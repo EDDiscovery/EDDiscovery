@@ -1,0 +1,46 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <title>EDD</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="header.css" rel="stylesheet" type="text/css">
+    <link href="status.css" rel="stylesheet" type="text/css">
+    <script src="jslib/elements.js"></script>
+    <script src="jslib/http.js"></script>
+    <script src="jslib/tables.js"></script>
+    <script src="jslib/websockets.js"></script>
+    <script src="header.js"></script>
+    <script src="systemtable.js"></script>
+    <script src="indicators.js"></script>
+    <script src="status.js"></script>
+</head>
+<body onload="OnLoad()">
+    <script>write_header(); write_nav();</script>
+
+    <div class="wrapper">
+        <div class="wrapleft">
+            <article>
+                <table id="StarData"></table>
+            </article>
+        </div>
+
+        <aside>
+            <div id="StatusBox">
+                <table id="Status"></table>
+                <div id="StatusOther"></div>
+            </div>
+        </aside>
+
+    </div>
+
+    <div id="ActionBox">
+        <p>Actions</p>
+        <table id="Actions"></table>
+    </div>
+
+    <script>write_footer([]);</script>
+
+</body>
+</html>

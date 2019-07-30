@@ -1,0 +1,62 @@
+/* 
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+
+function CreatePara(text)
+{
+    var a2 = document.createElement("p");
+    a2.innerHTML = text;
+    return a2;
+}
+
+function CreateAnchor(text, link, newtab = false)
+{
+    var a2 = document.createElement("a");
+    a2.href = link;
+    if (newtab)
+        a2.target = "_blank";
+    a2.appendChild(document.createTextNode(text));
+    return a2;
+}
+
+function CreateImage(link,alt,width,callback = null, tagname = null)
+{
+    var a = document.createElement("img");
+    a.src = link;
+    a.alt = alt;
+    a.width = width;
+
+    if (tagname != null)
+        a.tag = tagname;
+
+    if ( callback !== null )
+        a.onclick = callback;
+    
+    console.log("Create image s:" + a.src + " t:" + a.tag );
+    return a;
+}
+
+function CreateButton(text,handler)
+{
+    var a = document.createElement("button");
+    a.onclick = handler;
+    a.innerHTML = text;
+    return a;
+}
+
+function InsertAfter(elem,entity)
+{
+    elem.parentNode.insertBefore( entity,elem.nextSibling)
+}
+
+function AppendParaToElement(message, elementname)
+{
+    var pre = document.createElement("p");
+    pre.style.wordWrap = "break-word";
+    pre.innerHTML = message;
+    output2 = document.getElementById(elementname);
+    output2.appendChild(pre);
+}

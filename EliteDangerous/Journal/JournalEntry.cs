@@ -42,6 +42,7 @@ namespace EliteDangerousCore
         public string EventTypeStr { get { return EventTypeID.ToString(); } }             // name of event. these two duplicate each other, string if for debuggin in the db view of a browser
 
         public System.Drawing.Image Icon { get { return JournalTypeIcons.ContainsKey(this.IconEventType) ? JournalTypeIcons[this.IconEventType] : JournalTypeIcons[JournalTypeEnum.Unknown]; } }   // Icon to paint for this
+        public string GetIconPackPath { get { return "Journal." + IconEventType.ToString(); } } // its icon pack name..
 
         public DateTime EventTimeUTC { get; set; }
 

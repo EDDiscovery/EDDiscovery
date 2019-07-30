@@ -1,0 +1,18 @@
+
+header:after
+{
+    clear: both;
+    content: "";
+    display: table;
+}
+
+
+.clear:after
+{
+    content: ".";
+    visibility: hidden;
+    height: 0;
+    display: block;
+    clear: both;
+}
+

@@ -47,7 +47,7 @@ namespace EDDiscovery
 
         public WebServer.WebServer WebServer;
 
-        public Actions.ActionController DEBUGGETAC { get { return actioncontroller; } }
+        public Actions.ActionController ActionController { get { return actioncontroller; } }
 
         static public EDDConfig EDDConfig { get { return EDDConfig.Instance; } }
         public EDDTheme theme { get { return EDDTheme.Instance; } }
@@ -315,30 +315,26 @@ namespace EDDiscovery
 
             BaseUtils.Translator.Instance.Translate(mainMenu, this);
             BaseUtils.Translator.Instance.Translate(toolTip,this);
+
+            if (EDDOptions.Instance.ActionButton)
+                buttonReloadActions.Visible = true;
         }
 
         // OnLoad is called the first time the form is shown, before OnShown or OnActivated are called
 
         private void EDDiscoveryForm_Load(object sender, EventArgs e)
         {
-            Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " EDF Load");
-
-            Controller.PostInit_Loaded();
-
-            if (!EDDOptions.Instance.NoTabs)
+            if (!EDDOptions.Instance.NoTabs)        // load the tabs so when shown is done they are there..
                 tabControlMain.LoadTabs();
-
-            if (EDDOptions.Instance.ActionButton)
-            {
-                buttonReloadActions.Visible = true;
-            }
-            
-            Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " EDF load complete");
         }
 
-        // OnShown is called every time Show is called
+        // OnShown is called once
         private void EDDiscoveryForm_Shown(object sender, EventArgs e)
         {
+            Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " EDF shown");
+
+            Controller.PostInit_Shown();        // form is up, controller is released
+
             if (EDDConfig.Instance.EDSMGridIDs == "Not Set")        // initial state
             {
                 var ressel = GalaxySectorSelect.SelectGalaxyMenu(this);
@@ -346,19 +342,16 @@ namespace EDDiscovery
                 EDDConfig.Instance.EDSMGridIDs = ressel.Item2;
             }
 
-            Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " EDF shown");
-            Controller.PostInit_Shown();
-
-            if (!themeok)
-            {
-                Controller.LogLineHighlight(("The theme stored has missing colors or other missing information" + Environment.NewLine +
-                "Correct the missing colors or other information manually using the Theme Editor in Settings").Tx(this, "ThemeW"));
-            }
-
             if (EDDOptions.Instance.NoWindowReposition == false)
                 PopOuts.LoadSavedPopouts();  //moved from initial load so we don't open these before we can draw them properly
 
             actioncontroller.onStartup();
+
+            actioncontroller.CheckWarn();
+
+            screenshotconverter.Start();
+
+            WebServerControl(EDDConfig.Instance.WebServerEnable);
 
             tabControlMain.SelectedIndexChanged += (snd, ea) =>
             {
@@ -366,27 +359,12 @@ namespace EDDiscovery
                     ActionRun(Actions.ActionEventEDList.onTabChange, null, new BaseUtils.Variables("TabName", tabControlMain.TabPages[tabControlMain.SelectedIndex].Text));
             };
 
-            actioncontroller.CheckWarn();
-
-            screenshotconverter.Start();
-
-            checkInstallerTask = Installer.CheckForNewInstallerAsync((rel) =>  // in thread
-            {
-                newRelease = rel;
-                BeginInvoke(new Action(() => Controller.LogLineHighlight(string.Format("New EDDiscovery installer available: {0}".Tx(this, "NI"), newRelease.ReleaseName))));
-                BeginInvoke(new Action(() => labelInfoBoxTop.Text = "New Release Available!".Tx(this, "NRA")));
-            });
+            // DLL loads
 
             string alloweddlls = SQLiteConnectionUser.GetSettingString("DLLAllowed", "");
 
             DLLCallBacks.RequestHistory = DLLRequestHistory;
             DLLCallBacks.RunAction = DLLRunAction;
-
-            if (EDDConfig.Instance.WebServerPort > 0 )
-            {
-                WebServer.Port = EDDConfig.Instance.WebServerPort;
-                WebServer.Start();
-            }
 
             Tuple<string, string, string> res = DLLManager.Load(EDDOptions.Instance.DLLAppDirectory(), EDDApplicationContext.AppVersion, EDDOptions.Instance.DLLAppDirectory(), DLLCallBacks, alloweddlls);
 
@@ -416,7 +394,13 @@ namespace EDDiscovery
             LogLine(string.Format("Profile {0} Loaded".Tx(this, "PROFL"), EDDProfiles.Instance.Current.Name));
 
 
+            // Notifications
 
+            if (!themeok)
+            {
+                Controller.LogLineHighlight(("The theme stored has missing colors or other missing information" + Environment.NewLine +
+                "Correct the missing colors or other information manually using the Theme Editor in Settings").Tx(this, "ThemeW"));
+            }
 
             Notifications.CheckForNewNotifications((notelist) =>
             {
@@ -460,6 +444,13 @@ namespace EDDiscovery
 
                 }));
 
+            });
+
+            checkInstallerTask = Installer.CheckForNewInstallerAsync((rel) =>  // in thread
+            {
+                newRelease = rel;
+                BeginInvoke(new Action(() => Controller.LogLineHighlight(string.Format("New EDDiscovery installer available: {0}".Tx(this, "NI"), newRelease.ReleaseName))));
+                BeginInvoke(new Action(() => labelInfoBoxTop.Text = "New Release Available!".Tx(this, "NRA")));
             });
 
             // this.DebugSizePosition(toolTip); // Debug - theme all the tooltips to show info on control - useful
@@ -1602,6 +1593,56 @@ namespace EDDiscovery
             popoutdropdown.Show(this);
         }
 
+
+        #endregion
+
+        #region webserver
+
+        public bool WebServerControl(bool start)        // false if an error occurs
+        {
+            if (WebServer.Running)
+                WebServer.Stop();
+
+            if (start)
+            {
+                WebServer.Port = EDDConfig.Instance.WebServerPort;
+
+                string servefrom;
+                bool valid;
+
+                if (EDDOptions.Instance.WebServerFolder != null)
+                {
+                    servefrom = EDDOptions.Instance.WebServerFolder;
+                    valid = Directory.Exists(servefrom);
+                }
+                else
+                {
+                    servefrom = Path.Combine(EDDOptions.ExeDirectory(), "eddwebsite.zip");
+                    valid = File.Exists(servefrom);
+                }
+
+                if (valid)
+                {
+                    System.Diagnostics.Debug.WriteLine("Serve from " + servefrom + " on port " + EDDConfig.Instance.WebServerPort);
+
+                    if (WebServer.Start(servefrom))   // may fail due to some security reasons
+                        Controller.LogLine("Web server enabled".Tx(this, "WSE"));
+                    else
+                    {
+                        Controller.LogLineHighlight("Web server failed to start".Tx(this, "WSF"));
+                        return false;
+                    }
+                }
+                else
+                    Controller.LogLineHighlight("Web server disabled due to incorrect folder or missing zip file".Tx(this, "WSERR"));
+            }
+            else
+            {
+                Controller.LogLine("*** Web server is disabled ***".Tx(this, "WSD"));
+            }
+
+            return true;
+        }
 
         #endregion
 

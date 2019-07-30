@@ -72,9 +72,10 @@ namespace EDDiscovery.UserControls
             this.checkBoxCustomEnableScreenshots = new ExtendedControls.ExtCheckBox();
             this.extPanelScroll = new ExtendedControls.ExtPanelScroll();
             this.extGroupBoxWebServer = new ExtendedControls.ExtGroupBox();
-            this.extTextBoxPortNo = new ExtendedControls.ExtTextBox();
+            this.numberBoxLongPortNo = new ExtendedControls.NumberBoxLong();
             this.labelPortNo = new System.Windows.Forms.Label();
             this.extButtonTestWeb = new ExtendedControls.ExtButton();
+            this.extCheckBoxWebServerEnable = new ExtendedControls.ExtCheckBox();
             this.extScrollBar1 = new ExtendedControls.ExtScrollBar();
             this.groupBoxCommanders = new ExtendedControls.ExtGroupBox();
             this.dataViewScrollerCommanders = new ExtendedControls.ExtPanelDataGridViewScroll();
@@ -392,7 +393,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxClickThruKey.DisplayMember = "";
             this.comboBoxClickThruKey.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.comboBoxClickThruKey.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxClickThruKey.Location = new System.Drawing.Point(225, 19);
+            this.comboBoxClickThruKey.Location = new System.Drawing.Point(213, 19);
             this.comboBoxClickThruKey.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxClickThruKey.Name = "comboBoxClickThruKey";
             this.comboBoxClickThruKey.ScrollBarButtonColor = System.Drawing.Color.LightGray;
@@ -400,7 +401,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxClickThruKey.SelectedIndex = -1;
             this.comboBoxClickThruKey.SelectedItem = null;
             this.comboBoxClickThruKey.SelectedValue = null;
-            this.comboBoxClickThruKey.Size = new System.Drawing.Size(91, 21);
+            this.comboBoxClickThruKey.Size = new System.Drawing.Size(103, 21);
             this.comboBoxClickThruKey.TabIndex = 6;
             this.comboBoxClickThruKey.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.toolTip.SetToolTip(this.comboBoxClickThruKey, global::EDDiscovery.Properties.Resources.Tooltip_TransparencyHotkey);
@@ -429,9 +430,9 @@ namespace EDDiscovery.UserControls
             // 
             // buttonExtEDSMConfigureArea
             // 
-            this.buttonExtEDSMConfigureArea.Location = new System.Drawing.Point(216, 19);
+            this.buttonExtEDSMConfigureArea.Location = new System.Drawing.Point(213, 19);
             this.buttonExtEDSMConfigureArea.Name = "buttonExtEDSMConfigureArea";
-            this.buttonExtEDSMConfigureArea.Size = new System.Drawing.Size(100, 23);
+            this.buttonExtEDSMConfigureArea.Size = new System.Drawing.Size(90, 23);
             this.buttonExtEDSMConfigureArea.TabIndex = 10;
             this.buttonExtEDSMConfigureArea.Text = "Galaxy Select";
             this.toolTip.SetToolTip(this.buttonExtEDSMConfigureArea, "Configure what parts of the galaxy is stored in the databases");
@@ -582,63 +583,89 @@ namespace EDDiscovery.UserControls
             this.extGroupBoxWebServer.BackColorScaling = 0.5F;
             this.extGroupBoxWebServer.BorderColor = System.Drawing.Color.LightGray;
             this.extGroupBoxWebServer.BorderColorScaling = 0.5F;
-            this.extGroupBoxWebServer.Controls.Add(this.extTextBoxPortNo);
+            this.extGroupBoxWebServer.Controls.Add(this.numberBoxLongPortNo);
             this.extGroupBoxWebServer.Controls.Add(this.labelPortNo);
             this.extGroupBoxWebServer.Controls.Add(this.extButtonTestWeb);
+            this.extGroupBoxWebServer.Controls.Add(this.extCheckBoxWebServerEnable);
             this.extGroupBoxWebServer.FillClientAreaWithAlternateColor = false;
-            this.extGroupBoxWebServer.Location = new System.Drawing.Point(352, 181);
+            this.extGroupBoxWebServer.Location = new System.Drawing.Point(342, 181);
             this.extGroupBoxWebServer.Name = "extGroupBoxWebServer";
-            this.extGroupBoxWebServer.Size = new System.Drawing.Size(323, 48);
+            this.extGroupBoxWebServer.Size = new System.Drawing.Size(333, 48);
             this.extGroupBoxWebServer.TabIndex = 23;
             this.extGroupBoxWebServer.TabStop = false;
             this.extGroupBoxWebServer.Text = "Web Server";
             this.extGroupBoxWebServer.TextPadding = 0;
             this.extGroupBoxWebServer.TextStartPosition = -1;
             // 
-            // extTextBoxPortNo
+            // numberBoxLongPortNo
             // 
-            this.extTextBoxPortNo.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.extTextBoxPortNo.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
-            this.extTextBoxPortNo.BackErrorColor = System.Drawing.Color.Red;
-            this.extTextBoxPortNo.BorderColor = System.Drawing.Color.Transparent;
-            this.extTextBoxPortNo.BorderColorScaling = 0.5F;
-            this.extTextBoxPortNo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.extTextBoxPortNo.ClearOnFirstChar = false;
-            this.extTextBoxPortNo.ControlBackground = System.Drawing.SystemColors.Control;
-            this.extTextBoxPortNo.EndButtonEnable = true;
-            this.extTextBoxPortNo.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("extTextBoxPortNo.EndButtonImage")));
-            this.extTextBoxPortNo.EndButtonVisible = false;
-            this.extTextBoxPortNo.InErrorCondition = false;
-            this.extTextBoxPortNo.Location = new System.Drawing.Point(156, 19);
-            this.extTextBoxPortNo.Multiline = false;
-            this.extTextBoxPortNo.Name = "extTextBoxPortNo";
-            this.extTextBoxPortNo.ReadOnly = false;
-            this.extTextBoxPortNo.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.extTextBoxPortNo.SelectionLength = 0;
-            this.extTextBoxPortNo.SelectionStart = 0;
-            this.extTextBoxPortNo.Size = new System.Drawing.Size(90, 23);
-            this.extTextBoxPortNo.TabIndex = 2;
-            this.extTextBoxPortNo.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.extTextBoxPortNo.WordWrap = true;
+            this.numberBoxLongPortNo.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.numberBoxLongPortNo.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.numberBoxLongPortNo.BackErrorColor = System.Drawing.Color.Red;
+            this.numberBoxLongPortNo.BorderColor = System.Drawing.Color.Transparent;
+            this.numberBoxLongPortNo.BorderColorScaling = 0.5F;
+            this.numberBoxLongPortNo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.numberBoxLongPortNo.ClearOnFirstChar = false;
+            this.numberBoxLongPortNo.ControlBackground = System.Drawing.SystemColors.Control;
+            this.numberBoxLongPortNo.DelayBeforeNotification = 0;
+            this.numberBoxLongPortNo.EndButtonEnable = true;
+            this.numberBoxLongPortNo.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("numberBoxLongPortNo.EndButtonImage")));
+            this.numberBoxLongPortNo.EndButtonVisible = false;
+            this.numberBoxLongPortNo.Format = "D";
+            this.numberBoxLongPortNo.InErrorCondition = false;
+            this.numberBoxLongPortNo.Location = new System.Drawing.Point(123, 17);
+            this.numberBoxLongPortNo.Maximum = ((long)(65535));
+            this.numberBoxLongPortNo.Minimum = ((long)(1024));
+            this.numberBoxLongPortNo.Multiline = false;
+            this.numberBoxLongPortNo.Name = "numberBoxLongPortNo";
+            this.numberBoxLongPortNo.ReadOnly = false;
+            this.numberBoxLongPortNo.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.numberBoxLongPortNo.SelectionLength = 0;
+            this.numberBoxLongPortNo.SelectionStart = 0;
+            this.numberBoxLongPortNo.Size = new System.Drawing.Size(75, 23);
+            this.numberBoxLongPortNo.TabIndex = 6;
+            this.numberBoxLongPortNo.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.numberBoxLongPortNo.Value = ((long)(6502));
+            this.numberBoxLongPortNo.WordWrap = true;
             // 
             // labelPortNo
             // 
             this.labelPortNo.AutoSize = true;
-            this.labelPortNo.Location = new System.Drawing.Point(6, 22);
+            this.labelPortNo.Location = new System.Drawing.Point(88, 22);
             this.labelPortNo.Name = "labelPortNo";
             this.labelPortNo.Size = new System.Drawing.Size(26, 13);
             this.labelPortNo.TabIndex = 1;
             this.labelPortNo.Text = "Port";
             // 
-            // extButtonTestWeb
+            // extButtonTest
             // 
-            this.extButtonTestWeb.Location = new System.Drawing.Point(252, 19);
-            this.extButtonTestWeb.Name = "extButtonTestWeb";
-            this.extButtonTestWeb.Size = new System.Drawing.Size(41, 23);
+            this.extButtonTestWeb.Location = new System.Drawing.Point(238, 15);
+            this.extButtonTestWeb.Name = "extButtonTest";
+            this.extButtonTestWeb.Size = new System.Drawing.Size(78, 23);
             this.extButtonTestWeb.TabIndex = 3;
-            this.extButtonTestWeb.Text = "?";
+            this.extButtonTestWeb.Text = "Test";
             this.extButtonTestWeb.UseVisualStyleBackColor = true;
-            this.extButtonTestWeb.Click += new System.EventHandler(this.btnDeleteCommander_Click);
+            this.extButtonTestWeb.Click += new System.EventHandler(this.extButtonTestWebClick);
+            // 
+            // extCheckBoxWebServerEnable
+            // 
+            this.extCheckBoxWebServerEnable.AutoSize = true;
+            this.extCheckBoxWebServerEnable.CheckBoxColor = System.Drawing.Color.Gray;
+            this.extCheckBoxWebServerEnable.CheckBoxDisabledScaling = 0.5F;
+            this.extCheckBoxWebServerEnable.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.extCheckBoxWebServerEnable.CheckColor = System.Drawing.Color.DarkBlue;
+            this.extCheckBoxWebServerEnable.ImageButtonDisabledScaling = 0.5F;
+            this.extCheckBoxWebServerEnable.ImageIndeterminate = null;
+            this.extCheckBoxWebServerEnable.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.extCheckBoxWebServerEnable.ImageUnchecked = null;
+            this.extCheckBoxWebServerEnable.Location = new System.Drawing.Point(10, 21);
+            this.extCheckBoxWebServerEnable.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.extCheckBoxWebServerEnable.Name = "extCheckBoxWebServerEnable";
+            this.extCheckBoxWebServerEnable.Size = new System.Drawing.Size(59, 17);
+            this.extCheckBoxWebServerEnable.TabIndex = 5;
+            this.extCheckBoxWebServerEnable.Text = "Enable";
+            this.extCheckBoxWebServerEnable.TickBoxReductionRatio = 0.75F;
+            this.extCheckBoxWebServerEnable.UseVisualStyleBackColor = true;
             // 
             // extScrollBar1
             // 
@@ -1092,8 +1119,9 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtPanelScroll extPanelScroll;
         private ExtendedControls.ExtScrollBar extScrollBar1;
         private ExtendedControls.ExtGroupBox extGroupBoxWebServer;
-        private ExtendedControls.ExtTextBox extTextBoxPortNo;
         private System.Windows.Forms.Label labelPortNo;
         private ExtendedControls.ExtButton extButtonTestWeb;
+        private ExtendedControls.NumberBoxLong numberBoxLongPortNo;
+        private ExtendedControls.ExtCheckBox extCheckBoxWebServerEnable;
     }
 }
