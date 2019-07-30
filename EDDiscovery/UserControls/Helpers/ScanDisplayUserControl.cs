@@ -482,7 +482,7 @@ namespace EDDiscovery.UserControls
 
                         // debug if (matnow != null && mc.shortname == "Fe")  matnow.count = 10000;
                             
-                        if (matnow != null && matnow.Count >= limit)        // and limit
+                        if (matnow != null && limit != null && matnow.Count >= limit)        // and limit
                             continue;
                     }
 
