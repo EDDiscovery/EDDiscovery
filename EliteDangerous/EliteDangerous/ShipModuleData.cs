@@ -379,15 +379,19 @@ namespace EliteDangerousCore
 
             { "empire_fighter_armour_standard", new ShipModule(-1,0, "Empire Fighter Armour Standard", "Armour" ) },
 
-            { "hpt_pulselaser_gimbal_fed_fighter", new ShipModule(-1,0, 1,"Hpt Pulse Laser Gimbal Federation Fighter", "Pulse Laser" ) },
-            { "hpt_pulselaser_gimbal_indie_fighter", new ShipModule(-1,0, 1,"Hpt Pulse Laser Gimbal Indie Fighter", "Pulse Laser" ) },
-            { "hpt_pulselaser_gimbal_empire_fighter", new ShipModule(-1,0, 1, "Hpt Pulse Laser Gimbal Empire Fighter", "Pulse Laser" ) },
+            { "hpt_pulselaser_gimbal_fed_fighter", new ShipModule(-1,0, 1,"Pulse Laser Gimbal Federation Fighter", "Pulse Laser" ) },
+            { "hpt_pulselaser_gimbal_indie_fighter", new ShipModule(-1,0, 1,"Pulse Laser Gimbal Indie Fighter", "Pulse Laser" ) },
+            { "hpt_pulselaser_gimbal_empire_fighter", new ShipModule(-1,0, 1, "Pulse Laser Gimbal Empire Fighter", "Pulse Laser" ) },
 
-            { "hpt_pulselaser_fixed_fed_fighter", new ShipModule(-1,0, 1, "Hpt Pulse Laser Fixed Federation Fighter", "Pulse Laser" ) },
-            { "hpt_pulselaser_fixed_indie_fighter", new ShipModule(-1,0, 1,"Hpt Pulse Laser Fixed Indie Fighter", "Pulse Laser" ) },
-            { "hpt_pulselaser_fixed_empire_fighter", new ShipModule(-1,0, 1, "Hpt Pulse Laser Fixed Empire Fighter", "Pulse Laser" ) },
+            { "int_powerdistributor_fighter_class1", new ShipModule(-1,0, "Int Powerdistributor Fighter Class 1", UnknownType ) },
+            { "int_sensors_fighter_class1", new ShipModule(-1,0, "Int Sensors Fighter Class 1", UnknownType ) },
+            { "int_powerplant_fighter_class1", new ShipModule(-1,0, "Int Powerplant Fighter Class 1", UnknownType ) },
 
-            { "int_shieldgenerator_fighter_class1", new ShipModule(-1,0, "Int Shield Generator Fighter Class 1", "Shields" ) },
+            { "hpt_pulselaser_fixed_fed_fighter", new ShipModule(-1,0, 1, "Pulse Laser Fixed Federation Fighter", "Pulse Laser" ) },
+            { "hpt_pulselaser_fixed_indie_fighter", new ShipModule(-1,0, 1,"Pulse Laser Fixed Indie Fighter", "Pulse Laser" ) },
+            { "hpt_pulselaser_fixed_empire_fighter", new ShipModule(-1,0, 1, "Pulse Laser Fixed Empire Fighter", "Pulse Laser" ) },
+
+            { "int_shieldgenerator_fighter_class1", new ShipModule(-1,0, "Shield Generator Fighter Class 1", "Shields" ) },
             { "independent_fighter_armour_standard", new ShipModule(-1,0, "Independent Fighter Armour Standard", "Armour" ) },
             { "ext_emitter_standard", new ShipModule(-1,0, "Ext Emitter Standard", "Fighter Module" ) },
             { "hpt_shipdatalinkscanner", new ShipModule(-1,0, "Hpt Shipdatalinkscanner", "Data Link Scanner" ) },

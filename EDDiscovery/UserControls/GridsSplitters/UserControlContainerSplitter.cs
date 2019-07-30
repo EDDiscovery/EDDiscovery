@@ -90,6 +90,8 @@ namespace EDDiscovery.UserControls
 
             string splitctrl = SQLiteConnectionUser.GetSettingString(DbWindows, defaultview);
 
+            //System.Diagnostics.Debug.WriteLine("Init " + displaynumber + " " + splitctrl);
+
             SuspendLayout();
 
             //try and make the configured splitter tree
@@ -122,7 +124,7 @@ namespace EDDiscovery.UserControls
             ucursor_inuse = FindTHC() ?? ucursor_history; // if we have a THC, use it, else use the history one
             string splitctrl = SQLiteConnectionUser.GetSettingString(DbWindows, "");
 
-            //System.Diagnostics.Debug.WriteLine("--------------------" + splitctrl);
+            //System.Diagnostics.Debug.WriteLine("Layout loading " + displaynumber + " " + splitctrl);
             //panelPlayfield.Controls[0].DumpTree(0);
 
             RunActionOnSplitterTree((p, c, uccb) =>     // now, at load layout, do the rest of the UCCB contract.
@@ -142,9 +144,13 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
+            //System.Diagnostics.Debug.WriteLine("Closing splitter " + displaynumber);
+
             PanelInformation.PanelIDs[] pids = PanelInformation.GetUserSelectablePanelIDs(TabListSortAlpha);
 
-            string state = ControlHelpersStaticFunc.SplitterTreeState(panelPlayfield.Controls[0] as SplitContainer, "",
+            SplitContainer sc = (SplitContainer)panelPlayfield.Controls[0];
+
+            string state = ControlHelpersStaticFunc.SplitterTreeState(sc, "",
                 (c) =>          // S is either a TabStrip, or a direct UCCB. See the 
                 {
                     ExtendedControls.TabStrip ts = c as ExtendedControls.TabStrip;

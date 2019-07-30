@@ -122,7 +122,7 @@ namespace EliteDangerousCore
 
                 foreach (ShipModule m in modulesToRemove)
                 {
-                    System.Diagnostics.Trace.WriteLine($"Warning: Module {m.Item} in slot {m.Slot} is missing from loadout");
+                    //System.Diagnostics.Trace.WriteLine($"Warning: Module {m.Item} in slot {m.Slot} is missing from loadout");
                     newsm = newsm.RemoveModule(m.Slot, m.Item);
                 }
 
