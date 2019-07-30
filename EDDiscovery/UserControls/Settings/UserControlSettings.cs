@@ -29,6 +29,7 @@ namespace EDDiscovery.UserControls
     public partial class UserControlSettings : UserControlCommonBase
     {
         private ExtendedControls.ThemeStandardEditor themeeditor = null;
+        Timer tm = new Timer();
 
         public UserControlSettings()
         {
@@ -46,11 +47,11 @@ namespace EDDiscovery.UserControls
 
             btnDeleteCommander.Enabled = EDCommander.NumberOfCommanders > 1;
 
-            comboBoxClickThruKey.Items = KeyObjectExtensions.KeyListString(inclshifts:true);
+            comboBoxClickThruKey.Items = KeyObjectExtensions.KeyListString(inclshifts: true);
             comboBoxClickThruKey.SelectedItem = EDDConfig.Instance.ClickThruKey.VKeyToString();
             comboBoxClickThruKey.SelectedIndexChanged += comboBoxClickThruKey_SelectedIndexChanged;
 
-            comboBoxCustomLanguage.Items.AddRange(BaseUtils.Translator.EnumerateLanguageNames( EDDOptions.Instance.TranslatorFolders() ));
+            comboBoxCustomLanguage.Items.AddRange(BaseUtils.Translator.EnumerateLanguageNames(EDDOptions.Instance.TranslatorFolders()));
 
             comboBoxCustomLanguage.Items.Add("Auto");
             comboBoxCustomLanguage.Items.Add("Default (English)");
@@ -98,18 +99,27 @@ namespace EDDiscovery.UserControls
             checkBoxCustomEDSMEDDBDownload.Checked = EDDConfig.Instance.EDSMEDDBDownload;
             this.checkBoxCustomEDSMEDDBDownload.CheckedChanged += new System.EventHandler(this.checkBoxCustomEDSMDownload_CheckedChanged);
 
-            comboBoxCustomHistoryLoadTime.Items = new string[] { "Disabled-Load All".Tx(this,"DLA"), ">7 days old".Tx(this), ">30 days old".Tx(this), ">60 days old".Tx(this), ">90 days old".Tx(this), ">180 days old".Tx(this), ">270 days old".Tx(this), "> 365 days old".Tx(this) };
+            comboBoxCustomHistoryLoadTime.Items = new string[] { "Disabled-Load All".Tx(this, "DLA"), ">7 days old".Tx(this), ">30 days old".Tx(this), ">60 days old".Tx(this), ">90 days old".Tx(this), ">180 days old".Tx(this), ">270 days old".Tx(this), "> 365 days old".Tx(this) };
             comboBoxCustomHistoryLoadTime.Tag = new int[] { 0, 7, 30, 60, 90, 180, 270, 365 };
             int ix = Array.FindIndex(comboBoxCustomHistoryLoadTime.Tag as int[], x => x == EDDConfig.Instance.FullHistoryLoadDayLimit);
             comboBoxCustomHistoryLoadTime.SelectedIndex = ix >= 0 ? ix : 0;
             comboBoxCustomHistoryLoadTime.SelectedIndexChanged += ComboBoxCustomHistoryLoadTime_SelectedIndexChanged;
 
-            var eetn = new string[] { nameof(JournalEssentialEvents.EssentialEvents), nameof(JournalEssentialEvents.FullStatsEssentialEvents) , nameof(JournalEssentialEvents.JumpScanEssentialEvents), nameof(JournalEssentialEvents.JumpEssentialEvents), nameof(JournalEssentialEvents.NoEssentialEvents)};
+            var eetn = new string[] { nameof(JournalEssentialEvents.EssentialEvents), nameof(JournalEssentialEvents.FullStatsEssentialEvents), nameof(JournalEssentialEvents.JumpScanEssentialEvents), nameof(JournalEssentialEvents.JumpEssentialEvents), nameof(JournalEssentialEvents.NoEssentialEvents) };
             comboBoxCustomEssentialEntries.Items = new string[] { "Scans,Cargo,Missions,State,Jumps etc".Tx(this, "ESM"), "All entries for Statistics".Tx(this, "FS"), "Jumps and Scans".Tx(this, "EJS"), "Jumps".Tx(this, "EJ"), "Nothing".Tx(this, "EN") };
             comboBoxCustomEssentialEntries.Tag = eetn;
             ix = Array.FindIndex(eetn, x => x == EDDConfig.Instance.EssentialEventTypes);
             comboBoxCustomEssentialEntries.SelectedIndex = ix >= 0 ? ix : 0;
             comboBoxCustomEssentialEntries.SelectedIndexChanged += ComboBoxCustomEssentialEntries_SelectedIndexChanged;
+
+            extCheckBoxWebServerEnable.Checked = false;
+            extButtonTestWeb.Enabled = numberBoxLongPortNo.Enabled = false;
+            numberBoxLongPortNo.Value = EDDConfig.Instance.WebServerPort;
+            tm.Tick += PeriodicCheck;
+            tm.Interval = 1000;
+            tm.Start();
+
+            extCheckBoxWebServerEnable.CheckedChanged += ExtCheckBoxWebServerEnable_CheckedChanged;
         }
 
         public override void InitialDisplay()
@@ -558,6 +568,77 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
+
+        #region Webserver
+
+        private void PeriodicCheck(object sender, EventArgs e)      // webserver needs periodically checking to see if running.
+        {
+            bool running = discoveryform.WebServer.Running;
+            if (extCheckBoxWebServerEnable.Checked != running)
+            {
+                extCheckBoxWebServerEnable.CheckedChanged -= ExtCheckBoxWebServerEnable_CheckedChanged;
+                extCheckBoxWebServerEnable.Checked = running;
+                extCheckBoxWebServerEnable.CheckedChanged += ExtCheckBoxWebServerEnable_CheckedChanged;
+            }
+
+            numberBoxLongPortNo.Enabled = !running;
+            extButtonTestWeb.Enabled = running;
+        }
+
+
+        private void ExtCheckBoxWebServerEnable_CheckedChanged(object sender, EventArgs e)
+        {
+            bool runit = extCheckBoxWebServerEnable.Checked;
+
+            if (runit)
+            {
+                var res = ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "You need to configure Windows to allow EDD to webserve" + Environment.NewLine +
+                                                                           "Click Yes to do this. If you are not the adminstrator, a dialog will appear to ask you" + Environment.NewLine +
+                                                                           "to sign in as an admin to allow this to happen" + Environment.NewLine +
+                                                                           "If you have previously done this on this same port number you can click No and the enable will work".Tx(this,"WSQ"),
+                                                                           "Web Server",
+                                                                           MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+                if (res == DialogResult.Yes)
+                {
+                    BaseUtils.Processes process = new BaseUtils.Processes();
+
+                    // exe method to set it to the eddiscovery ext does not seem to work during debugging.. not sure, can't find out.. abandon for now.
+                    //string exe = System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName;
+                    //string cmd = "-Command new-netfirewallrule -Name EDDiscovery -DisplayName EDDiscovery -Description Webserver -Program \"" + exe + "\" -Direction Inbound -Action Allow -LocalPort " + EDDConfig.Instance.WebServerPort.ToStringInvariant() + " -Protocol TCP" +
+
+                    string cmd = "-Command new-netfirewallrule -Name EDDiscovery -DisplayName EDDiscovery -Description Webserver -Direction Inbound -Action Allow -LocalPort " + EDDConfig.Instance.WebServerPort.ToStringInvariant() + " -Protocol TCP" +
+                    ";netsh http add urlacl url = http://*:" + EDDConfig.Instance.WebServerPort.ToStringInvariant() + "/ user=" + Environment.GetEnvironmentVariable("USERNAME");
+
+                    int pid = process.StartProcess("Powershell.exe", cmd, "runas");
+
+                    if (pid == 0)
+                    {
+                        ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Configuration did not run", "Web Server");
+                    }
+                    else
+                    {
+                        process.WaitForProcess(pid, 25000);
+                    }
+                }
+            }
+
+            if ( !discoveryform.WebServerControl(runit) )
+            {
+                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Did not start - click OK to configure windows".Tx(this,"WSF"), "Web Server");
+            }
+            else
+                EDDConfig.Instance.WebServerEnable = runit;     // this is for next time at startup
+        }
+
+        #endregion
+
+        private void extButtonTestWebClick(object sender, EventArgs e)
+        {
+            string ipv4 = BaseUtils.BrowserInfo.EstimateLocalHostPreferredIPV4();
+
+            BaseUtils.BrowserInfo.LaunchBrowser("http://" + ipv4 + ":" + EDDConfig.Instance.WebServerPort.ToStringInvariant() + "/");
+        }
     }
 }
 

@@ -194,16 +194,9 @@ namespace EDDiscovery
             initComplete.Set();    
         }
 
-        public void PostInit_Loaded()       // called by EDDForm during loaded
-        {
-//TBD remove this step - its silly.  only different is writing the new commander to the db.. why?
-
-            EDDConfig.Instance.Update();    // lost in the midst of time why  
-        }
-
         public void PostInit_Shown()        // called by EDDForm during shown
         {
-//TBD work
+            EDDConfig.Instance.Update();    // lost in the midst of time why  
             readyForInitialLoad.Set();
         }
 

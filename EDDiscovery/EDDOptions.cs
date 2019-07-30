@@ -82,6 +82,10 @@ namespace EDDiscovery
             {
                 SelectLanguage = toeol ? ca.Rest() : ca.NextEmpty();
             }
+            else if (optname == "-webserverfolder" || optname == "-wsf" )
+            {
+                WebServerFolder = toeol ? ca.Rest() : ca.NextEmpty();
+            }
             else if (optname.StartsWith("-"))
             {
                 string opt = optname.Substring(1);
@@ -186,6 +190,7 @@ namespace EDDiscovery
         public string Commander { get; set; }                   // set commander, null if not
         public string Profile { get; set; }                   // set profile, null if not
         public bool TempDirInDataDir { get; set; }
+        public string WebServerFolder { get; set; }             // normally empty, so selections zip server
 
         public string SubAppDirectory(string subfolder)     // ensures its there.. name without \ slashes
         {

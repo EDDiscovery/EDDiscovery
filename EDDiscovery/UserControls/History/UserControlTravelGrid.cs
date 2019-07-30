@@ -1311,7 +1311,7 @@ namespace EDDiscovery.UserControls
             string lasttype = "";
             int lasttypecount = 0;
 
-            discoveryform.DEBUGGETAC.AsyncMode = false;     // to force it to do all the action code before returning..
+            discoveryform.ActionController.AsyncMode = false;     // to force it to do all the action code before returning..
 
             if (dataGridViewTravel.SelectedRows.Count > 0)
             {
@@ -1328,14 +1328,14 @@ namespace EDDiscovery.UserControls
                         lasttype = he.journalEntry.EventTypeStr;
                         lasttypecount = (same) ? ++lasttypecount : 0;
 
-                        discoveryform.DEBUGGETAC.SetPeristentGlobal("GlobalSaySaid", "");
+                        discoveryform.ActionController.SetPeristentGlobal("GlobalSaySaid", "");
                         BaseUtils.FunctionHandlers.SetRandom(new Random(rw.Index + 1));
                         discoveryform.ActionRunOnEntry(he, Actions.ActionEventEDList.UserRightClick(he));
 
                         Newtonsoft.Json.Linq.JObject jo = he.journalEntry.GetJson();
                         string json = jo?.ToString(Newtonsoft.Json.Formatting.None);
 
-                        string s = discoveryform.DEBUGGETAC.Globals["GlobalSaySaid"];
+                        string s = discoveryform.ActionController.Globals["GlobalSaySaid"];
 
                         if (s.Length > 0 && !s.Equals(laststring))
                         {

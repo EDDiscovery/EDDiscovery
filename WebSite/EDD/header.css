@@ -1,0 +1,89 @@
+
+header
+{
+    /*border: 3px solid green;*/
+    background-color: darkorange;
+    padding: 0px;
+    margin: 0px;
+    overflow: hidden; /* this causes the header to assume the height of its children*/
+}
+
+header h1:first-of-type
+{
+    float: left;
+    width: 70%;
+    text-align: left;
+    line-height: 1;
+    margin: 10px;
+    font-size: 20pt;
+    font-style: italic;
+    font-weight: normal;
+}
+
+header h1:last-of-type {
+    float: right;
+    margin: 2px;
+}
+
+nav
+{
+    clear:both;
+    background: darkorange;
+}
+
+nav ul
+{
+    margin: 0px 0px 0px 0px;
+    padding: 0px;
+    list-style-type: none;
+    overflow: hidden;
+    width: 72em;
+}
+
+nav ul li
+{
+    float: left;
+    background-color: #ff9c08;
+    margin: 0px 0px 0px 0px;
+    border-top: 1px solid black;
+    border-right: 1px solid rgb(0,0,0);
+    border-top-right-radius: 8px;
+    border-left: 1px solid black;
+    border-top-left-radius: 8px;
+}
+
+/* this style gets assigned to the highlighted tab classList and overrides the background-color.  Hover still works though */
+.tabhighlighted
+{
+    background-color: #ffac28;
+}
+
+/* gets added as you hover */
+
+nav ul li:hover
+{
+    background-color: #ffbc48;
+}
+
+nav ul li:first-child
+{
+    margin: 0px 0px 0px 0.5em;
+}
+
+
+nav * a
+{
+    padding: 0.2em;
+    line-height: 2.1em;
+    text-decoration: none;
+    color: #000;
+}
+
+footer
+{
+    background-color: darkorange;
+    clear: both;
+    font-size: 15pt;
+}
+
+

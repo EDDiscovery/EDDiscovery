@@ -74,7 +74,8 @@ namespace EDDiscovery
         private string eddshipyardURL = "";
         private string eddbsystemsurl = "";
         private string edsmfullsystemsurl = "";
-        private int webserverport = 0;
+        private int webserverport = 6502;
+        private bool webserverenable = false;
         Dictionary<string, Image> captainslogtaglist;
 
         /// <summary>
@@ -396,6 +397,19 @@ namespace EDDiscovery
             }
         }
 
+        public bool WebServerEnable
+        {
+            get
+            {
+                return webserverenable;
+            }
+            set
+            {
+                webserverenable = value;
+                SQLiteConnectionUser.PutSettingBool("WebServerEnable", webserverenable);
+            }
+        }
+
         #endregion
 
         #region Update at start
@@ -424,7 +438,8 @@ namespace EDDiscovery
                 edsmfullsystemsurl = SQLiteConnectionUser.GetSettingString("EDSMFullSystemsURL", "Default");
                 eddbsystemsurl = SQLiteConnectionUser.GetSettingString("EDDBSystemsURL", "Default");
                 CaptainsLogTags = SQLiteConnectionUser.GetSettingString("CaptainsLogPanelTagNames", "Expedition=Journal.FSDJump;Died=Journal.Died");
-                webserverport = SQLiteConnectionUser.GetSettingInt("WebServerPort", 0);
+                webserverport = SQLiteConnectionUser.GetSettingInt("WebServerPort", 6502);
+                webserverenable = SQLiteConnectionUser.GetSettingBool("WebServerEnable", false);
 
                 EliteDangerousCore.EDCommander.Load(write, conn);
             }

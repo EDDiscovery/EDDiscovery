@@ -73,6 +73,7 @@ namespace EliteDangerousCore
         UIEvents.UIPips.Pips prev_pips = new UIEvents.UIPips.Pips();
         UIEvents.UIPosition.Position prev_pos = new UIEvents.UIPosition.Position();     // default is MinValue
         double prev_heading = double.MaxValue;    // this forces a pos report
+        double prev_jpradius = double.MinValue;    // this forces a pos report
 
         private enum StatusFlagsShip                        // PURPOSELY PRIVATE - don't want users to get into low level detail of BITS
         {
@@ -226,10 +227,17 @@ namespace EliteDangerousCore
                             if (sys != prev_pips.Systems || wep != prev_pips.Weapons || eng != prev_pips.Engines)
                             {
                                 UIEvents.UIPips.Pips newpips = new UIEvents.UIPips.Pips() { Systems = sys, Engines = eng, Weapons = wep };
-                                events.Add(new UIEvents.UIPips(newpips, EventTimeUTC, prev_pips.Engines<0));
+                                events.Add(new UIEvents.UIPips(newpips, EventTimeUTC, prev_pips.Engines < 0));
                                 prev_pips = newpips;
                                 fireoverall = true;
                             }
+                        }
+                        else if ( prev_pips.Valid )     // missing pips, if we are valid.. need to clear them
+                        {
+                            UIEvents.UIPips.Pips newpips = new UIEvents.UIPips.Pips();
+                            events.Add(new UIEvents.UIPips(newpips, EventTimeUTC, prev_pips.Engines < 0));
+                            prev_pips = newpips;
+                            fireoverall = true;
                         }
 
                         int? curfiregroup = jo["FireGroup"].IntNull();      // may appear/disappear.
@@ -268,8 +276,9 @@ namespace EliteDangerousCore
                         double jlon = jo["Longitude"].Double(double.MinValue);
                         double jalt = jo["Altitude"].Double(double.MinValue);
                         double jheading = jo["Heading"].Double(double.MinValue);
+                        double jpradius = jo["PlanetRadius"].Double(double.MinValue);       // 3.4
 
-                        if (jlat != prev_pos.Latitude || jlon != prev_pos.Longitude || jalt != prev_pos.Altitude || jheading != prev_heading)
+                        if (jlat != prev_pos.Latitude || jlon != prev_pos.Longitude || jalt != prev_pos.Altitude || jheading != prev_heading || jpradius != prev_jpradius)
                         {
                             UIEvents.UIPosition.Position newpos = new UIEvents.UIPosition.Position()
                             {
@@ -277,9 +286,10 @@ namespace EliteDangerousCore
                                 Altitude = jalt, AltitudeFromAverageRadius = (curflags & (1 << (int)StatusFlagsReportedInOtherEvents.AltitudeFromAverageRadius)) != 0
                             };
 
-                            events.Add(new UIEvents.UIPosition(newpos, jheading, EventTimeUTC, jlat == double.MinValue));
+                            events.Add(new UIEvents.UIPosition(newpos, jheading, jpradius, EventTimeUTC, prev_pos.Latitude == double.MinValue));
                             prev_pos = newpos;
                             prev_heading = jheading;
+                            prev_jpradius = jpradius;
                             fireoverall = true;
                         }
 
@@ -289,6 +299,7 @@ namespace EliteDangerousCore
                         {
                             events.Add(new UIEvents.UILegalStatus(cur_legalstatus,EventTimeUTC,prev_legalstatus == null));
                             prev_legalstatus = cur_legalstatus;
+                            fireoverall = true;
                         }
 
                         if ( fireoverall )
@@ -298,7 +309,7 @@ namespace EliteDangerousCore
                             flagsset.AddRange(ReportFlagState(typeof(StatusFlagsAll), curflags));
 
                             events.Add(new UIEvents.UIOverallStatus(ShipType(curflags), flagsset, prev_guifocus, prev_pips, prev_firegroup, 
-                                                                    prev_curfuel,prev_curres, prev_cargo, prev_pos, prev_heading, prev_legalstatus,
+                                                                    prev_curfuel,prev_curres, prev_cargo, prev_pos, prev_heading, prev_jpradius, prev_legalstatus,
                                                                     EventTimeUTC, fireoverallrefresh));        // overall list of flags set
                         }
 

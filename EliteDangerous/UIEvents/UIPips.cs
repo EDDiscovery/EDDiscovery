@@ -40,6 +40,8 @@ namespace EliteDangerousCore.UIEvents
             public double Systems;
             public double Engines;
             public double Weapons;
+
+            public bool Valid { get { return Systems > double.MinValue; } }
         }
     }
 }

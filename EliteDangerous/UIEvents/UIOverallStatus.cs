@@ -21,12 +21,12 @@ namespace EliteDangerousCore.UIEvents
     public class UIOverallStatus : UIEvent
     {
         public UIOverallStatus(UIEvents.UIShipType.Shiptype st, List<UITypeEnum> list, int focus, UIEvents.UIPips.Pips pips, int fg, double fuel, double res, int cargo,
-            UIEvents.UIPosition.Position pos, double heading, string legalstate,
+            UIEvents.UIPosition.Position pos, double heading, double radius, string legalstate,
             DateTime time, bool refresh): base(UITypeEnum.OverallStatus, time, refresh)
         {
             ShipType = st;
             Flags = list;
-            Focus = focus;
+            Focus = (UIEvents.UIGUIFocus.Focus)focus;
             Pips = pips;
             Firegroup = fg;
             Fuel = fuel;
@@ -34,12 +34,13 @@ namespace EliteDangerousCore.UIEvents
             Cargo = cargo;
             Pos = pos;
             Heading = heading;
+            PlanetRadius = radius;
             LegalState = legalstate;
         }
 
         public UIEvents.UIShipType.Shiptype ShipType { get; private set; }
         public List<UITypeEnum> Flags { get; private set; }
-        public int Focus { get; private set; }
+        public UIEvents.UIGUIFocus.Focus Focus { get; private set; }
         public UIEvents.UIPips.Pips Pips { get; private set; }
         public int Firegroup { get; private set; }
         public double Fuel { get; private set; }
@@ -47,6 +48,9 @@ namespace EliteDangerousCore.UIEvents
         public int Cargo { get; private set; }
         public UIEvents.UIPosition.Position Pos { get; private set; }
         public double Heading { get; private set; }
+        public bool ValidHeading { get { return Heading != double.MinValue; } }
+        public double PlanetRadius { get; private set; }
+        public bool ValidRadius { get { return PlanetRadius != double.MinValue; } }
         public string LegalState { get; private set; }      // may be null
     }
 }

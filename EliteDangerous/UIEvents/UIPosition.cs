@@ -25,10 +25,11 @@ namespace EliteDangerousCore.UIEvents
 
     public class UIPosition : UIEvent
     {
-        public UIPosition(Position value, double head, DateTime time, bool refresh): base(UITypeEnum.Position, time, refresh)
+        public UIPosition(Position value, double head, double planetradius, DateTime time, bool refresh): base(UITypeEnum.Position, time, refresh)
         {
             Location = value;
             Heading = head;
+            PlanetRadius = planetradius;
         }
 
         public Position Location { get; private set; }
@@ -37,6 +38,9 @@ namespace EliteDangerousCore.UIEvents
 
         public double Heading { get; private set; }
         public bool ValidHeading { get { return Heading != double.MinValue; } }
+
+        public double PlanetRadius { get; private set; }
+        public bool ValidRadius { get { return PlanetRadius != double.MinValue; } }
 
         public class Position
         {
