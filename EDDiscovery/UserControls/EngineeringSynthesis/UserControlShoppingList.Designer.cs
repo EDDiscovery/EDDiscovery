@@ -61,6 +61,7 @@ namespace EDDiscovery.UserControls
             this.showSystemAvailabilityOfMaterialsInShoppingListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.useEDSMDataInSystemAvailabilityToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.useHistoricMaterialCountsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toggleListPositionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerVertical)).BeginInit();
             this.splitContainerVertical.Panel1.SuspendLayout();
             this.splitContainerVertical.Panel2.SuspendLayout();
@@ -95,6 +96,7 @@ namespace EDDiscovery.UserControls
             this.splitContainerVertical.Size = new System.Drawing.Size(1142, 626);
             this.splitContainerVertical.SplitterDistance = 141;
             this.splitContainerVertical.TabIndex = 0;
+            this.splitContainerVertical.MouseClick += new System.Windows.Forms.MouseEventHandler(this.SplitContainerVertical_MouseClick);
             // 
             // pictureBoxList
             // 
@@ -181,9 +183,10 @@ namespace EDDiscovery.UserControls
             this.showAvailableMaterialsInListWhenLandedToolStripMenuItem,
             this.showSystemAvailabilityOfMaterialsInShoppingListToolStripMenuItem,
             this.useEDSMDataInSystemAvailabilityToolStripMenuItem,
-            this.useHistoricMaterialCountsToolStripMenuItem});
+            this.useHistoricMaterialCountsToolStripMenuItem,
+            this.toggleListPositionToolStripMenuItem});
             this.contextMenuStrip.Name = "contextMenuConfig";
-            this.contextMenuStrip.Size = new System.Drawing.Size(369, 136);
+            this.contextMenuStrip.Size = new System.Drawing.Size(369, 180);
             // 
             // showMaxFSDInjectionsToolStripMenuItem
             // 
@@ -245,6 +248,13 @@ namespace EDDiscovery.UserControls
             this.useHistoricMaterialCountsToolStripMenuItem.Text = "Use Historic Material Counts";
             this.useHistoricMaterialCountsToolStripMenuItem.Click += new System.EventHandler(this.useHistoricMaterialCountsToolStripMenuItem_Click);
             // 
+            // toggleListPositionToolStripMenuItem
+            // 
+            this.toggleListPositionToolStripMenuItem.Name = "toggleListPositionToolStripMenuItem";
+            this.toggleListPositionToolStripMenuItem.Size = new System.Drawing.Size(368, 22);
+            this.toggleListPositionToolStripMenuItem.Text = "Toggle List Position (stacked)";
+            this.toggleListPositionToolStripMenuItem.Click += new System.EventHandler(this.ToggleListPositionToolStripMenuItem_Click);
+            // 
             // UserControlShoppingList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -286,5 +296,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripMenuItem onlyCapacityToolStripMenuItem;
         private ExtendedControls.ExtButton buttonSpecialEffects;
         private System.Windows.Forms.FlowLayoutPanel panelSpecialButs;
+        private System.Windows.Forms.ToolStripMenuItem toggleListPositionToolStripMenuItem;
     }
 }

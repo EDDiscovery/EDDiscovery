@@ -40,9 +40,10 @@ namespace EDDiscovery.UserControls
         private bool hidePlanetMatsWithNoCapacity;
         private bool showListAvailability;
         private bool showSystemAvailability;
-        private bool useEDSMForSystemAvailability;
+        private bool useEDSMForSystemAvailability;        
         private bool useHistoric = false;
-
+        private bool shoppingListStacked;
+        
         private string DbShowInjectionsSave { get { return DBName("ShoppingListShowFSD" ); } }
         private string DbShowAllMatsLandedSave { get { return DBName("ShoppingListShowPlanetMats" ); } }
         private string DbHideFullMatsLandedSave { get { return DBName("ShoppingListHideFullMats"); } }
@@ -51,7 +52,7 @@ namespace EDDiscovery.UserControls
         private string DBUseEDSMForSystemAvailability { get { return DBName("ShoppingListUseEDSM" ); } }
         private string DBTechBrokerFilterSave { get { return DBName("ShoppingListTechBrokerFilter"); } }
         private string DBSpecialEffectsFilterSave { get { return DBName("ShoppingListSpecialEffectsFilter"); } }
-
+        
         #region Init
 
         public UserControlShoppingList()
@@ -82,7 +83,8 @@ namespace EDDiscovery.UserControls
             hidePlanetMatsWithNoCapacity = SQLiteDBClass.GetSettingBool(DbHideFullMatsLandedSave, false);
             showListAvailability = SQLiteDBClass.GetSettingBool(DbHighlightAvailableMats, true);
             showSystemAvailability = SQLiteDBClass.GetSettingBool(DBShowSystemAvailability, true);
-            useEDSMForSystemAvailability = SQLiteDBClass.GetSettingBool(DBUseEDSMForSystemAvailability, false);
+            useEDSMForSystemAvailability = SQLiteDBClass.GetSettingBool(DBUseEDSMForSystemAvailability, false);            
+
             pictureBoxList.ContextMenuStrip = contextMenuStrip;
 
             userControlSynthesis.OnDisplayComplete += Synthesis_OnWantedChange;
@@ -116,7 +118,7 @@ namespace EDDiscovery.UserControls
             SQLiteDBClass.PutSettingBool(DbHideFullMatsLandedSave, hidePlanetMatsWithNoCapacity);
             SQLiteDBClass.PutSettingBool(DbHighlightAvailableMats, showListAvailability);
             SQLiteDBClass.PutSettingBool(DBShowSystemAvailability, showSystemAvailability);
-            SQLiteDBClass.PutSettingBool(DBUseEDSMForSystemAvailability, useEDSMForSystemAvailability);
+            SQLiteDBClass.PutSettingBool(DBUseEDSMForSystemAvailability, useEDSMForSystemAvailability);            
             userControlEngineering.CloseDown();
             userControlSynthesis.CloseDown();
         }
@@ -417,5 +419,33 @@ namespace EDDiscovery.UserControls
             Display();
         }
 
+        private void SplitContainerVertical_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                contextMenuStrip.Visible = true;
+            }
+        }
+                
+        private void ChangeShoppingListOrientation()
+        {
+            if (splitContainerVertical.Orientation == Orientation.Vertical)
+            {
+                splitContainerVertical.Orientation = Orientation.Horizontal;
+                toggleListPositionToolStripMenuItem.Text = "Toggle List Position (at side)";
+                shoppingListStacked = true;
+            }
+            else if (splitContainerVertical.Orientation == Orientation.Horizontal)
+            {
+                splitContainerVertical.Orientation = Orientation.Vertical;
+                toggleListPositionToolStripMenuItem.Text = "Toggle List Position (stacked)";
+                shoppingListStacked = false;
+            }
+        }
+
+        private void ToggleListPositionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ChangeShoppingListOrientation();
+        }
     }
 }
