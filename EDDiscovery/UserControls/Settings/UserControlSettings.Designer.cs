@@ -268,7 +268,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxTheme.SelectedIndex = -1;
             this.comboBoxTheme.SelectedItem = null;
             this.comboBoxTheme.SelectedValue = null;
-            this.comboBoxTheme.Size = new System.Drawing.Size(205, 21);
+            this.comboBoxTheme.Size = new System.Drawing.Size(249, 21);
             this.comboBoxTheme.TabIndex = 0;
             this.comboBoxTheme.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.toolTip.SetToolTip(this.comboBoxTheme, "Select the theme to use");
@@ -276,7 +276,7 @@ namespace EDDiscovery.UserControls
             // 
             // button_edittheme
             // 
-            this.button_edittheme.Location = new System.Drawing.Point(115, 48);
+            this.button_edittheme.Location = new System.Drawing.Point(136, 48);
             this.button_edittheme.Name = "button_edittheme";
             this.button_edittheme.Size = new System.Drawing.Size(100, 23);
             this.button_edittheme.TabIndex = 10;
@@ -287,7 +287,7 @@ namespace EDDiscovery.UserControls
             // 
             // buttonSaveTheme
             // 
-            this.buttonSaveTheme.Location = new System.Drawing.Point(9, 48);
+            this.buttonSaveTheme.Location = new System.Drawing.Point(25, 48);
             this.buttonSaveTheme.Name = "buttonSaveTheme";
             this.buttonSaveTheme.Size = new System.Drawing.Size(100, 23);
             this.buttonSaveTheme.TabIndex = 7;
@@ -800,7 +800,7 @@ namespace EDDiscovery.UserControls
             this.groupBoxTheme.FillClientAreaWithAlternateColor = false;
             this.groupBoxTheme.Location = new System.Drawing.Point(342, 218);
             this.groupBoxTheme.Name = "groupBoxTheme";
-            this.groupBoxTheme.Size = new System.Drawing.Size(227, 142);
+            this.groupBoxTheme.Size = new System.Drawing.Size(268, 142);
             this.groupBoxTheme.TabIndex = 18;
             this.groupBoxTheme.TabStop = false;
             this.groupBoxTheme.Text = "Theme";
@@ -817,7 +817,7 @@ namespace EDDiscovery.UserControls
             this.groupBoxCustomLanguage.FillClientAreaWithAlternateColor = false;
             this.groupBoxCustomLanguage.Location = new System.Drawing.Point(10, 77);
             this.groupBoxCustomLanguage.Name = "groupBoxCustomLanguage";
-            this.groupBoxCustomLanguage.Size = new System.Drawing.Size(205, 50);
+            this.groupBoxCustomLanguage.Size = new System.Drawing.Size(249, 50);
             this.groupBoxCustomLanguage.TabIndex = 21;
             this.groupBoxCustomLanguage.TabStop = false;
             this.groupBoxCustomLanguage.Text = "Language";
@@ -842,7 +842,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxCustomLanguage.SelectedIndex = -1;
             this.comboBoxCustomLanguage.SelectedItem = null;
             this.comboBoxCustomLanguage.SelectedValue = null;
-            this.comboBoxCustomLanguage.Size = new System.Drawing.Size(185, 21);
+            this.comboBoxCustomLanguage.Size = new System.Drawing.Size(232, 21);
             this.comboBoxCustomLanguage.TabIndex = 0;
             this.comboBoxCustomLanguage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.comboBoxCustomLanguage.ValueMember = "";
