@@ -96,7 +96,6 @@ namespace EDDiscovery.UserControls
             this.splitContainerVertical.Size = new System.Drawing.Size(1142, 626);
             this.splitContainerVertical.SplitterDistance = 141;
             this.splitContainerVertical.TabIndex = 0;
-            this.splitContainerVertical.MouseClick += new System.Windows.Forms.MouseEventHandler(this.SplitContainerVertical_MouseClick);
             // 
             // pictureBoxList
             // 
@@ -186,7 +185,7 @@ namespace EDDiscovery.UserControls
             this.useHistoricMaterialCountsToolStripMenuItem,
             this.toggleListPositionToolStripMenuItem});
             this.contextMenuStrip.Name = "contextMenuConfig";
-            this.contextMenuStrip.Size = new System.Drawing.Size(369, 180);
+            this.contextMenuStrip.Size = new System.Drawing.Size(369, 158);
             // 
             // showMaxFSDInjectionsToolStripMenuItem
             // 
@@ -252,7 +251,7 @@ namespace EDDiscovery.UserControls
             // 
             this.toggleListPositionToolStripMenuItem.Name = "toggleListPositionToolStripMenuItem";
             this.toggleListPositionToolStripMenuItem.Size = new System.Drawing.Size(368, 22);
-            this.toggleListPositionToolStripMenuItem.Text = "Toggle List Position (stacked)";
+            this.toggleListPositionToolStripMenuItem.Text = "Toggle Shopping List Position";
             this.toggleListPositionToolStripMenuItem.Click += new System.EventHandler(this.ToggleListPositionToolStripMenuItem_Click);
             // 
             // UserControlShoppingList
