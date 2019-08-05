@@ -143,7 +143,6 @@ namespace EDDiscovery.UserControls
             this.panelGeneral.Controls.Add(this.vScrollBarCustom);
             this.panelGeneral.Controls.Add(this.mostVisited);
             this.panelGeneral.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelGeneral.InternalScrollbar = true;
             this.panelGeneral.Location = new System.Drawing.Point(3, 3);
             this.panelGeneral.Name = "panelGeneral";
             this.panelGeneral.Size = new System.Drawing.Size(697, 537);

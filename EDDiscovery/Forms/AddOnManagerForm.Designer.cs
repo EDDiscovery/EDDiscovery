@@ -170,7 +170,6 @@ namespace EDDiscovery.Forms
             this.panelVScroll.Controls.Add(this.vScrollBarCustom1);
             this.panelVScroll.Controls.Add(this.buttonMore);
             this.panelVScroll.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelVScroll.InternalScrollbar = true;
             this.panelVScroll.Location = new System.Drawing.Point(0, 0);
             this.panelVScroll.Name = "panelVScroll";
             this.panelVScroll.Size = new System.Drawing.Size(920, 357);

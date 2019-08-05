@@ -1611,7 +1611,6 @@ namespace EDDiscovery.UserControls
             this.extPanelScroll.Controls.Add(this.labelHomeDist);
             this.extPanelScroll.Controls.Add(this.textBoxHomeDist);
             this.extPanelScroll.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.extPanelScroll.InternalScrollbar = true;
             this.extPanelScroll.Location = new System.Drawing.Point(0, 0);
             this.extPanelScroll.Name = "extPanelScroll";
             this.extPanelScroll.Size = new System.Drawing.Size(371, 760);
