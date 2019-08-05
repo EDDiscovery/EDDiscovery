@@ -412,7 +412,7 @@ SECTION JournalReceiveText
 .From: "From:" => "Od:"
 .Msg: "Msg:" => "Treść:"
 .Channel: "Channel:" => "Kanał:"
-.Text: " Texts" @
+.Text: " Texts" => " wiadomości"
 .FC: "from " => "z "
 .on: "< on " => "< na "
 
