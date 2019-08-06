@@ -1,0 +1,86 @@
+
+/* Style the article section */
+
+body
+{
+    background-color: black;
+}
+
+.wrapper
+{
+    clear: both;
+    width: 100%;
+}
+
+/* clear the contents after wrapper.. works better than clearing on next item */
+.wrapper::after
+{
+    content: "";
+    visibility: hidden;
+    height: 0;
+    display: block;
+    clear: both;
+}
+
+/* Common status and action box styling */
+
+#StatusBox, #ActionBox
+{
+    background-color: black;
+    margin-top: 0.5em;
+    width: 100%;
+}
+
+#ActionBox
+{
+    border: 2px solid #ffac28;
+}
+
+/* the p element can hold the name of the box, move it relative to give a inline label */
+
+#ActionBox p
+{
+    color: black;
+    position: relative;
+    top: -0.5em;
+    margin-left: 0.5em;
+    display: inline;
+    background-color: #ffac28;
+}
+
+#StatusBox p
+{
+    color: darkorange;
+    line-height:0.1em;
+}
+
+#ActionBox td
+{
+    display: inline; /* td's in action box are inline so flow around the actionbox areas */
+}
+#StatusBox td
+{
+    display: inline; /* td's in action box are inline so flow around the actionbox areas */
+}
+
+/* the img element is the button .. style it */
+
+#StatusBox img, #ActionBox img
+{
+    padding: 10px;
+    border: 2px solid darkorange;
+    border-radius: 8px;
+}
+
+#StatusBox img
+{
+    border-radius: 16px;
+}
+
+/* class assigned to say selected */
+
+.entryselected
+{
+    background-color: green;
+}
+

@@ -5,7 +5,11 @@ function write_header()
 
 function write_nav()
 {
-    document.write("<nav><ul> <li><a href=\"index.html\">History</a></li> <li><a href=\"status.html\">Status</a></li> </ul> </nav>");
+    document.write("<nav><ul> "+
+        "<li> <a href=\"index.html\">History</a></li>" +
+        "<li> <a href=\"status.html\">Status</a></li>" +
+        "<li> <a href=\"grid.html\">Grid</a></li>" +
+                   "</ul> </nav> ");
 }
 
 function write_footer(buttons)

@@ -1,6 +1,8 @@
 
 // Indicators
 
+var indicatoriconsize = 32;     //crappy but effective - set icon size globally
+
 function RequestIndicator()
 {
     console.log("Request indicators");
@@ -13,7 +15,7 @@ function RequestIndicator()
 
 function CreateIndicator(itype)
 {
-    return CreateImage("statusicons/" + itype + ".png", itype, 32, null, [itype, null]);
+    return CreateImage("statusicons/" + itype + ".png", itype, indicatoriconsize, null, [itype, null]);
 }
 
 function CreateAction(enableit, itype, action = null)
@@ -24,7 +26,7 @@ function CreateAction(enableit, itype, action = null)
             action = itype;
 
         //console.log("create action image name:" + itype + " a:" + action + " ");
-        return CreateImage("statusicons/" + itype + ".png", itype, 32, ClickActionItem, [itype, action]);
+        return CreateImage("statusicons/" + itype + ".png", itype, indicatoriconsize, ClickActionItem, [itype, action]);
     }
     else
         return null;
@@ -34,7 +36,8 @@ var shiptypeselected;
 var inwingselected;
 var supercruiseselected;
 
-function HandleIndicatorMessage(jdata)
+// names of elements
+function HandleIndicatorMessage(jdata, statuselement, actionelement, statusotherelement, slicestatus)
 {
     var guifocus = jdata["GUIFocus"];
 
@@ -54,56 +57,53 @@ function HandleIndicatorMessage(jdata)
         shiptypeselected = shiptype;       // SRV, MainShip, Fighter or None.
         inwingselected = inwing;
         supercruiseselected = supercruise;
-        SetupIndicators(jdata);
+        SetupIndicators(jdata, document.getElementById(statuselement), document.getElementById(actionelement), slicestatus);
     }
 
-    SetIndicatorState(jdata, "Status");
-    SetIndicatorState(jdata, "Actions");
+    SetIndicatorState(jdata, statuselement);
+    SetIndicatorState(jdata, actionelement);
 
-    var tstatusother = document.getElementById("StatusOther");
-    removeChildren(tstatusother);
+    if (statusotherelement != null)
+    {
+        var tstatusother = document.getElementById(statusotherelement);
 
-    if (jdata["LegalState"] != null)
-        tstatusother.appendChild(CreatePara("Legal State: " + jdata["LegalState"]));
-    if (jdata["Firegroup"] >= 0 && shiptype == "MainShip")
-        tstatusother.appendChild(CreatePara("Fire Group: " + "ABCDEFGHIJK"[jdata["Firegroup"]]));
-    if (jdata["ValidPips"])
-    {
-        tstatusother.appendChild(CreatePara("Pips: " + "S:" + jdata["Pips"][0] + " E:" + jdata["Pips"][1] + " W:" + jdata["Pips"][2]));
-    }
-    if (jdata["ValidPosition"])
-    {
-        tstatusother.appendChild(CreatePara("Pos: " + jdata["Position"][0] + ", " + jdata["Position"][1]));
-        if (jdata["ValidAltitude"])
+        removeChildren(tstatusother);
+
+        if (jdata["LegalState"] != null)
+            tstatusother.appendChild(CreatePara("Legal State: " + jdata["LegalState"]));
+        if (jdata["Firegroup"] >= 0 && shiptype == "MainShip")
+            tstatusother.appendChild(CreatePara("Fire Group: " + "ABCDEFGHIJK"[jdata["Firegroup"]]));
+        if (jdata["ValidPips"])
         {
-            var alt = jdata["Position"][2];
-            if (alt > 5000)
-                tstatusother.appendChild(CreatePara("Alt: " + (alt/1000.0) + "km"));
-            else
-                tstatusother.appendChild(CreatePara("Alt: " + alt + "m"));
+            tstatusother.appendChild(CreatePara("Pips: " + "S:" + jdata["Pips"][0] + " E:" + jdata["Pips"][1] + " W:" + jdata["Pips"][2]));
+        }
+        if (jdata["ValidPosition"])
+        {
+            tstatusother.appendChild(CreatePara("Pos: " + jdata["Position"][0] + ", " + jdata["Position"][1]));
+            if (jdata["ValidAltitude"])
+            {
+                var alt = jdata["Position"][2];
+                if (alt > 5000)
+                    tstatusother.appendChild(CreatePara("Alt: " + (alt / 1000.0) + "km"));
+                else
+                    tstatusother.appendChild(CreatePara("Alt: " + alt + "m"));
+            }
+
+            if (jdata["ValidHeading"])
+                tstatusother.appendChild(CreatePara("Hdr: " + jdata["Position"][3]));
         }
 
-        if (jdata["ValidHeading"])
-            tstatusother.appendChild(CreatePara("Hdr: " + jdata["Position"][3]));
+        if (jdata["ValidPlanetRadius"])
+            tstatusother.appendChild(CreatePara("Radius: " + jdata["PlanetRadius"] / 1000.0 + "km"));
     }
-
-    if (jdata["ValidPlanetRadius"])
-        tstatusother.appendChild(CreatePara("Radius: " + jdata["PlanetRadius"]/1000.0 + "km"));
 
 }
 
-
-function SetupIndicators(jdata)
+function SetupIndicators(jdata,tstatus,tactions, slicestatus)
 {
     var shiptype = jdata["ShipType"];
 
-    var tstatus = document.getElementById("Status");
     removeChildren(tstatus);
-
-    var tstatusother = document.getElementById("StatusOther");
-    removeChildren(tstatusother);
-
-    var tactions = document.getElementById("Actions");
     removeChildren(tactions);
 
     var inwing = jdata["InWing"] != null && jdata["InWing"] == true;
@@ -119,10 +119,15 @@ function SetupIndicators(jdata)
             CreateIndicator("FsdCooldown")
         ];
 
-        tstatus.appendChild(tablerowmultitdlist(statuslist.slice(0, 4)));
-        tstatus.appendChild(tablerowmultitdlist(statuslist.slice(4, 8)));
-        tstatus.appendChild(tablerowmultitdlist(statuslist.slice(8, 12)));
-        tstatus.appendChild(tablerowmultitdlist(statuslist.slice(12, 13)));
+        if (slicestatus)
+        {
+            tstatus.appendChild(tablerowmultitdlist(statuslist.slice(0, 4)));
+            tstatus.appendChild(tablerowmultitdlist(statuslist.slice(4, 8)));
+            tstatus.appendChild(tablerowmultitdlist(statuslist.slice(8, 12)));
+            tstatus.appendChild(tablerowmultitdlist(statuslist.slice(12, 13)));
+        }
+        else
+            tstatus.appendChild(tablerowmultitdlist(statuslist));
 
         var actionlist = [
             CreateAction(true, "LandingGear", "LandingGearToggle"),
