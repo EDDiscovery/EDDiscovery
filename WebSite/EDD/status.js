@@ -37,7 +37,7 @@ function onMessage(evt)
 
     if (jdata.responsetype == "indicator" || jdata.responsetype == "indicatorpush")
     {
-        HandleIndicatorMessage(jdata,"Status","Actions","StatusOther", true);
+        HandleIndicatorMessage(jdata,"Status","Actions","StatusOther");
     }
     else if (jdata.responsetype == "status" || jdata.responsetype == "statuspush" )
     {

@@ -97,6 +97,11 @@ aside
     display: inline; /* td's in action box are inline so flow around the actionbox areas */
 }
 
+#StatusBox td
+{
+    display: inline; 
+}
+
 /* the img element is the button .. style it */
 
 #StatusBox img, #ActionBox img

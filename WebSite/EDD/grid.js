@@ -15,7 +15,7 @@ function OnLoad()
 	websocket.onmessage = function (evt) { onMessage(evt) };
     websocket.onerror = function (evt) { onError(evt) };
 
-    indicatoriconsize = 48;
+    indicatoriconsize = 64;
     highlight_nav_tab(2);
 
 }

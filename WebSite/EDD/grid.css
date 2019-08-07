@@ -56,7 +56,7 @@ body
 
 #ActionBox td
 {
-    display: inline; /* td's in action box are inline so flow around the actionbox areas */
+    display: inline; /* td's in action box are inline so flow around the areas */
 }
 #StatusBox td
 {
