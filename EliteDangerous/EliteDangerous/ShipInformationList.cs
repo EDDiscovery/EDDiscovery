@@ -73,14 +73,14 @@ namespace EliteDangerousCore
         }
 
         public void Loadout(int id, string ship, string shipfd, string name, string ident, List<ShipModule> modulelist,
-                        long HullValue, long ModulesValue, long Rebuy, bool? Hot)
+                        long HullValue, long ModulesValue, long Rebuy, double unladenmass, double reservefuelcap, double hullhealth, bool? Hot)
         {
             string sid = Key(shipfd, id);
 
             //System.Diagnostics.Debug.WriteLine("Loadout {0} {1} {2} {3}", id, ship, name, ident);
 
             ShipInformation sm = EnsureShip(sid);            // this either gets current ship or makes a new one.
-            Ships[sid] = sm = sm.SetShipDetails(ship, shipfd, name, ident, 0, 0, HullValue, ModulesValue, Rebuy , Hot);     // update ship key, make a fresh one if required.
+            Ships[sid] = sm = sm.SetShipDetails(ship, shipfd, name, ident, 0, 0, HullValue, ModulesValue, Rebuy , unladenmass, reservefuelcap, hullhealth, Hot);     // update ship key, make a fresh one if required.
 
             //System.Diagnostics.Debug.WriteLine("Loadout " + sid);
 

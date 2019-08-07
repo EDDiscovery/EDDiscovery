@@ -435,6 +435,10 @@ namespace EDDiscovery
                 essentialeventtype = SQLiteConnectionUser.GetSettingString("EssentialEventType", "Default");
                 coriolisURL = SQLiteConnectionUser.GetSettingString("CorolisURL", Properties.Resources.URLCoriolis);
                 eddshipyardURL = SQLiteConnectionUser.GetSettingString("EDDShipyardURL", Properties.Resources.URLEDShipyard);
+
+                if (eddshipyardURL == "http://www.edshipyard.com/")     // 30/jul/19 changed address
+                    EDDShipyardURL = "http://edsy.org/";
+
                 edsmfullsystemsurl = SQLiteConnectionUser.GetSettingString("EDSMFullSystemsURL", "Default");
                 eddbsystemsurl = SQLiteConnectionUser.GetSettingString("EDDBSystemsURL", "Default");
                 CaptainsLogTags = SQLiteConnectionUser.GetSettingString("CaptainsLogPanelTagNames", "Expedition=Journal.FSDJump;Died=Journal.Died");

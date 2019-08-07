@@ -138,6 +138,7 @@ namespace EDDiscovery.WebServer
             {
                 discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
                 discoveryform.OnNewUIEvent += Discoveryform_OnNewUIEvent;
+                discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
             }
             else
                 httpws = null;
@@ -158,13 +159,11 @@ namespace EDDiscovery.WebServer
             return true;
         }
 
-
         private void Discoveryform_OnHistoryChange(HistoryList obj)
         {
             httpws.SendWebSockets(journalsender.Refresh(-1, 50), false); // refresh history
             httpws.SendWebSockets(statussender.Refresh(-1), false); // and status
         }
-
 
         private void Discoveryform_OnNewUIEvent(UIEvent obj)
         {
@@ -174,6 +173,10 @@ namespace EDDiscovery.WebServer
             }
         }
 
+        private void Discoveryform_OnNewEntry(HistoryEntry arg1, HistoryList arg2)
+        {
+            httpws.SendWebSockets(journalsender.Push(), false); // refresh history
+        }
 
         // deal with the icon roots
 
@@ -223,12 +226,17 @@ namespace EDDiscovery.WebServer
                 return MakeResponse(startindex, length , "journalrequest" );      // responsetype = journalrequest
             }
 
-            public JToken Refresh(int startindex, int length)
+            public JToken Refresh(int startindex, int length)       // a full refresh of journal history
             {
                 return MakeResponse(startindex, length, "journalrefresh");
             }
 
-            private  JToken MakeResponse(int startindex, int length, string rt)     // generate a response over this range
+            public JToken Push()                                    // push latest entry
+            {
+                return MakeResponse(-1, 1, "journalpush");
+            }
+
+            private JToken MakeResponse(int startindex, int length, string rt)     // generate a response over this range
             { 
                 JToken response = null;
 

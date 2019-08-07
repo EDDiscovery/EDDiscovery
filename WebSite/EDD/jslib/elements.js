@@ -22,20 +22,20 @@ function CreateAnchor(text, link, newtab = false)
     return a2;
 }
 
-function CreateImage(link,alt,width,callback = null, tagname = null)
+function CreateImage(link,alt,width,callback = null, tagdata = null)
 {
     var a = document.createElement("img");
     a.src = link;
     a.alt = alt;
     a.width = width;
 
-    if (tagname != null)
-        a.tag = tagname;
+    if (tagdata != null)
+        a.tag = tagdata;
 
     if ( callback !== null )
         a.onclick = callback;
     
-    console.log("Create image s:" + a.src + " t:" + a.tag );
+  //  console.log("Create image s:" + a.src + " t:" + a.tag );
     return a;
 }
 
