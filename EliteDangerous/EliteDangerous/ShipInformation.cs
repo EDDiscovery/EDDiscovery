@@ -30,18 +30,22 @@ namespace EliteDangerousCore
     {
         #region Information interface
 
-        public int ID { get; private set; }                 // its ID.     ID's are moved to high range when sold
+        public int ID { get; private set; }                 // its Frontier ID.     ID's are moved to high range when sold
         public enum ShipState { Owned, Sold, Destroyed};
         public ShipState State { get; set; } = ShipState.Owned; // if owned, sold, destroyed. Default owned
         public string ShipType { get; private set; }        // ship type name, nice, fer-de-lance, etc. can be null
         public string ShipFD { get; private set; }          // ship type name, fdname
         public string ShipUserName { get; private set; }    // ship name, may be empty or null
         public string ShipUserIdent { get; private set; }   // ship ident, may be empty or null
-        public double FuelLevel { get; private set; }       // fuel level may be 0 not known
-        public double FuelCapacity { get; private set; }    // fuel capacity may be 0 not known
         public long HullValue { get; private set; }         // may be 0, not known
         public long ModulesValue { get; private set; }      // may be 0, not known
+        public double HullHealthAtLoadout { get; private set; } // may be 0, in range 0-100.
+        public double UnladenMass { get; private set; }     // may be 0, not known
+        public double FuelLevel { get; private set; }       // fuel level may be 0 not known
+        public double FuelCapacity { get; private set; }    // fuel capacity may be 0 not known. Calculated as previous loadouts did not include this. 3.4 does
+        public double ReserveFuelCapacity { get; private set; }  // 3.4 from loadout..
         public long Rebuy { get; private set; }             // may be 0, not known
+
         public string StoredAtSystem { get; private set; }  // null if not stored, else where stored
         public string StoredAtStation { get; private set; } // null if not stored or unknown
         public DateTime TransferArrivalTimeUTC { get; private set; }     // if current UTC < this, its in transit
@@ -314,8 +318,11 @@ namespace EliteDangerousCore
             sm.FuelCapacity = this.FuelCapacity;
             sm.SubVehicle = this.SubVehicle;
             sm.HullValue = this.HullValue;
+            sm.HullHealthAtLoadout = this.HullHealthAtLoadout;
             sm.ModulesValue = this.ModulesValue;
+            sm.UnladenMass = this.UnladenMass;
             sm.Rebuy = this.Rebuy;
+            sm.ReserveFuelCapacity = this.ReserveFuelCapacity;
             sm.StoredAtStation = this.StoredAtStation;
             sm.StoredAtSystem = this.StoredAtSystem;
             sm.TransferArrivalTimeUTC = this.TransferArrivalTimeUTC;
@@ -362,7 +369,8 @@ namespace EliteDangerousCore
 
         public ShipInformation SetShipDetails(string ship, string shipfd, string name = null, string ident = null, 
                                     double fuellevel = 0, double fueltotal = 0,
-                                    long hullvalue = 0, long modulesvalue = 0, long rebuy = 0, bool? hot = null)
+                                    long hullvalue = 0, long modulesvalue = 0, long rebuy = 0,
+                                    double unladenmass = 0, double reservefuelcap = 0 , double hullhealth = 0, bool? hot = null)
         {
             if (ShipFD != shipfd || ship != ShipType || (name != null && name != ShipUserName) ||
                                 (ident != null && ident != ShipUserIdent) ||
@@ -371,6 +379,9 @@ namespace EliteDangerousCore
                                 (hullvalue != 0 && hullvalue != HullValue) ||
                                 (modulesvalue != 0 && modulesvalue != ModulesValue) ||
                                 (rebuy != 0 && rebuy != Rebuy) ||
+                                (unladenmass != 0 && unladenmass != UnladenMass) ||
+                                (reservefuelcap != 0 && reservefuelcap != ReserveFuelCapacity) ||
+                                (hullhealth != 0 && HullHealthAtLoadout != hullhealth) ||
                                 (hot != null && hot.Value != Hot)
                                 )
             {
@@ -394,10 +405,18 @@ namespace EliteDangerousCore
                     sm.ModulesValue = modulesvalue;
                 if (rebuy != 0)
                     sm.Rebuy = rebuy;
+                if (unladenmass != 0)
+                    sm.UnladenMass = unladenmass;
+                if (reservefuelcap != 0)
+                    sm.ReserveFuelCapacity = reservefuelcap;
+                if (hullhealth != 0)
+                    sm.HullHealthAtLoadout = hullhealth;
+
                 if (hot != null)
                     sm.Hot = hot.Value;
 
-                //System.Diagnostics.Debug.WriteLine(ship + " " + sm.FuelCapacity + " " + sm.FuelLevel);
+                //System.Diagnostics.Debug.WriteLine(ship + " " + sm.FuelCapacity + " " + sm.FuelLevel + " " + sm.ReserveFuelCapacity);
+
                 return sm;
             }
 
@@ -680,23 +699,36 @@ namespace EliteDangerousCore
             return engineering;
         }
 
-        public string ToJSONLoadout()
+        public JObject ToJSONLoadout()
         {
             JObject jo = new JObject();
 
             jo["timestamp"] = DateTime.UtcNow.ToStringZulu();
             jo["event"] = "Loadout";
             jo["Ship"] = ShipFD;
+            jo["ShipID"] = ID;
             if (!string.IsNullOrEmpty(ShipUserName))
                 jo["ShipName"] = ShipUserName;
             if (!string.IsNullOrEmpty(ShipUserIdent))
                 jo["ShipIdent"] = ShipUserIdent;
-            if (Rebuy > 0)
-                jo["Rebuy"] = Rebuy;
             if (HullValue > 0)
                 jo["HullValue"] = HullValue;
             if (ModulesValue > 0)
                 jo["ModulesValue"] = ModulesValue;
+            if (HullHealthAtLoadout > 0)
+                jo["HullHealth"] = HullHealthAtLoadout / 100.0;
+            if (UnladenMass > 0)
+                jo["UnladenMass"] = UnladenMass;
+            jo["CargoCapacity"] = CargoCapacity();
+            if (FuelCapacity > 0 && ReserveFuelCapacity > 0)
+            {
+                JObject fc = new JObject();
+                fc["Main"] = FuelCapacity;
+                fc["Reserve"] = ReserveFuelCapacity;
+                jo["FuelCapacity"] = fc;
+            }
+            if (Rebuy > 0)
+                jo["Rebuy"] = Rebuy;
 
             JArray mlist = new JArray();
 
@@ -708,15 +740,19 @@ namespace EliteDangerousCore
                 module["Item"] = sm.ItemFD;
                 module["On"] = sm.Enabled.HasValue ? sm.Enabled : true;
                 module["Priority"] = sm.Priority.HasValue ? sm.Priority : 0;
+
                 if (sm.Value.HasValue)
                     module["Value"] = sm.Value;
+
+                if ( sm.Engineering != null )
+                    module["Engineering"] = sm.Engineering.ToJSONLoadout();
 
                 mlist.Add(module);
             }
 
             jo["Modules"] = mlist;
 
-            return jo.ToString(Newtonsoft.Json.Formatting.Indented);
+            return jo;
         }
 
         #endregion

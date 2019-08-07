@@ -209,6 +209,49 @@ namespace EliteDangerousCore
                 }
             }
 
+            public JObject ToJSONLoadout()  // reproduce the loadout format..
+            {
+                JObject jo = new JObject();
+                jo["Engineer"] = Engineer;
+                jo["EngineerID"] = EngineerID;
+                jo["BlueprintID"] = BlueprintID;
+                jo["BlueprintName"] = BlueprintName;
+                jo["Level"] = Level;
+                jo["Quality"] = Quality;
+
+                if (ExperimentalEffect.HasChars())      // not always present..
+                {
+                    jo["ExperimentalEffect"] = ExperimentalEffect;
+                    jo["ExperimentalEffect_Localised"] = ExperimentalEffect_Localised;
+                }
+
+                if ( Modifiers != null )
+                {
+                    JArray modarray = new JArray();
+                    foreach( EngineeringModifiers m in Modifiers )
+                    {
+                        JObject mod = new JObject();
+                        mod["Label"] = m.Label;
+                        if (m.ValueStr.HasChars())      // if set, its just a string value
+                        {
+                            mod["ValueStr"] = m.ValueStr;
+                        }
+                        else
+                        {
+                            mod["Value"] = m.Value;
+                            mod["OriginalValue"] = m.OriginalValue;
+                            mod["LessIsGood"] = m.LessIsGood ? 1 : 0;       // written 1/0 in file, not true/false.
+                        }
+
+                        modarray.Add(mod);
+                    }
+
+                    jo["Modifiers"] = modarray;
+                }
+
+                return jo;
+            }
+
             public override string ToString()
             {
                 string ret = BaseUtils.FieldBuilder.BuildSetPad(Environment.NewLine, "Engineer:".Tx(this), Engineer, "Blueprint:".Tx(this), FriendlyBlueprintName,

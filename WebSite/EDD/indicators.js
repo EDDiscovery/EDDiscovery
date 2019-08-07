@@ -1,6 +1,8 @@
 
 // Indicators
 
+var indicatoriconsize = 32;     //crappy but effective - set icon size globally
+
 function RequestIndicator()
 {
     console.log("Request indicators");
@@ -11,30 +13,41 @@ function RequestIndicator()
     websocket.send(JSON.stringify(msg));
 }
 
-function CreateIndicator(itype)
+function CreateIndicator(itype, enableit = true)
 {
-    return CreateImage("statusicons/" + itype + ".png", itype, 32, null, [itype, null]);
+    if (enableit)
+        return CreateImage("statusicons/" + itype + ".png", itype, indicatoriconsize, null, [itype, null]);
+    else
+        return null;
 }
 
-function CreateAction(enableit, itype, action = null)
+function CreateAction(name, bindingname = null, enableit = true, flashit = 0, confirmit = false)
 {
     if (enableit)
     {
-        if (action == null)
-            action = itype;
+        if (bindingname == null)
+            bindingname = name;
 
         //console.log("create action image name:" + itype + " a:" + action + " ");
-        return CreateImage("statusicons/" + itype + ".png", itype, 32, ClickActionItem, [itype, action]);
+        return CreateImage("statusicons/" + name + ".png", name, indicatoriconsize, ClickActionItem, [name, bindingname, flashit, confirmit]);
     }
     else
         return null;
 }
 
+function CreateActionButton(name, bindingname = null, enableit = true)
+{
+    return CreateAction(name, bindingname, enableit, 250);
+}
+
 var shiptypeselected;
 var inwingselected;
 var supercruiseselected;
+var landedselected;
+var dockedselected;
 
-function HandleIndicatorMessage(jdata)
+// names of elements
+function HandleIndicatorMessage(jdata, statuselement, actionelement, statusotherelement)
 {
     var guifocus = jdata["GUIFocus"];
 
@@ -46,142 +59,138 @@ function HandleIndicatorMessage(jdata)
     console.log("Indicators Mod" + JSON.stringify(jdata));
 
     var shiptype = jdata["ShipType"];
+
     var inwing = jdata["InWing"] != null && jdata["InWing"] == true;
     var supercruise = jdata["Supercruise"] != null && jdata["Supercruise"] == true;
+    var landed = jdata["Landed"] != null && jdata["Landed"] == true;
+    var docked = jdata["Docked"] != null && jdata["Docked"] == true;
 
-    if (shiptype != shiptypeselected || inwing != inwingselected || supercruise != supercruiseselected)
+    if (shiptype != shiptypeselected || inwing != inwingselected || supercruise != supercruiseselected || landed != landedselected || docked != dockedselected)
     {
         shiptypeselected = shiptype;       // SRV, MainShip, Fighter or None.
         inwingselected = inwing;
         supercruiseselected = supercruise;
-        SetupIndicators(jdata);
+        SetupIndicators(jdata, document.getElementById(statuselement), document.getElementById(actionelement),
+            shiptype, inwing, supercruise, landed,docked);
     }
 
-    SetIndicatorState(jdata, "Status");
-    SetIndicatorState(jdata, "Actions");
+    SetIndicatorState(jdata, document.getElementById(statuselement));
+    SetIndicatorState(jdata, document.getElementById(actionelement));
 
-    var tstatusother = document.getElementById("StatusOther");
-    removeChildren(tstatusother);
+    if (statusotherelement != null)
+    {
+        var tstatusother = document.getElementById(statusotherelement);
 
-    if (jdata["LegalState"] != null)
-        tstatusother.appendChild(CreatePara("Legal State: " + jdata["LegalState"]));
-    if (jdata["Firegroup"] >= 0 && shiptype == "MainShip")
-        tstatusother.appendChild(CreatePara("Fire Group: " + "ABCDEFGHIJK"[jdata["Firegroup"]]));
-    if (jdata["ValidPips"])
-    {
-        tstatusother.appendChild(CreatePara("Pips: " + "S:" + jdata["Pips"][0] + " E:" + jdata["Pips"][1] + " W:" + jdata["Pips"][2]));
-    }
-    if (jdata["ValidPosition"])
-    {
-        tstatusother.appendChild(CreatePara("Pos: " + jdata["Position"][0] + ", " + jdata["Position"][1]));
-        if (jdata["ValidAltitude"])
+        removeChildren(tstatusother);
+
+        if (jdata["LegalState"] != null)
+            tstatusother.appendChild(CreatePara("Legal State: " + jdata["LegalState"]));
+        if (jdata["Firegroup"] >= 0 && shiptype == "MainShip")
+            tstatusother.appendChild(CreatePara("Fire Group: " + "ABCDEFGHIJK"[jdata["Firegroup"]]));
+        if (jdata["ValidPips"])
         {
-            var alt = jdata["Position"][2];
-            if (alt > 5000)
-                tstatusother.appendChild(CreatePara("Alt: " + (alt/1000.0) + "km"));
-            else
-                tstatusother.appendChild(CreatePara("Alt: " + alt + "m"));
+            tstatusother.appendChild(CreatePara("Pips: " + "S:" + jdata["Pips"][0] + " E:" + jdata["Pips"][1] + " W:" + jdata["Pips"][2]));
+        }
+        if (jdata["ValidPosition"])
+        {
+            tstatusother.appendChild(CreatePara("Pos: " + jdata["Position"][0] + ", " + jdata["Position"][1]));
+            if (jdata["ValidAltitude"])
+            {
+                var alt = jdata["Position"][2];
+                if (alt > 5000)
+                    tstatusother.appendChild(CreatePara("Alt: " + (alt / 1000.0) + "km"));
+                else
+                    tstatusother.appendChild(CreatePara("Alt: " + alt + "m"));
+            }
+
+            if (jdata["ValidHeading"])
+                tstatusother.appendChild(CreatePara("Hdr: " + jdata["Position"][3]));
         }
 
-        if (jdata["ValidHeading"])
-            tstatusother.appendChild(CreatePara("Hdr: " + jdata["Position"][3]));
+        if (jdata["ValidPlanetRadius"])
+            tstatusother.appendChild(CreatePara("Radius: " + jdata["PlanetRadius"] / 1000.0 + "km"));
     }
-
-    if (jdata["ValidPlanetRadius"])
-        tstatusother.appendChild(CreatePara("Radius: " + jdata["PlanetRadius"]/1000.0 + "km"));
 
 }
 
-
-function SetupIndicators(jdata)
+function SetupIndicators(jdata,tstatus,tactions, shiptype, inwing, supercruise,landed, docked)
 {
-    var shiptype = jdata["ShipType"];
-
-    var tstatus = document.getElementById("Status");
     removeChildren(tstatus);
-
-    var tstatusother = document.getElementById("StatusOther");
-    removeChildren(tstatusother);
-
-    var tactions = document.getElementById("Actions");
     removeChildren(tactions);
 
-    var inwing = jdata["InWing"] != null && jdata["InWing"] == true;
-    var supercruise = jdata["Supercruise"] != null && jdata["Supercruise"] == true;
-
+    var innormalspace = !landed && !docked && !supercruise;
+    console.log("Create Indicators with L:" + landed + " D:" + docked + " N:" + innormalspace + " W:" + inwing);
     if (shiptype == "MainShip")
     {
         var statuslist = [
-            CreateIndicator("Docked"), CreateIndicator("Landed"),
-            CreateIndicator("InWing"), CreateIndicator("ScoopingFuel"), CreateIndicator("ShieldsUp"),
-            CreateIndicator("LowFuel"), CreateIndicator("OverHeating"), CreateIndicator("IsInDanger"),
-            CreateIndicator("BeingInterdicted"), CreateIndicator("FsdMassLocked"), CreateIndicator("FsdCharging"),
-            CreateIndicator("FsdCooldown")
+            CreateIndicator("Docked"), CreateIndicator("Landed"), CreateIndicator("ShieldsUp"),
+            CreateIndicator("InWing"), CreateIndicator("ScoopingFuel", supercruise), 
+            CreateIndicator("LowFuel"), CreateIndicator("OverHeating"), CreateIndicator("IsInDanger", !docked),
+            CreateIndicator("BeingInterdicted", supercruise), CreateIndicator("FsdCharging",!landed && !docked),
+            CreateIndicator("FsdMassLocked", innormalspace),
+            CreateIndicator("FsdCooldown", supercruise || innormalspace)
         ];
 
-        tstatus.appendChild(tablerowmultitdlist(statuslist.slice(0, 4)));
-        tstatus.appendChild(tablerowmultitdlist(statuslist.slice(4, 8)));
-        tstatus.appendChild(tablerowmultitdlist(statuslist.slice(8, 12)));
-        tstatus.appendChild(tablerowmultitdlist(statuslist.slice(12, 13)));
+        tstatus.appendChild(tablerowmultitdlist(statuslist));
 
         var actionlist = [
-            CreateAction(true, "LandingGear", "LandingGearToggle"),
-            CreateAction(true, "Lights", "ShipSpotLightToggle"),
-            CreateAction(true, "FlightAssist", "ToggleFlightAssist"),
-            CreateAction(true, "HardpointsDeployed", "DeployHardpointToggle"),
+            CreateAction("LandingGear", "LandingGearToggle",innormalspace),     // reported..
+            CreateAction("Lights", "ShipSpotLightToggle"),
+            CreateAction("FlightAssist", "ToggleFlightAssist", innormalspace),
+            CreateAction("HardpointsDeployed", "DeployHardpointToggle"),
 
-            CreateAction(true, "CargoScoopDeployed", "ToggleCargoScoop"),
-            CreateAction(!supercruise, "SilentRunning", "ToggleButtonUpInput"),
-            CreateAction(true, "NightVision", "NightVisionToggle"),
-            CreateAction(!supercruise, "UseBoostJuice"),
+            CreateAction("CargoScoopDeployed", "ToggleCargoScoop",innormalspace),
+            CreateAction("NightVision", "NightVisionToggle"),
 
-            CreateAction(!supercruise, "ShieldCell", "UseShieldCell"),
-            CreateAction(!supercruise, "Chaff", "FireChaffLauncher"),
-            CreateAction(!supercruise, "HeatSink", "DeployHeatSink"),
-            CreateAction(!supercruise, "ChargeECM"),
+            CreateAction("UseBoostJuice", null, innormalspace, 1500),    
+            CreateAction("ShieldCell", "UseShieldCell", innormalspace,1000),
+            CreateAction("Chaff", "FireChaffLauncher", innormalspace,1000),
+            CreateAction("HeatSink", "DeployHeatSink", innormalspace,1000),
+            CreateAction("ChargeECM", null, innormalspace, 1500),
 
-            CreateAction(true, "Supercruise"),
-            CreateAction(true, "HyperSuperCombination"),
-            CreateAction(true, "OrbitLinesToggle"),
+            CreateAction("Supercruise", null, !landed),  // reported
+            CreateActionButton("HyperSuperCombination", null, !landed), // not reported
+            CreateActionButton("OrbitLinesToggle"),
 
-            CreateAction(true, "CycleNextTarget"),
-            CreateAction(true, "CyclePreviousTarget"),
-            CreateAction(true, "SelectHighestThreat"),
-            CreateAction(true, "CycleNextHostileTarget"),
-            CreateAction(true, "CyclePreviousHostileTarget"),
+            CreateActionButton("CycleNextTarget"),
+            CreateActionButton("CyclePreviousTarget"),
+            CreateActionButton("SelectHighestThreat"),
+            CreateActionButton("CycleNextHostileTarget"),
+            CreateActionButton("CyclePreviousHostileTarget"),
 
-            CreateAction(true, "CycleNextSubsystem"),
-            CreateAction(true, "CyclePreviousSubsystem"),
+            CreateActionButton("CycleNextSubsystem"),
+            CreateActionButton("CyclePreviousSubsystem"),
 
-            CreateAction(inwing, "TargetWingman0"),
-            CreateAction(inwing, "TargetWingman1"),
-            CreateAction(inwing, "TargetWingman2"),
-            CreateAction(inwing, "SelectTargetsTarget"),
-            CreateAction(inwing, "WingNavLock"),
+            CreateActionButton("TargetWingman0", null, inwing),
+            CreateActionButton("TargetWingman1", null, inwing),
+            CreateActionButton("TargetWingman2", null, inwing),
+            CreateActionButton("SelectTargetsTarget", null, inwing),
+            CreateActionButton("WingNavLock", null, inwing),
 
-            CreateAction(supercruise, "TargetNextRouteSystem"),
+            CreateActionButton("TargetNextRouteSystem",null,supercruise ),
 
-            CreateAction(true, "CycleFireGroupNext"),
-            CreateAction(true, "CycleFireGroupPrevious"),
+            CreateActionButton("CycleFireGroupNext"),
+            CreateActionButton("CycleFireGroupPrevious"),
 
-            CreateAction(true, "GalaxyMapOpen"),
-            CreateAction(true, "SystemMapOpen"),
-            CreateAction(true, "IncreaseSystemsPower"),
-            CreateAction(true, "IncreaseEnginesPower"),
-            CreateAction(true, "IncreaseWeaponsPower"),
-            CreateAction(true, "ResetPowerDistribution"),
+            CreateActionButton("IncreaseSystemsPower"),
+            CreateActionButton("IncreaseEnginesPower"),
+            CreateActionButton("IncreaseWeaponsPower"),
+            CreateActionButton("ResetPowerDistribution"),
 
-            CreateAction(!supercruise, "OrderDefensiveBehaviour"),
-            CreateAction(!supercruise, "OrderAggressiveBehaviour"),
-            CreateAction(!supercruise, "OrderFocusTarget"),
-            CreateAction(!supercruise, "OrderHoldFire"),
-            CreateAction(!supercruise, "OrderHoldPosition"),
-            CreateAction(!supercruise, "OrderFollow"),
-            CreateAction(!supercruise, "OrderRequestDock"),
-            CreateAction(!supercruise, "OpenOrders"),
+            CreateActionButton("OrderDefensiveBehaviour", null, innormalspace),
+            CreateActionButton("OrderAggressiveBehaviour", null, innormalspace),
+            CreateActionButton("OrderFocusTarget", null, innormalspace),
+            CreateActionButton("OrderHoldFire", null, innormalspace),
+            CreateActionButton("OrderHoldPosition", null, innormalspace),
+            CreateActionButton("OrderFollow", null, innormalspace),
+            CreateActionButton("OrderRequestDock", null, innormalspace),
+            CreateActionButton("OpenOrders", null, innormalspace),
 
-            CreateAction(true, "Screenshot", "F10"),
+            CreateAction("GalaxyMapOpen"),
+            CreateAction("SystemMapOpen"),
+            CreateActionButton("Screenshot", "F10"),
 
+            CreateAction("SilentRunning", "ToggleButtonUpInput", innormalspace,0,true),
         ];
 
         tactions.appendChild(tablerowmultitdlist(actionlist))
@@ -193,20 +202,21 @@ function SetupIndicators(jdata)
         ];
 
         var actionlist = [
-            CreateAction(true, "SrvHandbrake", "AutoBreakBuggyButton"),
-            CreateAction(true, "SrvTurret", "ToggleBuggyTurretButton"),
-            CreateAction(true, "SrvDriveAssist", "ToggleDriveAssist"),
-            CreateAction(true, "Lights", "HeadlightsBuggyButton"),
-            CreateAction(true, "RecallDismissShip", "F10"),
+            CreateAction( "SrvHandbrake", "AutoBreakBuggyButton"),
+            CreateAction( "SrvTurret", "ToggleBuggyTurretButton"),
+            CreateAction( "SrvDriveAssist", "ToggleDriveAssist"),
+            CreateAction( "Lights", "HeadlightsBuggyButton"),
 
-            CreateAction(true, "GalaxyMapOpen"),
-            CreateAction(true, "SystemMapOpen"),
-            CreateAction(true, "IncreaseSystemsPower"),
-            CreateAction(true, "IncreaseEnginesPower"),
-            CreateAction(true, "IncreaseWeaponsPower"),
-            CreateAction(true, "ResetPowerDistribution"),
+            CreateActionButton("RecallDismissShip", "F10"),
 
-            CreateAction(true, "Screenshot", "F10"),
+            CreateActionButton( "IncreaseSystemsPower"),
+            CreateActionButton( "IncreaseEnginesPower"),
+            CreateActionButton( "IncreaseWeaponsPower"),
+            CreateActionButton( "ResetPowerDistribution"),
+
+            CreateAction("GalaxyMapOpen"),
+            CreateAction("SystemMapOpen"),
+            CreateActionButton( "Screenshot", "F10"),
         ];
 
         tstatus.appendChild(tablerowmultitdlist(statuslist));
@@ -219,26 +229,26 @@ function SetupIndicators(jdata)
         ]
 
         var actionlist = [
-            CreateAction(true, "Lights", "ShipSpotLightToggle"),
-            CreateAction(true, "FlightAssist", "ToggleFlightAssist"),
-            CreateAction(true, "NightVision", "NightVisionToggle"),
-            CreateAction(true, "GalaxyMapOpen"),
-            CreateAction(true, "SystemMapOpen"),
-            CreateAction(true, "IncreaseSystemsPower"),
-            CreateAction(true, "IncreaseEnginesPower"),
-            CreateAction(true, "IncreaseWeaponsPower"),
-            CreateAction(true, "ResetPowerDistribution"),
+            CreateAction( "Lights", "ShipSpotLightToggle"),
+            CreateAction( "FlightAssist", "ToggleFlightAssist"),
+            CreateAction( "NightVision", "NightVisionToggle"),
+            CreateActionButton( "IncreaseSystemsPower"),
+            CreateActionButton( "IncreaseEnginesPower"),
+            CreateActionButton( "IncreaseWeaponsPower"),
+            CreateActionButton( "ResetPowerDistribution"),
 
-            CreateAction(true, "OrderDefensiveBehaviour"),
-            CreateAction(true, "OrderAggressiveBehaviour"),
-            CreateAction(true, "OrderFocusTarget"),
-            CreateAction(true, "OrderHoldFire"),
-            CreateAction(true, "OrderHoldPosition"),
-            CreateAction(true, "OrderFollow"),
-            CreateAction(true, "OrderRequestDock"),
-            CreateAction(true, "OpenOrders"),
+            CreateActionButton( "OrderDefensiveBehaviour"),
+            CreateActionButton( "OrderAggressiveBehaviour"),
+            CreateActionButton( "OrderFocusTarget"),
+            CreateActionButton( "OrderHoldFire"),
+            CreateActionButton( "OrderHoldPosition"),
+            CreateActionButton( "OrderFollow"),
+            CreateActionButton( "OrderRequestDock"),
+            CreateActionButton( "OpenOrders"),
 
-            CreateAction(true, "Screenshot", "F10"),
+            CreateAction("GalaxyMapOpen"),
+            CreateAction("SystemMapOpen"),
+            CreateActionButton( "Screenshot", "F10"),
         ];
 
         tstatus.appendChild(tablerowmultitdlist(statuslist));
@@ -249,7 +259,7 @@ function SetupIndicators(jdata)
     }
 }
 
-function SetIndicatorState(jdata, element)
+function SetIndicatorState(jdata, tstatus)
 {
     //const keys = Object.keys(jdata);
     //if (keys.indexOf(z.tag) != -1)
@@ -257,7 +267,6 @@ function SetIndicatorState(jdata, element)
     //    console.log(".. " + z.tag + " value is " + jdata[z.tag]);
     //}
 
-    var tstatus = document.getElementById(element);
     tstatus.childNodes.forEach(function (x)     // tr's
     {
         x.childNodes.forEach(function (y)       // td's
@@ -289,6 +298,12 @@ function SetIndicatorState(jdata, element)
 
 function ClickActionItem(e)
 {
+    if (e.target.tag[3])
+    {
+        if (!confirm("Confirm " + e.target.tag[0]))
+            return;
+    } 
+
     console.log("Press key " + e.target.tag[1]);
     var msg = {
         requesttype: "presskey",
@@ -296,5 +311,16 @@ function ClickActionItem(e)
     };
 
     websocket.send(JSON.stringify(msg));
+
+    if (e.target.tag[2]>0)
+    {
+        e.target.classList.add("entryselected");       // using a class means it does not mess up all the other properties.
+        console.log("Flash it! " + e.target.tag[2]);
+        setTimeout(function (f)
+        {
+            console.log("Flash off!")
+            e.target.classList.remove("entryselected");       // using a class means it does not mess up all the other properties.
+        }, e.target.tag[2]);
+    }
 }
 

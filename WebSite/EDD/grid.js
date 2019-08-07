@@ -15,7 +15,8 @@ function OnLoad()
 	websocket.onmessage = function (evt) { onMessage(evt) };
     websocket.onerror = function (evt) { onError(evt) };
 
-    highlight_nav_tab(1);
+    indicatoriconsize = 64;
+    highlight_nav_tab(2);
 
 }
 
@@ -37,11 +38,7 @@ function onMessage(evt)
 
     if (jdata.responsetype == "indicator" || jdata.responsetype == "indicatorpush")
     {
-        HandleIndicatorMessage(jdata,"Status","Actions","StatusOther");
-    }
-    else if (jdata.responsetype == "status" || jdata.responsetype == "statuspush" )
-    {
-        FillSystemTable(jdata);
+        HandleIndicatorMessage(jdata, "Status", "Actions", null);
     }
 }
 

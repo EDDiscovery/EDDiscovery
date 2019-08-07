@@ -41,8 +41,10 @@ namespace EDDiscovery.UserControls
         private bool showListAvailability;
         private bool showSystemAvailability;
         private bool useEDSMForSystemAvailability;
-        private bool useHistoric = false;
-
+        private bool toggleShoppingListPosition;
+                
+        private bool useHistoric = false;        
+        
         private string DbShowInjectionsSave { get { return DBName("ShoppingListShowFSD" ); } }
         private string DbShowAllMatsLandedSave { get { return DBName("ShoppingListShowPlanetMats" ); } }
         private string DbHideFullMatsLandedSave { get { return DBName("ShoppingListHideFullMats"); } }
@@ -51,6 +53,7 @@ namespace EDDiscovery.UserControls
         private string DBUseEDSMForSystemAvailability { get { return DBName("ShoppingListUseEDSM" ); } }
         private string DBTechBrokerFilterSave { get { return DBName("ShoppingListTechBrokerFilter"); } }
         private string DBSpecialEffectsFilterSave { get { return DBName("ShoppingListSpecialEffectsFilter"); } }
+        private string DbToggleShoppingListPosition { get { return DBName("ShoppingListPositionToggle"); } }
 
         #region Init
 
@@ -83,6 +86,9 @@ namespace EDDiscovery.UserControls
             showListAvailability = SQLiteDBClass.GetSettingBool(DbHighlightAvailableMats, true);
             showSystemAvailability = SQLiteDBClass.GetSettingBool(DBShowSystemAvailability, true);
             useEDSMForSystemAvailability = SQLiteDBClass.GetSettingBool(DBUseEDSMForSystemAvailability, false);
+            showMaxInjections = SQLiteDBClass.GetSettingBool(DbToggleShoppingListPosition, false);
+            toggleShoppingListPosition = SQLiteDBClass.GetSettingBool(DbToggleShoppingListPosition, false);
+
             pictureBoxList.ContextMenuStrip = contextMenuStrip;
 
             userControlSynthesis.OnDisplayComplete += Synthesis_OnWantedChange;
@@ -117,6 +123,7 @@ namespace EDDiscovery.UserControls
             SQLiteDBClass.PutSettingBool(DbHighlightAvailableMats, showListAvailability);
             SQLiteDBClass.PutSettingBool(DBShowSystemAvailability, showSystemAvailability);
             SQLiteDBClass.PutSettingBool(DBUseEDSMForSystemAvailability, useEDSMForSystemAvailability);
+            SQLiteDBClass.PutSettingBool(DbToggleShoppingListPosition, toggleShoppingListPosition);
             userControlEngineering.CloseDown();
             userControlSynthesis.CloseDown();
         }
@@ -136,6 +143,16 @@ namespace EDDiscovery.UserControls
             useHistoricMaterialCountsToolStripMenuItem.Checked = useHistoric;
             showSystemAvailabilityOfMaterialsInShoppingListToolStripMenuItem.Checked = showSystemAvailability;
             useEDSMDataInSystemAvailabilityToolStripMenuItem.Checked = useEDSMForSystemAvailability;
+
+            if (toggleShoppingListPosition == true)
+            {
+                splitContainerVertical.Orientation = Orientation.Horizontal;
+            }
+            else
+            {
+                splitContainerVertical.Orientation = Orientation.Vertical;
+            }
+            
             Display();
         }
 
@@ -146,6 +163,7 @@ namespace EDDiscovery.UserControls
         }
 
         public override Color ColorTransparency { get { return Color.Green; } }
+                
         public override void SetTransparency(bool on, Color curcol)
         {
             pictureBoxList.BackColor = this.BackColor = splitContainerVertical.BackColor = splitContainerRightHorz.BackColor = curcol;
@@ -416,6 +434,24 @@ namespace EDDiscovery.UserControls
             hidePlanetMatsWithNoCapacity = ((ToolStripMenuItem)sender).Checked;
             Display();
         }
+                
+        private void ChangeShoppingListOrientation()
+        {
+            if (splitContainerVertical.Orientation == Orientation.Vertical)
+            {
+                splitContainerVertical.Orientation = Orientation.Horizontal;
+                toggleShoppingListPosition = true;
+            }
+            else if (splitContainerVertical.Orientation == Orientation.Horizontal)
+            {
+                splitContainerVertical.Orientation = Orientation.Vertical;
+                toggleShoppingListPosition = false;
+            }
+        }
 
+        private void ToggleListPositionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ChangeShoppingListOrientation();
+        }
     }
 }
