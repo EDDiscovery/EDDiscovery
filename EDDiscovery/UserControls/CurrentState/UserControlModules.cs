@@ -242,6 +242,8 @@ namespace EDDiscovery.UserControls
 
             AddMassLine("Mass Hull".Tx(this), hullmass.ToStringInvariant("N1") + "t");
             AddMassLine("Mass Unladen".Tx(this), (hullmass + modulemass).ToStringInvariant("N1") + "t");
+            if (si.UnladenMass > 0)
+                AddMassLine("Mass FD Unladen".Tx(this), si.UnladenMass.ToStringInvariant("N1") + "t");
             AddMassLine("Mass Modules".Tx(this), modulemass.ToStringInvariant("N1") + "t");
 
             AddInfoLine("Manufacturer".Tx(this), si.Manufacturer);
@@ -250,6 +252,10 @@ namespace EDDiscovery.UserControls
                 AddInfoLine("Fuel Capacity".Tx(this), si.FuelCapacity.ToStringInvariant("N1") + "t");
             if ( si.FuelLevel > 0 )
                 AddInfoLine("Fuel Level".Tx(this), si.FuelLevel.ToStringInvariant("N1") + "t");
+            if (si.ReserveFuelCapacity > 0)
+                AddInfoLine("Fuel Reserve Capacity".Tx(this), si.ReserveFuelCapacity.ToStringInvariant("N2") + "t");
+            if ( si.HullHealthAtLoadout > 0 )
+                AddInfoLine("Hull Health (Loadout)".Tx(this), si.HullHealthAtLoadout.ToStringInvariant("N1") + "%");
 
             double fuelwarn = si.FuelWarningPercent;
             AddInfoLine("Fuel Warning %".Tx(this), fuelwarn > 0 ? fuelwarn.ToStringInvariant("N1") + "%" : "Off".Tx());
@@ -406,16 +412,18 @@ namespace EDDiscovery.UserControls
 
             if (si != null)
             {
-                string s = si.ToJSONLoadout();
+                Newtonsoft.Json.Linq.JObject jo = si.ToJSONLoadout();
 
-                string uri = EDDConfig.Instance.EDDShipyardURL + "#/I=" + BaseUtils.HttpUriEncode.URIGZipBase64Escape(s);
+                string loadoutjournalline = jo.ToString(Newtonsoft.Json.Formatting.Indented);
 
-                //File.WriteAllText(@"c:\code\out.txt", uri);
+           //     File.WriteAllText(@"c:\code\loadoutout.txt", loadoutjournalline);
+
+                string uri = EDDConfig.Instance.EDDShipyardURL + "#/I=" + BaseUtils.HttpUriEncode.URIGZipBase64Escape(loadoutjournalline);
 
                 if (!BaseUtils.BrowserInfo.LaunchBrowser(uri))
                 {
                     ExtendedControls.InfoForm info = new ExtendedControls.InfoForm();
-                    info.Info("Cannot launch browser, use this JSON for manual ED Shipyard import", FindForm().Icon, s);
+                    info.Info("Cannot launch browser, use this JSON for manual ED Shipyard import", FindForm().Icon, loadoutjournalline);
                     info.ShowDialog(FindForm());
                 }
             }
