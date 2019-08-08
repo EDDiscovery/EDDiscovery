@@ -239,7 +239,7 @@ namespace EDDiscovery.UserControls
         private void dataGridViewLedger_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {
             if (e.Column.Index == 0)
-                e.SortDataGridViewColumnDate();
+                e.SortDataGridViewColumnDate(true);
             else if (e.Column.Index >= 3)
                 e.SortDataGridViewColumnNumeric();
         }

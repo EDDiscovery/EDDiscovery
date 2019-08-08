@@ -67,8 +67,9 @@ namespace EliteDangerousCore.JournalEvents
 
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
-            if (Systems != null && Systems.Length != 0)
-                mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Systems.Length + " systems", TotalEarnings);
+            int count = (Systems?.Length ?? 0) + (Discovered?.Length ?? 0);
+
+            mcl.AddEvent(Id, EventTimeUTC, EventTypeID, count + " systems", TotalEarnings);
         }
 
         public override void FillInformation(out string info, out string detailed)
@@ -116,8 +117,8 @@ namespace EliteDangerousCore.JournalEvents
 
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
-            if (Systems != null)
-                mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Systems.Length + " systems", TotalEarnings);
+            int count = (Systems?.Length ?? 0);
+            mcl.AddEvent(Id, EventTimeUTC, EventTypeID, count + " systems", TotalEarnings);
         }
 
         public override void FillInformation(out string info, out string detailed)
