@@ -80,6 +80,7 @@ namespace EDDiscovery.UserControls
             PutSettingBool(DbHideSave, autoHideTargetCoords);
             discoveryform.OnNewEntry -= OnNewEntry;
             discoveryform.OnNewUIEvent -= OnNewUIEvent;
+            discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
             GlobalBookMarkList.Instance.OnBookmarkChange -= GlobalBookMarkList_OnBookmarkChange;
         }
 

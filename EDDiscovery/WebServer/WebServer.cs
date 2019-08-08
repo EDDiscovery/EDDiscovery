@@ -154,6 +154,7 @@ namespace EDDiscovery.WebServer
                 httpws = null;
                 discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
                 discoveryform.OnNewUIEvent -= Discoveryform_OnNewUIEvent;
+                discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
             }
 
             return true;
