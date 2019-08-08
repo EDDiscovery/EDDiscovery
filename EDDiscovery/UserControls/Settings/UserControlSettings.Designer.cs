@@ -91,7 +91,7 @@ namespace EDDiscovery.UserControls
             this.groupBoxCustomScreenShots = new ExtendedControls.ExtGroupBox();
             this.groupBoxCustomEDSM = new ExtendedControls.ExtGroupBox();
             this.groupBoxWindowOptions = new ExtendedControls.ExtGroupBox();
-            this.groupedGroupBox1 = new ExtendedControls.PanelNoTheme();
+            this.groupedWebServerLanguage = new ExtendedControls.PanelNoTheme();
             this.groupBoxCustomLanguage = new ExtendedControls.ExtGroupBox();
             this.comboBoxCustomLanguage = new ExtendedControls.ExtComboBox();
             this.extGroupBoxWebServer = new ExtendedControls.ExtGroupBox();
@@ -113,7 +113,7 @@ namespace EDDiscovery.UserControls
             this.groupBoxCustomScreenShots.SuspendLayout();
             this.groupBoxCustomEDSM.SuspendLayout();
             this.groupBoxWindowOptions.SuspendLayout();
-            this.groupedGroupBox1.SuspendLayout();
+            this.groupedWebServerLanguage.SuspendLayout();
             this.groupBoxCustomLanguage.SuspendLayout();
             this.extGroupBoxWebServer.SuspendLayout();
             this.groupBoxCustomSafeMode.SuspendLayout();
@@ -125,7 +125,7 @@ namespace EDDiscovery.UserControls
             // 
             // buttonEditCommander
             // 
-            this.buttonEditCommander.Location = new System.Drawing.Point(526, 3);
+            this.buttonEditCommander.Location = new System.Drawing.Point(640, 3);
             this.buttonEditCommander.Name = "buttonEditCommander";
             this.buttonEditCommander.Size = new System.Drawing.Size(90, 23);
             this.buttonEditCommander.TabIndex = 5;
@@ -136,7 +136,7 @@ namespace EDDiscovery.UserControls
             // 
             // btnDeleteCommander
             // 
-            this.btnDeleteCommander.Location = new System.Drawing.Point(622, 3);
+            this.btnDeleteCommander.Location = new System.Drawing.Point(736, 3);
             this.btnDeleteCommander.Name = "btnDeleteCommander";
             this.btnDeleteCommander.Size = new System.Drawing.Size(90, 23);
             this.btnDeleteCommander.TabIndex = 3;
@@ -147,7 +147,7 @@ namespace EDDiscovery.UserControls
             // 
             // buttonAddCommander
             // 
-            this.buttonAddCommander.Location = new System.Drawing.Point(430, 3);
+            this.buttonAddCommander.Location = new System.Drawing.Point(544, 3);
             this.buttonAddCommander.Name = "buttonAddCommander";
             this.buttonAddCommander.Size = new System.Drawing.Size(90, 23);
             this.buttonAddCommander.TabIndex = 0;
@@ -165,7 +165,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxCustomEssentialEntries.DisplayMember = "";
             this.comboBoxCustomEssentialEntries.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.comboBoxCustomEssentialEntries.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxCustomEssentialEntries.Location = new System.Drawing.Point(142, 48);
+            this.comboBoxCustomEssentialEntries.Location = new System.Drawing.Point(128, 48);
             this.comboBoxCustomEssentialEntries.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxCustomEssentialEntries.Name = "comboBoxCustomEssentialEntries";
             this.comboBoxCustomEssentialEntries.ScrollBarButtonColor = System.Drawing.Color.LightGray;
@@ -173,7 +173,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxCustomEssentialEntries.SelectedIndex = -1;
             this.comboBoxCustomEssentialEntries.SelectedItem = null;
             this.comboBoxCustomEssentialEntries.SelectedValue = null;
-            this.comboBoxCustomEssentialEntries.Size = new System.Drawing.Size(123, 21);
+            this.comboBoxCustomEssentialEntries.Size = new System.Drawing.Size(137, 21);
             this.comboBoxCustomEssentialEntries.TabIndex = 7;
             this.comboBoxCustomEssentialEntries.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.toolTip.SetToolTip(this.comboBoxCustomEssentialEntries, "Select which items you consider essential to load older than the time above");
@@ -188,7 +188,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxCustomHistoryLoadTime.DisplayMember = "";
             this.comboBoxCustomHistoryLoadTime.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.comboBoxCustomHistoryLoadTime.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxCustomHistoryLoadTime.Location = new System.Drawing.Point(142, 19);
+            this.comboBoxCustomHistoryLoadTime.Location = new System.Drawing.Point(128, 19);
             this.comboBoxCustomHistoryLoadTime.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxCustomHistoryLoadTime.Name = "comboBoxCustomHistoryLoadTime";
             this.comboBoxCustomHistoryLoadTime.ScrollBarButtonColor = System.Drawing.Color.LightGray;
@@ -196,7 +196,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxCustomHistoryLoadTime.SelectedIndex = -1;
             this.comboBoxCustomHistoryLoadTime.SelectedItem = null;
             this.comboBoxCustomHistoryLoadTime.SelectedValue = null;
-            this.comboBoxCustomHistoryLoadTime.Size = new System.Drawing.Size(123, 21);
+            this.comboBoxCustomHistoryLoadTime.Size = new System.Drawing.Size(137, 21);
             this.comboBoxCustomHistoryLoadTime.TabIndex = 7;
             this.comboBoxCustomHistoryLoadTime.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.toolTip.SetToolTip(this.comboBoxCustomHistoryLoadTime, "Reduce Memory use. Select either load all records, or load only essential items o" +
@@ -256,7 +256,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxPanelSortOrder.ImageIndeterminate = null;
             this.checkBoxPanelSortOrder.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxPanelSortOrder.ImageUnchecked = null;
-            this.checkBoxPanelSortOrder.Location = new System.Drawing.Point(10, 103);
+            this.checkBoxPanelSortOrder.Location = new System.Drawing.Point(13, 105);
             this.checkBoxPanelSortOrder.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxPanelSortOrder.Name = "checkBoxPanelSortOrder";
             this.checkBoxPanelSortOrder.Size = new System.Drawing.Size(188, 17);
@@ -278,7 +278,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxKeepOnTop.ImageIndeterminate = null;
             this.checkBoxKeepOnTop.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxKeepOnTop.ImageUnchecked = null;
-            this.checkBoxKeepOnTop.Location = new System.Drawing.Point(10, 82);
+            this.checkBoxKeepOnTop.Location = new System.Drawing.Point(13, 84);
             this.checkBoxKeepOnTop.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxKeepOnTop.Name = "checkBoxKeepOnTop";
             this.checkBoxKeepOnTop.Size = new System.Drawing.Size(88, 17);
@@ -299,7 +299,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxCustomResize.ImageIndeterminate = null;
             this.checkBoxCustomResize.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxCustomResize.ImageUnchecked = null;
-            this.checkBoxCustomResize.Location = new System.Drawing.Point(10, 61);
+            this.checkBoxCustomResize.Location = new System.Drawing.Point(13, 63);
             this.checkBoxCustomResize.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxCustomResize.Name = "checkBoxCustomResize";
             this.checkBoxCustomResize.Size = new System.Drawing.Size(186, 17);
@@ -321,7 +321,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxMinimizeToNotifyIcon.ImageIndeterminate = null;
             this.checkBoxMinimizeToNotifyIcon.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxMinimizeToNotifyIcon.ImageUnchecked = null;
-            this.checkBoxMinimizeToNotifyIcon.Location = new System.Drawing.Point(10, 40);
+            this.checkBoxMinimizeToNotifyIcon.Location = new System.Drawing.Point(13, 42);
             this.checkBoxMinimizeToNotifyIcon.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxMinimizeToNotifyIcon.Name = "checkBoxMinimizeToNotifyIcon";
             this.checkBoxMinimizeToNotifyIcon.Size = new System.Drawing.Size(179, 17);
@@ -365,7 +365,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxUseNotifyIcon.ImageIndeterminate = null;
             this.checkBoxUseNotifyIcon.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxUseNotifyIcon.ImageUnchecked = null;
-            this.checkBoxUseNotifyIcon.Location = new System.Drawing.Point(10, 19);
+            this.checkBoxUseNotifyIcon.Location = new System.Drawing.Point(13, 21);
             this.checkBoxUseNotifyIcon.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxUseNotifyIcon.Name = "checkBoxUseNotifyIcon";
             this.checkBoxUseNotifyIcon.Size = new System.Drawing.Size(154, 17);
@@ -386,7 +386,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxCustomCopyToClipboard.ImageIndeterminate = null;
             this.checkBoxCustomCopyToClipboard.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxCustomCopyToClipboard.ImageUnchecked = null;
-            this.checkBoxCustomCopyToClipboard.Location = new System.Drawing.Point(157, 58);
+            this.checkBoxCustomCopyToClipboard.Location = new System.Drawing.Point(157, 61);
             this.checkBoxCustomCopyToClipboard.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxCustomCopyToClipboard.Name = "checkBoxCustomCopyToClipboard";
             this.checkBoxCustomCopyToClipboard.Size = new System.Drawing.Size(108, 17);
@@ -440,9 +440,9 @@ namespace EDDiscovery.UserControls
             // 
             // buttonExtScreenshot
             // 
-            this.buttonExtScreenshot.Location = new System.Drawing.Point(175, 19);
+            this.buttonExtScreenshot.Location = new System.Drawing.Point(175, 23);
             this.buttonExtScreenshot.Name = "buttonExtScreenshot";
-            this.buttonExtScreenshot.Size = new System.Drawing.Size(90, 23);
+            this.buttonExtScreenshot.Size = new System.Drawing.Size(99, 23);
             this.buttonExtScreenshot.TabIndex = 10;
             this.buttonExtScreenshot.Text = "Configure";
             this.toolTip.SetToolTip(this.buttonExtScreenshot, "Configure further screenshot options");
@@ -551,7 +551,7 @@ namespace EDDiscovery.UserControls
             // 
             // buttonExtSafeMode
             // 
-            this.buttonExtSafeMode.Location = new System.Drawing.Point(38, 82);
+            this.buttonExtSafeMode.Location = new System.Drawing.Point(32, 99);
             this.buttonExtSafeMode.Name = "buttonExtSafeMode";
             this.buttonExtSafeMode.Size = new System.Drawing.Size(219, 23);
             this.buttonExtSafeMode.TabIndex = 10;
@@ -572,13 +572,13 @@ namespace EDDiscovery.UserControls
             this.extPanelScroll.Controls.Add(this.groupBoxCustomScreenShots);
             this.extPanelScroll.Controls.Add(this.groupBoxCustomEDSM);
             this.extPanelScroll.Controls.Add(this.groupBoxWindowOptions);
-            this.extPanelScroll.Controls.Add(this.groupedGroupBox1);
+            this.extPanelScroll.Controls.Add(this.groupedWebServerLanguage);
             this.extPanelScroll.Controls.Add(this.groupBoxCustomSafeMode);
             this.extPanelScroll.Dock = System.Windows.Forms.DockStyle.Fill;
             this.extPanelScroll.FlowControlsLeftToRight = true;
             this.extPanelScroll.Location = new System.Drawing.Point(0, 0);
             this.extPanelScroll.Name = "extPanelScroll";
-            this.extPanelScroll.Size = new System.Drawing.Size(740, 699);
+            this.extPanelScroll.Size = new System.Drawing.Size(854, 520);
             this.extPanelScroll.TabIndex = 22;
             this.extPanelScroll.VerticalScrollBarDockRight = true;
             // 
@@ -593,13 +593,13 @@ namespace EDDiscovery.UserControls
             this.extScrollBarSettings.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.extScrollBarSettings.HideScrollBar = true;
             this.extScrollBarSettings.LargeChange = 10;
-            this.extScrollBarSettings.Location = new System.Drawing.Point(724, 0);
-            this.extScrollBarSettings.Maximum = 5;
+            this.extScrollBarSettings.Location = new System.Drawing.Point(838, 0);
+            this.extScrollBarSettings.Maximum = -23;
             this.extScrollBarSettings.Minimum = 0;
             this.extScrollBarSettings.MouseOverButtonColor = System.Drawing.Color.Green;
             this.extScrollBarSettings.MousePressedButtonColor = System.Drawing.Color.Red;
             this.extScrollBarSettings.Name = "extScrollBarSettings";
-            this.extScrollBarSettings.Size = new System.Drawing.Size(16, 699);
+            this.extScrollBarSettings.Size = new System.Drawing.Size(16, 520);
             this.extScrollBarSettings.SliderColor = System.Drawing.Color.DarkGray;
             this.extScrollBarSettings.SmallChange = 1;
             this.extScrollBarSettings.TabIndex = 22;
@@ -607,8 +607,8 @@ namespace EDDiscovery.UserControls
             this.extScrollBarSettings.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.extScrollBarSettings.ThumbColorScaling = 0.5F;
             this.extScrollBarSettings.ThumbDrawAngle = 0F;
-            this.extScrollBarSettings.Value = 0;
-            this.extScrollBarSettings.ValueLimited = 0;
+            this.extScrollBarSettings.Value = -23;
+            this.extScrollBarSettings.ValueLimited = -23;
             // 
             // groupBoxCommanders
             // 
@@ -623,7 +623,7 @@ namespace EDDiscovery.UserControls
             this.groupBoxCommanders.Location = new System.Drawing.Point(3, 3);
             this.groupBoxCommanders.Name = "groupBoxCommanders";
             this.groupBoxCommanders.Padding = new System.Windows.Forms.Padding(3, 3, 6, 3);
-            this.groupBoxCommanders.Size = new System.Drawing.Size(724, 153);
+            this.groupBoxCommanders.Size = new System.Drawing.Size(838, 153);
             this.groupBoxCommanders.TabIndex = 15;
             this.groupBoxCommanders.TabStop = false;
             this.groupBoxCommanders.Text = "Commanders";
@@ -638,7 +638,7 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerCommanders.InternalMargin = new System.Windows.Forms.Padding(0);
             this.dataViewScrollerCommanders.Location = new System.Drawing.Point(3, 16);
             this.dataViewScrollerCommanders.Name = "dataViewScrollerCommanders";
-            this.dataViewScrollerCommanders.Size = new System.Drawing.Size(715, 104);
+            this.dataViewScrollerCommanders.Size = new System.Drawing.Size(829, 104);
             this.dataViewScrollerCommanders.TabIndex = 4;
             this.dataViewScrollerCommanders.VerticalScrollBarDockRight = true;
             // 
@@ -665,7 +665,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewCommanders.RowHeadersWidth = 20;
             this.dataGridViewCommanders.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewCommanders.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewCommanders.Size = new System.Drawing.Size(699, 104);
+            this.dataGridViewCommanders.Size = new System.Drawing.Size(813, 104);
             this.dataGridViewCommanders.TabIndex = 2;
             // 
             // ColumnCommander
@@ -717,7 +717,7 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCommanders.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCommanders.HideScrollBar = false;
             this.vScrollBarCommanders.LargeChange = 0;
-            this.vScrollBarCommanders.Location = new System.Drawing.Point(699, 0);
+            this.vScrollBarCommanders.Location = new System.Drawing.Point(813, 0);
             this.vScrollBarCommanders.Maximum = -1;
             this.vScrollBarCommanders.Minimum = 0;
             this.vScrollBarCommanders.MouseOverButtonColor = System.Drawing.Color.Green;
@@ -743,7 +743,7 @@ namespace EDDiscovery.UserControls
             this.flowLayoutButtons.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
             this.flowLayoutButtons.Location = new System.Drawing.Point(3, 120);
             this.flowLayoutButtons.Name = "flowLayoutButtons";
-            this.flowLayoutButtons.Size = new System.Drawing.Size(715, 30);
+            this.flowLayoutButtons.Size = new System.Drawing.Size(829, 30);
             this.flowLayoutButtons.TabIndex = 6;
             // 
             // groupBoxTheme
@@ -792,7 +792,7 @@ namespace EDDiscovery.UserControls
             this.groupBoxInteraction.Controls.Add(this.comboBoxClickThruKey);
             this.groupBoxInteraction.Controls.Add(this.labelTKey);
             this.groupBoxInteraction.FillClientAreaWithAlternateColor = false;
-            this.groupBoxInteraction.Location = new System.Drawing.Point(3, 253);
+            this.groupBoxInteraction.Location = new System.Drawing.Point(548, 162);
             this.groupBoxInteraction.Name = "groupBoxInteraction";
             this.groupBoxInteraction.Size = new System.Drawing.Size(250, 85);
             this.groupBoxInteraction.TabIndex = 25;
@@ -821,7 +821,7 @@ namespace EDDiscovery.UserControls
             this.groupBoxMemory.Controls.Add(this.labelHistoryEssItems);
             this.groupBoxMemory.Controls.Add(this.labelHistorySel);
             this.groupBoxMemory.FillClientAreaWithAlternateColor = false;
-            this.groupBoxMemory.Location = new System.Drawing.Point(259, 253);
+            this.groupBoxMemory.Location = new System.Drawing.Point(3, 253);
             this.groupBoxMemory.Name = "groupBoxMemory";
             this.groupBoxMemory.Size = new System.Drawing.Size(282, 85);
             this.groupBoxMemory.TabIndex = 21;
@@ -860,7 +860,7 @@ namespace EDDiscovery.UserControls
             this.groupBoxCustomScreenShots.Controls.Add(this.buttonExtScreenshot);
             this.groupBoxCustomScreenShots.Controls.Add(this.checkBoxCustomEnableScreenshots);
             this.groupBoxCustomScreenShots.FillClientAreaWithAlternateColor = false;
-            this.groupBoxCustomScreenShots.Location = new System.Drawing.Point(3, 344);
+            this.groupBoxCustomScreenShots.Location = new System.Drawing.Point(291, 253);
             this.groupBoxCustomScreenShots.Name = "groupBoxCustomScreenShots";
             this.groupBoxCustomScreenShots.Size = new System.Drawing.Size(295, 85);
             this.groupBoxCustomScreenShots.TabIndex = 20;
@@ -878,7 +878,7 @@ namespace EDDiscovery.UserControls
             this.groupBoxCustomEDSM.Controls.Add(this.buttonExtEDSMConfigureArea);
             this.groupBoxCustomEDSM.Controls.Add(this.checkBoxCustomEDSMEDDBDownload);
             this.groupBoxCustomEDSM.FillClientAreaWithAlternateColor = false;
-            this.groupBoxCustomEDSM.Location = new System.Drawing.Point(304, 344);
+            this.groupBoxCustomEDSM.Location = new System.Drawing.Point(592, 253);
             this.groupBoxCustomEDSM.Name = "groupBoxCustomEDSM";
             this.groupBoxCustomEDSM.Size = new System.Drawing.Size(238, 85);
             this.groupBoxCustomEDSM.TabIndex = 21;
@@ -899,23 +899,23 @@ namespace EDDiscovery.UserControls
             this.groupBoxWindowOptions.Controls.Add(this.checkBoxMinimizeToNotifyIcon);
             this.groupBoxWindowOptions.Controls.Add(this.checkBoxUseNotifyIcon);
             this.groupBoxWindowOptions.FillClientAreaWithAlternateColor = false;
-            this.groupBoxWindowOptions.Location = new System.Drawing.Point(3, 435);
+            this.groupBoxWindowOptions.Location = new System.Drawing.Point(3, 344);
             this.groupBoxWindowOptions.Name = "groupBoxWindowOptions";
-            this.groupBoxWindowOptions.Size = new System.Drawing.Size(295, 125);
+            this.groupBoxWindowOptions.Size = new System.Drawing.Size(295, 140);
             this.groupBoxWindowOptions.TabIndex = 19;
             this.groupBoxWindowOptions.TabStop = false;
             this.groupBoxWindowOptions.Text = "Window Options";
             this.groupBoxWindowOptions.TextPadding = 0;
             this.groupBoxWindowOptions.TextStartPosition = -1;
             // 
-            // groupedGroupBox1
+            // groupedWebServerLanguage
             // 
-            this.groupedGroupBox1.Controls.Add(this.groupBoxCustomLanguage);
-            this.groupedGroupBox1.Controls.Add(this.extGroupBoxWebServer);
-            this.groupedGroupBox1.Location = new System.Drawing.Point(304, 435);
-            this.groupedGroupBox1.Name = "groupedGroupBox1";
-            this.groupedGroupBox1.Size = new System.Drawing.Size(238, 125);
-            this.groupedGroupBox1.TabIndex = 27;
+            this.groupedWebServerLanguage.Controls.Add(this.groupBoxCustomLanguage);
+            this.groupedWebServerLanguage.Controls.Add(this.extGroupBoxWebServer);
+            this.groupedWebServerLanguage.Location = new System.Drawing.Point(304, 344);
+            this.groupedWebServerLanguage.Name = "groupedWebServerLanguage";
+            this.groupedWebServerLanguage.Size = new System.Drawing.Size(238, 140);
+            this.groupedWebServerLanguage.TabIndex = 27;
             // 
             // groupBoxCustomLanguage
             // 
@@ -925,7 +925,7 @@ namespace EDDiscovery.UserControls
             this.groupBoxCustomLanguage.BorderColorScaling = 0.5F;
             this.groupBoxCustomLanguage.Controls.Add(this.comboBoxCustomLanguage);
             this.groupBoxCustomLanguage.FillClientAreaWithAlternateColor = false;
-            this.groupBoxCustomLanguage.Location = new System.Drawing.Point(0, 73);
+            this.groupBoxCustomLanguage.Location = new System.Drawing.Point(0, 80);
             this.groupBoxCustomLanguage.Name = "groupBoxCustomLanguage";
             this.groupBoxCustomLanguage.Size = new System.Drawing.Size(238, 52);
             this.groupBoxCustomLanguage.TabIndex = 21;
@@ -944,7 +944,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxCustomLanguage.DisplayMember = "";
             this.comboBoxCustomLanguage.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.comboBoxCustomLanguage.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxCustomLanguage.Location = new System.Drawing.Point(19, 19);
+            this.comboBoxCustomLanguage.Location = new System.Drawing.Point(21, 19);
             this.comboBoxCustomLanguage.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxCustomLanguage.Name = "comboBoxCustomLanguage";
             this.comboBoxCustomLanguage.ScrollBarButtonColor = System.Drawing.Color.LightGray;
@@ -993,7 +993,7 @@ namespace EDDiscovery.UserControls
             this.numberBoxLongPortNo.EndButtonVisible = false;
             this.numberBoxLongPortNo.Format = "D";
             this.numberBoxLongPortNo.InErrorCondition = false;
-            this.numberBoxLongPortNo.Location = new System.Drawing.Point(166, 44);
+            this.numberBoxLongPortNo.Location = new System.Drawing.Point(102, 40);
             this.numberBoxLongPortNo.Maximum = ((long)(65535));
             this.numberBoxLongPortNo.Minimum = ((long)(1024));
             this.numberBoxLongPortNo.Multiline = false;
@@ -1002,7 +1002,7 @@ namespace EDDiscovery.UserControls
             this.numberBoxLongPortNo.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.numberBoxLongPortNo.SelectionLength = 0;
             this.numberBoxLongPortNo.SelectionStart = 0;
-            this.numberBoxLongPortNo.Size = new System.Drawing.Size(56, 23);
+            this.numberBoxLongPortNo.Size = new System.Drawing.Size(50, 23);
             this.numberBoxLongPortNo.TabIndex = 6;
             this.numberBoxLongPortNo.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.numberBoxLongPortNo.Value = ((long)(6502));
@@ -1011,7 +1011,7 @@ namespace EDDiscovery.UserControls
             // labelPortNo
             // 
             this.labelPortNo.AutoSize = true;
-            this.labelPortNo.Location = new System.Drawing.Point(163, 21);
+            this.labelPortNo.Location = new System.Drawing.Point(68, 44);
             this.labelPortNo.Name = "labelPortNo";
             this.labelPortNo.Size = new System.Drawing.Size(26, 13);
             this.labelPortNo.TabIndex = 1;
@@ -1019,9 +1019,9 @@ namespace EDDiscovery.UserControls
             // 
             // extButtonTestWeb
             // 
-            this.extButtonTestWeb.Location = new System.Drawing.Point(19, 44);
+            this.extButtonTestWeb.Location = new System.Drawing.Point(164, 40);
             this.extButtonTestWeb.Name = "extButtonTestWeb";
-            this.extButtonTestWeb.Size = new System.Drawing.Size(133, 23);
+            this.extButtonTestWeb.Size = new System.Drawing.Size(53, 23);
             this.extButtonTestWeb.TabIndex = 3;
             this.extButtonTestWeb.Text = "Test";
             this.extButtonTestWeb.UseVisualStyleBackColor = true;
@@ -1056,9 +1056,9 @@ namespace EDDiscovery.UserControls
             this.groupBoxCustomSafeMode.Controls.Add(this.buttonExtSafeMode);
             this.groupBoxCustomSafeMode.Controls.Add(this.labelSafeMode);
             this.groupBoxCustomSafeMode.FillClientAreaWithAlternateColor = false;
-            this.groupBoxCustomSafeMode.Location = new System.Drawing.Point(3, 566);
+            this.groupBoxCustomSafeMode.Location = new System.Drawing.Point(548, 344);
             this.groupBoxCustomSafeMode.Name = "groupBoxCustomSafeMode";
-            this.groupBoxCustomSafeMode.Size = new System.Drawing.Size(295, 125);
+            this.groupBoxCustomSafeMode.Size = new System.Drawing.Size(282, 140);
             this.groupBoxCustomSafeMode.TabIndex = 21;
             this.groupBoxCustomSafeMode.TabStop = false;
             this.groupBoxCustomSafeMode.Text = "Advanced";
@@ -1080,7 +1080,7 @@ namespace EDDiscovery.UserControls
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.extPanelScroll);
             this.Name = "UserControlSettings";
-            this.Size = new System.Drawing.Size(740, 699);
+            this.Size = new System.Drawing.Size(854, 520);
             this.extPanelScroll.ResumeLayout(false);
             this.groupBoxCommanders.ResumeLayout(false);
             this.dataViewScrollerCommanders.ResumeLayout(false);
@@ -1099,7 +1099,7 @@ namespace EDDiscovery.UserControls
             this.groupBoxCustomEDSM.PerformLayout();
             this.groupBoxWindowOptions.ResumeLayout(false);
             this.groupBoxWindowOptions.PerformLayout();
-            this.groupedGroupBox1.ResumeLayout(false);
+            this.groupedWebServerLanguage.ResumeLayout(false);
             this.groupBoxCustomLanguage.ResumeLayout(false);
             this.extGroupBoxWebServer.ResumeLayout(false);
             this.extGroupBoxWebServer.PerformLayout();
@@ -1164,6 +1164,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn NotesCol;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutButtons;
         private ExtendedControls.ExtGroupBox groupBoxInteraction;
-        private ExtendedControls.PanelNoTheme groupedGroupBox1;
+        private ExtendedControls.PanelNoTheme groupedWebServerLanguage;
     }
 }
