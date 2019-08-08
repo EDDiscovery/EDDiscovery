@@ -44,7 +44,7 @@ namespace EDDiscovery
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            ExtendedControls.TabStyleSquare tabStyleSquare1 = new ExtendedControls.TabStyleSquare();
+            ExtendedControls.TabStyleSquare tabStyleSquare5 = new ExtendedControls.TabStyleSquare();
             this.edsmRefreshTimer = new System.Windows.Forms.Timer(this.components);
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.notifyIconContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -195,7 +195,7 @@ namespace EDDiscovery
             this.tabControlMain.TabNotSelectedColor = System.Drawing.Color.Gray;
             this.tabControlMain.TabOpaque = 100F;
             this.tabControlMain.TabSelectedColor = System.Drawing.Color.LightGray;
-            this.tabControlMain.TabStyle = tabStyleSquare1;
+            this.tabControlMain.TabStyle = tabStyleSquare5;
             this.tabControlMain.TextNotSelectedColor = System.Drawing.SystemColors.ControlText;
             this.tabControlMain.TextSelectedColor = System.Drawing.SystemColors.ControlText;
             this.toolTip.SetToolTip(this.tabControlMain, "Right click to add/remove tabs, Left click drag to reorder");
@@ -473,6 +473,8 @@ namespace EDDiscovery
             this.tableLayoutPanelTop.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanelTop.Size = new System.Drawing.Size(969, 26);
             this.tableLayoutPanelTop.TabIndex = 23;
+            this.tableLayoutPanelTop.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MouseDownCAPTION);
+            this.tableLayoutPanelTop.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MouseUpCAPTION);
             // 
             // menuFlowPanel
             // 
@@ -486,6 +488,8 @@ namespace EDDiscovery
             this.menuFlowPanel.Name = "menuFlowPanel";
             this.menuFlowPanel.Size = new System.Drawing.Size(873, 26);
             this.menuFlowPanel.TabIndex = 23;
+            this.menuFlowPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MouseDownCAPTION);
+            this.menuFlowPanel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MouseUpCAPTION);
             // 
             // mainMenu
             // 
@@ -823,6 +827,8 @@ namespace EDDiscovery
             this.label_version.Size = new System.Drawing.Size(43, 13);
             this.label_version.TabIndex = 21;
             this.label_version.Text = "<code>";
+            this.label_version.MouseDown += new System.Windows.Forms.MouseEventHandler(this.labelversion_MouseDown);
+            this.label_version.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MouseUpCAPTION);
             // 
             // labelInfoBoxTop
             // 
@@ -833,6 +839,8 @@ namespace EDDiscovery
             this.labelInfoBoxTop.Size = new System.Drawing.Size(43, 13);
             this.labelInfoBoxTop.TabIndex = 0;
             this.labelInfoBoxTop.Text = "<code>";
+            this.labelInfoBoxTop.MouseDown += new System.Windows.Forms.MouseEventHandler(this.labelversion_MouseDown);
+            this.labelInfoBoxTop.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MouseUpCAPTION);
             // 
             // closeminimizeFlowPanel
             // 
@@ -845,6 +853,8 @@ namespace EDDiscovery
             this.closeminimizeFlowPanel.Name = "closeminimizeFlowPanel";
             this.closeminimizeFlowPanel.Size = new System.Drawing.Size(90, 20);
             this.closeminimizeFlowPanel.TabIndex = 22;
+            this.closeminimizeFlowPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MouseDownCAPTION);
+            this.closeminimizeFlowPanel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MouseUpCAPTION);
             // 
             // panel_close
             // 

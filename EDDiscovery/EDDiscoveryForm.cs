@@ -1220,7 +1220,7 @@ namespace EDDiscovery
         }
 
 
-        private void labelInfoBoxTop_MouseDown(object sender, MouseEventArgs e)
+        private void labelversion_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left && newRelease != null)
             {
@@ -1237,16 +1237,12 @@ namespace EDDiscovery
         {
             if (e.Button == MouseButtons.Left)
                 Close();
-            else
-                MouseUpCAPTION(sender, e);
         }
 
         private void panel_minimize_MouseClick(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
                 this.WindowState = FormWindowState.Minimized;
-            else
-                MouseUpCAPTION(sender, e);
         }
 
 #endregion
