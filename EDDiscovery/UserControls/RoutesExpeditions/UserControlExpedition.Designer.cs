@@ -157,7 +157,7 @@ namespace EDDiscovery.UserControls
             this.toolStripButtonExport.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.toolStripButtonExport.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonExport.Name = "toolStripButtonExport";
-            this.toolStripButtonExport.Size = new System.Drawing.Size(68, 29);
+            this.toolStripButtonExport.Size = new System.Drawing.Size(69, 29);
             this.toolStripButtonExport.Text = "Export";
             this.toolStripButtonExport.ToolTipText = "Export to file";
             this.toolStripButtonExport.Click += new System.EventHandler(this.toolStripButtonExport_Click);
@@ -426,7 +426,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewRouteSystems.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewRouteSystems.Name = "dataGridViewRouteSystems";
             this.dataGridViewRouteSystems.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewRouteSystems.Size = new System.Drawing.Size(1121, 558);
+            this.dataGridViewRouteSystems.Size = new System.Drawing.Size(1118, 558);
             this.dataGridViewRouteSystems.TabIndex = 2;
             this.dataGridViewRouteSystems.CellValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewRouteSystems_CellValidated);
             this.dataGridViewRouteSystems.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.dataGridViewRouteSystems_CellValidating);
@@ -590,17 +590,16 @@ namespace EDDiscovery.UserControls
             this.extScrollBarDGV.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.extScrollBarDGV.HideScrollBar = false;
             this.extScrollBarDGV.LargeChange = 1;
-            this.extScrollBarDGV.Location = new System.Drawing.Point(1121, 0);
+            this.extScrollBarDGV.Location = new System.Drawing.Point(1118, 0);
             this.extScrollBarDGV.Maximum = 0;
             this.extScrollBarDGV.Minimum = 0;
             this.extScrollBarDGV.MouseOverButtonColor = System.Drawing.Color.Green;
             this.extScrollBarDGV.MousePressedButtonColor = System.Drawing.Color.Red;
             this.extScrollBarDGV.Name = "extScrollBarDGV";
-            this.extScrollBarDGV.Size = new System.Drawing.Size(13, 558);
+            this.extScrollBarDGV.Size = new System.Drawing.Size(16, 558);
             this.extScrollBarDGV.SliderColor = System.Drawing.Color.DarkGray;
             this.extScrollBarDGV.SmallChange = 1;
             this.extScrollBarDGV.TabIndex = 14;
-            this.extScrollBarDGV.Text = "extScrollBar1";
             this.extScrollBarDGV.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.extScrollBarDGV.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.extScrollBarDGV.ThumbColorScaling = 0.5F;

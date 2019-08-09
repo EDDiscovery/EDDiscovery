@@ -93,7 +93,7 @@ namespace EDDiscovery.Forms
             SaveFileDialog dlg = new SaveFileDialog();
 
             dlg.Filter = ExportAsJournals ? "Journal export| *.log" : "CSV export| *.csv";
-            dlg.Title = string.Format("Export current History view to {0}".Tx(this,"ECH"), ExportAsJournals ? "Journal file".Tx(this,"JF") : "Excel(csv)");
+            dlg.Title = string.Format("Export current History view to {0}".T(EDTx.ExportForm_ECH), ExportAsJournals ? "Journal file".T(EDTx.ExportForm_JF) : "Excel(csv)");
 
             if (dlg.ShowDialog(this) == DialogResult.OK)
             {

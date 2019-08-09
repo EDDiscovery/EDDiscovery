@@ -16,7 +16,6 @@
 using EliteDangerousCore.EDDN;
 using EliteDangerousCore.EDSM;
 using EDDiscovery.Forms;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -32,7 +31,6 @@ using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using EliteDangerousCore.JournalEvents;
 using EDDiscovery.Icons;
-using EDDiscovery.WebServer;
 
 namespace EDDiscovery
 {
@@ -229,7 +227,7 @@ namespace EDDiscovery
                     MessageBox.Show(("Tab setup failure: Primary tab or TG failed to load." + Environment.NewLine +
                                     "This is a abnormal condition - please problem to EDD Team on discord or github." + Environment.NewLine +
                                     "To try and clear it, hold down shift and then launch the program." + Environment.NewLine +
-                                    "Click on Reset tabs, then Run program, which may clear the problem.").Tx(this, "TSF"));
+                                    "Click on Reset tabs, then Run program, which may clear the problem.").T(EDTx.EDDiscoveryForm_TSF));
                     Application.Exit();
                 }
             }
@@ -258,8 +256,8 @@ namespace EDDiscovery
             renameTabToolStripMenuItem.Click += (s, e) => 
             {
                 string newvalue = ExtendedControls.PromptSingleLine.ShowDialog(this, 
-                                "Name:".Tx(this,"RTABL"), tabControlMain.TabPages[tabControlMain.LastTabClicked].Text, 
-                                "Rename Tab".Tx(this,"RTABT"), this.Icon, false, "Enter a new name for the tab".Tx(this,"RTABTT"));
+                                "Name:".T(EDTx.EDDiscoveryForm_RTABL), tabControlMain.TabPages[tabControlMain.LastTabClicked].Text, 
+                                "Rename Tab".T(EDTx.EDDiscoveryForm_RTABT), this.Icon, false, "Enter a new name for the tab".T(EDTx.EDDiscoveryForm_RTABTT));
                 if (newvalue != null)
                     tabControlMain.RenameTab(tabControlMain.LastTabClicked, newvalue.Replace(";", "_"));
             };
@@ -377,8 +375,8 @@ namespace EDDiscovery
                                 "{0} " + Environment.NewLine +
                                 "If you do not, either remove the DLLs from the DLL folder in ED Appdata" + Environment.NewLine +
                                 "or deinstall the action pack which introduced the DLL" + Environment.NewLine +
-                                "or hold down shift when launching and use the Remove all Extensions DLL option").Tx(this, "DLLW"), res.Item3),
-                                "Warning".Tx(),
+                                "or hold down shift when launching and use the Remove all Extensions DLL option").T(EDTx.EDDiscoveryForm_DLLW), res.Item3),
+                                "Warning".T(EDTx.Warning),
                                 MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                 {
                     SQLiteConnectionUser.PutSettingString("DLLAllowed", alloweddlls.AppendPrePad(res.Item3, ","));
@@ -388,11 +386,11 @@ namespace EDDiscovery
             }
 
             if (res.Item1.HasChars())
-                LogLine(string.Format("DLLs loaded: {0}".Tx(this, "DLLL"), res.Item1));
+                LogLine(string.Format("DLLs loaded: {0}".T(EDTx.EDDiscoveryForm_DLLL), res.Item1));
             if (res.Item2.HasChars())
-                LogLineHighlight(string.Format("DLLs failed to load: {0}".Tx(this, "DLLF"), res.Item2));
+                LogLineHighlight(string.Format("DLLs failed to load: {0}".T(EDTx.EDDiscoveryForm_DLLF), res.Item2));
 
-            LogLine(string.Format("Profile {0} Loaded".Tx(this, "PROFL"), EDDProfiles.Instance.Current.Name));
+            LogLine(string.Format("Profile {0} Loaded".T(EDTx.EDDiscoveryForm_PROFL), EDDProfiles.Instance.Current.Name));
 
 
             // Notifications
@@ -400,7 +398,7 @@ namespace EDDiscovery
             if (!themeok)
             {
                 Controller.LogLineHighlight(("The theme stored has missing colors or other missing information" + Environment.NewLine +
-                "Correct the missing colors or other information manually using the Theme Editor in Settings").Tx(this, "ThemeW"));
+                "Correct the missing colors or other information manually using the Theme Editor in Settings").T(EDTx.EDDiscoveryForm_ThemeW));
             }
 
             Notifications.CheckForNewNotifications((notelist) =>
@@ -450,8 +448,8 @@ namespace EDDiscovery
             checkInstallerTask = Installer.CheckForNewInstallerAsync((rel) =>  // in thread
             {
                 newRelease = rel;
-                BeginInvoke(new Action(() => Controller.LogLineHighlight(string.Format("New EDDiscovery installer available: {0}".Tx(this, "NI"), newRelease.ReleaseName))));
-                BeginInvoke(new Action(() => labelInfoBoxTop.Text = "New Release Available!".Tx(this, "NRA")));
+                BeginInvoke(new Action(() => Controller.LogLineHighlight(string.Format("New EDDiscovery installer available: {0}".T(EDTx.EDDiscoveryForm_NI), newRelease.ReleaseName))));
+                BeginInvoke(new Action(() => labelInfoBoxTop.Text = "New Release Available!".T(EDTx.EDDiscoveryForm_NRA)));
             });
 
             // this.DebugSizePosition(toolTip); // Debug - theme all the tooltips to show info on control - useful
@@ -679,7 +677,7 @@ namespace EDDiscovery
             if (he.IsFSDJump)
             {
                 int count = history.GetVisitsCount(he.System.Name);
-                LogLine(string.Format("Arrived at system {0} Visit No. {1}".Tx(this,"Arrived"), he.System.Name, count));
+                LogLine(string.Format("Arrived at system {0} Visit No. {1}".T(EDTx.EDDiscoveryForm_Arrived), he.System.Name, count));
                 System.Diagnostics.Trace.WriteLine("Arrived at system: " + he.System.Name + " " + count + ":th visit.");
             }
 
@@ -727,7 +725,7 @@ namespace EDDiscovery
                     ChangeToProfileId(i, true);
 
                 if (errlist.HasChars())
-                    LogLine("Profile reports errors in triggers:".Tx(this, "PE1") + errlist);
+                    LogLine("Profile reports errors in triggers:".T(EDTx.EDDiscoveryForm_PE1) + errlist);
             }
         }
 
@@ -773,11 +771,11 @@ namespace EDDiscovery
             {
                 e.Cancel = true;
 
-                bool goforit = !in_system_sync || ExtendedControls.MessageBoxTheme.Show("EDDiscovery is updating the EDSM and EDDB databases\r\nPress OK to close now, Cancel to wait until update is complete".Tx(this,"CloseWarning"), "Warning".Tx(), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK;
+                bool goforit = !in_system_sync || ExtendedControls.MessageBoxTheme.Show("EDDiscovery is updating the EDSM and EDDB databases\r\nPress OK to close now, Cancel to wait until update is complete".T(EDTx.EDDiscoveryForm_CloseWarning), "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK;
 
                 if (goforit)
                 {
-                    ReportRefreshProgress(-1, "Closing, please wait!".Tx(this, "Closing"));
+                    ReportRefreshProgress(-1, "Closing, please wait!".T(EDTx.EDDiscoveryForm_Closing));
                     actioncontroller.ActionRun(Actions.ActionEventEDList.onShutdown);
                     Controller.Shutdown();
                 }
@@ -879,19 +877,19 @@ namespace EDDiscovery
         private void forceEDDBUpdateToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (!EDDConfig.Instance.EDSMEDDBDownload)
-                ExtendedControls.MessageBoxTheme.Show(this, "Star Data download is disabled. Use Settings to reenable it".Tx(this, "SDDis"));
+                ExtendedControls.MessageBoxTheme.Show(this, "Star Data download is disabled. Use Settings to reenable it".T(EDTx.EDDiscoveryForm_SDDis));
             else if (!Controller.AsyncPerformSync(eddb_edsmalias_sync: true))      // we want it to have run, to completion, to allow another go..
-                ExtendedControls.MessageBoxTheme.Show(this, "Synchronisation to databases is in operation or pending, please wait".Tx(this, "SDSyncErr"));
+                ExtendedControls.MessageBoxTheme.Show(this, "Synchronisation to databases is in operation or pending, please wait".T(EDTx.EDDiscoveryForm_SDSyncErr));
         }
 
         private void syncEDSMSystemsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (!EDDConfig.Instance.EDSMEDDBDownload)
-                ExtendedControls.MessageBoxTheme.Show(this, "Star Data download is disabled. Use Settings to reenable it".Tx(this, "SDDis"));
-            else if (ExtendedControls.MessageBoxTheme.Show(this, ("This can take a considerable amount of time and bandwidth" + Environment.NewLine + "Confirm you want to do this?").Tx(this,"EDSMQ"), "Warning".Tx(), MessageBoxButtons.OKCancel, MessageBoxIcon.Asterisk)  == DialogResult.OK )
+                ExtendedControls.MessageBoxTheme.Show(this, "Star Data download is disabled. Use Settings to reenable it".T(EDTx.EDDiscoveryForm_SDDis));
+            else if (ExtendedControls.MessageBoxTheme.Show(this, ("This can take a considerable amount of time and bandwidth" + Environment.NewLine + "Confirm you want to do this?").T(EDTx.EDDiscoveryForm_EDSMQ), "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel, MessageBoxIcon.Asterisk)  == DialogResult.OK )
             {
                 if (!Controller.AsyncPerformSync(edsmfullsync: true))      // we want it to have run, to completion, to allow another go..
-                    ExtendedControls.MessageBoxTheme.Show(this, "Synchronisation to databases is in operation or pending, please wait".Tx(this, "SDSyncErr"));
+                    ExtendedControls.MessageBoxTheme.Show(this, "Synchronisation to databases is in operation or pending, please wait".T(EDTx.EDDiscoveryForm_SDSyncErr));
             }
         }
 
@@ -947,8 +945,8 @@ namespace EDDiscovery
             ExtendedControls.MessageBoxTheme.Show(this, 
                             ("To start in safe mode, exit the program, hold down the shift key" + Environment.NewLine +
                             "and double click on the EDD program icon.  You will then be in the safe mode dialog." + Environment.NewLine +
-                            "You can reset various parameters and move the data bases to other locations.").Tx(this, "SafeMode"),
-                            "Information".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            "You can reset various parameters and move the data bases to other locations.").T(EDTx.EDDiscoveryForm_SafeMode),
+                            "Information".T(EDTx.Information), MessageBoxButtons.OK, MessageBoxIcon.Information);
 
         }
 
@@ -974,8 +972,8 @@ namespace EDDiscovery
                                 "or notes are going missing\r\n" +
                                 "\r\n" +
                                 "You can manually change one EDSM assigned system by right clicking\r\n" +
-                                "on the travel history and selecting the option").Tx(this,"ResetEDSMID")
-                                , "Warning".Tx(), MessageBoxButtons.OKCancel) == DialogResult.OK)
+                                "on the travel history and selecting the option").T(EDTx.EDDiscoveryForm_ResetEDSMID)
+                                , "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
                 JournalEntry.ClearEDSMID(EDCommander.CurrentCmdrID);
                 SystemNoteClass.ClearEDSMID();
@@ -1022,7 +1020,7 @@ namespace EDDiscovery
 
         private void dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (ExtendedControls.MessageBoxTheme.Show(this, "Confirm you wish to reset all history entries to the current commander".Tx(this,"ResetCMDR"), "Warning".Tx(), MessageBoxButtons.OKCancel) == DialogResult.OK)
+            if (ExtendedControls.MessageBoxTheme.Show(this, "Confirm you wish to reset all history entries to the current commander".T(EDTx.EDDiscoveryForm_ResetCMDR), "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
                 JournalEntry.ResetCommanderID(-1, EDCommander.CurrentCmdrID);
                 Controller.RefreshHistoryAsync();
@@ -1045,16 +1043,16 @@ namespace EDDiscovery
             }
             else
             {
-                ExtendedControls.MessageBoxTheme.Show(this,"No new release found".Tx(this,"NoRel"), "Warning".Tx(), MessageBoxButtons.OK);
+                ExtendedControls.MessageBoxTheme.Show(this,"No new release found".T(EDTx.EDDiscoveryForm_NoRel), "Warning".T(EDTx.Warning), MessageBoxButtons.OK);
             }
         }
 
         private void deleteDuplicateFSDJumpEntriesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (ExtendedControls.MessageBoxTheme.Show(this, "Confirm you remove any duplicate FSD entries from the current commander".Tx(this,"RevFSD"), "Warning".Tx(), MessageBoxButtons.OKCancel) == DialogResult.OK)
+            if (ExtendedControls.MessageBoxTheme.Show(this, "Confirm you remove any duplicate FSD entries from the current commander".T(EDTx.EDDiscoveryForm_RevFSD), "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
                 int n = JournalEntry.RemoveDuplicateFSDEntries(EDCommander.CurrentCmdrID);
-                Controller.LogLine(string.Format("Removed {0} FSD entries".Tx(this,"FSDRem") , n));
+                Controller.LogLine(string.Format("Removed {0} FSD entries".T(EDTx.EDDiscoveryForm_FSDRem) , n));
                 Controller.RefreshHistoryAsync();
             }
         }
@@ -1075,7 +1073,7 @@ namespace EDDiscovery
                 SaveFileDialog dlg = new SaveFileDialog();
 
                 dlg.Filter = "ImportedStars export| *.txt";
-                dlg.Title = "Could not find VisitedStarsCache.dat file, choose file".Tx(this,"VSLNF");
+                dlg.Title = "Could not find VisitedStarsCache.dat file, choose file".T(EDTx.EDDiscoveryForm_VSLNF);
                 dlg.FileName = "ImportStars.txt";
 
                 if (dlg.ShowDialog(this) != DialogResult.OK)
@@ -1097,12 +1095,12 @@ namespace EDDiscovery
                     }
                 }
 
-                ExtendedControls.MessageBoxTheme.Show(this, string.Format(("File {0} created." + Environment.NewLine + "{1}").Tx(this,"VSLEXP"),
-                    exportfilename, (found ? "Restart Elite Dangerous to have this file read into the galaxy map".Tx(this,"VSLRestart") : "" )), "Warning".Tx());
+                ExtendedControls.MessageBoxTheme.Show(this, string.Format(("File {0} created." + Environment.NewLine + "{1}").T(EDTx.EDDiscoveryForm_VSLEXP),
+                    exportfilename, (found ? "Restart Elite Dangerous to have this file read into the galaxy map".T(EDTx.EDDiscoveryForm_VSLRestart) : "" )), "Warning".T(EDTx.Warning));
             }
             catch (IOException)
             {
-                ExtendedControls.MessageBoxTheme.Show(this, string.Format("Error writing {0} export visited stars".Tx(this,"VSLFileErr"), exportfilename), "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ExtendedControls.MessageBoxTheme.Show(this, string.Format("Error writing {0} export visited stars".T(EDTx.EDDiscoveryForm_VSLFileErr), exportfilename), "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -1161,7 +1159,7 @@ namespace EDDiscovery
                 SQLiteConnectionSystem.PutSettingString("InaraLastHistoricUpload", DateTime.UtcNow.ToString(CultureInfo.InvariantCulture));
             }
             else
-                ExtendedControls.MessageBoxTheme.Show(this, "Inara historic upload is disabled until 1 hour has elapsed from the last try to prevent server flooding".Tx(this,"InaraW"), "Warning".Tx());
+                ExtendedControls.MessageBoxTheme.Show(this, "Inara historic upload is disabled until 1 hour has elapsed from the last try to prevent server flooding".T(EDTx.EDDiscoveryForm_InaraW), "Warning".T(EDTx.Warning));
         }
 
         private void notifyIcon1_DoubleClick(object sender, EventArgs e)
@@ -1439,7 +1437,7 @@ namespace EDDiscovery
 
         private void buttonExtRefresh_Click(object sender, EventArgs e)
         {
-            LogLine("Refresh History.".Tx(this,"RH"));
+            LogLine("Refresh History.".T(EDTx.EDDiscoveryForm_RH));
             RefreshHistoryAsync();
         }
 
@@ -1449,14 +1447,14 @@ namespace EDDiscovery
 
             if (!edsm.ValidCredentials)
             {
-                ExtendedControls.MessageBoxTheme.Show(this, "Please ensure a commander is selected and it has a EDSM API key set".Tx(this, "NoEDSMAPI"));
+                ExtendedControls.MessageBoxTheme.Show(this, "Please ensure a commander is selected and it has a EDSM API key set".T(EDTx.EDDiscoveryForm_NoEDSMAPI));
                 return;
             }
 
             if (!EDCommander.Current.SyncToEdsm)
             {
-                string dlgtext = "You have disabled sync to EDSM for this commander.  Are you sure you want to send unsynced events to EDSM?".Tx(this, "ConfirmSyncToEDSM");
-                string dlgcapt = "Confirm EDSM sync".Tx(this, "ConfirmSyncToEDSMCaption");
+                string dlgtext = "You have disabled sync to EDSM for this commander.  Are you sure you want to send unsynced events to EDSM?".T(EDTx.EDDiscoveryForm_ConfirmSyncToEDSM);
+                string dlgcapt = "Confirm EDSM sync".T(EDTx.EDDiscoveryForm_ConfirmSyncToEDSMCaption);
 
                 if (ExtendedControls.MessageBoxTheme.Show(this, dlgtext, dlgcapt, MessageBoxButtons.YesNo) == DialogResult.No)
                 {
@@ -1470,7 +1468,7 @@ namespace EDDiscovery
             }
             catch (Exception ex)
             {
-                LogLine(string.Format("EDSM Sync failed: {0}".Tx(this,"EDSMSyncE"), ex.Message));
+                LogLine(string.Format("EDSM Sync failed: {0}".T(EDTx.EDDiscoveryForm_EDSMSyncE), ex.Message));
             }
 
         }
@@ -1484,7 +1482,7 @@ namespace EDDiscovery
             comboBoxCustomProfiles.Enabled = false;                         // and update this box, making sure we don't renter
             comboBoxCustomProfiles.Items.Clear();
             comboBoxCustomProfiles.Items.AddRange(EDDProfiles.Instance.Names());
-            comboBoxCustomProfiles.Items.Add("Edit Profiles".Tx(this, "EP"));
+            comboBoxCustomProfiles.Items.Add("Edit Profiles".T(EDTx.EDDiscoveryForm_EP));
             comboBoxCustomProfiles.SelectedIndex = EDDProfiles.Instance.IndexOf(EDDProfiles.Instance.Current.Id);
             comboBoxCustomProfiles.Enabled = true;
         }
@@ -1544,7 +1542,7 @@ namespace EDDiscovery
                 PopOuts.LoadSavedPopouts();
 
                 System.Diagnostics.Debug.WriteLine(BaseUtils.AppTicks.TickCountLap("ProfT") + " *************************** Finished Profile " + id);
-                LogLine(string.Format("Profile {0} Loaded".Tx(this,"PL"), EDDProfiles.Instance.Current.Name ));
+                LogLine(string.Format("Profile {0} Loaded".T(EDTx.EDDiscoveryForm_PL), EDDProfiles.Instance.Current.Name ));
             }
         }
 
@@ -1561,7 +1559,7 @@ namespace EDDiscovery
                 ChangeToProfileId(i, true);
 
             if (errlist.HasChars())
-                LogLine("Profile reports errors in triggers:".Tx(this, "PE1") + errlist); 
+                LogLine("Profile reports errors in triggers:".T(EDTx.EDDiscoveryForm_PE1) + errlist); 
         }
 
         #endregion
@@ -1623,19 +1621,19 @@ namespace EDDiscovery
                     System.Diagnostics.Debug.WriteLine("Serve from " + servefrom + " on port " + EDDConfig.Instance.WebServerPort);
 
                     if (WebServer.Start(servefrom))   // may fail due to some security reasons
-                        Controller.LogLine("Web server enabled".Tx(this, "WSE"));
+                        Controller.LogLine("Web server enabled".T(EDTx.EDDiscoveryForm_WSE));
                     else
                     {
-                        Controller.LogLineHighlight("Web server failed to start".Tx(this, "WSF"));
+                        Controller.LogLineHighlight("Web server failed to start".T(EDTx.EDDiscoveryForm_WSF));
                         return false;
                     }
                 }
                 else
-                    Controller.LogLineHighlight("Web server disabled due to incorrect folder or missing zip file".Tx(this, "WSERR"));
+                    Controller.LogLineHighlight("Web server disabled due to incorrect folder or missing zip file".T(EDTx.EDDiscoveryForm_WSERR));
             }
             else
             {
-                Controller.LogLine("*** Web server is disabled ***".Tx(this, "WSD"));
+                Controller.LogLine("*** Web server is disabled ***".T(EDTx.EDDiscoveryForm_WSD));
             }
 
             return true;

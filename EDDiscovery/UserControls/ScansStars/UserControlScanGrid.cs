@@ -507,7 +507,7 @@ namespace EDDiscovery.UserControls
                 }
                 else if (!isGreenSystem)
                 {
-                    toolStripProgressBar.ToolTipText = toolStripProgressBar.Value + " jumponium materials found in system.".Tx("JS");
+                    toolStripProgressBar.ToolTipText = toolStripProgressBar.Value + " jumponium materials found in system.".Tx(this,"JS");
                 }
 
                 // set a meaningful title for the controller            

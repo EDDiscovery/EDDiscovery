@@ -295,11 +295,11 @@ namespace EDDiscovery.UserControls
             information.Append((sd.nRadius < lowRadiusLimit) ? @" Low Radius.".Tx(this) : null);
             information.Append(@" " + sd.DistanceFromArrivalText);
             if (sd.WasMapped == true && sd.WasDiscovered == true)
-                information.Append(" (Mapped & Discovered)".Tx(this));
+                information.Append(" (Mapped & Discovered)".Tx(this,"MandD"));
             else if (sd.WasMapped == true)
-                information.Append(" (Mapped)".Tx(this));
+                information.Append(" (Mapped)".Tx(this,"MP"));
             else if (sd.WasDiscovered == true)
-                information.Append(" (Discovered)".Tx(this));
+                information.Append(" (Discovered)".Tx(this,"DIS"));
 
             return information.ToString();
         }

@@ -233,6 +233,11 @@ SECTION EDDiscoveryForm
 .adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.fetchLogsAgainToolStripMenuItem: "Fetch Logs Again" @
 .adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.fetchStarDataAgainToolStripMenuItem: "Fetch Star Data Again" @
 
+.WSE: "Web server enabled" @
+.WSF: "Web server failed to start" @
+.WSERR: "Web server disabled due to incorrect folder or missing zip file" @
+.WSD: "*** Web server is disabled ***" @
+
 SECTION EDDiscoveryController
 
 .CD: "Closing down, please wait.." @
@@ -479,6 +484,18 @@ CommanderForm: "CommanderForm" @
 .Abandon: "You have entered text in the CAPI login or password fields, do you want to abandon CAPI credential check?" @
 .Confirm: "Confirm" @
 .LF: "Select folder where Journal*.log files are stored by Frontier in" @
+
+.textBoxDefaultZoom.ToolTip: "Set the zoom level of the map. 1 is normal" @
+.radioButtonHistorySelection: "History Grid Selection" @
+.radioButtonHistorySelection.ToolTip: "Select history entry as opening location" @
+.radioButtonCentreHome: "Home System" @
+.radioButtonCentreHome.ToolTip: "Select home system as opening location" @
+.panel_defaultmapcolor.ToolTip: "New travel entries get this colour on the map" @
+.labelMapCol: "Default Map Color" @
+.labelZoom: "Default Zoom" @
+.labelOpenOn: "Open Centred On" @
+.HomeSys: "Home System:" @
+
 
 SECTION ExportForm
 

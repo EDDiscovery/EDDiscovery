@@ -44,7 +44,7 @@ namespace EDDiscovery
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            ExtendedControls.TabStyleSquare tabStyleSquare5 = new ExtendedControls.TabStyleSquare();
+            ExtendedControls.TabStyleSquare tabStyleSquare1 = new ExtendedControls.TabStyleSquare();
             this.edsmRefreshTimer = new System.Windows.Forms.Timer(this.components);
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.notifyIconContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -195,7 +195,7 @@ namespace EDDiscovery
             this.tabControlMain.TabNotSelectedColor = System.Drawing.Color.Gray;
             this.tabControlMain.TabOpaque = 100F;
             this.tabControlMain.TabSelectedColor = System.Drawing.Color.LightGray;
-            this.tabControlMain.TabStyle = tabStyleSquare5;
+            this.tabControlMain.TabStyle = tabStyleSquare1;
             this.tabControlMain.TextNotSelectedColor = System.Drawing.SystemColors.ControlText;
             this.tabControlMain.TextSelectedColor = System.Drawing.SystemColors.ControlText;
             this.toolTip.SetToolTip(this.tabControlMain, "Right click to add/remove tabs, Left click drag to reorder");
@@ -502,7 +502,7 @@ namespace EDDiscovery
             this.mainMenu.Location = new System.Drawing.Point(0, 0);
             this.mainMenu.Name = "mainMenu";
             this.mainMenu.Padding = new System.Windows.Forms.Padding(0);
-            this.mainMenu.Size = new System.Drawing.Size(214, 24);
+            this.mainMenu.Size = new System.Drawing.Size(334, 24);
             this.mainMenu.TabIndex = 16;
             // 
             // toolsToolStripMenuItem
@@ -521,22 +521,25 @@ namespace EDDiscovery
             // 
             this.settingsToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.Main_Tools_Settings;
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.settingsToolStripMenuItem.Text = "Settings";
+            this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
             // show2DMapsToolStripMenuItem
             // 
             this.show2DMapsToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.Main_Tools_Open2DMap;
             this.show2DMapsToolStripMenuItem.Name = "show2DMapsToolStripMenuItem";
-            this.show2DMapsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.show2DMapsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.show2DMapsToolStripMenuItem.Text = "Show &2D maps";
+            this.show2DMapsToolStripMenuItem.Click += new System.EventHandler(this.show2DMapsToolStripMenuItem_Click);
             // 
             // show3DMapsToolStripMenuItem
             // 
             this.show3DMapsToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.Main_Tools_Open3DMap;
             this.show3DMapsToolStripMenuItem.Name = "show3DMapsToolStripMenuItem";
-            this.show3DMapsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.show3DMapsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.show3DMapsToolStripMenuItem.Text = "Show &3D maps";
+            this.show3DMapsToolStripMenuItem.Click += new System.EventHandler(this.show3DMapsToolStripMenuItem_Click);
             // 
             // showAllPopoutsInTaskBarToolStripMenuItem
             // 
@@ -545,7 +548,7 @@ namespace EDDiscovery
             this.turnOffAllTransparencyToolStripMenuItem});
             this.showAllPopoutsInTaskBarToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.Main_Tools_Popouts_Menu;
             this.showAllPopoutsInTaskBarToolStripMenuItem.Name = "showAllPopoutsInTaskBarToolStripMenuItem";
-            this.showAllPopoutsInTaskBarToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.showAllPopoutsInTaskBarToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.showAllPopoutsInTaskBarToolStripMenuItem.Text = "&Pop-outs";
             // 
             // showAllInTaskBarToolStripMenuItem
@@ -554,6 +557,7 @@ namespace EDDiscovery
             this.showAllInTaskBarToolStripMenuItem.Name = "showAllInTaskBarToolStripMenuItem";
             this.showAllInTaskBarToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
             this.showAllInTaskBarToolStripMenuItem.Text = "&Show All In Task Bar";
+            this.showAllInTaskBarToolStripMenuItem.Click += new System.EventHandler(this.showAllInTaskBarToolStripMenuItem_Click);
             // 
             // turnOffAllTransparencyToolStripMenuItem
             // 
@@ -561,13 +565,15 @@ namespace EDDiscovery
             this.turnOffAllTransparencyToolStripMenuItem.Name = "turnOffAllTransparencyToolStripMenuItem";
             this.turnOffAllTransparencyToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
             this.turnOffAllTransparencyToolStripMenuItem.Text = "&Turn Off All Transparency";
+            this.turnOffAllTransparencyToolStripMenuItem.Click += new System.EventHandler(this.turnOffAllTransparencyToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.Main_Tools_Exit;
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
             // adminToolStripMenuItem
             // 
@@ -594,6 +600,7 @@ namespace EDDiscovery
             this.forceEDDBUpdateToolStripMenuItem.Name = "forceEDDBUpdateToolStripMenuItem";
             this.forceEDDBUpdateToolStripMenuItem.Size = new System.Drawing.Size(396, 22);
             this.forceEDDBUpdateToolStripMenuItem.Text = "Synchronise with EDDB";
+            this.forceEDDBUpdateToolStripMenuItem.Click += new System.EventHandler(this.forceEDDBUpdateToolStripMenuItem_Click);
             // 
             // syncEDSMSystemsToolStripMenuItem
             // 
@@ -610,12 +617,14 @@ namespace EDDiscovery
             this.fetchLogsAgainToolStripMenuItem.Name = "fetchLogsAgainToolStripMenuItem";
             this.fetchLogsAgainToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
             this.fetchLogsAgainToolStripMenuItem.Text = "Fetch Logs Again";
+            this.fetchLogsAgainToolStripMenuItem.Click += new System.EventHandler(this.fetchLogsAgainToolStripMenuItem_Click);
             // 
             // fetchStarDataAgainToolStripMenuItem
             // 
             this.fetchStarDataAgainToolStripMenuItem.Name = "fetchStarDataAgainToolStripMenuItem";
             this.fetchStarDataAgainToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
             this.fetchStarDataAgainToolStripMenuItem.Text = "Fetch Star Data Again";
+            this.fetchStarDataAgainToolStripMenuItem.Click += new System.EventHandler(this.syncEDSMSystemsToolStripMenuItem_Click);
             // 
             // showLogfilesToolStripMenuItem
             // 
@@ -623,6 +632,7 @@ namespace EDDiscovery
             this.showLogfilesToolStripMenuItem.Name = "showLogfilesToolStripMenuItem";
             this.showLogfilesToolStripMenuItem.Size = new System.Drawing.Size(396, 22);
             this.showLogfilesToolStripMenuItem.Text = "Show journal files directory of current commander";
+            this.showLogfilesToolStripMenuItem.Click += new System.EventHandler(this.showLogfilesToolStripMenuItem_Click);
             // 
             // dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem
             // 
@@ -630,6 +640,7 @@ namespace EDDiscovery
             this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem.Name = "dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem";
             this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem.Size = new System.Drawing.Size(396, 22);
             this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem.Text = "Reset all history to current commander";
+            this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem.Click += new System.EventHandler(this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem_Click);
             // 
             // read21AndFormerLogFilesToolStripMenuItem
             // 
@@ -639,12 +650,14 @@ namespace EDDiscovery
             this.read21AndFormerLogFilesToolStripMenuItem.Name = "read21AndFormerLogFilesToolStripMenuItem";
             this.read21AndFormerLogFilesToolStripMenuItem.Size = new System.Drawing.Size(396, 22);
             this.read21AndFormerLogFilesToolStripMenuItem.Text = "Read 2.1 and former log files";
+            this.read21AndFormerLogFilesToolStripMenuItem.Click += new System.EventHandler(this.read21AndFormerLogFilesToolStripMenuItem_Click);
             // 
             // read21AndFormerLogFiles_forceReloadLogsToolStripMenuItem
             // 
             this.read21AndFormerLogFiles_forceReloadLogsToolStripMenuItem.Name = "read21AndFormerLogFiles_forceReloadLogsToolStripMenuItem";
-            this.read21AndFormerLogFiles_forceReloadLogsToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.read21AndFormerLogFiles_forceReloadLogsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.read21AndFormerLogFiles_forceReloadLogsToolStripMenuItem.Text = "Force reload logs";
+            this.read21AndFormerLogFiles_forceReloadLogsToolStripMenuItem.Click += new System.EventHandler(this.read21AndFormerLogFiles_forceReloadLogsToolStripMenuItem_Click);
             // 
             // rescanAllJournalFilesToolStripMenuItem
             // 
@@ -652,6 +665,7 @@ namespace EDDiscovery
             this.rescanAllJournalFilesToolStripMenuItem.Name = "rescanAllJournalFilesToolStripMenuItem";
             this.rescanAllJournalFilesToolStripMenuItem.Size = new System.Drawing.Size(396, 22);
             this.rescanAllJournalFilesToolStripMenuItem.Text = "Re-scan all journal files";
+            this.rescanAllJournalFilesToolStripMenuItem.Click += new System.EventHandler(this.rescanAllJournalFilesToolStripMenuItem_Click);
             // 
             // deleteDuplicateFSDJumpEntriesToolStripMenuItem
             // 
@@ -659,6 +673,7 @@ namespace EDDiscovery
             this.deleteDuplicateFSDJumpEntriesToolStripMenuItem.Name = "deleteDuplicateFSDJumpEntriesToolStripMenuItem";
             this.deleteDuplicateFSDJumpEntriesToolStripMenuItem.Size = new System.Drawing.Size(396, 22);
             this.deleteDuplicateFSDJumpEntriesToolStripMenuItem.Text = "Delete duplicate FSD Jump entries";
+            this.deleteDuplicateFSDJumpEntriesToolStripMenuItem.Click += new System.EventHandler(this.deleteDuplicateFSDJumpEntriesToolStripMenuItem_Click);
             // 
             // sendUnsuncedEDDNEventsToolStripMenuItem
             // 
@@ -666,6 +681,7 @@ namespace EDDiscovery
             this.sendUnsuncedEDDNEventsToolStripMenuItem.Name = "sendUnsuncedEDDNEventsToolStripMenuItem";
             this.sendUnsuncedEDDNEventsToolStripMenuItem.Size = new System.Drawing.Size(396, 22);
             this.sendUnsuncedEDDNEventsToolStripMenuItem.Text = "Send unsynced EDDN events";
+            this.sendUnsuncedEDDNEventsToolStripMenuItem.Click += new System.EventHandler(this.sendUnsuncedEDDNEventsToolStripMenuItem_Click);
             // 
             // sendUnsyncedEGOScansToolStripMenuItem
             // 
@@ -673,6 +689,7 @@ namespace EDDiscovery
             this.sendUnsyncedEGOScansToolStripMenuItem.Name = "sendUnsyncedEGOScansToolStripMenuItem";
             this.sendUnsyncedEGOScansToolStripMenuItem.Size = new System.Drawing.Size(396, 22);
             this.sendUnsyncedEGOScansToolStripMenuItem.Text = "Send unsynced EGO scans";
+            this.sendUnsyncedEGOScansToolStripMenuItem.Click += new System.EventHandler(this.sendUnsyncedEGOScansToolStripMenuItem_Click);
             // 
             // sendHistoricDataToInaraToolStripMenuItem
             // 
@@ -680,6 +697,7 @@ namespace EDDiscovery
             this.sendHistoricDataToInaraToolStripMenuItem.Name = "sendHistoricDataToInaraToolStripMenuItem";
             this.sendHistoricDataToInaraToolStripMenuItem.Size = new System.Drawing.Size(396, 22);
             this.sendHistoricDataToInaraToolStripMenuItem.Text = "Send to Inara historic data (previous ships, stored modules)";
+            this.sendHistoricDataToInaraToolStripMenuItem.Click += new System.EventHandler(this.sendHistoricDataToInaraToolStripMenuItem_Click);
             // 
             // clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem
             // 
@@ -687,13 +705,15 @@ namespace EDDiscovery
             this.clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem.Name = "clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem";
             this.clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem.Size = new System.Drawing.Size(396, 22);
             this.clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem.Text = "Clear EDSM ID assigned to all records for current commander";
+            this.clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem.Click += new System.EventHandler(this.clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem_Click);
             // 
             // exportVistedStarsListToEliteDangerousToolStripMenuItem
             // 
             this.exportVistedStarsListToEliteDangerousToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.Main_Admin_ExportVisitedStars;
             this.exportVistedStarsListToEliteDangerousToolStripMenuItem.Name = "exportVistedStarsListToEliteDangerousToolStripMenuItem";
             this.exportVistedStarsListToEliteDangerousToolStripMenuItem.Size = new System.Drawing.Size(396, 22);
-            this.exportVistedStarsListToEliteDangerousToolStripMenuItem.Text = "Export Visted Stars List to Elite Dangerous";
+            this.exportVistedStarsListToEliteDangerousToolStripMenuItem.Text = "Export Visited Stars List to Elite Dangerous";
+            this.exportVistedStarsListToEliteDangerousToolStripMenuItem.Click += new System.EventHandler(this.exportVistedStarsListToEliteDangerousToolStripMenuItem_Click);
             // 
             // addOnsToolStripMenuItem
             // 
@@ -712,6 +732,7 @@ namespace EDDiscovery
             this.manageAddOnsToolStripMenuItem.Name = "manageAddOnsToolStripMenuItem";
             this.manageAddOnsToolStripMenuItem.Size = new System.Drawing.Size(280, 22);
             this.manageAddOnsToolStripMenuItem.Text = "&Manage Add-Ons";
+            this.manageAddOnsToolStripMenuItem.Click += new System.EventHandler(this.manageAddOnsToolStripMenuItem_Click);
             // 
             // configureAddOnActionsToolStripMenuItem
             // 
@@ -719,6 +740,7 @@ namespace EDDiscovery
             this.configureAddOnActionsToolStripMenuItem.Name = "configureAddOnActionsToolStripMenuItem";
             this.configureAddOnActionsToolStripMenuItem.Size = new System.Drawing.Size(280, 22);
             this.configureAddOnActionsToolStripMenuItem.Text = "&Edit Add-On Action Files";
+            this.configureAddOnActionsToolStripMenuItem.Click += new System.EventHandler(this.configureAddOnActionsToolStripMenuItem_Click);
             // 
             // editLastActionPackToolStripMenuItem
             // 
@@ -726,6 +748,7 @@ namespace EDDiscovery
             this.editLastActionPackToolStripMenuItem.Name = "editLastActionPackToolStripMenuItem";
             this.editLastActionPackToolStripMenuItem.Size = new System.Drawing.Size(280, 22);
             this.editLastActionPackToolStripMenuItem.Text = "Edit Last Action Pack";
+            this.editLastActionPackToolStripMenuItem.Click += new System.EventHandler(this.editLastActionPackToolStripMenuItem_Click);
             // 
             // stopCurrentlyRunningActionProgramToolStripMenuItem
             // 
@@ -733,6 +756,7 @@ namespace EDDiscovery
             this.stopCurrentlyRunningActionProgramToolStripMenuItem.Name = "stopCurrentlyRunningActionProgramToolStripMenuItem";
             this.stopCurrentlyRunningActionProgramToolStripMenuItem.Size = new System.Drawing.Size(280, 22);
             this.stopCurrentlyRunningActionProgramToolStripMenuItem.Text = "&Stop currently running Action Program";
+            this.stopCurrentlyRunningActionProgramToolStripMenuItem.Click += new System.EventHandler(this.stopCurrentlyRunningActionProgramToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -757,6 +781,7 @@ namespace EDDiscovery
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
             this.aboutToolStripMenuItem.Size = new System.Drawing.Size(354, 22);
             this.aboutToolStripMenuItem.Text = "&About";
+            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
             // eDDiscoveryHomepageToolStripMenuItem
             // 
@@ -765,6 +790,7 @@ namespace EDDiscovery
             this.eDDiscoveryHomepageToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F1;
             this.eDDiscoveryHomepageToolStripMenuItem.Size = new System.Drawing.Size(354, 22);
             this.eDDiscoveryHomepageToolStripMenuItem.Text = "&View Help";
+            this.eDDiscoveryHomepageToolStripMenuItem.Click += new System.EventHandler(this.eDDiscoveryHomepageToolStripMenuItem_Click);
             // 
             // helpMenuSeparatorTop
             // 
@@ -777,6 +803,7 @@ namespace EDDiscovery
             this.eDDiscoveryChatDiscordToolStripMenuItem.Name = "eDDiscoveryChatDiscordToolStripMenuItem";
             this.eDDiscoveryChatDiscordToolStripMenuItem.Size = new System.Drawing.Size(354, 22);
             this.eDDiscoveryChatDiscordToolStripMenuItem.Text = "&Discord - EDD Community Chat";
+            this.eDDiscoveryChatDiscordToolStripMenuItem.Click += new System.EventHandler(this.eDDiscoveryChatDiscordToolStripMenuItem_Click);
             // 
             // frontierForumThreadToolStripMenuItem
             // 
@@ -784,6 +811,7 @@ namespace EDDiscovery
             this.frontierForumThreadToolStripMenuItem.Name = "frontierForumThreadToolStripMenuItem";
             this.frontierForumThreadToolStripMenuItem.Size = new System.Drawing.Size(354, 22);
             this.frontierForumThreadToolStripMenuItem.Text = "&Frontier Forum Thread";
+            this.frontierForumThreadToolStripMenuItem.Click += new System.EventHandler(this.frontierForumThreadToolStripMenuItem_Click);
             // 
             // gitHubToolStripMenuItem
             // 
@@ -791,6 +819,7 @@ namespace EDDiscovery
             this.gitHubToolStripMenuItem.Name = "gitHubToolStripMenuItem";
             this.gitHubToolStripMenuItem.Size = new System.Drawing.Size(354, 22);
             this.gitHubToolStripMenuItem.Text = "&Project Page (GitHub)";
+            this.gitHubToolStripMenuItem.Click += new System.EventHandler(this.gitHubToolStripMenuItem_Click);
             // 
             // reportIssueIdeasToolStripMenuItem
             // 
@@ -798,6 +827,7 @@ namespace EDDiscovery
             this.reportIssueIdeasToolStripMenuItem.Name = "reportIssueIdeasToolStripMenuItem";
             this.reportIssueIdeasToolStripMenuItem.Size = new System.Drawing.Size(354, 22);
             this.reportIssueIdeasToolStripMenuItem.Text = "&Report Issue / Idea";
+            this.reportIssueIdeasToolStripMenuItem.Click += new System.EventHandler(this.reportIssueIdeasToolStripMenuItem_Click);
             // 
             // howToRunInSafeModeToResetVariousParametersToolStripMenuItem
             // 
@@ -805,6 +835,7 @@ namespace EDDiscovery
             this.howToRunInSafeModeToResetVariousParametersToolStripMenuItem.Name = "howToRunInSafeModeToResetVariousParametersToolStripMenuItem";
             this.howToRunInSafeModeToResetVariousParametersToolStripMenuItem.Size = new System.Drawing.Size(354, 22);
             this.howToRunInSafeModeToResetVariousParametersToolStripMenuItem.Text = "How to Run in Safe Mode to reset various parameters";
+            this.howToRunInSafeModeToResetVariousParametersToolStripMenuItem.Click += new System.EventHandler(this.howToRunInSafeModeToResetVariousParametersToolStripMenuItem_Click);
             // 
             // helpMenuSeparatorBottom
             // 
@@ -817,11 +848,12 @@ namespace EDDiscovery
             this.checkForNewReleaseToolStripMenuItem.Name = "checkForNewReleaseToolStripMenuItem";
             this.checkForNewReleaseToolStripMenuItem.Size = new System.Drawing.Size(354, 22);
             this.checkForNewReleaseToolStripMenuItem.Text = "&Check for Updates";
+            this.checkForNewReleaseToolStripMenuItem.Click += new System.EventHandler(this.checkForNewReleaseToolStripMenuItem_Click);
             // 
             // label_version
             // 
             this.label_version.AutoSize = true;
-            this.label_version.Location = new System.Drawing.Point(222, 1);
+            this.label_version.Location = new System.Drawing.Point(342, 1);
             this.label_version.Margin = new System.Windows.Forms.Padding(8, 1, 3, 0);
             this.label_version.Name = "label_version";
             this.label_version.Size = new System.Drawing.Size(43, 13);
@@ -833,7 +865,7 @@ namespace EDDiscovery
             // labelInfoBoxTop
             // 
             this.labelInfoBoxTop.AutoSize = true;
-            this.labelInfoBoxTop.Location = new System.Drawing.Point(276, 1);
+            this.labelInfoBoxTop.Location = new System.Drawing.Point(396, 1);
             this.labelInfoBoxTop.Margin = new System.Windows.Forms.Padding(8, 1, 3, 0);
             this.labelInfoBoxTop.Name = "labelInfoBoxTop";
             this.labelInfoBoxTop.Size = new System.Drawing.Size(43, 13);

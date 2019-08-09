@@ -1444,7 +1444,7 @@ SECTION UserControlTrippanel
 
 
 
-SECTION ScanDisplayControl
+SECTION ScanDisplayUserControl
 
 
 .NSD: "No scan data available" => "Нет доступных данных сканирования"

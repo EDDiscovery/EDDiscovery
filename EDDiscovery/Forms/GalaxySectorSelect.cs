@@ -53,13 +53,13 @@ namespace EDDiscovery.Forms
 
         private static List<Tuple<string, string>> DefaultGalaxyOptions = new List<Tuple<string, string>>()
         {
-            new Tuple<string,string>("Custom".Tx(typeof(GalaxySectorSelect)),""),
-            new Tuple<string,string>("Reset".Tx(typeof(GalaxySectorSelect)),"Reset"),
-            new Tuple<string,string>("All".Tx(typeof(GalaxySectorSelect)),"All"),
-            new Tuple<string,string>("None".Tx(typeof(GalaxySectorSelect)),""),
-            new Tuple<string, string>("Bubble".Tx(typeof(GalaxySectorSelect)),"810"),
-            new Tuple<string, string>("Extended Bubble".Tx(typeof(GalaxySectorSelect)),"608,609,610,611,612,708,709,710,711,712,808,809,810,811,812,908,909,910,911,912,1008,1009,1010,1011,1012"),
-            new Tuple<string, string>("Bubble+Colonia".Tx(typeof(GalaxySectorSelect),"BC"),"608,609,610,611,612,708,709,710,711,712,808,809,810,811,812,908,909,910,911,912,1008,1009,1010,1011,1012,1108,1109,1110,1207,1208,1209,1306,1307,1308,1405,1406,1407,1504,1505,1603,1604,1703"),
+            new Tuple<string,string>("Custom".T(EDTx.GalaxySectorSelect_Custom),""),
+            new Tuple<string,string>("Reset".T(EDTx.GalaxySectorSelect_Reset),"Reset"),
+            new Tuple<string,string>("All".T(EDTx.GalaxySectorSelect_All),"All"),
+            new Tuple<string,string>("None".T(EDTx.GalaxySectorSelect_None),""),
+            new Tuple<string, string>("Bubble".T(EDTx.GalaxySectorSelect_Bubble),"810"),
+            new Tuple<string, string>("Extended Bubble".T(EDTx.GalaxySectorSelect_ExtendedBubble),"608,609,610,611,612,708,709,710,711,712,808,809,810,811,812,908,909,910,911,912,1008,1009,1010,1011,1012"),
+            new Tuple<string, string>("Bubble+Colonia".T(EDTx.GalaxySectorSelect_BC),"608,609,610,611,612,708,709,710,711,712,808,809,810,811,812,908,909,910,911,912,1008,1009,1010,1011,1012,1108,1109,1110,1207,1208,1209,1306,1307,1308,1405,1406,1407,1504,1505,1603,1604,1703"),
         };
 
         public GalaxySectorSelect()
@@ -157,11 +157,11 @@ namespace EDDiscovery.Forms
             if (added)                            // we added some..
             {
                 if (ExtendedControls.MessageBoxTheme.Show(this, 
-                    ("You have added new sectors!" + Environment.NewLine + "This will require a complete re-download of the EDSM data" + Environment.NewLine + "Confirm you wish to do this?").Tx(this,"RD"), 
-                    "Warning".Tx(), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+                    ("You have added new sectors!" + Environment.NewLine + "This will require a complete re-download of the EDSM data" + Environment.NewLine + "Confirm you wish to do this?").T(EDTx.GalaxySectorSelect_RD), 
+                    "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
                 {
                     if (!EDDConfig.Instance.EDSMEDDBDownload)
-                        ExtendedControls.MessageBoxTheme.Show(this, ("Synchronisation to star data disabled in settings." + Environment.NewLine + "Reenable to allow star data to be updated").Tx(this,"NoSync"), "Warning".Tx(this), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        ExtendedControls.MessageBoxTheme.Show(this, ("Synchronisation to star data disabled in settings." + Environment.NewLine + "Reenable to allow star data to be updated").T(EDTx.GalaxySectorSelect_NoSync), "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                     Action = ActionToDo.Add;
                 }
@@ -177,8 +177,8 @@ namespace EDDiscovery.Forms
                     AllRemoveSectors = (from int i in GridId.AllId() where !currentsel.Contains(i) select i).ToList();
 
                     if (ExtendedControls.MessageBoxTheme.Show(this, 
-                        ("You have removed sectors!" + Environment.NewLine + "This will require the DB to be cleaned of entries, which will take time" + Environment.NewLine + "Confirm you wish to do this?").Tx(this,"RS"), 
-                        "Warning".Tx(), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+                        ("You have removed sectors!" + Environment.NewLine + "This will require the DB to be cleaned of entries, which will take time" + Environment.NewLine + "Confirm you wish to do this?").T(EDTx.GalaxySectorSelect_RS), 
+                        "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
                     {
                         Action = ActionToDo.Remove;
                     }
@@ -224,21 +224,18 @@ namespace EDDiscovery.Forms
         public static Tuple<string,string> SelectGalaxyMenu(Form parent)
         {
             ExtendedControls.ConfigurableForm f = new ExtendedControls.ConfigurableForm();
-            Type t = typeof(GalaxySectorSelect);
 
             var list = DefaultGalaxyOptions.Where(x => x.Item1 != "Custom" && x.Item1 != "Reset").Select(x => x.Item1).ToList();
 
             int width = 700;
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "ED Discovery downloads star data from EDSM/EDDB which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed".Tx(t,"GALSELEX"), 
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "ED Discovery downloads star data from EDSM/EDDB which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed".T(EDTx.GalaxySectorSelect_GALSELEX), 
                             new Point(10, 30), new Size(width-50, 70), ""));
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "Select:".Tx(t), new Point(10, 100), new Size(160, 24), ""));
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "Select:".T(EDTx.GalaxySectorSelect_Select), new Point(10, 100), new Size(160, 24), ""));
             f.Add(new ExtendedControls.ConfigurableForm.Entry("Entry", "All",
                         new Point(180, 100), new Size(width-180-100, 24),
-                        "Select the data set".Tx(t, "GALSELEN"), list));
+                        "Select the data set".T(EDTx.GalaxySectorSelect_GALSELEN), list));
 
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("OK", typeof(ExtendedControls.ExtButton), "OK".Tx(), new Point(width-40-80, 150), new Size(80, 24), "Press to Accept".Tx(t)));
-
-            //f.Add(new ExtendedControls.ConfigurableForm.Entry("Cancel", typeof(ExtendedControls.ButtonExt), "Cancel".Tx(), new Point(width - 200, 70), new Size(80, 24), "Press to Cancel".Tx(t)));
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("OK", typeof(ExtendedControls.ExtButton), "OK".T(EDTx.OK), new Point(width-40-80, 150), new Size(80, 24), "Press to Accept".T(EDTx.GalaxySectorSelect_PresstoAccept)));
 
             f.Trigger += (dialogname, controlname, tag) =>
             {
@@ -249,7 +246,7 @@ namespace EDDiscovery.Forms
                 }
             };
             
-            DialogResult res = f.ShowDialogCentred(parent, parent.Icon, "Select EDSM Galaxy Data".Tx(t, "GALSELTitle"));
+            DialogResult res = f.ShowDialogCentred(parent, parent.Icon, "Select EDSM Galaxy Data".T(EDTx.GalaxySectorSelect_GALSELTitle));
 
             string sel = f.Get("Entry");
             int index = DefaultGalaxyOptions.FindIndex((x) => { return x.Item1 == sel; });

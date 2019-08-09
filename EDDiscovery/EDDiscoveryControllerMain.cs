@@ -213,7 +213,7 @@ namespace EDDiscovery
                 EDSMJournalSync.StopSync();
                 EdsmLogFetcher.AsyncStop();
                 journalmonitor.StopMonitor();
-                LogLineHighlight("Closing down, please wait..".Tx(this,"CD"));
+                LogLineHighlight("Closing down, please wait..".T(EDTx.EDDiscoveryController_CD));
                 closeRequested.Set();
                 journalqueuedelaytimer.Change(Timeout.Infinite, Timeout.Infinite);
                 journalqueuedelaytimer.Dispose();
@@ -328,7 +328,7 @@ namespace EDDiscovery
 
                 if (DateTime.Now.Subtract(galmaptime).TotalDays > 14 || !galacticMapping.GalMapFilePresent())  // Over 14 days do a sync from EDSM for galmap
                 {
-                    LogLine("Get galactic mapping from EDSM.".Tx(this, "EDSM"));
+                    LogLine("Get galactic mapping from EDSM.".T(EDTx.EDDiscoveryController_EDSM));
                     if (galacticMapping.DownloadFromEDSM())
                         SQLiteConnectionSystem.PutSettingDate("EDSMGalMapLast", DateTime.UtcNow);
                 }
@@ -340,7 +340,7 @@ namespace EDDiscovery
             SystemCache.AddToAutoCompleteList(galacticMapping.GetGMONames());
             SystemNoteClass.GetAllSystemNotes();
 
-            LogLine("Loaded Notes, Bookmarks and Galactic mapping.".Tx(this, "LN"));
+            LogLine("Loaded Notes, Bookmarks and Galactic mapping.".T(EDTx.EDDiscoveryController_LN));
 
             if (PendingClose) return;
 
@@ -348,13 +348,13 @@ namespace EDDiscovery
             {
                 if (EDCommander.Current.SyncToEddn)  // Both EDD and EDMC should not sync to EDDN.
                 {
-                    LogLineHighlight("EDDiscovery and EDMarketConnector should not both sync to EDDN. Stop EDMC or uncheck 'send to EDDN' in settings tab!".Tx(this, "EDMC"));
+                    LogLineHighlight("EDDiscovery and EDMarketConnector should not both sync to EDDN. Stop EDMC or uncheck 'send to EDDN' in settings tab!".T(EDTx.EDDiscoveryController_EDMC));
                 }
             }
 
             if (!EDDOptions.Instance.NoLoad)        // here in this thread, we do a refresh of history. 
             {
-                LogLine("Reading travel history".Tx(this, "RTH"));
+                LogLine("Reading travel history".T(EDTx.EDDiscoveryController_RTH));
 
                 if ( EDDOptions.Instance.Commander != null )
                 {
@@ -424,7 +424,7 @@ namespace EDDiscovery
         // in its own thread..
         public void DownloadMaps(Func<bool> cancelRequested)
         {
-            LogLine("Checking for new EDDiscovery maps".Tx(this,"Maps"));
+            LogLine("Checking for new EDDiscovery maps".T(EDTx.EDDiscoveryController_Maps));
 
             Task.Factory.StartNew(() =>
             {
@@ -446,7 +446,7 @@ namespace EDDiscovery
         // in its own thread..
         public void DownloadExpeditions(Func<bool> cancelRequested)
         {
-            LogLine("Checking for new Expedition data".Tx(this,"EXPD"));
+            LogLine("Checking for new Expedition data".T(EDTx.EDDiscoveryController_EXPD));
 
             Task.Factory.StartNew(() =>
             {
@@ -470,7 +470,7 @@ namespace EDDiscovery
 
         public void DownloadExploration(Func<bool> cancelRequested)
         {
-            LogLine("Checking for new Exploration data".Tx(this, "EXPL"));
+            LogLine("Checking for new Exploration data".T(EDTx.EDDiscoveryController_EXPL));
 
             Task.Factory.StartNew(() =>
             {

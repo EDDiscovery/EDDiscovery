@@ -1404,7 +1404,7 @@ SECTION UserControlTrippanel
 .FDEDSM: "Shows if EDSM indicates your it's first discoverer" => "Wyświetla, czy EDSM wskazuje że jesteś pierwszym odkrywcą układu"
 .UKN: "System {0} unknown to EDSM" => "Układ {0} nieznany w EDSM"
 
-SECTION ScanDisplayControl
+SECTION ScanDisplayUserControl
 
 .NSD: "No scan data available" => "Brak dostępnych danych skanu"
 .BC: "Barycentre of {0}" => "Barycentrum {0}"

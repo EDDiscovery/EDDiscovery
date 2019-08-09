@@ -81,6 +81,12 @@ SECTION UserControlCompass
 .checkBoxHideTransparent: "Hide In Transparent" @
 .labelTargetLat: "Target" @
 
+SECTION UserControlEDSM
+
+.extCheckBoxStar.ToolTip: "Select another system to view" @
+.System: "System:" @
+.EnterSys: "Show System" @
+
 SECTION UserControlSearch
 
 .MaterialsCommodities: "Materials Commodities" @
@@ -252,6 +258,7 @@ SECTION UserControlExploration
 
 SECTION UserControlJournalGrid
 
+.JHF: "Journal: Filter out fields" @
 .ColumnTime: "Time" @
 .Event: "Event" @
 .ColumnType: "Description" @
@@ -402,6 +409,16 @@ SECTION UserControlMissionOverlay
 
 SECTION UserControlSurveyor
 
+.MandD: " (Mapped & Discovered)" @
+.MP: " (Mapped)" @
+.DIS: " (Discovered)" @
+.bodyFeaturesToolStripMenuItem.lowRadiusToolStripMenuItem: "Low Radius" @
+.checkEDSMForInformationToolStripMenuItem: "Check EDSM for information" @
+.autoHideToolStripMenuItem: "Auto Hide" @
+.dontHideInFSSModeToolStripMenuItem: "Don\'t Hide in FSS Mode" @
+.showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem: "Show System Info Always" @
+.LowRadius: " Low Radius." @
+.Mapped: " (Mapped & Discovered)" @
 .Systemscancomplete: "System scan complete." @
 .bodiesfound: " bodies found." @
 .Noscanreported: "No scan reported." @
@@ -459,6 +476,9 @@ UserControlMissions.ToolTip: "Left click and drag on grid to reorder" @
 
 SECTION UserControlModules
 
+.MassFDUnladen: "Mass FD Unladen" @
+.FuelReserveCapacity: "Fuel Reserve Capacity" @
+.HullHealth: "Hull Health (Loadout)" @
 .ItemLocalised: "Type" @
 .ItemCol: "Item" @
 .SlotCol: "Slot" @
@@ -731,9 +751,13 @@ SECTION UserControlScanGrid
 .GS: "This is a green system, as it has all existing jumponium materials available!" @
 .JS: " jumponium materials found in system." @
 
-
 SECTION UserControlSettings
-
+.extGroupBoxWebServer: "Web Server" @
+.WSQ: "If you have previously done this on this same port number you can click No and the enable will work" @
+.WSF: "Did not start - click OK to configure windows" @
+.labelPortNo: "Port" @
+.extButtonTestWeb: "Test" @
+.extCheckBoxWebServerEnable: "Enable" @
 .FS: "All entries for Statistics" @
 .SM: "Safe Mode" @
 .CSM: "Confirm restart to safe mode" @
@@ -855,7 +879,7 @@ SECTION UserControlShipYards
 .MS: "Mass/Speed" @
 
 SECTION UserControlShoppingList
-
+.toggleListPositionToolStripMenuItem: "Toggle Shopping List Position" @
 .buttonSpecialEffects: "Special Effects" @
 .buttonTechBroker: "Tech Broker Unlocks" @
 .showMaxFSDInjectionsToolStripMenuItem: "Show Max FSD Injections" @
@@ -1248,9 +1272,11 @@ SECTION UserControlContainerSplitter
 .MergeTopPanel: "Merge Top Panel" @
 .MergeRightPanel: "Merge Right Panel" @
 .MergeBottomPanel: "Merge Bottom Panel" @
+.RC: "Right click on splitter bar to change orientation\nor split or merge panels" @
 
 SECTION UserControlTravelGrid
 
+UserControlTravelGrid.THF: "History: Filter out fields" @
 .ColumnTime: "Time" @
 .Icon: "Event" @
 .ColumnSystem: "Description" @
@@ -1411,7 +1437,7 @@ SECTION UserControlTrippanel
 .UKN: "System {0} unknown to EDSM" @
 
 
-SECTION ScanDisplayControl
+SECTION ScanDisplayUserControl
 
 .NSD: "No scan data available" @
 .BC: "Barycentre of {0}" @

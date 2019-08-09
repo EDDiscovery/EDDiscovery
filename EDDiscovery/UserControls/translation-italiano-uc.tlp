@@ -1386,7 +1386,7 @@ SECTION UserControlSurveyor
 .Hasring: " Has ring." @
 .Has: " Has " @
 
-SECTION ScanDisplayControl
+SECTION ScanDisplayUserControl
 
 .NSD: "No scan data available" @
 .BC: "Barycentre of {0}" @
