@@ -177,7 +177,7 @@ namespace EDDiscovery.UserControls
             dataGridViewJournal.Rows.Clear();
             rowsbyjournalid.Clear();
 
-            dataGridViewJournal.Columns[0].HeaderText = EDDiscoveryForm.EDDConfig.DisplayUTC ? "Game Time".Tx() : "Time".Tx();
+            dataGridViewJournal.Columns[0].HeaderText = EDDiscoveryForm.EDDConfig.DisplayUTC ? "Game Time".T(EDTx.GameTime) : "Time".T(EDTx.Time);
 
             List<HistoryEntry[]> chunks = new List<HistoryEntry[]>();
 
@@ -349,10 +349,10 @@ namespace EDDiscovery.UserControls
 
         private void UpdateToolTipsForFilter()
         {
-            string ms = string.Format(" showing {0} original {1}".Tx(this, "TT1"), dataGridViewJournal.Rows.Count, current_historylist?.Count() ?? 0);
-            comboBoxJournalWindow.SetTipDynamically(toolTip, fdropdown > 0 ? string.Format("Filtered {0}".Tx(this, "TTFilt1"), fdropdown + ms) : "Select the entries by age, ".Tx(this, "TTSelAge") + ms);
-            toolTip.SetToolTip(buttonFilter, (ftotalevents > 0) ? string.Format("Filtered {0}".Tx(this, "TTFilt2"), ftotalevents + ms) : "Filter out entries based on event type, ".Tx(this, "TTEvent") + ms);
-            toolTip.SetToolTip(buttonField, (ftotalfilters > 0) ? string.Format("Total filtered out {0}".Tx(this, "TTFilt3"), ftotalfilters + ms) : "Filter out entries matching the field selection, ".Tx(this, "TTTotal") + ms);
+            string ms = string.Format(" showing {0} original {1}".T(EDTx.UserControlJournalGrid_TT1), dataGridViewJournal.Rows.Count, current_historylist?.Count() ?? 0);
+            comboBoxJournalWindow.SetTipDynamically(toolTip, fdropdown > 0 ? string.Format("Filtered {0}".T(EDTx.UserControlJournalGrid_TTFilt1), fdropdown + ms) : "Select the entries by age, ".T(EDTx.UserControlJournalGrid_TTSelAge) + ms);
+            toolTip.SetToolTip(buttonFilter, (ftotalevents > 0) ? string.Format("Filtered {0}".T(EDTx.UserControlJournalGrid_TTFilt2), ftotalevents + ms) : "Filter out entries based on event type, ".T(EDTx.UserControlJournalGrid_TTEvent) + ms);
+            toolTip.SetToolTip(buttonField, (ftotalfilters > 0) ? string.Format("Total filtered out {0}".T(EDTx.UserControlJournalGrid_TTFilt3), ftotalfilters + ms) : "Filter out entries matching the field selection, ".T(EDTx.UserControlJournalGrid_TTTotal) + ms);
         }
 
 	    #endregion
@@ -393,7 +393,7 @@ namespace EDDiscovery.UserControls
 
         private void buttonField_Click(object sender, EventArgs e)
         {
-            BaseUtils.ConditionLists res = FilterHelpers.ShowDialog(FindForm(), fieldfilter, discoveryform, "Journal: Filter out fields".Tx(this, "JHF"));
+            BaseUtils.ConditionLists res = FilterHelpers.ShowDialog(FindForm(), fieldfilter, discoveryform, "Journal: Filter out fields".T(EDTx.UserControlJournalGrid_JHF));
             if ( res != null )
             {
                 fieldfilter = res;
@@ -511,7 +511,7 @@ namespace EDDiscovery.UserControls
             }
 
             if (!edsm.ShowSystemInEDSM(rightclicksystem.System.Name, id_edsm))
-                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "System could not be found - has not been synched or EDSM is unavailable".Tx(this,"NotSynced"));
+                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "System could not be found - has not been synched or EDSM is unavailable".T(EDTx.UserControlJournalGrid_NotSynced));
 
             this.Cursor = Cursors.Default;
         }

@@ -222,7 +222,7 @@ namespace EDDiscovery.UserControls
             dataGridViewTravel.Rows.Clear();
             rowsbyjournalid.Clear();
 
-            dataGridViewTravel.Columns[0].HeaderText = EDDiscoveryForm.EDDConfig.DisplayUTC ? "Game Time".Tx() : "Time".Tx();
+            dataGridViewTravel.Columns[0].HeaderText = EDDiscoveryForm.EDDConfig.DisplayUTC ? "Game Time".T(EDTx.GameTime) : "Time".T(EDTx.Time);
 
             List<HistoryEntry[]> chunks = new List<HistoryEntry[]>();
 
@@ -481,10 +481,10 @@ namespace EDDiscovery.UserControls
 
         private void UpdateToolTipsForFilter()
         {
-            string ms = string.Format(" showing {0} original {1}".Tx(this, "TT1"), dataGridViewTravel.Rows.Count, current_historylist?.Count() ?? 0);
-            comboBoxHistoryWindow.SetTipDynamically(toolTip, fdropdown > 0 ? string.Format("Filtered {0}".Tx(this, "TTFilt1"), fdropdown + ms) : "Select the entries by age, ".Tx(this, "TTSelAge") + ms);
-            toolTip.SetToolTip(buttonFilter, (ftotalevents > 0) ? string.Format("Filtered {0}".Tx(this, "TTFilt2"), ftotalevents + ms) : "Filter out entries based on event type, ".Tx(this, "TTEvent") + ms);
-            toolTip.SetToolTip(buttonField, (ftotalfilters > 0) ? string.Format("Total filtered out {0}".Tx(this, "TTFilt3"), ftotalfilters + ms) : "Filter out entries matching the field selection, ".Tx(this, "TTTotal") + ms);
+            string ms = string.Format(" showing {0} original {1}".T(EDTx.UserControlTravelGrid_TT1), dataGridViewTravel.Rows.Count, current_historylist?.Count() ?? 0);
+            comboBoxHistoryWindow.SetTipDynamically(toolTip, fdropdown > 0 ? string.Format("Filtered {0}".T(EDTx.UserControlTravelGrid_TTFilt1), fdropdown + ms) : "Select the entries by age, ".T(EDTx.UserControlTravelGrid_TTSelAge) + ms);
+            toolTip.SetToolTip(buttonFilter, (ftotalevents > 0) ? string.Format("Filtered {0}".T(EDTx.UserControlTravelGrid_TTFilt2), ftotalevents + ms) : "Filter out entries based on event type, ".T(EDTx.UserControlTravelGrid_TTEvent) + ms);
+            toolTip.SetToolTip(buttonField, (ftotalfilters > 0) ? string.Format("Total filtered out {0}".T(EDTx.UserControlTravelGrid_TTFilt3), ftotalfilters + ms) : "Filter out entries matching the field selection, ".T(EDTx.UserControlTravelGrid_TTTotal) + ms);
         }
 
         private void dataGridViewTravel_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
@@ -862,24 +862,24 @@ namespace EDDiscovery.UserControls
             {
                 if (rightclicksystem.StartMarker)
                 {
-                    toolStripMenuItemStartStop.Text = "Clear Start marker".Tx(this, "CSTART");
+                    toolStripMenuItemStartStop.Text = "Clear Start marker".T(EDTx.UserControlTravelGrid_CSTART);
                 }
                 else if (rightclicksystem.StopMarker)
                 {
-                    toolStripMenuItemStartStop.Text = "Clear Stop marker".Tx(this, "CSTOP");
+                    toolStripMenuItemStartStop.Text = "Clear Stop marker".T(EDTx.UserControlTravelGrid_CSTOP);
                 }
                 else if (rightclicksystem.isTravelling)
                 {
-                    toolStripMenuItemStartStop.Text = "Set Stop marker for travel calculations".Tx(this, "SETSTOPTC");
+                    toolStripMenuItemStartStop.Text = "Set Stop marker for travel calculations".T(EDTx.UserControlTravelGrid_SETSTOPTC);
                 }
                 else
                 {
-                    toolStripMenuItemStartStop.Text = "Set Start marker for travel calculations".Tx(this, "SETSTARTTC");
+                    toolStripMenuItemStartStop.Text = "Set Start marker for travel calculations".T(EDTx.UserControlTravelGrid_SETSTARTTC);
                 }
             }
             else
             {
-                toolStripMenuItemStartStop.Text = "Set Start/Stop point for travel calculations".Tx(this, "SETSTSTOP"); ;
+                toolStripMenuItemStartStop.Text = "Set Start/Stop point for travel calculations".T(EDTx.UserControlTravelGrid_SETSTSTOP); ;
             }
 
             mapGotoStartoolStripMenuItem.Enabled = (rightclicksystem != null && rightclicksystem.System.HasCoordinate);
@@ -1093,7 +1093,7 @@ namespace EDDiscovery.UserControls
             }
 
             if (!edsm.ShowSystemInEDSM(rightclicksystem.System.Name, id_edsm))
-                ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable".Tx(this,"NotSynced"));
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable".T(EDTx.UserControlTravelGrid_NotSynced));
 
             this.Cursor = Cursors.Default;
         }
@@ -1111,8 +1111,8 @@ namespace EDDiscovery.UserControls
 
         private void removeJournalEntryToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string warning = ("Confirm you wish to remove this entry" + Environment.NewLine + "It may reappear if the logs are rescanned").Tx(this, "Remove");
-            if (ExtendedControls.MessageBoxTheme.Show(FindForm(), warning, "Warning".Tx(), MessageBoxButtons.OKCancel) == DialogResult.OK)
+            string warning = ("Confirm you wish to remove this entry" + Environment.NewLine + "It may reappear if the logs are rescanned").T(EDTx.UserControlTravelGrid_Remove);
+            if (ExtendedControls.MessageBoxTheme.Show(FindForm(), warning, "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
                 JournalEntry.Delete(rightclicksystem.Journalid);
                 discoveryform.RefreshHistoryAsync();
@@ -1249,7 +1249,7 @@ namespace EDDiscovery.UserControls
 
         private void buttonField_Click(object sender, EventArgs e)
         {
-            BaseUtils.ConditionLists res = FilterHelpers.ShowDialog(FindForm(), fieldfilter, discoveryform, "History: Filter out fields".Tx(this, "THF"));
+            BaseUtils.ConditionLists res = FilterHelpers.ShowDialog(FindForm(), fieldfilter, discoveryform, "History: Filter out fields".T(EDTx.UserControlTravelGrid_THF));
             if (res != null)
             {
                 fieldfilter = res;

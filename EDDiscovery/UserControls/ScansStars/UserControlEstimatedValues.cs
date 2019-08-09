@@ -87,13 +87,13 @@ namespace EDDiscovery.UserControls
 
             if (last_he == null)
             {
-                SetControlText("No Scan".Tx());
+                SetControlText("No Scan".T(EDTx.NoScan));
                 return;
             }
 
             StarScan.SystemNode last_sn = discoveryform.history.starscan.FindSystem(last_he.System, true);
 
-            SetControlText((last_sn == null) ? "No Scan".Tx() : string.Format("Estimated Scan Values for {0}".Tx(this,"SV"), last_sn.system.Name));
+            SetControlText((last_sn == null) ? "No Scan".T(EDTx.NoScan) : string.Format("Estimated Scan Values for {0}".T(EDTx.UserControlEstimatedValues_SV), last_sn.system.Name));
 
             if (last_sn != null)
             {

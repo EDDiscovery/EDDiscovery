@@ -144,13 +144,13 @@ namespace EDDiscovery.UserControls
                 }
                 else if (he.EntryType == JournalTypeEnum.FSSAllBodiesFound)
                 {
-                    DrawSystem(last_sys, last_sys.Name + " " + "System scan complete.".Tx(this));
+                    DrawSystem(last_sys, last_sys.Name + " " + "System scan complete.".T(EDTx.UserControlSurveyor_Systemscancomplete));
                 }
                 else if (he.EntryType == JournalTypeEnum.FSSDiscoveryScan)
                 {
                     var je = he.journalEntry as JournalFSSDiscoveryScan;
                     var bodies_found = je.BodyCount;
-                    DrawSystem( last_sys, last_sys.Name + " " + bodies_found + " bodies found.".Tx(this));
+                    DrawSystem( last_sys, last_sys.Name + " " + bodies_found + " bodies found.".T(EDTx.UserControlSurveyor_bodiesfound));
                 }
                 else if (he.EntryType == JournalTypeEnum.Scan)
                 {
@@ -285,21 +285,21 @@ namespace EDDiscovery.UserControls
             information.Append(bodyname);
 
             // Additional information
-            information.Append((sd.AmmoniaWorld) ? @" is an ammonia world.".Tx(this) : null);
-            information.Append((sd.Earthlike) ? @" is an earth like world.".Tx(this) : null);
-            information.Append((sd.WaterWorld && !sd.Terraformable) ? @" is a water world.".Tx(this) : null);
-            information.Append((sd.WaterWorld && sd.Terraformable) ? @" is a terraformable water world.".Tx(this) : null);
-            information.Append((sd.Terraformable && !sd.WaterWorld) ? @" is a terraformable planet.".Tx(this) : null);
-            information.Append((sd.HasRings) ? @" Has ring.".Tx(this) : null);
-            information.Append((sd.HasMeaningfulVolcanism) ? @" Has ".Tx(this) + sd.Volcanism : null);
-            information.Append((sd.nRadius < lowRadiusLimit) ? @" Low Radius.".Tx(this) : null);
+            information.Append((sd.AmmoniaWorld) ? @" is an ammonia world.".T(EDTx.UserControlSurveyor_isanammoniaworld) : null);
+            information.Append((sd.Earthlike) ? @" is an earth like world.".T(EDTx.UserControlSurveyor_isanearthlikeworld) : null);
+            information.Append((sd.WaterWorld && !sd.Terraformable) ? @" is a water world.".T(EDTx.UserControlSurveyor_isawaterworld) : null);
+            information.Append((sd.WaterWorld && sd.Terraformable) ? @" is a terraformable water world.".T(EDTx.UserControlSurveyor_isaterraformablewaterworld) : null);
+            information.Append((sd.Terraformable && !sd.WaterWorld) ? @" is a terraformable planet.".T(EDTx.UserControlSurveyor_isaterraformableplanet) : null);
+            information.Append((sd.HasRings) ? @" Has ring.".T(EDTx.UserControlSurveyor_Hasring) : null);
+            information.Append((sd.HasMeaningfulVolcanism) ? @" Has ".T(EDTx.UserControlSurveyor_Has) + sd.Volcanism : null);
+            information.Append((sd.nRadius < lowRadiusLimit) ? @" Low Radius.".T(EDTx.UserControlSurveyor_LowRadius) : null);
             information.Append(@" " + sd.DistanceFromArrivalText);
             if (sd.WasMapped == true && sd.WasDiscovered == true)
-                information.Append(" (Mapped & Discovered)".Tx(this,"MandD"));
+                information.Append(" (Mapped & Discovered)".T(EDTx.UserControlSurveyor_MandD));
             else if (sd.WasMapped == true)
-                information.Append(" (Mapped)".Tx(this,"MP"));
+                information.Append(" (Mapped)".T(EDTx.UserControlSurveyor_MP));
             else if (sd.WasDiscovered == true)
-                information.Append(" (Discovered)".Tx(this,"DIS"));
+                information.Append(" (Discovered)".T(EDTx.UserControlSurveyor_DIS));
 
             return information.ToString();
         }

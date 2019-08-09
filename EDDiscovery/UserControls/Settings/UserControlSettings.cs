@@ -99,14 +99,20 @@ namespace EDDiscovery.UserControls
             checkBoxCustomEDSMEDDBDownload.Checked = EDDConfig.Instance.EDSMEDDBDownload;
             this.checkBoxCustomEDSMEDDBDownload.CheckedChanged += new System.EventHandler(this.checkBoxCustomEDSMDownload_CheckedChanged);
 
-            comboBoxCustomHistoryLoadTime.Items = new string[] { "Disabled-Load All".Tx(this, "DLA"), ">7 days old".Tx(this), ">30 days old".Tx(this), ">60 days old".Tx(this), ">90 days old".Tx(this), ">180 days old".Tx(this), ">270 days old".Tx(this), "> 365 days old".Tx(this) };
+            comboBoxCustomHistoryLoadTime.Items = new string[] { "Disabled-Load All".T(EDTx.UserControlSettings_DLA), ">7 days old".T(EDTx.UserControlSettings_7daysold),
+                ">30 days old".T(EDTx.UserControlSettings_30daysold), ">60 days old".T(EDTx.UserControlSettings_60daysold), ">90 days old".T(EDTx.UserControlSettings_90daysold),
+                ">180 days old".T(EDTx.UserControlSettings_180daysold), ">270 days old".T(EDTx.UserControlSettings_270daysold), "> 365 days old".T(EDTx.UserControlSettings_365daysold) };
+
             comboBoxCustomHistoryLoadTime.Tag = new int[] { 0, 7, 30, 60, 90, 180, 270, 365 };
             int ix = Array.FindIndex(comboBoxCustomHistoryLoadTime.Tag as int[], x => x == EDDConfig.Instance.FullHistoryLoadDayLimit);
             comboBoxCustomHistoryLoadTime.SelectedIndex = ix >= 0 ? ix : 0;
             comboBoxCustomHistoryLoadTime.SelectedIndexChanged += ComboBoxCustomHistoryLoadTime_SelectedIndexChanged;
 
             var eetn = new string[] { nameof(JournalEssentialEvents.EssentialEvents), nameof(JournalEssentialEvents.FullStatsEssentialEvents), nameof(JournalEssentialEvents.JumpScanEssentialEvents), nameof(JournalEssentialEvents.JumpEssentialEvents), nameof(JournalEssentialEvents.NoEssentialEvents) };
-            comboBoxCustomEssentialEntries.Items = new string[] { "Scans,Cargo,Missions,State,Jumps etc".Tx(this, "ESM"), "All entries for Statistics".Tx(this, "FS"), "Jumps and Scans".Tx(this, "EJS"), "Jumps".Tx(this, "EJ"), "Nothing".Tx(this, "EN") };
+            comboBoxCustomEssentialEntries.Items = new string[] { "Scans,Cargo,Missions,State,Jumps etc".T(EDTx.UserControlSettings_ESM), "All entries for Statistics".T(EDTx.UserControlSettings_FS),
+                                        "Jumps and Scans".T(EDTx.UserControlSettings_EJS),
+                                        "Jumps".T(EDTx.UserControlSettings_EJ), "Nothing".T(EDTx.UserControlSettings_EN) };
+
             comboBoxCustomEssentialEntries.Tag = eetn;
             ix = Array.FindIndex(eetn, x => x == EDDConfig.Instance.EssentialEventTypes);
             comboBoxCustomEssentialEntries.SelectedIndex = ix >= 0 ? ix : 0;
@@ -180,7 +186,7 @@ namespace EDDiscovery.UserControls
                     btnDeleteCommander.Enabled = EDCommander.NumberOfCommanders > 1;
                 }
                 else
-                    ExtendedControls.MessageBoxTheme.Show(FindForm(), "Commander name is not valid or duplicate".Tx(this,"AddC") , "Cannot create Commander".Tx(this,"AddT"), MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                    ExtendedControls.MessageBoxTheme.Show(FindForm(), "Commander name is not valid or duplicate".T(EDTx.UserControlSettings_AddC) , "Cannot create Commander".T(EDTx.UserControlSettings_AddT), MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             }
         }
 
@@ -214,7 +220,7 @@ namespace EDDiscovery.UserControls
                 int row = dataGridViewCommanders.SelectedRows[0].Index;
                 EDCommander cmdr = dataGridViewCommanders.Rows[row].DataBoundItem as EDCommander;
 
-                var result = ExtendedControls.MessageBoxTheme.Show(FindForm(), "Do you wish to delete commander " + cmdr.Name + "?", "Delete commander", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                var result = ExtendedControls.MessageBoxTheme.Show(FindForm(), "Do you wish to delete commander ".T(EDTx.UserControlSettings_DelCmdr) + cmdr.Name + "?", "Warning".T(EDTx.Warning), MessageBoxButtons.YesNo, MessageBoxIcon.Information);
 
                 if (result == DialogResult.Yes)
                 {
@@ -282,9 +288,9 @@ namespace EDDiscovery.UserControls
                       "Euro Caps font is freely available from www.edassets.org." + Environment.NewLine +
                       "and is in your install folder " + Path.GetDirectoryName(Application.ExecutablePath) + " - install it manually" + Environment.NewLine +
                       Environment.NewLine +
-                      "Would you like to load this theme using a replacement font?").Tx(this, "Font"), fontwanted);
+                      "Would you like to load this theme using a replacement font?").T(EDTx.UserControlSettings_Font), fontwanted);
 
-                DialogResult res = ExtendedControls.MessageBoxTheme.Show(FindForm(), warning, "Warning".Tx(), MessageBoxButtons.YesNo);
+                DialogResult res = ExtendedControls.MessageBoxTheme.Show(FindForm(), warning, "Warning".T(EDTx.Warning), MessageBoxButtons.YesNo);
 
                 if (res != DialogResult.Yes)
                 {
@@ -425,7 +431,7 @@ namespace EDDiscovery.UserControls
         {
             ExtendedControls.ExtComboBox c = sender as ExtendedControls.ExtComboBox;
             EDDConfig.Instance.Language = c.Items[c.SelectedIndex];
-            ExtendedControls.MessageBoxTheme.Show(this, "Applies at next restart of ED Discovery".Tx(this, "Language"), "Information".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Information);
+            ExtendedControls.MessageBoxTheme.Show(this, "Applies at next restart of ED Discovery".T(EDTx.UserControlSettings_Language), "Information".T(EDTx.Information), MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         #endregion
@@ -499,7 +505,7 @@ namespace EDDiscovery.UserControls
 
             if (!gss.Init(EDDConfig.Instance.EDSMGridIDs))
             {
-                ExtendedControls.MessageBoxTheme.Show(this, "Failed", "No map downloaded - please wait for it to download");
+                ExtendedControls.MessageBoxTheme.Show(this, "Warning".T(EDTx.Warning), "No map downloaded - please wait for it to download".T(EDTx.UserControlSettings_NoMap));
             }
             else if (gss.ShowDialog() == DialogResult.OK)
             {
@@ -514,12 +520,13 @@ namespace EDDiscovery.UserControls
                     System.Diagnostics.Debug.WriteLine("Remove ");
 
                     info = new ExtendedControls.InfoForm();
-                    info.Info("Remove Sectors".Tx(this), EDDiscovery.Properties.Resources.edlogo_3mo_icon,
+                    info.Info("Remove Sectors".T(EDTx.UserControlSettings_RemoveSectors), 
+                                EDDiscovery.Properties.Resources.edlogo_3mo_icon,
                                 string.Format( ("Removing {0} Sector(s)." + Environment.NewLine + Environment.NewLine +
                                 "This will take a while (up to 30 mins dep on drive type and amount of sectors)." + Environment.NewLine +
                                 "You may continue to use EDD while this operation takes place" + Environment.NewLine +
                                 "but it may be slow to respond. Do not close down EDD until this window says" + Environment.NewLine +
-                                "the process has finished" + Environment.NewLine + Environment.NewLine).Tx(this,"GalRemove"), gss.Removed.Count ));
+                                "the process has finished" + Environment.NewLine + Environment.NewLine).T(EDTx.UserControlSettings_GalRemove), gss.Removed.Count ));
                     info.EnableClose = false;
                     info.Show(discoveryform);
 
@@ -550,7 +557,7 @@ namespace EDDiscovery.UserControls
                 taskremovesectors.Dispose();
                 info.EnableClose = true;
                 info.AddText(("Finished, Please close the window." + Environment.NewLine +
-                    "If you already have the 3dmap open, changes will not be reflected in that map until the next start of EDD" + Environment.NewLine).Tx(this,"GalFini"));
+                    "If you already have the 3dmap open, changes will not be reflected in that map until the next start of EDD" + Environment.NewLine).T(EDTx.UserControlSettings_GalFini));
             }
         }
 
@@ -560,7 +567,7 @@ namespace EDDiscovery.UserControls
 
         private void buttonExtSafeMode_Click(object sender, EventArgs e)
         {
-            if (ExtendedControls.MessageBoxTheme.Show(this, "Safe Mode".Tx(this,"SM"), "Confirm restart to safe mode".Tx(this, "CSM"), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+            if (ExtendedControls.MessageBoxTheme.Show(this, "Safe Mode".T(EDTx.UserControlSettings_SM), "Confirm restart to safe mode".T(EDTx.UserControlSettings_CSM), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
             {
                 Application.Exit();
                 System.Diagnostics.Process.Start(Application.ExecutablePath, "-safemode");
@@ -595,7 +602,7 @@ namespace EDDiscovery.UserControls
                 var res = ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "You need to configure Windows to allow EDD to webserve" + Environment.NewLine +
                                                                            "Click Yes to do this. If you are not the adminstrator, a dialog will appear to ask you" + Environment.NewLine +
                                                                            "to sign in as an admin to allow this to happen" + Environment.NewLine +
-                                                                           "If you have previously done this on this same port number you can click No and the enable will work".Tx(this,"WSQ"),
+                                                                           "If you have previously done this on this same port number you can click No and the enable will work".T(EDTx.UserControlSettings_WSQ),
                                                                            "Web Server",
                                                                            MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
@@ -625,7 +632,7 @@ namespace EDDiscovery.UserControls
 
             if ( !discoveryform.WebServerControl(runit) )
             {
-                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Did not start - click OK to configure windows".Tx(this,"WSF"), "Web Server");
+                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Did not start - click OK to configure windows".T(EDTx.UserControlSettings_WSF), "Web Server");
             }
             else
                 EDDConfig.Instance.WebServerEnable = runit;     // this is for next time at startup

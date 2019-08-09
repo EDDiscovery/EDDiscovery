@@ -133,11 +133,11 @@ namespace EDDiscovery.UserControls
 
         private void UserControlStatsTime_Load(object sender, EventArgs e)
         {
-            comboBoxTimeMode.Items.Add("Summary".Tx(this));
-            comboBoxTimeMode.Items.Add("Day".Tx(this));
-            comboBoxTimeMode.Items.Add("Week".Tx(this));
-            comboBoxTimeMode.Items.Add("Month".Tx(this));
-            comboBoxTimeMode.Items.Add("Custom".Tx(this));
+            comboBoxTimeMode.Items.Add("Summary".T(EDTx.StatsTimeUserControl_Summary));
+            comboBoxTimeMode.Items.Add("Day".T(EDTx.StatsTimeUserControl_Day));
+            comboBoxTimeMode.Items.Add("Week".T(EDTx.StatsTimeUserControl_Week));
+            comboBoxTimeMode.Items.Add("Month".T(EDTx.StatsTimeUserControl_Month));
+            comboBoxTimeMode.Items.Add("Custom".T(EDTx.StatsTimeUserControl_Custom));
             comboBoxTimeMode.SelectedIndex = 0;
         }
 

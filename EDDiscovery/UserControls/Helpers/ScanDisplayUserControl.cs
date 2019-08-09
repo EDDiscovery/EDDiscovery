@@ -408,7 +408,7 @@ namespace EDDiscovery.UserControls
                 if (sn.BeltData != null)
                     tip = sn.BeltData.RingInformationMoons(true);
                 else
-                    tip = sn.ownname + Environment.NewLine + Environment.NewLine + "No scan data available".Tx(this, "NSD");
+                    tip = sn.ownname + Environment.NewLine + Environment.NewLine + "No scan data available".T(EDTx.ScanDisplayUserControl_NSD);
 
                 if (sn.children != null && sn.children.Count != 0)
                 {
@@ -429,9 +429,9 @@ namespace EDDiscovery.UserControls
             else
             {
                 if (sn.type == StarScan.ScanNodeType.barycentre)
-                    tip = string.Format("Barycentre of {0}".Tx(this,"BC") , sn.ownname);
+                    tip = string.Format("Barycentre of {0}".T(EDTx.ScanDisplayUserControl_BC) , sn.ownname);
                 else
-                    tip = sn.ownname + Environment.NewLine + Environment.NewLine + "No scan data available".Tx(this, "NSD");
+                    tip = sn.ownname + Environment.NewLine + Environment.NewLine + "No scan data available".T(EDTx.ScanDisplayUserControl_NSD);
 
                 endpoint = CreateImageLabel(pc, notscanned, new Point(curpos.X + offset, curpos.Y + alignv), size, sn.customname ?? sn.ownname, tip, alignv + labelvoff, false, false);
                 offset += size.Width / 2;       // return the middle used was this..

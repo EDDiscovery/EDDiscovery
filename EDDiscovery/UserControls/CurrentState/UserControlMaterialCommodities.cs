@@ -14,13 +14,10 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using EDDiscovery.Controls;
 using EliteDangerousCore;
@@ -62,8 +59,8 @@ namespace EDDiscovery.UserControls
             if (materials)
             {
                 dataGridViewMC.Columns.Remove(dataGridViewMC.Columns[5]);       // to give name,shortname abv,category,type,number
-                labelItems1.Text = "Data".Tx(this);
-                labelItems2.Text = "Mats".Tx(this);
+                labelItems1.Text = "Data".T(EDTx.UserControlMaterialCommodities_Data);
+                labelItems2.Text = "Mats".T(EDTx.UserControlMaterialCommodities_Mats);
 
                 items = MaterialCommodityData.GetMaterials(true);
                 types = MaterialCommodityData.GetTypes((x) => !x.IsCommodity, true);
@@ -80,7 +77,7 @@ namespace EDDiscovery.UserControls
             {
                 dataGridViewMC.Columns.Remove(dataGridViewMC.Columns[1]);       //shortname
                 dataGridViewMC.Columns.Remove(dataGridViewMC.Columns[1]);       //then category to give name,type,number, avg price
-                labelItems1.Text = "Total".Tx(this);
+                labelItems1.Text = "Total".T(EDTx.UserControlMaterialCommodities_Total);
                 textBoxItems2.Visible = labelItems2.Visible = false;
                 checkBoxClear.Location = new Point(textBoxItems1.Right + 8, checkBoxClear.Top);
 
@@ -88,7 +85,7 @@ namespace EDDiscovery.UserControls
                 types = MaterialCommodityData.GetTypes((x) => x.IsCommodity, true);
 
                 MaterialCommodityData[] rare = items.Where(x => x.IsRareCommodity).ToArray();
-                cfs.AddGroupOption(String.Join(";", rare.Select(x => x.FDName).ToArray()) + ";", "Rare".Tx(this));
+                cfs.AddGroupOption(String.Join(";", rare.Select(x => x.FDName).ToArray()) + ";", "Rare".T(EDTx.UserControlMaterialCommodities_Rare));
             }
 
             foreach (var t in types)

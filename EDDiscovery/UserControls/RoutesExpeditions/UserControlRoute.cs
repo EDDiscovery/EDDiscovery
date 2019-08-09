@@ -212,8 +212,8 @@ namespace EDDiscovery.UserControls
             if (PossibleJumps > 100)
             {
                 DialogResult res = ExtendedControls.MessageBoxTheme.Show(FindForm(), 
-                    string.Format(("This will result in a large number ({0}) of jumps" + Environment.NewLine + "Confirm please").Tx(this,"Confirm"), 
-                    PossibleJumps), "Warning".Tx(), MessageBoxButtons.YesNo);
+                    string.Format(("This will result in a large number ({0}) of jumps" + Environment.NewLine + "Confirm please").T(EDTx.UserControlRoute_Confirm), 
+                    PossibleJumps), "Warning".T(EDTx.Warning), MessageBoxButtons.YesNo);
                 if (res != System.Windows.Forms.DialogResult.Yes)
                 {
                     ToggleButtons(true);
@@ -278,7 +278,7 @@ namespace EDDiscovery.UserControls
             }
             else
             {
-                ExtendedControls.MessageBoxTheme.Show(FindForm(), "No route set up, retry".Tx(this,"NoRoute"), "Warning".Tx(), MessageBoxButtons.OK);
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "No route set up, retry".T(EDTx.UserControlRoute_NoRoute), "Warning".T(EDTx.Warning), MessageBoxButtons.OK);
                 return;
             }
         }

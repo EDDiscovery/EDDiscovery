@@ -41,7 +41,7 @@ namespace EDDiscovery.UserControls
         public override void Init()
         {
             tabStrip.ImageList = new Image[] { EDDiscovery.Icons.Controls.CaptainsLog_Diary, EDDiscovery.Icons.Controls.CaptainsLog_Entries};
-            tabStrip.TextList = new string[] { "Diary".Tx(this), "Entries".Tx(this) };
+            tabStrip.TextList = new string[] { "Diary".T(EDTx.UserControlCaptainsLog_Diary), "Entries".T(EDTx.UserControlCaptainsLog_Entries) };
             tabStrip.TagList = new Type[] { typeof(CaptainsLogDiary), typeof(CaptainsLogEntries) };
 
             tabStrip.OnCreateTab += (tab, si) =>

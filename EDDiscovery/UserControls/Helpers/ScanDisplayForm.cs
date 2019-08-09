@@ -26,8 +26,6 @@ namespace EDDiscovery.UserControls
     {
         public static void ShowScanOrMarketForm(Form parent, Object tag, bool checkedsm, HistoryList hl)     // tag can be a Isystem or an He.. output depends on it.
         {
-            Type ty = typeof(ScanDisplayForm);
-
             if (tag == null)
                 return;
 
@@ -39,7 +37,7 @@ namespace EDDiscovery.UserControls
             HistoryEntry he = tag as HistoryEntry;                          // is tag HE?
             ISystem sys = he != null ? he.System : tag as ISystem;          // if so, sys is he.system, else its a direct sys
             ScanDisplayUserControl sd = null;
-            string title = "System".Tx(ty, "Sys") + ": " + sys.Name;
+            string title = "System".T(EDTx.ScanDisplayForm_Sys) + ": " + sys.Name;
 
             AutoScaleMode asm = AutoScaleMode.Font;
 
@@ -50,7 +48,7 @@ namespace EDDiscovery.UserControls
 
                 f.Add(new ExtendedControls.ConfigurableForm.Entry("RTB", typeof(ExtendedControls.ExtRichTextBox), detailed, new Point(0, topmargin), infosize, null));
 
-                title += ", " +"Station".Tx(ty) + ": " + jm.Station;
+                title += ", " +"Station".T(EDTx.ScanDisplayForm_Station) + ": " + jm.Station;
             }
             else
             {      
@@ -78,7 +76,7 @@ namespace EDDiscovery.UserControls
                 f.Add(new ExtendedControls.ConfigurableForm.Entry("Sys", null, null, new Point(0, topmargin), infosize, null) { control = sd });
             }
 
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("OK", typeof(ExtendedControls.ExtButton), "OK".Tx(), new Point(infosize.Width - 120, topmargin + infosize.Height + 10), new Size(100, 24), ""));
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("OK", typeof(ExtendedControls.ExtButton), "OK".T(EDTx.OK), new Point(infosize.Width - 120, topmargin + infosize.Height + 10), new Size(100, 24), ""));
 
             f.Trigger += (dialogname, controlname, ttag) =>
             {

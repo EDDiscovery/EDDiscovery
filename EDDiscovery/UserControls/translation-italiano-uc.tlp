@@ -365,10 +365,14 @@ SECTION UserControlMaterials
 .textBoxItems2.ToolTip: "Count of Items" => "Conteggio"
 .textBoxItems1.ToolTip: "Count of Items" => "Conteggio"
 .checkBoxClear.ToolTip: "Remove zero items the time after they go to zero" => "Rimuovi prodotti assenti solo la prossima volta"
+.buttonFilter.ToolTip: "Filter out items" @
+
+SECTION UserControlMaterialCommodities
+
 .Data: "Data" @
 .Mats: "Mats" @
 .Total: "Total" @
-.buttonFilter.ToolTip: "Filter out items" @
+.Rare: "Rare" @
 
 SECTION UserControlCommodities
 
@@ -383,10 +387,6 @@ SECTION UserControlCommodities
 .textBoxItems2.ToolTip: "Count of Items" => "Conteggio"
 .textBoxItems1.ToolTip: "Count of Items" => "Conteggio"
 .checkBoxClear.ToolTip: "Remove zero items the time after they go to zero" => "Rimuovi prodotti assenti solo la prossima volta"
-.Data: "Data" @
-.Mats: "Mats" @
-.Total: "Total" @
-.Rare: "Rare" @
 .buttonFilter.ToolTip: "Filter out items" @
 
 SECTION UserControlMissionOverlay

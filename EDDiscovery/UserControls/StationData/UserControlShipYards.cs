@@ -96,7 +96,7 @@ namespace EDDiscovery.UserControls
             ShipYardList shm = hl.shipyards;
             string cursel = comboBoxYards.Text;
 
-            string the = "Travel History Entry".Tx(this);
+            string the = "Travel History Entry".T(EDTx.UserControlShipYards_TravelHistoryEntry);
 
             comboBoxYards.Items.Clear();
             comboBoxYards.Items.Add(the);
@@ -181,19 +181,19 @@ namespace EDDiscovery.UserControls
             {
                 double distance = discoveryform.history.DistanceCurrentTo(i.Item1.StarSystem);
                 string dte = EDDiscoveryForm.EDDConfig.DisplayUTC ? i.Item1.Datetime.ToString() : i.Item1.Datetime.ToLocalTime().ToString();
-                object[] rowobj = { dte, i.Item1.Location, (distance > -1) ? (distance.ToString("N1") + "ly") : "Unknown".Tx(), i.Item2.ShipPrice.ToString("N1") + "cr" };
+                object[] rowobj = { dte, i.Item1.Location, (distance > -1) ? (distance.ToString("N1") + "ly") : "Unknown".T(EDTx.Unknown), i.Item2.ShipPrice.ToString("N1") + "cr" };
                 dataGridViewShips.Rows.Add(rowobj);
             }
 
             labelYard.Text = ship;
             labelYard.Visible = true;
-            Col1.HeaderText = "Date".Tx(this);
+            Col1.HeaderText = "Date".T(EDTx.UserControlShipYards_Date);
             Col1.Tag = "DT";
-            Col2.HeaderText = "Yard".Tx(this);
+            Col2.HeaderText = "Yard".T(EDTx.UserControlShipYards_Yard);
             Col2.Tag = null;
-            Col3.HeaderText = "Distance".Tx(this);
+            Col3.HeaderText = "Distance".T(EDTx.UserControlShipYards_Distance);
             Col3.Tag = "ly";
-            ColPrice.HeaderText = "Price".Tx(this);
+            ColPrice.HeaderText = "Price".T(EDTx.UserControlShipYards_Price);
             ColPrice.Tag = "cr";
         }
 
@@ -201,7 +201,7 @@ namespace EDDiscovery.UserControls
         {
             foreach (ShipYard.ShipyardItem i in yard.Ships)
             {
-                string col2 = "Unknown".Tx(), col3 = "";
+                string col2 = "Unknown".T(EDTx.Unknown), col3 = "";
                 Dictionary<ShipModuleData.ShipPropID, ShipModuleData.ShipInfo> shipprops = ShipModuleData.Instance.GetShipProperties(i.FDShipType);
                 if ( shipprops != null)
                 {
@@ -220,13 +220,13 @@ namespace EDDiscovery.UserControls
 
             labelYard.Text = yard.Ident(EDDiscoveryForm.EDDConfig.DisplayUTC) + (distance>-1 ? (" @ " + distance.ToString("N1") + "ly") : "");
             labelYard.Visible = true;
-            Col1.HeaderText = "Ship".Tx(this);
+            Col1.HeaderText = "Ship".T(EDTx.UserControlShipYards_Ship);
             Col1.Tag = null;
-            Col2.HeaderText = "Manufacturer".Tx(this);
+            Col2.HeaderText = "Manufacturer".T(EDTx.UserControlShipYards_Manufacturer);
             Col2.Tag = null;
-            Col3.HeaderText = "Mass/Speed".Tx(this,"MS");
+            Col3.HeaderText = "Mass/Speed".T(EDTx.UserControlShipYards_MS);
             Col3.Tag = null;
-            ColPrice.HeaderText = "Price".Tx(this);
+            ColPrice.HeaderText = "Price".T(EDTx.UserControlShipYards_Price);
             ColPrice.Tag = "cr";
         }
 

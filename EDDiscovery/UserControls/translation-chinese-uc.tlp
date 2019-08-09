@@ -383,6 +383,9 @@ SECTION UserControlMaterials
 .textBoxItems2.ToolTip: "Count of Items" => "材料数量"
 .textBoxItems1.ToolTip: "Count of Items" => "材料数量"
 .checkBoxClear.ToolTip: "Remove zero items the time after they go to zero" => "当材料数量变为零的时候自动移除"
+
+SECTION UserControlMaterialCommodities
+
 .Data: "Data" => "数据"
 .Mats: "Mats" => "材料"
 .Total: "Total" => "总量"
@@ -400,9 +403,6 @@ SECTION UserControlCommodities
 .textBoxItems2.ToolTip: "Count of Items" => "商品数量"
 .textBoxItems1.ToolTip: "Count of Items" => "商品数量"
 .checkBoxClear.ToolTip: "Remove zero items the time after they go to zero" => "当商品数量变为零的时候自动移除"
-.Data: "Data" => "数据"
-.Mats: "Mats" => "材料"
-.Total: "Total" => "总量"
 
 SECTION UserControlMissions
 

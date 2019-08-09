@@ -140,7 +140,7 @@ namespace EDDiscovery.UserControls
             int currentoffset = (dataGridViewMarketData.CurrentRow != null) ? Math.Max(0,dataGridViewMarketData.CurrentRow.Index - firstdisplayed) : 0;
             
             dataGridViewMarketData.Rows.Clear();
-            labelLocation.Text = "No Data".Tx();
+            labelLocation.Text = "No Data".T(EDTx.NoData);
             toolTip.SetToolTip(labelLocation, null);
 
             HistoryEntry left = (eddmd_left != null) ? eddmd_left : last_eddmd;       // if we have a selected left, use it, else use the last eddmd
@@ -239,7 +239,7 @@ namespace EDDiscovery.UserControls
 
                         int rowno = dataGridViewMarketData.Rows.Add(rowobj);
                         dataGridViewMarketData.Rows[rowno].Cells[0].ToolTipText =
-                        dataGridViewMarketData.Rows[rowno].Cells[1].ToolTipText = "Cargo only, no market data on this item".Tx(this,"Conly");
+                        dataGridViewMarketData.Rows[rowno].Cells[1].ToolTipText = "Cargo only, no market data on this item".T(EDTx.UserControlMarketData_Conly);
                     }
                 }
 
@@ -280,8 +280,8 @@ namespace EDDiscovery.UserControls
             comboBoxCustomFrom.Items.Clear();
             comboBoxCustomTo.Items.Clear();
 
-            comboBoxCustomFrom.Items.Add("Travel History Entry Last".Tx(this,"LEntry"));
-            comboBoxCustomTo.Items.Add("None".Tx());
+            comboBoxCustomFrom.Items.Add("Travel History Entry Last".T(EDTx.UserControlMarketData_LEntry));
+            comboBoxCustomTo.Items.Add("None".T(EDTx.None));
 
             comboboxentries.Clear();
 
@@ -290,7 +290,7 @@ namespace EDDiscovery.UserControls
             foreach (HistoryEntry h in hlcpb)
             {
                 comboboxentries.Add(h);
-                string v = h.System.Name + ":" + h.WhereAmI + " " + "on".Tx() + " " + ((EDDiscoveryForm.EDDConfig.DisplayUTC) ? h.EventTimeUTC.ToString() : h.EventTimeLocal.ToString());
+                string v = h.System.Name + ":" + h.WhereAmI + " " + "on".T(EDTx.on) + " " + ((EDDiscoveryForm.EDDConfig.DisplayUTC) ? h.EventTimeUTC.ToString() : h.EventTimeLocal.ToString());
                 if (h.journalEntry is JournalEDDCommodityPrices)
                     v += " (CAPI)";
                 comboBoxCustomFrom.Items.Add(v);

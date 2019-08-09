@@ -322,7 +322,7 @@ namespace EDDiscovery.UserControls
             }
             else
             {
-                ExtendedControls.MessageBoxTheme.Show(FindForm(), "No route set up. Please add at least two systems.".Tx(this,"NoRoute"), "Warning".Tx(), MessageBoxButtons.OK);
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "No route set up. Please add at least two systems.".T(EDTx.UserControlExpedition_NoRoute), "Warning".T(EDTx.Warning), MessageBoxButtons.OK);
                 return;
             }
         }
@@ -337,7 +337,7 @@ namespace EDDiscovery.UserControls
 
         private void toolStripButtonDelete_Click(object sender, EventArgs e)
         {
-            if (ExtendedControls.MessageBoxTheme.Show(FindForm(), "Are you sure you want to delete this route?".Tx(this,"Delete"), "Warning".Tx(), MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            if (ExtendedControls.MessageBoxTheme.Show(FindForm(), "Are you sure you want to delete this route?".T(EDTx.UserControlExpedition_Delete), "Warning".T(EDTx.Warning), MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 if (currentroute.Id >= 0)
                 {
@@ -367,7 +367,7 @@ namespace EDDiscovery.UserControls
 
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.Filter = "Text Files|*.txt";
-            ofd.Title = "Select a route file".Tx(this,"SelRoute");
+            ofd.Title = "Select a route file".T(EDTx.UserControlExpedition_SelRoute);
 
             if (ofd.ShowDialog(FindForm()) != System.Windows.Forms.DialogResult.OK)
                 return;
@@ -379,8 +379,8 @@ namespace EDDiscovery.UserControls
             }
             catch (IOException)
             {
-                ExtendedControls.MessageBoxTheme.Show(FindForm(), "There was an error reading file".Tx(this,"FileE"),
-                    "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "There was an error reading file".T(EDTx.UserControlExpedition_FileE),
+                    "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -398,8 +398,8 @@ namespace EDDiscovery.UserControls
             }
             if (systems.Count == 0)
             {
-                ExtendedControls.MessageBoxTheme.Show(FindForm(), "The imported file contains no known system names".Tx(this,"Nonames"),
-                    "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "The imported file contains no known system names".T(EDTx.UserControlExpedition_Nonames),
+                    "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
 
@@ -417,7 +417,7 @@ namespace EDDiscovery.UserControls
         {
             if (latestplottedroute == null || latestplottedroute.Count == 0)
             {
-                ExtendedControls.MessageBoxTheme.Show(FindForm(), "Please create a route on a route panel".Tx(this,"Createroute"), "Warning".Tx());
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "Please create a route on a route panel".T(EDTx.UserControlExpedition_Createroute), "Warning".T(EDTx.Warning));
                 return;
             }
             else if (!PromptAndSaveIfNeeded())
@@ -443,14 +443,14 @@ namespace EDDiscovery.UserControls
             {
                 if (rt.Systems.Count < 1)
                 {
-                    ExtendedControls.MessageBoxTheme.Show(FindForm(), "There is no route to export ".Tx(this,"NoRouteExport"),
-                        "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    ExtendedControls.MessageBoxTheme.Show(FindForm(), "There is no route to export ".T(EDTx.UserControlExpedition_NoRouteExport),
+                        "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     return;
                 }
 
                 SaveFileDialog dlg = new SaveFileDialog();
                 dlg.Filter = "Route export| *.txt";
-                dlg.Title = "Export route".Tx(this,"Export");
+                dlg.Title = "Export route".T(EDTx.UserControlExpedition_Export);
                 if (currentroute != null && !String.IsNullOrWhiteSpace(currentroute.Name))
                     dlg.FileName = currentroute.Name + ".txt";
                 else
@@ -697,7 +697,7 @@ namespace EDDiscovery.UserControls
             ISystem sc = SystemCache.FindSystem((string)obj);
             if (sc == null)
             {
-                ExtendedControls.MessageBoxTheme.Show(FindForm(), "Unknown system, system is without co-ordinates".Tx(this,"UnknownS"), "Warning".Tx(), MessageBoxButtons.OK);
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "Unknown system, system is without co-ordinates".T(EDTx.UserControlExpedition_UnknownS), "Warning".T(EDTx.Warning), MessageBoxButtons.OK);
             }
             else
                 TargetHelpers.showBookmarkForm(this, discoveryform, sc, null, false);
@@ -778,7 +778,7 @@ namespace EDDiscovery.UserControls
              //   here get scanner to complain
 
                 var result = ExtendedControls.MessageBoxTheme.Show(FindForm(), ("There are unsaved changes to the current route." + Environment.NewLine
-                    + "Would you like to save the current route before proceeding?").Tx(this,"Unsaved"), "Warning".Tx(), MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
+                    + "Would you like to save the current route before proceeding?").T(EDTx.UserControlExpedition_Unsaved), "Warning".T(EDTx.Warning), MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
                 switch (result)
                 {
                     case DialogResult.Yes:
@@ -808,13 +808,13 @@ namespace EDDiscovery.UserControls
 
             if (string.IsNullOrEmpty(newrtname))
             {
-                ExtendedControls.MessageBoxTheme.Show(FindForm(), "Please specify a name for the route.".Tx(this,"Specify"), "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "Please specify a name for the route.".T(EDTx.UserControlExpedition_Specify), "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 textBoxRouteName.Select();
             }
             else if ( foundedsm != null )
             {
                 ExtendedControls.MessageBoxTheme.Show(FindForm(), ("The current route name conflicts with a well-known expedition." + Environment.NewLine
-                    + "Please specify a new name to save your changes.").Tx(this,"Conflict"), "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    + "Please specify a new name to save your changes.").T(EDTx.UserControlExpedition_Conflict), "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 textBoxRouteName.Select();
                 textBoxRouteName.SelectAll();
             }
@@ -824,7 +824,7 @@ namespace EDDiscovery.UserControls
 
                 if (overwriteroute != null)
                 {
-                    if (MessageBoxTheme.Show(FindForm(), "Warning: route already exists. Would you like to overwrite it?".Tx(this,"Overwrite"), "Warning".Tx(), MessageBoxButtons.YesNo) != DialogResult.Yes)
+                    if (MessageBoxTheme.Show(FindForm(), "Warning: route already exists. Would you like to overwrite it?".T(EDTx.UserControlExpedition_Overwrite), "Warning".T(EDTx.Warning), MessageBoxButtons.YesNo) != DialogResult.Yes)
                         return false;
 
                     overwriteroute.Delete();
@@ -904,7 +904,7 @@ namespace EDDiscovery.UserControls
 
                 if (sys == null && sysname != "")
                 {
-                    dataGridViewRouteSystems.Rows[rowindex].ErrorText = "System not known to EDSM".Tx(this,"EDSMUnk");
+                    dataGridViewRouteSystems.Rows[rowindex].ErrorText = "System not known to EDSM".T(EDTx.UserControlExpedition_EDSMUnk);
                 }
                 else
                 {
@@ -1007,7 +1007,7 @@ namespace EDDiscovery.UserControls
 
                 if (sysname != "" && GetSystem(sysname) == null)
                 {
-                    row.ErrorText = "System not known to EDSM".Tx(this,"EDSMUnk");
+                    row.ErrorText = "System not known to EDSM".T(EDTx.UserControlExpedition_EDSMUnk);
                 }
                 else
                 {

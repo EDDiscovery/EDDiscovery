@@ -135,7 +135,7 @@ namespace EDDiscovery.UserControls
 
         private void FillMap(SortedList<double, ISystem> csl, ISystem centerSystem)
         {
-            SetControlText(string.Format("3D Map of closest systems from {0}".Tx(this,"3dmap"), centerSystem.Name));
+            SetControlText(string.Format("3D Map of closest systems from {0}".T(EDTx.UserControlLocalMap_3dmap), centerSystem.Name));
 
             for (int s = 0; s <= 100; s++)
             {

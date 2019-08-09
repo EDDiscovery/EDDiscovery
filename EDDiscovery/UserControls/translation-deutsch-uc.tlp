@@ -365,10 +365,14 @@ SECTION UserControlMaterials
 .textBoxItems2.ToolTip: "Count of Items" => "Anzahl"
 .textBoxItems1.ToolTip: "Count of Items" => "Anzahl"
 .checkBoxClear.ToolTip: "Remove zero items the time after they go to zero" => "Objekte ausblenden, nachdem ihre Anzahl auf 0 gefallen ist"
+.buttonFilter.ToolTip: "Filter out items" @
+
+SECTION UserControlMaterialCommodities
+
 .Data: "Data" => "Daten"
 .Mats: "Mats" => "Materialien"
 .Total: "Total" => "Gesamt"
-.buttonFilter.ToolTip: "Filter out items" @
+.Rare: "Rare" @
 
 SECTION UserControlCommodities
 
@@ -383,10 +387,6 @@ SECTION UserControlCommodities
 .textBoxItems2.ToolTip: "Count of Items" => "Anzahl"
 .textBoxItems1.ToolTip: "Count of Items" => "Anzahl"
 .checkBoxClear.ToolTip: "Remove zero items the time after they go to zero" => "Objekte ausblenden, nachdem ihre Anzahl auf 0 gefallen ist"
-.Data: "Data" => "Daten"
-.Mats: "Mats" => "Materialien"
-.Total: "Total" => "Gesamt"
-.Rare: "Rare" @
 .buttonFilter.ToolTip: "Filter out items" @
 
 SECTION UserControlMissionOverlay

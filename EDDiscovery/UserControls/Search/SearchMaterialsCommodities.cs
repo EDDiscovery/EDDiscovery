@@ -66,7 +66,7 @@ namespace EDDiscovery.UserControls
             itemlist = MaterialCommodityData.GetAll();
             Array.Sort(itemlist, (left, right) => left.Name.CompareTo(right.Name));
 
-            var list = (from x in itemlist select x.Name + " (" + x.Category + ", " + x.Type + ((x.Rarity) ? ", Rare Commodity".Tx(this):"") + ")");
+            var list = (from x in itemlist select x.Name + " (" + x.Category + ", " + x.Type + ((x.Rarity) ? ", Rare Commodity".T(EDTx.SearchMaterialsCommodities_RareCommodity):"") + ")");
 
             comboBoxCustomCM1.Items.AddRange(list);
             comboBoxCustomCM1.SelectedIndex = Math.Min(SQLiteConnectionUser.GetSettingInt(DbCM1, 0), list.Count() - 1);
@@ -74,7 +74,7 @@ namespace EDDiscovery.UserControls
             comboBoxCustomCM2.Items.AddRange(list);
             comboBoxCustomCM2.SelectedIndex = Math.Min(SQLiteConnectionUser.GetSettingInt(DbCM2, 0), list.Count() - 1);
 
-            comboBoxCustomCMANDOR.Items.AddRange(new string[] { "AND".Tx(this), "OR".Tx(this) });
+            comboBoxCustomCMANDOR.Items.AddRange(new string[] { "AND".T(EDTx.SearchMaterialsCommodities_AND), "OR".T(EDTx.SearchMaterialsCommodities_OR) });
             comboBoxCustomCMANDOR.SelectedIndex = SQLiteConnectionUser.GetSettingInt(DbCMANDOR, 0);
 
         }
@@ -148,13 +148,13 @@ namespace EDDiscovery.UserControls
                 {
                     var je = he.journalEntry as JournalMaterialDiscovered;
                     if (je.Name.Equals(cm.FDName))
-                        found = new Tuple<HistoryEntry, string>(he, prefix + "Discovered at ".Tx(this, "DIS") + he.WhereAmI);
+                        found = new Tuple<HistoryEntry, string>(he, prefix + "Discovered at ".T(EDTx.SearchMaterialsCommodities_DIS) + he.WhereAmI);
                 }
                 else if (he.EntryType == JournalTypeEnum.MaterialCollected)
                 {
                     var je = he.journalEntry as JournalMaterialCollected;
                     if (je.Name.Equals(cm.FDName))
-                        found = new Tuple<HistoryEntry, string>(he, prefix + "Collected at ".Tx(this, "COL") + he.WhereAmI);
+                        found = new Tuple<HistoryEntry, string>(he, prefix + "Collected at ".T(EDTx.SearchMaterialsCommodities_COL) + he.WhereAmI);
                 }
 
                 if (found != null)

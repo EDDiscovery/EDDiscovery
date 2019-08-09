@@ -137,7 +137,7 @@ namespace EDDiscovery.UserControls
             }
             catch
             {
-                discoveryform.LogLineHighlight("Copying text to clipboard failed".Tx(this));
+                discoveryform.LogLineHighlight("Copying text to clipboard failed".T(EDTx.UserControlCommonBase_Copyingtexttoclipboardfailed));
             }
         }
 

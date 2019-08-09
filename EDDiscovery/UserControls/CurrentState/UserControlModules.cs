@@ -49,8 +49,8 @@ namespace EDDiscovery.UserControls
         {
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
-            storedmoduletext = "Stored Modules".Tx(this);
-            travelhistorytext = "Travel History Entry".Tx(this);
+            storedmoduletext = "Stored Modules".T(EDTx.UserControlModules_StoredModules);
+            travelhistorytext = "Travel History Entry".T(EDTx.UserControlModules_TravelHistoryEntry);
             dataGridViewModules.MakeDoubleBuffered();
             dataGridViewModules.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
 
@@ -170,9 +170,9 @@ namespace EDDiscovery.UserControls
 
             last_si = null;     // no ship info
 
-            dataGridViewModules.Columns[2].HeaderText = "SlotCol".Tx(this);
-            dataGridViewModules.Columns[3].HeaderText = "ItemInfo".Tx(this);
-            dataGridViewModules.Columns[6].HeaderText = "Value".Tx(this);
+            dataGridViewModules.Columns[2].HeaderText = "SlotCol".T(EDTx.UserControlModules_SlotCol);
+            dataGridViewModules.Columns[3].HeaderText = "ItemInfo".T(EDTx.UserControlModules_ItemInfo);
+            dataGridViewModules.Columns[6].HeaderText = "Value".T(EDTx.UserControlModules_Value);
 
             if (comboBoxShips.Text == storedmoduletext)
             {
@@ -184,9 +184,9 @@ namespace EDDiscovery.UserControls
                     foreach (ModulesInStore.StoredModule sm in mi.StoredModules)
                         AddStoredModule(sm);
 
-                    dataGridViewModules.Columns[2].HeaderText = "System".Tx(this);
-                    dataGridViewModules.Columns[3].HeaderText = "Tx Time".Tx(this);
-                    dataGridViewModules.Columns[6].HeaderText = "Cost".Tx(this);
+                    dataGridViewModules.Columns[2].HeaderText = "System".T(EDTx.UserControlModules_System);
+                    dataGridViewModules.Columns[3].HeaderText = "Tx Time".T(EDTx.UserControlModules_TxTime);
+                    dataGridViewModules.Columns[6].HeaderText = "Cost".T(EDTx.UserControlModules_Cost);
                 }
             }
             else if (comboBoxShips.Text == travelhistorytext || comboBoxShips.Text.Length == 0)  // second is due to the order History gets called vs this on start
@@ -225,53 +225,53 @@ namespace EDDiscovery.UserControls
             if (fsdspec != null)
             {
                 EliteDangerousCalculations.FSDSpec.JumpInfo ji = fsdspec.GetJumpInfo(0, modulemass + hullmass, si.FuelCapacity, si.FuelCapacity / 2);
-                AddInfoLine("FSD Avg Jump".Tx(this), ji.avgsinglejumpnocargo.ToStringInvariant("N2") + "ly", "Half tank, no cargo".Tx(this,"HT"), fsdspec.ToString());
+                AddInfoLine("FSD Avg Jump".T(EDTx.UserControlModules_FSDAvgJump), ji.avgsinglejumpnocargo.ToStringInvariant("N2") + "ly", "Half tank, no cargo".T(EDTx.UserControlModules_HT), fsdspec.ToString());
                 DataGridViewRow rw = dataGridViewModules.Rows[dataGridViewModules.Rows.Count - 1];
-                AddInfoLine("FSD Max Range".Tx(this), ji.maxjumprange.ToStringInvariant("N2") + "ly", "Full Tank, no cargo".Tx(this,"FT"), fsdspec.ToString());
-                AddInfoLine("FSD Maximum Fuel per jump".Tx(this), fsdspec.MaxFuelPerJump.ToStringInvariant()+"t","", fsdspec.ToString());
+                AddInfoLine("FSD Max Range".T(EDTx.UserControlModules_FSDMaxRange), ji.maxjumprange.ToStringInvariant("N2") + "ly", "Full Tank, no cargo".T(EDTx.UserControlModules_FT), fsdspec.ToString());
+                AddInfoLine("FSD Maximum Fuel per jump".T(EDTx.UserControlModules_FSDMaximumFuelperjump), fsdspec.MaxFuelPerJump.ToStringInvariant()+"t","", fsdspec.ToString());
             }
 
             if (si.HullValue > 0)
-                AddValueLine("Hull Value".Tx(this), si.HullValue);
+                AddValueLine("Hull Value".T(EDTx.UserControlModules_HullValue), si.HullValue);
             if (si.ModulesValue > 0)
-                AddValueLine("Modules Value".Tx(this), si.ModulesValue);
+                AddValueLine("Modules Value".T(EDTx.UserControlModules_ModulesValue), si.ModulesValue);
             if (si.HullValue > 0 && si.ModulesValue > 0)
-                AddValueLine("Total Cost".Tx(this), si.HullValue + si.ModulesValue);
+                AddValueLine("Total Cost".T(EDTx.UserControlModules_TotalCost), si.HullValue + si.ModulesValue);
             if (si.Rebuy > 0)
-                AddValueLine("Rebuy Cost".Tx(this), si.Rebuy);
+                AddValueLine("Rebuy Cost".T(EDTx.UserControlModules_RebuyCost), si.Rebuy);
 
-            AddMassLine("Mass Hull".Tx(this), hullmass.ToStringInvariant("N1") + "t");
-            AddMassLine("Mass Unladen".Tx(this), (hullmass + modulemass).ToStringInvariant("N1") + "t");
+            AddMassLine("Mass Hull".T(EDTx.UserControlModules_MassHull), hullmass.ToStringInvariant("N1") + "t");
+            AddMassLine("Mass Unladen".T(EDTx.UserControlModules_MassUnladen), (hullmass + modulemass).ToStringInvariant("N1") + "t");
             if (si.UnladenMass > 0)
-                AddMassLine("Mass FD Unladen".Tx(this), si.UnladenMass.ToStringInvariant("N1") + "t");
-            AddMassLine("Mass Modules".Tx(this), modulemass.ToStringInvariant("N1") + "t");
+                AddMassLine("Mass FD Unladen".T(EDTx.UserControlModules_MassFDUnladen), si.UnladenMass.ToStringInvariant("N1") + "t");
+            AddMassLine("Mass Modules".T(EDTx.UserControlModules_MassModules), modulemass.ToStringInvariant("N1") + "t");
 
-            AddInfoLine("Manufacturer".Tx(this), si.Manufacturer);
+            AddInfoLine("Manufacturer".T(EDTx.UserControlModules_Manufacturer), si.Manufacturer);
 
             if ( si.FuelCapacity > 0 )
-                AddInfoLine("Fuel Capacity".Tx(this), si.FuelCapacity.ToStringInvariant("N1") + "t");
+                AddInfoLine("Fuel Capacity".T(EDTx.UserControlModules_FuelCapacity), si.FuelCapacity.ToStringInvariant("N1") + "t");
             if ( si.FuelLevel > 0 )
-                AddInfoLine("Fuel Level".Tx(this), si.FuelLevel.ToStringInvariant("N1") + "t");
+                AddInfoLine("Fuel Level".T(EDTx.UserControlModules_FuelLevel), si.FuelLevel.ToStringInvariant("N1") + "t");
             if (si.ReserveFuelCapacity > 0)
-                AddInfoLine("Fuel Reserve Capacity".Tx(this), si.ReserveFuelCapacity.ToStringInvariant("N2") + "t");
+                AddInfoLine("Fuel Reserve Capacity".T(EDTx.UserControlModules_FuelReserveCapacity), si.ReserveFuelCapacity.ToStringInvariant("N2") + "t");
             if ( si.HullHealthAtLoadout > 0 )
-                AddInfoLine("Hull Health (Loadout)".Tx(this), si.HullHealthAtLoadout.ToStringInvariant("N1") + "%");
+                AddInfoLine("Hull Health (Loadout)".T(EDTx.UserControlModules_HullHealth), si.HullHealthAtLoadout.ToStringInvariant("N1") + "%");
 
             double fuelwarn = si.FuelWarningPercent;
-            AddInfoLine("Fuel Warning %".Tx(this), fuelwarn > 0 ? fuelwarn.ToStringInvariant("N1") + "%" : "Off".Tx());
+            AddInfoLine("Fuel Warning %".T(EDTx.UserControlModules_FuelWarning), fuelwarn > 0 ? fuelwarn.ToStringInvariant("N1") + "%" : "Off".T(EDTx.Off));
 
-            AddInfoLine("Pad Size".Tx(this), si.PadSize);
-            AddInfoLine("Main Thruster Speed".Tx(this), si.Speed.ToStringInvariant("0.#"));
-            AddInfoLine("Main Thruster Boost".Tx(this), si.Boost.ToStringInvariant("0.#"));
+            AddInfoLine("Pad Size".T(EDTx.UserControlModules_PadSize), si.PadSize);
+            AddInfoLine("Main Thruster Speed".T(EDTx.UserControlModules_MainThrusterSpeed), si.Speed.ToStringInvariant("0.#"));
+            AddInfoLine("Main Thruster Boost".T(EDTx.UserControlModules_MainThrusterBoost), si.Boost.ToStringInvariant("0.#"));
 
             if (si.InTransit)
-                AddInfoLine("In Transit to ".Tx(this), (si.StoredAtSystem??"Unknown".Tx()) + ":" + (si.StoredAtStation ?? "Unknown".Tx()));
+                AddInfoLine("In Transit to ".T(EDTx.UserControlModules_InTransit), (si.StoredAtSystem??"Unknown".T(EDTx.Unknown)) + ":" + (si.StoredAtStation ?? "Unknown".T(EDTx.Unknown)));
             else if ( si.StoredAtSystem != null )
-                AddInfoLine("Stored at".Tx(this), si.StoredAtSystem + ":" + (si.StoredAtStation ?? "Unknown".Tx()));
+                AddInfoLine("Stored at".T(EDTx.UserControlModules_Storedat), si.StoredAtSystem + ":" + (si.StoredAtStation ?? "Unknown".T(EDTx.Unknown)));
 
             int cc = si.CargoCapacity();
             if ( cc > 0 )
-                AddInfoLine("Cargo Capacity".Tx(this), cc.ToStringInvariant("N0") + "t");
+                AddInfoLine("Cargo Capacity".T(EDTx.UserControlModules_CargoCapacity), cc.ToStringInvariant("N0") + "t");
 
             labelVehicle.Visible = true;
             labelVehicle.Text = si.ShipFullInfo(cargo: false, fuel: false);
@@ -317,7 +317,7 @@ namespace EDDiscovery.UserControls
         void AddStoredModule(ModulesInStore.StoredModule sm)
         {
             object[] rowobj = { sm.Name_Localised.Alt(sm.Name), sm.Name,
-                                sm.StarSystem.Alt("In Transit".Tx(this)), sm.TransferTimeString ,
+                                sm.StarSystem.Alt("In Transit".T(EDTx.UserControlModules_InTransit)), sm.TransferTimeString ,
                                 sm.Mass > 0 ? (sm.Mass.ToStringInvariant()+"t") : "",
                                 sm.EngineerModifications.Alt(""),
                                 sm.TransferCost>0 ? sm.TransferCost.ToStringInvariant("N0") : "",
@@ -392,7 +392,8 @@ namespace EDDiscovery.UserControls
         {
             if (e.Button == MouseButtons.Right)
             {
-                string url = ExtendedControls.PromptSingleLine.ShowDialog(this.FindForm(), "URL:", EDDConfig.Instance.CoriolisURL, "Enter Coriolis URL".Tx(this,"CURL"), this.FindForm().Icon);
+                string url = ExtendedControls.PromptSingleLine.ShowDialog(this.FindForm(), "URL:", EDDConfig.Instance.CoriolisURL, 
+                            "Enter Coriolis URL".T(EDTx.UserControlModules_CURL), this.FindForm().Icon);
                 if (url != null)
                     EDDConfig.Instance.CoriolisURL = url;
             }
@@ -433,7 +434,7 @@ namespace EDDiscovery.UserControls
         {
             if (e.Button == MouseButtons.Right)
             {
-                string url = ExtendedControls.PromptSingleLine.ShowDialog(this.FindForm(), "URL:", EDDConfig.Instance.EDDShipyardURL, "Enter ED Shipyard URL".Tx(this,"EDSURL"), this.FindForm().Icon);
+                string url = ExtendedControls.PromptSingleLine.ShowDialog(this.FindForm(), "URL:", EDDConfig.Instance.EDDShipyardURL, "Enter ED Shipyard URL".T(EDTx.UserControlModules_EDSURL), this.FindForm().Icon);
                 if (url != null)
                     EDDConfig.Instance.EDDShipyardURL = url;
             }
@@ -448,13 +449,13 @@ namespace EDDiscovery.UserControls
             int width = 430;
             int ctrlleft = 150;
 
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "Fuel Warning:".Tx(this,"FW"), new Point(10, 40), new Size(140, 24), ""));
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "Fuel Warning:".T(EDTx.UserControlModules_FW), new Point(10, 40), new Size(140, 24), ""));
             f.Add(new ExtendedControls.ConfigurableForm.Entry("FuelWarning", typeof(ExtendedControls.NumberBoxDouble), 
-                last_si.FuelWarningPercent.ToStringInvariant(), new Point(ctrlleft, 40), new Size(width - ctrlleft - 20, 24), "Enter fuel warning level in % (0 = off, 1-100%)".Tx(this,"TTF"))
+                last_si.FuelWarningPercent.ToStringInvariant(), new Point(ctrlleft, 40), new Size(width - ctrlleft - 20, 24), "Enter fuel warning level in % (0 = off, 1-100%)".T(EDTx.UserControlModules_TTF))
                 { numberboxdoubleminimum = 0, numberboxdoublemaximum = 100, numberboxformat = "0.##" });
 
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("OK", typeof(ExtendedControls.ExtButton), "OK".Tx(), new Point(width - 100, 70), new Size(80, 24), "Press to Accept".Tx(this)));
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("Cancel", typeof(ExtendedControls.ExtButton), "Cancel".Tx(), new Point(width - 200, 70), new Size(80, 24), "Press to Cancel".Tx(this)));
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("OK", typeof(ExtendedControls.ExtButton), "OK".T(EDTx.OK), new Point(width - 100, 70), new Size(80, 24), "Press to Accept".T(EDTx.UserControlModules_PresstoAccept)));
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("Cancel", typeof(ExtendedControls.ExtButton), "Cancel".T(EDTx.Cancel), new Point(width - 200, 70), new Size(80, 24), "Press to Cancel".T(EDTx.UserControlModules_PresstoCancel)));
 
             f.Trigger += (dialogname, controlname, tag) =>
             {
@@ -467,7 +468,7 @@ namespace EDDiscovery.UserControls
                         f.Close();
                     }
                     else
-                        ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "A Value is not valid".Tx(this,"NValid"), "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "A Value is not valid".T(EDTx.UserControlModules_NValid), "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 else if ( controlname == "Cancel")
                 {
@@ -476,7 +477,7 @@ namespace EDDiscovery.UserControls
                 }
             };
 
-            DialogResult res = f.ShowDialogCentred(this.FindForm(), this.FindForm().Icon,  "Ship Configure".Tx(this,"SC"));
+            DialogResult res = f.ShowDialogCentred(this.FindForm(), this.FindForm().Icon,  "Ship Configure".T(EDTx.UserControlModules_SC));
 
             if (res == DialogResult.OK)
             {
@@ -500,7 +501,7 @@ namespace EDDiscovery.UserControls
                 {
                     Form mainform = FindForm();
                     ExtendedControls.InfoForm frm = new ExtendedControls.InfoForm();
-                    frm.Info("Module Information".Tx(this,"MI"), mainform.Icon, tt);
+                    frm.Info("Module Information".T(EDTx.UserControlModules_MI), mainform.Icon, tt);
                     frm.Size = new Size(600, 400);
                     frm.StartPosition = FormStartPosition.CenterParent;
                     frm.Show(mainform);

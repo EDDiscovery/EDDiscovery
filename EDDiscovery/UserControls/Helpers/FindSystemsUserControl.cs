@@ -162,7 +162,10 @@ namespace EDDiscovery.UserControls
                 }
 
                 if (listsphere == null)
-                    ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "EDSM did not return any data on " + textBoxSystemName.Text + Environment.NewLine + "It may be a galactic object that it does not know about", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                {
+                    string resp = String.Format("EDSM did not return any data on {0}\nIt may be a galactic object that it does not know about".T(EDTx.FindSystemsUserControl_EDSM), textBoxSystemName.Text);
+                    ExtendedControls.MessageBoxTheme.Show(this.FindForm(), resp, "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
 
                 Cursor = Cursors.Default;
                 ReturnSystems(listsphere);
@@ -181,7 +184,7 @@ namespace EDDiscovery.UserControls
                 ReturnSystems((from x in list select new Tuple<ISystem, double>(x, x.Distance(sys))).ToList());
             }
             else
-                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Cannot find system ".Tx(this) + textBoxSystemName.Text, "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Cannot find system ".T(EDTx.FindSystemsUserControl_Cannotfindsystem) + textBoxSystemName.Text, "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
         private void buttonExtDBClick(object sender, EventArgs e)
@@ -202,7 +205,7 @@ namespace EDDiscovery.UserControls
                 ReturnSystems((from x in distlist select new Tuple<ISystem, double>(x.Value, x.Value.Distance(sys))).ToList());
             }
             else
-                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Cannot find system ".Tx(this) + textBoxSystemName.Text, "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Cannot find system ".T(EDTx.FindSystemsUserControl_Cannotfindsystem) + textBoxSystemName.Text, "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
         private void buttonExtExcel_Click(object sender, EventArgs e)

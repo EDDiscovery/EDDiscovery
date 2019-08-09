@@ -173,7 +173,7 @@ namespace EDDiscovery.UserControls
             dataGridView.Init(discoveryform);
 
             comboBoxSearches.Items.AddRange(Queries.Instance.Searches.Select(x => x.Item1));
-            comboBoxSearches.Text = "Select".Tx(this);
+            comboBoxSearches.Text = "Select".T(EDTx.SearchScans_Select);
             comboBoxSearches.SelectedIndexChanged += ComboBoxSearches_SelectedIndexChanged;
         }
 
@@ -213,7 +213,7 @@ namespace EDDiscovery.UserControls
             BaseUtils.ConditionLists cond = Valid();
             if (cond != null)
             {
-                string name = ExtendedControls.PromptSingleLine.ShowDialog(this.FindForm(), "Name:".Tx(this), "", "Enter Search Name:".Tx(this, "SN"), this.FindForm().Icon);
+                string name = ExtendedControls.PromptSingleLine.ShowDialog(this.FindForm(), "Name:".T(EDTx.SearchScans_Name), "", "Enter Search Name:".T(EDTx.SearchScans_SN), this.FindForm().Icon);
                 if (name != null)
                 {
                     Queries.Instance.Update(name,cond.ToString());
@@ -231,7 +231,7 @@ namespace EDDiscovery.UserControls
             string name = comboBoxSearches.Text;
             if (comboBoxSearches.SelectedIndex >= Queries.Instance.StandardSearches && name.HasChars())
             {
-                if (ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Confirm deletion of".Tx(this, "DEL") + " " + name, "Delete".Tx(), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+                if (ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Confirm deletion of".T(EDTx.SearchScans_DEL) + " " + name, "Delete".T(EDTx.Delete), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
                 {
                     Queries.Instance.Delete(name);
                     comboBoxSearches.Items.Clear();
@@ -239,7 +239,7 @@ namespace EDDiscovery.UserControls
                 }
             }
             else
-                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Cannot delete this entry".Tx(this, "DELNO"), "Delete".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Cannot delete this entry".T(EDTx.SearchScans_DELNO), "Delete".T(EDTx.Delete), MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
         }
 
@@ -283,7 +283,7 @@ namespace EDDiscovery.UserControls
 
                     if ( errclass == BaseUtils.ConditionLists.ErrorClass.LeftSideVarUndefined || errclass == BaseUtils.ConditionLists.ErrorClass.RightSideBadFormat )
                     {
-                        ExtendedControls.MessageBoxTheme.Show(errlist, "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        ExtendedControls.MessageBoxTheme.Show(errlist, "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         break;
                     }
                 }
@@ -300,7 +300,7 @@ namespace EDDiscovery.UserControls
             string errs = conditionFilterUC.Check();
             if (errs.HasChars())
             {
-                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Condition is not valid".Tx(this, "CNV"), "Condition".Tx(this, "CD"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Condition is not valid".T(EDTx.SearchScans_CNV), "Condition".T(EDTx.SearchScans_CD), MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return null;
             }
             else

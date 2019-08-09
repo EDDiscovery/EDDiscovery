@@ -376,10 +376,14 @@ SECTION UserControlMaterials
 .textBoxItems2.ToolTip: "Count of Items" => "Количество предметов"
 .textBoxItems1.ToolTip: "Count of Items" => "Количество предметов"
 .checkBoxClear.ToolTip: "Remove zero items the time after they go to zero" => "Скрывать предметы, когда их количество упадет до 0"
+.buttonFilter.ToolTip: "Filter out items" => "Фильтровать"
+
+SECTION UserControlMaterialCommodities
+
 .Data: "Data" => "Данные"
 .Mats: "Mats" => "Мат-лы"
 .Total: "Total" => "Всего"
-.buttonFilter.ToolTip: "Filter out items" => "Фильтровать"
+.Rare: "Rare" => "Редкие товары"
 
 SECTION UserControlCommodities
 
@@ -394,10 +398,7 @@ SECTION UserControlCommodities
 .textBoxItems2.ToolTip: "Count of Items" => "Количество предметов"
 .textBoxItems1.ToolTip: "Count of Items" => "Количество предметов"
 .checkBoxClear.ToolTip: "Remove zero items the time after they go to zero" => "Скрывать предметы, когда их количество упадет до 0"
-.Data: "Data" => "Данные"
-.Mats: "Mats" => "Материалы"
 .Total: "Total" => "Итого"
-.Rare: "Rare" => "Редкие товары"
 .buttonFilter.ToolTip: "Filter out items" => "Фильтровать"
 
 SECTION UserControlMissionOverlay
