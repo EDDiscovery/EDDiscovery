@@ -140,7 +140,7 @@ namespace EDDiscovery
 
                 hist = HistoryList.LoadHistory(journalmonitor,
                     () => PendingClose,
-                    (p, s) => ReportRefreshProgress(p, string.Format("Processing log file {0}".Tx(this, "PLF"), s)), args.NetLogPath,
+                    (p, s) => ReportRefreshProgress(p, string.Format("Processing log file {0}".T(EDTx.EDDiscoveryController_PLF), s)), args.NetLogPath,
                     args.ForceNetLogReload, args.ForceJournalReload, args.CurrentCommander,
                     EDDConfig.Instance.FullHistoryLoadDayLimit, EDDConfig.Instance.EssentialEventTypes);
 
@@ -153,7 +153,7 @@ namespace EDDiscovery
 
             initComplete.WaitOne();
 
-            ReportRefreshProgress(-1, "Refresh Displays".Tx(this, "RD"));
+            ReportRefreshProgress(-1, "Refresh Displays".T(EDTx.EDDiscoveryController_RD));
 
             InvokeAsyncOnUiThread(() => ForegroundHistoryRefreshCompleteonUI(hist));
         }
@@ -197,7 +197,7 @@ namespace EDDiscovery
                 refreshHistoryRequestedFlag = 0;
                 readyForNewRefresh.Set();
 
-                LogLine("History refresh complete.".Tx(this, "HRC"));
+                LogLine("History refresh complete.".T(EDTx.EDDiscoveryController_HRC));
 
                 ReportRefreshProgress(-1, "");
 

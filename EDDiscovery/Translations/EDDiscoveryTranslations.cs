@@ -97,6 +97,7 @@ namespace EDDiscovery
         EDDiscoveryController_EXPD, // Checking for new Expedition data
         EDDiscoveryController_EXPL, // Checking for new Exploration data
 
+
         AddOnManagerForm_AddOnTitle, // Add-On Manager
         AddOnManagerForm_EditTitle, // Edit Add-Ons
         AddOnManagerForm_Locallymodified, // Locally modified

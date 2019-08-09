@@ -88,12 +88,12 @@ namespace EDDiscovery
 
                     LogLine(string.Format("Full synchronisation to the {0} databases required." + Environment.NewLine +
                                     "This will take a while, please be patient." + Environment.NewLine +
-                                    "Please continue running ED Discovery until refresh is complete.".Tx(this, "SyncEDSM"), databases));
+                                    "Please continue running ED Discovery until refresh is complete.".T(EDTx.EDDiscoveryController_SyncEDSM), databases));
                 }
             }
             else
             {
-                LogLine("Synchronisation to EDSM and EDDB disabled. Use Settings panel to reenable".Tx(this, "SyncOff"));
+                LogLine("Synchronisation to EDSM and EDDB disabled. Use Settings panel to reenable".T(EDTx.EDDiscoveryController_SyncOff));
             }
         }
 
@@ -208,14 +208,14 @@ namespace EDDiscovery
             Debug.Assert(System.Windows.Forms.Application.MessageLoop);
 
             if (syncstate.edsm_fullsync_count > 0 || syncstate.edsm_updatesync_count > 0)
-                LogLine(string.Format("EDSM update complete with {0} systems".Tx(this, "EDSMU"), syncstate.edsm_fullsync_count + syncstate.edsm_updatesync_count));
+                LogLine(string.Format("EDSM update complete with {0} systems".T(EDTx.EDDiscoveryController_EDSMU), syncstate.edsm_fullsync_count + syncstate.edsm_updatesync_count));
 
             if (syncstate.eddb_sync_count > 0)
-                LogLine(string.Format("EDDB update complete with {0} systems".Tx(this, "EDDBU"), syncstate.eddb_sync_count));
+                LogLine(string.Format("EDDB update complete with {0} systems".T(EDTx.EDDiscoveryController_EDDBU), syncstate.eddb_sync_count));
 
             if (syncstate.edsm_fullsync_count > 0 || syncstate.eddb_sync_count > 0 || syncstate.edsm_updatesync_count > 20000)   // if we have done a resync, or a major update sync (arb no)
             {
-                LogLine("Refresh due to updating EDSM or EDDB data".Tx(this, "Refresh"));
+                LogLine("Refresh due to updating EDSM or EDDB data".T(EDTx.EDDiscoveryController_Refresh));
                 RefreshHistoryAsync();
             }
 
