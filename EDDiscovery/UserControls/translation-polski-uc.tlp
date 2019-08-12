@@ -863,6 +863,8 @@ SECTION UserControlSettings
 .labelSafeMode: "Click this to perform special operations" => "Kliknij, aby wykonać specjalne operacje"
 .buttonExtSafeMode: "Restart in Safe Mode" => "Uruchom ponownie w Trybie Bezpiecznym"
 .buttonExtSafeMode.ToolTip: "Safe Mode allows you to perform special operations, such as moving the databases, resetting the UI, resetting the action packs,  DLLs etc." => "Tryb Bezpieczny umożliwia wykonywanie operacji specjalnych, takich jak przeniesienie baz danych, reset UI, reset paczek akcji, plików DLL itp."
+.groupBoxMemory: "Memory" @
+.groupBoxInteraction: "Interaction" @
 
 SECTION UserControlShipYards
 
