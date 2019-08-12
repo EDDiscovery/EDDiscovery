@@ -74,7 +74,7 @@ SECTION MaterialCommodityData
 .tungsten: "Tungsten" => "Wolfram"
 .molybdenum: "Molybdenum" => "Molibden"
 .mercury: "Mercury" => "Rtęć"
-.boron: "Boron" => "Boron"
+.boron: "Boron" @
 .cadmium: "Cadmium" => "Kadm"
 .tin: "Tin" => "Cyna"
 .selenium: "Selenium" => "Selen"
