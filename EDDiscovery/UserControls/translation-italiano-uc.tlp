@@ -81,6 +81,12 @@ SECTION UserControlCompass
 .checkBoxHideTransparent: "Hide In Transparent" @
 .labelTargetLat: "Target" @
 
+SECTION UserControlEDSM
+
+.extCheckBoxStar.ToolTip: "Select another system to view" @
+.System: "System:" @
+.EnterSys: "Show System" @
+
 SECTION UserControlSearch
 
 .MaterialsCommodities: "Materials Commodities" @
@@ -120,6 +126,7 @@ SECTION SearchScans
 .ColumnInformation: "Information" @
 .ColumnCurrentDistance: "Current Distance" @
 .ColumnPosition: "Position" @
+.conditionFilterUC.buttonMore: "+" @
 
 SECTION SearchStars
 
@@ -148,12 +155,12 @@ SECTION UserControlEngineering
 .RecipeCol: "Recipe" => "Ricetta"
 .EngineersCol: "Engineers" => "Ingenhere"
 .chkHistoric: "Use Cursor Positon" => "Usa la posizione del cursore"
-.buttonClear: "Clear Wanted" => "Pulischi Ricercati"
-.buttonFilterMaterial: "Filter By Material" => "Filtra per Materiali Filtra per Materiali"
-.buttonFilterUpgrade: "Filter By Upgrade" => "Filtra per Miglioramenti"
-.buttonFilterLevel: "Filter By Level" => "Filtra per Livello"
-.buttonFilterEngineer: "Filter By Engineer" => "Filtra per Ingegnere"
-.buttonFilterModule: "Filter By Module" => "Filtra per Modulo"
+.buttonClear: "Clear" => "Pulischi Ricercati"
+.buttonFilterMaterial: "Material" => "Filtra per Materiali Filtra per Materiali"
+.buttonFilterUpgrade: "Upgrade" => "Filtra per Miglioramenti"
+.buttonFilterLevel: "Level" => "Filtra per Livello"
+.buttonFilterEngineer: "Engineer" => "Filtra per Ingegnere"
+.buttonFilterModule: "Module" => "Filtra per Modulo"
 .ToolTip: "Left click and drag on grid to reorder" => "Premi il pulsante sinistro e trascina per riordinare la tabella"
 .chkHistoric.ToolTip: "When clicked on, use the materials at the cursor to estimate, when off always use the latest materials." => "Quando attivo, usa i materiali sotto il cursore da stimare, quando disattivo usa sempre l'ultimo materiale."
 .buttonClear.ToolTip: "Set all wanted values to zero" => "Imposta tutti i ricercati su zero"
@@ -222,7 +229,7 @@ SECTION UserControlExploration
 .ColumnPrimaryStar: "Pri star" => "Stella Principale"
 .ColumnInfo: "Info" @
 .ColumnNote: "Note" @
-.labelFilename: "Filename" => "Nome doumento"
+.labelFilename: "Filename:" => "Nome doumento"
 .labelName: "Exploration set:" => "Set di Esplorazione:"
 .toolStripButtonNew: "New" => "Nuovo"
 .toolStripButtonLoad: "Load" => "Carica"
@@ -251,6 +258,7 @@ SECTION UserControlExploration
 
 SECTION UserControlJournalGrid
 
+.JHF: "Journal: Filter out fields" @
 .ColumnTime: "Time" => "Tempo"
 .Event: "Event" => "Evento"
 .ColumnType: "Description" => "Descrizione"
@@ -401,6 +409,26 @@ SECTION UserControlMissionOverlay
 
 SECTION UserControlSurveyor
 
+.MandD: " (Mapped & Discovered)" @
+.MP: " (Mapped)" @
+.DIS: " (Discovered)" @
+.bodyFeaturesToolStripMenuItem.lowRadiusToolStripMenuItem: "Low Radius" @
+.checkEDSMForInformationToolStripMenuItem: "Check EDSM for information" @
+.autoHideToolStripMenuItem: "Auto Hide" @
+.dontHideInFSSModeToolStripMenuItem: "Don\'t Hide in FSS Mode" @
+.showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem: "Show System Info Always" @
+.LowRadius: " Low Radius." @
+.Mapped: " (Mapped & Discovered)" @
+.Systemscancomplete: "System scan complete." @
+.bodiesfound: " bodies found." @
+.Noscanreported: "No scan reported." @
+.isanammoniaworld: " is an ammonia world." @
+.isanearthlikeworld: " is an earth like world." @
+.isawaterworld: " is a water world." @
+.isaterraformablewaterworld: " is a terraformable water world." @
+.isaterraformableplanet: " is a terraformable planet." @
+.Hasring: " Has ring." @
+.Has: " Has " @
 .planetaryClassesToolStripMenuItem: "Planetary Classes" @
 .planetaryClassesToolStripMenuItem.ammoniaWorldToolStripMenuItem: "Ammonia World" @
 .planetaryClassesToolStripMenuItem.earthlikeWorldToolStripMenuItem: "Earthlike World" @
@@ -443,9 +471,13 @@ SECTION UserControlMissions
 .Value: "Value (cr):\n{0:N0}" @
 .ValueN: "Value (cr)" @
 .ValueC: "Value: " @
+.ToolTip: "Left click and drag on grid to reorder" @
 
 SECTION UserControlModules
 
+.MassFDUnladen: "Mass FD Unladen" @
+.FuelReserveCapacity: "Fuel Reserve Capacity" @
+.HullHealth: "Hull Health (Loadout)" @
 .ItemLocalised: "Type" @
 .ItemCol: "Item" @
 .SlotCol: "Slot" @
@@ -491,7 +523,7 @@ SECTION UserControlModules
 .MI: "Module Information" @
 .buttonExtConfigure.ToolTip: "Configure extra data missing from Elite Journal Output" @
 .buttonExtEDShipyard.ToolTip: "Send to ED Ship Yard" @
-.buttonExtCoriolis.ToolTip: "Send to Corolis" @
+.buttonExtCoriolis.ToolTip: "Send to Coriolis" @
 .comboBoxShips.ToolTip: "Select ship to view" @
 .labelVehicle: "Unknown" @
 .labelShip: "Ship" @
@@ -612,6 +644,7 @@ SECTION UserControlRoute
 .textBox_FromX.ToolTip: "X Co-ord" @
 .Confirm: "This will result in a large number ({0})) of jumps\r\nConfirm please" @
 .NoRoute: "No route set up, retry" @
+.comboBoxRoutingMetric: "Nearest to Waypoint" @
 
 SECTION UserControlRouteTracker
 
@@ -663,6 +696,7 @@ SECTION UserControlScan
 .cancelShowSystemToolStripMenuItem: "Cancel Show System" @
 .panelControls.ToolTip: "Right click on panel to show/hide the toolbar" @
 .rollUpPanelTop.ToolTip: "Right click on panel to show/hide the toolbar" @
+.extCheckBoxDisplaySystemAlways.ToolTip: "Show system and value in main display" @
 
 SECTION UserControlScanGrid
 
@@ -671,7 +705,7 @@ SECTION UserControlScanGrid
 .colName: "Name" @
 .colClass: "Class" @
 .colDistance: "Distance" @
-.colBriefing: "Briefing" @
+.colBriefing: "Information" @
 .Moon: "Moon" @
 .MainStar: "Main Star" @
 .Mass: "Mass" @
@@ -680,7 +714,7 @@ SECTION UserControlScanGrid
 .Terraformable: "Terraformable" @
 .Volcanism: "Volcanism" @
 .Rings: "Has {0} rings: " @
-.Ring: "Has 1 ring: " @
+.Ring: "Ring: " @
 .BC: "This body contains: " @
 .Value: "Value" @
 .SS: "Scan Summary for {0}. {1}" @
@@ -713,9 +747,17 @@ SECTION UserControlScanGrid
 .columnsToolStripMenuItem.informationToolStripMenuItem: "Information" @
 .toolStripStatusTotalValue: "Estimated scans value" @
 .toolStripStatusGreen: "GREEN SYSTEM" @
+.GS: "This is a green system, as it has all existing jumponium materials available!" @
+.JS: " jumponium materials found in system." @
 
 SECTION UserControlSettings
 
+.extGroupBoxWebServer: "Web Server" @
+.WSQ: "If you have previously done this on this same port number you can click No and the enable will work" @
+.WSF: "Did not start - click OK to configure windows" @
+.labelPortNo: "Port" @
+.extButtonTestWeb: "Test" @
+.extCheckBoxWebServerEnable: "Enable" @
 .FS: "All entries for Statistics" @
 .SM: "Safe Mode" @
 .CSM: "Confirm restart to safe mode" @
@@ -753,7 +795,7 @@ SECTION UserControlSettings
 .radioButtonHistorySelection: "History Grid Selection" => "Selezione dello storico"
 .radioButtonCentreHome: "Home System" => "Sistema Preferito"
 .labelOpenOn: "Open Centred On" => "Apri centrata su"
-.labelHome: "Home System" => "Sistema Predefinito"
+.labelHome: "Now in Commander Settings" => "Sistema Predefinito"
 .groupBoxCommanders: "Commanders" => "Comandanti"
 .buttonEditCommander: "Edit" => "Modifica"
 .ColumnCommander: "Commander" => "Comandante"
@@ -838,6 +880,7 @@ SECTION UserControlShipYards
 
 SECTION UserControlShoppingList
 
+.toggleListPositionToolStripMenuItem: "Toggle Shopping List Position" @
 .buttonSpecialEffects: "Special Effects" @
 .buttonTechBroker: "Tech Broker Unlocks" @
 .showMaxFSDInjectionsToolStripMenuItem: "Show Max FSD Injections" @
@@ -901,6 +944,7 @@ SECTION UserControlSpanel
 .showCircumstellarZonesToolStripMenuItem.showAmmoniaWorldsToolStripMenuItem: "Ammonia Worlds" @
 .showCircumstellarZonesToolStripMenuItem.showIcyPlanetsToolStripMenuItem: "Icy Planets" @
 .dontShowInformationWhenToolStripMenuItem.completelyHideThePanelToolStripMenuItem: "Completely hide the Panel" @
+.dontShowInformationWhenToolStripMenuItem.dontshowwhenInPanelToolStripMenuItem: ".. when in a Panel" @
 .Goldilocks: "Goldilocks, {0} ({1}-{2} AU),\n" @
 
 SECTION UserControlStarDistance
@@ -970,6 +1014,7 @@ SECTION UserControlStarList
 
 SECTION UserControlStats
 
+.tosystem: " to system " @
 .tabControlCustomStats.tabPageGeneral: "General" @
 .tabControlCustomStats.tabPageGeneral.mostVisited: "Most Visited" @
 .tabControlCustomStats.tabPageGeneral.ItemName: "Item" @
@@ -1100,6 +1145,19 @@ SECTION UserControlStats
 .tabControlCustomStats.tabPageByShip.dataGridViewTextBoxColumn3: "Item" @
 .tabControlCustomStats.tabPageByShip.dataGridViewTextBoxColumn4: "Information" @
 .Mapped: "Mapped" @
+.BankAccount: "Bank Account" @
+.Combat: "Combat" @
+.Crime: "Crime" @
+.Smuggling: "Smuggling" @
+.Trading: "Trading" @
+.Mining: "Mining" @
+.Exploration: "Exploration" @
+.Passengers: "Passengers" @
+.SearchandRescue: "Search and Rescue" @
+.Crafting: "Crafting" @
+.Crew: "Crew" @
+.Multi: "Multi-crew" @
+.MaterialsTrader: "Materials Trader" @
 
 SECTION StatsTimeUserControl
 
@@ -1211,9 +1269,11 @@ SECTION UserControlContainerSplitter
 .MergeTopPanel: "Merge Top Panel" @
 .MergeRightPanel: "Merge Right Panel" @
 .MergeBottomPanel: "Merge Bottom Panel" @
+.RC: "Right click on splitter bar to change orientation\nor split or merge panels" @
 
 SECTION UserControlTravelGrid
 
+.THF: "History: Filter out fields" @
 .ColumnTime: "Time" => "Ora"
 .Icon: "Event" => "Evento"
 .ColumnSystem: "Description" => "Descrizione"
@@ -1373,19 +1433,6 @@ SECTION UserControlTrippanel
 .FDEDSM: "Shows if EDSM indicates your it's first discoverer" @
 .UKN: "System {0} unknown to EDSM" @
 
-SECTION UserControlSurveyor
-
-.Systemscancomplete: "System scan complete." @
-.bodiesfound: " bodies found." @
-.Noscanreported: "No scan reported." @
-.isanammoniaworld: " is an ammonia world." @
-.isanearthlikeworld: " is an earth like world." @
-.isawaterworld: " is a water world." @
-.isaterraformablewaterworld: " is a terraformable water world." @
-.isaterraformableplanet: " is a terraformable planet." @
-.Hasring: " Has ring." @
-.Has: " Has " @
-
 SECTION ScanDisplayUserControl
 
 .NSD: "No scan data available" @
@@ -1404,6 +1451,9 @@ SECTION TagsForm
 .buttonMore: "+" @
 .buttonMore.ToolTip: "Add more tags" @
 TagsForm: "Tags" @
+.TN: "Tag name" @
+.SI: "Select image for this tag" @
+.DE: "Delete entry" @
 
 SECTION FilterSelector
 

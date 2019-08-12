@@ -60,7 +60,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = BaseUtils.FieldBuilder.Build("Loadout:".Txb(this), Loadout) + BaseUtils.FieldBuilder.Build(", NPC Controlled;".Txb(this), PlayerControlled);
+            info = BaseUtils.FieldBuilder.Build("Loadout:".T(EDTx.JournalEntry_Loadout), Loadout) + BaseUtils.FieldBuilder.Build(", NPC Controlled;".T(EDTx.JournalEntry_NPCControlled), PlayerControlled);
             detailed = "";
         }
     }

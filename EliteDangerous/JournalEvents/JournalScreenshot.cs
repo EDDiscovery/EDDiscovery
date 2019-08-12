@@ -47,7 +47,8 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed)  
         {
-            info = BaseUtils.FieldBuilder.Build("At ".Tx(this), Body , "< in ".Tx(this), System , "File:".Tx(this), Filename, "Width:".Tx(this), Width , "Height:".Tx(this), Height, "Latitude:".Txb(this), JournalFieldNaming.RLat(nLatitude), "Longitude:".Txb(this), JournalFieldNaming.RLong(nLongitude));
+            info = BaseUtils.FieldBuilder.Build("At ".T(EDTx.JournalScreenshot_At), Body , "< in ".T(EDTx.JournalScreenshot_in), System , "File:".T(EDTx.JournalScreenshot_File), Filename, 
+                        "Width:".T(EDTx.JournalScreenshot_Width), Width , "Height:".T(EDTx.JournalScreenshot_Height), Height, "Latitude:".T(EDTx.JournalEntry_Latitude), JournalFieldNaming.RLat(nLatitude), "Longitude:".T(EDTx.JournalEntry_Longitude), JournalFieldNaming.RLong(nLongitude));
             detailed = "";
         }
 

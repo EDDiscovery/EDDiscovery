@@ -295,7 +295,7 @@ SECTION JournalEngineerProgress
 SECTION JournalFSDJump
 
 .Jumpto: "Jump to {0}" @
-.Fuel: " Fuel " @
+.Fuel: ", Fuel " @
 .left: " left " @
 
 SECTION JournalLeaveBody
@@ -477,7 +477,7 @@ SECTION JournalScan
 .BodyRadius: "Body Radius: {0:0.00}km\n" @
 .SurfaceTemp: "Surface Temp: {0}K\n" @
 .Luminosity: "Luminosity: {0}\n" @
-.GV: "Gravity: {0:0.0}g\n" @
+.GV: "Gravity: {0:0.00}g\n" @
 .SPA: "Surface Pressure: {0} Atmospheres\n" @
 .SPP: "Surface Pressure: {0} Pa\n" @
 .Volcanism: "Volcanism: {0}\n" @
@@ -487,10 +487,10 @@ SECTION JournalScan
 .SMA: "Semi Major Axis: {0:0.00}AU\n" @
 .SMK: "Semi Major Axis: {0}km\n" @
 .OrbitalEccentricity: "Orbital Eccentricity: {0:0.000}\n" @
-.OrbitalInclination: "Orbital Inclination: {0:0.000}�\n" @
-.ArgOfPeriapsis: "Arg Of Periapsis: {0:0.000}�\n" @
+.OrbitalInclination: "Orbital Inclination: {0:0.000}°\n" @
+.ArgOfPeriapsis: "Arg Of Periapsis: {0:0.000}°\n" @
 .AbsoluteMagnitude: "Absolute Magnitude: {0:0.00}\n" @
-.Axialtilt: "Axial tilt: {0:0.00}�\n" @
+.Axialtilt: "Axial tilt: {0:0.00}°\n" @
 .RotationPeriod: "Rotation Period: {0} days\n" @
 .Tidallylocked: "Tidally locked\n" @
 .Candidateforterraforming: "Candidate for terraforming\n" @
@@ -502,7 +502,7 @@ SECTION JournalScan
 .EV: "\nEstimated value: {0:N0}" @
 .DB: "\n\nDiscovered by {0} on {1}" @
 .HabitableZoneApprox: "Habitable Zone Approx. {0} ({1}-{2} AU)\n" @
-.Othersstarsnotconsidered: " (Others stars not considered)\n" @
+.Othersstarsnotconsidered: "(Others stars not considered)\n\n" @
 .Materials: "Materials:\n" @
 .AtmosphericComposition: "Atmospheric Composition:\n" @
 .PlanetaryComposition: "Planetary Composition:\n" @
@@ -593,7 +593,7 @@ SECTION JournalStartJump
 
 SECTION JournalEntry
 
-.Wealth: "Wealth:;cr;N" @
+.Wealth: "Wealth:;cr;N0" @
 .NotorietyIndex: "Notoriety Index:;;N0" @
 
 SECTION JournalStatistics
@@ -620,7 +620,7 @@ SECTION BankAccountClass
 .SpentonOutfitting: "Spent on Outfitting:;cr;N0" @
 .SpentonRepairs: "Spent on Repairs:;cr;N0" @
 .SpentonFuel: "Spent on Fuel:;cr;N0" @
-.SpendonAmmo: "Spend on Ammo:;cr;N0" @
+.SpendonAmmo: "Spent on Ammo:;cr;N0" @
 .InsuranceClaims: "Insurance Claims:;;N0" @
 .SpentonInsurance: "Spent on Insurance:;cr;N0" @
 
@@ -892,7 +892,7 @@ SECTION JournalEntry
 .Fine: "Fine:" @
 .Missionname: "Mission name:" @
 .Hot: ";(Hot)" @
-.HullHealth: "Hull Health;%;N1" @
+.HullHealth: "Hull Health:;%;N1" @
 .Hull: "Hull:; cr;N0" @
 .Modules: "Modules:; cr;N0" @
 .Rebuy: "Rebuy:; cr;N0" @

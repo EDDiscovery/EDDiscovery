@@ -83,7 +83,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed) 
         {
-            info = "No Cargo".Txb(this);
+            info = "No Cargo".T(EDTx.JournalEntry_NoCargo);
             detailed = "";
 
             if (Inventory != null && Inventory.Length > 0)
@@ -92,10 +92,10 @@ namespace EliteDangerousCore.JournalEvents
                 foreach (Cargo c in Inventory)
                     total += c.Count;
 
-                info = Vessel.Equals("Ship") ? "Ship".Tx(this,"CargoShip") : "SRV".Tx(this,"CargoSRV");
+                info = Vessel.Equals("Ship") ? "Ship".T(EDTx.JournalCargo_CargoShip) : "SRV".T(EDTx.JournalCargo_CargoSRV);
                 info += " ";
 
-                info += string.Format( "Cargo, {0} items".Txb(this), total);
+                info += string.Format( "Cargo, {0} items".T(EDTx.JournalEntry_Cargo), total);
                 detailed = "";
 
                 foreach (Cargo c in Inventory)
@@ -105,7 +105,7 @@ namespace EliteDangerousCore.JournalEvents
                     int? stolen = null;
                     if (c.Stolen > 0)
                         stolen = c.Stolen;
-                    detailed += BaseUtils.FieldBuilder.Build("", c.FriendlyName, "; items".Txb(this), c.Count , "(;)" , stolen, "<; (Mission Cargo)".Txb(this), c.MissionID != null);
+                    detailed += BaseUtils.FieldBuilder.Build("", c.FriendlyName, "; items".T(EDTx.JournalEntry_items), c.Count , "(;)" , stolen, "<; (Mission Cargo)".T(EDTx.JournalEntry_MissionCargo), c.MissionID != null);
                 }
             }
         }
@@ -164,9 +164,9 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = BaseUtils.FieldBuilder.Build("", Type_Localised, "Count:".Txb(this), Count,
-                            "<; (Mission Cargo)".Txb(this), MissionID != null,
-                            ";Abandoned".Txb(this), Abandoned, "PowerPlay:".Txb(this), PowerplayOrigin);
+            info = BaseUtils.FieldBuilder.Build("", Type_Localised, "Count:".T(EDTx.JournalEntry_Count), Count,
+                            "<; (Mission Cargo)".T(EDTx.JournalEntry_MissionCargo), MissionID != null,
+                            ";Abandoned".T(EDTx.JournalEntry_Abandoned), Abandoned, "PowerPlay:".T(EDTx.JournalEntry_PowerPlay), PowerplayOrigin);
             detailed = "";
         }
     }
@@ -232,15 +232,15 @@ namespace EliteDangerousCore.JournalEvents
         {
             if (UpdateEnum == UpdateTypeEnum.Collect)
             {
-                info = BaseUtils.FieldBuilder.Build("Collected:".Txb(this), Count, "< of ".Txb(this), FriendlyCargoType, "Total:".Txb(this), ItemsDelivered, "To Go:".Txb(this), ItemsToGo, "Progress:;%;N1".Txb(this), ProgressPercent);
+                info = BaseUtils.FieldBuilder.Build("Collected:".T(EDTx.JournalEntry_Collected), Count, "< of ".T(EDTx.JournalEntry_of), FriendlyCargoType, "Total:".T(EDTx.JournalEntry_Total), ItemsDelivered, "To Go:".T(EDTx.JournalEntry_ToGo), ItemsToGo, "Progress:;%;N1".T(EDTx.JournalEntry_Progress), ProgressPercent);
             }
             else if (UpdateEnum == UpdateTypeEnum.Deliver)
             {
-                info = BaseUtils.FieldBuilder.Build("Delivered:".Txb(this), Count, "< of ".Txb(this), FriendlyCargoType, "Total:".Txb(this), ItemsDelivered, "To Go:".Txb(this), ItemsToGo, "Progress:;%;N1".Txb(this), ProgressPercent);
+                info = BaseUtils.FieldBuilder.Build("Delivered:".T(EDTx.JournalEntry_Delivered), Count, "< of ".T(EDTx.JournalEntry_of), FriendlyCargoType, "Total:".T(EDTx.JournalEntry_Total), ItemsDelivered, "To Go:".T(EDTx.JournalEntry_ToGo), ItemsToGo, "Progress:;%;N1".T(EDTx.JournalEntry_Progress), ProgressPercent);
             }
             else if (UpdateEnum == UpdateTypeEnum.WingUpdate)
             {
-                info = BaseUtils.FieldBuilder.Build("Update, Collected:".Txb(this), ItemsCollected, "Delivered:".Txb(this), ItemsDelivered, "To Go:".Txb(this), ItemsToGo, "Progress Left:;%;N1".Txb(this), ProgressPercent);
+                info = BaseUtils.FieldBuilder.Build("Update, Collected:".T(EDTx.JournalEntry_Update), ItemsCollected, "Delivered:".T(EDTx.JournalEntry_Delivered), ItemsDelivered, "To Go:".T(EDTx.JournalEntry_ToGo), ItemsToGo, "Progress Left:;%;N1".T(EDTx.JournalEntry_ProgressLeft), ProgressPercent);
             }
             else
             {
@@ -283,7 +283,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = BaseUtils.FieldBuilder.Build("", Type_Localised, ";Stolen".Txb(this), Stolen, "<; (Mission Cargo)".Txb(this), MissionID != null);
+            info = BaseUtils.FieldBuilder.Build("", Type_Localised, ";Stolen".T(EDTx.JournalEntry_Stolen), Stolen, "<; (Mission Cargo)".T(EDTx.JournalEntry_MissionCargo), MissionID != null);
             detailed = "";
         }
     }

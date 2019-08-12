@@ -37,7 +37,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed) 
         {
-            info = BaseUtils.FieldBuilder.Build("Cost:; cr;N0".Txb(this), Cost, "Fuel:; tons;0.0".Txb(this), Amount);
+            info = BaseUtils.FieldBuilder.Build("Cost:; cr;N0".T(EDTx.JournalEntry_Cost), Cost, "Fuel:; tons;0.0".T(EDTx.JournalEntry_Fuel), Amount);
             detailed = "";
         }
 
@@ -66,7 +66,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = BaseUtils.FieldBuilder.Build("Cost:; cr;N0".Txb(this), Cost, "Fuel:; tons;0.0".Txb(this), Amount);
+            info = BaseUtils.FieldBuilder.Build("Cost:; cr;N0".T(EDTx.JournalEntry_Cost), Cost, "Fuel:; tons;0.0".T(EDTx.JournalEntry_Fuel), Amount);
             detailed = "";
         }
 
@@ -90,7 +90,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = BaseUtils.FieldBuilder.Build(";t;0.0", Scooped, "Total:;t;0.0".Tx(this), Total);
+            info = BaseUtils.FieldBuilder.Build(";t;0.0", Scooped, "Total:;t;0.0".T(EDTx.JournalFuelScoop_Total), Total);
             detailed = "";
         }
 
@@ -114,7 +114,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = BaseUtils.FieldBuilder.Build("Main:;t;0.0".Tx(this), FuelMain, "Reservoir:;t;0.0".Tx(this), FuelReservoir);
+            info = BaseUtils.FieldBuilder.Build("Main:;t;0.0".T(EDTx.JournalReservoirReplenished_Main), FuelMain, "Reservoir:;t;0.0".T(EDTx.JournalReservoirReplenished_Reservoir), FuelReservoir);
             detailed = "";
         }
 

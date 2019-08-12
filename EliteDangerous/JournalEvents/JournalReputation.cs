@@ -36,7 +36,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed) 
         {
-            info = BaseUtils.FieldBuilder.Build("Federation:;;0.#".Tx(this), Federation , "Empire:;;0.#".Tx(this), Empire, "Independent:;;0.#".Tx(this), Independent , "Alliance:;;0.#".Tx(this), Alliance);
+            info = BaseUtils.FieldBuilder.Build("Federation:;;0.#".T(EDTx.JournalReputation_Federation), Federation , "Empire:;;0.#".T(EDTx.JournalReputation_Empire), Empire, "Independent:;;0.#".T(EDTx.JournalReputation_Independent), Independent , "Alliance:;;0.#".T(EDTx.JournalReputation_Alliance), Alliance);
             detailed = "";
         }
 

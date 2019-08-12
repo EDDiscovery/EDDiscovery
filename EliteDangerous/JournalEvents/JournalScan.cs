@@ -177,24 +177,24 @@ namespace EliteDangerousCore.JournalEvents
             public string RingInformation(double scale = 1, string scaletype = " MT", bool parentIsStar = false)
             {
                 StringBuilder scanText = new StringBuilder();
-                scanText.AppendFormat("  {0} ({1})\n", Name.Alt("Unknown".Tx()), DisplayStringFromRingClass(RingClass));
-                scanText.AppendFormat("  Mass: {0:N4}{1}\n".Tx(typeof(StarPlanetRing)), MassMT * scale, scaletype);
+                scanText.AppendFormat("  {0} ({1})\n", Name.Alt("Unknown".T(EDTx.Unknown)), DisplayStringFromRingClass(RingClass));
+                scanText.AppendFormat("  Mass: {0:N4}{1}\n".T(EDTx.StarPlanetRing_Mass), MassMT * scale, scaletype);
                 if (parentIsStar && InnerRad > 3000000)
                 {
-                    scanText.AppendFormat("  Inner Radius: {0:0.00}ls\n".Tx(typeof(StarPlanetRing)), (InnerRad / oneLS_m));
-                    scanText.AppendFormat("  Outer Radius: {0:0.00}ls\n".Tx(typeof(StarPlanetRing)), (OuterRad / oneLS_m));
+                    scanText.AppendFormat("  Inner Radius: {0:0.00}ls\n".T(EDTx.StarPlanetRing_InnerRadius), (InnerRad / oneLS_m));
+                    scanText.AppendFormat("  Outer Radius: {0:0.00}ls\n".T(EDTx.StarPlanetRing_OuterRadius), (OuterRad / oneLS_m));
                 }
                 else
                 {
-                    scanText.AppendFormat("  Inner Radius: {0}km\n".Tx(typeof(StarPlanetRing), "IK"), (InnerRad / 1000).ToString("N0"));
-                    scanText.AppendFormat("  Outer Radius: {0}km\n".Tx(typeof(StarPlanetRing), "OK"), (OuterRad / 1000).ToString("N0"));
+                    scanText.AppendFormat("  Inner Radius: {0}km\n".T(EDTx.StarPlanetRing_IK), (InnerRad / 1000).ToString("N0"));
+                    scanText.AppendFormat("  Outer Radius: {0}km\n".T(EDTx.StarPlanetRing_OK), (OuterRad / 1000).ToString("N0"));
                 }
                 return scanText.ToNullSafeString();
             }
 
             public string RingInformationMoons(bool parentIsStar = false)
             {
-                return RingInformation(1 / oneMoon_MT, " Moons".Tx(typeof(StarPlanetRing)), parentIsStar);
+                return RingInformation(1 / oneMoon_MT, " Moons".T(EDTx.StarPlanetRing_Moons), parentIsStar);
             }
 
             public static string DisplayStringFromRingClass(string ringClass)
@@ -202,17 +202,17 @@ namespace EliteDangerousCore.JournalEvents
                 switch (ringClass)
                 {
                     case null:
-                        return "Unknown".Tx();
+                        return "Unknown".T(EDTx.Unknown);
                     case "eRingClass_Icy":
-                        return "Icy".Tx(typeof(StarPlanetRing));
+                        return "Icy".T(EDTx.StarPlanetRing_Icy);
                     case "eRingClass_Rocky":
-                        return "Rocky".Tx(typeof(StarPlanetRing));
+                        return "Rocky".T(EDTx.StarPlanetRing_Rocky);
                     case "eRingClass_MetalRich":
-                        return "Metal Rich".Tx(typeof(StarPlanetRing));
+                        return "Metal Rich".T(EDTx.StarPlanetRing_MetalRich);
                     case "eRingClass_Metalic":
-                        return "Metallic".Tx(typeof(StarPlanetRing));
+                        return "Metallic".T(EDTx.StarPlanetRing_Metallic);
                     case "eRingClass_RockyIce":
-                        return "Rocky Ice".Tx(typeof(StarPlanetRing));
+                        return "Rocky Ice".T(EDTx.StarPlanetRing_RockyIce);
                     default:
                         return ringClass.Replace("eRingClass_", "");
                 }
@@ -447,15 +447,15 @@ namespace EliteDangerousCore.JournalEvents
 
         public override string SummaryName(ISystem sys)
         {
-            string text = "Scan of {0}".Tx(this);
+            string text = "Scan of {0}".T(EDTx.JournalScan_Scanof);
             if (ScanType == "AutoScan")
-                text = "Autoscan of {0}".Tx(this);
+                text = "Autoscan of {0}".T(EDTx.JournalScan_Autoscanof);
             else if (ScanType == "Detailed")
-                text = "Detailed scan of {0}".Tx(this);
+                text = "Detailed scan of {0}".T(EDTx.JournalScan_Detailedscanof);
             else if (ScanType == "Basic")
-                text = "Basic scan of {0}".Tx(this);
+                text = "Basic scan of {0}".T(EDTx.JournalScan_Basicscanof);
             else if (ScanType.Contains("Nav"))
-                text = "Nav scan of {0}".Tx(this);
+                text = "Nav scan of {0}".T(EDTx.JournalScan_Navscanof);
 
             return string.Format(text, BodyName.ReplaceIfStartsWith(sys.Name)); 
         }
@@ -477,12 +477,11 @@ namespace EliteDangerousCore.JournalEvents
 
         static public List<Tuple<string, string, Image>> FilterItems()
         {
-            Type t = typeof(JournalScan);
             return new List<Tuple<string, string, Image>>()
             {
-                new Tuple<string, string,Image>( "Scan Auto", "Scan Auto".Tx(t), JournalEntry.JournalTypeIcons[JournalTypeEnum.Scan] ),
-                new Tuple<string,string,Image>( "Scan Basic", "Scan Basic".Tx(t), JournalEntry.JournalTypeIcons[JournalTypeEnum.Scan] ),
-                new Tuple<string,string,Image>( "Scan Nav", "Scan Nav".Tx(t), JournalEntry.JournalTypeIcons[JournalTypeEnum.Scan] ),
+                new Tuple<string, string,Image>( "Scan Auto", "Scan Auto".T(EDTx.JournalScan_ScanAuto), JournalEntry.JournalTypeIcons[JournalTypeEnum.Scan] ),
+                new Tuple<string,string,Image>( "Scan Basic", "Scan Basic".T(EDTx.JournalScan_ScanBasic), JournalEntry.JournalTypeIcons[JournalTypeEnum.Scan] ),
+                new Tuple<string,string,Image>( "Scan Nav", "Scan Nav".T(EDTx.JournalScan_ScanNav), JournalEntry.JournalTypeIcons[JournalTypeEnum.Scan] ),
             };
         }
 
@@ -490,21 +489,21 @@ namespace EliteDangerousCore.JournalEvents
         {
             if (IsStar)
             {
-                info = BaseUtils.FieldBuilder.Build("", GetStarTypeName(), "Mass:;SM;0.00".Tx(this,"MSM"), nStellarMass, 
-                                                "Age:;my;0.0".Tx(this), nAge,
-                                                "Radius:".Tx(this, "RS"), RadiusText(),
-                                                "Dist:;ls;0.0".Tx(this, "DISTA"), DistanceFromArrivalLS,
-                                                "Name:".Tx(this, "BNME"), BodyName);
+                info = BaseUtils.FieldBuilder.Build("", GetStarTypeName(), "Mass:;SM;0.00".T(EDTx.JournalScan_MSM), nStellarMass, 
+                                                "Age:;my;0.0".T(EDTx.JournalScan_Age), nAge,
+                                                "Radius:".T(EDTx.JournalScan_RS), RadiusText(),
+                                                "Dist:;ls;0.0".T(EDTx.JournalScan_DISTA), DistanceFromArrivalLS,
+                                                "Name:".T(EDTx.JournalScan_BNME), BodyName);
             }
             else
             {
-                info = BaseUtils.FieldBuilder.Build( "", PlanetClass, "Mass:".Tx(this,"MASS"), MassEMText(),
-                                                "<;, Landable".Tx(this), IsLandable, 
-                                                "<;, Terraformable".Tx(this), TerraformState == "Terraformable", "", Atmosphere, 
-                                                 "Gravity:;G;0.0".Tx(this), nSurfaceGravityG,
-                                                 "Radius:".Tx(this, "RS"), RadiusText(),
-                                                 "Dist:;ls;0.0".Tx(this, "DISTA"), DistanceFromArrivalLS,
-                                                 "Name:".Tx(this, "SNME"), BodyName);
+                info = BaseUtils.FieldBuilder.Build( "", PlanetClass, "Mass:".T(EDTx.JournalScan_MASS), MassEMText(),
+                                                "<;, Landable".T(EDTx.JournalScan_Landable), IsLandable, 
+                                                "<;, Terraformable".T(EDTx.JournalScan_Terraformable), TerraformState == "Terraformable", "", Atmosphere, 
+                                                 "Gravity:;G;0.0".T(EDTx.JournalScan_Gravity), nSurfaceGravityG,
+                                                 "Radius:".T(EDTx.JournalScan_RS), RadiusText(),
+                                                 "Dist:;ls;0.0".T(EDTx.JournalScan_DISTA), DistanceFromArrivalLS,
+                                                 "Name:".T(EDTx.JournalScan_SNME), BodyName);
             }
 
             detailed = DisplayString(0, false);
@@ -532,12 +531,12 @@ namespace EliteDangerousCore.JournalEvents
 
                     if (!PlanetClass.ToLowerInvariant().Contains("gas"))
                     {
-                        scanText.AppendFormat((Atmosphere == null || Atmosphere == String.Empty) ? ", No Atmosphere".Tx(this) : (", " + Atmosphere));
+                        scanText.AppendFormat((Atmosphere == null || Atmosphere == String.Empty) ? ", No Atmosphere".T(EDTx.JournalScan_NoAtmosphere) : (", " + Atmosphere));
                     }
                 }
 
                 if (IsLandable)
-                    scanText.AppendFormat(", Landable".Tx(this,"LandC"));
+                    scanText.AppendFormat(", Landable".T(EDTx.JournalScan_LandC));
 
                 scanText.AppendFormat("\n");
 
@@ -551,93 +550,93 @@ namespace EliteDangerousCore.JournalEvents
                     scanText.Append("\n\n");
                                 
                 if (nAge.HasValue)
-                    scanText.AppendFormat("Age: {0} my\n".Tx(this,"AMY"), nAge.Value.ToString("N0"));
+                    scanText.AppendFormat("Age: {0} my\n".T(EDTx.JournalScan_AMY), nAge.Value.ToString("N0"));
 
                 if (nStellarMass.HasValue)
-                    scanText.AppendFormat("Solar Masses: {0:0.00}\n".Tx(this), nStellarMass.Value);
+                    scanText.AppendFormat("Solar Masses: {0:0.00}\n".T(EDTx.JournalScan_SolarMasses), nStellarMass.Value);
 
                 if (nMassEM.HasValue)
-                    scanText.AppendFormat("Mass:".Tx(this, "MASS") + " " + MassEMText() + "\n");
+                    scanText.AppendFormat("Mass:".T(EDTx.JournalScan_MASS) + " " + MassEMText() + "\n");
 
                 if (nRadius.HasValue)
-                    scanText.AppendFormat("Radius:".Tx(this, "RS") + " " + RadiusText() + "\n");
+                    scanText.AppendFormat("Radius:".T(EDTx.JournalScan_RS) + " " + RadiusText() + "\n");
 
                 if (DistanceFromArrivalLS > 0)
-                    scanText.AppendFormat("Distance from Arrival Point {0:N1}ls\n".Tx(this), DistanceFromArrivalLS);
+                    scanText.AppendFormat("Distance from Arrival Point {0:N1}ls\n".T(EDTx.JournalScan_DistancefromArrivalPoint), DistanceFromArrivalLS);
             }
 
             if (nSurfaceTemperature.HasValue)
-                scanText.AppendFormat("Surface Temp: {0}K\n".Tx(this), nSurfaceTemperature.Value.ToString("N0"));
+                scanText.AppendFormat("Surface Temp: {0}K\n".T(EDTx.JournalScan_SurfaceTemp), nSurfaceTemperature.Value.ToString("N0"));
 
             if (Luminosity != null)
-                scanText.AppendFormat("Luminosity: {0}\n".Tx(this), Luminosity);
+                scanText.AppendFormat("Luminosity: {0}\n".T(EDTx.JournalScan_Luminosity), Luminosity);
 
             if (nSurfaceGravity.HasValue)
-                scanText.AppendFormat("Gravity: {0:0.00}g\n".Tx(this,"GV"), nSurfaceGravityG.Value );
+                scanText.AppendFormat("Gravity: {0:0.00}g\n".T(EDTx.JournalScan_GV), nSurfaceGravityG.Value );
 
             if (nSurfacePressure.HasValue && nSurfacePressure.Value > 0.00 && !PlanetClass.ToLowerInvariant().Contains("gas"))
             {
                 if (nSurfacePressure.Value > 1000)
                 {
-                    scanText.AppendFormat("Surface Pressure: {0} Atmospheres\n".Tx(this,"SPA"), nSurfacePressureEarth.Value.ToString("N2"));
+                    scanText.AppendFormat("Surface Pressure: {0} Atmospheres\n".T(EDTx.JournalScan_SPA), nSurfacePressureEarth.Value.ToString("N2"));
                 }
                 else
                 {
-                    scanText.AppendFormat("Surface Pressure: {0} Pa\n".Tx(this,"SPP"), (nSurfacePressure.Value).ToString("N2"));
+                    scanText.AppendFormat("Surface Pressure: {0} Pa\n".T(EDTx.JournalScan_SPP), (nSurfacePressure.Value).ToString("N2"));
                 }
             }
 
             if (Volcanism != null)
-                scanText.AppendFormat("Volcanism: {0}\n".Tx(this), Volcanism == String.Empty ? "No Volcanism".Tx(this) : System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.
+                scanText.AppendFormat("Volcanism: {0}\n".T(EDTx.JournalScan_Volcanism), Volcanism == String.Empty ? "No Volcanism".T(EDTx.JournalScan_NoVolcanism) : System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.
                                                                                             ToTitleCase(Volcanism.ToLowerInvariant()));
 
 
             if (nOrbitalPeriodDays.HasValue && nOrbitalPeriodDays > 0)
-                scanText.AppendFormat("Orbital Period: {0} days\n".Tx(this), nOrbitalPeriodDays.Value.ToString("N1"));
+                scanText.AppendFormat("Orbital Period: {0} days\n".T(EDTx.JournalScan_OrbitalPeriod), nOrbitalPeriodDays.Value.ToString("N1"));
 
             if (nSemiMajorAxis.HasValue)
             {
                 if (IsStar || nSemiMajorAxis.Value > oneAU_m / 10)
-                    scanText.AppendFormat("Semi Major Axis: {0:0.00}AU\n".Tx(this,"SMA"), nSemiMajorAxisAU.Value );
+                    scanText.AppendFormat("Semi Major Axis: {0:0.00}AU\n".T(EDTx.JournalScan_SMA), nSemiMajorAxisAU.Value );
                 else
-                    scanText.AppendFormat("Semi Major Axis: {0}km\n".Tx(this,"SMK"), (nSemiMajorAxis.Value / 1000).ToString("N1"));
+                    scanText.AppendFormat("Semi Major Axis: {0}km\n".T(EDTx.JournalScan_SMK), (nSemiMajorAxis.Value / 1000).ToString("N1"));
             }
 
             if (nEccentricity.HasValue)
-                scanText.AppendFormat("Orbital Eccentricity: {0:0.000}\n".Tx(this), nEccentricity.Value);
+                scanText.AppendFormat("Orbital Eccentricity: {0:0.000}\n".T(EDTx.JournalScan_OrbitalEccentricity), nEccentricity.Value);
 
             if (nOrbitalInclination.HasValue)
-                scanText.AppendFormat("Orbital Inclination: {0:0.000}°\n".Tx(this), nOrbitalInclination.Value);
+                scanText.AppendFormat("Orbital Inclination: {0:0.000}°\n".T(EDTx.JournalScan_OrbitalInclination), nOrbitalInclination.Value);
 
             if (nPeriapsis.HasValue)
-                scanText.AppendFormat("Arg Of Periapsis: {0:0.000}°\n".Tx(this), nPeriapsis.Value);
+                scanText.AppendFormat("Arg Of Periapsis: {0:0.000}°\n".T(EDTx.JournalScan_ArgOfPeriapsis), nPeriapsis.Value);
 
             if (nAbsoluteMagnitude.HasValue)
-                scanText.AppendFormat("Absolute Magnitude: {0:0.00}\n".Tx(this), nAbsoluteMagnitude.Value);
+                scanText.AppendFormat("Absolute Magnitude: {0:0.00}\n".T(EDTx.JournalScan_AbsoluteMagnitude), nAbsoluteMagnitude.Value);
 
             if (nAxialTiltDeg.HasValue)
-                scanText.AppendFormat("Axial tilt: {0:0.00}°\n".Tx(this), nAxialTiltDeg.Value);
+                scanText.AppendFormat("Axial tilt: {0:0.00}°\n".T(EDTx.JournalScan_Axialtilt), nAxialTiltDeg.Value);
 
             if (nRotationPeriodDays.HasValue)
-                scanText.AppendFormat("Rotation Period: {0} days\n".Tx(this), nRotationPeriodDays.Value.ToString("N1"));
+                scanText.AppendFormat("Rotation Period: {0} days\n".T(EDTx.JournalScan_RotationPeriod), nRotationPeriodDays.Value.ToString("N1"));
 
             if (nTidalLock.HasValue && nTidalLock.Value)
-                scanText.Append("Tidally locked\n".Tx(this));
+                scanText.Append("Tidally locked\n".T(EDTx.JournalScan_Tidallylocked));
 
             if (Terraformable)
-                scanText.Append("Candidate for terraforming\n".Tx(this));
+                scanText.Append("Candidate for terraforming\n".T(EDTx.JournalScan_Candidateforterraforming));
 
             if (HasRings)
             {
                 scanText.Append("\n");
                 if (IsStar)
                 {
-                    scanText.AppendFormat(Rings.Count() == 1 ? "Belt".Tx(this) : "Belts".Tx(this), ""); // OLD translator files had "Belt{0}" so supply an empty string just in case
+                    scanText.AppendFormat(Rings.Count() == 1 ? "Belt".T(EDTx.JournalScan_Belt) : "Belts".T(EDTx.JournalScan_Belts), ""); // OLD translator files had "Belt{0}" so supply an empty string just in case
                     for (int i = 0; i < Rings.Length; i++)
                     {
                         if (Rings[i].MassMT > (oneMoon_MT / 10000))
                         {
-                            scanText.Append("\n" + RingInformation(i, 1.0 / oneMoon_MT, " Moons".Tx(this)));
+                            scanText.Append("\n" + RingInformation(i, 1.0 / oneMoon_MT, " Moons".T(EDTx.JournalScan_Moons)));
                         }
                         else
                         {
@@ -647,7 +646,7 @@ namespace EliteDangerousCore.JournalEvents
                 }
                 else
                 {
-                    scanText.AppendFormat(Rings.Count() == 1 ? "Ring".Tx(this) : "Rings".Tx(this), ""); // OLD translator files had "Rings{0}" so supply an empty string just in case
+                    scanText.AppendFormat(Rings.Count() == 1 ? "Ring".T(EDTx.JournalScan_Ring) : "Rings".T(EDTx.JournalScan_Rings), ""); // OLD translator files had "Rings{0}" so supply an empty string just in case
 
                     for (int i = 0; i < Rings.Length; i++)
                         scanText.Append("\n" + RingInformation(i));
@@ -670,27 +669,27 @@ namespace EliteDangerousCore.JournalEvents
 
             if (EstimatedValue > 0)
             {
-                scanText.AppendFormat("\nEstimated value: {0:N0}".Tx(this, "EV"), EstimatedValue);
+                scanText.AppendFormat("\nEstimated value: {0:N0}".T(EDTx.JournalScan_EV), EstimatedValue);
                 if (Mapped)
                 {
-                    scanText.Append(" " + "Mapped".Tx(this, "MPI"));
+                    scanText.Append(" " + "Mapped".T(EDTx.JournalScan_MPI));
                     if (EfficientMapped)
-                        scanText.Append(" " + "Efficiently".Tx(this, "MPIE"));
+                        scanText.Append(" " + "Efficiently".T(EDTx.JournalScan_MPIE));
 
-                    scanText.AppendFormat("\nFirst Discovered+Mapped value: {0:N0}".Tx(this, "EVFD"), EstimatedValueFirstDiscoveredFirstMapped);
-                    scanText.AppendFormat("\nFirst Mapped value: {0:N0}".Tx(this, "EVFM"), EstimatedValueFirstMapped);
+                    scanText.AppendFormat("\nFirst Discovered+Mapped value: {0:N0}".T(EDTx.JournalScan_EVFD), EstimatedValueFirstDiscoveredFirstMapped);
+                    scanText.AppendFormat("\nFirst Mapped value: {0:N0}".T(EDTx.JournalScan_EVFM), EstimatedValueFirstMapped);
                 }
 
                 if (WasDiscovered.HasValue && WasDiscovered.Value)
-                    scanText.AppendFormat("\nAlready Discovered".Tx(this, "EVAD"));
+                    scanText.AppendFormat("\nAlready Discovered".T(EDTx.JournalScan_EVAD));
                 if (WasMapped.HasValue && WasMapped.Value)
-                    scanText.AppendFormat("\nAlready Mapped".Tx(this, "EVAM"));
+                    scanText.AppendFormat("\nAlready Mapped".T(EDTx.JournalScan_EVAM));
             }
 
             if (EDSMDiscoveryCommander != null)
-                scanText.AppendFormat("\n\nDiscovered by {0} on {1}".Tx(this, "DB"), EDSMDiscoveryCommander, EDSMDiscoveryUTC.ToStringZulu());
+                scanText.AppendFormat("\n\nDiscovered by {0} on {1}".T(EDTx.JournalScan_DB), EDSMDiscoveryCommander, EDSMDiscoveryUTC.ToStringZulu());
 
-            scanText.AppendFormat("\nScan Type: {0}".Tx(this, "SCNT"), ScanType);
+            scanText.AppendFormat("\nScan Type: {0}".T(EDTx.JournalScan_SCNT), ScanType);
 
             return scanText.ToNullSafeString().Replace("\n", "\n" + inds);
         }
@@ -714,34 +713,34 @@ namespace EliteDangerousCore.JournalEvents
             {
                 StringBuilder habZone = new StringBuilder();
 
-				habZone.Append("Inferred Circumstellar zones:\n".Tx(this));
+				habZone.Append("Inferred Circumstellar zones:\n".T(EDTx.JournalScan_InferredCircumstellarzones));
 
-				habZone.AppendFormat(" - Habitable Zone, {0} ({1}-{2} AU),\n".Tx(this),
+				habZone.AppendFormat(" - Habitable Zone, {0} ({1}-{2} AU),\n".T(EDTx.JournalScan_HabitableZone),
 									 GetHabZoneStringLs(),
 									 (HabitableZoneInner.Value / oneAU_LS).ToString("N2"),
 									 (HabitableZoneOuter.Value / oneAU_LS).ToString("N2"));
 
-				habZone.AppendFormat(" - Metal Rich planets, {0} ({1}-{2} AU),\n".Tx(this),
+				habZone.AppendFormat(" - Metal Rich planets, {0} ({1}-{2} AU),\n".T(EDTx.JournalScan_MetalRichplanets),
 									 GetMetalRichZoneStringLs(),
 									 (MetalRichZoneInner.Value / oneAU_LS).ToString("N2"),
 									 (MetalRichZoneInner.Value / oneAU_LS).ToString("N2"));
 				
-				habZone.AppendFormat(" - Water Worlds, {0} ({1}-{2} AU),\n".Tx(this),
+				habZone.AppendFormat(" - Water Worlds, {0} ({1}-{2} AU),\n".T(EDTx.JournalScan_WaterWorlds),
 									 GetWaterWorldZoneStringLs(),
 									 (WaterWrldZoneInner.Value / oneAU_LS).ToString("N2"),
 									 (WaterWrldZoneOuter.Value / oneAU_LS).ToString("N2"));
 				
-				habZone.AppendFormat(" - Earth Like Worlds, {0} ({1}-{2} AU),\n".Tx(this),
+				habZone.AppendFormat(" - Earth Like Worlds, {0} ({1}-{2} AU),\n".T(EDTx.JournalScan_EarthLikeWorlds),
 									 GetEarthLikeZoneStringLs(),
 									 (EarthLikeZoneInner.Value / oneAU_LS).ToString("N2"),
 									 (EarthLikeZoneOuter.Value / oneAU_LS).ToString("N2"));
 				
-				habZone.AppendFormat(" - Ammonia Worlds, {0} ({1}-{2} AU),\n".Tx(this),
+				habZone.AppendFormat(" - Ammonia Worlds, {0} ({1}-{2} AU),\n".T(EDTx.JournalScan_AmmoniaWorlds),
 									 GetAmmoniaWorldZoneStringLs(),
 									 (AmmonWrldZoneInner.Value / oneAU_LS).ToString("N2"),
 									 (AmmonWrldZoneOuter.Value / oneAU_LS).ToString("N2"));
 				
-				habZone.AppendFormat(" - Icy Planets, {0} (from {1} AU)\n\n".Tx(this),
+				habZone.AppendFormat(" - Icy Planets, {0} (from {1} AU)\n\n".T(EDTx.JournalScan_IcyPlanets),
 									 GetIcyPlanetsZoneStringLs(),
 				(IcyPlanetZoneInner.Value / oneAU_LS).ToString("N2"));
 
@@ -756,7 +755,7 @@ namespace EliteDangerousCore.JournalEvents
 		{
 			StringBuilder habZoneAddend = new StringBuilder();
 			if (nSemiMajorAxis.HasValue && nSemiMajorAxis.Value > 0)
-				habZoneAddend.Append("(Others stars not considered)\n\n".Tx(this));
+				habZoneAddend.Append("(Others stars not considered)\n\n".T(EDTx.JournalScan_Othersstarsnotconsidered));
 			
 			return habZoneAddend.ToNullSafeString();
 		}
@@ -779,7 +778,7 @@ namespace EliteDangerousCore.JournalEvents
 			if (IsStar && MetalRichZoneInner.HasValue && MetalRichZoneOuter.HasValue)
 			{
 				StringBuilder habZone = new StringBuilder();
-				habZone.AppendFormat("Metal Rich Planets: {0} ({1}-{2} AU)\n".Tx(this,"MRP"),
+				habZone.AppendFormat("Metal Rich Planets: {0} ({1}-{2} AU)\n".T(EDTx.JournalScan_MRP),
 									 GetMetalRichZoneStringLs(), 
 									 (MetalRichZoneInner.Value / oneAU_LS).ToString("N2"), 
 									 (MetalRichZoneOuter.Value / oneAU_LS).ToString("N2"));
@@ -807,7 +806,7 @@ namespace EliteDangerousCore.JournalEvents
 			if (IsStar && WaterWrldZoneInner.HasValue && WaterWrldZoneOuter.HasValue)
 			{
 				StringBuilder habZone = new StringBuilder();
-				habZone.AppendFormat("Water Worlds: {0} ({1}-{2} AU)\n".Tx(this,"WWP"),
+				habZone.AppendFormat("Water Worlds: {0} ({1}-{2} AU)\n".T(EDTx.JournalScan_WWP),
 									 GetWaterWorldZoneStringLs(), 
 									 (WaterWrldZoneInner.Value / oneAU_LS).ToString("N2"), 
 									 (WaterWrldZoneOuter.Value / oneAU_LS).ToString("N2"));
@@ -835,7 +834,7 @@ namespace EliteDangerousCore.JournalEvents
 			if (IsStar && EarthLikeZoneInner.HasValue && EarthLikeZoneOuter.HasValue)
 			{
 				StringBuilder habZone = new StringBuilder();
-				habZone.AppendFormat("Earth Like Worlds: {0} ({1}-{2} AU)\n".Tx(this,"ELWP"),
+				habZone.AppendFormat("Earth Like Worlds: {0} ({1}-{2} AU)\n".T(EDTx.JournalScan_ELWP),
 									 GetEarthLikeZoneStringLs(), 
 									 (EarthLikeZoneInner.Value / oneAU_LS).ToString("N2"), 
 									 (EarthLikeZoneOuter.Value / oneAU_LS).ToString("N2"));
@@ -863,7 +862,7 @@ namespace EliteDangerousCore.JournalEvents
 			if (IsStar && AmmonWrldZoneInner.HasValue && AmmonWrldZoneOuter.HasValue)
 			{
 				StringBuilder habZone = new StringBuilder();
-				habZone.AppendFormat("Ammonia Worlds: {0} ({1}-{2} AU)\n".Tx(this,"AWP"),
+				habZone.AppendFormat("Ammonia Worlds: {0} ({1}-{2} AU)\n".T(EDTx.JournalScan_AWP),
 									 GetAmmoniaWorldZoneStringLs(), 
 									 (AmmonWrldZoneInner.Value / oneAU_LS).ToString("N2"), 
 									 (AmmonWrldZoneOuter.Value / oneAU_LS).ToString("N2"));
@@ -891,7 +890,7 @@ namespace EliteDangerousCore.JournalEvents
 			if (IsStar && IcyPlanetZoneInner.HasValue && IcyPlanetZoneOuter != null)
 			{
 				StringBuilder habZone = new StringBuilder();
-				habZone.AppendFormat("Icy Planets: {0} ({1} AU to {2})\n".Tx(this,"ICYP"),
+				habZone.AppendFormat("Icy Planets: {0} ({1} AU to {2})\n".T(EDTx.JournalScan_ICYP),
 									 GetIcyPlanetsZoneStringLs(), 
 									 (IcyPlanetZoneInner.Value / oneAU_LS).ToString("N2"),
 									 IcyPlanetZoneOuter);
@@ -910,7 +909,7 @@ namespace EliteDangerousCore.JournalEvents
             {
                 string indents = new string(' ', indent);
 
-                scanText.Append("Materials:\n".Tx(this));
+                scanText.Append("Materials:\n".T(EDTx.JournalScan_Materials));
                 foreach (KeyValuePair<string, double> mat in Materials)
                 {
                     scanText.Append(indents + DisplayMaterial(mat.Key, mat.Value, historicmatlist, currentmatlist));
@@ -956,7 +955,7 @@ namespace EliteDangerousCore.JournalEvents
             StringBuilder scanText = new StringBuilder();
             string indents = new string(' ', indent);
 
-            scanText.Append("Atmospheric Composition:\n".Tx(this));
+            scanText.Append("Atmospheric Composition:\n".T(EDTx.JournalScan_AtmosphericComposition));
             foreach (KeyValuePair<string, double> comp in AtmosphereComposition)
             {
                 scanText.AppendFormat(indents + "{0} - {1}%\n", comp.Key, comp.Value.ToString("N2"));
@@ -973,7 +972,7 @@ namespace EliteDangerousCore.JournalEvents
             StringBuilder scanText = new StringBuilder();
             string indents = new string(' ', indent);
 
-            scanText.Append("Planetary Composition:\n".Tx(this));
+            scanText.Append("Planetary Composition:\n".T(EDTx.JournalScan_PlanetaryComposition));
             foreach (KeyValuePair<string, double> comp in PlanetComposition)
             {
                 if (comp.Value > 0)
@@ -988,7 +987,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public string RingInformationMoons(int ringno)
         {
-            return RingInformation(ringno, 1 / oneMoon_MT, " Moons".Tx(this));
+            return RingInformation(ringno, 1 / oneMoon_MT, " Moons".T(EDTx.JournalScan_Moons));
         }
 
         public string RingInformation(int ringno, double scale = 1, string scaletype = " MT")

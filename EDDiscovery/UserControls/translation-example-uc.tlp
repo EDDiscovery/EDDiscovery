@@ -155,12 +155,12 @@ SECTION UserControlEngineering
 .RecipeCol: "Recipe" @
 .EngineersCol: "Engineers" @
 .chkHistoric: "Use Cursor Positon" @
-.buttonClear: "Clear Wanted" @
-.buttonFilterMaterial: "Filter By Material" @
-.buttonFilterUpgrade: "Filter By Upgrade" @
-.buttonFilterLevel: "Filter By Level" @
-.buttonFilterEngineer: "Filter By Engineer" @
-.buttonFilterModule: "Filter By Module" @
+.buttonClear: "Clear" @
+.buttonFilterMaterial: "Material" @
+.buttonFilterUpgrade: "Upgrade" @
+.buttonFilterLevel: "Level" @
+.buttonFilterEngineer: "Engineer" @
+.buttonFilterModule: "Module" @
 .ToolTip: "Left click and drag on grid to reorder" @
 .chkHistoric.ToolTip: "When clicked on, use the materials at the cursor to estimate, when off always use the latest materials." @
 .buttonClear.ToolTip: "Set all wanted values to zero" @
@@ -229,7 +229,7 @@ SECTION UserControlExploration
 .ColumnPrimaryStar: "Pri star" @
 .ColumnInfo: "Info" @
 .ColumnNote: "Note" @
-.labelFilename: "Filename" @
+.labelFilename: "Filename:" @
 .labelName: "Exploration set:" @
 .toolStripButtonNew: "New" @
 .toolStripButtonLoad: "Load" @
@@ -524,7 +524,7 @@ SECTION UserControlModules
 .MI: "Module Information" @
 .buttonExtConfigure.ToolTip: "Configure extra data missing from Elite Journal Output" @
 .buttonExtEDShipyard.ToolTip: "Send to ED Ship Yard" @
-.buttonExtCoriolis.ToolTip: "Send to Corolis" @
+.buttonExtCoriolis.ToolTip: "Send to Coriolis" @
 .comboBoxShips.ToolTip: "Select ship to view" @
 .labelVehicle: "Unknown" @
 .labelShip: "Ship" @
@@ -706,7 +706,7 @@ SECTION UserControlScanGrid
 .colName: "Name" @
 .colClass: "Class" @
 .colDistance: "Distance" @
-.colBriefing: "Briefing" @
+.colBriefing: "Information" @
 .Moon: "Moon" @
 .MainStar: "Main Star" @
 .Mass: "Mass" @
@@ -715,7 +715,7 @@ SECTION UserControlScanGrid
 .Terraformable: "Terraformable" @
 .Volcanism: "Volcanism" @
 .Rings: "Has {0} rings: " @
-.Ring: "Has 1 ring: " @
+.Ring: "Ring: " @
 .BC: "This body contains: " @
 .Value: "Value" @
 .SS: "Scan Summary for {0}. {1}" @
@@ -795,7 +795,7 @@ SECTION UserControlSettings
 .radioButtonHistorySelection: "History Grid Selection" @
 .radioButtonCentreHome: "Home System" @
 .labelOpenOn: "Open Centred On" @
-.labelHome: "Home System" @
+.labelHome: "Now in Commander Settings" @
 .groupBoxCommanders: "Commanders" @
 .buttonEditCommander: "Edit" @
 .ColumnCommander: "Commander" @

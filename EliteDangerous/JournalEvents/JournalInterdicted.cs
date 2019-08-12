@@ -44,7 +44,7 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string info, out string detailed) 
         {
             
-            info = BaseUtils.FieldBuilder.Build(";Submitted".Txb(this), Submitted, "< to ".Txb(this), Interdictor_Localised, "< (NPC);(Player)".Txb(this), IsPlayer, "Rank:", CombatRank.ToString().SplitCapsWord(), "Faction:".Txb(this), Faction, "Power:".Txb(this), Power);
+            info = BaseUtils.FieldBuilder.Build(";Submitted".T(EDTx.JournalEntry_Submitted), Submitted, "< to ".T(EDTx.JournalEntry_to), Interdictor_Localised, "< (NPC);(Player)".T(EDTx.JournalEntry_NPC), IsPlayer, "Rank:", CombatRank.ToString().SplitCapsWord(), "Faction:".T(EDTx.JournalEntry_Faction), Faction, "Power:".T(EDTx.JournalEntry_Power), Power);
             detailed = "";
         }
     }
@@ -75,7 +75,7 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string info, out string detailed)
         {
 
-            info = BaseUtils.FieldBuilder.Build("Failed to interdict;Interdicted".Txb(this), Success, "< ", Interdicted_Localised, "< (NPC);(Player)".Txb(this), IsPlayer, "Rank:", CombatRank.ToString().SplitCapsWord(), "Faction:".Txb(this), Faction, "Power:".Txb(this), Power);
+            info = BaseUtils.FieldBuilder.Build("Failed to interdict;Interdicted".T(EDTx.JournalEntry_Failedtointerdict), Success, "< ", Interdicted_Localised, "< (NPC);(Player)".T(EDTx.JournalEntry_NPC), IsPlayer, "Rank:", CombatRank.ToString().SplitCapsWord(), "Faction:".T(EDTx.JournalEntry_Faction), Faction, "Power:".T(EDTx.JournalEntry_Power), Power);
             detailed = "";
         }
     }
@@ -97,7 +97,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = BaseUtils.FieldBuilder.Build("By:".Txb(this), Interdictor_Localised, "< (NPC);(Player)".Txb(this), IsPlayer);
+            info = BaseUtils.FieldBuilder.Build("By:".T(EDTx.JournalEntry_By), Interdictor_Localised, "< (NPC);(Player)".T(EDTx.JournalEntry_NPC), IsPlayer);
             detailed = "";
         }
     }

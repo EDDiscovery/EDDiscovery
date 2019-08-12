@@ -60,7 +60,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed) //U
         {
-            info = "No Passengers".Txb(this);
+            info = "No Passengers".T(EDTx.JournalEntry_NoPassengers);
 
             if (Manifest != null && Manifest.Length > 0)
             {
@@ -69,7 +69,7 @@ namespace EliteDangerousCore.JournalEvents
                 {
                     if (info.Length > 0)
                         info += ", ";
-                    info += BaseUtils.FieldBuilder.Build("", p.Type , "< ", p.Count , "; (VIP)" , p.VIP , ";(Wanted)".Txb(this), p.Wanted);
+                    info += BaseUtils.FieldBuilder.Build("", p.Type , "< ", p.Count , "; (VIP)" , p.VIP , ";(Wanted)".T(EDTx.JournalEntry_Wanted), p.Wanted);
                 }
             }
 

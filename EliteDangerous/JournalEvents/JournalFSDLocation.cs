@@ -337,14 +337,14 @@ namespace EliteDangerousCore.JournalEvents
         public override string SummaryName(ISystem sys) 
         {
             if (Docked)
-                return string.Format("At {0}".Tx(this, "AtStat"), StationName);
+                return string.Format("At {0}".T(EDTx.JournalLocation_AtStat), StationName);
             else
             {
                 string bodyname = Body.HasChars() ? Body.ReplaceIfStartsWith(StarSystem) : StarSystem;
                 if (Latitude.HasValue && Longitude.HasValue)
-                    return string.Format("Landed on {0}".Tx(this, "LND"), bodyname);
+                    return string.Format("Landed on {0}".T(EDTx.JournalLocation_LND), bodyname);
                 else
-                    return string.Format("At {0}".Tx(this, "AtStar"), bodyname);
+                    return string.Format("At {0}".T(EDTx.JournalLocation_AtStar), bodyname);
             }
 
         }
@@ -353,39 +353,39 @@ namespace EliteDangerousCore.JournalEvents
         {
             if (Docked)
             {
-                info = BaseUtils.FieldBuilder.Build("Type ".Txb(this), StationType, "< in system ".Txb(this), StarSystem);
+                info = BaseUtils.FieldBuilder.Build("Type ".T(EDTx.JournalLocOrJump_Type), StationType, "< in system ".T(EDTx.JournalLocOrJump_insystem), StarSystem);
 
-                detailed = BaseUtils.FieldBuilder.Build("<;(Wanted) ".Txb(this), Wanted, "Faction:".Txb(this), StationFaction, "Allegiance:".Txb(this), Allegiance, "Economy:".Txb(this), Economy_Localised, "Government:".Txb(this), Government_Localised, "Security:".Txb(this), Security_Localised);
+                detailed = BaseUtils.FieldBuilder.Build("<;(Wanted) ".T(EDTx.JournalLocOrJump_Wanted), Wanted, "Faction:".T(EDTx.JournalLocOrJump_Faction), StationFaction, "Allegiance:".T(EDTx.JournalLocOrJump_Allegiance), Allegiance, "Economy:".T(EDTx.JournalLocOrJump_Economy), Economy_Localised, "Government:".T(EDTx.JournalLocOrJump_Government), Government_Localised, "Security:".T(EDTx.JournalLocOrJump_Security), Security_Localised);
 
                 if (Factions != null)
                 {
                     foreach (FactionInformation f in Factions)
                     {
                         detailed += Environment.NewLine;
-                        detailed += BaseUtils.FieldBuilder.Build("", f.Name, "State:".Txb(this), f.FactionState.SplitCapsWord(), "Government:".Txb(this), f.Government,
-                            "Inf:;%".Txb(this), (int)(f.Influence * 100), "Allegiance:".Txb(this), f.Allegiance, "Happiness:".Txb(this), f.Happiness_Localised,
-                            "Reputation:;%;N1".Txb(this), f.MyReputation,
-                            ";Squadron System".Txb(this), f.SquadronFaction, 
-                            ";Happiest System".Txb(this), f.HappiestSystem, 
-                            ";Home System".Txb(this), f.HomeSystem
+                        detailed += BaseUtils.FieldBuilder.Build("", f.Name, "State:".T(EDTx.JournalLocOrJump_State), f.FactionState.SplitCapsWord(), "Government:".T(EDTx.JournalLocOrJump_Government), f.Government,
+                            "Inf:;%".T(EDTx.JournalLocOrJump_Inf), (int)(f.Influence * 100), "Allegiance:".T(EDTx.JournalLocOrJump_Allegiance), f.Allegiance, "Happiness:".T(EDTx.JournalLocOrJump_Happiness), f.Happiness_Localised,
+                            "Reputation:;%;N1".T(EDTx.JournalLocOrJump_Reputation), f.MyReputation,
+                            ";Squadron System".T(EDTx.JournalLocOrJump_SquadronSystem), f.SquadronFaction, 
+                            ";Happiest System".T(EDTx.JournalLocOrJump_HappiestSystem), f.HappiestSystem, 
+                            ";Home System".T(EDTx.JournalLocOrJump_HomeSystem), f.HomeSystem
                             );
 
                         if (f.PendingStates != null)
                         {
-                            detailed += BaseUtils.FieldBuilder.Build(",", "Pending State:".Txb(this));
+                            detailed += BaseUtils.FieldBuilder.Build(",", "Pending State:".T(EDTx.JournalLocOrJump_PendingState));
                             foreach (JournalLocation.PowerStatesInfo state in f.PendingStates)
                                 detailed += BaseUtils.FieldBuilder.Build(" ", state.State, "<(;)", state.Trend);
 
                             if (f.RecoveringStates != null)
                             {
-                                detailed += BaseUtils.FieldBuilder.Build(",", "Recovering State:".Txb(this));
+                                detailed += BaseUtils.FieldBuilder.Build(",", "Recovering State:".T(EDTx.JournalLocOrJump_RecoveringState));
                                 foreach (JournalLocation.PowerStatesInfo state in f.RecoveringStates)
                                     detailed += BaseUtils.FieldBuilder.Build(" ", state.State, "<(;)", state.Trend);
                             }
 
                             if (f.ActiveStates != null)    
                             {
-                                detailed += BaseUtils.FieldBuilder.Build(",", "Active State:".Txb(this));
+                                detailed += BaseUtils.FieldBuilder.Build(",", "Active State:".T(EDTx.JournalLocOrJump_ActiveState));
                                 foreach (JournalLocation.ActiveStatesInfo state in f.ActiveStates)
                                     detailed += BaseUtils.FieldBuilder.Build(" ", state.State);
                             }
@@ -400,7 +400,7 @@ namespace EliteDangerousCore.JournalEvents
             }
             else
             {
-                info = "In space near ".Txb(this) + BodyType + " " + Body;
+                info = "In space near ".T(EDTx.JournalLocOrJump_Inspacenear) + BodyType + " " + Body;
                 detailed = "";
             }
         }
@@ -452,7 +452,7 @@ namespace EliteDangerousCore.JournalEvents
         public int? BodyID { get; set; }
         public string BodyType { get; set; }
 
-        public override string SummaryName(ISystem sys) { return string.Format("Jump to {0}".Tx(this), StarSystem); }
+        public override string SummaryName(ISystem sys) { return string.Format("Jump to {0}".T(EDTx.JournalFSDJump_Jumpto), StarSystem); }
 
         public override void FillInformation(out string info, out string detailed)
         {
@@ -460,18 +460,18 @@ namespace EliteDangerousCore.JournalEvents
             if (JumpDist > 0)
                 sb.Append(JumpDist.ToString("0.00") + " ly");
             if (FuelUsed > 0)
-                sb.Append(", Fuel ".Tx(this) + FuelUsed.ToString("0.0") + "t");
+                sb.Append(", Fuel ".T(EDTx.JournalFSDJump_Fuel) + FuelUsed.ToString("0.0") + "t");
             if (FuelLevel > 0)
-                sb.Append(" left ".Tx(this) + FuelLevel.ToString("0.0") + "t");
+                sb.Append(" left ".T(EDTx.JournalFSDJump_left) + FuelLevel.ToString("0.0") + "t");
 
             string econ = Economy_Localised.Alt(Economy);
             if (econ.Equals("None"))
                 econ = "";
 
             sb.Append(" ");
-            sb.Append(BaseUtils.FieldBuilder.Build("Faction:".Txb(this), Faction, "<;(Wanted) ".Txb(this), Wanted,
-                                                    "State:".Txb(this), FactionState, "Allegiance:".Txb(this), Allegiance,
-                                                    "Economy:".Txb(this), econ, "Population:".Txb(this), Population));
+            sb.Append(BaseUtils.FieldBuilder.Build("Faction:".T(EDTx.JournalLocOrJump_Faction), Faction, "<;(Wanted) ".T(EDTx.JournalLocOrJump_Wanted), Wanted,
+                                                    "State:".T(EDTx.JournalLocOrJump_State), FactionState, "Allegiance:".T(EDTx.JournalLocOrJump_Allegiance), Allegiance,
+                                                    "Economy:".T(EDTx.JournalLocOrJump_Economy), econ, "Population:".T(EDTx.JournalLocOrJump_Population), Population));
             info = sb.ToString();
 
             sb.Clear();
@@ -480,20 +480,20 @@ namespace EliteDangerousCore.JournalEvents
             {
                 foreach (FactionInformation i in Factions)
                 {
-                    sb.Append(BaseUtils.FieldBuilder.Build("", i.Name, "State:".Txb(this), i.FactionState,
-                                                                    "Government:".Txb(this), i.Government,
-                                                                    "Inf:;%".Txb(this), (i.Influence * 100.0).ToString("0.0"),
-                                                                    "Allegiance:".Txb(this), i.Allegiance,
-                                                                    "Happiness:".Txb(this), i.Happiness_Localised,
-                                                                    "Reputation:;%;N1".Txb(this), i.MyReputation,
-                                                                    ";Squadron System".Txb(this), i.SquadronFaction, 
-                                                                    ";Happiest System".Txb(this), i.HappiestSystem, 
-                                                                    ";Home System".Txb(this), i.HomeSystem
+                    sb.Append(BaseUtils.FieldBuilder.Build("", i.Name, "State:".T(EDTx.JournalLocOrJump_State), i.FactionState,
+                                                                    "Government:".T(EDTx.JournalLocOrJump_Government), i.Government,
+                                                                    "Inf:;%".T(EDTx.JournalLocOrJump_Inf), (i.Influence * 100.0).ToString("0.0"),
+                                                                    "Allegiance:".T(EDTx.JournalLocOrJump_Allegiance), i.Allegiance,
+                                                                    "Happiness:".T(EDTx.JournalLocOrJump_Happiness), i.Happiness_Localised,
+                                                                    "Reputation:;%;N1".T(EDTx.JournalLocOrJump_Reputation), i.MyReputation,
+                                                                    ";Squadron System".T(EDTx.JournalLocOrJump_SquadronSystem), i.SquadronFaction, 
+                                                                    ";Happiest System".T(EDTx.JournalLocOrJump_HappiestSystem), i.HappiestSystem, 
+                                                                    ";Home System".T(EDTx.JournalLocOrJump_HomeSystem), i.HomeSystem
                                                                     ));
 
                     if (i.PendingStates != null)
                     {
-                        sb.Append(BaseUtils.FieldBuilder.Build(",", "Pending State:".Txb(this)));
+                        sb.Append(BaseUtils.FieldBuilder.Build(",", "Pending State:".T(EDTx.JournalLocOrJump_PendingState)));
 
                         foreach (JournalLocation.PowerStatesInfo state in i.PendingStates)
                             sb.Append(BaseUtils.FieldBuilder.Build(" ", state.State, "<(;)", state.Trend));
@@ -502,7 +502,7 @@ namespace EliteDangerousCore.JournalEvents
 
                     if (i.RecoveringStates != null)
                     {
-                        sb.Append(BaseUtils.FieldBuilder.Build(",", "Recovering State:".Txb(this)));
+                        sb.Append(BaseUtils.FieldBuilder.Build(",", "Recovering State:".T(EDTx.JournalLocOrJump_RecoveringState)));
 
                         foreach (JournalLocation.PowerStatesInfo state in i.RecoveringStates)
                             sb.Append(BaseUtils.FieldBuilder.Build(" ", state.State, "<(;)", state.Trend));
@@ -510,7 +510,7 @@ namespace EliteDangerousCore.JournalEvents
 
                     if (i.ActiveStates != null)
                     {
-                        sb.Append(BaseUtils.FieldBuilder.Build(",", "Active State:".Txb(this)));
+                        sb.Append(BaseUtils.FieldBuilder.Build(",", "Active State:".T(EDTx.JournalLocOrJump_ActiveState)));
 
                         foreach (JournalLocation.ActiveStatesInfo state in i.ActiveStates)
                             sb.Append(BaseUtils.FieldBuilder.Build(" ", state.State));
@@ -610,11 +610,11 @@ namespace EliteDangerousCore.JournalEvents
         public string StarClass { get; set; }
         public string FriendlyStarClass { get; set; }
 
-        public override string SummaryName(ISystem sys) { return "Charging FSD".Tx(this); }
+        public override string SummaryName(ISystem sys) { return "Charging FSD".T(EDTx.JournalStartJump_ChargingFSD); }
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = BaseUtils.FieldBuilder.Build("", JumpType, "< to ".Txb(this), StarSystem, "", FriendlyStarClass);
+            info = BaseUtils.FieldBuilder.Build("", JumpType, "< to ".T(EDTx.JournalEntry_to), StarSystem, "", FriendlyStarClass);
             detailed = "";
         }
     }

@@ -206,11 +206,11 @@ namespace EliteDangerousCore
         public MaterialCommodityData(string cs, string n, string fd, string t, string shortn, Color cl, bool rare)
         {
             Category = cs;
-            TranslatedCategory = Category.Tx(typeof(MaterialCommodityData));
+            TranslatedCategory = Category.Tx(typeof(MaterialCommodityData));        // valid to pass this thru the Tx( system
             Name = n;
             FDName = fd;
             Type = t;
-            TranslatedType = Type.Tx(typeof(MaterialCommodityData));
+            TranslatedType = Type.Tx(typeof(MaterialCommodityData));                // valid to pass this thru the Tx( system
             Shortname = shortn;
             Colour = cl;
             Rarity = rare;

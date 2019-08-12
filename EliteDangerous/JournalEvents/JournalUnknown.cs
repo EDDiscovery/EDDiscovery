@@ -35,7 +35,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed) 
         {
-            info = "Unhandled Journal event, Report to EDDiscovery team. ".Tx(this) + Environment.NewLine + json;
+            info = "Unhandled Journal event, Report to EDDiscovery team. ".T(EDTx.JournalUnknown_UnhandledJournalevent) + Environment.NewLine + json;
             detailed = "";
         }
     }

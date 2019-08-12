@@ -250,6 +250,7 @@ namespace EDDiscovery
         UserControlModules_Storedat, // Stored at
         UserControlModules_CargoCapacity, // Cargo Capacity
         UserControlModules_InTransit, // In Transit
+        UserControlModules_InTransitto, // In Transit
         UserControlModules_EDSURL, // Enter ED Shipyard URL
         UserControlModules_CURL, // Enter Coriolis URL
         UserControlModules_FW, // Fuel Warning:
@@ -284,7 +285,6 @@ namespace EDDiscovery
         UserControlStats_Month, // Month
         UserControlStats_Lastdock, // Last dock
         UserControlStats_Jumps, // Jumps
-        UserControlStats_TraveledLy, // Traveled Ly
         UserControlStats_PremiumBoost, // Premium Boost
         UserControlStats_StandardBoost, // Standard Boost
         UserControlStats_BasicBoost, // Basic Boost

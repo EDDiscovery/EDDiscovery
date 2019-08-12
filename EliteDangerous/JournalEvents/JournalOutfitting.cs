@@ -59,7 +59,7 @@ namespace EliteDangerousCore.JournalEvents
 
             if (ItemList.Items != null)
             {
-                info = ItemList.Items.Length.ToString() + " items available".Txb(this);
+                info = ItemList.Items.Length.ToString() + " items available".T(EDTx.JournalEntry_itemsavailable);
                 int itemno = 0;
                 foreach (Outfitting.OutfittingItem m in ItemList.Items)
                 {

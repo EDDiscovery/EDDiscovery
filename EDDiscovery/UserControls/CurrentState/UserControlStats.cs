@@ -373,7 +373,7 @@ namespace EDDiscovery.UserControls
 
                 for (int ii = 0; ii < intervals; ii++)
                     strarr[ii] = hl.GetTraveledLy(timearr[ii], endTime).ToString("N2", System.Globalization.CultureInfo.CurrentCulture);
-                StatToDGV(dataGridViewTravel, "Traveled Ly".T(EDTx.UserControlStats_TravelledLy), strarr);
+                StatToDGV(dataGridViewTravel, "Travelled Ly".T(EDTx.UserControlStats_TravelledLy), strarr);
 
                 for (int ii = 0; ii < intervals; ii++)
                     strarr[ii] = hl.GetFSDBoostUsed(timearr[ii], endTime, 3).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
@@ -471,7 +471,7 @@ namespace EDDiscovery.UserControls
 
                 for (int ii = 0; ii < intervals; ii++)
                     strarr[ii] = hl.GetTraveledLy(timeintervals[ii + 1], timeintervals[ii]).ToString("N2", System.Globalization.CultureInfo.CurrentCulture);
-                StatToDGV(dataGridViewTravel, "Traveled Ly".T(EDTx.UserControlStats_TravelledLy), strarr);
+                StatToDGV(dataGridViewTravel, "Travelled Ly".T(EDTx.UserControlStats_TravelledLy), strarr);
 
                 for (int ii = 0; ii < intervals; ii++)
                     strarr[ii] = hl.GetFSDBoostUsed(timeintervals[ii + 1], timeintervals[ii], 3).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);

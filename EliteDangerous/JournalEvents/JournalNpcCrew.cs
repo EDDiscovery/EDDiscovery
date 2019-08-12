@@ -40,7 +40,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
-            mcl.AddEvent(Id, EventTimeUTC, EventTypeID, "Wages for ".Txb(this) + Name, -Amount);
+            mcl.AddEvent(Id, EventTimeUTC, EventTypeID, "Wages for ".T(EDTx.JournalEntry_Wagesfor) + Name, -Amount);
         }
     }
 
@@ -60,7 +60,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = BaseUtils.FieldBuilder.Build("<", Name, "Rank:".Txb(this), RankCombat.ToString().SplitCapsWord());
+            info = BaseUtils.FieldBuilder.Build("<", Name, "Rank:".T(EDTx.JournalEntry_Rank), RankCombat.ToString().SplitCapsWord());
             detailed = "";
         }
 

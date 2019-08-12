@@ -170,8 +170,8 @@ namespace EDDiscovery.UserControls
 
             last_si = null;     // no ship info
 
-            dataGridViewModules.Columns[2].HeaderText = "SlotCol".T(EDTx.UserControlModules_SlotCol);
-            dataGridViewModules.Columns[3].HeaderText = "ItemInfo".T(EDTx.UserControlModules_ItemInfo);
+            dataGridViewModules.Columns[2].HeaderText = "Slot".T(EDTx.UserControlModules_SlotCol);
+            dataGridViewModules.Columns[3].HeaderText = "Info".T(EDTx.UserControlModules_ItemInfo);
             dataGridViewModules.Columns[6].HeaderText = "Value".T(EDTx.UserControlModules_Value);
 
             if (comboBoxShips.Text == storedmoduletext)
@@ -265,7 +265,7 @@ namespace EDDiscovery.UserControls
             AddInfoLine("Main Thruster Boost".T(EDTx.UserControlModules_MainThrusterBoost), si.Boost.ToStringInvariant("0.#"));
 
             if (si.InTransit)
-                AddInfoLine("In Transit to ".T(EDTx.UserControlModules_InTransit), (si.StoredAtSystem??"Unknown".T(EDTx.Unknown)) + ":" + (si.StoredAtStation ?? "Unknown".T(EDTx.Unknown)));
+                AddInfoLine("In Transit to ".T(EDTx.UserControlModules_InTransitto), (si.StoredAtSystem??"Unknown".T(EDTx.Unknown)) + ":" + (si.StoredAtStation ?? "Unknown".T(EDTx.Unknown)));
             else if ( si.StoredAtSystem != null )
                 AddInfoLine("Stored at".T(EDTx.UserControlModules_Storedat), si.StoredAtSystem + ":" + (si.StoredAtStation ?? "Unknown".T(EDTx.Unknown)));
 

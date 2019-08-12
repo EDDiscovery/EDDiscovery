@@ -35,7 +35,7 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string info, out string detailed) 
         {
             
-            info = BaseUtils.FieldBuilder.Build("", Name, "< to role ;".Txb(this), Role);
+            info = BaseUtils.FieldBuilder.Build("", Name, "< to role ;".T(EDTx.JournalEntry_torole), Role);
             detailed = "";
         }
     }
@@ -54,7 +54,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = BaseUtils.FieldBuilder.Build("; fired".Txb(this), Name);
+            info = BaseUtils.FieldBuilder.Build("; fired".T(EDTx.JournalEntry_fired), Name);
             detailed = "";
         }
     }
@@ -84,7 +84,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = BaseUtils.FieldBuilder.Build("Hired:;".Txb(this), Name, "< of faction ".Txb(this), Faction, "Rank:".Txb(this), CombatRank.ToString().SplitCapsWord(), "Cost:; cr;N0".Txb(this), Cost);
+            info = BaseUtils.FieldBuilder.Build("Hired:;".T(EDTx.JournalEntry_Hired), Name, "< of faction ".T(EDTx.JournalEntry_offaction), Faction, "Rank:".T(EDTx.JournalEntry_Rank), CombatRank.ToString().SplitCapsWord(), "Cost:; cr;N0".T(EDTx.JournalEntry_Cost), Cost);
             detailed = "";
         }
     }
@@ -156,7 +156,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = BaseUtils.FieldBuilder.Build("Crew:".Txb(this), Crew, "Role:".Txb(this), Role);
+            info = BaseUtils.FieldBuilder.Build("Crew:".T(EDTx.JournalEntry_Crew), Crew, "Role:".T(EDTx.JournalEntry_Role), Role);
             detailed = "";
         }
     }
@@ -175,7 +175,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = BaseUtils.FieldBuilder.Build("Crew Member:".Txb(this), Crew, "; Due to Crime".Txb(this), OnCrime);
+            info = BaseUtils.FieldBuilder.Build("Crew Member:".T(EDTx.JournalEntry_CrewMember), Crew, "; Due to Crime".T(EDTx.JournalEntry_DuetoCrime), OnCrime);
             detailed = "";
         }
     }
@@ -193,7 +193,7 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string info, out string detailed)
         {
 
-            info = BaseUtils.FieldBuilder.Build("Captain:".Txb(this), Captain);
+            info = BaseUtils.FieldBuilder.Build("Captain:".T(EDTx.JournalEntry_Captain), Captain);
             detailed = "";
         }
     }
@@ -229,7 +229,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = BaseUtils.FieldBuilder.Build("; Due to Crime".Txb(this), OnCrime);
+            info = BaseUtils.FieldBuilder.Build("; Due to Crime".T(EDTx.JournalEntry_DuetoCrime), OnCrime);
             detailed = "";
         }
     }
@@ -247,7 +247,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = BaseUtils.FieldBuilder.Build("Captain:".Txb(this), Captain);
+            info = BaseUtils.FieldBuilder.Build("Captain:".T(EDTx.JournalEntry_Captain), Captain);
             detailed = "";
         }
 

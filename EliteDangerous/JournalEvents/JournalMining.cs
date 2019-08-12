@@ -112,7 +112,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = BaseUtils.FieldBuilder.Build("", FriendlyMotherlodeMaterial, "", Content_Localised, "Remaining:;%;N1".Tx(this), Remaining);
+            info = BaseUtils.FieldBuilder.Build("", FriendlyMotherlodeMaterial, "", Content_Localised, "Remaining:;%;N1".T(EDTx.JournalProspectedAsteroid_Remaining), Remaining);
             detailed = "";
 
             if ( Materials != null )
