@@ -191,7 +191,7 @@ namespace EDDiscovery.UserControls
             this.textBoxFileName.ClearOnFirstChar = false;
             this.textBoxFileName.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxFileName.EndButtonEnable = true;
-            this.textBoxFileName.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxFileName.EndButtonImage")));
+            this.textBoxFileName.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.textBoxFileName.EndButtonVisible = false;
             this.textBoxFileName.InErrorCondition = false;
             this.textBoxFileName.Location = new System.Drawing.Point(88, 6);
@@ -226,7 +226,7 @@ namespace EDDiscovery.UserControls
             this.textBoxRouteName.ClearOnFirstChar = false;
             this.textBoxRouteName.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxRouteName.EndButtonEnable = true;
-            this.textBoxRouteName.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxRouteName.EndButtonImage")));
+            this.textBoxRouteName.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.textBoxRouteName.EndButtonVisible = false;
             this.textBoxRouteName.InErrorCondition = false;
             this.textBoxRouteName.Location = new System.Drawing.Point(88, 32);

@@ -215,7 +215,7 @@ namespace EDDiscovery.UserControls
             this.textBoxFilter.ClearOnFirstChar = false;
             this.textBoxFilter.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxFilter.EndButtonEnable = true;
-            this.textBoxFilter.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxFilter.EndButtonImage")));
+            this.textBoxFilter.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.textBoxFilter.EndButtonVisible = false;
             this.textBoxFilter.InErrorCondition = false;
             this.textBoxFilter.Location = new System.Drawing.Point(195, 1);

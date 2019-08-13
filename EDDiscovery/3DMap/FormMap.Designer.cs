@@ -154,7 +154,7 @@ namespace EDDiscovery
             this.textboxFrom.DropDownScrollBarButtonColor = System.Drawing.Color.LightGray;
             this.textboxFrom.DropDownScrollBarColor = System.Drawing.Color.LightGray;
             this.textboxFrom.EndButtonEnable = false;
-            this.textboxFrom.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textboxFrom.EndButtonImage")));
+            this.textboxFrom.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.textboxFrom.EndButtonVisible = false;
             this.textboxFrom.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.textboxFrom.InErrorCondition = false;

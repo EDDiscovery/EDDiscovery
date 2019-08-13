@@ -205,7 +205,7 @@ namespace EDDiscovery.UserControls
             this.textMinRadius.ControlBackground = System.Drawing.SystemColors.Control;
             this.textMinRadius.DelayBeforeNotification = 500;
             this.textMinRadius.EndButtonEnable = true;
-            this.textMinRadius.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textMinRadius.EndButtonImage")));
+            this.textMinRadius.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.textMinRadius.EndButtonVisible = false;
             this.textMinRadius.Format = "0.#######";
             this.textMinRadius.InErrorCondition = false;
@@ -248,7 +248,7 @@ namespace EDDiscovery.UserControls
             this.textMaxRadius.ControlBackground = System.Drawing.SystemColors.Control;
             this.textMaxRadius.DelayBeforeNotification = 500;
             this.textMaxRadius.EndButtonEnable = true;
-            this.textMaxRadius.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textMaxRadius.EndButtonImage")));
+            this.textMaxRadius.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.textMaxRadius.EndButtonVisible = false;
             this.textMaxRadius.Format = "0.#######";
             this.textMaxRadius.InErrorCondition = false;

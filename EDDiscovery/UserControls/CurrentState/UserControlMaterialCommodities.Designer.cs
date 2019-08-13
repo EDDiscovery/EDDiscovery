@@ -193,7 +193,7 @@ namespace EDDiscovery.UserControls
             this.textBoxItems2.ClearOnFirstChar = false;
             this.textBoxItems2.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxItems2.EndButtonEnable = true;
-            this.textBoxItems2.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxItems2.EndButtonImage")));
+            this.textBoxItems2.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.textBoxItems2.EndButtonVisible = false;
             this.textBoxItems2.InErrorCondition = false;
             this.textBoxItems2.Location = new System.Drawing.Point(221, 1);
@@ -221,7 +221,7 @@ namespace EDDiscovery.UserControls
             this.textBoxItems1.ClearOnFirstChar = false;
             this.textBoxItems1.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxItems1.EndButtonEnable = true;
-            this.textBoxItems1.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxItems1.EndButtonImage")));
+            this.textBoxItems1.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.textBoxItems1.EndButtonVisible = false;
             this.textBoxItems1.InErrorCondition = false;
             this.textBoxItems1.Location = new System.Drawing.Point(87, 1);

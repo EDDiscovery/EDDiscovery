@@ -814,7 +814,7 @@ namespace EDDiscovery.UserControls
             this.numberBoxLongPortNo.ControlBackground = System.Drawing.SystemColors.Control;
             this.numberBoxLongPortNo.DelayBeforeNotification = 0;
             this.numberBoxLongPortNo.EndButtonEnable = true;
-            this.numberBoxLongPortNo.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("numberBoxLongPortNo.EndButtonImage")));
+            this.numberBoxLongPortNo.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.numberBoxLongPortNo.EndButtonVisible = false;
             this.numberBoxLongPortNo.Format = "D";
             this.numberBoxLongPortNo.InErrorCondition = false;

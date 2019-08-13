@@ -232,7 +232,7 @@ namespace EDDiscovery.UserControls
             this.txtP2PDIstance.ClearOnFirstChar = false;
             this.txtP2PDIstance.ControlBackground = System.Drawing.SystemColors.Control;
             this.txtP2PDIstance.EndButtonEnable = true;
-            this.txtP2PDIstance.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("txtP2PDIstance.EndButtonImage")));
+            this.txtP2PDIstance.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.txtP2PDIstance.EndButtonVisible = false;
             this.txtP2PDIstance.InErrorCondition = false;
             this.txtP2PDIstance.Location = new System.Drawing.Point(529, 34);
@@ -259,7 +259,7 @@ namespace EDDiscovery.UserControls
             this.txtCmlDistance.ClearOnFirstChar = false;
             this.txtCmlDistance.ControlBackground = System.Drawing.SystemColors.Control;
             this.txtCmlDistance.EndButtonEnable = true;
-            this.txtCmlDistance.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("txtCmlDistance.EndButtonImage")));
+            this.txtCmlDistance.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.txtCmlDistance.EndButtonVisible = false;
             this.txtCmlDistance.InErrorCondition = false;
             this.txtCmlDistance.Location = new System.Drawing.Point(529, 58);
@@ -387,7 +387,7 @@ namespace EDDiscovery.UserControls
             this.textBoxRouteName.ClearOnFirstChar = false;
             this.textBoxRouteName.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxRouteName.EndButtonEnable = true;
-            this.textBoxRouteName.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxRouteName.EndButtonImage")));
+            this.textBoxRouteName.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.textBoxRouteName.EndButtonVisible = false;
             this.textBoxRouteName.InErrorCondition = false;
             this.textBoxRouteName.Location = new System.Drawing.Point(78, 5);

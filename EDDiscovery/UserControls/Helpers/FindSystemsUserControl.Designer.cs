@@ -120,7 +120,7 @@
             this.numberBoxMaxRadius.ControlBackground = System.Drawing.SystemColors.Control;
             this.numberBoxMaxRadius.DelayBeforeNotification = 0;
             this.numberBoxMaxRadius.EndButtonEnable = true;
-            this.numberBoxMaxRadius.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("numberBoxMaxRadius.EndButtonImage")));
+            this.numberBoxMaxRadius.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.numberBoxMaxRadius.EndButtonVisible = false;
             this.numberBoxMaxRadius.Format = "0.##";
             this.numberBoxMaxRadius.InErrorCondition = false;
@@ -151,7 +151,7 @@
             this.numberBoxMinRadius.ControlBackground = System.Drawing.SystemColors.Control;
             this.numberBoxMinRadius.DelayBeforeNotification = 0;
             this.numberBoxMinRadius.EndButtonEnable = true;
-            this.numberBoxMinRadius.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("numberBoxMinRadius.EndButtonImage")));
+            this.numberBoxMinRadius.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.numberBoxMinRadius.EndButtonVisible = false;
             this.numberBoxMinRadius.Format = "0.##";
             this.numberBoxMinRadius.InErrorCondition = false;
@@ -187,7 +187,7 @@
             this.textBoxSystemName.DropDownScrollBarButtonColor = System.Drawing.Color.LightGray;
             this.textBoxSystemName.DropDownScrollBarColor = System.Drawing.Color.LightGray;
             this.textBoxSystemName.EndButtonEnable = false;
-            this.textBoxSystemName.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxSystemName.EndButtonImage")));
+            this.textBoxSystemName.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.textBoxSystemName.EndButtonVisible = false;
             this.textBoxSystemName.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.textBoxSystemName.InErrorCondition = false;
@@ -225,7 +225,7 @@
             this.numberBoxDoubleX.ControlBackground = System.Drawing.SystemColors.Control;
             this.numberBoxDoubleX.DelayBeforeNotification = 0;
             this.numberBoxDoubleX.EndButtonEnable = true;
-            this.numberBoxDoubleX.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("numberBoxDoubleX.EndButtonImage")));
+            this.numberBoxDoubleX.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.numberBoxDoubleX.EndButtonVisible = false;
             this.numberBoxDoubleX.Format = "0.##";
             this.numberBoxDoubleX.InErrorCondition = false;
@@ -257,7 +257,7 @@
             this.numberBoxDoubleY.ControlBackground = System.Drawing.SystemColors.Control;
             this.numberBoxDoubleY.DelayBeforeNotification = 0;
             this.numberBoxDoubleY.EndButtonEnable = true;
-            this.numberBoxDoubleY.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("numberBoxDoubleY.EndButtonImage")));
+            this.numberBoxDoubleY.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.numberBoxDoubleY.EndButtonVisible = false;
             this.numberBoxDoubleY.Format = "0.##";
             this.numberBoxDoubleY.InErrorCondition = false;
@@ -289,7 +289,7 @@
             this.numberBoxDoubleZ.ControlBackground = System.Drawing.SystemColors.Control;
             this.numberBoxDoubleZ.DelayBeforeNotification = 0;
             this.numberBoxDoubleZ.EndButtonEnable = true;
-            this.numberBoxDoubleZ.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("numberBoxDoubleZ.EndButtonImage")));
+            this.numberBoxDoubleZ.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.numberBoxDoubleZ.EndButtonVisible = false;
             this.numberBoxDoubleZ.Format = "0.##";
             this.numberBoxDoubleZ.InErrorCondition = false;
