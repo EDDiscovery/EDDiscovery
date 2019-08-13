@@ -260,7 +260,7 @@ namespace EDDiscovery.UserControls
                 }
                 else
                 {
-                    ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Bad Date Time format".Tx(this, "DTF"), "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Bad Date Time format".T(EDTx.CaptainsLogEntries_DTF), "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Error);
                     DateTime prev = (DateTime)rw.Cells[0].Tag;
                     rw.Cells[0].Value = EDDConfig.Instance.DisplayUTC ? prev : prev.ToLocalTime();
                 }
@@ -276,8 +276,8 @@ namespace EDDiscovery.UserControls
         {
             string notes = rw.Cells[3].Value != null ? (string)rw.Cells[3].Value : "";
 
-            string s = ExtendedControls.PromptSingleLine.ShowDialog(this.FindForm(), "Note:".Tx(this), notes,
-                            "Enter Note".Tx(this), this.FindForm().Icon, multiline: true, cursoratend: true, widthboxes:400, heightboxes:400);
+            string s = ExtendedControls.PromptSingleLine.ShowDialog(this.FindForm(), "Note:".T(EDTx.CaptainsLogEntries_Note), notes,
+                            "Enter Note".T(EDTx.CaptainsLogEntries_EnterNote), this.FindForm().Icon, multiline: true, cursoratend: true, widthboxes:400, heightboxes:400);
 
             if (s != null)
             {
@@ -410,7 +410,7 @@ namespace EDDiscovery.UserControls
 
             if ( rows != null && rows.Length > 1 )
             {
-                if (ExtendedControls.MessageBoxTheme.Show(FindForm(), string.Format(("Do you really want to delete {0} notes?" + Environment.NewLine + "Confirm or Cancel").Tx(this,"CFN"), rows.Length), "Warning".Tx(), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+                if (ExtendedControls.MessageBoxTheme.Show(FindForm(), string.Format(("Do you really want to delete {0} notes?" + Environment.NewLine + "Confirm or Cancel").T(EDTx.CaptainsLogEntries_CFN), rows.Length), "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
                 {
                     foreach (int r in rows)
                     {
@@ -431,7 +431,7 @@ namespace EDDiscovery.UserControls
                 {
                     CaptainsLogClass entry = (CaptainsLogClass)rw.Tag;
 
-                    if (ExtendedControls.MessageBoxTheme.Show(FindForm(), string.Format(("Do you really want to delete the note for {0}" + Environment.NewLine + "Confirm or Cancel").Tx(this, "CF"), entry.SystemName + ":" + entry.BodyName), "Warning".Tx(), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+                    if (ExtendedControls.MessageBoxTheme.Show(FindForm(), string.Format(("Do you really want to delete the note for {0}" + Environment.NewLine + "Confirm or Cancel").T(EDTx.CaptainsLogEntries_CF), entry.SystemName + ":" + entry.BodyName), "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
                     {
                         GlobalCaptainsLogList.Instance.Delete(entry);
                         Display();
@@ -445,7 +445,7 @@ namespace EDDiscovery.UserControls
         private void buttonTags_Click(object sender, EventArgs e)
         {
             TagsForm tg = new TagsForm();
-            tg.Init("Set Tags".Tx(this), this.FindForm().Icon, EDDConfig.Instance.CaptainsLogTagImage);
+            tg.Init("Set Tags".T(EDTx.CaptainsLogEntries_SetTags), this.FindForm().Icon, EDDConfig.Instance.CaptainsLogTagImage);
 
             if (tg.ShowDialog() == DialogResult.OK)
             {
@@ -544,7 +544,7 @@ namespace EDDiscovery.UserControls
             EliteDangerousCore.EDSM.EDSMClass edsm = new EDSMClass();
             
             if (!edsm.ShowSystemInEDSM(rightclickentry.SystemName, null))
-                ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable".Tx(this,"SysU"));
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable".T(EDTx.CaptainsLogEntries_SysU));
 
             this.Cursor = Cursors.Default;
         }
@@ -556,7 +556,7 @@ namespace EDDiscovery.UserControls
             if ( sys != null )
                 ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), sys, true, discoveryform.history);
             else
-                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "No such system".Tx(this, "NSS") + " " + rightclickentry.SystemName, "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "No such system".T(EDTx.CaptainsLogEntries_NSS) + " " + rightclickentry.SystemName, "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Error);
 
         }
 

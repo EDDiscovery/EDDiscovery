@@ -34,8 +34,8 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed) 
         {
-            info = BaseUtils.FieldBuilder.Build("Hull:".Tx(this), HullRepaired.ToString("0.0"), "Cockpit:".Txb(this), CockpitRepaired.ToString("0.0"), 
-                                "Corrosion:".Txb(this), CorrosionRepaired.ToString("0.0"));
+            info = BaseUtils.FieldBuilder.Build("Hull:".T(EDTx.JournalRepairDrone_Hull), HullRepaired.ToString("0.0"), "Cockpit:".T(EDTx.JournalEntry_Cockpit), CockpitRepaired.ToString("0.0"), 
+                                "Corrosion:".T(EDTx.JournalEntry_Corrosion), CorrosionRepaired.ToString("0.0"));
             detailed = "";
         }
     }
@@ -69,7 +69,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = BaseUtils.FieldBuilder.Build("Type:".Txb(this), Type, "Count:".Txb(this), Count, "Total Cost:; cr;N0".Txb(this), TotalCost, "each:; cr;N0".Txb(this), BuyPrice);
+            info = BaseUtils.FieldBuilder.Build("Type:".T(EDTx.JournalEntry_Type), Type, "Count:".T(EDTx.JournalEntry_Count), Count, "Total Cost:; cr;N0".T(EDTx.JournalEntry_TotalCost), TotalCost, "each:; cr;N0".T(EDTx.JournalEntry_each), BuyPrice);
             detailed = "";
         }
     }
@@ -97,12 +97,12 @@ namespace EliteDangerousCore.JournalEvents
 
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
-            mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Count.ToString() + " " + "Drones".Txb(this), TotalSale);
+            mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Count.ToString() + " " + "Drones".T(EDTx.JournalEntry_Drones), TotalSale);
         }
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = BaseUtils.FieldBuilder.Build("", Type, "Count:".Txb(this), Count, "Price:; cr;N0".Txb(this), SellPrice, "Amount:; cr;N0".Txb(this), TotalSale);
+            info = BaseUtils.FieldBuilder.Build("", Type, "Count:".T(EDTx.JournalEntry_Count), Count, "Price:; cr;N0".T(EDTx.JournalEntry_Price), SellPrice, "Amount:; cr;N0".T(EDTx.JournalEntry_Amount), TotalSale);
             detailed = "";
         }
     }
@@ -126,7 +126,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = BaseUtils.FieldBuilder.Build("Type:".Txb(this), FriendlyType);
+            info = BaseUtils.FieldBuilder.Build("Type:".T(EDTx.JournalEntry_Type), FriendlyType);
             detailed = "";
         }
     }

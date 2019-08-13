@@ -55,7 +55,7 @@ namespace EDDiscovery.UserControls
 
             cfs = new FilterSelector(DbFilterSave);
             cfs.AddAllNone();
-            cfs.AddGroupOption(cashtype, "Cash Transactions".Tx(this),  JournalEntry.JournalTypeIcons[JournalTypeEnum.Bounty]);
+            cfs.AddGroupOption(cashtype, "Cash Transactions".T(EDTx.UserControlLedger_CashTransactions),  JournalEntry.JournalTypeIcons[JournalTypeEnum.Bounty]);
             cfs.AddJournalEntries(new string[] { "Ledger", "LedgerNC" });
             cfs.Closing += EventFilterChanged;
 
@@ -144,7 +144,7 @@ namespace EDDiscovery.UserControls
                 }
             }
 
-            dataGridViewLedger.Columns[0].HeaderText = utctime ? "Game Time".Tx() : "Time".Tx();
+            dataGridViewLedger.Columns[0].HeaderText = utctime ? "Game Time".T(EDTx.GameTime) : "Time".T(EDTx.Time);
             dataGridViewLedger.Sort(sortcol, (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
             dataGridViewLedger.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
         }
@@ -240,7 +240,7 @@ namespace EDDiscovery.UserControls
         private void dataGridViewLedger_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {
             if (e.Column.Index == 0)
-                e.SortDataGridViewColumnDate();
+                e.SortDataGridViewColumnDate(true);
             else if (e.Column.Index >= 3)
                 e.SortDataGridViewColumnNumeric();
         }

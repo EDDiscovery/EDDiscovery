@@ -99,7 +99,7 @@ namespace EDDiscovery.UserControls
             OutfittingList ofl = hl.outfitting;
             string cursel = comboBoxYards.Text;
 
-            string the = "Travel History Entry".Tx(this);
+            string the = "Travel History Entry".T(EDTx.UserControlOutfitting_TravelHistoryEntry);
 
             comboBoxYards.Items.Clear();
             comboBoxYards.Items.Add(the);
@@ -192,22 +192,22 @@ namespace EDDiscovery.UserControls
                     ShipModuleData.ShipModule sm = ShipModuleData.Instance.GetItemProperties(item.FDName);
                     itemname = itemname.AppendPrePad(sm.InfoMassPower(true), ", ");
 
-                    object[] rowobj = { dte, yardname, itemname, (distance > -1) ? (distance.ToString("N1") + "ly") : "Unknown".Tx(), item.BuyPrice.ToString("N1") + "cr" };
+                    object[] rowobj = { dte, yardname, itemname, (distance > -1) ? (distance.ToString("N1") + "ly") : "Unknown".T(EDTx.Unknown), item.BuyPrice.ToString("N1") + "cr" };
                     dataGridViewOutfitting.Rows.Add(rowobj);
                 }
             }
 
             labelYard.Text = moduletype;
             labelYard.Visible = true;
-            Col1.HeaderText = "Date".Tx(this);
+            Col1.HeaderText = "Date".T(EDTx.UserControlOutfitting_Date);
             Col1.Tag = "DT";
-            Col2.HeaderText = "Yard".Tx(this);
+            Col2.HeaderText = "Yard".T(EDTx.UserControlOutfitting_Yard);
             Col2.Tag = null;
-            Col3.HeaderText = "Item".Tx(this);
+            Col3.HeaderText = "Item".T(EDTx.UserControlOutfitting_Item);
             Col3.Tag = null;
-            Col4.HeaderText = "Distance".Tx(this);
+            Col4.HeaderText = "Distance".T(EDTx.UserControlOutfitting_Distance);
             Col4.Tag = "ly";
-            ColPrice.HeaderText = "Price".Tx(this);
+            ColPrice.HeaderText = "Price".T(EDTx.UserControlOutfitting_Price);
             ColPrice.Tag = "cr";
         }
 
@@ -229,13 +229,13 @@ namespace EDDiscovery.UserControls
             labelYard.Text = yard.Ident(EDDiscoveryForm.EDDConfig.DisplayUTC) + (distance > -1 ? (" @ " + distance.ToString("N1") + "ly") : "");
             labelYard.Visible = true;
 
-            Col1.HeaderText = "Type".Tx(this);
+            Col1.HeaderText = "Type".T(EDTx.UserControlOutfitting_Type);
             Col1.Tag = null;
-            Col2.HeaderText = "Item".Tx(this);
+            Col2.HeaderText = "Item".T(EDTx.UserControlOutfitting_Item);
             Col2.Tag = null;
-            Col3.HeaderText = "Info".Tx(this);
+            Col3.HeaderText = "Info".T(EDTx.UserControlOutfitting_Info);
             Col3.Tag = null;
-            Col4.HeaderText = "Mass".Tx(this);
+            Col4.HeaderText = "Mass".T(EDTx.UserControlOutfitting_Mass);
             Col4.Tag = "t";
         }
 

@@ -233,6 +233,11 @@ SECTION EDDiscoveryForm
 .adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.fetchLogsAgainToolStripMenuItem: "Fetch Logs Again" @
 .adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.fetchStarDataAgainToolStripMenuItem: "Fetch Star Data Again" @
 
+.WSE: "Web server enabled" @
+.WSF: "Web server failed to start" @
+.WSERR: "Web server disabled due to incorrect folder or missing zip file" @
+.WSD: "*** Web server is disabled ***" @
+
 SECTION EDDiscoveryController
 
 .CD: "Closing down, please wait.." @
@@ -480,6 +485,18 @@ CommanderForm: "CommanderForm" @
 .Confirm: "Confirm" @
 .LF: "Select folder where Journal*.log files are stored by Frontier in" @
 
+.textBoxDefaultZoom.ToolTip: "Set the zoom level of the map. 1 is normal" @
+.radioButtonHistorySelection: "History Grid Selection" @
+.radioButtonHistorySelection.ToolTip: "Select history entry as opening location" @
+.radioButtonCentreHome: "Home System" @
+.radioButtonCentreHome.ToolTip: "Select home system as opening location" @
+.panel_defaultmapcolor.ToolTip: "New travel entries get this colour on the map" @
+.labelMapCol: "Default Map Color" @
+.labelZoom: "Default Zoom" @
+.labelOpenOn: "Open Centred On" @
+.HomeSys: "Home System:" @
+
+
 SECTION ExportForm
 
 ExportForm: "ExportForm" @
@@ -493,7 +510,7 @@ ExportForm: "ExportForm" @
 .checkBoxCustomAutoOpen: "Open in excel" @
 .label_index: "Export" @
 .ECH: "Export current History view to {0}" @
-.JF: "Journal File" @
+.JF: "Journal file" @
 
 SECTION Form2DMap
 
@@ -526,7 +543,7 @@ GalaxySectorSelect: "GalaxySectorSelect" @
 .RS: "You have removed sectors!\r\nThis will require the DB to be cleaned of entries, which will take time\r\nConfirm you wish to do this?" @
 .GALSELEX: "ED Discovery downloads star data from EDSM/EDDB which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed" @
 .Select: "Select:" @
-.GALSELEN: "Enter number to jump to or near to" @
+.GALSELEN: "Select the data set" @
 .PresstoAccept: "Press to Accept" @
 .PresstoCancel: "Press to Cancel" @
 .GALSELTitle: "Select EDSM Galaxy Data" @

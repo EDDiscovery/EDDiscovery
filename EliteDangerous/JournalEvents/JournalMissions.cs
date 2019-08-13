@@ -40,23 +40,23 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed) 
         {
-            info = BaseUtils.FieldBuilder.Build("Active:".Txb(this), ActiveMissions?.Length, "Failed:".Txb(this), FailedMissions?.Length, "Completed:".Txb(this), CompletedMissions?.Length);
+            info = BaseUtils.FieldBuilder.Build("Active:".T(EDTx.JournalEntry_Active), ActiveMissions?.Length, "Failed:".T(EDTx.JournalEntry_Failed), FailedMissions?.Length, "Completed:".T(EDTx.JournalEntry_Completed), CompletedMissions?.Length);
             detailed = "";
             if (ActiveMissions != null && ActiveMissions.Length>0)
             {
-                detailed = detailed.AppendPrePad("Active:".Txb(this), Environment.NewLine);
+                detailed = detailed.AppendPrePad("Active:".T(EDTx.JournalEntry_Active), Environment.NewLine);
                 foreach (var x in ActiveMissions)
                     detailed = detailed.AppendPrePad("    " + x.Format(), Environment.NewLine);
             }
             if (FailedMissions != null && FailedMissions.Length>0)
             {
-                detailed = detailed.AppendPrePad("Failed:".Txb(this), Environment.NewLine);
+                detailed = detailed.AppendPrePad("Failed:".T(EDTx.JournalEntry_Failed), Environment.NewLine);
                 foreach (var x in FailedMissions)
                     detailed = detailed.AppendPrePad("    " + x.Format(), Environment.NewLine);
             }
             if (CompletedMissions != null && CompletedMissions.Length > 0)
             {
-                detailed = detailed.AppendPrePad("Completed:".Txb(this), Environment.NewLine);
+                detailed = detailed.AppendPrePad("Completed:".T(EDTx.JournalEntry_Completed), Environment.NewLine);
                 foreach (var x in CompletedMissions)
                     detailed = detailed.AppendPrePad("    " + x.Format(), Environment.NewLine);
             }
@@ -93,7 +93,7 @@ namespace EliteDangerousCore.JournalEvents
 
             public string Format()
             {
-                return BaseUtils.FieldBuilder.Build("", Name, "<;(Passenger)".Tx(this), PassengerMission, " " + "Expires:".Tx(this), ExpiryTimeUTC.ToLocalTime());
+                return BaseUtils.FieldBuilder.Build("", Name, "<;(Passenger)".T(EDTx.MissionItem_Passenger), PassengerMission, " " + "Expires:".T(EDTx.MissionItem_Expires), ExpiryTimeUTC.ToLocalTime());
             }
         }
     }
@@ -210,39 +210,39 @@ namespace EliteDangerousCore.JournalEvents
                 exp = exp.ToLocalTime();
 
             return BaseUtils.FieldBuilder.Build("", LocalisedName,
-                                      "< from ".Tx(this), Faction,
-                                      "System:".Txb(this), DestinationSystem,
-                                      "Station:".Txb(this), DestinationStation,
-                                      "Expiry:".Tx(this), exp,
-                                      "Influence:".Tx(this), Influence,
-                                      "Reputation:".Tx(this), Reputation,
-                                      "Reward:; cr;N0".Tx(this), Reward,
-                                      "; (Wing)".Tx(this), Wing);
+                                      "< from ".T(EDTx.JournalMissionAccepted_from), Faction,
+                                      "System:".T(EDTx.JournalEntry_System), DestinationSystem,
+                                      "Station:".T(EDTx.JournalEntry_Station), DestinationStation,
+                                      "Expiry:".T(EDTx.JournalMissionAccepted_Expiry), exp,
+                                      "Influence:".T(EDTx.JournalMissionAccepted_Influence), Influence,
+                                      "Reputation:".T(EDTx.JournalMissionAccepted_Reputation), Reputation,
+                                      "Reward:; cr;N0".T(EDTx.JournalMissionAccepted_Reward), Reward,
+                                      "; (Wing)".T(EDTx.JournalMissionAccepted_Wing), Wing);
         }
 
         public string MissionDetailedInfo()          // MissionList::FullInfo (DLL uses this), Journal Entry detailed info
         {
-            return BaseUtils.FieldBuilder.Build("Deliver:".Tx(this), CommodityLocalised,
-                                           "Target:".Txb(this), TargetLocalised,
-                                           "Type:".Txb(this), TargetTypeFriendly,
-                                           "Target Faction:".Txb(this), TargetFaction,
-                                           "Target Type:".Tx(this), TargetTypeLocalised,
-                                           "Kill Count:".Tx(this), KillCount,
-                                           "Passengers:".Tx(this), PassengerCount);
+            return BaseUtils.FieldBuilder.Build("Deliver:".T(EDTx.JournalMissionAccepted_Deliver), CommodityLocalised,
+                                           "Target:".T(EDTx.JournalEntry_Target), TargetLocalised,
+                                           "Type:".T(EDTx.JournalEntry_Type), TargetTypeFriendly,
+                                           "Target Faction:".T(EDTx.JournalEntry_TargetFaction), TargetFaction,
+                                           "Target Type:".T(EDTx.JournalMissionAccepted_TargetType), TargetTypeLocalised,
+                                           "Kill Count:".T(EDTx.JournalMissionAccepted_KillCount), KillCount,
+                                           "Passengers:".T(EDTx.JournalMissionAccepted_Passengers), PassengerCount);
         }
 
         public string MissionAuxInfo()          //  MissionList:info, used for MissionList:Info, used in mission panels.
         {
             return BaseUtils.FieldBuilder.Build(
-                                        "Influence:".Tx(this), Influence,
-                                        "Reputation:".Tx(this), Reputation,
-                                        "Deliver:".Tx(this), CommodityLocalised,
-                                        "Target:".Txb(this), TargetLocalised,
-                                        "Type:".Txb(this), TargetTypeFriendly,
-                                        "Target Faction:".Txb(this), TargetFaction,
-                                        "Target Type:".Tx(this), TargetTypeLocalised,
-                                        "Passengers:".Tx(this), PassengerCount,
-                                        "Count:".Tx(this), Count);
+                                        "Influence:".T(EDTx.JournalMissionAccepted_Influence), Influence,
+                                        "Reputation:".T(EDTx.JournalMissionAccepted_Reputation), Reputation,
+                                        "Deliver:".T(EDTx.JournalMissionAccepted_Deliver), CommodityLocalised,
+                                        "Target:".T(EDTx.JournalEntry_Target), TargetLocalised,
+                                        "Type:".T(EDTx.JournalEntry_Type), TargetTypeFriendly,
+                                        "Target Faction:".T(EDTx.JournalEntry_TargetFaction), TargetFaction,
+                                        "Target Type:".T(EDTx.JournalMissionAccepted_TargetType), TargetTypeLocalised,
+                                        "Passengers:".T(EDTx.JournalMissionAccepted_Passengers), PassengerCount,
+                                        "Count:".T(EDTx.JournalMissionAccepted_Count), Count);
 
         }
 
@@ -392,16 +392,16 @@ namespace EliteDangerousCore.JournalEvents
         {
 
             info = BaseUtils.FieldBuilder.Build("", Name,
-                                        "< from ".Txb(this), Faction,
-                                        "Reward:; cr;N0".Txb(this), Reward,
-                                        "Donation:".Txb(this), Donation,
-                                        "System:".Txb(this), DestinationSystem,
-                                        "Station:".Txb(this), DestinationStation);
+                                        "< from ".T(EDTx.JournalEntry_from), Faction,
+                                        "Reward:; cr;N0".T(EDTx.JournalEntry_Reward), Reward,
+                                        "Donation:".T(EDTx.JournalEntry_Donation), Donation,
+                                        "System:".T(EDTx.JournalEntry_System), DestinationSystem,
+                                        "Station:".T(EDTx.JournalEntry_Station), DestinationStation);
 
-            detailed = BaseUtils.FieldBuilder.Build("Commodity:".Txb(this), CommodityLocalised,
-                                            "Target:".Txb(this), TargetLocalised,
-                                            "Type:".Txb(this), TargetTypeLocalised,
-                                            "Target Faction:".Txb(this), TargetFaction);
+            detailed = BaseUtils.FieldBuilder.Build("Commodity:".T(EDTx.JournalEntry_Commodity), CommodityLocalised,
+                                            "Target:".T(EDTx.JournalEntry_Target), TargetLocalised,
+                                            "Type:".T(EDTx.JournalEntry_Type), TargetTypeLocalised,
+                                            "Target Faction:".T(EDTx.JournalEntry_TargetFaction), TargetFaction);
 
             detailed += PermitsList();
             detailed += CommoditiesList();
@@ -414,7 +414,7 @@ namespace EliteDangerousCore.JournalEvents
             if (PermitsAwarded != null && PermitsAwarded.Length > 0)
             {
                 if (pretty)
-                    detailed += "Permits:".Txb(this);
+                    detailed += "Permits:".T(EDTx.JournalEntry_Permits);
 
                 for (int i = 0; i < PermitsAwarded.Length; i++)
                     detailed += ((i > 0) ? "," : "") + PermitsAwarded[i];
@@ -431,7 +431,7 @@ namespace EliteDangerousCore.JournalEvents
             if (CommodityReward != null && CommodityReward.Length > 0)
             {
                 if (pretty)
-                    detailed += "Rewards:".Txb(this);
+                    detailed += "Rewards:".T(EDTx.JournalEntry_Rewards);
                 for (int i = 0; i < CommodityReward.Length; i++)
                 {
                     CommodityRewards c = CommodityReward[i];
@@ -450,7 +450,7 @@ namespace EliteDangerousCore.JournalEvents
             if (MaterialsReward != null && MaterialsReward.Length > 0)
             {
                 if (pretty)
-                    detailed += "Rewards:".Txb(this);
+                    detailed += "Rewards:".T(EDTx.JournalEntry_Rewards);
 
                 for (int i = 0; i < MaterialsReward.Length; i++)
                 {
@@ -554,7 +554,7 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string info, out string detailed)
         {
 
-            info = BaseUtils.FieldBuilder.Build("", Name, "Fine:".Txb(this), Fine);
+            info = BaseUtils.FieldBuilder.Build("", Name, "Fine:".T(EDTx.JournalEntry_Fine), Fine);
             detailed = "";
         }
 
@@ -591,10 +591,10 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = info = BaseUtils.FieldBuilder.Build("Mission name:".Txb(this), Name,
-                                      "From:".Tx(this), OldDestinationSystem,
+            info = info = BaseUtils.FieldBuilder.Build("Mission name:".T(EDTx.JournalEntry_Missionname), Name,
+                                      "From:".T(EDTx.JournalMissionRedirected_From), OldDestinationSystem,
                                       "", OldDestinationStation,
-                                      "To:".Tx(this), NewDestinationSystem,
+                                      "To:".T(EDTx.JournalMissionRedirected_To), NewDestinationSystem,
                                       "", NewDestinationStation);
 
             detailed = "";
@@ -627,7 +627,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = BaseUtils.FieldBuilder.Build("", Name, "Fine:".Txb(this), Fine);
+            info = BaseUtils.FieldBuilder.Build("", Name, "Fine:".T(EDTx.JournalEntry_Fine), Fine);
             detailed = "";
         }
 

@@ -173,19 +173,19 @@ namespace EDDiscovery.UserControls
                     {
                         double dist = he.System.Distance(tpos.X, tpos.Y, tpos.Z);
 
-                        string mesg = "Left";
+                        string mesg = "Left".T(EDTx.UserControlTrippanel_Left);
 
                         if (ji != null)
                         {
                             int jumps = (int)Math.Ceiling(dist / ji.avgsinglejump);
                             if (jumps > 0)
-                                mesg = jumps.ToString() + " " + ((jumps == 1) ? "jump".Tx(this) : "jumps".Tx(this));
+                                mesg = jumps.ToString() + " " + ((jumps == 1) ? "jump".T(EDTx.UserControlTrippanel_jump) : "jumps".T(EDTx.UserControlTrippanel_jumps));
                         }
 
                         line += String.Format("-> {0} {1:N1}ly {2}", name, dist, mesg);
                     }
                     else
-                        line += " -> Target not set".Tx(this,"NoT");
+                        line += " -> Target not set".T(EDTx.UserControlTrippanel_NoT);
                 }
 
                 bool firstdiscovery = (lastfsd != null && (lastfsd.journalEntry as EliteDangerousCore.JournalEvents.JournalFSDJump).EDSMFirstDiscover);
@@ -193,7 +193,7 @@ namespace EDDiscovery.UserControls
                 int line1hpos = coltext;
                 if ( firstdiscovery )
                 {
-                    var i1 = pictureBox.AddImage(new Rectangle(line1hpos, 5, 24, 24), Icons.Controls.firstdiscover, null, "Shows if EDSM indicates your it's first discoverer".Tx(this, "FDEDSM"), false);
+                    var i1 = pictureBox.AddImage(new Rectangle(line1hpos, 5, 24, 24), Icons.Controls.firstdiscover, null, "Shows if EDSM indicates your it's first discoverer".T(EDTx.UserControlTrippanel_FDEDSM), false);
                     line1hpos = i1.pos.Right + Font.ScalePixels(8);
                 }
 
@@ -204,7 +204,7 @@ namespace EDDiscovery.UserControls
 
                 if (showTravelledDistanceToolStripMenuItem.Checked)
                 {
-                    line = String.Format("{0:N1}{1},{2} " + "jumps".Tx(this) + ", {3}", he.TravelledDistance, ((he.TravelledMissingjump > 0) ? "ly*" : "ly"),
+                    line = String.Format("{0:N1}{1},{2} " + "jumps".T(EDTx.UserControlTrippanel_jumps) + ", {3}", he.TravelledDistance, ((he.TravelledMissingjump > 0) ? "ly*" : "ly"),
                                         he.Travelledjumps,
                                         he.TravelledSeconds);
                 }
@@ -289,7 +289,7 @@ namespace EDDiscovery.UserControls
                     if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
                         System.Diagnostics.Process.Start(url);
                     else
-                        ExtendedControls.MessageBoxTheme.Show(FindForm(), string.Format("System {0} unknown to EDSM".Tx(this,"UKN"), he.System.Name));
+                        ExtendedControls.MessageBoxTheme.Show(FindForm(), string.Format("System {0} unknown to EDSM".T(EDTx.UserControlTrippanel_UKN), he.System.Name));
                 }
                 else
                 {

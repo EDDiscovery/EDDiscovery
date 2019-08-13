@@ -56,7 +56,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed) 
         {
-            info = BaseUtils.FieldBuilder.Build("Version:".Txb(this), GameVersion , "Build:".Txb(this), Build , "Part:".Txb(this), Part);
+            info = BaseUtils.FieldBuilder.Build("Version:".T(EDTx.JournalEntry_Version), GameVersion , "Build:".T(EDTx.JournalEntry_Build), Build , "Part:".T(EDTx.JournalEntry_Part), Part);
             detailed = "";
         }
     }
@@ -119,15 +119,15 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = BaseUtils.FieldBuilder.Build("Cmdr ", LoadGameCommander, "Ship:".Txb(this), Ship, "Name:".Txb(this), ShipName, "Ident:".Txb(this), ShipIdent, "Credits:;;N0".Txb(this), Credits);
-            detailed = BaseUtils.FieldBuilder.Build("Mode:".Txb(this), GameMode, "Group:".Txb(this), Group, "Not Landed;Landed".Txb(this), StartLanded, "Fuel Level:;;0.0".Txb(this), FuelLevel, "Capacity:;;0.0".Txb(this), FuelCapacity);
+            info = BaseUtils.FieldBuilder.Build("Cmdr ", LoadGameCommander, "Ship:".T(EDTx.JournalEntry_Ship), Ship, "Name:".T(EDTx.JournalEntry_Name), ShipName, "Ident:".T(EDTx.JournalEntry_Ident), ShipIdent, "Credits:;;N0".T(EDTx.JournalEntry_Credits), Credits);
+            detailed = BaseUtils.FieldBuilder.Build("Mode:".T(EDTx.JournalEntry_Mode), GameMode, "Group:".T(EDTx.JournalEntry_Group), Group, "Not Landed;Landed".T(EDTx.JournalEntry_NotLanded), StartLanded, "Fuel Level:;;0.0".T(EDTx.JournalEntry_FuelLevel), FuelLevel, "Capacity:;;0.0".T(EDTx.JournalEntry_Capacity), FuelCapacity);
         }
 
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
             if (mcl.CashTotal != Credits)
             {
-                mcl.AddEvent(Id, EventTimeUTC, EventTypeID, "Cash total differs, adjustment".Txb(this), Credits - mcl.CashTotal);
+                mcl.AddEvent(Id, EventTimeUTC, EventTypeID, "Cash total differs, adjustment".T(EDTx.JournalEntry_Cashtotaldiffers), Credits - mcl.CashTotal);
             }
         }
 

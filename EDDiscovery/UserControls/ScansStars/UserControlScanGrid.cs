@@ -175,7 +175,7 @@ namespace EDDiscovery.UserControls
             {
                 last_he = he;
                 dataGridViewScangrid.Rows.Clear();
-                SetControlText("No Scan".Tx());
+                SetControlText("No Scan".T(EDTx.NoScan));
                 return;
             }
             else
@@ -186,7 +186,7 @@ namespace EDDiscovery.UserControls
                 {
                     last_he = null;
                     dataGridViewScangrid.Rows.Clear();
-                    SetControlText("No Scan".Tx());
+                    SetControlText("No Scan".T(EDTx.NoScan));
                     return;
                 }
 
@@ -281,7 +281,7 @@ namespace EDDiscovery.UserControls
                             // is the main star?
                             if (sn.ScanData.BodyName.EndsWith(" A", StringComparison.Ordinal))
                             {
-                                bdDist.AppendFormat("Main Star".Tx(this));
+                                bdDist.AppendFormat("Main Star".T(EDTx.UserControlScanGrid_MainStar));
                             }
                             // if not, then tell us its hierarchy leveland distance from main star
                             else if (sn.ScanData.nSemiMajorAxis.HasValue)
@@ -294,42 +294,42 @@ namespace EDDiscovery.UserControls
 
                             // display stellar bodies mass, in sols
                             if (sn.ScanData.nStellarMass.HasValue)
-                                bdDetails.Append("Mass".Tx(this)).Append(": ").Append(sn.ScanData.nStellarMass.Value.ToString("N2")).Append(", ");
+                                bdDetails.Append("Mass".T(EDTx.UserControlScanGrid_Mass)).Append(": ").Append(sn.ScanData.nStellarMass.Value.ToString("N2")).Append(", ");
 
                             // display stellar bodies radius in sols
                             if (sn.ScanData.nRadius.HasValue)
-                                bdDetails.Append("Radius".Tx(this)).Append(": ").Append((sn.ScanData.nRadius.Value / JournalScan.oneSolRadius_m).ToString("N2")).Append(", ");
+                                bdDetails.Append("Radius".T(EDTx.UserControlScanGrid_Radius)).Append(": ").Append((sn.ScanData.nRadius.Value / JournalScan.oneSolRadius_m).ToString("N2")).Append(", ");
 
                             // show the temperature
                             if (sn.ScanData.nSurfaceTemperature.HasValue)
-                                bdDetails.Append("Temperature".Tx(this)).Append(": ").Append((sn.ScanData.nSurfaceTemperature.Value)).Append("K.");
+                                bdDetails.Append("Temperature".T(EDTx.UserControlScanGrid_Temperature)).Append(": ").Append((sn.ScanData.nSurfaceTemperature.Value)).Append("K.");
 
                             // habitable zone for stars - do not display for black holes.
                             if (showStellarZones)
                             {
                                 if (showHabitable && sn.ScanData.HabitableZoneInner != null && sn.ScanData.HabitableZoneOuter != null && sn.ScanData.StarTypeID != EDStar.H)
                                 {
-                                    bdDetails.AppendFormat(Environment.NewLine + "Habitable Zone".Tx(this) + ": {0}-{1}AU ({2}). ", (sn.ScanData.HabitableZoneInner.Value / JournalScan.oneAU_LS).ToString("N2"), (sn.ScanData.HabitableZoneOuter.Value / JournalScan.oneAU_LS).ToString("N2"), sn.ScanData.GetHabZoneStringLs());
+                                    bdDetails.AppendFormat(Environment.NewLine + "Habitable Zone".T(EDTx.UserControlScanGrid_HabitableZone) + ": {0}-{1}AU ({2}). ", (sn.ScanData.HabitableZoneInner.Value / JournalScan.oneAU_LS).ToString("N2"), (sn.ScanData.HabitableZoneOuter.Value / JournalScan.oneAU_LS).ToString("N2"), sn.ScanData.GetHabZoneStringLs());
                                 }
                                 if (showMetalRich && sn.ScanData.MetalRichZoneInner != null && sn.ScanData.MetalRichZoneOuter != null && sn.ScanData.StarTypeID != EDStar.H)
                                 {
-                                    bdDetails.AppendFormat(Environment.NewLine + "Metal Rich bodies".Tx(this) + ": {0}-{1}AU ({2}). ", (sn.ScanData.MetalRichZoneInner.Value / JournalScan.oneAU_LS).ToString("N2"), (sn.ScanData.MetalRichZoneOuter.Value / JournalScan.oneAU_LS).ToString("N2"), sn.ScanData.GetMetalRichZoneStringLs());
+                                    bdDetails.AppendFormat(Environment.NewLine + "Metal Rich bodies".T(EDTx.UserControlScanGrid_MetalRichbodies) + ": {0}-{1}AU ({2}). ", (sn.ScanData.MetalRichZoneInner.Value / JournalScan.oneAU_LS).ToString("N2"), (sn.ScanData.MetalRichZoneOuter.Value / JournalScan.oneAU_LS).ToString("N2"), sn.ScanData.GetMetalRichZoneStringLs());
                                 }
                                 if (showWaterWorlds && sn.ScanData.WaterWrldZoneInner != null && sn.ScanData.WaterWrldZoneOuter != null && sn.ScanData.StarTypeID != EDStar.H)
                                 {
-                                    bdDetails.AppendFormat(Environment.NewLine + "Water worlds".Tx(this) + ": {0}-{1}AU ({2}). ", (sn.ScanData.WaterWrldZoneInner.Value / JournalScan.oneAU_LS).ToString("N2"), (sn.ScanData.WaterWrldZoneOuter.Value / JournalScan.oneAU_LS).ToString("N2"), sn.ScanData.GetWaterWorldZoneStringLs());
+                                    bdDetails.AppendFormat(Environment.NewLine + "Water worlds".T(EDTx.UserControlScanGrid_Waterworlds) + ": {0}-{1}AU ({2}). ", (sn.ScanData.WaterWrldZoneInner.Value / JournalScan.oneAU_LS).ToString("N2"), (sn.ScanData.WaterWrldZoneOuter.Value / JournalScan.oneAU_LS).ToString("N2"), sn.ScanData.GetWaterWorldZoneStringLs());
                                 }
                                 if (showEarthLike && sn.ScanData.EarthLikeZoneInner != null && sn.ScanData.EarthLikeZoneOuter != null && sn.ScanData.StarTypeID != EDStar.H)
                                 {
-                                    bdDetails.AppendFormat(Environment.NewLine + "Earth likes planets".Tx(this) + ": {0}-{1}AU ({2}). ", (sn.ScanData.EarthLikeZoneInner.Value / JournalScan.oneAU_LS).ToString("N2"), (sn.ScanData.EarthLikeZoneOuter.Value / JournalScan.oneAU_LS).ToString("N2"), sn.ScanData.GetEarthLikeZoneStringLs());
+                                    bdDetails.AppendFormat(Environment.NewLine + "Earth likes planets".T(EDTx.UserControlScanGrid_Earthlikesplanets) + ": {0}-{1}AU ({2}). ", (sn.ScanData.EarthLikeZoneInner.Value / JournalScan.oneAU_LS).ToString("N2"), (sn.ScanData.EarthLikeZoneOuter.Value / JournalScan.oneAU_LS).ToString("N2"), sn.ScanData.GetEarthLikeZoneStringLs());
                                 }
                                 if (showAmmonia && sn.ScanData.AmmonWrldZoneInner != null && sn.ScanData.AmmonWrldZoneOuter != null && sn.ScanData.StarTypeID != EDStar.H)
                                 {
-                                    bdDetails.AppendFormat(Environment.NewLine + "Ammonia worlds".Tx(this) + ": {0}-{1}AU ({2}). ", (sn.ScanData.AmmonWrldZoneInner.Value / JournalScan.oneAU_LS).ToString("N2"), (sn.ScanData.AmmonWrldZoneOuter.Value / JournalScan.oneAU_LS).ToString("N2"), sn.ScanData.GetAmmoniaWorldZoneStringLs());
+                                    bdDetails.AppendFormat(Environment.NewLine + "Ammonia worlds".T(EDTx.UserControlScanGrid_Ammoniaworlds) + ": {0}-{1}AU ({2}). ", (sn.ScanData.AmmonWrldZoneInner.Value / JournalScan.oneAU_LS).ToString("N2"), (sn.ScanData.AmmonWrldZoneOuter.Value / JournalScan.oneAU_LS).ToString("N2"), sn.ScanData.GetAmmoniaWorldZoneStringLs());
                                 }
                                 if (showIcyBodies && sn.ScanData.IcyPlanetZoneInner != null && sn.ScanData.IcyPlanetZoneOuter != null && sn.ScanData.StarTypeID != EDStar.H)
                                 {
-                                    bdDetails.AppendFormat(Environment.NewLine + "Habitable Zone".Tx(this) + ": {0}AU-{1} ({2}). ", (sn.ScanData.IcyPlanetZoneInner.Value / JournalScan.oneAU_LS).ToString("N2"), (sn.ScanData.IcyPlanetZoneOuter), sn.ScanData.GetIcyPlanetsZoneStringLs());
+                                    bdDetails.AppendFormat(Environment.NewLine + "Habitable Zone".T(EDTx.UserControlScanGrid_HabitableZone) + ": {0}AU-{1} ({2}). ", (sn.ScanData.IcyPlanetZoneInner.Value / JournalScan.oneAU_LS).ToString("N2"), (sn.ScanData.IcyPlanetZoneOuter), sn.ScanData.GetIcyPlanetsZoneStringLs());
                                 }
                             }
                         }
@@ -339,7 +339,7 @@ namespace EDDiscovery.UserControls
 
                             // is terraformable? If so, prepend it to the body class
                             if (sn.ScanData.Terraformable)
-                                bdClass.Append("Terraformable".Tx(this)).Append(", ");
+                                bdClass.Append("Terraformable".T(EDTx.UserControlScanGrid_Terraformable)).Append(", ");
 
                             // is a planet?...
                             if (sn.ScanData.PlanetClass != null)
@@ -357,7 +357,7 @@ namespace EDDiscovery.UserControls
                                 if (sn.ScanData.PlanetClass != null)
                                     moons++;
 
-                                bdClass.Append(" ").Append("Moon".Tx(this));
+                                bdClass.Append(" ").Append("Moon".T(EDTx.UserControlScanGrid_Moon));
 
                                 // moon distances from center body are measured from in SemiMajorAxis
                                 if (sn.ScanData.nSemiMajorAxis.HasValue)
@@ -373,11 +373,11 @@ namespace EDDiscovery.UserControls
 
                             // display non-stellar bodies radius in earth radiuses
                             if (sn.ScanData.nRadius.HasValue)
-                                bdDetails.Append("Radius".Tx(this)).Append(": ").Append((sn.ScanData.nRadius.Value / JournalScan.oneEarthRadius_m).ToString("N2")).Append(", ");
+                                bdDetails.Append("Radius".T(EDTx.UserControlScanGrid_Radius)).Append(": ").Append((sn.ScanData.nRadius.Value / JournalScan.oneEarthRadius_m).ToString("N2")).Append(", ");
 
                             // show the temperature, both in K and C degrees
                             if (sn.ScanData.nSurfaceTemperature.HasValue)
-                                bdDetails.Append("Temperature".Tx(this)).Append(": ").Append((sn.ScanData.nSurfaceTemperature.Value).ToString("N2")).Append("K, (").Append((sn.ScanData.nSurfaceTemperature.Value - 273).ToString("N2")).Append("C).");
+                                bdDetails.Append("Temperature".T(EDTx.UserControlScanGrid_Temperature)).Append(": ").Append((sn.ScanData.nSurfaceTemperature.Value).ToString("N2")).Append("K, (").Append((sn.ScanData.nSurfaceTemperature.Value - 273).ToString("N2")).Append("C).");
 
                             // print the main atmospheric composition and pressure, if presents
                             if (!String.IsNullOrEmpty(sn.ScanData.Atmosphere) && sn.ScanData.Atmosphere != "None")
@@ -398,20 +398,20 @@ namespace EDDiscovery.UserControls
                                     Gg = " (G: " + g.Value.ToString("N1") + ")";
                                 }
 
-                                bdDetails.Append(Environment.NewLine).Append("Landable".Tx(this)).Append(Gg).Append(". ");
+                                bdDetails.Append(Environment.NewLine).Append("Landable".T(EDTx.UserControlScanGrid_Landable)).Append(Gg).Append(". ");
                                 overlays.landable = true;
                             }
 
                             // tell us that there is some volcanic activity
                             if (sn.ScanData.Volcanism != null)
                             {
-                                bdDetails.Append(Environment.NewLine).Append("Geological activity".Tx(this)).Append(": ").Append(sn.ScanData.Volcanism).Append(". ");
+                                bdDetails.Append(Environment.NewLine).Append("Geological activity".T(EDTx.UserControlScanGrid_Geologicalactivity)).Append(": ").Append(sn.ScanData.Volcanism).Append(". ");
                                 overlays.volcanism = true;
                             }
 
                             if (sn.ScanData.Mapped)
                             {
-                                bdDetails.Append(Environment.NewLine).Append("Surface mapped".Tx(this)).Append(". ");
+                                bdDetails.Append(Environment.NewLine).Append("Surface mapped".T(EDTx.UserControlScanGrid_Surfacemapped)).Append(". ");
                                 overlays.mapped = true;
                             }
                             
@@ -433,7 +433,7 @@ namespace EDDiscovery.UserControls
 
                                 if (ret.Length > 0 && showMaterials)
                                 {
-                                    bdDetails.Append(Environment.NewLine).Append("This body contains: ".Tx(this, "BC")).Append(ret);
+                                    bdDetails.Append(Environment.NewLine).Append("This body contains: ".T(EDTx.UserControlScanGrid_BC)).Append(ret);
                                 }
                                                                 
                                 ReportJumponium(ret);
@@ -452,7 +452,7 @@ namespace EDDiscovery.UserControls
                                         if (showBelts)
                                         {
                                             // is a belt
-                                            bdDetails.Append(Environment.NewLine).Append("Belt: ".Tx(this, "Belt"));
+                                            bdDetails.Append(Environment.NewLine).Append("Belt: ".T(EDTx.UserControlScanGrid_Belt));
                                             var RingName = sn.ScanData.Rings[r].Name;
                                             bdDetails.Append(JournalScan.StarPlanetRing.DisplayStringFromRingClass(sn.ScanData.Rings[r].RingClass)).Append(" ");
                                             bdDetails.Append((sn.ScanData.Rings[r].InnerRad / JournalScan.oneLS_m).ToString("N2")).Append("ls to ").Append((sn.ScanData.Rings[r].OuterRad / JournalScan.oneLS_m).ToString("N2")).Append("ls. ");
@@ -463,7 +463,7 @@ namespace EDDiscovery.UserControls
                                         if (showRings)
                                         {
                                             // is a ring
-                                            bdDetails.Append(Environment.NewLine).Append("Ring: ".Tx(this, "Ring"));
+                                            bdDetails.Append(Environment.NewLine).Append("Ring: ".T(EDTx.UserControlScanGrid_Ring));
                                             var RingName = sn.ScanData.Rings[r].Name;
                                             bdDetails.Append(JournalScan.StarPlanetRing.DisplayStringFromRingClass(sn.ScanData.Rings[r].RingClass)).Append(" ");
                                             bdDetails.Append((sn.ScanData.Rings[r].InnerRad / JournalScan.oneLS_m).ToString("N2")).Append("ls to ").Append((sn.ScanData.Rings[r].OuterRad / JournalScan.oneLS_m).ToString("N2")).Append("ls. ");
@@ -479,7 +479,7 @@ namespace EDDiscovery.UserControls
                         if (showValues)
                         {
                             var value = sn.ScanData.EstimatedValue;
-                            bdDetails.Append(Environment.NewLine).Append("Value".Tx(this)).Append(" ").Append(value.ToString("N0"));
+                            bdDetails.Append(Environment.NewLine).Append("Value".T(EDTx.UserControlScanGrid_Value)).Append(" ").Append(value.ToString("N0"));
                         }
 
                         // pick an image
@@ -502,16 +502,16 @@ namespace EDDiscovery.UserControls
 
                 if (isGreenSystem)
                 {
-                    toolStripProgressBar.ToolTipText = "This is a green system, as it has all existing jumponium materials available!".Tx(this,"GS");
+                    toolStripProgressBar.ToolTipText = "This is a green system, as it has all existing jumponium materials available!".T(EDTx.UserControlScanGrid_GS);
                     toolStripStatusGreen.Visible = true;
                 }
                 else if (!isGreenSystem)
                 {
-                    toolStripProgressBar.ToolTipText = toolStripProgressBar.Value + " jumponium materials found in system.".Tx("JS");
+                    toolStripProgressBar.ToolTipText = toolStripProgressBar.Value + " jumponium materials found in system.".T(EDTx.UserControlScanGrid_JS);
                 }
 
                 // set a meaningful title for the controller            
-                SetControlText(string.Format("Scan Summary for {0}: {1} stars; {2} planets ({3} terrestrial, {4} gas giants), {5} moons".Tx(this), scannode.system.Name, stars, planets, terrestrial, gasgiants, moons));
+                SetControlText(string.Format("Scan Summary for {0}: {1} stars; {2} planets ({3} terrestrial, {4} gas giants), {5} moons".T(EDTx.UserControlScanGrid_ScanSummaryfor), scannode.system.Name, stars, planets, terrestrial, gasgiants, moons));
                 if (firstdisplayedrow >= 0 && firstdisplayedrow < dataGridViewScangrid.RowCount)
                     dataGridViewScangrid.FirstDisplayedScrollingRowIndex = firstdisplayedrow;
 

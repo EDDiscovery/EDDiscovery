@@ -191,7 +191,7 @@ namespace EDDiscovery.UserControls
 
             if ( rows != null && rows.Length > 1 )
             {
-                if (ExtendedControls.MessageBoxTheme.Show(FindForm(), string.Format(("Do you really want to delete {0} bookmarks?" + Environment.NewLine + "Confirm or Cancel").Tx(this,"CFN"), rows.Length), "Warning".Tx(), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+                if (ExtendedControls.MessageBoxTheme.Show(FindForm(), string.Format(("Do you really want to delete {0} bookmarks?" + Environment.NewLine + "Confirm or Cancel").T(EDTx.UserControlBookmarks_CFN), rows.Length), "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
                 {
                     updating = true;
                     foreach (int r in rows)
@@ -209,7 +209,7 @@ namespace EDDiscovery.UserControls
             {
                 BookmarkClass bk = (BookmarkClass)currentedit.Tag;
 
-                if (ExtendedControls.MessageBoxTheme.Show(FindForm(), string.Format(("Do you really want to delete the bookmark for {0}" + Environment.NewLine + "Confirm or Cancel").Tx(this,"CF"),  bk.Name ), "Warning".Tx(), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+                if (ExtendedControls.MessageBoxTheme.Show(FindForm(), string.Format(("Do you really want to delete the bookmark for {0}" + Environment.NewLine + "Confirm or Cancel").T(EDTx.UserControlBookmarks_CF),  bk.Name ), "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
                 {
                     updating = true;
                     GlobalBookMarkList.Instance.Delete(bk);
@@ -338,7 +338,7 @@ namespace EDDiscovery.UserControls
             EliteDangerousCore.EDSM.EDSMClass edsm = new EDSMClass();
             
             if (!edsm.ShowSystemInEDSM(rightclickbookmark.StarName, null))
-                ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable".Tx(this,"SysU"));
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable".T(EDTx.UserControlBookmarks_SysU));
 
             this.Cursor = Cursors.Default;
         }

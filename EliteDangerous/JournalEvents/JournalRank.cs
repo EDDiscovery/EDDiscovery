@@ -90,12 +90,12 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = BaseUtils.FieldBuilder.Build("Combat:".Tx(this), Combat.HasValue ? Combat.ToString() : null,
-                                      "Trade:".Tx(this), Trade.HasValue ? Trade.ToString() : null,
-                                      "Exploration:".Tx(this), Explore.HasValue ? Explore.ToString() : null,
-                                      "Empire:".Tx(this), Empire.HasValue ? Empire.ToString() : null,
-                                      "Federation:".Tx(this), Federation.HasValue ? Federation.ToString() : null,
-                                      "CQC:".Tx(this), CQC.HasValue ? CQC.ToString() : null);
+            info = BaseUtils.FieldBuilder.Build("Combat:".T(EDTx.JournalPromotion_Combat), Combat.HasValue ? Combat.ToString() : null,
+                                      "Trade:".T(EDTx.JournalPromotion_Trade), Trade.HasValue ? Trade.ToString() : null,
+                                      "Exploration:".T(EDTx.JournalPromotion_Exploration), Explore.HasValue ? Explore.ToString() : null,
+                                      "Empire:".T(EDTx.JournalPromotion_Empire), Empire.HasValue ? Empire.ToString() : null,
+                                      "Federation:".T(EDTx.JournalPromotion_Federation), Federation.HasValue ? Federation.ToString() : null,
+                                      "CQC:".T(EDTx.JournalPromotion_CQC), CQC.HasValue ? CQC.ToString() : null);
             detailed = "";
         }
     }

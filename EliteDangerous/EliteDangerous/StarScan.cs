@@ -174,6 +174,38 @@ namespace EliteDangerousCore
                 return false;
             }
 
+            public bool IsBodyInFilter(string[] filternames, bool checkchildren)
+            {
+                if (IsBodyInFilter(filternames))
+                    return true;
+
+                if (checkchildren)
+                {
+                    foreach (var body in Descendants)
+                    {
+                        if (body.IsBodyInFilter(filternames))
+                            return true;
+                    }
+                }
+                return false;
+            }
+
+            public bool IsBodyInFilter(string[] filternames)    // stars/bodies use the xID type, others use the type
+            {
+                if (filternames.Contains("All"))
+                    return true;
+                string name = type.ToString();      // star etc..
+                if (scandata != null)
+                {
+                    if (type == ScanNodeType.star)
+                        name = scandata.StarTypeID.ToString();
+                    else if (type == ScanNodeType.body)
+                        name = scandata.PlanetTypeID.ToString();
+                }
+
+                return filternames.Contains(name, StringComparer.InvariantCultureIgnoreCase);
+            }
+
             public IEnumerable<ScanNode> Descendants
             {
                 get
@@ -479,9 +511,16 @@ namespace EliteDangerousCore
                 if (lvl == 0)
                     sublvtype = starscannodetype;
                 else if (isbeltcluster)
-                    sublvtype = lvl == 1 ? ScanNodeType.belt : ScanNodeType.beltcluster;
-                else if (isring && lvl == elements.Count - 1)
+                {
+                    if (lvl == 1)
+                        sublvtype = ScanNodeType.belt;          // A Belt
+                    else
+                        sublvtype = ScanNodeType.beltcluster;   // A Belt Cluster 1
+                }
+                else if (isring && lvl == elements.Count - 1)       // detailed scans of rings.. placed under planets
+                {
                     sublvtype = ScanNodeType.ring;
+                }
                 else
                     sublvtype = ScanNodeType.body;
 

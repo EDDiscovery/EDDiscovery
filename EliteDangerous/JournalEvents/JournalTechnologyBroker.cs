@@ -79,7 +79,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed) 
         {
-            info = BaseUtils.FieldBuilder.Build("Type:".Txb(this), BrokerType);
+            info = BaseUtils.FieldBuilder.Build("Type:".T(EDTx.JournalEntry_Type), BrokerType);
 
             if (ItemsUnlocked != null)
             {

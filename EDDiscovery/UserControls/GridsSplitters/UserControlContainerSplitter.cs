@@ -292,7 +292,7 @@ namespace EDDiscovery.UserControls
             sc.Name = "SC-" + lv;
             sc.Controls[0].Name = lv + "-P1";       // names used for debugging this complicated beast!
             sc.Controls[1].Name = lv + "-P2";
-            toolTip.SetToolTip(sc, "Right click on splitter bar to change orientation\nor split or merge panels".Tx(this,"RC"));
+            toolTip.SetToolTip(sc, "Right click on splitter bar to change orientation\nor split or merge panels".T(EDTx.UserControlContainerSplitter_RC));
             return sc;
         }
         
@@ -384,11 +384,11 @@ namespace EDDiscovery.UserControls
             {
                 currentsplitter = sender as SplitContainer;
                 bool v = currentsplitter.Orientation == Orientation.Vertical;
-                toolStripOrientation.Text = v ? "Change to Horizontal Split".Tx(this) : "Change to Vertical Split".Tx(this);
-                toolStripSplitPanel1.Text = v ? "Split Left Panel".Tx(this) : "Split Top Panel".Tx(this);
-                toolStripSplitPanel2.Text = v ? "Split Right Panel".Tx(this) : "Split Bottom Panel".Tx(this);
-                toolStripMergePanel1.Text = v ? "Merge Left Panel".Tx(this) : "Merge Top Panel".Tx(this);
-                toolStripMergePanel2.Text = v ? "Merge Right Panel".Tx(this) : "Merge Bottom Panel".Tx(this);
+                toolStripOrientation.Text = v ? "Change to Horizontal Split".T(EDTx.UserControlContainerSplitter_ChangetoHorizontalSplit) : "Change to Vertical Split".T(EDTx.UserControlContainerSplitter_ChangetoVerticalSplit);
+                toolStripSplitPanel1.Text = v ? "Split Left Panel".T(EDTx.UserControlContainerSplitter_SplitLeftPanel) : "Split Top Panel".T(EDTx.UserControlContainerSplitter_SplitTopPanel);
+                toolStripSplitPanel2.Text = v ? "Split Right Panel".T(EDTx.UserControlContainerSplitter_SplitRightPanel) : "Split Bottom Panel".T(EDTx.UserControlContainerSplitter_SplitBottomPanel);
+                toolStripMergePanel1.Text = v ? "Merge Left Panel".T(EDTx.UserControlContainerSplitter_MergeLeftPanel) : "Merge Top Panel".T(EDTx.UserControlContainerSplitter_MergeTopPanel);
+                toolStripMergePanel2.Text = v ? "Merge Right Panel".T(EDTx.UserControlContainerSplitter_MergeRightPanel) : "Merge Bottom Panel".T(EDTx.UserControlContainerSplitter_MergeBottomPanel);
                 
                 toolStripSplitPanel1.Enabled = !(currentsplitter.Panel1.Controls[0] is SplitContainer);
                 toolStripSplitPanel2.Enabled = !(currentsplitter.Panel2.Controls[0] is SplitContainer);

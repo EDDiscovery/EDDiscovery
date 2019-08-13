@@ -182,8 +182,8 @@ namespace EDDiscovery.UserControls
 
                 int count = mcurrent.Count();
 
-                cColName.HeaderText = (count > 0) ? (count.ToStringInvariant() + (count > 1 ? " Missions".Tx(this,"MPlural") : " Mission".Tx(this,"MSingular"))) : "Name".Tx(this,"Name");
-                cColValue.HeaderText = (totalReward != 0) ? string.Format("Value (cr):\n{0:N0}".Tx(this,"Value") ,totalReward) : "Value (cr)".Tx(this,"ValueN");
+                cColName.HeaderText = (count > 0) ? (count.ToStringInvariant() + (count > 1 ? " Missions".T(EDTx.UserControlMissions_MPlural) : " Mission".T(EDTx.UserControlMissions_MSingular))) : "Name".T(EDTx.UserControlMissions_Name);
+                cColValue.HeaderText = (totalReward != 0) ? string.Format("Value (cr):\n{0:N0}".T(EDTx.UserControlMissions_Value) ,totalReward) : "Value (cr)".T(EDTx.UserControlMissions_ValueN);
 
                 //                cColValue.HeaderText = (count>0) ? (count.ToStringInvariant() + (count > 1 ? " Missions" : " Mission") + (totalReward>0 ? $", {totalReward:N0}" : "")) : "Value";
 
@@ -233,7 +233,7 @@ namespace EDDiscovery.UserControls
                 }
 
                 labelValue.Visible = (value != 0);
-                labelValue.Text = "Value: ".Tx(this,"ValueC") + value.ToString("N0") + " C:" + completed.ToString("N0") + " A:" + abandonded.ToString("N0") + " F:" + failed.ToString("N0");
+                labelValue.Text = "Value: ".T(EDTx.UserControlMissions_ValueC) + value.ToString("N0") + " C:" + completed.ToString("N0") + " A:" + abandonded.ToString("N0") + " F:" + failed.ToString("N0");
 
                 //System.Diagnostics.Debug.WriteLine("Prev " + sortorderprev + " " + sortcolprev.Index);
                 dataGridViewPrevious.Sort(sortcolprev, (sortorderprev == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);

@@ -46,7 +46,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed) 
         {
-            info = BaseUtils.FieldBuilder.Build("",Name_Localised , "Num:".Txb(this), Count, "Reward:".Tx(this), Reward);
+            info = BaseUtils.FieldBuilder.Build("",Name_Localised , "Num:".T(EDTx.JournalEntry_Num), Count, "Reward:".T(EDTx.JournalSearchAndRescue_Reward), Reward);
             detailed = "";
         }
     }

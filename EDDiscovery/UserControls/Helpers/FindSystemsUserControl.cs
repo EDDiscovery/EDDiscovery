@@ -42,6 +42,7 @@ namespace EDDiscovery.UserControls
         private string DbY { get { return UserControlCommonBase.DBName(displaynumber, ucdbname, "Y"); } }
         private string DbZ { get { return UserControlCommonBase.DBName(displaynumber, ucdbname, "Z"); } }
         private string DbCube { get { return UserControlCommonBase.DBName(displaynumber, ucdbname, "Cube"); } }
+        private string DbEVS { get { return UserControlCommonBase.DBName(displaynumber, ucdbname, "ExcludeVisitedSystems"); } }
 
         public FindSystemsUserControl()
         {
@@ -60,6 +61,7 @@ namespace EDDiscovery.UserControls
             numberBoxDoubleY.Value = SQLiteConnectionUser.GetSettingDouble(DbY, 0);
             numberBoxDoubleZ.Value = SQLiteConnectionUser.GetSettingDouble(DbZ, 0);
             checkBoxCustomCube.Checked = SQLiteConnectionUser.GetSettingBool(DbCube, false);
+            extCheckBoxExcludeVisitedSystems.Checked = SQLiteConnectionUser.GetSettingBool(DbEVS, false);
 
             if (textBoxSystemName.Text.Length > 0)
                 SetXYZ();
@@ -95,6 +97,7 @@ namespace EDDiscovery.UserControls
             SQLiteConnectionUser.PutSettingDouble(DbZ, numberBoxDoubleZ.Value);
             SQLiteConnectionUser.PutSettingString(DbStar, textBoxSystemName.Text);
             SQLiteConnectionUser.PutSettingBool(DbCube, checkBoxCustomCube.Checked);
+            SQLiteConnectionUser.PutSettingBool(DbEVS, extCheckBoxExcludeVisitedSystems.Checked);
         }
 
         private void buttonExtNamesClick(object sender, EventArgs e)
@@ -136,33 +139,46 @@ namespace EDDiscovery.UserControls
             {
                 List<Tuple<ISystem, double>> listsphere = task.Result;
 
-                if (!spherical && listsphere != null)       // if cubed, need to filter them out
+                if ( listsphere != null )
                 {
-                    ISystem centre = listsphere.Find(x => x.Item2 <= 1)?.Item1;     // find centre, i.e less 1 ly distance
-                    if (centre != null)
+                    bool excvisited = extCheckBoxExcludeVisitedSystems.Checked;
+
+                    if (!spherical)       // if cubed, need to filter them out
                     {
-                        //System.Diagnostics.Debug.WriteLine("From " + listsphere.Count());
-                        //foreach (var x in listsphere) System.Diagnostics.Debug.WriteLine("<" + x.Item1.ToString());
+                        ISystem centre = listsphere.Find(x => x.Item2 <= 1)?.Item1;     // find centre, i.e less 1 ly distance
+                        if (centre != null)
+                        {
+                            //System.Diagnostics.Debug.WriteLine("From " + listsphere.Count());
+                            //foreach (var x in listsphere) System.Diagnostics.Debug.WriteLine("<" + x.Item1.ToString());
 
-                        double mindistsq = numberBoxMinRadius.Value * numberBoxMinRadius.Value;     // mindist is the square line distance, per stardistance use
+                            double mindistsq = numberBoxMinRadius.Value * numberBoxMinRadius.Value;     // mindist is the square line distance, per stardistance use
 
-                        listsphere = (from s in listsphere
-                                      where
-                                        (s.Item1.X - centre.X) * (s.Item1.X - centre.X) + (s.Item1.Y - centre.Y) * (s.Item1.Y - centre.Y) + (s.Item1.Z - centre.Z) * (s.Item1.Z - centre.Z) >= mindistsq &&
-                                        Math.Abs(s.Item1.X - centre.X) <= numberBoxMaxRadius.Value &&
-                                        Math.Abs(s.Item1.Y - centre.Y) <= numberBoxMaxRadius.Value &&
-                                        Math.Abs(s.Item1.Z - centre.Z) <= numberBoxMaxRadius.Value
-                                      select s).ToList();
+                            listsphere = (from s in listsphere
+                                          where
+                                            (s.Item1.X - centre.X) * (s.Item1.X - centre.X) + (s.Item1.Y - centre.Y) * (s.Item1.Y - centre.Y) + (s.Item1.Z - centre.Z) * (s.Item1.Z - centre.Z) >= mindistsq &&
+                                            Math.Abs(s.Item1.X - centre.X) <= numberBoxMaxRadius.Value &&
+                                            Math.Abs(s.Item1.Y - centre.Y) <= numberBoxMaxRadius.Value &&
+                                            Math.Abs(s.Item1.Z - centre.Z) <= numberBoxMaxRadius.Value &&
+                                            (!excvisited || discoveryform.history.FindByName(s.Item1.Name) == null)
+                                          select s).ToList();
 
-                        //System.Diagnostics.Debug.WriteLine("To " + listsphere.Count());
-                        //foreach (var x in listsphere) System.Diagnostics.Debug.WriteLine(">" + x.Item1.ToString());
+                            //System.Diagnostics.Debug.WriteLine("To " + listsphere.Count());
+                            //foreach (var x in listsphere) System.Diagnostics.Debug.WriteLine(">" + x.Item1.ToString());
+                        }
                     }
-                    else
-                        listsphere = null;
+                    else if ( excvisited )  // if exc visited, need to filter them out
+                    {
+                        listsphere = (from s in listsphere
+                                      where discoveryform.history.FindByName(s.Item1.Name) == null
+                                      select s).ToList();
+                    }
                 }
 
                 if (listsphere == null)
-                    ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "EDSM did not return any data on " + textBoxSystemName.Text + Environment.NewLine + "It may be a galactic object that it does not know about", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                {
+                    string resp = String.Format("EDSM did not return any data on {0}\nIt may be a galactic object that it does not know about".T(EDTx.FindSystemsUserControl_EDSM), textBoxSystemName.Text);
+                    ExtendedControls.MessageBoxTheme.Show(this.FindForm(), resp, "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
 
                 Cursor = Cursors.Default;
                 ReturnSystems(listsphere);
@@ -181,7 +197,7 @@ namespace EDDiscovery.UserControls
                 ReturnSystems((from x in list select new Tuple<ISystem, double>(x, x.Distance(sys))).ToList());
             }
             else
-                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Cannot find system ".Tx(this) + textBoxSystemName.Text, "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Cannot find system ".T(EDTx.FindSystemsUserControl_Cannotfindsystem) + textBoxSystemName.Text, "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
         private void buttonExtDBClick(object sender, EventArgs e)
@@ -199,10 +215,15 @@ namespace EDDiscovery.UserControls
 
                 Cursor = Cursors.Default;
 
-                ReturnSystems((from x in distlist select new Tuple<ISystem, double>(x.Value, x.Value.Distance(sys))).ToList());
+                var res = (from x in distlist select new Tuple<ISystem, double>(x.Value, x.Value.Distance(sys))).ToList();
+
+                if ( extCheckBoxExcludeVisitedSystems.Checked )
+                    res = (from x in res where discoveryform.history.FindByName(x.Item1.Name) == null select x).ToList();
+
+                ReturnSystems(res);
             }
             else
-                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Cannot find system ".Tx(this) + textBoxSystemName.Text, "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Cannot find system ".T(EDTx.FindSystemsUserControl_Cannotfindsystem) + textBoxSystemName.Text, "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
         private void buttonExtExcel_Click(object sender, EventArgs e)

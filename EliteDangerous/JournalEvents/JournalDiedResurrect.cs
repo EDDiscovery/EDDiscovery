@@ -81,10 +81,10 @@ namespace EliteDangerousCore.JournalEvents
             {
                 foreach (Killer k in Killers)
                 {
-                    info = info.AppendPrePad(string.Format("{0} in ship type {1} rank {2}".Txb(this,"Died") , k.Name_Localised , k.Ship , k.Rank) , ", ");
+                    info = info.AppendPrePad(string.Format("{0} in ship type {1} rank {2}".T(EDTx.JournalEntry_Died) , k.Name_Localised , k.Ship , k.Rank) , ", ");
                 }
 
-                info = "Killed by ".Txb(this) + info;
+                info = "Killed by ".T(EDTx.JournalEntry_Killedby) + info;
             }
 
             detailed = "";
@@ -102,7 +102,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = "Boom!".Txb(this);
+            info = "Boom!".T(EDTx.JournalEntry_Boom);
             detailed = "";
         }
     }
@@ -135,7 +135,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = BaseUtils.FieldBuilder.Build("Option:".Txb(this), Option, "Cost:; cr;N0".Txb(this), Cost, ";Bankrupt".Txb(this), Bankrupt);
+            info = BaseUtils.FieldBuilder.Build("Option:".T(EDTx.JournalEntry_Option), Option, "Cost:; cr;N0".T(EDTx.JournalEntry_Cost), Cost, ";Bankrupt".T(EDTx.JournalEntry_Bankrupt), Bankrupt);
             detailed = "";
         }
     }

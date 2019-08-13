@@ -53,7 +53,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = BaseUtils.FieldBuilder.Build("Cmdr ", Name, "Starting Package:".Txb(this), Package);
+            info = BaseUtils.FieldBuilder.Build("Cmdr ", Name, "Starting Package:".T(EDTx.JournalEntry_StartingPackage), Package);
             detailed = "";
         }
     }

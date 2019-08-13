@@ -73,7 +73,7 @@ namespace EDDiscovery.UserControls
 
                 CompositeButton cb = CompositeButton.QuickInit(
                             EDDiscovery.Icons.Controls.Selector_Background,
-                            (i == 0) ? "NO ADD ONS!".Tx(this) : i.ToString() + " Add Ons".Tx(this),
+                            (i == 0) ? "NO ADD ONS!".T(EDTx.UserControlPanelSelector_NOADDONS) : i.ToString() + " Add Ons".T(EDTx.UserControlPanelSelector_AddOns),
                             EDDTheme.Instance.GetFont,
                             (i == 0) ? Color.Red : (EDDTheme.Instance.TextBlockColor.GetBrightness() < 0.1 ? Color.AntiqueWhite : EDDTheme.Instance.TextBlockColor),
                             Color.Transparent,
@@ -85,8 +85,8 @@ namespace EDDiscovery.UserControls
                 panelVScroll.Controls.Add(cb);
                 cb.Name = "Add on";
                 cb.Tag = null;
-                toolTip.SetToolTip(cb.Buttons[0], "Click to add or remove Add Ons".Tx(this, "TTA"));
-                toolTip.SetToolTip(cb.Decals[0], "Add ons are essential additions to your EDD experience!".Tx(this, "TTB"));
+                toolTip.SetToolTip(cb.Buttons[0], "Click to add or remove Add Ons".T(EDTx.UserControlPanelSelector_TTA));
+                toolTip.SetToolTip(cb.Decals[0], "Add ons are essential additions to your EDD experience!".T(EDTx.UserControlPanelSelector_TTB));
 
                 EDDTheme.Instance.ApplyStd(cb);       // need to theme up the button
                 cb.Size = new Size(width, cb.FindMaxSubControlArea(0, padbot).Height);
@@ -113,8 +113,8 @@ namespace EDDiscovery.UserControls
                 cb.SuspendLayout();
                 panelVScroll.Controls.Add(cb);
                 cb.Tag = pi.PopoutID;
-                toolTip.SetToolTip(cb.Buttons[0], "Pop out in a new window".Tx(this, "PP1"));
-                toolTip.SetToolTip(cb.Buttons[1], "Open as a new menu tab".Tx(this, "MT1"));
+                toolTip.SetToolTip(cb.Buttons[0], "Pop out in a new window".T(EDTx.UserControlPanelSelector_PP1));
+                toolTip.SetToolTip(cb.Buttons[1], "Open as a new menu tab".T(EDTx.UserControlPanelSelector_MT1));
                 toolTip.SetToolTip(cb.Decals[0], pi.Description);
 
                 EDDTheme.Instance.ApplyStd(cb);

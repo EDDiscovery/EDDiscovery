@@ -59,7 +59,7 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string info, out string detailed)
         {
 
-            info = BaseUtils.FieldBuilder.Build("Reward:; cr;N0".Txb(this), Reward, "< from faction ".Txb(this), PayeeFaction, "Against ".Txb(this), VictimFaction);
+            info = BaseUtils.FieldBuilder.Build("Reward:; cr;N0".T(EDTx.JournalEntry_Reward), Reward, "< from faction ".T(EDTx.JournalEntry_fromfaction), PayeeFaction, "Against ".T(EDTx.JournalEntry_Against), VictimFaction);
             detailed = "";
         }
     }

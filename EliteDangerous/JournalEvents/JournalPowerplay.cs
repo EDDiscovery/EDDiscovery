@@ -42,7 +42,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed) 
         {
-            info = BaseUtils.FieldBuilder.Build("", Power, "Rank:".Txb(this), Rank, "Merits:".Txb(this), Merits, "Votes:".Txb(this), Votes, "Pledged:".Txb(this), TimePledgedString);
+            info = BaseUtils.FieldBuilder.Build("", Power, "Rank:".T(EDTx.JournalEntry_Rank), Rank, "Merits:".T(EDTx.JournalEntry_Merits), Merits, "Votes:".T(EDTx.JournalEntry_Votes), Votes, "Pledged:".T(EDTx.JournalEntry_Pledged), TimePledgedString);
             detailed = "";
         }
     }
@@ -65,7 +65,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = BaseUtils.FieldBuilder.Build("", Power, "Type:".Txb(this), Type_Localised, "Count:".Txb(this), Count);
+            info = BaseUtils.FieldBuilder.Build("", Power, "Type:".T(EDTx.JournalEntry_Type), Type_Localised, "Count:".T(EDTx.JournalEntry_Count), Count);
             detailed = "";
         }
     }
@@ -84,7 +84,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = BaseUtils.FieldBuilder.Build("From Power:".Txb(this), FromPower, "To Power:".Txb(this), ToPower);
+            info = BaseUtils.FieldBuilder.Build("From Power:".T(EDTx.JournalEntry_FromPower), FromPower, "To Power:".T(EDTx.JournalEntry_ToPower), ToPower);
             detailed = "";
         }
     }
@@ -107,7 +107,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = BaseUtils.FieldBuilder.Build("", Power, "Type:".Txb(this), Type_Localised, "Count:".Txb(this), Count);
+            info = BaseUtils.FieldBuilder.Build("", Power, "Type:".T(EDTx.JournalEntry_Type), Type_Localised, "Count:".T(EDTx.JournalEntry_Count), Count);
             detailed = "";
         }
     }
@@ -131,7 +131,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = BaseUtils.FieldBuilder.Build("", Power, "Cost:; cr;N0".Txb(this), Cost);
+            info = BaseUtils.FieldBuilder.Build("", Power, "Cost:; cr;N0".T(EDTx.JournalEntry_Cost), Cost);
             detailed = "";
         }
     }
@@ -189,7 +189,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = BaseUtils.FieldBuilder.Build("", Power, "Amount:; cr;N0".Txb(this), Amount);
+            info = BaseUtils.FieldBuilder.Build("", Power, "Amount:; cr;N0".T(EDTx.JournalEntry_Amount), Amount);
             detailed = "";
         }
     }
@@ -210,7 +210,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = BaseUtils.FieldBuilder.Build("", Power, "System:".Txb(this), System, "Votes:".Txb(this), Votes);
+            info = BaseUtils.FieldBuilder.Build("", Power, "System:".T(EDTx.JournalEntry_System), System, "Votes:".T(EDTx.JournalEntry_Votes), Votes);
             detailed = "";
         }
     }
@@ -233,7 +233,7 @@ namespace EliteDangerousCore.JournalEvents
 
             if (Systems != null)
             {
-                info += ", Systems:".Txb(this);
+                info += ", Systems:".T(EDTx.JournalEntry_Systems);
 
                 bool comma = false;
                 foreach (string s in Systems)

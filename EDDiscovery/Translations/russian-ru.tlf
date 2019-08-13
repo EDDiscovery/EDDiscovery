@@ -1,7 +1,4 @@
-﻿//Translated by Jay (jayjay.ru)
-
-SafeModeForm.buttonPositions: "Reset Window Positions" => "Сбросить положение окна"
-Warning: "Warning" => "Внимание"
+﻿Warning: "Warning" => "Внимание"
 Today: "Today" => "Сегодня"
 24h: "24h" => "24 ч."
 7days: "7 days" => "7 дн."
@@ -11,8 +8,6 @@ Cancel: "Cancel" => "Отмена"
 Delete: "Delete" => "Удалить"
 Campaign: "Campaign" => "Кампания"
 NoScan: "No Scan" => "Нет сканов"
-Ship: "Ship" => "Корабль"
-
 Systemnotknown: "System not known" => "Система неизвестна"
 Travel: "Travel" => "Полет"
 GameTime: "Game Time" => "Время в игре"
@@ -24,8 +19,24 @@ Off: "Off" => "Выкл"
 Unknown: "Unknown" => "Неизвестно"
 Information: "Information" => "Информация"
 NoPos: "No Pos" => "Нет положения"
-Station: "Station" => "Станция"
 
+SECTION StartUp
+
+.DUPLOAD: "EDDiscovery is already running. Launch anyway?" @
+
+SECTION SafeModeForm
+
+SafeModeForm: "EDDiscovery Safe Mode" => "EDDiscovery. Безопасный режим"
+.buttonCancel: "Cancel" => "Отмена"
+.buttonNormal: "Run" => "Запуск"
+.buttonDeleteSystemDB: "Delete/Rebuild System DB" => "Удалить/перестроить базу данных систем"
+.buttonDbs: "Move Databases" => "Переместить базу данных"
+.buttonLang: "Reset Language to English" => "Сбросить язык"
+.button1: "Remove all Action Packs" => "Удалить все Action Packs"
+.buttonRemoveDLLs: "Remove all Extension DLLs" => "Удалить все dll дополнений"
+.buttonResetTabs: "Reset Tabs, Remove PopOuts" => "Сбросить вкладки, удалить отдельные окна"
+.buttonPositions: "Reset Window Positions" => "Сбросить положение окна"
+.buttonResetTheme: "Reset Theme" => "Сбросить тему"
 
 SECTION PopOutInfo
 
@@ -109,7 +120,6 @@ SECTION PopOutInfo
 .PanelSelector.Title: "+" @
 .Search.Title: "Search" => "Поиск"
 .Search.Description: "Search" => "Поиск"
-
 .CaptainsLog.Title: "Captain's Log" => "Журнал капитана"
 .CaptainsLog.Description: "Captain's Log - notes on your travels" => "Заметки о путешествиях"
 .Surveyor.Title: "Surveyor" => "Топограф"
@@ -119,9 +129,8 @@ SECTION PopOutInfo
 
 SECTION EDDiscoveryForm
 
-.ConfirmSyncToEDSM: "You have disabled sync to EDSM for this commander.  Are you sure you want to send unsynced events to EDSM?"=> "У этого командира отключена синхронизация с EDSM. Вы действительно хотите отправить несинхронизированные события в EDSM?"
+.ConfirmSyncToEDSM: "You have disabled sync to EDSM for this commander.  Are you sure you want to send unsynced events to EDSM?" => "У этого командира отключена синхронизация с EDSM. Вы действительно хотите отправить несинхронизированные события в EDSM?"
 .ConfirmSyncToEDSMCaption: "Confirm EDSM sync" => "Подтвердить синхронизацию с EDSM"
-
 .toolsToolStripMenuItem: "&Tools" => "Инструменты"
 .toolsToolStripMenuItem.settingsToolStripMenuItem: "Settings" => "Настройки"
 .toolsToolStripMenuItem.show2DMapsToolStripMenuItem: "Show &2D maps" => "2D-карта"
@@ -161,8 +170,7 @@ SECTION EDDiscoveryForm
 .tabControlMain.ToolTip: "Right click to add/remove tabs, Left click drag to reorder" => "Правая кнопка мыши — добавить/удалить вкладку, перетаскивание с зажатой левой кнопкой — сортировка"
 .comboBoxCustomProfiles.ToolTip: "Use to select new profile or edit profile settings" => "Выберите новый профиль или измените настройки профиля"
 .comboBoxCommander.ToolTip: "Select the commander to view" => "Выбрать командира для просмотра"
-//.buttonExtEDSMSync.ToolTip: "Synchronize with EDSM, To and From" => "Синхронизировать с EDSM в обоих направлениях"
-.buttonExtEDSMSync.ToolTip: "Send any unsynced logs to EDSM" => "Синхронизировать с EDSM в обоих направлениях"
+.buttonExtEDSMSync.ToolTip: "Synchronize with EDSM, To and From" => "Синхронизировать с EDSM в обоих направлениях"
 .buttonExtPopOut.ToolTip: "Click to select a pop out panel to display" => "Создать отдельную панель"
 .buttonExtEditAddOns.ToolTip: "Edit Add-Ons" => "Изменить дополнения"
 .buttonExtManageAddOns.ToolTip: "Manage Add-Ons" => "Управление дополнениями"
@@ -225,6 +233,10 @@ SECTION EDDiscoveryForm
 .buttonExt3dmap: "3D" @
 .adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.fetchLogsAgainToolStripMenuItem: "Fetch Logs Again" => "Еще раз получить логи"
 .adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.fetchStarDataAgainToolStripMenuItem: "Fetch Star Data Again" => "Еще раз получить данные о системах"
+.WSE: "Web server enabled" @
+.WSF: "Web server failed to start" @
+.WSERR: "Web server disabled due to incorrect folder or missing zip file" @
+.WSD: "*** Web server is disabled ***" @
 
 SECTION EDDiscoveryController
 
@@ -353,7 +365,6 @@ SECTION FindSystemsUserControl
 
 SECTION ConditionFilterForm
 
-.ConditionFilterForm: "Journal: Filter out fields" => "Журнал: фильтры полей"
 ConditionFilterForm: "Journal: Filter out fields" => "Журнал: фильтры полей"
 .panelOK.buttonCancel: "Cancel" => "Отмена"
 .panelOK.buttonOK: "OK" @
@@ -402,7 +413,7 @@ SECTION AddOnManagerForm
 
 SECTION AssignTravelLogSystemForm
 
-AssignTravelLogSystemForm: "Assign System" => "Назначить систему журнала полетов"
+AssignTravelLogSystemForm: "AssignTravelLogSystemForm" => "Назначить систему журнала полетов"
 .label1: "Travel Log System Name:" => "Название в журнале полетов:"
 .label2: "Date Visited:" => "Дата посещения:"
 .label6: "EDSM Link:" => "Ссылка на EDSM"
@@ -416,29 +427,28 @@ AssignTravelLogSystemForm: "Assign System" => "Назначить систему
 SECTION CommanderForm
 
 CommanderForm: "CommanderForm" => "Командир"
-.groupBoxCustomJournal: "Journal Related Information" => "Журнал"
-.labelCN: "Commander Name:" => "Имя командира"
-.labelJL: "Journal Location:" => "Путь к файлам журнала"
-.buttonExtBrowse: "Browse" => "Обзор"
-.groupBoxCustomEDSM: "EDSM Information (optional)" => "EDSM (необязательно)"
-.labelEDSMN: "EDSM Name:" => "Имя пользователя EDSM"
-.labelEDSMAPI: "EDSM API Key:" => "Api-ключ EDSM"
-.checkBoxCustomEDSMTo: "Sync to EDSM" => "Синхронизация с EDSM"
-.checkBoxCustomEDSMFrom: "Sync From EDSM" => "Входящая синхронизация из EDSM"
-.groupBoxCustomEDDN: "EDDN" @
-.checkBoxCustomEDDNTo: "Send Event Information to EDDN" => "Отправлять информацию о событиях в EDDN"
+.groupBoxCustomInara: "Inara Information (optional)" => "Inara (необязательно)"
+.checkBoxCustomInara: "Sync to Inara" => "Синхронизация с Inara"
+.labelINARAN: "Inara Name:" => "Имя пользователя Inara"
+.labelInaraAPI: "Inara API Key:" => "Api-ключ Inara"
+.groupBoxCustomEGO: "Elite Galaxy Online Information (optional)" => "Elite Galaxy Online (необязательно)"
+.checkBoxEGOSync: "Sync to EGO" => "Синхронизация с EGO"
+.labelEGON: "EGO Name:" => "Имя пользовател EGO"
+.labelEGOAPI: "EGO API Key:" => "Api-ключ EGO"
 .groupBoxCustomCAPI: "Frontier Companion API (optional)" => "Frontier Companion API (необязательно)"
 .checkBoxCAPIEnable: "Enable Login" => "Включить вход"
 .labelCAPIPassword: "Login Password:" => "Логин пароль"
-.label1: "CAPI is not supported for the current release" => "В этой версии программы CAPI не поддерживается"
-.groupBoxCustomEGO: "Elite Galaxy Online Information (optional)" => "Elite Galaxy Online (необязательно)"
-.labelEGON: "EGO Name:" => "Имя пользовател EGO"
-.labelEGOAPI: "EGO API Key:" => "Api-ключ EGO"
-.checkBoxEGOSync: "Sync to EGO" => "Синхронизация с EGO"
-.groupBoxCustomInara: "Inara Information (optional)" => "Inara (необязательно)"
-.labelINARAN: "Inara Name:" => "Имя пользователя Inara"
-.labelInaraAPI: "Inara API Key:" => "Api-ключ Inara"
-.checkBoxCustomInara: "Sync to Inara" => "Синхронизация с Inara"
+.groupBoxCustomEDDN: "EDDN" @
+.checkBoxCustomEDDNTo: "Send Event Information to EDDN" => "Отправлять информацию о событиях в EDDN"
+.groupBoxCustomEDSM: "EDSM Information (optional)" => "EDSM (необязательно)"
+.checkBoxCustomEDSMFrom: "Sync From EDSM" => "Входящая синхронизация из EDSM"
+.checkBoxCustomEDSMTo: "Sync to EDSM" => "Синхронизация с EDSM"
+.labelEDSMN: "EDSM Name:" => "Имя пользователя EDSM"
+.labelEDSMAPI: "EDSM API Key:" => "Api-ключ EDSM"
+.groupBoxCustomJournal: "Journal Related Information" => "Журнал"
+.buttonExtBrowse: "Browse" => "Обзор"
+.labelCN: "Commander Name:" => "Имя командира"
+.labelJL: "Journal Location:" => "Путь к файлам журнала"
 .buttonCancel: "Cancel" => "Отмена"
 .buttonOK: "OK" @
 .label_index: "Commander Configure" => "Настройки командира"
@@ -474,6 +484,16 @@ CommanderForm: "CommanderForm" => "Командир"
 .Abandon: "You have entered text in the CAPI login or password fields, do you want to abandon CAPI credential check?" => "В поле логина или пароля CAPI есть текст, вы действительно хотите отменить проверку учетных данных CAPI?"
 .Confirm: "Confirm" => "Подтвердить"
 .LF: "Select folder where Journal*.log files are stored by Frontier in" => "Выберите папку, в которой хранятся файлы журнала *.log Frontier"
+.textBoxDefaultZoom.ToolTip: "Set the zoom level of the map. 1 is normal" @
+.radioButtonHistorySelection: "History Grid Selection" @
+.radioButtonHistorySelection.ToolTip: "Select history entry as opening location" @
+.radioButtonCentreHome: "Home System" @
+.radioButtonCentreHome.ToolTip: "Select home system as opening location" @
+.panel_defaultmapcolor.ToolTip: "New travel entries get this colour on the map" @
+.labelMapCol: "Default Map Color" @
+.labelZoom: "Default Zoom" @
+.labelOpenOn: "Open Centred On" @
+.HomeSys: "Home System:" @
 
 SECTION ExportForm
 
@@ -521,7 +541,7 @@ GalaxySectorSelect: "GalaxySectorSelect" => "Выбор секторов Гал�
 .RS: "You have removed sectors!\r\nThis will require the DB to be cleaned of entries, which will take time\r\nConfirm you wish to do this?" => "Вы удалили сектора!\r\nЭто потребует очистки БД, что займет время.\r\nВы действительно хотите это сделать?"
 .GALSELEX: "ED Discovery downloads star data from EDSM/EDDB which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed" => "Чтобы предоставить вам больше информации, ED Discovery может загрузить данные о системах из EDSM/EDDB. Выберите, сколько данных вы хотите загрузить. Чем большую часть Галактики вы выберете, тем больше места потребуется для хранения."
 .Select: "Select:" => "Выберите:"
-.GALSELEN: "Enter number to jump to or near to" @
+.GALSELEN: "Select the data set" @
 .PresstoAccept: "Press to Accept" => "Нажмите для подтверждения"
 .PresstoCancel: "Press to Cancel" => "Нажмите для отмены"
 .GALSELTitle: "Select EDSM Galaxy Data" => "Выберите EDSM Galaxy Data"
@@ -651,67 +671,7 @@ SECTION UserControlForm
 .panel_close.ToolTip: "Close" => "Закрыть"
 .panel_taskbaricon.ToolTip: "Toggle show taskbar icon for this window" => "Показать значок окна на панели задач"
 .panel_showtitle.ToolTip: "Toggle title visibility for this window when transparent" => "Видимость заголовка окна во время прозрачности"
-//.panel_transparent.ToolTip: "Toggle window transparency thru four settings\r\nOff - normal window\r\nOn (T) - transparent with controls active when mouse not inside window\r\nOn (Tc) - transparent with control active, to activate hold down the activate key\r\nOn (Tf) - fully transparent and inert, to activate hold down the activate key\r\n\r\nSee the settings page for configuring which key is the activate key.  \r\nMouse must be within the boundaries of the window and the key held down for\r\n500ms approx.\r\n\r\n\r\n" => "Переключить прозрачность окна в один из четырех режимов\r\nВыкл - обычное окно\r\nВкл (T) - прозрачное, элементы управления активны, когда мышь не находится внутри окна\r\nВкл (Tс) - прозрачное, элементы управления активны, когда нажата клавиша активации\r\nВкл (Tf) - полностью прозрачно и инертно, для активации удерживайте нажатой клавишу активации\r\n\r\nКлавиша активации выбирается на вкладке настроек  \r\nМышь должна находиться в границах окна, а клавиша должна удерживаться в течение\r\nприблизительно 500 мс.\r\n\r\n\r\n"
-.panel_transparent.ToolTip: "resources.GetString("panel_transparent.ToolTip"));" => "Переключить прозрачность окна в один из четырех режимов\r\nВыкл - обычное окно\r\nВкл (T) - прозрачное, элементы управления активны, когда мышь не находится внутри окна\r\nВкл (Tс) - прозрачное, элементы управления активны, когда нажата клавиша активации\r\nВкл (Tf) - полностью прозрачно и инертно, для активации удерживайте нажатой клавишу активации\r\n\r\nКлавиша активации выбирается на вкладке настроек  \r\nМышь должна находиться в границах окна, а клавиша должна удерживаться в течение\r\nприблизительно 500 мс.\r\n\r\n\r\n"
-
-
-
-
-SECTION FormMap
-
-.textboxFrom: "Sol" @
-.textboxFrom.ToolTip: "Enter system to centre on" => "Введите систему для центрирования"
-.toolStripButtonGoBackward: "Go Backward in Travel History" => "Назад по истории полетов"
-.toolStripButtonGoForward: "Go Forward in Travel History" => "Вперед по истории полетов"
-.toolStripButtonLastKnownPosition: "Go to latest position from travel history" => "Последняя запись в истории полетов"
-.toolStripButtonAutoForward: "Go Forward Automatically on Jump" => "Автопереход после прыжка"
-.toolStripDropDownButtonVisitedStars.drawLinesBetweenStarsWithPositionToolStripMenuItem: "Draw lines between stars with position" @
-.toolStripDropDownButtonVisitedStars.drawADiscOnStarsWithPositionToolStripMenuItem: "Draw a disc on stars with position" @
-.toolStripDropDownButtonVisitedStars.useWhiteForDiscsInsteadOfAssignedMapColourToolStripMenuItem: "Use White for discs instead of assigned map colour" @
-.toolStripDropDownButtonFilterStars: "Filter Stars" => "Фильтр звезд"
-.toolStripDropDownButtonFilterStars.showStarstoolStripMenuItem: "Show All Stars" => "Показать все звезды"
-.toolStripDropDownButtonFilterStars.showStationsToolStripMenuItem: "Show Stations" => "Показать станции"
-.toolStripDropDownButtonNameStars.showDiscsToolStripMenuItem: "Show Discs" => "Показать диски"
-.toolStripDropDownButtonNameStars.showNamesToolStripMenuItem: "Show Names" => "Показать названия"
-.toolStripDropDownButtonNameStars.enableColoursToolStripMenuItem: "Display Colours" => "Показать цвета"
-.toolStripDropDownButtonBookmarks.showBookmarksToolStripMenuItem: "Show Bookmarks" => "Показать закладки"
-.toolStripDropDownButtonBookmarks.showNoteMarksToolStripMenuItem: "Show Note marks" => "Показать примечания"
-.toolStripDropDownButtonBookmarks.newRegionBookmarkToolStripMenuItem: "New Region Bookmark" => "Новая закладка для региона"
-.toolStripButtonGrid: "Grid" @
-.toolStripButtonFineGrid: "Grid" @
-.toolStripButtonCoords: "Grid" @
-.toolStripButtonPerspective: "Perspective" => "Перспектива"
-.toolStripButtonEliteMovement: "Grid" @
-.dropdownMapNames: "Select Maps" => "Выбрать карту"
-.dropdownFilterDate: "Filter by Expedition or date" => "Фильтр по экспедиции или по дате"
-.toolStripButtonHelp: "Help" => "Помощь"
-.toolStripDropDownRecord.recordToolStripMenuItem: "Record (F5)" => "Запись (F5)"
-.toolStripDropDownRecord.recordStepToStepToolStripMenuItem: "Record Step (F6)" => "Записать шаг (F6)"
-.toolStripDropDownRecord.newRecordStepToolStripMenuItem: "New Record Step (F7)" => "Записать новый шаг (F7)"
-.toolStripDropDownRecord.pauseRecordToolStripMenuItem: "Pause Record (F8)" => "Пауза (F8)"
-.toolStripDropDownRecord.toolStripMenuItemClearRecording: "Clear Recording" => "Очистить запись"
-.toolStripDropDownRecord.playbackToolStripMenuItem: "Playback (F9)" => "Воспроизвести (F9)"
-.toolStripDropDownRecord.saveToFileToolStripMenuItem: "Save flight to file" => "Сохранить запись полета в файл"
-.toolStripDropDownRecord.LoadFileToolStripMenuItem: "Load flight from file" => "Загрузить запись полета из файла"
-.dotSelectedSystemCoords.ToolTip: "Centre map on this system" => "Центрировать карту на этой системе"
-.dotSystemCoords.ToolTip: "Centre map on this system" => "Центрировать карту на системе"
-.buttonCenter.ToolTip: "Center map on system" => "Центрировать карту на этой системе"
-.buttonLookAt.ToolTip: "Look at System" => "Осмотреть систему"
-.viewOnEDSMToolStripMenuItem: "View on EDSM" => "Открыть в EDSM"
-
-SECTION SafeModeForm
-
-SafeModeForm.buttonDbs: "Move Databases" => "Переместить базу данных"
-SafeModeForm.buttonNormal: "Run" => "Запуск"
-SafeModeForm.buttonPositions: "Reset Window Positions" => "Сбросить положение окна"
-SafeModeForm.buttonResetTheme: "Reset Theme" => "Сбросить тему"
-SafeModeForm.buttonCancel: "Cancel" => "Отмена"
-SafeModeForm.buttonDeleteSystemDB: "Delete/Rebuild System DB" => "Удалить/перестроить базу данных систем"
-SafeModeForm.buttonResetTabs: "Reset Tabs, Remove PopOuts" => "Сбросить вкладки, удалить отдельные окна"
-SafeModeForm.buttonRemoveDLLs: "Remove all Extension DLLs" => "Удалить все dll дополнений"
-SafeModeForm.button1: "Remove all Action Packs" => "Удалить все Action Packs"
-SafeModeForm.buttonLang: "Reset Language to English" => "Сбросить язык"
-SafeModeForm: "EDDiscovery Safe Mode" => "EDDiscovery. Безопасный режим"
+.panel_transparent.ToolTip: "Toggle window transparency thru four settings\r\nOff - normal window\r\nOn (T) - transparent with controls active when mouse not inside window\r\nOn (Tc) - transparent with control active, to activate hold down the activate key\r\nOn (Tf) - fully transparent and inert, to activate hold down the activate key\r\n\r\nSee the settings page for configuring which key is the activate key.  \r\nMouse must be within the boundaries of the window and the key held down for\r\n500ms approx.\r\n\r\n\r\n" @
 
 include translation-russian-uc.tlp
 

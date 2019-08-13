@@ -38,7 +38,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed) 
         {
-            info = BaseUtils.FieldBuilder.Build("System:".Txb(this), System, "Cost:; cr;N0".Txb(this), Cost);
+            info = BaseUtils.FieldBuilder.Build("System:".T(EDTx.JournalEntry_System), System, "Cost:; cr;N0".T(EDTx.JournalEntry_Cost), Cost);
             detailed = "";
         }
     }
@@ -67,24 +67,25 @@ namespace EliteDangerousCore.JournalEvents
 
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
-            if (Systems != null && Systems.Length != 0)
-                mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Systems.Length + " systems", TotalEarnings);
+            int count = (Systems?.Length ?? 0) + (Discovered?.Length ?? 0);
+
+            mcl.AddEvent(Id, EventTimeUTC, EventTypeID, count + " systems", TotalEarnings);
         }
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = BaseUtils.FieldBuilder.Build("Amount:; cr;N0".Txb(this), BaseValue, "Bonus:; cr;N0".Txb(this), Bonus,
-                                "Total:; cr;N0".Tx(this), TotalEarnings);
+            info = BaseUtils.FieldBuilder.Build("Amount:; cr;N0".T(EDTx.JournalEntry_Amount), BaseValue, "Bonus:; cr;N0".T(EDTx.JournalEntry_Bonus), Bonus,
+                                "Total:; cr;N0".T(EDTx.JournalSellExplorationData_Total), TotalEarnings);
             detailed = "";
             if (Systems != null && Systems.Length != 0)
             {
-                detailed += "Scanned:".Txb(this);
+                detailed += "Scanned:".T(EDTx.JournalEntry_Scanned);
                 foreach (string s in Systems)
                     detailed += s + " ";
             }
             if (Discovered != null && Discovered.Length != 0)
             {
-                detailed += System.Environment.NewLine + "Discovered:".Txb(this);
+                detailed += System.Environment.NewLine + "Discovered:".T(EDTx.JournalEntry_Discovered);
                 foreach (string s in Discovered)
                     detailed += s + " ";
             }
@@ -116,14 +117,14 @@ namespace EliteDangerousCore.JournalEvents
 
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
-            if (Systems != null)
-                mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Systems.Length + " systems", TotalEarnings);
+            int count = (Systems?.Length ?? 0);
+            mcl.AddEvent(Id, EventTimeUTC, EventTypeID, count + " systems", TotalEarnings);
         }
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = BaseUtils.FieldBuilder.Build("Amount:; cr;N0".Txb(this), BaseValue, "Bonus:; cr;N0".Txb(this), Bonus,
-                                "Total:; cr;N0".Tx(this), TotalEarnings);
+            info = BaseUtils.FieldBuilder.Build("Amount:; cr;N0".T(EDTx.JournalEntry_Amount), BaseValue, "Bonus:; cr;N0".T(EDTx.JournalEntry_Bonus), Bonus,
+                                "Total:; cr;N0".T(EDTx.JournalMultiSellExplorationData_Total), TotalEarnings);
             detailed = "";
             if (Systems != null)
             {

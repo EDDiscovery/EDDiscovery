@@ -384,35 +384,35 @@ namespace EDDiscovery.UserControls
             // trilaterationToolStripMenuItem
             // 
             this.trilaterationToolStripMenuItem.Name = "trilaterationToolStripMenuItem";
-            this.trilaterationToolStripMenuItem.Size = new System.Drawing.Size(276, 22);
+            this.trilaterationToolStripMenuItem.Size = new System.Drawing.Size(275, 22);
             this.trilaterationToolStripMenuItem.Text = "System on Trilateration Panel";
             this.trilaterationToolStripMenuItem.Click += new System.EventHandler(this.trilaterationToolStripMenuItem_Click);
             // 
             // wantedSystemsToolStripMenuItem
             // 
             this.wantedSystemsToolStripMenuItem.Name = "wantedSystemsToolStripMenuItem";
-            this.wantedSystemsToolStripMenuItem.Size = new System.Drawing.Size(276, 22);
+            this.wantedSystemsToolStripMenuItem.Size = new System.Drawing.Size(275, 22);
             this.wantedSystemsToolStripMenuItem.Text = "Wanted Systems on Trilateration Panel";
             this.wantedSystemsToolStripMenuItem.Click += new System.EventHandler(this.wantedSystemsToolStripMenuItem_Click);
             // 
             // bothToolStripMenuItem
             // 
             this.bothToolStripMenuItem.Name = "bothToolStripMenuItem";
-            this.bothToolStripMenuItem.Size = new System.Drawing.Size(276, 22);
+            this.bothToolStripMenuItem.Size = new System.Drawing.Size(275, 22);
             this.bothToolStripMenuItem.Text = "Both of the above";
             this.bothToolStripMenuItem.Click += new System.EventHandler(this.bothToolStripMenuItem_Click);
             // 
             // routeToolStripMenuItem
             // 
             this.routeToolStripMenuItem.Name = "routeToolStripMenuItem";
-            this.routeToolStripMenuItem.Size = new System.Drawing.Size(276, 22);
+            this.routeToolStripMenuItem.Size = new System.Drawing.Size(275, 22);
             this.routeToolStripMenuItem.Text = "Expedition Panel";
             this.routeToolStripMenuItem.Click += new System.EventHandler(this.routeToolStripMenuItem_Click);
             // 
             // explorationPanelToolStripMenuItem
             // 
             this.explorationPanelToolStripMenuItem.Name = "explorationPanelToolStripMenuItem";
-            this.explorationPanelToolStripMenuItem.Size = new System.Drawing.Size(276, 22);
+            this.explorationPanelToolStripMenuItem.Size = new System.Drawing.Size(275, 22);
             this.explorationPanelToolStripMenuItem.Text = "Exploration Panel";
             this.explorationPanelToolStripMenuItem.Click += new System.EventHandler(this.explorationPanelToolStripMenuItem_Click);
             // 
@@ -532,13 +532,13 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom.HideScrollBar = true;
             this.vScrollBarCustom.LargeChange = 0;
-            this.vScrollBarCustom.Location = new System.Drawing.Point(854, 0);
+            this.vScrollBarCustom.Location = new System.Drawing.Point(851, 0);
             this.vScrollBarCustom.Maximum = -1;
             this.vScrollBarCustom.Minimum = 0;
             this.vScrollBarCustom.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom.Name = "vScrollBarCustom";
-            this.vScrollBarCustom.Size = new System.Drawing.Size(13, 580);
+            this.vScrollBarCustom.Size = new System.Drawing.Size(16, 580);
             this.vScrollBarCustom.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom.SmallChange = 1;
             this.vScrollBarCustom.TabIndex = 4;
@@ -567,7 +567,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewTravel.Name = "dataGridViewTravel";
             this.dataGridViewTravel.RowHeadersWidth = 100;
             this.dataGridViewTravel.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewTravel.Size = new System.Drawing.Size(844, 580);
+            this.dataGridViewTravel.Size = new System.Drawing.Size(841, 580);
             this.dataGridViewTravel.TabIndex = 3;
             this.dataGridViewTravel.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewTravel_CellClick);
             this.dataGridViewTravel.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewTravel_CellDoubleClick);

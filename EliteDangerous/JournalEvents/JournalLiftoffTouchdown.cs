@@ -33,7 +33,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed) 
         {
-            info = JournalFieldNaming.RLat(Latitude) + " " + JournalFieldNaming.RLong(Longitude) + BaseUtils.FieldBuilder.Build(", NPC Controlled;".Txb(this), PlayerControlled);
+            info = JournalFieldNaming.RLat(Latitude) + " " + JournalFieldNaming.RLong(Longitude) + BaseUtils.FieldBuilder.Build(", NPC Controlled;".T(EDTx.JournalEntry_NPCControlled), PlayerControlled);
             detailed = "";
         }
     }
@@ -53,7 +53,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = JournalFieldNaming.RLat(Latitude) + " " + JournalFieldNaming.RLong(Longitude) + BaseUtils.FieldBuilder.Build(", NPC Controlled;".Txb(this), PlayerControlled);
+            info = JournalFieldNaming.RLat(Latitude) + " " + JournalFieldNaming.RLong(Longitude) + BaseUtils.FieldBuilder.Build(", NPC Controlled;".T(EDTx.JournalEntry_NPCControlled), PlayerControlled);
             detailed = "";
         }
     }

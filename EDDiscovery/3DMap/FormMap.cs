@@ -2349,8 +2349,8 @@ namespace EDDiscovery
 
             f.Add(new ExtendedControls.ConfigurableForm.Entry("From", typeof(ExtendedControls.ExtDateTimePicker), filterStartTime.ToStringUS(), new Point(10, 40), new Size(width - 20, 24), null));
             f.Add(new ExtendedControls.ConfigurableForm.Entry("To", typeof(ExtendedControls.ExtDateTimePicker), filterEndTime.ToStringUS(), new Point(10, 80), new Size(width - 20, 24), null));
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("OK", typeof(ExtendedControls.ExtButton), "OK".Tx(), new Point(width - 20 - 80, 120), new Size(80, 24), ""));
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("Cancel", typeof(ExtendedControls.ExtButton), "Cancel".Tx(), new Point(width - 200, 120), new Size(80, 24), ""));
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("OK", typeof(ExtendedControls.ExtButton), "OK".T(EDTx.OK), new Point(width - 20 - 80, 120), new Size(80, 24), ""));
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("Cancel", typeof(ExtendedControls.ExtButton), "Cancel".T(EDTx.Cancel), new Point(width - 200, 120), new Size(80, 24), ""));
 
             f.Trigger += (dialogname, controlname, tag) =>
             {
@@ -2361,7 +2361,7 @@ namespace EDDiscovery
                 }
             };
 
-            DialogResult res = f.ShowDialogCentred(this.FindForm(), this.FindForm().Icon, "Time".Tx(this, "TimeSel"));
+            DialogResult res = f.ShowDialogCentred(this.FindForm(), this.FindForm().Icon, "Time".T(EDTx.Time));
 
             if (res == DialogResult.OK)
             {

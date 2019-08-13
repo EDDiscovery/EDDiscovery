@@ -122,13 +122,13 @@ namespace EDDiscovery.UserControls
         {
             if (currentRoute == null)
             {
-                DisplayText("Please set a route, by right clicking".Tx(this,"NoRoute"), "");
+                DisplayText("Please set a route, by right clicking".T(EDTx.UserControlRouteTracker_NoRoute), "");
                 return;
             }
 
             if (currentRoute.Systems.Count == 0)
             {
-                DisplayText(currentRoute.Name, "Route contains no waypoints".Tx(this,"NoWay"));
+                DisplayText(currentRoute.Name, "Route contains no waypoints".T(EDTx.UserControlRouteTracker_NoWay));
                 return;
             }
 
@@ -136,7 +136,7 @@ namespace EDDiscovery.UserControls
 
             if (!cursys.HasCoordinate)
             {
-                topline = String.Format("Unknown location".Tx(this,"Unk"));
+                topline = String.Format("Unknown location".T(EDTx.UserControlRouteTracker_Unk));
                 bottomline = "";
             }
             else
@@ -145,7 +145,7 @@ namespace EDDiscovery.UserControls
 
                 if (closest == null)  // if null, no systems found.. uh oh
                 {
-                    topline = String.Format("No systems in route have known co-ords".Tx(this,"NoCo"));
+                    topline = String.Format("No systems in route have known co-ords".T(EDTx.UserControlRouteTracker_NoCo));
                     bottomline = "";
                 }
                 else
@@ -162,14 +162,14 @@ namespace EDDiscovery.UserControls
                     {
                         int jumps = (int)Math.Ceiling(routedistance / ji.avgsinglejump);
                         if (jumps > 0)
-                            topline += ", " + jumps.ToString() + " " + ((jumps == 1) ? "jump".Tx(this,"J1") : "jumps".Tx(this, "JS"));
+                            topline += ", " + jumps.ToString() + " " + ((jumps == 1) ? "jump".T(EDTx.UserControlRouteTracker_J1) : "jumps".T(EDTx.UserControlRouteTracker_JS));
 
                         jumps = (int)Math.Ceiling(closest.disttowaypoint / ji.avgsinglejump);
 
                         if (jumps > 0)
-                            jumpmsg = ", " + jumps.ToString() + " " + ((jumps == 1) ? "jump".Tx(this, "J1") : "jumps".Tx(this, "JS"));
+                            jumpmsg = ", " + jumps.ToString() + " " + ((jumps == 1) ? "jump".T(EDTx.UserControlRouteTracker_J1) : "jumps".T(EDTx.UserControlRouteTracker_JS));
                         else
-                            jumpmsg = " No Ship FSD Information".Tx(this,"NoFSD");
+                            jumpmsg = " No Ship FSD Information".T(EDTx.UserControlRouteTracker_NoFSD);
                     }
 
                     string wpposmsg = closest.system.Name;
@@ -179,16 +179,16 @@ namespace EDDiscovery.UserControls
 
                     if (closest.deviation < 0)        // if not on path
                     {
-                        bottomline += closest.cumulativewpdist == 0 ? "From Last WP ".Tx(this,"FL") : "To First WP ".Tx(this,"TF");
+                        bottomline += closest.cumulativewpdist == 0 ? "From Last WP ".T(EDTx.UserControlRouteTracker_FL) : "To First WP ".T(EDTx.UserControlRouteTracker_TF);
                         bottomline += wpposmsg + jumpmsg;
                     }
                     else
                     {
-                        topline += String.Format(", Left {0:N1}ly".Tx(this,"LF"), distleft);
-                        bottomline += String.Format("To WP {0} ".Tx(this,"ToWP"), closest.waypoint + 1);
+                        topline += String.Format(", Left {0:N1}ly".T(EDTx.UserControlRouteTracker_LF), distleft);
+                        bottomline += String.Format("To WP {0} ".T(EDTx.UserControlRouteTracker_ToWP), closest.waypoint + 1);
                         bottomline += wpposmsg + jumpmsg;
                         if ( showDeviationFromRouteToolStripMenuItem.Checked)
-                            bottomline += String.Format(", Dev {0:N1}ly".Tx(this,"Dev"), closest.deviation);
+                            bottomline += String.Format(", Dev {0:N1}ly".T(EDTx.UserControlRouteTracker_Dev), closest.deviation);
                     }
 
                     //System.Diagnostics.Debug.WriteLine("T:" + topline + Environment.NewLine + "B:" + bottomline);
@@ -256,8 +256,8 @@ namespace EDDiscovery.UserControls
 
             var routes = SavedRouteClass.GetAllSavedRoutes();
             var routenames = (from x in routes select x.Name).ToList();
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("Route", "", new Point(10, 40), new Size(400, 24), "Select route".Tx(this), routenames));
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("Cancel", typeof(ExtendedControls.ExtButton), "Cancel".Tx(), new Point(410-100, 80), new Size(100, 24), "Press to Cancel".Tx(this)));
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("Route", "", new Point(10, 40), new Size(400, 24), "Select route".T(EDTx.UserControlRouteTracker_Selectroute), routenames));
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("Cancel", typeof(ExtendedControls.ExtButton), "Cancel".T(EDTx.Cancel), new Point(410-100, 80), new Size(100, 24), "Press to Cancel".T(EDTx.UserControlRouteTracker_PresstoCancel)));
             f.Trigger += (dialogname, controlname, tag) =>
             {
                 if (controlname != "Route")
@@ -266,7 +266,7 @@ namespace EDDiscovery.UserControls
                     f.DialogResult = DialogResult.OK;
                 f.Close();
             };
-            if ( f.ShowDialogCentred(this.FindForm(), this.FindForm().Icon,  "Enter route".Tx(this)) == DialogResult.OK )
+            if ( f.ShowDialogCentred(this.FindForm(), this.FindForm().Icon,  "Enter route".T(EDTx.UserControlRouteTracker_Enterroute)) == DialogResult.OK )
             {
                 string routename = f.Get("Route");
                 currentRoute = routes.Find(x => x.Name.Equals(routename));       // not going to be null, but consider the upset.

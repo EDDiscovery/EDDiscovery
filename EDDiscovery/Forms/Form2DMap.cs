@@ -66,7 +66,7 @@ namespace EDDiscovery
             startDate = new DateTime(2010, 1, 1);
             if ( !AddImages() )
             {
-                ExtendedControls.MessageBoxTheme.Show(this, "No maps available".Tx(this),"Warning".Tx(), MessageBoxButtons.OK,MessageBoxIcon.Exclamation);
+                ExtendedControls.MessageBoxTheme.Show(this, "No maps available".T(EDTx.Form2DMap_Nomapsavailable),"Warning".T(EDTx.Warning), MessageBoxButtons.OK,MessageBoxIcon.Exclamation);
                 Close();
                 return;
             }
@@ -81,11 +81,11 @@ namespace EDDiscovery
             toolStripComboBoxTime.Items.AddRange(new string[] {
             "Distant Worlds Expedition",
             "FGE Expedition",
-            "Last Week".Tx(this),
-            "Last Month".Tx(this),
-            "Last Year".Tx(this),
-            "All".Tx(this),
-            "Custom".Tx(this)});
+            "Last Week".T(EDTx.Form2DMap_LastWeek),
+            "Last Month".T(EDTx.Form2DMap_LastMonth),
+            "Last Year".T(EDTx.Form2DMap_LastYear),
+            "All".T(EDTx.Form2DMap_All),
+            "Custom".T(EDTx.Form2DMap_Custom)});
 
             toolStripComboExpo.SelectedIndex = 0;
             toolStripComboBoxTime.SelectedIndex = 0;

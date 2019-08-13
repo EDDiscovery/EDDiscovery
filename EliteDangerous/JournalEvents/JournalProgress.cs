@@ -40,12 +40,12 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed) 
         {
-            info = BaseUtils.FieldBuilder.Build("Combat:;%".Tx(this), Combat,
-                                      "Trade:;%".Tx(this), Trade,
-                                      "Exploration:;%".Tx(this), Explore,
-                                      "Federation:;%".Tx(this), Federation,
-                                      "Empire:;%".Tx(this), Empire,
-                                      "CQC:;%".Tx(this), CQC);
+            info = BaseUtils.FieldBuilder.Build("Combat:;%".T(EDTx.JournalProgress_Combat), Combat,
+                                      "Trade:;%".T(EDTx.JournalProgress_Trade), Trade,
+                                      "Exploration:;%".T(EDTx.JournalProgress_Exploration), Explore,
+                                      "Federation:;%".T(EDTx.JournalProgress_Federation), Federation,
+                                      "Empire:;%".T(EDTx.JournalProgress_Empire), Empire,
+                                      "CQC:;%".T(EDTx.JournalProgress_CQC), CQC);
             detailed = "";
         }
     }

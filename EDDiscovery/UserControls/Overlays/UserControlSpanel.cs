@@ -328,7 +328,7 @@ namespace EDDiscovery.UserControls
 
                                 if (showCircumstellarZonesToolStripMenuItem.Checked)
                                 {
-                                    res.AppendFormat("Goldilocks, {0} ({1}-{2} AU),\n".Tx(this),
+                                    res.AppendFormat("Goldilocks, {0} ({1}-{2} AU),\n".T(EDTx.UserControlSpanel_Goldilocks),
                                                      js.GetHabZoneStringLs(),
                                                      (js.HabitableZoneInner.Value / JournalScan.oneAU_LS).ToString("N2"),
                                                      (js.HabitableZoneOuter.Value / JournalScan.oneAU_LS).ToString("N2"));
@@ -368,8 +368,8 @@ namespace EDDiscovery.UserControls
 
                         if (targetpresent && Config(Configuration.showTargetLine) && currentsystem != null)
                         {
-                            string dist = (currentsystem.HasCoordinate) ? currentsystem.Distance(tpos.X, tpos.Y, tpos.Z).ToString("0.00") : "Unknown".Tx();
-                            rowpos = rowmargin + AddColText(0, 0, rowpos, "Target".Tx(this) + ": " + name + " @ " + dist +" ly", textcolour, backcolour, null).pos.Bottom;
+                            string dist = (currentsystem.HasCoordinate) ? currentsystem.Distance(tpos.X, tpos.Y, tpos.Z).ToString("0.00") : "Unknown".T(EDTx.Unknown);
+                            rowpos = rowmargin + AddColText(0, 0, rowpos, "Target".T(EDTx.UserControlSpanel_Target) + ": " + name + " @ " + dist +" ly", textcolour, backcolour, null).pos.Bottom;
                         }
 
                         foreach (HistoryEntry rhe in result)
@@ -450,7 +450,7 @@ namespace EDDiscovery.UserControls
                 Color backtext = (backcolour.IsFullyTransparent()) ? Color.Black : backcolour;
 
                 edsm = pictureBox.AddTextAutoSize(new Point(scanpostextoffset.X + columnpos[colnum++], rowpos), new Size(200, 200),
-                                            "EDSM", displayfont, backtext, textcolour, 0.5F, he, "View system on EDSM".Tx(this,"TVE"));
+                                            "EDSM", displayfont, backtext, textcolour, 0.5F, he, "View system on EDSM".T(EDTx.UserControlSpanel_TVE));
                 edsm.SetAlternateImage(BaseUtils.BitMapHelpers.DrawTextIntoAutoSizedBitmap("EDSM", new Size(200,200), displayfont, backtext, textcolour.Multiply(1.2F), 0.5F), edsm.pos, true);
             }
 
@@ -1038,7 +1038,7 @@ namespace EDDiscovery.UserControls
 
         private void configureFieldFilterToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            BaseUtils.ConditionLists res = FilterHelpers.ShowDialog(FindForm(), fieldfilter, discoveryform, "Summary Panel: Filter out fields".Tx(this, "SPF"));
+            BaseUtils.ConditionLists res = FilterHelpers.ShowDialog(FindForm(), fieldfilter, discoveryform, "Summary Panel: Filter out fields".T(EDTx.UserControlSpanel_SPF));
             if (res != null)
             {
                 fieldfilter = res;

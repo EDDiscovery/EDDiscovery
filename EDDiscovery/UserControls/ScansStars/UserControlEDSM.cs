@@ -152,11 +152,11 @@ namespace EDDiscovery.UserControls
             {
                 ExtendedControls.ConfigurableForm f = new ExtendedControls.ConfigurableForm();
                 int width = 500;
-                f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "System:".Tx(this), new Point(10, 40), new Size(110, 24), null));
+                f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "System:".T(EDTx.UserControlEDSM_System), new Point(10, 40), new Size(110, 24), null));
                 f.Add(new ExtendedControls.ConfigurableForm.Entry("Sys", typeof(ExtendedControls.ExtTextBoxAutoComplete), "", new Point(120, 40), new Size(width - 120 - 20, 24), null));
 
-                f.Add(new ExtendedControls.ConfigurableForm.Entry("OK", typeof(ExtendedControls.ExtButton), "OK".Tx(), new Point(width - 20 - 80, 80), new Size(80, 24), ""));
-                f.Add(new ExtendedControls.ConfigurableForm.Entry("Cancel", typeof(ExtendedControls.ExtButton), "Cancel".Tx(), new Point(width - 200, 80), new Size(80, 24), ""));
+                f.Add(new ExtendedControls.ConfigurableForm.Entry("OK", typeof(ExtendedControls.ExtButton), "OK".T(EDTx.OK), new Point(width - 20 - 80, 80), new Size(80, 24), ""));
+                f.Add(new ExtendedControls.ConfigurableForm.Entry("Cancel", typeof(ExtendedControls.ExtButton), "Cancel".T(EDTx.Cancel), new Point(width - 200, 80), new Size(80, 24), ""));
 
                 f.Trigger += (dialogname, controlname, tag) =>
                 {
@@ -177,7 +177,7 @@ namespace EDDiscovery.UserControls
                     }
                 };
 
-                f.InitCentred(this.FindForm(), this.FindForm().Icon, "Show System".Tx(this, "EnterSys"), null, null);
+                f.InitCentred(this.FindForm(), this.FindForm().Icon, "Show System".T(EDTx.UserControlEDSM_EnterSys), null, null);
                 f.GetControl<ExtendedControls.ExtTextBoxAutoComplete>("Sys").SetAutoCompletor(SystemCache.ReturnSystemAutoCompleteList, true);
                 DialogResult res = f.ShowDialog(this.FindForm());
 

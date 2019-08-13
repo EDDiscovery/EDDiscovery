@@ -73,11 +73,11 @@ namespace EDDiscovery.UserControls
             textMaxRadius.SetComparitor(textMinRadius, 2);
 
             comboBoxView.Enabled = false;
-            comboBoxView.Items.Add("Top".Tx(this));
-            comboBoxView.Items.Add("Front".Tx(this));
-            comboBoxView.Items.Add("Side".Tx(this));
-            comboBoxView.Items.Add("Grid".Tx(this));
-            comboBoxView.Items.Add("Report".Tx(this));
+            comboBoxView.Items.Add("Top".T(EDTx.UserControlPlot_Top));
+            comboBoxView.Items.Add("Front".T(EDTx.UserControlPlot_Front));
+            comboBoxView.Items.Add("Side".T(EDTx.UserControlPlot_Side));
+            comboBoxView.Items.Add("Grid".T(EDTx.UserControlPlot_Grid));
+            comboBoxView.Items.Add("Report".T(EDTx.UserControlPlot_Report));
 
             var sel = SQLiteConnectionUser.GetSettingString(DbSave + "PlotOrientation", "!!");
             if (comboBoxView.Items.Contains(sel))
@@ -168,7 +168,7 @@ namespace EDDiscovery.UserControls
 
         private void FillPlot(BaseUtils.SortedListDoubleDuplicate<ISystem> csl, ISystem currentSystem)
         {
-            SetControlText(string.Format("2D Plot of systems in range from {0} ".Tx(this,"2d") , currentSystem.Name));
+            SetControlText(string.Format("2D Plot of systems in range from {0} ".T(EDTx.UserControlPlot_2d) , currentSystem.Name));
 
             const int pointSize = 4;
 
@@ -225,18 +225,18 @@ namespace EDDiscovery.UserControls
             modelSide.Series.Add(inrangeSeriesSide);
 
             // titles
-            modelTop.Title = string.Format("Plot around {0}, viewed from the top".Tx(this, "PTOP"), currentSystemName);
-            modelFront.Title = string.Format("Plot around {0}, viewed from the front".Tx(this, "PFRONT"), currentSystemName);
-            modelSide.Title = string.Format("Plot around {0}, viewed from the side".Tx(this, "PSIDE"), currentSystemName);
+            modelTop.Title = string.Format("Plot around {0}, viewed from the top".T(EDTx.UserControlPlot_PTOP), currentSystemName);
+            modelFront.Title = string.Format("Plot around {0}, viewed from the front".T(EDTx.UserControlPlot_PFRONT), currentSystemName);
+            modelSide.Title = string.Format("Plot around {0}, viewed from the side".T(EDTx.UserControlPlot_PSIDE), currentSystemName);
 
             // Title of the report           
-            reportView.Text += string.Format(("Systems around {0}, from {1} to {2}, Ly: {3}").Tx(this,"SysAROUND") ,currentSystemName, 
+            reportView.Text += string.Format(("Systems around {0}, from {1} to {2}, Ly: {3}").T(EDTx.UserControlPlot_SysAROUND) ,currentSystemName, 
                 textMinRadius.Value.ToString(), textMaxRadius.Value.ToString() ,csl.Count.ToString() );
 
             // Fill with some information for the report                    
             //reportView.AppendText("\nText " + currentSystem.some_value_interesting_to_report);
-            reportView.Text += string.Format((Environment.NewLine + "    Visits: {0}").Tx(this,"Vs") ,discoveryform.history.GetVisitsCount(currentSystem.Name, currentSystem.EDSMID));
-            //removed - system does not have a note. reportView.Text += string.Format((Environment.NewLine + "    Notes: {0}" + Environment.NewLine).Tx(this,"Nt") ,currentSystem.SystemNote);
+            reportView.Text += string.Format((Environment.NewLine + "    Visits: {0}").T(EDTx.UserControlPlot_Vs) ,discoveryform.history.GetVisitsCount(currentSystem.Name, currentSystem.EDSMID));
+            //removed - system does not have a note. reportView.Text += string.Format((Environment.NewLine + "    Notes: {0}" + Environment.NewLine).T(EDTx.UserControlPlot_Nt") ,currentSystem.SystemNote);
 
             // If the are any system inside the defined range...
             if (csl.Count() > 0)
@@ -259,9 +259,9 @@ namespace EDDiscovery.UserControls
                         var sysZ = tvp.Value.Z;
 
                         // print information on each member of the list;
-                        reportView.Text += string.Format((Environment.NewLine + "{0} distance {1:N2} Ly").Tx(this,"D1"), tvp.Value.Name.ToString() , distFromCurrentSys);
-                        reportView.Text += string.Format((Environment.NewLine + "    Visits: {0}").Tx(this,"D2") , visits.ToString());
-                        reportView.Text += string.Format((Environment.NewLine + "    Coordinates: X:{0:N2}, Y:{1:N2}, Z:{2:N2}" + Environment.NewLine).Tx(this,"D3") ,sysX , sysY , sysZ);
+                        reportView.Text += string.Format((Environment.NewLine + "{0} distance {1:N2} Ly").T(EDTx.UserControlPlot_D1), tvp.Value.Name.ToString() , distFromCurrentSys);
+                        reportView.Text += string.Format((Environment.NewLine + "    Visits: {0}").T(EDTx.UserControlPlot_D2) , visits.ToString());
+                        reportView.Text += string.Format((Environment.NewLine + "    Coordinates: X:{0:N2}, Y:{1:N2}, Z:{2:N2}" + Environment.NewLine).T(EDTx.UserControlPlot_D3) ,sysX , sysY , sysZ);
 
                         // Create the list, with each system's name, distances by x, y and z coordinates and number of visits
                         object[] value = { tvp.Value.Name, $"{sysX:0.00}", $"{sysY:0.00}", $"{sysZ:0.00}", $"{visits:n0}" };

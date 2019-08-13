@@ -140,7 +140,7 @@ namespace EDDiscovery.UserControls
 
             if (csl != null && csl.Any())
             {
-                SetControlText(string.Format("From {0}".Tx(this,"From"), name));
+                SetControlText(string.Format("From {0}".T(EDTx.UserControlStarDistance_From), name));
                 foreach (KeyValuePair<double, ISystem> tvp in csl)
                 {
                     double dist = Math.Sqrt(tvp.Key);   // distances are stored squared for speed, back to normal.
@@ -232,7 +232,7 @@ namespace EDDiscovery.UserControls
 
             if (!edsm.ShowSystemInEDSM(rightclicksystem.Name, id_edsm))
             {
-                ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable".Tx(this,"NoEDSMSys"));
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable".T(EDTx.UserControlStarDistance_NoEDSMSys));
             }
 
             this.Cursor = Cursors.Default;

@@ -36,7 +36,7 @@ namespace EDDiscovery
         private ConcurrentQueue<RefreshWorkerArgs> refreshWorkerQueue = new ConcurrentQueue<RefreshWorkerArgs>();           // QUEUE of refreshes pending, each with their own args..
         private int refreshHistoryRequestedFlag = 0;            // flag gets set during History refresh, cleared at end, interlocked exchange during request..
 
-        private ManualResetEvent readyForNewRefresh = new ManualResetEvent(false);
+        private ManualResetEvent readyForNewRefresh = new ManualResetEvent(false);      // holds loop while refresh is happening. Set false until first refresh has happened
         private AutoResetEvent refreshRequested = new AutoResetEvent(false);
 
         // indicate change commander, indicate netlogpath load (with forced refresh), indicate forced journal load
@@ -88,15 +88,16 @@ namespace EDDiscovery
 
         private void BackgroundHistoryRefreshWorkerThread()
         {
-// TBD why swalllow one of these.. logic again seems convoluted
+            System.Diagnostics.Debug.WriteLine("Background history refresh worker thread going.. waiting for read for refresh");
+            WaitHandle.WaitAny(new WaitHandle[] { closeRequested, readyForNewRefresh }); // Wait to be ready for new refresh after initial load caused by DoRefreshHistory, called by the controller. It sets the flag
 
-            WaitHandle.WaitAny(new WaitHandle[] { closeRequested, readyForNewRefresh }); // Wait to be ready for new refresh after initial refresh
+            System.Diagnostics.Debug.WriteLine("Background history refresh worker thread refresh given permission, close " + PendingClose);
 
             while (!PendingClose)
             {
-                int wh = WaitHandle.WaitAny(new WaitHandle[] { closeRequested, refreshRequested });
-                RefreshWorkerArgs argstemp = null;
-                RefreshWorkerArgs args = null;
+                int wh = WaitHandle.WaitAny(new WaitHandle[] { closeRequested, refreshRequested });     // wait for a second and subsequent refresh request.
+
+                System.Diagnostics.Debug.WriteLine("Background history refresh worker - kicked due to " + wh);
 
                 if (PendingClose) break;
 
@@ -111,6 +112,9 @@ namespace EDDiscovery
                         {
                             OnRefreshStarting?.Invoke();
                         });
+
+                        RefreshWorkerArgs argstemp = null;
+                        RefreshWorkerArgs args = null;
 
                         while (refreshWorkerQueue.TryDequeue(out argstemp)) // Get the most recent refresh
                         {
@@ -140,7 +144,7 @@ namespace EDDiscovery
 
                 hist = HistoryList.LoadHistory(journalmonitor,
                     () => PendingClose,
-                    (p, s) => ReportRefreshProgress(p, string.Format("Processing log file {0}".Tx(this, "PLF"), s)), args.NetLogPath,
+                    (p, s) => ReportRefreshProgress(p, string.Format("Processing log file {0}".T(EDTx.EDDiscoveryController_PLF), s)), args.NetLogPath,
                     args.ForceNetLogReload, args.ForceJournalReload, args.CurrentCommander,
                     EDDConfig.Instance.FullHistoryLoadDayLimit, EDDConfig.Instance.EssentialEventTypes);
 
@@ -151,9 +155,7 @@ namespace EDDiscovery
                 LogLineHighlight("History Refresh Error: " + ex);
             }
 
-            initComplete.WaitOne();
-
-            ReportRefreshProgress(-1, "Refresh Displays".Tx(this, "RD"));
+            ReportRefreshProgress(-1, "Refresh Displays".T(EDTx.EDDiscoveryController_RD));
 
             InvokeAsyncOnUiThread(() => ForegroundHistoryRefreshCompleteonUI(hist));
         }
@@ -195,9 +197,10 @@ namespace EDDiscovery
                     EdsmLogFetcher.Start(EDCommander.Current);
 
                 refreshHistoryRequestedFlag = 0;
-                readyForNewRefresh.Set();
+                readyForNewRefresh.Set();       // say i'm okay for another refresh
+                System.Diagnostics.Debug.WriteLine("Refresh completed, allow another refresh");
 
-                LogLine("History refresh complete.".Tx(this, "HRC"));
+                LogLine("History refresh complete.".T(EDTx.EDDiscoveryController_HRC));
 
                 ReportRefreshProgress(-1, "");
 

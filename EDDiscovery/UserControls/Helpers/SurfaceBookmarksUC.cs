@@ -139,7 +139,7 @@ namespace EDDiscovery.Forms
 
                 dr.Cells[0].Value = planet;
                 dr.Cells[0].ReadOnly = true;
-                dr.Cells[1].Value = "Enter a name".Tx(this,"Enter");
+                dr.Cells[1].Value = "Enter a name".T(EDTx.SurfaceBookmarkUserControl_Enter);
                 dr.Cells[2].Value = "";
                 dr.Cells[3].Value = latitude.ToString("F4");
                 dr.Cells[4].Value = longitude.ToString("F4");
@@ -214,12 +214,12 @@ namespace EDDiscovery.Forms
             int width = 430;
             int ctrlleft = 150;
 
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "Planet:".Tx(this,"PL"), new Point(10, 40), new Size(140, 24), ""));
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "Planet:".T(EDTx.SurfaceBookmarkUserControl_PL), new Point(10, 40), new Size(140, 24), ""));
             f.Add(new ExtendedControls.ConfigurableForm.Entry("Planet", typeof(ExtendedControls.ExtTextBox),
-                "", new Point(ctrlleft, 40), new Size(width - ctrlleft - 20, 24), "Enter planet name".Tx(this, "EPN")));
+                "", new Point(ctrlleft, 40), new Size(width - ctrlleft - 20, 24), "Enter planet name".T(EDTx.SurfaceBookmarkUserControl_EPN)));
 
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("OK", typeof(ExtendedControls.ExtButton), "OK".Tx(), new Point(width - 100, 70), new Size(80, 24), "Press to Accept".Tx(this)));
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("Cancel", typeof(ExtendedControls.ExtButton), "Cancel".Tx(), new Point(width - 200, 70), new Size(80, 24), "Press to Cancel".Tx(this)));
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("OK", typeof(ExtendedControls.ExtButton), "OK".T(EDTx.OK), new Point(width - 100, 70), new Size(80, 24), "Press to Accept".T(EDTx.SurfaceBookmarkUserControl_PresstoAccept)));
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("Cancel", typeof(ExtendedControls.ExtButton), "Cancel".T(EDTx.Cancel), new Point(width - 200, 70), new Size(80, 24), "Press to Cancel".T(EDTx.SurfaceBookmarkUserControl_PresstoCancel)));
 
             f.Trigger += (dialogname, controlname, tag) =>
             {
@@ -235,7 +235,7 @@ namespace EDDiscovery.Forms
                 }
             };
 
-            DialogResult res = f.ShowDialogCentred(this.FindForm(), this.FindForm().Icon, "Manually Add Planet".Tx(this, "MAP"));
+            DialogResult res = f.ShowDialogCentred(this.FindForm(), this.FindForm().Icon, "Manually Add Planet".T(EDTx.SurfaceBookmarkUserControl_MAP));
 
             string pname = f.Get("Planet");
             if (res == DialogResult.OK && pname.HasChars())

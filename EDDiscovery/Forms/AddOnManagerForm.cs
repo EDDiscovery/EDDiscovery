@@ -88,7 +88,7 @@ namespace EDDiscovery.Forms
 
             BaseUtils.Translator.Instance.Translate(this);
 
-            label_index.Text = this.Text = (managedownloadmode) ? "Add-On Manager".Tx(this, "AddOnTitle") : "Edit Add-Ons".Tx(this, "EditTitle");
+            label_index.Text = this.Text = (managedownloadmode) ? "Add-On Manager".T(EDTx.AddOnManagerForm_AddOnTitle) : "Edit Add-Ons".T(EDTx.AddOnManagerForm_EditTitle);
         }
 
         private System.Threading.Thread CheckThread;
@@ -191,15 +191,15 @@ namespace EDDiscovery.Forms
             int fonth = (int)theme.GetFont.GetHeight() + 1;
             int headervsize =  fonth + panelheightmargin + 2;
 
-            panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[0] + panelleftmargin, panelheightmargin), Size = new Size(tabs[1] - tabs[0] - 2, headervsize), Text = "Type".Tx(this) });
-            panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[1] + panelleftmargin, panelheightmargin), Size = new Size(tabs[2] - tabs[1] - 2, headervsize), Text = "Name".Tx(this) });
-            panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[2] + panelleftmargin, panelheightmargin), Size = new Size(tabs[3] - tabs[2] - 2, headervsize), Text = "Version".Tx(this) });
-            panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[3] + panelleftmargin, panelheightmargin), Size = new Size(tabs[4] - tabs[3] - 2, headervsize), Text = "Description".Tx(this) });
+            panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[0] + panelleftmargin, panelheightmargin), Size = new Size(tabs[1] - tabs[0] - 2, headervsize), Text = "Type".T(EDTx.AddOnManagerForm_Type) });
+            panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[1] + panelleftmargin, panelheightmargin), Size = new Size(tabs[2] - tabs[1] - 2, headervsize), Text = "Name".T(EDTx.AddOnManagerForm_Name) });
+            panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[2] + panelleftmargin, panelheightmargin), Size = new Size(tabs[3] - tabs[2] - 2, headervsize), Text = "Version".T(EDTx.AddOnManagerForm_Version) });
+            panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[3] + panelleftmargin, panelheightmargin), Size = new Size(tabs[4] - tabs[3] - 2, headervsize), Text = "Description".T(EDTx.AddOnManagerForm_Description) });
             if ( managedownloadmode)
-                panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[4] + panelleftmargin, panelheightmargin), Size = new Size(tabs[5] - tabs[4] - 2, headervsize), Text = "Status".Tx(this) });
-            panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[5] + panelleftmargin, panelheightmargin), Size = new Size(tabs[6] - tabs[5]-2, headervsize), Text = "Action".Tx(this) });
-            panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[6] + panelleftmargin, panelheightmargin), Size = new Size(tabs[7] - tabs[6]-2, headervsize), Text = "Delete".Tx(this) });
-            panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[7] + panelleftmargin, panelheightmargin), Size = new Size(tabs[8] - tabs[7]-2, headervsize), Text = "Enabled".Tx(this) });
+                panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[4] + panelleftmargin, panelheightmargin), Size = new Size(tabs[5] - tabs[4] - 2, headervsize), Text = "Status".T(EDTx.AddOnManagerForm_Status) });
+            panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[5] + panelleftmargin, panelheightmargin), Size = new Size(tabs[6] - tabs[5]-2, headervsize), Text = "Action".T(EDTx.AddOnManagerForm_Action) });
+            panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[6] + panelleftmargin, panelheightmargin), Size = new Size(tabs[7] - tabs[6]-2, headervsize), Text = "Delete".T(EDTx.AddOnManagerForm_Delete) });
+            panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[7] + panelleftmargin, panelheightmargin), Size = new Size(tabs[8] - tabs[7]-2, headervsize), Text = "Enabled".T(EDTx.AddOnManagerForm_Enabled) });
 
             int vpos = headervsize + 8;
 
@@ -253,22 +253,22 @@ namespace EDDiscovery.Forms
                     bool isversion = false;
                     string text;
                     if (di.state == VersioningManager.ItemState.EDOutOfDate)
-                        text = "Newer EDD required".Tx(this,"Newer");
+                        text = "Newer EDD required".T(EDTx.AddOnManagerForm_Newer);
                     else if (di.state == VersioningManager.ItemState.EDTooOld)
-                        text = "Too old for EDD".Tx(this, "Old");
+                        text = "Too old for EDD".T(EDTx.AddOnManagerForm_Old);
                     else if (di.state == VersioningManager.ItemState.UpToDate)
-                        text = (di.localmodified) ? "Locally modified".Tx(this) : "Up to Date".Tx(this);
+                        text = (di.localmodified) ? "Locally modified".T(EDTx.AddOnManagerForm_Locallymodified) : "Up to Date".T(EDTx.AddOnManagerForm_UptoDate);
                     else if (di.state == VersioningManager.ItemState.LocalOnly)
-                        text = "Local Only".Tx(this, "LocalOnly");
+                        text = "Local Only".T(EDTx.AddOnManagerForm_LocalOnly);
                     else if (di.state == VersioningManager.ItemState.NotPresent)
                     {
                         isversion = true;
-                        text = "Version".Tx(this) + " " + di.downloadedversion.ToString(".") + ((di.localmodified) ? "*" : "");
+                        text = "Version".T(EDTx.AddOnManagerForm_Version) + " " + di.downloadedversion.ToString(".") + ((di.localmodified) ? "*" : "");
                     }
                     else
                     {
                         isversion = true;
-                        text = "New version".Tx(this) + " " + di.downloadedversion.ToString(".") + ((di.localmodified) ? "*" : "");
+                        text = "New version".T(EDTx.AddOnManagerForm_Newversion) + " " + di.downloadedversion.ToString(".") + ((di.localmodified) ? "*" : "");
                     }
 
                     g.actionlabel = new Label();
@@ -282,7 +282,7 @@ namespace EDDiscovery.Forms
                         g.actionbutton = new ExtendedControls.ExtButton();
                         g.actionbutton.Location = new Point(tabs[5], labelheightmargin - 4);      // 8 spacing, allow 8*4 to indent
                         g.actionbutton.Size = new Size(tabs[6] - tabs[5] - 20, 24);
-                        g.actionbutton.Text = (di.state == VersioningManager.ItemState.NotPresent) ? "Install".Tx(this) : "Update".Tx(this);
+                        g.actionbutton.Text = (di.state == VersioningManager.ItemState.NotPresent) ? "Install".T(EDTx.AddOnManagerForm_Install) : "Update".T(EDTx.AddOnManagerForm_Update);
                         g.actionbutton.Click += Actionbutton_Click;
                         g.actionbutton.Tag = g;
                         g.panel.Controls.Add(g.actionbutton);
@@ -297,7 +297,7 @@ namespace EDDiscovery.Forms
                         g.actionbutton = new ExtendedControls.ExtButton();
                         g.actionbutton.Location = new Point(tabs[5], labelheightmargin - 4);      // 8 spacing, allow 8*4 to indent
                         g.actionbutton.Size = new Size(tabs[6] - tabs[5] - 20,24);
-                        g.actionbutton.Text = "Edit".Tx(this);
+                        g.actionbutton.Text = "Edit".T(EDTx.AddOnManagerForm_Edit);
                         g.actionbutton.Click += ActionbuttonEdit_Click;
                         g.actionbutton.Tag = g;
                         g.panel.Controls.Add(g.actionbutton);
@@ -320,7 +320,7 @@ namespace EDDiscovery.Forms
                     g.enabled = new ExtendedControls.ExtCheckBox();
                     g.enabled.Location = new Point(tabs[7], labelheightmargin);
                     g.enabled.Size = new Size(tabs[8]-tabs[7], 24);
-                    g.enabled.Text = "";// "Enabled".Tx(this);
+                    g.enabled.Text = "";
                     g.enabled.Checked = di.localenable.Value;
                     g.enabled.Click += Enabled_Click;
                     g.enabled.Tag = g;
@@ -387,7 +387,7 @@ namespace EDDiscovery.Forms
 
             if (g.di.localmodified)
             {
-                if (ExtendedControls.MessageBoxTheme.Show(this, "Modified locally, do you wish to overwrite the changes".Tx(this, "Modwarn"), "Warning".Tx(), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.Cancel)
+                if (ExtendedControls.MessageBoxTheme.Show(this, "Modified locally, do you wish to overwrite the changes".T(EDTx.AddOnManagerForm_Modwarn), "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.Cancel)
                     return;
             }
 
@@ -398,7 +398,7 @@ namespace EDDiscovery.Forms
                 ReadyToDisplay();
             }
             else
-                ExtendedControls.MessageBoxTheme.Show(this, "Add-on failed to update. Check files for read only status".Tx(this, "Failed"), "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ExtendedControls.MessageBoxTheme.Show(this, "Add-on failed to update. Check files for read only status".T(EDTx.AddOnManagerForm_Failed), "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         private void ActionbuttonEdit_Click(object sender, EventArgs e)
@@ -414,7 +414,7 @@ namespace EDDiscovery.Forms
             ExtendedControls.ExtButton cb = sender as ExtendedControls.ExtButton;
             Group g = cb.Tag as Group;
 
-            if (ExtendedControls.MessageBoxTheme.Show(this, string.Format("Do you really want to delete {0}".Tx(this,"DeleteWarn"), g.di.itemname), "Warning".Tx(), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+            if (ExtendedControls.MessageBoxTheme.Show(this, string.Format("Do you really want to delete {0}".T(EDTx.AddOnManagerForm_DeleteWarn), g.di.itemname), "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
             {
                 VersioningManager.DeleteInstall(g.di, EDDOptions.Instance.AppDataDirectory);
                 ReadyToDisplay();

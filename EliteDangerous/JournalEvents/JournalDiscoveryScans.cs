@@ -33,7 +33,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = BaseUtils.FieldBuilder.Build("New bodies discovered:".Txb(this, "Dscan"), Bodies);
+            info = BaseUtils.FieldBuilder.Build("New bodies discovered:".T(EDTx.JournalEntry_Dscan), Bodies);
             detailed = "";
         }
     }
@@ -54,7 +54,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = BaseUtils.FieldBuilder.Build("Progress:;%;N1".Tx(this), Progress, "Bodies:", BodyCount, "Others:".Tx(this), NonBodyCount);
+            info = BaseUtils.FieldBuilder.Build("Progress:;%;N1".T(EDTx.JournalFSSDiscoveryScan_Progress), Progress, "Bodies:", BodyCount, "Others:".T(EDTx.JournalFSSDiscoveryScan_Others), NonBodyCount);
             detailed = "";
         }
     }
@@ -110,10 +110,10 @@ namespace EliteDangerousCore.JournalEvents
 
             public override string ToString()
             {
-                return BaseUtils.FieldBuilder.Build("", SignalName_Localised, "State:".Tx(this),
-                            SpawingState_Localised, "Faction:".Tx(this), SpawingFaction_Localised,
-                            "USS Type:".Tx(this), USSTypeLocalised, " Threat Level:".Tx(this), ThreatLevel,
-                            ";Station".Tx(this, "StationBool"), IsStation
+                return BaseUtils.FieldBuilder.Build("", SignalName_Localised, "State:".T(EDTx.FSSSignal_State),
+                            SpawingState_Localised, "Faction:".T(EDTx.FSSSignal_Faction), SpawingFaction_Localised,
+                            "USS Type:".T(EDTx.FSSSignal_USSType), USSTypeLocalised, " Threat Level:".T(EDTx.FSSSignal_ThreatLevel), ThreatLevel,
+                            ";Station".T(EDTx.FSSSignal_StationBool), IsStation
                             );
             }
         }
@@ -137,7 +137,7 @@ namespace EliteDangerousCore.JournalEvents
 
             if (Signals.Count > 1)
             {
-                info = BaseUtils.FieldBuilder.Build("Detected ; signals".Tx(this), Signals.Count);
+                info = BaseUtils.FieldBuilder.Build("Detected ; signals".T(EDTx.JournalFSSSignalDiscovered_Detected), Signals.Count);
 
                 foreach (var s in Signals)
                     info += ", " + s.SignalName_Localised;
@@ -167,7 +167,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = BaseUtils.FieldBuilder.Build("Bodies:".Txb(this), NumBodies);
+            info = BaseUtils.FieldBuilder.Build("Bodies:".T(EDTx.JournalEntry_Bodies), NumBodies);
             detailed = "";
         }
     }
@@ -192,8 +192,8 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string info, out string detailed)
         {
             info = BaseUtils.FieldBuilder.Build("", BodyName,
-                                                "Probes:".Tx(this), ProbesUsed,
-                                                "Efficiency Target:".Tx(this), EfficiencyTarget);
+                                                "Probes:".T(EDTx.JournalSAAScanComplete_Probes), ProbesUsed,
+                                                "Efficiency Target:".T(EDTx.JournalSAAScanComplete_EfficiencyTarget), EfficiencyTarget);
             detailed = "";
         }
     }

@@ -66,12 +66,12 @@ namespace EDDiscovery.ScreenShots
                 filesystemwatcher.Created += WatcherTripped;
                 filesystemwatcher.EnableRaisingEvents = true;
 
-                discoveryform.LogLine(string.Format("Scanning for {0} screenshots in {1}".Tx(this,"Scan") ,ext, watchedfolder));
+                discoveryform.LogLine(string.Format("Scanning for {0} screenshots in {1}".T(EDTx.ScreenshotDirectoryWatcher_Scan) ,ext, watchedfolder));
                 return true;
             }
             else
             {
-                discoveryform.LogLineHighlight("Folder specified for image conversion does not exist, check settings in the Screenshots tab".Tx(this,"NOF"));
+                discoveryform.LogLineHighlight("Folder specified for image conversion does not exist, check settings in the Screenshots tab".T(EDTx.ScreenshotDirectoryWatcher_NOF));
                 return false;
             }
         }
@@ -232,7 +232,8 @@ namespace EDDiscovery.ScreenShots
                 System.Diagnostics.Trace.WriteLine("Exception watcher: " + ex.Message);
                 System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
 
-                discoveryform.LogLineHighlight("Error in executing image conversion, try another screenshot, check output path settings. (Exception ".Tx(this,"Excp") + ex.Message + ")");
+
+                discoveryform.LogLineHighlight("Error in executing image conversion, try another screenshot, check output path settings. (Exception ".T(EDTx.ScreenshotDirectoryWatcher_Excp) + ex.Message + ")");
             }
         }
     }

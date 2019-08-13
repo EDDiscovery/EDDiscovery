@@ -47,6 +47,7 @@
             this.labelZ = new System.Windows.Forms.Label();
             this.buttonExtVisited = new ExtendedControls.ExtButton();
             this.checkBoxCustomCube = new ExtendedControls.ExtCheckBox();
+            this.extCheckBoxExcludeVisitedSystems = new ExtendedControls.ExtCheckBox();
             this.SuspendLayout();
             // 
             // labelRadMin
@@ -349,10 +350,13 @@
             // 
             this.checkBoxCustomCube.AutoSize = true;
             this.checkBoxCustomCube.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxCustomCube.CheckBoxDisabledScaling = 0.5F;
             this.checkBoxCustomCube.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxCustomCube.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxCustomCube.ImageButtonDisabledScaling = 0.5F;
+            this.checkBoxCustomCube.ImageIndeterminate = null;
             this.checkBoxCustomCube.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.checkBoxCustomCube.ImageUnchecked = null;
             this.checkBoxCustomCube.Location = new System.Drawing.Point(456, 33);
             this.checkBoxCustomCube.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxCustomCube.Name = "checkBoxCustomCube";
@@ -362,10 +366,31 @@
             this.checkBoxCustomCube.TickBoxReductionRatio = 0.75F;
             this.checkBoxCustomCube.UseVisualStyleBackColor = true;
             // 
+            // extCheckBoxExcludeVisitedSystems
+            // 
+            this.extCheckBoxExcludeVisitedSystems.AutoSize = true;
+            this.extCheckBoxExcludeVisitedSystems.CheckBoxColor = System.Drawing.Color.Gray;
+            this.extCheckBoxExcludeVisitedSystems.CheckBoxDisabledScaling = 0.5F;
+            this.extCheckBoxExcludeVisitedSystems.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.extCheckBoxExcludeVisitedSystems.CheckColor = System.Drawing.Color.DarkBlue;
+            this.extCheckBoxExcludeVisitedSystems.ImageButtonDisabledScaling = 0.5F;
+            this.extCheckBoxExcludeVisitedSystems.ImageIndeterminate = null;
+            this.extCheckBoxExcludeVisitedSystems.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.extCheckBoxExcludeVisitedSystems.ImageUnchecked = null;
+            this.extCheckBoxExcludeVisitedSystems.Location = new System.Drawing.Point(360, 91);
+            this.extCheckBoxExcludeVisitedSystems.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.extCheckBoxExcludeVisitedSystems.Name = "extCheckBoxExcludeVisitedSystems";
+            this.extCheckBoxExcludeVisitedSystems.Size = new System.Drawing.Size(140, 17);
+            this.extCheckBoxExcludeVisitedSystems.TabIndex = 39;
+            this.extCheckBoxExcludeVisitedSystems.Text = "Exclude Visited Systems";
+            this.extCheckBoxExcludeVisitedSystems.TickBoxReductionRatio = 0.75F;
+            this.extCheckBoxExcludeVisitedSystems.UseVisualStyleBackColor = true;
+            // 
             // FindSystemsUserControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.extCheckBoxExcludeVisitedSystems);
             this.Controls.Add(this.checkBoxCustomCube);
             this.Controls.Add(this.buttonExtNames);
             this.Controls.Add(this.buttonExtVisited);
@@ -411,5 +436,6 @@
         private System.Windows.Forms.Label labelY;
         private System.Windows.Forms.Label labelZ;
         private ExtendedControls.ExtCheckBox checkBoxCustomCube;
+        private ExtendedControls.ExtCheckBox extCheckBoxExcludeVisitedSystems;
     }
 }

@@ -60,13 +60,13 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = BaseUtils.FieldBuilder.Build("At ".Tx(this), System,
-                                                "in ".Tx(this), Region_Localised,
+            info = BaseUtils.FieldBuilder.Build("At ".T(EDTx.JournalCodexEntry_At), System,
+                                                "in ".T(EDTx.JournalCodexEntry_in), Region_Localised,
                                                 "", Name_Localised,
                                                 "", Category_Localised,
                                                 "", SubCategory_Localised,
-                                                ";New Entry".Tx(this), IsNewEntry,
-                                                ";Traits".Tx(this), NewTraitsDiscovered);
+                                                ";New Entry".T(EDTx.JournalCodexEntry_NewEntry), IsNewEntry,
+                                                ";Traits".T(EDTx.JournalCodexEntry_Traits), NewTraitsDiscovered);
             detailed = "";
 
             if (Traits != null)

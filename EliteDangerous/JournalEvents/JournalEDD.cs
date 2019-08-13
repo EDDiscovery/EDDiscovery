@@ -69,12 +69,12 @@ namespace EliteDangerousCore.JournalEvents
         public void FillInformation(out string info, out string detailed, int maxcol)
         {
 
-            info = BaseUtils.FieldBuilder.Build("Prices on ; items".Tx(typeof(JournalCommodityPricesBase),"PON"), Commodities.Count, 
-                                                "< at ".Tx(typeof(JournalCommodityPricesBase), "CPBat"), Station , 
-                                                "< in ".Tx(typeof(JournalCommodityPricesBase), "CPBin"), StarSystem);
+            info = BaseUtils.FieldBuilder.Build("Prices on ; items".T(EDTx.JournalCommodityPricesBase_PON), Commodities.Count, 
+                                                "< at ".T(EDTx.JournalCommodityPricesBase_CPBat), Station , 
+                                                "< in ".T(EDTx.JournalCommodityPricesBase_CPBin), StarSystem);
 
             int col = 0;
-            detailed = "Items to buy:".Tx(typeof(JournalCommodityPricesBase)) + System.Environment.NewLine;
+            detailed = "Items to buy:".T(EDTx.JournalCommodityPricesBase_Itemstobuy) + System.Environment.NewLine;
             foreach (CCommodities c in Commodities)
             {
                 if (c.buyPrice > 0)
@@ -83,12 +83,12 @@ namespace EliteDangerousCore.JournalEvents
 
                     if (c.sellPrice > 0)
                     {
-                        detailed += string.Format("{0}: {1} sell {2} Diff {3} {4}%  ".Tx(typeof(JournalCommodityPricesBase), "CPBBuySell"),
+                        detailed += string.Format("{0}: {1} sell {2} Diff {3} {4}%  ".T(EDTx.JournalCommodityPricesBase_CPBBuySell),
                             name, c.buyPrice, c.sellPrice, c.buyPrice - c.sellPrice, 
                             ((double)(c.buyPrice - c.sellPrice) / (double)c.sellPrice * 100.0).ToString("0.#"));
                     }
                     else
-                        detailed += string.Format("{0}: {1}  ".Tx(typeof(JournalCommodityPricesBase), "CPBBuy"), name, c.buyPrice);
+                        detailed += string.Format("{0}: {1}  ".T(EDTx.JournalCommodityPricesBase_CPBBuy), name, c.buyPrice);
 
                     if (++col == maxcol)
                     {
@@ -102,14 +102,14 @@ namespace EliteDangerousCore.JournalEvents
                 detailed += System.Environment.NewLine;
 
             col = 0;
-            detailed += "Sell only Items:".Tx(typeof(JournalCommodityPricesBase),"SO") + System.Environment.NewLine;
+            detailed += "Sell only Items:".T(EDTx.JournalCommodityPricesBase_SO) + System.Environment.NewLine;
             foreach (CCommodities c in Commodities)
             {
                 if (c.buyPrice <= 0)
                 {
                     string name = MaterialCommodityData.GetNameByFDName(c.fdname);
 
-                    detailed += string.Format("{0}: {1}  ".Tx(typeof(JournalCommodityPricesBase), "CPBBuy"), name, c.sellPrice);
+                    detailed += string.Format("{0}: {1}  ".T(EDTx.JournalCommodityPricesBase_CPBBuy), name, c.sellPrice);
                     if (++col == maxcol)
                     {
                         detailed += System.Environment.NewLine;
@@ -165,7 +165,7 @@ namespace EliteDangerousCore.JournalEvents
                     if (comma)
                         info += ", ";
                     comma = true;
-                    info += BaseUtils.FieldBuilder.Build("Name:".Txb(this), MaterialCommodityData.GetNameByFDName(m.Name), "", m.Count);
+                    info += BaseUtils.FieldBuilder.Build("Name:".T(EDTx.JournalEntry_Name), MaterialCommodityData.GetNameByFDName(m.Name), "", m.Count);
                 }
             }
 
@@ -176,7 +176,7 @@ namespace EliteDangerousCore.JournalEvents
                     if (comma)
                         info += ", ";
                     comma = true;
-                    info += BaseUtils.FieldBuilder.Build("Name:".Txb(this), MaterialCommodityData.GetNameByFDName(m.Name), "", m.Count);
+                    info += BaseUtils.FieldBuilder.Build("Name:".T(EDTx.JournalEntry_Name), MaterialCommodityData.GetNameByFDName(m.Name), "", m.Count);
                 }
             }
             detailed = "";

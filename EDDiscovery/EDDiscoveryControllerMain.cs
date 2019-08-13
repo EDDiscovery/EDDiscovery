@@ -33,9 +33,11 @@ namespace EDDiscovery
         public HistoryList history { get; private set; } = new HistoryList();
         public EDSMLogFetcher EdsmLogFetcher { get; private set; }
         public string LogText { get { return logtext; } }
-        public bool PendingClose { get; private set; }           // we want to close boys!
+
+        public bool PendingClose { get; private set; }                      // we want to close boys!      set once, then we close
+
         public GalacticMapping galacticMapping { get; private set; }
-        public bool ReadyForFinalClose { get; private set; }
+
         #endregion
 
         #region Events
@@ -68,7 +70,6 @@ namespace EDDiscovery
 
         // During a Close
 
-        public event Action OnBgSafeClose;                                  // BK. Background close, in BCK thread
         public event Action OnFinalClose;                                   // UI. Final close, in UI thread
 
         // During SYNC events
@@ -84,6 +85,27 @@ namespace EDDiscovery
         public event Action OnExplorationDownloaded;                        // UI
 
         #endregion
+
+        #region Variables
+        private string logtext = "";     // to keep in case of no logs..
+
+        private EDJournalClass journalmonitor;
+
+        private Thread backgroundWorker;
+        private Thread backgroundRefreshWorker;
+
+        private ManualResetEvent closeRequested = new ManualResetEvent(false);
+        private AutoResetEvent resyncRequestedEvent = new AutoResetEvent(false);
+
+        #endregion
+
+        #region Accessors
+        private Func<Color> GetNormalTextColour;
+        private Func<Color> GetHighlightTextColour;
+        private Func<Color> GetSuccessTextColour;
+        private Action<Action> InvokeAsyncOnUiThread;
+        #endregion
+
 
         #region Refreshing
 
@@ -177,19 +199,12 @@ namespace EDDiscovery
             Icons.IconSet.LoadIconPack(path, EDDOptions.Instance.AppDataDirectory, EDDOptions.ExeDirectory());
         }
 
-// TBD why two inits - remove PostInit_Shown, call this instead, remove readyforinitialload.
-
         public void Init()      // ED Discovery calls this during its init
         {
             TraceLog.LogFileWriterException += ex =>            // now we can attach the log writing highter into it
             {
                 LogLineHighlight($"Log Writer Exception: {ex}");
             };
-
-            backgroundWorker = new Thread(BackgroundWorkerThread);
-            backgroundWorker.IsBackground = true;
-            backgroundWorker.Name = "Background Worker Thread";
-            backgroundWorker.Start();                                   // TBD later, get rid of readyforInitialLoad, and start this thread at PostInit_Shown
 
             galacticMapping = new GalacticMapping();
 
@@ -201,24 +216,17 @@ namespace EDDiscovery
             journalmonitor.OnNewUIEvent += NewUIEvent;
         }
 
-// TBD think this is also out of date.. DoRefreshHistory is waiting on this, its set at the end of main.. logic seems iffy
-
-        public void InitComplete()          // called by EDD Init at end
-        {
-            initComplete.Set();    
-        }
-
         public void PostInit_Shown()        // called by EDDForm during shown
         {
             EDDConfig.Instance.Update();    // lost in the midst of time why  
-            readyForInitialLoad.Set();
+
+            backgroundWorker = new Thread(BackgroundWorkerThread);
+            backgroundWorker.IsBackground = true;
+            backgroundWorker.Name = "Background Worker Thread";
+            backgroundWorker.Start();                                   // TBD later, get rid of readyforInitialLoad, and start this thread at PostInit_Shown
         }
 
-
-        #endregion
-
-        #region Shutdown
-        public void Shutdown()
+        public void Shutdown()      // called to request a shutdown.. background thread co-ords the shutdown.
         {
             if (!PendingClose)
             {
@@ -227,13 +235,131 @@ namespace EDDiscovery
                 EDSMJournalSync.StopSync();
                 EdsmLogFetcher.AsyncStop();
                 journalmonitor.StopMonitor();
-                LogLineHighlight("Closing down, please wait..".Tx(this,"CD"));
+                LogLineHighlight("Closing down, please wait..".T(EDTx.EDDiscoveryController_CD));
                 closeRequested.Set();
                 journalqueuedelaytimer.Change(Timeout.Infinite, Timeout.Infinite);
                 journalqueuedelaytimer.Dispose();
             }
         }
+
         #endregion
+
+        #region Background Worker Thread - kicked off by PostInit_Shown
+        private void BackgroundWorkerThread()
+        {
+            // check first and download items
+
+            StarScan.LoadBodyDesignationMap();
+
+            Debug.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Check systems");
+            ReportSyncProgress("");
+
+            bool checkGithub = EDDOptions.Instance.CheckGithubFiles;
+            if (checkGithub)      // not normall in debug, due to git hub chokeing
+            {
+                // Async load of maps in another thread
+                DownloadMaps(() => PendingClose);
+
+                // and Expedition data
+                DownloadExpeditions(() => PendingClose);
+
+                // and Exploration data
+                DownloadExploration(() => PendingClose);
+            }
+
+            if (!EDDOptions.Instance.NoSystemsLoad)
+            {
+                // New Galmap load - it was not doing a refresh if EDSM sync kept on happening. Now has its own timer
+
+                DateTime galmaptime = SQLiteConnectionSystem.GetSettingDate("EDSMGalMapLast", DateTime.MinValue); // Latest time from RW file.
+
+                if (DateTime.Now.Subtract(galmaptime).TotalDays > 14 || !galacticMapping.GalMapFilePresent())  // Over 14 days do a sync from EDSM for galmap
+                {
+                    LogLine("Get galactic mapping from EDSM.".T(EDTx.EDDiscoveryController_EDSM));
+                    if (galacticMapping.DownloadFromEDSM())
+                        SQLiteConnectionSystem.PutSettingDate("EDSMGalMapLast", DateTime.UtcNow);
+                }
+
+                Debug.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Check systems complete");
+            }
+
+            galacticMapping.ParseData();                            // at this point, gal map data has been uploaded - get it into memory
+            SystemCache.AddToAutoCompleteList(galacticMapping.GetGMONames());
+            SystemNoteClass.GetAllSystemNotes();
+
+            LogLine("Loaded Notes, Bookmarks and Galactic mapping.".T(EDTx.EDDiscoveryController_LN));
+
+            if (EliteDangerousCore.EDDN.EDDNClass.CheckforEDMC()) // EDMC is running
+            {
+                if (EDCommander.Current.SyncToEddn)  // Both EDD and EDMC should not sync to EDDN.
+                {
+                    LogLineHighlight("EDDiscovery and EDMarketConnector should not both sync to EDDN. Stop EDMC or uncheck 'send to EDDN' in settings tab!".T(EDTx.EDDiscoveryController_EDMC));
+                }
+            }
+
+            if (!EDDOptions.Instance.NoLoad)        // here in this thread, we do a refresh of history. 
+            {
+                LogLine("Reading travel history".T(EDTx.EDDiscoveryController_RTH));
+
+                if (EDDOptions.Instance.Commander != null)
+                {
+                    EDCommander switchto = EDCommander.GetCommander(EDDOptions.Instance.Commander);
+                    if (switchto != null)
+                        EDCommander.CurrentCmdrID = switchto.Nr;
+                }
+
+                DoRefreshHistory(new RefreshWorkerArgs { CurrentCommander = EDCommander.CurrentCmdrID });       // kick the background refresh worker thread into action
+            }
+
+            CheckForSync();     // see if any EDSM/EDDB sync is needed - this just sets some variables up
+
+            System.Diagnostics.Debug.WriteLine("Background worker setting up refresh worker");
+
+            backgroundRefreshWorker = new Thread(BackgroundHistoryRefreshWorkerThread) { Name = "Background Refresh Worker", IsBackground = true };
+            backgroundRefreshWorker.Start();        // start the refresh worker, another thread which does subsequenct (not the primary one) refresh work in the background..
+
+            try
+            {
+                if (!EDDOptions.Instance.NoSystemsLoad && EDDConfig.Instance.EDSMEDDBDownload)      // if no system off, and EDSM download on
+                {
+                    DoPerformSync();        // this is done after the initial history load..
+                }
+
+                while (!PendingClose)
+                {
+                    int wh = WaitHandle.WaitAny(new WaitHandle[] { closeRequested, resyncRequestedEvent });
+
+                    System.Diagnostics.Debug.WriteLine("Background worker kicked by " + wh);
+
+                    if (PendingClose)
+                        break;
+
+                    if (wh == 1)
+                    {
+                        if (!EDDOptions.Instance.NoSystemsLoad && EDDConfig.Instance.EDSMEDDBDownload)      // if no system off, and EDSM download on
+                            DoPerformSync();
+                    }
+                }
+            }
+            catch (OperationCanceledException)
+            {
+            }
+
+            backgroundRefreshWorker.Join();     // this should terminate due to closeRequested..
+
+            // Now we have been ordered to close down, so go thru the process
+
+            closeRequested.WaitOne();
+
+            InvokeAsyncOnUiThread(() =>
+            {
+                OnFinalClose?.Invoke();
+            });
+        }
+
+        #endregion
+
+
 
         #region Logging
         public void LogLine(string text)
@@ -280,165 +406,12 @@ namespace EDDiscovery
 
         #endregion
 
-
-        #region Variables
-        private string logtext = "";     // to keep in case of no logs..
-
-        private EDJournalClass journalmonitor;
-
-        private Thread backgroundWorker;
-        private Thread backgroundRefreshWorker;
-
-        private ManualResetEvent closeRequested = new ManualResetEvent(false);
-        private ManualResetEvent readyForInitialLoad = new ManualResetEvent(false);
-        private ManualResetEvent initComplete = new ManualResetEvent(false);
-        private AutoResetEvent resyncRequestedEvent = new AutoResetEvent(false);
-
-        #endregion
-
-        #region Accessors
-        private Func<Color> GetNormalTextColour;
-        private Func<Color> GetHighlightTextColour;
-        private Func<Color> GetSuccessTextColour;
-        private Action<Action> InvokeAsyncOnUiThread;
-        #endregion
-
-        #region Background Worker Thread - kicked off by Controller.Init, which itself is kicked by DiscoveryForm Init.
-
-
-// I think we rework so we have a SyncBackgroundworker, and a refresh background worker.
-// loading of history is done on refresh one..
-
-
-        private void BackgroundWorkerThread()     
-        {
-            readyForInitialLoad.WaitOne();      // wait for shown in form
-
-            // check first and download items
-
-            StarScan.LoadBodyDesignationMap();
-
-            Debug.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Check systems");
-            ReportSyncProgress("");
-
-            bool checkGithub = EDDOptions.Instance.CheckGithubFiles;
-            if (checkGithub)      // not normall in debug, due to git hub chokeing
-            {
-                // Async load of maps in another thread
-                DownloadMaps(() => PendingClose);
-
-                // and Expedition data
-                DownloadExpeditions(() => PendingClose);
-
-                // and Exploration data
-                DownloadExploration(() => PendingClose);
-            }
-
-            if (!EDDOptions.Instance.NoSystemsLoad)
-            {
-                // New Galmap load - it was not doing a refresh if EDSM sync kept on happening. Now has its own timer
-
-                DateTime galmaptime = SQLiteConnectionSystem.GetSettingDate("EDSMGalMapLast", DateTime.MinValue); // Latest time from RW file.
-
-                if (DateTime.Now.Subtract(galmaptime).TotalDays > 14 || !galacticMapping.GalMapFilePresent())  // Over 14 days do a sync from EDSM for galmap
-                {
-                    LogLine("Get galactic mapping from EDSM.".Tx(this, "EDSM"));
-                    if (galacticMapping.DownloadFromEDSM())
-                        SQLiteConnectionSystem.PutSettingDate("EDSMGalMapLast", DateTime.UtcNow);
-                }
-
-                Debug.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Check systems complete");
-            }
-
-            galacticMapping.ParseData();                            // at this point, gal map data has been uploaded - get it into memory
-            SystemCache.AddToAutoCompleteList(galacticMapping.GetGMONames());
-            SystemNoteClass.GetAllSystemNotes();
-
-            LogLine("Loaded Notes, Bookmarks and Galactic mapping.".Tx(this, "LN"));
-
-            if (PendingClose) return;
-
-            if (EliteDangerousCore.EDDN.EDDNClass.CheckforEDMC()) // EDMC is running
-            {
-                if (EDCommander.Current.SyncToEddn)  // Both EDD and EDMC should not sync to EDDN.
-                {
-                    LogLineHighlight("EDDiscovery and EDMarketConnector should not both sync to EDDN. Stop EDMC or uncheck 'send to EDDN' in settings tab!".Tx(this, "EDMC"));
-                }
-            }
-
-            if (!EDDOptions.Instance.NoLoad)        // here in this thread, we do a refresh of history. 
-            {
-                LogLine("Reading travel history".Tx(this, "RTH"));
-
-                if ( EDDOptions.Instance.Commander != null )
-                {
-                    EDCommander switchto = EDCommander.GetCommander(EDDOptions.Instance.Commander);
-                    if (switchto != null)
-                        EDCommander.CurrentCmdrID = switchto.Nr;
-                }
-
-                DoRefreshHistory(new RefreshWorkerArgs { CurrentCommander = EDCommander.CurrentCmdrID });       // kick the background refresh worker thread into action
-            }
-
-            if (PendingClose) return;
-
-            CheckForSync();     // see if any EDSM/EDDB sync is needed
-
-            if (PendingClose) return;
-
-            // Now stay in loop services stuff
-
-            backgroundRefreshWorker = new Thread(BackgroundHistoryRefreshWorkerThread) { Name = "Background Refresh Worker", IsBackground = true };
-            backgroundRefreshWorker.Start();        // start the refresh worker, another thread which does subsequenct (not the primary one) refresh work in the background..
-
-            try
-            {
-                if (!EDDOptions.Instance.NoSystemsLoad && EDDConfig.Instance.EDSMEDDBDownload)      // if no system off, and EDSM download on
-                    DoPerformSync();        // this is done after the initial history load..
-
-                while (!PendingClose)
-                {
-                    int wh = WaitHandle.WaitAny(new WaitHandle[] { closeRequested, resyncRequestedEvent });
-
-                    if (PendingClose) break;
-
-                    switch (wh)
-                    {
-                        case 0:  // Close Requested
-                            break;
-                        case 1:  // Resync Requested
-                            if (!EDDOptions.Instance.NoSystemsLoad && EDDConfig.Instance.EDSMEDDBDownload)      // if no system off, and EDSM download on
-                                DoPerformSync();
-                            break;
-                    }
-                }
-            }
-            catch (OperationCanceledException)
-            {
-            }
-
-            backgroundRefreshWorker.Join();
-
-            // Now we have been ordered to close down, so go thru the process
-
-            closeRequested.WaitOne();      
-
-            OnBgSafeClose?.Invoke();
-            ReadyForFinalClose = true;
-            InvokeAsyncOnUiThread(() =>
-            {
-                OnFinalClose?.Invoke();
-            });
-        }
-
-        #endregion
-
         #region Aux file downloads
 
         // in its own thread..
         public void DownloadMaps(Func<bool> cancelRequested)
         {
-            LogLine("Checking for new EDDiscovery maps".Tx(this,"Maps"));
+            LogLine("Checking for new EDDiscovery maps".T(EDTx.EDDiscoveryController_Maps));
 
             Task.Factory.StartNew(() =>
             {
@@ -460,7 +433,7 @@ namespace EDDiscovery
         // in its own thread..
         public void DownloadExpeditions(Func<bool> cancelRequested)
         {
-            LogLine("Checking for new Expedition data".Tx(this,"EXPD"));
+            LogLine("Checking for new Expedition data".T(EDTx.EDDiscoveryController_EXPD));
 
             Task.Factory.StartNew(() =>
             {
@@ -484,7 +457,7 @@ namespace EDDiscovery
 
         public void DownloadExploration(Func<bool> cancelRequested)
         {
-            LogLine("Checking for new Exploration data".Tx(this, "EXPL"));
+            LogLine("Checking for new Exploration data".T(EDTx.EDDiscoveryController_EXPL));
 
             Task.Factory.StartNew(() =>
             {

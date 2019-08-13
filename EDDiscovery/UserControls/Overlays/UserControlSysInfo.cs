@@ -234,7 +234,7 @@ namespace EDDiscovery.UserControls
                 List<MissionState> mcurrent = (from MissionState ms in he.MissionList.Missions.Values where ms.InProgressDateTime(last_he.EventTimeUTC) orderby ms.Mission.EventTimeUTC descending select ms).ToList();
 
                 if (mcurrent == null || mcurrent.Count == 0)
-                    richTextBoxScrollMissions.Text = "No Missions".Tx(this, "NoMissions");
+                    richTextBoxScrollMissions.Text = "No Missions".T(EDTx.UserControlSysInfo_NoMissions);
                 else
                 {
                     string t = "";
@@ -285,7 +285,7 @@ namespace EDDiscovery.UserControls
                     else if (si.FuelCapacity > 0)
                         textBoxFuel.Text = si.FuelCapacity.ToStringInvariant("0.#");
                     else
-                        textBoxFuel.Text = "N/A".Tx(this,"NA");
+                        textBoxFuel.Text = "N/A".T(EDTx.UserControlSysInfo_NA);
 
                     EliteDangerousCalculations.FSDSpec fsd = si.GetFSDSpec();
                     if ( fsd != null )
@@ -368,7 +368,7 @@ namespace EDDiscovery.UserControls
                         if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
                             Process.Start(url);
                         else
-                            ExtendedControls.MessageBoxTheme.Show(FindForm(), "System unknown to EDSM".Tx(this,"SysUnk"));
+                            ExtendedControls.MessageBoxTheme.Show(FindForm(), "System unknown to EDSM".T(EDTx.UserControlSysInfo_SysUnk));
                     }
                 }
             }
@@ -393,19 +393,19 @@ namespace EDDiscovery.UserControls
             {
                 textBoxTarget.Text = name;
                 textBoxTarget.Select(textBoxTarget.Text.Length, textBoxTarget.Text.Length);
-                textBoxTargetDist.Text = "No Pos".Tx();
+                textBoxTargetDist.Text = "No Pos".T(EDTx.NoPos);
 
                 HistoryEntry cs = discoveryform.history.GetLastWithPosition;
                 if (cs != null)
                     textBoxTargetDist.Text = cs.System.Distance(x, y, z).ToString("0.0");
 
-                textBoxTarget.SetTipDynamically(toolTip1, string.Format("Position is {0:0.00},{1:0.00},{2:0.00}".Tx(this, "Pos"), x,y,z));
+                textBoxTarget.SetTipDynamically(toolTip1, string.Format("Position is {0:0.00},{1:0.00},{2:0.00}".T(EDTx.UserControlSysInfo_Pos), x,y,z));
             }
             else
             {
                 textBoxTarget.Text = "?";
                 textBoxTargetDist.Text = "";
-                textBoxTarget.SetTipDynamically(toolTip1, "On 3D Map right click to make a bookmark, region mark or click on a notemark and then tick on Set Target, or type it here and hit enter".Tx(this,"Target"));
+                textBoxTarget.SetTipDynamically(toolTip1, "On 3D Map right click to make a bookmark, region mark or click on a notemark and then tick on Set Target, or type it here and hit enter".T(EDTx.UserControlSysInfo_Target));
             }
         }
 
@@ -432,7 +432,7 @@ namespace EDDiscovery.UserControls
             if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
                 Process.Start(url);
             else
-                ExtendedControls.MessageBoxTheme.Show(FindForm(), "System unknown to EDSM".Tx(this,"SysUnk"));
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "System unknown to EDSM".T(EDTx.UserControlSysInfo_SysUnk));
 
         }
 

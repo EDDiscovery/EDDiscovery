@@ -20,6 +20,24 @@ Unknown: "Unknown" => "Sconosciuto"
 Information: "Information" => "Informazione"
 NoPos: "No Pos" => "Nessuna Posizione"
 
+SECTION StartUp
+
+.DUPLOAD: "EDDiscovery is already running. Launch anyway?" @
+
+SECTION SafeModeForm
+
+SafeModeForm: "EDDiscovery Safe Mode" @
+.buttonCancel: "Cancel" @
+.buttonNormal: "Run" @
+.buttonDeleteSystemDB: "Delete/Rebuild System DB" @
+.buttonDbs: "Move Databases" @
+.buttonLang: "Reset Language to English" @
+.button1: "Remove all Action Packs" @
+.buttonRemoveDLLs: "Remove all Extension DLLs" @
+.buttonResetTabs: "Reset Tabs, Remove PopOuts" @
+.buttonPositions: "Reset Window Positions" @
+.buttonResetTheme: "Reset Theme" @
+
 SECTION PopOutInfo
 
 .Log.Description: "Program log" => "Registro del Programma"
@@ -215,6 +233,10 @@ SECTION EDDiscoveryForm
 .buttonExt3dmap: "3D" @
 .adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.fetchLogsAgainToolStripMenuItem: "Fetch Logs Again" @
 .adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.fetchStarDataAgainToolStripMenuItem: "Fetch Star Data Again" @
+.WSE: "Web server enabled" @
+.WSF: "Web server failed to start" @
+.WSERR: "Web server disabled due to incorrect folder or missing zip file" @
+.WSD: "*** Web server is disabled ***" @
 
 SECTION EDDiscoveryController
 
@@ -462,6 +484,16 @@ CommanderForm: "CommanderForm" => "Scheda"
 .Abandon: "You have entered text in the CAPI login or password fields, do you want to abandon CAPI credential check?" => "Il testo che hai inserito nel campo di login o di password non funziona, vuoi abbandonare l'impostazione delle credenziali CAPI?"
 .Confirm: "Confirm" => "Conferma"
 .LF: "Select folder where Journal*.log files are stored by Frontier in" => "Seleziona dove sono gli archivi di Journal*.log creati da Frontier"
+.textBoxDefaultZoom.ToolTip: "Set the zoom level of the map. 1 is normal" @
+.radioButtonHistorySelection: "History Grid Selection" @
+.radioButtonHistorySelection.ToolTip: "Select history entry as opening location" @
+.radioButtonCentreHome: "Home System" @
+.radioButtonCentreHome.ToolTip: "Select home system as opening location" @
+.panel_defaultmapcolor.ToolTip: "New travel entries get this colour on the map" @
+.labelMapCol: "Default Map Color" @
+.labelZoom: "Default Zoom" @
+.labelOpenOn: "Open Centred On" @
+.HomeSys: "Home System:" @
 
 SECTION ExportForm
 
@@ -476,7 +508,7 @@ ExportForm: "ExportForm" => "Esporta"
 .checkBoxCustomAutoOpen: "Open in excel" => "Apri in excel"
 .label_index: "Export" => "Esporta"
 .ECH: "Export current History view to {0}" => "Esporta lo storico corrente a {0}"
-.JF: "Journal File" => "File di Giornale"
+.JF: "Journal file" => "File di Giornale"
 
 SECTION Form2DMap
 
@@ -509,7 +541,7 @@ GalaxySectorSelect: "GalaxySectorSelect" => "Seleziona Settori Galattici"
 .RS: "You have removed sectors!\r\nThis will require the DB to be cleaned of entries, which will take time\r\nConfirm you wish to do this?" => "Hai rimosso settori!\r\nQuesto richiede che tutti i registri siano puliti, cosa che richiede tempo\r\nSei sicuro di voler continuare?"
 .GALSELEX: "ED Discovery downloads star data from EDSM/EDDB which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed" @
 .Select: "Select:" @
-.GALSELEN: "Enter number to jump to or near to" @
+.GALSELEN: "Select the data set" @
 .PresstoAccept: "Press to Accept" @
 .PresstoCancel: "Press to Cancel" @
 .GALSELTitle: "Select EDSM Galaxy Data" @

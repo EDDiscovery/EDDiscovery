@@ -108,7 +108,7 @@ namespace EDDiscovery.Forms
             g.stdtrigger = new ExtendedControls.ExtComboBox();
             g.stdtrigger.Location = new Point(210, textheightmargin);      // 8 spacing, allow 8*4 to indent
             g.stdtrigger.Size = new Size(200, 24);
-            g.stdtrigger.Items.Add("Custom".Tx(this));
+            g.stdtrigger.Items.Add("Custom".T(EDTx.ProfileEditor_Custom));
             g.stdtrigger.Items.AddRange(EDDProfiles.StandardTriggers.Select((p1) => p1.Name));
             g.stdtrigger.SelectedIndex = EDDProfiles.FindTriggerIndex(tripcondition,backcondition) + 1;
             g.stdtrigger.SelectedIndexChanged += Stdtrigger_SelectedIndexChanged;
@@ -118,7 +118,7 @@ namespace EDDiscovery.Forms
             g.edittriggerbutton = new ExtendedControls.ExtButton();
             g.edittriggerbutton.Location = new Point(420, textheightmargin);
             g.edittriggerbutton.Size = new Size(100, 24);
-            g.edittriggerbutton.Text = "Trigger".Tx(this);
+            g.edittriggerbutton.Text = "Trigger".T(EDTx.ProfileEditor_Trigger);
             g.edittriggerbutton.Tag = g;
             g.edittriggerbutton.Click += EditTrigger_Click;
             g.panel.Controls.Add(g.edittriggerbutton);
@@ -126,7 +126,7 @@ namespace EDDiscovery.Forms
             g.editbacktriggerbutton = new ExtendedControls.ExtButton();
             g.editbacktriggerbutton.Location = new Point(530, textheightmargin);
             g.editbacktriggerbutton.Size = new Size(100, 24);
-            g.editbacktriggerbutton.Text = "Back".Tx(this);
+            g.editbacktriggerbutton.Text = "Back".T(EDTx.ProfileEditor_Back);
             g.editbacktriggerbutton.Tag = g;
             g.editbacktriggerbutton.Click += EditBack_Click;
             g.panel.Controls.Add(g.editbacktriggerbutton);
@@ -134,7 +134,7 @@ namespace EDDiscovery.Forms
             g.chkbox = new ExtendedControls.ExtCheckBox();
             g.chkbox.Location = new Point(640, textheightmargin);
             g.chkbox.Size = new Size(150, 24);
-            g.chkbox.Text = "Default".Tx(this);
+            g.chkbox.Text = "Default".T(EDTx.ProfileEditor_Default);
             g.chkbox.Tag = g;
             g.chkbox.Checked = poweron;
             g.chkbox.Click += Chkbox_Click;
@@ -197,7 +197,7 @@ namespace EDDiscovery.Forms
         private void EditTrigger_Click(object sender, EventArgs e)
         {
             Group g = ((Control)sender).Tag as Group;
-            BaseUtils.ConditionLists res = ShowFilterDialog(g.triggercondition, string.Format("Edit Profile {0} Trigger".Tx(this, "TrigEdit"), g.name.Text));
+            BaseUtils.ConditionLists res = ShowFilterDialog(g.triggercondition, string.Format("Edit Profile {0} Trigger".T(EDTx.ProfileEditor_TrigEdit), g.name.Text));
             if ( res != null )
             {
                 g.triggercondition = res;
@@ -210,7 +210,7 @@ namespace EDDiscovery.Forms
         private void EditBack_Click(object sender, EventArgs e)
         {
             Group g = ((Control)sender).Tag as Group;
-            BaseUtils.ConditionLists res = ShowFilterDialog(g.backcondition, string.Format("Edit Profile {0} Back Trigger".Tx(this, "BackEdit"), g.name.Text));
+            BaseUtils.ConditionLists res = ShowFilterDialog(g.backcondition, string.Format("Edit Profile {0} Back Trigger".T(EDTx.ProfileEditor_BackEdit), g.name.Text));
 
             if (res != null )
             {
@@ -272,7 +272,9 @@ namespace EDDiscovery.Forms
             Group g = ((Control)sender).Tag as Group;
 
             if (ExtendedControls.MessageBoxTheme.Show(this,
-                        string.Format(("Do you wish to delete profile {0}?" + Environment.NewLine + "This will remove all the profile information and" + Environment.NewLine + "is not reversible!").Tx(this, "DeleteWarning"), g.name.Text), "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+                        string.Format(("Do you wish to delete profile {0}?" + Environment.NewLine + "This will remove all the profile information and" + 
+                        Environment.NewLine + "is not reversible!").T(EDTx.ProfileEditor_DeleteWarning), g.name.Text), "Warning".T(EDTx.Warning), 
+                        MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
             {
 
                 SuspendLayout();

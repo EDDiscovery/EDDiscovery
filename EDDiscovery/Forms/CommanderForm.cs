@@ -124,7 +124,7 @@ namespace EDDiscovery.Forms
         private void buttonExtBrowse_Click(object sender, EventArgs e)
         {
             FolderBrowserDialog fbd = new FolderBrowserDialog();
-            fbd.Description = "Select folder where Journal*.log files are stored by Frontier in".Tx(this, "LF");
+            fbd.Description = "Select folder where Journal*.log files are stored by Frontier in".T(EDTx.CommanderForm_LF);
 
             if (fbd.ShowDialog(this) == DialogResult.OK)
                 textBoxBorderJournal.Text = fbd.SelectedPath;
