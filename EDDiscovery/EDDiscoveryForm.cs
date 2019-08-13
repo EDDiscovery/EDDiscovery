@@ -131,7 +131,6 @@ namespace EDDiscovery
             Controller = new EDDiscoveryController(() => theme.TextBlockColor, () => theme.TextBlockHighlightColor, 
                                                         () => theme.TextBlockSuccessColor, a => BeginInvoke(a));
 
-            Controller.OnBgSafeClose += Controller_BgSafeClose;
             Controller.OnFinalClose += Controller_FinalClose;
 
             Controller.OnRefreshCommanders += Controller_RefreshCommanders;
@@ -309,8 +308,6 @@ namespace EDDiscovery
 
             UpdateProfileComboBox();
             comboBoxCustomProfiles.SelectedIndexChanged += ComboBoxCustomProfiles_SelectedIndexChanged;
-
-            Controller.InitComplete();
 
             BaseUtils.Translator.Instance.Translate(mainMenu, this);
             BaseUtils.Translator.Instance.Translate(toolTip,this);
@@ -767,7 +764,7 @@ namespace EDDiscovery
         private void EDDiscoveryForm_FormClosing(object sender, FormClosingEventArgs e)     // when user asks for a close
         {
             edsmRefreshTimer.Enabled = false;
-            if (!Controller.ReadyForFinalClose)
+            if (!Controller.PendingClose)       // only allow 1 close attempt..
             {
                 e.Cancel = true;
 
@@ -782,13 +779,10 @@ namespace EDDiscovery
             }
         }
 
-        private void Controller_BgSafeClose()       // run in thread..
-        {
-            actioncontroller.HoldTillProgStops();
-        }
-
         private void Controller_FinalClose()        // run in UI, when controller finishes close
         {
+            actioncontroller.HoldTillProgStops();
+
             if (WebServer.Running)
                 WebServer.Stop();
 

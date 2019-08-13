@@ -33,9 +33,11 @@ namespace EDDiscovery
         public HistoryList history { get; private set; } = new HistoryList();
         public EDSMLogFetcher EdsmLogFetcher { get; private set; }
         public string LogText { get { return logtext; } }
-        public bool PendingClose { get; private set; }           // we want to close boys!
+
+        public bool PendingClose { get; private set; }                      // we want to close boys!      set once, then we close
+
         public GalacticMapping galacticMapping { get; private set; }
-        public bool ReadyForFinalClose { get; private set; }
+
         #endregion
 
         #region Events
@@ -68,7 +70,6 @@ namespace EDDiscovery
 
         // During a Close
 
-        public event Action OnBgSafeClose;                                  // BK. Background close, in BCK thread
         public event Action OnFinalClose;                                   // UI. Final close, in UI thread
 
         // During SYNC events
@@ -84,6 +85,27 @@ namespace EDDiscovery
         public event Action OnExplorationDownloaded;                        // UI
 
         #endregion
+
+        #region Variables
+        private string logtext = "";     // to keep in case of no logs..
+
+        private EDJournalClass journalmonitor;
+
+        private Thread backgroundWorker;
+        private Thread backgroundRefreshWorker;
+
+        private ManualResetEvent closeRequested = new ManualResetEvent(false);
+        private AutoResetEvent resyncRequestedEvent = new AutoResetEvent(false);
+
+        #endregion
+
+        #region Accessors
+        private Func<Color> GetNormalTextColour;
+        private Func<Color> GetHighlightTextColour;
+        private Func<Color> GetSuccessTextColour;
+        private Action<Action> InvokeAsyncOnUiThread;
+        #endregion
+
 
         #region Refreshing
 
@@ -163,19 +185,12 @@ namespace EDDiscovery
             Icons.IconSet.LoadIconPack(path, EDDOptions.Instance.AppDataDirectory, EDDOptions.ExeDirectory());
         }
 
-// TBD why two inits - remove PostInit_Shown, call this instead, remove readyforinitialload.
-
         public void Init()      // ED Discovery calls this during its init
         {
             TraceLog.LogFileWriterException += ex =>            // now we can attach the log writing highter into it
             {
                 LogLineHighlight($"Log Writer Exception: {ex}");
             };
-
-            backgroundWorker = new Thread(BackgroundWorkerThread);
-            backgroundWorker.IsBackground = true;
-            backgroundWorker.Name = "Background Worker Thread";
-            backgroundWorker.Start();                                   // TBD later, get rid of readyforInitialLoad, and start this thread at PostInit_Shown
 
             galacticMapping = new GalacticMapping();
 
@@ -187,24 +202,17 @@ namespace EDDiscovery
             journalmonitor.OnNewUIEvent += NewUIEvent;
         }
 
-// TBD think this is also out of date.. DoRefreshHistory is waiting on this, its set at the end of main.. logic seems iffy
-
-        public void InitComplete()          // called by EDD Init at end
-        {
-            initComplete.Set();    
-        }
-
         public void PostInit_Shown()        // called by EDDForm during shown
         {
             EDDConfig.Instance.Update();    // lost in the midst of time why  
-            readyForInitialLoad.Set();
+
+            backgroundWorker = new Thread(BackgroundWorkerThread);
+            backgroundWorker.IsBackground = true;
+            backgroundWorker.Name = "Background Worker Thread";
+            backgroundWorker.Start();                                   // TBD later, get rid of readyforInitialLoad, and start this thread at PostInit_Shown
         }
 
-
-        #endregion
-
-        #region Shutdown
-        public void Shutdown()
+        public void Shutdown()      // called to request a shutdown.. background thread co-ords the shutdown.
         {
             if (!PendingClose)
             {
@@ -219,87 +227,12 @@ namespace EDDiscovery
                 journalqueuedelaytimer.Dispose();
             }
         }
-        #endregion
-
-        #region Logging
-        public void LogLine(string text)
-        {
-            LogLineColor(text, GetNormalTextColour());
-        }
-
-        public void LogLineHighlight(string text)
-        {
-            TraceLog.WriteLine(text);
-            LogLineColor(text, GetHighlightTextColour());
-        }
-
-        public void LogLineSuccess(string text)
-        {
-            LogLineColor(text, GetSuccessTextColour());
-        }
-
-        public void LogLineColor(string text, Color color)
-        {
-            try
-            {
-                InvokeAsyncOnUiThread(() =>
-                {
-                    logtext += text + Environment.NewLine;      // keep this, may be the only log showing
-
-                    OnNewLogEntry?.Invoke(text + Environment.NewLine, color);
-                });
-            }
-            catch
-            {
-                System.Diagnostics.Debug.WriteLine("******* Exception trying to write to ui thread log");
-            }
-        }
-
-        public void ReportSyncProgress(string message)
-        {
-            InvokeAsyncOnUiThread(() => OnReportSyncProgress?.Invoke(-1, message));
-        }
-        public void ReportRefreshProgress(int percent, string message)
-        {
-            InvokeAsyncOnUiThread(() => OnReportRefreshProgress?.Invoke(percent, message));
-        }
 
         #endregion
 
-
-        #region Variables
-        private string logtext = "";     // to keep in case of no logs..
-
-        private EDJournalClass journalmonitor;
-
-        private Thread backgroundWorker;
-        private Thread backgroundRefreshWorker;
-
-        private ManualResetEvent closeRequested = new ManualResetEvent(false);
-        private ManualResetEvent readyForInitialLoad = new ManualResetEvent(false);
-        private ManualResetEvent initComplete = new ManualResetEvent(false);
-        private AutoResetEvent resyncRequestedEvent = new AutoResetEvent(false);
-
-        #endregion
-
-        #region Accessors
-        private Func<Color> GetNormalTextColour;
-        private Func<Color> GetHighlightTextColour;
-        private Func<Color> GetSuccessTextColour;
-        private Action<Action> InvokeAsyncOnUiThread;
-        #endregion
-
-        #region Background Worker Thread - kicked off by Controller.Init, which itself is kicked by DiscoveryForm Init.
-
-
-// I think we rework so we have a SyncBackgroundworker, and a refresh background worker.
-// loading of history is done on refresh one..
-
-
-        private void BackgroundWorkerThread()     
+        #region Background Worker Thread - kicked off by PostInit_Shown
+        private void BackgroundWorkerThread()
         {
-            readyForInitialLoad.WaitOne();      // wait for shown in form
-
             // check first and download items
 
             StarScan.LoadBodyDesignationMap();
@@ -342,8 +275,6 @@ namespace EDDiscovery
 
             LogLine("Loaded Notes, Bookmarks and Galactic mapping.".T(EDTx.EDDiscoveryController_LN));
 
-            if (PendingClose) return;
-
             if (EliteDangerousCore.EDDN.EDDNClass.CheckforEDMC()) // EDMC is running
             {
                 if (EDCommander.Current.SyncToEddn)  // Both EDD and EDMC should not sync to EDDN.
@@ -356,7 +287,7 @@ namespace EDDiscovery
             {
                 LogLine("Reading travel history".T(EDTx.EDDiscoveryController_RTH));
 
-                if ( EDDOptions.Instance.Commander != null )
+                if (EDDOptions.Instance.Commander != null)
                 {
                     EDCommander switchto = EDCommander.GetCommander(EDDOptions.Instance.Commander);
                     if (switchto != null)
@@ -366,13 +297,9 @@ namespace EDDiscovery
                 DoRefreshHistory(new RefreshWorkerArgs { CurrentCommander = EDCommander.CurrentCmdrID });       // kick the background refresh worker thread into action
             }
 
-            if (PendingClose) return;
+            CheckForSync();     // see if any EDSM/EDDB sync is needed - this just sets some variables up
 
-            CheckForSync();     // see if any EDSM/EDDB sync is needed
-
-            if (PendingClose) return;
-
-            // Now stay in loop services stuff
+            System.Diagnostics.Debug.WriteLine("Background worker setting up refresh worker");
 
             backgroundRefreshWorker = new Thread(BackgroundHistoryRefreshWorkerThread) { Name = "Background Refresh Worker", IsBackground = true };
             backgroundRefreshWorker.Start();        // start the refresh worker, another thread which does subsequenct (not the primary one) refresh work in the background..
@@ -380,22 +307,23 @@ namespace EDDiscovery
             try
             {
                 if (!EDDOptions.Instance.NoSystemsLoad && EDDConfig.Instance.EDSMEDDBDownload)      // if no system off, and EDSM download on
+                {
                     DoPerformSync();        // this is done after the initial history load..
+                }
 
                 while (!PendingClose)
                 {
                     int wh = WaitHandle.WaitAny(new WaitHandle[] { closeRequested, resyncRequestedEvent });
 
-                    if (PendingClose) break;
+                    System.Diagnostics.Debug.WriteLine("Background worker kicked by " + wh);
 
-                    switch (wh)
+                    if (PendingClose)
+                        break;
+
+                    if (wh == 1)
                     {
-                        case 0:  // Close Requested
-                            break;
-                        case 1:  // Resync Requested
-                            if (!EDDOptions.Instance.NoSystemsLoad && EDDConfig.Instance.EDSMEDDBDownload)      // if no system off, and EDSM download on
-                                DoPerformSync();
-                            break;
+                        if (!EDDOptions.Instance.NoSystemsLoad && EDDConfig.Instance.EDSMEDDBDownload)      // if no system off, and EDSM download on
+                            DoPerformSync();
                     }
                 }
             }
@@ -403,18 +331,63 @@ namespace EDDiscovery
             {
             }
 
-            backgroundRefreshWorker.Join();
+            backgroundRefreshWorker.Join();     // this should terminate due to closeRequested..
 
             // Now we have been ordered to close down, so go thru the process
 
-            closeRequested.WaitOne();      
+            closeRequested.WaitOne();
 
-            OnBgSafeClose?.Invoke();
-            ReadyForFinalClose = true;
             InvokeAsyncOnUiThread(() =>
             {
                 OnFinalClose?.Invoke();
             });
+        }
+
+        #endregion
+
+
+
+        #region Logging
+        public void LogLine(string text)
+        {
+            LogLineColor(text, GetNormalTextColour());
+        }
+
+        public void LogLineHighlight(string text)
+        {
+            TraceLog.WriteLine(text);
+            LogLineColor(text, GetHighlightTextColour());
+        }
+
+        public void LogLineSuccess(string text)
+        {
+            LogLineColor(text, GetSuccessTextColour());
+        }
+
+        public void LogLineColor(string text, Color color)
+        {
+            try
+            {
+                InvokeAsyncOnUiThread(() =>
+                {
+                    logtext += text + Environment.NewLine;      // keep this, may be the only log showing
+
+                    OnNewLogEntry?.Invoke(text + Environment.NewLine, color);
+                });
+            }
+            catch
+            {
+                System.Diagnostics.Debug.WriteLine("******* Exception trying to write to ui thread log");
+            }
+        }
+
+        public void ReportSyncProgress(string message)
+        {
+            InvokeAsyncOnUiThread(() => OnReportSyncProgress?.Invoke(-1, message));
+        }
+        public void ReportRefreshProgress(int percent, string message)
+        {
+            InvokeAsyncOnUiThread(() => OnReportRefreshProgress?.Invoke(percent, message));
         }
 
         #endregion
