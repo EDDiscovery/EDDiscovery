@@ -340,7 +340,7 @@ namespace EliteDangerousCore.JournalEvents
             }
             else
             {
-                PlanetTypeID = EDPlanet.Unknown;
+                PlanetTypeID = EDPlanet.Unknown_Body_Type;
             }
 
             JToken mats = (JToken)evt["Materials"];
@@ -1003,12 +1003,12 @@ namespace EliteDangerousCore.JournalEvents
 
         public System.Drawing.Image GetStarTypeImage()           // give image and description to star class
         {
-            return Bodies.GetStarTypeImage(StarTypeID);
+            return EDDiscovery.Icons.IconSet.GetIcon("Stars." + StarTypeID.ToString());
         }
 
         static public System.Drawing.Image GetStarImageNotScanned()
         {
-            return Bodies.GetStarTypeImage(EDStar.Unknown);
+            return EDDiscovery.Icons.IconSet.GetIcon("Stars.Unknown");
         }
 
         public System.Drawing.Image GetPlanetClassImage()
@@ -1018,35 +1018,37 @@ namespace EliteDangerousCore.JournalEvents
                 return GetPlanetImageNotScanned();
             }
 
-            EDPlanet planetclass = PlanetTypeID;
+            string iconname = PlanetTypeID.ToString();
 
-            if (planetclass == EDPlanet.High_metal_content_body || planetclass == EDPlanet.Metal_rich_body)
+            // adjust image type dependent for certain classes.
+
+            if (PlanetTypeID == EDPlanet.High_metal_content_body || PlanetTypeID == EDPlanet.Metal_rich_body)
             {
                 if (AtmosphereProperty == (EDAtmosphereProperty.Hot | EDAtmosphereProperty.Thick))
                 {
-                    planetclass = EDPlanet.High_metal_content_body_hot_thick;
+                    iconname = "High_metal_content_body_hot_thick";
                 }
-                else if (planetclass == EDPlanet.High_metal_content_body && nSurfaceTemperature > 700)
+                else if (PlanetTypeID == EDPlanet.High_metal_content_body && nSurfaceTemperature > 700)
                 {
-                    planetclass = EDPlanet.High_metal_content_body_700;
+                    iconname = "High_metal_content_body_700";
                 }
-                else if (planetclass == EDPlanet.High_metal_content_body && nSurfaceTemperature > 250)
+                else if (PlanetTypeID == EDPlanet.High_metal_content_body && nSurfaceTemperature > 250)
                 {
-                    planetclass = EDPlanet.High_metal_content_body_250;
+                    iconname = "High_metal_content_body_250";
                 }
             }
 
-            return Bodies.GetPlanetClassImage(planetclass);
+            return EDDiscovery.Icons.IconSet.GetIcon("Planets." + iconname);
         }
 
         static public System.Drawing.Image GetPlanetImageNotScanned()
         {
-            return Bodies.GetPlanetClassImage(EDPlanet.Unknown);
+            return EDDiscovery.Icons.IconSet.GetIcon("Planets.Unknown");
         }
 
         static public System.Drawing.Image GetMoonImageNotScanned()
         {
-            return Bodies.GetPlanetClassImage(EDPlanet.Unknown);
+            return EDDiscovery.Icons.IconSet.GetIcon("Planets.Unknown");
         }
 
         public double GetMaterial(string v)

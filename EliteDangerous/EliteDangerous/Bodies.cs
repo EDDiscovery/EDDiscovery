@@ -96,7 +96,7 @@ namespace EliteDangerousCore
 
     public enum EDPlanet
     {
-        Unknown = 0,
+        Unknown_Body_Type = 0,
 
         Metal_rich_body = 1000,
         High_metal_content_body,
@@ -117,11 +117,6 @@ namespace EliteDangerousCore
         Sudarsky_class_V_gas_giant,
         Helium_rich_gas_giant,
         Helium_gas_giant,
-
-        // Custom types
-        High_metal_content_body_700 = 2000,
-        High_metal_content_body_250,
-        High_metal_content_body_hot_thick,
     }
 
     [Flags]
@@ -226,7 +221,7 @@ namespace EliteDangerousCore
         public static EDPlanet PlanetStr2Enum(string star)
         {
             if (star == null)
-                return EDPlanet.Unknown;
+                return EDPlanet.Unknown_Body_Type;
 
             if (PlanetStr2EnumLookup == null)
             {
@@ -242,7 +237,7 @@ namespace EliteDangerousCore
             if (PlanetStr2EnumLookup.ContainsKey(searchstr))
                 return PlanetStr2EnumLookup[searchstr];
 
-            return EDPlanet.Unknown;
+            return EDPlanet.Unknown_Body_Type;
         }
 
         private static Dictionary<string, EDAtmosphereType> AtmosphereStr2EnumLookup;
@@ -352,20 +347,6 @@ namespace EliteDangerousCore
                 return ReserveStr2EnumLookup[searchstr];
 
             return EDReserve.None;
-        }
-
-        public static IReadOnlyDictionary<EDStar, Image> StarTypeIcons { get; } = new IconGroup<EDStar>("Stars");
-
-        public static System.Drawing.Image GetStarTypeImage(EDStar type)
-        {
-            return StarTypeIcons[type];
-        }
-
-        public static IReadOnlyDictionary<EDPlanet, Image> PlanetTypeIcons { get; } = new IconGroup<EDPlanet>("Planets");
-
-        public static System.Drawing.Image GetPlanetClassImage(EDPlanet type)
-        {
-            return PlanetTypeIcons[type];
         }
 
         public static string StarName( EDStar id )

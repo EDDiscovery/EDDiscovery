@@ -228,6 +228,8 @@ namespace EDDiscovery.UserControls
 
                     if (all_nodes != null)
                     {
+                        long value = 0;
+
                         foreach (StarScan.ScanNode sn in all_nodes)
                         {
                             if (sn.ScanData != null && sn.ScanData?.BodyName != null && !sn.ScanData.IsStar)
@@ -248,7 +250,7 @@ namespace EDDiscovery.UserControls
                                         pictureBoxSurveyor.AddTextFixedSizeC(
                                                 new Point(3, vpos),
                                                 new Size(Math.Max(pictureBoxSurveyor.Width - 6, 24), Font.Height),
-                                                InfoLine(last_sys,sd),
+                                                InfoLine(last_sys, sd),
                                                 Font,
                                                 textcolour,
                                                 backcolour,
@@ -257,9 +259,24 @@ namespace EDDiscovery.UserControls
                                                 frmt: frmt);
 
                                         vpos += (int)Font.Height;
+                                        value += sd.EstimatedValue;
                                     }
                                 }
                             }
+                        }
+
+                        if (value>0 )
+                        {
+                            pictureBoxSurveyor.AddTextFixedSizeC(
+                                new Point(3, vpos),
+                                new Size(Math.Max(pictureBoxSurveyor.Width - 6, 24), Font.Height),
+                                "~ " + value.ToString("N0") + " cr",
+                                Font,
+                                textcolour,
+                                backcolour,
+                                1.0F,
+                                false,
+                                frmt: frmt);
                         }
                     }
                 }

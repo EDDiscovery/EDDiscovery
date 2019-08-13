@@ -81,7 +81,7 @@ namespace EDDiscovery.UserControls
 
         // draw scannode (may be null), 
         // curmats may be null
-        public void DrawSystem(StarScan.SystemNode scannode, MaterialCommoditiesList curmats, HistoryList hl, string opttext = null ) 
+        public void DrawSystem(StarScan.SystemNode scannode, MaterialCommoditiesList curmats, HistoryList hl, string opttext = null, string[] filter=  null ) 
         {
             HideInfo();
 
@@ -102,10 +102,28 @@ namespace EDDiscovery.UserControls
                 DisplayAreaUsed = curpos;
                 List<ExtPictureBox.ImageElement> starcontrols = new List<ExtPictureBox.ImageElement>();
 
+                bool displaybelts = filter == null || (filter.Contains("belt") || filter.Contains("All"));
+
                 //for( int i = 0; i < 1000; i +=100)  CreateStarPlanet(starcontrols, EDDiscovery.Properties.Resources.ImageStarDiscWhite, new Point(i, 0), new Size(24, 24), i.ToString(), "");
+
+                //foreach( var sn in scannode.Bodies )
+                //{
+                //    System.Diagnostics.Debug.Write("Node " + sn.type + " " + sn.fullname);
+                //    if ( sn.ScanData != null )
+                //    {
+                //        System.Diagnostics.Debug.Write("  " + sn.ScanData.IsStar + " P:" + sn.ScanData.PlanetTypeID + " S:" + sn.ScanData.StarTypeID + " EDSM:" + sn.ScanData.IsEDSMBody);
+                //    }
+                //    System.Diagnostics.Debug.WriteLine("");
+                //}
 
                 foreach (StarScan.ScanNode starnode in scannode.starnodes.Values)        // always has scan nodes
                 {
+                    if (filter != null && starnode.IsBodyInFilter(filter, true) == false)       // if filter active, but no body or children in filter
+                    {
+                        System.Diagnostics.Debug.WriteLine("SDUC Rejected " + starnode.fullname);
+                        continue;
+                    }
+
                     // Draw star
 
                     int offset = 0;
@@ -134,11 +152,21 @@ namespace EDDiscovery.UserControls
 
                         StarScan.ScanNode lastbelt = belts.Count != 0 ? belts.Dequeue() : null;
 
+                        // process body and stars only
+
                         foreach (StarScan.ScanNode planetnode in starnode.children.Values.Where(s => s.type == StarScan.ScanNodeType.body || s.type == StarScan.ScanNodeType.star))
                         {
+                            if (filter != null && planetnode.IsBodyInFilter(filter, true) == false)       // if filter active, but no body or children in filter
+                            {
+                                System.Diagnostics.Debug.WriteLine("SDUC Rejected " + planetnode.fullname);
+                                continue;
+                            }
+
                             //System.Diagnostics.Debug.WriteLine("Draw " + planetnode.ownname + ":" + planetnode.type);
 
-                            while (lastbelt != null && planetnode.ScanData != null && (lastbelt.BeltData == null || lastbelt.BeltData.OuterRad < planetnode.ScanData.nSemiMajorAxis))
+                            // if belt is before this, display belts here
+
+                            while (displaybelts && lastbelt != null && planetnode.ScanData != null && (lastbelt.BeltData == null || lastbelt.BeltData.OuterRad < planetnode.ScanData.nSemiMajorAxis))
                             {
                                 //System.Diagnostics.Debug.WriteLine("Draw a belt " + lastbelt.ownname);
 
@@ -163,7 +191,7 @@ namespace EDDiscovery.UserControls
                             {
                                 List<ExtPictureBox.ImageElement> pc = new List<ExtPictureBox.ImageElement>();
 
-                                Point maxpos = CreatePlanetTree(pc, planetnode, curmats, hl, curpos);
+                                Point maxpos = CreatePlanetTree(pc, planetnode, curmats, hl, curpos, filter);
 
                                 //System.Diagnostics.Debug.WriteLine("Planet " + planetnode.ownname + " " + curpos + " " + maxpos + " max " + (panelStars.Width - panelStars.ScrollBarWidth));
 
@@ -186,7 +214,9 @@ namespace EDDiscovery.UserControls
                             }
                         }
 
-                        while (lastbelt != null)
+                        // do any futher belts after all planets
+
+                        while (displaybelts && lastbelt != null)
                         {
                             if (curpos.X + planetsize.Width > panelStars.Width - panelStars.ScrollBarWidth)
                             {
@@ -213,7 +243,7 @@ namespace EDDiscovery.UserControls
         }
 
         // return right bottom of area used from curpos
-        Point CreatePlanetTree(List<ExtPictureBox.ImageElement> pc, StarScan.ScanNode planetnode, MaterialCommoditiesList curmats, HistoryList hl, Point curpos)
+        Point CreatePlanetTree(List<ExtPictureBox.ImageElement> pc, StarScan.ScanNode planetnode, MaterialCommoditiesList curmats, HistoryList hl, Point curpos , string[] filter)
         {
             // PLANETWIDTH|PLANETWIDTH  (if drawing a full planet with rings/landing)
             // or
@@ -232,6 +262,9 @@ namespace EDDiscovery.UserControls
 
                 foreach (StarScan.ScanNode moonnode in planetnode.children.Values.Where(n => n.type != StarScan.ScanNodeType.barycentre))
                 {
+                    if (filter != null && moonnode.IsBodyInFilter(filter, true) == false)       // if filter active, but no body or children in filter
+                        continue;
+
                     bool nonedsmscans = moonnode.DoesNodeHaveNonEDSMScansBelow();     // is there any scans here, either at this node or below?
 
                     if (nonedsmscans || CheckEDSM)
@@ -253,6 +286,9 @@ namespace EDDiscovery.UserControls
 
                             foreach (StarScan.ScanNode submoonnode in moonnode.children.Values)
                             {
+                                if (filter != null && submoonnode.IsBodyInFilter(filter, true) == false)       // if filter active, but no body or children in filter
+                                    continue;
+
                                 bool nonedsmsubmoonscans = submoonnode.DoesNodeHaveNonEDSMScansBelow();     // is there any scans here, either at this node or below?
 
                                 if (nonedsmsubmoonscans || CheckEDSM)

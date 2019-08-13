@@ -736,7 +736,7 @@ namespace EDDiscovery.UserControls
 
                     }
 
-                    StatToDGV(dataGridViewScan, obj == EDPlanet.Unknown ? "Belt Cluster" : obj.ToString().Replace("_", " ") , strarr, false);
+                    StatToDGV(dataGridViewScan, obj == EDPlanet.Unknown_Body_Type ? "Belt Cluster" : obj.ToString().Replace("_", " ") , strarr, false);
                 }
             }
 

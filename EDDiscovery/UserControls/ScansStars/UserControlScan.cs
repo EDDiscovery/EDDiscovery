@@ -24,6 +24,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using BaseUtils;
 
 namespace EDDiscovery.UserControls
 {
@@ -39,6 +40,8 @@ namespace EDDiscovery.UserControls
         MaterialCommoditiesList showing_matcomds;
 
         bool closing = false;           // set when closing, to prevent a resize, which you can get, causing a big redraw
+
+        string[] bodyfilters;           // body filters
 
         #region Init
         public UserControlScan()
@@ -59,6 +62,7 @@ namespace EDDiscovery.UserControls
             panelStars.ShowOverlays = chkShowOverlays.Checked = SQLiteDBClass.GetSettingBool(DbSave + "BodyOverlays", false);
             extCheckBoxDisplaySystemAlways.Checked = SQLiteDBClass.GetSettingBool(DbSave + "DisplaySysAlways", false);
             extCheckBoxDisplaySystemAlways.Visible = HasControlTextArea();
+            bodyfilters = SQLiteDBClass.GetSettingString(DbSave + "BodyFilters", "All").Split(';');
             panelStars.ValueLimit = SQLiteDBClass.GetSettingInt(DbSave + "ValueLimit", 50000);
             progchange = false;
 
@@ -71,7 +75,6 @@ namespace EDDiscovery.UserControls
 
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
-
         }
 
         public override void LoadLayout()
@@ -89,12 +92,16 @@ namespace EDDiscovery.UserControls
         public override void InitialDisplay()
         {
             last_he = uctg.GetCurrentHistoryEntry;
+
+            //debug  showing_system = new EliteDangerousCore.SystemClass("Lembava"); override_system = true; DrawSystem();
+
             DrawSystem(last_he);    // may be null
         }
 
         public override void Closing()
         {
             SQLiteConnectionUser.PutSettingBool(DbSave + "PinState", rollUpPanelTop.PinState );
+
             uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
             discoveryform.OnNewEntry -= NewEntry;
             closing = true;
@@ -190,7 +197,7 @@ namespace EDDiscovery.UserControls
 
             }
 
-            panelStars.DrawSystem(data, showing_matcomds, discoveryform.history, (HasControlTextArea() && !extCheckBoxDisplaySystemAlways.Checked) ? null : control_text);
+            panelStars.DrawSystem(data, showing_matcomds, discoveryform.history, (HasControlTextArea() && !extCheckBoxDisplaySystemAlways.Checked) ? null : control_text, bodyfilters);
             SetControlText(control_text);
         }
 
@@ -478,7 +485,7 @@ namespace EDDiscovery.UserControls
                                     writer.Write(csv.Format(system));
 
                                     EDStar star = EDStar.Unknown;
-                                    EDPlanet planet = EDPlanet.Unknown;
+                                    EDPlanet planet = EDPlanet.Unknown_Body_Type;
 
                                     foreach (HistoryEntry scanhe in scans)
                                     {
@@ -491,7 +498,7 @@ namespace EDDiscovery.UserControls
                                         }
                                     }
                                     writer.Write(csv.Format((star != EDStar.Unknown) ? Enum.GetName(typeof(EDStar), star) : ""));
-                                    writer.Write(csv.Format((planet != EDPlanet.Unknown) ? Enum.GetName(typeof(EDPlanet), planet) : "", false));
+                                    writer.Write(csv.Format((planet != EDPlanet.Unknown_Body_Type) ? Enum.GetName(typeof(EDPlanet), planet) : "", false));
                                     writer.WriteLine();
                                 }
                             }
@@ -753,6 +760,32 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
+
+        private void extButtonFilter_Click(object sender, EventArgs e)
+        {
+            ExtendedControls.CheckedIconListBoxSelectionForm bodyfilter;
+            bodyfilter = new CheckedIconListBoxSelectionForm();
+            bodyfilter.AddAllNone();
+            foreach (var x in Enum.GetNames(typeof(EDPlanet)))
+                bodyfilter.AddStandardOption(x.ToString(), x.ToString().Replace("_", " ") );
+            foreach (var x in Enum.GetNames(typeof(EDStar)))
+                bodyfilter.AddStandardOption(x.ToString(), Bodies.StarName(x.ParseEnum<EDStar>()));
+
+            // these are filter types for items which are either do not have scandata or are not stars/bodies.  Only Belts/Barycentre are displayed.. scans of rings/beltculsters are not displayed
+            bodyfilter.AddStandardOption("star", "Star");
+            bodyfilter.AddStandardOption("body", "Body");
+            bodyfilter.AddStandardOption("barycentre", "Barycentre");
+            bodyfilter.AddStandardOption("belt", "Belt");
+
+            bodyfilter.Closing = (s, o) => 
+            {
+                bodyfilters = s.Split(';');
+                SQLiteDBClass.PutSettingString(DbSave + "BodyFilters", string.Join(";", bodyfilters));
+                DrawSystem();
+            };
+
+            bodyfilter.Show(string.Join(";",bodyfilters), extButtonFilter, this.FindForm());
+        }
     }
 }
 
