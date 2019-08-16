@@ -118,19 +118,19 @@ SECTION PopOutInfo
 .SplitterControl.Title: "Splitter" @
 .PanelSelector.Description: "" @
 .PanelSelector.Title: "+" @
-.Search.Title: "Search" @
-.Search.Description: "Search" @
-.CaptainsLog.Title: "Captain's Log" @
-.CaptainsLog.Description: "Captain's Log - notes on your travels" @
+.Search.Title: "Search" => "Procura"
+.Search.Description: "Search" => "Procura"
+.CaptainsLog.Title: "Captain's Log" => "Diário do Capitão"
+.CaptainsLog.Description: "Captain's Log - notes on your travels" => "Diário do Capitão - anotações pessoais"
 .Surveyor.Title: "Surveyor" @
-.Surveyor.Description: "Surface map aid" @
-.MissionOverlay.Title: "Mission Overlay" @
-.MissionOverlay.Description: "Mission List overlay" @
+.Surveyor.Description: "Surface map aid" => "Auxílio para mapeamento de corpos celestes"
+.MissionOverlay.Title: "Mission Overlay" => "Overlay das missões"
+.MissionOverlay.Description: "Mission List overlay" => "Overlays das listas de missões"
 
 SECTION EDDiscoveryForm
 
-.ConfirmSyncToEDSM: "You have disabled sync to EDSM for this commander.  Are you sure you want to send unsynced events to EDSM?" @
-.ConfirmSyncToEDSMCaption: "Confirm EDSM sync" @
+.ConfirmSyncToEDSM: "You have disabled sync to EDSM for this commander.  Are you sure you want to send unsynced events to EDSM?" => "Você desabilitou a sc=incronia da EDSM para este comandante. Tem certeza de que quer enviar dados não sincronizados a EDSM?"
+.ConfirmSyncToEDSMCaption: "Confirm EDSM sync" => "Confirma sincronização da EDSM"
 .toolsToolStripMenuItem: "&Tools" => "In&strumentos"
 .toolsToolStripMenuItem.settingsToolStripMenuItem: "Settings" => "Configuração"
 .toolsToolStripMenuItem.show2DMapsToolStripMenuItem: "Show &2D maps" => "Visualizar mapa &2D"
@@ -224,19 +224,19 @@ SECTION EDDiscoveryForm
 .EDSMSyncE: "EDSM Sync failed: {0}" => "Sincronização EDSM falhou: {0}"
 .EP: "Edit Profiles" => "Modificar Perfíis"
 .PL: "Profile {0} Loaded" => "Perfil {0} Caregado"
-.popOutPanelToolStripMenuItem: "Pop Out Panel.." @
-.CloseWarning: "EDDiscovery is updating the EDSM and EDDB databases\r\nPress OK to close now, Cancel to wait until update is complete" @
-.notifyIconMenu_Open: "&Open EDDiscovery" @
-.notifyIconMenu_Hide: "&Hide Tray Icon" @
-.notifyIconMenu_Exit: "E&xit" @
+.popOutPanelToolStripMenuItem: "Pop Out Panel.." => "Painel de Pop Out"
+.CloseWarning: "EDDiscovery is updating the EDSM and EDDB databases\r\nPress OK to close now, Cancel to wait until update is complete" => "EDDiscovery is updating the EDSM and EDDB databases\r\nPremi OK para fechar agora, Cancela para esperar o fim da atualização" 
+.notifyIconMenu_Open: "&Open EDDiscovery" => "Abre EDDiscovery"
+.notifyIconMenu_Hide: "&Hide Tray Icon" => "Esconde icona da barra d serviço"
+.notifyIconMenu_Exit: "E&xit" =?  S&ai"
 .buttonExt2dmap: "2D" @
 .buttonExt3dmap: "3D" @
-.adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.fetchLogsAgainToolStripMenuItem: "Fetch Logs Again" @
-.adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.fetchStarDataAgainToolStripMenuItem: "Fetch Star Data Again" @
-.WSE: "Web server enabled" @
-.WSF: "Web server failed to start" @
-.WSERR: "Web server disabled due to incorrect folder or missing zip file" @
-.WSD: "*** Web server is disabled ***" @
+.adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.fetchLogsAgainToolStripMenuItem: "Fetch Logs Again" =? "Scarica os registros novamente"
+.adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.fetchStarDataAgainToolStripMenuItem: "Fetch Star Data Again" => "Scarica novamente os registro di esploração"
+.WSE: "Web server enabled" => "Servidor Web ativado"
+.WSF: "Web server failed to start" =? "O servidor Web encontrou erro ao iniciar"
+.WSERR: "Web server disabled due to incorrect folder or missing zip file" => "Web server deativado"
+.WSD: "*** Web server is disabled ***" => "Deb Server desabilitado"
 
 SECTION EDDiscoveryController
 
@@ -323,8 +323,8 @@ SECTION SurfaceBookmarksForm
 .BodyName: "Planetary Body" => "Corpo Planetário"
 .SurfaceName: "Name" => "Nome"
 .SurfaceDesc: "Description" => "Descrição"
-.Latitude: "Latitude" @
-.Longitude: "Longitude" @
+.Latitude: "Latitude" => "Latitude"
+.Longitude: "Longitude" => "Longitude"
 .Valid: "Saveable" => "Salvavel"
 .deleteToolStripMenuItem: "Delete Row" => "Elimina linha"
 .addPlanetManuallyToolStripMenuItem: "Manually Add Planet" => "Adiciona manualmente um planeta"
@@ -337,31 +337,31 @@ SECTION SurfaceBookmarkUserControl
 .PresstoAccept: "Press to Accept" => "Pressiona para aceitar"
 .PresstoCancel: "Press to Cancel" => "Pressiona para cancelar"
 .MAP: "Manually Add Planet" => "Adiciona manualmente um planeta"
-.BodyName: "Planetary Body" @
-.SurfaceName: "Name" @
-.SurfaceDesc: "Description" @
-.Latitude: "Latitude" @
-.Longitude: "Longitude" @
+.BodyName: "Planetary Body" => "Corpo planetario"
+.SurfaceName: "Name" => "Nome"
+.SurfaceDesc: "Description" => "Descrizione"
+.Latitude: "Latitude" => "Latitude"
+.Longitude: "Longitude" => "Longitude"
 .Valid: "Saveable" @
-.labelSurface: "Surface Bookmarks In System" @
-.sendToCompassToolStripMenuItem: "Send to compass" @
-.deleteToolStripMenuItem: "Delete Row" @
-.addPlanetManuallyToolStripMenuItem: "Manually Add Planet" @
+.labelSurface: "Surface Bookmarks In System" => "Favorito de modelo de superfice"
+.sendToCompassToolStripMenuItem: "Send to compass" => Envia a compass"
+.deleteToolStripMenuItem: "Delete Row" => "Cancella riga"
+.addPlanetManuallyToolStripMenuItem: "Manually Add Planet" => "Introduce dados manualmente"
 
 SECTION FindSystemsUserControl
 
 .labelRadMax: "Max" @
 .labelRadMin: "Radius ly Min" => "Ráio Min (ly)"
 .labelFilter: "Star Name" => "Nome do Sistema"
-.Cannotfindsystem: "Cannot find system " @
-.buttonExtNames: "From DB Find Names" @
-.buttonExtEDSM: "From EDSM" @
-.buttonExtDB: "From DB" @
+.Cannotfindsystem: "Cannot find system " => "Impossível achar o sistema"
+.buttonExtNames: "From DB Find Names" => "Cerca neve dal DB"
+.buttonExtEDSM: "From EDSM" => "Cerca da EDSM"
+.buttonExtDB: "From DB" =? "Cerca de DB"
 .labelX: "X" @
 .labelY: "Y" @
 .labelZ: "Z" @
-.buttonExtVisited: "From Visited Systems" @
-.checkBoxCustomCube: "Cube" @
+.buttonExtVisited: "From Visited Systems" => Sistei prossimi
+.checkBoxCustomCube: "Cube" => "Ciubo"
 
 SECTION ConditionFilterForm
 
