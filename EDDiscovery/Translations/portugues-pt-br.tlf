@@ -484,16 +484,16 @@ CommanderForm: "CommanderForm" => "Ficha"
 .Abandon: "You have entered text in the CAPI login or password fields, do you want to abandon CAPI credential check?" => "O texto que inseriu no campo de login o de senha não funciona, quer abandonar o login CAPI?"
 .Confirm: "Confirm" => "Confirma"
 .LF: "Select folder where Journal*.log files are stored by Frontier in" => "Selecionar onde ficam os arquivos de Journal*.log criados da Frontier"
-.textBoxDefaultZoom.ToolTip: "Set the zoom level of the map. 1 is normal" @
-.radioButtonHistorySelection: "History Grid Selection" @
-.radioButtonHistorySelection.ToolTip: "Select history entry as opening location" @
-.radioButtonCentreHome: "Home System" @
-.radioButtonCentreHome.ToolTip: "Select home system as opening location" @
-.panel_defaultmapcolor.ToolTip: "New travel entries get this colour on the map" @
-.labelMapCol: "Default Map Color" @
-.labelZoom: "Default Zoom" @
-.labelOpenOn: "Open Centred On" @
-.HomeSys: "Home System:" @
+.textBoxDefaultZoom.ToolTip: "Set the zoom level of the map. 1 is normal" => "Seleziona o nível de zoom do mapa. 1 é o normal."
+.radioButtonHistorySelection: "History Grid Selection" => "Seleção da Grade do Histórico"
+.radioButtonHistorySelection.ToolTip: "Select history entry as opening location" => "Centra no registro do histórico selecionado"
+.radioButtonCentreHome: "Home System" => "Sistema estelar de moradia"
+.radioButtonCentreHome.ToolTip: "Select home system as opening location" => "Centra no sistema estelar de moradia"
+.panel_defaultmapcolor.ToolTip: "New travel entries get this colour on the map" => "Novos registros de viajem recebem essa cor no mapa"
+.labelMapCol: "Default Map Color" => "Cor do mapa predefinido"
+.labelZoom: "Default Zoom" => "Zoom predefinido"
+.labelOpenOn: "Open Centred On" => "Abre centrado su"
+.HomeSys: "Home System:" => "Sistema estelar de moradia"
 
 SECTION ExportForm
 
@@ -519,19 +519,19 @@ SECTION Form2DMap
 .Custom: "Custom" => "Personalizado"
 Form2DMap: "2D Map" => "Mapa 2D"
 .Nomapsavailable: "No maps available" => "Nenhum mapa disponível"
-.toolStripButtonStars: "Stars" @
-.toolStripButtonSave: "Save" @
+.toolStripButtonStars: "Stars" => "Estrelas"
+.toolStripButtonSave: "Save" => "Salva"
 
 SECTION GalaxySectorSelect
 
 GalaxySectorSelect: "GalaxySectorSelect" => "Seletor de Setores Galácticos"
-.buttonExtCancel: "Cancel" @
-.buttonExtSet: "Set" @
+.buttonExtCancel: "Cancel" => "Cancela"
+.buttonExtSet: "Set" => "Imposta"
 .labelSectorName: "Sector" => "Setores"
 .Custom: "Custom" => "Personalizado"
 .Reset: "Reset" => "Resetar"
 .All: "All" => "Tudo"
-.None: "None" @
+.None: "None" => "Nenhum"
 .Bubble: "Bubble" => "Bolha"
 .ExtendedBubble: "Extended Bubble" => "Bolha Extendida"
 .BC: "Bubble+Colonia" => "Bolha+Colonia"
@@ -539,18 +539,18 @@ GalaxySectorSelect: "GalaxySectorSelect" => "Seletor de Setores Galácticos"
 .NoSync: "Synchronisation to star data disabled in settings.\r\nReenable to allow star data to be updated" => "Sincronização de todos os dados desabilitados nos ajustes.\r\nRehabilitar para atualizar dados galácticos"
 .Warning: "Warning" => "Attenção"
 .RS: "You have removed sectors!\r\nThis will require the DB to be cleaned of entries, which will take time\r\nConfirm you wish to do this?" => "Você removeu setores!\r\nIsto requer a limpeza de todos os registros, coisa que necessita de tempo. Confirma?"
-.GALSELEX: "ED Discovery downloads star data from EDSM/EDDB which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed" @
-.Select: "Select:" @
-.GALSELEN: "Select the data set" @
-.PresstoAccept: "Press to Accept" @
-.PresstoCancel: "Press to Cancel" @
-.GALSELTitle: "Select EDSM Galaxy Data" @
+.GALSELEX: "ED Discovery downloads star data from EDSM/EDDB which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed" => "ED Discovery baixa dados estelares da EDSM/EDDB, dados usados para te oferecer dados adicionais. Seleciona quantos desses dados você quer baixar e armazenar. Quantos mais dados estelares você baixar, mas espaço no disco e mais memória RAM serão usados."
+.Select: "Select:" => "Seleciona"
+.GALSELEN: "Select the data set" => "Escolhe o set de dados estelares"
+.PresstoAccept: "Press to Accept" => "Pressiona para aceitar"
+.PresstoCancel: "Press to Cancel" => "Pressiona para cancelar"
+.GALSELTitle: "Select EDSM Galaxy Data" => "Seleciona os Dados Estelares EDSM"
 
 SECTION MoveToCommander
 
 MoveToCommander: "MoveToCommander" => "Move para o comandante"
-.buttonExtCancel: "Cancel" @
-.buttonTransfer: "Transfer" @
+.buttonExtCancel: "Cancel" => "Cancela"
+.buttonTransfer: "Transfer" => "Transfira"
 .label1: "Move selected history to commander." => "Move o histórico selecionado ao comandante."
 
 SECTION NewReleaseForm
@@ -560,9 +560,9 @@ NewReleaseForm: "EDDiscovery Release" => "Versão EDDiscovery"
 .btnClose: "&Close" => "&Fecha"
 .buttonMsiInstaller: "&Msi Installer" => "Instalador &Msi"
 .labelURL: "GitHub URL" => "URL GitHUB"
-.labelDownload: "Download" @
-.buttonPortablezip: "&Portable Zip" @
-.buttonUrlOpen: "&Open" @
+.labelDownload: "Download" => "Descarrega"
+.buttonPortablezip: "&Portable Zip" => "Arquivo &Portátil"
+.buttonUrlOpen: "&Open" => "&Abre"
 .buttonExeInstaller: "&Exe Installer" => "Instalador &EXE"
 .labelRelease: "Release info" => "Informações sobre a versão"
 
@@ -586,7 +586,7 @@ ProfileEditor: "ProfileEditor" => "Editor de Perfil"
 SECTION RecordStep
 
 RecordStep: "RecordStep" => "Gravar passos"
-.labelGoto: "Go to" @
+.labelGoto: "Go to" => "Vai a"
 .labelPAt: "Pointing At" => "Apontar a"
 .checkBoxWaitForSlew: "Wait for slew" => "Esperar"
 .checkBoxChangeZoom: "Change Zoom" => "Mudar zoom"
@@ -646,8 +646,8 @@ SECTION KeyForm
 .PK: "Press Key" => "Pressiona Tecla"
 KeyForm: "Define Key Sequence" => "Defina uma sequência de teclas"
 .radioButtonUp: "Up" => "Cima"
-.radioButtonDown: "Down" @
-.radioButtonPress: "Press" @
+.radioButtonDown: "Down" => "Baixo"
+.radioButtonPress: "Press" => "Pressiona"
 .checkBoxShift: "Shift" @
 .checkBoxCtrl: "Ctrl" @
 .checkBoxAlt: "Alt" @
@@ -666,12 +666,12 @@ KeyForm: "Define Key Sequence" => "Defina uma sequência de teclas"
 
 SECTION UserControlForm
 
-.panel_minimize.ToolTip: "Minimise" @
-.panel_ontop.ToolTip: "Toggle window on top of others" @
-.panel_close.ToolTip: "Close" @
-.panel_taskbaricon.ToolTip: "Toggle show taskbar icon for this window" @
-.panel_showtitle.ToolTip: "Toggle title visibility for this window when transparent" @
-.panel_transparent.ToolTip: "Toggle window transparency thru four settings\r\nOff - normal window\r\nOn (T) - transparent with controls active when mouse not inside window\r\nOn (Tc) - transparent with control active, to activate hold down the activate key\r\nOn (Tf) - fully transparent and inert, to activate hold down the activate key\r\n\r\nSee the settings page for configuring which key is the activate key.  \r\nMouse must be within the boundaries of the window and the key held down for\r\n500ms approx.\r\n\r\n\r\n" @
+.panel_minimize.ToolTip: "Minimise" => "Minimiza"
+.panel_ontop.ToolTip: "Toggle window on top of others" => "Imposta acima das outras janelas"
+.panel_close.ToolTip: "Close" => "Fecha"
+.panel_taskbaricon.ToolTip: "Toggle show taskbar icon for this window" => "Mostra ou não a ícona na barra de ferramentas"
+.panel_showtitle.ToolTip: "Toggle title visibility for this window when transparent" => "Imposta a vibilidade do título da janela"
+.panel_transparent.ToolTip: "Toggle window transparency thru four settings\r\nOff - normal window\r\nOn (T) - transparent with controls active when mouse not inside window\r\nOn (Tc) - transparent with control active, to activate hold down the activate key\r\nOn (Tf) - fully transparent and inert, to activate hold down the activate key\r\n\r\nSee the settings page for configuring which key is the activate key.  \r\nMouse must be within the boundaries of the window and the key held down for\r\n500ms approx.\r\n\r\n\r\n" => "Imposta a transparência através de quatro presets:\r\nOff - normal, sem transparências\r\nOn (T) - transparente, com os controles ativos quando o mouse está dentro da janela\r\nOn (Tc) - transparente, com os controles ativos, activada mantendo pressionada a tecla de ativação\r\nOn (Tf) - transparência total, inerte, para interagir manter pressionada a tecla de ativação\r\n\r\nSee the settings page for configuring which key is the activate key.  \r\nMouse must be within the boundaries of the window and the key held down for\r\n500ms approx.\r\n\r\n\r\n"
 
 include translation-portugues-uc.tlp
 
