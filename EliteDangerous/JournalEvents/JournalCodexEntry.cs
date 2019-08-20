@@ -39,6 +39,8 @@ namespace EliteDangerousCore.JournalEvents
             SystemAddress = evt["SystemAddress"].LongNull();
             IsNewEntry = evt["IsNewEntry"].BoolNull();
             NewTraitsDiscovered = evt["NewTraitsDiscovered"].BoolNull();
+            NearestDestination = evt["NearestDestination"].StrNull();
+            NearestDestination_Localised = evt["NearestDestination_Localised"].StrNull();
             if ( evt["Traits"] != null )
                 Traits = evt["Traits"].ToObjectProtected<string[]>();
         }
@@ -57,6 +59,8 @@ namespace EliteDangerousCore.JournalEvents
         public bool? IsNewEntry { get; set; }
         public bool? NewTraitsDiscovered { get; set; }
         public string [] Traits { get; set; }
+        public string NearestDestination { get; set; }
+        public string NearestDestination_Localised { get; set; }
 
         public override void FillInformation(out string info, out string detailed)
         {

@@ -724,6 +724,10 @@ namespace EliteDangerousCore.EDDN
             if (system.SystemAddress == null)
                 return null;
 
+            // Reject scan if system doesn't match scan system
+            if (journal.SystemAddress != null && journal.StarSystem != null && (journal.SystemAddress != system.SystemAddress || journal.StarSystem != system.Name))
+                return null;
+
             JObject msg = new JObject();
 
             msg["header"] = Header();

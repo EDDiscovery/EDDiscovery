@@ -63,6 +63,7 @@ namespace EliteDangerousCore.JournalEvents
             Bounty = evt["Bounty"].IntNull();
             SubSystem = evt["SubSystem"].StrNull();
             SubSystemHealth = evt["SubSystemHealth"].DoubleNull();
+            Power = evt["Power"].StrNull();
         }
 
         public bool TargetLocked { get; set; }          // if false, no info below
@@ -81,6 +82,7 @@ namespace EliteDangerousCore.JournalEvents
         public int? Bounty { get; set; }                // 3 null 
         public string SubSystem { get; set; }           // 3 null
         public double? SubSystemHealth { get; set; }    // 3 null
+        public string Power { get; set; }               // 3 null
 
         public List<JournalShipTargeted> MergedEntries { get; set; }    // if verbose.. doing it this way does not break action packs as the variables are maintained
                                                                     // This is second, third merge etc.  First one is in above variables
