@@ -653,6 +653,8 @@
     <EmbeddedResource Include="Controls\SysInfo\notfirstdiscover.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Stars\G_WhiteSuperGiant.png" />
+    <EmbeddedResource Include="Stars\B_BlueWhiteSuperGiant.png" />
     <EmbeddedResource Include="General\OrderHoldPosition.png" />
     <EmbeddedResource Include="General\ResetPowerDistribution.png" />
     <EmbeddedResource Include="General\SrvDriveAssist.png" />
