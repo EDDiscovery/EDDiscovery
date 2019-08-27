@@ -928,7 +928,7 @@ namespace EliteDangerousCore.EDSM
             { "a (blue-white super giant) star", "A_BlueWhiteSuperGiant" },
             { "b (blue-white super giant) star", "B_BlueWhiteSuperGiant" },
             { "f (white super giant) star", "F_WhiteSuperGiant" },
-            { "g (white super giant) star", "G_WhiteSuperGiant" },
+            { "g (white-yellow super giant) star", "G_WhiteSuperGiant" },
             { "k (yellow-orange giant) star", "K_OrangeGiant" },
             { "m (red giant) star", "M_RedGiant" },
             { "m (red super giant) star", "M_RedSuperGiant" },
