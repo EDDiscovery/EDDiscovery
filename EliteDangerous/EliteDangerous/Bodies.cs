@@ -92,6 +92,8 @@ namespace EliteDangerousCore
         Nebula,
         StellarRemnantNebula,
         SuperMassiveBlackHole,
+        B_BlueWhiteSuperGiant,
+        G_WhiteSuperGiant,
     };
 
     public enum EDPlanet

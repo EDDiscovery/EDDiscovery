@@ -33,6 +33,8 @@ namespace EliteDangerousCore.JournalEvents
         public string ScanType { get; set; }                        // 3.0 scan type  Basic, Detailed, NavBeacon, NavBeaconDetail, (3.3) AutoScan, or empty for older ones
         public string BodyName { get; set; }                        // direct (meaning no translation)
         public int? BodyID { get; set; }                            // direct
+        public string StarSystem { get; set; }                      // direct (3.5)
+        public long? SystemAddress { get; set; }                    // direct (3.5)
         public double DistanceFromArrivalLS { get; set; }           // direct
         public string DistanceFromArrivalText { get { return string.Format("{0:0.00}AU ({1:0.0}ls)", DistanceFromArrivalLS / JournalScan.oneAU_LS, DistanceFromArrivalLS); } }
         public double? nRotationPeriod { get; set; }                // direct
@@ -235,6 +237,8 @@ namespace EliteDangerousCore.JournalEvents
             ScanType = evt["ScanType"].Str();
             BodyName = evt["BodyName"].Str();
             BodyID = evt["BodyID"].IntNull();
+            StarSystem = evt["StarSystem"].StrNull();
+            SystemAddress = evt["SystemAddress"].LongNull();
             StarType = evt["StarType"].StrNull();
 
             DistanceFromArrivalLS = evt["DistanceFromArrivalLS"].Double();
@@ -1085,8 +1089,13 @@ namespace EliteDangerousCore.JournalEvents
             return PlanetComposition[c] * 100;
         }
 
-        public bool IsStarNameRelated(string starname, string designation = null)
+        public bool IsStarNameRelated(string starname, string designation = null, long? sysaddr = null)
         {
+            if (StarSystem != null && SystemAddress != null && sysaddr != null)
+            {
+                return starname == StarSystem && sysaddr == SystemAddress;
+            }
+
             if (designation == null)
             {
                 designation = BodyName;
@@ -1101,17 +1110,29 @@ namespace EliteDangerousCore.JournalEvents
                 return false;
         }
 
-        public string IsStarNameRelatedReturnRest(string starname)          // null if not related, else rest of string
+        public string IsStarNameRelatedReturnRest(string starname, long? sysaddr = null)          // null if not related, else rest of string
         {
             string designation = BodyDesignation ?? BodyName;
+            string desigrest = null;
+
+            if (StarSystem != null && SystemAddress != null && sysaddr != null)
+            {
+                if (starname != StarSystem || sysaddr != SystemAddress)
+                {
+                    return null;
+                }
+
+                desigrest = designation;
+            }
+
             if (designation.Length >= starname.Length)
             {
                 string s = designation.Substring(0, starname.Length);
                 if (starname.Equals(s, StringComparison.InvariantCultureIgnoreCase))
-                    return designation.Substring(starname.Length).Trim();
+                    desigrest = designation.Substring(starname.Length).Trim();
             }
 
-            return null;
+            return desigrest;
         }
 
         // Habitable zone calculations, formula cribbed from JackieSilver's HabZone Calculator with permission

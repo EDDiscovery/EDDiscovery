@@ -26,10 +26,14 @@ namespace EliteDangerousCore.JournalEvents
             Latitude = evt["Latitude"].Double();
             Longitude = evt["Longitude"].Double();
             PlayerControlled = evt["PlayerControlled"].BoolNull();
+            NearestDestination = evt["NearestDestination"].StrNull();
+            NearestDestination_Localised = evt["NearestDestination_Localised"].StrNull();
         }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         public bool? PlayerControlled { get; set; }
+        public string NearestDestination { get; set; }
+        public string NearestDestination_Localised { get; set; }
 
         public override void FillInformation(out string info, out string detailed) 
         {
@@ -46,10 +50,14 @@ namespace EliteDangerousCore.JournalEvents
             Latitude = evt["Latitude"].Double();
             Longitude = evt["Longitude"].Double();
             PlayerControlled = evt["PlayerControlled"].BoolNull();
+            NearestDestination = evt["NearestDestination"].StrNull();
+            NearestDestination_Localised = evt["NearestDestination_Localised"].StrNull();
         }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         public bool? PlayerControlled { get; set; }
+        public string NearestDestination { get; set; }
+        public string NearestDestination_Localised { get; set; }
 
         public override void FillInformation(out string info, out string detailed)
         {
