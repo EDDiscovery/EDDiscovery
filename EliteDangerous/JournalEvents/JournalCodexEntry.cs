@@ -40,7 +40,7 @@ namespace EliteDangerousCore.JournalEvents
             IsNewEntry = evt["IsNewEntry"].BoolNull();
             NewTraitsDiscovered = evt["NewTraitsDiscovered"].BoolNull();
             NearestDestination = evt["NearestDestination"].StrNull();
-            NearestDestination_Localised = evt["NearestDestination_Localised"].StrNull();
+            NearestDestination_Localised = JournalFieldNaming.CheckLocalisation(evt["NearestDestination_Localised"].StrNull(), NearestDestination);
             if ( evt["Traits"] != null )
                 Traits = evt["Traits"].ToObjectProtected<string[]>();
         }
@@ -70,7 +70,9 @@ namespace EliteDangerousCore.JournalEvents
                                                 "", Category_Localised,
                                                 "", SubCategory_Localised,
                                                 ";New Entry".T(EDTx.JournalCodexEntry_NewEntry), IsNewEntry,
-                                                ";Traits".T(EDTx.JournalCodexEntry_Traits), NewTraitsDiscovered);
+                                                ";Traits".T(EDTx.JournalCodexEntry_Traits), NewTraitsDiscovered,
+                                                "Nearest:".T(EDTx.JournalNearest), NearestDestination_Localised
+                                                );
             detailed = "";
 
             if (Traits != null)

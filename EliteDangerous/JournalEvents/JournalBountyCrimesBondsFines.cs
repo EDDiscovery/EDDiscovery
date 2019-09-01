@@ -170,15 +170,17 @@ namespace EliteDangerousCore.JournalEvents
         {
             CrimeType = evt["CrimeType"].Str().SplitCapsWordFull();
             Offender = evt["Offender"].Str();
+            OffenderLocalised = JournalFieldNaming.CheckLocalisation(evt["Offender_Localised"].Str(), Offender);
             Bounty = evt["Bounty"].Long();
         }
         public string CrimeType { get; set; }
         public string Offender { get; set; }
+        public string OffenderLocalised { get; set; }
         public long Bounty { get; set; }
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = BaseUtils.FieldBuilder.Build("", CrimeType, "Offender ".T(EDTx.JournalEntry_Offender), Offender, "Bounty:; cr;N0".T(EDTx.JournalEntry_Bounty), Bounty);
+            info = BaseUtils.FieldBuilder.Build("", CrimeType, "Offender ".T(EDTx.JournalEntry_Offender), OffenderLocalised, "Bounty:; cr;N0".T(EDTx.JournalEntry_Bounty), Bounty);
             detailed = "";
         }
     }

@@ -143,7 +143,7 @@ namespace EliteDangerousCore.JournalEvents
                     info += ", " + s.SignalName_Localised;
 
                 foreach (var s in Signals)
-                    detailed = detailed.AppendPrePad(s.ToString(),System.Environment.NewLine);
+                    detailed = detailed.AppendPrePad(s.ToString(), System.Environment.NewLine);
             }
             else
             {
@@ -189,7 +189,7 @@ namespace EliteDangerousCore.JournalEvents
         public int ProbesUsed { get; set; }
         public int EfficiencyTarget { get; set; }
         public string BodyDesignation { get; set; }
-        public long? SystemAddress { get; set; }
+        public long? SystemAddress { get; set; }    // 3.5
 
         public override void FillInformation(out string info, out string detailed)
         {
@@ -227,6 +227,13 @@ namespace EliteDangerousCore.JournalEvents
         {
             info = BaseUtils.FieldBuilder.Build("", BodyName);
             detailed = "";
+            if ( Signals!= null)
+            {
+                foreach( var x in Signals )
+                {
+                    info = info.AppendPrePad(x.Type_Localised.Alt(x.Type) + ":"  + x.Count.ToString("N0"), ", ");
+                }
+            }
         }
     }
 

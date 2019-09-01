@@ -602,6 +602,8 @@ namespace EliteDangerousCore
         JournalReservoirReplenished_Reservoir, // Reservoir:;t;0.0
         JournalUnknown_UnhandledJournalevent, // Unhandled Journal event, Report to EDDiscovery team.
 
+        JournalRemainingJumps,  // Remaining Jumps
+        JournalNearest, // Nearest:
 
     }
 
