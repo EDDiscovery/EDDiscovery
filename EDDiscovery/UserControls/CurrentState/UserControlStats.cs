@@ -178,13 +178,13 @@ namespace EDDiscovery.UserControls
 
                 HistoryEntry down = hl.GetConditionally(Double.MaxValue, (HistoryEntry s, ref double l) =>
                 { bool v = s.IsFSDJump && s.System.HasCoordinate && s.System.Y < l; if (v) l = s.System.Y; return v; });
-                
-                StatToDGV("Most North".T(EDTx.UserControlStats_MostNorth), north.System.Name + " @ " + north.System.X.ToString("0.0") + "; " + north.System.Y.ToString("0.0") + "; " + north.System.Z.ToString("0.0"));
-                StatToDGV("Most South".T(EDTx.UserControlStats_MostSouth), south.System.Name + " @ " + south.System.X.ToString("0.0") + "; " + south.System.Y.ToString("0.0") + "; " + south.System.Z.ToString("0.0"));
-                StatToDGV("Most East".T(EDTx.UserControlStats_MostEast), east.System.Name + " @ " + east.System.X.ToString("0.0") + "; " + east.System.Y.ToString("0.0") + "; " + east.System.Z.ToString("0.0"));
-                StatToDGV("Most West".T(EDTx.UserControlStats_MostWest), west.System.Name + " @ " + west.System.X.ToString("0.0") + "; " + west.System.Y.ToString("0.0") + "; " + west.System.Z.ToString("0.0"));
-                StatToDGV("Most Highest".T(EDTx.UserControlStats_MostHighest), up.System.Name + " @ " + up.System.X.ToString("0.0") + "; " + up.System.Y.ToString("0.0") + "; " + up.System.Z.ToString("0.0"));
-                StatToDGV("Most Lowest".T(EDTx.UserControlStats_MostLowest), down.System.Name + " @ " + down.System.X.ToString("0.0") + "; " + down.System.Y.ToString("0.0") + "; " + down.System.Z.ToString("0.0"));
+
+                StatToDGV("Most North".T(EDTx.UserControlStats_MostNorth), GetSystemDataString(north));
+                StatToDGV("Most South".T(EDTx.UserControlStats_MostSouth), GetSystemDataString(south));
+                StatToDGV("Most East".T(EDTx.UserControlStats_MostEast), GetSystemDataString(east));
+                StatToDGV("Most West".T(EDTx.UserControlStats_MostWest), GetSystemDataString(west));
+                StatToDGV("Most Highest".T(EDTx.UserControlStats_MostHighest), GetSystemDataString(up));
+                StatToDGV("Most Lowest".T(EDTx.UserControlStats_MostLowest), GetSystemDataString(down));
 
                 var groupeddata = from data in hl.OrderByDate
                                   where data.IsFSDJump
@@ -234,6 +234,18 @@ namespace EDDiscovery.UserControls
                 mostVisited.Visible = false;
 
             PerformLayout();
+        }
+
+        private string GetSystemDataString(HistoryEntry he)
+        {
+            if (he == null)
+            {
+                return "N/A";
+            }
+            else
+            {
+                return he.System.Name + " @ " + he.System.X.ToString("0.0") + "; " + he.System.Y.ToString("0.0") + "; " + he.System.Z.ToString("0.0");
+            }
         }
 
         bool IsTravelling(HistoryList hl, out DateTime startTime)
