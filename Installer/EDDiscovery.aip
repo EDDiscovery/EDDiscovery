@@ -18,10 +18,10 @@
     <ROW Property="ARPURLUPDATEINFO" Value="https://github.com/EDDiscovery/EDDiscovery/releases"/>
     <ROW Property="CTRLS" Value="2"/>
     <ROW Property="Manufacturer" Value="EDDiscovery"/>
-    <ROW Property="ProductCode" Value="1033:{4E052283-36D6-4AF6-901D-B58E7DCAC670} 1053:{624E0810-1DF7-403A-BF8E-7A0F7131C90C} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{6ED1A2B0-B5EE-441F-8858-DB603B6706E3} 1053:{40CCACB2-D34E-4CB7-960F-D8E7FBBEA9A1} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="EDDiscovery"/>
-    <ROW Property="ProductVersion" Value="10.6.0" Type="32"/>
+    <ROW Property="ProductVersion" Value="11.0.0" Type="32"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND;UPGRADE_1;AI_SETUPEXEPATH;SETUPEXEDIR"/>
     <ROW Property="UpgradeCode" Value="{27EA2F84-C7C5-41E2-9C59-CC42CCDC9FEF}"/>
     <ROW Property="WindowsType9X" MultiBuildValue="AnyCPU_Debug:Windows 9x/ME" ValueLocId="-"/>
@@ -122,13 +122,14 @@
     <ROW File="System.Data.SQLite.xml" Component_="fround.js" FileName="SYSTEM~1.XML|System.Data.SQLite.xml" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\System.Data.SQLite.xml" SelfReg="false" NextFile="msvcp100.dll"/>
     <ROW File="chinesezh.tlf" Component_="EDDiscovery.exe.config" FileName="CHINES~1.TLF|chinese-zh.tlf" Attributes="0" SourcePath="..\EDDiscovery\Translations\chinese-zh.tlf" SelfReg="false" NextFile="translationchineseuc.tlp"/>
     <ROW File="deutschde.tlf" Component_="EDDiscovery.exe.config" FileName="DEUTSC~1.TLF|deutsch-de.tlf" Attributes="0" SourcePath="..\EDDiscovery\Translations\deutsch-de.tlf" SelfReg="false" NextFile="exampleex.tlf"/>
+    <ROW File="eddwebsite.zip" Component_="EDDiscovery.exe.config" FileName="EDDWEB~1.ZIP|eddwebsite.zip" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\eddwebsite.zip" SelfReg="false"/>
     <ROW File="exampleex.tlf" Component_="EDDiscovery.exe.config" FileName="EXAMPL~1.TLF|example-ex.tlf" Attributes="0" SourcePath="..\EDDiscovery\Translations\example-ex.tlf" SelfReg="false" NextFile="italianoit.tlf"/>
     <ROW File="italianoit.tlf" Component_="EDDiscovery.exe.config" FileName="ITALIA~1.TLF|italiano-it.tlf" Attributes="0" SourcePath="..\EDDiscovery\Translations\italiano-it.tlf" SelfReg="false" NextFile="translationdeutschuc.tlp"/>
     <ROW File="msvcp100.dll" Component_="msvcp100.dll" FileName="msvcp100.dll" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\x86\Microsoft.VC100.CRT\msvcp100.dll" SelfReg="false" NextFile="msvcr100.dll"/>
     <ROW File="msvcr100.dll" Component_="msvcr100.dll" FileName="msvcr100.dll" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\x86\Microsoft.VC100.CRT\msvcr100.dll" SelfReg="false" NextFile="SQLite.Interop.dll"/>
     <ROW File="polskipl.tlf" Component_="EDDiscovery.exe.config" FileName="POLSKI~1.TLF|polski-pl.tlf" Attributes="0" SourcePath="..\EDDiscovery\Translations\polski-pl.tlf" SelfReg="false" NextFile="translationpolskiuc.tlp"/>
     <ROW File="portuguesptbr.tlf" Component_="EDDiscovery.exe.config" FileName="PORTUG~1.TLF|portugues-pt-br.tlf" Attributes="0" SourcePath="..\EDDiscovery\Translations\portugues-pt-br.tlf" SelfReg="false" NextFile="polskipl.tlf"/>
-    <ROW File="russianru.tlf" Component_="EDDiscovery.exe.config" FileName="RUSSIA~1.TLF|russian-ru.tlf" Attributes="0" SourcePath="..\EDDiscovery\Translations\russian-ru.tlf" SelfReg="false"/>
+    <ROW File="russianru.tlf" Component_="EDDiscovery.exe.config" FileName="RUSSIA~1.TLF|russian-ru.tlf" Attributes="0" SourcePath="..\EDDiscovery\Translations\russian-ru.tlf" SelfReg="false" NextFile="eddwebsite.zip"/>
     <ROW File="translationchineseed.tlp" Component_="EDDiscovery.exe.config" FileName="TRANS~14.TLP|translation-chinese-ed.tlp" Attributes="0" SourcePath="..\EliteDangerous\EliteDangerous\translation-chinese-ed.tlp" SelfReg="false" NextFile="translationchineseje.tlp"/>
     <ROW File="translationchineseje.tlp" Component_="EDDiscovery.exe.config" FileName="TRANS~15.TLP|translation-chinese-je.tlp" Attributes="0" SourcePath="..\EliteDangerous\JournalEvents\translation-chinese-je.tlp" SelfReg="false" NextFile="translationrussianje.tlp"/>
     <ROW File="translationchineseuc.tlp" Component_="EDDiscovery.exe.config" FileName="TRANS~13.TLP|translation-chinese-uc.tlp" Attributes="0" SourcePath="..\EDDiscovery\UserControls\translation-chinese-uc.tlp" SelfReg="false" NextFile="translationchineseed.tlp"/>
