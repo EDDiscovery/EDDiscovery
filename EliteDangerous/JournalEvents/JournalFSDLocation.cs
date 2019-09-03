@@ -576,14 +576,16 @@ namespace EliteDangerousCore.JournalEvents
         {
             StarSystem = evt["Name"].Str();
             SystemAddress = evt["SystemAddress"].Long();
+            RemainingJumpsInRoute = evt["RemainingJumpsInRoute"].IntNull();
         }
 
         public string StarSystem { get; set; }
         public long SystemAddress { get; set; }
+        public int? RemainingJumpsInRoute { get; set; }
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = BaseUtils.FieldBuilder.Build("", StarSystem);
+            info = BaseUtils.FieldBuilder.Build("", StarSystem,"Remaining Jumps".T(EDTx.JournalRemainingJumps), RemainingJumpsInRoute);
             detailed = "";
         }
     }

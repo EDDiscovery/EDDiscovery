@@ -299,12 +299,12 @@ namespace EliteDangerousCore
                     jl = (JournalLocOrJump)he.journalEntry;
                     string designation = GetBodyDesignation(je, he.System.Name);
 
-                    if (je.IsStarNameRelated(he.System.Name, designation))       // if its part of the name, use it
+                    if (je.IsStarNameRelated(he.System.Name, designation, he.System.SystemAddress))       // if its part of the name, use it
                     {
                         je.BodyDesignation = designation;
                         return ProcessJournalScan(je, he.System, true);
                     }
-                    else if (jl != null && je.IsStarNameRelated(jl.StarSystem, designation))
+                    else if (jl != null && je.IsStarNameRelated(jl.StarSystem, designation, jl.SystemAddress))
                     {
                         // Ignore scans where the system name has changed
                         return false;
@@ -401,7 +401,7 @@ namespace EliteDangerousCore
             isbeltcluster = false;
             isring = false;
             List<string> elements;
-            string rest = sc.IsStarNameRelatedReturnRest(sys.Name);
+            string rest = sc.IsStarNameRelatedReturnRest(sys.Name, sys.SystemAddress);
 
             if (rest != null)                                   // if we have a relationship..
             {
@@ -465,7 +465,7 @@ namespace EliteDangerousCore
 
         private string GetCustomNameJournalScan(JournalScan sc, ISystem sys)
         {
-            string rest = sc.IsStarNameRelatedReturnRest(sys.Name);
+            string rest = sc.IsStarNameRelatedReturnRest(sys.Name, sys.SystemAddress);
             string customname = null;
 
             if (sc.BodyName.StartsWith(sys.Name, StringComparison.InvariantCultureIgnoreCase))

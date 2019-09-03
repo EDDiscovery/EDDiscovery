@@ -164,6 +164,7 @@
   </ItemGroup>
   <UsingTask TaskName="Zip" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
     <ParameterGroup>
+      <FileRoot ParameterType="System.String" Required="false" />
       <OutputFilename ParameterType="System.String" Required="true" />
       <BaseDirectory ParameterType="System.String" Required="true" />
       <Files ParameterType="Microsoft.Build.Framework.ITaskItem[]" Required="true" />
@@ -175,6 +176,7 @@
             try
             {
                 var zipnames = new HashSet<string>();
+                Console.WriteLine("Zip root '" + BaseDirectory + "'");
 
                 using (Stream zipStream = new FileStream(Path.GetFullPath(OutputFilename), FileMode.Create, FileAccess.Write))
                 {
@@ -199,6 +201,8 @@
                                         name = Path.GetFileName(filename);
                                     }
                                 }
+
+                                Console.WriteLine(".. zip up '" + filename + "' m:'" + metaname + "' -> '" + name + "'");
 
                                 if (!zipnames.Contains(name))
                                 {
@@ -232,9 +236,15 @@
     </PropertyGroup>
     <Error Condition="!Exists('$(OutDir)EDDiscovery.exe')" Text="$(OutDir)EDDiscovery.exe not found" />
     <ItemGroup>
+      <WebFiles Include="$(MSBuildProjectDirectory)\..\WebSite\EDD\**" />
+    </ItemGroup>
+    <Message Text="Webfiles zip up '@(WebFiles)'" />
+    <ZipDirectory OutputFileName="$(OutDir)eddwebsite.zip" Files="@(WebFiles)" BaseDirectory="$(MSBuildProjectDirectory)\..\WebSite\EDD\"  />
+    <ItemGroup>
       <ZipFiles Include="$(TargetPath)" />
       <ZipFiles Include="$(OutDir)*.dll" />
       <ZipFiles Include="$(OutDir)*.pdb" />
+      <ZipFiles Include="$(OutDir)eddwebsite.zip" />
       <ZipFiles Include="$(MSBuildProjectDirectory)\Translations\*.tlf" />
       <ZipFiles Include="$(MSBuildProjectDirectory)\UserControls\*.tlp" />
       <ZipFiles Include="$(MSBuildProjectDirectory)\..\EliteDangerous\EliteDangerous\*.tlp" />
@@ -250,7 +260,7 @@
       </Zipfiles>
       <Zipfiles Include="$(OutDir)runtimes\**\*.dll" />
     </ItemGroup>
-    <Message Text="'@(ZipFiles)' -&gt; '$(OutDir)EDDiscovery.Portable.zip'" />
+    <Message Text="Portable build Zip up '@(ZipFiles)' -&gt; '$(OutDir)EDDiscovery.Portable.zip'" />
     <Zip OutputFileName="$(OutDir)EDDiscovery.Portable.zip" BaseDirectory="$(OutDir)" Files="@(ZipFiles)" />
     <Error Condition="!Exists('$(OutDir)EDDiscovery.Portable.zip')" Text="Unknown error in BuildPortableZip." />
   </Target>

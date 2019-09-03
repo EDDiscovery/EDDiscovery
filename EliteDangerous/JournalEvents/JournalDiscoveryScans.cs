@@ -143,7 +143,7 @@ namespace EliteDangerousCore.JournalEvents
                     info += ", " + s.SignalName_Localised;
 
                 foreach (var s in Signals)
-                    detailed = detailed.AppendPrePad(s.ToString(),System.Environment.NewLine);
+                    detailed = detailed.AppendPrePad(s.ToString(), System.Environment.NewLine);
             }
             else
             {
@@ -181,6 +181,7 @@ namespace EliteDangerousCore.JournalEvents
             BodyID = evt["BodyID"].Long();
             ProbesUsed = evt["ProbesUsed"].Int();
             EfficiencyTarget = evt["EfficiencyTarget"].Int();
+            SystemAddress = evt["SystemAddress"].LongNull();
         }
 
         public long BodyID { get; set; }
@@ -188,6 +189,7 @@ namespace EliteDangerousCore.JournalEvents
         public int ProbesUsed { get; set; }
         public int EfficiencyTarget { get; set; }
         public string BodyDesignation { get; set; }
+        public long? SystemAddress { get; set; }    // 3.5
 
         public override void FillInformation(out string info, out string detailed)
         {
@@ -198,6 +200,42 @@ namespace EliteDangerousCore.JournalEvents
         }
     }
 
+    [JournalEntryType(JournalTypeEnum.SAASignalsFound)]
+    public class JournalSAASignalsFound : JournalEntry
+    {
+        public JournalSAASignalsFound(JObject evt) : base(evt, JournalTypeEnum.SAASignalsFound)
+        {
+            SystemAddress = evt["SystemAddress"].Long();
+            BodyName = evt["BodyName"].Str();
+            BodyID = evt["BodyID"].Int();
+            Signals = evt["Signals"].ToObjectProtected<List<SAASignal>>();
+        }
+
+        public long SystemAddress { get; set; }
+        public string BodyName { get; set; }
+        public int BodyID { get; set; }
+        public List<SAASignal> Signals { get; set; }
+
+        public class SAASignal
+        {
+            public string Type { get; set; }
+            public string Type_Localised { get; set; }
+            public int Count { get; set; }
+        }
+
+        public override void FillInformation(out string info, out string detailed)
+        {
+            info = BaseUtils.FieldBuilder.Build("", BodyName);
+            detailed = "";
+            if ( Signals!= null)
+            {
+                foreach( var x in Signals )
+                {
+                    info = info.AppendPrePad(x.Type_Localised.Alt(x.Type) + ":"  + x.Count.ToString("N0"), ", ");
+                }
+            }
+        }
+    }
 
     [JournalEntryType(JournalTypeEnum.FSSAllBodiesFound)]
     public class JournalFSSAllBodiesFound : JournalEntry

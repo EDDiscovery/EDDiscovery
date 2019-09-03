@@ -171,6 +171,7 @@ namespace EliteDangerousCore
         Resurrect = 760,
         ReservoirReplenished = 763,
         SAAScanComplete = 765,
+        SAASignalsFound = 766,
         Scan = 770,
         Scanned = 772,
         ScientificResearch = 775,

@@ -139,8 +139,8 @@ function SetupIndicators(jdata,tstatus,tactions, shiptype, inwing, supercruise,l
             CreateAction("FlightAssist", "ToggleFlightAssist", innormalspace),
             CreateAction("HardpointsDeployed", "DeployHardpointToggle"),
 
-            CreateAction("CargoScoopDeployed", "ToggleCargoScoop",innormalspace),
-            CreateAction("NightVision", "NightVisionToggle"),
+            CreateAction("CargoScoopDeployed", "ToggleCargoScoop", innormalspace),
+            CreateAction("NightVision", "NightVisionToggle", innormalspace),
 
             CreateAction("UseBoostJuice", null, innormalspace, 1500),    
             CreateAction("ShieldCell", "UseShieldCell", innormalspace,1000),
@@ -152,14 +152,14 @@ function SetupIndicators(jdata,tstatus,tactions, shiptype, inwing, supercruise,l
             CreateActionButton("HyperSuperCombination", null, !landed), // not reported
             CreateActionButton("OrbitLinesToggle"),
 
-            CreateActionButton("CycleNextTarget"),
             CreateActionButton("CyclePreviousTarget"),
-            CreateActionButton("SelectHighestThreat"),
-            CreateActionButton("CycleNextHostileTarget"),
-            CreateActionButton("CyclePreviousHostileTarget"),
+            CreateActionButton("CycleNextTarget"),
+            CreateActionButton("SelectHighestThreat", null, innormalspace),
+            CreateActionButton("CyclePreviousHostileTarget", null, innormalspace),
+            CreateActionButton("CycleNextHostileTarget", null, innormalspace),
 
-            CreateActionButton("CycleNextSubsystem"),
-            CreateActionButton("CyclePreviousSubsystem"),
+            CreateActionButton("CyclePreviousSubsystem", null, innormalspace),
+            CreateActionButton("CycleNextSubsystem", null, innormalspace),
 
             CreateActionButton("TargetWingman0", null, inwing),
             CreateActionButton("TargetWingman1", null, inwing),
@@ -169,8 +169,8 @@ function SetupIndicators(jdata,tstatus,tactions, shiptype, inwing, supercruise,l
 
             CreateActionButton("TargetNextRouteSystem",null,supercruise ),
 
-            CreateActionButton("CycleFireGroupNext"),
             CreateActionButton("CycleFireGroupPrevious"),
+            CreateActionButton("CycleFireGroupNext"),
 
             CreateActionButton("IncreaseSystemsPower"),
             CreateActionButton("IncreaseEnginesPower"),

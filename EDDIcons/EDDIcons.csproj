@@ -613,6 +613,9 @@
     <EmbeddedResource Include="Controls\SysInfo\notfirstdiscover.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Journal\SAASignalsFound.png" />
+    <EmbeddedResource Include="Stars\G_WhiteSuperGiant.png" />
+    <EmbeddedResource Include="Stars\B_BlueWhiteSuperGiant.png" />
     <EmbeddedResource Include="General\OrderHoldPosition.png" />
     <EmbeddedResource Include="General\ResetPowerDistribution.png" />
     <EmbeddedResource Include="General\SrvDriveAssist.png" />
@@ -657,9 +660,9 @@
     <EmbeddedResource Include="General\SelectHighestThreat.png" />
     <EmbeddedResource Include="General\OrbitLinesToggle.png" />
     <EmbeddedResource Include="General\CycleNextTarget.png" />
-    <EmbeddedResource Include="General\CyclePreviousSubsystem.png" />
-    <EmbeddedResource Include="General\CyclePreviousHostileTarget.png" />
     <EmbeddedResource Include="General\CycleNextSubsystem.png" />
+    <EmbeddedResource Include="General\CyclePreviousHostileTarget.png" />
+    <EmbeddedResource Include="General\CyclePreviousSubsystem.png" />
     <EmbeddedResource Include="General\CyclePreviousTarget.png" />
     <EmbeddedResource Include="General\ChargeECM.png" />
     <EmbeddedResource Include="General\HeatSink.png" />

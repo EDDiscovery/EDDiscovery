@@ -26,14 +26,18 @@ namespace EliteDangerousCore.JournalEvents
             Latitude = evt["Latitude"].Double();
             Longitude = evt["Longitude"].Double();
             PlayerControlled = evt["PlayerControlled"].BoolNull();
+            NearestDestination = evt["NearestDestination"].StrNull();
+            NearestDestination_Localised = JournalFieldNaming.CheckLocalisation(evt["NearestDestination_Localised"].StrNull(), NearestDestination);
         }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         public bool? PlayerControlled { get; set; }
+        public string NearestDestination { get; set; }
+        public string NearestDestination_Localised { get; set; }
 
         public override void FillInformation(out string info, out string detailed) 
         {
-            info = JournalFieldNaming.RLat(Latitude) + " " + JournalFieldNaming.RLong(Longitude) + BaseUtils.FieldBuilder.Build(", NPC Controlled;".T(EDTx.JournalEntry_NPCControlled), PlayerControlled);
+            info = JournalFieldNaming.RLat(Latitude) + " " + JournalFieldNaming.RLong(Longitude) + BaseUtils.FieldBuilder.Build(", NPC Controlled;".T(EDTx.JournalEntry_NPCControlled), PlayerControlled, "Nearest:".T(EDTx.JournalNearest), NearestDestination_Localised);
             detailed = "";
         }
     }
@@ -46,14 +50,19 @@ namespace EliteDangerousCore.JournalEvents
             Latitude = evt["Latitude"].Double();
             Longitude = evt["Longitude"].Double();
             PlayerControlled = evt["PlayerControlled"].BoolNull();
+            NearestDestination = evt["NearestDestination"].StrNull();
+            NearestDestination_Localised = JournalFieldNaming.CheckLocalisation(evt["NearestDestination_Localised"].StrNull(), NearestDestination);
         }
+
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         public bool? PlayerControlled { get; set; }
+        public string NearestDestination { get; set; }
+        public string NearestDestination_Localised { get; set; }
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = JournalFieldNaming.RLat(Latitude) + " " + JournalFieldNaming.RLong(Longitude) + BaseUtils.FieldBuilder.Build(", NPC Controlled;".T(EDTx.JournalEntry_NPCControlled), PlayerControlled);
+            info = JournalFieldNaming.RLat(Latitude) + " " + JournalFieldNaming.RLong(Longitude) + BaseUtils.FieldBuilder.Build(", NPC Controlled;".T(EDTx.JournalEntry_NPCControlled), PlayerControlled, "Nearest:".T(EDTx.JournalNearest), NearestDestination_Localised);
             detailed = "";
         }
     }
