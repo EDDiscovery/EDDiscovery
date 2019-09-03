@@ -164,7 +164,6 @@
   </ItemGroup>
   <UsingTask TaskName="Zip" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
     <ParameterGroup>
-      <FileRoot ParameterType="System.String" Required="false" />
       <OutputFilename ParameterType="System.String" Required="true" />
       <BaseDirectory ParameterType="System.String" Required="true" />
       <Files ParameterType="Microsoft.Build.Framework.ITaskItem[]" Required="true" />
@@ -176,7 +175,7 @@
             try
             {
                 var zipnames = new HashSet<string>();
-                Console.WriteLine("Zip root '" + BaseDirectory + "'");
+                Log.LogMessage("Zip root '" + BaseDirectory + "'", MessageImportance.High);
 
                 using (Stream zipStream = new FileStream(Path.GetFullPath(OutputFilename), FileMode.Create, FileAccess.Write))
                 {
@@ -189,6 +188,7 @@
                             if (File.Exists(filename))
                             {
                                 string name = fileItem.GetMetadata("Name");
+                                string metaname = name;
 
                                 if (String.IsNullOrEmpty(name))
                                 {
@@ -202,7 +202,7 @@
                                     }
                                 }
 
-                                Console.WriteLine(".. zip up '" + filename + "' m:'" + metaname + "' -> '" + name + "'");
+                                Log.LogMessage(".. zip up '" + filename + "' m:'" + metaname + "' -> '" + name + "'", MessageImportance.High);
 
                                 if (!zipnames.Contains(name))
                                 {
@@ -239,7 +239,7 @@
       <WebFiles Include="$(MSBuildProjectDirectory)\..\WebSite\EDD\**" />
     </ItemGroup>
     <Message Text="Webfiles zip up '@(WebFiles)'" />
-    <ZipDirectory OutputFileName="$(OutDir)eddwebsite.zip" Files="@(WebFiles)" BaseDirectory="$(MSBuildProjectDirectory)\..\WebSite\EDD\"  />
+    <Zip OutputFilename="$(OutDir)eddwebsite.zip" Files="@(WebFiles)" BaseDirectory="$(MSBuildProjectDirectory)\..\WebSite\EDD\"  />
     <ItemGroup>
       <ZipFiles Include="$(TargetPath)" />
       <ZipFiles Include="$(OutDir)*.dll" />
@@ -261,7 +261,7 @@
       <Zipfiles Include="$(OutDir)runtimes\**\*.dll" />
     </ItemGroup>
     <Message Text="Portable build Zip up '@(ZipFiles)' -&gt; '$(OutDir)EDDiscovery.Portable.zip'" />
-    <Zip OutputFileName="$(OutDir)EDDiscovery.Portable.zip" BaseDirectory="$(OutDir)" Files="@(ZipFiles)" />
+    <Zip OutputFilename="$(OutDir)EDDiscovery.Portable.zip" BaseDirectory="$(OutDir)" Files="@(ZipFiles)" />
     <Error Condition="!Exists('$(OutDir)EDDiscovery.Portable.zip')" Text="Unknown error in BuildPortableZip." />
   </Target>
   <Target Name="CleanZipFile" AfterTargets="Clean">
