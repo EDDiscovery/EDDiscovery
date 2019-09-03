@@ -66,7 +66,17 @@ namespace EliteDangerousCore.DB
 
             SQLiteConnectionSystem cn = new SQLiteConnectionSystem(mode: SQLLiteExtensions.SQLExtConnection.AccessMode.Writer);
 
-            StreamWriter sw = debugoutputfile != null ? new StreamWriter(debugoutputfile) : null;
+            StreamWriter sw = null;
+
+#if DEBUG
+            try
+            {
+                if (debugoutputfile != null) sw = new StreamWriter(debugoutputfile);
+            }
+            catch
+            {
+            }
+#endif
 
             long updates = 0;
             const int BlockSize = 100000;
