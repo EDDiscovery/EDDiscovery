@@ -23,7 +23,8 @@ namespace EliteDangerousCore.DB
     public class SQLiteConnectionSystem : SQLExtConnectionWithLockRegister<SQLiteConnectionSystem>
     {
         const string tablepostfix = "temp"; // postfix for temp tables
-        const string debugoutfile = @"c:\code\edsm\Jsonprocess.lst";        // null off
+        //const string debugoutfile = @"c:\code\edsm\Jsonprocess.lst";        // null off
+        const string debugoutfile = null;
 
         public SQLiteConnectionSystem() : base(EliteDangerousCore.EliteConfigInstance.InstanceOptions.SystemDatabasePath, false, Initialize, AccessMode.ReaderWriter)
         {
