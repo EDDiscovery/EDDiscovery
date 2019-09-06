@@ -462,7 +462,7 @@ namespace EliteDangerousCore.EDSM
                             bool firstdiscover = jo["firstDiscover"].Value<bool>();
                             DateTime etutc = DateTime.ParseExact(ts, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal); // UTC time
 
-                            ISystem sc = DB.SystemCache.FindSystem(id,cn);
+                            ISystem sc = DB.SystemCache.FindSystem(name,id,cn);
 
                             if (sc == null)
                             {
