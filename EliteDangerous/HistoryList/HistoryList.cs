@@ -977,6 +977,13 @@ namespace EliteDangerousCore
                         continue;
                     }
 
+                    // Clean up "UnKnown" systems from EDSM log
+                    if (je is JournalFSDJump && ((JournalFSDJump)je).StarSystem == "UnKnown")
+                    {
+                        JournalEntry.Delete(je.Id);
+                        continue;
+                    }
+
                     if ( je is EliteDangerousCore.JournalEvents.JournalMusic )      // remove music.. not shown.. now UI event. remove it for backwards compatibility
                     { 
                         //System.Diagnostics.Debug.WriteLine("**** Filter out " + je.EventTypeStr + " on " + je.EventTimeLocal.ToString());
