@@ -170,6 +170,13 @@ namespace EliteDangerousCore
             status = SystemStatusEnum.Unknown;
         }
 
+        public SystemClass(string name, long id)
+        {
+            Name = name;
+            EDSMID = id;
+            status = SystemStatusEnum.Unknown;
+        }
+
         public SystemClass(long id)
         {
             Name = "UnKnown";

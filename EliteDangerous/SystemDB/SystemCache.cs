@@ -37,6 +37,11 @@ namespace EliteDangerousCore.DB
             return FindSystem(new SystemClass(edsmid),cn);
         }
 
+        public static ISystem FindSystem(string name, long edsmid, SQLiteConnectionSystem cn = null)
+        {
+            return FindSystem(new SystemClass(name, edsmid), cn);
+        }
+
         public static ISystem FindSystem(string name, SQLiteConnectionSystem cn = null)
         {
             return FindSystem(new SystemClass(name),cn);
@@ -84,11 +89,11 @@ namespace EliteDangerousCore.DB
                 {
                     found = DB.SystemsDB.FindStar(find.EDSMID,cn);
 
-                    if (found != null && find.Name.HasChars())      // if we find it, use the find name in the return as the EDSM name may be out of date..
+                    if (found != null && find.Name.HasChars() && find.Name != "UnKnown")      // if we find it, use the find name in the return as the EDSM name may be out of date..
                         found.Name = find.Name;
                 }
 
-                if (found == null && find.Name.HasChars())      // if not found by has a name
+                if (found == null && find.Name.HasChars() && find.Name != "UnKnown")      // if not found by has a name
                     found = DB.SystemsDB.FindStar(find.Name,cn);   // find by name, no wildcards
 
                 if (found == null && find.HasCoordinate)        // finally, not found, but we have a co-ord, find it from the db  by distance
