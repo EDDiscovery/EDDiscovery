@@ -18,10 +18,10 @@
     <ROW Property="ARPURLUPDATEINFO" Value="https://github.com/EDDiscovery/EDDiscovery/releases"/>
     <ROW Property="CTRLS" Value="2"/>
     <ROW Property="Manufacturer" Value="EDDiscovery"/>
-    <ROW Property="ProductCode" Value="1033:{2550B7C7-9F09-4E9A-8EF0-3C8DCE4CE797} 1053:{5EC60115-5569-4BD7-B0C1-7BB795FA6678} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{E5AE24B5-B320-4E48-AEBE-51D7F13D9FC4} 1053:{A81BF208-A2DC-43B5-A452-F4BEB5EAA73C} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="EDDiscovery"/>
-    <ROW Property="ProductVersion" Value="11.0.1" Type="32"/>
+    <ROW Property="ProductVersion" Value="11.0.2" Type="32"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND;UPGRADE_1;AI_SETUPEXEPATH;SETUPEXEDIR"/>
     <ROW Property="UpgradeCode" Value="{27EA2F84-C7C5-41E2-9C59-CC42CCDC9FEF}"/>
     <ROW Property="WindowsType9X" MultiBuildValue="AnyCPU_Debug:Windows 9x/ME" ValueLocId="-"/>
@@ -55,6 +55,7 @@
     <ROW Component="EDDiscovery.Icons.dll" ComponentId="{2D375945-42F5-4BE0-BC52-1C4F31C022E2}" Directory_="APPDIR" Attributes="0" KeyPath="EDDiscovery.Icons.dll"/>
     <ROW Component="EDDiscovery.exe" ComponentId="{497BEB88-C9A8-4385-AE78-7EF3CD72795C}" Directory_="APPDIR" Attributes="0" KeyPath="EDDiscovery.exe"/>
     <ROW Component="EDDiscovery.exe.config" ComponentId="{674E78B1-0FF5-4922-8568-CDB41C0CC83C}" Directory_="APPDIR" Attributes="0" KeyPath="EDDiscovery.exe.config" Type="0"/>
+    <ROW Component="EDDiscovery_11.0.2.exe" ComponentId="{967F4EE8-FD3E-4CA0-8AF6-BAFD89F8AB59}" Directory_="APPDIR" Attributes="0" KeyPath="EDDiscovery_11.0.2.exe"/>
     <ROW Component="EUROCAPS.TTF" ComponentId="{6BDDE9AC-722A-44A4-8A95-9D3D98C24D62}" Directory_="APPDIR" Attributes="0" Type="0"/>
     <ROW Component="EliteDangerous.dll" ComponentId="{29FDF6F6-BE47-47D1-8946-444524A36532}" Directory_="APPDIR" Attributes="0" KeyPath="EliteDangerous.dll"/>
     <ROW Component="ExtendedControls.dll" ComponentId="{726FCAAF-0CAC-4414-8652-A647AF38EB5D}" Directory_="APPDIR" Attributes="0" KeyPath="ExtendedControls.dll"/>
@@ -81,7 +82,7 @@
     <ROW Feature="AI32BitFiles" Title="32-bit" Description="32-bit Executables and Libraries" Display="5" Level="1" Directory_="APPDIR" Attributes="0" Components="AI_ExePath AI_InstallLanguage InstallLanguage Newtonsoft.Json.dll OpenTK.GLControl.dll OpenTK.dll SQLite.Interop.dll System.Data.SQLite.dll msvcp100.dll msvcr100.dll"/>
     <ROW Feature="AI64BitFiles" Title="64-bit" Description="64-bit Executables and Libraries" Display="3" Level="1" Directory_="APPDIR" Attributes="0" Components="AI_ExePath AI_InstallLanguage InstallLanguage SQLite.Interop.dll_1"/>
     <ROW Feature="AIOtherFiles" Title="Common" Description="Shared Resource and Regular Files" Display="7" Level="1" Directory_="APPDIR" Attributes="0" Components="AI_ExePath AI_InstallLanguage InstallLanguage fround.js"/>
-    <ROW Feature="MainFeature" Title="MainFeature" Description="Description" Display="1" Level="1" Directory_="APPDIR" Attributes="0" Components="AI_ExePath AI_InstallLanguage ActionLanguage.dll Audio.dll BaseUtils.dll CSCore.dll DirectInput.dll EDDiscovery EDDiscovery.Icons.dll EDDiscovery.exe EDDiscovery.exe.config EUROCAPS.TTF EliteDangerous.dll ExtendedControls.dll ExtendedForms.dll InstallLanguage OpenTKUtils.dll OxyPlot.WindowsForms.dll OxyPlot.dll ProductInformation SQLLite.dll SharpDX.DirectInput.dll SharpDX.dll"/>
+    <ROW Feature="MainFeature" Title="MainFeature" Description="Description" Display="1" Level="1" Directory_="APPDIR" Attributes="0" Components="AI_ExePath AI_InstallLanguage ActionLanguage.dll Audio.dll BaseUtils.dll CSCore.dll DirectInput.dll EDDiscovery EDDiscovery.Icons.dll EDDiscovery.exe EDDiscovery.exe.config EDDiscovery_11.0.2.exe EUROCAPS.TTF EliteDangerous.dll ExtendedControls.dll ExtendedForms.dll InstallLanguage OpenTKUtils.dll OxyPlot.WindowsForms.dll OxyPlot.dll ProductInformation SQLLite.dll SharpDX.DirectInput.dll SharpDX.dll"/>
     <ATTRIBUTE name="CurrentFeature" value="MainFeature"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiFilesComponent">
@@ -98,6 +99,7 @@
     <ROW File="EDDiscovery.exe" Component_="EDDiscovery.exe" FileName="EDDISC~1.EXE|EDDiscovery.exe" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\EDDiscovery.exe" SelfReg="false" NextFile="EUROCAPS.TTF" DigSign="true"/>
     <ROW File="EDDiscovery.exe.config" Component_="EDDiscovery.exe.config" FileName="EDDISC~1.CON|EDDiscovery.exe.config" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\EDDiscovery.exe.config" SelfReg="false" NextFile="CSCore.dll"/>
     <ROW File="EDDiscovery.pdb" Component_="EDDiscovery.exe" FileName="EDDISC~1.PDB|EDDiscovery.pdb" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\EDDiscovery.pdb" SelfReg="false" NextFile="EliteDangerous.pdb"/>
+    <ROW File="EDDiscovery_11.0.2.exe" Component_="EDDiscovery_11.0.2.exe" FileName="EDDISC~2.EXE|EDDiscovery_11.0.2.exe" Attributes="0" SourcePath="AnyCPU_DebugSetupFiles\en\EDDiscovery_11.0.2.exe" SelfReg="false" DigSign="true"/>
     <ROW File="EUROCAPS.TTF" Component_="EUROCAPS.TTF" FileName="EUROCAPS.TTF" Attributes="0" SourcePath="ExtraFiles\EUROCAPS.TTF" SelfReg="false" NextFile="EDDiscovery.exe.config"/>
     <ROW File="EliteDangerous.dll" Component_="EliteDangerous.dll" FileName="ELITED~1.DLL|EliteDangerous.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\EliteDangerous.dll" SelfReg="false" NextFile="DirectInput.dll"/>
     <ROW File="EliteDangerous.pdb" Component_="EliteDangerous.dll" FileName="ELITED~1.PDB|EliteDangerous.pdb" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\EliteDangerous.pdb" SelfReg="false" NextFile="ExtendedControls.pdb"/>
@@ -122,7 +124,7 @@
     <ROW File="System.Data.SQLite.xml" Component_="fround.js" FileName="SYSTEM~1.XML|System.Data.SQLite.xml" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\System.Data.SQLite.xml" SelfReg="false" NextFile="msvcp100.dll"/>
     <ROW File="chinesezh.tlf" Component_="EDDiscovery.exe.config" FileName="CHINES~1.TLF|chinese-zh.tlf" Attributes="0" SourcePath="..\EDDiscovery\Translations\chinese-zh.tlf" SelfReg="false" NextFile="translationchineseuc.tlp"/>
     <ROW File="deutschde.tlf" Component_="EDDiscovery.exe.config" FileName="DEUTSC~1.TLF|deutsch-de.tlf" Attributes="0" SourcePath="..\EDDiscovery\Translations\deutsch-de.tlf" SelfReg="false" NextFile="exampleex.tlf"/>
-    <ROW File="eddwebsite.zip" Component_="EDDiscovery.exe.config" FileName="EDDWEB~1.ZIP|eddwebsite.zip" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\eddwebsite.zip" SelfReg="false"/>
+    <ROW File="eddwebsite.zip" Component_="EDDiscovery.exe.config" FileName="EDDWEB~1.ZIP|eddwebsite.zip" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\eddwebsite.zip" SelfReg="false" NextFile="EDDiscovery_11.0.2.exe"/>
     <ROW File="exampleex.tlf" Component_="EDDiscovery.exe.config" FileName="EXAMPL~1.TLF|example-ex.tlf" Attributes="0" SourcePath="..\EDDiscovery\Translations\example-ex.tlf" SelfReg="false" NextFile="italianoit.tlf"/>
     <ROW File="italianoit.tlf" Component_="EDDiscovery.exe.config" FileName="ITALIA~1.TLF|italiano-it.tlf" Attributes="0" SourcePath="..\EDDiscovery\Translations\italiano-it.tlf" SelfReg="false" NextFile="translationdeutschuc.tlp"/>
     <ROW File="msvcp100.dll" Component_="msvcp100.dll" FileName="msvcp100.dll" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\x86\Microsoft.VC100.CRT\msvcp100.dll" SelfReg="false" NextFile="msvcr100.dll"/>
