@@ -306,10 +306,17 @@ namespace EDDiscovery
 
             try
             {
-                if (!EDDOptions.Instance.NoSystemsLoad && EDDConfig.Instance.EDSMEDDBDownload)      // if no system off, and EDSM download on
+                if (!EDDOptions.Instance.NoSystemsLoad)
                 {
-                    DoPerformSync();        // this is done after the initial history load..
+                    // check for 102, if so, upgrade it..
+                    SQLiteConnectionSystem.UpgradeSystemTableFrom102TypeDB(() => PendingClose, ReportSyncProgress, syncstate.perform_edsm_fullsync);
+
+                    if (EDDConfig.Instance.EDSMEDDBDownload)      // if no system off, and EDSM download on
+                    {
+                        DoPerformSync();        // this is done after the initial history load..
+                    }
                 }
+
 
                 while (!PendingClose)
                 {

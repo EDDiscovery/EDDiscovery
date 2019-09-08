@@ -103,9 +103,6 @@ namespace EDDiscovery
 
             resyncEDSMEDDBRequestedFlag = 1;     // sync is happening, stop any async requests..
 
-            // check for 102, and if not performing a full sync, upgrade it
-            SQLiteConnectionSystem.UpgradeSystemTableFrom102TypeDB(() => PendingClose, ReportSyncProgress, syncstate.perform_edsm_fullsync);
-
             Debug.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Perform EDSM/EDDB sync");
 
             try
