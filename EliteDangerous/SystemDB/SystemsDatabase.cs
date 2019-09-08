@@ -46,9 +46,9 @@ namespace EliteDangerousCore.DB
                 WaitHandle.Set();
             }
 
-            public void Wait()
+            public void Wait(int timeout = 5000)
             {
-                WaitHandle.Wait();
+                WaitHandle.Wait(timeout);
             }
 
             public void Dispose()
@@ -69,6 +69,10 @@ namespace EliteDangerousCore.DB
         private bool StopRequested = false;
         private AutoResetEvent JobQueuedEvent = new AutoResetEvent(false);
         private ManualResetEvent StopCompleted = new ManualResetEvent(true);
+
+        public long? SqlThreadId => SqlThread?.ManagedThreadId;
+
+        public bool RebuildRunning { get; private set; }
 
         private void SqlThreadProc()
         {
@@ -96,11 +100,19 @@ namespace EliteDangerousCore.DB
 
             var sw = System.Diagnostics.Stopwatch.StartNew();
 
-            using (var job = new Job(action))
+            if (Thread.CurrentThread.ManagedThreadId == SqlThread?.ManagedThreadId)
             {
-                JobQueue.Enqueue(job);
-                JobQueuedEvent.Set();
-                job.Wait();
+                System.Diagnostics.Trace.WriteLine($"SystemDatabase Re-entrancy\n{new System.Diagnostics.StackTrace(skipframes, true).ToString()}");
+                action();
+            }
+            else
+            {
+                using (var job = new Job(action))
+                {
+                    JobQueue.Enqueue(job);
+                    JobQueuedEvent.Set();
+                    job.Wait(RebuildRunning ? Timeout.Infinite : 5000);
+                }
             }
 
             if (sw.ElapsedMilliseconds > warnthreshold)
@@ -187,7 +199,12 @@ namespace EliteDangerousCore.DB
 
         public void Initialize()
         {
-            Execute(() => SQLiteConnectionSystem.Initialize());
+            Execute(() =>
+            {
+                RebuildRunning = true;
+                SQLiteConnectionSystem.Initialize();
+                RebuildRunning = false;
+            });
         }
 
         const string TempTablePostfix = "temp"; // postfix for temp tables
@@ -209,6 +226,8 @@ namespace EliteDangerousCore.DB
             {
                 ExecuteWithDatabase(mode: SQLExtConnection.AccessMode.Writer, action: conn =>
                 {
+                    RebuildRunning = true;
+
                     reportProgress?.Invoke("Remove old data");
                     conn.Connection.DropStarTables();     // drop the main ones - this also kills the indexes
 
@@ -219,6 +238,8 @@ namespace EliteDangerousCore.DB
 
                     reportProgress?.Invoke("Creating indexes");
                     conn.Connection.CreateSystemDBTableIndexes();
+
+                    RebuildRunning = false;
                 });
 
                 SetLastEDSMRecordTimeUTC(maxdate);          // record last data stored in database
@@ -268,6 +289,8 @@ namespace EliteDangerousCore.DB
                     {
                         if (updates >= 0) // a cancel will result in -1
                         {
+                            RebuildRunning = true;
+
                             // keep code for checking
 
                             //if (false)   // demonstrate replacement to show rows are overwitten and not duplicated in the edsmid column and that speed is okay
@@ -302,6 +325,8 @@ namespace EliteDangerousCore.DB
 
                             reportProgress?.Invoke("Creating indexes");         // NOTE the date should be the same so we don't rewrite
                             conn.Connection.CreateSystemDBTableIndexes();
+
+                            RebuildRunning = false;
                         }
                         else
                         {

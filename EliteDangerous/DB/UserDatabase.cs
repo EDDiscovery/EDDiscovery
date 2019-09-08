@@ -758,9 +758,9 @@ namespace EliteDangerousCore.DB
                 WaitHandle.Set();
             }
 
-            public void Wait()
+            public void Wait(int timeout = 5000)
             {
-                WaitHandle.Wait();
+                WaitHandle.Wait(timeout);
             }
 
             public void Dispose()
@@ -779,6 +779,8 @@ namespace EliteDangerousCore.DB
         private bool StopRequested = false;
         private AutoResetEvent JobQueuedEvent = new AutoResetEvent(false);
         private ManualResetEvent StopCompleted = new ManualResetEvent(true);
+
+        public long? SqlThreadId => SqlThread?.ManagedThreadId;
 
         private UserDatabase()
         {
@@ -811,11 +813,24 @@ namespace EliteDangerousCore.DB
 
             var sw = System.Diagnostics.Stopwatch.StartNew();
 
-            using (var job = new Job(action))
+            if (Thread.CurrentThread.ManagedThreadId == SqlThreadId)
             {
-                JobQueue.Enqueue(job);
-                JobQueuedEvent.Set();
-                job.Wait();
+                System.Diagnostics.Trace.WriteLine($"UserDatabase Re-entrancy\n{new System.Diagnostics.StackTrace(skipframes, true).ToString()}");
+                action();
+            }
+            else if (Thread.CurrentThread.ManagedThreadId == SystemsDatabase.Instance.SqlThreadId)
+            {
+                System.Diagnostics.Trace.WriteLine($"Invalid UserDatabase call from SystemDatabase thread\n{new System.Diagnostics.StackTrace(skipframes, true).ToString()}");
+                throw new InvalidOperationException("Invalid UserDatabase call from SystemDatabase thread");
+            }
+            else
+            {
+                using (var job = new Job(action))
+                {
+                    JobQueue.Enqueue(job);
+                    JobQueuedEvent.Set();
+                    job.Wait(5000);
+                }
             }
 
             if (sw.ElapsedMilliseconds > 200)
