@@ -282,7 +282,7 @@ namespace EliteDangerousCore.DB
 
         #region Helpers
 
-        static private void AddToCache(ISystem found, ISystem orgsys = null)
+        static private void AddToCache(ISystem found)
         {
             lock (systemsByEdsmId)
             {
