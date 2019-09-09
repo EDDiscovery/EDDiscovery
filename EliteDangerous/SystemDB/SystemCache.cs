@@ -284,16 +284,19 @@ namespace EliteDangerousCore.DB
 
         static private void AddToCache(ISystem found, ISystem orgsys = null)
         {
-            if (found.EDSMID > 0)
-                systemsByEdsmId[found.EDSMID] = found;  // must be definition the best ID found.. and if the update date of sys is better, its now been updated
-
-            if (systemsByName.ContainsKey(found.Name))
+            lock (systemsByEdsmId)
             {
-                if ( !systemsByName[found.Name].Contains(found))
-                    systemsByName[found.Name].Add(found);   // add to list..
+                if (found.EDSMID > 0)
+                    systemsByEdsmId[found.EDSMID] = found;  // must be definition the best ID found.. and if the update date of sys is better, its now been updated
+
+                if (systemsByName.ContainsKey(found.Name))
+                {
+                    if (!systemsByName[found.Name].Contains(found))
+                        systemsByName[found.Name].Add(found);   // add to list..
+                }
+                else
+                    systemsByName[found.Name] = new List<ISystem> { found }; // or make list
             }
-            else
-                systemsByName[found.Name] = new List<ISystem> { found }; // or make list
         }
 
         static private ISystem NearestTo(List<ISystem> list, ISystem comparesystem, double mindist)
