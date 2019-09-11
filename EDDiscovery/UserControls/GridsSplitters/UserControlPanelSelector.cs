@@ -147,7 +147,7 @@ namespace EDDiscovery.UserControls
 
         private int NumberAcross()
         {
-            return (panelVScroll.Width - panelVScroll.ScrollBarWidth) / Spacing().Item1;
+            return Math.Max((panelVScroll.Width - panelVScroll.ScrollBarWidth) / Spacing().Item1, 1);
         }
 
         private void Reposition()
