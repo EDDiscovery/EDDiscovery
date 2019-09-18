@@ -251,6 +251,10 @@ namespace EliteDangerousCore
                 for (int i = 0; i < watchers.Count; i++)
                 {
                     bool found = false;
+
+                    if (frontierfolder != null && watchers[i].WatcherFolder.Equals(frontierfolder))
+                        found = true;
+
                     for (int j = 0; j < listCommanders.Count; j++)          // all commanders, see if this watch folder is present
                         found |= watchers[i].WatcherFolder.Equals(GetWatchFolder(listCommanders[j].JournalDir));
 
@@ -273,6 +277,10 @@ namespace EliteDangerousCore
                 for (int i = 0; i < statuswatchers.Count; i++)
                 {
                     bool found = false;
+
+                    if (frontierfolder != null && watchers[i].WatcherFolder.Equals(frontierfolder))
+                        found = true;
+
                     for (int j = 0; j < listCommanders.Count; j++)          // all commanders, see if this watch folder is present
                         found |= statuswatchers[i].WatcherFolder.Equals(GetWatchFolder(listCommanders[j].JournalDir));
 
