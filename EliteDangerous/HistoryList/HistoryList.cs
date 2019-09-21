@@ -891,7 +891,13 @@ namespace EliteDangerousCore
                 {
                     // Ignore scans where the system name has been changed
                     // Also ignore belt clusters
-                    if (jl == null || (jl.StarSystem.Equals(jlhe.System.Name, StringComparison.InvariantCultureIgnoreCase) && !js.BodyDesignation.ToLowerInvariant().Contains(" belt cluster ")))
+                    var bodyname = js.BodyDesignation ?? js.BodyName;
+
+                    if (bodyname == null)
+                    {
+                        logerror("Body name not set in scan entry");
+                    }
+                    else if (jl == null || (jl.StarSystem.Equals(jlhe.System.Name, StringComparison.InvariantCultureIgnoreCase) && !bodyname.ToLowerInvariant().Contains(" belt cluster ")))
                     {
                         logerror("Cannot add scan to system - alert the EDDiscovery developers using either discord or Github (see help)" + Environment.NewLine +
                                             "Scan object " + js.BodyName + " in " + he.System.Name);
