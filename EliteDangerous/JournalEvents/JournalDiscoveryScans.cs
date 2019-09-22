@@ -191,10 +191,14 @@ namespace EliteDangerousCore.JournalEvents
         public string BodyDesignation { get; set; }
         public long? SystemAddress { get; set; }    // 3.5
 
+        public override string SummaryName(ISystem sys)
+        {
+            return base.SummaryName(sys) + " " + "Of ".T(EDTx.JournalEntry_of) + BodyName.ReplaceIfStartsWith(sys.Name);
+        }
+
         public override void FillInformation(out string info, out string detailed)
         {
-            info = BaseUtils.FieldBuilder.Build("", BodyName,
-                                                "Probes:".T(EDTx.JournalSAAScanComplete_Probes), ProbesUsed,
+            info = BaseUtils.FieldBuilder.Build("Probes:".T(EDTx.JournalSAAScanComplete_Probes), ProbesUsed,
                                                 "Efficiency Target:".T(EDTx.JournalSAAScanComplete_EfficiencyTarget), EfficiencyTarget);
             detailed = "";
         }
@@ -223,9 +227,14 @@ namespace EliteDangerousCore.JournalEvents
             public int Count { get; set; }
         }
 
+        public override string SummaryName(ISystem sys)
+        {
+            return base.SummaryName(sys) + " " + "Of ".T(EDTx.JournalEntry_of) + BodyName.ReplaceIfStartsWith(sys.Name);
+        }
+
         public override void FillInformation(out string info, out string detailed)
         {
-            info = BaseUtils.FieldBuilder.Build("", BodyName);
+            info = "";
             detailed = "";
             if ( Signals!= null)
             {
@@ -253,7 +262,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = BaseUtils.FieldBuilder.Build("", SystemName) + " ("  + Count.ToString() + ")";
+            info = Count.ToString() + " @ " + SystemName;
             detailed = "";
         }
     }
