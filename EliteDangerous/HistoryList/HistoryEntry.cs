@@ -48,7 +48,7 @@ namespace EliteDangerousCore
         public EDCommander Commander { get { return EDCommander.GetCommander(journalEntry.CommanderId); } }
         public DateTime EventTimeLocal { get { return EventTimeUTC.ToLocalTime(); } }
         public DateTime EventTimeUTC { get { return journalEntry.EventTimeUTC; } }
-        public TimeSpan AgeOfEntry() { return DateTime.Now - EventTimeUTC; }
+        public TimeSpan AgeOfEntry() { return DateTime.UtcNow - EventTimeUTC; }
 
         public string EventSummary { get { return journalEntry.SummaryName(System);} }
 
