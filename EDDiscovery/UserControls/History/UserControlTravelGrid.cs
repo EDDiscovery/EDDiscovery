@@ -752,9 +752,12 @@ namespace EDDiscovery.UserControls
             {
                 leftclicksystem.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
 
-                string travelinfo = leftclicksystem.TravelInfo();
-                if (travelinfo != null)
-                    EventDetailedInfo = travelinfo + Environment.NewLine + EventDetailedInfo;
+                if (leftclicksystem.journalEntry is EliteDangerousCore.JournalEvents.JournalLocOrJump)
+                {
+                    string travelinfo = leftclicksystem.TravelInfo();
+                    if (travelinfo != null)
+                        EventDetailedInfo = travelinfo + Environment.NewLine + EventDetailedInfo;
+                }
 
                 string infodetailed = EventDescription.AppendPrePad(EventDetailedInfo,Environment.NewLine);
 

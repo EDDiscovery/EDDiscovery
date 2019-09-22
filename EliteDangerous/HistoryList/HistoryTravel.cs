@@ -34,10 +34,10 @@ namespace EliteDangerousCore
         {
             if (IsTravelling)
             {
-                return prefix + " " + TravelledDistance.ToStringInvariant("0.0") + " LY"
-                                 + ", " + Travelledjumps + " jumps"
+                return prefix + TravelledDistance.ToStringInvariant("0.0") + " LY"
+                                 + ", " + Travelledjumps + " J"
                                  + ((TravelledMissingjump > 0) ? ", " + TravelledMissingjump + " unknown distance jumps" : "") +
-                                  ", time " + TravelledSeconds;
+                                  ", " + TravelledSeconds.ToString();
             }
             else
                 return "";

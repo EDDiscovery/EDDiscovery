@@ -68,7 +68,7 @@ namespace EliteDangerousCore
         public bool isTravelling { get { return TravelStatus.IsTravelling; } }
         public int TravelledMissingjump { get { return TravelStatus.TravelledMissingjump; } }
         public int Travelledjumps { get { return TravelStatus.Travelledjumps; } }
-        public string TravelInfo() { return TravelStatus.ToString(StopMarker ? "Travelled" : "Travelling "); }
+        public string TravelInfo() { return TravelStatus.ToString("TT: "); }
         public string TravelledJumpsAndMisses { get { return TravelStatus.TravelledJumpsAndMisses; } }
 
         public bool IsLanded { get { return EntryStatus.TravelState == HistoryEntryStatus.TravelStateType.Landed; } }
