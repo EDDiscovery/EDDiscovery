@@ -326,9 +326,9 @@ namespace EliteDangerousCore
             return (from s in historylist where s.IsFSDJump && s.EventTimeUTC >= tme select s).Count();
         }
 
-        public int GetFSDJumps(DateTime start, DateTime to)
+        public int GetFSDJumpsUTC(DateTime startutc, DateTime toutc)
         {
-            return (from s in historylist where s.IsFSDJump && s.EventTimeLocal >= start && s.EventTimeLocal < to select s).Count();
+            return (from s in historylist where s.IsFSDJump && s.EventTimeUTC >= startutc && s.EventTimeUTC < toutc select s).Count();
         }
 
         public int GetFSDJumps(string forShipKey)
@@ -336,21 +336,21 @@ namespace EliteDangerousCore
             return (from s in historylist where s.IsFSDJump && $"{s.ShipTypeFD.ToLowerInvariant()}:{s.ShipId}" == forShipKey select s).Count();
         }
 
-        public int GetNrScans(DateTime start, DateTime to)
+        public int GetNrScansUTC(DateTime startutc, DateTime toutc)
         {
-            return (from s in historylist where s.journalEntry.EventTypeID == JournalTypeEnum.Scan && s.EventTimeLocal >= start && s.EventTimeLocal < to select s.journalEntry as JournalScan)
+            return (from s in historylist where s.journalEntry.EventTypeID == JournalTypeEnum.Scan && s.EventTimeUTC >= startutc && s.EventTimeUTC < toutc select s.journalEntry as JournalScan)
                 .Distinct(new ScansAreForSameBody()).Count();
         }
 
-        public int GetNrMapped(DateTime start, DateTime to)
+        public int GetNrMappedUTC(DateTime startutc, DateTime toutc)
         {
-            return (from s in historylist where s.journalEntry.EventTypeID == JournalTypeEnum.SAAScanComplete && s.EventTimeLocal >= start && s.EventTimeLocal < to select s).Count();
+            return (from s in historylist where s.journalEntry.EventTypeID == JournalTypeEnum.SAAScanComplete && s.EventTimeUTC >= startutc && s.EventTimeUTC < toutc select s).Count();
         }
 
-        public long GetScanValue(DateTime start, DateTime to)
+        public long GetScanValueUTC(DateTime startutc, DateTime toutc)
         {
             var scans = historylist
-                .Where(s => s.EntryType == JournalTypeEnum.Scan && s.EventTimeLocal >= start && s.EventTimeLocal < to)
+                .Where(s => s.EntryType == JournalTypeEnum.Scan && s.EventTimeUTC >= startutc && s.EventTimeUTC < toutc)
                 .Select(h => h.journalEntry as JournalScan)
                 .Distinct(new ScansAreForSameBody()).ToList();
 
@@ -359,67 +359,83 @@ namespace EliteDangerousCore
             return total;
         }
 
-        public int GetDocked(DateTime start, DateTime to)
+        public int GetDockedUTC(DateTime startutc, DateTime toutc)
         {
-            return (from s in historylist where s.EntryType == JournalTypeEnum.Docked && s.EventTimeLocal >= start && s.EventTimeLocal < to select s).Count();
+            return (from s in historylist where s.EntryType == JournalTypeEnum.Docked && s.EventTimeUTC >= startutc && s.EventTimeUTC < toutc select s).Count();
         }
 
-        public int GetJetConeBoost(DateTime start, DateTime to)
+        public int GetJetConeBoostUTC(DateTime startutc, DateTime toutc)
         {
-            return (from s in historylist where s.EntryType == JournalTypeEnum.JetConeBoost && s.EventTimeLocal >= start && s.EventTimeLocal < to select s).Count();
+            return (from s in historylist where s.EntryType == JournalTypeEnum.JetConeBoost && s.EventTimeUTC >= startutc && s.EventTimeUTC < toutc select s).Count();
         }
 
-        public int GetFSDBoostUsed(DateTime start, DateTime to, int boostValue = -1)
+        public int GetFSDBoostUsedUTC(DateTime startutc, DateTime toutc, int boostValue = -1)
         {
             if (boostValue >= 1 && boostValue <= 3)
             {
                 return (from s in historylist
-                        where (s.EntryType == JournalTypeEnum.FSDJump && s.EventTimeLocal >= start && s.EventTimeLocal < to && ((JournalFSDJump)s.journalEntry).BoostValue == boostValue)
+                        where (s.EntryType == JournalTypeEnum.FSDJump && s.EventTimeUTC >= startutc && s.EventTimeUTC < toutc && ((JournalFSDJump)s.journalEntry).BoostValue == boostValue)
                         select s).Count();
             }
             else
             { 
                 return (from s in historylist
-                        where (s.EntryType == JournalTypeEnum.FSDJump && s.EventTimeLocal >= start && s.EventTimeLocal < to && ((JournalFSDJump)s.journalEntry).BoostUsed == true)
+                        where (s.EntryType == JournalTypeEnum.FSDJump && s.EventTimeUTC >= startutc && s.EventTimeUTC < toutc && ((JournalFSDJump)s.journalEntry).BoostUsed == true)
                         select s).Count();
             }
         }
                 
-        public int GetPlayerControlledTouchDown(DateTime start, DateTime to)
+        public int GetPlayerControlledTouchDownUTC(DateTime startutc, DateTime toutc)
         {
-            return (from s in historylist where s.EntryType == JournalTypeEnum.Touchdown && s.EventTimeLocal >= start && s.EventTimeLocal < to select s)
+            return (from s in historylist where s.EntryType == JournalTypeEnum.Touchdown && s.EventTimeUTC >= startutc && s.EventTimeUTC < toutc select s)
                 .ToList().ConvertAll<JournalTouchdown>(e => e.journalEntry as JournalTouchdown).Where(j => j.PlayerControlled.HasValue && j.PlayerControlled.Value).Count();
         }
 
-        public int GetHeatWarning(DateTime start, DateTime to)
+        public int GetHeatWarningUTC(DateTime startutc, DateTime toutc)
         {
-            return (from s in historylist where s.EntryType == JournalTypeEnum.HeatWarning && s.EventTimeLocal >= start && s.EventTimeLocal < to select s).Count();
+            return (from s in historylist where s.EntryType == JournalTypeEnum.HeatWarning && s.EventTimeUTC >= startutc && s.EventTimeUTC < toutc select s).Count();
         }
 
 
-        public int GetHeatDamage(DateTime start, DateTime to)
+        public int GetHeatDamageUTC(DateTime startutc, DateTime toutc)
         {
-            return (from s in historylist where s.EntryType == JournalTypeEnum.HeatDamage && s.EventTimeLocal >= start && s.EventTimeLocal < to select s).Count();
+            return (from s in historylist where s.EntryType == JournalTypeEnum.HeatDamage && s.EventTimeUTC >= startutc && s.EventTimeUTC < toutc select s).Count();
         }
 
-        public int GetFuelScooped(DateTime start, DateTime to)
+        public int GetFuelScoopedUTC(DateTime startutc, DateTime toutc)
         {
-            return (from s in historylist where s.EntryType == JournalTypeEnum.FuelScoop && s.EventTimeLocal >= start && s.EventTimeLocal < to select s).Count();
+            return (from s in historylist where s.EntryType == JournalTypeEnum.FuelScoop && s.EventTimeUTC >= startutc && s.EventTimeUTC < toutc select s).Count();
         }
 
-        public double GetFuelScoopedTons(DateTime start, DateTime to)
+        public double GetFuelScoopedTonsUTC(DateTime startutc, DateTime toutc)
         {
-            var list = (from s in historylist where s.EntryType == JournalTypeEnum.FuelScoop && s.EventTimeLocal >= start && s.EventTimeLocal < to select s.journalEntry as JournalFuelScoop).ToList<JournalFuelScoop>();
+            var list = (from s in historylist where s.EntryType == JournalTypeEnum.FuelScoop && s.EventTimeUTC >= startutc && s.EventTimeUTC < toutc select s.journalEntry as JournalFuelScoop).ToList<JournalFuelScoop>();
 
             return (from s in list select s.Scooped).Sum();
         }
 
-        public double GetTraveledLy(DateTime start, DateTime to)
+        public double GetTraveledLyUTC(DateTime startutc, DateTime toutc)
         {
-            var list = (from s in historylist where s.EntryType == JournalTypeEnum.FSDJump && s.EventTimeLocal >= start && s.EventTimeLocal < to select s.journalEntry as JournalFSDJump).ToList<JournalFSDJump>();
+            var list = (from s in historylist where s.EntryType == JournalTypeEnum.FSDJump && s.EventTimeUTC >= startutc && s.EventTimeUTC < toutc select s.journalEntry as JournalFSDJump).ToList<JournalFSDJump>();
 
             return (from s in list select s.JumpDist).Sum();
         }
+
+        public bool IsTravellingUTC(out DateTime startTimeutc)
+        {
+            bool inTrip = false;
+            startTimeutc = DateTime.UtcNow;
+            HistoryEntry lastStartMark = GetLastHistoryEntry(x => x.StartMarker);
+            if (lastStartMark != null)
+            {
+                HistoryEntry lastStopMark = GetLastHistoryEntry(x => x.StopMarker);
+                inTrip = lastStopMark == null || lastStopMark.EventTimeUTC < lastStartMark.EventTimeUTC;
+                if (inTrip)
+                    startTimeutc = lastStartMark.EventTimeUTC;
+            }
+            return inTrip;
+        }
+
 
         public double GetTraveledLy(string forShipKey)
         {
@@ -428,10 +444,9 @@ namespace EliteDangerousCore
             return (from s in list select s.JumpDist).Sum();
         }
 
-
-        public List<JournalScan> GetScanList(DateTime start, DateTime to)
+        public List<JournalScan> GetScanListUTC(DateTime startutc, DateTime toutc)
         {
-            return (from s in historylist where s.EntryType == JournalTypeEnum.Scan && s.EventTimeLocal >= start && s.EventTimeLocal < to select s.journalEntry as JournalScan)
+            return (from s in historylist where s.EntryType == JournalTypeEnum.Scan && s.EventTimeUTC >= startutc && s.EventTimeUTC < toutc select s.journalEntry as JournalScan)
                 .Distinct(new ScansAreForSameBody()).ToList();
         }
 
@@ -462,7 +477,7 @@ namespace EliteDangerousCore
 
         public int GetFSDJumpsBeforeUTC(DateTime utc)
         {
-            return (from s in historylist where s.IsFSDJump && s.EventTimeLocal < utc select s).Count();
+            return (from s in historylist where s.IsFSDJump && s.EventTimeUTC < utc select s).Count();
         }
 
         public string GetCommanderFID()     // may be null
