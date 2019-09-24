@@ -255,7 +255,8 @@ function SetupIndicators(jdata,tstatus,tactions, shiptype, inwing, supercruise,l
         tactions.appendChild(tablerowmultitdlist(actionlist));
     }
     else
-    {       // no type, no data
+    {
+        tstatus.appendChild(CreatePara("Elite not running"));
     }
 }
 

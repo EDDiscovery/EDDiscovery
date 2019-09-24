@@ -27,6 +27,13 @@ using System.Net;
 using System.Reflection;
 using System.Windows.Forms;
 
+// how to debug
+// -wsf c:\code\eddiscovery\WebSite\EDD  to point EDD at the website
+// open the SLN in the website in another VS instance
+// use ISS Express (Google Chrome) to run the website - you will be able to single step etc
+// until the js file is needed, a debug point will show not bound.  thats okay.
+// use the console inspector control-shift-I to debug also in chrome
+
 namespace EDDiscovery.WebServer
 {
     // JSON Websockets Interface definition:

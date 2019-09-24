@@ -12,6 +12,13 @@ function CreatePara(text)
     return a2;
 }
 
+function CreateElement(type,text)
+{
+    var a2 = document.createElement(type);
+    a2.innerHTML = text;
+    return a2;
+}
+
 function CreateAnchor(text, link, newtab = false)
 {
     var a2 = document.createElement("a");
