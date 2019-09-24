@@ -145,7 +145,7 @@ namespace EDDiscovery.UserControls
         {
             if (he != null)
             {
-                if (he.EntryType == JournalTypeEnum.Scan || last_he == null || last_he.System != he.System) // if new entry is scan, may be new data.. or not presenting or diff sys
+                if (he.EntryType == JournalTypeEnum.Scan || he.journalEntry is IMaterialJournalEntry || last_he == null || last_he.System != he.System) // if new entry is scan, may be new data.. or not presenting or diff sys
                 {
                     last_he = he;
                     DrawSystem(last_he);
