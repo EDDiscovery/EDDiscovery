@@ -188,8 +188,9 @@ namespace EliteDangerousCore.JournalEvents
         public string BodyName { get; set; }
         public int ProbesUsed { get; set; }
         public int EfficiencyTarget { get; set; }
-        public string BodyDesignation { get; set; }
         public long? SystemAddress { get; set; }    // 3.5
+
+        public string BodyDesignation { get; set; }     // set by scan system to best body designation for this entry
 
         public override string SummaryName(ISystem sys)
         {
@@ -219,6 +220,8 @@ namespace EliteDangerousCore.JournalEvents
         public string BodyName { get; set; }
         public int BodyID { get; set; }
         public List<SAASignal> Signals { get; set; }
+
+        public string BodyDesignation { get; set; }     // set by scan system to best body designation for this entry
 
         public class SAASignal
         {

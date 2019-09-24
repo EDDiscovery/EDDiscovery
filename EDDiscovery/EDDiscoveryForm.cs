@@ -112,7 +112,6 @@ namespace EDDiscovery
             return Controller.RefreshHistoryAsync();
         }
         public void RefreshDisplays() { Controller.RefreshDisplays(); }
-        public void RecalculateHistoryDBs() { Controller.RecalculateHistoryDBs(); }
 
         public void ChangeToCommander(int id)
         {
