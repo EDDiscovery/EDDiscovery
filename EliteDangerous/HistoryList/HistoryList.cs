@@ -923,6 +923,10 @@ namespace EliteDangerousCore
             {
                 starscan.AddSAAScanToBestSystem((JournalSAAScanComplete)je, Count - 1, EntryOrder);
             }
+            else if (je is JournalSAASignalsFound)
+            {
+                this.starscan.AddSAASignalsFoundToBestSystem((JournalSAASignalsFound)je, Count-1, EntryOrder);
+            }
             else if (je is JournalFSSDiscoveryScan && he.System != null)
             {
                 starscan.SetFSSDiscoveryScan((JournalFSSDiscoveryScan)je, he.System);
@@ -1057,7 +1061,7 @@ namespace EliteDangerousCore
 
             reportProgress(-1, "Updating user statistics");
 
-            hist.ProcessUserHistoryListEntries(h => h.ToList());      // here, we update the DBs in HistoryEntry and any global DBs in historylist
+            hist.ProcessUserHistoryListEntries();      // here, we update the DBs in HistoryEntry and any global DBs in historylist
 
             reportProgress(-1, "Done");
 
@@ -1066,9 +1070,9 @@ namespace EliteDangerousCore
 
 
         // go through the history list and recalculate the materials ledger and the materials count, plus any other stuff..
-        public void ProcessUserHistoryListEntries(Func<HistoryList, List<HistoryEntry>> hlfilter)
+        public void ProcessUserHistoryListEntries()
         {
-            List<HistoryEntry> hl = hlfilter(this);
+            List<HistoryEntry> hl = historylist;
 
             using (SQLiteConnectionUser conn = new SQLiteConnectionUser())      // splitting the update into two, one using system, one using user helped
             {
@@ -1105,6 +1109,10 @@ namespace EliteDangerousCore
                     else if (je.EventTypeID == JournalTypeEnum.SAAScanComplete)
                     {
                         this.starscan.AddSAAScanToBestSystem((JournalSAAScanComplete)je, i, hl);
+                    }
+                    else if (je.EventTypeID == JournalTypeEnum.SAASignalsFound)
+                    {
+                        this.starscan.AddSAASignalsFoundToBestSystem((JournalSAASignalsFound)je, i, hl);
                     }
                     else if (je.EventTypeID == JournalTypeEnum.FSSDiscoveryScan && he.System != null)
                     {

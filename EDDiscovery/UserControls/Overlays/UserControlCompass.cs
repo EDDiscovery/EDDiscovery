@@ -88,9 +88,12 @@ namespace EDDiscovery.UserControls
 
         public override void SetTransparency(bool on, Color curbackcol)
         {
-            labelTargetLat.TextBackColor = curbackcol;
             numberBoxTargetLatitude.BackColor = numberBoxTargetLongitude.BackColor = curbackcol;
-            labelBookmark.BackColor = curbackcol;
+            numberBoxTargetLatitude.ControlBackground = numberBoxTargetLongitude.ControlBackground = curbackcol;
+            labelTargetLat.TextBackColor = curbackcol;
+            labelBookmark.TextBackColor = curbackcol;
+            flowLayoutPanelTop.BackColor = curbackcol;
+            flowLayoutPanelBookmarks.BackColor = curbackcol;
             checkBoxHideTransparent.BackColor = curbackcol;
             comboBoxBookmarks.DisableBackgroundDisabledShadingGradient = on;
             comboBoxBookmarks.BackColor = curbackcol;
@@ -107,20 +110,7 @@ namespace EDDiscovery.UserControls
 
             if (autoHideTargetCoords)
             {
-                if (on)
-                {
-                    labelTargetLat.Visible = false;
-                    numberBoxTargetLatitude.Visible = numberBoxTargetLongitude.Visible = checkBoxHideTransparent.Visible = false;
-                    buttonNewBookmark.Visible = labelBookmark.Visible = comboBoxBookmarks.Visible = false;
-                    compassControl.Top = 0;
-                }
-                else
-                {
-                    labelTargetLat.Visible = true;
-                    numberBoxTargetLatitude.Visible = numberBoxTargetLongitude.Visible = checkBoxHideTransparent.Visible = true;
-                    buttonNewBookmark.Visible = labelBookmark.Visible = comboBoxBookmarks.Visible = true;
-                    compassControl.Top = comboBoxBookmarks.Bottom + 8;
-                }
+                flowLayoutPanelBookmarks.Visible = flowLayoutPanelTop.Visible = !on;
             }
         }
 
@@ -392,7 +382,7 @@ namespace EDDiscovery.UserControls
         private void checkBoxHideTransparent_CheckedChanged(object sender, EventArgs e)
         {
             autoHideTargetCoords = ((ExtCheckBox)sender).Checked;
-            SetTransparency(IsTransparent, BackColor);
+           // SetTransparency(IsTransparent, BackColor);
         }
 
         private void comboBoxBookmarks_SelectedIndexChanged(object sender, EventArgs e)

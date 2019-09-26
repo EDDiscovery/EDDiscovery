@@ -114,12 +114,6 @@ namespace EDDiscovery
             OnHistoryChange?.Invoke(history);
         }
 
-        public void RecalculateHistoryDBs()         // call when you need to recalc the history dbs - not the whole history. Use RefreshAsync for that
-        {
-            history.ProcessUserHistoryListEntries(h => h.EntryOrder);
-            OnHistoryChange?.Invoke(history);
-        }
-
         #endregion
 
         #region Initialisation

@@ -112,7 +112,6 @@ namespace EDDiscovery
             return Controller.RefreshHistoryAsync();
         }
         public void RefreshDisplays() { Controller.RefreshDisplays(); }
-        public void RecalculateHistoryDBs() { Controller.RecalculateHistoryDBs(); }
 
         public void ChangeToCommander(int id)
         {
@@ -198,6 +197,8 @@ namespace EDDiscovery
                 theme.FontName = EDDOptions.Instance.Font;
 
             ApplyTheme();                       // we apply and scale (because its being applied to Form) before any tabs parts are setup.
+
+            panelToolBar.SetToolTip(toolTip);    // use the defaults
 
             this.TopMost = EDDConfig.KeepOnTop;
             notifyIcon1.Visible = EDDConfig.UseNotifyIcon;

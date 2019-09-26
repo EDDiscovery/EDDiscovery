@@ -272,7 +272,7 @@ namespace EDDiscovery.UserControls
                         object[] rowobj = {
                                             (EDDConfig.Instance.DisplayUTC ? he.EventTimeUTC : he.EventTimeLocal).ToString(),
                                             js.BodyName,
-                                            js.DisplayString(0,true),
+                                            js.DisplayString(0),
                                             (cursystem != null ? cursystem.Distance(sys).ToString("0.#") : ""),
                                             sys.X.ToString("0.#") + sep + sys.Y.ToString("0.#") + sep + sys.Z.ToString("0.#")
                                            };

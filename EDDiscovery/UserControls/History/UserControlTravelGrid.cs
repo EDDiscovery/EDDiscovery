@@ -761,7 +761,11 @@ namespace EDDiscovery.UserControls
 
                 string infodetailed = EventDescription.AppendPrePad(EventDetailedInfo,Environment.NewLine);
 
-                if (infodetailed.Lines() >= 15) // too long for inline expansion
+                int ch = dataGridViewTravel.Rows[leftclickrow].Height;
+                bool notexpanded = (ch <= defaultRowHeight);
+                int linesfound = infodetailed.Lines("\n");
+
+                if ( notexpanded && linesfound*ch > dataGridViewTravel.Height * 3 / 4 ) // unreasonable amount of space to show it.
                 {
                     ExtendedControls.InfoForm info = new ExtendedControls.InfoForm();
                     info.Info((EDDiscoveryForm.EDDConfig.DisplayUTC ? leftclicksystem.EventTimeUTC : leftclicksystem.EventTimeLocal) + ": " + leftclicksystem.EventSummary,
@@ -771,14 +775,12 @@ namespace EDDiscovery.UserControls
                 }
                 else
                 {
-                    int ch = dataGridViewTravel.Rows[leftclickrow].Height;
-                    bool toexpand = (ch <= defaultRowHeight);
 
-                    string infotext = (toexpand) ? infodetailed : EventDescription;
+                    string infotext = (notexpanded) ? infodetailed : EventDescription;
 
                     int h = defaultRowHeight;
 
-                    if (toexpand)
+                    if (notexpanded)
                     {
                         using (Graphics g = Parent.CreateGraphics())
                         {
@@ -793,12 +795,12 @@ namespace EDDiscovery.UserControls
                         }
                     }
 
-                    toexpand = (h > defaultRowHeight);      // now we have our h, is it bigger? If so, we need to go into wrap mode
+                    notexpanded = (h > defaultRowHeight);      // now we have our h, is it bigger? If so, we need to go into wrap mode
 
                     dataGridViewTravel.Rows[leftclickrow].Height = h;
                     dataGridViewTravel.Rows[leftclickrow].Cells[TravelHistoryColumns.Information].Value = infotext;
 
-                    DataGridViewTriState ti = (toexpand) ? DataGridViewTriState.True : DataGridViewTriState.False;
+                    DataGridViewTriState ti = (notexpanded) ? DataGridViewTriState.True : DataGridViewTriState.False;
 
                     dataGridViewTravel.Rows[leftclickrow].Cells[TravelHistoryColumns.Information].Style.WrapMode = ti;
                     dataGridViewTravel.Rows[leftclickrow].Cells[TravelHistoryColumns.Description].Style.WrapMode = ti;

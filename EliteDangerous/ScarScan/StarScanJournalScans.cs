@@ -14,14 +14,10 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
-using EliteDangerousCore;
 using EliteDangerousCore.JournalEvents;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EliteDangerousCore
 {
@@ -73,6 +69,8 @@ namespace EliteDangerousCore
             je.BodyDesignation = GetBodyDesignation(je, hl[startindex].System.Name);
             return ProcessJournalScan(je, hl[startindex].System, true);         // no relationship, add..
         }
+
+        // take the journal scan and add it to the node tree
 
         private bool ProcessJournalScan(JournalScan sc, ISystem sys, bool reprocessPrimary = false)  // background or foreground.. FALSE if you can't process it
         {
@@ -358,6 +356,8 @@ namespace EliteDangerousCore
             return node;
         }
 
+        // asteroid belts, not rings, are assigned to sub nodes of the star in the node heirarchy as type==belt.
+
         private void ProcessBelts(JournalScan sc, ScanNode node)
         {
             if (sc.HasRings)
@@ -400,84 +400,6 @@ namespace EliteDangerousCore
                     belt.BeltData = ring;
                 }
             }
-        }
-
-        private string GetBodyDesignation(JournalScan je, string system)
-        {
-            Dictionary<string, Dictionary<string, string>> desigmap = je.IsStar ? starDesignationMap : planetDesignationMap;
-            int bodyid = je.BodyID ?? -1;
-
-            if (je.BodyID != null && bodyIdDesignationMap.ContainsKey(system) && bodyIdDesignationMap[system].ContainsKey(bodyid) && bodyIdDesignationMap[system][bodyid].NameEquals(je.BodyName))
-            {
-                return bodyIdDesignationMap[system][bodyid].Designation;
-            }
-
-            // Special case for m Centauri
-            if (je.IsStar && system.ToLowerInvariant() == "m centauri")
-            {
-                if (je.BodyName == "m Centauri")
-                {
-                    return "m Centauri A";
-                }
-                else if (je.BodyName == "M Centauri")
-                {
-                    return "m Centauri B";
-                }
-            }
-
-            // Special case for Castellan Belt
-            if (system.ToLowerInvariant() == "lave" && je.BodyName.StartsWith("Castellan Belt ", StringComparison.InvariantCultureIgnoreCase))
-            {
-                return "Lave A Belt " + je.BodyName.Substring("Castellan Belt ".Length);
-            }
-
-            // Special case for 9 Aurigae
-            if (je.IsStar && system.ToLowerInvariant() == "9 Aurigae")
-            {
-                if (je.BodyName == "9 Aurigae C")
-                {
-                    if (je.nSemiMajorAxis > 1e13)
-                    {
-                        return "9 Aurigae D";
-                    }
-                    else
-                    {
-                        return "9 Aurigae C";
-                    }
-                }
-            }
-
-            if (desigmap.ContainsKey(system) && desigmap[system].ContainsKey(je.BodyName))
-            {
-                return desigmap[system][je.BodyName];
-            }
-
-            if (je.IsStar && je.BodyName == system && je.nOrbitalPeriod != null)
-            {
-                return system + " A";
-            }
-
-            if (je.BodyName.Equals(system, StringComparison.InvariantCultureIgnoreCase) || je.BodyName.StartsWith(system + " ", StringComparison.InvariantCultureIgnoreCase))
-            {
-                return je.BodyName;
-            }
-
-            if (je.IsStar && primaryStarScans.ContainsKey(system))
-            {
-                foreach (JournalScan primary in primaryStarScans[system])
-                {
-                    if (CompareEpsilon(je.nOrbitalPeriod, primary.nOrbitalPeriod) &&
-                        CompareEpsilon(je.nPeriapsis, primary.nPeriapsis, acceptNull: true, fb: b => ((double)b + 180) % 360.0) &&
-                        CompareEpsilon(je.nOrbitalInclination, primary.nOrbitalInclination) &&
-                        CompareEpsilon(je.nEccentricity, primary.nEccentricity) &&
-                        !je.BodyName.Equals(primary.BodyName, StringComparison.InvariantCultureIgnoreCase))
-                    {
-                        return system + " B";
-                    }
-                }
-            }
-
-            return je.BodyName;
         }
 
     }

@@ -153,6 +153,7 @@ namespace EDDiscovery.Actions
             ap[prefix + "_assignedname"] = scannode.Value.ownname;
             ap[prefix + "_assignedfullname"] = scannode.Value.fullname;
             ap[prefix + "_data"] = (sc != null) ? "1" : "0";
+            ap[prefix + "_signals"] = scannode.Value.Signals != null ? EliteDangerousCore.JournalEvents.JournalSAASignalsFound.SignalList(scannode.Value.Signals, 0, ",", true) : "";
 
             if ( sc != null )
             {
