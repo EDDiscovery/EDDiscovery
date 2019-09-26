@@ -13,15 +13,10 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-
-using EliteDangerousCore;
+ 
 using EliteDangerousCore.JournalEvents;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EliteDangerousCore
 {
@@ -59,14 +54,14 @@ namespace EliteDangerousCore
         private bool ProcessSAAScan(JournalSAAScanComplete jsaa, ISystem sys, bool reprocessPrimary = false)  // background or foreground.. FALSE if you can't process it
         {
             SystemNode sn = GetOrCreateSystemNode(sys);
-            ScanNode relatedScan = null;
+            ScanNode relatednode = null;
 
             if (sn.NodesByID.ContainsKey((int)jsaa.BodyID))
             {
-                relatedScan = sn.NodesByID[(int)jsaa.BodyID];
-                if (relatedScan.ScanData != null && relatedScan.ScanData.BodyDesignation != null)
+                relatednode = sn.NodesByID[(int)jsaa.BodyID];
+                if (relatednode.ScanData != null && relatednode.ScanData.BodyDesignation != null)
                 {
-                    jsaa.BodyDesignation = relatedScan.ScanData.BodyDesignation;
+                    jsaa.BodyDesignation = relatednode.ScanData.BodyDesignation;
                 }
             }
             else if (jsaa.BodyDesignation != null && jsaa.BodyDesignation != jsaa.BodyName)
@@ -75,34 +70,34 @@ namespace EliteDangerousCore
                 {
                     if (body.fullname == jsaa.BodyDesignation)
                     {
-                        relatedScan = body;
+                        relatednode = body;
                         break;
                     }
                 }
             }
 
-            if (relatedScan == null)
+            if (relatednode == null)
             {
                 foreach (var body in sn.Bodies)
                 {
                     if ((body.fullname == jsaa.BodyName || body.customname == jsaa.BodyName) &&
                         (body.fullname != sys.Name || body.level != 0))
                     {
-                        relatedScan = body;
+                        relatednode = body;
                         break;
                     }
                 }
             }
 
-            if (relatedScan != null)
+            if (relatednode != null)
             {
-                relatedScan.IsMapped = true;        // keep data here since we can get scans replaced later..
-                relatedScan.WasMappedEfficiently = jsaa.ProbesUsed <= jsaa.EfficiencyTarget;
+                relatednode.IsMapped = true;        // keep data here since we can get scans replaced later..
+                relatednode.WasMappedEfficiently = jsaa.ProbesUsed <= jsaa.EfficiencyTarget;
                 //System.Diagnostics.Debug.WriteLine("Setting SAA Scan for " + jsaa.BodyName + " " + sys.Name + " to Mapped: " + relatedScan.WasMappedEfficiently);
 
-                if (relatedScan.ScanData != null)       // if we have a scan, set its values - this keeps the calculation self contained in the class.
+                if (relatednode.ScanData != null)       // if we have a scan, set its values - this keeps the calculation self contained in the class.
                 {
-                    relatedScan.ScanData.SetMapped(relatedScan.IsMapped, relatedScan.WasMappedEfficiently);
+                    relatednode.ScanData.SetMapped(relatednode.IsMapped, relatednode.WasMappedEfficiently);
                     //System.Diagnostics.Debug.WriteLine(".. passing down to scan " + relatedScan.ScanData.ScanType);
                 }
 
@@ -137,5 +132,17 @@ namespace EliteDangerousCore
 
             return bodyname;
         }
+
+
+        #region FSS DISCOVERY *************************************************************
+
+        public void SetFSSDiscoveryScan(JournalFSSDiscoveryScan je, ISystem sys)
+        {
+            SystemNode sn = GetOrCreateSystemNode(sys);
+            sn.TotalBodies = je.BodyCount;
+        }
+
+        #endregion
+
     }
 }

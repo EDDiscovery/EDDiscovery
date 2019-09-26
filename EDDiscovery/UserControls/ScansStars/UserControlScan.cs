@@ -68,6 +68,8 @@ namespace EDDiscovery.UserControls
 
             rollUpPanelTop.PinState = SQLiteConnectionUser.GetSettingBool(DbSave + "PinState", true);
 
+            rollUpPanelTop.SetToolTip(toolTip);
+
             int size = SQLiteDBClass.GetSettingInt(DbSave + "Size", 64);
             SetSizeImage(size);
 
@@ -145,7 +147,9 @@ namespace EDDiscovery.UserControls
         {
             if (he != null)
             {
-                if (he.EntryType == JournalTypeEnum.Scan || last_he == null || last_he.System != he.System) // if new entry is scan, may be new data.. or not presenting or diff sys
+                // new scan, new materials (for the count display), new SAA Signals all can cause display to change.
+                if (he.EntryType == JournalTypeEnum.Scan || he.journalEntry is IMaterialJournalEntry || he.journalEntry is JournalSAASignalsFound ||
+                                last_he == null || last_he.System != he.System) //  or not presenting or diff sys
                 {
                     last_he = he;
                     DrawSystem(last_he);

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2015 - 2016 EDDiscovery development team
+ * Copyright © 2015 - 2019 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -14,26 +14,17 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
-using EliteDangerousCore;
 using EliteDangerousCore.JournalEvents;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EliteDangerousCore
 {
-
     public partial class StarScan
     {
-        Dictionary<Tuple<string, long>, SystemNode> scandata = new Dictionary<Tuple<string, long>, SystemNode>();
-        Dictionary<string, List<SystemNode>> scandataByName = new Dictionary<string, List<SystemNode>>();
-        private static Dictionary<string, Dictionary<string, string>> planetDesignationMap = new Dictionary<string, Dictionary<string, string>>(StringComparer.InvariantCultureIgnoreCase);
-        private static Dictionary<string, Dictionary<string, string>> starDesignationMap = new Dictionary<string, Dictionary<string, string>>(StringComparer.InvariantCultureIgnoreCase);
-        private static Dictionary<string, Dictionary<int, BodyDesignations.DesigMap>> bodyIdDesignationMap = new Dictionary<string, Dictionary<int, BodyDesignations.DesigMap>>(StringComparer.InvariantCultureIgnoreCase);
-        private static Dictionary<string, List<JournalScan>> primaryStarScans = new Dictionary<string, List<JournalScan>>(StringComparer.InvariantCultureIgnoreCase);
+        private Dictionary<Tuple<string, long>, SystemNode> scandata = new Dictionary<Tuple<string, long>, SystemNode>();
+        private Dictionary<string, List<SystemNode>> scandataByName = new Dictionary<string, List<SystemNode>>();
 
         public class SystemNode
         {
@@ -100,9 +91,10 @@ namespace EliteDangerousCore
 
             public bool IsTopLevelNode;
 
-            private JournalScan scandata;            // can be null if no scan, its a place holder.
-            private JournalScan.StarPlanetRing beltdata;
-            private IBodyNameAndID bodyloc;
+            private JournalScan scandata;            // can be null if no scan, its a place holder, else its a journal scan
+            private JournalScan.StarPlanetRing beltdata;    // can be null if not belt. if its a type==belt, it is populated with belt data
+            private IBodyNameAndID bodyloc;         // can be null if not allocated via BodyID system, else its the journal entry (of any type) with body and id data
+            private List<JournalSAASignalsFound.SAASignal> signals; // can be null if no signals for this node, else its a list of signals.
 
             public JournalScan ScanData
             {
@@ -154,6 +146,21 @@ namespace EliteDangerousCore
                         return;
 
                     bodyloc = value;
+                }
+            }
+
+            public List<JournalSAASignalsFound.SAASignal> Signals
+            {
+                get
+                {
+                    return signals;
+                }
+                set
+                {
+                    if (value == null)
+                        return;
+
+                    signals = value;
                 }
             }
 
@@ -269,248 +276,5 @@ namespace EliteDangerousCore
 
             return sn;
         }
-
-        #region FSS DISCOVERY *************************************************************
-
-        public void SetFSSDiscoveryScan(JournalFSSDiscoveryScan je, ISystem sys)
-        {
-            SystemNode sn = GetOrCreateSystemNode(sys);
-            sn.TotalBodies = je.BodyCount;
-        }
-
-        #endregion
-        
-        #region Helpers
-
-        private SystemNode GetOrCreateSystemNode(ISystem sys)
-        {
-            Tuple<string, long> withedsm = new Tuple<string, long>(sys.Name, sys.EDSMID);
-
-            SystemNode sn = null;
-            if (scandata.ContainsKey(withedsm))         // if with edsm (if id_edsm=0, then thats okay)
-                sn = scandata[withedsm];
-            else if (scandataByName.ContainsKey(sys.Name))  // if we now have an edsm id, see if we have one without it 
-            {
-                foreach (SystemNode _sn in scandataByName[sys.Name])
-                {
-                    if (_sn.system.Equals(sys))
-                    {
-                        if (sys.EDSMID != 0)             // yep, replace
-                        {
-                            scandata.Add(new Tuple<string, long>(sys.Name, sys.EDSMID), _sn);
-                        }
-                        sn = _sn;
-                        break;
-                    }
-                }
-            }
-
-            if (sn == null)
-            {
-                sn = new SystemNode() { system = sys, starnodes = new SortedList<string, ScanNode>(new DuplicateKeyComparer<string>()) };
-
-                if (!scandataByName.ContainsKey(sys.Name))
-                {
-                    scandataByName[sys.Name] = new List<SystemNode>();
-                }
-
-                scandataByName[sys.Name].Add(sn);
-
-                if (sys.EDSMID != 0)
-                {
-                    scandata.Add(new Tuple<string, long>(sys.Name, sys.EDSMID), sn);
-                }
-            }
-
-            return sn;
-        }
-
-        private class DuplicateKeyComparer<TKey> : IComparer<string> where TKey : IComparable      // special compare for sortedlist
-        {
-            public int Compare(string x, string y)
-            {
-                if (x.Length > 0 && Char.IsDigit(x[0]))      // numbers..
-                {
-                    if (x.Length < y.Length)
-                        return -1;
-                    else if (x.Length > y.Length)
-                        return 1;
-
-                }
-
-                return StringComparer.InvariantCultureIgnoreCase.Compare(x, y);
-            }
-        }
-
-        private static bool CompareEpsilon(double? a, double? b, bool acceptNull = false, double epsilon = 0.001, Func<double?, double> fb = null)
-        {
-            if (a == null || b == null)
-            {
-                return !acceptNull;
-            }
-
-            double _a = (double)a;
-            double _b = fb == null ? (double)b : fb(b);
-
-            return _a == _b || (_a + _b != 0 && Math.Sign(_a + _b) == Math.Sign(_a) && Math.Abs((_a - _b) / (_a + _b)) < epsilon);
-        }
-
-        private void CachePrimaryStar(JournalScan je, ISystem sys)
-        {
-            string system = sys.Name;
-
-            if (!primaryStarScans.ContainsKey(system))
-            {
-                primaryStarScans[system] = new List<JournalScan>();
-            }
-
-            if (!primaryStarScans[system].Any(s => CompareEpsilon(s.nAge, je.nAge) &&
-                                                   CompareEpsilon(s.nEccentricity, je.nEccentricity) &&
-                                                   CompareEpsilon(s.nOrbitalInclination, je.nOrbitalInclination) &&
-                                                   CompareEpsilon(s.nOrbitalPeriod, je.nOrbitalPeriod) &&
-                                                   CompareEpsilon(s.nPeriapsis, je.nPeriapsis) &&
-                                                   CompareEpsilon(s.nRadius, je.nRadius) &&
-                                                   CompareEpsilon(s.nRotationPeriod, je.nRotationPeriod) &&
-                                                   CompareEpsilon(s.nSemiMajorAxis, je.nSemiMajorAxis) &&
-                                                   CompareEpsilon(s.nStellarMass, je.nStellarMass)))
-            {
-                primaryStarScans[system].Add(je);
-            }
-        }
-
-        private static bool IsStarNameRelated(string starname, string bodyname, string designation = null)
-        {
-            if (designation == null)
-            {
-                designation = bodyname;
-            }
-
-            if (designation.Length >= starname.Length)
-            {
-                string s = designation.Substring(0, starname.Length);
-                return starname.Equals(s, StringComparison.InvariantCultureIgnoreCase);
-            }
-            else
-                return false;
-        }
-
-        public static string IsStarNameRelatedReturnRest(string starname, string bodyname, string designation = null)          // null if not related, else rest of string
-        {
-            if (designation == null)
-            {
-                designation = bodyname;
-            }
-
-            if (designation.Length >= starname.Length)
-            {
-                string s = designation.Substring(0, starname.Length);
-                if (starname.Equals(s, StringComparison.InvariantCultureIgnoreCase))
-                    return designation.Substring(starname.Length).Trim();
-            }
-
-            return null;
-        }
-
-        private SystemNode FindSystemNode(ISystem sys)
-        {
-            Tuple<string, long> withedsm = new Tuple<string, long>(sys.Name, sys.EDSMID);
-
-            if (scandata.ContainsKey(withedsm))         // if with edsm (if id_edsm=0, then thats okay)
-                return scandata[withedsm];
-
-            if (scandataByName.ContainsKey(sys.Name))
-            {
-                foreach (SystemNode sn in scandataByName[sys.Name])
-                {
-                    if (sn.system.Equals(sys))
-                    {
-                        return sn;
-                    }
-                }
-            }
-
-            return null;
-        }
-
-        public static void LoadBodyDesignationMap()
-        {
-            string desigmappath = Path.Combine(EliteConfigInstance.InstanceOptions.AppDataDirectory, "bodydesignations.csv");
-
-            if (!File.Exists(desigmappath))
-            {
-                desigmappath = Path.Combine(Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), "bodydesignations.csv");
-            }
-
-            if (File.Exists(desigmappath))
-            {
-                foreach (string line in File.ReadLines(desigmappath))
-                {
-                    string[] fields = line.Split(',').Select(s => s.Trim('"')).ToArray();
-                    if (fields.Length == 3)
-                    {
-                        string sysname = fields[0];
-                        string bodyname = fields[1];
-                        string desig = fields[2];
-                        Dictionary<string, Dictionary<string, string>> desigmap = planetDesignationMap;
-
-                        if (desig == sysname || (desig.Length == sysname.Length + 2 && desig[sysname.Length + 1] >= 'A' && desig[sysname.Length + 1] <= 'F'))
-                        {
-                            desigmap = starDesignationMap;
-                        }
-
-                        if (!desigmap.ContainsKey(sysname))
-                        {
-                            desigmap[sysname] = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
-                        }
-
-                        desigmap[sysname][bodyname] = desig;
-                    }
-                }
-            }
-            else
-            {
-                foreach (var skvp in BodyDesignations.Stars)
-                {
-                    if (!starDesignationMap.ContainsKey(skvp.Key))
-                    {
-                        starDesignationMap[skvp.Key] = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
-                    }
-
-                    foreach (var bkvp in skvp.Value)
-                    {
-                        starDesignationMap[skvp.Key][bkvp.Key] = bkvp.Value;
-                    }
-                }
-
-                foreach (var skvp in BodyDesignations.Planets)
-                {
-                    if (!planetDesignationMap.ContainsKey(skvp.Key))
-                    {
-                        planetDesignationMap[skvp.Key] = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
-                    }
-
-                    foreach (var bkvp in skvp.Value)
-                    {
-                        planetDesignationMap[skvp.Key][bkvp.Key] = bkvp.Value;
-                    }
-                }
-
-                foreach (var skvp in BodyDesignations.ByBodyId)
-                {
-                    if (!bodyIdDesignationMap.ContainsKey(skvp.Key))
-                    {
-                        bodyIdDesignationMap[skvp.Key] = new Dictionary<int, BodyDesignations.DesigMap>();
-                    }
-
-                    foreach (var bkvp in skvp.Value)
-                    {
-                        bodyIdDesignationMap[skvp.Key][bkvp.Key] = bkvp.Value;
-                    }
-                }
-            }
-        }
-
-        #endregion
-
     }
 }

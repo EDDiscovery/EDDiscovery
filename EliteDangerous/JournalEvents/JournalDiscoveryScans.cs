@@ -235,17 +235,25 @@ namespace EliteDangerousCore.JournalEvents
             return base.SummaryName(sys) + " " + "Of ".T(EDTx.JournalEntry_of) + BodyName.ReplaceIfStartsWith(sys.Name);
         }
 
-        public override void FillInformation(out string info, out string detailed)
+        static public string SignalList(List<SAASignal> list, int indent = 0, string separ = ", " , bool logtype = false)
         {
-            info = "";
-            detailed = "";
-            if ( Signals!= null)
+            string inds = new string(' ', indent);
+
+            string info = "";
+            if (list != null)
             {
-                foreach( var x in Signals )
+                foreach (var x in list)
                 {
-                    info = info.AppendPrePad(x.Type_Localised.Alt(x.Type) + ":"  + x.Count.ToString("N0"), ", ");
+                    info = info.AppendPrePad(inds + (logtype ? x.Type : x.Type_Localised.Alt(x.Type)) + ":" + x.Count.ToString("N0"), separ);
                 }
             }
+            return info;
+        }
+
+        public override void FillInformation(out string info, out string detailed)
+        {
+            info = SignalList(Signals);
+            detailed = "";
         }
     }
 

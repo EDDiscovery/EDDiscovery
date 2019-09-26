@@ -14,14 +14,9 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
-using EliteDangerousCore;
 using EliteDangerousCore.JournalEvents;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EliteDangerousCore
 {
@@ -30,6 +25,9 @@ namespace EliteDangerousCore
         // used by historylist directly for a single update during play, in foreground..  Also used by above.. so can be either in fore/back
         public bool AddSAASignalsFoundToBestSystem(JournalSAASignalsFound jsaa, int startindex, List<HistoryEntry> hl)
         {
+            if (jsaa.Signals == null)       // be paranoid, don't add if null signals
+                return false;
+
             for (int j = startindex; j >= 0; j--)
             {
                 HistoryEntry he = hl[j];
@@ -59,14 +57,14 @@ namespace EliteDangerousCore
         private bool ProcessSAASignalsFound(JournalSAASignalsFound jsaa, ISystem sys, bool reprocessPrimary = false)  // background or foreground.. FALSE if you can't process it
         {
             SystemNode sn = GetOrCreateSystemNode(sys);
-            ScanNode relatedScan = null;
+            ScanNode relatednode = null;
 
             if (sn.NodesByID.ContainsKey((int)jsaa.BodyID)) // find by ID
             {
-                relatedScan = sn.NodesByID[(int)jsaa.BodyID];
-                if (relatedScan.ScanData != null && relatedScan.ScanData.BodyDesignation != null)
+                relatednode = sn.NodesByID[(int)jsaa.BodyID];
+                if (relatednode.ScanData != null && relatednode.ScanData.BodyDesignation != null)
                 {
-                    jsaa.BodyDesignation = relatedScan.ScanData.BodyDesignation;
+                    jsaa.BodyDesignation = relatednode.ScanData.BodyDesignation;
                 }
             }
             else if (jsaa.BodyDesignation != null && jsaa.BodyDesignation != jsaa.BodyName)
@@ -75,36 +73,43 @@ namespace EliteDangerousCore
                 {
                     if (body.fullname == jsaa.BodyDesignation)
                     {
-                        relatedScan = body;
+                        relatednode = body;
                         break;
                     }
                 }
             }
 
-            if (relatedScan == null)
+            if (relatednode == null)
             {
+                bool ringname = jsaa.BodyName.EndsWith("A Ring") || jsaa.BodyName.EndsWith("B Ring") || jsaa.BodyName.EndsWith("C Ring") | jsaa.BodyName.EndsWith("D Ring");
+                string ringcutname = ringname ? jsaa.BodyName.Left(jsaa.BodyName.Length - 6).TrimEnd() : null;
+
                 foreach (var body in sn.Bodies)
                 {
                     if ((body.fullname == jsaa.BodyName || body.customname == jsaa.BodyName) &&
                         (body.fullname != sys.Name || body.level != 0))
                     {
-                        relatedScan = body;
+                        relatednode = body;
+                        break;
+                    }
+                    else if (ringcutname != null && body.fullname.Equals(ringcutname))
+                    {
+                        relatednode = body;
                         break;
                     }
                 }
             }
 
-            if (relatedScan != null)
+            if (relatednode != null )
             {
-                System.Diagnostics.Debug.WriteLine("Setting SAA Signals Found for " + jsaa.BodyName + " " + sys.Name + " "  + jsaa.BodyDesignation);
+                System.Diagnostics.Debug.WriteLine("Setting SAA Signals Found for " + jsaa.BodyName + " @ " + sys.Name + " body "  + jsaa.BodyDesignation);
 
-//                if (relatedScan.ScanData != null)       // if we have a scan, set its values - this keeps the calculation self contained in the class.
-  //              {
-    //                relatedScan.ScanData.SetMapped(relatedScan.IsMapped, relatedScan.WasMappedEfficiently);
-      //              //System.Diagnostics.Debug.WriteLine(".. passing down to scan " + relatedScan.ScanData.ScanType);
-        //        }
+                if (relatednode.Signals == null)
+                    relatednode.Signals = new List<JournalSAASignalsFound.SAASignal>();
 
-                return true; // We already have the scan
+                relatednode.Signals.AddRange(jsaa.Signals); // add signals to list of signals of this entity
+
+                return true; // all ok
             }
 
             return false;

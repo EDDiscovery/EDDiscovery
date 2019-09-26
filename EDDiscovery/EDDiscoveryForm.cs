@@ -198,6 +198,8 @@ namespace EDDiscovery
 
             ApplyTheme();                       // we apply and scale (because its being applied to Form) before any tabs parts are setup.
 
+            panelToolBar.SetToolTip(toolTip);    // use the defaults
+
             this.TopMost = EDDConfig.KeepOnTop;
             notifyIcon1.Visible = EDDConfig.UseNotifyIcon;
 

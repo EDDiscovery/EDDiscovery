@@ -49,6 +49,7 @@ namespace EDDiscovery.UserControls
         public override void Init()
         {
             rollUpPanelTop.PinState = SQLiteConnectionUser.GetSettingBool(DbSave + "PinState", true);
+            rollUpPanelTop.SetToolTip(toolTip);
 
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);

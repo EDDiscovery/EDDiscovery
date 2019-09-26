@@ -510,10 +510,10 @@ namespace EliteDangerousCore.JournalEvents
                                                  "Name:".T(EDTx.JournalScan_SNME), BodyName);
             }
 
-            detailed = DisplayString(0, false);
+            detailed = DisplayString(0, includefront:false);
         }
 
-        public string DisplayString(int indent = 0, bool includefront = true , MaterialCommoditiesList historicmatlist = null, MaterialCommoditiesList currentmatlist = null)//, bool mapped = false, bool efficiencyBonus = false)
+        public string DisplayString(int indent = 0, MaterialCommoditiesList historicmatlist = null, MaterialCommoditiesList currentmatlist = null, bool includefront = true)//, bool mapped = false, bool efficiencyBonus = false)
         {
             string inds = new string(' ', indent);
 
@@ -544,15 +544,10 @@ namespace EliteDangerousCore.JournalEvents
 
                 scanText.AppendFormat("\n");
 
-                if (HasAtmosphericComposition)
-                    scanText.Append("\n" + DisplayAtmosphere(2));
-                    
-                if (HasPlanetaryComposition)
-                    scanText.Append("\n" + DisplayComposition(2));
+                if (Terraformable)
+                    scanText.Append("Candidate for terraforming\n".T(EDTx.JournalScan_Candidateforterraforming));
 
-                if (HasPlanetaryComposition || HasAtmosphericComposition)
-                    scanText.Append("\n\n");
-                                
+                             
                 if (nAge.HasValue)
                     scanText.AppendFormat("Age: {0} my\n".T(EDTx.JournalScan_AMY), nAge.Value.ToString("N0"));
 
@@ -567,6 +562,12 @@ namespace EliteDangerousCore.JournalEvents
 
                 if (DistanceFromArrivalLS > 0)
                     scanText.AppendFormat("Distance from Arrival Point {0:N1}ls\n".T(EDTx.JournalScan_DistancefromArrivalPoint), DistanceFromArrivalLS);
+
+                if (HasAtmosphericComposition)
+                    scanText.Append(DisplayAtmosphere(4));
+
+                if (HasPlanetaryComposition)
+                    scanText.Append(DisplayComposition(4));
             }
 
             if (nSurfaceTemperature.HasValue)
@@ -627,9 +628,6 @@ namespace EliteDangerousCore.JournalEvents
             if (nTidalLock.HasValue && nTidalLock.Value)
                 scanText.Append("Tidally locked\n".T(EDTx.JournalScan_Tidallylocked));
 
-            if (Terraformable)
-                scanText.Append("Candidate for terraforming\n".T(EDTx.JournalScan_Candidateforterraforming));
-
             if (HasRings)
             {
                 scanText.Append("\n");
@@ -659,11 +657,11 @@ namespace EliteDangerousCore.JournalEvents
 
             if (HasMaterials)
             {
-                scanText.Append("\n" + DisplayMaterials(2, historicmatlist , currentmatlist) + "\n");
+                scanText.Append(DisplayMaterials(4, historicmatlist , currentmatlist) + "\n");
             }
 
             if (CircumstellarZonesString() != null)
-                scanText.Append("\n" + CircumstellarZonesString());
+                scanText.Append(CircumstellarZonesString());
 
 			if (IsStar && HabZoneOtherStarsString() != null)
 				scanText.Append(HabZoneOtherStarsString());
@@ -673,16 +671,17 @@ namespace EliteDangerousCore.JournalEvents
 
             if (EstimatedValue > 0)
             {
-                scanText.AppendFormat("\nEstimated value: {0:N0}".T(EDTx.JournalScan_EV), EstimatedValue);
                 if (Mapped)
                 {
-                    scanText.Append(" " + "Mapped".T(EDTx.JournalScan_MPI));
+                    scanText.Append("Mapped".T(EDTx.JournalScan_MPI));
                     if (EfficientMapped)
                         scanText.Append(" " + "Efficiently".T(EDTx.JournalScan_MPIE));
 
                     scanText.AppendFormat("\nFirst Discovered+Mapped value: {0:N0}".T(EDTx.JournalScan_EVFD), EstimatedValueFirstDiscoveredFirstMapped);
                     scanText.AppendFormat("\nFirst Mapped value: {0:N0}".T(EDTx.JournalScan_EVFM), EstimatedValueFirstMapped);
                 }
+                else
+                    scanText.AppendFormat("\nEstimated value: {0:N0}".T(EDTx.JournalScan_EV), EstimatedValue);
 
                 if (WasDiscovered.HasValue && WasDiscovered.Value)
                     scanText.AppendFormat("\nAlready Discovered".T(EDTx.JournalScan_EVAD));
@@ -744,7 +743,7 @@ namespace EliteDangerousCore.JournalEvents
 									 (AmmonWrldZoneInner.Value / oneAU_LS).ToString("N2"),
 									 (AmmonWrldZoneOuter.Value / oneAU_LS).ToString("N2"));
 				
-				habZone.AppendFormat(" - Icy Planets, {0} (from {1} AU)\n\n".T(EDTx.JournalScan_IcyPlanets),
+				habZone.AppendFormat(" - Icy Planets, {0} (from {1} AU)\n".T(EDTx.JournalScan_IcyPlanets),
 									 GetIcyPlanetsZoneStringLs(),
 				(IcyPlanetZoneInner.Value / oneAU_LS).ToString("N2"));
 
@@ -759,7 +758,7 @@ namespace EliteDangerousCore.JournalEvents
 		{
 			StringBuilder habZoneAddend = new StringBuilder();
 			if (nSemiMajorAxis.HasValue && nSemiMajorAxis.Value > 0)
-				habZoneAddend.Append("(Others stars not considered)\n\n".T(EDTx.JournalScan_Othersstarsnotconsidered));
+				habZoneAddend.Append(" - Others stars not considered\n".T(EDTx.JournalScan_Othersstarsnotconsidered));
 			
 			return habZoneAddend.ToNullSafeString();
 		}
