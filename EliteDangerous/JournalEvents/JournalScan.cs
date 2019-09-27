@@ -138,9 +138,22 @@ namespace EliteDangerousCore.JournalEvents
 
         public bool Mapped { get { return mapped;}  }                          // affects prices
         public bool EfficientMapped { get { return efficientmapped; } }                          // affects prices
-        public int EstimatedValue { get; private set; }           // Current Estimated Value
-        public int EstimatedValueFirstDiscoveredFirstMapped { get; private set; }           // 0 if not mapped
-        public int EstimatedValueFirstMapped { get; private set; }                          // 0 if not mapped
+
+        public int EstimatedValue { get // best guess based on discovered/wasmapped and Mapped flags
+            {
+                bool firstmapped = WasMapped.HasValue && WasMapped.Value == false && Mapped;
+                if (WasDiscovered.HasValue && WasDiscovered.Value == false && firstmapped)
+                    return EstimatedValueFirstDiscoveredFirstMapped;
+                else if (firstmapped)
+                    return EstimatedValueFirstMapped;
+                else
+                    return EstimatedValueNotMappedDiscovered;
+            }
+        }
+
+        public int EstimatedValueNotMappedDiscovered { get; private set; }     // Estimated value without mapping
+        public int EstimatedValueFirstDiscoveredFirstMapped { get; private set; }           // with both
+        public int EstimatedValueFirstMapped { get; private set; }             // with just mapped                 
 
         public void SetMapped(bool m, bool e)
         {
@@ -669,7 +682,7 @@ namespace EliteDangerousCore.JournalEvents
             if (scanText.Length > 0 && scanText[scanText.Length - 1] == '\n')
                 scanText.Remove(scanText.Length - 1, 1);
 
-            if (EstimatedValue > 0)
+            if (EstimatedValueNotMappedDiscovered > 0)
             {
                 if (Mapped)
                 {
@@ -677,11 +690,13 @@ namespace EliteDangerousCore.JournalEvents
                     if (EfficientMapped)
                         scanText.Append(" " + "Efficiently".T(EDTx.JournalScan_MPIE));
 
-                    scanText.AppendFormat("\nFirst Discovered+Mapped value: {0:N0}".T(EDTx.JournalScan_EVFD), EstimatedValueFirstDiscoveredFirstMapped);
-                    scanText.AppendFormat("\nFirst Mapped value: {0:N0}".T(EDTx.JournalScan_EVFM), EstimatedValueFirstMapped);
+                    if (WasDiscovered.HasValue && !WasDiscovered.Value)
+                        scanText.AppendFormat("\nFirst Discovered+Mapped value: {0:N0}".T(EDTx.JournalScan_EVFD), EstimatedValueFirstDiscoveredFirstMapped);
+                    else
+                        scanText.AppendFormat("\nFirst Mapped value: {0:N0}".T(EDTx.JournalScan_EVFM), EstimatedValueFirstMapped);
                 }
                 else
-                    scanText.AppendFormat("\nEstimated value: {0:N0}".T(EDTx.JournalScan_EV), EstimatedValue);
+                    scanText.AppendFormat("\nEstimated value: {0:N0}".T(EDTx.JournalScan_EV), EstimatedValueNotMappedDiscovered);
 
                 if (WasDiscovered.HasValue && WasDiscovered.Value)
                     scanText.AppendFormat("\nAlready Discovered".T(EDTx.JournalScan_EVAD));
@@ -1158,13 +1173,13 @@ namespace EliteDangerousCore.JournalEvents
 
             if (EventTimeUTC < new DateTime(2017, 4, 11, 12, 0, 0, 0, DateTimeKind.Utc))
             {
-                EstimatedValue = EstimatedValueED22();
+                EstimatedValueNotMappedDiscovered = EstimatedValueED22();
                 return;
             }
 
             if (EventTimeUTC < new DateTime(2018, 12, 11, 9, 0, 0, DateTimeKind.Utc))
             {
-                EstimatedValue = EstimatedValue32();
+                EstimatedValueNotMappedDiscovered = EstimatedValue32();
                 return;
             }
 
@@ -1212,11 +1227,11 @@ namespace EliteDangerousCore.JournalEvents
                         break;
                 }
 
-                EstimatedValue = (int)StarValue32And33(kValue, nStellarMass.HasValue ? nStellarMass.Value : 1.0);
+                EstimatedValueNotMappedDiscovered = (int)StarValue32And33(kValue, nStellarMass.HasValue ? nStellarMass.Value : 1.0);
             }
             else
             {
-                EstimatedValue = 0;
+                EstimatedValueNotMappedDiscovered = 0;
 
                 if (PlanetClass != null)  //Asteroid belt is null
                 {
@@ -1263,11 +1278,11 @@ namespace EliteDangerousCore.JournalEvents
 
                         EstimatedValueFirstMapped = (int)PlanetValue33(kValue, mass, 8.0956 * effmapped);
 
-                        EstimatedValue = (int)PlanetValue33(kValue, mass, 3.3333333333 * effmapped);
+                        EstimatedValueNotMappedDiscovered = (int)PlanetValue33(kValue, mass, 3.3333333333 * effmapped);
                     }
                     else
                     {
-                        EstimatedValue = (int)PlanetValue33(kValue, mass, 1);
+                        EstimatedValueNotMappedDiscovered = (int)PlanetValue33(kValue, mass, 1);
                         EstimatedValueFirstDiscoveredFirstMapped = EstimatedValueFirstMapped = 0;
                     }
 
