@@ -767,8 +767,7 @@ namespace EDDiscovery.UserControls
 
         private void extButtonFilter_Click(object sender, EventArgs e)
         {
-            ExtendedControls.CheckedIconListBoxSelectionForm bodyfilter;
-            bodyfilter = new CheckedIconListBoxSelectionForm();
+            ExtendedControls.CheckedIconListBoxFormGroup bodyfilter = new CheckedIconListBoxFormGroup();
             bodyfilter.AddAllNone();
             foreach (var x in Enum.GetNames(typeof(EDPlanet)))
                 bodyfilter.AddStandardOption(x.ToString(), x.ToString().Replace("_", " ") );
@@ -781,7 +780,7 @@ namespace EDDiscovery.UserControls
             bodyfilter.AddStandardOption("barycentre", "Barycentre");
             bodyfilter.AddStandardOption("belt", "Belt");
 
-            bodyfilter.Closing = (s, o) => 
+            bodyfilter.SaveSettings = (s, o) => 
             {
                 bodyfilters = s.Split(';');
                 SQLiteDBClass.PutSettingString(DbSave + "BodyFilters", string.Join(";", bodyfilters));

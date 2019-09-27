@@ -86,7 +86,7 @@ namespace EDDiscovery.UserControls
             cfs.AddAllNone();
             cfs.AddJournalExtraOptions();
             cfs.AddJournalEntries();
-            cfs.Closing += EventFilterChanged;
+            cfs.SaveSettings += EventFilterChanged;
 
             checkBoxCursorToTop.Checked = SQLiteConnectionUser.GetSettingBool(DbAutoTop, true);
 

@@ -294,9 +294,9 @@ namespace EDDiscovery.UserControls
             Dickeys.Sort();
             List<Tuple<string,string,Image>> options = (from x in Dickeys select new Tuple<string,string,Image>(x.ToString(),x.ToString(),EDDConfig.Instance.CaptainsLogTagImage[x])).ToList();
 
-            ExtendedControls.CheckedIconListBoxSelectionForm cfs = new ExtendedControls.CheckedIconListBoxSelectionForm();
+            ExtendedControls.CheckedIconListBoxFormGroup cfs = new ExtendedControls.CheckedIconListBoxFormGroup();
             cfs.AllOrNoneBack = false;      // we want the whole list, makes it easier.
-            cfs.Closing += TagsChanged;
+            cfs.SaveSettings += TagsChanged;
             cfs.AddAllNone();
             cfs.AddStandardOption(options);
 

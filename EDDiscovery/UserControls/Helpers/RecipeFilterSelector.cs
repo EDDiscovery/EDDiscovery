@@ -40,16 +40,17 @@ namespace EDDiscovery.UserControls
             FilterButton(db, ctr, back, fore, parent, options);
         }
 
-        ExtendedControls.CheckedIconListBoxSelectionForm cc;
+        ExtendedControls.CheckedIconListBoxFormGroup cc;
+
         public void FilterButton(string db, Control ctr, Color back, Color fore, Form parent, List<string> list)
         {
-            cc = new ExtendedControls.CheckedIconListBoxSelectionForm();
+            cc = new ExtendedControls.CheckedIconListBoxFormGroup();
             cc.AddAllNone();
 
             foreach (var s in list)
                 cc.AddStandardOption(s, s);
 
-            cc.Closing += (s, o) =>
+            cc.SaveSettings += (s, o) =>
             {
                 SQLiteDBClass.PutSettingString(db, s);
                 Changed?.Invoke();

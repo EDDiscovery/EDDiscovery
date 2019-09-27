@@ -56,7 +56,7 @@ namespace EDDiscovery.UserControls
             cfs.AddAllNone();
             cfs.AddGroupOption(cashtype, "Cash Transactions".T(EDTx.UserControlLedger_CashTransactions),  JournalEntry.JournalTypeIcons[JournalTypeEnum.Bounty]);
             cfs.AddJournalEntries(new string[] { "Ledger", "LedgerNC" });
-            cfs.Closing += EventFilterChanged;
+            cfs.SaveSettings += EventFilterChanged;
 
             discoveryform.OnHistoryChange += Redisplay;
             discoveryform.OnNewEntry += NewEntry;

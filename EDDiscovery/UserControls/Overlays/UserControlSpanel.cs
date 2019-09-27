@@ -178,7 +178,7 @@ namespace EDDiscovery.UserControls
             cfs.AddAllNone();
             cfs.AddJournalExtraOptions();
             cfs.AddJournalEntries();
-            cfs.Closing += EventFilterChanged;
+            cfs.SaveSettings += EventFilterChanged;
 
             dividers = new ExtButton[] { buttonExt0, buttonExt1, buttonExt2, buttonExt3, buttonExt4, buttonExt5, buttonExt6, buttonExt7, buttonExt8, buttonExt9, buttonExt10, buttonExt11, buttonExt12 };
 

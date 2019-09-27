@@ -33,9 +33,9 @@ namespace EliteDangerousCore
             public double profitperunit;                             // profit per unit
             public long cash;                                      // cash total at this point
 
-            public bool IsJournalEventInEventFilter(string[] events)
+            public bool IsJournalEventInEventFilter(string[] events)        // events are the uncompressed journal names ModuleBuy etc.
             {
-                return events.Contains(jtype.ToString().SplitCapsWord());
+                return events.Contains(jtype.ToString());
             }
         }
 

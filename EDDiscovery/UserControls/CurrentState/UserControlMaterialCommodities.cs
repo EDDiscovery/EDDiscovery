@@ -100,7 +100,7 @@ namespace EDDiscovery.UserControls
             checkBoxClear.Checked = EliteDangerousCore.DB.SQLiteDBClass.GetSettingBool(DbClearZeroSave, true);
             checkBoxClear.CheckedChanged += CheckBoxClear_CheckedChanged;
 
-            cfs.Closing += FilterChanged;
+            cfs.SaveSettings += FilterChanged;
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)

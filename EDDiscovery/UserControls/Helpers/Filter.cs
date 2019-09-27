@@ -26,20 +26,22 @@ namespace EDDiscovery.UserControls
 {
     // Extends the filter form to know how to save back to DB.  and to add some standard option lists in
 
-    public class FilterSelector : ExtendedControls.CheckedIconListBoxSelectionForm
+    public class FilterSelector : ExtendedControls.CheckedIconListBoxFormGroup
     {
         private string dbstring;
 
-        public new Action<string, bool, Object> Closing;                       // Action on close, string is the settings, bool is true if same as before, object is sender
+        public new Action<string, bool, Object> SaveSettings;                       // Action on close, string is the settings, bool is true if same as before, object is sender
 
         public FilterSelector(string db) : base()
         {
             dbstring = db;
-            base.Closing += (x, t) =>                                          // use the base class closing, and work out if we changed anything
+            CloseOnDeactivate = false;          // this one, we hide it on deactivate, to make it pop up quicker next time
+            HideOnDeactivate = true;
+            base.SaveSettings += (settings,tag) =>                              // on save settings, perform store.
             {
                 string org = SQLiteDBClass.GetSettingString(dbstring,"All");
-                SQLiteDBClass.PutSettingString(dbstring, x);
-                this.Closing?.Invoke(x, x.Equals(org), t);
+                SQLiteDBClass.PutSettingString(dbstring, settings);
+                this.SaveSettings?.Invoke(settings, settings.Equals(org), tag);
             };
         }
 
@@ -47,7 +49,7 @@ namespace EDDiscovery.UserControls
         {
             AddGroupOption("ApproachBody;Docked;FSDJump;Location;Undocked;", "Travel".T(EDTx.FilterSelector_Travel), JournalEntry.JournalTypeIcons[JournalTypeEnum.FSDJump]);
 
-            AddGroupOption("Scan;Scan Auto;Scan Basic;Scan Nav;NavBeaconScan;SAAScanComplete;FSSAllBodiesFound;FSSSignalDiscovered;FSSDiscoveryScan;DiscoveryScan", "Scan".T(EDTx.FilterSelector_Scan), JournalEntry.JournalTypeIcons[JournalTypeEnum.Scan]);
+            AddGroupOption("Scan;Scan Auto;Scan Basic;Scan Nav;NavBeaconScan;SAAScanComplete;FSSAllBodiesFound;FSSSignalDiscovered;FSSDiscoveryScan;DiscoveryScan;SAASignalsFound", "Scan".T(EDTx.FilterSelector_Scan), JournalEntry.JournalTypeIcons[JournalTypeEnum.Scan]);
 
             var mile = EliteDangerousCore.JournalEntry.GetNameImageOfEvents(new string[] { "UpdateMissions" });
             string miltype = string.Join(";", mile.Select(x => x.Item1)) + ";";
@@ -89,11 +91,11 @@ namespace EDDiscovery.UserControls
             SortStandardOptions();  // sorted by text
         }
 
-        // do not use base Filter options - use these.
+        // use this to open the filter.
 
         public void Filter(Control ctr, Form parent)
         {
-            Show(SQLiteDBClass.GetSettingString(dbstring, "All"), ctr, parent);
+            Show(SQLiteDBClass.GetSettingString(dbstring, "All"), ctr, parent);     // use the quick helper. 
         }
     }
 }
