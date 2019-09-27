@@ -225,6 +225,7 @@ namespace EDDiscovery
             Debug.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Perform sync completed");
         }
 
+        private static DateTime MinEDSMDate = new DateTime(2015, 1, 1);
         private static DateTime ED21date = new DateTime(2016, 5, 26);
         private static DateTime ED23date = new DateTime(2017, 4, 11);
         private static DateTime ED30date = new DateTime(2018, 2, 27);
@@ -232,6 +233,9 @@ namespace EDDiscovery
         public long UpdateSync(bool[] grididallow, Func<bool> PendingClose, Action<string> ReportProgress)
         {
             DateTime lastrecordtime = SQLiteConnectionSystem.GetLastEDSMRecordTimeUTC();
+
+            if (lastrecordtime < MinEDSMDate)
+                lastrecordtime = MinEDSMDate;
 
             long updates = 0;
 
