@@ -18,6 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using EliteDangerousCore;
+using System.Linq;
 
 namespace EliteDangerousCore
 {
@@ -464,6 +465,146 @@ namespace EliteDangerousCore
 
                 default:
                     return string.Format("Class {0} star\n", id.ToString());
+            }
+        }
+
+        // Do not translate these.  Use StarName if you want translated names.
+        private static readonly Dictionary<EDStar, string> StarEnumToNameLookup = new Dictionary<EDStar, string>
+        {
+            [EDStar.O] = "O (Blue-White) Star",
+            [EDStar.B] = "B (Blue-White) Star",
+            [EDStar.B_BlueWhiteSuperGiant] = "B (Blue-White super giant) Star",
+            [EDStar.A] = "A (Blue-White) Star",
+            [EDStar.A_BlueWhiteSuperGiant] = "A (Blue-White super giant) Star",
+            [EDStar.F] = "F (White) Star",
+            [EDStar.F_WhiteSuperGiant] = "F (White super giant) Star",
+            [EDStar.G] = "G (White-Yellow) Star",
+            [EDStar.G_WhiteSuperGiant] = "G (White-Yellow super giant) Star",
+            [EDStar.K] = "K (Yellow-Orange) Star",
+            [EDStar.K_OrangeGiant] = "K (Yellow-Orange giant) Star",
+            [EDStar.M] = "M (Red dwarf) Star",
+            [EDStar.M_RedGiant] = "M (Red giant) Star",
+            [EDStar.M_RedSuperGiant] = "M (Red super giant) Star",
+            [EDStar.L] = "L (Brown dwarf) Star",
+            [EDStar.T] = "T (Brown dwarf) Star",
+            [EDStar.Y] = "Y (Brown dwarf) Star",
+            [EDStar.TTS] = "T Tauri Star",
+            [EDStar.AeBe] = "Herbig Ae/Be Star",
+            [EDStar.W] = "Wolf-Rayet Star",
+            [EDStar.WN] = "Wolf-Rayet N Star",
+            [EDStar.WNC] = "Wolf-Rayet NC Star",
+            [EDStar.WC] = "Wolf-Rayet C Star",
+            [EDStar.WO] = "Wolf-Rayet O Star",
+            [EDStar.CS] = "CS Star",
+            [EDStar.C] = "C Star",
+            [EDStar.CN] = "CN Star",
+            [EDStar.CJ] = "CJ Star",
+            [EDStar.CHd] = "CHd Star",
+            [EDStar.MS] = "MS-type Star",
+            [EDStar.S] = "S-type Star",
+            [EDStar.D] = "White Dwarf (D) Star",
+            [EDStar.DA] = "White Dwarf (DA) Star",
+            [EDStar.DAB] = "White Dwarf (DAB) Star",
+            [EDStar.DAO] = "White Dwarf (DAO) Star",
+            [EDStar.DAZ] = "White Dwarf (DAZ) Star",
+            [EDStar.DAV] = "White Dwarf (DAV) Star",
+            [EDStar.DB] = "White Dwarf (DB) Star",
+            [EDStar.DBZ] = "White Dwarf (DBZ) Star",
+            [EDStar.DBV] = "White Dwarf (DBV) Star",
+            [EDStar.DO] = "White Dwarf (DO) Star",
+            [EDStar.DOV] = "White Dwarf (DOV) Star",
+            [EDStar.DQ] = "White Dwarf (DQ) Star",
+            [EDStar.DC] = "White Dwarf (DC) Star",
+            [EDStar.DCV] = "White Dwarf (DCV) Star",
+            [EDStar.DX] = "White Dwarf (DX) Star",
+            [EDStar.N] = "Neutron Star",
+            [EDStar.H] = "Black Hole",
+            [EDStar.SuperMassiveBlackHole] = "Supermassive Black Hole"
+        };
+
+        private static readonly Dictionary<string, EDStar> StarNameToEnumLookup = StarEnumToNameLookup.ToDictionary(kvp => kvp.Value, kvp => kvp.Key, StringComparer.InvariantCultureIgnoreCase);
+
+        public static List<EDStar> StarTypes
+        {
+            get
+            {
+                return StarEnumToNameLookup.Keys.ToList();
+            }
+        }
+
+        public static string StarTypeName(EDStar type)
+        {
+            if (StarEnumToNameLookup.TryGetValue(type, out var name))
+            {
+                return name;
+            }
+            else
+            {
+                return type.ToString().Replace("_", " ");
+            }
+        }
+
+        public static EDStar StarTypeNameToEnum(string name)
+        {
+            if (StarNameToEnumLookup.TryGetValue(name, out var type))
+            {
+                return type;
+            }
+            else
+            {
+                return StarStr2Enum(name);
+            }
+        }
+
+        // Do not translate these.
+        private static readonly Dictionary<EDPlanet, string> PlanetEnumToNameLookup = new Dictionary<EDPlanet, string>
+        {
+            [EDPlanet.Metal_rich_body] = "Metal-rich body",
+            [EDPlanet.High_metal_content_body] = "High metal content world",
+            [EDPlanet.Rocky_body] = "Rocky body",
+            [EDPlanet.Icy_body] = "Icy body",
+            [EDPlanet.Rocky_ice_body] = "Rocky ice world",
+            [EDPlanet.Earthlike_body] = "Earth-like world",
+            [EDPlanet.Water_world] = "Water world",
+            [EDPlanet.Ammonia_world] = "Ammonia world",
+            [EDPlanet.Water_giant] = "Water giant",
+            [EDPlanet.Water_giant_with_life] = "Water giant with life",
+            [EDPlanet.Gas_giant_with_water_based_life] = "Gas giant with water-based life",
+            [EDPlanet.Gas_giant_with_ammonia_based_life] = "Gas giant with ammonia-based life",
+            [EDPlanet.Sudarsky_class_I_gas_giant] = "Class I gas giant",
+            [EDPlanet.Sudarsky_class_II_gas_giant] = "Class II gas giant",
+            [EDPlanet.Sudarsky_class_III_gas_giant] = "Class III gas giant",
+            [EDPlanet.Sudarsky_class_IV_gas_giant] = "Class IV gas giant",
+            [EDPlanet.Sudarsky_class_V_gas_giant] = "Class V gas giant",
+            [EDPlanet.Helium_rich_gas_giant] = "Helium-rich gas giant",
+            [EDPlanet.Helium_gas_giant] = "Helium gas giant",
+        };
+
+        private static readonly Dictionary<string, EDPlanet> PlanetNameToEnumLookup = PlanetEnumToNameLookup.ToDictionary(kvp => kvp.Value, kvp => kvp.Key, StringComparer.InvariantCultureIgnoreCase);
+
+        public static string PlanetTypeName(EDPlanet type)
+        {
+            string name;
+            if (PlanetEnumToNameLookup.TryGetValue(type, out name))
+            {
+                return name;
+            }
+            else
+            {
+                return type.ToString().Replace("_", " ");
+            }
+        }
+
+        public static EDPlanet PlanetTypeNameToEnum(string name)
+        {
+            EDPlanet type;
+            if (PlanetNameToEnumLookup.TryGetValue(name, out type))
+            {
+                return type;
+            }
+            else
+            {
+                return PlanetStr2Enum(name);
             }
         }
     }
