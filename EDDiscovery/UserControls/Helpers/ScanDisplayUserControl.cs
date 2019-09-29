@@ -367,7 +367,7 @@ namespace EDDiscovery.UserControls
 
                     Image nodeimage = sc.IsStar ? sc.GetStarTypeImage() : sc.GetPlanetClassImage();
 
-                    if (ImageRequiresAnOverlay(sc, indicatematerials, valuable))
+                    if (ImageRequiresAnOverlay(sc, indicatematerials, valuable, sn))
                     {
                         Bitmap bmp = new Bitmap(size.Width * 2, quarterheight * 6);
 
@@ -487,14 +487,16 @@ namespace EDDiscovery.UserControls
             return endpoint;
         }
 
-        private static bool ImageRequiresAnOverlay(JournalScan sc, bool indicatematerials, bool valuable)
+        private static bool ImageRequiresAnOverlay(JournalScan sc, bool indicatematerials, bool valuable, StarScan.ScanNode sn)
         {
             return sc.IsLandable || 
                 sc.HasRings || 
                 indicatematerials || 
+                sc.Mapped ||
                 sc.Terraformable ||
                 sc.HasMeaningfulVolcanism ||
-                valuable;
+                valuable ||
+                sn.Signals != null;
         }
 
         // curmats may be null
