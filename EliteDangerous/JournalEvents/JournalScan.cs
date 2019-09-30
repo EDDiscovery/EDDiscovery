@@ -577,10 +577,10 @@ namespace EliteDangerousCore.JournalEvents
                     scanText.AppendFormat("Distance from Arrival Point {0:N1}ls\n".T(EDTx.JournalScan_DistancefromArrivalPoint), DistanceFromArrivalLS);
 
                 if (HasAtmosphericComposition)
-                    scanText.Append(DisplayAtmosphere(4));
+                    scanText.Append(DisplayAtmosphere(4) + "\n");
 
                 if (HasPlanetaryComposition)
-                    scanText.Append(DisplayComposition(4));
+                    scanText.Append(DisplayComposition(4) + "\n");
             }
 
             if (nSurfaceTemperature.HasValue)
@@ -666,6 +666,7 @@ namespace EliteDangerousCore.JournalEvents
                     for (int i = 0; i < Rings.Length; i++)
                         scanText.Append("\n" + RingInformation(i));
                 }
+                scanText.Append("\n");
             }
 
             if (HasMaterials)
@@ -679,9 +680,6 @@ namespace EliteDangerousCore.JournalEvents
 			if (IsStar && HabZoneOtherStarsString() != null)
 				scanText.Append(HabZoneOtherStarsString());
 			
-            if (scanText.Length > 0 && scanText[scanText.Length - 1] == '\n')
-                scanText.Remove(scanText.Length - 1, 1);
-
             if (EstimatedValueNotMappedDiscovered > 0)
             {
                 if (Mapped)
@@ -708,6 +706,9 @@ namespace EliteDangerousCore.JournalEvents
                 scanText.AppendFormat("\n\nDiscovered by {0} on {1}".T(EDTx.JournalScan_DB), EDSMDiscoveryCommander, EDSMDiscoveryUTC.ToStringZulu());
 
             scanText.AppendFormat("\nScan Type: {0}".T(EDTx.JournalScan_SCNT), ScanType);
+
+            if (scanText.Length > 0 && scanText[scanText.Length - 1] == '\n')
+                scanText.Remove(scanText.Length - 1, 1);
 
             return scanText.ToNullSafeString().Replace("\n", "\n" + inds);
         }
