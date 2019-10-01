@@ -396,7 +396,9 @@ namespace EliteDangerousCore
         JournalScan_Belts, // Belts
         JournalScan_Ring, // Ring
         JournalScan_Rings, // Rings
+        JournalScan_CV, //  Current value: {0:N0}
         JournalScan_EV, //  Estimated value: {0:N0}
+        JournalScan_FDV, //  First Discovered Value {0:N0}
         JournalScan_DB, //   Discovered by {0} on {1}
         JournalScan_HabitableZoneApprox, // Habitable Zone Approx. {0} ({1}-{2} AU)
         JournalScan_Othersstarsnotconsidered, //  (Others stars not considered)

@@ -524,11 +524,11 @@ SECTION JournalScan
 .MoonMasses: "Moon Masses: {0:0.00}\n" @
 .MPI: "Mapped" @
 .MPIE: "Efficiently" @
-.EVFD: "\nFirst Discovered+Mapped value: {0:N0}" @
-.EVFM: "\nFirst Mapped value: {0:N0}" @
-.SCNT: "\nScan Type: {0}" @
-.EVAD: "\nAlready Discovered" @
-.EVAM: "\nAlready Mapped" @
+.EVFD: "First Discovered+Mapped value: {0:N0}/{1:N0}" @
+.EVFM: "First Mapped value: {0:N0}/{1:N0}" @
+.SCNT: "Scan Type: {0}" @
+.EVAD: "Already Discovered" @
+.EVAM: "Already Mapped" @
 .InferredCircumstellarzones: "Inferred Circumstellar zones:\n" @
 .MASS: "Mass:" @
 

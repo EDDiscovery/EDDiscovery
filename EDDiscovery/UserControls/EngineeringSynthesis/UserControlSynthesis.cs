@@ -214,12 +214,17 @@ namespace EDDiscovery.UserControls
                 string levels = SQLiteDBClass.GetSettingString(DbLevelFilterSave, "All");
                 string[] lvlArray = (levels == "All" || levels == "None") ? new string[0] : levels.Split(';');
                 string materials = SQLiteDBClass.GetSettingString(DbMaterialFilterSave, "All");
-                List<string> matList;
 
-                if (materials == "All" || materials == "None")
-                    matList = new List<string>();
-                else
-                    matList = materials.Split(';').Where(x => !string.IsNullOrEmpty(x)).Select(m => matLookUp.Where(u => u.Item2 == m).First().Item1).ToList();
+                List<string> matList = new List<string>();
+                if (materials != "All" && materials != "None") // if an active list
+                {
+                    foreach (string m in materials.Split(';'))
+                    {
+                        var e = matLookUp.Find(x => x.Item2 == m);  // find it, add 
+                        if (e != null)
+                            matList.Add(e.Item1);
+                    }
+                }
 
                 for (int i = 0; i < Recipes.SynthesisRecipes.Count; i++)
                 {
@@ -227,25 +232,25 @@ namespace EDDiscovery.UserControls
                     dataGridViewSynthesis.Rows[i].Cells[2].Value = MaterialCommoditiesRecipe.HowManyLeft(mcl, Recipes.SynthesisRecipes[rno]).Item1.ToStringInvariant();
                     bool visible = true;
                 
-                    if (recep == "All" && levels == "All" && materials == "All")
-                    {
-                        visible = true;
-                    }
-                    else
-                    {
-                        visible = false;
-                        if (recep == "All") { visible = true; }
+                    if (recep != "All" || levels != "All" || materials != "All")
+                    { 
+                        visible = false;        // presume off
+
+                        if (recep == "All")
+                        {
+                            visible = true;
+                        }
                         else
                         {
                             visible = recipeArray.Contains(Recipes.SynthesisRecipes[rno].name);
                         }
-                        if (levels == "All") { visible = visible && true; }
-                        else
+
+                        if (levels != "All")
                         {
                             visible = visible && lvlArray.Contains(Recipes.SynthesisRecipes[rno].level);
                         }
-                        if (materials == "All") { visible = visible && true; }
-                        else
+
+                        if (materials != "All")
                         {
                             var included = matList.Intersect<string>(Recipes.SynthesisRecipes[rno].ingredients.ToList<string>());
                             visible = visible && included.Count() > 0;

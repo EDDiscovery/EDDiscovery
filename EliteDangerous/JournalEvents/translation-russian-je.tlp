@@ -524,11 +524,11 @@ SECTION JournalScan
 .MoonMasses: "Moon Masses: {0:0.00}\n" => "Лунных масс: {0:0.00}\n"
 .MPI: "Mapped" => "картографировано"
 .MPIE: "Efficiently" => "оптимально"
-.EVFD: "\nFirst Discovered+Mapped value: {0:N0}" => "\nСтоимость данных + бонус первооткрывателя: {0:N0} кр."
-.EVFM: "\nFirst Mapped value: {0:N0}" => "\nСтоимость данных + бонус первого картографировавшего: {0:N0} кр."
-.SCNT: "\nScan Type: {0}" => "\nТип сканирования: {0}"
-.EVAD: "\nAlready Discovered" @
-.EVAM: "\nAlready Mapped" @
+.EVFD: "First Discovered+Mapped value: {0:N0}/{1:N0}e" => "Стоимость данных + бонус первооткрывателя: {0:N0}/{1:N0}e кр."
+.EVFM: "First Mapped value: {0:N0}/{1:N0}e" => "Стоимость данных + бонус первого картографировавшего: {0:N0}/{1:N0}e кр."
+.SCNT: "Scan Type: {0}" => "Тип сканирования: {0}"
+.EVAD: "Already Discovered" @
+.EVAM: "Already Mapped" @
 .InferredCircumstellarzones: "Inferred Circumstellar zones:\n" => "Предполагаемая околозвездная зона:\n"
 .MASS: "Mass:" => "Масса: "
 
