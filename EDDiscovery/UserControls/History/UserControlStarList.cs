@@ -947,14 +947,7 @@ namespace EDDiscovery.UserControls
                         return (c < colh.Length && frm.IncludeHeader) ? colh[c] : null;
                     };
 
-                    if (grd.WriteCSV(frm.Path))
-                    {
-                        if (frm.AutoOpen)
-                            System.Diagnostics.Process.Start(frm.Path);
-                    }
-                    else
-                        ExtendedControls.MessageBoxTheme.Show(FindForm(), "Failed to write to " + frm.Path, "Export Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-
+                    grd.WriteGrid(frm.Path, frm.AutoOpen, FindForm());
                 }
             }
         }

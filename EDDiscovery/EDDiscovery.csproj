@@ -175,6 +175,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Translations\EDDiscoveryTranslations.cs" />
+    <Compile Include="UserControls\Helpers\CSVHelpers.cs" />
     <Compile Include="WebServer\WebServer.cs" />
     <None Include="..\EDDIcons\Controls\Fakes\Controls.Designer.cs">
       <Link>Icons\Controls.Designer.cs</Link>
@@ -1044,7 +1045,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
-
   <UsingTask TaskName="Zip" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
     <ParameterGroup>
       <FileRoot ParameterType="System.String" Required="false" />
@@ -1115,7 +1115,7 @@
       <WebFiles Include="$(MSBuildProjectDirectory)\..\WebSite\EDD\**" />
     </ItemGroup>
     <Message Text="Webfiles zip up '@(WebFiles)'" />
-    <Zip OutputFileName="$(OutDir)eddwebsite.zip" Files="@(WebFiles)" FileRoot="$(MSBuildProjectDirectory)\..\WebSite\EDD\"  />
+    <Zip OutputFileName="$(OutDir)eddwebsite.zip" Files="@(WebFiles)" FileRoot="$(MSBuildProjectDirectory)\..\WebSite\EDD\" />
     <ItemGroup>
       <ZipFiles Include="$(TargetPath)" />
       <ZipFiles Include="$(OutDir)*.dll" />

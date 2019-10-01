@@ -438,13 +438,7 @@ namespace EDDiscovery.UserControls
                         return retrow.ToArray();
                     };
 
-                    if (grd.WriteCSV(path))
-                    {
-                        if (frm.AutoOpen)
-                            System.Diagnostics.Process.Start(path);
-                    }
-                    else
-                        ExtendedControls.MessageBoxTheme.Show(FindForm(), "Failed to write to " + path, "Export Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    grd.WriteGrid(path, frm.AutoOpen, FindForm());
                 }
             }
         }

@@ -633,8 +633,18 @@ namespace EDDiscovery.UserControls
                                 }
                             }
                         }
+
                         if (frm.AutoOpen)
-                            System.Diagnostics.Process.Start(frm.Path);
+                        {
+                            try
+                            {
+                                System.Diagnostics.Process.Start(frm.Path);
+                            }
+                            catch
+                            {
+                                ExtendedControls.MessageBoxTheme.Show(FindForm(), "Failed to open " + frm.Path, "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                            }
+                        }
                     }
                     catch
                     {
@@ -671,13 +681,7 @@ namespace EDDiscovery.UserControls
                             return (c < 3 && frm.IncludeHeader) ? dataGridViewJournal.Columns[c + ((c > 0) ? 1 : 0)].HeaderText : null;
                         };
 
-                        if (grd.WriteCSV(frm.Path))
-                        {
-                            if (frm.AutoOpen)
-                                System.Diagnostics.Process.Start(frm.Path);
-                        }
-                        else
-                            ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Failed to write to " + frm.Path, "Export Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);  
+                        grd.WriteGrid(frm.Path, frm.AutoOpen, FindForm());
                     }
                 }
             }
