@@ -333,6 +333,8 @@ namespace EDDiscovery.UserControls
                     {
                         List<HistoryEntry> syslist = (List<HistoryEntry>)rowpresent.Tag;
                         var node = discoveryform.history.starscan?.FindSystem(syslist[0].System, false); // may be null
+                        string info = Infoline(syslist, node);  // lookup node, using star name, no EDSM lookup.
+                        rowpresent.Cells[3].Value = info;   // update info
                         rowpresent.Cells[4].Value = node?.ScanValue(true).ToString("N0") ?? "-"; // update scan value
                     }
                 }

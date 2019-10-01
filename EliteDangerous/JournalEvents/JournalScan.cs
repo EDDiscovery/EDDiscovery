@@ -145,19 +145,23 @@ namespace EliteDangerousCore.JournalEvents
 
         public int EstimatedValue { get // best guess based on discovered/wasmapped and Mapped flags
             {
-                if (IsNotDiscovered && IsNotMapped && Mapped )
-                    return EfficientMapped ? EstimatedValueFirstDiscoveredFirstMappedEfficiently : EstimatedValueFirstDiscoveredFirstMapped;
-                else if ( IsNotMapped && Mapped)
-                    return EfficientMapped ? EstimatedValueFirstMappedEfficiently : EstimatedValueFirstMapped;
-                else if ( IsNotDiscovered )
-                    return EstimatedValueFirstDiscovered;
-                else
-                    return EstimatedValueNotMappedNotFirstDiscovered;
+                if (EstimatedValueFirstDiscovered > 0)      // for previous scans before 3.3 and stars, these are not set.
+                {
+                    if (IsNotDiscovered && IsNotMapped && Mapped)
+                        return EfficientMapped ? EstimatedValueFirstDiscoveredFirstMappedEfficiently : EstimatedValueFirstDiscoveredFirstMapped;
+                    else if (IsNotMapped && Mapped)
+                        return EfficientMapped ? EstimatedValueFirstMappedEfficiently : EstimatedValueFirstMapped;
+                    else if (IsNotDiscovered)
+                        return EstimatedValueFirstDiscovered;
+                }
+
+                return EstimatedValueBase;
             }
         }
 
-        public int EstimatedValueNotMappedNotFirstDiscovered { get; private set; }     // Estimated value without mapping or first discovery
-        public int EstimatedValueFirstDiscovered { get; private set; }     // Estimated value with first discovery
+        public int EstimatedValueBase { get; private set; }     // Estimated value without mapping or first discovery - all types, all versions
+
+        public int EstimatedValueFirstDiscovered { get; private set; }     // Estimated value with first discovery  - 3.3 onwards for these for planets only
         public int EstimatedValueFirstDiscoveredFirstMapped { get; private set; }           // with both
         public int EstimatedValueFirstDiscoveredFirstMappedEfficiently { get; private set; }           // with both efficiently
         public int EstimatedValueFirstMapped { get; private set; }             // with just mapped                 
@@ -717,7 +721,8 @@ namespace EliteDangerousCore.JournalEvents
                 scanText.AppendFormat("First Discovered value: {0:N0}".T(EDTx.JournalScan_FDV) + "\n", EstimatedValueFirstDiscovered);
             }
 
-            scanText.AppendFormat("Base Estimated value: {0:N0}".T(EDTx.JournalScan_EV) + "\n", EstimatedValueNotMappedNotFirstDiscovered);
+            if (EstimatedValueFirstDiscovered > 0 ) // if we have extra details, on planets, show the base value
+                scanText.AppendFormat("Base Estimated value: {0:N0}".T(EDTx.JournalScan_EV) + "\n", EstimatedValueBase);
 
             if (WasDiscovered.HasValue && WasDiscovered.Value)
                 scanText.AppendFormat("Already Discovered".T(EDTx.JournalScan_EVAD) + "\n");
@@ -1184,13 +1189,13 @@ namespace EliteDangerousCore.JournalEvents
 
             if (EventTimeUTC < new DateTime(2017, 4, 11, 12, 0, 0, 0, DateTimeKind.Utc))
             {
-                EstimatedValueNotMappedNotFirstDiscovered = EstimatedValueED22();
+                EstimatedValueBase = EstimatedValueED22();
                 return;
             }
 
             if (EventTimeUTC < new DateTime(2018, 12, 11, 9, 0, 0, DateTimeKind.Utc))
             {
-                EstimatedValueNotMappedNotFirstDiscovered = EstimatedValue32();
+                EstimatedValueBase = EstimatedValue32();
                 return;
             }
 
@@ -1238,11 +1243,11 @@ namespace EliteDangerousCore.JournalEvents
                         break;
                 }
 
-                EstimatedValueNotMappedNotFirstDiscovered = (int)StarValue32And33(kValue, nStellarMass.HasValue ? nStellarMass.Value : 1.0);
+                EstimatedValueBase = (int)StarValue32And33(kValue, nStellarMass.HasValue ? nStellarMass.Value : 1.0);
             }
             else
             {
-                EstimatedValueNotMappedNotFirstDiscovered = 0;
+                EstimatedValueBase = 0;
 
                 if (PlanetClass != null)  //Asteroid belt is null
                 {
@@ -1285,7 +1290,7 @@ namespace EliteDangerousCore.JournalEvents
 
                     double basevalue = PlanetValue33(kValue, mass);
 
-                    EstimatedValueNotMappedNotFirstDiscovered = (int)basevalue;
+                    EstimatedValueBase = (int)basevalue;
 
                     EstimatedValueFirstDiscovered = (int)(basevalue*firstdiscovery);
 
