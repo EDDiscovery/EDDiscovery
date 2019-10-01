@@ -1,4 +1,5 @@
-﻿/*
+﻿
+/*
  * Copyright © 2016 - 2017 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
@@ -244,6 +245,25 @@ namespace EliteDangerousCore
                     return null;
             }
         }
+
+        static public List<List<HistoryEntry>> SystemAggregateList(List<HistoryEntry> result) // give a list of HEs, and return unique systems list of those HEs
+        {
+            Dictionary<string, List<HistoryEntry>> systemsentered = new Dictionary<string, List<HistoryEntry>>();
+
+            foreach (HistoryEntry he in result)       
+            {
+                if (!systemsentered.ContainsKey(he.System.Name))
+                    systemsentered[he.System.Name] = new List<HistoryEntry>();
+
+                systemsentered[he.System.Name].Add(he);   
+            }
+
+            return systemsentered.Values.ToList();
+        }
+
+        #endregion
+
+        #region Status
 
         public bool IsCurrentlyLanded { get { HistoryEntry he = GetLast; return (he != null) ? he.IsLanded : false; } }     //safe methods
         public bool IsCurrentlyDocked { get { HistoryEntry he = GetLast; return (he != null) ? he.IsDocked : false; } }
@@ -1210,8 +1230,6 @@ namespace EliteDangerousCore
 
         #region Common info extractors
 
-        #endregion
-
         public void ReturnSystemInfo(HistoryEntry he, out string allegiance, out string economy, out string gov, 
                                 out string faction, out string factionstate , out string security)
         {
@@ -1233,5 +1251,7 @@ namespace EliteDangerousCore
 
             security = lastfsd != null && lastfsd.Security_Localised.Length > 0 ? lastfsd.Security_Localised : "-";
         }
+
+        #endregion
     }
 }

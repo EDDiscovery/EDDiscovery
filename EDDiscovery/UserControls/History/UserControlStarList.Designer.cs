@@ -71,6 +71,7 @@ namespace EDDiscovery.UserControls
             this.ColumnSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnVisits = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnInformation = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.topPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.contextMenuStrip.SuspendLayout();
             this.dataViewScrollerPanel.SuspendLayout();
@@ -84,6 +85,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxCursorToTop.BackColor = System.Drawing.Color.Transparent;
             this.checkBoxCursorToTop.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.checkBoxCursorToTop.CheckBoxColor = System.Drawing.Color.White;
+            this.checkBoxCursorToTop.CheckBoxDisabledScaling = 0.5F;
             this.checkBoxCursorToTop.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxCursorToTop.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxCursorToTop.Cursor = System.Windows.Forms.Cursors.Default;
@@ -93,9 +95,10 @@ namespace EDDiscovery.UserControls
             this.checkBoxCursorToTop.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
             this.checkBoxCursorToTop.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.checkBoxCursorToTop.Image = global::EDDiscovery.Icons.Controls.TravelGrid_CursorToTop;
-            this.checkBoxCursorToTop.ImageUnchecked = global::EDDiscovery.Icons.Controls.TravelGrid_CursorStill;
             this.checkBoxCursorToTop.ImageButtonDisabledScaling = 0.5F;
+            this.checkBoxCursorToTop.ImageIndeterminate = null;
             this.checkBoxCursorToTop.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.checkBoxCursorToTop.ImageUnchecked = global::EDDiscovery.Icons.Controls.TravelGrid_CursorStill;
             this.checkBoxCursorToTop.Location = new System.Drawing.Point(495, 1);
             this.checkBoxCursorToTop.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.checkBoxCursorToTop.MouseOverColor = System.Drawing.Color.CornflowerBlue;
@@ -125,13 +128,16 @@ namespace EDDiscovery.UserControls
             this.checkBoxJumponium.Appearance = System.Windows.Forms.Appearance.Button;
             this.checkBoxJumponium.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.checkBoxJumponium.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxJumponium.CheckBoxDisabledScaling = 0.5F;
             this.checkBoxJumponium.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxJumponium.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxJumponium.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
             this.checkBoxJumponium.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.checkBoxJumponium.Image = global::EDDiscovery.Icons.Controls.StarList_Jumponium;
             this.checkBoxJumponium.ImageButtonDisabledScaling = 0.5F;
+            this.checkBoxJumponium.ImageIndeterminate = null;
             this.checkBoxJumponium.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.checkBoxJumponium.ImageUnchecked = null;
             this.checkBoxJumponium.Location = new System.Drawing.Point(423, 1);
             this.checkBoxJumponium.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.checkBoxJumponium.MouseOverColor = System.Drawing.Color.CornflowerBlue;
@@ -147,13 +153,16 @@ namespace EDDiscovery.UserControls
             this.checkBoxBodyClasses.Appearance = System.Windows.Forms.Appearance.Button;
             this.checkBoxBodyClasses.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.checkBoxBodyClasses.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxBodyClasses.CheckBoxDisabledScaling = 0.5F;
             this.checkBoxBodyClasses.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxBodyClasses.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxBodyClasses.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
             this.checkBoxBodyClasses.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.checkBoxBodyClasses.Image = global::EDDiscovery.Icons.Controls.StarList_BodyClass;
             this.checkBoxBodyClasses.ImageButtonDisabledScaling = 0.5F;
+            this.checkBoxBodyClasses.ImageIndeterminate = null;
             this.checkBoxBodyClasses.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.checkBoxBodyClasses.ImageUnchecked = null;
             this.checkBoxBodyClasses.Location = new System.Drawing.Point(387, 1);
             this.checkBoxBodyClasses.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.checkBoxBodyClasses.MouseOverColor = System.Drawing.Color.CornflowerBlue;
@@ -209,6 +218,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxEDSM.BackColor = System.Drawing.Color.Transparent;
             this.checkBoxEDSM.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.checkBoxEDSM.CheckBoxColor = System.Drawing.Color.White;
+            this.checkBoxEDSM.CheckBoxDisabledScaling = 0.5F;
             this.checkBoxEDSM.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxEDSM.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxEDSM.Cursor = System.Windows.Forms.Cursors.Default;
@@ -218,7 +228,9 @@ namespace EDDiscovery.UserControls
             this.checkBoxEDSM.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.checkBoxEDSM.Image = global::EDDiscovery.Icons.Controls.StarList_EDSM;
             this.checkBoxEDSM.ImageButtonDisabledScaling = 0.5F;
+            this.checkBoxEDSM.ImageIndeterminate = null;
             this.checkBoxEDSM.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.checkBoxEDSM.ImageUnchecked = null;
             this.checkBoxEDSM.Location = new System.Drawing.Point(146, 1);
             this.checkBoxEDSM.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.checkBoxEDSM.MouseOverColor = System.Drawing.Color.CornflowerBlue;
@@ -334,13 +346,13 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom.HideScrollBar = true;
             this.vScrollBarCustom.LargeChange = 0;
-            this.vScrollBarCustom.Location = new System.Drawing.Point(854, 0);
+            this.vScrollBarCustom.Location = new System.Drawing.Point(851, 0);
             this.vScrollBarCustom.Maximum = -1;
             this.vScrollBarCustom.Minimum = 0;
             this.vScrollBarCustom.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom.Name = "vScrollBarCustom";
-            this.vScrollBarCustom.Size = new System.Drawing.Size(13, 580);
+            this.vScrollBarCustom.Size = new System.Drawing.Size(16, 580);
             this.vScrollBarCustom.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom.SmallChange = 1;
             this.vScrollBarCustom.TabIndex = 4;
@@ -371,9 +383,10 @@ namespace EDDiscovery.UserControls
             this.ColumnTime,
             this.ColumnSystem,
             this.ColumnVisits,
-            this.ColumnInformation});
+            this.ColumnInformation,
+            this.Value});
             this.dataGridViewStarList.ContextMenuStrip = this.contextMenuStrip;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
             dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
             dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText;
@@ -393,7 +406,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewStarList.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
             this.dataGridViewStarList.RowHeadersWidth = 50;
             this.dataGridViewStarList.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewStarList.Size = new System.Drawing.Size(854, 580);
+            this.dataGridViewStarList.Size = new System.Drawing.Size(851, 580);
             this.dataGridViewStarList.TabIndex = 3;
             this.dataGridViewStarList.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewTravel_CellClick);
             this.dataGridViewStarList.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridViewStarList_RowPostPaint);
@@ -436,6 +449,11 @@ namespace EDDiscovery.UserControls
             this.ColumnInformation.MinimumWidth = 50;
             this.ColumnInformation.Name = "ColumnInformation";
             this.ColumnInformation.ReadOnly = true;
+            // 
+            // Value
+            // 
+            this.Value.HeaderText = "Scan Value";
+            this.Value.Name = "Value";
             // 
             // topPanel
             // 
@@ -497,5 +515,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripMenuItem removeSortingOfColumnsToolStripMenuItem;
         private ExtendedControls.ExtCheckBox checkBoxCursorToTop;
         private System.Windows.Forms.FlowLayoutPanel topPanel;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Value;
     }
 }

@@ -54,16 +54,16 @@ namespace EDDiscovery.UserControls
             public const int StarName = 1;
             public const int NoVisits = 2;
             public const int OtherInformation = 3;
+            public const int SystemValue = 4;
         }
 
-        private string DbColumnSave { get { return DBName("StarListControl" ,  "DGVCol"); } }
-        private string DbHistorySave { get { return DBName("StarListControlEDUIHistory" ); } }
-        private string DbAutoTop { get { return DBName("StarListControlAutoTop" ); } }
-        private string DbEDSM { get { return DBName("StarListControlEDSM" ); } }
-        private string DbShowJumponium { get { return DBName("StarListControlJumponium" ); } }
-        private string DbShowClasses { get { return DBName("StarListControlShowClasses" ); } }        
+        private string DbColumnSave { get { return DBName("StarListControl", "DGVCol"); } }
+        private string DbHistorySave { get { return DBName("StarListControlEDUIHistory"); } }
+        private string DbAutoTop { get { return DBName("StarListControlAutoTop"); } }
+        private string DbEDSM { get { return DBName("StarListControlEDSM"); } }
+        private string DbShowJumponium { get { return DBName("StarListControlJumponium"); } }
+        private string DbShowClasses { get { return DBName("StarListControlShowClasses"); } }
 
-        private Dictionary<string, List<HistoryEntry>> systemsentered = new Dictionary<string, List<HistoryEntry>>();
         private Dictionary<long, DataGridViewRow> rowsbyjournalid = new Dictionary<long, DataGridViewRow>();
         private HistoryList current_historylist;
 
@@ -85,12 +85,12 @@ namespace EDDiscovery.UserControls
         {
             checkBoxCursorToTop.Checked = SQLiteConnectionUser.GetSettingBool(DbAutoTop, true);
 
-         
+
             dataGridViewStarList.MakeDoubleBuffered();
             dataGridViewStarList.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             dataGridViewStarList.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
 
-            dataGridViewStarList.Columns[2].ValueType = typeof(Int32);            
+            dataGridViewStarList.Columns[2].ValueType = typeof(Int32);
 
             checkBoxEDSM.Checked = SQLiteDBClass.GetSettingBool(DbEDSM, false);
             this.checkBoxEDSM.CheckedChanged += new System.EventHandler(this.checkBoxEDSM_CheckedChanged);
@@ -157,7 +157,6 @@ namespace EDDiscovery.UserControls
             autoupdateedsm.Stop();
 
             Tuple<long, int> pos = CurrentGridPosByJID();
-            string filtertext = textBoxFilter.Text;
 
             current_historylist = hl;
 
@@ -172,7 +171,6 @@ namespace EDDiscovery.UserControls
             System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCountLap(this,true) + " SL " + displaynumber + " Load start");
 
             rowsbyjournalid.Clear();
-            systemsentered.Clear();
             dataGridViewStarList.Rows.Clear();
 
             dataGridViewStarList.Columns[0].HeaderText = EDDiscoveryForm.EDDConfig.DisplayUTC ? "Game Time".T(EDTx.GameTime) : "Time".T(EDTx.Time);
@@ -181,16 +179,7 @@ namespace EDDiscovery.UserControls
 
             List<HistoryEntry> result = filter.Filter(hl);      // last entry, first in list
             result = HistoryList.FilterHLByTravel(result);      // keep only travel entries (location after death, FSD jumps)
-
-            foreach (HistoryEntry he in result)        // last first..
-            {
-                if (!systemsentered.ContainsKey(he.System.Name))
-                    systemsentered[he.System.Name] = new List<HistoryEntry>();
-
-                systemsentered[he.System.Name].Add(he);     // first entry is newest jump to, second is next last, etc
-            }
-
-            List<List<HistoryEntry>> syslists = systemsentered.Values.ToList();
+            List<List<HistoryEntry>> syslists = HistoryList.SystemAggregateList(result);
             List<List<HistoryEntry>[]> syslistchunks = new List<List<HistoryEntry>[]>();
 
             for (int i = 0; i < syslists.Count; i += 1000)
@@ -202,6 +191,8 @@ namespace EDDiscovery.UserControls
             }
 
             todo.Clear();
+
+            string filtertext = textBoxFilter.Text;
 
             foreach (var syslistchunk in syslistchunks)
             {
@@ -284,18 +275,67 @@ namespace EDDiscovery.UserControls
                 return;
             }
 
-            if ( he.IsFSDJump )     // FSD jumps mean move system.. so
-                HistoryChanged(hl); // just recalc all..
-
-            if (checkBoxCursorToTop.Checked && dataGridViewStarList.DisplayedRowCount(false) > 0)   // Move focus to new row
+            if (he.IsFSDJump || he.journalEntry is JournalScan)
             {
-                //System.Diagnostics.Debug.WriteLine("Auto Sel");
-                dataGridViewStarList.ClearSelection();
-                int rowno = dataGridViewStarList.Rows.GetFirstRow(DataGridViewElementStates.Visible);
-                if ( rowno != -1 )
-                    dataGridViewStarList.CurrentCell = dataGridViewStarList.Rows[rowno].Cells[1];       // its the current cell which needs to be set, moves the row marker as well
+                DataGridViewRow rowpresent = null;
+                foreach (DataGridViewRow rowf in dataGridViewStarList.Rows)
+                {
+                    var list = (List<HistoryEntry>)rowf.Tag;
+                    if (list != null && list[0].System.Name.Equals(he.System.Name))
+                    {
+                        rowpresent = rowf;
+                        break;
+                    }
+                }
 
-                FireChangeSelection();
+                if (he.IsFSDJump)
+                {
+                    if (rowpresent != null) // if its in the list, move to top and increment he's
+                    {
+                        dataGridViewStarList.Rows.Remove(rowpresent);
+                        List<HistoryEntry> syslist = (List<HistoryEntry>)rowpresent.Tag;
+                        syslist.Insert(0, he);  // add onto list
+                        rowpresent.Cells[2].Value = syslist.Count.ToString();   // update count
+                        dataGridViewStarList.Rows.Insert(0, rowpresent);        // move to top..
+                    }
+                    else
+                    {
+                        // process thru normal filter to see if its displayable
+
+                        var filter = (TravelHistoryFilter)comboBoxHistoryWindow.SelectedItem ?? TravelHistoryFilter.NoFilter;
+                        List<HistoryEntry> result = filter.Filter(hl);      // last entry, first in list
+                        result = HistoryList.FilterHLByTravel(result);      // keep only travel entries (location after death, FSD jumps)
+                        List<List<HistoryEntry>> syslists = HistoryList.SystemAggregateList(result);
+
+                        if (syslists.Count > 0 && syslists[0][0].System.Name == he.System.Name) // if the filtered result has our system in (which must be the first, since its newest), its inside the filter, add
+                        {
+                            string filtertext = textBoxFilter.Text;
+                            var row = CreateHistoryRow(syslists[0], filtertext);
+                            if (row != null)    // text may have filtered it out
+                                dataGridViewStarList.Rows.Insert(0, row);
+                        }
+                    }
+
+                    if (checkBoxCursorToTop.Checked && dataGridViewStarList.DisplayedRowCount(false) > 0)   // Move focus to new row
+                    {
+                        //System.Diagnostics.Debug.WriteLine("Auto Sel");
+                        dataGridViewStarList.ClearSelection();
+                        int rowno = dataGridViewStarList.Rows.GetFirstRow(DataGridViewElementStates.Visible);
+                        if (rowno != -1)
+                            dataGridViewStarList.CurrentCell = dataGridViewStarList.Rows[rowno].Cells[1];       // its the current cell which needs to be set, moves the row marker as well
+
+                        FireChangeSelection();
+                    }
+                }
+                else
+                {
+                    if ( rowpresent != null )       // only need to do something if its displayed
+                    {
+                        List<HistoryEntry> syslist = (List<HistoryEntry>)rowpresent.Tag;
+                        var node = discoveryform.history.starscan?.FindSystem(syslist[0].System, false); // may be null
+                        rowpresent.Cells[4].Value = node?.ScanValue(true).ToString("N0") ?? "-"; // update scan value
+                    }
+                }
             }
         }
 
@@ -307,7 +347,10 @@ namespace EDDiscovery.UserControls
 
             DateTime time = EDDiscoveryForm.EDDConfig.DisplayUTC ? he.EventTimeUTC : he.EventTimeLocal;
             string visits = $"{syslist.Count:N0}";
-            string info = Infoline(syslist);
+
+            var node = discoveryform.history.starscan?.FindSystem(syslist[0].System, false); // may be null
+
+            string info = Infoline(syslist, node);  // lookup node, using star name, no EDSM lookup.
 
             if (search.HasChars())
             {
@@ -321,7 +364,7 @@ namespace EDDiscovery.UserControls
             }
 
             var rw = dataGridViewStarList.RowTemplate.Clone() as DataGridViewRow;
-            rw.CreateCells(dataGridViewStarList, time, he.System.Name, visits, info);
+            rw.CreateCells(dataGridViewStarList, time, he.System.Name, visits, info, node?.ScanValue(true).ToString("N0") ?? "-");
 
             foreach ( HistoryEntry hel in syslist )
                 rowsbyjournalid[hel.Journalid] = rw;      // all JIDs in this array, to this row
@@ -342,7 +385,7 @@ namespace EDDiscovery.UserControls
             return rw;
         }
 
-        string Infoline(List<HistoryEntry> syslist)
+        string Infoline(List<HistoryEntry> syslist, StarScan.SystemNode node )
         {
             string infostr = "";
             string jumponium = "";
@@ -350,9 +393,6 @@ namespace EDDiscovery.UserControls
 
             if (syslist.Count > 1)
                 infostr = string.Format("First visit {0}".T(EDTx.UserControlStarList_FV),syslist.Last().EventTimeLocal.ToShortDateString());
-
-            HistoryEntry he = syslist[0];
-            StarScan.SystemNode node = discoveryform.history.starscan?.FindSystem(he.System,false);
 
             #region information
 
@@ -580,8 +620,9 @@ namespace EDDiscovery.UserControls
         {
             List<HistoryEntry> syslist = row.Tag as List<HistoryEntry>;
 
-            discoveryform.history.starscan?.FindSystem(syslist[0].System, true);  // try an EDSM lookup
-            row.Cells[StarHistoryColumns.OtherInformation].Value = Infoline(syslist);
+            var node = discoveryform.history.starscan?.FindSystem(syslist[0].System, true);  // try an EDSM lookup, cache data, then redisplay.
+            row.Cells[StarHistoryColumns.OtherInformation].Value = Infoline(syslist,node);
+            row.Cells[StarHistoryColumns.SystemValue].Value = node?.ScanValue(true).ToString("N0") ?? "";
         }
 
         private void Autoupdateedsm_Tick(object sender, EventArgs e)            // tick tock to get edsm data very slowly!
@@ -624,6 +665,7 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        
         private void comboBoxHistoryWindow_SelectedIndexChanged(object sender, EventArgs e)
         {
             SQLiteDBClass.PutSettingString(DbHistorySave, comboBoxHistoryWindow.Text);
