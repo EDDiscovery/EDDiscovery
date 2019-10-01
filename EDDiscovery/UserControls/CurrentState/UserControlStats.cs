@@ -672,7 +672,7 @@ namespace EDDiscovery.UserControls
 
             if (userControlStatsTimeScan.StarPlanetMode)
             {
-                foreach (EDStar obj in Enum.GetValues(typeof(EDStar)))
+                foreach (EDStar obj in Bodies.StarTypes)
                 {
                     for (int ii = 0; ii < intervals; ii++)
                     {
@@ -687,7 +687,7 @@ namespace EDDiscovery.UserControls
 
                     }
 
-                    StatToDGV(dataGridViewScan, obj.ToString().Replace("_", " "), strarr);
+                    StatToDGV(dataGridViewScan, Bodies.StarTypeName(obj), strarr);
                 }
             }
             else
@@ -707,7 +707,7 @@ namespace EDDiscovery.UserControls
 
                     }
 
-                    StatToDGV(dataGridViewScan, obj == EDPlanet.Unknown_Body_Type ? "Belt Cluster" : obj.ToString().Replace("_", " ") , strarr);
+                    StatToDGV(dataGridViewScan, obj == EDPlanet.Unknown_Body_Type ? "Belt Cluster" : Bodies.PlanetTypeName(obj), strarr);
                 }
             }
 

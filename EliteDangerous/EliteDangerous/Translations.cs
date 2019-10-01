@@ -607,6 +607,76 @@ namespace EliteDangerousCore
         JournalRemainingJumps,  // Remaining Jumps
         JournalNearest, // Nearest:
 
+        EDStar_O, // O (Blue-White) Star,
+        EDStar_B, // B (Blue-White) Star,
+        EDStar_BBlueWhiteSuperGiant, // B (Blue-White super giant) Star,
+        EDStar_A, // A (Blue-White) Star,
+        EDStar_ABlueWhiteSuperGiant, // A (Blue-White super giant) Star,
+        EDStar_F, // F (White) Star,
+        EDStar_FWhiteSuperGiant, // F (White super giant) Star,
+        EDStar_G, // G (White-Yellow) Star,
+        EDStar_GWhiteSuperGiant, // G (White-Yellow super giant) Star,
+        EDStar_K, // K (Yellow-Orange) Star,
+        EDStar_KOrangeGiant, // K (Yellow-Orange giant) Star,
+        EDStar_M, // M (Red dwarf) Star,
+        EDStar_MRedGiant, // M (Red giant) Star,
+        EDStar_MRedSuperGiant, // M (Red super giant) Star,
+        EDStar_L, // L (Brown dwarf) Star,
+        EDStar_T, // T (Brown dwarf) Star,
+        EDStar_Y, // Y (Brown dwarf) Star,
+        EDStar_TTS, // T Tauri Star,
+        EDStar_AeBe, // Herbig Ae/Be Star,
+        EDStar_W, // Wolf-Rayet Star,
+        EDStar_WN, // Wolf-Rayet N Star,
+        EDStar_WNC, // Wolf-Rayet NC Star,
+        EDStar_WC, // Wolf-Rayet C Star,
+        EDStar_WO, // Wolf-Rayet O Star,
+        EDStar_CS, // CS Star,
+        EDStar_C, // C Star,
+        EDStar_CN, // CN Star,
+        EDStar_CJ, // CJ Star,
+        EDStar_CHd, // CHd Star,
+        EDStar_MS, // MS-type Star,
+        EDStar_S, // S-type Star,
+        EDStar_D, // White Dwarf (D) Star,
+        EDStar_DA, // White Dwarf (DA) Star,
+        EDStar_DAB, // White Dwarf (DAB) Star,
+        EDStar_DAO, // White Dwarf (DAO) Star,
+        EDStar_DAZ, // White Dwarf (DAZ) Star,
+        EDStar_DAV, // White Dwarf (DAV) Star,
+        EDStar_DB, // White Dwarf (DB) Star,
+        EDStar_DBZ, // White Dwarf (DBZ) Star,
+        EDStar_DBV, // White Dwarf (DBV) Star,
+        EDStar_DO, // White Dwarf (DO) Star,
+        EDStar_DOV, // White Dwarf (DOV) Star,
+        EDStar_DQ, // White Dwarf (DQ) Star,
+        EDStar_DC, // White Dwarf (DC) Star,
+        EDStar_DCV, // White Dwarf (DCV) Star,
+        EDStar_DX, // White Dwarf (DX) Star,
+        EDStar_N, // Neutron Star,
+        EDStar_H, // Black Hole,
+        EDStar_SuperMassiveBlackHole, // Supermassive Black Hole
+
+        EDPlanet_Metalrichbody, // Metal-rich body
+        EDPlanet_Highmetalcontentbody, // High metal content world
+        EDPlanet_Rockybody, // Rocky body
+        EDPlanet_Icybody, // Icy body
+        EDPlanet_Rockyicebody, // Rocky ice world
+        EDPlanet_Earthlikebody, // Earth-like world
+        EDPlanet_Waterworld, // Water world
+        EDPlanet_Ammoniaworld, // Ammonia world
+        EDPlanet_Watergiant, // Water giant
+        EDPlanet_Watergiantwithlife, // Water giant with life
+        EDPlanet_Gasgiantwithwaterbasedlife, // Gas giant with water-based life
+        EDPlanet_Gasgiantwithammoniabasedlife, // Gas giant with ammonia-based life
+        EDPlanet_SudarskyclassIgasgiant, // Class I gas giant
+        EDPlanet_SudarskyclassIIgasgiant, // Class II gas giant
+        EDPlanet_SudarskyclassIIIgasgiant, // Class III gas giant
+        EDPlanet_SudarskyclassIVgasgiant, // Class IV gas giant
+        EDPlanet_SudarskyclassVgasgiant, // Class V gas giant
+        EDPlanet_Heliumrichgasgiant, // Helium-rich gas giant
+        EDPlanet_Heliumgasgiant, // Helium gas giant
+
     }
 
     public static class EDTranslatorExtensions
