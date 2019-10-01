@@ -73,6 +73,7 @@ namespace EDDiscovery.UserControls
             this.ColumnInformation = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.topPanel = new System.Windows.Forms.FlowLayoutPanel();
+            this.viewScanDisplayToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip.SuspendLayout();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewStarList)).BeginInit();
@@ -283,9 +284,10 @@ namespace EDDiscovery.UserControls
             this.removeSortingOfColumnsToolStripMenuItem,
             this.mapGotoStartoolStripMenuItem,
             this.viewOnEDSMToolStripMenuItem,
-            this.setNoteToolStripMenuItem});
+            this.setNoteToolStripMenuItem,
+            this.viewScanDisplayToolStripMenuItem});
             this.contextMenuStrip.Name = "historyContextMenu";
-            this.contextMenuStrip.Size = new System.Drawing.Size(221, 92);
+            this.contextMenuStrip.Size = new System.Drawing.Size(221, 136);
             this.contextMenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.historyContextMenu_Opening);
             // 
             // removeSortingOfColumnsToolStripMenuItem
@@ -409,6 +411,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewStarList.Size = new System.Drawing.Size(851, 580);
             this.dataGridViewStarList.TabIndex = 3;
             this.dataGridViewStarList.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewTravel_CellClick);
+            this.dataGridViewStarList.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewStarList_CellDoubleClick);
             this.dataGridViewStarList.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridViewStarList_RowPostPaint);
             this.dataGridViewStarList.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewStarList_SortCompare);
             this.dataGridViewStarList.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dataGridViewTravel_KeyDown);
@@ -473,6 +476,13 @@ namespace EDDiscovery.UserControls
             this.topPanel.Size = new System.Drawing.Size(870, 30);
             this.topPanel.TabIndex = 38;
             // 
+            // viewScanDisplayToolStripMenuItem
+            // 
+            this.viewScanDisplayToolStripMenuItem.Name = "viewScanDisplayToolStripMenuItem";
+            this.viewScanDisplayToolStripMenuItem.Size = new System.Drawing.Size(220, 22);
+            this.viewScanDisplayToolStripMenuItem.Text = "View Scan Display";
+            this.viewScanDisplayToolStripMenuItem.Click += new System.EventHandler(this.viewScanDisplayToolStripMenuItem_Click);
+            // 
             // UserControlStarList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -516,5 +526,6 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtCheckBox checkBoxCursorToTop;
         private System.Windows.Forms.FlowLayoutPanel topPanel;
         private System.Windows.Forms.DataGridViewTextBoxColumn Value;
+        private System.Windows.Forms.ToolStripMenuItem viewScanDisplayToolStripMenuItem;
     }
 }

@@ -848,11 +848,27 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        private void dataGridViewStarList_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                List<HistoryEntry> helist = dataGridViewStarList.Rows[e.RowIndex].Tag as List<HistoryEntry>;
+                ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), helist[0], checkBoxEDSM.Checked, discoveryform.history);
+            }
+        }
+
+        private void viewScanDisplayToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (rightclicksystem != null)
+            {
+                ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), rightclicksystem, checkBoxEDSM.Checked, discoveryform.history);
+            }
+        }
         #endregion
 
         #region Events
 
-        private void checkBoxEDSM_CheckedChanged(object sender, EventArgs e)
+            private void checkBoxEDSM_CheckedChanged(object sender, EventArgs e)
         {
             SQLiteDBClass.PutSettingBool(DbEDSM, checkBoxEDSM.Checked);
         }
