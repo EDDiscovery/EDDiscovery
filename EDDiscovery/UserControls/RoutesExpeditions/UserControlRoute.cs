@@ -237,7 +237,7 @@ namespace EDDiscovery.UserControls
 
             routeSystems = p.RouteIterative(AppendData);
 
-            this.BeginInvoke(new Action(() => { discoveryform.NewCalculatedRoute(routeSystems); ToggleButtons(true); }));
+            this.BeginInvoke(new Action(() => { discoveryform.NewCalculatedRoute(routeSystems); ToggleButtons(true);  }));
         }
 
         private void AppendData(RoutePlotter.ReturnInfo info)
@@ -258,6 +258,11 @@ namespace EDDiscovery.UserControls
                 rw.Tag = info.system;       // may be null if waypoint or not a system
                 rw.HeaderCell.Value = info.pos != null ? (dataGridViewRoute.Rows.Count + 1).ToStringInvariant() : "-";
                 dataGridViewRoute.Rows.Add(rw);
+                if (!rw.Displayed)
+                {
+                    dataGridViewRoute.FirstDisplayedScrollingRowIndex++;
+                    dataGridViewRoute.Update();
+                }
             });
         }
 

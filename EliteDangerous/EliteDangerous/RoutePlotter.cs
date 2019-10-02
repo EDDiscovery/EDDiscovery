@@ -71,6 +71,7 @@ namespace EliteDangerousCore
             double actualdistance = 0;
 
             float maxfromwanted = (MaxRange<100) ? (MaxRange-1) : (100+MaxRange * 1 / 5);       // if <100, then just make sure we jump off by 1 yr, else its a 100+1/5
+            maxfromwanted = Math.Min(maxfromwanted, MaxRange - 1);
 
             do
             {
