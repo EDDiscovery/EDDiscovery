@@ -67,7 +67,16 @@ namespace EliteDangerousCore.EDDN
                  EntryType == JournalTypeEnum.Location ||
                  EntryType == JournalTypeEnum.Market ||
                  EntryType == JournalTypeEnum.Shipyard ||
+                 EntryType == JournalTypeEnum.SAASignalsFound ||
                  EntryType == JournalTypeEnum.Outfitting) && EventTimeUTC > ed22) return true;
+            else return false;
+        }
+
+        static public bool IsDelayableEDDNMessage(JournalTypeEnum EntryType, DateTime EventTimeUTC)
+        {
+            DateTime ed22 = new DateTime(2016, 10, 25, 12, 0, 0);
+            if ((EntryType == JournalTypeEnum.Scan ||
+                 EntryType == JournalTypeEnum.SAASignalsFound) && EventTimeUTC > ed22) return true;
             else return false;
         }
 
@@ -332,6 +341,20 @@ namespace EliteDangerousCore.EDDN
                 {
                     ["Name"] = true,
                     ["Percent"] = true
+                }
+            }
+        };
+
+        private static readonly JObject AllowedFieldsSAASignalsFound = new JObject(AllowedFieldsCommon)
+        {
+            ["BodyID"] = true,
+            ["BodyName"] = true,
+            ["Signals"] = new JArray
+            {
+                new JObject
+                {
+                    ["Count"] = true,
+                    ["Type"] = true
                 }
             }
         };
@@ -755,6 +778,10 @@ namespace EliteDangerousCore.EDDN
 
             string bodydesig = journal.BodyDesignation ?? journal.BodyName;
 
+            message = RemoveCommonKeys(message);
+
+            message = FilterJournalEvent(message, AllowedFieldsScan);
+
             if (!bodydesig.StartsWith(system.Name, StringComparison.InvariantCultureIgnoreCase))  // For now test if its a different name ( a few exception for like sol system with named planets)  To catch a rare out of sync bug in historylist.
             {
                 if (journal.BodyDesignation != null || System.Text.RegularExpressions.Regex.IsMatch(journal.BodyName, " [A-Z][A-Z]-[A-Z] [a-h][0-9]", System.Text.RegularExpressions.RegexOptions.IgnoreCase))
@@ -762,14 +789,50 @@ namespace EliteDangerousCore.EDDN
                     return null;
                 }
 
-                msg["IsUnknownBody"] = true;
+                message["IsUnknownBody"] = true;
                 msg["$schemaRef"] = GetEDDNJournalSchemaRef(true);
             }
 
+            msg["message"] = message;
+            return msg;
+        }
+
+        public JObject CreateEDDNMessage(JournalSAASignalsFound journal, ISystem system)
+        {
+            if (system.SystemAddress == null)
+                return null;
+
+            // Reject scan if system doesn't match scan system
+            if (journal.SystemAddress != system.SystemAddress)
+                return null;
+
+            JObject msg = new JObject();
+
+            msg["header"] = Header();
+            msg["$schemaRef"] = GetEDDNJournalSchemaRef();
+
+            JObject message = journal.GetJson();
+
+            if (message == null)
+            {
+                return null;
+            }
+
+            message["StarSystem"] = system.Name;
+            message["StarPos"] = new JArray(new float[] { (float)system.X, (float)system.Y, (float)system.Z });
+            message["SystemAddress"] = system.SystemAddress;
+
+            if (message["Signals"] != null && message["Signals"] is JArray)
+            {
+                foreach (JObject sig in message["Signals"])
+                {
+                    sig.Remove("Type_Localised");
+                }
+            }
 
             message = RemoveCommonKeys(message);
 
-            message = FilterJournalEvent(message, AllowedFieldsScan);
+            message = FilterJournalEvent(message, AllowedFieldsSAASignalsFound);
 
             msg["message"] = message;
             return msg;

@@ -189,6 +189,10 @@ namespace EliteDangerousCore.EDDN
             {
                 msg = eddn.CreateEDDNMessage(je as JournalScan, he.System);
             }
+            else if (je.EventTypeID == JournalTypeEnum.SAASignalsFound)
+            {
+                msg = eddn.CreateEDDNMessage(je as JournalSAASignalsFound, he.System);
+            }
             else if (je.EventTypeID == JournalTypeEnum.Outfitting)
             {
                 msg = eddn.CreateEDDNOutfittingMessage(je as JournalOutfitting, he.System);

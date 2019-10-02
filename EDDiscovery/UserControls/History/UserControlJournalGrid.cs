@@ -418,7 +418,7 @@ namespace EDDiscovery.UserControls
         {
             mapGotoStartoolStripMenuItem.Enabled = (rightclicksystem != null && rightclicksystem.System.HasCoordinate);
             viewOnEDSMToolStripMenuItem.Enabled = (rightclicksystem != null);
-            sendUnsyncedScanToEDDNToolStripMenuItem.Enabled = (rightclicksystem != null && rightclicksystem.EntryType == JournalTypeEnum.Scan && !rightclicksystem.EDDNSync);
+            sendUnsyncedScanToEDDNToolStripMenuItem.Enabled = (rightclicksystem != null && EDDNClass.IsDelayableEDDNMessage(rightclicksystem.EntryType, rightclicksystem.EventTimeUTC) && !rightclicksystem.EDDNSync);
             removeSortingOfColumnsToolStripMenuItem.Enabled = dataGridViewJournal.SortedColumn != null;
             jumpToEntryToolStripMenuItem.Enabled = dataGridViewJournal.Rows.Count > 0;
         }
@@ -527,7 +527,7 @@ namespace EDDiscovery.UserControls
 
         private void sendUnsyncedScanToEDDNToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (rightclicksystem != null && rightclicksystem.EntryType == JournalTypeEnum.Scan && !rightclicksystem.EDDNSync)
+            if (rightclicksystem != null && EDDNClass.IsDelayableEDDNMessage(rightclicksystem.EntryType, rightclicksystem.EventTimeUTC) && !rightclicksystem.EDDNSync)
             {
                 EDDNSync.SendEDDNEvent(discoveryform.LogLine, rightclicksystem);
             }
