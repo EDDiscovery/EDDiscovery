@@ -1002,49 +1002,45 @@ namespace EliteDangerousCore
 
             List<Tuple<JournalEntry, HistoryEntry>> jlistUpdated = new List<Tuple<JournalEntry, HistoryEntry>>();
 
+            HistoryEntry prev = null;
+            JournalEntry jprev = null;
 
-            SystemsDatabase.Instance.ExecuteWithDatabase(conn =>
+            reportProgress(-1, "Creating History");
+
+            foreach (JournalEntry je in jlist)
             {
-                HistoryEntry prev = null;
-                JournalEntry jprev = null;
-
-                reportProgress(-1, "Creating History");
-
-                foreach (JournalEntry je in jlist)
+                if (MergeEntries(jprev, je))        // if we merge.. we may have updated info, so reprint.
                 {
-                    if (MergeEntries(jprev, je))        // if we merge.. we may have updated info, so reprint.
-                    {
-                        //jprev.FillInformation(out prev.EventSummary, out prev.EventDescription, out prev.EventDetailedInfo);    // need to keep this up to date..
-                        continue;
-                    }
-
-                    // Clean up "UnKnown" systems from EDSM log
-                    if (je is JournalFSDJump && ((JournalFSDJump)je).StarSystem == "UnKnown")
-                    {
-                        JournalEntry.Delete(je.Id);
-                        continue;
-                    }
-
-                    if (je is EliteDangerousCore.JournalEvents.JournalMusic)      // remove music.. not shown.. now UI event. remove it for backwards compatibility
-                    {
-                        //System.Diagnostics.Debug.WriteLine("**** Filter out " + je.EventTypeStr + " on " + je.EventTimeLocal.ToString());
-                        continue;
-                    }
-
-                    HistoryEntry he = HistoryEntry.FromJournalEntry(je, prev, out bool journalupdate);
-
-                    prev = he;
-                    jprev = je;
-
-                    hist.historylist.Add(he);
-
-                    if (journalupdate)
-                    {
-                        jlistUpdated.Add(new Tuple<JournalEntry, HistoryEntry>(je, he));
-                        Debug.WriteLine("Queued update requested {0} {1}", he.System.EDSMID, he.System.Name);
-                    }
+                    //jprev.FillInformation(out prev.EventSummary, out prev.EventDescription, out prev.EventDetailedInfo);    // need to keep this up to date..
+                    continue;
                 }
-            });
+
+                // Clean up "UnKnown" systems from EDSM log
+                if (je is JournalFSDJump && ((JournalFSDJump)je).StarSystem == "UnKnown")
+                {
+                    JournalEntry.Delete(je.Id);
+                    continue;
+                }
+
+                if ( je is EliteDangerousCore.JournalEvents.JournalMusic )      // remove music.. not shown.. now UI event. remove it for backwards compatibility
+                { 
+                    //System.Diagnostics.Debug.WriteLine("**** Filter out " + je.EventTypeStr + " on " + je.EventTimeLocal.ToString());
+                    continue;
+                }
+
+                HistoryEntry he = HistoryEntry.FromJournalEntry(je, prev, out bool journalupdate);
+
+                prev = he;
+                jprev = je;
+
+                hist.historylist.Add(he);
+
+                if (journalupdate)
+                {
+                    jlistUpdated.Add(new Tuple<JournalEntry, HistoryEntry>(je, he));
+                    Debug.WriteLine("Queued update requested {0} {1}", he.System.EDSMID, he.System.Name);
+                }
+            }
 
             if (jlistUpdated.Count > 0)
             {
