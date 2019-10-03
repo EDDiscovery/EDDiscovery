@@ -892,7 +892,7 @@ namespace EDDiscovery.UserControls
             selectCorrectSystemToolStripMenuItem.Enabled = (rightclicksystem != null);
             toolStripMenuItemStartStop.Enabled = (rightclicksystem != null);
             removeJournalEntryToolStripMenuItem.Enabled = (rightclicksystem != null);
-            sendUnsyncedScanToEDDNToolStripMenuItem.Enabled = (rightclicksystem != null && rightclicksystem.EntryType == JournalTypeEnum.Scan && !rightclicksystem.EDDNSync);
+            sendUnsyncedScanToEDDNToolStripMenuItem.Enabled = (rightclicksystem != null && EDDNClass.IsDelayableEDDNMessage(rightclicksystem.EntryType, rightclicksystem.EventTimeUTC) && !rightclicksystem.EDDNSync);
             runActionsOnThisEntryToolStripMenuItem.Enabled = (rightclicksystem != null);
             setNoteToolStripMenuItem.Enabled = (rightclicksystem != null);
             writeEventInfoToLogDebugToolStripMenuItem.Enabled = (rightclicksystem != null);
@@ -1126,7 +1126,7 @@ namespace EDDiscovery.UserControls
 
         private void sendUnsyncedScanToEDDNToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (rightclicksystem.EntryType == JournalTypeEnum.Scan && !rightclicksystem.EDDNSync)
+            if (EDDNClass.IsDelayableEDDNMessage(rightclicksystem.EntryType, rightclicksystem.EventTimeUTC) && !rightclicksystem.EDDNSync)
             {
                 EDDNSync.SendEDDNEvent(discoveryform.LogLine, rightclicksystem);
             }
