@@ -625,8 +625,8 @@ namespace EDDiscovery
 
         public void ForceEDSMEDDBFullRefresh()
         {
-            SQLiteConnectionSystem.ForceEDSMFullUpdate();
-            SQLiteConnectionSystem.ForceEDDBFullUpdate();
+            SystemsDatabase.Instance.ForceEDSMFullUpdate();
+            SystemsDatabase.Instance.ForceEDDBFullUpdate();
             Controller.AsyncPerformSync(true, true);
         }
 
@@ -806,6 +806,8 @@ namespace EDDiscovery
             DLLManager.UnLoad();
 
             Close();
+            //TBD
+            SystemsDatabase.Instance.Stop();
             Application.Exit();
         }
      
@@ -1146,18 +1148,20 @@ namespace EDDiscovery
 
         private void sendHistoricDataToInaraToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string rwsystime = SQLiteConnectionSystem.GetSettingString("InaraLastHistoricUpload", "2000-01-01 00:00:00"); // Latest time
-            DateTime upload;
-            if (!DateTime.TryParse(rwsystime, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal, out upload))
-                upload = new DateTime(2000, 1, 1);
+            // TBD FIX WHEN USER DB UPDATED
 
-            if (DateTime.UtcNow.Subtract(upload).TotalHours >= 1)  // every hours, allowed to do this..
-            {
-                EliteDangerousCore.Inara.InaraSync.HistoricData(LogLine,history, EDCommander.Current);
-                SQLiteConnectionSystem.PutSettingString("InaraLastHistoricUpload", DateTime.UtcNow.ToString(CultureInfo.InvariantCulture));
-            }
-            else
-                ExtendedControls.MessageBoxTheme.Show(this, "Inara historic upload is disabled until 1 hour has elapsed from the last try to prevent server flooding".T(EDTx.EDDiscoveryForm_InaraW), "Warning".T(EDTx.Warning));
+            ////TBD string rwsystime = SQLiteConnectionSystem.GetSettingString("InaraLastHistoricUpload", "2000-01-01 00:00:00"); // Latest time
+            //DateTime upload;
+            //if (!DateTime.TryParse(rwsystime, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal, out upload))
+            //    upload = new DateTime(2000, 1, 1);
+
+            //if (DateTime.UtcNow.Subtract(upload).TotalHours >= 1)  // every hours, allowed to do this..
+            //{
+            //    EliteDangerousCore.Inara.InaraSync.HistoricData(LogLine,history, EDCommander.Current);
+            //    SQLiteConnectionSystem.PutSettingString("InaraLastHistoricUpload", DateTime.UtcNow.ToString(CultureInfo.InvariantCulture));
+            //}
+            //else
+            //    ExtendedControls.MessageBoxTheme.Show(this, "Inara historic upload is disabled until 1 hour has elapsed from the last try to prevent server flooding".T(EDTx.EDDiscoveryForm_InaraW), "Warning".T(EDTx.Warning));
         }
 
         private void notifyIcon1_DoubleClick(object sender, EventArgs e)

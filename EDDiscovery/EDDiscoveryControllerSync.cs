@@ -69,7 +69,7 @@ namespace EDDiscovery
         {
             if (!EDDOptions.Instance.NoSystemsLoad && EDDConfig.Instance.EDSMEDDBDownload)        // if enabled
             {
-                DateTime edsmdatetime = SQLiteConnectionSystem.GetLastEDSMRecordTimeUTC();
+                DateTime edsmdatetime = SystemsDatabase.Instance.GetLastEDSMRecordTimeUTC();
 
                 if (DateTime.UtcNow.Subtract(edsmdatetime).TotalDays >= 28)   // 600k ish per 12hours.  So 33MB.  Much less than a full download which is (23/1/2018) 2400MB, or 600MB compressed
                 {
@@ -77,7 +77,7 @@ namespace EDDiscovery
                     syncstate.perform_edsm_fullsync = true;       // do a full sync.
                 }
 
-                DateTime eddbdatetime = SQLiteConnectionSystem.GetLastEDDBDownloadTime();
+                DateTime eddbdatetime = SystemsDatabase.Instance.GetLastEDDBDownloadTime();
 
                 if (DateTime.UtcNow.Subtract(eddbdatetime).TotalDays > 6.5)     // Get EDDB data once every week.
                     syncstate.perform_eddb_edsmalias_sync = true;
@@ -103,96 +103,102 @@ namespace EDDiscovery
 
             resyncEDSMEDDBRequestedFlag = 1;     // sync is happening, stop any async requests..
 
-            Debug.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Perform EDSM/EDDB sync");
+            // check for 102, if so, upgrade it..
+            SystemsDatabase.Instance.UpgradeSystemTableFrom102TypeDB(() => PendingClose, ReportSyncProgress, syncstate.perform_edsm_fullsync);
 
-            try
+            if (EDDConfig.Instance.EDSMEDDBDownload)      // if no system off, and EDSM download on
             {
-                bool[] grids = new bool[GridId.MaxGridID];
-                foreach (int i in GridId.FromString(EDDConfig.Instance.EDSMGridIDs))
-                    grids[i] = true;
+                Debug.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Perform EDSM/EDDB sync");
 
-                syncstate.ClearCounters();
-
-                if (syncstate.perform_edsm_fullsync || syncstate.perform_eddb_edsmalias_sync)
+                try
                 {
-                    if (syncstate.perform_edsm_fullsync && !PendingClose)
+                    bool[] grids = new bool[GridId.MaxGridID];
+                    foreach (int i in GridId.FromString(EDDConfig.Instance.EDSMGridIDs))
+                        grids[i] = true;
+
+                    syncstate.ClearCounters();
+
+                    if (syncstate.perform_edsm_fullsync || syncstate.perform_eddb_edsmalias_sync)
                     {
-                        // Download new systems
-                        try
+                        if (syncstate.perform_edsm_fullsync && !PendingClose)
                         {
-                            string edsmsystems = Path.Combine(EliteConfigInstance.InstanceOptions.AppDataDirectory, "edsmsystems.json");
-
-                            ReportSyncProgress("Performing full download of EDSM Database from server");
-
-                            bool success = BaseUtils.DownloadFile.HTTPDownloadFile(EliteConfigInstance.InstanceConfig.EDSMFullSystemsURL, edsmsystems, false, out bool newfile);
-
-                            syncstate.perform_edsm_fullsync = false;
-
-                            if (success)
+                            // Download new systems
+                            try
                             {
-                                syncstate.edsm_fullsync_count = SQLiteConnectionSystem.UpgradeSystemTableFromFile(edsmsystems, grids, () => PendingClose, ReportSyncProgress);
+                                string edsmsystems = Path.Combine(EliteConfigInstance.InstanceOptions.AppDataDirectory, "edsmsystems.json");
 
-                                if (syncstate.edsm_fullsync_count < 0)     // this should always update something, the table is replaced.  If its not, its been cancelled
-                                    return;
+                                ReportSyncProgress("Performing full download of EDSM Database from server");
 
-                                BaseUtils.FileHelpers.DeleteFileNoError(edsmsystems);       // remove file - don't hold in storage
+                                bool success = BaseUtils.DownloadFile.HTTPDownloadFile(EliteConfigInstance.InstanceConfig.EDSMFullSystemsURL, edsmsystems, false, out bool newfile);
+
+                                syncstate.perform_edsm_fullsync = false;
+
+                                if (success)
+                                {
+                                    syncstate.edsm_fullsync_count = SystemsDatabase.Instance.UpgradeSystemTableFromFile(edsmsystems, grids, () => PendingClose, ReportSyncProgress);
+
+                                    if (syncstate.edsm_fullsync_count < 0)     // this should always update something, the table is replaced.  If its not, its been cancelled
+                                        return;
+
+                                    BaseUtils.FileHelpers.DeleteFileNoError(edsmsystems);       // remove file - don't hold in storage
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                LogLineHighlight("GetAllEDSMSystems exception:" + ex.Message);
                             }
                         }
-                        catch (Exception ex)
+
+                        if (!PendingClose)
                         {
-                            LogLineHighlight("GetAllEDSMSystems exception:" + ex.Message);
+                            try
+                            {
+                                EDSMClass edsm = new EDSMClass();
+                                string jsonhidden = edsm.GetHiddenSystems();
+
+                                if (jsonhidden != null)
+                                {
+                                    SystemsDB.ParseAliasString(jsonhidden);
+
+                                    string eddbsystems = Path.Combine(EliteConfigInstance.InstanceOptions.AppDataDirectory, "eddbsystems.json");
+
+                                    bool success = BaseUtils.DownloadFile.HTTPDownloadFile(EliteConfigInstance.InstanceConfig.EDDBSystemsURL, eddbsystems, false, out bool newfile);
+
+                                    syncstate.perform_eddb_edsmalias_sync = false;
+
+                                    if (success)
+                                    {
+                                        syncstate.eddb_sync_count = SystemsDB.ParseEDDBJSONFile(eddbsystems, () => PendingClose);
+
+                                        if (syncstate.eddb_sync_count < 0)      // on a cancel or error
+                                            return;
+
+                                        SystemsDatabase.Instance.SetLastEDDBDownloadTime();
+
+                                        BaseUtils.FileHelpers.DeleteFileNoError(eddbsystems);       // remove file - don't hold in storage
+                                    }
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                LogLineHighlight("GetEDDBUpdate exception: " + ex.Message);
+                            }
                         }
                     }
 
                     if (!PendingClose)
                     {
-                        try
-                        {
-                            EDSMClass edsm = new EDSMClass();
-                            string jsonhidden = edsm.GetHiddenSystems();
-
-                            if (jsonhidden != null)
-                            {
-                                SystemsDB.ParseAliasString(jsonhidden);
-
-                                string eddbsystems = Path.Combine(EliteConfigInstance.InstanceOptions.AppDataDirectory, "eddbsystems.json");
-
-                                bool success = BaseUtils.DownloadFile.HTTPDownloadFile(EliteConfigInstance.InstanceConfig.EDDBSystemsURL, eddbsystems, false, out bool newfile);
-
-                                syncstate.perform_eddb_edsmalias_sync = false;
-
-                                if (success)
-                                {
-                                    syncstate.eddb_sync_count = SystemsDB.ParseEDDBJSONFile(eddbsystems, () => PendingClose);
-
-                                    if (syncstate.eddb_sync_count < 0)      // on a cancel or error
-                                        return;
-
-                                    SQLiteConnectionSystem.SetLastEDDBDownloadTime();
-
-                                    BaseUtils.FileHelpers.DeleteFileNoError(eddbsystems);       // remove file - don't hold in storage
-                                }
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            LogLineHighlight("GetEDDBUpdate exception: " + ex.Message);
-                        }
+                        syncstate.edsm_updatesync_count = UpdateSync(grids, () => PendingClose, ReportSyncProgress);
                     }
                 }
-
-                if (!PendingClose)
+                catch (OperationCanceledException)
                 {
-                    syncstate.edsm_updatesync_count = UpdateSync(grids, () => PendingClose, ReportSyncProgress);
+                    // Swallow Operation Cancelled exceptions
                 }
-            }
-            catch (OperationCanceledException)
-            {
-                // Swallow Operation Cancelled exceptions
-            }
-            catch (Exception ex)
-            {
-                LogLineHighlight("Check Systems exception: " + ex.Message + Environment.NewLine + "Trace: " + ex.StackTrace);
+                catch (Exception ex)
+                {
+                    LogLineHighlight("Check Systems exception: " + ex.Message + Environment.NewLine + "Trace: " + ex.StackTrace);
+                }
             }
 
             InvokeAsyncOnUiThread(() => PerformSyncCompletedonUI());
@@ -232,7 +238,7 @@ namespace EDDiscovery
 
         public long UpdateSync(bool[] grididallow, Func<bool> PendingClose, Action<string> ReportProgress)
         {
-            DateTime lastrecordtime = SQLiteConnectionSystem.GetLastEDSMRecordTimeUTC();
+            DateTime lastrecordtime = SystemsDatabase.Instance.GetLastEDSMRecordTimeUTC();
 
             if (lastrecordtime < MinEDSMDate)
                 lastrecordtime = MinEDSMDate;
@@ -358,7 +364,7 @@ namespace EDDiscovery
 
                 updates += updated;
 
-                SQLiteConnectionSystem.SetLastEDSMRecordTimeUTC(lastrecordtime);       // keep on storing this in case next time we get an exception
+                SystemsDatabase.Instance.SetLastEDSMRecordTimeUTC(lastrecordtime);       // keep on storing this in case next time we get an exception
 
                 int delay = 10;     // Anthor's normal delay 
                 int ratelimitlimit;

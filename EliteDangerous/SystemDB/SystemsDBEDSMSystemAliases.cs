@@ -45,92 +45,102 @@ namespace EliteDangerousCore.DB
 
         public static long ParseAlias(JsonTextReader jr)
         {
-            long updates = 0;
-
-            System.Diagnostics.Debug.WriteLine("Update aliases");
-
-            using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem(mode: SQLLiteExtensions.SQLExtConnection.AccessMode.Writer))  // open the db
+            return SystemsDatabase.Instance.ExecuteWithDatabase(mode: SQLLiteExtensions.SQLExtConnection.AccessMode.Writer, func: db =>
             {
+                var cn = db.Connection;
+                System.Diagnostics.Debug.WriteLine("Update aliases");
+
+                long updates = 0;
+
                 using (DbTransaction txn = cn.BeginTransaction())
                 {
-                    DbCommand selectCmd = cn.CreateSelect("Aliases", "edsmid", "edsmid = @edsmid", inparas: new string[] { "edsmid:int64" }, limit: "1", tx: txn);   // 1 return matching ID
-                    DbCommand deletesystemcmd = cn.CreateDelete("Systems", "edsmid=@edsmid", paras: new string[] { "edsmid:int64" }, tx: txn);
-                    DbCommand insertCmd = cn.CreateReplace("Aliases", paras: new string[] { "edsmid:int64", "edsmid_mergedto:int64", "name:string" }, tx: txn);
-
+                    DbCommand selectCmd = null;
+                    DbCommand deletesystemcmd = null;
+                    DbCommand insertCmd = null;
                     try
-                    {       // protect against json exceptions
-                        while (true)
-                        {
-                            if (!jr.Read())
+                    {
+                        selectCmd = cn.CreateSelect("Aliases", "edsmid", "edsmid = @edsmid", inparas: new string[] { "edsmid:int64" }, limit: "1", tx: txn);   // 1 return matching ID
+                        deletesystemcmd = cn.CreateDelete("Systems", "edsmid=@edsmid", paras: new string[] { "edsmid:int64" }, tx: txn);
+                        insertCmd = cn.CreateReplace("Aliases", paras: new string[] { "edsmid:int64", "edsmid_mergedto:int64", "name:string" }, tx: txn);
+
+                        try
+                        {       // protect against json exceptions
+                            while (true)
                             {
-                                break;
-                            }
-
-                            if (jr.TokenType == JsonToken.StartObject)
-                            {
-                                JObject jo = JObject.Load(jr);
-
-                                long edsmid = (long)jo["id"];
-                                string name = (string)jo["system"];
-                                string action = (string)jo["action"];
-                                long mergedto = 0;
-
-                                if (jo["mergedTo"] != null)
+                                if (!jr.Read())
                                 {
-                                    mergedto = (long)jo["mergedTo"];
+                                    break;
                                 }
 
-                                if (action.Contains("delete system", System.StringComparison.InvariantCultureIgnoreCase))
+                                if (jr.TokenType == JsonToken.StartObject)
                                 {
-                                    deletesystemcmd.Parameters[0].Value = edsmid;
-                                    deletesystemcmd.ExecuteNonQuery();
-                                }
+                                    JObject jo = JObject.Load(jr);
 
-                                if (mergedto > 0)
-                                {
-                                    selectCmd.Parameters[0].Value = edsmid;
-                                    long foundedsmid = selectCmd.ExecuteScalar<long>(-1);
+                                    long edsmid = (long)jo["id"];
+                                    string name = (string)jo["system"];
+                                    string action = (string)jo["action"];
+                                    long mergedto = 0;
 
-                                    if (foundedsmid == -1)
+                                    if (jo["mergedTo"] != null)
                                     {
-                                        insertCmd.Parameters[0].Value = edsmid;
-                                        insertCmd.Parameters[1].Value = mergedto;
-                                        insertCmd.Parameters[2].Value = name;
-                                        insertCmd.ExecuteNonQuery();
-                                        //System.Diagnostics.Debug.WriteLine("Alias " + edsmid + " -> " + mergedto + " " + name);
-                                        updates++;
+                                        mergedto = (long)jo["mergedTo"];
                                     }
-                                }
 
+                                    if (action.Contains("delete system", System.StringComparison.InvariantCultureIgnoreCase))
+                                    {
+                                        deletesystemcmd.Parameters[0].Value = edsmid;
+                                        deletesystemcmd.ExecuteNonQuery();
+                                    }
+
+                                    if (mergedto > 0)
+                                    {
+                                        selectCmd.Parameters[0].Value = edsmid;
+                                        long foundedsmid = selectCmd.ExecuteScalar<long>(-1);
+
+                                        if (foundedsmid == -1)
+                                        {
+                                            insertCmd.Parameters[0].Value = edsmid;
+                                            insertCmd.Parameters[1].Value = mergedto;
+                                            insertCmd.Parameters[2].Value = name;
+                                            insertCmd.ExecuteNonQuery();
+                                            //System.Diagnostics.Debug.WriteLine("Alias " + edsmid + " -> " + mergedto + " " + name);
+                                            updates++;
+                                        }
+                                    }
+
+                                }
                             }
                         }
+                        catch (System.Exception ex)
+                        {
+                            System.Diagnostics.Debug.WriteLine("JSON format error in aliases " + ex);
+                        }
+
+                        txn.Commit();
                     }
-                    catch (System.Exception ex)
+                    finally
                     {
-                        System.Diagnostics.Debug.WriteLine("JSON format error in aliases " + ex);
+                        selectCmd.Dispose();
+                        deletesystemcmd.Dispose();
+                        insertCmd.Dispose();
                     }
-
-                    txn.Commit();
-                    selectCmd.Dispose();
-                    deletesystemcmd.Dispose();
-                    insertCmd.Dispose();
                 }
-            }
 
-            return updates;
+                return updates;
+            });
         }
 
         // pass edsmid>0, or name not null with characters, or both
 
         public static long FindAlias(long edsmid, string name)
         {
-            using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem(mode: SQLLiteExtensions.SQLExtConnection.AccessMode.Writer))  // open the db
+            return SystemsDatabase.Instance.ExecuteWithDatabase(db =>
             {
-                return FindAlias(edsmid, name, cn);
-            }
+                return FindAlias(edsmid, name, db.Connection);
+            });
         }
 
-        public static long FindAlias(long edsmid, string name, SQLiteConnectionSystem cn)
+        internal static long FindAlias(long edsmid, string name, SQLiteConnectionSystem cn)
         {
             string query = "edsmid = @edsmid OR name = @name";
             if (edsmid < 1)
@@ -148,13 +158,13 @@ namespace EliteDangerousCore.DB
 
         public static List<ISystem> FindAliasWildcard(string name)
         {
-            using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem(mode: SQLLiteExtensions.SQLExtConnection.AccessMode.Writer))  // open the db
+            return SystemsDatabase.Instance.ExecuteWithDatabase(db =>
             {
-                return FindAliasWildcard(name, cn);
-            }
+                return FindAliasWildcard(name, db.Connection);
+            });
         }
 
-        public static List<ISystem> FindAliasWildcard(string name, SQLiteConnectionSystem cn)
+        internal static List<ISystem> FindAliasWildcard(string name, SQLiteConnectionSystem cn)
         {
             List<ISystem> ret = new List<ISystem>();
 

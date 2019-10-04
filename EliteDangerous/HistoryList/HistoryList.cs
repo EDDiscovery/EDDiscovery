@@ -566,7 +566,7 @@ namespace EliteDangerousCore
         {
             List<Tuple<HistoryEntry, ISystem>> updatesystems = new List<Tuple<HistoryEntry, ISystem>>();
 
-            using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
+            SystemsDatabase.Instance.ExecuteWithDatabase(cn =>
             {
                 foreach (HistoryEntry he in historylist)
                 {
@@ -580,7 +580,7 @@ namespace EliteDangerousCore
                         }
                     }
                 }
-            }
+            });
 
             if (updatesystems.Count > 0)
             {
@@ -1007,7 +1007,8 @@ namespace EliteDangerousCore
 
             List<Tuple<JournalEntry, HistoryEntry>> jlistUpdated = new List<Tuple<JournalEntry, HistoryEntry>>();
 
-            using (SQLiteConnectionSystem conn = new SQLiteConnectionSystem())
+
+            SystemsDatabase.Instance.ExecuteWithDatabase(conn =>
             {
                 HistoryEntry prev = null;
                 JournalEntry jprev = null;
@@ -1029,13 +1030,13 @@ namespace EliteDangerousCore
                         continue;
                     }
 
-                    if ( je is EliteDangerousCore.JournalEvents.JournalMusic )      // remove music.. not shown.. now UI event. remove it for backwards compatibility
-                    { 
+                    if (je is EliteDangerousCore.JournalEvents.JournalMusic)      // remove music.. not shown.. now UI event. remove it for backwards compatibility
+                    {
                         //System.Diagnostics.Debug.WriteLine("**** Filter out " + je.EventTypeStr + " on " + je.EventTimeLocal.ToString());
                         continue;
                     }
 
-                    HistoryEntry he = HistoryEntry.FromJournalEntry(je, prev, out bool journalupdate, conn);
+                    HistoryEntry he = HistoryEntry.FromJournalEntry(je, prev, out bool journalupdate);
 
                     prev = he;
                     jprev = je;
@@ -1048,7 +1049,7 @@ namespace EliteDangerousCore
                         Debug.WriteLine("Queued update requested {0} {1}", he.System.EDSMID, he.System.Name);
                     }
                 }
-            }
+            });
 
             if (jlistUpdated.Count > 0)
             {

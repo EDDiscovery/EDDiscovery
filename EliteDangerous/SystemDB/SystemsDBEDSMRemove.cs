@@ -23,8 +23,10 @@ namespace EliteDangerousCore.DB
     {
         public static void RemoveGridSystems(int[] gridids, Action<string> report = null)
         {
-            using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem(mode: SQLLiteExtensions.SQLExtConnection.AccessMode.Writer))
+            SystemsDatabase.Instance.ExecuteWithDatabase(mode: SQLLiteExtensions.SQLExtConnection.AccessMode.Writer, action: db =>
             {
+                var cn = db.Connection;
+
                 report?.Invoke("Delete System Information from sector:");
                 for (int i = 0; i < gridids.Length; i += 32)
                 {
@@ -46,15 +48,15 @@ namespace EliteDangerousCore.DB
                 }
 
                 report?.Invoke(Environment.NewLine);
-            }
+            });
         }
 
         public static void Vacuum()
         {
-            using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem(mode: SQLLiteExtensions.SQLExtConnection.AccessMode.Writer))
+            SystemsDatabase.Instance.ExecuteWithDatabase(mode: SQLLiteExtensions.SQLExtConnection.AccessMode.Writer, action: db =>
             {
-                cn.Vacuum();
-            }
+                db.Connection.Vacuum();
+            });
         }
     }
 }
