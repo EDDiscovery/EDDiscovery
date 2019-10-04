@@ -80,15 +80,15 @@ namespace EliteDangerousCore
         }
 
 
-        public void Process(JournalEntry je, SQLiteConnectionUser conn)
+        public void Process(JournalEntry je)
         {
             if (je is ILedgerJournalEntry)
             {
-                ((ILedgerJournalEntry)je).Ledger(this, conn);
+                ((ILedgerJournalEntry)je).Ledger(this);
             }
             else if (je is ILedgerNoCashJournalEntry)
             {
-                ((ILedgerNoCashJournalEntry)je).LedgerNC(this, conn);
+                ((ILedgerNoCashJournalEntry)je).LedgerNC(this);
             }
         }
 

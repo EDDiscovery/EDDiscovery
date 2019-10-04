@@ -39,9 +39,9 @@ namespace EliteDangerousCore.JournalEvents
         public long Reward { get; set; }
         public long? MarketID { get; set; }
 
-        public void UpdateCommodities(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        public void UpdateCommodities(MaterialCommoditiesList mc)
         {
-            mc.Change(MaterialCommodityData.CommodityCategory, FDName, -Count, 0, conn);
+            mc.Change(MaterialCommodityData.CommodityCategory, FDName, -Count, 0);
         }
 
         public override void FillInformation(out string info, out string detailed) 

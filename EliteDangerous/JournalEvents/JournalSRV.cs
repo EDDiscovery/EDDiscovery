@@ -28,7 +28,7 @@ namespace EliteDangerousCore.JournalEvents
             ID = evt["ID"].IntNull();
         }
 
-        public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, DB.SQLiteConnectionUser conn)
+        public void ShipInformation(ShipInformationList shp, string whereami, ISystem system)
         {
             shp.DockSRV();
         }
@@ -53,7 +53,7 @@ namespace EliteDangerousCore.JournalEvents
         public bool PlayerControlled { get; set; }
         public int? ID { get; set; }
 
-        public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, DB.SQLiteConnectionUser conn)
+        public void ShipInformation(ShipInformationList shp, string whereami, ISystem system)
         {
             shp.LaunchSRV();
         }
@@ -76,7 +76,7 @@ namespace EliteDangerousCore.JournalEvents
             ID = evt["ID"].IntNull();
         }
 
-        public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, DB.SQLiteConnectionUser conn)
+        public void ShipInformation(ShipInformationList shp, string whereami, ISystem system)
         {
             shp.DestroyedSRV();
         }

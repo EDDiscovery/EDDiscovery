@@ -896,24 +896,19 @@ namespace EliteDangerousCore
                 }
             }
 
-            using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
-            {
-                he.ProcessWithUserDb(je, prev, this, conn);           // let some processes which need the user db to work
+            he.ProcessWithUserDb(je, prev, this);           // let some processes which need the user db to work
 
-                cashledger.Process(je, conn);
-                he.Credits = cashledger.CashTotal;
+            cashledger.Process(je);
+            he.Credits = cashledger.CashTotal;
 
-                shipyards.Process(je, conn);
-                outfitting.Process(je, conn);
+            shipyards.Process(je);
+            outfitting.Process(je);
 
-                Tuple<ShipInformation, ModulesInStore> ret = shipinformationlist.Process(je, conn,he.WhereAmI,he.System);
-                he.ShipInformation = ret.Item1;
-                he.StoredModules = ret.Item2;
+            Tuple<ShipInformation, ModulesInStore> ret = shipinformationlist.Process(je,he.WhereAmI,he.System);
+            he.ShipInformation = ret.Item1;
+            he.StoredModules = ret.Item2;
 
-                he.MissionList = missionlistaccumulator.Process(je, he.System, he.WhereAmI, conn);
-
-                
-            }
+            he.MissionList = missionlistaccumulator.Process(je, he.System, he.WhereAmI);
 
             historylist.Add(he);
 
@@ -1095,54 +1090,51 @@ namespace EliteDangerousCore
         {
             List<HistoryEntry> hl = historylist;
 
-            using (SQLiteConnectionUser conn = new SQLiteConnectionUser())      // splitting the update into two, one using system, one using user helped
+            for (int i = 0; i < hl.Count; i++)
             {
-                for (int i = 0; i < hl.Count; i++)
+                HistoryEntry he = hl[i];
+                JournalEntry je = he.journalEntry;
+
+                he.ProcessWithUserDb(je, (i > 0) ? hl[i - 1] : null, this);        // let the HE do what it wants to with the user db
+
+                Debug.Assert(he.MaterialCommodity != null);
+
+                // **** REMEMBER NEW Journal entry needs this too *****************
+
+                cashledger.Process(je);            // update the ledger     
+                he.Credits = cashledger.CashTotal;
+
+                shipyards.Process(je);
+                outfitting.Process(je);
+
+                Tuple<ShipInformation, ModulesInStore> ret = shipinformationlist.Process(je, he.WhereAmI, he.System);  // the ships
+                he.ShipInformation = ret.Item1;
+                he.StoredModules = ret.Item2;
+
+                he.MissionList = missionlistaccumulator.Process(je, he.System, he.WhereAmI);                           // the missions
+
+                if (je.EventTypeID == JournalTypeEnum.Scan && je is JournalScan)
                 {
-                    HistoryEntry he = hl[i];
-                    JournalEntry je = he.journalEntry;
-
-                    he.ProcessWithUserDb(je, (i > 0) ? hl[i - 1] : null, this, conn);        // let the HE do what it wants to with the user db
-
-                    Debug.Assert(he.MaterialCommodity != null);
-
-                    // **** REMEMBER NEW Journal entry needs this too *****************
-
-                    cashledger.Process(je, conn);            // update the ledger     
-                    he.Credits = cashledger.CashTotal;
-
-                    shipyards.Process(je, conn);
-                    outfitting.Process(je, conn);
-
-                    Tuple<ShipInformation, ModulesInStore> ret = shipinformationlist.Process(je, conn, he.WhereAmI, he.System);  // the ships
-                    he.ShipInformation = ret.Item1;
-                    he.StoredModules = ret.Item2;
-
-                    he.MissionList = missionlistaccumulator.Process(je, he.System, he.WhereAmI, conn);                           // the missions
-
-                    if (je.EventTypeID == JournalTypeEnum.Scan && je is JournalScan)
+                    if (!this.starscan.AddScanToBestSystem(je as JournalScan, i, hl))
                     {
-                        if (!this.starscan.AddScanToBestSystem(je as JournalScan, i, hl))
-                        {
-                            System.Diagnostics.Debug.WriteLine("******** Cannot add scan to system " + (je as JournalScan).BodyName + " in " + he.System.Name);
-                        }
+                        System.Diagnostics.Debug.WriteLine("******** Cannot add scan to system " + (je as JournalScan).BodyName + " in " + he.System.Name);
                     }
-                    else if (je.EventTypeID == JournalTypeEnum.SAAScanComplete)
-                    {
-                        this.starscan.AddSAAScanToBestSystem((JournalSAAScanComplete)je, i, hl);
-                    }
-                    else if (je.EventTypeID == JournalTypeEnum.SAASignalsFound)
-                    {
-                        this.starscan.AddSAASignalsFoundToBestSystem((JournalSAASignalsFound)je, i, hl);
-                    }
-                    else if (je.EventTypeID == JournalTypeEnum.FSSDiscoveryScan && he.System != null)
-                    {
-                        this.starscan.SetFSSDiscoveryScan((JournalFSSDiscoveryScan)je, he.System);
-                    }
-                    else if (je is IBodyNameAndID)
-                    {
-                        this.starscan.AddBodyToBestSystem((IBodyNameAndID)je, i, hl);
-                    }
+                }
+                else if (je.EventTypeID == JournalTypeEnum.SAAScanComplete)
+                {
+                    this.starscan.AddSAAScanToBestSystem((JournalSAAScanComplete)je, i, hl);
+                }
+                else if (je.EventTypeID == JournalTypeEnum.SAASignalsFound)
+                {
+                    this.starscan.AddSAASignalsFoundToBestSystem((JournalSAASignalsFound)je, i, hl);
+                }
+                else if (je.EventTypeID == JournalTypeEnum.FSSDiscoveryScan && he.System != null)
+                {
+                    this.starscan.SetFSSDiscoveryScan((JournalFSSDiscoveryScan)je, he.System);
+                }
+                else if (je is IBodyNameAndID)
+                {
+                    this.starscan.AddBodyToBestSystem((IBodyNameAndID)je, i, hl);
                 }
             }
         }

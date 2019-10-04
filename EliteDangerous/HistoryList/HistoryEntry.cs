@@ -237,9 +237,9 @@ namespace EliteDangerousCore
             return he;
         }
 
-        public void ProcessWithUserDb(JournalEntry je, HistoryEntry prev, HistoryList hl, SQLiteConnectionUser conn)      // called after above with a USER connection
+        public void ProcessWithUserDb(JournalEntry je, HistoryEntry prev, HistoryList hl)      // called after above with a USER connection
         {
-            MaterialCommodity = MaterialCommoditiesList.Process(je, prev?.MaterialCommodity, conn);
+            MaterialCommodity = MaterialCommoditiesList.Process(je, prev?.MaterialCommodity);
 
             snc = SystemNoteClass.GetSystemNote(Journalid, IsFSDJump, System);       // may be null
         }

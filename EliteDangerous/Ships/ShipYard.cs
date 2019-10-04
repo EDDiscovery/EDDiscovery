@@ -145,7 +145,7 @@ namespace EliteDangerousCore
             return list;
         }
 
-        public void Process(JournalEntry je, SQLiteConnectionUser conn)
+        public void Process(JournalEntry je)
         {
             if ( je.EventTypeID == JournalTypeEnum.Shipyard)
             {

@@ -98,22 +98,22 @@ namespace EliteDangerousCore.JournalEvents
             return sb.ToString();
         }
 
-        public void UpdateMaterials(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        public void UpdateMaterials(MaterialCommoditiesList mc)
         {
             //System.Diagnostics.Debug.WriteLine("Updated at " + this.EventTimeUTC.ToString());
             mc.Clear(false);
 
             if ( Raw != null )
                 foreach (Material m in Raw)
-                    mc.Set(MaterialCommodityData.MaterialRawCategory, m.Name, m.Count, 0, conn);
+                    mc.Set(MaterialCommodityData.MaterialRawCategory, m.Name, m.Count, 0);
 
             if ( Manufactured != null )
                 foreach (Material m in Manufactured)
-                    mc.Set(MaterialCommodityData.MaterialManufacturedCategory, m.Name, m.Count, 0, conn);
+                    mc.Set(MaterialCommodityData.MaterialManufacturedCategory, m.Name, m.Count, 0);
 
             if ( Encoded != null )
                 foreach (Material m in Encoded)
-                    mc.Set(MaterialCommodityData.MaterialEncodedCategory, m.Name, m.Count, 0, conn);
+                    mc.Set(MaterialCommodityData.MaterialEncodedCategory, m.Name, m.Count, 0);
         }
     }
 
@@ -133,9 +133,9 @@ namespace EliteDangerousCore.JournalEvents
         public string Name { get; set; }
         public int Count { get; set; }
 
-        public void UpdateMaterials(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        public void UpdateMaterials(MaterialCommoditiesList mc)
         {
-            mc.Change(Category, Name, Count, 0, conn);
+            mc.Change(Category, Name, Count, 0);
         }
 
         public override void FillInformation(out string info, out string detailed)
@@ -161,9 +161,9 @@ namespace EliteDangerousCore.JournalEvents
         public string Name { get; set; }    // FDName
         public int Count { get; set; }
 
-        public void UpdateMaterials(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        public void UpdateMaterials(MaterialCommoditiesList mc)
         {
-            mc.Change(Category, Name, -Count, 0, conn);
+            mc.Change(Category, Name, -Count, 0);
         }
 
         public override void FillInformation(out string info, out string detailed)
@@ -244,12 +244,12 @@ namespace EliteDangerousCore.JournalEvents
             }
         }
 
-        public void UpdateMaterials(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        public void UpdateMaterials(MaterialCommoditiesList mc)
         {
             if (Paid != null && Received != null)
             {
-                mc.Change(Paid.Category.Alt(TraderType), Paid.Material, -Paid.Quantity, 0, conn);
-                mc.Change(Received.Category.Alt(TraderType), Received.Material, Received.Quantity, 0, conn);
+                mc.Change(Paid.Category.Alt(TraderType), Paid.Material, -Paid.Quantity, 0);
+                mc.Change(Received.Category.Alt(TraderType), Received.Material, Received.Quantity, 0);
             }
         }
 
@@ -302,7 +302,7 @@ namespace EliteDangerousCore.JournalEvents
         public string Name { get; set; }
         public Dictionary<string, int> Materials { get; set; }
 
-        public void UpdateMaterials(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        public void UpdateMaterials(MaterialCommoditiesList mc)
         {
             if (Materials != null)
             {
@@ -312,7 +312,7 @@ namespace EliteDangerousCore.JournalEvents
 
             if (Name.Contains("Limpet", StringComparison.InvariantCultureIgnoreCase) )      // hard code limpets mean 1 more cargo of them
             {
-                mc.Change(MaterialCommodityData.CommodityCategory, "drones", 1, 0, conn);
+                mc.Change(MaterialCommodityData.CommodityCategory, "drones", 1, 0);
             }
         }
 

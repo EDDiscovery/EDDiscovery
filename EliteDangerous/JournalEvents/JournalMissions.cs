@@ -63,7 +63,7 @@ namespace EliteDangerousCore.JournalEvents
 
         }
 
-        public void UpdateMissions(MissionListAccumulator mlist, EliteDangerousCore.ISystem sys, string body, DB.SQLiteConnectionUser conn)
+        public void UpdateMissions(MissionListAccumulator mlist, EliteDangerousCore.ISystem sys, string body)
         {
             mlist.Missions(this);       // check vs our mission list
         }
@@ -246,16 +246,16 @@ namespace EliteDangerousCore.JournalEvents
 
         }
 
-        public void UpdateMissions(MissionListAccumulator mlist, EliteDangerousCore.ISystem sys, string body, DB.SQLiteConnectionUser conn)
+        public void UpdateMissions(MissionListAccumulator mlist, EliteDangerousCore.ISystem sys, string body)
         {
             mlist.Accepted(this, sys, body);
         }
 
-        public void UpdateCommodities(MaterialCommoditiesList mc, SQLiteConnectionUser conn)
+        public void UpdateCommodities(MaterialCommoditiesList mc)
         {
             if (Commodity != null && Count != null && DeliveryMissions.Contains(FDName) && EventTimeUTC < ED32Date)
             {
-                mc.Change(MaterialCommodityData.CommodityCategory, Commodity, (int)Count, 0, conn);
+                mc.Change(MaterialCommodityData.CommodityCategory, Commodity, (int)Count, 0);
             }
         }
     }
@@ -349,33 +349,33 @@ namespace EliteDangerousCore.JournalEvents
 
         public FactionEffectsEntry[] FactionEffects;
 
-        public void UpdateCommodities(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        public void UpdateCommodities(MaterialCommoditiesList mc)
         {
             if (Commodity != null && Count != null)
             {
-                mc.Change(MaterialCommodityData.CommodityCategory, Commodity, -(int)Count, 0, conn);
+                mc.Change(MaterialCommodityData.CommodityCategory, Commodity, -(int)Count, 0);
             }
 
             if (CommodityReward != null)
             {
                 foreach (CommodityRewards c in CommodityReward)
-                    mc.Change(MaterialCommodityData.CommodityCategory, c.Name, c.Count, 0, conn);
+                    mc.Change(MaterialCommodityData.CommodityCategory, c.Name, c.Count, 0);
             }
         }
 
-        public void UpdateMaterials(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        public void UpdateMaterials(MaterialCommoditiesList mc)
         {
             if (MaterialsReward != null)
             {
                 foreach (MaterialRewards m in MaterialsReward)                 // 7/3/2018 not yet fully proven.. changed in 3.02
                 {
                     string c = m.Category.Alt(MaterialCommodityData.MaterialRawCategory);     // older ones did not have this tag..
-                    mc.Change(c, m.Name, m.Count, 0, conn);
+                    mc.Change(c, m.Name, m.Count, 0);
                 }
             }
         }
 
-        public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
+        public void Ledger(Ledger mcl)
         {
             long rv = Reward.HasValue ? Reward.Value : 0;
             long dv = Donation.HasValue ? Donation.Value : 0;
@@ -383,7 +383,7 @@ namespace EliteDangerousCore.JournalEvents
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Name, (rv - dv), 0);
         }
 
-        public void UpdateMissions(MissionListAccumulator mlist, EliteDangerousCore.ISystem sys, string body, DB.SQLiteConnectionUser conn)
+        public void UpdateMissions(MissionListAccumulator mlist, EliteDangerousCore.ISystem sys, string body)
         {
             mlist.Completed(this);
         }
@@ -558,7 +558,7 @@ namespace EliteDangerousCore.JournalEvents
             detailed = "";
         }
 
-        public void UpdateMissions(MissionListAccumulator mlist, EliteDangerousCore.ISystem sys, string body, DB.SQLiteConnectionUser conn)
+        public void UpdateMissions(MissionListAccumulator mlist, EliteDangerousCore.ISystem sys, string body)
         {
             mlist.Failed(this);
         }
@@ -600,7 +600,7 @@ namespace EliteDangerousCore.JournalEvents
             detailed = "";
         }
 
-        public void UpdateMissions(MissionListAccumulator mlist, EliteDangerousCore.ISystem sys, string body, DB.SQLiteConnectionUser conn)
+        public void UpdateMissions(MissionListAccumulator mlist, EliteDangerousCore.ISystem sys, string body)
         {
             mlist.Redirected(this);
         }
@@ -631,7 +631,7 @@ namespace EliteDangerousCore.JournalEvents
             detailed = "";
         }
 
-        public void UpdateMissions(MissionListAccumulator mlist, EliteDangerousCore.ISystem sys, string body, DB.SQLiteConnectionUser conn)
+        public void UpdateMissions(MissionListAccumulator mlist, EliteDangerousCore.ISystem sys, string body)
         {
             mlist.Abandoned(this);
         }

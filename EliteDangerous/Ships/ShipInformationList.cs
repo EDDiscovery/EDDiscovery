@@ -549,12 +549,12 @@ namespace EliteDangerousCore
 
         #region process
 
-        public Tuple<ShipInformation, ModulesInStore> Process(JournalEntry je, DB.SQLiteConnectionUser conn, string whereami, ISystem system)
+        public Tuple<ShipInformation, ModulesInStore> Process(JournalEntry je, string whereami, ISystem system)
         {
             if (je is IShipInformation)
             {
                 IShipInformation e = je as IShipInformation;
-                e.ShipInformation(this, whereami, system, conn);                             // not cloned.. up to callers to see if they need to
+                e.ShipInformation(this, whereami, system);                             // not cloned.. up to callers to see if they need to
             }
 
             return new Tuple<ShipInformation, ModulesInStore>(CurrentShip, StoredModules);

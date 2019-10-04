@@ -51,7 +51,7 @@ namespace EliteDangerousCore.JournalEvents
         public long Reward { get; set; }
         public string VictimFaction { get; set; }
 
-        public void LedgerNC(Ledger mcl, DB.SQLiteConnectionUser conn)
+        public void LedgerNC(Ledger mcl)
         {
             mcl.AddEventNoCash(Id, EventTimeUTC, EventTypeID, PayeeFaction + " " + Reward.ToString("N0"));
         }
