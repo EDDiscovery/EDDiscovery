@@ -86,6 +86,18 @@ namespace EliteDangerousCore
                 Point3D expectedNextPosition = GetNextPosition(curpos, travelvectorperly, MaxRange);    // where we would like to be..
                 ISystem bestsystem = GetBestJumpSystem(curpos, travelvectorperly, maxfromwanted, MaxRange);    // see if we can find a system near  our target
 
+                // if we haven't found a system in range, let's try boosting
+                int boostStrength = 0;
+                while (bestsystem == null && boostStrength < 4)
+                {
+                    boostStrength = 1 << boostStrength;
+                    float maxRangeWithBoost = MaxRange * (1.0f + BoostPercentage(boostStrength));
+                    ISystem bestSystemWithBoost = GetBestJumpSystem(curpos, travelvectorperly, maxfromwanted, maxRangeWithBoost);
+
+                    if (bestSystemWithBoost != null)
+                        bestsystem = bestSystemWithBoost;
+                }
+
                 Point3D nextpos = expectedNextPosition;    // where we really are going to be
                 string sysname = "WAYPOINT";
                 double deltafromwaypoint = 0;
@@ -97,6 +109,8 @@ namespace EliteDangerousCore
                     deltafromwaypoint = Point3D.DistanceBetween(nextpos, expectedNextPosition);     // how much in error
                     deviation = Point3D.DistanceBetween(curpos.InterceptPoint(expectedNextPosition, nextpos), nextpos);
                     sysname = bestsystem.Name;
+                    if (boostStrength > 0)
+                        sysname += " (+" + BoostPercentage(boostStrength) * 100 + "% Boost)";
                     routeSystems.Add(bestsystem);
                 }
 
