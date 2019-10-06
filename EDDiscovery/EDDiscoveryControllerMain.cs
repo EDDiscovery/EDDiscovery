@@ -155,9 +155,9 @@ namespace EDDiscovery
 
             Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Initializing database");
 
-            SQLiteConnectionUser.Initialize();
-            //TBD
+            UserDatabase.Instance.Start();
             SystemsDatabase.Instance.Start();
+            UserDatabase.Instance.Initialize();
             SystemsDatabase.Instance.Initialize();
 
             Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Database initialization complete");

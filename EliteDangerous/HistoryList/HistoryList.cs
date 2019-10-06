@@ -584,18 +584,18 @@ namespace EliteDangerousCore
 
             if (updatesystems.Count > 0)
             {
-                using (SQLiteConnectionUser uconn = new SQLiteConnectionUser(utc: true))
+                UserDatabase.Instance.ExecuteWithDatabase(cn =>
                 {
-                    using (DbTransaction txn = uconn.BeginTransaction())        // take a transaction over this
+                    using (DbTransaction txn = cn.Connection.BeginTransaction())        // take a transaction over this
                     {
                         foreach (Tuple<HistoryEntry, ISystem> he in updatesystems)
                         {
-                            FillInSystemFromDBInt(he.Item1, he.Item2, uconn, txn);  // fill, we already have an EDSM system to use
+                            FillInSystemFromDBInt(he.Item1, he.Item2, cn.Connection, txn);  // fill, we already have an EDSM system to use
                         }
 
                         txn.Commit();
                     }
-                }
+                });
             }
         }
 
@@ -611,20 +611,20 @@ namespace EliteDangerousCore
 
             if (edsmsys != null)                                            // if we found it externally, fill in info
             {
-                using (SQLiteConnectionUser uconn = new SQLiteConnectionUser(utc: true))        // lets do this in a transaction for speed.
+                UserDatabase.Instance.ExecuteWithDatabase(cn =>
                 {
-                    using (DbTransaction txn = uconn.BeginTransaction())
+                    using (DbTransaction txn = cn.Connection.BeginTransaction())
                     {
-                        FillInSystemFromDBInt(syspos, edsmsys, uconn, txn); // and fill in using this connection/tx
+                        FillInSystemFromDBInt(syspos, edsmsys, cn.Connection, txn); // and fill in using this connection/tx
                         txn.Commit();
                     }
-                }
+                });
             }
             else
                 FillInSystemFromDBInt(syspos, null, null, null);        // else fill in using null system, which means just mark it checked
         }
 
-        private void FillInSystemFromDBInt(HistoryEntry syspos, ISystem edsmsys, SQLiteConnectionUser uconn, DbTransaction utn )       // call to fill in ESDM data for entry, and also fills in all others pointing to the system object
+        private void FillInSystemFromDBInt(HistoryEntry syspos, ISystem edsmsys, SQLiteConnectionUser2 uconn, DbTransaction utn )       // call to fill in ESDM data for entry, and also fills in all others pointing to the system object
         {
             List<HistoryEntry> alsomatching = new List<HistoryEntry>();
 
@@ -892,7 +892,10 @@ namespace EliteDangerousCore
 
                 if (jfsd != null)
                 {
-                    JournalEntry.UpdateEDSMIDPosJump(jfsd.Id, he.System, !jfsd.HasCoordinate && he.System.HasCoordinate, jfsd.JumpDist);
+                    UserDatabase.Instance.ExecuteWithDatabase(cn =>
+                    {
+                        JournalEntry.UpdateEDSMIDPosJump(jfsd.Id, he.System, !jfsd.HasCoordinate && he.System.HasCoordinate, jfsd.JumpDist, cn.Connection);
+                    });
                 }
             }
 
@@ -1050,9 +1053,9 @@ namespace EliteDangerousCore
             {
                 reportProgress(-1, "Updating journal entries");
 
-                using (SQLiteConnectionUser conn = new SQLiteConnectionUser(utc: true))
+                UserDatabase.Instance.ExecuteWithDatabase(cn =>
                 {
-                    using (DbTransaction txn = conn.BeginTransaction())
+                    using (DbTransaction txn = cn.Connection.BeginTransaction())
                     {
                         foreach (Tuple<JournalEntry, HistoryEntry> jehe in jlistUpdated)
                         {
@@ -1063,12 +1066,12 @@ namespace EliteDangerousCore
                             bool updatecoord = (je is JournalLocOrJump) ? (!(je as JournalLocOrJump).HasCoordinate && he.System.HasCoordinate) : false;
 
                             Debug.WriteLine("Push update {0} {1} to JE {2} HE {3}", he.System.EDSMID, he.System.Name, je.Id, he.Indexno);
-                            JournalEntry.UpdateEDSMIDPosJump(je.Id, he.System, updatecoord, dist, conn, txn);
+                            JournalEntry.UpdateEDSMIDPosJump(je.Id, he.System, updatecoord, dist, cn.Connection, txn);
                         }
 
                         txn.Commit();
                     }
-                }
+                });
             }
 
             // now database has been updated due to initial fill, now fill in stuff which needs the user database

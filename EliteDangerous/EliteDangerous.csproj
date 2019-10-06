@@ -221,6 +221,7 @@
     <Compile Include="SystemDB\SystemsDBGetByGrid.cs" />
     <Compile Include="SystemDB\SystemsDBGetLists.cs" />
     <Compile Include="SystemDB\SystemsDBGetStars.cs" />
+    <Compile Include="DB\UserDatabase.cs" />
     <Compile Include="UIEvents\UICommand.cs" />
     <Compile Include="UIEvents\UILegalStatus.cs" />
     <Compile Include="UIEvents\UIMusic.cs" />

@@ -48,28 +48,28 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNewTarget += NewTarget;
             discoveryform.OnEDSMSyncComplete += Discoveryform_OnEDSMSyncComplete;
 
-            showEDSMStartButtonsToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "showedsmbut", true);
+            showEDSMStartButtonsToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "showedsmbut", true);
             showEDSMStartButtonsToolStripMenuItem.Click += Optionchanged_Click;
 
-            showFuelLevelToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "fuel", true);
+            showFuelLevelToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "fuel", true);
             showFuelLevelToolStripMenuItem.Click += Optionchanged_Click;
 
-            showCurrentFSDRangeToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "Dcur", true);
+            showCurrentFSDRangeToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "Dcur", true);
             showCurrentFSDRangeToolStripMenuItem.Click += Optionchanged_Click;
 
-            showAvgFSDRangeToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "Dmax", true);
+            showAvgFSDRangeToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "Dmax", true);
             showAvgFSDRangeToolStripMenuItem.Click += Optionchanged_Click;
 
-            showMaxFSDRangeToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "Dfume", true);
+            showMaxFSDRangeToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "Dfume", true);
             showMaxFSDRangeToolStripMenuItem.Click += Optionchanged_Click;
 
-            showFSDRangeToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "Drange", true);
+            showFSDRangeToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "Drange", true);
             showFSDRangeToolStripMenuItem.Click += Optionchanged_Click;
 
-            showTargetToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "target", true);
+            showTargetToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "target", true);
             showTargetToolStripMenuItem.Click += Optionchanged_Click;
 
-            showTravelledDistanceToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "travel", true);
+            showTravelledDistanceToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "travel", true);
             showTravelledDistanceToolStripMenuItem.Click += Optionchanged_Click;
 
             BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
@@ -82,14 +82,14 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNewEntry -= NewEntry;
             discoveryform.OnNewTarget -= NewTarget;
             discoveryform.OnEDSMSyncComplete -= Discoveryform_OnEDSMSyncComplete;
-            SQLiteDBClass.PutSettingBool(DbSave + "showedsmbut", showEDSMStartButtonsToolStripMenuItem.Checked);
-            SQLiteDBClass.PutSettingBool(DbSave + "fuel", showFuelLevelToolStripMenuItem.Checked);
-            SQLiteDBClass.PutSettingBool(DbSave + "Dcur", showCurrentFSDRangeToolStripMenuItem.Checked);
-            SQLiteDBClass.PutSettingBool(DbSave + "Dmax", showAvgFSDRangeToolStripMenuItem.Checked);
-            SQLiteDBClass.PutSettingBool(DbSave + "Dfume", showMaxFSDRangeToolStripMenuItem.Checked);
-            SQLiteDBClass.PutSettingBool(DbSave + "Drange", showFSDRangeToolStripMenuItem.Checked);
-            SQLiteDBClass.PutSettingBool(DbSave + "target", showTargetToolStripMenuItem.Checked);
-            SQLiteDBClass.PutSettingBool(DbSave + "travel", showTravelledDistanceToolStripMenuItem.Checked);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "showedsmbut", showEDSMStartButtonsToolStripMenuItem.Checked);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "fuel", showFuelLevelToolStripMenuItem.Checked);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "Dcur", showCurrentFSDRangeToolStripMenuItem.Checked);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "Dmax", showAvgFSDRangeToolStripMenuItem.Checked);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "Dfume", showMaxFSDRangeToolStripMenuItem.Checked);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "Drange", showFSDRangeToolStripMenuItem.Checked);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "target", showTargetToolStripMenuItem.Checked);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "travel", showTravelledDistanceToolStripMenuItem.Checked);
         }
 
         public override Color ColorTransparency { get { return Color.Green; } }

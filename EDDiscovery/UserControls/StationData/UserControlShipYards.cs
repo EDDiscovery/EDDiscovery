@@ -107,7 +107,7 @@ namespace EDDiscovery.UserControls
             comboBoxYards.Items.AddRange(list);
 
             if (cursel == "")
-                cursel = SQLiteDBClass.GetSettingString(DbYardSave, "");
+                cursel = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbYardSave, "");
 
             if (cursel == "" || !comboBoxYards.Items.Contains(cursel))
                 cursel = the;
@@ -237,7 +237,7 @@ namespace EDDiscovery.UserControls
         {
             if (comboBoxYards.Enabled)
             {
-                SQLiteDBClass.PutSettingString(DbYardSave, comboBoxYards.Text);
+                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbYardSave, comboBoxYards.Text);
                 Display();
             }
         }

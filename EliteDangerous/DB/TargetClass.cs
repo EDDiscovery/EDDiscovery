@@ -23,77 +23,77 @@ namespace EliteDangerousCore.DB
 
         public static void SetTargetBookmark(string name, long id, double x, double y, double z)                                                 // set bookmark as ID
         {
-            SQLiteDBClass.PutSettingString("TargetPositionName", name);
-            SQLiteDBClass.PutSettingInt("TargetPositionType", (int)TargetType.Bookmark);
-            SQLiteDBClass.PutSettingInt("TargetPositionID", (int)id);
-            SQLiteDBClass.PutSettingDouble("TargetPositionX", x);
-            SQLiteDBClass.PutSettingDouble("TargetPositionY", y);
-            SQLiteDBClass.PutSettingDouble("TargetPositionZ", z);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("TargetPositionName", name);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt("TargetPositionType", (int)TargetType.Bookmark);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt("TargetPositionID", (int)id);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble("TargetPositionX", x);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble("TargetPositionY", y);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble("TargetPositionZ", z);
         }
 
         public static void SetTargetNotedSystem(string name, long id, double x, double y, double z)                                                 // set bookmark as ID
         {
-            SQLiteDBClass.PutSettingString("TargetPositionName", name);
-            SQLiteDBClass.PutSettingInt("TargetPositionType", (int)TargetType.Notemark);
-            SQLiteDBClass.PutSettingInt("TargetPositionID", (int)id);
-            SQLiteDBClass.PutSettingDouble("TargetPositionX", x);
-            SQLiteDBClass.PutSettingDouble("TargetPositionY", y);
-            SQLiteDBClass.PutSettingDouble("TargetPositionZ", z);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("TargetPositionName", name);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt("TargetPositionType", (int)TargetType.Notemark);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt("TargetPositionID", (int)id);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble("TargetPositionX", x);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble("TargetPositionY", y);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble("TargetPositionZ", z);
         }
 
         public static void SetTargetGMO(string name, long id, double x, double y, double z)                                                 // set bookmark as ID
         {
-            SQLiteDBClass.PutSettingString("TargetPositionName", name);
-            SQLiteDBClass.PutSettingInt("TargetPositionType", (int)TargetType.GMO);
-            SQLiteDBClass.PutSettingInt("TargetPositionID", (int)id);
-            SQLiteDBClass.PutSettingDouble("TargetPositionX", x);
-            SQLiteDBClass.PutSettingDouble("TargetPositionY", y);
-            SQLiteDBClass.PutSettingDouble("TargetPositionZ", z);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("TargetPositionName", name);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt("TargetPositionType", (int)TargetType.GMO);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt("TargetPositionID", (int)id);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble("TargetPositionX", x);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble("TargetPositionY", y);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble("TargetPositionZ", z);
         }
 
         public static void ClearTarget()
         {
-            SQLiteDBClass.PutSettingInt("TargetPositionType", (int)TargetType.None);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt("TargetPositionType", (int)TargetType.None);
         }
 
         public static long GetTargetBookmark()      // 0 if not a bookmark or not set.
         {
-            TargetType tt = (TargetType)SQLiteDBClass.GetSettingInt("TargetPositionType", (int)TargetType.None);
-            return (tt == TargetType.Bookmark) ? SQLiteDBClass.GetSettingInt("TargetPositionID", 0) : 0;
+            TargetType tt = (TargetType)EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt("TargetPositionType", (int)TargetType.None);
+            return (tt == TargetType.Bookmark) ? EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt("TargetPositionID", 0) : 0;
         }
 
         public static long GetTargetNotedSystem()      // 0 if not a noted system target or not set.
         {
-            TargetType tt = (TargetType)SQLiteDBClass.GetSettingInt("TargetPositionType", (int)TargetType.None);
-            return (tt == TargetType.Notemark) ? SQLiteDBClass.GetSettingInt("TargetPositionID", 0) : 0;
+            TargetType tt = (TargetType)EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt("TargetPositionType", (int)TargetType.None);
+            return (tt == TargetType.Notemark) ? EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt("TargetPositionID", 0) : 0;
         }
 
         public static long GetTargetGMO()               // 0 if not a GMO or not set.
         {
-            TargetType tt = (TargetType)SQLiteDBClass.GetSettingInt("TargetPositionType", (int)TargetType.None);
-            return (tt == TargetType.GMO) ? SQLiteDBClass.GetSettingInt("TargetPositionID", 0) : 0;
+            TargetType tt = (TargetType)EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt("TargetPositionType", (int)TargetType.None);
+            return (tt == TargetType.GMO) ? EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt("TargetPositionID", 0) : 0;
         }
 
         // true if target set with its name, x/y/z
         public static bool GetTargetPosition(out string name, out double x, out double y, out double z)
         {
-            TargetType tt = (TargetType)SQLiteDBClass.GetSettingInt("TargetPositionType", (int)TargetType.None);
-            name = SQLiteDBClass.GetSettingString("TargetPositionName", "");
-            x = SQLiteDBClass.GetSettingDouble("TargetPositionX", double.NaN);
-            y = SQLiteDBClass.GetSettingDouble("TargetPositionY", double.NaN);
-            z = SQLiteDBClass.GetSettingDouble("TargetPositionZ", double.NaN);
+            TargetType tt = (TargetType)EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt("TargetPositionType", (int)TargetType.None);
+            name = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("TargetPositionName", "");
+            x = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble("TargetPositionX", double.NaN);
+            y = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble("TargetPositionY", double.NaN);
+            z = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble("TargetPositionZ", double.NaN);
             return tt != TargetType.None;
         }
 
         public static bool IsTargetSet()
         {
-            TargetType tt = (TargetType)SQLiteDBClass.GetSettingInt("TargetPositionType", (int)TargetType.None);
+            TargetType tt = (TargetType)EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt("TargetPositionType", (int)TargetType.None);
             return tt != TargetType.None;
         }
 
         public static TargetType GetTargetType()
         {
-            TargetType tt = (TargetType)SQLiteDBClass.GetSettingInt("TargetPositionType", (int)TargetType.None);
+            TargetType tt = (TargetType)EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt("TargetPositionType", (int)TargetType.None);
             return tt;
         }
 

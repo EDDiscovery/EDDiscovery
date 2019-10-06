@@ -122,7 +122,7 @@ namespace EDDiscovery.UserControls
             comboBoxShips.Items.AddRange(fightersrvs.Select(x => x.ShipNameIdentType).ToList());
 
             if (cursel == "")
-                cursel = SQLiteDBClass.GetSettingString(DbShipSave, "");
+                cursel = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbShipSave, "");
 
             if (cursel == "" || !comboBoxShips.Items.Contains(cursel))
                 cursel = travelhistorytext;
@@ -352,7 +352,7 @@ namespace EDDiscovery.UserControls
         {
             if (comboBoxShips.Enabled)
             {
-                SQLiteDBClass.PutSettingString(DbShipSave, comboBoxShips.Text);
+                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbShipSave, comboBoxShips.Text);
                 Display();
             }
         }

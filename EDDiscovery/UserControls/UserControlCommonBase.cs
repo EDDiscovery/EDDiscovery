@@ -209,18 +209,18 @@ namespace EDDiscovery.UserControls
 
         public void DGVLoadColumnLayout(DataGridView dgv, string root)
         {
-            if (SQLiteConnectionUser.keyExists(root + "1"))        // if stored values, set back to what they were..
+            if (EliteDangerousCore.DB.UserDatabase.Instance.KeyExists(root + "1"))        // if stored values, set back to what they were..
             {
                 for (int i = 0; i < dgv.Columns.Count; i++)
                 {
                     string k = root + (i + 1).ToString();
-                    int w = SQLiteDBClass.GetSettingInt(k, -1);
+                    int w = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(k, -1);
                     if (w >= 10)        // in case something is up (min 10 pixels)
                         dgv.Columns[i].Width = w;
                     //System.Diagnostics.Debug.WriteLine("Load {0} {1} {2} {3}", Name, k, w, dgv.Columns[i].Width);
                 }
 
-                int hwidth = SQLiteConnectionUser.GetSettingInt(root + "HW", 0);
+                int hwidth = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(root + "HW", 0);
                 if (hwidth > 0)
                     dgv.RowHeadersWidth = hwidth;
                 else
@@ -239,11 +239,11 @@ namespace EDDiscovery.UserControls
             for (int i = 0; i < dgv.Columns.Count; i++)
             {
                 string k = root + (i + 1).ToString();
-                SQLiteDBClass.PutSettingInt(k, dgv.Columns[i].Width);
+                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(k, dgv.Columns[i].Width);
                 //System.Diagnostics.Debug.WriteLine("Save {0} {1} {2}", Name, k, dgv.Columns[i].Width);
             }
 
-            SQLiteConnectionUser.PutSettingInt(root + "HW", dgv.RowHeadersWidth);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(root + "HW", dgv.RowHeadersWidth);
         }
 
         #endregion

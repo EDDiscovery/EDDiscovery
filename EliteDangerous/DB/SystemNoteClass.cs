@@ -53,14 +53,10 @@ namespace EliteDangerousCore.DB
 
         private bool AddToDbAndGlobal()
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
-            {
-                bool ret = AddToDbAndGlobal(cn);
-                return ret;
-            }
+            return UserDatabase.Instance.ExecuteWithDatabase<bool>(cn => { return AddToDbAndGlobal(cn.Connection); });
         }
 
-        private bool AddToDbAndGlobal(SQLiteConnectionUser cn)
+        private bool AddToDbAndGlobal(SQLiteConnectionUser2 cn)
         {
             using (DbCommand cmd = cn.CreateCommand("Insert into SystemNote (Name, Time, Note, journalid, edsmid) values (@name, @time, @note, @journalid, @edsmid)"))
             {
@@ -87,13 +83,10 @@ namespace EliteDangerousCore.DB
 
         private bool Update()
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
-            {
-                return Update(cn);
-            }
+            return UserDatabase.Instance.ExecuteWithDatabase<bool>(cn => { return Update(cn.Connection); });
         }
 
-        private bool Update(SQLiteConnectionUser cn)
+        private bool Update(SQLiteConnectionUser2 cn)
         {
             using (DbCommand cmd = cn.CreateCommand("Update SystemNote set Name=@Name, Time=@Time, Note=@Note, Journalid=@journalid, EdsmId=@EdsmId  where ID=@id"))
             {
@@ -114,13 +107,10 @@ namespace EliteDangerousCore.DB
 
         public bool Delete()
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
-            {
-                return Delete(cn);
-            }
+            return UserDatabase.Instance.ExecuteWithDatabase<bool>(cn => { return Delete(cn.Connection); });
         }
 
-        private bool Delete(SQLiteConnectionUser cn)
+        private bool Delete(SQLiteConnectionUser2 cn)
         {
             using (DbCommand cmd = cn.CreateCommand("DELETE FROM SystemNote WHERE id = @id"))
             {
@@ -167,22 +157,22 @@ namespace EliteDangerousCore.DB
 
         public static void ClearEDSMID()
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
+            UserDatabase.Instance.ExecuteWithDatabase(cn =>
             {
-                using (DbCommand cmd = cn.CreateCommand("UPDATE SystemNote SET EdsmId=0"))
+                using (DbCommand cmd = cn.Connection.CreateCommand("UPDATE SystemNote SET EdsmId=0"))
                 {
                     cmd.ExecuteNonQuery();
                 }
-            }
+            });
         }
 
         public static bool GetAllSystemNotes()
         {
             try
             {
-                using (SQLiteConnectionUser cn = new SQLiteConnectionUser(mode: SQLLiteExtensions.SQLExtConnection.AccessMode.Reader))
+                return UserDatabase.Instance.ExecuteWithDatabase<bool>(cn =>
                 {
-                    using (DbCommand cmd = cn.CreateCommand("select * from SystemNote"))
+                    using (DbCommand cmd = cn.Connection.CreateCommand("select * from SystemNote"))
                     {
                         List<SystemNoteClass> notes = new List<SystemNoteClass>();
 
@@ -208,7 +198,7 @@ namespace EliteDangerousCore.DB
                             return true;
                         }
                     }
-                }
+                });
             }
             catch (Exception ex)
             {

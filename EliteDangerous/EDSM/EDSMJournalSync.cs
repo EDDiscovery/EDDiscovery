@@ -432,9 +432,10 @@ namespace EliteDangerousCore.EDSM
             }
             else
             {
-                using (var cn = new SQLiteConnectionUser(utc: true))
+                firstdiscovers = UserDatabase.Instance.ExecuteWithDatabase<string>(cn =>
                 {
-                    using (var txn = cn.BeginTransaction())
+                    string firsts = "";
+                    using (var txn = cn.Connection.BeginTransaction())
                     {
                         for (int i = 0; i < hl.Count && i < results.Count; i++)
                         {
@@ -450,23 +451,23 @@ namespace EliteDangerousCore.EDSM
                                     if (systemId != 0)
                                     {
                                         he.System.EDSMID = systemId;
-                                        JournalEntry.UpdateEDSMIDPosJump(he.Journalid, he.System, false, 0, cn, txn);
+                                        JournalEntry.UpdateEDSMIDPosJump(he.Journalid, he.System, false, 0, cn.Connection, txn);
                                     }
                                 }
 
-                                if (he.EntryType == JournalTypeEnum.FSDJump )       // only on FSD, confirmed with Anthor.  25/4/2018
+                                if (he.EntryType == JournalTypeEnum.FSDJump)       // only on FSD, confirmed with Anthor.  25/4/2018
                                 {
                                     bool systemCreated = result["systemCreated"].Bool();
 
                                     if (systemCreated)
                                     {
                                         System.Diagnostics.Debug.WriteLine("** EDSM indicates first entry for " + he.System.Name);
-                                        (he.journalEntry as JournalFSDJump).UpdateFirstDiscover(true, cn, txn);
-                                        firstdiscovers = firstdiscovers.AppendPrePad(he.System.Name, ";");
+                                        (he.journalEntry as JournalFSDJump).UpdateFirstDiscover(true, cn.Connection, txn);
+                                        firsts = firsts.AppendPrePad(he.System.Name, ";");
                                     }
                                 }
 
-                                he.journalEntry.SetEdsmSync(cn, txn);
+                                he.journalEntry.SetEdsmSync(cn.Connection, txn);
 
                                 if (msgnr == 500)
                                 {
@@ -481,12 +482,12 @@ namespace EliteDangerousCore.EDSM
                         }
 
                         txn.Commit();
+                        return firsts;
                     }
-                }
+                });
 
                 return true;
             }
         }
-
     }
 }

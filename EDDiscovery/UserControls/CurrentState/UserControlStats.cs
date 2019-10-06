@@ -45,7 +45,7 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
-            tabControlCustomStats.SelectedIndex = SQLiteDBClass.GetSettingInt(DbSelectedTabSave, 0);
+            tabControlCustomStats.SelectedIndex = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(DbSelectedTabSave, 0);
             userControlStatsTimeScan.EnableDisplayStarsPlanetSelector();
             discoveryform.OnNewEntry += AddNewEntry;
             BaseUtils.Translator.Instance.Translate(this);
@@ -65,8 +65,8 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
-            SQLiteDBClass.PutSettingInt(DbSelectedTabSave, tabControlCustomStats.SelectedIndex);
-            SQLiteDBClass.PutSettingString(DbStatsTreeStateSave, GameStatTreeState());
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(DbSelectedTabSave, tabControlCustomStats.SelectedIndex);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbStatsTreeStateSave, GameStatTreeState());
             discoveryform.OnNewEntry -= AddNewEntry;
             uctg.OnTravelSelectionChanged -= TravelGridChanged;
         }
@@ -747,7 +747,7 @@ namespace EDDiscovery.UserControls
             string collapseExpand = GameStatTreeState();
 
             if (string.IsNullOrEmpty(collapseExpand))
-                 collapseExpand = SQLiteDBClass.GetSettingString(DbStatsTreeStateSave, "YYYYYYYYYYYYY");
+                 collapseExpand = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbStatsTreeStateSave, "YYYYYYYYYYYYY");
 
             if (collapseExpand.Length < 13) 
                 collapseExpand += new string('Y', 13);
@@ -945,7 +945,7 @@ namespace EDDiscovery.UserControls
                     result += tn.IsExpanded ? "Y" : "N";
             }
             else
-                result = SQLiteDBClass.GetSettingString(DbStatsTreeStateSave, "YYYYYYYYYYYYY");
+                result = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbStatsTreeStateSave, "YYYYYYYYYYYYY");
             return result;
         }
 

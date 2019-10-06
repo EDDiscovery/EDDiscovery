@@ -69,14 +69,10 @@ namespace EliteDangerousCore
 
         public bool Add(JObject jo)
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
-            {
-                bool ret = Add(jo, cn);
-                return ret;
-            }
+            return UserDatabase.Instance.ExecuteWithDatabase<bool>(cn => { return Add(jo, cn.Connection); });
         }
 
-        public bool Add(JObject jo, SQLiteConnectionUser cn, DbTransaction tn = null)
+        internal bool Add(JObject jo, SQLiteConnectionUser2 cn, DbTransaction tn = null)
         {
             using (DbCommand cmd = cn.CreateCommand("Insert into JournalEntries (EventTime, TravelLogID, CommanderId, EventTypeId , EventType, EventData, EdsmId, Synced) values (@EventTime, @TravelLogID, @CommanderID, @EventTypeId , @EventStrName, @EventData, @EdsmId, @Synced)", tn))
             {
@@ -101,13 +97,10 @@ namespace EliteDangerousCore
 
         public bool Update()
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
-            {
-                return Update(cn);
-            }
+            return UserDatabase.Instance.ExecuteWithDatabase<bool>(cn => { return Update(cn.Connection); });
         }
 
-        private bool Update(SQLiteConnectionUser cn, DbTransaction tn = null)
+        private bool Update(SQLiteConnectionUser2 cn, DbTransaction tn = null)
         {
             using (DbCommand cmd = cn.CreateCommand("Update JournalEntries set EventTime=@EventTime, TravelLogID=@TravelLogID, CommanderID=@CommanderID, EventTypeId=@EventTypeId, EventType=@EventStrName, EdsmId=@EdsmId, Synced=@Synced where ID=@id", tn))
             {
@@ -125,43 +118,22 @@ namespace EliteDangerousCore
             }
         }
 
-        protected void UpdateJsonEntry(JObject jo, SQLiteConnectionUser cn = null, DbTransaction tn = null)
+        internal void UpdateJsonEntry(JObject jo, SQLiteConnectionUser2 cn, DbTransaction tn = null)
         {
-            bool ownconn = false;
-
-            try
+            using (DbCommand cmd = cn.CreateCommand("Update JournalEntries set EventData=@EventData where ID=@id", tn))
             {
-                if (cn == null)
-                {
-                    ownconn = true;
-                    cn = new SQLiteConnectionUser(utc: true);
-                }
-
-                using (DbCommand cmd = cn.CreateCommand("Update JournalEntries set EventData=@EventData where ID=@id", tn))
-                {
-                    cmd.AddParameterWithValue("@ID", Id);
-                    cmd.AddParameterWithValue("@EventData", jo.ToString());
-                    cmd.ExecuteNonQuery();
-                }
-            }
-            finally
-            {
-                if (ownconn)
-                {
-                    cn.Dispose();
-                }
+                cmd.AddParameterWithValue("@ID", Id);
+                cmd.AddParameterWithValue("@EventData", jo.ToString());
+                cmd.ExecuteNonQuery();
             }
         }
 
         static public void Delete(long idvalue)
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
-            {
-                Delete(idvalue, cn);
-            }
+            UserDatabase.Instance.ExecuteWithDatabase(cn => { Delete(idvalue,cn.Connection); });
         }
 
-        static private void Delete(long idvalue, SQLiteConnectionUser cn)
+        static private void Delete(long idvalue, SQLiteConnectionUser2 cn)
         {
             using (DbCommand cmd = cn.CreateCommand("DELETE FROM JournalEntries WHERE id = @id"))
             {
@@ -178,106 +150,70 @@ namespace EliteDangerousCore
         }
 
         //dist >0 to update
-        public static void UpdateEDSMIDPosJump(long journalid, ISystem system, bool jsonpos, double dist, SQLiteConnectionUser cn = null, DbTransaction tn = null)
+        internal static void UpdateEDSMIDPosJump(long journalid, ISystem system, bool jsonpos, double dist, SQLiteConnectionUser2 cn, DbTransaction tn = null)
         {
-            bool ownconn = false;
+            bool updatejson = jsonpos || dist > 0;
 
-            try
+            JObject jo = updatejson ? GetJson(journalid, cn, tn) : null;       // if JSON pos update, get it, else null
+                                                                                // no need to JSON read if just doing an EDSM update
+            if (jo != null || !updatejson)        // if got it, or no pos
             {
-                if (cn == null)
+                if (jsonpos)
                 {
-                    ownconn = true;
-                    cn = new SQLiteConnectionUser(utc: true);
+                    jo["StarPos"] = new JArray() { system.X, system.Y, system.Z };
+                    jo["StarPosFromEDSM"] = true;
                 }
 
-                bool updatejson = jsonpos || dist > 0;
+                if (dist > 0)
+                    jo["JumpDist"] = dist;
 
-                JObject jo = updatejson ? GetJson(journalid, cn, tn) : null;       // if JSON pos update, get it, else null
-                                                                                   // no need to JSON read if just doing an EDSM update
-                if (jo != null || !updatejson)        // if got it, or no pos
+                using (DbCommand cmd2 = cn.CreateCommand("Update JournalEntries set EdsmId = @EdsmId where ID = @ID", tn))
                 {
-                    if (jsonpos)
+                    if (updatejson)
                     {
-                        jo["StarPos"] = new JArray() { system.X, system.Y, system.Z };
-                        jo["StarPosFromEDSM"] = true;
+                        cmd2.CommandText = "Update JournalEntries set EventData = @EventData, EdsmId = @EdsmId where ID = @ID";
+                        cmd2.AddParameterWithValue("@EventData", jo.ToString());
+                        System.Diagnostics.Trace.WriteLine(string.Format("Update journal ID {0} with pos/edsmid {1} dist {2}", journalid, system.EDSMID, dist));
+                    }
+                    else
+                    {
+                        System.Diagnostics.Trace.WriteLine(string.Format("Update journal ID {0} with edsmid {1}", journalid, system.EDSMID));
                     }
 
-                    if (dist > 0)
-                        jo["JumpDist"] = dist;
+                    cmd2.AddParameterWithValue("@ID", journalid);
+                    cmd2.AddParameterWithValue("@EdsmId", system.EDSMID);
 
-                    using (DbCommand cmd2 = cn.CreateCommand("Update JournalEntries set EdsmId = @EdsmId where ID = @ID", tn))
-                    {
-                        if (updatejson)
-                        {
-                            cmd2.CommandText = "Update JournalEntries set EventData = @EventData, EdsmId = @EdsmId where ID = @ID";
-                            cmd2.AddParameterWithValue("@EventData", jo.ToString());
-                            System.Diagnostics.Trace.WriteLine(string.Format("Update journal ID {0} with pos/edsmid {1} dist {2}", journalid, system.EDSMID, dist));
-                        }
-                        else
-                        {
-                            System.Diagnostics.Trace.WriteLine(string.Format("Update journal ID {0} with edsmid {1}", journalid, system.EDSMID));
-                        }
-
-                        cmd2.AddParameterWithValue("@ID", journalid);
-                        cmd2.AddParameterWithValue("@EdsmId", system.EDSMID);
-
-                        cmd2.ExecuteNonQuery();
-                    }
-                }
-            }
-            finally
-            {
-                if (ownconn)
-                {
-                    cn.Dispose();
+                    cmd2.ExecuteNonQuery();
                 }
             }
         }
 
-        private void UpdateSyncFlagBit(SyncFlags bit1, bool value1, SyncFlags bit2, bool value2, SQLiteConnectionUser cn = null, DbTransaction txn = null)
+        private void UpdateSyncFlagBit(SyncFlags bit1, bool value1, SyncFlags bit2, bool value2, SQLiteConnectionUser2 cn , DbTransaction txn = null)
         {
-            bool closeConn = false;
+            if (value1)
+                Synced |= (int)bit1;
+            else
+                Synced &= ~(int)bit1;
 
-            try
+            if (value2)
+                Synced |= (int)bit2;
+            else
+                Synced &= ~(int)bit2;
+
+            using (DbCommand cmd = cn.CreateCommand("Update JournalEntries set Synced = @sync where ID=@journalid", txn))
             {
-                if (cn == null)
-                {
-                    closeConn = true;
-                    cn = new SQLiteConnectionUser(utc: true);
-                }
-
-                if (value1)
-                    Synced |= (int)bit1;
-                else
-                    Synced &= ~(int)bit1;
-
-                if (value2)
-                    Synced |= (int)bit2;
-                else
-                    Synced &= ~(int)bit2;
-
-                using (DbCommand cmd = cn.CreateCommand("Update JournalEntries set Synced = @sync where ID=@journalid", txn))
-                {
-                    cmd.AddParameterWithValue("@journalid", Id);
-                    cmd.AddParameterWithValue("@sync", Synced);
-                    System.Diagnostics.Trace.WriteLine(string.Format("Update sync flag ID {0} with {1}", Id, Synced));
-                    cmd.ExecuteNonQuery();
-                }
-            }
-            finally
-            {
-                if (closeConn && cn != null)
-                {
-                    cn.Dispose();
-                }
+                cmd.AddParameterWithValue("@journalid", Id);
+                cmd.AddParameterWithValue("@sync", Synced);
+                System.Diagnostics.Trace.WriteLine(string.Format("Update sync flag ID {0} with {1}", Id, Synced));
+                cmd.ExecuteNonQuery();
             }
         }
 
         public void UpdateCommanderID(int cmdrid)
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
+            UserDatabase.Instance.ExecuteWithDatabase(cn =>
             {
-                using (DbCommand cmd = cn.CreateCommand("Update JournalEntries set CommanderID = @cmdrid where ID=@journalid"))
+                using (DbCommand cmd = cn.Connection.CreateCommand("Update JournalEntries set CommanderID = @cmdrid where ID=@journalid"))
                 {
                     cmd.AddParameterWithValue("@journalid", Id);
                     cmd.AddParameterWithValue("@cmdrid", cmdrid);
@@ -285,14 +221,14 @@ namespace EliteDangerousCore
                     cmd.ExecuteNonQuery();
                     CommanderId = cmdrid;
                 }
-            }
+            });
         }
 
         static public bool ResetCommanderID(int from, int to)
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
+            UserDatabase.Instance.ExecuteWithDatabase(cn =>
             {
-                using (DbCommand cmd = cn.CreateCommand("Update JournalEntries set CommanderID = @cmdridto where CommanderID=@cmdridfrom"))
+                using (DbCommand cmd = cn.Connection.CreateCommand("Update JournalEntries set CommanderID = @cmdridto where CommanderID=@cmdridfrom"))
                 {
                     if (from == -1)
                         cmd.CommandText = "Update JournalEntries set CommanderID = @cmdridto";
@@ -302,7 +238,7 @@ namespace EliteDangerousCore
                     System.Diagnostics.Trace.WriteLine(string.Format("Update cmdr id ID {0} with {1}", from, to));
                     cmd.ExecuteNonQuery();
                 }
-            }
+            });
             return true;
         }
 
@@ -313,13 +249,10 @@ namespace EliteDangerousCore
 
         static public JObject GetJson(long journalid)
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
-            {
-                return GetJson(journalid, cn);
-            }
+            return UserDatabase.Instance.ExecuteWithDatabase<JObject>(cn => { return GetJson(journalid, cn.Connection); });
         }
 
-        static public JObject GetJson(long journalid, SQLiteConnectionUser cn, DbTransaction tn = null)
+        static internal JObject GetJson(long journalid, SQLiteConnectionUser2 cn, DbTransaction tn = null)
         {
             using (DbCommand cmd = cn.CreateCommand("select EventData from JournalEntries where ID=@journalid", tn))
             {
@@ -349,13 +282,10 @@ namespace EliteDangerousCore
 
         static public JournalEntry Get(long journalid)
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
-            {
-                return Get(journalid, cn);
-            }
+            return UserDatabase.Instance.ExecuteWithDatabase<JournalEntry>(cn => { return Get(journalid, cn.Connection); });
         }
 
-        static public JournalEntry Get(long journalid, SQLiteConnectionUser cn, DbTransaction tn = null)
+        static internal JournalEntry Get(long journalid, SQLiteConnectionUser2 cn, DbTransaction tn = null)
         {
             using (DbCommand cmd = cn.CreateCommand("select * from JournalEntries where ID=@journalid", tn))
             {
@@ -375,13 +305,10 @@ namespace EliteDangerousCore
 
         static public List<JournalEntry> Get(string eventtype)            // any commander, find me an event of this type..
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
-            {
-                return Get(eventtype, cn);
-            }
+            return UserDatabase.Instance.ExecuteWithDatabase<List<JournalEntry>>(cn => { return Get(eventtype, cn.Connection); });
         }
 
-        static public List<JournalEntry> Get(string eventtype, SQLiteConnectionUser cn, DbTransaction tn = null)
+        static internal List<JournalEntry> Get(string eventtype, SQLiteConnectionUser2 cn, DbTransaction tn = null)
         {
             Dictionary<long, TravelLogUnit> tlus = TravelLogUnit.GetAll().ToDictionary(t => t.id);
 
@@ -410,11 +337,11 @@ namespace EliteDangerousCore
         {
             Dictionary<long, TravelLogUnit> tlus = TravelLogUnit.GetAll().ToDictionary(t => t.id);
 
-            List<JournalEntry> list = new List<JournalEntry>();
-
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
+            return UserDatabase.Instance.ExecuteWithDatabase<List<JournalEntry>>(cn =>
             {
-                using (DbCommand cmd = cn.CreateCommand("select * from JournalEntries"))
+                List<JournalEntry> list = new List<JournalEntry>();
+
+                using (DbCommand cmd = cn.Connection.CreateCommand("select * from JournalEntries"))
                 {
                     string cnd = "";
                     if (commander != -999)
@@ -463,19 +390,18 @@ namespace EliteDangerousCore
 
                     return list;
                 }
-            }
+            });
         }
 
 
         public static List<JournalEntry> GetByEventType(JournalTypeEnum eventtype, int commanderid, DateTime start, DateTime stop)
         {
-            Dictionary<long, TravelLogUnit> tlus = TravelLogUnit.GetAll().ToDictionary(t => t.id);
-
-            List<JournalEntry> vsc = new List<JournalEntry>();
-
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
+            return UserDatabase.Instance.ExecuteWithDatabase<List<JournalEntry>>(cn =>
             {
-                using (DbCommand cmd = cn.CreateCommand("SELECT * FROM JournalEntries WHERE EventTypeID = @eventtype and  CommanderID=@commander and  EventTime >=@start and EventTime<=@Stop ORDER BY EventTime ASC"))
+                List<JournalEntry> vsc = new List<JournalEntry>();
+                Dictionary<long, TravelLogUnit> tlus = TravelLogUnit.GetAll().ToDictionary(t => t.id);
+
+                using (DbCommand cmd = cn.Connection.CreateCommand("SELECT * FROM JournalEntries WHERE EventTypeID = @eventtype and  CommanderID=@commander and  EventTime >=@start and EventTime<=@Stop ORDER BY EventTime ASC"))
                 {
                     cmd.AddParameterWithValue("@eventtype", (int)eventtype);
                     cmd.AddParameterWithValue("@commander", (int)commanderid);
@@ -491,8 +417,8 @@ namespace EliteDangerousCore
                         }
                     }
                 }
-            }
-            return vsc;
+                return vsc;
+            });
         }
                
         public static List<JournalEntry> GetAllByTLU(long tluid)
@@ -500,9 +426,9 @@ namespace EliteDangerousCore
             TravelLogUnit tlu = TravelLogUnit.Get(tluid);
             List<JournalEntry> vsc = new List<JournalEntry>();
 
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
+            return UserDatabase.Instance.ExecuteWithDatabase<List<JournalEntry>>(cn =>
             {
-                using (DbCommand cmd = cn.CreateCommand("SELECT * FROM JournalEntries WHERE TravelLogId = @source ORDER BY EventTime ASC"))
+                using (DbCommand cmd = cn.Connection.CreateCommand("SELECT * FROM JournalEntries WHERE TravelLogId = @source ORDER BY EventTime ASC"))
                 {
                     cmd.AddParameterWithValue("@source", tluid);
                     using (DbDataReader reader = cmd.ExecuteReader())
@@ -515,15 +441,15 @@ namespace EliteDangerousCore
                         }
                     }
                 }
-            }
-            return vsc;
+                return vsc;
+            });
         }
 
         public static JournalEntry GetLast(int cmdrid, DateTime before, Func<JournalEntry, bool> filter)
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
+            return UserDatabase.Instance.ExecuteWithDatabase<JournalEntry>(cn =>
             {
-                using (DbCommand cmd = cn.CreateCommand("SELECT * FROM JournalEntries WHERE CommanderId = @cmdrid AND EventTime < @time ORDER BY EventTime DESC"))
+                using (DbCommand cmd = cn.Connection.CreateCommand("SELECT * FROM JournalEntries WHERE CommanderId = @cmdrid AND EventTime < @time ORDER BY EventTime DESC"))
                 {
                     cmd.AddParameterWithValue("@cmdrid", cmdrid);
                     cmd.AddParameterWithValue("@time", before);
@@ -539,16 +465,15 @@ namespace EliteDangerousCore
                         }
                     }
                 }
-            }
-
-            return null;
+                return null;
+            });
         }
 
         public static JournalEntry GetLast(DateTime before, Func<JournalEntry, bool> filter)
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
+            return UserDatabase.Instance.ExecuteWithDatabase<JournalEntry>(cn =>
             {
-                using (DbCommand cmd = cn.CreateCommand("SELECT * FROM JournalEntries WHERE EventTime < @time ORDER BY EventTime DESC"))
+                using (DbCommand cmd = cn.Connection.CreateCommand("SELECT * FROM JournalEntries WHERE EventTime < @time ORDER BY EventTime DESC"))
                 {
                     cmd.AddParameterWithValue("@time", before);
                     using (DbDataReader reader = cmd.ExecuteReader())
@@ -563,9 +488,8 @@ namespace EliteDangerousCore
                         }
                     }
                 }
-            }
-
-            return null;
+                return null;
+            });
         }
 
         public static T GetLast<T>(int cmdrid, DateTime before, Func<T, bool> filter = null)
@@ -582,7 +506,6 @@ namespace EliteDangerousCore
 
         public static List<JournalEntry> FindEntry(JournalEntry ent, JObject entjo = null)      // entjo is not changed.
         {
-            List<JournalEntry> entries = new List<JournalEntry>();
             if (entjo == null)
             {
                 entjo = GetJson(ent.Id);
@@ -590,9 +513,11 @@ namespace EliteDangerousCore
 
             entjo = RemoveEDDGeneratedKeys(entjo);
 
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
+            return UserDatabase.Instance.ExecuteWithDatabase<List<JournalEntry>>(cn =>
             {
-                using (DbCommand cmd = cn.CreateCommand("SELECT * FROM JournalEntries WHERE CommanderId = @cmdrid AND EventTime = @time AND TravelLogId = @tluid AND EventTypeId = @evttype ORDER BY Id ASC"))
+                List<JournalEntry> entries = new List<JournalEntry>();
+
+                using (DbCommand cmd = cn.Connection.CreateCommand("SELECT * FROM JournalEntries WHERE CommanderId = @cmdrid AND EventTime = @time AND TravelLogId = @tluid AND EventTypeId = @evttype ORDER BY Id ASC"))
                 {
                     cmd.AddParameterWithValue("@cmdrid", ent.CommanderId);
                     cmd.AddParameterWithValue("@time", ent.EventTimeUTC);
@@ -610,9 +535,9 @@ namespace EliteDangerousCore
                         }
                     }
                 }
-            }
 
-            return entries;
+                return entries;
+            });
         }
 
         public static int RemoveDuplicateFSDEntries(int currentcmdrid)
@@ -621,7 +546,7 @@ namespace EliteDangerousCore
             List<JournalLocOrJump> vsSystemsEnts = JournalEntry.GetAll(currentcmdrid).OfType<JournalLocOrJump>().OrderBy(j => j.EventTimeUTC).ToList();
 
             int count = 0;
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
+            UserDatabase.Instance.ExecuteWithDatabase(cn =>
             {
                 for (int ji = 1; ji < vsSystemsEnts.Count; ji++)
                 {
@@ -634,22 +559,22 @@ namespace EliteDangerousCore
 
                         if (previssame)
                         {
-                            Delete(prev.Id, cn);
+                            Delete(prev.Id, cn.Connection);
                             count++;
                             System.Diagnostics.Debug.WriteLine("Dup {0} {1} {2} {3}", prev.Id, current.Id, prev.StarSystem, current.StarSystem);
                         }
                     }
                 }
-            }
+            });
 
             return count;
         }
 
         public static void ClearEDSMID(int currentcmdrid = -2)      // -2 is all
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
+            UserDatabase.Instance.ExecuteWithDatabase(cn =>
             {
-                using (DbCommand cmd = cn.CreateCommand("UPDATE JournalEntries SET EdsmId=0"))
+                using (DbCommand cmd = cn.Connection.CreateCommand("UPDATE JournalEntries SET EdsmId=0"))
                 {
                     if (currentcmdrid != -2)
                     {
@@ -659,7 +584,7 @@ namespace EliteDangerousCore
 
                     cmd.ExecuteNonQuery();
                 }
-            }
+            });
         }
     }
 }

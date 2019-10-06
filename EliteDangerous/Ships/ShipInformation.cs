@@ -225,8 +225,8 @@ namespace EliteDangerousCore
 
         public double FuelWarningPercent
         {
-            get { return SQLiteDBClass.GetSettingDouble("ShipInformation:" + ShipFD + ID + "Warninglevel", 0); }
-            set { SQLiteDBClass.PutSettingDouble("ShipInformation:" + ShipFD + ID + "Warninglevel", value); }
+            get { return EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble("ShipInformation:" + ShipFD + ID + "Warninglevel", 0); }
+            set { EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble("ShipInformation:" + ShipFD + ID + "Warninglevel", value); }
         }
 
         public string Manufacturer

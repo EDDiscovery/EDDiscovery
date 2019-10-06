@@ -39,8 +39,8 @@ namespace EDDiscovery.UserControls
             HideOnDeactivate = true;
             base.SaveSettings += (settings,tag) =>                              // on save settings, perform store.
             {
-                string org = SQLiteDBClass.GetSettingString(dbstring,"All");
-                SQLiteDBClass.PutSettingString(dbstring, settings);
+                string org = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(dbstring,"All");
+                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(dbstring, settings);
                 this.SaveSettings?.Invoke(settings, settings.Equals(org), tag);
             };
         }
@@ -95,7 +95,7 @@ namespace EDDiscovery.UserControls
 
         public void Filter(Control ctr, Form parent)
         {
-            Show(SQLiteDBClass.GetSettingString(dbstring, "All"), ctr, parent);     // use the quick helper. 
+            Show(EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(dbstring, "All"), ctr, parent);     // use the quick helper. 
         }
     }
 }

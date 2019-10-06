@@ -117,7 +117,7 @@ namespace EDDiscovery.UserControls
                 var filter = (TravelHistoryFilter)comboBoxHistoryWindow.SelectedItem ?? TravelHistoryFilter.NoFilter;
                 List<Ledger.Transaction> filteredlist = filter.Filter(mc.Transactions);
 
-                filteredlist = FilterByJournalEvent(filteredlist, SQLiteDBClass.GetSettingString(DbFilterSave, "All"));
+                filteredlist = FilterByJournalEvent(filteredlist, EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbFilterSave, "All"));
 
                 if (filteredlist.Count > 0)
                 {
@@ -169,7 +169,7 @@ namespace EDDiscovery.UserControls
 
         private void comboBoxHistoryWindow_SelectedIndexChanged(object sender, EventArgs e)
         {
-            SQLiteDBClass.PutSettingString(DbHistorySave, comboBoxHistoryWindow.Text);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbHistorySave, comboBoxHistoryWindow.Text);
 
             if (current_mc != null)
             {

@@ -68,14 +68,14 @@ namespace EDDiscovery.UserControls
             dataGridViewEngineering.MakeDoubleBuffered();
             dataGridViewEngineering.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
 
-            Order = SQLiteDBClass.GetSettingString(DbOSave, "").RestoreArrayFromString(0, Recipes.EngineeringRecipes.Count);
+            Order = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbOSave, "").RestoreArrayFromString(0, Recipes.EngineeringRecipes.Count);
             if (Order.Max() >= Recipes.EngineeringRecipes.Count || Order.Min() < 0 || Order.Distinct().Count() != Recipes.EngineeringRecipes.Count)       // if not distinct..
             {
                 for (int i = 0; i < Order.Length; i++)          // reset
                     Order[i] = i;
             }
 
-            Wanted = SQLiteDBClass.GetSettingString(DbWSave, "").RestoreArrayFromString(0, Recipes.EngineeringRecipes.Count);
+            Wanted = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbWSave, "").RestoreArrayFromString(0, Recipes.EngineeringRecipes.Count);
 
             List<string> engineers = Recipes.EngineeringRecipes.SelectMany(r => r.engineers).Distinct().ToList();
             engineers.Sort();
@@ -119,7 +119,7 @@ namespace EDDiscovery.UserControls
                 row.Visible = false;
             }
 
-            isHistoric = SQLiteDBClass.GetSettingBool(DbHistoricMatsSave, false);
+            isHistoric = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbHistoricMatsSave, false);
             
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
 
@@ -150,9 +150,9 @@ namespace EDDiscovery.UserControls
             uctg.OnTravelSelectionChanged -= Display;
             discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
 
-            SQLiteDBClass.PutSettingString(DbOSave, Order.ToString(","));
-            SQLiteDBClass.PutSettingString(DbWSave, Wanted.ToString(","));
-            SQLiteDBClass.PutSettingBool(DbHistoricMatsSave, isHistoric);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbOSave, Order.ToString(","));
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbWSave, Wanted.ToString(","));
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbHistoricMatsSave, isHistoric);
         }
 
 
@@ -215,15 +215,15 @@ namespace EDDiscovery.UserControls
 
                 wantedList = new List<Tuple<Recipes.Recipe, int>>();
 
-                string engineers = SQLiteDBClass.GetSettingString(DbEngFilterSave, "All");
+                string engineers = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbEngFilterSave, "All");
                 List<string> engList = engineers.Split(';').ToList<string>();
-                string modules = SQLiteDBClass.GetSettingString(DbModFilterSave, "All");
+                string modules = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbModFilterSave, "All");
                 List<string> modList = modules.Split(';').ToList<string>();
-                string levels = SQLiteDBClass.GetSettingString(DbLevelFilterSave, "All");
+                string levels = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbLevelFilterSave, "All");
                 string[] lvlArray = (levels == "All" || levels == "None") ? new string[0] : levels.Split(';');
-                string upgrades = SQLiteDBClass.GetSettingString(DbUpgradeFilterSave, "All");
+                string upgrades = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbUpgradeFilterSave, "All");
                 string[] upgArray = upgrades.Split(';');
-                string materials = SQLiteDBClass.GetSettingString(DbMaterialFilterSave, "All");
+                string materials = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbMaterialFilterSave, "All");
                 List<string> matList;
                 if (materials == "All" || materials == "None")
                 {

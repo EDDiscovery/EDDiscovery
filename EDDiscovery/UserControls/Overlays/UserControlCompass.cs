@@ -23,8 +23,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using static EDDiscovery.Icons.Controls;
-using static EliteDangerousCore.DB.SQLiteDBClass;
 using static System.Math;
 
 namespace EDDiscovery.UserControls
@@ -59,9 +57,9 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNewEntry += OnNewEntry;
             discoveryform.OnNewUIEvent += OnNewUIEvent;
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
-            numberBoxTargetLatitude.ValueNoChange = GetSettingDouble(DbLatSave, 0);
-            numberBoxTargetLongitude.ValueNoChange = GetSettingDouble(DbLongSave, 0);
-            autoHideTargetCoords = GetSettingBool(DbHideSave, false);
+            numberBoxTargetLatitude.ValueNoChange = UserDatabase.Instance.GetSettingDouble(DbLatSave, 0);
+            numberBoxTargetLongitude.ValueNoChange = UserDatabase.Instance.GetSettingDouble(DbLongSave, 0);
+            autoHideTargetCoords = UserDatabase.Instance.GetSettingBool(DbHideSave, false);
             checkBoxHideTransparent.Checked = autoHideTargetCoords;
             comboBoxBookmarks.Text = "";
             GlobalBookMarkList.Instance.OnBookmarkChange += GlobalBookMarkList_OnBookmarkChange;
@@ -75,9 +73,9 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
-            PutSettingDouble(DbLatSave, numberBoxTargetLatitude.Value);
-            PutSettingDouble(DbLongSave, numberBoxTargetLongitude.Value);
-            PutSettingBool(DbHideSave, autoHideTargetCoords);
+            UserDatabase.Instance.PutSettingDouble(DbLatSave, numberBoxTargetLatitude.Value);
+            UserDatabase.Instance.PutSettingDouble(DbLongSave, numberBoxTargetLongitude.Value);
+            UserDatabase.Instance.PutSettingBool(DbHideSave, autoHideTargetCoords);
             discoveryform.OnNewEntry -= OnNewEntry;
             discoveryform.OnNewUIEvent -= OnNewUIEvent;
             discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
