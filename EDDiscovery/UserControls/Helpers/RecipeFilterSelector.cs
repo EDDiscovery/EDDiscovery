@@ -52,11 +52,11 @@ namespace EDDiscovery.UserControls
 
             cc.SaveSettings += (s, o) =>
             {
-                SQLiteDBClass.PutSettingString(db, s);
+                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(db, s);
                 Changed?.Invoke();
             };
 
-            cc.Show(SQLiteDBClass.GetSettingString(db, "All"), ctr, parent);
+            cc.Show(EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(db, "All"), ctr, parent);
         }
 
     }

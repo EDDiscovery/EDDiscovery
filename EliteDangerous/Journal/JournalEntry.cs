@@ -102,34 +102,39 @@ namespace EliteDangerousCore
 
         #region Setters - db is updated
 
-        public void SetStartFlag(SQLiteConnectionUser cn = null, DbTransaction txn = null)
+        public void SetStartFlag()
         {
-            UpdateSyncFlagBit(SyncFlags.StartMarker, true, SyncFlags.StopMarker, false, cn, txn);
+            UserDatabase.Instance.ExecuteWithDatabase(cn => UpdateSyncFlagBit(SyncFlags.StartMarker, true, SyncFlags.StopMarker, false, cn.Connection));
         }
 
-        public void SetEndFlag(SQLiteConnectionUser cn = null, DbTransaction txn = null)
+        public void SetEndFlag()
         {
-            UpdateSyncFlagBit(SyncFlags.StartMarker, false, SyncFlags.StopMarker, true, cn, txn);
+            UserDatabase.Instance.ExecuteWithDatabase(cn => UpdateSyncFlagBit(SyncFlags.StartMarker, false, SyncFlags.StopMarker, true, cn.Connection));
         }
 
-        public void ClearStartEndFlag(SQLiteConnectionUser cn = null, DbTransaction txn = null)
+        public void ClearStartEndFlag()
         {
-            UpdateSyncFlagBit(SyncFlags.StartMarker, false, SyncFlags.StopMarker, false, cn, txn);
+            UserDatabase.Instance.ExecuteWithDatabase(cn => UpdateSyncFlagBit(SyncFlags.StartMarker, false, SyncFlags.StopMarker, false, cn.Connection));
         }
 
-        public void SetEdsmSync(SQLiteConnectionUser cn = null, DbTransaction txn = null)
+        public void SetEdsmSync()
+        {
+            UserDatabase.Instance.ExecuteWithDatabase(cn => UpdateSyncFlagBit(SyncFlags.EDSM, true, SyncFlags.NoBit, false, cn.Connection));
+        }
+
+        internal void SetEdsmSync(SQLiteConnectionUser2 cn , DbTransaction txn = null)
         {
             UpdateSyncFlagBit(SyncFlags.EDSM, true, SyncFlags.NoBit, false, cn, txn);
         }
 
-        public void SetEddnSync(SQLiteConnectionUser cn = null, DbTransaction txn = null)
+        public void SetEddnSync()
         {
-            UpdateSyncFlagBit(SyncFlags.EDDN, true, SyncFlags.NoBit, false, cn, txn);
+            UserDatabase.Instance.ExecuteWithDatabase( cn => UpdateSyncFlagBit(SyncFlags.EDDN, true, SyncFlags.NoBit, false, cn.Connection));
         }
 
-        public void SetEGOSync(SQLiteConnectionUser cn = null, DbTransaction txn = null)
+        public void SetEGOSync()
         {
-            UpdateSyncFlagBit(SyncFlags.EGO, true, SyncFlags.NoBit, false, cn, txn);
+            UserDatabase.Instance.ExecuteWithDatabase( cn => UpdateSyncFlagBit(SyncFlags.EGO, true, SyncFlags.NoBit, false, cn.Connection));
         }
 
         #endregion

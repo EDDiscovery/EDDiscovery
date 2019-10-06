@@ -12,9 +12,9 @@ namespace EliteDangerousCore.DB
     {
         internal SQLiteConnectionSystem Connection { get; private set; }
 
-        internal SystemsDatabaseConnection(SQLLiteExtensions.SQLExtConnection.AccessMode mode = SQLLiteExtensions.SQLExtConnection.AccessMode.Reader)
+        public SystemsDatabaseConnection()
         {
-            Connection = new SQLiteConnectionSystem(mode);
+            Connection = new SQLiteConnectionSystem();
         }
 
         public void Dispose()
@@ -27,187 +27,17 @@ namespace EliteDangerousCore.DB
         }
     }
 
-    public class SystemsDatabase
+    public class SystemsDatabase : SQLProcessingThread<SystemsDatabaseConnection>
     {
-        private class Job : IDisposable
-        {
-            private ManualResetEventSlim WaitHandle;
-            private Action Action;
-
-            public Job(Action action)
-            {
-                this.Action = action;
-                this.WaitHandle = new ManualResetEventSlim(false);
-            }
-
-            public void Exec()
-            {
-                Action.Invoke();
-                WaitHandle.Set();
-            }
-
-            public void Wait(int timeout = 5000)
-            {
-                WaitHandle.Wait(timeout);
-            }
-
-            public void Dispose()
-            {
-                this.WaitHandle?.Dispose();
-            }
-        }
-
         private SystemsDatabase()
         {
         }
 
         public static SystemsDatabase Instance { get; } = new SystemsDatabase();
 
-        private ConcurrentQueue<Job> JobQueue = new ConcurrentQueue<Job>();
-        private Thread SqlThread;
-        private ManualResetEvent StopRequestedEvent = new ManualResetEvent(false);
-        private bool StopRequested = false;
-        private AutoResetEvent JobQueuedEvent = new AutoResetEvent(false);
-        private ManualResetEvent StopCompleted = new ManualResetEvent(true);
-
-        public long? SqlThreadId => SqlThread?.ManagedThreadId;
-
-        //public bool RebuildRunning { get; private set; }  // not needed I think.
-
-        private void SqlThreadProc()    // SQL process thread
-        {
-            while (!StopRequested)
-            {
-                switch (WaitHandle.WaitAny(new WaitHandle[] { StopRequestedEvent, JobQueuedEvent }))
-                {
-                    case 1:
-                        while (JobQueue.TryDequeue(out Job job))
-                        {
-                            //System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000) + "Execute Job");
-                            job.Exec();
-                        }
-                        break;
-                }
-            }
-            StopCompleted.Set();
-        }
-
-        protected void Execute(Action action, int skipframes = 1, int warnthreshold = 500)  // in caller thread, queue to job queue, wait for complete
-        {
-            if (StopCompleted.WaitOne(0))
-            {
-                throw new ObjectDisposedException(nameof(SystemsDatabase));
-            }
-
-            var sw = System.Diagnostics.Stopwatch.StartNew();
-
-            if (Thread.CurrentThread.ManagedThreadId == SqlThread?.ManagedThreadId)     // if current thread is the SQL Job thread, uh-oh
-            {
-                System.Diagnostics.Trace.WriteLine($"SystemDatabase Re-entrancy\n{new System.Diagnostics.StackTrace(skipframes, true).ToString()}");
-                action();
-            }
-            else
-            {
-                using (var job = new Job(action))       // make a new job and queue it
-                {
-                    //System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000) + "Queue Job");
-                    JobQueue.Enqueue(job);
-                    JobQueuedEvent.Set();           // kick the thread to execute it.
-                    job.Wait(Timeout.Infinite);     // must be infinite - can't release the caller thread until the job finished. try it with 10ms for instance, route finder just fails.
-                    //System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000) + "Wait over Job " + sw.ElapsedMilliseconds);
-                }
-            }
-
-            if (sw.ElapsedMilliseconds > warnthreshold)
-            {
-                var trace = new System.Diagnostics.StackTrace(skipframes, true);
-                System.Diagnostics.Trace.WriteLine($"SystemsDatabase connection held for {sw.ElapsedMilliseconds}ms\n{trace.ToString()}");
-            }
-        }
-
-        protected T Execute<T>(Func<T> func, int skipframes = 1, int warnthreshold = 500)
-        {
-            T ret = default(T);
-            Execute(() => { ret = func(); }, skipframes + 1, warnthreshold);
-            return ret;
-        }
-
-        private void ExecuteWithDatabaseInternal(Action<SystemsDatabaseConnection> action, bool usetxnlock = false, SQLExtConnection.AccessMode mode = SQLExtConnection.AccessMode.Reader)
-        {
-            SQLExtTransactionLock<SQLiteConnectionSystem> tl = null;
-
-            try
-            {
-                if (usetxnlock)
-                {
-                    tl = new SQLExtTransactionLock<SQLiteConnectionSystem>();
-                    if (mode == SQLExtConnection.AccessMode.Reader)
-                    {
-                        tl.OpenReader();
-                    }
-                    else
-                    {
-                        tl.OpenWriter();
-                    }
-                }
-
-                using (var conn = new SystemsDatabaseConnection(mode: mode))
-                {
-                    action(conn);
-                }
-            }
-            finally
-            {
-                tl?.Dispose();
-            }
-        }
-
-        public void ExecuteWithDatabase(Action<SystemsDatabaseConnection> action, bool usetxnlock = false, SQLExtConnection.AccessMode mode = SQLExtConnection.AccessMode.Reader, int warnthreshold = 500)
-        {
-            Execute(() => ExecuteWithDatabaseInternal(action, usetxnlock, mode), warnthreshold: warnthreshold);
-        }
-
-        public T ExecuteWithDatabase<T>(Func<SystemsDatabaseConnection, T> func, bool usetxnlock = false, SQLExtConnection.AccessMode mode = SQLExtConnection.AccessMode.Reader, int warnthreshold = 500)
-        {
-            return Execute(() =>
-            {
-                T ret = default(T);
-                ExecuteWithDatabaseInternal(db => ret = func(db), usetxnlock, mode);
-                return ret;
-            }, warnthreshold: warnthreshold);
-        }
-
-        public void Start()
-        {
-            StopRequested = false;
-            StopRequestedEvent.Reset();
-            StopCompleted.Reset();
-
-            if (SqlThread == null)
-            {
-                SqlThread = new Thread(SqlThreadProc);
-                SqlThread.Name = "SystemsDatabaseThread";
-                SqlThread.IsBackground = true;
-                SqlThread.Start();
-            }
-        }
-
-        public void Stop()
-        {
-            StopRequested = true;
-            StopRequestedEvent.Set();
-            StopCompleted.WaitOne();
-            SqlThread = null;
-        }
-
         public void Initialize()
         {
-            Execute(() =>
-            {
-                //RebuildRunning = true;
-                SQLiteConnectionSystem.Initialize();
-                //RebuildRunning = false;
-            });
+            ExecuteWithDatabase(cn => { cn.Connection.UpgradeSystemsDB(); });
         }
 
         const string TempTablePostfix = "temp"; // postfix for temp tables
@@ -216,7 +46,7 @@ namespace EliteDangerousCore.DB
 
         public long UpgradeSystemTableFromFile(string filename, bool[] gridids, Func<bool> cancelRequested, Action<string> reportProgress)
         {
-            ExecuteWithDatabase(mode: SQLExtConnection.AccessMode.Writer, action: conn =>
+            ExecuteWithDatabase( action: conn =>
             {
                 conn.Connection.DropStarTables(TempTablePostfix);     // just in case, kill the old tables
                 conn.Connection.CreateStarTables(TempTablePostfix);     // and make new temp tables
@@ -227,7 +57,7 @@ namespace EliteDangerousCore.DB
 
             if (updates > 0)
             {
-                ExecuteWithDatabase(mode: SQLExtConnection.AccessMode.Writer, action: conn =>
+                ExecuteWithDatabase(action: conn =>
                 {
                     //RebuildRunning = true;
 
@@ -251,7 +81,7 @@ namespace EliteDangerousCore.DB
             }
             else
             {
-                ExecuteWithDatabase(mode: SQLExtConnection.AccessMode.Writer, action: conn =>
+                ExecuteWithDatabase(action: conn =>
                 {
                     conn.Connection.DropStarTables(TempTablePostfix);     // clean out half prepared tables
                 });
@@ -266,7 +96,7 @@ namespace EliteDangerousCore.DB
 
             // first work out if we can upgrade, if so, create temp tables
 
-            ExecuteWithDatabase(mode: SQLExtConnection.AccessMode.Writer, action: conn =>
+            ExecuteWithDatabase(action: conn =>
             {
                 var list = conn.Connection.Tables();
 
@@ -288,7 +118,7 @@ namespace EliteDangerousCore.DB
 
                     long updates = SystemsDB.UpgradeDB102to200(cancelRequested, reportProgress, TempTablePostfix, tablesareempty: true, maxgridid: maxgridid);
 
-                    ExecuteWithDatabase(mode: SQLExtConnection.AccessMode.Writer, action: conn =>
+                    ExecuteWithDatabase(action: conn =>
                     {
                         if (updates >= 0) // a cancel will result in -1
                         {
@@ -339,7 +169,7 @@ namespace EliteDangerousCore.DB
                 }
                 else
                 {       // newer data is needed, so just remove
-                    ExecuteWithDatabase(mode: SQLExtConnection.AccessMode.Writer, action: conn =>
+                    ExecuteWithDatabase( action: conn =>
                     {
                         reportProgress?.Invoke("Removing old system tables");
 
@@ -355,22 +185,22 @@ namespace EliteDangerousCore.DB
 
         public string GetEDSMGridIDs()
         {
-            return Execute(() => SQLiteConnectionSystem.GetSettingString("EDSMGridIDs", "Not Set"));
+            return Execute(() => SQLiteConnectionSystem.GetSettingString("EDSMGridIDs", "Not Set", Connection.Connection));
         }
 
         public bool SetEDSMGridIDs(string value)
         {
-            return Execute(() => SQLiteConnectionSystem.PutSettingString("EDSMGridIDs", value));
+            return Execute(() => SQLiteConnectionSystem.PutSettingString("EDSMGridIDs", value, Connection.Connection));
         }
 
         public DateTime GetEDSMGalMapLast()
         {
-            return Execute(() => SQLiteConnectionSystem.GetSettingDate("EDSMGalMapLast", DateTime.MinValue));
+            return Execute(() => SQLiteConnectionSystem.GetSettingDate("EDSMGalMapLast", DateTime.MinValue, Connection.Connection));
         }
 
         public bool SetEDSMGalMapLast(DateTime value)
         {
-            return Execute(() => SQLiteConnectionSystem.PutSettingDate("EDSMGalMapLast", value));
+            return Execute(() => SQLiteConnectionSystem.PutSettingDate("EDSMGalMapLast", value, Connection.Connection));
         }
 
         #region Time markers
@@ -379,14 +209,14 @@ namespace EliteDangerousCore.DB
 
         public void ForceEDSMFullUpdate()
         {
-            Execute(() => SQLiteConnectionSystem.PutSettingString("EDSMLastSystems", "2010-01-01 00:00:00"));
+            Execute(() => SQLiteConnectionSystem.PutSettingString("EDSMLastSystems", "2010-01-01 00:00:00", Connection.Connection));
         }
 
         public DateTime GetLastEDSMRecordTimeUTC()
         {
             return Execute(() =>
             {
-                string rwsystime = SQLiteConnectionSystem.GetSettingString("EDSMLastSystems", "2000-01-01 00:00:00"); // Latest time from RW file.
+                string rwsystime = SQLiteConnectionSystem.GetSettingString("EDSMLastSystems", "2000-01-01 00:00:00", Connection.Connection); // Latest time from RW file.
                 DateTime edsmdate;
 
                 if (!DateTime.TryParse(rwsystime, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal, out edsmdate))
@@ -400,34 +230,34 @@ namespace EliteDangerousCore.DB
         {
             Execute(() =>
             {
-                SQLiteConnectionSystem.PutSettingString("EDSMLastSystems", time.ToString(CultureInfo.InvariantCulture));
+                SQLiteConnectionSystem.PutSettingString("EDSMLastSystems", time.ToString(CultureInfo.InvariantCulture), Connection.Connection);
                 System.Diagnostics.Debug.WriteLine("Last EDSM record " + time.ToString());
             });
         }
 
         public DateTime GetLastEDDBDownloadTime()
         {
-            return Execute(() => SQLiteConnectionSystem.GetSettingDate("EDDBLastDownloadTime", DateTime.MinValue));
+            return Execute(() => SQLiteConnectionSystem.GetSettingDate("EDDBLastDownloadTime", DateTime.MinValue, Connection.Connection));
         }
 
         public void SetLastEDDBDownloadTime()
         {
-            Execute(() => SQLiteConnectionSystem.PutSettingDate("EDDBLastDownloadTime", DateTime.UtcNow));
+            Execute(() => SQLiteConnectionSystem.PutSettingDate("EDDBLastDownloadTime", DateTime.UtcNow, Connection.Connection));
         }
 
         public void ForceEDDBFullUpdate()
         {
-            Execute(() => SQLiteConnectionSystem.PutSettingDate("EDDBLastDownloadTime", DateTime.MinValue));
+            Execute(() => SQLiteConnectionSystem.PutSettingDate("EDDBLastDownloadTime", DateTime.MinValue, Connection.Connection));
         }
 
         public int GetEDSMSectorIDNext()
         {
-            return Execute(() => SQLiteConnectionSystem.GetSettingInt("EDSMSectorIDNext", 1));
+            return Execute(() => SQLiteConnectionSystem.GetSettingInt("EDSMSectorIDNext", 1, Connection.Connection));
         }
 
         public void SetEDSMSectorIDNext(int val)
         {
-            Execute(() => SQLiteConnectionSystem.PutSettingInt("EDSMSectorIDNext", val));
+            Execute(() => SQLiteConnectionSystem.PutSettingInt("EDSMSectorIDNext", val, Connection.Connection));
         }
 
         #endregion

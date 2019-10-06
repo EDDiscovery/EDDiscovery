@@ -129,6 +129,7 @@ namespace EDDiscovery
 
         public static void Initialize(Action<string> msg)    // called from EDDApplicationContext to initialize config and dbs
         {
+            Thread.CurrentThread.Name = "EDD Main Thread";
             msg.Invoke("Checking Config");
 
             string logpath = EDDOptions.Instance.LogAppDirectory();
@@ -155,9 +156,9 @@ namespace EDDiscovery
 
             Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Initializing database");
 
-            SQLiteConnectionUser.Initialize();
-            //TBD
-            SystemsDatabase.Instance.Start();
+            UserDatabase.Instance.Start("UserDB");
+            SystemsDatabase.Instance.Start("SystemDB");
+            UserDatabase.Instance.Initialize();
             SystemsDatabase.Instance.Initialize();
 
             Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Database initialization complete");
@@ -332,12 +333,15 @@ namespace EDDiscovery
 
             backgroundRefreshWorker.Join();     // this should terminate due to closeRequested..
 
+            System.Diagnostics.Debug.WriteLine("BW Refresh joined");
+
             // Now we have been ordered to close down, so go thru the process
 
             closeRequested.WaitOne();
 
             InvokeAsyncOnUiThread(() =>
             {
+                System.Diagnostics.Debug.WriteLine("Final close");
                 OnFinalClose?.Invoke();
             });
         }

@@ -69,13 +69,10 @@ namespace EliteDangerousCore.DB
 
         internal bool Add()
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())      // open connection..
-            {
-                return Add(cn);
-            }
+            return UserDatabase.Instance.ExecuteWithDatabase<bool>(cn => { return Add(cn.Connection); });
         }
 
-        private bool Add(SQLiteConnectionUser cn)
+        private bool Add(SQLiteConnectionUser2 cn)
         {
             using (DbCommand cmd = cn.CreateCommand("Insert into CaptainsLog (Commander, Time, SystemName, BodyName, Note, Tags, Parameters) values (@c,@t,@s,@b,@n,@g,@p)"))
             {
@@ -99,13 +96,10 @@ namespace EliteDangerousCore.DB
 
         internal bool Update()
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
-            {
-                return Update(cn);
-            }
+            return UserDatabase.Instance.ExecuteWithDatabase<bool>(cn => { return Update(cn.Connection); });
         }
 
-        private bool Update(SQLiteConnectionUser cn)
+        private bool Update(SQLiteConnectionUser2 cn)
         {
             using (DbCommand cmd = cn.CreateCommand("Update CaptainsLog set Commander=@c, Time=@t, SystemName=@s, BodyName=@b, Note=@n, Tags=@g, Parameters=@p where ID=@id"))
             {
@@ -125,13 +119,10 @@ namespace EliteDangerousCore.DB
 
         public bool Delete()
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
-            {
-                return Delete(cn,ID);
-            }
+            return UserDatabase.Instance.ExecuteWithDatabase<bool>(cn => { return Delete(cn.Connection, ID); });
         }
 
-        static private bool Delete(SQLiteConnectionUser cn, long id)
+        static private bool Delete(SQLiteConnectionUser2 cn, long id)
         {
             using (DbCommand cmd = cn.CreateCommand("DELETE FROM CaptainsLog WHERE id = @id"))
             {
@@ -175,9 +166,9 @@ namespace EliteDangerousCore.DB
 
             try
             {
-                using (SQLiteConnectionUser cn = new SQLiteConnectionUser(mode: SQLLiteExtensions.SQLExtConnection.AccessMode.Reader))
+                return UserDatabase.Instance.ExecuteWithDatabase<bool>(cn =>
                 {
-                    using (DbCommand cmd = cn.CreateCommand("select * from CaptainsLog"))
+                    using (DbCommand cmd = cn.Connection.CreateCommand("select * from CaptainsLog"))
                     {
                         List<CaptainsLogClass> logs = new List<CaptainsLogClass>();
 
@@ -203,7 +194,7 @@ namespace EliteDangerousCore.DB
                             return true;
                         }
                     }
-                }
+                });
             }
             catch (Exception ex)
             {

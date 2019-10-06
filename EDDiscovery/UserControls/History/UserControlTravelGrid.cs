@@ -112,11 +112,11 @@ namespace EDDiscovery.UserControls
             cfs.AddJournalEntries();
             cfs.SaveSettings += EventFilterChanged;
 
-            checkBoxCursorToTop.Checked = SQLiteConnectionUser.GetSettingBool(DbAutoTop, true);
+            checkBoxCursorToTop.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbAutoTop, true);
 
             dataGridViewTravel.MakeDoubleBuffered();
 
-            string filter = SQLiteDBClass.GetSettingString(DbFieldFilter, "");
+            string filter = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbFieldFilter, "");
             if (filter.Length > 0)
                 fieldfilter.FromJSON(filter);        // load filter
 #if !DEBUG
@@ -136,7 +136,7 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNewEntry += AddNewEntry;
             discoveryform.OnNoteChanged += OnNoteChanged;
 
-            contextMenuStripOutlines.SetToolStripState(SQLiteConnectionUser.GetSettingString(DbOutlines, ""));
+            contextMenuStripOutlines.SetToolStripState(EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbOutlines, ""));
             this.rollUpOffToolStripMenuItem.Click += new System.EventHandler(this.rolluplimitToolStripMenuItem_Click);
             this.rollUpAfterFirstToolStripMenuItem.Click += new System.EventHandler(this.rolluplimitToolStripMenuItem_Click);
             this.rollUpAfter5ToolStripMenuItem.Click += new System.EventHandler(this.rolluplimitToolStripMenuItem_Click);
@@ -171,7 +171,7 @@ namespace EDDiscovery.UserControls
             DGVSaveColumnLayout(dataGridViewTravel, DbColumnSave);
             discoveryform.OnHistoryChange -= HistoryChanged;
             discoveryform.OnNewEntry -= AddNewEntry;
-            SQLiteConnectionUser.PutSettingBool(DbAutoTop, checkBoxCursorToTop.Checked);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbAutoTop, checkBoxCursorToTop.Checked);
             searchtimer.Dispose();
         }
 
@@ -214,7 +214,7 @@ namespace EDDiscovery.UserControls
             List<HistoryEntry> result = filter.Filter(hl);
             fdropdown = hl.Count() - result.Count();
 
-            result = HistoryList.FilterByJournalEvent(result, SQLiteDBClass.GetSettingString(DbFilterSave, "All"), out ftotalevents);
+            result = HistoryList.FilterByJournalEvent(result, EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbFilterSave, "All"), out ftotalevents);
 
             result = FilterHelpers.FilterHistory(result, fieldfilter, discoveryform.Globals, out ftotalfilters);
 
@@ -373,7 +373,7 @@ namespace EDDiscovery.UserControls
                 return;
             }
 
-            bool add = he.IsJournalEventInEventFilter(SQLiteDBClass.GetSettingString(DbFilterSave, "All"));
+            bool add = he.IsJournalEventInEventFilter(EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbFilterSave, "All"));
 
             if (!add)                   // filtered out, update filter total and display
             {
@@ -523,7 +523,7 @@ namespace EDDiscovery.UserControls
 
         private void comboBoxHistoryWindow_SelectedIndexChanged(object sender, EventArgs e)
         {
-            SQLiteDBClass.PutSettingString(DbHistorySave, comboBoxHistoryWindow.Text);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbHistorySave, comboBoxHistoryWindow.Text);
 
             if (current_historylist != null)
             {
@@ -835,7 +835,7 @@ namespace EDDiscovery.UserControls
 
         private void toolStripOutliningToggle(object sender, EventArgs e)
         {
-            SQLiteConnectionUser.PutSettingString(DbOutlines, contextMenuStripOutlines.GetToolStripState());
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbOutlines, contextMenuStripOutlines.GetToolStripState());
             extCheckBoxOutlines.Checked = outliningOnOffToolStripMenuItem.Checked;
             if (outliningOnOffToolStripMenuItem.Checked || sender == outliningOnOffToolStripMenuItem)
                 HistoryChanged(current_historylist, true);
@@ -847,7 +847,7 @@ namespace EDDiscovery.UserControls
             rollUpOffToolStripMenuItem.Checked = tmi == rollUpOffToolStripMenuItem;         // makes them work as radio buttons
             rollUpAfterFirstToolStripMenuItem.Checked = tmi == rollUpAfterFirstToolStripMenuItem;
             rollUpAfter5ToolStripMenuItem.Checked = tmi == rollUpAfter5ToolStripMenuItem;
-            SQLiteConnectionUser.PutSettingString(DbOutlines, contextMenuStripOutlines.GetToolStripState());
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbOutlines, contextMenuStripOutlines.GetToolStripState());
             if (outliningOnOffToolStripMenuItem.Checked )
                 HistoryChanged(current_historylist, true);
         }
@@ -1258,7 +1258,7 @@ namespace EDDiscovery.UserControls
             if (res != null)
             {
                 fieldfilter = res;
-                SQLiteDBClass.PutSettingString(DbFieldFilter, fieldfilter.GetJSON());
+                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbFieldFilter, fieldfilter.GetJSON());
                 HistoryChanged(current_historylist);
             }
         }

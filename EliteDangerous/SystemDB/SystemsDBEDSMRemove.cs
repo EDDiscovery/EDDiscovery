@@ -23,7 +23,7 @@ namespace EliteDangerousCore.DB
     {
         public static void RemoveGridSystems(int[] gridids, Action<string> report = null)
         {
-            SystemsDatabase.Instance.ExecuteWithDatabase(mode: SQLLiteExtensions.SQLExtConnection.AccessMode.Writer, action: db =>
+            SystemsDatabase.Instance.ExecuteWithDatabase( action: db =>
             {
                 var cn = db.Connection;
 
@@ -53,7 +53,7 @@ namespace EliteDangerousCore.DB
 
         public static void Vacuum()
         {
-            SystemsDatabase.Instance.ExecuteWithDatabase(mode: SQLLiteExtensions.SQLExtConnection.AccessMode.Writer, action: db =>
+            SystemsDatabase.Instance.ExecuteWithDatabase(action: db =>
             {
                 db.Connection.Vacuum();
             });

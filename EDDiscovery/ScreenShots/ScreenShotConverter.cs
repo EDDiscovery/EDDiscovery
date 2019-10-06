@@ -41,53 +41,53 @@ namespace EDDiscovery.ScreenShots
             string screenshotsDirdefault = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures), "Frontier Developments", "Elite Dangerous");
             string outputDirdefault = Path.Combine(screenshotsDirdefault, "Converted");
 
-            ScreenshotsDir = SQLiteDBClass.GetSettingString("ImageHandlerScreenshotsDir", screenshotsDirdefault );
+            ScreenshotsDir = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("ImageHandlerScreenshotsDir", screenshotsDirdefault );
             if (!Directory.Exists(ScreenshotsDir))
                 ScreenshotsDir = screenshotsDirdefault;
 
-            OutputDir = SQLiteDBClass.GetSettingString("ImageHandlerOutputDir", outputDirdefault);
+            OutputDir = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("ImageHandlerOutputDir", outputDirdefault);
             if (!Directory.Exists(OutputDir))
                 OutputDir = outputDirdefault;
 
-            AutoConvert = SQLiteDBClass.GetSettingBool("ImageHandlerAutoconvert", false);
-            RemoveOriginal = SQLiteDBClass.GetSettingBool("checkBoxRemove", false);
-            MarkHiRes = SQLiteDBClass.GetSettingBool("checkBoxHires", false);
-            CopyToClipboard = SQLiteDBClass.GetSettingBool("ImageHandlerClipboard", false);
+            AutoConvert = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("ImageHandlerAutoconvert", false);
+            RemoveOriginal = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("checkBoxRemove", false);
+            MarkHiRes = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("checkBoxHires", false);
+            CopyToClipboard = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("ImageHandlerClipboard", false);
 
-            CropImage = SQLiteDBClass.GetSettingBool("ImageHandlerCropImage", false);      // fires the checked handler which sets the readonly mode of the controls
-            CropArea = new Rectangle(SQLiteDBClass.GetSettingInt("ImageHandlerCropLeft", 0), SQLiteDBClass.GetSettingInt("ImageHandlerCropTop", 0),
-                                    SQLiteDBClass.GetSettingInt("ImageHandlerCropWidth", 1920), SQLiteDBClass.GetSettingInt("ImageHandlerCropHeight", 1024));
+            CropImage = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("ImageHandlerCropImage", false);      // fires the checked handler which sets the readonly mode of the controls
+            CropArea = new Rectangle(EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt("ImageHandlerCropLeft", 0), EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt("ImageHandlerCropTop", 0),
+                                    EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt("ImageHandlerCropWidth", 1920), EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt("ImageHandlerCropHeight", 1024));
 
             try
             {       // just in case
-                InputFileExtension = (ScreenShotImageConverter.InputTypes)SQLiteDBClass.GetSettingInt("comboBoxScanFor", 0);
-                OutputFileExtension = (ScreenShotImageConverter.OutputTypes)SQLiteDBClass.GetSettingInt("ImageHandlerFormatNr", 0);
+                InputFileExtension = (ScreenShotImageConverter.InputTypes)EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt("comboBoxScanFor", 0);
+                OutputFileExtension = (ScreenShotImageConverter.OutputTypes)EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt("ImageHandlerFormatNr", 0);
             }
             catch { }
 
-            FileNameFormat = Math.Min(Math.Max(0, SQLiteDBClass.GetSettingInt("comboBoxFileNameFormat", 0)), ScreenShotImageConverter.FileNameFormats.Length - 1);
-            FolderNameFormat = Math.Min(Math.Max(0, SQLiteDBClass.GetSettingInt("comboBoxSubFolder", 0)), ScreenShotImageConverter.SubFolderSelections.Length - 1);
+            FileNameFormat = Math.Min(Math.Max(0, EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt("comboBoxFileNameFormat", 0)), ScreenShotImageConverter.FileNameFormats.Length - 1);
+            FolderNameFormat = Math.Min(Math.Max(0, EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt("comboBoxSubFolder", 0)), ScreenShotImageConverter.SubFolderSelections.Length - 1);
         }
 
         public void SaveSettings()
         {
-            SQLiteDBClass.PutSettingString("ImageHandlerOutputDir", OutputDir);
-            SQLiteDBClass.PutSettingString("ImageHandlerScreenshotsDir", ScreenshotsDir);
-            SQLiteDBClass.PutSettingBool("ImageHandlerAutoconvert", AutoConvert );      // names are all over the place.. historical
-            SQLiteDBClass.PutSettingBool("checkBoxRemove", RemoveOriginal );
-            SQLiteDBClass.PutSettingBool("checkBoxHires", MarkHiRes );
-            SQLiteDBClass.PutSettingBool("ImageHandlerClipboard", CopyToClipboard );
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("ImageHandlerOutputDir", OutputDir);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("ImageHandlerScreenshotsDir", ScreenshotsDir);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("ImageHandlerAutoconvert", AutoConvert );      // names are all over the place.. historical
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("checkBoxRemove", RemoveOriginal );
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("checkBoxHires", MarkHiRes );
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("ImageHandlerClipboard", CopyToClipboard );
 
-            SQLiteDBClass.PutSettingBool("ImageHandlerCropImage", CropImage );      // fires the checked handler which sets the readonly mode of the controls
-            SQLiteDBClass.PutSettingInt("ImageHandlerCropTop", CropArea.Top ) ;
-            SQLiteDBClass.PutSettingInt("ImageHandlerCropLeft", CropArea.Left );
-            SQLiteDBClass.PutSettingInt("ImageHandlerCropWidth", CropArea.Width );
-            SQLiteDBClass.PutSettingInt("ImageHandlerCropHeight", CropArea.Height );
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("ImageHandlerCropImage", CropImage );      // fires the checked handler which sets the readonly mode of the controls
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt("ImageHandlerCropTop", CropArea.Top ) ;
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt("ImageHandlerCropLeft", CropArea.Left );
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt("ImageHandlerCropWidth", CropArea.Width );
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt("ImageHandlerCropHeight", CropArea.Height );
 
-            SQLiteDBClass.PutSettingInt("comboBoxScanFor", (int)InputFileExtension);
-            SQLiteDBClass.PutSettingInt("ImageHandlerFormatNr", (int)OutputFileExtension);
-            SQLiteDBClass.PutSettingInt("comboBoxFileNameFormat", FileNameFormat);
-            SQLiteDBClass.PutSettingInt("comboBoxSubFolder", FolderNameFormat);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt("comboBoxScanFor", (int)InputFileExtension);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt("ImageHandlerFormatNr", (int)OutputFileExtension);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt("comboBoxFileNameFormat", FileNameFormat);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt("comboBoxSubFolder", FolderNameFormat);
         }
     
 

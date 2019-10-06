@@ -72,13 +72,13 @@ namespace EDDiscovery.Forms
             if (this.DesignMode || !EDDOptions.Instanced)       // this stops the designer barfing.
                 return;
 
-            var top = SQLiteDBClass.GetSettingInt(RestoreFormPositionRegKey+"Top", int.MinValue);
+            var top = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(RestoreFormPositionRegKey+"Top", int.MinValue);
 
             if (top != int.MinValue && EDDOptions.Instance.NoWindowReposition == false)
             {
-                var left = SQLiteDBClass.GetSettingInt(RestoreFormPositionRegKey+"Left", 0);
-                var height = SQLiteDBClass.GetSettingInt(RestoreFormPositionRegKey+"Height", 800);
-                var width = SQLiteDBClass.GetSettingInt(RestoreFormPositionRegKey+"Width", 800);
+                var left = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(RestoreFormPositionRegKey+"Left", 0);
+                var height = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(RestoreFormPositionRegKey+"Height", 800);
+                var width = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(RestoreFormPositionRegKey+"Width", 800);
 
                 //System.Diagnostics.Debug.WriteLine("Restore {0},{1} {2},{3} {4}", left, top, width, height, RestoreFormPositionRegKey);
 
@@ -103,7 +103,7 @@ namespace EDDiscovery.Forms
                 this.CreateParams.Y = this.Top;
                 this.StartPosition = FormStartPosition.Manual;
 
-                formMax = SQLiteDBClass.GetSettingBool(RestoreFormPositionRegKey+"Max", false);
+                formMax = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(RestoreFormPositionRegKey+"Max", false);
 
                 if (formMax)
                     this.WindowState = FormWindowState.Maximized;
@@ -118,11 +118,11 @@ namespace EDDiscovery.Forms
         private void SaveFormPosition()
         {
             //System.Diagnostics.Debug.WriteLine("Store {0},{1} {2},{3} {4}", formLeft, formTop, formWidth, formHeight, RestoreFormPositionRegKey);
-            SQLiteDBClass.PutSettingBool(RestoreFormPositionRegKey+"Max", formMax);
-            SQLiteDBClass.PutSettingInt(RestoreFormPositionRegKey+"Width", formWidth);
-            SQLiteDBClass.PutSettingInt(RestoreFormPositionRegKey+"Height", formHeight);
-            SQLiteDBClass.PutSettingInt(RestoreFormPositionRegKey+"Top", formTop);
-            SQLiteDBClass.PutSettingInt(RestoreFormPositionRegKey+"Left", formLeft);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(RestoreFormPositionRegKey+"Max", formMax);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(RestoreFormPositionRegKey+"Width", formWidth);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(RestoreFormPositionRegKey+"Height", formHeight);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(RestoreFormPositionRegKey+"Top", formTop);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(RestoreFormPositionRegKey+"Left", formLeft);
         }
 
         private void RecordFormPosition()     // HOOK into Resize (for Max) AND ResizeEnd (for drag and size)

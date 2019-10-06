@@ -62,20 +62,20 @@ namespace EDDiscovery.UserControls
             textBox_From.SetAutoCompletor(SystemCache.ReturnSystemAdditionalListForAutoComplete, true);
             textBox_To.SetAutoCompletor(SystemCache.ReturnSystemAdditionalListForAutoComplete , true);
 
-            textBox_From.Text = SQLiteDBClass.GetSettingString(DbSave("RouteFrom"), "");
-            textBox_To.Text = SQLiteDBClass.GetSettingString(DbSave("RouteTo"), "");
+            textBox_From.Text = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbSave("RouteFrom"), "");
+            textBox_To.Text = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbSave("RouteTo"), "");
             //Console.WriteLine("Load {0} {1}", textBox_From.Text, textBox_To.Text);
-            textBox_Range.Value = SQLiteDBClass.GetSettingInt(DbSave("RouteRange"), 30);
-            textBox_FromX.Text = SQLiteDBClass.GetSettingString(DbSave("RouteFromX"), "");
-            textBox_FromY.Text = SQLiteDBClass.GetSettingString(DbSave("RouteFromY"), "");
-            textBox_FromZ.Text = SQLiteDBClass.GetSettingString(DbSave("RouteFromZ"), "");
-            textBox_ToX.Text = SQLiteDBClass.GetSettingString(DbSave("RouteToX"), "");
-            textBox_ToY.Text = SQLiteDBClass.GetSettingString(DbSave("RouteToY"), "");
-            textBox_ToZ.Text = SQLiteDBClass.GetSettingString(DbSave("RouteToZ"), "");
-            bool fromstate = SQLiteDBClass.GetSettingBool(DbSave("RouteFromState"), false);
-            bool tostate = SQLiteDBClass.GetSettingBool(DbSave("RouteToState"), false);
+            textBox_Range.Value = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(DbSave("RouteRange"), 30);
+            textBox_FromX.Text = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbSave("RouteFromX"), "");
+            textBox_FromY.Text = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbSave("RouteFromY"), "");
+            textBox_FromZ.Text = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbSave("RouteFromZ"), "");
+            textBox_ToX.Text = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbSave("RouteToX"), "");
+            textBox_ToY.Text = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbSave("RouteToY"), "");
+            textBox_ToZ.Text = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbSave("RouteToZ"), "");
+            bool fromstate = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave("RouteFromState"), false);
+            bool tostate = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave("RouteToState"), false);
 
-            int metricvalue = SQLiteDBClass.GetSettingInt(DbSave("RouteMetric"), 0);
+            int metricvalue = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(DbSave("RouteMetric"), 0);
             comboBoxRoutingMetric.SelectedIndex = (metricvalue >= 0 && metricvalue < comboBoxRoutingMetric.Items.Count) ? metricvalue : SystemsDB.metric_waypointdev2;
 
             SelectToMaster(tostate);
@@ -102,18 +102,18 @@ namespace EDDiscovery.UserControls
                 routingthread.Join();
             }
                 
-            SQLiteDBClass.PutSettingString(DbSave("RouteFrom"), textBox_From.Text);
-            SQLiteDBClass.PutSettingString(DbSave("RouteTo"), textBox_To.Text);
-            SQLiteDBClass.PutSettingInt(DbSave("RouteRange"), (int)textBox_Range.Value);
-            SQLiteDBClass.PutSettingString(DbSave("RouteFromX"), textBox_FromX.Text);
-            SQLiteDBClass.PutSettingString(DbSave("RouteFromY"), textBox_FromY.Text);
-            SQLiteDBClass.PutSettingString(DbSave("RouteFromZ"), textBox_FromZ.Text);
-            SQLiteDBClass.PutSettingString(DbSave("RouteToX"), textBox_ToX.Text);
-            SQLiteDBClass.PutSettingString(DbSave("RouteToY"), textBox_ToY.Text);
-            SQLiteDBClass.PutSettingString(DbSave("RouteToZ"), textBox_ToZ.Text);
-            SQLiteDBClass.PutSettingBool(DbSave("RouteFromState"), textBox_From.ReadOnly);
-            SQLiteDBClass.PutSettingBool(DbSave("RouteToState"), textBox_To.ReadOnly);
-            SQLiteDBClass.PutSettingInt(DbSave("RouteMetric"), comboBoxRoutingMetric.SelectedIndex);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbSave("RouteFrom"), textBox_From.Text);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbSave("RouteTo"), textBox_To.Text);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(DbSave("RouteRange"), (int)textBox_Range.Value);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbSave("RouteFromX"), textBox_FromX.Text);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbSave("RouteFromY"), textBox_FromY.Text);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbSave("RouteFromZ"), textBox_FromZ.Text);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbSave("RouteToX"), textBox_ToX.Text);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbSave("RouteToY"), textBox_ToY.Text);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbSave("RouteToZ"), textBox_ToZ.Text);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave("RouteFromState"), textBox_From.ReadOnly);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave("RouteToState"), textBox_To.ReadOnly);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(DbSave("RouteMetric"), comboBoxRoutingMetric.SelectedIndex);
         }
 
         private void ToggleButtons(bool state)

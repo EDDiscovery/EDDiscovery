@@ -180,7 +180,7 @@ namespace EDDiscovery
             comboBoxCommander.AutoSize = comboBoxCustomProfiles.AutoSize = true;
             panelToolBar.HiddenMarkerWidth = 200;
             panelToolBar.SecondHiddenMarkerWidth = 60;
-            panelToolBar.PinState = SQLiteConnectionUser.GetSettingBool("ToolBarPanelPinState", true);
+            panelToolBar.PinState = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("ToolBarPanelPinState", true);
 
             labelInfoBoxTop.Text = "";
             label_version.Text = EDDOptions.Instance.VersionDisplayString;
@@ -208,10 +208,10 @@ namespace EDDiscovery
 
             if (EDDOptions.Instance.TabsReset)
             {
-                SQLiteConnectionUser.DeleteKey("GridControlWindows%");              // these hold the grid/splitter control values for all windows
-                SQLiteConnectionUser.DeleteKey("SplitterControlWindows%");          // wack them so they start empty.
-                SQLiteConnectionUser.DeleteKey("SavedPanelInformation.%");          // and delete the pop out history
-                SQLiteConnectionUser.DeleteKey("ProfilePowerOnID");                 // back to base profile
+                EliteDangerousCore.DB.UserDatabase.Instance.DeleteKey("GridControlWindows%");              // these hold the grid/splitter control values for all windows
+                EliteDangerousCore.DB.UserDatabase.Instance.DeleteKey("SplitterControlWindows%");          // wack them so they start empty.
+                EliteDangerousCore.DB.UserDatabase.Instance.DeleteKey("SavedPanelInformation.%");          // and delete the pop out history
+                EliteDangerousCore.DB.UserDatabase.Instance.DeleteKey("ProfilePowerOnID");                 // back to base profile
             }
 
             //Make sure the primary splitter is set up.. and rational
@@ -358,7 +358,7 @@ namespace EDDiscovery
 
             // DLL loads
 
-            string alloweddlls = SQLiteConnectionUser.GetSettingString("DLLAllowed", "");
+            string alloweddlls = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("DLLAllowed", "");
 
             DLLCallBacks.RequestHistory = DLLRequestHistory;
             DLLCallBacks.RunAction = DLLRunAction;
@@ -377,7 +377,7 @@ namespace EDDiscovery
                                 "Warning".T(EDTx.Warning),
                                 MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                 {
-                    SQLiteConnectionUser.PutSettingString("DLLAllowed", alloweddlls.AppendPrePad(res.Item3, ","));
+                    EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("DLLAllowed", alloweddlls.AppendPrePad(res.Item3, ","));
                     DLLManager.UnLoad();
                     res = DLLManager.Load(EDDOptions.Instance.DLLAppDirectory(), EDDApplicationContext.AppVersion, EDDOptions.Instance.DLLAppDirectory(), DLLCallBacks, alloweddlls);
                 }
@@ -403,7 +403,7 @@ namespace EDDiscovery
             {
                 this.BeginInvoke(new Action(() =>
                 {
-                    string acklist = SQLiteConnectionUser.GetSettingString("NotificationLastAckTime", "");
+                    string acklist = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("NotificationLastAckTime", "");
                     Version curver = new Version(System.Reflection.Assembly.GetExecutingAssembly().GetVersionString());
 
                     foreach (Notifications.Notification n in notelist)
@@ -464,7 +464,7 @@ namespace EDDiscovery
                 {
                     DateTime ackdate = (DateTime)o;
                     System.Diagnostics.Debug.WriteLine("Ack to " + ackdate.ToStringZulu());
-                    SQLiteConnectionUser.PutSettingString("NotificationLastAckTime", SQLiteConnectionUser.GetSettingString("NotificationLastAckTime","") + ackdate.ToStringZulu());
+                    EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("NotificationLastAckTime", EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("NotificationLastAckTime","") + ackdate.ToStringZulu());
                 });
 
                 ExtendedControls.InfoForm infoform = new ExtendedControls.InfoForm();
@@ -791,7 +791,7 @@ namespace EDDiscovery
             SystemNoteClass.CommitDirtyNotes((snc) => { if (EDCommander.Current.SyncToEdsm && snc.FSDEntry) EDSMClass.SendComments(snc.SystemName, snc.Note, snc.EdsmId); });
 
             screenshotconverter.SaveSettings();
-            SQLiteDBClass.PutSettingBool("ToolBarPanelPinState", panelToolBar.PinState);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("ToolBarPanelPinState", panelToolBar.PinState);
 
             theme.SaveSettings(null);
 
@@ -806,8 +806,6 @@ namespace EDDiscovery
             DLLManager.UnLoad();
 
             Close();
-            //TBD
-            SystemsDatabase.Instance.Stop();
             Application.Exit();
         }
      

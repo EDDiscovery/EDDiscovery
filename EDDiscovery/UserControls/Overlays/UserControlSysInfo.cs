@@ -91,8 +91,8 @@ namespace EDDiscovery.UserControls
                                                         toolStripJumpRange};
             Debug.Assert(toolstriplist.Length == BitSelTotal);
 
-            Selection = SQLiteDBClass.GetSettingInt(DbSelection, BitSelDefault);
-            string rs = SQLiteDBClass.GetSettingString(DbOSave, "-");
+            Selection = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(DbSelection, BitSelDefault);
+            string rs = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbOSave, "-");
             if (rs == "-")
                 Reset();
             else
@@ -139,8 +139,8 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNoteChanged -= OnNoteChanged;
             discoveryform.OnEDSMSyncComplete -= Discoveryform_OnEDSMSyncComplete;
             discoveryform.OnNewUIEvent -= Discoveryform_OnNewUIEvent;
-            SQLiteDBClass.PutSettingString(DbOSave, BaseUtils.LineStore.ToString(Lines));
-            SQLiteDBClass.PutSettingInt(DbSelection, Selection);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbOSave, BaseUtils.LineStore.ToString(Lines));
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(DbSelection, Selection);
         }
 
         #endregion

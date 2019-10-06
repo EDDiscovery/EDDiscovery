@@ -60,7 +60,7 @@ namespace EDDiscovery
             bool ok = true;
             Console.WriteLine("Theme ID " + Settings.ThemeID);
 
-            int themeidstored = SQLiteDBClass.GetSettingInt("ThemeID", -1);
+            int themeidstored = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt("ThemeID", -1);
 
             if ( themeidstored != -1 && themeidstored != Settings.ThemeID )
             {
@@ -75,20 +75,20 @@ namespace EDDiscovery
 
             }
 
-            if (SQLiteConnectionUser.keyExists("ThemeNameOf"))           // (keep previous check) if there.. get the others with a good default in case the db is screwed.
+            if (EliteDangerousCore.DB.UserDatabase.Instance.KeyExists("ThemeNameOf"))           // (keep previous check) if there.. get the others with a good default in case the db is screwed.
             {
-                currentsettings.name = SQLiteDBClass.GetSettingString("ThemeNameOf", "Custom");
-                currentsettings.windowsframe = SQLiteDBClass.GetSettingBool("ThemeWindowsFrame", true);
-                currentsettings.formopacity = SQLiteDBClass.GetSettingDouble("ThemeFormOpacity", 100);
-                currentsettings.fontname = SQLiteDBClass.GetSettingString("ThemeFont", defaultfont);
-                currentsettings.fontsize = (float)SQLiteDBClass.GetSettingDouble("ThemeFontSize", defaultfontsize);
-                currentsettings.buttonstyle = SQLiteDBClass.GetSettingString("ButtonStyle", buttonstyle_system);
-                currentsettings.textboxborderstyle = SQLiteDBClass.GetSettingString("TextBoxBorderStyle", textboxborderstyle_fixed3D);
+                currentsettings.name = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("ThemeNameOf", "Custom");
+                currentsettings.windowsframe = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("ThemeWindowsFrame", true);
+                currentsettings.formopacity = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble("ThemeFormOpacity", 100);
+                currentsettings.fontname = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("ThemeFont", defaultfont);
+                currentsettings.fontsize = (float)EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble("ThemeFontSize", defaultfontsize);
+                currentsettings.buttonstyle = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("ButtonStyle", buttonstyle_system);
+                currentsettings.textboxborderstyle = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("TextBoxBorderStyle", textboxborderstyle_fixed3D);
 
                 foreach (Settings.CI ck in themelist[0].colors.Keys)         // use themelist to find the key names, as we modify currentsettings as we go and that would cause an exception
                 {
                     int d = themelist[0].colors[ck].ToArgb();               // use windows default colors.
-                    Color c = Color.FromArgb(SQLiteDBClass.GetSettingInt("ThemeColor" + ck.ToString(), d));
+                    Color c = Color.FromArgb(EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt("ThemeColor" + ck.ToString(), d));
                     currentsettings.colors[ck] = c;
                 }
             }
@@ -97,18 +97,18 @@ namespace EDDiscovery
 
         public void SaveSettings(string filename)
         {
-            SQLiteDBClass.PutSettingInt("ThemeID", Settings.ThemeID);
-            SQLiteDBClass.PutSettingString("ThemeNameOf", currentsettings.name);
-            SQLiteDBClass.PutSettingBool("ThemeWindowsFrame", currentsettings.windowsframe);
-            SQLiteDBClass.PutSettingDouble("ThemeFormOpacity", currentsettings.formopacity);
-            SQLiteDBClass.PutSettingString("ThemeFont", currentsettings.fontname);
-            SQLiteDBClass.PutSettingDouble("ThemeFontSize", currentsettings.fontsize);
-            SQLiteDBClass.PutSettingString("ButtonStyle", currentsettings.buttonstyle);
-            SQLiteDBClass.PutSettingString("TextBoxBorderStyle", currentsettings.textboxborderstyle);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt("ThemeID", Settings.ThemeID);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("ThemeNameOf", currentsettings.name);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("ThemeWindowsFrame", currentsettings.windowsframe);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble("ThemeFormOpacity", currentsettings.formopacity);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("ThemeFont", currentsettings.fontname);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble("ThemeFontSize", currentsettings.fontsize);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("ButtonStyle", currentsettings.buttonstyle);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("TextBoxBorderStyle", currentsettings.textboxborderstyle);
             
             foreach (Settings.CI ck in currentsettings.colors.Keys)
             {
-                SQLiteDBClass.PutSettingInt("ThemeColor" + ck.ToString(), currentsettings.colors[ck].ToArgb());
+                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt("ThemeColor" + ck.ToString(), currentsettings.colors[ck].ToArgb());
             }
 
             if ( filename != null )         

@@ -49,9 +49,9 @@ namespace EDDiscovery.UserControls
             dataGridViewMarketData.MakeDoubleBuffered();
             dataGridViewMarketData.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
 
-            checkBoxBuyOnly.Checked = SQLiteDBClass.GetSettingBool(DbBuyOnly, false);
+            checkBoxBuyOnly.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbBuyOnly, false);
             this.checkBoxBuyOnly.CheckedChanged += new System.EventHandler(this.checkBoxBuyOnly_CheckedChanged);
-            checkBoxAutoSwap.Checked = SQLiteDBClass.GetSettingBool(DbAutoSwap, false);
+            checkBoxAutoSwap.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbAutoSwap, false);
 
             discoveryform.OnNewEntry += OnChanged;
 
@@ -76,8 +76,8 @@ namespace EDDiscovery.UserControls
         public override void Closing()
         {
             DGVSaveColumnLayout(dataGridViewMarketData, DbColumnSave);
-            SQLiteDBClass.PutSettingBool(DbBuyOnly, checkBoxBuyOnly.Checked);
-            SQLiteDBClass.PutSettingBool(DbAutoSwap, checkBoxAutoSwap.Checked);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbBuyOnly, checkBoxBuyOnly.Checked);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbAutoSwap, checkBoxAutoSwap.Checked);
             discoveryform.OnNewEntry -= OnChanged;
             uctg.OnTravelSelectionChanged -= OnChanged;
         }

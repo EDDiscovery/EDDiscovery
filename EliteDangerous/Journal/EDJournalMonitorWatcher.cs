@@ -191,25 +191,25 @@ namespace EliteDangerousCore
                 {
                     //System.Diagnostics.Debug.WriteLine("ScanReader " + Path.GetFileName(nfi.FileName) + " read " + ents.Count + " ui " +uientries.Count + " size " + netlogpos);
 
-                    using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
+                    UserDatabase.Instance.ExecuteWithDatabase(cn =>
                     {
-                        using (DbTransaction txn = cn.BeginTransaction())
+                        using (DbTransaction txn = cn.Connection.BeginTransaction())
                         {
                             ents = ents.Where(jre => JournalEntry.FindEntry(jre.JournalEntry, jre.Json).Count == 0).ToList();
 
                             foreach (JournalReaderEntry jre in ents)
                             {
                                 entries.Add(jre.JournalEntry);
-                                jre.JournalEntry.Add(jre.Json, cn, txn);
+                                jre.JournalEntry.Add(jre.Json, cn.Connection, txn);
                             }
 
-                           // System.Diagnostics.Debug.WriteLine("Wrote " + ents.Count() + " to db and updated TLU");
+                            // System.Diagnostics.Debug.WriteLine("Wrote " + ents.Count() + " to db and updated TLU");
 
-                            nfi.TravelLogUnit.Update(cn);
+                            nfi.TravelLogUnit.Update(cn.Connection);
 
                             txn.Commit();
                         }
-                    }
+                    });
                 }
             }
             catch ( Exception ex )
@@ -274,14 +274,14 @@ namespace EliteDangerousCore
 
             for (int i = 0; i < readersToUpdate.Count; i++)
             {
-                using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
+                UserDatabase.Instance.ExecuteWithDatabase(cn =>
                 {
                     EDJournalReader reader = readersToUpdate[i];
                     updateProgress(i * 100 / readersToUpdate.Count, reader.TravelLogUnit.Name);
 
                     //System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCountLap("PJF"), i + " read ");
 
-                    reader.ReadJournal(out List<JournalReaderEntry> entries, out List<UIEvent> uievents, historyrefreshparsing: true, resetOnError:true);      // this may create new commanders, and may write to the TLU db
+                    reader.ReadJournal(out List<JournalReaderEntry> entries, out List<UIEvent> uievents, historyrefreshparsing: true, resetOnError: true);      // this may create new commanders, and may write to the TLU db
 
                     if (entries.Count > 0)
                     {
@@ -289,13 +289,13 @@ namespace EliteDangerousCore
 
                         //System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCountLap("PJF"), i + " into db");
 
-                        using (DbTransaction tn = cn.BeginTransaction())
+                        using (DbTransaction tn = cn.Connection.BeginTransaction())
                         {
                             foreach (JournalReaderEntry jre in entries)
                             {
                                 if (!existing[jre.JournalEntry.EventTimeUTC].Any(e => JournalEntry.AreSameEntry(jre.JournalEntry, e, ent1jo: jre.Json)))
                                 {
-                                    jre.JournalEntry.Add(jre.Json, cn, tn);
+                                    jre.JournalEntry.Add(jre.Json, cn.Connection, tn);
                                     //System.Diagnostics.Trace.WriteLine(string.Format("Write Journal to db {0} {1}", jre.JournalEntry.EventTimeUTC, jre.JournalEntry.EventTypeStr));
                                 }
                             }
@@ -304,12 +304,12 @@ namespace EliteDangerousCore
                         }
                     }
 
-                    reader.TravelLogUnit.Update(cn);
+                    reader.TravelLogUnit.Update(cn.Connection);
 
                     updateProgress((i + 1) * 100 / readersToUpdate.Count, reader.TravelLogUnit.Name);
 
                     lastnfi = reader;
-                }
+                });
             }
 
             updateProgress(-1, "");

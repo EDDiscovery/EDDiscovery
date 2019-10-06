@@ -97,7 +97,7 @@ namespace EDDiscovery.UserControls
             foreach (var x in items)
                 cfs.AddStandardOption(x.FDName,x.Name);
 
-            checkBoxClear.Checked = EliteDangerousCore.DB.SQLiteDBClass.GetSettingBool(DbClearZeroSave, true);
+            checkBoxClear.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbClearZeroSave, true);
             checkBoxClear.CheckedChanged += CheckBoxClear_CheckedChanged;
 
             cfs.SaveSettings += FilterChanged;
@@ -146,7 +146,7 @@ namespace EDDiscovery.UserControls
             if (mcl == null)
                 return;
 
-            string[] filter = EliteDangerousCore.DB.SQLiteDBClass.GetSettingString(DbFilterSave, "All").SplitNoEmptyStartFinish(';');
+            string[] filter = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbFilterSave, "All").SplitNoEmptyStartFinish(';');
             bool all = filter.Length > 0 && filter[0] == "All";
             bool clearzero = checkBoxClear.Checked;
 
@@ -215,7 +215,7 @@ namespace EDDiscovery.UserControls
 
         private void CheckBoxClear_CheckedChanged(object sender, EventArgs e)
         {
-            EliteDangerousCore.DB.SQLiteDBClass.PutSettingBool(DbClearZeroSave, checkBoxClear.Checked);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbClearZeroSave, checkBoxClear.Checked);
             Display(uctg.GetCurrentHistoryEntry, discoveryform.history, true);
         }
 

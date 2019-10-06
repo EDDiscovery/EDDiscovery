@@ -83,7 +83,7 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
-            checkBoxCursorToTop.Checked = SQLiteConnectionUser.GetSettingBool(DbAutoTop, true);
+            checkBoxCursorToTop.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbAutoTop, true);
 
 
             dataGridViewStarList.MakeDoubleBuffered();
@@ -92,13 +92,13 @@ namespace EDDiscovery.UserControls
 
             dataGridViewStarList.Columns[2].ValueType = typeof(Int32);
 
-            checkBoxEDSM.Checked = SQLiteDBClass.GetSettingBool(DbEDSM, false);
+            checkBoxEDSM.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbEDSM, false);
             this.checkBoxEDSM.CheckedChanged += new System.EventHandler(this.checkBoxEDSM_CheckedChanged);
 
-            checkBoxBodyClasses.Checked = SQLiteConnectionUser.GetSettingBool(DbShowClasses, true);
+            checkBoxBodyClasses.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbShowClasses, true);
             this.checkBoxBodyClasses.CheckedChanged += new System.EventHandler(this.buttonBodyClasses_CheckedChanged);
 
-            checkBoxJumponium.Checked = SQLiteConnectionUser.GetSettingBool(DbShowJumponium, true);
+            checkBoxJumponium.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbShowJumponium, true);
             this.checkBoxJumponium.CheckedChanged += new System.EventHandler(this.buttonJumponium_CheckedChanged);
 
             discoveryform.OnHistoryChange += HistoryChanged;
@@ -132,7 +132,7 @@ namespace EDDiscovery.UserControls
             DGVSaveColumnLayout(dataGridViewStarList, DbColumnSave);
             discoveryform.OnHistoryChange -= HistoryChanged;
             discoveryform.OnNewEntry -= AddNewEntry;
-            SQLiteConnectionUser.PutSettingBool(DbAutoTop, checkBoxCursorToTop.Checked);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbAutoTop, checkBoxCursorToTop.Checked);
         }
 
         #endregion
@@ -670,7 +670,7 @@ namespace EDDiscovery.UserControls
         
         private void comboBoxHistoryWindow_SelectedIndexChanged(object sender, EventArgs e)
         {
-            SQLiteDBClass.PutSettingString(DbHistorySave, comboBoxHistoryWindow.Text);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbHistorySave, comboBoxHistoryWindow.Text);
 
             if (current_historylist != null)
                 HistoryChanged(current_historylist);        // fires lots of events
@@ -872,18 +872,18 @@ namespace EDDiscovery.UserControls
 
             private void checkBoxEDSM_CheckedChanged(object sender, EventArgs e)
         {
-            SQLiteDBClass.PutSettingBool(DbEDSM, checkBoxEDSM.Checked);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbEDSM, checkBoxEDSM.Checked);
         }
 
         private void buttonBodyClasses_CheckedChanged(object sender, EventArgs e)
         {
-            SQLiteConnectionUser.PutSettingBool(DbShowClasses, checkBoxBodyClasses.Checked);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbShowClasses, checkBoxBodyClasses.Checked);
             HistoryChanged(current_historylist);
         }
 
         private void buttonJumponium_CheckedChanged(object sender, EventArgs e)
         {
-            SQLiteConnectionUser.PutSettingBool(DbShowJumponium, checkBoxJumponium.Checked);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbShowJumponium, checkBoxJumponium.Checked);
             HistoryChanged(current_historylist);
         }
 

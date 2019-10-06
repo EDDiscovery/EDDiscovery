@@ -80,14 +80,14 @@ namespace EDDiscovery.UserControls
 
             // so the way it works, if the panels ever re-display (for whatever reason) they tell us, and we redisplay
 
-            showMaxInjections = SQLiteDBClass.GetSettingBool(DbShowInjectionsSave, true);
-            showPlanetMats = SQLiteDBClass.GetSettingBool(DbShowAllMatsLandedSave, true);
-            hidePlanetMatsWithNoCapacity = SQLiteDBClass.GetSettingBool(DbHideFullMatsLandedSave, false);
-            showListAvailability = SQLiteDBClass.GetSettingBool(DbHighlightAvailableMats, true);
-            showSystemAvailability = SQLiteDBClass.GetSettingBool(DBShowSystemAvailability, true);
-            useEDSMForSystemAvailability = SQLiteDBClass.GetSettingBool(DBUseEDSMForSystemAvailability, false);
-            showMaxInjections = SQLiteDBClass.GetSettingBool(DbToggleShoppingListPosition, false);
-            toggleShoppingListPosition = SQLiteDBClass.GetSettingBool(DbToggleShoppingListPosition, false);
+            showMaxInjections = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbShowInjectionsSave, true);
+            showPlanetMats = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbShowAllMatsLandedSave, true);
+            hidePlanetMatsWithNoCapacity = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbHideFullMatsLandedSave, false);
+            showListAvailability = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbHighlightAvailableMats, true);
+            showSystemAvailability = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DBShowSystemAvailability, true);
+            useEDSMForSystemAvailability = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DBUseEDSMForSystemAvailability, false);
+            showMaxInjections = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbToggleShoppingListPosition, false);
+            toggleShoppingListPosition = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbToggleShoppingListPosition, false);
 
             pictureBoxList.ContextMenuStrip = contextMenuStrip;
 
@@ -117,13 +117,13 @@ namespace EDDiscovery.UserControls
         public override void Closing()
         {
             RevertToNormalSize();
-            SQLiteDBClass.PutSettingBool(DbShowInjectionsSave, showMaxInjections);
-            SQLiteDBClass.PutSettingBool(DbShowAllMatsLandedSave, showPlanetMats);
-            SQLiteDBClass.PutSettingBool(DbHideFullMatsLandedSave, hidePlanetMatsWithNoCapacity);
-            SQLiteDBClass.PutSettingBool(DbHighlightAvailableMats, showListAvailability);
-            SQLiteDBClass.PutSettingBool(DBShowSystemAvailability, showSystemAvailability);
-            SQLiteDBClass.PutSettingBool(DBUseEDSMForSystemAvailability, useEDSMForSystemAvailability);
-            SQLiteDBClass.PutSettingBool(DbToggleShoppingListPosition, toggleShoppingListPosition);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbShowInjectionsSave, showMaxInjections);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbShowAllMatsLandedSave, showPlanetMats);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbHideFullMatsLandedSave, hidePlanetMatsWithNoCapacity);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbHighlightAvailableMats, showListAvailability);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DBShowSystemAvailability, showSystemAvailability);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DBUseEDSMForSystemAvailability, useEDSMForSystemAvailability);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbToggleShoppingListPosition, toggleShoppingListPosition);
             userControlEngineering.CloseDown();
             userControlSynthesis.CloseDown();
         }
@@ -196,7 +196,7 @@ namespace EDDiscovery.UserControls
                 Color backcolour = this.BackColor;
                 List<Tuple<Recipes.Recipe, int>> totalWanted = EngineeringWanted.Concat(SynthesisWanted).ToList();
 
-                string techBrokers = SQLiteDBClass.GetSettingString(DBTechBrokerFilterSave, "None");
+                string techBrokers = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DBTechBrokerFilterSave, "None");
                 if (techBrokers != "None")
                 {
                     List<string> techBrokerList = techBrokers.Split(';').ToList<string>();
@@ -207,7 +207,7 @@ namespace EDDiscovery.UserControls
                     }
                 }
 
-                string specialeffects = SQLiteDBClass.GetSettingString(DBSpecialEffectsFilterSave, "None");
+                string specialeffects = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DBSpecialEffectsFilterSave, "None");
                 if (specialeffects != "None")
                 {
                     List<string> seList = specialeffects.Split(';').ToList<string>();

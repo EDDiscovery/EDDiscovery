@@ -54,23 +54,23 @@ namespace EDDiscovery.UserControls
         public override void Init()
         {
             progchange = true;
-            panelStars.ShowMaterials = checkBoxMaterials.Checked = SQLiteDBClass.GetSettingBool(DbSave + "Materials", true);
-            panelStars.ShowMaterialsRare = checkBoxMaterialsRare.Checked = SQLiteDBClass.GetSettingBool(DbSave + "MaterialsRare", false);
-            panelStars.ShowMoons = checkBoxMoons.Checked = SQLiteDBClass.GetSettingBool(DbSave + "Moons", true);
-            panelStars.CheckEDSM = checkBoxEDSM.Checked = SQLiteDBClass.GetSettingBool(DbSave + "EDSM", false);
-            panelStars.HideFullMaterials = checkBoxCustomHideFullMats.Checked = SQLiteDBClass.GetSettingBool(DbSave + "MaterialsFull", false);
-            panelStars.ShowOverlays = chkShowOverlays.Checked = SQLiteDBClass.GetSettingBool(DbSave + "BodyOverlays", false);
-            extCheckBoxDisplaySystemAlways.Checked = SQLiteDBClass.GetSettingBool(DbSave + "DisplaySysAlways", false);
+            panelStars.ShowMaterials = checkBoxMaterials.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "Materials", true);
+            panelStars.ShowMaterialsRare = checkBoxMaterialsRare.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "MaterialsRare", false);
+            panelStars.ShowMoons = checkBoxMoons.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "Moons", true);
+            panelStars.CheckEDSM = checkBoxEDSM.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "EDSM", false);
+            panelStars.HideFullMaterials = checkBoxCustomHideFullMats.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "MaterialsFull", false);
+            panelStars.ShowOverlays = chkShowOverlays.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "BodyOverlays", false);
+            extCheckBoxDisplaySystemAlways.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "DisplaySysAlways", false);
             extCheckBoxDisplaySystemAlways.Visible = HasControlTextArea();
-            bodyfilters = SQLiteDBClass.GetSettingString(DbSave + "BodyFilters", "All").Split(';');
-            panelStars.ValueLimit = SQLiteDBClass.GetSettingInt(DbSave + "ValueLimit", 50000);
+            bodyfilters = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbSave + "BodyFilters", "All").Split(';');
+            panelStars.ValueLimit = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(DbSave + "ValueLimit", 50000);
             progchange = false;
 
-            rollUpPanelTop.PinState = SQLiteConnectionUser.GetSettingBool(DbSave + "PinState", true);
+            rollUpPanelTop.PinState = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "PinState", true);
 
             rollUpPanelTop.SetToolTip(toolTip);
 
-            int size = SQLiteDBClass.GetSettingInt(DbSave + "Size", 64);
+            int size = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(DbSave + "Size", 64);
             SetSizeImage(size);
 
             discoveryform.OnNewEntry += NewEntry;
@@ -102,7 +102,7 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
-            SQLiteConnectionUser.PutSettingBool(DbSave + "PinState", rollUpPanelTop.PinState );
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "PinState", rollUpPanelTop.PinState );
 
             uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
             discoveryform.OnNewEntry -= NewEntry;
@@ -277,7 +277,7 @@ namespace EDDiscovery.UserControls
         {
             if (!progchange)
             {
-                SQLiteDBClass.PutSettingBool(DbSave + "Materials", checkBoxMaterials.Checked);
+                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "Materials", checkBoxMaterials.Checked);
                 panelStars.ShowMaterials = checkBoxMaterials.Checked;
                 DrawSystem();
             }
@@ -287,7 +287,7 @@ namespace EDDiscovery.UserControls
         {
             if (!progchange)
             {
-                SQLiteDBClass.PutSettingBool(DbSave + "MaterialsRare", checkBoxMaterialsRare.Checked);
+                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "MaterialsRare", checkBoxMaterialsRare.Checked);
 
                 progchange = true;
                 checkBoxMaterials.Checked = true;
@@ -303,7 +303,7 @@ namespace EDDiscovery.UserControls
         {
             if (!progchange)
             {
-                SQLiteDBClass.PutSettingBool(DbSave + "MaterialsFull", checkBoxCustomHideFullMats.Checked);
+                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "MaterialsFull", checkBoxCustomHideFullMats.Checked);
                 panelStars.HideFullMaterials = checkBoxCustomHideFullMats.Checked;
                 DrawSystem();
             }
@@ -314,7 +314,7 @@ namespace EDDiscovery.UserControls
         {
             if (!progchange)
             {
-                SQLiteDBClass.PutSettingBool(DbSave + "Moons", checkBoxMoons.Checked);
+                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "Moons", checkBoxMoons.Checked);
                 panelStars.ShowMoons = checkBoxMoons.Checked;
                 DrawSystem();
             }
@@ -324,7 +324,7 @@ namespace EDDiscovery.UserControls
         {
             if (!progchange)
             {
-                SQLiteDBClass.PutSettingBool(DbSave + "EDSM", checkBoxEDSM.Checked);
+                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "EDSM", checkBoxEDSM.Checked);
                 panelStars.CheckEDSM = checkBoxEDSM.Checked;
                 DrawSystem();
             }
@@ -334,7 +334,7 @@ namespace EDDiscovery.UserControls
         {
             if (!progchange)
             {
-                SQLiteDBClass.PutSettingBool(DbSave + "BodyOverlays", chkShowOverlays.Checked);
+                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "BodyOverlays", chkShowOverlays.Checked);
                 panelStars.ShowOverlays = chkShowOverlays.Checked;
                 DrawSystem();
             }
@@ -344,7 +344,7 @@ namespace EDDiscovery.UserControls
         {
             if ( !progchange )
             {
-                SQLiteDBClass.PutSettingBool(DbSave + "DisplaySysAlways", extCheckBoxDisplaySystemAlways.Checked);
+                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "DisplaySysAlways", extCheckBoxDisplaySystemAlways.Checked);
                 DrawSystem();
             }
         }
@@ -381,7 +381,7 @@ namespace EDDiscovery.UserControls
             {
                 long? value = cf.GetLong("UC");
                 panelStars.ValueLimit = (int)value.Value;
-                SQLiteDBClass.PutSettingInt(DbSave + "ValueLimit", panelStars.ValueLimit);
+                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(DbSave + "ValueLimit", panelStars.ValueLimit);
                 DrawSystem();
             }
         }
@@ -435,7 +435,7 @@ namespace EDDiscovery.UserControls
                 buttonSize.Image = global::EDDiscovery.Icons.Controls.Scan_SizeMinuscule;
 
             panelStars.SetSize(size);
-            SQLiteDBClass.PutSettingInt(DbSave + "Size", size);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(DbSave + "Size", size);
         }
 
         #endregion
@@ -783,7 +783,7 @@ namespace EDDiscovery.UserControls
             bodyfilter.SaveSettings = (s, o) => 
             {
                 bodyfilters = s.Split(';');
-                SQLiteDBClass.PutSettingString(DbSave + "BodyFilters", string.Join(";", bodyfilters));
+                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbSave + "BodyFilters", string.Join(";", bodyfilters));
                 DrawSystem();
             };
 
