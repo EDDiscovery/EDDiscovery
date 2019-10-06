@@ -16,41 +16,20 @@
  
 using SQLLiteExtensions;
 using System;
-using System.Globalization;
 
 namespace EliteDangerousCore.DB
 {
-    internal class SQLiteConnectionSystem : SQLExtConnectionWithLockRegister<SQLiteConnectionSystem>
+    internal class SQLiteConnectionSystem : SQLExtConnectionRegister<SQLiteConnectionSystem>
     {
         const string tablepostfix = "temp"; // postfix for temp tables
 
-        public SQLiteConnectionSystem() : base(EliteDangerousCore.EliteConfigInstance.InstanceOptions.SystemDatabasePath, false, Initialize, AccessMode.ReaderWriter)
-        {
-        }
-
-        public SQLiteConnectionSystem(AccessMode mode = AccessMode.ReaderWriter) : base(EliteDangerousCore.EliteConfigInstance.InstanceOptions.SystemDatabasePath, false, Initialize, mode)
-        {
-        }
-
-        private SQLiteConnectionSystem(bool utc, Action init) : base(EliteDangerousCore.EliteConfigInstance.InstanceOptions.SystemDatabasePath, utc, init, AccessMode.ReaderWriter)
+        public SQLiteConnectionSystem() : base(EliteDangerousCore.EliteConfigInstance.InstanceOptions.SystemDatabasePath, utctimeindicator: true)
         {
         }
 
         #region Init
 
-        public static void Initialize()
-        {
-            InitializeIfNeeded(() =>
-            {
-                using (SQLiteConnectionSystem conn = new SQLiteConnectionSystem(false, null))       // use this special one so we don't get double init.
-                {
-                    System.Diagnostics.Debug.WriteLine("Initialise EDSM DB");
-                    conn.UpgradeSystemsDB();
-                }
-            });
-        }
-
-        private bool UpgradeSystemsDB()
+        public bool UpgradeSystemsDB()
         {
             try
             {
@@ -106,48 +85,6 @@ namespace EliteDangerousCore.DB
 
         #endregion
 
-        #region Time markers
-
-        // time markers - keeping the old code for now, not using better datetime funcs
-
-        static public void ForceEDSMFullUpdate()
-        {
-            SQLiteConnectionSystem.PutSettingString("EDSMLastSystems", "2010-01-01 00:00:00");
-        }
-
-        static public DateTime GetLastEDSMRecordTimeUTC()
-        {
-            string rwsystime = SQLiteConnectionSystem.GetSettingString("EDSMLastSystems", "2000-01-01 00:00:00"); // Latest time from RW file.
-            DateTime edsmdate;
-
-            if (!DateTime.TryParse(rwsystime, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal, out edsmdate))
-                edsmdate = new DateTime(2000, 1, 1);
-
-            return edsmdate;
-        }
-
-        static public void SetLastEDSMRecordTimeUTC(DateTime time)
-        {
-            SQLiteConnectionSystem.PutSettingString("EDSMLastSystems", time.ToString(CultureInfo.InvariantCulture));
-            System.Diagnostics.Debug.WriteLine("Last EDSM record " + time.ToString());
-        }
-
-        static public DateTime GetLastEDDBDownloadTime()
-        {
-            return SQLiteConnectionSystem.GetSettingDate("EDDBLastDownloadTime", DateTime.MinValue);    // different ID to 102 on purpose
-        }
-
-        static public void SetLastEDDBDownloadTime()
-        {
-            SQLiteConnectionSystem.PutSettingDate("EDDBLastDownloadTime", DateTime.UtcNow);
-        }
-
-        static public void ForceEDDBFullUpdate()
-        {
-            SQLiteConnectionSystem.PutSettingDate("EDDBLastDownloadTime", DateTime.MinValue);
-        }
-
-        #endregion
 
         #region Helpers
 
@@ -185,7 +122,6 @@ namespace EliteDangerousCore.DB
 
         public void CreateSystemDBTableIndexes() 
         {
-
             string[] queries = new[]
             {
                 "CREATE INDEX IF NOT EXISTS SystemsSectorName ON Systems (sectorid,nameid)",        // worth it for lookups of stars

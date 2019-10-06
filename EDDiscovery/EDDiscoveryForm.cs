@@ -806,8 +806,6 @@ namespace EDDiscovery
             DLLManager.UnLoad();
 
             Close();
-            UserDatabase.Instance.Stop();
-            SystemsDatabase.Instance.Stop();
             Application.Exit();
         }
      

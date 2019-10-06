@@ -47,9 +47,11 @@ namespace EliteDangerousCore.DB
 
             while (!eof)
             {
-                SystemsDatabase.Instance.ExecuteWithDatabase(usetxnlock: true, mode: SQLExtConnection.AccessMode.Writer, action: db =>
+                SystemsDatabase.Instance.ExecuteWithDatabase(action: db =>
                 {
                     var cn = db.Connection;
+
+                    int maxtodo = 1000;
 
                     using (DbTransaction txn = cn.BeginTransaction())
                     {
@@ -71,7 +73,7 @@ namespace EliteDangerousCore.DB
 
                             replaceCmd = cn.CreateReplace("EDDB", dbfields, dbfieldtypes, txn);
 
-                            while (!SQLiteConnectionSystem.IsReadWaiting)
+                            while(maxtodo-- > 0 )   // so to give rest of a system a chance, lets do them in groups
                             {
                                 string line = tr.ReadLine();
 
@@ -153,6 +155,8 @@ namespace EliteDangerousCore.DB
                         }
                     }
                 });
+
+                System.Threading.Thread.Sleep(20); // just give the rest a little chance.
             }
 
             return updated;

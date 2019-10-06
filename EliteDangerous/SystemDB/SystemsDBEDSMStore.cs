@@ -101,10 +101,7 @@ namespace EliteDangerousCore.DB
                     if (jr_eof)
                         break;
 
-                    if (SQLiteConnectionSystem.IsReadWaiting)
-                    {
-                        System.Threading.Thread.Sleep(20);      // just sleepy for a bit to let others use the db
-                    }
+                    System.Threading.Thread.Sleep(20);      // just sleepy for a bit to let others use the db
                 }
             }
             finally
@@ -222,10 +219,7 @@ namespace EliteDangerousCore.DB
                     if (Limit <= 0)
                         break;
 
-                    if (SQLiteConnectionSystem.IsReadWaiting)
-                    {
-                        System.Threading.Thread.Sleep(20);      // just sleepy for a bit to let others use the db
-                    }
+                    System.Threading.Thread.Sleep(20);      // just sleepy for a bit to let others use the db
                 }
 
                 var tres1 = BaseUtils.AppTicks.TickCountLapDelta("U1");
@@ -311,7 +305,7 @@ namespace EliteDangerousCore.DB
                 }
             }
 
-            SystemsDatabase.Instance.ExecuteWithDatabase(mode: SQLExtConnection.AccessMode.Reader, action: db =>
+            SystemsDatabase.Instance.ExecuteWithDatabase( action: db =>
             {
                 try
                 {
@@ -438,7 +432,7 @@ namespace EliteDangerousCore.DB
         {
             ////////////////////////////////////////////////////////////// push all new data to the db without any selects
 
-            return SystemsDatabase.Instance.ExecuteWithDatabase(mode: SQLExtConnection.AccessMode.Writer, usetxnlock: true, func: db =>
+            return SystemsDatabase.Instance.ExecuteWithDatabase(func: db =>
             {
                 long updates = 0;
 

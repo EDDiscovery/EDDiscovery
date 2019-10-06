@@ -45,7 +45,7 @@ namespace EliteDangerousCore.DB
 
         public static long ParseAlias(JsonTextReader jr)
         {
-            return SystemsDatabase.Instance.ExecuteWithDatabase(mode: SQLLiteExtensions.SQLExtConnection.AccessMode.Writer, func: db =>
+            return SystemsDatabase.Instance.ExecuteWithDatabase(func: db =>
             {
                 var cn = db.Connection;
                 System.Diagnostics.Debug.WriteLine("Update aliases");

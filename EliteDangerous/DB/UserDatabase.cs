@@ -15,9 +15,9 @@ namespace EliteDangerousCore.DB
     {
         internal SQLiteConnectionUser2 Connection { get; private set; }
 
-        internal UserDatabaseConnection(bool utc, SQLLiteExtensions.SQLExtConnection.AccessMode mode = SQLLiteExtensions.SQLExtConnection.AccessMode.Reader)
+        public UserDatabaseConnection()
         {
-            Connection = new SQLiteConnectionUser2(utc, mode);
+            Connection = new SQLiteConnectionUser2();
         }
 
         public void Dispose()
@@ -30,188 +30,17 @@ namespace EliteDangerousCore.DB
         }
     }
 
-    public class UserDatabase
+    public class UserDatabase : SQLProcessingThread<UserDatabaseConnection>
     {
-        private class Job : IDisposable
-        {
-            private ManualResetEventSlim WaitHandle;
-            private Action Action;
-
-            public Job(Action action)
-            {
-                this.Action = action;
-                this.WaitHandle = new ManualResetEventSlim(false);
-            }
-
-            public void Exec()
-            {
-                Action.Invoke();
-                WaitHandle.Set();
-            }
-
-            public void Wait(int timeout = 5000)
-            {
-                WaitHandle.Wait(timeout);
-            }
-
-            public void Dispose()
-            {
-                this.WaitHandle?.Dispose();
-            }
-        }
-
         private UserDatabase()
         {
         }
 
         public static UserDatabase Instance { get; } = new UserDatabase();
 
-
-        private ConcurrentQueue<Job> JobQueue = new ConcurrentQueue<Job>();
-        private Thread SqlThread;
-        private ManualResetEvent StopRequestedEvent = new ManualResetEvent(false);
-        private bool StopRequested = false;
-        private AutoResetEvent JobQueuedEvent = new AutoResetEvent(false);
-        private ManualResetEvent StopCompleted = new ManualResetEvent(true);
-
-        public long? SqlThreadId => SqlThread?.ManagedThreadId;
-
-        private void SqlThreadProc()
-        {
-            while (!StopRequested)
-            {
-                switch (WaitHandle.WaitAny(new WaitHandle[] { StopRequestedEvent, JobQueuedEvent }))
-                {
-                    case 1:
-                        while (JobQueue.TryDequeue(out Job job))
-                        {
-                            job.Exec();
-                        }
-                        break;
-                }
-            }
-
-            StopCompleted.Set();
-        }
-
-        protected void Execute(Action action, int skipframes = 1, int warnthreshold = 500)
-        {
-            if (StopCompleted.WaitOne(0))
-            {
-                throw new ObjectDisposedException(nameof(UserDatabase));
-            }
-
-            var sw = System.Diagnostics.Stopwatch.StartNew();
-
-            if (Thread.CurrentThread.ManagedThreadId == SqlThreadId)
-            {
-                System.Diagnostics.Trace.WriteLine($"UserDatabase Re-entrancy\n{new System.Diagnostics.StackTrace(skipframes, true).ToString()}");
-                action();
-            }
-            else if (Thread.CurrentThread.ManagedThreadId == EliteDangerousCore.DB.SystemsDatabase.Instance.SqlThreadId)
-            {
-                System.Diagnostics.Trace.WriteLine($"Invalid UserDatabase call from SystemDatabase thread\n{new System.Diagnostics.StackTrace(skipframes, true).ToString()}");
-                throw new InvalidOperationException("Invalid UserDatabase call from SystemDatabase thread");
-            }
-            else
-            {
-                using (var job = new Job(action))
-                {
-                    JobQueue.Enqueue(job);
-                    JobQueuedEvent.Set();
-                    job.Wait(Timeout.Infinite);
-                }
-            }
-
-            if (sw.ElapsedMilliseconds > warnthreshold)
-            {
-                var trace = new System.Diagnostics.StackTrace(skipframes, true);
-                System.Diagnostics.Trace.WriteLine($"UserDatabase connection held for {sw.ElapsedMilliseconds}ms\n{trace.ToString()}");
-            }
-        }
-
-        protected T Execute<T>(Func<T> func, int skipframes = 1, int warnthreshold = 500)
-        {
-            T ret = default(T);
-            Execute(() => { ret = func(); }, skipframes + 1, warnthreshold);
-            return ret;
-        }
-
-        private void ExecuteWithDatabaseInternal(Action<UserDatabaseConnection> action, bool utc = true, bool usetxnlock = false, SQLExtConnection.AccessMode mode = SQLExtConnection.AccessMode.Reader)
-        {
-            SQLExtTransactionLock<SQLiteConnectionUser2> tl = null;
-
-            try
-            {
-                if (usetxnlock)
-                {
-                    tl = new SQLExtTransactionLock<SQLiteConnectionUser2>();
-                    if (mode == SQLExtConnection.AccessMode.Reader)
-                    {
-                        tl.OpenReader();
-                    }
-                    else
-                    {
-                        tl.OpenWriter();
-                    }
-                }
-
-                using (var conn = new UserDatabaseConnection(utc, mode: mode))
-                {
-                    action(conn);
-                }
-            }
-            finally
-            {
-                // TBD no trasaction commit?
-                tl?.Dispose();
-            }
-        }
-
-        public void ExecuteWithDatabase(Action<UserDatabaseConnection> action, bool utc = true, bool usetxnlock = false, SQLExtConnection.AccessMode mode = SQLExtConnection.AccessMode.Reader, int warnthreshold = 500)
-        {
-            Execute(() => ExecuteWithDatabaseInternal(action, utc, usetxnlock, mode), warnthreshold: warnthreshold);
-        }
-
-        public T ExecuteWithDatabase<T>(Func<UserDatabaseConnection, T> func, bool utc = true, bool usetxnlock = false, SQLExtConnection.AccessMode mode = SQLExtConnection.AccessMode.Reader, int warnthreshold = 500)
-        {
-            return Execute(() =>
-            {
-                T ret = default(T);
-                ExecuteWithDatabaseInternal(db => ret = func(db), utc, usetxnlock, mode);
-                return ret;
-            }, warnthreshold: warnthreshold);
-        }
-
-        public void Start()
-        {
-            StopRequested = false;
-            StopRequestedEvent.Reset();
-            StopCompleted.Reset();
-
-            if (SqlThread == null)
-            {
-                SqlThread = new Thread(SqlThreadProc);
-                SqlThread.Name = "UserDatabaseThread";
-                SqlThread.IsBackground = true;
-                SqlThread.Start();
-            }
-        }
-
-        public void Stop()
-        {
-            StopRequested = true;
-            StopRequestedEvent.Set();
-            StopCompleted.WaitOne();
-            SqlThread = null;
-        }
-
         public void Initialize()
         {
-            Execute(() =>
-            {
-                SQLiteConnectionSystem.Initialize();
-            });
+            ExecuteWithDatabase(cn => { cn.Connection.UpgradeUserDB(); });
         }
 
         // Register

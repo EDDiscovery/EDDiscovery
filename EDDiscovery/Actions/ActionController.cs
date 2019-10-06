@@ -584,7 +584,8 @@ namespace EDDiscovery.Actions
 
         public void HoldTillProgStops()
         {
-            actionrunasync.WaitTillFinished(10000);
+            System.Diagnostics.Debug.Assert(Application.MessageLoop);
+            actionrunasync.WaitTillFinished(10000, true);
         }
 
         public void CloseDown()
