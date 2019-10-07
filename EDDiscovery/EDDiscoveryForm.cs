@@ -1049,9 +1049,7 @@ namespace EDDiscovery
         {
             if (ExtendedControls.MessageBoxTheme.Show(this, "Confirm you remove any duplicate FSD entries from the current commander".T(EDTx.EDDiscoveryForm_RevFSD), "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
-                int n = JournalEntry.RemoveDuplicateFSDEntries(EDCommander.CurrentCmdrID);
-                Controller.LogLine(string.Format("Removed {0} FSD entries".T(EDTx.EDDiscoveryForm_FSDRem) , n));
-                Controller.RefreshHistoryAsync();
+                Controller.RefreshHistoryAsync(removedupfsdentries: true);
             }
         }
 
