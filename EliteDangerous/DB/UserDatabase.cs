@@ -47,62 +47,62 @@ namespace EliteDangerousCore.DB
 
         public bool KeyExists(string key)
         {
-            return ExecuteWithDatabase(db => SQLiteConnectionUser2.keyExists(key, db.Connection));
+            return ExecuteWithDatabase(db => db.Connection.keyExists(key));
         }
 
         public bool DeleteKey(string key)
         {
-            return ExecuteWithDatabase(db =>  SQLiteConnectionUser2.DeleteKey(key,db.Connection));
+            return ExecuteWithDatabase(db =>  db.Connection.DeleteKey(key));
         }
 
         public int GetSettingInt(string key, int defaultvalue)
         {
-            return ExecuteWithDatabase(db =>  SQLiteConnectionUser2.GetSettingInt(key, defaultvalue, db.Connection));
+            return ExecuteWithDatabase(db =>  db.Connection.GetSettingInt(key, defaultvalue));
         }
 
         public bool PutSettingInt(string key, int intvalue)
         {
-            return ExecuteWithDatabase(db =>  SQLiteConnectionUser2.PutSettingInt(key, intvalue, db.Connection));
+            return ExecuteWithDatabase(db =>  db.Connection.PutSettingInt(key, intvalue));
         }
 
         public double GetSettingDouble(string key, double defaultvalue)
         {
-            return ExecuteWithDatabase(db =>  SQLiteConnectionUser2.GetSettingDouble(key, defaultvalue, db.Connection));
+            return ExecuteWithDatabase(db =>  db.Connection.GetSettingDouble(key, defaultvalue));
         }
 
         public bool PutSettingDouble(string key, double doublevalue)
         {
-            return ExecuteWithDatabase(db =>  SQLiteConnectionUser2.PutSettingDouble(key, doublevalue, db.Connection));
+            return ExecuteWithDatabase(db =>  db.Connection.PutSettingDouble(key, doublevalue));
         }
 
         public bool GetSettingBool(string key, bool defaultvalue)
         {
-            return ExecuteWithDatabase(db =>  SQLiteConnectionUser2.GetSettingBool(key, defaultvalue, db.Connection));
+            return ExecuteWithDatabase(db =>  db.Connection.GetSettingBool(key, defaultvalue));
         }
 
         public bool PutSettingBool(string key, bool boolvalue)
         {
-            return ExecuteWithDatabase(db =>  SQLiteConnectionUser2.PutSettingBool(key, boolvalue, db.Connection));
+            return ExecuteWithDatabase(db =>  db.Connection.PutSettingBool(key, boolvalue));
         }
 
         public string GetSettingString(string key, string defaultvalue)
         {
-            return ExecuteWithDatabase(db =>  SQLiteConnectionUser2.GetSettingString(key, defaultvalue, db.Connection));
+            return ExecuteWithDatabase(db =>  db.Connection.GetSettingString(key, defaultvalue));
         }
 
         public bool PutSettingString(string key, string strvalue)
         {
-            return ExecuteWithDatabase(db =>  SQLiteConnectionUser2.PutSettingString(key, strvalue, db.Connection));
+            return ExecuteWithDatabase(db =>  db.Connection.PutSettingString(key, strvalue));
         }
 
         public DateTime GetSettingDate(string key, DateTime defaultvalue)
         {
-            return ExecuteWithDatabase(db =>  SQLiteConnectionUser2.GetSettingDate(key, defaultvalue, db.Connection));
+            return ExecuteWithDatabase(db =>  db.Connection.GetSettingDate(key, defaultvalue));
         }
 
         public bool PutSettingDate(string key, DateTime value)
         {
-            return ExecuteWithDatabase(db =>  SQLiteConnectionUser2.PutSettingDate(key, value, db.Connection));
+            return ExecuteWithDatabase(db =>  db.Connection.PutSettingDate(key, value));
         }
     }
 }

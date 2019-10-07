@@ -185,22 +185,22 @@ namespace EliteDangerousCore.DB
 
         public string GetEDSMGridIDs()
         {
-            return Execute(() => SQLiteConnectionSystem.GetSettingString("EDSMGridIDs", "Not Set", Connection.Connection));
+            return ExecuteWithDatabase( db => db.Connection.GetSettingString("EDSMGridIDs", "Not Set"));
         }
 
         public bool SetEDSMGridIDs(string value)
         {
-            return Execute(() => SQLiteConnectionSystem.PutSettingString("EDSMGridIDs", value, Connection.Connection));
+            return ExecuteWithDatabase( db => db.Connection.PutSettingString("EDSMGridIDs", value));
         }
 
         public DateTime GetEDSMGalMapLast()
         {
-            return Execute(() => SQLiteConnectionSystem.GetSettingDate("EDSMGalMapLast", DateTime.MinValue, Connection.Connection));
+            return ExecuteWithDatabase( db => db.Connection.GetSettingDate("EDSMGalMapLast", DateTime.MinValue));
         }
 
         public bool SetEDSMGalMapLast(DateTime value)
         {
-            return Execute(() => SQLiteConnectionSystem.PutSettingDate("EDSMGalMapLast", value, Connection.Connection));
+            return ExecuteWithDatabase( db => db.Connection.PutSettingDate("EDSMGalMapLast", value));
         }
 
         #region Time markers
@@ -209,14 +209,14 @@ namespace EliteDangerousCore.DB
 
         public void ForceEDSMFullUpdate()
         {
-            Execute(() => SQLiteConnectionSystem.PutSettingString("EDSMLastSystems", "2010-01-01 00:00:00", Connection.Connection));
+            ExecuteWithDatabase( db => db.Connection.PutSettingString("EDSMLastSystems", "2010-01-01 00:00:00"));
         }
 
         public DateTime GetLastEDSMRecordTimeUTC()
         {
-            return Execute(() =>
+            return ExecuteWithDatabase( db =>
             {
-                string rwsystime = SQLiteConnectionSystem.GetSettingString("EDSMLastSystems", "2000-01-01 00:00:00", Connection.Connection); // Latest time from RW file.
+                string rwsystime = db.Connection.GetSettingString("EDSMLastSystems", "2000-01-01 00:00:00"); // Latest time from RW file.
                 DateTime edsmdate;
 
                 if (!DateTime.TryParse(rwsystime, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal, out edsmdate))
@@ -228,36 +228,36 @@ namespace EliteDangerousCore.DB
 
         public void SetLastEDSMRecordTimeUTC(DateTime time)
         {
-            Execute(() =>
+            ExecuteWithDatabase( db =>
             {
-                SQLiteConnectionSystem.PutSettingString("EDSMLastSystems", time.ToString(CultureInfo.InvariantCulture), Connection.Connection);
+                db.Connection.PutSettingString("EDSMLastSystems", time.ToString(CultureInfo.InvariantCulture));
                 System.Diagnostics.Debug.WriteLine("Last EDSM record " + time.ToString());
             });
         }
 
         public DateTime GetLastEDDBDownloadTime()
         {
-            return Execute(() => SQLiteConnectionSystem.GetSettingDate("EDDBLastDownloadTime", DateTime.MinValue, Connection.Connection));
+            return ExecuteWithDatabase( db => db.Connection.GetSettingDate("EDDBLastDownloadTime", DateTime.MinValue));
         }
 
         public void SetLastEDDBDownloadTime()
         {
-            Execute(() => SQLiteConnectionSystem.PutSettingDate("EDDBLastDownloadTime", DateTime.UtcNow, Connection.Connection));
+            ExecuteWithDatabase( db => db.Connection.PutSettingDate("EDDBLastDownloadTime", DateTime.UtcNow));
         }
 
         public void ForceEDDBFullUpdate()
         {
-            Execute(() => SQLiteConnectionSystem.PutSettingDate("EDDBLastDownloadTime", DateTime.MinValue, Connection.Connection));
+            ExecuteWithDatabase( db => db.Connection.PutSettingDate("EDDBLastDownloadTime", DateTime.MinValue));
         }
 
         public int GetEDSMSectorIDNext()
         {
-            return Execute(() => SQLiteConnectionSystem.GetSettingInt("EDSMSectorIDNext", 1, Connection.Connection));
+            return ExecuteWithDatabase( db => db.Connection.GetSettingInt("EDSMSectorIDNext", 1));
         }
 
         public void SetEDSMSectorIDNext(int val)
         {
-            Execute(() => SQLiteConnectionSystem.PutSettingInt("EDSMSectorIDNext", val, Connection.Connection));
+            ExecuteWithDatabase( db => db.Connection.PutSettingInt("EDSMSectorIDNext", val));
         }
 
         #endregion
