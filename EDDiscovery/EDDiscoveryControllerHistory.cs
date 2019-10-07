@@ -29,6 +29,7 @@ namespace EDDiscovery
             public string NetLogPath;
             public bool ForceNetLogReload;
             public bool ForceJournalReload;
+            public bool RemoveDuplicateFSDEntries;
             public int CurrentCommander;
         }
 
@@ -41,7 +42,7 @@ namespace EDDiscovery
 
         // indicate change commander, indicate netlogpath load (with forced refresh), indicate forced journal load
 
-        public bool RefreshHistoryAsync(string netlogpath = null, bool forcenetlogreload = false, bool forcejournalreload = false, int? currentcmdr = null)
+        public bool RefreshHistoryAsync(string netlogpath = null, bool forcenetlogreload = false, bool forcejournalreload = false, int? currentcmdr = null, bool removedupfsdentries = false)
         {
             if (PendingClose)
             {
@@ -57,7 +58,8 @@ namespace EDDiscovery
                     curargs.ForceNetLogReload != forcenetlogreload ||
                     curargs.ForceJournalReload != forcejournalreload ||
                     curargs.CurrentCommander != (currentcmdr ?? history.CommanderId) ||
-                    curargs.NetLogPath != netlogpath)
+                    curargs.NetLogPath != netlogpath ||
+                    curargs.RemoveDuplicateFSDEntries != removedupfsdentries)
                 {
                     newrefresh = true;                                                                      // we queue the refresh, even if we have a async refresh pending..
                 }
@@ -70,7 +72,8 @@ namespace EDDiscovery
                     NetLogPath = netlogpath,
                     ForceNetLogReload = forcenetlogreload,
                     ForceJournalReload = forcejournalreload,
-                    CurrentCommander = currentcmdr ?? history.CommanderId
+                    CurrentCommander = currentcmdr ?? history.CommanderId,
+                    RemoveDuplicateFSDEntries = removedupfsdentries
                 });
 
                 refreshRequested.Set();
@@ -141,6 +144,12 @@ namespace EDDiscovery
                 refreshWorkerArgs = args;
 
                 Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Load history for Cmdr " + args.CurrentCommander + " " + EDCommander.Current.Name);
+
+                if (args.RemoveDuplicateFSDEntries)
+                {
+                    int n = JournalEntry.RemoveDuplicateFSDEntries(EDCommander.CurrentCmdrID);
+                    LogLine(string.Format("Removed {0} FSD entries".T(EDTx.EDDiscoveryForm_FSDRem), n));
+                }
 
                 hist = HistoryList.LoadHistory(journalmonitor,
                     () => PendingClose,

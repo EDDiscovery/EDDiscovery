@@ -336,12 +336,14 @@ namespace EliteDangerousCore
                             JournalTypeEnum[] ids = null, DateTime? allidsafter = null)
         {
             Dictionary<long, TravelLogUnit> tlus = TravelLogUnit.GetAll().ToDictionary(t => t.id);
+            DbCommand cmd = null;
+            DbDataReader reader = null;
+            List<JournalEntry> entries = new List<JournalEntry>();
 
-            return UserDatabase.Instance.ExecuteWithDatabase<List<JournalEntry>>(cn =>
+            try
             {
-                List<JournalEntry> list = new List<JournalEntry>();
-
-                using (DbCommand cmd = cn.Connection.CreateCommand("select * from JournalEntries"))
+                cmd = UserDatabase.Instance.ExecuteWithDatabase(cn => cn.Connection.CreateCommand("select * from JournalEntries"));
+                reader = UserDatabase.Instance.ExecuteWithDatabase(cn =>
                 {
                     string cnd = "";
                     if (commander != -999)
@@ -378,47 +380,101 @@ namespace EliteDangerousCore
 
                     cmd.CommandText += " Order By EventTime ASC";
 
-                    using (DbDataReader reader = cmd.ExecuteReader())
+                    return cmd.ExecuteReader();
+                });
+
+                List<JournalEntry> retlist = null;
+
+                do
+                {
+                    retlist = UserDatabase.Instance.ExecuteWithDatabase(cn =>
                     {
-                        while (reader.Read())
+                        List<JournalEntry> list = new List<JournalEntry>();
+
+                        while (list.Count < 1000 && reader.Read())
                         {
                             JournalEntry sys = JournalEntry.CreateJournalEntry(reader);
                             sys.beta = tlus.ContainsKey(sys.TLUId) ? tlus[sys.TLUId].Beta : false;
                             list.Add(sys);
                         }
-                    }
 
-                    return list;
+                        return list;
+                    });
+
+                    entries.AddRange(retlist);
                 }
-            });
+                while (retlist != null && retlist.Count != 0);
+
+                return entries;
+            }
+            finally
+            {
+                if (reader != null || cmd != null)
+                {
+                    UserDatabase.Instance.ExecuteWithDatabase(cn =>
+                    {
+                        reader?.Close();
+                        cmd?.Dispose();
+                    });
+                }
+            }
         }
 
 
         public static List<JournalEntry> GetByEventType(JournalTypeEnum eventtype, int commanderid, DateTime start, DateTime stop)
         {
-            return UserDatabase.Instance.ExecuteWithDatabase<List<JournalEntry>>(cn =>
-            {
-                List<JournalEntry> vsc = new List<JournalEntry>();
-                Dictionary<long, TravelLogUnit> tlus = TravelLogUnit.GetAll().ToDictionary(t => t.id);
+            Dictionary<long, TravelLogUnit> tlus = TravelLogUnit.GetAll().ToDictionary(t => t.id);
+            DbCommand cmd = null;
+            DbDataReader reader = null;
+            List<JournalEntry> entries = new List<JournalEntry>();
 
-                using (DbCommand cmd = cn.Connection.CreateCommand("SELECT * FROM JournalEntries WHERE EventTypeID = @eventtype and  CommanderID=@commander and  EventTime >=@start and EventTime<=@Stop ORDER BY EventTime ASC"))
+            try
+            {
+                cmd = UserDatabase.Instance.ExecuteWithDatabase(cn => cn.Connection.CreateCommand("SELECT * FROM JournalEntries WHERE EventTypeID = @eventtype and  CommanderID=@commander and  EventTime >=@start and EventTime<=@Stop ORDER BY EventTime ASC"));
+                reader = UserDatabase.Instance.ExecuteWithDatabase(cn =>
                 {
                     cmd.AddParameterWithValue("@eventtype", (int)eventtype);
                     cmd.AddParameterWithValue("@commander", (int)commanderid);
                     cmd.AddParameterWithValue("@start", start);
                     cmd.AddParameterWithValue("@stop", stop);
-                    using (DbDataReader reader = cmd.ExecuteReader())
+                    return cmd.ExecuteReader();
+                });
+
+                List<JournalEntry> retlist = null;
+
+                do
+                {
+                    retlist = UserDatabase.Instance.ExecuteWithDatabase(cn =>
                     {
-                        while (reader.Read())
+                        List<JournalEntry> vsc = new List<JournalEntry>();
+
+                        while (vsc.Count < 1000 && reader.Read())
                         {
                             JournalEntry je = CreateJournalEntry(reader);
                             je.beta = tlus.ContainsKey(je.TLUId) ? tlus[je.TLUId].Beta : false;
                             vsc.Add(je);
                         }
-                    }
+
+                        return vsc;
+                    });
+
+                    entries.AddRange(retlist);
                 }
-                return vsc;
-            });
+                while (retlist != null && retlist.Count != 0);
+
+                return entries;
+            }
+            finally
+            {
+                if (reader != null || cmd != null)
+                {
+                    UserDatabase.Instance.ExecuteWithDatabase(cn =>
+                    {
+                        reader?.Close();
+                        cmd?.Dispose();
+                    });
+                }
+            }
         }
                
         public static List<JournalEntry> GetAllByTLU(long tluid)
@@ -543,7 +599,7 @@ namespace EliteDangerousCore
         public static int RemoveDuplicateFSDEntries(int currentcmdrid)
         {
             // list of systems in journal, sorted by time
-            List<JournalLocOrJump> vsSystemsEnts = JournalEntry.GetAll(currentcmdrid).OfType<JournalLocOrJump>().OrderBy(j => j.EventTimeUTC).ToList();
+            List<JournalFSDJump> vsSystemsEnts = GetAll(currentcmdrid, ids: new[] { JournalTypeEnum.FSDJump }).OfType<JournalFSDJump>().OrderBy(j => j.EventTimeUTC).ToList();
 
             int count = 0;
             UserDatabase.Instance.ExecuteWithDatabase(cn =>
