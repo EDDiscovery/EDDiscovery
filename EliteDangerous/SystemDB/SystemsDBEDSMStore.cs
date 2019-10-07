@@ -170,7 +170,7 @@ namespace EliteDangerousCore.DB
                                                                 new string[] { "gid" }, new DbType[] { DbType.Int32 },
                                                                 joinlist: new string[] { "LEFT OUTER JOIN SystemNames n ON n.EdsmId=s.EdsmId" });
 
-                        selectPrev.Parameters["gid"].Value = gridid;
+                        selectPrev.Parameters[0].Value = gridid;
 
                         using (DbDataReader reader = selectPrev.ExecuteReader())       // find name:gid
                         {
@@ -205,7 +205,7 @@ namespace EliteDangerousCore.DB
                     {
                         selectSectorCmd?.Dispose();
                     }
-                });
+                },5000);
 
                 //System.Diagnostics.Debug.WriteLine("Reader took " + BaseUtils.AppTicks.TickCountLap("U1") + " in " + gridid + "  " + recordpos + " total " + recordstostore);
 
@@ -520,7 +520,7 @@ namespace EliteDangerousCore.DB
                     replaceNameCmd?.Dispose();
                     txn?.Dispose();
                 }
-            });
+            },warnthreshold:5000);
         }
 
         #endregion
