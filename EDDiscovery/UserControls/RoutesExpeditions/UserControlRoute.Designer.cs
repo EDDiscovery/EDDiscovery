@@ -75,6 +75,7 @@
             this.ZCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.WayPointDistCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.DeviationCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.checkBox_FsdBoost = new ExtendedControls.ExtCheckBox();
             this.panel1.SuspendLayout();
             this.contextMenuStrip.SuspendLayout();
             this.dataViewScrollerPanel1.SuspendLayout();
@@ -84,6 +85,7 @@
             // panel1
             // 
             this.panel1.AutoSize = true;
+            this.panel1.Controls.Add(this.checkBox_FsdBoost);
             this.panel1.Controls.Add(this.buttonExtExcel);
             this.panel1.Controls.Add(this.textBox_ToName);
             this.panel1.Controls.Add(this.textBox_FromName);
@@ -158,6 +160,16 @@
             this.textBox_ToName.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.toolTip.SetToolTip(this.textBox_ToName, "Alternate Name");
             this.textBox_ToName.WordWrap = true;
+            // 
+            // checkBox_FSD_boost
+            // 
+            this.checkBox_FsdBoost.Location = new System.Drawing.Point(342, 112);
+            this.checkBox_FsdBoost.Name = "checkBox_FsdBoost";
+            this.checkBox_FsdBoost.Size = new System.Drawing.Size(72, 18);
+            this.checkBox_FsdBoost.TabIndex = 60;
+            this.checkBox_FsdBoost.Text = "Use Boosts";
+            this.toolTip.SetToolTip(this.checkBox_FsdBoost, "The route finder will try and use FSD injections in case a direct route could not be found.");
+            this.checkBox_FsdBoost.UseVisualStyleBackColor = true;
             // 
             // textBox_FromName
             // 
@@ -880,5 +892,6 @@
         private System.Windows.Forms.ToolStripMenuItem showInEDSMToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem copyToolStripMenuItem;
         private System.Windows.Forms.ToolTip toolTip;
+        private ExtendedControls.ExtCheckBox checkBox_FsdBoost;
     }
 }

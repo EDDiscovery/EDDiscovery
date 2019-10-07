@@ -201,6 +201,7 @@ namespace EDDiscovery.UserControls
             plotter.FromSystem = textBox_From.Text;
             plotter.ToSystem = textBox_To.Text;
             plotter.RouteMethod = comboBoxRoutingMetric.SelectedIndex;
+            plotter.UseFsdBoost = checkBox_FsdBoost.Checked;
 
             if (textBox_From.ReadOnly == true)
                 plotter.FromSystem = "START POINT";

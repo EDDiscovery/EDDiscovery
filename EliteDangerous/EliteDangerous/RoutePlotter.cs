@@ -30,6 +30,7 @@ namespace EliteDangerousCore
         public string FromSystem;
         public string ToSystem;
         public int RouteMethod;
+        public bool UseFsdBoost;
 
         // METRICs defined by systemclass GetSystemNearestTo function
         public static string[] metric_options = {
@@ -88,7 +89,7 @@ namespace EliteDangerousCore
 
                 // if we haven't found a system in range, let's try boosting
                 int boostStrength = 0;
-                while (bestsystem == null && boostStrength < 4)
+                while (UseFsdBoost && bestsystem == null && boostStrength < 4)
                 {
                     boostStrength = 1 << boostStrength;
                     float maxRangeWithBoost = MaxRange * (1.0f + BoostPercentage(boostStrength));
