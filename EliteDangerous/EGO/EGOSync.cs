@@ -144,7 +144,7 @@ namespace EliteDangerousCore.EGO
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Trace.WriteLine("Exception ex:" + ex.Message);
+                System.Diagnostics.Trace.WriteLine("EGO Exception ex:" + ex.Message);
                 logger?.Invoke("EGO sync Exception " + ex.Message);
             }
             finally

@@ -517,7 +517,8 @@ namespace EliteDangerousCore
         public bool SyncToEdsm { get { return syncToEdsm; } set { syncToEdsm = value; } }
         public bool SyncFromEdsm { get { return syncFromEdsm; } set { syncFromEdsm = value; } }
         public bool SyncToEddn {  get { return syncToEddn; } set { syncToEddn = value;  } }
-        public bool SyncToEGO { get { return syncToEGO; } set { syncToEGO = value; } }
+        //public bool SyncToEGO { get { return syncToEGO; } set { syncToEGO = value; } } disabled
+        public bool SyncToEGO { get { return false; } set {  } } 
         public bool SyncToInara { get { return syncToInara; } set { syncToInara = value; } }
         public bool Deleted { get { return deleted; } set { deleted = value; } }
 

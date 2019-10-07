@@ -80,12 +80,12 @@
             this.panelOK = new System.Windows.Forms.Panel();
             this.statusStripCustom = new ExtendedControls.ExtStatusStrip();
             this.extGroupBoxCommanderInfo = new ExtendedControls.ExtGroupBox();
+            this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.labelMapCol = new System.Windows.Forms.Label();
-            this.labelZoom = new System.Windows.Forms.Label();
-            this.labelOpenOn = new System.Windows.Forms.Label();
             this.extTextBoxAutoCompleteHomeSystem = new ExtendedControls.ExtTextBoxAutoComplete();
             this.HomeSys = new System.Windows.Forms.Label();
-            this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
+            this.labelZoom = new System.Windows.Forms.Label();
+            this.labelOpenOn = new System.Windows.Forms.Label();
             this.panelTop.SuspendLayout();
             this.groupBoxCustomEDDN.SuspendLayout();
             this.groupBoxCustomEDSM.SuspendLayout();
@@ -287,6 +287,7 @@
             this.checkBoxEGOSync.CheckBoxDisabledScaling = 0.5F;
             this.checkBoxEGOSync.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxEGOSync.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxEGOSync.Enabled = false;
             this.checkBoxEGOSync.ImageButtonDisabledScaling = 0.5F;
             this.checkBoxEGOSync.ImageIndeterminate = null;
             this.checkBoxEGOSync.ImageLayout = System.Windows.Forms.ImageLayout.Center;
@@ -311,6 +312,7 @@
             this.textBoxEGOName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxEGOName.ClearOnFirstChar = false;
             this.textBoxEGOName.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxEGOName.Enabled = false;
             this.textBoxEGOName.EndButtonEnable = true;
             this.textBoxEGOName.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxEGOName.EndButtonImage")));
             this.textBoxEGOName.EndButtonVisible = false;
@@ -338,6 +340,7 @@
             this.textBoxEGOAPI.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxEGOAPI.ClearOnFirstChar = false;
             this.textBoxEGOAPI.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxEGOAPI.Enabled = false;
             this.textBoxEGOAPI.EndButtonEnable = true;
             this.textBoxEGOAPI.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxEGOAPI.EndButtonImage")));
             this.textBoxEGOAPI.EndButtonVisible = false;
@@ -557,7 +560,7 @@
             this.textBoxDefaultZoom.EndButtonVisible = false;
             this.textBoxDefaultZoom.Format = "0.#######";
             this.textBoxDefaultZoom.InErrorCondition = true;
-            this.textBoxDefaultZoom.Location = new System.Drawing.Point(205, 65);
+            this.textBoxDefaultZoom.Location = new System.Drawing.Point(206, 65);
             this.textBoxDefaultZoom.Maximum = 300D;
             this.textBoxDefaultZoom.Minimum = 0.01D;
             this.textBoxDefaultZoom.Multiline = false;
@@ -576,7 +579,7 @@
             // radioButtonHistorySelection
             // 
             this.radioButtonHistorySelection.AutoSize = true;
-            this.radioButtonHistorySelection.Location = new System.Drawing.Point(407, 34);
+            this.radioButtonHistorySelection.Location = new System.Drawing.Point(409, 34);
             this.radioButtonHistorySelection.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.radioButtonHistorySelection.Name = "radioButtonHistorySelection";
             this.radioButtonHistorySelection.RadioButtonColor = System.Drawing.Color.Gray;
@@ -593,7 +596,7 @@
             // radioButtonCentreHome
             // 
             this.radioButtonCentreHome.AutoSize = true;
-            this.radioButtonCentreHome.Location = new System.Drawing.Point(205, 34);
+            this.radioButtonCentreHome.Location = new System.Drawing.Point(206, 34);
             this.radioButtonCentreHome.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.radioButtonCentreHome.Name = "radioButtonCentreHome";
             this.radioButtonCentreHome.RadioButtonColor = System.Drawing.Color.Gray;
@@ -611,7 +614,7 @@
             // 
             this.panel_defaultmapcolor.AccessibleDescription = "";
             this.panel_defaultmapcolor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel_defaultmapcolor.Location = new System.Drawing.Point(205, 85);
+            this.panel_defaultmapcolor.Location = new System.Drawing.Point(206, 85);
             this.panel_defaultmapcolor.Name = "panel_defaultmapcolor";
             this.panel_defaultmapcolor.Size = new System.Drawing.Size(28, 15);
             this.panel_defaultmapcolor.TabIndex = 12;
@@ -793,7 +796,7 @@
             this.groupBoxCustomEGO.Size = new System.Drawing.Size(615, 71);
             this.groupBoxCustomEGO.TabIndex = 33;
             this.groupBoxCustomEGO.TabStop = false;
-            this.groupBoxCustomEGO.Text = "Elite Galaxy Online Information (optional)";
+            this.groupBoxCustomEGO.Text = "Elite Galaxy Online - This site is offline so section disabled";
             this.groupBoxCustomEGO.TextPadding = 0;
             this.groupBoxCustomEGO.TextStartPosition = -1;
             // 
@@ -941,75 +944,6 @@
             this.extGroupBoxCommanderInfo.TextPadding = 0;
             this.extGroupBoxCommanderInfo.TextStartPosition = -1;
             // 
-            // labelMapCol
-            // 
-            this.labelMapCol.AutoSize = true;
-            this.labelMapCol.Location = new System.Drawing.Point(3, 82);
-            this.labelMapCol.Name = "labelMapCol";
-            this.labelMapCol.Size = new System.Drawing.Size(92, 13);
-            this.labelMapCol.TabIndex = 13;
-            this.labelMapCol.Text = "Default Map Color";
-            // 
-            // labelZoom
-            // 
-            this.labelZoom.AutoSize = true;
-            this.labelZoom.Location = new System.Drawing.Point(3, 62);
-            this.labelZoom.Name = "labelZoom";
-            this.labelZoom.Size = new System.Drawing.Size(71, 13);
-            this.labelZoom.TabIndex = 10;
-            this.labelZoom.Text = "Default Zoom";
-            // 
-            // labelOpenOn
-            // 
-            this.labelOpenOn.AutoSize = true;
-            this.labelOpenOn.Location = new System.Drawing.Point(3, 31);
-            this.labelOpenOn.Name = "labelOpenOn";
-            this.labelOpenOn.Size = new System.Drawing.Size(90, 13);
-            this.labelOpenOn.TabIndex = 7;
-            this.labelOpenOn.Text = "Open Centred On";
-            // 
-            // extTextBoxAutoCompleteHomeSystem
-            // 
-            this.extTextBoxAutoCompleteHomeSystem.AutoCompleteCommentMarker = null;
-            this.extTextBoxAutoCompleteHomeSystem.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.extTextBoxAutoCompleteHomeSystem.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
-            this.extTextBoxAutoCompleteHomeSystem.BackErrorColor = System.Drawing.Color.Red;
-            this.extTextBoxAutoCompleteHomeSystem.BorderColor = System.Drawing.Color.Transparent;
-            this.extTextBoxAutoCompleteHomeSystem.BorderColorScaling = 0.5F;
-            this.extTextBoxAutoCompleteHomeSystem.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.extTextBoxAutoCompleteHomeSystem.ClearOnFirstChar = false;
-            this.extTextBoxAutoCompleteHomeSystem.ControlBackground = System.Drawing.SystemColors.Control;
-            this.extTextBoxAutoCompleteHomeSystem.DropDownBackgroundColor = System.Drawing.Color.Gray;
-            this.extTextBoxAutoCompleteHomeSystem.DropDownBorderColor = System.Drawing.Color.Green;
-            this.extTextBoxAutoCompleteHomeSystem.DropDownMouseOverBackgroundColor = System.Drawing.Color.Red;
-            this.extTextBoxAutoCompleteHomeSystem.DropDownScrollBarButtonColor = System.Drawing.Color.LightGray;
-            this.extTextBoxAutoCompleteHomeSystem.DropDownScrollBarColor = System.Drawing.Color.LightGray;
-            this.extTextBoxAutoCompleteHomeSystem.EndButtonEnable = false;
-            this.extTextBoxAutoCompleteHomeSystem.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("extTextBoxAutoCompleteHomeSystem.EndButtonImage")));
-            this.extTextBoxAutoCompleteHomeSystem.EndButtonVisible = false;
-            this.extTextBoxAutoCompleteHomeSystem.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.extTextBoxAutoCompleteHomeSystem.InErrorCondition = false;
-            this.extTextBoxAutoCompleteHomeSystem.Location = new System.Drawing.Point(205, 3);
-            this.extTextBoxAutoCompleteHomeSystem.Multiline = false;
-            this.extTextBoxAutoCompleteHomeSystem.Name = "extTextBoxAutoCompleteHomeSystem";
-            this.extTextBoxAutoCompleteHomeSystem.ReadOnly = false;
-            this.extTextBoxAutoCompleteHomeSystem.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.extTextBoxAutoCompleteHomeSystem.SelectionLength = 0;
-            this.extTextBoxAutoCompleteHomeSystem.SelectionStart = 0;
-            this.extTextBoxAutoCompleteHomeSystem.Size = new System.Drawing.Size(152, 23);
-            this.extTextBoxAutoCompleteHomeSystem.TabIndex = 3;
-            this.extTextBoxAutoCompleteHomeSystem.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.extTextBoxAutoCompleteHomeSystem.WordWrap = true;
-            // 
-            // HomeSys
-            // 
-            this.HomeSys.AutoSize = true;
-            this.HomeSys.Location = new System.Drawing.Point(3, 0);
-            this.HomeSys.Name = "HomeSys";
-            this.HomeSys.Size = new System.Drawing.Size(75, 13);
-            this.HomeSys.TabIndex = 2;
-            this.HomeSys.Text = "Home System:";
-            // 
             // tableLayoutPanel4
             // 
             this.tableLayoutPanel4.ColumnCount = 3;
@@ -1035,6 +969,75 @@
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel4.Size = new System.Drawing.Size(609, 103);
             this.tableLayoutPanel4.TabIndex = 14;
+            // 
+            // labelMapCol
+            // 
+            this.labelMapCol.AutoSize = true;
+            this.labelMapCol.Location = new System.Drawing.Point(3, 82);
+            this.labelMapCol.Name = "labelMapCol";
+            this.labelMapCol.Size = new System.Drawing.Size(92, 13);
+            this.labelMapCol.TabIndex = 13;
+            this.labelMapCol.Text = "Default Map Color";
+            // 
+            // extTextBoxAutoCompleteHomeSystem
+            // 
+            this.extTextBoxAutoCompleteHomeSystem.AutoCompleteCommentMarker = null;
+            this.extTextBoxAutoCompleteHomeSystem.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.extTextBoxAutoCompleteHomeSystem.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.extTextBoxAutoCompleteHomeSystem.BackErrorColor = System.Drawing.Color.Red;
+            this.extTextBoxAutoCompleteHomeSystem.BorderColor = System.Drawing.Color.Transparent;
+            this.extTextBoxAutoCompleteHomeSystem.BorderColorScaling = 0.5F;
+            this.extTextBoxAutoCompleteHomeSystem.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.extTextBoxAutoCompleteHomeSystem.ClearOnFirstChar = false;
+            this.extTextBoxAutoCompleteHomeSystem.ControlBackground = System.Drawing.SystemColors.Control;
+            this.extTextBoxAutoCompleteHomeSystem.DropDownBackgroundColor = System.Drawing.Color.Gray;
+            this.extTextBoxAutoCompleteHomeSystem.DropDownBorderColor = System.Drawing.Color.Green;
+            this.extTextBoxAutoCompleteHomeSystem.DropDownMouseOverBackgroundColor = System.Drawing.Color.Red;
+            this.extTextBoxAutoCompleteHomeSystem.DropDownScrollBarButtonColor = System.Drawing.Color.LightGray;
+            this.extTextBoxAutoCompleteHomeSystem.DropDownScrollBarColor = System.Drawing.Color.LightGray;
+            this.extTextBoxAutoCompleteHomeSystem.EndButtonEnable = false;
+            this.extTextBoxAutoCompleteHomeSystem.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("extTextBoxAutoCompleteHomeSystem.EndButtonImage")));
+            this.extTextBoxAutoCompleteHomeSystem.EndButtonVisible = false;
+            this.extTextBoxAutoCompleteHomeSystem.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.extTextBoxAutoCompleteHomeSystem.InErrorCondition = false;
+            this.extTextBoxAutoCompleteHomeSystem.Location = new System.Drawing.Point(206, 3);
+            this.extTextBoxAutoCompleteHomeSystem.Multiline = false;
+            this.extTextBoxAutoCompleteHomeSystem.Name = "extTextBoxAutoCompleteHomeSystem";
+            this.extTextBoxAutoCompleteHomeSystem.ReadOnly = false;
+            this.extTextBoxAutoCompleteHomeSystem.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.extTextBoxAutoCompleteHomeSystem.SelectionLength = 0;
+            this.extTextBoxAutoCompleteHomeSystem.SelectionStart = 0;
+            this.extTextBoxAutoCompleteHomeSystem.Size = new System.Drawing.Size(152, 23);
+            this.extTextBoxAutoCompleteHomeSystem.TabIndex = 3;
+            this.extTextBoxAutoCompleteHomeSystem.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.extTextBoxAutoCompleteHomeSystem.WordWrap = true;
+            // 
+            // HomeSys
+            // 
+            this.HomeSys.AutoSize = true;
+            this.HomeSys.Location = new System.Drawing.Point(3, 0);
+            this.HomeSys.Name = "HomeSys";
+            this.HomeSys.Size = new System.Drawing.Size(75, 13);
+            this.HomeSys.TabIndex = 2;
+            this.HomeSys.Text = "Home System:";
+            // 
+            // labelZoom
+            // 
+            this.labelZoom.AutoSize = true;
+            this.labelZoom.Location = new System.Drawing.Point(3, 62);
+            this.labelZoom.Name = "labelZoom";
+            this.labelZoom.Size = new System.Drawing.Size(71, 13);
+            this.labelZoom.TabIndex = 10;
+            this.labelZoom.Text = "Default Zoom";
+            // 
+            // labelOpenOn
+            // 
+            this.labelOpenOn.AutoSize = true;
+            this.labelOpenOn.Location = new System.Drawing.Point(3, 31);
+            this.labelOpenOn.Name = "labelOpenOn";
+            this.labelOpenOn.Size = new System.Drawing.Size(90, 13);
+            this.labelOpenOn.TabIndex = 7;
+            this.labelOpenOn.Text = "Open Centred On";
             // 
             // CommanderForm
             // 
