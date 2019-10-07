@@ -13,11 +13,11 @@ namespace EliteDangerousCore.DB
 {
     public class UserDatabaseConnection : IDisposable
     {
-        internal SQLiteConnectionUser2 Connection { get; private set; }
+        internal SQLiteConnectionUser Connection { get; private set; }
 
         public UserDatabaseConnection()
         {
-            Connection = new SQLiteConnectionUser2();
+            Connection = new SQLiteConnectionUser();
         }
 
         public void Dispose()

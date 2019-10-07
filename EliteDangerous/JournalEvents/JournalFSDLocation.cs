@@ -551,7 +551,7 @@ namespace EliteDangerousCore.JournalEvents
             });
         }
 
-        internal void UpdateFirstDiscover(bool value, SQLiteConnectionUser2 cn, DbTransaction txnl = null)
+        internal void UpdateFirstDiscover(bool value, SQLiteConnectionUser cn, DbTransaction txnl = null)
         {
             JObject jo = GetJson(Id, cn, txnl);
 

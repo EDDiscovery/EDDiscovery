@@ -122,7 +122,7 @@ namespace EliteDangerousCore
             UserDatabase.Instance.ExecuteWithDatabase(cn => UpdateSyncFlagBit(SyncFlags.EDSM, true, SyncFlags.NoBit, false, cn.Connection));
         }
 
-        internal void SetEdsmSync(SQLiteConnectionUser2 cn , DbTransaction txn = null)
+        internal void SetEdsmSync(SQLiteConnectionUser cn , DbTransaction txn = null)
         {
             UpdateSyncFlagBit(SyncFlags.EDSM, true, SyncFlags.NoBit, false, cn, txn);
         }

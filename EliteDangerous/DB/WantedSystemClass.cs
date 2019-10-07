@@ -44,7 +44,7 @@ namespace EliteDangerousCore.DB
             return UserDatabase.Instance.ExecuteWithDatabase<bool>(cn => { return Add(cn.Connection); });
         }
 
-        private bool Add(SQLiteConnectionUser2 cn)
+        private bool Add(SQLiteConnectionUser cn)
         {
             using (DbCommand cmd = cn.CreateCommand("Insert into wanted_systems (systemname) values (@systemname)"))
             {
@@ -64,7 +64,7 @@ namespace EliteDangerousCore.DB
             return UserDatabase.Instance.ExecuteWithDatabase<bool>(cn => { return Delete(cn.Connection); });
         }
 
-        private bool Delete(SQLiteConnectionUser2 cn)
+        private bool Delete(SQLiteConnectionUser cn)
         {
             using (DbCommand cmd = cn.CreateCommand("DELETE FROM wanted_systems WHERE id = @id"))
             {

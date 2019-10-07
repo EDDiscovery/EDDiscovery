@@ -72,7 +72,7 @@ namespace EliteDangerousCore
             return UserDatabase.Instance.ExecuteWithDatabase<bool>(cn => { return Add(jo, cn.Connection); });
         }
 
-        internal bool Add(JObject jo, SQLiteConnectionUser2 cn, DbTransaction tn = null)
+        internal bool Add(JObject jo, SQLiteConnectionUser cn, DbTransaction tn = null)
         {
             using (DbCommand cmd = cn.CreateCommand("Insert into JournalEntries (EventTime, TravelLogID, CommanderId, EventTypeId , EventType, EventData, EdsmId, Synced) values (@EventTime, @TravelLogID, @CommanderID, @EventTypeId , @EventStrName, @EventData, @EdsmId, @Synced)", tn))
             {
@@ -100,7 +100,7 @@ namespace EliteDangerousCore
             return UserDatabase.Instance.ExecuteWithDatabase<bool>(cn => { return Update(cn.Connection); });
         }
 
-        private bool Update(SQLiteConnectionUser2 cn, DbTransaction tn = null)
+        private bool Update(SQLiteConnectionUser cn, DbTransaction tn = null)
         {
             using (DbCommand cmd = cn.CreateCommand("Update JournalEntries set EventTime=@EventTime, TravelLogID=@TravelLogID, CommanderID=@CommanderID, EventTypeId=@EventTypeId, EventType=@EventStrName, EdsmId=@EdsmId, Synced=@Synced where ID=@id", tn))
             {
@@ -118,7 +118,7 @@ namespace EliteDangerousCore
             }
         }
 
-        internal void UpdateJsonEntry(JObject jo, SQLiteConnectionUser2 cn, DbTransaction tn = null)
+        internal void UpdateJsonEntry(JObject jo, SQLiteConnectionUser cn, DbTransaction tn = null)
         {
             using (DbCommand cmd = cn.CreateCommand("Update JournalEntries set EventData=@EventData where ID=@id", tn))
             {
@@ -133,7 +133,7 @@ namespace EliteDangerousCore
             UserDatabase.Instance.ExecuteWithDatabase(cn => { Delete(idvalue,cn.Connection); });
         }
 
-        static private void Delete(long idvalue, SQLiteConnectionUser2 cn)
+        static private void Delete(long idvalue, SQLiteConnectionUser cn)
         {
             using (DbCommand cmd = cn.CreateCommand("DELETE FROM JournalEntries WHERE id = @id"))
             {
@@ -150,7 +150,7 @@ namespace EliteDangerousCore
         }
 
         //dist >0 to update
-        internal static void UpdateEDSMIDPosJump(long journalid, ISystem system, bool jsonpos, double dist, SQLiteConnectionUser2 cn, DbTransaction tn = null)
+        internal static void UpdateEDSMIDPosJump(long journalid, ISystem system, bool jsonpos, double dist, SQLiteConnectionUser cn, DbTransaction tn = null)
         {
             bool updatejson = jsonpos || dist > 0;
 
@@ -188,7 +188,7 @@ namespace EliteDangerousCore
             }
         }
 
-        private void UpdateSyncFlagBit(SyncFlags bit1, bool value1, SyncFlags bit2, bool value2, SQLiteConnectionUser2 cn , DbTransaction txn = null)
+        private void UpdateSyncFlagBit(SyncFlags bit1, bool value1, SyncFlags bit2, bool value2, SQLiteConnectionUser cn , DbTransaction txn = null)
         {
             if (value1)
                 Synced |= (int)bit1;
@@ -252,7 +252,7 @@ namespace EliteDangerousCore
             return UserDatabase.Instance.ExecuteWithDatabase<JObject>(cn => { return GetJson(journalid, cn.Connection); });
         }
 
-        static internal JObject GetJson(long journalid, SQLiteConnectionUser2 cn, DbTransaction tn = null)
+        static internal JObject GetJson(long journalid, SQLiteConnectionUser cn, DbTransaction tn = null)
         {
             using (DbCommand cmd = cn.CreateCommand("select EventData from JournalEntries where ID=@journalid", tn))
             {
@@ -285,7 +285,7 @@ namespace EliteDangerousCore
             return UserDatabase.Instance.ExecuteWithDatabase<JournalEntry>(cn => { return Get(journalid, cn.Connection); });
         }
 
-        static internal JournalEntry Get(long journalid, SQLiteConnectionUser2 cn, DbTransaction tn = null)
+        static internal JournalEntry Get(long journalid, SQLiteConnectionUser cn, DbTransaction tn = null)
         {
             using (DbCommand cmd = cn.CreateCommand("select * from JournalEntries where ID=@journalid", tn))
             {
@@ -308,7 +308,7 @@ namespace EliteDangerousCore
             return UserDatabase.Instance.ExecuteWithDatabase<List<JournalEntry>>(cn => { return Get(eventtype, cn.Connection); });
         }
 
-        static internal List<JournalEntry> Get(string eventtype, SQLiteConnectionUser2 cn, DbTransaction tn = null)
+        static internal List<JournalEntry> Get(string eventtype, SQLiteConnectionUser cn, DbTransaction tn = null)
         {
             Dictionary<long, TravelLogUnit> tlus = TravelLogUnit.GetAll().ToDictionary(t => t.id);
 

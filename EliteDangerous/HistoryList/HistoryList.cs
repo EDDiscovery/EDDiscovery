@@ -624,7 +624,7 @@ namespace EliteDangerousCore
                 FillInSystemFromDBInt(syspos, null, null, null);        // else fill in using null system, which means just mark it checked
         }
 
-        private void FillInSystemFromDBInt(HistoryEntry syspos, ISystem edsmsys, SQLiteConnectionUser2 uconn, DbTransaction utn )       // call to fill in ESDM data for entry, and also fills in all others pointing to the system object
+        private void FillInSystemFromDBInt(HistoryEntry syspos, ISystem edsmsys, SQLiteConnectionUser uconn, DbTransaction utn )       // call to fill in ESDM data for entry, and also fills in all others pointing to the system object
         {
             List<HistoryEntry> alsomatching = new List<HistoryEntry>();
 

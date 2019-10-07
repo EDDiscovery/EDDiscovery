@@ -23,9 +23,9 @@ using SQLLiteExtensions;
 
 namespace EliteDangerousCore.DB
 {
-    internal class SQLiteConnectionUser2 : SQLExtConnectionRegister<SQLiteConnectionUser2>
+    internal class SQLiteConnectionUser : SQLExtConnectionRegister<SQLiteConnectionUser>
     {
-        public SQLiteConnectionUser2() : base(EliteDangerousCore.EliteConfigInstance.InstanceOptions.UserDatabasePath, utctimeindicator:true)
+        public SQLiteConnectionUser() : base(EliteDangerousCore.EliteConfigInstance.InstanceOptions.UserDatabasePath, utctimeindicator:true)
         {
         }
 

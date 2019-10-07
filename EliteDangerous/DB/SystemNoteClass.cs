@@ -56,7 +56,7 @@ namespace EliteDangerousCore.DB
             return UserDatabase.Instance.ExecuteWithDatabase<bool>(cn => { return AddToDbAndGlobal(cn.Connection); });
         }
 
-        private bool AddToDbAndGlobal(SQLiteConnectionUser2 cn)
+        private bool AddToDbAndGlobal(SQLiteConnectionUser cn)
         {
             using (DbCommand cmd = cn.CreateCommand("Insert into SystemNote (Name, Time, Note, journalid, edsmid) values (@name, @time, @note, @journalid, @edsmid)"))
             {
@@ -86,7 +86,7 @@ namespace EliteDangerousCore.DB
             return UserDatabase.Instance.ExecuteWithDatabase<bool>(cn => { return Update(cn.Connection); });
         }
 
-        private bool Update(SQLiteConnectionUser2 cn)
+        private bool Update(SQLiteConnectionUser cn)
         {
             using (DbCommand cmd = cn.CreateCommand("Update SystemNote set Name=@Name, Time=@Time, Note=@Note, Journalid=@journalid, EdsmId=@EdsmId  where ID=@id"))
             {
@@ -110,7 +110,7 @@ namespace EliteDangerousCore.DB
             return UserDatabase.Instance.ExecuteWithDatabase<bool>(cn => { return Delete(cn.Connection); });
         }
 
-        private bool Delete(SQLiteConnectionUser2 cn)
+        private bool Delete(SQLiteConnectionUser cn)
         {
             using (DbCommand cmd = cn.CreateCommand("DELETE FROM SystemNote WHERE id = @id"))
             {
