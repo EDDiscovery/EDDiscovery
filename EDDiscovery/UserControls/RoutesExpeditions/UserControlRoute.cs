@@ -257,6 +257,7 @@ namespace EDDiscovery.UserControls
                         );
 
                 rw.Tag = info.system;       // may be null if waypoint or not a system
+                rw.Cells[0].Tag = info.system?.Name;    // write the name of the system into the cells'tag for copying
                 rw.HeaderCell.Value = info.pos != null ? (dataGridViewRoute.Rows.Count + 1).ToStringInvariant() : "-";
                 dataGridViewRoute.Rows.Add(rw);
                 if (!rw.Displayed)
@@ -674,7 +675,13 @@ namespace EDDiscovery.UserControls
             DataGridViewCell cell = dataGridViewRoute.CurrentCell;
             if (cell != null)
             {
-                string s = (string)cell.Value;
+                // If a cell contains a tag (i.e. a system name), copy the string of the tag
+                // else, copy whatever text is inside
+                string s = "";
+                if (cell.Tag != null)
+                    s = cell.Tag.ToString();
+                else
+                    s = (string)cell.Value;
                 SetClipboardText(s);
             }
         }
