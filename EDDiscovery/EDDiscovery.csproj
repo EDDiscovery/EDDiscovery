@@ -174,6 +174,8 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actions\ActionControllerKeys.cs" />
+    <Compile Include="Actions\ActionControllerVoice.cs" />
     <Compile Include="Translations\EDDiscoveryTranslations.cs" />
     <Compile Include="UserControls\Helpers\CSVHelpers.cs" />
     <Compile Include="WebServer\WebServer.cs" />

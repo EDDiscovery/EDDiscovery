@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2017 EDDiscovery development team
+ * Copyright © 2017-2019 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -13,29 +13,23 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+
+using ActionLanguage;
+using AudioExtensions;
+using BaseUtils;
 using EDDiscovery.Forms;
-using BaseUtils.Win32Constants;
+using EliteDangerousCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using BaseUtils;
-using ActionLanguage;
-using AudioExtensions;
-using EliteDangerousCore.DB;
-using EliteDangerousCore;
 
 namespace EDDiscovery.Actions
 {
-    public class ActionController : ActionCoreController
+    public partial class ActionController : ActionCoreController
     {
         private EDDiscoveryForm discoveryform;
         private EDDiscoveryController discoverycontroller;
-
-        protected ActionMessageFilter actionfilesmessagefilter;
-        protected string actionfileskeyevents;
 
         public HistoryList HistoryList { get { return discoverycontroller.history; } }
         public EDDiscoveryForm DiscoveryForm { get { return discoveryform; } }
@@ -54,7 +48,6 @@ namespace EDDiscovery.Actions
         public override AudioExtensions.AudioQueue AudioQueueWave { get { return audioqueuewave; } }
         public override AudioExtensions.AudioQueue AudioQueueSpeech { get { return audioqueuespeech; } }
         public override AudioExtensions.SpeechSynthesizer SpeechSynthesizer { get { return speechsynth; } }
-        public AudioExtensions.IVoiceRecognition VoiceRecognition { get { return voicerecon; } }
         public BindingsFile FrontierBindings { get { return frontierbindings; } }
 
         public string ErrorList;        // set on Reload, use to display warnings at right point
@@ -64,7 +57,6 @@ namespace EDDiscovery.Actions
         AudioExtensions.IAudioDriver audiodriverspeech;
         AudioExtensions.AudioQueue audioqueuespeech;
         AudioExtensions.SpeechSynthesizer speechsynth;
-        AudioExtensions.IVoiceRecognition voicerecon;
 
         DirectInputDevices.InputDeviceList inputdevices;
         Actions.ActionsFromInputDevices inputdevicesactions;
@@ -612,87 +604,6 @@ namespace EDDiscovery.Actions
             discoveryform.LogLine(s);
         }
 
-        #region Keys
-
-        protected class ActionMessageFilter : IMessageFilter
-        {
-            EDDiscoveryForm discoveryform;
-            ActionController actcontroller;
-            public ActionMessageFilter(EDDiscoveryForm frm, ActionController ac)
-            {
-                discoveryform = frm;
-                actcontroller = ac;
-            }
-
-            public bool PreFilterMessage(ref Message m)
-            {
-                if ((m.Msg == WM.KEYDOWN || m.Msg == WM.SYSKEYDOWN) && discoveryform.CanFocus)
-                {
-                    Keys k = (Keys)m.WParam;
-
-                    if (k != Keys.ControlKey && k != Keys.ShiftKey && k != Keys.Menu)
-                    {
-                        string name = k.VKeyToString(Control.ModifierKeys);
-                        //System.Diagnostics.Debug.WriteLine("Keydown " + m.LParam + " " + name + " " + m.WParam + " " + Control.ModifierKeys);
-                        if (actcontroller.CheckKeys(name))
-                            return true;    // swallow, we did it
-                    }
-                }
-
-                return false;
-            }
-        }
-
-        void ActionConfigureKeys()
-        {
-            List<Tuple<string, ConditionEntry.MatchType>> ret = actionfiles.ReturnValuesOfSpecificConditions("KeyPress", new List<ConditionEntry.MatchType>() { ConditionEntry.MatchType.Equals, ConditionEntry.MatchType.IsOneOf });        // need these to decide
-
-            if (ret.Count > 0)
-            {
-                actionfileskeyevents = "";
-                foreach (Tuple<string, ConditionEntry.MatchType> t in ret)                  // go thru the list, making up a comparision string with Name, on it..
-                {
-                    if (t.Item2 == ConditionEntry.MatchType.Equals)
-                        actionfileskeyevents += "<" + t.Item1 + ">";
-                    else
-                    {
-                        StringParser p = new StringParser(t.Item1);
-                        List<string> klist = p.NextQuotedWordList();
-                        if (klist != null)
-                        {
-                            foreach (string s in klist)
-                                actionfileskeyevents += "<" + s + ">";
-                        }
-                    }
-                }
-
-                if (actionfilesmessagefilter == null)
-                {
-                    actionfilesmessagefilter = new ActionMessageFilter(discoveryform, this);
-                    Application.AddMessageFilter(actionfilesmessagefilter);
-                }
-            }
-            else if (actionfilesmessagefilter != null)
-            {
-                Application.RemoveMessageFilter(actionfilesmessagefilter);
-                actionfilesmessagefilter = null;
-            }
-        }
-
-
-        public bool CheckKeys(string keyname)
-        {
-            if (actionfileskeyevents.Contains("<" + keyname + ">"))  // fast string comparision to determine if key is overridden..
-            {
-                ActionRun(ActionEventEDList.onKeyPress, new Variables("KeyPress", keyname));
-                return true;
-            }
-            else
-                return false;
-        }
-
-        #endregion
-
         #region Misc overrides
 
         public override bool Pragma(string s)     // extra pragmas.
@@ -713,93 +624,6 @@ namespace EDDiscovery.Actions
 
         #endregion
 
-        #region Voice
-
-        public bool VoiceReconOn(string culture = null)     // perform enableVR
-        {
-            voicerecon.Close(); // can close without stopping
-            voicerecon.Open(System.Globalization.CultureInfo.GetCultureInfo(culture));
-            return voicerecon.IsOpen;
-        }
-
-        public void VoiceReconOff()                         // perform disableVR
-        {
-            voicerecon.Close();
-        }
-
-        public void VoiceReconConfidence(float conf)
-        {
-            voicerecon.Confidence = conf;
-        }
-
-        public void VoiceReconParameters(int babble, int initialsilence, int endsilence, int endsilenceambigious)
-        {
-            if (voicerecon.IsOpen)
-            {
-                voicerecon.Stop(true);
-                try
-                {
-                    voicerecon.BabbleTimeout = babble;
-                    voicerecon.InitialSilenceTimeout = initialsilence;
-                    voicerecon.EndSilenceTimeout = endsilence;
-                    voicerecon.EndSilenceTimeoutAmbigious = endsilenceambigious;
-                }
-                catch { };
-
-                voicerecon.Start();
-            }
-        }
-
-        public void VoiceLoadEvents()       // kicked by Action.Perform so synchornised with voice pack (or via editor)
-        {
-            if ( voicerecon.IsOpen )
-            {
-                voicerecon.Stop(true);
-
-                voicerecon.Clear(); // clear grammars
-
-                List<Tuple<string, ConditionEntry.MatchType>> ret = actionfiles.ReturnValuesOfSpecificConditions("VoiceInput", new List<ConditionEntry.MatchType>() { ConditionEntry.MatchType.MatchSemicolonList, ConditionEntry.MatchType.MatchSemicolon });        // need these to decide
-
-                if (ret.Count > 0)
-                {
-                    foreach (var vp in ret)
-                    {
-                        voicerecon.Add(vp.Item1);
-                    }
-
-                    voicerecon.Start();
-                }
-            }
-        }
-
-        public string VoicePhrases(string sep)
-        {
-            List<Tuple<string, ConditionEntry.MatchType>> ret = actionfiles.ReturnValuesOfSpecificConditions("VoiceInput", new List<ConditionEntry.MatchType>() { ConditionEntry.MatchType.MatchSemicolonList, ConditionEntry.MatchType.MatchSemicolon });        // need these to decide
-
-            string s = "";
-            foreach (var vp in ret)
-            {
-                BaseUtils.StringCombinations sb = new BaseUtils.StringCombinations();
-                sb.ParseString(vp.Item1);
-                s += String.Join(",", sb.Permutations.ToArray()) + sep;
-            }
-
-            return s;
-        }
-
-        private void Voicerecon_SpeechRecognised(string text, float confidence)
-        {
-            System.Diagnostics.Debug.WriteLine(Environment.TickCount % 10000 + " Recognised " + text + " " + confidence.ToStringInvariant("0.0"));
-            ActionRun(ActionEventEDList.onVoiceInput, new Variables(new string[] { "VoiceInput", text, "VoiceConfidence", (confidence*100F).ToStringInvariant("0.00") }));
-        }
-
-        private void Voicerecon_SpeechNotRecognised(string text, float confidence)
-        {
-            System.Diagnostics.Debug.WriteLine(Environment.TickCount % 10000 + " Failed recognition " + text + " " + confidence.ToStringInvariant("0.00"));
-            ActionRun(ActionEventEDList.onVoiceInputFailed, new Variables(new string[] { "VoiceInput", text, "VoiceConfidence", (confidence*100F).ToStringInvariant("0.00") }));
-        }
-
-        #endregion
 
         #region Elite Input 
 
