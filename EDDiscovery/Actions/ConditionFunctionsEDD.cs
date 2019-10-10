@@ -13,14 +13,11 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+
 using BaseUtils;
-using EliteDangerousCore.DB;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EDDiscovery.Actions
 {
