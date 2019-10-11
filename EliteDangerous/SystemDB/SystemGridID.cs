@@ -63,7 +63,7 @@ namespace EliteDangerousCore.DB
             return compresstablex[(int)x] + ZMult * compresstablez[(int)z];
         }
 
-        public static int Id(int x128, int z128)
+        public static int Id128(int x128, int z128)                 
         {
             return Id((double)x128 / 128.0, (double)z128 / 128.0);
         }

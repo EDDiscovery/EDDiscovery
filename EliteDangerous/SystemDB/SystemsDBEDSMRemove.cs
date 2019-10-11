@@ -26,11 +26,12 @@ namespace EliteDangerousCore.DB
             SystemsDatabase.Instance.ExecuteWithDatabase( action: db =>
             {
                 var cn = db.Connection;
+                int gridspergo = 4;
 
                 report?.Invoke("Delete System Information from sector:");
-                for (int i = 0; i < gridids.Length; i += 32)
+                for (int i = 0; i < gridids.Length; i += gridspergo)
                 {
-                    int left = Math.Min(gridids.Length - i, 32);     // could do it all at once, but this way, some visual feedback
+                    int left = Math.Min(gridids.Length - i, gridspergo);     // could do it all at once, but this way, some visual feedback
                     int[] todo = new int[left];
                     Array.Copy(gridids, i, todo, 0, left);
 
@@ -41,10 +42,14 @@ namespace EliteDangerousCore.DB
                         cmd.ExecuteNonQuery();
                     }
 
+                    System.Threading.Thread.Sleep(200);
+
                     using (DbCommand cmd = cn.CreateDelete("Sectors", "gridid IN (" + string.Join(",", todo) + ")"))
                     {
                         cmd.ExecuteNonQuery();
                     }
+
+                    System.Threading.Thread.Sleep(200);
                 }
 
                 report?.Invoke(Environment.NewLine);

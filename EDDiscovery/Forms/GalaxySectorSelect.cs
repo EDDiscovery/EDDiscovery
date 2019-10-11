@@ -377,7 +377,7 @@ namespace EDDiscovery.Forms
                 xly = (int)(lypostop.X + fractx * lywidth);
                 zly = (int)(lypostop.Y - fracty * lyheight);
 
-                int id = GridId.Id(xly, zly);
+                int id = GridId.Id((double)xly, (double)zly);
 
                // System.Diagnostics.Debug.WriteLine("ID {0} {1} {2}" ,id, xly, zly);
 
@@ -403,6 +403,8 @@ namespace EDDiscovery.Forms
                         includedgridid.Add(id);
                         includedgridid.Sort();
                     }
+
+                    //System.Diagnostics.Debug.WriteLine("Grid list now " + string.Join(",",includedgridid));
                     Invalidate();
                     onChange?.Invoke();
                 }

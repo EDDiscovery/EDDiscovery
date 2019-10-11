@@ -58,7 +58,7 @@ namespace EliteDangerousCore
             EDSMID = edsmid;
             Name = name;
             X = vx; Y = vy; Z = vz;
-            GridID = EliteDangerousCore.DB.GridId.Id(Xi, Zi);
+            GridID = EliteDangerousCore.DB.GridId.Id128(Xi, Zi);
         }
 
         public SystemClassBase(string name, int xi, int yi, int zi, long edsmid = 0 , int gridid = -1)
@@ -66,7 +66,7 @@ namespace EliteDangerousCore
             EDSMID = edsmid;
             Name = name;
             Xi = xi; Yi = yi; Zi = zi;
-            GridID = gridid == -1 ? EliteDangerousCore.DB.GridId.Id(Xi,Zi) : gridid;
+            GridID = gridid == -1 ? EliteDangerousCore.DB.GridId.Id128(Xi,Zi) : gridid;
         }
 
         public SystemClassBase(ISystem sys)

@@ -187,7 +187,7 @@ namespace EliteDangerousCore.DB
                                     d.z = (int)(long)reader[3];
                                     d.name = (string)reader[4];
                                     d.date = new DateTime(2015, 1, 1, 0, 0, 0, DateTimeKind.Utc) + TimeSpan.FromSeconds((long)reader["UpdateTimestamp"]);
-                                    int grididentry = GridId.Id(d.x, d.z);  // because i don't trust the previous gridid - it should be the same as the outer loop, but lets recalc
+                                    int grididentry = GridId.Id128(d.x, d.z);  // because i don't trust the previous gridid - it should be the same as the outer loop, but lets recalc
 
                                     //if (!tablesareempty)  d.z = debug_z++;  // for debug checking
 
@@ -268,7 +268,7 @@ namespace EliteDangerousCore.DB
 
                             if (d.Deserialize(jr) && d.id >= 0 && d.name.HasChars() && d.z != int.MinValue)     // if we have a valid record
                             {
-                                int gridid = GridId.Id(d.x, d.z);
+                                int gridid = GridId.Id128(d.x, d.z);
                                 if (grididallowed == null || (grididallowed.Length > gridid && grididallowed[gridid]))    // allows a null or small grid
                                 {
                                     TableWriteData data = new TableWriteData() { edsm = d, classifier = new EliteNameClassifier(d.name), gridid = gridid };
