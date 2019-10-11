@@ -315,6 +315,8 @@ namespace EDDiscovery
 
             if (EDDOptions.Instance.ActionButton)
                 buttonReloadActions.Visible = true;
+
+       //     Hookable.Hook();
         }
 
         // OnLoad is called the first time the form is shown, before OnShown or OnActivated are called

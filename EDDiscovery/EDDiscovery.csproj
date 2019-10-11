@@ -283,7 +283,9 @@
     <Compile Include="UserControls\Helpers\TagsForm.Designer.cs">
       <DependentUpon>TagsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\Helpers\Filter.cs" />
+    <Compile Include="UserControls\Helpers\Filter.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="UserControls\LogsBookmarks\CaptainsLogDiary.cs">
       <SubType>UserControl</SubType>
     </Compile>
