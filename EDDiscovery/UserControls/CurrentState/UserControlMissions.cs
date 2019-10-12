@@ -182,7 +182,7 @@ namespace EDDiscovery.UserControls
 
                 int count = mcurrent.Count();
 
-                cColName.HeaderText = (count > 0) ? (count.ToStringInvariant() + (count > 1 ? " Missions".T(EDTx.UserControlMissions_MPlural) : " Mission".T(EDTx.UserControlMissions_MSingular))) : "Name".T(EDTx.UserControlMissions_Name);
+                cColName.HeaderText = (count > 0) ? (count.ToString() + (count > 1 ? " Missions".T(EDTx.UserControlMissions_MPlural) : " Mission".T(EDTx.UserControlMissions_MSingular))) : "Name".T(EDTx.UserControlMissions_Name);
                 cColValue.HeaderText = (totalReward != 0) ? string.Format("Value (cr):\n{0:N0}".T(EDTx.UserControlMissions_Value) ,totalReward) : "Value (cr)".T(EDTx.UserControlMissions_ValueN);
 
                 //                cColValue.HeaderText = (count>0) ? (count.ToStringInvariant() + (count > 1 ? " Missions" : " Mission") + (totalReward>0 ? $", {totalReward:N0}" : "")) : "Value";

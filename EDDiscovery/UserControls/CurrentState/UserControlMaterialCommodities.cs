@@ -190,12 +190,12 @@ namespace EDDiscovery.UserControls
 
             if (materials)
             {
-                textBoxItems1.Text = mcl.DataCount.ToStringInvariant();
-                textBoxItems2.Text = mcl.MaterialsCount.ToStringInvariant();
+                textBoxItems1.Text = mcl.DataCount.ToString();
+                textBoxItems2.Text = mcl.MaterialsCount.ToString();
             }
             else
             {
-                textBoxItems1.Text = mcl.CargoCount.ToStringInvariant();
+                textBoxItems1.Text = mcl.CargoCount.ToString();
             }
         }
 

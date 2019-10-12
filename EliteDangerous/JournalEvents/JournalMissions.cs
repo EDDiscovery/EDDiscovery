@@ -435,7 +435,7 @@ namespace EliteDangerousCore.JournalEvents
                 for (int i = 0; i < CommodityReward.Length; i++)
                 {
                     CommodityRewards c = CommodityReward[i];
-                    detailed += ((i > 0) ? "," : "") + c.Name_Localised + " " + CommodityReward[i].Count.ToStringInvariant();
+                    detailed += ((i > 0) ? "," : "") + c.Name_Localised + " " + CommodityReward[i].Count.ToString();
                 }
 
                 if (pretty)
@@ -455,7 +455,7 @@ namespace EliteDangerousCore.JournalEvents
                 for (int i = 0; i < MaterialsReward.Length; i++)
                 {
                     MaterialRewards m = MaterialsReward[i];
-                    detailed += ((i > 0) ? "," : "") + m.Name_Localised + " " + MaterialsReward[i].Count.ToStringInvariant();
+                    detailed += ((i > 0) ? "," : "") + m.Name_Localised + " " + MaterialsReward[i].Count.ToString();
                 }
 
                 if (pretty)

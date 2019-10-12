@@ -229,7 +229,7 @@ namespace EDDiscovery.UserControls
                 for (int i = 0; i < Recipes.SynthesisRecipes.Count; i++)
                 {
                     int rno = (int)dataGridViewSynthesis.Rows[i].Tag;
-                    dataGridViewSynthesis.Rows[i].Cells[2].Value = MaterialCommoditiesRecipe.HowManyLeft(mcl, Recipes.SynthesisRecipes[rno]).Item1.ToStringInvariant();
+                    dataGridViewSynthesis.Rows[i].Cells[2].Value = MaterialCommoditiesRecipe.HowManyLeft(mcl, Recipes.SynthesisRecipes[rno]).Item1.ToString();
                     bool visible = true;
                 
                     if (recep != "All" || levels != "All" || materials != "All")
@@ -270,8 +270,8 @@ namespace EDDiscovery.UserControls
 
                         using (DataGridViewRow row = dataGridViewSynthesis.Rows[i])
                         {
-                            row.Cells[3].Value = Wanted[rno].ToStringInvariant();
-                            row.Cells[4].Value = res.Item2.ToStringInvariant();
+                            row.Cells[3].Value = Wanted[rno].ToString();
+                            row.Cells[4].Value = res.Item2.ToString();
                             row.Cells[5].Value = res.Item3;
                             row.Cells[5].ToolTipText = res.Item4;
                         }
@@ -292,7 +292,7 @@ namespace EDDiscovery.UserControls
 
                     foreach (MaterialCommodities c in shoppinglist)        // and add new..
                     {
-                        Object[] values = { c.Details.Name, "", c.scratchpad.ToStringInvariant(), "", c.Details.Shortname };
+                        Object[] values = { c.Details.Name, "", c.scratchpad.ToString(), "", c.Details.Shortname };
                         int rn = dataGridViewSynthesis.Rows.Add(values);
                         dataGridViewSynthesis.Rows[rn].ReadOnly = true;     // disable editing wanted..
                     }
@@ -338,7 +338,7 @@ namespace EDDiscovery.UserControls
                 }
             }
             else
-                dataGridViewSynthesis.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = Wanted[rno].ToStringInvariant();
+                dataGridViewSynthesis.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = Wanted[rno].ToString();
         }
 
         private Rectangle moveMoveDragBox;

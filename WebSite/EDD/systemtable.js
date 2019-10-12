@@ -46,8 +46,13 @@ function FillSystemTable(jdata)
         asidetable.appendChild(tablerow2tdstring("Mats/Data", jdata["Ship"]["Materials"] + " / " + jdata["Ship"]["Data"]));
         asidetable.appendChild(tablerow2tdjson(jdata, "Materials", "Ship", "Materials"));
         asidetable.appendChild(tablerow2tdjson(jdata, "Credits", "Credits"));
-        if ( jdata.Travel.Dist != "" )
-            asidetable.appendChild(tablerow2tdstring("Travel", jdata.Travel.Dist + " ly, " + jdata.Travel.Time + ", " + jdata.Travel.Jumps));
+        if (jdata.Travel.Dist != "")
+        {
+            if (jdata.Travel.UnknownJumps != 0)
+                asidetable.appendChild(tablerow2tdstring("Travel", jdata.Travel.Dist + " ly, " + jdata.Travel.Time + ", " + jdata.Travel.Jumps + "(+" + jdata.Travel.UnknownJumps + ")"));
+            else
+                asidetable.appendChild(tablerow2tdstring("Travel", jdata.Travel.Dist + " ly, " + jdata.Travel.Time + ", " + jdata.Travel.Jumps));
+        }
         else
             asidetable.appendChild(tablerow2tdstring("Travel", "-"));
     }

@@ -69,7 +69,7 @@ namespace EliteDangerousCore
         public int TravelledMissingjump { get { return TravelStatus.TravelledMissingjump; } }
         public int Travelledjumps { get { return TravelStatus.Travelledjumps; } }
         public string TravelInfo() { return TravelStatus.ToString("TT: "); }
-        public string TravelledJumpsAndMisses { get { return TravelStatus.TravelledJumpsAndMisses; } }
+        public string TravelledJumpsAndMisses { get { return Travelledjumps.ToString() + ((TravelledMissingjump > 0) ? (" (" + TravelledMissingjump.ToString() + ")") : ""); } }
 
         public bool IsLanded { get { return EntryStatus.TravelState == HistoryEntryStatus.TravelStateType.Landed; } }
         public bool IsDocked { get { return EntryStatus.TravelState == HistoryEntryStatus.TravelStateType.Docked; } }

@@ -256,7 +256,7 @@ namespace EDDiscovery.UserControls
                         );
 
                 rw.Tag = info.system;       // may be null if waypoint or not a system
-                rw.HeaderCell.Value = info.pos != null ? (dataGridViewRoute.Rows.Count + 1).ToStringInvariant() : "-";
+                rw.HeaderCell.Value = info.pos != null ? (dataGridViewRoute.Rows.Count + 1).ToString() : "-";
                 dataGridViewRoute.Rows.Add(rw);
                 if (!rw.Displayed)
                 {

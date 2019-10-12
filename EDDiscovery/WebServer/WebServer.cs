@@ -184,6 +184,7 @@ namespace EDDiscovery.WebServer
         private void Discoveryform_OnNewEntry(HistoryEntry arg1, HistoryList arg2)
         {
             httpws.SendWebSockets(journalsender.Push(), false); // refresh history
+            httpws.SendWebSockets(statussender.Push(), false); // refresh status
         }
 
         // deal with the icon roots
@@ -312,6 +313,11 @@ namespace EDDiscovery.WebServer
                 return MakeResponse(entry, "status");
             }
 
+            public JToken Push()                                    // push latest entry
+            {
+                return MakeResponse(-1, "status");
+            }
+
             public JToken Response(string key, JToken message, HttpListenerRequest request)
             {
                 System.Diagnostics.Debug.WriteLine("Status Request " + key + " Fields " + message.ToString(Newtonsoft.Json.Formatting.None));
@@ -415,7 +421,8 @@ namespace EDDiscovery.WebServer
                 if (he.isTravelling)
                 {
                     travel["Dist"] = he.TravelledDistance.ToStringInvariant("0.0");
-                    travel["Jumps"] = he.TravelledJumpsAndMisses;
+                    travel["Jumps"] = he.Travelledjumps.ToStringInvariant();
+                    travel["UnknownJumps"] = he.TravelledMissingjump.ToStringInvariant();
                     travel["Time"] = he.TravelledSeconds.ToString();
                 }
                 else

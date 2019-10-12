@@ -450,10 +450,10 @@ namespace EDDiscovery.UserControls
         void SetLabels()
         {
             bool faction = current != null ? current.TargetFaction.Length > 0 : false;
-            labelTotalKills.Text = (total_kills>0) ? ("Kills:".T(EDTx.UserControlCombatPanel_Kills) + total_kills.ToStringInvariant()) : "";
-            labelFactionKills.Text = faction ? ("Faction:".T(EDTx.UserControlCombatPanel_Faction) + faction_kills.ToStringInvariant()) : "";
+            labelTotalKills.Text = (total_kills>0) ? ("Kills:".T(EDTx.UserControlCombatPanel_Kills) + total_kills.ToString()) : "";
+            labelFactionKills.Text = faction ? ("Faction:".T(EDTx.UserControlCombatPanel_Faction) + faction_kills.ToString()) : "";
             labelFaction.Text = faction ? (current.TargetFaction) : "";
-            labelTotalCrimes.Text = (total_crimes>0) ? ("Crimes:".T(EDTx.UserControlCombatPanel_Crimes) + total_crimes.ToStringInvariant()) : "";
+            labelTotalCrimes.Text = (total_crimes>0) ? ("Crimes:".T(EDTx.UserControlCombatPanel_Crimes) + total_crimes.ToString()) : "";
 
             labelCredits.Text = (discoveryform.history.GetLast != null) ? (discoveryform.history.GetLast.Credits.ToString("N0") + "cr") : "";
             labelBalance.Text = (balance > 0 ) ? ("Bal:".T(EDTx.UserControlCombatPanel_Bal) + balance.ToString("N0") + "cr") : "";

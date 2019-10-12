@@ -28,8 +28,6 @@ namespace EliteDangerousCore
         public int TravelledMissingjump { get; private set; }
         public int Travelledjumps { get; private set; }
 
-        public string TravelledJumpsAndMisses { get { return Travelledjumps.ToStringInvariant() + ((TravelledMissingjump > 0) ? (" (" + TravelledMissingjump.ToStringInvariant() + ")") : ""); } }
-
         public string ToString(string prefix)
         {
             if (IsTravelling)

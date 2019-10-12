@@ -237,7 +237,7 @@ namespace EDDiscovery.UserControls
                 for (int i = 0; i < Recipes.EngineeringRecipes.Count; i++)
                 {
                     int rno = (int)dataGridViewEngineering.Rows[i].Tag;
-                    dataGridViewEngineering[MaxCol.Index, i].Value = MaterialCommoditiesRecipe.HowManyLeft(mcl, Recipes.EngineeringRecipes[rno]).Item1.ToStringInvariant();
+                    dataGridViewEngineering[MaxCol.Index, i].Value = MaterialCommoditiesRecipe.HowManyLeft(mcl, Recipes.EngineeringRecipes[rno]).Item1.ToString();
                     bool visible = true;
                     
                     if (engineers == "All" && modules == "All" && levels == "All" && upgrades == "All" && materials == "All")
@@ -282,8 +282,8 @@ namespace EDDiscovery.UserControls
                         Tuple<int, int, string,string> res = MaterialCommoditiesRecipe.HowManyLeft(mcl, Recipes.EngineeringRecipes[rno], Wanted[rno]);
                         //System.Diagnostics.Debug.WriteLine("{0} Recipe {1} executed {2} {3} ", i, rno, Wanted[rno], res.Item2);
 
-                        dataGridViewEngineering[WantedCol.Index, i].Value = Wanted[rno].ToStringInvariant();
-                        dataGridViewEngineering[AvailableCol.Index, i].Value = res.Item2.ToStringInvariant();
+                        dataGridViewEngineering[WantedCol.Index, i].Value = Wanted[rno].ToString();
+                        dataGridViewEngineering[AvailableCol.Index, i].Value = res.Item2.ToString();
                         dataGridViewEngineering[NotesCol.Index, i].Value = res.Item3;
                         dataGridViewEngineering[NotesCol.Index, i].ToolTipText = res.Item4;
 
@@ -309,7 +309,7 @@ namespace EDDiscovery.UserControls
                             if (cell.OwningColumn == UpgradeCol)
                                 cell.Value = c.Details.Name;
                             else if (cell.OwningColumn == WantedCol)
-                                cell.Value = c.scratchpad.ToStringInvariant();
+                                cell.Value = c.scratchpad.ToString();
                             else if (cell.OwningColumn == NotesCol)
                                 cell.Value = c.Details.Shortname;
                             else if (cell.ValueType == null || cell.ValueType.IsAssignableFrom(typeof(string)))
@@ -358,7 +358,7 @@ namespace EDDiscovery.UserControls
                     Display();
                 }
                 else
-                    dataGridViewEngineering[WantedCol.Index, e.RowIndex].Value = Wanted[rno].ToStringInvariant();
+                    dataGridViewEngineering[WantedCol.Index, e.RowIndex].Value = Wanted[rno].ToString();
             }
         }
 

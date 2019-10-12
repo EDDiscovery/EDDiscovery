@@ -265,12 +265,12 @@ namespace EDDiscovery.UserControls
 
                 int cc = (he.ShipInformation) != null ? he.ShipInformation.CargoCapacity() : 0;
                 if (cc > 0)
-                    textBoxCargo.Text = he.MaterialCommodity.CargoCount.ToStringInvariant() + "/" + cc.ToStringInvariant();
+                    textBoxCargo.Text = he.MaterialCommodity.CargoCount.ToString() + "/" + cc.ToString();
                 else
-                    textBoxCargo.Text = he.MaterialCommodity.CargoCount.ToStringInvariant();
+                    textBoxCargo.Text = he.MaterialCommodity.CargoCount.ToString();
 
-                textBoxMaterials.Text = he.MaterialCommodity.MaterialsCount.ToStringInvariant();
-                textBoxData.Text = he.MaterialCommodity.DataCount.ToStringInvariant();
+                textBoxMaterials.Text = he.MaterialCommodity.MaterialsCount.ToString();
+                textBoxData.Text = he.MaterialCommodity.DataCount.ToString();
                 textBoxCredits.Text = he.Credits.ToString("N0");
 
                 textBoxJumpRange.Text = "";

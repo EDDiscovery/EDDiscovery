@@ -318,9 +318,9 @@ namespace EDDiscovery.UserControls
         {
             object[] rowobj = { sm.Name_Localised.Alt(sm.Name), sm.Name,
                                 sm.StarSystem.Alt("In Transit".T(EDTx.UserControlModules_InTransit)), sm.TransferTimeString ,
-                                sm.Mass > 0 ? (sm.Mass.ToStringInvariant()+"t") : "",
+                                sm.Mass > 0 ? (sm.Mass.ToString()+"t") : "",
                                 sm.EngineerModifications.Alt(""),
-                                sm.TransferCost>0 ? sm.TransferCost.ToStringInvariant("N0") : "",
+                                sm.TransferCost>0 ? sm.TransferCost.ToString("N0") : "",
                                 "" };
             dataGridViewModules.Rows.Add(rowobj);
         }
@@ -451,7 +451,7 @@ namespace EDDiscovery.UserControls
 
             f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "Fuel Warning:".T(EDTx.UserControlModules_FW), new Point(10, 40), new Size(140, 24), ""));
             f.Add(new ExtendedControls.ConfigurableForm.Entry("FuelWarning", typeof(ExtendedControls.NumberBoxDouble), 
-                last_si.FuelWarningPercent.ToStringInvariant(), new Point(ctrlleft, 40), new Size(width - ctrlleft - 20, 24), "Enter fuel warning level in % (0 = off, 1-100%)".T(EDTx.UserControlModules_TTF))
+                last_si.FuelWarningPercent.ToString(), new Point(ctrlleft, 40), new Size(width - ctrlleft - 20, 24), "Enter fuel warning level in % (0 = off, 1-100%)".T(EDTx.UserControlModules_TTF))
                 { numberboxdoubleminimum = 0, numberboxdoublemaximum = 100, numberboxformat = "0.##" });
 
             f.Add(new ExtendedControls.ConfigurableForm.Entry("OK", typeof(ExtendedControls.ExtButton), "OK".T(EDTx.OK), new Point(width - 100, 70), new Size(80, 24), "Press to Accept".T(EDTx.UserControlModules_PresstoAccept)));

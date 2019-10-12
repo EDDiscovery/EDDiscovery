@@ -547,7 +547,7 @@ namespace EDDiscovery.UserControls
                     total -= node.starnodes.Count;
                     if (total > 0)
                     {   // tell us that a system has other bodies, and how much, beside stars
-                        infostr = infostr.AppendPrePad(string.Format("{0} Other bodies".T(EDTx.UserControlStarList_OB), total.ToStringInvariant()), ", ");
+                        infostr = infostr.AppendPrePad(string.Format("{0} Other bodies".T(EDTx.UserControlStarList_OB), total.ToString()), ", ");
                         infostr = infostr.AppendPrePad(extrainfo, prefix);                                                
                     }
                     else
@@ -955,8 +955,8 @@ namespace EDDiscovery.UserControls
                             EventDetailedInfo,
                             he.isTravelling ? he.TravelledDistance.ToString("0.0") : "",
                             he.isTravelling ? he.TravelledSeconds.ToString() : "",
-                            he.isTravelling ? he.Travelledjumps.ToStringInvariant() : "",
-                            he.isTravelling ? he.TravelledMissingjump.ToStringInvariant() : "",
+                            he.isTravelling ? he.Travelledjumps.ToString() : "",
+                            he.isTravelling ? he.TravelledMissingjump.ToString() : "",
                             };
                     };
 

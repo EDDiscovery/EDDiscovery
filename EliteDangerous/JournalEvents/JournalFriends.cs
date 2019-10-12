@@ -69,10 +69,10 @@ namespace EliteDangerousCore.JournalEvents
                     info = BaseUtils.FieldBuilder.Build("Number of Statuses:".T(EDTx.JournalEntry_NumberofStatuses), NameList.Count);
 
                 if (OnlineCount > 0)
-                    info = info.AppendPrePad("Online:".T(EDTx.JournalEntry_Online) + OnlineCount.ToStringInvariant(), ", ");
+                    info = info.AppendPrePad("Online:".T(EDTx.JournalEntry_Online) + OnlineCount.ToString(), ", ");
 
                 if (OfflineCount > 0)
-                    info = info.AppendPrePad("Offline:".T(EDTx.JournalEntry_Offline) + OfflineCount.ToStringInvariant(), ", ");
+                    info = info.AppendPrePad("Offline:".T(EDTx.JournalEntry_Offline) + OfflineCount.ToString(), ", ");
 
                 for ( int i = 0; i < StatusList.Count; i++ )
                     detailed = detailed.AppendPrePad(BaseUtils.FieldBuilder.Build("", NameList[i], "", StatusList[i]) , System.Environment.NewLine);
