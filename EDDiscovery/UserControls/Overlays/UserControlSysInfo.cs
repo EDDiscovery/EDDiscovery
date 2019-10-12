@@ -254,7 +254,7 @@ namespace EDDiscovery.UserControls
                 textBoxGameMode.Text = he.GameModeGroup;
                 if (he.isTravelling)
                 {
-                    textBoxTravelDist.Text = he.TravelledDistance.ToStringInvariant("0.0") + "ly";
+                    textBoxTravelDist.Text = he.TravelledDistance.ToString("0.0") + "ly";
                     textBoxTravelTime.Text = he.TravelledSeconds.ToString();
                     textBoxTravelJumps.Text = he.TravelledJumpsAndMisses;
                 }
@@ -281,9 +281,9 @@ namespace EDDiscovery.UserControls
 
                     textBoxShip.Text = si.ShipFullInfo(cargo: false, fuel: false);
                     if (si.FuelCapacity > 0 && si.FuelLevel > 0)
-                        textBoxFuel.Text = si.FuelLevel.ToStringInvariant("0.#") + "/" + si.FuelCapacity.ToStringInvariant("0.#");
+                        textBoxFuel.Text = si.FuelLevel.ToString("0.#") + "/" + si.FuelCapacity.ToString("0.#");
                     else if (si.FuelCapacity > 0)
-                        textBoxFuel.Text = si.FuelCapacity.ToStringInvariant("0.#");
+                        textBoxFuel.Text = si.FuelCapacity.ToString("0.#");
                     else
                         textBoxFuel.Text = "N/A".T(EDTx.UserControlSysInfo_NA);
 
