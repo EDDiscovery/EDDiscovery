@@ -86,7 +86,6 @@ namespace EDDiscovery.UserControls
             showListAvailability = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbHighlightAvailableMats, true);
             showSystemAvailability = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DBShowSystemAvailability, true);
             useEDSMForSystemAvailability = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DBUseEDSMForSystemAvailability, false);
-            showMaxInjections = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbToggleShoppingListPosition, false);
             toggleShoppingListPosition = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbToggleShoppingListPosition, false);
 
             pictureBoxList.ContextMenuStrip = contextMenuStrip;
