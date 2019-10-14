@@ -30,6 +30,7 @@ namespace EliteDangerousCore
         public string FromSystem;
         public string ToSystem;
         public int RouteMethod;
+        public bool UseFsdBoost;
 
         // METRICs defined by systemclass GetSystemNearestTo function
         public static string[] metric_options = {
@@ -83,24 +84,34 @@ namespace EliteDangerousCore
                 Point3D travelvector = new Point3D(Coordsto.X - curpos.X, Coordsto.Y - curpos.Y, Coordsto.Z - curpos.Z); // vector to destination
                 Point3D travelvectorperly = new Point3D(travelvector.X / distancetogo, travelvector.Y / distancetogo, travelvector.Z / distancetogo); // per ly travel vector
 
-                Point3D nextpos = new Point3D(curpos.X + MaxRange * travelvectorperly.X,
-                                              curpos.Y + MaxRange * travelvectorperly.Y,
-                                              curpos.Z + MaxRange * travelvectorperly.Z);   // where we would like to be..
-                
+                Point3D expectedNextPosition = GetNextPosition(curpos, travelvectorperly, MaxRange);    // where we would like to be..
+                ISystem bestsystem = GetBestJumpSystem(curpos, travelvectorperly, maxfromwanted, MaxRange);    // see if we can find a system near  our target
 
-                ISystem bestsystem = DB.SystemCache.GetSystemNearestTo(curpos, nextpos, MaxRange, maxfromwanted, RouteMethod, 1000);     // at least get 1/4 way there, otherwise waypoint.  Best 1000 from waypoint checked
+                // if we haven't found a system in range, let's try boosting
+                int boostStrength = 0;
+                while (UseFsdBoost && bestsystem == null && boostStrength < 4)
+                {
+                    boostStrength = 1 << boostStrength;
+                    float maxRangeWithBoost = MaxRange * (1.0f + BoostPercentage(boostStrength));
+                    ISystem bestSystemWithBoost = GetBestJumpSystem(curpos, travelvectorperly, maxfromwanted, maxRangeWithBoost);
 
+                    if (bestSystemWithBoost != null)
+                        bestsystem = bestSystemWithBoost;
+                }
+
+                Point3D nextpos = expectedNextPosition;    // where we really are going to be
                 string sysname = "WAYPOINT";
                 double deltafromwaypoint = 0;
                 double deviation = 0;
 
                 if (bestsystem != null)
                 {
-                    Point3D bestposition = new Point3D(bestsystem.X, bestsystem.Y, bestsystem.Z);
-                    deltafromwaypoint = Point3D.DistanceBetween(bestposition, nextpos);     // how much in error
-                    deviation = Point3D.DistanceBetween(curpos.InterceptPoint(nextpos, bestposition), bestposition);
-                    nextpos = bestposition;
+                    nextpos = new Point3D(bestsystem.X, bestsystem.Y, bestsystem.Z);
+                    deltafromwaypoint = Point3D.DistanceBetween(nextpos, expectedNextPosition);     // how much in error
+                    deviation = Point3D.DistanceBetween(curpos.InterceptPoint(expectedNextPosition, nextpos), nextpos);
                     sysname = bestsystem.Name;
+                    if (boostStrength > 0)
+                        sysname += " (+" + BoostPercentage(boostStrength) * 100 + "% Boost)";
                     routeSystems.Add(bestsystem);
                 }
 
@@ -122,6 +133,25 @@ namespace EliteDangerousCore
             info(new ReturnInfo("Travelled Distance", actualdistance));
 
             return routeSystems;
+        }
+
+        private ISystem GetBestJumpSystem(Point3D currentPosition, Point3D travelVectorPerLy, float maxDistanceFromWanted, float maxRange)
+        {
+            Point3D nextPosition = GetNextPosition(currentPosition, travelVectorPerLy, maxRange);
+            ISystem bestSystem = DB.SystemCache.GetSystemNearestTo(currentPosition, nextPosition, maxRange, maxDistanceFromWanted, RouteMethod, 1000);  // at least get 1/4 way there, otherwise waypoint.  Best 1000 from waypoint checked
+            return bestSystem;
+        }
+
+        private static Point3D GetNextPosition(Point3D currentPosition, Point3D travelVectorPerLy, float maxRange)
+        {
+            return new Point3D(currentPosition.X + maxRange * travelVectorPerLy.X,
+                currentPosition.Y + maxRange * travelVectorPerLy.Y,
+                currentPosition.Z + maxRange * travelVectorPerLy.Z); // where we would like to be..
+        }
+
+        private static float BoostPercentage(int boostStrength)
+        {
+            return boostStrength / 4.0f;
         }
     }
 

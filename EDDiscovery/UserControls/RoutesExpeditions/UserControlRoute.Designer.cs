@@ -75,6 +75,7 @@
             this.ZCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.WayPointDistCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.DeviationCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.checkBox_FsdBoost = new ExtendedControls.ExtCheckBox();
             this.panel1.SuspendLayout();
             this.contextMenuStrip.SuspendLayout();
             this.dataViewScrollerPanel1.SuspendLayout();
@@ -84,6 +85,7 @@
             // panel1
             // 
             this.panel1.AutoSize = true;
+            this.panel1.Controls.Add(this.checkBox_FsdBoost);
             this.panel1.Controls.Add(this.buttonExtExcel);
             this.panel1.Controls.Add(this.textBox_ToName);
             this.panel1.Controls.Add(this.textBox_FromName);
@@ -154,10 +156,20 @@
             this.textBox_ToName.SelectionLength = 0;
             this.textBox_ToName.SelectionStart = 0;
             this.textBox_ToName.Size = new System.Drawing.Size(234, 20);
-            this.textBox_ToName.TabIndex = 58;
+            this.textBox_ToName.TabIndex = 22;
             this.textBox_ToName.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.toolTip.SetToolTip(this.textBox_ToName, "Alternate Name");
             this.textBox_ToName.WordWrap = true;
+            // 
+            // checkBox_FSD_boost
+            // 
+            this.checkBox_FsdBoost.Location = new System.Drawing.Point(342, 112);
+            this.checkBox_FsdBoost.Name = "checkBox_FsdBoost";
+            this.checkBox_FsdBoost.Size = new System.Drawing.Size(72, 18);
+            this.checkBox_FsdBoost.TabIndex = 32;
+            this.checkBox_FsdBoost.Text = "Use Boosts";
+            this.toolTip.SetToolTip(this.checkBox_FsdBoost, "The route finder will try and use FSD injections in case a direct route could not be found.");
+            this.checkBox_FsdBoost.UseVisualStyleBackColor = true;
             // 
             // textBox_FromName
             // 
@@ -181,7 +193,7 @@
             this.textBox_FromName.SelectionLength = 0;
             this.textBox_FromName.SelectionStart = 0;
             this.textBox_FromName.Size = new System.Drawing.Size(234, 20);
-            this.textBox_FromName.TabIndex = 57;
+            this.textBox_FromName.TabIndex = 12;
             this.textBox_FromName.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.toolTip.SetToolTip(this.textBox_FromName, "Alternate name");
             this.textBox_FromName.WordWrap = true;
@@ -205,7 +217,7 @@
             this.comboBoxRoutingMetric.SelectedItem = null;
             this.comboBoxRoutingMetric.SelectedValue = null;
             this.comboBoxRoutingMetric.Size = new System.Drawing.Size(234, 21);
-            this.comboBoxRoutingMetric.TabIndex = 41;
+            this.comboBoxRoutingMetric.TabIndex = 31;
             this.comboBoxRoutingMetric.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.toolTip.SetToolTip(this.comboBoxRoutingMetric, "Pick the metric to use when searching for a route");
             this.comboBoxRoutingMetric.ValueMember = "";
@@ -215,7 +227,7 @@
             this.buttonExtTravelTo.Location = new System.Drawing.Point(342, 83);
             this.buttonExtTravelTo.Name = "buttonExtTravelTo";
             this.buttonExtTravelTo.Size = new System.Drawing.Size(72, 23);
-            this.buttonExtTravelTo.TabIndex = 56;
+            this.buttonExtTravelTo.TabIndex = 26;
             this.buttonExtTravelTo.Text = "History";
             this.toolTip.SetToolTip(this.buttonExtTravelTo, "Copy the entry in the main travel grid to end route entry");
             this.buttonExtTravelTo.UseVisualStyleBackColor = true;
@@ -226,7 +238,7 @@
             this.buttonExtTravelFrom.Location = new System.Drawing.Point(57, 83);
             this.buttonExtTravelFrom.Name = "buttonExtTravelFrom";
             this.buttonExtTravelFrom.Size = new System.Drawing.Size(72, 23);
-            this.buttonExtTravelFrom.TabIndex = 55;
+            this.buttonExtTravelFrom.TabIndex = 16;
             this.buttonExtTravelFrom.Text = "History";
             this.toolTip.SetToolTip(this.buttonExtTravelFrom, "Copy the entry in the main travel grid to start route entry");
             this.buttonExtTravelFrom.UseVisualStyleBackColor = true;
@@ -237,7 +249,7 @@
             this.buttonExtTargetTo.Location = new System.Drawing.Point(420, 83);
             this.buttonExtTargetTo.Name = "buttonExtTargetTo";
             this.buttonExtTargetTo.Size = new System.Drawing.Size(72, 23);
-            this.buttonExtTargetTo.TabIndex = 54;
+            this.buttonExtTargetTo.TabIndex = 27;
             this.buttonExtTargetTo.Text = "Target";
             this.toolTip.SetToolTip(this.buttonExtTargetTo, "Copy the target system to end route entry");
             this.buttonExtTargetTo.UseVisualStyleBackColor = true;
@@ -248,7 +260,7 @@
             this.buttonToEDSM.Location = new System.Drawing.Point(498, 83);
             this.buttonToEDSM.Name = "buttonToEDSM";
             this.buttonToEDSM.Size = new System.Drawing.Size(72, 23);
-            this.buttonToEDSM.TabIndex = 53;
+            this.buttonToEDSM.TabIndex = 28;
             this.buttonToEDSM.Text = "EDSM";
             this.toolTip.SetToolTip(this.buttonToEDSM, "Open this end route system in EDSM");
             this.buttonToEDSM.UseVisualStyleBackColor = true;
@@ -259,7 +271,7 @@
             this.buttonFromEDSM.Location = new System.Drawing.Point(213, 83);
             this.buttonFromEDSM.Name = "buttonFromEDSM";
             this.buttonFromEDSM.Size = new System.Drawing.Size(72, 23);
-            this.buttonFromEDSM.TabIndex = 52;
+            this.buttonFromEDSM.TabIndex = 18;
             this.buttonFromEDSM.Text = "EDSM";
             this.toolTip.SetToolTip(this.buttonFromEDSM, "Open this start route system in EDSM");
             this.buttonFromEDSM.UseVisualStyleBackColor = true;
@@ -270,7 +282,7 @@
             this.buttonTargetFrom.Location = new System.Drawing.Point(135, 83);
             this.buttonTargetFrom.Name = "buttonTargetFrom";
             this.buttonTargetFrom.Size = new System.Drawing.Size(72, 23);
-            this.buttonTargetFrom.TabIndex = 51;
+            this.buttonTargetFrom.TabIndex = 17;
             this.buttonTargetFrom.Text = "Target";
             this.toolTip.SetToolTip(this.buttonTargetFrom, "Copy the target system to start route entry");
             this.buttonTargetFrom.UseVisualStyleBackColor = true;
@@ -316,7 +328,7 @@
             this.textBox_From.SelectionLength = 0;
             this.textBox_From.SelectionStart = 0;
             this.textBox_From.Size = new System.Drawing.Size(234, 20);
-            this.textBox_From.TabIndex = 31;
+            this.textBox_From.TabIndex = 11;
             this.textBox_From.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.toolTip.SetToolTip(this.textBox_From, "Select system to start the route");
             this.textBox_From.WordWrap = true;
@@ -384,7 +396,7 @@
             this.textBox_To.SelectionLength = 0;
             this.textBox_To.SelectionStart = 0;
             this.textBox_To.Size = new System.Drawing.Size(234, 20);
-            this.textBox_To.TabIndex = 32;
+            this.textBox_To.TabIndex = 21;
             this.textBox_To.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.toolTip.SetToolTip(this.textBox_To, "Select the system to end in");
             this.textBox_To.WordWrap = true;
@@ -397,7 +409,7 @@
             this.labelLy2.Location = new System.Drawing.Point(563, 142);
             this.labelLy2.Name = "labelLy2";
             this.labelLy2.Size = new System.Drawing.Size(14, 13);
-            this.labelLy2.TabIndex = 43;
+            this.labelLy2.TabIndex = 69;
             this.labelLy2.Text = "ly";
             // 
             // labelLy1
@@ -406,7 +418,7 @@
             this.labelLy1.Location = new System.Drawing.Point(563, 115);
             this.labelLy1.Name = "labelLy1";
             this.labelLy1.Size = new System.Drawing.Size(14, 13);
-            this.labelLy1.TabIndex = 44;
+            this.labelLy1.TabIndex = 39;
             this.labelLy1.Text = "ly";
             // 
             // textBox_Distance
@@ -431,7 +443,7 @@
             this.textBox_Distance.SelectionLength = 0;
             this.textBox_Distance.SelectionStart = 0;
             this.textBox_Distance.Size = new System.Drawing.Size(57, 20);
-            this.textBox_Distance.TabIndex = 40;
+            this.textBox_Distance.TabIndex = 61;
             this.textBox_Distance.TabStop = false;
             this.textBox_Distance.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.toolTip.SetToolTip(this.textBox_Distance, "Distance between start and end");
@@ -444,7 +456,7 @@
             this.labelTo.Location = new System.Drawing.Point(301, 6);
             this.labelTo.Name = "labelTo";
             this.labelTo.Size = new System.Drawing.Size(20, 13);
-            this.labelTo.TabIndex = 49;
+            this.labelTo.TabIndex = 20;
             this.labelTo.Text = "To";
             // 
             // textBox_ToZ
@@ -469,7 +481,7 @@
             this.textBox_ToZ.SelectionLength = 0;
             this.textBox_ToZ.SelectionStart = 0;
             this.textBox_ToZ.Size = new System.Drawing.Size(72, 20);
-            this.textBox_ToZ.TabIndex = 39;
+            this.textBox_ToZ.TabIndex = 25;
             this.textBox_ToZ.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.toolTip.SetToolTip(this.textBox_ToZ, "Z Co-ord");
             this.textBox_ToZ.WordWrap = true;
@@ -508,7 +520,7 @@
             this.textBox_ToY.SelectionLength = 0;
             this.textBox_ToY.SelectionStart = 0;
             this.textBox_ToY.Size = new System.Drawing.Size(72, 20);
-            this.textBox_ToY.TabIndex = 38;
+            this.textBox_ToY.TabIndex = 24;
             this.textBox_ToY.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.toolTip.SetToolTip(this.textBox_ToY, "Y (Vertical) Co-ord");
             this.textBox_ToY.WordWrap = true;
@@ -522,7 +534,7 @@
             this.labelDistance.Location = new System.Drawing.Point(422, 147);
             this.labelDistance.Name = "labelDistance";
             this.labelDistance.Size = new System.Drawing.Size(49, 13);
-            this.labelDistance.TabIndex = 46;
+            this.labelDistance.TabIndex = 60;
             this.labelDistance.Text = "Distance";
             // 
             // textBox_ToX
@@ -547,7 +559,7 @@
             this.textBox_ToX.SelectionLength = 0;
             this.textBox_ToX.SelectionStart = 0;
             this.textBox_ToX.Size = new System.Drawing.Size(72, 20);
-            this.textBox_ToX.TabIndex = 37;
+            this.textBox_ToX.TabIndex = 23;
             this.textBox_ToX.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.toolTip.SetToolTip(this.textBox_ToX, "X Co-Ord");
             this.textBox_ToX.WordWrap = true;
@@ -561,7 +573,7 @@
             this.labelMetric.Location = new System.Drawing.Point(3, 114);
             this.labelMetric.Name = "labelMetric";
             this.labelMetric.Size = new System.Drawing.Size(36, 13);
-            this.labelMetric.TabIndex = 47;
+            this.labelMetric.TabIndex = 30;
             this.labelMetric.Text = "Metric";
             // 
             // textBox_FromZ
@@ -586,7 +598,7 @@
             this.textBox_FromZ.SelectionLength = 0;
             this.textBox_FromZ.SelectionStart = 0;
             this.textBox_FromZ.Size = new System.Drawing.Size(72, 20);
-            this.textBox_FromZ.TabIndex = 36;
+            this.textBox_FromZ.TabIndex = 15;
             this.textBox_FromZ.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.toolTip.SetToolTip(this.textBox_FromZ, "Z Co-ord");
             this.textBox_FromZ.WordWrap = true;
@@ -600,7 +612,7 @@
             this.button_Route.Location = new System.Drawing.Point(57, 139);
             this.button_Route.Name = "button_Route";
             this.button_Route.Size = new System.Drawing.Size(111, 27);
-            this.button_Route.TabIndex = 42;
+            this.button_Route.TabIndex = 40;
             this.button_Route.Text = "Find route";
             this.toolTip.SetToolTip(this.button_Route, "Compute the route");
             this.button_Route.UseVisualStyleBackColor = true;
@@ -628,7 +640,7 @@
             this.textBox_FromY.SelectionLength = 0;
             this.textBox_FromY.SelectionStart = 0;
             this.textBox_FromY.Size = new System.Drawing.Size(72, 20);
-            this.textBox_FromY.TabIndex = 35;
+            this.textBox_FromY.TabIndex = 14;
             this.textBox_FromY.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.toolTip.SetToolTip(this.textBox_FromY, "Y (Vertical) Co-ord");
             this.textBox_FromY.WordWrap = true;
@@ -642,7 +654,7 @@
             this.labelFrom.Location = new System.Drawing.Point(3, 6);
             this.labelFrom.Name = "labelFrom";
             this.labelFrom.Size = new System.Drawing.Size(30, 13);
-            this.labelFrom.TabIndex = 48;
+            this.labelFrom.TabIndex = 10;
             this.labelFrom.Text = "From";
             // 
             // textBox_FromX
@@ -667,7 +679,7 @@
             this.textBox_FromX.SelectionLength = 0;
             this.textBox_FromX.SelectionStart = 0;
             this.textBox_FromX.Size = new System.Drawing.Size(72, 20);
-            this.textBox_FromX.TabIndex = 34;
+            this.textBox_FromX.TabIndex = 13;
             this.textBox_FromX.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.toolTip.SetToolTip(this.textBox_FromX, "X Co-ord");
             this.textBox_FromX.WordWrap = true;
@@ -880,5 +892,6 @@
         private System.Windows.Forms.ToolStripMenuItem showInEDSMToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem copyToolStripMenuItem;
         private System.Windows.Forms.ToolTip toolTip;
+        private ExtendedControls.ExtCheckBox checkBox_FsdBoost;
     }
 }
