@@ -18,6 +18,7 @@ using System;
 using System.Linq;
 using System.Data.Common;
 using EMK.LightGeometry;
+using System.Collections.Generic;
 
 namespace EliteDangerousCore.DB
 {
@@ -192,63 +193,70 @@ namespace EliteDangerousCore.DB
 
                 //System.Diagnostics.Debug.WriteLine(cn.ExplainQueryPlanString(cmd));
 
-                double bestmindistance = double.MaxValue;
-                SystemClass nearestsystem = null;
-
                 using (DbDataReader reader = cmd.ExecuteReader())
                 {
-                    while (reader.Read())
-                    {
-                        SystemClass s = MakeSystem(reader);
-                        LookedUp?.Invoke(s);                            // callback to say looked up
+                    var systems = MakeSystemEnumerable(reader, callback: LookedUp);
 
-                        Point3D syspos = new Point3D(s.X, s.Y, s.Z);
-                        double distancefromwantedx2 = Point3D.DistanceBetweenX2(wantedpos, syspos); // range between the wanted point and this, ^2
-                        double distancefromcurposx2 = Point3D.DistanceBetweenX2(currentpos, syspos);    // range between the wanted point and this, ^2
-
-                        // ENSURE its withing the circles now
-                        if (distancefromcurposx2 <= (maxfromcurpos * maxfromcurpos) && distancefromwantedx2 <= (maxfromwanted * maxfromwanted))
-                        {
-                            if (routemethod == metric_nearestwaypoint)
-                            {
-                                if (distancefromwantedx2 < bestmindistance)
-                                {
-                                    nearestsystem = s;
-                                    bestmindistance = distancefromwantedx2;
-                                }
-                            }
-                            else
-                            {
-                                Point3D interceptpoint = currentpos.InterceptPoint(wantedpos, syspos);      // work out where the perp. intercept point is..
-                                double deviation = Point3D.DistanceBetween(interceptpoint, syspos);
-                                double metric = 1E39;
-
-                                if (routemethod == metric_mindevfrompath)
-                                    metric = deviation;
-                                else if (routemethod == metric_maximum100ly)
-                                    metric = (deviation <= 100) ? distancefromwantedx2 : metric;        // no need to sqrt it..
-                                else if (routemethod == metric_maximum250ly)
-                                    metric = (deviation <= 250) ? distancefromwantedx2 : metric;
-                                else if (routemethod == metric_maximum500ly)
-                                    metric = (deviation <= 500) ? distancefromwantedx2 : metric;
-                                else if (routemethod == metric_waypointdev2)
-                                    metric = Math.Sqrt(distancefromwantedx2) + deviation / 2;
-
-                                if (metric < bestmindistance)
-                                {
-                                    nearestsystem = s;
-                                    bestmindistance = metric;
-                                }
-                            }
-                        }
-                    }
+                    return GetSystemNearestTo(systems, currentpos, wantedpos, maxfromcurpos, maxfromwanted, routemethod);
                 }
-
-                return nearestsystem;
             }
         }
 
+        public static ISystem GetSystemNearestTo(IEnumerable<ISystem> systems,
+                                                   Point3D currentpos,
+                                                   Point3D wantedpos,
+                                                   double maxfromcurpos,
+                                                   double maxfromwanted,
+                                                   int routemethod)
+        {
+            double bestmindistance = double.MaxValue;
+            ISystem nearestsystem = null;
 
+            foreach (var s in systems)
+            {
+                Point3D syspos = new Point3D(s.X, s.Y, s.Z);
+                double distancefromwantedx2 = Point3D.DistanceBetweenX2(wantedpos, syspos); // range between the wanted point and this, ^2
+                double distancefromcurposx2 = Point3D.DistanceBetweenX2(currentpos, syspos);    // range between the wanted point and this, ^2
+
+                // ENSURE its withing the circles now
+                if (distancefromcurposx2 <= (maxfromcurpos * maxfromcurpos) && distancefromwantedx2 <= (maxfromwanted * maxfromwanted))
+                {
+                    if (routemethod == metric_nearestwaypoint)
+                    {
+                        if (distancefromwantedx2 < bestmindistance)
+                        {
+                            nearestsystem = s;
+                            bestmindistance = distancefromwantedx2;
+                        }
+                    }
+                    else
+                    {
+                        Point3D interceptpoint = currentpos.InterceptPoint(wantedpos, syspos);      // work out where the perp. intercept point is..
+                        double deviation = Point3D.DistanceBetween(interceptpoint, syspos);
+                        double metric = 1E39;
+
+                        if (routemethod == metric_mindevfrompath)
+                            metric = deviation;
+                        else if (routemethod == metric_maximum100ly)
+                            metric = (deviation <= 100) ? distancefromwantedx2 : metric;        // no need to sqrt it..
+                        else if (routemethod == metric_maximum250ly)
+                            metric = (deviation <= 250) ? distancefromwantedx2 : metric;
+                        else if (routemethod == metric_maximum500ly)
+                            metric = (deviation <= 500) ? distancefromwantedx2 : metric;
+                        else if (routemethod == metric_waypointdev2)
+                            metric = Math.Sqrt(distancefromwantedx2) + deviation / 2;
+
+                        if (metric < bestmindistance)
+                        {
+                            nearestsystem = s;
+                            bestmindistance = metric;
+                        }
+                    }
+                }
+            }
+
+            return nearestsystem;
+        }
     }
 }
 

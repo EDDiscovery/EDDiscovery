@@ -44,6 +44,8 @@ namespace EliteDangerousCore.DB
         //const string DebugOutfile = @"c:\code\edsm\Jsonprocess.lst";        // null off
         const string DebugOutfile = null;
 
+        public bool RebuildRunning { get; private set; }
+
         public long UpgradeSystemTableFromFile(string filename, bool[] gridids, Func<bool> cancelRequested, Action<string> reportProgress)
         {
             ExecuteWithDatabase( action: conn =>
@@ -59,7 +61,7 @@ namespace EliteDangerousCore.DB
             {
                 ExecuteWithDatabase(action: conn =>
                 {
-                    //RebuildRunning = true;
+                    RebuildRunning = true;
 
                     reportProgress?.Invoke("Remove old data");
                     conn.Connection.DropStarTables();     // drop the main ones - this also kills the indexes
@@ -72,7 +74,7 @@ namespace EliteDangerousCore.DB
                     reportProgress?.Invoke("Creating indexes");
                     conn.Connection.CreateSystemDBTableIndexes();
 
-                    //RebuildRunning = false;
+                    RebuildRunning = false;
                 });
 
                 SetLastEDSMRecordTimeUTC(maxdate);          // record last data stored in database
@@ -122,7 +124,7 @@ namespace EliteDangerousCore.DB
                     {
                         if (updates >= 0) // a cancel will result in -1
                         {
-                            //RebuildRunning = true;
+                            RebuildRunning = true;
 
                             // keep code for checking
 
@@ -159,7 +161,7 @@ namespace EliteDangerousCore.DB
                             reportProgress?.Invoke("Creating indexes");         // NOTE the date should be the same so we don't rewrite
                             conn.Connection.CreateSystemDBTableIndexes();
 
-                            //RebuildRunning = false;
+                            RebuildRunning = false;
                         }
                         else
                         {
