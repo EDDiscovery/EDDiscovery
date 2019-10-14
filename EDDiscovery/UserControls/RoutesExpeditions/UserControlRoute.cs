@@ -64,7 +64,6 @@ namespace EDDiscovery.UserControls
 
             textBox_From.Text = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbSave("RouteFrom"), "");
             textBox_To.Text = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbSave("RouteTo"), "");
-            //Console.WriteLine("Load {0} {1}", textBox_From.Text, textBox_To.Text);
             textBox_Range.Value = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(DbSave("RouteRange"), 30);
             textBox_FromX.Text = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbSave("RouteFromX"), "");
             textBox_FromY.Text = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbSave("RouteFromY"), "");
@@ -78,15 +77,17 @@ namespace EDDiscovery.UserControls
             int metricvalue = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(DbSave("RouteMetric"), 0);
             comboBoxRoutingMetric.SelectedIndex = (metricvalue >= 0 && metricvalue < comboBoxRoutingMetric.Items.Count) ? metricvalue : SystemsDB.metric_waypointdev2;
 
-            SelectToMaster(tostate);
+            SeleteToCoords(tostate);
             UpdateTo(true);
-            SelectFromMaster(fromstate);
+            SelectFromCoords(fromstate);
             UpdateFrom(true);
             comboBoxRoutingMetric.Enabled = true;
 
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
+
+            discoveryform.OnHistoryChange += HistoryChanged;
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
@@ -101,7 +102,9 @@ namespace EDDiscovery.UserControls
                 plotter.StopPlotter = true;
                 routingthread.Join();
             }
-                
+
+            discoveryform.OnHistoryChange -= HistoryChanged;
+
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbSave("RouteFrom"), textBox_From.Text);
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbSave("RouteTo"), textBox_To.Text);
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(DbSave("RouteRange"), (int)textBox_Range.Value);
@@ -115,6 +118,16 @@ namespace EDDiscovery.UserControls
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave("RouteToState"), textBox_To.ReadOnly);
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(DbSave("RouteMetric"), comboBoxRoutingMetric.SelectedIndex);
         }
+
+        public void HistoryChanged(HistoryList hl)           // on History change, we now have history systems to look up, so make sure the To/From get a chance to update
+        {
+            if (hl != null && hl.Count > 0)
+            {
+                UpdateTo(true);
+                UpdateFrom(true);
+            }
+        }
+
 
         private void ToggleButtons(bool state)
         {
@@ -201,6 +214,7 @@ namespace EDDiscovery.UserControls
             plotter.FromSystem = textBox_From.Text;
             plotter.ToSystem = textBox_To.Text;
             plotter.RouteMethod = comboBoxRoutingMetric.SelectedIndex;
+            plotter.UseFsdBoost = checkBox_FsdBoost.Checked;
 
             if (textBox_From.ReadOnly == true)
                 plotter.FromSystem = "START POINT";
@@ -256,7 +270,8 @@ namespace EDDiscovery.UserControls
                         );
 
                 rw.Tag = info.system;       // may be null if waypoint or not a system
-                rw.HeaderCell.Value = info.pos != null ? (dataGridViewRoute.Rows.Count + 1).ToString() : "-";
+                rw.Cells[0].Tag = info.system?.Name;    // write the name of the system into the cells'tag for copying
+                rw.HeaderCell.Value = info.pos != null ? (dataGridViewRoute.Rows.Count + 1).ToStringInvariant() : "-";
                 dataGridViewRoute.Rows.Add(rw);
                 if (!rw.Displayed)
                 {
@@ -297,7 +312,7 @@ namespace EDDiscovery.UserControls
 
         #region From
 
-        private void SelectFromMaster(bool coords)
+        private void SelectFromCoords(bool coords)
         {
             textBox_From.ReadOnly = coords;
             textBox_FromX.ReadOnly = !coords;
@@ -384,7 +399,7 @@ namespace EDDiscovery.UserControls
 
         private void textBox_From_Enter(object sender, EventArgs e)
         {
-            SelectFromMaster(false);                              // enable system box
+            SelectFromCoords(false);                              // enable system box
             if (fromupdatetimer != null)  // for the designer
             {
                 fromupdatetimer.Stop();
@@ -394,7 +409,7 @@ namespace EDDiscovery.UserControls
 
         private void textBox_FromXYZ_Enter(object sender, EventArgs e)
         {
-            SelectFromMaster(true);                       // coords master
+            SelectFromCoords(true);                       // coords master
             fromupdatetimer.Stop();
             fromupdatetimer.Start();
             ((ExtendedControls.ExtTextBox)sender).Select(0, 1000); // entering selects everything
@@ -422,7 +437,7 @@ namespace EDDiscovery.UserControls
         {
             if (uctg.GetCurrentHistoryEntry != null)
             {
-                SelectFromMaster(false);                              // enable system box
+                SelectFromCoords(false);                              // enable system box
                 textBox_From.Text = uctg.GetCurrentHistoryEntry.System.Name;
                 UpdateFrom(false);
             }
@@ -435,7 +450,7 @@ namespace EDDiscovery.UserControls
 
             if (TargetClass.GetTargetPosition(out name, out x, out y, out z))
             {
-                SelectFromMaster(false);                              // enable system box
+                SelectFromCoords(false);                              // enable system box
                 textBox_From.Text = TargetClass.GetNameWithoutPrefix(name);
                 UpdateFrom(false);
             }
@@ -461,7 +476,7 @@ namespace EDDiscovery.UserControls
 
         #region To
 
-        private void SelectToMaster(bool coords)
+        private void SeleteToCoords(bool coords)
         {
             textBox_To.ReadOnly = coords;
             textBox_ToX.ReadOnly = !coords;
@@ -548,7 +563,7 @@ namespace EDDiscovery.UserControls
 
         private void textBox_To_Enter(object sender, EventArgs e)   // To has been tabbed/clicked..
         {
-            SelectToMaster(false);                              // enable system box
+            SeleteToCoords(false);                              // enable system box
 
             if (toupdatetimer != null)  // for the designer
             {
@@ -559,7 +574,7 @@ namespace EDDiscovery.UserControls
 
         private void textBox_ToXYZ_Enter(object sender, EventArgs e)
         {
-            SelectToMaster(true);                       // coords master
+            SeleteToCoords(true);                       // coords master
             toupdatetimer.Stop();
             toupdatetimer.Start();
             ((ExtendedControls.ExtTextBox)sender).Select(0, 1000); // clicking highlights everything
@@ -587,7 +602,7 @@ namespace EDDiscovery.UserControls
         {
             if (uctg.GetCurrentHistoryEntry != null)
             {
-                SelectToMaster(false);                              // enable system box
+                SeleteToCoords(false);                              // enable system box
                 textBox_To.Text = uctg.GetCurrentHistoryEntry.System.Name;
                 UpdateTo(false);
             }
@@ -600,7 +615,7 @@ namespace EDDiscovery.UserControls
 
             if (TargetClass.GetTargetPosition(out name, out x, out y, out z))
             {
-                SelectToMaster(false);                              // enable system box
+                SeleteToCoords(false);                              // enable system box
                 textBox_To.Text = TargetClass.GetNameWithoutPrefix(name);
                 UpdateTo(false);
             }
@@ -673,8 +688,25 @@ namespace EDDiscovery.UserControls
             DataGridViewCell cell = dataGridViewRoute.CurrentCell;
             if (cell != null)
             {
-                string s = (string)cell.Value;
+                // If a cell contains a tag (i.e. a system name), copy the string of the tag
+                // else, copy whatever text is inside
+                string s = "";
+                if (cell.Tag != null)
+                    s = cell.Tag.ToString();
+                else
+                    s = (string)cell.Value;
                 SetClipboardText(s);
+            }
+        }
+
+        
+        private void dataGridViewRoute_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            int row = dataGridViewRoute.CurrentCell?.RowIndex ?? -1;
+            if ( row >= 0 )
+            {
+                ISystem sys = dataGridViewRoute.Rows[row].Tag as ISystem;
+                ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), sys, true, discoveryform.history);
             }
         }
 
@@ -740,6 +772,14 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        private void showScanToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ISystem sys = dataGridViewRoute.Rows[rightclickrow].Tag as ISystem;
+            ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), sys, true, discoveryform.history);    // protected against sys = null
+        }
+
+
         #endregion
+
     }
 }
