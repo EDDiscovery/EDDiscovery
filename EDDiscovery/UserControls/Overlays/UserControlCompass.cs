@@ -67,6 +67,8 @@ namespace EDDiscovery.UserControls
             compassControl.AutoSetStencilTicks = true;
             buttonNewBookmark.Enabled = false;
 
+            checkBoxHideTransparent.Visible = IsFloatingWindow;
+
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
         }
