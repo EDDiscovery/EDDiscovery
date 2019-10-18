@@ -36,7 +36,7 @@ namespace EliteDangerousCore.DB
         // ask = AllStars/UnpopulatedStars/PopulatedStars = only v1/c1 is returned..
         // ask = SplitPopulatedStars = vertices1 is populated, 2 is unpopulated stars
 
-        public static void GetSystemVector<V>(int gridid, ref V[] vertices1, ref uint[] colours1,
+        private static void GetSystemVector<V>(int gridid, ref V[] vertices1, ref uint[] colours1,
                                                           ref V[] vertices2, ref uint[] colours2,
                                                           int percentage, Func<int, int, int, V> tovect,
                                                           SystemAskType ask = SystemAskType.SplitPopulatedStars)
@@ -57,7 +57,7 @@ namespace EliteDangerousCore.DB
             colours2 = cpcolours2;
         }
 
-        internal static void GetSystemVector<V>(int gridid, ref V[] vertices1, ref uint[] colours1,
+        private static void GetSystemVector<V>(int gridid, ref V[] vertices1, ref uint[] colours1,
                                                           ref V[] vertices2, ref uint[] colours2,
                                                           int percentage, Func<int, int, int, V> tovect,
                                                           SQLiteConnectionSystem cn,

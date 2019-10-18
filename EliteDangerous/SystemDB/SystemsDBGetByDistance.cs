@@ -26,7 +26,7 @@ namespace EliteDangerousCore.DB
     {
         ///////////////////////////////////////// List of systems near xyz between mindist and maxdist
 
-        public static void GetSystemListBySqDistancesFrom(BaseUtils.SortedListDoubleDuplicate<ISystem> distlist, double x, double y, double z,
+        private static void GetSystemListBySqDistancesFrom(BaseUtils.SortedListDoubleDuplicate<ISystem> distlist, double x, double y, double z,
                                                     int maxitems,
                                                     double mindist, double maxdist, bool spherical,
                                                     Action<ISystem> LookedUp = null
@@ -116,7 +116,7 @@ namespace EliteDangerousCore.DB
             }
         }
 
-        public static ISystem GetSystemByPosition(double x, double y, double z, double maxdist = 0.125)
+        private static ISystem GetSystemByPosition(double x, double y, double z, double maxdist = 0.125)
         {
             return SystemsDatabase.Instance.ExecuteWithDatabase(db =>
             {
@@ -139,20 +139,6 @@ namespace EliteDangerousCore.DB
         public const int metric_maximum250ly = 3;
         public const int metric_maximum500ly = 4;
         public const int metric_waypointdev2 = 5;
-
-        public static ISystem GetSystemNearestTo(Point3D currentpos,
-                                                  Point3D wantedpos,
-                                                  double maxfromcurpos,
-                                                  double maxfromwanted,
-                                                  int routemethod,
-                                                  Action<ISystem> LookedUp = null)
-        {
-            return SystemsDatabase.Instance.ExecuteWithDatabase(db =>
-            {
-                return GetSystemNearestTo(currentpos, wantedpos, maxfromcurpos, maxfromwanted, routemethod, db.Connection, LookedUp);
-            });
-        }
-
 
         internal static ISystem GetSystemNearestTo(Point3D currentpos,
                                                   Point3D wantedpos,
@@ -202,7 +188,7 @@ namespace EliteDangerousCore.DB
             }
         }
 
-        public static ISystem GetSystemNearestTo(IEnumerable<ISystem> systems,
+        internal static ISystem GetSystemNearestTo(IEnumerable<ISystem> systems,            // non database helper function
                                                    Point3D currentpos,
                                                    Point3D wantedpos,
                                                    double maxfromcurpos,

@@ -566,7 +566,7 @@ namespace EliteDangerousCore
         {
             List<Tuple<HistoryEntry, ISystem>> updatesystems = new List<Tuple<HistoryEntry, ISystem>>();
 
-            if (!SystemsDatabase.Instance.RebuildRunning)
+            if (!SystemsDatabase.Instance.RebuildRunning)       // only run this when the system db is stable.. this prevents the UI from slowing to a standstill
             {
                 SystemsDatabase.Instance.ExecuteWithDatabase(cn =>
                 {

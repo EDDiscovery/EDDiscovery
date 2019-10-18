@@ -59,12 +59,12 @@ namespace EliteDangerousCore.DB
             }
         }
 
-        public static ISystem FindSystem(string name, long edsmid, SystemsDatabaseConnection cn)
+        internal static ISystem FindSystem(string name, long edsmid, SystemsDatabaseConnection cn)
         {
             return FindSystem(new SystemClass(name, edsmid), cn);
         }
 
-        public static ISystem FindSystem(ISystem find, SystemsDatabaseConnection cn)
+        internal static ISystem FindSystem(ISystem find, SystemsDatabaseConnection cn)
         {
             ISystem orgsys = find;
 
@@ -94,7 +94,7 @@ namespace EliteDangerousCore.DB
             if (found == null && foundlist.Count == 1 && !find.HasCoordinate) // if we did not find one, but we have only 1 candidate, use it.
                 found = foundlist[0];
 
-            if (found == null && cn != null)                                    // nope, no cache, so use the db
+            if (found == null && cn != null)                                    // nope, no cache, so use the db as long as we have a connection
             {
                 //System.Diagnostics.Debug.WriteLine("Look up from DB " + sys.name + " " + sys.id_edsm);
 
@@ -146,13 +146,10 @@ namespace EliteDangerousCore.DB
             }
         }
 
-        //
-        // Generally, cache is not used below, but systems are added to the cache to speed up above searches
-        //
 
         public static List<ISystem> FindSystemWildcard(string name, int limit = int.MaxValue)
         {
-            if (SystemsDatabase.Instance.RebuildRunning) // return nothing if rebuild is running
+            if (SystemsDatabase.Instance.RebuildRunning) // use the cache is db is updating
             {
                 lock (systemsByEdsmId)
                 {
@@ -170,7 +167,7 @@ namespace EliteDangerousCore.DB
             }
         }
 
-        static public List<ISystem> FindSystemWildcard(string name, SystemsDatabaseConnection cn, int limit = int.MaxValue)
+        static private List<ISystem> FindSystemWildcard(string name, SystemsDatabaseConnection cn, int limit = int.MaxValue)
         {
             var list = DB.SystemsDB.FindStarWildcard(name, cn.Connection, limit);
             if (list != null)
@@ -218,7 +215,7 @@ namespace EliteDangerousCore.DB
             }
         }
 
-        public static void GetSystemListBySqDistancesFrom(BaseUtils.SortedListDoubleDuplicate<ISystem> distlist, double x, double y, double z,
+        private static void GetSystemListBySqDistancesFrom(BaseUtils.SortedListDoubleDuplicate<ISystem> distlist, double x, double y, double z,
                                                     int maxitems,
                                                     double mindist, double maxdist, bool spherical, SystemsDatabaseConnection cn)
         {
@@ -248,7 +245,7 @@ namespace EliteDangerousCore.DB
             }
         }
 
-        public static ISystem FindNearestSystemTo(double x, double y, double z, double maxdistance, SystemsDatabaseConnection cn)
+        private static ISystem FindNearestSystemTo(double x, double y, double z, double maxdistance, SystemsDatabaseConnection cn)
         {
             ISystem s = DB.SystemsDB.GetSystemByPosition(x, y, z, cn.Connection, maxdistance);
             if (s != null)
@@ -263,7 +260,7 @@ namespace EliteDangerousCore.DB
                                                  int routemethod,
                                                  int limitto)
         {
-            if (SystemsDatabase.Instance.RebuildRunning)
+            if (SystemsDatabase.Instance.RebuildRunning)    // return from cache is rebuild is running
             {
                 lock (systemsByEdsmId)
                 {
@@ -290,7 +287,7 @@ namespace EliteDangerousCore.DB
             }
         }
 
-        public static ISystem GetSystemNearestTo(Point3D currentpos,
+        private static ISystem GetSystemNearestTo(Point3D currentpos,
                                                  Point3D wantedpos,
                                                  double maxfromcurpos,
                                                  double maxfromwanted,
