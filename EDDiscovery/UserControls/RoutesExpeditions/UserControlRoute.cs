@@ -97,7 +97,7 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
-            if ( routingthread != null && routingthread.IsAlive && plotter != null )
+            if (routingthread != null && routingthread.IsAlive && plotter != null)
             {
                 plotter.StopPlotter = true;
                 routingthread.Join();
@@ -126,13 +126,6 @@ namespace EDDiscovery.UserControls
                 UpdateTo(true);
                 UpdateFrom(true);
             }
-        }
-
-
-        private void ToggleButtons(bool state)
-        {
-            button_Route.Enabled = state;
-            cmd3DMap.Enabled = state;
         }
 
         string SystemNameOnly(string s)             // removes @ at end.
@@ -205,40 +198,48 @@ namespace EDDiscovery.UserControls
 
         private void button_Route_Click(object sender, EventArgs e)
         {
-            ToggleButtons(false);           // beware the tab order, this moves the focus onto the next control, which in this dialog can be not what we want.
-
-            plotter = new RoutePlotter();
-            plotter.MaxRange = textBox_Range.Value;
-            GetCoordsFrom(out plotter.Coordsfrom);                      // will be valid for a system or a co-ords box
-            GetCoordsTo(out plotter.Coordsto);
-            plotter.FromSystem = textBox_From.Text;
-            plotter.ToSystem = textBox_To.Text;
-            plotter.RouteMethod = comboBoxRoutingMetric.SelectedIndex;
-            plotter.UseFsdBoost = checkBox_FsdBoost.Checked;
-
-            if (textBox_From.ReadOnly == true)
-                plotter.FromSystem = "START POINT";
-            if (textBox_To.ReadOnly == true)
-                plotter.ToSystem = "END POINT";
-
-            int PossibleJumps = (int)(Point3D.DistanceBetween(plotter.Coordsfrom, plotter.Coordsto) / plotter.MaxRange);
-
-            if (PossibleJumps > 100)
+            if (routingthread == null  || !routingthread.IsAlive)
             {
-                DialogResult res = ExtendedControls.MessageBoxTheme.Show(FindForm(), 
-                    string.Format(("This will result in a large number ({0}) of jumps" + Environment.NewLine + "Confirm please").T(EDTx.UserControlRoute_Confirm), 
-                    PossibleJumps), "Warning".T(EDTx.Warning), MessageBoxButtons.YesNo);
-                if (res != System.Windows.Forms.DialogResult.Yes)
-                {
-                    ToggleButtons(true);
-                    return;
-                }
-            }
+                plotter = new RoutePlotter();
+                plotter.MaxRange = textBox_Range.Value;
+                GetCoordsFrom(out plotter.Coordsfrom);                      // will be valid for a system or a co-ords box
+                GetCoordsTo(out plotter.Coordsto);
+                plotter.FromSystem = textBox_From.Text;
+                plotter.ToSystem = textBox_To.Text;
+                plotter.RouteMethod = comboBoxRoutingMetric.SelectedIndex;
+                plotter.UseFsdBoost = checkBox_FsdBoost.Checked;
 
-            dataGridViewRoute.Rows.Clear();
-            routingthread = new System.Threading.Thread(new System.Threading.ParameterizedThreadStart(RoutingThread));
-            routingthread.Name = "Thread Route";
-            routingthread.Start(plotter);
+                if (textBox_From.ReadOnly == true)
+                    plotter.FromSystem = "START POINT";
+                if (textBox_To.ReadOnly == true)
+                    plotter.ToSystem = "END POINT";
+
+                int PossibleJumps = (int)(Point3D.DistanceBetween(plotter.Coordsfrom, plotter.Coordsto) / plotter.MaxRange);
+
+                if (PossibleJumps > 100)
+                {
+                    DialogResult res = ExtendedControls.MessageBoxTheme.Show(FindForm(),
+                        string.Format(("This will result in a large number ({0}) of jumps" + Environment.NewLine + "Confirm please").T(EDTx.UserControlRoute_Confirm),
+                        PossibleJumps), "Warning".T(EDTx.Warning), MessageBoxButtons.YesNo);
+                    if (res != System.Windows.Forms.DialogResult.Yes)
+                    {
+                        return;
+                    }
+                }
+
+                dataGridViewRoute.Rows.Clear();
+                routingthread = new System.Threading.Thread(new System.Threading.ParameterizedThreadStart(RoutingThread));
+                routingthread.Name = "Thread Route";
+
+                cmd3DMap.Enabled = false;
+                button_Route.Text = "Cancel".T(EDTx.Cancel);
+                routingthread.Start(plotter);
+            }
+            else
+            {
+                plotter.StopPlotter = true;
+                button_Route.Text = "Find Route".Tx(this, "button_Route");
+            }
         }
 
         private Thread routingthread;
@@ -251,12 +252,17 @@ namespace EDDiscovery.UserControls
 
             routeSystems = p.RouteIterative(AppendData);
 
-            this.BeginInvoke(new Action(() => { discoveryform.NewCalculatedRoute(routeSystems); ToggleButtons(true);  }));
+            this.BeginInvoke(new Action(() => 
+                {
+                    discoveryform.NewCalculatedRoute(routeSystems);
+                    cmd3DMap.Enabled = true;
+                    button_Route.Text = "Find Route".Tx(this, "button_Route");
+                }));
         }
 
-        private void AppendData(RoutePlotter.ReturnInfo info)
+        private void AppendData(RoutePlotter.ReturnInfo info)   // IN thread context, need to invoke
         {
-            BeginInvoke((MethodInvoker)delegate
+            Invoke((MethodInvoker)delegate      // using Invoke blocks the thread until the UI finishes.  Using BeginInvoke async causes it to overload the UI
             {
                 DataGridViewRow rw = dataGridViewRoute.RowTemplate.Clone() as DataGridViewRow;
                 rw.CreateCells(dataGridViewRoute,
@@ -276,7 +282,6 @@ namespace EDDiscovery.UserControls
                 if (!rw.Displayed)
                 {
                     dataGridViewRoute.FirstDisplayedScrollingRowIndex++;
-                    dataGridViewRoute.Update();
                 }
             });
         }

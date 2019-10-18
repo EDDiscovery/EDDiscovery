@@ -208,7 +208,7 @@ namespace EDDiscovery
             backgroundWorker = new Thread(BackgroundWorkerThread);
             backgroundWorker.IsBackground = true;
             backgroundWorker.Name = "Background Worker Thread";
-            backgroundWorker.Start();                                   // TBD later, get rid of readyforInitialLoad, and start this thread at PostInit_Shown
+            backgroundWorker.Start();                                   
         }
 
         public void Shutdown()      // called to request a shutdown.. background thread co-ords the shutdown.
