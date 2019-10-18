@@ -34,37 +34,34 @@ namespace EliteDangerousCore.DB
 
         public static ISystem FindSystem(long edsmid)
         {
-            return SystemsDatabase.Instance.ExecuteWithDatabase(conn => FindSystem(edsmid, conn));
-        }
-
-        public static ISystem FindSystem(long edsmid, SystemsDatabaseConnection cn)
-        {
-            return FindSystem(new SystemClass(edsmid),cn);
+            return FindSystem(new SystemClass(edsmid));
         }
 
         public static ISystem FindSystem(string name, long edsmid)
         {
-            return SystemsDatabase.Instance.ExecuteWithDatabase(conn => FindSystem(name, edsmid, conn));
+            return FindSystem(new SystemClass(name, edsmid));
+        }
+
+        public static ISystem FindSystem(string name)
+        {
+            return FindSystem(new SystemClass(name));
+        }
+
+        public static ISystem FindSystem(ISystem find)
+        {
+            if (SystemsDatabase.Instance.RebuildRunning) // Find the system in the cache if a rebuild is running
+            {
+                return FindSystem(find, null);
+            }
+            else 
+            {
+                return SystemsDatabase.Instance.ExecuteWithDatabase(conn => FindSystem(find, conn));
+            }
         }
 
         public static ISystem FindSystem(string name, long edsmid, SystemsDatabaseConnection cn)
         {
             return FindSystem(new SystemClass(name, edsmid), cn);
-        }
-
-        public static ISystem FindSystem(string name)
-        {
-            return SystemsDatabase.Instance.ExecuteWithDatabase(conn => FindSystem(name, conn));
-        }
-
-        public static ISystem FindSystem(string name, SystemsDatabaseConnection cn)
-        {
-            return FindSystem(new SystemClass(name),cn);
-        }
-
-        public static ISystem FindSystem(ISystem find)
-        {
-            return SystemsDatabase.Instance.ExecuteWithDatabase(conn => FindSystem(find, conn));
         }
 
         public static ISystem FindSystem(ISystem find, SystemsDatabaseConnection cn)
@@ -97,7 +94,7 @@ namespace EliteDangerousCore.DB
             if (found == null && foundlist.Count == 1 && !find.HasCoordinate) // if we did not find one, but we have only 1 candidate, use it.
                 found = foundlist[0];
 
-            if (found == null)                                    // nope, no cache, so use the db
+            if (found == null && cn != null)                                    // nope, no cache, so use the db
             {
                 //System.Diagnostics.Debug.WriteLine("Look up from DB " + sys.name + " " + sys.id_edsm);
 
@@ -155,7 +152,22 @@ namespace EliteDangerousCore.DB
 
         public static List<ISystem> FindSystemWildcard(string name, int limit = int.MaxValue)
         {
-            return SystemsDatabase.Instance.ExecuteWithDatabase(conn => FindSystemWildcard(name, conn, limit));
+            if (SystemsDatabase.Instance.RebuildRunning) // return nothing if rebuild is running
+            {
+                lock (systemsByEdsmId)
+                {
+                    name = name.ToLowerInvariant();
+
+                    return systemsByName.Where(kvp => kvp.Key.ToLowerInvariant().StartsWith(name))
+                                        .SelectMany(s => s.Value)
+                                        .Take(limit)
+                                        .ToList();
+                }
+            }
+            else
+            {
+                return SystemsDatabase.Instance.ExecuteWithDatabase(conn => FindSystemWildcard(name, conn, limit));
+            }
         }
 
         static public List<ISystem> FindSystemWildcard(string name, SystemsDatabaseConnection cn, int limit = int.MaxValue)
@@ -174,7 +186,36 @@ namespace EliteDangerousCore.DB
                                                     int maxitems,
                                                     double mindist, double maxdist, bool spherical)
         {
-            SystemsDatabase.Instance.ExecuteWithDatabase(conn => GetSystemListBySqDistancesFrom(distlist, x, y, z, maxitems, mindist, maxdist, spherical, conn));
+            if (SystemsDatabase.Instance.RebuildRunning) // Return from cache if rebuild is running
+            {
+                lock (systemsByEdsmId)
+                {
+                    var sysdist = systemsByName.Values
+                                               .SelectMany(s => s)
+                                               .Select(s => new { distsq = s.DistanceSq(x, y, z), sys = s })
+                                               .OrderBy(s => s.distsq)
+                                               .ToList();
+                    var minsq = mindist * mindist;
+                    var maxsq = maxdist * maxdist;
+
+                    foreach (var sd in sysdist)
+                    {
+                        if (sd.distsq <= minsq && sd.distsq >= maxsq)
+                        {
+                            distlist.Add(sd.distsq, sd.sys);
+                        }
+
+                        if (distlist.Count >= maxitems)
+                        {
+                            break;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                SystemsDatabase.Instance.ExecuteWithDatabase(conn => GetSystemListBySqDistancesFrom(distlist, x, y, z, maxitems, mindist, maxdist, spherical, conn));
+            }
         }
 
         public static void GetSystemListBySqDistancesFrom(BaseUtils.SortedListDoubleDuplicate<ISystem> distlist, double x, double y, double z,
@@ -184,19 +225,27 @@ namespace EliteDangerousCore.DB
             DB.SystemsDB.GetSystemListBySqDistancesFrom(distlist, x, y, z, maxitems, mindist, maxdist, spherical, cn.Connection, (s) => AddToCache(s));
         }
 
-        public static ISystem GetSystemByPosition(double x, double y, double z , int warnthreshold = 500)
+        public static ISystem GetSystemByPosition(double x, double y, double z, int warnthreshold = 500)
         {
-            return SystemsDatabase.Instance.ExecuteWithDatabase(conn => GetSystemByPosition(x, y, z, conn), warnthreshold: warnthreshold);
+            return FindNearestSystemTo(x, y, z, 0.125, warnthreshold);
         }
 
-        public static ISystem GetSystemByPosition(double x, double y, double z, SystemsDatabaseConnection cn)
+        public static ISystem FindNearestSystemTo(double x, double y, double z, double maxdistance, int warnthreshold = 500)
         {
-            return FindNearestSystemTo(x, y, z, 0.125, cn);
-        }
-
-        public static ISystem FindNearestSystemTo(double x, double y, double z, double maxdistance)
-        {
-            return SystemsDatabase.Instance.ExecuteWithDatabase(conn => FindNearestSystemTo(x, y, z, maxdistance, conn));
+            if (SystemsDatabase.Instance.RebuildRunning) // Return from cache if rebuild is running
+            {
+                lock (systemsByEdsmId)
+                {
+                    return systemsByName.Values
+                                        .SelectMany(s => s)
+                                        .OrderBy(s => s.Distance(x, y, z))
+                                        .FirstOrDefault(e => e.Distance(x, y, z) < maxdistance);
+                }
+            }
+            else
+            {
+                return SystemsDatabase.Instance.ExecuteWithDatabase(conn => FindNearestSystemTo(x, y, z, maxdistance, conn), warnthreshold: warnthreshold);
+            }
         }
 
         public static ISystem FindNearestSystemTo(double x, double y, double z, double maxdistance, SystemsDatabaseConnection cn)
@@ -214,7 +263,31 @@ namespace EliteDangerousCore.DB
                                                  int routemethod,
                                                  int limitto)
         {
-            return SystemsDatabase.Instance.ExecuteWithDatabase(conn => GetSystemNearestTo(currentpos, wantedpos, maxfromcurpos, maxfromwanted, routemethod, limitto, conn));
+            if (SystemsDatabase.Instance.RebuildRunning)
+            {
+                lock (systemsByEdsmId)
+                {
+                    var candidates =
+                        systemsByName.Values
+                                     .SelectMany(s => s)
+                                     .Select(s => new
+                                     {
+                                         dc = s.Distance(currentpos.X, currentpos.Y, currentpos.Z),
+                                         dw = s.Distance(wantedpos.X, wantedpos.Y, wantedpos.Z),
+                                         sys = s
+                                     })
+                                     .Where(s => s.dw < maxfromwanted && s.dc < maxfromcurpos)
+                                     .OrderBy(s => s.dw)
+                                     .Select(s => s.sys)
+                                     .ToList();
+
+                    return DB.SystemsDB.GetSystemNearestTo(candidates, currentpos, wantedpos, maxfromcurpos, maxfromwanted, routemethod);
+                }
+            }
+            else
+            {
+                return SystemsDatabase.Instance.ExecuteWithDatabase(conn => GetSystemNearestTo(currentpos, wantedpos, maxfromcurpos, maxfromwanted, routemethod, limitto, conn));
+            }
         }
 
         public static ISystem GetSystemNearestTo(Point3D currentpos,
@@ -277,18 +350,39 @@ namespace EliteDangerousCore.DB
 
             if (input.HasChars())
             {
-                List<ISystem> systems = DB.SystemsDB.FindStarWildcard(input, MaximumStars);
-                foreach (var i in systems)
+                if (SystemsDatabase.Instance.RebuildRunning)
                 {
-                    AddToCache(i);
-                    ret.Add(i.Name);
-                }
+                    lock (systemsByEdsmId)
+                    {
+                        input = input.ToLowerInvariant();
 
-                List<ISystem> aliases = DB.SystemsDB.FindAliasWildcard(input);
-                foreach (var i in aliases)
+                        foreach (var kvp in systemsByName)
+                        {
+                            if (kvp.Key.ToLowerInvariant().StartsWith(input))
+                            {
+                                foreach (var s in kvp.Value)
+                                {
+                                    ret.Add(s.Name);
+                                }
+                            }
+                        }
+                    }
+                }
+                else
                 {
-                    AddToCache(i);
-                    ret.Add(i.Name);      
+                    List<ISystem> systems = DB.SystemsDB.FindStarWildcard(input, MaximumStars);
+                    foreach (var i in systems)
+                    {
+                        AddToCache(i);
+                        ret.Add(i.Name);
+                    }
+
+                    List<ISystem> aliases = DB.SystemsDB.FindAliasWildcard(input);
+                    foreach (var i in aliases)
+                    {
+                        AddToCache(i);
+                        ret.Add(i.Name);
+                    }
                 }
             }
 

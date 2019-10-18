@@ -283,6 +283,16 @@ namespace EliteDangerousCore.DB
             }
         }
 
+        static IEnumerable<SystemClass> MakeSystemEnumerable(DbDataReader reader, bool eddbinfo = true, Action<ISystem> callback = null)
+        {
+            while (reader.Read())
+            {
+                var sys = MakeSystem(reader, eddbinfo);
+                callback?.Invoke(sys);
+                yield return sys;
+            }
+        }
+
         #endregion
 
     }

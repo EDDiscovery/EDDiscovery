@@ -566,21 +566,24 @@ namespace EliteDangerousCore
         {
             List<Tuple<HistoryEntry, ISystem>> updatesystems = new List<Tuple<HistoryEntry, ISystem>>();
 
-            SystemsDatabase.Instance.ExecuteWithDatabase(cn =>
+            if (!SystemsDatabase.Instance.RebuildRunning)
             {
-                foreach (HistoryEntry he in historylist)
+                SystemsDatabase.Instance.ExecuteWithDatabase(cn =>
                 {
-                    if (he.IsFSDJump && !he.System.HasCoordinate)// try and load ones without position.. if its got pos we are happy
-                    {           // done in two IFs for debugging, in case your wondering why!
-                        if (he.System.status != SystemStatusEnum.EDSM && he.System.EDSMID == 0)   // and its not from EDSM and we have not already tried
-                        {
-                            ISystem found = SystemCache.FindSystem(he.System, cn);
-                            if (found != null)
-                                updatesystems.Add(new Tuple<HistoryEntry, ISystem>(he, found));
+                    foreach (HistoryEntry he in historylist)
+                    {
+                        if (he.IsFSDJump && !he.System.HasCoordinate)// try and load ones without position.. if its got pos we are happy
+                        {           // done in two IFs for debugging, in case your wondering why!
+                            if (he.System.status != SystemStatusEnum.EDSM && he.System.EDSMID == 0)   // and its not from EDSM and we have not already tried
+                            {
+                                ISystem found = SystemCache.FindSystem(he.System, cn);
+                                if (found != null)
+                                    updatesystems.Add(new Tuple<HistoryEntry, ISystem>(he, found));
+                            }
                         }
                     }
-                }
-            });
+                });
+            }
 
             if (updatesystems.Count > 0)
             {
