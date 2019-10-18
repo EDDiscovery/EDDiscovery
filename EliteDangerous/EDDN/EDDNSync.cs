@@ -204,7 +204,7 @@ namespace EliteDangerousCore.EDDN
             else if (je.EventTypeID == JournalTypeEnum.Market)
             {
                 JournalMarket jm = je as JournalMarket;
-                msg = eddn.CreateEDDNCommodityMessage(jm.Commodities, jm.StarSystem, jm.Station, jm.MarketID, DateTime.UtcNow);      // if its devoid of data, null returned
+                msg = eddn.CreateEDDNCommodityMessage(jm.Commodities, jm.StarSystem, jm.Station, jm.MarketID, jm.EventTimeUTC);      // if its devoid of data, null returned
             }
 
             if (msg != null)
