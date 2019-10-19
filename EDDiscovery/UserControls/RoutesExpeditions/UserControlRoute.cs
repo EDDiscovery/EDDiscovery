@@ -238,7 +238,7 @@ namespace EDDiscovery.UserControls
             else
             {
                 plotter.StopPlotter = true;
-                button_Route.Text = "Find Route".Tx(this, "button_Route");
+                button_Route.Enabled = false;
             }
         }
 
@@ -257,6 +257,7 @@ namespace EDDiscovery.UserControls
                     discoveryform.NewCalculatedRoute(routeSystems);
                     cmd3DMap.Enabled = true;
                     button_Route.Text = "Find Route".Tx(this, "button_Route");
+                    button_Route.Enabled = true;
                 }));
         }
 
