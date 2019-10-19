@@ -36,6 +36,7 @@ namespace EDDiscovery.UserControls
 
         private System.Windows.Forms.Timer fromupdatetimer;
         private System.Windows.Forms.Timer toupdatetimer;
+        private ManualResetEvent CloseRequested = new ManualResetEvent(false);
 
         public UserControlRoute()
         {
@@ -100,6 +101,7 @@ namespace EDDiscovery.UserControls
             if (routingthread != null && routingthread.IsAlive && plotter != null)
             {
                 plotter.StopPlotter = true;
+                CloseRequested.Set();
                 routingthread.Join();
             }
 
@@ -262,7 +264,7 @@ namespace EDDiscovery.UserControls
 
         private void AppendData(RoutePlotter.ReturnInfo info)   // IN thread context, need to invoke
         {
-            Invoke((MethodInvoker)delegate      // using Invoke blocks the thread until the UI finishes.  Using BeginInvoke async causes it to overload the UI
+            var ar = BeginInvoke((MethodInvoker)delegate      // using Invoke blocks the thread until the UI finishes.  Using BeginInvoke async causes it to overload the UI
             {
                 DataGridViewRow rw = dataGridViewRoute.RowTemplate.Clone() as DataGridViewRow;
                 rw.CreateCells(dataGridViewRoute,
@@ -284,6 +286,8 @@ namespace EDDiscovery.UserControls
                     dataGridViewRoute.FirstDisplayedScrollingRowIndex++;
                 }
             });
+
+            WaitHandle.WaitAny(new WaitHandle[] { CloseRequested, ar.AsyncWaitHandle });
         }
 
         private void cmd3DMap_Click(object sender, EventArgs e)
