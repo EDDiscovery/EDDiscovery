@@ -468,8 +468,8 @@ namespace EDDiscovery.UserControls
 
         private void buttonFromEDSM_Click(object sender, EventArgs e)
         {
-            ISystem ds1 = discoveryform.history.FindSystem(SystemNameOnly(textBox_To.Text), discoveryform.galacticMapping);
-            string sysname = ds1?.Name ?? SystemNameOnly(textBox_To.Text);
+            ISystem ds1 = discoveryform.history.FindSystem(SystemNameOnly(textBox_From.Text), discoveryform.galacticMapping);
+            string sysname = ds1?.Name ?? SystemNameOnly(textBox_From.Text);
             long? edsmid = ds1?.EDSMID;
 
             EDSMClass edsm = new EDSMClass();
