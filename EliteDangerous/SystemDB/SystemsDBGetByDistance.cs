@@ -132,19 +132,11 @@ namespace EliteDangerousCore.DB
         }
 
         /////////////////////////////////////////////// Nearest to a point determined by a metric
-
-        public const int metric_nearestwaypoint = 0;     // easiest way to synchronise metric selection..
-        public const int metric_mindevfrompath = 1;
-        public const int metric_maximum100ly = 2;
-        public const int metric_maximum250ly = 3;
-        public const int metric_maximum500ly = 4;
-        public const int metric_waypointdev2 = 5;
-
         internal static ISystem GetSystemNearestTo(Point3D currentpos,
                                                   Point3D wantedpos,
                                                   double maxfromcurpos,
                                                   double maxfromwanted,
-                                                  int routemethod,
+                                                  RoutePlotter.Metric routemethod,
                                                   SQLiteConnectionSystem cn,
                                                   Action<ISystem> LookedUp = null,
                                                   int limitto = 1000)
@@ -193,7 +185,7 @@ namespace EliteDangerousCore.DB
                                                    Point3D wantedpos,
                                                    double maxfromcurpos,
                                                    double maxfromwanted,
-                                                   int routemethod)
+                                                   RoutePlotter.Metric routemethod)
         {
             double bestmindistance = double.MaxValue;
             ISystem nearestsystem = null;
@@ -207,7 +199,7 @@ namespace EliteDangerousCore.DB
                 // ENSURE its withing the circles now
                 if (distancefromcurposx2 <= (maxfromcurpos * maxfromcurpos) && distancefromwantedx2 <= (maxfromwanted * maxfromwanted))
                 {
-                    if (routemethod == metric_nearestwaypoint)
+                    if (routemethod == RoutePlotter.Metric.IterativeNearestWaypoint)
                     {
                         if (distancefromwantedx2 < bestmindistance)
                         {
@@ -221,16 +213,18 @@ namespace EliteDangerousCore.DB
                         double deviation = Point3D.DistanceBetween(interceptpoint, syspos);
                         double metric = 1E39;
 
-                        if (routemethod == metric_mindevfrompath)
+                        if (routemethod == RoutePlotter.Metric.IterativeMinDevFromPath)
                             metric = deviation;
-                        else if (routemethod == metric_maximum100ly)
+                        else if (routemethod == RoutePlotter.Metric.IterativeMaximumDev100Ly)
                             metric = (deviation <= 100) ? distancefromwantedx2 : metric;        // no need to sqrt it..
-                        else if (routemethod == metric_maximum250ly)
+                        else if (routemethod == RoutePlotter.Metric.IterativeMaximumDev250Ly)
                             metric = (deviation <= 250) ? distancefromwantedx2 : metric;
-                        else if (routemethod == metric_maximum500ly)
+                        else if (routemethod == RoutePlotter.Metric.IterativeMaximumDev500Ly)
                             metric = (deviation <= 500) ? distancefromwantedx2 : metric;
-                        else if (routemethod == metric_waypointdev2)
+                        else if (routemethod == RoutePlotter.Metric.IterativeWaypointDevHalf)
                             metric = Math.Sqrt(distancefromwantedx2) + deviation / 2;
+                        else
+                            throw new ArgumentOutOfRangeException(nameof(routemethod));
 
                         if (metric < bestmindistance)
                         {

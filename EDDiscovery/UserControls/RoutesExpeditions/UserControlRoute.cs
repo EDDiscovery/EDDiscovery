@@ -57,8 +57,8 @@ namespace EDDiscovery.UserControls
             toupdatetimer.Interval = 500;
             toupdatetimer.Tick += ToUpdateTick;
 
-            for (int i = 0; i < RoutePlotter.metric_options.Length; i++)
-                comboBoxRoutingMetric.Items.Add(RoutePlotter.metric_options[i]);
+            foreach (RoutePlotter.Metric values in Enum.GetValues(typeof(RoutePlotter.Metric)))
+                comboBoxRoutingMetric.Items.Insert((int)values, RoutePlotter.GetMetricName(values));
 
             textBox_From.SetAutoCompletor(SystemCache.ReturnSystemAdditionalListForAutoComplete, true);
             textBox_To.SetAutoCompletor(SystemCache.ReturnSystemAdditionalListForAutoComplete , true);
@@ -76,7 +76,9 @@ namespace EDDiscovery.UserControls
             bool tostate = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave("RouteToState"), false);
 
             int metricvalue = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(DbSave("RouteMetric"), 0);
-            comboBoxRoutingMetric.SelectedIndex = (metricvalue >= 0 && metricvalue < comboBoxRoutingMetric.Items.Count) ? metricvalue : SystemsDB.metric_waypointdev2;
+            comboBoxRoutingMetric.SelectedIndex = Enum.IsDefined(typeof(RoutePlotter.Metric), metricvalue)
+                ? metricvalue
+                : (int) RoutePlotter.Metric.IterativeNearestWaypoint;
 
             SeleteToCoords(tostate);
             UpdateTo(true);
@@ -208,7 +210,7 @@ namespace EDDiscovery.UserControls
                 GetCoordsTo(out plotter.Coordsto);
                 plotter.FromSystem = textBox_From.Text;
                 plotter.ToSystem = textBox_To.Text;
-                plotter.RouteMethod = comboBoxRoutingMetric.SelectedIndex;
+                plotter.RouteMethod = (RoutePlotter.Metric) comboBoxRoutingMetric.SelectedIndex;
                 plotter.UseFsdBoost = checkBox_FsdBoost.Checked;
 
                 if (textBox_From.ReadOnly == true)

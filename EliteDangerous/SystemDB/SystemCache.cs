@@ -257,7 +257,7 @@ namespace EliteDangerousCore.DB
                                                  Point3D wantedpos,
                                                  double maxfromcurpos,
                                                  double maxfromwanted,
-                                                 int routemethod,
+                                                 RoutePlotter.Metric routemethod,
                                                  int limitto)
         {
             if (SystemsDatabase.Instance.RebuildRunning)    // return from cache is rebuild is running
@@ -291,7 +291,7 @@ namespace EliteDangerousCore.DB
                                                  Point3D wantedpos,
                                                  double maxfromcurpos,
                                                  double maxfromwanted,
-                                                 int routemethod , 
+                                                 RoutePlotter.Metric routemethod,
                                                  int limitto, 
                                                  SystemsDatabaseConnection cn)
         {
