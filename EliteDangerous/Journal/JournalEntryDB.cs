@@ -560,7 +560,7 @@ namespace EliteDangerousCore
             return (T)GetLast(before, e => e is T && (filter == null || filter((T)e)));
         }
 
-        public static List<JournalEntry> FindEntry(JournalEntry ent, JObject entjo = null)      // entjo is not changed.
+        public static List<JournalEntry> FindEntry(JournalEntry ent, UserDatabaseConnection cn , JObject entjo = null)      // entjo is not changed.
         {
             if (entjo == null)
             {
@@ -569,31 +569,28 @@ namespace EliteDangerousCore
 
             entjo = RemoveEDDGeneratedKeys(entjo);
 
-            return UserDatabase.Instance.ExecuteWithDatabase<List<JournalEntry>>(cn =>
-            {
-                List<JournalEntry> entries = new List<JournalEntry>();
+            List<JournalEntry> entries = new List<JournalEntry>();
 
-                using (DbCommand cmd = cn.Connection.CreateCommand("SELECT * FROM JournalEntries WHERE CommanderId = @cmdrid AND EventTime = @time AND TravelLogId = @tluid AND EventTypeId = @evttype ORDER BY Id ASC"))
+            using (DbCommand cmd = cn.Connection.CreateCommand("SELECT * FROM JournalEntries WHERE CommanderId = @cmdrid AND EventTime = @time AND TravelLogId = @tluid AND EventTypeId = @evttype ORDER BY Id ASC"))
+            {
+                cmd.AddParameterWithValue("@cmdrid", ent.CommanderId);
+                cmd.AddParameterWithValue("@time", ent.EventTimeUTC);
+                cmd.AddParameterWithValue("@tluid", ent.TLUId);
+                cmd.AddParameterWithValue("@evttype", ent.EventTypeID);
+                using (DbDataReader reader = cmd.ExecuteReader())
                 {
-                    cmd.AddParameterWithValue("@cmdrid", ent.CommanderId);
-                    cmd.AddParameterWithValue("@time", ent.EventTimeUTC);
-                    cmd.AddParameterWithValue("@tluid", ent.TLUId);
-                    cmd.AddParameterWithValue("@evttype", ent.EventTypeID);
-                    using (DbDataReader reader = cmd.ExecuteReader())
+                    while (reader.Read())
                     {
-                        while (reader.Read())
+                        JournalEntry jent = CreateJournalEntry(reader);
+                        if (AreSameEntry(ent, jent, entjo))
                         {
-                            JournalEntry jent = CreateJournalEntry(reader);
-                            if (AreSameEntry(ent, jent, entjo))
-                            {
-                                entries.Add(jent);
-                            }
+                            entries.Add(jent);
                         }
                     }
                 }
+            }
 
-                return entries;
-            });
+            return entries;
         }
 
         public static int RemoveDuplicateFSDEntries(int currentcmdrid)

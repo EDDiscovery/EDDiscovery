@@ -125,9 +125,15 @@ namespace EDDiscovery.Actions
                                     });
 
             paras[0].Value = paras[0].Value.ReplaceIfStartsWith(", ", "");
+            paras[0].Value = paras[0].Value.Replace("ABC, ", "A B C, ");
+            paras[0].Value = paras[0].Value.Replace("ABCD, ", "A B C D, ");
+            paras[0].Value = paras[0].Value.Replace("ABCE, ", "A B C D E, ");
             paras[0].Value = paras[0].Value.Replace("AB, ", "A B, ");
             paras[0].Value = paras[0].Value.Replace("BC, ", "B C, ");
             paras[0].Value = paras[0].Value.Replace("CD, ", "C D, ");
+            paras[0].Value = paras[0].Value.Replace("DE, ", "D E, ");
+            paras[0].Value = paras[0].Value.Replace("EF, ", "E F, ");
+            paras[0].Value = paras[0].Value.Replace("FG, ", "F G, ");
 
             paras[0].Value = paras[0].Value.Replace("  ", " ");
             paras[0].Value = paras[0].Value.Replace("Belt Cluster", ", Belt Cluster");

@@ -195,7 +195,7 @@ namespace EliteDangerousCore
                     {
                         using (DbTransaction txn = cn.Connection.BeginTransaction())
                         {
-                            ents = ents.Where(jre => JournalEntry.FindEntry(jre.JournalEntry, jre.Json).Count == 0).ToList();
+                            ents = ents.Where(jre => JournalEntry.FindEntry(jre.JournalEntry, cn, jre.Json).Count == 0).ToList();
 
                             foreach (JournalReaderEntry jre in ents)
                             {
