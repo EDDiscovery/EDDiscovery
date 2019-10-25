@@ -488,7 +488,7 @@ namespace EliteDangerousCore.JournalEvents
             else if (ScanType.Contains("Nav"))
                 text = "Nav scan of {0}".T(EDTx.JournalScan_Navscanof);
 
-            return string.Format(text, BodyName.ReplaceIfStartsWith(sys.Name)); 
+            return string.Format(text, BodyName.ReplaceIfStartsWith(sys.Name));
         }
 
         public override string EventFilterName

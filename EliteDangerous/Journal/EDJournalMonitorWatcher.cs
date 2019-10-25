@@ -285,7 +285,7 @@ namespace EliteDangerousCore
 
                     if (entries.Count > 0)
                     {
-                        ILookup<DateTime, JournalEntry> existing = JournalEntry.GetAllByTLU(reader.TravelLogUnit.id).ToLookup(e => e.EventTimeUTC);
+                        ILookup<DateTime, JournalEntry> existing = JournalEntry.GetAllByTLU(reader.TravelLogUnit.id, cn.Connection).ToLookup(e => e.EventTimeUTC);
 
                         //System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCountLap("PJF"), i + " into db");
 

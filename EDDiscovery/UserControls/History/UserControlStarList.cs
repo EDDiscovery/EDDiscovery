@@ -413,6 +413,7 @@ namespace EDDiscovery.UserControls
                         if (sn.ScanData != null && checkBoxBodyClasses.Checked)
                         {
                             JournalScan sc = sn.ScanData;
+                            string bodynameshort = sc.BodyName.ReplaceIfStartsWith(syslist[0].System.Name);
 
                             if (sc.IsStar) // brief notification for special or uncommon celestial bodies, useful to traverse the history and search for that special body you discovered.
                             {
@@ -459,22 +460,22 @@ namespace EDDiscovery.UserControls
                                 {
                                     // Earth-like moon
                                     if (sc.PlanetTypeID == EDPlanet.Earthlike_body)
-                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is an earth like moon".T(EDTx.UserControlStarList_ELM), sc.BodyName), prefix);
+                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is an earth like moon".T(EDTx.UserControlStarList_ELM), bodynameshort), prefix);
 
                                     // Terraformable water moon
                                     if (sc.Terraformable == true && sc.PlanetTypeID == EDPlanet.Water_world)
-                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is a terraformable water moon".T(EDTx.UserControlStarList_TWM), sc.BodyName), prefix);
+                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is a terraformable water moon".T(EDTx.UserControlStarList_TWM), bodynameshort), prefix);
                                     // Water moon
                                     if (sc.Terraformable == false && sc.PlanetTypeID == EDPlanet.Water_world)
-                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is a water moon".T(EDTx.UserControlStarList_WM), sc.BodyName), prefix);
+                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is a water moon".T(EDTx.UserControlStarList_WM), bodynameshort), prefix);
 
                                     // Terraformable moon
                                     if (sc.Terraformable == true && sc.PlanetTypeID != EDPlanet.Water_world)
-                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is a terraformable moon".T(EDTx.UserControlStarList_TM), sc.BodyName), prefix);
+                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is a terraformable moon".T(EDTx.UserControlStarList_TM), bodynameshort), prefix);
 
                                     // Ammonia moon
                                     if (sc.PlanetTypeID == EDPlanet.Ammonia_world)
-                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is an ammonia moon".T(EDTx.UserControlStarList_AM), sc.BodyName), prefix);
+                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is an ammonia moon".T(EDTx.UserControlStarList_AM), bodynameshort), prefix);
                                 }
 
                                 else
@@ -483,22 +484,22 @@ namespace EDDiscovery.UserControls
                                 {
                                     // Earth Like planet
                                     if (sc.PlanetTypeID == EDPlanet.Earthlike_body)
-                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is an earth like planet".T(EDTx.UserControlStarList_ELP), sc.BodyName), prefix);
+                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is an earth like planet".T(EDTx.UserControlStarList_ELP), bodynameshort), prefix);
 
                                     // Terraformable water world
                                     if (sc.PlanetTypeID == EDPlanet.Water_world && sc.Terraformable == true)
-                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is a terraformable water world".T(EDTx.UserControlStarList_TWW), sc.BodyName), prefix);
+                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is a terraformable water world".T(EDTx.UserControlStarList_TWW), bodynameshort), prefix);
                                     // Water world
                                     if (sc.PlanetTypeID == EDPlanet.Water_world && sc.Terraformable == false)
-                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is a water world".T(EDTx.UserControlStarList_WW), sc.BodyName), prefix);
+                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is a water world".T(EDTx.UserControlStarList_WW), bodynameshort), prefix);
 
                                     // Terraformable planet
                                     if (sc.Terraformable == true && sc.PlanetTypeID != EDPlanet.Water_world)
-                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is a terraformable planet".T(EDTx.UserControlStarList_TP), sc.BodyName), prefix);
+                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is a terraformable planet".T(EDTx.UserControlStarList_TP), bodynameshort), prefix);
 
                                     // Ammonia world
                                     if (sc.PlanetTypeID == EDPlanet.Ammonia_world)
-                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is an ammonia world".T(EDTx.UserControlStarList_AW), sc.BodyName), prefix);
+                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is an ammonia world".T(EDTx.UserControlStarList_AW), bodynameshort), prefix);
                                 }
                             }
                         }

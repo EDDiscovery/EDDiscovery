@@ -477,28 +477,25 @@ namespace EliteDangerousCore
             }
         }
                
-        public static List<JournalEntry> GetAllByTLU(long tluid)
+        internal static List<JournalEntry> GetAllByTLU(long tluid, SQLiteConnectionUser cn)
         {
             TravelLogUnit tlu = TravelLogUnit.Get(tluid);
             List<JournalEntry> vsc = new List<JournalEntry>();
 
-            return UserDatabase.Instance.ExecuteWithDatabase<List<JournalEntry>>(cn =>
+            using (DbCommand cmd = cn.CreateCommand("SELECT * FROM JournalEntries WHERE TravelLogId = @source ORDER BY EventTime ASC"))
             {
-                using (DbCommand cmd = cn.Connection.CreateCommand("SELECT * FROM JournalEntries WHERE TravelLogId = @source ORDER BY EventTime ASC"))
+                cmd.AddParameterWithValue("@source", tluid);
+                using (DbDataReader reader = cmd.ExecuteReader())
                 {
-                    cmd.AddParameterWithValue("@source", tluid);
-                    using (DbDataReader reader = cmd.ExecuteReader())
+                    while (reader.Read())
                     {
-                        while (reader.Read())
-                        {
-                            JournalEntry je = CreateJournalEntry(reader);
-                            je.beta = tlu?.Beta ?? false;
-                            vsc.Add(je);
-                        }
+                        JournalEntry je = CreateJournalEntry(reader);
+                        je.beta = tlu?.Beta ?? false;
+                        vsc.Add(je);
                     }
                 }
-                return vsc;
-            });
+            }
+            return vsc;
         }
 
         public static JournalEntry GetLast(int cmdrid, DateTime before, Func<JournalEntry, bool> filter)

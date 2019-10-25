@@ -60,7 +60,10 @@ namespace EliteDangerousCore
             }
             else
             {
-                systems = JournalEntry.GetAllByTLU(tlu.id).OfType<JournalLocOrJump>().ToList();
+                UserDatabase.Instance.ExecuteWithDatabase(cn =>
+                {
+                    systems = JournalEntry.GetAllByTLU(tlu.id, cn.Connection).OfType<JournalLocOrJump>().ToList();
+                });
             }
         }
 
