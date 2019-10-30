@@ -613,6 +613,7 @@
     <EmbeddedResource Include="Controls\SysInfo\notfirstdiscover.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Controls\Scan\Bodies\Signals.png" />
     <EmbeddedResource Include="Journal\SAASignalsFound.png" />
     <EmbeddedResource Include="Stars\G_WhiteSuperGiant.png" />
     <EmbeddedResource Include="Stars\B_BlueWhiteSuperGiant.png" />

@@ -189,6 +189,10 @@ namespace EliteDangerousCore.EDDN
             {
                 msg = eddn.CreateEDDNMessage(je as JournalScan, he.System);
             }
+            else if (je.EventTypeID == JournalTypeEnum.SAASignalsFound)
+            {
+                msg = eddn.CreateEDDNMessage(je as JournalSAASignalsFound, he.System);
+            }
             else if (je.EventTypeID == JournalTypeEnum.Outfitting)
             {
                 msg = eddn.CreateEDDNOutfittingMessage(je as JournalOutfitting, he.System);
@@ -200,7 +204,7 @@ namespace EliteDangerousCore.EDDN
             else if (je.EventTypeID == JournalTypeEnum.Market)
             {
                 JournalMarket jm = je as JournalMarket;
-                msg = eddn.CreateEDDNCommodityMessage(jm.Commodities, jm.StarSystem, jm.Station, jm.MarketID, DateTime.UtcNow);      // if its devoid of data, null returned
+                msg = eddn.CreateEDDNCommodityMessage(jm.Commodities, jm.StarSystem, jm.Station, jm.MarketID, jm.EventTimeUTC);      // if its devoid of data, null returned
             }
 
             if (msg != null)

@@ -353,12 +353,12 @@ namespace EliteDangerousCore
 
         #region process
 
-        public MissionList Process(JournalEntry je, ISystem sys, string body , DB.SQLiteConnectionUser conn)
+        public MissionList Process(JournalEntry je, ISystem sys, string body )
         {
             if (je is IMissions)
             {
                 IMissions e = je as IMissions;
-                e.UpdateMissions(this, sys , body, conn);                                   // not cloned.. up to callers to see if they need to
+                e.UpdateMissions(this, sys , body);                                   // not cloned.. up to callers to see if they need to
             }
 
             return missionlist;

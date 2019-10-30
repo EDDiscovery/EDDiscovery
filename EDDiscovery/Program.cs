@@ -62,6 +62,11 @@ namespace EDDiscovery
                      * TODO: show a dialog and/or bring the current instance's window to the foreground.
                      */
                 }
+                finally
+                {
+                    EliteDangerousCore.DB.UserDatabase.Instance.Stop();     // need everything closed before we can shut down the DBs threads
+                    EliteDangerousCore.DB.SystemsDatabase.Instance.Stop();
+                }
             }
         }
     }

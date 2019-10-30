@@ -68,6 +68,9 @@ namespace EliteDangerousCore.EGO
         {
             recordSet = false;
 
+            if (ego_apikey.IsEmpty() || ego_username.IsEmpty())
+                return false;
+
             try
             {
                 BaseUtils.ResponseData resp = RequestPost(msg.ToString(), "");

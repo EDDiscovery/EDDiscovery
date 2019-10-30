@@ -41,11 +41,7 @@ namespace EliteDangerousCore.DB
 
         public bool Add()
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
-            {
-                bool ret = Add(cn);
-                return ret;
-            }
+            return UserDatabase.Instance.ExecuteWithDatabase<bool>(cn => { return Add(cn.Connection); });
         }
 
         private bool Add(SQLiteConnectionUser cn)
@@ -65,10 +61,7 @@ namespace EliteDangerousCore.DB
 
         public bool Delete()
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
-            {
-                return Delete(cn);
-            }
+            return UserDatabase.Instance.ExecuteWithDatabase<bool>(cn => { return Delete(cn.Connection); });
         }
 
         private bool Delete(SQLiteConnectionUser cn)
@@ -87,9 +80,9 @@ namespace EliteDangerousCore.DB
         {
             try
             {
-                using (SQLiteConnectionUser cn = new SQLiteConnectionUser(mode: SQLLiteExtensions.SQLExtConnection.AccessMode.Reader))
+                return UserDatabase.Instance.ExecuteWithDatabase<List<WantedSystemClass>>(cn =>
                 {
-                    using (DbCommand cmd = cn.CreateCommand("select * from wanted_systems"))
+                    using (DbCommand cmd = cn.Connection.CreateCommand("select * from wanted_systems"))
                     {
                         List<WantedSystemClass> retVal = new List<WantedSystemClass>();
 
@@ -104,7 +97,7 @@ namespace EliteDangerousCore.DB
 
                         return retVal;
                     }
-                }
+                });
             }
             catch (System.Exception ex)
             {

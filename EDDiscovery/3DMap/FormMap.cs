@@ -156,22 +156,22 @@ namespace EDDiscovery
 
             plannedRoute = null;
 
-            drawLinesBetweenStarsWithPositionToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool("Map3DDrawLines", true);
-            drawADiscOnStarsWithPositionToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool("Map3DDrawTravelDisc", true);
-            useWhiteForDiscsInsteadOfAssignedMapColourToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool("Map3DDrawTravelWhiteDisc", true);
-            showStarstoolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool("Map3DAllStars", true);
-            showStationsToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool("Map3DButtonStations", true);
-            toolStripButtonPerspective.Checked = SQLiteDBClass.GetSettingBool("Map3DPerspective", false);
-            toolStripButtonGrid.Checked = SQLiteDBClass.GetSettingBool("Map3DCoarseGrid", true);
-            toolStripButtonFineGrid.Checked = SQLiteDBClass.GetSettingBool("Map3DFineGrid", true);
-            toolStripButtonCoords.Checked = SQLiteDBClass.GetSettingBool("Map3DCoords", true);
-            toolStripButtonEliteMovement.Checked = SQLiteDBClass.GetSettingBool("Map3DEliteMove", false);
-            showNamesToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool("Map3DStarNaming", true);
-            showDiscsToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool("Map3DStarDiscs", true);
-            showNoteMarksToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool("Map3DShowNoteMarks", true);
-            showBookmarksToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool("Map3DShowBookmarks", true);
-            toolStripButtonAutoForward.Checked = SQLiteDBClass.GetSettingBool("Map3DAutoForward", false);
-            enableColoursToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool("Map3DButtonColours", true);
+            drawLinesBetweenStarsWithPositionToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("Map3DDrawLines", true);
+            drawADiscOnStarsWithPositionToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("Map3DDrawTravelDisc", true);
+            useWhiteForDiscsInsteadOfAssignedMapColourToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("Map3DDrawTravelWhiteDisc", true);
+            showStarstoolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("Map3DAllStars", true);
+            showStationsToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("Map3DButtonStations", true);
+            toolStripButtonPerspective.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("Map3DPerspective", false);
+            toolStripButtonGrid.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("Map3DCoarseGrid", true);
+            toolStripButtonFineGrid.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("Map3DFineGrid", true);
+            toolStripButtonCoords.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("Map3DCoords", true);
+            toolStripButtonEliteMovement.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("Map3DEliteMove", false);
+            showNamesToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("Map3DStarNaming", true);
+            showDiscsToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("Map3DStarDiscs", true);
+            showNoteMarksToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("Map3DShowNoteMarks", true);
+            showBookmarksToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("Map3DShowBookmarks", true);
+            toolStripButtonAutoForward.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("Map3DAutoForward", false);
+            enableColoursToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("Map3DButtonColours", true);
             stargrids.ForceWhite = !enableColoursToolStripMenuItem.Checked;
 
             stargrids.FillSystemListGrid(systemlist);     // to ensure its updated
@@ -188,7 +188,7 @@ namespace EDDiscovery
                         toolStripDropDownButtonGalObjects.DropDownItems.Add(AddGalMapButton(tp.Description, tp, tp.Enabled));
                         if (tp.Group == GalMapType.GalMapGroup.Regions)
                         {
-                            toolstripToggleRegionColouringButton = AddGalMapButton("Toggle Region Colouring", 2, SQLiteDBClass.GetSettingBool("Map3DGMORegionColouring", true));
+                            toolstripToggleRegionColouringButton = AddGalMapButton("Toggle Region Colouring", 2, EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("Map3DGMORegionColouring", true));
                             toolStripDropDownButtonGalObjects.DropDownItems.Add(toolstripToggleRegionColouringButton);
                         }
                     }
@@ -196,7 +196,7 @@ namespace EDDiscovery
 
                 toolStripDropDownButtonGalObjects.DropDownItems.Add(AddGalMapButton("Toggle All", 0, null));
 
-                toolstripToggleNamingButton = AddGalMapButton("Toggle Star Naming", 1, SQLiteDBClass.GetSettingBool("Map3DGMONaming", true));
+                toolstripToggleNamingButton = AddGalMapButton("Toggle Star Naming", 1, EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("Map3DGMONaming", true));
                 toolStripDropDownButtonGalObjects.DropDownItems.Add(toolstripToggleNamingButton);
             }
 
@@ -375,12 +375,12 @@ namespace EDDiscovery
         {
             base.OnShown(e);
 
-            int helpno = SQLiteDBClass.GetSettingInt("Map3DShownHelp", 0);                 // force up help, to make sure they know it exists
+            int helpno = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt("Map3DShownHelp", 0);                 // force up help, to make sure they know it exists
 
             if (helpno != HELP_VERSION)
             {
                 toolStripButtonHelp_Click(toolStripButtonHelp, EventArgs.Empty);
-                SQLiteDBClass.PutSettingInt("Map3DShownHelp", HELP_VERSION);
+                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt("Map3DShownHelp", HELP_VERSION);
             }
 
             SetModelProjectionMatrix();
@@ -442,24 +442,24 @@ namespace EDDiscovery
             systemtickinterval.Stop();
             VideoMessage();
 
-            SQLiteDBClass.PutSettingBool("Map3DAutoForward", toolStripButtonAutoForward.Checked);
-            SQLiteDBClass.PutSettingBool("Map3DDrawLines", drawLinesBetweenStarsWithPositionToolStripMenuItem.Checked);
-            SQLiteDBClass.PutSettingBool("Map3DDrawTravelDisc", drawADiscOnStarsWithPositionToolStripMenuItem.Checked);
-            SQLiteDBClass.PutSettingBool("Map3DDrawTravelWhiteDisc", useWhiteForDiscsInsteadOfAssignedMapColourToolStripMenuItem.Checked);
-            SQLiteDBClass.PutSettingBool("Map3DAllStars", showStarstoolStripMenuItem.Checked);
-            SQLiteDBClass.PutSettingBool("Map3DButtonColours", enableColoursToolStripMenuItem.Checked);
-            SQLiteDBClass.PutSettingBool("Map3DButtonStations", showStationsToolStripMenuItem.Checked);
-            SQLiteDBClass.PutSettingBool("Map3DCoarseGrid", toolStripButtonGrid.Checked);
-            SQLiteDBClass.PutSettingBool("Map3DFineGrid", toolStripButtonFineGrid.Checked);
-            SQLiteDBClass.PutSettingBool("Map3DCoords", toolStripButtonCoords.Checked);
-            SQLiteDBClass.PutSettingBool("Map3DEliteMove", toolStripButtonEliteMovement.Checked);
-            SQLiteDBClass.PutSettingBool("Map3DStarDiscs", showDiscsToolStripMenuItem.Checked);
-            SQLiteDBClass.PutSettingBool("Map3DStarNaming", showNamesToolStripMenuItem.Checked);
-            SQLiteDBClass.PutSettingBool("Map3DShowNoteMarks", showNoteMarksToolStripMenuItem.Checked);
-            SQLiteDBClass.PutSettingBool("Map3DShowBookmarks", showBookmarksToolStripMenuItem.Checked);
-            SQLiteDBClass.PutSettingBool("Map3DPerspective", toolStripButtonPerspective.Checked);
-            SQLiteDBClass.PutSettingBool("Map3DGMONaming", toolstripToggleNamingButton.Checked);
-            SQLiteDBClass.PutSettingBool("Map3DGMORegionColouring", toolstripToggleRegionColouringButton.Checked);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("Map3DAutoForward", toolStripButtonAutoForward.Checked);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("Map3DDrawLines", drawLinesBetweenStarsWithPositionToolStripMenuItem.Checked);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("Map3DDrawTravelDisc", drawADiscOnStarsWithPositionToolStripMenuItem.Checked);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("Map3DDrawTravelWhiteDisc", useWhiteForDiscsInsteadOfAssignedMapColourToolStripMenuItem.Checked);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("Map3DAllStars", showStarstoolStripMenuItem.Checked);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("Map3DButtonColours", enableColoursToolStripMenuItem.Checked);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("Map3DButtonStations", showStationsToolStripMenuItem.Checked);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("Map3DCoarseGrid", toolStripButtonGrid.Checked);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("Map3DFineGrid", toolStripButtonFineGrid.Checked);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("Map3DCoords", toolStripButtonCoords.Checked);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("Map3DEliteMove", toolStripButtonEliteMovement.Checked);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("Map3DStarDiscs", showDiscsToolStripMenuItem.Checked);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("Map3DStarNaming", showNamesToolStripMenuItem.Checked);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("Map3DShowNoteMarks", showNoteMarksToolStripMenuItem.Checked);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("Map3DShowBookmarks", showBookmarksToolStripMenuItem.Checked);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("Map3DPerspective", toolStripButtonPerspective.Checked);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("Map3DGMONaming", toolstripToggleNamingButton.Checked);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("Map3DGMORegionColouring", toolstripToggleRegionColouringButton.Checked);
             discoveryForm.galacticMapping.SaveSettings();
 
             stargrids.Stop();
@@ -1363,7 +1363,7 @@ namespace EDDiscovery
         private void dropdownMapNames_DropDownItemClicked(object sender, EventArgs e)
         {
             ToolStripButton tsb = (ToolStripButton)sender;
-            SQLiteDBClass.PutSettingBool("map3DMaps" + tsb.Text, tsb.Checked);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("map3DMaps" + tsb.Text, tsb.Checked);
             GenerateDataSetsMaps();
             RequestPaint();
         }
@@ -2153,7 +2153,7 @@ namespace EDDiscovery
 
         #region Misc
 
-        public ISystem FindSystem(string name, SQLiteConnectionSystem cn = null)    // nice wrapper for this
+        public ISystem FindSystem(string name)    // nice wrapper for this
         {
             if (systemlist != null)
             {
@@ -2163,11 +2163,11 @@ namespace EDDiscovery
                     return sys.System;
             }
 
-            ISystem isys = SystemCache.FindSystem(name,cn);
+            ISystem isys = SystemCache.FindSystem(name);
             return isys;
         }
 
-        public ISystem FindSystem(Vector3 pos, SQLiteConnectionSystem cn = null )
+        public ISystem FindSystem(Vector3 pos)
         {
             if (systemlist != null)
             {
@@ -2177,7 +2177,7 @@ namespace EDDiscovery
                     return vsc.System;
             }
 
-            return SystemCache.GetSystemByPosition(pos.X, pos.Y, pos.Z, cn);
+            return SystemCache.GetSystemByPosition(pos.X, pos.Y, pos.Z, 5000);
         }
 
         private ISystem SafeSystem(ISystem s)
@@ -2241,7 +2241,7 @@ namespace EDDiscovery
                     Tag = img
                 };
                 item.Click += new EventHandler(dropdownMapNames_DropDownItemClicked);
-                item.Checked = SQLiteDBClass.GetSettingBool("map3DMaps" + img.FileName, false);
+                item.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("map3DMaps" + img.FileName, false);
                 dropdownMapNames.DropDownItems.Add(item);
             }
         }
@@ -2305,7 +2305,7 @@ namespace EDDiscovery
             filterStartTime = starttimes["All"]();
             filterEndTime = DateTime.UtcNow.AddYears(1);
 
-            string lastsel = SQLiteDBClass.GetSettingString("Map3DFilter", "");
+            string lastsel = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("Map3DFilter", "");
             foreach (var kvp in starttimes)
             {
                 var name = kvp.Key;
@@ -2342,7 +2342,7 @@ namespace EDDiscovery
                 }
             }
 
-            SQLiteDBClass.PutSettingString("Map3DFilter", "Custom");                   // Custom is not saved, but clear last entry.
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("Map3DFilter", "Custom");                   // Custom is not saved, but clear last entry.
 
             ExtendedControls.ConfigurableForm f = new ExtendedControls.ConfigurableForm();
             int width = 300;
@@ -2382,7 +2382,7 @@ namespace EDDiscovery
                 }
             }
 
-            SQLiteDBClass.PutSettingString("Map3DFilter", sel.Text);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("Map3DFilter", sel.Text);
             filterStartTime = startfunc();
             filterEndTime = endfunc == null ? DateTime.Now.AddDays(1) : endfunc();
             GenerateDataSetsSystemList();

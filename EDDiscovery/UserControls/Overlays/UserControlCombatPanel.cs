@@ -138,7 +138,7 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
-            string filter = SQLiteConnectionUser.GetSettingString(DbSave + "Campaign", "");
+            string filter = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbSave + "Campaign", "");
             List<string> filtarray = BaseUtils.StringParser.ParseWordList(filter);
 
             savedfilterentries = new List<FilterEntry>();
@@ -156,7 +156,7 @@ namespace EDDiscovery.UserControls
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
 
-            checkBoxCustomGridOn.Checked = SQLiteConnectionUser.GetSettingBool(DbSave + "Gridshow", false);
+            checkBoxCustomGridOn.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "Gridshow", false);
             checkBoxCustomGridOn.Visible = IsFloatingWindow;
 
             transparentfont = EDDTheme.Instance.GetFont;
@@ -206,10 +206,10 @@ namespace EDDiscovery.UserControls
                                     f.StartTime.ToStringZulu() + "," + f.EndTime.ToStringZulu() + ",";
             }
 
-            SQLiteConnectionUser.PutSettingString(DbSave + "Campaign", s);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbSave + "Campaign", s);
 
-            SQLiteConnectionUser.PutSettingBool(DbSave + "Gridshow", checkBoxCustomGridOn.Checked);
-            SQLiteConnectionUser.PutSettingString(DbSave + "Selected", current?.UniqueID ?? "");
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "Gridshow", checkBoxCustomGridOn.Checked);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbSave + "Selected", current?.UniqueID ?? "");
         }
 
         public override void SetTransparency(bool on, Color curbackcol)
@@ -450,10 +450,10 @@ namespace EDDiscovery.UserControls
         void SetLabels()
         {
             bool faction = current != null ? current.TargetFaction.Length > 0 : false;
-            labelTotalKills.Text = (total_kills>0) ? ("Kills:".T(EDTx.UserControlCombatPanel_Kills) + total_kills.ToStringInvariant()) : "";
-            labelFactionKills.Text = faction ? ("Faction:".T(EDTx.UserControlCombatPanel_Faction) + faction_kills.ToStringInvariant()) : "";
+            labelTotalKills.Text = (total_kills>0) ? ("Kills:".T(EDTx.UserControlCombatPanel_Kills) + total_kills.ToString()) : "";
+            labelFactionKills.Text = faction ? ("Faction:".T(EDTx.UserControlCombatPanel_Faction) + faction_kills.ToString()) : "";
             labelFaction.Text = faction ? (current.TargetFaction) : "";
-            labelTotalCrimes.Text = (total_crimes>0) ? ("Crimes:".T(EDTx.UserControlCombatPanel_Crimes) + total_crimes.ToStringInvariant()) : "";
+            labelTotalCrimes.Text = (total_crimes>0) ? ("Crimes:".T(EDTx.UserControlCombatPanel_Crimes) + total_crimes.ToString()) : "";
 
             labelCredits.Text = (discoveryform.history.GetLast != null) ? (discoveryform.history.GetLast.Credits.ToString("N0") + "cr") : "";
             labelBalance.Text = (balance > 0 ) ? ("Bal:".T(EDTx.UserControlCombatPanel_Bal) + balance.ToString("N0") + "cr") : "";
@@ -555,7 +555,7 @@ namespace EDDiscovery.UserControls
 
         private void SelectInitial()
         {
-            string sel = SQLiteConnectionUser.GetSettingString(DbSave + "Selected", "Since Last Dock");
+            string sel = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbSave + "Selected", "Since Last Dock");
 
             if (!sel.IsEmpty())
             {

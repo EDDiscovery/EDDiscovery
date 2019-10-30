@@ -91,11 +91,11 @@ namespace EliteDangerousCore.JournalEvents
 
             if (CommodityList != null)
                 foreach (Commodities c in CommodityList)
-                    detailed = detailed.AppendPrePad(c.FriendlyName + ":" + c.Count.ToStringInvariant(), ", "); 
+                    detailed = detailed.AppendPrePad(c.FriendlyName + ":" + c.Count.ToString(), ", "); 
 
             if (MaterialList != null)
                 foreach (Materials m in MaterialList)
-                    detailed = detailed.AppendPrePad(m.FriendlyName + ":" + m.Count.ToStringInvariant(), ", ");
+                    detailed = detailed.AppendPrePad(m.FriendlyName + ":" + m.Count.ToString(), ", ");
         }
     }
 }

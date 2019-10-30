@@ -91,8 +91,8 @@ namespace EDDiscovery.UserControls
                                                         toolStripJumpRange};
             Debug.Assert(toolstriplist.Length == BitSelTotal);
 
-            Selection = SQLiteDBClass.GetSettingInt(DbSelection, BitSelDefault);
-            string rs = SQLiteDBClass.GetSettingString(DbOSave, "-");
+            Selection = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(DbSelection, BitSelDefault);
+            string rs = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbOSave, "-");
             if (rs == "-")
                 Reset();
             else
@@ -139,8 +139,8 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNoteChanged -= OnNoteChanged;
             discoveryform.OnEDSMSyncComplete -= Discoveryform_OnEDSMSyncComplete;
             discoveryform.OnNewUIEvent -= Discoveryform_OnNewUIEvent;
-            SQLiteDBClass.PutSettingString(DbOSave, BaseUtils.LineStore.ToString(Lines));
-            SQLiteDBClass.PutSettingInt(DbSelection, Selection);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbOSave, BaseUtils.LineStore.ToString(Lines));
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(DbSelection, Selection);
         }
 
         #endregion
@@ -254,7 +254,7 @@ namespace EDDiscovery.UserControls
                 textBoxGameMode.Text = he.GameModeGroup;
                 if (he.isTravelling)
                 {
-                    textBoxTravelDist.Text = he.TravelledDistance.ToStringInvariant("0.0") + "ly";
+                    textBoxTravelDist.Text = he.TravelledDistance.ToString("0.0") + "ly";
                     textBoxTravelTime.Text = he.TravelledSeconds.ToString();
                     textBoxTravelJumps.Text = he.TravelledJumpsAndMisses;
                 }
@@ -265,12 +265,12 @@ namespace EDDiscovery.UserControls
 
                 int cc = (he.ShipInformation) != null ? he.ShipInformation.CargoCapacity() : 0;
                 if (cc > 0)
-                    textBoxCargo.Text = he.MaterialCommodity.CargoCount.ToStringInvariant() + "/" + cc.ToStringInvariant();
+                    textBoxCargo.Text = he.MaterialCommodity.CargoCount.ToString() + "/" + cc.ToString();
                 else
-                    textBoxCargo.Text = he.MaterialCommodity.CargoCount.ToStringInvariant();
+                    textBoxCargo.Text = he.MaterialCommodity.CargoCount.ToString();
 
-                textBoxMaterials.Text = he.MaterialCommodity.MaterialsCount.ToStringInvariant();
-                textBoxData.Text = he.MaterialCommodity.DataCount.ToStringInvariant();
+                textBoxMaterials.Text = he.MaterialCommodity.MaterialsCount.ToString();
+                textBoxData.Text = he.MaterialCommodity.DataCount.ToString();
                 textBoxCredits.Text = he.Credits.ToString("N0");
 
                 textBoxJumpRange.Text = "";
@@ -281,9 +281,9 @@ namespace EDDiscovery.UserControls
 
                     textBoxShip.Text = si.ShipFullInfo(cargo: false, fuel: false);
                     if (si.FuelCapacity > 0 && si.FuelLevel > 0)
-                        textBoxFuel.Text = si.FuelLevel.ToStringInvariant("0.#") + "/" + si.FuelCapacity.ToStringInvariant("0.#");
+                        textBoxFuel.Text = si.FuelLevel.ToString("0.#") + "/" + si.FuelCapacity.ToString("0.#");
                     else if (si.FuelCapacity > 0)
-                        textBoxFuel.Text = si.FuelCapacity.ToStringInvariant("0.#");
+                        textBoxFuel.Text = si.FuelCapacity.ToString("0.#");
                     else
                         textBoxFuel.Text = "N/A".T(EDTx.UserControlSysInfo_NA);
 

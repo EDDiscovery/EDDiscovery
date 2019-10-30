@@ -438,13 +438,7 @@ namespace EDDiscovery.UserControls
                         return retrow.ToArray();
                     };
 
-                    if (grd.WriteCSV(path))
-                    {
-                        if (frm.AutoOpen)
-                            System.Diagnostics.Process.Start(path);
-                    }
-                    else
-                        ExtendedControls.MessageBoxTheme.Show(FindForm(), "Failed to write to " + path, "Export Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    grd.WriteGrid(path, frm.AutoOpen, FindForm());
                 }
             }
         }
@@ -453,7 +447,7 @@ namespace EDDiscovery.UserControls
         {
             OpenFileDialog dlg = new OpenFileDialog();
 
-            dlg.InitialDirectory = SQLiteConnectionUser.GetSettingString("BookmarkFormImportExcelFolder", "c:\\");
+            dlg.InitialDirectory = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("BookmarkFormImportExcelFolder", "c:\\");
 
             if (!System.IO.Directory.Exists(dlg.InitialDirectory))
                 System.IO.Directory.CreateDirectory(dlg.InitialDirectory);
@@ -542,7 +536,7 @@ namespace EDDiscovery.UserControls
                         }
                     }
 
-                    SQLiteConnectionUser.PutSettingString("BookmarkFormImportExcelFolder", System.IO.Path.GetDirectoryName(path));
+                    EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("BookmarkFormImportExcelFolder", System.IO.Path.GetDirectoryName(path));
                 }
                 else
                     ExtendedControls.MessageBoxTheme.Show(FindForm(), "Failed to read " + path, "Import Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);

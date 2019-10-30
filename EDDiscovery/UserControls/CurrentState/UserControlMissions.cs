@@ -57,18 +57,18 @@ namespace EDDiscovery.UserControls
             dataGridViewPrevious.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             dataGridViewPrevious.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
 
-            string start = SQLiteDBClass.GetSettingString(DbStartDate, "");
+            string start = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbStartDate, "");
             DateTime dt;
             if (start != "" && DateTime.TryParse(start, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out dt))
                 customDateTimePickerStart.Value = dt;
 
-            customDateTimePickerStart.Checked = SQLiteDBClass.GetSettingBool(DbStartDateChecked, false);
+            customDateTimePickerStart.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbStartDateChecked, false);
 
-            string end = SQLiteDBClass.GetSettingString(DbEndDate, "");
+            string end = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbEndDate, "");
             if (end != "" && DateTime.TryParse(end, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out dt))
                 customDateTimePickerEnd.Value = dt;
 
-            customDateTimePickerEnd.Checked = SQLiteDBClass.GetSettingBool(DbEndDateChecked, false);
+            customDateTimePickerEnd.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbEndDateChecked, false);
 
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
 
@@ -92,7 +92,7 @@ namespace EDDiscovery.UserControls
             DGVLoadColumnLayout(dataGridViewCurrent, DbColumnSaveCurrent);
             DGVLoadColumnLayout(dataGridViewPrevious, DbColumnSavePrevious);
 
-            splitContainerMissions.SplitterDistance(SQLiteDBClass.GetSettingDouble(DbSplitter, 0.4));
+            splitContainerMissions.SplitterDistance(EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble(DbSplitter, 0.4));
         }
 
         public override void Closing()
@@ -103,13 +103,13 @@ namespace EDDiscovery.UserControls
             uctg.OnTravelSelectionChanged -= Display;
             discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
 
-            SQLiteDBClass.PutSettingString(DbStartDate, customDateTimePickerStart.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
-            SQLiteDBClass.PutSettingString(DbEndDate, customDateTimePickerEnd.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbStartDate, customDateTimePickerStart.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbEndDate, customDateTimePickerEnd.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
 
-            SQLiteDBClass.PutSettingBool(DbStartDateChecked, customDateTimePickerStart.Checked);
-            SQLiteDBClass.PutSettingBool(DbEndDateChecked, customDateTimePickerEnd.Checked);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbStartDateChecked, customDateTimePickerStart.Checked);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbEndDateChecked, customDateTimePickerEnd.Checked);
 
-            SQLiteDBClass.PutSettingDouble(DbSplitter, splitContainerMissions.GetSplitterDistance());
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble(DbSplitter, splitContainerMissions.GetSplitterDistance());
         }
 
         #endregion
@@ -182,7 +182,7 @@ namespace EDDiscovery.UserControls
 
                 int count = mcurrent.Count();
 
-                cColName.HeaderText = (count > 0) ? (count.ToStringInvariant() + (count > 1 ? " Missions".T(EDTx.UserControlMissions_MPlural) : " Mission".T(EDTx.UserControlMissions_MSingular))) : "Name".T(EDTx.UserControlMissions_Name);
+                cColName.HeaderText = (count > 0) ? (count.ToString() + (count > 1 ? " Missions".T(EDTx.UserControlMissions_MPlural) : " Mission".T(EDTx.UserControlMissions_MSingular))) : "Name".T(EDTx.UserControlMissions_Name);
                 cColValue.HeaderText = (totalReward != 0) ? string.Format("Value (cr):\n{0:N0}".T(EDTx.UserControlMissions_Value) ,totalReward) : "Value (cr)".T(EDTx.UserControlMissions_ValueN);
 
                 //                cColValue.HeaderText = (count>0) ? (count.ToStringInvariant() + (count > 1 ? " Missions" : " Mission") + (totalReward>0 ? $", {totalReward:N0}" : "")) : "Value";

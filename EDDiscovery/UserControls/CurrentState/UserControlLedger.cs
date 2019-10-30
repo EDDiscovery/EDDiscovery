@@ -57,7 +57,7 @@ namespace EDDiscovery.UserControls
             cfs.AddAllNone();
             cfs.AddGroupOption(cashtype, "Cash Transactions".T(EDTx.UserControlLedger_CashTransactions),  JournalEntry.JournalTypeIcons[JournalTypeEnum.Bounty]);
             cfs.AddJournalEntries(new string[] { "Ledger", "LedgerNC" });
-            cfs.Closing += EventFilterChanged;
+            cfs.SaveSettings += EventFilterChanged;
 
             discoveryform.OnHistoryChange += Redisplay;
             discoveryform.OnNewEntry += NewEntry;
@@ -118,7 +118,7 @@ namespace EDDiscovery.UserControls
                 var filter = (TravelHistoryFilter)comboBoxHistoryWindow.SelectedItem ?? TravelHistoryFilter.NoFilter;
                 List<Ledger.Transaction> filteredlist = filter.Filter(mc.Transactions);
 
-                filteredlist = FilterByJournalEvent(filteredlist, SQLiteDBClass.GetSettingString(DbFilterSave, "All"));
+                filteredlist = FilterByJournalEvent(filteredlist, EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbFilterSave, "All"));
 
                 if (filteredlist.Count > 0)
                 {
@@ -170,7 +170,7 @@ namespace EDDiscovery.UserControls
 
         private void comboBoxHistoryWindow_SelectedIndexChanged(object sender, EventArgs e)
         {
-            SQLiteDBClass.PutSettingString(DbHistorySave, comboBoxHistoryWindow.Text);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbHistorySave, comboBoxHistoryWindow.Text);
 
             if (current_mc != null)
             {

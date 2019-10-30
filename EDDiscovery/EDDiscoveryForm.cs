@@ -112,7 +112,6 @@ namespace EDDiscovery
             return Controller.RefreshHistoryAsync();
         }
         public void RefreshDisplays() { Controller.RefreshDisplays(); }
-        public void RecalculateHistoryDBs() { Controller.RecalculateHistoryDBs(); }
 
         public void ChangeToCommander(int id)
         {
@@ -181,7 +180,7 @@ namespace EDDiscovery
             comboBoxCommander.AutoSize = comboBoxCustomProfiles.AutoSize = true;
             panelToolBar.HiddenMarkerWidth = 200;
             panelToolBar.SecondHiddenMarkerWidth = 60;
-            panelToolBar.PinState = SQLiteConnectionUser.GetSettingBool("ToolBarPanelPinState", true);
+            panelToolBar.PinState = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("ToolBarPanelPinState", true);
 
             labelInfoBoxTop.Text = "";
             label_version.Text = EDDOptions.Instance.VersionDisplayString;
@@ -199,6 +198,8 @@ namespace EDDiscovery
 
             ApplyTheme();                       // we apply and scale (because its being applied to Form) before any tabs parts are setup.
 
+            panelToolBar.SetToolTip(toolTip);    // use the defaults
+
             this.TopMost = EDDConfig.KeepOnTop;
             notifyIcon1.Visible = EDDConfig.UseNotifyIcon;
 
@@ -207,10 +208,10 @@ namespace EDDiscovery
 
             if (EDDOptions.Instance.TabsReset)
             {
-                SQLiteConnectionUser.DeleteKey("GridControlWindows%");              // these hold the grid/splitter control values for all windows
-                SQLiteConnectionUser.DeleteKey("SplitterControlWindows%");          // wack them so they start empty.
-                SQLiteConnectionUser.DeleteKey("SavedPanelInformation.%");          // and delete the pop out history
-                SQLiteConnectionUser.DeleteKey("ProfilePowerOnID");                 // back to base profile
+                EliteDangerousCore.DB.UserDatabase.Instance.DeleteKey("GridControlWindows%");              // these hold the grid/splitter control values for all windows
+                EliteDangerousCore.DB.UserDatabase.Instance.DeleteKey("SplitterControlWindows%");          // wack them so they start empty.
+                EliteDangerousCore.DB.UserDatabase.Instance.DeleteKey("SavedPanelInformation.%");          // and delete the pop out history
+                EliteDangerousCore.DB.UserDatabase.Instance.DeleteKey("ProfilePowerOnID");                 // back to base profile
             }
 
             //Make sure the primary splitter is set up.. and rational
@@ -314,6 +315,8 @@ namespace EDDiscovery
 
             if (EDDOptions.Instance.ActionButton)
                 buttonReloadActions.Visible = true;
+
+       //     Hookable.Hook();
         }
 
         // OnLoad is called the first time the form is shown, before OnShown or OnActivated are called
@@ -357,7 +360,7 @@ namespace EDDiscovery
 
             // DLL loads
 
-            string alloweddlls = SQLiteConnectionUser.GetSettingString("DLLAllowed", "");
+            string alloweddlls = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("DLLAllowed", "");
 
             DLLCallBacks.RequestHistory = DLLRequestHistory;
             DLLCallBacks.RunAction = DLLRunAction;
@@ -376,7 +379,7 @@ namespace EDDiscovery
                                 "Warning".T(EDTx.Warning),
                                 MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                 {
-                    SQLiteConnectionUser.PutSettingString("DLLAllowed", alloweddlls.AppendPrePad(res.Item3, ","));
+                    EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("DLLAllowed", alloweddlls.AppendPrePad(res.Item3, ","));
                     DLLManager.UnLoad();
                     res = DLLManager.Load(EDDOptions.Instance.DLLAppDirectory(), EDDApplicationContext.AppVersion, EDDOptions.Instance.DLLAppDirectory(), DLLCallBacks, alloweddlls);
                 }
@@ -402,7 +405,7 @@ namespace EDDiscovery
             {
                 this.BeginInvoke(new Action(() =>
                 {
-                    string acklist = SQLiteConnectionUser.GetSettingString("NotificationLastAckTime", "");
+                    string acklist = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("NotificationLastAckTime", "");
                     Version curver = new Version(System.Reflection.Assembly.GetExecutingAssembly().GetVersionString());
 
                     foreach (Notifications.Notification n in notelist)
@@ -463,7 +466,7 @@ namespace EDDiscovery
                 {
                     DateTime ackdate = (DateTime)o;
                     System.Diagnostics.Debug.WriteLine("Ack to " + ackdate.ToStringZulu());
-                    SQLiteConnectionUser.PutSettingString("NotificationLastAckTime", SQLiteConnectionUser.GetSettingString("NotificationLastAckTime","") + ackdate.ToStringZulu());
+                    EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("NotificationLastAckTime", EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("NotificationLastAckTime","") + ackdate.ToStringZulu());
                 });
 
                 ExtendedControls.InfoForm infoform = new ExtendedControls.InfoForm();
@@ -624,8 +627,8 @@ namespace EDDiscovery
 
         public void ForceEDSMEDDBFullRefresh()
         {
-            SQLiteConnectionSystem.ForceEDSMFullUpdate();
-            SQLiteConnectionSystem.ForceEDDBFullUpdate();
+            SystemsDatabase.Instance.ForceEDSMFullUpdate();
+            SystemsDatabase.Instance.ForceEDDBFullUpdate();
             Controller.AsyncPerformSync(true, true);
         }
 
@@ -790,7 +793,7 @@ namespace EDDiscovery
             SystemNoteClass.CommitDirtyNotes((snc) => { if (EDCommander.Current.SyncToEdsm && snc.FSDEntry) EDSMClass.SendComments(snc.SystemName, snc.Note, snc.EdsmId); });
 
             screenshotconverter.SaveSettings();
-            SQLiteDBClass.PutSettingBool("ToolBarPanelPinState", panelToolBar.PinState);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("ToolBarPanelPinState", panelToolBar.PinState);
 
             theme.SaveSettings(null);
 
@@ -1048,9 +1051,7 @@ namespace EDDiscovery
         {
             if (ExtendedControls.MessageBoxTheme.Show(this, "Confirm you remove any duplicate FSD entries from the current commander".T(EDTx.EDDiscoveryForm_RevFSD), "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
-                int n = JournalEntry.RemoveDuplicateFSDEntries(EDCommander.CurrentCmdrID);
-                Controller.LogLine(string.Format("Removed {0} FSD entries".T(EDTx.EDDiscoveryForm_FSDRem) , n));
-                Controller.RefreshHistoryAsync();
+                Controller.RefreshHistoryAsync(removedupfsdentries: true);
             }
         }
 
@@ -1145,18 +1146,20 @@ namespace EDDiscovery
 
         private void sendHistoricDataToInaraToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string rwsystime = SQLiteConnectionSystem.GetSettingString("InaraLastHistoricUpload", "2000-01-01 00:00:00"); // Latest time
-            DateTime upload;
-            if (!DateTime.TryParse(rwsystime, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal, out upload))
-                upload = new DateTime(2000, 1, 1);
+            // TBD FIX WHEN USER DB UPDATED
 
-            if (DateTime.UtcNow.Subtract(upload).TotalHours >= 1)  // every hours, allowed to do this..
-            {
-                EliteDangerousCore.Inara.InaraSync.HistoricData(LogLine,history, EDCommander.Current);
-                SQLiteConnectionSystem.PutSettingString("InaraLastHistoricUpload", DateTime.UtcNow.ToString(CultureInfo.InvariantCulture));
-            }
-            else
-                ExtendedControls.MessageBoxTheme.Show(this, "Inara historic upload is disabled until 1 hour has elapsed from the last try to prevent server flooding".T(EDTx.EDDiscoveryForm_InaraW), "Warning".T(EDTx.Warning));
+            ////TBD string rwsystime = SQLiteConnectionSystem.GetSettingString("InaraLastHistoricUpload", "2000-01-01 00:00:00"); // Latest time
+            //DateTime upload;
+            //if (!DateTime.TryParse(rwsystime, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal, out upload))
+            //    upload = new DateTime(2000, 1, 1);
+
+            //if (DateTime.UtcNow.Subtract(upload).TotalHours >= 1)  // every hours, allowed to do this..
+            //{
+            //    EliteDangerousCore.Inara.InaraSync.HistoricData(LogLine,history, EDCommander.Current);
+            //    SQLiteConnectionSystem.PutSettingString("InaraLastHistoricUpload", DateTime.UtcNow.ToString(CultureInfo.InvariantCulture));
+            //}
+            //else
+            //    ExtendedControls.MessageBoxTheme.Show(this, "Inara historic upload is disabled until 1 hour has elapsed from the last try to prevent server flooding".T(EDTx.EDDiscoveryForm_InaraW), "Warning".T(EDTx.Warning));
         }
 
         private void notifyIcon1_DoubleClick(object sender, EventArgs e)

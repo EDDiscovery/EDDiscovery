@@ -54,13 +54,13 @@ namespace EDDiscovery.UserControls
         {
             displayfont = discoveryform.theme.GetFont;
 
-            showJumpsToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "showjumps", true);
-            autoCopyWPToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "autoCopyWP", false);
-            autoSetTargetToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "autoSetTarget", false);
-            showWaypointCoordinatesToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "coords", true);
-            showDeviationFromRouteToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "dev", true);
+            showJumpsToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "showjumps", true);
+            autoCopyWPToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "autoCopyWP", false);
+            autoSetTargetToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "autoSetTarget", false);
+            showWaypointCoordinatesToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "coords", true);
+            showDeviationFromRouteToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "dev", true);
 
-            string ids = SQLiteDBClass.GetSettingString(DbSave + "SelectedRoute", "-1");        // for some reason, it was saved as a string.. so keep for backwards compat
+            string ids = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbSave + "SelectedRoute", "-1");        // for some reason, it was saved as a string.. so keep for backwards compat
             int? id = ids.InvariantParseIntNull();
             if ( id != null )
                 currentRoute = SavedRouteClass.GetAllSavedRoutes().Find(r => r.Id.Equals(id.Value));  // may be null
@@ -76,11 +76,11 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
-            SQLiteDBClass.PutSettingBool(DbSave + "showjumps", showJumpsToolStripMenuItem.Checked);
-            SQLiteDBClass.PutSettingBool(DbSave + "autoCopyWP", autoCopyWPToolStripMenuItem.Checked);
-            SQLiteDBClass.PutSettingBool(DbSave + "autoSetTarget", autoSetTargetToolStripMenuItem.Checked);
-            SQLiteDBClass.PutSettingBool(DbSave + "coords", showWaypointCoordinatesToolStripMenuItem.Checked);
-            SQLiteDBClass.PutSettingBool(DbSave + "dev", showDeviationFromRouteToolStripMenuItem.Checked);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "showjumps", showJumpsToolStripMenuItem.Checked);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "autoCopyWP", autoCopyWPToolStripMenuItem.Checked);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "autoSetTarget", autoSetTargetToolStripMenuItem.Checked);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "coords", showWaypointCoordinatesToolStripMenuItem.Checked);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "dev", showDeviationFromRouteToolStripMenuItem.Checked);
             discoveryform.OnHistoryChange -= Display;
             discoveryform.OnNewEntry -= NewEntry;
         }
@@ -274,7 +274,7 @@ namespace EDDiscovery.UserControls
                 currentRoute.TestHarness(); // enable for debug
 
                 if (currentRoute != null)
-                    SQLiteDBClass.PutSettingString(DbSave + "SelectedRoute", currentRoute.Id.ToStringInvariant());        // write ID back
+                    EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbSave + "SelectedRoute", currentRoute.Id.ToStringInvariant());        // write ID back
 
                 Display();
             }

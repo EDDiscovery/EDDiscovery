@@ -47,8 +47,6 @@ namespace EDDiscovery.UserControls
             System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             ExtendedControls.TabStyleSquare tabStyleSquare1 = new ExtendedControls.TabStyleSquare();
             this.dataGridViewStats = new System.Windows.Forms.DataGridView();
-            this.ItemName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Information = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.mostVisited = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.panelGeneral = new ExtendedControls.ExtPanelScroll();
             this.vScrollBarCustom = new ExtendedControls.ExtScrollBar();
@@ -58,13 +56,10 @@ namespace EDDiscovery.UserControls
             this.extPanelDataGridViewScrollTravel = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.extScrollBarTravel = new ExtendedControls.ExtScrollBar();
             this.dataGridViewTravel = new System.Windows.Forms.DataGridView();
-            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.userControlStatsTimeTravel = new EDDiscovery.UserControls.StatsTimeUserControl();
             this.tabPageScan = new System.Windows.Forms.TabPage();
             this.extPanelDataGridViewScrollScan = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.dataGridViewScan = new System.Windows.Forms.DataGridView();
-            this.ScanNotUsed = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.extScrollBarScan = new ExtendedControls.ExtScrollBar();
             this.userControlStatsTimeScan = new EDDiscovery.UserControls.StatsTimeUserControl();
             this.tabPageGameStats = new System.Windows.Forms.TabPage();
@@ -72,9 +67,9 @@ namespace EDDiscovery.UserControls
             this.tabPageByShip = new System.Windows.Forms.TabPage();
             this.extPanelDataGridViewScrollByShip = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.dataGridViewByShip = new System.Windows.Forms.DataGridView();
-            this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.extScrollBarByShip = new ExtendedControls.ExtScrollBar();
+            this.ItemName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Information = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewStats)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mostVisited)).BeginInit();
             this.panelGeneral.SuspendLayout();
@@ -107,21 +102,6 @@ namespace EDDiscovery.UserControls
             this.dataGridViewStats.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewStats.Size = new System.Drawing.Size(634, 190);
             this.dataGridViewStats.TabIndex = 2;
-            // 
-            // ItemName
-            // 
-            this.ItemName.HeaderText = "Item";
-            this.ItemName.MinimumWidth = 50;
-            this.ItemName.Name = "ItemName";
-            this.ItemName.ReadOnly = true;
-            // 
-            // Information
-            // 
-            this.Information.FillWeight = 400F;
-            this.Information.HeaderText = "Information";
-            this.Information.MinimumWidth = 50;
-            this.Information.Name = "Information";
-            this.Information.ReadOnly = true;
             // 
             // mostVisited
             // 
@@ -275,9 +255,6 @@ namespace EDDiscovery.UserControls
             this.dataGridViewTravel.AllowUserToDeleteRows = false;
             this.dataGridViewTravel.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewTravel.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewTravel.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.dataGridViewTextBoxColumn1,
-            this.dataGridViewTextBoxColumn2});
             this.dataGridViewTravel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewTravel.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewTravel.Name = "dataGridViewTravel";
@@ -286,21 +263,6 @@ namespace EDDiscovery.UserControls
             this.dataGridViewTravel.Size = new System.Drawing.Size(687, 520);
             this.dataGridViewTravel.TabIndex = 3;
             this.dataGridViewTravel.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewTravel_SortCompare);
-            // 
-            // dataGridViewTextBoxColumn1
-            // 
-            this.dataGridViewTextBoxColumn1.HeaderText = "Item";
-            this.dataGridViewTextBoxColumn1.MinimumWidth = 50;
-            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
-            this.dataGridViewTextBoxColumn1.ReadOnly = true;
-            // 
-            // dataGridViewTextBoxColumn2
-            // 
-            this.dataGridViewTextBoxColumn2.FillWeight = 400F;
-            this.dataGridViewTextBoxColumn2.HeaderText = "Information";
-            this.dataGridViewTextBoxColumn2.MinimumWidth = 50;
-            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
-            this.dataGridViewTextBoxColumn2.ReadOnly = true;
             // 
             // userControlStatsTimeTravel
             // 
@@ -342,8 +304,6 @@ namespace EDDiscovery.UserControls
             this.dataGridViewScan.AllowUserToDeleteRows = false;
             this.dataGridViewScan.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewScan.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewScan.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.ScanNotUsed});
             this.dataGridViewScan.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewScan.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewScan.Name = "dataGridViewScan";
@@ -352,11 +312,6 @@ namespace EDDiscovery.UserControls
             this.dataGridViewScan.Size = new System.Drawing.Size(687, 520);
             this.dataGridViewScan.TabIndex = 4;
             this.dataGridViewScan.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewScan_SortCompare);
-            // 
-            // ScanNotUsed
-            // 
-            this.ScanNotUsed.HeaderText = "Column1";
-            this.ScanNotUsed.Name = "ScanNotUsed";
             // 
             // extScrollBarScan
             // 
@@ -396,6 +351,7 @@ namespace EDDiscovery.UserControls
             this.userControlStatsTimeScan.TabIndex = 1;
             this.userControlStatsTimeScan.TimeMode = EDDiscovery.UserControls.StatsTimeUserControl.TimeModeType.Summary;
             this.userControlStatsTimeScan.TimeModeChanged += new System.EventHandler(this.userControlStatsTimeScan_TimeModeChanged);
+            this.userControlStatsTimeScan.DrawModeChanged += new System.EventHandler(this.userControlStatsTimeScan_DrawModeChanged);
             // 
             // tabPageGameStats
             // 
@@ -464,9 +420,6 @@ namespace EDDiscovery.UserControls
             this.dataGridViewByShip.AllowUserToDeleteRows = false;
             this.dataGridViewByShip.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewByShip.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewByShip.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.dataGridViewTextBoxColumn3,
-            this.dataGridViewTextBoxColumn4});
             this.dataGridViewByShip.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewByShip.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewByShip.Name = "dataGridViewByShip";
@@ -475,21 +428,6 @@ namespace EDDiscovery.UserControls
             this.dataGridViewByShip.Size = new System.Drawing.Size(681, 537);
             this.dataGridViewByShip.TabIndex = 3;
             this.dataGridViewByShip.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewByShip_SortCompare);
-            // 
-            // dataGridViewTextBoxColumn3
-            // 
-            this.dataGridViewTextBoxColumn3.HeaderText = "Item";
-            this.dataGridViewTextBoxColumn3.MinimumWidth = 50;
-            this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
-            this.dataGridViewTextBoxColumn3.ReadOnly = true;
-            // 
-            // dataGridViewTextBoxColumn4
-            // 
-            this.dataGridViewTextBoxColumn4.FillWeight = 400F;
-            this.dataGridViewTextBoxColumn4.HeaderText = "Information";
-            this.dataGridViewTextBoxColumn4.MinimumWidth = 50;
-            this.dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
-            this.dataGridViewTextBoxColumn4.ReadOnly = true;
             // 
             // extScrollBarByShip
             // 
@@ -518,6 +456,18 @@ namespace EDDiscovery.UserControls
             this.extScrollBarByShip.ThumbDrawAngle = 0F;
             this.extScrollBarByShip.Value = -1;
             this.extScrollBarByShip.ValueLimited = -1;
+            // 
+            // ItemName
+            // 
+            this.ItemName.HeaderText = "Item";
+            this.ItemName.Name = "ItemName";
+            // 
+            // Information
+            // 
+            this.Information.FillWeight = 400F;
+            this.Information.HeaderText = "Information";
+            this.Information.MinimumWidth = 50;
+            this.Information.Name = "Information";
             // 
             // UserControlStats
             // 
@@ -552,8 +502,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridView dataGridViewStats;
         private System.Windows.Forms.DataVisualization.Charting.Chart mostVisited;
         private ExtendedControls.ExtPanelScroll panelGeneral;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ItemName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Information;
         private ExtendedControls.ExtScrollBar vScrollBarCustom;
         private ExtendedControls.ExtTabControl tabControlCustomStats;
         private System.Windows.Forms.TabPage tabPageGeneral;
@@ -561,22 +509,19 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.TabPage tabPageScan;
         private StatsTimeUserControl userControlStatsTimeTravel;
         private System.Windows.Forms.DataGridView dataGridViewTravel;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
         private StatsTimeUserControl userControlStatsTimeScan;
         private System.Windows.Forms.DataGridView dataGridViewScan;
         private System.Windows.Forms.TabPage tabPageGameStats;
         private ExtendedControls.Controls.ExtTreeView treeViewStats;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ScanNotUsed;
         private System.Windows.Forms.TabPage tabPageByShip;
         private System.Windows.Forms.DataGridView dataGridViewByShip;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
         private ExtendedControls.ExtPanelDataGridViewScroll extPanelDataGridViewScrollTravel;
         private ExtendedControls.ExtScrollBar extScrollBarTravel;
         private ExtendedControls.ExtPanelDataGridViewScroll extPanelDataGridViewScrollScan;
         private ExtendedControls.ExtScrollBar extScrollBarScan;
         private ExtendedControls.ExtPanelDataGridViewScroll extPanelDataGridViewScrollByShip;
         private ExtendedControls.ExtScrollBar extScrollBarByShip;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ItemName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Information;
     }
 }

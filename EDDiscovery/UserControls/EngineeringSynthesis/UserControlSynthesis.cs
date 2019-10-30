@@ -67,14 +67,14 @@ namespace EDDiscovery.UserControls
             dataGridViewSynthesis.MakeDoubleBuffered();
             dataGridViewSynthesis.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
 
-            Order = SQLiteDBClass.GetSettingString(DbOSave, "").RestoreArrayFromString(0, Recipes.SynthesisRecipes.Count);
+            Order = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbOSave, "").RestoreArrayFromString(0, Recipes.SynthesisRecipes.Count);
             if (Order.Max() >= Recipes.SynthesisRecipes.Count || Order.Min() < 0 || Order.Distinct().Count() != Recipes.SynthesisRecipes.Count)       // if not distinct..
             {
                 for (int i = 0; i < Order.Length; i++)          // reset
                     Order[i] = i;
             }
 
-            Wanted = SQLiteDBClass.GetSettingString(DbWSave, "").RestoreArrayFromString(0, Recipes.SynthesisRecipes.Count);
+            Wanted = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbWSave, "").RestoreArrayFromString(0, Recipes.SynthesisRecipes.Count);
 
             var rcpes = Recipes.SynthesisRecipes.Select(r => r.name).Distinct().ToList();
             rcpes.Sort();
@@ -113,7 +113,7 @@ namespace EDDiscovery.UserControls
                 }
             }
 
-            isHistoric = SQLiteDBClass.GetSettingBool(DbHistoricMatsSave, false);
+            isHistoric = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbHistoricMatsSave, false);
 
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
 
@@ -144,9 +144,9 @@ namespace EDDiscovery.UserControls
             uctg.OnTravelSelectionChanged -= Display;
             discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
 
-            SQLiteDBClass.PutSettingString(DbOSave, Order.ToString(","));
-            SQLiteDBClass.PutSettingString(DbWSave, Wanted.ToString(","));
-            SQLiteDBClass.PutSettingBool(DbHistoricMatsSave, isHistoric);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbOSave, Order.ToString(","));
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbWSave, Wanted.ToString(","));
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbHistoricMatsSave, isHistoric);
         }
 
 
@@ -209,43 +209,48 @@ namespace EDDiscovery.UserControls
 
                 wantedList = new List<Tuple<Recipes.Recipe, int>>();
 
-                string recep = SQLiteDBClass.GetSettingString(DbRecipeFilterSave, "All");
+                string recep = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbRecipeFilterSave, "All");
                 string[] recipeArray = recep.Split(';');
-                string levels = SQLiteDBClass.GetSettingString(DbLevelFilterSave, "All");
+                string levels = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbLevelFilterSave, "All");
                 string[] lvlArray = (levels == "All" || levels == "None") ? new string[0] : levels.Split(';');
-                string materials = SQLiteDBClass.GetSettingString(DbMaterialFilterSave, "All");
-                List<string> matList;
+                string materials = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbMaterialFilterSave, "All");
 
-                if (materials == "All" || materials == "None")
-                    matList = new List<string>();
-                else
-                    matList = materials.Split(';').Where(x => !string.IsNullOrEmpty(x)).Select(m => matLookUp.Where(u => u.Item2 == m).First().Item1).ToList();
+                List<string> matList = new List<string>();
+                if (materials != "All" && materials != "None") // if an active list
+                {
+                    foreach (string m in materials.Split(';'))
+                    {
+                        var e = matLookUp.Find(x => x.Item2 == m);  // find it, add 
+                        if (e != null)
+                            matList.Add(e.Item1);
+                    }
+                }
 
                 for (int i = 0; i < Recipes.SynthesisRecipes.Count; i++)
                 {
                     int rno = (int)dataGridViewSynthesis.Rows[i].Tag;
-                    dataGridViewSynthesis.Rows[i].Cells[2].Value = MaterialCommoditiesRecipe.HowManyLeft(mcl, Recipes.SynthesisRecipes[rno]).Item1.ToStringInvariant();
+                    dataGridViewSynthesis.Rows[i].Cells[2].Value = MaterialCommoditiesRecipe.HowManyLeft(mcl, Recipes.SynthesisRecipes[rno]).Item1.ToString();
                     bool visible = true;
                 
-                    if (recep == "All" && levels == "All" && materials == "All")
-                    {
-                        visible = true;
-                    }
-                    else
-                    {
-                        visible = false;
-                        if (recep == "All") { visible = true; }
+                    if (recep != "All" || levels != "All" || materials != "All")
+                    { 
+                        visible = false;        // presume off
+
+                        if (recep == "All")
+                        {
+                            visible = true;
+                        }
                         else
                         {
                             visible = recipeArray.Contains(Recipes.SynthesisRecipes[rno].name);
                         }
-                        if (levels == "All") { visible = visible && true; }
-                        else
+
+                        if (levels != "All")
                         {
                             visible = visible && lvlArray.Contains(Recipes.SynthesisRecipes[rno].level);
                         }
-                        if (materials == "All") { visible = visible && true; }
-                        else
+
+                        if (materials != "All")
                         {
                             var included = matList.Intersect<string>(Recipes.SynthesisRecipes[rno].ingredients.ToList<string>());
                             visible = visible && included.Count() > 0;
@@ -265,8 +270,8 @@ namespace EDDiscovery.UserControls
 
                         using (DataGridViewRow row = dataGridViewSynthesis.Rows[i])
                         {
-                            row.Cells[3].Value = Wanted[rno].ToStringInvariant();
-                            row.Cells[4].Value = res.Item2.ToStringInvariant();
+                            row.Cells[3].Value = Wanted[rno].ToString();
+                            row.Cells[4].Value = res.Item2.ToString();
                             row.Cells[5].Value = res.Item3;
                             row.Cells[5].ToolTipText = res.Item4;
                         }
@@ -287,7 +292,7 @@ namespace EDDiscovery.UserControls
 
                     foreach (MaterialCommodities c in shoppinglist)        // and add new..
                     {
-                        Object[] values = { c.Details.Name, "", c.scratchpad.ToStringInvariant(), "", c.Details.Shortname };
+                        Object[] values = { c.Details.Name, "", c.scratchpad.ToString(), "", c.Details.Shortname };
                         int rn = dataGridViewSynthesis.Rows.Add(values);
                         dataGridViewSynthesis.Rows[rn].ReadOnly = true;     // disable editing wanted..
                     }
@@ -333,7 +338,7 @@ namespace EDDiscovery.UserControls
                 }
             }
             else
-                dataGridViewSynthesis.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = Wanted[rno].ToStringInvariant();
+                dataGridViewSynthesis.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = Wanted[rno].ToString();
         }
 
         private Rectangle moveMoveDragBox;

@@ -102,11 +102,7 @@ namespace EliteDangerousCore.DB
 
         public bool Add()
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
-            {
-                bool ret = Add(cn);     // pass it an open connection since it does multiple SQLs
-                return ret;
-            }
+            return UserDatabase.Instance.ExecuteWithDatabase<bool>(cn => { return Add(cn.Connection); });
         }
 
         private bool Add(SQLiteConnectionUser cn)
@@ -144,11 +140,7 @@ namespace EliteDangerousCore.DB
 
         public bool Update()
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
-            {
-                bool ret = Update(cn);
-                return ret;
-            }
+            return UserDatabase.Instance.ExecuteWithDatabase<bool>(cn => { return Update(cn.Connection); });
         }
 
         private bool Update(SQLiteConnectionUser cn)
@@ -187,13 +179,10 @@ namespace EliteDangerousCore.DB
 
         public bool Delete()
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
-            {
-                return Delete(cn);
-            }
+            return UserDatabase.Instance.ExecuteWithDatabase<bool>(cn => { return Delete(cn.Connection); });
         }
 
-        public bool Delete(SQLiteConnectionUser cn)
+        private bool Delete(SQLiteConnectionUser cn)
         {
             using (DbCommand cmd = cn.CreateCommand("DELETE FROM routes_expeditions WHERE id=@id"))
             {
@@ -217,11 +206,11 @@ namespace EliteDangerousCore.DB
 
             try
             {
-                using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc:true, mode: SQLLiteExtensions.SQLExtConnection.AccessMode.Reader))
+                UserDatabase.Instance.ExecuteWithDatabase(cn =>
                 {
                     Dictionary<int, List<string>> routesystems = new Dictionary<int, List<string>>();
 
-                    using (DbCommand cmd = cn.CreateCommand("SELECT routeid, systemname FROM route_systems ORDER BY id ASC"))
+                    using (DbCommand cmd = cn.Connection.CreateCommand("SELECT routeid, systemname FROM route_systems ORDER BY id ASC"))
                     {
                         using (DbDataReader rdr = cmd.ExecuteReader())
                         {
@@ -238,7 +227,7 @@ namespace EliteDangerousCore.DB
                         }
                     }
 
-                    using (DbCommand cmd = cn.CreateCommand("SELECT id, name, start, end, Status FROM routes_expeditions"))
+                    using (DbCommand cmd = cn.Connection.CreateCommand("SELECT id, name, start, end, Status FROM routes_expeditions"))
                     {
                         using (DbDataReader rdr = cmd.ExecuteReader())
                         {
@@ -251,7 +240,7 @@ namespace EliteDangerousCore.DB
                             }
                         }
                     }
-                }
+                });
             }
             catch (Exception ex)
             {

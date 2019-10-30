@@ -28,16 +28,14 @@ namespace EliteDangerousCore
         public int TravelledMissingjump { get; private set; }
         public int Travelledjumps { get; private set; }
 
-        public string TravelledJumpsAndMisses { get { return Travelledjumps.ToStringInvariant() + ((TravelledMissingjump > 0) ? (" (" + TravelledMissingjump.ToStringInvariant() + ")") : ""); } }
-
         public string ToString(string prefix)
         {
             if (IsTravelling)
             {
-                return prefix + " " + TravelledDistance.ToStringInvariant("0.0") + " LY"
-                                 + ", " + Travelledjumps + " jumps"
+                return prefix + TravelledDistance.ToStringInvariant("0.0") + " LY"
+                                 + ", " + Travelledjumps + " J"
                                  + ((TravelledMissingjump > 0) ? ", " + TravelledMissingjump + " unknown distance jumps" : "") +
-                                  ", time " + TravelledSeconds;
+                                  ", " + TravelledSeconds.ToString();
             }
             else
                 return "";

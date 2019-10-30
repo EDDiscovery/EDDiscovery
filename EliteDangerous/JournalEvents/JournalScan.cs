@@ -46,8 +46,12 @@ namespace EliteDangerousCore.JournalEvents
         public bool HasRings { get { return Rings != null && Rings.Length > 0; } }
         public StarPlanetRing[] Rings { get; set; }
         public List<BodyParent> Parents { get; set; }
+
         public bool? WasDiscovered { get; set; }                    // direct, 3.4, indicates whether the body has already been discovered
+        public bool IsNotDiscovered { get { return WasDiscovered.HasValue && WasDiscovered == false; } }
+
         public bool? WasMapped { get; set; }                        // direct, 3.4, indicates whether the body has already been mapped
+        public bool IsNotMapped { get { return WasMapped.HasValue && WasMapped == false; } }
 
         // STAR
         public string StarType { get; set; }                        // null if no StarType, direct from journal, K, A, B etc
@@ -138,13 +142,34 @@ namespace EliteDangerousCore.JournalEvents
 
         public bool Mapped { get { return mapped;}  }                          // affects prices
         public bool EfficientMapped { get { return efficientmapped; } }                          // affects prices
-        public int EstimatedValue { get; private set; }           // Current Estimated Value
-        public int EstimatedValueFirstDiscoveredFirstMapped { get; private set; }           // 0 if not mapped
-        public int EstimatedValueFirstMapped { get; private set; }                          // 0 if not mapped
+
+        public int EstimatedValue { get // best guess based on discovered/wasmapped and Mapped flags
+            {
+                if (EstimatedValueFirstDiscovered > 0)      // for previous scans before 3.3 and stars, these are not set.
+                {
+                    if (IsNotDiscovered && IsNotMapped && Mapped)
+                        return EfficientMapped ? EstimatedValueFirstDiscoveredFirstMappedEfficiently : EstimatedValueFirstDiscoveredFirstMapped;
+                    else if (IsNotMapped && Mapped)
+                        return EfficientMapped ? EstimatedValueFirstMappedEfficiently : EstimatedValueFirstMapped;
+                    else if (IsNotDiscovered)
+                        return EstimatedValueFirstDiscovered;
+                }
+
+                return EstimatedValueBase;
+            }
+        }
+
+        public int EstimatedValueBase { get; private set; }     // Estimated value without mapping or first discovery - all types, all versions
+
+        public int EstimatedValueFirstDiscovered { get; private set; }     // Estimated value with first discovery  - 3.3 onwards for these for planets only
+        public int EstimatedValueFirstDiscoveredFirstMapped { get; private set; }           // with both
+        public int EstimatedValueFirstDiscoveredFirstMappedEfficiently { get; private set; }           // with both efficiently
+        public int EstimatedValueFirstMapped { get; private set; }             // with just mapped                 
+        public int EstimatedValueFirstMappedEfficiently { get; private set; }             // with just mapped                 
 
         public void SetMapped(bool m, bool e)
         {
-            mapped = m; efficientmapped = e; EstimateScanValue(); 
+            mapped = m; efficientmapped = e;
         }
 
         private bool mapped, efficientmapped;
@@ -176,6 +201,7 @@ namespace EliteDangerousCore.JournalEvents
             public double InnerRad;
             public double OuterRad;
 
+            // has trailing LF
             public string RingInformation(double scale = 1, string scaletype = " MT", bool parentIsStar = false)
             {
                 StringBuilder scanText = new StringBuilder();
@@ -194,12 +220,13 @@ namespace EliteDangerousCore.JournalEvents
                 return scanText.ToNullSafeString();
             }
 
+            // has trailing LF
             public string RingInformationMoons(bool parentIsStar = false)
             {
                 return RingInformation(1 / oneMoon_MT, " Moons".T(EDTx.StarPlanetRing_Moons), parentIsStar);
             }
 
-            public static string DisplayStringFromRingClass(string ringClass)
+            public static string DisplayStringFromRingClass(string ringClass)   // no trailing LF
             {
                 switch (ringClass)
                 {
@@ -461,7 +488,7 @@ namespace EliteDangerousCore.JournalEvents
             else if (ScanType.Contains("Nav"))
                 text = "Nav scan of {0}".T(EDTx.JournalScan_Navscanof);
 
-            return string.Format(text, BodyName.ReplaceIfStartsWith(sys.Name)); 
+            return string.Format(text, BodyName.ReplaceIfStartsWith(sys.Name));
         }
 
         public override string EventFilterName
@@ -510,10 +537,11 @@ namespace EliteDangerousCore.JournalEvents
                                                  "Name:".T(EDTx.JournalScan_SNME), BodyName);
             }
 
-            detailed = DisplayString(0, false);
+            detailed = DisplayString(0, includefront:false);
         }
 
-        public string DisplayString(int indent = 0, bool includefront = true , MaterialCommoditiesList historicmatlist = null, MaterialCommoditiesList currentmatlist = null)//, bool mapped = false, bool efficiencyBonus = false)
+        // has no trailing LF
+        public string DisplayString(int indent = 0, MaterialCommoditiesList historicmatlist = null, MaterialCommoditiesList currentmatlist = null, bool includefront = true)//, bool mapped = false, bool efficiencyBonus = false)
         {
             string inds = new string(' ', indent);
 
@@ -544,15 +572,10 @@ namespace EliteDangerousCore.JournalEvents
 
                 scanText.AppendFormat("\n");
 
-                if (HasAtmosphericComposition)
-                    scanText.Append("\n" + DisplayAtmosphere(2));
-                    
-                if (HasPlanetaryComposition)
-                    scanText.Append("\n" + DisplayComposition(2));
+                if (Terraformable)
+                    scanText.Append("Candidate for terraforming\n".T(EDTx.JournalScan_Candidateforterraforming));
 
-                if (HasPlanetaryComposition || HasAtmosphericComposition)
-                    scanText.Append("\n\n");
-                                
+
                 if (nAge.HasValue)
                     scanText.AppendFormat("Age: {0} my\n".T(EDTx.JournalScan_AMY), nAge.Value.ToString("N0"));
 
@@ -567,6 +590,12 @@ namespace EliteDangerousCore.JournalEvents
 
                 if (DistanceFromArrivalLS > 0)
                     scanText.AppendFormat("Distance from Arrival Point {0:N1}ls\n".T(EDTx.JournalScan_DistancefromArrivalPoint), DistanceFromArrivalLS);
+
+                if (HasAtmosphericComposition)
+                    scanText.Append(DisplayAtmosphere(4));
+
+                if (HasPlanetaryComposition)
+                    scanText.Append(DisplayComposition(4));
             }
 
             if (nSurfaceTemperature.HasValue)
@@ -576,7 +605,7 @@ namespace EliteDangerousCore.JournalEvents
                 scanText.AppendFormat("Luminosity: {0}\n".T(EDTx.JournalScan_Luminosity), Luminosity);
 
             if (nSurfaceGravity.HasValue)
-                scanText.AppendFormat("Gravity: {0:0.00}g\n".T(EDTx.JournalScan_GV), nSurfaceGravityG.Value );
+                scanText.AppendFormat("Gravity: {0:0.00}g\n".T(EDTx.JournalScan_GV), nSurfaceGravityG.Value);
 
             if (nSurfacePressure.HasValue && nSurfacePressure.Value > 0.00 && !PlanetClass.ToLowerInvariant().Contains("gas"))
             {
@@ -601,7 +630,7 @@ namespace EliteDangerousCore.JournalEvents
             if (nSemiMajorAxis.HasValue)
             {
                 if (IsStar || nSemiMajorAxis.Value > oneAU_m / 10)
-                    scanText.AppendFormat("Semi Major Axis: {0:0.00}AU\n".T(EDTx.JournalScan_SMA), nSemiMajorAxisAU.Value );
+                    scanText.AppendFormat("Semi Major Axis: {0:0.00}AU\n".T(EDTx.JournalScan_SMA), nSemiMajorAxisAU.Value);
                 else
                     scanText.AppendFormat("Semi Major Axis: {0}km\n".T(EDTx.JournalScan_SMK), (nSemiMajorAxis.Value / 1000).ToString("N1"));
             }
@@ -626,9 +655,6 @@ namespace EliteDangerousCore.JournalEvents
 
             if (nTidalLock.HasValue && nTidalLock.Value)
                 scanText.Append("Tidally locked\n".T(EDTx.JournalScan_Tidallylocked));
-
-            if (Terraformable)
-                scanText.Append("Candidate for terraforming\n".T(EDTx.JournalScan_Candidateforterraforming));
 
             if (HasRings)
             {
@@ -655,50 +681,66 @@ namespace EliteDangerousCore.JournalEvents
                     for (int i = 0; i < Rings.Length; i++)
                         scanText.Append("\n" + RingInformation(i));
                 }
+                scanText.Append("\n");
             }
 
             if (HasMaterials)
             {
-                scanText.Append("\n" + DisplayMaterials(2, historicmatlist , currentmatlist) + "\n");
+                scanText.Append(DisplayMaterials(4, historicmatlist, currentmatlist));
             }
 
             if (CircumstellarZonesString() != null)
-                scanText.Append("\n" + CircumstellarZonesString());
+                scanText.Append(CircumstellarZonesString());
 
-			if (IsStar && HabZoneOtherStarsString() != null)
-				scanText.Append(HabZoneOtherStarsString());
-			
-            if (scanText.Length > 0 && scanText[scanText.Length - 1] == '\n')
-                scanText.Remove(scanText.Length - 1, 1);
+            if (IsStar && HabZoneOtherStarsString() != null)
+                scanText.Append(HabZoneOtherStarsString());
 
-            if (EstimatedValue > 0)
+            if (Mapped)
             {
-                scanText.AppendFormat("\nEstimated value: {0:N0}".T(EDTx.JournalScan_EV), EstimatedValue);
-                if (Mapped)
-                {
-                    scanText.Append(" " + "Mapped".T(EDTx.JournalScan_MPI));
-                    if (EfficientMapped)
-                        scanText.Append(" " + "Efficiently".T(EDTx.JournalScan_MPIE));
-
-                    scanText.AppendFormat("\nFirst Discovered+Mapped value: {0:N0}".T(EDTx.JournalScan_EVFD), EstimatedValueFirstDiscoveredFirstMapped);
-                    scanText.AppendFormat("\nFirst Mapped value: {0:N0}".T(EDTx.JournalScan_EVFM), EstimatedValueFirstMapped);
-                }
-
-                if (WasDiscovered.HasValue && WasDiscovered.Value)
-                    scanText.AppendFormat("\nAlready Discovered".T(EDTx.JournalScan_EVAD));
-                if (WasMapped.HasValue && WasMapped.Value)
-                    scanText.AppendFormat("\nAlready Mapped".T(EDTx.JournalScan_EVAM));
+                scanText.Append("Mapped".T(EDTx.JournalScan_MPI));
+                if (EfficientMapped)
+                    scanText.Append(" " + "Efficiently".T(EDTx.JournalScan_MPIE));
+                scanText.Append("\n");
             }
 
-            if (EDSMDiscoveryCommander != null)
-                scanText.AppendFormat("\n\nDiscovered by {0} on {1}".T(EDTx.JournalScan_DB), EDSMDiscoveryCommander, EDSMDiscoveryUTC.ToStringZulu());
+            scanText.AppendFormat("Current value: {0:N0}".T(EDTx.JournalScan_CV) + "\n", EstimatedValue);
 
-            scanText.AppendFormat("\nScan Type: {0}".T(EDTx.JournalScan_SCNT), ScanType);
+            if (EstimatedValueFirstDiscoveredFirstMapped > 0 && (!WasDiscovered.HasValue || !WasDiscovered.Value))  // if we don't know, or its not discovered
+            {
+                string msg = "First Discovered+Mapped value: {0:N0}/{1:N0}e".T(EDTx.JournalScan_EVFD) + "\n";
+                scanText.AppendFormat(msg, EstimatedValueFirstDiscoveredFirstMapped, EstimatedValueFirstDiscoveredFirstMappedEfficiently);
+            }
+
+            if (EstimatedValueFirstMapped > 0 && (!WasMapped.HasValue || !WasMapped.Value))    // if was discovered, but not mapped 
+            {
+                scanText.AppendFormat("First Mapped value: {0:N0}/{1:N0}e".T(EDTx.JournalScan_EVFM) + "\n", EstimatedValueFirstMapped, EstimatedValueFirstMappedEfficiently);
+            }
+
+            if (EstimatedValueFirstDiscovered > 0 && (!WasDiscovered.HasValue || !WasDiscovered.Value))  // if we don't know, or its not discovered
+            {
+                scanText.AppendFormat("First Discovered value: {0:N0}".T(EDTx.JournalScan_FDV) + "\n", EstimatedValueFirstDiscovered);
+            }
+
+            if (EstimatedValueFirstDiscovered > 0 ) // if we have extra details, on planets, show the base value
+                scanText.AppendFormat("Base Estimated value: {0:N0}".T(EDTx.JournalScan_EV) + "\n", EstimatedValueBase);
+
+            if (WasDiscovered.HasValue && WasDiscovered.Value)
+                scanText.AppendFormat("Already Discovered".T(EDTx.JournalScan_EVAD) + "\n");
+            if (WasMapped.HasValue && WasMapped.Value)
+                scanText.AppendFormat("Already Mapped".T(EDTx.JournalScan_EVAM) + "\n");
+
+            if (EDSMDiscoveryCommander != null)
+                scanText.AppendFormat("Discovered by {0} on {1}".T(EDTx.JournalScan_DB) + "\n", EDSMDiscoveryCommander, EDSMDiscoveryUTC.ToStringZulu());
+
+            scanText.AppendFormat("Scan Type: {0}".T(EDTx.JournalScan_SCNT) + "\n", ScanType);
+
+            if (scanText.Length > 0 && scanText[scanText.Length - 1] == '\n')
+                scanText.Remove(scanText.Length - 1, 1);
 
             return scanText.ToNullSafeString().Replace("\n", "\n" + inds);
         }
 
-		// goldilocks zone
+		// goldilocks zone. No trailing LF
         public string GetHabZoneStringLs()
         {
             if (IsStar && HabitableZoneInner.HasValue && HabitableZoneOuter.HasValue)
@@ -711,7 +753,7 @@ namespace EliteDangerousCore.JournalEvents
             }
         }
 
-        public string CircumstellarZonesString()
+        private string CircumstellarZonesString()    // has trailing LF
         {
             if (IsStar && HabitableZoneInner.HasValue && HabitableZoneOuter.HasValue)
             {
@@ -744,7 +786,7 @@ namespace EliteDangerousCore.JournalEvents
 									 (AmmonWrldZoneInner.Value / oneAU_LS).ToString("N2"),
 									 (AmmonWrldZoneOuter.Value / oneAU_LS).ToString("N2"));
 				
-				habZone.AppendFormat(" - Icy Planets, {0} (from {1} AU)\n\n".T(EDTx.JournalScan_IcyPlanets),
+				habZone.AppendFormat(" - Icy Planets, {0} (from {1} AU)\n".T(EDTx.JournalScan_IcyPlanets),
 									 GetIcyPlanetsZoneStringLs(),
 				(IcyPlanetZoneInner.Value / oneAU_LS).ToString("N2"));
 
@@ -755,18 +797,18 @@ namespace EliteDangerousCore.JournalEvents
         }
 
 		// string which tell us that other stars are not considered in the habitable zone calculations.
-		public string HabZoneOtherStarsString()
+		public string HabZoneOtherStarsString() // has trailing LF 
 		{
 			StringBuilder habZoneAddend = new StringBuilder();
 			if (nSemiMajorAxis.HasValue && nSemiMajorAxis.Value > 0)
-				habZoneAddend.Append("(Others stars not considered)\n\n".T(EDTx.JournalScan_Othersstarsnotconsidered));
+				habZoneAddend.Append(" - Others stars not considered\n".T(EDTx.JournalScan_Othersstarsnotconsidered));
 			
 			return habZoneAddend.ToNullSafeString();
 		}
 
 		// metal rich zone
-		public string GetMetalRichZoneStringLs()
-		{
+		public string GetMetalRichZoneStringLs() // no trailing LF
+        {
 			if (IsStar && MetalRichZoneInner.HasValue && MetalRichZoneOuter.HasValue)
 			{
 				return $"{MetalRichZoneInner:N0}-{MetalRichZoneOuter:N0}ls";
@@ -777,8 +819,8 @@ namespace EliteDangerousCore.JournalEvents
 			}
 		}
 
-		public string MetalRichZoneString()
-		{
+		public string MetalRichZoneString() // no trailing LF
+        {
 			if (IsStar && MetalRichZoneInner.HasValue && MetalRichZoneOuter.HasValue)
 			{
 				StringBuilder habZone = new StringBuilder();
@@ -793,8 +835,8 @@ namespace EliteDangerousCore.JournalEvents
 		}
 
 		// water world zone
-		public string GetWaterWorldZoneStringLs()
-		{
+		public string GetWaterWorldZoneStringLs() // no trailing LF
+        {
 			if (IsStar && WaterWrldZoneInner.HasValue && WaterWrldZoneOuter.HasValue)
 			{
 				return $"{WaterWrldZoneInner:N0}-{WaterWrldZoneOuter:N0}ls";
@@ -805,8 +847,8 @@ namespace EliteDangerousCore.JournalEvents
 			}
 		}
 
-		public string WaterWorldZoneString()
-		{
+		public string WaterWorldZoneString() // has trailing LF
+        {
 			if (IsStar && WaterWrldZoneInner.HasValue && WaterWrldZoneOuter.HasValue)
 			{
 				StringBuilder habZone = new StringBuilder();
@@ -820,8 +862,8 @@ namespace EliteDangerousCore.JournalEvents
 				return null;
 		}
 
-		// earth like world zone
-		public string GetEarthLikeZoneStringLs()
+        // earth like world zone. No trailing LF
+        public string GetEarthLikeZoneStringLs()
 		{
 			if (IsStar && EarthLikeZoneInner.HasValue && EarthLikeZoneOuter.HasValue)
 			{
@@ -833,7 +875,7 @@ namespace EliteDangerousCore.JournalEvents
 			}
 		}
 
-		public string EarthLikeZoneString()
+		public string EarthLikeZoneString() // has trailing LF
 		{
 			if (IsStar && EarthLikeZoneInner.HasValue && EarthLikeZoneOuter.HasValue)
 			{
@@ -848,7 +890,7 @@ namespace EliteDangerousCore.JournalEvents
 				return null;
 		}
 
-		// ammonia world zone
+		// ammonia world zone. No trailing LF
 		public string GetAmmoniaWorldZoneStringLs()
 		{
 			if (IsStar && AmmonWrldZoneInner.HasValue && AmmonWrldZoneOuter.HasValue)
@@ -861,7 +903,7 @@ namespace EliteDangerousCore.JournalEvents
 			}
 		}
 
-		public string AmmoniaWorldZoneString()
+		public string AmmoniaWorldZoneString() // has trailing LF
 		{
 			if (IsStar && AmmonWrldZoneInner.HasValue && AmmonWrldZoneOuter.HasValue)
 			{
@@ -876,7 +918,7 @@ namespace EliteDangerousCore.JournalEvents
 				return null;
 		}
 
-		// icy planets zone
+		// icy planets zone. No trailing LF
 		public string GetIcyPlanetsZoneStringLs()
 		{
 			if (IsStar && IcyPlanetZoneInner.HasValue && IcyPlanetZoneOuter != null)
@@ -889,8 +931,8 @@ namespace EliteDangerousCore.JournalEvents
 			}
 		}
 
-		public string IcyPlanetsZoneString()
-		{
+		public string IcyPlanetsZoneString()    // has trailing LF
+        {
 			if (IsStar && IcyPlanetZoneInner.HasValue && IcyPlanetZoneOuter != null)
 			{
 				StringBuilder habZone = new StringBuilder();
@@ -904,7 +946,7 @@ namespace EliteDangerousCore.JournalEvents
 				return null;
 		}
 
-        // optionally, show material counts at the historic point and current.
+        // show material counts at the historic point and current.  Has trailing LF if text present.
         public string DisplayMaterials(int indent = 0, MaterialCommoditiesList historicmatlist = null, MaterialCommoditiesList currentmatlist = null)
         {
             StringBuilder scanText = new StringBuilder();
@@ -918,15 +960,13 @@ namespace EliteDangerousCore.JournalEvents
                 {
                     scanText.Append(indents + DisplayMaterial(mat.Key, mat.Value, historicmatlist, currentmatlist));
                 }
-
-                if (scanText.Length > 0 && scanText[scanText.Length - 1] == '\n')
-                    scanText.Remove(scanText.Length - 1, 1);
             }
 
             return scanText.ToNullSafeString();
         }
 
-        public string DisplayMaterial(string fdname, double percent, MaterialCommoditiesList historicmatlist = null, MaterialCommoditiesList currentmatlist = null)
+        public string DisplayMaterial(string fdname, double percent, MaterialCommoditiesList historicmatlist = null, 
+                                        MaterialCommoditiesList currentmatlist = null)  // has trailing LF
         {
             StringBuilder scanText = new StringBuilder();
 
@@ -954,7 +994,7 @@ namespace EliteDangerousCore.JournalEvents
             return scanText.ToNullSafeString();
         }
 
-        public string DisplayAtmosphere(int indent = 0)
+        private string DisplayAtmosphere(int indent = 0)     // has trailing LF
         {
             StringBuilder scanText = new StringBuilder();
             string indents = new string(' ', indent);
@@ -965,13 +1005,10 @@ namespace EliteDangerousCore.JournalEvents
                 scanText.AppendFormat(indents + "{0} - {1}%\n", comp.Key, comp.Value.ToString("N2"));
             }
 
-            if (scanText.Length > 0 && scanText[scanText.Length - 1] == '\n')
-                scanText.Remove(scanText.Length - 1, 1);
-
             return scanText.ToNullSafeString();
         }
 
-        public string DisplayComposition(int indent = 0)
+        private string DisplayComposition(int indent = 0)   // has trailing LF
         {
             StringBuilder scanText = new StringBuilder();
             string indents = new string(' ', indent);
@@ -983,18 +1020,11 @@ namespace EliteDangerousCore.JournalEvents
                     scanText.AppendFormat(indents + "{0} - {1}%\n", comp.Key, (comp.Value * 100).ToString("N2"));
             }
 
-            if (scanText.Length > 0 && scanText[scanText.Length - 1] == '\n')
-                scanText.Remove(scanText.Length - 1, 1);
-
             return scanText.ToNullSafeString();
         }
 
-        public string RingInformationMoons(int ringno)
-        {
-            return RingInformation(ringno, 1 / oneMoon_MT, " Moons".T(EDTx.JournalScan_Moons));
-        }
-
-        public string RingInformation(int ringno, double scale = 1, string scaletype = " MT")
+        // Has Trailing LF
+        private string RingInformation(int ringno, double scale = 1, string scaletype = " MT")
         {
             StarPlanetRing ring = Rings[ringno];
             return ring.RingInformation(scale, scaletype, IsStar);
@@ -1159,13 +1189,13 @@ namespace EliteDangerousCore.JournalEvents
 
             if (EventTimeUTC < new DateTime(2017, 4, 11, 12, 0, 0, 0, DateTimeKind.Utc))
             {
-                EstimatedValue = EstimatedValueED22();
+                EstimatedValueBase = EstimatedValueED22();
                 return;
             }
 
             if (EventTimeUTC < new DateTime(2018, 12, 11, 9, 0, 0, DateTimeKind.Utc))
             {
-                EstimatedValue = EstimatedValue32();
+                EstimatedValueBase = EstimatedValue32();
                 return;
             }
 
@@ -1213,11 +1243,11 @@ namespace EliteDangerousCore.JournalEvents
                         break;
                 }
 
-                EstimatedValue = (int)StarValue32And33(kValue, nStellarMass.HasValue ? nStellarMass.Value : 1.0);
+                EstimatedValueBase = (int)StarValue32And33(kValue, nStellarMass.HasValue ? nStellarMass.Value : 1.0);
             }
             else
             {
-                EstimatedValue = 0;
+                EstimatedValueBase = 0;
 
                 if (PlanetClass != null)  //Asteroid belt is null
                 {
@@ -1255,23 +1285,20 @@ namespace EliteDangerousCore.JournalEvents
                     }
 
                     double mass = nMassEM.HasValue ? nMassEM.Value : 1.0;
+                    double effmapped = 1.25;
+                    double firstdiscovery = 2.6;
 
-                    if (Mapped)
-                    {
-                        double effmapped = EfficientMapped ? 1.25 : 1;
+                    double basevalue = PlanetValue33(kValue, mass);
 
-                        EstimatedValueFirstDiscoveredFirstMapped = (int)(PlanetValue33(kValue, mass, 3.699622554 * effmapped) * 2.6);
+                    EstimatedValueBase = (int)basevalue;
 
-                        EstimatedValueFirstMapped = (int)PlanetValue33(kValue, mass, 8.0956 * effmapped);
+                    EstimatedValueFirstDiscovered = (int)(basevalue*firstdiscovery);
 
-                        EstimatedValue = (int)PlanetValue33(kValue, mass, 3.3333333333 * effmapped);
-                    }
-                    else
-                    {
-                        EstimatedValue = (int)PlanetValue33(kValue, mass, 1);
-                        EstimatedValueFirstDiscoveredFirstMapped = EstimatedValueFirstMapped = 0;
-                    }
+                    EstimatedValueFirstDiscoveredFirstMapped = (int)(basevalue * firstdiscovery * 3.699622554);
+                    EstimatedValueFirstDiscoveredFirstMappedEfficiently = (int)(basevalue * firstdiscovery * 3.699622554 * effmapped);
 
+                    EstimatedValueFirstMapped = (int)(basevalue * 8.0956);
+                    EstimatedValueFirstMappedEfficiently = (int)(basevalue * 8.0956 * effmapped);
                 }
             }
         }
@@ -1281,10 +1308,10 @@ namespace EliteDangerousCore.JournalEvents
             return k + (m * k / 66.25);
         }
 
-        private double PlanetValue33(double k, double m, double map)
+        private double PlanetValue33(double k, double m)
         {
             const double q = 0.56591828;
-            return Math.Max((k + (k * Math.Pow(m, 0.2) * q)) * map, 500);
+            return Math.Max((k + (k * Math.Pow(m, 0.2) * q)), 500);
         }
 
         #endregion

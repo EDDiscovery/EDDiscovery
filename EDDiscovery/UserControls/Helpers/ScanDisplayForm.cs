@@ -31,7 +31,7 @@ namespace EDDiscovery.UserControls
 
             ExtendedControls.ConfigurableForm f = new ExtendedControls.ConfigurableForm();
 
-            Size infosize = parent.SizeWithinScreen(new Size(parent.Width * 2 / 4,parent.Height * 2 / 4), 128, 128+100);        // go for this, but allow this around window
+            Size infosize = parent.SizeWithinScreen(new Size(parent.Width * 6 / 8, parent.Height * 6 / 8), 128, 128 + 100);        // go for this, but allow this around window
             int topmargin = 40;
 
             HistoryEntry he = tag as HistoryEntry;                          // is tag HE?
@@ -69,7 +69,9 @@ namespace EDDiscovery.UserControls
                 sd.BackColor = EDDTheme.Instance.Form;
                 sd.DrawSystem( data, null , hl);
 
-                infosize = new Size(Math.Max(400, sd.DisplayAreaUsed.X) , Math.Max(200, sd.DisplayAreaUsed.Y));
+                int wastedh = infosize.Height - sd.DisplayAreaUsed.Y - 10 - 40;
+                if (wastedh > 0)
+                    infosize.Height -= wastedh;
 
                 asm = AutoScaleMode.None;   // because we are using a picture box, it does not autoscale, so we can't use that logic on it.
 

@@ -72,8 +72,8 @@ namespace EliteDangerousCore.EDSM
             if (Commander != null)
             {
                 KeyName(out string latestdatekeyname, out string oldestdatekeyname);
-                SQLiteConnectionUser.DeleteKey(latestdatekeyname);
-                SQLiteConnectionUser.DeleteKey(oldestdatekeyname);
+                EliteDangerousCore.DB.UserDatabase.Instance.DeleteKey(latestdatekeyname);
+                EliteDangerousCore.DB.UserDatabase.Instance.DeleteKey(oldestdatekeyname);
             }
         }
 
@@ -107,8 +107,8 @@ namespace EliteDangerousCore.EDSM
                         lastCommentFetch = DateTime.UtcNow;
                     }
 
-                    DateTime latestentry = SQLiteConnectionUser.GetSettingDate(latestdatekeyname, GammaStart); // lastest entry
-                    DateTime oldestentry = SQLiteConnectionUser.GetSettingDate(oldestdatekeyname, DateTime.UtcNow); // oldest entry
+                    DateTime latestentry = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDate(latestdatekeyname, GammaStart); // lastest entry
+                    DateTime oldestentry = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDate(oldestdatekeyname, DateTime.UtcNow); // oldest entry
 
                     DateTime logstarttime = DateTime.MinValue;      // return what we got..
                     DateTime logendtime = DateTime.MinValue;
@@ -138,10 +138,10 @@ namespace EliteDangerousCore.EDSM
                             Process(edsmlogs, logstarttime, logendtime);
 
                         if (logendtime > latestentry)
-                            SQLiteConnectionUser.PutSettingDate(latestdatekeyname, logendtime);
+                            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDate(latestdatekeyname, logendtime);
 
                         if (logstarttime < oldestentry)
-                            SQLiteConnectionUser.PutSettingDate(oldestdatekeyname, logstarttime);
+                            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDate(oldestdatekeyname, logstarttime);
                     }
                     else if ( res != -1 )
                     {
@@ -242,15 +242,15 @@ namespace EliteDangerousCore.EDSM
                 tlu.CommanderId = EDCommander.CurrentCmdrID;
                 tlu.Add();  // Add to Database
 
-                using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
+                UserDatabase.Instance.ExecuteWithDatabase(cn =>
                 {
                     foreach (JournalFSDJump jfsd in toadd)
                     {
                         System.Diagnostics.Trace.WriteLine(string.Format("Add {0} {1}", jfsd.EventTimeUTC, jfsd.StarSystem));
                         jfsd.SetTLUCommander(tlu.id, tlu.CommanderId.Value);        // update its TLU id to the TLU made above
-                        jfsd.Add(jfsd.CreateFSDJournalEntryJson(), cn);     // add it to the db with the JSON created
+                        jfsd.Add(jfsd.CreateFSDJournalEntryJson(), cn.Connection);     // add it to the db with the JSON created
                     }
-                }
+                });
 
                 LogLine($"Retrieved {toadd.Count} log entries from EDSM, from {logstarttime.ToLocalTime().ToString()} to {logendtime.ToLocalTime().ToString()}");
 

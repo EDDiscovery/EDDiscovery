@@ -86,11 +86,11 @@ namespace EDDiscovery.UserControls
             cfs.AddAllNone();
             cfs.AddJournalExtraOptions();
             cfs.AddJournalEntries();
-            cfs.Closing += EventFilterChanged;
+            cfs.SaveSettings += EventFilterChanged;
 
-            checkBoxCursorToTop.Checked = SQLiteConnectionUser.GetSettingBool(DbAutoTop, true);
+            checkBoxCursorToTop.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbAutoTop, true);
 
-            string filter = SQLiteDBClass.GetSettingString(DbFieldFilter, "");
+            string filter = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbFieldFilter, "");
             if (filter.Length > 0)
                 fieldfilter.FromJSON(filter);        // load filter
 
@@ -124,7 +124,7 @@ namespace EDDiscovery.UserControls
             DGVSaveColumnLayout(dataGridViewJournal, DbColumnSave);
             discoveryform.OnHistoryChange -= Display;
             discoveryform.OnNewEntry -= AddNewEntry;
-            SQLiteConnectionUser.PutSettingBool(DbAutoTop, checkBoxCursorToTop.Checked);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbAutoTop, checkBoxCursorToTop.Checked);
             searchtimer.Dispose();
         }
 
@@ -171,7 +171,7 @@ namespace EDDiscovery.UserControls
             List<HistoryEntry> result = filter.Filter(hl);
             fdropdown = hl.Count() - result.Count();
 
-            result = HistoryList.FilterByJournalEvent(result, SQLiteDBClass.GetSettingString(DbFilterSave, "All"), out ftotalevents);
+            result = HistoryList.FilterByJournalEvent(result, EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbFilterSave, "All"), out ftotalevents);
             result = FilterHelpers.FilterHistory(result, fieldfilter, discoveryform.Globals, out ftotalfilters);
 
             dataGridViewJournal.Rows.Clear();
@@ -262,7 +262,7 @@ namespace EDDiscovery.UserControls
                 return;
             }
 
-            bool add = he.IsJournalEventInEventFilter(SQLiteDBClass.GetSettingString(DbFilterSave, "All"));
+            bool add = he.IsJournalEventInEventFilter(EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbFilterSave, "All"));
 
             if (!add)
             {
@@ -387,7 +387,7 @@ namespace EDDiscovery.UserControls
 
         private void comboBoxJournalWindow_SelectedIndexChanged(object sender, EventArgs e)
         {
-            SQLiteDBClass.PutSettingString(DbHistorySave, comboBoxJournalWindow.Text);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbHistorySave, comboBoxJournalWindow.Text);
             Display(current_historylist);
         }
 
@@ -397,7 +397,7 @@ namespace EDDiscovery.UserControls
             if ( res != null )
             {
                 fieldfilter = res;
-                SQLiteDBClass.PutSettingString(DbFieldFilter, fieldfilter.GetJSON());
+                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbFieldFilter, fieldfilter.GetJSON());
                 Display(current_historylist);
             }
         }
@@ -418,7 +418,7 @@ namespace EDDiscovery.UserControls
         {
             mapGotoStartoolStripMenuItem.Enabled = (rightclicksystem != null && rightclicksystem.System.HasCoordinate);
             viewOnEDSMToolStripMenuItem.Enabled = (rightclicksystem != null);
-            sendUnsyncedScanToEDDNToolStripMenuItem.Enabled = (rightclicksystem != null && rightclicksystem.EntryType == JournalTypeEnum.Scan && !rightclicksystem.EDDNSync);
+            sendUnsyncedScanToEDDNToolStripMenuItem.Enabled = (rightclicksystem != null && EDDNClass.IsDelayableEDDNMessage(rightclicksystem.EntryType, rightclicksystem.EventTimeUTC) && !rightclicksystem.EDDNSync);
             removeSortingOfColumnsToolStripMenuItem.Enabled = dataGridViewJournal.SortedColumn != null;
             jumpToEntryToolStripMenuItem.Enabled = dataGridViewJournal.Rows.Count > 0;
         }
@@ -527,7 +527,7 @@ namespace EDDiscovery.UserControls
 
         private void sendUnsyncedScanToEDDNToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (rightclicksystem != null && rightclicksystem.EntryType == JournalTypeEnum.Scan && !rightclicksystem.EDDNSync)
+            if (rightclicksystem != null && EDDNClass.IsDelayableEDDNMessage(rightclicksystem.EntryType, rightclicksystem.EventTimeUTC) && !rightclicksystem.EDDNSync)
             {
                 EDDNSync.SendEDDNEvent(discoveryform.LogLine, rightclicksystem);
             }
@@ -633,8 +633,18 @@ namespace EDDiscovery.UserControls
                                 }
                             }
                         }
+
                         if (frm.AutoOpen)
-                            System.Diagnostics.Process.Start(frm.Path);
+                        {
+                            try
+                            {
+                                System.Diagnostics.Process.Start(frm.Path);
+                            }
+                            catch
+                            {
+                                ExtendedControls.MessageBoxTheme.Show(FindForm(), "Failed to open " + frm.Path, "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                            }
+                        }
                     }
                     catch
                     {
@@ -671,13 +681,7 @@ namespace EDDiscovery.UserControls
                             return (c < 3 && frm.IncludeHeader) ? dataGridViewJournal.Columns[c + ((c > 0) ? 1 : 0)].HeaderText : null;
                         };
 
-                        if (grd.WriteCSV(frm.Path))
-                        {
-                            if (frm.AutoOpen)
-                                System.Diagnostics.Process.Start(frm.Path);
-                        }
-                        else
-                            ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Failed to write to " + frm.Path, "Export Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);  
+                        grd.WriteGrid(frm.Path, frm.AutoOpen, FindForm());
                     }
                 }
             }

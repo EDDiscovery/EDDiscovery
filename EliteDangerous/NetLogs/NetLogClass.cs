@@ -106,14 +106,14 @@ namespace EliteDangerousCore
 
             for (int i = 0; i < readersToUpdate.Count; i++)
             {
-                using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
+                UserDatabase.Instance.ExecuteWithDatabase(cn =>
                 {
                     int ji = 0;
 
                     NetLogFileReader reader = readersToUpdate[i];
                     updateProgress(i * 100 / readersToUpdate.Count, reader.TravelLogUnit.Name);
 
-                    using (DbTransaction tn = cn.BeginTransaction())
+                    using (DbTransaction tn = cn.Connection.BeginTransaction())
                     {
                         foreach (JObject jo in reader.ReadSystems(cancelRequested, currentcmdrid))
                         {
@@ -133,11 +133,11 @@ namespace EliteDangerousCore
                             bool previssame = (prev != null && prev.StarSystem.Equals(je.StarSystem, StringComparison.CurrentCultureIgnoreCase) && (!prev.HasCoordinate || !je.HasCoordinate || (prev.StarPos - je.StarPos).LengthSquared < 0.01));
                             bool nextissame = (next != null && next.StarSystem.Equals(je.StarSystem, StringComparison.CurrentCultureIgnoreCase) && (!next.HasCoordinate || !je.HasCoordinate || (next.StarPos - je.StarPos).LengthSquared < 0.01));
 
-                           // System.Diagnostics.Debug.WriteLine("{0} {1} {2}", ji, vsSystemsEnts[ji].EventTimeUTC, je.EventTimeUTC);
+                            // System.Diagnostics.Debug.WriteLine("{0} {1} {2}", ji, vsSystemsEnts[ji].EventTimeUTC, je.EventTimeUTC);
 
                             if (!(previssame || nextissame))
                             {
-                                je.Add(jo, cn, tn);
+                                je.Add(jo, cn.Connection, tn);
                                 System.Diagnostics.Debug.WriteLine("Add {0} {1}", je.EventTimeUTC, jo.ToString());
                             }
                         }
@@ -151,7 +151,7 @@ namespace EliteDangerousCore
                     {
                         updateProgress((i + 1) * 100 / readersToUpdate.Count, reader.TravelLogUnit.Name);
                     }
-                }
+                });
             }
         }
 

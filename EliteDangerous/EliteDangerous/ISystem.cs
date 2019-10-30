@@ -132,6 +132,7 @@ namespace EliteDangerousCore
 
         double Distance(ISystemBase other);
         double Distance(double x, double y, double z);
+        double DistanceSq(double x, double y, double z);
         bool Distance(ISystemBase other, double min, double max);
         bool Cuboid(ISystemBase other, double min, double max);
     }

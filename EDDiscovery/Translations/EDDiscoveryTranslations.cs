@@ -729,6 +729,7 @@ namespace EDDiscovery
 
         ScanDisplayUserControl_NSD, // No scan data available
         ScanDisplayUserControl_BC, // Barycentre of {0}
+        ScanDisplayUserControl_Signals, // Signals
         FindSystemsUserControl_Cannotfindsystem, // Cannot find system
         FindSystemsUserControl_EDSM, // new warning..
 

@@ -54,16 +54,16 @@ namespace EDDiscovery.UserControls
             public const int StarName = 1;
             public const int NoVisits = 2;
             public const int OtherInformation = 3;
+            public const int SystemValue = 4;
         }
 
-        private string DbColumnSave { get { return DBName("StarListControl" ,  "DGVCol"); } }
-        private string DbHistorySave { get { return DBName("StarListControlEDUIHistory" ); } }
-        private string DbAutoTop { get { return DBName("StarListControlAutoTop" ); } }
-        private string DbEDSM { get { return DBName("StarListControlEDSM" ); } }
-        private string DbShowJumponium { get { return DBName("StarListControlJumponium" ); } }
-        private string DbShowClasses { get { return DBName("StarListControlShowClasses" ); } }        
+        private string DbColumnSave { get { return DBName("StarListControl", "DGVCol"); } }
+        private string DbHistorySave { get { return DBName("StarListControlEDUIHistory"); } }
+        private string DbAutoTop { get { return DBName("StarListControlAutoTop"); } }
+        private string DbEDSM { get { return DBName("StarListControlEDSM"); } }
+        private string DbShowJumponium { get { return DBName("StarListControlJumponium"); } }
+        private string DbShowClasses { get { return DBName("StarListControlShowClasses"); } }
 
-        private Dictionary<string, List<HistoryEntry>> systemsentered = new Dictionary<string, List<HistoryEntry>>();
         private Dictionary<long, DataGridViewRow> rowsbyjournalid = new Dictionary<long, DataGridViewRow>();
         private HistoryList current_historylist;
 
@@ -83,22 +83,22 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
-            checkBoxCursorToTop.Checked = SQLiteConnectionUser.GetSettingBool(DbAutoTop, true);
+            checkBoxCursorToTop.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbAutoTop, true);
 
-         
+
             dataGridViewStarList.MakeDoubleBuffered();
             dataGridViewStarList.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             dataGridViewStarList.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
 
-            dataGridViewStarList.Columns[2].ValueType = typeof(Int32);            
+            dataGridViewStarList.Columns[2].ValueType = typeof(Int32);
 
-            checkBoxEDSM.Checked = SQLiteDBClass.GetSettingBool(DbEDSM, false);
+            checkBoxEDSM.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbEDSM, false);
             this.checkBoxEDSM.CheckedChanged += new System.EventHandler(this.checkBoxEDSM_CheckedChanged);
 
-            checkBoxBodyClasses.Checked = SQLiteConnectionUser.GetSettingBool(DbShowClasses, true);
+            checkBoxBodyClasses.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbShowClasses, true);
             this.checkBoxBodyClasses.CheckedChanged += new System.EventHandler(this.buttonBodyClasses_CheckedChanged);
 
-            checkBoxJumponium.Checked = SQLiteConnectionUser.GetSettingBool(DbShowJumponium, true);
+            checkBoxJumponium.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbShowJumponium, true);
             this.checkBoxJumponium.CheckedChanged += new System.EventHandler(this.buttonJumponium_CheckedChanged);
 
             discoveryform.OnHistoryChange += HistoryChanged;
@@ -132,7 +132,7 @@ namespace EDDiscovery.UserControls
             DGVSaveColumnLayout(dataGridViewStarList, DbColumnSave);
             discoveryform.OnHistoryChange -= HistoryChanged;
             discoveryform.OnNewEntry -= AddNewEntry;
-            SQLiteConnectionUser.PutSettingBool(DbAutoTop, checkBoxCursorToTop.Checked);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbAutoTop, checkBoxCursorToTop.Checked);
         }
 
         #endregion
@@ -157,7 +157,6 @@ namespace EDDiscovery.UserControls
             autoupdateedsm.Stop();
 
             Tuple<long, int> pos = CurrentGridPosByJID();
-            string filtertext = textBoxFilter.Text;
 
             current_historylist = hl;
 
@@ -172,7 +171,6 @@ namespace EDDiscovery.UserControls
             System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCountLap(this,true) + " SL " + displaynumber + " Load start");
 
             rowsbyjournalid.Clear();
-            systemsentered.Clear();
             dataGridViewStarList.Rows.Clear();
 
             dataGridViewStarList.Columns[0].HeaderText = EDDiscoveryForm.EDDConfig.DisplayUTC ? "Game Time".T(EDTx.GameTime) : "Time".T(EDTx.Time);
@@ -181,16 +179,7 @@ namespace EDDiscovery.UserControls
 
             List<HistoryEntry> result = filter.Filter(hl);      // last entry, first in list
             result = HistoryList.FilterHLByTravel(result);      // keep only travel entries (location after death, FSD jumps)
-
-            foreach (HistoryEntry he in result)        // last first..
-            {
-                if (!systemsentered.ContainsKey(he.System.Name))
-                    systemsentered[he.System.Name] = new List<HistoryEntry>();
-
-                systemsentered[he.System.Name].Add(he);     // first entry is newest jump to, second is next last, etc
-            }
-
-            List<List<HistoryEntry>> syslists = systemsentered.Values.ToList();
+            List<List<HistoryEntry>> syslists = HistoryList.SystemAggregateList(result);
             List<List<HistoryEntry>[]> syslistchunks = new List<List<HistoryEntry>[]>();
 
             for (int i = 0; i < syslists.Count; i += 1000)
@@ -202,6 +191,8 @@ namespace EDDiscovery.UserControls
             }
 
             todo.Clear();
+
+            string filtertext = textBoxFilter.Text;
 
             foreach (var syslistchunk in syslistchunks)
             {
@@ -284,18 +275,69 @@ namespace EDDiscovery.UserControls
                 return;
             }
 
-            if ( he.IsFSDJump )     // FSD jumps mean move system.. so
-                HistoryChanged(hl); // just recalc all..
-
-            if (checkBoxCursorToTop.Checked && dataGridViewStarList.DisplayedRowCount(false) > 0)   // Move focus to new row
+            if (he.IsFSDJump || he.journalEntry is JournalScan)
             {
-                //System.Diagnostics.Debug.WriteLine("Auto Sel");
-                dataGridViewStarList.ClearSelection();
-                int rowno = dataGridViewStarList.Rows.GetFirstRow(DataGridViewElementStates.Visible);
-                if ( rowno != -1 )
-                    dataGridViewStarList.CurrentCell = dataGridViewStarList.Rows[rowno].Cells[1];       // its the current cell which needs to be set, moves the row marker as well
+                DataGridViewRow rowpresent = null;
+                foreach (DataGridViewRow rowf in dataGridViewStarList.Rows)
+                {
+                    var list = (List<HistoryEntry>)rowf.Tag;
+                    if (list != null && list[0].System.Name.Equals(he.System.Name))
+                    {
+                        rowpresent = rowf;
+                        break;
+                    }
+                }
 
-                FireChangeSelection();
+                if (he.IsFSDJump)
+                {
+                    if (rowpresent != null) // if its in the list, move to top and increment he's
+                    {
+                        dataGridViewStarList.Rows.Remove(rowpresent);
+                        List<HistoryEntry> syslist = (List<HistoryEntry>)rowpresent.Tag;
+                        syslist.Insert(0, he);  // add onto list
+                        rowpresent.Cells[2].Value = syslist.Count.ToString();   // update count
+                        dataGridViewStarList.Rows.Insert(0, rowpresent);        // move to top..
+                    }
+                    else
+                    {
+                        // process thru normal filter to see if its displayable
+
+                        var filter = (TravelHistoryFilter)comboBoxHistoryWindow.SelectedItem ?? TravelHistoryFilter.NoFilter;
+                        List<HistoryEntry> result = filter.Filter(hl);      // last entry, first in list
+                        result = HistoryList.FilterHLByTravel(result);      // keep only travel entries (location after death, FSD jumps)
+                        List<List<HistoryEntry>> syslists = HistoryList.SystemAggregateList(result);
+
+                        if (syslists.Count > 0 && syslists[0][0].System.Name == he.System.Name) // if the filtered result has our system in (which must be the first, since its newest), its inside the filter, add
+                        {
+                            string filtertext = textBoxFilter.Text;
+                            var row = CreateHistoryRow(syslists[0], filtertext);
+                            if (row != null)    // text may have filtered it out
+                                dataGridViewStarList.Rows.Insert(0, row);
+                        }
+                    }
+
+                    if (checkBoxCursorToTop.Checked && dataGridViewStarList.DisplayedRowCount(false) > 0)   // Move focus to new row
+                    {
+                        //System.Diagnostics.Debug.WriteLine("Auto Sel");
+                        dataGridViewStarList.ClearSelection();
+                        int rowno = dataGridViewStarList.Rows.GetFirstRow(DataGridViewElementStates.Visible);
+                        if (rowno != -1)
+                            dataGridViewStarList.CurrentCell = dataGridViewStarList.Rows[rowno].Cells[1];       // its the current cell which needs to be set, moves the row marker as well
+
+                        FireChangeSelection();
+                    }
+                }
+                else
+                {
+                    if ( rowpresent != null )       // only need to do something if its displayed
+                    {
+                        List<HistoryEntry> syslist = (List<HistoryEntry>)rowpresent.Tag;
+                        var node = discoveryform.history.starscan?.FindSystem(syslist[0].System, false); // may be null
+                        string info = Infoline(syslist, node);  // lookup node, using star name, no EDSM lookup.
+                        rowpresent.Cells[3].Value = info;   // update info
+                        rowpresent.Cells[4].Value = node?.ScanValue(true).ToString("N0") ?? "-"; // update scan value
+                    }
+                }
             }
         }
 
@@ -307,7 +349,10 @@ namespace EDDiscovery.UserControls
 
             DateTime time = EDDiscoveryForm.EDDConfig.DisplayUTC ? he.EventTimeUTC : he.EventTimeLocal;
             string visits = $"{syslist.Count:N0}";
-            string info = Infoline(syslist);
+
+            var node = discoveryform.history.starscan?.FindSystem(syslist[0].System, false); // may be null
+
+            string info = Infoline(syslist, node);  // lookup node, using star name, no EDSM lookup.
 
             if (search.HasChars())
             {
@@ -321,7 +366,7 @@ namespace EDDiscovery.UserControls
             }
 
             var rw = dataGridViewStarList.RowTemplate.Clone() as DataGridViewRow;
-            rw.CreateCells(dataGridViewStarList, time, he.System.Name, visits, info);
+            rw.CreateCells(dataGridViewStarList, time, he.System.Name, visits, info, node?.ScanValue(true).ToString("N0") ?? "-");
 
             foreach ( HistoryEntry hel in syslist )
                 rowsbyjournalid[hel.Journalid] = rw;      // all JIDs in this array, to this row
@@ -342,7 +387,7 @@ namespace EDDiscovery.UserControls
             return rw;
         }
 
-        string Infoline(List<HistoryEntry> syslist)
+        string Infoline(List<HistoryEntry> syslist, StarScan.SystemNode node )
         {
             string infostr = "";
             string jumponium = "";
@@ -350,9 +395,6 @@ namespace EDDiscovery.UserControls
 
             if (syslist.Count > 1)
                 infostr = string.Format("First visit {0}".T(EDTx.UserControlStarList_FV),syslist.Last().EventTimeLocal.ToShortDateString());
-
-            HistoryEntry he = syslist[0];
-            StarScan.SystemNode node = discoveryform.history.starscan?.FindSystem(he.System,false);
 
             #region information
 
@@ -371,6 +413,7 @@ namespace EDDiscovery.UserControls
                         if (sn.ScanData != null && checkBoxBodyClasses.Checked)
                         {
                             JournalScan sc = sn.ScanData;
+                            string bodynameshort = sc.BodyName.ReplaceIfStartsWith(syslist[0].System.Name);
 
                             if (sc.IsStar) // brief notification for special or uncommon celestial bodies, useful to traverse the history and search for that special body you discovered.
                             {
@@ -417,22 +460,22 @@ namespace EDDiscovery.UserControls
                                 {
                                     // Earth-like moon
                                     if (sc.PlanetTypeID == EDPlanet.Earthlike_body)
-                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is an earth like moon".T(EDTx.UserControlStarList_ELM), sc.BodyName), prefix);
+                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is an earth like moon".T(EDTx.UserControlStarList_ELM), bodynameshort), prefix);
 
                                     // Terraformable water moon
                                     if (sc.Terraformable == true && sc.PlanetTypeID == EDPlanet.Water_world)
-                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is a terraformable water moon".T(EDTx.UserControlStarList_TWM), sc.BodyName), prefix);
+                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is a terraformable water moon".T(EDTx.UserControlStarList_TWM), bodynameshort), prefix);
                                     // Water moon
                                     if (sc.Terraformable == false && sc.PlanetTypeID == EDPlanet.Water_world)
-                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is a water moon".T(EDTx.UserControlStarList_WM), sc.BodyName), prefix);
+                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is a water moon".T(EDTx.UserControlStarList_WM), bodynameshort), prefix);
 
                                     // Terraformable moon
                                     if (sc.Terraformable == true && sc.PlanetTypeID != EDPlanet.Water_world)
-                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is a terraformable moon".T(EDTx.UserControlStarList_TM), sc.BodyName), prefix);
+                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is a terraformable moon".T(EDTx.UserControlStarList_TM), bodynameshort), prefix);
 
                                     // Ammonia moon
                                     if (sc.PlanetTypeID == EDPlanet.Ammonia_world)
-                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is an ammonia moon".T(EDTx.UserControlStarList_AM), sc.BodyName), prefix);
+                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is an ammonia moon".T(EDTx.UserControlStarList_AM), bodynameshort), prefix);
                                 }
 
                                 else
@@ -441,22 +484,22 @@ namespace EDDiscovery.UserControls
                                 {
                                     // Earth Like planet
                                     if (sc.PlanetTypeID == EDPlanet.Earthlike_body)
-                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is an earth like planet".T(EDTx.UserControlStarList_ELP), sc.BodyName), prefix);
+                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is an earth like planet".T(EDTx.UserControlStarList_ELP), bodynameshort), prefix);
 
                                     // Terraformable water world
                                     if (sc.PlanetTypeID == EDPlanet.Water_world && sc.Terraformable == true)
-                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is a terraformable water world".T(EDTx.UserControlStarList_TWW), sc.BodyName), prefix);
+                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is a terraformable water world".T(EDTx.UserControlStarList_TWW), bodynameshort), prefix);
                                     // Water world
                                     if (sc.PlanetTypeID == EDPlanet.Water_world && sc.Terraformable == false)
-                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is a water world".T(EDTx.UserControlStarList_WW), sc.BodyName), prefix);
+                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is a water world".T(EDTx.UserControlStarList_WW), bodynameshort), prefix);
 
                                     // Terraformable planet
                                     if (sc.Terraformable == true && sc.PlanetTypeID != EDPlanet.Water_world)
-                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is a terraformable planet".T(EDTx.UserControlStarList_TP), sc.BodyName), prefix);
+                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is a terraformable planet".T(EDTx.UserControlStarList_TP), bodynameshort), prefix);
 
                                     // Ammonia world
                                     if (sc.PlanetTypeID == EDPlanet.Ammonia_world)
-                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is an ammonia world".T(EDTx.UserControlStarList_AW), sc.BodyName), prefix);
+                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is an ammonia world".T(EDTx.UserControlStarList_AW), bodynameshort), prefix);
                                 }
                             }
                         }
@@ -505,7 +548,7 @@ namespace EDDiscovery.UserControls
                     total -= node.starnodes.Count;
                     if (total > 0)
                     {   // tell us that a system has other bodies, and how much, beside stars
-                        infostr = infostr.AppendPrePad(string.Format("{0} Other bodies".T(EDTx.UserControlStarList_OB), total.ToStringInvariant()), ", ");
+                        infostr = infostr.AppendPrePad(string.Format("{0} Other bodies".T(EDTx.UserControlStarList_OB), total.ToString()), ", ");
                         infostr = infostr.AppendPrePad(extrainfo, prefix);                                                
                     }
                     else
@@ -580,8 +623,9 @@ namespace EDDiscovery.UserControls
         {
             List<HistoryEntry> syslist = row.Tag as List<HistoryEntry>;
 
-            discoveryform.history.starscan?.FindSystem(syslist[0].System, true);  // try an EDSM lookup
-            row.Cells[StarHistoryColumns.OtherInformation].Value = Infoline(syslist);
+            var node = discoveryform.history.starscan?.FindSystem(syslist[0].System, true);  // try an EDSM lookup, cache data, then redisplay.
+            row.Cells[StarHistoryColumns.OtherInformation].Value = Infoline(syslist,node);
+            row.Cells[StarHistoryColumns.SystemValue].Value = node?.ScanValue(true).ToString("N0") ?? "";
         }
 
         private void Autoupdateedsm_Tick(object sender, EventArgs e)            // tick tock to get edsm data very slowly!
@@ -624,9 +668,10 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        
         private void comboBoxHistoryWindow_SelectedIndexChanged(object sender, EventArgs e)
         {
-            SQLiteDBClass.PutSettingString(DbHistorySave, comboBoxHistoryWindow.Text);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbHistorySave, comboBoxHistoryWindow.Text);
 
             if (current_historylist != null)
                 HistoryChanged(current_historylist);        // fires lots of events
@@ -806,24 +851,40 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        private void dataGridViewStarList_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                List<HistoryEntry> helist = dataGridViewStarList.Rows[e.RowIndex].Tag as List<HistoryEntry>;
+                ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), helist[0], checkBoxEDSM.Checked, discoveryform.history);
+            }
+        }
+
+        private void viewScanDisplayToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (rightclicksystem != null)
+            {
+                ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), rightclicksystem, checkBoxEDSM.Checked, discoveryform.history);
+            }
+        }
         #endregion
 
         #region Events
 
-        private void checkBoxEDSM_CheckedChanged(object sender, EventArgs e)
+            private void checkBoxEDSM_CheckedChanged(object sender, EventArgs e)
         {
-            SQLiteDBClass.PutSettingBool(DbEDSM, checkBoxEDSM.Checked);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbEDSM, checkBoxEDSM.Checked);
         }
 
         private void buttonBodyClasses_CheckedChanged(object sender, EventArgs e)
         {
-            SQLiteConnectionUser.PutSettingBool(DbShowClasses, checkBoxBodyClasses.Checked);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbShowClasses, checkBoxBodyClasses.Checked);
             HistoryChanged(current_historylist);
         }
 
         private void buttonJumponium_CheckedChanged(object sender, EventArgs e)
         {
-            SQLiteConnectionUser.PutSettingBool(DbShowJumponium, checkBoxJumponium.Checked);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbShowJumponium, checkBoxJumponium.Checked);
             HistoryChanged(current_historylist);
         }
 
@@ -895,8 +956,8 @@ namespace EDDiscovery.UserControls
                             EventDetailedInfo,
                             he.isTravelling ? he.TravelledDistance.ToString("0.0") : "",
                             he.isTravelling ? he.TravelledSeconds.ToString() : "",
-                            he.isTravelling ? he.Travelledjumps.ToStringInvariant() : "",
-                            he.isTravelling ? he.TravelledMissingjump.ToStringInvariant() : "",
+                            he.isTravelling ? he.Travelledjumps.ToString() : "",
+                            he.isTravelling ? he.TravelledMissingjump.ToString() : "",
                             };
                     };
 
@@ -905,14 +966,7 @@ namespace EDDiscovery.UserControls
                         return (c < colh.Length && frm.IncludeHeader) ? colh[c] : null;
                     };
 
-                    if (grd.WriteCSV(frm.Path))
-                    {
-                        if (frm.AutoOpen)
-                            System.Diagnostics.Process.Start(frm.Path);
-                    }
-                    else
-                        ExtendedControls.MessageBoxTheme.Show(FindForm(), "Failed to write to " + frm.Path, "Export Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-
+                    grd.WriteGrid(frm.Path, frm.AutoOpen, FindForm());
                 }
             }
         }

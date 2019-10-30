@@ -110,13 +110,13 @@ namespace EDDiscovery.UserControls
             cfs.AddAllNone();
             cfs.AddJournalExtraOptions();
             cfs.AddJournalEntries();
-            cfs.Closing += EventFilterChanged;
+            cfs.SaveSettings += EventFilterChanged;
 
-            checkBoxCursorToTop.Checked = SQLiteConnectionUser.GetSettingBool(DbAutoTop, true);
+            checkBoxCursorToTop.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbAutoTop, true);
 
             dataGridViewTravel.MakeDoubleBuffered();
 
-            string filter = SQLiteDBClass.GetSettingString(DbFieldFilter, "");
+            string filter = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbFieldFilter, "");
             if (filter.Length > 0)
                 fieldfilter.FromJSON(filter);        // load filter
 #if !DEBUG
@@ -136,7 +136,7 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNewEntry += AddNewEntry;
             discoveryform.OnNoteChanged += OnNoteChanged;
 
-            contextMenuStripOutlines.SetToolStripState(SQLiteConnectionUser.GetSettingString(DbOutlines, ""));
+            contextMenuStripOutlines.SetToolStripState(EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbOutlines, ""));
             this.rollUpOffToolStripMenuItem.Click += new System.EventHandler(this.rolluplimitToolStripMenuItem_Click);
             this.rollUpAfterFirstToolStripMenuItem.Click += new System.EventHandler(this.rolluplimitToolStripMenuItem_Click);
             this.rollUpAfter5ToolStripMenuItem.Click += new System.EventHandler(this.rolluplimitToolStripMenuItem_Click);
@@ -171,7 +171,7 @@ namespace EDDiscovery.UserControls
             DGVSaveColumnLayout(dataGridViewTravel, DbColumnSave);
             discoveryform.OnHistoryChange -= HistoryChanged;
             discoveryform.OnNewEntry -= AddNewEntry;
-            SQLiteConnectionUser.PutSettingBool(DbAutoTop, checkBoxCursorToTop.Checked);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbAutoTop, checkBoxCursorToTop.Checked);
             searchtimer.Dispose();
         }
 
@@ -214,7 +214,7 @@ namespace EDDiscovery.UserControls
             List<HistoryEntry> result = filter.Filter(hl);
             fdropdown = hl.Count() - result.Count();
 
-            result = HistoryList.FilterByJournalEvent(result, SQLiteDBClass.GetSettingString(DbFilterSave, "All"), out ftotalevents);
+            result = HistoryList.FilterByJournalEvent(result, EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbFilterSave, "All"), out ftotalevents);
 
             result = FilterHelpers.FilterHistory(result, fieldfilter, discoveryform.Globals, out ftotalfilters);
 
@@ -373,7 +373,7 @@ namespace EDDiscovery.UserControls
                 return;
             }
 
-            bool add = he.IsJournalEventInEventFilter(SQLiteDBClass.GetSettingString(DbFilterSave, "All"));
+            bool add = he.IsJournalEventInEventFilter(EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbFilterSave, "All"));
 
             if (!add)                   // filtered out, update filter total and display
             {
@@ -523,7 +523,7 @@ namespace EDDiscovery.UserControls
 
         private void comboBoxHistoryWindow_SelectedIndexChanged(object sender, EventArgs e)
         {
-            SQLiteDBClass.PutSettingString(DbHistorySave, comboBoxHistoryWindow.Text);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbHistorySave, comboBoxHistoryWindow.Text);
 
             if (current_historylist != null)
             {
@@ -752,13 +752,20 @@ namespace EDDiscovery.UserControls
             {
                 leftclicksystem.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
 
-                string travelinfo = leftclicksystem.TravelInfo();
-                if (travelinfo != null)
-                    EventDetailedInfo = travelinfo + Environment.NewLine + EventDetailedInfo;
+                if (leftclicksystem.journalEntry is EliteDangerousCore.JournalEvents.JournalLocOrJump)
+                {
+                    string travelinfo = leftclicksystem.TravelInfo();
+                    if (travelinfo != null)
+                        EventDetailedInfo = travelinfo + Environment.NewLine + EventDetailedInfo;
+                }
 
                 string infodetailed = EventDescription.AppendPrePad(EventDetailedInfo,Environment.NewLine);
 
-                if (infodetailed.Lines() >= 15) // too long for inline expansion
+                int ch = dataGridViewTravel.Rows[leftclickrow].Height;
+                bool notexpanded = (ch <= defaultRowHeight);
+                int linesfound = infodetailed.Lines("\n");
+
+                if ( notexpanded && linesfound*ch > dataGridViewTravel.Height * 3 / 4 ) // unreasonable amount of space to show it.
                 {
                     ExtendedControls.InfoForm info = new ExtendedControls.InfoForm();
                     info.Info((EDDiscoveryForm.EDDConfig.DisplayUTC ? leftclicksystem.EventTimeUTC : leftclicksystem.EventTimeLocal) + ": " + leftclicksystem.EventSummary,
@@ -768,14 +775,12 @@ namespace EDDiscovery.UserControls
                 }
                 else
                 {
-                    int ch = dataGridViewTravel.Rows[leftclickrow].Height;
-                    bool toexpand = (ch <= defaultRowHeight);
 
-                    string infotext = (toexpand) ? infodetailed : EventDescription;
+                    string infotext = (notexpanded) ? infodetailed : EventDescription;
 
                     int h = defaultRowHeight;
 
-                    if (toexpand)
+                    if (notexpanded)
                     {
                         using (Graphics g = Parent.CreateGraphics())
                         {
@@ -790,12 +795,12 @@ namespace EDDiscovery.UserControls
                         }
                     }
 
-                    toexpand = (h > defaultRowHeight);      // now we have our h, is it bigger? If so, we need to go into wrap mode
+                    notexpanded = (h > defaultRowHeight);      // now we have our h, is it bigger? If so, we need to go into wrap mode
 
                     dataGridViewTravel.Rows[leftclickrow].Height = h;
                     dataGridViewTravel.Rows[leftclickrow].Cells[TravelHistoryColumns.Information].Value = infotext;
 
-                    DataGridViewTriState ti = (toexpand) ? DataGridViewTriState.True : DataGridViewTriState.False;
+                    DataGridViewTriState ti = (notexpanded) ? DataGridViewTriState.True : DataGridViewTriState.False;
 
                     dataGridViewTravel.Rows[leftclickrow].Cells[TravelHistoryColumns.Information].Style.WrapMode = ti;
                     dataGridViewTravel.Rows[leftclickrow].Cells[TravelHistoryColumns.Description].Style.WrapMode = ti;
@@ -830,7 +835,7 @@ namespace EDDiscovery.UserControls
 
         private void toolStripOutliningToggle(object sender, EventArgs e)
         {
-            SQLiteConnectionUser.PutSettingString(DbOutlines, contextMenuStripOutlines.GetToolStripState());
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbOutlines, contextMenuStripOutlines.GetToolStripState());
             extCheckBoxOutlines.Checked = outliningOnOffToolStripMenuItem.Checked;
             if (outliningOnOffToolStripMenuItem.Checked || sender == outliningOnOffToolStripMenuItem)
                 HistoryChanged(current_historylist, true);
@@ -842,7 +847,7 @@ namespace EDDiscovery.UserControls
             rollUpOffToolStripMenuItem.Checked = tmi == rollUpOffToolStripMenuItem;         // makes them work as radio buttons
             rollUpAfterFirstToolStripMenuItem.Checked = tmi == rollUpAfterFirstToolStripMenuItem;
             rollUpAfter5ToolStripMenuItem.Checked = tmi == rollUpAfter5ToolStripMenuItem;
-            SQLiteConnectionUser.PutSettingString(DbOutlines, contextMenuStripOutlines.GetToolStripState());
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbOutlines, contextMenuStripOutlines.GetToolStripState());
             if (outliningOnOffToolStripMenuItem.Checked )
                 HistoryChanged(current_historylist, true);
         }
@@ -887,7 +892,7 @@ namespace EDDiscovery.UserControls
             selectCorrectSystemToolStripMenuItem.Enabled = (rightclicksystem != null);
             toolStripMenuItemStartStop.Enabled = (rightclicksystem != null);
             removeJournalEntryToolStripMenuItem.Enabled = (rightclicksystem != null);
-            sendUnsyncedScanToEDDNToolStripMenuItem.Enabled = (rightclicksystem != null && rightclicksystem.EntryType == JournalTypeEnum.Scan && !rightclicksystem.EDDNSync);
+            sendUnsyncedScanToEDDNToolStripMenuItem.Enabled = (rightclicksystem != null && EDDNClass.IsDelayableEDDNMessage(rightclicksystem.EntryType, rightclicksystem.EventTimeUTC) && !rightclicksystem.EDDNSync);
             runActionsOnThisEntryToolStripMenuItem.Enabled = (rightclicksystem != null);
             setNoteToolStripMenuItem.Enabled = (rightclicksystem != null);
             writeEventInfoToLogDebugToolStripMenuItem.Enabled = (rightclicksystem != null);
@@ -1121,7 +1126,7 @@ namespace EDDiscovery.UserControls
 
         private void sendUnsyncedScanToEDDNToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (rightclicksystem.EntryType == JournalTypeEnum.Scan && !rightclicksystem.EDDNSync)
+            if (EDDNClass.IsDelayableEDDNMessage(rightclicksystem.EntryType, rightclicksystem.EventTimeUTC) && !rightclicksystem.EDDNSync)
             {
                 EDDNSync.SendEDDNEvent(discoveryform.LogLine, rightclicksystem);
             }
@@ -1253,7 +1258,7 @@ namespace EDDiscovery.UserControls
             if (res != null)
             {
                 fieldfilter = res;
-                SQLiteDBClass.PutSettingString(DbFieldFilter, fieldfilter.GetJSON());
+                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbFieldFilter, fieldfilter.GetJSON());
                 HistoryChanged(current_historylist);
             }
         }
@@ -1431,8 +1436,8 @@ namespace EDDiscovery.UserControls
                             dataGridViewTravel.Rows[r].Cells[4].Value,
                             he.isTravelling ? he.TravelledDistance.ToString("0.0") : "",
                             he.isTravelling ? he.TravelledSeconds.ToString() : "",
-                            he.isTravelling ? he.Travelledjumps.ToStringInvariant() : "",
-                            he.isTravelling ? he.TravelledMissingjump.ToStringInvariant() : "",
+                            he.isTravelling ? he.Travelledjumps.ToString() : "",
+                            he.isTravelling ? he.TravelledMissingjump.ToString() : "",
                             he.System.X,
                             he.System.Y,
                             he.System.Z,
@@ -1469,13 +1474,7 @@ namespace EDDiscovery.UserControls
                     return (c < colh.Length && frm.IncludeHeader) ? colh[c] : null;
                 };
 
-                if (grd.WriteCSV(frm.Path))
-                {
-                    if (frm.AutoOpen)
-                        System.Diagnostics.Process.Start(frm.Path);
-                }
-                else
-                    ExtendedControls.MessageBoxTheme.Show(FindForm(), "Failed to write to " + frm.Path, "Export Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                grd.WriteGrid(frm.Path, frm.AutoOpen, FindForm());
             }
 
         }

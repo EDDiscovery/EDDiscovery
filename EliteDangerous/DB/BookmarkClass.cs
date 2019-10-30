@@ -222,10 +222,7 @@ namespace EliteDangerousCore.DB
 
         internal bool Add()
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())      // open connection..
-            {
-                return Add(cn);
-            }
+            return UserDatabase.Instance.ExecuteWithDatabase<bool>(cn => { return Add(cn.Connection); });
         }
 
         private bool Add(SQLiteConnectionUser cn)
@@ -254,10 +251,7 @@ namespace EliteDangerousCore.DB
 
         internal bool Update()
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
-            {
-                return Update(cn);
-            }
+            return UserDatabase.Instance.ExecuteWithDatabase<bool>(cn => { return Update(cn.Connection); });
         }
 
         private bool Update(SQLiteConnectionUser cn)
@@ -282,10 +276,7 @@ namespace EliteDangerousCore.DB
 
         internal bool Delete()
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
-            {
-                return Delete(cn);
-            }
+            return UserDatabase.Instance.ExecuteWithDatabase<bool>(cn => { return Delete(cn.Connection); });
         }
 
         private bool Delete(SQLiteConnectionUser cn)
@@ -374,9 +365,9 @@ namespace EliteDangerousCore.DB
             {
                 List<BookmarkClass> bookmarks = new List<BookmarkClass>();
 
-                using (SQLiteConnectionUser cn = new SQLiteConnectionUser(mode: SQLLiteExtensions.SQLExtConnection.AccessMode.Reader))
+                UserDatabase.Instance.ExecuteWithDatabase(cn =>
                 {
-                    using (DbCommand cmd = cn.CreateCommand("select * from Bookmarks"))
+                    using (DbCommand cmd = cn.Connection.CreateCommand("select * from Bookmarks"))
                     {
                         using (DbDataReader rdr = cmd.ExecuteReader())
                         {
@@ -386,7 +377,8 @@ namespace EliteDangerousCore.DB
                             }
                         }
                     }
-                }
+                });
+
 
                 if (bookmarks.Count == 0)
                 {

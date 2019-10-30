@@ -135,21 +135,21 @@ namespace EliteDangerousCore.JournalEvents
         public MaterialListClass Materials { get; set; }             // FDNAMES
         public CommodityListClass Commodities { get; set; }
 
-        public void UpdateMaterials(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        public void UpdateMaterials(MaterialCommoditiesList mc)
         {
             if (Materials != null)
             {
                 foreach (MaterialItem m in Materials.Materials)
-                    mc.Set(m.Category, m.Name, m.Count, 0, conn);
+                    mc.Set(m.Category, m.Name, m.Count, 0);
             }
         }
 
-        public void UpdateCommodities(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        public void UpdateCommodities(MaterialCommoditiesList mc)
         { 
             if (Commodities != null)
             {
                 foreach (CommodityItem m in Commodities.Commodities)
-                    mc.Set(MaterialCommodityData.CommodityCategory, m.Name, m.Count, m.BuyPrice, conn);
+                    mc.Set(MaterialCommodityData.CommodityCategory, m.Name, m.Count, m.BuyPrice);
             }
         }
 

@@ -64,10 +64,10 @@ namespace EDDiscovery.UserControls
             dataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             dataGridView.DefaultCellStyle.Alignment = DataGridViewContentAlignment.TopLeft;
 
-            dateTimePickerStartDate.Value = SQLiteConnectionUser.GetSettingDate(DbStartDate, new DateTime(2014, 12, 14));
-            dateTimePickerStartDate.Checked = SQLiteConnectionUser.GetSettingBool(DbStartDateOn, false);
-            dateTimePickerEndDate.Value = SQLiteConnectionUser.GetSettingDate(DbEndDate, new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day));
-            dateTimePickerEndDate.Checked = SQLiteConnectionUser.GetSettingBool(DbEndDateOn, false);
+            dateTimePickerStartDate.Value = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDate(DbStartDate, new DateTime(2014, 12, 14));
+            dateTimePickerStartDate.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbStartDateOn, false);
+            dateTimePickerEndDate.Value = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDate(DbEndDate, new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day));
+            dateTimePickerEndDate.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbEndDateOn, false);
             dateTimePickerStartDate.ValueChanged += (s, e) => { if (!updateprogramatically) Display(); };
             dateTimePickerEndDate.ValueChanged += (s, e) => { if (!updateprogramatically) Display(); };
 
@@ -84,10 +84,10 @@ namespace EDDiscovery.UserControls
         {
             DGVSaveColumnLayout(dataGridView, DbColumnSave);
 
-            SQLiteConnectionUser.PutSettingDate(DbStartDate, dateTimePickerStartDate.Value);
-            SQLiteConnectionUser.PutSettingDate(DbEndDate, dateTimePickerEndDate.Value);
-            SQLiteConnectionUser.PutSettingBool(DbStartDateOn, dateTimePickerStartDate.Checked);
-            SQLiteConnectionUser.PutSettingBool(DbEndDateOn, dateTimePickerEndDate.Checked);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDate(DbStartDate, dateTimePickerStartDate.Value);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDate(DbEndDate, dateTimePickerEndDate.Value);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbStartDateOn, dateTimePickerStartDate.Checked);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbEndDateOn, dateTimePickerEndDate.Checked);
 
             searchtimer.Dispose();
             GlobalCaptainsLogList.Instance.OnLogEntryChanged -= LogChanged;
@@ -294,9 +294,9 @@ namespace EDDiscovery.UserControls
             Dickeys.Sort();
             List<Tuple<string,string,Image>> options = (from x in Dickeys select new Tuple<string,string,Image>(x.ToString(),x.ToString(),EDDConfig.Instance.CaptainsLogTagImage[x])).ToList();
 
-            ExtendedControls.CheckedIconListBoxSelectionForm cfs = new ExtendedControls.CheckedIconListBoxSelectionForm();
+            ExtendedControls.CheckedIconListBoxFormGroup cfs = new ExtendedControls.CheckedIconListBoxFormGroup();
             cfs.AllOrNoneBack = false;      // we want the whole list, makes it easier.
-            cfs.Closing += TagsChanged;
+            cfs.SaveSettings += TagsChanged;
             cfs.AddAllNone();
             cfs.AddStandardOption(options);
 

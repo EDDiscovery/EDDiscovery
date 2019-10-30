@@ -13,14 +13,11 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+
 using BaseUtils;
-using EliteDangerousCore.DB;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EDDiscovery.Actions
 {
@@ -127,6 +124,17 @@ namespace EDDiscovery.Actions
                                         return ", " + r.Trim();
                                     });
 
+            paras[0].Value = paras[0].Value.ReplaceIfStartsWith(", ", "");
+            paras[0].Value = paras[0].Value.Replace("ABC, ", "A B C, ");
+            paras[0].Value = paras[0].Value.Replace("ABCD, ", "A B C D, ");
+            paras[0].Value = paras[0].Value.Replace("ABCE, ", "A B C D E, ");
+            paras[0].Value = paras[0].Value.Replace("AB, ", "A B, ");
+            paras[0].Value = paras[0].Value.Replace("BC, ", "B C, ");
+            paras[0].Value = paras[0].Value.Replace("CD, ", "C D, ");
+            paras[0].Value = paras[0].Value.Replace("DE, ", "D E, ");
+            paras[0].Value = paras[0].Value.Replace("EF, ", "E F, ");
+            paras[0].Value = paras[0].Value.Replace("FG, ", "F G, ");
+
             paras[0].Value = paras[0].Value.Replace("  ", " ");
             paras[0].Value = paras[0].Value.Replace("Belt Cluster", ", Belt Cluster");
 
@@ -174,7 +182,7 @@ namespace EDDiscovery.Actions
         protected override bool VerifyFileAction(string action, string file)
         {
             string folder = Path.GetDirectoryName(file);
-            string actionfolderperms = SQLiteConnectionUser.GetSettingString("ActionFolderPerms", "");
+            string actionfolderperms = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("ActionFolderPerms", "");
 
             if (!actionfolderperms.Contains(folder + ";"))
             {
@@ -188,7 +196,7 @@ namespace EDDiscovery.Actions
 
                 if (ok)
                 {
-                    SQLiteConnectionUser.PutSettingString("ActionFolderPerms", actionfolderperms + folder + ";");
+                    EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("ActionFolderPerms", actionfolderperms + folder + ";");
                     return true;
                 }
                 else
@@ -200,7 +208,7 @@ namespace EDDiscovery.Actions
 
         protected override bool VerifyProcessAllowed(string proc, string cmdline)
         {
-            string actionprocessperms = SQLiteConnectionUser.GetSettingString("ActionProcessPerms", "");
+            string actionprocessperms = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("ActionProcessPerms", "");
 
             if (!actionprocessperms.Contains("!" + proc + ";"))
             {
@@ -213,7 +221,7 @@ namespace EDDiscovery.Actions
 
                 if (ok)
                 {
-                    SQLiteConnectionUser.PutSettingString("ActionProcessPerms", actionprocessperms + "!" + proc + ";");
+                    EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("ActionProcessPerms", actionprocessperms + "!" + proc + ";");
                     return true;
                 }
                 else

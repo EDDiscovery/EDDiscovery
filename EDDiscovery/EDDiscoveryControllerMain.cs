@@ -114,12 +114,6 @@ namespace EDDiscovery
             OnHistoryChange?.Invoke(history);
         }
 
-        public void RecalculateHistoryDBs()         // call when you need to recalc the history dbs - not the whole history. Use RefreshAsync for that
-        {
-            history.ProcessUserHistoryListEntries(h => h.EntryOrder);
-            OnHistoryChange?.Invoke(history);
-        }
-
         #endregion
 
         #region Initialisation
@@ -140,6 +134,7 @@ namespace EDDiscovery
 
         public static void Initialize(Action<string> msg)    // called from EDDApplicationContext to initialize config and dbs
         {
+            Thread.CurrentThread.Name = "EDD Main Thread";
             msg.Invoke("Checking Config");
 
             string logpath = EDDOptions.Instance.LogAppDirectory();
@@ -165,17 +160,11 @@ namespace EDDiscovery
             msg.Invoke("Checking Databases");
 
             Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Initializing database");
-            try
-            {
-                SQLiteConnectionUser.Initialize();
-            }
-            catch (SQLiteConnectionUser.UserDBUpgradeException ex)
-            {
-                ExtendedControls.MessageBoxTheme.Show(ex.Message + Environment.NewLine + ex.StackTrace);
-                Environment.Exit(1);
-            }
+            UserDatabase.Instance.Start("UserDB");
+            SystemsDatabase.Instance.Start("SystemDB");
+            UserDatabase.Instance.Initialize();
+            SystemsDatabase.Instance.Initialize();
 
-            SQLiteConnectionSystem.Initialize();
             Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Database initialization complete");
 
             HttpCom.LogPath = logpath;
@@ -223,7 +212,7 @@ namespace EDDiscovery
             backgroundWorker = new Thread(BackgroundWorkerThread);
             backgroundWorker.IsBackground = true;
             backgroundWorker.Name = "Background Worker Thread";
-            backgroundWorker.Start();                                   // TBD later, get rid of readyforInitialLoad, and start this thread at PostInit_Shown
+            backgroundWorker.Start();                                   
         }
 
         public void Shutdown()      // called to request a shutdown.. background thread co-ords the shutdown.
@@ -271,13 +260,13 @@ namespace EDDiscovery
             {
                 // New Galmap load - it was not doing a refresh if EDSM sync kept on happening. Now has its own timer
 
-                DateTime galmaptime = SQLiteConnectionSystem.GetSettingDate("EDSMGalMapLast", DateTime.MinValue); // Latest time from RW file.
+                DateTime galmaptime = SystemsDatabase.Instance.GetEDSMGalMapLast(); // Latest time from RW file.
 
                 if (DateTime.Now.Subtract(galmaptime).TotalDays > 14 || !galacticMapping.GalMapFilePresent())  // Over 14 days do a sync from EDSM for galmap
                 {
                     LogLine("Get galactic mapping from EDSM.".T(EDTx.EDDiscoveryController_EDSM));
                     if (galacticMapping.DownloadFromEDSM())
-                        SQLiteConnectionSystem.PutSettingDate("EDSMGalMapLast", DateTime.UtcNow);
+                        SystemsDatabase.Instance.SetEDSMGalMapLast(DateTime.UtcNow);
                 }
 
                 Debug.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Check systems complete");
@@ -320,10 +309,11 @@ namespace EDDiscovery
 
             try
             {
-                if (!EDDOptions.Instance.NoSystemsLoad && EDDConfig.Instance.EDSMEDDBDownload)      // if no system off, and EDSM download on
+                if (!EDDOptions.Instance.NoSystemsLoad)
                 {
                     DoPerformSync();        // this is done after the initial history load..
                 }
+
 
                 while (!PendingClose)
                 {
@@ -347,12 +337,15 @@ namespace EDDiscovery
 
             backgroundRefreshWorker.Join();     // this should terminate due to closeRequested..
 
+            System.Diagnostics.Debug.WriteLine("BW Refresh joined");
+
             // Now we have been ordered to close down, so go thru the process
 
             closeRequested.WaitOne();
 
             InvokeAsyncOnUiThread(() =>
             {
+                System.Diagnostics.Debug.WriteLine("Final close");
                 OnFinalClose?.Invoke();
             });
         }

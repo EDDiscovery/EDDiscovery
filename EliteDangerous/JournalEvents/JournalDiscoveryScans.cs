@@ -188,13 +188,18 @@ namespace EliteDangerousCore.JournalEvents
         public string BodyName { get; set; }
         public int ProbesUsed { get; set; }
         public int EfficiencyTarget { get; set; }
-        public string BodyDesignation { get; set; }
         public long? SystemAddress { get; set; }    // 3.5
+
+        public string BodyDesignation { get; set; }     // set by scan system to best body designation for this entry
+
+        public override string SummaryName(ISystem sys)
+        {
+            return base.SummaryName(sys) + " " + "Of ".T(EDTx.JournalEntry_of) + BodyName.ReplaceIfStartsWith(sys.Name);
+        }
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = BaseUtils.FieldBuilder.Build("", BodyName,
-                                                "Probes:".T(EDTx.JournalSAAScanComplete_Probes), ProbesUsed,
+            info = BaseUtils.FieldBuilder.Build("Probes:".T(EDTx.JournalSAAScanComplete_Probes), ProbesUsed,
                                                 "Efficiency Target:".T(EDTx.JournalSAAScanComplete_EfficiencyTarget), EfficiencyTarget);
             detailed = "";
         }
@@ -216,6 +221,8 @@ namespace EliteDangerousCore.JournalEvents
         public int BodyID { get; set; }
         public List<SAASignal> Signals { get; set; }
 
+        public string BodyDesignation { get; set; }     // set by scan system to best body designation for this entry
+
         public class SAASignal
         {
             public string Type { get; set; }
@@ -223,17 +230,30 @@ namespace EliteDangerousCore.JournalEvents
             public int Count { get; set; }
         }
 
-        public override void FillInformation(out string info, out string detailed)
+        public override string SummaryName(ISystem sys)
         {
-            info = BaseUtils.FieldBuilder.Build("", BodyName);
-            detailed = "";
-            if ( Signals!= null)
+            return base.SummaryName(sys) + " " + "Of ".T(EDTx.JournalEntry_of) + BodyName.ReplaceIfStartsWith(sys.Name);
+        }
+
+        static public string SignalList(List<SAASignal> list, int indent = 0, string separ = ", " , bool logtype = false)
+        {
+            string inds = new string(' ', indent);
+
+            string info = "";
+            if (list != null)
             {
-                foreach( var x in Signals )
+                foreach (var x in list)
                 {
-                    info = info.AppendPrePad(x.Type_Localised.Alt(x.Type) + ":"  + x.Count.ToString("N0"), ", ");
+                    info = info.AppendPrePad(inds + (logtype ? x.Type : x.Type_Localised.Alt(x.Type)) + ":" + x.Count.ToString("N0"), separ);
                 }
             }
+            return info;
+        }
+
+        public override void FillInformation(out string info, out string detailed)
+        {
+            info = SignalList(Signals);
+            detailed = "";
         }
     }
 
@@ -253,7 +273,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = BaseUtils.FieldBuilder.Build("", SystemName) + " ("  + Count.ToString() + ")";
+            info = Count.ToString() + " @ " + SystemName;
             detailed = "";
         }
     }

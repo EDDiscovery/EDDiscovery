@@ -122,7 +122,7 @@ namespace EDDiscovery.UserControls
             comboBoxShips.Items.AddRange(fightersrvs.Select(x => x.ShipNameIdentType).ToList());
 
             if (cursel == "")
-                cursel = SQLiteDBClass.GetSettingString(DbShipSave, "");
+                cursel = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbShipSave, "");
 
             if (cursel == "" || !comboBoxShips.Items.Contains(cursel))
                 cursel = travelhistorytext;
@@ -225,10 +225,10 @@ namespace EDDiscovery.UserControls
             if (fsdspec != null)
             {
                 EliteDangerousCalculations.FSDSpec.JumpInfo ji = fsdspec.GetJumpInfo(0, modulemass + hullmass, si.FuelCapacity, si.FuelCapacity / 2);
-                AddInfoLine("FSD Avg Jump".T(EDTx.UserControlModules_FSDAvgJump), ji.avgsinglejumpnocargo.ToStringInvariant("N2") + "ly", "Half tank, no cargo".T(EDTx.UserControlModules_HT), fsdspec.ToString());
+                AddInfoLine("FSD Avg Jump".T(EDTx.UserControlModules_FSDAvgJump), ji.avgsinglejumpnocargo.ToString("N2") + "ly", "Half tank, no cargo".T(EDTx.UserControlModules_HT), fsdspec.ToString());
                 DataGridViewRow rw = dataGridViewModules.Rows[dataGridViewModules.Rows.Count - 1];
-                AddInfoLine("FSD Max Range".T(EDTx.UserControlModules_FSDMaxRange), ji.maxjumprange.ToStringInvariant("N2") + "ly", "Full Tank, no cargo".T(EDTx.UserControlModules_FT), fsdspec.ToString());
-                AddInfoLine("FSD Maximum Fuel per jump".T(EDTx.UserControlModules_FSDMaximumFuelperjump), fsdspec.MaxFuelPerJump.ToStringInvariant()+"t","", fsdspec.ToString());
+                AddInfoLine("FSD Max Range".T(EDTx.UserControlModules_FSDMaxRange), ji.maxjumprange.ToString("N2") + "ly", "Full Tank, no cargo".T(EDTx.UserControlModules_FT), fsdspec.ToString());
+                AddInfoLine("FSD Maximum Fuel per jump".T(EDTx.UserControlModules_FSDMaximumFuelperjump), fsdspec.MaxFuelPerJump.ToString()+"t","", fsdspec.ToString());
             }
 
             if (si.HullValue > 0)
@@ -240,29 +240,29 @@ namespace EDDiscovery.UserControls
             if (si.Rebuy > 0)
                 AddValueLine("Rebuy Cost".T(EDTx.UserControlModules_RebuyCost), si.Rebuy);
 
-            AddMassLine("Mass Hull".T(EDTx.UserControlModules_MassHull), hullmass.ToStringInvariant("N1") + "t");
-            AddMassLine("Mass Unladen".T(EDTx.UserControlModules_MassUnladen), (hullmass + modulemass).ToStringInvariant("N1") + "t");
+            AddMassLine("Mass Hull".T(EDTx.UserControlModules_MassHull), hullmass.ToString("N1") + "t");
+            AddMassLine("Mass Unladen".T(EDTx.UserControlModules_MassUnladen), (hullmass + modulemass).ToString("N1") + "t");
             if (si.UnladenMass > 0)
-                AddMassLine("Mass FD Unladen".T(EDTx.UserControlModules_MassFDUnladen), si.UnladenMass.ToStringInvariant("N1") + "t");
-            AddMassLine("Mass Modules".T(EDTx.UserControlModules_MassModules), modulemass.ToStringInvariant("N1") + "t");
+                AddMassLine("Mass FD Unladen".T(EDTx.UserControlModules_MassFDUnladen), si.UnladenMass.ToString("N1") + "t");
+            AddMassLine("Mass Modules".T(EDTx.UserControlModules_MassModules), modulemass.ToString("N1") + "t");
 
             AddInfoLine("Manufacturer".T(EDTx.UserControlModules_Manufacturer), si.Manufacturer);
 
             if ( si.FuelCapacity > 0 )
-                AddInfoLine("Fuel Capacity".T(EDTx.UserControlModules_FuelCapacity), si.FuelCapacity.ToStringInvariant("N1") + "t");
+                AddInfoLine("Fuel Capacity".T(EDTx.UserControlModules_FuelCapacity), si.FuelCapacity.ToString("N1") + "t");
             if ( si.FuelLevel > 0 )
-                AddInfoLine("Fuel Level".T(EDTx.UserControlModules_FuelLevel), si.FuelLevel.ToStringInvariant("N1") + "t");
+                AddInfoLine("Fuel Level".T(EDTx.UserControlModules_FuelLevel), si.FuelLevel.ToString("N1") + "t");
             if (si.ReserveFuelCapacity > 0)
-                AddInfoLine("Fuel Reserve Capacity".T(EDTx.UserControlModules_FuelReserveCapacity), si.ReserveFuelCapacity.ToStringInvariant("N2") + "t");
+                AddInfoLine("Fuel Reserve Capacity".T(EDTx.UserControlModules_FuelReserveCapacity), si.ReserveFuelCapacity.ToString("N2") + "t");
             if ( si.HullHealthAtLoadout > 0 )
-                AddInfoLine("Hull Health (Loadout)".T(EDTx.UserControlModules_HullHealth), si.HullHealthAtLoadout.ToStringInvariant("N1") + "%");
+                AddInfoLine("Hull Health (Loadout)".T(EDTx.UserControlModules_HullHealth), si.HullHealthAtLoadout.ToString("N1") + "%");
 
             double fuelwarn = si.FuelWarningPercent;
-            AddInfoLine("Fuel Warning %".T(EDTx.UserControlModules_FuelWarning), fuelwarn > 0 ? fuelwarn.ToStringInvariant("N1") + "%" : "Off".T(EDTx.Off));
+            AddInfoLine("Fuel Warning %".T(EDTx.UserControlModules_FuelWarning), fuelwarn > 0 ? fuelwarn.ToString("N1") + "%" : "Off".T(EDTx.Off));
 
             AddInfoLine("Pad Size".T(EDTx.UserControlModules_PadSize), si.PadSize);
-            AddInfoLine("Main Thruster Speed".T(EDTx.UserControlModules_MainThrusterSpeed), si.Speed.ToStringInvariant("0.#"));
-            AddInfoLine("Main Thruster Boost".T(EDTx.UserControlModules_MainThrusterBoost), si.Boost.ToStringInvariant("0.#"));
+            AddInfoLine("Main Thruster Speed".T(EDTx.UserControlModules_MainThrusterSpeed), si.Speed.ToString("0.#"));
+            AddInfoLine("Main Thruster Boost".T(EDTx.UserControlModules_MainThrusterBoost), si.Boost.ToString("0.#"));
 
             if (si.InTransit)
                 AddInfoLine("In Transit to ".T(EDTx.UserControlModules_InTransitto), (si.StoredAtSystem??"Unknown".T(EDTx.Unknown)) + ":" + (si.StoredAtStation ?? "Unknown".T(EDTx.Unknown)));
@@ -271,7 +271,7 @@ namespace EDDiscovery.UserControls
 
             int cc = si.CargoCapacity();
             if ( cc > 0 )
-                AddInfoLine("Cargo Capacity".T(EDTx.UserControlModules_CargoCapacity), cc.ToStringInvariant("N0") + "t");
+                AddInfoLine("Cargo Capacity".T(EDTx.UserControlModules_CargoCapacity), cc.ToString("N0") + "t");
 
             labelVehicle.Visible = true;
             labelVehicle.Text = si.ShipFullInfo(cargo: false, fuel: false);
@@ -289,7 +289,7 @@ namespace EDDiscovery.UserControls
                     ammo += "/" + sm.AmmoClip.ToString();
             }
 
-            string value = (sm.Value.HasValue && sm.Value.Value > 0) ? sm.Value.Value.ToStringInvariant("N0") : "";
+            string value = (sm.Value.HasValue && sm.Value.Value > 0) ? sm.Value.Value.ToString("N0") : "";
 
             string typename = sm.LocalisedItem;
             if (typename.IsEmpty())
@@ -297,7 +297,7 @@ namespace EDDiscovery.UserControls
 
             object[] rowobj = { typename,
                                 sm.Item, sm.Slot, ammo,
-                                sm.Mass > 0 ? (sm.Mass.ToStringInvariant("0.#")+"t") : "",
+                                sm.Mass > 0 ? (sm.Mass.ToString("0.#")+"t") : "",
                                 sm.Engineering?.FriendlyBlueprintName ?? "",
                                 value, sm.PE() };
 
@@ -318,9 +318,9 @@ namespace EDDiscovery.UserControls
         {
             object[] rowobj = { sm.Name_Localised.Alt(sm.Name), sm.Name,
                                 sm.StarSystem.Alt("In Transit".T(EDTx.UserControlModules_InTransit)), sm.TransferTimeString ,
-                                sm.Mass > 0 ? (sm.Mass.ToStringInvariant()+"t") : "",
+                                sm.Mass > 0 ? (sm.Mass.ToString()+"t") : "",
                                 sm.EngineerModifications.Alt(""),
-                                sm.TransferCost>0 ? sm.TransferCost.ToStringInvariant("N0") : "",
+                                sm.TransferCost>0 ? sm.TransferCost.ToString("N0") : "",
                                 "" };
             dataGridViewModules.Rows.Add(rowobj);
         }
@@ -352,7 +352,7 @@ namespace EDDiscovery.UserControls
         {
             if (comboBoxShips.Enabled)
             {
-                SQLiteDBClass.PutSettingString(DbShipSave, comboBoxShips.Text);
+                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbShipSave, comboBoxShips.Text);
                 Display();
             }
         }
@@ -451,7 +451,7 @@ namespace EDDiscovery.UserControls
 
             f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "Fuel Warning:".T(EDTx.UserControlModules_FW), new Point(10, 40), new Size(140, 24), ""));
             f.Add(new ExtendedControls.ConfigurableForm.Entry("FuelWarning", typeof(ExtendedControls.NumberBoxDouble), 
-                last_si.FuelWarningPercent.ToStringInvariant(), new Point(ctrlleft, 40), new Size(width - ctrlleft - 20, 24), "Enter fuel warning level in % (0 = off, 1-100%)".T(EDTx.UserControlModules_TTF))
+                last_si.FuelWarningPercent.ToString(), new Point(ctrlleft, 40), new Size(width - ctrlleft - 20, 24), "Enter fuel warning level in % (0 = off, 1-100%)".T(EDTx.UserControlModules_TTF))
                 { numberboxdoubleminimum = 0, numberboxdoublemaximum = 100, numberboxformat = "0.##" });
 
             f.Add(new ExtendedControls.ConfigurableForm.Entry("OK", typeof(ExtendedControls.ExtButton), "OK".T(EDTx.OK), new Point(width - 100, 70), new Size(80, 24), "Press to Accept".T(EDTx.UserControlModules_PresstoAccept)));

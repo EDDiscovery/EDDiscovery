@@ -178,7 +178,7 @@ namespace EDDiscovery.UserControls
 
             cc.DataSource = el;
 
-            string last = SQLiteDBClass.GetSettingString(dbname, "");
+            string last = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(dbname, "");
             int entry = el.FindIndex(x => x.Label == last);
             //System.Diagnostics.Debug.WriteLine(dbname + "=" + last + "=" + entry);
             cc.SelectedIndex = (entry >=0) ? entry: 0;

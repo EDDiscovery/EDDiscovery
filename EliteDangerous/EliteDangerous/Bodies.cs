@@ -18,6 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using EliteDangerousCore;
+using System.Linq;
 
 namespace EliteDangerousCore
 {
@@ -464,6 +465,218 @@ namespace EliteDangerousCore
 
                 default:
                     return string.Format("Class {0} star\n", id.ToString());
+            }
+        }
+
+        private static readonly Dictionary<string, EDStar> StarNameToEnumLookup = new Dictionary<string, EDStar>(StringComparer.InvariantCultureIgnoreCase)
+        {
+            ["O (Blue-White) Star"] = EDStar.O,
+            ["B (Blue-White) Star"] = EDStar.B,
+            ["B (Blue-White super giant) Star"] = EDStar.B_BlueWhiteSuperGiant,
+            ["A (Blue-White) Star"] = EDStar.A,
+            ["A (Blue-White super giant) Star"] = EDStar.A_BlueWhiteSuperGiant,
+            ["F (White) Star"] = EDStar.F,
+            ["F (White super giant) Star"] = EDStar.F_WhiteSuperGiant,
+            ["G (White-Yellow) Star"] = EDStar.G,
+            ["G (White-Yellow super giant) Star"] = EDStar.G_WhiteSuperGiant,
+            ["K (Yellow-Orange) Star"] = EDStar.K,
+            ["K (Yellow-Orange giant) Star"] = EDStar.K_OrangeGiant,
+            ["M (Red dwarf) Star"] = EDStar.M,
+            ["M (Red giant) Star"] = EDStar.M_RedGiant,
+            ["M (Red super giant) Star"] = EDStar.M_RedSuperGiant,
+            ["L (Brown dwarf) Star"] = EDStar.L,
+            ["T (Brown dwarf) Star"] = EDStar.T,
+            ["Y (Brown dwarf) Star"] = EDStar.Y,
+            ["T Tauri Star"] = EDStar.TTS,
+            ["Herbig Ae/Be Star"] = EDStar.AeBe,
+            ["Wolf-Rayet Star"] = EDStar.W,
+            ["Wolf-Rayet N Star"] = EDStar.WN,
+            ["Wolf-Rayet NC Star"] = EDStar.WNC,
+            ["Wolf-Rayet C Star"] = EDStar.WC,
+            ["Wolf-Rayet O Star"] = EDStar.WO,
+            ["CS Star"] = EDStar.CS,
+            ["C Star"] = EDStar.C,
+            ["CN Star"] = EDStar.CN,
+            ["CJ Star"] = EDStar.CJ,
+            ["CHd Star"] = EDStar.CHd,
+            ["MS-type Star"] = EDStar.MS,
+            ["S-type Star"] = EDStar.S,
+            ["White Dwarf (D) Star"] = EDStar.D,
+            ["White Dwarf (DA) Star"] = EDStar.DA,
+            ["White Dwarf (DAB) Star"] = EDStar.DAB,
+            ["White Dwarf (DAO) Star"] = EDStar.DAO,
+            ["White Dwarf (DAZ) Star"] = EDStar.DAZ,
+            ["White Dwarf (DAV) Star"] = EDStar.DAV,
+            ["White Dwarf (DB) Star"] = EDStar.DB,
+            ["White Dwarf (DBZ) Star"] = EDStar.DBZ,
+            ["White Dwarf (DBV) Star"] = EDStar.DBV,
+            ["White Dwarf (DO) Star"] = EDStar.DO,
+            ["White Dwarf (DOV) Star"] = EDStar.DOV,
+            ["White Dwarf (DQ) Star"] = EDStar.DQ,
+            ["White Dwarf (DC) Star"] = EDStar.DC,
+            ["White Dwarf (DCV) Star"] = EDStar.DCV,
+            ["White Dwarf (DX) Star"] = EDStar.DX,
+            ["Neutron Star"] = EDStar.N,
+            ["Black Hole"] = EDStar.H,
+            ["Supermassive Black Hole"] = EDStar.SuperMassiveBlackHole
+        };
+
+        // These should be translated to match the in-game star types
+        private static readonly Dictionary<EDStar, string> StarEnumToNameLookup = new Dictionary<EDStar, string>
+        {
+            [EDStar.O] = "O (Blue-White) Star".T(EDTx.EDStar_O),
+            [EDStar.B] = "B (Blue-White) Star".T(EDTx.EDStar_B),
+            [EDStar.B_BlueWhiteSuperGiant] = "B (Blue-White super giant) Star".T(EDTx.EDStar_BBlueWhiteSuperGiant),
+            [EDStar.A] = "A (Blue-White) Star".T(EDTx.EDStar_A),
+            [EDStar.A_BlueWhiteSuperGiant] = "A (Blue-White super giant) Star".T(EDTx.EDStar_ABlueWhiteSuperGiant),
+            [EDStar.F] = "F (White) Star".T(EDTx.EDStar_F),
+            [EDStar.F_WhiteSuperGiant] = "F (White super giant) Star".T(EDTx.EDStar_FWhiteSuperGiant),
+            [EDStar.G] = "G (White-Yellow) Star".T(EDTx.EDStar_G),
+            [EDStar.G_WhiteSuperGiant] = "G (White-Yellow super giant) Star".T(EDTx.EDStar_GWhiteSuperGiant),
+            [EDStar.K] = "K (Yellow-Orange) Star".T(EDTx.EDStar_K),
+            [EDStar.K_OrangeGiant] = "K (Yellow-Orange giant) Star".T(EDTx.EDStar_KOrangeGiant),
+            [EDStar.M] = "M (Red dwarf) Star".T(EDTx.EDStar_M),
+            [EDStar.M_RedGiant] = "M (Red giant) Star".T(EDTx.EDStar_MRedGiant),
+            [EDStar.M_RedSuperGiant] = "M (Red super giant) Star".T(EDTx.EDStar_MRedSuperGiant),
+            [EDStar.L] = "L (Brown dwarf) Star".T(EDTx.EDStar_L),
+            [EDStar.T] = "T (Brown dwarf) Star".T(EDTx.EDStar_T),
+            [EDStar.Y] = "Y (Brown dwarf) Star".T(EDTx.EDStar_Y),
+            [EDStar.TTS] = "T Tauri Star".T(EDTx.EDStar_TTS),
+            [EDStar.AeBe] = "Herbig Ae/Be Star".T(EDTx.EDStar_AeBe),
+            [EDStar.W] = "Wolf-Rayet Star".T(EDTx.EDStar_W),
+            [EDStar.WN] = "Wolf-Rayet N Star".T(EDTx.EDStar_WN),
+            [EDStar.WNC] = "Wolf-Rayet NC Star".T(EDTx.EDStar_WNC),
+            [EDStar.WC] = "Wolf-Rayet C Star".T(EDTx.EDStar_WC),
+            [EDStar.WO] = "Wolf-Rayet O Star".T(EDTx.EDStar_WO),
+            [EDStar.CS] = "CS Star".T(EDTx.EDStar_CS),
+            [EDStar.C] = "C Star".T(EDTx.EDStar_C),
+            [EDStar.CN] = "CN Star".T(EDTx.EDStar_CN),
+            [EDStar.CJ] = "CJ Star".T(EDTx.EDStar_CJ),
+            [EDStar.CHd] = "CHd Star".T(EDTx.EDStar_CHd),
+            [EDStar.MS] = "MS-type Star".T(EDTx.EDStar_MS),
+            [EDStar.S] = "S-type Star".T(EDTx.EDStar_S),
+            [EDStar.D] = "White Dwarf (D) Star".T(EDTx.EDStar_D),
+            [EDStar.DA] = "White Dwarf (DA) Star".T(EDTx.EDStar_DA),
+            [EDStar.DAB] = "White Dwarf (DAB) Star".T(EDTx.EDStar_DAB),
+            [EDStar.DAO] = "White Dwarf (DAO) Star".T(EDTx.EDStar_DAO),
+            [EDStar.DAZ] = "White Dwarf (DAZ) Star".T(EDTx.EDStar_DAZ),
+            [EDStar.DAV] = "White Dwarf (DAV) Star".T(EDTx.EDStar_DAV),
+            [EDStar.DB] = "White Dwarf (DB) Star".T(EDTx.EDStar_DB),
+            [EDStar.DBZ] = "White Dwarf (DBZ) Star".T(EDTx.EDStar_DBZ),
+            [EDStar.DBV] = "White Dwarf (DBV) Star".T(EDTx.EDStar_DBV),
+            [EDStar.DO] = "White Dwarf (DO) Star".T(EDTx.EDStar_DO),
+            [EDStar.DOV] = "White Dwarf (DOV) Star".T(EDTx.EDStar_DOV),
+            [EDStar.DQ] = "White Dwarf (DQ) Star".T(EDTx.EDStar_DQ),
+            [EDStar.DC] = "White Dwarf (DC) Star".T(EDTx.EDStar_DC),
+            [EDStar.DCV] = "White Dwarf (DCV) Star".T(EDTx.EDStar_DCV),
+            [EDStar.DX] = "White Dwarf (DX) Star".T(EDTx.EDStar_DX),
+            [EDStar.N] = "Neutron Star".T(EDTx.EDStar_N),
+            [EDStar.H] = "Black Hole".T(EDTx.EDStar_H),
+            [EDStar.SuperMassiveBlackHole] = "Supermassive Black Hole".T(EDTx.EDStar_SuperMassiveBlackHole),
+        };
+
+        public static List<EDStar> StarTypes
+        {
+            get
+            {
+                return StarEnumToNameLookup.Keys.ToList();
+            }
+        }
+
+        public static string StarTypeName(EDStar type)
+        {
+            if (StarEnumToNameLookup.TryGetValue(type, out var name))
+            {
+                return name;
+            }
+            else
+            {
+                return type.ToString().Replace("_", " ");
+            }
+        }
+
+        public static EDStar StarTypeNameToEnum(string name)
+        {
+            if (StarNameToEnumLookup.TryGetValue(name, out var type))
+            {
+                return type;
+            }
+            else
+            {
+                return StarStr2Enum(name);
+            }
+        }
+
+        // These should be translated to match the in-game planet types
+        private static readonly Dictionary<EDPlanet, string> PlanetEnumToNameLookup = new Dictionary<EDPlanet, string>
+        {
+            [EDPlanet.Metal_rich_body] = "Metal-rich body".T(EDTx.EDPlanet_Metalrichbody),
+            [EDPlanet.High_metal_content_body] = "High metal content world".T(EDTx.EDPlanet_Highmetalcontentbody),
+            [EDPlanet.Rocky_body] = "Rocky body".T(EDTx.EDPlanet_Rockybody),
+            [EDPlanet.Icy_body] = "Icy body".T(EDTx.EDPlanet_Icybody),
+            [EDPlanet.Rocky_ice_body] = "Rocky ice world".T(EDTx.EDPlanet_Rockyicebody),
+            [EDPlanet.Earthlike_body] = "Earth-like world".T(EDTx.EDPlanet_Earthlikebody),
+            [EDPlanet.Water_world] = "Water world".T(EDTx.EDPlanet_Waterworld),
+            [EDPlanet.Ammonia_world] = "Ammonia world".T(EDTx.EDPlanet_Ammoniaworld),
+            [EDPlanet.Water_giant] = "Water giant".T(EDTx.EDPlanet_Watergiant),
+            [EDPlanet.Water_giant_with_life] = "Water giant with life".T(EDTx.EDPlanet_Watergiantwithlife),
+            [EDPlanet.Gas_giant_with_water_based_life] = "Gas giant with water-based life".T(EDTx.EDPlanet_Gasgiantwithwaterbasedlife),
+            [EDPlanet.Gas_giant_with_ammonia_based_life] = "Gas giant with ammonia-based life".T(EDTx.EDPlanet_Gasgiantwithammoniabasedlife),
+            [EDPlanet.Sudarsky_class_I_gas_giant] = "Class I gas giant".T(EDTx.EDPlanet_SudarskyclassIgasgiant),
+            [EDPlanet.Sudarsky_class_II_gas_giant] = "Class II gas giant".T(EDTx.EDPlanet_SudarskyclassIIgasgiant),
+            [EDPlanet.Sudarsky_class_III_gas_giant] = "Class III gas giant".T(EDTx.EDPlanet_SudarskyclassIIIgasgiant),
+            [EDPlanet.Sudarsky_class_IV_gas_giant] = "Class IV gas giant".T(EDTx.EDPlanet_SudarskyclassIVgasgiant),
+            [EDPlanet.Sudarsky_class_V_gas_giant] = "Class V gas giant".T(EDTx.EDPlanet_SudarskyclassVgasgiant),
+            [EDPlanet.Helium_rich_gas_giant] = "Helium-rich gas giant".T(EDTx.EDPlanet_Heliumrichgasgiant),
+            [EDPlanet.Helium_gas_giant] = "Helium gas giant".T(EDTx.EDPlanet_Heliumgasgiant),
+        };
+
+        private static readonly Dictionary<string, EDPlanet> PlanetNameToEnumLookup = new Dictionary<string, EDPlanet>(StringComparer.InvariantCultureIgnoreCase)
+        {
+            ["Metal-rich body"] = EDPlanet.Metal_rich_body,
+            ["High metal content world"] = EDPlanet.High_metal_content_body,
+            ["Rocky body"] = EDPlanet.Rocky_body,
+            ["Icy body"] = EDPlanet.Icy_body,
+            ["Rocky ice world"] = EDPlanet.Rocky_ice_body,
+            ["Earth-like world"] = EDPlanet.Earthlike_body,
+            ["Water world"] = EDPlanet.Water_world,
+            ["Ammonia world"] = EDPlanet.Ammonia_world,
+            ["Water giant"] = EDPlanet.Water_giant,
+            ["Water giant with life"] = EDPlanet.Water_giant_with_life,
+            ["Gas giant with water-based life"] = EDPlanet.Gas_giant_with_water_based_life,
+            ["Gas giant with ammonia-based life"] = EDPlanet.Gas_giant_with_ammonia_based_life,
+            ["Class I gas giant"] = EDPlanet.Sudarsky_class_I_gas_giant,
+            ["Class II gas giant"] = EDPlanet.Sudarsky_class_II_gas_giant,
+            ["Class III gas giant"] = EDPlanet.Sudarsky_class_III_gas_giant,
+            ["Class IV gas giant"] = EDPlanet.Sudarsky_class_IV_gas_giant,
+            ["Class V gas giant"] = EDPlanet.Sudarsky_class_V_gas_giant,
+            ["Helium-rich gas giant"] = EDPlanet.Helium_rich_gas_giant,
+            ["Helium gas giant"] = EDPlanet.Helium_gas_giant,
+        };
+
+        public static string PlanetTypeName(EDPlanet type)
+        {
+            string name;
+            if (PlanetEnumToNameLookup.TryGetValue(type, out name))
+            {
+                return name;
+            }
+            else
+            {
+                return type.ToString().Replace("_", " ");
+            }
+        }
+
+        public static EDPlanet PlanetTypeNameToEnum(string name)
+        {
+            EDPlanet type;
+            if (PlanetNameToEnumLookup.TryGetValue(name, out type))
+            {
+                return type;
+            }
+            else
+            {
+                return PlanetStr2Enum(name);
             }
         }
     }

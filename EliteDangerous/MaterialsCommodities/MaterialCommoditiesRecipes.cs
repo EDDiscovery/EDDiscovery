@@ -64,8 +64,8 @@ namespace EliteDangerousCore
                         displong = " " + db.Name;
                     }
 
-                    string sshort = (need - got).ToStringInvariant() + dispshort;
-                    string slong = (need - got).ToStringInvariant() + " x " + displong + Environment.NewLine;
+                    string sshort = (need - got).ToString() + dispshort;
+                    string slong = (need - got).ToString() + " x " + displong + Environment.NewLine;
 
                     if (needed.Length == 0)
                     {
@@ -98,8 +98,8 @@ namespace EliteDangerousCore
                     string dispshort = (list[mi].Details.IsEncodedOrManufactured) ? " " + list[mi].Details.Name : list[mi].Details.Shortname;
                     string displong = " " + list[mi].Details.Name;
 
-                    usedstrshort.AppendPrePad(used.ToStringInvariant() + dispshort, ",");
-                    usedstrlong.AppendPrePad(used.ToStringInvariant() + " x " + displong, Environment.NewLine);
+                    usedstrshort.AppendPrePad(used.ToString() + dispshort, " ,");
+                    usedstrlong.AppendPrePad(used.ToString() + " x " + displong, Environment.NewLine);
                 }
 
                 needed.AppendPrePad("Used: " + usedstrshort.ToString(), ", ");

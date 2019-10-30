@@ -54,7 +54,7 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
-            config = (Configuration)SQLiteDBClass.GetSettingInt(DbSave + "Config", (int)config);
+            config = (Configuration)EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(DbSave + "Config", (int)config);
 
             displayfont = discoveryform.theme.GetFont;
 
@@ -98,7 +98,7 @@ namespace EDDiscovery.UserControls
             discoveryform.OnHistoryChange -= Display;
             discoveryform.OnNewEntry -= NewEntry;
             uctg.OnTravelSelectionChanged -= DisplaySelected;
-            SQLiteDBClass.PutSettingInt(DbSave + "Config", (int)config);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(DbSave + "Config", (int)config);
         }
 
         public void NewEntry(HistoryEntry he, HistoryList hl)               // called when a new entry is made..

@@ -48,7 +48,8 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
-            rollUpPanelTop.PinState = SQLiteConnectionUser.GetSettingBool(DbSave + "PinState", true);
+            rollUpPanelTop.PinState = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "PinState", true);
+            rollUpPanelTop.SetToolTip(toolTip);
 
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
@@ -77,7 +78,7 @@ namespace EDDiscovery.UserControls
         public override void Closing()
         {
             isClosing = true;
-            SQLiteConnectionUser.PutSettingBool(DbSave + "PinState", rollUpPanelTop.PinState );
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "PinState", rollUpPanelTop.PinState );
             uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
         }
 

@@ -48,7 +48,7 @@ namespace EliteDangerousCore
         public EDCommander Commander { get { return EDCommander.GetCommander(journalEntry.CommanderId); } }
         public DateTime EventTimeLocal { get { return EventTimeUTC.ToLocalTime(); } }
         public DateTime EventTimeUTC { get { return journalEntry.EventTimeUTC; } }
-        public TimeSpan AgeOfEntry() { return DateTime.Now - EventTimeUTC; }
+        public TimeSpan AgeOfEntry() { return DateTime.UtcNow - EventTimeUTC; }
 
         public string EventSummary { get { return journalEntry.SummaryName(System);} }
 
@@ -68,8 +68,8 @@ namespace EliteDangerousCore
         public bool isTravelling { get { return TravelStatus.IsTravelling; } }
         public int TravelledMissingjump { get { return TravelStatus.TravelledMissingjump; } }
         public int Travelledjumps { get { return TravelStatus.Travelledjumps; } }
-        public string TravelInfo() { return TravelStatus.ToString(StopMarker ? "Travelled" : "Travelling "); }
-        public string TravelledJumpsAndMisses { get { return TravelStatus.TravelledJumpsAndMisses; } }
+        public string TravelInfo() { return TravelStatus.ToString("TT: "); }
+        public string TravelledJumpsAndMisses { get { return Travelledjumps.ToString() + ((TravelledMissingjump > 0) ? (" (" + TravelledMissingjump.ToString() + ")") : ""); } }
 
         public bool IsLanded { get { return EntryStatus.TravelState == HistoryEntryStatus.TravelStateType.Landed; } }
         public bool IsDocked { get { return EntryStatus.TravelState == HistoryEntryStatus.TravelStateType.Docked; } }
@@ -132,7 +132,7 @@ namespace EliteDangerousCore
         {
         }
 
-        public static HistoryEntry FromJournalEntry(JournalEntry je, HistoryEntry prev, out bool journalupdate, SQLiteConnectionSystem conn = null)
+        public static HistoryEntry FromJournalEntry(JournalEntry je, HistoryEntry prev, out bool journalupdate)
         {
             ISystem isys = prev == null ? new SystemClass("Unknown") : prev.System;
             int indexno = prev == null ? 1 : prev.Indexno + 1;
@@ -180,7 +180,7 @@ namespace EliteDangerousCore
                     newsys = new SystemClass(jl.StarSystem);
                     newsys.EDSMID = je.EdsmID;
 
-                    ISystem s = SystemCache.FindSystem(newsys, conn);      // has no co-ord, did we find it?
+                    ISystem s = SystemCache.FindSystem(newsys);      // has no co-ord, did we find it?
 
                     if (s != null)                               // found a system..
                     {
@@ -237,9 +237,9 @@ namespace EliteDangerousCore
             return he;
         }
 
-        public void ProcessWithUserDb(JournalEntry je, HistoryEntry prev, HistoryList hl, SQLiteConnectionUser conn)      // called after above with a USER connection
+        public void ProcessWithUserDb(JournalEntry je, HistoryEntry prev, HistoryList hl)      // called after above with a USER connection
         {
-            MaterialCommodity = MaterialCommoditiesList.Process(je, prev?.MaterialCommodity, conn);
+            MaterialCommodity = MaterialCommoditiesList.Process(je, prev?.MaterialCommodity);
 
             snc = SystemNoteClass.GetSystemNote(Journalid, IsFSDJump, System);       // may be null
         }

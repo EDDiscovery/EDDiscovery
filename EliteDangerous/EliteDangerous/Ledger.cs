@@ -33,9 +33,9 @@ namespace EliteDangerousCore
             public double profitperunit;                             // profit per unit
             public long cash;                                      // cash total at this point
 
-            public bool IsJournalEventInEventFilter(string[] events)
+            public bool IsJournalEventInEventFilter(string[] events)        // events are the uncompressed journal names ModuleBuy etc.
             {
-                return events.Contains(jtype.ToString().SplitCapsWord());
+                return events.Contains(jtype.ToString());
             }
         }
 
@@ -80,15 +80,15 @@ namespace EliteDangerousCore
         }
 
 
-        public void Process(JournalEntry je, SQLiteConnectionUser conn)
+        public void Process(JournalEntry je)
         {
             if (je is ILedgerJournalEntry)
             {
-                ((ILedgerJournalEntry)je).Ledger(this, conn);
+                ((ILedgerJournalEntry)je).Ledger(this);
             }
             else if (je is ILedgerNoCashJournalEntry)
             {
-                ((ILedgerNoCashJournalEntry)je).LedgerNC(this, conn);
+                ((ILedgerNoCashJournalEntry)je).LedgerNC(this);
             }
         }
 

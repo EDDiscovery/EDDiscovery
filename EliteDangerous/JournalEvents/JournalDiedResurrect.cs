@@ -64,12 +64,12 @@ namespace EliteDangerousCore.JournalEvents
 
         public Killer[] Killers { get; set; }
 
-        public void UpdateMissions(MissionListAccumulator mlist, EliteDangerousCore.ISystem sys, string body, DB.SQLiteConnectionUser conn)
+        public void UpdateMissions(MissionListAccumulator mlist, EliteDangerousCore.ISystem sys, string body)
         {
             mlist.Died(this.EventTimeUTC);
         }
 
-        public void UpdateCommodities(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        public void UpdateCommodities(MaterialCommoditiesList mc)
         {
             mc.Died();
         }
@@ -123,12 +123,12 @@ namespace EliteDangerousCore.JournalEvents
         public long Cost { get; set; }
         public bool Bankrupt { get; set; }
 
-        public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
+        public void Ledger(Ledger mcl)
         {
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Option, -Cost);
         }
 
-        public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, DB.SQLiteConnectionUser conn)
+        public void ShipInformation(ShipInformationList shp, string whereami, ISystem system)
         {
             shp.Resurrect(Option.Equals("free", System.StringComparison.InvariantCultureIgnoreCase));    // if free, we did not rebuy the ship
         }

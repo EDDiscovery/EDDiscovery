@@ -36,6 +36,7 @@ namespace EDDiscovery.UserControls
 
         private System.Windows.Forms.Timer fromupdatetimer;
         private System.Windows.Forms.Timer toupdatetimer;
+        private ManualResetEvent CloseRequested = new ManualResetEvent(false);
 
         public UserControlRoute()
         {
@@ -62,31 +63,32 @@ namespace EDDiscovery.UserControls
             textBox_From.SetAutoCompletor(SystemCache.ReturnSystemAdditionalListForAutoComplete, true);
             textBox_To.SetAutoCompletor(SystemCache.ReturnSystemAdditionalListForAutoComplete , true);
 
-            textBox_From.Text = SQLiteDBClass.GetSettingString(DbSave("RouteFrom"), "");
-            textBox_To.Text = SQLiteDBClass.GetSettingString(DbSave("RouteTo"), "");
-            //Console.WriteLine("Load {0} {1}", textBox_From.Text, textBox_To.Text);
-            textBox_Range.Value = SQLiteDBClass.GetSettingInt(DbSave("RouteRange"), 30);
-            textBox_FromX.Text = SQLiteDBClass.GetSettingString(DbSave("RouteFromX"), "");
-            textBox_FromY.Text = SQLiteDBClass.GetSettingString(DbSave("RouteFromY"), "");
-            textBox_FromZ.Text = SQLiteDBClass.GetSettingString(DbSave("RouteFromZ"), "");
-            textBox_ToX.Text = SQLiteDBClass.GetSettingString(DbSave("RouteToX"), "");
-            textBox_ToY.Text = SQLiteDBClass.GetSettingString(DbSave("RouteToY"), "");
-            textBox_ToZ.Text = SQLiteDBClass.GetSettingString(DbSave("RouteToZ"), "");
-            bool fromstate = SQLiteDBClass.GetSettingBool(DbSave("RouteFromState"), false);
-            bool tostate = SQLiteDBClass.GetSettingBool(DbSave("RouteToState"), false);
+            textBox_From.Text = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbSave("RouteFrom"), "");
+            textBox_To.Text = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbSave("RouteTo"), "");
+            textBox_Range.Value = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(DbSave("RouteRange"), 30);
+            textBox_FromX.Text = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbSave("RouteFromX"), "");
+            textBox_FromY.Text = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbSave("RouteFromY"), "");
+            textBox_FromZ.Text = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbSave("RouteFromZ"), "");
+            textBox_ToX.Text = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbSave("RouteToX"), "");
+            textBox_ToY.Text = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbSave("RouteToY"), "");
+            textBox_ToZ.Text = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbSave("RouteToZ"), "");
+            bool fromstate = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave("RouteFromState"), false);
+            bool tostate = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave("RouteToState"), false);
 
-            int metricvalue = SQLiteDBClass.GetSettingInt(DbSave("RouteMetric"), 0);
+            int metricvalue = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(DbSave("RouteMetric"), 0);
             comboBoxRoutingMetric.SelectedIndex = (metricvalue >= 0 && metricvalue < comboBoxRoutingMetric.Items.Count) ? metricvalue : SystemsDB.metric_waypointdev2;
 
-            SelectToMaster(tostate);
+            SeleteToCoords(tostate);
             UpdateTo(true);
-            SelectFromMaster(fromstate);
+            SelectFromCoords(fromstate);
             UpdateFrom(true);
             comboBoxRoutingMetric.Enabled = true;
 
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
+
+            discoveryform.OnHistoryChange += HistoryChanged;
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
@@ -96,30 +98,36 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
-            if ( routingthread != null && routingthread.IsAlive && plotter != null )
+            if (routingthread != null && routingthread.IsAlive && plotter != null)
             {
                 plotter.StopPlotter = true;
+                CloseRequested.Set();
                 routingthread.Join();
             }
-                
-            SQLiteDBClass.PutSettingString(DbSave("RouteFrom"), textBox_From.Text);
-            SQLiteDBClass.PutSettingString(DbSave("RouteTo"), textBox_To.Text);
-            SQLiteDBClass.PutSettingInt(DbSave("RouteRange"), (int)textBox_Range.Value);
-            SQLiteDBClass.PutSettingString(DbSave("RouteFromX"), textBox_FromX.Text);
-            SQLiteDBClass.PutSettingString(DbSave("RouteFromY"), textBox_FromY.Text);
-            SQLiteDBClass.PutSettingString(DbSave("RouteFromZ"), textBox_FromZ.Text);
-            SQLiteDBClass.PutSettingString(DbSave("RouteToX"), textBox_ToX.Text);
-            SQLiteDBClass.PutSettingString(DbSave("RouteToY"), textBox_ToY.Text);
-            SQLiteDBClass.PutSettingString(DbSave("RouteToZ"), textBox_ToZ.Text);
-            SQLiteDBClass.PutSettingBool(DbSave("RouteFromState"), textBox_From.ReadOnly);
-            SQLiteDBClass.PutSettingBool(DbSave("RouteToState"), textBox_To.ReadOnly);
-            SQLiteDBClass.PutSettingInt(DbSave("RouteMetric"), comboBoxRoutingMetric.SelectedIndex);
+
+            discoveryform.OnHistoryChange -= HistoryChanged;
+
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbSave("RouteFrom"), textBox_From.Text);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbSave("RouteTo"), textBox_To.Text);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(DbSave("RouteRange"), (int)textBox_Range.Value);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbSave("RouteFromX"), textBox_FromX.Text);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbSave("RouteFromY"), textBox_FromY.Text);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbSave("RouteFromZ"), textBox_FromZ.Text);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbSave("RouteToX"), textBox_ToX.Text);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbSave("RouteToY"), textBox_ToY.Text);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbSave("RouteToZ"), textBox_ToZ.Text);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave("RouteFromState"), textBox_From.ReadOnly);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave("RouteToState"), textBox_To.ReadOnly);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(DbSave("RouteMetric"), comboBoxRoutingMetric.SelectedIndex);
         }
 
-        private void ToggleButtons(bool state)
+        public void HistoryChanged(HistoryList hl)           // on History change, we now have history systems to look up, so make sure the To/From get a chance to update
         {
-            button_Route.Enabled = state;
-            cmd3DMap.Enabled = state;
+            if (hl != null && hl.Count > 0)
+            {
+                UpdateTo(true);
+                UpdateFrom(true);
+            }
         }
 
         string SystemNameOnly(string s)             // removes @ at end.
@@ -192,39 +200,48 @@ namespace EDDiscovery.UserControls
 
         private void button_Route_Click(object sender, EventArgs e)
         {
-            ToggleButtons(false);           // beware the tab order, this moves the focus onto the next control, which in this dialog can be not what we want.
-
-            plotter = new RoutePlotter();
-            plotter.MaxRange = textBox_Range.Value;
-            GetCoordsFrom(out plotter.Coordsfrom);                      // will be valid for a system or a co-ords box
-            GetCoordsTo(out plotter.Coordsto);
-            plotter.FromSystem = textBox_From.Text;
-            plotter.ToSystem = textBox_To.Text;
-            plotter.RouteMethod = comboBoxRoutingMetric.SelectedIndex;
-
-            if (textBox_From.ReadOnly == true)
-                plotter.FromSystem = "START POINT";
-            if (textBox_To.ReadOnly == true)
-                plotter.ToSystem = "END POINT";
-
-            int PossibleJumps = (int)(Point3D.DistanceBetween(plotter.Coordsfrom, plotter.Coordsto) / plotter.MaxRange);
-
-            if (PossibleJumps > 100)
+            if (routingthread == null  || !routingthread.IsAlive)
             {
-                DialogResult res = ExtendedControls.MessageBoxTheme.Show(FindForm(), 
-                    string.Format(("This will result in a large number ({0}) of jumps" + Environment.NewLine + "Confirm please").T(EDTx.UserControlRoute_Confirm), 
-                    PossibleJumps), "Warning".T(EDTx.Warning), MessageBoxButtons.YesNo);
-                if (res != System.Windows.Forms.DialogResult.Yes)
-                {
-                    ToggleButtons(true);
-                    return;
-                }
-            }
+                plotter = new RoutePlotter();
+                plotter.MaxRange = textBox_Range.Value;
+                GetCoordsFrom(out plotter.Coordsfrom);                      // will be valid for a system or a co-ords box
+                GetCoordsTo(out plotter.Coordsto);
+                plotter.FromSystem = textBox_From.Text;
+                plotter.ToSystem = textBox_To.Text;
+                plotter.RouteMethod = comboBoxRoutingMetric.SelectedIndex;
+                plotter.UseFsdBoost = checkBox_FsdBoost.Checked;
 
-            dataGridViewRoute.Rows.Clear();
-            routingthread = new System.Threading.Thread(new System.Threading.ParameterizedThreadStart(RoutingThread));
-            routingthread.Name = "Thread Route";
-            routingthread.Start(plotter);
+                if (textBox_From.ReadOnly == true)
+                    plotter.FromSystem = "START POINT";
+                if (textBox_To.ReadOnly == true)
+                    plotter.ToSystem = "END POINT";
+
+                int PossibleJumps = (int)(Point3D.DistanceBetween(plotter.Coordsfrom, plotter.Coordsto) / plotter.MaxRange);
+
+                if (PossibleJumps > 100)
+                {
+                    DialogResult res = ExtendedControls.MessageBoxTheme.Show(FindForm(),
+                        string.Format(("This will result in a large number ({0}) of jumps" + Environment.NewLine + "Confirm please").T(EDTx.UserControlRoute_Confirm),
+                        PossibleJumps), "Warning".T(EDTx.Warning), MessageBoxButtons.YesNo);
+                    if (res != System.Windows.Forms.DialogResult.Yes)
+                    {
+                        return;
+                    }
+                }
+
+                dataGridViewRoute.Rows.Clear();
+                routingthread = new System.Threading.Thread(new System.Threading.ParameterizedThreadStart(RoutingThread));
+                routingthread.Name = "Thread Route";
+
+                cmd3DMap.Enabled = false;
+                button_Route.Text = "Cancel".T(EDTx.Cancel);
+                routingthread.Start(plotter);
+            }
+            else
+            {
+                plotter.StopPlotter = true;
+                button_Route.Enabled = false;
+            }
         }
 
         private Thread routingthread;
@@ -237,12 +254,18 @@ namespace EDDiscovery.UserControls
 
             routeSystems = p.RouteIterative(AppendData);
 
-            this.BeginInvoke(new Action(() => { discoveryform.NewCalculatedRoute(routeSystems); ToggleButtons(true); }));
+            this.BeginInvoke(new Action(() => 
+                {
+                    discoveryform.NewCalculatedRoute(routeSystems);
+                    cmd3DMap.Enabled = true;
+                    button_Route.Text = "Find Route".Tx(this, "button_Route");
+                    button_Route.Enabled = true;
+                }));
         }
 
-        private void AppendData(RoutePlotter.ReturnInfo info)
+        private void AppendData(RoutePlotter.ReturnInfo info)   // IN thread context, need to invoke
         {
-            BeginInvoke((MethodInvoker)delegate
+            var ar = BeginInvoke((MethodInvoker)delegate      // using Invoke blocks the thread until the UI finishes.  Using BeginInvoke async causes it to overload the UI
             {
                 DataGridViewRow rw = dataGridViewRoute.RowTemplate.Clone() as DataGridViewRow;
                 rw.CreateCells(dataGridViewRoute,
@@ -256,9 +279,16 @@ namespace EDDiscovery.UserControls
                         );
 
                 rw.Tag = info.system;       // may be null if waypoint or not a system
+                rw.Cells[0].Tag = info.system?.Name;    // write the name of the system into the cells'tag for copying
                 rw.HeaderCell.Value = info.pos != null ? (dataGridViewRoute.Rows.Count + 1).ToStringInvariant() : "-";
                 dataGridViewRoute.Rows.Add(rw);
+                if (!rw.Displayed)
+                {
+                    dataGridViewRoute.FirstDisplayedScrollingRowIndex++;
+                }
             });
+
+            WaitHandle.WaitAny(new WaitHandle[] { CloseRequested, ar.AsyncWaitHandle });
         }
 
         private void cmd3DMap_Click(object sender, EventArgs e)
@@ -292,7 +322,7 @@ namespace EDDiscovery.UserControls
 
         #region From
 
-        private void SelectFromMaster(bool coords)
+        private void SelectFromCoords(bool coords)
         {
             textBox_From.ReadOnly = coords;
             textBox_FromX.ReadOnly = !coords;
@@ -379,7 +409,7 @@ namespace EDDiscovery.UserControls
 
         private void textBox_From_Enter(object sender, EventArgs e)
         {
-            SelectFromMaster(false);                              // enable system box
+            SelectFromCoords(false);                              // enable system box
             if (fromupdatetimer != null)  // for the designer
             {
                 fromupdatetimer.Stop();
@@ -389,7 +419,7 @@ namespace EDDiscovery.UserControls
 
         private void textBox_FromXYZ_Enter(object sender, EventArgs e)
         {
-            SelectFromMaster(true);                       // coords master
+            SelectFromCoords(true);                       // coords master
             fromupdatetimer.Stop();
             fromupdatetimer.Start();
             ((ExtendedControls.ExtTextBox)sender).Select(0, 1000); // entering selects everything
@@ -417,7 +447,7 @@ namespace EDDiscovery.UserControls
         {
             if (uctg.GetCurrentHistoryEntry != null)
             {
-                SelectFromMaster(false);                              // enable system box
+                SelectFromCoords(false);                              // enable system box
                 textBox_From.Text = uctg.GetCurrentHistoryEntry.System.Name;
                 UpdateFrom(false);
             }
@@ -430,7 +460,7 @@ namespace EDDiscovery.UserControls
 
             if (TargetClass.GetTargetPosition(out name, out x, out y, out z))
             {
-                SelectFromMaster(false);                              // enable system box
+                SelectFromCoords(false);                              // enable system box
                 textBox_From.Text = TargetClass.GetNameWithoutPrefix(name);
                 UpdateFrom(false);
             }
@@ -438,8 +468,8 @@ namespace EDDiscovery.UserControls
 
         private void buttonFromEDSM_Click(object sender, EventArgs e)
         {
-            ISystem ds1 = discoveryform.history.FindSystem(SystemNameOnly(textBox_To.Text), discoveryform.galacticMapping);
-            string sysname = ds1?.Name ?? SystemNameOnly(textBox_To.Text);
+            ISystem ds1 = discoveryform.history.FindSystem(SystemNameOnly(textBox_From.Text), discoveryform.galacticMapping);
+            string sysname = ds1?.Name ?? SystemNameOnly(textBox_From.Text);
             long? edsmid = ds1?.EDSMID;
 
             EDSMClass edsm = new EDSMClass();
@@ -456,7 +486,7 @@ namespace EDDiscovery.UserControls
 
         #region To
 
-        private void SelectToMaster(bool coords)
+        private void SeleteToCoords(bool coords)
         {
             textBox_To.ReadOnly = coords;
             textBox_ToX.ReadOnly = !coords;
@@ -543,7 +573,7 @@ namespace EDDiscovery.UserControls
 
         private void textBox_To_Enter(object sender, EventArgs e)   // To has been tabbed/clicked..
         {
-            SelectToMaster(false);                              // enable system box
+            SeleteToCoords(false);                              // enable system box
 
             if (toupdatetimer != null)  // for the designer
             {
@@ -554,7 +584,7 @@ namespace EDDiscovery.UserControls
 
         private void textBox_ToXYZ_Enter(object sender, EventArgs e)
         {
-            SelectToMaster(true);                       // coords master
+            SeleteToCoords(true);                       // coords master
             toupdatetimer.Stop();
             toupdatetimer.Start();
             ((ExtendedControls.ExtTextBox)sender).Select(0, 1000); // clicking highlights everything
@@ -582,7 +612,7 @@ namespace EDDiscovery.UserControls
         {
             if (uctg.GetCurrentHistoryEntry != null)
             {
-                SelectToMaster(false);                              // enable system box
+                SeleteToCoords(false);                              // enable system box
                 textBox_To.Text = uctg.GetCurrentHistoryEntry.System.Name;
                 UpdateTo(false);
             }
@@ -595,7 +625,7 @@ namespace EDDiscovery.UserControls
 
             if (TargetClass.GetTargetPosition(out name, out x, out y, out z))
             {
-                SelectToMaster(false);                              // enable system box
+                SeleteToCoords(false);                              // enable system box
                 textBox_To.Text = TargetClass.GetNameWithoutPrefix(name);
                 UpdateTo(false);
             }
@@ -659,14 +689,7 @@ namespace EDDiscovery.UserControls
                     return (c < dataGridViewRoute.Columns.Count) ? dataGridViewRoute.Columns[c].HeaderText : null;
                 };
 
-
-                if (grd.WriteCSV(frm.Path))
-                {
-                    if (frm.AutoOpen)
-                        System.Diagnostics.Process.Start(frm.Path);
-                }
-                else
-                    ExtendedControls.MessageBoxTheme.Show(FindForm(), "Failed to write to " + frm.Path, "Export Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                grd.WriteGrid(frm.Path, frm.AutoOpen, FindForm());
             }
         }
 
@@ -675,8 +698,25 @@ namespace EDDiscovery.UserControls
             DataGridViewCell cell = dataGridViewRoute.CurrentCell;
             if (cell != null)
             {
-                string s = (string)cell.Value;
+                // If a cell contains a tag (i.e. a system name), copy the string of the tag
+                // else, copy whatever text is inside
+                string s = "";
+                if (cell.Tag != null)
+                    s = cell.Tag.ToString();
+                else
+                    s = (string)cell.Value;
                 SetClipboardText(s);
+            }
+        }
+
+        
+        private void dataGridViewRoute_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            int row = dataGridViewRoute.CurrentCell?.RowIndex ?? -1;
+            if ( row >= 0 )
+            {
+                ISystem sys = dataGridViewRoute.Rows[row].Tag as ISystem;
+                ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), sys, true, discoveryform.history);
             }
         }
 
@@ -742,6 +782,14 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        private void showScanToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ISystem sys = dataGridViewRoute.Rows[rightclickrow].Tag as ISystem;
+            ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), sys, true, discoveryform.history);    // protected against sys = null
+        }
+
+
         #endregion
+
     }
 }

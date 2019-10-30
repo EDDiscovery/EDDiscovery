@@ -88,11 +88,7 @@ namespace EliteDangerousCore.DB
 
         public bool Add()
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
-            {
-                bool ret = Add(cn);
-                return ret;
-            }
+            return UserDatabase.Instance.ExecuteWithDatabase<bool>(cn => { return Add(cn.Connection); });
         }
 
         private bool Add(SQLiteConnectionUser cn)
@@ -118,13 +114,10 @@ namespace EliteDangerousCore.DB
 
         public bool Update()
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
-            {
-                return Update(cn);
-            }
+            return UserDatabase.Instance.ExecuteWithDatabase<bool>(cn => { return Update(cn.Connection); });
         }
 
-        public bool Update(SQLiteConnectionUser cn, DbTransaction tn = null)
+        internal bool Update(SQLiteConnectionUser cn, DbTransaction tn = null)
         {
             using (DbCommand cmd = cn.CreateCommand("Update TravelLogUnit set Name=@Name, Type=@type, size=@size, Path=@Path, CommanderID=@CommanderID  where ID=@id", tn))
             {
@@ -143,11 +136,11 @@ namespace EliteDangerousCore.DB
         
         static public List<TravelLogUnit> GetAll()
         {
-            List<TravelLogUnit> list = new List<TravelLogUnit>();
-
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(mode: SQLLiteExtensions.SQLExtConnection.AccessMode.Reader))
+            return UserDatabase.Instance.ExecuteWithDatabase<List<TravelLogUnit>>(cn =>
             {
-                using (DbCommand cmd = cn.CreateCommand("select * from TravelLogUnit"))
+                List<TravelLogUnit> list = new List<TravelLogUnit>();
+
+                using (DbCommand cmd = cn.Connection.CreateCommand("select * from TravelLogUnit"))
                 {
                     using (DbDataReader rdr = cmd.ExecuteReader())
                     {
@@ -158,17 +151,19 @@ namespace EliteDangerousCore.DB
                         }
                     }
 
-                    return list;
                 }
-            }
+
+                return list;
+            });
         }
 
         public static List<string> GetAllNames()
         {
-            List<string> names = new List<string>();
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(mode: SQLLiteExtensions.SQLExtConnection.AccessMode.Reader))
+            return UserDatabase.Instance.ExecuteWithDatabase<List<string>>(cn =>
             {
-                using (DbCommand cmd = cn.CreateCommand("SELECT DISTINCT Name FROM TravelLogUnit"))
+                List<string> names = new List<string>();
+
+                using (DbCommand cmd = cn.Connection.CreateCommand("SELECT DISTINCT Name FROM TravelLogUnit"))
                 {
                     using (DbDataReader reader = cmd.ExecuteReader())
                     {
@@ -178,15 +173,15 @@ namespace EliteDangerousCore.DB
                         }
                     }
                 }
-            }
-            return names;
+                return names;
+            });
         }
 
         public static TravelLogUnit Get(string name)
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(mode: SQLLiteExtensions.SQLExtConnection.AccessMode.Reader))
+            return UserDatabase.Instance.ExecuteWithDatabase<TravelLogUnit>(cn =>
             {
-                using (DbCommand cmd = cn.CreateCommand("SELECT * FROM TravelLogUnit WHERE Name = @name ORDER BY Id DESC"))
+                using (DbCommand cmd = cn.Connection.CreateCommand("SELECT * FROM TravelLogUnit WHERE Name = @name ORDER BY Id DESC"))
                 {
                     cmd.AddParameterWithValue("@name", name);
                     using (DbDataReader reader = cmd.ExecuteReader())
@@ -197,9 +192,9 @@ namespace EliteDangerousCore.DB
                         }
                     }
                 }
-            }
 
-            return null;
+                return null;
+            });
         }
 
         public static bool TryGet(string name, out TravelLogUnit tlu)
@@ -210,9 +205,9 @@ namespace EliteDangerousCore.DB
 
         public static TravelLogUnit Get(long id)
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(mode: SQLLiteExtensions.SQLExtConnection.AccessMode.Reader))
+            return UserDatabase.Instance.ExecuteWithDatabase<TravelLogUnit>(cn =>
             {
-                using (DbCommand cmd = cn.CreateCommand("SELECT * FROM TravelLogUnit WHERE Id = @id ORDER BY Id DESC"))
+                using (DbCommand cmd = cn.Connection.CreateCommand("SELECT * FROM TravelLogUnit WHERE Id = @id ORDER BY Id DESC"))
                 {
                     cmd.AddParameterWithValue("@id", id);
                     using (DbDataReader reader = cmd.ExecuteReader())
@@ -223,9 +218,9 @@ namespace EliteDangerousCore.DB
                         }
                     }
                 }
-            }
 
-            return null;
+                return null;
+            });
         }
 
         public static bool TryGet(long id, out TravelLogUnit tlu)

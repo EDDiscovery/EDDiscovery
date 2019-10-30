@@ -158,7 +158,7 @@ namespace EDDiscovery.Actions
             {
                 System.Globalization.CultureInfo ct = System.Globalization.CultureInfo.InvariantCulture;
 
-                int fsd = hl.GetFSDJumps(new DateTime(1980, 1, 1), he.EventTimeUTC);    // total before
+                int fsd = hl.GetFSDJumpsUTC(new DateTime(1980, 1, 1), he.EventTimeUTC);    // total before
                 if (he.IsFSDJump)   // if on an fsd, count this in
                     fsd++;
                 vars[prefix + "FSDJump"] = fsd.ToString(ct);

@@ -120,7 +120,7 @@ namespace EDDiscovery.UserControls
             for (int i = 0; i < dataGridViewExplore.Rows.Count; i++)
             {
                 UpdateSystemRow(i);
-                dataGridViewExplore.Rows[i].HeaderCell.Value = (i + 1).ToStringInvariant();
+                dataGridViewExplore.Rows[i].HeaderCell.Value = (i + 1).ToString();
             }
         }
 
@@ -494,7 +494,7 @@ namespace EDDiscovery.UserControls
             if (e.ColumnIndex == 0)
             {
                 UpdateSystemRow(e.RowIndex);
-                dataGridViewExplore.Rows[e.RowIndex].HeaderCell.Value = (e.RowIndex + 1).ToStringInvariant();
+                dataGridViewExplore.Rows[e.RowIndex].HeaderCell.Value = (e.RowIndex + 1).ToString();
             }
         }
 

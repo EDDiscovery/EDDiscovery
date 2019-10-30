@@ -96,9 +96,9 @@ namespace EDDiscovery.Forms
 
             labelControlText.Text = "";                                 // always starts blank..
 
-            this.ShowInTaskbar = SQLiteDBClass.GetSettingBool(dbrefname + "Taskbar", true);
+            this.ShowInTaskbar = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(dbrefname + "Taskbar", true);
 
-            displayTitle = SQLiteDBClass.GetSettingBool(dbrefname + "ShowTitle", true);
+            displayTitle = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(dbrefname + "ShowTitle", true);
 
 #if !__MonoCS__
             idk = DirectInputDevices.InputDeviceKeyboard.CreateKeyboard();
@@ -124,7 +124,7 @@ namespace EDDiscovery.Forms
             {
                 transparentmode = t;
                 UpdateTransparency();
-                SQLiteDBClass.PutSettingInt(dbrefname + "Transparent", (int)transparentmode);
+                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(dbrefname + "Transparent", (int)transparentmode);
             }
         }
 
@@ -132,7 +132,7 @@ namespace EDDiscovery.Forms
         {
             displayTitle = t;
             UpdateControls();
-            SQLiteDBClass.PutSettingBool(dbrefname + "ShowTitle", displayTitle);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(dbrefname + "ShowTitle", displayTitle);
             UserControl.onControlTextVisibilityChanged(displayTitle);            
         }
 
@@ -145,7 +145,7 @@ namespace EDDiscovery.Forms
         {
             TopMost = t;        // this calls Win32.SetWindowPos, which then plays with the actual topmost bit in windows extended style
                                 // and loses the transparency bit!  So therefore
-            SQLiteDBClass.PutSettingBool(dbrefname + "TopMost", TopMost);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(dbrefname + "TopMost", TopMost);
             UpdateTransparency();   // need to reestablish correct transparency again
         }
 
@@ -153,7 +153,7 @@ namespace EDDiscovery.Forms
         {
             this.ShowInTaskbar = t;
             UpdateControls();
-            SQLiteDBClass.PutSettingBool(dbrefname + "Taskbar", t);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(dbrefname + "Taskbar", t);
         }
 
         public UserControlCommonBase FindUserControl(Type c)
@@ -268,15 +268,15 @@ namespace EDDiscovery.Forms
             this.BringToFront();
 
             if (IsTransparencySupported)
-                transparentmode = (TransparencyMode)SQLiteDBClass.GetSettingInt(dbrefname + "Transparent", deftransparent ? (int)TransparencyMode.On : (int)TransparencyMode.Off);
+                transparentmode = (TransparencyMode)EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(dbrefname + "Transparent", deftransparent ? (int)TransparencyMode.On : (int)TransparencyMode.Off);
 
-            bool wantedTopMost = SQLiteDBClass.GetSettingBool(dbrefname + "TopMost", deftopmost);
+            bool wantedTopMost = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(dbrefname + "TopMost", deftopmost);
             //kludge 
             SetTopMost(wantedTopMost);
             SetTopMost(!wantedTopMost);
             SetTopMost(wantedTopMost); // this also establishes transparency
 
-            var top = SQLiteDBClass.GetSettingInt(dbrefname + "Top", -999);
+            var top = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(dbrefname + "Top", -999);
             //System.Diagnostics.Debug.WriteLine("Position Top is {0} {1}", dbrefname, top);
 
             if (UserControl != null)

@@ -47,98 +47,116 @@ namespace EliteDangerousCore.DB
 
             while (!eof)
             {
-                SQLiteConnectionSystem cn = new SQLiteConnectionSystem(mode: SQLLiteExtensions.SQLExtConnection.AccessMode.ReaderWriter);
-
-                SQLExtTransactionLock<SQLiteConnectionSystem> tl = new SQLExtTransactionLock<SQLiteConnectionSystem>();
-                tl.OpenWriter();
-
-                DbTransaction txn = cn.BeginTransaction();
-
-                DbCommand selectCmd = cn.CreateSelect("EDDB","eddbupdatedat", "edsmid = @edsmid", inparas:new string[] { "edsmid:int64" }, limit:"1", tx:txn);   // 1 return matching ID
-
-                string[] dbfields = { "edsmid", "eddbid", "eddbupdatedat", "population",
-                                        "faction", "government", "allegiance", "state",
-                                        "security", "primaryeconomy", "needspermit", "power",
-                                        "powerstate" , "properties" };
-                DbType[] dbfieldtypes = { DbType.Int64, DbType.Int64, DbType.Int64, DbType.Int64,
-                                          DbType.String, DbType.Int64, DbType.Int64, DbType.Int64,
-                                          DbType.Int64, DbType.Int64, DbType.Int64, DbType.String ,
-                                          DbType.String ,DbType.String };
-
-                DbCommand replaceCmd = cn.CreateReplace("EDDB", dbfields, dbfieldtypes, txn);
-
-                while (!SQLiteConnectionSystem.IsReadWaiting)
+                SystemsDatabase.Instance.ExecuteWithDatabase(action: db =>
                 {
-                    string line = tr.ReadLine();
+                    var cn = db.Connection;
 
-                    if (line == null)  // End of stream
+                    int maxtodo = 1000;
+
+                    using (DbTransaction txn = cn.BeginTransaction())
                     {
-                        eof = true;
-                        break;
-                    }
+                        DbCommand selectCmd = null;
+                        DbCommand replaceCmd = null;
 
-                    try
-                    {
-                        JObject jo = JObject.Parse(line);
-                        long jsonupdatedat = jo["updated_at"].Int();
-                        long jsonedsmid = jo["edsm_id"].Long();
-                        bool jsonispopulated = jo["is_populated"].Bool();
-
-                        if (jsonispopulated)        // double check that the flag is set - population itself may be zero, for some systems, but its the flag we care about
+                        try
                         {
-                            selectCmd.Parameters[0].Value = jsonedsmid;
-                            long dbupdated_at = selectCmd.ExecuteScalar<long>(0);
+                            selectCmd = cn.CreateSelect("EDDB", "eddbupdatedat", "edsmid = @edsmid", inparas: new string[] { "edsmid:int64" }, limit: "1", tx: txn);   // 1 return matching ID
 
-                            if (dbupdated_at == 0 || jsonupdatedat != dbupdated_at)
+                            string[] dbfields = { "edsmid", "eddbid", "eddbupdatedat", "population",
+                                                    "faction", "government", "allegiance", "state",
+                                                    "security", "primaryeconomy", "needspermit", "power",
+                                                    "powerstate" , "properties" };
+                            DbType[] dbfieldtypes = { DbType.Int64, DbType.Int64, DbType.Int64, DbType.Int64,
+                                                        DbType.String, DbType.Int64, DbType.Int64, DbType.Int64,
+                                                        DbType.Int64, DbType.Int64, DbType.Int64, DbType.String ,
+                                                        DbType.String ,DbType.String };
+
+                            replaceCmd = cn.CreateReplace("EDDB", dbfields, dbfieldtypes, txn);
+
+                            while(maxtodo-- > 0 )   // so to give rest of a system a chance, lets do them in groups
                             {
-                                replaceCmd.Parameters["@edsmid"].Value = jsonedsmid;
-                                replaceCmd.Parameters["@eddbid"].Value = jo["id"].Long();
-                                replaceCmd.Parameters["@eddbupdatedat"].Value = jsonupdatedat;
-                                replaceCmd.Parameters["@population"].Value = jo["population"].Long();
-                                replaceCmd.Parameters["@faction"].Value = jo["controlling_minor_faction"].Str("Unknown");
-                                replaceCmd.Parameters["@government"].Value = EliteDangerousTypesFromJSON.Government2ID(jo["government"].Str("Unknown"));
-                                replaceCmd.Parameters["@allegiance"].Value = EliteDangerousTypesFromJSON.Allegiance2ID(jo["allegiance"].Str("Unknown"));
+                                string line = tr.ReadLine();
 
-                                EDState edstate = EDState.Unknown;
+                                if (line == null)  // End of stream
+                                {
+                                    eof = true;
+                                    break;
+                                }
 
                                 try
                                 {
-                                    if (jo["states"] != null && jo["states"].HasValues)
+                                    JObject jo = JObject.Parse(line);
+                                    long jsonupdatedat = jo["updated_at"].Int();
+                                    long jsonedsmid = jo["edsm_id"].Long();
+                                    bool jsonispopulated = jo["is_populated"].Bool();
+
+                                    if (jsonispopulated)        // double check that the flag is set - population itself may be zero, for some systems, but its the flag we care about
                                     {
-                                        JToken tk = jo["states"].First;     // we take the first one whatever
-                                        JObject jostate = (JObject)tk;
-                                        edstate = EliteDangerousTypesFromJSON.EDState2ID(jostate["name"].Str("Unknown"));
+                                        selectCmd.Parameters[0].Value = jsonedsmid;
+                                        long dbupdated_at = selectCmd.ExecuteScalar<long>(0);
+
+                                        if (dbupdated_at == 0 || jsonupdatedat != dbupdated_at)
+                                        {
+                                            replaceCmd.Parameters["@edsmid"].Value = jsonedsmid;
+                                            replaceCmd.Parameters["@eddbid"].Value = jo["id"].Long();
+                                            replaceCmd.Parameters["@eddbupdatedat"].Value = jsonupdatedat;
+                                            replaceCmd.Parameters["@population"].Value = jo["population"].Long();
+                                            replaceCmd.Parameters["@faction"].Value = jo["controlling_minor_faction"].Str("Unknown");
+                                            replaceCmd.Parameters["@government"].Value = EliteDangerousTypesFromJSON.Government2ID(jo["government"].Str("Unknown"));
+                                            replaceCmd.Parameters["@allegiance"].Value = EliteDangerousTypesFromJSON.Allegiance2ID(jo["allegiance"].Str("Unknown"));
+
+                                            EDState edstate = EDState.Unknown;
+
+                                            try
+                                            {
+                                                if (jo["states"] != null && jo["states"].HasValues)
+                                                {
+                                                    JToken tk = jo["states"].First;     // we take the first one whatever
+                                                    JObject jostate = (JObject)tk;
+                                                    edstate = EliteDangerousTypesFromJSON.EDState2ID(jostate["name"].Str("Unknown"));
+                                                }
+                                            }
+                                            catch (Exception ex)
+                                            {
+                                                System.Diagnostics.Debug.WriteLine("EDDB JSON file exception for states " + ex.ToString());
+                                            }
+
+                                            replaceCmd.Parameters["@state"].Value = edstate;
+                                            replaceCmd.Parameters["@security"].Value = EliteDangerousTypesFromJSON.EDSecurity2ID(jo["security"].Str("Unknown"));
+                                            replaceCmd.Parameters["@primaryeconomy"].Value = EliteDangerousTypesFromJSON.EDEconomy2ID(jo["primary_economy"].Str("Unknown"));
+                                            replaceCmd.Parameters["@needspermit"].Value = jo["needs_permit"].Int(0);
+                                            replaceCmd.Parameters["@power"].Value = jo["power"].Str("None");
+                                            replaceCmd.Parameters["@powerstate"].Value = jo["power_state"].Str("N/A");
+                                            replaceCmd.Parameters["@properties"].Value = RemoveFieldsFromJSON(jo);
+                                            replaceCmd.ExecuteNonQuery();
+                                            updated++;
+                                        }
                                     }
                                 }
                                 catch (Exception ex)
                                 {
-                                    System.Diagnostics.Debug.WriteLine("EDDB JSON file exception for states " + ex.ToString());
+                                    System.Diagnostics.Debug.WriteLine("EDDB JSON file exception " + ex.ToString());
                                 }
+                            }
 
-                                replaceCmd.Parameters["@state"].Value = edstate;
-                                replaceCmd.Parameters["@security"].Value = EliteDangerousTypesFromJSON.EDSecurity2ID(jo["security"].Str("Unknown"));
-                                replaceCmd.Parameters["@primaryeconomy"].Value = EliteDangerousTypesFromJSON.EDEconomy2ID(jo["primary_economy"].Str("Unknown"));
-                                replaceCmd.Parameters["@needspermit"].Value = jo["needs_permit"].Int(0);
-                                replaceCmd.Parameters["@power"].Value = jo["power"].Str("None");
-                                replaceCmd.Parameters["@powerstate"].Value = jo["power_state"].Str("N/A");
-                                replaceCmd.Parameters["@properties"].Value = RemoveFieldsFromJSON(jo);
-                                replaceCmd.ExecuteNonQuery();
-                                updated++;
+                            txn.Commit();
+                        }
+                        finally
+                        {
+                            if (selectCmd != null)
+                            {
+                                selectCmd.Dispose();
+                            }
+
+                            if (replaceCmd != null)
+                            {
+                                replaceCmd.Dispose();
                             }
                         }
                     }
-                    catch (Exception ex)
-                    {
-                        System.Diagnostics.Debug.WriteLine("EDDB JSON file exception " + ex.ToString());
-                    }
-                }
+                });
 
-                txn.Commit();
-                txn.Dispose();
-                selectCmd.Dispose();
-                replaceCmd.Dispose();
-                tl.Dispose();
-                cn.Dispose();
+                System.Threading.Thread.Sleep(20); // just give the rest a little chance.
             }
 
             return updated;

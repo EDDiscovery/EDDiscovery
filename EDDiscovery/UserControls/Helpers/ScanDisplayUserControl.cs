@@ -337,6 +337,8 @@ namespace EDDiscovery.UserControls
             if (sc != null && (!sc.IsEDSMBody || CheckEDSM))     // if got one, and its our scan, or we are showing EDSM
             {
                 tip = sc.DisplayString(historicmatlist:curmats, currentmatlist:hl.GetLast?.MaterialCommodity);
+                if (sn.Signals != null)
+                    tip += "\n" + "Signals".T(EDTx.ScanDisplayUserControl_Signals)+":\n" + JournalSAASignalsFound.SignalList(sn.Signals,4, "\n");
 
                 if ( sn.type == StarScan.ScanNodeType.ring)
                 {
@@ -365,7 +367,7 @@ namespace EDDiscovery.UserControls
 
                     Image nodeimage = sc.IsStar ? sc.GetStarTypeImage() : sc.GetPlanetClassImage();
 
-                    if (ImageRequiresAnOverlay(sc, indicatematerials, valuable))
+                    if (ImageRequiresAnOverlay(sc, indicatematerials, valuable, sn))
                     {
                         Bitmap bmp = new Bitmap(size.Width * 2, quarterheight * 6);
 
@@ -382,7 +384,7 @@ namespace EDDiscovery.UserControls
 
                             if (ShowOverlays)
                             {
-                                int overlaystotal = (sc.Terraformable ? 1 : 0) + (sc.HasMeaningfulVolcanism ? 1 : 0) + (valuable ? 1 : 0) + (sc.Mapped ? 1 : 0);
+                                int overlaystotal = (sc.Terraformable ? 1 : 0) + (sc.HasMeaningfulVolcanism ? 1 : 0) + (valuable ? 1 : 0) + (sc.Mapped ? 1 : 0) + (sn.Signals!=null ? 1: 0);
                                 int ovsize = (overlaystotal>1) ? quarterheight : (quarterheight*3/2);
                                 int pos = 0;
 
@@ -405,7 +407,16 @@ namespace EDDiscovery.UserControls
                                 }
 
                                 if (sc.Mapped)
+                                {
                                     g.DrawImage(Icons.Controls.Scan_Bodies_Mapped, new Rectangle(0, pos, ovsize, ovsize));
+                                    pos += ovsize + 1;
+                                }
+
+                                if ( sn.Signals != null )
+                                {
+                                    g.DrawImage(Icons.Controls.Scan_Bodies_Signals, new Rectangle(0, pos, ovsize, ovsize));
+
+                                }
                             }
 
                             if (indicatematerials)
@@ -476,14 +487,16 @@ namespace EDDiscovery.UserControls
             return endpoint;
         }
 
-        private static bool ImageRequiresAnOverlay(JournalScan sc, bool indicatematerials, bool valuable)
+        private static bool ImageRequiresAnOverlay(JournalScan sc, bool indicatematerials, bool valuable, StarScan.ScanNode sn)
         {
             return sc.IsLandable || 
                 sc.HasRings || 
                 indicatematerials || 
+                sc.Mapped ||
                 sc.Terraformable ||
                 sc.HasMeaningfulVolcanism ||
-                valuable;
+                valuable ||
+                sn.Signals != null;
         }
 
         // curmats may be null

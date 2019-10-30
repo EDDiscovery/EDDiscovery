@@ -258,71 +258,68 @@ namespace EDDiscovery
 
                 foreach (StarGrid.InViewInfo inview in inviewlist.Values)            // for all in viewport, sorted by distance from camera position
                 {
-                    using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
+                    StarNames sys = null;
+                    bool draw = false;
+
+                    if (_starnamesbackground.ContainsKey(inview.position))                   // if already there..
                     {
-                        StarNames sys = null;
-                        bool draw = false;
+                        sys = _starnamesbackground[inview.position];
+                        sys.updatedinview = true;
 
-                        if (_starnamesbackground.ContainsKey(inview.position))                   // if already there..
-                        {
-                            sys = _starnamesbackground[inview.position];
-                            sys.updatedinview = true;
-
-                            draw = (_discson && sys.paintstar == null && sys.newstar == null) || 
-                                   (_nameson && ((sys.nametexture == null && sys.newnametexture == null) ));
+                        draw = (_discson && sys.paintstar == null && sys.newstar == null) || 
+                                (_nameson && ((sys.nametexture == null && sys.newnametexture == null) ));
                             
-                            painted++;
-                            //System.Diagnostics.Debug.WriteLine("In view there " + sys.name + " draw " + draw);
-                        }
-                        else if (painted < maxstars)
+                        painted++;
+                        //System.Diagnostics.Debug.WriteLine("In view there " + sys.name + " draw " + draw);
+                    }
+                    else if (painted < maxstars)
+                    {
+                        ISystem sc = _formmap.FindSystem(inview.position);               // with the open connection, find this star..
+
+                        if (sc != null)     // if can't be resolved, ignore
                         {
-                            ISystem sc = _formmap.FindSystem(inview.position, cn);               // with the open connection, find this star..
+                            sys = new StarNames(sc, inview.position);           // we keep position in here using same floats as inview so it will match
+                            _starnamesbackground.Add(inview.position, sys);     // add to our database
+                            _starnamestoforeground.Add(sys);  // send to foreground for adding
+                            draw = true;
+                            painted++;
 
-                            if (sc != null)     // if can't be resolved, ignore
-                            {
-                                sys = new StarNames(sc, inview.position);           // we keep position in here using same floats as inview so it will match
-                                _starnamesbackground.Add(inview.position, sys);     // add to our database
-                                _starnamestoforeground.Add(sys);  // send to foreground for adding
-                                draw = true;
-                                painted++;
-
-                                //System.Diagnostics.Debug.WriteLine("Found " + inview.position);
-                                //Tools.LogToFile(String.Format("starnamesest: push {0}", sys.Pos));
-                                //res += "N";
-                            }
-                            else
-                            {
-                                System.Diagnostics.Debug.WriteLine("Cant find " + inview.position);
-                            }
+                            //System.Diagnostics.Debug.WriteLine("Found " + inview.position);
+                            //Tools.LogToFile(String.Format("starnamesest: push {0}", sys.Pos));
+                            //res += "N";
                         }
                         else
                         {
-                            break;      // no point doing any more..  got our fill of items
+                            System.Diagnostics.Debug.WriteLine("Cant find " + inview.position);
+                        }
+                    }
+                    else
+                    {
+                        break;      // no point doing any more..  got our fill of items
+                    }
+
+                    if (draw)
+                    {
+                        _needrepaint = true;                                            // changed a item.. needs a repaint
+
+                        if (_nameson)
+                        {
+                            float width = textscalingw * sys.name.Length;
+
+                            Bitmap map = DatasetBuilder.DrawString(sys.name, _namecolour, _starfont);
+
+                            sys.newnametexture = TexturedQuadData.FromBitmap(map,
+                                                    new PointData(sys.pos.X, sys.pos.Y, sys.pos.Z),
+                                                    _lastcamera.Rotation,
+                                                    width, textscalingw * 4.0F, _startextoffset + width / 2, 0);
+
+                            sys.rotation = _lastcamera.Rotation;            // remember when we were when we draw it
+                            sys.zoom = _lastcamera.LastZoom;
                         }
 
-                        if (draw)
+                        if (_discson)
                         {
-                            _needrepaint = true;                                            // changed a item.. needs a repaint
-
-                            if (_nameson)
-                            {
-                                float width = textscalingw * sys.name.Length;
-
-                                Bitmap map = DatasetBuilder.DrawString(sys.name, _namecolour, _starfont);
-
-                                sys.newnametexture = TexturedQuadData.FromBitmap(map,
-                                                        new PointData(sys.pos.X, sys.pos.Y, sys.pos.Z),
-                                                        _lastcamera.Rotation,
-                                                        width, textscalingw * 4.0F, _startextoffset + width / 2, 0);
-
-                                sys.rotation = _lastcamera.Rotation;            // remember when we were when we draw it
-                                sys.zoom = _lastcamera.LastZoom;
-                            }
-
-                            if (_discson)
-                            {
-                                sys.newstar = new PointData(sys.pos.X, sys.pos.Y, sys.pos.Z, starsize, inview.AsColor);
-                            }
+                            sys.newstar = new PointData(sys.pos.X, sys.pos.Y, sys.pos.Z, starsize, inview.AsColor);
                         }
                     }
                 }

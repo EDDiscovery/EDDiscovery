@@ -57,10 +57,10 @@ namespace EDDiscovery.UserControls
         {
             computer = new StarDistanceComputer();
 
-            slideMaxItems.Value = maxitems = SQLiteConnectionUser.GetSettingInt(DbSave + "MapMaxItems", maxitems);
+            slideMaxItems.Value = maxitems = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(DbSave + "MapMaxItems", maxitems);
 
-            textMaxRadius.ValueNoChange = SQLiteConnectionUser.GetSettingDouble(DbSave + "MapMax", defaultMapMaxRadius);
-            textMinRadius.ValueNoChange = SQLiteConnectionUser.GetSettingDouble(DbSave + "MapMin", defaultMapMinRadius);
+            textMaxRadius.ValueNoChange = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble(DbSave + "MapMax", defaultMapMaxRadius);
+            textMinRadius.ValueNoChange = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble(DbSave + "MapMin", defaultMapMinRadius);
             textMinRadius.SetComparitor(textMaxRadius, -2);     // need to do this after values are set
             textMaxRadius.SetComparitor(textMinRadius, 2);
 
@@ -69,8 +69,8 @@ namespace EDDiscovery.UserControls
             slidetimer.Tick += Slidetimer_Tick;
 
             var style = chartMap.ChartAreas[0].Area3DStyle;
-            style.Rotation = Math.Min(180, Math.Max(-180, style.Rotation - (Convert.ToInt32(SQLiteConnectionUser.GetSettingDouble(DbSave + "MapRotationX", xr)))));
-            style.Inclination = Math.Min(90, Math.Max(-90, style.Inclination + (Convert.ToInt32(SQLiteConnectionUser.GetSettingDouble(DbSave + "MapRotationY", yr)))));
+            style.Rotation = Math.Min(180, Math.Max(-180, style.Rotation - (Convert.ToInt32(EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble(DbSave + "MapRotationX", xr)))));
+            style.Inclination = Math.Min(90, Math.Max(-90, style.Inclination + (Convert.ToInt32(EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble(DbSave + "MapRotationY", yr)))));
 
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
@@ -93,11 +93,11 @@ namespace EDDiscovery.UserControls
         {
             uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
             computer.ShutDown();
-            SQLiteConnectionUser.PutSettingDouble(DbSave + "MapMin", textMinRadius.Value);
-            SQLiteConnectionUser.PutSettingDouble(DbSave + "MapMax", textMaxRadius.Value);
-            SQLiteConnectionUser.PutSettingInt(DbSave + "MapMaxItems", maxitems);
-            SQLiteConnectionUser.PutSettingDouble(DbSave + "MapRotationX", prevxr);
-            SQLiteConnectionUser.PutSettingDouble(DbSave + "MapRotationY", prevyr);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble(DbSave + "MapMin", textMinRadius.Value);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble(DbSave + "MapMax", textMaxRadius.Value);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(DbSave + "MapMaxItems", maxitems);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble(DbSave + "MapRotationX", prevxr);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble(DbSave + "MapRotationY", prevyr);
         }
 
         public override void InitialDisplay()
@@ -412,8 +412,8 @@ namespace EDDiscovery.UserControls
 
                 if (prevxr.ToString() != null || prevyr.ToString() != null)
                 {
-                    prevxr = SQLiteConnectionUser.GetSettingDouble(DbSave + "MapRotationX", xr);
-                    prevyr = SQLiteConnectionUser.GetSettingDouble(DbSave + "MapRotationY", yr);
+                    prevxr = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble(DbSave + "MapRotationX", xr);
+                    prevyr = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble(DbSave + "MapRotationY", yr);
 
                     Cursor.Position = new Point(Convert.ToInt32(prevxr), Convert.ToInt32(prevyr));
                 }
@@ -439,8 +439,8 @@ namespace EDDiscovery.UserControls
                 prevxr = Cursor.Position.X; // record the last mouse position
                 prevyr = Cursor.Position.Y; //       
 
-                SQLiteConnectionUser.PutSettingDouble(DbSave + "MapRotationX", prevxr);
-                SQLiteConnectionUser.PutSettingDouble(DbSave + "MapRotationY", prevyr);
+                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble(DbSave + "MapRotationX", prevxr);
+                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble(DbSave + "MapRotationY", prevyr);
 
                 CenterMouseOverControl(chartMap);
                 Cursor.Show(); // show the cursor                

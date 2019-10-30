@@ -35,7 +35,7 @@ namespace EliteDangerousCore.EDSM
         {
             galacticMapTypes = GalMapType.GetTypes();          // we always have the types.
 
-            int sel = SQLiteDBClass.GetSettingInt("GalObjectsEnable", int.MaxValue);
+            int sel = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt("GalObjectsEnable", int.MaxValue);
             foreach (GalMapType tp in galacticMapTypes)
             {
                 tp.Enabled = (sel & 1) != 0;
@@ -130,7 +130,7 @@ namespace EliteDangerousCore.EDSM
                 index++;
             }
 
-            SQLiteDBClass.PutSettingInt("GalObjectsEnable", sel);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt("GalObjectsEnable", sel);
         }
 
         public GalacticMapObject Find(string name, bool contains = false , bool disregardenable = false)

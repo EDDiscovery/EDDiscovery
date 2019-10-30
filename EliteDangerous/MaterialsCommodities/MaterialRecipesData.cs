@@ -54,7 +54,7 @@ namespace EliteDangerousCore
                     MaterialCommodityData mcd = MaterialCommodityData.GetByShortName(ingredients[i]);
                     System.Diagnostics.Debug.Assert(mcd != null, "Not found ingredient " + name + " " + indg + " i=" + i + " " + ingredients[i]);
 
-                    ingredientsstringlong = ingredientsstringlong.AppendPrePad(count[i].ToStringInvariant() + " x " + mcd.Name, Environment.NewLine);
+                    ingredientsstringlong = ingredientsstringlong.AppendPrePad(count[i].ToString() + " x " + mcd.Name, Environment.NewLine);
                 }
             }
         }
