@@ -73,6 +73,25 @@ namespace EliteDangerousCore
 
                 return value;
             }
+
+            // run across all with scan of a type
+            public string ActionWithScan(Func<ScanNode,string> action, bool bracketit = false, string spacing = "; ", ScanNodeType ntype = ScanNodeType.star)   
+            {
+                string st = "";
+                foreach (var x in starnodes)
+                {
+                    System.Diagnostics.Debug.WriteLine("Star node {0} type {1} Scan {2}", system.Name, x.Value.type, x.Value.ScanData!=null);
+                    if (x.Value.type == ntype && x.Value.ScanData != null)
+                    {
+                        st = st.AppendPrePad(action(x.Value), spacing);
+                    }
+                }
+
+                if (bracketit && st.HasChars())
+                    st = "(" + st + ")";
+
+                return st;
+            }
         };
 
         public enum ScanNodeType { star, barycentre, body, belt, beltcluster, ring };

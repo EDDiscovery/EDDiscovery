@@ -13,21 +13,17 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using EDDiscovery.Controls;
+using EliteDangerousCore;
+using EliteDangerousCore.EDSM;
+using EliteDangerousCore.JournalEvents;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Data;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using EDDiscovery.Controls;
-using EliteDangerousCore.DB;
-using EliteDangerousCore;
-using EliteDangerousCore.EDSM;
-using EliteDangerousCore.EDDN;
-using EliteDangerousCore.JournalEvents;
 
 namespace EDDiscovery.UserControls
 {
@@ -402,7 +398,11 @@ namespace EDDiscovery.UserControls
             {
                 if (node.starnodes != null)
                 {
-                    infostr = infostr.AppendPrePad(string.Format("{0} Star(s)".T(EDTx.UserControlStarList_CS), node.starnodes.Count) , Environment.NewLine);
+                    string st = node.ActionWithScan((s) => s.ScanData.StarTypeID.ToString(), true);
+                    if (st.HasChars())
+                        st = " " + st;
+
+                    infostr = infostr.AppendPrePad(string.Format("{0} Star(s){1}".T(EDTx.UserControlStarList_CS), node.starnodes.Count, st) , Environment.NewLine);
                     string extrainfo = "";
                     string prefix = Environment.NewLine;
                     int total = 0;
