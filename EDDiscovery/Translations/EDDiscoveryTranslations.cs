@@ -458,6 +458,7 @@ namespace EDDiscovery
         UserControlStarList_OB, // {0} Other bodies
         UserControlStarList_FSD, // This system has materials for FSD boost:
         UserControlStarList_NoEDSM, // System could not be found - has not been synched or EDSM is unavailable
+        UserControlStarList_Signals, // {0} has signals
 
         UserControlCaptainsLog_Diary, // Diary
         UserControlCaptainsLog_Entries, // Entries
@@ -521,6 +522,7 @@ namespace EDDiscovery
         UserControlSpanel_SPF, // Summary Panel: Filter out fields
 
         UserControlSurveyor_LowRadius, //  Low Radius.
+        UserControlSurveyor_Signals, //  Has signals.
         UserControlSurveyor_Mapped, //  (Mapped & Discovered)
         UserControlSurveyor_Systemscancomplete, // System scan complete.
         UserControlSurveyor_bodiesfound, //  bodies found.

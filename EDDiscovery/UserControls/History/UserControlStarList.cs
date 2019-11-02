@@ -501,6 +501,11 @@ namespace EDDiscovery.UserControls
                                     if (sc.PlanetTypeID == EDPlanet.Ammonia_world)
                                         extrainfo = extrainfo.AppendPrePad(string.Format("{0} is an ammonia world".T(EDTx.UserControlStarList_AW), bodynameshort), prefix);
                                 }
+
+                                if ( sn.Signals != null )
+                                {
+                                    extrainfo = extrainfo.AppendPrePad(string.Format("{0} has signals".T(EDTx.UserControlStarList_Signals), bodynameshort), prefix);
+                                }
                             }
                         }
 

@@ -65,6 +65,8 @@ namespace EDDiscovery.UserControls
             checkEDSMForInformationToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "edsm", false);
             showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "showsysinfo", true);
             dontHideInFSSModeToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "donthidefssmode", true);
+            hasSignalsToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "signals", true );
+
             SetAlign((StringAlignment)EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(DbSave + "align", 0));
 
             // install the handlers AFTER setup otherwise you get lots of events
@@ -242,7 +244,8 @@ namespace EDDiscovery.UserControls
                                                         (sd.HasRings && !sd.AmmoniaWorld && !sd.Earthlike && !sd.WaterWorld && hasRingsToolStripMenuItem.Checked) ||
                                                         (sd.HasMeaningfulVolcanism && hasVolcanismToolStripMenuItem.Checked) ||
                                                         (sd.Terraformable && terraformableToolStripMenuItem.Checked) ||
-                                                        (lowRadiusToolStripMenuItem.Checked && sd.nRadius < lowRadiusLimit)
+                                                        (lowRadiusToolStripMenuItem.Checked && sd.nRadius < lowRadiusLimit) ||
+                                                        (sn.Signals != null && hasSignalsToolStripMenuItem.Checked )
                                                         )
                                 {
                                     if (!sd.Mapped || hideAlreadyMappedBodiesToolStripMenuItem.Checked == false)      // if not mapped, or show mapped
@@ -250,7 +253,7 @@ namespace EDDiscovery.UserControls
                                         pictureBoxSurveyor.AddTextFixedSizeC(
                                                 new Point(3, vpos),
                                                 new Size(Math.Max(pictureBoxSurveyor.Width - 6, 24), Font.Height),
-                                                InfoLine(last_sys, sd),
+                                                InfoLine(last_sys, sn, sd),
                                                 Font,
                                                 textcolour,
                                                 backcolour,
@@ -285,18 +288,14 @@ namespace EDDiscovery.UserControls
             pictureBoxSurveyor.Render();
         }
 
-        private string InfoLine(ISystem sys, JournalScan sd)
+        private string InfoLine(ISystem sys, StarScan.ScanNode sn, JournalScan sd)
         {
             var information = new StringBuilder();
 
             if (sd.Mapped)
                 information.Append("\u2713"); // let the cmdr see that this body is already mapped - this is a check
 
-            string bodyname = sd.BodyName;
-
-            // if [0] starts with [1], and there is more in [0] then [1], remove
-            if (bodyname.StartsWith(sys.Name, StringComparison.InvariantCultureIgnoreCase) && bodyname.Length > sys.Name.Length)
-                bodyname = bodyname.Substring(sys.Name.Length).Trim();
+            string bodyname = sd.BodyName.ReplaceIfStartsWith(sys.Name);
 
             // Name
             information.Append(bodyname);
@@ -308,8 +307,9 @@ namespace EDDiscovery.UserControls
             information.Append((sd.WaterWorld && sd.Terraformable) ? @" is a terraformable water world.".T(EDTx.UserControlSurveyor_isaterraformablewaterworld) : null);
             information.Append((sd.Terraformable && !sd.WaterWorld) ? @" is a terraformable planet.".T(EDTx.UserControlSurveyor_isaterraformableplanet) : null);
             information.Append((sd.HasRings) ? @" Has ring.".T(EDTx.UserControlSurveyor_Hasring) : null);
-            information.Append((sd.HasMeaningfulVolcanism) ? @" Has ".T(EDTx.UserControlSurveyor_Has) + sd.Volcanism : null);
+            information.Append((sd.HasMeaningfulVolcanism) ? @" Has ".T(EDTx.UserControlSurveyor_Has) + sd.Volcanism + "." : null);
             information.Append((sd.nRadius < lowRadiusLimit) ? @" Low Radius.".T(EDTx.UserControlSurveyor_LowRadius) : null);
+            information.Append((sn.Signals != null) ? " Has Signals.".T(EDTx.UserControlSurveyor_Signals) : null);
             information.Append(@" " + sd.DistanceFromArrivalText);
             if (sd.WasMapped == true && sd.WasDiscovered == true)
                 information.Append(" (Mapped & Discovered)".T(EDTx.UserControlSurveyor_MandD));
@@ -396,6 +396,11 @@ namespace EDDiscovery.UserControls
             DrawSystem(last_sys);
         }
 
+        private void hasSignalsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "signals", hasSignalsToolStripMenuItem.Checked);
+            DrawSystem(last_sys);
+        }
 
         private void leftToolStripMenuItem_Click(object sender, EventArgs e)
         {
