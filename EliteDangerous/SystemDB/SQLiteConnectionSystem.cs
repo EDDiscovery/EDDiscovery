@@ -136,6 +136,23 @@ namespace EliteDangerousCore.DB
             ExecuteNonQueries(queries);
         }
 
+        public void DropSystemDBTableIndexes()
+        {
+            string[] queries = new[]
+            {
+                "DROP INDEX IF EXISTS SystemsSectorName",        // worth it for lookups of stars
+                "DROP INDEX IF EXISTS SystemsXZY",        // speeds up searching. 
+               
+                "DROP INDEX IF EXISTS NamesName",            // improved speed from 9038 (named)/1564 (std) to 516/446ms at minimal cost
+
+                "DROP INDEX IF EXISTS SectorName",         // name - > entry
+                "DROP INDEX IF EXISTS SectorGridid",     // gridid -> entry
+            };
+
+            ExecuteNonQueries(queries);
+
+        }
+
         #endregion
 
     }

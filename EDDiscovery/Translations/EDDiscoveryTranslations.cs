@@ -66,6 +66,7 @@ namespace EDDiscovery
         EDDiscoveryForm_VSLRestart, // Restart Elite Dangerous to have this file read into the galaxy map
         EDDiscoveryForm_VSLFileErr, // Error writing {0} export visited stars
         EDDiscoveryForm_InaraW, // Inara historic upload is disabled until 1 hour has elapsed from the last try to prevent server flooding
+        EDDiscoveryForm_IndexW, // Are you sure to Rebuild Indexes? It may take a long time.
         EDDiscoveryForm_RH, // Refresh History.
         EDDiscoveryForm_NoEDSMAPI, // Please ensure a commander is selected and it has a EDSM API key set
         EDDiscoveryForm_EDSMSyncE, // EDSM Sync failed: {0}
