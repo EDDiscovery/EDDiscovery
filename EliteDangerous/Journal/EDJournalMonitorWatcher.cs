@@ -274,15 +274,15 @@ namespace EliteDangerousCore
 
             for (int i = 0; i < readersToUpdate.Count; i++)
             {
+                EDJournalReader reader = readersToUpdate[i];
+                updateProgress(i * 100 / readersToUpdate.Count, reader.TravelLogUnit.Name);
+
+                //System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCountLap("PJF"), i + " read ");
+
+                reader.ReadJournal(out List<JournalReaderEntry> entries, out List<UIEvent> uievents, historyrefreshparsing: true, resetOnError: true);      // this may create new commanders, and may write to the TLU db
+
                 UserDatabase.Instance.ExecuteWithDatabase(cn =>
                 {
-                    EDJournalReader reader = readersToUpdate[i];
-                    updateProgress(i * 100 / readersToUpdate.Count, reader.TravelLogUnit.Name);
-
-                    //System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCountLap("PJF"), i + " read ");
-
-                    reader.ReadJournal(out List<JournalReaderEntry> entries, out List<UIEvent> uievents, historyrefreshparsing: true, resetOnError: true);      // this may create new commanders, and may write to the TLU db
-
                     if (entries.Count > 0)
                     {
                         ILookup<DateTime, JournalEntry> existing = JournalEntry.GetAllByTLU(reader.TravelLogUnit.id, cn.Connection).ToLookup(e => e.EventTimeUTC);
