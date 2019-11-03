@@ -293,7 +293,7 @@ namespace EliteDangerousCore
                         {
                             foreach (JournalReaderEntry jre in entries)
                             {
-                                if (!existing[jre.JournalEntry.EventTimeUTC].Any(e => JournalEntry.AreSameEntry(jre.JournalEntry, e, ent1jo: jre.Json)))
+                                if (!existing[jre.JournalEntry.EventTimeUTC].Any(e => JournalEntry.AreSameEntry(jre.JournalEntry, e, cn.Connection, ent1jo: jre.Json)))
                                 {
                                     jre.JournalEntry.Add(jre.Json, cn.Connection, tn);
                                     //System.Diagnostics.Trace.WriteLine(string.Format("Write Journal to db {0} {1}", jre.JournalEntry.EventTimeUTC, jre.JournalEntry.EventTypeStr));

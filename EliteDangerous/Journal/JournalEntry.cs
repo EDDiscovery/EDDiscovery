@@ -384,16 +384,16 @@ namespace EliteDangerousCore
         }
 
         // optionally pass in json for speed reasons.  Guaranteed that ent1jo and 2 are not altered by the compare!
-        public static bool AreSameEntry(JournalEntry ent1, JournalEntry ent2, JObject ent1jo = null, JObject ent2jo = null)
+        internal static bool AreSameEntry(JournalEntry ent1, JournalEntry ent2, SQLiteConnectionUser cn, JObject ent1jo = null, JObject ent2jo = null)
         {
             if (ent1jo == null && ent1 != null)
             {
-                ent1jo = GetJson(ent1.Id);      // read from db the json since we don't have it
+                ent1jo = GetJson(ent1.Id,cn);      // read from db the json since we don't have it
             }
 
             if (ent2jo == null && ent2 != null)
             {
-                ent2jo = GetJson(ent2.Id);      // read from db the json since we don't have it
+                ent2jo = GetJson(ent2.Id,cn);      // read from db the json since we don't have it
             }
 
             if (ent1jo == null || ent2jo == null)
