@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2017 EDDiscovery development team
+ * Copyright © 2017-2019 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -13,23 +13,19 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using EliteDangerousCore;
+using EliteDangerousCore.DB;
+using EliteDangerousCore.EDSM;
+using EliteDangerousCore.JournalEvents;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using EliteDangerousCore.EDSM;
+using System.Drawing;
 using System.IO;
-using EDDiscovery.UserControls;
-using Newtonsoft.Json.Linq;
-using System.Threading.Tasks;
-using EDDiscovery.Forms;
-using EliteDangerousCore.DB;
-using EliteDangerousCore;
-using EliteDangerousCore.JournalEvents;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
 {
@@ -91,7 +87,7 @@ namespace EDDiscovery.UserControls
 
         public void NewEntry(HistoryEntry he, HistoryList hl)               // called when a new entry is made.. check to see if its a scan update
         {
-            if (he.EntryType == JournalTypeEnum.Scan || he.EntryType == JournalTypeEnum.FSDJump)
+            if (he.EntryType == JournalTypeEnum.Scan || he.EntryType == JournalTypeEnum.FSDJump || he.EntryType == JournalTypeEnum.FSSDiscoveryScan )
                 UpdateSystemRows();
         }
 
@@ -128,9 +124,10 @@ namespace EDDiscovery.UserControls
         {
             const int idxVisits = 5;
             const int idxScans = 6;
-            const int idxPriStar = 7;
-            const int idxInfo = 8;
-            const int idxNote = 9;
+            const int idxBodies= 7;
+            const int idxstars = 8;
+            const int idxInfo = 9;
+            const int idxNote = 10;
 
             ISystem currentSystem = discoveryform.history.CurrentSystem; // may be null
 
@@ -140,7 +137,7 @@ namespace EDDiscovery.UserControls
                 ISystem sys = (ISystem)dataGridViewExplore[0, rowindex].Tag;
 
                 if (sys == null)
-                    sys = SystemCache.FindSystem(sysname);
+                    sys = discoveryform.history.FindSystem(sysname);
 
                 if (sys != null && currentSystem != null)
                 {
@@ -163,46 +160,48 @@ namespace EDDiscovery.UserControls
 
                     dataGridViewExplore[idxVisits, rowindex].Value = discoveryform.history.GetVisitsCount(sysname).ToString();
 
-                    List<JournalScan> scans = discoveryform.history.GetScans(sysname);
-                    dataGridViewExplore[idxScans, rowindex].Value = scans.Count.ToString();
-
-                    string pristar = "";
-                    // Search for primary star
-                    foreach (var scan in scans)
+                    StarScan.SystemNode sysnode = discoveryform.history.starscan.FindSystem(sys,false);
+                    
+                    if ( sysnode != null)
                     {
-                        if (scan.IsStar && scan.DistanceFromArrivalLS == 0.0)
+                        dataGridViewExplore[idxScans, rowindex].Value = sysnode.StarPlanetsScanned().ToString();
+                        if (sysnode.FSSTotalBodies.HasValue)
+                            dataGridViewExplore[idxBodies, rowindex].Value = sysnode.FSSTotalBodies.Value.ToString();
+
+                        dataGridViewExplore[idxstars, rowindex].Value = sysnode.StarTypesFound(false);
+
+                        string info = "";
+                        foreach( var scan in sysnode.Bodies)
                         {
-                            pristar = scan.StarType;
-                            break;
+                            JournalScan sd = scan.ScanData;
+                            if (sd != null)
+                            {
+                                if (sd.IsStar)
+                                {
+                                    if (sd.StarTypeID == EDStar.AeBe)
+                                        info = info + " " + "AeBe";
+                                    if (sd.StarTypeID == EDStar.N)
+                                        info = info + " " + "NS";
+                                    if (sd.StarTypeID == EDStar.H)
+                                        info = info + " " + "BH";
+                                }
+                                else
+                                {
+                                    if (sd.PlanetTypeID == EDPlanet.Earthlike_body)
+                                    {
+                                        info = info + " " + (sd.Terraformable ? "T-ELW" : "ELW");
+                                    }
+                                    else if (sd.PlanetTypeID == EDPlanet.Water_world)
+                                        info = info + " " + (sd.Terraformable ? "T-WW" : "WW");
+                                    else if (sd.PlanetTypeID == EDPlanet.High_metal_content_body && sd.Terraformable)
+                                        info = info + " " + "T-HMC";
+                                }
+                            }
+
                         }
+
+                        dataGridViewExplore[idxInfo, rowindex].Value = info.Trim();
                     }
-                    dataGridViewExplore[idxPriStar, rowindex].Value = pristar;
-
-
-                    string info = "";
-
-                    foreach (var scan in scans)
-                    {
-                        if (scan.IsStar)
-                        {
-                            if (scan.StarTypeID == EDStar.AeBe)
-                                info = info + " " + "AeBe";
-                            if (scan.StarTypeID == EDStar.N)
-                                info = info + " " + "NS";
-                            if (scan.StarTypeID == EDStar.H)
-                                info = info + " " + "BH";
-                        }
-                        else
-                        {
-                            if (scan.PlanetTypeID == EDPlanet.Earthlike_body)
-                                info = info + " " + "ELW";
-                            if (scan.PlanetTypeID == EDPlanet.Water_world)
-                                info = info + " " + "WW";
-                        }
-                    }
-
-                    dataGridViewExplore[idxInfo, rowindex].Value = info.Trim();
-
 
                     string note = "";
                     SystemNoteClass sn = SystemNoteClass.GetNoteOnSystem(sys.Name, sys.EDSMID);

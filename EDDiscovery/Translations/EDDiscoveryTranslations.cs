@@ -432,6 +432,7 @@ namespace EDDiscovery
         UserControlTravelGrid_NotSynced, // System could not be found - has not been synched or EDSM is unavailable
         UserControlTravelGrid_Remove, // Confirm you wish to remove this entry
 
+        UserControlStarList_Total, // Total
         UserControlStarList_FV, // First visit {0}
         UserControlStarList_CS, // {0} Star(s)
         UserControlStarList_SMBH, // {0} is a super massive black hole
@@ -537,6 +538,7 @@ namespace EDDiscovery
         UserControlSurveyor_isaterraformableplanet, //  is a terraformable planet.
         UserControlSurveyor_Hasring, //  Has ring.
         UserControlSurveyor_Has, //  Has
+        UserControlSurveyor_Scan, //  Scan
 
         UserControlSysInfo_NoMissions, // No Missions
         UserControlSysInfo_NA, // N/A

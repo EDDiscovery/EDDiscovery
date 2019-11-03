@@ -149,6 +149,7 @@ namespace EDDiscovery.UserControls
             {
                 // new scan, new materials (for the count display), new SAA Signals all can cause display to change.
                 if (he.EntryType == JournalTypeEnum.Scan || he.journalEntry is IMaterialJournalEntry || he.journalEntry is JournalSAASignalsFound ||
+                    he.journalEntry is JournalFSSDiscoveryScan || 
                                 last_he == null || last_he.System != he.System) //  or not presenting or diff sys
                 {
                     last_he = he;
@@ -195,9 +196,17 @@ namespace EDDiscovery.UserControls
                 {
                     long value = data.ScanValue(checkBoxEDSM.Checked);
                     control_text += " ~ " + value.ToString("N0") + " cr";
+
+                    int scanned = data.StarPlanetsScanned();
+
+                    if (scanned > 0)
+                    {
+                        control_text += " " + "Scan".T(EDTx.UserControlSurveyor_Scan) + " " + scanned.ToString() + (data.FSSTotalBodies != null ? (" / " + data.FSSTotalBodies.Value.ToString()) : "");
+                    }
                 }
                 else
                     control_text += " " + "No Scan".T(EDTx.NoScan);
+
 
             }
 

@@ -35,7 +35,7 @@ namespace EliteDangerousCore
             public SortedList<int, ScanNode> NodesByID = new SortedList<int, ScanNode>();
             public int MaxTopLevelBodyID = 0;
             public int MinPlanetBodyID = 512;
-            public int? TotalBodies;
+            public int? FSSTotalBodies;
 
             public IEnumerable<ScanNode> Bodies
             {
@@ -74,23 +74,22 @@ namespace EliteDangerousCore
                 return value;
             }
 
-            // run across all with scan of a type
-            public string ActionWithScan(Func<ScanNode,string> action, bool bracketit = false, string spacing = "; ", ScanNodeType ntype = ScanNodeType.star)   
+            public string StarTypesFound(bool bracketit = true) // first is primary star
             {
-                string st = "";
-                foreach (var x in starnodes)
-                {
-                    System.Diagnostics.Debug.WriteLine("Star node {0} type {1} Scan {2}", system.Name, x.Value.type, x.Value.ScanData!=null);
-                    if (x.Value.type == ntype && x.Value.ScanData != null)
-                    {
-                        st = st.AppendPrePad(action(x.Value), spacing);
-                    }
-                }
+                var sortedset = (from x in Bodies where x.ScanData != null && x.type == ScanNodeType.star orderby x.ScanData.DistanceFromArrivalLS select x.ScanData.StarTypeID.ToString()).ToList();
+                string s = string.Join("; ", sortedset);
+                if (bracketit && s.HasChars())
+                    s = "(" + s + ")";
+                return s;
+            }
 
-                if (bracketit && st.HasChars())
-                    st = "(" + st + ")";
-
-                return st;
+            public int StarPlanetsScanned()      // not include anything but these.  This corresponds to FSSDiscoveryScan
+            {
+                return Bodies.Where(b => ( b.type == ScanNodeType.star || b.type == ScanNodeType.body) && b.ScanData != null).Count();
+            }
+            public int StarsScanned()      // only stars
+            {
+                return Bodies.Where(b => b.type == ScanNodeType.star && b.ScanData != null).Count();
             }
         };
 

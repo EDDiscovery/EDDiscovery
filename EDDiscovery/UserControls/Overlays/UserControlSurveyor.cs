@@ -222,15 +222,46 @@ namespace EDDiscovery.UserControls
                     vpos += (int)Font.Height;
                 }
 
-                StarScan.SystemNode scannode = discoveryform.history.starscan.FindSystem(sys, checkEDSMForInformationToolStripMenuItem.Checked);        // get data with EDSM
+                StarScan.SystemNode systemnode = discoveryform.history.starscan.FindSystem(sys, checkEDSMForInformationToolStripMenuItem.Checked);        // get data with EDSM
 
-                if (scannode != null)     // no data, clear display, clear any last_he so samesys is false next time
+                if (systemnode != null)     // no data, clear display, clear any last_he so samesys is false next time
                 {
-                    var all_nodes = scannode.Bodies.ToList();
+                    string infoline = "";
+
+                    int scanned = systemnode.StarPlanetsScanned();
+
+                    if (scanned > 0)
+                    {
+                        infoline = "Scan".T(EDTx.UserControlSurveyor_Scan) + " " + scanned.ToString() + (systemnode.FSSTotalBodies != null ? (" / " + systemnode.FSSTotalBodies.Value.ToString()) : "");
+                    }
+
+                    long value = systemnode.ScanValue(false);
+
+                    if ( value > 0 )
+                    {
+                        infoline = infoline.AppendPrePad("~ " + value.ToString("N0") + " cr", "; ");
+                    }
+
+                    if (infoline.HasChars())
+                    {
+                        pictureBoxSurveyor.AddTextFixedSizeC(
+                            new Point(3, vpos),
+                            new Size(Math.Max(pictureBoxSurveyor.Width - 6, 24), Font.Height),
+                            infoline,
+                            Font,
+                            textcolour,
+                            backcolour,
+                            1.0F,
+                            false,
+                            frmt: frmt);
+                        vpos += (int)Font.Height;
+                    }
+
+                    var all_nodes = systemnode.Bodies.ToList();
 
                     if (all_nodes != null)
                     {
-                        long value = 0;
+                        value = 0;
 
                         foreach (StarScan.ScanNode sn in all_nodes)
                         {
@@ -268,19 +299,21 @@ namespace EDDiscovery.UserControls
                             }
                         }
 
-                        if (value>0 )
+                        if (value>0)
                         {
                             pictureBoxSurveyor.AddTextFixedSizeC(
                                 new Point(3, vpos),
                                 new Size(Math.Max(pictureBoxSurveyor.Width - 6, 24), Font.Height),
-                                "~ " + value.ToString("N0") + " cr",
+                                "^^ ~ " + value.ToString("N0") + " cr",
                                 Font,
                                 textcolour,
                                 backcolour,
                                 1.0F,
                                 false,
                                 frmt: frmt);
+                            vpos += (int)Font.Height;
                         }
+
                     }
                 }
             }
