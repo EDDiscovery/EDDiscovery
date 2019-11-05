@@ -253,11 +253,11 @@ namespace EliteDangerousCore.DB
             return s;
         }
 
-        public static ISystem GetSystemNearestTo(Point3D currentpos,
+         public static ISystem GetSystemNearestTo(Point3D currentpos,
                                                  Point3D wantedpos,
                                                  double maxfromcurpos,
                                                  double maxfromwanted,
-                                                 RoutePlotter.Metric routemethod,
+                                                 SystemsDB.SystemsNearestMetric routemethod,
                                                  int limitto)
         {
             if (SystemsDatabase.Instance.RebuildRunning)    // return from cache is rebuild is running
@@ -291,7 +291,7 @@ namespace EliteDangerousCore.DB
                                                  Point3D wantedpos,
                                                  double maxfromcurpos,
                                                  double maxfromwanted,
-                                                 RoutePlotter.Metric routemethod,
+                                                 SystemsDB.SystemsNearestMetric routemethod,
                                                  int limitto, 
                                                  SystemsDatabaseConnection cn)
         {

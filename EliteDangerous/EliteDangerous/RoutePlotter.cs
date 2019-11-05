@@ -14,6 +14,7 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
+using EliteDangerousCore.DB;
 using EMK.LightGeometry;
 using System;
 using System.Collections.Generic;
@@ -30,41 +31,8 @@ namespace EliteDangerousCore
         public Point3D Coordsto;
         public string FromSystem;
         public string ToSystem;
-        public Metric RouteMethod;
+        public SystemsDB.SystemsNearestMetric RouteMethod;
         public bool UseFsdBoost;
-
-        private static readonly string[] MetricNames = {
-            "Nearest to Waypoint",
-            "Minimum Deviation from Path",
-            "Nearest to Waypoint with dev<=100ly",
-            "Nearest to Waypoint with dev<=250ly",
-            "Nearest to Waypoint with dev<=500ly",
-            "Nearest to Waypoint + Deviation / 2",
-        };
-
-        /// <summary>
-        /// Returns the string representation of a Metric enum value.
-        /// </summary>
-        /// <exception cref="ArgumentOutOfRangeException">The int representation of the variable metric has to be smaller than the length of the static MetricNames array.</exception>
-        /// <param name="metric">The metric enum value.</param>
-        public static string GetMetricName(Metric metric)
-        {
-            Debug.Assert(Enum.GetNames(typeof(Metric)).Length == MetricNames.Length);
-            if ((int) metric >= MetricNames.Length)
-                throw new ArgumentOutOfRangeException(nameof(metric));
-
-            return MetricNames[(int) metric];
-        }
-
-        public enum Metric
-        {
-            IterativeNearestWaypoint,
-            IterativeMinDevFromPath,
-            IterativeMaximumDev100Ly,
-            IterativeMaximumDev250Ly,
-            IterativeMaximumDev500Ly,
-            IterativeWaypointDevHalf,
-        }
 
         public class ReturnInfo
         {
@@ -85,7 +53,7 @@ namespace EliteDangerousCore
         {
             double traveldistance = Point3D.DistanceBetween(Coordsfrom, Coordsto);      // its based on a percentage of the traveldistance
             List<ISystem> routeSystems = new List<ISystem>();
-            System.Diagnostics.Debug.WriteLine("From " + FromSystem + " to  " + ToSystem + ", using metric " + GetMetricName(RouteMethod));
+            System.Diagnostics.Debug.WriteLine("From " + FromSystem + " to  " + ToSystem + ", using metric " + RouteMethod.ToString());
 
             routeSystems.Add(new SystemClass(FromSystem, Coordsfrom.X, Coordsfrom.Y, Coordsfrom.Z));
 
