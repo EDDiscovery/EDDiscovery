@@ -96,7 +96,6 @@ namespace EDDiscovery.Forms
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "EDDiscovery Loading";
-            this.TopMost = true;
             this.ResumeLayout(false);
 
         }
