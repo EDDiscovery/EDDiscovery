@@ -160,7 +160,7 @@ namespace EliteDangerousCore
                         PrimaryEconomy = jl.EDEconomy,
                         Power = jl.PowerList,
                         PowerState = jl.PowerplayState,
-                        status = SystemStatusEnum.EDDiscovery,
+                        status = jl.StarPosFromEDSM ? SystemStatusEnum.Unknown : SystemStatusEnum.EDDiscovery,
                     };
 
                     // If it was a new system, pass the coords back to the StartJump

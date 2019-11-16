@@ -642,7 +642,10 @@ namespace EliteDangerousCore
                 ISystem oldsys = syspos.System;
 
                 bool updateedsmid = oldsys.EDSMID != edsmsys.EDSMID;
-                bool updatesyspos = edsmsys.HasCoordinate && edsmsys.Xi != oldsys.Xi && edsmsys.Yi != oldsys.Yi && edsmsys.Zi != oldsys.Zi;
+                bool updatesyspos = edsmsys.HasCoordinate &&
+                                    (edsmsys.Xi != oldsys.Xi || edsmsys.Yi != oldsys.Yi || edsmsys.Zi != oldsys.Zi) &&
+                                    oldsys.status != SystemStatusEnum.EDDiscovery && // NEVER EVER EVER OVERRIDE JOURNAL COORDINATES
+                                    oldsys.status != SystemStatusEnum.EDSM;
 
                 ISystem newsys = new SystemClass
                 {
