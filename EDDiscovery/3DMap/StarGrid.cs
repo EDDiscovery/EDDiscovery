@@ -119,7 +119,7 @@ namespace EDDiscovery
 
             foreach (HistoryEntry vs in cls)
             {                                                               // all vs stars which are not in edsm and have co-ords.
-                if (vs.IsLocOrJump && vs.System.status != SystemStatusEnum.EDSM && vs.System.HasCoordinate )
+                if (vs.IsLocOrJump && vs.System.source != SystemSource.FromEDSM && vs.System.HasCoordinate )
                 {
                     Vector3 ent = new Vector3((float)vs.System.X, (float)vs.System.Y, (float)vs.System.Z);
                     if (!ents.Contains(ent))
