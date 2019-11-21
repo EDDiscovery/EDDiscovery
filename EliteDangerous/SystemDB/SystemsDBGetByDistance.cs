@@ -26,18 +26,6 @@ namespace EliteDangerousCore.DB
     {
         ///////////////////////////////////////// List of systems near xyz between mindist and maxdist
 
-        private static void GetSystemListBySqDistancesFrom(BaseUtils.SortedListDoubleDuplicate<ISystem> distlist, double x, double y, double z,
-                                                    int maxitems,
-                                                    double mindist, double maxdist, bool spherical,
-                                                    Action<ISystem> LookedUp = null
-                                                    )
-        {
-            SystemsDatabase.Instance.ExecuteWithDatabase(db =>
-            {
-                GetSystemListBySqDistancesFrom(distlist, x, y, z, maxitems, mindist, maxdist, spherical, db.Connection, LookedUp);
-            });
-        }
-
         internal static void GetSystemListBySqDistancesFrom(BaseUtils.SortedListDoubleDuplicate<ISystem> distlist, // MUST use duplicate double list to protect against EDSM having two at the same point
                                                             double x, double y, double z,
                                                             int maxitems,
@@ -114,14 +102,6 @@ namespace EliteDangerousCore.DB
                   //  System.Diagnostics.Debug.WriteLine("Time2 " + BaseUtils.AppTicks.TickCountLap("SDC") + "  count " + count);
                 }
             }
-        }
-
-        private static ISystem GetSystemByPosition(double x, double y, double z, double maxdist = 0.125)
-        {
-            return SystemsDatabase.Instance.ExecuteWithDatabase(db =>
-            {
-                return GetSystemByPosition(x, y, z, db.Connection, maxdist);
-            });
         }
 
         internal static ISystem GetSystemByPosition(double x, double y, double z, SQLiteConnectionSystem cn, double maxdist = 0.125)

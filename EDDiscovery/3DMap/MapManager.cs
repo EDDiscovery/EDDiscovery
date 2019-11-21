@@ -75,14 +75,20 @@ namespace EDDiscovery._3DMap
 
         public void Show()
         {
-            // TODO: set Opacity to match EDDiscoveryForm
             if (_formMap != null)
             {
-                EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
-                _formMap.IconSelect(theme.ApplyStd(_formMap));
+                if (SystemsDatabase.Instance.RebuildRunning)
+                {
+                    ExtendedControls.MessageBoxTheme.Show("Not Available due to DB rebuild", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+                else
+                {
+                    EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
+                    _formMap.IconSelect(theme.ApplyStd(_formMap));
 
-                _formMap.Show();
-                _formMap.Focus();
+                    _formMap.Show();
+                    _formMap.Focus();
+                }
             }
         }
     }

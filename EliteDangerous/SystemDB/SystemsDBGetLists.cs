@@ -24,6 +24,9 @@ namespace EliteDangerousCore.DB
     {
         public static long GetTotalSystems()            // this is SLOW try not to use
         {
+            if (SystemsDatabase.Instance.RebuildRunning)
+                return 0;
+
             return SystemsDatabase.Instance.ExecuteWithDatabase(db =>
             {
                 var cn = db.Connection;
@@ -39,9 +42,13 @@ namespace EliteDangerousCore.DB
         public static List<ISystem> ListStars(string where = null, string orderby = null, string limit = null, bool eddbinfo = false, 
                                                 Action<ISystem> starreport = null)
         {
+            List<ISystem> ret = new List<ISystem>();
+
+            if (SystemsDatabase.Instance.RebuildRunning)
+                return ret;
+
             return SystemsDatabase.Instance.ExecuteWithDatabase(db =>
             {
-                List<ISystem> ret = new List<ISystem>();
 
                 //BaseUtils.AppTicks.TickCountLap("Star");
 
@@ -71,9 +78,13 @@ namespace EliteDangerousCore.DB
         // randimised id % 100 < sercentage
         public static List<V> GetStarPositions<V>(int percentage, Func<int, int, int, V> tovect)  // return all star positions..
         {
+            List<V> ret = new List<V>();
+
+            if (SystemsDatabase.Instance.RebuildRunning)
+                return ret;
+
             return SystemsDatabase.Instance.ExecuteWithDatabase(db =>
             {
-                List<V> ret = new List<V>();
 
                 var cn = db.Connection;
 
