@@ -256,7 +256,7 @@ namespace EDDiscovery.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://forums.frontier.co.uk/showthread.php?t=329643&amp;amp;p=5154370#post5154370.
+        ///   Looks up a localized string similar to https://forums.frontier.co.uk/threads/eddiscovery-journals-exploration-trading-voice-recognition-speech-star-maps-webserver.329643/.
         /// </summary>
         internal static string URLProjectEDForumPost {
             get {
