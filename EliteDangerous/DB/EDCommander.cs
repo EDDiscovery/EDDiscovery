@@ -137,7 +137,7 @@ namespace EliteDangerousCore
         public static EDCommander Create(EDCommander other )
         {
             return Create(other.name, other.EdsmName, other.EDSMAPIKey, other.JournalDir, other.syncToEdsm, other.SyncFromEdsm,
-                                other.SyncToEddn, other.SyncToEGO, other.EGOName, other.EGOAPIKey, other.SyncToInara, other.InaraName, other.InaraAPIKey, other.SyncToIGAU);
+                                other.SyncToEddn, other.SyncToEGO, other.EGOName, other.EGOAPIKey, other.SyncToInara, other.InaraName, other.InaraAPIKey, toigau: other.SyncToIGAU);
         }
 
         public static EDCommander Create(string name = null, string edsmName = null, string edsmApiKey = null, string journalpath = null,
