@@ -5,12 +5,12 @@
  * file except in compliance with the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
+ *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using Newtonsoft.Json.Linq;
@@ -129,6 +129,9 @@ namespace EliteDangerousCore.DB
 
                 if (dbver < 122)
                     UpgradeUserDB122();
+
+                if (dbver < 123)
+                    UpgradeUserDB123();
 
                 CreateUserDBTableIndexes();
 
@@ -370,7 +373,7 @@ namespace EliteDangerousCore.DB
 
         private void UpgradeUserDB114()
         {
-            string query1 = "DELETE FROM MaterialsCommodities";     // To fix journal name -> in game name mappings for manufactured and encoded commodities  missmatch between  different 8.0 branches... 
+            string query1 = "DELETE FROM MaterialsCommodities";     // To fix journal name -> in game name mappings for manufactured and encoded commodities  missmatch between  different 8.0 branches...
             PerformUpgrade(114, true, false, new[] { query1 });
         }
 
@@ -439,6 +442,12 @@ namespace EliteDangerousCore.DB
             string query2 = "ALTER TABLE Commanders ADD COLUMN MapCentreOnSelection INT";
             string query3 = "ALTER TABLE Commanders ADD COLUMN MapZoom REAL";
             PerformUpgrade(122, true, false, new[] { query1, query2, query3 });
+        }
+
+        private void UpgradeUserDB123()
+        {
+            string query1 = "ALTER TABLE Commanders ADD COLUMN SyncToIGAU INTEGER NOT NULL DEFAULT 0";
+            PerformUpgrade(123, true, false, new[] { query1 });
         }
 
         private void DropOldUserTables()

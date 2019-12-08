@@ -5,12 +5,12 @@
  * file except in compliance with the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
+ *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using System;
@@ -136,19 +136,19 @@ namespace EliteDangerousCore
 
         public static EDCommander Create(EDCommander other )
         {
-            return Create(other.name, other.EdsmName, other.EDSMAPIKey, other.JournalDir, other.syncToEdsm, other.SyncFromEdsm, 
-                                other.SyncToEddn, other.SyncToEGO, other.EGOName, other.EGOAPIKey, other.SyncToInara, other.InaraName, other.InaraAPIKey);
+            return Create(other.name, other.EdsmName, other.EDSMAPIKey, other.JournalDir, other.syncToEdsm, other.SyncFromEdsm,
+                                other.SyncToEddn, other.SyncToEGO, other.EGOName, other.EGOAPIKey, other.SyncToInara, other.InaraName, other.InaraAPIKey, other.SyncToIGAU);
         }
 
-        public static EDCommander Create(string name = null, string edsmName = null, string edsmApiKey = null, string journalpath = null, 
+        public static EDCommander Create(string name = null, string edsmName = null, string edsmApiKey = null, string journalpath = null,
                                         bool toedsm = true, bool fromedsm = false, bool toeddn = true, bool toego = false, string egoname = null, string egoapi = null,
                                         bool toinara = false, string inaraname = null, string inaraapikey = null, string homesystem = null,
-                                        float mapzoom = 1.0f, bool mapcentreonselection = true, int mapcolour = -1)
+                                        float mapzoom = 1.0f, bool mapcentreonselection = true, int mapcolour = -1, bool toigau = false)
         {
             EDCommander cmdr = UserDatabase.Instance.ExecuteWithDatabase<EDCommander>(cn =>
             {
-                using (DbCommand cmd = cn.Connection.CreateCommand("INSERT INTO Commanders (Name,EdsmName,EdsmApiKey,JournalDir,Deleted, SyncToEdsm, SyncFromEdsm, SyncToEddn, NetLogDir, SyncToEGO, EGOName, EGOAPIKey, SyncToInara, InaraName, InaraAPIKey, HomeSystem, MapColour,MapCentreOnSelection,MapZoom) " +
-                                                          "VALUES (@Name,@EdsmName,@EdsmApiKey,@JournalDir,@Deleted, @SyncToEdsm, @SyncFromEdsm, @SyncToEddn, @NetLogDir, @SyncToEGO, @EGOName, @EGOApiKey, @SyncToInara, @InaraName, @InaraAPIKey, @HomeSystem, @MapColour,@MapCentreOnSelection,@MapZoom)"))
+                using (DbCommand cmd = cn.Connection.CreateCommand("INSERT INTO Commanders (Name,EdsmName,EdsmApiKey,JournalDir,Deleted, SyncToEdsm, SyncFromEdsm, SyncToEddn, NetLogDir, SyncToEGO, EGOName, EGOAPIKey, SyncToInara, InaraName, InaraAPIKey, HomeSystem, MapColour, MapCentreOnSelection, MapZoom, SyncToIGAU) " +
+                                                          "VALUES (@Name,@EdsmName,@EdsmApiKey,@JournalDir,@Deleted, @SyncToEdsm, @SyncFromEdsm, @SyncToEddn, @NetLogDir, @SyncToEGO, @EGOName, @EGOApiKey, @SyncToInara, @InaraName, @InaraAPIKey, @HomeSystem, @MapColour, @MapCentreOnSelection, @MapZoom, @SyncToIGAU)"))
                 {
 
                     cmd.AddParameterWithValue("@Name", name ?? "");
@@ -170,6 +170,7 @@ namespace EliteDangerousCore
                     cmd.AddParameterWithValue("@MapColour", mapcolour == -1 ? System.Drawing.Color.Red.ToArgb() : mapcolour);
                     cmd.AddParameterWithValue("@MapCentreOnSelection", mapcentreonselection);
                     cmd.AddParameterWithValue("@MapZoom", mapzoom);
+                    cmd.AddParameterWithValue("@SyncToIGAU", toigau);
                     cmd.ExecuteNonQuery();
                 }
 
@@ -213,7 +214,7 @@ namespace EliteDangerousCore
                 using (DbCommand cmd = cn.Connection.CreateCommand("UPDATE Commanders SET Name=@Name, EdsmName=@EdsmName, EdsmApiKey=@EdsmApiKey, NetLogDir=@NetLogDir, JournalDir=@JournalDir, " +
                                                           "SyncToEdsm=@SyncToEdsm, SyncFromEdsm=@SyncFromEdsm, SyncToEddn=@SyncToEddn, SyncToEGO=@SyncToEGO, EGOName=@EGOName, " +
                                                           "EGOAPIKey=@EGOApiKey, SyncToInara=@SyncToInara, InaraName=@InaraName, InaraAPIKey=@InaraAPIKey, HomeSystem=@HomeSystem, " +
-                                                          "MapColour=@MapColour, MapCentreOnSelection=@MapCentreOnSelection, MapZoom=@MapZoom " +
+                                                          "MapColour=@MapColour, MapCentreOnSelection=@MapCentreOnSelection, MapZoom=@MapZoom, SyncToIGAU=@SyncToIGAU " +
                                                           "WHERE Id=@Id"))
                 {
                     cmd.AddParameter("@Id", DbType.Int32);
@@ -235,6 +236,7 @@ namespace EliteDangerousCore
                     cmd.AddParameter("@MapColour", DbType.Int32);
                     cmd.AddParameter("@MapCentreOnSelection", DbType.Boolean);
                     cmd.AddParameter("@MapZoom", DbType.Double);
+                    cmd.AddParameter("@SyncToIGAU", DbType.Boolean);
 
                     foreach (EDCommander edcmdr in cmdrlist) // potential NRE
                     {
@@ -257,6 +259,7 @@ namespace EliteDangerousCore
                         cmd.Parameters["@MapColour"].Value = edcmdr.MapColour;
                         cmd.Parameters["@MapCentreOnSelection"].Value = edcmdr.MapCentreOnSelection;
                         cmd.Parameters["@MapZoom"].Value = edcmdr.MapZoom;
+                        cmd.Parameters["@IGAU"].Value = edcmdr.SyncToIGAU;
                         cmd.ExecuteNonQuery();
 
                         commanders[edcmdr.Nr] = edcmdr;
@@ -289,7 +292,7 @@ namespace EliteDangerousCore
             }
 
             File.Delete(Path.Combine(EliteDangerousCore.EliteConfigInstance.InstanceOptions.AppDataDirectory, "CommanderPaths.json"));
-            File.Move(Path.Combine(EliteDangerousCore.EliteConfigInstance.InstanceOptions.AppDataDirectory, "CommanderPaths.json.tmp"), 
+            File.Move(Path.Combine(EliteDangerousCore.EliteConfigInstance.InstanceOptions.AppDataDirectory, "CommanderPaths.json.tmp"),
                 Path.Combine(EliteDangerousCore.EliteConfigInstance.InstanceOptions.AppDataDirectory, "CommanderPaths.json"));
 
         }
@@ -414,7 +417,7 @@ namespace EliteDangerousCore
 #endregion
 
 #region Instance
-       
+
         private int nr;
         private bool deleted;
         private string name;
@@ -434,6 +437,7 @@ namespace EliteDangerousCore
         private float mapzoom;
         private bool mapcentreonselection;
         private int mapcolour;
+        private bool syncToIGAU;
 
         public EDCommander()
         {
@@ -466,7 +470,9 @@ namespace EliteDangerousCore
             mapzoom = reader["MapZoom"] is System.DBNull ? 1.0f : (float)Convert.ToDouble(reader["MapZoom"]);
             mapcolour = reader["MapColour"] is System.DBNull ? System.Drawing.Color.Red.ToArgb() : Convert.ToInt32(reader["MapColour"]);
             mapcentreonselection = reader["MapCentreOnSelection"] is System.DBNull ? true : Convert.ToBoolean(reader["MapCentreOnSelection"]);
-            
+
+            syncToIGAU = Convert.ToBoolean(reader["SyncToIGAU"]);
+
         }
 
         public EDCommander(int id, string Name )
@@ -492,6 +498,7 @@ namespace EliteDangerousCore
             this.MapColour = System.Drawing.Color.Red.ToArgb();
 
             this.syncToEddn = false;
+            this.syncToIGAU = false;
         }
 
         public int Nr { get { return nr; }  private set { nr = value;  } }
@@ -518,13 +525,14 @@ namespace EliteDangerousCore
         public bool SyncFromEdsm { get { return syncFromEdsm; } set { syncFromEdsm = value; } }
         public bool SyncToEddn {  get { return syncToEddn; } set { syncToEddn = value;  } }
         //public bool SyncToEGO { get { return syncToEGO; } set { syncToEGO = value; } } disabled
-        public bool SyncToEGO { get { return false; } set {  } } 
+        public bool SyncToIGAU { get { return syncToIGAU; } set { syncToIGAU = value; } }
+        public bool SyncToEGO { get { return false; } set {  } }
         public bool SyncToInara { get { return syncToInara; } set { syncToInara = value; } }
         public bool Deleted { get { return deleted; } set { deleted = value; } }
 
         public string Info { get
             {
-                return BaseUtils.FieldBuilder.Build(";To EDDN", syncToEddn, ";To EDSM", syncToEdsm, ";From EDSM", syncFromEdsm, ";To Inara" , syncToInara, ";To EGO", syncToEGO);
+                return BaseUtils.FieldBuilder.Build(";To EDDN", syncToEddn, ";To EDSM", syncToEdsm, ";From EDSM", syncFromEdsm, ";To Inara" , syncToInara, ";To EGO", syncToEGO, ";To IGAU", syncToIGAU);
             } }
 
 #endregion
