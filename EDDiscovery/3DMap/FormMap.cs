@@ -436,7 +436,7 @@ namespace EDDiscovery
         {
             base.OnFormClosing(e);
 
-            Console.WriteLine("{0} Close form" , Environment.TickCount);
+            Trace.WriteLine($"{Environment.TickCount} Close form");
 
             systemtimer.Stop();
             systemtickinterval.Stop();

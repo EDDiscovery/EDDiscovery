@@ -694,7 +694,7 @@ namespace EDDiscovery.UserControls
 
                     var responseM = edsm.SubmitDistances(targetsystem.Name, dists);
 
-                    Console.WriteLine(responseM);
+                    System.Diagnostics.Trace.WriteLine(responseM);
 
                     string infoM;
                     bool trilaterationOkM;
@@ -706,7 +706,7 @@ namespace EDDiscovery.UserControls
                     if (!responseOkM)
                         respOk = false;
 
-                    Console.WriteLine(infoM);
+                    System.Diagnostics.Trace.WriteLine(infoM);
                 }
 
                 BeginInvoke((MethodInvoker)delegate

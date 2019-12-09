@@ -426,7 +426,7 @@ namespace EDDiscovery
             populatedgrid.dBAsk = SystemsDB.SystemAskType.PopulatedStars;
             grids.Add(populatedgrid);   // add last so shown last
 
-            Console.WriteLine("Grids " + grids.Count + " mid " + midpercentage + " far " + farpercentage);
+            Trace.WriteLine("Grids " + grids.Count + " mid " + midpercentage + " far " + farpercentage);
         }
 
         public void Start()
@@ -442,13 +442,13 @@ namespace EDDiscovery
         {
             if (computeThread!=null && computeThread.IsAlive)
             {
-                Console.WriteLine("{0} Ask for compute exit", Environment.TickCount);
+                Trace.WriteLine($"{Environment.TickCount} Ask for compute exit");
                 computeExit = true;
                 ewh.Set();              // wake it up!
                 computeThread.Join();
                 computeThread = null;
                 computeExit = false;
-                Console.WriteLine("{0} compute exit", Environment.TickCount);
+                Trace.WriteLine($"{Environment.TickCount} compute exit");
             }
         }
 
