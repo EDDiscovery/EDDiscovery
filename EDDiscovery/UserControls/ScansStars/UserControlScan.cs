@@ -234,15 +234,13 @@ namespace EDDiscovery.UserControls
                 {
                     if (controlname == "OK" || controlname == "Cancel")
                     {
-                        f.DialogResult = controlname == "OK" ? DialogResult.OK : DialogResult.Cancel;
-                        f.Close();
+                        f.ReturnResult(controlname == "OK" ? DialogResult.OK : DialogResult.Cancel);
                     }
                     else if ( controlname == "Sys:Return")
                     {
                         if (f.Get("Sys").HasChars())
                         {
-                            f.DialogResult = DialogResult.OK;
-                            f.Close();
+                            f.ReturnResult(DialogResult.OK);
                         }
 
                         f.SwallowReturn = true;
@@ -381,8 +379,7 @@ namespace EDDiscovery.UserControls
                     cf.SetEnabled("OK", true);
                 else if (controlname == "OK")
                 {
-                    cf.DialogResult = DialogResult.OK;
-                    cf.Close();
+                    cf.ReturnResult(DialogResult.OK);
                 }
             };
 

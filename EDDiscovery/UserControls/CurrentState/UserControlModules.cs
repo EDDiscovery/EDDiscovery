@@ -464,16 +464,14 @@ namespace EDDiscovery.UserControls
                     double? v3 = f.GetDouble("FuelWarning");
                     if ( v3.HasValue)
                     {
-                        f.DialogResult = DialogResult.OK;
-                        f.Close();
+                        f.ReturnResult(DialogResult.OK);
                     }
                     else
                         ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "A Value is not valid".T(EDTx.UserControlModules_NValid), "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 else if ( controlname == "Cancel")
                 {
-                    f.DialogResult = DialogResult.Cancel;
-                    f.Close();
+                    f.ReturnResult(DialogResult.Cancel);
                 }
             };
 

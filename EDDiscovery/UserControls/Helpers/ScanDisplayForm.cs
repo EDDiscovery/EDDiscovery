@@ -83,7 +83,7 @@ namespace EDDiscovery.UserControls
             f.Trigger += (dialogname, controlname, ttag) =>
             {
                 if (controlname == "OK" || controlname == "Cancel")
-                    f.Close();
+                    f.ReturnResult(f.DialogResult);
             };
 
             f.InitCentred( parent, parent.Icon, title, null, null, asm);

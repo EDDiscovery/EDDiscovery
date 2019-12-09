@@ -2356,8 +2356,7 @@ namespace EDDiscovery
             {
                 if (controlname == "OK" || controlname == "Cancel")
                 {
-                    f.DialogResult = controlname == "OK" ? DialogResult.OK : DialogResult.Cancel;
-                    f.Close();
+                    f.ReturnResult(controlname == "OK" ? DialogResult.OK : DialogResult.Cancel);
                 }
             };
 

@@ -261,10 +261,9 @@ namespace EDDiscovery.UserControls
             f.Trigger += (dialogname, controlname, tag) =>
             {
                 if (controlname != "Route")
-                    f.DialogResult = DialogResult.Cancel;
+                    f.ReturnResult(DialogResult.Cancel);
                 else
-                    f.DialogResult = DialogResult.OK;
-                f.Close();
+                    f.ReturnResult(DialogResult.OK);
             };
             if ( f.ShowDialogCentred(this.FindForm(), this.FindForm().Icon,  "Enter route".T(EDTx.UserControlRouteTracker_Enterroute)) == DialogResult.OK )
             {
