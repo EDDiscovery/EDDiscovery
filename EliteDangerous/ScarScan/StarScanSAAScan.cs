@@ -139,7 +139,7 @@ namespace EliteDangerousCore
         public void SetFSSDiscoveryScan(JournalFSSDiscoveryScan je, ISystem sys)
         {
             SystemNode sn = GetOrCreateSystemNode(sys);
-            sn.TotalBodies = je.BodyCount;
+            sn.FSSTotalBodies = je.BodyCount;
         }
 
         #endregion

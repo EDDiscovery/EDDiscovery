@@ -1146,21 +1146,25 @@ namespace EDDiscovery
 
         private void sendHistoricDataToInaraToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // TBD FIX WHEN USER DB UPDATED
+            DateTime lasttime = UserDatabase.Instance.GetSettingDate("InaraLastHistoricUpload", DateTime.MinValue);
 
-            ////TBD string rwsystime = SQLiteConnectionSystem.GetSettingString("InaraLastHistoricUpload", "2000-01-01 00:00:00"); // Latest time
-            //DateTime upload;
-            //if (!DateTime.TryParse(rwsystime, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal, out upload))
-            //    upload = new DateTime(2000, 1, 1);
-
-            //if (DateTime.UtcNow.Subtract(upload).TotalHours >= 1)  // every hours, allowed to do this..
-            //{
-            //    EliteDangerousCore.Inara.InaraSync.HistoricData(LogLine,history, EDCommander.Current);
-            //    SQLiteConnectionSystem.PutSettingString("InaraLastHistoricUpload", DateTime.UtcNow.ToString(CultureInfo.InvariantCulture));
-            //}
-            //else
-            //    ExtendedControls.MessageBoxTheme.Show(this, "Inara historic upload is disabled until 1 hour has elapsed from the last try to prevent server flooding".T(EDTx.EDDiscoveryForm_InaraW), "Warning".T(EDTx.Warning));
+            if (DateTime.UtcNow.Subtract(lasttime).TotalHours >= 1)  // every hours, allowed to do this..
+            {
+                EliteDangerousCore.Inara.InaraSync.HistoricData(LogLine, history, EDCommander.Current);
+                UserDatabase.Instance.PutSettingDate("InaraLastHistoricUpload", DateTime.UtcNow);
+            }
+            else
+                ExtendedControls.MessageBoxTheme.Show(this, "Inara historic upload is disabled until 1 hour has elapsed from the last try to prevent server flooding".T(EDTx.EDDiscoveryForm_InaraW), "Warning".T(EDTx.Warning));
         }
+
+        private void rebuildSystemDBIndexesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (ExtendedControls.MessageBoxTheme.Show(this, "Are you sure to Rebuild Indexes? It may take a long time.".T(EDTx.EDDiscoveryForm_IndexW), "Warning".T(EDTx.Warning),MessageBoxButtons.OKCancel,MessageBoxIcon.Warning) == DialogResult.OK )
+            {
+                SystemsDatabase.Instance.RebuildIndexes(LogLine);
+            }
+        }
+
 
         private void notifyIcon1_DoubleClick(object sender, EventArgs e)
         {
@@ -1587,6 +1591,7 @@ namespace EDDiscovery
             popoutdropdown.SelectionBackColor = theme.ButtonBackColor;
             popoutdropdown.Show(this);
         }
+
 
 
         #endregion

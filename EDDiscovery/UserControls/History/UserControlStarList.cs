@@ -13,21 +13,17 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using EDDiscovery.Controls;
+using EliteDangerousCore;
+using EliteDangerousCore.EDSM;
+using EliteDangerousCore.JournalEvents;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Data;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using EDDiscovery.Controls;
-using EliteDangerousCore.DB;
-using EliteDangerousCore;
-using EliteDangerousCore.EDSM;
-using EliteDangerousCore.EDDN;
-using EliteDangerousCore.JournalEvents;
 
 namespace EDDiscovery.UserControls
 {
@@ -275,7 +271,7 @@ namespace EDDiscovery.UserControls
                 return;
             }
 
-            if (he.IsFSDJump || he.journalEntry is JournalScan)
+            if (he.IsFSDJump || he.journalEntry is JournalScan || he.journalEntry is JournalFSSDiscoveryScan)
             {
                 DataGridViewRow rowpresent = null;
                 foreach (DataGridViewRow rowf in dataGridViewStarList.Rows)
@@ -387,7 +383,7 @@ namespace EDDiscovery.UserControls
             return rw;
         }
 
-        string Infoline(List<HistoryEntry> syslist, StarScan.SystemNode node )
+        string Infoline(List<HistoryEntry> syslist, StarScan.SystemNode sysnode )
         {
             string infostr = "";
             string jumponium = "";
@@ -398,18 +394,21 @@ namespace EDDiscovery.UserControls
 
             #region information
 
-            if (node != null)
+            if (sysnode != null)
             {
-                if (node.starnodes != null)
+                if (sysnode.starnodes != null)
                 {
-                    infostr = infostr.AppendPrePad(string.Format("{0} Star(s)".T(EDTx.UserControlStarList_CS), node.starnodes.Count) , Environment.NewLine);
+                    string st = sysnode.StarTypesFound();
+                    if (st.HasChars())
+                        st = " " + st;
+                    int stars = sysnode.StarsScanned();
+                    infostr = infostr.AppendPrePad(string.Format("{0} Star(s){1}".T(EDTx.UserControlStarList_CS), stars, st) , Environment.NewLine);
+
                     string extrainfo = "";
                     string prefix = Environment.NewLine;
-                    int total = 0;
 
-                    foreach (StarScan.ScanNode sn in node.Bodies)
+                    foreach (StarScan.ScanNode sn in sysnode.Bodies)
                     {
-                        total++;
                         if (sn.ScanData != null && checkBoxBodyClasses.Checked)
                         {
                             JournalScan sc = sn.ScanData;
@@ -501,6 +500,11 @@ namespace EDDiscovery.UserControls
                                     if (sc.PlanetTypeID == EDPlanet.Ammonia_world)
                                         extrainfo = extrainfo.AppendPrePad(string.Format("{0} is an ammonia world".T(EDTx.UserControlStarList_AW), bodynameshort), prefix);
                                 }
+
+                                if ( sn.Signals != null )
+                                {
+                                    extrainfo = extrainfo.AppendPrePad(string.Format("{0} has signals".T(EDTx.UserControlStarList_Signals), bodynameshort), prefix);
+                                }
                             }
                         }
 
@@ -545,10 +549,22 @@ namespace EDDiscovery.UserControls
                         }
                     }
 
-                    total -= node.starnodes.Count;
+                    int total = sysnode.StarPlanetsScanned();
+
                     if (total > 0)
-                    {   // tell us that a system has other bodies, and how much, beside stars
-                        infostr = infostr.AppendPrePad(string.Format("{0} Other bodies".T(EDTx.UserControlStarList_OB), total.ToString()), ", ");
+                    {
+                        int totalwithoutstars = total - stars;
+
+                        if (totalwithoutstars > 0)
+                        {
+                            infostr = infostr.AppendPrePad(string.Format("{0} Other bodies".T(EDTx.UserControlStarList_OB), totalwithoutstars.ToString()), ", ");
+                        }
+
+                        if ( sysnode.FSSTotalBodies.HasValue && total < sysnode.FSSTotalBodies.Value )        // only show if you've not got them all
+                        {
+                            infostr += ", " + "Total".T(EDTx.UserControlStarList_Total) + " "+ sysnode.FSSTotalBodies.Value.ToString();
+                        }
+
                         infostr = infostr.AppendPrePad(extrainfo, prefix);                                                
                     }
                     else

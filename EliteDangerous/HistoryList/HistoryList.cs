@@ -574,7 +574,7 @@ namespace EliteDangerousCore
                     {
                         if (he.IsFSDJump && !he.System.HasCoordinate)// try and load ones without position.. if its got pos we are happy
                         {           // done in two IFs for debugging, in case your wondering why!
-                            if (he.System.status != SystemStatusEnum.EDSM && he.System.EDSMID == 0)   // and its not from EDSM and we have not already tried
+                            if (he.System.source != SystemSource.FromEDSM && he.System.EDSMID == 0)   // and its not from EDSM and we have not already tried
                             {
                                 ISystem found = SystemCache.FindSystem(he.System, cn);
                                 if (found != null)
@@ -604,7 +604,7 @@ namespace EliteDangerousCore
 
         public void FillEDSM(HistoryEntry syspos)       // call to fill in ESDM data for entry, and also fills in all others pointing to the system object
         {
-            if (syspos.System.status == SystemStatusEnum.EDSM || syspos.System.EDSMID == -1)  // if set already, or we tried and failed..
+            if (syspos.System.source == SystemSource.FromEDSM || syspos.System.EDSMID == -1)  // if set already, or we tried and failed..
             {
                 //System.Diagnostics.Debug.WriteLine("Checked System {0} already id {1} ", syspos.System.name , syspos.System.id_edsm);
                 return;
@@ -642,7 +642,9 @@ namespace EliteDangerousCore
                 ISystem oldsys = syspos.System;
 
                 bool updateedsmid = oldsys.EDSMID != edsmsys.EDSMID;
-                bool updatesyspos = edsmsys.HasCoordinate && edsmsys.Xi != oldsys.Xi && edsmsys.Yi != oldsys.Yi && edsmsys.Zi != oldsys.Zi;
+                bool updatesyspos = edsmsys.HasCoordinate &&
+                                    (edsmsys.Xi != oldsys.Xi || edsmsys.Yi != oldsys.Yi || edsmsys.Zi != oldsys.Zi) &&
+                                    oldsys.source != SystemSource.FromJournal; // NEVER EVER EVER OVERRIDE JOURNAL COORDINATES
 
                 ISystem newsys = new SystemClass
                 {
@@ -666,7 +668,7 @@ namespace EliteDangerousCore
                     PowerState = !oldsys.PowerState.HasChars() ? edsmsys.PowerState : oldsys.PowerState,
                     NeedsPermit = edsmsys.NeedsPermit,
                     EDDBUpdatedAt = edsmsys.EDDBUpdatedAt,
-                    status = SystemStatusEnum.EDSM
+                    source = SystemSource.FromEDSM
                 };
 
                 foreach (HistoryEntry he in alsomatching)       // list of systems in historylist using the same system object

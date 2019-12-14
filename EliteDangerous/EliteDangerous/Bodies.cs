@@ -468,60 +468,7 @@ namespace EliteDangerousCore
             }
         }
 
-        private static readonly Dictionary<string, EDStar> StarNameToEnumLookup = new Dictionary<string, EDStar>(StringComparer.InvariantCultureIgnoreCase)
-        {
-            ["O (Blue-White) Star"] = EDStar.O,
-            ["B (Blue-White) Star"] = EDStar.B,
-            ["B (Blue-White super giant) Star"] = EDStar.B_BlueWhiteSuperGiant,
-            ["A (Blue-White) Star"] = EDStar.A,
-            ["A (Blue-White super giant) Star"] = EDStar.A_BlueWhiteSuperGiant,
-            ["F (White) Star"] = EDStar.F,
-            ["F (White super giant) Star"] = EDStar.F_WhiteSuperGiant,
-            ["G (White-Yellow) Star"] = EDStar.G,
-            ["G (White-Yellow super giant) Star"] = EDStar.G_WhiteSuperGiant,
-            ["K (Yellow-Orange) Star"] = EDStar.K,
-            ["K (Yellow-Orange giant) Star"] = EDStar.K_OrangeGiant,
-            ["M (Red dwarf) Star"] = EDStar.M,
-            ["M (Red giant) Star"] = EDStar.M_RedGiant,
-            ["M (Red super giant) Star"] = EDStar.M_RedSuperGiant,
-            ["L (Brown dwarf) Star"] = EDStar.L,
-            ["T (Brown dwarf) Star"] = EDStar.T,
-            ["Y (Brown dwarf) Star"] = EDStar.Y,
-            ["T Tauri Star"] = EDStar.TTS,
-            ["Herbig Ae/Be Star"] = EDStar.AeBe,
-            ["Wolf-Rayet Star"] = EDStar.W,
-            ["Wolf-Rayet N Star"] = EDStar.WN,
-            ["Wolf-Rayet NC Star"] = EDStar.WNC,
-            ["Wolf-Rayet C Star"] = EDStar.WC,
-            ["Wolf-Rayet O Star"] = EDStar.WO,
-            ["CS Star"] = EDStar.CS,
-            ["C Star"] = EDStar.C,
-            ["CN Star"] = EDStar.CN,
-            ["CJ Star"] = EDStar.CJ,
-            ["CHd Star"] = EDStar.CHd,
-            ["MS-type Star"] = EDStar.MS,
-            ["S-type Star"] = EDStar.S,
-            ["White Dwarf (D) Star"] = EDStar.D,
-            ["White Dwarf (DA) Star"] = EDStar.DA,
-            ["White Dwarf (DAB) Star"] = EDStar.DAB,
-            ["White Dwarf (DAO) Star"] = EDStar.DAO,
-            ["White Dwarf (DAZ) Star"] = EDStar.DAZ,
-            ["White Dwarf (DAV) Star"] = EDStar.DAV,
-            ["White Dwarf (DB) Star"] = EDStar.DB,
-            ["White Dwarf (DBZ) Star"] = EDStar.DBZ,
-            ["White Dwarf (DBV) Star"] = EDStar.DBV,
-            ["White Dwarf (DO) Star"] = EDStar.DO,
-            ["White Dwarf (DOV) Star"] = EDStar.DOV,
-            ["White Dwarf (DQ) Star"] = EDStar.DQ,
-            ["White Dwarf (DC) Star"] = EDStar.DC,
-            ["White Dwarf (DCV) Star"] = EDStar.DCV,
-            ["White Dwarf (DX) Star"] = EDStar.DX,
-            ["Neutron Star"] = EDStar.N,
-            ["Black Hole"] = EDStar.H,
-            ["Supermassive Black Hole"] = EDStar.SuperMassiveBlackHole
-        };
-
-        // These should be translated to match the in-game star types
+           // These should be translated to match the in-game star types
         private static readonly Dictionary<EDStar, string> StarEnumToNameLookup = new Dictionary<EDStar, string>
         {
             [EDStar.O] = "O (Blue-White) Star".T(EDTx.EDStar_O),
@@ -575,6 +522,9 @@ namespace EliteDangerousCore
             [EDStar.SuperMassiveBlackHole] = "Supermassive Black Hole".T(EDTx.EDStar_SuperMassiveBlackHole),
         };
 
+        // Removed the reverse lookups since they are english dependent. If we need them they are in 11.0.0.   They are not used and i'm worried
+        // they would get used on the translated strings above to reverse it.  So thats why they are gone.
+
         public static List<EDStar> StarTypes
         {
             get
@@ -583,7 +533,7 @@ namespace EliteDangerousCore
             }
         }
 
-        public static string StarTypeName(EDStar type)
+        public static string StarTypeNameShorter(EDStar type)
         {
             if (StarEnumToNameLookup.TryGetValue(type, out var name))
             {
@@ -592,18 +542,6 @@ namespace EliteDangerousCore
             else
             {
                 return type.ToString().Replace("_", " ");
-            }
-        }
-
-        public static EDStar StarTypeNameToEnum(string name)
-        {
-            if (StarNameToEnumLookup.TryGetValue(name, out var type))
-            {
-                return type;
-            }
-            else
-            {
-                return StarStr2Enum(name);
             }
         }
 
@@ -631,29 +569,6 @@ namespace EliteDangerousCore
             [EDPlanet.Helium_gas_giant] = "Helium gas giant".T(EDTx.EDPlanet_Heliumgasgiant),
         };
 
-        private static readonly Dictionary<string, EDPlanet> PlanetNameToEnumLookup = new Dictionary<string, EDPlanet>(StringComparer.InvariantCultureIgnoreCase)
-        {
-            ["Metal-rich body"] = EDPlanet.Metal_rich_body,
-            ["High metal content world"] = EDPlanet.High_metal_content_body,
-            ["Rocky body"] = EDPlanet.Rocky_body,
-            ["Icy body"] = EDPlanet.Icy_body,
-            ["Rocky ice world"] = EDPlanet.Rocky_ice_body,
-            ["Earth-like world"] = EDPlanet.Earthlike_body,
-            ["Water world"] = EDPlanet.Water_world,
-            ["Ammonia world"] = EDPlanet.Ammonia_world,
-            ["Water giant"] = EDPlanet.Water_giant,
-            ["Water giant with life"] = EDPlanet.Water_giant_with_life,
-            ["Gas giant with water-based life"] = EDPlanet.Gas_giant_with_water_based_life,
-            ["Gas giant with ammonia-based life"] = EDPlanet.Gas_giant_with_ammonia_based_life,
-            ["Class I gas giant"] = EDPlanet.Sudarsky_class_I_gas_giant,
-            ["Class II gas giant"] = EDPlanet.Sudarsky_class_II_gas_giant,
-            ["Class III gas giant"] = EDPlanet.Sudarsky_class_III_gas_giant,
-            ["Class IV gas giant"] = EDPlanet.Sudarsky_class_IV_gas_giant,
-            ["Class V gas giant"] = EDPlanet.Sudarsky_class_V_gas_giant,
-            ["Helium-rich gas giant"] = EDPlanet.Helium_rich_gas_giant,
-            ["Helium gas giant"] = EDPlanet.Helium_gas_giant,
-        };
-
         public static string PlanetTypeName(EDPlanet type)
         {
             string name;
@@ -667,17 +582,5 @@ namespace EliteDangerousCore
             }
         }
 
-        public static EDPlanet PlanetTypeNameToEnum(string name)
-        {
-            EDPlanet type;
-            if (PlanetNameToEnumLookup.TryGetValue(name, out type))
-            {
-                return type;
-            }
-            else
-            {
-                return PlanetStr2Enum(name);
-            }
-        }
     }
 }

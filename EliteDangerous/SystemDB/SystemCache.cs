@@ -94,7 +94,7 @@ namespace EliteDangerousCore.DB
             if (found == null && foundlist.Count == 1 && !find.HasCoordinate) // if we did not find one, but we have only 1 candidate, use it.
                 found = foundlist[0];
 
-            if (found == null && cn != null)                                    // nope, no cache, so use the db as long as we have a connection
+            if (found == null && cn != null && !SystemsDatabase.Instance.RebuildRunning)   // not cached, connection and not rebuilding, try db
             {
                 //System.Diagnostics.Debug.WriteLine("Look up from DB " + sys.name + " " + sys.id_edsm);
 
@@ -253,11 +253,11 @@ namespace EliteDangerousCore.DB
             return s;
         }
 
-        public static ISystem GetSystemNearestTo(Point3D currentpos,
+         public static ISystem GetSystemNearestTo(Point3D currentpos,
                                                  Point3D wantedpos,
                                                  double maxfromcurpos,
                                                  double maxfromwanted,
-                                                 int routemethod,
+                                                 SystemsDB.SystemsNearestMetric routemethod,
                                                  int limitto)
         {
             if (SystemsDatabase.Instance.RebuildRunning)    // return from cache is rebuild is running
@@ -291,7 +291,7 @@ namespace EliteDangerousCore.DB
                                                  Point3D wantedpos,
                                                  double maxfromcurpos,
                                                  double maxfromwanted,
-                                                 int routemethod , 
+                                                 SystemsDB.SystemsNearestMetric routemethod,
                                                  int limitto, 
                                                  SystemsDatabaseConnection cn)
         {

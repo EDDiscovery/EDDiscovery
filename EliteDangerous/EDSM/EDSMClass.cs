@@ -452,40 +452,56 @@ namespace EliteDangerousCore.EDSM
                     if (enddatestr == null || !DateTime.TryParseExact(enddatestr, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out logendtime))
                         logendtime = DateTime.MinValue;
 
-                    log = SystemsDatabase.Instance.ExecuteWithDatabase(db =>
+                    var tofetch = SystemsDatabase.Instance.ExecuteWithDatabase(db =>
                     {
-                        var xlog = new List<JournalFSDJump>();
+                        var xtofetch = new List<Tuple<JObject, ISystem>>();
 
                         foreach (JObject jo in logs)
                         {
                             string name = jo["system"].Value<string>();
                             string ts = jo["date"].Value<string>();
                             long id = jo["systemId"].Value<long>();
-                            bool firstdiscover = jo["firstDiscover"].Value<bool>();
                             DateTime etutc = DateTime.ParseExact(ts, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal); // UTC time
 
                             ISystem sc = DB.SystemCache.FindSystem(name, id, db);
 
-                            if (sc == null)
-                            {
-                                if (DateTime.UtcNow.Subtract(etutc).TotalHours < 6) // Avoid running into the rate limit
-                                    sc = GetSystemsByName(name)?.FirstOrDefault(s => s.EDSMID == id);
-
-                                if (sc == null)
-                                {
-                                    sc = new SystemClass(name)
-                                    {
-                                        EDSMID = id
-                                    };
-                                }
-                            }
-
-                            JournalFSDJump fsd = new JournalFSDJump(etutc, sc, EDCommander.Current.MapColour, firstdiscover, true);
-                            xlog.Add(fsd);
+                            xtofetch.Add(new Tuple<JObject, ISystem>(jo, sc));
                         }
 
-                        return xlog;
+                        return xtofetch;
                     });
+
+                    var xlog = new List<JournalFSDJump>();
+
+                    foreach (var js in tofetch)
+                    {
+                        var jo = js.Item1;
+                        var sc = js.Item2;
+                        string name = jo["system"].Value<string>();
+                        string ts = jo["date"].Value<string>();
+                        long id = jo["systemId"].Value<long>();
+                        bool firstdiscover = jo["firstDiscover"].Value<bool>();
+                        DateTime etutc = DateTime.ParseExact(ts, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal); // UTC time
+
+                        if (sc == null)
+                        {
+                            if (DateTime.UtcNow.Subtract(etutc).TotalHours < 6) // Avoid running into the rate limit
+                                sc = GetSystemsByName(name)?.FirstOrDefault(s => s.EDSMID == id);
+
+                            if (sc == null)
+                            {
+                                sc = new SystemClass(name)
+                                {
+                                    EDSMID = id
+                                };
+                            }
+                        }
+
+                        JournalFSDJump fsd = new JournalFSDJump(etutc, sc, EDCommander.Current.MapColour, firstdiscover, true);
+                        xlog.Add(fsd);
+                    }
+
+                    log = xlog;
                 }
 
                 return msgnr;

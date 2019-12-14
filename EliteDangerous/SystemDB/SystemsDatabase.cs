@@ -185,6 +185,28 @@ namespace EliteDangerousCore.DB
             }
         }
 
+        public void RebuildIndexes(Action<string> logger )
+        {
+            if (!RebuildRunning)
+            {
+                System.Threading.Tasks.Task.Factory.StartNew(() =>
+                {
+                    RebuildRunning = true;
+
+                    ExecuteWithDatabase(action: conn =>
+                    {
+                        logger?.Invoke("Removing indexes");
+                        conn.Connection.DropSystemDBTableIndexes();
+                        logger?.Invoke("Rebuilding indexes, please wait");
+                        conn.Connection.CreateSystemDBTableIndexes();
+                        logger?.Invoke("Indexes rebuilt");
+                    });
+
+                    RebuildRunning = false;
+                });
+            }
+        }
+
         public string GetEDSMGridIDs()
         {
             return ExecuteWithDatabase( db => db.Connection.GetSettingString("EDSMGridIDs", "Not Set"));

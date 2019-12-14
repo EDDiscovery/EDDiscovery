@@ -66,6 +66,7 @@ namespace EDDiscovery
         EDDiscoveryForm_VSLRestart, // Restart Elite Dangerous to have this file read into the galaxy map
         EDDiscoveryForm_VSLFileErr, // Error writing {0} export visited stars
         EDDiscoveryForm_InaraW, // Inara historic upload is disabled until 1 hour has elapsed from the last try to prevent server flooding
+        EDDiscoveryForm_IndexW, // Are you sure to Rebuild Indexes? It may take a long time.
         EDDiscoveryForm_RH, // Refresh History.
         EDDiscoveryForm_NoEDSMAPI, // Please ensure a commander is selected and it has a EDSM API key set
         EDDiscoveryForm_EDSMSyncE, // EDSM Sync failed: {0}
@@ -432,6 +433,7 @@ namespace EDDiscovery
         UserControlTravelGrid_NotSynced, // System could not be found - has not been synched or EDSM is unavailable
         UserControlTravelGrid_Remove, // Confirm you wish to remove this entry
 
+        UserControlStarList_Total, // Total
         UserControlStarList_FV, // First visit {0}
         UserControlStarList_CS, // {0} Star(s)
         UserControlStarList_SMBH, // {0} is a super massive black hole
@@ -458,6 +460,7 @@ namespace EDDiscovery
         UserControlStarList_OB, // {0} Other bodies
         UserControlStarList_FSD, // This system has materials for FSD boost:
         UserControlStarList_NoEDSM, // System could not be found - has not been synched or EDSM is unavailable
+        UserControlStarList_Signals, // {0} has signals
 
         UserControlCaptainsLog_Diary, // Diary
         UserControlCaptainsLog_Entries, // Entries
@@ -521,6 +524,7 @@ namespace EDDiscovery
         UserControlSpanel_SPF, // Summary Panel: Filter out fields
 
         UserControlSurveyor_LowRadius, //  Low Radius.
+        UserControlSurveyor_Signals, //  Has signals.
         UserControlSurveyor_Mapped, //  (Mapped & Discovered)
         UserControlSurveyor_Systemscancomplete, // System scan complete.
         UserControlSurveyor_bodiesfound, //  bodies found.
@@ -535,6 +539,7 @@ namespace EDDiscovery
         UserControlSurveyor_isaterraformableplanet, //  is a terraformable planet.
         UserControlSurveyor_Hasring, //  Has ring.
         UserControlSurveyor_Has, //  Has
+        UserControlSurveyor_Scan, //  Scan
 
         UserControlSysInfo_NoMissions, // No Missions
         UserControlSysInfo_NA, // N/A

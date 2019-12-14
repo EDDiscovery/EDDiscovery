@@ -244,12 +244,7 @@ namespace EliteDangerousCore
 
         public JObject GetJson()
         {
-            return GetJson(Id);
-        }
-
-        static public JObject GetJson(long journalid)
-        {
-            return UserDatabase.Instance.ExecuteWithDatabase<JObject>(cn => { return GetJson(journalid, cn.Connection); });
+            return UserDatabase.Instance.ExecuteWithDatabase<JObject>(cn => { return GetJson(Id, cn.Connection); });
         }
 
         static internal JObject GetJson(long journalid, SQLiteConnectionUser cn, DbTransaction tn = null)
@@ -479,7 +474,7 @@ namespace EliteDangerousCore
                
         internal static List<JournalEntry> GetAllByTLU(long tluid, SQLiteConnectionUser cn)
         {
-            TravelLogUnit tlu = TravelLogUnit.Get(tluid);
+            TravelLogUnit tlu = TravelLogUnit.Get(tluid, cn);
             List<JournalEntry> vsc = new List<JournalEntry>();
 
             using (DbCommand cmd = cn.CreateCommand("SELECT * FROM JournalEntries WHERE TravelLogId = @source ORDER BY EventTime ASC"))
@@ -561,7 +556,7 @@ namespace EliteDangerousCore
         {
             if (entjo == null)
             {
-                entjo = GetJson(ent.Id);
+                entjo = GetJson(ent.Id,cn.Connection);
             }
 
             entjo = RemoveEDDGeneratedKeys(entjo);
@@ -579,7 +574,7 @@ namespace EliteDangerousCore
                     while (reader.Read())
                     {
                         JournalEntry jent = CreateJournalEntry(reader);
-                        if (AreSameEntry(ent, jent, entjo))
+                        if (AreSameEntry(ent, jent, cn.Connection, entjo))
                         {
                             entries.Add(jent);
                         }

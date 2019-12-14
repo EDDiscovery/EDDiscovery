@@ -24,6 +24,8 @@ namespace EliteDangerousCore.DB
     {
         public enum SystemAskType { AllStars, SplitPopulatedStars, UnpopulatedStars, PopulatedStars };
 
+        // protect above from SystemsDatabase.Instance.RebuildRunning
+
         // all stars/Unpopulated/Poplulated only
         public static void GetSystemVector<V>(int gridid, ref V[] vertices1, ref uint[] colours1, int percentage, Func<int, int, int, V> tovect, SystemAskType ask = SystemAskType.AllStars)
         {

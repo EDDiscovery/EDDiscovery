@@ -193,7 +193,7 @@ namespace EliteDangerousCore
 
                     if (char.IsDigit(elements[0][0]))       // if digits, planet number, no star designator
                         elements.Insert(0, "Main Star");         // no star designator, main star, add MAIN
-                    else if (elements[0].Length > 1)        // designator, is it multiple chars.. 
+                    else if (elements[0].Length > 1 && elements[0] != "Main Star")        // designator, is it multiple chars.. 
                         starscannodetype = ScanNodeType.barycentre;
                 }
                 else

@@ -513,6 +513,8 @@ namespace EliteDangerousCore.EDDN
             if (message["FuelUsed"].Empty() || message["SystemAddress"] == null)  // Old ED 2.1 messages has no Fuel used fields
                 return null;
 
+            if (message["StarPosFromEDSM"] != null)  // Reject systems recently updated with EDSM coords
+                return null;
 
             message = RemoveCommonKeys(message);
             message = RemoveFactionReputation(message);
@@ -546,6 +548,9 @@ namespace EliteDangerousCore.EDDN
             {
                 return null;
             }
+
+            if (message["StarPosFromEDSM"] != null)  // Reject systems recently updated with EDSM coords
+                return null;
 
             message = RemoveCommonKeys(message);
             message = RemoveFactionReputation(message);

@@ -687,7 +687,7 @@ namespace EDDiscovery.UserControls
 
                     }
 
-                    StatToDGV(dataGridViewScan, Bodies.StarTypeName(obj), strarr);
+                    StatToDGV(dataGridViewScan, Bodies.StarTypeNameShorter(obj), strarr);
                 }
             }
             else

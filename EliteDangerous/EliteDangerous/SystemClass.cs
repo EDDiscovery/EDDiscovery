@@ -148,7 +148,7 @@ namespace EliteDangerousCore
 
         public SystemClass(ISystem sys) : base(sys)
         {
-            this.status = sys.status;
+            this.source = sys.source;
 
             this.EDDBID = sys.EDDBID;
             this.Population = sys.Population;
@@ -167,38 +167,38 @@ namespace EliteDangerousCore
         public SystemClass(string name) : base()
         {
             Name = name;
-            status = SystemStatusEnum.Unknown;
+            source = SystemSource.Synthesised;
         }
 
         public SystemClass(string name, long id)
         {
             Name = name;
             EDSMID = id;
-            status = SystemStatusEnum.Unknown;
+            source = SystemSource.Synthesised;
         }
 
         public SystemClass(long id)
         {
             Name = "UnKnown";
             EDSMID = id;
-            status = SystemStatusEnum.Unknown;
+            source = SystemSource.Synthesised;
         }
 
         public SystemClass(string name, double vx, double vy, double vz) : base( name, vx,vy,vz )
         {
-            status = SystemStatusEnum.Unknown;
+            source = SystemSource.Synthesised;
         }
 
         public SystemClass(string name, int xi, int yi, int zi, long edsmid, int gridid = -1) : base(name,xi,yi,zi,edsmid,gridid)
         {
-            status = SystemStatusEnum.Unknown;
+            source = SystemSource.Synthesised;
         }
 
-        public SystemClass(string name, int xi, int yi, int zi, long edsmid,
+        public SystemClass(SystemSource statusv, string name, int xi, int yi, int zi, long edsmid,
                             long eddbid, int eddbupdateat, long population, string faction,
                             EDGovernment g, EDAllegiance a, EDState s, EDSecurity security,
                             EDEconomy eco, string power, string powerstate, int needspermit,
-                            int gridid = -1, SystemStatusEnum statusv = SystemStatusEnum.Unknown) : base(name, xi, yi, zi, edsmid, gridid)
+                            int gridid = -1) : base(name, xi, yi, zi, edsmid, gridid)
         {
             EDDBID = eddbid;
             Population = population;
@@ -212,10 +212,10 @@ namespace EliteDangerousCore
             PowerState = powerstate;
             NeedsPermit = needspermit;
             EDDBUpdatedAt = eddbupdateat;
-            status = statusv;
+            source = statusv;
         }
 
-        public SystemStatusEnum status { get; set; }
+        public SystemSource source { get; set; }
 
         public long EDDBID { get; set; }
         public long Population { get; set; }        // may be 0 and still be in eddb pop list

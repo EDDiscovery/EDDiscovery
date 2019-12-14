@@ -113,9 +113,9 @@ namespace EDDiscovery.UserControls
             HistoryEntry fuel = hl.GetLastHistoryEntry(x => x.journalEntry.EventTypeID == JournalTypeEnum.RefuelAll
                     || x.journalEntry.EventTypeID == JournalTypeEnum.RefuelPartial);
             HistoryEntry hex = fsd;
-            if (lfs != null && lfs.EventTimeUTC >= hex.EventTimeUTC)
+            if (lfs != null && (hex == null || lfs.EventTimeUTC >= hex.EventTimeUTC))
                 hex = lfs;
-            if (fuel != null && fuel.EventTimeUTC >= hex.EventTimeUTC)
+            if (fuel != null && (hex == null || fuel.EventTimeUTC >= hex.EventTimeUTC))
                 hex = fuel;
             DisplayState(hex, fsd);
         }

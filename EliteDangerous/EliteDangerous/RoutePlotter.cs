@@ -14,9 +14,11 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
+using EliteDangerousCore.DB;
 using EMK.LightGeometry;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace EliteDangerousCore
@@ -29,18 +31,8 @@ namespace EliteDangerousCore
         public Point3D Coordsto;
         public string FromSystem;
         public string ToSystem;
-        public int RouteMethod;
+        public SystemsDB.SystemsNearestMetric RouteMethod;
         public bool UseFsdBoost;
-
-        // METRICs defined by systemclass GetSystemNearestTo function
-        public static string[] metric_options = {
-            "Nearest to Waypoint",
-            "Minimum Deviation from Path",
-            "Nearest to Waypoint with dev<=100ly",
-            "Nearest to Waypoint with dev<=250ly",
-            "Nearest to Waypoint with dev<=500ly",
-            "Nearest to Waypoint + Deviation / 2"
-        };
 
         public class ReturnInfo
         {
@@ -61,7 +53,7 @@ namespace EliteDangerousCore
         {
             double traveldistance = Point3D.DistanceBetween(Coordsfrom, Coordsto);      // its based on a percentage of the traveldistance
             List<ISystem> routeSystems = new List<ISystem>();
-            System.Diagnostics.Debug.WriteLine("From " + FromSystem + " to  " + ToSystem);
+            System.Diagnostics.Debug.WriteLine("From " + FromSystem + " to  " + ToSystem + ", using metric " + RouteMethod.ToString());
 
             routeSystems.Add(new SystemClass(FromSystem, Coordsfrom.X, Coordsfrom.Y, Coordsfrom.Z));
 

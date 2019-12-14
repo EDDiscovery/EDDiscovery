@@ -24,7 +24,7 @@ namespace EliteDangerousCore.DB
     {
         ///////////////////////////////////////// By Name
 
-        public static ISystem FindStar(string name)
+        internal static ISystem FindStar(string name)
         {
             return SystemsDatabase.Instance.ExecuteWithDatabase(cn => FindStar(name, cn.Connection));
         }
@@ -82,7 +82,7 @@ namespace EliteDangerousCore.DB
 
         ///////////////////////////////////////// By EDSMID
 
-        public static ISystem FindStar(long edsmid)
+        internal static ISystem FindStar(long edsmid)
         {
             return SystemsDatabase.Instance.ExecuteWithDatabase(cn => FindStar(edsmid, cn.Connection));
         }
@@ -111,7 +111,7 @@ namespace EliteDangerousCore.DB
 
         ///////////////////////////////////////// By Wildcard
 
-        public static List<ISystem> FindStarWildcard(string name, int limit = int.MaxValue)
+        internal static List<ISystem> FindStarWildcard(string name, int limit = int.MaxValue)
         {
             return SystemsDatabase.Instance.ExecuteWithDatabase(cn => FindStarWildcard(name, cn.Connection, limit));
         }
@@ -246,11 +246,11 @@ namespace EliteDangerousCore.DB
             }
             else
             {
-                return new SystemClass(ec.ToString(), reader.GetInt32(0), reader.GetInt32(1), reader.GetInt32(2), reader.GetInt64(3),
+                return new SystemClass(SystemSource.FromEDSM, ec.ToString(), reader.GetInt32(0), reader.GetInt32(1), reader.GetInt32(2), reader.GetInt64(3),
                                 reader.GetInt64(offset), reader.GetInt32(offset + 1), reader.GetInt64(offset + 2), reader.GetString(offset + 3),
                                 (EDGovernment)reader.GetInt64(offset + 4), (EDAllegiance)reader.GetInt64(offset + 5), (EDState)reader.GetInt64(offset + 6), (EDSecurity)reader.GetInt64(offset + 7),
                                 (EDEconomy)reader.GetInt64(offset + offset), reader.GetString(offset + 9), reader.GetString(offset + 10), reader.GetInt32(offset + 11),
-                                reader.GetInt32(5), SystemStatusEnum.EDSM);
+                                reader.GetInt32(5));
             }
         }
 
@@ -275,11 +275,11 @@ namespace EliteDangerousCore.DB
             }
             else
             {
-                return new SystemClass(ec.ToString(), reader.GetInt32(0), reader.GetInt32(1), reader.GetInt32(2), reader.GetInt64(3),
+                return new SystemClass(SystemSource.FromEDSM, ec.ToString(), reader.GetInt32(0), reader.GetInt32(1), reader.GetInt32(2), reader.GetInt64(3),
                                 reader.GetInt64(offset), reader.GetInt32(offset + 1), reader.GetInt64(offset + 2), reader.GetString(offset + 3),
                                 (EDGovernment)reader.GetInt64(offset + 4), (EDAllegiance)reader.GetInt64(offset + 5), (EDState)reader.GetInt64(offset + 6), (EDSecurity)reader.GetInt64(offset + 7),
                                 (EDEconomy)reader.GetInt64(offset + offset), reader.GetString(offset + 9), reader.GetString(offset + 10), reader.GetInt32(offset + 11),
-                                reader.GetInt32(5), SystemStatusEnum.EDSM);
+                                reader.GetInt32(5));
             }
         }
 

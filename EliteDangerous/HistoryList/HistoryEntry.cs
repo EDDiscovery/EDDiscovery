@@ -160,7 +160,7 @@ namespace EliteDangerousCore
                         PrimaryEconomy = jl.EDEconomy,
                         Power = jl.PowerList,
                         PowerState = jl.PowerplayState,
-                        status = SystemStatusEnum.EDDiscovery,
+                        source = jl.StarPosFromEDSM ? SystemSource.FromEDSM : SystemSource.FromJournal,
                     };
 
                     // If it was a new system, pass the coords back to the StartJump
@@ -177,12 +177,12 @@ namespace EliteDangerousCore
                     // Jumpstart was also screwing about with the EDSM ID fill in which was broken.  This is now working again.
 
                     // Default one
-                    newsys = new SystemClass(jl.StarSystem);
+                    newsys = new SystemClass(jl.StarSystem);         // this will be a synthesised one, unless we find an EDSM to replace it
                     newsys.EDSMID = je.EdsmID;
 
-                    ISystem s = SystemCache.FindSystem(newsys);      // has no co-ord, did we find it?
+                    ISystem s = SystemCache.FindSystem(newsys);      // did we find it?
 
-                    if (s != null)                               // found a system..
+                    if (s != null)                                  // found a system..
                     {
                         if (jl != null && jl.HasCoordinate)         // if journal Loc, and journal has a star position, use that instead of EDSM..
                         {

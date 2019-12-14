@@ -100,6 +100,7 @@ namespace EDDiscovery
             this.sendHistoricDataToInaraToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportVistedStarsListToEliteDangerousToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.rebuildSystemDBIndexesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addOnsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.manageAddOnsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.configureAddOnActionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -589,7 +590,8 @@ namespace EDDiscovery
             this.sendUnsyncedEGOScansToolStripMenuItem,
             this.sendHistoricDataToInaraToolStripMenuItem,
             this.clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem,
-            this.exportVistedStarsListToEliteDangerousToolStripMenuItem});
+            this.exportVistedStarsListToEliteDangerousToolStripMenuItem,
+            this.rebuildSystemDBIndexesToolStripMenuItem});
             this.adminToolStripMenuItem.Name = "adminToolStripMenuItem";
             this.adminToolStripMenuItem.Size = new System.Drawing.Size(55, 24);
             this.adminToolStripMenuItem.Text = "A&dmin";
@@ -715,6 +717,14 @@ namespace EDDiscovery
             this.exportVistedStarsListToEliteDangerousToolStripMenuItem.Size = new System.Drawing.Size(396, 22);
             this.exportVistedStarsListToEliteDangerousToolStripMenuItem.Text = "Export Visited Stars List to Elite Dangerous";
             this.exportVistedStarsListToEliteDangerousToolStripMenuItem.Click += new System.EventHandler(this.exportVistedStarsListToEliteDangerousToolStripMenuItem_Click);
+            // 
+            // rebuildSystemDBIndexesToolStripMenuItem
+            // 
+            this.rebuildSystemDBIndexesToolStripMenuItem.Name = "rebuildSystemDBIndexesToolStripMenuItem";
+            this.rebuildSystemDBIndexesToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.Main_Admin_RescanJournals;
+            this.rebuildSystemDBIndexesToolStripMenuItem.Size = new System.Drawing.Size(396, 22);
+            this.rebuildSystemDBIndexesToolStripMenuItem.Text = "Rebuild System DB Indexes";
+            this.rebuildSystemDBIndexesToolStripMenuItem.Click += new System.EventHandler(this.rebuildSystemDBIndexesToolStripMenuItem_Click);
             // 
             // addOnsToolStripMenuItem
             // 
@@ -1065,5 +1075,6 @@ namespace EDDiscovery
         private ExtendedControls.ExtButtonDrawn panel_close;
         private ExtendedControls.ExtButtonDrawn panel_minimize;
         private System.Windows.Forms.Panel panel_eddiscovery;
+        private System.Windows.Forms.ToolStripMenuItem rebuildSystemDBIndexesToolStripMenuItem;
     }
 }

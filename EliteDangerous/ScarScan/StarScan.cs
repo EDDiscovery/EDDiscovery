@@ -35,7 +35,7 @@ namespace EliteDangerousCore
             public SortedList<int, ScanNode> NodesByID = new SortedList<int, ScanNode>();
             public int MaxTopLevelBodyID = 0;
             public int MinPlanetBodyID = 512;
-            public int? TotalBodies;
+            public int? FSSTotalBodies;
 
             public IEnumerable<ScanNode> Bodies
             {
@@ -72,6 +72,24 @@ namespace EliteDangerousCore
                 }
 
                 return value;
+            }
+
+            public string StarTypesFound(bool bracketit = true) // first is primary star
+            {
+                var sortedset = (from x in Bodies where x.ScanData != null && x.type == ScanNodeType.star orderby x.ScanData.DistanceFromArrivalLS select x.ScanData.StarTypeID.ToString()).ToList();
+                string s = string.Join("; ", sortedset);
+                if (bracketit && s.HasChars())
+                    s = "(" + s + ")";
+                return s;
+            }
+
+            public int StarPlanetsScanned()      // not include anything but these.  This corresponds to FSSDiscoveryScan
+            {
+                return Bodies.Where(b => ( b.type == ScanNodeType.star || b.type == ScanNodeType.body) && b.ScanData != null).Count();
+            }
+            public int StarsScanned()      // only stars
+            {
+                return Bodies.Where(b => b.type == ScanNodeType.star && b.ScanData != null).Count();
             }
         };
 

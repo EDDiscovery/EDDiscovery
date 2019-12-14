@@ -205,22 +205,24 @@ namespace EliteDangerousCore.DB
 
         public static TravelLogUnit Get(long id)
         {
-            return UserDatabase.Instance.ExecuteWithDatabase<TravelLogUnit>(cn =>
+            return UserDatabase.Instance.ExecuteWithDatabase<TravelLogUnit>(cn => Get(id, cn.Connection));
+        }
+
+        internal static TravelLogUnit Get(long id, SQLiteConnectionUser cn)
+        {
+            using (DbCommand cmd = cn.CreateCommand("SELECT * FROM TravelLogUnit WHERE Id = @id ORDER BY Id DESC"))
             {
-                using (DbCommand cmd = cn.Connection.CreateCommand("SELECT * FROM TravelLogUnit WHERE Id = @id ORDER BY Id DESC"))
+                cmd.AddParameterWithValue("@id", id);
+                using (DbDataReader reader = cmd.ExecuteReader())
                 {
-                    cmd.AddParameterWithValue("@id", id);
-                    using (DbDataReader reader = cmd.ExecuteReader())
+                    if (reader.Read())
                     {
-                        if (reader.Read())
-                        {
-                            return new TravelLogUnit(reader);
-                        }
+                        return new TravelLogUnit(reader);
                     }
                 }
+            }
 
-                return null;
-            });
+            return null;
         }
 
         public static bool TryGet(long id, out TravelLogUnit tlu)

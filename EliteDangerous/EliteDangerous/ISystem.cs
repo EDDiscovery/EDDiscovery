@@ -108,11 +108,11 @@ namespace EliteDangerousCore
         None = 10,
     }
 
-    public enum SystemStatusEnum                // Who made the information?
+    public enum SystemSource                // Who made the information?
     {
-        Unknown = 0,
-        EDSM = 1,
-        EDDiscovery = 3,
+        Synthesised,
+        FromEDSM,
+        FromJournal,
     }
 
     public interface ISystemBase : IEquatable<ISystemBase>
@@ -157,7 +157,7 @@ namespace EliteDangerousCore
     // Definition of the core interface so we can swap out an "offline" version during testing
     public interface ISystem : ISystemBase, ISystemEDDB
     {
-        SystemStatusEnum status { get; set; }        // Who made this entry, where did the info come from?
+        SystemSource source { get; set; }        // Who made this entry, where did the info come from?
         string ToString();
         string ToStringVerbose();
     }

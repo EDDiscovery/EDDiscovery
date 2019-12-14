@@ -26,18 +26,6 @@ namespace EliteDangerousCore.DB
     {
         ///////////////////////////////////////// List of systems near xyz between mindist and maxdist
 
-        private static void GetSystemListBySqDistancesFrom(BaseUtils.SortedListDoubleDuplicate<ISystem> distlist, double x, double y, double z,
-                                                    int maxitems,
-                                                    double mindist, double maxdist, bool spherical,
-                                                    Action<ISystem> LookedUp = null
-                                                    )
-        {
-            SystemsDatabase.Instance.ExecuteWithDatabase(db =>
-            {
-                GetSystemListBySqDistancesFrom(distlist, x, y, z, maxitems, mindist, maxdist, spherical, db.Connection, LookedUp);
-            });
-        }
-
         internal static void GetSystemListBySqDistancesFrom(BaseUtils.SortedListDoubleDuplicate<ISystem> distlist, // MUST use duplicate double list to protect against EDSM having two at the same point
                                                             double x, double y, double z,
                                                             int maxitems,
@@ -116,14 +104,6 @@ namespace EliteDangerousCore.DB
             }
         }
 
-        private static ISystem GetSystemByPosition(double x, double y, double z, double maxdist = 0.125)
-        {
-            return SystemsDatabase.Instance.ExecuteWithDatabase(db =>
-            {
-                return GetSystemByPosition(x, y, z, db.Connection, maxdist);
-            });
-        }
-
         internal static ISystem GetSystemByPosition(double x, double y, double z, SQLiteConnectionSystem cn, double maxdist = 0.125)
         {
             BaseUtils.SortedListDoubleDuplicate<ISystem> distlist = new BaseUtils.SortedListDoubleDuplicate<ISystem>();
@@ -133,18 +113,21 @@ namespace EliteDangerousCore.DB
 
         /////////////////////////////////////////////// Nearest to a point determined by a metric
 
-        public const int metric_nearestwaypoint = 0;     // easiest way to synchronise metric selection..
-        public const int metric_mindevfrompath = 1;
-        public const int metric_maximum100ly = 2;
-        public const int metric_maximum250ly = 3;
-        public const int metric_maximum500ly = 4;
-        public const int metric_waypointdev2 = 5;
+        public enum SystemsNearestMetric
+        {
+            IterativeNearestWaypoint,
+            IterativeMinDevFromPath,
+            IterativeMaximumDev100Ly,
+            IterativeMaximumDev250Ly,
+            IterativeMaximumDev500Ly,
+            IterativeWaypointDevHalf,
+        }
 
         internal static ISystem GetSystemNearestTo(Point3D currentpos,
                                                   Point3D wantedpos,
                                                   double maxfromcurpos,
                                                   double maxfromwanted,
-                                                  int routemethod,
+                                                  SystemsNearestMetric routemethod,
                                                   SQLiteConnectionSystem cn,
                                                   Action<ISystem> LookedUp = null,
                                                   int limitto = 1000)
@@ -193,7 +176,7 @@ namespace EliteDangerousCore.DB
                                                    Point3D wantedpos,
                                                    double maxfromcurpos,
                                                    double maxfromwanted,
-                                                   int routemethod)
+                                                   SystemsNearestMetric routemethod)
         {
             double bestmindistance = double.MaxValue;
             ISystem nearestsystem = null;
@@ -207,7 +190,7 @@ namespace EliteDangerousCore.DB
                 // ENSURE its withing the circles now
                 if (distancefromcurposx2 <= (maxfromcurpos * maxfromcurpos) && distancefromwantedx2 <= (maxfromwanted * maxfromwanted))
                 {
-                    if (routemethod == metric_nearestwaypoint)
+                    if (routemethod == SystemsNearestMetric.IterativeNearestWaypoint)
                     {
                         if (distancefromwantedx2 < bestmindistance)
                         {
@@ -221,16 +204,18 @@ namespace EliteDangerousCore.DB
                         double deviation = Point3D.DistanceBetween(interceptpoint, syspos);
                         double metric = 1E39;
 
-                        if (routemethod == metric_mindevfrompath)
+                        if (routemethod == SystemsNearestMetric.IterativeMinDevFromPath)
                             metric = deviation;
-                        else if (routemethod == metric_maximum100ly)
+                        else if (routemethod == SystemsNearestMetric.IterativeMaximumDev100Ly)
                             metric = (deviation <= 100) ? distancefromwantedx2 : metric;        // no need to sqrt it..
-                        else if (routemethod == metric_maximum250ly)
+                        else if (routemethod == SystemsNearestMetric.IterativeMaximumDev250Ly)
                             metric = (deviation <= 250) ? distancefromwantedx2 : metric;
-                        else if (routemethod == metric_maximum500ly)
+                        else if (routemethod == SystemsNearestMetric.IterativeMaximumDev500Ly)
                             metric = (deviation <= 500) ? distancefromwantedx2 : metric;
-                        else if (routemethod == metric_waypointdev2)
+                        else if (routemethod == SystemsNearestMetric.IterativeWaypointDevHalf)
                             metric = Math.Sqrt(distancefromwantedx2) + deviation / 2;
+                        else
+                            throw new ArgumentOutOfRangeException(nameof(routemethod));
 
                         if (metric < bestmindistance)
                         {
