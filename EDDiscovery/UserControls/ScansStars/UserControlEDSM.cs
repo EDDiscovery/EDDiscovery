@@ -174,6 +174,10 @@ namespace EDDiscovery.UserControls
 
                         f.SwallowReturn = true;
                     }
+                    else if (controlname == "Cancel")
+                    {
+                        f.ReturnResult(DialogResult.Cancel);
+                    }
                 };
 
                 f.InitCentred(this.FindForm(), this.FindForm().Icon, "Show System".T(EDTx.UserControlEDSM_EnterSys), null, null);

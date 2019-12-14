@@ -381,6 +381,10 @@ namespace EDDiscovery.UserControls
                 {
                     cf.ReturnResult(DialogResult.OK);
                 }
+                else if (controlname == "Cancel")
+                {
+                    cf.ReturnResult(DialogResult.Cancel);
+                }
             };
 
             if (cf.ShowDialogCentred(this.FindForm(), this.FindForm().Icon,  "Set Valuable Minimum".T(EDTx.UserControlScan_VLMT)) == DialogResult.OK)

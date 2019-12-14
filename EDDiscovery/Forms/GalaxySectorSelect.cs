@@ -243,6 +243,10 @@ namespace EDDiscovery.Forms
                 {
                     f.ReturnResult(DialogResult.OK);
                 }
+                else if (controlname == "Cancel")
+                {
+                    f.ReturnResult(DialogResult.Cancel);
+                }
             };
             
             DialogResult res = f.ShowDialogCentred(parent, parent.Icon, "Select EDSM Galaxy Data".T(EDTx.GalaxySectorSelect_GALSELTitle));
