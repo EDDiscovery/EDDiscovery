@@ -632,15 +632,13 @@ namespace EDDiscovery.Actions
             inputdevicesactions.Stop();
             inputdevices.Clear();
 
-#if !__MonoCS__
-            if (on)
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT && on)
             {
                 DirectInputDevices.InputDeviceJoystickWindows.CreateJoysticks(inputdevices, axisevents);
                 DirectInputDevices.InputDeviceKeyboard.CreateKeyboard(inputdevices);              // Created.. not started..
                 DirectInputDevices.InputDeviceMouse.CreateMouse(inputdevices);
                 inputdevicesactions.Start();
             }
-#endif
         }
 
         public string EliteInputList() { return inputdevices.ListDevices(); }

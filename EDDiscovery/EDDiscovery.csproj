@@ -1151,7 +1151,7 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
   </Target>
-  <Target Name="Version">
+  <Target Name="Version" BeforeTargets="Build">
     <PropertyGroup Condition=" '$(OS)' != 'Unix' ">
       <GitPath>$(Registry:HKEY_LOCAL_MACHINE\SOFTWARE\GitForWindows@InstallPath)</GitPath>
       <GitPath Condition=" '$(GitPath)' == '' Or !Exists('$(GitPath)\bin\git.exe') ">$([MSBuild]::GetRegistryValueFromView('HKEY_LOCAL_MACHINE\SOFTWARE\GitForWindows', 'InstallPath', null, RegistryView.Registry64))</GitPath>
