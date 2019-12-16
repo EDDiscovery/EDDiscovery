@@ -636,8 +636,7 @@ namespace EDDiscovery.UserControls
                         ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Name of campaign already in use, cannot overwrite".T(EDTx.UserControlCombatPanel_NoOverwrite), "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Error);
                     else
                     {
-                        f.DialogResult = DialogResult.OK;
-                        f.Close();
+                        f.ReturnResult(DialogResult.OK);
                     }
                 }
                 else if (controlname == "Delete")
@@ -646,8 +645,7 @@ namespace EDDiscovery.UserControls
                     {
                         if (ExtendedControls.MessageBoxTheme.Show(this.FindForm(), string.Format("Confirm deletion of {0}".T(EDTx.UserControlCombatPanel_Condel), entry.Name), "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK )
                         {
-                            f.DialogResult = DialogResult.Abort;
-                            f.Close();
+                            f.ReturnResult(DialogResult.Abort);
                         }
                     }
                     else
@@ -657,8 +655,7 @@ namespace EDDiscovery.UserControls
                 }
                 else if ( controlname == "Cancel" )
                 {
-                    f.DialogResult = DialogResult.Cancel;
-                    f.Close();
+                    f.ReturnResult(DialogResult.Cancel);
                 }
             };
 

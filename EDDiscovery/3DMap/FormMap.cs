@@ -436,7 +436,7 @@ namespace EDDiscovery
         {
             base.OnFormClosing(e);
 
-            Console.WriteLine("{0} Close form" , Environment.TickCount);
+            Trace.WriteLine($"{Environment.TickCount} Close form");
 
             systemtimer.Stop();
             systemtickinterval.Stop();
@@ -2356,8 +2356,7 @@ namespace EDDiscovery
             {
                 if (controlname == "OK" || controlname == "Cancel")
                 {
-                    f.DialogResult = controlname == "OK" ? DialogResult.OK : DialogResult.Cancel;
-                    f.Close();
+                    f.ReturnResult(controlname == "OK" ? DialogResult.OK : DialogResult.Cancel);
                 }
             };
 

@@ -439,8 +439,7 @@ namespace EDDiscovery.UserControls
                 else
                     AddSystems(systems);
 
-                f.DialogResult = DialogResult.OK;
-                f.Close();
+                f.ReturnResult(DialogResult.OK);
             };
 
             f.Add(new ExtendedControls.ConfigurableForm.Entry("UC", null, "", new Point(5, 30), new Size(740, 200), null) { control = usc });
@@ -450,8 +449,7 @@ namespace EDDiscovery.UserControls
             {
                 if (controlname == "Cancel")
                 {
-                    f.DialogResult = DialogResult.Cancel;
-                    f.Close();
+                    f.ReturnResult(DialogResult.Cancel);
                 }
             };
 

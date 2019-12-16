@@ -241,8 +241,11 @@ namespace EDDiscovery.Forms
             {
                 if (controlname == "OK")
                 {
-                    f.DialogResult = DialogResult.OK;
-                    f.Close();
+                    f.ReturnResult(DialogResult.OK);
+                }
+                else if (controlname == "Cancel")
+                {
+                    f.ReturnResult(DialogResult.Cancel);
                 }
             };
             

@@ -163,18 +163,20 @@ namespace EDDiscovery.UserControls
                 {
                     if (controlname == "OK" || controlname == "Cancel")
                     {
-                        f.DialogResult = controlname == "OK" ? DialogResult.OK : DialogResult.Cancel;
-                        f.Close();
+                        f.ReturnResult(controlname == "OK" ? DialogResult.OK : DialogResult.Cancel);
                     }
                     else if (controlname == "Sys:Return")
                     {
                         if (f.Get("Sys").HasChars())
                         {
-                            f.DialogResult = DialogResult.OK;
-                            f.Close();
+                            f.ReturnResult(DialogResult.OK);
                         }
 
                         f.SwallowReturn = true;
+                    }
+                    else if (controlname == "Cancel")
+                    {
+                        f.ReturnResult(DialogResult.Cancel);
                     }
                 };
 

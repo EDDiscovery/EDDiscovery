@@ -58,7 +58,7 @@ namespace EDDiscovery
         public bool RestoreSettings()
         {
             bool ok = true;
-            Console.WriteLine("Theme ID " + Settings.ThemeID);
+            Trace.WriteLine("Theme ID " + Settings.ThemeID);
 
             int themeidstored = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt("ThemeID", -1);
 
