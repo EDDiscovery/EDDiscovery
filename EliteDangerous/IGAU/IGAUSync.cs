@@ -27,11 +27,11 @@ using System.Threading.Tasks;
 using EliteDangerousCore;
 using EliteDangerousCore.JournalEvents;
 
-namespace EliteDangerousCore.EGO
+namespace EliteDangerousCore.IGAU
 {
-    public static class EGOSync
+    public static class IGAUSync
     {
-        private static Thread ThreadEGOSync;
+        private static Thread ThreadIGAUSync;
         private static int running = 0;
         private static bool Exit = false;
         private static ConcurrentQueue<HistoryEntry> hlscanunsyncedlist = new ConcurrentQueue<HistoryEntry>();
@@ -40,17 +40,17 @@ namespace EliteDangerousCore.EGO
 
         static public Action<int,string> SentEvents;       // called in thread when sync thread has finished and is terminating
 
-        public static bool SendEGOEvent(Action<string> log, HistoryEntry helist)
+        public static bool SendIGAUEvent(Action<string> log, HistoryEntry helist)
         {
-            return SendEGOEvents(log, new[] { helist });
+            return SendIGAUEvents(log, new[] { helist });
         }
 
-        public static bool SendEGOEvents(Action<string> log, params HistoryEntry[] helist)
+        public static bool SendIGAUEvents(Action<string> log, params HistoryEntry[] helist)
         {
-            return SendEGOEvents(log, (IEnumerable<HistoryEntry>)helist);
+            return SendIGAUEvents(log, (IEnumerable<HistoryEntry>)helist);
         }
 
-        public static bool SendEGOEvents(Action<string> log, IEnumerable<HistoryEntry> helist)
+        public static bool SendIGAUEvents(Action<string> log, IEnumerable<HistoryEntry> helist)
         {
             logger = log;
 
@@ -66,7 +66,7 @@ namespace EliteDangerousCore.EGO
             {
                 Exit = false;
                 ThreadEGOSync = new System.Threading.Thread(new System.Threading.ThreadStart(SyncThread));
-                ThreadEGOSync.Name = "EGO Sync";
+                ThreadEGOSync.Name = "IGAU Sync";
                 ThreadEGOSync.IsBackground = true;
                 ThreadEGOSync.Start();
             }
@@ -85,7 +85,7 @@ namespace EliteDangerousCore.EGO
             try
             {
                 running = 1;
-                //mainForm.LogLine("Starting EGO sync thread");
+                //mainForm.LogLine("Starting IGAU sync thread");
 
                 while (hlscanunsyncedlist.Count != 0)
                 {
@@ -99,12 +99,12 @@ namespace EliteDangerousCore.EGO
                     {
                         hlscanevent.Reset();
 
-                        if (EGOSync.SendToEGO(he, out bool recordflag))
+                        if (EGOSync.SendToIGAU(he, out bool recordflag))
                         {
-                            logger?.Invoke($"Sent {he.EntryType.ToString()} event to EGO ({he.EventSummary})");
+                            logger?.Invoke($"Sent {he.EntryType.ToString()} event to IGAU ({he.EventSummary})");
                             if (recordflag)
                             {
-                                logger?.Invoke("New EGO record set");
+                                logger?.Invoke("New IGAU record set");
                                 recordlist = recordlist.AppendPrePad(he.System.Name, ";");
                             }
 
@@ -112,13 +112,13 @@ namespace EliteDangerousCore.EGO
                         }
                         else
                         {
-                            logger?.Invoke($"Fail to send {he.EntryType.ToString()} event to EGO ({he.EventSummary})");
+                            logger?.Invoke($"Fail to send {he.EntryType.ToString()} event to IGAU ({he.EventSummary})");
 
                         }
 
                         if (hlscanunsyncedlist.Count>1 && hlscanunsyncedlist.Count%10==0)
                         {
-                            logger?.Invoke($"{hlscanunsyncedlist.Count.ToString()} events in EGO queue");
+                            logger?.Invoke($"{hlscanunsyncedlist.Count.ToString()} events in IGAU queue");
                         }
 
                         if (Exit)
@@ -126,7 +126,7 @@ namespace EliteDangerousCore.EGO
                             return;
                         }
 
-                        Thread.Sleep(1000);   // Throttling to 1 per second to not kill EGO network
+                        Thread.Sleep(1000);   // Throttling to 1 per second to not kill IGAU endpoint
                     }
 
                     SentEvents?.Invoke(eventcount, recordlist);    // tell the system..
@@ -144,8 +144,8 @@ namespace EliteDangerousCore.EGO
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Trace.WriteLine("EGO Exception ex:" + ex.Message);
-                logger?.Invoke("EGO sync Exception " + ex.Message);
+                System.Diagnostics.Trace.WriteLine("IGAU Exception ex:" + ex.Message);
+                logger?.Invoke("IGAU sync Exception " + ex.Message);
             }
             finally
             {
@@ -153,18 +153,11 @@ namespace EliteDangerousCore.EGO
             }
         }
 
-        static public bool SendToEGO(HistoryEntry he, out bool newRecord)
+        static public bool SendToIGAU(HistoryEntry he, out bool newRecord)
         {
             newRecord = false;
 
-            EGOClass ego = new EGOClass();
-
-            if (he.Commander != null)
-            {
-                ego.commanderName = he.Commander.EdsmName;
-                if (string.IsNullOrEmpty(ego.commanderName))
-                    ego.commanderName = he.Commander.Name;
-            }
+            IGAUClass ego = new IGAUClass();
 
             JournalEntry je = he.journalEntry;
 
@@ -177,14 +170,14 @@ namespace EliteDangerousCore.EGO
 
             if (je.EventTypeID == JournalTypeEnum.Scan)
             {
-                msg = ego.CreateEGOMessage(je as JournalScan, he.System.Name, he.System.X, he.System.Y, he.System.Z);
+                msg = ego.CreateIGAUMessage(je as JournalScan, he.System.Name, he.System.X, he.System.Y, he.System.Z);
             }
 
             if (msg != null)
             {
                 if (ego.PostMessage(msg, out newRecord))
                 {
-                    he.journalEntry.SetEGOSync();
+                    he.journalEntry.SetIGAUSync();
                     return true;
                 }
             }
