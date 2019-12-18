@@ -217,7 +217,7 @@ namespace EliteDangerousCore
                 return desigmap[system][je.BodyName];
             }
 
-            if (je.IsStar && je.BodyName == system && je.nOrbitalPeriod != null)
+            if (je.IsStar && je.BodyName.Equals(system, StringComparison.InvariantCultureIgnoreCase) && je.nOrbitalPeriod != null)
             {
                 return system + " A";
             }
