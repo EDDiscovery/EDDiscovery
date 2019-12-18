@@ -1123,7 +1123,7 @@ namespace EliteDangerousCore.JournalEvents
         {
             if (StarSystem != null && SystemAddress != null && sysaddr != null)
             {
-                return starname == StarSystem && sysaddr == SystemAddress;
+                return starname.Equals(StarSystem, StringComparison.InvariantCultureIgnoreCase) && sysaddr == SystemAddress;
             }
 
             if (designation == null)
