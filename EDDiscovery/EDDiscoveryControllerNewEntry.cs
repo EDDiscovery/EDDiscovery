@@ -26,6 +26,7 @@ namespace EDDiscovery
     {
         private Queue<JournalEntry> journalqueue = new Queue<JournalEntry>();
         private System.Threading.Timer journalqueuedelaytimer;
+        private bool journalqueuedelaytimersemaphore;
 
         public void NewEntry(JournalEntry je)        // on UI thread. hooked into journal monitor and receives new entries.. Also call if you programatically add an entry
         {
@@ -55,21 +56,33 @@ namespace EDDiscovery
 
             JournalEntry prev = null;  // we start afresh from the point of merging so we don't merge with previous ones already shown
 
-            while (journalqueue.Count > 0)
+            if (journalqueuedelaytimersemaphore == false) // Don't re-enter play loop
             {
-                JournalEntry je = journalqueue.Dequeue();
-
-                if (!HistoryList.MergeEntries(prev, je))                // if not merged
+                try
                 {
-                    if (prev != null)                       // no merge, so if we have a merge candidate on top, run actions on it.
-                        ActionEntry(prev);
+                    journalqueuedelaytimersemaphore = true;
 
-                    prev = je;                              // record
+                    while (journalqueue.Count > 0)
+                    {
+                        JournalEntry je = journalqueue.Dequeue();
+
+                        if (!HistoryList.MergeEntries(prev, je))                // if not merged
+                        {
+                            if (prev != null)                       // no merge, so if we have a merge candidate on top, run actions on it.
+                                ActionEntry(prev);
+
+                            prev = je;                              // record
+                        }
+                    }
+
+                    if (prev != null)                               // any left.. action it
+                        ActionEntry(prev);
+                }
+                finally
+                {
+                    journalqueuedelaytimersemaphore = false;
                 }
             }
-
-            if (prev != null)                               // any left.. action it
-                ActionEntry(prev);
         }
 
         void ActionEntry(JournalEntry je)               // UI thread issue the JE to the system
