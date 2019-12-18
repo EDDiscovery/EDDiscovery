@@ -440,6 +440,7 @@ namespace EliteDangerousCore
             { "17 Draconis", new Dictionary<string, string> {
                 { "Limbo", "17 Draconis A 1" },
                 { "Eo", "17 Draconis A 2" },
+                { "Eo r1", "17 Draconis A 2 A Ring" },
                 { "Shepherd", "17 Draconis A 2 a" },
                 { "Paradiso", "17 Draconis A 2 b" },
                 { "Icemir", "17 Draconis A 3" },
@@ -451,6 +452,7 @@ namespace EliteDangerousCore
             } },
             { "Prism", new Dictionary<string, string> {
                 { "Mestra", "Prism A 1" },
+                { "Mestra r1", "Prism A 1 A Ring" },
                 { "Daedalion", "Prism A 2" },
                 { "Chione", "Prism A 2 a" },
                 { "Neaera", "Prism A 3" },
@@ -854,6 +856,9 @@ namespace EliteDangerousCore
                 { "Smithy's Claim", "Dahan 2 c" },
                 { "Jonty's Claim", "Dahan 2 d" },
                 { "Wanderer", "Dahan 2 e" },
+                { "Dahan 3 r1", "Dahan 3 A Ring" },
+                { "Dahan 3 r2", "Dahan 3 B Ring" },
+                { "Dahan 3 r3", "Dahan 3 C Ring" },
                 { "Dahan 3a", "Dahan 3 a" },
                 { "Dahan 3b", "Dahan 3 b" },
                 { "Dahan 3c", "Dahan 3 c" },
@@ -1164,6 +1169,12 @@ namespace EliteDangerousCore
             } },
             { "Lave", new Dictionary<string, string> {
                 { "Planet Lave", "Lave 1" },
+                { "Castellan Belt", "Lave A Belt" },
+                { "Castellan Belt Cluster 1", "Lave A Belt Cluster 1" },
+                { "Castellan Belt Cluster 2", "Lave A Belt Cluster 2" },
+                { "Castellan Belt Cluster 3", "Lave A Belt Cluster 3" },
+                { "Castellan Belt Cluster 4", "Lave A Belt Cluster 4" },
+                { "Castellan Belt Cluster 5", "Lave A Belt Cluster 5" },
             } },
             { "Leesti", new Dictionary<string, string> {
                 { "Leesti", "Leesti 3" },
@@ -1586,6 +1597,7 @@ namespace EliteDangerousCore
                 { "Earth", "Sol 3" },
                 { "Moon", "Sol 3 a" },
                 { "Mars", "Sol 4" },
+                { "Asteroid Belt", "Sol A Belt" },
                 { "Jupiter", "Sol 5" },
                 { "Jupiter Halo Ring", "Sol 5 A Ring" },
                 { "Io", "Sol 5 a" },
@@ -1593,6 +1605,7 @@ namespace EliteDangerousCore
                 { "Ganymede", "Sol 5 c" },
                 { "Callisto", "Sol 5 d" },
                 { "Saturn", "Sol 6" },
+                { "D Ring", "Sol 6 A Ring" },
                 { "Enceladus", "Sol 6 a" },
                 { "Tethys", "Sol 6 b" },
                 { "Dione", "Sol 6 c" },
@@ -1600,11 +1613,13 @@ namespace EliteDangerousCore
                 { "Titan", "Sol 6 e" },
                 { "Iapetus", "Sol 6 f" },
                 { "Uranus", "Sol 7" },
+                { "ZetaCC Ring", "Sol 7 A Ring" },
                 { "Ariel", "Sol 7 a" },
                 { "Umbriel", "Sol 7 b" },
                 { "Titania", "Sol 7 c" },
                 { "Oberon", "Sol 7 d" },
                 { "Neptune", "Sol 8" },
+                { "Galle Ring", "Sol 8 A Ring" },
                 { "Triton", "Sol 8 a" },
                 { "Pluto", "Sol 9" },
                 { "Charon", "Sol 10" },
@@ -1976,12 +1991,29 @@ namespace EliteDangerousCore
             } },
             { "Trapezium Sector AF-Z c1", new Dictionary<string, string> {
                 { "Mike Meister", "Trapezium Sector AF-Z c1 A 10" },
+                { "Gabriel's Hideout", "Trapezium Sector AF-Z c1 A 10" },
             } },
             { "HIP 63835", new Dictionary<string, string> {
                 { "Josie Rosa", "HIP 63835 CD 8" },
             } },
             { "4 Arietis", new Dictionary<string, string> {
                 { "Ziva", "4 Arietis 3 a" },
+            } },
+            { "Traikoa VY-S d3-68", new Dictionary<string, string> {
+                { "Major ROM's Retirement Globe", "Traikoa VY-S d3-68 BC 1" },
+            } },
+            { "Aucownst TU-D b58-0", new Dictionary<string, string> {
+                { "Giles", "Aucownst TU-D b58-0 A 1" },
+                { "Kirsten", "Aucownst TU-D b58-0 A 2" },
+            } },
+            { "Athaip QP-E d12-9178", new Dictionary<string, string> {
+                { "Jasmine's Playground", "Athaip QP-E d12-9178 6" },
+            } },
+            { "Toluku", new Dictionary<string, string> {
+                { "Lilith", "Toluku AB 4 a" },
+            } },
+            { "LFT 37", new Dictionary<string, string> {
+                { "Wrewpiter", "LFT 37 1" },
             } },
         };
 
