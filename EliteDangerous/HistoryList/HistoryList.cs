@@ -645,11 +645,13 @@ namespace EliteDangerousCore
                 bool updatesyspos = edsmsys.HasCoordinate &&
                                     (edsmsys.Xi != oldsys.Xi || edsmsys.Yi != oldsys.Yi || edsmsys.Zi != oldsys.Zi) &&
                                     oldsys.source != SystemSource.FromJournal; // NEVER EVER EVER OVERRIDE JOURNAL COORDINATES
+                bool updatename = oldsys.source != SystemSource.FromJournal ||
+                                  !oldsys.Name.Equals(edsmsys.Name, StringComparison.InvariantCultureIgnoreCase);
 
                 ISystem newsys = new SystemClass
                 {
                     EDSMID = updateedsmid ? edsmsys.EDSMID : oldsys.EDSMID,
-                    Name = edsmsys.Name,
+                    Name = updatename ? edsmsys.Name : oldsys.Name,
                     X = updatesyspos ? edsmsys.X : oldsys.X,
                     Y = updatesyspos ? edsmsys.Y : oldsys.Y,
                     Z = updatesyspos ? edsmsys.Z : oldsys.Z,
