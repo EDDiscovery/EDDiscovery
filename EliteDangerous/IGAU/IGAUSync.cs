@@ -65,10 +65,10 @@ namespace EliteDangerousCore.IGAU
             if (Interlocked.CompareExchange(ref running, 1, 0) == 0)
             {
                 Exit = false;
-                ThreadEGOSync = new System.Threading.Thread(new System.Threading.ThreadStart(SyncThread));
-                ThreadEGOSync.Name = "IGAU Sync";
-                ThreadEGOSync.IsBackground = true;
-                ThreadEGOSync.Start();
+                ThreadIGAUSync = new System.Threading.Thread(new System.Threading.ThreadStart(SyncThread));
+                ThreadIGAUSync.Name = "IGAU Sync";
+                ThreadIGAUSync.IsBackground = true;
+                ThreadIGAUSync.Start();
             }
 
             return true;
@@ -99,7 +99,7 @@ namespace EliteDangerousCore.IGAU
                     {
                         hlscanevent.Reset();
 
-                        if (EGOSync.SendToIGAU(he, out bool recordflag))
+                        if (IGAUSync.SendToIGAU(he, out bool recordflag))
                         {
                             logger?.Invoke($"Sent {he.EntryType.ToString()} event to IGAU ({he.EventSummary})");
                             if (recordflag)
@@ -170,16 +170,16 @@ namespace EliteDangerousCore.IGAU
 
             if (je.EventTypeID == JournalTypeEnum.Scan)
             {
-                msg = ego.CreateIGAUMessage(je as JournalScan, he.System.Name, he.System.X, he.System.Y, he.System.Z);
+            //    msg = ego.CreateIGAUMessage(je as JournalScan, he.System.Name, he.System.X, he.System.Y, he.System.Z);
             }
 
             if (msg != null)
             {
-                if (ego.PostMessage(msg, out newRecord))
-                {
-                    he.journalEntry.SetIGAUSync();
-                    return true;
-                }
+              //  if (IGAU.PostMessage(msg, out newRecord))
+              //  {
+                    //he.journalEntry.SetIGAUSync();
+              //      return true;
+              //  }
             }
 
             return false;

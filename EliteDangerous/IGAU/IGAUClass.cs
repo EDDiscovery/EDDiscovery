@@ -51,27 +51,27 @@ namespace EliteDangerousCore.IGAU
             return msg;
         }
 
-        public bool PostMessage(JObject msg, out bool recordSet)
-        {
-            recordSet = false;
+        //public bool PostMessage(JObject msg, out bool recordSet)
+        //{
+        //    recordSet = false;
 
-            if (edcmdr.SyncToIGAU.IsEmpty() )
-                return false;
+        //    if (edcmdr.SyncToIGAU.IsEmpty() )
+        //        return false;
 
-            try
-            {
-                BaseUtils.ResponseData resp = RequestPost(msg.ToString(), "");
+        //    try
+        //    {
+        //        BaseUtils.ResponseData resp = RequestPost(msg.ToString(), "");
 
-                JObject result = JObject.Parse(resp.Body);
-                JObject res = (JObject)result["response"];
+        //        JObject result = JObject.Parse(resp.Body);
+        //        JObject res = (JObject)result["response"];
 
-            }
-            catch (System.Net.WebException ex)
-            {
-                System.Net.HttpWebResponse response = ex.Response as System.Net.HttpWebResponse;
-                System.Diagnostics.Trace.WriteLine($"IGAU Data Transmission Failed");
-                return false;
-            }
-        }
+        //    }
+        //    catch (System.Net.WebException ex)
+        //    {
+        //        System.Net.HttpWebResponse response = ex.Response as System.Net.HttpWebResponse;
+        //        System.Diagnostics.Trace.WriteLine($"IGAU Data Transmission Failed");
+        //        return false;
+        //    }
+        // }
     }
 }
