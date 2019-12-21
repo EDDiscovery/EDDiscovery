@@ -95,7 +95,14 @@ namespace EDDiscovery.UserControls
 
         public void Filter(Control ctr, Form parent)
         {
-            Show(EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(dbstring, "All"), ctr, parent);     // use the quick helper. 
+            if (this.Visible == true)
+            {
+                Hide();
+            }
+            else
+            {
+                Show(EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(dbstring, "All"), ctr, parent);     // use the quick helper. 
+            }
         }
     }
 }
