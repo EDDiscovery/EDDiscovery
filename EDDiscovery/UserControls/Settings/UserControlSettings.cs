@@ -614,8 +614,18 @@ namespace EDDiscovery.UserControls
                     //string exe = System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName;
                     //string cmd = "-Command new-netfirewallrule -Name EDDiscovery -DisplayName EDDiscovery -Description Webserver -Program \"" + exe + "\" -Direction Inbound -Action Allow -LocalPort " + EDDConfig.Instance.WebServerPort.ToStringInvariant() + " -Protocol TCP" +
 
-                    string cmd = "-Command new-netfirewallrule -Name EDDiscovery -DisplayName EDDiscovery -Description Webserver -Direction Inbound -Action Allow -LocalPort " + EDDConfig.Instance.WebServerPort.ToStringInvariant() + " -Protocol TCP" +
-                    ";netsh http add urlacl url = http://*:" + EDDConfig.Instance.WebServerPort.ToStringInvariant() + "/ user=" + Environment.GetEnvironmentVariable("USERNAME");
+                    string cmd = "-Command " +
+                                 "new-netfirewallrule " +
+                                 "-Name EDDiscovery " +
+                                 "-DisplayName EDDiscovery " +
+                                 "-Description Webserver " +
+                                 "-Direction Inbound " +
+                                 "-Action Allow " +
+                                $"-LocalPort {EDDConfig.Instance.WebServerPort.ToStringInvariant()} " +
+                                 "-Protocol TCP;" +
+                                 "netsh http add urlacl " +
+                                $"url = http://*:{EDDConfig.Instance.WebServerPort.ToStringInvariant()}/ " +
+                                $"user=\"{Environment.GetEnvironmentVariable("USERNAME")}\"";
 
                     int pid = process.StartProcess("Powershell.exe", cmd, "runas");
 
