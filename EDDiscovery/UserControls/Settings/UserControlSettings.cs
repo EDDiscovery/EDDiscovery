@@ -567,7 +567,7 @@ namespace EDDiscovery.UserControls
 
         private void buttonExtSafeMode_Click(object sender, EventArgs e)
         {
-            if (ExtendedControls.MessageBoxTheme.Show(this, "Safe Mode".T(EDTx.UserControlSettings_SM), "Confirm restart to safe mode".T(EDTx.UserControlSettings_CSM), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+            if (ExtendedControls.MessageBoxTheme.Show(this, "Confirm restart to safe mode".T(EDTx.UserControlSettings_CSM), "Safe Mode".T(EDTx.UserControlSettings_SM), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
             {
                 Application.Exit();
                 System.Diagnostics.Process.Start(Application.ExecutablePath, "-safemode");
