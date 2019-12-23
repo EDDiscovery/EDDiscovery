@@ -246,11 +246,15 @@ namespace EDDiscovery.WebServer
             }
 
             private JToken MakeResponse(int startindex, int length, string rt)     // generate a response over this range
-            { 
-                JToken response = null;
-
-                discoveryform.Invoke((MethodInvoker)delegate
+            {
+                if (discoveryform.InvokeRequired)
                 {
+                    return (JToken)discoveryform.Invoke(new Func<JToken>(() => MakeResponse(startindex, length, rt)));
+                }
+                else
+                {
+                    JToken response;
+
                     var hl = discoveryform.history;
                     if (hl.Count == 0)
                     {
@@ -267,9 +271,9 @@ namespace EDDiscovery.WebServer
                     }
 
                     response["Commander"] = EDCommander.Current.Name;
-                });
 
-                return response;
+                    return response;
+                }
             }
 
             public JToken NewJRec(HistoryList hl, string type, int startindex, int length)
@@ -326,11 +330,15 @@ namespace EDDiscovery.WebServer
             }
 
             private JToken MakeResponse(int entry, string rt)
-            { 
-                JToken response = null;
-
-                discoveryform.Invoke((MethodInvoker)delegate
+            {
+                if (discoveryform.InvokeRequired)
                 {
+                    return (JToken)discoveryform.Invoke(new Func<JToken>(() => MakeResponse(entry, rt)));
+                }
+                else
+                {
+                    JToken response = null;
+
                     var hl = discoveryform.history;
                     if (hl.Count == 0)
                     {
@@ -345,9 +353,9 @@ namespace EDDiscovery.WebServer
 
                         response = NewSRec(hl, rt, entry);
                     }
-                });
 
-                return response;
+                    return response;
+                }
             }
 
             public JToken NewSRec(EliteDangerousCore.HistoryList hl, string type, int entry)       // entry = -1 means latest
