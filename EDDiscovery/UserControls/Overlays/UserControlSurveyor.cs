@@ -197,8 +197,8 @@ namespace EDDiscovery.UserControls
             pictureBoxSurveyor.ClearImageList();
 
             // if system, and we are in no focus or don't care
-            if (sys != null && ( uistate == EliteDangerousCore.UIEvents.UIGUIFocus.Focus.NoFocus || !autoHideToolStripMenuItem.Checked )
-                 || ( uistate == EliteDangerousCore.UIEvents.UIGUIFocus.Focus.FSSMode && dontHideInFSSModeToolStripMenuItem.Checked) )
+            if (sys != null && ( uistate == EliteDangerousCore.UIEvents.UIGUIFocus.Focus.NoFocus || !autoHideToolStripMenuItem.Checked 
+                                || ( uistate == EliteDangerousCore.UIEvents.UIGUIFocus.Focus.FSSMode && dontHideInFSSModeToolStripMenuItem.Checked) ) )
             {
                 int vpos = 0;
                 StringFormat frmt = new StringFormat(StringFormatFlags.NoWrap);

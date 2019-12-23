@@ -260,6 +260,7 @@ namespace EliteDangerousCore
         public SystemNode FindSystem(ISystem sys, bool edsmweblookup, bool byname = false)    // Find the system. Optionally do a EDSM web lookup
         {
             System.Diagnostics.Debug.Assert(System.Windows.Forms.Application.MessageLoop);  // foreground only
+            System.Diagnostics.Debug.Assert(sys != null);
 
             SystemNode sn = FindSystemNode(sys);
 
