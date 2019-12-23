@@ -674,6 +674,17 @@ namespace EDDiscovery
 
             // HERE PERFORM CAPI.. DOCKED
 
+            var lastent = history.GetLast;
+            if (!object.ReferenceEquals(he, lastent))
+            {
+                LogLineHighlight(string.Format("Current history entry is not last in history - possible re-entrancy.\nAlert the EDDiscovery developers using either discord or Github (see help) and attach log file {0}", BaseUtils.TraceLog.LogFileName));
+                Trace.WriteLine($"Current history entry is not last in history");
+                Trace.WriteLine($"Current entry: {he.journalEntry?.GetJson()?.ToString()}");
+                Trace.WriteLine($"Last entry: {lastent.journalEntry?.GetJson()?.ToString()}");
+                Trace.WriteLine($"Stack Trace:");
+                Trace.WriteLine(new StackTrace(true).ToString());
+            }
+
             if (he.IsFSDJump)
             {
                 int count = history.GetVisitsCount(he.System.Name);
