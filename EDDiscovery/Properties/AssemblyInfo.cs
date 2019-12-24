@@ -42,7 +42,7 @@ using System.Runtime.InteropServices;
 //      Major Version
 //      Minor Version 
 //      Build Number
-//      Revision
+//      Revision.
 //
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
