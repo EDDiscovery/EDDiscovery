@@ -64,6 +64,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxHistoryWindow = new ExtendedControls.ExtComboBox();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.topPanel = new System.Windows.Forms.FlowLayoutPanel();
+            this.buttonExtExcel = new ExtendedControls.ExtButton();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewLedger)).BeginInit();
             this.contextMenuStrip.SuspendLayout();
@@ -101,7 +102,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewLedger.Name = "dataGridViewLedger";
             this.dataGridViewLedger.RowHeadersVisible = false;
             this.dataGridViewLedger.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewLedger.Size = new System.Drawing.Size(787, 542);
+            this.dataGridViewLedger.Size = new System.Drawing.Size(784, 542);
             this.dataGridViewLedger.TabIndex = 1;
             this.dataGridViewLedger.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewLedger_SortCompare);
             this.dataGridViewLedger.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridViewLedger_MouseDown);
@@ -180,13 +181,13 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustomMC.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustomMC.HideScrollBar = false;
             this.vScrollBarCustomMC.LargeChange = 0;
-            this.vScrollBarCustomMC.Location = new System.Drawing.Point(787, 0);
+            this.vScrollBarCustomMC.Location = new System.Drawing.Point(784, 0);
             this.vScrollBarCustomMC.Maximum = -1;
             this.vScrollBarCustomMC.Minimum = 0;
             this.vScrollBarCustomMC.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustomMC.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustomMC.Name = "vScrollBarCustomMC";
-            this.vScrollBarCustomMC.Size = new System.Drawing.Size(13, 542);
+            this.vScrollBarCustomMC.Size = new System.Drawing.Size(16, 542);
             this.vScrollBarCustomMC.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustomMC.SmallChange = 1;
             this.vScrollBarCustomMC.TabIndex = 0;
@@ -295,11 +296,25 @@ namespace EDDiscovery.UserControls
             this.topPanel.Controls.Add(this.labelSearch);
             this.topPanel.Controls.Add(this.textBoxFilter);
             this.topPanel.Controls.Add(this.buttonFilter);
+            this.topPanel.Controls.Add(this.buttonExtExcel);
             this.topPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.topPanel.Location = new System.Drawing.Point(0, 0);
             this.topPanel.Name = "topPanel";
             this.topPanel.Size = new System.Drawing.Size(800, 30);
             this.topPanel.TabIndex = 2;
+            // 
+            // buttonExtExcel
+            // 
+            this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonExtExcel.Image = global::EDDiscovery.Icons.Controls.JournalGrid_ExportToExcel;
+            this.buttonExtExcel.Location = new System.Drawing.Point(387, 1);
+            this.buttonExtExcel.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.buttonExtExcel.Name = "buttonExtExcel";
+            this.buttonExtExcel.Size = new System.Drawing.Size(28, 28);
+            this.buttonExtExcel.TabIndex = 32;
+            this.toolTip.SetToolTip(this.buttonExtExcel, "Send data on grid to excel");
+            this.buttonExtExcel.UseVisualStyleBackColor = true;
+            this.buttonExtExcel.Click += new System.EventHandler(this.buttonExtExcel_Click);
             // 
             // UserControlLedger
             // 
@@ -340,5 +355,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn NormProfit;
         private System.Windows.Forms.Label labelTime;
         private System.Windows.Forms.FlowLayoutPanel topPanel;
+        private ExtendedControls.ExtButton buttonExtExcel;
     }
 }

@@ -105,7 +105,7 @@ namespace EDDiscovery.UserControls
         private void Display(Ledger mc)
         {
             DataGridViewColumn sortcol = dataGridViewLedger.SortedColumn != null ? dataGridViewLedger.SortedColumn : dataGridViewLedger.Columns[0];
-            SortOrder sortorder = dataGridViewLedger.SortOrder;
+            SortOrder sortorder = dataGridViewLedger.SortOrder != SortOrder.None ? dataGridViewLedger.SortOrder : SortOrder.Descending;
 
             dataGridViewLedger.Rows.Clear();
             bool utctime = EDDiscoveryForm.EDDConfig.DisplayUTC;
@@ -242,6 +242,42 @@ namespace EDDiscovery.UserControls
                 e.SortDataGridViewColumnDate(true);
             else if (e.Column.Index >= 3)
                 e.SortDataGridViewColumnNumeric();
+        }
+
+        private void buttonExtExcel_Click(object sender, EventArgs e)
+        {
+            if (current_mc != null)
+            {
+                Forms.ExportForm frm = new Forms.ExportForm();
+                frm.Init(new string[] { "Export Current View" }, disablestartendtime: true, allowRawJournalExport: false);
+
+                if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)
+                {
+                    BaseUtils.CSVWriteGrid grd = new BaseUtils.CSVWriteGrid();
+                    grd.SetCSVDelimiter(frm.Comma);
+
+                    grd.GetHeader += delegate (int c)
+                    {
+                        return (frm.IncludeHeader && c < dataGridViewLedger.ColumnCount) ? dataGridViewLedger.Columns[c].HeaderText : null;
+                    };
+
+                    grd.GetLine += delegate (int r)
+                    {
+                        if (r < dataGridViewLedger.RowCount)
+                        {
+                            DataGridViewRow rw = dataGridViewLedger.Rows[r];
+                            return new Object[] { rw.Cells[0].Value, rw.Cells[1].Value, rw.Cells[2].Value, rw.Cells[3].Value, rw.Cells[4].Value, rw.Cells[5].Value, rw.Cells[6].Value};
+                        }
+                        else
+                            return null;
+                    };
+
+                    grd.WriteGrid(frm.Path, frm.AutoOpen, FindForm());
+                }
+            }
+            else
+                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "No Ledger available".T(EDTx.UserControlLedger_NOLG), "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Error);
+
         }
     }
 }

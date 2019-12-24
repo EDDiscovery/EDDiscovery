@@ -134,6 +134,9 @@ namespace EDDiscovery
         BookmarkForm_Update, // Update
         BookmarkForm_Description, // Description
 
+        CSV_Helpers_OpenFailed, // Failed to open<spc>
+        CSV_Helpers_WriteFailed, // Failed to write to<spc>
+
         CommanderForm_LF, // Select folder where Journal*.log files are stored by Frontier in
 
         ExportForm_ECH, // Export current History view to {0}
@@ -261,6 +264,7 @@ namespace EDDiscovery
         UserControlModules_NValid, // A Value is not valid
         UserControlModules_SC, // Ship Configure
         UserControlModules_MI, // Module Information
+        UserControlModules_NOSI, // No ship information available
 
         UserControlStats_tosystem, //  to system
         UserControlStats_Visits, // Visits
@@ -664,6 +668,7 @@ namespace EDDiscovery
         UserControlOutfitting_TravelHistoryEntry, // Travel History Entry
 
         UserControlLedger_CashTransactions, // Cash Transactions
+        UserControlLedger_NOLG, // No Ledger available
 
         UserControlPanelSelector_NOADDONS, // NO ADD ONS!
         UserControlPanelSelector_AddOns, //  Add Ons
