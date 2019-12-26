@@ -125,9 +125,11 @@ namespace EDDiscovery
                             // Download new systems
                             try
                             {
-                                string edsmsystems = Path.Combine(EliteConfigInstance.InstanceOptions.AppDataDirectory, "edsmsystems.json");
+                                string edsmsystems = Path.Combine(EliteConfigInstance.InstanceOptions.AppDataDirectory, "edsmsystems.json.gz");
 
                                 ReportSyncProgress("Performing full download of EDSM Database from server");
+
+                                Debug.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Full sync using URL " + EliteConfigInstance.InstanceConfig.EDSMFullSystemsURL);
 
                                 bool success = BaseUtils.DownloadFile.HTTPDownloadFile(EliteConfigInstance.InstanceConfig.EDSMFullSystemsURL, edsmsystems, false, out bool newfile);
 
