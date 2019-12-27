@@ -45,12 +45,12 @@ namespace EliteDangerousCore.DB
                         }
                     }
                 }
-
-
             }
-
-            using (StreamReader sr = new StreamReader(filename))         // read directly from file..
-                return ParseEDSMJSON(sr, grididallow, ref date, cancelRequested, reportProgress, tableposfix, presumeempty, debugoutputfile);
+            else
+            {
+                using (StreamReader sr = new StreamReader(filename))         // read directly from file..
+                    return ParseEDSMJSON(sr, grididallow, ref date, cancelRequested, reportProgress, tableposfix, presumeempty, debugoutputfile);
+            }
         }
 
         public static long ParseEDSMJSONString(string data, bool[] grididallow, ref DateTime date, Func<bool> cancelRequested, Action<string> reportProgress, string tableposfix, bool presumeempty = false, string debugoutputfile = null)

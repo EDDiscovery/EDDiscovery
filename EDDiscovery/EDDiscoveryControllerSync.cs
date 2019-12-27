@@ -144,6 +144,14 @@ namespace EDDiscovery
 
                                     BaseUtils.FileHelpers.DeleteFileNoError(edsmsystems);       // remove file - don't hold in storage
                                 }
+                                else
+                                {
+                                    ReportSyncProgress("");
+                                    LogLineHighlight("Failed to download full EDSM systems file. Try re-running EDD later");
+                                    BaseUtils.FileHelpers.DeleteFileNoError(edsmsystems);       // remove file - don't hold in storage
+                                    return;     // new! if we failed to download, fail here, wait for another time
+                                }
+
                             }
                             catch (Exception ex)
                             {
@@ -179,6 +187,13 @@ namespace EDDiscovery
 
                                         BaseUtils.FileHelpers.DeleteFileNoError(eddbsystems);       // remove file - don't hold in storage
                                     }
+                                    else
+                                    {
+                                        LogLineHighlight("Failed to download EDDB systems file. Try re-running EDD later");
+                                        BaseUtils.FileHelpers.DeleteFileNoError(eddbsystems);       // remove file - don't hold in storage
+                                        // we can continue, as its not the end of the world
+                                    }
+
                                 }
                             }
                             catch (Exception ex)
