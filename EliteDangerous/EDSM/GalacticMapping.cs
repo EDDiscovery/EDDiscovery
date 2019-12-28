@@ -91,6 +91,12 @@ namespace EliteDangerousCore.EDSM
 
                         galobject.galMapType = ty;
                         gmobjects.Add(galobject);
+
+                        if (galobject.points.Count == 1 && galobject.galMapSearch != null && galobject.galMapUrl != null)
+                        {
+                            var gms = new GalacticMapSystem(galobject);
+                            SystemCache.FindCachedJournalSystem(gms);
+                        }
                     }
 
                     galacticMapObjects = gmobjects;
