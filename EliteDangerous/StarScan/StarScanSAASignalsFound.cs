@@ -102,7 +102,7 @@ namespace EliteDangerousCore
 
             if (relatednode != null )
             {
-                System.Diagnostics.Debug.WriteLine("Setting SAA Signals Found for " + jsaa.BodyName + " @ " + sys.Name + " body "  + jsaa.BodyDesignation);
+                //System.Diagnostics.Debug.WriteLine("Setting SAA Signals Found for " + jsaa.BodyName + " @ " + sys.Name + " body "  + jsaa.BodyDesignation);
 
                 if (relatednode.Signals == null)
                     relatednode.Signals = new List<JournalSAASignalsFound.SAASignal>();

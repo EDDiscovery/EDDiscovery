@@ -190,7 +190,7 @@ namespace EDDiscovery.UserControls
                 {
                     ISystem sys = ret.Item1.System;
                     string sep = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberGroupSeparator + " ";
-                    object[] rowobj = {     (EDDConfig.Instance.DisplayUTC ? ret.Item1.EventTimeUTC : ret.Item1.EventTimeLocal).ToString(),
+                    object[] rowobj = {     EDDConfig.Instance.ConvertTimeToSelectedFromUTC(ret.Item1.EventTimeUTC).ToString(),
                                             sys.Name,
                                             ret.Item2,
                                             (cursystem != null ? cursystem.Distance(sys).ToString("0.#") : ""),

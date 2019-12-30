@@ -329,7 +329,7 @@ namespace EDDiscovery.Actions
         {
             ap[prefix + "Id"] = cl.ID.ToStringInvariant();
             ap[prefix + "TimeUTC"] = cl.TimeUTC.ToStringUS();
-            ap[prefix + "TimeLocal"] = cl.TimeLocal.ToStringUS();
+            ap[prefix + "TimeLocal"] = cl.TimeUTC.ToLocalTime().ToStringUS();
             ap[prefix + "SystemName"] = cl.SystemName ?? "";
             ap[prefix + "BodyName"] = cl.BodyName ?? "";
             ap[prefix + "Note"] = cl.Note ?? "";

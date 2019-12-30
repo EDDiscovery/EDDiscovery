@@ -57,17 +57,9 @@ namespace EDDiscovery.UserControls
             dataGridViewPrevious.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             dataGridViewPrevious.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
 
-            string start = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbStartDate, "");
-            DateTime dt;
-            if (start != "" && DateTime.TryParse(start, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out dt))
-                customDateTimePickerStart.Value = dt;
-
+            customDateTimePickerStart.Value = EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDate(DbStartDate, DateTime.UtcNow));
             customDateTimePickerStart.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbStartDateChecked, false);
-
-            string end = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbEndDate, "");
-            if (end != "" && DateTime.TryParse(end, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out dt))
-                customDateTimePickerEnd.Value = dt;
-
+            customDateTimePickerEnd.Value = EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDate(DbEndDate, DateTime.UtcNow));
             customDateTimePickerEnd.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbEndDateChecked, false);
 
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
@@ -103,8 +95,8 @@ namespace EDDiscovery.UserControls
             uctg.OnTravelSelectionChanged -= Display;
             discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
 
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbStartDate, customDateTimePickerStart.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbEndDate, customDateTimePickerEnd.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDate(DbStartDate, EDDiscoveryForm.EDDConfig.ConvertTimeToUTCFromSelected(customDateTimePickerStart.Value));
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDate(DbEndDate, EDDiscoveryForm.EDDConfig.ConvertTimeToUTCFromSelected(customDateTimePickerEnd.Value));
 
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbStartDateChecked, customDateTimePickerStart.Checked);
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbEndDateChecked, customDateTimePickerEnd.Checked);
@@ -161,8 +153,8 @@ namespace EDDiscovery.UserControls
                 foreach (MissionState ms in mcurrent)
                 {
                     object[] rowobj = { JournalFieldNaming.ShortenMissionName(ms.Mission.LocalisedName) ,
-                                        EDDiscoveryForm.EDDConfig.DisplayUTC ? ms.Mission.EventTimeUTC : ms.Mission.EventTimeLocal,
-                                        EDDiscoveryForm.EDDConfig.DisplayUTC ? ms.Mission.Expiry : ms.Mission.Expiry.ToLocalTime(),
+                                        EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(ms.Mission.EventTimeUTC),
+                                        EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(ms.Mission.Expiry),
                                         ms.OriginatingSystem + ":" + ms.OriginatingStation,
                                         ms.Mission.Faction,
                                         ms.DestinationSystemStation(),
@@ -189,20 +181,20 @@ namespace EDDiscovery.UserControls
 
                 List<MissionState> mprev = ml.GetAllExpiredMissions(hetime);
 
-                DateTime startdate = customDateTimePickerStart.Checked ? customDateTimePickerStart.Value : new DateTime(1980, 1, 1);
-                DateTime enddate = customDateTimePickerEnd.Checked ? customDateTimePickerEnd.Value : new DateTime(2999, 1, 1);
+                DateTime startdateutc = customDateTimePickerStart.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromSelected(customDateTimePickerStart.Value) : new DateTime(1980, 1, 1);
+                DateTime enddateutc = customDateTimePickerEnd.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromSelected(customDateTimePickerEnd.Value) : new DateTime(8999, 1, 1);
 
                 long value = 0;
                 int completed = 0, abandonded = 0, failed = 0;
 
                 foreach (MissionState ms in mprev)
                 {
-                    int cmps = EDDiscoveryForm.EDDConfig.DisplayUTC ? DateTime.Compare(ms.Mission.EventTimeUTC, startdate) : DateTime.Compare(ms.Mission.EventTimeLocal, startdate);
+                    int cmps = DateTime.Compare(ms.Mission.EventTimeUTC, startdateutc);
 
                     //System.Diagnostics.Debug.WriteLine(ms.Mission.EventTimeUTC.ToString() + " " + startdate.ToString() + " " + cmps);
                     if (cmps >= 0)
                     {
-                        int cmpe = EDDiscoveryForm.EDDConfig.DisplayUTC ? DateTime.Compare(ms.Mission.EventTimeUTC, enddate) : DateTime.Compare(ms.Mission.EventTimeLocal, enddate);
+                        int cmpe = DateTime.Compare(ms.Mission.EventTimeUTC, enddateutc);
 
                         if (cmpe <= 0)
                         {
@@ -214,8 +206,8 @@ namespace EDDiscovery.UserControls
                                 failed++;
 
                             object[] rowobj = { JournalFieldNaming.ShortenMissionName(ms.Mission.LocalisedName) ,
-                                        EDDiscoveryForm.EDDConfig.DisplayUTC ? ms.Mission.EventTimeUTC : ms.Mission.EventTimeLocal,
-                                        EDDiscoveryForm.EDDConfig.DisplayUTC ? ms.MissionEndTime : ms.MissionEndTime.ToLocalTime(),
+                                         EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(ms.Mission.EventTimeUTC),
+                                         EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(ms.MissionEndTime),
                                         ms.OriginatingSystem + ":" + ms.OriginatingStation,
                                         ms.Mission.Faction,
                                         ms.DestinationSystemStation(),

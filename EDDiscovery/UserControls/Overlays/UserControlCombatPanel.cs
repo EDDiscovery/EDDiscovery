@@ -55,8 +55,8 @@ namespace EDDiscovery.UserControls
             public string MissionKey { get; private set; }  // null if not set.  Mission only
             public string TargetFaction { get; private set; }  // null if not set
 
-            public DateTime StartTime { get { return starttime; } }
-            public DateTime EndTime { get { return endtime; } }     // for missions, its the expiry time, not the MissionEndTime
+            public DateTime StartTimeUTC { get { return starttime; } }
+            public DateTime EndTimeUTC { get { return endtime; } }     // for missions, its the expiry time, not the MissionEndTime
 
             public string NameDate
             {
@@ -65,8 +65,8 @@ namespace EDDiscovery.UserControls
                     string date = "";
                     if (Type == FilterEntry.EntryType.Time || Type == FilterEntry.EntryType.Mission)
                     {
-                        date = EDDiscoveryForm.EDDConfig.DisplayUTC ? starttime.ToString("d") : starttime.ToLocalTime().ToString("d");
-                        string dte = EDDiscoveryForm.EDDConfig.DisplayUTC ? endtime.ToString("d") : endtime.ToLocalTime().ToString("d");
+                        date = EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(starttime).ToString("d") ;
+                        string dte = EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(endtime).ToString("d");
                         if (date.Equals(dte))
                             date = "(" + date + ")";
                         else
@@ -203,7 +203,7 @@ namespace EDDiscovery.UserControls
             foreach (FilterEntry f in savedfilterentries)
             {
                 s += f.Type.ToString() + "," + f.Name.QuoteString(comma: true) + "," + f.TargetFaction.QuoteString(comma: true) + "," +
-                                    f.StartTime.ToStringZulu() + "," + f.EndTime.ToStringZulu() + ",";
+                                    f.StartTimeUTC.ToStringZulu() + "," + f.EndTimeUTC.ToStringZulu() + ",";
             }
 
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbSave + "Campaign", s);
@@ -257,7 +257,7 @@ namespace EDDiscovery.UserControls
         public void Display()
         {
             DataGridViewColumn sortcol = dataGridViewCombat.SortedColumn != null ? dataGridViewCombat.SortedColumn : dataGridViewCombat.Columns[0];
-            SortOrder sortorder = dataGridViewCombat.SortOrder;
+            SortOrder sortorder = dataGridViewCombat.SortOrder != SortOrder.None ? dataGridViewCombat.SortOrder : SortOrder.Descending;
 
             dataGridViewCombat.Rows.Clear();
             total_kills = faction_kills = total_reward = faction_reward = balance = total_crimes = 0;
@@ -281,10 +281,10 @@ namespace EDDiscovery.UserControls
                 {
                     // look up the mission in the current data
                     MissionState ml = current.MissionKey != null && discoveryform.history.GetLast.MissionList.Missions.ContainsKey(current.MissionKey) ? discoveryform.history.GetLast.MissionList.Missions[current.MissionKey] : null;
-                    hel = ml != null ? discoveryform.history.FilterByDateRangeLatestFirst(current.StartTime, ml.MissionEndTime) : new List<HistoryEntry>();
+                    hel = ml != null ? discoveryform.history.FilterByDateRangeLatestFirst(current.StartTimeUTC, ml.MissionEndTime) : new List<HistoryEntry>();
                 }
                 else
-                    hel = discoveryform.history.FilterByDateRangeLatestFirst(current.StartTime, current.EndTime);
+                    hel = discoveryform.history.FilterByDateRangeLatestFirst(current.StartTimeUTC, current.EndTimeUTC);
 
                 foreach ( HistoryEntry he in hel )
                 {
@@ -306,7 +306,7 @@ namespace EDDiscovery.UserControls
                 bool tryadd = true; // normally go for it..
 
                 if (current.Type == FilterEntry.EntryType.Time)     // time is limited 
-                    tryadd = he.EventTimeUTC <= current.EndTime;
+                    tryadd = he.EventTimeUTC <= current.EndTimeUTC;
                 else if (current.Type == FilterEntry.EntryType.Mission) // mission is limited, lookup mission and check end time
                 {
                     MissionState ml = current.MissionKey != null && he.MissionList.Missions.ContainsKey(current.MissionKey) ? he.MissionList.Missions[current.MissionKey] : null;
@@ -341,7 +341,7 @@ namespace EDDiscovery.UserControls
                 var rw = dataGridViewCombat.RowTemplate.Clone() as DataGridViewRow;
                 he.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
 
-                rw.CreateCells(dataGridViewCombat, EDDiscoveryForm.EDDConfig.DisplayUTC ? he.EventTimeUTC : he.EventTimeLocal,
+                rw.CreateCells(dataGridViewCombat, EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(he.EventTimeUTC),
                     he.EventSummary, EventDescription, rewardcol);
 
                 rw.Tag = he;
@@ -604,8 +604,8 @@ namespace EDDiscovery.UserControls
         {
             ExtendedControls.ConfigurableForm f = new ExtendedControls.ConfigurableForm();
 
-            DateTime start = EDDConfig.Instance.DisplayUTC ? entry.StartTime : entry.StartTime.ToLocalTime();
-            DateTime end = EDDConfig.Instance.DisplayUTC ? entry.EndTime : entry.EndTime.ToLocalTime();
+            DateTime starttime = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(entry.StartTimeUTC);
+            DateTime endtime = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(entry.EndTimeUTC);
 
             int width = 430;
 
@@ -616,10 +616,10 @@ namespace EDDiscovery.UserControls
             f.Add(new ExtendedControls.ConfigurableForm.Entry("Faction", typeof(ExtendedControls.ExtTextBox), entry.TargetFaction, new Point(100, 70), new Size(width - 100 - 20, 24), "Optional faction to target".T(EDTx.UserControlCombatPanel_C2)) );
 
             f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "Start:".T(EDTx.UserControlCombatPanel_Start), new Point(10, 100), new Size(80, 24), ""));
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("DTS", typeof(ExtendedControls.ExtDateTimePicker), entry.StartTime.ToStringZulu(), new Point(100, 100), new Size(width - 100 - 20, 24), "Select Start time".T(EDTx.UserControlCombatPanel_C3)) { customdateformat = "yyyy-MM-dd HH:mm:ss" });
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("DTS", typeof(ExtendedControls.ExtDateTimePicker), starttime.ToStringZulu(), new Point(100, 100), new Size(width - 100 - 20, 24), "Select Start time".T(EDTx.UserControlCombatPanel_C3)) { customdateformat = "yyyy-MM-dd HH:mm:ss" });
 
             f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "End:".T(EDTx.UserControlCombatPanel_End), new Point(10, 130), new Size(80, 24), ""));
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("DTE", typeof(ExtendedControls.ExtDateTimePicker), entry.EndTime.ToStringZulu(), new Point(100, 130), new Size(width - 100 - 20, 24), "Select Start time".T(EDTx.UserControlCombatPanel_C4)) { customdateformat = "yyyy-MM-dd HH:mm:ss" });
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("DTE", typeof(ExtendedControls.ExtDateTimePicker), endtime.ToStringZulu(), new Point(100, 130), new Size(width - 100 - 20, 24), "Select Start time".T(EDTx.UserControlCombatPanel_C4)) { customdateformat = "yyyy-MM-dd HH:mm:ss" });
 
             f.Add(new ExtendedControls.ConfigurableForm.Entry("OK", typeof(ExtendedControls.ExtButton), "OK".T(EDTx.OK), new Point(width - 100, 180), new Size(80, 24), "Press to Accept".T(EDTx.UserControlCombatPanel_C5)));
             f.Add(new ExtendedControls.ConfigurableForm.Entry("Cancel", typeof(ExtendedControls.ExtButton), "Cancel".T(EDTx.Cancel), new Point(width - 200, 180), new Size(80, 24), "Press to Cancel".T(EDTx.UserControlCombatPanel_C6)));
@@ -663,8 +663,8 @@ namespace EDDiscovery.UserControls
             if (res == DialogResult.OK)
             {
                 entry.Reset(f.Get("Name"), f.Get("Faction"),
-                                EDDConfig.Instance.DisplayUTC ? f.GetDateTime("DTS").Value : f.GetDateTime("DTS").Value.ToUniversalTime(),
-                                EDDConfig.Instance.DisplayUTC ? f.GetDateTime("DTE").Value : f.GetDateTime("DTE").Value.ToUniversalTime());
+                                EDDConfig.Instance.ConvertTimeToUTCFromSelected(f.GetDateTime("DTS").Value),
+                                EDDConfig.Instance.ConvertTimeToUTCFromSelected(f.GetDateTime("DTE").Value));
             }
 
             return res;

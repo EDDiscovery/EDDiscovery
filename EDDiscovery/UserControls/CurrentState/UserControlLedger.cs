@@ -108,7 +108,6 @@ namespace EDDiscovery.UserControls
             SortOrder sortorder = dataGridViewLedger.SortOrder != SortOrder.None ? dataGridViewLedger.SortOrder : SortOrder.Descending;
 
             dataGridViewLedger.Rows.Clear();
-            bool utctime = EDDiscoveryForm.EDDConfig.DisplayUTC;
 
             current_mc = mc;
             
@@ -125,7 +124,7 @@ namespace EDDiscovery.UserControls
                     {
                         Ledger.Transaction tx = filteredlist[i];
 
-                        object[] rowobj = { utctime ? tx.utctime : tx.utctime.ToLocalTime() ,
+                        object[] rowobj = { EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(tx.utctime) ,
                                             tx.jtype.ToString().SplitCapsWord(),
                                             tx.notes,
                                             (tx.cashadjust>0) ? tx.cashadjust.ToString("N0") : "",
@@ -143,7 +142,7 @@ namespace EDDiscovery.UserControls
                 }
             }
 
-            dataGridViewLedger.Columns[0].HeaderText = utctime ? "Game Time".T(EDTx.GameTime) : "Time".T(EDTx.Time);
+            dataGridViewLedger.Columns[0].HeaderText = EDDiscoveryForm.EDDConfig.GetTimeTitle();
             dataGridViewLedger.Sort(sortcol, (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
             dataGridViewLedger.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
         }

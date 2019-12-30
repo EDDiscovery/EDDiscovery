@@ -99,12 +99,12 @@
     <Compile Include="Journal\JournalEssentialEvents.cs" />
     <Compile Include="Journal\JournalEntryDB.cs" />
     <Compile Include="Journal\JournalEnums.cs" />
-    <Compile Include="ScarScan\StarScanHelpers.cs" />
-    <Compile Include="ScarScan\StarScanDesignationMaps.cs" />
-    <Compile Include="ScarScan\StarScanJournalScans.cs" />
-    <Compile Include="ScarScan\StarScanBodyID.cs" />
-    <Compile Include="ScarScan\StarScanSAASignalsFound.cs" />
-    <Compile Include="ScarScan\StarScanSAAScan.cs" />
+    <Compile Include="StarScan\StarScanHelpers.cs" />
+    <Compile Include="StarScan\StarScanDesignationMaps.cs" />
+    <Compile Include="StarScan\StarScanJournalScans.cs" />
+    <Compile Include="StarScan\StarScanBodyID.cs" />
+    <Compile Include="StarScan\StarScanSAASignalsFound.cs" />
+    <Compile Include="StarScan\StarScanSAAScan.cs" />
     <Compile Include="Status\EDStatusMonitorWatcher.cs" />
     <Compile Include="EliteDangerous\EDTypesFromJSON.cs" />
     <Compile Include="Bindings\FrontierToVKey.cs" />
@@ -133,7 +133,7 @@
     <Compile Include="Ships\ShipStored.cs" />
     <Compile Include="Ships\ShipYard.cs" />
     <Compile Include="EliteDangerous\StarDistanceComputer.cs" />
-    <Compile Include="ScarScan\StarScan.cs" />
+    <Compile Include="StarScan\StarScan.cs" />
     <Compile Include="EliteDangerous\SystemClass.cs" />
     <Compile Include="EliteDangerous\VisitingStarsCacheFolder.cs" />
     <Compile Include="HistoryList\HistoryTravel.cs" />

@@ -52,7 +52,6 @@ namespace EDDiscovery.UserControls
             this.comboBoxCustomEssentialEntries = new ExtendedControls.ExtComboBox();
             this.comboBoxCustomHistoryLoadTime = new ExtendedControls.ExtComboBox();
             this.checkBoxOrderRowsInverted = new ExtendedControls.ExtCheckBox();
-            this.checkBoxUTC = new ExtendedControls.ExtCheckBox();
             this.checkBoxPanelSortOrder = new ExtendedControls.ExtCheckBox();
             this.checkBoxKeepOnTop = new ExtendedControls.ExtCheckBox();
             this.checkBoxCustomResize = new ExtendedControls.ExtCheckBox();
@@ -83,6 +82,8 @@ namespace EDDiscovery.UserControls
             this.flowLayoutButtons = new System.Windows.Forms.FlowLayoutPanel();
             this.groupBoxTheme = new ExtendedControls.ExtGroupBox();
             this.groupBoxCustomHistoryLoad = new ExtendedControls.ExtGroupBox();
+            this.extComboBoxGameTime = new ExtendedControls.ExtComboBox();
+            this.labelTimeDisplay = new System.Windows.Forms.Label();
             this.extGroupBoxWebServer = new ExtendedControls.ExtGroupBox();
             this.numberBoxLongPortNo = new ExtendedControls.NumberBoxLong();
             this.labelPortNo = new System.Windows.Forms.Label();
@@ -221,27 +222,6 @@ namespace EDDiscovery.UserControls
             this.checkBoxOrderRowsInverted.TickBoxReductionRatio = 0.75F;
             this.toolTip.SetToolTip(this.checkBoxOrderRowsInverted, "Number oldest entry 1, latest entry highest");
             this.checkBoxOrderRowsInverted.UseVisualStyleBackColor = true;
-            // 
-            // checkBoxUTC
-            // 
-            this.checkBoxUTC.AutoSize = true;
-            this.checkBoxUTC.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxUTC.CheckBoxDisabledScaling = 0.5F;
-            this.checkBoxUTC.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBoxUTC.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxUTC.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxUTC.ImageIndeterminate = null;
-            this.checkBoxUTC.ImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.checkBoxUTC.ImageUnchecked = null;
-            this.checkBoxUTC.Location = new System.Drawing.Point(9, 46);
-            this.checkBoxUTC.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxUTC.Name = "checkBoxUTC";
-            this.checkBoxUTC.Size = new System.Drawing.Size(209, 17);
-            this.checkBoxUTC.TabIndex = 0;
-            this.checkBoxUTC.Text = "Display Game time instead of local time";
-            this.checkBoxUTC.TickBoxReductionRatio = 0.75F;
-            this.toolTip.SetToolTip(this.checkBoxUTC, "Display game time (UTC) instead of your local time");
-            this.checkBoxUTC.UseVisualStyleBackColor = true;
             // 
             // checkBoxPanelSortOrder
             // 
@@ -771,7 +751,8 @@ namespace EDDiscovery.UserControls
             this.groupBoxCustomHistoryLoad.BorderColor = System.Drawing.Color.LightGray;
             this.groupBoxCustomHistoryLoad.BorderColorScaling = 0.5F;
             this.groupBoxCustomHistoryLoad.Controls.Add(this.checkBoxOrderRowsInverted);
-            this.groupBoxCustomHistoryLoad.Controls.Add(this.checkBoxUTC);
+            this.groupBoxCustomHistoryLoad.Controls.Add(this.extComboBoxGameTime);
+            this.groupBoxCustomHistoryLoad.Controls.Add(this.labelTimeDisplay);
             this.groupBoxCustomHistoryLoad.FillClientAreaWithAlternateColor = false;
             this.groupBoxCustomHistoryLoad.Location = new System.Drawing.Point(290, 162);
             this.groupBoxCustomHistoryLoad.Name = "groupBoxCustomHistoryLoad";
@@ -781,6 +762,37 @@ namespace EDDiscovery.UserControls
             this.groupBoxCustomHistoryLoad.Text = "History";
             this.groupBoxCustomHistoryLoad.TextPadding = 0;
             this.groupBoxCustomHistoryLoad.TextStartPosition = -1;
+            // 
+            // extComboBoxGameTime
+            // 
+            this.extComboBoxGameTime.BorderColor = System.Drawing.Color.White;
+            this.extComboBoxGameTime.ButtonColorScaling = 0.5F;
+            this.extComboBoxGameTime.DataSource = null;
+            this.extComboBoxGameTime.DisableBackgroundDisabledShadingGradient = false;
+            this.extComboBoxGameTime.DisplayMember = "";
+            this.extComboBoxGameTime.DropDownBackgroundColor = System.Drawing.Color.Gray;
+            this.extComboBoxGameTime.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.extComboBoxGameTime.Location = new System.Drawing.Point(128, 48);
+            this.extComboBoxGameTime.MouseOverBackgroundColor = System.Drawing.Color.Silver;
+            this.extComboBoxGameTime.Name = "extComboBoxGameTime";
+            this.extComboBoxGameTime.ScrollBarButtonColor = System.Drawing.Color.LightGray;
+            this.extComboBoxGameTime.ScrollBarColor = System.Drawing.Color.LightGray;
+            this.extComboBoxGameTime.SelectedIndex = -1;
+            this.extComboBoxGameTime.SelectedItem = null;
+            this.extComboBoxGameTime.SelectedValue = null;
+            this.extComboBoxGameTime.Size = new System.Drawing.Size(137, 21);
+            this.extComboBoxGameTime.TabIndex = 7;
+            this.extComboBoxGameTime.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.extComboBoxGameTime.ValueMember = "";
+            // 
+            // labelTimeDisplay
+            // 
+            this.labelTimeDisplay.AutoSize = true;
+            this.labelTimeDisplay.Location = new System.Drawing.Point(10, 52);
+            this.labelTimeDisplay.Name = "labelTimeDisplay";
+            this.labelTimeDisplay.Size = new System.Drawing.Size(33, 13);
+            this.labelTimeDisplay.TabIndex = 5;
+            this.labelTimeDisplay.Text = "Time:";
             // 
             // extGroupBoxWebServer
             // 
@@ -1109,7 +1121,6 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtCheckBox checkBoxOrderRowsInverted;
         private ExtendedControls.ExtCheckBox checkBoxKeepOnTop;
         private ExtendedControls.ExtButton btnDeleteCommander;
-        private ExtendedControls.ExtCheckBox checkBoxUTC;
         private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerCommanders;
         private ExtendedControls.ExtScrollBar vScrollBarCommanders;
         private ExtendedControls.ExtGroupBox groupBoxPopOuts;
@@ -1153,5 +1164,7 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn NotesCol;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutButtons;
         private ExtendedControls.ExtGroupBox groupBoxInteraction;
+        private ExtendedControls.ExtComboBox extComboBoxGameTime;
+        private System.Windows.Forms.Label labelTimeDisplay;
     }
 }
