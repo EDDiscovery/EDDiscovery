@@ -222,7 +222,7 @@ namespace EDDiscovery.UserControls
             dataGridViewTravel.Rows.Clear();
             rowsbyjournalid.Clear();
 
-            dataGridViewTravel.Columns[0].HeaderText = EDDiscoveryForm.EDDConfig.DisplayUTC ? "Game Time".T(EDTx.GameTime) : "Time".T(EDTx.Time);
+            dataGridViewTravel.Columns[0].HeaderText = EDDiscoveryForm.EDDConfig.GetTimeTitle();
 
             List<HistoryEntry[]> chunks = new List<HistoryEntry[]>();
 
@@ -443,7 +443,7 @@ namespace EDDiscovery.UserControls
         {
             //string debugt = item.Journalid + "  " + item.System.id_edsm + " " + item.System.GetHashCode() + " "; // add on for debug purposes to a field below
 
-            DateTime time = EDDiscoveryForm.EDDConfig.DisplayUTC ? item.EventTimeUTC : item.EventTimeLocal;
+            DateTime time = EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(item.EventTimeUTC);
             item.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
             string note = (item.snc != null) ? item.snc.Note : "";
 
@@ -768,7 +768,7 @@ namespace EDDiscovery.UserControls
                 if ( notexpanded && linesfound*ch > dataGridViewTravel.Height * 3 / 4 ) // unreasonable amount of space to show it.
                 {
                     ExtendedControls.InfoForm info = new ExtendedControls.InfoForm();
-                    info.Info((EDDiscoveryForm.EDDConfig.DisplayUTC ? leftclicksystem.EventTimeUTC : leftclicksystem.EventTimeLocal) + ": " + leftclicksystem.EventSummary,
+                    info.Info(EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(leftclicksystem.EventTimeUTC) + ": " + leftclicksystem.EventSummary,
                         FindForm().Icon, infodetailed);
                     info.Size = new Size(1200, 800);
                     info.Show(FindForm());

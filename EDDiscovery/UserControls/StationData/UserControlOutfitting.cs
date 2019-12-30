@@ -106,7 +106,7 @@ namespace EDDiscovery.UserControls
 
             comboBoxYards.Items.AddRange(ShipModuleData.Instance.GetAllModTypes());
 
-            var list = (from x in ofl.GetFilteredList() select x.Ident(EDDiscoveryForm.EDDConfig.DisplayUTC)).ToList();
+            var list = (from x in ofl.GetFilteredList() select x.Ident()).ToList();
             comboBoxYards.Items.AddRange(list);
 
             if (cursel == "")
@@ -158,7 +158,7 @@ namespace EDDiscovery.UserControls
             }
             else
             {
-                yard = discoveryform.history.outfitting.GetFilteredList().Find(x => x.Ident(EDDiscoveryForm.EDDConfig.DisplayUTC).Equals(comboBoxYards.Text));
+                yard = discoveryform.history.outfitting.GetFilteredList().Find(x => x.Ident().Equals(comboBoxYards.Text));
             }
 
             if (yard != null)
@@ -183,7 +183,7 @@ namespace EDDiscovery.UserControls
             foreach (var yard in itemlist)
             {
                 double distance = discoveryform.history.DistanceCurrentTo(yard.Item1.StarSystem);
-                string dte = EDDiscoveryForm.EDDConfig.DisplayUTC ? yard.Item1.Datetime.ToString() : yard.Item1.Datetime.ToLocalTime().ToString();
+                string dte = EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(yard.Item1.Datetime).ToString();
                 string yardname = yard.Item1.Location;
 
                 foreach (var item in yard.Item2)
@@ -226,7 +226,7 @@ namespace EDDiscovery.UserControls
 
             double distance = discoveryform.history.DistanceCurrentTo(yard.StarSystem);
 
-            labelYard.Text = yard.Ident(EDDiscoveryForm.EDDConfig.DisplayUTC) + (distance > -1 ? (" @ " + distance.ToString("N1") + "ly") : "");
+            labelYard.Text = yard.Ident() + (distance > -1 ? (" @ " + distance.ToString("N1") + "ly") : "");
             labelYard.Visible = true;
 
             Col1.HeaderText = "Type".T(EDTx.UserControlOutfitting_Type);

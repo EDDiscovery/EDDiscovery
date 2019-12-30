@@ -270,7 +270,7 @@ namespace EDDiscovery.UserControls
                         ISystem sys = he.System;
                         string sep = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberGroupSeparator + " ";
                         object[] rowobj = {
-                                            (EDDConfig.Instance.DisplayUTC ? he.EventTimeUTC : he.EventTimeLocal).ToString(),
+                                            EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC).ToString(),
                                             js.BodyName,
                                             js.DisplayString(0),
                                             (cursystem != null ? cursystem.Distance(sys).ToString("0.#") : ""),

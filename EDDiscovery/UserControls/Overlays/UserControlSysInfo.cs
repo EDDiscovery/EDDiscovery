@@ -240,9 +240,11 @@ namespace EDDiscovery.UserControls
                     string t = "";
                     foreach (MissionState ms in mcurrent)
                     {
+                        DateTime exp = EliteConfigInstance.InstanceConfig.ConvertTimeToSelectedFromUTC(ms.Mission.Expiry);
+
                         t = ObjectExtensionsStrings.AppendPrePad(t,
                             JournalFieldNaming.ShortenMissionName(ms.Mission.Name) 
-                            + " Exp:" + (EDDiscoveryForm.EDDConfig.DisplayUTC ? ms.Mission.Expiry : ms.Mission.Expiry.ToLocalTime())
+                            + " Exp:" + exp 
                             + " @ " + ms.DestinationSystemStation(),
                             Environment.NewLine);
                     }

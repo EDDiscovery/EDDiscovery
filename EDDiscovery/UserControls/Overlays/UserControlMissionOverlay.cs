@@ -175,10 +175,10 @@ namespace EDDiscovery.UserControls
                         text = text.AppendPrePad(ms.Mission.LocalisedName, ", ");
 
                     if (startDateToolStripMenuItem.Checked)
-                        text = text.AppendPrePad( EDDiscoveryForm.EDDConfig.DisplayUTC ? ms.Mission.EventTimeUTC.ToString() : ms.Mission.EventTimeLocal.ToString(), ", ");
+                        text = text.AppendPrePad( EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(ms.Mission.EventTimeUTC).ToString(), ", ");
 
                     if (endDateToolStripMenuItem.Checked)
-                        text = text.AppendPrePad(EDDiscoveryForm.EDDConfig.DisplayUTC ? ms.Mission.Expiry.ToString() : ms.Mission.Expiry.ToLocalTime().ToString(), startDateToolStripMenuItem.Checked ? "-" : ", ");
+                        text = text.AppendPrePad(EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(ms.Mission.Expiry).ToString(), startDateToolStripMenuItem.Checked ? "-" : ", ");
 
                     string mainpart = BaseUtils.FieldBuilder.Build(
                                         "< ", ms.DestinationSystemStation(),

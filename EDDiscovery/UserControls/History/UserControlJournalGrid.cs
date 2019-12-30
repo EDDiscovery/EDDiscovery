@@ -177,7 +177,7 @@ namespace EDDiscovery.UserControls
             dataGridViewJournal.Rows.Clear();
             rowsbyjournalid.Clear();
 
-            dataGridViewJournal.Columns[0].HeaderText = EDDiscoveryForm.EDDConfig.DisplayUTC ? "Game Time".T(EDTx.GameTime) : "Time".T(EDTx.Time);
+            dataGridViewJournal.Columns[0].HeaderText = EDDiscoveryForm.EDDConfig.GetTimeTitle();
 
             List<HistoryEntry[]> chunks = new List<HistoryEntry[]>();
 
@@ -323,7 +323,7 @@ namespace EDDiscovery.UserControls
 
         private DataGridViewRow CreateHistoryRow(HistoryEntry item, string search)
         {
-            DateTime time = EDDiscoveryForm.EDDConfig.DisplayUTC ? item.EventTimeUTC : item.EventTimeLocal;
+            DateTime time = EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(item.EventTimeUTC);
             item.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
             string detail = EventDescription;
             detail = detail.AppendPrePad(EventDetailedInfo.LineLimit(15,Environment.NewLine + "..."), Environment.NewLine);
@@ -470,7 +470,7 @@ namespace EDDiscovery.UserControls
                 ExtendedControls.InfoForm info = new ExtendedControls.InfoForm();
                 leftclicksystem.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
                 string infodetailed = EventDescription.AppendPrePad(EventDetailedInfo, Environment.NewLine);
-                info.Info( (EDDiscoveryForm.EDDConfig.DisplayUTC ? leftclicksystem.EventTimeUTC : leftclicksystem.EventTimeLocal) + ": " + leftclicksystem.EventSummary,
+                info.Info( (EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(leftclicksystem.EventTimeUTC)) + ": " + leftclicksystem.EventSummary,
                     FindForm().Icon, infodetailed);
                 info.Size = new Size(1200, 800);
                 info.Show(FindForm());

@@ -50,7 +50,7 @@ namespace EDDiscovery
         private bool orderrowsinverted = false;
         private bool minimizeToNotifyIcon = false;
         private bool keepOnTop = false; /**< Whether to keep the windows on top or not */
-        private bool displayUTC = false;
+        private int displayTimeFormat = 0; //0=local,1=utc,2=elite time
         private System.Windows.Forms.Keys clickthrukey = System.Windows.Forms.Keys.ShiftKey;
         private string defaultwavedevice = "Default";
         private string defaultvoicedevice = "Default";
@@ -129,16 +129,76 @@ namespace EDDiscovery
             }
         }
 
-        public bool DisplayUTC
+        public string GetTimeTitle()
+        {
+            if (displayTimeFormat == 2)
+                return "Game Time".T(EDTx.GameTime);
+            else if (displayTimeFormat == 1)
+                return "UTC";
+            else
+                return "Time".T(EDTx.Time);
+        }
+
+        public DateTime ConvertTimeToSelectedFromUTC(DateTime t)        // from UTC->Display format
+        {
+            if (displayTimeFormat == 1)
+            {
+                if (t.Year < 2010 || t.Year > 2099)      // so we may have swapped around stuff and ended up with a stupid year, fix
+                    t = new DateTime(2010, 1, 1);
+                return t;
+            }
+            else if (displayTimeFormat == 2)
+            {
+                t = t.AddYears(1286);   // 2 is UTC+years
+                if (t.Year < 3300 || t.Year>3399 )      // so we may have swapped around stuff and ended up with a stupid year, fix
+                    t = new DateTime(3300, 1, 1);
+                return t;
+            }
+            else
+            {
+                if (t.Year < 2010 || t.Year > 2099)      // so we may have swapped around stuff and ended up with a stupid year, fix
+                    t = new DateTime(2010, 1, 1);
+
+                return t.ToLocalTime();
+            }
+        }
+
+        public DateTime ConvertTimeToSelectedNoKind(DateTime t)         // from a date time (no kind) -> Display format
+        {
+            if (displayTimeFormat == 2)
+                return t.AddYears(1286);   // 2 is UTC+years
+            else
+                return t;
+        }
+
+        public DateTime ConvertTimeToUTCFromSelected(DateTime t)        // from selected format back to UTC
+        {
+            if (displayTimeFormat == 1)
+                return t;
+            else if (displayTimeFormat == 2)
+                return t.AddYears(-1286);
+            else
+                return t.ToUniversalTime();
+        }
+
+        public bool DisplayTimeLocal
         {
             get
             {
-                return displayUTC;
+                return displayTimeFormat == 0;
+            }
+        }
+
+        public int DisplayTimeIndex //0= local, 1=UTC,2 = game time, backwards compatible with old DisplayUTC bool
+        {
+            get
+            {
+                return displayTimeFormat;
             }
             set
             {
-                displayUTC = value;
-                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("DisplayUTC", value);
+                displayTimeFormat = value;
+                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt("DisplayUTC", value);
             }
         }
 
@@ -405,6 +465,7 @@ namespace EDDiscovery
 
         #region Update at start
 
+       
         public void Update(bool write = true)     // call at start to populate above
         {
             try
@@ -413,7 +474,7 @@ namespace EDDiscovery
                 orderrowsinverted = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("OrderRowsInverted", false);
                 minimizeToNotifyIcon = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("MinimizeToNotifyIcon", false);
                 keepOnTop = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("KeepOnTop", false);
-                displayUTC = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("DisplayUTC", false);
+                displayTimeFormat = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt("DisplayUTC", 0);
                 defaultvoicedevice = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("VoiceAudioDevice", "Default");
                 defaultwavedevice = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("WaveAudioDevice", "Default");
                 clickthrukey = (System.Windows.Forms.Keys)EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt("ClickThruKey", (int)System.Windows.Forms.Keys.ShiftKey);

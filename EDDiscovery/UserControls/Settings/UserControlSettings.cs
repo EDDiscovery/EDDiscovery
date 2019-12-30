@@ -68,15 +68,19 @@ namespace EDDiscovery.UserControls
             checkBoxKeepOnTop.Checked = EDDiscoveryForm.EDDConfig.KeepOnTop;
             checkBoxPanelSortOrder.Checked = EDDConfig.Instance.SortPanelsByName;
             checkBoxUseNotifyIcon.Checked = EDDiscoveryForm.EDDConfig.UseNotifyIcon;
-            checkBoxUTC.Checked = EDDiscoveryForm.EDDConfig.DisplayUTC;
             checkBoxCustomResize.Checked = EDDiscoveryForm.EDDConfig.DrawDuringResize;
+
+            extComboBoxGameTime.Items.Add("Local");
+            extComboBoxGameTime.Items.Add("UTC");
+            extComboBoxGameTime.Items.Add("Game Time");
+            extComboBoxGameTime.SelectedIndex = EDDiscoveryForm.EDDConfig.DisplayTimeIndex;
 
             checkBoxOrderRowsInverted.CheckedChanged += checkBoxOrderRowsInverted_CheckedChanged;
             checkBoxMinimizeToNotifyIcon.CheckedChanged += checkBoxMinimizeToNotifyIcon_CheckedChanged;
             checkBoxKeepOnTop.CheckedChanged += checkBoxKeepOnTop_CheckedChanged;
             checkBoxPanelSortOrder.CheckedChanged += checkBoxPanelSortOrder_CheckedChanged;
             checkBoxUseNotifyIcon.CheckedChanged += checkBoxUseNotifyIcon_CheckedChanged;
-            checkBoxUTC.CheckedChanged += checkBoxUTC_CheckedChanged;
+            extComboBoxGameTime.SelectedIndexChanged += ExtComboBoxGameTime_SelectedIndexChanged;
             checkBoxCustomResize.CheckedChanged += checkBoxCustomResize_CheckedChanged;
 
             checkBoxMinimizeToNotifyIcon.Enabled = EDDiscoveryForm.EDDConfig.UseNotifyIcon;
@@ -244,9 +248,9 @@ namespace EDDiscovery.UserControls
             EDDConfig.Instance.OrderRowsInverted = checkBoxOrderRowsInverted.Checked;
         }
 
-        private void checkBoxUTC_CheckedChanged(object sender, EventArgs e)
+        private void ExtComboBoxGameTime_SelectedIndexChanged(object sender, EventArgs e)
         {
-            EDDiscoveryForm.EDDConfig.DisplayUTC = checkBoxUTC.Checked;
+            EDDiscoveryForm.EDDConfig.DisplayTimeIndex = extComboBoxGameTime.SelectedIndex;
             discoveryform.RefreshDisplays();
         }
 

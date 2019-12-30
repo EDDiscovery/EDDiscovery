@@ -80,9 +80,9 @@ namespace EliteDangerousCore
 
         public string Location { get { return StarSystem + ":" + StationName; } }
 
-        public string Ident(bool utc)
+        public string Ident()
         {
-            return StarSystem + ":" + StationName + " on " + ((utc) ? Datetime.ToString() : Datetime.ToLocalTime().ToString());
+            return StarSystem + ":" + StationName + " on " + EliteConfigInstance.InstanceConfig.ConvertTimeToSelectedFromUTC(Datetime).ToString();
         }
 
         public List<string> ItemList() { return (from x1 in Items select x1.Name).ToList(); }

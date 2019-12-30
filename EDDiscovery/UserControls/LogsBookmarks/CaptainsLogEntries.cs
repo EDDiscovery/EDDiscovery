@@ -124,19 +124,17 @@ namespace EDDiscovery.UserControls
             bool pickend = dateTimePickerEndDate.Checked;
             DateTime pickenddate = dateTimePickerEndDate.Value.EndOfDay();
 
-            bool utc = EDDConfig.Instance.DisplayUTC;
-
             foreach (CaptainsLogClass entry in GlobalCaptainsLogList.Instance.LogEntries)
             {
                 if (entry.Commander == EDCommander.CurrentCmdrID)
                 {
-                    if ((pickstart == false || entry.Time(utc) >= dateTimePickerStartDate.Value) &&     // >= <= does not care about kind.
-                        (pickend == false || entry.Time(utc) <= pickenddate))
+                    if ((pickstart == false || EDDConfig.Instance.ConvertTimeToSelectedFromUTC(entry.TimeUTC) >= dateTimePickerStartDate.Value) &&     // >= <= does not care about kind.
+                        (pickend == false || EDDConfig.Instance.ConvertTimeToSelectedFromUTC(entry.TimeUTC) <= pickenddate))
                     {
                         //System.Diagnostics.Debug.WriteLine("Bookmark " + bk.Name  +":" + bk.Note);
                         var rw = dataGridView.RowTemplate.Clone() as DataGridViewRow;
                         rw.CreateCells(dataGridView,
-                            entry.Time(utc),
+                            EDDConfig.Instance.ConvertTimeToSelectedFromUTC(entry.TimeUTC),
                             entry.SystemName,
                             entry.BodyName,
                             entry.Note,
@@ -249,7 +247,7 @@ namespace EDDiscovery.UserControls
             {
                 string v = rw.Cells[0].Value as string;
 
-                System.Globalization.DateTimeStyles dts = EDDConfig.Instance.DisplayUTC ?
+                System.Globalization.DateTimeStyles dts = !EDDConfig.Instance.DisplayTimeLocal ?
                     System.Globalization.DateTimeStyles.AssumeUniversal | System.Globalization.DateTimeStyles.AdjustToUniversal :
                     System.Globalization.DateTimeStyles.AssumeLocal | System.Globalization.DateTimeStyles.AdjustToUniversal;
 
@@ -262,7 +260,7 @@ namespace EDDiscovery.UserControls
                 {
                     ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Bad Date Time format".T(EDTx.CaptainsLogEntries_DTF), "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Error);
                     DateTime prev = (DateTime)rw.Cells[0].Tag;
-                    rw.Cells[0].Value = EDDConfig.Instance.DisplayUTC ? prev : prev.ToLocalTime();
+                    rw.Cells[0].Value = prev;
                 }
             }
             else if (e.ColumnIndex <= 2 )
@@ -349,10 +347,10 @@ namespace EDDiscovery.UserControls
 
         #region Interactions with other tabs
 
-        public void SelectDate(DateTime date, bool createnew)       // date is local or utc, dependent on config
+        public void SelectDate(DateTime date, bool createnew)       // date is in real time (12/1/2019), not in game (3305) time, but has no kind (its just plain).
         {
             updateprogramatically = true;
-            dateTimePickerEndDate.Value = dateTimePickerStartDate.Value = date;
+            dateTimePickerEndDate.Value = dateTimePickerStartDate.Value = EDDConfig.Instance.ConvertTimeToSelectedNoKind(date);
             dateTimePickerEndDate.Checked = dateTimePickerStartDate.Checked = true;
 
             updateprogramatically = false;
@@ -376,7 +374,8 @@ namespace EDDiscovery.UserControls
 
             if (dateTimePickerEndDate.Checked)      // we are not at the current time..
             {
-                entrytimeutc = EDDConfig.Instance.DisplayUTC ? dateTimePickerEndDate.Value : dateTimePickerEndDate.Value.ToUniversalTime();
+                entrytimeutc = EDDConfig.Instance.ConvertTimeToUTCFromSelected(dateTimePickerEndDate.Value);
+                entrytimeutc = entrytimeutc.AddHours(DateTime.UtcNow.Hour).AddSeconds(DateTime.UtcNow.Minute);
                 system = "?";
                 body = "?";
             }
@@ -384,7 +383,7 @@ namespace EDDiscovery.UserControls
             var rw = dataGridView.RowTemplate.Clone() as DataGridViewRow;
 
             rw.CreateCells(dataGridView,
-                EDDConfig.Instance.DisplayUTC ? entrytimeutc : entrytimeutc.ToLocalTime(),
+                EDDConfig.Instance.ConvertTimeToSelectedFromUTC(entrytimeutc),
                 system,
                 body,
                 "",

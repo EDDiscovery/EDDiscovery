@@ -77,8 +77,9 @@ namespace EliteDangerousCore
 
         public string Location { get { return StarSystem + ":" + StationName; } }
 
-        public string Ident(bool utc) { return StarSystem + ":" + StationName + " on " +
-                ((utc) ? Datetime.ToString() : Datetime.ToLocalTime().ToString());
+        public string Ident()
+        {
+            return StarSystem + ":" + StationName + " on " + EliteConfigInstance.InstanceConfig.ConvertTimeToSelectedFromUTC(Datetime).ToString();
         }
 
         public List<string> ShipList() { return (from x1 in Ships select x1.ShipType_Localised).ToList(); }
