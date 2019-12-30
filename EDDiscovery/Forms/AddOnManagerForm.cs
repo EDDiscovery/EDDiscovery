@@ -84,7 +84,6 @@ namespace EDDiscovery.Forms
             richTextBoxScrollDescription.ReadOnly = true;
 
             buttonExtGlobals.Visible = !managedownloadmode;
-            buttonMore.Visible = !managedownloadmode;
 
             BaseUtils.Translator.Instance.Translate(this);
 
@@ -152,12 +151,10 @@ namespace EDDiscovery.Forms
             }
         }
 
-
         void ReadyToDisplay()
         {
             this.Cursor = Cursors.Default;
-            panelVScroll.RemoveAllControls(new List<Control>() { buttonMore});
-
+            
             mgr = new VersioningManager();
 
             int[] edversion = System.Reflection.Assembly.GetExecutingAssembly().GetVersionInts();
@@ -177,6 +174,7 @@ namespace EDDiscovery.Forms
 
             mgr.Sort();
 
+            panelVScroll.RemoveAllControls();       // blank
             panelVScroll.SuspendLayout();
 
             int[] tabs;
@@ -191,19 +189,11 @@ namespace EDDiscovery.Forms
             int fonth = (int)theme.GetFont.GetHeight() + 1;
             int headervsize =  fonth + panelheightmargin + 2;
 
-            panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[0] + panelleftmargin, panelheightmargin), Size = new Size(tabs[1] - tabs[0] - 2, headervsize), Text = "Type".T(EDTx.AddOnManagerForm_Type) });
-            panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[1] + panelleftmargin, panelheightmargin), Size = new Size(tabs[2] - tabs[1] - 2, headervsize), Text = "Name".T(EDTx.AddOnManagerForm_Name) });
-            panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[2] + panelleftmargin, panelheightmargin), Size = new Size(tabs[3] - tabs[2] - 2, headervsize), Text = "Version".T(EDTx.AddOnManagerForm_Version) });
-            panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[3] + panelleftmargin, panelheightmargin), Size = new Size(tabs[4] - tabs[3] - 2, headervsize), Text = "Description".T(EDTx.AddOnManagerForm_Description) });
-            if ( managedownloadmode)
-                panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[4] + panelleftmargin, panelheightmargin), Size = new Size(tabs[5] - tabs[4] - 2, headervsize), Text = "Status".T(EDTx.AddOnManagerForm_Status) });
-            panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[5] + panelleftmargin, panelheightmargin), Size = new Size(tabs[6] - tabs[5]-2, headervsize), Text = "Action".T(EDTx.AddOnManagerForm_Action) });
-            panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[6] + panelleftmargin, panelheightmargin), Size = new Size(tabs[7] - tabs[6]-2, headervsize), Text = "Delete".T(EDTx.AddOnManagerForm_Delete) });
-            panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[7] + panelleftmargin, panelheightmargin), Size = new Size(tabs[8] - tabs[7]-2, headervsize), Text = "Enabled".T(EDTx.AddOnManagerForm_Enabled) });
-
             int vpos = headervsize + 8;
 
             // draw everything in 8.25 point position then scale
+
+            int maxpanelwidth = 0;
 
             foreach ( VersioningManager.DownloadItem di in mgr.DownloadItems )
             {
@@ -318,7 +308,7 @@ namespace EDDiscovery.Forms
                 if ( di.localenable.HasValue )
                 {
                     g.enabled = new ExtendedControls.ExtCheckBox();
-                    g.enabled.Location = new Point(tabs[7], labelheightmargin);
+                    g.enabled.Location = new Point(tabs[7], labelheightmargin - 4);
                     g.enabled.Size = new Size(tabs[8]-tabs[7], 24);
                     g.enabled.Text = "";
                     g.enabled.Checked = di.localenable.Value;
@@ -330,16 +320,44 @@ namespace EDDiscovery.Forms
                 g.panel.Location= new Point(panelleftmargin, vpos);
                 g.panel.Size = g.panel.FindMaxSubControlArea(4, 4);
 
+                maxpanelwidth = Math.Max(maxpanelwidth, g.panel.Width);
+
                 panelVScroll.Controls.Add(g.panel);
                 vpos += g.panel.Height + 4;
             }
 
-            buttonMore.Location = new Point(panelleftmargin, vpos);
+            foreach( Control c in panelVScroll.Controls )       // set all the sub items, which are panels, to max panel width
+            {
+                c.Width = maxpanelwidth;
+            }
+
+            // then add the titles
+
+            panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[0] + panelleftmargin, panelheightmargin), Size = new Size(tabs[1] - tabs[0] - 2, headervsize), Text = "Type".T(EDTx.AddOnManagerForm_Type) });
+            panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[1] + panelleftmargin, panelheightmargin), Size = new Size(tabs[2] - tabs[1] - 2, headervsize), Text = "Name".T(EDTx.AddOnManagerForm_Name) });
+            panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[2] + panelleftmargin, panelheightmargin), Size = new Size(tabs[3] - tabs[2] - 2, headervsize), Text = "Version".T(EDTx.AddOnManagerForm_Version) });
+            panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[3] + panelleftmargin, panelheightmargin), Size = new Size(tabs[4] - tabs[3] - 2, headervsize), Text = "Description".T(EDTx.AddOnManagerForm_Description) });
+            if (managedownloadmode)
+                panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[4] + panelleftmargin, panelheightmargin), Size = new Size(tabs[5] - tabs[4] - 2, headervsize), Text = "Status".T(EDTx.AddOnManagerForm_Status) });
+            panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[5] + panelleftmargin, panelheightmargin), Size = new Size(tabs[6] - tabs[5] - 2, headervsize), Text = "Action".T(EDTx.AddOnManagerForm_Action) });
+            panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[6] + panelleftmargin, panelheightmargin), Size = new Size(tabs[7] - tabs[6] - 2, headervsize), Text = "Delete".T(EDTx.AddOnManagerForm_Delete) });
+            panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[7] + panelleftmargin, panelheightmargin), Size = new Size(tabs[8] - tabs[7] - 2, headervsize), Text = "Enabled".T(EDTx.AddOnManagerForm_Enabled) });
+
+            if (!managedownloadmode)        // add on a more button if in edit pack mode
+            {
+                ExtendedControls.ExtButton dynmore = new ExtendedControls.ExtButton();
+                dynmore.Size = new System.Drawing.Size(24, 24);
+                dynmore.Text = "+";
+                dynmore.Click += new System.EventHandler(this.buttonMore_Click);
+                dynmore.UseVisualStyleBackColor = true;
+                dynmore.Location = new Point(panelleftmargin, vpos);
+                panelVScroll.Controls.Add(dynmore);
+            }
 
             panelVScroll.Scale(this.CurrentAutoScaleFactor());       // scale newly added children to form
 
             theme.ApplyStd(panelVScroll);
-            
+
             panelVScroll.ResumeLayout();
         }
 

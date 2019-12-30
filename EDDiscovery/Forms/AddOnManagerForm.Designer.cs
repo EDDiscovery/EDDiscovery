@@ -51,7 +51,6 @@ namespace EDDiscovery.Forms
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.panelVScroll = new ExtendedControls.ExtPanelScroll();
             this.vScrollBarCustom1 = new ExtendedControls.ExtScrollBar();
-            this.buttonMore = new ExtendedControls.ExtButton();
             this.richTextBoxScrollDescription = new ExtendedControls.ExtRichTextBox();
             this.panelOK = new System.Windows.Forms.Panel();
             this.buttonExtGlobals = new ExtendedControls.ExtButton();
@@ -168,8 +167,8 @@ namespace EDDiscovery.Forms
             // panelVScroll
             // 
             this.panelVScroll.Controls.Add(this.vScrollBarCustom1);
-            this.panelVScroll.Controls.Add(this.buttonMore);
             this.panelVScroll.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelVScroll.FlowControlsLeftToRight = false;
             this.panelVScroll.Location = new System.Drawing.Point(0, 0);
             this.panelVScroll.Name = "panelVScroll";
             this.panelVScroll.Size = new System.Drawing.Size(920, 357);
@@ -187,13 +186,13 @@ namespace EDDiscovery.Forms
             this.vScrollBarCustom1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom1.HideScrollBar = false;
             this.vScrollBarCustom1.LargeChange = 10;
-            this.vScrollBarCustom1.Location = new System.Drawing.Point(907, 0);
+            this.vScrollBarCustom1.Location = new System.Drawing.Point(904, 0);
             this.vScrollBarCustom1.Maximum = -308;
             this.vScrollBarCustom1.Minimum = 0;
             this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom1.Name = "vScrollBarCustom1";
-            this.vScrollBarCustom1.Size = new System.Drawing.Size(13, 357);
+            this.vScrollBarCustom1.Size = new System.Drawing.Size(16, 357);
             this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom1.SmallChange = 1;
             this.vScrollBarCustom1.TabIndex = 0;
@@ -203,16 +202,6 @@ namespace EDDiscovery.Forms
             this.vScrollBarCustom1.ThumbDrawAngle = 0F;
             this.vScrollBarCustom1.Value = -308;
             this.vScrollBarCustom1.ValueLimited = -308;
-            // 
-            // buttonMore
-            // 
-            this.buttonMore.Location = new System.Drawing.Point(8, 15);
-            this.buttonMore.Name = "buttonMore";
-            this.buttonMore.Size = new System.Drawing.Size(24, 24);
-            this.buttonMore.TabIndex = 5;
-            this.buttonMore.Text = "+";
-            this.buttonMore.UseVisualStyleBackColor = true;
-            this.buttonMore.Click += new System.EventHandler(this.buttonMore_Click);
             // 
             // richTextBoxScrollDescription
             // 
@@ -324,6 +313,5 @@ namespace EDDiscovery.Forms
         private ExtendedControls.ExtScrollBar vScrollBarCustom1;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private ExtendedControls.ExtButton buttonExtGlobals;
-        private ExtendedControls.ExtButton buttonMore;
     }
 }
