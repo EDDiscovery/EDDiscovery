@@ -24,39 +24,47 @@ namespace EliteDangerousCore
     {
         public class Recipe
         {
-            public string name;
-            public string ingredientsstring;
-            public string ingredientsstringlong;
-            public string[] ingredients;
-            public int[] count;
+            public string Name;
+            public MaterialCommodityData[] Ingredients;
+            public int[] Amount;
 
-            public int Count { get { return ingredients.Length; } }
+            public int Count { get { return Ingredients.Length; } }
 
-            public Recipe(string n, string indg)
+            public Recipe(string n, string ingredientsstring)
             {
-                name = n;
-                ingredientsstring = indg;
-                string[] ilist = indg.Split(',');
-                ingredients = new string[ilist.Length];
-                count = new int[ilist.Length];
+                Name = n;
+                string[] ilist = ingredientsstring.Split(',');
+                Ingredients = new MaterialCommodityData[ilist.Length];
+                Amount = new int[ilist.Length];
 
-                ingredientsstringlong = "";
                 for (int i = 0; i < ilist.Length; i++)
                 {
-                    //Thanks to 10Fe and 10 Ni to synthesise a limpet we can no longer assume the first character is a number and the rest is the material
-
                     string s = new string(ilist[i].TakeWhile(c => !Char.IsLetter(c)).ToArray());
-                    ingredients[i] = ilist[i].Substring(s.Length);
-
-                    bool countsuccess = int.TryParse(s, out count[i]);
+                    string iname = ilist[i].Substring(s.Length);
+                    Ingredients[i] = MaterialCommodityData.GetByShortName(iname);
+                    System.Diagnostics.Debug.Assert(Ingredients[i] != null, "Not found ingredient " + Name + " " + ingredientsstring + " i=" + i + " " + Ingredients[i]);
+                    bool countsuccess = int.TryParse(s, out Amount[i]);
                     System.Diagnostics.Debug.Assert(countsuccess, "Count missing from ingredient");
-
-                    MaterialCommodityData mcd = MaterialCommodityData.GetByShortName(ingredients[i]);
-                    System.Diagnostics.Debug.Assert(mcd != null, "Not found ingredient " + name + " " + indg + " i=" + i + " " + ingredients[i]);
-
-                    ingredientsstringlong = ingredientsstringlong.AppendPrePad(count[i].ToString() + " x " + mcd.Name, Environment.NewLine);
                 }
             }
+
+            public string IngredientsString
+            {
+                get
+                {
+                    var ing = (from x in Ingredients select Amount[Array.IndexOf(Ingredients, x)].ToString() + x.Shortname).ToArray();
+                    return string.Join(",", ing);
+                }
+            }
+            public string IngredientsStringLong
+            {
+                get
+                {
+                    var ing = (from x in Ingredients select Amount[Array.IndexOf(Ingredients, x)].ToString() + " "+ x.Name).ToArray();
+                    return string.Join(",", ing);
+                }
+            }
+
         }
 
         public class SynthesisRecipe : Recipe
@@ -112,14 +120,14 @@ namespace EliteDangerousCore
         public static string UsedInSynthesisByShortName(string shortname)
         {
             if (SynthesisRecipesByMaterial.ContainsKey(shortname))
-                return String.Join(",", SynthesisRecipesByMaterial[shortname].Select(x => x.name + "-" + x.level));
+                return String.Join(",", SynthesisRecipesByMaterial[shortname].Select(x => x.Name + "-" + x.level));
             else
                 return "";
         }
 
         public static SynthesisRecipe FindSynthesis(string recipename, string level)
         {
-            return SynthesisRecipes.Find(x => x.name.Equals(recipename, StringComparison.InvariantCultureIgnoreCase) && x.level.Equals(level, StringComparison.InvariantCultureIgnoreCase));
+            return SynthesisRecipes.Find(x => x.Name.Equals(recipename, StringComparison.InvariantCultureIgnoreCase) && x.level.Equals(level, StringComparison.InvariantCultureIgnoreCase));
         }
 
         public static List<SynthesisRecipe> SynthesisRecipes = new List<SynthesisRecipe>()
@@ -214,7 +222,7 @@ namespace EliteDangerousCore
         };
 
         public static Dictionary<string, List<SynthesisRecipe>> SynthesisRecipesByMaterial =
-            SynthesisRecipes.SelectMany(r => r.ingredients.Select(i => new { mat = i, recipe = r }))
+            SynthesisRecipes.SelectMany(r => r.Ingredients.Select(i => new { mat = i.Shortname, recipe = r }))
                             .GroupBy(a => a.mat)
                             .ToDictionary(g => g.Key, g => g.Select(a => a.recipe).ToList());
 
@@ -1038,7 +1046,7 @@ namespace EliteDangerousCore
         };
 
         public static Dictionary<string, List<EngineeringRecipe>> EngineeringRecipesByMaterial =
-            EngineeringRecipes.SelectMany(r => r.ingredients.Select(i => new { mat = i, recipe = r }))
+            EngineeringRecipes.SelectMany(r => r.Ingredients.Select(i => new { mat = i.Shortname, recipe = r }))
                               .GroupBy(a => a.mat)
                               .ToDictionary(g => g.Key, g => g.Select(a => a.recipe).ToList());
 

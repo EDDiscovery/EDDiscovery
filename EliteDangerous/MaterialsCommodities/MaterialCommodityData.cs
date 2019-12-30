@@ -112,6 +112,17 @@ namespace EliteDangerousCore
             return i >= 0 ? lst[i] : null;
         }
 
+        public static MaterialCommodityData GetByName(string longname)
+        {
+            if (cachelist == null)
+                FillTable();
+
+            List<MaterialCommodityData> lst = cachelist.Values.ToList();
+            int i = lst.FindIndex(x => x.Name.Equals(longname));
+            return i >= 0 ? lst[i] : null;
+        }
+
+
         public static MaterialCommodityData[] GetAll()
         {
             if (cachelist == null)

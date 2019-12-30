@@ -36,17 +36,17 @@ namespace EliteDangerousCore
             System.Text.StringBuilder needed = new System.Text.StringBuilder(64);
             System.Text.StringBuilder neededlong = new System.Text.StringBuilder(64);
 
-            for (int i = 0; i < r.ingredients.Length; i++)
+            for (int i = 0; i < r.Ingredients.Length; i++)
             {
-                string ingredient = r.ingredients[i];
+                string ingredient = r.Ingredients[i].Shortname;
 
                 int mi = list.FindIndex(x => x.Details.Shortname.Equals(ingredient));
                 int got = (mi >= 0) ? list[mi].scratchpad : 0;
-                int sets = got / r.count[i];
+                int sets = got / r.Amount[i];
 
                 max = Math.Min(max, sets);
 
-                int need = r.count[i] * tomake;
+                int need = r.Amount[i] * tomake;
 
                 if (got < need)
                 {
@@ -88,11 +88,11 @@ namespace EliteDangerousCore
                 System.Text.StringBuilder usedstrshort = new System.Text.StringBuilder(64);
                 System.Text.StringBuilder usedstrlong = new System.Text.StringBuilder(64);
 
-                for (int i = 0; i < r.ingredients.Length; i++)
+                for (int i = 0; i < r.Ingredients.Length; i++)
                 {
-                    int mi = list.FindIndex(x => x.Details.Shortname.Equals(r.ingredients[i]));
+                    int mi = list.FindIndex(x => x.Details.Shortname.Equals(r.Ingredients[i]));
                     System.Diagnostics.Debug.Assert(mi != -1);
-                    int used = r.count[i] * made;
+                    int used = r.Amount[i] * made;
                     list[mi].scratchpad -= used;
 
                     string dispshort = (list[mi].Details.IsEncodedOrManufactured) ? " " + list[mi].Details.Name : list[mi].Details.Shortname;
@@ -117,12 +117,12 @@ namespace EliteDangerousCore
             {
                 Recipes.Recipe r = want.Item1;
                 int wanted = want.Item2;
-                for (int i = 0; i < r.ingredients.Length; i++)
+                for (int i = 0; i < r.Ingredients.Length; i++)
                 {
-                    string ingredient = r.ingredients[i];
+                    string ingredient = r.Ingredients[i].Shortname;
                     int mi = list.FindIndex(x => x.Details.Shortname.Equals(ingredient));
                     int got = (mi >= 0) ? list[mi].scratchpad : 0;
-                    int need = r.count[i] * wanted;
+                    int need = r.Amount[i] * wanted;
 
                     if (got < need)
                     {

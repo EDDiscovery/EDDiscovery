@@ -90,12 +90,12 @@ namespace EDDiscovery.UserControls
             mfs = new RecipeFilterSelector(modules);
             mfs.Changed += FilterChanged;
 
-            var upgrades = Recipes.EngineeringRecipes.Select(r => r.name).Distinct().ToList();
+            var upgrades = Recipes.EngineeringRecipes.Select(r => r.Name).Distinct().ToList();
             upgrades.Sort();
             ufs = new RecipeFilterSelector(upgrades);
             ufs.Changed += FilterChanged;
 
-            List<string> matShortNames = Recipes.EngineeringRecipes.SelectMany(r => r.ingredients).Distinct().ToList();
+            List<string> matShortNames = Recipes.EngineeringRecipes.SelectMany(r => r.Ingredients).Select(x=>x.Shortname).Distinct().ToList();
             matLookUp = matShortNames.ToDictionary(sn => MaterialCommodityData.GetByShortName(sn).Name, sn => sn);
             List<string> matLongNames = matLookUp.Keys.ToList();
             matLongNames.Sort();
@@ -109,11 +109,11 @@ namespace EDDiscovery.UserControls
 
                 int rown = dataGridViewEngineering.Rows.Add();
                 DataGridViewRow row = dataGridViewEngineering.Rows[rown];
-                row.Cells[UpgradeCol.Index].Value = r.name; // debug rno + ":" + r.name;
+                row.Cells[UpgradeCol.Index].Value = r.Name; // debug rno + ":" + r.name;
                 row.Cells[ModuleCol.Index].Value = r.modulesstring;
                 row.Cells[LevelCol.Index].Value = r.level;
-                row.Cells[RecipeCol.Index].Value = r.ingredientsstring;
-                row.Cells[RecipeCol.Index].ToolTipText = r.ingredientsstringlong;
+                row.Cells[RecipeCol.Index].Value = r.IngredientsString;
+                row.Cells[RecipeCol.Index].ToolTipText = r.IngredientsStringLong;
                 row.Cells[EngineersCol.Index].Value = r.engineersstring;
                 row.Tag = rno;
                 row.Visible = false;
@@ -265,12 +265,12 @@ namespace EDDiscovery.UserControls
                         if (upgrades == "All") { visible = visible && true; }
                         else
                         {
-                            visible = visible && upgArray.Contains(Recipes.EngineeringRecipes[rno].name);
+                            visible = visible && upgArray.Contains(Recipes.EngineeringRecipes[rno].Name);
                         }
                         if (materials == "All") { visible = visible && true; }
                         else
                         {
-                            var included = matList.Intersect<string>(Recipes.EngineeringRecipes[rno].ingredients.ToList<string>());
+                            var included = matList.Intersect<string>(Recipes.EngineeringRecipes[rno].Ingredients.Select(x=>x.Shortname).ToList<string>());
                             visible = visible && included.Count() > 0;
                         }
                     }

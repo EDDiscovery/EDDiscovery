@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2017 EDDiscovery development team
+ * Copyright © 2016 - 2019 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -13,18 +13,14 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using EDDiscovery.Controls;
+using EliteDangerousCore;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
 using System.Data;
+using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using EDDiscovery.Controls;
-using EliteDangerousCore.DB;
-using EliteDangerousCore;
 
 namespace EDDiscovery.UserControls
 {
@@ -45,7 +41,7 @@ namespace EDDiscovery.UserControls
         internal bool isEmbedded = false;
         internal bool isHistoric = false;
 
-        private List<Tuple<string, string>> matLookUp;
+//        private List<Tuple<string, string>> matLookUp;
         RecipeFilterSelector rfs;
         RecipeFilterSelector lfs;
         RecipeFilterSelector mfs;
@@ -76,7 +72,7 @@ namespace EDDiscovery.UserControls
 
             Wanted = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbWSave, "").RestoreArrayFromString(0, Recipes.SynthesisRecipes.Count);
 
-            var rcpes = Recipes.SynthesisRecipes.Select(r => r.name).Distinct().ToList();
+            var rcpes = Recipes.SynthesisRecipes.Select(r => r.Name).Distinct().ToList();
             rcpes.Sort();
             rfs = new RecipeFilterSelector(rcpes);
             rfs.Changed += FilterChanged;
@@ -86,7 +82,9 @@ namespace EDDiscovery.UserControls
             lfs = new RecipeFilterSelector(lvls);
             lfs.Changed += FilterChanged;
 
-            List<string> matShortNames = Recipes.SynthesisRecipes.SelectMany(r => r.ingredients).Distinct().ToList();
+            List<string> matLongNames = Recipes.SynthesisRecipes.SelectMany(r => r.Ingredients).Select(x=>x.Name).Distinct().ToList();
+
+            crappy here..
             matLookUp = matShortNames.Select(sn => Tuple.Create<string, string>(sn, MaterialCommodityData.GetByShortName(sn).Name)).ToList();
 
             List<string> matLongNames = matLookUp.Select(lu => lu.Item2).ToList();
@@ -104,10 +102,8 @@ namespace EDDiscovery.UserControls
 
                 using (DataGridViewRow row = dataGridViewSynthesis.Rows[rown])
                 {
-                    row.Cells[0].Value = r.name; // debug rno + ":" + r.name;
+                    row.Cells[0].Value = r.Name; // debug rno + ":" + r.name;
                     row.Cells[1].Value = r.level;
-                    row.Cells[6].Value = r.ingredientsstring;
-                    row.Cells[6].ToolTipText = r.ingredientsstringlong;
                     row.Tag = rno;
                     row.Visible = false;
                 }
@@ -242,7 +238,7 @@ namespace EDDiscovery.UserControls
                         }
                         else
                         {
-                            visible = recipeArray.Contains(Recipes.SynthesisRecipes[rno].name);
+                            visible = recipeArray.Contains(Recipes.SynthesisRecipes[rno].Name);
                         }
 
                         if (levels != "All")
@@ -252,7 +248,7 @@ namespace EDDiscovery.UserControls
 
                         if (materials != "All")
                         {
-                            var included = matList.Intersect<string>(Recipes.SynthesisRecipes[rno].ingredients.ToList<string>());
+                            var included = matList.Intersect<string>(Recipes.SynthesisRecipes[rno].Ingredients.Select(x=>x.Shortname).ToList<string>());
                             visible = visible && included.Count() > 0;
                         }
                     }
@@ -265,7 +261,8 @@ namespace EDDiscovery.UserControls
                     int rno = (int)dataGridViewSynthesis.Rows[i].Tag;
                     if (dataGridViewSynthesis.Rows[i].Visible)
                     {
-                        Tuple<int, int, string, string> res = MaterialCommoditiesRecipe.HowManyLeft(mcl, Recipes.SynthesisRecipes[rno], Wanted[rno]);
+                        Recipes.Recipe r = Recipes.SynthesisRecipes[rno];
+                        Tuple<int, int, string, string> res = MaterialCommoditiesRecipe.HowManyLeft(mcl,r , Wanted[rno]);
                         //System.Diagnostics.Debug.WriteLine("{0} Recipe {1} executed {2} {3} ", i, rno, Wanted[rno], res.Item2);
 
                         using (DataGridViewRow row = dataGridViewSynthesis.Rows[i])
@@ -274,6 +271,8 @@ namespace EDDiscovery.UserControls
                             row.Cells[4].Value = res.Item2.ToString();
                             row.Cells[5].Value = res.Item3;
                             row.Cells[5].ToolTipText = res.Item4;
+                            row.Cells[6].Value = r.IngredientsString;
+                            row.Cells[6].ToolTipText = r.IngredientsStringLong;
                         }
                     }
                     if (Wanted[rno] > 0 && (dataGridViewSynthesis.Rows[i].Visible || isEmbedded))
