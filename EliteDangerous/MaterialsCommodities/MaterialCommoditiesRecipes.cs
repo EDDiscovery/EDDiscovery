@@ -90,7 +90,8 @@ namespace EliteDangerousCore
 
                 for (int i = 0; i < r.Ingredients.Length; i++)
                 {
-                    int mi = list.FindIndex(x => x.Details.Shortname.Equals(r.Ingredients[i]));
+                    string ingredient = r.Ingredients[i].Shortname;
+                    int mi = list.FindIndex(x => x.Details.Shortname.Equals(ingredient));
                     System.Diagnostics.Debug.Assert(mi != -1);
                     int used = r.Amount[i] * made;
                     list[mi].scratchpad -= used;

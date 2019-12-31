@@ -249,7 +249,7 @@ namespace EDDiscovery.UserControls
                             row.Cells[4].Value = res.Item2.ToString();
                             row.Cells[5].Value = res.Item3;
                             row.Cells[5].ToolTipText = res.Item4;
-                            row.Cells[6].Value = r.IngredientsString;
+                            row.Cells[6].Value = r.IngredientsStringvsCurrent(last_he.MaterialCommodity);
                             row.Cells[6].ToolTipText = r.IngredientsStringLong;
                         }
                     }
@@ -269,7 +269,8 @@ namespace EDDiscovery.UserControls
 
                     foreach (MaterialCommodities c in shoppinglist)        // and add new..
                     {
-                        Object[] values = { c.Details.Name, "", c.scratchpad.ToString(), "", c.Details.Shortname };
+                        var cur = last_he.MaterialCommodity.Find(c.Details);    // may be null
+                        Object[] values = { c.Details.Name, c.Details.Category, (cur?.Count??0).ToString(), c.scratchpad.ToString(), "","",c.Details.Shortname };
                         int rn = dataGridViewSynthesis.Rows.Add(values);
                         dataGridViewSynthesis.Rows[rn].ReadOnly = true;     // disable editing wanted..
                     }

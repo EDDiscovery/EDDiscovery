@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2017 EDDiscovery development team
+ * Copyright © 2016 - 2019 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -15,7 +15,6 @@
  */
 using EDDiscovery.Controls;
 using EliteDangerousCore;
-using EliteDangerousCore.DB;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -108,8 +107,6 @@ namespace EDDiscovery.UserControls
                 row.Cells[UpgradeCol.Index].Value = r.Name; // debug rno + ":" + r.name;
                 row.Cells[ModuleCol.Index].Value = r.modulesstring;
                 row.Cells[LevelCol.Index].Value = r.level;
-                row.Cells[RecipeCol.Index].Value = r.IngredientsString;
-                row.Cells[RecipeCol.Index].ToolTipText = r.IngredientsStringLong;
                 row.Cells[EngineersCol.Index].Value = r.engineersstring;
                 row.Tag = rno;
                 row.Visible = false;
@@ -264,6 +261,8 @@ namespace EDDiscovery.UserControls
 
                     if (visible)
                     {
+                        Recipes.Recipe r = Recipes.EngineeringRecipes[i];
+
                         Tuple<int, int, string,string> res = MaterialCommoditiesRecipe.HowManyLeft(mcl, Recipes.EngineeringRecipes[rno], Wanted[rno]);
                         //System.Diagnostics.Debug.WriteLine("{0} Recipe {1} executed {2} {3} ", i, rno, Wanted[rno], res.Item2);
 
@@ -271,7 +270,8 @@ namespace EDDiscovery.UserControls
                         dataGridViewEngineering[AvailableCol.Index, i].Value = res.Item2.ToString();
                         dataGridViewEngineering[NotesCol.Index, i].Value = res.Item3;
                         dataGridViewEngineering[NotesCol.Index, i].ToolTipText = res.Item4;
-
+                        dataGridViewEngineering[RecipeCol.Index, i].Value = r.IngredientsStringvsCurrent(last_he.MaterialCommodity);
+                        dataGridViewEngineering[RecipeCol.Index, i].ToolTipText = r.IngredientsStringLong;
                     }
                     if (Wanted[rno] > 0 && (visible || isEmbedded))      // embedded, need to 
                     {
@@ -283,9 +283,12 @@ namespace EDDiscovery.UserControls
                 {
                     MaterialCommoditiesRecipe.ResetUsed(mcl);
                     List<MaterialCommodities> shoppinglist = MaterialCommoditiesRecipe.GetShoppingList(wantedList, mcl);
+
                     dataGridViewEngineering.RowCount = Recipes.EngineeringRecipes.Count;         // truncate previous shopping list..
+
                     foreach (MaterialCommodities c in shoppinglist.OrderBy(mat => mat.Details.Name))      // and add new..
                     {
+                        var cur = last_he.MaterialCommodity.Find(c.Details);    // may be null
 
                         int rn = dataGridViewEngineering.Rows.Add();
 
@@ -293,9 +296,11 @@ namespace EDDiscovery.UserControls
                         {
                             if (cell.OwningColumn == UpgradeCol)
                                 cell.Value = c.Details.Name;
+                            else if (cell.OwningColumn == MaxCol)
+                                cell.Value = (cur?.Count??0).ToString();
                             else if (cell.OwningColumn == WantedCol)
                                 cell.Value = c.scratchpad.ToString();
-                            else if (cell.OwningColumn == NotesCol)
+                            else if (cell.OwningColumn == RecipeCol)
                                 cell.Value = c.Details.Shortname;
                             else if (cell.ValueType == null || cell.ValueType.IsAssignableFrom(typeof(string)))
                                 cell.Value = string.Empty;
