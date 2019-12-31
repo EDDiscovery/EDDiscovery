@@ -41,7 +41,6 @@ namespace EDDiscovery.UserControls
         internal bool isEmbedded = false;
         internal bool isHistoric = false;
 
-//        private List<Tuple<string, string>> matLookUp;
         RecipeFilterSelector rfs;
         RecipeFilterSelector lfs;
         RecipeFilterSelector mfs;
@@ -83,13 +82,7 @@ namespace EDDiscovery.UserControls
             lfs.Changed += FilterChanged;
 
             List<string> matLongNames = Recipes.SynthesisRecipes.SelectMany(r => r.Ingredients).Select(x=>x.Name).Distinct().ToList();
-
-            crappy here..
-            matLookUp = matShortNames.Select(sn => Tuple.Create<string, string>(sn, MaterialCommodityData.GetByShortName(sn).Name)).ToList();
-
-            List<string> matLongNames = matLookUp.Select(lu => lu.Item2).ToList();
             matLongNames.Sort();
-
             mfs = new RecipeFilterSelector(matLongNames);
             mfs.Changed += FilterChanged;
 
@@ -210,17 +203,7 @@ namespace EDDiscovery.UserControls
                 string levels = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbLevelFilterSave, "All");
                 string[] lvlArray = (levels == "All" || levels == "None") ? new string[0] : levels.Split(';');
                 string materials = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbMaterialFilterSave, "All");
-
-                List<string> matList = new List<string>();
-                if (materials != "All" && materials != "None") // if an active list
-                {
-                    foreach (string m in materials.Split(';'))
-                    {
-                        var e = matLookUp.Find(x => x.Item2 == m);  // find it, add 
-                        if (e != null)
-                            matList.Add(e.Item1);
-                    }
-                }
+                var matList = materials.Split(';');        // list of materials to show
 
                 for (int i = 0; i < Recipes.SynthesisRecipes.Count; i++)
                 {
@@ -230,26 +213,21 @@ namespace EDDiscovery.UserControls
                 
                     if (recep != "All" || levels != "All" || materials != "All")
                     { 
-                        visible = false;        // presume off
-
-                        if (recep == "All")
+                        if (recep != "All")
                         {
-                            visible = true;
-                        }
-                        else
-                        {
-                            visible = recipeArray.Contains(Recipes.SynthesisRecipes[rno].Name);
+                            visible &= recipeArray.Contains(Recipes.SynthesisRecipes[rno].Name);
                         }
 
                         if (levels != "All")
                         {
-                            visible = visible && lvlArray.Contains(Recipes.SynthesisRecipes[rno].level);
+                            visible &= lvlArray.Contains(Recipes.SynthesisRecipes[rno].level);
                         }
 
                         if (materials != "All")
                         {
-                            var included = matList.Intersect<string>(Recipes.SynthesisRecipes[rno].Ingredients.Select(x=>x.Shortname).ToList<string>());
-                            visible = visible && included.Count() > 0;
+                            var inglongname = Recipes.SynthesisRecipes[rno].Ingredients.Select(x => x.Name);
+                            var included = matList.Intersect<string>(inglongname);
+                            visible &= included.Count() > 0;
                         }
                     }
 

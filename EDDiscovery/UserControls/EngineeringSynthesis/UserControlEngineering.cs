@@ -33,7 +33,6 @@ namespace EDDiscovery.UserControls
         RecipeFilterSelector matfs;
 
         private List<string> levels = new List<string> { "1", "2", "3", "4", "5", "Experimental" };
-        private Dictionary<string, string> matLookUp;
 
         public string PrefixName = "Engineering";
 
@@ -95,10 +94,7 @@ namespace EDDiscovery.UserControls
             ufs = new RecipeFilterSelector(upgrades);
             ufs.Changed += FilterChanged;
 
-            List<string> matShortNames = Recipes.EngineeringRecipes.SelectMany(r => r.Ingredients).Select(x=>x.Shortname).Distinct().ToList();
-            matLookUp = matShortNames.ToDictionary(sn => MaterialCommodityData.GetByShortName(sn).Name, sn => sn);
-            List<string> matLongNames = matLookUp.Keys.ToList();
-            matLongNames.Sort();
+            List<string> matLongNames = Recipes.EngineeringRecipes.SelectMany(r => r.Ingredients).Select(x=>x.Name).Distinct().ToList();
             matfs = new RecipeFilterSelector(matLongNames);
             matfs.Changed += FilterChanged;
 
@@ -224,15 +220,7 @@ namespace EDDiscovery.UserControls
                 string upgrades = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbUpgradeFilterSave, "All");
                 string[] upgArray = upgrades.Split(';');
                 string materials = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbMaterialFilterSave, "All");
-                List<string> matList;
-                if (materials == "All" || materials == "None")
-                {
-                    matList = new List<string>();
-                }
-                else
-                {
-                    matList = materials.Split(';').Where(x => !string.IsNullOrEmpty(x) && matLookUp.ContainsKey(x)).Select(m => matLookUp[m]).ToList();
-                }
+                var matList = materials.Split(';');        // list of materials to show
                 
                 for (int i = 0; i < Recipes.EngineeringRecipes.Count; i++)
                 {
@@ -240,38 +228,35 @@ namespace EDDiscovery.UserControls
                     dataGridViewEngineering[MaxCol.Index, i].Value = MaterialCommoditiesRecipe.HowManyLeft(mcl, Recipes.EngineeringRecipes[rno]).Item1.ToString();
                     bool visible = true;
                     
-                    if (engineers == "All" && modules == "All" && levels == "All" && upgrades == "All" && materials == "All")
-                    { visible = true; }
-                    else
+                    if (!(engineers == "All" && modules == "All" && levels == "All" && upgrades == "All" && materials == "All"))
                     {
-                        visible = false;
-                        if (engineers == "All") { visible = true; }
-                        else
+                        if (engineers != "All")
                         {
                             var included = engList.Intersect<string>(Recipes.EngineeringRecipes[rno].engineers.ToList<string>());
-                            visible = included.Count() > 0;
+                            visible &= included.Count() > 0;
                         }
-                        if (modules == "All") { visible = visible && true; }
-                        else
-                        {
+
+                        if (modules != "All")
+                        { 
                             var included = modList.Intersect<string>(Recipes.EngineeringRecipes[rno].modules.ToList<string>());
-                            visible = visible && included.Count() > 0;
+                            visible &= included.Count() > 0;
                         }
-                        if (levels == "All") { visible = visible && true; }
-                        else
-                        {
-                            visible = visible && lvlArray.Contains(Recipes.EngineeringRecipes[rno].level);
+
+                        if (levels != "All")
+                        { 
+                            visible &= lvlArray.Contains(Recipes.EngineeringRecipes[rno].level);
                         }
-                        if (upgrades == "All") { visible = visible && true; }
-                        else
-                        {
-                            visible = visible && upgArray.Contains(Recipes.EngineeringRecipes[rno].Name);
+
+                        if (upgrades != "All")
+                        { 
+                            visible &= upgArray.Contains(Recipes.EngineeringRecipes[rno].Name);
                         }
-                        if (materials == "All") { visible = visible && true; }
-                        else
+
+                        if (materials != "All")
                         {
-                            var included = matList.Intersect<string>(Recipes.EngineeringRecipes[rno].Ingredients.Select(x=>x.Shortname).ToList<string>());
-                            visible = visible && included.Count() > 0;
+                            var inglongname = Recipes.EngineeringRecipes[rno].Ingredients.Select(x => x.Name);
+                            var included = matList.Intersect<string>(inglongname);
+                            visible &= included.Count() > 0;
                         }
                     }
 

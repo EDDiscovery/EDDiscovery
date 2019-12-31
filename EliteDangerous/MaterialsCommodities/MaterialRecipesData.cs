@@ -119,8 +119,9 @@ namespace EliteDangerousCore
 
         public static string UsedInSynthesisByShortName(string shortname)
         {
-            if (SynthesisRecipesByMaterial.ContainsKey(shortname))
-                return String.Join(",", SynthesisRecipesByMaterial[shortname].Select(x => x.Name + "-" + x.level));
+            MaterialCommodityData mc = MaterialCommodityData.GetByShortName(shortname);
+            if (SynthesisRecipesByMaterial.ContainsKey(mc))
+                return String.Join(",", SynthesisRecipesByMaterial[mc].Select(x => x.Name + "-" + x.level));
             else
                 return "";
         }
@@ -221,8 +222,8 @@ namespace EliteDangerousCore
             new SynthesisRecipe("AX Explosive Munitions", "Premium", "5W,4Hg,2Po,5BMC,5PE,6SFD"),
         };
 
-        public static Dictionary<string, List<SynthesisRecipe>> SynthesisRecipesByMaterial =
-            SynthesisRecipes.SelectMany(r => r.Ingredients.Select(i => new { mat = i.Shortname, recipe = r }))
+        public static Dictionary<MaterialCommodityData, List<SynthesisRecipe>> SynthesisRecipesByMaterial =
+            SynthesisRecipes.SelectMany(r => r.Ingredients.Select(i => new { mat = i, recipe = r }))
                             .GroupBy(a => a.mat)
                             .ToDictionary(g => g.Key, g => g.Select(a => a.recipe).ToList());
 
@@ -1045,8 +1046,8 @@ namespace EliteDangerousCore
 #endregion
         };
 
-        public static Dictionary<string, List<EngineeringRecipe>> EngineeringRecipesByMaterial =
-            EngineeringRecipes.SelectMany(r => r.Ingredients.Select(i => new { mat = i.Shortname, recipe = r }))
+        public static Dictionary<MaterialCommodityData, List<EngineeringRecipe>> EngineeringRecipesByMaterial =
+            EngineeringRecipes.SelectMany(r => r.Ingredients.Select(i => new { mat = i, recipe = r }))
                               .GroupBy(a => a.mat)
                               .ToDictionary(g => g.Key, g => g.Select(a => a.recipe).ToList());
 
