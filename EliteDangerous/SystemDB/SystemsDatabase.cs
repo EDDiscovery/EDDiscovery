@@ -37,14 +37,18 @@ namespace EliteDangerousCore.DB
 
         public void Initialize()
         {
-            ExecuteWithDatabase(cn => { cn.Connection.UpgradeSystemsDB(); });
+            ExecuteWithDatabase(cn => 
+            {
+                cn.Connection.UpgradeSystemsDB();
+                RebuildRunning = false;
+            });
         }
 
         const string TempTablePostfix = "temp"; // postfix for temp tables
         //const string DebugOutfile = @"c:\code\edsm\Jsonprocess.lst";        // null off
         const string DebugOutfile = null;
 
-        public bool RebuildRunning { get; private set; }
+        public bool RebuildRunning { get; private set; } = true;                // we are rebuilding until we have the system db table in there
 
         public long UpgradeSystemTableFromFile(string filename, bool[] gridids, Func<bool> cancelRequested, Action<string> reportProgress)
         {
