@@ -48,12 +48,18 @@ namespace EliteDangerousCore.DB
                     "DROP TABLE IF EXISTS Stations",
                     "DROP TABLE IF EXISTS SystemAliases",
                     // don't drop Systemnames
-                    "DROP TABLE IF EXISTS Systems", // New! this is an hold over which never got deleted when we moved to the 102 schema
                     "DROP TABLE IF EXISTS station_commodities",
-
                     "CREATE TABLE IF NOT EXISTS EDDB (edsmid INTEGER PRIMARY KEY NOT NULL, eddbid INTEGER, eddbupdatedat INTEGER, population INTEGER, faction TEXT, government INTEGER, allegiance INTEGER, state INTEGER, security INTEGER, primaryeconomy INTEGER, needspermit INTEGER, power TEXT, powerstate TEXT, properties TEXT)",
                     "CREATE TABLE IF NOT EXISTS Aliases (edsmid INTEGER PRIMARY KEY NOT NULL, edsmid_mergedto INTEGER, name TEXT COLLATE NOCASE)"
                     });
+
+                if ( dbver < 200 )          // version 200+ uses Systems as the new system format, <100 used it as the db, 102 forgot to delete it
+                {
+                    ExecuteNonQueries(new string[]             // always kill these old tables and make EDDB new table
+                    {
+                    "DROP TABLE IF EXISTS Systems", // New! this is an hold over which never got deleted when we moved to the 102 schema
+                    });
+                }
 
                 if (dbver < 102)        // is it older than 102, its unusable
                 {
