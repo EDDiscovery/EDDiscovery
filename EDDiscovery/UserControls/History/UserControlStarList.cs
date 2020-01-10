@@ -331,7 +331,7 @@ namespace EDDiscovery.UserControls
                         var node = discoveryform.history.starscan?.FindSystem(syslist[0].System, false); // may be null
                         string info = Infoline(syslist, node);  // lookup node, using star name, no EDSM lookup.
                         rowpresent.Cells[3].Value = info;   // update info
-                        rowpresent.Cells[4].Value = node?.ScanValue(true).ToString("N0") ?? "-"; // update scan value
+                        rowpresent.Cells[4].Value = node?.ScanValue(true).ToString("N0") ?? "0"; // update scan value
                     }
                 }
             }
@@ -362,7 +362,7 @@ namespace EDDiscovery.UserControls
             }
 
             var rw = dataGridViewStarList.RowTemplate.Clone() as DataGridViewRow;
-            rw.CreateCells(dataGridViewStarList, time, he.System.Name, visits, info, node?.ScanValue(true).ToString("N0") ?? "-");
+            rw.CreateCells(dataGridViewStarList, time, he.System.Name, visits, info, node?.ScanValue(true).ToString("N0") ?? "0");
 
             foreach ( HistoryEntry hel in syslist )
                 rowsbyjournalid[hel.Journalid] = rw;      // all JIDs in this array, to this row
@@ -909,7 +909,7 @@ namespace EDDiscovery.UserControls
         {
             if ( e.Column.Index == 0 )
                 e.SortDataGridViewColumnDate();
-            else if (e.Column.Index == 2)
+            else if (e.Column.Index == 2 || e.Column.Index == 4)
                 e.SortDataGridViewColumnNumeric();
         }
 
