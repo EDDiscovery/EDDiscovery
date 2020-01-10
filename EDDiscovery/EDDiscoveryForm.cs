@@ -336,9 +336,12 @@ namespace EDDiscovery
 
             if (EDDConfig.Instance.EDSMGridIDs == "Not Set")        // initial state
             {
+                EDDConfig.Instance.EDSMEDDBDownload = false;        // this stops the download working in the controller thread
                 var ressel = GalaxySectorSelect.SelectGalaxyMenu(this);
                 EDDConfig.Instance.EDSMEDDBDownload = ressel.Item1 != "None";
                 EDDConfig.Instance.EDSMGridIDs = ressel.Item2;
+                if (EDDConfig.Instance.EDSMEDDBDownload)
+                    Controller.AsyncPerformSync(edsmfullsync: true, eddb_edsmalias_sync:true);      // order another go.
             }
 
             if (EDDOptions.Instance.NoWindowReposition == false)
