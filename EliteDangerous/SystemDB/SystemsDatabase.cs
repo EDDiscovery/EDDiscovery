@@ -104,7 +104,7 @@ namespace EliteDangerousCore.DB
 
             ExecuteWithDatabase(action: conn =>
             {
-                var list = conn.Connection.Tables();
+                var list = conn.Connection.Tables();    // this gets table list
 
                 if (list.Contains("EdsmSystems"))
                 {

@@ -53,7 +53,11 @@ namespace EliteDangerousCore.DB
                     "CREATE TABLE IF NOT EXISTS Aliases (edsmid INTEGER PRIMARY KEY NOT NULL, edsmid_mergedto INTEGER, name TEXT COLLATE NOCASE)"
                     });
 
-                if ( dbver < 200 )          // version 200+ uses Systems as the new system format, <100 used it as the db, 102 forgot to delete it
+                var tablesql = this.SQLMasterQuery("table");
+                int index = tablesql.FindIndex(x => x.TableName == "Systems");
+                bool oldsystems = index >=0 && tablesql[index].SQL.Contains("commandercreate");
+
+                if ( dbver < 200 || oldsystems)
                 {
                     ExecuteNonQueries(new string[]             // always kill these old tables and make EDDB new table
                     {
