@@ -163,6 +163,8 @@ namespace EliteDangerousCore
                         source = jl.StarPosFromEDSM ? SystemSource.FromEDSM : SystemSource.FromJournal,
                     };
 
+                    SystemCache.FindCachedJournalSystem(newsys);
+
                     // If it was a new system, pass the coords back to the StartJump
                     if (prev != null && prev.journalEntry is JournalStartJump)
                     {
