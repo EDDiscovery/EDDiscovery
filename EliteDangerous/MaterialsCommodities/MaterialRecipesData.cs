@@ -58,7 +58,7 @@ namespace EliteDangerousCore
             }
             public string IngredientsStringvsCurrent(MaterialCommoditiesList cur)
             {
-                var ing = (from x in Ingredients select Amount[Array.IndexOf(Ingredients, x)].ToString() + x.Shortname + "(" + (cur.Find(x)?.Count ??0).ToStringInvariant()+")").ToArray();
+                var ing = (from x in Ingredients select Amount[Array.IndexOf(Ingredients, x)].ToString() + x.Shortname + "(" + (cur.Find(x)?.Count ?? 0).ToStringInvariant() + ")").ToArray();
                 return string.Join(",", ing);
             }
 

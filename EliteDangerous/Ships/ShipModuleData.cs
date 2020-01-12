@@ -311,40 +311,23 @@ namespace EliteDangerousCore
         {
             // Excel frontier data for 3.3 not in corolis yet..
             // mass guessed..
-            { "hpt_mining_abrblstr_fixed_small",            new ShipModule(-1, 2, 0.34 , "Mining Abrasion Laser Fixed Small" , "Mining Laser" ) },
-            { "hpt_mining_abrblstr_turret_small",            new ShipModule(-1, 2, 0.47, "Mining Abrasion Laser Turret Small" , "Mining Laser" ) },
-            { "hpt_mining_seismchrgwarhd_fixed_medium",     new ShipModule(-1, 4, 1.2, "Seismic Charge Warhead Fixed Medium" , "Mining" ) },
-            { "hpt_mining_seismchrgwarhd_turret_medium",     new ShipModule(-1, 4, 1.2, "Seismic Charge Warhead Turret Medium" , "Mining" ) },
-            { "hpt_mining_subsurfdispmisle_fixed_medium",    new ShipModule(-1, 4, 1.01, "Sub Surface Missile Fixed Medium" , "Mining" ) },
-            { "hpt_mining_subsurfdispmisle_fixed_small",     new ShipModule(-1, 2, 0.42, "Sub Surface Missile Fixed Small" , "Mining" ) },
-            { "hpt_mining_subsurfdispmisle_turret_medium", new ShipModule(-1, 4, 0.93, "Sub Surface Missile Turret Medium" , "Mining" ) },
-            { "hpt_mining_subsurfdispmisle_turret_small",    new ShipModule(-1,24, 0.53, "Sub Surface Missile Turret Small" , "Mining" ) },
 
              { "hpt_cannon_turret_huge", new ShipModule(-1, 1, .9, "Cannon Turret Huge", "Cannon")},
              { "hpt_plasmaburstcannon_fixed_medium", new ShipModule(-1, 1, 1.4, "Plasma Burst Cannon Fixed Medium", "Plasma Accelerator")},
              { "hpt_pulselaserstealth_fixed_small", new ShipModule(-1, 1, .2, "Pulse Laser Stealth Fixed Small", "Pulse Laser")},
              { "hpt_pulselaser_fixed_smallfree", new ShipModule(-1, 1, .4, "Pulse Laser Fixed Small Free", "Pulse Laser")},
-             { "hpt_plasmashockcannon_turret_small", new ShipModule(-1, 1, .5, "Plasma Shock Cannon Turret Small", "Plasma Accelerator")},
-             { "hpt_plasmashockcannon_gimbal_small", new ShipModule(-1, 1, .5, "Plasma Shock Cannon Gimbal Small", "Plasma Accelerator")},
-             { "hpt_plasmashockcannon_fixed_small", new ShipModule(-1, 1, .4, "Plasma Shock Cannon Fixed Small", "Plasma Accelerator")},
-             { "hpt_guardian_shardcannon_turret_small", new ShipModule(-1, 1, .7, "Guardian Shard Cannon Turret Small", "Guardian")},
-             { "hpt_guardian_shardcannon_fixed_small", new ShipModule(-1, 1, .9, "Guardian Shard Cannon Fixed Small", "Guardian")},
-             { "hpt_guardian_plasmalauncher_turret_small", new ShipModule(-1, 1, 1.6, "Guardian Plasma Launcher Turret Small", "Guardian")},
-             { "hpt_guardian_plasmalauncher_fixed_small", new ShipModule(-1, 1, 1.4, "Guardian Plasma Launcher Fixed Small", "Guardian")},
-             { "hpt_guardian_gausscannon_fixed_small", new ShipModule(-1, 1, 1.9, "Guardian Gauss Cannon Fixed Small", "Guardian")},
-             { "hpt_advancedtorppylon_fixed_large", new ShipModule(-1, 1, .6, "Advanced Torp Pylon Fixed Large", "Missile Rack")},
-             { "hpt_basicmissilerack_fixed_large", new ShipModule(-1, 1, 1.6, "Basic Missile Rack Fixed Large", "Missile Rack")},
-             { "hpt_dumbfiremissilerack_fixed_large", new ShipModule(-1, 1, 1.6, "Dumbfire Missile Rack Fixed Large", "Missile Rack")},
-             { "hpt_multicannon_turret_large", new ShipModule(-1, 1, .9, "Multi Cannon Turret Large", "Multi Cannon")},
              { "int_codexscanner", new ShipModule(-1, 0, "Codex Scanner", "Codex")},
 
-            // Robby logs and EDDI has these
+             // 3.6 missing modules from corolis
 
-            { "int_dronecontrol_recon_size1_class1", new ShipModule(128837858, 2, "Drone Controller Recon Class 1 Rating E" , "Limpet Controller" ) },
-            { "int_dronecontrol_recon_size3_class1", new ShipModule(128841592, 5, "Drone Controller Recon Class 3 Rating E" , "Limpet Controller" ) },
-            { "int_dronecontrol_recon_size5_class1", new ShipModule(128841593, 8, "Drone Controller Recon Class 5 Rating E" , "Limpet Controller" ) },
-            { "int_dronecontrol_recon_size7_class1", new ShipModule(128841594, 16, "Drone Controller Recon Class 7 Rating E" , "Limpet Controller" ) },
-            { "int_dronecontrol_decontamination_size3_class1", new ShipModule(-1,0, "Drone Controller Decontamination Size 3 Class 1", "Limpet Controller" ) },
+             { "hpt_dumbfiremissilerack_fixed_medium_advanced", new ShipModule(-1, 1, 1.2, "Dumbfire Missile Rack Fixed Medium Advanced", "Weapon")},
+             { "hpt_dumbfiremissilerack_fixed_small_advanced", new ShipModule(-1, 1, .4, "Dumbfire Missile Rack Fixed Small Advanced", "Weapon")},
+             { "hpt_guardiangauss_fixed_gdn_fighter", new ShipModule(-1, 1, 1, "Guardian Gauss Fixed GDN Fighter", "Weapon")},
+             { "hpt_guardianplasma_fixed_gdn_fighter", new ShipModule(-1, 1, 1, "Guardian Plasma Fixed GDN Fighter", "Weapon")},
+             { "hpt_guardianshard_fixed_gdn_fighter", new ShipModule(-1, 1, 1, "Guardian Shard Fixed GDN Fighter", "Weapon")},
+             { "hpt_multicannon_fixed_medium_advanced", new ShipModule(-1, 1, .5, "Multi Cannon Fixed Medium Advanced", "Weapon")},
+             { "hpt_multicannon_fixed_small_advanced", new ShipModule(-1, 1, .3, "Multi Cannon Fixed Small Advanced", "Weapon")},
+             { "int_corrosionproofcargorack_size2_class1", new ShipModule(-1, 0, "Corrosion Resistant Cargo Rack", "Internal Module")},            
 
             // SRV
 
@@ -1593,7 +1576,7 @@ namespace EliteDangerousCore
             { "int_shieldgenerator_size8_class4", new ShipModule(128064296, 256, 4.8F, "OptMass:1800t, MaxMass:4500t, MinMass:900t, Explosive:50%, Kinetic:40%, Thermal:-20%","Shield Generator Class 8 Rating B", "Shield Generator")},
             { "int_shieldgenerator_size8_class5", new ShipModule(128064297, 160, 5.6F, "OptMass:1800t, MaxMass:4500t, MinMass:900t, Explosive:50%, Kinetic:40%, Thermal:-20%","Shield Generator Class 8 Rating A", "Shield Generator")},
             { "int_supercruiseassist", new ShipModule(128932273, 0, 0.3F, null,"Supercruise Assist", "Supercruise Assist")},
-            { "int_detailedsurfacescanner_tiny", new ShipModule(128666634, 0, 0, null,"Detailed Surface Scanner", "Detailed Surface Scanner")},
+            { "int_detailedsurfacescanner_tiny", new ShipModule(128666634, 1.3, 0, null,"Detailed Surface Scanner", "Detailed Surface Scanner")},
 
             ///////////////////////////////////// FROM STANDARD FOLDER SCAN
 
@@ -2429,7 +2412,7 @@ namespace EliteDangerousCore
         {
             { ShipPropID.FDID, new ShipInfoString("Viper")},
             { ShipPropID.HullMass, new ShipInfoDouble(50F)},
-            { ShipPropID.Name, new ShipInfoString("Viper")},
+            { ShipPropID.Name, new ShipInfoString("Viper Mk III")},
             { ShipPropID.Manu, new ShipInfoString("Faulcon DeLacy")},
             { ShipPropID.Speed, new ShipInfoInt(320)},
             { ShipPropID.Boost, new ShipInfoInt(400)},

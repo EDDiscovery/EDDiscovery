@@ -514,6 +514,8 @@ namespace EliteDangerousCore
 
             #region Commodities - checked by netlogentry frontierdata against their spreadsheets. Use this tool to update the tables
 
+            AddCommodity("Rockforth Fertiliser", "Chemicals", "RockforthFertiliser");
+            AddCommodity("Agronomic Treatment", "Chemicals", "AgronomicTreatment");
             AddCommodityList("Explosives;Hydrogen Fuel;Hydrogen Peroxide;Liquid Oxygen;Mineral Oil;Nerve Agents;Pesticides;Surface Stabilisers;Synthetic Reagents;Water", "Chemicals");
 
             string ci = "Consumer Items";
@@ -556,7 +558,8 @@ namespace EliteDangerousCore
             string md = "Medicines";
             AddCommodityList("Advanced Medicines;Basic Medicines;Combat Stabilisers;Performance Enhancers;Progenitor Cells", md);
             AddCommodity("Agri-Medicines", md, "agriculturalmedicines");
-            AddCommodityRare("Nanomedicines", md, "Nanomedicines");
+
+            AddCommodity("Nanomedicines", md, "Nanomedicines"); // not in frontier data. Keep for now Jan 2020
 
             AddCommodityList("Aluminium;Beryllium;Bismuth;Cobalt;Copper;Gallium;Gold;Hafnium 178;Indium;Lanthanum;Lithium;Osmium;Palladium;Platinum;Praseodymium;Samarium;Silver;Tantalum;Thallium;Thorium;Titanium;Uranium", "Metals");
             AddCommodity("Platinum Alloy", "Metals", "PlatinumAloy");
@@ -566,6 +569,7 @@ namespace EliteDangerousCore
             AddCommodityList("Indite;Jadeite;Lepidolite;Lithium Hydroxide;Moissanite;Painite;Pyrophyllite;Rutile;Taaffeite;Uraninite", mi);
             AddCommodity("Methanol Monohydrate Crystals", mi, "methanolmonohydratecrystals");
             AddCommodity("Low Temperature Diamonds", mi, "lowtemperaturediamond");
+            AddCommodity("Void Opal", mi, "Opal");
 
             AddCommodity("Rhodplumsite", mi, "Rhodplumsite");
             AddCommodity("Serendibite", mi, "Serendibite");
@@ -574,7 +578,6 @@ namespace EliteDangerousCore
             AddCommodity("Benitoite", mi, "Benitoite");
             AddCommodity("Grandidierite", mi, "Grandidierite");
             AddCommodity("Alexandrite", mi, "Alexandrite");
-            AddCommodity("Opal", mi, "Opal");
 
             AddCommodity("Trinkets of Hidden Fortune", sv, "TrinketsOfFortune");
             AddCommodity("Gene Bank", sv, "GeneBank");
@@ -591,12 +594,14 @@ namespace EliteDangerousCore
             AddCommodity("Ancient Key", sv, "AncientKey");
 
             AddCommodityList("Ai Relics;Antimatter Containment Unit;Antiquities;Assault Plans;Data Core;Diplomatic Bag;Encrypted Correspondence;Fossil Remnants", sv);
-            AddCommodityList("Geological Samples;Hostage;Military Intelligence;Mysterious Idol;Occupied CryoPod;Personal Effects;Political Prisoner;Precious Gems;Prohibited Research Materials", sv);
+            AddCommodityList("Geological Samples;Military Intelligence;Mysterious Idol;Occupied CryoPod;Personal Effects;Precious Gems;Prohibited Research Materials", sv);
             AddCommodityList("Sap 8 Core Container;Scientific Research;Scientific Samples;Space Pioneer Relics;Tactical Data;Unstable Data Core", sv);
             AddCommodity("Large Survey Data Cache", sv, "largeexplorationdatacash");
             AddCommodity("Small Survey Data Cache", sv, "smallexplorationdatacash");
             AddCommodity("Ancient Artefact", sv, "USSCargoAncientArtefact");
             AddCommodity("Black Box", sv, "USSCargoBlackBox");
+            AddCommodity("Political Prisoners", sv, "PoliticalPrisoner");
+            AddCommodity("Hostages", sv, "Hostage");
             AddCommodity("Commercial Samples", sv, "ComercialSamples");
             AddCommodity("Encrypted Data Storage", sv, "EncriptedDataStorage");
             AddCommodity("Experimental Chemicals", sv, "USSCargoExperimentalChemicals");
@@ -607,13 +612,24 @@ namespace EliteDangerousCore
             AddCommodity("Rebel Transmissions", sv, "USSCargoRebelTransmissions");
             AddCommodity("Technical Blueprints", sv, "USSCargoTechnicalBlueprints");
             AddCommodity("Trade Data", sv, "USSCargoTradeData");
-            AddCommodity("Ancient Relic", sv, "AncientRelic");
-            AddCommodity("Ancient Orb", sv, "AncientOrb");
-            AddCommodity("Ancient Casket", sv, "AncientCasket");
-            AddCommodity("Ancient Tablet", sv, "AncientTablet");
-            AddCommodity("Ancient Urn", sv, "AncientUrn");
-            AddCommodity("Ancient Totem", sv, "AncientTotem");
+            AddCommodity("Guardian Relic", sv, "AncientRelic");
+            AddCommodity("Guardian Orb", sv, "AncientOrb");
+            AddCommodity("Guardian Casket", sv, "AncientCasket");
+            AddCommodity("Guardian Tablet", sv, "AncientTablet");
+            AddCommodity("Guardian Urn", sv, "AncientUrn");
+            AddCommodity("Guardian Totem", sv, "AncientTotem");
 
+            AddCommodity("Mollusc Soft Tissue", "Salvage", "M_TissueSample_Soft");
+            AddCommodity("Pod Core Tissue", "Salvage", "S_TissueSample_Cells");
+            AddCommodity("Pod Dead Tissue", "Salvage", "S_TissueSample_Surface");
+            AddCommodity("Pod Surface Tissue", "Salvage", "S_TissueSample_Core");
+            AddCommodity("Mollusc Membrane", "Salvage", "M3_TissueSample_Membrane");
+            AddCommodity("Mollusc Mycelium", "Salvage", "M3_TissueSample_Mycelium");
+            AddCommodity("Mollusc Spores", "Salvage", "M3_TissueSample_Spores");
+            AddCommodity("Pod Shell Tissue", "Salvage", "S6_TissueSample_Coenosarc");
+
+
+            AddCommodity("Apa Vietii", "Narcotics", "ApaVietii");
             AddCommodity("Narcotics", "Narcotics", "BasicNarcotics");
 
             AddCommodityList("Imperial Slaves;Slaves", "Slaves");
