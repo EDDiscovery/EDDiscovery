@@ -498,6 +498,18 @@ namespace EDDiscovery.UserControls
         private void checkBoxCustomEDSMDownload_CheckedChanged(object sender, EventArgs e)
         {
             EDDConfig.Instance.EDSMEDDBDownload = checkBoxCustomEDSMEDDBDownload.Checked;
+
+
+            if ( EDDConfig.Instance.EDSMEDDBDownload == true)   // if turned on
+            {
+                int gridsel = 0;
+                bool[] grids = new bool[GridId.MaxGridID];
+                foreach (int i in GridId.FromString(EDDConfig.Instance.EDSMGridIDs))
+                    gridsel++;
+
+                if (gridsel == 0)                               // but we have zero grids selected, force the user to select again
+                    buttonExtEDSMConfigureArea_Click(sender, e);
+            }
         }
 
         ExtendedControls.InfoForm info;
@@ -524,13 +536,13 @@ namespace EDDiscovery.UserControls
                     System.Diagnostics.Debug.WriteLine("Remove ");
 
                     info = new ExtendedControls.InfoForm();
-                    info.Info("Remove Sectors".T(EDTx.UserControlSettings_RemoveSectors), 
+                    info.Info("Remove Sectors".T(EDTx.UserControlSettings_RemoveSectors),
                                 EDDiscovery.Properties.Resources.edlogo_3mo_icon,
-                                string.Format( ("Removing {0} Sector(s)." + Environment.NewLine + Environment.NewLine +
+                                string.Format(("Removing {0} Sector(s)." + Environment.NewLine + Environment.NewLine +
                                 "This will take a while (up to 30 mins dep on drive type and amount of sectors)." + Environment.NewLine +
                                 "You may continue to use EDD while this operation takes place" + Environment.NewLine +
                                 "but it may be slow to respond. Do not close down EDD until this window says" + Environment.NewLine +
-                                "the process has finished" + Environment.NewLine + Environment.NewLine).T(EDTx.UserControlSettings_GalRemove), gss.Removed.Count ));
+                                "the process has finished" + Environment.NewLine + Environment.NewLine).T(EDTx.UserControlSettings_GalRemove), gss.Removed.Count));
                     info.EnableClose = false;
                     info.Show(discoveryform);
 
