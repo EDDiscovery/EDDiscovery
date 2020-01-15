@@ -390,7 +390,7 @@ namespace EDDiscovery.UserControls
             bool hasMaterials = false;
 
             if (syslist.Count > 1)
-                infostr = string.Format("First visit {0}".T(EDTx.UserControlStarList_FV),syslist.Last().EventTimeLocal.ToShortDateString());
+                infostr = string.Format("First visit {0}".T(EDTx.UserControlStarList_FV),EDDConfig.Instance.ConvertTimeToSelectedFromUTC(syslist.Last().EventTimeUTC).ToShortDateString());
 
             #region information
 
