@@ -141,26 +141,34 @@ namespace EDDiscovery
 
         public DateTime ConvertTimeToSelectedFromUTC(DateTime t)        // from UTC->Display format
         {
-            if (displayTimeFormat == 1)
+            if (displayTimeFormat == 1)     // UTC
             {
-                if (t.Year < 2010 || t.Year > 2099)      // so we may have swapped around stuff and ended up with a stupid year, fix
-                    t = new DateTime(2010, 1, 1);
+                if (!DateTimeInRangeForGame(t))
+                    t = new DateTime(2014, 12, 16);
                 return t;
             }
-            else if (displayTimeFormat == 2)
+            else if (displayTimeFormat == 2)    // Game time
             {
                 t = t.AddYears(1286);   // 2 is UTC+years
-                if (t.Year < 3300 || t.Year>3399 )      // so we may have swapped around stuff and ended up with a stupid year, fix
-                    t = new DateTime(3300, 1, 1);
+                if (!DateTimeInRangeForGame(t))
+                    t = new DateTime(3300, 12, 16);
                 return t;
             }
-            else
+            else                                 // local
             {
-                if (t.Year < 2010 || t.Year > 2099)      // so we may have swapped around stuff and ended up with a stupid year, fix
-                    t = new DateTime(2010, 1, 1);
+                if (!DateTimeInRangeForGame(t))
+                    t = new DateTime(2014, 12, 16);
 
                 return t.ToLocalTime();
             }
+        }
+
+        public bool DateTimeInRangeForGame(DateTime t)
+        {
+            if (displayTimeFormat == 2)
+                return t.Year >= 3300 && t.Year <= 3399;
+            else
+                return t.Year >= 2014 && t.Year <= 2114;
         }
 
         public DateTime ConvertTimeToSelectedNoKind(DateTime t)         // from a date time (no kind) -> Display format

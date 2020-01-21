@@ -49,6 +49,8 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
+            discoveryform.OnRefreshCommanders += Discoveryform_OnRefreshCommanders;
+            discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
         }
 
         public override void LoadLayout()
@@ -84,9 +86,22 @@ namespace EDDiscovery.UserControls
             Display();
         }
 
+        private void Discoveryform_OnRefreshCommanders()
+        {
+            Display();
+        }
+
+        private void Discoveryform_OnHistoryChange(HistoryList obj)
+        {
+            Display();
+        }
+
+
         public override void Closing()
         {
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDate(DbDateSave, curmonthnokind);
+            discoveryform.OnRefreshCommanders -= Discoveryform_OnRefreshCommanders;
+            discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
         }
 
         private void CaptainsLogDiary_Resize(object sender, EventArgs e)

@@ -39,6 +39,10 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
+            extComboBoxGameTime.Items.Add("Local");
+            extComboBoxGameTime.Items.Add("UTC");
+            extComboBoxGameTime.Items.Add("Game Time");
+
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
 
@@ -70,9 +74,6 @@ namespace EDDiscovery.UserControls
             checkBoxUseNotifyIcon.Checked = EDDiscoveryForm.EDDConfig.UseNotifyIcon;
             checkBoxCustomResize.Checked = EDDiscoveryForm.EDDConfig.DrawDuringResize;
 
-            extComboBoxGameTime.Items.Add("Local");
-            extComboBoxGameTime.Items.Add("UTC");
-            extComboBoxGameTime.Items.Add("Game Time");
             extComboBoxGameTime.SelectedIndex = EDDiscoveryForm.EDDConfig.DisplayTimeIndex;
 
             checkBoxOrderRowsInverted.CheckedChanged += checkBoxOrderRowsInverted_CheckedChanged;

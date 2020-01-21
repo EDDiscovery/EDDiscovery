@@ -72,6 +72,7 @@ namespace EDDiscovery.UserControls
             dateTimePickerEndDate.ValueChanged += (s, e) => { if (!updateprogramatically) Display(); };
 
             discoveryform.OnRefreshCommanders += Discoveryform_OnRefreshCommanders;
+            discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
 
         }
 
@@ -93,6 +94,7 @@ namespace EDDiscovery.UserControls
             GlobalCaptainsLogList.Instance.OnLogEntryChanged -= LogChanged;
 
             discoveryform.OnRefreshCommanders -= Discoveryform_OnRefreshCommanders;
+            discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
         }
         #endregion
 
@@ -107,6 +109,12 @@ namespace EDDiscovery.UserControls
         {
             Display();
         }
+
+        private void Discoveryform_OnHistoryChange(HistoryList obj)
+        {
+            Display();
+        }
+
 
         private void Display()
         {
@@ -251,14 +259,14 @@ namespace EDDiscovery.UserControls
                     System.Globalization.DateTimeStyles.AssumeUniversal | System.Globalization.DateTimeStyles.AdjustToUniversal :
                     System.Globalization.DateTimeStyles.AssumeLocal | System.Globalization.DateTimeStyles.AdjustToUniversal;
 
-                if (v!= null && DateTime.TryParse(v, System.Globalization.CultureInfo.CurrentCulture, dts, out DateTime res))
+                if (v!= null && DateTime.TryParse(v, System.Globalization.CultureInfo.CurrentCulture, dts, out DateTime res) && EDDConfig.Instance.DateTimeInRangeForGame(res))
                 {
                     rw.Cells[0].Tag = res;
                     StoreRow(rw);
                 }
                 else
                 {
-                    ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Bad Date Time format".T(EDTx.CaptainsLogEntries_DTF), "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Bad/Out of Range Date Time format".T(EDTx.CaptainsLogEntries_DTF), "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Error);
                     DateTime prev = (DateTime)rw.Cells[0].Tag;
                     rw.Cells[0].Value = prev;
                 }
