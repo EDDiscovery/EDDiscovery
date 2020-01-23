@@ -380,7 +380,7 @@ namespace EDDiscovery.UserControls
         {
             if (e.KeyCode == Keys.Enter)
             {
-                TargetHelpers.setTargetSystem(this,discoveryform, textBoxTarget.Text);
+                TargetHelpers.SetTargetSystem(this,discoveryform, textBoxTarget.Text);
             }
         }
 

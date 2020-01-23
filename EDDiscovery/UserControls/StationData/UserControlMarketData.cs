@@ -54,6 +54,7 @@ namespace EDDiscovery.UserControls
             checkBoxAutoSwap.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbAutoSwap, false);
 
             discoveryform.OnNewEntry += OnChanged;
+            discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
 
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
@@ -80,6 +81,7 @@ namespace EDDiscovery.UserControls
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbAutoSwap, checkBoxAutoSwap.Checked);
             discoveryform.OnNewEntry -= OnChanged;
             uctg.OnTravelSelectionChanged -= OnChanged;
+            discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
         }
 
         public override void InitialDisplay()
@@ -98,6 +100,11 @@ namespace EDDiscovery.UserControls
         HistoryEntry current_displayed; // what we are displaying
 
         List<HistoryEntry> comboboxentries = new List<HistoryEntry>(); // filled by combobox
+
+        private void Discoveryform_OnHistoryChange(HistoryList hl)
+        {
+            FillComboBoxes(hl);     // display time or list may have changed
+        }
 
         private void OnChanged(HistoryEntry he, HistoryList hl) =>
             OnChanged(he, hl, true);

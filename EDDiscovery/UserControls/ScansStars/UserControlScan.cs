@@ -459,7 +459,6 @@ namespace EDDiscovery.UserControls
                                     "Planets only", //2
                                     "Exploration List Stars", //3
                                     "Exploration List Planets", //4
-                                    "Sold Exploration Data", // 5
                                         });
 
             if (frm.ShowDialog(FindForm()) == DialogResult.OK)
@@ -471,59 +470,12 @@ namespace EDDiscovery.UserControls
                 {
                     using (System.IO.StreamWriter writer = new System.IO.StreamWriter(frm.Path))
                     {
-                        if (frm.SelectedIndex == 5)
-                        {
-                            int count;
-                            List<HistoryEntry> data = HistoryList.FilterByJournalEvent(discoveryform.history.ToList(), "Sell Exploration Data", out count);
-                            data = (from he in data where he.EventTimeLocal >= frm.StartTime && he.EventTimeLocal <= frm.EndTime orderby he.EventTimeUTC descending select he).ToList();
-
-                            List<HistoryEntry> scans = HistoryList.FilterByJournalEvent(discoveryform.history.ToList(), "Scan", out count);
-
-                            if (frm.IncludeHeader)
-                            {
-                                writer.Write(csv.Format("Time"));
-                                writer.Write(csv.Format("System"));
-                                writer.Write(csv.Format("Star type"));
-                                writer.Write(csv.Format("Planet type", false));
-                                writer.WriteLine();
-                            }
-
-                            foreach (HistoryEntry he in data)
-                            {
-                                JournalSellExplorationData jsed = he.journalEntry as JournalSellExplorationData;
-                                if (jsed == null || jsed.Discovered == null)
-                                    continue;
-                                foreach (String system in jsed.Discovered)
-                                {
-                                    writer.Write(csv.Format(jsed.EventTimeLocal));
-                                    writer.Write(csv.Format(system));
-
-                                    EDStar star = EDStar.Unknown;
-                                    EDPlanet planet = EDPlanet.Unknown_Body_Type;
-
-                                    foreach (HistoryEntry scanhe in scans)
-                                    {
-                                        JournalScan scan = scanhe.journalEntry as JournalScan;
-                                        if (scan.BodyName.Equals(system, StringComparison.OrdinalIgnoreCase))
-                                        {
-                                            star = scan.StarTypeID;
-                                            planet = scan.PlanetTypeID;
-                                            break;
-                                        }
-                                    }
-                                    writer.Write(csv.Format((star != EDStar.Unknown) ? Enum.GetName(typeof(EDStar), star) : ""));
-                                    writer.Write(csv.Format((planet != EDPlanet.Unknown_Body_Type) ? Enum.GetName(typeof(EDPlanet), planet) : "", false));
-                                    writer.WriteLine();
-                                }
-                            }
-                        }
-                        else
                         {
                             List<JournalScan> scans = null;
                             
                             if (frm.SelectedIndex < 3)
                             {
-                                var entries = JournalEntry.GetByEventType(JournalTypeEnum.Scan, EDCommander.CurrentCmdrID, frm.StartTime, frm.EndTime);
+                                var entries = JournalEntry.GetByEventType(JournalTypeEnum.Scan, EDCommander.CurrentCmdrID, frm.StartTimeUTC, frm.EndTimeUTC);
                                 scans = entries.ConvertAll(x => (JournalScan)x);
                             }
                             else
@@ -555,7 +507,7 @@ namespace EDDiscovery.UserControls
                             bool ShowPlanets = frm.SelectedIndex == 0 || frm.SelectedIndex == 2 || frm.SelectedIndex == 4;
 
                             List<JournalSAAScanComplete> mappings = ShowPlanets ? 
-                                JournalEntry.GetByEventType(JournalTypeEnum.SAAScanComplete, EDCommander.CurrentCmdrID, frm.StartTime, frm.EndTime)
+                                JournalEntry.GetByEventType(JournalTypeEnum.SAAScanComplete, EDCommander.CurrentCmdrID, frm.StartTimeUTC, frm.EndTimeUTC)
                                 .ConvertAll(x => (JournalSAAScanComplete)x)
                                 : null;
 
@@ -671,7 +623,7 @@ namespace EDDiscovery.UserControls
                                     if (String.IsNullOrEmpty(scan.PlanetClass))
                                         continue;
 
-                                writer.Write(csv.Format(scan.EventTimeUTC));
+                                writer.Write(csv.Format(EDDConfig.Instance.ConvertTimeToSelectedFromUTC(scan.EventTimeUTC)));
                                 writer.Write(csv.Format(scan.BodyName));
                                 writer.Write(csv.Format(scan.EstimatedValue));
                                 writer.Write(csv.Format(scan.DistanceFromArrivalLS));

@@ -37,7 +37,8 @@ namespace EDDiscovery.Actions
 
                 vars[prefix + "JID"] = he.Journalid.ToString(ct);
                 vars[prefix + "UTCTime"] = he.EventTimeUTC.ToStringUS();
-                vars[prefix + "LocalTime"] = he.EventTimeLocal.ToStringUS();
+                vars[prefix + "LocalTime"] = he.EventTimeUTC.ToLocalTime().ToStringUS();
+                vars[prefix + "GameTime"] = he.EventTimeUTC.AddYears(1286).ToStringUS();
                 vars[prefix + "DockedState"] = he.IsDocked.ToStringIntValue();
                 vars[prefix + "LandedState"] = he.IsLanded.ToStringIntValue();
                 vars[prefix + "Hyperspace"] = he.IsInHyperSpace.ToStringIntValue();

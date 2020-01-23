@@ -1002,7 +1002,7 @@ namespace EliteDangerousCore
 
                 jlist = JournalEntry.GetAll(CurrentCommander, 
                     ids: list,
-                    allidsafter: DateTime.UtcNow.Subtract(new TimeSpan(fullhistoryloaddaylimit, 0, 0, 0))
+                    allidsafterutc: DateTime.UtcNow.Subtract(new TimeSpan(fullhistoryloaddaylimit, 0, 0, 0))
                     ).OrderBy(x => x.EventTimeUTC).ThenBy(x => x.Id).ToList();
             }
             else

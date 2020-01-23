@@ -205,7 +205,7 @@ namespace EDDiscovery.UserControls
                             double x, y, z;
                             TargetClass.GetTargetPosition(out targetName, out x, out y, out z);
                             if (name.CompareTo(targetName) != 0)
-                                TargetHelpers.setTargetSystem(this, discoveryform, name, false);
+                                TargetHelpers.SetTargetSystem(this, discoveryform, name, false);
                         }
 
                         lastsystem = name;

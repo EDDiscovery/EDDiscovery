@@ -57,12 +57,14 @@ namespace EDDiscovery.UserControls
             dataGridViewPrevious.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             dataGridViewPrevious.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
 
-            customDateTimePickerStart.Value = EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDate(DbStartDate, DateTime.UtcNow));
+            customDateTimePickerStart.Value = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDate(DbStartDate, DateTime.UtcNow);
             customDateTimePickerStart.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbStartDateChecked, false);
-            customDateTimePickerEnd.Value = EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDate(DbEndDate, DateTime.UtcNow));
+            customDateTimePickerEnd.Value = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDate(DbEndDate, DateTime.UtcNow);
             customDateTimePickerEnd.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbEndDateChecked, false);
+            VerifyDates();
 
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
+            discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
 
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
@@ -94,6 +96,7 @@ namespace EDDiscovery.UserControls
 
             uctg.OnTravelSelectionChanged -= Display;
             discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
+            discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
 
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDate(DbStartDate, EDDiscoveryForm.EDDConfig.ConvertTimeToUTCFromSelected(customDateTimePickerStart.Value));
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDate(DbEndDate, EDDiscoveryForm.EDDConfig.ConvertTimeToUTCFromSelected(customDateTimePickerEnd.Value));
@@ -111,6 +114,11 @@ namespace EDDiscovery.UserControls
         public override void InitialDisplay()
         {
             Display(uctg.GetCurrentHistoryEntry, discoveryform.history);
+        }
+
+        private void Discoveryform_OnHistoryChange(HistoryList obj)
+        {
+            VerifyDates();
         }
 
         private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)
@@ -249,6 +257,15 @@ namespace EDDiscovery.UserControls
         {
             //System.Diagnostics.Debug.WriteLine("End changed");
             Display();
+        }
+
+        private void VerifyDates()
+        {
+            if (!EDDConfig.Instance.DateTimeInRangeForGame(customDateTimePickerStart.Value) || !EDDConfig.Instance.DateTimeInRangeForGame(customDateTimePickerEnd.Value))
+            {
+                customDateTimePickerStart.Checked = customDateTimePickerEnd.Checked = false;
+                customDateTimePickerEnd.Value = customDateTimePickerStart.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(DateTime.UtcNow);
+            }
         }
 
         private void dataGridViewPrevious_SortCompare(object sender, DataGridViewSortCompareEventArgs e)

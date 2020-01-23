@@ -45,9 +45,9 @@ namespace EliteDangerousCore.DB
             this.Id = (long)dr["id"];
             this.Name = (string)dr["name"];
             if (dr["start"] != DBNull.Value)
-                this.StartDate = ((DateTime)dr["start"]);
+                this.StartDateUTC = ((DateTime)dr["start"]);
             if (dr["end"] != DBNull.Value)
-                this.EndDate = ((DateTime)dr["end"]);
+                this.EndDateUTC = ((DateTime)dr["end"]);
                
             this.Systems = syslist;
             int statusbits = (int)dr["Status"];
@@ -63,8 +63,8 @@ namespace EliteDangerousCore.DB
 
         public long Id { get; set; }
         public string Name { get; set; }
-        public DateTime? StartDate { get; set; }            // these are LOCAL TIMES since the expedition editor is using DateTime.Now
-        public DateTime? EndDate { get; set; }
+        public DateTime? StartDateUTC { get; set; }            // UTC times now since jan 2020, changed to make compatible with gametime
+        public DateTime? EndDateUTC { get; set; }
         public List<string> Systems { get; private set; }
         public bool EDSM { get; set; }          // supplied by EDSM
         public bool Deleted { get; set; }       // Deleted by us
@@ -78,8 +78,8 @@ namespace EliteDangerousCore.DB
             }
 
             return (this.Name == other.Name || (String.IsNullOrEmpty(this.Name) && String.IsNullOrEmpty(other.Name))) &&
-                   this.StartDate == other.StartDate &&
-                   this.EndDate == other.EndDate &&
+                   this.StartDateUTC == other.StartDateUTC &&
+                   this.EndDateUTC == other.EndDateUTC &&
                    this.Systems.SequenceEqual(other.Systems);
         }
 
@@ -110,8 +110,8 @@ namespace EliteDangerousCore.DB
             using (DbCommand cmd = cn.CreateCommand("Insert into routes_expeditions (name, start, end, Status) values (@name, @start, @end, @stat)"))
             {
                 cmd.AddParameterWithValue("@name", Name);
-                cmd.AddParameterWithValue("@start", StartDate);
-                cmd.AddParameterWithValue("@end", EndDate);
+                cmd.AddParameterWithValue("@start", StartDateUTC);
+                cmd.AddParameterWithValue("@end", EndDateUTC);
                 cmd.AddParameterWithValue("@stat", (Deleted ? 1 : 0) + (EDSM ? 2 : 0));
 
                 cmd.ExecuteNonQuery();
@@ -149,8 +149,8 @@ namespace EliteDangerousCore.DB
             {
                 cmd.AddParameterWithValue("@id", Id);
                 cmd.AddParameterWithValue("@name", Name);
-                cmd.AddParameterWithValue("@start", StartDate);
-                cmd.AddParameterWithValue("@end", EndDate);
+                cmd.AddParameterWithValue("@start", StartDateUTC);
+                cmd.AddParameterWithValue("@end", EndDateUTC);
                 cmd.AddParameterWithValue("@stat", (Deleted ? 1 : 0) + (EDSM ? 2 : 0));
                 cmd.ExecuteNonQuery();
 
@@ -451,10 +451,10 @@ namespace EliteDangerousCore.DB
 
                         foreach (SavedRouteClass newentry in array)
                         {
-                            if (newentry.StartDate.HasValue)
-                                newentry.StartDate = newentry.StartDate.Value.ToLocalTime();      // supplied, and respected by JSON, as zulu time. the stupid database holds local times. Convert.
-                            if (newentry.EndDate.HasValue)
-                                newentry.EndDate = newentry.EndDate.Value.ToLocalTime();
+                            if (newentry.StartDateUTC.HasValue)
+                                newentry.StartDateUTC = newentry.StartDateUTC.Value.ToLocalTime();      // supplied, and respected by JSON, as zulu time. the stupid database holds local times. Convert.
+                            if (newentry.EndDateUTC.HasValue)
+                                newentry.EndDateUTC = newentry.EndDateUTC.Value.ToLocalTime();
 
                             SavedRouteClass storedentry = stored.Find(x => x.Name.Equals(newentry.Name));
 
@@ -480,10 +480,10 @@ namespace EliteDangerousCore.DB
                                         newentry.Add();        // add to db..
                                         changed = changed || !wasDel;   // If it was marked deleted, don't report it as being changed.
                                     }
-                                    else if (storedentry.EndDate != newentry.EndDate || storedentry.StartDate != newentry.StartDate)    // times change, just update
+                                    else if (storedentry.EndDateUTC != newentry.EndDateUTC || storedentry.StartDateUTC != newentry.StartDateUTC)    // times change, just update
                                     {
-                                        storedentry.StartDate = newentry.StartDate;             // update time and date but keep the expedition ID
-                                        storedentry.EndDate = newentry.EndDate;
+                                        storedentry.StartDateUTC = newentry.StartDateUTC;             // update time and date but keep the expedition ID
+                                        storedentry.EndDateUTC = newentry.EndDateUTC;
                                         storedentry.EDSM = true;
                                         storedentry.Update();
                                         changed = true;

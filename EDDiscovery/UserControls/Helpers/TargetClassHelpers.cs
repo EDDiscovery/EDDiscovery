@@ -29,12 +29,12 @@ namespace EDDiscovery.UserControls
 {
     static class TargetHelpers
     {
-        public static void setTargetSystem(Object sender, EDDiscoveryForm discoveryform, String sn)
+        public static void SetTargetSystem(Object sender, EDDiscoveryForm discoveryform, String sn)
         {
-            setTargetSystem(sender, discoveryform, sn, true);
+            SetTargetSystem(sender, discoveryform, sn, true);
 
         }
-        public static void setTargetSystem(Object sender, EDDiscoveryForm discoveryform, String sn, Boolean prompt)
+        public static void SetTargetSystem(Object sender, EDDiscoveryForm discoveryform, String sn, Boolean prompt)
         {
             Form senderForm = ((Control)sender)?.FindForm() ?? discoveryform;
 
@@ -83,7 +83,7 @@ namespace EDDiscovery.UserControls
 
                         if (createbookmark)
                         {
-                            BookmarkClass newbk = GlobalBookMarkList.Instance.AddOrUpdateBookmark(null, true, sn, sc.X, sc.Y, sc.Z, DateTime.Now, "");
+                            BookmarkClass newbk = GlobalBookMarkList.Instance.AddOrUpdateBookmark(null, true, sn, sc.X, sc.Y, sc.Z, DateTime.UtcNow, "");
                             TargetClass.SetTargetBookmark(sc.Name, newbk.id, newbk.x, newbk.y, newbk.z);
                         }
                     }
@@ -120,8 +120,7 @@ namespace EDDiscovery.UserControls
         // cursystem != null, curbookmark = null, no system bookmark found, new bookmark on system
         // curbookmark != null, edit current bookmark
 
-        public static void showBookmarkForm(Object sender,
-            EDDiscoveryForm discoveryForm, ISystem cursystem, BookmarkClass curbookmark, bool notedsystem)
+        public static void ShowBookmarkForm(Object sender, EDDiscoveryForm discoveryForm, ISystem cursystem, BookmarkClass curbookmark, bool notedsystem)
         {
             Form senderForm = ((Control)sender)?.FindForm() ?? discoveryForm;
 
@@ -153,21 +152,21 @@ namespace EDDiscovery.UserControls
             else
             {
                 bool regionmarker = false;
-                DateTime tme;
+                DateTime timeutc;
 
                 if (bkmark == null)                         // new bookmark
                 {
-                    tme = DateTime.Now;
+                    timeutc = DateTime.UtcNow;
                     if (cursystem == null)
-                        frm.NewFreeEntrySystemBookmark(tme);
+                        frm.NewFreeEntrySystemBookmark(timeutc);
                     else
-                        frm.NewSystemBookmark(cursystem, note, tme);
+                        frm.NewSystemBookmark(cursystem, note, timeutc);
                 }
                 else                                        // update bookmark
                 {
                     regionmarker = bkmark.isRegion;
-                    tme = bkmark.Time;
-                    frm.Update(bkmark);
+                    timeutc = bkmark.TimeUTC;
+                    frm.Bookmark(bkmark);
                 }
 
                 DialogResult res = frm.ShowDialog(senderForm);
@@ -177,7 +176,7 @@ namespace EDDiscovery.UserControls
                 if (res == DialogResult.OK)
                 {
                     BookmarkClass newcls = GlobalBookMarkList.Instance.AddOrUpdateBookmark(bkmark, !regionmarker, frm.StarHeading, double.Parse(frm.x), double.Parse(frm.y), double.Parse(frm.z),
-                                                                     tme, frm.Notes, frm.SurfaceLocations);
+                                                                     timeutc, frm.Notes, frm.SurfaceLocations);
 
 
                     if ((frm.IsTarget && curtargetid != newcls.id) || (!frm.IsTarget && curtargetid == newcls.id)) // changed..

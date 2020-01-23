@@ -68,6 +68,8 @@ namespace EDDiscovery.UserControls
             dateTimePickerStartDate.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbStartDateOn, false);
             dateTimePickerEndDate.Value = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDate(DbEndDate, new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day));
             dateTimePickerEndDate.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbEndDateOn, false);
+            VerifyDates();
+
             dateTimePickerStartDate.ValueChanged += (s, e) => { if (!updateprogramatically) Display(); };
             dateTimePickerEndDate.ValueChanged += (s, e) => { if (!updateprogramatically) Display(); };
 
@@ -112,6 +114,8 @@ namespace EDDiscovery.UserControls
 
         private void Discoveryform_OnHistoryChange(HistoryList obj)
         {
+            VerifyDates();
+
             Display();
         }
 
@@ -166,7 +170,7 @@ namespace EDDiscovery.UserControls
 
             dataGridView.Sort(sortcol, (sortorder == SortOrder.Descending) ? System.ComponentModel.ListSortDirection.Descending : System.ComponentModel.ListSortDirection.Ascending);
             dataGridView.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
-
+                 
             if ( textBoxFilter.Text.HasChars() )
                 dataGridView.FilterGridView(textBoxFilter.Text, checktags: true);
 
@@ -349,6 +353,18 @@ namespace EDDiscovery.UserControls
             rw.Tag = cls;
 
             inupdate = false;
+        }
+
+
+        private void VerifyDates()
+        {
+            updateprogramatically = true;
+            if (!EDDConfig.Instance.DateTimeInRangeForGame(dateTimePickerStartDate.Value) || !EDDConfig.Instance.DateTimeInRangeForGame(dateTimePickerEndDate.Value))
+            {
+                dateTimePickerStartDate.Checked = dateTimePickerEndDate.Checked = false;
+                dateTimePickerEndDate.Value = dateTimePickerStartDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(DateTime.UtcNow);
+            }
+            updateprogramatically = false;
         }
 
         #endregion
@@ -564,6 +580,65 @@ namespace EDDiscovery.UserControls
                 ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), sys, true, discoveryform.history);
             else
                 ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "No such system".T(EDTx.CaptainsLogEntries_NSS) + " " + rightclickentry.SystemName, "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+        }
+
+        private void extButtonExcel_Click(object sender, EventArgs e)
+        {
+            Forms.ExportForm frm = new Forms.ExportForm();
+            frm.Init(new string[] { "Export Current View","All" }, disablestartendtime: true, allowRawJournalExport: false);
+
+            if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)
+            {
+                BaseUtils.CSVWriteGrid grd = new BaseUtils.CSVWriteGrid();
+                grd.SetCSVDelimiter(frm.Comma);
+
+                grd.GetLineHeader += delegate (int c)
+                {
+                    if (c == 0)
+                        return new string[] { "Time", "System","Body","Note","Tags" };
+                    else
+                        return null;
+                };
+
+                if (frm.SelectedIndex == 1)
+                {
+                    List<CaptainsLogClass> logs = GlobalCaptainsLogList.Instance.LogEntries;
+                    int i = 0;
+
+                    grd.GetLine += delegate (int r)
+                    {
+                        while (i < logs.Count)
+                        {
+                            CaptainsLogClass ent = logs[i++];
+                            if (ent.Commander == EDCommander.CurrentCmdrID)
+                            {
+                                return new object[] { EDDConfig.Instance.ConvertTimeToSelectedFromUTC(ent.TimeUTC),
+                                                      ent.SystemName , ent.BodyName, ent.Note, ent.Tags };
+                            }
+                        }
+
+                        return null;
+                    };
+                }
+                else
+                {
+                    grd.GetLine += delegate (int r)
+                    {
+                        if (r < dataGridView.RowCount)
+                        {
+                            DataGridViewRow rw = dataGridView.Rows[r];
+                            CaptainsLogClass ent = rw.Tag as CaptainsLogClass;
+                            return new Object[] { rw.Cells[0].Value, rw.Cells[1].Value, rw.Cells[2].Value, rw.Cells[3].Value, ent.Tags};
+                        }
+
+                        return null;
+                    };
+
+                }
+
+                grd.WriteGrid(frm.Path, frm.AutoOpen, FindForm());
+            }
 
         }
 

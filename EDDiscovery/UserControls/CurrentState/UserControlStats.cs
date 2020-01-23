@@ -760,7 +760,7 @@ namespace EDDiscovery.UserControls
             {
                 {
                     AddTreeNode("@", "@", hestats.System.Name);
-                    AddTreeNode("@", "T", hestats.EventTimeLocal.ToString());
+                    AddTreeNode("@", "T", EDDConfig.Instance.ConvertTimeToSelectedFromUTC(hestats.EventTimeUTC).ToString());
                     AddTreeNode("@", "UTC", hestats.EventTimeUTC.ToString());
                     if (he != null)
                     {

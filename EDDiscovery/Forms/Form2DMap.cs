@@ -126,7 +126,7 @@ namespace EDDiscovery
 
             int currentcmdr = EDCommander.CurrentCmdrID;
 
-            List<HistoryEntry> jumps = (from systems in syslist where systems.EventTimeLocal > start && systems.EventTimeLocal < endDate && systems.IsLocOrJump orderby systems.EventTimeUTC select systems).ToList();
+            List<HistoryEntry> jumps = (from systems in syslist where systems.EventTimeUTC.ToLocalTime() > start && systems.EventTimeUTC.ToLocalTime() < endDate && systems.IsLocOrJump orderby systems.EventTimeUTC select systems).ToList();
 
             Color drawcolour = Color.Green;
 

@@ -236,7 +236,7 @@ namespace EDDiscovery.UserControls
 
                         double boostval = 1;
 
-                        if (lastJet != null && lastfsd != null && lastJet.EventTimeLocal > lastfsd.EventTimeLocal)
+                        if (lastJet != null && lastfsd != null && lastJet.EventTimeUTC > lastfsd.EventTimeUTC)
                             boostval = (lastJet.journalEntry as EliteDangerousCore.JournalEvents.JournalJetConeBoost).BoostValue;
 
                         string range = "";

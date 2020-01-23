@@ -420,27 +420,27 @@ namespace EDDiscovery.UserControls
                 return;
 
             BookmarkForm frm = new BookmarkForm();
-            DateTime tme = DateTime.Now;
+            DateTime timeutc = DateTime.UtcNow;
             if (currentBookmark == null)
             {
                 if (latitude.HasValue)
                 {
-                    frm.NewSystemBookmark(last_he.System, "", tme, last_he.WhereAmI, latitude.Value, longitude.Value);
+                    frm.NewSystemBookmark(last_he.System, "", timeutc, last_he.WhereAmI, latitude.Value, longitude.Value);
                 }
                 else
                 {
-                    frm.NewSystemBookmark(last_he.System, "", tme);
+                    frm.NewSystemBookmark(last_he.System, "", timeutc);
                 }
             }
             else
             {
                 if (latitude.HasValue)
                 {
-                    frm.Update(currentBookmark, last_he.WhereAmI, latitude.Value, longitude.Value);
+                    frm.Bookmark(currentBookmark, last_he.WhereAmI, latitude.Value, longitude.Value);
                 }
                 else
                 {
-                    frm.Update(currentBookmark);
+                    frm.Bookmark(currentBookmark);
                 }
             }
 
@@ -448,7 +448,7 @@ namespace EDDiscovery.UserControls
             DialogResult dr = frm.ShowDialog();
             if (dr == DialogResult.OK)
             {
-                currentBookmark = GlobalBookMarkList.Instance.AddOrUpdateBookmark(currentBookmark, true, frm.StarHeading, double.Parse(frm.x), double.Parse(frm.y), double.Parse(frm.z), tme, frm.Notes, frm.SurfaceLocations);
+                currentBookmark = GlobalBookMarkList.Instance.AddOrUpdateBookmark(currentBookmark, true, frm.StarHeading, double.Parse(frm.x), double.Parse(frm.y), double.Parse(frm.z), timeutc, frm.Notes, frm.SurfaceLocations);
             }
             if (dr == DialogResult.Abort)
             {

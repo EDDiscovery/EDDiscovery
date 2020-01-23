@@ -54,12 +54,20 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
+            dateTimePickerEndDate.Value = dateTimePickerEndTime.Value = dateTimePickerStartTime.Value = dateTimePickerStartDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(DateTime.UtcNow);
+
             discoveryform.OnNewCalculatedRoute += discoveryForm_OnNewCalculatedRoute;
+            discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
 
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(toolStrip, this);
             BaseUtils.Translator.Instance.Translate(contextMenuCopyPaste, this);
             BaseUtils.Translator.Instance.Translate(ctxMenuCombo, this);
+        }
+
+        private void Discoveryform_OnHistoryChange(HistoryList obj)
+        {
+            DisplayRoute();
         }
 
         public override void LoadLayout()
@@ -88,6 +96,7 @@ namespace EDDiscovery.UserControls
 
             discoveryform.OnNewCalculatedRoute -= discoveryForm_OnNewCalculatedRoute;
             discoveryform.OnExpeditionsDownloaded -= Discoveryform_OnExpeditionsDownloaded;
+            discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
 
             if (uctg is IHistoryCursorNewStarList)
                 (uctg as IHistoryCursorNewStarList).OnNewStarList -= OnNewStars;
@@ -106,6 +115,42 @@ namespace EDDiscovery.UserControls
             savedroute = savedroute.Where(r => !r.Deleted).OrderBy(r => r.Name).ToList();   // don't list deleted
             UpdateUndeleteMenu();
             UpdateComboBox();
+        }
+
+        private void DisplayRoute()
+        {
+            dataGridViewRouteSystems.Rows.Clear();
+
+            textBoxRouteName.Text = currentroute.Name;
+            if (currentroute.StartDateUTC == null)
+            {
+                dateTimePickerStartTime.Value = dateTimePickerStartDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(DateTime.UtcNow);
+                dateTimePickerStartTime.Checked = dateTimePickerStartDate.Checked = false;
+            }
+            else
+            {
+                dateTimePickerStartTime.Checked = dateTimePickerStartDate.Checked = true;
+                dateTimePickerStartTime.Value = dateTimePickerStartDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(currentroute.StartDateUTC.Value);
+            }
+
+            if (currentroute.EndDateUTC == null)
+            {
+                dateTimePickerEndTime.Value = dateTimePickerEndDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(DateTime.UtcNow);
+                dateTimePickerEndTime.Checked = dateTimePickerEndDate.Checked = false;
+            }
+            else
+            {
+                dateTimePickerEndTime.Checked = dateTimePickerEndDate.Checked = true;
+                dateTimePickerEndTime.Value = dateTimePickerEndDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(currentroute.EndDateUTC.Value);
+            }
+
+            foreach (string sysname in currentroute.Systems)
+            {
+                var rowobj = new object[] { sysname, "", "" };
+                dataGridViewRouteSystems.Rows.Add(rowobj);
+            }
+
+            UpdateSystemRows();
         }
 
         #endregion
@@ -219,66 +264,10 @@ namespace EDDiscovery.UserControls
             if (toolStripComboBoxRouteSelection.SelectedIndex == -1)
                 return;
 
-
             currentroute = savedroute[toolStripComboBoxRouteSelection.SelectedIndex];
-
-            dataGridViewRouteSystems.Rows.Clear();
-
-            textBoxRouteName.Text = currentroute.Name;
-            if (currentroute.StartDate == null)
-            {
-                dateTimePickerStartDate.Value = DateTime.Now;
-                dateTimePickerStartDate.Checked = false;
-                dateTimePickerStartTime.Value = DateTime.Now;
-                dateTimePickerStartTime.Checked = false;
-            }
-            else
-            {
-                dateTimePickerStartDate.Checked = true;
-                dateTimePickerStartDate.Value = (DateTime)currentroute.StartDate;
-                dateTimePickerStartTime.Value = (DateTime)currentroute.StartDate;
-
-                if (((DateTime)currentroute.StartDate).TimeOfDay == new TimeSpan(0, 0, 0))
-                {
-                    dateTimePickerStartTime.Checked = false;
-                }
-                else
-                {
-                    dateTimePickerStartTime.Checked = true;
-                }
-            }
-
-            if (currentroute.EndDate == null)
-            {
-                dateTimePickerEndDate.Value = DateTime.Now;
-                dateTimePickerEndDate.Checked = false;
-                dateTimePickerEndTime.Value = DateTime.Now;
-                dateTimePickerEndTime.Checked = false;
-            }
-            else
-            {
-                dateTimePickerEndDate.Checked = true;
-                dateTimePickerEndDate.Value = (DateTime)currentroute.EndDate;
-                dateTimePickerEndTime.Value = (DateTime)currentroute.EndDate;
-
-                if (((DateTime)currentroute.EndDate).TimeOfDay == new TimeSpan(23, 59, 59))
-                {
-                    dateTimePickerEndTime.Checked = false;
-                }
-                else
-                {
-                    dateTimePickerEndTime.Checked = true;
-                }
-            }
-
-            foreach (string sysname in currentroute.Systems)
-            {
-                var rowobj = new object[] { sysname, "", "" };
-                dataGridViewRouteSystems.Rows.Add(rowobj);
-            }
-
-            UpdateSystemRows();
+            DisplayRoute();
         }
+
 
         private void toolStripComboBoxRouteSelection_MouseUp(object sender, MouseEventArgs e)
         {
@@ -679,7 +668,7 @@ namespace EDDiscovery.UserControls
 
             if (obj == null)
                 return;
-            TargetHelpers.setTargetSystem(this, discoveryform, (string)obj);
+            TargetHelpers.SetTargetSystem(this, discoveryform, (string)obj);
         }
 
         private void editBookmarkToolStripMenuItem_Click(object sender, EventArgs e)
@@ -700,7 +689,7 @@ namespace EDDiscovery.UserControls
                 ExtendedControls.MessageBoxTheme.Show(FindForm(), "Unknown system, system is without co-ordinates".T(EDTx.UserControlExpedition_UnknownS), "Warning".T(EDTx.Warning), MessageBoxButtons.OK);
             }
             else
-                TargetHelpers.showBookmarkForm(this, discoveryform, sc, null, false);
+                TargetHelpers.ShowBookmarkForm(this, discoveryform, sc, null, false);
         }
 
 
@@ -733,14 +722,8 @@ namespace EDDiscovery.UserControls
             toolStripComboBoxRouteSelection.Text = "";
             currentroute = new SavedRouteClass { Name = "" };
             dataGridViewRouteSystems.Rows.Clear();
-            dateTimePickerStartDate.Value = DateTime.Now;
-            dateTimePickerStartDate.Checked = false;
-            dateTimePickerEndDate.Value = DateTime.Now;
-            dateTimePickerEndDate.Checked = false;
-            dateTimePickerStartTime.Value = DateTime.Now;
-            dateTimePickerStartTime.Checked = false;
-            dateTimePickerEndTime.Value = DateTime.Now;
-            dateTimePickerEndTime.Checked = false;
+            dateTimePickerEndDate.Value = dateTimePickerEndTime.Value = dateTimePickerStartTime.Value = dateTimePickerStartDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(DateTime.UtcNow);
+            dateTimePickerEndTime.Checked = dateTimePickerEndDate.Checked = dateTimePickerStartTime.Checked = dateTimePickerStartDate.Checked = false;
             textBoxRouteName.Text = "";
             txtCmlDistance.Text = "";
             txtP2PDIstance.Text = "";
@@ -963,34 +946,23 @@ namespace EDDiscovery.UserControls
 
             if (dateTimePickerStartDate.Checked)
             {
-                route.StartDate = dateTimePickerStartDate.Value.Date;
-
+                route.StartDateUTC = EDDConfig.Instance.ConvertTimeToUTCFromSelected(dateTimePickerStartDate.Value.Date);
                 if (dateTimePickerStartTime.Checked)
-                {
-                    route.StartDate += dateTimePickerStartTime.Value.TimeOfDay;
-                }
+                    route.StartDateUTC += dateTimePickerStartTime.Value.TimeOfDay;
             }
             else
             {
-                route.StartDate = null;
+                route.StartDateUTC = null;
             }
 
             if (dateTimePickerEndDate.Checked)
             {
-                route.EndDate = dateTimePickerEndDate.Value.Date;
-
-                if (dateTimePickerEndTime.Checked)
-                {
-                    route.EndDate += dateTimePickerEndTime.Value.TimeOfDay;
-                }
-                else
-                {
-                    route.EndDate += new TimeSpan(23, 59, 59);
-                }
+                route.EndDateUTC = EDDConfig.Instance.ConvertTimeToUTCFromSelected(dateTimePickerEndDate.Value.Date);
+                route.EndDateUTC += dateTimePickerEndTime.Checked ? dateTimePickerEndTime.Value.TimeOfDay : new TimeSpan(23, 59, 59);
             }
             else
             {
-                route.EndDate = null;
+                route.EndDateUTC = null;
             }
         }
 

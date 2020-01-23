@@ -1175,22 +1175,22 @@ namespace EDDiscovery.UserControls
         {
             BookmarkForm bookmarkForm = new BookmarkForm();
             BookmarkClass existing = GlobalBookMarkList.Instance.FindBookmarkOnSystem(rightclicksystem.System.Name);
-            DateTime tme;
+            DateTime timeutc;
             if (existing != null)
             {
-                tme = existing.Time;
-                bookmarkForm.Update(existing);
+                timeutc = existing.TimeUTC;
+                bookmarkForm.Bookmark(existing);
             }
             else
             {
-                tme = DateTime.Now;
-                bookmarkForm.NewSystemBookmark(rightclicksystem.System, "", tme);
+                timeutc = DateTime.UtcNow;
+                bookmarkForm.NewSystemBookmark(rightclicksystem.System, "", timeutc);
             }
             DialogResult dr = bookmarkForm.ShowDialog();
             if (dr == DialogResult.OK)
             {
                 GlobalBookMarkList.Instance.AddOrUpdateBookmark(existing, true, rightclicksystem.System.Name, rightclicksystem.System.X, rightclicksystem.System.Y, rightclicksystem.System.Z,
-                    tme, bookmarkForm.Notes, bookmarkForm.SurfaceLocations);
+                    timeutc, bookmarkForm.Notes, bookmarkForm.SurfaceLocations);
             }
             if (dr == DialogResult.Abort && existing != null)
             {
@@ -1375,8 +1375,8 @@ namespace EDDiscovery.UserControls
                     {
                         HistoryEntry he = (HistoryEntry)dataGridViewTravel.Rows[r].Cells[TravelHistoryColumns.HistoryTag].Tag;
                         return (dataGridViewTravel.Rows[r].Visible &&
-                                he.EventTimeLocal.CompareTo(frm.StartTime) >= 0 &&
-                                he.EventTimeLocal.CompareTo(frm.EndTime) <= 0) ? BaseUtils.CSVWriteGrid.LineStatus.OK : BaseUtils.CSVWriteGrid.LineStatus.Skip;
+                                he.EventTimeUTC.CompareTo(frm.StartTimeUTC) >= 0 &&
+                                he.EventTimeUTC.CompareTo(frm.EndTimeUTC) <= 0) ? BaseUtils.CSVWriteGrid.LineStatus.OK : BaseUtils.CSVWriteGrid.LineStatus.Skip;
                     }
                     else
                         return BaseUtils.CSVWriteGrid.LineStatus.EOF;
@@ -1398,7 +1398,7 @@ namespace EDDiscovery.UserControls
                         EliteDangerousCore.JournalEvents.JournalFSDJump fsd = he.journalEntry as EliteDangerousCore.JournalEvents.JournalFSDJump;
 
                         return new Object[] {
-                            fsd.EventTimeLocal,
+                            EDDConfig.Instance.ConvertTimeToSelectedFromUTC(fsd.EventTimeUTC),
                             fsd.StarSystem,
                             fsd.StarPos.X,
                             fsd.StarPos.Y,
@@ -1425,7 +1425,7 @@ namespace EDDiscovery.UserControls
                         HistoryEntry he = (HistoryEntry)dataGridViewTravel.Rows[r].Cells[TravelHistoryColumns.HistoryTag].Tag;
                         he.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
                         return new Object[] {
-                            dataGridViewTravel.Rows[r].Cells[0].Value,
+                            EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC),
                             he.EventSummary,
                             (he.System != null) ? he.System.Name : "Unknown",    // paranoia
                             he.WhereAmI,

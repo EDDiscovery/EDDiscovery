@@ -621,7 +621,7 @@ namespace EDDiscovery.UserControls
                             foreach(DataGridViewRow dgvr in dataGridViewJournal.Rows)
                             {
                                 HistoryEntry he = dgvr.Cells[JournalHistoryColumns.HistoryTag].Tag as HistoryEntry;
-                                if (dgvr.Visible && he.EventTimeLocal.CompareTo(frm.StartTime) >= 0 && he.EventTimeLocal.CompareTo(frm.EndTime) <= 0)
+                                if (dgvr.Visible && he.EventTimeUTC.CompareTo(frm.StartTimeUTC) >= 0 && he.EventTimeUTC.CompareTo(frm.EndTimeUTC) <= 0)
                                 {
                                     string forExport = he.journalEntry.GetJson()?.ToString().Replace("\r\n", "");
                                     if (forExport != null)
@@ -663,8 +663,8 @@ namespace EDDiscovery.UserControls
                             {
                                 HistoryEntry he = dataGridViewJournal.Rows[r].Cells[JournalHistoryColumns.HistoryTag].Tag as HistoryEntry;
                                 return (dataGridViewJournal.Rows[r].Visible &&
-                                    he.EventTimeLocal.CompareTo(frm.StartTime) >= 0 &&
-                                    he.EventTimeLocal.CompareTo(frm.EndTime) <= 0) ? BaseUtils.CSVWriteGrid.LineStatus.OK : BaseUtils.CSVWriteGrid.LineStatus.Skip;
+                                    he.EventTimeUTC.CompareTo(frm.StartTimeUTC) >= 0 &&
+                                    he.EventTimeUTC.CompareTo(frm.EndTimeUTC) <= 0) ? BaseUtils.CSVWriteGrid.LineStatus.OK : BaseUtils.CSVWriteGrid.LineStatus.Skip;
                             }
                             else
                                 return BaseUtils.CSVWriteGrid.LineStatus.EOF;

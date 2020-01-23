@@ -606,7 +606,7 @@ namespace EDDiscovery.UserControls
 
             if (obj == null)
                 return;
-            TargetHelpers.setTargetSystem(this, discoveryform, (string)obj);
+            TargetHelpers.SetTargetSystem(this, discoveryform, (string)obj);
         }
 
         private void editBookmarkToolStripMenuItem_Click(object sender, EventArgs e)
@@ -625,7 +625,7 @@ namespace EDDiscovery.UserControls
                 ExtendedControls.MessageBoxTheme.Show(FindForm(), "Unknown system, system is without co-ordinates".T(EDTx.UserControlExploration_UnknownS), "Warning".T(EDTx.Warning), MessageBoxButtons.OK);
             }
             else
-                TargetHelpers.showBookmarkForm(this, discoveryform, sc, null, false);
+                TargetHelpers.ShowBookmarkForm(this, discoveryform, sc, null, false);
         }
 
         #endregion

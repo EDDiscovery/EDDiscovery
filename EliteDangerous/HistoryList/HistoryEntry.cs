@@ -46,8 +46,7 @@ namespace EliteDangerousCore
         public JournalTypeEnum EntryType { get { return journalEntry.EventTypeID; } }
         public long Journalid { get { return journalEntry.Id; } }
         public EDCommander Commander { get { return EDCommander.GetCommander(journalEntry.CommanderId); } }
-        public DateTime EventTimeLocal { get { return EventTimeUTC.ToLocalTime(); } }
-        public DateTime EventTimeUTC { get { return journalEntry.EventTimeUTC; } }
+        public DateTime EventTimeUTC { get { return journalEntry.EventTimeUTC; } }  // local removed to stop us using it!.
         public TimeSpan AgeOfEntry() { return DateTime.UtcNow - EventTimeUTC; }
 
         public string EventSummary { get { return journalEntry.SummaryName(System);} }

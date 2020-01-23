@@ -53,6 +53,7 @@
             this.openAScanPanelViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.extButtonExcel = new ExtendedControls.ExtButton();
             this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
@@ -215,13 +216,13 @@
             this.vScrollBarCustom1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom1.HideScrollBar = false;
             this.vScrollBarCustom1.LargeChange = 0;
-            this.vScrollBarCustom1.Location = new System.Drawing.Point(663, 0);
+            this.vScrollBarCustom1.Location = new System.Drawing.Point(660, 0);
             this.vScrollBarCustom1.Maximum = -1;
             this.vScrollBarCustom1.Minimum = 0;
             this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom1.Name = "vScrollBarCustom1";
-            this.vScrollBarCustom1.Size = new System.Drawing.Size(13, 391);
+            this.vScrollBarCustom1.Size = new System.Drawing.Size(16, 391);
             this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom1.SmallChange = 1;
             this.vScrollBarCustom1.TabIndex = 6;
@@ -248,7 +249,7 @@
             this.dataGridView.Location = new System.Drawing.Point(0, 0);
             this.dataGridView.Name = "dataGridView";
             this.dataGridView.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridView.Size = new System.Drawing.Size(663, 391);
+            this.dataGridView.Size = new System.Drawing.Size(660, 391);
             this.dataGridView.TabIndex = 4;
             this.dataGridView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView_CellClick);
             this.dataGridView.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView_CellEndEdit);
@@ -324,11 +325,23 @@
             this.flowLayoutPanel1.Controls.Add(this.buttonNew);
             this.flowLayoutPanel1.Controls.Add(this.buttonDelete);
             this.flowLayoutPanel1.Controls.Add(this.buttonTags);
+            this.flowLayoutPanel1.Controls.Add(this.extButtonExcel);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Size = new System.Drawing.Size(676, 30);
             this.flowLayoutPanel1.TabIndex = 33;
+            // 
+            // extButtonExcel
+            // 
+            this.extButtonExcel.Image = global::EDDiscovery.Icons.Controls.JournalGrid_ExportToExcel;
+            this.extButtonExcel.Location = new System.Drawing.Point(313, 1);
+            this.extButtonExcel.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.extButtonExcel.Name = "extButtonExcel";
+            this.extButtonExcel.Size = new System.Drawing.Size(28, 28);
+            this.extButtonExcel.TabIndex = 27;
+            this.extButtonExcel.UseVisualStyleBackColor = true;
+            this.extButtonExcel.Click += new System.EventHandler(this.extButtonExcel_Click);
             // 
             // flowLayoutPanel2
             // 
@@ -389,5 +402,6 @@
         private System.Windows.Forms.ToolStripMenuItem openAScanPanelViewToolStripMenuItem;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
+        private ExtendedControls.ExtButton extButtonExcel;
     }
 }

@@ -144,20 +144,20 @@ namespace EDDiscovery
             if (displayTimeFormat == 1)     // UTC
             {
                 if (!DateTimeInRangeForGame(t))
-                    t = new DateTime(2014, 12, 16);
+                    t = DateTime.UtcNow;
                 return t;
             }
             else if (displayTimeFormat == 2)    // Game time
             {
-                t = t.AddYears(1286);   // 2 is UTC+years
+                t = t.AddYears(1286);  
                 if (!DateTimeInRangeForGame(t))
-                    t = new DateTime(3300, 12, 16);
+                    t = new DateTime(DateTime.UtcNow.Year+1286, DateTime.UtcNow.Month, DateTime.UtcNow.Day);
                 return t;
             }
             else                                 // local
             {
                 if (!DateTimeInRangeForGame(t))
-                    t = new DateTime(2014, 12, 16);
+                    t = DateTime.Now;
 
                 return t.ToLocalTime();
             }
@@ -169,6 +169,13 @@ namespace EDDiscovery
                 return t.Year >= 3300 && t.Year <= 3399;
             else
                 return t.Year >= 2014 && t.Year <= 2114;
+        }
+
+        public DateTime EnsureTimeInRangeForGame(DateTime t)
+        {
+            if (!DateTimeInRangeForGame(t))
+                t = ConvertTimeToSelectedFromUTC(DateTime.UtcNow);
+            return t;
         }
 
         public DateTime ConvertTimeToSelectedNoKind(DateTime t)         // from a date time (no kind) -> Display format

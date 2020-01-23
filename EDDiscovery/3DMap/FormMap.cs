@@ -970,7 +970,7 @@ namespace EDDiscovery
 
             DatasetBuilder builder = new DatasetBuilder();
 
-            List<HistoryEntry> filtered = systemlist.Where(s => s.EventTimeLocal >= filterStartTime && s.EventTimeLocal <= filterEndTime && s.MultiPlayer == false).OrderBy(s => s.EventTimeUTC).ToList();
+            List<HistoryEntry> filtered = systemlist.Where(s => s.EventTimeUTC.ToLocalTime() >= filterStartTime && s.EventTimeUTC.ToLocalTime() <= filterEndTime && s.MultiPlayer == false).OrderBy(s => s.EventTimeUTC).ToList();
 
             datasets_systems = builder.BuildSystems(drawLinesBetweenStarsWithPositionToolStripMenuItem.Checked,
                             drawADiscOnStarsWithPositionToolStripMenuItem.Checked,
@@ -1303,13 +1303,13 @@ namespace EDDiscovery
         {
             BookmarkForm frm = new BookmarkForm();
             frm.InitialisePos(position.Current.X, position.Current.Y, position.Current.Z);
-            DateTime tme = DateTime.Now;
-            frm.NewRegionBookmark(tme);
+            DateTime bookmarktime = DateTime.UtcNow;
+            frm.NewRegionBookmark(bookmarktime);
             DialogResult res = frm.ShowDialog(this);
 
             if (res == DialogResult.OK)
             {
-                BookmarkClass newcls = GlobalBookMarkList.Instance.AddOrUpdateBookmark(null,false,frm.StarHeading, double.Parse(frm.x), double.Parse(frm.y), double.Parse(frm.z), tme, frm.Notes);
+                BookmarkClass newcls = GlobalBookMarkList.Instance.AddOrUpdateBookmark(null,false,frm.StarHeading, double.Parse(frm.x), double.Parse(frm.y), double.Parse(frm.z), bookmarktime, frm.Notes);
 
                 if (frm.IsTarget)          // asked for targetchanged..
                 {
@@ -1634,7 +1634,7 @@ namespace EDDiscovery
                 if (cursystem != null || curbookmark != null)      // if we have a system or a bookmark...
                 {
                     //Moved the code so that it could be shared with SavedRouteExpeditionControl
-                    UserControls.TargetHelpers.showBookmarkForm(this,discoveryForm , cursystem, curbookmark, notedsystem);
+                    UserControls.TargetHelpers.ShowBookmarkForm(this,discoveryForm , cursystem, curbookmark, notedsystem);
                     GenerateDataSetsBNG();      // in case target changed, do all..
                     RequestPaint();
                 }
@@ -2283,20 +2283,20 @@ namespace EDDiscovery
 
             foreach (var expedition in SavedRouteClass.GetAllSavedRoutes())
             {
-                if (expedition.StartDate != null)
+                if (expedition.StartDateUTC != null)
                 {
-                    var starttime = (DateTime)expedition.StartDate;
+                    var starttime = (DateTime)expedition.StartDateUTC;
                     starttimes[expedition.Name] = () => starttime;
 
-                    if (expedition.EndDate != null)
+                    if (expedition.EndDateUTC != null)
                     {
-                        var endtime = (DateTime)expedition.EndDate;
+                        var endtime = (DateTime)expedition.EndDateUTC;
                         endtimes[expedition.Name] = () => endtime;
                     }
                 }
-                else if (expedition.EndDate != null)
+                else if (expedition.EndDateUTC != null)
                 {
-                    var endtime = (DateTime)expedition.EndDate;
+                    var endtime = (DateTime)expedition.EndDateUTC;
                     endtimes[expedition.Name] = () => endtime;
                     starttimes[expedition.Name] = starttimes["All"];
                 }

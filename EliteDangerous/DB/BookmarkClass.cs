@@ -185,7 +185,7 @@ namespace EliteDangerousCore.DB
         public double x;                // x/y/z always set for render purposes
         public double y;
         public double z;
-        public DateTime Time;           
+        public DateTime TimeUTC;
         public string Heading;          // set if region bookmark, else null if its a star
         public string Note;
         public PlanetMarks PlanetaryMarks;   // may be null
@@ -196,6 +196,8 @@ namespace EliteDangerousCore.DB
 
         public bool hasPlanetaryMarks
         { get { return PlanetaryMarks != null && PlanetaryMarks.hasMarks; } }
+
+        DateTime utcswitchover = new DateTime(2020, 1, 23);
 
         public BookmarkClass()
         {
@@ -209,7 +211,15 @@ namespace EliteDangerousCore.DB
             x = (double)dr["x"];
             y = (double)dr["y"];
             z = (double)dr["z"];
-            Time = (DateTime)dr["Time"];
+
+            DateTime t = (DateTime)dr["Time"];
+            if (t < utcswitchover)      // dates before this was stupidly recorded in here in local time.
+            {
+                t = new DateTime(t.Year, t.Month, t.Day, t.Hour, t.Minute, t.Second, DateTimeKind.Local);
+                t = t.ToUniversalTime();
+            }
+            TimeUTC = t;
+
             if (System.DBNull.Value != dr["Heading"])
                 Heading = (string)dr["Heading"];
             Note = (string)dr["Note"];
@@ -229,11 +239,15 @@ namespace EliteDangerousCore.DB
         {
             using (DbCommand cmd = cn.CreateCommand("Insert into Bookmarks (StarName, x, y, z, Time, Heading, Note, PlanetMarks) values (@sname, @xp, @yp, @zp, @time, @head, @note, @pmarks)"))
             {
+                DateTime tme = TimeUTC;
+                if (TimeUTC < utcswitchover)
+                    tme = TimeUTC.ToLocalTime();
+
                 cmd.AddParameterWithValue("@sname", StarName);
                 cmd.AddParameterWithValue("@xp", x);
                 cmd.AddParameterWithValue("@yp", y);
                 cmd.AddParameterWithValue("@zp", z);
-                cmd.AddParameterWithValue("@time", Time);
+                cmd.AddParameterWithValue("@time", tme);
                 cmd.AddParameterWithValue("@head", Heading);
                 cmd.AddParameterWithValue("@note", Note);
                 cmd.AddParameterWithValue("@pmarks", PlanetaryMarks?.ToJsonString());
@@ -258,12 +272,16 @@ namespace EliteDangerousCore.DB
         {
             using (DbCommand cmd = cn.CreateCommand("Update Bookmarks set StarName=@sname, x = @xp, y = @yp, z = @zp, Time=@time, Heading = @head, Note=@note, PlanetMarks=@pmarks  where ID=@id"))
             {
+                DateTime tme = TimeUTC;
+                if (TimeUTC < utcswitchover)
+                    tme = TimeUTC.ToLocalTime();
+
                 cmd.AddParameterWithValue("@ID", id);
                 cmd.AddParameterWithValue("@sname", StarName);
                 cmd.AddParameterWithValue("@xp", x);
                 cmd.AddParameterWithValue("@yp", y);
                 cmd.AddParameterWithValue("@zp", z);
-                cmd.AddParameterWithValue("@time", Time);
+                cmd.AddParameterWithValue("@time", tme);
                 cmd.AddParameterWithValue("@head", Heading);
                 cmd.AddParameterWithValue("@note", Note);
                 cmd.AddParameterWithValue("@pmarks", PlanetaryMarks?.ToJsonString());
@@ -419,14 +437,14 @@ namespace EliteDangerousCore.DB
         }
 
         // on a star system, if an existing bookmark, return it, else create a new one with these properties
-        public BookmarkClass EnsureBookmarkOnSystem(string name, double x, double y, double z, DateTime tme, string notes = null)
+        public BookmarkClass EnsureBookmarkOnSystem(string name, double x, double y, double z, DateTime timeutc, string notes = null)
         {
             BookmarkClass bk = FindBookmarkOnSystem(name);
-            return bk != null ? bk : AddOrUpdateBookmark(null, true, name, x, y, z, tme, notes);
+            return bk != null ? bk : AddOrUpdateBookmark(null, true, name, x, y, z, timeutc, notes);
         }
 
         // bk = null, new bookmark, else update.  isstar = true, region = false.
-        public BookmarkClass AddOrUpdateBookmark(BookmarkClass bk, bool isstar, string name, double x, double y, double z, DateTime tme, string notes = null, PlanetMarks planetMarks = null)
+        public BookmarkClass AddOrUpdateBookmark(BookmarkClass bk, bool isstar, string name, double x, double y, double z, DateTime timeutc, string notes = null, PlanetMarks planetMarks = null)
         {
             System.Diagnostics.Debug.Assert(System.Windows.Forms.Application.MessageLoop);
             bool addit = bk == null;
@@ -447,8 +465,7 @@ namespace EliteDangerousCore.DB
             bk.x = x;
             bk.y = y;
             bk.z = z;
-            bk.Time = tme;
-            bk.PlanetaryMarks = planetMarks ?? bk.PlanetaryMarks;
+            bk.TimeUTC = timeutc;            bk.PlanetaryMarks = planetMarks ?? bk.PlanetaryMarks;
             bk.Note = notes ?? bk.Note; // only override notes if its set.
 
             if (addit)

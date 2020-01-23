@@ -939,12 +939,13 @@ namespace EDDiscovery.UserControls
                             HistoryEntry he = syslist[0];
 
                             return (dataGridViewStarList.Rows[r].Visible &&
-                                    he.EventTimeLocal.CompareTo(frm.StartTime) >= 0 &&
-                                    he.EventTimeLocal.CompareTo(frm.EndTime) <= 0) ? BaseUtils.CSVWriteGrid.LineStatus.OK : BaseUtils.CSVWriteGrid.LineStatus.Skip;
+                                    he.EventTimeUTC.CompareTo(frm.StartTimeUTC) >= 0 &&
+                                    he.EventTimeUTC.CompareTo(frm.EndTimeUTC) <= 0) ? BaseUtils.CSVWriteGrid.LineStatus.OK : BaseUtils.CSVWriteGrid.LineStatus.Skip;
                         }
                         else
                             return BaseUtils.CSVWriteGrid.LineStatus.EOF;
                     };
+
                     grd.GetLine += delegate (int r)
                     {
                         List<HistoryEntry> syslist = dataGridViewStarList.Rows[r].Tag as List<HistoryEntry>;
@@ -955,7 +956,8 @@ namespace EDDiscovery.UserControls
                         if (syslist.Count > 1)
                         {
                             for (int i = 1; i < syslist.Count; i++)
-                                tlist = tlist.AppendPrePad(syslist[i].EventTimeLocal.ToShortDateString() + " " + syslist[i].EventTimeLocal.ToShortTimeString(), ", ");
+                                tlist = tlist.AppendPrePad(EDDConfig.Instance.ConvertTimeToSelectedFromUTC(syslist[i].EventTimeUTC).ToShortDateString() 
+                                                            + " " + EDDConfig.Instance.ConvertTimeToSelectedFromUTC(syslist[i].EventTimeUTC).ToShortTimeString(), ", ");
                         }
 
                         he.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);

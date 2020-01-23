@@ -77,12 +77,12 @@ namespace EDDiscovery.Forms
         }
 
 
-        public void NewRegionBookmark(DateTime tme)              // from map, a region bookmark at this time
+        public void NewRegionBookmark(DateTime timeutc)              // from map, a region bookmark at this time
         {
             this.Text = "Create Region Bookmark".T(EDTx.BookmarkForm_RB);
             textBoxName.Text = "Enter a region name...".T(EDTx.BookmarkForm_RN);
             textBoxName.ClearOnFirstChar = true;
-            textBoxTime.Text = tme.ToString();
+            textBoxTime.Text = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(timeutc).ToString();
             textBoxName.ReturnPressed += (ctrl) => { return true; };
             textBoxX.ReadOnly = false;
             textBoxY.ReadOnly = false;
@@ -96,7 +96,7 @@ namespace EDDiscovery.Forms
             buttonOK.Enabled = ValidateData();
         }
 
-        public void Update(BookmarkClass bk)        // from multiple places, update this bookmark, region or system..
+        public void Bookmark(BookmarkClass bk)        // from multiple places, update this bookmark, region or system..
         {
             string note = "";
             string name;
@@ -133,7 +133,7 @@ namespace EDDiscovery.Forms
             textBoxBookmarkNotes.CursorToEnd();
             textBoxBookmarkNotes.ScrollToCaret();
             textBoxTravelNote.Text = note;
-            textBoxTime.Text = bk.Time.ToString();
+            textBoxTime.Text = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(bk.TimeUTC).ToString();
             checkBoxTarget.Checked = bk.id == TargetClass.GetTargetBookmark();      // who is the target of a bookmark (0=none)
 
             if (bk.isRegion)
@@ -152,19 +152,19 @@ namespace EDDiscovery.Forms
             buttonOK.Enabled = true;
         }
 
-        public void Update(BookmarkClass bk, string planet, double latitude, double longitude)  // from compass, bookmark at planet/lat/long
+        public void Bookmark(BookmarkClass bk, string planet, double latitude, double longitude)  // from compass, bookmark at planet/lat/long
         {
-            Update(bk);
+            Bookmark(bk);
             SurfaceBookmarks.AddSurfaceLocation(planet, latitude, longitude);
         }
 
-        public void NewSystemBookmark(ISystem system, string note, DateTime tme)    // from multipe, create a new system bookmark
+        public void NewSystemBookmark(ISystem system, string note, DateTime timeutc)    // from multipe, create a new system bookmark
         {
             this.Text = "New System Bookmark".T(EDTx.BookmarkForm_SB);
             textBoxName.Text = system.Name;
             textBoxName.ReturnPressed += (ctrl) => { return true; };
             textBoxTravelNote.Text = note;
-            textBoxTime.Text = tme.ToString();
+            textBoxTime.Text = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(timeutc).ToString();
             InitialisePos(system);
             buttonDelete.Hide();
             var edsm = new EDSMClass();
@@ -174,13 +174,13 @@ namespace EDDiscovery.Forms
         }
 
                                                                                     // from compass, new system bookmark at position
-        public void NewSystemBookmark(ISystem system, string note, DateTime tme, string planet, double latitude, double longitude)
+        public void NewSystemBookmark(ISystem system, string note, DateTime timeutc, string planet, double latitude, double longitude)
         {
-            NewSystemBookmark(system, note, tme);
+            NewSystemBookmark(system, note, timeutc);
             SurfaceBookmarks.AddSurfaceLocation(planet, latitude, longitude);
         }
 
-        public void NewFreeEntrySystemBookmark(DateTime tme)     // new system bookmark anywhere
+        public void NewFreeEntrySystemBookmark(DateTime timeutc)     // new system bookmark anywhere
         {
             this.Text = "New System Bookmark".T(EDTx.BookmarkForm_NSB);
             textBoxName.Text = "Enter a system name...".T(EDTx.BookmarkForm_ESN);
@@ -190,7 +190,7 @@ namespace EDDiscovery.Forms
             textBoxName.ClearOnFirstChar = true;
             textBoxName.SelectAll();
             textBoxName.Focus();
-            textBoxTime.Text = tme.ToString();
+            textBoxTime.Text = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(timeutc).ToString();
             validatestarname = true;
             buttonDelete.Hide();
             buttonEDSM.Enabled = false;
