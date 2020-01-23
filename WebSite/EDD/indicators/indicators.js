@@ -13,31 +13,39 @@ function RequestIndicator()
     websocket.send(JSON.stringify(msg));
 }
 
-function CreateIndicator(itype, enableit = true)
+function CreateIndicator(itype, enableit = true, tooltip = null)
 {
     if (enableit)
-        return CreateImage("statusicons/" + itype + ".png", itype, indicatoriconsize, null, [itype, null]);
+    {
+        if ( tooltip == null )
+            tooltip = itype.replace(/([a-z](?=[A-Z]))/g, '$1 ');
+
+        return CreateImage("/statusicons/" + itype + ".png", itype, indicatoriconsize, null, [itype, null], tooltip);
+    } 
     else
         return null;
 }
 
-function CreateAction(name, bindingname = null, enableit = true, flashit = 0, confirmit = false)
+function CreateAction(name, bindingname = null, enableit = true, flashit = 0, confirmit = false, tooltip = null)
 {
     if (enableit)
     {
         if (bindingname == null)
             bindingname = name;
 
+        if ( tooltip == null )
+            tooltip = bindingname.replace(/([a-z](?=[A-Z]))/g, '$1 ');
+
         //console.log("create action image name:" + itype + " a:" + action + " ");
-        return CreateImage("statusicons/" + name + ".png", name, indicatoriconsize, ClickActionItem, [name, bindingname, flashit, confirmit]);
+        return CreateImage("/statusicons/" + name + ".png", name, indicatoriconsize, ClickActionItem, [name, bindingname, flashit, confirmit], tooltip);
     }
     else
         return null;
 }
 
-function CreateActionButton(name, bindingname = null, enableit = true)
+function CreateActionButton(name, bindingname = null, enableit = true, tooltip = null)
 {
-    return CreateAction(name, bindingname, enableit, 250);
+    return CreateAction(name, bindingname, enableit, 250, null, tooltip);
 }
 
 var currentshiptype;
@@ -128,7 +136,7 @@ function SetupIndicators(jdata,tstatus,tactions)
         var statuslist = [
             CreateIndicator("Docked"), CreateIndicator("Landed"), CreateIndicator("ShieldsUp"),
             CreateIndicator("InWing"), CreateIndicator("ScoopingFuel", currentsupercruise), 
-            CreateIndicator("LowFuel"), CreateIndicator("OverHeating"), CreateIndicator("IsInDanger", !currentdocked),
+            CreateIndicator("LowFuel"), CreateIndicator("OverHeating"), CreateIndicator("IsInDanger", !currentdocked, "In Danger"),
             CreateIndicator("BeingInterdicted", currentsupercruise), CreateIndicator("FsdCharging", notdockedlanded),
             CreateIndicator("FsdMassLocked", innormalspace),
             CreateIndicator("FsdCooldown", currentsupercruise || innormalspace)
@@ -191,9 +199,9 @@ function SetupIndicators(jdata,tstatus,tactions)
 
             CreateAction("GalaxyMapOpen"),
             CreateAction("SystemMapOpen"),
-            CreateActionButton("Screenshot", "F10"),
+            CreateActionButton("Screenshot", "F10", true, "Screen Shot"),
 
-            CreateAction("SilentRunning", "ToggleButtonUpInput", innormalspace,0,true),
+            CreateAction("SilentRunning", "ToggleButtonUpInput", innormalspace,0,true, "Silent Running"),
         ];
 
         tactions.appendChild(tablerowmultitdlist(actionlist))
@@ -219,7 +227,7 @@ function SetupIndicators(jdata,tstatus,tactions)
 
             CreateAction("GalaxyMapOpen"),
             CreateAction("SystemMapOpen"),
-            CreateActionButton( "Screenshot", "F10"),
+            CreateActionButton("Screenshot", "F10", true, "Screen Shot"),
         ];
 
         tstatus.appendChild(tablerowmultitdlist(statuslist));
@@ -251,7 +259,7 @@ function SetupIndicators(jdata,tstatus,tactions)
 
             CreateAction("GalaxyMapOpen"),
             CreateAction("SystemMapOpen"),
-            CreateActionButton( "Screenshot", "F10"),
+            CreateActionButton("Screenshot", "F10", true, "Screen Shot"),
         ];
 
         tstatus.appendChild(tablerowmultitdlist(statuslist));
@@ -275,25 +283,31 @@ function SetIndicatorState(jdata, tstatus)
     {
         x.childNodes.forEach(function (y)       // td's
         {
-            y.childNodes.forEach(function (z)   // imgs
+            y.childNodes.forEach(function (y1)       // Div due to toolbar
             {
-                //console.log("Entry is " + z.nodeName + " " + z.tag);
-
-                var indicator = z.tag[0];
-
-                if (indicator != null )      // presuming this works if z.tag is not defined.
+                y1.childNodes.forEach(function (z)   // imgs and spans
                 {
-                    //console.log("..1 " + z.tag + " value is " + jdata[z.tag]);
+                    if (z.nodeName == "IMG" && z.tag != null)
+                    {
+                        console.log("Entry is " + z.nodeName + " " + z.tag);
 
-                    if (jdata[indicator] != null && jdata[indicator] == true)
-                    {
-                        z.classList.add("entryselected");       // using a class means it does not mess up all the other properties.
+                        var indicator = z.tag[0];
+
+                        if (indicator != null)      // presuming this works if z.tag is not defined.
+                        {
+                            //console.log("..1 " + z.tag + " value is " + jdata[z.tag]);
+
+                            if (jdata[indicator] != null && jdata[indicator] == true)
+                            {
+                                z.classList.add("entryselected");       // using a class means it does not mess up all the other properties.
+                            }
+                            else
+                            {
+                                z.classList.remove("entryselected");
+                            }
+                        }
                     }
-                    else
-                    {
-                        z.classList.remove("entryselected");
-                    }
-                }
+                });
             });
         });
     });

@@ -22,44 +22,6 @@ body
     clear: both;
 }
 
-.wrapleft
-{
-    float: left;
-    width: 100%;
-}
-
-/* this holds the status table */
-
-article
-{
-    height: auto;
-    overflow: auto;
-    margin-right: 310px;
-    line-height:1em;
-}
-
-article table
-{
-    width: 100%;
-    border-collapse: collapse;
-}
-
-article table tr
-{
-    background-color: #000000;
-    color: darkorange;
-}
-
-
-/* The aside holds the status indicators */
-
-aside
-{
-    float: Right;
-    width: 300px;
-    margin-left: -300px;
-}
-
 /* Common status and action box styling */
 
 #StatusBox, #ActionBox
@@ -94,12 +56,11 @@ aside
 
 #ActionBox td
 {
-    display: inline; /* td's in action box are inline so flow around the actionbox areas */
+    display: inline; /* td's in action box are inline so flow around the areas */
 }
-
 #StatusBox td
 {
-    display: inline; 
+    display: inline; /* td's in action box are inline so flow around the actionbox areas */
 }
 
 /* the img element is the button .. style it */
@@ -123,15 +84,9 @@ aside
     background-color: green;
 }
 
-/* class to theme the status buttons */
-.edsmetcbuttons
+.tooltip .tooltiptext
 {
-    width: 6em;
-    margin: 1px 0px 1px 10px;
-    line-height: 1;
-    background-color: orange;
-    border: 1px solid darkorange;
-    color: #000;
-    text-decoration: none;
+    margin-left: -140px;
+    margin-top: 90px;
+    width: 200px;
 }
-

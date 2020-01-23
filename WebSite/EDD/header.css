@@ -25,6 +25,16 @@ header h1:last-of-type {
     margin: 2px;
 }
 
+header h1 input
+{
+    background-color: #ff9c08;
+    margin: 0px 10px;
+    border: 1px solid black;
+    border-radius: 8px;
+    transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+}
+
 nav
 {
     clear:both;

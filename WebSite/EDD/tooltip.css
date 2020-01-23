@@ -1,0 +1,30 @@
+﻿
+/* Style a item div wrapped in tooltip */
+
+.tooltip
+{
+    display: inline;
+}
+
+/* Tooltip text - you should position it to your satisfaction */
+.tooltip .tooltiptext
+{
+    visibility: hidden;
+    color: orange;
+    background-color: black;
+    border: 1px solid orange;
+    border-radius: 1px;
+    text-align: center;
+    padding: 5px 0;
+    position: absolute;
+}
+
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext
+{
+    transition-delay: 500ms;
+    transition-duration: 2000ms;
+    visibility: visible;
+}
+

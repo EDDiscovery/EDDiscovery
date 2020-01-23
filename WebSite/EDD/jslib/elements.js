@@ -29,7 +29,7 @@ function CreateAnchor(text, link, newtab = false)
     return a2;
 }
 
-function CreateImage(link,alt,width,callback = null, tagdata = null)
+function CreateImage(link,alt,width,callback = null, tagdata = null, tooltip = "fred")
 {
     var a = document.createElement("img");
     a.src = link;
@@ -41,9 +41,23 @@ function CreateImage(link,alt,width,callback = null, tagdata = null)
 
     if ( callback !== null )
         a.onclick = callback;
+
+    if (tooltip == null)
+        return a;
+    else
+    {
+        var div = document.createElement("div");
+        div.className = "tooltip";
+        div.appendChild(a);
+        var span = document.createElement("span");
+        span.className = "tooltiptext";
+        span.innerText = tooltip;
+        //span.appendChild(CreatePara(tooltip));
+        div.appendChild(span);
+        return div;
+    }
     
   //  console.log("Create image s:" + a.src + " t:" + a.tag );
-    return a;
 }
 
 function CreateButton(text,handler)
