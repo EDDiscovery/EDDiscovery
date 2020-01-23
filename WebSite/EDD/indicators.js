@@ -40,11 +40,11 @@ function CreateActionButton(name, bindingname = null, enableit = true)
     return CreateAction(name, bindingname, enableit, 250);
 }
 
-var shiptypeselected;
-var inwingselected;
-var supercruiseselected;
-var landedselected;
-var dockedselected;
+var currentshiptype;
+var currentinwing;
+var currentsupercruise;
+var currentlanded;
+var currentdocked;
 
 // names of elements
 function HandleIndicatorMessage(jdata, statuselement, actionelement, statusotherelement)
@@ -58,20 +58,20 @@ function HandleIndicatorMessage(jdata, statuselement, actionelement, statusother
 
     console.log("Indicators Mod" + JSON.stringify(jdata));
 
-    var shiptype = jdata["ShipType"];
+    var newshiptype = jdata["ShipType"];
+    var newinwing = jdata["InWing"] != null && jdata["InWing"] == true;
+    var newsupercruise = jdata["Supercruise"] != null && jdata["Supercruise"] == true;
+    var newlanded = jdata["Landed"] != null && jdata["Landed"] == true;
+    var newdocked = jdata["Docked"] != null && jdata["Docked"] == true;
 
-    var inwing = jdata["InWing"] != null && jdata["InWing"] == true;
-    var supercruise = jdata["Supercruise"] != null && jdata["Supercruise"] == true;
-    var landed = jdata["Landed"] != null && jdata["Landed"] == true;
-    var docked = jdata["Docked"] != null && jdata["Docked"] == true;
-
-    if (shiptype != shiptypeselected || inwing != inwingselected || supercruise != supercruiseselected || landed != landedselected || docked != dockedselected)
+    if (newshiptype != currentshiptype || newinwing != currentinwing || newsupercruise != currentsupercruise || newlanded != currentlanded || newdocked != currentdocked)
     {
-        shiptypeselected = shiptype;       // SRV, MainShip, Fighter or None.
-        inwingselected = inwing;
-        supercruiseselected = supercruise;
-        SetupIndicators(jdata, document.getElementById(statuselement), document.getElementById(actionelement),
-            shiptype, inwing, supercruise, landed,docked);
+        currentshiptype = newshiptype;       // SRV, MainShip, Fighter or None.
+        currentinwing = newinwing;
+        currentsupercruise = newsupercruise;
+        currentlanded = newlanded;
+        currentdocked = newdocked;
+        SetupIndicators(jdata, document.getElementById(statuselement), document.getElementById(actionelement));
     }
 
     SetIndicatorState(jdata, document.getElementById(statuselement));
@@ -85,7 +85,7 @@ function HandleIndicatorMessage(jdata, statuselement, actionelement, statusother
 
         if (jdata["LegalState"] != null)
             tstatusother.appendChild(CreatePara("Legal State: " + jdata["LegalState"]));
-        if (jdata["Firegroup"] >= 0 && shiptype == "MainShip")
+        if (jdata["Firegroup"] >= 0 && newshiptype == "MainShip")
             tstatusother.appendChild(CreatePara("Fire Group: " + "ABCDEFGHIJK"[jdata["Firegroup"]]));
         if (jdata["ValidPips"])
         {
@@ -113,22 +113,25 @@ function HandleIndicatorMessage(jdata, statuselement, actionelement, statusother
 
 }
 
-function SetupIndicators(jdata,tstatus,tactions, shiptype, inwing, supercruise,landed, docked)
+function SetupIndicators(jdata,tstatus,tactions)
 {
     removeChildren(tstatus);
     removeChildren(tactions);
 
-    var innormalspace = !landed && !docked && !supercruise;
-    console.log("Create Indicators with L:" + landed + " D:" + docked + " N:" + innormalspace + " W:" + inwing);
-    if (shiptype == "MainShip")
+    var innormalspace = !currentlanded && !currentdocked && !currentsupercruise;
+    var notdockedlanded = !currentdocked && !currentlanded;
+
+    console.log("Create Indicators with L:" + currentlanded + " D:" + currentdocked + " N:" + innormalspace + " W:" + currentinwing + " S:" + currentsupercruise);
+
+    if (currentshiptype == "MainShip")
     {
         var statuslist = [
             CreateIndicator("Docked"), CreateIndicator("Landed"), CreateIndicator("ShieldsUp"),
-            CreateIndicator("InWing"), CreateIndicator("ScoopingFuel", supercruise), 
-            CreateIndicator("LowFuel"), CreateIndicator("OverHeating"), CreateIndicator("IsInDanger", !docked),
-            CreateIndicator("BeingInterdicted", supercruise), CreateIndicator("FsdCharging",!landed && !docked),
+            CreateIndicator("InWing"), CreateIndicator("ScoopingFuel", currentsupercruise), 
+            CreateIndicator("LowFuel"), CreateIndicator("OverHeating"), CreateIndicator("IsInDanger", !currentdocked),
+            CreateIndicator("BeingInterdicted", currentsupercruise), CreateIndicator("FsdCharging", notdockedlanded),
             CreateIndicator("FsdMassLocked", innormalspace),
-            CreateIndicator("FsdCooldown", supercruise || innormalspace)
+            CreateIndicator("FsdCooldown", currentsupercruise || innormalspace)
         ];
 
         tstatus.appendChild(tablerowmultitdlist(statuslist));
@@ -137,7 +140,7 @@ function SetupIndicators(jdata,tstatus,tactions, shiptype, inwing, supercruise,l
             CreateAction("LandingGear", "LandingGearToggle",innormalspace),     // reported..
             CreateAction("Lights", "ShipSpotLightToggle"),
             CreateAction("FlightAssist", "ToggleFlightAssist", innormalspace),
-            CreateAction("HardpointsDeployed", "DeployHardpointToggle"),
+            CreateAction("HardpointsDeployed", "DeployHardpointToggle", notdockedlanded),
 
             CreateAction("CargoScoopDeployed", "ToggleCargoScoop", innormalspace),
             CreateAction("NightVision", "NightVisionToggle", innormalspace),
@@ -148,8 +151,8 @@ function SetupIndicators(jdata,tstatus,tactions, shiptype, inwing, supercruise,l
             CreateAction("HeatSink", "DeployHeatSink", innormalspace,1000),
             CreateAction("ChargeECM", null, innormalspace, 1500),
 
-            CreateAction("Supercruise", null, !landed),  // reported
-            CreateActionButton("HyperSuperCombination", null, !landed), // not reported
+            CreateAction("Supercruise", null, notdockedlanded),  // reported
+            CreateActionButton("HyperSuperCombination", null, notdockedlanded), // not reported
             CreateActionButton("OrbitLinesToggle"),
 
             CreateActionButton("CyclePreviousTarget"),
@@ -161,21 +164,21 @@ function SetupIndicators(jdata,tstatus,tactions, shiptype, inwing, supercruise,l
             CreateActionButton("CyclePreviousSubsystem", null, innormalspace),
             CreateActionButton("CycleNextSubsystem", null, innormalspace),
 
-            CreateActionButton("TargetWingman0", null, inwing),
-            CreateActionButton("TargetWingman1", null, inwing),
-            CreateActionButton("TargetWingman2", null, inwing),
-            CreateActionButton("SelectTargetsTarget", null, inwing),
-            CreateActionButton("WingNavLock", null, inwing),
+            CreateActionButton("TargetWingman0", null, currentinwing),
+            CreateActionButton("TargetWingman1", null, currentinwing),
+            CreateActionButton("TargetWingman2", null, currentinwing),
+            CreateActionButton("SelectTargetsTarget", null, currentinwing),
+            CreateActionButton("WingNavLock", null, currentinwing),
 
-            CreateActionButton("TargetNextRouteSystem",null,supercruise ),
+            CreateActionButton("TargetNextRouteSystem",null,currentsupercruise ),
 
             CreateActionButton("CycleFireGroupPrevious"),
             CreateActionButton("CycleFireGroupNext"),
 
-            CreateActionButton("IncreaseSystemsPower"),
-            CreateActionButton("IncreaseEnginesPower"),
-            CreateActionButton("IncreaseWeaponsPower"),
-            CreateActionButton("ResetPowerDistribution"),
+            CreateActionButton("IncreaseSystemsPower", null, !currentdocked),
+            CreateActionButton("IncreaseEnginesPower", null, !currentdocked),
+            CreateActionButton("IncreaseWeaponsPower", null, !currentdocked),
+            CreateActionButton("ResetPowerDistribution", null, !currentdocked),
 
             CreateActionButton("OrderDefensiveBehaviour", null, innormalspace),
             CreateActionButton("OrderAggressiveBehaviour", null, innormalspace),
@@ -195,7 +198,7 @@ function SetupIndicators(jdata,tstatus,tactions, shiptype, inwing, supercruise,l
 
         tactions.appendChild(tablerowmultitdlist(actionlist))
     }
-    else if (shiptype == "SRV")
+    else if (currentshiptype == "SRV")
     {
         var statuslist = [
             CreateIndicator("SrvUnderShip"), CreateIndicator("LowFuel"), CreateIndicator("ShieldsUp")
@@ -222,7 +225,7 @@ function SetupIndicators(jdata,tstatus,tactions, shiptype, inwing, supercruise,l
         tstatus.appendChild(tablerowmultitdlist(statuslist));
         tactions.appendChild(tablerowmultitdlist(actionlist));
     }
-    else if (shiptype == "Fighter")
+    else if (currentshiptype == "Fighter")
     {
         var statuslist = [
             CreateIndicator("ShieldsUp")

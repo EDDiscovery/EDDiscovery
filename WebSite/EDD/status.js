@@ -21,7 +21,7 @@ function OnLoad()
 
 function onOpen(evt)
 {
-    shiptypeselected = "";
+    currentshiptype = "";
     RequestStatus(-1);
     RequestIndicator();
 }
