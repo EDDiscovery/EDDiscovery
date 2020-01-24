@@ -81,7 +81,7 @@ namespace EliteDangerousCore.DB
                 {
                   //  System.Diagnostics.Debug.WriteLine("Time1.5 " + BaseUtils.AppTicks.TickCountLap("SDC"));
 
-                    while (reader.Read())// && distlist.Count < maxitems)           // already sorted, and already limited to max items
+                    while (reader.Read())      // already sorted, and already limited to max items
                     {
                         int sxi = reader.GetInt32(0);
                         int syi = reader.GetInt32(1);
@@ -92,8 +92,10 @@ namespace EliteDangerousCore.DB
                         if (!spherical || distsqi <= maxdistsqi)
                         {
                             SystemClass s = MakeSystem(reader);
+                            double distnorm = ((double)distsqi) / SystemClass.XYZScalar / SystemClass.XYZScalar;
+                            //System.Diagnostics.Debug.WriteLine("System " + s.Name + " " + Math.Sqrt(distnorm).ToString("0.0"));
                             LookedUp?.Invoke(s);                            // callback to say looked up
-                            distlist.Add(((double)distsqi) / SystemClass.XYZScalar / SystemClass.XYZScalar, s);                  // which Rob has seen crashing the program! Bad EDSM!
+                            distlist.Add(distnorm, s);                  // which Rob has seen crashing the program! Bad EDSM!
                         }
 
                         count++;

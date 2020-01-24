@@ -43,6 +43,8 @@ namespace EDDiscovery.UserControls
         private const double defaultMinRadius = 0;
         private const int maxitems = 500;
 
+        private double lookup_limit = 100;      // we start with a reasonable number, because if your in the bubble, you don't want to be looking up 1000
+
         public override void Init()
         {
             computer = new StarDistanceComputer();
@@ -108,16 +110,22 @@ namespace EDDiscovery.UserControls
 
                 //System.Diagnostics.Debug.WriteLine("Star grid started, uctg selected, ask");
 
+                double lookup_max = Math.Min(textMaxRadius.Value, lookup_limit);
+               // System.Diagnostics.Debug.WriteLine("Lookup limit " + lookup_limit + " lookup " + lookup_max);
+
                 // Get nearby systems from the systems DB.
                 computer.CalculateClosestSystems(he.System, 
                     NewStarListComputedAsync, 
-                    maxitems, textMinRadius.Value, textMaxRadius.Value, !checkBoxCube.Checked
+                    maxitems, textMinRadius.Value, lookup_max, !checkBoxCube.Checked
                     );     // hook here, force closes system update
+
+
             }
         }
 
         private void NewStarListComputedAsync(ISystem sys, BaseUtils.SortedListDoubleDuplicate<ISystem> list)
         {
+            //System.Diagnostics.Debug.WriteLine("Computer returned " + list.Count);
             if (this.IsHandleCreated)
                 this.BeginInvoke(new Action(() => NewStarListComputed(sys, list)));
         }
@@ -126,9 +134,11 @@ namespace EDDiscovery.UserControls
         {
             System.Diagnostics.Debug.Assert(Application.MessageLoop);       // check!
 
+            double lookup_max = Math.Min(textMaxRadius.Value, lookup_limit);
+
             // Get nearby systems from our travel history. This will filter out duplicates from the systems DB.
             discoveryform.history.CalculateSqDistances(list, sys.X, sys.Y, sys.Z,
-                                maxitems, textMinRadius.Value, textMaxRadius.Value, !checkBoxCube.Checked
+                                maxitems, textMinRadius.Value, lookup_max, !checkBoxCube.Checked
                                 );
 
             FillGrid(sys.Name, list);
@@ -141,9 +151,13 @@ namespace EDDiscovery.UserControls
             if (csl != null && csl.Any())
             {
                 SetControlText(string.Format("From {0}".T(EDTx.UserControlStarDistance_From), name));
+
+                int maxdist = 0;
                 foreach (KeyValuePair<double, ISystem> tvp in csl)
                 {
                     double dist = Math.Sqrt(tvp.Key);   // distances are stored squared for speed, back to normal.
+
+                    maxdist = Math.Max(maxdist, (int)dist);
 
                     if (tvp.Value.Name != name && (checkBoxCube.Checked || (dist >= textMinRadius.Value && dist <= textMaxRadius.Value)))
                     {
@@ -154,6 +168,15 @@ namespace EDDiscovery.UserControls
                         dataGridViewNearest.Rows[rowindex].Tag = tvp.Value;
                     }
                 }
+
+                if (csl.Count > maxitems/2)             // if we filled up at least half the list, we limit to max distance plus
+                {
+                    lookup_limit = maxdist * 11 / 10;   // lookup limit is % more than max dist, to allow for growth
+                }
+                else
+                    lookup_limit = maxdist * 2;         // else we did not get close to filling the list, so double the limit and try again
+
+                System.Diagnostics.Debug.WriteLine("Star distance Lookup " + name + " found " + csl.Count + " max was " + maxdist + " New limit " + lookup_limit);
             }
             else
             {
