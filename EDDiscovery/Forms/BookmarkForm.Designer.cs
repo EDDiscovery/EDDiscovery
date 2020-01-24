@@ -259,7 +259,6 @@ namespace EDDiscovery.Forms
             // 
             // buttonOK
             // 
-            this.buttonOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonOK.Location = new System.Drawing.Point(752, 669);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(100, 24);
@@ -270,7 +269,6 @@ namespace EDDiscovery.Forms
             // 
             // buttonCancel
             // 
-            this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonCancel.Location = new System.Drawing.Point(624, 669);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(100, 24);
@@ -281,7 +279,6 @@ namespace EDDiscovery.Forms
             // 
             // buttonDelete
             // 
-            this.buttonDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.buttonDelete.Location = new System.Drawing.Point(13, 669);
             this.buttonDelete.Name = "buttonDelete";
             this.buttonDelete.Size = new System.Drawing.Size(100, 24);
@@ -328,16 +325,20 @@ namespace EDDiscovery.Forms
             // 
             this.checkBoxTarget.AutoSize = true;
             this.checkBoxTarget.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxTarget.CheckBoxDisabledScaling = 0.5F;
             this.checkBoxTarget.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxTarget.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxTarget.ImageButtonDisabledScaling = 0.5F;
+            this.checkBoxTarget.ImageIndeterminate = null;
+            this.checkBoxTarget.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.checkBoxTarget.ImageUnchecked = null;
             this.checkBoxTarget.Location = new System.Drawing.Point(584, 19);
             this.checkBoxTarget.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxTarget.Name = "checkBoxTarget";
             this.checkBoxTarget.Size = new System.Drawing.Size(87, 17);
             this.checkBoxTarget.TabIndex = 10;
             this.checkBoxTarget.Text = "Make Target";
-            this.checkBoxTarget.TickBoxReductionRatio = 0.75f;
+            this.checkBoxTarget.TickBoxReductionRatio = 0.75F;
             this.checkBoxTarget.UseVisualStyleBackColor = true;
             // 
             // buttonEDSM
@@ -427,7 +428,7 @@ namespace EDDiscovery.Forms
             // 
             this.SurfaceBookmarks.Location = new System.Drawing.Point(13, 390);
             this.SurfaceBookmarks.Name = "SurfaceBookmarks";
-            this.SurfaceBookmarks.Size = new System.Drawing.Size(852, 205);
+            this.SurfaceBookmarks.Size = new System.Drawing.Size(852, 261);
             this.SurfaceBookmarks.TabIndex = 12;
             // 
             // BookmarkForm

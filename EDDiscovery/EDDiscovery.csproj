@@ -694,10 +694,10 @@
     <Compile Include="UserControls\UserControlCommonBase.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\Helpers\SurfaceBookmarksUC.cs">
+    <Compile Include="Forms\SurfaceBookmarksUC.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\Helpers\SurfaceBookmarksUC.Designer.cs">
+    <Compile Include="Forms\SurfaceBookmarksUC.Designer.cs">
       <DependentUpon>SurfaceBookmarksUC.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\Helpers\StatsTimeUserControl.cs">
@@ -889,7 +889,7 @@
     <EmbeddedResource Include="UserControls\StationData\UserControlShipYards.resx">
       <DependentUpon>UserControlShipYards.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\Helpers\SurfaceBookmarksUC.resx">
+    <EmbeddedResource Include="Forms\SurfaceBookmarksUC.resx">
       <DependentUpon>SurfaceBookmarksUC.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\Helpers\StatsTimeUserControl.resx">

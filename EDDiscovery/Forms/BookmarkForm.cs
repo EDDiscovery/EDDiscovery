@@ -89,7 +89,7 @@ namespace EDDiscovery.Forms
             textBoxZ.ReadOnly = false;
 
             HideEDSM();
-            HideTravelNote();
+            HideTravelNote();   // in order
             HideSurfaceBookmarks();
             buttonDelete.Hide();
 
@@ -136,10 +136,12 @@ namespace EDDiscovery.Forms
             textBoxTime.Text = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(bk.TimeUTC).ToString();
             checkBoxTarget.Checked = bk.id == TargetClass.GetTargetBookmark();      // who is the target of a bookmark (0=none)
 
+            //foreach (Control c in panelOuter.Controls) System.Diagnostics.Debug.WriteLine("All Control {0} at {1}", c.Name, c.Top);
+
             if (bk.isRegion)
             {
                 HideEDSM();
-                HideTravelNote();
+                HideTravelNote();   // in order note
                 HideSurfaceBookmarks();
             }
             else
@@ -148,6 +150,7 @@ namespace EDDiscovery.Forms
                 edsmurl = edsm.GetUrlToEDSMSystem(name, edsmid);
                 SurfaceBookmarks.Init(bk.StarName, bk.PlanetaryMarks);
             }
+
 
             buttonOK.Enabled = true;
         }
@@ -210,7 +213,7 @@ namespace EDDiscovery.Forms
             labelBookmarkNotes.Text = "Description".T(EDTx.BookmarkForm_Description);
             buttonDelete.Hide();
             HideTime();
-            HideTravelNote();
+            HideTravelNote();   // in order
             HideSurfaceBookmarks();
 
             checkBoxTarget.Checked = istarget;
@@ -228,15 +231,17 @@ namespace EDDiscovery.Forms
         {
             int topline = top.Top;
             int delta = bot.Top - topline;
-            System.Diagnostics.Debug.WriteLine("Control bot {0} {1} to {2} {3} delta {4}", bot.Name, bot.Top, top.Name, top.Top, delta);
+
+            //System.Diagnostics.Debug.WriteLine("Control bot {0} {1} to {2} {3} delta {4}", bot.Name, bot.Top, top.Name, top.Top, delta);
             foreach (Control c in panelOuter.Controls)
             {
                 if (c.Top >= topline)  // if below..
                 {
-                    System.Diagnostics.Debug.WriteLine("Control {0} at {1}", c.Name, c.Top);
+                    //System.Diagnostics.Debug.WriteLine("Control {0} at {1} -> {2}", c.Name, c.Top, c.Top - delta);
                     c.Top -= delta;
                 }
             }
+            //System.Diagnostics.Debug.WriteLine("height now " + Height + " delta " + delta);
             Height -= delta;
         }
 
