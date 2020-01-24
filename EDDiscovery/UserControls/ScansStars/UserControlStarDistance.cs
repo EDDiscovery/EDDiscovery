@@ -86,20 +86,22 @@ namespace EDDiscovery.UserControls
 
         public override void InitialDisplay()
         {
-            if (this.IsHandleCreated)
-                KickComputation(uctg.GetCurrentHistoryEntry, true);
+            KickComputation(uctg.GetCurrentHistoryEntry, true);
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
         }
 
         private void Discoveryform_OnHistoryChange(HistoryList obj)
         {
-            if (this.IsHandleCreated)
-                KickComputation(obj.GetLast);   // copes with getlast = null
+            KickComputation(obj.GetLast);   // copes with getlast = null
         }
 
         private void Uctg_OnTravelSelectionChanged(HistoryEntry he, HistoryList hl, bool selectedEntry)
         {
-            if (this.IsHandleCreated)
-                KickComputation(he);
+            KickComputation(he);
         }
 
         private void KickComputation(HistoryEntry he, bool force = false)
@@ -126,8 +128,7 @@ namespace EDDiscovery.UserControls
         private void NewStarListComputedAsync(ISystem sys, BaseUtils.SortedListDoubleDuplicate<ISystem> list)
         {
             //System.Diagnostics.Debug.WriteLine("Computer returned " + list.Count);
-            if (this.IsHandleCreated)
-                this.BeginInvoke(new Action(() => NewStarListComputed(sys, list)));
+            this.ParentForm.BeginInvoke(new Action(() => NewStarListComputed(sys, list)));
         }
 
         private void NewStarListComputed(ISystem sys, BaseUtils.SortedListDoubleDuplicate<ISystem> list)      // In UI
@@ -269,20 +270,17 @@ namespace EDDiscovery.UserControls
 
         private void checkBoxCube_CheckedChanged(object sender, EventArgs e)
         {
-            if (this.IsHandleCreated)
-                KickComputation(last_he, true);
+            KickComputation(last_he, true);
         }
 
         private void textMinRadius_ValueChanged(object sender, EventArgs e)
         {
-            if (this.IsHandleCreated)
-                KickComputation(last_he, true);
+            KickComputation(last_he, true);
         }
 
         private void textMaxRadius_ValueChanged(object sender, EventArgs e)
         {
-            if (this.IsHandleCreated)
-                KickComputation(last_he, true);
+            KickComputation(last_he, true);
         }
 
     }
