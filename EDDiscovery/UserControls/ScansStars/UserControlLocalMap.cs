@@ -121,7 +121,7 @@ namespace EDDiscovery.UserControls
             if (he?.System != null && he.System.HasCoordinate)
             {
                 computer.CalculateClosestSystems(he.System,
-                    (s, d) => BeginInvoke((MethodInvoker)delegate { NewStarListComputed(s, d); }),
+                    (s, d) => this.ParentForm.BeginInvoke((MethodInvoker)delegate { NewStarListComputed(s, d); }),
                     maxitems, textMinRadius.Value, textMaxRadius.Value, true);
             }
         }
@@ -258,14 +258,12 @@ namespace EDDiscovery.UserControls
 
         private void textMinRadius_ValueChanged(object sender, EventArgs e)
         {
-            if (this.IsHandleCreated)
-                KickComputation(last_he ?? uctg.GetCurrentHistoryEntry);
+            KickComputation(last_he ?? uctg.GetCurrentHistoryEntry);
         }
 
         private void textMaxRadius_ValueChanged(object sender, EventArgs e)
         {
-            if (this.IsHandleCreated)
-                KickComputation(last_he ?? uctg.GetCurrentHistoryEntry);
+            KickComputation(last_he ?? uctg.GetCurrentHistoryEntry);
         }
 
         private void RefreshMap()
