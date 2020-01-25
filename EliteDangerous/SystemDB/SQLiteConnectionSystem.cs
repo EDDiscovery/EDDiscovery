@@ -23,7 +23,11 @@ namespace EliteDangerousCore.DB
     {
         const string tablepostfix = "temp"; // postfix for temp tables
 
-        public SQLiteConnectionSystem() : base(EliteDangerousCore.EliteConfigInstance.InstanceOptions.SystemDatabasePath, utctimeindicator: true)
+        public SQLiteConnectionSystem() : this(false)
+        {
+        }
+
+        public SQLiteConnectionSystem(bool ro) : base(EliteDangerousCore.EliteConfigInstance.InstanceOptions.SystemDatabasePath, utctimeindicator: true, mode: ro ? AccessMode.Reader : AccessMode.ReaderWriter)
         {
         }
 
