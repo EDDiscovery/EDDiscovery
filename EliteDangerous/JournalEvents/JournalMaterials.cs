@@ -140,7 +140,12 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = BaseUtils.FieldBuilder.Build("", FriendlyName, "< ; items".T(EDTx.JournalEntry_MatC), Count);
+            MaterialCommodityData mcd = MaterialCommodityData.GetByFDName(Name);
+            if (mcd != null)
+                info = BaseUtils.FieldBuilder.Build("", FriendlyName, "< (", mcd.TranslatedCategory, ";)", mcd.TranslatedType, "; items".T(EDTx.JournalEntry_MatC), Count);
+            else
+                info = BaseUtils.FieldBuilder.Build("", FriendlyName, "< ; items".T(EDTx.JournalEntry_MatC), Count);
+
             detailed = "";
         }
     }
@@ -168,7 +173,12 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = BaseUtils.FieldBuilder.Build("", FriendlyName, "< ; items".T(EDTx.JournalEntry_MatC), Count);
+            MaterialCommodityData mcd = MaterialCommodityData.GetByFDName(Name);
+            if (mcd != null)
+                info = BaseUtils.FieldBuilder.Build("", FriendlyName, "< (", mcd.TranslatedCategory, ";)", mcd.TranslatedType, "; items".T(EDTx.JournalEntry_MatC), Count);
+            else
+                info = BaseUtils.FieldBuilder.Build("", FriendlyName, "< ; items".T(EDTx.JournalEntry_MatC), Count);
+    
             detailed = "";
         }
     }
@@ -192,6 +202,10 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string info, out string detailed)
         {
             info = BaseUtils.FieldBuilder.Build("", FriendlyName);
+            MaterialCommodityData mcd = MaterialCommodityData.GetByFDName(Name);
+            if (mcd != null)
+                info += BaseUtils.FieldBuilder.Build(" (", mcd.TranslatedCategory, ";)", mcd.TranslatedType);
+
             if (DiscoveryNumber > 0)
                 info += string.Format(", Discovery {0}".T(EDTx.JournalMaterialDiscovered_DN), DiscoveryNumber);
             detailed = "";
