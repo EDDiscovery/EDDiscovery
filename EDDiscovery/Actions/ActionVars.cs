@@ -51,7 +51,7 @@ namespace EDDiscovery.Actions
 
                 vars[prefix + "Credits"] = he.Credits.ToString(ct);
 
-                vars[prefix + "TravelledDistance"] = he.TravelledDistance.ToString("0.0");
+                vars[prefix + "TravelledDistance"] = he.TravelledDistance.ToStringInvariant("0.0");
                 vars[prefix + "TravelledSeconds"] = he.TravelledSeconds.ToString();
                 vars[prefix + "IsTravelling"] = he.isTravelling.ToStringIntValue();
                 vars[prefix + "TravelledJumps"] = he.Travelledjumps.ToStringInvariant();
@@ -127,8 +127,8 @@ namespace EDDiscovery.Actions
                 sv = si.SubVehicle.ToString();
                 fullinfo = si.ShipFullInfo();
                 shortname = si.ShipShortName.Alt("Unknown");
-                fuel = si.FuelCapacity.ToString("0.0");
-                fuellevel = si.FuelLevel.ToString("0.0");
+                fuel = si.FuelCapacity.ToStringInvariant("0.0");
+                fuellevel = si.FuelLevel.ToStringInvariant("0.0");
                 cargo = si.CargoCapacity().ToStringInvariant();
             }
 
