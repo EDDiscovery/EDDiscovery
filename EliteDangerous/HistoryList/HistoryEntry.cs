@@ -131,7 +131,7 @@ namespace EliteDangerousCore
         {
         }
 
-        public static HistoryEntry FromJournalEntry(JournalEntry je, HistoryEntry prev, out bool journalupdate)
+        public static HistoryEntry FromJournalEntry(JournalEntry je, HistoryEntry prev, bool checkdbforunknownsystem , out bool journalupdate)
         {
             ISystem isys = prev == null ? new SystemClass("Unknown") : prev.System;
             int indexno = prev == null ? 1 : prev.Indexno + 1;
@@ -181,7 +181,7 @@ namespace EliteDangerousCore
                     newsys = new SystemClass(jl.StarSystem);         // this will be a synthesised one, unless we find an EDSM to replace it
                     newsys.EDSMID = je.EdsmID;
 
-                    ISystem s = SystemCache.FindSystem(newsys);      // did we find it?
+                    ISystem s = checkdbforunknownsystem ? SystemCache.FindSystem(newsys) : null;      // did we find it?
 
                     if (s != null)                                  // found a system..
                     {

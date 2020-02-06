@@ -335,7 +335,7 @@ namespace EDDiscovery.Actions
                                     }
                                     else
                                     {
-                                        EliteDangerousCore.HistoryEntry he = EliteDangerousCore.HistoryEntry.FromJournalEntry(je, null, out bool journalupdate);
+                                        EliteDangerousCore.HistoryEntry he = EliteDangerousCore.HistoryEntry.FromJournalEntry(je, null, true, out bool journalupdate);
                                         (ap.actioncontroller as ActionController).ActionRunOnEntry(he, Actions.ActionEventEDList.NewEntry(he), now: true);
                                     }
                                 }

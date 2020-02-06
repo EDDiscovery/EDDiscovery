@@ -891,7 +891,7 @@ namespace EliteDangerousCore
             HistoryEntry prev = GetLast;
 
             bool journalupdate = false;
-            HistoryEntry he = HistoryEntry.FromJournalEntry(je, prev, out journalupdate);     // we may check edsm for this entry
+            HistoryEntry he = HistoryEntry.FromJournalEntry(je, prev, true, out journalupdate);     // we may check edsm for this entry
 
             if (journalupdate)
             {
@@ -1017,6 +1017,11 @@ namespace EliteDangerousCore
 
             reportProgress(-1, "Creating History");
 
+            bool checkforunknownsystemsindb = true;
+
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+
             foreach (JournalEntry je in jlist)
             {
                 if (MergeEntries(jprev, je))        // if we merge.. we may have updated info, so reprint.
@@ -1038,7 +1043,14 @@ namespace EliteDangerousCore
                     continue;
                 }
 
-                HistoryEntry he = HistoryEntry.FromJournalEntry(je, prev, out bool journalupdate);
+                long timetoload = sw.ElapsedMilliseconds;
+                HistoryEntry he = HistoryEntry.FromJournalEntry(je, prev, checkforunknownsystemsindb, out bool journalupdate);
+
+                if (sw.ElapsedMilliseconds - timetoload > 100)
+                {
+                    System.Diagnostics.Debug.WriteLine("DB is slow - probably 3dmap is being initialised, give up checking for old systems");
+                    checkforunknownsystemsindb = false;
+                }
 
                 prev = he;
                 jprev = je;
