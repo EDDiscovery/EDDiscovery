@@ -540,7 +540,7 @@ namespace EDDiscovery
             {
                 if (kbdActions.IsAnyCurrentlyOrHasBeenPressed())                     // if any actions..
                 {
-                    System.Diagnostics.Debug.WriteLine("Keys pressed");
+                    //System.Diagnostics.Debug.WriteLine("Keys pressed");
 
                     float zoomlimited = Math.Min(Math.Max(zoom.Current, 0.01F), 15.0F);
                     if ( StandardKeyboardHandler.Movement(kbdActions, position, matrixcalc.InPerspectiveMode, camera.Current, msticks * (1.0f / zoomlimited), toolStripButtonEliteMovement.Checked) )
