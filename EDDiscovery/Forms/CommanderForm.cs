@@ -60,7 +60,7 @@ namespace EDDiscovery.Forms
             textBoxBorderInaraName.Text = cmdr.InaraName;
             checkBoxCustomInara.Checked = cmdr.SyncToInara;
 
-            extTextBoxAutoCompleteHomeSystem.Text = cmdr.HomeSystemTextOrSol;
+            extTextBoxAutoCompleteHomeSystem.Text = cmdr.HomeSystem;
             extTextBoxAutoCompleteHomeSystem.SetAutoCompletor(EliteDangerousCore.DB.SystemCache.ReturnSystemAutoCompleteList, true);
 
             textBoxDefaultZoom.ValueNoChange = cmdr.MapZoom;
@@ -94,7 +94,7 @@ namespace EDDiscovery.Forms
             cmdr.InaraAPIKey = textBoxBorderInaraAPIKey.Text;
             cmdr.InaraName = textBoxBorderInaraName.Text;
             cmdr.SyncToInara = checkBoxCustomInara.Checked;
-            cmdr.HomeSystemTextOrSol = extTextBoxAutoCompleteHomeSystem.Text;
+            cmdr.HomeSystem = extTextBoxAutoCompleteHomeSystem.Text;
             cmdr.MapZoom = float.TryParse(textBoxDefaultZoom.Text, out float res) ? res : 1.0f;
             cmdr.MapCentreOnSelection = radioButtonHistorySelection.Checked;
             cmdr.MapColour = panel_defaultmapcolor.BackColor.ToArgb();

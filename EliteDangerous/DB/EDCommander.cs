@@ -141,7 +141,7 @@ namespace EliteDangerousCore
                                 other.SyncToEddn, 
                                 other.SyncToEGO, other.EGOName, other.EGOAPIKey, 
                                 other.SyncToInara, other.InaraName, other.InaraAPIKey, 
-                                other.homesystem,  other.MapZoom, other.MapCentreOnSelection, other.MapColour,
+                                other.HomeSystem,  other.MapZoom, other.MapCentreOnSelection, other.MapColour,
                                 other.SyncToIGAU);
         }
 
@@ -455,7 +455,7 @@ namespace EliteDangerousCore
 
             SyncToEddn = Convert.ToBoolean(reader["SyncToEddn"]);
 
-            homesystem = Convert.ToString(reader["HomeSystem"]);        // may be null
+            HomeSystem = Convert.ToString(reader["HomeSystem"]) ?? "";        // may be null
 
             MapZoom = reader["MapZoom"] is System.DBNull ? 1.0f : (float)Convert.ToDouble(reader["MapZoom"]);
             MapColour = reader["MapColour"] is System.DBNull ? System.Drawing.Color.Red.ToArgb() : Convert.ToInt32(reader["MapColour"]);
@@ -493,11 +493,28 @@ namespace EliteDangerousCore
         public bool SyncToEddn { set; get; }
 
         private string homesystem = "";
-        public string HomeSystemTextOrSol { get { return homesystem.HasChars() ? homesystem : "Sol"; } set { homesystem = value; } }
-        public ISystem HomeSystemIOrSol { get
+        private ISystem lookuphomesys = null;
+        private string lastlookuphomename = null;
+        public string HomeSystem { get { return homesystem; } set { homesystem = value; lookuphomesys = null; lastlookuphomename = null; } }
+        public ISystem HomeSystemI
+        {
+            get
             {
-                return SystemCache.FindSystem(HomeSystemTextOrSol) ?? new SystemClass("Sol", 0, 0, 0);
-            } }
+                if (homesystem.HasChars())
+                {
+                    if (lastlookuphomename != homesystem)
+                    {
+                        lastlookuphomename = homesystem;
+                        lookuphomesys = SystemCache.FindSystem(homesystem);
+                    }
+                }
+
+                return lookuphomesys;
+            }
+        }
+
+        public string HomeSystemTextOrSol { get { return homesystem.HasChars() ? homesystem : "Sol"; } }
+        public ISystem HomeSystemIOrSol {  get { return HomeSystemI ?? new SystemClass("Sol", 0, 0, 0); } }
 
         public float MapZoom { set; get; } = 1.0f;
         public int MapColour { set; get; } = System.Drawing.Color.Red.ToArgb();
