@@ -255,6 +255,7 @@ namespace EDDiscovery
                 int painted = 0;
 
                 //string res = "";  // used to view whats added/removed/draw..
+                //System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch(); sw.Start();
 
                 foreach (StarGrid.InViewInfo inview in inviewlist.Values)            // for all in viewport, sorted by distance from camera position
                 {
@@ -274,7 +275,11 @@ namespace EDDiscovery
                     }
                     else if (painted < maxstars)
                     {
-                        ISystem sc = _formmap.FindSystem(inview.position);               // with the open connection, find this star..
+                        //System.Diagnostics.Debug.WriteLine(sw.ElapsedMilliseconds + " Names lookup " + inview.position);
+
+                        ISystem sc = _formmap.FindSystemInSystemlist(inview.position);
+                        if ( sc == null )
+                            sc = SystemCache.GetSystemByPosition(inview.position.X, inview.position.Y, inview.position.Z, 5000);
 
                         if (sc != null)     // if can't be resolved, ignore
                         {
@@ -284,7 +289,8 @@ namespace EDDiscovery
                             draw = true;
                             painted++;
 
-                            //System.Diagnostics.Debug.WriteLine("Found " + inview.position);
+                            //System.Diagnostics.Debug.WriteLine(sw.ElapsedMilliseconds + " Added " + inview.position);
+
                             //Tools.LogToFile(String.Format("starnamesest: push {0}", sys.Pos));
                             //res += "N";
                         }
@@ -346,7 +352,7 @@ namespace EDDiscovery
 
             _formmap.BeginInvoke((System.Windows.Forms.MethodInvoker)delegate              // kick the UI thread to process.
             {
-                System.Diagnostics.Debug.WriteLine("Tell forground to change");
+                System.Diagnostics.Debug.WriteLine("Names search redisplay");
                 _formmap.ChangeNamedStars();
             });
         }

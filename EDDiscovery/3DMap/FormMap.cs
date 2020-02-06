@@ -98,8 +98,8 @@ namespace EDDiscovery
         private Point mouseStartTranslateXZ = new Point(int.MinValue, int.MinValue);
         private Point mouseDownPos;
 
+        //Timer mousehovertick = new Timer();
         private Point mouseHover;                          // Hover system, point, ticker, tooltip
-        Timer mousehovertick = new Timer();
         System.Windows.Forms.ToolTip mousehovertooltip = null;
 
         public List<HistoryEntry> systemlist { get; set; }
@@ -132,7 +132,7 @@ namespace EDDiscovery
         public void Prepare(ISystem historysel, string homesys, ISystem centersys, float zoom,
                             List<HistoryEntry> visited)
         {
-            ISystem homeSystem = (homesys != null) ? FindSystem(homesys) : null;
+            ISystem homeSystem = (homesys != null) ? FindSystem(homesys,true) : null;
             Prepare(historysel, homeSystem, centersys, zoom, visited);
         }
 
@@ -341,10 +341,11 @@ namespace EDDiscovery
         {
             base.OnLoad(e);
 
-            KeyDown += new KeyEventHandler(kbdActions.KeyDown);
-            glControl.KeyDown += new KeyEventHandler(kbdActions.KeyDown);
-            KeyUp += new KeyEventHandler(kbdActions.KeyUp);
-            glControl.KeyUp += new KeyEventHandler(kbdActions.KeyUp);
+//            KeyDown += FormMap_KeyDown;
+            glControl.KeyDown += FormMap_KeyDown;
+            //KeyUp += FormMap_KeyUp;
+            glControl.KeyUp += FormMap_KeyUp;
+
 
             LoadMapImages();
             FillExpeditions();
@@ -363,12 +364,22 @@ namespace EDDiscovery
             GenerateDataSetsSystemList();
             GenerateDataSetsRouteTri();
 
-            mousehovertick.Tick += new EventHandler(MouseHoverTick);
-            mousehovertick.Interval = 250;
+           // mousehovertick.Tick += new EventHandler(MouseHoverTick);
+          //  mousehovertick.Interval = 250;
 
             SetCenterSystemTo(centerSystem);                   // move to this..
 
             textboxFrom.SetAutoCompletor(SystemCache.ReturnSystemAdditionalListForAutoComplete);
+        }
+
+        private void FormMap_KeyUp(object sender, KeyEventArgs e)
+        {
+            kbdActions.KeyUp(e.Control, e.Shift, e.Alt, e.KeyCode);
+        }
+
+        private void FormMap_KeyDown(object sender, KeyEventArgs e)
+        {
+            kbdActions.KeyDown(e.Control, e.Shift, e.Alt, e.KeyCode);
         }
 
         protected override void OnShown(EventArgs e)
@@ -525,21 +536,36 @@ namespace EDDiscovery
             int msticks = (int)(elapsed - lastsystemtickinterval);
             lastsystemtickinterval = elapsed;
 
-            if (isActivated && glControl.Focused)                      // if we can accept keys
+            if (isActivated && glControl.Focused)                           // if we can accept keys
             {
-                if (kbdActions.IsAnyPressed())                         // if any actions..
+                if (kbdActions.IsAnyCurrentlyOrHasBeenPressed())                     // if any actions..
                 {
-                    position.KillSlew();
-                    camera.KillSlew();
-                    zoom.KillSlew();
+                    System.Diagnostics.Debug.WriteLine("Keys pressed");
 
                     float zoomlimited = Math.Min(Math.Max(zoom.Current, 0.01F), 15.0F);
-                    StandardKeyboardHandler.Movement(kbdActions, position, matrixcalc.InPerspectiveMode, camera.Current, msticks * (1.0f / zoomlimited), toolStripButtonEliteMovement.Checked);
-                    StandardKeyboardHandler.Camera(kbdActions, camera, msticks);
+                    if ( StandardKeyboardHandler.Movement(kbdActions, position, matrixcalc.InPerspectiveMode, camera.Current, msticks * (1.0f / zoomlimited), toolStripButtonEliteMovement.Checked) )
+                    {
+                        position.KillSlew();
+                        camera.KillSlew();
+                        zoom.KillSlew();
+                    }
+
+                    if ( StandardKeyboardHandler.Camera(kbdActions, camera, msticks) )
+                    {
+                        position.KillSlew();
+                        camera.KillSlew();
+                        zoom.KillSlew();
+                    }
+
+                    if (StandardKeyboardHandler.Zoom(kbdActions, zoom, msticks))
+                    {
+                        position.KillSlew();
+                        camera.KillSlew();
+                    }
 
                     HandleSpecialKeys(kbdActions);                     // special keys for us
 
-                    StandardKeyboardHandler.Zoom(kbdActions, zoom, msticks);
+                    kbdActions.ClearHasBeenPressed();
                 }
             }
             else
@@ -594,7 +620,7 @@ namespace EDDiscovery
                 {
                     lastcameranorm.SetGrossChanged();                  // make sure gross does not trip yet..     
                     UpdateDataSetsDueToZoomOrFlip(lastcameranorm.CameraZoomed);
-                    //Console.WriteLine("{0}  ZOOM repaint" , _systemtickinterval.ElapsedMilliseconds);
+                    //System.Diagnostics.Debug.WriteLine("{0}  ZOOM repaint", systemtickinterval.ElapsedMilliseconds);
                 }
                 else if (lastcameranorm.CameraDirGrossChanged )
                 {
@@ -647,6 +673,7 @@ namespace EDDiscovery
             {
                 requestrepaint = false;
                 glControl.Invalidate();                 // and kick paint 
+                //System.Diagnostics.Debug.WriteLine("Repaint");
             }
         }
 
@@ -669,47 +696,47 @@ namespace EDDiscovery
 
         public void HandleSpecialKeys(BaseUtils.KeyboardState _kbdActions)
         {
-            if (_kbdActions.IsPressedRemove(Keys.F3))
+            if (_kbdActions.HasBeenPressed(Keys.F3))
             {
                 starnameslist.IncreaseStarLimit();
                 RequestStarNameRecalc();
             }
 
-            if (_kbdActions.IsPressedRemove(Keys.F4))
+            if (_kbdActions.HasBeenPressed(Keys.F4))
             {
                 starnameslist.DecreaseStarLimit();
                 RequestStarNameRecalc();
             }
 
-            if (_kbdActions.IsPressedRemove(Keys.F5))
+            if (_kbdActions.HasBeenPressed(Keys.F5))
             {
                 maprecorder.ToggleRecord(false);
                 SetDropDownRecordImage();
             }
-            if (_kbdActions.IsPressedRemove(Keys.F6))
+            if (_kbdActions.HasBeenPressed(Keys.F6))
             {
                 maprecorder.ToggleRecord(true);
                 SetDropDownRecordImage();
             }
-            if (_kbdActions.IsPressedRemove(Keys.F7))
+            if (_kbdActions.HasBeenPressed(Keys.F7))
             {
                 maprecorder.RecordStepDialog(position.Current, camera.Current, zoom.Current);
             }
-            if (_kbdActions.IsPressedRemove(Keys.F8))
+            if (_kbdActions.HasBeenPressed(Keys.F8))
             {
                 maprecorder.TogglePause();
                 SetDropDownRecordImage();
             }
-            if (_kbdActions.IsPressedRemove(Keys.F9))
+            if (_kbdActions.HasBeenPressed(Keys.F9))
             {
                 maprecorder.TogglePlayBack();
                 SetDropDownRecordImage();
             }
-            if (_kbdActions.IsPressedRemove(Keys.F1))
+            if (_kbdActions.HasBeenPressed(Keys.F1))
             {
                 toolStripButtonHelp_Click(null, null);
             }
-            if (_kbdActions.IsPressedRemove(Keys.F) && _kbdActions.Ctrl)
+            if (_kbdActions.HasBeenPressed(Keys.F) && _kbdActions.Ctrl)
             {
                 fpson = !fpson;
                 UpdateStatus();
@@ -1065,7 +1092,7 @@ namespace EDDiscovery
         public bool SetCenterSystemTo(string name)
         {
             if (Is3DMapsRunning)                         // if null, we are not up and running
-                return SetCenterSystemTo(FindSystem(name));
+                return SetCenterSystemTo(FindSystem(name,true));
             else
                 return false;
         }
@@ -1187,7 +1214,7 @@ namespace EDDiscovery
                 HistoryEntry he = HistoryList.FindLastFSDKnownPosition(systemlist);
 
                 if (he != null )
-                    SetCenterSystemTo(FindSystem(he.System.Name));
+                    SetCenterSystemTo(FindSystem(he.System.Name,true));
                 else
                     ExtendedControls.MessageBoxTheme.Show(this, "No stars with defined co-ordinates available in travel history");
             }
@@ -1561,7 +1588,7 @@ namespace EDDiscovery
             bool notedsystem = false;
             GalacticMapObject gmo = null;
 
-            GetMouseOverItem(e.X, e.Y, out cursystem, out curbookmark, out notedsystem, out gmo);
+            GetMouseOverItem(e.X, e.Y, out cursystem, out curbookmark, out notedsystem, out gmo, true);
             //System.Diagnostics.Debug.WriteLine("{0} Mouse over {1}", Environment.TickCount % 10000, cursystem);
 
             if (e.Button == System.Windows.Forms.MouseButtons.Left)            // left clicks associate with systems..
@@ -1595,6 +1622,7 @@ namespace EDDiscovery
                     {
                         Trace.WriteLine("Copying text to clipboard failed");
                     }
+
                 }
                 else if (curbookmark != null)                                   // region bookmark..
                 {
@@ -1624,6 +1652,8 @@ namespace EDDiscovery
                     GenerateDataSetsSelectedSystems();
                     RequestPaint();
                 }
+
+                DisplayTip(clickedSystem, curbookmark, gmo);
             }
 
             if (e.Button == System.Windows.Forms.MouseButtons.Right)                    // right clicks are about bookmarks.
@@ -1667,8 +1697,6 @@ namespace EDDiscovery
             }
         }
 
-   
-
         private void glControl_DoubleClick(object sender, EventArgs e)
         {
             //System.Diagnostics.Debug.WriteLine("{0} Double click", Environment.TickCount%10000);
@@ -1692,8 +1720,6 @@ namespace EDDiscovery
 
                     camera.Rotate(new Vector3((float)(-dy / 4.0f), (float)(dx / 4.0f), 0));
                 }
-
-                mousehovertick.Stop();
             }
             else if (e.Button == System.Windows.Forms.MouseButtons.Right)
             {
@@ -1710,8 +1736,6 @@ namespace EDDiscovery
 
                     position.Translate(new Vector3(0, -dy * (1.0f / zoom.Current) * 2.0f, 0));
                 }
-
-                mousehovertick.Stop();
             }
             else if (e.Button == (System.Windows.Forms.MouseButtons.Left | System.Windows.Forms.MouseButtons.Right))
             {
@@ -1732,20 +1756,16 @@ namespace EDDiscovery
 
                     position.Translate(new Vector3(translation.X,0, translation.Y));
                 }
-
-                mousehovertick.Stop();
             }
-            else //
+            else 
             {
                 if (Math.Abs(e.X - mouseHover.X) + Math.Abs(e.Y - mouseHover.Y) > 8)
                     KillHover();                                // we move we kill the hover.
 
-                                                                // no tool tip, not slewing, not ticking..
-                if (mousehovertooltip == null && !position.InSlew && !camera.InSlew && !mousehovertick.Enabled)
+                //                                                // no tool tip, not slewing, not ticking.. record location so we know if we need to cancel
+                if (mousehovertooltip == null && !position.InSlew && !camera.InSlew )//&& !mousehovertick.Enabled)
                 {
-                    //Console.WriteLine("{0} Start tick", Environment.TickCount);
                     mouseHover = e.Location;
-                    mousehovertick.Start();
                 }
             }
         }
@@ -1754,27 +1774,13 @@ namespace EDDiscovery
         {
             if (mousehovertooltip != null)                                 // kill the tool tip
             {
-                //Console.WriteLine("{0} kill tool tip move mouse", Environment.TickCount);
                 mousehovertooltip.Dispose();
                 mousehovertooltip = null;
             }
-
-            //Console.WriteLine("{0} kill hover", Environment.TickCount);
-            mousehovertick.Stop();
         }
 
-        void MouseHoverTick(object sender, EventArgs e)
-        {
-            mousehovertick.Stop();
-
-            //Console.WriteLine("{0} Hover tick tripped slew {1}", Environment.TickCount, _cameraSlewProgress);
-
-            ISystem hoversystem = null;
-            BookmarkClass curbookmark = null;
-            bool notedsystem = false;
-            GalacticMapObject gmo = null;
-            GetMouseOverItem(mouseHover.X, mouseHover.Y, out hoversystem, out curbookmark, out notedsystem, out gmo);
-
+        void DisplayTip(ISystem hoversystem, BookmarkClass curbookmark, GalacticMapObject gmo)
+        { 
             string info = null, sysname = null;
             Vector3d pos = new Vector3d(0,0,0);
 
@@ -2079,7 +2085,7 @@ namespace EDDiscovery
             return curobj;
         }
 
-        private ISystem GetMouseOverSystem(int x, int y, out float cursysdistz)
+        private ISystem GetMouseOverSystem(int x, int y, bool checksysdb , out float cursysdistz)
         {
             x = Math.Min(Math.Max(x, 5), glControl.Width - 5);
             y = Math.Min(Math.Max(glControl.Height - y, 5), glControl.Height - 5);
@@ -2093,8 +2099,8 @@ namespace EDDiscovery
 
             ISystem f = null;
 
-            if (posofsystem != null)
-                f = FindSystem(new Vector3(posofsystem.Value.X, posofsystem.Value.Y, posofsystem.Value.Z));
+            if (posofsystem != null )
+                f = FindSystem(new Vector3(posofsystem.Value.X, posofsystem.Value.Y, posofsystem.Value.Z),checksysdb);
 
             return f;
         }
@@ -2107,7 +2113,7 @@ namespace EDDiscovery
 
         private void GetMouseOverItem(int x, int y, out ISystem cursystem,  // can return both, if a system bookmark is clicked..
                                                     out BookmarkClass curbookmark, out bool notedsystem,
-                                                    out GalacticMapObject galobj)
+                                                    out GalacticMapObject galobj , bool checksysdb)
         {
             cursystem = null;
             curbookmark = null;
@@ -2122,7 +2128,7 @@ namespace EDDiscovery
                 if (curbookmark != null)
                 {
                     if ( curbookmark.StarName != null )            // if starname set, see if we can find it
-                        cursystem = FindSystem(curbookmark.StarName);       // find, either in visited system, or in db
+                        cursystem = FindSystem(curbookmark.StarName,true);       // find, either in visited system, or in db
 
                     return;
                 }
@@ -2146,14 +2152,14 @@ namespace EDDiscovery
                 return;
 
             float curdistsystem;
-            cursystem = GetMouseOverSystem(x, y, out curdistsystem);
+            cursystem = GetMouseOverSystem(x, y, checksysdb , out curdistsystem);
         }
 
         #endregion
 
         #region Misc
 
-        public ISystem FindSystem(string name)    // nice wrapper for this
+        private ISystem FindSystem(string name, bool checksystemdb)    // find system either in systemlist or db if allowed.  only allowed in formmap due to cursor
         {
             if (systemlist != null)
             {
@@ -2163,11 +2169,18 @@ namespace EDDiscovery
                     return sys.System;
             }
 
-            ISystem isys = SystemCache.FindSystem(name);
-            return isys;
+            if (checksystemdb)
+            {
+                Cursor = Cursors.WaitCursor;
+                ISystem sys = SystemCache.FindSystem(name);
+                Cursor = Cursors.Default;
+                return sys;
+            }
+            else
+                return null;
         }
 
-        public ISystem FindSystem(Vector3 pos)
+        private ISystem FindSystem(Vector3 pos, bool checksystemdb) // find system either in systemlist or db if allowed.  only allowed in formmap due to cursor
         {
             if (systemlist != null)
             {
@@ -2177,14 +2190,35 @@ namespace EDDiscovery
                     return vsc.System;
             }
 
-            return SystemCache.GetSystemByPosition(pos.X, pos.Y, pos.Z, 5000);
+            if (checksystemdb)
+            {
+                Cursor = Cursors.WaitCursor;
+                ISystem sys = SystemCache.GetSystemByPosition(pos.X, pos.Y, pos.Z, 5000);
+                Cursor = Cursors.Default;
+                return sys;
+            }
+            else
+                return null;
+        }
+
+        public ISystem FindSystemInSystemlist(Vector3 pos)  // allowable to be called from external
+        {
+            if (systemlist != null)
+            {
+                HistoryEntry vsc = HistoryList.FindByPos(systemlist, pos.X, pos.Y, pos.Z, 0.1);
+
+                if (vsc != null)
+                    return vsc.System;
+            }
+
+            return null;
         }
 
         private ISystem SafeSystem(ISystem s)
         {
             if (s == null)
             {
-                s = FindSystem("Sol");
+                s = FindSystem("Sol",true);
 
                 if (s == null)
                     s = new SystemClass("Sol", 0, 0, 0);
@@ -2196,7 +2230,7 @@ namespace EDDiscovery
         public string FindSystemOrGMO(string name, out ISystem sys, out GalacticMapObject gmo , out Vector3 loc )
         {
             gmo = null;
-            sys = FindSystem(textboxFrom.Text);
+            sys = FindSystem(textboxFrom.Text,true);
             loc = new Vector3(0, 0, 0);
 
             if (sys != null)
