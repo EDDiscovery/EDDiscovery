@@ -290,10 +290,14 @@ namespace EDDiscovery.UserControls
             if (typename.IsEmpty())
                 typename = ShipModuleData.Instance.GetItemProperties(sm.ItemFD).ModType;
 
+            string eng = "";
+            if ( sm.Engineering != null )
+                eng = sm.Engineering.FriendlyBlueprintName + ":" + sm.Engineering.Level.ToStringInvariant();
+
             object[] rowobj = { typename,
                                 sm.Item, sm.Slot, ammo,
                                 sm.Mass > 0 ? (sm.Mass.ToString("0.#")+"t") : "",
-                                sm.Engineering?.FriendlyBlueprintName ?? "",
+                                eng,
                                 value, sm.PE() };
 
             dataGridViewModules.Rows.Add(rowobj);
