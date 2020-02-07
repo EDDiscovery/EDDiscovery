@@ -98,9 +98,9 @@ namespace EDDiscovery
         private Point mouseStartTranslateXZ = new Point(int.MinValue, int.MinValue);
         private Point mouseDownPos;
 
-        //Timer mousehovertick = new Timer();
-        private Point mouseHover;                          // Hover system, point, ticker, tooltip
-        System.Windows.Forms.ToolTip mousehovertooltip = null;
+        bool tooltipon = false;
+        private Point tooltipPosition;                      
+        System.Windows.Forms.ToolTip controltooltip = new ToolTip();
 
         public List<HistoryEntry> systemlist { get; set; }
         private List<ISystem> plannedRoute { get; set; }
@@ -212,6 +212,12 @@ namespace EDDiscovery
             discoveryForm.OnNewEntry += UpdateSystemList;
             discoveryForm.PrimaryCursor.OnTravelSelectionChanged -= PrimaryCursor_OnTravelSelectionChanged;
             discoveryForm.PrimaryCursor.OnTravelSelectionChanged += PrimaryCursor_OnTravelSelectionChanged;
+
+            controltooltip.InitialDelay = 250;
+            controltooltip.AutoPopDelay = 30000;
+            controltooltip.ReshowDelay = 500;
+            controltooltip.IsBalloon = true;
+
         }
 
         public ToolStripMenuItem AddGalMapButton( string name, Object tt, bool? checkedbut)
@@ -341,9 +347,7 @@ namespace EDDiscovery
         {
             base.OnLoad(e);
 
-//            KeyDown += FormMap_KeyDown;
             glControl.KeyDown += FormMap_KeyDown;
-            //KeyUp += FormMap_KeyUp;
             glControl.KeyUp += FormMap_KeyUp;
 
 
@@ -379,6 +383,7 @@ namespace EDDiscovery
 
         private void FormMap_KeyDown(object sender, KeyEventArgs e)
         {
+            System.Diagnostics.Debug.WriteLine("Key down" + e.KeyCode);
             kbdActions.KeyDown(e.Control, e.Shift, e.Alt, e.KeyCode);
         }
 
@@ -626,7 +631,7 @@ namespace EDDiscovery
                 {
                     UpdateDataSetsDueToZoomOrFlip(lastcameranorm.CameraZoomed);
                 }
-                KillHover();
+                KillToolTip();
                 UpdateStatus();
             }
             else
@@ -701,13 +706,11 @@ namespace EDDiscovery
                 starnameslist.IncreaseStarLimit();
                 RequestStarNameRecalc();
             }
-
             if (_kbdActions.HasBeenPressed(Keys.F4))
             {
                 starnameslist.DecreaseStarLimit();
                 RequestStarNameRecalc();
             }
-
             if (_kbdActions.HasBeenPressed(Keys.F5))
             {
                 maprecorder.ToggleRecord(false);
@@ -967,6 +970,7 @@ namespace EDDiscovery
                     builder.UpdateGridCoordZoom(ref datasets_gridlinecoords, zoom.Current);
             }
 
+            System.Diagnostics.Debug.WriteLine("Update gal rotate " + lastcameranorm.Rotation);
             builder.UpdateGalObjects(ref datasets_galmapobjects, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), lastcameranorm.Rotation);
 
             if (showBookmarksToolStripMenuItem.Checked)
@@ -1021,6 +1025,7 @@ namespace EDDiscovery
             datasets_selectedsystems = null;
             DatasetBuilder builder = new DatasetBuilder();
             datasets_selectedsystems = builder.BuildSelected(centerSystem, clickedSystem, clickedGMO, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), lastcameranorm.Rotation);
+            Debug.Assert(datasets_selectedsystems != null);
         }
 
         private void GenerateDataSetsBNG()      // because the target is bound up with all three, best to do all three at once in ONE FUNCTION!
@@ -1136,19 +1141,19 @@ namespace EDDiscovery
 
             string name = FindSystemOrGMO(textboxFrom.Text, out sys, out gmo, out loc);
 
-            if (name != null)
+            if (name != null && !(float.IsNaN(loc.X) || float.IsNaN(loc.Y) || float.IsNaN(loc.Z)))
             {
-                textboxFrom.Text = name;        // normalise name (user may have different 
+                textboxFrom.Text = name;        // normalise name (user may have different)
 
                 if (sys != null && moveto)
                     SetCenterSystemTo(sys);
                 else if (moveto)
-                    camera.Pan(loc,-1F);
+                    position.GoTo(loc, -1F);
                 else
-                    camera.LookAt(loc,position.Current,zoom.Current, 2F);
+                    camera.LookAt(position.Current,loc,zoom.Current, 2F);
             }
             else
-                ExtendedControls.MessageBoxTheme.Show(this, "System or Object " + textboxFrom.Text + " not found");
+                ExtendedControls.MessageBoxTheme.Show(this, "System or Object " + textboxFrom.Text + " not found/no position");
 
             glControl.Focus();
         }
@@ -1367,7 +1372,7 @@ namespace EDDiscovery
         {
             if (clickedSystem!=null)
                 SetCenterSystemTo(clickedSystem);
-            else
+            else 
                 position.GoTo(clickedposition,-1F);      // if nan, will ignore..
         }
 
@@ -1759,24 +1764,23 @@ namespace EDDiscovery
             }
             else 
             {
-                if (Math.Abs(e.X - mouseHover.X) + Math.Abs(e.Y - mouseHover.Y) > 8)
-                    KillHover();                                // we move we kill the hover.
-
-                //                                                // no tool tip, not slewing, not ticking.. record location so we know if we need to cancel
-                if (mousehovertooltip == null && !position.InSlew && !camera.InSlew )//&& !mousehovertick.Enabled)
+                if (tooltipon)
                 {
-                    mouseHover = e.Location;
+                    if (Math.Abs(e.X - tooltipPosition.X) + Math.Abs(e.Y - tooltipPosition.Y) > 8)
+                    {
+                        KillToolTip();
+                    }
                 }
+                else
+                    tooltipPosition = e.Location;
             }
         }
 
-        void KillHover()
+        void KillToolTip()
         {
-            if (mousehovertooltip != null)                                 // kill the tool tip
-            {
-                mousehovertooltip.Dispose();
-                mousehovertooltip = null;
-            }
+            controltooltip.SetToolTip(glControl, "");
+            controltooltip.Hide(glControl);
+            tooltipon = false;
         }
 
         void DisplayTip(ISystem hoversystem, BookmarkClass curbookmark, GalacticMapObject gmo)
@@ -1865,13 +1869,8 @@ namespace EDDiscovery
                 if (!string.IsNullOrWhiteSpace(curbookmark?.Note))
                     info += Environment.NewLine + "Bookmark Notes: " + curbookmark.Note.Trim();
 
-                mousehovertooltip = new System.Windows.Forms.ToolTip();
-                mousehovertooltip.InitialDelay = 0;
-                mousehovertooltip.AutoPopDelay = 30000;
-                mousehovertooltip.ReshowDelay = 0;
-                mousehovertooltip.IsBalloon = true;
-                mousehovertooltip.SetToolTip(glControl, info);
-   
+                controltooltip.SetToolTip(glControl, info);
+                tooltipon = true;
             }
         }
 

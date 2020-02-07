@@ -32,24 +32,33 @@ namespace EDDiscovery.Actions
         {
             EDDiscoveryForm discoveryform;
             ActionController actcontroller;
-            public ActionMessageFilter(EDDiscoveryForm frm, ActionController ac)
+            Type[] ignoredforms;
+
+            public ActionMessageFilter(EDDiscoveryForm frm, ActionController ac, Type[] ignorewhenactive )
             {
                 discoveryform = frm;
                 actcontroller = ac;
+                ignoredforms = ignorewhenactive;
             }
 
             public bool PreFilterMessage(ref Message m)
             {
                 if ((m.Msg == WM.KEYDOWN || m.Msg == WM.SYSKEYDOWN) && discoveryform.CanFocus)
                 {
-                    Keys k = (Keys)m.WParam;
+                    var activeform = System.Windows.Forms.Form.ActiveForm;
+                    //System.Diagnostics.Debug.WriteLine("Active form " + activeform?.GetType().Name);
 
-                    if (k != Keys.ControlKey && k != Keys.ShiftKey && k != Keys.Menu)
+                    if (ignoredforms == null || activeform == null || Array.IndexOf(ignoredforms, activeform.GetType()) == -1)
                     {
-                        string name = k.VKeyToString(Control.ModifierKeys);
-                        //System.Diagnostics.Debug.WriteLine("Keydown " + m.LParam + " " + name + " " + m.WParam + " " + Control.ModifierKeys);
-                        if (actcontroller.CheckKeys(name))
-                            return true;    // swallow, we did it
+                        Keys k = (Keys)m.WParam;
+
+                        if (k != Keys.ControlKey && k != Keys.ShiftKey && k != Keys.Menu)
+                        {
+                            string name = k.VKeyToString(Control.ModifierKeys);
+                            //System.Diagnostics.Debug.WriteLine("Keydown " + m.LParam + " " + name + " " + m.WParam + " " + Control.ModifierKeys);
+                            if (actcontroller.CheckKeys(name))
+                                return true;    // swallow, we did it
+                        }
                     }
                 }
 
@@ -82,7 +91,7 @@ namespace EDDiscovery.Actions
 
                 if (actionfilesmessagefilter == null)
                 {
-                    actionfilesmessagefilter = new ActionMessageFilter(discoveryform, this);
+                    actionfilesmessagefilter = new ActionMessageFilter(discoveryform, this, keyignoredforms);
                     Application.AddMessageFilter(actionfilesmessagefilter);
                 }
             }

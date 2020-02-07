@@ -265,7 +265,7 @@ namespace EDDiscovery
 
             msg.Invoke("Loading Action Packs");         // STAGE 4 Action packs
 
-            actioncontroller = new Actions.ActionController(this, Controller, this.Icon);
+            actioncontroller = new Actions.ActionController(this, Controller, this.Icon, new Type[] { typeof(FormMap) });
             actioncontroller.ReLoad();          // load system up here
 
             // Stage 5 Misc

@@ -62,10 +62,13 @@ namespace EDDiscovery.Actions
         Actions.ActionsFromInputDevices inputdevicesactions;
         BindingsFile frontierbindings;
 
-        public ActionController(EDDiscoveryForm frm, EDDiscoveryController ctrl, System.Drawing.Icon ic) : base(frm, ic)
+        Type[] keyignoredforms;
+
+        public ActionController(EDDiscoveryForm frm, EDDiscoveryController ctrl, System.Drawing.Icon ic, Type[] keyignoredforms = null) : base(frm, ic)
         {
             discoveryform = frm;
             discoverycontroller = ctrl;
+            this.keyignoredforms = keyignoredforms;
 
             #if !NO_SYSTEM_SPEECH
             // Windows TTS (2000 and above). Speech *recognition* will be Version.Major >= 6 (Vista and above)
