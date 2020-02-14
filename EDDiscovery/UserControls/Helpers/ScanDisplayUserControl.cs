@@ -669,14 +669,17 @@ namespace EDDiscovery.UserControls
         {
             if (rtbNodeInfo.Visible)
             {
+                int y = -panelStars.ScrollOffset;           // invert to get pixels down scrolled
+                int width = panelStars.Width * 7 / 16;
+
                 if (rtbNodeInfo.Tag != null && ((bool)rtbNodeInfo.Tag) == true)
-                    rtbNodeInfo.Location = new Point(panelStars.Width / 2 + panelStars.Width / 16, 10);
+                    rtbNodeInfo.Location = new Point(panelStars.Width - panelStars.ScrollBar.Width - 10 - width, y);
                 else
-                    rtbNodeInfo.Location = new Point(panelStars.Width / 16, 10);
+                    rtbNodeInfo.Location = new Point(10, y);
 
                 int h = Math.Min(rtbNodeInfo.EstimateVerticalSizeFromText(), panelStars.Height - 20);
 
-                rtbNodeInfo.Size = new Size(panelStars.Width * 7 / 16, h);
+                rtbNodeInfo.Size = new Size(width, h);
                 rtbNodeInfo.PerformLayout();    // not sure why i need this..
             }
         }
