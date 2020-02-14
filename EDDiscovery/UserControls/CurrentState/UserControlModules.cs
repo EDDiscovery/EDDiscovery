@@ -31,6 +31,8 @@ namespace EDDiscovery.UserControls
 
         private string storedmoduletext;
         private string travelhistorytext;
+        private HistoryEntry last_he = null;
+        private ShipInformation last_si = null;
 
         #region Init
 
@@ -79,7 +81,6 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNewUIEvent -= Discoveryform_OnNewUIEvent;
         }
 
-
         #endregion
 
         #region Display
@@ -94,55 +95,16 @@ namespace EDDiscovery.UserControls
             UpdateComboBox(hl);
         }
 
-        private void UpdateComboBox(HistoryList hl)
-        {
-            ShipInformationList shm = hl.shipinformationlist;
-            string cursel = comboBoxShips.Text;
-
-            comboBoxShips.Items.Clear();
-            comboBoxShips.Items.Add(travelhistorytext);
-            comboBoxShips.Items.Add(storedmoduletext);
-
-            var ownedships = (from x1 in shm.Ships where x1.Value.State == ShipInformation.ShipState.Owned && !ShipModuleData.IsSRVOrFighter(x1.Value.ShipFD) select x1.Value);
-            var notownedships = (from x1 in shm.Ships where x1.Value.State != ShipInformation.ShipState.Owned && !ShipModuleData.IsSRVOrFighter(x1.Value.ShipFD) select x1.Value);
-            var fightersrvs = (from x1 in shm.Ships where ShipModuleData.IsSRVOrFighter(x1.Value.ShipFD) select x1.Value);
-
-            var now = (from x1 in ownedships where x1.StoredAtSystem == null select x1.ShipNameIdentType).ToList();
-            comboBoxShips.Items.AddRange(now);
-
-            var stored = (from x1 in ownedships where x1.StoredAtSystem != null select x1.ShipNameIdentType).ToList();
-            comboBoxShips.Items.AddRange(stored);
-
-            comboBoxShips.Items.AddRange(notownedships.Select(x => x.ShipNameIdentType).ToList());
-            comboBoxShips.Items.AddRange(fightersrvs.Select(x => x.ShipNameIdentType).ToList());
-
-            if (cursel == "")
-                cursel = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbShipSave, "");
-
-            if (cursel == "" || !comboBoxShips.Items.Contains(cursel))
-                cursel = travelhistorytext;
-
-            comboBoxShips.Enabled = false;
-            comboBoxShips.SelectedItem = cursel;
-            comboBoxShips.Enabled = true;
-        }
-
         private void Discoveryform_OnNewUIEvent(UIEvent obj)
         {
             if (obj is EliteDangerousCore.UIEvents.UIFuel) // fuel UI update the SI information globally.
-                Display(last_he, discoveryform.history);
+                Display(last_he, discoveryform.history, true);
         }
 
         public override void InitialDisplay()
         {
-            Display(uctg.GetCurrentHistoryEntry, discoveryform.history);
+            Display(uctg.GetCurrentHistoryEntry, discoveryform.history , true);
         }
-
-        HistoryEntry last_he = null;
-        ShipInformation last_si = null;
-
-        private void Display(HistoryEntry he, HistoryList hl) =>
-            Display(he, hl, true);
 
         private void Display(HistoryEntry he, HistoryList hl, bool selectedEntry)
         {
@@ -153,10 +115,11 @@ namespace EDDiscovery.UserControls
             Display();
         }
 
-        private void Display()
+        private void Display()      // allow redisplay of last data
         {
-            DataGridViewColumn sortcol = dataGridViewModules.SortedColumn != null ? dataGridViewModules.SortedColumn : dataGridViewModules.Columns[0];
-            SortOrder sortorder = dataGridViewModules.SortOrder;
+            DataGridViewColumn sortcolprev = dataGridViewModules.SortedColumn != null ? dataGridViewModules.SortedColumn : dataGridViewModules.Columns[0];
+            SortOrder sortorderprev = dataGridViewModules.SortedColumn != null ? dataGridViewModules.SortOrder : SortOrder.Ascending;
+            int firstline = dataGridViewModules.FirstDisplayedScrollingRowIndex;
 
             dataGridViewModules.Rows.Clear();
 
@@ -198,8 +161,10 @@ namespace EDDiscovery.UserControls
                     DisplayShip(si);
             }
 
-            dataGridViewModules.Sort(sortcol, (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
-            dataGridViewModules.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
+            dataGridViewModules.Sort(sortcolprev, (sortorderprev == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
+            dataGridViewModules.Columns[sortcolprev.Index].HeaderCell.SortGlyphDirection = sortorderprev;
+            if (firstline >= 0 && firstline < dataGridViewModules.RowCount)
+                dataGridViewModules.FirstDisplayedScrollingRowIndex = firstline;
         }
 
         private void DisplayShip(ShipInformation si)
@@ -346,6 +311,38 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
+        private void UpdateComboBox(HistoryList hl)
+        {
+            ShipInformationList shm = hl.shipinformationlist;
+            string cursel = comboBoxShips.Text;
+
+            comboBoxShips.Items.Clear();
+            comboBoxShips.Items.Add(travelhistorytext);
+            comboBoxShips.Items.Add(storedmoduletext);
+
+            var ownedships = (from x1 in shm.Ships where x1.Value.State == ShipInformation.ShipState.Owned && !ShipModuleData.IsSRVOrFighter(x1.Value.ShipFD) select x1.Value);
+            var notownedships = (from x1 in shm.Ships where x1.Value.State != ShipInformation.ShipState.Owned && !ShipModuleData.IsSRVOrFighter(x1.Value.ShipFD) select x1.Value);
+            var fightersrvs = (from x1 in shm.Ships where ShipModuleData.IsSRVOrFighter(x1.Value.ShipFD) select x1.Value);
+
+            var now = (from x1 in ownedships where x1.StoredAtSystem == null select x1.ShipNameIdentType).ToList();
+            comboBoxShips.Items.AddRange(now);
+
+            var stored = (from x1 in ownedships where x1.StoredAtSystem != null select x1.ShipNameIdentType).ToList();
+            comboBoxShips.Items.AddRange(stored);
+
+            comboBoxShips.Items.AddRange(notownedships.Select(x => x.ShipNameIdentType).ToList());
+            comboBoxShips.Items.AddRange(fightersrvs.Select(x => x.ShipNameIdentType).ToList());
+
+            if (cursel == "")
+                cursel = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbShipSave, "");
+
+            if (cursel == "" || !comboBoxShips.Items.Contains(cursel))
+                cursel = travelhistorytext;
+
+            comboBoxShips.Enabled = false;
+            comboBoxShips.SelectedItem = cursel;
+            comboBoxShips.Enabled = true;
+        }
 
         private void comboBoxHistoryWindow_SelectedIndexChanged(object sender, EventArgs e)
         {
