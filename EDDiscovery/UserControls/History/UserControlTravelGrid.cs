@@ -450,10 +450,13 @@ namespace EDDiscovery.UserControls
             if (search.HasChars())
             {
                 string timestr = time.ToString();
+                int rown = EDDConfig.Instance.OrderRowsInverted ? item.Indexno : (discoveryform.history.Count - item.Indexno + 1);
+                string entryrow = rown.ToStringInvariant();
                 bool matched = timestr.IndexOf(search, StringComparison.InvariantCultureIgnoreCase) >= 0 ||
                                 item.EventSummary.IndexOf(search, StringComparison.InvariantCultureIgnoreCase) >= 0 ||
                                 EventDescription.IndexOf(search, StringComparison.InvariantCultureIgnoreCase) >= 0 ||
-                                note.IndexOf(search, StringComparison.InvariantCultureIgnoreCase) >= 0;
+                                note.IndexOf(search, StringComparison.InvariantCultureIgnoreCase) >= 0 ||
+                                entryrow.IndexOf(search, StringComparison.InvariantCultureIgnoreCase) >= 0;
                 if (!matched)
                     return null;
             }
