@@ -33,6 +33,8 @@ namespace EDDiscovery.UserControls
         private string DbFilterSave { get { return DBName((materials) ? "MaterialsGrid" : "CommoditiesGrid", "Filter2"); } }
         private string DbClearZeroSave { get { return DBName((materials) ? "MaterialsGrid" : "CommoditiesGrid", "ClearZero"); } }
 
+        MaterialCommoditiesList last_mcl;
+
         #region Init
 
         public UserControlMaterialCommodities()
@@ -140,7 +142,22 @@ namespace EDDiscovery.UserControls
 
         private void Display(MaterialCommoditiesList mcl)
         {
+            if (mcl == last_mcl)        // same list, nothing to do
+            {
+                //System.Diagnostics.Debug.WriteLine("Same mcl " + mcl?.GetHashCode());
+                return;
+            }
+
+            last_mcl = mcl;
+
+            //System.Diagnostics.Debug.WriteLine("Display mcl " + mcl.GetHashCode());
+
+            DataGridViewColumn sortcolprev = dataGridViewMC.SortedColumn != null ? dataGridViewMC.SortedColumn : dataGridViewMC.Columns[0];
+            SortOrder sortorderprev = dataGridViewMC.SortedColumn != null ? dataGridViewMC.SortOrder : SortOrder.Ascending;
+            int firstline = dataGridViewMC.FirstDisplayedScrollingRowIndex;
+
             dataGridViewMC.Rows.Clear();
+
             textBoxItems1.Text = textBoxItems2.Text = "";
 
             if (mcl == null)
@@ -183,10 +200,10 @@ namespace EDDiscovery.UserControls
                 }
             }
 
-            if (dataGridViewMC.SortedColumn != null && dataGridViewMC.SortOrder != SortOrder.None)
-            {
-                dataGridViewMC.Sort(dataGridViewMC.SortedColumn, dataGridViewMC.SortOrder == SortOrder.Descending ? ListSortDirection.Descending : ListSortDirection.Ascending);
-            }
+            dataGridViewMC.Sort(sortcolprev, (sortorderprev == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
+            dataGridViewMC.Columns[sortcolprev.Index].HeaderCell.SortGlyphDirection = sortorderprev;
+            if (firstline >= 0 && firstline < dataGridViewMC.RowCount)
+                dataGridViewMC.FirstDisplayedScrollingRowIndex = firstline;
 
             if (materials)
             {
