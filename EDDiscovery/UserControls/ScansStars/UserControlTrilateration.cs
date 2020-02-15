@@ -33,6 +33,8 @@ namespace EDDiscovery.UserControls
         private ISystem targetsystem;
         private List<WantedSystemClass> wanted;
         private List<string> pushed;
+        private List<string> sector;
+        private string DbSectorSave { get { return "TrilaterationSectorSystems" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
 
         private Thread EDSMSubmissionThread;
         private bool skipReadOnlyCells = false;
@@ -50,6 +52,7 @@ namespace EDDiscovery.UserControls
         {
             ColumnSystem.AutoCompleteGenerator = SystemCache.ReturnSystemAutoCompleteList;
             FreezeTrilaterationUI();
+            toolStripButtonSector.Checked = UserDatabase.Instance.GetSettingBool(DbSectorSave, false);
             toolStripTextBoxSystem.Text = "Press Start New".T(EDTx.UserControlTrilateration_ToolStripText);
 
             BaseUtils.Translator.Instance.Translate(this);
@@ -67,6 +70,8 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
+            UserDatabase.Instance.PutSettingBool(DbSectorSave, toolStripButtonSector.Checked);
+
             if (uctg is IHistoryCursorNewStarList)
                 (uctg as IHistoryCursorNewStarList).OnNewStarList -= Discoveryform_OnNewStarsForTrilat;
         }
@@ -119,6 +124,13 @@ namespace EDDiscovery.UserControls
                 Set(he.System);
         }
 
+        private void toolStripButtonSector_Click(object sender, EventArgs e)
+        {
+            HistoryEntry he = discoveryform.history.GetLastFSD;
+            if (he != null)
+                Set(he.System);
+        }
+
         public void LogText(string text)
         {
             LogTextColor(text, discoveryform.theme.TextBlockColor);
@@ -142,7 +154,7 @@ namespace EDDiscovery.UserControls
 
         private void dataGridViewClosestSystems_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-            if (e.RowIndex >= 0 && e.RowIndex < dataGridViewDistances.Rows.Count)
+            if (e.RowIndex >= 0 && e.RowIndex < dataGridViewClosestSystems.Rows.Count)
             {
                 var system = (ISystem)dataGridViewClosestSystems[1, e.RowIndex].Tag;
                 AddSystemToDataGridViewDistances(system);
@@ -616,6 +628,14 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        private void addAllSectorSystemsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (sector != null && sector.Any())
+            {
+                sector.ForEach(s => AddSystemToDataGridViewDistances(s, true));
+            }
+        }
+
         private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string txt = Clipboard.GetText(TextDataFormat.UnicodeText);
@@ -764,6 +784,12 @@ namespace EDDiscovery.UserControls
             Thread ViewPushedSystemsThread = new Thread(ViewPushedSystems) { Name = "EDSM get pushed systems" };
             ViewPushedSystemsThread.Start();
 
+            sector = null;
+            if (toolStripButtonSector.Checked)
+            {
+                Thread ViewSectorSystemsThread = new Thread(() => ViewSectorSystems(system)) { Name = "EDSM get sector systems" };
+                ViewSectorSystemsThread.Start();
+            }
         }
 
         public void ClearDataGridViewDistancesRows()
@@ -910,6 +936,46 @@ namespace EDDiscovery.UserControls
                 this.BeginInvoke(new MethodInvoker(() =>
                 {
                     LogTextHighlight("ViewPushedSystems Exception:" + ex.Message);
+                    LogText(ex.StackTrace);
+                }));
+            }
+        }
+
+        // Runs as a thread from Set
+        private void ViewSectorSystems(ISystem system)
+        {
+            try
+            {
+                EDSMClass edsm = new EDSMClass();
+                var splitName = system.Name.Split(' ');
+                if (splitName.Length < 3)
+                {
+                    sector = new List<string>();
+                    return;
+                }
+
+                var sectorName = string.Join("%20", splitName.Take(splitName.Length - 2));
+                sector = edsm.GetUnknownSystemsForSector(sectorName);
+
+                foreach (string systemName in sector)
+                {
+                    ISystem star = SystemCache.FindSystem(systemName);
+                    if (star == null)
+                        star = new SystemClass(systemName);
+
+                    BeginInvoke(new MethodInvoker(() =>
+                    {
+                        var index = dataGridViewClosestSystems.Rows.Add("Sector");
+                        dataGridViewClosestSystems[1, index].Value = systemName;
+                        dataGridViewClosestSystems[1, index].Tag = star;
+                    }));
+                }
+            }
+            catch (Exception ex)
+            {
+                this.BeginInvoke(new MethodInvoker(() =>
+                {
+                    LogTextHighlight("ViewSectorSystems Exception:" + ex.Message);
                     LogText(ex.StackTrace);
                 }));
             }
@@ -1063,6 +1129,5 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
-        
     }
 }
