@@ -954,7 +954,7 @@ namespace EDDiscovery.UserControls
                     return;
                 }
 
-                var sectorName = string.Join("%20", splitName.Take(splitName.Length - 2));
+                var sectorName = string.Join(" ", splitName.Take(splitName.Length - 2));
                 sector = edsm.GetUnknownSystemsForSector(sectorName);
 
                 if (!sector.Any())
@@ -962,6 +962,9 @@ namespace EDDiscovery.UserControls
                     BeginInvoke(new MethodInvoker(() => LogText("No systems with unknown coordinates were found for the current sector.".T(EDTx.UserControlTrilateration_NoSector) + Environment.NewLine)));
                     return;
                 }
+
+                BeginInvoke(new MethodInvoker(() => 
+                    LogText(string.Format("{0} systems with unknown coordinates found in {1} sector.".T(EDTx.UserControlTrilateration_SectorCount) + Environment.NewLine, sector.Count(), sectorName))));
 
                 foreach (string systemName in sector)
                 {
