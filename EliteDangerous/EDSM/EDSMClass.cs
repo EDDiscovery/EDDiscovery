@@ -215,14 +215,14 @@ namespace EliteDangerousCore.EDSM
         public List<string> GetUnknownSystemsForSector(string sectorName)
         {
             string query = $"api-v1/systems?systemName={sectorName}&onlyUnknownCoordinates=1";
-            return getSystemsForQuery(query, 30000);
+            return getSystemsForQuery(query);
         }
 
-        List<string> getSystemsForQuery(string query, int timeout = 5000)
+        List<string> getSystemsForQuery(string query)
         {
             List<string> systems = new List<string>();
 
-            var response = RequestGet(query, handleException: true, timeout: timeout);
+            var response = RequestGet(query, handleException: true);
             if (response.Error)
                 return systems;
 

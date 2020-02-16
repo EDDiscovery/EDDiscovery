@@ -634,7 +634,8 @@ namespace EDDiscovery
         UserControlTrilateration_Co, // Only systems with coordinates or already known to EDSM can be added
         UserControlTrilateration_PU, // Position unknown
         UserControlTrilateration_PF, // Position found
-
+        UserControlTrilateration_NotProcGen, // Sector name could not be derived from system name (it may not be procedurally generated).  Not getting sector systems.
+        UserControlTrilateration_NoSector, // No systems with unknown coordinates were found for the current sector.
 
         SearchMaterialsCommodities_RareCommodity, // , Rare Commodity
         SearchMaterialsCommodities_AND, // AND

@@ -13,18 +13,17 @@
  *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using EliteDangerousCore;
+using EliteDangerousCore.DB;
+using EliteDangerousCore.EDSM;
+using EliteDangerousCore.JournalEvents;
+using ExtendedControls;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
-using EliteDangerousCore.EDSM;
-using ExtendedControls;
-using EliteDangerousCore;
-using EliteDangerousCore.DB;
-using EliteDangerousCore.JournalEvents;
-using EDDiscovery.UserControls;
 
 namespace EDDiscovery.UserControls
 {
@@ -950,12 +949,19 @@ namespace EDDiscovery.UserControls
                 var splitName = system.Name.Split(' ');
                 if (splitName.Length < 3)
                 {
+                    BeginInvoke(new MethodInvoker(() => LogTextHighlight("Sector name could not be derived from system name (it may not be procedurally generated).  Not getting sector systems.".T(EDTx.UserControlTrilateration_NotProcGen) + Environment.NewLine))); 
                     sector = new List<string>();
                     return;
                 }
 
                 var sectorName = string.Join("%20", splitName.Take(splitName.Length - 2));
                 sector = edsm.GetUnknownSystemsForSector(sectorName);
+
+                if (!sector.Any())
+                {
+                    BeginInvoke(new MethodInvoker(() => LogText("No systems with unknown coordinates were found for the current sector.".T(EDTx.UserControlTrilateration_NoSector) + Environment.NewLine)));
+                    return;
+                }
 
                 foreach (string systemName in sector)
                 {
