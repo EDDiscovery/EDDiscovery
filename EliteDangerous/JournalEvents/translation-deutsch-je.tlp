@@ -770,7 +770,7 @@ SECTION JournalEntry
 .LegBounty: "{0} total {1:N0}" => "{0} Gesamt {1:N0}"
 .Target: "Target:" => "Ziel:"
 .Victimfaction: "Victim faction:" => "Opferfraktion:"
-.Faction: "Faction:" => "Franktion:"
+.Faction: "Faction:" => "Fraktion:"
 .from: "< from " => "< von "
 .dueto: "< , due to " => "< , wegen "
 .0: "{0} on {1}" => "{0} auf {1}"
