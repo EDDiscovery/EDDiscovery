@@ -79,7 +79,6 @@ namespace EDDiscovery.UserControls
         private string DbColumnSave { get { return DBName("TravelControl" ,  "DGVCol"); } }
         private string DbHistorySave { get { return DBName("EDUIHistory" ); } }
         private string DbFieldFilter { get { return DBName("TravelHistoryControlFieldFilter" ); } }
-        private string DbAutoTop { get { return DBName("TravelHistoryControlAutoTop"); } }
         private string DbOutlines { get { return DBName("TravelHistoryOutlines"); } }
 
         private HistoryList current_historylist;        // the last one set, for internal refresh purposes on sort
@@ -112,7 +111,7 @@ namespace EDDiscovery.UserControls
             cfs.AddJournalEntries();
             cfs.SaveSettings += EventFilterChanged;
 
-            checkBoxCursorToTop.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbAutoTop, true);
+            checkBoxCursorToTop.Checked = true;
 
             dataGridViewTravel.MakeDoubleBuffered();
 
@@ -171,7 +170,6 @@ namespace EDDiscovery.UserControls
             DGVSaveColumnLayout(dataGridViewTravel, DbColumnSave);
             discoveryform.OnHistoryChange -= HistoryChanged;
             discoveryform.OnNewEntry -= AddNewEntry;
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbAutoTop, checkBoxCursorToTop.Checked);
             searchtimer.Dispose();
         }
 

@@ -55,7 +55,6 @@ namespace EDDiscovery.UserControls
 
         private string DbColumnSave { get { return DBName("StarListControl", "DGVCol"); } }
         private string DbHistorySave { get { return DBName("StarListControlEDUIHistory"); } }
-        private string DbAutoTop { get { return DBName("StarListControlAutoTop"); } }
         private string DbEDSM { get { return DBName("StarListControlEDSM"); } }
         private string DbShowJumponium { get { return DBName("StarListControlJumponium"); } }
         private string DbShowClasses { get { return DBName("StarListControlShowClasses"); } }
@@ -79,7 +78,7 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
-            checkBoxCursorToTop.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbAutoTop, true);
+            checkBoxCursorToTop.Checked = true;
 
 
             dataGridViewStarList.MakeDoubleBuffered();
@@ -128,7 +127,6 @@ namespace EDDiscovery.UserControls
             DGVSaveColumnLayout(dataGridViewStarList, DbColumnSave);
             discoveryform.OnHistoryChange -= HistoryChanged;
             discoveryform.OnNewEntry -= AddNewEntry;
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbAutoTop, checkBoxCursorToTop.Checked);
         }
 
         #endregion

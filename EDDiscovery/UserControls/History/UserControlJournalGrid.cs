@@ -41,7 +41,6 @@ namespace EDDiscovery.UserControls
         private string DbColumnSave { get { return DBName("JournalGrid", "DGVCol"); } }
         private string DbHistorySave { get { return DBName("JournalEDUIHistory" ); } }
         private string DbFieldFilter { get { return DBName("JournalGridControlFieldFilter" ); } }
-        private string DbAutoTop { get { return DBName("JournalGridControlAutoTop" ); } }
 
         public delegate void PopOut();
         public PopOut OnPopOut;
@@ -88,7 +87,7 @@ namespace EDDiscovery.UserControls
             cfs.AddJournalEntries();
             cfs.SaveSettings += EventFilterChanged;
 
-            checkBoxCursorToTop.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbAutoTop, true);
+            checkBoxCursorToTop.Checked = true;
 
             string filter = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbFieldFilter, "");
             if (filter.Length > 0)
@@ -124,7 +123,6 @@ namespace EDDiscovery.UserControls
             DGVSaveColumnLayout(dataGridViewJournal, DbColumnSave);
             discoveryform.OnHistoryChange -= Display;
             discoveryform.OnNewEntry -= AddNewEntry;
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbAutoTop, checkBoxCursorToTop.Checked);
             searchtimer.Dispose();
         }
 
