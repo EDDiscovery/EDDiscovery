@@ -117,17 +117,38 @@ namespace EliteDangerousCore
             { }
         }
 
-        public static string UsedInSythesisByFDName(string fdname)
+        public static string UsedInSythesisByFDName(string fdname, string join=",")
         {
             MaterialCommodityData mc = MaterialCommodityData.GetByFDName(fdname);
-            return Recipes.UsedInSynthesisByShortName(mc?.Shortname ?? "--");
+            if (SynthesisRecipesByMaterial.ContainsKey(mc))
+                return String.Join(join, SynthesisRecipesByMaterial[mc].Select(x => x.Name + "-" + x.level + ": " + x.IngredientsStringLong));
+            else
+                return "";
         }
 
-        public static string UsedInSynthesisByShortName(string shortname)
+        public static string UsedInEngineeringByFDName(string fdname, string join = ",")
         {
-            MaterialCommodityData mc = MaterialCommodityData.GetByShortName(shortname);
-            if (SynthesisRecipesByMaterial.ContainsKey(mc))
-                return String.Join(",", SynthesisRecipesByMaterial[mc].Select(x => x.Name + "-" + x.level));
+            MaterialCommodityData mc = MaterialCommodityData.GetByFDName(fdname);
+            if (EngineeringRecipesByMaterial.ContainsKey(mc))
+                return String.Join(join, EngineeringRecipesByMaterial[mc].Select(x => x.modulesstring + " "+ x.Name + "-" + x.level + ": " + x.IngredientsStringLong + " @ " + x.engineersstring));
+            else
+                return "";
+        }
+
+        public static string UsedInSpecialEffectsyFDName(string fdname, string join = ",")
+        {
+            MaterialCommodityData mc = MaterialCommodityData.GetByFDName(fdname);
+            if (SpecialEffectsRecipesByMaterial.ContainsKey(mc))
+                return String.Join(join, SpecialEffectsRecipesByMaterial[mc].Select(x => x.Name + ": " + x.IngredientsStringLong));
+            else
+                return "";
+        }
+
+        public static string UsedInTechBrokerUnlocksByFDName(string fdname, string join = ",")
+        {
+            MaterialCommodityData mc = MaterialCommodityData.GetByFDName(fdname);
+            if (TechBrokerUnlockRecipesByMaterial.ContainsKey(mc))
+                return String.Join(join, TechBrokerUnlockRecipesByMaterial[mc].Select(x => x.Name + ": " + x.IngredientsStringLong));
             else
                 return "";
         }
@@ -1098,8 +1119,13 @@ namespace EliteDangerousCore
             new TechBrokerUnlockRecipe("Plasma Shock Cannon Turret Large","Human","26V,28W,22Re,24Tc,10IOD"),
             new TechBrokerUnlockRecipe("Plasma Shock Cannon Turret Medium","Human","24V,22W,20Re,28Tc,8PTB"),
             new TechBrokerUnlockRecipe("Plasma Shock Cannon Turret Small","Human","8V,12W,10Re,10Tc,4IOD"),
-
         };
+
+        public static Dictionary<MaterialCommodityData, List<TechBrokerUnlockRecipe>> TechBrokerUnlockRecipesByMaterial =
+            TechBrokerUnlocks.SelectMany(r => r.Ingredients.Select(i => new { mat = i, recipe = r }))
+                              .GroupBy(a => a.mat)
+                              .ToDictionary(g => g.Key, g => g.Select(a => a.recipe).ToList());
+
 
         public static List<SpecialEffectRecipe> SpecialEffects = new List<SpecialEffectRecipe>()
         {
@@ -1189,6 +1215,11 @@ namespace EliteDangerousCore
             new SpecialEffectRecipe("Thermo Block", "Shield Generator", "5WSE,3FFC,1HV"),
             new SpecialEffectRecipe("Thermo Block", "Shield Booster", "5ABSD,3CCe,3HV"),
         };
+
+        public static Dictionary<MaterialCommodityData, List<SpecialEffectRecipe>> SpecialEffectsRecipesByMaterial =
+            SpecialEffects.SelectMany(r => r.Ingredients.Select(i => new { mat = i, recipe = r }))
+                              .GroupBy(a => a.mat)
+                              .ToDictionary(g => g.Key, g => g.Select(a => a.recipe).ToList());
 
         #endregion
     }

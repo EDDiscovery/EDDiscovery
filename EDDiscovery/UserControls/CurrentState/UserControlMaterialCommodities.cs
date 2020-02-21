@@ -195,7 +195,17 @@ namespace EDDiscovery.UserControls
                                                 m != null ? m.Price.ToString("0.#") : "-" };
                         }
 
+                        string s = Recipes.UsedInSythesisByFDName(mcd.FDName, Environment.NewLine);
+                        string e = Recipes.UsedInEngineeringByFDName(mcd.FDName, Environment.NewLine);
+                        s = s.AppendPrePad(e, Environment.NewLine);
+                        string b = Recipes.UsedInTechBrokerUnlocksByFDName(mcd.FDName, Environment.NewLine);
+                        s = s.AppendPrePad(b, Environment.NewLine);
+                        string se = Recipes.UsedInSpecialEffectsyFDName(mcd.FDName, Environment.NewLine);
+                        s = s.AppendPrePad(se, Environment.NewLine);
+
                         dataGridViewMC.Rows.Add(rowobj);
+                        dataGridViewMC.Rows[dataGridViewMC.RowCount - 1].Cells[0].ToolTipText = s;
+                        dataGridViewMC.Rows[dataGridViewMC.RowCount - 1].Tag = s;
                     }
                 }
             }
@@ -244,6 +254,19 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        private void dataGridViewMC_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            string mats = (string)dataGridViewMC.Rows[e.RowIndex].Tag;
+            if (mats != null)   // sheer paranoia.
+            {
+                mats = mats.Replace(": ", Environment.NewLine + "      ");
+                ExtendedControls.InfoForm info = new ExtendedControls.InfoForm();
+                info.Info(dataGridViewMC.Rows[e.RowIndex].Cells[0].Value as string, FindForm().Icon, mats);
+                info.Size = new Size(800, 600);
+                info.StartPosition = FormStartPosition.CenterParent;
+                info.ShowDialog(FindForm());
+            }
+        }
     }
 
     public class UserControlMaterials : UserControlMaterialCommodities

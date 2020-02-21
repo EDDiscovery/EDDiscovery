@@ -96,8 +96,9 @@ namespace EDDiscovery.UserControls
             this.dataGridViewMC.Name = "dataGridViewMC";
             this.dataGridViewMC.RowHeadersVisible = false;
             this.dataGridViewMC.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewMC.Size = new System.Drawing.Size(691, 534);
+            this.dataGridViewMC.Size = new System.Drawing.Size(688, 534);
             this.dataGridViewMC.TabIndex = 1;
+            this.dataGridViewMC.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewMC_CellDoubleClick);
             this.dataGridViewMC.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewMC_SortCompare);
             // 
             // NameCol
@@ -153,13 +154,13 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustomMC.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustomMC.HideScrollBar = false;
             this.vScrollBarCustomMC.LargeChange = 0;
-            this.vScrollBarCustomMC.Location = new System.Drawing.Point(691, 0);
+            this.vScrollBarCustomMC.Location = new System.Drawing.Point(688, 0);
             this.vScrollBarCustomMC.Maximum = -1;
             this.vScrollBarCustomMC.Minimum = 0;
             this.vScrollBarCustomMC.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustomMC.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustomMC.Name = "vScrollBarCustomMC";
-            this.vScrollBarCustomMC.Size = new System.Drawing.Size(13, 534);
+            this.vScrollBarCustomMC.Size = new System.Drawing.Size(16, 534);
             this.vScrollBarCustomMC.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustomMC.SmallChange = 1;
             this.vScrollBarCustomMC.TabIndex = 0;
@@ -262,10 +263,13 @@ namespace EDDiscovery.UserControls
             // 
             this.checkBoxClear.AutoSize = true;
             this.checkBoxClear.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxClear.CheckBoxDisabledScaling = 0.5F;
             this.checkBoxClear.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxClear.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxClear.ImageButtonDisabledScaling = 0.5F;
+            this.checkBoxClear.ImageIndeterminate = null;
             this.checkBoxClear.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.checkBoxClear.ImageUnchecked = null;
             this.checkBoxClear.Location = new System.Drawing.Point(304, 1);
             this.checkBoxClear.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.checkBoxClear.MouseOverColor = System.Drawing.Color.CornflowerBlue;
@@ -279,6 +283,9 @@ namespace EDDiscovery.UserControls
             // 
             // toolTip
             // 
+            this.toolTip.AutoPopDelay = 30000;
+            this.toolTip.InitialDelay = 500;
+            this.toolTip.ReshowDelay = 100;
             this.toolTip.ShowAlways = true;
             // 
             // panelTop
