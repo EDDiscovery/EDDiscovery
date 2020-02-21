@@ -43,11 +43,8 @@ namespace EDDiscovery.UserControls
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             ExtendedControls.TabStyleSquare tabStyleSquare1 = new ExtendedControls.TabStyleSquare();
             this.dataGridViewStats = new System.Windows.Forms.DataGridView();
-            this.mostVisited = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.panelGeneral = new ExtendedControls.ExtPanelScroll();
             this.vScrollBarCustom = new ExtendedControls.ExtScrollBar();
             this.tabControlCustomStats = new ExtendedControls.ExtTabControl();
@@ -71,7 +68,6 @@ namespace EDDiscovery.UserControls
             this.ItemName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Information = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewStats)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.mostVisited)).BeginInit();
             this.panelGeneral.SuspendLayout();
             this.tabControlCustomStats.SuspendLayout();
             this.tabPageGeneral.SuspendLayout();
@@ -103,25 +99,10 @@ namespace EDDiscovery.UserControls
             this.dataGridViewStats.Size = new System.Drawing.Size(634, 190);
             this.dataGridViewStats.TabIndex = 2;
             // 
-            // mostVisited
-            // 
-            this.mostVisited.BorderlineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
-            chartArea1.Name = "ChartArea1";
-            this.mostVisited.ChartAreas.Add(chartArea1);
-            this.mostVisited.Location = new System.Drawing.Point(3, 250);
-            this.mostVisited.Name = "mostVisited";
-            series1.ChartArea = "ChartArea1";
-            series1.Name = "Series1";
-            this.mostVisited.Series.Add(series1);
-            this.mostVisited.Size = new System.Drawing.Size(482, 177);
-            this.mostVisited.TabIndex = 5;
-            this.mostVisited.Text = "Most Visited";
-            // 
             // panelGeneral
             // 
             this.panelGeneral.Controls.Add(this.dataGridViewStats);
             this.panelGeneral.Controls.Add(this.vScrollBarCustom);
-            this.panelGeneral.Controls.Add(this.mostVisited);
             this.panelGeneral.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelGeneral.FlowControlsLeftToRight = false;
             this.panelGeneral.Location = new System.Drawing.Point(3, 3);
@@ -477,7 +458,6 @@ namespace EDDiscovery.UserControls
             this.Name = "UserControlStats";
             this.Size = new System.Drawing.Size(711, 569);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewStats)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.mostVisited)).EndInit();
             this.panelGeneral.ResumeLayout(false);
             this.tabControlCustomStats.ResumeLayout(false);
             this.tabPageGeneral.ResumeLayout(false);
@@ -494,13 +474,11 @@ namespace EDDiscovery.UserControls
             this.extPanelDataGridViewScrollByShip.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewByShip)).EndInit();
             this.ResumeLayout(false);
-
         }
 
         #endregion
 
         private System.Windows.Forms.DataGridView dataGridViewStats;
-        private System.Windows.Forms.DataVisualization.Charting.Chart mostVisited;
         private ExtendedControls.ExtPanelScroll panelGeneral;
         private ExtendedControls.ExtScrollBar vScrollBarCustom;
         private ExtendedControls.ExtTabControl tabControlCustomStats;
