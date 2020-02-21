@@ -31,6 +31,7 @@ namespace EDDiscovery.UserControls
     {
         private string DbSelectedTabSave { get { return DBName("StatsSelectedTab" ); } }
         private string DbStatsTreeStateSave { get { return DBName("StatsTreeExpanded" ); } }
+        private Chart mostVisited { get; set; }
 
         #region Init
 
@@ -41,6 +42,32 @@ namespace EDDiscovery.UserControls
             userControlStatsTimeTravel.AutoScaleMode = AutoScaleMode.Inherit;
 
             var corner = dataGridViewStats.TopLeftHeaderCell; // work around #1487
+
+            try
+            {
+                Chart chart = new Chart();
+                ChartArea chartArea1 = new ChartArea();
+                Series series1 = new Series();
+                chart.BeginInit();
+                chart.BorderlineDashStyle = ChartDashStyle.Solid;
+                chartArea1.Name = "ChartArea1";
+                chart.ChartAreas.Add(chartArea1);
+                chart.Location = new Point(3, 250);
+                chart.Name = "mostVisited";
+                series1.ChartArea = "ChartArea1";
+                series1.Name = "Series1";
+                chart.Series.Add(series1);
+                chart.Size = new Size(482, 177);
+                chart.TabIndex = 5;
+                chart.Text = "Most Visited";
+                this.panelGeneral.Controls.Add(chart);
+                this.mostVisited = chart;
+                chart.EndInit();
+            }
+            catch (NotImplementedException)
+            {
+                // Charting not implemented in mono System.Windows.Forms
+            }
         }
 
         public override void Init()
@@ -178,52 +205,57 @@ namespace EDDiscovery.UserControls
                 StatToDGVStats("Most Highest".T(EDTx.UserControlStats_MostHighest), GetSystemDataString(up));
                 StatToDGVStats("Most Lowest".T(EDTx.UserControlStats_MostLowest), GetSystemDataString(down));
 
-                var groupeddata = from data in hl.OrderByDate
-                                  where data.IsFSDJump
-                                  group data by data.System.Name
-                                      into grouped
-                                  select new
-                                  {
-                                      Title = grouped.Key,
-                                      Count = grouped.Count()
-                                  };
-
-                mostVisited.Visible = true;
-
-                Color GridC = discoveryform.theme.GridCellText;
-                Color TextC = discoveryform.theme.VisitedSystemColor;
-                mostVisited.Titles.Clear();
-                mostVisited.Titles.Add(new Title("Most Visited".T(EDTx.UserControlStats_MostVisited), Docking.Top, discoveryform.theme.GetFont, TextC));
-                mostVisited.Series[0].Points.Clear();
-
-                mostVisited.ChartAreas[0].AxisX.LabelStyle.ForeColor = TextC;
-                mostVisited.ChartAreas[0].AxisY.LabelStyle.ForeColor = TextC;
-                mostVisited.ChartAreas[0].AxisX.MajorGrid.LineColor = GridC;
-                mostVisited.ChartAreas[0].AxisX.MinorGrid.LineColor = GridC;
-                mostVisited.ChartAreas[0].AxisY.MajorGrid.LineColor = GridC;
-                mostVisited.ChartAreas[0].AxisY.MinorGrid.LineColor = GridC;
-                mostVisited.ChartAreas[0].BorderColor = GridC;
-                mostVisited.ChartAreas[0].BorderDashStyle = ChartDashStyle.Solid;
-                mostVisited.ChartAreas[0].BorderWidth = 2;
-
-                mostVisited.ChartAreas[0].BackColor = Color.Transparent;
-                mostVisited.Series[0].Color = GridC;
-                mostVisited.BorderlineColor = Color.Transparent;
-
-                int i = 0;
-                foreach (var data in from a in groupeddata orderby a.Count descending select a)
+                if (mostVisited != null)
                 {
-                    if (data.Count <= 1 || i == 10)
-                        break;
+                    var groupeddata = from data in hl.OrderByDate
+                                      where data.IsFSDJump
+                                      group data by data.System.Name
+                                          into grouped
+                                      select new
+                                      {
+                                          Title = grouped.Key,
+                                          Count = grouped.Count()
+                                      };
 
-                    mostVisited.Series[0].Points.Add(new DataPoint(i, data.Count));
-                    mostVisited.Series[0].Points[i].AxisLabel = data.Title;
-                    mostVisited.Series[0].Points[i].LabelForeColor = TextC;
-                    i++;
+                    mostVisited.Visible = true;
+
+                    Color GridC = discoveryform.theme.GridCellText;
+                    Color TextC = discoveryform.theme.VisitedSystemColor;
+                    mostVisited.Titles.Clear();
+                    mostVisited.Titles.Add(new Title("Most Visited".T(EDTx.UserControlStats_MostVisited), Docking.Top, discoveryform.theme.GetFont, TextC));
+                    mostVisited.Series[0].Points.Clear();
+
+                    mostVisited.ChartAreas[0].AxisX.LabelStyle.ForeColor = TextC;
+                    mostVisited.ChartAreas[0].AxisY.LabelStyle.ForeColor = TextC;
+                    mostVisited.ChartAreas[0].AxisX.MajorGrid.LineColor = GridC;
+                    mostVisited.ChartAreas[0].AxisX.MinorGrid.LineColor = GridC;
+                    mostVisited.ChartAreas[0].AxisY.MajorGrid.LineColor = GridC;
+                    mostVisited.ChartAreas[0].AxisY.MinorGrid.LineColor = GridC;
+                    mostVisited.ChartAreas[0].BorderColor = GridC;
+                    mostVisited.ChartAreas[0].BorderDashStyle = ChartDashStyle.Solid;
+                    mostVisited.ChartAreas[0].BorderWidth = 2;
+
+                    mostVisited.ChartAreas[0].BackColor = Color.Transparent;
+                    mostVisited.Series[0].Color = GridC;
+                    mostVisited.BorderlineColor = Color.Transparent;
+
+                    int i = 0;
+                    foreach (var data in from a in groupeddata orderby a.Count descending select a)
+                    {
+                        if (data.Count <= 1 || i == 10)
+                            break;
+
+                        mostVisited.Series[0].Points.Add(new DataPoint(i, data.Count));
+                        mostVisited.Series[0].Points[i].AxisLabel = data.Title;
+                        mostVisited.Series[0].Points[i].LabelForeColor = TextC;
+                        i++;
+                    }
                 }
             }
-            else
+            else if (mostVisited != null)
+            {
                 mostVisited.Visible = false;
+            }
 
             PerformLayout();
         }
@@ -1073,8 +1105,14 @@ namespace EDDiscovery.UserControls
             height += dataGridViewStats.ColumnHeadersHeight + 2;
 
             dataGridViewStats.Height = height;
-            mostVisited.Width = dataGridViewStats.Width = panelGeneral.Width - panelGeneral.ScrollBarWidth - dataGridViewStats.Left;
-            mostVisited.Top = dataGridViewStats.Bottom + 8;
+            var width = panelGeneral.Width - panelGeneral.ScrollBarWidth - dataGridViewStats.Left;
+            dataGridViewStats.Width = width;
+
+            if (mostVisited != null)
+            {
+                mostVisited.Width = width;
+                mostVisited.Top = dataGridViewStats.Bottom + 8;
+            }
             base.OnLayout(e);
         }
 
