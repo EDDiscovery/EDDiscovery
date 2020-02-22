@@ -256,15 +256,18 @@ namespace EDDiscovery.UserControls
 
         private void dataGridViewMC_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            string mats = (string)dataGridViewMC.Rows[e.RowIndex].Tag;
-            if (mats != null)   // sheer paranoia.
+            if (e.RowIndex >= 0 && e.RowIndex < dataGridViewMC.Rows.Count)
             {
-                mats = mats.Replace(": ", Environment.NewLine + "      ");
-                ExtendedControls.InfoForm info = new ExtendedControls.InfoForm();
-                info.Info(dataGridViewMC.Rows[e.RowIndex].Cells[0].Value as string, FindForm().Icon, mats);
-                info.Size = new Size(800, 600);
-                info.StartPosition = FormStartPosition.CenterParent;
-                info.ShowDialog(FindForm());
+                string mats = (string)dataGridViewMC.Rows[e.RowIndex].Tag;
+                if (mats != null)   // sheer paranoia.
+                {
+                    mats = mats.Replace(": ", Environment.NewLine + "      ");
+                    ExtendedControls.InfoForm info = new ExtendedControls.InfoForm();
+                    info.Info(dataGridViewMC.Rows[e.RowIndex].Cells[0].Value as string, FindForm().Icon, mats);
+                    info.Size = new Size(800, 600);
+                    info.StartPosition = FormStartPosition.CenterParent;
+                    info.ShowDialog(FindForm());
+                }
             }
         }
     }
