@@ -155,6 +155,10 @@ namespace EDDiscovery
             { new PanelInfo( PanelIDs.PanelSelector, typeof(UserControlPanelSelector), "+", "Selector", "") },       // no description, not presented to user
         };
 
+        private static HashSet<PanelIDs> WindowsOnlyPanels = new HashSet<PanelIDs>(new[] {
+            PanelIDs.LocalMap, // Depends on System.Windows.Forms.DataVizualization.Charting, not implemented in Mono
+        });
+
         static private List<PanelInfo> displayablepanels;   // filled by Init - all panels that can be displayed
         static private List<PanelInfo> userselectablepanellist;   // filled by Init - all panels that the user can select directly
         static private int[] userselectablepanelseperatorlistgroup;    // filled by Init - the seperator group index into userselectablepanellist
@@ -165,6 +169,11 @@ namespace EDDiscovery
         {
             int offset = 0;
             List<int> separs = new List<int>();
+
+            if (Environment.OSVersion.Platform != PlatformID.Win32NT)
+            {
+                paneldefinition = paneldefinition.Where(e => !WindowsOnlyPanels.Contains(e.PopoutID)).ToList();
+            }
 
             foreach (PanelInfo i in paneldefinition)
             {
