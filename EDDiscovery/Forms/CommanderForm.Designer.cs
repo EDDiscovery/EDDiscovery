@@ -86,6 +86,8 @@
             this.HomeSys = new System.Windows.Forms.Label();
             this.labelZoom = new System.Windows.Forms.Label();
             this.labelOpenOn = new System.Windows.Forms.Label();
+            this.checkBoxIGAUSync = new System.Windows.Forms.CheckBox();
+            this.groupBoxCustomIGA = new System.Windows.Forms.GroupBox();
             this.panelTop.SuspendLayout();
             this.groupBoxCustomEDDN.SuspendLayout();
             this.groupBoxCustomEDSM.SuspendLayout();
@@ -99,6 +101,7 @@
             this.panelOK.SuspendLayout();
             this.extGroupBoxCommanderInfo.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
+            this.groupBoxCustomIGA.SuspendLayout();
             this.SuspendLayout();
             // 
             // panelTop
@@ -793,7 +796,7 @@
             this.groupBoxCustomEGO.Location = new System.Drawing.Point(0, 279);
             this.groupBoxCustomEGO.Margin = new System.Windows.Forms.Padding(10);
             this.groupBoxCustomEGO.Name = "groupBoxCustomEGO";
-            this.groupBoxCustomEGO.Size = new System.Drawing.Size(615, 71);
+            this.groupBoxCustomEGO.Size = new System.Drawing.Size(615, 76);
             this.groupBoxCustomEGO.TabIndex = 33;
             this.groupBoxCustomEGO.TabStop = false;
             this.groupBoxCustomEGO.Text = "Elite Galaxy Online - This site is offline so section disabled";
@@ -816,9 +819,9 @@
             this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 16);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 2;
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(609, 52);
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 45.90164F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 54.09836F));
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(609, 57);
             this.tableLayoutPanel3.TabIndex = 5;
             // 
             // labelEGOAPI
@@ -849,7 +852,7 @@
             this.groupBoxCustomInara.Controls.Add(this.tableLayoutPanel5);
             this.groupBoxCustomInara.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBoxCustomInara.FillClientAreaWithAlternateColor = false;
-            this.groupBoxCustomInara.Location = new System.Drawing.Point(0, 350);
+            this.groupBoxCustomInara.Location = new System.Drawing.Point(0, 355);
             this.groupBoxCustomInara.Margin = new System.Windows.Forms.Padding(10);
             this.groupBoxCustomInara.Name = "groupBoxCustomInara";
             this.groupBoxCustomInara.Size = new System.Drawing.Size(615, 70);
@@ -902,7 +905,7 @@
             // 
             this.panelI6.AutoSize = true;
             this.panelI6.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelI6.Location = new System.Drawing.Point(0, 350);
+            this.panelI6.Location = new System.Drawing.Point(0, 355);
             this.panelI6.Name = "panelI6";
             this.panelI6.Size = new System.Drawing.Size(615, 0);
             this.panelI6.TabIndex = 35;
@@ -913,7 +916,7 @@
             this.panelOK.Controls.Add(this.buttonCancel);
             this.panelOK.Controls.Add(this.buttonOK);
             this.panelOK.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panelOK.Location = new System.Drawing.Point(0, 547);
+            this.panelOK.Location = new System.Drawing.Point(0, 609);
             this.panelOK.Margin = new System.Windows.Forms.Padding(10);
             this.panelOK.Name = "panelOK";
             this.panelOK.Size = new System.Drawing.Size(615, 29);
@@ -921,7 +924,7 @@
             // 
             // statusStripCustom
             // 
-            this.statusStripCustom.Location = new System.Drawing.Point(0, 576);
+            this.statusStripCustom.Location = new System.Drawing.Point(0, 638);
             this.statusStripCustom.Name = "statusStripCustom";
             this.statusStripCustom.Size = new System.Drawing.Size(615, 22);
             this.statusStripCustom.TabIndex = 32;
@@ -935,7 +938,7 @@
             this.extGroupBoxCommanderInfo.Controls.Add(this.tableLayoutPanel4);
             this.extGroupBoxCommanderInfo.Dock = System.Windows.Forms.DockStyle.Top;
             this.extGroupBoxCommanderInfo.FillClientAreaWithAlternateColor = false;
-            this.extGroupBoxCommanderInfo.Location = new System.Drawing.Point(0, 420);
+            this.extGroupBoxCommanderInfo.Location = new System.Drawing.Point(0, 425);
             this.extGroupBoxCommanderInfo.Name = "extGroupBoxCommanderInfo";
             this.extGroupBoxCommanderInfo.Size = new System.Drawing.Size(615, 122);
             this.extGroupBoxCommanderInfo.TabIndex = 37;
@@ -1039,12 +1042,34 @@
             this.labelOpenOn.TabIndex = 7;
             this.labelOpenOn.Text = "Open Centred On";
             // 
+            // checkBoxIGAUSync
+            // 
+            this.checkBoxIGAUSync.AutoSize = true;
+            this.checkBoxIGAUSync.Location = new System.Drawing.Point(6, 19);
+            this.checkBoxIGAUSync.Name = "checkBoxIGAUSync";
+            this.checkBoxIGAUSync.Size = new System.Drawing.Size(225, 17);
+            this.checkBoxIGAUSync.TabIndex = 38;
+            this.checkBoxIGAUSync.Text = "Send CodexEntry Discovery Data to IGAU";
+            this.toolTip.SetToolTip(this.checkBoxIGAUSync, "https://github.com/Elite-IGAU/publications/blob/master/IGAU_Codex.csv");
+            this.checkBoxIGAUSync.UseVisualStyleBackColor = true;
+            // 
+            // groupBoxCustomIGA
+            // 
+            this.groupBoxCustomIGA.Controls.Add(this.checkBoxIGAUSync);
+            this.groupBoxCustomIGA.Location = new System.Drawing.Point(3, 553);
+            this.groupBoxCustomIGA.Name = "groupBoxCustomIGA";
+            this.groupBoxCustomIGA.Size = new System.Drawing.Size(600, 44);
+            this.groupBoxCustomIGA.TabIndex = 39;
+            this.groupBoxCustomIGA.TabStop = false;
+            this.groupBoxCustomIGA.Text = "Intergalactic Astronomical Union [IGAU]";
+            // 
             // CommanderForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(615, 598);
+            this.ClientSize = new System.Drawing.Size(615, 660);
+            this.Controls.Add(this.groupBoxCustomIGA);
             this.Controls.Add(this.panelOK);
             this.Controls.Add(this.statusStripCustom);
             this.Controls.Add(this.extGroupBoxCommanderInfo);
@@ -1064,6 +1089,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "CommanderForm";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.CommanderForm_FormClosed);
+            this.Load += new System.EventHandler(this.CommanderForm_Load);
             this.panelTop.ResumeLayout(false);
             this.panelTop.PerformLayout();
             this.groupBoxCustomEDDN.ResumeLayout(false);
@@ -1088,6 +1114,8 @@
             this.extGroupBoxCommanderInfo.ResumeLayout(false);
             this.tableLayoutPanel4.ResumeLayout(false);
             this.tableLayoutPanel4.PerformLayout();
+            this.groupBoxCustomIGA.ResumeLayout(false);
+            this.groupBoxCustomIGA.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1127,6 +1155,7 @@
         private ExtendedControls.ExtTextBox textBoxEGOName;
         private ExtendedControls.ExtTextBox textBoxEGOAPI;
         private System.Windows.Forms.Label labelEGOAPI;
+        private System.Windows.Forms.Label labelIGAU;
         private ExtendedControls.ExtGroupBox groupBoxCustomInara;
         private ExtendedControls.ExtCheckBox checkBoxCustomInara;
         private System.Windows.Forms.Label labelINARAN;
@@ -1151,5 +1180,7 @@
         private System.Windows.Forms.Label labelMapCol;
         private ExtendedControls.PanelNoTheme panel_defaultmapcolor;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
+        private System.Windows.Forms.CheckBox checkBoxIGAUSync;
+        private System.Windows.Forms.GroupBox groupBoxCustomIGA;
     }
 }
