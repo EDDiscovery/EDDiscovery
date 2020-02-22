@@ -58,7 +58,7 @@ namespace EliteDangerousCore.IGAU
         {
             recordSet = false;
 
-            if (cmdr.SyncToIGAU == 'false')
+            if (igau_address.IsEmpty())
                 return false;
 
             try

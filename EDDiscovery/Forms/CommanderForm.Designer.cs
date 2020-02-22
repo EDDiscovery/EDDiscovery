@@ -57,6 +57,7 @@
             this.radioButtonHistorySelection = new ExtendedControls.ExtRadioButton();
             this.radioButtonCentreHome = new ExtendedControls.ExtRadioButton();
             this.panel_defaultmapcolor = new ExtendedControls.PanelNoTheme();
+            this.checkBoxIGAUSync = new ExtendedControls.ExtCheckBox();
             this.groupBoxCustomEDDN = new ExtendedControls.ExtGroupBox();
             this.groupBoxCustomEDSM = new ExtendedControls.ExtGroupBox();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
@@ -86,8 +87,7 @@
             this.HomeSys = new System.Windows.Forms.Label();
             this.labelZoom = new System.Windows.Forms.Label();
             this.labelOpenOn = new System.Windows.Forms.Label();
-            this.checkBoxIGAUSync = new System.Windows.Forms.CheckBox();
-            this.groupBoxCustomIGA = new System.Windows.Forms.GroupBox();
+            this.groupBoxCustomIGAU = new ExtendedControls.ExtGroupBox();
             this.panelTop.SuspendLayout();
             this.groupBoxCustomEDDN.SuspendLayout();
             this.groupBoxCustomEDSM.SuspendLayout();
@@ -101,7 +101,7 @@
             this.panelOK.SuspendLayout();
             this.extGroupBoxCommanderInfo.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
-            this.groupBoxCustomIGA.SuspendLayout();
+            this.groupBoxCustomIGAU.SuspendLayout();
             this.SuspendLayout();
             // 
             // panelTop
@@ -624,6 +624,27 @@
             this.panel_defaultmapcolor.Tag = "";
             this.toolTip.SetToolTip(this.panel_defaultmapcolor, "New travel entries get this colour on the map");
             // 
+            // checkBoxIGAUSync
+            // 
+            this.checkBoxIGAUSync.AutoSize = true;
+            this.checkBoxIGAUSync.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxIGAUSync.CheckBoxDisabledScaling = 0.5F;
+            this.checkBoxIGAUSync.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxIGAUSync.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxIGAUSync.ImageButtonDisabledScaling = 0.5F;
+            this.checkBoxIGAUSync.ImageIndeterminate = null;
+            this.checkBoxIGAUSync.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.checkBoxIGAUSync.ImageUnchecked = null;
+            this.checkBoxIGAUSync.Location = new System.Drawing.Point(6, 19);
+            this.checkBoxIGAUSync.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxIGAUSync.Name = "checkBoxIGAUSync";
+            this.checkBoxIGAUSync.Size = new System.Drawing.Size(225, 17);
+            this.checkBoxIGAUSync.TabIndex = 38;
+            this.checkBoxIGAUSync.Text = "Send CodexEntry Discovery Data to IGAU";
+            this.checkBoxIGAUSync.TickBoxReductionRatio = 0.75F;
+            this.toolTip.SetToolTip(this.checkBoxIGAUSync, "https://github.com/Elite-IGAU/publications/blob/master/IGAU_Codex.csv");
+            this.checkBoxIGAUSync.UseVisualStyleBackColor = true;
+            // 
             // groupBoxCustomEDDN
             // 
             this.groupBoxCustomEDDN.AlternateClientBackColor = System.Drawing.Color.Blue;
@@ -1042,26 +1063,22 @@
             this.labelOpenOn.TabIndex = 7;
             this.labelOpenOn.Text = "Open Centred On";
             // 
-            // checkBoxIGAUSync
+            // groupBoxCustomIGAU
             // 
-            this.checkBoxIGAUSync.AutoSize = true;
-            this.checkBoxIGAUSync.Location = new System.Drawing.Point(6, 19);
-            this.checkBoxIGAUSync.Name = "checkBoxIGAUSync";
-            this.checkBoxIGAUSync.Size = new System.Drawing.Size(225, 17);
-            this.checkBoxIGAUSync.TabIndex = 38;
-            this.checkBoxIGAUSync.Text = "Send CodexEntry Discovery Data to IGAU";
-            this.toolTip.SetToolTip(this.checkBoxIGAUSync, "https://github.com/Elite-IGAU/publications/blob/master/IGAU_Codex.csv");
-            this.checkBoxIGAUSync.UseVisualStyleBackColor = true;
-            // 
-            // groupBoxCustomIGA
-            // 
-            this.groupBoxCustomIGA.Controls.Add(this.checkBoxIGAUSync);
-            this.groupBoxCustomIGA.Location = new System.Drawing.Point(3, 553);
-            this.groupBoxCustomIGA.Name = "groupBoxCustomIGA";
-            this.groupBoxCustomIGA.Size = new System.Drawing.Size(600, 44);
-            this.groupBoxCustomIGA.TabIndex = 39;
-            this.groupBoxCustomIGA.TabStop = false;
-            this.groupBoxCustomIGA.Text = "Intergalactic Astronomical Union [IGAU]";
+            this.groupBoxCustomIGAU.AlternateClientBackColor = System.Drawing.Color.Blue;
+            this.groupBoxCustomIGAU.BackColorScaling = 0.5F;
+            this.groupBoxCustomIGAU.BorderColor = System.Drawing.Color.LightGray;
+            this.groupBoxCustomIGAU.BorderColorScaling = 0.5F;
+            this.groupBoxCustomIGAU.Controls.Add(this.checkBoxIGAUSync);
+            this.groupBoxCustomIGAU.FillClientAreaWithAlternateColor = false;
+            this.groupBoxCustomIGAU.Location = new System.Drawing.Point(3, 553);
+            this.groupBoxCustomIGAU.Name = "groupBoxCustomIGAU";
+            this.groupBoxCustomIGAU.Size = new System.Drawing.Size(609, 44);
+            this.groupBoxCustomIGAU.TabIndex = 39;
+            this.groupBoxCustomIGAU.TabStop = false;
+            this.groupBoxCustomIGAU.Text = "Intergalactic Astronomical Union [IGAU]";
+            this.groupBoxCustomIGAU.TextPadding = 0;
+            this.groupBoxCustomIGAU.TextStartPosition = -1;
             // 
             // CommanderForm
             // 
@@ -1069,7 +1086,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(615, 660);
-            this.Controls.Add(this.groupBoxCustomIGA);
+            this.Controls.Add(this.groupBoxCustomIGAU);
             this.Controls.Add(this.panelOK);
             this.Controls.Add(this.statusStripCustom);
             this.Controls.Add(this.extGroupBoxCommanderInfo);
@@ -1114,8 +1131,8 @@
             this.extGroupBoxCommanderInfo.ResumeLayout(false);
             this.tableLayoutPanel4.ResumeLayout(false);
             this.tableLayoutPanel4.PerformLayout();
-            this.groupBoxCustomIGA.ResumeLayout(false);
-            this.groupBoxCustomIGA.PerformLayout();
+            this.groupBoxCustomIGAU.ResumeLayout(false);
+            this.groupBoxCustomIGAU.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1155,7 +1172,6 @@
         private ExtendedControls.ExtTextBox textBoxEGOName;
         private ExtendedControls.ExtTextBox textBoxEGOAPI;
         private System.Windows.Forms.Label labelEGOAPI;
-        private System.Windows.Forms.Label labelIGAU;
         private ExtendedControls.ExtGroupBox groupBoxCustomInara;
         private ExtendedControls.ExtCheckBox checkBoxCustomInara;
         private System.Windows.Forms.Label labelINARAN;
@@ -1180,7 +1196,7 @@
         private System.Windows.Forms.Label labelMapCol;
         private ExtendedControls.PanelNoTheme panel_defaultmapcolor;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
-        private System.Windows.Forms.CheckBox checkBoxIGAUSync;
-        private System.Windows.Forms.GroupBox groupBoxCustomIGA;
+        private ExtendedControls.ExtGroupBox groupBoxCustomIGAU;
+        private ExtendedControls.ExtCheckBox checkBoxIGAUSync;
     }
 }
