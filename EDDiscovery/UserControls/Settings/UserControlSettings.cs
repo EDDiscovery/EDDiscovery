@@ -586,8 +586,17 @@ namespace EDDiscovery.UserControls
         {
             if (ExtendedControls.MessageBoxTheme.Show(this, "Confirm restart to safe mode".T(EDTx.UserControlSettings_CSM), "Safe Mode".T(EDTx.UserControlSettings_SM), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
             {
-                Application.Exit();
-                System.Diagnostics.Process.Start(Application.ExecutablePath, "-safemode");
+                bool force = EDDApplicationContext.RestartInSafeMode;
+                EDDApplicationContext.RestartInSafeMode = true;
+
+                if (!force)
+                {
+                    Application.Exit();
+                }
+                else
+                {
+                    System.Threading.Thread.CurrentThread.Abort();
+                }
             }
         }
 
