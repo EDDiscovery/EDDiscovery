@@ -32,6 +32,8 @@ namespace EliteDangerousCore.IGAU
     public class IGAUClass : BaseUtils.HttpCom
     {
         public string commanderName;
+        public string App_Name;
+        public string App_Version;
 
         private readonly string igau_address = "https://ddss70885k.execute-api.us-west-1.amazonaws.com/Prod";
 
@@ -40,7 +42,7 @@ namespace EliteDangerousCore.IGAU
             httpserveraddress = igau_address;            
         }
 
-        public JObject CreateIGAUMessage(JournalScan journal, string timestamp, string EntryID, string Name, string Name_Localised, string System, string SystemAddress )
+        public JObject CreateIGAUMessage(JournalScan journal, string timestamp, string EntryID, string Name, string Name_Localised, string System, string SystemAddress, string App_Name, string App_Version)
         {
             JObject detail = new JObject();
             detail["input_1"] = timestamp;
@@ -49,6 +51,8 @@ namespace EliteDangerousCore.IGAU
             detail["input_4"] = Name_Localised;
             detail["input_5"] = System;
             detail["input_6"] = SystemAddress;
+            detail["input_7"] = App_Name;
+            detail["input_8"] = App_Version;
             JObject msg = new JObject();
             msg["input_values"] = detail;
             return msg;
