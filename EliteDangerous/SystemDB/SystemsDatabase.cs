@@ -12,9 +12,9 @@ namespace EliteDangerousCore.DB
     {
         internal SQLiteConnectionSystem Connection { get; private set; }
 
-        public SystemsDatabaseConnection()
+        public SystemsDatabaseConnection(bool ro)
         {
-            Connection = new SQLiteConnectionSystem();
+            Connection = new SQLiteConnectionSystem(ro);
         }
 
         public void Dispose()
@@ -49,6 +49,11 @@ namespace EliteDangerousCore.DB
         const string DebugOutfile = null;
 
         public bool RebuildRunning { get; private set; } = true;                // we are rebuilding until we have the system db table in there
+
+        protected override SystemsDatabaseConnection CreateConnection()
+        {
+            return new SystemsDatabaseConnection(ReadOnly);
+        }
 
         public long UpgradeSystemTableFromFile(string filename, bool[] gridids, Func<bool> cancelRequested, Action<string> reportProgress)
         {
@@ -197,14 +202,14 @@ namespace EliteDangerousCore.DB
                 {
                     RebuildRunning = true;
 
-                    ExecuteWithDatabase(action: conn =>
+                    WithReadWrite(() => ExecuteWithDatabase(action: conn =>
                     {
                         logger?.Invoke("Removing indexes");
                         conn.Connection.DropSystemDBTableIndexes();
                         logger?.Invoke("Rebuilding indexes, please wait");
                         conn.Connection.CreateSystemDBTableIndexes();
                         logger?.Invoke("Indexes rebuilt");
-                    });
+                    }));
 
                     RebuildRunning = false;
                 });
@@ -218,7 +223,7 @@ namespace EliteDangerousCore.DB
 
         public bool SetEDSMGridIDs(string value)
         {
-            return ExecuteWithDatabase( db => db.Connection.PutSettingString("EDSMGridIDs", value));
+            return WithReadWrite(() => ExecuteWithDatabase( db => db.Connection.PutSettingString("EDSMGridIDs", value)));
         }
 
         public DateTime GetEDSMGalMapLast()
@@ -228,7 +233,7 @@ namespace EliteDangerousCore.DB
 
         public bool SetEDSMGalMapLast(DateTime value)
         {
-            return ExecuteWithDatabase( db => db.Connection.PutSettingDate("EDSMGalMapLast", value));
+            return WithReadWrite(() => ExecuteWithDatabase( db => db.Connection.PutSettingDate("EDSMGalMapLast", value)));
         }
 
         #region Time markers
@@ -237,7 +242,7 @@ namespace EliteDangerousCore.DB
 
         public void ForceEDSMFullUpdate()
         {
-            ExecuteWithDatabase( db => db.Connection.PutSettingString("EDSMLastSystems", "2010-01-01 00:00:00"));
+            WithReadWrite(() => ExecuteWithDatabase( db => db.Connection.PutSettingString("EDSMLastSystems", "2010-01-01 00:00:00")));
         }
 
         public DateTime GetLastEDSMRecordTimeUTC()
@@ -256,11 +261,11 @@ namespace EliteDangerousCore.DB
 
         public void SetLastEDSMRecordTimeUTC(DateTime time)
         {
-            ExecuteWithDatabase( db =>
+            WithReadWrite(() => ExecuteWithDatabase( db =>
             {
                 db.Connection.PutSettingString("EDSMLastSystems", time.ToString(CultureInfo.InvariantCulture));
                 System.Diagnostics.Debug.WriteLine("Last EDSM record " + time.ToString());
-            });
+            }));
         }
 
         public DateTime GetLastEDDBDownloadTime()
@@ -270,12 +275,12 @@ namespace EliteDangerousCore.DB
 
         public void SetLastEDDBDownloadTime()
         {
-            ExecuteWithDatabase( db => db.Connection.PutSettingDate("EDDBLastDownloadTime", DateTime.UtcNow));
+            WithReadWrite(() => ExecuteWithDatabase( db => db.Connection.PutSettingDate("EDDBLastDownloadTime", DateTime.UtcNow)));
         }
 
         public void ForceEDDBFullUpdate()
         {
-            ExecuteWithDatabase( db => db.Connection.PutSettingDate("EDDBLastDownloadTime", DateTime.MinValue));
+            WithReadWrite(() => ExecuteWithDatabase( db => db.Connection.PutSettingDate("EDDBLastDownloadTime", DateTime.MinValue)));
         }
 
         public int GetEDSMSectorIDNext()
@@ -285,7 +290,7 @@ namespace EliteDangerousCore.DB
 
         public void SetEDSMSectorIDNext(int val)
         {
-            ExecuteWithDatabase( db => db.Connection.PutSettingInt("EDSMSectorIDNext", val));
+            WithReadWrite(() => ExecuteWithDatabase( db => db.Connection.PutSettingInt("EDSMSectorIDNext", val)));
         }
 
         #endregion

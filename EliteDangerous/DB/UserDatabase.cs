@@ -43,6 +43,11 @@ namespace EliteDangerousCore.DB
             ExecuteWithDatabase(cn => { cn.Connection.UpgradeUserDB(); });
         }
 
+        protected override UserDatabaseConnection CreateConnection()
+        {
+            return new UserDatabaseConnection();
+        }
+
         // Register
 
         public bool KeyExists(string key)

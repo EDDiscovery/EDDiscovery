@@ -307,9 +307,10 @@ namespace EDDiscovery
             {
                 if (!EDDOptions.Instance.NoSystemsLoad)
                 {
-                    DoPerformSync();        // this is done after the initial history load..
+                    SystemsDatabase.Instance.WithReadWrite(() => DoPerformSync());        // this is done after the initial history load..
                 }
 
+                SystemsDatabase.Instance.SetReadOnly();
 
                 while (!PendingClose)
                 {
@@ -323,7 +324,7 @@ namespace EDDiscovery
                     if (wh == 1)
                     {
                         if (!EDDOptions.Instance.NoSystemsLoad && EDDConfig.Instance.EDSMEDDBDownload)      // if no system off, and EDSM download on
-                            DoPerformSync();
+                            SystemsDatabase.Instance.WithReadWrite(() => DoPerformSync());
                     }
                 }
             }
