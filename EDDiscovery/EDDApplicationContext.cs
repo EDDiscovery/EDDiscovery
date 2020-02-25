@@ -71,6 +71,8 @@ namespace EDDiscovery
         /// </summary>
         public static EDDiscoveryForm EDDMainForm { get; private set; } = null;
 
+        public static bool RestartInSafeMode { get; set; } = false;
+
         #endregion
 
         #region Implementation
