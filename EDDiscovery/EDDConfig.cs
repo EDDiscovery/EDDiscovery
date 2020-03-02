@@ -151,7 +151,7 @@ namespace EDDiscovery
             {
                 t = t.AddYears(1286);  
                 if (!DateTimeInRangeForGame(t))
-                    t = new DateTime(DateTime.UtcNow.Year+1286, DateTime.UtcNow.Month, DateTime.UtcNow.Day);
+                    t = DateTime.UtcNow.AddYears(1286);
                 return t;
             }
             else                                 // local
