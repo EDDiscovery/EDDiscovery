@@ -52,7 +52,6 @@ namespace EliteDangerousCore
 
         public bool SyncedEDSM { get { return (Synced & (int)SyncFlags.EDSM) != 0; } }
         public bool SyncedEDDN { get { return (Synced & (int)SyncFlags.EDDN) != 0; } }
-        public bool SyncedEGO { get { return (Synced & (int)SyncFlags.EGO) != 0; } }
         public bool StartMarker { get { return (Synced & (int)SyncFlags.StartMarker) != 0; } }
         public bool StopMarker { get { return (Synced & (int)SyncFlags.StopMarker) != 0; } }
 
@@ -130,11 +129,6 @@ namespace EliteDangerousCore
         public void SetEddnSync()
         {
             UserDatabase.Instance.ExecuteWithDatabase( cn => UpdateSyncFlagBit(SyncFlags.EDDN, true, SyncFlags.NoBit, false, cn.Connection));
-        }
-
-        public void SetEGOSync()
-        {
-            UserDatabase.Instance.ExecuteWithDatabase( cn => UpdateSyncFlagBit(SyncFlags.EGO, true, SyncFlags.NoBit, false, cn.Connection));
         }
 
         #endregion
@@ -285,7 +279,7 @@ namespace EliteDangerousCore
             NoBit = 0,                      // for sync change func only
             EDSM = 0x01,
             EDDN = 0x02,
-            EGO = 0x04,
+            // 0x04 was EGO
             StartMarker = 0x0100,           // measure distance start pos marker
             StopMarker = 0x0200,            // measure distance stop pos marker
         }

@@ -153,16 +153,6 @@ namespace EliteDangerousCore
             }
         }
 
-        public List<HistoryEntry> FilterByScanNotEGOSynced
-        {
-            get
-            {
-                DateTime start2_3 = new DateTime(2017, 4, 11, 12, 0, 0, 0, DateTimeKind.Utc);
-                return (from s in historylist where s.EGOSync == false && s.EntryType == JournalTypeEnum.Scan && s.EventTimeUTC >= start2_3 orderby s.EventTimeUTC ascending select s).ToList();
-            }
-        }
-
-
         public List<HistoryEntry> FilterByFSDAndPosition
         {
             get

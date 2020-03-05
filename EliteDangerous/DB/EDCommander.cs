@@ -482,9 +482,9 @@ namespace EliteDangerousCore
         public string EdsmName { set; get; } = "";
         public string EDSMAPIKey { set; get; } = "";
 
-        public bool SyncToEGO { get { return false; } set { } }
-        public string EGOName { set; get; } = "";
-        public string EGOAPIKey { set; get; } = "";
+        private bool SyncToEGO { get { return false; } set { } }    // now withdrawn, kept in DB as its in the users DB fields.
+        private string EGOName { set; get; } = "";
+        private string EGOAPIKey { set; get; } = "";
 
         public bool SyncToInara { set; get; }
         public string InaraName { set; get; } = "";

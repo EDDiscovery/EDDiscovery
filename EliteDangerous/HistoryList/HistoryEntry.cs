@@ -53,7 +53,6 @@ namespace EliteDangerousCore
 
         public bool EdsmSync { get { return journalEntry.SyncedEDSM; } }           // flag populated from journal entry when HE is made. Have we synced?
         public bool EDDNSync { get { return journalEntry.SyncedEDDN; } }
-        public bool EGOSync { get { return journalEntry.SyncedEGO; } }
         public bool StartMarker { get { return journalEntry.StartMarker; } }
         public bool StopMarker { get { return journalEntry.StopMarker; } }
         public bool IsFSDJump { get { return EntryType == JournalTypeEnum.FSDJump; } }

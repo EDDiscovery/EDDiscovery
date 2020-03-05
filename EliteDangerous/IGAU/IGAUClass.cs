@@ -31,18 +31,20 @@ namespace EliteDangerousCore.IGAU
 {
     public class IGAUClass : BaseUtils.HttpCom
     {
-        public string commanderName;
-        public string App_Name;
-        public string App_Version;
+        private readonly string App_Version;
+        private readonly string App_Name;
 
         private readonly string igau_address = "https://ddss70885k.execute-api.us-west-1.amazonaws.com/Prod";
 
         public IGAUClass()
         {
-            httpserveraddress = igau_address;            
+            httpserveraddress = igau_address;
+            App_Name = "EDDiscovery";
+            var assemblyFullName = Assembly.GetEntryAssembly().FullName;
+            App_Version = assemblyFullName.Split(',')[1].Split('=')[1];
         }
 
-        public JObject CreateIGAUMessage(JournalScan journal, string timestamp, string EntryID, string Name, string Name_Localised, string System, string SystemAddress, string App_Name, string App_Version)
+        public JObject CreateIGAUMessage(string timestamp, long EntryID, string Name, string Name_Localised, string System, long SystemAddress)
         {
             JObject detail = new JObject();
             detail["input_1"] = timestamp;

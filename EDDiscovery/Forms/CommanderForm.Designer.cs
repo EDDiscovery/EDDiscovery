@@ -43,9 +43,6 @@
             this.checkBoxCustomEDSMFrom = new ExtendedControls.ExtCheckBox();
             this.checkBoxCustomEDSMTo = new ExtendedControls.ExtCheckBox();
             this.buttonExtBrowse = new ExtendedControls.ExtButton();
-            this.checkBoxEGOSync = new ExtendedControls.ExtCheckBox();
-            this.textBoxEGOName = new ExtendedControls.ExtTextBox();
-            this.textBoxEGOAPI = new ExtendedControls.ExtTextBox();
             this.textBoxBorderEDSMName = new ExtendedControls.ExtTextBox();
             this.textBoxBorderEDSMAPI = new ExtendedControls.ExtTextBox();
             this.textBoxBorderJournal = new ExtendedControls.ExtTextBox();
@@ -69,10 +66,6 @@
             this.labelJL = new System.Windows.Forms.Label();
             this.buttonCancel = new ExtendedControls.ExtButton();
             this.buttonOK = new ExtendedControls.ExtButton();
-            this.groupBoxCustomEGO = new ExtendedControls.ExtGroupBox();
-            this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
-            this.labelEGOAPI = new System.Windows.Forms.Label();
-            this.labelEGON = new System.Windows.Forms.Label();
             this.groupBoxCustomInara = new ExtendedControls.ExtGroupBox();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
             this.labelINARAN = new System.Windows.Forms.Label();
@@ -94,8 +87,6 @@
             this.tableLayoutPanel2.SuspendLayout();
             this.groupBoxCustomJournal.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
-            this.groupBoxCustomEGO.SuspendLayout();
-            this.tableLayoutPanel3.SuspendLayout();
             this.groupBoxCustomInara.SuspendLayout();
             this.tableLayoutPanel5.SuspendLayout();
             this.panelOK.SuspendLayout();
@@ -282,85 +273,6 @@
             this.toolTip.SetToolTip(this.buttonExtBrowse, "Browse to the the journal folder");
             this.buttonExtBrowse.UseVisualStyleBackColor = true;
             this.buttonExtBrowse.Click += new System.EventHandler(this.buttonExtBrowse_Click);
-            // 
-            // checkBoxEGOSync
-            // 
-            this.checkBoxEGOSync.AutoSize = true;
-            this.checkBoxEGOSync.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxEGOSync.CheckBoxDisabledScaling = 0.5F;
-            this.checkBoxEGOSync.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBoxEGOSync.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxEGOSync.Enabled = false;
-            this.checkBoxEGOSync.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxEGOSync.ImageIndeterminate = null;
-            this.checkBoxEGOSync.ImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.checkBoxEGOSync.ImageUnchecked = null;
-            this.checkBoxEGOSync.Location = new System.Drawing.Point(409, 3);
-            this.checkBoxEGOSync.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxEGOSync.Name = "checkBoxEGOSync";
-            this.checkBoxEGOSync.Size = new System.Drawing.Size(88, 17);
-            this.checkBoxEGOSync.TabIndex = 4;
-            this.checkBoxEGOSync.Text = "Sync to EGO";
-            this.checkBoxEGOSync.TickBoxReductionRatio = 0.75F;
-            this.toolTip.SetToolTip(this.checkBoxEGOSync, "Send your scan data to EGO");
-            this.checkBoxEGOSync.UseVisualStyleBackColor = true;
-            // 
-            // textBoxEGOName
-            // 
-            this.textBoxEGOName.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.textBoxEGOName.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
-            this.textBoxEGOName.BackErrorColor = System.Drawing.Color.Red;
-            this.textBoxEGOName.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxEGOName.BorderColorScaling = 0.5F;
-            this.textBoxEGOName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBoxEGOName.ClearOnFirstChar = false;
-            this.textBoxEGOName.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBoxEGOName.Enabled = false;
-            this.textBoxEGOName.EndButtonEnable = true;
-            this.textBoxEGOName.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxEGOName.EndButtonImage")));
-            this.textBoxEGOName.EndButtonVisible = false;
-            this.textBoxEGOName.InErrorCondition = false;
-            this.textBoxEGOName.Location = new System.Drawing.Point(206, 3);
-            this.textBoxEGOName.Multiline = false;
-            this.textBoxEGOName.Name = "textBoxEGOName";
-            this.textBoxEGOName.ReadOnly = false;
-            this.textBoxEGOName.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.textBoxEGOName.SelectionLength = 0;
-            this.textBoxEGOName.SelectionStart = 0;
-            this.textBoxEGOName.Size = new System.Drawing.Size(197, 20);
-            this.textBoxEGOName.TabIndex = 3;
-            this.textBoxEGOName.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.toolTip.SetToolTip(this.textBoxEGOName, "Give the user name for this commander on EGO");
-            this.textBoxEGOName.WordWrap = true;
-            // 
-            // textBoxEGOAPI
-            // 
-            this.textBoxEGOAPI.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.textBoxEGOAPI.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
-            this.textBoxEGOAPI.BackErrorColor = System.Drawing.Color.Red;
-            this.textBoxEGOAPI.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxEGOAPI.BorderColorScaling = 0.5F;
-            this.textBoxEGOAPI.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBoxEGOAPI.ClearOnFirstChar = false;
-            this.textBoxEGOAPI.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBoxEGOAPI.Enabled = false;
-            this.textBoxEGOAPI.EndButtonEnable = true;
-            this.textBoxEGOAPI.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxEGOAPI.EndButtonImage")));
-            this.textBoxEGOAPI.EndButtonVisible = false;
-            this.textBoxEGOAPI.InErrorCondition = false;
-            this.textBoxEGOAPI.Location = new System.Drawing.Point(206, 29);
-            this.textBoxEGOAPI.Multiline = false;
-            this.textBoxEGOAPI.Name = "textBoxEGOAPI";
-            this.textBoxEGOAPI.ReadOnly = false;
-            this.textBoxEGOAPI.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.textBoxEGOAPI.SelectionLength = 0;
-            this.textBoxEGOAPI.SelectionStart = 0;
-            this.textBoxEGOAPI.Size = new System.Drawing.Size(197, 20);
-            this.textBoxEGOAPI.TabIndex = 3;
-            this.textBoxEGOAPI.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.toolTip.SetToolTip(this.textBoxEGOAPI, "Enter the API key from the EGO Website\\nGet an EGO API key from https://www.elite" +
-        "galaxyonline.com in the account menu");
-            this.textBoxEGOAPI.WordWrap = true;
             // 
             // textBoxBorderEDSMName
             // 
@@ -635,12 +547,12 @@
             this.checkBoxIGAUSync.ImageIndeterminate = null;
             this.checkBoxIGAUSync.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxIGAUSync.ImageUnchecked = null;
-            this.checkBoxIGAUSync.Location = new System.Drawing.Point(6, 19);
+            this.checkBoxIGAUSync.Location = new System.Drawing.Point(6, 23);
             this.checkBoxIGAUSync.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxIGAUSync.Name = "checkBoxIGAUSync";
-            this.checkBoxIGAUSync.Size = new System.Drawing.Size(225, 17);
+            this.checkBoxIGAUSync.Size = new System.Drawing.Size(228, 17);
             this.checkBoxIGAUSync.TabIndex = 38;
-            this.checkBoxIGAUSync.Text = "Send CodexEntry Discovery Data to IGAU";
+            this.checkBoxIGAUSync.Text = "Send Codex Entry Discovery Data to IGAU";
             this.checkBoxIGAUSync.TickBoxReductionRatio = 0.75F;
             this.toolTip.SetToolTip(this.checkBoxIGAUSync, "https://github.com/Elite-IGAU/publications/blob/master/IGAU_Codex.csv");
             this.checkBoxIGAUSync.UseVisualStyleBackColor = true;
@@ -804,65 +716,6 @@
             this.buttonOK.UseVisualStyleBackColor = true;
             this.buttonOK.Click += new System.EventHandler(this.buttonOK_Click);
             // 
-            // groupBoxCustomEGO
-            // 
-            this.groupBoxCustomEGO.AlternateClientBackColor = System.Drawing.Color.Blue;
-            this.groupBoxCustomEGO.AutoSize = true;
-            this.groupBoxCustomEGO.BackColorScaling = 0.5F;
-            this.groupBoxCustomEGO.BorderColor = System.Drawing.Color.LightGray;
-            this.groupBoxCustomEGO.BorderColorScaling = 0.5F;
-            this.groupBoxCustomEGO.Controls.Add(this.tableLayoutPanel3);
-            this.groupBoxCustomEGO.Dock = System.Windows.Forms.DockStyle.Top;
-            this.groupBoxCustomEGO.FillClientAreaWithAlternateColor = false;
-            this.groupBoxCustomEGO.Location = new System.Drawing.Point(0, 279);
-            this.groupBoxCustomEGO.Margin = new System.Windows.Forms.Padding(10);
-            this.groupBoxCustomEGO.Name = "groupBoxCustomEGO";
-            this.groupBoxCustomEGO.Size = new System.Drawing.Size(615, 76);
-            this.groupBoxCustomEGO.TabIndex = 33;
-            this.groupBoxCustomEGO.TabStop = false;
-            this.groupBoxCustomEGO.Text = "Elite Galaxy Online - This site is offline so section disabled";
-            this.groupBoxCustomEGO.TextPadding = 0;
-            this.groupBoxCustomEGO.TextStartPosition = -1;
-            // 
-            // tableLayoutPanel3
-            // 
-            this.tableLayoutPanel3.AutoSize = true;
-            this.tableLayoutPanel3.ColumnCount = 3;
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tableLayoutPanel3.Controls.Add(this.checkBoxEGOSync, 2, 0);
-            this.tableLayoutPanel3.Controls.Add(this.labelEGOAPI, 0, 1);
-            this.tableLayoutPanel3.Controls.Add(this.labelEGON, 0, 0);
-            this.tableLayoutPanel3.Controls.Add(this.textBoxEGOName, 1, 0);
-            this.tableLayoutPanel3.Controls.Add(this.textBoxEGOAPI, 1, 1);
-            this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 16);
-            this.tableLayoutPanel3.Name = "tableLayoutPanel3";
-            this.tableLayoutPanel3.RowCount = 2;
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 45.90164F));
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 54.09836F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(609, 57);
-            this.tableLayoutPanel3.TabIndex = 5;
-            // 
-            // labelEGOAPI
-            // 
-            this.labelEGOAPI.AutoSize = true;
-            this.labelEGOAPI.Location = new System.Drawing.Point(3, 26);
-            this.labelEGOAPI.Name = "labelEGOAPI";
-            this.labelEGOAPI.Size = new System.Drawing.Size(74, 13);
-            this.labelEGOAPI.TabIndex = 2;
-            this.labelEGOAPI.Text = "EGO API Key:";
-            // 
-            // labelEGON
-            // 
-            this.labelEGON.AutoSize = true;
-            this.labelEGON.Location = new System.Drawing.Point(3, 0);
-            this.labelEGON.Name = "labelEGON";
-            this.labelEGON.Size = new System.Drawing.Size(64, 13);
-            this.labelEGON.TabIndex = 2;
-            this.labelEGON.Text = "EGO Name:";
-            // 
             // groupBoxCustomInara
             // 
             this.groupBoxCustomInara.AlternateClientBackColor = System.Drawing.Color.Blue;
@@ -873,7 +726,7 @@
             this.groupBoxCustomInara.Controls.Add(this.tableLayoutPanel5);
             this.groupBoxCustomInara.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBoxCustomInara.FillClientAreaWithAlternateColor = false;
-            this.groupBoxCustomInara.Location = new System.Drawing.Point(0, 355);
+            this.groupBoxCustomInara.Location = new System.Drawing.Point(0, 279);
             this.groupBoxCustomInara.Margin = new System.Windows.Forms.Padding(10);
             this.groupBoxCustomInara.Name = "groupBoxCustomInara";
             this.groupBoxCustomInara.Size = new System.Drawing.Size(615, 70);
@@ -926,7 +779,7 @@
             // 
             this.panelI6.AutoSize = true;
             this.panelI6.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelI6.Location = new System.Drawing.Point(0, 355);
+            this.panelI6.Location = new System.Drawing.Point(0, 279);
             this.panelI6.Name = "panelI6";
             this.panelI6.Size = new System.Drawing.Size(615, 0);
             this.panelI6.TabIndex = 35;
@@ -937,7 +790,7 @@
             this.panelOK.Controls.Add(this.buttonCancel);
             this.panelOK.Controls.Add(this.buttonOK);
             this.panelOK.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panelOK.Location = new System.Drawing.Point(0, 609);
+            this.panelOK.Location = new System.Drawing.Point(0, 547);
             this.panelOK.Margin = new System.Windows.Forms.Padding(10);
             this.panelOK.Name = "panelOK";
             this.panelOK.Size = new System.Drawing.Size(615, 29);
@@ -945,7 +798,7 @@
             // 
             // statusStripCustom
             // 
-            this.statusStripCustom.Location = new System.Drawing.Point(0, 638);
+            this.statusStripCustom.Location = new System.Drawing.Point(0, 576);
             this.statusStripCustom.Name = "statusStripCustom";
             this.statusStripCustom.Size = new System.Drawing.Size(615, 22);
             this.statusStripCustom.TabIndex = 32;
@@ -959,7 +812,7 @@
             this.extGroupBoxCommanderInfo.Controls.Add(this.tableLayoutPanel4);
             this.extGroupBoxCommanderInfo.Dock = System.Windows.Forms.DockStyle.Top;
             this.extGroupBoxCommanderInfo.FillClientAreaWithAlternateColor = false;
-            this.extGroupBoxCommanderInfo.Location = new System.Drawing.Point(0, 425);
+            this.extGroupBoxCommanderInfo.Location = new System.Drawing.Point(0, 408);
             this.extGroupBoxCommanderInfo.Name = "extGroupBoxCommanderInfo";
             this.extGroupBoxCommanderInfo.Size = new System.Drawing.Size(615, 122);
             this.extGroupBoxCommanderInfo.TabIndex = 37;
@@ -1066,14 +919,16 @@
             // groupBoxCustomIGAU
             // 
             this.groupBoxCustomIGAU.AlternateClientBackColor = System.Drawing.Color.Blue;
+            this.groupBoxCustomIGAU.AutoSize = true;
             this.groupBoxCustomIGAU.BackColorScaling = 0.5F;
             this.groupBoxCustomIGAU.BorderColor = System.Drawing.Color.LightGray;
             this.groupBoxCustomIGAU.BorderColorScaling = 0.5F;
             this.groupBoxCustomIGAU.Controls.Add(this.checkBoxIGAUSync);
+            this.groupBoxCustomIGAU.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBoxCustomIGAU.FillClientAreaWithAlternateColor = false;
-            this.groupBoxCustomIGAU.Location = new System.Drawing.Point(3, 553);
+            this.groupBoxCustomIGAU.Location = new System.Drawing.Point(0, 349);
             this.groupBoxCustomIGAU.Name = "groupBoxCustomIGAU";
-            this.groupBoxCustomIGAU.Size = new System.Drawing.Size(609, 44);
+            this.groupBoxCustomIGAU.Size = new System.Drawing.Size(615, 59);
             this.groupBoxCustomIGAU.TabIndex = 39;
             this.groupBoxCustomIGAU.TabStop = false;
             this.groupBoxCustomIGAU.Text = "Intergalactic Astronomical Union [IGAU]";
@@ -1085,14 +940,13 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(615, 660);
-            this.Controls.Add(this.groupBoxCustomIGAU);
+            this.ClientSize = new System.Drawing.Size(615, 598);
             this.Controls.Add(this.panelOK);
             this.Controls.Add(this.statusStripCustom);
             this.Controls.Add(this.extGroupBoxCommanderInfo);
+            this.Controls.Add(this.groupBoxCustomIGAU);
             this.Controls.Add(this.groupBoxCustomInara);
             this.Controls.Add(this.panelI6);
-            this.Controls.Add(this.groupBoxCustomEGO);
             this.Controls.Add(this.panelI4);
             this.Controls.Add(this.groupBoxCustomEDDN);
             this.Controls.Add(this.panelI3);
@@ -1119,10 +973,6 @@
             this.groupBoxCustomJournal.PerformLayout();
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
-            this.groupBoxCustomEGO.ResumeLayout(false);
-            this.groupBoxCustomEGO.PerformLayout();
-            this.tableLayoutPanel3.ResumeLayout(false);
-            this.tableLayoutPanel3.PerformLayout();
             this.groupBoxCustomInara.ResumeLayout(false);
             this.groupBoxCustomInara.PerformLayout();
             this.tableLayoutPanel5.ResumeLayout(false);
@@ -1166,12 +1016,6 @@
         private System.Windows.Forms.Panel panelI2;
         private System.Windows.Forms.Panel panelI1;
         private System.Windows.Forms.ToolTip toolTip;
-        private ExtendedControls.ExtGroupBox groupBoxCustomEGO;
-        private ExtendedControls.ExtCheckBox checkBoxEGOSync;
-        private System.Windows.Forms.Label labelEGON;
-        private ExtendedControls.ExtTextBox textBoxEGOName;
-        private ExtendedControls.ExtTextBox textBoxEGOAPI;
-        private System.Windows.Forms.Label labelEGOAPI;
         private ExtendedControls.ExtGroupBox groupBoxCustomInara;
         private ExtendedControls.ExtCheckBox checkBoxCustomInara;
         private System.Windows.Forms.Label labelINARAN;
@@ -1182,7 +1026,6 @@
         private System.Windows.Forms.Panel panelOK;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
         private ExtendedControls.ExtStatusStrip statusStripCustom;
         private ExtendedControls.ExtGroupBox extGroupBoxCommanderInfo;

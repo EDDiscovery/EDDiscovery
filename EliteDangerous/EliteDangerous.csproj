@@ -84,8 +84,6 @@
     <Compile Include="EDSM\GalacticMapObject.cs" />
     <Compile Include="EDSM\GalacticMapSystem.cs" />
     <Compile Include="EDSM\GalacticMapping.cs" />
-    <Compile Include="EGO\EGOClass.cs" />
-    <Compile Include="EGO\EGOSync.cs" />
     <Compile Include="Bindings\BindingsFile.cs" />
     <Compile Include="EliteDangerous\Bodies.cs" />
     <Compile Include="EliteDangerous\BodyDesignations.cs" />
@@ -93,6 +91,7 @@
     <Compile Include="EliteDangerous\EDCalculations.cs" />
     <Compile Include="DB\EDCommander.cs" />
     <Compile Include="EliteDangerous\Translations.cs" />
+    <Compile Include="IGAU\IGAUSync.cs" />
     <Compile Include="IGAU\IGAUClass.cs" />
     <Compile Include="Journal\EDJournalClass.cs" />
     <Compile Include="Journal\EDJournalReader.cs" />

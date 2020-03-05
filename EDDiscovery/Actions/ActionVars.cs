@@ -64,7 +64,7 @@ namespace EDDiscovery.Actions
                 vars[prefix + "StopMarker"] = he.StopMarker.ToStringIntValue();
                 vars[prefix + "EdsmSync"] = he.EdsmSync.ToStringIntValue();
                 vars[prefix + "EddnSync"] = he.EDDNSync.ToStringIntValue();
-                vars[prefix + "EgoSync"] = he.EGOSync.ToStringIntValue();
+                vars[prefix + "EgoSync"] = false.ToStringIntValue();        //removed due to no EGO
                 vars[prefix + "Beta"] = he.IsBetaMessage.ToStringIntValue();
                 vars[prefix + "GameMode"] = he.GameMode;
                 vars[prefix + "Group"] = he.Group;

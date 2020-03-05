@@ -54,9 +54,6 @@ namespace EDDiscovery.Forms
             checkBoxCustomEDSMTo.Checked = cmdr.SyncToEdsm;
             checkBoxCustomEDDNTo.Checked = cmdr.SyncToEddn;
             checkBoxIGAUSync.Checked = cmdr.SyncToIGAU;
-            checkBoxEGOSync.Checked = cmdr.SyncToEGO;
-            textBoxEGOName.Text = cmdr.EGOName;
-            textBoxEGOAPI.Text = cmdr.EGOAPIKey;
             textBoxBorderInaraAPIKey.Text = cmdr.InaraAPIKey;
             textBoxBorderInaraName.Text = cmdr.InaraName;
             checkBoxCustomInara.Checked = cmdr.SyncToInara;
@@ -90,9 +87,6 @@ namespace EDDiscovery.Forms
             cmdr.SyncToEdsm = checkBoxCustomEDSMTo.Checked;
             cmdr.SyncToEddn = checkBoxCustomEDDNTo.Checked;
             cmdr.SyncToIGAU = checkBoxIGAUSync.Checked;
-            cmdr.SyncToEGO = checkBoxEGOSync.Checked;
-            cmdr.EGOName = textBoxEGOName.Text;
-            cmdr.EGOAPIKey = textBoxEGOAPI.Text;
             cmdr.InaraAPIKey = textBoxBorderInaraAPIKey.Text;
             cmdr.InaraName = textBoxBorderInaraName.Text;
             cmdr.SyncToInara = checkBoxCustomInara.Checked;

@@ -123,6 +123,7 @@ namespace EDDiscovery.UserControls
             runActionsAcrossSelectionToolSpeechStripMenuItem.Visible = false;
             runSelectionThroughInaraSystemToolStripMenuItem.Visible = false;
             runEntryThroughProfileSystemToolStripMenuItem.Visible = false;
+            runSelectionThroughIGAUDebugToolStripMenuItem.Visible = false;
 #endif
 
             searchtimer = new Timer() { Interval = 500 };
@@ -1270,7 +1271,7 @@ namespace EDDiscovery.UserControls
 
         private void runSelectionThroughInaraSystemToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (rightclicksystem != null )
+            if (rightclicksystem != null)
             {
                 List<Newtonsoft.Json.Linq.JToken> list = EliteDangerousCore.Inara.InaraSync.NewEntryList(discoveryform.history, rightclicksystem);
 
@@ -1311,6 +1312,13 @@ namespace EDDiscovery.UserControls
             discoveryform.CheckActionProfile(rightclicksystem);
         }
 
+        private void runSelectionThroughIGAUDebugToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (rightclicksystem != null)
+            {
+                EliteDangerousCore.IGAU.IGAUSync.NewEvent(discoveryform.LogLine, rightclicksystem);
+            }
+        }
         private void runActionsAcrossSelectionToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string laststring = "";
