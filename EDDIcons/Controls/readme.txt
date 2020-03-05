@@ -5,6 +5,8 @@ Adding icons is complicated
 3. Add your icon to that folder (lets call it firstdiscover.png)
 4. Mark the icon as an embedded resource in properties
 
+IF YOU WANT THE ICON TO BE IN A CONTROL (eg Stars/Planets/Panels do not need this)
+
 5. Open the resource file in Fakes to view the icons
 6. Drag the icon from the folder into the resource view to add it.
 7. Rename, in the resource editor, the resource entry so its not generic if required - add on a prefix
