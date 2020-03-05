@@ -53,6 +53,7 @@ namespace EDDiscovery.Forms
             checkBoxCustomEDSMFrom.Checked = cmdr.SyncFromEdsm;
             checkBoxCustomEDSMTo.Checked = cmdr.SyncToEdsm;
             checkBoxCustomEDDNTo.Checked = cmdr.SyncToEddn;
+            checkBoxIGAUSync.Checked = cmdr.SyncToIGAU;
             checkBoxEGOSync.Checked = cmdr.SyncToEGO;
             textBoxEGOName.Text = cmdr.EGOName;
             textBoxEGOAPI.Text = cmdr.EGOAPIKey;
@@ -88,6 +89,7 @@ namespace EDDiscovery.Forms
             cmdr.SyncFromEdsm = checkBoxCustomEDSMFrom.Checked;
             cmdr.SyncToEdsm = checkBoxCustomEDSMTo.Checked;
             cmdr.SyncToEddn = checkBoxCustomEDDNTo.Checked;
+            cmdr.SyncToIGAU = checkBoxIGAUSync.Checked;
             cmdr.SyncToEGO = checkBoxEGOSync.Checked;
             cmdr.EGOName = textBoxEGOName.Text;
             cmdr.EGOAPIKey = textBoxEGOAPI.Text;
@@ -168,8 +170,12 @@ namespace EDDiscovery.Forms
         }
 
 
+
         #endregion
 
-       
+        private void CommanderForm_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
