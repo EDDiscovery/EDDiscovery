@@ -1134,10 +1134,8 @@
       </ZipFiles>
       <Zipfiles Include="$(OutDir)x64\SQLite.Interop.dll">
         <Name>x64\SQLite.Interop.dll</Name>
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Zipfiles>
       <Zipfiles Include="$(OutDir)x86\SQLite.Interop.dll">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         <Name>x86\SQLite.Interop.dll</Name>
       </Zipfiles>
     </ItemGroup>
