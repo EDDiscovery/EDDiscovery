@@ -44,12 +44,20 @@ namespace EliteDangerousCore.IGAU
             App_Version = assemblyFullName.Split(',')[1].Split('=')[1];
         }
 
+        public string Name_Stripped { get; private set; }
+        public string Name_Lower { get; private set; }
+
         public JObject CreateIGAUMessage(string timestamp, long EntryID, string Name, string Name_Localised, string System, long SystemAddress)
         {
+            Name_Stripped = Name.Replace("$", string.Empty).Replace(";", string.Empty);
+            // IGAUClass.cs(53,41,53,54): error CS1503: Argument 1: cannot convert from 'string' to 'System.Globalization.CultureInfo'
+            // Name_Lower = string.ToLower(Name_Stripped);
             JObject detail = new JObject();
             detail["input_1"] = timestamp;
             detail["input_2"] = EntryID;
-            detail["input_3"] = Name;
+            //detail["input_3"] = Name;
+            detail["input_3"] = Name_Stripped;
+            //detail["input_3"] = Name_Lower;
             detail["input_4"] = Name_Localised;
             detail["input_5"] = System;
             detail["input_6"] = SystemAddress;
