@@ -82,23 +82,23 @@ namespace EliteDangerousCore.IGAU
                     {
                         hlscanevent.Reset();
                         JournalCodexEntry c = he.journalEntry as JournalCodexEntry;
-
-                        var msg = igau.CreateIGAUMessage(he.EventTimeUTC.ToStringZulu(),
+                        if (c.VoucherAmount != null && c.VoucherAmount > 0)
+                        {
+                            var msg = igau.CreateIGAUMessage(he.EventTimeUTC.ToStringZulu(),
                                                               c.EntryID.ToString(), c.Name, c.Name_Localised, c.System, c.SystemAddress.ToString() ?? "0");
 
-                        System.Diagnostics.Debug.WriteLine("IGAU Post " + msg.ToString(Newtonsoft.Json.Formatting.Indented));
+                            System.Diagnostics.Debug.WriteLine("IGAU Post " + msg.ToString(Newtonsoft.Json.Formatting.Indented));
 
-                        igau.PostMessage(msg, out bool accepted);
-                        //if (!accepted)
-                        //logger?.Invoke("IGAU Message rejected " + he.EventTimeUTC.ToStringZulu());
-
+                            igau.PostMessage(msg, out bool accepted);
+                            //if (!accepted)
+                            //logger?.Invoke("IGAU Message rejected " + he.EventTimeUTC.ToStringZulu());
+                        }
                         eventcount++;
                     }
                     catch (Exception ex)
                     {
-                        System.Diagnostics.Trace.WriteLine("Exception ex:" + ex.Message);
-                        System.Diagnostics.Trace.WriteLine("Exception ex:" + ex.StackTrace);
-                        logger?.Invoke("EDDN sync Exception " + ex.Message + Environment.NewLine + ex.StackTrace);
+                        System.Diagnostics.Trace.WriteLine("Error sending event to IGAU:" + ex.Message + Environment.NewLine + ex.StackTrace);
+                        logger?.Invoke("IGAU sync Exception " + ex.Message + Environment.NewLine + ex.StackTrace);
                     }
 
                     if (Exit)
@@ -113,7 +113,7 @@ namespace EliteDangerousCore.IGAU
                 SentEvents?.Invoke(eventcount);     // tell the system..
 
                 if (hlscanunsyncedlist.IsEmpty)     // if nothing there..
-                    hlscanevent.WaitOne(60000);     // Wait up to 60 seconds for another EDDN event to come in
+                    hlscanevent.WaitOne(60000);     // Wait up to 60 seconds for another IGAU event to come in
 
                 if (Exit)
                 {
