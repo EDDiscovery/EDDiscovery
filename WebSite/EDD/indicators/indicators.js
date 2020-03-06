@@ -13,38 +13,46 @@ function RequestIndicator()
     websocket.send(JSON.stringify(msg));
 }
 
-function CreateIndicator(itype, enableit = true)
+function CreateIndicator(itype, enableit = true, tooltip = null)
 {
     if (enableit)
-        return CreateImage("statusicons/" + itype + ".png", itype, indicatoriconsize, null, [itype, null]);
+    {
+        if ( tooltip == null )
+            tooltip = itype.replace(/([a-z](?=[A-Z]))/g, '$1 ');
+
+        return CreateImage("/statusicons/" + itype + ".png", itype, indicatoriconsize, null, [itype, null], tooltip);
+    } 
     else
         return null;
 }
 
-function CreateAction(name, bindingname = null, enableit = true, flashit = 0, confirmit = false)
+function CreateAction(name, bindingname = null, enableit = true, flashit = 0, confirmit = false, tooltip = null)
 {
     if (enableit)
     {
         if (bindingname == null)
             bindingname = name;
 
+        if ( tooltip == null )
+            tooltip = bindingname.replace(/([a-z](?=[A-Z]))/g, '$1 ');
+
         //console.log("create action image name:" + itype + " a:" + action + " ");
-        return CreateImage("statusicons/" + name + ".png", name, indicatoriconsize, ClickActionItem, [name, bindingname, flashit, confirmit]);
+        return CreateImage("/statusicons/" + name + ".png", name, indicatoriconsize, ClickActionItem, [name, bindingname, flashit, confirmit], tooltip);
     }
     else
         return null;
 }
 
-function CreateActionButton(name, bindingname = null, enableit = true)
+function CreateActionButton(name, bindingname = null, enableit = true, tooltip = null)
 {
-    return CreateAction(name, bindingname, enableit, 250);
+    return CreateAction(name, bindingname, enableit, 250, null, tooltip);
 }
 
-var shiptypeselected;
-var inwingselected;
-var supercruiseselected;
-var landedselected;
-var dockedselected;
+var currentshiptype;
+var currentinwing;
+var currentsupercruise;
+var currentlanded;
+var currentdocked;
 
 // names of elements
 function HandleIndicatorMessage(jdata, statuselement, actionelement, statusotherelement)
@@ -58,20 +66,20 @@ function HandleIndicatorMessage(jdata, statuselement, actionelement, statusother
 
     console.log("Indicators Mod" + JSON.stringify(jdata));
 
-    var shiptype = jdata["ShipType"];
+    var newshiptype = jdata["ShipType"];
+    var newinwing = jdata["InWing"] != null && jdata["InWing"] == true;
+    var newsupercruise = jdata["Supercruise"] != null && jdata["Supercruise"] == true;
+    var newlanded = jdata["Landed"] != null && jdata["Landed"] == true;
+    var newdocked = jdata["Docked"] != null && jdata["Docked"] == true;
 
-    var inwing = jdata["InWing"] != null && jdata["InWing"] == true;
-    var supercruise = jdata["Supercruise"] != null && jdata["Supercruise"] == true;
-    var landed = jdata["Landed"] != null && jdata["Landed"] == true;
-    var docked = jdata["Docked"] != null && jdata["Docked"] == true;
-
-    if (shiptype != shiptypeselected || inwing != inwingselected || supercruise != supercruiseselected || landed != landedselected || docked != dockedselected)
+    if (newshiptype != currentshiptype || newinwing != currentinwing || newsupercruise != currentsupercruise || newlanded != currentlanded || newdocked != currentdocked)
     {
-        shiptypeselected = shiptype;       // SRV, MainShip, Fighter or None.
-        inwingselected = inwing;
-        supercruiseselected = supercruise;
-        SetupIndicators(jdata, document.getElementById(statuselement), document.getElementById(actionelement),
-            shiptype, inwing, supercruise, landed,docked);
+        currentshiptype = newshiptype;       // SRV, MainShip, Fighter or None.
+        currentinwing = newinwing;
+        currentsupercruise = newsupercruise;
+        currentlanded = newlanded;
+        currentdocked = newdocked;
+        SetupIndicators(jdata, document.getElementById(statuselement), document.getElementById(actionelement));
     }
 
     SetIndicatorState(jdata, document.getElementById(statuselement));
@@ -85,7 +93,7 @@ function HandleIndicatorMessage(jdata, statuselement, actionelement, statusother
 
         if (jdata["LegalState"] != null)
             tstatusother.appendChild(CreatePara("Legal State: " + jdata["LegalState"]));
-        if (jdata["Firegroup"] >= 0 && shiptype == "MainShip")
+        if (jdata["Firegroup"] >= 0 && newshiptype == "MainShip")
             tstatusother.appendChild(CreatePara("Fire Group: " + "ABCDEFGHIJK"[jdata["Firegroup"]]));
         if (jdata["ValidPips"])
         {
@@ -113,22 +121,25 @@ function HandleIndicatorMessage(jdata, statuselement, actionelement, statusother
 
 }
 
-function SetupIndicators(jdata,tstatus,tactions, shiptype, inwing, supercruise,landed, docked)
+function SetupIndicators(jdata,tstatus,tactions)
 {
     removeChildren(tstatus);
     removeChildren(tactions);
 
-    var innormalspace = !landed && !docked && !supercruise;
-    console.log("Create Indicators with L:" + landed + " D:" + docked + " N:" + innormalspace + " W:" + inwing);
-    if (shiptype == "MainShip")
+    var innormalspace = !currentlanded && !currentdocked && !currentsupercruise;
+    var notdockedlanded = !currentdocked && !currentlanded;
+
+    console.log("Create Indicators with L:" + currentlanded + " D:" + currentdocked + " N:" + innormalspace + " W:" + currentinwing + " S:" + currentsupercruise);
+
+    if (currentshiptype == "MainShip")
     {
         var statuslist = [
             CreateIndicator("Docked"), CreateIndicator("Landed"), CreateIndicator("ShieldsUp"),
-            CreateIndicator("InWing"), CreateIndicator("ScoopingFuel", supercruise), 
-            CreateIndicator("LowFuel"), CreateIndicator("OverHeating"), CreateIndicator("IsInDanger", !docked),
-            CreateIndicator("BeingInterdicted", supercruise), CreateIndicator("FsdCharging",!landed && !docked),
+            CreateIndicator("InWing"), CreateIndicator("ScoopingFuel", currentsupercruise), 
+            CreateIndicator("LowFuel"), CreateIndicator("OverHeating"), CreateIndicator("IsInDanger", !currentdocked, "In Danger"),
+            CreateIndicator("BeingInterdicted", currentsupercruise), CreateIndicator("FsdCharging", notdockedlanded),
             CreateIndicator("FsdMassLocked", innormalspace),
-            CreateIndicator("FsdCooldown", supercruise || innormalspace)
+            CreateIndicator("FsdCooldown", currentsupercruise || innormalspace)
         ];
 
         tstatus.appendChild(tablerowmultitdlist(statuslist));
@@ -137,7 +148,7 @@ function SetupIndicators(jdata,tstatus,tactions, shiptype, inwing, supercruise,l
             CreateAction("LandingGear", "LandingGearToggle",innormalspace),     // reported..
             CreateAction("Lights", "ShipSpotLightToggle"),
             CreateAction("FlightAssist", "ToggleFlightAssist", innormalspace),
-            CreateAction("HardpointsDeployed", "DeployHardpointToggle"),
+            CreateAction("HardpointsDeployed", "DeployHardpointToggle", notdockedlanded),
 
             CreateAction("CargoScoopDeployed", "ToggleCargoScoop", innormalspace),
             CreateAction("NightVision", "NightVisionToggle", innormalspace),
@@ -148,8 +159,8 @@ function SetupIndicators(jdata,tstatus,tactions, shiptype, inwing, supercruise,l
             CreateAction("HeatSink", "DeployHeatSink", innormalspace,1000),
             CreateAction("ChargeECM", null, innormalspace, 1500),
 
-            CreateAction("Supercruise", null, !landed),  // reported
-            CreateActionButton("HyperSuperCombination", null, !landed), // not reported
+            CreateAction("Supercruise", null, notdockedlanded),  // reported
+            CreateActionButton("HyperSuperCombination", null, notdockedlanded), // not reported
             CreateActionButton("OrbitLinesToggle"),
 
             CreateActionButton("CyclePreviousTarget"),
@@ -161,21 +172,21 @@ function SetupIndicators(jdata,tstatus,tactions, shiptype, inwing, supercruise,l
             CreateActionButton("CyclePreviousSubsystem", null, innormalspace),
             CreateActionButton("CycleNextSubsystem", null, innormalspace),
 
-            CreateActionButton("TargetWingman0", null, inwing),
-            CreateActionButton("TargetWingman1", null, inwing),
-            CreateActionButton("TargetWingman2", null, inwing),
-            CreateActionButton("SelectTargetsTarget", null, inwing),
-            CreateActionButton("WingNavLock", null, inwing),
+            CreateActionButton("TargetWingman0", null, currentinwing),
+            CreateActionButton("TargetWingman1", null, currentinwing),
+            CreateActionButton("TargetWingman2", null, currentinwing),
+            CreateActionButton("SelectTargetsTarget", null, currentinwing),
+            CreateActionButton("WingNavLock", null, currentinwing),
 
-            CreateActionButton("TargetNextRouteSystem",null,supercruise ),
+            CreateActionButton("TargetNextRouteSystem",null,currentsupercruise ),
 
             CreateActionButton("CycleFireGroupPrevious"),
             CreateActionButton("CycleFireGroupNext"),
 
-            CreateActionButton("IncreaseSystemsPower"),
-            CreateActionButton("IncreaseEnginesPower"),
-            CreateActionButton("IncreaseWeaponsPower"),
-            CreateActionButton("ResetPowerDistribution"),
+            CreateActionButton("IncreaseSystemsPower", null, !currentdocked),
+            CreateActionButton("IncreaseEnginesPower", null, !currentdocked),
+            CreateActionButton("IncreaseWeaponsPower", null, !currentdocked),
+            CreateActionButton("ResetPowerDistribution", null, !currentdocked),
 
             CreateActionButton("OrderDefensiveBehaviour", null, innormalspace),
             CreateActionButton("OrderAggressiveBehaviour", null, innormalspace),
@@ -188,14 +199,14 @@ function SetupIndicators(jdata,tstatus,tactions, shiptype, inwing, supercruise,l
 
             CreateAction("GalaxyMapOpen"),
             CreateAction("SystemMapOpen"),
-            CreateActionButton("Screenshot", "F10"),
+            CreateActionButton("Screenshot", "F10", true, "Screen Shot"),
 
-            CreateAction("SilentRunning", "ToggleButtonUpInput", innormalspace,0,true),
+            CreateAction("SilentRunning", "ToggleButtonUpInput", innormalspace,0,true, "Silent Running"),
         ];
 
         tactions.appendChild(tablerowmultitdlist(actionlist))
     }
-    else if (shiptype == "SRV")
+    else if (currentshiptype == "SRV")
     {
         var statuslist = [
             CreateIndicator("SrvUnderShip"), CreateIndicator("LowFuel"), CreateIndicator("ShieldsUp")
@@ -216,13 +227,13 @@ function SetupIndicators(jdata,tstatus,tactions, shiptype, inwing, supercruise,l
 
             CreateAction("GalaxyMapOpen"),
             CreateAction("SystemMapOpen"),
-            CreateActionButton( "Screenshot", "F10"),
+            CreateActionButton("Screenshot", "F10", true, "Screen Shot"),
         ];
 
         tstatus.appendChild(tablerowmultitdlist(statuslist));
         tactions.appendChild(tablerowmultitdlist(actionlist));
     }
-    else if (shiptype == "Fighter")
+    else if (currentshiptype == "Fighter")
     {
         var statuslist = [
             CreateIndicator("ShieldsUp")
@@ -248,7 +259,7 @@ function SetupIndicators(jdata,tstatus,tactions, shiptype, inwing, supercruise,l
 
             CreateAction("GalaxyMapOpen"),
             CreateAction("SystemMapOpen"),
-            CreateActionButton( "Screenshot", "F10"),
+            CreateActionButton("Screenshot", "F10", true, "Screen Shot"),
         ];
 
         tstatus.appendChild(tablerowmultitdlist(statuslist));
@@ -272,25 +283,31 @@ function SetIndicatorState(jdata, tstatus)
     {
         x.childNodes.forEach(function (y)       // td's
         {
-            y.childNodes.forEach(function (z)   // imgs
+            y.childNodes.forEach(function (y1)       // Div due to toolbar
             {
-                //console.log("Entry is " + z.nodeName + " " + z.tag);
-
-                var indicator = z.tag[0];
-
-                if (indicator != null )      // presuming this works if z.tag is not defined.
+                y1.childNodes.forEach(function (z)   // imgs and spans
                 {
-                    //console.log("..1 " + z.tag + " value is " + jdata[z.tag]);
+                    if (z.nodeName == "IMG" && z.tag != null)
+                    {
+                        console.log("Entry is " + z.nodeName + " " + z.tag);
 
-                    if (jdata[indicator] != null && jdata[indicator] == true)
-                    {
-                        z.classList.add("entryselected");       // using a class means it does not mess up all the other properties.
+                        var indicator = z.tag[0];
+
+                        if (indicator != null)      // presuming this works if z.tag is not defined.
+                        {
+                            //console.log("..1 " + z.tag + " value is " + jdata[z.tag]);
+
+                            if (jdata[indicator] != null && jdata[indicator] == true)
+                            {
+                                z.classList.add("entryselected");       // using a class means it does not mess up all the other properties.
+                            }
+                            else
+                            {
+                                z.classList.remove("entryselected");
+                            }
+                        }
                     }
-                    else
-                    {
-                        z.classList.remove("entryselected");
-                    }
-                }
+                });
             });
         });
     });

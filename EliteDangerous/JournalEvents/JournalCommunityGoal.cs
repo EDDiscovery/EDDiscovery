@@ -83,9 +83,7 @@ namespace EliteDangerousCore.JournalEvents
             {
                 BaseUtils.FieldBuilder.NewPrefix nl = new BaseUtils.FieldBuilder.NewPrefix(Environment.NewLine+"  ");
 
-                DateTime exp = Expiry;
-                if (exp != null && !EliteConfigInstance.InstanceConfig.DisplayUTC)
-                    exp = exp.ToLocalTime();
+                DateTime exp = EliteConfigInstance.InstanceConfig.ConvertTimeToSelectedFromUTC(Expiry);
 
                 return BaseUtils.FieldBuilder.Build(
                      "Title:".T(EDTx.CommunityGoal_Title), Title, "System:".T(EDTx.CommunityGoal_System), SystemName,                  

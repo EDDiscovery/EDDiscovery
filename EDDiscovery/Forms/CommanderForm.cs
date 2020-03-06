@@ -54,14 +54,12 @@ namespace EDDiscovery.Forms
             checkBoxCustomEDSMFrom.Checked = cmdr.SyncFromEdsm;
             checkBoxCustomEDSMTo.Checked = cmdr.SyncToEdsm;
             checkBoxCustomEDDNTo.Checked = cmdr.SyncToEddn;
-            checkBoxEGOSync.Checked = cmdr.SyncToEGO;
-            textBoxEGOName.Text = cmdr.EGOName;
-            textBoxEGOAPI.Text = cmdr.EGOAPIKey;
+            checkBoxIGAUSync.Checked = cmdr.SyncToIGAU;
             textBoxBorderInaraAPIKey.Text = cmdr.InaraAPIKey;
             textBoxBorderInaraName.Text = cmdr.InaraName;
             checkBoxCustomInara.Checked = cmdr.SyncToInara;
 
-            extTextBoxAutoCompleteHomeSystem.Text = cmdr.HomeSystemTextOrSol;
+            extTextBoxAutoCompleteHomeSystem.Text = cmdr.HomeSystem;
             extTextBoxAutoCompleteHomeSystem.SetAutoCompletor(EliteDangerousCore.DB.SystemCache.ReturnSystemAutoCompleteList, true);
 
             textBoxDefaultZoom.ValueNoChange = cmdr.MapZoom;
@@ -89,13 +87,11 @@ namespace EDDiscovery.Forms
             cmdr.SyncFromEdsm = checkBoxCustomEDSMFrom.Checked;
             cmdr.SyncToEdsm = checkBoxCustomEDSMTo.Checked;
             cmdr.SyncToEddn = checkBoxCustomEDDNTo.Checked;
-            cmdr.SyncToEGO = checkBoxEGOSync.Checked;
-            cmdr.EGOName = textBoxEGOName.Text;
-            cmdr.EGOAPIKey = textBoxEGOAPI.Text;
+            cmdr.SyncToIGAU = checkBoxIGAUSync.Checked;
             cmdr.InaraAPIKey = textBoxBorderInaraAPIKey.Text;
             cmdr.InaraName = textBoxBorderInaraName.Text;
             cmdr.SyncToInara = checkBoxCustomInara.Checked;
-            cmdr.HomeSystemTextOrSol = extTextBoxAutoCompleteHomeSystem.Text;
+            cmdr.HomeSystem = extTextBoxAutoCompleteHomeSystem.Text;
             cmdr.MapZoom = float.TryParse(textBoxDefaultZoom.Text, out float res) ? res : 1.0f;
             cmdr.MapCentreOnSelection = radioButtonHistorySelection.Checked;
             cmdr.MapColour = panel_defaultmapcolor.BackColor.ToArgb();
@@ -169,8 +165,12 @@ namespace EDDiscovery.Forms
         }
 
 
+
         #endregion
 
-       
+        private void CommanderForm_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

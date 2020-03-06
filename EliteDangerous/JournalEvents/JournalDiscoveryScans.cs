@@ -66,9 +66,9 @@ namespace EliteDangerousCore.JournalEvents
         {
             public string SignalName { get; set; }
             public string SignalName_Localised { get; set; }
-            public string SpawingState { get; set; }
+            public string SpawingState { get; set; }            // keep the typo - its in the voice pack
             public string SpawingState_Localised { get; set; }
-            public string SpawingFaction { get; set; }
+            public string SpawingFaction { get; set; }          // keep the typo - its in the voice pack
             public string SpawingFaction_Localised { get; set; }
             public double? TimeRemaining { get; set; }          // null if not expiring
             public long? SystemAddress { get; set; }
@@ -81,22 +81,22 @@ namespace EliteDangerousCore.JournalEvents
             public System.DateTime ExpiryUTC { get; set; }
             public System.DateTime ExpiryLocal { get; set; }
 
-            public FSSSignal(JObject evt , System.DateTime EventTimeUTC)
+            public FSSSignal(JObject evt, System.DateTime EventTimeUTC)
             {
                 SignalName = evt["SignalName"].Str();
                 SignalName_Localised = JournalFieldNaming.CheckLocalisation(evt["SignalName_Localised"].Str(), SignalName);
 
-                SpawingState = evt["SpawingState"].Str();
-                SpawingState_Localised = JournalFieldNaming.CheckLocalisation(evt["SpawingState_Localised"].Str(), SpawingState);
+                SpawingState = evt["SpawningState"].Str();
+                SpawingState_Localised = JournalFieldNaming.CheckLocalisation(evt["SpawningState_Localised"].Str(), SpawingState);
 
-                SpawingFaction = evt["SpawingFaction"].Str();
-                SpawingFaction_Localised = JournalFieldNaming.CheckLocalisation(evt["SpawingFaction_Localised"].Str(), SpawingFaction);
+                SpawingFaction = evt["SpawningFaction"].Str();
+                SpawingFaction_Localised = JournalFieldNaming.CheckLocalisation(evt["SpawningFaction_Localised"].Str(), SpawingFaction);
 
                 TimeRemaining = evt["TimeRemaining"].DoubleNull();
 
                 SystemAddress = evt["SystemAddress"].LongNull();
 
-                ThreatLevel = evt["USSThreat"].IntNull();
+                ThreatLevel = evt["ThreatLevel"].IntNull();
                 USSType = evt["USSType"].Str();
                 USSTypeLocalised = JournalFieldNaming.CheckLocalisation(evt["USSType_Localised"].Str(), USSType);
                 IsStation = evt["IsStation"].BoolNull();
@@ -110,11 +110,25 @@ namespace EliteDangerousCore.JournalEvents
 
             public override string ToString()
             {
-                return BaseUtils.FieldBuilder.Build("", SignalName_Localised, "State:".T(EDTx.FSSSignal_State),
-                            SpawingState_Localised, "Faction:".T(EDTx.FSSSignal_Faction), SpawingFaction_Localised,
-                            "USS Type:".T(EDTx.FSSSignal_USSType), USSTypeLocalised, " Threat Level:".T(EDTx.FSSSignal_ThreatLevel), ThreatLevel,
-                            ";Station".T(EDTx.FSSSignal_StationBool), IsStation
-                            );
+                if (SignalName.StartsWith("$USS_"))
+                {
+                    return BaseUtils.FieldBuilder.Build("", USSTypeLocalised, 
+                                "Threat Level:".T(EDTx.FSSSignal_ThreatLevel), ThreatLevel,
+                                "Faction:".T(EDTx.FSSSignal_Faction), SpawingFaction_Localised,
+                                ";Station".T(EDTx.FSSSignal_StationBool), IsStation,
+                                "State:".T(EDTx.FSSSignal_State), SpawingState_Localised
+                                );
+                }
+                else
+                {
+                    return BaseUtils.FieldBuilder.Build("", SignalName_Localised, 
+                                "USS Type:".T(EDTx.FSSSignal_USSType), USSTypeLocalised, 
+                                "Threat Level:".T(EDTx.FSSSignal_ThreatLevel), ThreatLevel,
+                                "Faction:".T(EDTx.FSSSignal_Faction), SpawingFaction_Localised,
+                                ";Station".T(EDTx.FSSSignal_StationBool), IsStation,
+                                "State:".T(EDTx.FSSSignal_State), SpawingState_Localised
+                                );
+                }
             }
         }
 
@@ -140,7 +154,12 @@ namespace EliteDangerousCore.JournalEvents
                 info = BaseUtils.FieldBuilder.Build("Detected ; signals".T(EDTx.JournalFSSSignalDiscovered_Detected), Signals.Count);
 
                 foreach (var s in Signals)
-                    info += ", " + s.SignalName_Localised;
+                {
+                    if (s.SignalName.StartsWith("$USS_"))
+                        info += ", " + s.USSTypeLocalised;
+                    else
+                        info += ", " + s.SignalName_Localised;
+                }
 
                 foreach (var s in Signals)
                     detailed = detailed.AppendPrePad(s.ToString(), System.Environment.NewLine);

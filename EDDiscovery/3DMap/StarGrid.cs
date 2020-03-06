@@ -380,11 +380,11 @@ namespace EDDiscovery
         public bool ForceWhite { get; set; } = false;
 
         private BlockingCollection<StarGrid> computed = new BlockingCollection<StarGrid>();
+        private CancellationTokenSource canceltokensource = new CancellationTokenSource();
         private List<StarGrid> grids = new List<StarGrid>();        // unpopulated grid stars
         private StarGrid populatedgrid;
         private StarGrid systemlistgrid;
         private System.Threading.Thread computeThread;
-        private bool computeExit = false;
         private EventWaitHandle ewh = new EventWaitHandle(false, EventResetMode.AutoReset);
         private float curx = 0, curz = 0;
 
@@ -426,11 +426,12 @@ namespace EDDiscovery
             populatedgrid.dBAsk = SystemsDB.SystemAskType.PopulatedStars;
             grids.Add(populatedgrid);   // add last so shown last
 
-            Console.WriteLine("Grids " + grids.Count + " mid " + midpercentage + " far " + farpercentage);
+            Trace.WriteLine("Grids " + grids.Count + " mid " + midpercentage + " far " + farpercentage);
         }
 
         public void Start()
         {
+            canceltokensource = new CancellationTokenSource();
             if (computeThread == null)
             {
                 computeThread = new System.Threading.Thread(ComputeThread) { Name = "Fill stars", IsBackground = true };
@@ -442,13 +443,11 @@ namespace EDDiscovery
         {
             if (computeThread!=null && computeThread.IsAlive)
             {
-                Console.WriteLine("{0} Ask for compute exit", Environment.TickCount);
-                computeExit = true;
+                Trace.WriteLine($"{Environment.TickCount} Ask for compute exit");
+                canceltokensource.Cancel();
                 ewh.Set();              // wake it up!
-                computeThread.Join();
                 computeThread = null;
-                computeExit = false;
-                Console.WriteLine("{0} compute exit", Environment.TickCount);
+                computed = new BlockingCollection<StarGrid>();
             }
         }
 
@@ -525,15 +524,14 @@ namespace EDDiscovery
         {
             //Console.WriteLine("Start COMPUTE");
 
-            while (true)
+            var canceltoken = canceltokensource.Token;
+            var computed = new BlockingCollection<StarGrid>();
+            this.computed = computed;
+
+            while (WaitHandle.WaitAny(new WaitHandle[] { canceltoken.WaitHandle, ewh }) == 1)
             {
-                ewh.WaitOne();
-
-                while (true)
+                while (!canceltoken.IsCancellationRequested)
                 {
-                    if (computeExit)
-                        return;
-
                     float mindist = float.MaxValue;
                     float maxdist = 0;
                     StarGrid selmin = null;
@@ -603,11 +601,13 @@ namespace EDDiscovery
                         break;              // nothing to do, wait for kick
                 }
             }
+
+            Trace.WriteLine($"{Environment.TickCount} compute exit");
         }
 
-#endregion
+        #endregion
 
-#region Draw
+        #region Draw
 
         public void DrawAll(GLControl control, bool showstars , bool showstations )
         {

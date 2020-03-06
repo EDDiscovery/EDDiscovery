@@ -191,7 +191,8 @@ namespace EDDiscovery.UserControls
                 textBoxSystem.Text = he.System.Name;
                 panelFD.BackgroundImage = (lastfsd != null && (lastfsd.journalEntry as EliteDangerousCore.JournalEvents.JournalFSDJump).EDSMFirstDiscover) ? EDDiscovery.Icons.Controls.firstdiscover : EDDiscovery.Icons.Controls.notfirstdiscover;
 
-                discoveryform.history.FillEDSM(he); // Fill in any EDSM info we have
+                if ( !he.System.HasEDDBInformation || !he.System.HasCoordinate )
+                    discoveryform.history.FillEDSM(he); // Fill in any EDSM info we have
 
                 //textBoxBody.Text = he.WhereAmI + ((he.IsInHyperSpace) ? " (HS)": "");
                 textBoxBody.Text = he.WhereAmI + " (" + he.BodyType + ")";
@@ -204,9 +205,8 @@ namespace EDDiscovery.UserControls
 
                     textBoxPosition.Text = he.System.X.ToString(SingleCoordinateFormat) + separ + he.System.Y.ToString(SingleCoordinateFormat) + separ + he.System.Z.ToString(SingleCoordinateFormat);
 
-                    ISystem homesys = EDCommander.Current.HomeSystemIOrSol;
-
-                    textBoxHomeDist.Text = he.System.Distance(homesys).ToString(SingleCoordinateFormat);
+                    ISystem homesys = EDCommander.Current.HomeSystemI;
+                    textBoxHomeDist.Text = homesys != null ? he.System.Distance(homesys).ToString(SingleCoordinateFormat) : "---";
                     textBoxSolDist.Text = he.System.Distance(0, 0, 0).ToString(SingleCoordinateFormat);
                 }
                 else
@@ -240,9 +240,11 @@ namespace EDDiscovery.UserControls
                     string t = "";
                     foreach (MissionState ms in mcurrent)
                     {
+                        DateTime exp = EliteConfigInstance.InstanceConfig.ConvertTimeToSelectedFromUTC(ms.Mission.Expiry);
+
                         t = ObjectExtensionsStrings.AppendPrePad(t,
                             JournalFieldNaming.ShortenMissionName(ms.Mission.Name) 
-                            + " Exp:" + (EDDiscoveryForm.EDDConfig.DisplayUTC ? ms.Mission.Expiry : ms.Mission.Expiry.ToLocalTime())
+                            + " Exp:" + exp 
                             + " @ " + ms.DestinationSystemStation(),
                             Environment.NewLine);
                     }
@@ -378,7 +380,7 @@ namespace EDDiscovery.UserControls
         {
             if (e.KeyCode == Keys.Enter)
             {
-                TargetHelpers.setTargetSystem(this,discoveryform, textBoxTarget.Text);
+                TargetHelpers.SetTargetSystem(this,discoveryform, textBoxTarget.Text);
             }
         }
 

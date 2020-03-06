@@ -86,11 +86,17 @@ namespace EliteDangerousCore.EDSM
                         if (ty == null)
                         {
                             ty = galacticMapTypes[galacticMapTypes.Count - 1];      // last one is default..
-                            Console.WriteLine("Unknown Gal Map object " + galobject.type);
+                            System.Diagnostics.Trace.WriteLine("Unknown Gal Map object " + galobject.type);
                         }
 
                         galobject.galMapType = ty;
                         gmobjects.Add(galobject);
+
+                        if (galobject.points.Count == 1 && galobject.galMapSearch != null && galobject.galMapUrl != null)
+                        {
+                            var gms = new GalacticMapSystem(galobject);
+                            SystemCache.FindCachedJournalSystem(gms);
+                        }
                     }
 
                     galacticMapObjects = gmobjects;

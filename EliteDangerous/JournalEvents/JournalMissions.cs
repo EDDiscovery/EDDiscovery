@@ -205,9 +205,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public string MissionBasicInfo()          // MissionList::FullInfo uses this. Journal Entry info brief uses this
         {
-            DateTime exp = Expiry;
-            if (exp != null && !EliteConfigInstance.InstanceConfig.DisplayUTC)
-                exp = exp.ToLocalTime();
+            DateTime exp = EliteConfigInstance.InstanceConfig.ConvertTimeToSelectedFromUTC(Expiry);
 
             return BaseUtils.FieldBuilder.Build("", LocalisedName,
                                       "< from ".T(EDTx.JournalMissionAccepted_from), Faction,

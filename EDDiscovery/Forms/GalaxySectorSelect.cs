@@ -227,12 +227,12 @@ namespace EDDiscovery.Forms
 
             var list = DefaultGalaxyOptions.Where(x => x.Item1 != "Custom" && x.Item1 != "Reset").Select(x => x.Item1).ToList();
 
-            int width = 700;
+            int width = 500;
             f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "ED Discovery downloads star data from EDSM/EDDB which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed".T(EDTx.GalaxySectorSelect_GALSELEX), 
                             new Point(10, 30), new Size(width-50, 70), ""));
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "Select:".T(EDTx.GalaxySectorSelect_Select), new Point(10, 100), new Size(160, 24), ""));
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "Select:".T(EDTx.GalaxySectorSelect_Select), new Point(10, 100), new Size(130, 24), ""));
             f.Add(new ExtendedControls.ConfigurableForm.Entry("Entry", "All",
-                        new Point(180, 100), new Size(width-180-100, 24),
+                        new Point(140, 100), new Size(width-140-100, 24),
                         "Select the data set".T(EDTx.GalaxySectorSelect_GALSELEN), list));
 
             f.Add(new ExtendedControls.ConfigurableForm.Entry("OK", typeof(ExtendedControls.ExtButton), "OK".T(EDTx.OK), new Point(width-40-80, 150), new Size(80, 24), "Press to Accept".T(EDTx.GalaxySectorSelect_PresstoAccept)));
@@ -241,8 +241,11 @@ namespace EDDiscovery.Forms
             {
                 if (controlname == "OK")
                 {
-                    f.DialogResult = DialogResult.OK;
-                    f.Close();
+                    f.ReturnResult(DialogResult.OK);
+                }
+                else if (controlname == "Cancel")
+                {
+                    f.ReturnResult(DialogResult.Cancel);
                 }
             };
             

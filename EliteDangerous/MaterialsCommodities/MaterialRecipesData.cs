@@ -24,39 +24,53 @@ namespace EliteDangerousCore
     {
         public class Recipe
         {
-            public string name;
-            public string ingredientsstring;
-            public string ingredientsstringlong;
-            public string[] ingredients;
-            public int[] count;
+            public string Name;
+            public MaterialCommodityData[] Ingredients;
+            public int[] Amount;
 
-            public int Count { get { return ingredients.Length; } }
+            public int Count { get { return Ingredients.Length; } }
 
-            public Recipe(string n, string indg)
+            public Recipe(string n, string ingredientsstring)
             {
-                name = n;
-                ingredientsstring = indg;
-                string[] ilist = indg.Split(',');
-                ingredients = new string[ilist.Length];
-                count = new int[ilist.Length];
+                Name = n;
+                string[] ilist = ingredientsstring.Split(',');
+                Ingredients = new MaterialCommodityData[ilist.Length];
+                Amount = new int[ilist.Length];
 
-                ingredientsstringlong = "";
                 for (int i = 0; i < ilist.Length; i++)
                 {
-                    //Thanks to 10Fe and 10 Ni to synthesise a limpet we can no longer assume the first character is a number and the rest is the material
-
                     string s = new string(ilist[i].TakeWhile(c => !Char.IsLetter(c)).ToArray());
-                    ingredients[i] = ilist[i].Substring(s.Length);
-
-                    bool countsuccess = int.TryParse(s, out count[i]);
+                    string iname = ilist[i].Substring(s.Length);
+                    Ingredients[i] = MaterialCommodityData.GetByShortName(iname);
+                    System.Diagnostics.Debug.Assert(Ingredients[i] != null, "Not found ingredient " + Name + " " + ingredientsstring + " i=" + i + " " + Ingredients[i]);
+                    bool countsuccess = int.TryParse(s, out Amount[i]);
                     System.Diagnostics.Debug.Assert(countsuccess, "Count missing from ingredient");
-
-                    MaterialCommodityData mcd = MaterialCommodityData.GetByShortName(ingredients[i]);
-                    System.Diagnostics.Debug.Assert(mcd != null, "Not found ingredient " + name + " " + indg + " i=" + i + " " + ingredients[i]);
-
-                    ingredientsstringlong = ingredientsstringlong.AppendPrePad(count[i].ToString() + " x " + mcd.Name, Environment.NewLine);
                 }
             }
+
+            public string IngredientsString
+            {
+                get
+                {
+                    var ing = (from x in Ingredients select Amount[Array.IndexOf(Ingredients, x)].ToString() + x.Shortname).ToArray();
+                    return string.Join(",", ing);
+                }
+            }
+            public string IngredientsStringvsCurrent(MaterialCommoditiesList cur)
+            {
+                var ing = (from x in Ingredients select Amount[Array.IndexOf(Ingredients, x)].ToString() + x.Shortname + "(" + (cur.Find(x)?.Count ?? 0).ToStringInvariant() + ")").ToArray();
+                return string.Join(",", ing);
+            }
+
+            public string IngredientsStringLong
+            {
+                get
+                {
+                    var ing = (from x in Ingredients select Amount[Array.IndexOf(Ingredients, x)].ToString() + " "+ x.Name).ToArray();
+                    return string.Join(",", ing);
+                }
+            }
+
         }
 
         public class SynthesisRecipe : Recipe
@@ -103,23 +117,45 @@ namespace EliteDangerousCore
             { }
         }
 
-        public static string UsedInSythesisByFDName(string fdname)
+        public static string UsedInSythesisByFDName(string fdname, string join=",")
         {
             MaterialCommodityData mc = MaterialCommodityData.GetByFDName(fdname);
-            return Recipes.UsedInSynthesisByShortName(mc?.Shortname ?? "--");
+            if (SynthesisRecipesByMaterial.ContainsKey(mc))
+                return String.Join(join, SynthesisRecipesByMaterial[mc].Select(x => x.Name + "-" + x.level + ": " + x.IngredientsStringLong));
+            else
+                return "";
         }
 
-        public static string UsedInSynthesisByShortName(string shortname)
+        public static string UsedInEngineeringByFDName(string fdname, string join = ",")
         {
-            if (SynthesisRecipesByMaterial.ContainsKey(shortname))
-                return String.Join(",", SynthesisRecipesByMaterial[shortname].Select(x => x.name + "-" + x.level));
+            MaterialCommodityData mc = MaterialCommodityData.GetByFDName(fdname);
+            if (EngineeringRecipesByMaterial.ContainsKey(mc))
+                return String.Join(join, EngineeringRecipesByMaterial[mc].Select(x => x.modulesstring + " "+ x.Name + "-" + x.level + ": " + x.IngredientsStringLong + " @ " + x.engineersstring));
+            else
+                return "";
+        }
+
+        public static string UsedInSpecialEffectsyFDName(string fdname, string join = ",")
+        {
+            MaterialCommodityData mc = MaterialCommodityData.GetByFDName(fdname);
+            if (SpecialEffectsRecipesByMaterial.ContainsKey(mc))
+                return String.Join(join, SpecialEffectsRecipesByMaterial[mc].Select(x => x.Name + ": " + x.IngredientsStringLong));
+            else
+                return "";
+        }
+
+        public static string UsedInTechBrokerUnlocksByFDName(string fdname, string join = ",")
+        {
+            MaterialCommodityData mc = MaterialCommodityData.GetByFDName(fdname);
+            if (TechBrokerUnlockRecipesByMaterial.ContainsKey(mc))
+                return String.Join(join, TechBrokerUnlockRecipesByMaterial[mc].Select(x => x.Name + ": " + x.IngredientsStringLong));
             else
                 return "";
         }
 
         public static SynthesisRecipe FindSynthesis(string recipename, string level)
         {
-            return SynthesisRecipes.Find(x => x.name.Equals(recipename, StringComparison.InvariantCultureIgnoreCase) && x.level.Equals(level, StringComparison.InvariantCultureIgnoreCase));
+            return SynthesisRecipes.Find(x => x.Name.Equals(recipename, StringComparison.InvariantCultureIgnoreCase) && x.level.Equals(level, StringComparison.InvariantCultureIgnoreCase));
         }
 
         public static List<SynthesisRecipe> SynthesisRecipes = new List<SynthesisRecipe>()
@@ -213,8 +249,8 @@ namespace EliteDangerousCore
             new SynthesisRecipe("AX Explosive Munitions", "Premium", "5W,4Hg,2Po,5BMC,5PE,6SFD"),
         };
 
-        public static Dictionary<string, List<SynthesisRecipe>> SynthesisRecipesByMaterial =
-            SynthesisRecipes.SelectMany(r => r.ingredients.Select(i => new { mat = i, recipe = r }))
+        public static Dictionary<MaterialCommodityData, List<SynthesisRecipe>> SynthesisRecipesByMaterial =
+            SynthesisRecipes.SelectMany(r => r.Ingredients.Select(i => new { mat = i, recipe = r }))
                             .GroupBy(a => a.mat)
                             .ToDictionary(g => g.Key, g => g.Select(a => a.recipe).ToList());
 
@@ -1037,8 +1073,8 @@ namespace EliteDangerousCore
 #endregion
         };
 
-        public static Dictionary<string, List<EngineeringRecipe>> EngineeringRecipesByMaterial =
-            EngineeringRecipes.SelectMany(r => r.ingredients.Select(i => new { mat = i, recipe = r }))
+        public static Dictionary<MaterialCommodityData, List<EngineeringRecipe>> EngineeringRecipesByMaterial =
+            EngineeringRecipes.SelectMany(r => r.Ingredients.Select(i => new { mat = i, recipe = r }))
                               .GroupBy(a => a.mat)
                               .ToDictionary(g => g.Key, g => g.Select(a => a.recipe).ToList());
 
@@ -1083,8 +1119,13 @@ namespace EliteDangerousCore
             new TechBrokerUnlockRecipe("Plasma Shock Cannon Turret Large","Human","26V,28W,22Re,24Tc,10IOD"),
             new TechBrokerUnlockRecipe("Plasma Shock Cannon Turret Medium","Human","24V,22W,20Re,28Tc,8PTB"),
             new TechBrokerUnlockRecipe("Plasma Shock Cannon Turret Small","Human","8V,12W,10Re,10Tc,4IOD"),
-
         };
+
+        public static Dictionary<MaterialCommodityData, List<TechBrokerUnlockRecipe>> TechBrokerUnlockRecipesByMaterial =
+            TechBrokerUnlocks.SelectMany(r => r.Ingredients.Select(i => new { mat = i, recipe = r }))
+                              .GroupBy(a => a.mat)
+                              .ToDictionary(g => g.Key, g => g.Select(a => a.recipe).ToList());
+
 
         public static List<SpecialEffectRecipe> SpecialEffects = new List<SpecialEffectRecipe>()
         {
@@ -1174,6 +1215,11 @@ namespace EliteDangerousCore
             new SpecialEffectRecipe("Thermo Block", "Shield Generator", "5WSE,3FFC,1HV"),
             new SpecialEffectRecipe("Thermo Block", "Shield Booster", "5ABSD,3CCe,3HV"),
         };
+
+        public static Dictionary<MaterialCommodityData, List<SpecialEffectRecipe>> SpecialEffectsRecipesByMaterial =
+            SpecialEffects.SelectMany(r => r.Ingredients.Select(i => new { mat = i, recipe = r }))
+                              .GroupBy(a => a.mat)
+                              .ToDictionary(g => g.Key, g => g.Select(a => a.recipe).ToList());
 
         #endregion
     }

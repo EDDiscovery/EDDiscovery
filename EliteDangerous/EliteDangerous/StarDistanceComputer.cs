@@ -96,7 +96,7 @@ namespace EliteDangerousCore
                                 ISystem sys = req.System;
                                 BaseUtils.SortedListDoubleDuplicate<ISystem> closestsystemlist = new BaseUtils.SortedListDoubleDuplicate<ISystem>(); //lovely list allowing duplicate keys - can only iterate in it.
 
-                                //System.Diagnostics.Debug.WriteLine("DB Computer Max distance " + req.MaxDistance);
+                                //System.Diagnostics.Debug.WriteLine("DB Computer Max distance " + sys.X + " " + sys.Y + " " + sys.Z + " " + req.MaxItems + " " + req.MinDistance + " -> " + req.MaxDistance + " "  + req.Spherical);
 
                                 DB.SystemCache.GetSystemListBySqDistancesFrom(closestsystemlist, sys.X, sys.Y, sys.Z, req.MaxItems , 
                                               req.MinDistance, req.MaxDistance , req.Spherical);

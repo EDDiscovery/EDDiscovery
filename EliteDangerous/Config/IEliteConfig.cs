@@ -18,7 +18,7 @@ namespace EliteDangerousCore
 {
     public interface IEliteConfig
     {
-        bool DisplayUTC { get; }
+        System.DateTime ConvertTimeToSelectedFromUTC(System.DateTime t);
         string EDSMFullSystemsURL { get; }
         string EDDBSystemsURL { get; }
     }

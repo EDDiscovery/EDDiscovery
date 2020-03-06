@@ -179,7 +179,7 @@
     <value>https://eddiscovery.space/eddb/systems_populated.jsonl</value>
   </data>
   <data name="URLEDSMFullSystems" xml:space="preserve">
-    <value>https://www.edsm.net/dump/systemsWithCoordinates.json</value>
+    <value>https://www.edsm.net/dump/systemsWithCoordinates.json.gz</value>
   </data>
   <data name="URLEDDBSystem" xml:space="preserve">
     <value>http://eddb.io/system/</value>

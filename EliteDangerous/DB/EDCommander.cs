@@ -5,12 +5,12 @@
  * file except in compliance with the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
+ *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using System;
@@ -136,19 +136,27 @@ namespace EliteDangerousCore
 
         public static EDCommander Create(EDCommander other )
         {
-            return Create(other.name, other.EdsmName, other.EDSMAPIKey, other.JournalDir, other.syncToEdsm, other.SyncFromEdsm, 
-                                other.SyncToEddn, other.SyncToEGO, other.EGOName, other.EGOAPIKey, other.SyncToInara, other.InaraName, other.InaraAPIKey);
+            return Create(other.Name, other.EdsmName, other.EDSMAPIKey, other.JournalDir, 
+                                other.SyncToEdsm, other.SyncFromEdsm,
+                                other.SyncToEddn, 
+                                other.SyncToEGO, other.EGOName, other.EGOAPIKey, 
+                                other.SyncToInara, other.InaraName, other.InaraAPIKey, 
+                                other.HomeSystem,  other.MapZoom, other.MapCentreOnSelection, other.MapColour,
+                                other.SyncToIGAU);
         }
 
-        public static EDCommander Create(string name = null, string edsmName = null, string edsmApiKey = null, string journalpath = null, 
-                                        bool toedsm = true, bool fromedsm = false, bool toeddn = true, bool toego = false, string egoname = null, string egoapi = null,
-                                        bool toinara = false, string inaraname = null, string inaraapikey = null, string homesystem = null,
-                                        float mapzoom = 1.0f, bool mapcentreonselection = true, int mapcolour = -1)
+        public static EDCommander Create(string name = null, string edsmName = null, string edsmApiKey = null, string journalpath = null,
+                                        bool toedsm = true, bool fromedsm = false, 
+                                        bool toeddn = true, 
+                                        bool toego = false, string egoname = null, string egoapi = null,
+                                        bool toinara = false, string inaraname = null, string inaraapikey = null, 
+                                        string homesystem = null, float mapzoom = 1.0f, bool mapcentreonselection = true, int mapcolour = -1, 
+                                        bool toigau = false)
         {
             EDCommander cmdr = UserDatabase.Instance.ExecuteWithDatabase<EDCommander>(cn =>
             {
-                using (DbCommand cmd = cn.Connection.CreateCommand("INSERT INTO Commanders (Name,EdsmName,EdsmApiKey,JournalDir,Deleted, SyncToEdsm, SyncFromEdsm, SyncToEddn, NetLogDir, SyncToEGO, EGOName, EGOAPIKey, SyncToInara, InaraName, InaraAPIKey, HomeSystem, MapColour,MapCentreOnSelection,MapZoom) " +
-                                                          "VALUES (@Name,@EdsmName,@EdsmApiKey,@JournalDir,@Deleted, @SyncToEdsm, @SyncFromEdsm, @SyncToEddn, @NetLogDir, @SyncToEGO, @EGOName, @EGOApiKey, @SyncToInara, @InaraName, @InaraAPIKey, @HomeSystem, @MapColour,@MapCentreOnSelection,@MapZoom)"))
+                using (DbCommand cmd = cn.Connection.CreateCommand("INSERT INTO Commanders (Name,EdsmName,EdsmApiKey,JournalDir,Deleted, SyncToEdsm, SyncFromEdsm, SyncToEddn, NetLogDir, SyncToEGO, EGOName, EGOAPIKey, SyncToInara, InaraName, InaraAPIKey, HomeSystem, MapColour, MapCentreOnSelection, MapZoom, SyncToIGAU) " +
+                                                          "VALUES (@Name,@EdsmName,@EdsmApiKey,@JournalDir,@Deleted, @SyncToEdsm, @SyncFromEdsm, @SyncToEddn, @NetLogDir, @SyncToEGO, @EGOName, @EGOApiKey, @SyncToInara, @InaraName, @InaraAPIKey, @HomeSystem, @MapColour, @MapCentreOnSelection, @MapZoom, @SyncToIGAU)"))
                 {
 
                     cmd.AddParameterWithValue("@Name", name ?? "");
@@ -170,6 +178,7 @@ namespace EliteDangerousCore
                     cmd.AddParameterWithValue("@MapColour", mapcolour == -1 ? System.Drawing.Color.Red.ToArgb() : mapcolour);
                     cmd.AddParameterWithValue("@MapCentreOnSelection", mapcentreonselection);
                     cmd.AddParameterWithValue("@MapZoom", mapzoom);
+                    cmd.AddParameterWithValue("@SyncToIGAU", toigau);
                     cmd.ExecuteNonQuery();
                 }
 
@@ -210,11 +219,12 @@ namespace EliteDangerousCore
         {
             UserDatabase.Instance.ExecuteWithDatabase(cn =>
             {
-                using (DbCommand cmd = cn.Connection.CreateCommand("UPDATE Commanders SET Name=@Name, EdsmName=@EdsmName, EdsmApiKey=@EdsmApiKey, NetLogDir=@NetLogDir, JournalDir=@JournalDir, " +
-                                                          "SyncToEdsm=@SyncToEdsm, SyncFromEdsm=@SyncFromEdsm, SyncToEddn=@SyncToEddn, SyncToEGO=@SyncToEGO, EGOName=@EGOName, " +
-                                                          "EGOAPIKey=@EGOApiKey, SyncToInara=@SyncToInara, InaraName=@InaraName, InaraAPIKey=@InaraAPIKey, HomeSystem=@HomeSystem, " +
-                                                          "MapColour=@MapColour, MapCentreOnSelection=@MapCentreOnSelection, MapZoom=@MapZoom " +
-                                                          "WHERE Id=@Id"))
+                using (DbCommand cmd = cn.Connection.CreateCommand(
+                    "UPDATE Commanders SET Name=@Name, EdsmName=@EdsmName, EdsmApiKey=@EdsmApiKey, NetLogDir=@NetLogDir, JournalDir=@JournalDir, " +
+                    "SyncToEdsm=@SyncToEdsm, SyncFromEdsm=@SyncFromEdsm, SyncToEddn=@SyncToEddn, SyncToEGO=@SyncToEGO, EGOName=@EGOName, " +
+                    "EGOAPIKey=@EGOApiKey, SyncToInara=@SyncToInara, InaraName=@InaraName, InaraAPIKey=@InaraAPIKey, HomeSystem=@HomeSystem, " +
+                    "MapColour=@MapColour, MapCentreOnSelection=@MapCentreOnSelection, MapZoom=@MapZoom, SyncToIGAU=@SyncToIGAU " +
+                    "WHERE Id=@Id"))
                 {
                     cmd.AddParameter("@Id", DbType.Int32);
                     cmd.AddParameter("@Name", DbType.String);
@@ -235,6 +245,7 @@ namespace EliteDangerousCore
                     cmd.AddParameter("@MapColour", DbType.Int32);
                     cmd.AddParameter("@MapCentreOnSelection", DbType.Boolean);
                     cmd.AddParameter("@MapZoom", DbType.Double);
+                    cmd.AddParameter("@SyncToIGAU", DbType.Boolean);
 
                     foreach (EDCommander edcmdr in cmdrlist) // potential NRE
                     {
@@ -257,6 +268,7 @@ namespace EliteDangerousCore
                         cmd.Parameters["@MapColour"].Value = edcmdr.MapColour;
                         cmd.Parameters["@MapCentreOnSelection"].Value = edcmdr.MapCentreOnSelection;
                         cmd.Parameters["@MapZoom"].Value = edcmdr.MapZoom;
+                        cmd.Parameters["@SyncToIGAU"].Value = edcmdr.SyncToIGAU;
                         cmd.ExecuteNonQuery();
 
                         commanders[edcmdr.Nr] = edcmdr;
@@ -289,7 +301,7 @@ namespace EliteDangerousCore
             }
 
             File.Delete(Path.Combine(EliteDangerousCore.EliteConfigInstance.InstanceOptions.AppDataDirectory, "CommanderPaths.json"));
-            File.Move(Path.Combine(EliteDangerousCore.EliteConfigInstance.InstanceOptions.AppDataDirectory, "CommanderPaths.json.tmp"), 
+            File.Move(Path.Combine(EliteDangerousCore.EliteConfigInstance.InstanceOptions.AppDataDirectory, "CommanderPaths.json.tmp"),
                 Path.Combine(EliteDangerousCore.EliteConfigInstance.InstanceOptions.AppDataDirectory, "CommanderPaths.json"));
 
         }
@@ -414,26 +426,6 @@ namespace EliteDangerousCore
 #endregion
 
 #region Instance
-       
-        private int nr;
-        private bool deleted;
-        private string name;
-        private string edsmname;
-        private string edsmapikey;
-        private string egoname;
-        private string egoapikey;
-        private string inaraname;
-        private string inaraapikey;
-        private string journalDir;
-        private bool syncToEdsm;
-        private bool syncFromEdsm;
-        private bool syncToEddn;
-        private bool syncToEGO;
-        private bool syncToInara;
-        private string homesystem;
-        private float mapzoom;
-        private bool mapcentreonselection;
-        private int mapcolour;
 
         public EDCommander()
         {
@@ -441,92 +433,100 @@ namespace EliteDangerousCore
 
         public EDCommander(DbDataReader reader)
         {
-            nr = Convert.ToInt32(reader["Id"]);
-            name = Convert.ToString(reader["Name"]);
-            deleted = Convert.ToBoolean(reader["Deleted"]);
-            journalDir = Convert.ToString(reader["JournalDir"]);
+            Nr = Convert.ToInt32(reader["Id"]);
+            Name = Convert.ToString(reader["Name"]);
+            Deleted = Convert.ToBoolean(reader["Deleted"]);
 
-            syncToEdsm = Convert.ToBoolean(reader["SyncToEdsm"]);
-            syncFromEdsm = Convert.ToBoolean(reader["SyncFromEdsm"]);
-            edsmname = reader["EDSMName"] == DBNull.Value ? name : Convert.ToString(reader["EDSMName"]) ?? name;
-            edsmapikey = Convert.ToString(reader["EdsmApiKey"]);
+            JournalDir = Convert.ToString(reader["JournalDir"]);
 
-            syncToEGO = Convert.ToBoolean(reader["SyncToEGO"]);
-            egoname = Convert.ToString(reader["EGOName"]);
-            egoapikey = Convert.ToString(reader["EGOAPIKey"]);
+            SyncToEdsm = Convert.ToBoolean(reader["SyncToEdsm"]);
+            SyncFromEdsm = Convert.ToBoolean(reader["SyncFromEdsm"]);
+            EdsmName = reader["EDSMName"] == DBNull.Value ? Name : Convert.ToString(reader["EDSMName"]) ?? Name;
+            EDSMAPIKey = Convert.ToString(reader["EdsmApiKey"]);
 
-            syncToInara = Convert.ToBoolean(reader["SyncToInara"]);
-            inaraname = Convert.ToString(reader["InaraName"]);
-            inaraapikey = Convert.ToString(reader["InaraAPIKey"]);
+            SyncToEGO = false; // currently disabled. Convert.ToBoolean(reader["SyncToEGO"]);
 
-            syncToEddn = Convert.ToBoolean(reader["SyncToEddn"]);
+            EGOName = Convert.ToString(reader["EGOName"]);
+            EGOAPIKey = Convert.ToString(reader["EGOAPIKey"]);
 
-            homesystem = Convert.ToString(reader["HomeSystem"]);        // may be null
+            SyncToInara = Convert.ToBoolean(reader["SyncToInara"]);
+            InaraName = Convert.ToString(reader["InaraName"]);
+            InaraAPIKey = Convert.ToString(reader["InaraAPIKey"]);
 
-            mapzoom = reader["MapZoom"] is System.DBNull ? 1.0f : (float)Convert.ToDouble(reader["MapZoom"]);
-            mapcolour = reader["MapColour"] is System.DBNull ? System.Drawing.Color.Red.ToArgb() : Convert.ToInt32(reader["MapColour"]);
-            mapcentreonselection = reader["MapCentreOnSelection"] is System.DBNull ? true : Convert.ToBoolean(reader["MapCentreOnSelection"]);
-            
+            SyncToEddn = Convert.ToBoolean(reader["SyncToEddn"]);
+
+            HomeSystem = Convert.ToString(reader["HomeSystem"]) ?? "";        // may be null
+
+            MapZoom = reader["MapZoom"] is System.DBNull ? 1.0f : (float)Convert.ToDouble(reader["MapZoom"]);
+            MapColour = reader["MapColour"] is System.DBNull ? System.Drawing.Color.Red.ToArgb() : Convert.ToInt32(reader["MapColour"]);
+            MapCentreOnSelection = reader["MapCentreOnSelection"] is System.DBNull ? true : Convert.ToBoolean(reader["MapCentreOnSelection"]);
+
+            SyncToIGAU = Convert.ToBoolean(reader["SyncToIGAU"]);
+
         }
 
         public EDCommander(int id, string Name )
         {
-            this.nr = id;
-            this.name = Name;
-
-            this.syncToEdsm = false;
-            this.syncFromEdsm = false;
-            this.edsmname = "";
-            this.edsmapikey = "";
-
-            this.syncToEGO = false;
-            this.egoname = "";
-            this.egoapikey = "";
-
-            this.SyncToInara = false;
-            this.inaraname = "";
-            this.inaraapikey = "";
-            this.homesystem = "";
-            this.mapcentreonselection = true;
-            this.mapzoom = 1.0f;
-            this.MapColour = System.Drawing.Color.Red.ToArgb();
-
-            this.syncToEddn = false;
+            this.Nr = id;
+            this.Name = Name;
         }
 
-        public int Nr { get { return nr; }  private set { nr = value;  } }
+        public int Nr { set; get; }
+        public string Name { set; get; } = "";
+        public bool Deleted { set; get; }
 
-        public string Name { get { return name; } set { name = value; } }
-        public string EdsmName { get { return edsmname; } set { edsmname = value; } }
-        public string EDSMAPIKey { get { return edsmapikey; } set { edsmapikey = value; } }
-        public string EGOName { get { return egoname; } set { egoname = value; } }
-        public string EGOAPIKey { get { return egoapikey; } set { egoapikey = value; } }
-        public string InaraName { get { return inaraname; } set { inaraname = value; } }
-        public string InaraAPIKey { get { return inaraapikey; } set { inaraapikey = value; } }
-        public string HomeSystemTextOrSol { get { return homesystem.HasChars() ? homesystem : "Sol"; } set { homesystem = value; } }
-        public ISystem HomeSystemIOrSol { get
+        public string JournalDir { set; get; } = "";
+
+        public bool SyncToEdsm { set; get; }
+        public bool SyncFromEdsm { set; get; }
+        public string EdsmName { set; get; } = "";
+        public string EDSMAPIKey { set; get; } = "";
+
+        private bool SyncToEGO { get { return false; } set { } }    // now withdrawn, kept in DB as its in the users DB fields.
+        private string EGOName { set; get; } = "";
+        private string EGOAPIKey { set; get; } = "";
+
+        public bool SyncToInara { set; get; }
+        public string InaraName { set; get; } = "";
+        public string InaraAPIKey { set; get; } = "";
+
+        public bool SyncToEddn { set; get; }
+
+        private string homesystem = "";
+        private ISystem lookuphomesys = null;
+        private string lastlookuphomename = null;
+        public string HomeSystem { get { return homesystem; } set { homesystem = value; lookuphomesys = null; lastlookuphomename = null; } }
+        public ISystem HomeSystemI
+        {
+            get
             {
-                return SystemCache.FindSystem(HomeSystemTextOrSol) ?? new SystemClass("Sol", 0, 0, 0);
-            } }
+                if (homesystem.HasChars())
+                {
+                    if (lastlookuphomename != homesystem)
+                    {
+                        lastlookuphomename = homesystem;
+                        lookuphomesys = SystemCache.FindSystem(homesystem);
+                    }
+                }
 
-        public float MapZoom { get { return mapzoom; } set { mapzoom = value; } }
-        public int MapColour { get { return mapcolour; } set { mapcolour = value; } }
-        public bool MapCentreOnSelection { get { return mapcentreonselection; } set { mapcentreonselection = value; } }
+                return lookuphomesys;
+            }
+        }
 
-        public string JournalDir { get { return journalDir; } set { journalDir = value; } }
-        public bool SyncToEdsm { get { return syncToEdsm; } set { syncToEdsm = value; } }
-        public bool SyncFromEdsm { get { return syncFromEdsm; } set { syncFromEdsm = value; } }
-        public bool SyncToEddn {  get { return syncToEddn; } set { syncToEddn = value;  } }
-        //public bool SyncToEGO { get { return syncToEGO; } set { syncToEGO = value; } } disabled
-        public bool SyncToEGO { get { return false; } set {  } } 
-        public bool SyncToInara { get { return syncToInara; } set { syncToInara = value; } }
-        public bool Deleted { get { return deleted; } set { deleted = value; } }
+        public string HomeSystemTextOrSol { get { return homesystem.HasChars() ? homesystem : "Sol"; } }
+        public ISystem HomeSystemIOrSol {  get { return HomeSystemI ?? new SystemClass("Sol", 0, 0, 0); } }
+
+        public float MapZoom { set; get; } = 1.0f;
+        public int MapColour { set; get; } = System.Drawing.Color.Red.ToArgb();
+        public bool MapCentreOnSelection { set; get; } = true;
+
+        public bool SyncToIGAU { set; get; }
 
         public string Info { get
             {
-                return BaseUtils.FieldBuilder.Build(";To EDDN", syncToEddn, ";To EDSM", syncToEdsm, ";From EDSM", syncFromEdsm, ";To Inara" , syncToInara, ";To EGO", syncToEGO);
+                return BaseUtils.FieldBuilder.Build(";To EDDN", SyncToEddn, ";To EDSM", SyncToEdsm, ";From EDSM", SyncFromEdsm, ";To Inara" , SyncToInara, ";To EGO", SyncToEGO, ";To IGAU", SyncToIGAU);
             } }
 
-#endregion
+        #endregion
     }
 }

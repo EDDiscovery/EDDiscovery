@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2017 EDDiscovery development team
+ * Copyright © 2016 - 2019 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -13,29 +13,26 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using EDDiscovery.Controls;
-using System.IO;
 using EliteDangerousCore;
-using EliteDangerousCore.DB;
+using System;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
 {
     public partial class UserControlModules : UserControlCommonBase
     {
-        private string DbColumnSave { get { return DBName("ModulesGrid",  "DGVCol"); } }
-        private string DbShipSave { get { return DBName("ModulesGridShipSelect" ); } }
+        private string DbColumnSave { get { return DBName("ModulesGrid", "DGVCol"); } }
+        private string DbShipSave { get { return DBName("ModulesGridShipSelect"); } }
 
         private string storedmoduletext;
         private string travelhistorytext;
+        private HistoryEntry last_he = null;
+        private ShipInformation last_si = null;
 
         #region Init
 
@@ -84,7 +81,6 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNewUIEvent -= Discoveryform_OnNewUIEvent;
         }
 
-
         #endregion
 
         #region Display
@@ -99,69 +95,31 @@ namespace EDDiscovery.UserControls
             UpdateComboBox(hl);
         }
 
-        private void UpdateComboBox(HistoryList hl)
-        { 
-            ShipInformationList shm = hl.shipinformationlist;
-            string cursel = comboBoxShips.Text;
-
-            comboBoxShips.Items.Clear();
-            comboBoxShips.Items.Add(travelhistorytext);
-            comboBoxShips.Items.Add(storedmoduletext);
-
-            var ownedships = (from x1 in shm.Ships where x1.Value.State == ShipInformation.ShipState.Owned && !ShipModuleData.IsSRVOrFighter(x1.Value.ShipFD) select x1.Value);
-            var notownedships = (from x1 in shm.Ships where x1.Value.State != ShipInformation.ShipState.Owned && !ShipModuleData.IsSRVOrFighter(x1.Value.ShipFD) select x1.Value);
-            var fightersrvs = (from x1 in shm.Ships where ShipModuleData.IsSRVOrFighter(x1.Value.ShipFD) select x1.Value);
-
-            var now = (from x1 in ownedships where x1.StoredAtSystem == null select x1.ShipNameIdentType).ToList();
-            comboBoxShips.Items.AddRange(now);
-
-            var stored = (from x1 in ownedships where x1.StoredAtSystem != null select x1.ShipNameIdentType).ToList();
-            comboBoxShips.Items.AddRange(stored);
-
-            comboBoxShips.Items.AddRange(notownedships.Select(x => x.ShipNameIdentType).ToList());
-            comboBoxShips.Items.AddRange(fightersrvs.Select(x => x.ShipNameIdentType).ToList());
-
-            if (cursel == "")
-                cursel = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbShipSave, "");
-
-            if (cursel == "" || !comboBoxShips.Items.Contains(cursel))
-                cursel = travelhistorytext;
-
-            comboBoxShips.Enabled = false;
-            comboBoxShips.SelectedItem = cursel;
-            comboBoxShips.Enabled = true;
-        }
-
         private void Discoveryform_OnNewUIEvent(UIEvent obj)
         {
             if (obj is EliteDangerousCore.UIEvents.UIFuel) // fuel UI update the SI information globally.
-                Display(last_he, discoveryform.history);
+                Display(last_he, discoveryform.history, true);
         }
 
         public override void InitialDisplay()
         {
-            Display(uctg.GetCurrentHistoryEntry, discoveryform.history);
+            Display(uctg.GetCurrentHistoryEntry, discoveryform.history , true);
         }
-
-        HistoryEntry last_he = null;
-        ShipInformation last_si = null;
-
-        private void Display(HistoryEntry he, HistoryList hl) =>
-            Display(he, hl, true);
 
         private void Display(HistoryEntry he, HistoryList hl, bool selectedEntry)
         {
-            if ( comboBoxShips.Items.Count == 0 )
+            if (comboBoxShips.Items.Count == 0)
                 UpdateComboBox(hl);
 
             last_he = he;
             Display();
         }
 
-        private void Display()
+        private void Display()      // allow redisplay of last data
         {
-            DataGridViewColumn sortcol = dataGridViewModules.SortedColumn != null ? dataGridViewModules.SortedColumn : dataGridViewModules.Columns[0];
-            SortOrder sortorder = dataGridViewModules.SortOrder;
+            DataGridViewColumn sortcolprev = dataGridViewModules.SortedColumn != null ? dataGridViewModules.SortedColumn : dataGridViewModules.Columns[0];
+            SortOrder sortorderprev = dataGridViewModules.SortedColumn != null ? dataGridViewModules.SortOrder : SortOrder.Ascending;
+            int firstline = dataGridViewModules.FirstDisplayedScrollingRowIndex;
 
             dataGridViewModules.Rows.Clear();
 
@@ -203,11 +161,13 @@ namespace EDDiscovery.UserControls
                     DisplayShip(si);
             }
 
-            dataGridViewModules.Sort(sortcol, (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
-            dataGridViewModules.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
+            dataGridViewModules.Sort(sortcolprev, (sortorderprev == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
+            dataGridViewModules.Columns[sortcolprev.Index].HeaderCell.SortGlyphDirection = sortorderprev;
+            if (firstline >= 0 && firstline < dataGridViewModules.RowCount)
+                dataGridViewModules.FirstDisplayedScrollingRowIndex = firstline;
         }
 
-        private void DisplayShip(ShipInformation si)    
+        private void DisplayShip(ShipInformation si)
         {
             //System.Diagnostics.Debug.WriteLine("HE " + last_he.Indexno);
             last_si = si;
@@ -228,7 +188,7 @@ namespace EDDiscovery.UserControls
                 AddInfoLine("FSD Avg Jump".T(EDTx.UserControlModules_FSDAvgJump), ji.avgsinglejumpnocargo.ToString("N2") + "ly", "Half tank, no cargo".T(EDTx.UserControlModules_HT), fsdspec.ToString());
                 DataGridViewRow rw = dataGridViewModules.Rows[dataGridViewModules.Rows.Count - 1];
                 AddInfoLine("FSD Max Range".T(EDTx.UserControlModules_FSDMaxRange), ji.maxjumprange.ToString("N2") + "ly", "Full Tank, no cargo".T(EDTx.UserControlModules_FT), fsdspec.ToString());
-                AddInfoLine("FSD Maximum Fuel per jump".T(EDTx.UserControlModules_FSDMaximumFuelperjump), fsdspec.MaxFuelPerJump.ToString()+"t","", fsdspec.ToString());
+                AddInfoLine("FSD Maximum Fuel per jump".T(EDTx.UserControlModules_FSDMaximumFuelperjump), fsdspec.MaxFuelPerJump.ToString() + "t", "", fsdspec.ToString());
             }
 
             if (si.HullValue > 0)
@@ -248,13 +208,13 @@ namespace EDDiscovery.UserControls
 
             AddInfoLine("Manufacturer".T(EDTx.UserControlModules_Manufacturer), si.Manufacturer);
 
-            if ( si.FuelCapacity > 0 )
+            if (si.FuelCapacity > 0)
                 AddInfoLine("Fuel Capacity".T(EDTx.UserControlModules_FuelCapacity), si.FuelCapacity.ToString("N1") + "t");
-            if ( si.FuelLevel > 0 )
+            if (si.FuelLevel > 0)
                 AddInfoLine("Fuel Level".T(EDTx.UserControlModules_FuelLevel), si.FuelLevel.ToString("N1") + "t");
             if (si.ReserveFuelCapacity > 0)
                 AddInfoLine("Fuel Reserve Capacity".T(EDTx.UserControlModules_FuelReserveCapacity), si.ReserveFuelCapacity.ToString("N2") + "t");
-            if ( si.HullHealthAtLoadout > 0 )
+            if (si.HullHealthAtLoadout > 0)
                 AddInfoLine("Hull Health (Loadout)".T(EDTx.UserControlModules_HullHealth), si.HullHealthAtLoadout.ToString("N1") + "%");
 
             double fuelwarn = si.FuelWarningPercent;
@@ -265,12 +225,12 @@ namespace EDDiscovery.UserControls
             AddInfoLine("Main Thruster Boost".T(EDTx.UserControlModules_MainThrusterBoost), si.Boost.ToString("0.#"));
 
             if (si.InTransit)
-                AddInfoLine("In Transit to ".T(EDTx.UserControlModules_InTransitto), (si.StoredAtSystem??"Unknown".T(EDTx.Unknown)) + ":" + (si.StoredAtStation ?? "Unknown".T(EDTx.Unknown)));
-            else if ( si.StoredAtSystem != null )
+                AddInfoLine("In Transit to ".T(EDTx.UserControlModules_InTransitto), (si.StoredAtSystem ?? "Unknown".T(EDTx.Unknown)) + ":" + (si.StoredAtStation ?? "Unknown".T(EDTx.Unknown)));
+            else if (si.StoredAtSystem != null)
                 AddInfoLine("Stored at".T(EDTx.UserControlModules_Storedat), si.StoredAtSystem + ":" + (si.StoredAtStation ?? "Unknown".T(EDTx.Unknown)));
 
             int cc = si.CargoCapacity();
-            if ( cc > 0 )
+            if (cc > 0)
                 AddInfoLine("Cargo Capacity".T(EDTx.UserControlModules_CargoCapacity), cc.ToString("N0") + "t");
 
             labelVehicle.Visible = true;
@@ -295,15 +255,19 @@ namespace EDDiscovery.UserControls
             if (typename.IsEmpty())
                 typename = ShipModuleData.Instance.GetItemProperties(sm.ItemFD).ModType;
 
+            string eng = "";
+            if ( sm.Engineering != null )
+                eng = sm.Engineering.FriendlyBlueprintName + ":" + sm.Engineering.Level.ToStringInvariant();
+
             object[] rowobj = { typename,
                                 sm.Item, sm.Slot, ammo,
                                 sm.Mass > 0 ? (sm.Mass.ToString("0.#")+"t") : "",
-                                sm.Engineering?.FriendlyBlueprintName ?? "",
+                                eng,
                                 value, sm.PE() };
 
             dataGridViewModules.Rows.Add(rowobj);
 
-            if ( sm.Engineering != null )
+            if (sm.Engineering != null)
             {
                 string text = sm.Engineering.ToString();
                 EliteDangerousCalculations.FSDSpec spec = sm.GetFSDSpec();
@@ -333,7 +297,7 @@ namespace EDDiscovery.UserControls
 
         void AddInfoLine(string s, string v, string opt = "", string tooltip = "")
         {
-            object[] rowobj = { s, v.AppendPrePad(opt), "", "", "", "","", "" };
+            object[] rowobj = { s, v.AppendPrePad(opt), "", "", "", "", "", "" };
             dataGridViewModules.Rows.Add(rowobj);
             if (!string.IsNullOrEmpty(tooltip))
                 dataGridViewModules.Rows[dataGridViewModules.Rows.Count - 1].Cells[0].ToolTipText = tooltip;
@@ -341,12 +305,44 @@ namespace EDDiscovery.UserControls
 
         void AddMassLine(string m, string v, string opt = "")
         {
-            object[] rowobj = { m, opt, "", "", v, "","", "" };
+            object[] rowobj = { m, opt, "", "", v, "", "", "" };
             dataGridViewModules.Rows.Add(rowobj);
         }
 
         #endregion
 
+        private void UpdateComboBox(HistoryList hl)
+        {
+            ShipInformationList shm = hl.shipinformationlist;
+            string cursel = comboBoxShips.Text;
+
+            comboBoxShips.Items.Clear();
+            comboBoxShips.Items.Add(travelhistorytext);
+            comboBoxShips.Items.Add(storedmoduletext);
+
+            var ownedships = (from x1 in shm.Ships where x1.Value.State == ShipInformation.ShipState.Owned && !ShipModuleData.IsSRVOrFighter(x1.Value.ShipFD) select x1.Value);
+            var notownedships = (from x1 in shm.Ships where x1.Value.State != ShipInformation.ShipState.Owned && !ShipModuleData.IsSRVOrFighter(x1.Value.ShipFD) select x1.Value);
+            var fightersrvs = (from x1 in shm.Ships where ShipModuleData.IsSRVOrFighter(x1.Value.ShipFD) select x1.Value);
+
+            var now = (from x1 in ownedships where x1.StoredAtSystem == null select x1.ShipNameIdentType).ToList();
+            comboBoxShips.Items.AddRange(now);
+
+            var stored = (from x1 in ownedships where x1.StoredAtSystem != null select x1.ShipNameIdentType).ToList();
+            comboBoxShips.Items.AddRange(stored);
+
+            comboBoxShips.Items.AddRange(notownedships.Select(x => x.ShipNameIdentType).ToList());
+            comboBoxShips.Items.AddRange(fightersrvs.Select(x => x.ShipNameIdentType).ToList());
+
+            if (cursel == "")
+                cursel = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbShipSave, "");
+
+            if (cursel == "" || !comboBoxShips.Items.Contains(cursel))
+                cursel = travelhistorytext;
+
+            comboBoxShips.Enabled = false;
+            comboBoxShips.SelectedItem = cursel;
+            comboBoxShips.Enabled = true;
+        }
 
         private void comboBoxHistoryWindow_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -377,7 +373,7 @@ namespace EDDiscovery.UserControls
                 if (errstr.Length > 0)
                     ExtendedControls.MessageBoxTheme.Show(FindForm(), errstr + Environment.NewLine + "This is probably a new or powerplay module" + Environment.NewLine + "Report to EDD Team by Github giving the full text above", "Unknown Module Type");
 
-                string uri = EDDConfig.Instance.CoriolisURL  + "data=" + BaseUtils.HttpUriEncode.URIGZipBase64Escape(s) + "&bn=" + Uri.EscapeDataString(si.Name);
+                string uri = EDDConfig.Instance.CoriolisURL + "data=" + BaseUtils.HttpUriEncode.URIGZipBase64Escape(s) + "&bn=" + Uri.EscapeDataString(si.Name);
 
                 if (!BaseUtils.BrowserInfo.LaunchBrowser(uri))
                 {
@@ -392,7 +388,7 @@ namespace EDDiscovery.UserControls
         {
             if (e.Button == MouseButtons.Right)
             {
-                string url = ExtendedControls.PromptSingleLine.ShowDialog(this.FindForm(), "URL:", EDDConfig.Instance.CoriolisURL, 
+                string url = ExtendedControls.PromptSingleLine.ShowDialog(this.FindForm(), "URL:", EDDConfig.Instance.CoriolisURL,
                             "Enter Coriolis URL".T(EDTx.UserControlModules_CURL), this.FindForm().Icon);
                 if (url != null)
                     EDDConfig.Instance.CoriolisURL = url;
@@ -417,7 +413,7 @@ namespace EDDiscovery.UserControls
 
                 string loadoutjournalline = jo.ToString(Newtonsoft.Json.Formatting.Indented);
 
-           //     File.WriteAllText(@"c:\code\loadoutout.txt", loadoutjournalline);
+                //     File.WriteAllText(@"c:\code\loadoutout.txt", loadoutjournalline);
 
                 string uri = EDDConfig.Instance.EDDShipyardURL + "#/I=" + BaseUtils.HttpUriEncode.URIGZipBase64Escape(loadoutjournalline);
 
@@ -450,34 +446,32 @@ namespace EDDiscovery.UserControls
             int ctrlleft = 150;
 
             f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "Fuel Warning:".T(EDTx.UserControlModules_FW), new Point(10, 40), new Size(140, 24), ""));
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("FuelWarning", typeof(ExtendedControls.NumberBoxDouble), 
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("FuelWarning", typeof(ExtendedControls.NumberBoxDouble),
                 last_si.FuelWarningPercent.ToString(), new Point(ctrlleft, 40), new Size(width - ctrlleft - 20, 24), "Enter fuel warning level in % (0 = off, 1-100%)".T(EDTx.UserControlModules_TTF))
-                { numberboxdoubleminimum = 0, numberboxdoublemaximum = 100, numberboxformat = "0.##" });
+            { numberboxdoubleminimum = 0, numberboxdoublemaximum = 100, numberboxformat = "0.##" });
 
             f.Add(new ExtendedControls.ConfigurableForm.Entry("OK", typeof(ExtendedControls.ExtButton), "OK".T(EDTx.OK), new Point(width - 100, 70), new Size(80, 24), "Press to Accept".T(EDTx.UserControlModules_PresstoAccept)));
             f.Add(new ExtendedControls.ConfigurableForm.Entry("Cancel", typeof(ExtendedControls.ExtButton), "Cancel".T(EDTx.Cancel), new Point(width - 200, 70), new Size(80, 24), "Press to Cancel".T(EDTx.UserControlModules_PresstoCancel)));
 
             f.Trigger += (dialogname, controlname, tag) =>
             {
-                if ( controlname == "OK" )
+                if (controlname == "OK")
                 {
                     double? v3 = f.GetDouble("FuelWarning");
-                    if ( v3.HasValue)
+                    if (v3.HasValue)
                     {
-                        f.DialogResult = DialogResult.OK;
-                        f.Close();
+                        f.ReturnResult(DialogResult.OK);
                     }
                     else
                         ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "A Value is not valid".T(EDTx.UserControlModules_NValid), "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-                else if ( controlname == "Cancel")
+                else if (controlname == "Cancel")
                 {
-                    f.DialogResult = DialogResult.Cancel;
-                    f.Close();
+                    f.ReturnResult(DialogResult.Cancel);
                 }
             };
 
-            DialogResult res = f.ShowDialogCentred(this.FindForm(), this.FindForm().Icon,  "Ship Configure".T(EDTx.UserControlModules_SC));
+            DialogResult res = f.ShowDialogCentred(this.FindForm(), this.FindForm().Icon, "Ship Configure".T(EDTx.UserControlModules_SC));
 
             if (res == DialogResult.OK)
             {
@@ -509,5 +503,68 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        private void buttonExtExcel_Click(object sender, EventArgs e)
+        {
+            if (last_si != null)
+            {
+                Forms.ExportForm frm = new Forms.ExportForm();
+                frm.Init(new string[] { "Export Current View" }, disablestartendtime: true, allowRawJournalExport: false);
+
+                if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)
+                {
+                    BaseUtils.CSVWriteGrid grd = new BaseUtils.CSVWriteGrid();
+                    grd.SetCSVDelimiter(frm.Comma);
+
+                    grd.GetPreHeader += delegate (int r)
+                    {
+                        if (r == 0)
+                            return new Object[] { last_si.ShipUserName ?? "", last_si.ShipUserIdent ?? "", last_si.ShipType ?? "", last_si.ID };
+                        else if ( r == 1 )
+                            return new Object[] { };
+                        else
+                            return null;
+                    };
+
+                    grd.GetHeader += delegate (int c)
+                    {
+                        return (frm.IncludeHeader && c < dataGridViewModules.ColumnCount) ? dataGridViewModules.Columns[c].HeaderText : null;
+                    };
+
+                    grd.GetLine += delegate (int r)
+                    {
+                        if (r < dataGridViewModules.RowCount)
+                        {
+                            DataGridViewRow rw = dataGridViewModules.Rows[r];
+                            return new Object[] { rw.Cells[0].Value, rw.Cells[1].Value, rw.Cells[2].Value, rw.Cells[3].Value, rw.Cells[4].Value, rw.Cells[5].Value, rw.Cells[6].Value, rw.Cells[7].Value };
+                        }
+                        else
+                            return null;
+                    };
+
+                    var x = discoveryform.history.shipinformationlist.Ships.GetEnumerator();
+                    x.MoveNext();
+
+                    grd.GetPostHeader += delegate (int r)
+                    {
+                        if (r == 0)
+                            return new Object[] { };
+                        else if ( r == 1 )
+                            return new Object[] { "Ships:" };
+
+                        while (x.MoveNext())
+                        {
+                            if ( x.Current.Value.State == ShipInformation.ShipState.Owned )
+                                return new Object[] { x.Current.Value.ShipFullInfo() };
+                        }
+
+                        return null;
+                    };
+
+                    grd.WriteGrid(frm.Path, frm.AutoOpen, FindForm());
+                }
+            }
+            else
+                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "No Ship Information available".T(EDTx.UserControlModules_NOSI), "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
     }
 }

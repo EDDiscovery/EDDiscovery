@@ -133,14 +133,23 @@ namespace EliteDangerousCore.JournalEvents
         public string Name { get; set; }
         public int Count { get; set; }
 
+        public int Total { get; set; }      // found from MCL
+
         public void UpdateMaterials(MaterialCommoditiesList mc)
         {
             mc.Change(Category, Name, Count, 0);
+
+            Total = mc.FindFDName(Name)?.Count ?? 0;
         }
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = BaseUtils.FieldBuilder.Build("", FriendlyName, "< ; items".T(EDTx.JournalEntry_MatC), Count);
+            MaterialCommodityData mcd = MaterialCommodityData.GetByFDName(Name);
+            if (mcd != null)
+                info = BaseUtils.FieldBuilder.Build("", FriendlyName, "< (", mcd.TranslatedCategory, ";)", mcd.TranslatedType, "; items".T(EDTx.JournalEntry_MatC), Count, "Total: ".T(EDTx.JournalEntry_Total), Total);
+            else
+                info = BaseUtils.FieldBuilder.Build("", FriendlyName, "< ; items".T(EDTx.JournalEntry_MatC), Count);
+
             detailed = "";
         }
     }
@@ -161,14 +170,22 @@ namespace EliteDangerousCore.JournalEvents
         public string Name { get; set; }    // FDName
         public int Count { get; set; }
 
+        public int Total { get; set; }      // found from MCL
+
         public void UpdateMaterials(MaterialCommoditiesList mc)
         {
             mc.Change(Category, Name, -Count, 0);
+            Total = mc.FindFDName(Name)?.Count ?? 0;
         }
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = BaseUtils.FieldBuilder.Build("", FriendlyName, "< ; items".T(EDTx.JournalEntry_MatC), Count);
+            MaterialCommodityData mcd = MaterialCommodityData.GetByFDName(Name);
+            if (mcd != null)
+                info = BaseUtils.FieldBuilder.Build("", FriendlyName, "< (", mcd.TranslatedCategory, ";)", mcd.TranslatedType, "; items".T(EDTx.JournalEntry_MatC), Count, "Total: ".T(EDTx.JournalEntry_Total), Total);
+            else
+                info = BaseUtils.FieldBuilder.Build("", FriendlyName, "< ; items".T(EDTx.JournalEntry_MatC), Count);
+    
             detailed = "";
         }
     }
@@ -192,6 +209,10 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string info, out string detailed)
         {
             info = BaseUtils.FieldBuilder.Build("", FriendlyName);
+            MaterialCommodityData mcd = MaterialCommodityData.GetByFDName(Name);
+            if (mcd != null)
+                info += BaseUtils.FieldBuilder.Build(" (", mcd.TranslatedCategory, ";)", mcd.TranslatedType);
+
             if (DiscoveryNumber > 0)
                 info += string.Format(", Discovery {0}".T(EDTx.JournalMaterialDiscovered_DN), DiscoveryNumber);
             detailed = "";

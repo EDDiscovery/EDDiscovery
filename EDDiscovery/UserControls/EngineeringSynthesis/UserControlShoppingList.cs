@@ -93,11 +93,11 @@ namespace EDDiscovery.UserControls
             userControlSynthesis.OnDisplayComplete += Synthesis_OnWantedChange;
             userControlEngineering.OnDisplayComplete += Engineering_OnWantedChange;
 
-            List<string> techBrokerList = Recipes.TechBrokerUnlocks.Select(r => r.name).ToList();
+            List<string> techBrokerList = Recipes.TechBrokerUnlocks.Select(r => r.Name).ToList();
             techbrokerselection = new RecipeFilterSelector(techBrokerList);
             techbrokerselection.Changed += TechBrokerSelectionChanged;
 
-            List<string> seList = Recipes.SpecialEffects.Select(r => r.name).ToList();
+            List<string> seList = Recipes.SpecialEffects.Select(r => r.Name).ToList();
             specialeffectsselection = new RecipeFilterSelector(seList);
             specialeffectsselection.Changed += SpecialEffectsSelectionChanged;
 
@@ -201,7 +201,7 @@ namespace EDDiscovery.UserControls
                     List<string> techBrokerList = techBrokers.Split(';').ToList<string>();
                     foreach (Recipes.Recipe r in Recipes.TechBrokerUnlocks)
                     {
-                        if (techBrokers == "All" || techBrokerList.Contains(r.name))
+                        if (techBrokers == "All" || techBrokerList.Contains(r.Name))
                             totalWanted.Add(new Tuple<Recipes.Recipe, int>(r, 1));
                     }
                 }
@@ -212,7 +212,7 @@ namespace EDDiscovery.UserControls
                     List<string> seList = specialeffects.Split(';').ToList<string>();
                     foreach (Recipes.Recipe r in Recipes.SpecialEffects)
                     {
-                        if (specialeffects == "All" || specialeffects.Contains(r.name))
+                        if (specialeffects == "All" || specialeffects.Contains(r.Name))
                             totalWanted.Add(new Tuple<Recipes.Recipe, int>(r, 1));
                     }
                 }
@@ -306,9 +306,9 @@ namespace EDDiscovery.UserControls
                 if (showMaxInjections)
                 {
                     MaterialCommoditiesRecipe.ResetUsed(mcl);
-                    Tuple<int, int, string, string> basic = MaterialCommoditiesRecipe.HowManyLeft(mcl, Recipes.SynthesisRecipes.First(r => r.name == "FSD" && r.level == "Basic"));
-                    Tuple<int, int, string, string> standard = MaterialCommoditiesRecipe.HowManyLeft(mcl, Recipes.SynthesisRecipes.First(r => r.name == "FSD" && r.level == "Standard"));
-                    Tuple<int, int, string, string> premium = MaterialCommoditiesRecipe.HowManyLeft(mcl, Recipes.SynthesisRecipes.First(r => r.name == "FSD" && r.level == "Premium"));
+                    Tuple<int, int, string, string> basic = MaterialCommoditiesRecipe.HowManyLeft(mcl, Recipes.SynthesisRecipes.First(r => r.Name == "FSD" && r.level == "Basic"));
+                    Tuple<int, int, string, string> standard = MaterialCommoditiesRecipe.HowManyLeft(mcl, Recipes.SynthesisRecipes.First(r => r.Name == "FSD" && r.level == "Standard"));
+                    Tuple<int, int, string, string> premium = MaterialCommoditiesRecipe.HowManyLeft(mcl, Recipes.SynthesisRecipes.First(r => r.Name == "FSD" && r.level == "Premium"));
                     wantedList.Append(Environment.NewLine +
                         string.Format("Max FSD Injections\r\n   {0} Basic\r\n   {1} Standard\r\n   {2} Premium".T(EDTx.UserControlShoppingList_FSD), basic.Item1, standard.Item1, premium.Item1));
                 }

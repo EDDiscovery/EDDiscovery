@@ -197,8 +197,8 @@ namespace EDDiscovery.UserControls
             pictureBoxSurveyor.ClearImageList();
 
             // if system, and we are in no focus or don't care
-            if (sys != null && ( uistate == EliteDangerousCore.UIEvents.UIGUIFocus.Focus.NoFocus || !autoHideToolStripMenuItem.Checked )
-                 || ( uistate == EliteDangerousCore.UIEvents.UIGUIFocus.Focus.FSSMode && dontHideInFSSModeToolStripMenuItem.Checked) )
+            if (sys != null && ( uistate == EliteDangerousCore.UIEvents.UIGUIFocus.Focus.NoFocus || !autoHideToolStripMenuItem.Checked 
+                                || ( uistate == EliteDangerousCore.UIEvents.UIGUIFocus.Focus.FSSMode && dontHideInFSSModeToolStripMenuItem.Checked) ) )
             {
                 int vpos = 0;
                 StringFormat frmt = new StringFormat(StringFormatFlags.NoWrap);
@@ -344,13 +344,17 @@ namespace EDDiscovery.UserControls
             information.Append((sd.nRadius < lowRadiusLimit) ? @" Low Radius.".T(EDTx.UserControlSurveyor_LowRadius) : null);
             information.Append((sn.Signals != null) ? " Has Signals.".T(EDTx.UserControlSurveyor_Signals) : null);
             information.Append(@" " + sd.DistanceFromArrivalText);
-            if (sd.WasMapped == true && sd.WasDiscovered == true)
-                information.Append(" (Mapped & Discovered)".T(EDTx.UserControlSurveyor_MandD));
-            else if (sd.WasMapped == true)
-                information.Append(" (Mapped)".T(EDTx.UserControlSurveyor_MP));
-            else if (sd.WasDiscovered == true)
-                information.Append(" (Discovered)".T(EDTx.UserControlSurveyor_DIS));
 
+            if (sd.WasMapped == true && sd.WasDiscovered == true)
+                information.Append(" (Mapped & Discovered)".T(EDTx.UserControlSurveyor_MandD) + " " + sd.EstimatedValueBase.ToString("N0") + " cr");
+            else if (sd.WasMapped == true)
+                information.Append(" (Mapped)".T(EDTx.UserControlSurveyor_MP) + " " + sd.EstimatedValueBase.ToString("N0") + " cr");
+            else if (sd.WasDiscovered == true)
+                information.Append(" (Discovered)".T(EDTx.UserControlSurveyor_DIS) + " " + sd.EstimatedValueFirstMappedEfficiently.ToString("N0") + " cr");
+            else
+            {       // cope with old versions
+                information.Append(" " + (sd.EstimatedValueFirstDiscoveredFirstMappedEfficiently > 0 ? sd.EstimatedValueFirstDiscoveredFirstMappedEfficiently : sd.EstimatedValueBase).ToString("N0") + " cr");
+            }
             return information.ToString();
         }
 

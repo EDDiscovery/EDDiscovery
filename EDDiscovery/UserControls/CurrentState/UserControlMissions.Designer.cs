@@ -125,7 +125,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewCurrent.RowHeadersVisible = false;
             this.dataGridViewCurrent.RowHeadersWidth = 25;
             this.dataGridViewCurrent.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewCurrent.Size = new System.Drawing.Size(787, 266);
+            this.dataGridViewCurrent.Size = new System.Drawing.Size(784, 266);
             this.dataGridViewCurrent.TabIndex = 1;
             this.dataGridViewCurrent.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewCurrent_SortCompare);
             // 
@@ -207,13 +207,13 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustomCur.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustomCur.HideScrollBar = false;
             this.vScrollBarCustomCur.LargeChange = 0;
-            this.vScrollBarCustomCur.Location = new System.Drawing.Point(787, 0);
+            this.vScrollBarCustomCur.Location = new System.Drawing.Point(784, 0);
             this.vScrollBarCustomCur.Maximum = -1;
             this.vScrollBarCustomCur.Minimum = 0;
             this.vScrollBarCustomCur.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustomCur.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustomCur.Name = "vScrollBarCustomCur";
-            this.vScrollBarCustomCur.Size = new System.Drawing.Size(13, 266);
+            this.vScrollBarCustomCur.Size = new System.Drawing.Size(16, 266);
             this.vScrollBarCustomCur.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustomCur.SmallChange = 1;
             this.vScrollBarCustomCur.TabIndex = 0;
@@ -269,7 +269,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewPrevious.RowHeadersVisible = false;
             this.dataGridViewPrevious.RowHeadersWidth = 25;
             this.dataGridViewPrevious.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewPrevious.Size = new System.Drawing.Size(787, 280);
+            this.dataGridViewPrevious.Size = new System.Drawing.Size(784, 280);
             this.dataGridViewPrevious.TabIndex = 2;
             this.dataGridViewPrevious.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewPrevious_SortCompare);
             // 
@@ -355,13 +355,13 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustomPrev.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustomPrev.HideScrollBar = false;
             this.vScrollBarCustomPrev.LargeChange = 0;
-            this.vScrollBarCustomPrev.Location = new System.Drawing.Point(787, 0);
+            this.vScrollBarCustomPrev.Location = new System.Drawing.Point(784, 0);
             this.vScrollBarCustomPrev.Maximum = -1;
             this.vScrollBarCustomPrev.Minimum = 0;
             this.vScrollBarCustomPrev.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustomPrev.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustomPrev.Name = "vScrollBarCustomPrev";
-            this.vScrollBarCustomPrev.Size = new System.Drawing.Size(13, 280);
+            this.vScrollBarCustomPrev.Size = new System.Drawing.Size(16, 280);
             this.vScrollBarCustomPrev.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustomPrev.SmallChange = 1;
             this.vScrollBarCustomPrev.TabIndex = 0;
@@ -375,9 +375,9 @@ namespace EDDiscovery.UserControls
             // panelButtons
             // 
             this.panelButtons.AutoSize = true;
-            this.panelButtons.Controls.Add(this.customDateTimePickerEnd);
-            this.panelButtons.Controls.Add(this.labelTo);
             this.panelButtons.Controls.Add(this.customDateTimePickerStart);
+            this.panelButtons.Controls.Add(this.labelTo);
+            this.panelButtons.Controls.Add(this.customDateTimePickerEnd);
             this.panelButtons.Controls.Add(this.labelValue);
             this.panelButtons.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelButtons.Location = new System.Drawing.Point(0, 0);
@@ -392,7 +392,7 @@ namespace EDDiscovery.UserControls
             this.customDateTimePickerEnd.Checked = false;
             this.customDateTimePickerEnd.CustomFormat = "yyyy/MM/dd | HH:mm:ss";
             this.customDateTimePickerEnd.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.customDateTimePickerEnd.Location = new System.Drawing.Point(0, 1);
+            this.customDateTimePickerEnd.Location = new System.Drawing.Point(252, 1);
             this.customDateTimePickerEnd.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.customDateTimePickerEnd.Name = "customDateTimePickerEnd";
             this.customDateTimePickerEnd.SelectedColor = System.Drawing.Color.Yellow;
@@ -407,7 +407,7 @@ namespace EDDiscovery.UserControls
             // labelTo
             // 
             this.labelTo.AutoSize = true;
-            this.labelTo.Location = new System.Drawing.Point(226, 1);
+            this.labelTo.Location = new System.Drawing.Point(228, 1);
             this.labelTo.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.labelTo.Name = "labelTo";
             this.labelTo.Size = new System.Drawing.Size(16, 13);
@@ -421,7 +421,7 @@ namespace EDDiscovery.UserControls
             this.customDateTimePickerStart.Checked = false;
             this.customDateTimePickerStart.CustomFormat = "yyyy/MM/dd | HH:mm:ss";
             this.customDateTimePickerStart.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.customDateTimePickerStart.Location = new System.Drawing.Point(250, 1);
+            this.customDateTimePickerStart.Location = new System.Drawing.Point(0, 1);
             this.customDateTimePickerStart.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.customDateTimePickerStart.Name = "customDateTimePickerStart";
             this.customDateTimePickerStart.SelectedColor = System.Drawing.Color.Yellow;

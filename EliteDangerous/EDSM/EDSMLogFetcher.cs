@@ -175,7 +175,7 @@ namespace EliteDangerousCore.EDSM
 
             List<HistoryEntry> hlfsdlist = JournalEntry.GetAll(Commander.Nr, logstarttime.AddDays(-1), logendtime.AddDays(1)).
                 OfType<JournalLocOrJump>().OrderBy(je => je.EventTimeUTC).
-                Select(je => HistoryEntry.FromJournalEntry(je, null, out bool jupdate)).ToList();    // using HE just because of the FillEDSM func
+                Select(je => HistoryEntry.FromJournalEntry(je, null, true, out bool jupdate)).ToList();    // using HE just because of the FillEDSM func
 
             HistoryList hl = new HistoryList(hlfsdlist);        // just so we can access the FillEDSM func
 

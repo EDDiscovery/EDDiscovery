@@ -39,6 +39,10 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
+            extComboBoxGameTime.Items.Add("Local");
+            extComboBoxGameTime.Items.Add("UTC");
+            extComboBoxGameTime.Items.Add("Game Time");
+
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
 
@@ -68,15 +72,16 @@ namespace EDDiscovery.UserControls
             checkBoxKeepOnTop.Checked = EDDiscoveryForm.EDDConfig.KeepOnTop;
             checkBoxPanelSortOrder.Checked = EDDConfig.Instance.SortPanelsByName;
             checkBoxUseNotifyIcon.Checked = EDDiscoveryForm.EDDConfig.UseNotifyIcon;
-            checkBoxUTC.Checked = EDDiscoveryForm.EDDConfig.DisplayUTC;
             checkBoxCustomResize.Checked = EDDiscoveryForm.EDDConfig.DrawDuringResize;
+
+            extComboBoxGameTime.SelectedIndex = EDDiscoveryForm.EDDConfig.DisplayTimeIndex;
 
             checkBoxOrderRowsInverted.CheckedChanged += checkBoxOrderRowsInverted_CheckedChanged;
             checkBoxMinimizeToNotifyIcon.CheckedChanged += checkBoxMinimizeToNotifyIcon_CheckedChanged;
             checkBoxKeepOnTop.CheckedChanged += checkBoxKeepOnTop_CheckedChanged;
             checkBoxPanelSortOrder.CheckedChanged += checkBoxPanelSortOrder_CheckedChanged;
             checkBoxUseNotifyIcon.CheckedChanged += checkBoxUseNotifyIcon_CheckedChanged;
-            checkBoxUTC.CheckedChanged += checkBoxUTC_CheckedChanged;
+            extComboBoxGameTime.SelectedIndexChanged += ExtComboBoxGameTime_SelectedIndexChanged;
             checkBoxCustomResize.CheckedChanged += checkBoxCustomResize_CheckedChanged;
 
             checkBoxMinimizeToNotifyIcon.Enabled = EDDiscoveryForm.EDDConfig.UseNotifyIcon;
@@ -244,9 +249,9 @@ namespace EDDiscovery.UserControls
             EDDConfig.Instance.OrderRowsInverted = checkBoxOrderRowsInverted.Checked;
         }
 
-        private void checkBoxUTC_CheckedChanged(object sender, EventArgs e)
+        private void ExtComboBoxGameTime_SelectedIndexChanged(object sender, EventArgs e)
         {
-            EDDiscoveryForm.EDDConfig.DisplayUTC = checkBoxUTC.Checked;
+            EDDiscoveryForm.EDDConfig.DisplayTimeIndex = extComboBoxGameTime.SelectedIndex;
             discoveryform.RefreshDisplays();
         }
 
@@ -494,6 +499,18 @@ namespace EDDiscovery.UserControls
         private void checkBoxCustomEDSMDownload_CheckedChanged(object sender, EventArgs e)
         {
             EDDConfig.Instance.EDSMEDDBDownload = checkBoxCustomEDSMEDDBDownload.Checked;
+
+
+            if ( EDDConfig.Instance.EDSMEDDBDownload == true)   // if turned on
+            {
+                int gridsel = 0;
+                bool[] grids = new bool[GridId.MaxGridID];
+                foreach (int i in GridId.FromString(EDDConfig.Instance.EDSMGridIDs))
+                    gridsel++;
+
+                if (gridsel == 0)                               // but we have zero grids selected, force the user to select again
+                    buttonExtEDSMConfigureArea_Click(sender, e);
+            }
         }
 
         ExtendedControls.InfoForm info;
@@ -520,13 +537,13 @@ namespace EDDiscovery.UserControls
                     System.Diagnostics.Debug.WriteLine("Remove ");
 
                     info = new ExtendedControls.InfoForm();
-                    info.Info("Remove Sectors".T(EDTx.UserControlSettings_RemoveSectors), 
+                    info.Info("Remove Sectors".T(EDTx.UserControlSettings_RemoveSectors),
                                 EDDiscovery.Properties.Resources.edlogo_3mo_icon,
-                                string.Format( ("Removing {0} Sector(s)." + Environment.NewLine + Environment.NewLine +
+                                string.Format(("Removing {0} Sector(s)." + Environment.NewLine + Environment.NewLine +
                                 "This will take a while (up to 30 mins dep on drive type and amount of sectors)." + Environment.NewLine +
                                 "You may continue to use EDD while this operation takes place" + Environment.NewLine +
                                 "but it may be slow to respond. Do not close down EDD until this window says" + Environment.NewLine +
-                                "the process has finished" + Environment.NewLine + Environment.NewLine).T(EDTx.UserControlSettings_GalRemove), gss.Removed.Count ));
+                                "the process has finished" + Environment.NewLine + Environment.NewLine).T(EDTx.UserControlSettings_GalRemove), gss.Removed.Count));
                     info.EnableClose = false;
                     info.Show(discoveryform);
 
@@ -567,10 +584,19 @@ namespace EDDiscovery.UserControls
 
         private void buttonExtSafeMode_Click(object sender, EventArgs e)
         {
-            if (ExtendedControls.MessageBoxTheme.Show(this, "Safe Mode".T(EDTx.UserControlSettings_SM), "Confirm restart to safe mode".T(EDTx.UserControlSettings_CSM), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+            if (ExtendedControls.MessageBoxTheme.Show(this, "Confirm restart to safe mode".T(EDTx.UserControlSettings_CSM), "Safe Mode".T(EDTx.UserControlSettings_SM), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
             {
-                Application.Exit();
-                System.Diagnostics.Process.Start(Application.ExecutablePath, "-safemode");
+                bool force = EDDApplicationContext.RestartInSafeMode;
+                EDDApplicationContext.RestartInSafeMode = true;
+
+                if (!force)
+                {
+                    Application.Exit();
+                }
+                else
+                {
+                    System.Threading.Thread.CurrentThread.Abort();
+                }
             }
         }
 
@@ -614,8 +640,18 @@ namespace EDDiscovery.UserControls
                     //string exe = System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName;
                     //string cmd = "-Command new-netfirewallrule -Name EDDiscovery -DisplayName EDDiscovery -Description Webserver -Program \"" + exe + "\" -Direction Inbound -Action Allow -LocalPort " + EDDConfig.Instance.WebServerPort.ToStringInvariant() + " -Protocol TCP" +
 
-                    string cmd = "-Command new-netfirewallrule -Name EDDiscovery -DisplayName EDDiscovery -Description Webserver -Direction Inbound -Action Allow -LocalPort " + EDDConfig.Instance.WebServerPort.ToStringInvariant() + " -Protocol TCP" +
-                    ";netsh http add urlacl url = http://*:" + EDDConfig.Instance.WebServerPort.ToStringInvariant() + "/ user=" + Environment.GetEnvironmentVariable("USERNAME");
+                    string cmd = "-Command " +
+                                 "new-netfirewallrule " +
+                                 "-Name EDDiscovery " +
+                                 "-DisplayName EDDiscovery " +
+                                 "-Description Webserver " +
+                                 "-Direction Inbound " +
+                                 "-Action Allow " +
+                                $"-LocalPort {EDDConfig.Instance.WebServerPort.ToStringInvariant()} " +
+                                 "-Protocol TCP;" +
+                                 "netsh http add urlacl " +
+                                $"url = http://*:{EDDConfig.Instance.WebServerPort.ToStringInvariant()}/ " +
+                                $"user=\"{Environment.GetEnvironmentVariable("USERNAME")}\"";
 
                     int pid = process.StartProcess("Powershell.exe", cmd, "runas");
 

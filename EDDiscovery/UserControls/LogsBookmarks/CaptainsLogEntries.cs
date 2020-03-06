@@ -68,10 +68,13 @@ namespace EDDiscovery.UserControls
             dateTimePickerStartDate.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbStartDateOn, false);
             dateTimePickerEndDate.Value = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDate(DbEndDate, new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day));
             dateTimePickerEndDate.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbEndDateOn, false);
+            VerifyDates();
+
             dateTimePickerStartDate.ValueChanged += (s, e) => { if (!updateprogramatically) Display(); };
             dateTimePickerEndDate.ValueChanged += (s, e) => { if (!updateprogramatically) Display(); };
 
             discoveryform.OnRefreshCommanders += Discoveryform_OnRefreshCommanders;
+            discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
 
         }
 
@@ -93,6 +96,7 @@ namespace EDDiscovery.UserControls
             GlobalCaptainsLogList.Instance.OnLogEntryChanged -= LogChanged;
 
             discoveryform.OnRefreshCommanders -= Discoveryform_OnRefreshCommanders;
+            discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
         }
         #endregion
 
@@ -107,6 +111,14 @@ namespace EDDiscovery.UserControls
         {
             Display();
         }
+
+        private void Discoveryform_OnHistoryChange(HistoryList obj)
+        {
+            VerifyDates();
+
+            Display();
+        }
+
 
         private void Display()
         {
@@ -124,19 +136,17 @@ namespace EDDiscovery.UserControls
             bool pickend = dateTimePickerEndDate.Checked;
             DateTime pickenddate = dateTimePickerEndDate.Value.EndOfDay();
 
-            bool utc = EDDConfig.Instance.DisplayUTC;
-
             foreach (CaptainsLogClass entry in GlobalCaptainsLogList.Instance.LogEntries)
             {
                 if (entry.Commander == EDCommander.CurrentCmdrID)
                 {
-                    if ((pickstart == false || entry.Time(utc) >= dateTimePickerStartDate.Value) &&     // >= <= does not care about kind.
-                        (pickend == false || entry.Time(utc) <= pickenddate))
+                    if ((pickstart == false || EDDConfig.Instance.ConvertTimeToSelectedFromUTC(entry.TimeUTC) >= dateTimePickerStartDate.Value) &&     // >= <= does not care about kind.
+                        (pickend == false || EDDConfig.Instance.ConvertTimeToSelectedFromUTC(entry.TimeUTC) <= pickenddate))
                     {
                         //System.Diagnostics.Debug.WriteLine("Bookmark " + bk.Name  +":" + bk.Note);
                         var rw = dataGridView.RowTemplate.Clone() as DataGridViewRow;
                         rw.CreateCells(dataGridView,
-                            entry.Time(utc),
+                            EDDConfig.Instance.ConvertTimeToSelectedFromUTC(entry.TimeUTC),
                             entry.SystemName,
                             entry.BodyName,
                             entry.Note,
@@ -160,7 +170,7 @@ namespace EDDiscovery.UserControls
 
             dataGridView.Sort(sortcol, (sortorder == SortOrder.Descending) ? System.ComponentModel.ListSortDirection.Descending : System.ComponentModel.ListSortDirection.Ascending);
             dataGridView.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
-
+                 
             if ( textBoxFilter.Text.HasChars() )
                 dataGridView.FilterGridView(textBoxFilter.Text, checktags: true);
 
@@ -249,20 +259,20 @@ namespace EDDiscovery.UserControls
             {
                 string v = rw.Cells[0].Value as string;
 
-                System.Globalization.DateTimeStyles dts = EDDConfig.Instance.DisplayUTC ?
+                System.Globalization.DateTimeStyles dts = !EDDConfig.Instance.DisplayTimeLocal ?
                     System.Globalization.DateTimeStyles.AssumeUniversal | System.Globalization.DateTimeStyles.AdjustToUniversal :
                     System.Globalization.DateTimeStyles.AssumeLocal | System.Globalization.DateTimeStyles.AdjustToUniversal;
 
-                if (v!= null && DateTime.TryParse(v, System.Globalization.CultureInfo.CurrentCulture, dts, out DateTime res))
+                if (v!= null && DateTime.TryParse(v, System.Globalization.CultureInfo.CurrentCulture, dts, out DateTime res) && EDDConfig.Instance.DateTimeInRangeForGame(res))
                 {
                     rw.Cells[0].Tag = res;
                     StoreRow(rw);
                 }
                 else
                 {
-                    ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Bad Date Time format".T(EDTx.CaptainsLogEntries_DTF), "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Bad/Out of Range Date Time format".T(EDTx.CaptainsLogEntries_DTF), "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Error);
                     DateTime prev = (DateTime)rw.Cells[0].Tag;
-                    rw.Cells[0].Value = EDDConfig.Instance.DisplayUTC ? prev : prev.ToLocalTime();
+                    rw.Cells[0].Value = prev;
                 }
             }
             else if (e.ColumnIndex <= 2 )
@@ -345,14 +355,26 @@ namespace EDDiscovery.UserControls
             inupdate = false;
         }
 
+
+        private void VerifyDates()
+        {
+            updateprogramatically = true;
+            if (!EDDConfig.Instance.DateTimeInRangeForGame(dateTimePickerStartDate.Value) || !EDDConfig.Instance.DateTimeInRangeForGame(dateTimePickerEndDate.Value))
+            {
+                dateTimePickerStartDate.Checked = dateTimePickerEndDate.Checked = false;
+                dateTimePickerEndDate.Value = dateTimePickerStartDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(DateTime.UtcNow);
+            }
+            updateprogramatically = false;
+        }
+
         #endregion
 
         #region Interactions with other tabs
 
-        public void SelectDate(DateTime date, bool createnew)       // date is local or utc, dependent on config
+        public void SelectDate(DateTime date, bool createnew)       // date is in real time (12/1/2019), not in game (3305) time, but has no kind (its just plain).
         {
             updateprogramatically = true;
-            dateTimePickerEndDate.Value = dateTimePickerStartDate.Value = date;
+            dateTimePickerEndDate.Value = dateTimePickerStartDate.Value = EDDConfig.Instance.ConvertTimeToSelectedNoKind(date);
             dateTimePickerEndDate.Checked = dateTimePickerStartDate.Checked = true;
 
             updateprogramatically = false;
@@ -376,7 +398,8 @@ namespace EDDiscovery.UserControls
 
             if (dateTimePickerEndDate.Checked)      // we are not at the current time..
             {
-                entrytimeutc = EDDConfig.Instance.DisplayUTC ? dateTimePickerEndDate.Value : dateTimePickerEndDate.Value.ToUniversalTime();
+                entrytimeutc = EDDConfig.Instance.ConvertTimeToUTCFromSelected(dateTimePickerEndDate.Value);
+                entrytimeutc = entrytimeutc.AddHours(DateTime.UtcNow.Hour).AddSeconds(DateTime.UtcNow.Minute);
                 system = "?";
                 body = "?";
             }
@@ -384,7 +407,7 @@ namespace EDDiscovery.UserControls
             var rw = dataGridView.RowTemplate.Clone() as DataGridViewRow;
 
             rw.CreateCells(dataGridView,
-                EDDConfig.Instance.DisplayUTC ? entrytimeutc : entrytimeutc.ToLocalTime(),
+                EDDConfig.Instance.ConvertTimeToSelectedFromUTC(entrytimeutc),
                 system,
                 body,
                 "",
@@ -557,6 +580,65 @@ namespace EDDiscovery.UserControls
                 ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), sys, true, discoveryform.history);
             else
                 ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "No such system".T(EDTx.CaptainsLogEntries_NSS) + " " + rightclickentry.SystemName, "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+        }
+
+        private void extButtonExcel_Click(object sender, EventArgs e)
+        {
+            Forms.ExportForm frm = new Forms.ExportForm();
+            frm.Init(new string[] { "Export Current View","All" }, disablestartendtime: true, allowRawJournalExport: false);
+
+            if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)
+            {
+                BaseUtils.CSVWriteGrid grd = new BaseUtils.CSVWriteGrid();
+                grd.SetCSVDelimiter(frm.Comma);
+
+                grd.GetLineHeader += delegate (int c)
+                {
+                    if (c == 0)
+                        return new string[] { "Time", "System","Body","Note","Tags" };
+                    else
+                        return null;
+                };
+
+                if (frm.SelectedIndex == 1)
+                {
+                    List<CaptainsLogClass> logs = GlobalCaptainsLogList.Instance.LogEntries;
+                    int i = 0;
+
+                    grd.GetLine += delegate (int r)
+                    {
+                        while (i < logs.Count)
+                        {
+                            CaptainsLogClass ent = logs[i++];
+                            if (ent.Commander == EDCommander.CurrentCmdrID)
+                            {
+                                return new object[] { EDDConfig.Instance.ConvertTimeToSelectedFromUTC(ent.TimeUTC),
+                                                      ent.SystemName , ent.BodyName, ent.Note, ent.Tags };
+                            }
+                        }
+
+                        return null;
+                    };
+                }
+                else
+                {
+                    grd.GetLine += delegate (int r)
+                    {
+                        if (r < dataGridView.RowCount)
+                        {
+                            DataGridViewRow rw = dataGridView.Rows[r];
+                            CaptainsLogClass ent = rw.Tag as CaptainsLogClass;
+                            return new Object[] { rw.Cells[0].Value, rw.Cells[1].Value, rw.Cells[2].Value, rw.Cells[3].Value, ent.Tags};
+                        }
+
+                        return null;
+                    };
+
+                }
+
+                grd.WriteGrid(frm.Path, frm.AutoOpen, FindForm());
+            }
 
         }
 

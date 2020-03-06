@@ -46,15 +46,13 @@ namespace EliteDangerousCore
         public JournalTypeEnum EntryType { get { return journalEntry.EventTypeID; } }
         public long Journalid { get { return journalEntry.Id; } }
         public EDCommander Commander { get { return EDCommander.GetCommander(journalEntry.CommanderId); } }
-        public DateTime EventTimeLocal { get { return EventTimeUTC.ToLocalTime(); } }
-        public DateTime EventTimeUTC { get { return journalEntry.EventTimeUTC; } }
+        public DateTime EventTimeUTC { get { return journalEntry.EventTimeUTC; } }  // local removed to stop us using it!.
         public TimeSpan AgeOfEntry() { return DateTime.UtcNow - EventTimeUTC; }
 
         public string EventSummary { get { return journalEntry.SummaryName(System);} }
 
         public bool EdsmSync { get { return journalEntry.SyncedEDSM; } }           // flag populated from journal entry when HE is made. Have we synced?
         public bool EDDNSync { get { return journalEntry.SyncedEDDN; } }
-        public bool EGOSync { get { return journalEntry.SyncedEGO; } }
         public bool StartMarker { get { return journalEntry.StartMarker; } }
         public bool StopMarker { get { return journalEntry.StopMarker; } }
         public bool IsFSDJump { get { return EntryType == JournalTypeEnum.FSDJump; } }
@@ -132,7 +130,7 @@ namespace EliteDangerousCore
         {
         }
 
-        public static HistoryEntry FromJournalEntry(JournalEntry je, HistoryEntry prev, out bool journalupdate)
+        public static HistoryEntry FromJournalEntry(JournalEntry je, HistoryEntry prev, bool checkdbforunknownsystem , out bool journalupdate)
         {
             ISystem isys = prev == null ? new SystemClass("Unknown") : prev.System;
             int indexno = prev == null ? 1 : prev.Indexno + 1;
@@ -163,6 +161,8 @@ namespace EliteDangerousCore
                         source = jl.StarPosFromEDSM ? SystemSource.FromEDSM : SystemSource.FromJournal,
                     };
 
+                    SystemCache.FindCachedJournalSystem(newsys);
+
                     // If it was a new system, pass the coords back to the StartJump
                     if (prev != null && prev.journalEntry is JournalStartJump)
                     {
@@ -180,7 +180,7 @@ namespace EliteDangerousCore
                     newsys = new SystemClass(jl.StarSystem);         // this will be a synthesised one, unless we find an EDSM to replace it
                     newsys.EDSMID = je.EdsmID;
 
-                    ISystem s = SystemCache.FindSystem(newsys);      // did we find it?
+                    ISystem s = checkdbforunknownsystem ? SystemCache.FindSystem(newsys) : null;      // did we find it?
 
                     if (s != null)                                  // found a system..
                     {

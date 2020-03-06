@@ -128,7 +128,7 @@ namespace EDDiscovery.UserControls
                     //System.Diagnostics.Debug.WriteLine("Save back " + bk.Name + " " + newNote);
                     currentedit.Tag = GlobalBookMarkList.Instance.AddOrUpdateBookmark(bk, !bk.isRegion,
                                     bk.isRegion ? bk.Heading : bk.StarName,
-                                    bk.x, bk.y, bk.z, bk.Time,
+                                    bk.x, bk.y, bk.z, bk.TimeUTC,
                                     newNote,
                                     userControlSurfaceBookmarks.PlanetMarks);
                     updating = false;
@@ -152,7 +152,7 @@ namespace EDDiscovery.UserControls
         private void buttonNew_Click(object sender, EventArgs e)
         {
             updating = true;
-            UserControls.TargetHelpers.showBookmarkForm(this.FindForm(), discoveryform, null, null, false);
+            UserControls.TargetHelpers.ShowBookmarkForm(this.FindForm(), discoveryform, null, null, false);
             updating = false;
             Display();
         }
@@ -172,7 +172,7 @@ namespace EDDiscovery.UserControls
                 EliteDangerousCore.ISystem sys = bk.isStar ? SystemCache.FindSystem(bk.Name) : null;
 
                 updating = true;
-                UserControls.TargetHelpers.showBookmarkForm(this.FindForm(), discoveryform, sys, bk, false);
+                UserControls.TargetHelpers.ShowBookmarkForm(this.FindForm(), discoveryform, sys, bk, false);
                 updating = false;
                 Display();
             }
@@ -399,7 +399,7 @@ namespace EDDiscovery.UserControls
                         List<Object> retrow = new List<Object>
                         {
                             bk.isRegion ? "Region" : "System",
-                            bk.Time.ToStringYearFirst(),
+                            EDDConfig.Instance.ConvertTimeToSelectedFromUTC(bk.TimeUTC).ToStringYearFirst(),
                             bk.isRegion ? bk.Heading : bk.StarName,
                             bk.Note,
                             bk.x.ToString("0.##"),
@@ -479,15 +479,17 @@ namespace EDDiscovery.UserControls
                         {
                             bool region = type?.Equals("Region", StringComparison.InvariantCultureIgnoreCase) ?? false;
 
-                            DateTime time = DateTime.MinValue;
+                            DateTime timeutc = DateTime.MinValue;
 
                             bool isyyyy = Regexyyyyddmm.IsMatch(date);      // excel, after getting our output in, converts the damn thing to local dates.. this distinguishes it.
 
-                            bool success = isyyyy ? DateTime.TryParse(date, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AssumeLocal, out time) :
-                                                                                    DateTime.TryParse(date, System.Globalization.CultureInfo.CurrentCulture, System.Globalization.DateTimeStyles.AssumeLocal, out time);
+                            bool success = isyyyy ? DateTime.TryParse(date, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AssumeUniversal, out timeutc) :
+                                                                                    DateTime.TryParse(date, System.Globalization.CultureInfo.CurrentCulture, System.Globalization.DateTimeStyles.AssumeUniversal, out timeutc);
 
                             if (success)
                             {
+                                timeutc = EDDConfig.Instance.ConvertTimeToUTCFromSelected(timeutc);     // assume import is in selected time base, convert
+
                                 string name = r[2];
                                 string note = r[3];
                                 double? x = r[4].InvariantParseDoubleNull();
@@ -496,16 +498,16 @@ namespace EDDiscovery.UserControls
 
                                 if (x != null && y != null && z != null)
                                 {
-                                    System.Diagnostics.Debug.WriteLine("Bookmark {0} {1} {2} {3} ({4},{5},{6}", type, time.ToStringZulu(), name, note, x, y, z);
+                                    System.Diagnostics.Debug.WriteLine("Bookmark {0} {1} {2} {3} ({4},{5},{6}", type, timeutc.ToStringZulu(), name, note, x, y, z);
 
                                     currentbk = GlobalBookMarkList.Instance.FindBookmark(name, region);
 
                                     if (currentbk != null)
                                     {
-                                        GlobalBookMarkList.Instance.AddOrUpdateBookmark(currentbk, !region, name, x.Value, y.Value, z.Value, time, note, currentbk.PlanetaryMarks);
+                                        GlobalBookMarkList.Instance.AddOrUpdateBookmark(currentbk, !region, name, x.Value, y.Value, z.Value, timeutc, note, currentbk.PlanetaryMarks);
                                     }
                                     else
-                                        currentbk = GlobalBookMarkList.Instance.AddOrUpdateBookmark(null, !region, name, x.Value, y.Value, z.Value, time, note, null);
+                                        currentbk = GlobalBookMarkList.Instance.AddOrUpdateBookmark(null, !region, name, x.Value, y.Value, z.Value, timeutc, note, null);
                                 }
                                 else
                                 {

@@ -103,7 +103,7 @@ namespace EDDiscovery.UserControls
 
             comboBoxYards.Items.AddRange(shm.ShipList());
 
-            var list = (from ShipYard x in shm.GetFilteredList() select x.Ident(EDDiscoveryForm.EDDConfig.DisplayUTC)).ToList();        // yard list repeats allowed within timescale
+            var list = (from ShipYard x in shm.GetFilteredList() select x.Ident()).ToList();        // yard list repeats allowed within timescale
             comboBoxYards.Items.AddRange(list);
 
             if (cursel == "")
@@ -155,7 +155,7 @@ namespace EDDiscovery.UserControls
             }
             else
             {
-                yard = discoveryform.history.shipyards.GetFilteredList().Find(x => x.Ident(EDDiscoveryForm.EDDConfig.DisplayUTC).Equals(comboBoxYards.Text));
+                yard = discoveryform.history.shipyards.GetFilteredList().Find(x => x.Ident().Equals(comboBoxYards.Text));
             }
 
             if (yard != null && yard.Ships != null)
@@ -180,7 +180,7 @@ namespace EDDiscovery.UserControls
             foreach (Tuple<ShipYard, ShipYard.ShipyardItem> i in shiplist)
             {
                 double distance = discoveryform.history.DistanceCurrentTo(i.Item1.StarSystem);
-                string dte = EDDiscoveryForm.EDDConfig.DisplayUTC ? i.Item1.Datetime.ToString() : i.Item1.Datetime.ToLocalTime().ToString();
+                string dte = EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(i.Item1.Datetime).ToString();
                 object[] rowobj = { dte, i.Item1.Location, (distance > -1) ? (distance.ToString("N1") + "ly") : "Unknown".T(EDTx.Unknown), i.Item2.ShipPrice.ToString("N1") + "cr" };
                 dataGridViewShips.Rows.Add(rowobj);
             }
@@ -218,7 +218,7 @@ namespace EDDiscovery.UserControls
 
             double distance = discoveryform.history.DistanceCurrentTo(yard.StarSystem);
 
-            labelYard.Text = yard.Ident(EDDiscoveryForm.EDDConfig.DisplayUTC) + (distance>-1 ? (" @ " + distance.ToString("N1") + "ly") : "");
+            labelYard.Text = yard.Ident() + (distance>-1 ? (" @ " + distance.ToString("N1") + "ly") : "");
             labelYard.Visible = true;
             Col1.HeaderText = "Ship".T(EDTx.UserControlShipYards_Ship);
             Col1.Tag = null;

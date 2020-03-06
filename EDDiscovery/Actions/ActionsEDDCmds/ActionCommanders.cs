@@ -121,13 +121,14 @@ namespace EDDiscovery.Actions
             ap[prefix + "Id"] = cmdr.Nr.ToStringInvariant();
             ap[prefix + "Name"] = cmdr.Name;
             ap[prefix + "EDSMName"] = cmdr.EdsmName;
-            ap[prefix + "EGOName"] = cmdr.EGOName;
+            ap[prefix + "EGOName"] = "";
             ap[prefix + "INARAName"] = cmdr.InaraName;
             ap[prefix + "JournalDir"] = cmdr.JournalDir;
             ap[prefix + "SyncToEDSM"] = cmdr.SyncToEdsm.ToStringIntValue();
             ap[prefix + "SyncFromEDSM"] = cmdr.SyncFromEdsm.ToStringIntValue();
             ap[prefix + "SyncToEDDN"] = cmdr.SyncToEddn.ToStringIntValue();
-            ap[prefix + "SyncToEGO"] = cmdr.SyncToEGO.ToStringIntValue();
+            ap[prefix + "SyncToEGO"] = false.ToStringIntValue();
+            ap[prefix + "SyncToIGAU"] = cmdr.SyncToIGAU.ToStringIntValue();
             ap[prefix + "SyncToINARA"] = cmdr.SyncToInara.ToStringIntValue();
             ap[prefix + "Deleted"] = cmdr.Deleted.ToStringIntValue();
         }

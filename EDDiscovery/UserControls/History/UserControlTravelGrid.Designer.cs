@@ -81,6 +81,7 @@ namespace EDDiscovery.UserControls
             this.runActionsAcrossSelectionToolSpeechStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runSelectionThroughInaraSystemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runEntryThroughProfileSystemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.runSelectionThroughIGAUDebugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.panelOutlining = new ExtendedControls.ExtPanelDataGridViewScrollOutlining();
@@ -301,9 +302,10 @@ namespace EDDiscovery.UserControls
             this.writeEventInfoToLogDebugToolStripMenuItem,
             this.runActionsAcrossSelectionToolSpeechStripMenuItem,
             this.runSelectionThroughInaraSystemToolStripMenuItem,
-            this.runEntryThroughProfileSystemToolStripMenuItem});
+            this.runEntryThroughProfileSystemToolStripMenuItem,
+            this.runSelectionThroughIGAUDebugToolStripMenuItem});
             this.historyContextMenu.Name = "historyContextMenu";
-            this.historyContextMenu.Size = new System.Drawing.Size(388, 466);
+            this.historyContextMenu.Size = new System.Drawing.Size(388, 488);
             this.historyContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.historyContextMenu_Opening);
             // 
             // removeSortingOfColumnsToolStripMenuItem
@@ -492,6 +494,13 @@ namespace EDDiscovery.UserControls
             this.runEntryThroughProfileSystemToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
             this.runEntryThroughProfileSystemToolStripMenuItem.Text = "Run entry through Profile System (Debug)";
             this.runEntryThroughProfileSystemToolStripMenuItem.Click += new System.EventHandler(this.runEntryThroughProfileSystemToolStripMenuItem_Click);
+            // 
+            // runSelectionThroughIGAUDebugToolStripMenuItem
+            // 
+            this.runSelectionThroughIGAUDebugToolStripMenuItem.Name = "runSelectionThroughIGAUDebugToolStripMenuItem";
+            this.runSelectionThroughIGAUDebugToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
+            this.runSelectionThroughIGAUDebugToolStripMenuItem.Text = "Run selection through IGAU (Debug)";
+            this.runSelectionThroughIGAUDebugToolStripMenuItem.Click += new System.EventHandler(this.runSelectionThroughIGAUDebugToolStripMenuItem_Click);
             // 
             // toolTip
             // 
@@ -770,5 +779,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripMenuItem rollUpAfter5ToolStripMenuItem;
         private ExtendedControls.ExtCheckBox extCheckBoxOutlines;
         private System.Windows.Forms.FlowLayoutPanel panelTop;
+        private System.Windows.Forms.ToolStripMenuItem runSelectionThroughIGAUDebugToolStripMenuItem;
     }
 }

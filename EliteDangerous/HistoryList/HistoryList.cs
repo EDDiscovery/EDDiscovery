@@ -153,16 +153,6 @@ namespace EliteDangerousCore
             }
         }
 
-        public List<HistoryEntry> FilterByScanNotEGOSynced
-        {
-            get
-            {
-                DateTime start2_3 = new DateTime(2017, 4, 11, 12, 0, 0, 0, DateTimeKind.Utc);
-                return (from s in historylist where s.EGOSync == false && s.EntryType == JournalTypeEnum.Scan && s.EventTimeUTC >= start2_3 orderby s.EventTimeUTC ascending select s).ToList();
-            }
-        }
-
-
         public List<HistoryEntry> FilterByFSDAndPosition
         {
             get
@@ -645,11 +635,13 @@ namespace EliteDangerousCore
                 bool updatesyspos = edsmsys.HasCoordinate &&
                                     (edsmsys.Xi != oldsys.Xi || edsmsys.Yi != oldsys.Yi || edsmsys.Zi != oldsys.Zi) &&
                                     oldsys.source != SystemSource.FromJournal; // NEVER EVER EVER OVERRIDE JOURNAL COORDINATES
+                bool updatename = oldsys.source != SystemSource.FromJournal ||
+                                  !oldsys.Name.Equals(edsmsys.Name, StringComparison.InvariantCultureIgnoreCase);
 
                 ISystem newsys = new SystemClass
                 {
                     EDSMID = updateedsmid ? edsmsys.EDSMID : oldsys.EDSMID,
-                    Name = edsmsys.Name,
+                    Name = updatename ? edsmsys.Name : oldsys.Name,
                     X = updatesyspos ? edsmsys.X : oldsys.X,
                     Y = updatesyspos ? edsmsys.Y : oldsys.Y,
                     Z = updatesyspos ? edsmsys.Z : oldsys.Z,
@@ -889,7 +881,7 @@ namespace EliteDangerousCore
             HistoryEntry prev = GetLast;
 
             bool journalupdate = false;
-            HistoryEntry he = HistoryEntry.FromJournalEntry(je, prev, out journalupdate);     // we may check edsm for this entry
+            HistoryEntry he = HistoryEntry.FromJournalEntry(je, prev, true, out journalupdate);     // we may check edsm for this entry
 
             if (journalupdate)
             {
@@ -1000,7 +992,7 @@ namespace EliteDangerousCore
 
                 jlist = JournalEntry.GetAll(CurrentCommander, 
                     ids: list,
-                    allidsafter: DateTime.UtcNow.Subtract(new TimeSpan(fullhistoryloaddaylimit, 0, 0, 0))
+                    allidsafterutc: DateTime.UtcNow.Subtract(new TimeSpan(fullhistoryloaddaylimit, 0, 0, 0))
                     ).OrderBy(x => x.EventTimeUTC).ThenBy(x => x.Id).ToList();
             }
             else
@@ -1014,6 +1006,11 @@ namespace EliteDangerousCore
             JournalEntry jprev = null;
 
             reportProgress(-1, "Creating History");
+
+            bool checkforunknownsystemsindb = true;
+
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
 
             foreach (JournalEntry je in jlist)
             {
@@ -1036,7 +1033,14 @@ namespace EliteDangerousCore
                     continue;
                 }
 
-                HistoryEntry he = HistoryEntry.FromJournalEntry(je, prev, out bool journalupdate);
+                long timetoload = sw.ElapsedMilliseconds;
+                HistoryEntry he = HistoryEntry.FromJournalEntry(je, prev, checkforunknownsystemsindb, out bool journalupdate);
+
+                if (sw.ElapsedMilliseconds - timetoload > 100)
+                {
+                    System.Diagnostics.Debug.WriteLine("DB is slow - probably 3dmap is being initialised, give up checking for old systems");
+                    checkforunknownsystemsindb = false;
+                }
 
                 prev = he;
                 jprev = je;
@@ -1197,22 +1201,33 @@ namespace EliteDangerousCore
                         jdprev.Add(jd);
                         return true;
                     }
-                    else if (je.EventTypeID == JournalTypeEnum.UnderAttack)     // not merged during play
+                    else if (je.EventTypeID == JournalTypeEnum.UnderAttack)     
                     {
                         var jdprev = prev as EliteDangerousCore.JournalEvents.JournalUnderAttack;
                         var jd = je as EliteDangerousCore.JournalEvents.JournalUnderAttack;
                         jdprev.Add(jd.Target);
                         return true;
                     }
-                    else if (je.EventTypeID == JournalTypeEnum.ReceiveText)     // not merged during play
+                    else if (je.EventTypeID == JournalTypeEnum.ReceiveText)     
                     {
                         var jdprev = prev as EliteDangerousCore.JournalEvents.JournalReceiveText;
                         var jd = je as EliteDangerousCore.JournalEvents.JournalReceiveText;
 
                         // merge if same channel 
-                        if (jd.Channel == jdprev.Channel )
+                        if (jd.Channel == jdprev.Channel)
                         {
                             jdprev.Add(jd);
+                            return true;
+                        }
+                    }
+                    else if (je.EventTypeID == JournalTypeEnum.FSSAllBodiesFound)    
+                    {
+                        var jdprev = prev as EliteDangerousCore.JournalEvents.JournalFSSAllBodiesFound;
+                        var jd = je as EliteDangerousCore.JournalEvents.JournalFSSAllBodiesFound;
+
+                        // throw away if same..
+                        if (jdprev.SystemName == jd.SystemName && jdprev.Count == jd.Count ) // if same, we just waste the repeater, ED sometimes spews out multiples
+                        {
                             return true;
                         }
                     }

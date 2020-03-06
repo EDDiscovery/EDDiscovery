@@ -439,8 +439,7 @@ namespace EDDiscovery.UserControls
                 else
                     AddSystems(systems);
 
-                f.DialogResult = DialogResult.OK;
-                f.Close();
+                f.ReturnResult(DialogResult.OK);
             };
 
             f.Add(new ExtendedControls.ConfigurableForm.Entry("UC", null, "", new Point(5, 30), new Size(740, 200), null) { control = usc });
@@ -450,8 +449,7 @@ namespace EDDiscovery.UserControls
             {
                 if (controlname == "Cancel")
                 {
-                    f.DialogResult = DialogResult.Cancel;
-                    f.Close();
+                    f.ReturnResult(DialogResult.Cancel);
                 }
             };
 
@@ -608,7 +606,7 @@ namespace EDDiscovery.UserControls
 
             if (obj == null)
                 return;
-            TargetHelpers.setTargetSystem(this, discoveryform, (string)obj);
+            TargetHelpers.SetTargetSystem(this, discoveryform, (string)obj);
         }
 
         private void editBookmarkToolStripMenuItem_Click(object sender, EventArgs e)
@@ -627,7 +625,7 @@ namespace EDDiscovery.UserControls
                 ExtendedControls.MessageBoxTheme.Show(FindForm(), "Unknown system, system is without co-ordinates".T(EDTx.UserControlExploration_UnknownS), "Warning".T(EDTx.Warning), MessageBoxButtons.OK);
             }
             else
-                TargetHelpers.showBookmarkForm(this, discoveryform, sc, null, false);
+                TargetHelpers.ShowBookmarkForm(this, discoveryform, sc, null, false);
         }
 
         #endregion

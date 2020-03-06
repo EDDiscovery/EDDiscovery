@@ -33,6 +33,8 @@ namespace EDDiscovery.UserControls
         private string DbFilterSave { get { return DBName((materials) ? "MaterialsGrid" : "CommoditiesGrid", "Filter2"); } }
         private string DbClearZeroSave { get { return DBName((materials) ? "MaterialsGrid" : "CommoditiesGrid", "ClearZero"); } }
 
+        MaterialCommoditiesList last_mcl;
+
         #region Init
 
         public UserControlMaterialCommodities()
@@ -140,7 +142,22 @@ namespace EDDiscovery.UserControls
 
         private void Display(MaterialCommoditiesList mcl)
         {
+            if (mcl == last_mcl)        // same list, nothing to do
+            {
+                //System.Diagnostics.Debug.WriteLine("Same mcl " + mcl?.GetHashCode());
+                return;
+            }
+
+            last_mcl = mcl;
+
+            //System.Diagnostics.Debug.WriteLine("Display mcl " + mcl.GetHashCode());
+
+            DataGridViewColumn sortcolprev = dataGridViewMC.SortedColumn != null ? dataGridViewMC.SortedColumn : dataGridViewMC.Columns[0];
+            SortOrder sortorderprev = dataGridViewMC.SortedColumn != null ? dataGridViewMC.SortOrder : SortOrder.Ascending;
+            int firstline = dataGridViewMC.FirstDisplayedScrollingRowIndex;
+
             dataGridViewMC.Rows.Clear();
+
             textBoxItems1.Text = textBoxItems2.Text = "";
 
             if (mcl == null)
@@ -178,15 +195,25 @@ namespace EDDiscovery.UserControls
                                                 m != null ? m.Price.ToString("0.#") : "-" };
                         }
 
+                        string s = Recipes.UsedInSythesisByFDName(mcd.FDName, Environment.NewLine);
+                        string e = Recipes.UsedInEngineeringByFDName(mcd.FDName, Environment.NewLine);
+                        s = s.AppendPrePad(e, Environment.NewLine);
+                        string b = Recipes.UsedInTechBrokerUnlocksByFDName(mcd.FDName, Environment.NewLine);
+                        s = s.AppendPrePad(b, Environment.NewLine);
+                        string se = Recipes.UsedInSpecialEffectsyFDName(mcd.FDName, Environment.NewLine);
+                        s = s.AppendPrePad(se, Environment.NewLine);
+
                         dataGridViewMC.Rows.Add(rowobj);
+                        dataGridViewMC.Rows[dataGridViewMC.RowCount - 1].Cells[0].ToolTipText = s;
+                        dataGridViewMC.Rows[dataGridViewMC.RowCount - 1].Tag = s;
                     }
                 }
             }
 
-            if (dataGridViewMC.SortedColumn != null && dataGridViewMC.SortOrder != SortOrder.None)
-            {
-                dataGridViewMC.Sort(dataGridViewMC.SortedColumn, dataGridViewMC.SortOrder == SortOrder.Descending ? ListSortDirection.Descending : ListSortDirection.Ascending);
-            }
+            dataGridViewMC.Sort(sortcolprev, (sortorderprev == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
+            dataGridViewMC.Columns[sortcolprev.Index].HeaderCell.SortGlyphDirection = sortorderprev;
+            if (firstline >= 0 && firstline < dataGridViewMC.RowCount)
+                dataGridViewMC.FirstDisplayedScrollingRowIndex = firstline;
 
             if (materials)
             {
@@ -227,6 +254,22 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        private void dataGridViewMC_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.RowIndex < dataGridViewMC.Rows.Count)
+            {
+                string mats = (string)dataGridViewMC.Rows[e.RowIndex].Tag;
+                if (mats != null)   // sheer paranoia.
+                {
+                    mats = mats.Replace(": ", Environment.NewLine + "      ");
+                    ExtendedControls.InfoForm info = new ExtendedControls.InfoForm();
+                    info.Info(dataGridViewMC.Rows[e.RowIndex].Cells[0].Value as string, FindForm().Icon, mats);
+                    info.Size = new Size(800, 600);
+                    info.StartPosition = FormStartPosition.CenterParent;
+                    info.ShowDialog(FindForm());
+                }
+            }
+        }
     }
 
     public class UserControlMaterials : UserControlMaterialCommodities

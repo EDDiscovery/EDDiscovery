@@ -37,7 +37,8 @@ namespace EDDiscovery.Actions
 
                 vars[prefix + "JID"] = he.Journalid.ToString(ct);
                 vars[prefix + "UTCTime"] = he.EventTimeUTC.ToStringUS();
-                vars[prefix + "LocalTime"] = he.EventTimeLocal.ToStringUS();
+                vars[prefix + "LocalTime"] = he.EventTimeUTC.ToLocalTime().ToStringUS();
+                vars[prefix + "GameTime"] = he.EventTimeUTC.AddYears(1286).ToStringUS();
                 vars[prefix + "DockedState"] = he.IsDocked.ToStringIntValue();
                 vars[prefix + "LandedState"] = he.IsLanded.ToStringIntValue();
                 vars[prefix + "Hyperspace"] = he.IsInHyperSpace.ToStringIntValue();
@@ -50,7 +51,7 @@ namespace EDDiscovery.Actions
 
                 vars[prefix + "Credits"] = he.Credits.ToString(ct);
 
-                vars[prefix + "TravelledDistance"] = he.TravelledDistance.ToString("0.0");
+                vars[prefix + "TravelledDistance"] = he.TravelledDistance.ToStringInvariant("0.0");
                 vars[prefix + "TravelledSeconds"] = he.TravelledSeconds.ToString();
                 vars[prefix + "IsTravelling"] = he.isTravelling.ToStringIntValue();
                 vars[prefix + "TravelledJumps"] = he.Travelledjumps.ToStringInvariant();
@@ -63,7 +64,7 @@ namespace EDDiscovery.Actions
                 vars[prefix + "StopMarker"] = he.StopMarker.ToStringIntValue();
                 vars[prefix + "EdsmSync"] = he.EdsmSync.ToStringIntValue();
                 vars[prefix + "EddnSync"] = he.EDDNSync.ToStringIntValue();
-                vars[prefix + "EgoSync"] = he.EGOSync.ToStringIntValue();
+                vars[prefix + "EgoSync"] = false.ToStringIntValue();        //removed due to no EGO
                 vars[prefix + "Beta"] = he.IsBetaMessage.ToStringIntValue();
                 vars[prefix + "GameMode"] = he.GameMode;
                 vars[prefix + "Group"] = he.Group;
@@ -126,8 +127,8 @@ namespace EDDiscovery.Actions
                 sv = si.SubVehicle.ToString();
                 fullinfo = si.ShipFullInfo();
                 shortname = si.ShipShortName.Alt("Unknown");
-                fuel = si.FuelCapacity.ToString("0.0");
-                fuellevel = si.FuelLevel.ToString("0.0");
+                fuel = si.FuelCapacity.ToStringInvariant("0.0");
+                fuellevel = si.FuelLevel.ToStringInvariant("0.0");
                 cargo = si.CargoCapacity().ToStringInvariant();
             }
 

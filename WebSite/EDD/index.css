@@ -145,3 +145,7 @@ footer button
     background: rgb(100,100,100);
 }
 
+body p 
+{
+    color: aliceblue;
+}

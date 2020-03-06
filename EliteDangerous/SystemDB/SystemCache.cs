@@ -68,33 +68,9 @@ namespace EliteDangerousCore.DB
         {
             ISystem orgsys = find;
 
-            List<ISystem> foundlist = new List<ISystem>();
+            ISystem found = FindCachedSystem(find);
 
-            lock (systemsByEdsmId)          // Rob seen instances of it being locked together in multiple star distance threads, we need to serialise access to these two dictionaries
-            {                               // Concurrent dictionary no good, they could both be about to add the same thing at the same time and pass the contains test.
-
-                if (find.EDSMID > 0 && systemsByEdsmId.ContainsKey(find.EDSMID))        // add to list
-                {
-                    ISystem s = systemsByEdsmId[find.EDSMID];
-                    foundlist.Add(s);
-                }
-
-                if (systemsByName.ContainsKey(find.Name))            // and all names cached
-                {
-                    List<ISystem> s = systemsByName[find.Name];
-                    foundlist.AddRange(s);
-                }
-            }
-
-            ISystem found = null;
-
-            if (find.HasCoordinate && foundlist.Count > 0)           // if sys has a co-ord, find the best match within 0.5 ly
-                found = NearestTo(foundlist, find, 0.5);
-
-            if (found == null && foundlist.Count == 1 && !find.HasCoordinate) // if we did not find one, but we have only 1 candidate, use it.
-                found = foundlist[0];
-
-            if (found == null && cn != null && !SystemsDatabase.Instance.RebuildRunning)   // not cached, connection and not rebuilding, try db
+            if ((found == null || found.source != SystemSource.FromEDSM) && cn != null && !SystemsDatabase.Instance.RebuildRunning)   // not cached, connection and not rebuilding, try db
             {
                 //System.Diagnostics.Debug.WriteLine("Look up from DB " + sys.name + " " + sys.id_edsm);
 
@@ -141,11 +117,64 @@ namespace EliteDangerousCore.DB
             }
             else
             {                                               // FROM CACHE
+                if (found != null)
+                {
+                    return found;
+                }
+
+                if (find.source == SystemSource.FromJournal && find.Name != null && find.HasCoordinate == true)
+                {
+                    AddToCache(find);
+                    return find;
+                }
+
                 //System.Diagnostics.Trace.WriteLine($"Cached reference to {found.name} {found.id_edsm}");
                 return found;       // no need for extra work.
             }
         }
 
+        private static ISystem FindCachedSystem(ISystem find)
+        {
+            List<ISystem> foundlist = new List<ISystem>();
+            ISystem found = null;
+
+            lock (systemsByEdsmId)          // Rob seen instances of it being locked together in multiple star distance threads, we need to serialise access to these two dictionaries
+            {                               // Concurrent dictionary no good, they could both be about to add the same thing at the same time and pass the contains test.
+
+                if (find.EDSMID > 0 && systemsByEdsmId.ContainsKey(find.EDSMID))        // add to list
+                {
+                    ISystem s = systemsByEdsmId[find.EDSMID];
+                    foundlist.Add(s);
+                }
+
+                if (systemsByName.ContainsKey(find.Name))            // and all names cached
+                {
+                    List<ISystem> s = systemsByName[find.Name];
+                    foundlist.AddRange(s);
+                }
+            }
+
+            if (find.HasCoordinate && foundlist.Count > 0)           // if sys has a co-ord, find the best match within 0.5 ly
+                found = NearestTo(foundlist, find, 0.5);
+
+            if (found == null && foundlist.Count == 1 && !find.HasCoordinate) // if we did not find one, but we have only 1 candidate, use it.
+                found = foundlist[0];
+
+            return found;
+        }
+
+        public static ISystem FindCachedJournalSystem(ISystem system)
+        {
+            var found = FindCachedSystem(system);
+
+            if ((found == null || (found.source != SystemSource.FromJournal && found.source != SystemSource.FromEDSM)) && system.HasCoordinate == true && system.Name != "")
+            {
+                AddToCache(system, found);
+                found = system;
+            }
+
+            return found;
+        }
 
         public static List<ISystem> FindSystemWildcard(string name, int limit = int.MaxValue)
         {
@@ -247,9 +276,13 @@ namespace EliteDangerousCore.DB
 
         private static ISystem FindNearestSystemTo(double x, double y, double z, double maxdistance, SystemsDatabaseConnection cn)
         {
+            //System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch(); sw.Start();  System.Diagnostics.Debug.WriteLine("Look up " + x + "," + y + "," + z + " : " + maxdistance);
+
             ISystem s = DB.SystemsDB.GetSystemByPosition(x, y, z, cn.Connection, maxdistance);
             if (s != null)
                 AddToCache(s);
+
+            //System.Diagnostics.Debug.WriteLine(".. lookup done " + sw.ElapsedMilliseconds);
             return s;
         }
 
@@ -392,16 +425,44 @@ namespace EliteDangerousCore.DB
 
         static private void AddToCache(ISystem found, ISystem orgsys = null)
         {
-            if (found.EDSMID > 0)
-                systemsByEdsmId[found.EDSMID] = found;  // must be definition the best ID found.. and if the update date of sys is better, its now been updated
-
-            if (systemsByName.ContainsKey(found.Name))
+            lock (systemsByEdsmId)
             {
-                if ( !systemsByName[found.Name].Contains(found))
-                    systemsByName[found.Name].Add(found);   // add to list..
+                if (found.EDSMID > 0)
+                    systemsByEdsmId[found.EDSMID] = found;  // must be definition the best ID found.. and if the update date of sys is better, its now been updated
+
+                List<ISystem> byname;
+
+                if (!systemsByName.TryGetValue(found.Name, out byname))
+                {
+                    systemsByName[found.Name] = byname = new List<ISystem>();
+                }
+
+                int idx = -1;
+
+                if (found.EDSMID > 0)
+                {
+                    idx = byname.FindIndex(e => e.EDSMID == found.EDSMID);
+                }
+
+                if (idx < 0)
+                {
+                    idx = byname.FindIndex(e => e.Xi == found.Xi && e.Yi == found.Yi && e.Zi == found.Zi);
+                }
+
+                if (idx < 0 && orgsys != null)
+                {
+                    idx = byname.FindIndex(e => e.Xi == orgsys.Xi && e.Yi == orgsys.Yi && e.Zi == orgsys.Zi);
+                }
+
+                if (idx >= 0)
+                {
+                    byname[idx] = found;
+                }
+                else
+                {
+                    byname.Add(found);
+                }
             }
-            else
-                systemsByName[found.Name] = new List<ISystem> { found }; // or make list
         }
 
         static private ISystem NearestTo(List<ISystem> list, ISystem comparesystem, double mindist)

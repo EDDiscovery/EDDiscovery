@@ -206,12 +206,24 @@ namespace EliteDangerousCore.EDSM
             return nowKnown;
         }
 
-        public List<String> GetPushedSystems()
+        public List<string> GetPushedSystems()
         {
-            List<String> systems = new List<string>();
             string query = "api-v1/systems?pushed=1";
+            return getSystemsForQuery(query);
+        }
 
-            var response = RequestGet(query, handleException: true);
+        public List<string> GetUnknownSystemsForSector(string sectorName)
+        {
+            string query = $"api-v1/systems?systemName={HttpUtility.UrlEncode(sectorName)}%20&onlyUnknownCoordinates=1";
+            // 5s is occasionally slightly short for core sectors returning the max # systems (1000)
+            return getSystemsForQuery(query, 10000);
+        }
+
+        List<string> getSystemsForQuery(string query, int timeout = 5000)
+        {
+            List<string> systems = new List<string>();
+
+            var response = RequestGet(query, handleException: true, timeout: timeout);
             if (response.Error)
                 return systems;
 

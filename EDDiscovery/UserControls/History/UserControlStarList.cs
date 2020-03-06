@@ -55,7 +55,6 @@ namespace EDDiscovery.UserControls
 
         private string DbColumnSave { get { return DBName("StarListControl", "DGVCol"); } }
         private string DbHistorySave { get { return DBName("StarListControlEDUIHistory"); } }
-        private string DbAutoTop { get { return DBName("StarListControlAutoTop"); } }
         private string DbEDSM { get { return DBName("StarListControlEDSM"); } }
         private string DbShowJumponium { get { return DBName("StarListControlJumponium"); } }
         private string DbShowClasses { get { return DBName("StarListControlShowClasses"); } }
@@ -79,7 +78,7 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
-            checkBoxCursorToTop.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbAutoTop, true);
+            checkBoxCursorToTop.Checked = true;
 
 
             dataGridViewStarList.MakeDoubleBuffered();
@@ -128,7 +127,6 @@ namespace EDDiscovery.UserControls
             DGVSaveColumnLayout(dataGridViewStarList, DbColumnSave);
             discoveryform.OnHistoryChange -= HistoryChanged;
             discoveryform.OnNewEntry -= AddNewEntry;
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbAutoTop, checkBoxCursorToTop.Checked);
         }
 
         #endregion
@@ -169,7 +167,7 @@ namespace EDDiscovery.UserControls
             rowsbyjournalid.Clear();
             dataGridViewStarList.Rows.Clear();
 
-            dataGridViewStarList.Columns[0].HeaderText = EDDiscoveryForm.EDDConfig.DisplayUTC ? "Game Time".T(EDTx.GameTime) : "Time".T(EDTx.Time);
+            dataGridViewStarList.Columns[0].HeaderText = EDDiscoveryForm.EDDConfig.GetTimeTitle();
 
             var filter = (TravelHistoryFilter)comboBoxHistoryWindow.SelectedItem ?? TravelHistoryFilter.NoFilter;
 
@@ -331,7 +329,7 @@ namespace EDDiscovery.UserControls
                         var node = discoveryform.history.starscan?.FindSystem(syslist[0].System, false); // may be null
                         string info = Infoline(syslist, node);  // lookup node, using star name, no EDSM lookup.
                         rowpresent.Cells[3].Value = info;   // update info
-                        rowpresent.Cells[4].Value = node?.ScanValue(true).ToString("N0") ?? "-"; // update scan value
+                        rowpresent.Cells[4].Value = node?.ScanValue(true).ToString("N0") ?? "0"; // update scan value
                     }
                 }
             }
@@ -343,7 +341,7 @@ namespace EDDiscovery.UserControls
 
             HistoryEntry he = syslist[0];
 
-            DateTime time = EDDiscoveryForm.EDDConfig.DisplayUTC ? he.EventTimeUTC : he.EventTimeLocal;
+            DateTime time = EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(he.EventTimeUTC);
             string visits = $"{syslist.Count:N0}";
 
             var node = discoveryform.history.starscan?.FindSystem(syslist[0].System, false); // may be null
@@ -362,7 +360,7 @@ namespace EDDiscovery.UserControls
             }
 
             var rw = dataGridViewStarList.RowTemplate.Clone() as DataGridViewRow;
-            rw.CreateCells(dataGridViewStarList, time, he.System.Name, visits, info, node?.ScanValue(true).ToString("N0") ?? "-");
+            rw.CreateCells(dataGridViewStarList, time, he.System.Name, visits, info, node?.ScanValue(true).ToString("N0") ?? "0");
 
             foreach ( HistoryEntry hel in syslist )
                 rowsbyjournalid[hel.Journalid] = rw;      // all JIDs in this array, to this row
@@ -390,7 +388,7 @@ namespace EDDiscovery.UserControls
             bool hasMaterials = false;
 
             if (syslist.Count > 1)
-                infostr = string.Format("First visit {0}".T(EDTx.UserControlStarList_FV),syslist.Last().EventTimeLocal.ToShortDateString());
+                infostr = string.Format("First visit {0}".T(EDTx.UserControlStarList_FV),EDDConfig.Instance.ConvertTimeToSelectedFromUTC(syslist.Last().EventTimeUTC).ToShortDateString());
 
             #region information
 
@@ -909,7 +907,7 @@ namespace EDDiscovery.UserControls
         {
             if ( e.Column.Index == 0 )
                 e.SortDataGridViewColumnDate();
-            else if (e.Column.Index == 2)
+            else if (e.Column.Index == 2 || e.Column.Index == 4)
                 e.SortDataGridViewColumnNumeric();
         }
 
@@ -939,12 +937,13 @@ namespace EDDiscovery.UserControls
                             HistoryEntry he = syslist[0];
 
                             return (dataGridViewStarList.Rows[r].Visible &&
-                                    he.EventTimeLocal.CompareTo(frm.StartTime) >= 0 &&
-                                    he.EventTimeLocal.CompareTo(frm.EndTime) <= 0) ? BaseUtils.CSVWriteGrid.LineStatus.OK : BaseUtils.CSVWriteGrid.LineStatus.Skip;
+                                    he.EventTimeUTC.CompareTo(frm.StartTimeUTC) >= 0 &&
+                                    he.EventTimeUTC.CompareTo(frm.EndTimeUTC) <= 0) ? BaseUtils.CSVWriteGrid.LineStatus.OK : BaseUtils.CSVWriteGrid.LineStatus.Skip;
                         }
                         else
                             return BaseUtils.CSVWriteGrid.LineStatus.EOF;
                     };
+
                     grd.GetLine += delegate (int r)
                     {
                         List<HistoryEntry> syslist = dataGridViewStarList.Rows[r].Tag as List<HistoryEntry>;
@@ -955,7 +954,8 @@ namespace EDDiscovery.UserControls
                         if (syslist.Count > 1)
                         {
                             for (int i = 1; i < syslist.Count; i++)
-                                tlist = tlist.AppendPrePad(syslist[i].EventTimeLocal.ToShortDateString() + " " + syslist[i].EventTimeLocal.ToShortTimeString(), ", ");
+                                tlist = tlist.AppendPrePad(EDDConfig.Instance.ConvertTimeToSelectedFromUTC(syslist[i].EventTimeUTC).ToShortDateString() 
+                                                            + " " + EDDConfig.Instance.ConvertTimeToSelectedFromUTC(syslist[i].EventTimeUTC).ToShortTimeString(), ", ");
                         }
 
                         he.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);

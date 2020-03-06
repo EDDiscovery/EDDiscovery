@@ -397,7 +397,7 @@ namespace EDDiscovery.UserControls
             int maxrowpos = rowpos;
 
             if (Config(Configuration.showTime))
-                coldata.Add((EDDiscoveryForm.EDDConfig.DisplayUTC ? he.EventTimeUTC : he.EventTimeLocal).ToString("HH:mm.ss"));
+                coldata.Add(EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(he.EventTimeUTC).ToString("HH:mm.ss"));
 
             if (Config(Configuration.showIcon))
                 coldata.Add("`!!ICON!!");                // dummy place holder..

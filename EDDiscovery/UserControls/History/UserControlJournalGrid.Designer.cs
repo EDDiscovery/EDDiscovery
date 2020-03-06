@@ -100,13 +100,13 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom.HideScrollBar = true;
             this.vScrollBarCustom.LargeChange = 0;
-            this.vScrollBarCustom.Location = new System.Drawing.Point(791, 0);
+            this.vScrollBarCustom.Location = new System.Drawing.Point(788, 0);
             this.vScrollBarCustom.Maximum = -1;
             this.vScrollBarCustom.Minimum = 0;
             this.vScrollBarCustom.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom.Name = "vScrollBarCustom";
-            this.vScrollBarCustom.Size = new System.Drawing.Size(13, 686);
+            this.vScrollBarCustom.Size = new System.Drawing.Size(16, 686);
             this.vScrollBarCustom.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom.SmallChange = 1;
             this.vScrollBarCustom.TabIndex = 7;
@@ -133,7 +133,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewJournal.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewJournal.Name = "dataGridViewJournal";
             this.dataGridViewJournal.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewJournal.Size = new System.Drawing.Size(791, 686);
+            this.dataGridViewJournal.Size = new System.Drawing.Size(788, 686);
             this.dataGridViewJournal.TabIndex = 0;
             this.dataGridViewJournal.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewJournal_CellClick);
             this.dataGridViewJournal.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewJournal_CellDoubleClick);
@@ -250,6 +250,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxCursorToTop.BackColor = System.Drawing.Color.Transparent;
             this.checkBoxCursorToTop.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.checkBoxCursorToTop.CheckBoxColor = System.Drawing.Color.White;
+            this.checkBoxCursorToTop.CheckBoxDisabledScaling = 0.5F;
             this.checkBoxCursorToTop.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxCursorToTop.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxCursorToTop.Cursor = System.Windows.Forms.Cursors.Default;
@@ -259,9 +260,10 @@ namespace EDDiscovery.UserControls
             this.checkBoxCursorToTop.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
             this.checkBoxCursorToTop.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.checkBoxCursorToTop.Image = global::EDDiscovery.Icons.Controls.TravelGrid_CursorToTop;
-            this.checkBoxCursorToTop.ImageUnchecked = global::EDDiscovery.Icons.Controls.TravelGrid_CursorStill;
             this.checkBoxCursorToTop.ImageButtonDisabledScaling = 0.5F;
+            this.checkBoxCursorToTop.ImageIndeterminate = null;
             this.checkBoxCursorToTop.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.checkBoxCursorToTop.ImageUnchecked = global::EDDiscovery.Icons.Controls.TravelGrid_CursorStill;
             this.checkBoxCursorToTop.Location = new System.Drawing.Point(459, 1);
             this.checkBoxCursorToTop.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.checkBoxCursorToTop.MouseOverColor = System.Drawing.Color.CornflowerBlue;

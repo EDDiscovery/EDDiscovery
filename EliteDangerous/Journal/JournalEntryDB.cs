@@ -327,8 +327,8 @@ namespace EliteDangerousCore
             }
         }
 
-        static public List<JournalEntry> GetAll(int commander = -999, DateTime? after = null, DateTime? before = null,
-                            JournalTypeEnum[] ids = null, DateTime? allidsafter = null)
+        static public List<JournalEntry> GetAll(int commander = -999, DateTime? afterutc = null, DateTime? beforeutc = null,
+                            JournalTypeEnum[] ids = null, DateTime? allidsafterutc = null)
         {
             Dictionary<long, TravelLogUnit> tlus = TravelLogUnit.GetAll().ToDictionary(t => t.id);
             DbCommand cmd = null;
@@ -346,22 +346,22 @@ namespace EliteDangerousCore
                         cnd = cnd.AppendPrePad("CommanderID = @commander", " and ");
                         cmd.AddParameterWithValue("@commander", commander);
                     }
-                    if (after != null)
+                    if (afterutc != null)
                     {
                         cnd = cnd.AppendPrePad("EventTime >= @after", " and ");
-                        cmd.AddParameterWithValue("@after", after.Value);
+                        cmd.AddParameterWithValue("@after", afterutc.Value);
                     }
-                    if (before != null)
+                    if (beforeutc != null)
                     {
                         cnd = cnd.AppendPrePad("EventTime <= @before", " and ");
-                        cmd.AddParameterWithValue("@before", before.Value);
+                        cmd.AddParameterWithValue("@before", beforeutc.Value);
                     }
                     if (ids != null)
                     {
                         int[] array = Array.ConvertAll(ids, x => (int)x);
-                        if (allidsafter != null)
+                        if (allidsafterutc != null)
                         {
-                            cmd.AddParameterWithValue("@idafter", allidsafter.Value);
+                            cmd.AddParameterWithValue("@idafter", allidsafterutc.Value);
                             cnd = cnd.AppendPrePad("(EventTypeId in (" + string.Join(",", array) + ") Or EventTime>=@idafter)", " and ");
                         }
                         else
@@ -416,7 +416,7 @@ namespace EliteDangerousCore
         }
 
 
-        public static List<JournalEntry> GetByEventType(JournalTypeEnum eventtype, int commanderid, DateTime start, DateTime stop)
+        public static List<JournalEntry> GetByEventType(JournalTypeEnum eventtype, int commanderid, DateTime startutc, DateTime stoputc)
         {
             Dictionary<long, TravelLogUnit> tlus = TravelLogUnit.GetAll().ToDictionary(t => t.id);
             DbCommand cmd = null;
@@ -430,8 +430,8 @@ namespace EliteDangerousCore
                 {
                     cmd.AddParameterWithValue("@eventtype", (int)eventtype);
                     cmd.AddParameterWithValue("@commander", (int)commanderid);
-                    cmd.AddParameterWithValue("@start", start);
-                    cmd.AddParameterWithValue("@stop", stop);
+                    cmd.AddParameterWithValue("@start", startutc);
+                    cmd.AddParameterWithValue("@stop", stoputc);
                     return cmd.ExecuteReader();
                 });
 
@@ -493,14 +493,14 @@ namespace EliteDangerousCore
             return vsc;
         }
 
-        public static JournalEntry GetLast(int cmdrid, DateTime before, Func<JournalEntry, bool> filter)
+        public static JournalEntry GetLast(int cmdrid, DateTime beforeutc, Func<JournalEntry, bool> filter)
         {
             return UserDatabase.Instance.ExecuteWithDatabase<JournalEntry>(cn =>
             {
                 using (DbCommand cmd = cn.Connection.CreateCommand("SELECT * FROM JournalEntries WHERE CommanderId = @cmdrid AND EventTime < @time ORDER BY EventTime DESC"))
                 {
                     cmd.AddParameterWithValue("@cmdrid", cmdrid);
-                    cmd.AddParameterWithValue("@time", before);
+                    cmd.AddParameterWithValue("@time", beforeutc);
                     using (DbDataReader reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
@@ -517,13 +517,13 @@ namespace EliteDangerousCore
             });
         }
 
-        public static JournalEntry GetLast(DateTime before, Func<JournalEntry, bool> filter)
+        public static JournalEntry GetLast(DateTime beforeutc, Func<JournalEntry, bool> filter)
         {
             return UserDatabase.Instance.ExecuteWithDatabase<JournalEntry>(cn =>
             {
                 using (DbCommand cmd = cn.Connection.CreateCommand("SELECT * FROM JournalEntries WHERE EventTime < @time ORDER BY EventTime DESC"))
                 {
-                    cmd.AddParameterWithValue("@time", before);
+                    cmd.AddParameterWithValue("@time", beforeutc);
                     using (DbDataReader reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
@@ -540,16 +540,16 @@ namespace EliteDangerousCore
             });
         }
 
-        public static T GetLast<T>(int cmdrid, DateTime before, Func<T, bool> filter = null)
+        public static T GetLast<T>(int cmdrid, DateTime beforeutc, Func<T, bool> filter = null)
             where T : JournalEntry
         {
-            return (T)GetLast(cmdrid, before, e => e is T && (filter == null || filter((T)e)));
+            return (T)GetLast(cmdrid, beforeutc, e => e is T && (filter == null || filter((T)e)));
         }
 
-        public static T GetLast<T>(DateTime before, Func<T, bool> filter = null)
+        public static T GetLast<T>(DateTime beforeutc, Func<T, bool> filter = null)
             where T : JournalEntry
         {
-            return (T)GetLast(before, e => e is T && (filter == null || filter((T)e)));
+            return (T)GetLast(beforeutc, e => e is T && (filter == null || filter((T)e)));
         }
 
         public static List<JournalEntry> FindEntry(JournalEntry ent, UserDatabaseConnection cn , JObject entjo = null)      // entjo is not changed.

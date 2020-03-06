@@ -34,9 +34,6 @@ namespace EliteDangerousCore.DB
         public string Tags { get; private set; }     // may be null
         public string Parameters { get; private set; }     // may be null
 
-        public DateTime TimeLocal { get { return TimeUTC.ToLocalTime(); } }
-        public DateTime Time(bool utc) { return utc ? TimeUTC : TimeLocal; }
-
         public CaptainsLogClass()
         {
         }
@@ -203,12 +200,9 @@ namespace EliteDangerousCore.DB
             }
         }
 
-        public CaptainsLogClass[] Find(DateTime start, DateTime end, bool utc, int cmdr)
+        public CaptainsLogClass[] FindUTC(DateTime start, DateTime end, int cmdr)
         {
-            if ( utc )
-                return (from x in LogEntries where x.TimeUTC >= start && x.TimeUTC <= end && x.Commander == cmdr select x).ToArray();
-            else
-                return (from x in LogEntries where x.TimeLocal >= start && x.TimeLocal <= end && x.Commander == cmdr select x).ToArray();
+            return (from x in LogEntries where x.TimeUTC >= start && x.TimeUTC <= end && x.Commander == cmdr select x).ToArray();
         }
 
         // bk = null, new note, else update. Note systemname/bodyname are not unique.  Id it the only unique property

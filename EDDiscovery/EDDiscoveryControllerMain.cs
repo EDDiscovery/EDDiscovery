@@ -222,6 +222,7 @@ namespace EDDiscovery
                 PendingClose = true;
                 EDDNSync.StopSync();
                 EDSMJournalSync.StopSync();
+                EliteDangerousCore.IGAU.IGAUSync.StopSync();
                 EdsmLogFetcher.AsyncStop();
                 journalmonitor.StopMonitor();
                 LogLineHighlight("Closing down, please wait..".T(EDTx.EDDiscoveryController_CD));
@@ -311,9 +312,10 @@ namespace EDDiscovery
             {
                 if (!EDDOptions.Instance.NoSystemsLoad)
                 {
-                    DoPerformSync();        // this is done after the initial history load..
+                    SystemsDatabase.Instance.WithReadWrite(() => DoPerformSync());        // this is done after the initial history load..
                 }
 
+                SystemsDatabase.Instance.SetReadOnly();
 
                 while (!PendingClose)
                 {
@@ -327,7 +329,7 @@ namespace EDDiscovery
                     if (wh == 1)
                     {
                         if (!EDDOptions.Instance.NoSystemsLoad && EDDConfig.Instance.EDSMEDDBDownload)      // if no system off, and EDSM download on
-                            DoPerformSync();
+                            SystemsDatabase.Instance.WithReadWrite(() => DoPerformSync());
                     }
                 }
             }

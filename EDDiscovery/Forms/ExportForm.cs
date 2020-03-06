@@ -22,8 +22,8 @@ namespace EDDiscovery.Forms
     public partial class ExportForm : ExtendedControls.DraggableForm
     {
         public int SelectedIndex { get; private set; }
-        public DateTime StartTime { get { return customDateTimePickerFrom.Value; } }
-        public DateTime EndTime { get { return customDateTimePickerTo.Value; } }
+        public DateTime StartTimeUTC { get { return EDDConfig.Instance.ConvertTimeToUTCFromSelected(customDateTimePickerFrom.Value); } }
+        public DateTime EndTimeUTC { get { return EDDConfig.Instance.ConvertTimeToUTCFromSelected(customDateTimePickerTo.Value); } }
         public bool Comma { get { return radioButtonComma.Checked; } }
         public bool AutoOpen { get { return checkBoxCustomAutoOpen.Checked; } }
         public bool IncludeHeader { get { return checkBoxIncludeHeader.Checked; } }
@@ -38,8 +38,8 @@ namespace EDDiscovery.Forms
         public void Init(string[] exportlist, bool disablestartendtime = false, bool allowRawJournalExport = false)
         {
             comboBoxCustomExportType.Items.AddRange(exportlist);
-            customDateTimePickerFrom.Value = new DateTime(2014, 11, 22, 4, 0, 0, DateTimeKind.Utc); //Gamma start
-            customDateTimePickerTo.Value = DateTime.Now;
+            customDateTimePickerFrom.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(new DateTime(2014, 11, 22, 4, 0, 0, DateTimeKind.Utc)); //Gamma start
+            customDateTimePickerTo.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(DateTime.UtcNow);
 
             if (System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator.Equals("."))
                 radioButtonComma.Checked = true;

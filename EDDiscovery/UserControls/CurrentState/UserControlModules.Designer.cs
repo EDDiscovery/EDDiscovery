@@ -63,6 +63,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxShips = new ExtendedControls.ExtComboBox();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.panelTop = new System.Windows.Forms.FlowLayoutPanel();
+            this.buttonExtExcel = new ExtendedControls.ExtButton();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewModules)).BeginInit();
             this.panelTop.SuspendLayout();
@@ -74,9 +75,9 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel.Controls.Add(this.vScrollBarCustomMC);
             this.dataViewScrollerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewScrollerPanel.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.dataViewScrollerPanel.Location = new System.Drawing.Point(0, 26);
+            this.dataViewScrollerPanel.Location = new System.Drawing.Point(0, 30);
             this.dataViewScrollerPanel.Name = "dataViewScrollerPanel";
-            this.dataViewScrollerPanel.Size = new System.Drawing.Size(800, 546);
+            this.dataViewScrollerPanel.Size = new System.Drawing.Size(800, 542);
             this.dataViewScrollerPanel.TabIndex = 0;
             this.dataViewScrollerPanel.VerticalScrollBarDockRight = true;
             // 
@@ -99,7 +100,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewModules.Name = "dataGridViewModules";
             this.dataGridViewModules.RowHeadersVisible = false;
             this.dataGridViewModules.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewModules.Size = new System.Drawing.Size(787, 546);
+            this.dataGridViewModules.Size = new System.Drawing.Size(784, 542);
             this.dataGridViewModules.TabIndex = 1;
             this.dataGridViewModules.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewModules_CellClick);
             this.dataGridViewModules.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewModules_SortCompare);
@@ -177,13 +178,13 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustomMC.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustomMC.HideScrollBar = false;
             this.vScrollBarCustomMC.LargeChange = 0;
-            this.vScrollBarCustomMC.Location = new System.Drawing.Point(787, 0);
+            this.vScrollBarCustomMC.Location = new System.Drawing.Point(784, 0);
             this.vScrollBarCustomMC.Maximum = -1;
             this.vScrollBarCustomMC.Minimum = 0;
             this.vScrollBarCustomMC.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustomMC.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustomMC.Name = "vScrollBarCustomMC";
-            this.vScrollBarCustomMC.Size = new System.Drawing.Size(13, 546);
+            this.vScrollBarCustomMC.Size = new System.Drawing.Size(16, 542);
             this.vScrollBarCustomMC.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustomMC.SmallChange = 1;
             this.vScrollBarCustomMC.TabIndex = 0;
@@ -238,7 +239,7 @@ namespace EDDiscovery.UserControls
             // labelVehicle
             // 
             this.labelVehicle.AutoSize = true;
-            this.labelVehicle.Location = new System.Drawing.Point(328, 1);
+            this.labelVehicle.Location = new System.Drawing.Point(364, 1);
             this.labelVehicle.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.labelVehicle.Name = "labelVehicle";
             this.labelVehicle.Size = new System.Drawing.Size(53, 13);
@@ -292,12 +293,26 @@ namespace EDDiscovery.UserControls
             this.panelTop.Controls.Add(this.buttonExtCoriolis);
             this.panelTop.Controls.Add(this.buttonExtEDShipyard);
             this.panelTop.Controls.Add(this.buttonExtConfigure);
+            this.panelTop.Controls.Add(this.buttonExtExcel);
             this.panelTop.Controls.Add(this.labelVehicle);
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
             this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(800, 26);
+            this.panelTop.Size = new System.Drawing.Size(800, 30);
             this.panelTop.TabIndex = 30;
+            // 
+            // buttonExtExcel
+            // 
+            this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonExtExcel.Image = global::EDDiscovery.Icons.Controls.JournalGrid_ExportToExcel;
+            this.buttonExtExcel.Location = new System.Drawing.Point(328, 1);
+            this.buttonExtExcel.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.buttonExtExcel.Name = "buttonExtExcel";
+            this.buttonExtExcel.Size = new System.Drawing.Size(28, 28);
+            this.buttonExtExcel.TabIndex = 31;
+            this.toolTip.SetToolTip(this.buttonExtExcel, "Send data on grid to excel");
+            this.buttonExtExcel.UseVisualStyleBackColor = true;
+            this.buttonExtExcel.Click += new System.EventHandler(this.buttonExtExcel_Click);
             // 
             // UserControlModules
             // 
@@ -337,5 +352,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn Value;
         private System.Windows.Forms.DataGridViewTextBoxColumn PriorityEnable;
         private System.Windows.Forms.FlowLayoutPanel panelTop;
+        private ExtendedControls.ExtButton buttonExtExcel;
     }
 }

@@ -80,7 +80,7 @@ namespace EDDiscovery.Actions
                                 ap[nprefix + "x"] = b.x.ToStringInvariant();
                                 ap[nprefix + "y"] = b.y.ToStringInvariant();
                                 ap[nprefix + "z"] = b.z.ToStringInvariant();
-                                ap[nprefix + "time"] = b.Time.ToStringUS(); // US Date format
+                                ap[nprefix + "time"] = b.TimeUTC.ToStringUS(); // US Date format
                                 ap[nprefix + "note"] = b.Note;
 
                                 if ( b.PlanetaryMarks != null )
@@ -190,7 +190,7 @@ namespace EDDiscovery.Actions
                                 {
                                     string notes = sp.NextQuotedWord();     // valid for it to be null, means don't override or set to empty
                                     BookmarkClass bk = GlobalBookMarkList.Instance.FindBookmarkOnSystem(name);
-                                    GlobalBookMarkList.Instance.AddOrUpdateBookmark(bk, true, name, sys.X, sys.Y, sys.Z, DateTime.Now, notes);
+                                    GlobalBookMarkList.Instance.AddOrUpdateBookmark(bk, true, name, sys.X, sys.Y, sys.Z, DateTime.UtcNow, notes);
                                 }
                                 else
                                     ap.ReportError("AddStar cannot find star " + name + " in database");

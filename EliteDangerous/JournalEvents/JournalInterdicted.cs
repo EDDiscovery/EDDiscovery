@@ -27,7 +27,6 @@ namespace EliteDangerousCore.JournalEvents
             Interdictor = evt["Interdictor"].Str();
             Interdictor_Localised = JournalFieldNaming.CheckLocalisation(evt["Interdictor_Localised"].Str(),Interdictor);
             IsPlayer = evt["IsPlayer"].Bool();
-            CombatRank = CombatRank.Harmless;
             if (!evt["CombatRank"].Empty())
                 CombatRank = (CombatRank)(evt["CombatRank"].Int());
             Faction = evt["Faction"].Str();

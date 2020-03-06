@@ -125,9 +125,11 @@ namespace EDDiscovery
                             // Download new systems
                             try
                             {
-                                string edsmsystems = Path.Combine(EliteConfigInstance.InstanceOptions.AppDataDirectory, "edsmsystems.json");
+                                string edsmsystems = Path.Combine(EliteConfigInstance.InstanceOptions.AppDataDirectory, "edsmsystems.json.gz");
 
                                 ReportSyncProgress("Performing full download of EDSM Database from server");
+
+                                Debug.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Full sync using URL " + EliteConfigInstance.InstanceConfig.EDSMFullSystemsURL);
 
                                 bool success = BaseUtils.DownloadFile.HTTPDownloadFile(EliteConfigInstance.InstanceConfig.EDSMFullSystemsURL, edsmsystems, false, out bool newfile);
 
@@ -142,6 +144,14 @@ namespace EDDiscovery
 
                                     BaseUtils.FileHelpers.DeleteFileNoError(edsmsystems);       // remove file - don't hold in storage
                                 }
+                                else
+                                {
+                                    ReportSyncProgress("");
+                                    LogLineHighlight("Failed to download full EDSM systems file. Try re-running EDD later");
+                                    BaseUtils.FileHelpers.DeleteFileNoError(edsmsystems);       // remove file - don't hold in storage
+                                    return;     // new! if we failed to download, fail here, wait for another time
+                                }
+
                             }
                             catch (Exception ex)
                             {
@@ -177,6 +187,13 @@ namespace EDDiscovery
 
                                         BaseUtils.FileHelpers.DeleteFileNoError(eddbsystems);       // remove file - don't hold in storage
                                     }
+                                    else
+                                    {
+                                        LogLineHighlight("Failed to download EDDB systems file. Try re-running EDD later");
+                                        BaseUtils.FileHelpers.DeleteFileNoError(eddbsystems);       // remove file - don't hold in storage
+                                        // we can continue, as its not the end of the world
+                                    }
+
                                 }
                             }
                             catch (Exception ex)

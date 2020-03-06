@@ -75,10 +75,10 @@ namespace EDDiscovery
         public event Action OnAddOnsChanged;                            // add on changed
         public event Action<int,string> OnEDSMSyncComplete;             // EDSM Sync has completed with this list of stars are newly created
         public event Action<int> OnEDDNSyncComplete;                    // Sync has completed
-        public event Action<int,string> OnEGOSyncComplete;              // EGO Sync has completed with records on this list of stars
+        public event Action<int> OnIGAUSyncComplete;                    // Sync has completed
         #endregion
 
-     
+
         #region Properties
         public HistoryList history { get { return Controller.history; } }
         public string LogText { get { return Controller.LogText; } }
@@ -265,7 +265,7 @@ namespace EDDiscovery
 
             msg.Invoke("Loading Action Packs");         // STAGE 4 Action packs
 
-            actioncontroller = new Actions.ActionController(this, Controller, this.Icon);
+            actioncontroller = new Actions.ActionController(this, Controller, this.Icon, new Type[] { typeof(FormMap) });
             actioncontroller.ReLoad();          // load system up here
 
             // Stage 5 Misc
@@ -290,13 +290,13 @@ namespace EDDiscovery
                 });
             };
 
-            EliteDangerousCore.EGO.EGOSync.SentEvents = (count,list) =>              // Sync thread finishing, transfers to this thread, then runs the callback and the action..
+            EliteDangerousCore.IGAU.IGAUSync.SentEvents = (count) =>              // Sync thread finishing, transfers to this thread, then runs the callback and the action..
             {
                 this.BeginInvoke((MethodInvoker)delegate
                 {
                     System.Diagnostics.Debug.Assert(Application.MessageLoop);
-                    OnEGOSyncComplete?.Invoke(count,list);
-                    ActionRun(Actions.ActionEventEDList.onEGOSync, null, new BaseUtils.Variables(new string[] { "EventStarList", list, "EventCount", count.ToStringInvariant() }));
+                    OnIGAUSyncComplete?.Invoke(count);
+                    ActionRun(Actions.ActionEventEDList.onIGAUSync, null, new BaseUtils.Variables(new string[] { "EventCount", count.ToStringInvariant() }));
                 });
             };
 
@@ -336,9 +336,12 @@ namespace EDDiscovery
 
             if (EDDConfig.Instance.EDSMGridIDs == "Not Set")        // initial state
             {
+                EDDConfig.Instance.EDSMEDDBDownload = false;        // this stops the download working in the controller thread
                 var ressel = GalaxySectorSelect.SelectGalaxyMenu(this);
                 EDDConfig.Instance.EDSMEDDBDownload = ressel.Item1 != "None";
                 EDDConfig.Instance.EDSMGridIDs = ressel.Item2;
+                if (EDDConfig.Instance.EDSMEDDBDownload)
+                    Controller.AsyncPerformSync(edsmfullsync: true, eddb_edsmalias_sync:true);      // order another go.
             }
 
             if (EDDOptions.Instance.NoWindowReposition == false)
@@ -674,6 +677,17 @@ namespace EDDiscovery
 
             // HERE PERFORM CAPI.. DOCKED
 
+            var lastent = history.GetLast;
+            if (!object.ReferenceEquals(he, lastent))
+            {
+                LogLineHighlight(string.Format("Current history entry is not last in history - possible re-entrancy.\nAlert the EDDiscovery developers using either discord or Github (see help) and attach log file {0}", BaseUtils.TraceLog.LogFileName));
+                Trace.WriteLine($"Current history entry is not last in history");
+                Trace.WriteLine($"Current entry: {he.journalEntry?.GetJson()?.ToString()}");
+                Trace.WriteLine($"Last entry: {lastent.journalEntry?.GetJson()?.ToString()}");
+                Trace.WriteLine($"Stack Trace:");
+                Trace.WriteLine(new StackTrace(true).ToString());
+            }
+
             if (he.IsFSDJump)
             {
                 int count = history.GetVisitsCount(he.System.Name);
@@ -691,14 +705,14 @@ namespace EDDiscovery
                 EliteDangerousCore.Inara.InaraSync.NewEvent(LogLine, history, he);
             }
 
+            if (EDCommander.Current.SyncToIGAU )
+            {
+                EliteDangerousCore.IGAU.IGAUSync.NewEvent(LogLine, he);
+            }
+
             if (EDDNClass.IsEDDNMessage(he.EntryType,he.EventTimeUTC) && he.AgeOfEntry() < TimeSpan.FromDays(1.0) && EDCommander.Current.SyncToEddn == true)
             {
                 EDDNSync.SendEDDNEvents(LogLine, he);
-            }
-
-            if (he.EntryType == JournalTypeEnum.Scan && EDCommander.Current.SyncToEGO)
-            {
-                EliteDangerousCore.EGO.EGOSync.SendEGOEvents(LogLine, he);
             }
 
             DLLManager.NewJournalEntry( DLL.EDDDLLCallerHE.CreateFromHistoryEntry(he));
@@ -825,11 +839,6 @@ namespace EDDiscovery
             actioncontroller.onStartup();
          }
 
-        private void sendUnsyncedEGOScansToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            List<HistoryEntry> hlsyncunsyncedlist = Controller.history.FilterByScanNotEGOSynced;        // first entry is oldest
-            EliteDangerousCore.EGO.EGOSync.SendEGOEvents(LogLine, hlsyncunsyncedlist);
-        }
 
         private void frontierForumThreadToolStripMenuItem_Click(object sender, EventArgs e)
         {

@@ -41,7 +41,6 @@ namespace EDDiscovery.UserControls
         private string DbColumnSave { get { return DBName("JournalGrid", "DGVCol"); } }
         private string DbHistorySave { get { return DBName("JournalEDUIHistory" ); } }
         private string DbFieldFilter { get { return DBName("JournalGridControlFieldFilter" ); } }
-        private string DbAutoTop { get { return DBName("JournalGridControlAutoTop" ); } }
 
         public delegate void PopOut();
         public PopOut OnPopOut;
@@ -88,7 +87,7 @@ namespace EDDiscovery.UserControls
             cfs.AddJournalEntries();
             cfs.SaveSettings += EventFilterChanged;
 
-            checkBoxCursorToTop.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbAutoTop, true);
+            checkBoxCursorToTop.Checked = true;
 
             string filter = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbFieldFilter, "");
             if (filter.Length > 0)
@@ -124,7 +123,6 @@ namespace EDDiscovery.UserControls
             DGVSaveColumnLayout(dataGridViewJournal, DbColumnSave);
             discoveryform.OnHistoryChange -= Display;
             discoveryform.OnNewEntry -= AddNewEntry;
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbAutoTop, checkBoxCursorToTop.Checked);
             searchtimer.Dispose();
         }
 
@@ -177,7 +175,7 @@ namespace EDDiscovery.UserControls
             dataGridViewJournal.Rows.Clear();
             rowsbyjournalid.Clear();
 
-            dataGridViewJournal.Columns[0].HeaderText = EDDiscoveryForm.EDDConfig.DisplayUTC ? "Game Time".T(EDTx.GameTime) : "Time".T(EDTx.Time);
+            dataGridViewJournal.Columns[0].HeaderText = EDDiscoveryForm.EDDConfig.GetTimeTitle();
 
             List<HistoryEntry[]> chunks = new List<HistoryEntry[]>();
 
@@ -323,7 +321,7 @@ namespace EDDiscovery.UserControls
 
         private DataGridViewRow CreateHistoryRow(HistoryEntry item, string search)
         {
-            DateTime time = EDDiscoveryForm.EDDConfig.DisplayUTC ? item.EventTimeUTC : item.EventTimeLocal;
+            DateTime time = EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(item.EventTimeUTC);
             item.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
             string detail = EventDescription;
             detail = detail.AppendPrePad(EventDetailedInfo.LineLimit(15,Environment.NewLine + "..."), Environment.NewLine);
@@ -331,9 +329,13 @@ namespace EDDiscovery.UserControls
             if (search.HasChars())
             {
                 string timestr = time.ToString();
+                int rown = EDDConfig.Instance.OrderRowsInverted ? item.Indexno : (discoveryform.history.Count - item.Indexno + 1);
+                string entryrow = rown.ToStringInvariant();
                 bool matched = timestr.IndexOf(search, StringComparison.InvariantCultureIgnoreCase) >= 0 ||
                                 item.EventSummary.IndexOf(search, StringComparison.InvariantCultureIgnoreCase) >= 0 ||
-                                detail.IndexOf(search, StringComparison.InvariantCultureIgnoreCase) >= 0;
+                                detail.IndexOf(search, StringComparison.InvariantCultureIgnoreCase) >= 0 ||
+                                entryrow.IndexOf(search, StringComparison.InvariantCultureIgnoreCase) >= 0;
+
                 if (!matched)
                     return null;
             }
@@ -470,7 +472,7 @@ namespace EDDiscovery.UserControls
                 ExtendedControls.InfoForm info = new ExtendedControls.InfoForm();
                 leftclicksystem.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
                 string infodetailed = EventDescription.AppendPrePad(EventDetailedInfo, Environment.NewLine);
-                info.Info( (EDDiscoveryForm.EDDConfig.DisplayUTC ? leftclicksystem.EventTimeUTC : leftclicksystem.EventTimeLocal) + ": " + leftclicksystem.EventSummary,
+                info.Info( (EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(leftclicksystem.EventTimeUTC)) + ": " + leftclicksystem.EventSummary,
                     FindForm().Icon, infodetailed);
                 info.Size = new Size(1200, 800);
                 info.Show(FindForm());
@@ -621,7 +623,7 @@ namespace EDDiscovery.UserControls
                             foreach(DataGridViewRow dgvr in dataGridViewJournal.Rows)
                             {
                                 HistoryEntry he = dgvr.Cells[JournalHistoryColumns.HistoryTag].Tag as HistoryEntry;
-                                if (dgvr.Visible && he.EventTimeLocal.CompareTo(frm.StartTime) >= 0 && he.EventTimeLocal.CompareTo(frm.EndTime) <= 0)
+                                if (dgvr.Visible && he.EventTimeUTC.CompareTo(frm.StartTimeUTC) >= 0 && he.EventTimeUTC.CompareTo(frm.EndTimeUTC) <= 0)
                                 {
                                     string forExport = he.journalEntry.GetJson()?.ToString().Replace("\r\n", "");
                                     if (forExport != null)
@@ -663,8 +665,8 @@ namespace EDDiscovery.UserControls
                             {
                                 HistoryEntry he = dataGridViewJournal.Rows[r].Cells[JournalHistoryColumns.HistoryTag].Tag as HistoryEntry;
                                 return (dataGridViewJournal.Rows[r].Visible &&
-                                    he.EventTimeLocal.CompareTo(frm.StartTime) >= 0 &&
-                                    he.EventTimeLocal.CompareTo(frm.EndTime) <= 0) ? BaseUtils.CSVWriteGrid.LineStatus.OK : BaseUtils.CSVWriteGrid.LineStatus.Skip;
+                                    he.EventTimeUTC.CompareTo(frm.StartTimeUTC) >= 0 &&
+                                    he.EventTimeUTC.CompareTo(frm.EndTimeUTC) <= 0) ? BaseUtils.CSVWriteGrid.LineStatus.OK : BaseUtils.CSVWriteGrid.LineStatus.Skip;
                             }
                             else
                                 return BaseUtils.CSVWriteGrid.LineStatus.EOF;

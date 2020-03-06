@@ -245,7 +245,7 @@ namespace EDDiscovery
                 float textscalingw = Math.Min(_starnamemaxly, Math.Max(_starnamesizely / _lastcamera.LastZoom, _starnameminly)); // per char
                 float starsize = Math.Min(Math.Max(_lastcamera.LastZoom / 10F, 1.0F), 20F);     // Normal stars are at 1F.
 
-                System.Diagnostics.Debug.WriteLine("Named Stars begin search");
+                System.Diagnostics.Debug.WriteLine("Named Stars begin search " + lylimit + " sl " + _starlimitly);
 
                 foreach (StarNames s in _starnamesbackground.Values)    // all items not processed
                     s.updatedinview = false;                                 // only items remaining will clear this
@@ -255,6 +255,7 @@ namespace EDDiscovery
                 int painted = 0;
 
                 //string res = "";  // used to view whats added/removed/draw..
+                //System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch(); sw.Start();
 
                 foreach (StarGrid.InViewInfo inview in inviewlist.Values)            // for all in viewport, sorted by distance from camera position
                 {
@@ -274,7 +275,11 @@ namespace EDDiscovery
                     }
                     else if (painted < maxstars)
                     {
-                        ISystem sc = _formmap.FindSystem(inview.position);               // with the open connection, find this star..
+                        //System.Diagnostics.Debug.WriteLine(sw.ElapsedMilliseconds + " Names lookup " + inview.position);
+
+                        ISystem sc = _formmap.FindSystemInSystemlist(inview.position);
+                        if ( sc == null )
+                            sc = SystemCache.GetSystemByPosition(inview.position.X, inview.position.Y, inview.position.Z, 5000);
 
                         if (sc != null)     // if can't be resolved, ignore
                         {
@@ -284,7 +289,8 @@ namespace EDDiscovery
                             draw = true;
                             painted++;
 
-                            //System.Diagnostics.Debug.WriteLine("Found " + inview.position);
+                            //System.Diagnostics.Debug.WriteLine( " Added " + inview.position);
+
                             //Tools.LogToFile(String.Format("starnamesest: push {0}", sys.Pos));
                             //res += "N";
                         }
@@ -324,16 +330,19 @@ namespace EDDiscovery
                     }
                 }
 
-                System.Diagnostics.Debug.WriteLine("Process " + _starnamesbackground.Count);
+                System.Diagnostics.Debug.WriteLine("Process " + _starnamesbackground.Count + " " + _needrepaint);
 
                 foreach (StarNames s in _starnamesbackground.Values)              // only items above will remain.
                 {
-                    //if (s.inview != s.updatedinview) res += (s.updatedinview) ? "+" : "-";
-
-                    _needrepaint = _needrepaint || (s.inview != s.updatedinview);       // set if we change our mind on any of the items
-                    s.inview = s.updatedinview;                          // copy flag over, causes foreground to start removing them
+                    if (s.inview != s.updatedinview)
+                    {
+                        _needrepaint = true;
+                        s.inview = s.updatedinview;                          // copy flag over, causes foreground to start removing them
+                       // System.Diagnostics.Debug.WriteLine("View changed " + s.name + " " + s.inview);
+                    }
                 }
 
+                System.Diagnostics.Debug.WriteLine("Need repaint " + _needrepaint);
                 //if ( _needrepaint) Console.WriteLine(String.Format("starnamesest in view  {0} limit {1} repaint {2} {3}", inviewlist.Count, lylimit, _needrepaint, res));
 
                 //Tools.LogToFile(String.Format("starnamesest added all delta {0} topaint {1}", sw1.ElapsedMilliseconds, painted));
@@ -346,7 +355,7 @@ namespace EDDiscovery
 
             _formmap.BeginInvoke((System.Windows.Forms.MethodInvoker)delegate              // kick the UI thread to process.
             {
-                System.Diagnostics.Debug.WriteLine("Tell forground to change");
+                System.Diagnostics.Debug.WriteLine("Names search redisplay");
                 _formmap.ChangeNamedStars();
             });
         }

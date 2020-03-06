@@ -62,10 +62,13 @@ namespace EDDiscovery.Actions
         Actions.ActionsFromInputDevices inputdevicesactions;
         BindingsFile frontierbindings;
 
-        public ActionController(EDDiscoveryForm frm, EDDiscoveryController ctrl, System.Drawing.Icon ic) : base(new ActionConfigFuncsWinForms(frm), ic)
+        Type[] keyignoredforms;
+
+        public ActionController(EDDiscoveryForm frm, EDDiscoveryController ctrl, System.Drawing.Icon ic, Type[] keyignoredforms = null) : base(new ActionConfigFuncsWinForms(frm), ic)
         {
             discoveryform = frm;
             discoverycontroller = ctrl;
+            this.keyignoredforms = keyignoredforms;
 
             #if !NO_SYSTEM_SPEECH
             // Windows TTS (2000 and above). Speech *recognition* will be Version.Major >= 6 (Vista and above)
@@ -632,15 +635,13 @@ namespace EDDiscovery.Actions
             inputdevicesactions.Stop();
             inputdevices.Clear();
 
-#if !__MonoCS__
-            if (on)
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT && on)
             {
                 DirectInputDevices.InputDeviceJoystickWindows.CreateJoysticks(inputdevices, axisevents);
                 DirectInputDevices.InputDeviceKeyboard.CreateKeyboard(inputdevices);              // Created.. not started..
                 DirectInputDevices.InputDeviceMouse.CreateMouse(inputdevices);
                 inputdevicesactions.Start();
             }
-#endif
         }
 
         public string EliteInputList() { return inputdevices.ListDevices(); }

@@ -22,7 +22,6 @@ namespace EDDiscovery.Forms
 {
     public partial class SetNoteForm : ExtendedControls.DraggableForm
     {
-        private EDDiscoveryForm _discoveryForm;
         public HistoryEntry HistoryEntry { get; private set; }
         public string NoteText { get; private set; }
 
@@ -30,11 +29,10 @@ namespace EDDiscovery.Forms
         {
             InitializeComponent();
             this.Owner = parent;
-            this._discoveryForm = parent;
             this.HistoryEntry = he;
             this.NoteText = he.snc?.Note;
             this.textBoxNote.Text = this.NoteText ?? "";
-            this.labelTimestamp.Text = he.EventTimeLocal.ToString();
+            this.labelTimestamp.Text = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC).ToString();
             this.labelSystem.Text = he.System.Name;
 
             he.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);

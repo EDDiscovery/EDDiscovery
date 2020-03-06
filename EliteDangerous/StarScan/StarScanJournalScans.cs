@@ -58,6 +58,7 @@ namespace EliteDangerousCore
                     else if (jl != null && je.IsStarNameRelated(jl.StarSystem, designation, jl.SystemAddress))
                     {
                         // Ignore scans where the system name has changed
+                        System.Diagnostics.Trace.WriteLine($"Rejecting body {designation} ({je.BodyName}) in system {he.System.Name} => {jl.StarSystem} due to system rename");
                         return false;
                     }
                 }

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2017 EDDiscovery development team
+ * Copyright © 2016 - 2019 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -15,7 +15,6 @@
  */
 using EDDiscovery.Controls;
 using EliteDangerousCore;
-using EliteDangerousCore.DB;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -33,7 +32,6 @@ namespace EDDiscovery.UserControls
         RecipeFilterSelector matfs;
 
         private List<string> levels = new List<string> { "1", "2", "3", "4", "5", "Experimental" };
-        private Dictionary<string, string> matLookUp;
 
         public string PrefixName = "Engineering";
 
@@ -90,15 +88,12 @@ namespace EDDiscovery.UserControls
             mfs = new RecipeFilterSelector(modules);
             mfs.Changed += FilterChanged;
 
-            var upgrades = Recipes.EngineeringRecipes.Select(r => r.name).Distinct().ToList();
+            var upgrades = Recipes.EngineeringRecipes.Select(r => r.Name).Distinct().ToList();
             upgrades.Sort();
             ufs = new RecipeFilterSelector(upgrades);
             ufs.Changed += FilterChanged;
 
-            List<string> matShortNames = Recipes.EngineeringRecipes.SelectMany(r => r.ingredients).Distinct().ToList();
-            matLookUp = matShortNames.ToDictionary(sn => MaterialCommodityData.GetByShortName(sn).Name, sn => sn);
-            List<string> matLongNames = matLookUp.Keys.ToList();
-            matLongNames.Sort();
+            List<string> matLongNames = Recipes.EngineeringRecipes.SelectMany(r => r.Ingredients).Select(x=>x.Name).Distinct().ToList();
             matfs = new RecipeFilterSelector(matLongNames);
             matfs.Changed += FilterChanged;
 
@@ -109,11 +104,9 @@ namespace EDDiscovery.UserControls
 
                 int rown = dataGridViewEngineering.Rows.Add();
                 DataGridViewRow row = dataGridViewEngineering.Rows[rown];
-                row.Cells[UpgradeCol.Index].Value = r.name; // debug rno + ":" + r.name;
+                row.Cells[UpgradeCol.Index].Value = r.Name; // debug rno + ":" + r.name;
                 row.Cells[ModuleCol.Index].Value = r.modulesstring;
                 row.Cells[LevelCol.Index].Value = r.level;
-                row.Cells[RecipeCol.Index].Value = r.ingredientsstring;
-                row.Cells[RecipeCol.Index].ToolTipText = r.ingredientsstringlong;
                 row.Cells[EngineersCol.Index].Value = r.engineersstring;
                 row.Tag = rno;
                 row.Visible = false;
@@ -224,15 +217,7 @@ namespace EDDiscovery.UserControls
                 string upgrades = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbUpgradeFilterSave, "All");
                 string[] upgArray = upgrades.Split(';');
                 string materials = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbMaterialFilterSave, "All");
-                List<string> matList;
-                if (materials == "All" || materials == "None")
-                {
-                    matList = new List<string>();
-                }
-                else
-                {
-                    matList = materials.Split(';').Where(x => !string.IsNullOrEmpty(x) && matLookUp.ContainsKey(x)).Select(m => matLookUp[m]).ToList();
-                }
+                var matList = materials.Split(';');        // list of materials to show
                 
                 for (int i = 0; i < Recipes.EngineeringRecipes.Count; i++)
                 {
@@ -240,38 +225,35 @@ namespace EDDiscovery.UserControls
                     dataGridViewEngineering[MaxCol.Index, i].Value = MaterialCommoditiesRecipe.HowManyLeft(mcl, Recipes.EngineeringRecipes[rno]).Item1.ToString();
                     bool visible = true;
                     
-                    if (engineers == "All" && modules == "All" && levels == "All" && upgrades == "All" && materials == "All")
-                    { visible = true; }
-                    else
+                    if (!(engineers == "All" && modules == "All" && levels == "All" && upgrades == "All" && materials == "All"))
                     {
-                        visible = false;
-                        if (engineers == "All") { visible = true; }
-                        else
+                        if (engineers != "All")
                         {
                             var included = engList.Intersect<string>(Recipes.EngineeringRecipes[rno].engineers.ToList<string>());
-                            visible = included.Count() > 0;
+                            visible &= included.Count() > 0;
                         }
-                        if (modules == "All") { visible = visible && true; }
-                        else
-                        {
+
+                        if (modules != "All")
+                        { 
                             var included = modList.Intersect<string>(Recipes.EngineeringRecipes[rno].modules.ToList<string>());
-                            visible = visible && included.Count() > 0;
+                            visible &= included.Count() > 0;
                         }
-                        if (levels == "All") { visible = visible && true; }
-                        else
-                        {
-                            visible = visible && lvlArray.Contains(Recipes.EngineeringRecipes[rno].level);
+
+                        if (levels != "All")
+                        { 
+                            visible &= lvlArray.Contains(Recipes.EngineeringRecipes[rno].level);
                         }
-                        if (upgrades == "All") { visible = visible && true; }
-                        else
-                        {
-                            visible = visible && upgArray.Contains(Recipes.EngineeringRecipes[rno].name);
+
+                        if (upgrades != "All")
+                        { 
+                            visible &= upgArray.Contains(Recipes.EngineeringRecipes[rno].Name);
                         }
-                        if (materials == "All") { visible = visible && true; }
-                        else
+
+                        if (materials != "All")
                         {
-                            var included = matList.Intersect<string>(Recipes.EngineeringRecipes[rno].ingredients.ToList<string>());
-                            visible = visible && included.Count() > 0;
+                            var inglongname = Recipes.EngineeringRecipes[rno].Ingredients.Select(x => x.Name);
+                            var included = matList.Intersect<string>(inglongname);
+                            visible &= included.Count() > 0;
                         }
                     }
 
@@ -279,6 +261,8 @@ namespace EDDiscovery.UserControls
 
                     if (visible)
                     {
+                        Recipes.Recipe r = Recipes.EngineeringRecipes[i];
+
                         Tuple<int, int, string,string> res = MaterialCommoditiesRecipe.HowManyLeft(mcl, Recipes.EngineeringRecipes[rno], Wanted[rno]);
                         //System.Diagnostics.Debug.WriteLine("{0} Recipe {1} executed {2} {3} ", i, rno, Wanted[rno], res.Item2);
 
@@ -286,7 +270,8 @@ namespace EDDiscovery.UserControls
                         dataGridViewEngineering[AvailableCol.Index, i].Value = res.Item2.ToString();
                         dataGridViewEngineering[NotesCol.Index, i].Value = res.Item3;
                         dataGridViewEngineering[NotesCol.Index, i].ToolTipText = res.Item4;
-
+                        dataGridViewEngineering[RecipeCol.Index, i].Value = r.IngredientsStringvsCurrent(last_he.MaterialCommodity);
+                        dataGridViewEngineering[RecipeCol.Index, i].ToolTipText = r.IngredientsStringLong;
                     }
                     if (Wanted[rno] > 0 && (visible || isEmbedded))      // embedded, need to 
                     {
@@ -298,9 +283,12 @@ namespace EDDiscovery.UserControls
                 {
                     MaterialCommoditiesRecipe.ResetUsed(mcl);
                     List<MaterialCommodities> shoppinglist = MaterialCommoditiesRecipe.GetShoppingList(wantedList, mcl);
+
                     dataGridViewEngineering.RowCount = Recipes.EngineeringRecipes.Count;         // truncate previous shopping list..
+
                     foreach (MaterialCommodities c in shoppinglist.OrderBy(mat => mat.Details.Name))      // and add new..
                     {
+                        var cur = last_he.MaterialCommodity.Find(c.Details);    // may be null
 
                         int rn = dataGridViewEngineering.Rows.Add();
 
@@ -308,9 +296,11 @@ namespace EDDiscovery.UserControls
                         {
                             if (cell.OwningColumn == UpgradeCol)
                                 cell.Value = c.Details.Name;
+                            else if (cell.OwningColumn == MaxCol)
+                                cell.Value = (cur?.Count??0).ToString();
                             else if (cell.OwningColumn == WantedCol)
                                 cell.Value = c.scratchpad.ToString();
-                            else if (cell.OwningColumn == NotesCol)
+                            else if (cell.OwningColumn == RecipeCol)
                                 cell.Value = c.Details.Shortname;
                             else if (cell.ValueType == null || cell.ValueType.IsAssignableFrom(typeof(string)))
                                 cell.Value = string.Empty;

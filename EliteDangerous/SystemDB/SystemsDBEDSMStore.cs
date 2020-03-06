@@ -22,6 +22,7 @@ using SQLLiteExtensions;
 using System.Data.Common;
 using System.Data;
 using Newtonsoft.Json.Linq;
+using System.IO.Compression;
 
 namespace EliteDangerousCore.DB
 {
@@ -31,8 +32,25 @@ namespace EliteDangerousCore.DB
 
         public static long ParseEDSMJSONFile(string filename, bool[] grididallow, ref DateTime date, Func<bool> cancelRequested, Action<string> reportProgress, string tableposfix, bool presumeempty = false, string debugoutputfile = null)
         {
-            using (StreamReader sr = new StreamReader(filename))         // read directly from file..
-                return ParseEDSMJSON(sr, grididallow, ref date, cancelRequested, reportProgress, tableposfix, presumeempty, debugoutputfile);
+            // if the filename ends in .gz, then decompress it on the fly
+            if (filename.EndsWith("gz"))
+            {
+                using (FileStream originalFileStream = new FileStream(filename, FileMode.Open, FileAccess.Read))
+                {
+                    using (GZipStream gz = new GZipStream(originalFileStream, CompressionMode.Decompress))
+                    {
+                        using (StreamReader sr = new StreamReader(gz))
+                        {
+                            return ParseEDSMJSON(sr, grididallow, ref date, cancelRequested, reportProgress, tableposfix, presumeempty, debugoutputfile);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                using (StreamReader sr = new StreamReader(filename))         // read directly from file..
+                    return ParseEDSMJSON(sr, grididallow, ref date, cancelRequested, reportProgress, tableposfix, presumeempty, debugoutputfile);
+            }
         }
 
         public static long ParseEDSMJSONString(string data, bool[] grididallow, ref DateTime date, Func<bool> cancelRequested, Action<string> reportProgress, string tableposfix, bool presumeempty = false, string debugoutputfile = null)

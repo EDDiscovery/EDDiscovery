@@ -33,14 +33,14 @@ namespace EDDiscovery.UserControls
                     }
                     catch
                     {
-                        ExtendedControls.MessageBoxTheme.Show(parent, "Failed to open " + file, "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        ExtendedControls.MessageBoxTheme.Show(parent, "Failed to open ".T(EDTx.CSV_Helpers_OpenFailed) + file, "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     }
                 }
                 else
                     return true;
             }
             else
-                ExtendedControls.MessageBoxTheme.Show(parent, "Failed to write to " + file, "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                ExtendedControls.MessageBoxTheme.Show(parent, "Failed to write to ".T(EDTx.CSV_Helpers_WriteFailed) + file, "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 
             return false;
         }

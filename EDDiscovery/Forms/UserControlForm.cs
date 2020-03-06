@@ -50,9 +50,7 @@ namespace EDDiscovery.Forms
         private Timer timer = new Timer();      // timer to monitor for entry into form when transparent.. only sane way in forms
         private bool deftopmost, deftransparent;
 
-#if !__MonoCS__
         private DirectInputDevices.InputDeviceKeyboard idk;     // used to sniff in transparency mode
-#endif
 
         public bool IsTransparencySupported { get { return !transparencycolor.IsFullyTransparent(); } }
 
@@ -100,9 +98,11 @@ namespace EDDiscovery.Forms
 
             displayTitle = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(dbrefname + "ShowTitle", true);
 
-#if !__MonoCS__
-            idk = DirectInputDevices.InputDeviceKeyboard.CreateKeyboard();
-#endif
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+            {
+                idk = DirectInputDevices.InputDeviceKeyboard.CreateKeyboard();
+            }
+
             UpdateControls();
 
             Invalidate();
@@ -328,11 +328,14 @@ namespace EDDiscovery.Forms
             inpanelshow = true; // in case we go transparent, we need to make sure its on.. since it won't be on if the timer is not running
 
             //nasty.. but nice
-#if !__MonoCS__
-            transparentmode = (TransparencyMode)(((int)transparentmode + 1) % Enum.GetValues(typeof(TransparencyMode)).Length);
-#else
-            transparentmode = (transparentmode == TransparencyMode.Off) ? TransparencyMode.On : TransparencyMode.Off;   // no idea what happens in Mono
-#endif
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+            {
+                transparentmode = (TransparencyMode)(((int)transparentmode + 1) % Enum.GetValues(typeof(TransparencyMode)).Length);
+            }
+            else
+            {
+                transparentmode = (transparentmode == TransparencyMode.Off) ? TransparencyMode.On : TransparencyMode.Off;   // no idea what happens in Mono
+            }
 
             SetTransparency(transparentmode);
         }
@@ -359,10 +362,11 @@ namespace EDDiscovery.Forms
                     {
                         if (IsClickThruOn)
                         {
-#if !__MonoCS__
-                            if (idk.IsKeyPressed(EDDConfig.Instance.ClickThruKey, recheck: true))
-                                inpanelshow = true;
-#endif
+                            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+                            {
+                                if (idk.IsKeyPressed(EDDConfig.Instance.ClickThruKey, recheck: true))
+                                    inpanelshow = true;
+                            }
                         }
                         else
                             inpanelshow = true;

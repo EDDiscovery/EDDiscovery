@@ -23,7 +23,11 @@ namespace EliteDangerousCore.DB
     {
         const string tablepostfix = "temp"; // postfix for temp tables
 
-        public SQLiteConnectionSystem() : base(EliteDangerousCore.EliteConfigInstance.InstanceOptions.SystemDatabasePath, utctimeindicator: true)
+        public SQLiteConnectionSystem() : this(false)
+        {
+        }
+
+        public SQLiteConnectionSystem(bool ro) : base(EliteDangerousCore.EliteConfigInstance.InstanceOptions.SystemDatabasePath, utctimeindicator: true, mode: ro ? AccessMode.Reader : AccessMode.ReaderWriter)
         {
         }
 
@@ -42,14 +46,28 @@ namespace EliteDangerousCore.DB
 
                 ExecuteNonQueries(new string[]             // always kill these old tables and make EDDB new table
                     {
-                    "DROP TABLE IF EXISTS EddbSystems",
                     "DROP TABLE IF EXISTS Distances",
+                    "DROP TABLE IF EXISTS EddbSystems",
+                    // keep edsmsystems
                     "DROP TABLE IF EXISTS Stations",
                     "DROP TABLE IF EXISTS SystemAliases",
+                    // don't drop Systemnames
                     "DROP TABLE IF EXISTS station_commodities",
                     "CREATE TABLE IF NOT EXISTS EDDB (edsmid INTEGER PRIMARY KEY NOT NULL, eddbid INTEGER, eddbupdatedat INTEGER, population INTEGER, faction TEXT, government INTEGER, allegiance INTEGER, state INTEGER, security INTEGER, primaryeconomy INTEGER, needspermit INTEGER, power TEXT, powerstate TEXT, properties TEXT)",
                     "CREATE TABLE IF NOT EXISTS Aliases (edsmid INTEGER PRIMARY KEY NOT NULL, edsmid_mergedto INTEGER, name TEXT COLLATE NOCASE)"
                     });
+
+                var tablesql = this.SQLMasterQuery("table");
+                int index = tablesql.FindIndex(x => x.TableName == "Systems");
+                bool oldsystems = index >=0 && tablesql[index].SQL.Contains("commandercreate");
+
+                if ( dbver < 200 || oldsystems)
+                {
+                    ExecuteNonQueries(new string[]             // always kill these old tables and make EDDB new table
+                    {
+                    "DROP TABLE IF EXISTS Systems", // New! this is an hold over which never got deleted when we moved to the 102 schema
+                    });
+                }
 
                 if (dbver < 102)        // is it older than 102, its unusable
                 {

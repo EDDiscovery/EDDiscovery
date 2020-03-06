@@ -79,7 +79,6 @@ namespace EDDiscovery.UserControls
         private string DbColumnSave { get { return DBName("TravelControl" ,  "DGVCol"); } }
         private string DbHistorySave { get { return DBName("EDUIHistory" ); } }
         private string DbFieldFilter { get { return DBName("TravelHistoryControlFieldFilter" ); } }
-        private string DbAutoTop { get { return DBName("TravelHistoryControlAutoTop"); } }
         private string DbOutlines { get { return DBName("TravelHistoryOutlines"); } }
 
         private HistoryList current_historylist;        // the last one set, for internal refresh purposes on sort
@@ -112,7 +111,7 @@ namespace EDDiscovery.UserControls
             cfs.AddJournalEntries();
             cfs.SaveSettings += EventFilterChanged;
 
-            checkBoxCursorToTop.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbAutoTop, true);
+            checkBoxCursorToTop.Checked = true;
 
             dataGridViewTravel.MakeDoubleBuffered();
 
@@ -124,6 +123,7 @@ namespace EDDiscovery.UserControls
             runActionsAcrossSelectionToolSpeechStripMenuItem.Visible = false;
             runSelectionThroughInaraSystemToolStripMenuItem.Visible = false;
             runEntryThroughProfileSystemToolStripMenuItem.Visible = false;
+            runSelectionThroughIGAUDebugToolStripMenuItem.Visible = false;
 #endif
 
             searchtimer = new Timer() { Interval = 500 };
@@ -171,7 +171,6 @@ namespace EDDiscovery.UserControls
             DGVSaveColumnLayout(dataGridViewTravel, DbColumnSave);
             discoveryform.OnHistoryChange -= HistoryChanged;
             discoveryform.OnNewEntry -= AddNewEntry;
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbAutoTop, checkBoxCursorToTop.Checked);
             searchtimer.Dispose();
         }
 
@@ -222,7 +221,7 @@ namespace EDDiscovery.UserControls
             dataGridViewTravel.Rows.Clear();
             rowsbyjournalid.Clear();
 
-            dataGridViewTravel.Columns[0].HeaderText = EDDiscoveryForm.EDDConfig.DisplayUTC ? "Game Time".T(EDTx.GameTime) : "Time".T(EDTx.Time);
+            dataGridViewTravel.Columns[0].HeaderText = EDDiscoveryForm.EDDConfig.GetTimeTitle();
 
             List<HistoryEntry[]> chunks = new List<HistoryEntry[]>();
 
@@ -443,17 +442,20 @@ namespace EDDiscovery.UserControls
         {
             //string debugt = item.Journalid + "  " + item.System.id_edsm + " " + item.System.GetHashCode() + " "; // add on for debug purposes to a field below
 
-            DateTime time = EDDiscoveryForm.EDDConfig.DisplayUTC ? item.EventTimeUTC : item.EventTimeLocal;
+            DateTime time = EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(item.EventTimeUTC);
             item.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
             string note = (item.snc != null) ? item.snc.Note : "";
 
             if (search.HasChars())
             {
                 string timestr = time.ToString();
+                int rown = EDDConfig.Instance.OrderRowsInverted ? item.Indexno : (discoveryform.history.Count - item.Indexno + 1);
+                string entryrow = rown.ToStringInvariant();
                 bool matched = timestr.IndexOf(search, StringComparison.InvariantCultureIgnoreCase) >= 0 ||
                                 item.EventSummary.IndexOf(search, StringComparison.InvariantCultureIgnoreCase) >= 0 ||
                                 EventDescription.IndexOf(search, StringComparison.InvariantCultureIgnoreCase) >= 0 ||
-                                note.IndexOf(search, StringComparison.InvariantCultureIgnoreCase) >= 0;
+                                note.IndexOf(search, StringComparison.InvariantCultureIgnoreCase) >= 0 ||
+                                entryrow.IndexOf(search, StringComparison.InvariantCultureIgnoreCase) >= 0;
                 if (!matched)
                     return null;
             }
@@ -768,7 +770,7 @@ namespace EDDiscovery.UserControls
                 if ( notexpanded && linesfound*ch > dataGridViewTravel.Height * 3 / 4 ) // unreasonable amount of space to show it.
                 {
                     ExtendedControls.InfoForm info = new ExtendedControls.InfoForm();
-                    info.Info((EDDiscoveryForm.EDDConfig.DisplayUTC ? leftclicksystem.EventTimeUTC : leftclicksystem.EventTimeLocal) + ": " + leftclicksystem.EventSummary,
+                    info.Info(EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(leftclicksystem.EventTimeUTC) + ": " + leftclicksystem.EventSummary,
                         FindForm().Icon, infodetailed);
                     info.Size = new Size(1200, 800);
                     info.Show(FindForm());
@@ -1175,22 +1177,22 @@ namespace EDDiscovery.UserControls
         {
             BookmarkForm bookmarkForm = new BookmarkForm();
             BookmarkClass existing = GlobalBookMarkList.Instance.FindBookmarkOnSystem(rightclicksystem.System.Name);
-            DateTime tme;
+            DateTime timeutc;
             if (existing != null)
             {
-                tme = existing.Time;
-                bookmarkForm.Update(existing);
+                timeutc = existing.TimeUTC;
+                bookmarkForm.Bookmark(existing);
             }
             else
             {
-                tme = DateTime.Now;
-                bookmarkForm.NewSystemBookmark(rightclicksystem.System, "", tme);
+                timeutc = DateTime.UtcNow;
+                bookmarkForm.NewSystemBookmark(rightclicksystem.System, "", timeutc);
             }
             DialogResult dr = bookmarkForm.ShowDialog();
             if (dr == DialogResult.OK)
             {
                 GlobalBookMarkList.Instance.AddOrUpdateBookmark(existing, true, rightclicksystem.System.Name, rightclicksystem.System.X, rightclicksystem.System.Y, rightclicksystem.System.Z,
-                    tme, bookmarkForm.Notes, bookmarkForm.SurfaceLocations);
+                    timeutc, bookmarkForm.Notes, bookmarkForm.SurfaceLocations);
             }
             if (dr == DialogResult.Abort && existing != null)
             {
@@ -1269,7 +1271,7 @@ namespace EDDiscovery.UserControls
 
         private void runSelectionThroughInaraSystemToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (rightclicksystem != null )
+            if (rightclicksystem != null)
             {
                 List<Newtonsoft.Json.Linq.JToken> list = EliteDangerousCore.Inara.InaraSync.NewEntryList(discoveryform.history, rightclicksystem);
 
@@ -1310,6 +1312,13 @@ namespace EDDiscovery.UserControls
             discoveryform.CheckActionProfile(rightclicksystem);
         }
 
+        private void runSelectionThroughIGAUDebugToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (rightclicksystem != null)
+            {
+                EliteDangerousCore.IGAU.IGAUSync.NewEvent(discoveryform.LogLine, rightclicksystem);
+            }
+        }
         private void runActionsAcrossSelectionToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string laststring = "";
@@ -1375,8 +1384,8 @@ namespace EDDiscovery.UserControls
                     {
                         HistoryEntry he = (HistoryEntry)dataGridViewTravel.Rows[r].Cells[TravelHistoryColumns.HistoryTag].Tag;
                         return (dataGridViewTravel.Rows[r].Visible &&
-                                he.EventTimeLocal.CompareTo(frm.StartTime) >= 0 &&
-                                he.EventTimeLocal.CompareTo(frm.EndTime) <= 0) ? BaseUtils.CSVWriteGrid.LineStatus.OK : BaseUtils.CSVWriteGrid.LineStatus.Skip;
+                                he.EventTimeUTC.CompareTo(frm.StartTimeUTC) >= 0 &&
+                                he.EventTimeUTC.CompareTo(frm.EndTimeUTC) <= 0) ? BaseUtils.CSVWriteGrid.LineStatus.OK : BaseUtils.CSVWriteGrid.LineStatus.Skip;
                     }
                     else
                         return BaseUtils.CSVWriteGrid.LineStatus.EOF;
@@ -1398,7 +1407,7 @@ namespace EDDiscovery.UserControls
                         EliteDangerousCore.JournalEvents.JournalFSDJump fsd = he.journalEntry as EliteDangerousCore.JournalEvents.JournalFSDJump;
 
                         return new Object[] {
-                            fsd.EventTimeLocal,
+                            EDDConfig.Instance.ConvertTimeToSelectedFromUTC(fsd.EventTimeUTC),
                             fsd.StarSystem,
                             fsd.StarPos.X,
                             fsd.StarPos.Y,
@@ -1425,7 +1434,7 @@ namespace EDDiscovery.UserControls
                         HistoryEntry he = (HistoryEntry)dataGridViewTravel.Rows[r].Cells[TravelHistoryColumns.HistoryTag].Tag;
                         he.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
                         return new Object[] {
-                            dataGridViewTravel.Rows[r].Cells[0].Value,
+                            EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC),
                             he.EventSummary,
                             (he.System != null) ? he.System.Name : "Unknown",    // paranoia
                             he.WhereAmI,

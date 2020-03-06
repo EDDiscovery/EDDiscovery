@@ -74,21 +74,21 @@ namespace EliteDangerousCore.JournalEvents
             height = jo == null ? 0 : jo["EDDOutputHeight"].Int();
         }
 
-        public static JournalScreenshot GetScreenshot(string filename, int width, int height, DateTime timestamp, string sysname, int cmdrid)
+        public static JournalScreenshot GetScreenshot(string filename, int width, int height, DateTime timestamputc, string sysname, int cmdrid)
         {
             JournalScreenshot ss = null;
             string body = null;
 
             if (cmdrid >= 0)
             {
-                JournalEntry je = JournalEntry.GetLast(cmdrid, timestamp + TimeSpan.FromSeconds(2), e =>
+                JournalEntry je = JournalEntry.GetLast(cmdrid, timestamputc + TimeSpan.FromSeconds(2), e =>
                     e is JournalScreenshot ||
                     e is JournalSupercruiseEntry ||
                     e is JournalSupercruiseExit ||
                     e is JournalLocation ||
                     e is JournalFSDJump);
 
-                if (je is JournalScreenshot && (sysname == null || sysname == ((JournalScreenshot)je).System) && Math.Abs(timestamp.Subtract(je.EventTimeUTC).TotalSeconds) < 2)
+                if (je is JournalScreenshot && (sysname == null || sysname == ((JournalScreenshot)je).System) && Math.Abs(timestamputc.Subtract(je.EventTimeUTC).TotalSeconds) < 2)
                 {
                     ss = je as JournalScreenshot;
                     body = ss.Body;
@@ -110,7 +110,7 @@ namespace EliteDangerousCore.JournalEvents
             {
                 JObject jo = JObject.FromObject(new
                 {
-                    timestamp = timestamp.ToUniversalTime().ToString("s") + "Z",
+                    timestamp = timestamputc.ToUniversalTime().ToString("s") + "Z",
                     @event = "Screenshot",
                     Filename = filename,
                     Width = width,

@@ -110,7 +110,7 @@ namespace EDDiscovery.Actions
                 }
                 ),
             new ActionEventEDList("onEDDNSync", "ProgramEvent", "Program", null ),  //16
-            new ActionEventEDList("onEGOSync", "ProgramEvent", "Program", null ),  //17
+            new ActionEventEDList("onIGAUSync", "ProgramEvent", "Program", null ),  //17
             new ActionEventEDList("onEDSMSync", "ProgramEvent", "Program", null ),  //18
             new ActionEventEDList("onVoiceInput", "Voice", "Voice",
                 new List<BaseUtils.TypeHelpers.PropertyNameInfo>()
@@ -147,7 +147,7 @@ namespace EDDiscovery.Actions
         public static ActionEvent onHistorySelection { get { return eddevents[14]; } }     // withdrawn in 10
         public static ActionEvent onUIEvent { get { return eddevents[15]; } }
         public static ActionEvent onEDDNSync { get { return eddevents[16]; } }
-        public static ActionEvent onEGOSync { get { return eddevents[17]; } }
+        public static ActionEvent onIGAUSync { get { return eddevents[17]; } }
         public static ActionEvent onEDSMSync { get { return eddevents[18]; } }
         public static ActionEvent onVoiceInput { get { return eddevents[19]; } }
         public static ActionEvent onVoiceInputFailed { get { return eddevents[20]; } }
