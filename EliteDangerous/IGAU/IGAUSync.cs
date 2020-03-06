@@ -84,15 +84,13 @@ namespace EliteDangerousCore.IGAU
                         JournalCodexEntry c = he.journalEntry as JournalCodexEntry;
 
                         var msg = igau.CreateIGAUMessage(he.EventTimeUTC.ToStringZulu(),
-                                                              c.EntryID.ToString(), c.Name, c.Name_Localised, c.System, c.SystemAddress.ToString() ?? 0);
+                                                              c.EntryID.ToString(), c.Name, c.Name_Localised, c.System, c.SystemAddress.ToString() ?? "0");
 
                         System.Diagnostics.Debug.WriteLine("IGAU Post " + msg.ToString(Newtonsoft.Json.Formatting.Indented));
 
-                        // comment ball the ack in when your ready to try!
-
                         igau.PostMessage(msg, out bool accepted);
-                        if (!accepted)
-                        logger?.Invoke("IGAU Message rejected " + he.EventTimeUTC.ToStringZulu());
+                        //if (!accepted)
+                        //logger?.Invoke("IGAU Message rejected " + he.EventTimeUTC.ToStringZulu());
 
                         eventcount++;
                     }
