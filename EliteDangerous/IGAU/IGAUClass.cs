@@ -47,22 +47,19 @@ namespace EliteDangerousCore.IGAU
         public string Name_Stripped { get; private set; }
         public string Name_Lower { get; private set; }
 
-        public JObject CreateIGAUMessage(string timestamp, long EntryID, string Name, string Name_Localised, string System, long SystemAddress)
+        public JObject CreateIGAUMessage(string timestamp, string EntryID, string Name, string Name_Localised, string System, string SystemAddress)
         {
             Name_Stripped = Name.Replace("$", string.Empty).Replace(";", string.Empty);
-            // IGAUClass.cs(53,41,53,54): error CS1503: Argument 1: cannot convert from 'string' to 'System.Globalization.CultureInfo'
-            // Name_Lower = string.ToLower(Name_Stripped);
+
             JObject detail = new JObject();
-            detail["input_1"] = timestamp;
-            detail["input_2"] = EntryID;
-            //detail["input_3"] = Name;
-            detail["input_3"] = Name_Stripped;
-            //detail["input_3"] = Name_Lower;
-            detail["input_4"] = Name_Localised;
-            detail["input_5"] = System;
-            detail["input_6"] = SystemAddress;
-            detail["input_7"] = App_Name;
-            detail["input_8"] = App_Version;
+            detail["timestamp"] = timestamp;
+            detail["EntryID"] = (EntryID).ToString();
+            detail["Name"] = (Name_Stripped).ToLower();
+            detail["Name_Localised"] = Name_Localised;
+            detail["System"] = System;
+            detail["SystemAddress"] = (SystemAddress).ToString();
+            detail["App_Name"] = App_Name;
+            detail["App_Version"] = App_Version;
             JObject msg = new JObject();
             msg["input_values"] = detail;
             return msg;
