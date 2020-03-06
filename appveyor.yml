@@ -1,7 +1,7 @@
 version: 10.6.0.{build}
 image:
   - Visual Studio 2017
-  - Visual Studio 2019 Preview
+  - Visual Studio 2019
 configuration: Release
 install:
   - git submodule update --init
@@ -15,7 +15,7 @@ for:
 -
   matrix:
     only:
-      - image: Visual Studio 2019 Preview
+      - image: Visual Studio 2019
 
   after_build:
     - cmd: copy EDDiscovery\bin\Release\net461\EDDiscovery.Portable.zip EDDiscovery.Portable.vs2019.net461.zip
