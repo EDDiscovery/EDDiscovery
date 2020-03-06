@@ -39,7 +39,7 @@ namespace EDDiscovery.Icons
 
             foreach (string resname in resnames)
             {
-                if (resname.StartsWith(basename) && resname.EndsWith(".png", StringComparison.InvariantCultureIgnoreCase))
+                if (resname.StartsWith(basename) && new[] { ".png", ".jpg" }.Any(e => resname.EndsWith(e, StringComparison.InvariantCultureIgnoreCase)))
                 {
                     string name = resname.Substring(basename.Length, resname.Length - basename.Length - 4);
                     Image img = Image.FromStream(asm.GetManifestResourceStream(resname));
@@ -60,33 +60,39 @@ namespace EDDiscovery.Icons
             Icons["speaker"] = IconSet.GetIcon("Legacy.speaker");
         }
 
+        private static void LoadIconsFromDirectory(string path, string extension)
+        {
+            foreach (var file in Directory.EnumerateFiles(path, "*." + extension, SearchOption.AllDirectories))
+            {
+                string name = file.Substring(path.Length + 1).Replace('/', '.').Replace('\\', '.').Replace("." + extension, "");
+                Image img = null;
+
+                try
+                {
+                    img = Image.FromFile(file);
+                    img.Tag = name;
+                }
+                catch
+                {
+                    // Ignore any bad images
+                    continue;
+                }
+
+                if (!Icons.ContainsKey(name))
+                    System.Diagnostics.Debug.WriteLine("Icon Pack new unknown " + name);
+
+                Icons[name] = img;
+            }
+        }
+
         public static void LoadIconsFromDirectory(string path)      // tested 1/feb/2018
         {
             if (Directory.Exists(path))
             {
                 System.Diagnostics.Debug.WriteLine("Loading icons from " + path);
 
-                foreach (var file in Directory.EnumerateFiles(path, "*.png", SearchOption.AllDirectories))
-                {
-                    string name = file.Substring(path.Length + 1).Replace('/', '.').Replace('\\', '.').Replace(".png", "");
-                    Image img = null;
-
-                    try
-                    {
-                        img = Image.FromFile(file);
-                        img.Tag = name;
-                    }
-                    catch
-                    {
-                        // Ignore any bad images
-                        continue;
-                    }
-
-                    if (!Icons.ContainsKey(name))
-                        System.Diagnostics.Debug.WriteLine("Icon Pack new unknown " + name);
-
-                    Icons[name] = img;
-                }
+                LoadIconsFromDirectory(path, "png");
+                LoadIconsFromDirectory(path, "jpg");
             }
         }
 
@@ -100,7 +106,7 @@ namespace EDDiscovery.Icons
 
                     foreach (var entry in zipfile.Entries)
                     {
-                        if (entry.FullName.EndsWith(".png", StringComparison.InvariantCultureIgnoreCase))
+                        if (new[] { ".png", ".jpg" }.Any(e => entry.FullName.EndsWith(e, StringComparison.InvariantCultureIgnoreCase)))
                         {
                             string name = entry.FullName.Substring(0, entry.FullName.Length - 4).Replace('/', '.').Replace('\\', '.');
                             Image img = null;
