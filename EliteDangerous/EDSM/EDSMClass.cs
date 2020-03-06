@@ -214,7 +214,7 @@ namespace EliteDangerousCore.EDSM
 
         public List<string> GetUnknownSystemsForSector(string sectorName)
         {
-            string query = $"api-v1/systems?systemName={HttpUtility.UrlEncode(sectorName)}%20&onlyUnknownCoordinates=1";
+            string query = $"api-v1/systems?systemName={Uri.EscapeDataString(sectorName)}%20&onlyUnknownCoordinates=1";
             // 5s is occasionally slightly short for core sectors returning the max # systems (1000)
             return getSystemsForQuery(query, 10000);
         }
