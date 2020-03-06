@@ -48,11 +48,11 @@ namespace EliteDangerousCore.IGAU
         {
             JObject detail = new JObject();
             detail["input_1"] = timestamp;
-            detail["input_2"] = EntryID;
+            detail["input_2"] = EntryID.ToString();
             detail["input_3"] = Name;
             detail["input_4"] = Name_Localised;
             detail["input_5"] = System;
-            detail["input_6"] = SystemAddress;
+            detail["input_6"] = SystemAddress.ToString();
             detail["input_7"] = App_Name;
             detail["input_8"] = App_Version;
             JObject msg = new JObject();
