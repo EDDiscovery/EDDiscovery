@@ -21,6 +21,7 @@ using System.Drawing;
 using System.Reflection;
 using System.IO;
 using System.IO.Compression;
+using System.Globalization;
 
 namespace EDDiscovery.Icons
 {
@@ -43,6 +44,7 @@ namespace EDDiscovery.Icons
                 {
                     string name = resname.Substring(basename.Length, resname.Length - basename.Length - 4);
                     Image img = Image.FromStream(asm.GetManifestResourceStream(resname));
+                    name = SetImageTransparency(img, name);
                     img.Tag = name;
                     defaultIcons[name] = img;
                 }
@@ -60,6 +62,20 @@ namespace EDDiscovery.Icons
             Icons["speaker"] = IconSet.GetIcon("Legacy.speaker");
         }
 
+        private static string SetImageTransparency(Image image, string name)
+        {
+            int transparentcolour;
+
+            if (image is Bitmap && name.Length >= 9 && name[name.Length - 7] == '_' && name[name.Length - 8] == '_' && int.TryParse(name.Substring(name.Length - 6), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out transparentcolour))
+            {
+                var bmp = (Bitmap)image;
+                name = name.Substring(0, name.Length - 8);
+                bmp.MakeTransparent(Color.FromArgb(transparentcolour));
+            }
+
+            return name;
+        }
+
         private static void LoadIconsFromDirectory(string path, string extension)
         {
             foreach (var file in Directory.EnumerateFiles(path, "*." + extension, SearchOption.AllDirectories))
@@ -70,6 +86,7 @@ namespace EDDiscovery.Icons
                 try
                 {
                     img = Image.FromFile(file);
+                    name = SetImageTransparency(img, name);
                     img.Tag = name;
                 }
                 catch
@@ -118,6 +135,7 @@ namespace EDDiscovery.Icons
                                     var memstrm = new MemoryStream(); // Image will own this
                                     zipstrm.CopyTo(memstrm);
                                     img = Image.FromStream(memstrm);
+                                    name = SetImageTransparency(img, name);
                                     img.Tag = name;
                                 }
                             }
