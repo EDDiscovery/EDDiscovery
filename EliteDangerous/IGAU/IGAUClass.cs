@@ -81,23 +81,8 @@ namespace EliteDangerousCore.IGAU
                 {
                     var res = result["response"];
                     var errmsg = res?.Value<string>("errorMessage");
-
-                    if (errmsg != null)
-                    {
-                        Trace.WriteLine($"IGAU message post failed: {errmsg}");
-                        return false;
-                    }
-
-                    if (res.Value<bool?>("is_valid") == true)
-                    {
-                        recordSet = res["confirmation_message"]?.Value<bool?>("unique_record_holder") == true;
-                        return true;
-                    }
-                    else
-                    {
-                        System.Diagnostics.Trace.WriteLine($"IGAU message post failed - status: {res["validation_messages"].ToNullSafeString()}\nIGAU Message: {msg.ToString()}");
-                        return false;
-                    }
+                    Trace.WriteLine($"IGAU message post failed: {errmsg}");
+                    return false;
                 }
             }
             catch (System.Net.WebException ex)
