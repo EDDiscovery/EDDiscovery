@@ -63,10 +63,8 @@ namespace EliteDangerousCore.IGAU
             return detail;
         }
 
-        public bool PostMessage(JObject msg, out bool recordSet)
+        public bool PostMessage(JObject msg)
         {
-            recordSet = false;
-
             if (igau_address.IsEmpty())
                 return false;
 

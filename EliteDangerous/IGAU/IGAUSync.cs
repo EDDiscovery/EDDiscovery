@@ -91,9 +91,10 @@ namespace EliteDangerousCore.IGAU
 
                             // comment ball the ack in when your ready to try!
 
-                            igau.PostMessage(msg, out bool accepted);
-                            if (!accepted)
-                                logger?.Invoke("IGAU Message rejected " + he.EventTimeUTC.ToStringZulu());
+                            if (igau.PostMessage(msg))
+                            {
+                                logger?.Invoke("IGAU Message transmitted " + he.EventTimeUTC.ToStringZulu());
+                            }
                         }
 
                         eventcount++;
