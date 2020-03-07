@@ -85,7 +85,7 @@ namespace EliteDangerousCore.IGAU
                         if (c.VoucherAmount != null && c.VoucherAmount > 0)
                         {
                             var msg = igau.CreateIGAUMessage(he.EventTimeUTC.ToStringZulu(),
-                                                              c.EntryID.ToString(), c.Name, c.Name_Localised, c.System, c.SystemAddress.ToString() ?? "0");
+                                                              c.EntryID.ToString(), c.Name, c.Name_Localised, c.System, c.SystemAddress?.ToString() ?? "0");
 
                             System.Diagnostics.Debug.WriteLine("IGAU Post " + msg.ToString(Newtonsoft.Json.Formatting.Indented));
 
