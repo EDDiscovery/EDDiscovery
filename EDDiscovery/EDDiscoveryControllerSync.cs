@@ -73,7 +73,7 @@ namespace EDDiscovery
 
                 if (DateTime.UtcNow.Subtract(edsmdatetime).TotalDays >= 28)   // 600k ish per 12hours.  So 33MB.  Much less than a full download which is (23/1/2018) 2400MB, or 600MB compressed
                 {
-                    System.Diagnostics.Debug.WriteLine("EDSM full sync ordered, time since {0}", DateTime.UtcNow.Subtract(edsmdatetime).TotalDays);
+                    System.Diagnostics.Debug.WriteLine("EDSM Full system data download ordered, time since {0}", DateTime.UtcNow.Subtract(edsmdatetime).TotalDays);
                     syncstate.perform_edsm_fullsync = true;       // do a full sync.
                 }
 
@@ -86,14 +86,14 @@ namespace EDDiscovery
                 {
                     string databases = (syncstate.perform_edsm_fullsync && syncstate.perform_eddb_edsmalias_sync) ? "EDSM and EDDB" : ((syncstate.perform_edsm_fullsync) ? "EDSM" : "EDDB");
 
-                    LogLine(string.Format("Full synchronisation to the {0} databases required." + Environment.NewLine +
+                    LogLine(string.Format("Full system data download from {0} required." + Environment.NewLine +
                                     "This will take a while, please be patient." + Environment.NewLine +
                                     "Please continue running ED Discovery until refresh is complete.".T(EDTx.EDDiscoveryController_SyncEDSM), databases));
                 }
             }
             else
             {
-                LogLine("Synchronisation to EDSM and EDDB disabled. Use Settings panel to reenable".T(EDTx.EDDiscoveryController_SyncOff));
+                LogLine("Star Data download is disabled. Use Settings panel to reenable".T(EDTx.EDDiscoveryController_SyncOff));
             }
         }
 
@@ -108,7 +108,7 @@ namespace EDDiscovery
 
             if (EDDConfig.Instance.EDSMEDDBDownload)      // if no system off, and EDSM download on
             {
-                Debug.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Perform EDSM/EDDB sync");
+                Debug.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Perform System Data Download from EDSM/EDDB");
 
                 try
                 {
@@ -127,9 +127,9 @@ namespace EDDiscovery
                             {
                                 string edsmsystems = Path.Combine(EliteConfigInstance.InstanceOptions.AppDataDirectory, "edsmsystems.json.gz");
 
-                                ReportSyncProgress("Performing full download of EDSM Database from server");
+                                ReportSyncProgress("Performing full download of System Data from EDSM");
 
-                                Debug.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Full sync using URL " + EliteConfigInstance.InstanceConfig.EDSMFullSystemsURL);
+                                Debug.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Full system download using URL " + EliteConfigInstance.InstanceConfig.EDSMFullSystemsURL);
 
                                 bool success = BaseUtils.DownloadFile.HTTPDownloadFile(EliteConfigInstance.InstanceConfig.EDSMFullSystemsURL, edsmsystems, false, out bool newfile);
 
@@ -228,14 +228,14 @@ namespace EDDiscovery
             Debug.Assert(System.Windows.Forms.Application.MessageLoop);
 
             if (syncstate.edsm_fullsync_count > 0 || syncstate.edsm_updatesync_count > 0)
-                LogLine(string.Format("EDSM update complete with {0} systems".T(EDTx.EDDiscoveryController_EDSMU), syncstate.edsm_fullsync_count + syncstate.edsm_updatesync_count));
+                LogLine(string.Format("EDSM systems update complete with {0} systems".T(EDTx.EDDiscoveryController_EDSMU), syncstate.edsm_fullsync_count + syncstate.edsm_updatesync_count));
 
             if (syncstate.eddb_sync_count > 0)
-                LogLine(string.Format("EDDB update complete with {0} systems".T(EDTx.EDDiscoveryController_EDDBU), syncstate.eddb_sync_count));
+                LogLine(string.Format("EDDB systems update complete with {0} systems".T(EDTx.EDDiscoveryController_EDDBU), syncstate.eddb_sync_count));
 
             if (syncstate.edsm_fullsync_count > 0 || syncstate.eddb_sync_count > 0 || syncstate.edsm_updatesync_count > 20000)   // if we have done a resync, or a major update sync (arb no)
             {
-                LogLine("Refresh due to updating EDSM or EDDB data".T(EDTx.EDDiscoveryController_Refresh));
+                LogLine("Refresh due to updating EDSM or EDDB system data".T(EDTx.EDDiscoveryController_Refresh));
                 RefreshHistoryAsync();
             }
 

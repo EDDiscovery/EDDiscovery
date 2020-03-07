@@ -49,15 +49,12 @@ namespace EliteDangerousCore.IGAU
 
         public JObject CreateIGAUMessage(string timestamp, string EntryID, string Name, string Name_Localised, string System, string SystemAddress)
         {
-            Name_Stripped = Name
-                .Replace("$", string.Empty)
-                .Replace("_Name", string.Empty)
-                .Replace(";", string.Empty);
+            var stripped = Name?.ToLowerInvariant()?.Replace("$", "")?.Replace("_name;", "");
 
             JObject detail = new JObject();
             detail["timestamp"] = timestamp;
             detail["EntryID"] = EntryID.ToString();
-            detail["Name"] = (Name_Stripped).ToLower();
+            detail["Name"] = stripped;
             detail["Name_Localised"] = Name_Localised;
             detail["System"] = System;
             detail["SystemAddress"] = SystemAddress.ToString();
@@ -76,17 +73,18 @@ namespace EliteDangerousCore.IGAU
             try
             {
                 BaseUtils.ResponseData resp = RequestPost(msg.ToString(), "");
-                JObject result = JObject.Parse(resp.Body);
-                JObject res = (JObject)result["response"];
-                if ((bool)res["is_valid"])
+
+                var result = JToken.Parse(resp.Body);
+
+                if (result.Value<string>() == "SUCCESS")
                 {
-                    JObject conf = (JObject)res["confirmation_message"];
-                    recordSet = (bool)conf["unique_record_holder"];
                     return true;
                 }
                 else
                 {
-                    System.Diagnostics.Trace.WriteLine($"IGAU message post failed - status: {res["validation_messages"].ToNullSafeString()}\nIGAU Message: {msg.ToString()}");
+                    var res = result["response"];
+                    var errmsg = res?.Value<string>("errorMessage");
+                    Trace.WriteLine($"IGAU message post failed: {errmsg}");
                     return false;
                 }
             }

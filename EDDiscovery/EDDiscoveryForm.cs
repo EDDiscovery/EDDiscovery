@@ -1454,7 +1454,7 @@ namespace EDDiscovery
             RefreshHistoryAsync();
         }
 
-        private void buttonExtEDSMSync_Click(object sender, EventArgs e)
+        private void SendUnsyncedJournalsToEDSM()
         {
             EDSMClass edsm = new EDSMClass();
 
@@ -1483,7 +1483,16 @@ namespace EDDiscovery
             {
                 LogLine(string.Format("EDSM Sync failed: {0}".T(EDTx.EDDiscoveryForm_EDSMSyncE), ex.Message));
             }
+        }
 
+        private void buttonExtEDSMSync_Click(object sender, EventArgs e)
+        {
+            SendUnsyncedJournalsToEDSM();
+        }
+
+        private void sendUnsyncedEDSMJournalsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SendUnsyncedJournalsToEDSM();
         }
 
         #endregion

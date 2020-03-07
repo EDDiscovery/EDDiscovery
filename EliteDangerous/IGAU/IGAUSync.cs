@@ -89,10 +89,13 @@ namespace EliteDangerousCore.IGAU
 
                             System.Diagnostics.Debug.WriteLine("IGAU Post " + msg.ToString(Newtonsoft.Json.Formatting.Indented));
 
+                            // comment ball the ack in when your ready to try!
+
                             igau.PostMessage(msg, out bool accepted);
-                            //if (!accepted)
-                            //logger?.Invoke("IGAU Message rejected " + he.EventTimeUTC.ToStringZulu());
+                            if (!accepted)
+                                logger?.Invoke("IGAU Message rejected " + he.EventTimeUTC.ToStringZulu());
                         }
+
                         eventcount++;
                     }
                     catch (Exception ex)
