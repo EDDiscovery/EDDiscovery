@@ -82,12 +82,10 @@ namespace EliteDangerousCore.IGAU
                     {
                         hlscanevent.Reset();
                         JournalCodexEntry c = he.journalEntry as JournalCodexEntry;
-
                         if (c.VoucherAmount != null && c.VoucherAmount > 0)
                         {
-
                             var msg = igau.CreateIGAUMessage(he.EventTimeUTC.ToStringZulu(),
-                                                                  c.EntryID, c.Name, c.Name_Localised, c.System, c.SystemAddress ?? 0);
+                                                              c.EntryID.ToString(), c.Name, c.Name_Localised, c.System, c.SystemAddress.ToString() ?? "0");
 
                             System.Diagnostics.Debug.WriteLine("IGAU Post " + msg.ToString(Newtonsoft.Json.Formatting.Indented));
 

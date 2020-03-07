@@ -44,7 +44,10 @@ namespace EliteDangerousCore.IGAU
             App_Version = assemblyFullName.Split(',')[1].Split('=')[1];
         }
 
-        public JObject CreateIGAUMessage(string timestamp, long EntryID, string Name, string Name_Localised, string System, long SystemAddress)
+        public string Name_Stripped { get; private set; }
+        public string Name_Lower { get; private set; }
+
+        public JObject CreateIGAUMessage(string timestamp, string EntryID, string Name, string Name_Localised, string System, string SystemAddress)
         {
             var stripped = Name?.ToLowerInvariant()?.Replace("$", "")?.Replace("_name;", "");
 
