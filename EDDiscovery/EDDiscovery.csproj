@@ -176,6 +176,7 @@
   <ItemGroup>
     <Compile Include="Actions\ActionControllerKeys.cs" />
     <Compile Include="Actions\ActionControllerVoice.cs" />
+    <Content Include="ExtraVersion.cs" />
     <Compile Include="Translations\EDDiscoveryTranslations.cs" />
     <Compile Include="UserControls\Helpers\CSVHelpers.cs" />
     <Compile Include="WebServer\WebServer.cs" />
@@ -264,7 +265,6 @@
     <Compile Include="EDDProfiles.cs" />
     <Compile Include="Installer.cs" />
     <Compile Include="Notifications.cs" />
-    <Compile Include="Properties\ExtraVersion.cs" />
     <Compile Include="ScreenShots\ScreenShotConfigureForm.cs">
       <SubType>Form</SubType>
     </Compile>
