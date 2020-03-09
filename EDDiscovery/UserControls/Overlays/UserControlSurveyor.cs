@@ -53,6 +53,7 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
 
             // set context menu checkboxes
+            showValuesToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "showValues", true);
             ammoniaWorldToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "showAmmonia", true);
             earthlikeWorldToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "showEarthlike", true);
             waterWorldToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "showWaterWorld", true);
@@ -65,7 +66,7 @@ namespace EDDiscovery.UserControls
             checkEDSMForInformationToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "edsm", false);
             showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "showsysinfo", true);
             dontHideInFSSModeToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "donthidefssmode", true);
-            hasSignalsToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "signals", true );
+            hasSignalsToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "signals", true );            
 
             SetAlign((StringAlignment)EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(DbSave + "align", 0));
 
@@ -237,7 +238,7 @@ namespace EDDiscovery.UserControls
 
                     long value = systemnode.ScanValue(false);
 
-                    if ( value > 0 )
+                    if ( value > 0  && showValuesToolStripMenuItem.Checked )
                     {
                         infoline = infoline.AppendPrePad("~ " + value.ToString("N0") + " cr", "; ");
                     }
@@ -299,7 +300,7 @@ namespace EDDiscovery.UserControls
                             }
                         }
 
-                        if (value>0)
+                        if (value > 0 && showValuesToolStripMenuItem.Checked )
                         {
                             pictureBoxSurveyor.AddTextFixedSizeC(
                                 new Point(3, vpos),
@@ -346,14 +347,35 @@ namespace EDDiscovery.UserControls
             information.Append(@" " + sd.DistanceFromArrivalText);
 
             if (sd.WasMapped == true && sd.WasDiscovered == true)
-                information.Append(" (Mapped & Discovered)".T(EDTx.UserControlSurveyor_MandD) + " " + sd.EstimatedValueBase.ToString("N0") + " cr");
-            else if (sd.WasMapped == true)
-                information.Append(" (Mapped)".T(EDTx.UserControlSurveyor_MP) + " " + sd.EstimatedValueBase.ToString("N0") + " cr");
-            else if (sd.WasDiscovered == true)
-                information.Append(" (Discovered)".T(EDTx.UserControlSurveyor_DIS) + " " + sd.EstimatedValueFirstMappedEfficiently.ToString("N0") + " cr");
+            {
+                information.Append(" (Mapped & Discovered)".T(EDTx.UserControlSurveyor_MandD));
+                if (showValuesToolStripMenuItem.Checked)
+                {
+                    information.Append(" " + sd.EstimatedValueBase.ToString("N0") + " cr");
+                }
+            }
+            else if (sd.WasMapped == true && sd.WasDiscovered == false)
+            {
+                information.Append(" (Mapped)".T(EDTx.UserControlSurveyor_MP));
+                if (showValuesToolStripMenuItem.Checked)
+                {
+                    information.Append(" " + sd.EstimatedValueBase.ToString("N0") + " cr");
+                }
+            }
+            else if (sd.WasDiscovered == true && sd.WasMapped == false)
+            {
+                information.Append(" (Discovered)".T(EDTx.UserControlSurveyor_DIS));
+                if (showValuesToolStripMenuItem.Checked)
+                {
+                    information.Append(" " + sd.EstimatedValueFirstMappedEfficiently.ToString("N0") + " cr");
+                }
+            }
             else
             {       // cope with old versions
-                information.Append(" " + (sd.EstimatedValueFirstDiscoveredFirstMappedEfficiently > 0 ? sd.EstimatedValueFirstDiscoveredFirstMappedEfficiently : sd.EstimatedValueBase).ToString("N0") + " cr");
+                if (showValuesToolStripMenuItem.Checked)
+                {
+                    information.Append(" " + (sd.EstimatedValueFirstDiscoveredFirstMappedEfficiently > 0 ? sd.EstimatedValueFirstDiscoveredFirstMappedEfficiently : sd.EstimatedValueBase).ToString("N0") + " cr");
+                }
             }
             return information.ToString();
         }
@@ -439,6 +461,12 @@ namespace EDDiscovery.UserControls
             DrawSystem(last_sys);
         }
 
+        private void showValuesToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
+        {
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "showValues", showValuesToolStripMenuItem.Checked);
+            DrawSystem(last_sys);
+        }
+
         private void leftToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SetAlign(StringAlignment.Near);
@@ -469,7 +497,6 @@ namespace EDDiscovery.UserControls
         private void UserControlSurveyor_Resize(object sender, EventArgs e)
         {
             DrawSystem(last_sys);
-        }
-
+        }        
     }
 }
