@@ -1106,7 +1106,7 @@
   </UsingTask>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup Condition=" '$(OS)' != 'Unix' ">
-    <PostBuildEvent>xcopy /Y /S ..\..\x86\Microsoft.VC100.CRT x86\Microsoft.VC100.CRT\
+    <PostBuildEvent>xcopy /Y /S $(MSBuildProjectDirectory)\x86\Microsoft.VC100.CRT x86\Microsoft.VC100.CRT\
 </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
