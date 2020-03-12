@@ -756,28 +756,33 @@ namespace EDDiscovery.UserControls
             }
 
             showInEDSMToolStripMenuItem.Enabled = rightclickrow != -1 && dataGridViewRoute.Rows[rightclickrow].Tag != null;
+            showScanToolStripMenuItem.Enabled = rightclickrow != -1 && dataGridViewRoute.Rows[rightclickrow].Tag != null;
+            copyToolStripMenuItem.Enabled = dataGridViewRoute.GetCellCount(DataGridViewElementStates.Selected) > 0;
         }
-                                                                    
+
         private void showInEDSMToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ISystem sys = dataGridViewRoute.Rows[rightclickrow].Tag as ISystem;
-
-            if (sys!=null) // paranoia because it should not be enabled otherwise
+            if (rightclickrow >= 0)
             {
-                this.Cursor = Cursors.WaitCursor;
+                ISystem sys = dataGridViewRoute.Rows[rightclickrow].Tag as ISystem;
 
-                EliteDangerousCore.EDSM.EDSMClass edsm = new EDSMClass();
-                long? id_edsm = sys.EDSMID;
-
-                if (id_edsm <= 0)
+                if (sys != null) // paranoia because it should not be enabled otherwise
                 {
-                    id_edsm = null;
+                    this.Cursor = Cursors.WaitCursor;
+
+                    EliteDangerousCore.EDSM.EDSMClass edsm = new EDSMClass();
+                    long? id_edsm = sys.EDSMID;
+
+                    if (id_edsm <= 0)
+                    {
+                        id_edsm = null;
+                    }
+
+                    if (!edsm.ShowSystemInEDSM(sys.Name, id_edsm))
+                        ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable");
+
+                    this.Cursor = Cursors.Default;
                 }
-
-                if (!edsm.ShowSystemInEDSM(sys.Name, id_edsm))
-                    ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable");
-
-                this.Cursor = Cursors.Default;
             }
         }
 
@@ -795,8 +800,11 @@ namespace EDDiscovery.UserControls
 
         private void showScanToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ISystem sys = dataGridViewRoute.Rows[rightclickrow].Tag as ISystem;
-            ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), sys, true, discoveryform.history);    // protected against sys = null
+            if (rightclickrow >= 0)
+            {
+                ISystem sys = dataGridViewRoute.Rows[rightclickrow].Tag as ISystem;
+                ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), sys, true, discoveryform.history);    // protected against sys = null
+            }
         }
 
 
