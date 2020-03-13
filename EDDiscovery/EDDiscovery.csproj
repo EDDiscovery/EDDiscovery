@@ -13,7 +13,8 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <UseWindowsForms>true</UseWindowsForms>
     <UseWPF>true</UseWPF>
-  </PropertyGroup>
+    <EmbeddedResourceUseDependentUponConvention>true</EmbeddedResourceUseDependentUponConvention>
+</PropertyGroup>
   <PropertyGroup Condition="'$(OS)' == 'Windows_NT' and '$(NETCoreSdkVersion)' != '' and '$(NETCoreSdkVersion.Substring(0, 1))' == '3'">
     <TargetFrameworks>net461;netcoreapp3.0</TargetFrameworks>
   </PropertyGroup>
