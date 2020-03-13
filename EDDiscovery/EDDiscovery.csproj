@@ -230,9 +230,8 @@
     </Task>
   </UsingTask>
   <Target Name="DeleteExtraInterop" AfterTargets="Build" BeforeTargets="MakeZip">
-    <PropertyGroup Condition="'$(OutDir)' == ''">
-      <OutDir>$(MSBuildProjectDirectory)\bin\$(Configuration)\net461\</OutDir>
-      <TargetPath>$(OutDir)EDDiscovery.exe</TargetPath>
+    <PropertyGroup>
+      <OutDir Condition=" '$(OutDir)' == '' ">$(OutputPath)</OutDir>
     </PropertyGroup>
     <ItemGroup>
       <ExtraSQLiteInterop Include="$(OutDir)SQLite.Interop.dll" />
@@ -240,9 +239,9 @@
     <Delete Files="@(ExtraSQLiteInterop)" Condition="Exists('$(OutDir)SQLite.Interop.dll')" />
   </Target>
   <Target Name="MakeZip" Condition=" '$(OS)' != 'Unix' " AfterTargets="Build">
-    <PropertyGroup Condition="'$(OutDir)' == ''">
-      <OutDir>$(MSBuildProjectDirectory)\bin\$(Configuration)\net461\</OutDir>
-      <TargetPath>$(OutDir)EDDiscovery.exe</TargetPath>
+    <PropertyGroup>
+      <OutDir Condition=" '$(OutDir)' == '' ">$(OutputPath)</OutDir>
+      <TargetPath Condition=" '$(TargetPath)' == '' ">$(OutDir)EDDiscovery.exe</TargetPath>
     </PropertyGroup>
     <Error Condition="!Exists('$(OutDir)EDDiscovery.exe')" Text="$(OutDir)EDDiscovery.exe not found" />
     <ItemGroup>
@@ -275,10 +274,11 @@
     <Error Condition="!Exists('$(OutDir)EDDiscovery.Portable.zip')" Text="Unknown error in BuildPortableZip." />
   </Target>
   <Target Name="CleanZipFile" AfterTargets="Clean">
-    <PropertyGroup Condition="'$(OutDir)' == ''">
-      <OutDir>$(MSBuildProjectDirectory)\bin\$(Configuration)\net461\</OutDir>
+    <PropertyGroup>
+      <OutDir Condition=" '$(OutDir)' == '' ">$(OutputPath)</OutDir>
     </PropertyGroup>
     <Delete Files="$(OutDir)EDDiscovery.Portable.zip" />
+    <Delete Files="$(OutDir)eddwebsite.zip" />
   </Target>
   <Target Name="Version" BeforeTargets="Build">
     <PropertyGroup Condition=" '$(OS)' != 'Unix' ">
