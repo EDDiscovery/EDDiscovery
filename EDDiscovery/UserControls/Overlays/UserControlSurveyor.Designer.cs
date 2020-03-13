@@ -67,6 +67,7 @@ namespace EDDiscovery.UserControls
             this.leftToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.centerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rightToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showValuesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSurveyor)).BeginInit();
             this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
@@ -92,9 +93,10 @@ namespace EDDiscovery.UserControls
             this.autoHideToolStripMenuItem,
             this.dontHideInFSSModeToolStripMenuItem,
             this.showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem,
+            this.showValuesToolStripMenuItem,
             this.textAlignToolStripMenuItem});
             this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(226, 208);
+            this.contextMenuStrip.Size = new System.Drawing.Size(226, 230);
             // 
             // planetaryClassesToolStripMenuItem
             // 
@@ -269,6 +271,16 @@ namespace EDDiscovery.UserControls
             this.rightToolStripMenuItem.Size = new System.Drawing.Size(109, 22);
             this.rightToolStripMenuItem.Text = "Right";
             // 
+            // showValuesToolStripMenuItem
+            // 
+            this.showValuesToolStripMenuItem.Checked = true;
+            this.showValuesToolStripMenuItem.CheckOnClick = true;
+            this.showValuesToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.showValuesToolStripMenuItem.Name = "showValuesToolStripMenuItem";
+            this.showValuesToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
+            this.showValuesToolStripMenuItem.Text = "Show values";
+            this.showValuesToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.showValuesToolStripMenuItem_CheckStateChanged);
+            // 
             // UserControlSurveyor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -308,5 +320,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripMenuItem showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem dontHideInFSSModeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem hasSignalsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem showValuesToolStripMenuItem;
     }
 }

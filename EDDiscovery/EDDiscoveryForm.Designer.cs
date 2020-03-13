@@ -87,6 +87,7 @@ namespace EDDiscovery
             this.adminToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.forceEDDBUpdateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.syncEDSMSystemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sendUnsyncedEDSMJournalsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fetchLogsAgainToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fetchStarDataAgainToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showLogfilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -605,6 +606,7 @@ namespace EDDiscovery
             // syncEDSMSystemsToolStripMenuItem
             // 
             this.syncEDSMSystemsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.sendUnsyncedEDSMJournalsToolStripMenuItem,
             this.fetchLogsAgainToolStripMenuItem,
             this.fetchStarDataAgainToolStripMenuItem});
             this.syncEDSMSystemsToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.Main_Admin_EDSMSystemsSync;
@@ -618,6 +620,13 @@ namespace EDDiscovery
             this.fetchLogsAgainToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
             this.fetchLogsAgainToolStripMenuItem.Text = "Fetch Logs Again";
             this.fetchLogsAgainToolStripMenuItem.Click += new System.EventHandler(this.fetchLogsAgainToolStripMenuItem_Click);
+            //
+            // sendUnsyncedEDSMJournalsToolStripMenuItem
+            //
+            this.sendUnsyncedEDSMJournalsToolStripMenuItem.Name = "sendUnsyncedEDSMJournalsToolStripMenuItem";
+            this.sendUnsyncedEDSMJournalsToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
+            this.sendUnsyncedEDSMJournalsToolStripMenuItem.Text = "Send Unsynced Journals To EDSM";
+            this.sendUnsyncedEDSMJournalsToolStripMenuItem.Click += new System.EventHandler(sendUnsyncedEDSMJournalsToolStripMenuItem_Click);
             // 
             // fetchStarDataAgainToolStripMenuItem
             // 
@@ -1030,6 +1039,7 @@ namespace EDDiscovery
         private System.Windows.Forms.ToolStripMenuItem forceEDDBUpdateToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem syncEDSMSystemsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem fetchLogsAgainToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem sendUnsyncedEDSMJournalsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem fetchStarDataAgainToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showLogfilesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem;

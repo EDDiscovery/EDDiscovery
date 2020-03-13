@@ -43,6 +43,7 @@ namespace EliteDangerousCore.JournalEvents
             NearestDestination_Localised = JournalFieldNaming.CheckLocalisation(evt["NearestDestination_Localised"].StrNull(), NearestDestination);
             if ( evt["Traits"] != null )
                 Traits = evt["Traits"].ToObjectProtected<string[]>();
+            VoucherAmount = evt["VoucherAmount"].LongNull();
         }
 
         public long EntryID { get; set; }
@@ -58,6 +59,7 @@ namespace EliteDangerousCore.JournalEvents
         public long? SystemAddress { get; set; }
         public bool? IsNewEntry { get; set; }
         public bool? NewTraitsDiscovered { get; set; }
+        public long? VoucherAmount { get; set; }
         public string [] Traits { get; set; }
         public string NearestDestination { get; set; }
         public string NearestDestination_Localised { get; set; }

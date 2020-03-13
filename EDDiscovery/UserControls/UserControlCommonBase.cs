@@ -211,6 +211,7 @@ namespace EDDiscovery.UserControls
         {
             if (EliteDangerousCore.DB.UserDatabase.Instance.KeyExists(root + "1"))        // if stored values, set back to what they were..
             {
+                dgv.SuspendLayout();
                 for (int i = 0; i < dgv.Columns.Count; i++)
                 {
                     string k = root + (i + 1).ToString();
@@ -231,6 +232,7 @@ namespace EDDiscovery.UserControls
                         dgv.RowHeadersWidth = (int)(sz.Width + 6);        // size it to the text, need a little more for rounding
                     }
                 }
+                dgv.ResumeLayout();
             }
         }
 
