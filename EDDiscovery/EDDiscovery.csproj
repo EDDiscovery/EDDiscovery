@@ -229,6 +229,16 @@
       ]]></Code>
     </Task>
   </UsingTask>
+  <Target Name="DeleteExtraInterop" AfterTargets="Build" BeforeTargets="MakeZip">
+    <PropertyGroup Condition="'$(OutDir)' == ''">
+      <OutDir>$(MSBuildProjectDirectory)\bin\$(Configuration)\net461\</OutDir>
+      <TargetPath>$(OutDir)EDDiscovery.exe</TargetPath>
+    </PropertyGroup>
+    <ItemGroup>
+      <ExtraSQLiteInterop Include="$(OutDir)SQLite.Interop.dll" />
+    </ItemGroup>
+    <Delete Files="@(ExtraSQLiteInterop)" Condition="Exists('$(OutDir)SQLite.Interop.dll')" />
+  </Target>
   <Target Name="MakeZip" Condition=" '$(OS)' != 'Unix' " AfterTargets="Build">
     <PropertyGroup Condition="'$(OutDir)' == ''">
       <OutDir>$(MSBuildProjectDirectory)\bin\$(Configuration)\net461\</OutDir>
