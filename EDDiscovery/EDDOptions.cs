@@ -127,6 +127,10 @@ namespace EDDiscovery
                     case "resetlanguage": ResetLanguage = true; break;
                     case "tempdirindatadir": TempDirInDataDir = true; break;
                     case "notempdirindatadir": TempDirInDataDir = false; break;
+                    case "lowpriority": LowPriority = true; break;
+                    case "nolowpriority": LowPriority = false; break;
+                    case "backgroundpriority": BackgroundPriority = true; break;
+                    case "nobackgroundpriority": BackgroundPriority = false; break;
                     default:
                         System.Diagnostics.Debug.WriteLine($"Unrecognized option -{opt}");
                         break;
@@ -191,6 +195,8 @@ namespace EDDiscovery
         public string Profile { get; set; }                   // set profile, null if not
         public bool TempDirInDataDir { get; set; }
         public string WebServerFolder { get; set; }             // normally empty, so selections zip server
+        public bool LowPriority { get; set; }
+        public bool BackgroundPriority { get; set; }
 
         public string SubAppDirectory(string subfolder)     // ensures its there.. name without \ slashes
         {
