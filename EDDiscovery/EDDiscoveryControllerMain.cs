@@ -152,6 +152,15 @@ namespace EDDiscovery
                 FirstChanceExceptionCatcher.RegisterFirstChanceExceptionHandler();
             }
 
+            if (EDDOptions.Instance.BackgroundPriority)
+            {
+                Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.Idle;
+            }
+            else if (EDDOptions.Instance.LowPriority)
+            {
+                Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.BelowNormal;
+            }
+
             msg.Invoke("Checking Databases");
 
             Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Initializing database");
