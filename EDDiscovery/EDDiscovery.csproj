@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk" InitialTargets="Version">
   <Import Sdk="Microsoft.NET.Sdk.WindowsDesktop" Project="Sdk.props" Condition="'$(TargetFramework)' == 'netcoreapp3.0'"/>
   <PropertyGroup>
     <ProjectGuid>{6EE10D92-E3E4-44D9-8E6B-851801B0B510}</ProjectGuid>
@@ -230,21 +230,13 @@
       ]]></Code>
     </Task>
   </UsingTask>
-  <Target Name="DeleteExtraInterop" AfterTargets="Build" BeforeTargets="MakeZip">
-    <PropertyGroup>
-      <OutDir Condition=" '$(OutDir)' == '' ">$(OutputPath)</OutDir>
-    </PropertyGroup>
+  <Target Name="DeleteExtraInterop" AfterTargets="Build" Condition=" '$(OutDir)' != '' and Exists('$(OutDir)') ">
     <ItemGroup>
       <ExtraSQLiteInterop Include="$(OutDir)SQLite.Interop.dll" />
     </ItemGroup>
     <Delete Files="@(ExtraSQLiteInterop)" Condition="Exists('$(OutDir)SQLite.Interop.dll')" />
   </Target>
-  <Target Name="MakeZip" Condition=" '$(OS)' != 'Unix' " AfterTargets="Build">
-    <PropertyGroup>
-      <OutDir Condition=" '$(OutDir)' == '' ">$(OutputPath)</OutDir>
-      <TargetPath Condition=" '$(TargetPath)' == '' ">$(OutDir)EDDiscovery.exe</TargetPath>
-    </PropertyGroup>
-    <Error Condition="!Exists('$(OutDir)EDDiscovery.exe')" Text="$(OutDir)EDDiscovery.exe not found" />
+  <Target Name="MakeZip" Condition=" '$(OS)' != 'Unix' and '$(OutDir)' != '' and Exists('$(TargetPath)') " AfterTargets="Build">
     <ItemGroup>
       <WebFiles Include="$(MSBuildProjectDirectory)\..\WebSite\EDD\**" />
     </ItemGroup>
