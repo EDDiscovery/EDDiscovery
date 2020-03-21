@@ -227,14 +227,14 @@ namespace EliteDangerousCore.Inara
                 case JournalTypeEnum.Docked:  // VERIFIED 18/5/2018 from historic upload test
                     {
                         var je = he.journalEntry as JournalDocked;
-                        eventstosend.Add(InaraClass.addCommanderTravelDock(he.ShipInformation.ShipFD, he.ShipInformation.ID, je.StarSystem, je.StationName, je.MarketID, he.EventTimeUTC));
+                        eventstosend.Add(InaraClass.addCommanderTravelDock(he.ShipInformation?.ShipFD, he.ShipInformation?.ID, je.StarSystem, je.StationName, je.MarketID, he.EventTimeUTC));
                         break;
                     }
 
                 case JournalTypeEnum.FSDJump: // VERIFIED 18/5/2018
                     {
                         var je = he.journalEntry as JournalFSDJump;
-                        eventstosend.Add(InaraClass.addCommanderTravelFSDJump(he.ShipInformation.ShipFD, he.ShipInformation.ID, je.StarSystem, je.JumpDist, he.EventTimeUTC));
+                        eventstosend.Add(InaraClass.addCommanderTravelFSDJump(he.ShipInformation?.ShipFD, he.ShipInformation?.ID, je.StarSystem, je.JumpDist, he.EventTimeUTC));
                         break;
                     }
 

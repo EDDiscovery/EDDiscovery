@@ -434,7 +434,7 @@ namespace EliteDangerousCore.Inara
             return Event("setCommanderShipTransfer", dt, eventData);
         }
 
-        static public JToken addCommanderTravelDock(string fdname, int id, string starsystem, string station, long ? marketid, DateTime dt)
+        static public JToken addCommanderTravelDock(string fdname, int? id, string starsystem, string station, long ? marketid, DateTime dt)
         {
             JObject eventData = new JObject();
             eventData["shipType"] = fdname;
@@ -446,7 +446,7 @@ namespace EliteDangerousCore.Inara
             return Event("addCommanderTravelDock", dt, eventData);
         }
 
-        static public JToken addCommanderTravelFSDJump(string fdname, int id, string starsystem, double distance, DateTime dt)
+        static public JToken addCommanderTravelFSDJump(string fdname, int? id, string starsystem, double distance, DateTime dt)
         {
             JObject eventData = new JObject();
             eventData["shipType"] = fdname;
