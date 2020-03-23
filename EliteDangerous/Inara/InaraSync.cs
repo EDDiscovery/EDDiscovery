@@ -194,7 +194,7 @@ namespace EliteDangerousCore.Inara
                     {
                         var je = he.journalEntry as JournalLoadout;
                         var si = he.ShipInformation;
-                        if (je.ShipFD.HasChars() && !ShipModuleData.IsSRVOrFighter(je.ShipFD)) // if it has an FDname (defensive) and is not SRV/Fighter
+                        if (si != null && je.ShipFD.HasChars() && !ShipModuleData.IsSRVOrFighter(je.ShipFD)) // if it has an FDname (defensive) and is not SRV/Fighter
                         {
                             if (je.ShipId == si.ID)
                             {
@@ -226,15 +226,21 @@ namespace EliteDangerousCore.Inara
 
                 case JournalTypeEnum.Docked:  // VERIFIED 18/5/2018 from historic upload test
                     {
-                        var je = he.journalEntry as JournalDocked;
-                        eventstosend.Add(InaraClass.addCommanderTravelDock(he.ShipInformation.ShipFD, he.ShipInformation.ID, je.StarSystem, je.StationName, je.MarketID, he.EventTimeUTC));
+                        if (he.ShipInformation != null)     // PR2754 error - a empty list can end up with he.shipinformation = null if all is hidden.
+                        {
+                            var je = he.journalEntry as JournalDocked;
+                            eventstosend.Add(InaraClass.addCommanderTravelDock(he.ShipInformation.ShipFD, he.ShipInformation.ID, je.StarSystem, je.StationName, je.MarketID, he.EventTimeUTC));
+                        }
                         break;
                     }
 
                 case JournalTypeEnum.FSDJump: // VERIFIED 18/5/2018
                     {
-                        var je = he.journalEntry as JournalFSDJump;
-                        eventstosend.Add(InaraClass.addCommanderTravelFSDJump(he.ShipInformation.ShipFD, he.ShipInformation.ID, je.StarSystem, je.JumpDist, he.EventTimeUTC));
+                        if (he.ShipInformation != null)     // PR2754 error - a empty list can end up with he.shipinformation = null if all is hidden.
+                        {
+                            var je = he.journalEntry as JournalFSDJump;
+                            eventstosend.Add(InaraClass.addCommanderTravelFSDJump(he.ShipInformation.ShipFD, he.ShipInformation.ID, je.StarSystem, je.JumpDist, he.EventTimeUTC));
+                        }
                         break;
                     }
 
