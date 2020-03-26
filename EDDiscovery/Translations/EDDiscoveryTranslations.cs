@@ -207,6 +207,7 @@ namespace EDDiscovery
         UserControlMaterialCommodities_Mats, // Data !! NOTE
         UserControlMaterialCommodities_Total, // Data !! NOTE
         UserControlMaterialCommodities_Rare, // Rare !! NOTE
+        UserControlMaterialCommodities_Recipes, // Recipes !! NOTE
 
         UserControlMissions_MPlural, //  Missions
         UserControlMissions_MSingular, //  Mission

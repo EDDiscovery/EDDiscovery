@@ -32,6 +32,7 @@ namespace EDDiscovery.UserControls
         private string DbColumnSave { get { return DBName((materials) ? "MaterialsGrid" : "CommoditiesGrid",  "DGVCol"); } }
         private string DbFilterSave { get { return DBName((materials) ? "MaterialsGrid" : "CommoditiesGrid", "Filter2"); } }
         private string DbClearZeroSave { get { return DBName((materials) ? "MaterialsGrid" : "CommoditiesGrid", "ClearZero"); } }
+        private string DbTruncateText { get { return DBName((materials) ? "MaterialsGrid" : "CommoditiesGrid", "WrapText"); } }
 
         MaterialCommoditiesList last_mcl;
 
@@ -46,7 +47,6 @@ namespace EDDiscovery.UserControls
         public override void Init()
         {
             dataGridViewMC.MakeDoubleBuffered();
-            dataGridViewMC.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
 
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
@@ -60,7 +60,7 @@ namespace EDDiscovery.UserControls
 
             if (materials)
             {
-                dataGridViewMC.Columns.Remove(dataGridViewMC.Columns[5]);       // to give name,shortname abv,category,type,number
+                dataGridViewMC.Columns[5].HeaderText = "Recipes".T(EDTx.UserControlMaterialCommodities_Recipes);
                 labelItems1.Text = "Data".T(EDTx.UserControlMaterialCommodities_Data);
                 labelItems2.Text = "Mats".T(EDTx.UserControlMaterialCommodities_Mats);
 
@@ -77,8 +77,14 @@ namespace EDDiscovery.UserControls
             }
             else
             {
-                dataGridViewMC.Columns.Remove(dataGridViewMC.Columns[1]);       //shortname
-                dataGridViewMC.Columns.Remove(dataGridViewMC.Columns[1]);       //then category to give name,type,number, avg price
+                dataGridViewMC.Columns.Remove(dataGridViewMC.Columns[1]);       //remove cat
+
+                DataGridViewColumn c = dataGridViewMC.Columns[1];       // reassign column 1 to end and call recipes
+                c.HeaderText = "Recipes".T(EDTx.UserControlMaterialCommodities_Recipes);
+                c.DisplayIndex = 4; // need to change its display pos
+                dataGridViewMC.Columns.Remove(c);   // and to place it at the end otherwise it does not fill in the right order
+                dataGridViewMC.Columns.Add(c);
+
                 labelItems1.Text = "Total".T(EDTx.UserControlMaterialCommodities_Total);
                 textBoxItems2.Visible = labelItems2.Visible = false;
                 checkBoxClear.Location = new Point(textBoxItems1.Right + 8, checkBoxClear.Top);
@@ -101,6 +107,12 @@ namespace EDDiscovery.UserControls
 
             checkBoxClear.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbClearZeroSave, true);
             checkBoxClear.CheckedChanged += CheckBoxClear_CheckedChanged;
+
+            extCheckBoxTruncateText.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbTruncateText, true);
+            extCheckBoxTruncateText.CheckedChanged += TruncateText_CheckedChanged;
+
+            dataGridViewMC.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+            dataGridViewMC.AutoSizeRowsMode = extCheckBoxTruncateText.Checked ? DataGridViewAutoSizeRowsMode.None : DataGridViewAutoSizeRowsMode.AllCells;
 
             cfs.SaveSettings += FilterChanged;
         }
@@ -178,21 +190,6 @@ namespace EDDiscovery.UserControls
 
                     if (!clearzero || (m != null && m.Count > 0))       // if display zero, or we have some..
                     {
-                        if (materials)
-                        {
-                            int limit = mcd.MaterialLimit() ?? 0;
-
-                            rowobj = new[] { mcd.Name, mcd.Shortname, mcd.TranslatedCategory,
-                                                mcd.TranslatedType + ( limit>0 ? " (" + limit.ToString() + ")" : "") ,
-                                                m != null ? m.Count.ToString() : "0"
-                            };
-                        }
-                        else
-                        {
-                            rowobj = new[] { mcd.Name, mcd.TranslatedType,
-                                                m != null ? m.Count.ToString() : "0",
-                                                m != null ? m.Price.ToString("0.#") : "-" };
-                        }
 
                         string s = Recipes.UsedInSythesisByFDName(mcd.FDName, Environment.NewLine);
                         string e = Recipes.UsedInEngineeringByFDName(mcd.FDName, Environment.NewLine);
@@ -202,8 +199,25 @@ namespace EDDiscovery.UserControls
                         string se = Recipes.UsedInSpecialEffectsyFDName(mcd.FDName, Environment.NewLine);
                         s = s.AppendPrePad(se, Environment.NewLine);
 
+                        if (materials)
+                        {
+                            int limit = mcd.MaterialLimit() ?? 0;
+
+                            rowobj = new[] { mcd.Name, mcd.Shortname, mcd.TranslatedCategory,
+                                                mcd.TranslatedType + ( limit>0 ? " (" + limit.ToString() + ")" : "") ,
+                                                m != null ? m.Count.ToString() : "0",  s
+                            };
+                        }
+                        else
+                        {
+                            rowobj = new[] { mcd.Name, mcd.TranslatedType,
+                                                m != null ? m.Count.ToString() : "0",
+                                                m != null ? m.Price.ToString("0.#") : "-", s
+                            };
+                        }
+
                         dataGridViewMC.Rows.Add(rowobj);
-                        dataGridViewMC.Rows[dataGridViewMC.RowCount - 1].Cells[0].ToolTipText = s;
+                        dataGridViewMC.Rows[dataGridViewMC.RowCount - 1].Cells[dataGridViewMC.ColumnCount-1].ToolTipText = s;
                         dataGridViewMC.Rows[dataGridViewMC.RowCount - 1].Tag = s;
                     }
                 }
@@ -245,9 +259,16 @@ namespace EDDiscovery.UserControls
             Display(last_mcl);
         }
 
+        private void TruncateText_CheckedChanged(object sender, EventArgs e)
+        {
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbTruncateText, checkBoxClear.Checked);
+            dataGridViewMC.AutoSizeRowsMode = extCheckBoxTruncateText.Checked ? DataGridViewAutoSizeRowsMode.None : DataGridViewAutoSizeRowsMode.AllCells;
+            Display(last_mcl);
+        }
+
         private void dataGridViewMC_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {
-            if ((materials && e.Column.Index == 4) || (!materials && e.Column.Index == 3))
+            if ((materials && e.Column.Index == 4) || (!materials && (e.Column.Index == 3 || e.Column.Index ==2)))
             {
                 e.SortDataGridViewColumnNumeric();
             }
@@ -268,6 +289,29 @@ namespace EDDiscovery.UserControls
                     info.ShowDialog(FindForm());
                 }
             }
+        }
+
+        private void dataGridViewMC_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            int rcell = dataGridViewMC.ColumnCount - 1;
+            if (e.RowIndex >= 0 && e.RowIndex < dataGridViewMC.Rows.Count && e.ColumnIndex == rcell )
+            {
+                // not working for some reason, come back to it another time..
+
+                //DataGridViewRow row = dataGridViewMC.Rows[e.RowIndex];
+
+                //using (Graphics g = Parent.CreateGraphics())
+                //{
+                //    using (StringFormat f = new StringFormat())
+                //    {
+                //        f.FormatFlags = StringFormatFlags.NoWrap;
+                //        var sz = g.MeasureString((string)row.Cells[rcell].Value, dataGridViewMC.Font, new SizeF(dataGridViewMC.Columns[rcell].Width - 4, 1000), f);
+                //        row.Height = (int)sz.Height + 4;
+                //    }
+                    
+                //}
+            }
+
         }
     }
 

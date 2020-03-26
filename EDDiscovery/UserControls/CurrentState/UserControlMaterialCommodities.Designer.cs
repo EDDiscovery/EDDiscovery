@@ -62,6 +62,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxClear = new ExtendedControls.ExtCheckBox();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.panelTop = new System.Windows.Forms.FlowLayoutPanel();
+            this.extCheckBoxTruncateText = new ExtendedControls.ExtCheckBox();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMC)).BeginInit();
             this.panelTop.SuspendLayout();
@@ -98,6 +99,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewMC.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewMC.Size = new System.Drawing.Size(688, 534);
             this.dataGridViewMC.TabIndex = 1;
+            this.dataGridViewMC.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewMC_CellClick);
             this.dataGridViewMC.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewMC_CellDoubleClick);
             this.dataGridViewMC.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewMC_SortCompare);
             // 
@@ -297,11 +299,33 @@ namespace EDDiscovery.UserControls
             this.panelTop.Controls.Add(this.labelItems2);
             this.panelTop.Controls.Add(this.textBoxItems2);
             this.panelTop.Controls.Add(this.checkBoxClear);
+            this.panelTop.Controls.Add(this.extCheckBoxTruncateText);
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
             this.panelTop.Name = "panelTop";
             this.panelTop.Size = new System.Drawing.Size(704, 30);
             this.panelTop.TabIndex = 6;
+            // 
+            // extCheckBoxTruncateText
+            // 
+            this.extCheckBoxTruncateText.AutoSize = true;
+            this.extCheckBoxTruncateText.CheckBoxColor = System.Drawing.Color.Gray;
+            this.extCheckBoxTruncateText.CheckBoxDisabledScaling = 0.5F;
+            this.extCheckBoxTruncateText.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.extCheckBoxTruncateText.CheckColor = System.Drawing.Color.DarkBlue;
+            this.extCheckBoxTruncateText.ImageButtonDisabledScaling = 0.5F;
+            this.extCheckBoxTruncateText.ImageIndeterminate = null;
+            this.extCheckBoxTruncateText.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.extCheckBoxTruncateText.ImageUnchecked = null;
+            this.extCheckBoxTruncateText.Location = new System.Drawing.Point(428, 1);
+            this.extCheckBoxTruncateText.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.extCheckBoxTruncateText.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.extCheckBoxTruncateText.Name = "extCheckBoxTruncateText";
+            this.extCheckBoxTruncateText.Size = new System.Drawing.Size(93, 17);
+            this.extCheckBoxTruncateText.TabIndex = 2;
+            this.extCheckBoxTruncateText.Text = "Truncate Text";
+            this.extCheckBoxTruncateText.TickBoxReductionRatio = 0.75F;
+            this.extCheckBoxTruncateText.UseVisualStyleBackColor = true;
             // 
             // UserControlMaterialCommodities
             // 
@@ -339,5 +363,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.Label labelItems1;
         private ExtendedControls.ExtButton buttonFilter;
         private System.Windows.Forms.FlowLayoutPanel panelTop;
+        private ExtendedControls.ExtCheckBox extCheckBoxTruncateText;
     }
 }
