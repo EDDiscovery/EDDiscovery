@@ -610,11 +610,11 @@ namespace EDDiscovery.UserControls
         private void buttonExtExcel_Click(object sender, EventArgs e)
         {
             Forms.ExportForm frm = new Forms.ExportForm();
-            frm.Init(new string[] { "Export Current View" }, allowRawJournalExport: true);
+            frm.Init(new string[] { "Export Current View", "Export as Journals" }, outputext: new string[] { "CSV export| *.csv", "Journal Export|*.log" });
 
             if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)
             {
-                if (frm.ExportAsJournals)
+                if (frm.SelectedIndex == 1)
                 {
                     try
                     { 
@@ -655,36 +655,33 @@ namespace EDDiscovery.UserControls
                 }
                 else
                 {
-                    if (frm.SelectedIndex == 0)
+                    BaseUtils.CSVWriteGrid grd = new BaseUtils.CSVWriteGrid();
+                    grd.SetCSVDelimiter(frm.Comma);
+                    grd.GetLineStatus += delegate (int r)
                     {
-                        BaseUtils.CSVWriteGrid grd = new BaseUtils.CSVWriteGrid();
-                        grd.SetCSVDelimiter(frm.Comma);
-                        grd.GetLineStatus += delegate (int r)
+                        if (r < dataGridViewJournal.Rows.Count)
                         {
-                            if (r < dataGridViewJournal.Rows.Count)
-                            {
-                                HistoryEntry he = dataGridViewJournal.Rows[r].Cells[JournalHistoryColumns.HistoryTag].Tag as HistoryEntry;
-                                return (dataGridViewJournal.Rows[r].Visible &&
-                                    he.EventTimeUTC.CompareTo(frm.StartTimeUTC) >= 0 &&
-                                    he.EventTimeUTC.CompareTo(frm.EndTimeUTC) <= 0) ? BaseUtils.CSVWriteGrid.LineStatus.OK : BaseUtils.CSVWriteGrid.LineStatus.Skip;
-                            }
-                            else
-                                return BaseUtils.CSVWriteGrid.LineStatus.EOF;
-                        };
+                            HistoryEntry he = dataGridViewJournal.Rows[r].Cells[JournalHistoryColumns.HistoryTag].Tag as HistoryEntry;
+                            return (dataGridViewJournal.Rows[r].Visible &&
+                                he.EventTimeUTC.CompareTo(frm.StartTimeUTC) >= 0 &&
+                                he.EventTimeUTC.CompareTo(frm.EndTimeUTC) <= 0) ? BaseUtils.CSVWriteGrid.LineStatus.OK : BaseUtils.CSVWriteGrid.LineStatus.Skip;
+                        }
+                        else
+                            return BaseUtils.CSVWriteGrid.LineStatus.EOF;
+                    };
 
-                        grd.GetLine += delegate (int r)
-                        {
-                            DataGridViewRow rw = dataGridViewJournal.Rows[r];
-                            return new Object[] { rw.Cells[0].Value, rw.Cells[2].Value, rw.Cells[3].Value };
-                        };
+                    grd.GetLine += delegate (int r)
+                    {
+                        DataGridViewRow rw = dataGridViewJournal.Rows[r];
+                        return new Object[] { rw.Cells[0].Value, rw.Cells[2].Value, rw.Cells[3].Value };
+                    };
 
-                        grd.GetHeader += delegate (int c)
-                        {
-                            return (c < 3 && frm.IncludeHeader) ? dataGridViewJournal.Columns[c + ((c > 0) ? 1 : 0)].HeaderText : null;
-                        };
+                    grd.GetHeader += delegate (int c)
+                    {
+                        return (c < 3 && frm.IncludeHeader) ? dataGridViewJournal.Columns[c + ((c > 0) ? 1 : 0)].HeaderText : null;
+                    };
 
-                        grd.WriteGrid(frm.Path, frm.AutoOpen, FindForm());
-                    }
+                    grd.WriteGrid(frm.Path, frm.AutoOpen, FindForm());
                 }
             }
         }

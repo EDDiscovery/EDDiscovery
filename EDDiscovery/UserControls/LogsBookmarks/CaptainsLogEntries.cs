@@ -586,7 +586,7 @@ namespace EDDiscovery.UserControls
         private void extButtonExcel_Click(object sender, EventArgs e)
         {
             Forms.ExportForm frm = new Forms.ExportForm();
-            frm.Init(new string[] { "Export Current View","All" }, disablestartendtime: true, allowRawJournalExport: false);
+            frm.Init(new string[] { "Export Current View","All" }, disablestartendtime: true);
 
             if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)
             {

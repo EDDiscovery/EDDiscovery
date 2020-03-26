@@ -161,8 +161,8 @@ namespace EDDiscovery.UserControls
             this.toolStripButtonExport.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.toolStripButtonExport.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonExport.Name = "toolStripButtonExport";
-            this.toolStripButtonExport.Size = new System.Drawing.Size(114, 29);
-            this.toolStripButtonExport.Text = "Export Text File";
+            this.toolStripButtonExport.Size = new System.Drawing.Size(69, 29);
+            this.toolStripButtonExport.Text = "Export";
             this.toolStripButtonExport.ToolTipText = "Export to file";
             this.toolStripButtonExport.Click += new System.EventHandler(this.toolStripButtonExport_Click);
             // 

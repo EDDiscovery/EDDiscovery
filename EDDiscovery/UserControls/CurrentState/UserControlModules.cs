@@ -508,7 +508,7 @@ namespace EDDiscovery.UserControls
             if (last_si != null)
             {
                 Forms.ExportForm frm = new Forms.ExportForm();
-                frm.Init(new string[] { "Export Current View" }, disablestartendtime: true, allowRawJournalExport: false);
+                frm.Init(new string[] { "Export Current View" }, disablestartendtime: true);
 
                 if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)
                 {
