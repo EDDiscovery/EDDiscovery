@@ -107,15 +107,15 @@ namespace EDDiscovery.UserControls
 
         public override void ChangeCursorType(IHistoryCursor thc)
         {
-            uctg.OnTravelSelectionChanged -= Display;
+            uctg.OnTravelSelectionChanged -= CallBackDisplayWithCheck;
             uctg = thc;
-            uctg.OnTravelSelectionChanged += Display;
+            uctg.OnTravelSelectionChanged += CallBackDisplayWithCheck;
         }
 
         public override void LoadLayout()
         {
             dataGridViewMC.RowTemplate.MinimumHeight = Font.ScalePixels(26);
-            uctg.OnTravelSelectionChanged += Display;
+            uctg.OnTravelSelectionChanged += CallBackDisplayWithCheck;
             DGVLoadColumnLayout(dataGridViewMC, DbColumnSave);
         }
 
@@ -123,7 +123,7 @@ namespace EDDiscovery.UserControls
         {
             DGVSaveColumnLayout(dataGridViewMC, DbColumnSave);
 
-            uctg.OnTravelSelectionChanged -= Display;
+            uctg.OnTravelSelectionChanged -= CallBackDisplayWithCheck;
         }
 
         #endregion
@@ -132,25 +132,20 @@ namespace EDDiscovery.UserControls
 
         public override void InitialDisplay()
         {
-            Display(uctg.GetCurrentHistoryEntry, discoveryform.history, true);
+            MaterialCommoditiesList mcl = uctg?.GetCurrentHistoryEntry?.MaterialCommodity;
+            Display(mcl);
         }
 
-        private void Display(HistoryEntry he, HistoryList hl, bool selectedEntry)
+        private void CallBackDisplayWithCheck(HistoryEntry he, HistoryList hl, bool selectedEntry)
         {
-            Display(he?.MaterialCommodity);
+            MaterialCommoditiesList mcl = he?.MaterialCommodity;
+            if ( mcl != last_mcl )
+                Display(mcl);
         }
 
-        private void Display(MaterialCommoditiesList mcl)
+        private void Display(MaterialCommoditiesList mcl)       // update display. mcl can be null
         {
-            if (mcl == last_mcl)        // same list, nothing to do
-            {
-                //System.Diagnostics.Debug.WriteLine("Same mcl " + mcl?.GetHashCode());
-                return;
-            }
-
             last_mcl = mcl;
-
-            //System.Diagnostics.Debug.WriteLine("Display mcl " + mcl.GetHashCode());
 
             DataGridViewColumn sortcolprev = dataGridViewMC.SortedColumn != null ? dataGridViewMC.SortedColumn : dataGridViewMC.Columns[0];
             SortOrder sortorderprev = dataGridViewMC.SortedColumn != null ? dataGridViewMC.SortOrder : SortOrder.Ascending;
@@ -162,8 +157,12 @@ namespace EDDiscovery.UserControls
 
             if (mcl == null)
                 return;
+            
+            //System.Diagnostics.Debug.WriteLine("Display mcl " + mcl.GetHashCode());
 
-            string[] filter = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbFilterSave, "All").SplitNoEmptyStartFinish(';');
+            string filters = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbFilterSave, "All");
+            System.Diagnostics.Debug.WriteLine("Filter is " + filters);
+            string[] filter = filters.SplitNoEmptyStartFinish(';');
             bool all = filter.Length > 0 && filter[0] == "All";
             bool clearzero = checkBoxClear.Checked;
 
@@ -237,13 +236,13 @@ namespace EDDiscovery.UserControls
         private void FilterChanged(object sender, bool same, Object e)
         {
             if (!same)
-                Display(uctg.GetCurrentHistoryEntry, discoveryform.history, true);
+                Display(last_mcl);
         }
 
         private void CheckBoxClear_CheckedChanged(object sender, EventArgs e)
         {
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbClearZeroSave, checkBoxClear.Checked);
-            Display(uctg.GetCurrentHistoryEntry, discoveryform.history, true);
+            Display(last_mcl);
         }
 
         private void dataGridViewMC_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
