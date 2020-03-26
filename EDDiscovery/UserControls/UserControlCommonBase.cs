@@ -219,39 +219,40 @@ namespace EDDiscovery.UserControls
 
             hw = Math.Max(10, hw);
 
+            // first see if we have a full collection of ints (old style) or floats (new style)
+            // we may have a mixture or not a full set..
+
+            int intpresent = 0;
+            int inttotal = 0;
             int[] widths = new int[dgv.Columns.Count];      // older saves used ints to save column sizes
-            int totalw = 0;
-
             double[] fillw = new double[dgv.Columns.Count]; // newer ones save the fill weight
+            int doublepresent = 0;
 
-            for (int i = 0; i < dgv.Columns.Count; i++)
+            for (int i = 0; i < dgv.ColumnCount; i++)
             {
                 string k = root + (i + 1).ToString();
+                widths[i] = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(k, -1);
+                intpresent += widths[i] >= 10 ? 1 : 0;
+                inttotal += widths[i];
 
-                if (!useint)
-                {
-                    fillw[i] = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble(k, double.NaN);
-                }
-
-                if (useint || double.IsNaN(fillw[i])) // if not present
-                {
-                    widths[i] = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(k, -1);
-                    if (widths[i] == -1) // if int not present, no save
-                        return null;
-                    useint = true;
-                    totalw += widths[i];
-                }
+                fillw[i] = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble(k, double.NaN);
+                if (!double.IsNaN(fillw[i]) && fillw[i] > 0)
+                    doublepresent++;
             }
 
-            if (useint) // if using int, convert to fillw
+            if (doublepresent == dgv.ColumnCount)   // a full set of doubles
             {
-                for (int i = 0; i < dgv.Columns.Count; i++)
-                {
-                    fillw[i] = (float)widths[i] / (float)totalw;
-                }
+                return fillw;
             }
-
-            return fillw;
+            else if (intpresent == dgv.ColumnCount) // full set of ints 
+            {
+                for (int i = 0; i < dgv.ColumnCount; i++)
+                    fillw[i] = (float)widths[i] / (float)inttotal;
+                useint = true;
+                return fillw;
+            }
+            else
+                return null;    // no valid settings
         }
 
         public void DGVLoadColumnLayout(DataGridView dgv, string root)
