@@ -296,20 +296,28 @@ namespace EDDiscovery.UserControls
             int rcell = dataGridViewMC.ColumnCount - 1;
             if (e.RowIndex >= 0 && e.RowIndex < dataGridViewMC.Rows.Count && e.ColumnIndex == rcell )
             {
-                // not working for some reason, come back to it another time..
+                DataGridViewRow row = dataGridViewMC.Rows[e.RowIndex];
 
-                //DataGridViewRow row = dataGridViewMC.Rows[e.RowIndex];
+                if (row.Height > dataGridViewMC.RowTemplate.Height)
+                {
+                    row.Height = dataGridViewMC.RowTemplate.Height;
+                }
+                else
+                {
 
-                //using (Graphics g = Parent.CreateGraphics())
-                //{
-                //    using (StringFormat f = new StringFormat())
-                //    {
-                //        f.FormatFlags = StringFormatFlags.NoWrap;
-                //        var sz = g.MeasureString((string)row.Cells[rcell].Value, dataGridViewMC.Font, new SizeF(dataGridViewMC.Columns[rcell].Width - 4, 1000), f);
-                //        row.Height = (int)sz.Height + 4;
-                //    }
-                    
-                //}
+                    using (Graphics g = Parent.CreateGraphics())
+                    {
+                        using (StringFormat f = new StringFormat())
+                        {
+                            string ms = (string)row.Cells[rcell].Value + ".";
+                            var sz = g.MeasureString(ms, dataGridViewMC.Font, new SizeF(dataGridViewMC.Columns[rcell].Width - 4, 1000), f);
+                            sz.Height *= 63.0f / 56.0f; // it underestimates of course, scale it a bit
+                            row.Height = (int)sz.Height;
+                            System.Diagnostics.Debug.WriteLine("Measured h" + sz);
+                        }
+
+                    }
+                }
             }
 
         }
