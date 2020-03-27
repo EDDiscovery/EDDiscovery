@@ -268,7 +268,7 @@ namespace EDDiscovery.UserControls
                 for (int i = 0; i < dgv.Columns.Count; i++)
                 {
                     dgv.Columns[i].FillWeight = (float)fillw[i];
-                    System.Diagnostics.Debug.WriteLine("Load {0} {1} {2} {3}", i, Name, root, dgv.Columns[i].FillWeight);
+              //      System.Diagnostics.Debug.WriteLine("Load {0} {1} {2} {3}", i, Name, root, dgv.Columns[i].FillWeight);
                 }
             }
 

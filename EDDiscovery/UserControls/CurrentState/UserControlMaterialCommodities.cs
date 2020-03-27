@@ -173,7 +173,7 @@ namespace EDDiscovery.UserControls
             //System.Diagnostics.Debug.WriteLine("Display mcl " + mcl.GetHashCode());
 
             string filters = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbFilterSave, "All");
-            System.Diagnostics.Debug.WriteLine("Filter is " + filters);
+            //System.Diagnostics.Debug.WriteLine("Filter is " + filters);
             string[] filter = filters.SplitNoEmptyStartFinish(';');
             bool all = filter.Length > 0 && filter[0] == "All";
             bool clearzero = checkBoxClear.Checked;
@@ -276,25 +276,8 @@ namespace EDDiscovery.UserControls
 
         private void dataGridViewMC_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex >= 0 && e.RowIndex < dataGridViewMC.Rows.Count)
-            {
-                string mats = (string)dataGridViewMC.Rows[e.RowIndex].Tag;
-                if (mats != null)   // sheer paranoia.
-                {
-                    mats = mats.Replace(": ", Environment.NewLine + "      ");
-                    ExtendedControls.InfoForm info = new ExtendedControls.InfoForm();
-                    info.Info(dataGridViewMC.Rows[e.RowIndex].Cells[0].Value as string, FindForm().Icon, mats);
-                    info.Size = new Size(800, 600);
-                    info.StartPosition = FormStartPosition.CenterParent;
-                    info.ShowDialog(FindForm());
-                }
-            }
-        }
-
-        private void dataGridViewMC_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
             int rcell = dataGridViewMC.ColumnCount - 1;
-            if (e.RowIndex >= 0 && e.RowIndex < dataGridViewMC.Rows.Count && e.ColumnIndex == rcell )
+            if (e.RowIndex >= 0 && e.RowIndex < dataGridViewMC.Rows.Count && e.ColumnIndex == rcell)
             {
                 DataGridViewRow row = dataGridViewMC.Rows[e.RowIndex];
 
@@ -313,7 +296,7 @@ namespace EDDiscovery.UserControls
                             var sz = g.MeasureString(ms, dataGridViewMC.Font, new SizeF(dataGridViewMC.Columns[rcell].Width - 4, 1000), f);
                             sz.Height *= 63.0f / 56.0f; // it underestimates of course, scale it a bit
                             row.Height = (int)sz.Height;
-                            System.Diagnostics.Debug.WriteLine("Measured h" + sz);
+                            //System.Diagnostics.Debug.WriteLine("Measured h" + sz);
                         }
 
                     }
@@ -321,6 +304,57 @@ namespace EDDiscovery.UserControls
             }
 
         }
+
+        #region Right click
+
+        int rightclickrow = -1;
+
+        private void dataGridViewMC_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)         // right click on travel map, get in before the context menu
+            {
+                rightclickrow = -1;
+            }
+
+            if (dataGridViewMC.SelectedCells.Count < 2 || dataGridViewMC.SelectedRows.Count == 1)      // if single row completely selected, or 1 cell or less..
+            {
+                DataGridView.HitTestInfo hti = dataGridViewMC.HitTest(e.X, e.Y);
+                if (hti.Type == DataGridViewHitTestType.Cell)
+                {
+                    dataGridViewMC.ClearSelection();                // select row under cursor.
+                    dataGridViewMC.Rows[hti.RowIndex].Selected = true;
+
+                    if (e.Button == MouseButtons.Right)         // right click on MC map, get in before the context menu
+                    {
+                        rightclickrow = hti.RowIndex;
+                    }
+                }
+            }
+        }
+
+        private void contextMenuStrip_Opening(object sender, CancelEventArgs e)
+        {
+        }
+
+        private void openRecipeInWindowToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (rightclickrow >= 0 && rightclickrow < dataGridViewMC.RowCount)
+            {
+                string mats = (string)dataGridViewMC.Rows[rightclickrow].Tag;
+                if (mats != null)   // sheer paranoia.
+                {
+                    mats = mats.Replace(": ", Environment.NewLine + "      ");
+                    ExtendedControls.InfoForm info = new ExtendedControls.InfoForm();
+                    info.Info(dataGridViewMC.Rows[rightclickrow].Cells[0].Value as string, FindForm().Icon, mats);
+                    info.Size = new Size(800, 600);
+                    info.StartPosition = FormStartPosition.CenterParent;
+                    info.ShowDialog(FindForm());
+                }
+            }
+        }
+
+        #endregion
+
     }
 
     public class UserControlMaterials : UserControlMaterialCommodities

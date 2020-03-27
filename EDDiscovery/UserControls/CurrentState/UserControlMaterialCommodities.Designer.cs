@@ -63,9 +63,12 @@ namespace EDDiscovery.UserControls
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.panelTop = new System.Windows.Forms.FlowLayoutPanel();
             this.extCheckBoxTruncateText = new ExtendedControls.ExtCheckBox();
+            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.openRecipeInWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMC)).BeginInit();
             this.panelTop.SuspendLayout();
+            this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // dataViewScrollerPanel
@@ -93,15 +96,16 @@ namespace EDDiscovery.UserControls
             this.Type,
             this.Number,
             this.Price});
+            this.dataGridViewMC.ContextMenuStrip = this.contextMenuStrip;
             this.dataGridViewMC.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewMC.Name = "dataGridViewMC";
             this.dataGridViewMC.RowHeadersVisible = false;
             this.dataGridViewMC.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewMC.Size = new System.Drawing.Size(688, 534);
             this.dataGridViewMC.TabIndex = 1;
-            this.dataGridViewMC.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewMC_CellClick);
             this.dataGridViewMC.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewMC_CellDoubleClick);
             this.dataGridViewMC.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewMC_SortCompare);
+            this.dataGridViewMC.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridViewMC_MouseDown);
             // 
             // NameCol
             // 
@@ -327,6 +331,21 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxTruncateText.TickBoxReductionRatio = 0.75F;
             this.extCheckBoxTruncateText.UseVisualStyleBackColor = true;
             // 
+            // contextMenuStrip
+            // 
+            this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.openRecipeInWindowToolStripMenuItem});
+            this.contextMenuStrip.Name = "contextMenuStrip";
+            this.contextMenuStrip.Size = new System.Drawing.Size(202, 26);
+            this.contextMenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Opening);
+            // 
+            // openRecipeInWindowToolStripMenuItem
+            // 
+            this.openRecipeInWindowToolStripMenuItem.Name = "openRecipeInWindowToolStripMenuItem";
+            this.openRecipeInWindowToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.openRecipeInWindowToolStripMenuItem.Text = "Open Recipe in Window";
+            this.openRecipeInWindowToolStripMenuItem.Click += new System.EventHandler(this.openRecipeInWindowToolStripMenuItem_Click);
+            // 
             // UserControlMaterialCommodities
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -339,6 +358,7 @@ namespace EDDiscovery.UserControls
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMC)).EndInit();
             this.panelTop.ResumeLayout(false);
             this.panelTop.PerformLayout();
+            this.contextMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -364,5 +384,7 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtButton buttonFilter;
         private System.Windows.Forms.FlowLayoutPanel panelTop;
         private ExtendedControls.ExtCheckBox extCheckBoxTruncateText;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
+        private System.Windows.Forms.ToolStripMenuItem openRecipeInWindowToolStripMenuItem;
     }
 }
