@@ -417,6 +417,7 @@ namespace EDDiscovery.UserControls
             this.Controls.Add(this.panelTop);
             this.Name = "UserControlJournalGrid";
             this.Size = new System.Drawing.Size(804, 716);
+            this.VisibleChanged += new System.EventHandler(this.UserControlJournalGrid_VisibleChanged);
             this.dataViewScrollerPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewJournal)).EndInit();
             this.historyContextMenu.ResumeLayout(false);

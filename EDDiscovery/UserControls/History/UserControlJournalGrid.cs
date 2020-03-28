@@ -13,21 +13,17 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using EDDiscovery.Controls;
+using EliteDangerousCore;
+using EliteDangerousCore.EDDN;
+using EliteDangerousCore.EDSM;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using EDDiscovery.Controls;
-using EliteDangerousCore.EDSM;
-using EliteDangerousCore.EDDN;
-using EliteDangerousCore.DB;
-using EliteDangerousCore;
 using System.IO;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
 {
@@ -66,7 +62,8 @@ namespace EDDiscovery.UserControls
         Timer searchtimer;
 
         Timer todotimer;
-        Queue<Action> todo = new Queue<Action>();
+        Queue<Action> newHistory = new Queue<Action>();
+        Queue<Action> initialHistory = new Queue<Action>();
         bool loadcomplete;
 
         public UserControlJournalGrid()
@@ -117,7 +114,7 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
-            todo.Clear();
+            initialHistory.Clear();
             todotimer.Stop();
             searchtimer.Stop();
             DGVSaveColumnLayout(dataGridViewJournal, DbColumnSave);
@@ -187,12 +184,13 @@ namespace EDDiscovery.UserControls
                 chunks.Add(chunk);
             }
 
-            todo.Clear();
+            initialHistory.Clear();
+            newHistory.Clear();
             string filtertext = textBoxFilter.Text;
 
             foreach (var chunk in chunks)
             {
-                todo.Enqueue(() =>
+                initialHistory.Enqueue(() =>
                 {
                     dataViewScrollerPanel.Suspend();
                     foreach (var item in chunk)
@@ -205,7 +203,7 @@ namespace EDDiscovery.UserControls
                 });
             }
 
-            todo.Enqueue(() =>
+            initialHistory.Enqueue(() =>
             {
                 UpdateToolTipsForFilter();
 
@@ -231,7 +229,15 @@ namespace EDDiscovery.UserControls
                 loadcomplete = true;
             });
 
-            todotimer.Start();
+            if (Visible)
+            { 
+                todotimer.Start(); 
+            }
+            else
+            {
+                var act = initialHistory.Dequeue();
+                act();
+            }
         }
 
         private void Todotimer_Tick(object sender, EventArgs e)
@@ -241,25 +247,27 @@ namespace EDDiscovery.UserControls
 
         private void ProcessTodo()
         {
-            if (todo.Count != 0)
-            {
-                var act = todo.Dequeue();
-                act();
-            }
+            Action action = null;
+            if (newHistory.Any())
+                action = newHistory.Dequeue();
+            else if (initialHistory.Any())
+                action = initialHistory.Dequeue();
             else
-            {
                 todotimer.Stop();
-            }
+
+            action?.Invoke();
         }
 
         private void AddNewEntry(HistoryEntry he, HistoryList hl)               // add if in event filter, and not in field filter..
         {
-            if (!loadcomplete)
-            {
-                todo.Enqueue(() => AddNewEntry(he, hl));
-                return;
-            }
+            if (loadcomplete)
+                InsertNewRowIfRequired(he, hl);
+            else
+                newHistory.Enqueue(() => InsertNewRowIfRequired(he, hl));
+        }
 
+        private void InsertNewRowIfRequired(HistoryEntry he, HistoryList hl)
+        { 
             bool add = he.IsJournalEventInEventFilter(EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbFilterSave, "All"));
 
             if (!add)
@@ -687,6 +695,14 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
+
+        private void UserControlJournalGrid_VisibleChanged(object sender, EventArgs e)
+        {
+            if (Visible && initialHistory.Any() && !todotimer.Enabled)
+                todotimer.Start();
+            else if (loadcomplete)
+                Cursor = Cursors.Default;
+        }
 
         private void dataGridViewJournal_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {
