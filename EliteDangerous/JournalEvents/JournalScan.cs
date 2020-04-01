@@ -27,6 +27,9 @@ namespace EliteDangerousCore.JournalEvents
     public class JournalScan : JournalEntry
     {
         public bool IsStar { get { return !String.IsNullOrEmpty(StarType); } }
+        public bool IsPlanet { get { return !IsStar && !IsBeltCluster; } }
+        public bool IsBeltCluster { get { return !IsStar && PlanetClass == null; } }
+
         public string BodyDesignation { get; set; }
 
         // ALL
@@ -516,11 +519,11 @@ namespace EliteDangerousCore.JournalEvents
             };
         }
 
-        public override void FillInformation(out string info, out string detailed)  
+        public override void FillInformation(out string info, out string detailed)      
         {
             if (IsStar)
             {
-                info = BaseUtils.FieldBuilder.Build("", GetStarTypeName(), "Mass:;SM;0.00".T(EDTx.JournalScan_MSM), nStellarMass, 
+                info = BaseUtils.FieldBuilder.Build("", GetStarTypeName(), "Mass:;SM;0.00".T(EDTx.JournalScan_MSM), nStellarMass,
                                                 "Age:;my;0.0".T(EDTx.JournalScan_Age), nAge,
                                                 "Radius:".T(EDTx.JournalScan_RS), RadiusText(),
                                                 "Dist:;ls;0.0".T(EDTx.JournalScan_DISTA), DistanceFromArrivalLS,
@@ -528,16 +531,38 @@ namespace EliteDangerousCore.JournalEvents
             }
             else
             {
-                info = BaseUtils.FieldBuilder.Build( "", PlanetClass, "Mass:".T(EDTx.JournalScan_MASS), MassEMText(),
-                                                "<;, Landable".T(EDTx.JournalScan_Landable), IsLandable, 
-                                                "<;, Terraformable".T(EDTx.JournalScan_Terraformable), TerraformState == "Terraformable", "", Atmosphere, 
-                                                 "Gravity:;G;0.0".T(EDTx.JournalScan_Gravity), nSurfaceGravityG,
+                info = BaseUtils.FieldBuilder.Build("", PlanetClass, "Mass:".T(EDTx.JournalScan_MASS), MassEMText(),
+                                                "<;, Landable".T(EDTx.JournalScan_Landable), IsLandable,
+                                                "<;, Terraformable".T(EDTx.JournalScan_Terraformable), TerraformState == "Terraformable", "", Atmosphere,
+                                                 "Gravity:;G;0.00".T(EDTx.JournalScan_Gravity), nSurfaceGravityG,
                                                  "Radius:".T(EDTx.JournalScan_RS), RadiusText(),
                                                  "Dist:;ls;0.0".T(EDTx.JournalScan_DISTA), DistanceFromArrivalLS,
                                                  "Name:".T(EDTx.JournalScan_SNME), BodyName);
             }
 
-            detailed = DisplayString(0, includefront:false);
+            detailed = DisplayString(0, includefront: false);
+        }
+
+        public string ShortInformation(bool name = false)
+        {
+            if (IsStar)
+            {
+                return BaseUtils.FieldBuilder.Build("", GetStarTypeName(), "Mass:;SM;0.00".T(EDTx.JournalScan_MSM), nStellarMass,
+                                                "Age:;my;0.0".T(EDTx.JournalScan_Age), nAge,
+                                                "Radius:".T(EDTx.JournalScan_RS), RadiusText(),
+                                                "Dist:".T(EDTx.JournalScan_DIST), DistanceFromArrivalText,
+                                                "Name:".T(EDTx.JournalScan_BNME), name ? BodyName : null);
+            }
+            else
+            {
+                return BaseUtils.FieldBuilder.Build("", PlanetClass, "Mass:".T(EDTx.JournalScan_MASS), MassEMText(),
+                                                "<;, Landable".T(EDTx.JournalScan_Landable), IsLandable,
+                                                "<;, Terraformable".T(EDTx.JournalScan_Terraformable), TerraformState == "Terraformable", "", Atmosphere,
+                                                 "Gravity:;G;0.00".T(EDTx.JournalScan_Gravity), nSurfaceGravityG,
+                                                 "Radius:".T(EDTx.JournalScan_RS), RadiusText(),
+                                                 "Dist:".T(EDTx.JournalScan_DIST), DistanceFromArrivalText,
+                                                 "Name:".T(EDTx.JournalScan_SNME), name ? BodyName : null);
+            }
         }
 
         // has no trailing LF

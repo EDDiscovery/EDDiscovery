@@ -417,6 +417,7 @@ namespace EliteDangerousCore
         JournalScan_AmmoniaWorlds, //  - Ammonia Worlds, {0} ({1}-{2} AU),
         JournalScan_IcyPlanets, //  - Icy Planets, {0} (from {1} AU)
         JournalScan_DISTA, // Dist:;ls;0.0
+        JournalScan_DIST, // Dist:
         JournalScan_BNME, // Name:
         JournalScan_MMoM, // Mass:;MM;0.00
         JournalScan_SNME, // Name:

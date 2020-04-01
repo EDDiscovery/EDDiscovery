@@ -884,6 +884,9 @@ namespace EliteDangerousCore.EDSM
                 {
                     jout["Landable"] = jo["isLandable"];
                     jout["MassEM"] = jo["earthMasses"];
+
+                    jout["SurfaceGravity"] = jo["gravity"].Double() * JournalScan.oneGee_m_s2;      // if not there, we get 0
+
                     jout["Volcanism"] = jo["volcanismType"];
                     string atmos = jo["atmosphereType"].StrNull();
                     if ( atmos != null && atmos.IndexOf("atmosphere",StringComparison.InvariantCultureIgnoreCase)==-1)
