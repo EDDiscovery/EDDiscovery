@@ -653,6 +653,8 @@
     <EmbeddedResource Include="Controls\SysInfo\notfirstdiscover.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Controls\TravelGrid\WordWrapOff.png" />
+    <EmbeddedResource Include="Controls\TravelGrid\WordWrapOn.png" />
     <EmbeddedResource Include="Controls\Scan\Bodies\Signals.png" />
     <EmbeddedResource Include="Journal\SAASignalsFound.png" />
     <EmbeddedResource Include="Stars\G_WhiteSuperGiant.png" />

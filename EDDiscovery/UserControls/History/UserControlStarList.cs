@@ -162,8 +162,6 @@ namespace EDDiscovery.UserControls
                 sortcol = -1;
             }
 
-            System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCountLap(this,true) + " SL " + displaynumber + " Load start");
-
             rowsbyjournalid.Clear();
             dataGridViewStarList.Rows.Clear();
 
@@ -176,37 +174,43 @@ namespace EDDiscovery.UserControls
             List<List<HistoryEntry>> syslists = HistoryList.SystemAggregateList(result);
             List<List<HistoryEntry>[]> syslistchunks = new List<List<HistoryEntry>[]>();
 
-            for (int i = 0; i < syslists.Count; i += 1000)
+            int chunksize = 500;
+            for (int i = 0; i < syslists.Count; i += chunksize)
             {
-                int totake = Math.Min(1000, syslists.Count - i);
+                int totake = Math.Min(chunksize, syslists.Count - i);
                 List<HistoryEntry>[] syslistchunk = new List<HistoryEntry>[totake];
                 syslists.CopyTo(i, syslistchunk, 0, totake);
                 syslistchunks.Add(syslistchunk);
+                chunksize = 2000;
             }
 
             todo.Clear();
 
             string filtertext = textBoxFilter.Text;
 
+            System.Diagnostics.Stopwatch swtotal = new System.Diagnostics.Stopwatch(); swtotal.Start();
+
             foreach (var syslistchunk in syslistchunks)
             {
                 todo.Enqueue(() =>
                 {
-                    dataViewScrollerPanel.Suspend();
+                    List<DataGridViewRow> rowstoadd = new List<DataGridViewRow>();
+
                     foreach (var syslist in syslistchunk)
                     {
                         var row = CreateHistoryRow(syslist, filtertext);
                         if (row != null)
-                            dataGridViewStarList.Rows.Add(row);
+                            rowstoadd.Add(row);
                     }
 
-                    dataViewScrollerPanel.Resume();
+                    dataGridViewStarList.Rows.AddRange(rowstoadd.ToArray());
                 });
             }
 
             todo.Enqueue(() =>
             {
                 dataGridViewStarList.FilterGridView(filtertext);
+                System.Diagnostics.Debug.WriteLine(BaseUtils.AppTicks.TickCount + " SL TOTAL TIME " + swtotal.ElapsedMilliseconds);
 
                 int rowno = FindGridPosByJID(pos.Item1, true);     // find row.. must be visible..  -1 if not found/not visible
 
@@ -221,8 +225,6 @@ namespace EDDiscovery.UserControls
                 }
                 else
                     rowno = -1;
-
-                System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCountLap(this) + " SL " + displaynumber + " Load Finish");
 
                 if (sortcol >= 0)
                 {

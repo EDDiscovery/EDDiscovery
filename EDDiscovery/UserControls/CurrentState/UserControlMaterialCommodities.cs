@@ -301,6 +301,8 @@ namespace EDDiscovery.UserControls
 
                     }
                 }
+
+                dataViewScrollerPanel.UpdateScroll();
             }
 
         }

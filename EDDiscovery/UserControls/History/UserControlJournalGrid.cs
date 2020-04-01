@@ -164,8 +164,6 @@ namespace EDDiscovery.UserControls
 
             var filter = (TravelHistoryFilter)comboBoxJournalWindow.SelectedItem ?? TravelHistoryFilter.NoFilter;
 
-            System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCountLap(this,true) + " JG " + displaynumber + " Load start");
-
             List<HistoryEntry> result = filter.Filter(hl);
             fdropdown = hl.Count() - result.Count();
 
@@ -179,34 +177,47 @@ namespace EDDiscovery.UserControls
 
             List<HistoryEntry[]> chunks = new List<HistoryEntry[]>();
 
-            for (int i = 0; i < result.Count; i += 1000)
+            int chunksize = 500;
+            for (int i = 0; i < result.Count; i += chunksize)
             {
-                HistoryEntry[] chunk = new HistoryEntry[i + 1000 > result.Count ? result.Count - i : 1000];
+                HistoryEntry[] chunk = new HistoryEntry[i + chunksize > result.Count ? result.Count - i : chunksize];
 
                 result.CopyTo(i, chunk, 0, chunk.Length);
                 chunks.Add(chunk);
+                chunksize = 2000;
             }
 
             todo.Clear();
             string filtertext = textBoxFilter.Text;
 
+            System.Diagnostics.Stopwatch swtotal = new System.Diagnostics.Stopwatch(); swtotal.Start();
+
             foreach (var chunk in chunks)
             {
                 todo.Enqueue(() =>
                 {
-                    dataViewScrollerPanel.Suspend();
+                    //System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch(); sw.Start();
+
+                    List<DataGridViewRow> rowstoadd = new List<DataGridViewRow>();
+
                     foreach (var item in chunk)
                     {
                         var row = CreateHistoryRow(item, filtertext);
                         if (row != null)
-                            dataGridViewJournal.Rows.Add(row);
+                            rowstoadd.Add(row);
                     }
-                    dataViewScrollerPanel.Resume();
+
+                    dataGridViewJournal.Rows.AddRange(rowstoadd.ToArray()); // much faster to send in one chunk
+
+                   // System.Diagnostics.Debug.WriteLine("J Chunk Load in " + sw.ElapsedMilliseconds);
+
                 });
             }
 
             todo.Enqueue(() =>
             {
+                System.Diagnostics.Debug.WriteLine(BaseUtils.AppTicks.TickCount + " JG TOTAL TIME " + swtotal.ElapsedMilliseconds);
+
                 UpdateToolTipsForFilter();
 
                 int rowno = FindGridPosByJID(pos.Item1, true);
@@ -215,8 +226,6 @@ namespace EDDiscovery.UserControls
                 {
                     dataGridViewJournal.CurrentCell = dataGridViewJournal.Rows[rowno].Cells[pos.Item2];       // its the current cell which needs to be set, moves the row marker as well            currentGridRow = (rowno!=-1) ? 
                 }
-
-                System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCountLap(this) + " JG " + displaynumber + " Load Finish");
 
                 if (sortcol >= 0)
                 {
@@ -235,11 +244,6 @@ namespace EDDiscovery.UserControls
         }
 
         private void Todotimer_Tick(object sender, EventArgs e)
-        {
-            ProcessTodo();
-        }
-
-        private void ProcessTodo()
         {
             if (todo.Count != 0)
             {

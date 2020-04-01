@@ -214,6 +214,8 @@ namespace EDDiscovery.Icons
         public static Image TravelGrid_Outlines { get { return IconSet.GetIcon("Controls.TravelGrid.Outlines"); } }
         public static Image TravelGrid_FieldFilter { get { return IconSet.GetIcon("Controls.TravelGrid.FieldFilter"); } }
         public static Image TravelGrid_EventFilter { get { return IconSet.GetIcon("Controls.TravelGrid.EventFilter"); } }
+        public static Image WordWrapOff { get { return IconSet.GetIcon("Controls.TravelGrid.WordWrapOff"); } }
+        public static Image WordWrapOn { get { return IconSet.GetIcon("Controls.TravelGrid.WordWrapOn"); } }
         #endregion
         #region EDDiscovery.UserControls.UserControlTrilateration
         public static Image Trilateration_RemoveAll { get { return IconSet.GetIcon("Controls.Trilateration.RemoveAll"); } }

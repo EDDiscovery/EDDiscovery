@@ -80,6 +80,7 @@ namespace EDDiscovery.UserControls
         private string DbHistorySave { get { return DBName("EDUIHistory" ); } }
         private string DbFieldFilter { get { return DBName("TravelHistoryControlFieldFilter" ); } }
         private string DbOutlines { get { return DBName("TravelHistoryOutlines"); } }
+        private string DbWordWrap { get { return DBName("TravelHistoryWordWrap"); } }
 
         private HistoryList current_historylist;        // the last one set, for internal refresh purposes on sort
 
@@ -143,6 +144,10 @@ namespace EDDiscovery.UserControls
             this.outliningOnOffToolStripMenuItem.Click += new System.EventHandler(this.toolStripOutliningToggle);
             this.scanEventsOutliningOnOffToolStripMenuItem.Click += new System.EventHandler(this.toolStripOutliningToggle);
             extCheckBoxOutlines.Checked = outliningOnOffToolStripMenuItem.Checked;
+
+            extCheckBoxWordWrap.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbWordWrap, false);
+            UpdateWordWrap();
+            extCheckBoxWordWrap.Click += extCheckBoxWordWrap_Click;
 
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(historyContextMenu, this);
@@ -208,8 +213,6 @@ namespace EDDiscovery.UserControls
 
             var filter = (TravelHistoryFilter)comboBoxHistoryWindow.SelectedItem ?? TravelHistoryFilter.NoFilter;
 
-            System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCountLap(this,true) + " TG " + displaynumber + " Load start");
-
             List<HistoryEntry> result = filter.Filter(hl);
             fdropdown = hl.Count() - result.Count();
 
@@ -225,12 +228,14 @@ namespace EDDiscovery.UserControls
 
             List<HistoryEntry[]> chunks = new List<HistoryEntry[]>();
 
-            for (int i = 0; i < result.Count; i += 1000)
+            int chunksize = 500;
+            for (int i = 0; i < result.Count; i += chunksize)
             {
-                HistoryEntry[] chunk = new HistoryEntry[i + 1000 > result.Count ? result.Count - i : 1000];
+                HistoryEntry[] chunk = new HistoryEntry[i + chunksize > result.Count ? result.Count - i : chunksize];
 
                 result.CopyTo(i, chunk, 0, chunk.Length);
                 chunks.Add(chunk);
+                chunksize = 2000;
             }
 
             todo.Clear();
@@ -249,12 +254,15 @@ namespace EDDiscovery.UserControls
 
             extCheckBoxOutlines.Checked = outlining != null;
 
+            System.Diagnostics.Stopwatch swtotal = new System.Diagnostics.Stopwatch();
+
             if (chunks.Count != 0)
             {
                 var chunk = chunks[0];
 
-                dataViewScrollerPanel.Suspend();
+                swtotal.Start();
 
+                List<DataGridViewRow> rowstoadd = new List<DataGridViewRow>();
                 foreach (var item in chunk)
                 {
                     var row = CreateHistoryRow(item, filtertext);
@@ -262,9 +270,10 @@ namespace EDDiscovery.UserControls
                     {
                         row.Visible = outlining?.Process(item, dataGridViewTravel.RowCount, rollupscans, rollupolder) ?? true;
                         //row.Cells[2].Value = dataGridViewTravel.RowCount.ToString() + (string)row.Cells[2].Value;
-                        dataGridViewTravel.Rows.Add(row);
+                        rowstoadd.Add(row);
                     }
                 }
+                dataGridViewTravel.Rows.AddRange(rowstoadd.ToArray());
 
                 int rowno = FindGridPosByJID(pos.Item1, true);     // find row.. must be visible..  -1 if not found/not visible
 
@@ -285,6 +294,10 @@ namespace EDDiscovery.UserControls
             {
                 todo.Enqueue(() =>
                 {
+                    List<DataGridViewRow> rowstoadd = new List<DataGridViewRow>();
+
+                    //System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch(); sw.Start();
+
                     foreach (var item in chunk)
                     {
                         var row = CreateHistoryRow(item, filtertext);
@@ -292,10 +305,13 @@ namespace EDDiscovery.UserControls
                         {
                             row.Visible = outlining?.Process(item, dataGridViewTravel.RowCount, rollupscans, rollupolder) ?? true;
                             //row.Cells[2].Value = dataGridViewTravel.RowCount.ToString() + (string)row.Cells[2].Value;
-                            dataGridViewTravel.Rows.Add(row);
+                            rowstoadd.Add(row);
                         }
                     }
 
+                    dataGridViewTravel.Rows.AddRange(rowstoadd.ToArray());
+
+                    //System.Diagnostics.Debug.WriteLine("T Chunk Load in " + sw.ElapsedMilliseconds);
                 });
             }
 
@@ -309,8 +325,9 @@ namespace EDDiscovery.UserControls
                         outlining.ProcesslastLine(dataGridViewTravel.Rows.Count - 1, rollupolder);     // ensures we have a group at the end..
                         panelOutlining.UpdateAfterAdd();
                     }
-                    dataViewScrollerPanel.Resume();     // only resume if we added something
                 }
+
+                System.Diagnostics.Debug.WriteLine(BaseUtils.AppTicks.TickCount + " TG TOTAL TIME " + swtotal.ElapsedMilliseconds);
 
                 UpdateToolTipsForFilter();
 
@@ -328,7 +345,7 @@ namespace EDDiscovery.UserControls
                 else
                     rowno = -1;
 
-                System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCountLap(this) + " TG " + displaynumber + " Load Finish");
+                //System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCountLap(this) + " TG " + displaynumber + " Load Finish");
 
                 if (sortcol >= 0)
                 {
@@ -347,11 +364,6 @@ namespace EDDiscovery.UserControls
         }
 
         private void Todotimer_Tick(object sender, EventArgs e)
-        {
-            ProcessTodo();
-        }
-
-        private void ProcessTodo()
         {
             if (todo.Count != 0)
             {
@@ -706,7 +718,7 @@ namespace EDDiscovery.UserControls
             }
         }
 
-#region Clicks
+#region Right/Left Clicks
 
         HistoryEntry rightclicksystem = null;
         int rightclickrow = -1;
@@ -1265,9 +1277,26 @@ namespace EDDiscovery.UserControls
             }
         }
 
-#endregion
+        #endregion
 
-#region DEBUG clicks - only for special people who build the debug version!
+        #region Word wrap
+
+        private void extCheckBoxWordWrap_Click(object sender, EventArgs e)
+        {
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbWordWrap, extCheckBoxWordWrap.Checked);
+            UpdateWordWrap();
+        }
+
+        private void UpdateWordWrap()
+        {
+            dataGridViewTravel.DefaultCellStyle.WrapMode = extCheckBoxWordWrap.Checked ? DataGridViewTriState.True : DataGridViewTriState.False;
+            dataGridViewTravel.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;
+            dataViewScrollerPanel.UpdateScroll();
+        }
+
+        #endregion
+
+        #region DEBUG clicks - only for special people who build the debug version!
 
         private void runSelectionThroughInaraSystemToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1319,6 +1348,7 @@ namespace EDDiscovery.UserControls
                 EliteDangerousCore.IGAU.IGAUSync.NewEvent(discoveryform.LogLine, rightclicksystem);
             }
         }
+
         private void runActionsAcrossSelectionToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string laststring = "";
