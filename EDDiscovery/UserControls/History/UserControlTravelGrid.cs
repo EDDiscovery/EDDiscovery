@@ -765,60 +765,58 @@ namespace EDDiscovery.UserControls
             if (leftclickrow >= 0)                                                   // Click expands it..
             {
                 leftclicksystem.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
+                DataGridViewRow row = dataGridViewTravel.Rows[leftclickrow];
 
-                if (leftclicksystem.journalEntry is EliteDangerousCore.JournalEvents.JournalLocOrJump)
+                string text = (string)row.Cells[TravelHistoryColumns.Information].Value;
+
+                bool expanded = EventDescription != text;
+
+                if ( expanded ) // put it back to original text
                 {
-                    string travelinfo = leftclicksystem.TravelInfo();
-                    if (travelinfo != null)
-                        EventDetailedInfo = travelinfo + Environment.NewLine + EventDetailedInfo;
-                }
-
-                string infodetailed = EventDescription.AppendPrePad(EventDetailedInfo,Environment.NewLine);
-
-                int ch = dataGridViewTravel.Rows[leftclickrow].Height;
-                bool notexpanded = (ch <= defaultRowHeight);
-                int linesfound = infodetailed.Lines("\n");
-
-                if ( notexpanded && linesfound*ch > dataGridViewTravel.Height * 3 / 4 ) // unreasonable amount of space to show it.
-                {
-                    ExtendedControls.InfoForm info = new ExtendedControls.InfoForm();
-                    info.Info(EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(leftclicksystem.EventTimeUTC) + ": " + leftclicksystem.EventSummary,
-                        FindForm().Icon, infodetailed);
-                    info.Size = new Size(1200, 800);
-                    info.Show(FindForm());
+                    row.Cells[TravelHistoryColumns.Information].Value = EventDescription;
+                    row.Cells[TravelHistoryColumns.Information].Style.WrapMode = row.Cells[TravelHistoryColumns.Description].Style.WrapMode = row.Cells[TravelHistoryColumns.Note].Style.WrapMode = DataGridViewTriState.NotSet;
                 }
                 else
                 {
-
-                    string infotext = (notexpanded) ? infodetailed : EventDescription;
-
-                    int h = defaultRowHeight;
-
-                    if (notexpanded)
+                    string infodetailed = EventDescription.AppendPrePad(EventDetailedInfo, Environment.NewLine);        // make up detailed line
+                    if (leftclicksystem.journalEntry is EliteDangerousCore.JournalEvents.JournalLocOrJump)
                     {
-                        using (Graphics g = Parent.CreateGraphics())
-                        {
-                            int desch = (int)(g.MeasureString((string)dataGridViewTravel.Rows[leftclickrow].Cells[TravelHistoryColumns.Description].Value, dataGridViewTravel.Font, dataGridViewTravel.Columns[TravelHistoryColumns.Description].Width - 4).Height + 2);
-                            int infoh = (int)(g.MeasureString(infotext, dataGridViewTravel.Font, dataGridViewTravel.Columns[TravelHistoryColumns.Information].Width - 4).Height + 2);
-                            int noteh = (int)(g.MeasureString((string)dataGridViewTravel.Rows[leftclickrow].Cells[TravelHistoryColumns.Note].Value, dataGridViewTravel.Font, dataGridViewTravel.Columns[TravelHistoryColumns.Note].Width - 4).Height + 2);
-
-                            h = Math.Max(desch, h);
-                            h = Math.Max(infoh, h);
-                            h = Math.Max(noteh, h);
-                            h += 20;
-                        }
+                        string travelinfo = leftclicksystem.TravelInfo();
+                        if (travelinfo != null)
+                            infodetailed = travelinfo + Environment.NewLine + infodetailed;
                     }
 
-                    notexpanded = (h > defaultRowHeight);      // now we have our h, is it bigger? If so, we need to go into wrap mode
+                    using (Graphics g = Parent.CreateGraphics())
+                    {
+                        int desch = (int)(g.MeasureString((string)dataGridViewTravel.Rows[leftclickrow].Cells[TravelHistoryColumns.Description].Value, dataGridViewTravel.Font, dataGridViewTravel.Columns[TravelHistoryColumns.Description].Width - 4).Height + 2);
+                        int infoh = (int)(g.MeasureString(infodetailed, dataGridViewTravel.Font, dataGridViewTravel.Columns[TravelHistoryColumns.Information].Width - 4).Height + 2);
+                        int noteh = (int)(g.MeasureString((string)dataGridViewTravel.Rows[leftclickrow].Cells[TravelHistoryColumns.Note].Value, dataGridViewTravel.Font, dataGridViewTravel.Columns[TravelHistoryColumns.Note].Width - 4).Height + 2);
 
-                    dataGridViewTravel.Rows[leftclickrow].Height = h;
-                    dataGridViewTravel.Rows[leftclickrow].Cells[TravelHistoryColumns.Information].Value = infotext;
+                        int h = dataGridViewTravel.Font.Height;
+                        h = Math.Max(desch, h);
+                        h = Math.Max(infoh, h);
+                        h = Math.Max(noteh, h);
+                        h += 20;
 
-                    DataGridViewTriState ti = (notexpanded) ? DataGridViewTriState.True : DataGridViewTriState.False;
-
-                    dataGridViewTravel.Rows[leftclickrow].Cells[TravelHistoryColumns.Information].Style.WrapMode = ti;
-                    dataGridViewTravel.Rows[leftclickrow].Cells[TravelHistoryColumns.Description].Style.WrapMode = ti;
-                    dataGridViewTravel.Rows[leftclickrow].Cells[TravelHistoryColumns.Note].Style.WrapMode = ti;
+                        if (h > dataGridViewTravel.Height * 3 / 4) // unreasonable amount of space to show it.
+                        {
+                            ExtendedControls.InfoForm info = new ExtendedControls.InfoForm();
+                            info.Info(EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(leftclicksystem.EventTimeUTC) + ": " + leftclicksystem.EventSummary,
+                                FindForm().Icon, infodetailed);
+                            info.Size = new Size(1200, 800);
+                            info.Show(FindForm());
+                        }
+                        else if (extCheckBoxWordWrap.Checked)       // wrapping just set
+                        {
+                            row.Cells[TravelHistoryColumns.Information].Value = infodetailed;       
+                        }
+                        else
+                        {
+                            row.Height = h;                         // adjust tow height and wrap mode
+                            row.Cells[TravelHistoryColumns.Information].Style.WrapMode = row.Cells[TravelHistoryColumns.Description].Style.WrapMode = row.Cells[TravelHistoryColumns.Note].Style.WrapMode = DataGridViewTriState.True;
+                            row.Cells[TravelHistoryColumns.Information].Value = infodetailed;
+                        }
+                    }
                 }
             }
         }

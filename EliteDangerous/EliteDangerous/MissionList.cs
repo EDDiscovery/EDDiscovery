@@ -59,6 +59,9 @@ namespace EliteDangerousCore
             {
                 info += Environment.NewLine + Completed.RewardInformation(true);
             }
+
+            info = info.ReplaceIfEndsWith(Environment.NewLine, "");
+
             return info;
         }
 

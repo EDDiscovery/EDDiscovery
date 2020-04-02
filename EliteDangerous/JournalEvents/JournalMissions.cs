@@ -402,11 +402,14 @@ namespace EliteDangerousCore.JournalEvents
                                             "Target Faction:".T(EDTx.JournalEntry_TargetFaction), TargetFaction);
 
             detailed += RewardInformation(true);
+
+            detailed= detailed.ReplaceIfEndsWith(Environment.NewLine, "");
+
         }
 
         public string RewardInformation(bool translate)          
         {
-            return PermitsList(translate, true) + CommoditiesList(translate, true) + MaterialList(translate, true);
+            return PermitsList(translate, true) + CommoditiesList(translate, true) + MaterialList(translate, true) + FactionEffectsList(translate,true);
         }
 
         public string PermitsList(bool translate, bool pretty)
@@ -446,7 +449,7 @@ namespace EliteDangerousCore.JournalEvents
             return detailed;
         }
 
-        public string MaterialList(bool translate, bool pretty )
+        public string MaterialList(bool translate, bool pretty)
         {
             string detailed = "";
             if (MaterialsReward != null && MaterialsReward.Length > 0)
@@ -463,6 +466,50 @@ namespace EliteDangerousCore.JournalEvents
                 if (pretty)
                     detailed += System.Environment.NewLine;
             }
+            return detailed;
+        }
+
+        public string FactionEffectsList(bool translate, bool pretty)
+        {
+            string detailed = "";
+            if (FactionEffects != null && FactionEffects.Length>0)
+            {
+                for (int i = 0; i < FactionEffects.Length; i++)
+                {
+                    detailed += FactionEffects[i].Faction + " " + FactionEffects[i].ReputationTrend + " " + FactionEffects[i].Reputation;
+
+                    string effects = "";
+                    foreach (var x in FactionEffects[i].Effects)
+                    {
+                        effects = effects.AppendPrePad(x.Effect.Replace("$MISSIONUTIL_","").Replace(";","") + " " + x.Trend,",");
+                    }
+
+                    string influence = "";
+                    foreach (var x in FactionEffects[i].Influence)
+                    {
+                        influence = influence.AppendPrePad(x.Trend + " " + x.Influence,",");
+                    }
+
+                    string inf = "";
+                    if (effects.HasChars())
+                    {
+                        inf += "E: " + effects;
+
+                        if (influence.HasChars())
+                           inf += "; ";
+                    }
+
+                    if (influence.HasChars())
+                        inf += "I: " + influence;
+
+                    if ( inf.HasChars() )
+                        detailed += " {" + inf + "}";
+
+                    if ( pretty )    
+                        detailed += Environment.NewLine;
+                }
+            }
+
             return detailed;
         }
 

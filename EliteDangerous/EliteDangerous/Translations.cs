@@ -191,6 +191,7 @@ namespace EliteDangerousCore
         JournalEntry_Donation, // Donation:
         JournalEntry_Permits, // Permits:
         JournalEntry_Rewards, // Rewards:
+        JournalEntry_FactionEffects, // Faction Effects:
         JournalEntry_Fine, // Fine:
         JournalEntry_Missionname, // Mission name:
         JournalEntry_Hot, // ;(Hot)
