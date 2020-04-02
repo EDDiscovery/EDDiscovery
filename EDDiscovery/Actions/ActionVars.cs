@@ -226,8 +226,9 @@ namespace EDDiscovery.Actions
                 {
                     vars[mp + "Reward"] = ms.Completed.Reward.ToStringInvariant();
                     vars[mp + "Donation"] = ms.Completed.Donation.ToStringInvariant();
-                    vars[mp + "RewardCommodity"] = ms.Completed.CommoditiesList(false);
-                    vars[mp + "RewardPermit"] = ms.Completed.PermitsList(false);
+                    vars[mp + "RewardCommodity"] = ms.Completed.CommoditiesList(false,false);
+                    vars[mp + "RewardPermit"] = ms.Completed.PermitsList(false, false);
+                    vars[mp + "RewardMaterials"] = ms.Completed.MaterialList(false, false);
                 }
                 i++;
             }

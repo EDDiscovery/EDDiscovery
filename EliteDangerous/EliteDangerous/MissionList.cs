@@ -47,23 +47,27 @@ namespace EliteDangerousCore
             return (Redirected != null) ? ("->" + Redirected.NewDestinationSystem.AppendPrePad(Redirected.NewDestinationStation, ":")) : Mission.DestinationSystem.AppendPrePad(Mission.DestinationStation, ":");
         }
 
-        public string Info()            // Missions panel uses this for info column
+        public string MissionInfoColumn()            // Missions panel uses this for info column
         {
-            string info = Mission.MissionAuxInfo();
+            string info = Mission.MissionInfoColumn();
+
             if (CargoDepot != null)
             {
                 info += Environment.NewLine + BaseUtils.FieldBuilder.Build("To Go:".T(EDTx.MissionState_ToGo), CargoDepot.ItemsToGo, "Progress:;%;N1".T(EDTx.MissionState_Progress), CargoDepot.ProgressPercent);
             }
             if (Completed != null)
             {
-                info += Environment.NewLine + Completed.MissionInformation();
+                info += Environment.NewLine + Completed.RewardInformation(true);
             }
             return info;
         }
 
-        public string FullInfo()    // DLL Uses this for mission info
+        public string DLLInfo()    // DLL Uses this for mission info
         {
-            return Mission.MissionBasicInfo() + "," + Mission.MissionDetailedInfo() + ((Completed != null) ? (Environment.NewLine + Completed.MissionInformation()) : "");
+            string s = Mission.MissionBasicInfo(false) + "," + Mission.MissionDetailedInfo(false) + ", State: " + State.ToString();
+            if (Completed != null)
+                s += Environment.NewLine + Completed.RewardInformation(false);
+            return s;
         }
 
         public string StateText

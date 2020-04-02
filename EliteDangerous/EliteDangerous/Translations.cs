@@ -28,6 +28,7 @@ namespace EliteDangerousCore
         Information, // Information
         NoPos, // No Pos
 
+        NoTranslate, // DO NOT Define this attribute, used to cause a purposeful mismatch
 
         Bodies_HMS, //"Luminous Hot Main Sequence {0} star" @
         Bodies_BMS, //"Luminous Blue Main Sequence {0} star" @

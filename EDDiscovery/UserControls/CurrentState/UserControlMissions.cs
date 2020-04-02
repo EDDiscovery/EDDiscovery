@@ -168,7 +168,7 @@ namespace EDDiscovery.UserControls
                                         ms.DestinationSystemStation(),
                                         ms.Mission.TargetFaction,
                                         ms.Mission.Reward.GetValueOrDefault().ToString("N0"),
-                                        ms.Info()
+                                        ms.MissionInfoColumn()
                     };
 
                     if (ms.Mission.Reward.HasValue)
@@ -221,7 +221,7 @@ namespace EDDiscovery.UserControls
                                         ms.DestinationSystemStation(),
                                         ms.Mission.TargetFaction,
                                         ms.StateText,
-                                        ms.Info()
+                                        ms.MissionInfoColumn()
                                         };
 
                             int rowno = dataGridViewPrevious.Rows.Add(rowobj);

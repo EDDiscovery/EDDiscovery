@@ -57,7 +57,7 @@ namespace EDDiscovery.DLL
 
                 je.materials = (from x in he.MaterialCommodity.Sort(false) select x.Details.Name + ":" + x.Count.ToStringInvariant() + ":" + x.Details.FDName).ToArray();
                 je.commodities = (from x in he.MaterialCommodity.Sort(true) select x.Details.Name + ":" + x.Count.ToStringInvariant() + ":" + x.Details.FDName).ToArray();
-                je.currentmissions = he.MissionList.GetAllCurrentMissions(he.EventTimeUTC).Select(x=>x.FullInfo()).ToArray();
+                je.currentmissions = he.MissionList.GetAllCurrentMissions(he.EventTimeUTC).Select(x=>x.DLLInfo()).ToArray();
                 return je;
             }
         }
