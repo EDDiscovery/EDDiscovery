@@ -31,6 +31,7 @@ namespace EDDiscovery.UserControls
 
         private string storedmoduletext;
         private string travelhistorytext;
+        private string allmodulestext;
         private HistoryEntry last_he = null;
         private ShipInformation last_si = null;
 
@@ -48,6 +49,7 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.Translate(toolTip, this);
             storedmoduletext = "Stored Modules".T(EDTx.UserControlModules_StoredModules);
             travelhistorytext = "Travel History Entry".T(EDTx.UserControlModules_TravelHistoryEntry);
+            allmodulestext = "All Modules".T(EDTx.UserControlModules_AllModules); //TBD
             dataGridViewModules.MakeDoubleBuffered();
             dataGridViewModules.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
 
@@ -140,11 +142,53 @@ namespace EDDiscovery.UserControls
                     labelVehicle.Text = "";
 
                     foreach (ModulesInStore.StoredModule sm in mi.StoredModules)
-                        AddStoredModule(sm);
+                    {
+                        object[] rowobj = { sm.Name_Localised.Alt(sm.Name), sm.Name,
+                                sm.StarSystem.Alt("In Transit".T(EDTx.UserControlModules_InTransit)), sm.TransferTimeString ,
+                                sm.Mass > 0 ? (sm.Mass.ToString()+"t") : "",
+                                sm.EngineerModifications.Alt(""),
+                                sm.TransferCost>0 ? sm.TransferCost.ToString("N0") : "",
+                                "" };
+                        dataGridViewModules.Rows.Add(rowobj);
+                    }
 
                     dataGridViewModules.Columns[2].HeaderText = "System".T(EDTx.UserControlModules_System);
                     dataGridViewModules.Columns[3].HeaderText = "Tx Time".T(EDTx.UserControlModules_TxTime);
                     dataGridViewModules.Columns[6].HeaderText = "Cost".T(EDTx.UserControlModules_Cost);
+                }
+            }
+            else if (comboBoxShips.Text == allmodulestext)
+            {
+                ShipInformationList shm = discoveryform.history.shipinformationlist;
+                var ownedships = (from x1 in shm.Ships where x1.Value.State == ShipInformation.ShipState.Owned && !ShipModuleData.IsSRVOrFighter(x1.Value.ShipFD) select x1.Value);
+
+                foreach( var si in ownedships )
+                {
+                    foreach (string key in si.Modules.Keys)
+                    {
+                        EliteDangerousCore.ShipModule sm = si.Modules[key];
+                        AddModuleLine(sm,si);
+
+                    }
+                }
+
+                if (last_he != null && last_he.StoredModules != null)
+                {
+                    ModulesInStore mi = last_he.StoredModules;
+                    labelVehicle.Text = "";
+
+                    foreach (ModulesInStore.StoredModule sm in mi.StoredModules)
+                    {
+                        string info = sm.StarSystem.Alt("In Transit".T(EDTx.UserControlModules_InTransit));
+                        info = info.AppendPrePad(sm.TransferTimeString, ":");
+                        object[] rowobj = { sm.Name_Localised.Alt(sm.Name), sm.Name, "Stored".Tx(EDTx.UserControlModules_Stored),
+                                 info ,
+                                sm.Mass > 0 ? (sm.Mass.ToString()+"t") : "",
+                                sm.EngineerModifications.Alt(""),
+                                sm.TransferCost>0 ? sm.TransferCost.ToString("N0") : "",
+                                "" };
+                        dataGridViewModules.Rows.Add(rowobj);
+                    }
                 }
             }
             else if (comboBoxShips.Text == travelhistorytext || comboBoxShips.Text.Length == 0)  // second is due to the order History gets called vs this on start
@@ -239,14 +283,17 @@ namespace EDDiscovery.UserControls
             buttonExtCoriolis.Visible = buttonExtEDShipyard.Visible = si.CheckMinimumJSONModules();
         }
 
-        void AddModuleLine(ShipModule sm)
+        void AddModuleLine(ShipModule sm , ShipInformation si = null)
         {
-            string ammo = "";
-            if (sm.AmmoHopper.HasValue)
+            string infoentry = "";
+
+            if (si != null)
+                infoentry = si.ShipNameIdentType;
+            else if (sm.AmmoHopper.HasValue)
             {
-                ammo = sm.AmmoHopper.Value.ToString();
+                infoentry = sm.AmmoHopper.Value.ToString();
                 if (sm.AmmoClip.HasValue)
-                    ammo += "/" + sm.AmmoClip.ToString();
+                    infoentry += "/" + sm.AmmoClip.ToString();
             }
 
             string value = (sm.Value.HasValue && sm.Value.Value > 0) ? sm.Value.Value.ToString("N0") : "";
@@ -260,7 +307,7 @@ namespace EDDiscovery.UserControls
                 eng = sm.Engineering.FriendlyBlueprintName + ":" + sm.Engineering.Level.ToStringInvariant();
 
             object[] rowobj = { typename,
-                                sm.Item, sm.Slot, ammo,
+                                sm.Item, sm.Slot, infoentry,
                                 sm.Mass > 0 ? (sm.Mass.ToString("0.#")+"t") : "",
                                 eng,
                                 value, sm.PE() };
@@ -276,17 +323,6 @@ namespace EDDiscovery.UserControls
 
                 dataGridViewModules.Rows[dataGridViewModules.Rows.Count - 1].Cells[5].ToolTipText = text;
             }
-        }
-
-        void AddStoredModule(ModulesInStore.StoredModule sm)
-        {
-            object[] rowobj = { sm.Name_Localised.Alt(sm.Name), sm.Name,
-                                sm.StarSystem.Alt("In Transit".T(EDTx.UserControlModules_InTransit)), sm.TransferTimeString ,
-                                sm.Mass > 0 ? (sm.Mass.ToString()+"t") : "",
-                                sm.EngineerModifications.Alt(""),
-                                sm.TransferCost>0 ? sm.TransferCost.ToString("N0") : "",
-                                "" };
-            dataGridViewModules.Rows.Add(rowobj);
         }
 
         void AddValueLine(string s, long v, string opt = "")
@@ -319,6 +355,7 @@ namespace EDDiscovery.UserControls
             comboBoxShips.Items.Clear();
             comboBoxShips.Items.Add(travelhistorytext);
             comboBoxShips.Items.Add(storedmoduletext);
+            comboBoxShips.Items.Add(allmodulestext);
 
             var ownedships = (from x1 in shm.Ships where x1.Value.State == ShipInformation.ShipState.Owned && !ShipModuleData.IsSRVOrFighter(x1.Value.ShipFD) select x1.Value);
             var notownedships = (from x1 in shm.Ships where x1.Value.State != ShipInformation.ShipState.Owned && !ShipModuleData.IsSRVOrFighter(x1.Value.ShipFD) select x1.Value);

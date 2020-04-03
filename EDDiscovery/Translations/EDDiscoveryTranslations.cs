@@ -226,6 +226,8 @@ namespace EDDiscovery
         UserControlModules_SlotCol, // Slot
         UserControlModules_ItemInfo, // Info
         UserControlModules_Value, // Value
+        UserControlModules_Stored, // Stored
+        UserControlModules_AllModules, // All Modules
 
         UserControlModules_FSDAvgJump, // FSD Avg Jump
         UserControlModules_HT, // Half tank, no cargo
