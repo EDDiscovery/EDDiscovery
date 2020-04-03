@@ -667,6 +667,11 @@ namespace EDDiscovery
             Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Refresh complete finished");
         }
 
+        public void NewEntry( JournalEntry e)       // programatically do a new entry
+        {
+            Controller.NewEntry(e);                 // push it thru as if the monitor watcher saw it
+        }
+
 
         private void Controller_NewEntrySecond(HistoryEntry he, HistoryList hl)         // called after all UI's have had their chance
         {

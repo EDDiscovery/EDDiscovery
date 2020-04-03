@@ -216,6 +216,8 @@ namespace EDDiscovery
         UserControlMissions_ValueN, // Value (cr)
         UserControlMissions_ValueC, // Value:
 
+        UserControlModules_ForceSell, // Force Sell
+        UserControlModules_ConfirmForceSell, // Confirm sell of ship
         UserControlModules_StoredModules, // Stored Modules
         UserControlModules_TravelHistoryEntry, // Travel History Entry
         UserControlModules_System, // System

@@ -235,7 +235,7 @@ namespace EDDiscovery.UserControls
 
             labelVehicle.Visible = true;
             labelVehicle.Text = si.ShipFullInfo(cargo: false, fuel: false);
-            buttonExtConfigure.Visible = true;
+            buttonExtConfigure.Visible = si.State == ShipInformation.ShipState.Owned;
             buttonExtCoriolis.Visible = buttonExtEDShipyard.Visible = si.CheckMinimumJSONModules();
         }
 
@@ -450,8 +450,10 @@ namespace EDDiscovery.UserControls
                 last_si.FuelWarningPercent.ToString(), new Point(ctrlleft, 40), new Size(width - ctrlleft - 20, 24), "Enter fuel warning level in % (0 = off, 1-100%)".T(EDTx.UserControlModules_TTF))
             { numberboxdoubleminimum = 0, numberboxdoublemaximum = 100, numberboxformat = "0.##" });
 
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("OK", typeof(ExtendedControls.ExtButton), "OK".T(EDTx.OK), new Point(width - 100, 70), new Size(80, 24), "Press to Accept".T(EDTx.UserControlModules_PresstoAccept)));
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("Cancel", typeof(ExtendedControls.ExtButton), "Cancel".T(EDTx.Cancel), new Point(width - 200, 70), new Size(80, 24), "Press to Cancel".T(EDTx.UserControlModules_PresstoCancel)));
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("Sell", typeof(ExtendedControls.ExtButton), "Force Sell".T(EDTx.UserControlModules_ForceSell), new Point(10, 80), new Size(80, 24),null));
+
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("OK", typeof(ExtendedControls.ExtButton), "OK".T(EDTx.OK), new Point(width - 100, 110), new Size(80, 24), "Press to Accept".T(EDTx.UserControlModules_PresstoAccept)));
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("Cancel", typeof(ExtendedControls.ExtButton), "Cancel".T(EDTx.Cancel), new Point(width - 200, 110), new Size(80, 24), "Press to Cancel".T(EDTx.UserControlModules_PresstoCancel)));
 
             f.Trigger += (dialogname, controlname, tag) =>
             {
@@ -467,6 +469,22 @@ namespace EDDiscovery.UserControls
                 }
                 else if (controlname == "Cancel")
                 {
+                    f.ReturnResult(DialogResult.Cancel);
+                }
+                else if (controlname == "Sell")
+                {
+                    if ( ExtendedControls.MessageBoxTheme.Show(FindForm(), "Confirm sell of ship:".Tx(EDTx.EDDiscoveryForm_ConfirmSyncToEDSM) + Environment.NewLine + last_si.ShipNameIdentType , "Warning".T(EDTx.Warning), MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes ) 
+                    {
+                        var je = new EliteDangerousCore.JournalEvents.JournalShipyardSell(DateTime.UtcNow);
+                        je.ShipTypeFD = last_si.ShipFD;
+                        je.SellShipId = last_si.ID;
+                        je.ShipPrice = 0;
+                        je.SetCommander(EDCommander.CurrentCmdrID);
+                        var jo = je.Json();
+                        je.Add(jo);
+                        discoveryform.NewEntry(je);
+                    }
+
                     f.ReturnResult(DialogResult.Cancel);
                 }
             };
