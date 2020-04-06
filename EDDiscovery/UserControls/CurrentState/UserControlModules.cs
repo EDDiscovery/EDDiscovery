@@ -35,6 +35,9 @@ namespace EDDiscovery.UserControls
         private HistoryEntry last_he = null;
         private ShipInformation last_si = null;
 
+        private string fuellevelname;
+        private string fuelresname;
+
         #region Init
 
         public UserControlModules()
@@ -58,6 +61,9 @@ namespace EDDiscovery.UserControls
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange; ;
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
             discoveryform.OnNewUIEvent += Discoveryform_OnNewUIEvent;
+
+            fuelresname = "Fuel Reserve Capacity".T(EDTx.UserControlModules_FuelReserveCapacity);
+            fuellevelname = "Fuel Level".T(EDTx.UserControlModules_FuelLevel);
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
@@ -99,12 +105,26 @@ namespace EDDiscovery.UserControls
 
         private void Discoveryform_OnNewUIEvent(UIEvent obj)
         {
-            if (obj is EliteDangerousCore.UIEvents.UIFuel) // fuel UI update the SI information globally.
-                Display(last_he, discoveryform.history, true);
+            if (obj is EliteDangerousCore.UIEvents.UIFuel && last_si != null && discoveryform.history.GetLast != null ) // fuel UI update the SI information globally, and we have a ship, and we have a last entry
+            {
+                if (last_si.ShipNameIdentType == discoveryform.history.GetLast.ShipInformation.ShipNameIdentType ) // and we are pointing at the same ship, use name since the last_si may be an old one if fuel keeps on updating it.
+                {
+                    // update grid if found. Doing it this way stops flicker.
+
+                    int rowfuel = dataGridViewModules.FindRowWithValue(0, fuellevelname);
+                    if (rowfuel != -1)
+                        dataGridViewModules.Rows[rowfuel].Cells[1].Value = last_he.ShipInformation.FuelLevel.ToString("N1") + "t";
+                    int rowres = dataGridViewModules.FindRowWithValue(0, fuelresname);
+                        dataGridViewModules.Rows[rowres].Cells[1].Value = last_he.ShipInformation.ReserveFuelCapacity.ToString("N2") + "t";
+
+                    System.Diagnostics.Debug.WriteLine("Modules Fuel update");
+                }
+            }
         }
 
         public override void InitialDisplay()
         {
+            labelVehicle.Visible = buttonExtCoriolis.Visible = buttonExtEDShipyard.Visible = buttonExtConfigure.Visible = false;
             Display(uctg.GetCurrentHistoryEntry, discoveryform.history , true);
         }
 
@@ -125,9 +145,6 @@ namespace EDDiscovery.UserControls
 
             dataGridViewModules.Rows.Clear();
 
-            labelVehicle.Visible = false;
-            buttonExtCoriolis.Visible = buttonExtEDShipyard.Visible = buttonExtConfigure.Visible = false;
-
             last_si = null;     // no ship info
 
             dataGridViewModules.Columns[2].HeaderText = "Slot".T(EDTx.UserControlModules_SlotCol);
@@ -136,6 +153,8 @@ namespace EDDiscovery.UserControls
 
             if (comboBoxShips.Text == storedmoduletext)
             {
+                labelVehicle.Visible = buttonExtCoriolis.Visible = buttonExtEDShipyard.Visible = buttonExtConfigure.Visible = false;
+
                 if (last_he != null && last_he.StoredModules != null)
                 {
                     ModulesInStore mi = last_he.StoredModules;
@@ -159,6 +178,8 @@ namespace EDDiscovery.UserControls
             }
             else if (comboBoxShips.Text == allmodulestext)
             {
+                labelVehicle.Visible = buttonExtCoriolis.Visible = buttonExtEDShipyard.Visible = buttonExtConfigure.Visible = false;
+
                 ShipInformationList shm = discoveryform.history.shipinformationlist;
                 var ownedships = (from x1 in shm.Ships where x1.Value.State == ShipInformation.ShipState.Owned && !ShipModuleData.IsSRVOrFighter(x1.Value.ShipFD) select x1.Value);
 
@@ -255,9 +276,9 @@ namespace EDDiscovery.UserControls
             if (si.FuelCapacity > 0)
                 AddInfoLine("Fuel Capacity".T(EDTx.UserControlModules_FuelCapacity), si.FuelCapacity.ToString("N1") + "t");
             if (si.FuelLevel > 0)
-                AddInfoLine("Fuel Level".T(EDTx.UserControlModules_FuelLevel), si.FuelLevel.ToString("N1") + "t");
+                AddInfoLine(fuellevelname, si.FuelLevel.ToString("N1") + "t");
             if (si.ReserveFuelCapacity > 0)
-                AddInfoLine("Fuel Reserve Capacity".T(EDTx.UserControlModules_FuelReserveCapacity), si.ReserveFuelCapacity.ToString("N2") + "t");
+                AddInfoLine(fuelresname, si.ReserveFuelCapacity.ToString("N2") + "t");
             if (si.HullHealthAtLoadout > 0)
                 AddInfoLine("Hull Health (Loadout)".T(EDTx.UserControlModules_HullHealth), si.HullHealthAtLoadout.ToString("N1") + "%");
 
@@ -277,7 +298,7 @@ namespace EDDiscovery.UserControls
             if (cc > 0)
                 AddInfoLine("Cargo Capacity".T(EDTx.UserControlModules_CargoCapacity), cc.ToString("N0") + "t");
 
-            labelVehicle.Visible = true;
+            labelVehicle.Visible = buttonExtCoriolis.Visible = buttonExtEDShipyard.Visible = buttonExtConfigure.Visible = true;
             labelVehicle.Text = si.ShipFullInfo(cargo: false, fuel: false);
             buttonExtConfigure.Visible = si.State == ShipInformation.ShipState.Owned;
             buttonExtCoriolis.Visible = buttonExtEDShipyard.Visible = si.CheckMinimumJSONModules();
@@ -560,7 +581,7 @@ namespace EDDiscovery.UserControls
 
         private void buttonExtExcel_Click(object sender, EventArgs e)
         {
-            if (last_si != null)
+            if (dataGridViewModules.RowCount>0)
             {
                 Forms.ExportForm frm = new Forms.ExportForm();
                 frm.Init(new string[] { "Export Current View" }, disablestartendtime: true);
@@ -572,12 +593,15 @@ namespace EDDiscovery.UserControls
 
                     grd.GetPreHeader += delegate (int r)
                     {
-                        if (r == 0)
-                            return new Object[] { last_si.ShipUserName ?? "", last_si.ShipUserIdent ?? "", last_si.ShipType ?? "", last_si.ID };
-                        else if ( r == 1 )
-                            return new Object[] { };
-                        else
-                            return null;
+                        if (last_si != null)
+                        {
+                            if (r == 0)
+                                return new Object[] { last_si.ShipUserName ?? "", last_si.ShipUserIdent ?? "", last_si.ShipType ?? "", last_si.ID };
+                            else if (r == 1)
+                                return new Object[] { };
+                        }
+
+                        return null;
                     };
 
                     grd.GetHeader += delegate (int c)

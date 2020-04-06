@@ -452,6 +452,26 @@ namespace EliteDangerousCore
             return this;
         }
 
+        public ShipInformation SetFuelLevel(double fuellevel, double reserve)
+        {
+            if (fuellevel != 0 && ( Math.Abs(FuelLevel - fuellevel) > 0.01 || Math.Abs(ReserveFuelCapacity - reserve) > 0.01))
+            {
+                System.Diagnostics.Debug.WriteLine("Update ship fuel to " + fuellevel + " " + reserve);
+
+                ShipInformation sm = this.ShallowClone();
+
+                if (fuellevel != 0)
+                    sm.FuelLevel = fuellevel;
+                if (fuellevel > sm.FuelCapacity)
+                    sm.FuelCapacity = fuellevel;
+                sm.ReserveFuelCapacity = reserve;
+
+                return sm;
+            }
+
+            return this;
+        }
+
         public ShipInformation AddModule(string slot, string slotfd, string item, string itemfd, string itemlocalised)
         {
             if (!Modules.ContainsKey(slot) || Modules[slot].Item.Equals(item) == false)       // if does not have it, or item is not the same..
