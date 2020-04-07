@@ -34,13 +34,26 @@ namespace EliteDangerousCore
 
         public enum ItemType
         {
-            VeryRare, Rare, Standard, Common, VeryCommon, Unknown,
-            ConsumerItems, Chemicals, Drones, Foods, IndustrialMaterials, LegalDrugs, Machinery, Medicines, Metals, Minerals, Narcotics, PowerPlay,
+            VeryCommon, Common, Standard, Rare, VeryRare,           // materials
+            Unknown,   
+            ConsumerItems, Chemicals, Drones, Foods, IndustrialMaterials, LegalDrugs, Machinery, Medicines, Metals, Minerals, Narcotics, PowerPlay,     // commodities..
             Salvage, Slaves, Technology, Textiles, Waste, Weapons,
         };
 
         public ItemType Type { get; private set; }                  // and its type, for materials its commonality, for commodities its group ("Metals" etc).
         public string TranslatedType { get; private set; }          // translation of above..        
+
+        public enum MaterialGroupType
+        {
+            NA,
+            RawCategory1, RawCategory2, RawCategory3, RawCategory4, RawCategory5, RawCategory6, RawCategory7,
+            EncodedEmissionData, EncodedWakeScans, EncodedShieldData, EncodedEncryptionFiles, EncodedDataArchives, EncodedFirmware,
+            ManufacturedChemical, ManufacturedThermic, ManufacturedHeat, ManufacturedConductive, ManufacturedMechanicalComponents,
+                    ManufacturedCapacitors, ManufacturedShielding, ManufacturedComposite, ManufacturedCrystals, ManufacturedAlloys, 
+        };
+
+        public MaterialGroupType MaterialGroup { get; private set; } // only for materials, grouping
+        public string TranslatedMaterialGroup { get; private set; } 
 
         public string Shortname { get; private set; }               // short abv. name
         public Color Colour { get; private set; }                   // colour if its associated with one
@@ -222,7 +235,7 @@ namespace EliteDangerousCore
         {
         }
 
-        public MaterialCommodityData(CatType cs, string n, string fd, ItemType t, string shortn, Color cl, bool rare)
+        public MaterialCommodityData(CatType cs, string n, string fd, ItemType t, MaterialGroupType mtg, string shortn, Color cl, bool rare)
         {
             Category = cs;
             TranslatedCategory = Category.ToString().Tx(typeof(MaterialCommodityData));        // valid to pass this thru the Tx( system
@@ -231,6 +244,8 @@ namespace EliteDangerousCore
             Type = t;
             string tn = Type.ToString().SplitCapsWord();
             TranslatedType = tn.Tx(typeof(MaterialCommodityData));                // valid to pass this thru the Tx( system
+            MaterialGroup = mtg;
+            TranslatedMaterialGroup = MaterialGroup.ToString().Tx(typeof(MaterialCommodityData));                // valid to pass this thru the Tx( system
             Shortname = shortn;
             Colour = cl;
             Rarity = rare;
@@ -245,7 +260,7 @@ namespace EliteDangerousCore
         {
             if (!cachelist.ContainsKey(fdname.ToLowerInvariant()))
             {
-                MaterialCommodityData mcdb = new MaterialCommodityData(cat, fdname.SplitCapsWordFull(), fdname, ItemType.Unknown, "", Color.Green, false);
+                MaterialCommodityData mcdb = new MaterialCommodityData(cat, fdname.SplitCapsWordFull(), fdname, ItemType.Unknown, MaterialGroupType.NA, "", Color.Green, false );
                 mcdb.SetCache();
                 System.Diagnostics.Debug.WriteLine("Material not present: " + cat + "," + fdname);
             }
@@ -276,36 +291,36 @@ namespace EliteDangerousCore
 
         // Mats
 
-        private static bool AddRaw(string name, ItemType typeofit, string shortname, string fdname = "")
+        private static bool AddRaw(string name, ItemType typeofit, MaterialGroupType mt, string shortname, string fdname = "")
         {
-            return AddEntry(CatType.Raw, CByType(typeofit), name, typeofit, shortname, fdname);
+            return AddEntry(CatType.Raw, CByType(typeofit), name, typeofit, mt, shortname, fdname);
         }
 
-        private static bool AddEnc(string name, ItemType typeofit, string shortname, string fdname = "")
+        private static bool AddEnc(string name, ItemType typeofit, MaterialGroupType mt, string shortname, string fdname = "")
         {
-            return AddEntry(CatType.Encoded, CByType(typeofit), name, typeofit, shortname, fdname);
+            return AddEntry(CatType.Encoded, CByType(typeofit), name, typeofit, mt, shortname, fdname);
         }
 
-        private static bool AddManu(string name, ItemType typeofit, string shortname, string fdname = "")
+        private static bool AddManu(string name, ItemType typeofit, MaterialGroupType mt, string shortname, string fdname = "")
         {
-            return AddEntry(CatType.Manufactured, CByType(typeofit), name, typeofit, shortname, fdname);
+            return AddEntry(CatType.Manufactured, CByType(typeofit), name, typeofit, mt, shortname, fdname);
         }
 
         // Commods
 
         private static bool AddCommodityRare(string aliasname, ItemType typeofit, string fdname)
         {
-            return AddEntry(CatType.Commodity, Color.Green, aliasname, typeofit, "", fdname, true);
+            return AddEntry(CatType.Commodity, Color.Green, aliasname, typeofit, MaterialGroupType.NA, "", fdname, true);
         }
 
         private static bool AddCommodity(string aliasname, ItemType typeofit, string fdname)        // fdname only if not a list.
         {
-            return AddEntry(CatType.Commodity, Color.Green, aliasname, typeofit, "", fdname);
+            return AddEntry(CatType.Commodity, Color.Green, aliasname, typeofit, MaterialGroupType.NA, "", fdname);
         }
 
         private static bool AddCommoditySN(string aliasname, ItemType typeofit, string shortname, string fdname)
         {
-            return AddEntry(CatType.Commodity, Color.Green, aliasname, typeofit, shortname, fdname);
+            return AddEntry(CatType.Commodity, Color.Green, aliasname, typeofit, MaterialGroupType.NA, shortname, fdname);
         }
 
         // fdname only useful if aliasname is not a list.
@@ -317,7 +332,7 @@ namespace EliteDangerousCore
             {
                 if (name.Length > 0)   // just in case a semicolon slips thru
                 {
-                    if (!AddEntry(CatType.Commodity, Color.Green, name, typeofit, "", ""))
+                    if (!AddEntry(CatType.Commodity, Color.Green, name, typeofit, MaterialGroupType.NA, "", ""))
                     {
                         return false;
                     }
@@ -332,172 +347,197 @@ namespace EliteDangerousCore
             return n.ToLowerInvariant();
         }
 
-        private static bool AddEntry(CatType catname, Color colour, string aliasname, ItemType typeofit, string shortname, string fdName, bool comrare = false)
+        private static bool AddEntry(CatType catname, Color colour, string aliasname, ItemType typeofit, MaterialGroupType mtg, string shortname, string fdName, bool comrare = false)
         {
             System.Diagnostics.Debug.Assert(!shortname.HasChars() || cachelist.Values.ToList().Find(x => x.Shortname.Equals(shortname, StringComparison.InvariantCultureIgnoreCase)) == null, "ShortName repeat " + aliasname + " " + shortname);
             System.Diagnostics.Debug.Assert(cachelist.ContainsKey(fdName) == false, "Repeated entry " + fdName);
 
             string fdn = (fdName.Length > 0) ? fdName.ToLowerInvariant() : FDNameCnv(aliasname);       // always lower case fdname
 
-            MaterialCommodityData mc = new MaterialCommodityData(catname, aliasname, fdn, typeofit, shortname, colour, comrare);
+            MaterialCommodityData mc = new MaterialCommodityData(catname, aliasname, fdn, typeofit, mtg, shortname, colour, comrare);
             mc.SetCache();
             return true;
         }
 
         private static void FillTable()
         {
-            #region Materials  - checked by netlogentry frontierdata against their spreadsheets. Use this tool to update the tables
+            #region Materials  
 
             cachelist = new Dictionary<string, MaterialCommodityData>();
 
-            AddRaw("Carbon", ItemType.VeryCommon, "C");
-            AddRaw("Iron", ItemType.VeryCommon, "Fe");
-            AddRaw("Nickel", ItemType.VeryCommon, "Ni");
-            AddRaw("Phosphorus", ItemType.VeryCommon, "P");
-            AddRaw("Sulphur", ItemType.VeryCommon, "S");
-            AddRaw("Lead", ItemType.VeryCommon, "Pb");
-            AddRaw("Rhenium", ItemType.VeryCommon, "Re");
+            // very common raw
 
-            AddRaw("Chromium", ItemType.Common, "Cr");
-            AddRaw("Germanium", ItemType.Common, "Ge");
-            AddRaw("Manganese", ItemType.Common, "Mn");
-            AddRaw("Vanadium", ItemType.Common, "V");
-            AddRaw("Zinc", ItemType.Common, "Zn");
-            AddRaw("Zirconium", ItemType.Common, "Zr");
-            AddRaw("Arsenic", ItemType.Common, "As");
+            AddRaw("Carbon", ItemType.VeryCommon, MaterialGroupType.RawCategory1, "C");
+            AddRaw("Phosphorus", ItemType.VeryCommon, MaterialGroupType.RawCategory2, "P");
+            AddRaw("Sulphur", ItemType.VeryCommon, MaterialGroupType.RawCategory3, "S");
+            AddRaw("Iron", ItemType.VeryCommon, MaterialGroupType.RawCategory4, "Fe");
+            AddRaw("Nickel", ItemType.VeryCommon, MaterialGroupType.RawCategory5, "Ni");
+            AddRaw("Rhenium", ItemType.VeryCommon, MaterialGroupType.RawCategory6, "Re");
+            AddRaw("Lead", ItemType.VeryCommon, MaterialGroupType.RawCategory7, "Pb");
 
-            AddRaw("Niobium", ItemType.Standard, "Nb");        // realign to Anthors standard
-            AddRaw("Tungsten", ItemType.Standard, "W");
-            AddRaw("Molybdenum", ItemType.Standard, "Mo");
-            AddRaw("Mercury", ItemType.Standard, "Hg");
-            AddRaw("Boron", ItemType.Standard, "B");
-            AddRaw("Cadmium", ItemType.Standard, "Cd");
-            AddRaw("Tin", ItemType.Standard, "Sn");
+            // common raw
 
-            AddRaw("Selenium", ItemType.Rare, "Se");
-            AddRaw("Yttrium", ItemType.Rare, "Y");
-            AddRaw("Technetium", ItemType.Rare, "Tc");
-            AddRaw("Tellurium", ItemType.Rare, "Te");
-            AddRaw("Ruthenium", ItemType.Rare, "Ru");
-            AddRaw("Polonium", ItemType.Rare, "Po");
-            AddRaw("Antimony", ItemType.Rare, "Sb");
+            AddRaw("Vanadium", ItemType.Common, MaterialGroupType.RawCategory1, "V");
+            AddRaw("Chromium", ItemType.Common, MaterialGroupType.RawCategory2, "Cr");
+            AddRaw("Manganese", ItemType.Common, MaterialGroupType.RawCategory3, "Mn");
+            AddRaw("Zinc", ItemType.Common, MaterialGroupType.RawCategory4, "Zn");
+            AddRaw("Germanium", ItemType.Common, MaterialGroupType.RawCategory5, "Ge");
+            AddRaw("Arsenic", ItemType.Common, MaterialGroupType.RawCategory6, "As");
+            AddRaw("Zirconium", ItemType.Common, MaterialGroupType.RawCategory7, "Zr");
+
+            // standard raw
+
+            AddRaw("Niobium", ItemType.Standard, MaterialGroupType.RawCategory1, "Nb");        // realign to Anthors standard
+            AddRaw("Molybdenum", ItemType.Standard, MaterialGroupType.RawCategory2, "Mo");
+            AddRaw("Cadmium", ItemType.Standard, MaterialGroupType.RawCategory3, "Cd");
+            AddRaw("Tin", ItemType.Standard, MaterialGroupType.RawCategory4, "Sn");
+            AddRaw("Tungsten", ItemType.Standard, MaterialGroupType.RawCategory5, "W");
+            AddRaw("Mercury", ItemType.Standard, MaterialGroupType.RawCategory6, "Hg");
+            AddRaw("Boron", ItemType.Standard, MaterialGroupType.RawCategory7, "B");
+
+            // rare raw
+
+            AddRaw("Yttrium", ItemType.Rare, MaterialGroupType.RawCategory1, "Y");
+            AddRaw("Tellurium", ItemType.Rare, MaterialGroupType.RawCategory2, "Te");
+            AddRaw("Ruthenium", ItemType.Rare, MaterialGroupType.RawCategory3, "Ru");
+            AddRaw("Selenium", ItemType.Rare, MaterialGroupType.RawCategory4, "Se");
+            AddRaw("Technetium", ItemType.Rare, MaterialGroupType.RawCategory5, "Tc");
+            AddRaw("Polonium", ItemType.Rare, MaterialGroupType.RawCategory6, "Po");
+            AddRaw("Antimony", ItemType.Rare, MaterialGroupType.RawCategory7, "Sb");
 
             // very common data
-            AddEnc("Anomalous Bulk Scan Data", ItemType.VeryCommon, "ABSD", "bulkscandata");
-            AddEnc("Atypical Disrupted Wake Echoes", ItemType.VeryCommon, "ADWE", "disruptedwakeechoes");
-            AddEnc("Distorted Shield Cycle Recordings", ItemType.VeryCommon, "DSCR", "shieldcyclerecordings");
-            AddEnc("Exceptional Scrambled Emission Data", ItemType.VeryCommon, "ESED", "scrambledemissiondata");
-            AddEnc("Specialised Legacy Firmware", ItemType.VeryCommon, "SLF", "legacyfirmware");
-            AddEnc("Unusual Encrypted Files", ItemType.VeryCommon, "UEF", "encryptedfiles");
+            AddEnc("Exceptional Scrambled Emission Data", ItemType.VeryCommon, MaterialGroupType.EncodedEmissionData, "ESED", "scrambledemissiondata");
+            AddEnc("Atypical Disrupted Wake Echoes", ItemType.VeryCommon, MaterialGroupType.EncodedWakeScans, "ADWE", "disruptedwakeechoes");
+            AddEnc("Distorted Shield Cycle Recordings", ItemType.VeryCommon, MaterialGroupType.EncodedShieldData, "DSCR", "shieldcyclerecordings");
+            AddEnc("Unusual Encrypted Files", ItemType.VeryCommon, MaterialGroupType.EncodedEncryptionFiles, "UEF", "encryptedfiles");
+            AddEnc("Anomalous Bulk Scan Data", ItemType.VeryCommon, MaterialGroupType.EncodedDataArchives, "ABSD", "bulkscandata");
+            AddEnc("Specialised Legacy Firmware", ItemType.VeryCommon, MaterialGroupType.EncodedFirmware, "SLF", "legacyfirmware");
+            
             // common data
-            AddEnc("Anomalous FSD Telemetry", ItemType.Common, "AFT", "fsdtelemetry");
-            AddEnc("Inconsistent Shield Soak Analysis", ItemType.Common, "ISSA", "shieldsoakanalysis");
-            AddEnc("Irregular Emission Data", ItemType.Common, "IED", "archivedemissiondata");
-            AddEnc("Modified Consumer Firmware", ItemType.Common, "MCF", "consumerfirmware");
-            AddEnc("Tagged Encryption Codes", ItemType.Common, "TEC", "encryptioncodes");
-            AddEnc("Unidentified Scan Archives", ItemType.Common, "USA", "scanarchives");
-            AddEnc("Pattern Beta Obelisk Data", ItemType.Common, "PBOD", "ancientculturaldata");
-            AddEnc("Pattern Gamma Obelisk Data", ItemType.Common, "PGOD", "ancienthistoricaldata");
+            AddEnc("Irregular Emission Data", ItemType.Common, MaterialGroupType.EncodedEmissionData, "IED", "archivedemissiondata");
+            AddEnc("Anomalous FSD Telemetry", ItemType.Common, MaterialGroupType.EncodedWakeScans, "AFT", "fsdtelemetry");
+            AddEnc("Inconsistent Shield Soak Analysis", ItemType.Common, MaterialGroupType.EncodedShieldData, "ISSA", "shieldsoakanalysis");
+            AddEnc("Tagged Encryption Codes", ItemType.Common, MaterialGroupType.EncodedEncryptionFiles, "TEC", "encryptioncodes");
+            AddEnc("Unidentified Scan Archives", ItemType.Common, MaterialGroupType.EncodedDataArchives, "USA", "scanarchives");
+            AddEnc("Modified Consumer Firmware", ItemType.Common, MaterialGroupType.EncodedFirmware, "MCF", "consumerfirmware");
+
             // standard data
-            AddEnc("Classified Scan Databanks", ItemType.Standard, "CSD", "scandatabanks");
-            AddEnc("Cracked Industrial Firmware", ItemType.Standard, "CIF", "industrialfirmware");
-            AddEnc("Open Symmetric Keys", ItemType.Standard, "OSK", "symmetrickeys");
-            AddEnc("Strange Wake Solutions", ItemType.Standard, "SWS", "wakesolutions");
-            AddEnc("Unexpected Emission Data", ItemType.Standard, "UED", "emissiondata");
-            AddEnc("Untypical Shield Scans", ItemType.Standard, "USS", "shielddensityreports");
-            AddEnc("Abnormal Compact Emissions Data", ItemType.Standard, "CED", "compactemissionsdata");
-            AddEnc("Pattern Alpha Obelisk Data", ItemType.Standard, "PAOD", "ancientbiologicaldata");
+
+            AddEnc("Unexpected Emission Data", ItemType.Standard, MaterialGroupType.EncodedEmissionData, "UED", "emissiondata");
+            AddEnc("Strange Wake Solutions", ItemType.Standard, MaterialGroupType.EncodedWakeScans, "SWS", "wakesolutions");
+            AddEnc("Untypical Shield Scans", ItemType.Standard, MaterialGroupType.EncodedShieldData, "USS", "shielddensityreports");
+            AddEnc("Open Symmetric Keys", ItemType.Standard, MaterialGroupType.EncodedEncryptionFiles, "OSK", "symmetrickeys");
+            AddEnc("Classified Scan Databanks", ItemType.Standard, MaterialGroupType.EncodedDataArchives, "CSD", "scandatabanks");
+            AddEnc("Cracked Industrial Firmware", ItemType.Standard, MaterialGroupType.EncodedFirmware, "CIF", "industrialfirmware");
+
             // rare data
-            AddEnc("Aberrant Shield Pattern Analysis", ItemType.Rare, "ASPA", "shieldpatternanalysis");
-            AddEnc("Atypical Encryption Archives", ItemType.Rare, "AEA", "encryptionarchives");
-            AddEnc("Decoded Emission Data", ItemType.Rare, "DED");
-            AddEnc("Divergent Scan Data", ItemType.Rare, "DSD", "encodedscandata");
-            AddEnc("Eccentric Hyperspace Trajectories", ItemType.Rare, "EHT", "hyperspacetrajectories");
-            AddEnc("Security Firmware Patch", ItemType.Rare, "SFP", "securityfirmware");
-            AddEnc("Pattern Delta Obelisk Data", ItemType.Rare, "PDOD", "ancientlanguagedata");
+            AddEnc("Decoded Emission Data", ItemType.Rare, MaterialGroupType.EncodedEmissionData, "DED");
+            AddEnc("Eccentric Hyperspace Trajectories", ItemType.Rare, MaterialGroupType.EncodedWakeScans, "EHT", "hyperspacetrajectories");
+            AddEnc("Aberrant Shield Pattern Analysis", ItemType.Rare, MaterialGroupType.EncodedShieldData, "ASPA", "shieldpatternanalysis");
+            AddEnc("Atypical Encryption Archives", ItemType.Rare, MaterialGroupType.EncodedEncryptionFiles, "AEA", "encryptionarchives");
+            AddEnc("Divergent Scan Data", ItemType.Rare,  MaterialGroupType.EncodedDataArchives, "DSD", "encodedscandata");
+            AddEnc("Security Firmware Patch", ItemType.Rare, MaterialGroupType.EncodedFirmware, "SFP", "securityfirmware");
+
             // very rare data
-            AddEnc("Classified Scan Fragment", ItemType.VeryRare, "CFSD", "classifiedscandata");
-            AddEnc("Modified Embedded Firmware", ItemType.VeryRare, "EFW", "embeddedfirmware");
-            AddEnc("Adaptive Encryptors Capture", ItemType.VeryRare, "AEC", "adaptiveencryptors");
-            AddEnc("Datamined Wake Exceptions", ItemType.VeryRare, "DWEx", "dataminedwake");
-            AddEnc("Peculiar Shield Frequency Data", ItemType.VeryRare, "PSFD", "shieldfrequencydata");
-            AddEnc("Pattern Epsilon Obelisk Data", ItemType.VeryRare, "PEOD", "ancienttechnologicaldata");
-            //very common manufactured
-            AddManu("Basic Conductors", ItemType.VeryCommon, "BaC");
-            AddManu("Chemical Storage Units", ItemType.VeryCommon, "CSU");
-            AddManu("Compact Composites", ItemType.VeryCommon, "CC");
-            AddManu("Crystal Shards", ItemType.VeryCommon, "CS");
-            AddManu("Grid Resistors", ItemType.VeryCommon, "GR");
-            AddManu("Heat Conduction Wiring", ItemType.VeryCommon, "HCW");
-            AddManu("Mechanical Scrap", ItemType.VeryCommon, "MS");
-            AddManu("Salvaged Alloys", ItemType.VeryCommon, "SAll");
-            AddManu("Worn Shield Emitters", ItemType.VeryCommon, "WSE");
-            AddManu("Tempered Alloys", ItemType.VeryCommon, "TeA");
-            // common manufactured
-            AddManu("Chemical Processors", ItemType.Common, "CP");
-            AddManu("Conductive Components", ItemType.Common, "CCo");
-            AddManu("Filament Composites", ItemType.Common, "FiC");
-            AddManu("Flawed Focus Crystals", ItemType.Common, "FFC", "uncutfocuscrystals");
-            AddManu("Galvanising Alloys", ItemType.Common, "GA");
-            AddManu("Heat Dispersion Plate", ItemType.Common, "HDP");
-            AddManu("Heat Resistant Ceramics", ItemType.Common, "HRC");
-            AddManu("Hybrid Capacitors", ItemType.Common, "HC");
-            AddManu("Mechanical Equipment", ItemType.Common, "ME");
-            AddManu("Shield Emitters", ItemType.Common, "SHE");
-            // standard manufactured
-            AddManu("Chemical Distillery", ItemType.Standard, "CHD");
-            AddManu("Conductive Ceramics", ItemType.Standard, "CCe");
-            AddManu("Electrochemical Arrays", ItemType.Standard, "EA");
-            AddManu("Focus Crystals", ItemType.Standard, "FoC");
-            AddManu("Heat Exchangers", ItemType.Standard, "HE");
-            AddManu("High Density Composites", ItemType.Standard, "HDC");
-            AddManu("Mechanical Components", ItemType.Standard, "MC");
-            AddManu("Phase Alloys", ItemType.Standard, "PA");
-            AddManu("Precipitated Alloys", ItemType.Standard, "PAll");
-            AddManu("Shielding Sensors", ItemType.Standard, "SS");
+
+            AddEnc("Abnormal Compact Emissions Data", ItemType.Standard, MaterialGroupType.EncodedEmissionData, "CED", "compactemissionsdata");
+            AddEnc("Datamined Wake Exceptions", ItemType.VeryRare, MaterialGroupType.EncodedWakeScans, "DWEx", "dataminedwake");
+            AddEnc("Peculiar Shield Frequency Data", ItemType.VeryRare, MaterialGroupType.EncodedShieldData, "PSFD", "shieldfrequencydata");
+            AddEnc("Adaptive Encryptors Capture", ItemType.VeryRare, MaterialGroupType.EncodedEncryptionFiles, "AEC", "adaptiveencryptors");
+            AddEnc("Classified Scan Fragment", ItemType.VeryRare, MaterialGroupType.EncodedDataArchives, "CFSD", "classifiedscandata");
+            AddEnc("Modified Embedded Firmware", ItemType.VeryRare, MaterialGroupType.EncodedFirmware, "EFW", "embeddedfirmware");
+
+            // very common manu
+
+            AddManu("Chemical Storage Units", ItemType.VeryCommon, MaterialGroupType.ManufacturedChemical, "CSU");
+            AddManu("Tempered Alloys", ItemType.VeryCommon, MaterialGroupType.ManufacturedThermic, "TeA");
+            AddManu("Heat Conduction Wiring", ItemType.VeryCommon, MaterialGroupType.ManufacturedHeat, "HCW");
+            AddManu("Basic Conductors", ItemType.VeryCommon, MaterialGroupType.ManufacturedConductive, "BaC");
+            AddManu("Mechanical Scrap", ItemType.VeryCommon, MaterialGroupType.ManufacturedMechanicalComponents, "MS");
+            AddManu("Grid Resistors", ItemType.VeryCommon, MaterialGroupType.ManufacturedCapacitors, "GR");
+            AddManu("Worn Shield Emitters", ItemType.VeryCommon, MaterialGroupType.ManufacturedShielding, "WSE");
+            AddManu("Compact Composites", ItemType.VeryCommon, MaterialGroupType.ManufacturedComposite, "CC");
+            AddManu("Crystal Shards", ItemType.VeryCommon, MaterialGroupType.ManufacturedCrystals, "CS");
+            AddManu("Salvaged Alloys", ItemType.VeryCommon, MaterialGroupType.ManufacturedAlloys, "SAll");
+
+            // common manu
+
+            AddManu("Chemical Processors", ItemType.Common, MaterialGroupType.ManufacturedChemical, "CP");
+            AddManu("Heat Resistant Ceramics", ItemType.Common, MaterialGroupType.ManufacturedThermic, "HRC");
+            AddManu("Heat Dispersion Plate", ItemType.Common, MaterialGroupType.ManufacturedHeat, "HDP");
+            AddManu("Conductive Components", ItemType.Common, MaterialGroupType.ManufacturedConductive, "CCo");
+            AddManu("Mechanical Equipment", ItemType.Common, MaterialGroupType.ManufacturedMechanicalComponents, "ME");
+            AddManu("Hybrid Capacitors", ItemType.Common, MaterialGroupType.ManufacturedCapacitors, "HC");
+            AddManu("Shield Emitters", ItemType.Common, MaterialGroupType.ManufacturedShielding, "SHE");
+            AddManu("Filament Composites", ItemType.Common, MaterialGroupType.ManufacturedComposite, "FiC");
+            AddManu("Flawed Focus Crystals", ItemType.Common, MaterialGroupType.ManufacturedCrystals, "FFC", "uncutfocuscrystals");
+            AddManu("Galvanising Alloys", ItemType.Common, MaterialGroupType.ManufacturedAlloys, "GA");
+
+            // Standard manu
+
+            AddManu("Chemical Distillery", ItemType.Standard, MaterialGroupType.ManufacturedChemical, "CHD");
+            AddManu("Precipitated Alloys", ItemType.Standard, MaterialGroupType.ManufacturedThermic, "PAll");
+            AddManu("Heat Exchangers", ItemType.Standard, MaterialGroupType.ManufacturedHeat, "HE");
+            AddManu("Conductive Ceramics", ItemType.Standard, MaterialGroupType.ManufacturedConductive, "CCe");
+            AddManu("Mechanical Components", ItemType.Standard, MaterialGroupType.ManufacturedMechanicalComponents, "MC");
+            AddManu("Electrochemical Arrays", ItemType.Standard, MaterialGroupType.ManufacturedCapacitors, "EA");
+            AddManu("Shielding Sensors", ItemType.Standard, MaterialGroupType.ManufacturedShielding, "SS");
+            AddManu("High Density Composites", ItemType.Standard, MaterialGroupType.ManufacturedComposite, "HDC");
+            AddManu("Focus Crystals", ItemType.Standard, MaterialGroupType.ManufacturedCrystals, "FoC");
+            AddManu("Phase Alloys", ItemType.Standard, MaterialGroupType.ManufacturedAlloys, "PA");
+
+            // rare manu 
+
+            AddManu("Chemical Manipulators", ItemType.Rare, MaterialGroupType.ManufacturedChemical, "CM");
+            AddManu("Thermic Alloys", ItemType.Rare, MaterialGroupType.ManufacturedThermic, "ThA");
+            AddManu("Heat Vanes", ItemType.Rare, MaterialGroupType.ManufacturedHeat, "HV");
+            AddManu("Conductive Polymers", ItemType.Rare, MaterialGroupType.ManufacturedConductive, "CPo");
+            AddManu("Configurable Components", ItemType.Rare, MaterialGroupType.ManufacturedMechanicalComponents, "CCom");
+            AddManu("Polymer Capacitors", ItemType.Rare, MaterialGroupType.ManufacturedCapacitors, "PCa");
+            AddManu("Compound Shielding", ItemType.Rare, MaterialGroupType.ManufacturedShielding, "CoS");
+            AddManu("Proprietary Composites", ItemType.Rare, MaterialGroupType.ManufacturedComposite, "FPC", "fedproprietarycomposites");
+            AddManu("Refined Focus Crystals", ItemType.Rare, MaterialGroupType.ManufacturedCrystals, "RFC");
+            AddManu("Proto Light Alloys", ItemType.Rare, MaterialGroupType.ManufacturedAlloys, "PLA");
+
+            // very rare manu
+
+            AddManu("Pharmaceutical Isolators", ItemType.VeryRare, MaterialGroupType.ManufacturedChemical, "PI");
+            AddManu("Military Grade Alloys", ItemType.VeryRare, MaterialGroupType.ManufacturedThermic, "MGA");
+            AddManu("Proto Heat Radiators", ItemType.VeryRare, MaterialGroupType.ManufacturedHeat, "PHR");
+            AddManu("Biotech Conductors", ItemType.VeryRare, MaterialGroupType.ManufacturedConductive, "BiC");
+            AddManu("Improvised Components", ItemType.VeryRare, MaterialGroupType.ManufacturedMechanicalComponents, "IC");
+            AddManu("Military Supercapacitors", ItemType.VeryRare, MaterialGroupType.ManufacturedCapacitors, "MSC");
+            AddManu("Imperial Shielding", ItemType.VeryRare, MaterialGroupType.ManufacturedShielding, "IS");
+            AddManu("Core Dynamics Composites", ItemType.VeryRare, MaterialGroupType.ManufacturedComposite, "FCC", "fedcorecomposites");
+            AddManu("Exquisite Focus Crystals", ItemType.VeryRare, MaterialGroupType.ManufacturedCrystals, "EFC");
+            AddManu("Proto Radiolic Alloys", ItemType.VeryRare, MaterialGroupType.ManufacturedAlloys, "PRA");
+
+            // Obelisk
+
+            AddEnc("Pattern Beta Obelisk Data", ItemType.Common, MaterialGroupType.NA, "PBOD", "ancientculturaldata");
+            AddEnc("Pattern Gamma Obelisk Data", ItemType.Common, MaterialGroupType.NA, "PGOD", "ancienthistoricaldata");
+            AddEnc("Pattern Alpha Obelisk Data", ItemType.Standard, MaterialGroupType.NA, "PAOD", "ancientbiologicaldata");
+            AddEnc("Pattern Delta Obelisk Data", ItemType.Rare, MaterialGroupType.NA, "PDOD", "ancientlanguagedata");
+            AddEnc("Pattern Epsilon Obelisk Data", ItemType.VeryRare, MaterialGroupType.NA, "PEOD", "ancienttechnologicaldata");
 
             // new to 3.1 frontier data
 
-            AddManu("Guardian Power Cell", ItemType.VeryCommon, "GPCe", "guardian_powercell");
-            AddManu("Guardian Power Conduit", ItemType.Common, "GPC", "guardian_powerconduit");
-            AddManu("Guardian Technology Component", ItemType.Standard, "GTC", "guardian_techcomponent");
-            AddManu("Guardian Sentinel Weapon Parts", ItemType.Standard, "GSWP", "guardian_sentinel_weaponparts");
-            AddManu("Guardian Sentinel Wreckage Components", ItemType.VeryCommon, "GSWC", "guardian_sentinel_wreckagecomponents");
-            AddEnc("Guardian Weapon Blueprint Segment", ItemType.Rare, "GWBS", "guardian_weaponblueprint");
-            AddEnc("Guardian Module Blueprint Segment", ItemType.Rare, "GMBS", "guardian_moduleblueprint");
+            AddManu("Guardian Power Cell", ItemType.VeryCommon, MaterialGroupType.NA, "GPCe", "guardian_powercell");
+            AddManu("Guardian Power Conduit", ItemType.Common, MaterialGroupType.NA, "GPC", "guardian_powerconduit");
+            AddManu("Guardian Technology Component", ItemType.Standard, MaterialGroupType.NA, "GTC", "guardian_techcomponent");
+            AddManu("Guardian Sentinel Weapon Parts", ItemType.Standard, MaterialGroupType.NA, "GSWP", "guardian_sentinel_weaponparts");
+            AddManu("Guardian Sentinel Wreckage Components", ItemType.VeryCommon, MaterialGroupType.NA, "GSWC", "guardian_sentinel_wreckagecomponents");
+            AddEnc("Guardian Weapon Blueprint Segment", ItemType.Rare, MaterialGroupType.NA, "GWBS", "guardian_weaponblueprint");
+            AddEnc("Guardian Module Blueprint Segment", ItemType.Rare, MaterialGroupType.NA, "GMBS", "guardian_moduleblueprint");
 
             // new to 3.2 frontier data
-            AddEnc("Guardian Vessel Blueprint Segment", ItemType.VeryRare, "GMVB", "guardian_vesselblueprint");
-
-            AddManu("Bio-Mechanical Conduits", ItemType.Standard, "BMC", "TG_BioMechanicalConduits");
-            AddManu("Propulsion Elements", ItemType.Standard, "PE", "TG_PropulsionElement");
-            AddManu("Weapon Parts", ItemType.Standard, "WP", "TG_WeaponParts");
-            AddManu("Wreckage Components", ItemType.Standard, "WRC", "TG_WreckageComponents");
-            AddEnc("Ship Flight Data", ItemType.Standard, "SFD", "TG_ShipFlightData");
-            AddEnc("Ship Systems Data", ItemType.Standard, "SSD", "TG_ShipSystemsData");
-
-            // rare manufactured
-            AddManu("Chemical Manipulators", ItemType.Rare, "CM");
-            AddManu("Compound Shielding", ItemType.Rare, "CoS");
-            AddManu("Conductive Polymers", ItemType.Rare, "CPo");
-            AddManu("Configurable Components", ItemType.Rare, "CCom");
-            AddManu("Heat Vanes", ItemType.Rare, "HV");
-            AddManu("Polymer Capacitors", ItemType.Rare, "PCa");
-            AddManu("Proto Light Alloys", ItemType.Rare, "PLA");
-            AddManu("Refined Focus Crystals", ItemType.Rare, "RFC");
-            AddManu("Proprietary Composites", ItemType.Rare, "FPC", "fedproprietarycomposites");
-            AddManu("Thermic Alloys", ItemType.Rare, "ThA");
-            // very rare manufactured
-            AddManu("Core Dynamics Composites", ItemType.VeryRare, "FCC", "fedcorecomposites");
-            AddManu("Biotech Conductors", ItemType.VeryRare, "BiC");
-            AddManu("Exquisite Focus Crystals", ItemType.VeryRare, "EFC");
-            AddManu("Imperial Shielding", ItemType.VeryRare, "IS");
-            AddManu("Improvised Components", ItemType.VeryRare, "IC");
-            AddManu("Military Grade Alloys", ItemType.VeryRare, "MGA");
-            AddManu("Military Supercapacitors", ItemType.VeryRare, "MSC");
-            AddManu("Pharmaceutical Isolators", ItemType.VeryRare, "PI");
-            AddManu("Proto Heat Radiators", ItemType.VeryRare, "PHR");
-            AddManu("Proto Radiolic Alloys", ItemType.VeryRare, "PRA");
+            AddEnc("Guardian Vessel Blueprint Segment", ItemType.VeryRare, MaterialGroupType.NA, "GMVB", "guardian_vesselblueprint");
+            AddManu("Bio-Mechanical Conduits", ItemType.Standard, MaterialGroupType.NA, "BMC", "TG_BioMechanicalConduits");
+            AddManu("Propulsion Elements", ItemType.Standard, MaterialGroupType.NA, "PE", "TG_PropulsionElement");
+            AddManu("Weapon Parts", ItemType.Standard, MaterialGroupType.NA, "WP", "TG_WeaponParts");
+            AddManu("Wreckage Components", ItemType.Standard, MaterialGroupType.NA, "WRC", "TG_WreckageComponents");
+            AddEnc("Ship Flight Data", ItemType.Standard, MaterialGroupType.NA, "SFD", "TG_ShipFlightData");
+            AddEnc("Ship Systems Data", ItemType.Standard, MaterialGroupType.NA, "SSD", "TG_ShipSystemsData");
 
             ItemType sv = ItemType.Salvage;
             AddCommodity("Thargoid Sensor", sv, "UnknownArtifact");
@@ -507,21 +547,21 @@ namespace EliteDangerousCore
             AddCommodity("Thargoid Biological Matter", sv, "UnknownBiologicalMatter");
             AddCommodity("Thargoid Technology Samples", sv, "UnknownTechnologySamples");
 
-            AddManu("Thargoid Carapace", ItemType.Common, "UKCP", "unknowncarapace");
-            AddManu("Thargoid Energy Cell", ItemType.Standard, "UKEC", "unknownenergycell");
-            AddManu("Thargoid Organic Circuitry", ItemType.VeryRare, "UKOC", "unknownorganiccircuitry");
-            AddManu("Thargoid Technological Components", ItemType.Rare, "UKTC", "unknowntechnologycomponents");
-            AddManu("Sensor Fragment", ItemType.VeryRare, "UES", "unknownenergysource");
+            AddManu("Thargoid Carapace", ItemType.Common, MaterialGroupType.NA, "UKCP", "unknowncarapace");
+            AddManu("Thargoid Energy Cell", ItemType.Standard, MaterialGroupType.NA, "UKEC", "unknownenergycell");
+            AddManu("Thargoid Organic Circuitry", ItemType.VeryRare, MaterialGroupType.NA, "UKOC", "unknownorganiccircuitry");
+            AddManu("Thargoid Technological Components", ItemType.Rare, MaterialGroupType.NA, "UKTC", "unknowntechnologycomponents");
+            AddManu("Sensor Fragment", ItemType.VeryRare, MaterialGroupType.NA, "UES", "unknownenergysource");
 
-            AddEnc("Thargoid Material Composition Data", ItemType.Standard, "UMCD", "tg_compositiondata");
-            AddEnc("Thargoid Structural Data", ItemType.Common, "UKSD", "tg_structuraldata");
-            AddEnc("Thargoid Residue Data", ItemType.Rare, "URDA", "tg_residuedata");
-            AddEnc("Thargoid Ship Signature", ItemType.Standard, "USSig", "unknownshipsignature");
-            AddEnc("Thargoid Wake Data", ItemType.Rare, "UWD", "unknownwakedata");
+            AddEnc("Thargoid Material Composition Data", ItemType.Standard, MaterialGroupType.NA, "UMCD", "tg_compositiondata");
+            AddEnc("Thargoid Structural Data", ItemType.Common, MaterialGroupType.NA, "UKSD", "tg_structuraldata");
+            AddEnc("Thargoid Residue Data", ItemType.Rare, MaterialGroupType.NA, "URDA", "tg_residuedata");
+            AddEnc("Thargoid Ship Signature", ItemType.Standard, MaterialGroupType.NA, "USSig", "unknownshipsignature");
+            AddEnc("Thargoid Wake Data", ItemType.Rare, MaterialGroupType.NA, "UWD", "unknownwakedata");
 
             #endregion
 
-            #region Commodities - checked by netlogentry frontierdata against their spreadsheets. Use this tool to update the tables
+            #region Commodities 
 
             AddCommodity("Rockforth Fertiliser", ItemType.Chemicals, "RockforthFertiliser");
             AddCommodity("Agronomic Treatment", ItemType.Chemicals, "AgronomicTreatment");
@@ -549,7 +589,6 @@ namespace EliteDangerousCore
             AddCommodity("Marine Equipment", m, "MarineSupplies");
             AddCommodity("Microbial Furnaces", m, "HeliostaticFurnaces");
             AddCommodity("Skimmer Components", m, "SkimerComponents");
-
             AddCommodityList("Building Fabricators;Crop Harvesters;Emergency Power Cells;Exhaust Manifold;Geological Equipment", m);
             AddCommoditySN("HN Shock Mount", m, "HNSM", "");
             AddCommodityList("Mineral Extractors;Modular Terminals;Power Generators", m);
@@ -567,7 +606,6 @@ namespace EliteDangerousCore
             ItemType md = ItemType.Medicines;
             AddCommodityList("Advanced Medicines;Basic Medicines;Combat Stabilisers;Performance Enhancers;Progenitor Cells", md);
             AddCommodity("Agri-Medicines", md, "agriculturalmedicines");
-
             AddCommodity("Nanomedicines", md, "Nanomedicines"); // not in frontier data. Keep for now Jan 2020
 
             ItemType mt = ItemType.Metals;
@@ -580,7 +618,6 @@ namespace EliteDangerousCore
             AddCommodity("Methanol Monohydrate Crystals", mi, "methanolmonohydratecrystals");
             AddCommodity("Low Temperature Diamonds", mi, "lowtemperaturediamond");
             AddCommodity("Void Opal", mi, "Opal");
-
             AddCommodity("Rhodplumsite", mi, "Rhodplumsite");
             AddCommodity("Serendibite", mi, "Serendibite");
             AddCommodity("Monazite", mi, "Monazite");
@@ -588,6 +625,8 @@ namespace EliteDangerousCore
             AddCommodity("Benitoite", mi, "Benitoite");
             AddCommodity("Grandidierite", mi, "Grandidierite");
             AddCommodity("Alexandrite", mi, "Alexandrite");
+
+            // Salvage
 
             AddCommodity("Trinkets of Hidden Fortune", sv, "TrinketsOfFortune");
             AddCommodity("Gene Bank", sv, "GeneBank");
@@ -638,7 +677,6 @@ namespace EliteDangerousCore
             AddCommodity("Mollusc Spores", sv, "M3_TissueSample_Spores");
             AddCommodity("Pod Shell Tissue", sv, "S6_TissueSample_Coenosarc");
 
-
             ItemType nc = ItemType.Narcotics;
             AddCommodity("Narcotics", nc, "BasicNarcotics");
 
@@ -658,11 +696,9 @@ namespace EliteDangerousCore
             AddCommodity("Land Enrichment Systems", tc, "TerrainEnrichmentSystems");
 
             ItemType tx = ItemType.Textiles;
-
             AddCommodityList("Conductive Fabrics;Leather;Military Grade Fabrics;Natural Fabrics;Synthetic Fabrics", tx);
 
             ItemType ws = ItemType.Waste;
-
             AddCommodityList("Biowaste;Chemical Waste;Scrap;Toxic Waste", ws);
 
             ItemType wp = ItemType.Weapons;
@@ -671,7 +707,7 @@ namespace EliteDangerousCore
 
             #endregion
 
-            #region Rare Commodities - checked by netlogentry frontierdata against their spreadsheets. Use this tool to update the tables
+            #region Rare Commodities 
 
             AddCommodityRare("Apa Vietii", ItemType.Narcotics, "ApaVietii");
             AddCommodityRare("The Hutton Mug", ItemType.ConsumerItems, "TheHuttonMug");
@@ -815,7 +851,7 @@ namespace EliteDangerousCore
 
             #endregion
 
-            #region Powerplay - checked by netlogentry frontierdata against their spreadsheets. Use this tool to update the tables
+            #region Powerplay 
 
             AddCommodity("Aisling Media Materials", ItemType.PowerPlay, "AislingMediaMaterials");
             AddCommodity("Aisling Sealed Contracts", ItemType.PowerPlay, "AislingMediaResources");
@@ -866,7 +902,7 @@ namespace EliteDangerousCore
                 x.Name = BaseUtils.Translator.Instance.Translate(x.Name, "MaterialCommodityData." + x.FDName);
             }
 
-            foreach (MaterialCommodityData d in cachelist.Values) System.Diagnostics.Debug.WriteLine(string.Format("{0},{1},{2},{3},{4}, {5}", d.Category, d.Type.ToString().SplitCapsWord(), d.FDName, d.Name, d.Shortname, d.Rarity ));
+            foreach (MaterialCommodityData d in cachelist.Values) System.Diagnostics.Debug.WriteLine(string.Format("{0},{1},{2},{3},{4},{5},{6}", d.Category, d.Type.ToString().SplitCapsWord(), d.MaterialGroup.ToString(), d.FDName, d.Name, d.Shortname, d.Rarity ));
         }
 
 
