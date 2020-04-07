@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2019 EDDiscovery development team
+ * Copyright © 2016 - 2020 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -28,6 +28,7 @@ namespace EDDiscovery.UserControls
     {
         private string DbColumnSave { get { return DBName("ModulesGrid", "DGVCol"); } }
         private string DbShipSave { get { return DBName("ModulesGridShipSelect"); } }
+        private string DbWordWrap { get { return DBName("ModulesGridWordWrap"); } }
 
         private string storedmoduletext;
         private string travelhistorytext;
@@ -57,6 +58,10 @@ namespace EDDiscovery.UserControls
             dataGridViewModules.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
 
             buttonExtCoriolis.Visible = buttonExtEDShipyard.Visible = buttonExtConfigure.Visible = false;
+
+            extCheckBoxWordWrap.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbWordWrap, false);
+            UpdateWordWrap();
+            extCheckBoxWordWrap.Click += extCheckBoxWordWrap_Click;
 
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange; ;
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
@@ -368,6 +373,24 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
+        #region Word wrap
+
+        private void extCheckBoxWordWrap_Click(object sender, EventArgs e)
+        {
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbWordWrap, extCheckBoxWordWrap.Checked);
+            UpdateWordWrap();
+        }
+
+        private void UpdateWordWrap()
+        {
+            dataGridViewModules.DefaultCellStyle.WrapMode = extCheckBoxWordWrap.Checked ? DataGridViewTriState.True : DataGridViewTriState.False;
+            dataGridViewModules.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;
+            dataViewScrollerPanel.UpdateScroll();
+        }
+
+        #endregion
+
+
         private void UpdateComboBox(HistoryList hl)
         {
             ShipInformationList shm = hl.shipinformationlist;
@@ -562,6 +585,24 @@ namespace EDDiscovery.UserControls
                 e.SortDataGridViewColumnNumeric("t");
         }
 
+        private void dataGridViewModules_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.RowIndex < dataGridViewModules.RowCount)
+            {
+                DataGridViewRow row = dataGridViewModules.Rows[e.RowIndex];
+
+                bool expanded = row.Cells[0].Tag != null && (bool)row.Cells[0].Tag == true;     // cell 0 tag holds expanded state
+
+                for (int i = 0; i < dataGridViewModules.ColumnCount; i++)
+                {
+                    DataGridViewCell cell = row.Cells[i];
+                    cell.Style.WrapMode = expanded ? DataGridViewTriState.NotSet : DataGridViewTriState.True;
+                }
+
+                row.Cells[0].Tag = !expanded;
+            }
+        }
+
         private void dataGridViewModules_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
@@ -645,5 +686,6 @@ namespace EDDiscovery.UserControls
             else
                 ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "No Ship Information available".T(EDTx.UserControlModules_NOSI), "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
+
     }
 }

@@ -72,7 +72,6 @@ namespace EDDiscovery.UserControls
             this.explorationPanelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.moveToAnotherCommanderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hideSystemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.selectCorrectSystemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.removeJournalEntryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sendUnsyncedScanToEDDNToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runActionsOnThisEntryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -295,7 +294,6 @@ namespace EDDiscovery.UserControls
             this.addToTrilaterationToolStripMenuItem,
             this.moveToAnotherCommanderToolStripMenuItem,
             this.hideSystemToolStripMenuItem,
-            this.selectCorrectSystemToolStripMenuItem,
             this.removeJournalEntryToolStripMenuItem,
             this.sendUnsyncedScanToEDDNToolStripMenuItem,
             this.runActionsOnThisEntryToolStripMenuItem,
@@ -432,13 +430,6 @@ namespace EDDiscovery.UserControls
             this.hideSystemToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
             this.hideSystemToolStripMenuItem.Text = "Hide Entries";
             this.hideSystemToolStripMenuItem.Click += new System.EventHandler(this.hideSystemToolStripMenuItem_Click);
-            // 
-            // selectCorrectSystemToolStripMenuItem
-            // 
-            this.selectCorrectSystemToolStripMenuItem.Name = "selectCorrectSystemToolStripMenuItem";
-            this.selectCorrectSystemToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
-            this.selectCorrectSystemToolStripMenuItem.Text = "Assign new system";
-            this.selectCorrectSystemToolStripMenuItem.Click += new System.EventHandler(this.selectCorrectSystemToolStripMenuItem_Click);
             // 
             // removeJournalEntryToolStripMenuItem
             // 
@@ -775,7 +766,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripMenuItem bothToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem routeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem viewOnEDSMToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem selectCorrectSystemToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemStartStop;
         private System.Windows.Forms.ToolStripMenuItem removeJournalEntryToolStripMenuItem;
         private System.Windows.Forms.ToolTip toolTip;

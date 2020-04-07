@@ -113,7 +113,7 @@ namespace EDDiscovery.UserControls
                 //System.Diagnostics.Debug.WriteLine("Star grid started, uctg selected, ask");
 
                 double lookup_max = Math.Min(textMaxRadius.Value, lookup_limit);
-               // System.Diagnostics.Debug.WriteLine("Lookup limit " + lookup_limit + " lookup " + lookup_max);
+                //System.Diagnostics.Debug.WriteLine("Lookup limit " + lookup_limit + " lookup " + lookup_max);
 
                 // Get nearby systems from the systems DB.
                 computer.CalculateClosestSystems(he.System, 
@@ -275,11 +275,13 @@ namespace EDDiscovery.UserControls
 
         private void textMinRadius_ValueChanged(object sender, EventArgs e)
         {
+            lookup_limit = textMaxRadius.Value;
             KickComputation(last_he, true);
         }
 
         private void textMaxRadius_ValueChanged(object sender, EventArgs e)
         {
+            lookup_limit = textMaxRadius.Value;
             KickComputation(last_he, true);
         }
 

@@ -233,7 +233,7 @@ namespace EDDiscovery.UserControls
                     vpos += i.pos.Height;
                 }
 
-                StarScan.SystemNode systemnode = discoveryform.history.starscan.FindSystem(sys, checkEDSMForInformationToolStripMenuItem.Checked);        // get data with EDSM
+                StarScan.SystemNode systemnode = discoveryform.history.starscan.FindSystem(sys, checkEDSMForInformationToolStripMenuItem.Checked, true);        // get data with EDSM
 
                 if (systemnode != null)     // no data, clear display, clear any last_he so samesys is false next time
                 {
