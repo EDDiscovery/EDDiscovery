@@ -255,11 +255,11 @@ namespace EDDiscovery.UserControls
                         wantedList.Append($"  {c.scratchpad} {c.Details.Name}{present}");
                         int? onHand = mcl.Where(m => m.Details.Shortname == c.Details.Shortname).FirstOrDefault()?.Count;
                         int totalReq = c.scratchpad + (onHand.HasValue ? onHand.Value : 0);
-                        if ((c.Details.Type == MaterialFreqVeryCommon && totalReq > VeryCommonCap) ||
-                            (c.Details.Type == MaterialFreqCommon && totalReq > CommonCap) ||
-                            (c.Details.Type == MaterialFreqStandard && totalReq > StandardCap) ||
-                            (c.Details.Type == MaterialFreqRare && totalReq > RareCap) ||
-                            (c.Details.Type == MaterialFreqVeryRare && totalReq > VeryRareCap))
+                        if ((c.Details.Type == MaterialCommodityData.ItemType.VeryCommon && totalReq > VeryCommonCap) ||
+                            (c.Details.Type == MaterialCommodityData.ItemType.Common && totalReq > CommonCap) ||
+                            (c.Details.Type == MaterialCommodityData.ItemType.Standard && totalReq > StandardCap) ||
+                            (c.Details.Type == MaterialCommodityData.ItemType.Rare && totalReq > RareCap) ||
+                            (c.Details.Type == MaterialCommodityData.ItemType.VeryRare && totalReq > VeryRareCap))
                         {
                             capExceededMats.Add(c.Details.Name);
                         }

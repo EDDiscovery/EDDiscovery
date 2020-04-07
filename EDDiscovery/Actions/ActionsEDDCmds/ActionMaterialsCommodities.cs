@@ -94,7 +94,7 @@ namespace EDDiscovery.Actions
                         ap[prefix + "Name" + postfix] = list[i].Details.Name;
                         ap[prefix + "Category" + postfix] = list[i].Details.Category.ToString();
                         ap[prefix + "fdname" + postfix] = list[i].Details.FDName;
-                        ap[prefix + "type" + postfix] = list[i].Details.Type;
+                        ap[prefix + "type" + postfix] = list[i].Details.Type.ToString().SplitCapsWord();
                         ap[prefix + "shortname" + postfix] = list[i].Details.Shortname;
                     }
                 }

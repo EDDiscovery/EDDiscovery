@@ -54,7 +54,7 @@ namespace EDDiscovery.UserControls
             cfs = new FilterSelector(DbFilterSave);
 
             MaterialCommodityData[] items;
-            Tuple<string, string>[] types;
+            Tuple<MaterialCommodityData.ItemType, string>[] types;
 
             cfs.AddAllNone();
 
