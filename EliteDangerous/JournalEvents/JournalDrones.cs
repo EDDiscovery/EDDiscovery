@@ -59,7 +59,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public void UpdateCommodities(MaterialCommoditiesList mc)
         {
-            mc.Change(MaterialCommodityData.CommodityCategory, "drones", Count, 0);
+            mc.Change(MaterialCommodityData.CatType.Commodity, "drones", Count, 0);
         }
 
         public void Ledger(Ledger mcl)
@@ -92,7 +92,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public void UpdateCommodities(MaterialCommoditiesList mc)
         {
-            mc.Change(MaterialCommodityData.CommodityCategory, "drones", -Count, 0);
+            mc.Change(MaterialCommodityData.CatType.Commodity, "drones", -Count, 0);
         }
 
         public void Ledger(Ledger mcl)
@@ -121,7 +121,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public void UpdateCommodities(MaterialCommoditiesList mc)
         {
-            mc.Change(MaterialCommodityData.CommodityCategory, "drones", -1, 0);
+            mc.Change(MaterialCommodityData.CatType.Commodity, "drones", -1, 0);
         }
 
         public override void FillInformation(out string info, out string detailed)

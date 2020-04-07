@@ -67,7 +67,7 @@ namespace EDDiscovery.UserControls
                 items = MaterialCommodityData.GetMaterials(true);
                 types = MaterialCommodityData.GetTypes((x) => !x.IsCommodity, true);
 
-                Tuple<string, string>[] cats = MaterialCommodityData.GetCategories((x) => !x.IsCommodity, true);
+                var cats = MaterialCommodityData.GetCategories((x) => !x.IsCommodity, true);
 
                 foreach (var t in cats)
                 {

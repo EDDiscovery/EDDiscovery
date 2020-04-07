@@ -91,7 +91,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public void UpdateCommodities(MaterialCommoditiesList mc)
         {
-            mc.Change(MaterialCommodityData.CommodityCategory, Type, Count, BuyPrice);
+            mc.Change(MaterialCommodityData.CatType.Commodity, Type, Count, BuyPrice);
         }
 
         public void Ledger(Ledger mcl)
@@ -141,7 +141,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public void UpdateCommodities(MaterialCommoditiesList mc)
         {
-            mc.Change(MaterialCommodityData.CommodityCategory, Type, -Count, 0);
+            mc.Change(MaterialCommodityData.CatType.Commodity, Type, -Count, 0);
         }
 
         public void Ledger(Ledger mcl)

@@ -120,7 +120,7 @@ namespace EliteDangerousCore.JournalEvents
                 if (Inventory != null)
                 {
                     foreach (Cargo c in Inventory)
-                        mc.Set(MaterialCommodityData.CommodityCategory, c.Name, c.Count, 0);
+                        mc.Set(MaterialCommodityData.CatType.Commodity, c.Name, c.Count, 0);
                 }
             }
         }
@@ -154,7 +154,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public void UpdateCommodities(MaterialCommoditiesList mc)
         {
-            mc.Change(MaterialCommodityData.CommodityCategory, Type, -Count, 0);
+            mc.Change(MaterialCommodityData.CatType.Commodity, Type, -Count, 0);
         }
 
         public void LedgerNC(Ledger mcl)
@@ -220,7 +220,7 @@ namespace EliteDangerousCore.JournalEvents
         public void UpdateCommodities(MaterialCommoditiesList mc)
         {
             if (CargoType.Length > 0 && Count > 0)
-                mc.Change(MaterialCommodityData.CommodityCategory, CargoType, (UpdateEnum == UpdateTypeEnum.Collect) ? Count : -Count, 0);
+                mc.Change(MaterialCommodityData.CatType.Commodity, CargoType, (UpdateEnum == UpdateTypeEnum.Collect) ? Count : -Count, 0);
         }
 
         public void UpdateMissions(MissionListAccumulator mlist, EliteDangerousCore.ISystem sys, string body)
@@ -273,7 +273,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public void UpdateCommodities(MaterialCommoditiesList mc)
         {
-            mc.Change(MaterialCommodityData.CommodityCategory, Type, 1, 0);
+            mc.Change(MaterialCommodityData.CatType.Commodity, Type, 1, 0);
         }
 
         public void LedgerNC(Ledger mcl)

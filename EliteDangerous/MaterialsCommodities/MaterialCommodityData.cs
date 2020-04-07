@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2020 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -24,7 +24,8 @@ namespace EliteDangerousCore
     // [System.Diagnostics.DebuggerDisplay("MatDB {Category} {Name} {FDName} {Type} {Shortname}")]
     public class MaterialCommodityData
     {
-        public string Category { get; private set; }                // either Commodity, or one of the Category types from the MaterialCollected type.
+        public enum CatType { Commodity, Raw, Encoded, Manufactured };
+        public CatType Category { get; private set; }                // either Commodity, Encoded, Manufactured, Raw
         public string TranslatedCategory { get; private set; }      // translation of above..
         public string Name { get; private set; }                    // name of it in nice text
         public string FDName { get; private set; }                  // fdname, lower case..
@@ -34,12 +35,12 @@ namespace EliteDangerousCore
         public Color Colour { get; private set; }                   // colour if its associated with one
         public bool Rarity { get; private set; }                    // if it is a rare commodity
 
-        public bool IsCommodity { get { return Category == CommodityCategory; } }
-        public bool IsRaw { get { return Category == MaterialRawCategory; } }
-        public bool IsEncoded { get { return Category == MaterialEncodedCategory; } }
-        public bool IsManufactured { get { return Category == MaterialManufacturedCategory; } }
-        public bool IsEncodedOrManufactured { get { return Category == MaterialEncodedCategory || Category == MaterialManufacturedCategory; } }
-        public bool IsRareCommodity { get { return Rarity && Category.Equals(CommodityCategory); } }
+        public bool IsCommodity { get { return Category == CatType.Commodity; } }
+        public bool IsRaw { get { return Category == CatType.Raw; } }
+        public bool IsEncoded { get { return Category == CatType.Encoded; } }
+        public bool IsManufactured { get { return Category == CatType.Manufactured; } }
+        public bool IsEncodedOrManufactured { get { return Category == CatType.Encoded || Category == CatType.Manufactured; } }
+        public bool IsRareCommodity { get { return Rarity && Category.Equals(CatType.Commodity); } }
         public bool IsCommonMaterial { get { return Type == MaterialFreqCommon || Type == MaterialFreqVeryCommon; } }
         public bool IsJumponium
         {
@@ -51,10 +52,18 @@ namespace EliteDangerousCore
             }
         }
 
-        public static string CommodityCategory = "Commodity";       // Categories 
-        public static string MaterialRawCategory = "Raw";
-        public static string MaterialEncodedCategory = "Encoded";
-        public static string MaterialManufacturedCategory = "Manufactured";
+        static public CatType? CategoryFrom(string s)
+        {
+            if (Enum.TryParse<CatType>(s, true, out CatType res))
+                return res;
+            else
+                return null;
+        }
+
+        //public static string CatType.Commodity = "Commodity";       // Categories 
+        //public static string CatType.Raw = "Raw";
+        //public static string CatType.Encoded = "Encoded";
+        //public static string CatType.Manufactured = "Manufactured";
 
         public static string MaterialFreqVeryRare = "Very Rare";    // type field for materials
         public static string MaterialFreqRare = "Rare";
@@ -154,12 +163,12 @@ namespace EliteDangerousCore
 
         public static MaterialCommodityData[] GetCommodities(bool sorted)
         {
-            return Get(x => x.Category == CommodityCategory, sorted);
+            return Get(x => x.Category == CatType.Commodity, sorted);
         }
 
         public static MaterialCommodityData[] GetMaterials(bool sorted)
         {
-            return Get(x => x.Category != CommodityCategory, sorted);
+            return Get(x => x.Category != CatType.Commodity, sorted);
         }
 
         public static Tuple<string, string>[] GetTypes(Func<MaterialCommodityData, bool> func, bool sorted)
@@ -171,12 +180,12 @@ namespace EliteDangerousCore
             return types;
         }
 
-        public static Tuple<string, string>[] GetCategories(Func<MaterialCommodityData, bool> func, bool sorted)
+        public static Tuple<CatType, string>[] GetCategories(Func<MaterialCommodityData, bool> func, bool sorted)
         {
             MaterialCommodityData[] mcs = GetAll();
-            Tuple<string, string>[] types = mcs.Where(func).Select(x => new Tuple<string, string>(x.Category, x.TranslatedCategory)).Distinct().ToArray();
+            var types = mcs.Where(func).Select(x => new Tuple<CatType, string>(x.Category, x.TranslatedCategory)).Distinct().ToArray();
             if (sorted)
-                Array.Sort(types, delegate (Tuple<string, string> l, Tuple<string, string> r) { return l.Item2.CompareTo(r.Item2); });
+                Array.Sort(types, delegate (Tuple<CatType, string> l, Tuple<CatType, string> r) { return l.Item2.CompareTo(r.Item2); });
             return types;
         }
 
@@ -199,10 +208,10 @@ namespace EliteDangerousCore
         }
 
 
-        public static string[] GetFDNameMembersOfCategory(string catname, bool sorted)
+        public static string[] GetFDNameMembersOfCategory(CatType catname, bool sorted)
         {
             MaterialCommodityData[] mcs = GetAll();
-            string[] members = mcs.Where(x => x.Category.Equals(catname, StringComparison.InvariantCultureIgnoreCase)).Select(x => x.FDName).ToArray();
+            string[] members = mcs.Where(x => x.Category == catname).Select(x => x.FDName).ToArray();
             if (sorted)
                 Array.Sort(members);
             return members;
@@ -214,10 +223,10 @@ namespace EliteDangerousCore
         {
         }
 
-        public MaterialCommodityData(string cs, string n, string fd, string t, string shortn, Color cl, bool rare)
+        public MaterialCommodityData(CatType cs, string n, string fd, string t, string shortn, Color cl, bool rare)
         {
             Category = cs;
-            TranslatedCategory = Category.Tx(typeof(MaterialCommodityData));        // valid to pass this thru the Tx( system
+            TranslatedCategory = Category.ToString().Tx(typeof(MaterialCommodityData));        // valid to pass this thru the Tx( system
             Name = n;
             FDName = fd;
             Type = t;
@@ -232,7 +241,7 @@ namespace EliteDangerousCore
             cachelist[this.FDName.ToLowerInvariant()] = this;
         }
 
-        public static MaterialCommodityData EnsurePresent(string cat, string fdname)  // By FDNAME
+        public static MaterialCommodityData EnsurePresent(CatType cat, string fdname)  // By FDNAME
         {
             if (!cachelist.ContainsKey(fdname.ToLowerInvariant()))
             {
@@ -269,34 +278,34 @@ namespace EliteDangerousCore
 
         private static bool AddRaw(string name, string typeofit, string shortname, string fdname = "")
         {
-            return AddEntry(MaterialRawCategory, CByType(typeofit), name, typeofit, shortname, fdname);
+            return AddEntry(CatType.Raw, CByType(typeofit), name, typeofit, shortname, fdname);
         }
 
         private static bool AddEnc(string name, string typeofit, string shortname, string fdname = "")
         {
-            return AddEntry(MaterialEncodedCategory, CByType(typeofit), name, typeofit, shortname, fdname);
+            return AddEntry(CatType.Encoded, CByType(typeofit), name, typeofit, shortname, fdname);
         }
 
         private static bool AddManu(string name, string typeofit, string shortname, string fdname = "")
         {
-            return AddEntry(MaterialManufacturedCategory, CByType(typeofit), name, typeofit, shortname, fdname);
+            return AddEntry(CatType.Manufactured, CByType(typeofit), name, typeofit, shortname, fdname);
         }
 
         // Commods
 
         private static bool AddCommodityRare(string aliasname, string typeofit, string fdname)
         {
-            return AddEntry(CommodityCategory, Color.Green, aliasname, typeofit, "", fdname, true);
+            return AddEntry(CatType.Commodity, Color.Green, aliasname, typeofit, "", fdname, true);
         }
 
         private static bool AddCommodity(string aliasname, string typeofit, string fdname)        // fdname only if not a list.
         {
-            return AddEntry(CommodityCategory, Color.Green, aliasname, typeofit, "", fdname);
+            return AddEntry(CatType.Commodity, Color.Green, aliasname, typeofit, "", fdname);
         }
 
         private static bool AddCommoditySN(string aliasname, string typeofit, string shortname, string fdname)
         {
-            return AddEntry(CommodityCategory, Color.Green, aliasname, typeofit, shortname, fdname);
+            return AddEntry(CatType.Commodity, Color.Green, aliasname, typeofit, shortname, fdname);
         }
 
         // fdname only useful if aliasname is not a list.
@@ -308,7 +317,7 @@ namespace EliteDangerousCore
             {
                 if (name.Length > 0)   // just in case a semicolon slips thru
                 {
-                    if (!AddEntry(CommodityCategory, Color.Green, name, typeofit, "", ""))
+                    if (!AddEntry(CatType.Commodity, Color.Green, name, typeofit, "", ""))
                     {
                         return false;
                     }
@@ -323,7 +332,7 @@ namespace EliteDangerousCore
             return n.ToLowerInvariant();
         }
 
-        private static bool AddEntry(string catname, Color colour, string aliasname, string typeofit, string shortname, string fdName, bool comrare = false)
+        private static bool AddEntry(CatType catname, Color colour, string aliasname, string typeofit, string shortname, string fdName, bool comrare = false)
         {
             System.Diagnostics.Debug.Assert(!shortname.HasChars() || cachelist.Values.ToList().Find(x => x.Shortname.Equals(shortname, StringComparison.InvariantCultureIgnoreCase)) == null, "ShortName repeat " + aliasname + " " + shortname);
             System.Diagnostics.Debug.Assert(cachelist.ContainsKey(fdName) == false, "Repeated entry " + fdName);
@@ -850,7 +859,7 @@ namespace EliteDangerousCore
                 x.Name = BaseUtils.Translator.Instance.Translate(x.Name, "MaterialCommodityData." + x.FDName);
             }
 
-            //foreach (MaterialCommodityDB d in cachelist.Values) System.Diagnostics.Debug.WriteLine(string.Format("{0},{1},{2},{3}", d.fdname, d.name, d.category, d.type));
+            //foreach (MaterialCommodityData d in cachelist.Values) System.Diagnostics.Debug.WriteLine(string.Format("{0},{1},{2},{3},{4}, {5}", d.Category, d.Type, d.FDName, d.Name, d.Shortname, d.Rarity ));
         }
 
 

@@ -253,7 +253,7 @@ namespace EliteDangerousCore.JournalEvents
         {
             if (Commodity != null && Count != null && DeliveryMissions.Contains(FDName) && EventTimeUTC < ED32Date)
             {
-                mc.Change(MaterialCommodityData.CommodityCategory, Commodity, (int)Count, 0);
+                mc.Change(MaterialCommodityData.CatType.Commodity, Commodity, (int)Count, 0);
             }
         }
     }
@@ -351,13 +351,13 @@ namespace EliteDangerousCore.JournalEvents
         {
             if (Commodity != null && Count != null)
             {
-                mc.Change(MaterialCommodityData.CommodityCategory, Commodity, -(int)Count, 0);
+                mc.Change(MaterialCommodityData.CatType.Commodity, Commodity, -(int)Count, 0);
             }
 
             if (CommodityReward != null)
             {
                 foreach (CommodityRewards c in CommodityReward)
-                    mc.Change(MaterialCommodityData.CommodityCategory, c.Name, c.Count, 0);
+                    mc.Change(MaterialCommodityData.CatType.Commodity, c.Name, c.Count, 0);
             }
         }
 
@@ -367,8 +367,7 @@ namespace EliteDangerousCore.JournalEvents
             {
                 foreach (MaterialRewards m in MaterialsReward)                 // 7/3/2018 not yet fully proven.. changed in 3.02
                 {
-                    string c = m.Category.Alt(MaterialCommodityData.MaterialRawCategory);     // older ones did not have this tag..
-                    mc.Change(c, m.Name, m.Count, 0);
+                    mc.Change(m.Category.Alt("Raw"), m.Name, m.Count, 0);
                 }
             }
         }

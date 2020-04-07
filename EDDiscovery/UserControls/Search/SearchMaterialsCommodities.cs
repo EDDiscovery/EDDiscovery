@@ -66,7 +66,7 @@ namespace EDDiscovery.UserControls
             itemlist = MaterialCommodityData.GetAll();
             Array.Sort(itemlist, (left, right) => left.Name.CompareTo(right.Name));
 
-            var list = (from x in itemlist select x.Name + " (" + x.Category + ", " + x.Type + ((x.Rarity) ? ", Rare Commodity".T(EDTx.SearchMaterialsCommodities_RareCommodity):"") + ")");
+            var list = (from x in itemlist select x.Name + " (" + x.TranslatedCategory + ", " + x.TranslatedType + (x.Rarity ? ", Rare Commodity".T(EDTx.SearchMaterialsCommodities_RareCommodity):"") + ")");
 
             comboBoxCustomCM1.Items.AddRange(list);
             comboBoxCustomCM1.SelectedIndex = Math.Min(EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(DbCM1, 0), list.Count() - 1);

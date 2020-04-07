@@ -270,7 +270,7 @@ namespace EDDiscovery.UserControls
                     foreach (MaterialCommodities c in shoppinglist)        // and add new..
                     {
                         var cur = last_he.MaterialCommodity.Find(c.Details);    // may be null
-                        Object[] values = { c.Details.Name, c.Details.Category, (cur?.Count??0).ToString(), c.scratchpad.ToString(), "","",c.Details.Shortname };
+                        Object[] values = { c.Details.Name, c.Details.TranslatedCategory, (cur?.Count??0).ToString(), c.scratchpad.ToString(), "","",c.Details.Shortname };
                         int rn = dataGridViewSynthesis.Rows.Add(values);
                         dataGridViewSynthesis.Rows[rn].ReadOnly = true;     // disable editing wanted..
                     }

@@ -60,7 +60,7 @@ namespace EliteDangerousCore
                     else
                     {
                         MaterialCommodityData db = MaterialCommodityData.GetByShortName(ingredient);
-                        dispshort = (db.Category == MaterialCommodityData.MaterialEncodedCategory || db.Category == MaterialCommodityData.MaterialManufacturedCategory) ? " " + db.Name : db.Shortname;
+                        dispshort = (db.Category == MaterialCommodityData.CatType.Encoded || db.Category == MaterialCommodityData.CatType.Manufactured) ? " " + db.Name : db.Shortname;
                         displong = " " + db.Name;
                     }
 

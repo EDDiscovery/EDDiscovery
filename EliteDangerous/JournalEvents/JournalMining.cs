@@ -35,7 +35,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public void UpdateCommodities(MaterialCommoditiesList mc)
         {
-            mc.Change(MaterialCommodityData.CommodityCategory, Type, 1, 0);
+            mc.Change(MaterialCommodityData.CatType.Commodity, Type, 1, 0);
         }
 
         public void LedgerNC(Ledger mcl)
