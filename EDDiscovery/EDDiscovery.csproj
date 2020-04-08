@@ -177,6 +177,12 @@
     <Compile Include="Actions\ActionControllerKeys.cs" />
     <Compile Include="Actions\ActionControllerVoice.cs" />
     <Compile Include="Translations\EDDiscoveryTranslations.cs" />
+    <Compile Include="UserControls\EngineeringSynthesis\UserControlMaterialTrader.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\EngineeringSynthesis\UserControlMaterialTrader.Designer.cs">
+      <DependentUpon>UserControlMaterialTrader.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\Helpers\CSVHelpers.cs" />
     <Compile Include="WebServer\WebServer.cs" />
     <None Include="..\EDDIcons\Controls\Fakes\Controls.Designer.cs">
@@ -735,6 +741,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ScreenShots\ScreenShotConfigureForm.resx">
       <DependentUpon>ScreenShotConfigureForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\EngineeringSynthesis\UserControlMaterialTrader.resx">
+      <DependentUpon>UserControlMaterialTrader.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\Helpers\TagsForm.resx">
       <DependentUpon>TagsForm.cs</DependentUpon>
