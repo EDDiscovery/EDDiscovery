@@ -45,16 +45,8 @@ namespace EDDiscovery.UserControls
         {
             this.components = new System.ComponentModel.Container();
             this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
-            this.dataGridViewTrades = new System.Windows.Forms.DataGridView();
             this.vScrollBarCustomMC = new ExtendedControls.ExtScrollBar();
-            this.buttonClear = new ExtendedControls.ExtButton();
-            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.panelTop = new System.Windows.Forms.FlowLayoutPanel();
-            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
-            this.extComboBoxTraderType = new ExtendedControls.ExtComboBox();
-            this.extPanelScroll1 = new ExtendedControls.ExtPanelScroll();
-            this.extPictureTrades = new ExtendedControls.ExtPictureBox();
+            this.dataGridViewTrades = new System.Windows.Forms.DataGridView();
             this.UpgradeCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.LevelCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.WantedCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -62,16 +54,25 @@ namespace EDDiscovery.UserControls
             this.MaxCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.AvailableCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.NotesCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.buttonClear = new ExtendedControls.ExtButton();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.panelTop = new System.Windows.Forms.FlowLayoutPanel();
+            this.splitContainer = new System.Windows.Forms.SplitContainer();
+            this.extPanelScrollTrades = new ExtendedControls.ExtPanelScroll();
+            this.vScrollBarCustom = new ExtendedControls.ExtScrollBar();
+            this.extPictureTrades = new ExtendedControls.ExtPictureBox();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.extComboBoxTraderType = new ExtendedControls.ExtComboBox();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTrades)).BeginInit();
             this.panelTop.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
-            this.splitContainer1.Panel1.SuspendLayout();
-            this.splitContainer1.Panel2.SuspendLayout();
-            this.splitContainer1.SuspendLayout();
-            this.flowLayoutPanel1.SuspendLayout();
-            this.extPanelScroll1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
+            this.splitContainer.Panel1.SuspendLayout();
+            this.splitContainer.Panel2.SuspendLayout();
+            this.splitContainer.SuspendLayout();
+            this.extPanelScrollTrades.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.extPictureTrades)).BeginInit();
+            this.flowLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // dataViewScrollerPanel
@@ -84,31 +85,6 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel.Size = new System.Drawing.Size(800, 572);
             this.dataViewScrollerPanel.TabIndex = 0;
             this.dataViewScrollerPanel.VerticalScrollBarDockRight = true;
-            // 
-            // dataGridViewTrades
-            // 
-            this.dataGridViewTrades.AllowDrop = true;
-            this.dataGridViewTrades.AllowUserToAddRows = false;
-            this.dataGridViewTrades.AllowUserToDeleteRows = false;
-            this.dataGridViewTrades.AllowUserToOrderColumns = true;
-            this.dataGridViewTrades.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dataGridViewTrades.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewTrades.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.UpgradeCol,
-            this.LevelCol,
-            this.WantedCol,
-            this.ModuleCol,
-            this.MaxCol,
-            this.AvailableCol,
-            this.NotesCol});
-            this.dataGridViewTrades.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridViewTrades.Location = new System.Drawing.Point(0, 25);
-            this.dataGridViewTrades.Name = "dataGridViewTrades";
-            this.dataGridViewTrades.RowHeadersVisible = false;
-            this.dataGridViewTrades.RowHeadersWidth = 25;
-            this.dataGridViewTrades.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewTrades.Size = new System.Drawing.Size(800, 143);
-            this.dataGridViewTrades.TabIndex = 1;
             // 
             // vScrollBarCustomMC
             // 
@@ -138,103 +114,30 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustomMC.Value = -1;
             this.vScrollBarCustomMC.ValueLimited = -1;
             // 
-            // buttonClear
+            // dataGridViewTrades
             // 
-            this.buttonClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonClear.Location = new System.Drawing.Point(0, 1);
-            this.buttonClear.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.buttonClear.Name = "buttonClear";
-            this.buttonClear.Size = new System.Drawing.Size(80, 23);
-            this.buttonClear.TabIndex = 5;
-            this.buttonClear.Text = "Clear";
-            this.toolTip.SetToolTip(this.buttonClear, "Set all wanted values to zero");
-            this.buttonClear.UseVisualStyleBackColor = true;
-            this.buttonClear.Click += new System.EventHandler(this.buttonClear_Click);
-            // 
-            // toolTip
-            // 
-            this.toolTip.ShowAlways = true;
-            // 
-            // panelTop
-            // 
-            this.panelTop.AutoSize = true;
-            this.panelTop.Controls.Add(this.buttonClear);
-            this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelTop.Location = new System.Drawing.Point(0, 0);
-            this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(800, 25);
-            this.panelTop.TabIndex = 2;
-            // 
-            // splitContainer1
-            // 
-            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer1.Name = "splitContainer1";
-            this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            // 
-            // splitContainer1.Panel1
-            // 
-            this.splitContainer1.Panel1.Controls.Add(this.extPanelScroll1);
-            this.splitContainer1.Panel1.Controls.Add(this.flowLayoutPanel1);
-            // 
-            // splitContainer1.Panel2
-            // 
-            this.splitContainer1.Panel2.Controls.Add(this.dataGridViewTrades);
-            this.splitContainer1.Panel2.Controls.Add(this.panelTop);
-            this.splitContainer1.Size = new System.Drawing.Size(800, 572);
-            this.splitContainer1.SplitterDistance = 400;
-            this.splitContainer1.TabIndex = 2;
-            // 
-            // flowLayoutPanel1
-            // 
-            this.flowLayoutPanel1.AutoSize = true;
-            this.flowLayoutPanel1.Controls.Add(this.extComboBoxTraderType);
-            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(800, 27);
-            this.flowLayoutPanel1.TabIndex = 3;
-            // 
-            // extComboBoxTraderType
-            // 
-            this.extComboBoxTraderType.BorderColor = System.Drawing.Color.White;
-            this.extComboBoxTraderType.ButtonColorScaling = 0.5F;
-            this.extComboBoxTraderType.DataSource = null;
-            this.extComboBoxTraderType.DisableBackgroundDisabledShadingGradient = false;
-            this.extComboBoxTraderType.DisplayMember = "";
-            this.extComboBoxTraderType.DropDownBackgroundColor = System.Drawing.Color.Gray;
-            this.extComboBoxTraderType.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.extComboBoxTraderType.Location = new System.Drawing.Point(3, 3);
-            this.extComboBoxTraderType.MouseOverBackgroundColor = System.Drawing.Color.Silver;
-            this.extComboBoxTraderType.Name = "extComboBoxTraderType";
-            this.extComboBoxTraderType.ScrollBarButtonColor = System.Drawing.Color.LightGray;
-            this.extComboBoxTraderType.ScrollBarColor = System.Drawing.Color.LightGray;
-            this.extComboBoxTraderType.SelectedIndex = -1;
-            this.extComboBoxTraderType.SelectedItem = null;
-            this.extComboBoxTraderType.SelectedValue = null;
-            this.extComboBoxTraderType.Size = new System.Drawing.Size(198, 21);
-            this.extComboBoxTraderType.TabIndex = 6;
-            this.extComboBoxTraderType.Text = "extComboBox2";
-            this.extComboBoxTraderType.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.extComboBoxTraderType.ValueMember = "";
-            // 
-            // extPanelScroll1
-            // 
-            this.extPanelScroll1.Controls.Add(this.extPictureTrades);
-            this.extPanelScroll1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.extPanelScroll1.FlowControlsLeftToRight = false;
-            this.extPanelScroll1.Location = new System.Drawing.Point(0, 27);
-            this.extPanelScroll1.Name = "extPanelScroll1";
-            this.extPanelScroll1.Size = new System.Drawing.Size(800, 373);
-            this.extPanelScroll1.TabIndex = 4;
-            this.extPanelScroll1.VerticalScrollBarDockRight = true;
-            // 
-            // extPictureTrades
-            // 
-            this.extPictureTrades.Location = new System.Drawing.Point(0, 0);
-            this.extPictureTrades.Name = "extPictureTrades";
-            this.extPictureTrades.Size = new System.Drawing.Size(632, 219);
-            this.extPictureTrades.TabIndex = 0;
+            this.dataGridViewTrades.AllowDrop = true;
+            this.dataGridViewTrades.AllowUserToAddRows = false;
+            this.dataGridViewTrades.AllowUserToDeleteRows = false;
+            this.dataGridViewTrades.AllowUserToOrderColumns = true;
+            this.dataGridViewTrades.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewTrades.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewTrades.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.UpgradeCol,
+            this.LevelCol,
+            this.WantedCol,
+            this.ModuleCol,
+            this.MaxCol,
+            this.AvailableCol,
+            this.NotesCol});
+            this.dataGridViewTrades.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridViewTrades.Location = new System.Drawing.Point(0, 25);
+            this.dataGridViewTrades.Name = "dataGridViewTrades";
+            this.dataGridViewTrades.RowHeadersVisible = false;
+            this.dataGridViewTrades.RowHeadersWidth = 25;
+            this.dataGridViewTrades.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dataGridViewTrades.Size = new System.Drawing.Size(800, 143);
+            this.dataGridViewTrades.TabIndex = 1;
             // 
             // UpgradeCol
             // 
@@ -296,26 +199,154 @@ namespace EDDiscovery.UserControls
             this.NotesCol.ReadOnly = true;
             this.NotesCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
+            // buttonClear
+            // 
+            this.buttonClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonClear.Location = new System.Drawing.Point(0, 1);
+            this.buttonClear.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.buttonClear.Name = "buttonClear";
+            this.buttonClear.Size = new System.Drawing.Size(80, 23);
+            this.buttonClear.TabIndex = 5;
+            this.buttonClear.Text = "Clear";
+            this.toolTip.SetToolTip(this.buttonClear, "Set all wanted values to zero");
+            this.buttonClear.UseVisualStyleBackColor = true;
+            this.buttonClear.Click += new System.EventHandler(this.buttonClear_Click);
+            // 
+            // toolTip
+            // 
+            this.toolTip.ShowAlways = true;
+            // 
+            // panelTop
+            // 
+            this.panelTop.AutoSize = true;
+            this.panelTop.Controls.Add(this.buttonClear);
+            this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelTop.Location = new System.Drawing.Point(0, 0);
+            this.panelTop.Name = "panelTop";
+            this.panelTop.Size = new System.Drawing.Size(800, 25);
+            this.panelTop.TabIndex = 2;
+            // 
+            // splitContainer
+            // 
+            this.splitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer.Name = "splitContainer";
+            this.splitContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainer.Panel1
+            // 
+            this.splitContainer.Panel1.Controls.Add(this.extPanelScrollTrades);
+            this.splitContainer.Panel1.Controls.Add(this.flowLayoutPanel1);
+            // 
+            // splitContainer.Panel2
+            // 
+            this.splitContainer.Panel2.Controls.Add(this.dataGridViewTrades);
+            this.splitContainer.Panel2.Controls.Add(this.panelTop);
+            this.splitContainer.Size = new System.Drawing.Size(800, 572);
+            this.splitContainer.SplitterDistance = 400;
+            this.splitContainer.TabIndex = 2;
+            // 
+            // extPanelScrollTrades
+            // 
+            this.extPanelScrollTrades.Controls.Add(this.vScrollBarCustom);
+            this.extPanelScrollTrades.Controls.Add(this.extPictureTrades);
+            this.extPanelScrollTrades.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.extPanelScrollTrades.FlowControlsLeftToRight = false;
+            this.extPanelScrollTrades.Location = new System.Drawing.Point(0, 27);
+            this.extPanelScrollTrades.Name = "extPanelScrollTrades";
+            this.extPanelScrollTrades.Size = new System.Drawing.Size(800, 373);
+            this.extPanelScrollTrades.TabIndex = 4;
+            this.extPanelScrollTrades.VerticalScrollBarDockRight = true;
+            // 
+            // vScrollBarCustom
+            // 
+            this.vScrollBarCustom.ArrowBorderColor = System.Drawing.Color.LightBlue;
+            this.vScrollBarCustom.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.vScrollBarCustom.ArrowColorScaling = 0.5F;
+            this.vScrollBarCustom.ArrowDownDrawAngle = 270F;
+            this.vScrollBarCustom.ArrowUpDrawAngle = 90F;
+            this.vScrollBarCustom.BorderColor = System.Drawing.Color.White;
+            this.vScrollBarCustom.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.vScrollBarCustom.HideScrollBar = true;
+            this.vScrollBarCustom.LargeChange = 20;
+            this.vScrollBarCustom.Location = new System.Drawing.Point(784, 0);
+            this.vScrollBarCustom.Maximum = -134;
+            this.vScrollBarCustom.Minimum = 0;
+            this.vScrollBarCustom.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.vScrollBarCustom.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.vScrollBarCustom.Name = "vScrollBarCustom";
+            this.vScrollBarCustom.Size = new System.Drawing.Size(16, 373);
+            this.vScrollBarCustom.SliderColor = System.Drawing.Color.DarkGray;
+            this.vScrollBarCustom.SmallChange = 1;
+            this.vScrollBarCustom.TabIndex = 3;
+            this.vScrollBarCustom.ThumbBorderColor = System.Drawing.Color.Yellow;
+            this.vScrollBarCustom.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.vScrollBarCustom.ThumbColorScaling = 0.5F;
+            this.vScrollBarCustom.ThumbDrawAngle = 0F;
+            this.vScrollBarCustom.Value = -134;
+            this.vScrollBarCustom.ValueLimited = -134;
+            // 
+            // extPictureTrades
+            // 
+            this.extPictureTrades.Location = new System.Drawing.Point(0, 0);
+            this.extPictureTrades.Name = "extPictureTrades";
+            this.extPictureTrades.Size = new System.Drawing.Size(632, 219);
+            this.extPictureTrades.TabIndex = 0;
+            this.extPictureTrades.ClickElement += new ExtendedControls.ExtPictureBox.OnElement(this.extPictureTrades_ClickElement);
+            // 
+            // flowLayoutPanel1
+            // 
+            this.flowLayoutPanel1.AutoSize = true;
+            this.flowLayoutPanel1.Controls.Add(this.extComboBoxTraderType);
+            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(800, 27);
+            this.flowLayoutPanel1.TabIndex = 3;
+            // 
+            // extComboBoxTraderType
+            // 
+            this.extComboBoxTraderType.BorderColor = System.Drawing.Color.White;
+            this.extComboBoxTraderType.ButtonColorScaling = 0.5F;
+            this.extComboBoxTraderType.DataSource = null;
+            this.extComboBoxTraderType.DisableBackgroundDisabledShadingGradient = false;
+            this.extComboBoxTraderType.DisplayMember = "";
+            this.extComboBoxTraderType.DropDownBackgroundColor = System.Drawing.Color.Gray;
+            this.extComboBoxTraderType.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.extComboBoxTraderType.Location = new System.Drawing.Point(3, 3);
+            this.extComboBoxTraderType.MouseOverBackgroundColor = System.Drawing.Color.Silver;
+            this.extComboBoxTraderType.Name = "extComboBoxTraderType";
+            this.extComboBoxTraderType.ScrollBarButtonColor = System.Drawing.Color.LightGray;
+            this.extComboBoxTraderType.ScrollBarColor = System.Drawing.Color.LightGray;
+            this.extComboBoxTraderType.SelectedIndex = -1;
+            this.extComboBoxTraderType.SelectedItem = null;
+            this.extComboBoxTraderType.SelectedValue = null;
+            this.extComboBoxTraderType.Size = new System.Drawing.Size(198, 21);
+            this.extComboBoxTraderType.TabIndex = 6;
+            this.extComboBoxTraderType.Text = "extComboBox2";
+            this.extComboBoxTraderType.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.extComboBoxTraderType.ValueMember = "";
+            // 
             // UserControlMaterialTrader
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.splitContainer1);
+            this.Controls.Add(this.splitContainer);
             this.Controls.Add(this.dataViewScrollerPanel);
             this.Name = "UserControlMaterialTrader";
             this.Size = new System.Drawing.Size(800, 572);
             this.dataViewScrollerPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTrades)).EndInit();
             this.panelTop.ResumeLayout(false);
-            this.splitContainer1.Panel1.ResumeLayout(false);
-            this.splitContainer1.Panel1.PerformLayout();
-            this.splitContainer1.Panel2.ResumeLayout(false);
-            this.splitContainer1.Panel2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
-            this.splitContainer1.ResumeLayout(false);
-            this.flowLayoutPanel1.ResumeLayout(false);
-            this.extPanelScroll1.ResumeLayout(false);
+            this.splitContainer.Panel1.ResumeLayout(false);
+            this.splitContainer.Panel1.PerformLayout();
+            this.splitContainer.Panel2.ResumeLayout(false);
+            this.splitContainer.Panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
+            this.splitContainer.ResumeLayout(false);
+            this.extPanelScrollTrades.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.extPictureTrades)).EndInit();
+            this.flowLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -328,8 +359,8 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolTip toolTip;
         private ExtendedControls.ExtButton buttonClear;
         private System.Windows.Forms.FlowLayoutPanel panelTop;
-        private System.Windows.Forms.SplitContainer splitContainer1;
-        private ExtendedControls.ExtPanelScroll extPanelScroll1;
+        private System.Windows.Forms.SplitContainer splitContainer;
+        private ExtendedControls.ExtPanelScroll extPanelScrollTrades;
         private ExtendedControls.ExtPictureBox extPictureTrades;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private ExtendedControls.ExtComboBox extComboBoxTraderType;
@@ -340,5 +371,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn MaxCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn AvailableCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn NotesCol;
+        private ExtendedControls.ExtScrollBar vScrollBarCustom;
     }
 }

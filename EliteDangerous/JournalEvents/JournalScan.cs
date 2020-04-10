@@ -24,7 +24,7 @@ using System.Text;
 namespace EliteDangerousCore.JournalEvents
 {
     [JournalEntryType(JournalTypeEnum.Scan)]
-    public class JournalScan : JournalEntry
+    public class JournalScan : JournalEntry, IScanDataChanges
     {
         public bool IsStar { get { return !String.IsNullOrEmpty(StarType); } }
         public bool IsPlanet { get { return !IsStar && !IsBeltCluster; } }
