@@ -294,7 +294,7 @@ namespace EDDiscovery.UserControls
                         butr.Image = EDDiscovery.Icons.IconSet.GetIcon("Controls.MaterialTrader.RightArrow");
                         f.Add(new ExtendedControls.ConfigurableForm.Entry(butr, "right", "", new Point(width - 10 - 32, 64), new Size(32, 32), null));
 
-                        f.Add(new ExtendedControls.ConfigurableForm.Entry("olabel", typeof(Label), "Offer".Tx(EDTx.UserControlMaterialTrader_Offer), new Point(0, 30), new Size(width, 20), null, 1.5f, ContentAlignment.MiddleCenter));
+                        f.Add(new ExtendedControls.ConfigurableForm.Entry("olabel", typeof(Label), "Offer".Tx(EDTx.UserControlMaterialTrader_Offer), new Point(20, 30), new Size(width-40, 20), null, 1.5f, ContentAlignment.MiddleCenter));
 
                         f.Add(new ExtendedControls.ConfigurableForm.Entry("offer", typeof(Label), "0/0", new Point(width / 2 - 12, 50), new Size(width/2, 20), null, 1.2f, ContentAlignment.MiddleLeft));
 
@@ -305,7 +305,7 @@ namespace EDDiscovery.UserControls
 
                         f.Add(new ExtendedControls.ConfigurableForm.Entry("receive", typeof(Label), "0", new Point(width / 2 - 12, 90), new Size(width/2, 20), null, 1.2f, ContentAlignment.MiddleLeft));
 
-                        f.Add(new ExtendedControls.ConfigurableForm.Entry("rlabel", typeof(Label), "Receive".Tx(EDTx.UserControlMaterialTrader_Receive), new Point(0, 110), new Size(width, 20), null, 1.5f, ContentAlignment.MiddleCenter));
+                        f.Add(new ExtendedControls.ConfigurableForm.Entry("rlabel", typeof(Label), "Receive".Tx(EDTx.UserControlMaterialTrader_Receive), new Point(20, 110), new Size(width-40, 20), null, 1.5f, ContentAlignment.MiddleCenter));
 
                         f.Add(new ExtendedControls.ConfigurableForm.Entry("OK", typeof(ExtendedControls.ExtButton), "OK".T(EDTx.OK), new Point(width - 100, 150), new Size(80, 24), "Press to Accept".T(EDTx.UserControlModules_PresstoAccept)));
                         f.Add(new ExtendedControls.ConfigurableForm.Entry("Cancel", typeof(ExtendedControls.ExtButton), "Cancel".T(EDTx.Cancel), new Point(20, 150), new Size(80, 24), "Press to Cancel".T(EDTx.UserControlModules_PresstoCancel)));
@@ -327,6 +327,8 @@ namespace EDDiscovery.UserControls
                             {
                             }
                         };
+
+                        f.RightMargin = 20;
 
                         f.InitCentred(this.FindForm(), this.FindForm().Icon, "Trade".T(EDTx.UserControlMaterialTrader_Trade));
                         //f.GetControl<Label>("offer").Font = new Font()
