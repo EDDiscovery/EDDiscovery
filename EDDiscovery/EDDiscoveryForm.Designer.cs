@@ -522,7 +522,7 @@ namespace EDDiscovery
             // 
             this.settingsToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.Main_Tools_Settings;
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.settingsToolStripMenuItem.Text = "Settings";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
@@ -530,7 +530,7 @@ namespace EDDiscovery
             // 
             this.show2DMapsToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.Main_Tools_Open2DMap;
             this.show2DMapsToolStripMenuItem.Name = "show2DMapsToolStripMenuItem";
-            this.show2DMapsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.show2DMapsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.show2DMapsToolStripMenuItem.Text = "Show &2D maps";
             this.show2DMapsToolStripMenuItem.Click += new System.EventHandler(this.show2DMapsToolStripMenuItem_Click);
             // 
@@ -538,7 +538,7 @@ namespace EDDiscovery
             // 
             this.show3DMapsToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.Main_Tools_Open3DMap;
             this.show3DMapsToolStripMenuItem.Name = "show3DMapsToolStripMenuItem";
-            this.show3DMapsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.show3DMapsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.show3DMapsToolStripMenuItem.Text = "Show &3D maps";
             this.show3DMapsToolStripMenuItem.Click += new System.EventHandler(this.show3DMapsToolStripMenuItem_Click);
             // 
@@ -549,7 +549,7 @@ namespace EDDiscovery
             this.turnOffAllTransparencyToolStripMenuItem});
             this.showAllPopoutsInTaskBarToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.Main_Tools_Popouts_Menu;
             this.showAllPopoutsInTaskBarToolStripMenuItem.Name = "showAllPopoutsInTaskBarToolStripMenuItem";
-            this.showAllPopoutsInTaskBarToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.showAllPopoutsInTaskBarToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.showAllPopoutsInTaskBarToolStripMenuItem.Text = "&Pop-outs";
             // 
             // showAllInTaskBarToolStripMenuItem
@@ -572,7 +572,7 @@ namespace EDDiscovery
             // 
             this.exitToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.Main_Tools_Exit;
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -614,24 +614,24 @@ namespace EDDiscovery
             this.syncEDSMSystemsToolStripMenuItem.Size = new System.Drawing.Size(396, 22);
             this.syncEDSMSystemsToolStripMenuItem.Text = "Synchronise with EDSM";
             // 
+            // sendUnsyncedEDSMJournalsToolStripMenuItem
+            // 
+            this.sendUnsyncedEDSMJournalsToolStripMenuItem.Name = "sendUnsyncedEDSMJournalsToolStripMenuItem";
+            this.sendUnsyncedEDSMJournalsToolStripMenuItem.Size = new System.Drawing.Size(250, 22);
+            this.sendUnsyncedEDSMJournalsToolStripMenuItem.Text = "Send Unsynced Journals To EDSM";
+            this.sendUnsyncedEDSMJournalsToolStripMenuItem.Click += new System.EventHandler(this.sendUnsyncedEDSMJournalsToolStripMenuItem_Click);
+            // 
             // fetchLogsAgainToolStripMenuItem
             // 
             this.fetchLogsAgainToolStripMenuItem.Name = "fetchLogsAgainToolStripMenuItem";
-            this.fetchLogsAgainToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
+            this.fetchLogsAgainToolStripMenuItem.Size = new System.Drawing.Size(250, 22);
             this.fetchLogsAgainToolStripMenuItem.Text = "Fetch Logs Again";
             this.fetchLogsAgainToolStripMenuItem.Click += new System.EventHandler(this.fetchLogsAgainToolStripMenuItem_Click);
-            //
-            // sendUnsyncedEDSMJournalsToolStripMenuItem
-            //
-            this.sendUnsyncedEDSMJournalsToolStripMenuItem.Name = "sendUnsyncedEDSMJournalsToolStripMenuItem";
-            this.sendUnsyncedEDSMJournalsToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
-            this.sendUnsyncedEDSMJournalsToolStripMenuItem.Text = "Send Unsynced Journals To EDSM";
-            this.sendUnsyncedEDSMJournalsToolStripMenuItem.Click += new System.EventHandler(sendUnsyncedEDSMJournalsToolStripMenuItem_Click);
             // 
             // fetchStarDataAgainToolStripMenuItem
             // 
             this.fetchStarDataAgainToolStripMenuItem.Name = "fetchStarDataAgainToolStripMenuItem";
-            this.fetchStarDataAgainToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
+            this.fetchStarDataAgainToolStripMenuItem.Size = new System.Drawing.Size(250, 22);
             this.fetchStarDataAgainToolStripMenuItem.Text = "Fetch Star Data Again";
             this.fetchStarDataAgainToolStripMenuItem.Click += new System.EventHandler(this.syncEDSMSystemsToolStripMenuItem_Click);
             // 
@@ -694,7 +694,7 @@ namespace EDDiscovery
             // 
             // sendHistoricDataToInaraToolStripMenuItem
             // 
-            this.sendHistoricDataToInaraToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.Main_Admin_SendInara;
+            this.sendHistoricDataToInaraToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.SendInara;
             this.sendHistoricDataToInaraToolStripMenuItem.Name = "sendHistoricDataToInaraToolStripMenuItem";
             this.sendHistoricDataToInaraToolStripMenuItem.Size = new System.Drawing.Size(396, 22);
             this.sendHistoricDataToInaraToolStripMenuItem.Text = "Send to Inara historic data (previous ships, stored modules)";
