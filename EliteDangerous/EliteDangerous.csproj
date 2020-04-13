@@ -94,6 +94,7 @@
     <Compile Include="HistoryList\HistoryFsdJumpStatistics.cs" />
     <Compile Include="IGAU\IGAUSync.cs" />
     <Compile Include="IGAU\IGAUClass.cs" />
+    <Compile Include="JournalEvents\JournalCarrier.cs" />
     <Compile Include="Journal\EDJournalClass.cs" />
     <Compile Include="Journal\EDJournalReader.cs" />
     <Compile Include="Journal\EDJournalMonitorWatcher.cs" />

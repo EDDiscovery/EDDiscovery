@@ -567,6 +567,41 @@ namespace EliteDangerousCore.EDDN
             return msg;
         }
 
+        public JObject CreateEDDNMessage(JournalCarrierJump journal)
+        {
+            if (!journal.HasCoordinate || journal.StarPosFromEDSM || journal.SystemAddress == null)
+                return null;
+
+            JObject msg = new JObject();
+
+            msg["header"] = Header();
+            msg["$schemaRef"] = GetEDDNJournalSchemaRef();
+
+            JObject message = journal.GetJson();
+
+            if (message == null)
+            {
+                return null;
+            }
+
+            if (message["StarPosFromEDSM"] != null)  // Reject systems recently updated with EDSM coords
+                return null;
+
+            message = RemoveCommonKeys(message);
+            message = RemoveFactionReputation(message);
+            message = RemoveStationEconomyKeys(message);
+            message.Remove("StarPosFromEDSM");
+            message.Remove("Latitude");
+            message.Remove("Longitude");
+            message.Remove("MyReputation");
+            message.Remove("ActiveFine");
+
+            message = FilterJournalEvent(message, AllowedFieldsLocation);
+
+            msg["message"] = message;
+            return msg;
+        }
+
         public JObject CreateEDDNMessage(JournalDocked journal, ISystem system)
         {
             if (!String.Equals(system.Name, journal.StarSystem, StringComparison.InvariantCultureIgnoreCase))

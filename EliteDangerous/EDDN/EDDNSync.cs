@@ -181,6 +181,10 @@ namespace EliteDangerousCore.EDDN
             {
                 msg = eddn.CreateEDDNMessage(je as JournalLocation);
             }
+            else if (je.EventTypeID == JournalTypeEnum.CarrierJump)
+            {
+                msg = eddn.CreateEDDNMessage(je as JournalCarrierJump);
+            }
             else if (je.EventTypeID == JournalTypeEnum.Docked)
             {
                 msg = eddn.CreateEDDNMessage(je as JournalDocked, he.System);

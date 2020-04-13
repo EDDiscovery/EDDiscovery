@@ -288,5 +288,35 @@ namespace EliteDangerousCore.JournalEvents
         }
     }
 
+    [JournalEntryType(JournalTypeEnum.CargoTransfer)]
+    public class JournalCargoTransfer : JournalEntry, ICommodityJournalEntry
+    {
+        public class TransferClass
+        {
+            public string Type { get; set; }
+            public int Count { get; set; }
+            public string Direction { get; set; }
+        }
 
+        public TransferClass[] Transfers { get; set; }
+
+        public JournalCargoTransfer(JObject evt) : base(evt, JournalTypeEnum.CargoTransfer)
+        {
+            Transfers = evt["Transfers"].ToObjectProtected<TransferClass[]>();
+        }
+
+        public override void FillInformation(out string info, out string detailed)
+        {
+            info = "Cargo Transfer";
+            detailed = "";
+        }
+
+        public void UpdateCommodities(MaterialCommoditiesList mc)
+        {
+            foreach (var transfer in Transfers)
+            {
+                // How to determine if "toship" is Carrier to Ship or SRV to Ship?
+            }
+        }
+    }
 }

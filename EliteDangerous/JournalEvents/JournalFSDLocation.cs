@@ -406,7 +406,116 @@ namespace EliteDangerousCore.JournalEvents
         }
     }
 
+    //When written: when jumping with a fleet carrier
+    [JournalEntryType(JournalTypeEnum.CarrierJump)]
+    public class JournalCarrierJump : JournalLocOrJump, ISystemStationEntry, IBodyNameAndID
+    {
+        public JournalCarrierJump(JObject evt) : base(evt, JournalTypeEnum.CarrierJump)
+        {
+            // base class does StarSystem/StarPos/Faction/Powerplay
 
+            Docked = evt.Value<bool?>("Docked") ?? false;
+            StationName = evt["StationName"].Str();
+            StationType = evt["StationType"].Str().SplitCapsWord();
+            Body = evt["Body"].Str();
+            BodyID = evt["BodyID"].IntNull();
+            BodyType = JournalFieldNaming.NormaliseBodyType(evt["BodyType"].Str());
+            DistFromStarLS = evt["DistFromStarLS"].DoubleNull();
+
+            Latitude = evt["Latitude"].DoubleNull();
+            Longitude = evt["Longitude"].DoubleNull();
+
+            MarketID = evt["MarketID"].LongNull();
+
+            // station data only if docked..
+
+            JToken jk = (JToken)evt["StationFaction"];  // 3.3.3 post
+
+            if (jk != null && jk.Type == JTokenType.Object)
+            {
+                JObject jo = jk as JObject;
+                StationFaction = jk["Name"].Str();                // system faction pick up
+                StationFactionState = jk["FactionState"].Str();
+            }
+
+            StationGovernment = evt["StationGovernment"].Str();       // 3.3.2 empty before
+            StationGovernment_Localised = evt["StationGovernment_Localised"].Str();       // 3.3.2 empty before
+            StationAllegiance = evt["StationAllegiance"].Str();       // 3.3.2 empty before
+                                                                      // tbd bug in journal over FactionState - its repeated twice..
+            StationServices = evt["StationServices"]?.ToObjectProtected<string[]>();
+            StationEconomyList = evt["StationEconomies"]?.ToObjectProtected<JournalDocked.Economies[]>();
+        }
+
+        public bool Docked { get; set; }
+        public string StationName { get; set; }
+        public string StationType { get; set; }
+        public string Body { get; set; }
+        public int? BodyID { get; set; }
+        public string BodyType { get; set; }
+        public string BodyDesignation { get; set; }
+        public double? DistFromStarLS { get; set; }
+
+        public double? Latitude { get; set; }
+        public double? Longitude { get; set; }
+
+        public long? MarketID { get; set; }
+
+        public string StationFaction { get; set; }
+        public string StationFactionState { get; set; }
+        public string StationGovernment { get; set; }
+        public string StationGovernment_Localised { get; set; }
+        public string StationAllegiance { get; set; }
+        public string[] StationServices { get; set; }
+        public JournalDocked.Economies[] StationEconomyList { get; set; }        // may be null
+
+        public override string SummaryName(ISystem sys)
+        {
+            return string.Format("Jumped with carrier {0} to {1}".T(EDTx.JournalCarrierJump_JumpedWith), StationName, Body);
+        }
+
+        public override void FillInformation(out string info, out string detailed)
+        {
+            info = BaseUtils.FieldBuilder.Build("Type ".T(EDTx.JournalLocOrJump_Type), StationType, "< in system ".T(EDTx.JournalLocOrJump_insystem), StarSystem);
+
+            detailed = BaseUtils.FieldBuilder.Build("<;(Wanted) ".T(EDTx.JournalLocOrJump_Wanted), Wanted, "Faction:".T(EDTx.JournalLocOrJump_Faction), StationFaction, "Allegiance:".T(EDTx.JournalLocOrJump_Allegiance), Allegiance, "Economy:".T(EDTx.JournalLocOrJump_Economy), Economy_Localised, "Government:".T(EDTx.JournalLocOrJump_Government), Government_Localised, "Security:".T(EDTx.JournalLocOrJump_Security), Security_Localised);
+
+            if (Factions != null)
+            {
+                foreach (FactionInformation f in Factions)
+                {
+                    detailed += Environment.NewLine;
+                    detailed += BaseUtils.FieldBuilder.Build("", f.Name, "State:".T(EDTx.JournalLocOrJump_State), f.FactionState.SplitCapsWord(), "Government:".T(EDTx.JournalLocOrJump_Government), f.Government,
+                        "Inf:;%".T(EDTx.JournalLocOrJump_Inf), (int)(f.Influence * 100), "Allegiance:".T(EDTx.JournalLocOrJump_Allegiance), f.Allegiance, "Happiness:".T(EDTx.JournalLocOrJump_Happiness), f.Happiness_Localised,
+                        "Reputation:;%;N1".T(EDTx.JournalLocOrJump_Reputation), f.MyReputation,
+                        ";Squadron System".T(EDTx.JournalLocOrJump_SquadronSystem), f.SquadronFaction,
+                        ";Happiest System".T(EDTx.JournalLocOrJump_HappiestSystem), f.HappiestSystem,
+                        ";Home System".T(EDTx.JournalLocOrJump_HomeSystem), f.HomeSystem
+                        );
+
+                    if (f.PendingStates != null)
+                    {
+                        detailed += BaseUtils.FieldBuilder.Build(",", "Pending State:".T(EDTx.JournalLocOrJump_PendingState));
+                        foreach (JournalLocation.PowerStatesInfo state in f.PendingStates)
+                            detailed += BaseUtils.FieldBuilder.Build(" ", state.State, "<(;)", state.Trend);
+
+                        if (f.RecoveringStates != null)
+                        {
+                            detailed += BaseUtils.FieldBuilder.Build(",", "Recovering State:".T(EDTx.JournalLocOrJump_RecoveringState));
+                            foreach (JournalLocation.PowerStatesInfo state in f.RecoveringStates)
+                                detailed += BaseUtils.FieldBuilder.Build(" ", state.State, "<(;)", state.Trend);
+                        }
+
+                        if (f.ActiveStates != null)
+                        {
+                            detailed += BaseUtils.FieldBuilder.Build(",", "Active State:".T(EDTx.JournalLocOrJump_ActiveState));
+                            foreach (JournalLocation.ActiveStatesInfo state in f.ActiveStates)
+                                detailed += BaseUtils.FieldBuilder.Build(" ", state.State);
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     [JournalEntryType(JournalTypeEnum.FSDJump)]
     public class JournalFSDJump : JournalLocOrJump, IShipInformation, ISystemStationEntry
