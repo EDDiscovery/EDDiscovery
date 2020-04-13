@@ -780,6 +780,12 @@ namespace EDDiscovery
         TravelHistoryFilter_LDock, // Last dock
         TravelHistoryFilter_StartEnd, // Start/End Flag
 
+        UserControlMaterialTrader_Raw, // Raw
+        UserControlMaterialTrader_Encoded, // Encoded
+        UserControlMaterialTrader_Manufactured, // Manufactured
+        UserControlMaterialTrader_Trade, // Trade
+        UserControlMaterialTrader_Offer, // Offer
+        UserControlMaterialTrader_Receive, // Receive
 
     }
 

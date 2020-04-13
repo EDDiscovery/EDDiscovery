@@ -39,7 +39,7 @@ namespace EliteDangerousCore.JournalEvents
     }
 
     [JournalEntryType(JournalTypeEnum.FSSDiscoveryScan)]
-    public class JournalFSSDiscoveryScan : JournalEntry
+    public class JournalFSSDiscoveryScan : JournalEntry, IScanDataChanges
     {
         public JournalFSSDiscoveryScan(JObject evt) : base(evt, JournalTypeEnum.FSSDiscoveryScan)
         {
@@ -192,7 +192,7 @@ namespace EliteDangerousCore.JournalEvents
     }
 
     [JournalEntryType(JournalTypeEnum.SAAScanComplete)]
-    public class JournalSAAScanComplete : JournalEntry
+    public class JournalSAAScanComplete : JournalEntry, IScanDataChanges
     {
         public JournalSAAScanComplete(JObject evt) : base(evt, JournalTypeEnum.SAAScanComplete)
         {
@@ -225,7 +225,7 @@ namespace EliteDangerousCore.JournalEvents
     }
 
     [JournalEntryType(JournalTypeEnum.SAASignalsFound)]
-    public class JournalSAASignalsFound : JournalEntry
+    public class JournalSAASignalsFound : JournalEntry, IScanDataChanges
     {
         public JournalSAASignalsFound(JObject evt) : base(evt, JournalTypeEnum.SAASignalsFound)
         {

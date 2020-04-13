@@ -21,7 +21,7 @@ using System.Linq;
 
 namespace EliteDangerousCore
 {
-    // [System.Diagnostics.DebuggerDisplay("MatDB {Category} {Name} {FDName} {Type} {Shortname}")]
+    [System.Diagnostics.DebuggerDisplay("MatDB {Category} {Type} {MaterialGroup} {Name} {FDName} {Shortname}")]
     public class MaterialCommodityData
     {
         public enum CatType { Commodity, Raw, Encoded, Manufactured };
@@ -201,6 +201,13 @@ namespace EliteDangerousCore
             return types;
         }
 
+        public static MaterialCommodityData[] GetMaterialGroup(Func<MaterialCommodityData, bool> func)   // given predate, return cat/translated cat combos.
+        {
+            MaterialCommodityData[] mcs = GetAll();
+            var group = mcs.Where(func).Select(x => x).ToArray();
+            return group;
+        }
+
         public static string[] GetMembersOfType(ItemType typename, bool sorted)
         {
             MaterialCommodityData[] mcs = GetAll();
@@ -364,6 +371,8 @@ namespace EliteDangerousCore
             #region Materials  
 
             cachelist = new Dictionary<string, MaterialCommodityData>();
+
+            // NOTE KEEP IN ORDER BY Rarity and then Material Group Type
 
             // very common raw
 
