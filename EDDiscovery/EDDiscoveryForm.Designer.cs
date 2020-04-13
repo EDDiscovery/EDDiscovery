@@ -123,6 +123,7 @@ namespace EDDiscovery
             this.panel_close = new ExtendedControls.ExtButtonDrawn();
             this.panel_minimize = new ExtendedControls.ExtButtonDrawn();
             this.panel_eddiscovery = new System.Windows.Forms.Panel();
+            this.extPanelTopResizer = new ExtendedControls.ExtPanelResizer();
             this.notifyIconContextMenuStrip.SuspendLayout();
             this.contextMenuStripTabs.SuspendLayout();
             this.panelToolBar.SuspendLayout();
@@ -181,11 +182,11 @@ namespace EDDiscovery
             this.tabControlMain.AllowDragReorder = true;
             this.tabControlMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControlMain.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.tabControlMain.Location = new System.Drawing.Point(0, 53);
+            this.tabControlMain.Location = new System.Drawing.Point(0, 76);
             this.tabControlMain.Multiline = true;
             this.tabControlMain.Name = "tabControlMain";
             this.tabControlMain.SelectedIndex = 0;
-            this.tabControlMain.Size = new System.Drawing.Size(969, 646);
+            this.tabControlMain.Size = new System.Drawing.Size(969, 623);
             this.tabControlMain.TabColorScaling = 0.5F;
             this.tabControlMain.TabControlBorderBrightColor = System.Drawing.Color.LightGray;
             this.tabControlMain.TabControlBorderColor = System.Drawing.Color.DarkGray;
@@ -403,7 +404,7 @@ namespace EDDiscovery
             this.panelToolBar.Controls.Add(this.flowToolBar);
             this.panelToolBar.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelToolBar.HiddenMarkerWidth = 0;
-            this.panelToolBar.Location = new System.Drawing.Point(0, 26);
+            this.panelToolBar.Location = new System.Drawing.Point(0, 49);
             this.panelToolBar.Margin = new System.Windows.Forms.Padding(0);
             this.panelToolBar.Name = "panelToolBar";
             this.panelToolBar.PinState = true;
@@ -468,11 +469,12 @@ namespace EDDiscovery
             this.tableLayoutPanelTop.Controls.Add(this.menuFlowPanel, 0, 0);
             this.tableLayoutPanelTop.Controls.Add(this.closeminimizeFlowPanel, 1, 0);
             this.tableLayoutPanelTop.Dock = System.Windows.Forms.DockStyle.Top;
-            this.tableLayoutPanelTop.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanelTop.Location = new System.Drawing.Point(0, 3);
             this.tableLayoutPanelTop.Name = "tableLayoutPanelTop";
-            this.tableLayoutPanelTop.RowCount = 1;
+            this.tableLayoutPanelTop.RowCount = 2;
             this.tableLayoutPanelTop.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanelTop.Size = new System.Drawing.Size(969, 26);
+            this.tableLayoutPanelTop.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanelTop.Size = new System.Drawing.Size(969, 46);
             this.tableLayoutPanelTop.TabIndex = 23;
             this.tableLayoutPanelTop.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MouseDownCAPTION);
             this.tableLayoutPanelTop.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MouseUpCAPTION);
@@ -503,7 +505,7 @@ namespace EDDiscovery
             this.mainMenu.Location = new System.Drawing.Point(0, 0);
             this.mainMenu.Name = "mainMenu";
             this.mainMenu.Padding = new System.Windows.Forms.Padding(0);
-            this.mainMenu.Size = new System.Drawing.Size(334, 24);
+            this.mainMenu.Size = new System.Drawing.Size(214, 24);
             this.mainMenu.TabIndex = 16;
             // 
             // toolsToolStripMenuItem
@@ -862,7 +864,7 @@ namespace EDDiscovery
             // label_version
             // 
             this.label_version.AutoSize = true;
-            this.label_version.Location = new System.Drawing.Point(342, 1);
+            this.label_version.Location = new System.Drawing.Point(222, 1);
             this.label_version.Margin = new System.Windows.Forms.Padding(8, 1, 3, 0);
             this.label_version.Name = "label_version";
             this.label_version.Size = new System.Drawing.Size(43, 13);
@@ -874,7 +876,7 @@ namespace EDDiscovery
             // labelInfoBoxTop
             // 
             this.labelInfoBoxTop.AutoSize = true;
-            this.labelInfoBoxTop.Location = new System.Drawing.Point(396, 1);
+            this.labelInfoBoxTop.Location = new System.Drawing.Point(276, 1);
             this.labelInfoBoxTop.Margin = new System.Windows.Forms.Padding(8, 1, 3, 0);
             this.labelInfoBoxTop.Name = "labelInfoBoxTop";
             this.labelInfoBoxTop.Size = new System.Drawing.Size(43, 13);
@@ -956,6 +958,16 @@ namespace EDDiscovery
             this.panel_eddiscovery.TabIndex = 18;
             this.panel_eddiscovery.Click += new System.EventHandler(this.paneleddiscovery_Click);
             // 
+            // extPanelTopResizer
+            // 
+            this.extPanelTopResizer.Cursor = System.Windows.Forms.Cursors.SizeNS;
+            this.extPanelTopResizer.Dock = System.Windows.Forms.DockStyle.Top;
+            this.extPanelTopResizer.Location = new System.Drawing.Point(0, 0);
+            this.extPanelTopResizer.Movement = System.Windows.Forms.DockStyle.Top;
+            this.extPanelTopResizer.Name = "extPanelTopResizer";
+            this.extPanelTopResizer.Size = new System.Drawing.Size(969, 3);
+            this.extPanelTopResizer.TabIndex = 22;
+            // 
             // EDDiscoveryForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -964,6 +976,7 @@ namespace EDDiscovery
             this.Controls.Add(this.tabControlMain);
             this.Controls.Add(this.panelToolBar);
             this.Controls.Add(this.tableLayoutPanelTop);
+            this.Controls.Add(this.extPanelTopResizer);
             this.Controls.Add(this.statusStrip);
             this.Icon = global::EDDiscovery.Properties.Resources.edlogo_3mo_icon;
             this.Name = "EDDiscoveryForm";
@@ -1074,5 +1087,6 @@ namespace EDDiscovery
         private ExtendedControls.ExtButtonDrawn panel_minimize;
         private System.Windows.Forms.Panel panel_eddiscovery;
         private System.Windows.Forms.ToolStripMenuItem rebuildSystemDBIndexesToolStripMenuItem;
+        private ExtendedControls.ExtPanelResizer extPanelTopResizer;
     }
 }
