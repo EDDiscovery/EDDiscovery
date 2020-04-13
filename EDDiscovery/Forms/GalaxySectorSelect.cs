@@ -81,6 +81,7 @@ namespace EDDiscovery.Forms
                     imageViewer.Image = new Bitmap(galaxy.FilePath);
                     imageViewer.ZoomToFit();
                     imageViewer.Init(galaxy);
+                    imageViewer.MinZoom = 1;
 
                     comboBoxSelections.Items.AddRange((from x in DefaultGalaxyOptions select x.Item1));
 
@@ -102,6 +103,12 @@ namespace EDDiscovery.Forms
             }
 
             return false;
+        }
+
+
+        private void GalaxySectorSelect_Resize(object sender, EventArgs e)
+        {
+            imageViewer.ZoomToFit();
         }
 
         void SetComboBox()
