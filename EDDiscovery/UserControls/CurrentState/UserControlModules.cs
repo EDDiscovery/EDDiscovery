@@ -533,8 +533,8 @@ namespace EDDiscovery.UserControls
 
             f.Add(new ExtendedControls.ConfigurableForm.Entry("Sell", typeof(ExtendedControls.ExtButton), "Force Sell".T(EDTx.UserControlModules_ForceSell), new Point(10, 80), new Size(80, 24),null));
 
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("OK", typeof(ExtendedControls.ExtButton), "OK".T(EDTx.OK), new Point(width - 100, 110), new Size(80, 24), "Press to Accept".T(EDTx.UserControlModules_PresstoAccept)));
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("Cancel", typeof(ExtendedControls.ExtButton), "Cancel".T(EDTx.Cancel), new Point(width - 200, 110), new Size(80, 24), "Press to Cancel".T(EDTx.UserControlModules_PresstoCancel)));
+            f.AddOK(new Point(width - 100, 110), "Press to Accept".T(EDTx.UserControlModules_PresstoAccept));
+            f.AddCancel(new Point(width - 200, 110), "Press to Cancel".T(EDTx.UserControlModules_PresstoCancel));
 
             f.Trigger += (dialogname, controlname, tag) =>
             {
@@ -548,7 +548,7 @@ namespace EDDiscovery.UserControls
                     else
                         ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "A Value is not valid".T(EDTx.UserControlModules_NValid), "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-                else if (controlname == "Cancel")
+                else if (controlname == "Cancel" || controlname == "Close" )
                 {
                     f.ReturnResult(DialogResult.Cancel);
                 }
@@ -570,7 +570,7 @@ namespace EDDiscovery.UserControls
                 }
             };
 
-            DialogResult res = f.ShowDialogCentred(this.FindForm(), this.FindForm().Icon, "Ship Configure".T(EDTx.UserControlModules_SC));
+            DialogResult res = f.ShowDialogCentred(this.FindForm(), this.FindForm().Icon, "Ship Configure".T(EDTx.UserControlModules_SC), closeicon:true);
 
             if (res == DialogResult.OK)
             {

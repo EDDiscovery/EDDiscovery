@@ -621,8 +621,9 @@ namespace EDDiscovery.UserControls
             f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "End:".T(EDTx.UserControlCombatPanel_End), new Point(10, 130), new Size(80, 24), ""));
             f.Add(new ExtendedControls.ConfigurableForm.Entry("DTE", typeof(ExtendedControls.ExtDateTimePicker), endtime.ToStringZulu(), new Point(100, 130), new Size(width - 100 - 20, 24), "Select Start time".T(EDTx.UserControlCombatPanel_C4)) { customdateformat = "yyyy-MM-dd HH:mm:ss" });
 
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("OK", typeof(ExtendedControls.ExtButton), "OK".T(EDTx.OK), new Point(width - 100, 180), new Size(80, 24), "Press to Accept".T(EDTx.UserControlCombatPanel_C5)));
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("Cancel", typeof(ExtendedControls.ExtButton), "Cancel".T(EDTx.Cancel), new Point(width - 200, 180), new Size(80, 24), "Press to Cancel".T(EDTx.UserControlCombatPanel_C6)));
+            f.AddOK(new Point(width - 100, 180), "Press to Accept".T(EDTx.UserControlCombatPanel_C5));
+            f.AddCancel(new Point(width - 200, 180), "Press to Cancel".T(EDTx.UserControlCombatPanel_C6));
+
             if ( allowdel )
                 f.Add(new ExtendedControls.ConfigurableForm.Entry("Delete", typeof(ExtendedControls.ExtButton), "Delete".T(EDTx.Delete), new Point(10, 180), new Size(80, 24), "Press to Delete".T(EDTx.UserControlCombatPanel_C7)));
 
@@ -653,13 +654,13 @@ namespace EDDiscovery.UserControls
                         ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Name changed - can't delete".T(EDTx.UserControlCombatPanel_NC), "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
-                else if ( controlname == "Cancel" )
+                else if ( controlname == "Cancel" || controlname == "Close" )
                 {
                     f.ReturnResult(DialogResult.Cancel);
                 }
             };
 
-            DialogResult res = f.ShowDialogCentred(this.FindForm(), this.FindForm().Icon,  "Campaign".T(EDTx.Campaign));
+            DialogResult res = f.ShowDialogCentred(this.FindForm(), this.FindForm().Icon,  "Campaign".T(EDTx.Campaign) , closeicon:true);
             if (res == DialogResult.OK)
             {
                 entry.Reset(f.Get("Name"), f.Get("Faction"),

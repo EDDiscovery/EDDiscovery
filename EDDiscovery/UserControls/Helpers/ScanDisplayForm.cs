@@ -78,15 +78,14 @@ namespace EDDiscovery.UserControls
                 f.Add(new ExtendedControls.ConfigurableForm.Entry("Sys", null, null, new Point(0, topmargin), infosize, null) { control = sd });
             }
 
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("OK", typeof(ExtendedControls.ExtButton), "OK".T(EDTx.OK), new Point(infosize.Width - 120, topmargin + infosize.Height + 10), new Size(100, 24), ""));
+            f.AddOK(new Point(infosize.Width - 120, topmargin + infosize.Height + 10));
 
             f.Trigger += (dialogname, controlname, ttag) =>
             {
-                if (controlname == "OK" || controlname == "Cancel")
-                    f.ReturnResult(f.DialogResult);
+                f.ReturnResult(DialogResult.OK);
             };
 
-            f.InitCentred( parent, parent.Icon, title, null, null, asm);
+            f.InitCentred( parent, parent.Icon, title, null, null, asm , closeicon:true);
 
             f.Show(parent);
         }

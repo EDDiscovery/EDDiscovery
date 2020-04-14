@@ -182,11 +182,11 @@ namespace EDDiscovery
             this.tabControlMain.AllowDragReorder = true;
             this.tabControlMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControlMain.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.tabControlMain.Location = new System.Drawing.Point(0, 76);
+            this.tabControlMain.Location = new System.Drawing.Point(0, 54);
             this.tabControlMain.Multiline = true;
             this.tabControlMain.Name = "tabControlMain";
             this.tabControlMain.SelectedIndex = 0;
-            this.tabControlMain.Size = new System.Drawing.Size(969, 623);
+            this.tabControlMain.Size = new System.Drawing.Size(969, 645);
             this.tabControlMain.TabColorScaling = 0.5F;
             this.tabControlMain.TabControlBorderBrightColor = System.Drawing.Color.LightGray;
             this.tabControlMain.TabControlBorderColor = System.Drawing.Color.DarkGray;
@@ -404,7 +404,7 @@ namespace EDDiscovery
             this.panelToolBar.Controls.Add(this.flowToolBar);
             this.panelToolBar.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelToolBar.HiddenMarkerWidth = 0;
-            this.panelToolBar.Location = new System.Drawing.Point(0, 49);
+            this.panelToolBar.Location = new System.Drawing.Point(0, 27);
             this.panelToolBar.Margin = new System.Windows.Forms.Padding(0);
             this.panelToolBar.Name = "panelToolBar";
             this.panelToolBar.PinState = true;
@@ -471,10 +471,10 @@ namespace EDDiscovery
             this.tableLayoutPanelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.tableLayoutPanelTop.Location = new System.Drawing.Point(0, 3);
             this.tableLayoutPanelTop.Name = "tableLayoutPanelTop";
-            this.tableLayoutPanelTop.RowCount = 2;
+            this.tableLayoutPanelTop.RowCount = 1;
             this.tableLayoutPanelTop.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanelTop.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanelTop.Size = new System.Drawing.Size(969, 46);
+            this.tableLayoutPanelTop.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
+            this.tableLayoutPanelTop.Size = new System.Drawing.Size(969, 24);
             this.tableLayoutPanelTop.TabIndex = 23;
             this.tableLayoutPanelTop.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MouseDownCAPTION);
             this.tableLayoutPanelTop.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MouseUpCAPTION);
@@ -489,7 +489,7 @@ namespace EDDiscovery
             this.menuFlowPanel.Location = new System.Drawing.Point(0, 0);
             this.menuFlowPanel.Margin = new System.Windows.Forms.Padding(0);
             this.menuFlowPanel.Name = "menuFlowPanel";
-            this.menuFlowPanel.Size = new System.Drawing.Size(873, 26);
+            this.menuFlowPanel.Size = new System.Drawing.Size(879, 24);
             this.menuFlowPanel.TabIndex = 23;
             this.menuFlowPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MouseDownCAPTION);
             this.menuFlowPanel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MouseUpCAPTION);
@@ -892,9 +892,10 @@ namespace EDDiscovery
             this.closeminimizeFlowPanel.Controls.Add(this.panel_eddiscovery);
             this.closeminimizeFlowPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.closeminimizeFlowPanel.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            this.closeminimizeFlowPanel.Location = new System.Drawing.Point(876, 3);
+            this.closeminimizeFlowPanel.Location = new System.Drawing.Point(879, 0);
+            this.closeminimizeFlowPanel.Margin = new System.Windows.Forms.Padding(0);
             this.closeminimizeFlowPanel.Name = "closeminimizeFlowPanel";
-            this.closeminimizeFlowPanel.Size = new System.Drawing.Size(90, 20);
+            this.closeminimizeFlowPanel.Size = new System.Drawing.Size(90, 24);
             this.closeminimizeFlowPanel.TabIndex = 22;
             this.closeminimizeFlowPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MouseDownCAPTION);
             this.closeminimizeFlowPanel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MouseUpCAPTION);

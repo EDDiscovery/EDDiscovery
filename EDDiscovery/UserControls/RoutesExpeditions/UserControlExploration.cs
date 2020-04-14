@@ -478,11 +478,11 @@ namespace EDDiscovery.UserControls
             };
 
             f.Add(new ExtendedControls.ConfigurableForm.Entry("UC", null, "", new Point(5, 30), usc.Size, null) { control = usc });
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("Cancel", typeof(ExtendedControls.ExtButton), "Cancel".T(EDTx.Cancel), new Point(4+usc.Width - 80, usc.Height + 50), new Size(80, 24),""));
+            f.AddCancel(new Point(4+usc.Width - 80, usc.Height + 50));
 
             f.Trigger += (dialogname, controlname, tag) =>
             {
-                if (controlname == "Cancel")
+                if (controlname == "Cancel" || controlname == "Close")
                 {
                     f.ReturnResult(DialogResult.Cancel);
                 }
@@ -490,7 +490,7 @@ namespace EDDiscovery.UserControls
 
             // usc.Font = EDDTheme.Instance.GetScaledFont(0.8f)
             f.ShowDialogCentred(this.FindForm(), this.FindForm().Icon, "Add Systems".T(EDTx.UserControlExploration_AddSys), 
-                                callback: () => {; usc.Init(0, "ExplorationFindSys", false, discoveryform); });
+                                callback: () => {; usc.Init(0, "ExplorationFindSys", false, discoveryform); }, closeicon:true);
             usc.Closing();
         }
 
