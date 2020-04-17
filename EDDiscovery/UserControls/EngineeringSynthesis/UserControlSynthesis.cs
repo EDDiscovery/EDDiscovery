@@ -50,6 +50,8 @@ namespace EDDiscovery.UserControls
 
         public HistoryEntry CurrentHistoryEntry { get {return last_he;} }     //one in use, may be null
 
+        HistoryEntry last_he = null;
+
         #region Init
 
         public UserControlSynthesis()
@@ -108,6 +110,7 @@ namespace EDDiscovery.UserControls
             isHistoric = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbHistoricMatsSave, false);
 
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
+            discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
 
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
@@ -115,26 +118,27 @@ namespace EDDiscovery.UserControls
 
         public override void ChangeCursorType(IHistoryCursor thc)
         {
-            uctg.OnTravelSelectionChanged -= Display;
+            uctg.OnTravelSelectionChanged -= UCTGChanged;
             uctg = thc;
-            uctg.OnTravelSelectionChanged += Display;
+            uctg.OnTravelSelectionChanged += UCTGChanged;
         }
 
         public override void LoadLayout()
         {
             dataGridViewSynthesis.RowTemplate.MinimumHeight = Font.ScalePixels(26);
-            uctg.OnTravelSelectionChanged += Display;
+            uctg.OnTravelSelectionChanged += UCTGChanged;
             DGVLoadColumnLayout(dataGridViewSynthesis, DbColumnSave);
-            chkHistoric.Checked = isHistoric;
-            chkHistoric.Visible = !isEmbedded;
+            chkNotHistoric.Checked = !isHistoric;
+            chkNotHistoric.Visible = !isEmbedded;
         }
 
         public override void Closing()
         {
             DGVSaveColumnLayout(dataGridViewSynthesis, DbColumnSave);
 
-            uctg.OnTravelSelectionChanged -= Display;
+            uctg.OnTravelSelectionChanged -= UCTGChanged;
             discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
+            discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
 
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbOSave, Order.ToString(","));
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbWSave, Wanted.ToString(","));
@@ -165,17 +169,23 @@ namespace EDDiscovery.UserControls
             Display();
         }
 
+        private void Discoveryform_OnHistoryChange(HistoryList obj)
+        {
+            InitialDisplay();
+        }
+
         private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)
         {
             last_he = he;
             //touchdown and liftoff ensure shopping list refresh in case displaying landed planet mats, scan for mat availability while flying in same
-            if (he.journalEntry is IMaterialJournalEntry || he.journalEntry.EventTypeID == JournalTypeEnum.Touchdown || he.journalEntry.EventTypeID == JournalTypeEnum.Liftoff  
+            if (he.journalEntry is IMaterialJournalEntry || he.journalEntry.EventTypeID == JournalTypeEnum.Touchdown || he.journalEntry.EventTypeID == JournalTypeEnum.Liftoff
                 || he.IsLocOrJump || he.journalEntry.EventTypeID == JournalTypeEnum.Scan)
+            {
                 Display();
+            }
         }
 
-        HistoryEntry last_he = null;
-        private void Display(HistoryEntry he, HistoryList hl, bool selectedEntry)
+        private void UCTGChanged(HistoryEntry he, HistoryList hl, bool selectedEntry)
         {
             if (isHistoric || last_he == null)
             {
@@ -421,7 +431,7 @@ namespace EDDiscovery.UserControls
 
         private void chkHistoric_CheckedChanged(object sender, EventArgs e)
         {
-            SetHistoric(chkHistoric.Checked);
+            SetHistoric(!chkNotHistoric.Checked);       // button sense changed
         }
     }
 }

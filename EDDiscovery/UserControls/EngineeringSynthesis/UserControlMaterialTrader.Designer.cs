@@ -47,10 +47,17 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.vScrollBarCustomMC = new ExtendedControls.ExtScrollBar();
             this.dataGridViewTrades = new System.Windows.Forms.DataGridView();
+            this.UpgradeCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.LevelCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.WantedCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ModuleCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.MaxCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.AvailableCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.clearTradeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.buttonClear = new ExtendedControls.ExtButton();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.checkBoxCursorToTop = new ExtendedControls.ExtCheckBox();
             this.panelTop = new System.Windows.Forms.FlowLayoutPanel();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.extPanelScrollTrades = new ExtendedControls.ExtPanelScroll();
@@ -60,12 +67,6 @@ namespace EDDiscovery.UserControls
             this.extComboBoxTraderType = new ExtendedControls.ExtComboBox();
             this.extPanelDataGridViewScrollDGVTrades = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.extScrollBarDGVTrades = new ExtendedControls.ExtScrollBar();
-            this.UpgradeCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.LevelCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.WantedCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ModuleCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.MaxCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.AvailableCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTrades)).BeginInit();
             this.contextMenuStrip.SuspendLayout();
@@ -145,6 +146,57 @@ namespace EDDiscovery.UserControls
             this.dataGridViewTrades.TabIndex = 1;
             this.dataGridViewTrades.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridViewTrades_MouseDown);
             // 
+            // UpgradeCol
+            // 
+            this.UpgradeCol.HeaderText = "From";
+            this.UpgradeCol.MinimumWidth = 50;
+            this.UpgradeCol.Name = "UpgradeCol";
+            this.UpgradeCol.ReadOnly = true;
+            this.UpgradeCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // LevelCol
+            // 
+            this.LevelCol.FillWeight = 25F;
+            this.LevelCol.HeaderText = "Use";
+            this.LevelCol.MinimumWidth = 50;
+            this.LevelCol.Name = "LevelCol";
+            this.LevelCol.ReadOnly = true;
+            this.LevelCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // WantedCol
+            // 
+            this.WantedCol.FillWeight = 25F;
+            this.WantedCol.HeaderText = "Left";
+            this.WantedCol.MinimumWidth = 50;
+            this.WantedCol.Name = "WantedCol";
+            this.WantedCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // ModuleCol
+            // 
+            this.ModuleCol.HeaderText = "To";
+            this.ModuleCol.MinimumWidth = 50;
+            this.ModuleCol.Name = "ModuleCol";
+            this.ModuleCol.ReadOnly = true;
+            this.ModuleCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // MaxCol
+            // 
+            this.MaxCol.FillWeight = 25F;
+            this.MaxCol.HeaderText = "Get";
+            this.MaxCol.MinimumWidth = 50;
+            this.MaxCol.Name = "MaxCol";
+            this.MaxCol.ReadOnly = true;
+            this.MaxCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // AvailableCol
+            // 
+            this.AvailableCol.FillWeight = 25F;
+            this.AvailableCol.HeaderText = "Total";
+            this.AvailableCol.MinimumWidth = 50;
+            this.AvailableCol.Name = "AvailableCol";
+            this.AvailableCol.ReadOnly = true;
+            this.AvailableCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
             // contextMenuStrip
             // 
             this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -175,6 +227,37 @@ namespace EDDiscovery.UserControls
             // toolTip
             // 
             this.toolTip.ShowAlways = true;
+            // 
+            // checkBoxCursorToTop
+            // 
+            this.checkBoxCursorToTop.Appearance = System.Windows.Forms.Appearance.Button;
+            this.checkBoxCursorToTop.BackColor = System.Drawing.Color.Transparent;
+            this.checkBoxCursorToTop.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.checkBoxCursorToTop.CheckBoxColor = System.Drawing.Color.White;
+            this.checkBoxCursorToTop.CheckBoxDisabledScaling = 0.5F;
+            this.checkBoxCursorToTop.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxCursorToTop.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxCursorToTop.Cursor = System.Windows.Forms.Cursors.Default;
+            this.checkBoxCursorToTop.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.checkBoxCursorToTop.FlatAppearance.CheckedBackColor = System.Drawing.Color.Green;
+            this.checkBoxCursorToTop.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.checkBoxCursorToTop.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
+            this.checkBoxCursorToTop.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.checkBoxCursorToTop.Image = global::EDDiscovery.Icons.Controls.TravelGrid_CursorToTop;
+            this.checkBoxCursorToTop.ImageButtonDisabledScaling = 0.5F;
+            this.checkBoxCursorToTop.ImageIndeterminate = null;
+            this.checkBoxCursorToTop.ImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.checkBoxCursorToTop.ImageUnchecked = global::EDDiscovery.Icons.Controls.TravelGrid_CursorStill;
+            this.checkBoxCursorToTop.Location = new System.Drawing.Point(204, 1);
+            this.checkBoxCursorToTop.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.checkBoxCursorToTop.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxCursorToTop.Name = "checkBoxCursorToTop";
+            this.checkBoxCursorToTop.Size = new System.Drawing.Size(28, 28);
+            this.checkBoxCursorToTop.TabIndex = 31;
+            this.checkBoxCursorToTop.TickBoxReductionRatio = 0.75F;
+            this.toolTip.SetToolTip(this.checkBoxCursorToTop, "When red, use the materials at the cursor to estimate, when green always use the " +
+        "latest materials.");
+            this.checkBoxCursorToTop.UseVisualStyleBackColor = false;
             // 
             // panelTop
             // 
@@ -212,9 +295,9 @@ namespace EDDiscovery.UserControls
             this.extPanelScrollTrades.Controls.Add(this.extPictureTrades);
             this.extPanelScrollTrades.Dock = System.Windows.Forms.DockStyle.Fill;
             this.extPanelScrollTrades.FlowControlsLeftToRight = false;
-            this.extPanelScrollTrades.Location = new System.Drawing.Point(0, 27);
+            this.extPanelScrollTrades.Location = new System.Drawing.Point(0, 30);
             this.extPanelScrollTrades.Name = "extPanelScrollTrades";
-            this.extPanelScrollTrades.Size = new System.Drawing.Size(800, 373);
+            this.extPanelScrollTrades.Size = new System.Drawing.Size(800, 370);
             this.extPanelScrollTrades.TabIndex = 4;
             this.extPanelScrollTrades.VerticalScrollBarDockRight = true;
             // 
@@ -230,12 +313,12 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom.HideScrollBar = true;
             this.vScrollBarCustom.LargeChange = 20;
             this.vScrollBarCustom.Location = new System.Drawing.Point(784, 0);
-            this.vScrollBarCustom.Maximum = -135;
+            this.vScrollBarCustom.Maximum = -132;
             this.vScrollBarCustom.Minimum = 0;
             this.vScrollBarCustom.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom.Name = "vScrollBarCustom";
-            this.vScrollBarCustom.Size = new System.Drawing.Size(16, 373);
+            this.vScrollBarCustom.Size = new System.Drawing.Size(16, 370);
             this.vScrollBarCustom.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom.SmallChange = 1;
             this.vScrollBarCustom.TabIndex = 3;
@@ -243,8 +326,8 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.vScrollBarCustom.ThumbColorScaling = 0.5F;
             this.vScrollBarCustom.ThumbDrawAngle = 0F;
-            this.vScrollBarCustom.Value = -135;
-            this.vScrollBarCustom.ValueLimited = -135;
+            this.vScrollBarCustom.Value = -132;
+            this.vScrollBarCustom.ValueLimited = -132;
             // 
             // extPictureTrades
             // 
@@ -258,10 +341,11 @@ namespace EDDiscovery.UserControls
             // 
             this.flowLayoutPanel1.AutoSize = true;
             this.flowLayoutPanel1.Controls.Add(this.extComboBoxTraderType);
+            this.flowLayoutPanel1.Controls.Add(this.checkBoxCursorToTop);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(800, 27);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(800, 30);
             this.flowLayoutPanel1.TabIndex = 3;
             // 
             // extComboBoxTraderType
@@ -328,57 +412,6 @@ namespace EDDiscovery.UserControls
             this.extScrollBarDGVTrades.Value = -1;
             this.extScrollBarDGVTrades.ValueLimited = -1;
             // 
-            // UpgradeCol
-            // 
-            this.UpgradeCol.HeaderText = "From";
-            this.UpgradeCol.MinimumWidth = 50;
-            this.UpgradeCol.Name = "UpgradeCol";
-            this.UpgradeCol.ReadOnly = true;
-            this.UpgradeCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // LevelCol
-            // 
-            this.LevelCol.FillWeight = 25F;
-            this.LevelCol.HeaderText = "Use";
-            this.LevelCol.MinimumWidth = 50;
-            this.LevelCol.Name = "LevelCol";
-            this.LevelCol.ReadOnly = true;
-            this.LevelCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // WantedCol
-            // 
-            this.WantedCol.FillWeight = 25F;
-            this.WantedCol.HeaderText = "Left";
-            this.WantedCol.MinimumWidth = 50;
-            this.WantedCol.Name = "WantedCol";
-            this.WantedCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // ModuleCol
-            // 
-            this.ModuleCol.HeaderText = "To";
-            this.ModuleCol.MinimumWidth = 50;
-            this.ModuleCol.Name = "ModuleCol";
-            this.ModuleCol.ReadOnly = true;
-            this.ModuleCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // MaxCol
-            // 
-            this.MaxCol.FillWeight = 25F;
-            this.MaxCol.HeaderText = "Get";
-            this.MaxCol.MinimumWidth = 50;
-            this.MaxCol.Name = "MaxCol";
-            this.MaxCol.ReadOnly = true;
-            this.MaxCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // AvailableCol
-            // 
-            this.AvailableCol.FillWeight = 25F;
-            this.AvailableCol.HeaderText = "Total";
-            this.AvailableCol.MinimumWidth = 50;
-            this.AvailableCol.Name = "AvailableCol";
-            this.AvailableCol.ReadOnly = true;
-            this.AvailableCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
             // UserControlMaterialTrader
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -429,5 +462,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn ModuleCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn MaxCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn AvailableCol;
+        private ExtendedControls.ExtCheckBox checkBoxCursorToTop;
     }
 }

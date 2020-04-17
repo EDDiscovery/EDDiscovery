@@ -127,7 +127,7 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxOutlines.ImageIndeterminate = null;
             this.extCheckBoxOutlines.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxOutlines.ImageUnchecked = null;
-            this.extCheckBoxOutlines.Location = new System.Drawing.Point(495, 1);
+            this.extCheckBoxOutlines.Location = new System.Drawing.Point(531, 1);
             this.extCheckBoxOutlines.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.extCheckBoxOutlines.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.extCheckBoxOutlines.Name = "extCheckBoxOutlines";
@@ -690,8 +690,8 @@ namespace EDDiscovery.UserControls
             this.panelTop.Controls.Add(this.buttonField);
             this.panelTop.Controls.Add(this.buttonExtExcel);
             this.panelTop.Controls.Add(this.checkBoxCursorToTop);
-            this.panelTop.Controls.Add(this.extCheckBoxOutlines);
             this.panelTop.Controls.Add(this.extCheckBoxWordWrap);
+            this.panelTop.Controls.Add(this.extCheckBoxOutlines);
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
             this.panelTop.Name = "panelTop";
@@ -718,13 +718,14 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxWordWrap.ImageIndeterminate = null;
             this.extCheckBoxWordWrap.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxWordWrap.ImageUnchecked = global::EDDiscovery.Icons.Controls.WordWrapOff;
-            this.extCheckBoxWordWrap.Location = new System.Drawing.Point(531, 1);
+            this.extCheckBoxWordWrap.Location = new System.Drawing.Point(495, 1);
             this.extCheckBoxWordWrap.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.extCheckBoxWordWrap.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.extCheckBoxWordWrap.Name = "extCheckBoxWordWrap";
             this.extCheckBoxWordWrap.Size = new System.Drawing.Size(28, 28);
             this.extCheckBoxWordWrap.TabIndex = 30;
             this.extCheckBoxWordWrap.TickBoxReductionRatio = 0.75F;
+            this.toolTip.SetToolTip(this.extCheckBoxWordWrap, "Enable or disable word wrap");
             this.extCheckBoxWordWrap.UseVisualStyleBackColor = false;
             // 
             // UserControlTravelGrid

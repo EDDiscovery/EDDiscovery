@@ -61,10 +61,10 @@ namespace EDDiscovery.UserControls
             this.textBoxItems1 = new ExtendedControls.ExtTextBox();
             this.labelItems2 = new System.Windows.Forms.Label();
             this.labelItems1 = new System.Windows.Forms.Label();
-            this.checkBoxClear = new ExtendedControls.ExtCheckBox();
+            this.checkBoxShowZeros = new ExtendedControls.ExtCheckBox();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.panelTop = new System.Windows.Forms.FlowLayoutPanel();
             this.extCheckBoxWordWrap = new ExtendedControls.ExtCheckBox();
+            this.panelTop = new System.Windows.Forms.FlowLayoutPanel();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMC)).BeginInit();
             this.contextMenuStrip.SuspendLayout();
@@ -280,27 +280,27 @@ namespace EDDiscovery.UserControls
             this.labelItems1.TabIndex = 3;
             this.labelItems1.Text = "<code>";
             // 
-            // checkBoxClear
+            // checkBoxShowZeros
             // 
-            this.checkBoxClear.AutoSize = true;
-            this.checkBoxClear.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxClear.CheckBoxDisabledScaling = 0.5F;
-            this.checkBoxClear.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBoxClear.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxClear.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxClear.ImageIndeterminate = null;
-            this.checkBoxClear.ImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.checkBoxClear.ImageUnchecked = null;
-            this.checkBoxClear.Location = new System.Drawing.Point(304, 1);
-            this.checkBoxClear.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.checkBoxClear.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxClear.Name = "checkBoxClear";
-            this.checkBoxClear.Size = new System.Drawing.Size(116, 17);
-            this.checkBoxClear.TabIndex = 2;
-            this.checkBoxClear.Text = "Remove zero items";
-            this.checkBoxClear.TickBoxReductionRatio = 0.75F;
-            this.toolTip.SetToolTip(this.checkBoxClear, "Remove zero items the time after they go to zero");
-            this.checkBoxClear.UseVisualStyleBackColor = true;
+            this.checkBoxShowZeros.Appearance = System.Windows.Forms.Appearance.Button;
+            this.checkBoxShowZeros.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxShowZeros.CheckBoxDisabledScaling = 0.5F;
+            this.checkBoxShowZeros.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxShowZeros.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxShowZeros.Image = global::EDDiscovery.Icons.Controls.matshowzeros;
+            this.checkBoxShowZeros.ImageButtonDisabledScaling = 0.5F;
+            this.checkBoxShowZeros.ImageIndeterminate = null;
+            this.checkBoxShowZeros.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.checkBoxShowZeros.ImageUnchecked = global::EDDiscovery.Icons.Controls.matnozeros;
+            this.checkBoxShowZeros.Location = new System.Drawing.Point(304, 1);
+            this.checkBoxShowZeros.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.checkBoxShowZeros.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxShowZeros.Name = "checkBoxShowZeros";
+            this.checkBoxShowZeros.Size = new System.Drawing.Size(28, 28);
+            this.checkBoxShowZeros.TabIndex = 2;
+            this.checkBoxShowZeros.TickBoxReductionRatio = 0.75F;
+            this.toolTip.SetToolTip(this.checkBoxShowZeros, "Green will show materials with zero counts, red means remove them");
+            this.checkBoxShowZeros.UseVisualStyleBackColor = true;
             // 
             // toolTip
             // 
@@ -308,22 +308,6 @@ namespace EDDiscovery.UserControls
             this.toolTip.InitialDelay = 500;
             this.toolTip.ReshowDelay = 100;
             this.toolTip.ShowAlways = true;
-            // 
-            // panelTop
-            // 
-            this.panelTop.AutoSize = true;
-            this.panelTop.Controls.Add(this.buttonFilter);
-            this.panelTop.Controls.Add(this.labelItems1);
-            this.panelTop.Controls.Add(this.textBoxItems1);
-            this.panelTop.Controls.Add(this.labelItems2);
-            this.panelTop.Controls.Add(this.textBoxItems2);
-            this.panelTop.Controls.Add(this.checkBoxClear);
-            this.panelTop.Controls.Add(this.extCheckBoxWordWrap);
-            this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelTop.Location = new System.Drawing.Point(0, 0);
-            this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(704, 30);
-            this.panelTop.TabIndex = 6;
             // 
             // extCheckBoxWordWrap
             // 
@@ -345,14 +329,31 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxWordWrap.ImageIndeterminate = null;
             this.extCheckBoxWordWrap.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxWordWrap.ImageUnchecked = global::EDDiscovery.Icons.Controls.WordWrapOff;
-            this.extCheckBoxWordWrap.Location = new System.Drawing.Point(428, 1);
+            this.extCheckBoxWordWrap.Location = new System.Drawing.Point(340, 1);
             this.extCheckBoxWordWrap.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.extCheckBoxWordWrap.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.extCheckBoxWordWrap.Name = "extCheckBoxWordWrap";
             this.extCheckBoxWordWrap.Size = new System.Drawing.Size(28, 28);
             this.extCheckBoxWordWrap.TabIndex = 33;
             this.extCheckBoxWordWrap.TickBoxReductionRatio = 0.75F;
+            this.toolTip.SetToolTip(this.extCheckBoxWordWrap, "Enable or disable word wrap");
             this.extCheckBoxWordWrap.UseVisualStyleBackColor = false;
+            // 
+            // panelTop
+            // 
+            this.panelTop.AutoSize = true;
+            this.panelTop.Controls.Add(this.buttonFilter);
+            this.panelTop.Controls.Add(this.labelItems1);
+            this.panelTop.Controls.Add(this.textBoxItems1);
+            this.panelTop.Controls.Add(this.labelItems2);
+            this.panelTop.Controls.Add(this.textBoxItems2);
+            this.panelTop.Controls.Add(this.checkBoxShowZeros);
+            this.panelTop.Controls.Add(this.extCheckBoxWordWrap);
+            this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelTop.Location = new System.Drawing.Point(0, 0);
+            this.panelTop.Name = "panelTop";
+            this.panelTop.Size = new System.Drawing.Size(704, 30);
+            this.panelTop.TabIndex = 6;
             // 
             // UserControlMaterialCommodities
             // 
@@ -384,7 +385,7 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn Number;
         private System.Windows.Forms.DataGridViewTextBoxColumn Price;
         private System.Windows.Forms.ToolTip toolTip;
-        private ExtendedControls.ExtCheckBox checkBoxClear;
+        private ExtendedControls.ExtCheckBox checkBoxShowZeros;
         private ExtendedControls.ExtTextBox textBoxItems2;
         private ExtendedControls.ExtTextBox textBoxItems1;
         private System.Windows.Forms.Label labelItems2;

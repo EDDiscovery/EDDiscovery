@@ -344,6 +344,7 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxWordWrap.Size = new System.Drawing.Size(28, 28);
             this.extCheckBoxWordWrap.TabIndex = 32;
             this.extCheckBoxWordWrap.TickBoxReductionRatio = 0.75F;
+            this.toolTip.SetToolTip(this.extCheckBoxWordWrap, "Enable or disable word wrap");
             this.extCheckBoxWordWrap.UseVisualStyleBackColor = false;
             // 
             // UserControlModules

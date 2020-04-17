@@ -54,6 +54,8 @@ namespace EDDiscovery.UserControls
         internal bool isHistoric = false;
         public Action<List<Tuple<Recipes.Recipe, int>>> OnDisplayComplete;  // called when display complete, for use by other UCs using this
 
+        HistoryEntry last_he = null;
+
         #region Init
 
         public UserControlEngineering()
@@ -118,6 +120,7 @@ namespace EDDiscovery.UserControls
             isHistoric = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbHistoricMatsSave, false);
             
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
+            discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
 
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
@@ -126,26 +129,27 @@ namespace EDDiscovery.UserControls
 
         public override void ChangeCursorType(IHistoryCursor thc)
         {
-            uctg.OnTravelSelectionChanged -= Display;
+            uctg.OnTravelSelectionChanged -= UCTGChanged;
             uctg = thc;
-            uctg.OnTravelSelectionChanged += Display;
+            uctg.OnTravelSelectionChanged += UCTGChanged;
         }
 
         public override void LoadLayout()
         {
             dataGridViewEngineering.RowTemplate.MinimumHeight = Font.ScalePixels(26);
-            uctg.OnTravelSelectionChanged += Display;
+            uctg.OnTravelSelectionChanged += UCTGChanged;
             DGVLoadColumnLayout(dataGridViewEngineering, DbColumnSave);
-            chkHistoric.Checked = isHistoric;
-            chkHistoric.Visible = !isEmbedded;
+            chkNotHistoric.Checked = !isHistoric;       // upside down now
+            chkNotHistoric.Visible = !isEmbedded;
         }
 
         public override void Closing()
         {
             DGVSaveColumnLayout(dataGridViewEngineering, DbColumnSave);
 
-            uctg.OnTravelSelectionChanged -= Display;
+            uctg.OnTravelSelectionChanged -= UCTGChanged;
             discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
+            discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
 
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbOSave, Order.ToString(","));
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbWSave, Wanted.ToString(","));
@@ -176,15 +180,21 @@ namespace EDDiscovery.UserControls
             Display();
         }
 
+        private void Discoveryform_OnHistoryChange(HistoryList obj)
+        {
+            InitialDisplay();
+        }
+
         private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)
         {
             last_he = he;
-            if (he.journalEntry is ICommodityJournalEntry || he.journalEntry is IMaterialJournalEntry )
+            if (he.journalEntry is ICommodityJournalEntry || he.journalEntry is IMaterialJournalEntry)
+            {
                 Display();
+            }
         }
 
-        HistoryEntry last_he = null;
-        private void Display(HistoryEntry he, HistoryList hl, bool selectedEntry)
+        private void UCTGChanged(HistoryEntry he, HistoryList hl, bool selectedEntry)
         {
             if (isHistoric || last_he == null)
             {
@@ -456,12 +466,7 @@ namespace EDDiscovery.UserControls
 
         private void chkHistoric_CheckedChanged(object sender, EventArgs e)
         {
-            SetHistoric(chkHistoric.Checked);
-        }
-
-        private void extCheckBoxWordWrap_CheckedChanged(object sender, EventArgs e)
-        {
-
+            SetHistoric(!chkNotHistoric.Checked);      // upside down when changed appearance
         }
     }
 }

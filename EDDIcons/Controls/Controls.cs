@@ -258,6 +258,10 @@ namespace EDDiscovery.Icons
         public static Image CaptainsLog_Entries { get { return IconSet.GetIcon("Controls.CaptainsLog.Entries"); } }
         public static Image CaptainsLog_Diary { get { return IconSet.GetIcon("Controls.CaptainsLog.Diary"); } }
         #endregion
+        #region Mat Commds
+        public static Image matnozeros { get { return IconSet.GetIcon("Controls.MatCommds.matnozeros"); } }
+        public static Image matshowzeros { get { return IconSet.GetIcon("Controls.MatCommds.matshowzeros"); } }
+        #endregion
         #region General
         public static Image All { get { return IconSet.GetIcon("Controls.General.All"); } }
         public static Image None { get { return IconSet.GetIcon("Controls.General.None"); } }

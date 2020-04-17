@@ -90,7 +90,7 @@ namespace EDDiscovery.UserControls
 
                 labelItems1.Text = "Total".T(EDTx.UserControlMaterialCommodities_Total);
                 textBoxItems2.Visible = labelItems2.Visible = false;
-                checkBoxClear.Location = new Point(textBoxItems1.Right + 8, checkBoxClear.Top);
+                checkBoxShowZeros.Location = new Point(textBoxItems1.Right + 8, checkBoxShowZeros.Top);
 
                 items = MaterialCommodityData.GetCommodities(true);
                 types = MaterialCommodityData.GetTypes((x) => x.IsCommodity, true);
@@ -108,8 +108,8 @@ namespace EDDiscovery.UserControls
             foreach (var x in items)
                 cfs.AddStandardOption(x.FDName,x.Name);
 
-            checkBoxClear.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbClearZeroSave, true);
-            checkBoxClear.CheckedChanged += CheckBoxClear_CheckedChanged;
+            checkBoxShowZeros.Checked = !EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbClearZeroSave, true); // used to be clear zeros, now its show zeros, invert
+            checkBoxShowZeros.CheckedChanged += CheckBoxClear_CheckedChanged;
 
             cfs.SaveSettings += FilterChanged;
         }
@@ -173,7 +173,7 @@ namespace EDDiscovery.UserControls
             //System.Diagnostics.Debug.WriteLine("Filter is " + filters);
             string[] filter = filters.SplitNoEmptyStartFinish(';');
             bool all = filter.Length > 0 && filter[0] == "All";
-            bool clearzero = checkBoxClear.Checked;
+            bool showzeros = checkBoxShowZeros.Checked;
 
             MaterialCommodityData[] allitems = materials ? MaterialCommodityData.GetMaterials(true) : MaterialCommodityData.GetCommodities(true);
 
@@ -185,7 +185,7 @@ namespace EDDiscovery.UserControls
 
                     MaterialCommodities m = mcl.List.Find(x => x.Details.Name == mcd.Name);     // and we see if we actually have some at this time
 
-                    if (!clearzero || (m != null && m.Count > 0))       // if display zero, or we have some..
+                    if (showzeros || (m != null && m.Count > 0))       // if display zero, or we have some..
                     {
                         string s = Recipes.UsedInRecipesByFDName(mcd.FDName, Environment.NewLine);
 
@@ -258,7 +258,7 @@ namespace EDDiscovery.UserControls
 
         private void CheckBoxClear_CheckedChanged(object sender, EventArgs e)
         {
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbClearZeroSave, checkBoxClear.Checked);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbClearZeroSave, !checkBoxShowZeros.Checked);    // negative because we changed button sense
             Display(last_mcl);
         }
 

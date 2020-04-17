@@ -32,6 +32,7 @@ namespace EDDiscovery.UserControls
         private string DbTrades { get { return DBName(PrefixName, "Trades"); } }
         private string DbSplitter { get { return DBName(PrefixName, "Splitter"); } }
         private string DbWordWrap { get { return DBName(PrefixName, "WrapText"); } }
+        private string DbLatest { get { return DBName(PrefixName, "Latest"); } }
 
         private Color orange = Color.FromArgb(255, 184, 85, 8);
 
@@ -94,6 +95,9 @@ namespace EDDiscovery.UserControls
             extComboBoxTraderType.SelectedIndex = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(DbTraderType, 0);
             extComboBoxTraderType.SelectedIndexChanged += ExtComboBoxTraderType_SelectedIndexChanged;
 
+            checkBoxCursorToTop.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbLatest, true);
+            checkBoxCursorToTop.CheckedChanged += CheckBoxCursorToTop_CheckedChanged;
+
             string[] strades = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbTrades, "").Split(';');
             foreach (var t in strades)      // deserialise the trades and populate the trades list
             {
@@ -105,6 +109,8 @@ namespace EDDiscovery.UserControls
             splitContainer.SplitterDistance(EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble(DbSplitter, 0.75));
 
             discoveryform.OnThemeChanged += Discoveryform_OnThemeChanged;
+            discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
+            discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
@@ -126,7 +132,10 @@ namespace EDDiscovery.UserControls
             DGVSaveColumnLayout(dataGridViewTrades, DbColumnSave);
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble(DbSplitter, splitContainer.GetSplitterDistance());
             uctg.OnTravelSelectionChanged -= TravelSelectionChanged;
+
             discoveryform.OnThemeChanged -= Discoveryform_OnThemeChanged;
+            discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
+            discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
         }
 
 
@@ -142,18 +151,39 @@ namespace EDDiscovery.UserControls
 
         public override void InitialDisplay()
         {
-            last_mcl = uctg.GetCurrentHistoryEntry?.MaterialCommodity;
+            last_mcl = checkBoxCursorToTop.Checked ? discoveryform.history.GetLast?.MaterialCommodity : uctg.GetCurrentHistoryEntry?.MaterialCommodity;
             DisplayTradeSelection();
             DisplayTradeList();
         }
 
+        private void Discoveryform_OnHistoryChange(HistoryList obj)
+        {
+            InitialDisplay();
+        }
+
         private void TravelSelectionChanged(HistoryEntry he, HistoryList hl, bool selectedEntry)
         {
-            if ( he != null && last_mcl != he?.MaterialCommodity )        // if changed MCL
+            if (checkBoxCursorToTop.Checked == false)
             {
-                last_mcl = he.MaterialCommodity;
-                DisplayTradeSelection();
-                DisplayTradeList();
+                if (he != null && last_mcl != he?.MaterialCommodity)        // if changed MCL
+                {
+                    last_mcl = he.MaterialCommodity;
+                    DisplayTradeSelection();
+                    DisplayTradeList();
+                }
+            }
+        }
+
+        private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)
+        {
+            if ( checkBoxCursorToTop.Checked )
+            { 
+                if (he.journalEntry is IMaterialJournalEntry)
+                {
+                    last_mcl = he.MaterialCommodity;
+                    DisplayTradeSelection();
+                    DisplayTradeList();
+                }
             }
         }
 
@@ -229,11 +259,10 @@ namespace EDDiscovery.UserControls
 
                 foreach ( var mat in t.Item2 )
                 {
-
                     int offer = 0, receive = 0;
                     string name = mat.Name;
 
-                    int mattotal = last_mcl == null ? -1 : last_mcl.FindFDName(mat.FDName)?.Count ?? 0;    // find mcl in material list if there, and its count
+                    int mattotal = last_mcl == null ? int.MinValue : last_mcl.FindFDName(mat.FDName)?.Count ?? 0;    // find mcl in material list if there, and its count
 
                     if (mattotal >= 0)                                                  // if we have an he, adjust the totals by the trades
                     {
@@ -329,7 +358,7 @@ namespace EDDiscovery.UserControls
                     {
                         g.DrawString(matname, displayfont, b, new Rectangle(0, 100, bmp.Width, 45), fmt);
 
-                        if ( mattotal >= 0 )
+                        if ( mattotal != int.MinValue )
                             g.DrawString(mattotal.ToStringInvariant(), displayfont, b, new Rectangle(0, 75, bmp.Width, 20), fmt);
                     }
 
@@ -427,8 +456,10 @@ namespace EDDiscovery.UserControls
                     var curmat = last_mcl.Find(current.element);   // current mat
 
                     if (selected.element.FDName == current.element.FDName)        // clicked on same.. deselect
+                    {
                         selected = null;
-                    else
+                    }
+                    else if ( curmat.Count >= current.offer )                       // if we have enough for at least 1 trade
                     {
                         DisplayTradeSelection(current.element);
 
@@ -444,18 +475,18 @@ namespace EDDiscovery.UserControls
                         butr.Image = EDDiscovery.Icons.IconSet.GetIcon("Controls.MaterialTrader.RightArrow");
                         f.Add(new ExtendedControls.ConfigurableForm.Entry(butr, "more", "", new Point(width - margin - 32, 64), new Size(32, 32), null));
 
-                        f.Add(new ExtendedControls.ConfigurableForm.Entry("olabel", typeof(Label), "Offer".Tx(EDTx.UserControlMaterialTrader_Offer), new Point(margin, 30), new Size(width-margin*2, 20), null, 1.5f, ContentAlignment.MiddleCenter));
+                        f.Add(new ExtendedControls.ConfigurableForm.Entry("olabel", typeof(Label), "Offer".Tx(EDTx.UserControlMaterialTrader_Offer), new Point(margin, 30), new Size(width - margin * 2, 20), null, 1.5f, ContentAlignment.MiddleCenter));
 
-                        f.Add(new ExtendedControls.ConfigurableForm.Entry("offer", typeof(Label), "0/" + curmat.Count.ToStringInvariant(), new Point(width / 2 - 12, 50), new Size(width/2-20, 20), null, 1.2f, ContentAlignment.MiddleLeft));
+                        f.Add(new ExtendedControls.ConfigurableForm.Entry("offer", typeof(Label), "0/" + curmat.Count.ToStringInvariant(), new Point(width / 2 - 12, 50), new Size(width / 2 - 20, 20), null, 1.2f, ContentAlignment.MiddleLeft));
 
                         var bar = new PictureBox();
                         bar.SizeMode = PictureBoxSizeMode.StretchImage;
                         bar.Image = EDDiscovery.Icons.IconSet.GetIcon("Controls.MaterialTrader.TraderBar");
-                        f.Add(new ExtendedControls.ConfigurableForm.Entry(bar, "bar", "", new Point(width/2-32, 70), new Size(64, 16), null));
+                        f.Add(new ExtendedControls.ConfigurableForm.Entry(bar, "bar", "", new Point(width / 2 - 32, 70), new Size(64, 16), null));
 
-                        f.Add(new ExtendedControls.ConfigurableForm.Entry("receive", typeof(Label), "0", new Point(width / 2 - 12, 90), new Size(width/2-20, 20), null, 1.2f, ContentAlignment.MiddleLeft));
+                        f.Add(new ExtendedControls.ConfigurableForm.Entry("receive", typeof(Label), "0", new Point(width / 2 - 12, 90), new Size(width / 2 - 20, 20), null, 1.2f, ContentAlignment.MiddleLeft));
 
-                        f.Add(new ExtendedControls.ConfigurableForm.Entry("rlabel", typeof(Label), "Receive".Tx(EDTx.UserControlMaterialTrader_Receive), new Point(margin, 110), new Size(width-margin*2, 20), null, 1.5f, ContentAlignment.MiddleCenter));
+                        f.Add(new ExtendedControls.ConfigurableForm.Entry("rlabel", typeof(Label), "Receive".Tx(EDTx.UserControlMaterialTrader_Receive), new Point(margin, 110), new Size(width - margin * 2, 20), null, 1.5f, ContentAlignment.MiddleCenter));
 
                         f.AddOK(new Point(width - margin - 80, 150), "Press to Accept".T(EDTx.UserControlModules_PresstoAccept));
                         f.AddCancel(new Point(margin, 150), "Press to Cancel".T(EDTx.UserControlModules_PresstoCancel));
@@ -469,7 +500,7 @@ namespace EDDiscovery.UserControls
                             {
                                 f.ReturnResult(DialogResult.OK);
                             }
-                            else if (controlname == "Cancel" || controlname == "Close" )
+                            else if (controlname == "Cancel" || controlname == "Close")
                             {
                                 f.ReturnResult(DialogResult.Cancel);
                             }
@@ -500,7 +531,7 @@ namespace EDDiscovery.UserControls
 
                         f.RightMargin = margin;
 
-                        f.InitCentred(this.FindForm(), this.FindForm().Icon, " ", closeicon:true);
+                        f.InitCentred(this.FindForm(), this.FindForm().Icon, " ", closeicon: true);
 
                         DialogResult res = f.ShowDialog();
 
@@ -553,5 +584,13 @@ namespace EDDiscovery.UserControls
 
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbTrades, strades);
         }
+
+
+        private void CheckBoxCursorToTop_CheckedChanged(object sender, EventArgs e)
+        {
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbLatest, checkBoxCursorToTop.Checked);
+            InitialDisplay();
+        }
+
     }
 }

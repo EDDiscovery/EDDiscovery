@@ -54,7 +54,7 @@ namespace EDDiscovery.UserControls
             this.Notes = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Recipe = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.vScrollBarCustomMC = new ExtendedControls.ExtScrollBar();
-            this.chkHistoric = new ExtendedControls.ExtCheckBox();
+            this.chkNotHistoric = new ExtendedControls.ExtCheckBox();
             this.buttonMaterialFilter = new ExtendedControls.ExtButton();
             this.buttonFilterLevel = new ExtendedControls.ExtButton();
             this.buttonRecipeFilter = new ExtendedControls.ExtButton();
@@ -195,29 +195,29 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustomMC.Value = -1;
             this.vScrollBarCustomMC.ValueLimited = -1;
             // 
-            // chkHistoric
+            // chkNotHistoric
             // 
-            this.chkHistoric.AutoSize = true;
-            this.chkHistoric.CheckBoxColor = System.Drawing.Color.Gray;
-            this.chkHistoric.CheckBoxDisabledScaling = 0.5F;
-            this.chkHistoric.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.chkHistoric.CheckColor = System.Drawing.Color.DarkBlue;
-            this.chkHistoric.ImageButtonDisabledScaling = 0.5F;
-            this.chkHistoric.ImageIndeterminate = null;
-            this.chkHistoric.ImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.chkHistoric.ImageUnchecked = null;
-            this.chkHistoric.Location = new System.Drawing.Point(264, 1);
-            this.chkHistoric.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.chkHistoric.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.chkHistoric.Name = "chkHistoric";
-            this.chkHistoric.Size = new System.Drawing.Size(118, 17);
-            this.chkHistoric.TabIndex = 7;
-            this.chkHistoric.Text = "Use Cursor Position";
-            this.chkHistoric.TickBoxReductionRatio = 0.75F;
-            this.toolTip.SetToolTip(this.chkHistoric, "When clicked on, use the materials at the cursor to estimate, when off always use" +
-        " the latest materials.");
-            this.chkHistoric.UseVisualStyleBackColor = true;
-            this.chkHistoric.CheckedChanged += new System.EventHandler(this.chkHistoric_CheckedChanged);
+            this.chkNotHistoric.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkNotHistoric.CheckBoxColor = System.Drawing.Color.Gray;
+            this.chkNotHistoric.CheckBoxDisabledScaling = 0.5F;
+            this.chkNotHistoric.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.chkNotHistoric.CheckColor = System.Drawing.Color.DarkBlue;
+            this.chkNotHistoric.Image = global::EDDiscovery.Icons.Controls.TravelGrid_CursorToTop;
+            this.chkNotHistoric.ImageButtonDisabledScaling = 0.5F;
+            this.chkNotHistoric.ImageIndeterminate = null;
+            this.chkNotHistoric.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.chkNotHistoric.ImageUnchecked = global::EDDiscovery.Icons.Controls.TravelGrid_CursorStill;
+            this.chkNotHistoric.Location = new System.Drawing.Point(352, 1);
+            this.chkNotHistoric.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.chkNotHistoric.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.chkNotHistoric.Name = "chkNotHistoric";
+            this.chkNotHistoric.Size = new System.Drawing.Size(28, 28);
+            this.chkNotHistoric.TabIndex = 7;
+            this.chkNotHistoric.TickBoxReductionRatio = 0.75F;
+            this.toolTip.SetToolTip(this.chkNotHistoric, "When red, use the materials at the cursor to estimate, when green always use the " +
+        "latest materials.");
+            this.chkNotHistoric.UseVisualStyleBackColor = true;
+            this.chkNotHistoric.CheckedChanged += new System.EventHandler(this.chkHistoric_CheckedChanged);
             // 
             // buttonMaterialFilter
             // 
@@ -258,7 +258,7 @@ namespace EDDiscovery.UserControls
             // buttonClear
             // 
             this.buttonClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonClear.Location = new System.Drawing.Point(390, 1);
+            this.buttonClear.Location = new System.Drawing.Point(264, 1);
             this.buttonClear.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonClear.Name = "buttonClear";
             this.buttonClear.Size = new System.Drawing.Size(80, 23);
@@ -278,8 +278,8 @@ namespace EDDiscovery.UserControls
             this.panelTop.Controls.Add(this.buttonRecipeFilter);
             this.panelTop.Controls.Add(this.buttonFilterLevel);
             this.panelTop.Controls.Add(this.buttonMaterialFilter);
-            this.panelTop.Controls.Add(this.chkHistoric);
             this.panelTop.Controls.Add(this.buttonClear);
+            this.panelTop.Controls.Add(this.chkNotHistoric);
             this.panelTop.Controls.Add(this.extCheckBoxWordWrap);
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
@@ -308,13 +308,14 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxWordWrap.ImageIndeterminate = null;
             this.extCheckBoxWordWrap.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxWordWrap.ImageUnchecked = global::EDDiscovery.Icons.Controls.WordWrapOff;
-            this.extCheckBoxWordWrap.Location = new System.Drawing.Point(478, 1);
+            this.extCheckBoxWordWrap.Location = new System.Drawing.Point(388, 1);
             this.extCheckBoxWordWrap.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.extCheckBoxWordWrap.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.extCheckBoxWordWrap.Name = "extCheckBoxWordWrap";
             this.extCheckBoxWordWrap.Size = new System.Drawing.Size(28, 28);
             this.extCheckBoxWordWrap.TabIndex = 32;
             this.extCheckBoxWordWrap.TickBoxReductionRatio = 0.75F;
+            this.toolTip.SetToolTip(this.extCheckBoxWordWrap, "Enable or disable word wrap");
             this.extCheckBoxWordWrap.UseVisualStyleBackColor = false;
             // 
             // UserControlSynthesis
@@ -328,7 +329,6 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewSynthesis)).EndInit();
             this.panelTop.ResumeLayout(false);
-            this.panelTop.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -344,7 +344,7 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtButton buttonRecipeFilter;
         private ExtendedControls.ExtButton buttonFilterLevel;
         private ExtendedControls.ExtButton buttonMaterialFilter;
-        private ExtendedControls.ExtCheckBox chkHistoric;
+        private ExtendedControls.ExtCheckBox chkNotHistoric;
         private System.Windows.Forms.DataGridViewTextBoxColumn UpgradeCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn Level;
         private System.Windows.Forms.DataGridViewTextBoxColumn MaxCol;
