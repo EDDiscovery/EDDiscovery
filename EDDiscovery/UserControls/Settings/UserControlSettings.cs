@@ -337,17 +337,12 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        public void UpdateThemeChanges()
-        {
-            discoveryform.ApplyTheme(true);
-        }
-
         public void button_edittheme_Click(object sender, EventArgs e)
         {
             if (themeeditor == null)                    // no theme editor, make one..
             {
                 themeeditor = new ExtendedControls.ThemeStandardEditor() { TopMost = FindForm().TopMost };
-                themeeditor.ApplyChanges = UpdateThemeChanges;
+                themeeditor.ApplyChanges = () => { discoveryform.ApplyTheme(true); };
                 themeeditor.InitForm();
                 themeeditor.FormClosing += close_edit;  // lets see when it closes
 

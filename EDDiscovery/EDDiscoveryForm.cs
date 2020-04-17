@@ -76,6 +76,8 @@ namespace EDDiscovery
         public event Action<int,string> OnEDSMSyncComplete;             // EDSM Sync has completed with this list of stars are newly created
         public event Action<int> OnEDDNSyncComplete;                    // Sync has completed
         public event Action<int> OnIGAUSyncComplete;                    // Sync has completed
+                                                                        // theme has changed by settings, hook if you have some UI which needs refreshing due to it. 
+        public event Action OnThemeChanged;                             // Note you won't get it on startup because theme is applied to form before tabs/panels are setup
         #endregion
 
 
@@ -93,7 +95,6 @@ namespace EDDiscovery
         public event Action<JournalEntry> OnNewJournalEntry { add { Controller.OnNewJournalEntry += value; } remove { Controller.OnNewJournalEntry -= value; } }
         public event Action<string, Color> OnNewLogEntry { add { Controller.OnNewLogEntry += value; } remove { Controller.OnNewLogEntry -= value; } }
         public event Action OnRefreshCommanders { add { Controller.OnRefreshCommanders += value; } remove { Controller.OnRefreshCommanders -= value; } }
-        //public event Action<EliteDangerousCore.CompanionAPI.CompanionAPIClass,HistoryEntry> OnNewCompanionAPIData;
         public event Action OnMapsDownloaded { add { Controller.OnMapsDownloaded += value; } remove { Controller.OnMapsDownloaded -= value; } }
         public event Action<bool> OnExpeditionsDownloaded { add { Controller.OnExpeditionsDownloaded += value; } remove { Controller.OnExpeditionsDownloaded -= value; } }
 
@@ -609,11 +610,12 @@ namespace EDDiscovery
 
             this.Text = "EDDiscovery " + label_version.Text;            // note in no border mode, this is not visible on the title bar but it is in the taskbar..
 
-            //this.DumpTree(0);
             theme.ApplyStd(this);
-            
+
             statusStrip.Font = contextMenuStripTabs.Font = this.Font;
             labelInfoBoxTop.Location = new Point(label_version.Right + 16, labelInfoBoxTop.Top);
+
+            OnThemeChanged?.Invoke();
 
             if ( panelrefreshaswell)
                 Controller.RefreshDisplays(); // needed to cause them to cope with theme change

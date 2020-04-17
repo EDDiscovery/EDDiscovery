@@ -103,8 +103,9 @@ namespace EDDiscovery.UserControls
             }
 
             splitContainer.SplitterDistance(EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble(DbSplitter, 0.75));
-        }
 
+            discoveryform.OnThemeChanged += Discoveryform_OnThemeChanged;
+        }
 
         public override void ChangeCursorType(IHistoryCursor thc)
         {
@@ -125,8 +126,15 @@ namespace EDDiscovery.UserControls
             DGVSaveColumnLayout(dataGridViewTrades, DbColumnSave);
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble(DbSplitter, splitContainer.GetSplitterDistance());
             uctg.OnTravelSelectionChanged -= TravelSelectionChanged;
+            discoveryform.OnThemeChanged -= Discoveryform_OnThemeChanged;
         }
 
+
+        private void Discoveryform_OnThemeChanged()
+        {
+            DisplayTradeSelection();
+            DisplayTradeList();
+        }
 
         #endregion
 
