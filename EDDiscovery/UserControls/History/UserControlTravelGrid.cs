@@ -725,37 +725,9 @@ namespace EDDiscovery.UserControls
 
         private void dataGridViewTravel_MouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Right)         // right click on travel map, get in before the context menu
-            {
-                rightclickhe = null;
-                rightclickrow = -1;
-            }
-            if (e.Button == MouseButtons.Left)         // right click on travel map, get in before the context menu
-            {
-                leftclickhe = null;
-                leftclickrow = -1;
-            }
-
-            if (dataGridViewTravel.SelectedCells.Count < 2 || dataGridViewTravel.SelectedRows.Count == 1)      // if single row completely selected, or 1 cell or less..
-            {
-                DataGridView.HitTestInfo hti = dataGridViewTravel.HitTest(e.X, e.Y);
-                if (hti.Type == DataGridViewHitTestType.Cell)
-                {
-                    dataGridViewTravel.ClearSelection();                // select row under cursor.
-                    dataGridViewTravel.Rows[hti.RowIndex].Selected = true;
-
-                    if (e.Button == MouseButtons.Right)         // right click on travel map, get in before the context menu
-                    {
-                        rightclickrow = hti.RowIndex;
-                        rightclickhe = (HistoryEntry)dataGridViewTravel.Rows[hti.RowIndex].Tag;
-                    }
-                    if (e.Button == MouseButtons.Left)         // right click on travel map, get in before the context menu
-                    {
-                        leftclickrow = hti.RowIndex;
-                        leftclickhe = (HistoryEntry)dataGridViewTravel.Rows[hti.RowIndex].Tag;
-                    }
-                }
-            }
+            dataGridViewTravel.HandleClickOnDataGrid(e, out int leftclickrow, out rightclickrow);
+            rightclickhe = (rightclickrow != -1) ? (HistoryEntry)dataGridViewTravel.Rows[rightclickrow].Tag : null;
+            leftclickhe = (leftclickrow != -1) ? (HistoryEntry)dataGridViewTravel.Rows[leftclickrow].Tag : null;
         }
 
         private void dataGridViewTravel_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
@@ -765,11 +737,9 @@ namespace EDDiscovery.UserControls
                 leftclickhe.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
                 DataGridViewRow row = dataGridViewTravel.Rows[leftclickrow];
 
-                string text = (string)row.Cells[Columns.Information].Value;
-
                 bool expanded = row.Cells[Columns.Information].Tag != null;
 
-                if ( expanded ) // put it back to original text
+                if (expanded) // put it back to original text
                 {
                     row.Cells[Columns.Information].Value = EventDescription;
                     for (int i = 0; i < row.Cells.Count; i++)

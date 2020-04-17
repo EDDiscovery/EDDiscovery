@@ -53,13 +53,13 @@ namespace EliteDangerousCore
                 get
                 {
                     var ing = (from x in Ingredients select Amount[Array.IndexOf(Ingredients, x)].ToString() + x.Shortname).ToArray();
-                    return string.Join(",", ing);
+                    return string.Join(", ", ing);
                 }
             }
             public string IngredientsStringvsCurrent(MaterialCommoditiesList cur)
             {
                 var ing = (from x in Ingredients select Amount[Array.IndexOf(Ingredients, x)].ToString() + x.Shortname + "(" + (cur.Find(x)?.Count ?? 0).ToStringInvariant() + ")").ToArray();
-                return string.Join(",", ing);
+                return string.Join(", ", ing);
             }
 
             public string IngredientsStringLong
@@ -67,7 +67,7 @@ namespace EliteDangerousCore
                 get
                 {
                     var ing = (from x in Ingredients select Amount[Array.IndexOf(Ingredients, x)].ToString() + " "+ x.Name).ToArray();
-                    return string.Join(",", ing);
+                    return string.Join(", ", ing);
                 }
             }
 
@@ -117,37 +117,47 @@ namespace EliteDangerousCore
             { }
         }
 
-        public static string UsedInSythesisByFDName(string fdname, string join=",")
+        public static string UsedInRecipesByFDName(string fdname, string join = ", ")
+        {
+            string s =Recipes.UsedInEngineeringByFDName(fdname, join);
+            s = s.AppendPrePad(Recipes.UsedInSythesisByFDName(fdname, join),join);
+            s = s.AppendPrePad(Recipes.UsedInTechBrokerUnlocksByFDName(fdname, join), join);
+            s = s.AppendPrePad(Recipes.UsedInSpecialEffectsyFDName(fdname, join), join);
+            return s;
+        }
+
+
+        public static string UsedInSythesisByFDName(string fdname, string join=", ")
         {
             MaterialCommodityData mc = MaterialCommodityData.GetByFDName(fdname);
-            if (SynthesisRecipesByMaterial.ContainsKey(mc))
+            if (mc != null && SynthesisRecipesByMaterial.ContainsKey(mc))
                 return String.Join(join, SynthesisRecipesByMaterial[mc].Select(x => x.Name + "-" + x.level + ": " + x.IngredientsStringLong));
             else
                 return "";
         }
 
-        public static string UsedInEngineeringByFDName(string fdname, string join = ",")
+        public static string UsedInEngineeringByFDName(string fdname, string join = ", ")
         {
             MaterialCommodityData mc = MaterialCommodityData.GetByFDName(fdname);
-            if (EngineeringRecipesByMaterial.ContainsKey(mc))
+            if (mc != null && EngineeringRecipesByMaterial.ContainsKey(mc))
                 return String.Join(join, EngineeringRecipesByMaterial[mc].Select(x => x.modulesstring + " "+ x.Name + "-" + x.level + ": " + x.IngredientsStringLong + " @ " + x.engineersstring));
             else
                 return "";
         }
 
-        public static string UsedInSpecialEffectsyFDName(string fdname, string join = ",")
+        public static string UsedInSpecialEffectsyFDName(string fdname, string join = ", ")
         {
             MaterialCommodityData mc = MaterialCommodityData.GetByFDName(fdname);
-            if (SpecialEffectsRecipesByMaterial.ContainsKey(mc))
+            if (mc != null && SpecialEffectsRecipesByMaterial.ContainsKey(mc))
                 return String.Join(join, SpecialEffectsRecipesByMaterial[mc].Select(x => x.Name + ": " + x.IngredientsStringLong));
             else
                 return "";
         }
 
-        public static string UsedInTechBrokerUnlocksByFDName(string fdname, string join = ",")
+        public static string UsedInTechBrokerUnlocksByFDName(string fdname, string join = ", ")
         {
             MaterialCommodityData mc = MaterialCommodityData.GetByFDName(fdname);
-            if (TechBrokerUnlockRecipesByMaterial.ContainsKey(mc))
+            if (mc != null && TechBrokerUnlockRecipesByMaterial.ContainsKey(mc))
                 return String.Join(join, TechBrokerUnlockRecipesByMaterial[mc].Select(x => x.Name + ": " + x.IngredientsStringLong));
             else
                 return "";

@@ -32,7 +32,7 @@ namespace EDDiscovery.UserControls
         private string DbColumnSave { get { return DBName((materials) ? "MaterialsGrid" : "CommoditiesGrid",  "DGVCol"); } }
         private string DbFilterSave { get { return DBName((materials) ? "MaterialsGrid" : "CommoditiesGrid", "Filter2"); } }
         private string DbClearZeroSave { get { return DBName((materials) ? "MaterialsGrid" : "CommoditiesGrid", "ClearZero"); } }
-        private string DbTruncateText { get { return DBName((materials) ? "MaterialsGrid" : "CommoditiesGrid", "WrapText"); } }
+        private string DbWordWrap { get { return DBName((materials) ? "MaterialsGrid" : "CommoditiesGrid", "WrapText"); } }
 
         MaterialCommoditiesList last_mcl;
 
@@ -47,6 +47,9 @@ namespace EDDiscovery.UserControls
         public override void Init()
         {
             dataGridViewMC.MakeDoubleBuffered();
+            extCheckBoxWordWrap.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbWordWrap, false);
+            UpdateWordWrap();
+            extCheckBoxWordWrap.Click += extCheckBoxWordWrap_Click;
 
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
@@ -107,12 +110,6 @@ namespace EDDiscovery.UserControls
 
             checkBoxClear.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbClearZeroSave, true);
             checkBoxClear.CheckedChanged += CheckBoxClear_CheckedChanged;
-
-            extCheckBoxTruncateText.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbTruncateText, true);
-            extCheckBoxTruncateText.CheckedChanged += TruncateText_CheckedChanged;
-
-            dataGridViewMC.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
-            dataGridViewMC.AutoSizeRowsMode = extCheckBoxTruncateText.Checked ? DataGridViewAutoSizeRowsMode.None : DataGridViewAutoSizeRowsMode.AllCells;
 
             cfs.SaveSettings += FilterChanged;
         }
@@ -190,14 +187,7 @@ namespace EDDiscovery.UserControls
 
                     if (!clearzero || (m != null && m.Count > 0))       // if display zero, or we have some..
                     {
-
-                        string s = Recipes.UsedInSythesisByFDName(mcd.FDName, Environment.NewLine);
-                        string e = Recipes.UsedInEngineeringByFDName(mcd.FDName, Environment.NewLine);
-                        s = s.AppendPrePad(e, Environment.NewLine);
-                        string b = Recipes.UsedInTechBrokerUnlocksByFDName(mcd.FDName, Environment.NewLine);
-                        s = s.AppendPrePad(b, Environment.NewLine);
-                        string se = Recipes.UsedInSpecialEffectsyFDName(mcd.FDName, Environment.NewLine);
-                        s = s.AppendPrePad(se, Environment.NewLine);
+                        string s = Recipes.UsedInRecipesByFDName(mcd.FDName, Environment.NewLine);
 
                         if (materials)
                         {
@@ -253,16 +243,22 @@ namespace EDDiscovery.UserControls
                 Display(last_mcl);
         }
 
+        private void extCheckBoxWordWrap_Click(object sender, EventArgs e)
+        {
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbWordWrap, extCheckBoxWordWrap.Checked);
+            UpdateWordWrap();
+        }
+
+        private void UpdateWordWrap()
+        {
+            dataGridViewMC.DefaultCellStyle.WrapMode = extCheckBoxWordWrap.Checked ? DataGridViewTriState.True : DataGridViewTriState.False;
+            dataGridViewMC.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;
+            dataViewScrollerPanel.UpdateScroll();
+        }
+
         private void CheckBoxClear_CheckedChanged(object sender, EventArgs e)
         {
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbClearZeroSave, checkBoxClear.Checked);
-            Display(last_mcl);
-        }
-
-        private void TruncateText_CheckedChanged(object sender, EventArgs e)
-        {
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbTruncateText, checkBoxClear.Checked);
-            dataGridViewMC.AutoSizeRowsMode = extCheckBoxTruncateText.Checked ? DataGridViewAutoSizeRowsMode.None : DataGridViewAutoSizeRowsMode.AllCells;
             Display(last_mcl);
         }
 
@@ -313,25 +309,7 @@ namespace EDDiscovery.UserControls
 
         private void dataGridViewMC_MouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Right)         // right click on travel map, get in before the context menu
-            {
-                rightclickrow = -1;
-            }
-
-            if (dataGridViewMC.SelectedCells.Count < 2 || dataGridViewMC.SelectedRows.Count == 1)      // if single row completely selected, or 1 cell or less..
-            {
-                DataGridView.HitTestInfo hti = dataGridViewMC.HitTest(e.X, e.Y);
-                if (hti.Type == DataGridViewHitTestType.Cell)
-                {
-                    dataGridViewMC.ClearSelection();                // select row under cursor.
-                    dataGridViewMC.Rows[hti.RowIndex].Selected = true;
-
-                    if (e.Button == MouseButtons.Right)         // right click on MC map, get in before the context menu
-                    {
-                        rightclickrow = hti.RowIndex;
-                    }
-                }
-            }
+            dataGridViewMC.HandleClickOnDataGrid(e, out int lcr, out rightclickrow);
         }
 
         private void contextMenuStrip_Opening(object sender, CancelEventArgs e)

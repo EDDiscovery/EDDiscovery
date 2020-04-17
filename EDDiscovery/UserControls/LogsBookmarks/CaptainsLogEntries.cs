@@ -519,25 +519,8 @@ namespace EDDiscovery.UserControls
 
         private void dataGridView_MouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Right)         // right click on travel map, get in before the context menu
-            {
-                rightclickentry = null;
-            }
-
-            if (dataGridView.SelectedCells.Count < 2 || dataGridView.SelectedRows.Count == 1)      // if single row completely selected, or 1 cell or less..
-            {
-                DataGridView.HitTestInfo hti = dataGridView.HitTest(e.X, e.Y);
-                if (hti.Type == DataGridViewHitTestType.Cell)
-                {
-                    dataGridView.ClearSelection();                // select row under cursor.
-                    dataGridView.Rows[hti.RowIndex].Selected = true;
-
-                    if (e.Button == MouseButtons.Right)         // right click on travel map, get in before the context menu
-                    {
-                        rightclickentry = (CaptainsLogClass)dataGridView.Rows[hti.RowIndex].Tag;
-                    }
-                }
-            }
+            dataGridView.HandleClickOnDataGrid(e, out int leftclickrow, out int rightclickrow);
+            rightclickentry = (rightclickrow != -1) ? (CaptainsLogClass)dataGridView.Rows[rightclickrow].Tag : null;
         }
 
         private void contextMenuStrip_Opening(object sender, System.ComponentModel.CancelEventArgs e)

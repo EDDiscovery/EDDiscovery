@@ -141,6 +141,9 @@ namespace EDDiscovery.UserControls
             string filter = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbSave + "Campaign", "");
             List<string> filtarray = BaseUtils.StringParser.ParseWordList(filter);
 
+            dataGridViewCombat.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
+            dataGridViewCombat.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;
+
             savedfilterentries = new List<FilterEntry>();
 
             for (int i = 0; i < filtarray.Count / 5; i++)
@@ -675,82 +678,37 @@ namespace EDDiscovery.UserControls
 
         #region Clicks
 
-        HistoryEntry rightclicksystem = null;
-        int rightclickrow = -1;
-        HistoryEntry leftclicksystem = null;
         int leftclickrow = -1;
 
         private void dataGridViewCombat_MouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Right)         // right click on travel map, get in before the context menu
-            {
-                rightclicksystem = null;
-                rightclickrow = -1;
-            }
-            if (e.Button == MouseButtons.Left)         // right click on travel map, get in before the context menu
-            {
-                leftclicksystem = null;
-                leftclickrow = -1;
-            }
-
-            if (dataGridViewCombat.SelectedCells.Count < 2 || dataGridViewCombat.SelectedRows.Count == 1)      // if single row completely selected, or 1 cell or less..
-            {
-                DataGridView.HitTestInfo hti = dataGridViewCombat.HitTest(e.X, e.Y);
-                if (hti.Type == DataGridViewHitTestType.Cell)
-                {
-                    dataGridViewCombat.ClearSelection();                // select row under cursor.
-                    dataGridViewCombat.Rows[hti.RowIndex].Selected = true;
-
-                    if (e.Button == MouseButtons.Right)         // right click on travel map, get in before the context menu
-                    {
-                        rightclickrow = hti.RowIndex;
-                        rightclicksystem = (HistoryEntry)dataGridViewCombat.Rows[hti.RowIndex].Tag;
-                    }
-                    if (e.Button == MouseButtons.Left)         // right click on travel map, get in before the context menu
-                    {
-                        leftclickrow = hti.RowIndex;
-                        leftclicksystem = (HistoryEntry)dataGridViewCombat.Rows[hti.RowIndex].Tag;
-                    }
-                }
-            }
+            dataGridViewCombat.HandleClickOnDataGrid(e, out leftclickrow, out int rightclickrow);
         }
 
         private void dataGridViewCombat_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            int defaultRowHeight = Font.ScalePixels(26);
-
             if (leftclickrow >= 0)                                                   // Click expands it..
             {
-                int ch = dataGridViewCombat.Rows[leftclickrow].Height;
-                bool toexpand = (ch <= defaultRowHeight);
+                DataGridViewRow row = dataGridViewCombat.Rows[leftclickrow];
+                bool expanded = row.Cells[0].Tag != null;
+
+                var leftclicksystem = (HistoryEntry)dataGridViewCombat.Rows[leftclickrow].Tag;
 
                 leftclicksystem.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
-                string infotext = EventDescription + ((toexpand && EventDetailedInfo.Length > 0) ? (Environment.NewLine + EventDetailedInfo) : "");
 
-                int h = defaultRowHeight;
-
-                if (toexpand)
+                if (expanded) // put it back to original text
                 {
-                    using (Graphics g = Parent.CreateGraphics())
-                    {
-                        int desch = (int)(g.MeasureString((string)dataGridViewCombat.Rows[leftclickrow].Cells[1].Value, dataGridViewCombat.Font, dataGridViewCombat.Columns[1].Width - 4).Height + 2);
-                        int infoh = (int)(g.MeasureString(infotext, dataGridViewCombat.Font, dataGridViewCombat.Columns[2].Width - 4).Height + 2);
+                    dataGridViewCombat.Rows[leftclickrow].Cells[2].Value = EventDescription;
+                    row.Cells[0].Tag = null;
 
-                        h = Math.Max(desch, h);
-                        h = Math.Max(infoh, h);
-                        h += 20;
-                    }
+                    row.Cells[2].Style.WrapMode = row.Cells[1].Style.WrapMode = DataGridViewTriState.NotSet;
                 }
-
-                toexpand = (h > defaultRowHeight);      // now we have our h, is it bigger? If so, we need to go into wrap mode
-
-                dataGridViewCombat.Rows[leftclickrow].Height = h;
-                dataGridViewCombat.Rows[leftclickrow].Cells[2].Value = infotext;
-
-                DataGridViewTriState ti = (toexpand) ? DataGridViewTriState.True : DataGridViewTriState.False;
-
-                dataGridViewCombat.Rows[leftclickrow].Cells[1].Style.WrapMode = ti;
-                dataGridViewCombat.Rows[leftclickrow].Cells[2].Style.WrapMode = ti;
+                else
+                {
+                    dataGridViewCombat.Rows[leftclickrow].Cells[2].Value = EventDescription + ((EventDetailedInfo.Length > 0) ? (Environment.NewLine + EventDetailedInfo) : "");
+                    row.Cells[0].Tag = true;
+                    row.Cells[2].Style.WrapMode = row.Cells[1].Style.WrapMode = DataGridViewTriState.True;
+                }
             }
         }
 

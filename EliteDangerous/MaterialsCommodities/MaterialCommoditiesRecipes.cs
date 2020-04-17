@@ -23,25 +23,28 @@ namespace EliteDangerousCore
 
     public static class MaterialCommoditiesRecipe
     {
-        static public void ResetUsed(List<MaterialCommodities> mcl)
+        static public Dictionary<string, int> TotalList(List<MaterialCommodities> mcl)      // holds totals list by FDName, used during computation of below functions
         {
-            for (int i = 0; i < mcl.Count; i++)
-                mcl[i].scratchpad = mcl[i].Count;
+            var used = new Dictionary<string, int>();
+            foreach (var x in mcl)
+                used.Add(x.Details.FDName, x.Count);
+            return used;
         }
 
-        //return maximum can make, how many made, needed string.
-        static public Tuple<int, int, string, string> HowManyLeft(List<MaterialCommodities> list, Recipes.Recipe r, int tomake = 0)
+        //return maximum can make, how many made, needed string, needed string long format
+
+        static public Tuple<int, int, string, string> HowManyLeft(List<MaterialCommodities> list, Dictionary<string, int> totals, Recipes.Recipe r, int tomake = 0)
         {
             int max = int.MaxValue;
-            System.Text.StringBuilder needed = new System.Text.StringBuilder(64);
-            System.Text.StringBuilder neededlong = new System.Text.StringBuilder(64);
+            System.Text.StringBuilder needed = new System.Text.StringBuilder(256);
+            System.Text.StringBuilder neededlong = new System.Text.StringBuilder(256);
 
             for (int i = 0; i < r.Ingredients.Length; i++)
             {
                 string ingredient = r.Ingredients[i].Shortname;
 
                 int mi = list.FindIndex(x => x.Details.Shortname.Equals(ingredient));
-                int got = (mi >= 0) ? list[mi].scratchpad : 0;
+                int got = (mi >= 0) ? totals[list[mi].Details.FDName] : 0;
                 int sets = got / r.Amount[i];
 
                 max = Math.Min(max, sets);
@@ -74,7 +77,7 @@ namespace EliteDangerousCore
                     }
                     else
                     {
-                        needed.Append("," + sshort);
+                        needed.Append(", " + sshort);
                         neededlong.Append(slong);
                     }
                 }
@@ -94,12 +97,12 @@ namespace EliteDangerousCore
                     int mi = list.FindIndex(x => x.Details.Shortname.Equals(ingredient));
                     System.Diagnostics.Debug.Assert(mi != -1);
                     int used = r.Amount[i] * made;
-                    list[mi].scratchpad -= used;
+                    totals[ list[mi].Details.FDName] -= used;
 
                     string dispshort = (list[mi].Details.IsEncodedOrManufactured) ? " " + list[mi].Details.Name : list[mi].Details.Shortname;
                     string displong = " " + list[mi].Details.Name;
 
-                    usedstrshort.AppendPrePad(used.ToString() + dispshort, " ,");
+                    usedstrshort.AppendPrePad(used.ToString() + dispshort, ", ");
                     usedstrlong.AppendPrePad(used.ToString() + " x " + displong, Environment.NewLine);
                 }
 
@@ -110,44 +113,56 @@ namespace EliteDangerousCore
             return new Tuple<int, int, string, string>(max, made, needed.ToNullSafeString(), neededlong.ToNullSafeString());
         }
 
-        static public List<MaterialCommodities> GetShoppingList(List<Tuple<Recipes.Recipe, int>> target, List<MaterialCommodities> list)
-        {
-            List<MaterialCommodities> shoppingList = new List<MaterialCommodities>();
+        // return shopping list/count given receipe list, list of current materials.
 
-            foreach (Tuple<Recipes.Recipe, int> want in target)
+        static public List<Tuple<MaterialCommodities,int>> GetShoppingList(List<Tuple<Recipes.Recipe, int>> wantedrecipes, List<MaterialCommodities> list)
+        {
+            var shoppingList = new List<Tuple<MaterialCommodities, int>>();
+            var totals = TotalList(list);
+
+            foreach (Tuple<Recipes.Recipe, int> want in wantedrecipes)
             {
                 Recipes.Recipe r = want.Item1;
                 int wanted = want.Item2;
+
                 for (int i = 0; i < r.Ingredients.Length; i++)
                 {
                     string ingredient = r.Ingredients[i].Shortname;
-                    int mi = list.FindIndex(x => x.Details.Shortname.Equals(ingredient));
-                    int got = (mi >= 0) ? list[mi].scratchpad : 0;
-                    int need = r.Amount[i] * wanted;
 
-                    if (got < need)
+                    int mi = list.FindIndex(x => x.Details.Shortname.Equals(ingredient));   // see if we have any in list
+
+                    MaterialCommodities matc = mi != -1 ? list[mi] : new MaterialCommodities( MaterialCommodityData.GetByShortName(ingredient) );   // if not there, make one
+                    if (mi == -1)               // if not there, make an empty total entry
+                        totals[matc.Details.FDName] = 0;
+
+                    int got = totals[matc.Details.FDName];      // what we have left from totals
+                    int need = r.Amount[i] * wanted;
+                    int left = got - need;
+
+                    if (left < 0)     // if not enough
                     {
-                        int shopentry = shoppingList.FindIndex(x => x.Details.Shortname.Equals(ingredient));
-                        if (shopentry >= 0)
-                            shoppingList[shopentry].scratchpad += (need - got);
+                        int shopentry = shoppingList.FindIndex(x => x.Item1.Details.Shortname.Equals(ingredient));      // have we already got it in the shopping list
+
+                        if (shopentry >= 0)     // found, update list with new wanted total
+                        {
+                            shoppingList[shopentry] = new Tuple<MaterialCommodities, int>(shoppingList[shopentry].Item1, shoppingList[shopentry].Item2 - left);       // need this more
+                        }
                         else
                         {
-                            MaterialCommodityData db = MaterialCommodityData.GetByShortName(ingredient);
-                            if (db != null)       // MUST be there, its well know, but will check..
-                            {
-                                MaterialCommodities mc = new MaterialCommodities(db);        // make a new entry
-                                mc.scratchpad = (need - got);
-                                shoppingList.Add(mc);
-                            }
+                            shoppingList.Add(new Tuple<MaterialCommodities, int>(matc, -left));  // a new shop entry with this many needed
                         }
-                        if (mi >= 0) list[mi].scratchpad = 0;
+
+                        totals[matc.Details.FDName] = 0;            // clear count
                     }
                     else
                     {
-                        if (mi >= 0) list[mi].scratchpad -= need;
+                        totals[matc.Details.FDName] -= need;        // decrement total
                     }
                 }
             }
+
+            shoppingList.Sort(delegate (Tuple<MaterialCommodities,int> left, Tuple<MaterialCommodities,int> right) { return left.Item1.Details.Name.CompareTo(right.Item1.Details.Name); });
+
             return shoppingList;
         }
 

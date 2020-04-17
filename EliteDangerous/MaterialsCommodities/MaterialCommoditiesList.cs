@@ -21,18 +21,16 @@ using System.Linq;
 
 namespace EliteDangerousCore
 {
-    [System.Diagnostics.DebuggerDisplay("Mat {Name} count {Count} left {scratchpad}")]
+    [System.Diagnostics.DebuggerDisplay("MatC {Details.Category} {Details.Name} {Details.FDName} count {Count}")]
     public class MaterialCommodities               // in memory version of it
     {
         public int Count { get; set; }
         public double Price { get; set; }
         public MaterialCommodityData Details { get; set; }
 
-        public int scratchpad { get; set; }        // for synthesis dialog..
-
         public MaterialCommodities(MaterialCommodityData c)
         {
-            Count = scratchpad = 0;
+            Count = 0;
             Price = 0;
             this.Details = c;
         }

@@ -72,27 +72,8 @@ namespace EDDiscovery.UserControls.Search
 
         private void mouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Right)         // right click on travel map, get in before the context menu
-            {
-                rightclicktag = null;
-                rightclickrow = -1;
-            }
-
-            if (SelectedCells.Count < 2 || SelectedRows.Count == 1)      // if single row completely selected, or 1 cell or less..
-            {
-                DataGridView.HitTestInfo hti = HitTest(e.X, e.Y);
-                if (hti.Type == DataGridViewHitTestType.Cell)
-                {
-                    ClearSelection();                // select row under cursor.
-                    Rows[hti.RowIndex].Selected = true;
-
-                    if (e.Button == MouseButtons.Right)         // right click on travel map, get in before the context menu
-                    {
-                        rightclickrow = hti.RowIndex;
-                        rightclicktag = Rows[hti.RowIndex].Tag;
-                    }
-                }
-            }
+            this.HandleClickOnDataGrid(e, out int lcr, out rightclickrow);
+            rightclicktag = (rightclickrow != -1) ? Rows[rightclickrow].Tag : null;
         }
 
         private ISystem SysFrom(Object t)   // given tag, find the isystem

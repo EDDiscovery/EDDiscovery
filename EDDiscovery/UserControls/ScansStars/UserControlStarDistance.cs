@@ -36,8 +36,6 @@ namespace EDDiscovery.UserControls
 
         private StarDistanceComputer computer = null;
         private HistoryEntry last_he = null;
-        private ISystem rightclicksystem = null;
-        private int rightclickrow = -1;
 
         private const double defaultMaxRadius = 100;
         private const double defaultMinRadius = 0;
@@ -185,31 +183,12 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        private int rightclickrow = -1;
+
         private void dataGridViewNearest_MouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Right)         // right click on travel map, get in before the context menu
-            {
-                rightclicksystem = null;
-                rightclickrow = -1;
-            }
-
-            if (dataGridViewNearest.SelectedCells.Count < 2 || dataGridViewNearest.SelectedRows.Count == 1)      // if single row completely selected, or 1 cell or less..
-            {
-                DataGridView.HitTestInfo hti = dataGridViewNearest.HitTest(e.X, e.Y);
-                if (hti.Type == DataGridViewHitTestType.Cell)
-                {
-                    dataGridViewNearest.ClearSelection();                // select row under cursor.
-                    dataGridViewNearest.Rows[hti.RowIndex].Selected = true;
-
-                    if (e.Button == MouseButtons.Right)         // right click on travel map, get in before the context menu
-                    {
-                        rightclickrow = hti.RowIndex;
-                        rightclicksystem = (ISystem)dataGridViewNearest.Rows[hti.RowIndex].Tag;
-                    }
-                }
-            }
-
-            viewOnEDSMToolStripMenuItem1.Enabled = rightclicksystem != null;
+            dataGridViewNearest.HandleClickOnDataGrid(e, out int lcr, out rightclickrow);
+            viewOnEDSMToolStripMenuItem1.Enabled = rightclickrow != -1;
         }
 
         private void addToTrilaterationToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -245,21 +224,26 @@ namespace EDDiscovery.UserControls
 
         private void viewOnEDSMToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            this.Cursor = Cursors.WaitCursor;
-            EDSMClass edsm = new EDSMClass();
-            long? id_edsm = rightclicksystem.EDSMID;
-
-            if (id_edsm == 0)
+            if (rightclickrow >= 0)
             {
-                id_edsm = null;
-            }
+                var rightclicksystem = (ISystem)dataGridViewNearest.Rows[rightclickrow].Tag;
 
-            if (!edsm.ShowSystemInEDSM(rightclicksystem.Name, id_edsm))
-            {
-                ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable".T(EDTx.UserControlStarDistance_NoEDSMSys));
-            }
+                this.Cursor = Cursors.WaitCursor;
+                EDSMClass edsm = new EDSMClass();
+                long? id_edsm = rightclicksystem.EDSMID;
 
-            this.Cursor = Cursors.Default;
+                if (id_edsm == 0)
+                {
+                    id_edsm = null;
+                }
+
+                if (!edsm.ShowSystemInEDSM(rightclicksystem.Name, id_edsm))
+                {
+                    ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable".T(EDTx.UserControlStarDistance_NoEDSMSys));
+                }
+
+                this.Cursor = Cursors.Default;
+            }
         }
 
         private void dataGridViewNearest_SortCompare(object sender, DataGridViewSortCompareEventArgs e)

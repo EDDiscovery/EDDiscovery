@@ -230,7 +230,7 @@ namespace EDDiscovery.UserControls
                             1.0F,
                             frmt: frmt);
 
-                    vpos += i.pos.Height;
+                    vpos += i.Location.Height;
                 }
 
                 StarScan.SystemNode systemnode = discoveryform.history.starscan.FindSystem(sys, checkEDSMForInformationToolStripMenuItem.Checked, true);        // get data with EDSM
@@ -264,7 +264,7 @@ namespace EDDiscovery.UserControls
                             backcolour,
                             1.0F,
                             frmt: frmt);
-                        vpos += i.pos.Height;
+                        vpos += i.Location.Height;
                     }
 
                     var all_nodes = systemnode.Bodies.ToList();
@@ -304,7 +304,7 @@ namespace EDDiscovery.UserControls
                                                 1.0F,
                                                 frmt: frmt);
 
-                                        vpos += i.pos.Height;
+                                        vpos += i.Location.Height;
                                         value += sd.EstimatedValue;
                                     }
                                 }
@@ -322,7 +322,7 @@ namespace EDDiscovery.UserControls
                                 backcolour,
                                 1.0F,
                                 frmt: frmt);
-                            vpos += i.pos.Height;
+                            vpos += i.Location.Height;
                         }
 
                     }

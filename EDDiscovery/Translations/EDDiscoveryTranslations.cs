@@ -783,7 +783,7 @@ namespace EDDiscovery
         UserControlMaterialTrader_Raw, // Raw
         UserControlMaterialTrader_Encoded, // Encoded
         UserControlMaterialTrader_Manufactured, // Manufactured
-        UserControlMaterialTrader_Trade, // Trade
+        // not used UserControlMaterialTrader_Trade, // Trade
         UserControlMaterialTrader_Offer, // Offer
         UserControlMaterialTrader_Receive, // Receive
 

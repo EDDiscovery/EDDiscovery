@@ -53,6 +53,8 @@ namespace EDDiscovery.UserControls
             this.Type = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Number = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Price = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.openRecipeInWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.vScrollBarCustomMC = new ExtendedControls.ExtScrollBar();
             this.buttonFilter = new ExtendedControls.ExtButton();
             this.textBoxItems2 = new ExtendedControls.ExtTextBox();
@@ -62,13 +64,11 @@ namespace EDDiscovery.UserControls
             this.checkBoxClear = new ExtendedControls.ExtCheckBox();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.panelTop = new System.Windows.Forms.FlowLayoutPanel();
-            this.extCheckBoxTruncateText = new ExtendedControls.ExtCheckBox();
-            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.openRecipeInWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.extCheckBoxWordWrap = new ExtendedControls.ExtCheckBox();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMC)).BeginInit();
-            this.panelTop.SuspendLayout();
             this.contextMenuStrip.SuspendLayout();
+            this.panelTop.SuspendLayout();
             this.SuspendLayout();
             // 
             // dataViewScrollerPanel
@@ -148,6 +148,21 @@ namespace EDDiscovery.UserControls
             this.Price.MinimumWidth = 50;
             this.Price.Name = "Price";
             this.Price.ReadOnly = true;
+            // 
+            // contextMenuStrip
+            // 
+            this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.openRecipeInWindowToolStripMenuItem});
+            this.contextMenuStrip.Name = "contextMenuStrip";
+            this.contextMenuStrip.Size = new System.Drawing.Size(202, 26);
+            this.contextMenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Opening);
+            // 
+            // openRecipeInWindowToolStripMenuItem
+            // 
+            this.openRecipeInWindowToolStripMenuItem.Name = "openRecipeInWindowToolStripMenuItem";
+            this.openRecipeInWindowToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.openRecipeInWindowToolStripMenuItem.Text = "Open Recipe in Window";
+            this.openRecipeInWindowToolStripMenuItem.Click += new System.EventHandler(this.openRecipeInWindowToolStripMenuItem_Click);
             // 
             // vScrollBarCustomMC
             // 
@@ -303,48 +318,41 @@ namespace EDDiscovery.UserControls
             this.panelTop.Controls.Add(this.labelItems2);
             this.panelTop.Controls.Add(this.textBoxItems2);
             this.panelTop.Controls.Add(this.checkBoxClear);
-            this.panelTop.Controls.Add(this.extCheckBoxTruncateText);
+            this.panelTop.Controls.Add(this.extCheckBoxWordWrap);
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
             this.panelTop.Name = "panelTop";
             this.panelTop.Size = new System.Drawing.Size(704, 30);
             this.panelTop.TabIndex = 6;
             // 
-            // extCheckBoxTruncateText
+            // extCheckBoxWordWrap
             // 
-            this.extCheckBoxTruncateText.AutoSize = true;
-            this.extCheckBoxTruncateText.CheckBoxColor = System.Drawing.Color.Gray;
-            this.extCheckBoxTruncateText.CheckBoxDisabledScaling = 0.5F;
-            this.extCheckBoxTruncateText.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.extCheckBoxTruncateText.CheckColor = System.Drawing.Color.DarkBlue;
-            this.extCheckBoxTruncateText.ImageButtonDisabledScaling = 0.5F;
-            this.extCheckBoxTruncateText.ImageIndeterminate = null;
-            this.extCheckBoxTruncateText.ImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.extCheckBoxTruncateText.ImageUnchecked = null;
-            this.extCheckBoxTruncateText.Location = new System.Drawing.Point(428, 1);
-            this.extCheckBoxTruncateText.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.extCheckBoxTruncateText.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.extCheckBoxTruncateText.Name = "extCheckBoxTruncateText";
-            this.extCheckBoxTruncateText.Size = new System.Drawing.Size(93, 17);
-            this.extCheckBoxTruncateText.TabIndex = 2;
-            this.extCheckBoxTruncateText.Text = "Truncate Text";
-            this.extCheckBoxTruncateText.TickBoxReductionRatio = 0.75F;
-            this.extCheckBoxTruncateText.UseVisualStyleBackColor = true;
-            // 
-            // contextMenuStrip
-            // 
-            this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.openRecipeInWindowToolStripMenuItem});
-            this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(202, 26);
-            this.contextMenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Opening);
-            // 
-            // openRecipeInWindowToolStripMenuItem
-            // 
-            this.openRecipeInWindowToolStripMenuItem.Name = "openRecipeInWindowToolStripMenuItem";
-            this.openRecipeInWindowToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
-            this.openRecipeInWindowToolStripMenuItem.Text = "Open Recipe in Window";
-            this.openRecipeInWindowToolStripMenuItem.Click += new System.EventHandler(this.openRecipeInWindowToolStripMenuItem_Click);
+            this.extCheckBoxWordWrap.Appearance = System.Windows.Forms.Appearance.Button;
+            this.extCheckBoxWordWrap.BackColor = System.Drawing.Color.Transparent;
+            this.extCheckBoxWordWrap.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.extCheckBoxWordWrap.CheckBoxColor = System.Drawing.Color.White;
+            this.extCheckBoxWordWrap.CheckBoxDisabledScaling = 0.5F;
+            this.extCheckBoxWordWrap.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.extCheckBoxWordWrap.CheckColor = System.Drawing.Color.DarkBlue;
+            this.extCheckBoxWordWrap.Cursor = System.Windows.Forms.Cursors.Default;
+            this.extCheckBoxWordWrap.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.extCheckBoxWordWrap.FlatAppearance.CheckedBackColor = System.Drawing.Color.Green;
+            this.extCheckBoxWordWrap.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.extCheckBoxWordWrap.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
+            this.extCheckBoxWordWrap.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.extCheckBoxWordWrap.Image = global::EDDiscovery.Icons.Controls.WordWrapOn;
+            this.extCheckBoxWordWrap.ImageButtonDisabledScaling = 0.5F;
+            this.extCheckBoxWordWrap.ImageIndeterminate = null;
+            this.extCheckBoxWordWrap.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.extCheckBoxWordWrap.ImageUnchecked = global::EDDiscovery.Icons.Controls.WordWrapOff;
+            this.extCheckBoxWordWrap.Location = new System.Drawing.Point(428, 1);
+            this.extCheckBoxWordWrap.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.extCheckBoxWordWrap.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.extCheckBoxWordWrap.Name = "extCheckBoxWordWrap";
+            this.extCheckBoxWordWrap.Size = new System.Drawing.Size(28, 28);
+            this.extCheckBoxWordWrap.TabIndex = 33;
+            this.extCheckBoxWordWrap.TickBoxReductionRatio = 0.75F;
+            this.extCheckBoxWordWrap.UseVisualStyleBackColor = false;
             // 
             // UserControlMaterialCommodities
             // 
@@ -356,9 +364,9 @@ namespace EDDiscovery.UserControls
             this.Size = new System.Drawing.Size(704, 564);
             this.dataViewScrollerPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMC)).EndInit();
+            this.contextMenuStrip.ResumeLayout(false);
             this.panelTop.ResumeLayout(false);
             this.panelTop.PerformLayout();
-            this.contextMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -383,8 +391,8 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.Label labelItems1;
         private ExtendedControls.ExtButton buttonFilter;
         private System.Windows.Forms.FlowLayoutPanel panelTop;
-        private ExtendedControls.ExtCheckBox extCheckBoxTruncateText;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem openRecipeInWindowToolStripMenuItem;
+        private ExtendedControls.ExtCheckBox extCheckBoxWordWrap;
     }
 }

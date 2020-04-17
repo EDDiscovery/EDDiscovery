@@ -45,6 +45,7 @@ namespace EDDiscovery.UserControls
         private string DbUpgradeFilterSave { get { return PrefixName + "GridControlUpgradeFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
         private string DbMaterialFilterSave { get { return PrefixName + "GridControlMaterialFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
         private string DbHistoricMatsSave { get { return PrefixName + "GridHistoricMaterials" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        private string DbWordWrap { get { return PrefixName + "WordWrap" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
 
         int[] Order;        // order
         int[] Wanted;       // wanted, in order terms
@@ -64,7 +65,9 @@ namespace EDDiscovery.UserControls
         public override void Init()
         {
             dataGridViewEngineering.MakeDoubleBuffered();
-            dataGridViewEngineering.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
+            extCheckBoxWordWrap.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbWordWrap, false);
+            UpdateWordWrap();
+            extCheckBoxWordWrap.Click += extCheckBoxWordWrap_Click;
 
             Order = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbOSave, "").RestoreArrayFromString(0, Recipes.EngineeringRecipes.Count);
             if (Order.Max() >= Recipes.EngineeringRecipes.Count || Order.Min() < 0 || Order.Distinct().Count() != Recipes.EngineeringRecipes.Count)       // if not distinct..
@@ -118,6 +121,7 @@ namespace EDDiscovery.UserControls
 
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
+
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
@@ -175,7 +179,7 @@ namespace EDDiscovery.UserControls
         private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)
         {
             last_he = he;
-            if (he.journalEntry is ICommodityJournalEntry || he.journalEntry is IMaterialJournalEntry)
+            if (he.journalEntry is ICommodityJournalEntry || he.journalEntry is IMaterialJournalEntry )
                 Display();
         }
 
@@ -202,7 +206,7 @@ namespace EDDiscovery.UserControls
 
                 int fdrow = dataGridViewEngineering.FirstDisplayedScrollingRowIndex;      // remember where we were displaying
 
-                MaterialCommoditiesRecipe.ResetUsed(mcl);
+                var totals = MaterialCommoditiesRecipe.TotalList(mcl);                  // start with totals present
 
                 wantedList = new List<Tuple<Recipes.Recipe, int>>();
 
@@ -220,7 +224,7 @@ namespace EDDiscovery.UserControls
                 for (int i = 0; i < Recipes.EngineeringRecipes.Count; i++)
                 {
                     int rno = (int)dataGridViewEngineering.Rows[i].Tag;
-                    dataGridViewEngineering[MaxCol.Index, i].Value = MaterialCommoditiesRecipe.HowManyLeft(mcl, Recipes.EngineeringRecipes[rno]).Item1.ToString();
+                    dataGridViewEngineering[MaxCol.Index, i].Value = MaterialCommoditiesRecipe.HowManyLeft(mcl, totals, Recipes.EngineeringRecipes[rno]).Item1.ToString();
                     bool visible = true;
                     
                     if (!(engineers == "All" && modules == "All" && levels == "All" && upgrades == "All" && materials == "All"))
@@ -261,7 +265,7 @@ namespace EDDiscovery.UserControls
                     {
                         Recipes.Recipe r = Recipes.EngineeringRecipes[i];
 
-                        Tuple<int, int, string,string> res = MaterialCommoditiesRecipe.HowManyLeft(mcl, Recipes.EngineeringRecipes[rno], Wanted[rno]);
+                        Tuple<int, int, string,string> res = MaterialCommoditiesRecipe.HowManyLeft(mcl, totals, Recipes.EngineeringRecipes[rno], Wanted[rno]);
                         //System.Diagnostics.Debug.WriteLine("{0} Recipe {1} executed {2} {3} ", i, rno, Wanted[rno], res.Item2);
 
                         dataGridViewEngineering[WantedCol.Index, i].Value = Wanted[rno].ToString();
@@ -279,31 +283,18 @@ namespace EDDiscovery.UserControls
 
                 if (!isEmbedded)
                 {
-                    MaterialCommoditiesRecipe.ResetUsed(mcl);
-                    List<MaterialCommodities> shoppinglist = MaterialCommoditiesRecipe.GetShoppingList(wantedList, mcl);
+                    var shoppinglist = MaterialCommoditiesRecipe.GetShoppingList(wantedList, mcl);
 
                     dataGridViewEngineering.RowCount = Recipes.EngineeringRecipes.Count;         // truncate previous shopping list..
 
-                    foreach (MaterialCommodities c in shoppinglist.OrderBy(mat => mat.Details.Name))      // and add new..
+                    foreach (var c in shoppinglist)      // and add new..
                     {
-                        var cur = last_he.MaterialCommodity.Find(c.Details);    // may be null
+                        var cur = last_he.MaterialCommodity.Find(c.Item1.Details);    // may be null
 
-                        int rn = dataGridViewEngineering.Rows.Add();
-
-                        foreach (var cell in dataGridViewEngineering.Rows[rn].Cells.OfType<DataGridViewCell>())
-                        {
-                            if (cell.OwningColumn == UpgradeCol)
-                                cell.Value = c.Details.Name;
-                            else if (cell.OwningColumn == MaxCol)
-                                cell.Value = (cur?.Count??0).ToString();
-                            else if (cell.OwningColumn == WantedCol)
-                                cell.Value = c.scratchpad.ToString();
-                            else if (cell.OwningColumn == RecipeCol)
-                                cell.Value = c.Details.Shortname;
-                            else if (cell.ValueType == null || cell.ValueType.IsAssignableFrom(typeof(string)))
-                                cell.Value = string.Empty;
-                        }
-                        dataGridViewEngineering.Rows[rn].ReadOnly = true;   // disable editing wanted..
+                        DataGridViewRow r = dataGridViewEngineering.RowTemplate.Clone() as DataGridViewRow;
+                        r.CreateCells(dataGridViewEngineering, c.Item1.Details.Name, "", "", "", c.Item2.ToString(), (cur?.Count ?? 0).ToString(), "", c.Item1.Details.Shortname, "");
+                        r.ReadOnly = true;
+                        dataGridViewEngineering.Rows.Add(r);
                     }
                 }
 
@@ -329,6 +320,18 @@ namespace EDDiscovery.UserControls
             Display();
         }
 
+        private void extCheckBoxWordWrap_Click(object sender, EventArgs e)
+        {
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbWordWrap, extCheckBoxWordWrap.Checked);
+            UpdateWordWrap();
+        }
+
+        private void UpdateWordWrap()
+        {
+            dataGridViewEngineering.DefaultCellStyle.WrapMode = extCheckBoxWordWrap.Checked ? DataGridViewTriState.True : DataGridViewTriState.False;
+            dataGridViewEngineering.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;
+            dataViewScrollerPanel.UpdateScroll();
+        }
 
         private void dataGridViewModules_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
@@ -454,6 +457,11 @@ namespace EDDiscovery.UserControls
         private void chkHistoric_CheckedChanged(object sender, EventArgs e)
         {
             SetHistoric(chkHistoric.Checked);
+        }
+
+        private void extCheckBoxWordWrap_CheckedChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

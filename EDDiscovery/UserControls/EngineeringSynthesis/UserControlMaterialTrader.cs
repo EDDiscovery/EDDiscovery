@@ -29,9 +29,46 @@ namespace EDDiscovery.UserControls
 
         private string DbColumnSave { get { return (PrefixName + "Grid") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
         private string DbTraderType { get { return DBName(PrefixName, "TraderType"); } }
+        private string DbTrades { get { return DBName(PrefixName, "Trades"); } }
+        private string DbSplitter { get { return DBName(PrefixName, "Splitter"); } }
+        private string DbWordWrap { get { return DBName(PrefixName, "WrapText"); } }
 
-        HistoryEntry last_he = null;
-        MaterialCommoditiesList current_mcl = null;
+        private Color orange = Color.FromArgb(255, 184, 85, 8);
+
+        private MaterialCommoditiesList last_mcl = null;
+
+        public class ElementTrade
+        {
+            public MaterialCommodityData.MaterialGroupType type;    // for display purposes, group type
+            public int level;                                       // and level
+
+            public MaterialCommodityData element;               // element of entry, or for trades, element received
+            public int offer;
+            public int receive;
+            public MaterialCommodityData fromelement;           // only for trades, the element that offered up
+
+            public override string ToString()                   // serialise to string
+            {
+                return fromelement?.FDName + "," + element?.FDName + "," + offer.ToStringInvariant() + "," + receive.ToStringInvariant();
+            }
+
+            public bool FromString(string s)                    // serialise from string
+            {
+                string[] parts = s.Split(',');
+                if (parts.Length == 4)
+                {
+                    fromelement = MaterialCommodityData.GetByFDName(parts[0]);
+                    element = MaterialCommodityData.GetByFDName(parts[1]);
+                    return fromelement != null && element != null && parts[2].InvariantParse(out offer) && parts[3].InvariantParse(out receive);
+                }
+                else
+                    return false;
+            }
+        }
+
+        ElementTrade selected = null;         // selected entry to trade to
+
+        List<ElementTrade> trades = new List<ElementTrade>();           // trades established.
 
         #region Init
 
@@ -39,12 +76,16 @@ namespace EDDiscovery.UserControls
         {
             InitializeComponent();
             var corner = dataGridViewTrades.TopLeftHeaderCell; // work around #1487
+
+            BaseUtils.Translator.Instance.Translate(this);
+            BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
+            BaseUtils.Translator.Instance.Translate(toolTip, this);
         }
 
         public override void Init()
         {
             dataGridViewTrades.MakeDoubleBuffered();
-            dataGridViewTrades.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+            dataGridViewTrades.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
 
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
@@ -52,6 +93,16 @@ namespace EDDiscovery.UserControls
             extComboBoxTraderType.Items.AddRange(new string[] { "Raw".Tx(EDTx.UserControlMaterialTrader_Raw), "Encoded".Tx(EDTx.UserControlMaterialTrader_Encoded), "Manufactured".Tx(EDTx.UserControlMaterialTrader_Manufactured) });
             extComboBoxTraderType.SelectedIndex = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(DbTraderType, 0);
             extComboBoxTraderType.SelectedIndexChanged += ExtComboBoxTraderType_SelectedIndexChanged;
+
+            string[] strades = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbTrades, "").Split(';');
+            foreach (var t in strades)      // deserialise the trades and populate the trades list
+            {
+                ElementTrade et = new ElementTrade();
+                if (et.FromString(t))
+                    trades.Add(et);
+            }
+
+            splitContainer.SplitterDistance(EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble(DbSplitter, 0.75));
         }
 
 
@@ -72,7 +123,7 @@ namespace EDDiscovery.UserControls
         public override void Closing()
         {
             DGVSaveColumnLayout(dataGridViewTrades, DbColumnSave);
-
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble(DbSplitter, splitContainer.GetSplitterDistance());
             uctg.OnTravelSelectionChanged -= TravelSelectionChanged;
         }
 
@@ -83,36 +134,26 @@ namespace EDDiscovery.UserControls
 
         public override void InitialDisplay()
         {
-            last_he = uctg.GetCurrentHistoryEntry;
-            Display();
+            last_mcl = uctg.GetCurrentHistoryEntry?.MaterialCommodity;
+            DisplayTradeSelection();
+            DisplayTradeList();
         }
 
         private void TravelSelectionChanged(HistoryEntry he, HistoryList hl, bool selectedEntry)
         {
-            if ( he != last_he && current_mcl == null )        // if changed HE, and not locked to a MCL
+            if ( he != null && last_mcl != he?.MaterialCommodity )        // if changed MCL
             {
-                last_he = he;
-                Display();
+                last_mcl = he.MaterialCommodity;
+                DisplayTradeSelection();
+                DisplayTradeList();
             }
         }
 
-        List<Tuple<MaterialCommodityData.MaterialGroupType, MaterialCommodityData[]>> mcl = null;
-        class ElementTag
-        {
-            public MaterialCommodityData.MaterialGroupType type;
-            public MaterialCommodityData element;
-            public int level;
-            public int offer;
-            public int receive;
-        }
-
-        ElementTag selected = null;
-        
-        private void Display()  // last_he and current_mcl can be null
+        private void DisplayTradeSelection(MaterialCommodityData highlight = null)  // last_he and current_mcl can be null
         {
             int sel = extComboBoxTraderType.SelectedIndex;
 
-            mcl = new List<Tuple<MaterialCommodityData.MaterialGroupType, MaterialCommodityData[]>>();
+            var mcl = new List<Tuple<MaterialCommodityData.MaterialGroupType, MaterialCommodityData[]>>();
 
             foreach ( var t in Enum.GetValues(typeof(MaterialCommodityData.MaterialGroupType)))
             {
@@ -127,29 +168,80 @@ namespace EDDiscovery.UserControls
                 }
             }
 
-            const int badgemargin = 20;
+            Font titlefont = EDDTheme.Instance.GetFont;
+            Font badgefont = EDDTheme.Instance.GetScaledFont(16f / 12f, max:21);
+
+            const int hbadgemargin = 20;
+            const int vbadgemargin = 12;
 
             extPictureTrades.ClearImageList();
 
             int vpos = 0;
-            foreach( var t in mcl )
+            int maxhpos = 0;
+
+            // save splitter
+            // save trades
+            // more backdrops
+
+
+            foreach (var t in mcl)
             {
                 int hpos = 0;
                 int nextvpos = vpos;
                 int lvl = 1;
 
-                foreach( var b in t.Item2 )
+                extPictureTrades.AddOwnerDraw((g, ie) =>
                 {
-                    Bitmap background = EDDiscovery.Icons.IconSet.GetIcon("Controls.MaterialTrader.encodedbackground") as Bitmap;
+                    int tlen;
+                    using (Brush b = new SolidBrush(orange))
+                    {
+                        string s = ie.Tag as string;
+                        s = s.Replace("Manufactured", "").Replace("Raw", "").Replace("Encoded", "");
+                        s = s.SplitCapsWordFull();
+                        tlen = (int)(g.MeasureString(s, titlefont).Width+2);
+                        g.DrawString(s, titlefont, b, new Point(ie.Location.Left, ie.Location.Top));
+                    }
 
-                    int offer = 0, receive = 0, mattotal = 0;
-                    string name = b.Name;
+                    using (Pen p = new Pen(orange))
+                    {
+                        g.DrawLine(p, new Point(tlen, ie.Location.Top + titlefont.Height / 2), new Point(maxhpos, ie.Location.Top + titlefont.Height / 2));
+                    }
 
-                    var mc = current_mcl?.FindFDName(b.FDName) ?? (last_he?.MaterialCommodity.FindFDName(b.FDName));    // if locked to mcl, use that, else use last he mcl
+                }, new Rectangle(0, vpos, 2000, 24), t.Item1.ToString());
 
-                    mattotal = mc?.Count ?? -1;
+                vpos += titlefont.Height + 6;
+
+                string backname = "encodedbackground";
+                if (t.Item1.ToString().Contains("Manu"))
+                    backname = "manubackground";
+                else if (t.Item1.ToString().Contains("Raw"))
+                    backname = "rawbackground";
+
+                Bitmap background = EDDiscovery.Icons.IconSet.GetIcon("Controls.MaterialTrader." + backname ) as Bitmap;
+
+                foreach ( var mat in t.Item2 )
+                {
+
+                    int offer = 0, receive = 0;
+                    string name = mat.Name;
+
+                    int mattotal = last_mcl == null ? -1 : last_mcl.FindFDName(mat.FDName)?.Count ?? 0;    // find mcl in material list if there, and its count
+
+                    if (mattotal >= 0)                                                  // if we have an he, adjust the totals by the trades
+                    {
+                        foreach (var trade in trades)
+                        {
+                            if (trade.fromelement.FDName == mat.FDName)
+                                mattotal -= trade.offer;                              // may go negative if over offered
+                            if (trade.element.FDName == mat.FDName)
+                                mattotal += trade.receive;
+                        }
+                    }
 
                     Color wash = Color.Transparent;
+
+                    if (highlight?.FDName == mat.FDName)
+                        wash = Color.FromArgb(80, 0, 75, 0);
 
                     if (selected != null)
                     {
@@ -188,13 +280,14 @@ namespace EDDiscovery.UserControls
                         }
                     }
 
-                    Bitmap bmp = DrawBadge(background, offer, receive, lvl, name, mattotal, wash);
+                    Bitmap bmp = DrawBadge(background, badgefont, offer, receive, lvl, name, mattotal, wash);
 
                     var ie = extPictureTrades.AddImage(new Rectangle(hpos, vpos, background.Width, background.Height), bmp, imgowned: true);
-                    ie.tag = new ElementTag { type = t.Item1, element = b, level = lvl, offer = offer, receive = receive };
+                    ie.Tag = new ElementTrade { type = t.Item1, element = mat, level = lvl, offer = offer, receive = receive };
 
-                    hpos += bmp.Width + badgemargin;
-                    nextvpos = Math.Max(nextvpos, vpos+ bmp.Height + badgemargin);
+                    maxhpos = Math.Max(maxhpos, hpos + bmp.Width);
+                    hpos += bmp.Width + hbadgemargin;
+                    nextvpos = Math.Max(nextvpos, vpos+ bmp.Height + vbadgemargin);
                     lvl++;
                 }
 
@@ -202,20 +295,16 @@ namespace EDDiscovery.UserControls
             }
 
             extPictureTrades.Render();
-
         }
 
-        Color orange = Color.FromArgb(255, 184, 85, 8);
-
-        Bitmap DrawBadge(Bitmap background , int offer, int receive , int level , string matname, int mattotal, Color wash)
+        Bitmap DrawBadge(Bitmap background , Font displayfont, int offer, int receive , int level , string matname, int mattotal, Color wash)
         {
+
             Bitmap bmp = background.Clone() as Bitmap;
             using (Graphics g = Graphics.FromImage(bmp))
             {
                 using (Brush b = new SolidBrush(orange))
                 {
-                    Font f = new Font("Arial", 16);
-
                     if (offer > 0 && receive > 0)
                     {
                         Bitmap arrow = EDDiscovery.Icons.IconSet.GetIcon("Controls.MaterialTrader.materialexchange") as Bitmap;
@@ -224,16 +313,16 @@ namespace EDDiscovery.UserControls
 
                         g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
-                        g.DrawString(offer.ToStringInvariant(), f, b, new Point(8, 2));
-                        g.DrawString(receive.ToStringInvariant(), f, b, new Point(8, 32));
+                        g.DrawString(offer.ToStringInvariant(), displayfont, b, new Point(8, 2));
+                        g.DrawString(receive.ToStringInvariant(), displayfont, b, new Point(8, 32));
                     }
 
                     using (StringFormat fmt = new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center })
                     {
-                        g.DrawString(matname, f, b, new Rectangle(0, 100, bmp.Width, 45), fmt);
+                        g.DrawString(matname, displayfont, b, new Rectangle(0, 100, bmp.Width, 45), fmt);
 
-                        if ( mattotal > 0 )
-                            g.DrawString(mattotal.ToStringInvariant(), f, b, new Rectangle(0, 75, bmp.Width, 20), fmt);
+                        if ( mattotal >= 0 )
+                            g.DrawString(mattotal.ToStringInvariant(), displayfont, b, new Rectangle(0, 75, bmp.Width, 20), fmt);
                     }
 
                 }
@@ -256,33 +345,85 @@ namespace EDDiscovery.UserControls
             return bmp;
         }
 
+        void DisplayTradeList()
+        {
+            dataGridViewTrades.Rows.Clear();
+
+            if (trades.Count > 0)
+            {
+                MaterialCommoditiesList mcl = last_mcl;
+
+                var totals = mcl == null ? null : MaterialCommoditiesRecipe.TotalList(mcl.List);                  // start with totals present, null if we don't have an mcl
+
+                foreach (var trade in trades)
+                {
+                    var rw = dataGridViewTrades.RowTemplate.Clone() as DataGridViewRow;
+
+                    if (mcl != null)
+                    {
+                        if (!totals.ContainsKey(trade.fromelement.FDName))      // make sure they are both there, so we don't crash.  the from should always be here
+                            totals[trade.fromelement.FDName] = 0;
+                        if (!totals.ContainsKey(trade.element.FDName))          // the to, if 0, will not
+                            totals[trade.element.FDName] = 0;
+
+                        totals[trade.fromelement.FDName] -= trade.offer;
+
+                        if (totals[trade.fromelement.FDName] >= 0)
+                        {
+                            totals[trade.element.FDName] += trade.receive;
+
+                            rw.CreateCells(dataGridViewTrades, trade.fromelement.Name, trade.offer.ToString(), totals[trade.fromelement.FDName].ToString(), trade.element.Name, trade.receive.ToString(), totals[trade.element.FDName].ToString());
+                        }
+                        else
+                        {
+                            rw.CreateCells(dataGridViewTrades, trade.fromelement.Name, trade.offer.ToString(), "- !!!", trade.element.Name, trade.receive.ToString(), "-");
+                        }
+                    }
+                    else
+                    {
+                        rw.CreateCells(dataGridViewTrades, trade.fromelement.Name, trade.offer.ToString(), "-", trade.element.Name, trade.receive.ToString(), "-");
+                    }
+
+                    dataGridViewTrades.Rows.Add(rw);
+                }
+
+            }
+        }
+
         #endregion
 
         private void buttonClear_Click(object sender, EventArgs e)
         {
-            dataGridViewTrades.Rows.Clear();
+            trades.Clear();
+            StoreTrades();
+            DisplayTradeSelection();
+            DisplayTradeList();
         }
 
         private void ExtComboBoxTraderType_SelectedIndexChanged(object sender, EventArgs e)
         {
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(DbTraderType, extComboBoxTraderType.SelectedIndex );
             selected = null;
-            Display();
+            DisplayTradeSelection();
         }
 
         private void extPictureTrades_ClickElement(object sender, MouseEventArgs eventargs, ExtendedControls.ExtPictureBox.ImageElement i, object tag)
         {
-            if (i != null)
+            if (i != null && tag is ElementTrade && last_mcl != null ) // must be an element, with a tag, must have a current mcl
             {
-                ElementTag e = (ElementTag)tag;
-                System.Diagnostics.Debug.WriteLine("Clicked on " + e.type + " " + e.element.Name);
+                ElementTrade current = (ElementTrade)tag;
+                System.Diagnostics.Debug.WriteLine("Clicked on " + current.type + " " + current.element.Name);
 
                 if (selected != null)
                 {
-                    if (selected.element.FDName == e.element.FDName)        // clicked on same.. deselect
+                    var curmat = last_mcl.Find(current.element);   // current mat
+
+                    if (selected.element.FDName == current.element.FDName)        // clicked on same.. deselect
                         selected = null;
                     else
                     {
+                        DisplayTradeSelection(current.element);
+
                         ExtendedControls.ConfigurableForm f = new ExtendedControls.ConfigurableForm();
 
                         int width = 250;
@@ -290,14 +431,14 @@ namespace EDDiscovery.UserControls
 
                         var butl = new ExtendedControls.ExtButton();
                         butl.Image = EDDiscovery.Icons.IconSet.GetIcon("Controls.MaterialTrader.LeftArrow");
-                        f.Add(new ExtendedControls.ConfigurableForm.Entry(butl, "left", "", new Point(margin, 64), new Size(32, 32), null));
+                        f.Add(new ExtendedControls.ConfigurableForm.Entry(butl, "less", "", new Point(margin, 64), new Size(32, 32), null));
                         var butr = new ExtendedControls.ExtButton();
                         butr.Image = EDDiscovery.Icons.IconSet.GetIcon("Controls.MaterialTrader.RightArrow");
-                        f.Add(new ExtendedControls.ConfigurableForm.Entry(butr, "right", "", new Point(width - margin - 32, 64), new Size(32, 32), null));
+                        f.Add(new ExtendedControls.ConfigurableForm.Entry(butr, "more", "", new Point(width - margin - 32, 64), new Size(32, 32), null));
 
                         f.Add(new ExtendedControls.ConfigurableForm.Entry("olabel", typeof(Label), "Offer".Tx(EDTx.UserControlMaterialTrader_Offer), new Point(margin, 30), new Size(width-margin*2, 20), null, 1.5f, ContentAlignment.MiddleCenter));
 
-                        f.Add(new ExtendedControls.ConfigurableForm.Entry("offer", typeof(Label), "0/0", new Point(width / 2 - 12, 50), new Size(width/2-20, 20), null, 1.2f, ContentAlignment.MiddleLeft));
+                        f.Add(new ExtendedControls.ConfigurableForm.Entry("offer", typeof(Label), "0/" + curmat.Count.ToStringInvariant(), new Point(width / 2 - 12, 50), new Size(width/2-20, 20), null, 1.2f, ContentAlignment.MiddleLeft));
 
                         var bar = new PictureBox();
                         bar.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -308,8 +449,11 @@ namespace EDDiscovery.UserControls
 
                         f.Add(new ExtendedControls.ConfigurableForm.Entry("rlabel", typeof(Label), "Receive".Tx(EDTx.UserControlMaterialTrader_Receive), new Point(margin, 110), new Size(width-margin*2, 20), null, 1.5f, ContentAlignment.MiddleCenter));
 
-                        f.Add(new ExtendedControls.ConfigurableForm.Entry("OK", typeof(ExtendedControls.ExtButton), "OK".T(EDTx.OK), new Point(width - margin - 80, 150), new Size(80, 24), "Press to Accept".T(EDTx.UserControlModules_PresstoAccept)));
-                        f.Add(new ExtendedControls.ConfigurableForm.Entry("Cancel", typeof(ExtendedControls.ExtButton), "Cancel".T(EDTx.Cancel), new Point(margin, 150), new Size(80, 24), "Press to Cancel".T(EDTx.UserControlModules_PresstoCancel)));
+                        f.AddOK(new Point(width - margin - 80, 150), "Press to Accept".T(EDTx.UserControlModules_PresstoAccept));
+                        f.AddCancel(new Point(margin, 150), "Press to Cancel".T(EDTx.UserControlModules_PresstoCancel));
+
+                        int currentoffer = 0;
+                        int currentreceive = 0;
 
                         f.Trigger += (dialogname, controlname, xtag) =>
                         {
@@ -317,37 +461,89 @@ namespace EDDiscovery.UserControls
                             {
                                 f.ReturnResult(DialogResult.OK);
                             }
-                            else if (controlname == "Cancel")
+                            else if (controlname == "Cancel" || controlname == "Close" )
                             {
                                 f.ReturnResult(DialogResult.Cancel);
                             }
-                            else if (controlname == "Less")
+                            else
                             {
-                            }
-                            else if (controlname == "More")
-                            {
+                                if (controlname == "less")
+                                {
+                                    if (currentoffer > 0)
+                                    {
+                                        currentoffer -= current.offer;
+                                        currentreceive -= current.receive;
+                                    }
+                                }
+                                else if (controlname == "more")
+                                {
+                                    int newoffer = currentoffer + current.offer;
+                                    if (newoffer <= curmat.Count)
+                                    {
+                                        currentoffer = newoffer;
+                                        currentreceive += current.receive;
+                                    }
+                                }
+
+                                f.GetControl<Label>("offer").Text = currentoffer.ToStringInvariant() + "/" + curmat.Count.ToStringInvariant();
+                                f.GetControl<Label>("receive").Text = currentreceive.ToStringInvariant();
                             }
                         };
 
                         f.RightMargin = margin;
 
-                        f.InitCentred(this.FindForm(), this.FindForm().Icon, "Trade".T(EDTx.UserControlMaterialTrader_Trade));
-                        //f.GetControl<Label>("offer").Font = new Font()
+                        f.InitCentred(this.FindForm(), this.FindForm().Icon, " ", closeicon:true);
 
                         DialogResult res = f.ShowDialog();
 
                         if (res == DialogResult.OK)
                         {
-                            Display();
+                            ElementTrade t = new ElementTrade() { element = selected.element, fromelement = current.element, offer = currentoffer, receive = currentreceive };
+                            trades.Add(t);
+                            selected = null;
+
+                            StoreTrades();
+
+                            DisplayTradeList();
                         }
+
+                        DisplayTradeSelection();
                     }
                 }
                 else
                 {
-                    selected = e;
+                    selected = current;
                 }
-                Display();
+
+                DisplayTradeSelection();
             }
+        }
+
+        int rightclickrow = -1;
+
+        private void dataGridViewTrades_MouseDown(object sender, MouseEventArgs e)
+        {
+            dataGridViewTrades.HandleClickOnDataGrid(e, out int lcr, out rightclickrow);
+        }
+
+        private void clearTradeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if ( rightclickrow >= 0 && rightclickrow < trades.Count)
+            {
+                trades.RemoveAt(rightclickrow);
+                StoreTrades();
+                DisplayTradeSelection();
+                DisplayTradeList();
+            }
+        }
+
+        private void StoreTrades()
+        {
+            string strades = "";
+            foreach (var td in trades)
+                strades = strades.AppendPrePad(td.ToString(), ";");
+
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbTrades, strades);
         }
     }
 }

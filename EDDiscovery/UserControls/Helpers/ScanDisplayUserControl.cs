@@ -96,7 +96,7 @@ namespace EDDiscovery.UserControls
                     ExtPictureBox.ImageElement lab = new ExtPictureBox.ImageElement();
                     lab.TextAutosize(curpos, new Size(500, 30), opttext, largerfont, EDDTheme.Instance.LabelColor, this.BackColor);
                     imagebox.Add(lab);
-                    curpos.Y += lab.img.Height + 8;
+                    curpos.Y += lab.Image.Height + 8;
                 }
 
                 DisplayAreaUsed = curpos;
@@ -595,16 +595,16 @@ namespace EDDiscovery.UserControls
 
                 lab.TextCentreAutosize(labposcenthorz, maxsize, label, font, EDDTheme.Instance.LabelColor, this.BackColor);
 
-                if (lab.pos.X < postopright.X)
+                if (lab.Location.X < postopright.X)
                 {
-                    int offset = postopright.X - lab.pos.X;
+                    int offset = postopright.X - lab.Location.X;
                     ie.Translate(offset, 0);
                     lab.Translate(offset, 0);
                 }
 
                 c.Add(lab);
 
-                max = new Point(Math.Max(lab.pos.X + lab.pos.Width, max.X), lab.pos.Y + lab.pos.Height);
+                max = new Point(Math.Max(lab.Location.X + lab.Location.Width, max.X), lab.Location.Y + lab.Location.Height);
             }
 
             c.Add(ie);
@@ -646,7 +646,7 @@ namespace EDDiscovery.UserControls
         private void ClickElement(object sender, MouseEventArgs e, ExtPictureBox.ImageElement i, object tag)
         {
             if (i != null)
-                ShowInfo((string)tag, i.pos.Location.X < panelStars.Width / 2);
+                ShowInfo((string)tag, i.Location.Location.X < panelStars.Width / 2);
             else
                 HideInfo();
         }

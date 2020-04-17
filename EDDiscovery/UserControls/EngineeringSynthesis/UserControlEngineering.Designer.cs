@@ -65,6 +65,7 @@ namespace EDDiscovery.UserControls
             this.buttonFilterModule = new ExtendedControls.ExtButton();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.panelTop = new System.Windows.Forms.FlowLayoutPanel();
+            this.extCheckBoxWordWrap = new ExtendedControls.ExtCheckBox();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewEngineering)).BeginInit();
             this.panelTop.SuspendLayout();
@@ -76,9 +77,9 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel.Controls.Add(this.vScrollBarCustomMC);
             this.dataViewScrollerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewScrollerPanel.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.dataViewScrollerPanel.Location = new System.Drawing.Point(0, 25);
+            this.dataViewScrollerPanel.Location = new System.Drawing.Point(0, 30);
             this.dataViewScrollerPanel.Name = "dataViewScrollerPanel";
-            this.dataViewScrollerPanel.Size = new System.Drawing.Size(800, 547);
+            this.dataViewScrollerPanel.Size = new System.Drawing.Size(800, 542);
             this.dataViewScrollerPanel.TabIndex = 0;
             this.dataViewScrollerPanel.VerticalScrollBarDockRight = true;
             // 
@@ -105,7 +106,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewEngineering.RowHeadersVisible = false;
             this.dataGridViewEngineering.RowHeadersWidth = 25;
             this.dataGridViewEngineering.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewEngineering.Size = new System.Drawing.Size(787, 547);
+            this.dataGridViewEngineering.Size = new System.Drawing.Size(784, 542);
             this.dataGridViewEngineering.TabIndex = 1;
             this.dataGridViewEngineering.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewModules_CellEndEdit);
             this.dataGridViewEngineering.DragDrop += new System.Windows.Forms.DragEventHandler(this.dataGridViewEngineering_DragDrop);
@@ -201,13 +202,13 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustomMC.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustomMC.HideScrollBar = false;
             this.vScrollBarCustomMC.LargeChange = 0;
-            this.vScrollBarCustomMC.Location = new System.Drawing.Point(787, 0);
+            this.vScrollBarCustomMC.Location = new System.Drawing.Point(784, 0);
             this.vScrollBarCustomMC.Maximum = -1;
             this.vScrollBarCustomMC.Minimum = 0;
             this.vScrollBarCustomMC.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustomMC.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustomMC.Name = "vScrollBarCustomMC";
-            this.vScrollBarCustomMC.Size = new System.Drawing.Size(13, 547);
+            this.vScrollBarCustomMC.Size = new System.Drawing.Size(16, 542);
             this.vScrollBarCustomMC.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustomMC.SmallChange = 1;
             this.vScrollBarCustomMC.TabIndex = 0;
@@ -222,10 +223,13 @@ namespace EDDiscovery.UserControls
             // 
             this.chkHistoric.AutoSize = true;
             this.chkHistoric.CheckBoxColor = System.Drawing.Color.Gray;
+            this.chkHistoric.CheckBoxDisabledScaling = 0.5F;
             this.chkHistoric.CheckBoxInnerColor = System.Drawing.Color.White;
             this.chkHistoric.CheckColor = System.Drawing.Color.DarkBlue;
             this.chkHistoric.ImageButtonDisabledScaling = 0.5F;
+            this.chkHistoric.ImageIndeterminate = null;
             this.chkHistoric.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.chkHistoric.ImageUnchecked = null;
             this.chkHistoric.Location = new System.Drawing.Point(440, 1);
             this.chkHistoric.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.chkHistoric.MouseOverColor = System.Drawing.Color.CornflowerBlue;
@@ -326,11 +330,42 @@ namespace EDDiscovery.UserControls
             this.panelTop.Controls.Add(this.buttonFilterMaterial);
             this.panelTop.Controls.Add(this.chkHistoric);
             this.panelTop.Controls.Add(this.buttonClear);
+            this.panelTop.Controls.Add(this.extCheckBoxWordWrap);
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
             this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(800, 25);
+            this.panelTop.Size = new System.Drawing.Size(800, 30);
             this.panelTop.TabIndex = 2;
+            // 
+            // extCheckBoxWordWrap
+            // 
+            this.extCheckBoxWordWrap.Appearance = System.Windows.Forms.Appearance.Button;
+            this.extCheckBoxWordWrap.BackColor = System.Drawing.Color.Transparent;
+            this.extCheckBoxWordWrap.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.extCheckBoxWordWrap.CheckBoxColor = System.Drawing.Color.White;
+            this.extCheckBoxWordWrap.CheckBoxDisabledScaling = 0.5F;
+            this.extCheckBoxWordWrap.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.extCheckBoxWordWrap.CheckColor = System.Drawing.Color.DarkBlue;
+            this.extCheckBoxWordWrap.Cursor = System.Windows.Forms.Cursors.Default;
+            this.extCheckBoxWordWrap.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.extCheckBoxWordWrap.FlatAppearance.CheckedBackColor = System.Drawing.Color.Green;
+            this.extCheckBoxWordWrap.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.extCheckBoxWordWrap.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
+            this.extCheckBoxWordWrap.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.extCheckBoxWordWrap.Image = global::EDDiscovery.Icons.Controls.WordWrapOn;
+            this.extCheckBoxWordWrap.ImageButtonDisabledScaling = 0.5F;
+            this.extCheckBoxWordWrap.ImageIndeterminate = null;
+            this.extCheckBoxWordWrap.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.extCheckBoxWordWrap.ImageUnchecked = global::EDDiscovery.Icons.Controls.WordWrapOff;
+            this.extCheckBoxWordWrap.Location = new System.Drawing.Point(652, 1);
+            this.extCheckBoxWordWrap.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.extCheckBoxWordWrap.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.extCheckBoxWordWrap.Name = "extCheckBoxWordWrap";
+            this.extCheckBoxWordWrap.Size = new System.Drawing.Size(28, 28);
+            this.extCheckBoxWordWrap.TabIndex = 31;
+            this.extCheckBoxWordWrap.TickBoxReductionRatio = 0.75F;
+            this.extCheckBoxWordWrap.UseVisualStyleBackColor = false;
+            this.extCheckBoxWordWrap.CheckedChanged += new System.EventHandler(this.extCheckBoxWordWrap_CheckedChanged);
             // 
             // UserControlEngineering
             // 
@@ -372,5 +407,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn RecipeCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn EngineersCol;
         private System.Windows.Forms.FlowLayoutPanel panelTop;
+        private ExtendedControls.ExtCheckBox extCheckBoxWordWrap;
     }
 }

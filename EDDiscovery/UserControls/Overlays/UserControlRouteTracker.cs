@@ -222,7 +222,7 @@ namespace EDDiscovery.UserControls
             Color textcolour = IsTransparent ? discoveryform.theme.SPanelColor : discoveryform.theme.LabelColor;
             Color backcolour = IsTransparent ? Color.Transparent : this.BackColor;
             var ie = pictureBox.AddTextAutoSize(new Point(10, 5), new Size(10000, 100), topline == null ? "" : topline, displayfont, textcolour, backcolour, 1.0F);
-            pictureBox.AddTextAutoSize(new Point(10, ie.pos.Bottom + displayfont.ScalePixels(4)), new Size(10000, 100), bottomLine == null ? "" : bottomLine, displayfont, textcolour, backcolour, 1.0F);
+            pictureBox.AddTextAutoSize(new Point(10, ie.Location.Bottom + displayfont.ScalePixels(4)), new Size(10000, 100), bottomLine == null ? "" : bottomLine, displayfont, textcolour, backcolour, 1.0F);
             pictureBox.Render();
         }
 
