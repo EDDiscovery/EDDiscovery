@@ -506,6 +506,11 @@ namespace EDDiscovery.UserControls
                             bool ShowStars = frm.SelectedIndex < 2 || frm.SelectedIndex == 3;
                             bool ShowPlanets = frm.SelectedIndex == 0 || frm.SelectedIndex == 2 || frm.SelectedIndex == 4;
 
+                            List<JournalSAAScanComplete> mappings = ShowPlanets ?
+                                                      JournalEntry.GetByEventType(JournalTypeEnum.SAAScanComplete, EDCommander.CurrentCmdrID, frm.StartTimeUTC, frm.EndTimeUTC)
+                                                      .ConvertAll(x => (JournalSAAScanComplete)x)
+                                                      : null;
+
                             if (frm.IncludeHeader)
                             {
                                 // Write header
@@ -607,6 +612,16 @@ namespace EDDiscovery.UserControls
                                 if (ShowStars == false)   // Then only show planets
                                     if (String.IsNullOrEmpty(scan.PlanetClass))
                                         continue;
+
+                                if (ShowPlanets == true && !string.IsNullOrEmpty(scan.PlanetClass))
+                                {
+                                    var mapping = mappings?.FirstOrDefault(m => m.BodyID == scan.BodyID && m.BodyName == scan.BodyName);
+
+                                    if (mapping != null)
+                                    {
+                                        scan.SetMapped(true, mapping.ProbesUsed <= mapping.EfficiencyTarget);
+                                    }
+                                }
 
                                 writer.Write(csv.Format(EDDConfig.Instance.ConvertTimeToSelectedFromUTC(scan.EventTimeUTC)));
                                 writer.Write(csv.Format(scan.BodyName));
