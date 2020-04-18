@@ -506,11 +506,6 @@ namespace EDDiscovery.UserControls
                             bool ShowStars = frm.SelectedIndex < 2 || frm.SelectedIndex == 3;
                             bool ShowPlanets = frm.SelectedIndex == 0 || frm.SelectedIndex == 2 || frm.SelectedIndex == 4;
 
-                            List<JournalSAAScanComplete> mappings = ShowPlanets ? 
-                                JournalEntry.GetByEventType(JournalTypeEnum.SAAScanComplete, EDCommander.CurrentCmdrID, frm.StartTimeUTC, frm.EndTimeUTC)
-                                .ConvertAll(x => (JournalSAAScanComplete)x)
-                                : null;
-
                             if (frm.IncludeHeader)
                             {
                                 // Write header
@@ -604,16 +599,6 @@ namespace EDDiscovery.UserControls
                             foreach (JournalScan je in scans)
                             {
                                 JournalScan scan = je as JournalScan;
-
-                                if (ShowPlanets == true && !string.IsNullOrEmpty(scan.PlanetClass))
-                                {
-                                    var mapping = mappings?.FirstOrDefault(m => m.BodyID == scan.BodyID);
-
-                                    if (mapping != null)
-                                    {
-                                        scan.SetMapped(true, mapping.ProbesUsed <= mapping.EfficiencyTarget);
-                                    }
-                                }
 
                                 if (ShowPlanets == false)  // Then only show stars.
                                     if (String.IsNullOrEmpty(scan.StarType))
