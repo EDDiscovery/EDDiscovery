@@ -161,6 +161,11 @@ namespace EDDiscovery
                 Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.BelowNormal;
             }
 
+            if (EDDOptions.Instance.ForceTLS12)
+            {
+                System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12 | System.Net.SecurityProtocolType.Tls11;
+            }
+
             msg.Invoke("Checking Databases");
 
             Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Initializing database");
