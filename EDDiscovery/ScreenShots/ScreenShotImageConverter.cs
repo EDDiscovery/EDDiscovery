@@ -116,21 +116,26 @@ namespace EDDiscovery.ScreenShots
 
             using (Bitmap croppedbmp = ConvertImage(bmp))   // do the convert to BMP
             {
-                if (OutputFileExtension == OutputTypes.jpg)
+                using (var memstream = new MemoryStream())
                 {
-                    croppedbmp.Save(OutputFilename, System.Drawing.Imaging.ImageFormat.Jpeg);
-                }
-                else if (OutputFileExtension == OutputTypes.tiff)
-                {
-                    croppedbmp.Save(OutputFilename, System.Drawing.Imaging.ImageFormat.Tiff);
-                }
-                else if (OutputFileExtension == OutputTypes.bmp)
-                {
-                    croppedbmp.Save(OutputFilename, System.Drawing.Imaging.ImageFormat.Bmp);
-                }
-                else
-                {
-                    croppedbmp.Save(OutputFilename, System.Drawing.Imaging.ImageFormat.Png);
+                    if (OutputFileExtension == OutputTypes.jpg)
+                    {
+                        croppedbmp.Save(memstream, System.Drawing.Imaging.ImageFormat.Jpeg);
+                    }
+                    else if (OutputFileExtension == OutputTypes.tiff)
+                    {
+                        croppedbmp.Save(memstream, System.Drawing.Imaging.ImageFormat.Tiff);
+                    }
+                    else if (OutputFileExtension == OutputTypes.bmp)
+                    {
+                        croppedbmp.Save(memstream, System.Drawing.Imaging.ImageFormat.Bmp);
+                    }
+                    else
+                    {
+                        croppedbmp.Save(memstream, System.Drawing.Imaging.ImageFormat.Png);
+                    }
+
+                    File.WriteAllBytes(OutputFilename, memstream.ToArray());
                 }
 
                 FinalSize = new Point(croppedbmp.Size);
