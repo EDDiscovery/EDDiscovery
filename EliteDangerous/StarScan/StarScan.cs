@@ -257,7 +257,9 @@ namespace EliteDangerousCore
             return (sn != null && sn.EDSMWebChecked);
         }
 
-        public SystemNode FindSystem(ISystem sys, bool edsmweblookup, bool byname = false)    // Find the system. Optionally do a EDSM web lookup
+        // ONLY use this if you must because the async await won't work in the call stack.  edsmweblookup here with true is strongly discouraged
+
+        public SystemNode FindSystemSynchronous(ISystem sys, bool edsmweblookup, bool byname = false)    // Find the system. Optionally do a EDSM web lookup
         {
             System.Diagnostics.Debug.Assert(System.Windows.Forms.Application.MessageLoop);  // foreground only
             System.Diagnostics.Debug.Assert(sys != null);
@@ -268,19 +270,77 @@ namespace EliteDangerousCore
 
             if ((sys.EDSMID > 0 || (sys.SystemAddress != null && sys.SystemAddress > 0) || (byname && sys.Name.HasChars())) && (sn == null || sn.EDSMCacheCheck == false || (edsmweblookup && !sn.EDSMWebChecked)))
             {
-                List<JournalScan> jl = EliteDangerousCore.EDSM.EDSMClass.GetBodiesList(sys.EDSMID, edsmweblookup: edsmweblookup, id64: sys.SystemAddress, sysname:sys.Name); // lookup, with optional web
+                var jl = EliteDangerousCore.EDSM.EDSMClass.GetBodiesList(sys, edsmweblookup); // lookup, with optional web
 
-                //if ( edsmweblookup) System.Diagnostics.Debug.WriteLine("Lookup bodies " + sys.Name + " " + sys.EDSMID + " result " + (jl?.Count ?? -1));
+                //if (edsmweblookup) System.Diagnostics.Debug.WriteLine("EDSM WEB Lookup bodies " + sys.Name + " " + sys.EDSMID + " result " + (jl?.Count ?? -1));
 
-                if (jl != null) // found some bodies.. either from cache or from EDSM..
+                if (jl != null && jl.Item2 == false) // found some bodies, not from the cache
                 {
-                    foreach (JournalScan js in jl)
+                    foreach (JournalScan js in jl.Item1)
                     {
                         js.BodyDesignation = GetBodyDesignation(js, sys.Name);
                         ProcessJournalScan(js, sys, true);
                     }
                 }
 
+                if (sn == null) // refind to make sure SN is set
+                    sn = FindSystemNode(sys);
+
+                if (sn != null) // if we found it, set to indicate we did a cache check
+                {
+                    sn.EDSMCacheCheck = true;
+
+                    if (edsmweblookup)      // and if we did a web check, set it too..
+                        sn.EDSMWebChecked = true;
+                }
+            }
+
+            return sn;
+
+        }
+
+        // you must be returning void to use this..
+
+        public async System.Threading.Tasks.Task<SystemNode> FindSystemAsync(ISystem sys, bool edsmweblookup, bool byname = false)    // Find the system. Optionally do a EDSM web lookup
+        {
+            System.Diagnostics.Debug.Assert(System.Windows.Forms.Application.MessageLoop);  // foreground only
+            System.Diagnostics.Debug.Assert(sys != null);
+
+            SystemNode sn = FindSystemNode(sys);
+
+            string trace = Environment.StackTrace.StackTrace("FindSystemAsync", 4);
+
+            System.Diagnostics.Debug.WriteLine("Scan Lookup " + trace + " " + sys.Name + " found " + (sn != null) + " web? " + edsmweblookup + " edsm lookup " + (sn?.EDSMWebChecked ?? false));
+
+            if ((sys.EDSMID > 0 || (sys.SystemAddress != null && sys.SystemAddress > 0) || (byname && sys.Name.HasChars())) && (sn == null || sn.EDSMCacheCheck == false || (edsmweblookup && !sn.EDSMWebChecked)))
+            {
+                System.Diagnostics.Debug.WriteLine("..Asking for EDSM data");
+
+                var jl = await EliteDangerousCore.EDSM.EDSMClass.GetBodiesListAsync(sys, edsmweblookup); // lookup, with optional web
+
+                // found some bodies.. note if multiple people are awaiting above, because two or three asks for system data with edsm lookup,
+                // then c# should guarantee that the first one entering the awaiting gets released to run first.  So it will run first, 
+                // add the bodies to the list, execute through, then the next one will get a go and it should see the cache flag set and not add more 
+
+                if (jl != null)
+                {
+                    if (jl.Item2 == false)      // only want them if not previously cached
+                    {
+                        System.Diagnostics.Debug.WriteLine("Process bodies from EDSM " + trace + " " + sys.Name + " " + sys.EDSMID + " result " + (jl.Item1?.Count ?? -1));
+                        foreach (JournalScan js in jl.Item1)
+                        {
+                            js.BodyDesignation = GetBodyDesignation(js, sys.Name);
+                            ProcessJournalScan(js, sys, true);
+                        }
+                        System.Diagnostics.Debug.WriteLine("Process bodies complete");
+                    }
+                    else
+                    {
+                        System.Diagnostics.Debug.WriteLine("Process bodies from EDSM came from cache so already added in " + trace);
+                    }
+                }
+
+                System.Diagnostics.Debug.WriteLine("Lookup System node again");
                 if (sn == null) // refind to make sure SN is set
                     sn = FindSystemNode(sys);
 

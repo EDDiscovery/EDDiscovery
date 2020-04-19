@@ -160,7 +160,7 @@ namespace EDDiscovery.UserControls
 
                     dataGridViewExplore[idxVisits, rowindex].Value = discoveryform.history.GetVisitsCount(sysname).ToString();
 
-                    StarScan.SystemNode sysnode = discoveryform.history.starscan.FindSystem(sys,false);
+                    StarScan.SystemNode sysnode = discoveryform.history.starscan.FindSystemSynchronous(sys,false);
                     
                     if ( sysnode != null)
                     {

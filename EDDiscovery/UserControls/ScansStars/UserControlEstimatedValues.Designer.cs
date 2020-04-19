@@ -43,13 +43,21 @@ namespace EDDiscovery.UserControls
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.dataViewScrollerPanel2 = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.vScrollBarCustom2 = new ExtendedControls.ExtScrollBar();
             this.dataGridViewEstimatedValues = new System.Windows.Forms.DataGridView();
             this.BodyName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.EDSM = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.EstValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.checkBoxEDSM = new ExtendedControls.ExtCheckBox();
+            this.extPanelRollUp = new ExtendedControls.ExtPanelRollUp();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.dataViewScrollerPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewEstimatedValues)).BeginInit();
+            this.flowLayoutPanel1.SuspendLayout();
+            this.extPanelRollUp.SuspendLayout();
             this.SuspendLayout();
             // 
             // dataViewScrollerPanel2
@@ -58,9 +66,9 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel2.Controls.Add(this.dataGridViewEstimatedValues);
             this.dataViewScrollerPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewScrollerPanel2.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.dataViewScrollerPanel2.Location = new System.Drawing.Point(0, 0);
+            this.dataViewScrollerPanel2.Location = new System.Drawing.Point(0, 30);
             this.dataViewScrollerPanel2.Name = "dataViewScrollerPanel2";
-            this.dataViewScrollerPanel2.Size = new System.Drawing.Size(572, 572);
+            this.dataViewScrollerPanel2.Size = new System.Drawing.Size(572, 542);
             this.dataViewScrollerPanel2.TabIndex = 25;
             this.dataViewScrollerPanel2.VerticalScrollBarDockRight = true;
             // 
@@ -76,13 +84,13 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom2.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom2.HideScrollBar = true;
             this.vScrollBarCustom2.LargeChange = 0;
-            this.vScrollBarCustom2.Location = new System.Drawing.Point(559, 0);
+            this.vScrollBarCustom2.Location = new System.Drawing.Point(556, 0);
             this.vScrollBarCustom2.Maximum = -1;
             this.vScrollBarCustom2.Minimum = 0;
             this.vScrollBarCustom2.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom2.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom2.Name = "vScrollBarCustom2";
-            this.vScrollBarCustom2.Size = new System.Drawing.Size(13, 572);
+            this.vScrollBarCustom2.Size = new System.Drawing.Size(16, 542);
             this.vScrollBarCustom2.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom2.SmallChange = 1;
             this.vScrollBarCustom2.TabIndex = 24;
@@ -102,13 +110,14 @@ namespace EDDiscovery.UserControls
             this.dataGridViewEstimatedValues.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewEstimatedValues.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.BodyName,
+            this.EDSM,
             this.EstValue});
             this.dataGridViewEstimatedValues.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.dataGridViewEstimatedValues.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewEstimatedValues.Name = "dataGridViewEstimatedValues";
             this.dataGridViewEstimatedValues.RowHeadersVisible = false;
             this.dataGridViewEstimatedValues.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewEstimatedValues.Size = new System.Drawing.Size(559, 572);
+            this.dataGridViewEstimatedValues.Size = new System.Drawing.Size(556, 542);
             this.dataGridViewEstimatedValues.TabIndex = 23;
             // 
             // BodyName
@@ -118,23 +127,96 @@ namespace EDDiscovery.UserControls
             this.BodyName.MinimumWidth = 50;
             this.BodyName.Name = "BodyName";
             // 
+            // EDSM
+            // 
+            this.EDSM.FillWeight = 20F;
+            this.EDSM.HeaderText = "EDSM";
+            this.EDSM.Name = "EDSM";
+            // 
             // EstValue
             // 
-            this.EstValue.FillWeight = 15F;
+            this.EstValue.FillWeight = 20F;
             this.EstValue.HeaderText = "Est Value";
             this.EstValue.MinimumWidth = 50;
             this.EstValue.Name = "EstValue";
+            // 
+            // flowLayoutPanel1
+            // 
+            this.flowLayoutPanel1.AutoSize = true;
+            this.flowLayoutPanel1.Controls.Add(this.checkBoxEDSM);
+            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(572, 30);
+            this.flowLayoutPanel1.TabIndex = 5;
+            // 
+            // checkBoxEDSM
+            // 
+            this.checkBoxEDSM.Appearance = System.Windows.Forms.Appearance.Button;
+            this.checkBoxEDSM.BackColor = System.Drawing.SystemColors.Control;
+            this.checkBoxEDSM.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.checkBoxEDSM.CheckBoxColor = System.Drawing.Color.White;
+            this.checkBoxEDSM.CheckBoxDisabledScaling = 0.5F;
+            this.checkBoxEDSM.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxEDSM.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxEDSM.Cursor = System.Windows.Forms.Cursors.Default;
+            this.checkBoxEDSM.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.checkBoxEDSM.FlatAppearance.CheckedBackColor = System.Drawing.Color.Green;
+            this.checkBoxEDSM.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.checkBoxEDSM.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
+            this.checkBoxEDSM.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.checkBoxEDSM.Image = global::EDDiscovery.Icons.Controls.Scan_FetchEDSMBodies;
+            this.checkBoxEDSM.ImageButtonDisabledScaling = 0.5F;
+            this.checkBoxEDSM.ImageIndeterminate = null;
+            this.checkBoxEDSM.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.checkBoxEDSM.ImageUnchecked = null;
+            this.checkBoxEDSM.Location = new System.Drawing.Point(8, 1);
+            this.checkBoxEDSM.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.checkBoxEDSM.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxEDSM.Name = "checkBoxEDSM";
+            this.checkBoxEDSM.Size = new System.Drawing.Size(28, 28);
+            this.checkBoxEDSM.TabIndex = 4;
+            this.checkBoxEDSM.TickBoxReductionRatio = 0.75F;
+            this.toolTip.SetToolTip(this.checkBoxEDSM, "Get and show information from EDSM");
+            this.checkBoxEDSM.UseVisualStyleBackColor = false;
+            // 
+            // extPanelRollUp
+            // 
+            this.extPanelRollUp.AutoSize = true;
+            this.extPanelRollUp.Controls.Add(this.flowLayoutPanel1);
+            this.extPanelRollUp.Dock = System.Windows.Forms.DockStyle.Top;
+            this.extPanelRollUp.HiddenMarkerWidth = 400;
+            this.extPanelRollUp.Location = new System.Drawing.Point(0, 0);
+            this.extPanelRollUp.Name = "extPanelRollUp";
+            this.extPanelRollUp.PinState = true;
+            this.extPanelRollUp.RolledUpHeight = 5;
+            this.extPanelRollUp.RollUpAnimationTime = 500;
+            this.extPanelRollUp.RollUpDelay = 1000;
+            this.extPanelRollUp.SecondHiddenMarkerWidth = 0;
+            this.extPanelRollUp.ShowHiddenMarker = true;
+            this.extPanelRollUp.Size = new System.Drawing.Size(572, 30);
+            this.extPanelRollUp.TabIndex = 25;
+            this.extPanelRollUp.UnrollHoverDelay = 1000;
+            // 
+            // toolTip
+            // 
+            this.toolTip.ShowAlways = true;
             // 
             // UserControlEstimatedValues
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.dataViewScrollerPanel2);
+            this.Controls.Add(this.extPanelRollUp);
             this.Name = "UserControlEstimatedValues";
             this.Size = new System.Drawing.Size(572, 572);
             this.dataViewScrollerPanel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewEstimatedValues)).EndInit();
+            this.flowLayoutPanel1.ResumeLayout(false);
+            this.extPanelRollUp.ResumeLayout(false);
+            this.extPanelRollUp.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -143,6 +225,11 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtScrollBar vScrollBarCustom2;
         private System.Windows.Forms.DataGridView dataGridViewEstimatedValues;
         private System.Windows.Forms.DataGridViewTextBoxColumn BodyName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn EDSM;
         private System.Windows.Forms.DataGridViewTextBoxColumn EstValue;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
+        private ExtendedControls.ExtCheckBox checkBoxEDSM;
+        private ExtendedControls.ExtPanelRollUp extPanelRollUp;
+        private System.Windows.Forms.ToolTip toolTip;
     }
 }

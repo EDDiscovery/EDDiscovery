@@ -24,6 +24,8 @@ namespace EDDiscovery.UserControls
     {
         private HistoryEntry last_he = null;
 
+        private string DbEDSM { get { return DBName("EstimatedValueEDSM"); } }
+
         public UserControlEstimatedValues()
         {
             InitializeComponent();
@@ -34,6 +36,9 @@ namespace EDDiscovery.UserControls
         {
             discoveryform.OnNewEntry += NewEntry;
             BaseUtils.Translator.Instance.Translate(this);
+
+            checkBoxEDSM.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbEDSM, false);
+            checkBoxEDSM.CheckedChanged += CheckBoxEDSM_CheckedChanged;
         }
 
         public override void LoadLayout()
@@ -56,7 +61,7 @@ namespace EDDiscovery.UserControls
 
         public override void InitialDisplay()
         {
-            Display(uctg.GetCurrentHistoryEntry, discoveryform.history);
+            Display(uctg.GetCurrentHistoryEntry, discoveryform.history , true);
         }
 
         public void NewEntry(HistoryEntry he, HistoryList hl)               // called when a new entry is made.. check to see if its a scan update
@@ -69,9 +74,6 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void Display(HistoryEntry he, HistoryList hl) =>
-            Display(he, hl, true);
-
         private void Display(HistoryEntry he, HistoryList hl, bool selectedEntry)            // Called at first start or hooked to change cursor
         {
             if (he != null && (last_he == null || he.System != last_he.System))
@@ -81,7 +83,7 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        void DrawSystem()   // draw last_sn, last_he
+        async void DrawSystem()   // draw last_he
         {
             dataGridViewEstimatedValues.Rows.Clear();
 
@@ -91,41 +93,27 @@ namespace EDDiscovery.UserControls
                 return;
             }
 
-            StarScan.SystemNode last_sn = discoveryform.history.starscan.FindSystem(last_he.System, true);
+            StarScan.SystemNode last_sn = await discoveryform.history.starscan.FindSystemAsync(last_he.System, checkBoxEDSM.Checked);
 
             SetControlText((last_sn == null) ? "No Scan".T(EDTx.NoScan) : string.Format("Estimated Scan Values for {0}".T(EDTx.UserControlEstimatedValues_SV), last_sn.system.Name));
 
             if (last_sn != null)
             {
-                List<StarScan.ScanNode> all_nodes = new List<StarScan.ScanNode>();
-                foreach (StarScan.ScanNode starnode in last_sn.starnodes.Values)
+                foreach( var bodies in last_sn.Bodies )
                 {
-                    all_nodes = Flatten(starnode, all_nodes);
+                    if ( bodies.ScanData != null && bodies.ScanData.BodyName != null && (checkBoxEDSM.Checked || !bodies.ScanData.IsEDSMBody))     // if check edsm, or not edsm body, with scandata
+                    {
+                        dataGridViewEstimatedValues.Rows.Add(new object[] { bodies.ScanData.BodyName, bodies.ScanData.IsEDSMBody ? "EDSM" : "", bodies.ScanData.EstimatedValue });
+                    }
                 }
-
-                // flatten tree of scan nodes to prepare for listing
-                foreach(StarScan.ScanNode sn in all_nodes)
-                {
-                    if ( sn.ScanData != null && sn.ScanData.BodyName != null )
-                        dataGridViewEstimatedValues.Rows.Add(new object[] { sn.ScanData.BodyName, sn.ScanData.EstimatedValue});
-                }
-
                 dataGridViewEstimatedValues.Sort(this.EstValue, ListSortDirection.Descending);
             }
         }
 
-        private List<StarScan.ScanNode> Flatten(StarScan.ScanNode sn, List<StarScan.ScanNode> flattened)
+        private void CheckBoxEDSM_CheckedChanged(object sender, System.EventArgs e)
         {
-            flattened.Add(sn);
-            if (sn.children != null)
-            {
-                foreach (StarScan.ScanNode node in sn.children.Values)
-                {
-                    Flatten(node, flattened);
-                }
-            }
-            return flattened;
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbEDSM, checkBoxEDSM.Checked);
+            DrawSystem();
         }
-
     }
 }

@@ -81,7 +81,7 @@ namespace EDDiscovery.Actions
                         sc.EDSMID = 0;
                     }
 
-                    StarScan.SystemNode sn = scan.FindSystem(sc, edsm);
+                    StarScan.SystemNode sn = scan.FindSystemSynchronous(sc, edsm);
 
                     System.Globalization.CultureInfo ct = System.Globalization.CultureInfo.InvariantCulture;
 

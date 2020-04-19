@@ -30,7 +30,7 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlScan : UserControlCommonBase
     {
-        private string DbSave { get { return DBName("ScanPanel" ); } }
+        private string DbSave { get { return DBName("ScanPanel"); } }
 
         HistoryEntry last_he = null;
 
@@ -180,11 +180,11 @@ namespace EDDiscovery.UserControls
             DrawSystem();
         }
 
-        void DrawSystem()   // draw showing_system (may be null), showing_matcomds (may be null)
+        async void DrawSystem()   // draw showing_system (may be null), showing_matcomds (may be null)
         {
             panelStars.HideInfo();
 
-            StarScan.SystemNode data = panelStars.FindSystem(showing_system, discoveryform.history);
+            StarScan.SystemNode data = showing_system != null ? await discoveryform.history.starscan.FindSystemAsync(showing_system, panelStars.CheckEDSM) : null;
 
             string control_text = "No System";
 
@@ -493,7 +493,8 @@ namespace EDDiscovery.UserControls
                                         ISystem sys = SystemCache.FindSystem(system);
                                         if (sys!=null)
                                         {
-                                            List<JournalScan> sysscans = EDSMClass.GetBodiesList(sys.EDSMID);
+                                            var jl = EDSMClass.GetBodiesList(sys);
+                                            List<JournalScan> sysscans = jl.Item1;
                                             if (sysscans != null)
                                                 scans.AddRange(sysscans);
                                         }

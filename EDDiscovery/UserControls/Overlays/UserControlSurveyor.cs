@@ -198,7 +198,7 @@ namespace EDDiscovery.UserControls
 
         #region Main
 
-        private void DrawSystem(ISystem sys, string tt = null)
+        async private void DrawSystem(ISystem sys, string tt = null)
         {
             if ( tt != null )
             {
@@ -233,7 +233,7 @@ namespace EDDiscovery.UserControls
                     vpos += i.Location.Height;
                 }
 
-                StarScan.SystemNode systemnode = discoveryform.history.starscan.FindSystem(sys, checkEDSMForInformationToolStripMenuItem.Checked, true);        // get data with EDSM
+                StarScan.SystemNode systemnode = await discoveryform.history.starscan.FindSystemAsync(sys, checkEDSMForInformationToolStripMenuItem.Checked, true);        // get data with EDSM
 
                 if (systemnode != null)     // no data, clear display, clear any last_he so samesys is false next time
                 {

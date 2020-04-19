@@ -74,11 +74,6 @@ namespace EDDiscovery.UserControls
 
         #region Display
 
-        public StarScan.SystemNode FindSystem(ISystem showing_system, HistoryList hl)
-        {
-            return showing_system != null ? hl.starscan.FindSystem(showing_system, CheckEDSM, byname: true) : null;
-        }
-
         // draw scannode (may be null), 
         // curmats may be null
         public void DrawSystem(StarScan.SystemNode scannode, MaterialCommoditiesList curmats, HistoryList hl, string opttext = null, string[] filter=  null ) 

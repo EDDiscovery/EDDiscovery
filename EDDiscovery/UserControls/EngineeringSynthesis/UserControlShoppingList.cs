@@ -183,7 +183,7 @@ namespace EDDiscovery.UserControls
             Display();
         }
         
-        private void Display()
+        private async void Display()
         {
             HistoryEntry last_he = userControlSynthesis.CurrentHistoryEntry;        // sync with what its showing
 
@@ -230,7 +230,7 @@ namespace EDDiscovery.UserControls
                 }
                 if (!last_he.IsLanded && showSystemAvailability)
                 {
-                    last_sn = discoveryform.history.starscan.FindSystem(last_he.System, useEDSMForSystemAvailability);
+                    last_sn = await discoveryform.history.starscan.FindSystemAsync(last_he.System, useEDSMForSystemAvailability);
                 }
 
                 StringBuilder wantedList = new StringBuilder();
