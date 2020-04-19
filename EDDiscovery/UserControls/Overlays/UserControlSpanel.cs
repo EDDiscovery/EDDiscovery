@@ -233,7 +233,7 @@ namespace EDDiscovery.UserControls
             Display(discoveryform.history);
         }
 
-        private void Display(HistoryList hl)            
+        private async void Display(HistoryList hl)            
         {
             pictureBox.ClearImageList();
 
@@ -318,7 +318,7 @@ namespace EDDiscovery.UserControls
                         {
                             StarScan scan = hl.starscan;
 
-                            StarScan.SystemNode sn = scan.FindSystem(last.System, true);    // EDSM look up here..
+                            StarScan.SystemNode sn = await scan.FindSystemAsync(last.System, true);    // EDSM look up here..
 
                             StringBuilder res = new StringBuilder();
 

@@ -24,7 +24,7 @@ namespace EDDiscovery.UserControls
 {
     public static class ScanDisplayForm
     {
-        public static void ShowScanOrMarketForm(Form parent, Object tag, bool checkedsm, HistoryList hl)     // tag can be a Isystem or an He.. output depends on it.
+        public static async void ShowScanOrMarketForm(Form parent, Object tag, bool checkedsm, HistoryList hl)     // tag can be a Isystem or an He.. output depends on it.
         {
             if (tag == null)
                 return;
@@ -59,7 +59,8 @@ namespace EDDiscovery.UserControls
                 sd.SetSize( selsize );
                 sd.Size = infosize;
 
-                StarScan.SystemNode data = sd.FindSystem(sys, hl);
+                StarScan.SystemNode data = await hl.starscan.FindSystemAsync(sys, sd.CheckEDSM);    // look up system async
+                    
                 if ( data != null )
                 {
                     long value = data.ScanValue(sd.CheckEDSM);

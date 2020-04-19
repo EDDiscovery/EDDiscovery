@@ -148,14 +148,15 @@ namespace EDDiscovery.Forms
             }
         }
 
-        private void UpdateComboBox(string systemName)
+        private async void UpdateComboBox(string systemName)
         {
             ISystem thisSystem = EDDApplicationContext.EDDMainForm.history.FindSystem(systemName);
 
             BodyName.Items.Clear();
             if (thisSystem != null)
             {
-                var landables = EDDApplicationContext.EDDMainForm.history.starscan.FindSystem(thisSystem, true)?.Bodies?.Where(b => b.ScanData != null && b.ScanData.IsLandable)?.Select(b => b.fullname);
+                var lookup = await EDDApplicationContext.EDDMainForm.history.starscan.FindSystemAsync(thisSystem, true);
+                var landables = lookup?.Bodies?.Where(b => b.ScanData != null && b.ScanData.IsLandable)?.Select(b => b.fullname);
 
                 if (landables != null)
                 {

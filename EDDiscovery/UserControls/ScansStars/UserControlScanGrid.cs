@@ -163,7 +163,7 @@ namespace EDDiscovery.UserControls
             public bool landable, materials, volcanism, mapped;     // all false on creation
         }
 
-        private void DrawSystem(HistoryEntry he, bool force)
+        private async void DrawSystem(HistoryEntry he, bool force)
         {
             StarScan.SystemNode scannode = null;
 
@@ -180,7 +180,7 @@ namespace EDDiscovery.UserControls
             }
             else
             {
-                scannode = discoveryform.history.starscan.FindSystem(he.System, true);        // get data with EDSM
+                scannode = await discoveryform.history.starscan.FindSystemAsync(he.System, true);        // get data with EDSM
 
                 if (scannode == null)     // no data, clear display, clear any last_he so samesys is false next time
                 {

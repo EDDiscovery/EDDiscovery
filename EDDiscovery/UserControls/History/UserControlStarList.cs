@@ -328,7 +328,7 @@ namespace EDDiscovery.UserControls
                     if ( rowpresent != null )       // only need to do something if its displayed
                     {
                         List<HistoryEntry> syslist = (List<HistoryEntry>)rowpresent.Tag;
-                        var node = discoveryform.history.starscan?.FindSystem(syslist[0].System, false); // may be null
+                        var node = discoveryform.history.starscan?.FindSystemSynchronous(syslist[0].System, false); // may be null
                         string info = Infoline(syslist, node);  // lookup node, using star name, no EDSM lookup.
                         rowpresent.Cells[3].Value = info;   // update info
                         rowpresent.Cells[4].Value = node?.ScanValue(true).ToString("N0") ?? "0"; // update scan value
@@ -346,7 +346,7 @@ namespace EDDiscovery.UserControls
             DateTime time = EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(he.EventTimeUTC);
             string visits = $"{syslist.Count:N0}";
 
-            var node = discoveryform.history.starscan?.FindSystem(syslist[0].System, false); // may be null
+            var node = discoveryform.history.starscan?.FindSystemSynchronous(syslist[0].System, false); // may be null
 
             string info = Infoline(syslist, node);  // lookup node, using star name, no EDSM lookup.
 
@@ -635,11 +635,11 @@ namespace EDDiscovery.UserControls
                 CheckEDSM(dataGridViewStarList.CurrentRow);
         }
 
-        public void CheckEDSM(DataGridViewRow row)
+        public async void CheckEDSM(DataGridViewRow row)
         {
             List<HistoryEntry> syslist = row.Tag as List<HistoryEntry>;
 
-            var node = discoveryform.history.starscan?.FindSystem(syslist[0].System, true);  // try an EDSM lookup, cache data, then redisplay.
+            var node = await discoveryform.history.starscan?.FindSystemAsync(syslist[0].System, true);  // try an EDSM lookup, cache data, then redisplay.
             row.Cells[StarHistoryColumns.OtherInformation].Value = Infoline(syslist,node);
             row.Cells[StarHistoryColumns.SystemValue].Value = node?.ScanValue(true).ToString("N0") ?? "";
         }
