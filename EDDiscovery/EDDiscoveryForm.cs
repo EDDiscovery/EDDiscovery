@@ -457,6 +457,33 @@ namespace EDDiscovery
             });
 
             // this.DebugSizePosition(toolTip); // Debug - theme all the tooltips to show info on control - useful
+
+            if (EDDOptions.Instance.OutputEventHelp != null)        // help for events, going to have to do this frequently, so keep
+            {
+                string s = "All Events" + Environment.NewLine;
+                var infoe = BaseUtils.TypeHelpers.GetPropertyFieldNames(typeof(JournalEntry), "EventClass_", fields: true);
+                foreach (var ix in infoe)
+                {
+                    s += "    " + ix.Name + " " + ix.Help + Environment.NewLine;
+                }
+
+                foreach (var x in Enum.GetValues(typeof(JournalTypeEnum)))
+                {
+                    JournalEntry je = JournalEntry.CreateJournalEntry(x.ToString(), DateTime.UtcNow);
+
+                    if (!(je is JournalUnknown))
+                    {
+                        s += "Event " + x + Environment.NewLine;
+                        var info = BaseUtils.TypeHelpers.GetPropertyFieldNames(je.GetType(), "EventClass_", excludedeclaretype: typeof(JournalEntry), fields: true);
+                        foreach (var ix in info)
+                        {
+                            s += "    " + ix.Name + " : " + ix.Help + Environment.NewLine;
+                        }
+                    }
+                }
+
+                File.WriteAllText(EDDOptions.Instance.OutputEventHelp, s);
+            }
         }
 
         List<Notifications.Notification> popupnotificationlist = new List<Notifications.Notification>();

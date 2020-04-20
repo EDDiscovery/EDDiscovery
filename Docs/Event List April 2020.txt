@@ -1,0 +1,1343 @@
+All Events
+    EventClass_Id Integer value
+    EventClass_TLUId Integer value
+    EventClass_CommanderId Integer value
+    EventClass_EventTypeID Enumeration:Unknown,AfmuRepairs,ApproachBody,ApproachSettlement,AppliedToSquadron,AsteroidCracked
+        Bounty,BuyAmmo,BuyDrones,BuyExplorationData,BuyTradeData,CapShipBond,Cargo,CargoDepot
+        ChangeCrewRole,ClearSavedGame,CockpitBreached,CodexEntry,CollectCargo,Commander,CommitCrime
+        CommunityGoal,CommunityGoalJoin,CommunityGoalReward,Continued,CrewAssign,CrewFire
+        CrewHire,CrimeVictim,DatalinkScan,Died,DiscoveryScan,DisbandedSquadron,Docked,DockFighter
+        DockingCancelled,DockingDenied,DockingGranted,DockingRequested,DockingTimeout,DockSRV
+        EjectCargo,EndCrewSession,EngineerApply,EngineerContribution,EngineerCraft,EngineerLegacyConvert
+        EngineerProgress,EscapeInterdiction,FactionKillBond,FSDJump,FSDTarget,FSSAllBodiesFound
+        FuelScoop,Fileheader,FighterDestroyed,FighterRebuilt,Friends,FSSDiscoveryScan,FSSSignalDiscovered
+        HeatDamage,HeatWarning,HullDamage,Interdicted,Interdiction,InvitedToSquadron,JoinedSquadron
+        JetConeBoost,JetConeDamage,JoinACrew,KickCrewMember,KickedFromSquadron,LaunchDrone
+        LaunchFighter,LaunchSRV,LeftSquadron,LeaveBody,Liftoff,LoadGame,Loadout,Location
+        Market,MarketBuy,MarketSell,MaterialCollected,MaterialDiscarded,MaterialDiscovered
+        MaterialTrade,Materials,MiningRefined,Missions,MissionAbandoned,MissionAccepted,MissionCompleted
+        MissionFailed,MissionRedirected,ModuleInfo,ModuleBuy,ModuleRetrieve,ModuleSell,ModuleStore
+        ModuleSwap,MultiSellExplorationData,Music,NavBeaconScan,NewCommander,NpcCrewPaidWage
+        NpcCrewRank,Outfitting,Passengers,PayFines,PayBounties,PayLegacyFines,Powerplay,PowerplayCollect
+        PowerplayDefect,PowerplayDeliver,PowerplayFastTrack,PowerplayJoin,PowerplayLeave
+        PowerplaySalary,PowerplayVote,PowerplayVoucher,Progress,Promotion,ProspectedAsteroid
+        PVPKill,QuitACrew,Rank,RebootRepair,ReceiveText,RedeemVoucher,RefuelAll,RefuelPartial
+        Repair,RepairAll,RepairDrone,Reputation,RestockVehicle,Resurrect,ReservoirReplenished
+        SAAScanComplete,SAASignalsFound,Scan,Scanned,ScientificResearch,Screenshot,SearchAndRescue
+        SelfDestruct,SellDrones,SellExplorationData,SellShipOnRebuy,SendText,SetUserShipName
+        SharedBookmarkToSquadron,ShieldState,Shipyard,ShipyardBuy,ShipyardNew,ShipyardSell
+        ShipyardSwap,ShipyardTransfer,ShipTargeted,Shutdown,SRVDestroyed,StartJump,StoredModules
+        StoredShips,Statistics,SupercruiseEntry,SquadronCreated,SquadronDemotion,SquadronPromotion
+        SquadronStartup,SupercruiseExit,Synthesis,SystemsShutdown,TechnologyBroker,Touchdown
+        UnderAttack,Undocked,USSDrop,VehicleSwitch,WingAdd,WingInvite,WingJoin,WingLeave
+        WonATrophyForSquadron,ModuleSellRemote,FetchRemoteModule,MassModuleStore,DatalinkVoucher
+        DataScanned,CommunityGoalDiscard,CrewLaunchFighter,CrewMemberJoins,CrewMemberQuits
+        CrewMemberRoleChange,EDDItemSet,EDDCommodityPrices,ICONIDsStart,RestockVehicle_SRV
+        RestockVehicle_Fighter,ShieldState_ShieldsUp,ShieldState_ShieldsDown,VehicleSwitch_Mothership
+        VehicleSwitch_Fighter
+    EventClass_EventTypeStr String value
+    EventClass_Icon String value
+    EventClass_GetIconPackPath String value
+    EventClass_EventTimeUTC Date Time Value, US format
+    EventClass_EdsmID Integer value
+    EventClass_EventTimeLocal Date Time Value, US format
+    EventClass_SyncedEDSM Boolean value, 1 = true, 0 = false
+    EventClass_SyncedEDDN Boolean value, 1 = true, 0 = false
+    EventClass_StartMarker Boolean value, 1 = true, 0 = false
+    EventClass_StopMarker Boolean value, 1 = true, 0 = false
+    EventClass_Beta Boolean value, 1 = true, 0 = false
+    EventClass_EventFilterName String value
+    EventClass_JournalTypeIcons String value
+Event AfmuRepairs
+    EventClass_Module : String value
+    EventClass_ModuleFD : String value
+    EventClass_ModuleLocalised : String value
+    EventClass_FullyRepaired : Boolean value, 1 = true, 0 = false
+    EventClass_Health : String value
+Event ApproachBody
+    EventClass_StarSystem : String value
+    EventClass_SystemAddress : Integer value
+    EventClass_Body : String value
+    EventClass_BodyID : Integer value
+    EventClass_BodyType : String value
+    EventClass_BodyDesignation : String value
+Event ApproachSettlement
+    EventClass_Name : String value
+    EventClass_Name_Localised : String value
+    EventClass_MarketID : Integer value
+    EventClass_Latitude : Floating point value
+    EventClass_Longitude : Floating point value
+    EventClass_SystemAddress : Integer value
+    EventClass_BodyID : Integer value
+    EventClass_BodyName : String value
+Event AppliedToSquadron
+    EventClass_Name : String value
+Event AsteroidCracked
+    EventClass_Body : String value
+Event Bounty
+    EventClass_TotalReward : Integer value
+    EventClass_VictimFaction : String value
+    EventClass_VictimFactionLocalised : String value
+    EventClass_Target : String value
+    EventClass_TargetLocalised : String value
+    EventClass_SharedWithOthers : Boolean value, 1 = true, 0 = false
+    EventClass_Rewards : String value
+Event BuyAmmo
+    EventClass_Cost : Integer value
+Event BuyDrones
+    EventClass_Type : String value
+    EventClass_Count : Integer value
+    EventClass_BuyPrice : Integer value
+    EventClass_TotalCost : Integer value
+Event BuyExplorationData
+    EventClass_System : String value
+    EventClass_Cost : Integer value
+Event BuyTradeData
+    EventClass_System : String value
+    EventClass_Cost : Integer value
+Event CapShipBond
+    EventClass_AwardingFaction : String value
+    EventClass_AwardingFaction_Localised : String value
+    EventClass_VictimFaction : String value
+    EventClass_VictimFaction_Localised : String value
+    EventClass_Reward : Integer value
+Event Cargo
+    EventClass_Vessel : String value
+    EventClass_Inventory : String value
+Event CargoDepot
+    EventClass_MissionId : Integer value
+    EventClass_UpdateType : String value
+    EventClass_UpdateEnum : Enumeration:Unknown,Collect,Deliver,WingUpdate
+    EventClass_CargoType : String value
+    EventClass_FriendlyCargoType : String value
+    EventClass_Count : Integer value
+    EventClass_StartMarketID : Integer value
+    EventClass_EndMarketID : Integer value
+    EventClass_ItemsCollected : Integer value
+    EventClass_ItemsDelivered : Integer value
+    EventClass_ItemsToGo : Integer value
+    EventClass_TotalItemsToDeliver : Integer value
+    EventClass_ProgressPercent : Floating point value
+    EventClass_MarketID : Integer value
+Event ChangeCrewRole
+    EventClass_Role : String value
+Event ClearSavedGame
+    EventClass_Name : String value
+    EventClass_FID : String value
+Event CockpitBreached
+Event CodexEntry
+    EventClass_EntryID : Integer value
+    EventClass_Name : String value
+    EventClass_Name_Localised : String value
+    EventClass_Category : String value
+    EventClass_Category_Localised : String value
+    EventClass_SubCategory : String value
+    EventClass_SubCategory_Localised : String value
+    EventClass_Region : String value
+    EventClass_Region_Localised : String value
+    EventClass_System : String value
+    EventClass_SystemAddress : Integer value
+    EventClass_IsNewEntry : Boolean value, 1 = true, 0 = false
+    EventClass_NewTraitsDiscovered : Boolean value, 1 = true, 0 = false
+    EventClass_VoucherAmount : Integer value
+    EventClass_Traits : String value
+    EventClass_NearestDestination : String value
+    EventClass_NearestDestination_Localised : String value
+Event CollectCargo
+    EventClass_Type : String value
+    EventClass_FriendlyType : String value
+    EventClass_Type_Localised : String value
+    EventClass_Stolen : Boolean value, 1 = true, 0 = false
+    EventClass_MissionID : Integer value
+Event Commander
+    EventClass_Name : String value
+    EventClass_FID : String value
+Event CommitCrime
+    EventClass_CrimeType : String value
+    EventClass_Faction : String value
+    EventClass_Victim : String value
+    EventClass_VictimLocalised : String value
+    EventClass_Fine : Integer value
+    EventClass_Bounty : Integer value
+    EventClass_Cost : Integer value
+Event CommunityGoal
+    EventClass_CommunityGoals : String value
+    EventClass_CommunityGoalList : String value
+Event CommunityGoalJoin
+    EventClass_CGID : Integer value
+    EventClass_Name : String value
+    EventClass_System : String value
+Event CommunityGoalReward
+    EventClass_CGID : Integer value
+    EventClass_Name : String value
+    EventClass_System : String value
+    EventClass_Reward : Integer value
+Event Continued
+    EventClass_Part : Integer value
+Event CrewAssign
+    EventClass_NpcCrewID : Integer value
+    EventClass_Name : String value
+    EventClass_Role : String value
+Event CrewFire
+    EventClass_NpcCrewID : Integer value
+    EventClass_Name : String value
+Event CrewHire
+    EventClass_NpcCrewID : Integer value
+    EventClass_Name : String value
+    EventClass_Faction : String value
+    EventClass_Cost : Integer value
+    EventClass_CombatRank : Enumeration:Harmless,MostlyHarmless,Novice,Competent,Expert,Master,Dangerous,Deadly,Elite,Unknown
+
+Event CrimeVictim
+    EventClass_CrimeType : String value
+    EventClass_Offender : String value
+    EventClass_OffenderLocalised : String value
+    EventClass_Bounty : Integer value
+Event DatalinkScan
+    EventClass_Message : String value
+    EventClass_MessageLocalised : String value
+Event Died
+    EventClass_Killers : String value
+Event DiscoveryScan
+    EventClass_SystemAddress : Integer value
+    EventClass_Bodies : Integer value
+Event DisbandedSquadron
+    EventClass_Name : String value
+Event Docked
+    EventClass_StationName : String value
+    EventClass_StationType : String value
+    EventClass_StarSystem : String value
+    EventClass_SystemAddress : Integer value
+    EventClass_MarketID : Integer value
+    EventClass_CockpitBreach : Boolean value, 1 = true, 0 = false
+    EventClass_Faction : String value
+    EventClass_FactionState : String value
+    EventClass_Allegiance : String value
+    EventClass_Economy : String value
+    EventClass_Economy_Localised : String value
+    EventClass_EconomyList : String value
+    EventClass_Government : String value
+    EventClass_Government_Localised : String value
+    EventClass_StationServices : String value
+    EventClass_Wanted : Boolean value, 1 = true, 0 = false
+    EventClass_ActiveFine : Boolean value, 1 = true, 0 = false
+    EventClass_IsTrainingEvent : Boolean value, 1 = true, 0 = false
+Event DockFighter
+    EventClass_ID : Integer value
+Event DockingCancelled
+    EventClass_StationName : String value
+    EventClass_StationType : String value
+    EventClass_MarketID : Integer value
+Event DockingDenied
+    EventClass_StationName : String value
+    EventClass_Reason : String value
+    EventClass_StationType : String value
+    EventClass_MarketID : Integer value
+Event DockingGranted
+    EventClass_StationName : String value
+    EventClass_LandingPad : Integer value
+    EventClass_StationType : String value
+    EventClass_MarketID : Integer value
+Event DockingRequested
+    EventClass_StationName : String value
+    EventClass_StationType : String value
+    EventClass_MarketID : Integer value
+Event DockingTimeout
+    EventClass_StationName : String value
+    EventClass_StationType : String value
+    EventClass_MarketID : Integer value
+Event DockSRV
+    EventClass_ID : Integer value
+Event EjectCargo
+    EventClass_Type : String value
+    EventClass_FriendlyType : String value
+    EventClass_Type_Localised : String value
+    EventClass_Count : Integer value
+    EventClass_Abandoned : Boolean value, 1 = true, 0 = false
+    EventClass_PowerplayOrigin : String value
+    EventClass_MissionID : Integer value
+Event EndCrewSession
+    EventClass_OnCrime : Boolean value, 1 = true, 0 = false
+Event EngineerApply
+    EventClass_Engineer : String value
+    EventClass_Blueprint : String value
+    EventClass_Level : Integer value
+    EventClass_Override : String value
+Event EngineerContribution
+    EventClass_Engineer : String value
+    EventClass_EngineerID : Integer value
+    EventClass_Type : String value
+    EventClass_FriendlyCommodity : String value
+    EventClass_Commodity : String value
+    EventClass_Commodity_Localised : String value
+    EventClass_FriendlyMaterial : String value
+    EventClass_Material : String value
+    EventClass_Material_Localised : String value
+    EventClass_Quantity : Integer value
+    EventClass_TotalQuantity : Integer value
+Event EngineerCraft
+    EventClass_Slot : String value
+    EventClass_SlotFD : String value
+    EventClass_Module : String value
+    EventClass_ModuleFD : String value
+    EventClass_Engineering : String value
+    EventClass_IsPreview : Boolean value, 1 = true, 0 = false
+    EventClass_Ingredients : Integer value
+Event EngineerLegacyConvert
+    EventClass_Slot : String value
+    EventClass_SlotFD : String value
+    EventClass_Module : String value
+    EventClass_ModuleFD : String value
+    EventClass_Engineering : String value
+    EventClass_IsPreview : Boolean value, 1 = true, 0 = false
+    EventClass_Ingredients : Integer value
+Event EngineerProgress
+    EventClass_Engineers : String value
+Event EscapeInterdiction
+    EventClass_Interdictor : String value
+    EventClass_Interdictor_Localised : String value
+    EventClass_IsPlayer : Boolean value, 1 = true, 0 = false
+Event FactionKillBond
+    EventClass_AwardingFaction : String value
+    EventClass_AwardingFaction_Localised : String value
+    EventClass_VictimFaction : String value
+    EventClass_VictimFaction_Localised : String value
+    EventClass_Reward : Integer value
+Event FSDJump
+    EventClass_JumpDist : Floating point value
+    EventClass_FuelUsed : Floating point value
+    EventClass_FuelLevel : Floating point value
+    EventClass_BoostUsed : Boolean value, 1 = true, 0 = false
+    EventClass_BoostValue : Integer value
+    EventClass_MapColor : Integer value
+    EventClass_RealJournalEvent : Boolean value, 1 = true, 0 = false
+    EventClass_EDSMFirstDiscover : Boolean value, 1 = true, 0 = false
+    EventClass_Body : String value
+    EventClass_BodyID : Integer value
+    EventClass_BodyType : String value
+    EventClass_StarSystem : String value
+    EventClass_StarPos : String value
+    EventClass_SystemAddress : Integer value
+    EventClass_StarPosFromEDSM : Boolean value, 1 = true, 0 = false
+    EventClass_Faction : String value
+    EventClass_FactionState : String value
+    EventClass_Allegiance : String value
+    EventClass_Economy : String value
+    EventClass_Economy_Localised : String value
+    EventClass_SecondEconomy : String value
+    EventClass_SecondEconomy_Localised : String value
+    EventClass_Government : String value
+    EventClass_Government_Localised : String value
+    EventClass_Security : String value
+    EventClass_Security_Localised : String value
+    EventClass_Population : Integer value
+    EventClass_PowerplayState : String value
+    EventClass_PowerplayPowers : String value
+    EventClass_Wanted : Boolean value, 1 = true, 0 = false
+    EventClass_Factions : String value
+    EventClass_Conflicts : String value
+    EventClass_HasCoordinate : Boolean value, 1 = true, 0 = false
+    EventClass_IsTrainingEvent : Boolean value, 1 = true, 0 = false
+    EventClass_EDGovernment : Enumeration:Unknown,Anarchy,Communism,Confederacy,Corporate,Cooperative,Democracy,Dictatorship
+Feudal,Imperial,Patronage,Colony,Prison_Colony,Theocracy,None
+    EventClass_EDEconomy : Enumeration:Unknown,Agriculture,Extraction,High_Tech,Industrial,Military,Refinery,Service,Terraforming
+Tourism,None
+    EventClass_EDSecurity : Enumeration:Unknown,Low,Medium,High,Anarchy,Lawless
+    EventClass_EDState : Enumeration:Unknown,None,Boom,Bust,Civil_Unrest,Civil_War,Expansion,Lockdown,Outbreak,War,Famine
+Election,Retreat,Investment
+    EventClass_EDAllegiance : Enumeration:Unknown,Alliance,Anarchy,Empire,Federation,Independent,None
+    EventClass_PowerList : String value
+Event FSDTarget
+    EventClass_StarSystem : String value
+    EventClass_SystemAddress : Integer value
+    EventClass_RemainingJumpsInRoute : Integer value
+Event FSSAllBodiesFound
+    EventClass_SystemAddress : Integer value
+    EventClass_SystemName : String value
+    EventClass_Count : Integer value
+Event FuelScoop
+    EventClass_Scooped : Floating point value
+    EventClass_Total : Floating point value
+Event Fileheader
+    EventClass_GameVersion : String value
+    EventClass_Build : String value
+    EventClass_Language : String value
+    EventClass_Part : Integer value
+    EventClass_Beta : Boolean value, 1 = true, 0 = false
+Event FighterDestroyed
+    EventClass_ID : Integer value
+Event FighterRebuilt
+    EventClass_Loadout : String value
+    EventClass_ID : Integer value
+Event Friends
+    EventClass_Status : String value
+    EventClass_Name : String value
+    EventClass_StatusList : String value
+    EventClass_NameList : String value
+    EventClass_OnlineCount : Integer value
+    EventClass_OfflineCount : Integer value
+Event FSSDiscoveryScan
+    EventClass_Progress : Floating point value
+    EventClass_BodyCount : Integer value
+    EventClass_NonBodyCount : Integer value
+Event FSSSignalDiscovered
+    EventClass_Signals : String value
+Event HeatDamage
+    EventClass_ID : Integer value
+Event HeatWarning
+Event HullDamage
+    EventClass_Health : Floating point value
+Event Interdicted
+    EventClass_Submitted : Boolean value, 1 = true, 0 = false
+    EventClass_Interdictor : String value
+    EventClass_Interdictor_Localised : String value
+    EventClass_IsPlayer : Boolean value, 1 = true, 0 = false
+    EventClass_CombatRank : Enumeration:Harmless,MostlyHarmless,Novice,Competent,Expert,Master,Dangerous,Deadly,Elite,Unknown
+
+    EventClass_Faction : String value
+    EventClass_Power : String value
+Event Interdiction
+    EventClass_Success : Boolean value, 1 = true, 0 = false
+    EventClass_Interdicted : String value
+    EventClass_Interdicted_Localised : String value
+    EventClass_IsPlayer : Boolean value, 1 = true, 0 = false
+    EventClass_CombatRank : Enumeration:Harmless,MostlyHarmless,Novice,Competent,Expert,Master,Dangerous,Deadly,Elite,Unknown
+
+    EventClass_Faction : String value
+    EventClass_Power : String value
+Event InvitedToSquadron
+    EventClass_Name : String value
+Event JoinedSquadron
+    EventClass_Name : String value
+Event JetConeBoost
+    EventClass_BoostValue : Floating point value
+Event JetConeDamage
+    EventClass_Module : String value
+    EventClass_ModuleFD : String value
+    EventClass_ModuleLocalised : String value
+Event JoinACrew
+    EventClass_Captain : String value
+Event KickCrewMember
+    EventClass_Crew : String value
+    EventClass_OnCrime : Boolean value, 1 = true, 0 = false
+Event KickedFromSquadron
+    EventClass_Name : String value
+Event LaunchDrone
+    EventClass_Type : String value
+    EventClass_FriendlyType : String value
+Event LaunchFighter
+    EventClass_Loadout : String value
+    EventClass_PlayerControlled : Boolean value, 1 = true, 0 = false
+    EventClass_ID : Integer value
+Event LaunchSRV
+    EventClass_Loadout : String value
+    EventClass_PlayerControlled : Boolean value, 1 = true, 0 = false
+    EventClass_ID : Integer value
+Event LeftSquadron
+    EventClass_Name : String value
+Event LeaveBody
+    EventClass_StarSystem : String value
+    EventClass_SystemAddress : Integer value
+    EventClass_Body : String value
+    EventClass_BodyID : Integer value
+    EventClass_BodyDesignation : String value
+    EventClass_BodyType : String value
+Event Liftoff
+    EventClass_Latitude : Floating point value
+    EventClass_Longitude : Floating point value
+    EventClass_PlayerControlled : Boolean value, 1 = true, 0 = false
+    EventClass_NearestDestination : String value
+    EventClass_NearestDestination_Localised : String value
+Event LoadGame
+    EventClass_LoadGameCommander : String value
+    EventClass_Ship : String value
+    EventClass_ShipFD : String value
+    EventClass_ShipId : Integer value
+    EventClass_StartLanded : Boolean value, 1 = true, 0 = false
+    EventClass_StartDead : Boolean value, 1 = true, 0 = false
+    EventClass_GameMode : String value
+    EventClass_Group : String value
+    EventClass_Credits : Integer value
+    EventClass_Loan : Integer value
+    EventClass_ShipName : String value
+    EventClass_ShipIdent : String value
+    EventClass_FuelLevel : Floating point value
+    EventClass_FuelCapacity : Floating point value
+    EventClass_Horizons : Boolean value, 1 = true, 0 = false
+    EventClass_FID : String value
+Event Loadout
+    EventClass_Ship : String value
+    EventClass_ShipFD : String value
+    EventClass_ShipId : Integer value
+    EventClass_ShipName : String value
+    EventClass_ShipIdent : String value
+    EventClass_HullValue : Integer value
+    EventClass_HullHealth : Floating point value
+    EventClass_ModulesValue : Integer value
+    EventClass_Rebuy : Integer value
+    EventClass_Hot : Boolean value, 1 = true, 0 = false
+    EventClass_UnladenMass : Floating point value
+    EventClass_MainFuelCapacity : Floating point value
+    EventClass_ReserveFuelCapacity : Floating point value
+    EventClass_CargoCapacity : Integer value
+    EventClass_MaxJumpRange : Floating point value
+    EventClass_ShipModules : String value
+Event Location
+    EventClass_Docked : Boolean value, 1 = true, 0 = false
+    EventClass_StationName : String value
+    EventClass_StationType : String value
+    EventClass_Body : String value
+    EventClass_BodyID : Integer value
+    EventClass_BodyType : String value
+    EventClass_BodyDesignation : String value
+    EventClass_DistFromStarLS : Floating point value
+    EventClass_Latitude : Floating point value
+    EventClass_Longitude : Floating point value
+    EventClass_MarketID : Integer value
+    EventClass_StationFaction : String value
+    EventClass_StationFactionState : String value
+    EventClass_StationGovernment : String value
+    EventClass_StationGovernment_Localised : String value
+    EventClass_StationAllegiance : String value
+    EventClass_StationServices : String value
+    EventClass_StationEconomyList : String value
+    EventClass_StarSystem : String value
+    EventClass_StarPos : String value
+    EventClass_SystemAddress : Integer value
+    EventClass_StarPosFromEDSM : Boolean value, 1 = true, 0 = false
+    EventClass_Faction : String value
+    EventClass_FactionState : String value
+    EventClass_Allegiance : String value
+    EventClass_Economy : String value
+    EventClass_Economy_Localised : String value
+    EventClass_SecondEconomy : String value
+    EventClass_SecondEconomy_Localised : String value
+    EventClass_Government : String value
+    EventClass_Government_Localised : String value
+    EventClass_Security : String value
+    EventClass_Security_Localised : String value
+    EventClass_Population : Integer value
+    EventClass_PowerplayState : String value
+    EventClass_PowerplayPowers : String value
+    EventClass_Wanted : Boolean value, 1 = true, 0 = false
+    EventClass_Factions : String value
+    EventClass_Conflicts : String value
+    EventClass_HasCoordinate : Boolean value, 1 = true, 0 = false
+    EventClass_IsTrainingEvent : Boolean value, 1 = true, 0 = false
+    EventClass_EDGovernment : Enumeration:Unknown,Anarchy,Communism,Confederacy,Corporate,Cooperative,Democracy,Dictatorship
+Feudal,Imperial,Patronage,Colony,Prison_Colony,Theocracy,None
+    EventClass_EDEconomy : Enumeration:Unknown,Agriculture,Extraction,High_Tech,Industrial,Military,Refinery,Service,Terraforming
+Tourism,None
+    EventClass_EDSecurity : Enumeration:Unknown,Low,Medium,High,Anarchy,Lawless
+    EventClass_EDState : Enumeration:Unknown,None,Boom,Bust,Civil_Unrest,Civil_War,Expansion,Lockdown,Outbreak,War,Famine
+Election,Retreat,Investment
+    EventClass_EDAllegiance : Enumeration:Unknown,Alliance,Anarchy,Empire,Federation,Independent,None
+    EventClass_PowerList : String value
+Event Market
+    EventClass_Station : String value
+    EventClass_Faction : String value
+    EventClass_StarSystem : String value
+    EventClass_MarketID : Integer value
+    EventClass_Commodities : String value
+Event MarketBuy
+    EventClass_Type : String value
+    EventClass_Type_Localised : String value
+    EventClass_FriendlyType : String value
+    EventClass_Count : Integer value
+    EventClass_BuyPrice : Integer value
+    EventClass_TotalCost : Integer value
+    EventClass_MarketID : Integer value
+Event MarketSell
+    EventClass_Type : String value
+    EventClass_FriendlyType : String value
+    EventClass_Type_Localised : String value
+    EventClass_Count : Integer value
+    EventClass_SellPrice : Integer value
+    EventClass_TotalSale : Integer value
+    EventClass_AvgPricePaid : Integer value
+    EventClass_IllegalGoods : Boolean value, 1 = true, 0 = false
+    EventClass_StolenGoods : Boolean value, 1 = true, 0 = false
+    EventClass_BlackMarket : Boolean value, 1 = true, 0 = false
+    EventClass_MarketID : Integer value
+Event MaterialCollected
+    EventClass_Category : String value
+    EventClass_FriendlyName : String value
+    EventClass_Name : String value
+    EventClass_Count : Integer value
+    EventClass_Total : Integer value
+Event MaterialDiscarded
+    EventClass_Category : String value
+    EventClass_FriendlyName : String value
+    EventClass_Name : String value
+    EventClass_Count : Integer value
+    EventClass_Total : Integer value
+Event MaterialDiscovered
+    EventClass_Category : String value
+    EventClass_Name : String value
+    EventClass_FriendlyName : String value
+    EventClass_DiscoveryNumber : Integer value
+Event MaterialTrade
+    EventClass_TraderType : String value
+    EventClass_MarketID : Integer value
+    EventClass_Paid : String value
+    EventClass_Received : String value
+Event Materials
+    EventClass_Raw : String value
+    EventClass_Manufactured : String value
+    EventClass_Encoded : String value
+Event MiningRefined
+    EventClass_Type : String value
+    EventClass_FriendlyType : String value
+    EventClass_Type_Localised : String value
+Event Missions
+    EventClass_ActiveMissions : String value
+    EventClass_FailedMissions : String value
+    EventClass_CompletedMissions : String value
+Event MissionAbandoned
+    EventClass_Name : String value
+    EventClass_FDName : String value
+    EventClass_MissionId : Integer value
+    EventClass_Fine : Integer value
+Event MissionAccepted
+    EventClass_MissionId : Integer value
+    EventClass_Faction : String value
+    EventClass_Name : String value
+    EventClass_LocalisedName : String value
+    EventClass_FDName : String value
+    EventClass_DestinationSystem : String value
+    EventClass_DestinationStation : String value
+    EventClass_TargetType : String value
+    EventClass_TargetTypeFriendly : String value
+    EventClass_TargetTypeLocalised : String value
+    EventClass_TargetFaction : String value
+    EventClass_Target : String value
+    EventClass_TargetFriendly : String value
+    EventClass_TargetLocalised : String value
+    EventClass_KillCount : Integer value
+    EventClass_Expiry : Date Time Value, US format
+    EventClass_ExpiryValid : Boolean value, 1 = true, 0 = false
+    EventClass_Influence : String value
+    EventClass_Reputation : String value
+    EventClass_Commodity : String value
+    EventClass_CommodityLocalised : String value
+    EventClass_FriendlyCommodity : String value
+    EventClass_Count : Integer value
+    EventClass_PassengerCount : Integer value
+    EventClass_PassengerVIPs : Boolean value, 1 = true, 0 = false
+    EventClass_PassengerWanted : Boolean value, 1 = true, 0 = false
+    EventClass_PassengerType : String value
+    EventClass_Reward : Integer value
+    EventClass_Wing : Boolean value, 1 = true, 0 = false
+Event MissionCompleted
+    EventClass_Name : String value
+    EventClass_FDName : String value
+    EventClass_Faction : String value
+    EventClass_Commodity : String value
+    EventClass_CommodityLocalised : String value
+    EventClass_FriendlyCommodity : String value
+    EventClass_Count : Integer value
+    EventClass_Target : String value
+    EventClass_TargetLocalised : String value
+    EventClass_TargetFriendly : String value
+    EventClass_TargetType : String value
+    EventClass_TargetTypeLocalised : String value
+    EventClass_TargetTypeFriendly : String value
+    EventClass_TargetFaction : String value
+    EventClass_DestinationSystem : String value
+    EventClass_DestinationStation : String value
+    EventClass_Reward : Integer value
+    EventClass_Donation : Integer value
+    EventClass_PermitsAwarded : String value
+    EventClass_MissionId : Integer value
+    EventClass_CommodityReward : String value
+    EventClass_MaterialsReward : String value
+    EventClass_RewardOrDonation : String value
+    EventClass_Value : Integer value
+    EventClass_FactionEffects : String value
+Event MissionFailed
+    EventClass_Name : String value
+    EventClass_FDName : String value
+    EventClass_MissionId : Integer value
+    EventClass_Fine : Integer value
+Event MissionRedirected
+    EventClass_NewDestinationStation : String value
+    EventClass_OldDestinationStation : String value
+    EventClass_NewDestinationSystem : String value
+    EventClass_OldDestinationSystem : String value
+    EventClass_MissionId : Integer value
+    EventClass_Name : String value
+    EventClass_FDName : String value
+Event ModuleInfo
+    EventClass_ShipModules : String value
+Event ModuleBuy
+    EventClass_Slot : String value
+    EventClass_SlotFD : String value
+    EventClass_Ship : String value
+    EventClass_ShipFD : String value
+    EventClass_ShipId : Integer value
+    EventClass_BuyItem : String value
+    EventClass_BuyItemFD : String value
+    EventClass_BuyItemLocalised : String value
+    EventClass_BuyPrice : Integer value
+    EventClass_SellItem : String value
+    EventClass_SellItemFD : String value
+    EventClass_SellItemLocalised : String value
+    EventClass_SellPrice : Integer value
+    EventClass_StoredItem : String value
+    EventClass_StoredItemFD : String value
+    EventClass_StoredItemLocalised : String value
+    EventClass_MarketID : Integer value
+Event ModuleRetrieve
+    EventClass_Slot : String value
+    EventClass_SlotFD : String value
+    EventClass_Ship : String value
+    EventClass_ShipFD : String value
+    EventClass_ShipId : Integer value
+    EventClass_RetrievedItem : String value
+    EventClass_RetrievedItemFD : String value
+    EventClass_RetrievedItemLocalised : String value
+    EventClass_EngineerModifications : String value
+    EventClass_SwapOutItem : String value
+    EventClass_SwapOutItemFD : String value
+    EventClass_SwapOutItemLocalised : String value
+    EventClass_Cost : Integer value
+    EventClass_Quality : Floating point value
+    EventClass_Level : Integer value
+    EventClass_Hot : Boolean value, 1 = true, 0 = false
+    EventClass_MarketID : Integer value
+Event ModuleSell
+    EventClass_Slot : String value
+    EventClass_SlotFD : String value
+    EventClass_SellItem : String value
+    EventClass_SellItemFD : String value
+    EventClass_SellItemLocalised : String value
+    EventClass_SellPrice : Integer value
+    EventClass_Ship : String value
+    EventClass_ShipFD : String value
+    EventClass_ShipId : Integer value
+    EventClass_MarketID : Integer value
+Event ModuleStore
+    EventClass_Slot : String value
+    EventClass_SlotFD : String value
+    EventClass_Ship : String value
+    EventClass_ShipFD : String value
+    EventClass_ShipId : Integer value
+    EventClass_StoredItem : String value
+    EventClass_StoredItemFD : String value
+    EventClass_StoredItemLocalised : String value
+    EventClass_EngineerModifications : String value
+    EventClass_ReplacementItem : String value
+    EventClass_ReplacementItemFD : String value
+    EventClass_ReplacementItemLocalised : String value
+    EventClass_Cost : Integer value
+    EventClass_Quality : Floating point value
+    EventClass_Level : Integer value
+    EventClass_Hot : Boolean value, 1 = true, 0 = false
+    EventClass_MarketID : Integer value
+Event ModuleSwap
+    EventClass_FromSlot : String value
+    EventClass_FromSlotFD : String value
+    EventClass_ToSlot : String value
+    EventClass_ToSlotFD : String value
+    EventClass_FromItem : String value
+    EventClass_FromItemFD : String value
+    EventClass_FromItemLocalised : String value
+    EventClass_ToItem : String value
+    EventClass_ToItemFD : String value
+    EventClass_ToItemLocalised : String value
+    EventClass_Ship : String value
+    EventClass_ShipFD : String value
+    EventClass_ShipId : Integer value
+    EventClass_MarketID : Integer value
+Event MultiSellExplorationData
+    EventClass_Systems : String value
+    EventClass_BaseValue : Integer value
+    EventClass_Bonus : Integer value
+    EventClass_TotalEarnings : Integer value
+Event Music
+    EventClass_MusicTrack : String value
+    EventClass_MusicTrackID : Enumeration:None,Unknown,NoTrack,MainMenu,CQCMenu,SystemMap,GalaxyMap,GalacticPowers,CQC,DestinationFromHyperspace
+DestinationFromSupercruise,Supercruise,Combat_Unknown,UnknownEncounter,CapitalShip
+CombatLargeDogFight,CombatDogfight,CombatSRV,UnknownSettlement,DockingComputer,Starport
+UnknownExploration,Exploration
+Event NavBeaconScan
+    EventClass_NumBodies : Integer value
+    EventClass_SystemAddress : Integer value
+Event NewCommander
+    EventClass_Name : String value
+    EventClass_Package : String value
+    EventClass_FID : String value
+Event NpcCrewPaidWage
+    EventClass_NpcCrewID : Integer value
+    EventClass_Name : String value
+    EventClass_Amount : Integer value
+Event NpcCrewRank
+    EventClass_NpcCrewID : Integer value
+    EventClass_Name : String value
+    EventClass_RankCombat : Enumeration:Harmless,MostlyHarmless,Novice,Competent,Expert,Master,Dangerous,Deadly,Elite,Unknown
+
+Event Outfitting
+    EventClass_MarketID : Integer value
+    EventClass_Horizons : Boolean value, 1 = true, 0 = false
+    EventClass_AllowCobraMkIV : Boolean value, 1 = true, 0 = false
+    EventClass_ItemList : String value
+Event Passengers
+    EventClass_Manifest : String value
+Event PayFines
+    EventClass_Amount : Integer value
+    EventClass_BrokerPercentage : Floating point value
+    EventClass_AllFines : Boolean value, 1 = true, 0 = false
+    EventClass_Faction : String value
+    EventClass_Faction_Localised : String value
+    EventClass_ShipId : Integer value
+Event PayBounties
+    EventClass_Amount : Integer value
+    EventClass_BrokerPercentage : Floating point value
+    EventClass_AllFines : Boolean value, 1 = true, 0 = false
+    EventClass_Faction : String value
+    EventClass_Faction_Localised : String value
+    EventClass_ShipId : Integer value
+Event PayLegacyFines
+    EventClass_Amount : Integer value
+    EventClass_BrokerPercentage : Floating point value
+Event Powerplay
+    EventClass_Power : String value
+    EventClass_Rank : Integer value
+    EventClass_Merits : Integer value
+    EventClass_Votes : Integer value
+    EventClass_TimePledged : Integer value
+    EventClass_TimePledgedSpan : String value
+    EventClass_TimePledgedString : String value
+Event PowerplayCollect
+    EventClass_Power : String value
+    EventClass_Type : String value
+    EventClass_Type_Localised : String value
+    EventClass_Count : Integer value
+Event PowerplayDefect
+    EventClass_FromPower : String value
+    EventClass_ToPower : String value
+Event PowerplayDeliver
+    EventClass_Power : String value
+    EventClass_Type : String value
+    EventClass_Type_Localised : String value
+    EventClass_Count : Integer value
+Event PowerplayFastTrack
+    EventClass_Power : String value
+    EventClass_Cost : Integer value
+Event PowerplayJoin
+    EventClass_Power : String value
+Event PowerplayLeave
+    EventClass_Power : String value
+Event PowerplaySalary
+    EventClass_Power : String value
+    EventClass_Amount : Integer value
+Event PowerplayVote
+    EventClass_Power : String value
+    EventClass_System : String value
+    EventClass_Votes : Integer value
+Event PowerplayVoucher
+    EventClass_Power : String value
+    EventClass_Systems : String value
+Event Progress
+    EventClass_Combat : Integer value
+    EventClass_Trade : Integer value
+    EventClass_Explore : Integer value
+    EventClass_Empire : Integer value
+    EventClass_Federation : Integer value
+    EventClass_CQC : Integer value
+Event Promotion
+    EventClass_Combat : String value
+    EventClass_Trade : String value
+    EventClass_Explore : String value
+    EventClass_CQC : String value
+    EventClass_Federation : String value
+    EventClass_Empire : String value
+Event ProspectedAsteroid
+    EventClass_Content : String value
+    EventClass_Content_Localised : String value
+    EventClass_MotherlodeMaterial : String value
+    EventClass_FriendlyMotherlodeMaterial : String value
+    EventClass_Remaining : Floating point value
+    EventClass_Materials : String value
+Event PVPKill
+    EventClass_Victim : String value
+    EventClass_CombatRank : Enumeration:Harmless,MostlyHarmless,Novice,Competent,Expert,Master,Dangerous,Deadly,Elite,Unknown
+
+Event QuitACrew
+    EventClass_Captain : String value
+Event Rank
+    EventClass_Combat : Enumeration:Harmless,MostlyHarmless,Novice,Competent,Expert,Master,Dangerous,Deadly,Elite,Unknown
+
+    EventClass_Trade : Enumeration:Penniless,MostlyPenniless,Peddler,Dealer,Merchant,Broker,Entrepreneur,Tycoon,Elite
+Unknown
+    EventClass_Explore : Enumeration:Aimless,MostlyAimless,Scout,Surveyor,Explorer,Pathfinder,Ranger,Pioneer,Elite,Unknown
+
+    EventClass_Empire : Enumeration:None,Outsider,Serf,Master,Squire,Knight,Lord,Baron,Viscount,Count,Earl,Marquis,Duke
+Prince,King,Unknown
+    EventClass_Federation : Enumeration:None,Recruit,Cadet,Midshipman,PettyOfficer,ChiefPettyOfficer,WarrantOfficer,Ensign
+Lieutenant,LtCommander,PostCommander,PostCaptain,RearAdmiral,ViceAdmiral,Admiral
+Unknown
+    EventClass_CQC : Enumeration:Helpless,MostlyHelpless,Amateur,SemiProfessional,Professional,Champion,Hero,Legend
+Elite,Unknown
+Event RebootRepair
+    EventClass_Slots : String value
+    EventClass_FriendlySlots : String value
+Event ReceiveText
+    EventClass_From : String value
+    EventClass_FromLocalised : String value
+    EventClass_Message : String value
+    EventClass_MessageLocalised : String value
+    EventClass_Channel : String value
+    EventClass_MergedEntries : String value
+Event RedeemVoucher
+    EventClass_Type : String value
+    EventClass_Amount : Integer value
+    EventClass_Faction : String value
+    EventClass_BrokerPercentage : Floating point value
+Event RefuelAll
+    EventClass_Cost : Integer value
+    EventClass_Amount : Floating point value
+Event RefuelPartial
+    EventClass_Cost : Integer value
+    EventClass_Amount : Integer value
+Event Repair
+    EventClass_ItemFD : String value
+    EventClass_Item : String value
+    EventClass_ItemLocalised : String value
+    EventClass_Cost : Integer value
+Event RepairAll
+    EventClass_Cost : Integer value
+Event RepairDrone
+    EventClass_HullRepaired : Floating point value
+    EventClass_CockpitRepaired : Floating point value
+    EventClass_CorrosionRepaired : Floating point value
+Event Reputation
+    EventClass_Federation : Floating point value
+    EventClass_Empire : Floating point value
+    EventClass_Independent : Floating point value
+    EventClass_Alliance : Floating point value
+Event RestockVehicle
+    EventClass_Type : String value
+    EventClass_Loadout : String value
+    EventClass_Cost : Integer value
+    EventClass_Count : Integer value
+Event Resurrect
+    EventClass_Option : String value
+    EventClass_Cost : Integer value
+    EventClass_Bankrupt : Boolean value, 1 = true, 0 = false
+Event ReservoirReplenished
+    EventClass_FuelMain : Floating point value
+    EventClass_FuelReservoir : Floating point value
+Event SAAScanComplete
+    EventClass_BodyID : Integer value
+    EventClass_BodyName : String value
+    EventClass_ProbesUsed : Integer value
+    EventClass_EfficiencyTarget : Integer value
+    EventClass_SystemAddress : Integer value
+    EventClass_BodyDesignation : String value
+Event SAASignalsFound
+    EventClass_SystemAddress : Integer value
+    EventClass_BodyName : String value
+    EventClass_BodyID : Integer value
+    EventClass_Signals : String value
+    EventClass_BodyDesignation : String value
+Event Scan
+    EventClass_IsStar : Boolean value, 1 = true, 0 = false
+    EventClass_IsPlanet : Boolean value, 1 = true, 0 = false
+    EventClass_IsBeltCluster : Boolean value, 1 = true, 0 = false
+    EventClass_BodyDesignation : String value
+    EventClass_ScanType : String value
+    EventClass_BodyName : String value
+    EventClass_BodyID : Integer value
+    EventClass_StarSystem : String value
+    EventClass_SystemAddress : Integer value
+    EventClass_DistanceFromArrivalLS : Floating point value
+    EventClass_DistanceFromArrivalText : String value
+    EventClass_nRotationPeriod : Floating point value
+    EventClass_nRotationPeriodDays : Floating point value
+    EventClass_nSurfaceTemperature : Floating point value
+    EventClass_nRadius : Floating point value
+    EventClass_nRadiusSols : Floating point value
+    EventClass_nRadiusEarths : Floating point value
+    EventClass_HasRings : Boolean value, 1 = true, 0 = false
+    EventClass_Rings : String value
+    EventClass_Parents : String value
+    EventClass_WasDiscovered : Boolean value, 1 = true, 0 = false
+    EventClass_IsNotDiscovered : Boolean value, 1 = true, 0 = false
+    EventClass_WasMapped : Boolean value, 1 = true, 0 = false
+    EventClass_IsNotMapped : Boolean value, 1 = true, 0 = false
+    EventClass_StarType : String value
+    EventClass_StarTypeID : Enumeration:Unknown,O,B,A,F,G,K,M,L,T,Y,AeBe,TTS,W,WN,WNC,WC,WO,CS,C,CN,CJ,CHd,MS,S,D,DA,DAB
+DAO,DAZ,DAV,DB,DBZ,DBV,DO,DOV,DQ,DC,DCV,DX,N,H,X,A_BlueWhiteSuperGiant,F_WhiteSuperGiant
+M_RedSuperGiant,M_RedGiant,K_OrangeGiant,RoguePlanet,Nebula,StellarRemnantNebula
+SuperMassiveBlackHole,B_BlueWhiteSuperGiant,G_WhiteSuperGiant
+    EventClass_StarTypeText : String value
+    EventClass_nStellarMass : Floating point value
+    EventClass_nAbsoluteMagnitude : Floating point value
+    EventClass_Luminosity : String value
+    EventClass_nAge : Floating point value
+    EventClass_HabitableZoneInner : Floating point value
+    EventClass_HabitableZoneOuter : Floating point value
+    EventClass_MetalRichZoneInner : Floating point value
+    EventClass_MetalRichZoneOuter : Floating point value
+    EventClass_WaterWrldZoneInner : Floating point value
+    EventClass_WaterWrldZoneOuter : Floating point value
+    EventClass_EarthLikeZoneInner : Floating point value
+    EventClass_EarthLikeZoneOuter : Floating point value
+    EventClass_AmmonWrldZoneInner : Floating point value
+    EventClass_AmmonWrldZoneOuter : Floating point value
+    EventClass_IcyPlanetZoneInner : Floating point value
+    EventClass_IcyPlanetZoneOuter : String value
+    EventClass_nSemiMajorAxis : Floating point value
+    EventClass_nSemiMajorAxisAU : Floating point value
+    EventClass_nEccentricity : Floating point value
+    EventClass_nOrbitalInclination : Floating point value
+    EventClass_nPeriapsis : Floating point value
+    EventClass_nOrbitalPeriod : Floating point value
+    EventClass_nOrbitalPeriodDays : Floating point value
+    EventClass_nAxialTilt : Floating point value
+    EventClass_nAxialTiltDeg : Floating point value
+    EventClass_StarSubclass : Integer value
+    EventClass_PlanetClass : String value
+    EventClass_PlanetTypeID : Enumeration:Unknown_Body_Type,Metal_rich_body,High_metal_content_body,Rocky_body,Icy_body,Rocky_ice_body
+Earthlike_body,Water_world,Ammonia_world,Water_giant,Water_giant_with_life,Gas_giant_with_water_based_life
+Gas_giant_with_ammonia_based_life,Sudarsky_class_I_gas_giant,Sudarsky_class_II_gas_giant
+Sudarsky_class_III_gas_giant,Sudarsky_class_IV_gas_giant,Sudarsky_class_V_gas_giant
+Helium_rich_gas_giant,Helium_gas_giant
+    EventClass_AmmoniaWorld : Boolean value, 1 = true, 0 = false
+    EventClass_Earthlike : Boolean value, 1 = true, 0 = false
+    EventClass_WaterWorld : Boolean value, 1 = true, 0 = false
+    EventClass_nTidalLock : Boolean value, 1 = true, 0 = false
+    EventClass_TerraformState : String value
+    EventClass_Terraformable : Boolean value, 1 = true, 0 = false
+    EventClass_Atmosphere : String value
+    EventClass_AtmosphereID : Enumeration:Unknown,No_atmosphere,Suitable_for_water_based_life,Ammonia_and_oxygen,Ammonia,Water
+Carbon_dioxide,Methane,Helium,Argon,Neon,Sulphur_dioxide,Nitrogen,Silicate_vapour
+Metallic_vapour,Oxygen
+    EventClass_AtmosphereProperty : Enumeration:None,Rich,Thick,Thin,Hot
+    EventClass_HasAtmosphericComposition : Boolean value, 1 = true, 0 = false
+    EventClass_AtmosphereComposition : Floating point value
+    EventClass_PlanetComposition : Floating point value
+    EventClass_HasPlanetaryComposition : Boolean value, 1 = true, 0 = false
+    EventClass_Volcanism : String value
+    EventClass_VolcanismID : Enumeration:Unknown,None,Water_Magma,Sulphur_Dioxide_Magma,Ammonia_Magma,Methane_Magma,Nitrogen_Magma
+Silicate_Magma,Metallic_Magma,Water_Geysers,Carbon_Dioxide_Geysers,Ammonia_Geysers
+Methane_Geysers,Nitrogen_Geysers,Helium_Geysers,Silicate_Vapour_Geysers,Rocky_Magma
+
+    EventClass_HasMeaningfulVolcanism : Boolean value, 1 = true, 0 = false
+    EventClass_VolcanismProperty : Enumeration:None,Minor,Major
+    EventClass_nSurfaceGravity : Floating point value
+    EventClass_nSurfaceGravityG : Floating point value
+    EventClass_nSurfacePressure : Floating point value
+    EventClass_nSurfacePressureEarth : Floating point value
+    EventClass_nLandable : Boolean value, 1 = true, 0 = false
+    EventClass_IsLandable : Boolean value, 1 = true, 0 = false
+    EventClass_nMassEM : Floating point value
+    EventClass_nMassMM : Floating point value
+    EventClass_HasMaterials : Boolean value, 1 = true, 0 = false
+    EventClass_Materials : Floating point value
+    EventClass_MaterialList : String value
+    EventClass_IsEDSMBody : Boolean value, 1 = true, 0 = false
+    EventClass_EDSMDiscoveryCommander : String value
+    EventClass_EDSMDiscoveryUTC : Date Time Value, US format
+    EventClass_ReserveLevel : Enumeration:None,Depleted,Low,Common,Major,Pristine
+    EventClass_ReserveLevelStr : String value
+    EventClass_Mapped : Boolean value, 1 = true, 0 = false
+    EventClass_EfficientMapped : Boolean value, 1 = true, 0 = false
+    EventClass_EstimatedValue : Integer value
+    EventClass_EstimatedValueBase : Integer value
+    EventClass_EstimatedValueFirstDiscovered : Integer value
+    EventClass_EstimatedValueFirstDiscoveredFirstMapped : Integer value
+    EventClass_EstimatedValueFirstDiscoveredFirstMappedEfficiently : Integer value
+    EventClass_EstimatedValueFirstMapped : Integer value
+    EventClass_EstimatedValueFirstMappedEfficiently : Integer value
+    EventClass_EventFilterName : String value
+    EventClass_oneSolRadius_m : Floating point value
+    EventClass_oneEarthRadius_m : Floating point value
+    EventClass_oneAtmosphere_Pa : Floating point value
+    EventClass_oneGee_m_s2 : Floating point value
+    EventClass_oneEarth_MT : Floating point value
+    EventClass_oneMoon_MT : Floating point value
+    EventClass_EarthMoonMassRatio : Floating point value
+    EventClass_oneLS_m : Floating point value
+    EventClass_oneAU_m : Floating point value
+    EventClass_oneAU_LS : Floating point value
+    EventClass_oneDay_s : Floating point value
+Event Scanned
+    EventClass_ScanType : String value
+Event ScientificResearch
+    EventClass_Name : String value
+    EventClass_Count : Integer value
+    EventClass_Category : String value
+    EventClass_MarketID : Integer value
+Event Screenshot
+    EventClass_Filename : String value
+    EventClass_Width : Integer value
+    EventClass_Height : Integer value
+    EventClass_System : String value
+    EventClass_Body : String value
+    EventClass_nLatitude : Floating point value
+    EventClass_nLongitude : Floating point value
+    EventClass_nAltitude : Floating point value
+    EventClass_nHeading : Floating point value
+Event SearchAndRescue
+    EventClass_FDName : String value
+    EventClass_Name_Localised : String value
+    EventClass_FriendlyName : String value
+    EventClass_Count : Integer value
+    EventClass_Reward : Integer value
+    EventClass_MarketID : Integer value
+Event SelfDestruct
+Event SellDrones
+    EventClass_Type : String value
+    EventClass_Count : Integer value
+    EventClass_SellPrice : Integer value
+    EventClass_TotalSale : Integer value
+Event SellExplorationData
+    EventClass_Systems : String value
+    EventClass_Discovered : String value
+    EventClass_BaseValue : Integer value
+    EventClass_Bonus : Integer value
+    EventClass_TotalEarnings : Integer value
+Event SellShipOnRebuy
+    EventClass_ShipTypeFD : String value
+    EventClass_ShipType : String value
+    EventClass_System : String value
+    EventClass_SellShipId : Integer value
+    EventClass_ShipPrice : Integer value
+Event SendText
+    EventClass_To : String value
+    EventClass_To_Localised : String value
+    EventClass_Message : String value
+    EventClass_Command : Boolean value, 1 = true, 0 = false
+Event SetUserShipName
+    EventClass_Ship : String value
+    EventClass_ShipFD : String value
+    EventClass_ShipID : Integer value
+    EventClass_ShipName : String value
+    EventClass_ShipIdent : String value
+Event SharedBookmarkToSquadron
+    EventClass_Name : String value
+Event ShieldState
+    EventClass_ShieldsUp : Boolean value, 1 = true, 0 = false
+Event Shipyard
+    EventClass_Yard : String value
+    EventClass_MarketID : Integer value
+    EventClass_Horizons : Boolean value, 1 = true, 0 = false
+    EventClass_AllowCobraMkIV : Boolean value, 1 = true, 0 = false
+Event ShipyardBuy
+    EventClass_ShipTypeFD : String value
+    EventClass_ShipType : String value
+    EventClass_ShipPrice : Integer value
+    EventClass_StoreOldShipFD : String value
+    EventClass_StoreOldShip : String value
+    EventClass_StoreOldShipId : Integer value
+    EventClass_SellOldShipFD : String value
+    EventClass_SellOldShip : String value
+    EventClass_SellOldShipId : Integer value
+    EventClass_SellPrice : Integer value
+    EventClass_MarketID : Integer value
+Event ShipyardNew
+    EventClass_ShipType : String value
+    EventClass_ShipFD : String value
+    EventClass_ShipId : Integer value
+Event ShipyardSell
+    EventClass_ShipTypeFD : String value
+    EventClass_ShipType : String value
+    EventClass_SellShipId : Integer value
+    EventClass_ShipPrice : Integer value
+    EventClass_System : String value
+    EventClass_MarketID : Integer value
+Event ShipyardSwap
+    EventClass_ShipFD : String value
+    EventClass_ShipType : String value
+    EventClass_ShipId : Integer value
+    EventClass_StoreOldShipFD : String value
+    EventClass_StoreOldShip : String value
+    EventClass_StoreShipId : Integer value
+    EventClass_MarketID : Integer value
+Event ShipyardTransfer
+    EventClass_ShipTypeFD : String value
+    EventClass_ShipType : String value
+    EventClass_ShipId : Integer value
+    EventClass_FromSystem : String value
+    EventClass_Distance : Floating point value
+    EventClass_TransferPrice : Integer value
+    EventClass_nTransferTime : Integer value
+    EventClass_FriendlyTransferTime : String value
+    EventClass_MarketID : Integer value
+    EventClass_ShipMarketID : Integer value
+Event ShipTargeted
+    EventClass_TargetLocked : Boolean value, 1 = true, 0 = false
+    EventClass_ScanStage : Integer value
+    EventClass_Ship : String value
+    EventClass_ShipFD : String value
+    EventClass_Ship_Localised : String value
+    EventClass_PilotName : String value
+    EventClass_PilotName_Localised : String value
+    EventClass_PilotRank : String value
+    EventClass_ShieldHealth : Floating point value
+    EventClass_HullHealth : Floating point value
+    EventClass_Faction : String value
+    EventClass_LegalStatus : String value
+    EventClass_Bounty : Integer value
+    EventClass_SubSystem : String value
+    EventClass_SubSystemHealth : Floating point value
+    EventClass_Power : String value
+    EventClass_MergedEntries : String value
+Event Shutdown
+Event SRVDestroyed
+    EventClass_ID : Integer value
+Event StartJump
+    EventClass_JumpType : String value
+    EventClass_IsHyperspace : Boolean value, 1 = true, 0 = false
+    EventClass_StarSystem : String value
+    EventClass_SystemAddress : Integer value
+    EventClass_StarClass : String value
+    EventClass_FriendlyStarClass : String value
+Event StoredModules
+    EventClass_StationName : String value
+    EventClass_StarSystem : String value
+    EventClass_MarketID : Integer value
+    EventClass_ModuleItems : String value
+Event StoredShips
+    EventClass_StationName : String value
+    EventClass_StarSystem : String value
+    EventClass_MarketID : Integer value
+    EventClass_ShipsHere : String value
+    EventClass_ShipsRemote : String value
+Event Statistics
+    EventClass_BankAccount : String value
+    EventClass_Combat : String value
+    EventClass_Crime : String value
+    EventClass_Smuggling : String value
+    EventClass_Trading : String value
+    EventClass_Mining : String value
+    EventClass_Exploration : String value
+    EventClass_PassengerMissions : String value
+    EventClass_SearchAndRescue : String value
+    EventClass_Crafting : String value
+    EventClass_Crew : String value
+    EventClass_Multicrew : String value
+    EventClass_MaterialTraderStats : String value
+    EventClass_CQC : String value
+    EventClass_Json : String value
+Event SupercruiseEntry
+    EventClass_StarSystem : String value
+    EventClass_SystemAddress : Integer value
+Event SquadronCreated
+    EventClass_Name : String value
+Event SquadronDemotion
+    EventClass_OldRank : Enumeration:Leader,SeniorOfficer,Officer,Agent,Rookie,Unknown
+    EventClass_NewRank : Enumeration:Leader,SeniorOfficer,Officer,Agent,Rookie,Unknown
+    EventClass_Name : String value
+Event SquadronPromotion
+    EventClass_OldRank : Enumeration:Leader,SeniorOfficer,Officer,Agent,Rookie,Unknown
+    EventClass_NewRank : Enumeration:Leader,SeniorOfficer,Officer,Agent,Rookie,Unknown
+    EventClass_Name : String value
+Event SquadronStartup
+    EventClass_CurrentRank : Enumeration:Leader,SeniorOfficer,Officer,Agent,Rookie,Unknown
+    EventClass_Name : String value
+Event SupercruiseExit
+    EventClass_StarSystem : String value
+    EventClass_SystemAddress : Integer value
+    EventClass_Body : String value
+    EventClass_BodyID : Integer value
+    EventClass_BodyType : String value
+    EventClass_BodyDesignation : String value
+Event Synthesis
+    EventClass_Name : String value
+    EventClass_Materials : Integer value
+Event SystemsShutdown
+Event TechnologyBroker
+    EventClass_BrokerType : String value
+    EventClass_MarketID : Integer value
+    EventClass_ItemsUnlocked : String value
+    EventClass_MaterialList : String value
+    EventClass_CommodityList : String value
+Event Touchdown
+    EventClass_Latitude : Floating point value
+    EventClass_Longitude : Floating point value
+    EventClass_PlayerControlled : Boolean value, 1 = true, 0 = false
+    EventClass_NearestDestination : String value
+    EventClass_NearestDestination_Localised : String value
+Event UnderAttack
+    EventClass_Target : String value
+    EventClass_MergedEntries : String value
+Event Undocked
+    EventClass_StationName : String value
+    EventClass_StationType : String value
+    EventClass_MarketID : Integer value
+Event USSDrop
+    EventClass_USSType : String value
+    EventClass_USSThreat : Integer value
+    EventClass_USSTypeLocalised : String value
+Event VehicleSwitch
+    EventClass_To : String value
+Event WingAdd
+    EventClass_Name : String value
+Event WingInvite
+    EventClass_Name : String value
+Event WingJoin
+    EventClass_Others : String value
+Event WingLeave
+Event WonATrophyForSquadron
+    EventClass_Name : String value
+Event ModuleSellRemote
+    EventClass_Slot : String value
+    EventClass_SellItem : String value
+    EventClass_SellItemFD : String value
+    EventClass_SellItemLocalised : String value
+    EventClass_SellPrice : Integer value
+    EventClass_ShipFD : String value
+    EventClass_Ship : String value
+    EventClass_ShipId : Integer value
+    EventClass_ServerId : Integer value
+Event FetchRemoteModule
+    EventClass_StorageSlot : String value
+    EventClass_StoredItem : String value
+    EventClass_StoredItemFD : String value
+    EventClass_StoredItemLocalised : String value
+    EventClass_TransferCost : Integer value
+    EventClass_ShipFD : String value
+    EventClass_Ship : String value
+    EventClass_ShipId : Integer value
+    EventClass_ServerId : Integer value
+    EventClass_nTransferTime : Integer value
+    EventClass_FriendlyTransferTime : String value
+Event MassModuleStore
+    EventClass_Ship : String value
+    EventClass_ShipFD : String value
+    EventClass_ShipId : Integer value
+    EventClass_MarketID : Integer value
+    EventClass_ModuleItems : String value
+Event DatalinkVoucher
+    EventClass_PayeeFaction : String value
+    EventClass_Reward : Integer value
+    EventClass_VictimFaction : String value
+Event DataScanned
+    EventClass_Type : String value
+    EventClass_TypeLocalised : String value
+Event CommunityGoalDiscard
+    EventClass_CGID : Integer value
+    EventClass_Name : String value
+    EventClass_System : String value
+Event CrewLaunchFighter
+    EventClass_Crew : String value
+    EventClass_ID : Integer value
+Event CrewMemberJoins
+    EventClass_Crew : String value
+Event CrewMemberQuits
+    EventClass_Crew : String value
+Event CrewMemberRoleChange
+    EventClass_Crew : String value
+    EventClass_Role : String value
+Event EDDItemSet
+    EventClass_Materials : String value
+    EventClass_Commodities : String value
+Event EDDCommodityPrices
+    EventClass_Station : String value
+    EventClass_Faction : String value
+    EventClass_StarSystem : String value
+    EventClass_MarketID : Integer value
+    EventClass_Commodities : String value

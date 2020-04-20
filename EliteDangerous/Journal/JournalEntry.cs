@@ -204,9 +204,17 @@ namespace EliteDangerousCore
 
         #endregion
 
-            #region Factory creation
+        #region Factory creation
 
-            static public JournalEntry CreateJournalEntry(string text)
+        static public JournalEntry CreateJournalEntry(string events, DateTime t)
+        {
+            JObject jo = new JObject();
+            jo.Add("event", events);
+            jo.Add("timestamp", t);
+            return CreateJournalEntry(jo.ToString());
+        }
+
+        static public JournalEntry CreateJournalEntry(string text)
         {
             JObject jo;
 

@@ -82,9 +82,13 @@ namespace EDDiscovery
             {
                 SelectLanguage = toeol ? ca.Rest() : ca.NextEmpty();
             }
-            else if (optname == "-webserverfolder" || optname == "-wsf" )
+            else if (optname == "-webserverfolder" || optname == "-wsf")
             {
                 WebServerFolder = toeol ? ca.Rest() : ca.NextEmpty();
+            }
+            else if (optname == "-outputeventhelp")
+            {
+                OutputEventHelp = toeol ? ca.Rest() : ca.NextEmpty();
             }
             else if (optname.StartsWith("-"))
             {
@@ -199,6 +203,7 @@ namespace EDDiscovery
         public bool LowPriority { get; set; }
         public bool BackgroundPriority { get; set; }
         public bool ForceTLS12 { get; set; }
+        public string OutputEventHelp { get; set; }
 
         public string SubAppDirectory(string subfolder)     // ensures its there.. name without \ slashes
         {
