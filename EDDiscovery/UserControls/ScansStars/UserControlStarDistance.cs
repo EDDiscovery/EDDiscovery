@@ -187,7 +187,7 @@ namespace EDDiscovery.UserControls
 
         private void dataGridViewNearest_MouseDown(object sender, MouseEventArgs e)
         {
-            dataGridViewNearest.HandleClickOnDataGrid(e, out int lcr, out rightclickrow);
+            dataGridViewNearest.HandleClickOnDataGrid(e, out int unusedleftclickrow, out rightclickrow);
             viewOnEDSMToolStripMenuItem1.Enabled = rightclickrow != -1;
         }
 

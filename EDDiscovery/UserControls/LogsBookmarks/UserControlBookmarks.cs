@@ -293,7 +293,7 @@ namespace EDDiscovery.UserControls
 
         private void dataGridViewBookMarks_MouseDown(object sender, MouseEventArgs e)
         {
-            dataGridViewBookMarks.HandleClickOnDataGrid(e, out int leftclickrow, out int rightclickrow);
+            dataGridViewBookMarks.HandleClickOnDataGrid(e, out int unusedleftclickrow, out int rightclickrow);
             rightclickbookmark = (rightclickrow !=-1) ? (BookmarkClass)dataGridViewBookMarks.Rows[rightclickrow].Tag : null;
         }
 

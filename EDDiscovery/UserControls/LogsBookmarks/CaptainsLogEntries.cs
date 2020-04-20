@@ -519,7 +519,7 @@ namespace EDDiscovery.UserControls
 
         private void dataGridView_MouseDown(object sender, MouseEventArgs e)
         {
-            dataGridView.HandleClickOnDataGrid(e, out int leftclickrow, out int rightclickrow);
+            dataGridView.HandleClickOnDataGrid(e, out int unusedleftclickrow, out int rightclickrow);
             rightclickentry = (rightclickrow != -1) ? (CaptainsLogClass)dataGridView.Rows[rightclickrow].Tag : null;
         }
 

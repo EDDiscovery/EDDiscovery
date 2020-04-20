@@ -72,7 +72,7 @@ namespace EDDiscovery.UserControls.Search
 
         private void mouseDown(object sender, MouseEventArgs e)
         {
-            this.HandleClickOnDataGrid(e, out int lcr, out rightclickrow);
+            this.HandleClickOnDataGrid(e, out int unusedleftclickrow, out rightclickrow);
             rightclicktag = (rightclickrow != -1) ? Rows[rightclickrow].Tag : null;
         }
 

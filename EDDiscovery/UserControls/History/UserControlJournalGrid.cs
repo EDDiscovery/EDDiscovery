@@ -434,7 +434,7 @@ namespace EDDiscovery.UserControls
 
         private void dataGridViewJournal_MouseDown(object sender, MouseEventArgs e)
         {
-            dataGridViewJournal.HandleClickOnDataGrid(e, out int leftclickrow, out rightclickrow);
+            dataGridViewJournal.HandleClickOnDataGrid(e, out leftclickrow, out rightclickrow);
             rightclicksystem = (rightclickrow != -1) ? (HistoryEntry)dataGridViewJournal.Rows[rightclickrow].Tag : null;
             leftclicksystem = (leftclickrow != -1) ? (HistoryEntry)dataGridViewJournal.Rows[leftclickrow].Tag : null;
         }

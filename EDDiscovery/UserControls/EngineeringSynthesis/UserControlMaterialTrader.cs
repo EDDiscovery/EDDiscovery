@@ -562,7 +562,7 @@ namespace EDDiscovery.UserControls
 
         private void dataGridViewTrades_MouseDown(object sender, MouseEventArgs e)
         {
-            dataGridViewTrades.HandleClickOnDataGrid(e, out int lcr, out rightclickrow);
+            dataGridViewTrades.HandleClickOnDataGrid(e, out int unusedleftclickrow, out rightclickrow);
         }
 
         private void clearTradeToolStripMenuItem_Click(object sender, EventArgs e)

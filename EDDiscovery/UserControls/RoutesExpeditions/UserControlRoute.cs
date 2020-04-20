@@ -735,7 +735,7 @@ namespace EDDiscovery.UserControls
 
         private void dataGridViewRoute_MouseDown(object sender, MouseEventArgs e)
         {
-            dataGridViewRoute.HandleClickOnDataGrid(e, out int lcr, out rightclickrow);
+            dataGridViewRoute.HandleClickOnDataGrid(e, out int unusedleftclickrow, out rightclickrow);
 
             showInEDSMToolStripMenuItem.Enabled = rightclickrow != -1 && dataGridViewRoute.Rows[rightclickrow].Tag != null;
             showScanToolStripMenuItem.Enabled = rightclickrow != -1 && dataGridViewRoute.Rows[rightclickrow].Tag != null;

@@ -309,7 +309,7 @@ namespace EDDiscovery.UserControls
 
         private void dataGridViewMC_MouseDown(object sender, MouseEventArgs e)
         {
-            dataGridViewMC.HandleClickOnDataGrid(e, out int lcr, out rightclickrow);
+            dataGridViewMC.HandleClickOnDataGrid(e, out int unusedleftclickrow, out rightclickrow);
         }
 
         private void contextMenuStrip_Opening(object sender, CancelEventArgs e)

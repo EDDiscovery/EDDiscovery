@@ -193,7 +193,7 @@ namespace EDDiscovery.UserControls
 
         private void dataGridViewLedger_MouseDown(object sender, MouseEventArgs e)
         {
-            dataGridViewLedger.HandleClickOnDataGrid(e, out int lcr, out rightclickrow);
+            dataGridViewLedger.HandleClickOnDataGrid(e, out int unusedleftclickrow, out rightclickrow);
         }
 
         private void toolStripMenuItemGotoItem_Click(object sender, EventArgs e)

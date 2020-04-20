@@ -682,7 +682,7 @@ namespace EDDiscovery.UserControls
 
         private void dataGridViewCombat_MouseDown(object sender, MouseEventArgs e)
         {
-            dataGridViewCombat.HandleClickOnDataGrid(e, out leftclickrow, out int rightclickrow);
+            dataGridViewCombat.HandleClickOnDataGrid(e, out leftclickrow, out int unusedrightclickrow);
         }
 
         private void dataGridViewCombat_CellDoubleClick(object sender, DataGridViewCellEventArgs e)

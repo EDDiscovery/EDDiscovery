@@ -765,7 +765,7 @@ namespace EDDiscovery.UserControls
 
         private void dataGridViewTravel_MouseDown(object sender, MouseEventArgs e)
         {
-            dataGridViewStarList.HandleClickOnDataGrid(e, out int leftclickrow, out rightclickrow);
+            dataGridViewStarList.HandleClickOnDataGrid(e, out int unusedleftclickrow, out rightclickrow);
             rightclicksystem = (rightclickrow != -1) ? (HistoryEntry)(dataGridViewStarList.Rows[rightclickrow].Tag as List<HistoryEntry>)[0] : null;
         }
 
