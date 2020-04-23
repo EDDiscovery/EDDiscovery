@@ -1193,7 +1193,8 @@ namespace EDDiscovery.UserControls
             if (selrow >= 0)
             {
                 dataGridViewTravel.ClearSelection();
-                dataGridViewTravel.Rows[selrow].Selected = true;
+                dataGridViewTravel.CurrentCell = dataGridViewTravel.Rows[selrow].Cells[1];
+                FireChangeSelection();
             }
         }
 

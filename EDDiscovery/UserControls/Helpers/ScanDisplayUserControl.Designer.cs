@@ -60,11 +60,13 @@ namespace EDDiscovery.UserControls
             this.panelStars.Controls.Add(this.imagebox);
             this.panelStars.Controls.Add(this.vScrollBarCustom);
             this.panelStars.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelStars.FlowControlsLeftToRight = false;
             this.panelStars.Location = new System.Drawing.Point(0, 0);
             this.panelStars.Name = "panelStars";
             this.panelStars.Size = new System.Drawing.Size(748, 682);
             this.panelStars.TabIndex = 1;
             this.panelStars.VerticalScrollBarDockRight = true;
+            this.panelStars.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelStars_MouseDown);
             // 
             // rtbNodeInfo
             // 
@@ -112,13 +114,13 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom.HideScrollBar = true;
             this.vScrollBarCustom.LargeChange = 20;
-            this.vScrollBarCustom.Location = new System.Drawing.Point(735, 0);
-            this.vScrollBarCustom.Maximum = -108;
+            this.vScrollBarCustom.Location = new System.Drawing.Point(732, 0);
+            this.vScrollBarCustom.Maximum = -109;
             this.vScrollBarCustom.Minimum = 0;
             this.vScrollBarCustom.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom.Name = "vScrollBarCustom";
-            this.vScrollBarCustom.Size = new System.Drawing.Size(13, 682);
+            this.vScrollBarCustom.Size = new System.Drawing.Size(16, 682);
             this.vScrollBarCustom.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom.SmallChange = 1;
             this.vScrollBarCustom.TabIndex = 2;
@@ -126,8 +128,8 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.vScrollBarCustom.ThumbColorScaling = 0.5F;
             this.vScrollBarCustom.ThumbDrawAngle = 0F;
-            this.vScrollBarCustom.Value = -108;
-            this.vScrollBarCustom.ValueLimited = -108;
+            this.vScrollBarCustom.Value = -109;
+            this.vScrollBarCustom.ValueLimited = -109;
             // 
             // toolTip
             // 

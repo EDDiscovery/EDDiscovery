@@ -55,6 +55,9 @@ namespace EliteDangerousCore
         Bodies_MOG, //"M Red Giant" @
         Bodies_KOG, //"K Orange Giant" @
         Bodies_RP, //"Rogue Planet" @
+        Bodies_UNK, // "Class {0} star" @
+        Bodies_Herbig, //"Herbig Ae/Be"
+        Bodies_TTauri, //"T Tauri"
 
         MissionState_ToGo, // To Go:
         MissionState_Progress, // Progress:;%;N1
@@ -237,6 +240,8 @@ namespace EliteDangerousCore
         JournalEntry_Old, // New:
         JournalEntry_Wealth, // Wealth:;cr;N
         JournalEntry_NotorietyIndex, // Notoriety Index:;;N0
+        JournalEntry_RemainingJumps,  // Remaining Jumps
+        JournalEntry_Nearest, // Nearest:
 
 
         JournalLocOrJump_Type, // "Type " @
@@ -607,9 +612,6 @@ namespace EliteDangerousCore
         JournalReservoirReplenished_Reservoir, // Reservoir:;t;0.0
         JournalUnknown_UnhandledJournalevent, // Unhandled Journal event, Report to EDDiscovery team.
 
-        JournalRemainingJumps,  // Remaining Jumps
-        JournalNearest, // Nearest:
-
         EDStar_O, // O (Blue-White) Star,
         EDStar_B, // B (Blue-White) Star,
         EDStar_BBlueWhiteSuperGiant, // B (Blue-White super giant) Star,
@@ -659,6 +661,7 @@ namespace EliteDangerousCore
         EDStar_N, // Neutron Star,
         EDStar_H, // Black Hole,
         EDStar_SuperMassiveBlackHole, // Supermassive Black Hole
+        EDStar_Unknown, // Unknown star type
 
         EDPlanet_Metalrichbody, // Metal-rich body
         EDPlanet_Highmetalcontentbody, // High metal content world
@@ -679,6 +682,7 @@ namespace EliteDangerousCore
         EDPlanet_SudarskyclassVgasgiant, // Class V gas giant
         EDPlanet_Heliumrichgasgiant, // Helium-rich gas giant
         EDPlanet_Heliumgasgiant, // Helium gas giant
+        EDPlanet_Unknown, // Unknown planet type
 
     }
 

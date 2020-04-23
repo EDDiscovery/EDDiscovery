@@ -367,7 +367,6 @@ namespace EDDiscovery.UserControls
             this.extComboBoxTraderType.SelectedValue = null;
             this.extComboBoxTraderType.Size = new System.Drawing.Size(198, 21);
             this.extComboBoxTraderType.TabIndex = 6;
-            this.extComboBoxTraderType.Text = "extComboBox2";
             this.extComboBoxTraderType.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.extComboBoxTraderType.ValueMember = "";
             // 
@@ -404,7 +403,6 @@ namespace EDDiscovery.UserControls
             this.extScrollBarDGVTrades.SliderColor = System.Drawing.Color.DarkGray;
             this.extScrollBarDGVTrades.SmallChange = 1;
             this.extScrollBarDGVTrades.TabIndex = 4;
-            this.extScrollBarDGVTrades.Text = "extScrollBar1";
             this.extScrollBarDGVTrades.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.extScrollBarDGVTrades.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.extScrollBarDGVTrades.ThumbColorScaling = 0.5F;

@@ -201,7 +201,7 @@ namespace EliteDangerousCore
             return types;
         }
 
-        public static MaterialCommodityData[] GetMaterialGroup(Func<MaterialCommodityData, bool> func)   // given predate, return cat/translated cat combos.
+        public static MaterialCommodityData[] Get(Func<MaterialCommodityData, bool> func)   // given predate, return matching items
         {
             MaterialCommodityData[] mcs = GetAll();
             var group = mcs.Where(func).Select(x => x).ToArray();
@@ -252,7 +252,7 @@ namespace EliteDangerousCore
             string tn = Type.ToString().SplitCapsWord();
             TranslatedType = tn.Tx(typeof(MaterialCommodityData));                // valid to pass this thru the Tx( system
             MaterialGroup = mtg;
-            TranslatedMaterialGroup = MaterialGroup.ToString().Tx(typeof(MaterialCommodityData));                // valid to pass this thru the Tx( system
+            TranslatedMaterialGroup = MaterialGroup.ToString().SplitCapsWordFull().Tx(typeof(MaterialCommodityData));                // valid to pass this thru the Tx( system
             Shortname = shortn;
             Colour = cl;
             Rarity = rare;

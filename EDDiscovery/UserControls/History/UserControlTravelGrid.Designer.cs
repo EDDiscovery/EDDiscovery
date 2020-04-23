@@ -82,6 +82,7 @@ namespace EDDiscovery.UserControls
             this.runEntryThroughProfileSystemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runSelectionThroughIGAUDebugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.extCheckBoxWordWrap = new ExtendedControls.ExtCheckBox();
             this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.panelOutlining = new ExtendedControls.ExtPanelDataGridViewScrollOutlining();
             this.vScrollBarCustom = new ExtendedControls.ExtScrollBar();
@@ -99,7 +100,6 @@ namespace EDDiscovery.UserControls
             this.rollUpAfterFirstToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rollUpAfter5ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelTop = new System.Windows.Forms.FlowLayoutPanel();
-            this.extCheckBoxWordWrap = new ExtendedControls.ExtCheckBox();
             this.historyContextMenu.SuspendLayout();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTravel)).BeginInit();
@@ -304,7 +304,7 @@ namespace EDDiscovery.UserControls
             this.runEntryThroughProfileSystemToolStripMenuItem,
             this.runSelectionThroughIGAUDebugToolStripMenuItem});
             this.historyContextMenu.Name = "historyContextMenu";
-            this.historyContextMenu.Size = new System.Drawing.Size(388, 466);
+            this.historyContextMenu.Size = new System.Drawing.Size(388, 488);
             this.historyContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.historyContextMenu_Opening);
             // 
             // removeSortingOfColumnsToolStripMenuItem
@@ -500,6 +500,36 @@ namespace EDDiscovery.UserControls
             this.toolTip.InitialDelay = 250;
             this.toolTip.ReshowDelay = 100;
             this.toolTip.ShowAlways = true;
+            // 
+            // extCheckBoxWordWrap
+            // 
+            this.extCheckBoxWordWrap.Appearance = System.Windows.Forms.Appearance.Button;
+            this.extCheckBoxWordWrap.BackColor = System.Drawing.Color.Transparent;
+            this.extCheckBoxWordWrap.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.extCheckBoxWordWrap.CheckBoxColor = System.Drawing.Color.White;
+            this.extCheckBoxWordWrap.CheckBoxDisabledScaling = 0.5F;
+            this.extCheckBoxWordWrap.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.extCheckBoxWordWrap.CheckColor = System.Drawing.Color.DarkBlue;
+            this.extCheckBoxWordWrap.Cursor = System.Windows.Forms.Cursors.Default;
+            this.extCheckBoxWordWrap.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.extCheckBoxWordWrap.FlatAppearance.CheckedBackColor = System.Drawing.Color.Green;
+            this.extCheckBoxWordWrap.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.extCheckBoxWordWrap.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
+            this.extCheckBoxWordWrap.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.extCheckBoxWordWrap.Image = global::EDDiscovery.Icons.Controls.WordWrapOn;
+            this.extCheckBoxWordWrap.ImageButtonDisabledScaling = 0.5F;
+            this.extCheckBoxWordWrap.ImageIndeterminate = null;
+            this.extCheckBoxWordWrap.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.extCheckBoxWordWrap.ImageUnchecked = global::EDDiscovery.Icons.Controls.WordWrapOff;
+            this.extCheckBoxWordWrap.Location = new System.Drawing.Point(495, 1);
+            this.extCheckBoxWordWrap.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.extCheckBoxWordWrap.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.extCheckBoxWordWrap.Name = "extCheckBoxWordWrap";
+            this.extCheckBoxWordWrap.Size = new System.Drawing.Size(28, 28);
+            this.extCheckBoxWordWrap.TabIndex = 30;
+            this.extCheckBoxWordWrap.TickBoxReductionRatio = 0.75F;
+            this.toolTip.SetToolTip(this.extCheckBoxWordWrap, "Enable or disable word wrap");
+            this.extCheckBoxWordWrap.UseVisualStyleBackColor = false;
             // 
             // dataViewScrollerPanel
             // 
@@ -697,36 +727,6 @@ namespace EDDiscovery.UserControls
             this.panelTop.Name = "panelTop";
             this.panelTop.Size = new System.Drawing.Size(870, 30);
             this.panelTop.TabIndex = 31;
-            // 
-            // extCheckBoxWordWrap
-            // 
-            this.extCheckBoxWordWrap.Appearance = System.Windows.Forms.Appearance.Button;
-            this.extCheckBoxWordWrap.BackColor = System.Drawing.Color.Transparent;
-            this.extCheckBoxWordWrap.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.extCheckBoxWordWrap.CheckBoxColor = System.Drawing.Color.White;
-            this.extCheckBoxWordWrap.CheckBoxDisabledScaling = 0.5F;
-            this.extCheckBoxWordWrap.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.extCheckBoxWordWrap.CheckColor = System.Drawing.Color.DarkBlue;
-            this.extCheckBoxWordWrap.Cursor = System.Windows.Forms.Cursors.Default;
-            this.extCheckBoxWordWrap.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.extCheckBoxWordWrap.FlatAppearance.CheckedBackColor = System.Drawing.Color.Green;
-            this.extCheckBoxWordWrap.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.extCheckBoxWordWrap.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
-            this.extCheckBoxWordWrap.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.extCheckBoxWordWrap.Image = global::EDDiscovery.Icons.Controls.WordWrapOn;
-            this.extCheckBoxWordWrap.ImageButtonDisabledScaling = 0.5F;
-            this.extCheckBoxWordWrap.ImageIndeterminate = null;
-            this.extCheckBoxWordWrap.ImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.extCheckBoxWordWrap.ImageUnchecked = global::EDDiscovery.Icons.Controls.WordWrapOff;
-            this.extCheckBoxWordWrap.Location = new System.Drawing.Point(495, 1);
-            this.extCheckBoxWordWrap.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.extCheckBoxWordWrap.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.extCheckBoxWordWrap.Name = "extCheckBoxWordWrap";
-            this.extCheckBoxWordWrap.Size = new System.Drawing.Size(28, 28);
-            this.extCheckBoxWordWrap.TabIndex = 30;
-            this.extCheckBoxWordWrap.TickBoxReductionRatio = 0.75F;
-            this.toolTip.SetToolTip(this.extCheckBoxWordWrap, "Enable or disable word wrap");
-            this.extCheckBoxWordWrap.UseVisualStyleBackColor = false;
             // 
             // UserControlTravelGrid
             // 

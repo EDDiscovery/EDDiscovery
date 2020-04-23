@@ -176,6 +176,9 @@ namespace EDDiscovery
         ProfileEditor_BackEdit, // Edit Profile {0} Back Trigger
         ProfileEditor_DeleteWarning, // Do you wish to delete profile {0}?
 
+
+        UserControlSettings_GameTime, // Game Time
+        UserControlSettings_Local, // Local
         UserControlSettings_WSQ, // If you have previously done this on this same port number you can click No and the enable will work
         UserControlSettings_WSF, // Did not start - click OK to configure windows
         UserControlSettings_FS, // All entries for Statistics
@@ -620,6 +623,22 @@ namespace EDDiscovery
         UserControlScan_System, // System:
         UserControlScan_EnterSys, // Show System
         UserControlScan_VLMT, // Set Valuable Minimum
+
+        UserControlScan_StatusIcons, // Show body status icons
+        UserControlScan_SystemValue, // Show syatem and value in main display
+        UserControlScan_MatFull, // Hide materials which have reached their storage limit
+        UserControlScan_ShowMaterials, //  Show Materials
+        UserControlScan_ShowRaresOnly, // Show rare materials only
+        UserControlScan_ShowMoons, // Show Moons
+        UserControlScan_Belt,
+        UserControlScan_Star,
+        UserControlScan_Barycentre,
+        UserControlScan_Body,
+        UserControlScan_AllG,
+        UserControlScan_HabZone,
+        UserControlScan_PlanetClass,
+        UserControlScan_StarClass,
+        UserControlScan_Distance,
 
         UserControlStarDistance_From, // From {0}
         UserControlStarDistance_NoEDSMSys, // System could not be found - has not been synched or EDSM is unavailable

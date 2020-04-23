@@ -36,6 +36,8 @@ namespace EDDiscovery.UserControls
         {
             discoveryform.OnNewEntry += NewEntry;
             BaseUtils.Translator.Instance.Translate(this);
+            BaseUtils.Translator.Instance.Translate(toolTip,this);
+            extPanelRollUp.SetToolTip(toolTip);
 
             checkBoxEDSM.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbEDSM, false);
             checkBoxEDSM.CheckedChanged += CheckBoxEDSM_CheckedChanged;

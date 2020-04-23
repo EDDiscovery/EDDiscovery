@@ -574,7 +574,8 @@ namespace EDDiscovery.UserControls
             if (selrow >= 0)
             {
                 dataGridViewJournal.ClearSelection();
-                dataGridViewJournal.Rows[selrow].Selected = true;
+                dataGridViewJournal.CurrentCell = dataGridViewJournal.Rows[selrow].Cells[1];
+                FireChangeSelection();
             }
         }
 

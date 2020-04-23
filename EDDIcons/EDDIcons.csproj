@@ -653,6 +653,12 @@
     <EmbeddedResource Include="Controls\SysInfo\notfirstdiscover.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Controls\Scan\ShowAllG.png" />
+    <EmbeddedResource Include="Controls\Scan\ShowDistances.png" />
+    <EmbeddedResource Include="Controls\Scan\ShowPlanetClasses.png" />
+    <EmbeddedResource Include="Controls\Scan\ShowHabZone.png" />
+    <EmbeddedResource Include="Controls\Scan\ShowStarClasses.png" />
+    <EmbeddedResource Include="Controls\Scan\DisplayFilters.png" />
     <EmbeddedResource Include="Panels\MaterialTrader.png" />
     <EmbeddedResource Include="Controls\TravelGrid\WordWrapOff.png" />
     <EmbeddedResource Include="Controls\TravelGrid\WordWrapOn.png" />

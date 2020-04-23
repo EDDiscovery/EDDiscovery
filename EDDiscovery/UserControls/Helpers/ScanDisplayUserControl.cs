@@ -29,11 +29,17 @@ namespace EDDiscovery.UserControls
     public partial class ScanDisplayUserControl : UserControl
     {
         public bool CheckEDSM { get; set; }
-        public bool ShowMoons { get; set; }
-        public bool ShowMaterials { get; set; }
-        public bool ShowMaterialsRare { get; set; }
-        public bool HideFullMaterials { get; set; }
-        public bool ShowOverlays { get; set; }
+        public bool ShowMoons { get; set; } = true;
+        public bool ShowOverlays { get; set; } = true;
+        public bool ShowMaterials { get; set; } = true;
+        public bool ShowOnlyMaterialsRare { get; set; } = false;
+        public bool HideFullMaterials { get; set; } = false;
+        public bool ShowAllG { get; set; } = true;
+        public bool ShowHabZone { get; set; } = true;
+        public bool ShowPlanetClasses { get; set; } = true;
+        public bool ShowStarClasses { get; set; } = true;
+        public bool ShowDist { get; set; } = true;
+
         public int ValueLimit { get; set; } = 50000;
 
         public int WidthAvailable { get { return this.Width - vScrollBarCustom.Width; } }   // available display width
@@ -84,32 +90,22 @@ namespace EDDiscovery.UserControls
             
             if (scannode != null)
             {
-                Point curpos = new Point(leftmargin, topmargin);
+                Point leftmiddle = new Point(leftmargin, topmargin + StarSize.Height/2);
 
                 if ( opttext != null )
                 {
                     ExtPictureBox.ImageElement lab = new ExtPictureBox.ImageElement();
-                    lab.TextAutosize(curpos, new Size(500, 30), opttext, largerfont, EDDTheme.Instance.LabelColor, this.BackColor);
+                    lab.TextAutosize(new Point(leftmargin,0), new Size(500, 30), opttext, largerfont, EDDTheme.Instance.LabelColor, this.BackColor);
                     imagebox.Add(lab);
-                    curpos.Y += lab.Image.Height + 8;
+                    leftmiddle.Y += lab.Image.Height + 8;
                 }
 
-                DisplayAreaUsed = curpos;
+                DisplayAreaUsed = leftmiddle;
                 List<ExtPictureBox.ImageElement> starcontrols = new List<ExtPictureBox.ImageElement>();
 
                 bool displaybelts = filter == null || (filter.Contains("belt") || filter.Contains("All"));
 
-                //for( int i = 0; i < 1000; i +=100)  CreateStarPlanet(starcontrols, EDDiscovery.Properties.Resources.ImageStarDiscWhite, new Point(i, 0), new Size(24, 24), i.ToString(), "");
-
-                //foreach( var sn in scannode.Bodies )
-                //{
-                //    System.Diagnostics.Debug.Write("Node " + sn.type + " " + sn.fullname);
-                //    if ( sn.ScanData != null )
-                //    {
-                //        System.Diagnostics.Debug.Write("  " + sn.ScanData.IsStar + " P:" + sn.ScanData.PlanetTypeID + " S:" + sn.ScanData.StarTypeID + " EDSM:" + sn.ScanData.IsEDSMBody);
-                //    }
-                //    System.Diagnostics.Debug.WriteLine("");
-                //}
+                Point maxitemspos = new Point(0, 0);
 
                 foreach (StarScan.ScanNode starnode in scannode.starnodes.Values)        // always has scan nodes
                 {
@@ -121,31 +117,31 @@ namespace EDDiscovery.UserControls
 
                     // Draw star
 
-                    int offset = 0;
-                    Point maxstarpos = DrawNode(starcontrols, starnode,curmats,hl,
+                    Point maxstarpos = DrawNode(starcontrols, starnode, curmats, hl,
                                 (starnode.type == StarScan.ScanNodeType.barycentre) ? Icons.Controls.Scan_Bodies_Barycentre : JournalScan.GetStarImageNotScanned(),
-                                curpos, StarSize, ref offset, false, (planetsize.Height * 6 / 4 - StarSize.Height) / 2, true);       // the last part nerfs the label down to the right position
+                                leftmiddle, false, out int unusedstarcentre, StarSize, true);       // the last part nerfs the label down to the right position
 
-                    Point maxitemspos = maxstarpos;
-
-                    curpos = new Point(maxitemspos.X + starfirstplanetspacerx, curpos.Y);   // move to the right
-                    curpos.Y += StarSize.Height / 2 - planetsize.Height * 3 / 4;     // slide down for planet vs star difference in size
-
-                    Point firstcolumn = curpos;
+                    maxitemspos = new Point(Math.Max(maxitemspos.X, maxstarpos.X), Math.Max(maxitemspos.Y, maxstarpos.Y));
 
                     if (starnode.children != null)
                     {
-                        Queue<StarScan.ScanNode> belts = null;
-                        if (starnode.ScanData != null && (!starnode.ScanData.IsEDSMBody || CheckEDSM))
+                        leftmiddle = new Point(maxitemspos.X + starfirstplanetspacerx, leftmiddle.Y + StarSize.Height / 2 - planetsize.Height * 3 / 4);
+                        Point firstcolumn = leftmiddle;
+
+                        Queue<StarScan.ScanNode> belts;
+                        if (starnode.ScanData != null && (!starnode.ScanData.IsEDSMBody || CheckEDSM))  // have scandata on star, and its not edsm or allowed edsm
                         {
-                            belts = new Queue<StarScan.ScanNode>(starnode.children.Values.Where(s => s.type == StarScan.ScanNodeType.belt));
+                            belts = new Queue<StarScan.ScanNode>(starnode.children.Values.Where(s => s.type == StarScan.ScanNodeType.belt));    // find belts in children of star
                         }
                         else
                         {
-                            belts = new Queue<StarScan.ScanNode>();
+                            belts = new Queue<StarScan.ScanNode>(); // empty array
                         }
 
                         StarScan.ScanNode lastbelt = belts.Count != 0 ? belts.Dequeue() : null;
+
+                        double habzonestartls = starnode.ScanData?.HabitableZoneInner ?? 0;
+                        double habzoneendls = starnode.ScanData?.HabitableZoneOuter ?? 0;
 
                         // process body and stars only
 
@@ -163,19 +159,20 @@ namespace EDDiscovery.UserControls
 
                             while (displaybelts && lastbelt != null && planetnode.ScanData != null && (lastbelt.BeltData == null || lastbelt.BeltData.OuterRad < planetnode.ScanData.nSemiMajorAxis))
                             {
-                                //System.Diagnostics.Debug.WriteLine("Draw a belt " + lastbelt.ownname);
-
                                 // if too far across, go back to star
-                                if (curpos.X + planetsize.Width > panelStars.Width - panelStars.ScrollBarWidth)
+                                if (leftmiddle.X + planetsize.Width > panelStars.Width - panelStars.ScrollBarWidth) // if too far across..
                                 {
-                                    curpos = new Point(firstcolumn.X, maxitemspos.Y + planetsize.Height + planetspacery);
+                                    leftmiddle = new Point(firstcolumn.X, maxitemspos.Y + planetspacery + planetsize.Height / 2); // move to left at maxy+space+h/2
                                 }
 
-                                Point used = DrawNode(starcontrols, lastbelt, curmats, hl, Icons.Controls.Scan_Bodies_Belt,
-                                                        new Point(curpos.X + (planetsize.Width - beltsize.Width) / 2, curpos.Y), beltsize, ref offset, false);
+                                string appendlabel = Environment.NewLine + $"{lastbelt.BeltData.OuterRad / JournalScan.oneLS_m:N1}ls";
 
-                                curpos = new Point(used.X, curpos.Y);
+                                Point maxbeltpos = DrawNode(starcontrols, lastbelt, curmats, hl, Icons.Controls.Scan_Bodies_Belt, leftmiddle,false,out int unusedbeltcentre, beltsize, appendlabeltext:appendlabel);
+
+                                leftmiddle = new Point(maxbeltpos.X + planetspacerx, leftmiddle.Y);
                                 lastbelt = belts.Count != 0 ? belts.Dequeue() : null;
+
+                                maxitemspos = new Point(Math.Max(maxitemspos.X, maxbeltpos.X), Math.Max(maxitemspos.Y, maxbeltpos.Y));
                             }
 
                             bool nonedsmscans = planetnode.DoesNodeHaveNonEDSMScansBelow();     // is there any scans here, either at this node or below?
@@ -186,24 +183,28 @@ namespace EDDiscovery.UserControls
                             {
                                 List<ExtPictureBox.ImageElement> pc = new List<ExtPictureBox.ImageElement>();
 
-                                Point maxpos = CreatePlanetTree(pc, planetnode, curmats, hl, curpos, filter);
+                                bool habzone = ShowHabZone && planetnode.ScanData != null && planetnode.ScanData.nSemiMajorAxisAU.HasValue && 
+                                                planetnode.ScanData.nSemiMajorAxisAU.Value * JournalScan.oneAU_LS >= habzonestartls && planetnode.ScanData.nSemiMajorAxisAU.Value * JournalScan.oneAU_LS <= habzoneendls;
+
+                                Point maxplanetpos = CreatePlanetTree(pc, planetnode, curmats, hl, leftmiddle, filter, habzone );
 
                                 //System.Diagnostics.Debug.WriteLine("Planet " + planetnode.ownname + " " + curpos + " " + maxpos + " max " + (panelStars.Width - panelStars.ScrollBarWidth));
 
-                                if (maxpos.X > panelStars.Width - panelStars.ScrollBarWidth)          // uh oh too wide..
+                                if (maxplanetpos.X > panelStars.Width - panelStars.ScrollBarWidth)          // uh oh too wide..
                                 {
-                                    int xoffset = firstcolumn.X - curpos.X;                     // shift to firstcolumn.x, maxitemspos.Y+planetspacer
-                                    int yoffset = (maxitemspos.Y+planetspacery) - curpos.Y;
+                                    int xoff = firstcolumn.X - leftmiddle.X;                     // shift to firstcolumn.x, maxitemspos.Y+planetspacer
+                                    int yoff = (maxitemspos.Y+planetspacery) - (leftmiddle.Y-planetsize.Height/2);
 
-                                    RepositionTree(pc, xoffset, yoffset);        // shift co-ords of all you've drawn
+                                    RepositionTree(pc, xoff, yoff);        // shift co-ords of all you've drawn
 
-                                    maxpos = new Point(maxpos.X + xoffset, maxpos.Y + yoffset);     // remove the shift from maxpos
-                                    curpos = new Point(maxpos.X + planetspacerx, curpos.Y + yoffset);   // and set the curpos to maxpos.x + spacer, remove the shift from curpos.y
+                                    maxplanetpos = new Point(maxplanetpos.X + xoff, maxplanetpos.Y + yoff);     // remove the shift from maxpos
+
+                                    leftmiddle = new Point(maxplanetpos.X + planetspacerx, leftmiddle.Y + yoff);   // and set the curpos to maxpos.x + spacer, remove the shift from curpos.y
                                 }
                                 else
-                                    curpos = new Point(maxpos.X + planetspacerx, curpos.Y);     // shift current pos right, plus a spacer
+                                    leftmiddle = new Point(maxplanetpos.X + planetspacerx, leftmiddle.Y);     // shift current pos right, plus a spacer
 
-                                maxitemspos = new Point(Math.Max(maxitemspos.X, maxpos.X), Math.Max(maxitemspos.Y, maxpos.Y));
+                                maxitemspos = new Point(Math.Max(maxitemspos.X, maxplanetpos.X), Math.Max(maxitemspos.Y, maxplanetpos.Y));
 
                                 starcontrols.AddRange(pc.ToArray());
                             }
@@ -213,22 +214,34 @@ namespace EDDiscovery.UserControls
 
                         while (displaybelts && lastbelt != null)
                         {
-                            if (curpos.X + planetsize.Width > panelStars.Width - panelStars.ScrollBarWidth)
+                            if (leftmiddle.X + planetsize.Width > panelStars.Width - panelStars.ScrollBarWidth) // if too far across..
                             {
-                                curpos = new Point(firstcolumn.X, maxitemspos.Y + planetsize.Height);
+                                leftmiddle = new Point(firstcolumn.X, maxitemspos.Y + planetspacery + planetsize.Height / 2); // move to left at maxy+space+h/2
                             }
 
-                            Point used = DrawNode(starcontrols, lastbelt, curmats, hl, Icons.Controls.Scan_Bodies_Belt,
-                                     new Point(curpos.X + (planetsize.Width - beltsize.Width) / 2, curpos.Y), beltsize, ref offset, false);
+                            string appendlabel = Environment.NewLine + $"{lastbelt.BeltData.OuterRad / JournalScan.oneLS_m:N1}ls";
 
-                            curpos = new Point(used.X, curpos.Y);
+                            Point maxbeltpos = DrawNode(starcontrols, lastbelt, curmats, hl, Icons.Controls.Scan_Bodies_Belt, leftmiddle, false, out int unusedbelt2centre, beltsize, appendlabeltext:appendlabel);
+
+                            leftmiddle = new Point(maxbeltpos.X + planetspacerx, leftmiddle.Y);
                             lastbelt = belts.Count != 0 ? belts.Dequeue() : null;
+
+                            maxitemspos = new Point(Math.Max(maxitemspos.X, maxbeltpos.X), Math.Max(maxitemspos.Y, maxbeltpos.Y));
+                        }
+
+                        maxitemspos = leftmiddle = new Point(leftmargin, maxitemspos.Y + starplanetgroupspacery + StarSize.Height / 2);     // move back to left margin and move down to next position of star, allowing gap
+                    }
+                    else
+                    {               // no planets, so just move across and plot another one
+                        leftmiddle = new Point(maxitemspos.X + starfirstplanetspacerx, leftmiddle.Y);
+
+                        if (leftmiddle.X + StarSize.Width > panelStars.Width - panelStars.ScrollBarWidth) // if too far across..
+                        {
+                            maxitemspos = leftmiddle = new Point(leftmargin, maxitemspos.Y + starplanetgroupspacery + StarSize.Height / 2); // move to left at maxy+space+h/2
                         }
                     }
 
                     DisplayAreaUsed = new Point(Math.Max(DisplayAreaUsed.X, maxitemspos.X), Math.Max(DisplayAreaUsed.Y, maxitemspos.Y));
-
-                    curpos = new Point(leftmargin, maxitemspos.Y + starplanetgroupspacery);     // move back to left margin and move down to next position of star, allowing gap
                 }
 
                 imagebox.AddRange(starcontrols);
@@ -238,22 +251,18 @@ namespace EDDiscovery.UserControls
         }
 
         // return right bottom of area used from curpos
-        Point CreatePlanetTree(List<ExtPictureBox.ImageElement> pc, StarScan.ScanNode planetnode, MaterialCommoditiesList curmats, HistoryList hl, Point curpos , string[] filter)
+        Point CreatePlanetTree(List<ExtPictureBox.ImageElement> pc, StarScan.ScanNode planetnode, MaterialCommoditiesList curmats, HistoryList hl, Point leftmiddle, string[] filter, bool habzone)
         {
-            // PLANETWIDTH|PLANETWIDTH  (if drawing a full planet with rings/landing)
-            // or
-            // MOONWIDTH|MOONWIDTH      (if drawing a single width planet)
-            // this offset, ONLY used if a single width planet, allows for two moons
-            int offset = moonsize.Width - planetsize.Width / 2;           // centre is moon width, back off by planetwidth/2 to place the left edge of the planet
+            Color? backwash = null;
+            if (habzone)
+                backwash = Color.FromArgb(255, 0, 30, 0);
 
             Point maxtreepos = DrawNode(pc, planetnode, curmats, hl, JournalScan.GetPlanetImageNotScanned(),
-                                curpos, planetsize, ref offset, true);        // offset passes in the suggested offset, returns the centre offset
+                                leftmiddle, false, out int planetcentre, planetsize, backwash: backwash);        // offset passes in the suggested offset, returns the centre offset
 
             if (planetnode.children != null && ShowMoons)
             {
-                offset -= moonsize.Width;               // offset is centre of planet image, back off by a moon width to allow for 2 moon widths centred
-
-                Point moonpos = new Point(curpos.X + offset, maxtreepos.Y + moonspacery);    // moon pos
+                Point moonposcentremid = new Point(planetcentre, maxtreepos.Y + moonspacery + moonsize.Height/2);    // moon pos, below planet, centre x coord
 
                 foreach (StarScan.ScanNode moonnode in planetnode.children.Values.Where(n => n.type != StarScan.ScanNodeType.barycentre))
                 {
@@ -264,23 +273,19 @@ namespace EDDiscovery.UserControls
 
                     if (nonedsmscans || CheckEDSM)
                     {
-                        int offsetm = moonsize.Width / 2;                // pass in normal offset if not double width item (half moon from moonpos.x)
-
-                        Point mmax = DrawNode(pc, moonnode, curmats, hl, JournalScan.GetMoonImageNotScanned(), moonpos, moonsize, ref offsetm);
+                        Point mmax = DrawNode(pc, moonnode, curmats, hl, JournalScan.GetMoonImageNotScanned(), moonposcentremid, true, out int mooncentre, moonsize);
 
                         maxtreepos = new Point(Math.Max(maxtreepos.X, mmax.X), Math.Max(maxtreepos.Y, mmax.Y));
 
                         if (moonnode.children != null)
                         {
-                            Point submoonpos;
+                            Point submoonpos = new Point(mmax.X + moonspacerx, moonposcentremid.Y);     // first its left mid
+                            bool xiscentre = false;
 
-                            if (mmax.X <= moonpos.X + moonsize.Width * 2)           // if we have nothing wider than the 2 moon widths, we can go with it right aligned
-                                submoonpos = new Point(moonpos.X + moonsize.Width * 2 + moonspacerx, moonpos.Y);    // moon pos
-                            else
-                                submoonpos = new Point(moonpos.X + moonsize.Width * 2 + moonspacerx, mmax.Y + moonspacery);    // moon pos below and right
-
+                            //for ( int i = 0; i < 1; i++) { StarScan.ScanNode submoonnode = moonnode; // debug
                             foreach (StarScan.ScanNode submoonnode in moonnode.children.Values)
                             {
+
                                 if (filter != null && submoonnode.IsBodyInFilter(filter, true) == false)       // if filter active, but no body or children in filter
                                     continue;
 
@@ -288,18 +293,22 @@ namespace EDDiscovery.UserControls
 
                                 if (nonedsmsubmoonscans || CheckEDSM)
                                 {
-                                    int offsetsm = moonsize.Width / 2;                // pass in normal offset if not double width item (half moon from moonpos.x)
+                                    Point sbmax = DrawNode(pc, submoonnode, curmats, hl, JournalScan.GetMoonImageNotScanned(), submoonpos, xiscentre, out int xsubmooncentre, moonsize);
 
-                                    Point sbmax = DrawNode(pc, submoonnode, curmats, hl, JournalScan.GetMoonImageNotScanned(), submoonpos, moonsize, ref offsetsm);
+                                    if (xiscentre)
+                                        submoonpos = new Point(submoonpos.X, sbmax.Y + moonspacery + moonsize.Height / 2);
+                                    else
+                                    {
+                                        submoonpos = new Point(xsubmooncentre, sbmax.Y + moonspacery + moonsize.Height / 2);
+                                        xiscentre = true;       // now go to centre placing
+                                    }
 
                                     maxtreepos = new Point(Math.Max(maxtreepos.X, sbmax.X), Math.Max(maxtreepos.Y, sbmax.Y));
-
-                                    submoonpos = new Point(submoonpos.X, maxtreepos.Y + moonspacery);
                                 }
                             }
                         }
 
-                        moonpos = new Point(moonpos.X, maxtreepos.Y + moonspacery);
+                        moonposcentremid = new Point(moonposcentremid.X, maxtreepos.Y + moonspacery + moonsize.Height/2);
                     }
                 }
             }
@@ -307,27 +316,28 @@ namespace EDDiscovery.UserControls
             return maxtreepos;
         }
 
-        // Width:  Nodes are allowed 2 widths 
-        // Height: Nodes are allowed 1.5 Heights.  0 = top, 1/2/3/4 = image, 5 = bottom.  
-        // offset: pass in horizonal offset, return back middle of image
-        // aligndown : if true, compensate for drawing normal size images and ones 1.5 by shifting down the image and the label by the right amounts
-        // labelvoff : any additional compensation for label pos
 
         // return right bottom of area used from curpos
-        // curmats may be null
-        Point DrawNode(List<ExtPictureBox.ImageElement> pc, StarScan.ScanNode sn, MaterialCommoditiesList curmats, HistoryList hl, 
-                                    Image notscanned, Point curpos,
-                                    Size size, ref int offset, bool aligndown = false, int labelvoff = 0,
-                                    bool toplevel = false)
+
+        Point DrawNode(List<ExtPictureBox.ImageElement> pc,
+                            StarScan.ScanNode sn,
+                            MaterialCommoditiesList curmats,    // curmats may be null
+                            HistoryList hl,
+                            Image notscanned,               // image if sn is not known
+                            Point position,                 // position is normally left/middle, unless xiscentre is set.
+                            bool xiscentre,
+                            out int ximagecentre,           // centre in x of image
+                            Size size,                      // nominal size
+                            bool toplevelstar = false,      // its top level, don't draw as planet
+                            Color? backwash = null,         // optional back wash on image (planet nodes only)
+                            string appendlabeltext = ""     // any label text to append
+                )         
         {
             string tip;
-            Point endpoint = curpos;
-            int quarterheight = size.Height / 4;
-            int alignv = aligndown ? quarterheight : 0;
+            Point endpoint = position;
+            ximagecentre = -1;
 
             JournalScan sc = sn.ScanData;
-
-            //System.Diagnostics.Debug.WriteLine("Node " + sn.ownname + " " + curpos + " " + size + " hoff " + offset + " EDSM " + ((sc!= null) ? sc.IsEDSMBody.ToString() : ""));
 
             if (sc != null && (!sc.IsEDSMBody || CheckEDSM))     // if got one, and its our scan, or we are showing EDSM
             {
@@ -339,107 +349,175 @@ namespace EDDiscovery.UserControls
                 {
 
                 }
-                else  if (sc.IsStar && toplevel)
+                else  if (sc.IsStar && toplevelstar)
                 {
-                    var starLabel = sn.customname ?? sn.ownname;
+                    var starlabel = sn.customname ?? sn.ownname;
 
-                    var habZone = sc.GetHabZoneStringLs();
-                    if (!string.IsNullOrEmpty(habZone))
+                    if ( sc.nStellarMass.HasValue )
+                        starlabel += Environment.NewLine + $"{sc.nStellarMass.Value:N2} SM";
+                    if ( sc.nAge.HasValue)
+                        starlabel += Environment.NewLine + $"{sc.nAge.Value:N0} MY";
+
+                    if (ShowHabZone)
                     {
-                        starLabel += $" ({habZone})";
+                        var habZone = sc.GetHabZoneStringLs();
+                        if (habZone.HasChars())
+                            starlabel += Environment.NewLine + $"{habZone}";
                     }
 
-                    endpoint = CreateImageLabel(pc, sc.GetStarTypeImage(),
-                                                new Point(curpos.X + offset, curpos.Y + alignv),      // WE are basing it on a 1/4 + 1 + 1/4 grid, this is not being made bigger, move off
-                                                size, starLabel, tip, alignv + labelvoff, sc.IsEDSMBody, false);          // and the label needs to be a quarter height below it..
+                    starlabel += appendlabeltext;
 
-                    offset += size.Width / 2;       // return the middle used was this..
+                    string overlaytext = null;
+                    if (ShowStarClasses && sn.ScanData != null && sn.ScanData.StarTypeID != EDStar.H)
+                        overlaytext = sn.ScanData.StarClassification;
+
+                    Image starimage = sc.GetStarTypeImage();
+                    bool owned = false;
+
+                    if (overlaytext.HasChars())
+                    {
+                        Image clone = starimage.Clone() as Image;
+                        using (Font f = new Font(EDDTheme.Instance.FontName, starimage.Width / 6.0f))
+                        {
+                            using (Graphics g = Graphics.FromImage(clone))
+                            {
+                                using (Brush b = new SolidBrush(Color.Black))
+                                {
+                                    g.DrawString(overlaytext, f, b, new Rectangle(0, 0, starimage.Width, starimage.Height), new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center });
+                                }
+                            }
+                        }
+
+                        starimage = clone;
+                        owned = true;
+                    }
+
+                    endpoint = CreateImageAndLabel(pc, starimage,
+                                                    position,      // WE are basing it on a 1/4 + 1 + 1/4 grid, this is not being made bigger, move off
+                                                    size, out ximagecentre , starlabel, tip, sc.IsEDSMBody, owned);          // and the label needs to be a quarter height below it..
                 }
-                else //else not a top-level star
+                else //else not a top-level star or its a planet
                 {
-                    bool indicatematerials = sc.HasMaterials && !ShowMaterials;
-                    bool valuable = sc.EstimatedValue >= ValueLimit;
-
                     Image nodeimage = sc.IsStar ? sc.GetStarTypeImage() : sc.GetPlanetClassImage();
 
-                    if (ImageRequiresAnOverlay(sc, indicatematerials, valuable, sn))
+                    bool valuable = sc.EstimatedValue >= ValueLimit;
+                    int imageoverlays = ShowOverlays ? ((sc.Terraformable ? 1 : 0) + (sc.HasMeaningfulVolcanism ? 1 : 0) + (valuable ? 1 : 0) + (sc.Mapped ? 1 : 0) + (sn.Signals != null ? 1 : 0)) : 0;
+                    bool materialsicon = sc.HasMaterials && !ShowMaterials;
+                    string overlaytext = "";
+
+                    if (ShowPlanetClasses)
                     {
-                        Bitmap bmp = new Bitmap(size.Width * 2, quarterheight * 6);
+                        overlaytext = sc.IsStar ? sc.StarClassification : Bodies.PlanetAbv(sc.PlanetTypeID);
+                    }
 
-                        using (Graphics g = Graphics.FromImage(bmp))
+                    var nodelabel = sn.customname ?? sn.ownname;
+
+                    if (!sc.IsStar && (sn.ScanData.IsLandable || ShowAllG) && sn.ScanData.nSurfaceGravity != null)
+                    {
+                        nodelabel += Environment.NewLine + $"{(sn.ScanData.nSurfaceGravity / JournalScan.oneGee_m_s2):N2}g";
+                    }
+
+                    if ( ShowDist && sn.ScanData.nSemiMajorAxis.HasValue)
+                    {
+                        nodelabel += Environment.NewLine + $"{(sn.ScanData.nSemiMajorAxis / JournalScan.oneLS_m):N1}ls";
+                    }
+
+                    nodelabel += appendlabeltext;
+
+                    bool requiresbigoverlay =   sc.IsLandable ||
+                                                sc.HasRings ||
+                                                imageoverlays > 0 ||
+                                                materialsicon;
+
+                    int quarterheight = size.Height / 4;
+
+                    Size bmpsize = new Size(size.Width * (requiresbigoverlay ? 2 : 1), quarterheight * 6);
+
+                    Bitmap bmp = new Bitmap(bmpsize.Width, bmpsize.Height);
+
+                    //backwash = Color.FromArgb(255, 80, 0, 0); //debug
+
+                    using (Graphics g = Graphics.FromImage(bmp))
+                    {
+                        if (backwash.HasValue)
                         {
-                            g.DrawImage(nodeimage, size.Width / 2, quarterheight, size.Width, size.Height);
-
-                            if (sc.IsLandable)
-                                g.DrawImage(Icons.Controls.Scan_Bodies_Landable, new Rectangle(quarterheight, 0, quarterheight * 6, quarterheight * 6));
-
-                            if (sc.HasRings)
-                                g.DrawImage(sc.Rings.Count() > 1 ? Icons.Controls.Scan_Bodies_RingGap : Icons.Controls.Scan_Bodies_RingOnly,
-                                                new Rectangle(-2, quarterheight, size.Width * 2, size.Height));
-
-                            if (ShowOverlays)
+                            using (Brush b = new SolidBrush(backwash.Value))
                             {
-                                int overlaystotal = (sc.Terraformable ? 1 : 0) + (sc.HasMeaningfulVolcanism ? 1 : 0) + (valuable ? 1 : 0) + (sc.Mapped ? 1 : 0) + (sn.Signals!=null ? 1: 0);
-                                int ovsize = (overlaystotal>1) ? quarterheight : (quarterheight*3/2);
-                                int pos = 0;
-
-                                if (sc.Terraformable)
-                                {
-                                    g.DrawImage(Icons.Controls.Scan_Bodies_Terraformable, new Rectangle(0, pos, ovsize, ovsize));
-                                    pos += ovsize + 1;
-                                }
-
-                                if (sc.HasMeaningfulVolcanism) //this renders below the terraformable icon if present
-                                {
-                                    g.DrawImage(Icons.Controls.Scan_Bodies_Volcanism, new Rectangle(0, pos, ovsize, ovsize));
-                                    pos += ovsize + 1;
-                                }
-
-                                if (valuable)
-                                {
-                                    g.DrawImage(Icons.Controls.Scan_Bodies_HighValue, new Rectangle(0, pos, ovsize, ovsize));
-                                    pos += ovsize + 1;
-                                }
-
-                                if (sc.Mapped)
-                                {
-                                    g.DrawImage(Icons.Controls.Scan_Bodies_Mapped, new Rectangle(0, pos, ovsize, ovsize));
-                                    pos += ovsize + 1;
-                                }
-
-                                if ( sn.Signals != null )
-                                {
-                                    g.DrawImage(Icons.Controls.Scan_Bodies_Signals, new Rectangle(0, pos, ovsize, ovsize));
-
-                                }
-                            }
-
-                            if (indicatematerials)
-                            {
-                                Image mm = Icons.Controls.Scan_Bodies_MaterialMore;
-                                g.DrawImage(mm, new Rectangle(bmp.Width - mm.Width, bmp.Height - mm.Height, mm.Width, mm.Height));
+                                g.FillRectangle(b, new Rectangle(0, 0, bmpsize.Width, bmpsize.Height));
                             }
                         }
 
-                        var nodeLabel = sn.customname ?? sn.ownname;
-                        if (sn.ScanData.IsLandable && sn.ScanData.nSurfaceGravity != null)
+                        g.DrawImage(nodeimage, bmpsize.Width / 2 - size.Width/2, bmpsize.Height/2 - size.Height/2, size.Width, size.Height);
+
+                        if (sc.IsLandable)
+                            g.DrawImage(Icons.Controls.Scan_Bodies_Landable, new Rectangle(quarterheight, 0, quarterheight * 6, quarterheight * 6));
+
+                        if (sc.HasRings)
+                            g.DrawImage(sc.Rings.Count() > 1 ? Icons.Controls.Scan_Bodies_RingGap : Icons.Controls.Scan_Bodies_RingOnly,
+                                            new Rectangle(-2, quarterheight, size.Width * 2, size.Height));
+
+                        if (imageoverlays>0)
                         {
-                            nodeLabel += $" ({(sn.ScanData.nSurfaceGravity / JournalScan.oneGee_m_s2):N2}g)";
+                            int ovsize = (imageoverlays > 1) ? quarterheight : (quarterheight * 3 / 2);
+                            int pos = 0;
+
+                            if (sc.Terraformable)
+                            {
+                                g.DrawImage(Icons.Controls.Scan_Bodies_Terraformable, new Rectangle(0, pos, ovsize, ovsize));
+                                pos += ovsize + 1;
+                            }
+
+                            if (sc.HasMeaningfulVolcanism) //this renders below the terraformable icon if present
+                            {
+                                g.DrawImage(Icons.Controls.Scan_Bodies_Volcanism, new Rectangle(0, pos, ovsize, ovsize));
+                                pos += ovsize + 1;
+                            }
+
+                            if (valuable)
+                            {
+                                g.DrawImage(Icons.Controls.Scan_Bodies_HighValue, new Rectangle(0, pos, ovsize, ovsize));
+                                pos += ovsize + 1;
+                            }
+
+                            if (sc.Mapped)
+                            {
+                                g.DrawImage(Icons.Controls.Scan_Bodies_Mapped, new Rectangle(0, pos, ovsize, ovsize));
+                                pos += ovsize + 1;
+                            }
+
+                            if (sn.Signals != null)
+                            {
+                                g.DrawImage(Icons.Controls.Scan_Bodies_Signals, new Rectangle(0, pos, ovsize, ovsize));
+                            }
                         }
 
-                        endpoint = CreateImageLabel(pc, bmp, curpos, new Size(bmp.Width, bmp.Height), nodeLabel, tip, labelvoff, sc.IsEDSMBody);
-                        offset = size.Width;                                        // return that the middle is now this
+                        if (materialsicon)
+                        {
+                            Image mm = Icons.Controls.Scan_Bodies_MaterialMore;
+                            g.DrawImage(mm, new Rectangle(bmp.Width - mm.Width, bmp.Height - mm.Height, mm.Width, mm.Height));
+                        }
+
+                        if (overlaytext.HasChars())
+                        {
+                            using (Font f = new Font(EDDTheme.Instance.FontName, size.Width / 5.0f))
+                            {
+                                Color text = sc.IsStar ? Color.Black : Color.FromArgb(255,160,190,160);
+
+                                using (Brush b = new SolidBrush(text))
+                                {
+                                    g.DrawString(overlaytext, f, b, new Rectangle(0, 0, bmpsize.Width, bmpsize.Height), new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center });
+                                }
+                            }
+                        }
                     }
-                    else
-                    {
-                        endpoint = CreateImageLabel(pc, nodeimage, new Point(curpos.X + offset, curpos.Y + alignv), size,
-                                                    sn.customname ?? sn.ownname, tip, alignv + labelvoff, sc.IsEDSMBody, false);
-                        offset += size.Width / 2;
-                    }
+
+                    Point postoplot = xiscentre ? new Point(position.X - bmpsize.Width / 2, position.Y) : position;
+
+                    endpoint = CreateImageAndLabel(pc, bmp, postoplot, bmpsize, out ximagecentre, nodelabel, tip, sc.IsEDSMBody);
 
                     if (sc.HasMaterials && ShowMaterials)
                     {
-                        Point matpos = new Point(endpoint.X + 4, curpos.Y);
+                        Point matpos = new Point(endpoint.X + 4, position.Y);
                         Point endmat = CreateMaterialNodes(pc, sc, curmats, hl, matpos, materialsize);
                         endpoint = new Point(Math.Max(endpoint.X, endmat.X), Math.Max(endpoint.Y, endmat.Y)); // record new right point..
                     }
@@ -463,10 +541,10 @@ namespace EDDiscovery.UserControls
                     }
                 }
 
-                endpoint = CreateImageLabel(pc, Icons.Controls.Scan_Bodies_Belt,
-                    new Point(curpos.X, curpos.Y + alignv), new Size(size.Width, size.Height), sn.ownname,
-                                                    tip, alignv + labelvoff, false, false);
-                offset += size.Width;
+                string nodelabel = sn.ownname;
+                nodelabel += appendlabeltext;
+
+                endpoint = CreateImageAndLabel(pc, Icons.Controls.Scan_Bodies_Belt, position, size, out ximagecentre, nodelabel, tip, false, false);
             }
             else
             {
@@ -475,23 +553,14 @@ namespace EDDiscovery.UserControls
                 else
                     tip = sn.ownname + Environment.NewLine + Environment.NewLine + "No scan data available".T(EDTx.ScanDisplayUserControl_NSD);
 
-                endpoint = CreateImageLabel(pc, notscanned, new Point(curpos.X + offset, curpos.Y + alignv), size, sn.customname ?? sn.ownname, tip, alignv + labelvoff, false, false);
-                offset += size.Width / 2;       // return the middle used was this..
+                string nodelabel = sn.customname ?? sn.ownname;
+                nodelabel += appendlabeltext;
+
+                endpoint = CreateImageAndLabel(pc, notscanned, position, size, out ximagecentre, nodelabel, tip, false, false);
             }
 
+            System.Diagnostics.Debug.WriteLine("Node " + sn.ownname + " " + position + " " + size + " -> "+ endpoint);
             return endpoint;
-        }
-
-        private static bool ImageRequiresAnOverlay(JournalScan sc, bool indicatematerials, bool valuable, StarScan.ScanNode sn)
-        {
-            return sc.IsLandable || 
-                sc.HasRings || 
-                indicatematerials || 
-                sc.Mapped ||
-                sc.Terraformable ||
-                sc.HasMeaningfulVolcanism ||
-                valuable ||
-                sn.Signals != null;
         }
 
         // curmats may be null
@@ -500,8 +569,6 @@ namespace EDDiscovery.UserControls
             Point startpos = matpos;
             Point maximum = matpos;
             int noperline = 0;
-
-            bool noncommon = ShowMaterialsRare;
 
             string matclicktext = sn.DisplayMaterials(2, curmats, hl.GetLast?.MaterialCommodity);
 
@@ -530,11 +597,22 @@ namespace EDDiscovery.UserControls
                             continue;
                     }
 
-                    if (noncommon && mc.IsCommonMaterial )
+                    if (ShowOnlyMaterialsRare && mc.IsCommonMaterial )
                         continue;
                 }
 
-                CreateMaterialImage(pc, matpos, matsize, abv, tooltip + "\n\n" + "All " + matclicktext, tooltip, fillc, Color.Black);
+                System.Drawing.Imaging.ColorMap colormap = new System.Drawing.Imaging.ColorMap();
+                colormap.OldColor = Color.White;    // this is the marker colour to replace
+                colormap.NewColor = fillc;
+
+                Bitmap mat = BaseUtils.BitMapHelpers.ReplaceColourInBitmap((Bitmap)Icons.Controls.Scan_Bodies_Material, new System.Drawing.Imaging.ColorMap[] { colormap });
+
+                BaseUtils.BitMapHelpers.DrawTextCentreIntoBitmap(ref mat, abv, stdfont, Color.Black);
+
+                ExtPictureBox.ImageElement ie = new ExtPictureBox.ImageElement(
+                                new Rectangle(matpos.X, matpos.Y, matsize.Width, matsize.Height), mat, tooltip + "\n\n" + "All " + matclicktext, tooltip);
+
+                pc.Add(ie);
 
                 maximum = new Point(Math.Max(maximum.X, matpos.X + matsize.Width), Math.Max(maximum.Y, matpos.Y + matsize.Height));
 
@@ -550,49 +628,33 @@ namespace EDDiscovery.UserControls
             return maximum;
         }
 
-        void CreateMaterialImage(List<ExtPictureBox.ImageElement> pc, Point matpos, Size matsize, string text, string mattag, string mattip, Color matcolour, Color textcolour)
-        {
-            System.Drawing.Imaging.ColorMap colormap = new System.Drawing.Imaging.ColorMap();
-            colormap.OldColor = Color.White;    // this is the marker colour to replace
-            colormap.NewColor = matcolour;
 
-            Bitmap mat = BaseUtils.BitMapHelpers.ReplaceColourInBitmap((Bitmap)Icons.Controls.Scan_Bodies_Material, new System.Drawing.Imaging.ColorMap[] { colormap });
+        // plot at leftmiddle the image of size, return bot left accounting for label 
+        // label can be null. returns ximagecentre of image
 
-            BaseUtils.BitMapHelpers.DrawTextCentreIntoBitmap(ref mat, text, stdfont, textcolour);
-
-            ExtPictureBox.ImageElement ie = new ExtPictureBox.ImageElement(
-                            new Rectangle(matpos.X, matpos.Y, matsize.Width, matsize.Height), mat, mattag, mattip);
-
-            pc.Add(ie);
-        }
-
-        Point CreateImageLabel(List<ExtPictureBox.ImageElement> c, Image i, Point postopright, Size size, string label,
-                                    string ttext, int labelhoff, bool fromEDSM, bool imgowned = true)
+        Point CreateImageAndLabel(List<ExtPictureBox.ImageElement> c, Image i, Point leftmiddle, Size size, out int ximagecentre, string label,
+                                    string ttext, bool fromEDSM, bool imgowned = true)
         {
             //System.Diagnostics.Debug.WriteLine("    " + label + " " + postopright + " size " + size + " hoff " + labelhoff + " laby " + (postopright.Y + size.Height + labelhoff));
 
-            ExtPictureBox.ImageElement ie = new ExtPictureBox.ImageElement(new Rectangle(postopright.X, postopright.Y, size.Width, size.Height), i, ttext, ttext, imgowned);
+            ExtPictureBox.ImageElement ie = new ExtPictureBox.ImageElement(new Rectangle(leftmiddle.X, leftmiddle.Y - size.Height/2, size.Width, size.Height), i, ttext, ttext, imgowned);
 
-            Point max = new Point(postopright.X + size.Width, postopright.Y + size.Height);
+            Point max = new Point(leftmiddle.X + size.Width, leftmiddle.Y + size.Height/2);
 
             if (label != null)
             {
-                Font font = stdfont;
-                if (fromEDSM)
-                    font = stdfontUnderline;
+                Font font = fromEDSM ? stdfontUnderline : stdfont;
 
-                Point labposcenthorz = new Point(postopright.X + size.Width / 2, postopright.Y + size.Height + labelhoff);
+                Point labposcenthorz = new Point(leftmiddle.X + size.Width/2, leftmiddle.Y + size.Height/2);
 
                 ExtPictureBox.ImageElement lab = new ExtPictureBox.ImageElement();
-                Size maxsize = new Size(300, 30);
 
-                //System.Diagnostics.Debug.WriteLine("Write Label " + label + " " + EDDTheme.Instance.LabelColor + " " + this.BackColor);
+                Color backcolor = this.BackColor;       // override for debug
+                lab.TextCentreAutosize(labposcenthorz, new Size(0,100), label, font, EDDTheme.Instance.LabelColor, backcolor, frmt: new StringFormat() { Alignment = StringAlignment.Center });
 
-                lab.TextCentreAutosize(labposcenthorz, maxsize, label, font, EDDTheme.Instance.LabelColor, this.BackColor);
-
-                if (lab.Location.X < postopright.X)
+                if (lab.Location.X < ie.Location.X)
                 {
-                    int offset = postopright.X - lab.Location.X;
+                    int offset = ie.Location.X - lab.Location.X;
                     ie.Translate(offset, 0);
                     lab.Translate(offset, 0);
                 }
@@ -603,6 +665,8 @@ namespace EDDiscovery.UserControls
             }
 
             c.Add(ie);
+
+            ximagecentre = ie.Location.X + ie.Location.Width / 2;
 
             //System.Diagnostics.Debug.WriteLine(" ... to " + label + " " + max + " size " + (new Size(max.X-postopright.X,max.Y-postopright.Y)));
             return max;
@@ -630,7 +694,7 @@ namespace EDDiscovery.UserControls
             moonspacerx = Math.Min(stars / 4, 8);
             moonspacery = Math.Min(stars / 4, 8);
             topmargin = 10;
-            leftmargin = 0;
+            leftmargin = 8;
             materiallinespacerxy = 4;
         }
 
@@ -653,6 +717,11 @@ namespace EDDiscovery.UserControls
             rtbNodeInfo.Visible = true;
             rtbNodeInfo.Show();
             PositionInfo();
+        }
+
+        private void panelStars_MouseDown(object sender, MouseEventArgs e)
+        {
+            HideInfo();
         }
 
         public void HideInfo()

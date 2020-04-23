@@ -126,6 +126,7 @@ SECTION JournalTypeEnum
 .Reputation: "Reputation" @
 .RestockVehicle: "Restock Vehicle" @
 .Resurrect: "Resurrect" @
+.SAASignalsFound: "SAA Signals Found" @
 .Scan: "Scan" @
 .Scanned: "Scanned" @
 .ScientificResearch: "Scientific Research" @
@@ -452,6 +453,8 @@ SECTION StarPlanetRing
 
 SECTION JournalScan
 
+.CV: "Current value: {0:N0}" @
+.FDV: "First Discovered value: {0:N0}" @
 .Autoscanof: "Autoscan of {0}" @
 .Detailedscanof: "Detailed scan of {0}" @
 .Basicscanof: "Basic scan of {0}" @
@@ -476,7 +479,6 @@ SECTION JournalScan
 .SolarRadius: "Solar Radius: {0:0.00} Sols\n" @
 .BodyRadius: "Body Radius: {0:0.00}km\n" @
 .SurfaceTemp: "Surface Temp: {0}K\n" @
-.Luminosity: "Luminosity: {0}\n" @
 .GV: "Gravity: {0:0.00}g\n" @
 .SPA: "Surface Pressure: {0} Atmospheres\n" @
 .SPP: "Surface Pressure: {0} Pa\n" @
@@ -518,6 +520,7 @@ SECTION JournalScan
 .AmmoniaWorlds: " - Ammonia Worlds, {0} ({1}-{2} AU),\n" @
 .IcyPlanets: " - Icy Planets, {0} (from {1} AU)\n\n" @
 .DISTA: "Dist:;ls;0.0" @
+.DIST: "Dist:" @
 .BNME: "Name:" @
 .MMoM: "Mass:;MM;0.00" @
 .SNME: "Name:" @
@@ -930,3 +933,6 @@ SECTION JournalEntry
 .Ships: "Ships" @
 .Distance: "Distance:; ly;0.0" @
 .Threat: "Threat:" @
+.RemaingJumps: "Remaining Jumps" @
+.Nearest: "Nearest:" @
+

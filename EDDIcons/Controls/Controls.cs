@@ -186,6 +186,12 @@ namespace EDDiscovery.Icons
         public static Image Scan_SizeMinuscule { get { return IconSet.GetIcon("Controls.Scan.SizeMinuscule"); } }
         public static Image Scan_Star { get { return IconSet.GetIcon("Controls.Scan.Star"); } }
         public static Image backbutton { get { return IconSet.GetIcon("Controls.Scan.backbutton"); } }
+        public static Image DisplayFilters { get { return IconSet.GetIcon("Controls.Scan.DisplayFilters"); } }
+        public static Image ShowAllG { get { return IconSet.GetIcon("Controls.Scan.ShowAllG"); } }
+        public static Image ShowDistances { get { return IconSet.GetIcon("Controls.Scan.ShowDistances"); } }
+        public static Image ShowHabZone { get { return IconSet.GetIcon("Controls.Scan.ShowHabZone"); } }
+        public static Image ShowPlanetClasses { get { return IconSet.GetIcon("Controls.Scan.ShowPlanetClasses"); } }
+        public static Image ShowStarClasses { get { return IconSet.GetIcon("Controls.Scan.ShowStarClasses"); } }
         #endregion
         #region EDDiscovery.UserControls.UserControlScanGrid
         public static Image ScanGrid_Belt { get { return IconSet.GetIcon("Controls.ScanGrid.Belt"); } }

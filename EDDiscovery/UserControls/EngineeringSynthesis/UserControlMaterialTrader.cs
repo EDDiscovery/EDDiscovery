@@ -91,7 +91,7 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
 
-            extComboBoxTraderType.Items.AddRange(new string[] { "Raw".Tx(EDTx.UserControlMaterialTrader_Raw), "Encoded".Tx(EDTx.UserControlMaterialTrader_Encoded), "Manufactured".Tx(EDTx.UserControlMaterialTrader_Manufactured) });
+            extComboBoxTraderType.Items.AddRange(new string[] { "Raw".T(EDTx.UserControlMaterialTrader_Raw), "Encoded".T(EDTx.UserControlMaterialTrader_Encoded), "Manufactured".T(EDTx.UserControlMaterialTrader_Manufactured) });
             extComboBoxTraderType.SelectedIndex = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(DbTraderType, 0);
             extComboBoxTraderType.SelectedIndexChanged += ExtComboBoxTraderType_SelectedIndexChanged;
 
@@ -191,18 +191,20 @@ namespace EDDiscovery.UserControls
         {
             int sel = extComboBoxTraderType.SelectedIndex;
 
-            var mcl = new List<Tuple<MaterialCommodityData.MaterialGroupType, MaterialCommodityData[]>>();
+            var mcl = new List<Tuple<MaterialCommodityData.MaterialGroupType, MaterialCommodityData[]>>();      // list of groups vs data
+            Dictionary<MaterialCommodityData.MaterialGroupType, string> mattxgroupnames = new Dictionary<MaterialCommodityData.MaterialGroupType, string>(); // translated names of groups
 
-            foreach ( var t in Enum.GetValues(typeof(MaterialCommodityData.MaterialGroupType)))
+            foreach ( var t in Enum.GetValues(typeof(MaterialCommodityData.MaterialGroupType)))     // relies on MCD being in order
             {
-                var e = (MaterialCommodityData.MaterialGroupType)t;
-                bool ok = (sel == 0 && e >= MaterialCommodityData.MaterialGroupType.RawCategory1 && e <= MaterialCommodityData.MaterialGroupType.RawCategory7);
-                ok |= (sel == 1 && e >= MaterialCommodityData.MaterialGroupType.EncodedEmissionData && e <= MaterialCommodityData.MaterialGroupType.EncodedFirmware);
-                ok |= (sel == 2 && e >= MaterialCommodityData.MaterialGroupType.ManufacturedChemical);
+                var matgroup = (MaterialCommodityData.MaterialGroupType)t;
+                bool ok = (sel == 0 && matgroup >= MaterialCommodityData.MaterialGroupType.RawCategory1 && matgroup <= MaterialCommodityData.MaterialGroupType.RawCategory7);
+                ok |= (sel == 1 && matgroup >= MaterialCommodityData.MaterialGroupType.EncodedEmissionData && matgroup <= MaterialCommodityData.MaterialGroupType.EncodedFirmware);
+                ok |= (sel == 2 && matgroup >= MaterialCommodityData.MaterialGroupType.ManufacturedChemical);
                 if ( ok )
                 {
-                    var list = MaterialCommodityData.GetMaterialGroup(x => x.MaterialGroup == e);
-                    mcl.Add(new Tuple<MaterialCommodityData.MaterialGroupType, MaterialCommodityData[]>(e,list));
+                    var list = MaterialCommodityData.Get(x => x.MaterialGroup == matgroup);
+                    mcl.Add(new Tuple<MaterialCommodityData.MaterialGroupType, MaterialCommodityData[]>(matgroup,list));
+                    mattxgroupnames[matgroup] = list[0].TranslatedMaterialGroup;
                 }
             }
 
@@ -217,11 +219,6 @@ namespace EDDiscovery.UserControls
             int vpos = 0;
             int maxhpos = 0;
 
-            // save splitter
-            // save trades
-            // more backdrops
-
-
             foreach (var t in mcl)
             {
                 int hpos = 0;
@@ -233,9 +230,8 @@ namespace EDDiscovery.UserControls
                     int tlen;
                     using (Brush b = new SolidBrush(orange))
                     {
-                        string s = ie.Tag as string;
-                        s = s.Replace("Manufactured", "").Replace("Raw", "").Replace("Encoded", "");
-                        s = s.SplitCapsWordFull();
+                        string s = mattxgroupnames[t.Item1];
+                        s = s.Substring(s.IndexOf(" ") + 1);
                         tlen = (int)(g.MeasureString(s, titlefont).Width+2);
                         g.DrawString(s, titlefont, b, new Point(ie.Location.Left, ie.Location.Top));
                     }
@@ -475,7 +471,7 @@ namespace EDDiscovery.UserControls
                         butr.Image = EDDiscovery.Icons.IconSet.GetIcon("Controls.MaterialTrader.RightArrow");
                         f.Add(new ExtendedControls.ConfigurableForm.Entry(butr, "more", "", new Point(width - margin - 32, 64), new Size(32, 32), null));
 
-                        f.Add(new ExtendedControls.ConfigurableForm.Entry("olabel", typeof(Label), "Offer".Tx(EDTx.UserControlMaterialTrader_Offer), new Point(margin, 30), new Size(width - margin * 2, 20), null, 1.5f, ContentAlignment.MiddleCenter));
+                        f.Add(new ExtendedControls.ConfigurableForm.Entry("olabel", typeof(Label), "Offer".T(EDTx.UserControlMaterialTrader_Offer), new Point(margin, 30), new Size(width - margin * 2, 20), null, 1.5f, ContentAlignment.MiddleCenter));
 
                         f.Add(new ExtendedControls.ConfigurableForm.Entry("offer", typeof(Label), "0/" + curmat.Count.ToStringInvariant(), new Point(width / 2 - 12, 50), new Size(width / 2 - 20, 20), null, 1.2f, ContentAlignment.MiddleLeft));
 
@@ -486,7 +482,7 @@ namespace EDDiscovery.UserControls
 
                         f.Add(new ExtendedControls.ConfigurableForm.Entry("receive", typeof(Label), "0", new Point(width / 2 - 12, 90), new Size(width / 2 - 20, 20), null, 1.2f, ContentAlignment.MiddleLeft));
 
-                        f.Add(new ExtendedControls.ConfigurableForm.Entry("rlabel", typeof(Label), "Receive".Tx(EDTx.UserControlMaterialTrader_Receive), new Point(margin, 110), new Size(width - margin * 2, 20), null, 1.5f, ContentAlignment.MiddleCenter));
+                        f.Add(new ExtendedControls.ConfigurableForm.Entry("rlabel", typeof(Label), "Receive".T(EDTx.UserControlMaterialTrader_Receive), new Point(margin, 110), new Size(width - margin * 2, 20), null, 1.5f, ContentAlignment.MiddleCenter));
 
                         f.AddOK(new Point(width - margin - 80, 150), "Press to Accept".T(EDTx.UserControlModules_PresstoAccept));
                         f.AddCancel(new Point(margin, 150), "Press to Cancel".T(EDTx.UserControlModules_PresstoCancel));

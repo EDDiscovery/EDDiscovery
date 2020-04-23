@@ -62,11 +62,12 @@ namespace EliteDangerousCore.JournalEvents
         public string StarTypeText { get { return IsStar ? GetStarTypeName() : ""; } }   // Long form star name, from StarTypeID
         public double? nStellarMass { get; set; }                   // direct
         public double? nAbsoluteMagnitude { get; set; }             // direct
-        public string Luminosity { get; set; }
-        public double? nAge { get; set; }                           // direct
-        public double? HabitableZoneInner { get; set; }             // calculated
-        public double? HabitableZoneOuter { get; set; }             // calculated
-        public double? MetalRichZoneInner { get; set; }
+        public string Luminosity { get; set; }                      // character string (I,II,.. V)
+        public string StarClassification { get { return (StarType ?? "") + (StarSubclass?.ToStringInvariant() ?? "") + (Luminosity ?? ""); } }
+        public double? nAge { get; set; }                           // direct, in million years
+        public double? HabitableZoneInner { get; set; }             // in AU
+        public double? HabitableZoneOuter { get; set; }             // in AU
+        public double? MetalRichZoneInner { get; set; }             // in AU etc
         public double? MetalRichZoneOuter { get; set; }
         public double? WaterWrldZoneInner { get; set; }
         public double? WaterWrldZoneOuter { get; set; }
@@ -75,14 +76,14 @@ namespace EliteDangerousCore.JournalEvents
         public double? AmmonWrldZoneInner { get; set; }
         public double? AmmonWrldZoneOuter { get; set; }
         public double? IcyPlanetZoneInner { get; set; }
-        public string IcyPlanetZoneOuter { get; set; }
+        public string IcyPlanetZoneOuter { get; set; }              // in AU
 
         // All orbiting bodies (Stars/Planets), not main star
-        public double? nSemiMajorAxis { get; set; }                              // direct
-        public double? nSemiMajorAxisAU { get; set; }                            // direct
-        public double? nEccentricity { get; set; }                               // direct
-        public double? nOrbitalInclination { get; set; }                         // direct
-        public double? nPeriapsis { get; set; }                                  // direct
+        public double? nSemiMajorAxis { get; set; }                 // direct, m
+        public double? nSemiMajorAxisAU { get; set; }               // direct
+        public double? nEccentricity { get; set; }                  // direct
+        public double? nOrbitalInclination { get; set; }            // direct
+        public double? nPeriapsis { get; set; }                     // direct
         public double? nOrbitalPeriod { get; set; }                 // direct
         public double? nOrbitalPeriodDays { get; set; }
         public double? nAxialTilt { get; set; }                     // direct, radians
@@ -93,9 +94,13 @@ namespace EliteDangerousCore.JournalEvents
         public string PlanetClass { get; set; }                     // planet class, direct
 
         public EDPlanet PlanetTypeID { get; }                       // planet class -> ID
-        public bool AmmoniaWorld { get { return PlanetTypeID == EDPlanet.Ammonia_world; } }
-        public bool Earthlike { get { return PlanetTypeID == EDPlanet.Earthlike_body; } }
-        public bool WaterWorld { get { return PlanetTypeID == EDPlanet.Water_world; } }
+        public bool AmmoniaWorld { get { return Bodies.AmmoniaWorld(PlanetTypeID); } }
+        public bool Earthlike { get { return Bodies.Earthlike(PlanetTypeID); } }
+        public bool WaterWorld { get { return Bodies.WaterWorld(PlanetTypeID); } }
+        public bool SudarskyGasGiant { get { return Bodies.SudarskyGasGiant(PlanetTypeID); } }
+        public bool GasGiant { get { return Bodies.GasGiant(PlanetTypeID); } }
+        public bool WaterGiant { get { return Bodies.WaterGiant(PlanetTypeID); } }
+        public bool HeliumGasGiant { get { return Bodies.HeliumGasGiant(PlanetTypeID); } }
 
         public bool? nTidalLock { get; set; }                       // direct
         public string TerraformState { get; set; }                  // direct, can be empty or a string
@@ -580,7 +585,7 @@ namespace EliteDangerousCore.JournalEvents
 
                 if (IsStar)
                 {
-                    scanText.AppendFormat(GetStarTypeName());
+                    scanText.AppendFormat(GetStarTypeName() + " (" + StarClassification + ")");
                 }
                 else if (PlanetClass != null)
                 {
@@ -625,9 +630,6 @@ namespace EliteDangerousCore.JournalEvents
 
             if (nSurfaceTemperature.HasValue)
                 scanText.AppendFormat("Surface Temp: {0}K\n".T(EDTx.JournalScan_SurfaceTemp), nSurfaceTemperature.Value.ToString("N0"));
-
-            if (Luminosity != null)
-                scanText.AppendFormat("Luminosity: {0}\n".T(EDTx.JournalScan_Luminosity), Luminosity);
 
             if (nSurfaceGravity.HasValue)
                 scanText.AppendFormat("Gravity: {0:0.00}g\n".T(EDTx.JournalScan_GV), nSurfaceGravityG.Value);

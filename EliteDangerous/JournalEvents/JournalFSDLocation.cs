@@ -593,7 +593,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = BaseUtils.FieldBuilder.Build("", StarSystem,"Remaining Jumps".T(EDTx.JournalRemainingJumps), RemainingJumpsInRoute);
+            info = BaseUtils.FieldBuilder.Build("", StarSystem,"Remaining Jumps".T(EDTx.JournalEntry_RemainingJumps), RemainingJumpsInRoute);
             detailed = "";
         }
     }

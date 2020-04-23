@@ -25,6 +25,7 @@ namespace EliteDangerousCore
     {
         private Dictionary<Tuple<string, long>, SystemNode> scandata = new Dictionary<Tuple<string, long>, SystemNode>();
         private Dictionary<string, List<SystemNode>> scandataByName = new Dictionary<string, List<SystemNode>>();
+        private const string MainStar = "Main Star";
 
         public class SystemNode
         {
@@ -37,6 +38,7 @@ namespace EliteDangerousCore
             public int MinPlanetBodyID = 512;
             public int? FSSTotalBodies;
 
+            
             public IEnumerable<ScanNode> Bodies
             {
                 get

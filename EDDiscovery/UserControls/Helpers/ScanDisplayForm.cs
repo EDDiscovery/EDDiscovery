@@ -54,7 +54,6 @@ namespace EDDiscovery.UserControls
             {      
                 sd = new ScanDisplayUserControl();
                 sd.CheckEDSM =checkedsm;
-                sd.ShowMoons = sd.ShowMaterials = sd.ShowOverlays = true;
                 int selsize = (int)(EDDTheme.Instance.GetFont.Height / 16.0f * 48.0f);
                 sd.SetSize( selsize );
                 sd.Size = infosize;
