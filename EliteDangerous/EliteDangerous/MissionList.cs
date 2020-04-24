@@ -77,7 +77,7 @@ namespace EliteDangerousCore
         {
             get
             {
-                if (State != MissionState.StateTypes.Completed)
+                if (State != MissionState.StateTypes.Completed || Completed == null)
                     return State.ToString();
                 else
                     return Completed.Value.ToString("N0");
@@ -88,7 +88,7 @@ namespace EliteDangerousCore
         {
             get
             {
-                if (State != MissionState.StateTypes.Completed)
+                if (State != MissionState.StateTypes.Completed || Completed == null)
                     return 0;
                 else
                     return Completed.Value;
@@ -221,6 +221,17 @@ namespace EliteDangerousCore
             }
         }
 
+        public void Missing(List<string> keys, MissionState.StateTypes state, DateTime missingtime)
+        {
+            foreach (string k in keys)
+            {
+                if (Missions[k].State == MissionState.StateTypes.InProgress)
+                {
+                    Missions[k] = new MissionState(Missions[k], state, missingtime);
+                }
+            }
+        }
+
 
         public List<MissionState> GetAllCombatMissionsLatestFirst() { return (from x in Missions.Values where x.Mission.TargetType.Length > 0 && x.Mission.ExpiryValid orderby x.Mission.EventTimeUTC descending select x).ToList(); }
 
@@ -328,10 +339,15 @@ namespace EliteDangerousCore
         public void Missions( JournalMissions m )
         {
             List<string> toresurrect = new List<string>();
+            HashSet<string> active = new HashSet<string>();
+            List<string> failed = new List<string>();
+            List<string> completed = new List<string>();
+            List<string> disappeared = new List<string>();
 
             foreach( var mi in m.ActiveMissions )
             {
                 string kn = MissionList.Key(mi.MissionID, mi.Name);
+                active.Add(kn);
 
                 if (missionlist.Missions.ContainsKey(kn))
                 {
@@ -345,10 +361,48 @@ namespace EliteDangerousCore
                 }
             }
 
+            foreach (var mi in m.FailedMissions)
+            {
+                string kn = MissionList.Key(mi.MissionID, mi.Name);
+                failed.Add(kn);
+            }
+
+            foreach (var mi in m.CompletedMissions)
+            {
+                string kn = MissionList.Key(mi.MissionID, mi.Name);
+                completed.Add(kn);
+            }
+
+            foreach (var kvp in missionlist.Missions)
+            {
+                if (!active.Contains(kvp.Key) && !failed.Contains(kvp.Key) && !completed.Contains(kvp.Key) && kvp.Value.State == MissionState.StateTypes.InProgress)
+                {
+                    disappeared.Add(kvp.Key);
+                }
+            }
+
             if ( toresurrect.Count>0)       // if any..
             {
                 missionlist = new MissionList(missionlist);     // shallow copy
                 missionlist.Resurrect(toresurrect);
+            }
+
+            if (disappeared.Count > 0)
+            {
+                missionlist = new MissionList(missionlist);
+                missionlist.Missing(disappeared, MissionState.StateTypes.Abandoned, m.EventTimeUTC);
+            }
+
+            if (failed.Count > 0)
+            {
+                missionlist = new MissionList(missionlist);
+                missionlist.Missing(failed, MissionState.StateTypes.Failed, m.EventTimeUTC);
+            }
+
+            if (completed.Count > 0)
+            {
+                missionlist = new MissionList(missionlist);
+                missionlist.Missing(failed, MissionState.StateTypes.Completed, m.EventTimeUTC);
             }
         }
 
