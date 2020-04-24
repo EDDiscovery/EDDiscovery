@@ -59,7 +59,7 @@ namespace EDDiscovery.UserControls
 
             bodyfilters = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbSave + "BodyFilters", "All").Split(';');
 
-            displayfilters = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbSave + "DisplayFilters", "All").Split(';');
+            displayfilters = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbSave + "DisplayFilters", "moons;icons;mats;allg;habzone;starclass;planetclass;dist;").Split(';');
             ApplyDisplayFilters();
 
             panelStars.ValueLimit = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(DbSave + "ValueLimit", 50000);
@@ -76,9 +76,9 @@ namespace EDDiscovery.UserControls
 
             rollUpPanelTop.SetToolTip(toolTip);     // set after translater
 
-            t = new Timer();
-            t.Interval = 100;
-            t.Tick += T_Tick;
+         //   t = new Timer();      // debug, keep for now
+            //t.Interval = 100;
+            //t.Tick += T_Tick;
         }
 
         public override void LoadLayout()
@@ -96,9 +96,6 @@ namespace EDDiscovery.UserControls
         public override void InitialDisplay()
         {
             last_he = uctg.GetCurrentHistoryEntry;
-
-            //debug  showing_system = new EliteDangerousCore.SystemClass("Lembava"); override_system = true; DrawSystem();
-
             DrawSystem(last_he);    // may be null
         }
 
@@ -162,7 +159,7 @@ namespace EDDiscovery.UserControls
 
         private void Uctg_OnTravelSelectionChanged(HistoryEntry he, HistoryList hl, bool selectedEntry)
         {
-            //t.Start();
+            //t.Start();    // debug, for playing all scans thru
 
             if (he != null)
             {
@@ -728,7 +725,7 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
-#if true
+#if false
         int hec = 20000;        // debug code to check all my scans don't crash
         Timer t;
         private void T_Tick(object sender, EventArgs e)

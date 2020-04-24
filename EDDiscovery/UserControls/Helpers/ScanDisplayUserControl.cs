@@ -58,8 +58,8 @@ namespace EDDiscovery.UserControls
         private int topmargin;
 
         private Font stdfont = EDDTheme.Instance.GetDialogFont;
+        private Font stdfontUnderline = EDDTheme.Instance.GetDialogScaledFont(1f, FontStyle.Underline);
         private Font largerfont = EDDTheme.Instance.GetFont;
-        private Font stdfontUnderline = EDDTheme.Instance.GetDialogScaledFont(1f,FontStyle.Underline);
 
         #region Init
         public ScanDisplayUserControl()
@@ -111,7 +111,7 @@ namespace EDDiscovery.UserControls
                 {
                     if (filter != null && starnode.IsBodyInFilter(filter, true) == false)       // if filter active, but no body or children in filter
                     {
-                        System.Diagnostics.Debug.WriteLine("SDUC Rejected " + starnode.fullname);
+                       // System.Diagnostics.Debug.WriteLine("SDUC Rejected " + starnode.fullname);
                         continue;
                     }
 
@@ -149,7 +149,7 @@ namespace EDDiscovery.UserControls
                         {
                             if (filter != null && planetnode.IsBodyInFilter(filter, true) == false)       // if filter active, but no body or children in filter
                             {
-                                System.Diagnostics.Debug.WriteLine("SDUC Rejected " + planetnode.fullname);
+                                //System.Diagnostics.Debug.WriteLine("SDUC Rejected " + planetnode.fullname);
                                 continue;
                             }
 
@@ -339,65 +339,14 @@ namespace EDDiscovery.UserControls
 
             JournalScan sc = sn.ScanData;
 
-            if (sc != null && (!sc.IsEDSMBody || CheckEDSM))     // if got one, and its our scan, or we are showing EDSM
+            if (sc != null && (!sc.IsEDSMBody || CheckEDSM))     // has a scan and its our scan, or we are showing EDSM
             {
-                tip = sc.DisplayString(historicmatlist:curmats, currentmatlist:hl.GetLast?.MaterialCommodity);
-                if (sn.Signals != null)
-                    tip += "\n" + "Signals".T(EDTx.ScanDisplayUserControl_Signals)+":\n" + JournalSAASignalsFound.SignalList(sn.Signals,4, "\n");
-
-                if ( sn.type == StarScan.ScanNodeType.ring)
+                if (sn.type != StarScan.ScanNodeType.ring)       // not rings
                 {
+                    tip = sc.DisplayString(historicmatlist: curmats, currentmatlist: hl.GetLast?.MaterialCommodity);
+                    if (sn.Signals != null)
+                        tip += "\n" + "Signals".T(EDTx.ScanDisplayUserControl_Signals) + ":\n" + JournalSAASignalsFound.SignalList(sn.Signals, 4, "\n");
 
-                }
-                else  if (sc.IsStar && toplevelstar)
-                {
-                    var starlabel = sn.customname ?? sn.ownname;
-
-                    if ( sc.nStellarMass.HasValue )
-                        starlabel += Environment.NewLine + $"{sc.nStellarMass.Value:N2} SM";
-                    if ( sc.nAge.HasValue)
-                        starlabel += Environment.NewLine + $"{sc.nAge.Value:N0} MY";
-
-                    if (ShowHabZone)
-                    {
-                        var habZone = sc.GetHabZoneStringLs();
-                        if (habZone.HasChars())
-                            starlabel += Environment.NewLine + $"{habZone}";
-                    }
-
-                    starlabel += appendlabeltext;
-
-                    string overlaytext = null;
-                    if (ShowStarClasses && sn.ScanData != null && sn.ScanData.StarTypeID != EDStar.H)
-                        overlaytext = sn.ScanData.StarClassification;
-
-                    Image starimage = sc.GetStarTypeImage();
-                    bool owned = false;
-
-                    if (overlaytext.HasChars())
-                    {
-                        Image clone = starimage.Clone() as Image;
-                        using (Font f = new Font(EDDTheme.Instance.FontName, starimage.Width / 6.0f))
-                        {
-                            using (Graphics g = Graphics.FromImage(clone))
-                            {
-                                using (Brush b = new SolidBrush(Color.Black))
-                                {
-                                    g.DrawString(overlaytext, f, b, new Rectangle(0, 0, starimage.Width, starimage.Height), new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center });
-                                }
-                            }
-                        }
-
-                        starimage = clone;
-                        owned = true;
-                    }
-
-                    endpoint = CreateImageAndLabel(pc, starimage,
-                                                    position,      // WE are basing it on a 1/4 + 1 + 1/4 grid, this is not being made bigger, move off
-                                                    size, out ximagecentre , starlabel, tip, sc.IsEDSMBody, owned);          // and the label needs to be a quarter height below it..
-                }
-                else //else not a top-level star or its a planet
-                {
                     Image nodeimage = sc.IsStar ? sc.GetStarTypeImage() : sc.GetPlanetClassImage();
 
                     bool valuable = sc.EstimatedValue >= ValueLimit;
@@ -405,24 +354,48 @@ namespace EDDiscovery.UserControls
                     bool materialsicon = sc.HasMaterials && !ShowMaterials;
                     string overlaytext = "";
 
-                    if (ShowPlanetClasses)
+                    var nodelabels = new string[2] { "", "" };
+
+                    nodelabels[0] = sn.customname ?? sn.ownname;
+                    if (sc.IsEDSMBody)
+                        nodelabels[0] = "_" + nodelabels[0];
+
+                    if ( sc.IsStar )
                     {
-                        overlaytext = sc.IsStar ? sc.StarClassification : Bodies.PlanetAbv(sc.PlanetTypeID);
+                        if (ShowStarClasses)
+                            overlaytext = sc.StarClassification;
+
+                        if (sc.nStellarMass.HasValue)
+                            nodelabels[1] = nodelabels[1].AppendPrePad($"{sc.nStellarMass.Value:N2} SM",Environment.NewLine);
+
+                        if (toplevelstar)
+                        {
+                            if (sc.nAge.HasValue)
+                                nodelabels[1] = nodelabels[1].AppendPrePad($"{sc.nAge.Value:N0} MY", Environment.NewLine);
+
+                            if (ShowHabZone)
+                            {
+                                var habZone = sc.GetHabZoneStringLs();
+                                if (habZone.HasChars())
+                                    nodelabels[1] = nodelabels[1].AppendPrePad($"{habZone}", Environment.NewLine);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (ShowPlanetClasses)
+                            overlaytext = Bodies.PlanetAbv(sc.PlanetTypeID);
+
+                        if ((sn.ScanData.IsLandable || ShowAllG) && sn.ScanData.nSurfaceGravity != null)
+                        {
+                            nodelabels[1] = nodelabels[1].AppendPrePad( $"{(sn.ScanData.nSurfaceGravity / JournalScan.oneGee_m_s2):N2}g", Environment.NewLine);
+                        }
                     }
 
-                    var nodelabel = sn.customname ?? sn.ownname;
+                    if ( ShowDist && sn.ScanData.nSemiMajorAxis.HasValue && sn.ScanData.nSemiMajorAxis.Value>0)
+                        nodelabels[1] = nodelabels[1].AppendPrePad($"{(sn.ScanData.nSemiMajorAxis / JournalScan.oneLS_m):N1}ls", Environment.NewLine );
 
-                    if (!sc.IsStar && (sn.ScanData.IsLandable || ShowAllG) && sn.ScanData.nSurfaceGravity != null)
-                    {
-                        nodelabel += Environment.NewLine + $"{(sn.ScanData.nSurfaceGravity / JournalScan.oneGee_m_s2):N2}g";
-                    }
-
-                    if ( ShowDist && sn.ScanData.nSemiMajorAxis.HasValue)
-                    {
-                        nodelabel += Environment.NewLine + $"{(sn.ScanData.nSemiMajorAxis / JournalScan.oneLS_m):N1}ls";
-                    }
-
-                    nodelabel += appendlabeltext;
+                    nodelabels[1] = nodelabels[1].AppendPrePad(appendlabeltext, Environment.NewLine);
 
                     bool requiresbigoverlay =   sc.IsLandable ||
                                                 sc.HasRings ||
@@ -513,7 +486,7 @@ namespace EDDiscovery.UserControls
 
                     Point postoplot = xiscentre ? new Point(position.X - bmpsize.Width / 2, position.Y) : position;
 
-                    endpoint = CreateImageAndLabel(pc, bmp, postoplot, bmpsize, out ximagecentre, nodelabel, tip, sc.IsEDSMBody);
+                    endpoint = CreateImageAndLabel(pc, bmp, postoplot, bmpsize, out ximagecentre, nodelabels, tip);
 
                     if (sc.HasMaterials && ShowMaterials)
                     {
@@ -541,10 +514,7 @@ namespace EDDiscovery.UserControls
                     }
                 }
 
-                string nodelabel = sn.ownname;
-                nodelabel += appendlabeltext;
-
-                endpoint = CreateImageAndLabel(pc, Icons.Controls.Scan_Bodies_Belt, position, size, out ximagecentre, nodelabel, tip, false, false);
+                endpoint = CreateImageAndLabel(pc, Icons.Controls.Scan_Bodies_Belt, position, size, out ximagecentre, new string[] { sn.ownname + appendlabeltext }, tip, false);
             }
             else
             {
@@ -556,10 +526,10 @@ namespace EDDiscovery.UserControls
                 string nodelabel = sn.customname ?? sn.ownname;
                 nodelabel += appendlabeltext;
 
-                endpoint = CreateImageAndLabel(pc, notscanned, position, size, out ximagecentre, nodelabel, tip, false, false);
+                endpoint = CreateImageAndLabel(pc, notscanned, position, size, out ximagecentre, new string[] { nodelabel }, tip, false);
             }
 
-            System.Diagnostics.Debug.WriteLine("Node " + sn.ownname + " " + position + " " + size + " -> "+ endpoint);
+            //System.Diagnostics.Debug.WriteLine("Node " + sn.ownname + " " + position + " " + size + " -> "+ endpoint);
             return endpoint;
         }
 
@@ -632,8 +602,7 @@ namespace EDDiscovery.UserControls
         // plot at leftmiddle the image of size, return bot left accounting for label 
         // label can be null. returns ximagecentre of image
 
-        Point CreateImageAndLabel(List<ExtPictureBox.ImageElement> c, Image i, Point leftmiddle, Size size, out int ximagecentre, string label,
-                                    string ttext, bool fromEDSM, bool imgowned = true)
+        Point CreateImageAndLabel(List<ExtPictureBox.ImageElement> c, Image i, Point leftmiddle, Size size, out int ximagecentre, string[] labels, string ttext, bool imgowned = true)
         {
             //System.Diagnostics.Debug.WriteLine("    " + label + " " + postopright + " size " + size + " hoff " + labelhoff + " laby " + (postopright.Y + size.Height + labelhoff));
 
@@ -641,29 +610,43 @@ namespace EDDiscovery.UserControls
 
             Point max = new Point(leftmiddle.X + size.Width, leftmiddle.Y + size.Height/2);
 
-            if (label != null)
+            var labelie = new List<ExtPictureBox.ImageElement>();
+            int laboff = 0;
+            int vpos = leftmiddle.Y + size.Height / 2;
+
+            foreach (string label in labels)
             {
-                Font font = fromEDSM ? stdfontUnderline : stdfont;
-
-                Point labposcenthorz = new Point(leftmiddle.X + size.Width/2, leftmiddle.Y + size.Height/2);
-
-                ExtPictureBox.ImageElement lab = new ExtPictureBox.ImageElement();
-
-                Color backcolor = this.BackColor;       // override for debug
-                lab.TextCentreAutosize(labposcenthorz, new Size(0,100), label, font, EDDTheme.Instance.LabelColor, backcolor, frmt: new StringFormat() { Alignment = StringAlignment.Center });
-
-                if (lab.Location.X < ie.Location.X)
+                if (label.HasChars())
                 {
-                    int offset = ie.Location.X - lab.Location.X;
-                    ie.Translate(offset, 0);
-                    lab.Translate(offset, 0);
+                    Font f = stdfont;
+                    int labcut = 0;
+                    if (label[0] == '_')
+                    {
+                        f = stdfontUnderline;
+                        labcut = 1;
+                    }
+
+                    Point labposcenthorz = new Point(leftmiddle.X + size.Width / 2, vpos);
+
+                    ExtPictureBox.ImageElement labie = new ExtPictureBox.ImageElement();
+                    Color backcolor = this.BackColor;       // override for debug
+                    labie.TextCentreAutosize(labposcenthorz, new Size(0, 100), label.Substring(labcut), f, EDDTheme.Instance.LabelColor, backcolor, frmt: new StringFormat() { Alignment = StringAlignment.Center });
+                    labelie.Add(labie);
+
+                    if (labie.Location.X < 0)
+                        laboff = Math.Max(laboff, -labie.Location.X);
+                    vpos += labie.Location.Height;
                 }
-
-                c.Add(lab);
-
-                max = new Point(Math.Max(lab.Location.X + lab.Location.Width, max.X), lab.Location.Y + lab.Location.Height);
             }
 
+            foreach (var l in labelie)
+            {
+                l.Translate(laboff, 0);
+                c.Add(l);
+                max = new Point(Math.Max(max.X, l.Location.Right), Math.Max(max.Y, l.Location.Bottom));
+            }
+
+            ie.Translate(laboff, 0);
             c.Add(ie);
 
             ximagecentre = ie.Location.X + ie.Location.Width / 2;

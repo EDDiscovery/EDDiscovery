@@ -312,7 +312,7 @@ namespace EliteDangerousCore
 
             string trace = Environment.StackTrace.StackTrace("FindSystemAsync", 4);
 
-            System.Diagnostics.Debug.WriteLine("Scan Lookup " + trace + " " + sys.Name + " found " + (sn != null) + " web? " + edsmweblookup + " edsm lookup " + (sn?.EDSMWebChecked ?? false));
+            //System.Diagnostics.Debug.WriteLine("Scan Lookup " + trace + " " + sys.Name + " found " + (sn != null) + " web? " + edsmweblookup + " edsm lookup " + (sn?.EDSMWebChecked ?? false));
 
             if ((sys.EDSMID > 0 || (sys.SystemAddress != null && sys.SystemAddress > 0) || (byname && sys.Name.HasChars())) && (sn == null || sn.EDSMCacheCheck == false || (edsmweblookup && !sn.EDSMWebChecked)))
             {
@@ -320,13 +320,20 @@ namespace EliteDangerousCore
 
                 var jl = await EliteDangerousCore.EDSM.EDSMClass.GetBodiesListAsync(sys, edsmweblookup); // lookup, with optional web
 
-                // found some bodies.. note if multiple people are awaiting above, because two or three asks for system data with edsm lookup,
-                // then c# should guarantee that the first one entering the awaiting gets released to run first.  So it will run first, 
-                // add the bodies to the list, execute through, then the next one will get a go and it should see the cache flag set and not add more 
+                // return bodies and a flag indicating if from cache.
+                // Scenario: Three panels are asking for data, one at a time, since its the foreground thread
+                // each one awaits, sets and runs a task, blocks until tasks completes, foreground continues to next panel where it does the same
+                // we have three tasks, any which could run in any order. 
+                // The tasks all go thru GetBodiesListAsync, which locks.  Only 1 task gets to do the lookup, the one which got there first, because it did not see
+                // a cached version
+                // once that task completes the lookups, and it unlocks, the other tasks can run, and they will see the cache setup.  They won't do an EDSM web access
+                // since the body is in the cache.  
+                // for now, i can't guarantee that the task which gives back the bodies first runs on the foreground task.  It may be task2 gets the bodies.
+                // so we will just add them in again
 
                 if (jl != null)
                 {
-                    if (jl.Item2 == false)      // only want them if not previously cached
+                    // removed - can't guarantee if (jl.Item2 == false)      // only want them if not previously cached
                     {
                         System.Diagnostics.Debug.WriteLine("Process bodies from EDSM " + trace + " " + sys.Name + " " + sys.EDSMID + " result " + (jl.Item1?.Count ?? -1));
                         foreach (JournalScan js in jl.Item1)
@@ -334,11 +341,6 @@ namespace EliteDangerousCore
                             js.BodyDesignation = GetBodyDesignation(js, sys.Name);
                             ProcessJournalScan(js, sys, true);
                         }
-                        System.Diagnostics.Debug.WriteLine("Process bodies complete");
-                    }
-                    else
-                    {
-                        System.Diagnostics.Debug.WriteLine("Process bodies from EDSM came from cache so already added in " + trace);
                     }
                 }
 
