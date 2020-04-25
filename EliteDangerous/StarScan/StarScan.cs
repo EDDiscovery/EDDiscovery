@@ -331,7 +331,7 @@ namespace EliteDangerousCore
                 // for now, i can't guarantee that the task which gives back the bodies first runs on the foreground task.  It may be task2 gets the bodies.
                 // so we will just add them in again
 
-                if (jl != null)
+                if (jl != null && jl.Item1 != null)
                 {
                     // removed - can't guarantee if (jl.Item2 == false)      // only want them if not previously cached
                     {
