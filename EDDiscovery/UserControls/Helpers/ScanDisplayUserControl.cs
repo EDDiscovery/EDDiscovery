@@ -398,7 +398,7 @@ namespace EDDiscovery.UserControls
                     nodelabels[1] = nodelabels[1].AppendPrePad(appendlabeltext, Environment.NewLine);
 
                     bool requiresbigoverlay =   sc.IsLandable ||
-                                                sc.HasRings ||
+                                                (sc.HasRings && !toplevelstar) ||
                                                 imageoverlays > 0 ||
                                                 materialsicon;
 
@@ -425,7 +425,7 @@ namespace EDDiscovery.UserControls
                         if (sc.IsLandable)
                             g.DrawImage(Icons.Controls.Scan_Bodies_Landable, new Rectangle(quarterheight, 0, quarterheight * 6, quarterheight * 6));
 
-                        if (sc.HasRings)
+                        if (sc.HasRings && !toplevelstar)
                             g.DrawImage(sc.Rings.Count() > 1 ? Icons.Controls.Scan_Bodies_RingGap : Icons.Controls.Scan_Bodies_RingOnly,
                                             new Rectangle(-2, quarterheight, size.Width * 2, size.Height));
 
