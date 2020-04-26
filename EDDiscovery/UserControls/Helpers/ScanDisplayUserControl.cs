@@ -255,7 +255,7 @@ namespace EDDiscovery.UserControls
         {
             Color? backwash = null;
             if (habzone)
-                backwash = Color.FromArgb(255, 0, 30, 0);
+                backwash = Color.FromArgb(64, 0, 128, 0);       // transparent in case we have a non black background
 
             Point maxtreepos = DrawNode(pc, planetnode, curmats, hl, JournalScan.GetPlanetImageNotScanned(),
                                 leftmiddle, false, out int planetcentre, planetsize, backwash: backwash);        // offset passes in the suggested offset, returns the centre offset
