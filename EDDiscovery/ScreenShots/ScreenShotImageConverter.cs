@@ -74,8 +74,10 @@ namespace EDDiscovery.ScreenShots
         };
 
         public bool HighRes = false;
-        public bool CropImage = false;
-        public Rectangle CropArea = new Rectangle();
+        public ScreenShotConverter.CropResizeOptions CropResizeImage1;
+        public ScreenShotConverter.CropResizeOptions CropResizeImage2;
+        public Rectangle CropResizeArea1 = new Rectangle();
+        public Rectangle CropResizeArea2 = new Rectangle();
         public bool RemoveInputFile = false;
 
         public enum OutputTypes { png, jpg, bmp, tiff };

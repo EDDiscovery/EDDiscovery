@@ -396,8 +396,8 @@ namespace EDDiscovery.UserControls
                 discoveryform.screenshotconverter.OutputFileExtension = frm.OutputFileExtension;
                 discoveryform.screenshotconverter.FolderNameFormat = frm.FolderNameFormat;
                 discoveryform.screenshotconverter.FileNameFormat = frm.FileNameFormat;
-                discoveryform.screenshotconverter.CropImage = frm.CropImage;
-                discoveryform.screenshotconverter.CropArea = frm.CropArea;
+                discoveryform.screenshotconverter.CropResize1 = frm.CropResizeImage1;
+                discoveryform.screenshotconverter.CropResizeArea1 = frm.CropArea;
                 discoveryform.screenshotconverter.Start();
             }
         }

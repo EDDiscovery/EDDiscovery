@@ -47,11 +47,11 @@ namespace EDDiscovery.ScreenShots
             comboBoxFileNameFormat.Items.AddRange(ScreenShotImageConverter.FileNameFormats);
             comboBoxFileNameFormat.SelectedIndex = cf.FileNameFormat;
 
-            checkBoxCropImage.Checked = cf.CropImage;
-            numericUpDownTop.Value = cf.CropArea.Top;
-            numericUpDownLeft.Value = cf.CropArea.Left;
-            numericUpDownWidth.Value = cf.CropArea.Width;
-            numericUpDownHeight.Value = cf.CropArea.Height;
+            checkBoxCropImage.Checked = cf.CropResize;
+            numericUpDownTop.Value = cf.CropResizeArea1.Top;
+            numericUpDownLeft.Value = cf.CropResizeArea1.Left;
+            numericUpDownWidth.Value = cf.CropResizeArea1.Width;
+            numericUpDownHeight.Value = cf.CropResizeArea1.Height;
             SetNumEnabled();
 
             textBoxFileNameExample.Text = ScreenShotImageConverter.CreateFileName("Sol", "Earth", "HighResScreenshot_0000.bmp", comboBoxFileNameFormat.SelectedIndex, hires, DateTime.Now);
