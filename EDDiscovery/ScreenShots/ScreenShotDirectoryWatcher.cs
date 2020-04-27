@@ -211,7 +211,7 @@ namespace EDDiscovery.ScreenShots
                     converted = cp.Convert(bmp, discoveryform.LogLine);
                 }
 
-                if (converted && cp.RemoveInputFile)         // if remove, delete original picture
+                if (converted && cp.RemoveOriginal)         // if remove, delete original picture
                 {
                     ScreenshotTimers.TryRemove(filename, out timer);
 
