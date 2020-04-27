@@ -183,7 +183,7 @@ namespace EDDiscovery.UserControls
                             {
                                 List<ExtPictureBox.ImageElement> pc = new List<ExtPictureBox.ImageElement>();
 
-                                bool habzone = ShowHabZone && planetnode.ScanData != null && planetnode.ScanData.nSemiMajorAxisAU.HasValue && 
+                                bool habzone = ShowHabZone && planetnode.ScanData != null && planetnode.ScanData.nSemiMajorAxisAU.HasValue && planetnode.ScanData.Parents?.FirstOrDefault()?.Type != "Null" &&
                                                 planetnode.ScanData.nSemiMajorAxisAU.Value * JournalScan.oneAU_LS >= habzonestartls && planetnode.ScanData.nSemiMajorAxisAU.Value * JournalScan.oneAU_LS <= habzoneendls;
 
                                 Point maxplanetpos = CreatePlanetTree(pc, planetnode, curmats, hl, leftmiddle, filter, habzone );
@@ -392,7 +392,7 @@ namespace EDDiscovery.UserControls
                         }
                     }
 
-                    if ( ShowDist && sn.ScanData.nSemiMajorAxis.HasValue && sn.ScanData.nSemiMajorAxis.Value>0)
+                    if ( ShowDist && sn.ScanData.nSemiMajorAxis.HasValue && sn.ScanData.nSemiMajorAxis.Value>0 && sn.ScanData.Parents?.FirstOrDefault()?.Type != "Null")
                         nodelabels[1] = nodelabels[1].AppendPrePad($"{(sn.ScanData.nSemiMajorAxis / JournalScan.oneLS_m):N1}ls", Environment.NewLine );
 
                     nodelabels[1] = nodelabels[1].AppendPrePad(appendlabeltext, Environment.NewLine);
