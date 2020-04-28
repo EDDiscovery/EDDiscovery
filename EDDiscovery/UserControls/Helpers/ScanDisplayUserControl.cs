@@ -200,8 +200,9 @@ namespace EDDiscovery.UserControls
                                 Point maxplanetpos = CreatePlanetTree(pc, planetnode, curmats, hl, leftmiddle, filter, habzone , out int centreplanet);
 
                                 int imgh = planetsize.Height * nodeheightratio / noderatiodivider;
-                                DrawBarycentre(pc, planetsinorder, pn, pn - 1, new Point(centreplanet, leftmiddle.Y - imgh / 2 + 2), -(centreplanet - (leftmiddle.X-planetspacerx)), imgh / 2);
-                                DrawBarycentre(pc, planetsinorder, pn, pn +1, new Point(centreplanet, leftmiddle.Y - imgh/2 + 2), maxplanetpos.X - centreplanet, imgh/2 -4 );
+                                int barytop = leftmiddle.Y - imgh / 2 - 12;
+                                DrawBarycentre(pc, planetsinorder, pn, pn - 1, new Point(centreplanet, leftmiddle.Y), new Point(leftmiddle.X - planetspacerx, barytop), true);
+                                DrawBarycentre(pc, planetsinorder, pn, pn + 1, new Point(centreplanet, leftmiddle.Y), new Point(maxplanetpos.X, barytop), true);
 
                                 //System.Diagnostics.Debug.WriteLine("Planet " + planetnode.ownname + " " + curpos + " " + maxpos + " max " + (panelStars.Width - panelStars.ScrollBarWidth));
 
@@ -265,24 +266,29 @@ namespace EDDiscovery.UserControls
             imagebox.Render();      // replaces image..
         }
 
-        void DrawBarycentre(List<ExtPictureBox.ImageElement> pc, List<StarScan.ScanNode> planetsinorder, int cur, int partner , Point pos, int width , int height)
+        // draw the barycentre line
+
+        void DrawBarycentre(List<ExtPictureBox.ImageElement> pc, List<StarScan.ScanNode> bodiesinorder, int cur, int partner , Point pos1, Point pos2 , bool above)
         {
-            if (planetsinorder[cur].ScanData?.IsOrbitingBaryCentre ?? false)      // if have scan data and its orbiting a bary centre
+            if (bodiesinorder[cur].ScanData?.IsOrbitingBaryCentre ?? false)      // if have scan data and its orbiting a bary centre
             {
-                if (partner>=0 && partner < planetsinorder.Count && planetsinorder[partner].HasSameParents(planetsinorder[cur]))
+                if (partner>=0 && partner < bodiesinorder.Count && bodiesinorder[partner].HasSameParents(bodiesinorder[cur]))
                 {
-                    System.Diagnostics.Debug.WriteLine(planetsinorder[cur].fullname + " same parents as " + planetsinorder[partner].fullname + " and is barycentre");
+                    //System.Diagnostics.Debug.WriteLine(bodiesinorder[cur].fullname + " same parents as " + bodiesinorder[partner].fullname + " and is barycentre");
 
                     ExtPictureBox.ImageElement image = new ExtPictureBox.ImageElement();
                     image.OwnerDraw((g, ie) =>
                     {
                         using (Pen p = new Pen(Color.FromArgb(128, 170, 170, 170), 2)) // gray
                         {
-                            g.DrawLine(p, new Point(ie.Location.X, ie.Location.Y + height), new Point(ie.Location.X, ie.Location.Y));     // vertical bit
-                            g.DrawLine(p, new Point(ie.Location.X, ie.Location.Y), new Point(ie.Location.X + ie.Location.Width, ie.Location.Y));
+                            //System.Diagnostics.Debug.WriteLine("Bary " + ie.Location.Location + "->" + ie.AltLocation.Location + " " + above);
+                            Point midpoint = above ? new Point(ie.Location.X, ie.AltLocation.Y) : new Point(ie.AltLocation.X, ie.Location.Y);
+                            g.DrawLine(p, ie.Location.Location, midpoint );
+                            g.DrawLine(p, midpoint, ie.AltLocation.Location );
                         }
 
-                    }, new Rectangle(pos.X, pos.Y, width, height));
+                    }, new Rectangle(pos1.X,pos1.Y,0,0 ));     // set to zero size so won't hit
+                    image.AltLocation = new Rectangle(pos2.X,pos2.Y,0,0);
 
                     pc.Insert(0,image);  // need to draw it under the images, so add first
                 }
@@ -304,8 +310,12 @@ namespace EDDiscovery.UserControls
             {
                 Point moonposcentremid = new Point(planetcentre, maxtreepos.Y + moonspacery + moonsize.Height/2);    // moon pos, below planet, centre x coord
 
-                foreach (StarScan.ScanNode moonnode in planetnode.children.Values.Where(n => n.type != StarScan.ScanNodeType.barycentre))
+                var moonnodes = planetnode.children.Values.Where(n => n.type != StarScan.ScanNodeType.barycentre).ToList();
+
+                for( int mn = 0; mn < moonnodes.Count; mn++)
                 {
+                    StarScan.ScanNode moonnode = moonnodes[mn];
+
                     if (filter != null && moonnode.IsBodyInFilter(filter, true) == false)       // if filter active, but no body or children in filter
                         continue;
 
@@ -315,6 +325,14 @@ namespace EDDiscovery.UserControls
                     {
                         Point mmax = DrawNode(pc, moonnode, curmats, hl, JournalScan.GetMoonImageNotScanned(), moonposcentremid, true, out int mooncentre, moonsize, DrawLevel.MoonLevel);
 
+                        //                        int imgh = planetsize.Height * nodeheightratio / noderatiodivider;
+
+                        int up = moonsize.Height/2 + moonspacery;       // go up by moon/2, plus spacer, which is what we use below to space them
+                        int overlaywidth = moonsize.Height * nodeheightratio / noderatiodivider / 6;        // same as below in node
+                        int left = moonposcentremid.X - moonsize.Width - overlaywidth - 4;      // worse case, tie into code in DrawNode for sizing
+
+                        DrawBarycentre(pc, moonnodes, mn, mn - 1, new Point(mooncentre, moonposcentremid.Y), new Point(left, moonposcentremid.Y - up) , false);
+
                         maxtreepos = new Point(Math.Max(maxtreepos.X, mmax.X), Math.Max(maxtreepos.Y, mmax.Y));
 
                         if (moonnode.children != null)
@@ -322,10 +340,8 @@ namespace EDDiscovery.UserControls
                             Point submoonpos = new Point(mmax.X + moonspacerx, moonposcentremid.Y);     // first its left mid
                             bool xiscentre = false;
 
-                            //for ( int i = 0; i < 1; i++) { StarScan.ScanNode submoonnode = moonnode; // debug
                             foreach (StarScan.ScanNode submoonnode in moonnode.children.Values)
                             {
-
                                 if (filter != null && submoonnode.IsBodyInFilter(filter, true) == false)       // if filter active, but no body or children in filter
                                     continue;
 
@@ -348,7 +364,10 @@ namespace EDDiscovery.UserControls
                             }
                         }
 
+                        DrawBarycentre(pc, moonnodes, mn, mn + 1, new Point(mooncentre, moonposcentremid.Y), new Point(left, maxtreepos.Y), false);
+
                         moonposcentremid = new Point(moonposcentremid.X, maxtreepos.Y + moonspacery + moonsize.Height/2);
+                        //System.Diagnostics.Debug.WriteLine("Next moon centre at " + moonposcentremid );
                     }
                 }
             }
@@ -443,7 +462,7 @@ namespace EDDiscovery.UserControls
                             }
                             else
                             {
-                                System.Diagnostics.Debug.WriteLine("Detected barycentre moon " + sn.fullname);
+                                //System.Diagnostics.Debug.WriteLine("Detected barycentre moon " + sn.fullname);
                             }
                         }
                         else if ( sn.ScanData.nSemiMajorAxis.HasValue )
@@ -456,22 +475,26 @@ namespace EDDiscovery.UserControls
 
                     bool valuable = sc.EstimatedValue >= ValueLimit;
                     int iconoverlays = ShowOverlays ? ((sc.Terraformable ? 1 : 0) + (sc.HasMeaningfulVolcanism ? 1 : 0) + (valuable ? 1 : 0) + (sc.Mapped ? 1 : 0) + (sn.Signals != null ? 1 : 0)) : 0;
+
+//   if (sc.BodyName.Contains("4 b"))  iconoverlays = 0;
+
                     bool materialsicon = sc.HasMaterials && !ShowMaterials;
                     bool imageoverlays = sc.IsLandable || (sc.HasRings && drawtype != DrawLevel.TopLevelStar) || materialsicon;
 
                     int bitmapheight = size.Height * nodeheightratio / noderatiodivider;
                     int overlaywidth = bitmapheight / 6;
-                    int imagewidtharea = (imageoverlays ? 2:1) * size.Width;            // area used by image+ overlay
-                    int iconwidtharea = (iconoverlays > 0 ? overlaywidth : 0);          // area used by icon width area
+                    int imagewidtharea = (imageoverlays ? 2:1) * size.Width;            // area used by image+overlay if any
+                    int iconwidtharea = (iconoverlays > 0 ? overlaywidth : 0);          // area used by icon width area on left
 
-                    int bitmapwidth = iconwidtharea + imagewidtharea;
-                    int imageleft = iconwidtharea + imagewidtharea / 2 - size.Width/2;
-                    int imagetop = bitmapheight / 2 - size.Height / 2;
+                    int bitmapwidth = iconwidtharea + imagewidtharea;                   // total width
+                    int imageleft = iconwidtharea + imagewidtharea / 2 - size.Width/2;  // calculate where the left of the image is 
+                    int imagetop = bitmapheight / 2 - size.Height / 2;                  // and the top
 
                     Bitmap bmp = new Bitmap(bitmapwidth, bitmapheight);
                     
                     using (Graphics g = Graphics.FromImage(bmp))
                     {
+                        //backwash = Color.FromArgb(128, 40, 40, 40);
                         if (backwash.HasValue)
                         {
                             using (Brush b = new SolidBrush(backwash.Value))
@@ -551,10 +574,14 @@ namespace EDDiscovery.UserControls
                         }
                     }
 
-                    Point postoplot = xiscentre ? new Point(position.X - bitmapwidth / 2, position.Y) : position;
+                    // for xcentre, center the image around position.X, not the bitmap, the icon width area is off to the left
+                    Point postoplot = xiscentre ? new Point(position.X - imagewidtharea / 2 - iconwidtharea, position.Y) : position;
+
+                    //System.Diagnostics.Debug.WriteLine("Body " + sc.BodyName + " plot at "  + postoplot + " " + bmp.Size + " " + (postoplot.X+imageleft) + "," + (postoplot.Y-bmp.Height/2+imagetop));
+
 
                     endpoint = CreateImageAndLabel(pc, bmp, postoplot, bmp.Size, out ximagecentre, nodelabels, tip);
-                    ximagecentre += iconwidtharea / 2;       // adjust for left overlaywidth, since it centre /2
+                    ximagecentre += iconwidtharea / 2;       // adjust for left icon width, since we have iconwidth + image..
 
                     if (sc.HasMaterials && ShowMaterials)
                     {
@@ -720,11 +747,14 @@ namespace EDDiscovery.UserControls
                 l.Translate(laboff, 0);
                 c.Add(l);
                 max = new Point(Math.Max(max.X, l.Location.Right), Math.Max(max.Y, l.Location.Bottom));
+                //System.Diagnostics.Debug.WriteLine("Label " + l.Location);
             }
 
             ie.Translate(laboff, 0);
             max = new Point(Math.Max(max.X, ie.Location.Right), Math.Max(max.Y, ie.Location.Bottom));
             c.Add(ie);
+
+            //System.Diagnostics.Debug.WriteLine(".. Max " + max);
 
             ximagecentre = ie.Location.X + ie.Location.Width / 2;
 
