@@ -48,7 +48,11 @@ namespace EliteDangerousCore.JournalEvents
         public double? nRadiusEarths { get; set; }
         public bool HasRings { get { return Rings != null && Rings.Length > 0; } }
         public StarPlanetRing[] Rings { get; set; }
+
         public List<BodyParent> Parents { get; set; }
+        public bool IsOrbitingBaryCentre { get { return Parents?.FirstOrDefault()?.Type == "Null"; } }
+        public bool IsOrbitingPlanet { get { return Parents?.FirstOrDefault()?.Type == "Planet"; } }
+        public bool IsOrbitingStar { get { return Parents?.FirstOrDefault()?.Type == "Star"; } }
 
         public bool? WasDiscovered { get; set; }                    // direct, 3.4, indicates whether the body has already been discovered
         public bool IsNotDiscovered { get { return WasDiscovered.HasValue && WasDiscovered == false; } }
@@ -79,8 +83,13 @@ namespace EliteDangerousCore.JournalEvents
         public string IcyPlanetZoneOuter { get; set; }              // in AU
 
         // All orbiting bodies (Stars/Planets), not main star
+
+        public double DistanceAccountingForBarycentre { get { return nSemiMajorAxis.HasValue && !IsOrbitingBaryCentre ? nSemiMajorAxis.Value : DistanceFromArrivalLS * oneLS_m; } } // in metres
+
         public double? nSemiMajorAxis { get; set; }                 // direct, m
         public double? nSemiMajorAxisAU { get; set; }               // direct
+        public string SemiMajorAxisLSKM { get { return nSemiMajorAxis.HasValue ? (nSemiMajorAxis >= oneLS_m / 10 ? ((nSemiMajorAxis.Value / oneLS_m).ToString("N1") + "ls") : ((nSemiMajorAxis.Value / 1000).ToString("N0") + "km")) : ""; } }
+
         public double? nEccentricity { get; set; }                  // direct
         public double? nOrbitalInclination { get; set; }            // direct
         public double? nPeriapsis { get; set; }                     // direct
@@ -179,6 +188,22 @@ namespace EliteDangerousCore.JournalEvents
         {
             mapped = m; efficientmapped = e;
         }
+
+        public bool HasSameParents( JournalScan other)      // exact same parent tree
+        {
+            if (Parents != null && other.Parents != null && Parents.Count == other.Parents.Count)
+            {
+                for( int i = 0; i < Parents.Count; i++ )
+                {
+                    if (Parents[i].BodyID != other.Parents[i].BodyID || Parents[i].Type != other.Parents[i].Type)
+                        return false;
+                }
+                return true;
+            }
+            else
+                return false;
+        }
+
 
         private bool mapped, efficientmapped;
 

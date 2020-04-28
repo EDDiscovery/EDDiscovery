@@ -251,6 +251,24 @@ namespace EliteDangerousCore
                     }
                 }
             }
+
+            public bool HasSameParents( ScanNode other)     // does this node have the same parents are other, needs scan data
+            {
+                return (this.ScanData != null && other.ScanData != null && this.ScanData.HasSameParents(other.ScanData));
+            }
+
+            public List<ScanNode> ListSameParentsOfChildren( ScanNode child)        // give all children with the same parent tree
+            {
+                var list = new List<ScanNode>();
+                foreach( var n in children )
+                {
+                    if (n.Value != child && n.Value.HasSameParents(child))
+                        list.Add(n.Value);
+                }
+
+                return list;
+            }
+
         };
 
         public bool HasWebLookupOccurred(ISystem sys)       // have we had a web checkup on this system?  false if sys does not exist
