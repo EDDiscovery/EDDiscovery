@@ -40,7 +40,7 @@ namespace EDDiscovery.Forms
             InitializeComponent();
             EDDTheme.Instance.ApplyDialog(this);
 
-            BaseUtils.Translator.Instance.Translate(this, new Control[] { labelX, labelY, labelZ, SurfaceBookmarks });
+            BaseUtils.Translator.Instance.Translate(this, new Control[] { labelX, labelY, labelZ, SurfaceBookmarks  });
         }
 
         #region External Initialisation

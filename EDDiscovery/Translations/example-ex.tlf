@@ -282,6 +282,7 @@ ScreenShotConfigureForm: "Screen Shot Configure" @
 .buttonExtCancel: "Cancel" @
 .buttonExtOK: "OK" @
 .groupBoxCropSettings: "Crop Settings" @
+.extGroupBox1: "Crop/Resize Settings" @
 .labelHeight: "Height" @
 .labelWidth: "Width" @
 .labelLeft: "Left" @
@@ -295,6 +296,16 @@ ScreenShotConfigureForm: "Screen Shot Configure" @
 .buttonEDChangeOutputFolder: "Browse" @
 .labelScanFor: "Scan for" @
 .labelSaveAs: "Save as" @
+.extCheckBoxRemoveOriginal: "Remove Original Elite Image" @
+.extCheckBoxKeepMasterConvertedImage: "Keep master converted image" @
+.labelImage2: "Image 2" @
+.labelImage1: "Image 1" @
+.labelHeight2: "Height" @
+.labelWidth2: "Width" @
+.labelLeft2: "Left" @
+.labelTop2: "Top" @
+.labelCropResizeOptions: "Crop/Resize Options" @
+
 
 SECTION BookmarkForm
 

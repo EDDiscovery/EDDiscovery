@@ -28,24 +28,40 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ScreenShotConfigureForm));
             this.panelConfigure = new System.Windows.Forms.Panel();
+            this.extCheckBoxRemoveOriginal = new ExtendedControls.ExtCheckBox();
+            this.extCheckBoxKeepMasterConvertedImage = new ExtendedControls.ExtCheckBox();
+            this.extComboBoxConvert2 = new ExtendedControls.ExtComboBox();
+            this.extComboBoxConvert1 = new ExtendedControls.ExtComboBox();
             this.buttonExtCancel = new ExtendedControls.ExtButton();
+            this.extGroupBox1 = new ExtendedControls.ExtGroupBox();
+            this.extNumericUpDownHeight2 = new ExtendedControls.ExtNumericUpDown();
+            this.extNumericUpDownWidth2 = new ExtendedControls.ExtNumericUpDown();
+            this.extNumericUpDownLeft2 = new ExtendedControls.ExtNumericUpDown();
+            this.extNumericUpDownTop2 = new ExtendedControls.ExtNumericUpDown();
+            this.labelHeight2 = new System.Windows.Forms.Label();
+            this.labelWidth2 = new System.Windows.Forms.Label();
+            this.labelLeft2 = new System.Windows.Forms.Label();
+            this.labelTop2 = new System.Windows.Forms.Label();
             this.buttonExtOK = new ExtendedControls.ExtButton();
             this.groupBoxCropSettings = new ExtendedControls.ExtGroupBox();
-            this.numericUpDownHeight = new ExtendedControls.ExtNumericUpDown();
-            this.numericUpDownWidth = new ExtendedControls.ExtNumericUpDown();
-            this.numericUpDownLeft = new ExtendedControls.ExtNumericUpDown();
-            this.numericUpDownTop = new ExtendedControls.ExtNumericUpDown();
+            this.numericUpDownHeight1 = new ExtendedControls.ExtNumericUpDown();
+            this.numericUpDownWidth1 = new ExtendedControls.ExtNumericUpDown();
+            this.numericUpDownLeft1 = new ExtendedControls.ExtNumericUpDown();
+            this.numericUpDownTop1 = new ExtendedControls.ExtNumericUpDown();
             this.labelHeight = new System.Windows.Forms.Label();
             this.labelWidth = new System.Windows.Forms.Label();
             this.labelLeft = new System.Windows.Forms.Label();
             this.labelTop = new System.Windows.Forms.Label();
-            this.checkBoxCropImage = new ExtendedControls.ExtCheckBox();
             this.textBoxScreenshotsDir = new ExtendedControls.ExtTextBox();
             this.labelFolder = new System.Windows.Forms.Label();
             this.textBoxFileNameExample = new ExtendedControls.ExtTextBox();
             this.buttonChangeScreenshotsFolder = new ExtendedControls.ExtButton();
             this.labelSubfolder = new System.Windows.Forms.Label();
+            this.labelImage2 = new System.Windows.Forms.Label();
+            this.labelImage1 = new System.Windows.Forms.Label();
+            this.labelCropResizeOptions = new System.Windows.Forms.Label();
             this.labelFileNameFormat = new System.Windows.Forms.Label();
             this.textBoxOutputDir = new ExtendedControls.ExtTextBox();
             this.comboBoxSubFolder = new ExtendedControls.ExtComboBox();
@@ -61,6 +77,7 @@
             this.panel_minimize = new ExtendedControls.ExtButtonDrawn();
             this.label_index = new System.Windows.Forms.Label();
             this.panelConfigure.SuspendLayout();
+            this.extGroupBox1.SuspendLayout();
             this.groupBoxCropSettings.SuspendLayout();
             this.panelTop.SuspendLayout();
             this.SuspendLayout();
@@ -68,15 +85,22 @@
             // panelConfigure
             // 
             this.panelConfigure.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panelConfigure.Controls.Add(this.extCheckBoxRemoveOriginal);
+            this.panelConfigure.Controls.Add(this.extCheckBoxKeepMasterConvertedImage);
+            this.panelConfigure.Controls.Add(this.extComboBoxConvert2);
+            this.panelConfigure.Controls.Add(this.extComboBoxConvert1);
             this.panelConfigure.Controls.Add(this.buttonExtCancel);
+            this.panelConfigure.Controls.Add(this.extGroupBox1);
             this.panelConfigure.Controls.Add(this.buttonExtOK);
             this.panelConfigure.Controls.Add(this.groupBoxCropSettings);
-            this.panelConfigure.Controls.Add(this.checkBoxCropImage);
             this.panelConfigure.Controls.Add(this.textBoxScreenshotsDir);
             this.panelConfigure.Controls.Add(this.labelFolder);
             this.panelConfigure.Controls.Add(this.textBoxFileNameExample);
             this.panelConfigure.Controls.Add(this.buttonChangeScreenshotsFolder);
             this.panelConfigure.Controls.Add(this.labelSubfolder);
+            this.panelConfigure.Controls.Add(this.labelImage2);
+            this.panelConfigure.Controls.Add(this.labelImage1);
+            this.panelConfigure.Controls.Add(this.labelCropResizeOptions);
             this.panelConfigure.Controls.Add(this.labelFileNameFormat);
             this.panelConfigure.Controls.Add(this.textBoxOutputDir);
             this.panelConfigure.Controls.Add(this.comboBoxSubFolder);
@@ -90,13 +114,99 @@
             this.panelConfigure.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelConfigure.Location = new System.Drawing.Point(0, 26);
             this.panelConfigure.Name = "panelConfigure";
-            this.panelConfigure.Size = new System.Drawing.Size(705, 473);
+            this.panelConfigure.Size = new System.Drawing.Size(636, 566);
             this.panelConfigure.TabIndex = 0;
+            // 
+            // extCheckBoxRemoveOriginal
+            // 
+            this.extCheckBoxRemoveOriginal.AutoSize = true;
+            this.extCheckBoxRemoveOriginal.CheckBoxColor = System.Drawing.Color.Gray;
+            this.extCheckBoxRemoveOriginal.CheckBoxDisabledScaling = 0.5F;
+            this.extCheckBoxRemoveOriginal.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.extCheckBoxRemoveOriginal.CheckColor = System.Drawing.Color.DarkBlue;
+            this.extCheckBoxRemoveOriginal.ImageButtonDisabledScaling = 0.5F;
+            this.extCheckBoxRemoveOriginal.ImageIndeterminate = null;
+            this.extCheckBoxRemoveOriginal.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.extCheckBoxRemoveOriginal.ImageUnchecked = null;
+            this.extCheckBoxRemoveOriginal.Location = new System.Drawing.Point(210, 75);
+            this.extCheckBoxRemoveOriginal.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.extCheckBoxRemoveOriginal.Name = "extCheckBoxRemoveOriginal";
+            this.extCheckBoxRemoveOriginal.Size = new System.Drawing.Size(159, 17);
+            this.extCheckBoxRemoveOriginal.TabIndex = 34;
+            this.extCheckBoxRemoveOriginal.Text = "Remove Original Elite Image";
+            this.extCheckBoxRemoveOriginal.TickBoxReductionRatio = 0.75F;
+            this.extCheckBoxRemoveOriginal.UseVisualStyleBackColor = true;
+            // 
+            // extCheckBoxKeepMasterConvertedImage
+            // 
+            this.extCheckBoxKeepMasterConvertedImage.AutoSize = true;
+            this.extCheckBoxKeepMasterConvertedImage.CheckBoxColor = System.Drawing.Color.Gray;
+            this.extCheckBoxKeepMasterConvertedImage.CheckBoxDisabledScaling = 0.5F;
+            this.extCheckBoxKeepMasterConvertedImage.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.extCheckBoxKeepMasterConvertedImage.CheckColor = System.Drawing.Color.DarkBlue;
+            this.extCheckBoxKeepMasterConvertedImage.ImageButtonDisabledScaling = 0.5F;
+            this.extCheckBoxKeepMasterConvertedImage.ImageIndeterminate = null;
+            this.extCheckBoxKeepMasterConvertedImage.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.extCheckBoxKeepMasterConvertedImage.ImageUnchecked = null;
+            this.extCheckBoxKeepMasterConvertedImage.Location = new System.Drawing.Point(210, 341);
+            this.extCheckBoxKeepMasterConvertedImage.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.extCheckBoxKeepMasterConvertedImage.Name = "extCheckBoxKeepMasterConvertedImage";
+            this.extCheckBoxKeepMasterConvertedImage.Size = new System.Drawing.Size(167, 17);
+            this.extCheckBoxKeepMasterConvertedImage.TabIndex = 34;
+            this.extCheckBoxKeepMasterConvertedImage.Text = "Keep master converted image";
+            this.extCheckBoxKeepMasterConvertedImage.TickBoxReductionRatio = 0.75F;
+            this.extCheckBoxKeepMasterConvertedImage.UseVisualStyleBackColor = true;
+            // 
+            // extComboBoxConvert2
+            // 
+            this.extComboBoxConvert2.BorderColor = System.Drawing.Color.White;
+            this.extComboBoxConvert2.ButtonColorScaling = 0.5F;
+            this.extComboBoxConvert2.DataSource = null;
+            this.extComboBoxConvert2.DisableBackgroundDisabledShadingGradient = false;
+            this.extComboBoxConvert2.DisplayMember = "";
+            this.extComboBoxConvert2.DropDownBackgroundColor = System.Drawing.Color.Gray;
+            this.extComboBoxConvert2.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.extComboBoxConvert2.Location = new System.Drawing.Point(423, 311);
+            this.extComboBoxConvert2.MouseOverBackgroundColor = System.Drawing.Color.Silver;
+            this.extComboBoxConvert2.Name = "extComboBoxConvert2";
+            this.extComboBoxConvert2.ScrollBarButtonColor = System.Drawing.Color.LightGray;
+            this.extComboBoxConvert2.ScrollBarColor = System.Drawing.Color.LightGray;
+            this.extComboBoxConvert2.SelectedIndex = -1;
+            this.extComboBoxConvert2.SelectedItem = null;
+            this.extComboBoxConvert2.SelectedValue = null;
+            this.extComboBoxConvert2.Size = new System.Drawing.Size(198, 21);
+            this.extComboBoxConvert2.TabIndex = 33;
+            this.extComboBoxConvert2.Text = "extComboBox1";
+            this.extComboBoxConvert2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.extComboBoxConvert2.ValueMember = "";
+            // 
+            // extComboBoxConvert1
+            // 
+            this.extComboBoxConvert1.BorderColor = System.Drawing.Color.White;
+            this.extComboBoxConvert1.ButtonColorScaling = 0.5F;
+            this.extComboBoxConvert1.DataSource = null;
+            this.extComboBoxConvert1.DisableBackgroundDisabledShadingGradient = false;
+            this.extComboBoxConvert1.DisplayMember = "";
+            this.extComboBoxConvert1.DropDownBackgroundColor = System.Drawing.Color.Gray;
+            this.extComboBoxConvert1.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.extComboBoxConvert1.Location = new System.Drawing.Point(210, 311);
+            this.extComboBoxConvert1.MouseOverBackgroundColor = System.Drawing.Color.Silver;
+            this.extComboBoxConvert1.Name = "extComboBoxConvert1";
+            this.extComboBoxConvert1.ScrollBarButtonColor = System.Drawing.Color.LightGray;
+            this.extComboBoxConvert1.ScrollBarColor = System.Drawing.Color.LightGray;
+            this.extComboBoxConvert1.SelectedIndex = -1;
+            this.extComboBoxConvert1.SelectedItem = null;
+            this.extComboBoxConvert1.SelectedValue = null;
+            this.extComboBoxConvert1.Size = new System.Drawing.Size(198, 21);
+            this.extComboBoxConvert1.TabIndex = 33;
+            this.extComboBoxConvert1.Text = "extComboBox1";
+            this.extComboBoxConvert1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.extComboBoxConvert1.ValueMember = "";
             // 
             // buttonExtCancel
             // 
             this.buttonExtCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonExtCancel.Location = new System.Drawing.Point(473, 426);
+            this.buttonExtCancel.Location = new System.Drawing.Point(404, 530);
             this.buttonExtCancel.Name = "buttonExtCancel";
             this.buttonExtCancel.Size = new System.Drawing.Size(100, 23);
             this.buttonExtCancel.TabIndex = 32;
@@ -104,10 +214,134 @@
             this.buttonExtCancel.UseVisualStyleBackColor = true;
             this.buttonExtCancel.Click += new System.EventHandler(this.buttonExtCancel_Click);
             // 
+            // extGroupBox1
+            // 
+            this.extGroupBox1.AlternateClientBackColor = System.Drawing.Color.Blue;
+            this.extGroupBox1.BackColorScaling = 0.5F;
+            this.extGroupBox1.BorderColor = System.Drawing.Color.LightGray;
+            this.extGroupBox1.BorderColorScaling = 0.5F;
+            this.extGroupBox1.Controls.Add(this.extNumericUpDownHeight2);
+            this.extGroupBox1.Controls.Add(this.extNumericUpDownWidth2);
+            this.extGroupBox1.Controls.Add(this.extNumericUpDownLeft2);
+            this.extGroupBox1.Controls.Add(this.extNumericUpDownTop2);
+            this.extGroupBox1.Controls.Add(this.labelHeight2);
+            this.extGroupBox1.Controls.Add(this.labelWidth2);
+            this.extGroupBox1.Controls.Add(this.labelLeft2);
+            this.extGroupBox1.Controls.Add(this.labelTop2);
+            this.extGroupBox1.FillClientAreaWithAlternateColor = false;
+            this.extGroupBox1.Location = new System.Drawing.Point(424, 372);
+            this.extGroupBox1.Name = "extGroupBox1";
+            this.extGroupBox1.Size = new System.Drawing.Size(197, 143);
+            this.extGroupBox1.TabIndex = 30;
+            this.extGroupBox1.TabStop = false;
+            this.extGroupBox1.Text = "Crop/Resize Settings";
+            this.extGroupBox1.TextPadding = 0;
+            this.extGroupBox1.TextStartPosition = -1;
+            // 
+            // extNumericUpDownHeight2
+            // 
+            this.extNumericUpDownHeight2.AutoSizeTextBox = false;
+            this.extNumericUpDownHeight2.BorderColor = System.Drawing.Color.Transparent;
+            this.extNumericUpDownHeight2.BorderColorScaling = 0.5F;
+            this.extNumericUpDownHeight2.Location = new System.Drawing.Point(122, 110);
+            this.extNumericUpDownHeight2.Maximum = 10000;
+            this.extNumericUpDownHeight2.Minimum = 0;
+            this.extNumericUpDownHeight2.Name = "extNumericUpDownHeight2";
+            this.extNumericUpDownHeight2.Size = new System.Drawing.Size(57, 20);
+            this.extNumericUpDownHeight2.TabIndex = 4;
+            this.extNumericUpDownHeight2.Text = "0";
+            this.extNumericUpDownHeight2.TextBoxBackColor = System.Drawing.SystemColors.Window;
+            this.extNumericUpDownHeight2.TextBoxForeColor = System.Drawing.SystemColors.WindowText;
+            this.extNumericUpDownHeight2.Value = 0;
+            // 
+            // extNumericUpDownWidth2
+            // 
+            this.extNumericUpDownWidth2.AutoSizeTextBox = false;
+            this.extNumericUpDownWidth2.BorderColor = System.Drawing.Color.Transparent;
+            this.extNumericUpDownWidth2.BorderColorScaling = 0.5F;
+            this.extNumericUpDownWidth2.Location = new System.Drawing.Point(122, 80);
+            this.extNumericUpDownWidth2.Maximum = 10000;
+            this.extNumericUpDownWidth2.Minimum = 0;
+            this.extNumericUpDownWidth2.Name = "extNumericUpDownWidth2";
+            this.extNumericUpDownWidth2.Size = new System.Drawing.Size(57, 20);
+            this.extNumericUpDownWidth2.TabIndex = 3;
+            this.extNumericUpDownWidth2.Text = "0";
+            this.extNumericUpDownWidth2.TextBoxBackColor = System.Drawing.SystemColors.Window;
+            this.extNumericUpDownWidth2.TextBoxForeColor = System.Drawing.SystemColors.WindowText;
+            this.extNumericUpDownWidth2.Value = 0;
+            // 
+            // extNumericUpDownLeft2
+            // 
+            this.extNumericUpDownLeft2.AutoSizeTextBox = false;
+            this.extNumericUpDownLeft2.BorderColor = System.Drawing.Color.Transparent;
+            this.extNumericUpDownLeft2.BorderColorScaling = 0.5F;
+            this.extNumericUpDownLeft2.Location = new System.Drawing.Point(122, 50);
+            this.extNumericUpDownLeft2.Maximum = 10000;
+            this.extNumericUpDownLeft2.Minimum = 0;
+            this.extNumericUpDownLeft2.Name = "extNumericUpDownLeft2";
+            this.extNumericUpDownLeft2.Size = new System.Drawing.Size(57, 20);
+            this.extNumericUpDownLeft2.TabIndex = 2;
+            this.extNumericUpDownLeft2.Text = "0";
+            this.extNumericUpDownLeft2.TextBoxBackColor = System.Drawing.SystemColors.Window;
+            this.extNumericUpDownLeft2.TextBoxForeColor = System.Drawing.SystemColors.WindowText;
+            this.extNumericUpDownLeft2.Value = 0;
+            // 
+            // extNumericUpDownTop2
+            // 
+            this.extNumericUpDownTop2.AutoSizeTextBox = false;
+            this.extNumericUpDownTop2.BorderColor = System.Drawing.Color.Transparent;
+            this.extNumericUpDownTop2.BorderColorScaling = 0.5F;
+            this.extNumericUpDownTop2.Location = new System.Drawing.Point(122, 20);
+            this.extNumericUpDownTop2.Maximum = 10000;
+            this.extNumericUpDownTop2.Minimum = 0;
+            this.extNumericUpDownTop2.Name = "extNumericUpDownTop2";
+            this.extNumericUpDownTop2.Size = new System.Drawing.Size(57, 20);
+            this.extNumericUpDownTop2.TabIndex = 1;
+            this.extNumericUpDownTop2.Text = "0";
+            this.extNumericUpDownTop2.TextBoxBackColor = System.Drawing.SystemColors.Window;
+            this.extNumericUpDownTop2.TextBoxForeColor = System.Drawing.SystemColors.WindowText;
+            this.extNumericUpDownTop2.Value = 0;
+            // 
+            // labelHeight2
+            // 
+            this.labelHeight2.AutoSize = true;
+            this.labelHeight2.Location = new System.Drawing.Point(6, 112);
+            this.labelHeight2.Name = "labelHeight2";
+            this.labelHeight2.Size = new System.Drawing.Size(38, 13);
+            this.labelHeight2.TabIndex = 7;
+            this.labelHeight2.Text = "Height";
+            // 
+            // labelWidth2
+            // 
+            this.labelWidth2.AutoSize = true;
+            this.labelWidth2.Location = new System.Drawing.Point(6, 82);
+            this.labelWidth2.Name = "labelWidth2";
+            this.labelWidth2.Size = new System.Drawing.Size(35, 13);
+            this.labelWidth2.TabIndex = 6;
+            this.labelWidth2.Text = "Width";
+            // 
+            // labelLeft2
+            // 
+            this.labelLeft2.AutoSize = true;
+            this.labelLeft2.Location = new System.Drawing.Point(6, 52);
+            this.labelLeft2.Name = "labelLeft2";
+            this.labelLeft2.Size = new System.Drawing.Size(25, 13);
+            this.labelLeft2.TabIndex = 5;
+            this.labelLeft2.Text = "Left";
+            // 
+            // labelTop2
+            // 
+            this.labelTop2.AutoSize = true;
+            this.labelTop2.Location = new System.Drawing.Point(6, 22);
+            this.labelTop2.Name = "labelTop2";
+            this.labelTop2.Size = new System.Drawing.Size(26, 13);
+            this.labelTop2.TabIndex = 0;
+            this.labelTop2.Text = "Top";
+            // 
             // buttonExtOK
             // 
             this.buttonExtOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonExtOK.Location = new System.Drawing.Point(590, 426);
+            this.buttonExtOK.Location = new System.Drawing.Point(521, 530);
             this.buttonExtOK.Name = "buttonExtOK";
             this.buttonExtOK.Size = new System.Drawing.Size(100, 23);
             this.buttonExtOK.TabIndex = 31;
@@ -121,87 +355,87 @@
             this.groupBoxCropSettings.BackColorScaling = 0.5F;
             this.groupBoxCropSettings.BorderColor = System.Drawing.Color.LightGray;
             this.groupBoxCropSettings.BorderColorScaling = 0.5F;
-            this.groupBoxCropSettings.Controls.Add(this.numericUpDownHeight);
-            this.groupBoxCropSettings.Controls.Add(this.numericUpDownWidth);
-            this.groupBoxCropSettings.Controls.Add(this.numericUpDownLeft);
-            this.groupBoxCropSettings.Controls.Add(this.numericUpDownTop);
+            this.groupBoxCropSettings.Controls.Add(this.numericUpDownHeight1);
+            this.groupBoxCropSettings.Controls.Add(this.numericUpDownWidth1);
+            this.groupBoxCropSettings.Controls.Add(this.numericUpDownLeft1);
+            this.groupBoxCropSettings.Controls.Add(this.numericUpDownTop1);
             this.groupBoxCropSettings.Controls.Add(this.labelHeight);
             this.groupBoxCropSettings.Controls.Add(this.labelWidth);
             this.groupBoxCropSettings.Controls.Add(this.labelLeft);
             this.groupBoxCropSettings.Controls.Add(this.labelTop);
             this.groupBoxCropSettings.FillClientAreaWithAlternateColor = false;
-            this.groupBoxCropSettings.Location = new System.Drawing.Point(250, 251);
+            this.groupBoxCropSettings.Location = new System.Drawing.Point(211, 372);
             this.groupBoxCropSettings.Name = "groupBoxCropSettings";
             this.groupBoxCropSettings.Size = new System.Drawing.Size(197, 143);
             this.groupBoxCropSettings.TabIndex = 30;
             this.groupBoxCropSettings.TabStop = false;
-            this.groupBoxCropSettings.Text = "Crop Settings";
+            this.groupBoxCropSettings.Text = "Crop/Resize Settings";
             this.groupBoxCropSettings.TextPadding = 0;
             this.groupBoxCropSettings.TextStartPosition = -1;
             // 
-            // numericUpDownHeight
+            // numericUpDownHeight1
             // 
-            this.numericUpDownHeight.AutoSizeTextBox = false;
-            this.numericUpDownHeight.BorderColor = System.Drawing.Color.Transparent;
-            this.numericUpDownHeight.BorderColorScaling = 0.5F;
-            this.numericUpDownHeight.Location = new System.Drawing.Point(122, 110);
-            this.numericUpDownHeight.Maximum = 10000;
-            this.numericUpDownHeight.Minimum = 0;
-            this.numericUpDownHeight.Name = "numericUpDownHeight";
-            this.numericUpDownHeight.Size = new System.Drawing.Size(57, 20);
-            this.numericUpDownHeight.TabIndex = 4;
-            this.numericUpDownHeight.Text = "0";
-            this.numericUpDownHeight.TextBoxBackColor = System.Drawing.SystemColors.Window;
-            this.numericUpDownHeight.TextBoxForeColor = System.Drawing.SystemColors.WindowText;
-            this.numericUpDownHeight.Value = 0;
+            this.numericUpDownHeight1.AutoSizeTextBox = false;
+            this.numericUpDownHeight1.BorderColor = System.Drawing.Color.Transparent;
+            this.numericUpDownHeight1.BorderColorScaling = 0.5F;
+            this.numericUpDownHeight1.Location = new System.Drawing.Point(122, 110);
+            this.numericUpDownHeight1.Maximum = 10000;
+            this.numericUpDownHeight1.Minimum = 0;
+            this.numericUpDownHeight1.Name = "numericUpDownHeight1";
+            this.numericUpDownHeight1.Size = new System.Drawing.Size(57, 20);
+            this.numericUpDownHeight1.TabIndex = 4;
+            this.numericUpDownHeight1.Text = "0";
+            this.numericUpDownHeight1.TextBoxBackColor = System.Drawing.SystemColors.Window;
+            this.numericUpDownHeight1.TextBoxForeColor = System.Drawing.SystemColors.WindowText;
+            this.numericUpDownHeight1.Value = 0;
             // 
-            // numericUpDownWidth
+            // numericUpDownWidth1
             // 
-            this.numericUpDownWidth.AutoSizeTextBox = false;
-            this.numericUpDownWidth.BorderColor = System.Drawing.Color.Transparent;
-            this.numericUpDownWidth.BorderColorScaling = 0.5F;
-            this.numericUpDownWidth.Location = new System.Drawing.Point(122, 80);
-            this.numericUpDownWidth.Maximum = 10000;
-            this.numericUpDownWidth.Minimum = 0;
-            this.numericUpDownWidth.Name = "numericUpDownWidth";
-            this.numericUpDownWidth.Size = new System.Drawing.Size(57, 20);
-            this.numericUpDownWidth.TabIndex = 3;
-            this.numericUpDownWidth.Text = "0";
-            this.numericUpDownWidth.TextBoxBackColor = System.Drawing.SystemColors.Window;
-            this.numericUpDownWidth.TextBoxForeColor = System.Drawing.SystemColors.WindowText;
-            this.numericUpDownWidth.Value = 0;
+            this.numericUpDownWidth1.AutoSizeTextBox = false;
+            this.numericUpDownWidth1.BorderColor = System.Drawing.Color.Transparent;
+            this.numericUpDownWidth1.BorderColorScaling = 0.5F;
+            this.numericUpDownWidth1.Location = new System.Drawing.Point(122, 80);
+            this.numericUpDownWidth1.Maximum = 10000;
+            this.numericUpDownWidth1.Minimum = 0;
+            this.numericUpDownWidth1.Name = "numericUpDownWidth1";
+            this.numericUpDownWidth1.Size = new System.Drawing.Size(57, 20);
+            this.numericUpDownWidth1.TabIndex = 3;
+            this.numericUpDownWidth1.Text = "0";
+            this.numericUpDownWidth1.TextBoxBackColor = System.Drawing.SystemColors.Window;
+            this.numericUpDownWidth1.TextBoxForeColor = System.Drawing.SystemColors.WindowText;
+            this.numericUpDownWidth1.Value = 0;
             // 
-            // numericUpDownLeft
+            // numericUpDownLeft1
             // 
-            this.numericUpDownLeft.AutoSizeTextBox = false;
-            this.numericUpDownLeft.BorderColor = System.Drawing.Color.Transparent;
-            this.numericUpDownLeft.BorderColorScaling = 0.5F;
-            this.numericUpDownLeft.Location = new System.Drawing.Point(122, 50);
-            this.numericUpDownLeft.Maximum = 10000;
-            this.numericUpDownLeft.Minimum = 0;
-            this.numericUpDownLeft.Name = "numericUpDownLeft";
-            this.numericUpDownLeft.Size = new System.Drawing.Size(57, 20);
-            this.numericUpDownLeft.TabIndex = 2;
-            this.numericUpDownLeft.Text = "0";
-            this.numericUpDownLeft.TextBoxBackColor = System.Drawing.SystemColors.Window;
-            this.numericUpDownLeft.TextBoxForeColor = System.Drawing.SystemColors.WindowText;
-            this.numericUpDownLeft.Value = 0;
+            this.numericUpDownLeft1.AutoSizeTextBox = false;
+            this.numericUpDownLeft1.BorderColor = System.Drawing.Color.Transparent;
+            this.numericUpDownLeft1.BorderColorScaling = 0.5F;
+            this.numericUpDownLeft1.Location = new System.Drawing.Point(122, 50);
+            this.numericUpDownLeft1.Maximum = 10000;
+            this.numericUpDownLeft1.Minimum = 0;
+            this.numericUpDownLeft1.Name = "numericUpDownLeft1";
+            this.numericUpDownLeft1.Size = new System.Drawing.Size(57, 20);
+            this.numericUpDownLeft1.TabIndex = 2;
+            this.numericUpDownLeft1.Text = "0";
+            this.numericUpDownLeft1.TextBoxBackColor = System.Drawing.SystemColors.Window;
+            this.numericUpDownLeft1.TextBoxForeColor = System.Drawing.SystemColors.WindowText;
+            this.numericUpDownLeft1.Value = 0;
             // 
-            // numericUpDownTop
+            // numericUpDownTop1
             // 
-            this.numericUpDownTop.AutoSizeTextBox = false;
-            this.numericUpDownTop.BorderColor = System.Drawing.Color.Transparent;
-            this.numericUpDownTop.BorderColorScaling = 0.5F;
-            this.numericUpDownTop.Location = new System.Drawing.Point(122, 20);
-            this.numericUpDownTop.Maximum = 10000;
-            this.numericUpDownTop.Minimum = 0;
-            this.numericUpDownTop.Name = "numericUpDownTop";
-            this.numericUpDownTop.Size = new System.Drawing.Size(57, 20);
-            this.numericUpDownTop.TabIndex = 1;
-            this.numericUpDownTop.Text = "0";
-            this.numericUpDownTop.TextBoxBackColor = System.Drawing.SystemColors.Window;
-            this.numericUpDownTop.TextBoxForeColor = System.Drawing.SystemColors.WindowText;
-            this.numericUpDownTop.Value = 0;
+            this.numericUpDownTop1.AutoSizeTextBox = false;
+            this.numericUpDownTop1.BorderColor = System.Drawing.Color.Transparent;
+            this.numericUpDownTop1.BorderColorScaling = 0.5F;
+            this.numericUpDownTop1.Location = new System.Drawing.Point(122, 20);
+            this.numericUpDownTop1.Maximum = 10000;
+            this.numericUpDownTop1.Minimum = 0;
+            this.numericUpDownTop1.Name = "numericUpDownTop1";
+            this.numericUpDownTop1.Size = new System.Drawing.Size(57, 20);
+            this.numericUpDownTop1.TabIndex = 1;
+            this.numericUpDownTop1.Text = "0";
+            this.numericUpDownTop1.TextBoxBackColor = System.Drawing.SystemColors.Window;
+            this.numericUpDownTop1.TextBoxForeColor = System.Drawing.SystemColors.WindowText;
+            this.numericUpDownTop1.Value = 0;
             // 
             // labelHeight
             // 
@@ -239,23 +473,6 @@
             this.labelTop.TabIndex = 0;
             this.labelTop.Text = "Top";
             // 
-            // checkBoxCropImage
-            // 
-            this.checkBoxCropImage.AutoSize = true;
-            this.checkBoxCropImage.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxCropImage.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBoxCropImage.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxCropImage.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxCropImage.Location = new System.Drawing.Point(8, 251);
-            this.checkBoxCropImage.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxCropImage.Name = "checkBoxCropImage";
-            this.checkBoxCropImage.Size = new System.Drawing.Size(80, 17);
-            this.checkBoxCropImage.TabIndex = 29;
-            this.checkBoxCropImage.Text = "Crop Image";
-            this.checkBoxCropImage.TickBoxReductionRatio = 0.75f;
-            this.checkBoxCropImage.UseVisualStyleBackColor = true;
-            this.checkBoxCropImage.CheckedChanged += new System.EventHandler(this.checkBoxCropImage_CheckedChanged);
-            // 
             // textBoxScreenshotsDir
             // 
             this.textBoxScreenshotsDir.AccessibleRole = System.Windows.Forms.AccessibleRole.ScrollBar;
@@ -267,8 +484,11 @@
             this.textBoxScreenshotsDir.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxScreenshotsDir.ClearOnFirstChar = false;
             this.textBoxScreenshotsDir.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxScreenshotsDir.EndButtonEnable = true;
+            this.textBoxScreenshotsDir.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxScreenshotsDir.EndButtonImage")));
+            this.textBoxScreenshotsDir.EndButtonVisible = false;
             this.textBoxScreenshotsDir.InErrorCondition = false;
-            this.textBoxScreenshotsDir.Location = new System.Drawing.Point(250, 14);
+            this.textBoxScreenshotsDir.Location = new System.Drawing.Point(210, 14);
             this.textBoxScreenshotsDir.Multiline = false;
             this.textBoxScreenshotsDir.Name = "textBoxScreenshotsDir";
             this.textBoxScreenshotsDir.ReadOnly = false;
@@ -302,8 +522,11 @@
             this.textBoxFileNameExample.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxFileNameExample.ClearOnFirstChar = false;
             this.textBoxFileNameExample.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxFileNameExample.EndButtonEnable = true;
+            this.textBoxFileNameExample.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxFileNameExample.EndButtonImage")));
+            this.textBoxFileNameExample.EndButtonVisible = false;
             this.textBoxFileNameExample.InErrorCondition = false;
-            this.textBoxFileNameExample.Location = new System.Drawing.Point(250, 214);
+            this.textBoxFileNameExample.Location = new System.Drawing.Point(210, 241);
             this.textBoxFileNameExample.Multiline = false;
             this.textBoxFileNameExample.Name = "textBoxFileNameExample";
             this.textBoxFileNameExample.ReadOnly = true;
@@ -318,7 +541,7 @@
             // 
             // buttonChangeScreenshotsFolder
             // 
-            this.buttonChangeScreenshotsFolder.Location = new System.Drawing.Point(548, 12);
+            this.buttonChangeScreenshotsFolder.Location = new System.Drawing.Point(508, 12);
             this.buttonChangeScreenshotsFolder.Name = "buttonChangeScreenshotsFolder";
             this.buttonChangeScreenshotsFolder.Size = new System.Drawing.Size(100, 23);
             this.buttonChangeScreenshotsFolder.TabIndex = 16;
@@ -329,16 +552,43 @@
             // labelSubfolder
             // 
             this.labelSubfolder.AutoSize = true;
-            this.labelSubfolder.Location = new System.Drawing.Point(5, 156);
+            this.labelSubfolder.Location = new System.Drawing.Point(5, 183);
             this.labelSubfolder.Name = "labelSubfolder";
             this.labelSubfolder.Size = new System.Drawing.Size(67, 13);
             this.labelSubfolder.TabIndex = 26;
             this.labelSubfolder.Text = "In Sub folder";
             // 
+            // labelImage2
+            // 
+            this.labelImage2.AutoSize = true;
+            this.labelImage2.Location = new System.Drawing.Point(420, 285);
+            this.labelImage2.Name = "labelImage2";
+            this.labelImage2.Size = new System.Drawing.Size(45, 13);
+            this.labelImage2.TabIndex = 27;
+            this.labelImage2.Text = "Image 2";
+            // 
+            // labelImage1
+            // 
+            this.labelImage1.AutoSize = true;
+            this.labelImage1.Location = new System.Drawing.Point(207, 285);
+            this.labelImage1.Name = "labelImage1";
+            this.labelImage1.Size = new System.Drawing.Size(45, 13);
+            this.labelImage1.TabIndex = 27;
+            this.labelImage1.Text = "Image 1";
+            // 
+            // labelCropResizeOptions
+            // 
+            this.labelCropResizeOptions.AutoSize = true;
+            this.labelCropResizeOptions.Location = new System.Drawing.Point(5, 311);
+            this.labelCropResizeOptions.Name = "labelCropResizeOptions";
+            this.labelCropResizeOptions.Size = new System.Drawing.Size(105, 13);
+            this.labelCropResizeOptions.TabIndex = 27;
+            this.labelCropResizeOptions.Text = "Crop/Resize Options";
+            // 
             // labelFileNameFormat
             // 
             this.labelFileNameFormat.AutoSize = true;
-            this.labelFileNameFormat.Location = new System.Drawing.Point(5, 190);
+            this.labelFileNameFormat.Location = new System.Drawing.Point(5, 217);
             this.labelFileNameFormat.Name = "labelFileNameFormat";
             this.labelFileNameFormat.Size = new System.Drawing.Size(93, 13);
             this.labelFileNameFormat.TabIndex = 27;
@@ -355,8 +605,11 @@
             this.textBoxOutputDir.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxOutputDir.ClearOnFirstChar = false;
             this.textBoxOutputDir.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxOutputDir.EndButtonEnable = true;
+            this.textBoxOutputDir.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxOutputDir.EndButtonImage")));
+            this.textBoxOutputDir.EndButtonVisible = false;
             this.textBoxOutputDir.InErrorCondition = false;
-            this.textBoxOutputDir.Location = new System.Drawing.Point(250, 88);
+            this.textBoxOutputDir.Location = new System.Drawing.Point(210, 118);
             this.textBoxOutputDir.Multiline = false;
             this.textBoxOutputDir.Name = "textBoxOutputDir";
             this.textBoxOutputDir.ReadOnly = false;
@@ -377,7 +630,7 @@
             this.comboBoxSubFolder.DisplayMember = "";
             this.comboBoxSubFolder.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.comboBoxSubFolder.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxSubFolder.Location = new System.Drawing.Point(251, 152);
+            this.comboBoxSubFolder.Location = new System.Drawing.Point(211, 179);
             this.comboBoxSubFolder.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxSubFolder.Name = "comboBoxSubFolder";
             this.comboBoxSubFolder.ScrollBarButtonColor = System.Drawing.Color.LightGray;
@@ -399,7 +652,7 @@
             this.comboBoxFileNameFormat.DisplayMember = "";
             this.comboBoxFileNameFormat.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.comboBoxFileNameFormat.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxFileNameFormat.Location = new System.Drawing.Point(251, 187);
+            this.comboBoxFileNameFormat.Location = new System.Drawing.Point(211, 214);
             this.comboBoxFileNameFormat.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxFileNameFormat.Name = "comboBoxFileNameFormat";
             this.comboBoxFileNameFormat.ScrollBarButtonColor = System.Drawing.Color.LightGray;
@@ -416,7 +669,7 @@
             // labelStoreFolder
             // 
             this.labelStoreFolder.AutoSize = true;
-            this.labelStoreFolder.Location = new System.Drawing.Point(5, 91);
+            this.labelStoreFolder.Location = new System.Drawing.Point(5, 121);
             this.labelStoreFolder.Name = "labelStoreFolder";
             this.labelStoreFolder.Size = new System.Drawing.Size(124, 13);
             this.labelStoreFolder.TabIndex = 19;
@@ -424,7 +677,7 @@
             // 
             // buttonEDChangeOutputFolder
             // 
-            this.buttonEDChangeOutputFolder.Location = new System.Drawing.Point(548, 86);
+            this.buttonEDChangeOutputFolder.Location = new System.Drawing.Point(508, 116);
             this.buttonEDChangeOutputFolder.Name = "buttonEDChangeOutputFolder";
             this.buttonEDChangeOutputFolder.Size = new System.Drawing.Size(100, 23);
             this.buttonEDChangeOutputFolder.TabIndex = 18;
@@ -444,7 +697,7 @@
             // labelSaveAs
             // 
             this.labelSaveAs.AutoSize = true;
-            this.labelSaveAs.Location = new System.Drawing.Point(5, 118);
+            this.labelSaveAs.Location = new System.Drawing.Point(5, 148);
             this.labelSaveAs.Name = "labelSaveAs";
             this.labelSaveAs.Size = new System.Drawing.Size(46, 13);
             this.labelSaveAs.TabIndex = 25;
@@ -459,7 +712,7 @@
             this.comboBoxScanFor.DisplayMember = "";
             this.comboBoxScanFor.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.comboBoxScanFor.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxScanFor.Location = new System.Drawing.Point(250, 39);
+            this.comboBoxScanFor.Location = new System.Drawing.Point(210, 39);
             this.comboBoxScanFor.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxScanFor.Name = "comboBoxScanFor";
             this.comboBoxScanFor.ScrollBarButtonColor = System.Drawing.Color.LightGray;
@@ -481,7 +734,7 @@
             this.comboBoxOutputAs.DisplayMember = "";
             this.comboBoxOutputAs.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.comboBoxOutputAs.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxOutputAs.Location = new System.Drawing.Point(250, 115);
+            this.comboBoxOutputAs.Location = new System.Drawing.Point(210, 145);
             this.comboBoxOutputAs.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxOutputAs.Name = "comboBoxOutputAs";
             this.comboBoxOutputAs.ScrollBarButtonColor = System.Drawing.Color.LightGray;
@@ -502,7 +755,7 @@
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
             this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(705, 26);
+            this.panelTop.Size = new System.Drawing.Size(636, 26);
             this.panelTop.TabIndex = 32;
             this.panelTop.MouseDown += new System.Windows.Forms.MouseEventHandler(this.captionControl_MouseDown);
             this.panelTop.MouseUp += new System.Windows.Forms.MouseEventHandler(this.captionControl_MouseUp);
@@ -510,26 +763,45 @@
             // panel_close
             // 
             this.panel_close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel_close.Location = new System.Drawing.Point(682, 0);
+            this.panel_close.AutoEllipsis = false;
+            this.panel_close.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.panel_close.Image = null;
+            this.panel_close.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Close;
+            this.panel_close.Location = new System.Drawing.Point(613, 0);
+            this.panel_close.MouseOverColor = System.Drawing.Color.White;
+            this.panel_close.MouseSelectedColor = System.Drawing.Color.Green;
+            this.panel_close.MouseSelectedColorEnable = true;
             this.panel_close.Name = "panel_close";
             this.panel_close.Padding = new System.Windows.Forms.Padding(6);
+            this.panel_close.PanelDisabledScaling = 0.25F;
             this.panel_close.Selectable = false;
             this.panel_close.Size = new System.Drawing.Size(24, 24);
             this.panel_close.TabIndex = 27;
             this.panel_close.TabStop = false;
+            this.panel_close.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.panel_close.UseMnemonic = true;
             this.panel_close.Click += new System.EventHandler(this.panel_close_Click);
             // 
             // panel_minimize
             // 
             this.panel_minimize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel_minimize.AutoEllipsis = false;
+            this.panel_minimize.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.panel_minimize.Image = null;
             this.panel_minimize.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Minimize;
-            this.panel_minimize.Location = new System.Drawing.Point(652, 0);
+            this.panel_minimize.Location = new System.Drawing.Point(583, 0);
+            this.panel_minimize.MouseOverColor = System.Drawing.Color.White;
+            this.panel_minimize.MouseSelectedColor = System.Drawing.Color.Green;
+            this.panel_minimize.MouseSelectedColorEnable = true;
             this.panel_minimize.Name = "panel_minimize";
             this.panel_minimize.Padding = new System.Windows.Forms.Padding(6);
+            this.panel_minimize.PanelDisabledScaling = 0.25F;
             this.panel_minimize.Selectable = false;
             this.panel_minimize.Size = new System.Drawing.Size(24, 24);
             this.panel_minimize.TabIndex = 26;
             this.panel_minimize.TabStop = false;
+            this.panel_minimize.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.panel_minimize.UseMnemonic = true;
             this.panel_minimize.Click += new System.EventHandler(this.panel_minimize_Click);
             // 
             // label_index
@@ -547,7 +819,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(705, 499);
+            this.ClientSize = new System.Drawing.Size(636, 592);
             this.Controls.Add(this.panelConfigure);
             this.Controls.Add(this.panelTop);
             this.Icon = global::EDDiscovery.Properties.Resources.edlogo_3mo_icon;
@@ -557,6 +829,8 @@
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ScreenShotConfigureForm_FormClosed);
             this.panelConfigure.ResumeLayout(false);
             this.panelConfigure.PerformLayout();
+            this.extGroupBox1.ResumeLayout(false);
+            this.extGroupBox1.PerformLayout();
             this.groupBoxCropSettings.ResumeLayout(false);
             this.groupBoxCropSettings.PerformLayout();
             this.panelTop.ResumeLayout(false);
@@ -588,16 +862,31 @@
         private ExtendedControls.ExtComboBox comboBoxScanFor;
         private ExtendedControls.ExtComboBox comboBoxOutputAs;
         private ExtendedControls.ExtGroupBox groupBoxCropSettings;
-        private ExtendedControls.ExtNumericUpDown numericUpDownHeight;
-        private ExtendedControls.ExtNumericUpDown numericUpDownWidth;
-        private ExtendedControls.ExtNumericUpDown numericUpDownLeft;
-        private ExtendedControls.ExtNumericUpDown numericUpDownTop;
+        private ExtendedControls.ExtNumericUpDown numericUpDownHeight1;
+        private ExtendedControls.ExtNumericUpDown numericUpDownWidth1;
+        private ExtendedControls.ExtNumericUpDown numericUpDownLeft1;
+        private ExtendedControls.ExtNumericUpDown numericUpDownTop1;
         private System.Windows.Forms.Label labelHeight;
         private System.Windows.Forms.Label labelWidth;
         private System.Windows.Forms.Label labelLeft;
         private System.Windows.Forms.Label labelTop;
-        protected ExtendedControls.ExtCheckBox checkBoxCropImage;
         private ExtendedControls.ExtButton buttonExtCancel;
         private ExtendedControls.ExtButton buttonExtOK;
+        private ExtendedControls.ExtCheckBox extCheckBoxKeepMasterConvertedImage;
+        private ExtendedControls.ExtComboBox extComboBoxConvert2;
+        private ExtendedControls.ExtComboBox extComboBoxConvert1;
+        private ExtendedControls.ExtGroupBox extGroupBox1;
+        private ExtendedControls.ExtNumericUpDown extNumericUpDownHeight2;
+        private ExtendedControls.ExtNumericUpDown extNumericUpDownWidth2;
+        private ExtendedControls.ExtNumericUpDown extNumericUpDownLeft2;
+        private ExtendedControls.ExtNumericUpDown extNumericUpDownTop2;
+        private System.Windows.Forms.Label labelHeight2;
+        private System.Windows.Forms.Label labelWidth2;
+        private System.Windows.Forms.Label labelLeft2;
+        private System.Windows.Forms.Label labelTop2;
+        private System.Windows.Forms.Label labelCropResizeOptions;
+        private ExtendedControls.ExtCheckBox extCheckBoxRemoveOriginal;
+        private System.Windows.Forms.Label labelImage2;
+        private System.Windows.Forms.Label labelImage1;
     }
 }
