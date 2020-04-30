@@ -189,21 +189,27 @@ namespace EliteDangerousCore.JournalEvents
             mapped = m; efficientmapped = e;
         }
 
-        public bool HasSameParents( JournalScan other)      // exact same parent tree
+        public int HasSameParents(JournalScan other)     // return -1 if not, or index of last match , 0,1,2
         {
-            if (Parents != null && other.Parents != null && Parents.Count == other.Parents.Count)
+            if (Parents != null && other.Parents != null)
             {
-                for( int i = 0; i < Parents.Count; i++ )
+                for (int i = 0; ; i++)
                 {
-                    if (Parents[i].BodyID != other.Parents[i].BodyID || Parents[i].Type != other.Parents[i].Type)
-                        return false;
+                    int p1 = Parents.Count - 1 - i;
+                    int p2 = other.Parents.Count - 1 - i;
+
+                    if (p1 < 0 || p2 < 0)     // if out of parents, return how many of p2 are left
+                        return i;
+
+                    if (Parents[p1].BodyID != other.Parents[p2].BodyID || Parents[p1].Type != other.Parents[p2].Type)
+                        return -1;
                 }
-                return true;
             }
             else
-                return false;
+                return -1;
         }
 
+        public string ParentList() { return Parents != null ? string.Join(",", Parents.Select(x => x.Type + ":" + x.BodyID)) : ""; }     // not get on purpose
 
         private bool mapped, efficientmapped;
 
@@ -785,6 +791,8 @@ namespace EliteDangerousCore.JournalEvents
                 scanText.AppendFormat("Discovered by {0} on {1}".T(EDTx.JournalScan_DB) + "\n", EDSMDiscoveryCommander, EDSMDiscoveryUTC.ToStringZulu());
 
             scanText.AppendFormat("Scan Type: {0}".T(EDTx.JournalScan_SCNT) + "\n", ScanType);
+
+            scanText.AppendFormat("BID+Parents: {0} - {1}\n", BodyID ?? -1, ParentList());
 
             if (scanText.Length > 0 && scanText[scanText.Length - 1] == '\n')
                 scanText.Remove(scanText.Length - 1, 1);

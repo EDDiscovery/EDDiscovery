@@ -44,7 +44,7 @@ namespace EDDiscovery.UserControls
         #endregion
 
         #region Init
-        private class StarHistoryColumns
+        private class Columns
         {
             public const int LastVisit = 0;
             public const int StarName = 1;
@@ -205,6 +205,9 @@ namespace EDDiscovery.UserControls
 
                     dataGridViewStarList.Rows.AddRange(rowstoadd.ToArray());
                 });
+
+                if (dataGridViewStarList.MoveToSelection(rowsbyjournalid, ref pos, false, Columns.StarName))
+                    FireChangeSelection();
             }
 
             todo.Enqueue(() =>
@@ -212,19 +215,8 @@ namespace EDDiscovery.UserControls
                 dataGridViewStarList.FilterGridView(filtertext);
                 System.Diagnostics.Debug.WriteLine(BaseUtils.AppTicks.TickCount + " SL TOTAL TIME " + swtotal.ElapsedMilliseconds);
 
-                int rowno = FindGridPosByJID(pos.Item1, true);     // find row.. must be visible..  -1 if not found/not visible
-
-                if (rowno >= 0)
-                {
-                    dataGridViewStarList.CurrentCell = dataGridViewStarList.Rows[rowno].Cells[pos.Item2];       // its the current cell which needs to be set, moves the row marker as well currentGridRow = (rowno!=-1) ? 
-                }
-                else if (dataGridViewStarList.Rows.GetRowCount(DataGridViewElementStates.Visible) > 0)
-                {
-                    rowno = dataGridViewStarList.Rows.GetFirstRow(DataGridViewElementStates.Visible);
-                    dataGridViewStarList.CurrentCell = dataGridViewStarList.Rows[rowno].Cells[StarHistoryColumns.StarName];
-                }
-                else
-                    rowno = -1;
+                if (dataGridViewStarList.MoveToSelection(rowsbyjournalid, ref pos, true, Columns.StarName))
+                    FireChangeSelection();
 
                 if (sortcol >= 0)
                 {
@@ -236,8 +228,6 @@ namespace EDDiscovery.UserControls
 
                 autoupdaterowoffset = autoupdaterowstart = 0;
                 autoupdateedsm.Start();
-
-                FireChangeSelection();      // and since we repainted, we should fire selection, as we in effect may have selected a new one
 
                 loadcomplete = true;
             });
@@ -610,20 +600,12 @@ namespace EDDiscovery.UserControls
             return new Tuple<long, int>(jid, cellno);
         }
 
-        int FindGridPosByJID(long jid, bool checkvisible)
-        {
-            if (rowsbyjournalid.ContainsKey(jid) && (!checkvisible || rowsbyjournalid[jid].Visible))
-                return rowsbyjournalid[jid].Index;
-            else
-                return -1;
-        }
-
         public void GotoPosByJID(long jid)      // uccursor requirement
         {
-            int rowno = FindGridPosByJID(jid, true);
+            int rowno = DataGridViewControlHelpersStaticFunc.FindGridPosByID(rowsbyjournalid, jid, true);
             if (rowno >= 0)
             {
-                dataGridViewStarList.CurrentCell = dataGridViewStarList.Rows[rowno].Cells[StarHistoryColumns.StarName];
+                dataGridViewStarList.CurrentCell = dataGridViewStarList.Rows[rowno].Cells[Columns.StarName];
                 dataGridViewStarList.Rows[rowno].Selected = true;
                 FireChangeSelection();
             }
@@ -640,8 +622,8 @@ namespace EDDiscovery.UserControls
             List<HistoryEntry> syslist = row.Tag as List<HistoryEntry>;
 
             var node = await discoveryform.history.starscan?.FindSystemAsync(syslist[0].System, true);  // try an EDSM lookup, cache data, then redisplay.
-            row.Cells[StarHistoryColumns.OtherInformation].Value = Infoline(syslist,node);
-            row.Cells[StarHistoryColumns.SystemValue].Value = node?.ScanValue(true).ToString("N0") ?? "";
+            row.Cells[Columns.OtherInformation].Value = Infoline(syslist,node);
+            row.Cells[Columns.SystemValue].Value = node?.ScanValue(true).ToString("N0") ?? "";
         }
 
         private void Autoupdateedsm_Tick(object sender, EventArgs e)            // tick tock to get edsm data very slowly!

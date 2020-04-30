@@ -304,7 +304,7 @@ namespace EDDiscovery.UserControls
             this.runEntryThroughProfileSystemToolStripMenuItem,
             this.runSelectionThroughIGAUDebugToolStripMenuItem});
             this.historyContextMenu.Name = "historyContextMenu";
-            this.historyContextMenu.Size = new System.Drawing.Size(388, 488);
+            this.historyContextMenu.Size = new System.Drawing.Size(388, 466);
             this.historyContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.historyContextMenu_Opening);
             // 
             // removeSortingOfColumnsToolStripMenuItem

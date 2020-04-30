@@ -153,6 +153,8 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.Translate(toolTip, this);
 
             TravelHistoryFilter.InitaliseComboBox(comboBoxHistoryWindow, DbHistorySave);
+
+            dataViewScrollerPanel.LimitLargeChange = 4; // since row sizes can be variable, estimating large change on visible rows is problematic
         }
 
         private void ToolStripOutliningOn_CheckStateChanged(object sender, EventArgs e)
@@ -198,6 +200,7 @@ namespace EDDiscovery.UserControls
             loadcomplete = false;
             current_historylist = hl;
             this.Cursor = Cursors.WaitCursor;
+            buttonFilter.Enabled = buttonField.Enabled = textBoxFilter.Enabled = comboBoxHistoryWindow.Enabled = false;
 
             Tuple<long, int> pos = CurrentGridPosByJID();
 
@@ -254,6 +257,8 @@ namespace EDDiscovery.UserControls
 
             System.Diagnostics.Stopwatch swtotal = new System.Diagnostics.Stopwatch();
 
+            //int lrowno = 0;
+
             if (chunks.Count != 0)
             {
                 var chunk = chunks[0];
@@ -264,28 +269,19 @@ namespace EDDiscovery.UserControls
                 foreach (var item in chunk)
                 {
                     var row = CreateHistoryRow(item, filtertext);
+
                     if (row != null)
                     {
+                        //row.Cells[2].Value = (lrowno++).ToString() + " " + item.Journalid + " " + (string)row.Cells[2].Value;
                         row.Visible = outlining?.Process(item, dataGridViewTravel.RowCount, rollupscans, rollupolder) ?? true;
-                        //row.Cells[2].Value = dataGridViewTravel.RowCount.ToString() + (string)row.Cells[2].Value;
                         rowstoadd.Add(row);
                     }
                 }
+
                 dataGridViewTravel.Rows.AddRange(rowstoadd.ToArray());
 
-                int rowno = FindGridPosByJID(pos.Item1, true);     // find row.. must be visible..  -1 if not found/not visible
-
-                if (rowno >= 0)
-                {
-                    dataGridViewTravel.CurrentCell = dataGridViewTravel.Rows[rowno].Cells[pos.Item2];       // its the current cell which needs to be set, moves the row marker as well            currentGridRow = (rowno!=-1) ? 
+                if (dataGridViewTravel.MoveToSelection(rowsbyjournalid, ref pos, false, Columns.Information))
                     FireChangeSelection();
-                }
-                else if (pos.Item1 < 0 && dataGridViewTravel.Rows.GetRowCount(DataGridViewElementStates.Visible) > 0)
-                {
-                    rowno = dataGridViewTravel.Rows.GetFirstRow(DataGridViewElementStates.Visible);
-                    dataGridViewTravel.CurrentCell = dataGridViewTravel.Rows[rowno].Cells[Columns.Description];
-                    FireChangeSelection();
-                }
             }
 
             foreach (var chunk in chunks.Skip(1))
@@ -301,13 +297,16 @@ namespace EDDiscovery.UserControls
                         var row = CreateHistoryRow(item, filtertext);
                         if (row != null)
                         {
+                            //row.Cells[2].Value = (lrowno++).ToString() + " " + item.Journalid + " " + (string)row.Cells[2].Value;
                             row.Visible = outlining?.Process(item, dataGridViewTravel.RowCount, rollupscans, rollupolder) ?? true;
-                            //row.Cells[2].Value = dataGridViewTravel.RowCount.ToString() + (string)row.Cells[2].Value;
                             rowstoadd.Add(row);
                         }
                     }
 
                     dataGridViewTravel.Rows.AddRange(rowstoadd.ToArray());
+
+                    if (dataGridViewTravel.MoveToSelection(rowsbyjournalid, ref pos, false, Columns.Information))
+                        FireChangeSelection();
 
                     //System.Diagnostics.Debug.WriteLine("T Chunk Load in " + sw.ElapsedMilliseconds);
                 });
@@ -329,37 +328,25 @@ namespace EDDiscovery.UserControls
 
                 UpdateToolTipsForFilter();
 
-                int rowno = FindGridPosByJID(pos.Item1, true);     // find row.. must be visible..  -1 if not found/not visible
-
-                if (rowno >= 0)
-                {
-                    dataGridViewTravel.CurrentCell = dataGridViewTravel.Rows[rowno].Cells[pos.Item2];       // its the current cell which needs to be set, moves the row marker as well            currentGridRow = (rowno!=-1) ? 
-                }
-                else if (dataGridViewTravel.Rows.GetRowCount(DataGridViewElementStates.Visible) > 0)
-                {
-                    rowno = dataGridViewTravel.Rows.GetFirstRow(DataGridViewElementStates.Visible);
-                    dataGridViewTravel.CurrentCell = dataGridViewTravel.Rows[rowno].Cells[Columns.Description];
-                }
-                else
-                    rowno = -1;
-
                 //System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCountLap(this) + " TG " + displaynumber + " Load Finish");
+
+                if (dataGridViewTravel.MoveToSelection(rowsbyjournalid, ref pos, true, Columns.Information))
+                    FireChangeSelection();
 
                 if (sortcol >= 0)
                 {
                     dataGridViewTravel.Sort(dataGridViewTravel.Columns[sortcol], (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
                     dataGridViewTravel.Columns[sortcol].HeaderCell.SortGlyphDirection = sortorder;
                 }
-              
-
-                FireChangeSelection();      // and since we repainted, we should fire selection, as we in effect may have selected a new one
 
                 this.Cursor = Cursors.Default;
+                buttonFilter.Enabled = buttonField.Enabled = textBoxFilter.Enabled = comboBoxHistoryWindow.Enabled = true;
                 loadcomplete = true;
             });
 
             todotimer.Start();
         }
+
 
         private void Todotimer_Tick(object sender, EventArgs e)
         {
@@ -514,23 +501,29 @@ namespace EDDiscovery.UserControls
             return new Tuple<long, int>(jid, cellno);
         }
 
-        int FindGridPosByJID(long jid, bool checkvisible)
-        {
-            if (rowsbyjournalid.ContainsKey(jid) && (!checkvisible || rowsbyjournalid[jid].Visible))
-                return rowsbyjournalid[jid].Index;
-            else
-                return -1;
-        }
-
         public void GotoPosByJID(long jid)
         {
-            int rowno = FindGridPosByJID(jid, true);
+            int rowno = DataGridViewControlHelpersStaticFunc.FindGridPosByID(rowsbyjournalid,jid, true);
             if (rowno >= 0)
             {
                 dataGridViewTravel.CurrentCell = dataGridViewTravel.Rows[rowno].Cells[Columns.Information];
                 dataGridViewTravel.Rows[rowno].Selected = true;
                 FireChangeSelection();
             }
+        }
+
+        public void FireChangeSelection()
+        {
+            System.Diagnostics.Debug.WriteLine("TG Fire Change sel" );
+
+            if (dataGridViewTravel.CurrentCell != null)
+            {
+                int row = dataGridViewTravel.CurrentCell.RowIndex;
+                //System.Diagnostics.Debug.WriteLine("TG:Fire Change Sel row" + row);
+                OnTravelSelectionChanged?.Invoke(dataGridViewTravel.Rows[row].Tag as HistoryEntry, current_historylist, true);
+            }
+            else if (current_historylist != null && current_historylist.Count > 0)
+                OnTravelSelectionChanged?.Invoke(current_historylist.Last(), current_historylist, false);
         }
 
         private void comboBoxHistoryWindow_SelectedIndexChanged(object sender, EventArgs e)
@@ -541,18 +534,6 @@ namespace EDDiscovery.UserControls
             {
                 HistoryChanged(current_historylist);        // fires lots of events
             }
-        }
-
-        public void FireChangeSelection()
-        {
-            if (dataGridViewTravel.CurrentCell != null)
-            {
-                int row = dataGridViewTravel.CurrentCell.RowIndex;
-                //System.Diagnostics.Debug.WriteLine("TG:Fire Change Sel row" + row);
-                OnTravelSelectionChanged?.Invoke(dataGridViewTravel.Rows[row].Tag as HistoryEntry, current_historylist, true);
-            }
-            else if (current_historylist != null && current_historylist.Count > 0)
-                OnTravelSelectionChanged?.Invoke(current_historylist.Last(), current_historylist, false);
         }
 
         private void dataGridViewTravel_CellClick(object sender, DataGridViewCellEventArgs e)
