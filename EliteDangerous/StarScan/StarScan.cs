@@ -259,7 +259,7 @@ namespace EliteDangerousCore
             // given a list of scannodes, construst a tree of barynodes with their scans underneath.
             // reconstructs the node tree and inserts barynodes into it from the parent info
 
-            static public ScanNode FindBarycentres(List<ScanNode> nodes)      
+            static public ScanNode PopulateBarycentres(List<ScanNode> nodes)      
             {
                 ScanNode top = new ScanNode();
                 top.children = new SortedList<string, ScanNode>();
@@ -286,7 +286,7 @@ namespace EliteDangerousCore
 
                                     if (bodynode == null && sd.Parents[i - 1].Type == "Null")   // if can't find, and its another barycentre, add a new dummy barycentre node
                                     {
-                                        bodynode = new ScanNode() { BodyID = bodyid, type = ScanNodeType.barycentre, fullname = "Created Barynode" };
+                                        bodynode = new ScanNode() { BodyID = bodyid, type = ScanNodeType.barycentre, fullname = "Created Barynode", ownname = bodyid.ToString("00000") };
                                     }
                                 }
                                 else
@@ -296,7 +296,7 @@ namespace EliteDangerousCore
 
                                 if (bodynode != null)  
                                 {
-                                    string barykey = sp.BodyID.ToStringInvariant(); // sp is a barycentre, so get its body id
+                                    string barykey = sp.BodyID.ToStringInvariant("00000"); // sp is a barycentre, so get its body id
                                     ScanNode cur = null;
 
                                     if (top.children.ContainsKey(barykey))      // if top has this barycentre..
@@ -308,13 +308,11 @@ namespace EliteDangerousCore
                                         top.children[barykey] = cur;
                                     }
 
-                                    string entry = bodynode.BodyID.ToStringInvariant();     // this is the node to place under the barycentre
-
                                     //System.Diagnostics.Debug.WriteLine("Scan add " + entry + " to " + barykey);
 
-                                    if (!cur.children.ContainsKey(entry))
+                                    if (!cur.children.ContainsKey(bodynode.ownname))
                                     {
-                                        cur.children[entry] = bodynode;
+                                        cur.children[bodynode.ownname] = bodynode;
                                     }
                                 }
                             }
@@ -340,9 +338,9 @@ namespace EliteDangerousCore
             {
                 List<string> keystodelete = new List<string>();
 
-                foreach (var k in pos.children)     // all chidren of top
+                foreach (var k in pos.children)     // all children of top
                 {
-                    string keyid = k.Value.BodyID.ToStringInvariant();
+                    string keyid = k.Value.BodyID.ToStringInvariant("00000");   // key from bodyid
 
                     if (k.Value.type == ScanNodeType.barycentre && top.children.ContainsKey(keyid)) // its a barycentre, and top has that barycentre, move it to here
                     {
@@ -354,7 +352,7 @@ namespace EliteDangerousCore
 
                         foreach (var cc in tocopy.children)
                         {
-                            string cckey = cc.Value.BodyID.ToStringInvariant();
+                            string cckey = cc.Key;
                             if (!k.Value.children.ContainsKey(cckey))                               // may have been moved already, because we don't remove top keys until finished
                             {
                                // System.Diagnostics.Debug.WriteLine(".. " + cckey + " " + cc.Value.fullname + " onto " + keyid);
@@ -374,13 +372,13 @@ namespace EliteDangerousCore
                 return keystodelete;
             }
 
-            public static void DumpTree(ScanNode top, int level)        // debug dump out
+            public static void DumpTree(ScanNode top, string key , int level)        // debug dump out
             {
-                System.Diagnostics.Debug.WriteLine("                                                        ".Substring(0,level*3) + top.BodyID + " "+ top.fullname +  " " + top.type);
+                System.Diagnostics.Debug.WriteLine("                                                        ".Substring(0,level*3) + key + ":" + top.BodyID + " "+ top.fullname +  " " + top.type);
                 if ( top.children != null )
                 {
                     foreach (var c in top.children)
-                        DumpTree(c.Value, level + 1);
+                        DumpTree(c.Value, c.Key, level + 1);
                 }
            }
 

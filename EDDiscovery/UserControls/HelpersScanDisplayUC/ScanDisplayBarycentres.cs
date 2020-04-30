@@ -58,11 +58,11 @@ int barycount;
                     recursedepth = 1;
                     var x = DisplayBarynode(c.Value, level + 1, nodecentres, nodes, pc, imagesize, horz);
                     recursedepth = Math.Max(x.Item2, recursedepth);
-                    System.Diagnostics.Debug.WriteLine("Draw bary " + x.Item1 + " " + level);
+                    System.Diagnostics.Debug.WriteLine("                        ".Substring(0, level * 3) + level + " Draw bary " + x.Item1 + " " + level);
                     if ( horz )
-                        tojoin.Add(new BaryPointInfo() { point = x.Item1, toppos = new Point(x.Item1.X-10, x.Item1.Y), orderpos = x.Item3 }); // make a join point for a barynode
+                        tojoin.Add(new BaryPointInfo() { point = x.Item1, toppos = new Point(x.Item1.X-10,x.Item1.Y), orderpos = x.Item3 }); // make a join point for a barynode
                     else
-                        tojoin.Add(new BaryPointInfo() { point = x.Item1, toppos = new Point(x.Item1.X, x.Item1.Y - 10), orderpos = x.Item3 }); // make a join point for a barynode
+                        tojoin.Add(new BaryPointInfo() { point = x.Item1, toppos = Point.Empty, orderpos = x.Item3 }); // make a join point for a barynode. Leave the toppos for later
                 }
             }
 
@@ -78,13 +78,32 @@ int barycount;
                 {
                     int od = nodes.IndexOf(c.Value);
                     orderpos = od;
-                    System.Diagnostics.Debug.WriteLine("Draw point " + nodecentres[c.Value] + " " + c.Value.fullname);
+                    System.Diagnostics.Debug.WriteLine("                        ".Substring(0, level * 3) + level + " Draw Body " + nodecentres[c.Value] + " " + c.Value.fullname);
                     if ( horz )
                         tojoin.Add(new BaryPointInfo() { point = nodecentres[c.Value], toppos = new Point(nodecentres[c.Value].X - lineoff, nodecentres[c.Value].Y), orderpos = od });
                     else
                         tojoin.Add(new BaryPointInfo() { point = nodecentres[c.Value], toppos = new Point(nodecentres[c.Value].X, nodecentres[c.Value].Y - lineoff), orderpos = od });
                 }
             }
+
+            foreach( var b in tojoin)       // for vert, and we have a barynode, we need to find a compatible friend in the pointslist to lock the Y too
+            {
+                if ( b.toppos == Point.Empty )
+                {
+                    for( int i = 0; i < tojoin.Count; i++ )
+                    {
+                        if ( tojoin[i].toppos != Point.Empty && b.point.Y - tojoin[i].toppos.Y < planetsize.Height) // try and find a node within range where we can grab the Y from
+                        {
+                            b.toppos = new Point(b.point.X, tojoin[i].toppos.Y);
+                            break;
+                        }
+                    }
+
+                    if (b.toppos == Point.Empty)
+                        b.toppos = new Point(b.point.X, b.point.Y-10);
+                }
+            }
+
 
             if (tojoin.Count > 1)       // we need two or more to make a job.
             {
@@ -93,8 +112,8 @@ int barycount;
                 ExtPictureBox.ImageElement ie = new ExtPictureBox.ImageElement();
                 ie.OwnerDraw(DrawBaryTree, new Rectangle(0,0,horz?1:0, 0), tojoin);         // use Width, which does not get affected by repositiontree, to record if horz
                 pc.Insert(0, ie); // insert first so drawn under
-barycount++;               
-                System.Diagnostics.Debug.WriteLine("Lines to draw at " + level + " " + recursedepth + " linepos " + lineoff);
+barycount++;
+                System.Diagnostics.Debug.WriteLine("                        ".Substring(0, level * 3) + level + " Join co-ords");
                 for (int i = 0; i < tojoin.Count; i++)
                     System.Diagnostics.Debug.WriteLine(".. " + tojoin[i].point + " " + tojoin[i].toppos + " " + tojoin[i].orderpos);
 
@@ -129,26 +148,26 @@ barycount++;
 
                 //int miny = tojoin.Select(x => x.Y).Min();
 
-                var first = tojoin[0];
                 for (int i = 0; i < tojoin.Count; i++)
                 {
-                    var n = tojoin[i];
-                    g.DrawLine(p, n.point, n.toppos);
+                    var cur = tojoin[i];
+                    g.DrawLine(p, cur.point, cur.toppos);
 
                     if (i > 0)
                     {
-                        if (n.toppos.Y == first.toppos.Y || e.Location.Width == 1)      //.Width records if horizontal line, ie.moons.  If on same level, or horz
+                        var prev = tojoin[i-1];
+
+                        if (cur.toppos.Y == prev.toppos.Y || e.Location.Width == 1)      //.Width records if horizontal line, ie.moons.  If on same level, or horz
                         {
-                            g.DrawLine(p, first.toppos, n.toppos);
+                            g.DrawLine(p, prev.toppos, cur.toppos);
                         }
                         else
                         {                                   // here, for vert (planets) the entries are not side by side, so we draw nice lines out
-                            g.DrawLine(p, first.toppos, new Point(first.toppos.X + planetsize.Width * 2, first.toppos.Y));
-                            g.DrawLine(p, n.toppos, new Point(n.toppos.X - planetsize.Width, n.toppos.Y));
-
-                            first = tojoin[i];  // move the first point to the new line
+                            g.DrawLine(p, prev.toppos, new Point(prev.toppos.X + planetsize.Width * 2, prev.toppos.Y));
+                            g.DrawLine(p, cur.toppos, new Point(cur.toppos.X - planetsize.Width, cur.toppos.Y));
                         }
                     }
+
                 }
 
             }

@@ -250,9 +250,9 @@ barycount = 0;
                         maxitemspos = leftmiddle = new Point(leftmargin, maxitemspos.Y + starplanetgroupspacery + StarSize.Height / 2);     // move back to left margin and move down to next position of star, allowing gap
 
                         // make a tree of the planets with their barycentres from the Parents information
-                        var barynodes = StarScan.ScanNode.FindBarycentres(planetsinorder);  // children always made, barynode tree
+                        var barynodes = StarScan.ScanNode.PopulateBarycentres(planetsinorder);  // children always made, barynode tree
 
-                        StarScan.ScanNode.DumpTree(barynodes, 0);
+                        StarScan.ScanNode.DumpTree(barynodes, "TOP", 0);
 
                         List<ExtPictureBox.ImageElement> pcb = new List<ExtPictureBox.ImageElement>();
 
@@ -274,12 +274,14 @@ barycount = 0;
                     }
 
                     DisplayAreaUsed = new Point(Math.Max(DisplayAreaUsed.X, maxitemspos.X), Math.Max(DisplayAreaUsed.Y, maxitemspos.Y));
+
                 }
 
                 imagebox.AddRange(starcontrols);
 
                 if (barycount > 0)
                     System.Diagnostics.Debug.WriteLine("Barycount of System " + scannode.system.Name + " has " + barycount);
+
             }
 
             imagebox.Render();      // replaces image..
@@ -358,8 +360,8 @@ barycount = 0;
                     }
                 }
 
-                // now, taking the moon modes, create a barycentre tree with those inserted in 
-                var barynodes = StarScan.ScanNode.FindBarycentres(moonnodes);  // children always made, barynode tree
+                //// now, taking the moon modes, create a barycentre tree with those inserted in 
+                var barynodes = StarScan.ScanNode.PopulateBarycentres(moonnodes);  // children always made, barynode tree
 
                 foreach (var k in barynodes.children)   // for all barynodes.. display
                 {
