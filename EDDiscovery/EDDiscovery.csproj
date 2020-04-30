@@ -183,6 +183,12 @@
     <Compile Include="UserControls\EngineeringSynthesis\UserControlMaterialTrader.Designer.cs">
       <DependentUpon>UserControlMaterialTrader.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\HelpersScanDisplayUC\ScanDisplayNodes.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\HelpersScanDisplayUC\ScanDisplayBarycentres.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="UserControls\Helpers\CSVHelpers.cs" />
     <Compile Include="WebServer\WebServer.cs" />
     <None Include="..\EDDIcons\Controls\Fakes\Controls.Designer.cs">
@@ -643,10 +649,10 @@
     <Compile Include="UserControls\ScansStars\UserControlScan.Designer.cs">
       <DependentUpon>UserControlScan.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\Helpers\ScanDisplayUserControl.cs">
+    <Compile Include="UserControls\HelpersScanDisplayUC\ScanDisplayUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\Helpers\ScanDisplayUserControl.Designer.cs">
+    <Compile Include="UserControls\HelpersScanDisplayUC\ScanDisplayUserControl.Designer.cs">
       <DependentUpon>ScanDisplayUserControl.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\ScansStars\UserControlScanGrid.cs">
@@ -871,7 +877,7 @@
     <EmbeddedResource Include="UserControls\ScansStars\UserControlScan.resx">
       <DependentUpon>UserControlScan.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\Helpers\ScanDisplayUserControl.resx">
+    <EmbeddedResource Include="UserControls\HelpersScanDisplayUC\ScanDisplayUserControl.resx">
       <DependentUpon>ScanDisplayUserControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\ScansStars\UserControlScanGrid.resx">

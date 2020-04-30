@@ -76,9 +76,9 @@ namespace EDDiscovery.UserControls
 
             rollUpPanelTop.SetToolTip(toolTip);     // set after translater
 
-         //   t = new Timer();      // debug, keep for now
-            //t.Interval = 100;
-            //t.Tick += T_Tick;
+            t = new Timer();      // debug, keep for now
+            t.Interval = 100;
+            t.Tick += T_Tick;
         }
 
         public override void LoadLayout()
@@ -159,7 +159,7 @@ namespace EDDiscovery.UserControls
 
         private void Uctg_OnTravelSelectionChanged(HistoryEntry he, HistoryList hl, bool selectedEntry)
         {
-            //t.Start();    // debug, for playing all scans thru
+           //t.Start();    // debug, for playing all scans thru
 
             if (he != null)
             {
@@ -185,7 +185,10 @@ namespace EDDiscovery.UserControls
         {
             panelStars.HideInfo();
 
-//  showing_system = new SystemClass("HIP 53737");
+            // showing_system = new SystemClass("Qi Lieh");
+            //showing_system = new SystemClass("Pallaeni"); - problem with shrinking lines
+            //showing_system = new SystemClass("Borann");
+            //showing_system = new SystemClass("Skaudai AM-B d14-138");
 
             StarScan.SystemNode data = showing_system != null ? await discoveryform.history.starscan.FindSystemAsync(showing_system, panelStars.CheckEDSM) : null;
 
@@ -725,8 +728,8 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
-#if false
-        int hec = 20000;        // debug code to check all my scans don't crash
+#if true
+        int hec = 0;        // debug code to check all my scans don't crash - start point
         Timer t;
         private void T_Tick(object sender, EventArgs e)
         {

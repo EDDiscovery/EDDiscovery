@@ -48,7 +48,11 @@ namespace EliteDangerousCore.JournalEvents
         public double? nRadiusEarths { get; set; }
         public bool HasRings { get { return Rings != null && Rings.Length > 0; } }
         public StarPlanetRing[] Rings { get; set; }
+
         public List<BodyParent> Parents { get; set; }
+        public bool IsOrbitingBaryCentre { get { return Parents?.FirstOrDefault()?.Type == "Null"; } }
+        public bool IsOrbitingPlanet { get { return Parents?.FirstOrDefault()?.Type == "Planet"; } }
+        public bool IsOrbitingStar { get { return Parents?.FirstOrDefault()?.Type == "Star"; } }
 
         public bool? WasDiscovered { get; set; }                    // direct, 3.4, indicates whether the body has already been discovered
         public bool IsNotDiscovered { get { return WasDiscovered.HasValue && WasDiscovered == false; } }
@@ -79,8 +83,13 @@ namespace EliteDangerousCore.JournalEvents
         public string IcyPlanetZoneOuter { get; set; }              // in AU
 
         // All orbiting bodies (Stars/Planets), not main star
+
+        public double DistanceAccountingForBarycentre { get { return nSemiMajorAxis.HasValue && !IsOrbitingBaryCentre ? nSemiMajorAxis.Value : DistanceFromArrivalLS * oneLS_m; } } // in metres
+
         public double? nSemiMajorAxis { get; set; }                 // direct, m
         public double? nSemiMajorAxisAU { get; set; }               // direct
+        public string SemiMajorAxisLSKM { get { return nSemiMajorAxis.HasValue ? (nSemiMajorAxis >= oneLS_m / 10 ? ((nSemiMajorAxis.Value / oneLS_m).ToString("N1") + "ls") : ((nSemiMajorAxis.Value / 1000).ToString("N0") + "km")) : ""; } }
+
         public double? nEccentricity { get; set; }                  // direct
         public double? nOrbitalInclination { get; set; }            // direct
         public double? nPeriapsis { get; set; }                     // direct
@@ -179,6 +188,28 @@ namespace EliteDangerousCore.JournalEvents
         {
             mapped = m; efficientmapped = e;
         }
+
+        public int HasSameParents(JournalScan other)     // return -1 if not, or index of last match , 0,1,2
+        {
+            if (Parents != null && other.Parents != null)
+            {
+                for (int i = 0; ; i++)
+                {
+                    int p1 = Parents.Count - 1 - i;
+                    int p2 = other.Parents.Count - 1 - i;
+
+                    if (p1 < 0 || p2 < 0)     // if out of parents, return how many of p2 are left
+                        return i;
+
+                    if (Parents[p1].BodyID != other.Parents[p2].BodyID || Parents[p1].Type != other.Parents[p2].Type)
+                        return -1;
+                }
+            }
+            else
+                return -1;
+        }
+
+        public string ParentList() { return Parents != null ? string.Join(",", Parents.Select(x => x.Type + ":" + x.BodyID)) : ""; }     // not get on purpose
 
         private bool mapped, efficientmapped;
 
@@ -760,6 +791,8 @@ namespace EliteDangerousCore.JournalEvents
                 scanText.AppendFormat("Discovered by {0} on {1}".T(EDTx.JournalScan_DB) + "\n", EDSMDiscoveryCommander, EDSMDiscoveryUTC.ToStringZulu());
 
             scanText.AppendFormat("Scan Type: {0}".T(EDTx.JournalScan_SCNT) + "\n", ScanType);
+
+            scanText.AppendFormat("BID+Parents: {0} - {1}\n", BodyID ?? -1, ParentList());
 
             if (scanText.Length > 0 && scanText[scanText.Length - 1] == '\n')
                 scanText.Remove(scanText.Length - 1, 1);

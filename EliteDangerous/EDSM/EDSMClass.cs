@@ -757,7 +757,7 @@ namespace EliteDangerousCore.EDSM
                 lock (bodylock) // only one request at a time going, this is to prevent multiple requests for the same body
                 {
                     // System.Threading.Thread.Sleep(2000); //debug - delay to show its happening 
-                    System.Diagnostics.Debug.WriteLine("EDSM Web Lookup bodies " + sys.EDSMID + " " + sys.SystemAddress + " " + sys.Name);
+                    System.Diagnostics.Debug.WriteLine("EDSM Cache check " + sys.EDSMID + " " + sys.SystemAddress + " " + sys.Name);
 
                     if (DictEDSMBodies != null && sys.EDSMID > 0 && DictEDSMBodies.ContainsKey(sys.EDSMID))  // Cache EDSM bidies during run of EDD.
                     {
@@ -773,7 +773,7 @@ namespace EliteDangerousCore.EDSM
                     if (!edsmweblookup)      // must be set for a web lookup
                         return null;
 
-                    System.Diagnostics.Debug.WriteLine("Going for EDSM web lookup");
+                    System.Diagnostics.Debug.WriteLine("EDSM Web lookup");
                     List<JournalScan> bodies = new List<JournalScan>();
 
                     EDSMClass edsm = new EDSMClass();
