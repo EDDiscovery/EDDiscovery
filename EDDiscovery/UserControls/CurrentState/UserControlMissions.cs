@@ -13,18 +13,14 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using EDDiscovery.Controls;
+using EliteDangerousCore;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using EDDiscovery.Controls;
-using EliteDangerousCore.DB;
-using EliteDangerousCore;
 
 namespace EDDiscovery.UserControls
 {
@@ -158,6 +154,7 @@ namespace EDDiscovery.UserControls
                 List<MissionState> mcurrent = ml.GetAllCurrentMissions(hetime);
 
                 var totalReward = 0;
+                var currentRows = new List<DataGridViewRow>(mcurrent.Count);
                 foreach (MissionState ms in mcurrent)
                 {
                     object[] rowobj = { JournalFieldNaming.ShortenMissionName(ms.Mission.LocalisedName) ,
@@ -176,9 +173,13 @@ namespace EDDiscovery.UserControls
                         totalReward += ms.Mission.Reward.Value;
                     }
 
-                    int rowno = dataGridViewCurrent.Rows.Add(rowobj);
-                    dataGridViewCurrent.Rows[rowno].Tag = ms;
+                    var row = dataGridViewCurrent.RowTemplate.Clone() as DataGridViewRow;
+                    row.CreateCells(dataGridViewCurrent, rowobj);
+                    row.Tag = ms;
+                    currentRows.Add(row);
                 }
+
+                dataGridViewCurrent.Rows.AddRange(currentRows.ToArray());
 
                 int count = mcurrent.Count();
 
@@ -194,6 +195,7 @@ namespace EDDiscovery.UserControls
 
                 long value = 0;
                 int completed = 0, abandonded = 0, failed = 0;
+                var previousRows = new List<DataGridViewRow>(mprev.Count);
 
                 foreach (MissionState ms in mprev)
                 {
@@ -224,13 +226,17 @@ namespace EDDiscovery.UserControls
                                         ms.MissionInfoColumn()
                                         };
 
-                            int rowno = dataGridViewPrevious.Rows.Add(rowobj);
-                            dataGridViewPrevious.Rows[rowno].Tag = ms;
+                            var row = dataGridViewPrevious.RowTemplate.Clone() as DataGridViewRow;
+                            row.CreateCells(dataGridViewPrevious, rowobj);
+                            row.Tag = ms;
+                            previousRows.Add(row);
 
                             value += ms.Value;
                         }
                     }
                 }
+
+                dataGridViewPrevious.Rows.AddRange(previousRows.ToArray());
 
                 labelValue.Visible = (value != 0);
                 labelValue.Text = "Value: ".T(EDTx.UserControlMissions_ValueC) + value.ToString("N0") + " C:" + completed.ToString("N0") + " A:" + abandonded.ToString("N0") + " F:" + failed.ToString("N0");

@@ -120,6 +120,7 @@ namespace EDDiscovery.UserControls
 
                 if (filteredlist.Count > 0)
                 {
+                    var rowsToAdd = new List<DataGridViewRow>(filteredlist.Count);
                     for (int i = filteredlist.Count - 1; i >= 0; i--)
                     {
                         Ledger.Transaction tx = filteredlist[i];
@@ -133,10 +134,13 @@ namespace EDDiscovery.UserControls
                                             (tx.profitperunit!=0) ? tx.profitperunit.ToString("N0") : ""
                                         };
 
-                        dataGridViewLedger.Rows.Add(rowobj);
-                        dataGridViewLedger.Rows[dataGridViewLedger.Rows.Count - 1].Tag = tx.jid;
-
+                        var row = dataGridViewLedger.RowTemplate.Clone() as DataGridViewRow;
+                        row.CreateCells(dataGridViewLedger, rowobj);
+                        row.Tag = tx.jid;
+                        rowsToAdd.Add(row);
                     }
+
+                    dataGridViewLedger.Rows.AddRange(rowsToAdd.ToArray());
 
                     dataGridViewLedger.FilterGridView(textBoxFilter.Text);
                 }
