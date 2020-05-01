@@ -126,6 +126,7 @@ SECTION JournalTypeEnum
 .Reputation: "Reputation" @
 .RestockVehicle: "Restock Vehicle" @
 .Resurrect: "Resurrect" @
+.SAASignalsFound: "SAA Signals Found" @
 .Scan: "Scan" @
 .Scanned: "Scanned" @
 .ScientificResearch: "Scientific Research" @
@@ -254,7 +255,7 @@ SECTION FSSSignal
 .State: "State:" @
 .Faction: "Faction:" @
 .USSType: "USS Type:" @
-.ThreatLevel: " Threat Level:" @
+.ThreatLevel: "Threat Level:" @
 .StationBool: ";Station" @
 
 SECTION JournalFSSDiscoveryScan
@@ -452,6 +453,8 @@ SECTION StarPlanetRing
 
 SECTION JournalScan
 
+.CV: "Current value: {0:N0}" @
+.FDV: "First Discovered value: {0:N0}" @
 .Autoscanof: "Autoscan of {0}" @
 .Detailedscanof: "Detailed scan of {0}" @
 .Basicscanof: "Basic scan of {0}" @
@@ -466,7 +469,7 @@ SECTION JournalScan
 .MEM: "Mass:;EM;0.00" @
 .Landable: "<;, Landable" @
 .Terraformable: "<;, Terraformable" @
-.Gravity: "Gravity:;G;0.0" @
+.Gravity: "Gravity:;G;0.00" @
 .RK: "Radius:;km;0" @
 .NoAtmosphere: ", No Atmosphere" @
 .LandC: ", Landable" @
@@ -476,7 +479,6 @@ SECTION JournalScan
 .SolarRadius: "Solar Radius: {0:0.00} Sols\n" @
 .BodyRadius: "Body Radius: {0:0.00}km\n" @
 .SurfaceTemp: "Surface Temp: {0}K\n" @
-.Luminosity: "Luminosity: {0}\n" @
 .GV: "Gravity: {0:0.00}g\n" @
 .SPA: "Surface Pressure: {0} Atmospheres\n" @
 .SPP: "Surface Pressure: {0} Pa\n" @
@@ -499,10 +501,10 @@ SECTION JournalScan
 .Belts: "Belts" @
 .Ring: "Ring" @
 .Rings: "Rings" @
-.EV: "\nEstimated value: {0:N0}" @
-.DB: "\n\nDiscovered by {0} on {1}" @
+.EV: "Base Estimated value: {0:N0}" @
+.DB: "Discovered by {0} on {1}" @
 .HabitableZoneApprox: "Habitable Zone Approx. {0} ({1}-{2} AU)\n" @
-.Othersstarsnotconsidered: "(Others stars not considered)\n\n" @
+.Othersstarsnotconsidered: " - Others stars not considered\n" @
 .Materials: "Materials:\n" @
 .AtmosphericComposition: "Atmospheric Composition:\n" @
 .PlanetaryComposition: "Planetary Composition:\n" @
@@ -516,16 +518,17 @@ SECTION JournalScan
 .WaterWorlds: " - Water Worlds, {0} ({1}-{2} AU),\n" @
 .EarthLikeWorlds: " - Earth Like Worlds, {0} ({1}-{2} AU),\n" @
 .AmmoniaWorlds: " - Ammonia Worlds, {0} ({1}-{2} AU),\n" @
-.IcyPlanets: " - Icy Planets, {0} (from {1} AU)\n\n" @
+.IcyPlanets: " - Icy Planets, {0} (from {1} AU)\n" @
 .DISTA: "Dist:;ls;0.0" @
+.DIST: "Dist:" @
 .BNME: "Name:" @
 .MMoM: "Mass:;MM;0.00" @
 .SNME: "Name:" @
 .MoonMasses: "Moon Masses: {0:0.00}\n" @
 .MPI: "Mapped" @
 .MPIE: "Efficiently" @
-.EVFD: "First Discovered+Mapped value: {0:N0}/{1:N0}" @
-.EVFM: "First Mapped value: {0:N0}/{1:N0}" @
+.EVFD: "First Discovered+Mapped value: {0:N0}/{1:N0}e" @
+.EVFM: "First Mapped value: {0:N0}/{1:N0}e" @
 .SCNT: "Scan Type: {0}" @
 .EVAD: "Already Discovered" @
 .EVAM: "Already Mapped" @
@@ -794,6 +797,7 @@ SECTION JournalEntry
 .PowerPlay: "PowerPlay:" @
 .Collected: "Collected:" @
 .of: "< of " @
+.ofa: "of " @
 .Total: "Total:" @
 .Progress: "Progress:;%;N1" @
 .Delivered: "Delivered:" @
@@ -930,3 +934,5 @@ SECTION JournalEntry
 .Ships: "Ships" @
 .Distance: "Distance:; ly;0.0" @
 .Threat: "Threat:" @
+.RemaingJumps: "Remaining Jumps" @
+.Nearest: "Nearest:" @

@@ -126,6 +126,10 @@ SECTION PopOutInfo
 .Surveyor.Description: "Surface map aid" @
 .MissionOverlay.Title: "Mission Overlay" => "任务遮罩"
 .MissionOverlay.Description: "Mission List overlay" => "任务列表(遮罩)"
+.MaterialTrader.Title: "Material Trader" @
+.MaterialTrader.Description: "Material Trader" @
+.EDSM.Title: "EDSM" @
+.EDSM.Description: "Automatic web view of EDSM page on system" @
 
 SECTION EDDiscoveryForm
 
@@ -141,18 +145,19 @@ SECTION EDDiscoveryForm
 .toolsToolStripMenuItem.exitToolStripMenuItem: "E&xit" => "退出(&E)"
 .adminToolStripMenuItem: "A&dmin" => "管理(&D)"
 .adminToolStripMenuItem.forceEDDBUpdateToolStripMenuItem: "Synchronise with EDDB" => "手动与EDDB同步获取空间站数据"
-.adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem: "Synchronise with EDSM" => "手动与EDSM同步获取星系数据"
 .adminToolStripMenuItem.showLogfilesToolStripMenuItem: "Show journal files directory of current commander" => "显示当前指挥官的游戏日志文件路径"
 .adminToolStripMenuItem.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem: "Reset all history to current commander" => "合并全部航行记录至当前指挥官"
 .adminToolStripMenuItem.read21AndFormerLogFilesToolStripMenuItem: "Read 2.1 and former log files" => "读取2.1和之前版本的游戏日志文件"
 .adminToolStripMenuItem.read21AndFormerLogFilesToolStripMenuItem.read21AndFormerLogFiles_forceReloadLogsToolStripMenuItem: "Force reload logs" => "强制重新读取日志"
 .adminToolStripMenuItem.rescanAllJournalFilesToolStripMenuItem: "Re-scan all journal files" => "重新扫描全部游戏日志文件"
 .adminToolStripMenuItem.deleteDuplicateFSDJumpEntriesToolStripMenuItem: "Delete duplicate FSD Jump entries" => "删除重复的FSD跳跃记录"
+.adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.sendUnsyncedEDSMJournalsToolStripMenuItem: "Send Unsynced Journals To EDSM" @
+.adminToolStripMenuItem.rebuildSystemDBIndexesToolStripMenuItem: "Rebuild System DB Indexes" @
+.adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem: "Synchronise with EDSM" => "手动与EDSM同步获取星系数据"
 .adminToolStripMenuItem.sendUnsuncedEDDNEventsToolStripMenuItem: "Send unsynced EDDN events" => "发送未同步的EDDN事件"
-.adminToolStripMenuItem.sendUnsyncedEGOScansToolStripMenuItem: "Send unsynced EGO scans" => "发送未同步的EGO扫描"
 .adminToolStripMenuItem.sendHistoricDataToInaraToolStripMenuItem: "Send to Inara historic data (previous ships, stored modules)" => "向Inara发送历史数据（之前的飞船，储存的飞船模块）"
 .adminToolStripMenuItem.clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem: "Clear EDSM ID assigned to all records for current commander" => "清除当前指挥官的所有航行记录条目的EDSM ID"
-.adminToolStripMenuItem.exportVistedStarsListToEliteDangerousToolStripMenuItem: "Export Visted Stars List to Elite Dangerous" => "导出访问过的星系列表至游戏"
+.adminToolStripMenuItem.exportVistedStarsListToEliteDangerousToolStripMenuItem: "Export Visited Stars List to Elite Dangerous" => "导出访问过的星系列表至游戏"
 .addOnsToolStripMenuItem: "&Add-Ons" => "插件(&A)"
 .addOnsToolStripMenuItem.manageAddOnsToolStripMenuItem: "&Manage Add-Ons" => "管理插件(&M)"
 .addOnsToolStripMenuItem.configureAddOnActionsToolStripMenuItem: "&Edit Add-On Action Files" => "编辑插件脚本文件(&E)"
@@ -170,7 +175,7 @@ SECTION EDDiscoveryForm
 .tabControlMain.ToolTip: "Right click to add/remove tabs, Left click drag to reorder" => "右击添加/移除标签页，左键拖拽排序"
 .comboBoxCustomProfiles.ToolTip: "Use to select new profile or edit profile settings" => "选择新的配置文件或更改配置文件设置"
 .comboBoxCommander.ToolTip: "Select the commander to view" => "选择要查看的指挥官"
-.buttonExtEDSMSync.ToolTip: "Synchronize with EDSM, To and From" => "与EDSM双向同步"
+.buttonExtEDSMSync.ToolTip: "Send any unsynced logs to EDSM" => "与EDSM双向同步"
 .buttonExtPopOut.ToolTip: "Click to select a pop out panel to display" => "点击选取想要显示的弹窗"
 .buttonExtEditAddOns.ToolTip: "Edit Add-Ons" => "编辑插件"
 .buttonExtManageAddOns.ToolTip: "Manage Add-Ons" => "管理插件"
@@ -246,11 +251,11 @@ SECTION EDDiscoveryController
 .EDMC: "EDDiscovery and EDMarketConnector should not both sync to EDDN. Stop EDMC or uncheck 'send to EDDN' in settings tab!" => "EDDiscovery和EDMarketConnector不应该同时向EDDN同步。关闭EDMarketConnector或者从设置面板中关闭”发送至EDDN“的选项！"
 .RTH: "Reading travel history" => "读取航行记录中"
 .SyncEDSM: "Please continue running ED Discovery until refresh is complete." => "请在刷新完成之前不要关闭EDDiscovery"
-.SyncOff: "Synchronisation to EDSM and EDDB disabled. Use Settings panel to reenable" => "同步至EDSM和EDDB已被禁用，从设置面板重新开启"
-.EDSMU: "EDSM update complete with {0} systems" => "EDSM完成更新了{0}个星系"
-.EDDBU: "EDDB update complete with {0} systems" => "EDDB完成更新了{0}个星系"
+.SyncOff: "Star Data download is disabled. Use Settings panel to reenable" => "同步至EDSM和EDDB已被禁用，从设置面板重新开启"
+.EDSMU: "EDSM systems update complete with {0} systems" => "EDSM完成更新了{0}个星系"
+.EDDBU: "EDDB systems update complete with {0} systems" => "EDDB完成更新了{0}个星系"
 .SYST: "Loading completed, total of {0:N0} systems stored" => "加载完成，总共储存了{0:N0}个星系"
-.Refresh: "Refresh due to updating EDSM or EDDB data" => "基于EDSM或者EDDB的数据更新的刷新"
+.Refresh: "Refresh due to updating EDSM or EDDB system data" => "基于EDSM或者EDDB的数据更新的刷新"
 .PLF: "Processing log file {0}" => "正在处理日志文件 {0}"
 .RD: "Refresh Displays" => "刷新显示"
 .HRC: "History refresh complete." => "航行记录刷新完成。"
@@ -276,6 +281,7 @@ ScreenShotConfigureForm: "Screen Shot Configure" => "截图配置"
 .buttonExtCancel: "Cancel" => "取消"
 .buttonExtOK: "OK" => "确认"
 .groupBoxCropSettings: "Crop Settings" => "裁剪设置"
+.extGroupBox1: "Crop/Resize Settings" @
 .labelHeight: "Height" => "高度"
 .labelWidth: "Width" => "宽度"
 .labelLeft: "Left" => "左"
@@ -289,6 +295,15 @@ ScreenShotConfigureForm: "Screen Shot Configure" => "截图配置"
 .buttonEDChangeOutputFolder: "Browse" => "浏览"
 .labelScanFor: "Scan for" => "原始格式"
 .labelSaveAs: "Save as" => "转换为"
+.extCheckBoxRemoveOriginal: "Remove Original Elite Image" @
+.extCheckBoxKeepMasterConvertedImage: "Keep master converted image" @
+.labelImage2: "Image 2" @
+.labelImage1: "Image 1" @
+.labelHeight2: "Height" @
+.labelWidth2: "Width" @
+.labelLeft2: "Left" @
+.labelTop2: "Top" @
+.labelCropResizeOptions: "Crop/Resize Options" @
 
 SECTION BookmarkForm
 
@@ -362,6 +377,7 @@ SECTION FindSystemsUserControl
 .labelZ: "Z" => "Z："
 .buttonExtVisited: "From Visited Systems" => "从星系访问记录里搜索"
 .checkBoxCustomCube: "Cube" => "立方体"
+.extCheckBoxExcludeVisitedSystems: "Exclude Visited Systems" @
 
 SECTION ConditionFilterForm
 
@@ -427,73 +443,50 @@ AssignTravelLogSystemForm: "AssignTravelLogSystemForm" => "指向至新的星系
 SECTION CommanderForm
 
 CommanderForm: "CommanderForm" => "指挥官配置"
+.buttonCancel: "Cancel" => "取消"
+.buttonOK: "OK" => "确认"
+.extGroupBoxCommanderInfo: "Other" @
+.radioButtonHistorySelection: "History Grid Selection" @
+.labelMapCol: "Default Map Color" @
+.radioButtonCentreHome: "Home System" @
+.HomeSys: "Home System:" @
+.labelZoom: "Default Zoom" @
+.labelOpenOn: "Open Centred On" @
+.groupBoxCustomIGAU: "Intergalactic Astronomical Union [IGAU]" @
+.checkBoxIGAUSync: "Send Codex Entry Discovery Data to IGAU" @
 .groupBoxCustomInara: "Inara Information (optional)" => "Inara 设置（可选）"
-.checkBoxCustomInara: "Sync to Inara" => "同步至 Inara"
 .labelINARAN: "Inara Name:" => "Inara 用户名："
 .labelInaraAPI: "Inara API Key:" => "Inara API Key："
-.groupBoxCustomEGO: "Elite Galaxy Online Information (optional)" => "Elite Galaxy Online 设置（可选）"
-.checkBoxEGOSync: "Sync to EGO" => "同步至 EGO"
-.labelEGON: "EGO Name:" => "EGO 用户名："
-.labelEGOAPI: "EGO API Key:" => "EGO API Key："
-.groupBoxCustomCAPI: "Frontier Companion API (optional)" => "Frontier Companion API 设置(可选)"
-.checkBoxCAPIEnable: "Enable Login" => "启用登录"
-.labelCAPIPassword: "Login Password:" => "登录密码："
+.checkBoxCustomInara: "Sync to Inara" => "同步至 Inara"
 .groupBoxCustomEDDN: "EDDN" => "EDDN 设置"
 .checkBoxCustomEDDNTo: "Send Event Information to EDDN" => "向 EDDN 发送事件数据"
 .groupBoxCustomEDSM: "EDSM Information (optional)" => "EDSM 设置(可选)"
 .checkBoxCustomEDSMFrom: "Sync From EDSM" => "从 EDSM 同步"
-.checkBoxCustomEDSMTo: "Sync to EDSM" => "同步至 EDSM"
-.labelEDSMN: "EDSM Name:" => "EDSM 用户名："
 .labelEDSMAPI: "EDSM API Key:" => "EDSM API Key："
+.labelEDSMN: "EDSM Name:" => "EDSM 用户名："
+.checkBoxCustomEDSMTo: "Sync to EDSM" => "同步至 EDSM"
 .groupBoxCustomJournal: "Journal Related Information" => "游戏日志文件相关设置"
-.buttonExtBrowse: "Browse" => "浏览"
 .labelCN: "Commander Name:" => "指挥官名称："
+.buttonExtBrowse: "Browse" => "浏览"
 .labelJL: "Journal Location:" => "游戏日志文件路径："
-.buttonCancel: "Cancel" => "取消"
-.buttonOK: "OK" => "确认"
 .label_index: "Commander Configure" => "指挥官配置"
-.checkBoxCustomInara.ToolTip: "Sync with Inara" => "与 Inara 同步"
+.radioButtonHistorySelection.ToolTip: "Select history entry as opening location" @
+.textBoxDefaultZoom.ToolTip: "Set the zoom level of the map. 1 is normal" @
+.radioButtonCentreHome.ToolTip: "Select home system as opening location" @
+.panel_defaultmapcolor.ToolTip: "New travel entries get this colour on the map" @
+.checkBoxIGAUSync.ToolTip: "https://github.com/Elite-IGAU/publications/blob/master/IGAU_Codex.csv" @
 .textBoxBorderInaraName.ToolTip: "Give the user name for this commander on Inara" => "输入此指挥官在 Inara 上对应的用户名"
+.checkBoxCustomInara.ToolTip: "Sync with Inara" => "与 Inara 同步"
 .textBoxBorderInaraAPIKey.ToolTip: "Enter the API key from the Inara Website\nGet an Inara API key from https://inara.cz" => "输入 Inara 网站的 API Key\n从 https://inara.cz 获取 API Key"
-.checkBoxEGOSync.ToolTip: "Send your scan data to EGO" => "向 EGO 发送你的扫描数据"
-.textBoxEGOName.ToolTip: "Give the user name for this commander on EGO" => "输入此指挥官在 EGO 上对应的用户名"
-.textBoxEGOAPI.ToolTip: "Enter the API key from the EGO Website\nGet an EGO API key from https://www.elitegalaxyonline.com in the account menu" => "输入 EGO 网站的 API Key\n从  https://www.elitegalaxyonline.com 获取 API Key"
-.buttonExtCAPI.ToolTip: "Perform operation indicated" => "执行指定的操作"
-.textBoxBorderCompanionPassword.ToolTip: "Enter your Frontier Password" => "输入你的 Frontier 密码"
 .checkBoxCustomEDDNTo.ToolTip: "Click to send journal information to EDDN. EDDN feeds tools such as EDDB, EDSM, Inara with data from commanders. All data is made anonymised" => "勾选以将日志信息发送到EDDN。 EDDN使用从指挥官们那里收集到的信息向EDDB，EDSM，Inara等工具提供数据。 所有数据都是匿名的。"
 .checkBoxCustomEDSMFrom.ToolTip: "Receive any FSD jumps from EDSM that are on their database but not in EDDiscovery" => "从 EDSM 获取 EDDiscovery 上不存在的FSD跳跃信息。"
 .checkBoxCustomEDSMTo.ToolTip: "Send your travel and ship data to EDSM" => "向 EDSM 发送你的航行已经飞船数据。"
-.textBoxBorderEDSMName.ToolTip: "Give the name this commander is known as in EDSM" => "输入此指挥官在 EDSM 上对应的用户名"
 .textBoxBorderEDSMAPI.ToolTip: "Enter the API key from the EDSM Website\nGet an EDSM API key from https://www.edsm.net in \"My account\" menu" => "输入 EDSM 网站的 API Key\n从  https://www.edsm.net/zh 获取 API Key"
+.textBoxBorderEDSMName.ToolTip: "Give the name this commander is known as in EDSM" => "输入此指挥官在 EDSM 上对应的用户名"
 .buttonExtBrowse.ToolTip: "Browse to the the journal folder" => "选择游戏日志所在的文件夹"
-.textBoxBorderJournal.ToolTip: "Enter the journal location folder.  Normally leave this field blank only if you are using EDD on another computer than your play computer\nLeave override journal location blank to use the standard Frontier location for journals" => "输入游戏日志所在的路径。通常这项可以留空白，除非你想加载的游戏日志不在默认位置。\n将这项留空白以使用默认游戏日志路径。"
 .textBoxBorderCmdr.ToolTip: "Enter commander name as used in Elite Dangerous" => "输入游戏中的指挥官名称"
-.Login: "Login" => "登录"
-.NoCredentials: "No Credentials" => "无登录凭据"
-.LoginID: "Login ID:" => "登录 ID"
-.TTCAPI: "Enter your Frontier ID, which is the email you registered with Frontier. Does not work for Steam installs" => "输入你的 Frontier ID， 即你用来注册的Email地址。不适用于Steam版"
-.CC: "Confirmed Credentials" => "确认登录凭据"
-.Clear: "Clear" => "清空"
-.RC: "Require Confirmation" => "请求确认"
-.CFC: "Confirm Code:" => "确认码"
-.ConfirmCode: "Enter the confirmation code you just received via email from Frontier" => "输入你Email刚刚收到的Frontier发来的验证码。"
-.LIF: "Login Failed: \r\n{0}" => "登录失败： \r\n{0}"
-.FL: "Failed to login to Frontier Companion API:\r\n{0}" => "Frontier Companion API 登录失败：\r\n{0}"
-.CD: "Confirm you wish to delete the credentials stored for this commander" => "请确认你想要删除已存的该指挥官的登陆凭证"
-.CF: "Confirm Failed:\r\n{0}" => "确认失败：\r\n{0}"
-.Abandon: "You have entered text in the CAPI login or password fields, do you want to abandon CAPI credential check?" => "你已经在CAPI的登陆文本框里输入了信息，确认要放弃CAPI的凭据检查吗？"
-.Confirm: "Confirm" => "确认"
+.textBoxBorderJournal.ToolTip: "Enter the journal location folder.  Normally leave this field blank only if you are using EDD on another computer than your play computer\nLeave override journal location blank to use the standard Frontier location for journals" => "输入游戏日志所在的路径。通常这项可以留空白，除非你想加载的游戏日志不在默认位置。\n将这项留空白以使用默认游戏日志路径。"
 .LF: "Select folder where Journal*.log files are stored by Frontier in" => "选择Frontier存放游戏日志文件 *.log 所在的文件夹"
-.textBoxDefaultZoom.ToolTip: "Set the zoom level of the map. 1 is normal" @
-.radioButtonHistorySelection: "History Grid Selection" @
-.radioButtonHistorySelection.ToolTip: "Select history entry as opening location" @
-.radioButtonCentreHome: "Home System" @
-.radioButtonCentreHome.ToolTip: "Select home system as opening location" @
-.panel_defaultmapcolor.ToolTip: "New travel entries get this colour on the map" @
-.labelMapCol: "Default Map Color" @
-.labelZoom: "Default Zoom" @
-.labelOpenOn: "Open Centred On" @
-.HomeSys: "Home System:" @
 
 SECTION ExportForm
 
@@ -505,9 +498,9 @@ ExportForm: "ExportForm" => "导出"
 .buttonExport: "Export" => "导出"
 .radioButtonComma: "Comma" => "逗号"
 .checkBoxIncludeHeader: "Include Header" => "包含表头"
-.checkBoxCustomAutoOpen: "Open in excel" => "导出后打开"
+.checkBoxCustomAutoOpen: "Open" => "导出后打开"
 .label_index: "Export" => "导出"
-.ECH: "Export current History view to {0}" => "导出当前的航行记录视图为{0}"
+.ECH: "Export current data {0}" => "导出当前的航行记录视图为{0}"
 .JF: "Journal file" => "游戏日志文件"
 
 SECTION Form2DMap
@@ -672,6 +665,11 @@ SECTION UserControlForm
 .panel_taskbaricon.ToolTip: "Toggle show taskbar icon for this window" => "切换是否显示此窗口任务栏图标"
 .panel_showtitle.ToolTip: "Toggle title visibility for this window when transparent" => "切换当此窗口透明时是否显示标题"
 .panel_transparent.ToolTip: "Toggle window transparency thru four settings\r\nOff - normal window\r\nOn (T) - transparent with controls active when mouse not inside window\r\nOn (Tc) - transparent with control active, to activate hold down the activate key\r\nOn (Tf) - fully transparent and inert, to activate hold down the activate key\r\n\r\nSee the settings page for configuring which key is the activate key.  \r\nMouse must be within the boundaries of the window and the key held down for\r\n500ms approx.\r\n\r\n\r\n" => "切换四种窗口透明度模式\r\n关闭——普通窗口\r\n打开(T)——窗口透明切可用鼠标控制\r\n打开(Tc)——窗口透明按下激活窗口热键启用鼠标控制\r\n打开(Tf)——完全透明并无响应，按下激活窗口热键启用鼠标控制\r\n\r\n参照设置面板来配置激活窗口热键。\r\n鼠标必须在窗口范围内且按下热键大约500毫秒。\r\n\r\n\r\n"
+
+SECTION ExtPanelRollUp
+
+.RUPPin: "Pin to stop this menu bar disappearing automatically" @
+.RUPMarker: "Click or hover over this to unroll the menu bar" @
 
 include translation-chinese-uc.tlp
 

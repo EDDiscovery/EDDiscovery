@@ -26,6 +26,85 @@ SECTION Bodies
 .MOG: "M Red Giant" => "M型红巨星"
 .KOG: "K Orange Giant" => "K型橙巨星"
 .RP: "Rogue Planet" => "流浪行星"
+.UNK: "Class {0} star" @
+.Herbig: "Herbig Ae/Be" @
+.TTauri: "T Tauri" @
+
+SECTION EDStar
+
+.O: "O (Blue-White) Star" @
+.B: "B (Blue-White) Star" @
+.BBlueWhiteSuperGiant: "B (Blue-White super giant) Star" @
+.A: "A (Blue-White) Star" @
+.ABlueWhiteSuperGiant: "A (Blue-White super giant) Star" @
+.F: "F (White) Star" @
+.FWhiteSuperGiant: "F (White super giant) Star" @
+.G: "G (White-Yellow) Star" @
+.GWhiteSuperGiant: "G (White-Yellow super giant) Star" @
+.K: "K (Yellow-Orange) Star" @
+.KOrangeGiant: "K (Yellow-Orange giant) Star" @
+.M: "M (Red dwarf) Star" @
+.MRedGiant: "M (Red giant) Star" @
+.MRedSuperGiant: "M (Red super giant) Star" @
+.L: "L (Brown dwarf) Star" @
+.T: "T (Brown dwarf) Star" @
+.Y: "Y (Brown dwarf) Star" @
+.TTS: "T Tauri Star" @
+.AeBe: "Herbig Ae/Be Star" @
+.W: "Wolf-Rayet Star" @
+.WN: "Wolf-Rayet N Star" @
+.WNC: "Wolf-Rayet NC Star" @
+.WC: "Wolf-Rayet C Star" @
+.WO: "Wolf-Rayet O Star" @
+.CS: "CS Star" @
+.C: "C Star" @
+.CN: "CN Star" @
+.CJ: "CJ Star" @
+.CHd: "CHd Star" @
+.MS: "MS-type Star" @
+.S: "S-type Star" @
+.D: "White Dwarf (D) Star" @
+.DA: "White Dwarf (DA) Star" @
+.DAB: "White Dwarf (DAB) Star" @
+.DAO: "White Dwarf (DAO) Star" @
+.DAZ: "White Dwarf (DAZ) Star" @
+.DAV: "White Dwarf (DAV) Star" @
+.DB: "White Dwarf (DB) Star" @
+.DBZ: "White Dwarf (DBZ) Star" @
+.DBV: "White Dwarf (DBV) Star" @
+.DO: "White Dwarf (DO) Star" @
+.DOV: "White Dwarf (DOV) Star" @
+.DQ: "White Dwarf (DQ) Star" @
+.DC: "White Dwarf (DC) Star" @
+.DCV: "White Dwarf (DCV) Star" @
+.DX: "White Dwarf (DX) Star" @
+.N: "Neutron Star" @
+.H: "Black Hole" @
+.SuperMassiveBlackHole: "Supermassive Black Hole" @
+.Unknown: "Unknown star type" @
+
+SECTION EDPlanet
+
+.Metalrichbody: "Metal-rich body" @
+.Highmetalcontentbody: "High metal content world" @
+.Rockybody: "Rocky body" @
+.Icybody: "Icy body" @
+.Rockyicebody: "Rocky ice world" @
+.Earthlikebody: "Earth-like world" @
+.Waterworld: "Water world" @
+.Ammoniaworld: "Ammonia world" @
+.Watergiant: "Water giant" @
+.Watergiantwithlife: "Water giant with life" @
+.Gasgiantwithwaterbasedlife: "Gas giant with water-based life" @
+.Gasgiantwithammoniabasedlife: "Gas giant with ammonia-based life" @
+.SudarskyclassIgasgiant: "Class I gas giant" @
+.SudarskyclassIIgasgiant: "Class II gas giant" @
+.SudarskyclassIIIgasgiant: "Class III gas giant" @
+.SudarskyclassIVgasgiant: "Class IV gas giant" @
+.SudarskyclassVgasgiant: "Class V gas giant" @
+.Heliumrichgasgiant: "Helium-rich gas giant" @
+.Heliumgasgiant: "Helium gas giant" @
+.Unknown: "Unknown planet type" @
 
 SECTION MaterialCommodityData
 
@@ -586,6 +665,41 @@ SECTION MaterialCommodityData
 .opal: "Opal" @
 .thargoidtissuesampletype4: "Thargoid Hydra Tissue Sample" @
 .ancientkey: "Ancient Key" @
+.rockforthfertiliser: "Rockforth Fertiliser" @
+.agronomictreatment: "Agronomic Treatment" @
+.m_tissuesample_soft: "Mollusc Soft Tissue" @
+.s_tissuesample_cells: "Pod Core Tissue" @
+.s_tissuesample_surface: "Pod Dead Tissue" @
+.s_tissuesample_core: "Pod Surface Tissue" @
+.m3_tissuesample_membrane: "Mollusc Membrane" @
+.m3_tissuesample_mycelium: "Mollusc Mycelium" @
+.m3_tissuesample_spores: "Mollusc Spores" @
+.s6_tissuesample_coenosarc: "Pod Shell Tissue" @
+.apavietii: "Apa Vietii" @
+.RawCategory1: "Raw Category 1" @
+.RawCategory2: "Raw Category 2" @
+.RawCategory3: "Raw Category 3" @
+.RawCategory4: "Raw Category 4" @
+.RawCategory5: "Raw Category 5" @
+.RawCategory6: "Raw Category 6" @
+.RawCategory7: "Raw Category 7" @
+.EncodedEmissionData: "Encoded Emission Data" @
+.EncodedWakeScans: "Encoded Wake Scans" @
+.EncodedShieldData: "Encoded Shield Data" @
+.EncodedEncryptionFiles: "Encoded Encryption Files" @
+.EncodedDataArchives: "Encoded Data Archives" @
+.EncodedFirmware: "Encoded Firmware" @
+.ManufacturedChemical: "Manufactured Chemical" @
+.ManufacturedThermic: "Manufactured Thermic" @
+.ManufacturedHeat: "Manufactured Heat" @
+.ManufacturedConductive: "Manufactured Conductive" @
+.ManufacturedMechanicalComponents: "Manufactured Mechanical Components" @
+.ManufacturedCapacitors: "Manufactured Capacitors" @
+.ManufacturedShielding: "Manufactured Shielding" @
+.ManufacturedComposite: "Manufactured Composite" @
+.ManufacturedCrystals: "Manufactured Crystals" @
+.ManufacturedAlloys: "Manufactured Alloys" @
+.NA: "NA" @
 
 SECTION EngineeringData
 

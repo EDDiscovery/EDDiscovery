@@ -126,6 +126,7 @@ SECTION JournalTypeEnum
 .Reputation: "Reputation" => "Репутация"
 .RestockVehicle: "Restock Vehicle" => "Покупка транспорта"
 .Resurrect: "Resurrect" => "Воскрешение"
+.SAASignalsFound: "SAA Signals Found" @
 .Scan: "Scan" => "Сканирование"
 .Scanned: "Scanned" => "Обнаружено сканирование корабля"
 .ScientificResearch: "Scientific Research" => "Научные исследования"
@@ -254,7 +255,7 @@ SECTION FSSSignal
 .State: "State:" => "Состояние: "
 .Faction: "Faction:" => "фракция: "
 .USSType: "USS Type:" => "тип сигнала: "
-.ThreatLevel: " Threat Level:" => " уровень угрозы: "
+.ThreatLevel: "Threat Level:" => " уровень угрозы: "
 .StationBool: ";Station" => "; станция"
 
 SECTION JournalFSSDiscoveryScan
@@ -452,6 +453,8 @@ SECTION StarPlanetRing
 
 SECTION JournalScan
 
+.CV: "Current value: {0:N0}" @
+.FDV: "First Discovered value: {0:N0}" @
 .Autoscanof: "Autoscan of {0}" => "Автосканирование {0}"
 .Detailedscanof: "Detailed scan of {0}" => "Подробное сканирование {0}"
 .Basicscanof: "Basic scan of {0}" => "Базовое сканирование {0}"
@@ -466,7 +469,7 @@ SECTION JournalScan
 .MEM: "Mass:;EM;0.00" => "земных масс: ; ;0.00"
 .Landable: "<;, Landable" => "<;, пригодна для посадки"
 .Terraformable: "<;, Terraformable" => "<;, пригодна для терраформирования"
-.Gravity: "Gravity:;G;0.0" => "гравитация: ; g;0.0"
+.Gravity: "Gravity:;G;0.00" => "гравитация: ; g;0.0"
 .RK: "Radius:;km;0" => "радиус: ; км;0"
 .NoAtmosphere: ", No Atmosphere" => ", без атмосферы"
 .LandC: ", Landable" => ", пригодна для посадки"
@@ -476,7 +479,6 @@ SECTION JournalScan
 .SolarRadius: "Solar Radius: {0:0.00} Sols\n" => "Солнечных радиусов: {0:0.00}\n"
 .BodyRadius: "Body Radius: {0:0.00}km\n" => "Радиус: {0:0.00} км\n"
 .SurfaceTemp: "Surface Temp: {0}K\n" => "Температура поверхности: {0} K\n"
-.Luminosity: "Luminosity: {0}\n" => "Класс светимости: {0}\n"
 .GV: "Gravity: {0:0.00}g\n" => "Гравитация: {0:0.0} g\n"
 .SPA: "Surface Pressure: {0} Atmospheres\n" => "Атмосферное давление: {0} ат\n"
 .SPP: "Surface Pressure: {0} Pa\n" => "Атмосферное давление: {0} Па\n"
@@ -499,10 +501,10 @@ SECTION JournalScan
 .Belts: "Belts" => "Пояса"
 .Ring: "Ring" => "Кольцо"
 .Rings: "Rings" => "Кольца"
-.EV: "\nEstimated value: {0:N0}" => "\n\nПримерная стоимость данных сканирования: {0:N0} кр.,"
-.DB: "\n\nDiscovered by {0} on {1}" => "\n\nПервооткрыватель: {0}, дата: {1}"
+.EV: "Base Estimated value: {0:N0}" => "\n\nПримерная стоимость данных сканирования: {0:N0} кр.,"
+.DB: "Discovered by {0} on {1}" => "\n\nПервооткрыватель: {0}, дата: {1}"
 .HabitableZoneApprox: "Habitable Zone Approx. {0} ({1}-{2} AU)\n" => "Обитаемая зона прибл. {0} ({1}-{2} а. е.)\n"
-.Othersstarsnotconsidered: "(Others stars not considered)\n\n" => " (без учета других звезд)\n\n"
+.Othersstarsnotconsidered: " - Others stars not considered\n" => " (без учета других звезд)\n\n"
 .Materials: "Materials:\n" => "Материалы:\n"
 .AtmosphericComposition: "Atmospheric Composition:\n" => "Состав атмосферы:\n"
 .PlanetaryComposition: "Planetary Composition:\n" => "Состав планеты:\n"
@@ -516,8 +518,9 @@ SECTION JournalScan
 .WaterWorlds: " - Water Worlds, {0} ({1}-{2} AU),\n" => " - водные планеты:, {0} ({1}-{2} а. е.),\n"
 .EarthLikeWorlds: " - Earth Like Worlds, {0} ({1}-{2} AU),\n" => " - землеподобные планеты, {0} ({1}-{2} а. е.),\n"
 .AmmoniaWorlds: " - Ammonia Worlds, {0} ({1}-{2} AU),\n" => " - аммиачные планеты, {0} ({1}-{2} а. е.),\n"
-.IcyPlanets: " - Icy Planets, {0} (from {1} AU)\n\n" => " - ледяные планеты, {0} (от {1} а. е.)\n\n"
+.IcyPlanets: " - Icy Planets, {0} (from {1} AU)\n" => " - ледяные планеты, {0} (от {1} а. е.)\n\n"
 .DISTA: "Dist:;ls;0.0" => "Расстояние от точки прибытия: ; св. с.;0.0"
+.DIST: "Dist:" @
 .BNME: "Name:" => "название звезды: "
 .MMoM: "Mass:;MM;0.00" => "Масса: ; лунных масс;0.00"
 .SNME: "Name:" => "название тела: "
@@ -794,6 +797,7 @@ SECTION JournalEntry
 .PowerPlay: "PowerPlay:" => "Политика:"
 .Collected: "Collected:" => "Собрано: "
 .of: "< of " => "< шт. груза "
+.ofa: "of " @
 .Total: "Total:" => "\nВсего в хранилище: "
 .Progress: "Progress:;%;N1" => "прогресс: ;%;N1"
 .Delivered: "Delivered:" => "Доставлено: "
@@ -930,3 +934,5 @@ SECTION JournalEntry
 .Ships: "Ships" => "корабл."
 .Distance: "Distance:; ly;0.0" => "расстояние: ; св. л.;0.0"
 .Threat: "Threat:" => "ур. опасности: "
+.RemaingJumps: "Remaining Jumps" @
+.Nearest: "Nearest:" @

@@ -126,6 +126,10 @@ SECTION PopOutInfo
 .Surveyor.Description: "Surface map aid" => "Informacje o powierzchni planety"
 .MissionOverlay.Title: "Mission Overlay" => "Nakładka Misji"
 .MissionOverlay.Description: "Mission List overlay" => "Nakładka Listy Misji"
+.MaterialTrader.Title: "Material Trader" @
+.MaterialTrader.Description: "Material Trader" @
+.EDSM.Title: "EDSM" @
+.EDSM.Description: "Automatic web view of EDSM page on system" @
 
 SECTION EDDiscoveryForm
 
@@ -141,18 +145,19 @@ SECTION EDDiscoveryForm
 .toolsToolStripMenuItem.exitToolStripMenuItem: "E&xit" => "W&yjście"
 .adminToolStripMenuItem: "A&dmin" => "A&dministracja"
 .adminToolStripMenuItem.forceEDDBUpdateToolStripMenuItem: "Synchronise with EDDB" => "Synchronizuj z EDDB"
-.adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem: "Synchronise with EDSM" => "Synchronizuj z EDSM"
 .adminToolStripMenuItem.showLogfilesToolStripMenuItem: "Show journal files directory of current commander" => "Pokaż lokalizację dzienników obecnego Dowódcy"
 .adminToolStripMenuItem.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem: "Reset all history to current commander" => "Zresetuj całą historię obecnego Dowódcy"
 .adminToolStripMenuItem.read21AndFormerLogFilesToolStripMenuItem: "Read 2.1 and former log files" => "Odczytaj dzienniki z wersji ED 2.1 lub starszej"
 .adminToolStripMenuItem.read21AndFormerLogFilesToolStripMenuItem.read21AndFormerLogFiles_forceReloadLogsToolStripMenuItem: "Force reload logs" => "Wymuszenie ponownego wczytania dzienników"
 .adminToolStripMenuItem.rescanAllJournalFilesToolStripMenuItem: "Re-scan all journal files" => "Wczytaj ponownie wszystkie dzienniki"
 .adminToolStripMenuItem.deleteDuplicateFSDJumpEntriesToolStripMenuItem: "Delete duplicate FSD Jump entries" => "Usuń zduplikowane wpisy skoków FSD"
+.adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.sendUnsyncedEDSMJournalsToolStripMenuItem: "Send Unsynced Journals To EDSM" @
+.adminToolStripMenuItem.rebuildSystemDBIndexesToolStripMenuItem: "Rebuild System DB Indexes" @
+.adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem: "Synchronise with EDSM" => "Synchronizuj z EDSM"
 .adminToolStripMenuItem.sendUnsuncedEDDNEventsToolStripMenuItem: "Send unsynced EDDN events" => "Wyślij niezsynchronizowane zdarzenia do EDDN"
-.adminToolStripMenuItem.sendUnsyncedEGOScansToolStripMenuItem: "Send unsynced EGO scans" => "Wyślij niezsynchronizowane skany do EGO"
 .adminToolStripMenuItem.sendHistoricDataToInaraToolStripMenuItem: "Send to Inara historic data (previous ships, stored modules)" => "Wyślij starsze dane do Inara (poprzednie statki, przechowywane moduły)"
 .adminToolStripMenuItem.clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem: "Clear EDSM ID assigned to all records for current commander" => "Wyczyść EDSM ID przypisane do wszystkich wpisów obecnego Dowódcy"
-.adminToolStripMenuItem.exportVistedStarsListToEliteDangerousToolStripMenuItem: "Export Visted Stars List to Elite Dangerous" => "Eksportuj Listę Odwiedzonych Układów do Elite Dangerous"
+.adminToolStripMenuItem.exportVistedStarsListToEliteDangerousToolStripMenuItem: "Export Visited Stars List to Elite Dangerous" => "Eksportuj Listę Odwiedzonych Układów do Elite Dangerous"
 .addOnsToolStripMenuItem: "&Add-Ons" => "&Dodatki"
 .addOnsToolStripMenuItem.manageAddOnsToolStripMenuItem: "&Manage Add-Ons" => "&Zarządzaj Dodatkami"
 .addOnsToolStripMenuItem.configureAddOnActionsToolStripMenuItem: "&Edit Add-On Action Files" => "&Zarządzaj Plikami Akcji Dodatków"
@@ -170,7 +175,7 @@ SECTION EDDiscoveryForm
 .tabControlMain.ToolTip: "Right click to add/remove tabs, Left click drag to reorder" => "Prawy przycisk myszki - dodaj/usuń karty, Lewy przycisk myszki - przeciągnij aby zmienić kolejność"
 .comboBoxCustomProfiles.ToolTip: "Use to select new profile or edit profile settings" => "Wybierz nowy profil lub edytuj ustawienia istniejącego profilu"
 .comboBoxCommander.ToolTip: "Select the commander to view" => "Wybierz Dowódcę"
-.buttonExtEDSMSync.ToolTip: "Synchronize with EDSM, To and From" => "Prześlij i pobierz dane do/z EDSM"
+.buttonExtEDSMSync.ToolTip: "Send any unsynced logs to EDSM" => "Prześlij i pobierz dane do/z EDSM"
 .buttonExtPopOut.ToolTip: "Click to select a pop out panel to display" => "Kliknij żeby wybrać panel do wyświetlenia"
 .buttonExtEditAddOns.ToolTip: "Edit Add-Ons" => "Edytuj Dodatki"
 .buttonExtManageAddOns.ToolTip: "Manage Add-Ons" => "Zarządzaj Dodatkami"
@@ -246,11 +251,11 @@ SECTION EDDiscoveryController
 .EDMC: "EDDiscovery and EDMarketConnector should not both sync to EDDN. Stop EDMC or uncheck 'send to EDDN' in settings tab!" => "EDDiscovery i EDMarketConnector nie powinny w tym samym czasie synchronizować z EDDN. Wyłącz EDMC lub odznacz 'Wysyłaj Dane Zdarzeń do EDDN' w Ustawieniach!"
 .RTH: "Reading travel history" => "Wczytywanie historii podróży"
 .SyncEDSM: "Please continue running ED Discovery until refresh is complete." => "Proszę nie wyłączać EDDiscovery do momentu ukończenia odświeżania."
-.SyncOff: "Synchronisation to EDSM and EDDB disabled. Use Settings panel to reenable" => "Synchronizacja z EDSM i EDDB jest wyłączona. Można ją włączyć w Ustawieniach"
-.EDSMU: "EDSM update complete with {0} systems" => "Aktualizacja z EDSM ukończona - {0} układów"
-.EDDBU: "EDDB update complete with {0} systems" => "Aktualizacja z EDDB ukończona - {0} układów"
+.SyncOff: "Star Data download is disabled. Use Settings panel to reenable" => "Synchronizacja z EDSM i EDDB jest wyłączona. Można ją włączyć w Ustawieniach"
+.EDSMU: "EDSM systems update complete with {0} systems" => "Aktualizacja z EDSM ukończona - {0} układów"
+.EDDBU: "EDDB systems update complete with {0} systems" => "Aktualizacja z EDDB ukończona - {0} układów"
 .SYST: "Loading completed, total of {0:N0} systems stored" => "Ładowanie zakończone, razem zapisano {0:N0} układów"
-.Refresh: "Refresh due to updating EDSM or EDDB data" => "Odświeżanie z powodu aktualizacji danych EDSM lub EDDB"
+.Refresh: "Refresh due to updating EDSM or EDDB system data" => "Odświeżanie z powodu aktualizacji danych EDSM lub EDDB"
 .PLF: "Processing log file {0}" => "Przetwarzanie pliku dziennika {0}"
 .RD: "Refresh Displays" => "Odświeżanie Wskaźników"
 .HRC: "History refresh complete." => "Odświeżanie Historii zakończone."
@@ -276,6 +281,7 @@ ScreenShotConfigureForm: "Screen Shot Configure" => "Konfiguracja Zrzutów Ekran
 .buttonExtCancel: "Cancel" => "Anuluj"
 .buttonExtOK: "OK" @
 .groupBoxCropSettings: "Crop Settings" => "Ustawienia Przycinania"
+.extGroupBox1: "Crop/Resize Settings" @
 .labelHeight: "Height" => "Wysokość"
 .labelWidth: "Width" => "Szerokość"
 .labelLeft: "Left" => "Lewa strona"
@@ -289,6 +295,15 @@ ScreenShotConfigureForm: "Screen Shot Configure" => "Konfiguracja Zrzutów Ekran
 .buttonEDChangeOutputFolder: "Browse" => "Przeglądaj"
 .labelScanFor: "Scan for" => "Szukaj plików w formacie"
 .labelSaveAs: "Save as" => "Zapisz jako"
+.extCheckBoxRemoveOriginal: "Remove Original Elite Image" @
+.extCheckBoxKeepMasterConvertedImage: "Keep master converted image" @
+.labelImage2: "Image 2" @
+.labelImage1: "Image 1" @
+.labelHeight2: "Height" @
+.labelWidth2: "Width" @
+.labelLeft2: "Left" @
+.labelTop2: "Top" @
+.labelCropResizeOptions: "Crop/Resize Options" @
 
 SECTION BookmarkForm
 
@@ -362,6 +377,7 @@ SECTION FindSystemsUserControl
 .labelZ: "Z" @
 .buttonExtVisited: "From Visited Systems" => "Z Odwiedzonych Układów"
 .checkBoxCustomCube: "Cube" => "Sześcian"
+.extCheckBoxExcludeVisitedSystems: "Exclude Visited Systems" @
 
 SECTION ConditionFilterForm
 
@@ -427,73 +443,50 @@ AssignTravelLogSystemForm: "AssignTravelLogSystemForm" => "Przypisywanie Nowego 
 SECTION CommanderForm
 
 CommanderForm: "CommanderForm" => "Ustawienia Dowódcy"
+.buttonCancel: "Cancel" => "Anuluj"
+.buttonOK: "OK" @
+.extGroupBoxCommanderInfo: "Other" @
+.radioButtonHistorySelection: "History Grid Selection" @
+.labelMapCol: "Default Map Color" @
+.radioButtonCentreHome: "Home System" @
+.HomeSys: "Home System:" @
+.labelZoom: "Default Zoom" @
+.labelOpenOn: "Open Centred On" @
+.groupBoxCustomIGAU: "Intergalactic Astronomical Union [IGAU]" @
+.checkBoxIGAUSync: "Send Codex Entry Discovery Data to IGAU" @
 .groupBoxCustomInara: "Inara Information (optional)" => "Informacje Inara (opcjonalne)"
-.checkBoxCustomInara: "Sync to Inara" => "Synchronizuj z Inara"
 .labelINARAN: "Inara Name:" => "Nazwa w Inara:"
 .labelInaraAPI: "Inara API Key:" => "Klucz API Inara:"
-.groupBoxCustomEGO: "Elite Galaxy Online Information (optional)" => "Informacje Elite Galaxy Online (opcjonalne)"
-.checkBoxEGOSync: "Sync to EGO" => "Synchronizuj z EGO"
-.labelEGON: "EGO Name:" => "Nazwa w EGO:"
-.labelEGOAPI: "EGO API Key:" => "Klucz API EGO:"
-.groupBoxCustomCAPI: "Frontier Companion API (optional)" => "Frontier Companion API (opcjonalne)"
-.checkBoxCAPIEnable: "Enable Login" => "Włącz Login"
-.labelCAPIPassword: "Login Password:" => "Hasło:"
+.checkBoxCustomInara: "Sync to Inara" => "Synchronizuj z Inara"
 .groupBoxCustomEDDN: "EDDN" @
 .checkBoxCustomEDDNTo: "Send Event Information to EDDN" => "Wysyłaj Dane Zdarzeń do EDDN"
 .groupBoxCustomEDSM: "EDSM Information (optional)" => "Informacje EDSM (opcjonalne)"
 .checkBoxCustomEDSMFrom: "Sync From EDSM" => "Pobieraj dane z EDSM"
-.checkBoxCustomEDSMTo: "Sync to EDSM" => "Przesyłaj dane do EDSM"
-.labelEDSMN: "EDSM Name:" => "Nazwa w EDSM:"
 .labelEDSMAPI: "EDSM API Key:" => "Klucz API EDSM:"
+.labelEDSMN: "EDSM Name:" => "Nazwa w EDSM:"
+.checkBoxCustomEDSMTo: "Sync to EDSM" => "Przesyłaj dane do EDSM"
 .groupBoxCustomJournal: "Journal Related Information" => "Informacje Związane z Dziennikiem"
-.buttonExtBrowse: "Browse" => "Przeglądaj"
 .labelCN: "Commander Name:" => "Nazwa Dowódcy"
+.buttonExtBrowse: "Browse" => "Przeglądaj"
 .labelJL: "Journal Location:" => "Lokalizacja Dzienników:"
-.buttonCancel: "Cancel" => "Anuluj"
-.buttonOK: "OK" @
 .label_index: "Commander Configure" => "Konfiguracja Dowódcy"
-.checkBoxCustomInara.ToolTip: "Sync with Inara" => "Synchronizuj z Inara"
+.radioButtonHistorySelection.ToolTip: "Select history entry as opening location" @
+.textBoxDefaultZoom.ToolTip: "Set the zoom level of the map. 1 is normal" @
+.radioButtonCentreHome.ToolTip: "Select home system as opening location" @
+.panel_defaultmapcolor.ToolTip: "New travel entries get this colour on the map" @
+.checkBoxIGAUSync.ToolTip: "https://github.com/Elite-IGAU/publications/blob/master/IGAU_Codex.csv" @
 .textBoxBorderInaraName.ToolTip: "Give the user name for this commander on Inara" => "Wprowadź nazwę użytkownika z Inara dla tego Dowódcy"
+.checkBoxCustomInara.ToolTip: "Sync with Inara" => "Synchronizuj z Inara"
 .textBoxBorderInaraAPIKey.ToolTip: "Enter the API key from the Inara Website\nGet an Inara API key from https://inara.cz" => "Wprowadź klucz API ze strony Inara\nKlucz API można otrzymać na https://inara.cz"
-.checkBoxEGOSync.ToolTip: "Send your scan data to EGO" => "Przesyłaj swoje dane skanów do EGO"
-.textBoxEGOName.ToolTip: "Give the user name for this commander on EGO" => "Podaj nazwę użytkownika z EGO dla tego Dowódcy"
-.textBoxEGOAPI.ToolTip: "Enter the API key from the EGO Website\nGet an EGO API key from https://www.elitegalaxyonline.com in the account menu" => "Wprowadź klucz api ze strony EGO\nKlucz API można otrzymać na https://www.elitegalaxyonline.com w menu konta"
-.buttonExtCAPI.ToolTip: "Perform operation indicated" => "Wykonaj wskazaną operację"
-.textBoxBorderCompanionPassword.ToolTip: "Enter your Frontier Password" => "Wprowadź swoje hasło Frontier"
 .checkBoxCustomEDDNTo.ToolTip: "Click to send journal information to EDDN. EDDN feeds tools such as EDDB, EDSM, Inara with data from commanders. All data is made anonymised" => "Zaznacz, aby przesyłać informacje z dzienników do EDDN. EDDN przekazuje dane od dowódców narzędziom takim jak EDDB, EDSM, Inara. Dane są przekazywane anonimowo"
 .checkBoxCustomEDSMFrom.ToolTip: "Receive any FSD jumps from EDSM that are on their database but not in EDDiscovery" => "Pobierz wszystkie wpisy skoków FSD, które są w bazie danych EDSM, ale nie ma ich w bazie danych EDDiscovery"
 .checkBoxCustomEDSMTo.ToolTip: "Send your travel and ship data to EDSM" => "Przesyłaj swoje dane podróży i statków do EDSM"
-.textBoxBorderEDSMName.ToolTip: "Give the name this commander is known as in EDSM" => "Podaj nazwę tego Dowódcy z EDSM"
 .textBoxBorderEDSMAPI.ToolTip: "Enter the API key from the EDSM Website\nGet an EDSM API key from https://www.edsm.net in \"My account\" menu" => "Wprowadź klucz API ze strony EDSM\nKlucz API można otrzymać na https://www.edsm.net w menu konta"
+.textBoxBorderEDSMName.ToolTip: "Give the name this commander is known as in EDSM" => "Podaj nazwę tego Dowódcy z EDSM"
 .buttonExtBrowse.ToolTip: "Browse to the the journal folder" => "Przeglądaj, aby wybrać ścieżkę folderu dzienników"
-.textBoxBorderJournal.ToolTip: "Enter the journal location folder.  Normally leave this field blank only if you are using EDD on another computer than your play computer\nLeave override journal location blank to use the standard Frontier location for journals" => "Wprowadź lokalizację dzienników. Zostaw to pole puste, chyba że używasz EDD na innym komputerze niż ten, na którym grasz.\nPole niestandardowej lokalizacji dzienników należy zostawić puste, aby użyć domyślnej lokalizacji dzienników Frontier."
 .textBoxBorderCmdr.ToolTip: "Enter commander name as used in Elite Dangerous" => "Wprowadź nazwę Dowódcy, której używasz w Elite Dangerous"
-.Login: "Login" @
-.NoCredentials: "No Credentials" => "Brak danych dostępu"
-.LoginID: "Login ID:" => "ID Logowania:"
-.TTCAPI: "Enter your Frontier ID, which is the email you registered with Frontier. Does not work for Steam installs" => "Wprowadź swoje Frontier ID, czyli adres e-mail na który masz założone konto Frontier. Nie działa w przypadku wersji s zerwisu Steam."
-.CC: "Confirmed Credentials" => "Potwierdzone Dane Dostępu"
-.Clear: "Clear" => "Wyczyść"
-.RC: "Require Confirmation" => "Wymagane Potwierdzenie"
-.CFC: "Confirm Code:" => "Kod Potwierdzenia:"
-.ConfirmCode: "Enter the confirmation code you just received via email from Frontier" => "Wprowadź kod otrzymany przez e-mail od Frontier"
-.LIF: "Login Failed: \r\n{0}" => "Logowanie nie powiodło się: \r\n{0}"
-.FL: "Failed to login to Frontier Companion API:\r\n{0}" => "Logowanie do Frontier Companion API nie powiodło się:\r\n{0}"
-.CD: "Confirm you wish to delete the credentials stored for this commander" => "Potwierdź, że chcesz usunąć zapisane dane dostępu dla tego Dowódcy"
-.CF: "Confirm Failed:\r\n{0}" => "Potwierdzenie nie powiodło się:\r\n{0}"
-.Abandon: "You have entered text in the CAPI login or password fields, do you want to abandon CAPI credential check?" => "Wprowadziłeś tekst w polu loginu lub hasła CAPI, czy chcesz porzucić sprawdzanie danych dostępu CAPI?"
-.Confirm: "Confirm" => "Potwierdź"
+.textBoxBorderJournal.ToolTip: "Enter the journal location folder.  Normally leave this field blank only if you are using EDD on another computer than your play computer\nLeave override journal location blank to use the standard Frontier location for journals" => "Wprowadź lokalizację dzienników. Zostaw to pole puste, chyba że używasz EDD na innym komputerze niż ten, na którym grasz.\nPole niestandardowej lokalizacji dzienników należy zostawić puste, aby użyć domyślnej lokalizacji dzienników Frontier."
 .LF: "Select folder where Journal*.log files are stored by Frontier in" => "Wybierz folder, w którym pliki Journal*.log są przechowywane przez Frontier"
-.textBoxDefaultZoom.ToolTip: "Set the zoom level of the map. 1 is normal" @
-.radioButtonHistorySelection: "History Grid Selection" @
-.radioButtonHistorySelection.ToolTip: "Select history entry as opening location" @
-.radioButtonCentreHome: "Home System" @
-.radioButtonCentreHome.ToolTip: "Select home system as opening location" @
-.panel_defaultmapcolor.ToolTip: "New travel entries get this colour on the map" @
-.labelMapCol: "Default Map Color" @
-.labelZoom: "Default Zoom" @
-.labelOpenOn: "Open Centred On" @
-.HomeSys: "Home System:" @
 
 SECTION ExportForm
 
@@ -505,9 +498,9 @@ ExportForm: "ExportForm" => "Eksport"
 .buttonExport: "Export" => "Eksportuj"
 .radioButtonComma: "Comma" => "Przecinek"
 .checkBoxIncludeHeader: "Include Header" => "Uwzględnij Nagłówek"
-.checkBoxCustomAutoOpen: "Open in excel" => "Otwórz w Excel"
+.checkBoxCustomAutoOpen: "Open" => "Otwórz w Excel"
 .label_index: "Export" => "Eksportuj"
-.ECH: "Export current History view to {0}" => "Eksportuj obecny widok Historii do {0}"
+.ECH: "Export current data {0}" => "Eksportuj obecny widok Historii do {0}"
 .JF: "Journal file" => "Plik Dziennika"
 
 SECTION Form2DMap
@@ -672,6 +665,11 @@ SECTION UserControlForm
 .panel_taskbaricon.ToolTip: "Toggle show taskbar icon for this window" => "Włącz/Wyłącz ikonę paska zadań tego okna"
 .panel_showtitle.ToolTip: "Toggle title visibility for this window when transparent" => "Przełącz widoczność tytułu tego okna gdy przezroczyste"
 .panel_transparent.ToolTip: "Toggle window transparency thru four settings\r\nOff - normal window\r\nOn (T) - transparent with controls active when mouse not inside window\r\nOn (Tc) - transparent with control active, to activate hold down the activate key\r\nOn (Tf) - fully transparent and inert, to activate hold down the activate key\r\n\r\nSee the settings page for configuring which key is the activate key.  \r\nMouse must be within the boundaries of the window and the key held down for\r\n500ms approx.\r\n\r\n\r\n" => "Przełącz przezroczystość okien według czterech ustawień\r\nOff - normalne okno\r\nOn (T) - przezroczyste z aktywną kontrolą gdy kursor myszki nie znajduje się w oknie\r\nOn (Tc) - przezroczyste z aktywną kontrolą, aby aktywować przytrzymaj przycisk aktywacji\r\nOn (Tf) - całkowicie przezroczyste i nieaktywne, aby aktywować przytrzymaj przycisk aktywacji\r\n\r\nSprawdź stronę ustawień, aby ustawić przycisk jako przycisk aktywacji.  \r\nKursor myszki musi być w zakresie granic okna, przycisk musi być przytrzymany przez ok. 500ms.\r\n\r\n\r\n"
+
+SECTION ExtPanelRollUp
+
+.RUPPin: "Pin to stop this menu bar disappearing automatically" @
+.RUPMarker: "Click or hover over this to unroll the menu bar" @
 
 include translation-polski-uc.tlp
 
