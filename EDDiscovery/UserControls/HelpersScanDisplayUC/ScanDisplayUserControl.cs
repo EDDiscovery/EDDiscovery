@@ -258,10 +258,10 @@ barycount = 0;
 
                         foreach (var k in barynodes.children)   // for all barynodes.. display
                         {
-                            DisplayBarynode(k.Value, 0, planetcentres, planetsinorder, pcb, planetsize.Height / 2);     // done after the reposition so true positions set up.E
+                            DisplayBarynode(k.Value, 0, planetcentres, planetsinorder, pcb, planetsize.Height / 2);     // done after the reposition so true positions set up.
                         }
 
-                        starcontrols.InsertRange(0,pcb); // insert of all
+                        starcontrols.InsertRange(0,pcb); // insert at start so drawn under
                     }
                     else
                     {               // no planets, so just move across and plot another one

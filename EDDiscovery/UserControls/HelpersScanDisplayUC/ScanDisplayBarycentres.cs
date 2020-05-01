@@ -68,13 +68,15 @@ int barycount;
 
             int lineoff = imagesize + 8 + 10 * recursedepth;
 
-            // now we go thru all the children which actually show, find them in the nodes list, add them to the join list
-
-            int orderpos = 0;
+            int orderpos = 0;   // this records the last planet order pos for use to pass back up the tree - helps in ordering
 
             foreach (var c in sn.children)
             {
-                if (c.Value.type != StarScan.ScanNodeType.barycentre)       // deep dive down
+                // not barycentres now, we have estimate of where the bary line needs to be
+                // Note if EDSM draw is turned off, but it was in the data from another source, we would not have drawn it so we need to check that by
+                // seeing if the node has a nodecentre. No nodecentre, did not draw
+
+                if (c.Value.type != StarScan.ScanNodeType.barycentre && nodecentres.ContainsKey(c.Value))  
                 {
                     int od = nodes.IndexOf(c.Value);
                     orderpos = od;
@@ -86,7 +88,9 @@ int barycount;
                 }
             }
 
-            foreach( var b in tojoin)       // for vert, and we have a barynode, we need to find a compatible friend in the pointslist to lock the Y too
+            // now for any barycentres, see if we can place the toppos against another node on the same line so we can get a straight line to it
+
+            foreach( var b in tojoin)       
             {
                 if ( b.toppos == Point.Empty )
                 {
@@ -100,25 +104,26 @@ int barycount;
                     }
 
                     if (b.toppos == Point.Empty)
-                        b.toppos = new Point(b.point.X, b.point.Y-10);
+                        b.toppos = new Point(b.point.X, b.point.Y-10);      // if not, just use a line just above.  the draw will make a short stub
                 }
             }
 
-
-            if (tojoin.Count > 1)       // we need two or more to make a job.
+            if (tojoin.Count > 1)       // we need two or more to make a barynode line
             {
-                tojoin.Sort(delegate (BaryPointInfo l, BaryPointInfo r) { return l.orderpos.CompareTo(r.orderpos); });
+                // sort the points into planet draw order.. may not be as the barytree does not respect that
+
+                tojoin.Sort(delegate (BaryPointInfo l, BaryPointInfo r) { return l.orderpos.CompareTo(r.orderpos); });  
 
                 ExtPictureBox.ImageElement ie = new ExtPictureBox.ImageElement();
                 ie.OwnerDraw(DrawBaryTree, new Rectangle(0,0,horz?1:0, 0), tojoin);         // use Width, which does not get affected by repositiontree, to record if horz
                 pc.Insert(0, ie); // insert first so drawn under
-barycount++;
-                System.Diagnostics.Debug.WriteLine("                        ".Substring(0, level * 3) + level + " Join co-ords");
-                for (int i = 0; i < tojoin.Count; i++)
-                    System.Diagnostics.Debug.WriteLine(".. " + tojoin[i].point + " " + tojoin[i].toppos + " " + tojoin[i].orderpos);
 
-                Point pi;
-                if (horz)
+           //     System.Diagnostics.Debug.WriteLine("                        ".Substring(0, level * 3) + level + " Join co-ords");
+          //      for (int i = 0; i < tojoin.Count; i++)
+          //          System.Diagnostics.Debug.WriteLine(".. " + tojoin[i].point + " " + tojoin[i].toppos + " " + tojoin[i].orderpos);
+
+                Point pi;       // calculate and return the barycentre position 
+                if (horz)       
                 {
                     pi = new Point(tojoin[0].point.X - lineoff, (tojoin[0].point.Y + tojoin[1].point.Y) / 2);       // moons can't be split horzontally, don't need to worry like planets
                 }
@@ -143,23 +148,19 @@ barycount++;
             using (Pen p = new Pen(Color.FromArgb(255, 170, 170, 170), 2)) // gray
             {
                 var tojoin = e.Tag as List<BaryPointInfo>;
-                int linepos = e.Location.X;
-                int sely = e.Location.Y;
-
-                //int miny = tojoin.Select(x => x.Y).Min();
 
                 for (int i = 0; i < tojoin.Count; i++)
                 {
                     var cur = tojoin[i];
-                    g.DrawLine(p, cur.point, cur.toppos);
+                    g.DrawLine(p, cur.point, cur.toppos);           // always draw the sub from the centre to the top pos
 
-                    if (i > 0)
+                    if (i > 0)                                      // if we have a previous
                     {
                         var prev = tojoin[i-1];
 
-                        if (cur.toppos.Y == prev.toppos.Y || e.Location.Width == 1)      //.Width records if horizontal line, ie.moons.  If on same level, or horz
+                        if (cur.toppos.Y == prev.toppos.Y || e.Location.Width == 1)  //.Width records if horizontal line, ie.moons.  If on same level, or horz
                         {
-                            g.DrawLine(p, prev.toppos, cur.toppos);
+                            g.DrawLine(p, prev.toppos, cur.toppos); // draw from prev top to our top
                         }
                         else
                         {                                   // here, for vert (planets) the entries are not side by side, so we draw nice lines out
