@@ -455,7 +455,7 @@ namespace EDDiscovery.UserControls
                     {
                         selected = null;
                     }
-                    else if ( curmat.Count >= current.offer )                       // if we have enough for at least 1 trade
+                    else if ( curmat != null && curmat.Count >= current.offer )                       // if we have enough for at least 1 trade
                     {
                         DisplayTradeSelection(current.element);
 
