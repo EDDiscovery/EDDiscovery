@@ -95,7 +95,6 @@ namespace EDDiscovery.UserControls
             if (scannode != null)
             {
 
-barycount = 0;
                 Point leftmiddle = new Point(leftmargin, topmargin + StarSize.Height * nodeheightratio / 2 / noderatiodivider );  // half down (h/2 * ratio)
 
                 if ( opttext != null )
@@ -278,10 +277,6 @@ barycount = 0;
                 }
 
                 imagebox.AddRange(starcontrols);
-
-                if (barycount > 0)
-                    System.Diagnostics.Debug.WriteLine("Barycount of System " + scannode.system.Name + " has " + barycount);
-
             }
 
             imagebox.Render();      // replaces image..

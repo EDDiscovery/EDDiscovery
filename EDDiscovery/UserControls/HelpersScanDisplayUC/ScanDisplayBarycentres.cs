@@ -28,8 +28,6 @@ namespace EDDiscovery.UserControls
 {
     public partial class ScanDisplayUserControl : UserControl
     {
-
-int barycount;
         class BaryPointInfo
         {
             public Point point;
