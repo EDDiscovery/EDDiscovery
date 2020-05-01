@@ -23,12 +23,15 @@ using System.Windows.Forms;
 using ExtendedControls;
 using EliteDangerousCore;
 using EliteDangerousCore.JournalEvents;
+using BaseUtils;
 
 namespace EDDiscovery.UserControls
 {
     public partial class ScanDisplayUserControl : UserControl
     {
         enum DrawLevel { TopLevelStar, PlanetLevel, MoonLevel };
+
+        Dictionary<Bitmap, float> imageintensities = new Dictionary<Bitmap, float>();       // cached
 
         // return right bottom of area used from curpos
 
@@ -60,7 +63,7 @@ namespace EDDiscovery.UserControls
                     if (sn.Signals != null)
                         tip += "\n" + "Signals".T(EDTx.ScanDisplayUserControl_Signals) + ":\n" + JournalSAASignalsFound.SignalList(sn.Signals, 4, "\n");
 
-                    Image nodeimage = sc.IsStar ? sc.GetStarTypeImage() : sc.GetPlanetClassImage();
+                    Bitmap nodeimage = (Bitmap)(sc.IsStar ? sc.GetStarTypeImage() : sc.GetPlanetClassImage());
 
                     string overlaytext = "";
                     var nodelabels = new string[2] { "", "" };
@@ -215,10 +218,24 @@ namespace EDDiscovery.UserControls
 
                         if (overlaytext.HasChars())
                         {
+                            float ii;
+                            if (imageintensities.ContainsKey(nodeimage))        // find cache
+                            {
+                                ii = imageintensities[nodeimage];
+                                //System.Diagnostics.Debug.WriteLine("Cached Image intensity of " + sn.fullname + " " + ii);
+                            }
+                            else
+                            {
+                                var imageintensity = nodeimage.Function(BitMapHelpers.BitmapFunction.Brightness, nodeimage.Width * 3 / 8, nodeimage.Height * 3 / 8, nodeimage.Width * 2 / 8, nodeimage.Height * 2 / 8);
+                                ii = imageintensity.Item2;
+                                imageintensities[nodeimage] = ii;
+                                //System.Diagnostics.Debug.WriteLine("Calculated Image intensity of " + sn.fullname + " " + ii);
+                            }
+
+                            Color text = ii> 0.3f ? Color.Black : Color.FromArgb(255, 200, 200, 200);
+
                             using (Font f = new Font(EDDTheme.Instance.FontName, size.Width / 5.0f))
                             {
-                                Color text = sc.IsStar ? Color.Black : Color.FromArgb(255, 100, 140, 100);
-
                                 using (Brush b = new SolidBrush(text))
                                 {
                                     g.DrawString(overlaytext, f, b, new Rectangle(iconwidtharea, 0, bitmapwidth - iconwidtharea, bitmapheight), new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center });

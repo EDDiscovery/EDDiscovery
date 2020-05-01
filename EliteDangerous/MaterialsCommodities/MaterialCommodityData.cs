@@ -449,7 +449,7 @@ namespace EliteDangerousCore
 
             // very rare data
 
-            AddEnc("Abnormal Compact Emissions Data", ItemType.Standard, MaterialGroupType.EncodedEmissionData, "CED", "compactemissionsdata");
+            AddEnc("Abnormal Compact Emissions Data", ItemType.VeryRare, MaterialGroupType.EncodedEmissionData, "CED", "compactemissionsdata");
             AddEnc("Datamined Wake Exceptions", ItemType.VeryRare, MaterialGroupType.EncodedWakeScans, "DWEx", "dataminedwake");
             AddEnc("Peculiar Shield Frequency Data", ItemType.VeryRare, MaterialGroupType.EncodedShieldData, "PSFD", "shieldfrequencydata");
             AddEnc("Adaptive Encryptors Capture", ItemType.VeryRare, MaterialGroupType.EncodedEncryptionFiles, "AEC", "adaptiveencryptors");
