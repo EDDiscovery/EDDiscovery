@@ -22,21 +22,21 @@ NoPos: "No Pos" => "Nenhuma Posição"
 
 SECTION StartUp
 
-.DUPLOAD: "EDDiscovery is already running. Launch anyway?" @
+.DUPLOAD: "EDDiscovery is already running. Launch anyway?" => "EDDiscovery já está sendo executado. Iniciar de qualquer maneira?"
 
 SECTION SafeModeForm
 
-SafeModeForm: "EDDiscovery Safe Mode" @
-.buttonCancel: "Cancel" @
-.buttonNormal: "Run" @
-.buttonDeleteSystemDB: "Delete/Rebuild System DB" @
-.buttonDbs: "Move Databases" @
-.buttonLang: "Reset Language to English" @
-.button1: "Remove all Action Packs" @
-.buttonRemoveDLLs: "Remove all Extension DLLs" @
-.buttonResetTabs: "Reset Tabs, Remove PopOuts" @
-.buttonPositions: "Reset Window Positions" @
-.buttonResetTheme: "Reset Theme" @
+SafeModeForm: "EDDiscovery Safe Mode" => "Modo seguro de EDDiscovery"
+.buttonCancel: "Cancel" => "Cancela"
+.buttonNormal: "Run" => "Começar"
+.buttonDeleteSystemDB: "Delete/Rebuild System DB" => "Excluir/Reconstruir banco de dados do sistema"
+.buttonDbs: "Move Databases" => "Move banco de dados"
+.buttonLang: "Reset Language to English" => "Redefinir língua para Inglês"
+.button1: "Remove all Action Packs" => "Remove todos os Pacotes Action"
+.buttonRemoveDLLs: "Remove all Extension DLLs" => "Remove todas as extensões DLL"
+.buttonResetTabs: "Reset Tabs, Remove PopOuts" => "Redefine abas, remove popouts"
+.buttonPositions: "Reset Window Positions" => "Redefine posição das janelas"
+.buttonResetTheme: "Reset Theme" => "Redefine tema"
 
 SECTION PopOutInfo
 
@@ -114,22 +114,22 @@ SECTION PopOutInfo
 .ScreenShot.Title: "Screen Shot" => "Foto da Tela"
 .Grid.Description: "Grid (allows other panels to be placed in the it)" => "Grade (possibilita inserir, posicionar e redimensionar painéis ao seu interior)"
 .Grid.Title: "Grid" => "Grade"
-.SplitterControl.Description: "Splitter (allows other panels to be placed in the it)" => "Splitter (permite criar todo tipo de layout com os painéis em seu interno)"
-.SplitterControl.Title: "Splitter" @
+.SplitterControl.Description: "Splitter (allows other panels to be placed in the it)" => "Divisor (permite criar todo tipo de layout com os painéis em seu interno)"
+.SplitterControl.Title: "Splitter" => "Divisor"
 .PanelSelector.Description: "" @
 .PanelSelector.Title: "+" @
 .Search.Title: "Search" => "Procura"
 .Search.Description: "Search" => "Procura"
 .CaptainsLog.Title: "Captain's Log" => "Diário do Capitão"
 .CaptainsLog.Description: "Captain's Log - notes on your travels" => "Diário do Capitão - anotações pessoais"
-.Surveyor.Title: "Surveyor" @
+.Surveyor.Title: "Surveyor" => "Topógrafo"
 .Surveyor.Description: "Surface map aid" => "Auxílio para mapeamento de corpos celestes"
 .MissionOverlay.Title: "Mission Overlay" => "Overlay das missões"
 .MissionOverlay.Description: "Mission List overlay" => "Overlays das listas de missões"
-.MaterialTrader.Title: "Material Trader" @
-.MaterialTrader.Description: "Material Trader" @
+.MaterialTrader.Title: "Material Trader" => "Mercador de Materiais"
+.MaterialTrader.Description: "Material Trader" => "Mercador de Materiais"
 .EDSM.Title: "EDSM" @
-.EDSM.Description: "Automatic web view of EDSM page on system" @
+.EDSM.Description: "Automatic web view of EDSM page on system" => "Visualização automática da página web EDSM no sistema"
 
 SECTION EDDiscoveryForm
 
@@ -152,7 +152,7 @@ SECTION EDDiscoveryForm
 .adminToolStripMenuItem.rescanAllJournalFilesToolStripMenuItem: "Re-scan all journal files" => "Rescanneia todos os arquivos do jornal"
 .adminToolStripMenuItem.deleteDuplicateFSDJumpEntriesToolStripMenuItem: "Delete duplicate FSD Jump entries" => "Cancela entradas FSD duplicadas"
 .adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.sendUnsyncedEDSMJournalsToolStripMenuItem: "Send Unsynced Journals To EDSM" @
-.adminToolStripMenuItem.rebuildSystemDBIndexesToolStripMenuItem: "Rebuild System DB Indexes" @
+.adminToolStripMenuItem.rebuildSystemDBIndexesToolStripMenuItem: "Rebuild System DB Indexes" => "Reconstrói índices de banco de dados de sistema"
 .adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem: "Synchronise with EDSM" => "Sincronizar com EDSM"
 .adminToolStripMenuItem.sendUnsuncedEDDNEventsToolStripMenuItem: "Send unsynced EDDN events" => "Envia eventos EDDN não sincronizados"
 .adminToolStripMenuItem.sendHistoricDataToInaraToolStripMenuItem: "Send to Inara historic data (previous ships, stored modules)" => "Envia a Inara dados históricos (espaçonaves anteriores, modulos armazenados)"
@@ -166,8 +166,8 @@ SECTION EDDiscoveryForm
 .helpToolStripMenuItem: "&Help" => "&Ajuda"
 .helpToolStripMenuItem.aboutToolStripMenuItem: "&About" => "&Sobre"
 .helpToolStripMenuItem.eDDiscoveryHomepageToolStripMenuItem: "&View Help" => "&Visualizar o arquivo de ajuda"
-.helpToolStripMenuItem.eDDiscoveryChatDiscordToolStripMenuItem: "&Discord - EDD Community Chat" @
-.helpToolStripMenuItem.frontierForumThreadToolStripMenuItem: "&Frontier Forum Thread" @
+.helpToolStripMenuItem.eDDiscoveryChatDiscordToolStripMenuItem: "&Discord - EDD Community Chat" => "Comunidade chat de EDD no &Discord"
+.helpToolStripMenuItem.frontierForumThreadToolStripMenuItem: "&Frontier Forum Thread" => "&Forum da Frontier"
 .helpToolStripMenuItem.gitHubToolStripMenuItem: "&Project Page (GitHub)" => "&Paginas do Projeto (GitHub)"
 .helpToolStripMenuItem.reportIssueIdeasToolStripMenuItem: "&Report Issue / Idea" => "&Reportar um Problema o uma Sugestão"
 .helpToolStripMenuItem.howToRunInSafeModeToResetVariousParametersToolStripMenuItem: "How to Run in Safe Mode to reset various parameters" => "Como iniciar o programa em Modo Seguro para redefinir varios parametros e corrigir problemas"
@@ -233,15 +233,15 @@ SECTION EDDiscoveryForm
 .CloseWarning: "EDDiscovery is updating the EDSM and EDDB databases\r\nPress OK to close now, Cancel to wait until update is complete" => "EDDiscovery is updating the EDSM and EDDB databases\r\nPremi OK para fechar agora, Cancela para esperar o fim da atualização"
 .notifyIconMenu_Open: "&Open EDDiscovery" => "Abre EDDiscovery"
 .notifyIconMenu_Hide: "&Hide Tray Icon" => "Esconde icona da barra d serviço"
-.notifyIconMenu_Exit: "E&xit" @
-.buttonExt2dmap: "2D" @
-.buttonExt3dmap: "3D" @
-.adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.fetchLogsAgainToolStripMenuItem: "Fetch Logs Again" @
-.adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.fetchStarDataAgainToolStripMenuItem: "Fetch Star Data Again" => "Scarica novamente os registro di esploração"
+.notifyIconMenu_Exit: "E&xit" => "&Sai"
+.buttonExt2dmap: "2D" => "2D"
+.buttonExt3dmap: "3D" => "3D"
+.adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.fetchLogsAgainToolStripMenuItem: "Fetch Logs Again" => "Recupera novamente os registros"
+.adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.fetchStarDataAgainToolStripMenuItem: "Fetch Star Data Again" => "Recupera novamente os registro di esploração"
 .WSE: "Web server enabled" => "Servidor Web ativado"
-.WSF: "Web server failed to start" @
-.WSERR: "Web server disabled due to incorrect folder or missing zip file" => "Web server deativado"
-.WSD: "*** Web server is disabled ***" => "Deb Server desabilitado"
+.WSF: "Web server failed to start" => "O servidor web não pude ser iniciádo"
+.WSERR: "Web server disabled due to incorrect folder or missing zip file" => "Servidor web desativado"
+.WSD: "*** Web server is disabled ***" => "Servidor web desabilitado"
 
 SECTION EDDiscoveryController
 
@@ -260,8 +260,8 @@ SECTION EDDiscoveryController
 .RD: "Refresh Displays" => "Recarregando a exibição"
 .HRC: "History refresh complete." => "Recarregamento do histórico completo"
 .Maps: "Checking for new EDDiscovery maps" => "Verificando por novos mapas EDDiscovery"
-.EXPD: "Checking for new Expedition data" => "Verificando por novos dados de Esploração"
-.EXPL: "Checking for new Exploration data" @
+.EXPD: "Checking for new Expedition data" => "Verificando por novos dados de exploração"
+.EXPL: "Checking for new Exploration data" => "Verificando por novos dados de exploração"
 
 SECTION ScreenshotDirectoryWatcher
 
@@ -295,15 +295,15 @@ ScreenShotConfigureForm: "Screen Shot Configure" => "Impostar SCreen Shot"
 .buttonEDChangeOutputFolder: "Browse" => "Navegar"
 .labelScanFor: "Scan for" => "Escanear para"
 .labelSaveAs: "Save as" => "Salvar como"
-.extCheckBoxRemoveOriginal: "Remove Original Elite Image" @
-.extCheckBoxKeepMasterConvertedImage: "Keep master converted image" @
-.labelImage2: "Image 2" @
-.labelImage1: "Image 1" @
-.labelHeight2: "Height" @
-.labelWidth2: "Width" @
-.labelLeft2: "Left" @
-.labelTop2: "Top" @
-.labelCropResizeOptions: "Crop/Resize Options" @
+.extCheckBoxRemoveOriginal: "Remove Original Elite Image" => "Remove imagem original"
+.extCheckBoxKeepMasterConvertedImage: "Keep master converted image" => "Mantém imagem convertida"
+.labelImage2: "Image 2" => "Imagem 2"
+.labelImage1: "Image 1" => "Imagem 1"
+.labelHeight2: "Height" => "Altura"
+.labelWidth2: "Width" => "Largura"
+.labelLeft2: "Left" => "Esquerda"
+.labelTop2: "Top" => "Alto"
+.labelCropResizeOptions: "Crop/Resize Options" => "Opções de Corte/Redimensionamento"
 
 SECTION BookmarkForm
 
@@ -318,7 +318,7 @@ BookmarkForm: "Create New Bookmark" => "Criar um novo Favorito"
 .labelBookmarkNotes: "Bookmark Notes" => "Nota do Favorito"
 .labelTravelNote: "Travel History Note" => "Nota do Histórico de Viajem"
 .labelTravelNoteEdit: "(Edit on Travel Screen)" => "(Modifica no painel de viajem)"
-.labelTimeMade: "Time Made" @
+.labelTimeMade: "Time Made" => "Tempo realizado"
 .UpdateBookmark: "Update Bookmark" => "Atualizar Favorito"
 .Update: "Update" => "Atualizar"
 .SB: "New System Bookmark" => "Novo Favorito de Sistema"
@@ -338,9 +338,9 @@ SECTION SurfaceBookmarksForm
 .BodyName: "Planetary Body" => "Corpo Planetário"
 .SurfaceName: "Name" => "Nome"
 .SurfaceDesc: "Description" => "Descrição"
-.Latitude: "Latitude" @
-.Longitude: "Longitude" @
-.Valid: "Saveable" => "Salvavel"
+.Latitude: "Latitude" => "Latitude"
+.Longitude: "Longitude" => "Longitude"
+.Valid: "Saveable" => "Salvável"
 .deleteToolStripMenuItem: "Delete Row" => "Elimina linha"
 .addPlanetManuallyToolStripMenuItem: "Manually Add Planet" => "Adiciona manualmente um planeta"
 
@@ -355,29 +355,29 @@ SECTION SurfaceBookmarkUserControl
 .BodyName: "Planetary Body" => "Corpo planetario"
 .SurfaceName: "Name" => "Nome"
 .SurfaceDesc: "Description" => "Descrizione"
-.Latitude: "Latitude" @
-.Longitude: "Longitude" @
-.Valid: "Saveable" @
+.Latitude: "Latitude" => "Latitude"
+.Longitude: "Longitude" => "Longitude"
+.Valid: "Saveable" => "Salvável"
 .labelSurface: "Surface Bookmarks In System" => "Favorito de modelo de superfice"
 .sendToCompassToolStripMenuItem: "Send to compass" => "Envia"
-.deleteToolStripMenuItem: "Delete Row" => "Cancella riga"
-.addPlanetManuallyToolStripMenuItem: "Manually Add Planet" => "Introduce dados manualmente"
+.deleteToolStripMenuItem: "Delete Row" => "Elimina linha"
+.addPlanetManuallyToolStripMenuItem: "Manually Add Planet" => "Adiciona dados manualmente"
 
 SECTION FindSystemsUserControl
 
-.labelRadMax: "Max" @
+.labelRadMax: "Max" => "Máx"
 .labelRadMin: "Radius ly Min" => "Ráio Min (ly)"
 .labelFilter: "Star Name" => "Nome do Sistema"
 .Cannotfindsystem: "Cannot find system " => "Impossível achar o sistema"
 .buttonExtNames: "From DB Find Names" => "Cerca neve dal DB"
 .buttonExtEDSM: "From EDSM" => "Cerca da EDSM"
-.buttonExtDB: "From DB" @
+.buttonExtDB: "From DB" => "Da banco de dados"
 .labelX: "X" @
 .labelY: "Y" @
 .labelZ: "Z" @
-.buttonExtVisited: "From Visited Systems" => "Sistei"
-.checkBoxCustomCube: "Cube" => "Ciubo"
-.extCheckBoxExcludeVisitedSystems: "Exclude Visited Systems" @
+.buttonExtVisited: "From Visited Systems" => "De sistemas visitados"
+.checkBoxCustomCube: "Cube" => "Cubo"
+.extCheckBoxExcludeVisitedSystems: "Exclude Visited Systems" => "Exclui sistemas visitados"
 
 SECTION ConditionFilterForm
 
@@ -410,7 +410,7 @@ SECTION AddOnManagerForm
 .Name: "Name" => "Nome"
 .Version: "Version" => "Versão"
 .Description: "Description" => "Descrição"
-.Status: "Status" @
+.Status: "Status" => "Estado"
 .Action: "Action" => "Ação"
 .Delete: "Delete" => "Eliminar"
 .Enabled: "Enabled" => "Habilitar"
@@ -445,15 +445,15 @@ SECTION CommanderForm
 CommanderForm: "CommanderForm" => "Ficha"
 .buttonCancel: "Cancel" => "Cancela"
 .buttonOK: "OK" @
-.extGroupBoxCommanderInfo: "Other" @
+.extGroupBoxCommanderInfo: "Other" => "Outros"
 .radioButtonHistorySelection: "History Grid Selection" => "Seleção da Grade do Histórico"
 .labelMapCol: "Default Map Color" => "Cor do mapa predefinido"
 .radioButtonCentreHome: "Home System" => "Sistema estelar de moradia"
 .HomeSys: "Home System:" => "Sistema estelar de moradia"
 .labelZoom: "Default Zoom" => "Zoom predefinido"
 .labelOpenOn: "Open Centred On" => "Abre centrado su"
-.groupBoxCustomIGAU: "Intergalactic Astronomical Union [IGAU]" @
-.checkBoxIGAUSync: "Send Codex Entry Discovery Data to IGAU" @
+.groupBoxCustomIGAU: "Intergalactic Astronomical Union [IGAU]" => "Intergalactic Astronomical Union [IGAU]"
+.checkBoxIGAUSync: "Send Codex Entry Discovery Data to IGAU" => "Envia dados do Codex a IGAU"
 .groupBoxCustomInara: "Inara Information (optional)" => "Informações de Inara (opcional)"
 .labelINARAN: "Inara Name:" => "Nome su Inara:"
 .labelInaraAPI: "Inara API Key:" => "Chave API de Inara:"
@@ -567,14 +567,14 @@ ProfileEditor: "ProfileEditor" => "Editor de Perfil"
 .buttonExtGlobals: "Globals" => "Global"
 .buttonExtCancel: "Cancel" => "Cancela"
 .buttonOK: "OK" @
-.Custom: "Custom" @
+.Custom: "Custom" => "Personalizado"
 .Trigger: "Trigger" => "Causa"
 .Back: "Back" => "Atrás"
 .Startup: "Startup" => "Inicio"
 .TrigEdit: "Edit Profile {0} Trigger" => "Editar perfil {0} Sim"
 .BackEdit: "Edit Profile {0} Back Trigger" => "Editar perfil {0} Não"
 .DeleteWarning: "Do you wish to delete profile {0}?\r\nThis will remove all the profile information and\r\nis not reversible!" => "Quer eliminar o perfil {0}?\r\nIsto significa que todas as informações sejam perdidas de forma ireversível!"
-.Default: "Default" @
+.Default: "Default" => "Predefinido"
 
 SECTION RecordStep
 
@@ -668,8 +668,8 @@ SECTION UserControlForm
 
 SECTION ExtPanelRollUp
 
-.RUPPin: "Pin to stop this menu bar disappearing automatically" @
-.RUPMarker: "Click or hover over this to unroll the menu bar" @
+.RUPPin: "Pin to stop this menu bar disappearing automatically" => "Fixar para evitar que essa barra de menu desapareça automaticamente"
+.RUPMarker: "Click or hover over this to unroll the menu bar" => "Clique ou passe o mouse sobre para abrir a barra de menu"
 
 include translation-portugues-uc.tlp
 
