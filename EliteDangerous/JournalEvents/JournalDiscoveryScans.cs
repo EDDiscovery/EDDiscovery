@@ -213,7 +213,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public override string SummaryName(ISystem sys)
         {
-            return base.SummaryName(sys) + " " + "Of ".T(EDTx.JournalEntry_of) + BodyName.ReplaceIfStartsWith(sys.Name);
+            return base.SummaryName(sys) + " " + "of ".T(EDTx.JournalEntry_ofa) + BodyName.ReplaceIfStartsWith(sys.Name);
         }
 
         public override void FillInformation(out string info, out string detailed)
@@ -251,7 +251,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public override string SummaryName(ISystem sys)
         {
-            return base.SummaryName(sys) + " " + "Of ".T(EDTx.JournalEntry_of) + BodyName.ReplaceIfStartsWith(sys.Name);
+            return base.SummaryName(sys) + " " + "of ".T(EDTx.JournalEntry_ofa) + BodyName.ReplaceIfStartsWith(sys.Name);
         }
 
         static public string SignalList(List<SAASignal> list, int indent = 0, string separ = ", " , bool logtype = false)

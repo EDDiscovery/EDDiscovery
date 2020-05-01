@@ -50,7 +50,7 @@ namespace EliteDangerousCore.JournalEvents
         {
             MaterialCommodityData mcd = MaterialCommodityData.GetByFDName(Type);
             if (mcd != null)
-                info = BaseUtils.FieldBuilder.Build("", Type_Localised, "< (", mcd.TranslatedCategory, ";)", mcd.TranslatedType, "Total: ".T(EDTx.JournalEntry_Total), Total);
+                info = BaseUtils.FieldBuilder.Build("", Type_Localised, "< (", mcd.TranslatedCategory, ";)", mcd.TranslatedType, "Total:".T(EDTx.JournalEntry_Total), Total);
             else
                 info = Type_Localised;
             detailed = "";

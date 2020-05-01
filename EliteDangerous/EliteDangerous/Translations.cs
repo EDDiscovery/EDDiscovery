@@ -98,6 +98,7 @@ namespace EliteDangerousCore
         JournalEntry_PowerPlay, // PowerPlay:
         JournalEntry_Collected, // Collected:
         JournalEntry_of, // < of
+        JournalEntry_ofa, // < of
         JournalEntry_Total, // Total:
         JournalEntry_Progress, // Progress:;%;N1
         JournalEntry_Delivered, // Delivered:

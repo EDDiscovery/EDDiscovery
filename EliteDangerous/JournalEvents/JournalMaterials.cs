@@ -146,7 +146,7 @@ namespace EliteDangerousCore.JournalEvents
         {
             MaterialCommodityData mcd = MaterialCommodityData.GetByFDName(Name);
             if (mcd != null)
-                info = BaseUtils.FieldBuilder.Build("", FriendlyName, "< (", mcd.TranslatedCategory, ";)", mcd.TranslatedType, "; items".T(EDTx.JournalEntry_MatC), Count, "Total: ".T(EDTx.JournalEntry_Total), Total);
+                info = BaseUtils.FieldBuilder.Build("", FriendlyName, "< (", mcd.TranslatedCategory, ";)", mcd.TranslatedType, "< ; items".T(EDTx.JournalEntry_MatC), Count, "Total:".T(EDTx.JournalEntry_Total), Total);
             else
                 info = BaseUtils.FieldBuilder.Build("", FriendlyName, "< ; items".T(EDTx.JournalEntry_MatC), Count);
 
@@ -182,7 +182,7 @@ namespace EliteDangerousCore.JournalEvents
         {
             MaterialCommodityData mcd = MaterialCommodityData.GetByFDName(Name);
             if (mcd != null)
-                info = BaseUtils.FieldBuilder.Build("", FriendlyName, "< (", mcd.TranslatedCategory, ";)", mcd.TranslatedType, "; items".T(EDTx.JournalEntry_MatC), Count, "Total: ".T(EDTx.JournalEntry_Total), Total);
+                info = BaseUtils.FieldBuilder.Build("", FriendlyName, "< (", mcd.TranslatedCategory, ";)", mcd.TranslatedType, "< ; items".T(EDTx.JournalEntry_MatC), Count, "Total:".T(EDTx.JournalEntry_Total), Total);
             else
                 info = BaseUtils.FieldBuilder.Build("", FriendlyName, "< ; items".T(EDTx.JournalEntry_MatC), Count);
     

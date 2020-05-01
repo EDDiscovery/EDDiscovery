@@ -170,6 +170,8 @@ SECTION UserControlEngineering
 .buttonFilterEngineer.ToolTip: "Filter the table by engineer" @
 .buttonFilterModule.ToolTip: "Filter the table by module type" @
 .panelButtons.ToolTip: "Left click and drag on grid to reorder" @
+.chkNotHistoric.ToolTip: "When red, use the materials at the cursor to estimate, when green always use the latest materials." @
+.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 
 SECTION UserControlEstimatedValues
 
@@ -228,17 +230,17 @@ SECTION UserControlExploration
 .ColumnZ: "Z" @
 .ColumnVisits: "Visits" @
 .ColumnScans: "Scans" @
-.ColumnPrimaryStar: "Pri star" @
+.ColumnPrimaryStar: "Stars" @
 .ColumnInfo: "Info" @
 .ColumnNote: "Note" @
 .labelFilename: "Filename:" @
-.labelName: "Exploration set:" @
+.labelName: "Description:" @
 .toolStripButtonNew: "New" @
 .toolStripButtonLoad: "Load" @
 .toolStripButtonSave: "Save" @
 .tsbAddSystems: "Add Systems" @
 .toolStripButtonImportFile: "Import Text File" @
-.toolStripButtonExport: "Export Text File" @
+.toolStripButtonExport: "Export" @
 .toolStripButtonClear: "Clear List" @
 .copyToolStripMenuItem: "Copy" @
 .pasteToolStripMenuItem: "Paste" @
@@ -257,6 +259,7 @@ SECTION UserControlExploration
 .AddSys: "Add Systems" @
 .EDSMUnk: "System not known to EDSM" @
 .UnknownS: "Unknown system, system is without co-ordinates" @
+.Bodies: "Bodies" @
 
 SECTION UserControlJournalGrid
 
@@ -308,6 +311,7 @@ SECTION UserControlLedger
 .comboBoxHistoryWindow.ToolTip: "Select the entries by age" @
 .toolStripMenuItemGotoItem: "Go to entry on grid" @
 .CashTransactions: "Cash Transactions" @
+.buttonExtExcel.ToolTip: "Send data on grid to excel" @
 
 SECTION UserControlLocalMap
 
@@ -376,6 +380,8 @@ SECTION UserControlMaterials
 .textBoxItems1.ToolTip: "Count of Items" @
 .checkBoxClear.ToolTip: "Remove zero items the time after they go to zero" @
 .buttonFilter.ToolTip: "Filter out items" @
+.checkBoxShowZeros.ToolTip: "Green will show materials with zero counts, red means remove them" @
+.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 
 SECTION UserControlMaterialCommodities
 
@@ -383,6 +389,7 @@ SECTION UserControlMaterialCommodities
 .Mats: "Mats" @
 .Total: "Total" @
 .Rare: "Rare" @
+.Recipes: "Recipes" @
 
 SECTION UserControlCommodities
 
@@ -398,6 +405,8 @@ SECTION UserControlCommodities
 .textBoxItems1.ToolTip: "Count of Items" @
 .checkBoxClear.ToolTip: "Remove zero items the time after they go to zero" @
 .buttonFilter.ToolTip: "Filter out items" @
+.checkBoxShowZeros.ToolTip: "Green will show materials with zero counts, red means remove them" @
+.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 
 SECTION UserControlMissionOverlay
 
@@ -543,6 +552,9 @@ SECTION UserControlModules
 .labelShip: "Ship" @
 .EDSURL: "Enter ED Shipyard URL" @
 .CURL: "Enter Coriolis URL" @
+.buttonExtExcel.ToolTip: "Send data on grid to excel" @
+.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
+.AllModules: "All Modules" @
 
 SECTION UserControlNotePanel
 
@@ -658,7 +670,9 @@ SECTION UserControlRoute
 .textBox_FromX.ToolTip: "X Co-ord" @
 .Confirm: "This will result in a large number ({0})) of jumps\r\nConfirm please" @
 .NoRoute: "No route set up, retry" @
-UserControlRoute.comboBoxRoutingMetric: "Nearest to Waypoint" @
+.checkBox_FsdBoost: "Use Boosts" @
+.checkBox_FsdBoost.ToolTip: "The route finder will try and use FSD injections in case a direct route could not" @
+.showScanToolStripMenuItem: "View Scan Display" @
 
 SECTION UserControlRouteTracker
 
@@ -1002,8 +1016,13 @@ SECTION UserControlStarList
 .textBoxFilter.ToolTip: "Enter text to search in any fields for an item" @
 .checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM. Due to server constraints, you must click on a system to retreive data on it from EDSM." @
 .comboBoxHistoryWindow.ToolTip: "Select the entries by age" @
+.Value: "Scan Value" @
+.viewScanDisplayToolStripMenuItem: "View Scan Display" @
+.Total: "Total" @
+.Signals: "{0} has signals" @
+
 .FV: "First visit {0}" @
-.CS: "{0} Star(s)" @
+.CS: "{0} Star(s) {1}" @
 .SMBH: "{0} is a super massive black hole" @
 .BH: "{0} is a black hole" @
 .NS: "{0} is a neutron star" @
@@ -1198,10 +1217,10 @@ SECTION UserControlSynthesis
 .Notes: "Notes" @
 .Recipe: "Recipe" @
 .chkHistoric: "Use Cursor Position" @
-.buttonMaterialFilter: "Filter By Material" @
-.buttonFilterLevel: "Filter By Level" @
-.buttonRecipeFilter: "Filter By Synthesis" @
-.buttonClear: "Clear Wanted" @
+.buttonMaterialFilter: "Material" @
+.buttonFilterLevel: "Level" @
+.buttonRecipeFilter: "Synthesis" @
+.buttonClear: "Clear" @
 .ToolTip: "Left click and drag on grid to reorder" @
 .chkHistoric.ToolTip: "When clicked on, use the materials at the cursor to estimate, when off always use the latest materials." @
 .buttonMaterialFilter.ToolTip: "Filter the table by the material type" @
@@ -1209,6 +1228,8 @@ SECTION UserControlSynthesis
 .buttonRecipeFilter.ToolTip: "Filter the table by the synthesis type" @
 .buttonClear.ToolTip: "Set all wanted values to zero" @
 .panelButtons.ToolTip: "Left click and drag on grid to reorder" @
+.chkNotHistoric.ToolTip: "When red, use the materials at the cursor to estimate, when green always use the latest materials." @
+.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 
 SECTION UserControlSysInfo
 
@@ -1372,7 +1393,7 @@ SECTION CaptainsLogDiary
 
 SECTION CaptainsLogEntries
 
-.DTF: "Bad Date Time format" @
+.DTF: "Bad/Out of Range Date Time format" @
 .Note: "Note:" @
 .EnterNote: "Enter Note" @
 .CFN: "Do you really want to delete {0} notes?\r\nConfirm or Cancel" @
@@ -1438,6 +1459,8 @@ SECTION UserControlTrilateration
 .Co: "Only systems with coordinates or already known to EDSM can be added" @
 .PU: "Position unknown" @
 .PF: "Position found" @
+.addAllSectorSystemsToolStripMenuItem: "Add all Sector systems" @
+.toolStripButtonSector: "Sector Systems" @
 
 SECTION UserControlTrippanel
 
