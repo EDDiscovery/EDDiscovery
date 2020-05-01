@@ -259,7 +259,7 @@ namespace EliteDangerousCore
             // given a list of scannodes, construst a tree of barynodes with their scans underneath.
             // reconstructs the node tree and inserts barynodes into it from the parent info
 
-            static public ScanNode PopulateBarycentres(List<ScanNode> nodes)      
+            static public ScanNode PopulateBarycentres(List<ScanNode> nodes, int laststar = 0)
             {
                 ScanNode top = new ScanNode();
                 top.children = new SortedList<string, ScanNode>();
@@ -275,16 +275,17 @@ namespace EliteDangerousCore
                             var sd = sn.ScanData;
                             var sp = sd.Parents[i];
 
-                            if (sp.Type == "Null")      // any barycenters, process
+                            if (sp.Type == "Null" && sp.BodyID > laststar)      // any barycenters, process
                             {
                                 ScanNode bodynode = null;
 
                                 if (i > 0)              // so its not the last barycentre (remembering its in reverse order- last entry is the deepest (say Star) node
                                 {
                                     int bodyid = sd.Parents[i - 1].BodyID;                  // pick up the body ID of the previous entry
+                                    string bodytype = sd.Parents[i - 1].Type;
                                     bodynode = nodes.Find((x) => x.BodyID == bodyid);       // see if its in the scan database
 
-                                    if (bodynode == null && sd.Parents[i - 1].Type == "Null")   // if can't find, and its another barycentre, add a new dummy barycentre node
+                                    if (bodynode == null && bodytype == "Null" && bodyid > laststar)   // if can't find, and its another barycentre, add a new dummy barycentre node
                                     {
                                         bodynode = new ScanNode() { BodyID = bodyid, type = ScanNodeType.barycentre, fullname = "Created Barynode", ownname = bodyid.ToString("00000") };
                                     }

@@ -112,6 +112,8 @@ namespace EDDiscovery.UserControls
 
                 Point maxitemspos = new Point(0, 0);
 
+                var laststar = scannode.starnodes.Values.Select(sn => sn.BodyID).Where(e => e != null).OrderByDescending(e => e).FirstOrDefault() ?? 0;
+
                 foreach (StarScan.ScanNode starnode in scannode.starnodes.Values)        // always has scan nodes
                 {
                     if (filter != null && starnode.IsBodyInFilter(filter, true) == false)       // if filter active, but no body or children in filter
@@ -249,7 +251,7 @@ namespace EDDiscovery.UserControls
                         maxitemspos = leftmiddle = new Point(leftmargin, maxitemspos.Y + starplanetgroupspacery + StarSize.Height / 2);     // move back to left margin and move down to next position of star, allowing gap
 
                         // make a tree of the planets with their barycentres from the Parents information
-                        var barynodes = StarScan.ScanNode.PopulateBarycentres(planetsinorder);  // children always made, barynode tree
+                        var barynodes = StarScan.ScanNode.PopulateBarycentres(planetsinorder, laststar);  // children always made, barynode tree
 
                         StarScan.ScanNode.DumpTree(barynodes, "TOP", 0);
 
