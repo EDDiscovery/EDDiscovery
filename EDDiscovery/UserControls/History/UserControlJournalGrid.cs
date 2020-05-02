@@ -179,13 +179,12 @@ namespace EDDiscovery.UserControls
             List<HistoryEntry[]> chunks = new List<HistoryEntry[]>();
 
             int chunksize = 500;
-            for (int i = 0; i < result.Count; i += chunksize)
+            for (int i = 0; i < result.Count; i += chunksize, chunksize = 2000)
             {
                 HistoryEntry[] chunk = new HistoryEntry[i + chunksize > result.Count ? result.Count - i : chunksize];
 
                 result.CopyTo(i, chunk, 0, chunk.Length);
                 chunks.Add(chunk);
-                chunksize = 2000;
             }
 
             todo.Clear();
