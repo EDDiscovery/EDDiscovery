@@ -293,9 +293,11 @@ namespace EDDiscovery.UserControls
                 foreach (HistoryEntry he in hel)
                 {
                     //System.Diagnostics.Debug.WriteLine("Combat Add {0} {1} {2}", he.EventTimeUTC.ToStringZulu(), he.EventSummary, he.EventDescription);
-                    rows.Add(createRow(he));
+                    var row = createRow(he);
+                    if ( row != null)
+                        rows.Add(row);
                 }
-                dataGridViewCombat.Rows.AddRange(rows.Where(r => r is object).ToArray());
+                dataGridViewCombat.Rows.AddRange(rows.ToArray());
             }
 
             dataGridViewCombat.Sort(sortcol, (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
@@ -378,8 +380,6 @@ namespace EDDiscovery.UserControls
         bool CreateEntry(HistoryEntry he, out string rewardcol)
         {
             rewardcol = "";
-
-            he.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
 
             MissionState ml = current.MissionKey != null && he.MissionList.Missions.ContainsKey(current.MissionKey) ? he.MissionList.Missions[current.MissionKey] : null;
 
