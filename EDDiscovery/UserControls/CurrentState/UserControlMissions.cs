@@ -37,6 +37,7 @@ namespace EDDiscovery.UserControls
         private string DbStartDateChecked { get { return DBName("MissionsStartDateCheck" ); } }
         private string DbEndDateChecked { get { return DBName("MissionsEndDateCheck" ); } }
         private string DbSplitter { get { return DBName("MissionsSplitter") ; } }
+        private DateTime NextExpiry;
 
         #region Init
 
@@ -123,8 +124,12 @@ namespace EDDiscovery.UserControls
 
         private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)
         {
-            last_he = he;
-            Display();
+            if (!object.ReferenceEquals(he.MissionList, last_he?.MissionList) || he.EventTimeUTC > NextExpiry)
+            {
+                last_he = he;
+                Display();
+                NextExpiry = he.MissionList?.GetAllCurrentMissions(he.EventTimeUTC).OrderBy(e => e.MissionEndTime).FirstOrDefault()?.MissionEndTime ?? DateTime.MaxValue;
+            }
         }
 
         HistoryEntry last_he = null;
@@ -136,6 +141,7 @@ namespace EDDiscovery.UserControls
         {
             last_he = he;
             Display();
+            NextExpiry = he.MissionList?.GetAllCurrentMissions(he.EventTimeUTC).OrderBy(e => e.MissionEndTime).FirstOrDefault()?.MissionEndTime ?? DateTime.MaxValue;
         }
 
         private void Display()
@@ -147,6 +153,9 @@ namespace EDDiscovery.UserControls
 
             DataGridViewColumn sortcolcur = dataGridViewCurrent.SortedColumn != null ? dataGridViewCurrent.SortedColumn : dataGridViewCurrent.Columns[1];
             SortOrder sortordercur = dataGridViewCurrent.SortedColumn != null ? dataGridViewCurrent.SortOrder : SortOrder.Descending;
+
+            dataGridViewCurrent.SuspendLayout();
+            dataGridViewPrevious.SuspendLayout();
 
             dataGridViewCurrent.Rows.Clear();
             dataGridViewPrevious.Rows.Clear();
@@ -242,6 +251,9 @@ namespace EDDiscovery.UserControls
                 dataGridViewCurrent.Sort(sortcolcur, (sortordercur == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
                 dataGridViewCurrent.Columns[sortcolcur.Index].HeaderCell.SortGlyphDirection = sortordercur;
             }
+
+            dataGridViewCurrent.ResumeLayout();
+            dataGridViewPrevious.ResumeLayout();
         }
 
         #endregion
