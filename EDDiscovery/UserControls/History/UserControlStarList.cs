@@ -175,13 +175,12 @@ namespace EDDiscovery.UserControls
             List<List<HistoryEntry>[]> syslistchunks = new List<List<HistoryEntry>[]>();
 
             int chunksize = 500;
-            for (int i = 0; i < syslists.Count; i += chunksize)
+            for (int i = 0; i < syslists.Count; i += chunksize, chunksize = 2000)
             {
                 int totake = Math.Min(chunksize, syslists.Count - i);
                 List<HistoryEntry>[] syslistchunk = new List<HistoryEntry>[totake];
                 syslists.CopyTo(i, syslistchunk, 0, totake);
                 syslistchunks.Add(syslistchunk);
-                chunksize = 2000;
             }
 
             todo.Clear();
