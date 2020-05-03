@@ -124,7 +124,7 @@ namespace EDDiscovery.UserControls
             {
                 last_he = he;
                 Display();
-                NextExpiry = he.MissionList?.GetAllCurrentMissions(he.EventTimeUTC).OrderBy(e => e.MissionEndTime).FirstOrDefault()?.MissionEndTime ?? DateTime.MaxValue;
+                NextExpiry = he?.MissionList?.GetAllCurrentMissions(he.EventTimeUTC).OrderBy(e => e.MissionEndTime).FirstOrDefault()?.MissionEndTime ?? DateTime.MaxValue;
             }
         }
 
@@ -137,7 +137,7 @@ namespace EDDiscovery.UserControls
         {
             last_he = he;
             Display();
-            NextExpiry = he.MissionList?.GetAllCurrentMissions(he.EventTimeUTC).OrderBy(e => e.MissionEndTime).FirstOrDefault()?.MissionEndTime ?? DateTime.MaxValue;
+            NextExpiry = he?.MissionList?.GetAllCurrentMissions(he.EventTimeUTC).OrderBy(e => e.MissionEndTime).FirstOrDefault()?.MissionEndTime ?? DateTime.MaxValue;
         }
 
         private void Display()
@@ -149,9 +149,6 @@ namespace EDDiscovery.UserControls
 
             DataGridViewColumn sortcolcur = dataGridViewCurrent.SortedColumn != null ? dataGridViewCurrent.SortedColumn : dataGridViewCurrent.Columns[1];
             SortOrder sortordercur = dataGridViewCurrent.SortedColumn != null ? dataGridViewCurrent.SortOrder : SortOrder.Descending;
-
-            dataGridViewCurrent.SuspendLayout();
-            dataGridViewPrevious.SuspendLayout();
 
             dataGridViewCurrent.Rows.Clear();
             dataGridViewPrevious.Rows.Clear();
@@ -169,7 +166,7 @@ namespace EDDiscovery.UserControls
                     object[] rowobj = { JournalFieldNaming.ShortenMissionName(ms.Mission.LocalisedName) ,
                                         EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(ms.Mission.EventTimeUTC),
                                         EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(ms.Mission.Expiry),
-                                        ms.OriginatingSystem + ":" + ms.OriginatingStation,
+                                        ms.OriginatingSystem + ": " + ms.OriginatingStation,
                                         ms.Mission.Faction,
                                         ms.DestinationSystemStation(),
                                         ms.Mission.TargetFaction,
@@ -227,7 +224,7 @@ namespace EDDiscovery.UserControls
                             object[] rowobj = { JournalFieldNaming.ShortenMissionName(ms.Mission.LocalisedName) ,
                                          EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(ms.Mission.EventTimeUTC),
                                          EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(ms.MissionEndTime),
-                                        ms.OriginatingSystem + ":" + ms.OriginatingStation,
+                                        ms.OriginatingSystem + ": " + ms.OriginatingStation,
                                         ms.Mission.Faction,
                                         ms.DestinationSystemStation(),
                                         ms.Mission.TargetFaction,
@@ -257,9 +254,6 @@ namespace EDDiscovery.UserControls
                 dataGridViewCurrent.Sort(sortcolcur, (sortordercur == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
                 dataGridViewCurrent.Columns[sortcolcur.Index].HeaderCell.SortGlyphDirection = sortordercur;
             }
-
-            dataGridViewCurrent.ResumeLayout();
-            dataGridViewPrevious.ResumeLayout();
         }
 
         #endregion
