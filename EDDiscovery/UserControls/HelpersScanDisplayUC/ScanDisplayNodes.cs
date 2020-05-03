@@ -45,7 +45,7 @@ namespace EDDiscovery.UserControls
                             out int ximagecentre,           // centre in x of image
                             Size size,                      // nominal size
                             DrawLevel drawtype,          // drawing..
-                            Color? backwash = null,         // optional back wash on image (planet nodes only)
+                            Color? backwash = null,         // optional back wash on image 
                             string appendlabeltext = ""     // any label text to append
                 )
         {
@@ -155,7 +155,7 @@ namespace EDDiscovery.UserControls
                         {
                             using (Brush b = new SolidBrush(backwash.Value))
                             {
-                                g.FillRectangle(b, new Rectangle(0, 0, bitmapwidth, bitmapheight));
+                                g.FillRectangle(b, new Rectangle(overlaywidth, 0, imagewidtharea, bitmapheight));
                             }
                         }
 

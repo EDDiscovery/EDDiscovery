@@ -127,13 +127,13 @@ namespace EDDiscovery.UserControls
             //PositionInfo();
             //System.Diagnostics.Debug.WriteLine("Resize panel stars {0} {1}", DisplayRectangle, panelStars.Size);
 
-            if (!closing && last_he != null)
+            if (!closing && showing_system != null)
             {
                 int newspace = panelStars.WidthAvailable;
 
                 if (newspace < panelStars.DisplayAreaUsed.X || newspace > panelStars.DisplayAreaUsed.X +  panelStars.StarSize.Width)
                 {
-                    DrawSystem(last_he);
+                    DrawSystem();
                 }
             }
         }
@@ -189,8 +189,9 @@ namespace EDDiscovery.UserControls
             //showing_system = new SystemClass("Pallaeni"); - problem with shrinking lines
             //showing_system = new SystemClass("Borann");
             //showing_system = new SystemClass("Skaudai AM-B d14-138");
+            //showing_system = new SystemClass("Eorgh Prou JH-V e2-1979");
 
-            StarScan.SystemNode data = showing_system != null ? await discoveryform.history.starscan.FindSystemAsync(showing_system, panelStars.CheckEDSM) : null;
+            StarScan.SystemNode data = showing_system != null ? await discoveryform.history.starscan.FindSystemAsync(showing_system, panelStars.CheckEDSM, byname:true) : null;
 
             string control_text = "No System";
 

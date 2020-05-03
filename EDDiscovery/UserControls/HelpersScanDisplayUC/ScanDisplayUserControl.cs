@@ -95,7 +95,7 @@ namespace EDDiscovery.UserControls
             if (scannode != null)
             {
 
-                Point leftmiddle = new Point(leftmargin, topmargin + StarSize.Height * nodeheightratio / 2 / noderatiodivider );  // half down (h/2 * ratio)
+                Point leftmiddle = new Point(leftmargin, topmargin + StarSize.Height * nodeheightratio / 2 / noderatiodivider);  // half down (h/2 * ratio)
 
                 if ( opttext != null )
                 {
@@ -360,7 +360,7 @@ namespace EDDiscovery.UserControls
 
                 foreach (var k in barynodes.children)   // for all barynodes.. display
                 {
-                    DisplayBarynode(k.Value, 0, mooncentres, moonnodes, pc, moonsize.Width*5/4, true);
+                    DisplayBarynode(k.Value, 0, mooncentres, moonnodes, pc, moonsize.Width * 5 / 4, true);
                 }
             }
 
@@ -397,10 +397,9 @@ namespace EDDiscovery.UserControls
             starfirstplanetspacerx = Math.Min(stars / 2, 16);      // 16/2=8 to 16
             starplanetgroupspacery = Math.Min(stars / 2, 24);      // 16/2=8 to 24
             planetspacerx = Math.Min(stars / 4, 16);
-            planetspacery = 32;
+            topmargin = planetspacery = 40;     // enough space for a decent number of barycentres
             moonspacerx = Math.Min(stars / 4, 8);
             moonspacery = Math.Min(stars / 4, 8);
-            topmargin = 20;
             leftmargin = 8;
             materiallinespacerxy = 4;
         }
