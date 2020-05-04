@@ -67,6 +67,8 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.Translate(toolTip, this);
 
             dataViewScrollerPanelPrev.LimitLargeChange = dataViewScrollerPanelCurrent.LimitLargeChange = 4;
+
+            labelValue.Visible = false;
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
