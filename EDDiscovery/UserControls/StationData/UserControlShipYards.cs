@@ -142,6 +142,7 @@ namespace EDDiscovery.UserControls
             SortOrder sortorder = dataGridViewShips.SortOrder;
 
             dataGridViewShips.Rows.Clear();
+            dataViewScrollerPanel1.SuspendLayout();
 
             labelYard.Visible = false;
 
@@ -169,6 +170,7 @@ namespace EDDiscovery.UserControls
                     DisplayShips(shiplist, comboBoxYards.Text);
             }
 
+            dataViewScrollerPanel1.ResumeLayout();
             dataGridViewShips.Sort(sortcol, (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
             dataGridViewShips.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
         }

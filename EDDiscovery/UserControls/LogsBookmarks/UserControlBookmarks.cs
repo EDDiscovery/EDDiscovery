@@ -59,6 +59,7 @@ namespace EDDiscovery.UserControls
             DataGridViewColumn sortcol = dataGridViewBookMarks.SortedColumn != null ? dataGridViewBookMarks.SortedColumn : dataGridViewBookMarks.Columns[0];
             SortOrder sortorder = dataGridViewBookMarks.SortOrder;
 
+            dataViewScrollerPanel.SuspendLayout();
             dataGridViewBookMarks.SuspendLayout();
 
             dataGridViewBookMarks.Rows.Clear();
@@ -79,6 +80,7 @@ namespace EDDiscovery.UserControls
             }
 
             dataGridViewBookMarks.ResumeLayout();
+            dataViewScrollerPanel.ResumeLayout();
 
             dataGridViewBookMarks.Sort(sortcol, (sortorder == SortOrder.Descending) ? System.ComponentModel.ListSortDirection.Descending : System.ComponentModel.ListSortDirection.Ascending);
             dataGridViewBookMarks.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;

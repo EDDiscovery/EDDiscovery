@@ -175,6 +175,8 @@ namespace EDDiscovery.UserControls
             bool all = filter.Length > 0 && filter[0] == "All";
             bool showzeros = checkBoxShowZeros.Checked;
 
+            dataViewScrollerPanel.SuspendLayout();
+
             MaterialCommodityData[] allitems = materials ? MaterialCommodityData.GetMaterials(true) : MaterialCommodityData.GetCommodities(true);
 
             foreach ( MaterialCommodityData mcd in allitems)        // we go thru all items..
@@ -212,6 +214,8 @@ namespace EDDiscovery.UserControls
                     }
                 }
             }
+
+            dataViewScrollerPanel.ResumeLayout();
 
             dataGridViewMC.Sort(sortcolprev, (sortorderprev == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
             dataGridViewMC.Columns[sortcolprev.Index].HeaderCell.SortGlyphDirection = sortorderprev;
