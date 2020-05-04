@@ -165,6 +165,8 @@ namespace EDDiscovery.UserControls
             rowsbyjournalid.Clear();
             dataGridViewStarList.Rows.Clear();
 
+            checkBoxJumponium.Enabled = checkBoxBodyClasses.Enabled = buttonExtExcel.Enabled = comboBoxHistoryWindow.Enabled = false;
+
             dataGridViewStarList.Columns[0].HeaderText = EDDiscoveryForm.EDDConfig.GetTimeTitle();
 
             var filter = (TravelHistoryFilter)comboBoxHistoryWindow.SelectedItem ?? TravelHistoryFilter.NoFilter;
@@ -229,6 +231,7 @@ namespace EDDiscovery.UserControls
                 autoupdateedsm.Start();
 
                 loadcomplete = true;
+                checkBoxJumponium.Enabled = checkBoxBodyClasses.Enabled = buttonExtExcel.Enabled = comboBoxHistoryWindow.Enabled = true;
             });
 
             todotimer.Start();

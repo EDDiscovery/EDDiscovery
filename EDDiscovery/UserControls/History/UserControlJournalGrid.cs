@@ -149,7 +149,7 @@ namespace EDDiscovery.UserControls
 
             loadcomplete = false;
             this.Cursor = Cursors.WaitCursor;
-            buttonFilter.Enabled = buttonField.Enabled = textBoxFilter.Enabled = comboBoxJournalWindow.Enabled = false;
+            buttonExtExcel.Enabled = buttonFilter.Enabled = buttonField.Enabled = comboBoxJournalWindow.Enabled = false;
 
             current_historylist = hl;
 
@@ -238,7 +238,7 @@ namespace EDDiscovery.UserControls
                 }
 
                 this.Cursor = Cursors.Default;
-                buttonFilter.Enabled = buttonField.Enabled = textBoxFilter.Enabled = comboBoxJournalWindow.Enabled = true;
+                buttonExtExcel.Enabled = buttonFilter.Enabled = buttonField.Enabled = comboBoxJournalWindow.Enabled = true;
 
                 loadcomplete = true;
             });
