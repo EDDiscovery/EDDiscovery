@@ -119,6 +119,7 @@ namespace EDDiscovery
             this.checkForNewReleaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.label_version = new System.Windows.Forms.Label();
             this.labelInfoBoxTop = new System.Windows.Forms.Label();
+            this.labelGameDateTime = new System.Windows.Forms.Label();
             this.closeminimizeFlowPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.panel_close = new ExtendedControls.ExtButtonDrawn();
             this.panel_minimize = new ExtendedControls.ExtButtonDrawn();
@@ -233,6 +234,7 @@ namespace EDDiscovery
             // 
             this.buttonExtRefresh.BackColor = System.Drawing.Color.Transparent;
             this.buttonExtRefresh.Image = global::EDDiscovery.Icons.Controls.Main_Toolbar_Refresh;
+            this.buttonExtRefresh.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.buttonExtRefresh.Location = new System.Drawing.Point(154, 1);
             this.buttonExtRefresh.Margin = new System.Windows.Forms.Padding(1, 1, 3, 1);
             this.buttonExtRefresh.Name = "buttonExtRefresh";
@@ -351,12 +353,15 @@ namespace EDDiscovery
             // 
             // buttonReloadActions
             // 
+            this.buttonReloadActions.Image = global::EDDiscovery.Icons.Controls.Main_Toolbar_Refresh;
+            this.buttonReloadActions.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.buttonReloadActions.Location = new System.Drawing.Point(518, 1);
             this.buttonReloadActions.Margin = new System.Windows.Forms.Padding(1, 1, 3, 1);
             this.buttonReloadActions.Name = "buttonReloadActions";
-            this.buttonReloadActions.Size = new System.Drawing.Size(82, 23);
+            this.buttonReloadActions.Size = new System.Drawing.Size(65, 23);
             this.buttonReloadActions.TabIndex = 1;
-            this.buttonReloadActions.Text = "Reload-A";
+            this.buttonReloadActions.Text = "Actions";
+            this.buttonReloadActions.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.toolTip.SetToolTip(this.buttonReloadActions, "DEBUG reload action system");
             this.buttonReloadActions.UseVisualStyleBackColor = true;
             this.buttonReloadActions.Visible = false;
@@ -473,7 +478,7 @@ namespace EDDiscovery
             this.tableLayoutPanelTop.Name = "tableLayoutPanelTop";
             this.tableLayoutPanelTop.RowCount = 1;
             this.tableLayoutPanelTop.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanelTop.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
+            this.tableLayoutPanelTop.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
             this.tableLayoutPanelTop.Size = new System.Drawing.Size(969, 24);
             this.tableLayoutPanelTop.TabIndex = 23;
             this.tableLayoutPanelTop.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MouseDownCAPTION);
@@ -485,6 +490,7 @@ namespace EDDiscovery
             this.menuFlowPanel.Controls.Add(this.mainMenu);
             this.menuFlowPanel.Controls.Add(this.label_version);
             this.menuFlowPanel.Controls.Add(this.labelInfoBoxTop);
+            this.menuFlowPanel.Controls.Add(this.labelGameDateTime);
             this.menuFlowPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.menuFlowPanel.Location = new System.Drawing.Point(0, 0);
             this.menuFlowPanel.Margin = new System.Windows.Forms.Padding(0);
@@ -885,6 +891,18 @@ namespace EDDiscovery
             this.labelInfoBoxTop.MouseDown += new System.Windows.Forms.MouseEventHandler(this.labelversion_MouseDown);
             this.labelInfoBoxTop.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MouseUpCAPTION);
             // 
+            // labelGameDateTime
+            // 
+            this.labelGameDateTime.AutoSize = true;
+            this.labelGameDateTime.Location = new System.Drawing.Point(330, 1);
+            this.labelGameDateTime.Margin = new System.Windows.Forms.Padding(8, 1, 3, 0);
+            this.labelGameDateTime.Name = "labelGameDateTime";
+            this.labelGameDateTime.Size = new System.Drawing.Size(43, 13);
+            this.labelGameDateTime.TabIndex = 0;
+            this.labelGameDateTime.Text = "<code>";
+            this.labelGameDateTime.MouseDown += new System.Windows.Forms.MouseEventHandler(this.labelversion_MouseDown);
+            this.labelGameDateTime.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MouseUpCAPTION);
+            // 
             // closeminimizeFlowPanel
             // 
             this.closeminimizeFlowPanel.Controls.Add(this.panel_close);
@@ -1089,5 +1107,6 @@ namespace EDDiscovery
         private System.Windows.Forms.Panel panel_eddiscovery;
         private System.Windows.Forms.ToolStripMenuItem rebuildSystemDBIndexesToolStripMenuItem;
         private ExtendedControls.ExtPanelResizer extPanelTopResizer;
+        private System.Windows.Forms.Label labelGameDateTime;
     }
 }
