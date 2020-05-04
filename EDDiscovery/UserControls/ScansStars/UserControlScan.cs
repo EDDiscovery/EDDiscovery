@@ -344,7 +344,7 @@ namespace EDDiscovery.UserControls
                 global::EDDiscovery.Icons.Controls.Scan_SizeMinuscule ,
             };
 
-            string[] textlist = new string[] { "128", "96", "64", "48", "32", "16" };
+            string[] textlist = new string[] { "256", "192", "128", "96", "64", "48", "32", "16" };
 
             dropdown.Items = textlist.ToList();
             dropdown.ImageItems = imagelist.ToList();
