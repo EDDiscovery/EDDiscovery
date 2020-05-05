@@ -68,6 +68,11 @@ namespace EDDiscovery.UserControls
             TravelHistoryFilter.InitaliseComboBox(comboBoxHistoryWindow, DbHistorySave, incldockstartend: false);
         }
 
+        public override void ChangeCursorType(IHistoryCursor thc)
+        {
+            uctg = thc;
+        }
+
         public override void LoadLayout()
         {
             dataGridViewLedger.RowTemplate.MinimumHeight = Font.ScalePixels(26);

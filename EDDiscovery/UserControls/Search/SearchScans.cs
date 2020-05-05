@@ -177,6 +177,11 @@ namespace EDDiscovery.UserControls
             comboBoxSearches.SelectedIndexChanged += ComboBoxSearches_SelectedIndexChanged;
         }
 
+        public override void ChangeCursorType(IHistoryCursor thc)
+        {
+            uctg = thc;
+        }
+
         public override void LoadLayout()
         {
             DGVLoadColumnLayout(dataGridView, DbColumnSave);
