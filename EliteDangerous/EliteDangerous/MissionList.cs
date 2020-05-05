@@ -217,7 +217,10 @@ namespace EliteDangerousCore
         {
             foreach( string k in keys)
             {
-                Missions[k] = new MissionState(Missions[k], MissionState.StateTypes.InProgress,null); // copy previous mission info, resurrected, now!
+                if (Missions.ContainsKey(k))
+                {
+                    Missions[k] = new MissionState(Missions[k], MissionState.StateTypes.InProgress, null); // copy previous mission info, resurrected, now!
+                }
             }
         }
 
@@ -225,7 +228,7 @@ namespace EliteDangerousCore
         {
             foreach (string k in keys)
             {
-                if (Missions[k].State == MissionState.StateTypes.InProgress)
+                if (Missions.ContainsKey(k) && Missions[k].State == MissionState.StateTypes.InProgress)
                 {
                     Missions[k] = new MissionState(Missions[k], state, missingtime);
                 }
@@ -236,7 +239,7 @@ namespace EliteDangerousCore
         {
             foreach (string k in keys)
             {
-                if (Missions[k].State == MissionState.StateTypes.InProgress)
+                if (Missions.ContainsKey(k) && Missions[k].State == MissionState.StateTypes.InProgress)
                 {
                     // permits seem to be only 1 journal entry.. so its completed.
                     MissionState.StateTypes st = Missions[k].Mission.Name.Contains("permit", StringComparison.InvariantCultureIgnoreCase) ? MissionState.StateTypes.Completed : MissionState.StateTypes.Abandoned;
