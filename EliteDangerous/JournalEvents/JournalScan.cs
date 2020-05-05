@@ -1109,34 +1109,34 @@ namespace EliteDangerousCore.JournalEvents
             // The in-game black hole population do not really fit quite well that nomenclature, so we have to quantize the masses ranges to more reasonable limits.
 
             if (StarTypeID == EDStar.H && sm <= 7.0)
-                iconname = "HS";
+                iconname = "H_stellar";
             else if (StarTypeID == EDStar.H && sm > 7.0)
                 iconname = "H";
             else if (StarTypeID == EDStar.H && sm > 70.0)
-                iconname = "HI";
+                iconname = "H_intermediate";
             
             // neutron stars variations. 
             // Uses theorethical masses: https://en.wikipedia.org/wiki/Neutron_star
             if (StarTypeID == EDStar.N)
                 if (sm < 1.1)
-                    iconname = "Nv1";
+                    iconname = "N";
                 else if (sm < 1.9)
-                    iconname = "Nv2";
+                    iconname = "N_massive";
                 else
-                    iconname = "Nv3";            
+                    iconname = "N_veryMassive";            
 
             // white dwarfs variations
             if (StarTypeID == EDStar.D || StarTypeID == EDStar.DA || StarTypeID == EDStar.DAB || StarTypeID == EDStar.DAO || StarTypeID == EDStar.DAV || StarTypeID == EDStar.DAZ || StarTypeID == EDStar.DB || 
                 StarTypeID == EDStar.DBV || StarTypeID == EDStar.DBZ || StarTypeID == EDStar.DC || StarTypeID == EDStar.DCV || StarTypeID == EDStar.DO || StarTypeID == EDStar.DOV || StarTypeID == EDStar.DQ || 
                 StarTypeID == EDStar.DX)
                 if (st <= 5500)
-                    iconname = "Dv1";
+                    iconname = "D";
                 else if (st < 8000)
-                    iconname = "Dv2";
+                    iconname = "D_hot";
                 else if (st < 14000)
-                    iconname = "Dv3";
+                    iconname = "D_veryHot";
                 else if (st >= 14000)
-                    iconname = "Dv4";
+                    iconname = "D_extremelyHot";
 
             // carbon stars
             if (StarTypeID == EDStar.C || StarTypeID == EDStar.CHd || StarTypeID == EDStar.CJ || StarTypeID == EDStar.CN || StarTypeID == EDStar.CS)
@@ -1327,31 +1327,40 @@ namespace EliteDangerousCore.JournalEvents
             {
                 iconname = "AMWv1"; // fallback
 
-                if (AtmosphereProperty == EDAtmosphereProperty.Thick || AtmosphereProperty == EDAtmosphereProperty.Hot)
-                    iconname = "AMWv2";                
+                if (Terraformable) // extremely rare, but they exists
+                    iconname = "AMWv2";
+                else if (AtmosphereProperty == EDAtmosphereProperty.Thick || AtmosphereProperty == EDAtmosphereProperty.Hot)
+                    iconname = "AMWv3";                
                 else if (AtmosphereProperty == EDAtmosphereProperty.Rich || AtmosphereID == EDAtmosphereType.Ammonia_and_oxygen)
-                    iconname = "AMWv3";
-                else if (nLandable == true || AtmosphereID == EDAtmosphereType.No_atmosphere || AtmosphereProperty == EDAtmosphereProperty.None)
                     iconname = "AMWv4";
-                else
+                else if (nLandable == true || AtmosphereID == EDAtmosphereType.No_atmosphere && st < 140)
+                    iconname = "AMWv5";
+                else if (st < 180)
+                    iconname = "AMWv3";
+                else if (st < 210)
                     iconname = "AMWv1";
+                else
+                    iconname = "AMWv4";
             }
 
             // Earth world
             if (PlanetTypeID == EDPlanet.Earthlike_body)
             {
                 iconname = "ELWv5"; // fallback
-                                
-                if (st > 260 && st < 262) // mars, or almost identical to
-                    iconname = "ELWv4";
-                else if (st < 280)
-                    iconname = "ELWv2";                
-                else if (st > 287 && st < 289 && VolcanismID == EDVolcanism.Silicate_Magma) // earth, or almost identical to
+
+                if ((int)nMassEM == 1 && st == 288) // earth, or almost identical to
                     iconname = "ELWv1";
-                else if (st < 300)
-                    iconname = "ELWv3";
                 else
-                    iconname = "ELWv5";
+                {
+                    if (st < 265) // mars, or almost identical to
+                        iconname = "ELWv4";
+                    else if (st < 280)
+                        iconname = "ELWv2";
+                    else if (st < 300)
+                        iconname = "ELWv3";
+                    else
+                        iconname = "ELWv5";
+                }
             }
 
             if (PlanetTypeID == EDPlanet.High_metal_content_body)
