@@ -199,7 +199,7 @@ namespace EDDiscovery.UserControls
 #if PLAYTHRU
             StarScan.SystemNode data = showing_system != null ? await discoveryform.history.starscan.FindSystemAsync(showing_system, false, byname: true) : null;
 #else
-            StarScan.SystemNode data = showing_system != null ? await discoveryform.history.starscan.FindSystemAsync(showing_system, panelStars.CheckEDSM, byname:true) : null;
+            StarScan.SystemNode data = showing_system != null ? await discoveryform.history.starscan.FindSystemAsync(showing_system, panelStars.CheckEDSM) : null;
 #endif
             string control_text = "No System";
 
