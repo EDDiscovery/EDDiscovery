@@ -1106,13 +1106,14 @@ namespace EliteDangerousCore.JournalEvents
 
             // black holes variations. According to theorethical papers, we should find four classes of black holes: 
             // supermassive, intermediate, stellar and micro (https://en.wikipedia.org/wiki/Black_hole) gravitional collapses.
-            // The in-game black hole population do not really fit quite well that nomenclature, so we have to quantize the masses ranges to more reasonable limits.
-
+            // The in-game black hole population do not really fit quite well that nomenclature, they are somewhat capped. so we have to quantize the masses ranges to more reasonable limits.
+            // For example, SagA* is known to have at least 4 millions solar masses, in real life: the in-game stats shows only 516.608, way smaller! The same for Great Annihilator: the biggest
+            // of the couple should be more than some hundrends of thousands of solar masses, which is the expected mass range of an intermediate black holes...
             if (StarTypeID == EDStar.H && sm <= 7.0)
                 iconname = "H_stellar";
-            else if (StarTypeID == EDStar.H && sm > 7.0)
+            else if (StarTypeID == EDStar.H && sm < 70.0)
                 iconname = "H";
-            else if (StarTypeID == EDStar.H && sm > 70.0)
+            else
                 iconname = "H_intermediate";
             
             // neutron stars variations. 
