@@ -26,6 +26,7 @@ using System.Diagnostics;
 using System.Net.NetworkInformation;
 using System.Runtime.InteropServices;
 using BaseUtils;
+using System.Drawing.Imaging;
 
 namespace EDDiscovery.Icons
 {
@@ -212,7 +213,7 @@ namespace EDDiscovery.Icons
 
         }
 
-        public static Image GetIcon(string name, int rotation = 0)
+        public static Image GetIcon(string name)
         {
             if (Icons == null)      // seen designer barfing over this
                 return null;
@@ -221,8 +222,6 @@ namespace EDDiscovery.Icons
 
             if (Icons.ContainsKey(name))            // written this way so you can debug step it.
             {
-                if (rotation != 0)
-                    RotateIcon(Icons[name], rotation);
                 return Icons[name];
             }
             else if (defaultIcons.ContainsKey(name))
@@ -232,41 +231,6 @@ namespace EDDiscovery.Icons
                 System.Diagnostics.Debug.WriteLine("**************************** ************************" + Environment.NewLine + " Missing Icon " + name);
                 return defaultIcons["Legacy.star"];
             }
-        }
-
-        private static void RotateIcon(Image icon, int rotation)
-        {
-            int effect = 0;
-
-            var rotate = RotateFlipType.RotateNoneFlipNone;
-            Random rnd = new Random();
-
-            if (rotation == 6) // allow for some random rotation, to spice up the scan panel
-                effect = rnd.Next(1, 6);
-
-            switch (effect)
-            {
-                case 1:
-                    rotate = RotateFlipType.Rotate90FlipNone;
-                    break;
-                case 2:
-                    rotate = RotateFlipType.Rotate180FlipNone;
-                    break;
-                case 3:
-                    rotate = RotateFlipType.Rotate270FlipNone;
-                    break;
-                case 4:
-                    rotate = RotateFlipType.RotateNoneFlipX;
-                    break;
-                case 5:
-                    rotate = RotateFlipType.RotateNoneFlipY;
-                    break;
-                case 0:
-                    rotate = RotateFlipType.RotateNoneFlipNone;
-                    break;
-            }
-
-            icon.RotateFlip(rotate);
         }
     }
 }

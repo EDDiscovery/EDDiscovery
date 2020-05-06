@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -700,6 +701,7 @@
     <EmbeddedResource Include="Bodies\Giants\WTGv1.png" />
     <EmbeddedResource Include="Bodies\Planets\AMWv5.png" />
     <EmbeddedResource Include="Bodies\Planets\RBDv6.png" />
+    <EmbeddedResource Include="Bodies\Giants\GG4v2.png" />
     <Content Include="Bodies\Stars\SagittariusA.png" />
     <EmbeddedResource Include="Bodies\Stars\D_veryHot.png" />
     <EmbeddedResource Include="Bodies\Stars\D_extremelyHot.png" />
