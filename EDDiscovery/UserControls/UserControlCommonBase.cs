@@ -76,6 +76,12 @@ namespace EDDiscovery.UserControls
 
         // end calling order.
 
+        public virtual void ChangeCursorType(IHistoryCursor thc) { }     // implement if you call the uctg
+
+        public virtual Color ColorTransparency { get { return Color.Transparent; } }  // override to say support transparency, and what colour you want.
+
+        // Close
+
         public void CloseDown()     // Call to close down.
         {
             Closing();
@@ -95,9 +101,6 @@ namespace EDDiscovery.UserControls
             base.Dispose(disposing);
         }
 
-        public virtual void ChangeCursorType(IHistoryCursor thc) { }     // optional, cursor has changed
-
-        public virtual Color ColorTransparency { get { return Color.Transparent; } }        // override to say support transparency, and what colour you want.
 
         public bool IsFloatingWindow { get { return this.FindForm() is Forms.UserControlForm; } }   // ultimately its a floating window
 

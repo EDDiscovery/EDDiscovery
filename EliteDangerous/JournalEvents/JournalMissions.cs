@@ -400,7 +400,7 @@ namespace EliteDangerousCore.JournalEvents
                                             "Type:".T(EDTx.JournalEntry_Type), TargetTypeLocalised,
                                             "Target Faction:".T(EDTx.JournalEntry_TargetFaction), TargetFaction);
 
-            detailed += RewardInformation(true);
+            detailed = detailed.AppendPrePad(RewardInformation(true),Environment.NewLine);
 
             detailed= detailed.ReplaceIfEndsWith(Environment.NewLine, "");
 
@@ -510,6 +510,13 @@ namespace EliteDangerousCore.JournalEvents
             }
 
             return detailed;
+        }
+
+        public bool HasReceivedReward(string fdname)
+        {
+            var m = MaterialsReward != null && Array.Find(MaterialsReward, (x) => x.Name.Equals(fdname, StringComparison.InvariantCultureIgnoreCase)) != null;
+            var c = CommodityReward != null && Array.Find(CommodityReward, (x) => x.Name.Equals(fdname, StringComparison.InvariantCultureIgnoreCase)) != null;
+            return m || c;
         }
 
         public string RewardOrDonation { get { return Reward.HasValue ? Reward.Value.ToString("N0") : (Donation.HasValue ? (-Donation.Value).ToString("N0") : ""); } }

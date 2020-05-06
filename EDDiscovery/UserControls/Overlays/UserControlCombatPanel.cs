@@ -289,11 +289,15 @@ namespace EDDiscovery.UserControls
                 else
                     hel = discoveryform.history.FilterByDateRangeLatestFirst(current.StartTimeUTC, current.EndTimeUTC);
 
-                foreach ( HistoryEntry he in hel )
+                var rows = new List<DataGridViewRow>(hel.Count);
+                foreach (HistoryEntry he in hel)
                 {
                     //System.Diagnostics.Debug.WriteLine("Combat Add {0} {1} {2}", he.EventTimeUTC.ToStringZulu(), he.EventSummary, he.EventDescription);
-                    AddToGrid(he);
+                    var row = createRow(he);
+                    if ( row != null)
+                        rows.Add(row);
                 }
+                dataGridViewCombat.Rows.AddRange(rows.ToArray());
             }
 
             dataGridViewCombat.Sort(sortcol, (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
@@ -318,7 +322,7 @@ namespace EDDiscovery.UserControls
 
                 if (tryadd)
                 {
-                    if (AddToGrid(he, true))        // if did add..
+                    if (insertToGrid(he))        // if did add..
                     {
                         SetLabels();
                     }
@@ -337,27 +341,31 @@ namespace EDDiscovery.UserControls
             SetTarget(he);
         }
 
-        bool AddToGrid(HistoryEntry he , bool ins = false )
+        DataGridViewRow createRow(HistoryEntry he)
         {
-            if (CreateEntry(he, out string summarycol, out string descriptioncol, out string rewardcol))
+            if (CreateEntry(he, out var rewardcol))
             {
                 var rw = dataGridViewCombat.RowTemplate.Clone() as DataGridViewRow;
-                he.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
+                he.journalEntry.FillInformation(out var eventDescription, out _);
 
                 rw.CreateCells(dataGridViewCombat, EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(he.EventTimeUTC),
-                    he.EventSummary, EventDescription, rewardcol);
+                    he.EventSummary, eventDescription, rewardcol);
 
                 rw.Tag = he;
-
-                if (ins)
-                    dataGridViewCombat.Rows.Insert(0, rw);
-                else
-                    dataGridViewCombat.Rows.Add(rw);
-
-                return true;
+                return rw;
             }
-            else
+
+            return null;
+        }
+
+        bool insertToGrid(HistoryEntry he)
+        {
+            var row = createRow(he);
+            if (row is null)
                 return false;
+
+            dataGridViewCombat.Rows.Insert(0, row);
+            return true;
         }
 
         static JournalTypeEnum[] jtelist = new JournalTypeEnum[]            // ones to display without any extra detail
@@ -369,14 +377,9 @@ namespace EDDiscovery.UserControls
             JournalTypeEnum.SRVDestroyed
         };
 
-        bool CreateEntry( HistoryEntry he, out string summarycol, out string descriptioncol, out string rewardcol )
+        bool CreateEntry(HistoryEntry he, out string rewardcol)
         {
             rewardcol = "";
-
-            he.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
-
-            summarycol = he.EventSummary;
-            descriptioncol = EventDescription;
 
             MissionState ml = current.MissionKey != null && he.MissionList.Missions.ContainsKey(current.MissionKey) ? he.MissionList.Missions[current.MissionKey] : null;
 

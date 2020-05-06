@@ -72,6 +72,7 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel.Controls.Add(this.dataGridView);
             this.dataViewScrollerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewScrollerPanel.InternalMargin = new System.Windows.Forms.Padding(0);
+            this.dataViewScrollerPanel.LimitLargeChange = 2147483647;
             this.dataViewScrollerPanel.Location = new System.Drawing.Point(0, 67);
             this.dataViewScrollerPanel.Name = "dataViewScrollerPanel";
             this.dataViewScrollerPanel.Size = new System.Drawing.Size(804, 649);
@@ -89,13 +90,13 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom.HideScrollBar = false;
             this.vScrollBarCustom.LargeChange = 0;
-            this.vScrollBarCustom.Location = new System.Drawing.Point(791, 0);
+            this.vScrollBarCustom.Location = new System.Drawing.Point(788, 0);
             this.vScrollBarCustom.Maximum = -1;
             this.vScrollBarCustom.Minimum = 0;
             this.vScrollBarCustom.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom.Name = "vScrollBarCustom";
-            this.vScrollBarCustom.Size = new System.Drawing.Size(13, 649);
+            this.vScrollBarCustom.Size = new System.Drawing.Size(16, 649);
             this.vScrollBarCustom.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom.SmallChange = 1;
             this.vScrollBarCustom.TabIndex = 7;
@@ -124,7 +125,7 @@ namespace EDDiscovery.UserControls
             this.dataGridView.Name = "dataGridView";
             this.dataGridView.RowHeadersVisible = false;
             this.dataGridView.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridView.Size = new System.Drawing.Size(791, 649);
+            this.dataGridView.Size = new System.Drawing.Size(788, 649);
             this.dataGridView.TabIndex = 0;
             this.dataGridView.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridView_SortCompare);
             // 

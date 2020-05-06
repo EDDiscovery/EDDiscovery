@@ -757,7 +757,7 @@ namespace EliteDangerousCore.EDSM
                 lock (bodylock) // only one request at a time going, this is to prevent multiple requests for the same body
                 {
                     // System.Threading.Thread.Sleep(2000); //debug - delay to show its happening 
-                    System.Diagnostics.Debug.WriteLine("EDSM Cache check " + sys.EDSMID + " " + sys.SystemAddress + " " + sys.Name);
+                   // System.Diagnostics.Debug.WriteLine("EDSM Cache check " + sys.EDSMID + " " + sys.SystemAddress + " " + sys.Name);
 
                     if (DictEDSMBodies != null && sys.EDSMID > 0 && DictEDSMBodies.ContainsKey(sys.EDSMID))  // Cache EDSM bidies during run of EDD.
                     {

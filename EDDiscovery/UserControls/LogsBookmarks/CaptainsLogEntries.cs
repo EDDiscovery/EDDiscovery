@@ -127,6 +127,7 @@ namespace EDDiscovery.UserControls
             DataGridViewColumn sortcol = dataGridView.SortedColumn != null ? dataGridView.SortedColumn : dataGridView.Columns[0];
             SortOrder sortorder = dataGridView.SortOrder;
 
+            dataViewScrollerPanel.SuspendLayout();
             dataGridView.SuspendLayout();
 
             System.Diagnostics.Debug.WriteLine("Redraw");
@@ -135,6 +136,7 @@ namespace EDDiscovery.UserControls
             bool pickstart = dateTimePickerStartDate.Checked;       // Picker is UTC or local dependent on UTC Config selection.. just changes compare against entry
             bool pickend = dateTimePickerEndDate.Checked;
             DateTime pickenddate = dateTimePickerEndDate.Value.EndOfDay();
+
 
             foreach (CaptainsLogClass entry in GlobalCaptainsLogList.Instance.LogEntries)
             {
@@ -167,6 +169,7 @@ namespace EDDiscovery.UserControls
             }
 
             dataGridView.ResumeLayout();
+            dataViewScrollerPanel.ResumeLayout();
 
             dataGridView.Sort(sortcol, (sortorder == SortOrder.Descending) ? System.ComponentModel.ListSortDirection.Descending : System.ComponentModel.ListSortDirection.Ascending);
             dataGridView.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;

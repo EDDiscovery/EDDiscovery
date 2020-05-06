@@ -24,10 +24,10 @@ namespace EliteDangerousCore
     [System.Diagnostics.DebuggerDisplay("Mission {Mission.Name} {State} {DestinationSystemStation()}")]
     public class MissionState
     {
-        public enum StateTypes { InProgress, Completed, Abandoned, Failed, Died };
+        public enum StateTypes { InProgress, Completed, Abandoned, Failed, Died };    
 
         public JournalMissionAccepted Mission { get; private set; }                  // never null
-        public JournalMissionCompleted Completed { get; private set; }               // null until complete
+        public JournalMissionCompleted Completed { get; private set; }               // null until completed properly, may be complete but with this missing
         public JournalMissionRedirected Redirected { get; private set; }             // null unless redirected
         public JournalCargoDepot CargoDepot { get; private set; }                    // null unless we received a CD on this mission
 
@@ -77,7 +77,7 @@ namespace EliteDangerousCore
         {
             get
             {
-                if (State != MissionState.StateTypes.Completed)
+                if (State != MissionState.StateTypes.Completed || Completed == null)
                     return State.ToString();
                 else
                     return Completed.Value.ToString("N0");
@@ -88,7 +88,7 @@ namespace EliteDangerousCore
         {
             get
             {
-                if (State != MissionState.StateTypes.Completed)
+                if (State != MissionState.StateTypes.Completed || Completed == null)
                     return 0;
                 else
                     return Completed.Value;
@@ -217,7 +217,34 @@ namespace EliteDangerousCore
         {
             foreach( string k in keys)
             {
-                Missions[k] = new MissionState(Missions[k], MissionState.StateTypes.InProgress,null); // copy previous mission info, resurrected, now!
+                if (Missions.ContainsKey(k))
+                {
+                    Missions[k] = new MissionState(Missions[k], MissionState.StateTypes.InProgress, null); // copy previous mission info, resurrected, now!
+                }
+            }
+        }
+
+        public void ChangeStateIfInProgress(List<string> keys, MissionState.StateTypes state, DateTime missingtime)
+        {
+            foreach (string k in keys)
+            {
+                if (Missions.ContainsKey(k) && Missions[k].State == MissionState.StateTypes.InProgress)
+                {
+                    Missions[k] = new MissionState(Missions[k], state, missingtime);
+                }
+            }
+        }
+
+        public void Disappeared(List<string> keys, DateTime missingtime)
+        {
+            foreach (string k in keys)
+            {
+                if (Missions.ContainsKey(k) && Missions[k].State == MissionState.StateTypes.InProgress)
+                {
+                    // permits seem to be only 1 journal entry.. so its completed.
+                    MissionState.StateTypes st = Missions[k].Mission.Name.Contains("permit", StringComparison.InvariantCultureIgnoreCase) ? MissionState.StateTypes.Completed : MissionState.StateTypes.Abandoned;
+                    Missions[k] = new MissionState(Missions[k], st, missingtime);
+                }
             }
         }
 
@@ -264,6 +291,7 @@ namespace EliteDangerousCore
             {
                 missionlist = new MissionList(missionlist);     // shallow copy
                 missionlist.Accepted(m, sys, body);
+              //  System.Diagnostics.Debug.WriteLine(m.EventTimeUTC.ToStringZulu() + " Missions Accepted " + MissionList.Key(m));
             }
             else
                 System.Diagnostics.Debug.WriteLine("Missions: Duplicate " + MissionList.Key(m));
@@ -275,6 +303,7 @@ namespace EliteDangerousCore
             {
                 missionlist = new MissionList(missionlist);     // shallow copy
                 missionlist.Completed(m);
+               // System.Diagnostics.Debug.WriteLine(m.EventTimeUTC.ToStringZulu() + " Missions Completed " + MissionList.Key(m));
             }
             else
                 System.Diagnostics.Debug.WriteLine("Missions: Unknown " + MissionList.Key(m));
@@ -286,6 +315,7 @@ namespace EliteDangerousCore
             {
                 missionlist = new MissionList(missionlist);     // shallow copy
                 missionlist.Abandoned(m);
+              //  System.Diagnostics.Debug.WriteLine(m.EventTimeUTC.ToStringZulu() + " Missions Abandoned " + MissionList.Key(m));
             }
             else
                 System.Diagnostics.Debug.WriteLine("Missions: Unknown " + MissionList.Key(m));
@@ -297,6 +327,7 @@ namespace EliteDangerousCore
             {
                 missionlist = new MissionList(missionlist);     // shallow copy
                 missionlist.Failed(m);
+               // System.Diagnostics.Debug.WriteLine(m.EventTimeUTC.ToStringZulu() + " Missions Failed " + MissionList.Key(m));
             }
             else
                 System.Diagnostics.Debug.WriteLine("Missions: Unknown " + MissionList.Key(m));
@@ -308,6 +339,7 @@ namespace EliteDangerousCore
             {
                 missionlist = new MissionList(missionlist);     // shallow copy
                 missionlist.Redirected(m);
+               // System.Diagnostics.Debug.WriteLine(m.EventTimeUTC.ToStringZulu() + " Missions Redirected " + MissionList.Key(m));
             }
             else
                 System.Diagnostics.Debug.WriteLine("Missions: Unknown " + MissionList.Key(m));
@@ -320,6 +352,7 @@ namespace EliteDangerousCore
             { 
                 missionlist = new MissionList(missionlist);     // shallow copy
                 missionlist.CargoDepot(key,m);
+              //  System.Diagnostics.Debug.WriteLine(m.EventTimeUTC.ToStringZulu() + " Cargo depot " + key);
             }
             else
                 System.Diagnostics.Debug.WriteLine("Missions: Unknown " + m.MissionId);
@@ -328,10 +361,16 @@ namespace EliteDangerousCore
         public void Missions( JournalMissions m )
         {
             List<string> toresurrect = new List<string>();
+            HashSet<string> active = new HashSet<string>();
+            List<string> failed = new List<string>();
+            List<string> completed = new List<string>();
+            List<string> disappeared = new List<string>();
 
-            foreach( var mi in m.ActiveMissions )
+            foreach ( var mi in m.ActiveMissions )
             {
                 string kn = MissionList.Key(mi.MissionID, mi.Name);
+                active.Add(kn);
+                //System.Diagnostics.Debug.WriteLine(m.EventTimeUTC.ToStringZulu() + " Mission " + kn + " is active");
 
                 if (missionlist.Missions.ContainsKey(kn))
                 {
@@ -345,10 +384,49 @@ namespace EliteDangerousCore
                 }
             }
 
+            foreach (var mi in m.FailedMissions)
+            {
+                string kn = MissionList.Key(mi.MissionID, mi.Name);
+                failed.Add(kn);
+            }
+
+            foreach (var mi in m.CompletedMissions)
+            {
+                string kn = MissionList.Key(mi.MissionID, mi.Name);
+                completed.Add(kn);
+            }
+
+            foreach (var kvp in missionlist.Missions)
+            {
+                if (!active.Contains(kvp.Key) && !failed.Contains(kvp.Key) && !completed.Contains(kvp.Key) && kvp.Value.State == MissionState.StateTypes.InProgress)
+                {
+                    System.Diagnostics.Debug.WriteLine(m.EventTimeUTC.ToStringZulu() + " Mission " + kvp.Value.Mission.EventTimeUTC.ToStringZulu() + " " + kvp.Key + " disappeared ****");
+                    disappeared.Add(kvp.Key);
+                }
+            }
+
             if ( toresurrect.Count>0)       // if any..
             {
                 missionlist = new MissionList(missionlist);     // shallow copy
                 missionlist.Resurrect(toresurrect);
+            }
+
+            if (disappeared.Count > 0)
+            {
+                missionlist = new MissionList(missionlist);
+                missionlist.Disappeared(disappeared, m.EventTimeUTC);
+            }
+
+            if (failed.Count > 0)
+            {
+                missionlist = new MissionList(missionlist);
+                missionlist.ChangeStateIfInProgress(failed, MissionState.StateTypes.Failed, m.EventTimeUTC);
+            }
+
+            if (completed.Count > 0)
+            {
+                missionlist = new MissionList(missionlist);
+                missionlist.ChangeStateIfInProgress(failed, MissionState.StateTypes.Completed, m.EventTimeUTC);
             }
         }
 

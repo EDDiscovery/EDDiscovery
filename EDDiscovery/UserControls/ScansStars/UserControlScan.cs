@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2019 EDDiscovery development team
+ * Copyright © 2016 - 2020 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -13,6 +13,10 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+
+// turn on for play testing of all your scans
+//#define PLAYTHRU
+
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using EliteDangerousCore.EDSM;
@@ -76,9 +80,11 @@ namespace EDDiscovery.UserControls
 
             rollUpPanelTop.SetToolTip(toolTip);     // set after translater
 
+#if PLAYTHRU
             t = new Timer();      // debug, keep for now
             t.Interval = 100;
             t.Tick += T_Tick;
+#endif
         }
 
         public override void LoadLayout()
@@ -108,9 +114,9 @@ namespace EDDiscovery.UserControls
             closing = true;
         }
 
-        #endregion
+#endregion
 
-        #region Transparency
+#region Transparency
         Color transparencycolor = Color.Green;
         public override Color ColorTransparency { get { return transparencycolor; } }
         public override void SetTransparency(bool on, Color curcol)
@@ -124,23 +130,20 @@ namespace EDDiscovery.UserControls
 
         private void UserControlScan_Resize(object sender, EventArgs e)
         {
-            //PositionInfo();
-            //System.Diagnostics.Debug.WriteLine("Resize panel stars {0} {1}", DisplayRectangle, panelStars.Size);
-
-            if (!closing && last_he != null)
+            if (!closing && showing_system != null)
             {
                 int newspace = panelStars.WidthAvailable;
 
                 if (newspace < panelStars.DisplayAreaUsed.X || newspace > panelStars.DisplayAreaUsed.X +  panelStars.StarSize.Width)
                 {
-                    DrawSystem(last_he);
+                    DrawSystem();
                 }
             }
         }
 
-        #endregion
+#endregion
 
-        #region Display
+#region Display
 
         public void NewEntry(HistoryEntry he, HistoryList hl)               // called when a new entry is made.. check to see if its a scan update
         {
@@ -159,7 +162,9 @@ namespace EDDiscovery.UserControls
 
         private void Uctg_OnTravelSelectionChanged(HistoryEntry he, HistoryList hl, bool selectedEntry)
         {
-           //t.Start();    // debug, for playing all scans thru
+#if PLAYTHRU
+            t.Start();    // debug, for playing all scans thru
+#endif
 
             if (he != null)
             {
@@ -189,9 +194,13 @@ namespace EDDiscovery.UserControls
             //showing_system = new SystemClass("Pallaeni"); - problem with shrinking lines
             //showing_system = new SystemClass("Borann");
             //showing_system = new SystemClass("Skaudai AM-B d14-138");
+            //showing_system = new SystemClass("Eorgh Prou JH-V e2-1979");
 
+#if PLAYTHRU
+            StarScan.SystemNode data = showing_system != null ? await discoveryform.history.starscan.FindSystemAsync(showing_system, false, byname: true) : null;
+#else
             StarScan.SystemNode data = showing_system != null ? await discoveryform.history.starscan.FindSystemAsync(showing_system, panelStars.CheckEDSM) : null;
-
+#endif
             string control_text = "No System";
 
             if (showing_system != null)
@@ -220,9 +229,9 @@ namespace EDDiscovery.UserControls
             SetControlText(control_text);
         }
 
-        #endregion
+#endregion
 
-        #region User interaction
+#region User interaction
 
         private void extCheckBoxStar_Click(object sender, EventArgs e)
         {
@@ -385,7 +394,7 @@ namespace EDDiscovery.UserControls
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(DbSave + "Size", size);
         }
 
-        #endregion
+#endregion
 
         private void extButtonFilter_Click(object sender, EventArgs e)
         {
@@ -455,7 +464,7 @@ namespace EDDiscovery.UserControls
             panelStars.ShowDist = displayfilters.Contains("dist") || all;
         }
 
-        #region Export
+#region Export
 
         private void buttonExtExcel_Click(object sender, EventArgs e)
         {
@@ -730,10 +739,10 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        #endregion
+#endregion
 
-#if true
-        int hec = 0;        // debug code to check all my scans don't crash - start point
+#if PLAYTHRU
+        int hec = 20000;        // debug code to check all my scans don't crash - start point - 20000 is robs best position
         Timer t;
         private void T_Tick(object sender, EventArgs e)
         {

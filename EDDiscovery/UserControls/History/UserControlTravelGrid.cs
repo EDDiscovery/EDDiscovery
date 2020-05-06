@@ -200,7 +200,7 @@ namespace EDDiscovery.UserControls
             loadcomplete = false;
             current_historylist = hl;
             this.Cursor = Cursors.WaitCursor;
-            buttonFilter.Enabled = buttonField.Enabled = textBoxFilter.Enabled = comboBoxHistoryWindow.Enabled = false;
+            extCheckBoxOutlines.Enabled = extCheckBoxWordWrap.Enabled = buttonExtExcel.Enabled = buttonFilter.Enabled = buttonField.Enabled = comboBoxHistoryWindow.Enabled = false;
 
             Tuple<long, int> pos = CurrentGridPosByJID();
 
@@ -230,13 +230,12 @@ namespace EDDiscovery.UserControls
             List<HistoryEntry[]> chunks = new List<HistoryEntry[]>();
 
             int chunksize = 500;
-            for (int i = 0; i < result.Count; i += chunksize)
+            for (int i = 0; i < result.Count; i += chunksize, chunksize = 2000)
             {
                 HistoryEntry[] chunk = new HistoryEntry[i + chunksize > result.Count ? result.Count - i : chunksize];
 
                 result.CopyTo(i, chunk, 0, chunk.Length);
                 chunks.Add(chunk);
-                chunksize = 2000;
             }
 
             todo.Clear();
@@ -340,7 +339,8 @@ namespace EDDiscovery.UserControls
                 }
 
                 this.Cursor = Cursors.Default;
-                buttonFilter.Enabled = buttonField.Enabled = textBoxFilter.Enabled = comboBoxHistoryWindow.Enabled = true;
+                extCheckBoxOutlines.Enabled = extCheckBoxWordWrap.Enabled = buttonExtExcel.Enabled = buttonFilter.Enabled = buttonField.Enabled = comboBoxHistoryWindow.Enabled = true;
+
                 loadcomplete = true;
             });
 

@@ -33,111 +33,121 @@ namespace EDDiscovery.UserControls
             public Point point;
             public Point toppos;
             public int orderpos;
+            public int est;
         }
 
         // sn is the scan nodes with barycentres structure, in correct heirachy.
         // nodecentres/nodes are paired with the drawn positions and node info
 
-        Tuple<Point, int,int> DisplayBarynode(StarScan.ScanNode sn, int level, Dictionary<StarScan.ScanNode,Point> nodecentres, List<StarScan.ScanNode> nodes, List<ExtPictureBox.ImageElement> pc, int imagesize, bool horz = false)
+        const int baryspacing = 10;
+        const int baryspacingmargin = baryspacing * 4;      // up to 4 bary lines..
+
+        Tuple<Point, int, int> DisplayBarynode(StarScan.ScanNode sn, int level, Dictionary<StarScan.ScanNode, Point> nodecentres, List<StarScan.ScanNode> nodes, List<ExtPictureBox.ImageElement> pc, int imagesize, bool horz = false)
         {
             if (sn.children == null)
-                return new Tuple<Point, int,int>(Point.Empty, level,0);
+                return new Tuple<Point, int, int>(Point.Empty, level, 0);
 
             var tojoin = new List<BaryPointInfo>();
-            int recursedepth = 0;
-
-            // with the planet/moon nodes, we first find all the barycentres, and recurse into them, to calculate the recursion depth of the 
-            // ones underneath - we need to to work out how high to place the lines
-
-            foreach (var c in sn.children)
-            {
-                if (c.Value.type == StarScan.ScanNodeType.barycentre)       // deep dive down
-                {
-                    recursedepth = 1;
-                    var x = DisplayBarynode(c.Value, level + 1, nodecentres, nodes, pc, imagesize, horz);
-                    recursedepth = Math.Max(x.Item2, recursedepth);
-                    System.Diagnostics.Debug.WriteLine("                        ".Substring(0, level * 3) + level + " Draw bary " + x.Item1 + " " + level);
-                    if ( horz )
-                        tojoin.Add(new BaryPointInfo() { point = x.Item1, toppos = new Point(x.Item1.X-10,x.Item1.Y), orderpos = x.Item3 }); // make a join point for a barynode
-                    else
-                        tojoin.Add(new BaryPointInfo() { point = x.Item1, toppos = Point.Empty, orderpos = x.Item3 }); // make a join point for a barynode. Leave the toppos for later
-                }
-            }
-
-            int lineoff = imagesize + 8 + 10 * recursedepth;
 
             int orderpos = 0;   // this records the last planet order pos for use to pass back up the tree - helps in ordering
 
             foreach (var c in sn.children)
             {
-                // not barycentres now, we have estimate of where the bary line needs to be
-                // Note if EDSM draw is turned off, but it was in the data from another source, we would not have drawn it so we need to check that by
-                // seeing if the node has a nodecentre. No nodecentre, did not draw
-
-                if (c.Value.type != StarScan.ScanNodeType.barycentre && nodecentres.ContainsKey(c.Value))  
+                if (c.Value.type == StarScan.ScanNodeType.barycentre)       // if a barycentre, draw it
                 {
-                    int od = nodes.IndexOf(c.Value);
-                    orderpos = od;
-                    System.Diagnostics.Debug.WriteLine("                        ".Substring(0, level * 3) + level + " Draw Body " + nodecentres[c.Value] + " " + c.Value.fullname);
-                    if ( horz )
-                        tojoin.Add(new BaryPointInfo() { point = nodecentres[c.Value], toppos = new Point(nodecentres[c.Value].X - lineoff, nodecentres[c.Value].Y), orderpos = od });
+                    var x = DisplayBarynode(c.Value, level + 1, nodecentres, nodes, pc, imagesize, horz);
+                    System.Diagnostics.Debug.WriteLine("                        ".Substring(0, level * 3) + level + " Draw bary " + c.Value.fullname + " " + x.Item1 + " " + level);
+                    if (horz)
+                        tojoin.Add(new BaryPointInfo() { point = x.Item1, toppos = x.Item1, orderpos = x.Item3 }); // make a join point for a barynode
                     else
-                        tojoin.Add(new BaryPointInfo() { point = nodecentres[c.Value], toppos = new Point(nodecentres[c.Value].X, nodecentres[c.Value].Y - lineoff), orderpos = od });
+                        tojoin.Add(new BaryPointInfo() { point = x.Item1, toppos = x.Item1, orderpos = x.Item3 }); // make a join point for a barynode. Leave the toppos for later
                 }
-            }
-
-            // now for any barycentres, see if we can place the toppos against another node on the same line so we can get a straight line to it
-
-            foreach( var b in tojoin)       
-            {
-                if ( b.toppos == Point.Empty )
+                else
                 {
-                    for( int i = 0; i < tojoin.Count; i++ )
-                    {
-                        if ( tojoin[i].toppos != Point.Empty && b.point.Y - tojoin[i].toppos.Y < planetsize.Height) // try and find a node within range where we can grab the Y from
-                        {
-                            b.toppos = new Point(b.point.X, tojoin[i].toppos.Y);
-                            break;
-                        }
-                    }
+                    // Note if EDSM draw is turned off, but it was in the data from another source, we would not have drawn it so we need to check that by
+                    // seeing if the node has a nodecentre. No nodecentre, did not draw
 
-                    if (b.toppos == Point.Empty)
-                        b.toppos = new Point(b.point.X, b.point.Y-10);      // if not, just use a line just above.  the draw will make a short stub
+                    if (nodecentres.ContainsKey(c.Value))
+                    {
+                        orderpos = nodes.IndexOf(c.Value);
+                        System.Diagnostics.Debug.WriteLine("                        ".Substring(0, level * 3) + level + " Draw Body " + c.Value.fullname + " " + orderpos + " " + nodecentres[c.Value]);
+                        if (horz)
+                            tojoin.Add(new BaryPointInfo() { point = nodecentres[c.Value], toppos = new Point( nodecentres[c.Value].X - imagesize/2, nodecentres[c.Value].Y), orderpos = orderpos });
+                        else
+                            tojoin.Add(new BaryPointInfo() { point = nodecentres[c.Value], toppos = new Point(nodecentres[c.Value].X, nodecentres[c.Value].Y - 10*imagesize/8), orderpos = orderpos });
+                    }
                 }
             }
 
             if (tojoin.Count > 1)       // we need two or more to make a barynode line
             {
-                // sort the points into planet draw order.. may not be as the barytree does not respect that
+                tojoin.Sort(delegate (BaryPointInfo l, BaryPointInfo r) { return l.orderpos.CompareTo(r.orderpos); });      // make sure in order 
 
-                tojoin.Sort(delegate (BaryPointInfo l, BaryPointInfo r) { return l.orderpos.CompareTo(r.orderpos); });  
-
-                ExtPictureBox.ImageElement ie = new ExtPictureBox.ImageElement();
-                ie.OwnerDraw(DrawBaryTree, new Rectangle(0,0,horz?1:0, 0), tojoin);         // use Width, which does not get affected by repositiontree, to record if horz
-                pc.Insert(0, ie); // insert first so drawn under
-
-           //     System.Diagnostics.Debug.WriteLine("                        ".Substring(0, level * 3) + level + " Join co-ords");
-          //      for (int i = 0; i < tojoin.Count; i++)
-          //          System.Diagnostics.Debug.WriteLine(".. " + tojoin[i].point + " " + tojoin[i].toppos + " " + tojoin[i].orderpos);
-
-                Point pi;       // calculate and return the barycentre position 
-                if (horz)       
+                if (horz)
                 {
-                    pi = new Point(tojoin[0].point.X - lineoff, (tojoin[0].point.Y + tojoin[1].point.Y) / 2);       // moons can't be split horzontally, don't need to worry like planets
-                }
-                else if (tojoin[0].point.Y == tojoin[1].point.Y)     // if first two are at the same level, use the mid point to star up a join point for the barycentre
-                {
-                    pi = new Point((tojoin[0].point.X + tojoin[1].point.X) / 2, tojoin[0].point.Y - lineoff);       // vert, on same line, so normal
+                    foreach (var c in tojoin)       // find min y of cohort (same line) and set estimate pos to it
+                    {
+                        int minx = tojoin.Where(x => Math.Abs(x.toppos.X - c.toppos.X) < baryspacingmargin).Select(x => x.toppos.X).Min();      // find minx in cohort
+                        c.est = minx - baryspacing;     // don't change toppos, we need it for other estimations. hold in another var
+                    }
+
+                    foreach (var c in tojoin)
+                        c.toppos = new Point(c.est, c.toppos.Y);    // apply calculated pos to toppos to align all barycentres to it
                 }
                 else
                 {
-                    pi = new Point(tojoin[0].point.X + imagesize, tojoin[0].point.Y - lineoff);              // objects are not on same line, so we set the barypoint off to side a bit
+                    foreach (var c in tojoin)       // find min y of cohort (same line) and set estimate pos to it
+                    {
+                        int miny = tojoin.Where(y => Math.Abs(y.toppos.Y - c.toppos.Y) < baryspacingmargin).Select(x => x.toppos.Y).Min();      // find miny in cohort
+                        c.est = miny - baryspacing;     // don't change toppos, we need it for other estimations. hold in another var
+                    }
+
+                    foreach (var c in tojoin)
+                        c.toppos = new Point(c.toppos.X, c.est);    // apply calculated pos to toppos to align all barycentres to it
                 }
 
-                return new Tuple<Point, int,int>(pi, level,orderpos);
+                ExtPictureBox.ImageElement ie = new ExtPictureBox.ImageElement();
+                ie.OwnerDraw(DrawBaryTree, new Rectangle(0, 0, horz ? 1 : 0, 0), tojoin);         // use Width, which does not get affected by repositiontree, to record if horz
+                pc.Insert(0, ie); // insert first so drawn under
+
+                System.Diagnostics.Debug.Write("                        ".Substring(0, level * 3) + level + " Join co-ords");
+                for (int i = 0; i < tojoin.Count; i++)
+                    System.Diagnostics.Debug.Write(" " + tojoin[i].point + ":" + tojoin[i].toppos);
+
+                Point pi;       // calculate and return the barycentre position 
+                if (horz)
+                {
+                    if (tojoin.Average(x => x.toppos.X) == tojoin[0].toppos.X)      // if all on same line
+                    {
+                        pi = new Point(tojoin[0].toppos.X, (int)tojoin.Select(y => y.point.Y).Average());
+                        System.Diagnostics.Debug.Write(" same xline");
+                    }
+                    else
+                    {
+                        pi = new Point(tojoin[0].toppos.X, tojoin[0].toppos.Y + imagesize); 
+                        System.Diagnostics.Debug.Write(" not same xline");
+                    }
+                }
+                else
+                {
+                    if (tojoin.Average(x => x.toppos.Y) == tojoin[0].toppos.Y)      // if all on same line
+                    {
+                        pi = new Point((int)tojoin.Select(x => x.point.X).Average(), tojoin[0].toppos.Y);
+                        System.Diagnostics.Debug.Write(" same yline");
+                    }
+                    else
+                    {
+                        pi = new Point(tojoin[0].point.X + imagesize, tojoin[0].toppos.Y); // objects are not on same line, so we set the barypoint off to side a bit of the first
+                        System.Diagnostics.Debug.Write(" not same yline");
+                    }
+                }
+
+                System.Diagnostics.Debug.WriteLine(" Pass back " + pi);
+                System.Diagnostics.Debug.WriteLine("");
+                return new Tuple<Point, int, int>(pi, level, orderpos);
             }
             else
-                return new Tuple<Point, int, int>(Point.Empty, level,0);
+                return new Tuple<Point, int, int>(Point.Empty, level, 0);
         }
 
 
@@ -154,7 +164,7 @@ namespace EDDiscovery.UserControls
 
                     if (i > 0)                                      // if we have a previous
                     {
-                        var prev = tojoin[i-1];
+                        var prev = tojoin[i - 1];
 
                         if (cur.toppos.Y == prev.toppos.Y || e.Location.Width == 1)  //.Width records if horizontal line, ie.moons.  If on same level, or horz
                         {

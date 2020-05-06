@@ -58,13 +58,14 @@ namespace EDDiscovery
 
         public EDDiscovery._3DMap.MapManager Map { get; private set; }
 
-        Task checkInstallerTask = null;
         private bool themeok = true;
         private bool in_system_sync = false;        // between start/end sync of databases
 
         BaseUtils.GitHubRelease newRelease;
 
         public PopOutControl PopOuts;
+
+        Timer datetimetimer;
 
         #endregion
 
@@ -184,6 +185,7 @@ namespace EDDiscovery
             panelToolBar.SecondHiddenMarkerWidth = 60;
             panelToolBar.PinState = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("ToolBarPanelPinState", true);
 
+            labelGameDateTime.Text = "";
             labelInfoBoxTop.Text = "";
             label_version.Text = EDDOptions.Instance.VersionDisplayString;
 
@@ -450,7 +452,7 @@ namespace EDDiscovery
 
             });
 
-            checkInstallerTask = Installer.CheckForNewInstallerAsync((rel) =>  // in thread
+            Installer.CheckForNewInstallerAsync((rel) =>  // in thread
             {
                 newRelease = rel;
                 BeginInvoke(new Action(() => Controller.LogLineHighlight(string.Format("New EDDiscovery installer available: {0}".T(EDTx.EDDiscoveryForm_NI), newRelease.ReleaseName))));
@@ -485,6 +487,11 @@ namespace EDDiscovery
 
                 File.WriteAllText(EDDOptions.Instance.OutputEventHelp, s);
             }
+
+            datetimetimer = new Timer();
+            datetimetimer.Interval = 1000;
+            datetimetimer.Tick += (sv, ev) => { DateTime gameutc = DateTime.UtcNow.AddYears(1286); labelGameDateTime.Text = gameutc.ToShortDateString() + " " + gameutc.ToShortTimeString(); };
+            datetimetimer.Start();
         }
 
         List<Notifications.Notification> popupnotificationlist = new List<Notifications.Notification>();

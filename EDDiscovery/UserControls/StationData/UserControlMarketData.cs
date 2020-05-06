@@ -142,6 +142,8 @@ namespace EDDiscovery.UserControls
             DataGridViewColumn sortcol = dataGridViewMarketData.SortedColumn != null ? dataGridViewMarketData.SortedColumn : dataGridViewMarketData.Columns[0];
             SortOrder sortorder = dataGridViewMarketData.SortOrder;
 
+            dataViewScrollerPanel.SuspendLayout();
+
             int firstdisplayed = dataGridViewMarketData.FirstDisplayedScrollingRowIndex;
             string commodity = (dataGridViewMarketData.CurrentRow != null) ? (string)dataGridViewMarketData.CurrentRow.Cells[1].Value : null;
             int currentoffset = (dataGridViewMarketData.CurrentRow != null) ? Math.Max(0,dataGridViewMarketData.CurrentRow.Index - firstdisplayed) : 0;
@@ -257,6 +259,8 @@ namespace EDDiscovery.UserControls
 
                 System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCountLap(this) + " MK " + displaynumber + " Load Finished");
             }
+
+            dataViewScrollerPanel.ResumeLayout();
 
             dataGridViewMarketData.Sort(sortcol, (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
             dataGridViewMarketData.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;

@@ -286,7 +286,7 @@ namespace EliteDangerousCore
 
                                     if (bodynode == null && sd.Parents[i - 1].Type == "Null")   // if can't find, and its another barycentre, add a new dummy barycentre node
                                     {
-                                        bodynode = new ScanNode() { BodyID = bodyid, type = ScanNodeType.barycentre, fullname = "Created Barynode", ownname = bodyid.ToString("00000") };
+                                        bodynode = new ScanNode() { BodyID = bodyid, type = ScanNodeType.barycentre, fullname = "Created Barynode " + bodyid, ownname = bodyid.ToString("00000") };
                                     }
                                 }
                                 else
@@ -303,7 +303,7 @@ namespace EliteDangerousCore
                                         cur = top.children[barykey];
                                     else
                                     { 
-                                        cur = new ScanNode() { BodyID = sp.BodyID, type = ScanNodeType.barycentre, fullname = "Created Barynode2" };    // make it
+                                        cur = new ScanNode() { BodyID = sp.BodyID, type = ScanNodeType.barycentre, fullname = "Created Barynode " + sp.BodyID };    // make it
                                         cur.children = new SortedList<string, ScanNode>();
                                         top.children[barykey] = cur;
                                     }
@@ -392,7 +392,7 @@ namespace EliteDangerousCore
 
         // ONLY use this if you must because the async await won't work in the call stack.  edsmweblookup here with true is strongly discouraged
 
-        public SystemNode FindSystemSynchronous(ISystem sys, bool edsmweblookup, bool byname = false)    // Find the system. Optionally do a EDSM web lookup
+        public SystemNode FindSystemSynchronous(ISystem sys, bool edsmweblookup)    // Find the system. Optionally do a EDSM web lookup
         {
             System.Diagnostics.Debug.Assert(System.Windows.Forms.Application.MessageLoop);  // foreground only
             System.Diagnostics.Debug.Assert(sys != null);
@@ -401,7 +401,7 @@ namespace EliteDangerousCore
 
             // System.Diagnostics.Debug.WriteLine("Scan Lookup " + sys.Name + " found " + (sn != null) + " web? " + edsmweblookup + " edsm lookup " + (sn?.EDSMAdded ?? false));
 
-            if ((sys.EDSMID > 0 || (sys.SystemAddress != null && sys.SystemAddress > 0) || (byname && sys.Name.HasChars())) && (sn == null || sn.EDSMCacheCheck == false || (edsmweblookup && !sn.EDSMWebChecked)))
+            if ((sys.EDSMID > 0 || (sys.SystemAddress != null && sys.SystemAddress > 0) || (sys.Name.HasChars())) && (sn == null || sn.EDSMCacheCheck == false || (edsmweblookup && !sn.EDSMWebChecked)))
             {
                 var jl = EliteDangerousCore.EDSM.EDSMClass.GetBodiesList(sys, edsmweblookup); // lookup, with optional web
 
@@ -434,7 +434,7 @@ namespace EliteDangerousCore
 
         // you must be returning void to use this..
 
-        public async System.Threading.Tasks.Task<SystemNode> FindSystemAsync(ISystem sys, bool edsmweblookup, bool byname = false)    // Find the system. Optionally do a EDSM web lookup
+        public async System.Threading.Tasks.Task<SystemNode> FindSystemAsync(ISystem sys, bool edsmweblookup )    // Find the system. Optionally do a EDSM web lookup
         {
             System.Diagnostics.Debug.Assert(System.Windows.Forms.Application.MessageLoop);  // foreground only
             System.Diagnostics.Debug.Assert(sys != null);
@@ -445,7 +445,7 @@ namespace EliteDangerousCore
 
             //System.Diagnostics.Debug.WriteLine("Scan Lookup " + trace + " " + sys.Name + " found " + (sn != null) + " web? " + edsmweblookup + " edsm lookup " + (sn?.EDSMWebChecked ?? false));
 
-            if ((sys.EDSMID > 0 || (sys.SystemAddress != null && sys.SystemAddress > 0) || (byname && sys.Name.HasChars())) && (sn == null || sn.EDSMCacheCheck == false || (edsmweblookup && !sn.EDSMWebChecked)))
+            if ((sys.EDSMID > 0 || (sys.SystemAddress != null && sys.SystemAddress > 0) || (sys.Name.HasChars())) && (sn == null || sn.EDSMCacheCheck == false || (edsmweblookup && !sn.EDSMWebChecked)))
             {
                 System.Diagnostics.Debug.WriteLine("..Asking for EDSM data");
 

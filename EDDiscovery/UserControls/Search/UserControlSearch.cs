@@ -49,6 +49,7 @@ namespace EDDiscovery.UserControls
                 UserControlCommonBase uccb = ctrl as UserControlCommonBase;
                 uccb.Init(discoveryform, displaynumber);
                 discoveryform.theme.ApplyStd(uccb);       // contract, in UCCB, states theming is between init and load
+                uccb.SetCursor(uctg);
                 uccb.LoadLayout();
                 uccb.InitialDisplay();
             };
@@ -58,6 +59,15 @@ namespace EDDiscovery.UserControls
                 UserControlCommonBase uccb = ctrl as UserControlCommonBase;
                 uccb.CloseDown();
             };
+        }
+
+        public override void ChangeCursorType(IHistoryCursor thc)
+        {
+            UserControlCommonBase uccb = tabStrip.CurrentControl as UserControlCommonBase;
+            if (uccb != null)           // if we get a change cursor, must tell our tab child
+            {
+                uccb.ChangeCursorType(uctg);
+            }
         }
 
         public override void InitialDisplay()

@@ -165,6 +165,8 @@ namespace EDDiscovery.UserControls
             rowsbyjournalid.Clear();
             dataGridViewStarList.Rows.Clear();
 
+            checkBoxJumponium.Enabled = checkBoxBodyClasses.Enabled = buttonExtExcel.Enabled = comboBoxHistoryWindow.Enabled = false;
+
             dataGridViewStarList.Columns[0].HeaderText = EDDiscoveryForm.EDDConfig.GetTimeTitle();
 
             var filter = (TravelHistoryFilter)comboBoxHistoryWindow.SelectedItem ?? TravelHistoryFilter.NoFilter;
@@ -175,13 +177,12 @@ namespace EDDiscovery.UserControls
             List<List<HistoryEntry>[]> syslistchunks = new List<List<HistoryEntry>[]>();
 
             int chunksize = 500;
-            for (int i = 0; i < syslists.Count; i += chunksize)
+            for (int i = 0; i < syslists.Count; i += chunksize, chunksize = 2000)
             {
                 int totake = Math.Min(chunksize, syslists.Count - i);
                 List<HistoryEntry>[] syslistchunk = new List<HistoryEntry>[totake];
                 syslists.CopyTo(i, syslistchunk, 0, totake);
                 syslistchunks.Add(syslistchunk);
-                chunksize = 2000;
             }
 
             todo.Clear();
@@ -230,6 +231,7 @@ namespace EDDiscovery.UserControls
                 autoupdateedsm.Start();
 
                 loadcomplete = true;
+                checkBoxJumponium.Enabled = checkBoxBodyClasses.Enabled = buttonExtExcel.Enabled = comboBoxHistoryWindow.Enabled = true;
             });
 
             todotimer.Start();

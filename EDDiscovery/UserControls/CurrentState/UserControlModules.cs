@@ -150,6 +150,8 @@ namespace EDDiscovery.UserControls
 
             dataGridViewModules.Rows.Clear();
 
+            dataViewScrollerPanel.SuspendLayout();
+
             last_si = null;     // no ship info
 
             dataGridViewModules.Columns[2].HeaderText = "Slot".T(EDTx.UserControlModules_SlotCol);
@@ -230,6 +232,8 @@ namespace EDDiscovery.UserControls
                 if (si != null)
                     DisplayShip(si);
             }
+
+            dataViewScrollerPanel.ResumeLayout();
 
             dataGridViewModules.Sort(sortcolprev, (sortorderprev == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
             dataGridViewModules.Columns[sortcolprev.Index].HeaderCell.SortGlyphDirection = sortorderprev;

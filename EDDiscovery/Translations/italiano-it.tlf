@@ -118,23 +118,23 @@ SECTION PopOutInfo
 .SplitterControl.Title: "Splitter" @
 .PanelSelector.Description: "" @
 .PanelSelector.Title: "+" @
-.Search.Title: "Search" @
-.Search.Description: "Search" @
-.CaptainsLog.Title: "Captain's Log" @
-.CaptainsLog.Description: "Captain's Log - notes on your travels" @
-.Surveyor.Title: "Surveyor" @
-.Surveyor.Description: "Surface map aid" @
-.MissionOverlay.Title: "Mission Overlay" @
-.MissionOverlay.Description: "Mission List overlay" @
-.MaterialTrader.Title: "Material Trader" @
-.MaterialTrader.Description: "Material Trader" @
+.Search.Title: "Search" => "Cerca"
+.Search.Description: "Search" => "Cerca"
+.CaptainsLog.Title: "Captain's Log" => "Diario del Comandante"
+.CaptainsLog.Description: "Captain's Log - notes on your travels" => "Diario del Comandante - note di viaggio"
+.Surveyor.Title: "Surveyor" => "Topografo"
+.Surveyor.Description: "Surface map aid" => "Assistente di mappatura di superfice"
+.MissionOverlay.Title: "Mission Overlay" => "Simbolo di Missione"
+.MissionOverlay.Description: "Mission List overlay" => "Simbolo della lista di missioni"
+.MaterialTrader.Title: "Material Trader" => "Commerciante di Materiali"
+.MaterialTrader.Description: "Material Trader" => "Commerciante di Materiali"
 .EDSM.Title: "EDSM" @
-.EDSM.Description: "Automatic web view of EDSM page on system" @
+.EDSM.Description: "Automatic web view of EDSM page on system" => "Visualizzazione automatica della pagina di EDSM sul sistema"
 
 SECTION EDDiscoveryForm
 
-.ConfirmSyncToEDSM: "You have disabled sync to EDSM for this commander.  Are you sure you want to send unsynced events to EDSM?" @
-.ConfirmSyncToEDSMCaption: "Confirm EDSM sync" @
+.ConfirmSyncToEDSM: "You have disabled sync to EDSM for this commander.  Are you sure you want to send unsynced events to EDSM?" => "Hai disabilitato la sincronizzazione con EDSM per questo comandante. Sei sicuro di voler inviare eventi non sincronizzati a EDSM?"
+.ConfirmSyncToEDSMCaption: "Confirm EDSM sync" => "Conferma syncronizzazione com EDSM"
 .toolsToolStripMenuItem: "&Tools" => "&Strumenti"
 .toolsToolStripMenuItem.settingsToolStripMenuItem: "Settings" => "Configurazione"
 .toolsToolStripMenuItem.show2DMapsToolStripMenuItem: "Show &2D maps" => "Visualizza mappa &2D"
@@ -151,8 +151,8 @@ SECTION EDDiscoveryForm
 .adminToolStripMenuItem.read21AndFormerLogFilesToolStripMenuItem.read21AndFormerLogFiles_forceReloadLogsToolStripMenuItem: "Force reload logs" => "Forza la rilettura degli archivi di registro (log)"
 .adminToolStripMenuItem.rescanAllJournalFilesToolStripMenuItem: "Re-scan all journal files" => "Riscansiona tutti gli archivi del giornale"
 .adminToolStripMenuItem.deleteDuplicateFSDJumpEntriesToolStripMenuItem: "Delete duplicate FSD Jump entries" => "Cancella entrate FSD duplicate"
-.adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.sendUnsyncedEDSMJournalsToolStripMenuItem: "Send Unsynced Journals To EDSM" @
-.adminToolStripMenuItem.rebuildSystemDBIndexesToolStripMenuItem: "Rebuild System DB Indexes" @
+.adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.sendUnsyncedEDSMJournalsToolStripMenuItem: "Send Unsynced Journals To EDSM" => "Invia dati non sincronizzati a EDSM"
+.adminToolStripMenuItem.rebuildSystemDBIndexesToolStripMenuItem: "Rebuild System DB Indexes" => "Ripristina indici del DB di sistema"
 .adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem: "Synchronise with EDSM" => "Sincronizza con EDSM"
 .adminToolStripMenuItem.sendUnsuncedEDDNEventsToolStripMenuItem: "Send unsynced EDDN events" => "Invia eventi EDDN non sincronizzati"
 .adminToolStripMenuItem.sendHistoricDataToInaraToolStripMenuItem: "Send to Inara historic data (previous ships, stored modules)" => "Invia a Inara dati storici (navi anteriori, moduli in magazzino)"
@@ -164,10 +164,10 @@ SECTION EDDiscoveryForm
 .addOnsToolStripMenuItem.editLastActionPackToolStripMenuItem: "Edit Last Action Pack" => "Modifica l'ultimo Action Pack"
 .addOnsToolStripMenuItem.stopCurrentlyRunningActionProgramToolStripMenuItem: "&Stop currently running Action Program" => "&Ferma l'Action Program corrente"
 .helpToolStripMenuItem: "&Help" => "&Aiuto"
-.helpToolStripMenuItem.aboutToolStripMenuItem: "&About" @
+.helpToolStripMenuItem.aboutToolStripMenuItem: "&About" => "Riguardo &a"
 .helpToolStripMenuItem.eDDiscoveryHomepageToolStripMenuItem: "&View Help" => "&Visualizza l'archivio d'aiuto"
-.helpToolStripMenuItem.eDDiscoveryChatDiscordToolStripMenuItem: "&Discord - EDD Community Chat" @
-.helpToolStripMenuItem.frontierForumThreadToolStripMenuItem: "&Frontier Forum Thread" @
+.helpToolStripMenuItem.eDDiscoveryChatDiscordToolStripMenuItem: "&Discord - EDD Community Chat" => "Chat della comunitá di EDD"
+.helpToolStripMenuItem.frontierForumThreadToolStripMenuItem: "&Frontier Forum Thread" => "Forum di &Frontier"
 .helpToolStripMenuItem.gitHubToolStripMenuItem: "&Project Page (GitHub)" => "&Pagine del progetto (GitHub)"
 .helpToolStripMenuItem.reportIssueIdeasToolStripMenuItem: "&Report Issue / Idea" => "&Reporta un Problema o un Suggerimento"
 .helpToolStripMenuItem.howToRunInSafeModeToResetVariousParametersToolStripMenuItem: "How to Run in Safe Mode to reset various parameters" => "Come avviare il programma in Modo di Sicurezza per ridefinire vari parametri"
@@ -229,19 +229,19 @@ SECTION EDDiscoveryForm
 .EDSMSyncE: "EDSM Sync failed: {0}" => "Sincronizzazione EDSM fallita {0}"
 .EP: "Edit Profiles" => "Modificare Profili"
 .PL: "Profile {0} Loaded" => "PRofilo {0} Caricato"
-.popOutPanelToolStripMenuItem: "Pop Out Panel.." @
-.CloseWarning: "EDDiscovery is updating the EDSM and EDDB databases\r\nPress OK to close now, Cancel to wait until update is complete" @
-.notifyIconMenu_Open: "&Open EDDiscovery" @
-.notifyIconMenu_Hide: "&Hide Tray Icon" @
-.notifyIconMenu_Exit: "E&xit" @
-.buttonExt2dmap: "2D" @
-.buttonExt3dmap: "3D" @
-.adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.fetchLogsAgainToolStripMenuItem: "Fetch Logs Again" @
-.adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.fetchStarDataAgainToolStripMenuItem: "Fetch Star Data Again" @
-.WSE: "Web server enabled" @
-.WSF: "Web server failed to start" @
-.WSERR: "Web server disabled due to incorrect folder or missing zip file" @
-.WSD: "*** Web server is disabled ***" @
+.popOutPanelToolStripMenuItem: "Pop Out Panel.." => "Pannelo di popout"
+.CloseWarning: "EDDiscovery is updating the EDSM and EDDB databases\r\nPress OK to close now, Cancel to wait until update is complete" => "EDDiscovery sta aggiornando i database EDSM e EDDB \ r \ nPremere OK per chiudere ora, Annulla per attendere fino al completamento dell'aggiornamento"
+.notifyIconMenu_Open: "&Open EDDiscovery" => "&Apri EDDiscovery"
+.notifyIconMenu_Hide: "&Hide Tray Icon" => "&Nascondi l'icona di notificazione"
+.notifyIconMenu_Exit: "E&xit" => "&Esci"
+.buttonExt2dmap: "2D" => "2D"
+.buttonExt3dmap: "3D" => "3D"
+.adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.fetchLogsAgainToolStripMenuItem: "Fetch Logs Again" => "Recupera registri nuovamente"
+.adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.fetchStarDataAgainToolStripMenuItem: "Fetch Star Data Again" => "REcupera dati stellari nuovamente"
+.WSE: "Web server enabled" => "Server web non abilitato"
+.WSF: "Web server failed to start" => "Impossibilie avviare il server web"
+.WSERR: "Web server disabled due to incorrect folder or missing zip file" => "Server Web disabilitato a causa di cartella errata o file zip mancante"
+.WSD: "*** Web server is disabled ***" => "*** Il server web é disabilitato ***"
 
 SECTION EDDiscoveryController
 
@@ -295,15 +295,15 @@ ScreenShotConfigureForm: "Screen Shot Configure" => "Configurare Screenshot"
 .buttonEDChangeOutputFolder: "Browse" => "Sfoglia"
 .labelScanFor: "Scan for" => "Scansiona per"
 .labelSaveAs: "Save as" => "Salva come"
-.extCheckBoxRemoveOriginal: "Remove Original Elite Image" @
-.extCheckBoxKeepMasterConvertedImage: "Keep master converted image" @
-.labelImage2: "Image 2" @
-.labelImage1: "Image 1" @
-.labelHeight2: "Height" @
-.labelWidth2: "Width" @
-.labelLeft2: "Left" @
-.labelTop2: "Top" @
-.labelCropResizeOptions: "Crop/Resize Options" @
+.extCheckBoxRemoveOriginal: "Remove Original Elite Image" => "Elimina immagine originale di ED"
+.extCheckBoxKeepMasterConvertedImage: "Keep master converted image" => "Mantieni immagini convertita"
+.labelImage2: "Image 2" => "Immagine 2"
+.labelImage1: "Image 1" => "Immagine 1"
+.labelHeight2: "Height" => "Altezza"
+.labelWidth2: "Width" => "Larghezza"
+.labelLeft2: "Left" => "Sinistra"
+.labelTop2: "Top" => "Alto"
+.labelCropResizeOptions: "Crop/Resize Options" => "Opzioni di taglio/redimensionamento"
 
 SECTION BookmarkForm
 
@@ -318,7 +318,7 @@ BookmarkForm: "Create New Bookmark" => "Crea un nuobo Favorito"
 .labelBookmarkNotes: "Bookmark Notes" => "Note del Favorito"
 .labelTravelNote: "Travel History Note" => "Nota dello Storico di Viaggio"
 .labelTravelNoteEdit: "(Edit on Travel Screen)" => "(Modifica nella schermo di viaggio)"
-.labelTimeMade: "Time Made" @
+.labelTimeMade: "Time Made" => "Tempo fatto"
 .UpdateBookmark: "Update Bookmark" => "Attualizza Favorito"
 .Update: "Update" => "Attualizza"
 .SB: "New System Bookmark" => "Nuovo Favorito di Sistema"
@@ -377,7 +377,7 @@ SECTION FindSystemsUserControl
 .labelZ: "Z" @
 .buttonExtVisited: "From Visited Systems" => "Da sistemi visitati"
 .checkBoxCustomCube: "Cube" => "Cubo"
-.extCheckBoxExcludeVisitedSystems: "Exclude Visited Systems" @
+.extCheckBoxExcludeVisitedSystems: "Exclude Visited Systems" => "Escludi sistemi visitati"
 
 SECTION ConditionFilterForm
 
@@ -410,7 +410,7 @@ SECTION AddOnManagerForm
 .Name: "Name" => "Nome"
 .Version: "Version" => "Versione"
 .Description: "Description" => "Descrizione"
-.Status: "Status" @
+.Status: "Status" => "Stato"
 .Action: "Action" => "Azione"
 .Delete: "Delete" => "Elimina"
 .Enabled: "Enabled" => "Abilita"
@@ -509,7 +509,7 @@ SECTION Form2DMap
 .LastMonth: "Last Month" => "Ultimo Mese"
 .LastYear: "Last Year" => "Ultimo Anno"
 .All: "All" => "Tutto"
-.Custom: "Custom" @
+.Custom: "Custom" => "Personalizzato"
 Form2DMap: "2D Map" => "Mappa 2D"
 .Nomapsavailable: "No maps available" => "Nessuna mappa disponibile"
 .toolStripButtonStars: "Stars" => "Stelle"
@@ -521,7 +521,7 @@ GalaxySectorSelect: "GalaxySectorSelect" => "Seleziona Settori Galattici"
 .buttonExtCancel: "Cancel" => "Cancella"
 .buttonExtSet: "Set" => "Imposta"
 .labelSectorName: "Sector" => "Settore"
-.Custom: "Custom" @
+.Custom: "Custom" => "Personalizzato"
 .Reset: "Reset" => "Resetta"
 .All: "All" => "Tutti"
 .None: "None" => "Nome"
@@ -567,14 +567,14 @@ ProfileEditor: "ProfileEditor" => "Editor di Profilo"
 .buttonExtGlobals: "Globals" => "Globale"
 .buttonExtCancel: "Cancel" => "Cancella"
 .buttonOK: "OK" @
-.Custom: "Custom" @
+.Custom: "Custom" => "Personalizzato"
 .Trigger: "Trigger" => "Causa"
 .Back: "Back" => "Indietro"
 .Startup: "Startup" => "Inizio"
 .TrigEdit: "Edit Profile {0} Trigger" => "Modifica la causa d'azione del profilo {0}"
 .BackEdit: "Edit Profile {0} Back Trigger" => "Modifica l'azione di ritorno del profilo {0}"
 .DeleteWarning: "Do you wish to delete profile {0}?\r\nThis will remove all the profile information and\r\nis not reversible!" => "Vuoi eliminare il profilo {0}?\r\nQuesto farà si che tutte le informazioni si pergano di forma irriversibile!"
-.Default: "Default" @
+.Default: "Default" => "Predefinito"
 
 SECTION RecordStep
 
@@ -668,8 +668,8 @@ SECTION UserControlForm
 
 SECTION ExtPanelRollUp
 
-.RUPPin: "Pin to stop this menu bar disappearing automatically" @
-.RUPMarker: "Click or hover over this to unroll the menu bar" @
+.RUPPin: "Pin to stop this menu bar disappearing automatically" => "Fissa per impedire a questa barra di menu di scomparire automaticamente"
+.RUPMarker: "Click or hover over this to unroll the menu bar" => "Premi o passa con il mouse sopra per srotolare la barra di menu"
 
 include translation-italiano-uc.tlp
 
