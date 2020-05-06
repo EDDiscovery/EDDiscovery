@@ -22,6 +22,8 @@ using System.Reflection;
 using System.IO;
 using System.IO.Compression;
 using System.Globalization;
+using System.Diagnostics;
+using System.Net.NetworkInformation;
 
 namespace EDDiscovery.Icons
 {
@@ -216,7 +218,7 @@ namespace EDDiscovery.Icons
             //System.Diagnostics.Debug.WriteLine("ICON " + name);
 
             if (Icons.ContainsKey(name))            // written this way so you can debug step it.
-                return Icons[name];
+                return Icons[name];                
             else if (defaultIcons.ContainsKey(name))
                 return defaultIcons[name];
             else
@@ -224,6 +226,38 @@ namespace EDDiscovery.Icons
                 System.Diagnostics.Debug.WriteLine("**************************** ************************" + Environment.NewLine + " Missing Icon " + name);
                 return defaultIcons["Legacy.star"];
             }
+        }
+
+        private static void TransformIcon(Image icon, int effect)
+        {
+            var transformation = RotateFlipType.RotateNoneFlipNone;
+
+            switch (effect)
+            {
+                case 1:
+                    transformation = RotateFlipType.Rotate90FlipNone;
+                    break;
+                case 2:
+                    transformation = RotateFlipType.Rotate180FlipNone;
+                    break;
+                case 3:
+                    transformation = RotateFlipType.Rotate270FlipNone;
+                    break;
+                case 4:
+                    transformation = RotateFlipType.RotateNoneFlipX;
+                    break;
+                case 5:
+                    transformation = RotateFlipType.RotateNoneFlipY;
+                    break;
+                case 6:
+                    transformation = RotateFlipType.RotateNoneFlipNone;
+                    break;
+                default:
+                    transformation = RotateFlipType.RotateNoneFlipNone;
+                    break;
+            }
+
+            icon.RotateFlip(transformation);
         }
     }
 }
