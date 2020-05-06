@@ -1109,12 +1109,15 @@ namespace EliteDangerousCore.JournalEvents
             // The in-game black hole population do not really fit quite well that nomenclature, they are somewhat capped. so we have to quantize the masses ranges to more reasonable limits.
             // For example, SagA* is known to have at least 4 millions solar masses, in real life: the in-game stats shows only 516.608, way smaller! The same for Great Annihilator: the biggest
             // of the couple should be more than some hundrends of thousands of solar masses, which is the expected mass range of an intermediate black holes...
-            if (StarTypeID == EDStar.H && sm <= 7.0)
-                iconname = "H_stellar";
-            else if (StarTypeID == EDStar.H && sm < 70.0)
-                iconname = "H";
-            else
-                iconname = "H_intermediate";
+            if (StarTypeID == EDStar.H)
+            {
+                if (sm <= 7.0)
+                    iconname = "H_stellar";
+                else if (sm < 70.0)
+                    iconname = "H";
+                else 
+                    iconname = "H_intermediate";
+            }
             
             // neutron stars variations. 
             // Uses theorethical masses: https://en.wikipedia.org/wiki/Neutron_star
@@ -1145,6 +1148,7 @@ namespace EliteDangerousCore.JournalEvents
 
             // Herbig AeBe
             // https://en.wikipedia.org/wiki/Herbig_Ae/Be_star
+            // This kind of star classes show a spectrum of an A or B star class. It all depend on their surface temperature
             if (StarTypeID == EDStar.AeBe)
                 if (st < 5000)
                     iconname = "A";
@@ -1353,7 +1357,7 @@ namespace EliteDangerousCore.JournalEvents
                     iconname = "ELWv1";
                 else
                 {
-                    if (st < 265) // mars, or almost identical to
+                    if (nMassEM < 0.15 && st < 262) // mars, or very similar
                         iconname = "ELWv4";
                     else if (st < 280)
                         iconname = "ELWv2";
