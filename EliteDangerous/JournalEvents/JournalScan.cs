@@ -1260,11 +1260,11 @@ namespace EliteDangerousCore.JournalEvents
                 }
 
                 if (PlanetTypeID == EDPlanet.Sudarsky_class_I_gas_giant)
-                {
-                    if (st < 40)
-                        iconname = "GG1v4";
-                    else if (st < 55)
+                {                    
+                    if (st <= 45)
                         iconname = "GG1v2";
+                    else if (st < 60)
+                        iconname = "GG1v4";
                     else if (st < 80)
                         iconname = "GG1v7";
                     else if (st < 100)
@@ -1273,6 +1273,8 @@ namespace EliteDangerousCore.JournalEvents
                         iconname = "GG1v5";
                     else if (st < 130)
                         iconname = "GG1v3";
+                    else if (st < 150)
+                        iconname = "GG1v6"; // jupiter
                     else
                         iconname = "GG1v8";
                 }
@@ -1296,10 +1298,8 @@ namespace EliteDangerousCore.JournalEvents
                         iconname = "GG3v4";
                     else if (st < 700)
                         iconname = "GG3v7";
-                    else if (st < 770)
-                        iconname = "GG3v6";
-                    else
-                        iconname = "GG1v8";
+                    else 
+                        iconname = "GG3v6";                    
                 }
 
                 if (PlanetTypeID == EDPlanet.Sudarsky_class_IV_gas_giant)
@@ -1357,7 +1357,7 @@ namespace EliteDangerousCore.JournalEvents
                     iconname = "ELWv1";
                 else
                 {
-                    if (nMassEM < 0.15 && st < 262) // mars, or very similar
+                    if (nMassEM < 0.15 && st < 262) // mars, or extremely similar to
                         iconname = "ELWv4";
                     else if (st < 280)
                         iconname = "ELWv2";
@@ -1549,7 +1549,9 @@ namespace EliteDangerousCore.JournalEvents
             {
                 iconname = "RBDv1"; // fallback
 
-                if (st < 150)
+                if (st == 55 && !IsLandable) // pluto
+                    iconname = "RBDv6";
+                else if (st < 150)
                     iconname = "RBDv2";
                 else if (st < 300)
                     iconname = "RBDv1";
