@@ -20,6 +20,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 
 namespace EliteDangerousCore.JournalEvents
 {
@@ -1052,7 +1053,6 @@ namespace EliteDangerousCore.JournalEvents
                                                             percent.ToString("N1"));
 
 
-
             return scanText.ToNullSafeString();
         }
 
@@ -1103,6 +1103,7 @@ namespace EliteDangerousCore.JournalEvents
             var st = nSurfaceTemperature;
 
             string iconname = StarTypeID.ToString();
+            int rotation = 6;            
 
             // black holes variations. According to theorethical papers, we should find four classes of black holes: 
             // supermassive, intermediate, stellar and micro (https://en.wikipedia.org/wiki/Black_hole) gravitional collapses.
@@ -1115,24 +1116,31 @@ namespace EliteDangerousCore.JournalEvents
                     iconname = "H_stellar";
                 else if (sm < 70.0)
                     iconname = "H";
-                else 
+                else
                     iconname = "H_intermediate";
             }
-            
+
             // neutron stars variations. 
             // Uses theorethical masses: https://en.wikipedia.org/wiki/Neutron_star
             if (StarTypeID == EDStar.N)
+            {
+                rotation = 0; // turn off random rotation
+
                 if (sm < 1.1)
                     iconname = "N";
                 else if (sm < 1.9)
                     iconname = "N_massive";
                 else
-                    iconname = "N_veryMassive";            
+                    iconname = "N_veryMassive";
+            }
 
             // white dwarfs variations
-            if (StarTypeID == EDStar.D || StarTypeID == EDStar.DA || StarTypeID == EDStar.DAB || StarTypeID == EDStar.DAO || StarTypeID == EDStar.DAV || StarTypeID == EDStar.DAZ || StarTypeID == EDStar.DB || 
-                StarTypeID == EDStar.DBV || StarTypeID == EDStar.DBZ || StarTypeID == EDStar.DC || StarTypeID == EDStar.DCV || StarTypeID == EDStar.DO || StarTypeID == EDStar.DOV || StarTypeID == EDStar.DQ || 
+            if (StarTypeID == EDStar.D || StarTypeID == EDStar.DA || StarTypeID == EDStar.DAB || StarTypeID == EDStar.DAO || StarTypeID == EDStar.DAV || StarTypeID == EDStar.DAZ || StarTypeID == EDStar.DB ||
+                StarTypeID == EDStar.DBV || StarTypeID == EDStar.DBZ || StarTypeID == EDStar.DC || StarTypeID == EDStar.DCV || StarTypeID == EDStar.DO || StarTypeID == EDStar.DOV || StarTypeID == EDStar.DQ ||
                 StarTypeID == EDStar.DX)
+            {
+                rotation = 0; // turn off random rotation
+
                 if (st <= 5500)
                     iconname = "D";
                 else if (st < 8000)
@@ -1141,6 +1149,7 @@ namespace EliteDangerousCore.JournalEvents
                     iconname = "D_veryHot";
                 else if (st >= 14000)
                     iconname = "D_extremelyHot";
+            }
 
             // carbon stars
             if (StarTypeID == EDStar.C || StarTypeID == EDStar.CHd || StarTypeID == EDStar.CJ || StarTypeID == EDStar.CN || StarTypeID == EDStar.CS)
@@ -1157,19 +1166,33 @@ namespace EliteDangerousCore.JournalEvents
 
             // giants and supergiants can use the same icons of their classes, so we tell to use it, to avoid duplication. In case we really want, we can force a bigger size in scan panel...
             if (StarTypeID == EDStar.A_BlueWhiteSuperGiant)
-                iconname = "A";
+            {
+                iconname = "A";                
+            }
             else if (StarTypeID == EDStar.B_BlueWhiteSuperGiant)
-                iconname = "B";
+            {
+                iconname = "B";                
+            }
             else if (StarTypeID == EDStar.F_WhiteSuperGiant)
-                iconname = "F";
+            {
+                iconname = "F";                
+            }
             else if (StarTypeID == EDStar.G_WhiteSuperGiant)
-                iconname = "G";
+            {
+                iconname = "G";                
+            }
             else if (StarTypeID == EDStar.K_OrangeGiant)
-                iconname = "K";
+            {
+                iconname = "K";                
+            }
             else if (StarTypeID == EDStar.M_RedGiant)
-                iconname = "M";
+            {
+                iconname = "M";                
+            }
             else if (StarTypeID == EDStar.M_RedSuperGiant)
-                iconname = "M";
+            {
+                iconname = "M";                
+            }
 
             // t-tauri shows spcetral colours related to their surface temperature...
             // They are pre-main sequence stars, so their spectrum shows similarities to main-sequence stars with the same surface temperature; are usually brighter, however, because of the contraction process.
@@ -1196,8 +1219,7 @@ namespace EliteDangerousCore.JournalEvents
             // wolf-rayets stars
             // https://en.wikipedia.org/wiki/Wolf%E2%80%93Rayet_star
             if (StarTypeID == EDStar.W || StarTypeID == EDStar.WC || StarTypeID == EDStar.WN || StarTypeID == EDStar.WNC || StarTypeID == EDStar.WO)
-            {
-                if (st < 50000)
+            {   if (st < 50000)
                     iconname = "F";
                 if (st < 90000)
                     iconname = "A";
@@ -1207,7 +1229,7 @@ namespace EliteDangerousCore.JournalEvents
                     iconname = "O";
             }
                         
-            return EDDiscovery.Icons.IconSet.GetIcon("Bodies.Stars." + iconname);
+            return EDDiscovery.Icons.IconSet.GetIcon("Bodies.Stars." + iconname, rotation);
         }
 
         static public System.Drawing.Image GetStarImageNotScanned()
@@ -1218,17 +1240,20 @@ namespace EliteDangerousCore.JournalEvents
         public System.Drawing.Image GetPlanetClassImage()
         {
             var st = nSurfaceTemperature;
-            
+            int rotation = 6; // random
+
             if (PlanetClass == null)
             {
                 return GetPlanetImageNotScanned();
             }
 
             string iconname = PlanetTypeID.ToString();
-
+            
             // Gas Giants variants
             if (PlanetTypeID.ToNullSafeString().ToLowerInvariant().Contains("giant"))
             {
+                rotation = 0; // off
+
                 iconname = "GG1v1"; // fallback
 
                 if (PlanetTypeID == EDPlanet.Gas_giant_with_ammonia_based_life)
@@ -1260,10 +1285,13 @@ namespace EliteDangerousCore.JournalEvents
                 }
 
                 if (PlanetTypeID == EDPlanet.Sudarsky_class_I_gas_giant)
-                {                    
-                    if (st <= 45)
+                {
+                    if (st <= 45) // neptune
+                    { 
                         iconname = "GG1v2";
-                    else if (st < 60)
+                        rotation = 6; // turn on random rotation
+                    }
+                    else if (st < 60) // uranus
                         iconname = "GG1v4";
                     else if (st < 80)
                         iconname = "GG1v7";
@@ -1274,13 +1302,17 @@ namespace EliteDangerousCore.JournalEvents
                     else if (st < 130)
                         iconname = "GG1v3";
                     else if (st < 150)
+                    {
                         iconname = "GG1v6"; // jupiter
+                        rotation = 0; // assure that rotation is turned off, so to render jupiter as we know it
+                    }
                     else
                         iconname = "GG1v8";
                 }
 
                 if (PlanetTypeID == EDPlanet.Sudarsky_class_II_gas_giant)
                 {
+                    rotation = 6; // turn on random rotation
                     iconname = "GG2v1";
                 }
 
@@ -1289,7 +1321,10 @@ namespace EliteDangerousCore.JournalEvents
                     if (st < 300)
                         iconname = "GG3v2";
                     else if (st < 350)
+                    {
                         iconname = "GG3v3";
+                        rotation = 6; // turn on random rotation
+                    }
                     else if (st < 400)
                         iconname = "GG3v1";
                     else if (st < 500)
@@ -1298,17 +1333,22 @@ namespace EliteDangerousCore.JournalEvents
                         iconname = "GG3v4";
                     else if (st < 700)
                         iconname = "GG3v7";
-                    else 
-                        iconname = "GG3v6";                    
+                    else
+                    { 
+                        iconname = "GG3v6";
+                        rotation = 6; // turn on random rotation
+                    }
                 }
 
                 if (PlanetTypeID == EDPlanet.Sudarsky_class_IV_gas_giant)
                 {
+                    rotation = 6; // turn on random rotation
                     iconname = "GG4v1";
                 }
 
                 if (PlanetTypeID == EDPlanet.Sudarsky_class_V_gas_giant)
                 {
+                    rotation = 6; // turn on random rotation
                     iconname = "GG3v5";
                 }
 
@@ -1319,10 +1359,10 @@ namespace EliteDangerousCore.JournalEvents
 
                 if (PlanetTypeID == EDPlanet.Water_giant_with_life)
                 {
-                    iconname = "GGWv1";
+                    iconname = "GGWv1";                    
                 }
 
-                return EDDiscovery.Icons.IconSet.GetIcon("Bodies.Giants." + iconname);
+                return EDDiscovery.Icons.IconSet.GetIcon("Bodies.Giants." + iconname, rotation);
             }
 
             // Terrestrial planets variants
@@ -1330,12 +1370,12 @@ namespace EliteDangerousCore.JournalEvents
             // Ammonia world 
             if (PlanetTypeID == EDPlanet.Ammonia_world) 
             {
-                iconname = "AMWv1"; // fallback
+                iconname = "AMWv1"; // fallback                
 
                 if (Terraformable) // extremely rare, but they exists
                     iconname = "AMWv2";
                 else if (AtmosphereProperty == EDAtmosphereProperty.Thick || AtmosphereProperty == EDAtmosphereProperty.Hot)
-                    iconname = "AMWv3";                
+                    iconname = "AMWv3";
                 else if (AtmosphereProperty == EDAtmosphereProperty.Rich || AtmosphereID == EDAtmosphereType.Ammonia_and_oxygen)
                     iconname = "AMWv4";
                 else if (nLandable == true || AtmosphereID == EDAtmosphereType.No_atmosphere && st < 140)
@@ -1343,7 +1383,9 @@ namespace EliteDangerousCore.JournalEvents
                 else if (st < 180)
                     iconname = "AMWv3";
                 else if (st < 210)
-                    iconname = "AMWv1";
+                {
+                    iconname = "AMWv1";                    
+                }
                 else
                     iconname = "AMWv4";
             }
@@ -1354,7 +1396,10 @@ namespace EliteDangerousCore.JournalEvents
                 iconname = "ELWv5"; // fallback
 
                 if ((int)nMassEM == 1 && st == 288) // earth, or almost identical to
+                {
                     iconname = "ELWv1";
+                    rotation = 0;
+                }
                 else
                 {
                     if (nMassEM < 0.15 && st < 262) // mars, or extremely similar to
@@ -1469,8 +1514,7 @@ namespace EliteDangerousCore.JournalEvents
                         iconname = "HMCv3"; // fallback
                 }
                 else
-                    iconname = "HMCv3"; // fallback
-
+                    iconname = "HMCv3"; // fallback                                
             }
 
             if (PlanetTypeID == EDPlanet.Icy_body)
@@ -1509,16 +1553,20 @@ namespace EliteDangerousCore.JournalEvents
                 if (st < 150)
                 {
                     if (nTidalLock == true)
-                        iconname = "ICYv3";
+                    {
+                        iconname = "ICYv3";                        
+                    }
                     else
-                        iconname = "ICYv8";
+                    {
+                        iconname = "ICYv8";                        
+                    }
                 }
                 else if (st < 60)
                     iconname = "ICYv6";
                 else if (st < 120)
                     iconname = "ICYv9";
                 else
-                    iconname = "ICYv4"; // fallback
+                    iconname = "ICYv4"; // fallback                
             }
 
             if (PlanetTypeID == EDPlanet.Metal_rich_body)
@@ -1582,7 +1630,7 @@ namespace EliteDangerousCore.JournalEvents
                         iconname = "RIBv4";
                     else if (AtmosphereProperty == (EDAtmosphereProperty.Hot | EDAtmosphereProperty.Thin))
                         iconname = "RIBv1";                    
-                }                
+                }
             }
 
             if (PlanetTypeID == EDPlanet.Water_world)
@@ -1618,7 +1666,7 @@ namespace EliteDangerousCore.JournalEvents
                     iconname = "WTRv7"; // fallback
             }
 
-            return EDDiscovery.Icons.IconSet.GetIcon("Bodies.Planets." + iconname);                        
+            return EDDiscovery.Icons.IconSet.GetIcon("Bodies.Planets." + iconname, rotation);                        
         }
 
         static public System.Drawing.Image GetPlanetImageNotScanned()
