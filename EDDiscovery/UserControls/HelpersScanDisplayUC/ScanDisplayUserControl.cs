@@ -167,7 +167,7 @@ namespace EDDiscovery.UserControls
 
                             // if belt is before this, display belts here
 
-                            while (displaybelts && lastbelt != null && planetnode.ScanData != null && (lastbelt.BeltData == null || lastbelt.BeltData.OuterRad < planetnode.ScanData.nSemiMajorAxis))
+                            while (displaybelts && lastbelt != null && planetnode.ScanData != null && (lastbelt.BeltData == null || planetnode.ScanData.IsOrbitingBaryCentre || lastbelt.BeltData.OuterRad < planetnode.ScanData.nSemiMajorAxis))
                             {
                                 // if too far across, go back to star
                                 if (leftmiddle.X + planetsize.Width > panelStars.Width - panelStars.ScrollBarWidth) // if too far across..
@@ -176,6 +176,8 @@ namespace EDDiscovery.UserControls
                                 }
 
                                 string appendlabel = Environment.NewLine + $"{lastbelt.BeltData.OuterRad / JournalScan.oneLS_m:N1}ls";
+
+                                appendlabel = appendlabel.AppendPrePad("" + lastbelt.ScanData?.BodyID, Environment.NewLine);
 
                                 Point maxbeltpos = DrawNode(starcontrols, lastbelt, curmats, hl, Icons.Controls.Scan_Bodies_Belt, leftmiddle,false,out int unusedbeltcentre, beltsize, DrawLevel.PlanetLevel, appendlabeltext:appendlabel);
 

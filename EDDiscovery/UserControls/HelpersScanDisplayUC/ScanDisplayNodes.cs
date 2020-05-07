@@ -106,28 +106,32 @@ namespace EDDiscovery.UserControls
 
                     if (ShowDist)
                     {
-                        if (sn.ScanData.IsOrbitingBaryCentre)          // if in orbit of barycentre
+                        if (drawtype != DrawLevel.MoonLevel)       // other than moons
                         {
-                            if (drawtype != DrawLevel.MoonLevel)       // can't do moons
+                            if (sn.ScanData.IsOrbitingBaryCentre)          // if in orbit of barycentre
                             {
                                 string s = $"{(sn.ScanData.DistanceFromArrivalLS):N1}ls";
                                 if (sn.ScanData.nSemiMajorAxis.HasValue)
                                     s += "/" + sn.ScanData.SemiMajorAxisLSKM;
-
                                 nodelabels[1] = nodelabels[1].AppendPrePad(s, Environment.NewLine);
                             }
                             else
                             {
-                                //System.Diagnostics.Debug.WriteLine("Detected barycentre moon " + sn.fullname);
+                                nodelabels[1] = nodelabels[1].AppendPrePad($"{sn.ScanData.DistanceFromArrivalLS:N1}ls", Environment.NewLine);
                             }
                         }
-                        else if (sn.ScanData.nSemiMajorAxis.HasValue)
+                        else
                         {
-                            nodelabels[1] = nodelabels[1].AppendPrePad($"{(sn.ScanData.nSemiMajorAxis / JournalScan.oneLS_m):N1}ls", Environment.NewLine);
+                            if (!sn.ScanData.IsOrbitingBaryCentre && sn.ScanData.nSemiMajorAxis.HasValue)          // if not in orbit of barycentre
+                            {
+                                nodelabels[1] = nodelabels[1].AppendPrePad($"{(sn.ScanData.nSemiMajorAxis / JournalScan.oneLS_m):N1}ls", Environment.NewLine);
+                            }
                         }
                     }
 
                     nodelabels[1] = nodelabels[1].AppendPrePad(appendlabeltext, Environment.NewLine);
+
+   nodelabels[1] = nodelabels[1].AppendPrePad("" + sn.ScanData?.BodyID, Environment.NewLine);
 
                     bool valuable = sc.EstimatedValue >= ValueLimit;
                     int iconoverlays = ShowOverlays ? ((sc.Terraformable ? 1 : 0) + (sc.HasMeaningfulVolcanism ? 1 : 0) + (valuable ? 1 : 0) + (sc.Mapped ? 1 : 0) + (sn.Signals != null ? 1 : 0)) : 0;
