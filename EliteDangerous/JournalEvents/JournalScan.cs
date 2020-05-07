@@ -1162,6 +1162,7 @@ namespace EliteDangerousCore.JournalEvents
             }
 
             // giants and supergiants can use the same icons of their classes, so we tell to use it, to avoid duplication. In case we really want, we can force a bigger size in scan panel...
+            // better: an huge corona overlay? ;)
             if (StarTypeID == EDStar.A_BlueWhiteSuperGiant)
             {
                 iconname = "A";                
@@ -1370,9 +1371,9 @@ namespace EliteDangerousCore.JournalEvents
                 else if (AtmosphereProperty == EDAtmosphereProperty.Thick || AtmosphereProperty == EDAtmosphereProperty.Hot)
                     iconname = "AMWv3";
                 else if (AtmosphereProperty == EDAtmosphereProperty.Rich || AtmosphereID == EDAtmosphereType.Ammonia_and_oxygen)
-                    iconname = "AMWv4";
+                    iconname = "AMWv4"; // kindly provided by CMDR CompleteNOOB
                 else if (nLandable == true || AtmosphereID == EDAtmosphereType.No_atmosphere && st < 140)
-                    iconname = "AMWv5";
+                    iconname = "AMWv5"; // kindly provided by CMDR CompleteNOOB
                 else if (st < 180)
                     iconname = "AMWv3";
                 else if (st < 210)
@@ -1401,7 +1402,7 @@ namespace EliteDangerousCore.JournalEvents
                     else if (st < 300)
                         iconname = "ELWv3";
                     else
-                        iconname = "ELWv5";
+                        iconname = "ELWv5"; // kindly provided by CMDR CompleteNOOB
                 }
             }
 
@@ -1413,7 +1414,12 @@ namespace EliteDangerousCore.JournalEvents
                 if (nLandable == true || AtmosphereProperty == EDAtmosphereProperty.None || AtmosphereID == EDAtmosphereType.No_atmosphere)
                 {
                     if (st < 300)
-                        iconname = "HMCv30";
+                    {
+                        if (nTidalLock == true)
+                            iconname = "HMCv30";
+                        else
+                            iconname = "HMCv27"; // kindly provided by CMDR CompleteNOOB
+                    }
                     else if (st < 500)
                         iconname = "HMCv34";
                     else if (st < 700)
@@ -1473,7 +1479,7 @@ namespace EliteDangerousCore.JournalEvents
                         else if (st > 1250)
                             iconname = "HMCv14";
                         else
-                            iconname = "HMCv18";
+                            iconname = "HMCv18"; // kindly provided by CMDR CompleteNOOB
                     }
                     else if (AtmosphereID == EDAtmosphereType.Methane)
                     {
@@ -1490,7 +1496,12 @@ namespace EliteDangerousCore.JournalEvents
                             iconname = "HMCv5";
                     }
                     else if (AtmosphereID == EDAtmosphereType.Sulphur_dioxide)
-                        iconname = "HMCv23";
+                    {
+                        if (st < 700)
+                            iconname = "HMCv23";
+                        else
+                            iconname = "HMCv37"; // kindly provided by CMDR CompleteNOOB
+                    }
                     else if (AtmosphereID == EDAtmosphereType.Water)
                     {
                         if (st < 400)
@@ -1589,7 +1600,7 @@ namespace EliteDangerousCore.JournalEvents
             {
                 iconname = "RBDv1"; // fallback
 
-                if (st == 55 && !IsLandable) // pluto
+                if (st == 55 && !IsLandable) // pluto (actually, pluto is a rocky-ice body, in real life; however, the game consider it a rocky body. Too bad...)
                     iconname = "RBDv6";
                 else if (st < 150)
                     iconname = "RBDv2";
@@ -1631,33 +1642,42 @@ namespace EliteDangerousCore.JournalEvents
             {
                 iconname = "WTRv7"; // fallback
 
-                if (AtmosphereID == EDAtmosphereType.Carbon_dioxide)
+                if (nLandable == true || AtmosphereProperty == EDAtmosphereProperty.None || AtmosphereID == EDAtmosphereType.No_atmosphere)
                 {
-                    if (st < 260)
-                        iconname = "WTRv6";
-                    else if (st < 280)
-                        iconname = "WTRv5";
-                    else if (st < 300)
-                        iconname = "WTRv7";
-                    else if (st > 300)
-                        iconname = "WTRv2";
+                    iconname = "WTRv10"; // kindly provided by CMDR CompleteNOOB
                 }
-                else if (AtmosphereID == EDAtmosphereType.Ammonia)
+                else
                 {
-                    if (st < 280)
-                        iconname = "WTRv1";
+                    if (AtmosphereID == EDAtmosphereType.Carbon_dioxide)
+                    {
+                        if (st < 260)
+                            iconname = "WTRv6";
+                        else if (st < 280)
+                            iconname = "WTRv5";
+                        else if (st < 300)
+                            iconname = "WTRv7";
+                        else if (st > 300)
+                            iconname = "WTRv2";
+                    }
+                    else if (AtmosphereID == EDAtmosphereType.Ammonia)
+                    {
+                        if (st < 275)
+                            iconname = "WTRv1";
+                        else if (st < 350)
+                            iconname = "WTRv9"; // kindly provided by CMDR CompleteNOOB
+                        else 
+                            iconname = "WTRv4";
+                    }
+                    else if (AtmosphereID == EDAtmosphereType.Nitrogen)
+                    {
+                        if (st < 250)
+                            iconname = "WTRv3";
+                        else
+                            iconname = "WTRv8";
+                    }
                     else
-                        iconname = "WTRv4";
+                        iconname = "WTRv7"; // fallback                                
                 }
-                else if (AtmosphereID == EDAtmosphereType.Nitrogen)
-                {
-                    if (st < 250)
-                        iconname = "WTRv3";
-                    else
-                        iconname = "WTRv8";
-                }
-                else 
-                    iconname = "WTRv7"; // fallback                                
             }
 
             return EDDiscovery.Icons.IconSet.GetIcon("Bodies.Planets." + iconname);                        

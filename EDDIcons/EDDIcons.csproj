@@ -703,6 +703,10 @@
     <EmbeddedResource Include="Bodies\Planets\RBDv6.png" />
     <EmbeddedResource Include="Bodies\Giants\GG4v2.png" />
     <EmbeddedResource Include="Bodies\Giants\GG4v3.png" />
+    <EmbeddedResource Include="Bodies\Planets\HMCv27.png" />
+    <EmbeddedResource Include="Bodies\Planets\WTRv10.png" />
+    <EmbeddedResource Include="Bodies\Planets\WTRv9.png" />
+    <EmbeddedResource Include="Bodies\Planets\HMCv37.png" />
     <Content Include="Bodies\Stars\SagittariusA.png" />
     <EmbeddedResource Include="Bodies\Stars\D_veryHot.png" />
     <EmbeddedResource Include="Bodies\Stars\D_extremelyHot.png" />
