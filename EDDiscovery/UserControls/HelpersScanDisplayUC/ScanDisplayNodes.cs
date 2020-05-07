@@ -159,7 +159,7 @@ namespace EDDiscovery.UserControls
                         {
                             using (Brush b = new SolidBrush(backwash.Value))
                             {
-                                g.FillRectangle(b, new Rectangle(overlaywidth, 0, imagewidtharea, bitmapheight));
+                                g.FillRectangle(b, new Rectangle(iconwidtharea, 0, imagewidtharea, bitmapheight));
                             }
                         }
 

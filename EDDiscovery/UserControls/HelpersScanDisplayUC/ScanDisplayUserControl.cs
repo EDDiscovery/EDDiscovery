@@ -195,9 +195,9 @@ namespace EDDiscovery.UserControls
 
                                 bool habzone = false;
 
-                                if (ShowHabZone && planetnode.ScanData != null)
+                                if (ShowHabZone && planetnode.ScanData != null && !planetnode.ScanData.IsOrbitingBaryCentre && planetnode.ScanData.nSemiMajorAxis.HasValue)
                                 {
-                                    double dist = planetnode.ScanData.DistanceAccountingForBarycentre / JournalScan.oneLS_m;  // m , converted to LS
+                                    double dist = planetnode.ScanData.nSemiMajorAxis.Value / JournalScan.oneLS_m;  // m , converted to LS
                                     habzone =  dist >= habzonestartls && dist <= habzoneendls;
                                 }
 
