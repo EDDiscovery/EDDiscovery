@@ -702,6 +702,7 @@
     <EmbeddedResource Include="Bodies\Planets\AMWv5.png" />
     <EmbeddedResource Include="Bodies\Planets\RBDv6.png" />
     <EmbeddedResource Include="Bodies\Giants\GG4v2.png" />
+    <EmbeddedResource Include="Bodies\Giants\GG4v3.png" />
     <Content Include="Bodies\Stars\SagittariusA.png" />
     <EmbeddedResource Include="Bodies\Stars\D_veryHot.png" />
     <EmbeddedResource Include="Bodies\Stars\D_extremelyHot.png" />

@@ -1332,7 +1332,9 @@ namespace EliteDangerousCore.JournalEvents
 
                 if (PlanetTypeID == EDPlanet.Sudarsky_class_IV_gas_giant)
                 {                    
-                    if (st < 1100)
+                    if (st < 1000)
+                        iconname = "GG4v3";
+                    else if (st < 1100)
                         iconname = "GG4v1";
                     else
                         iconname = "GG4v2";
