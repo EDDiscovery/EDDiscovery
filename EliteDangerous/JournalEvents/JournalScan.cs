@@ -1161,8 +1161,8 @@ namespace EliteDangerousCore.JournalEvents
                     iconname = "B";
             }
 
-            // giants and supergiants can use the same icons of their classes, so we tell to use it, to avoid duplication. In case we really want, we can force a bigger size in scan panel...
-            // better: an huge corona overlay? ;)
+            // giants and supergiants can use the same icons of their classes, so we'll use them, to avoid duplication. In case we really want, we can force a bigger size in scan panel...
+            // better: huge corona overlay? ;)
             if (StarTypeID == EDStar.A_BlueWhiteSuperGiant)
             {
                 iconname = "A";                
@@ -1192,7 +1192,7 @@ namespace EliteDangerousCore.JournalEvents
                 iconname = "M";                
             }
 
-            // t-tauri shows spcetral colours related to their surface temperature...
+            // t-tauri shows spectral colours related to their surface temperature...
             // They are pre-main sequence stars, so their spectrum shows similarities to main-sequence stars with the same surface temperature; are usually brighter, however, because of the contraction process.
             // https://en.wikipedia.org/wiki/Stellar_classification
             // https://en.wikipedia.org/wiki/T_Tauri_star
@@ -1264,10 +1264,8 @@ namespace EliteDangerousCore.JournalEvents
                 {
                     if (st < 150)
                         iconname = "GGWv1";
-                    else if (st < 175)
-                        iconname = "GGWv2";
-                    else
-                        iconname = "GGWv3";
+                    else 
+                        iconname = "GGWv2";                    
                 }
 
                 if (PlanetTypeID == EDPlanet.Helium_gas_giant)
@@ -1283,30 +1281,35 @@ namespace EliteDangerousCore.JournalEvents
                 if (PlanetTypeID == EDPlanet.Sudarsky_class_I_gas_giant)
                 {
                     if (st <= 45) // neptune
-                    { 
                         iconname = "GG1v2";                        
-                    }
-                    else if (st < 60) // uranus
+                    else if (st < 55)
+                        iconname = "GG1v9";
+                    else if (st < 65) // uranus
                         iconname = "GG1v4";
-                    else if (st < 80)
-                        iconname = "GG1v7";
+                    else if (st < 85)
+                        iconname = "GG1v6";
                     else if (st < 100)
+                        iconname = "GG1v8";
+                    else if (st < 110)
                         iconname = "GG1v1";
-                    else if (st < 115)
-                        iconname = "GG1v5";
                     else if (st < 130)
                         iconname = "GG1v3";
                     else if (st < 150)
-                    {
-                        iconname = "GG1v6"; // jupiter
-                    }
+                        iconname = "GG1v5"; // jupiter
+                    else if (st < 170)
+                        iconname = "GG1v7";
                     else
-                        iconname = "GG1v8";
+                        iconname = "GG1v10";
                 }
 
                 if (PlanetTypeID == EDPlanet.Sudarsky_class_II_gas_giant)
                 {                    
-                    iconname = "GG2v1";
+                    if (st < 250)
+                        iconname = "GG2v1";
+                    else if (st < 300)
+                        iconname = "GG2v2";
+                    else
+                        iconname = "GG2v3";
                 }
 
                 if (PlanetTypeID == EDPlanet.Sudarsky_class_III_gas_giant)

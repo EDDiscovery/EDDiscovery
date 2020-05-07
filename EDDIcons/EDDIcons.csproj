@@ -697,7 +697,6 @@
     <EmbeddedResource Include="Bodies\Giants\GGAv2.png" />
     <EmbeddedResource Include="Bodies\Giants\GGWv1.png" />
     <EmbeddedResource Include="Bodies\Giants\GGWv2.png" />
-    <EmbeddedResource Include="Bodies\Giants\GGWv3.png" />
     <EmbeddedResource Include="Bodies\Giants\WTGv1.png" />
     <EmbeddedResource Include="Bodies\Planets\AMWv5.png" />
     <EmbeddedResource Include="Bodies\Planets\RBDv6.png" />
@@ -707,6 +706,9 @@
     <EmbeddedResource Include="Bodies\Planets\WTRv10.png" />
     <EmbeddedResource Include="Bodies\Planets\WTRv9.png" />
     <EmbeddedResource Include="Bodies\Planets\HMCv37.png" />
+    <EmbeddedResource Include="Bodies\Giants\GG1v10.png" />
+    <EmbeddedResource Include="Bodies\Giants\GG1v9.png" />
+    <Content Include="Bodies\Giants\GG2v3.png" />
     <Content Include="Bodies\Stars\SagittariusA.png" />
     <EmbeddedResource Include="Bodies\Stars\D_veryHot.png" />
     <EmbeddedResource Include="Bodies\Stars\D_extremelyHot.png" />
