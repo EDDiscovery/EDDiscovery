@@ -1228,6 +1228,9 @@ namespace EliteDangerousCore.JournalEvents
                     iconname = "O";
             }
 
+            if (StarTypeID == EDStar.MS)
+                iconname = "M";
+
             return EDDiscovery.Icons.IconSet.GetIcon("Bodies.Stars." + iconname); //temporarily switching of gamma correction;
         }
 
@@ -1645,7 +1648,7 @@ namespace EliteDangerousCore.JournalEvents
             {
                 iconname = "WTRv7"; // fallback
 
-                if (nLandable == true || AtmosphereProperty == EDAtmosphereProperty.None || AtmosphereID == EDAtmosphereType.No_atmosphere)
+                if (AtmosphereID == EDAtmosphereType.No_atmosphere)
                 {
                     iconname = "WTRv10"; // kindly provided by CMDR CompleteNOOB
                 }
