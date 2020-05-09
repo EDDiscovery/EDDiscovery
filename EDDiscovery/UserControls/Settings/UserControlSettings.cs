@@ -211,6 +211,7 @@ namespace EDDiscovery.UserControls
                     List<EDCommander> edcommanders = (List<EDCommander>)dataGridViewCommanders.DataSource;
                     discoveryform.LoadCommandersListBox();
                     EDCommander.Update(edcommanders, false);
+                    dataGridViewCommanders.Refresh();
 
                     if ( forceupdate )                  // journal loc change forcing update
                         discoveryform.RefreshHistoryAsync();        // do a resync
