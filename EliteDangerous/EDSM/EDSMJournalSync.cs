@@ -158,15 +158,6 @@ namespace EliteDangerousCore.EDSM
             historyevent.Set();     // also trigger in case we are in thread hold
         }
 
-        // called by onNewEntry
-
-        public static bool SendEDSMEvents(Action<string> logger, params HistoryEntry[] helist)
-        {
-            return SendEDSMEvents(logger, (IEnumerable<HistoryEntry>)helist);
-        }
-
-        // Called by Perform, by Sync, by above.
-
         public static void UpdateDiscardList()
         {
             if (lastDiscardFetch < DateTime.UtcNow.AddMinutes(-120))     // check if we need a new discard list
@@ -174,7 +165,13 @@ namespace EliteDangerousCore.EDSM
                 try
                 {
                     EDSMClass edsm = new EDSMClass();
-                    discardEvents = new HashSet<string>(edsm.GetJournalEventsToDiscard());
+                    var newdiscardEvents = new HashSet<string>(edsm.GetJournalEventsToDiscard());
+
+                    lock (alwaysDiscard)        // use this as a perm proxy to lock discardEvents
+                    {
+                        discardEvents = newdiscardEvents;
+                    }
+
                     lastDiscardFetch = DateTime.UtcNow;
                 }
                 catch (Exception ex)
@@ -184,6 +181,15 @@ namespace EliteDangerousCore.EDSM
             }
         }
 
+        // called by onNewEntry
+
+        public static bool SendEDSMEvents(Action<string> logger, params HistoryEntry[] helist)
+        {
+            return SendEDSMEvents(logger, (IEnumerable<HistoryEntry>)helist);
+        }
+
+        // Called by Perform, by Sync, by above.
+
         public static bool SendEDSMEvents(Action<string> log, IEnumerable<HistoryEntry> helist, bool manual = false)
         {
             System.Diagnostics.Debug.WriteLine("Send " + helist.Count());
@@ -192,22 +198,25 @@ namespace EliteDangerousCore.EDSM
             bool hasbeta = false;
             DateTime betatime = DateTime.MinValue;
 
-            foreach (HistoryEntry he in helist)     // push list of events to historylist queue..
+            lock (alwaysDiscard)        // use this as a perm proxy to lock discardEvents
             {
-                if ( !he.EdsmSync )     // if we have not sent it..
+                foreach (HistoryEntry he in helist)     // push list of events to historylist queue..
                 {
-                    string eventtype = he.EntryType.ToString();
+                    if (!he.EdsmSync)     // if we have not sent it..
+                    {
+                        string eventtype = he.EntryType.ToString();
 
-                    if (he.Commander.Name.StartsWith("[BETA]", StringComparison.InvariantCultureIgnoreCase) || he.IsBetaMessage)
-                    {
-                        hasbeta = true;
-                        betatime = he.EventTimeUTC;
-                        he.journalEntry.SetEdsmSync();       // crappy slow but unusual, but lets mark them as sent..
-                    }
-                    else if (! ( he.MultiPlayer || discardEvents.Contains(eventtype) || alwaysDiscard.Contains(eventtype) ))
-                    {
-                        historylist.Enqueue(new HistoryQueueEntry { HistoryEntry = he, Logger = log, ManualSync = manual });
-                        eventCount++;
+                        if (he.Commander.Name.StartsWith("[BETA]", StringComparison.InvariantCultureIgnoreCase) || he.IsBetaMessage)
+                        {
+                            hasbeta = true;
+                            betatime = he.EventTimeUTC;
+                            he.journalEntry.SetEdsmSync();       // crappy slow but unusual, but lets mark them as sent..
+                        }
+                        else if (!(he.MultiPlayer || discardEvents.Contains(eventtype) || alwaysDiscard.Contains(eventtype)))
+                        {
+                            historylist.Enqueue(new HistoryQueueEntry { HistoryEntry = he, Logger = log, ManualSync = manual });
+                            eventCount++;
+                        }
                     }
                 }
             }
