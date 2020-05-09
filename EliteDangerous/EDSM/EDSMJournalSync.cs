@@ -167,7 +167,7 @@ namespace EliteDangerousCore.EDSM
 
         // Called by Perform, by Sync, by above.
 
-        public static bool SendEDSMEvents(Action<string> log, IEnumerable<HistoryEntry> helist, bool manual = false)
+        public static void UpdateDiscardList()
         {
             if (lastDiscardFetch < DateTime.UtcNow.AddMinutes(-120))     // check if we need a new discard list
             {
@@ -182,7 +182,10 @@ namespace EliteDangerousCore.EDSM
                     System.Diagnostics.Trace.WriteLine($"Unable to retrieve events to be discarded: {ex.ToString()}");
                 }
             }
+        }
 
+        public static bool SendEDSMEvents(Action<string> log, IEnumerable<HistoryEntry> helist, bool manual = false)
+        {
             System.Diagnostics.Debug.WriteLine("Send " + helist.Count());
 
             int eventCount = 0;
@@ -246,6 +249,8 @@ namespace EliteDangerousCore.EDSM
         {
             try
             {
+                UpdateDiscardList();
+
                 running = 1;
 
                 int manualcount = 0;
