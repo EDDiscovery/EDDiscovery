@@ -91,6 +91,7 @@
     <Compile Include="EliteDangerous\EDCalculations.cs" />
     <Compile Include="DB\EDCommander.cs" />
     <Compile Include="EliteDangerous\Translations.cs" />
+    <Compile Include="HistoryList\FsdJumpStatistics.cs" />
     <Compile Include="IGAU\IGAUSync.cs" />
     <Compile Include="IGAU\IGAUClass.cs" />
     <Compile Include="Journal\EDJournalClass.cs" />

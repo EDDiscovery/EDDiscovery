@@ -29,9 +29,15 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlStats : UserControlCommonBase
     {
-        private string DbSelectedTabSave { get { return DBName("StatsSelectedTab" ); } }
-        private string DbStatsTreeStateSave { get { return DBName("StatsTreeExpanded" ); } }
+        private string DbSelectedTabSave { get { return DBName("StatsSelectedTab"); } }
+        private string DbStatsTreeStateSave { get { return DBName("StatsTreeExpanded"); } }
         private Chart mostVisited { get; set; }
+        bool wasTravelling;
+        bool generalInitialised;
+        bool travelInitialised;
+        bool scansInitialised;
+        bool gameStatsInitialised;
+        bool byShipInitialised;
 
         #region Init
 
@@ -88,38 +94,34 @@ namespace EDDiscovery.UserControls
         public override void LoadLayout()
         {
             uctg.OnTravelSelectionChanged += TravelGridChanged;
+            discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
         }
 
         public override void Closing()
         {
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(DbSelectedTabSave, tabControlCustomStats.SelectedIndex);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbStatsTreeStateSave, GameStatTreeState());
-            discoveryform.OnNewEntry -= AddNewEntry;
+            UserDatabase.Instance.PutSettingInt(DbSelectedTabSave, tabControlCustomStats.SelectedIndex);
+            UserDatabase.Instance.PutSettingString(DbStatsTreeStateSave, GameStatTreeState());
             uctg.OnTravelSelectionChanged -= TravelGridChanged;
         }
 
-        private void AddNewEntry(HistoryEntry he, HistoryList hl)
-        {
-            Stats(he,hl);
-        }
+        public override void InitialDisplay() =>
+            Stats(uctg.GetCurrentHistoryEntry, discoveryform.history);
 
-        public override void InitialDisplay()
-        {
-            TravelGridChanged(uctg.GetCurrentHistoryEntry,discoveryform.history);
-        }
-
-        private void TravelGridChanged(HistoryEntry he, HistoryList hl) =>
-            TravelGridChanged(he, hl, true);
-
-        public void TravelGridChanged(HistoryEntry he, HistoryList hl, bool selectedEntry)
-        {
+        public void TravelGridChanged(HistoryEntry he, HistoryList hl, bool selectedEntry) =>
             Stats(he, hl);
+
+        private void AddNewEntry(HistoryEntry he, HistoryList hl) =>
+            Stats(he, hl);
+
+        private void Discoveryform_OnHistoryChange(HistoryList obj)
+        {
+            last_he = null;
+            last_hl = null;
+            Stats(null, obj);
         }
 
-        private void tabControlCustomStats_SelectedIndexChanged(object sender, EventArgs e)
-        {
+        private void tabControlCustomStats_SelectedIndexChanged(object sender, EventArgs e) =>
             Stats(last_he, last_hl);
-        }
 
         private HistoryEntry last_he = null;
         private HistoryList last_hl = null;
@@ -129,29 +131,34 @@ namespace EDDiscovery.UserControls
             if (hl == null)
                 return;
 
-            last_hl = hl;
-            last_he = he;
-
             if (tabControlCustomStats.SelectedIndex == 0)
             {
-                StatsGeneral(he, hl);
+                if (!generalInitialised || he == null || last_he == null || hl.IsBetween(last_he, he, x => x.IsLocOrJump))
+                    StatsGeneral(he, hl);
             }
-            if (tabControlCustomStats.SelectedIndex == 1)
+            else if (tabControlCustomStats.SelectedIndex == 1)
             {
-                StatsTravel(he, hl);
+                if (!travelInitialised || he == null || last_he == null || hl.AnyBetween(last_he, he, journalsForStatsTravel))
+                    StatsTravel(hl);
             }
-            if (tabControlCustomStats.SelectedIndex == 2)
+            else if (tabControlCustomStats.SelectedIndex == 2)
             {
-                StatsScan(he, hl);
+                if (!scansInitialised || he == null || last_he == null || hl.AnyBetween(last_he, he, new[] { JournalTypeEnum.Scan }))
+                    StatsScan(hl);
             }
-            if (tabControlCustomStats.SelectedIndex == 3)
+            else if (tabControlCustomStats.SelectedIndex == 3)
             {
-                StatsGame(he, hl);
+                if (!gameStatsInitialised || he == null || last_he == null || hl.AnyBetween(last_he, he, new[] { JournalTypeEnum.Statistics }))
+                    StatsGame(he, hl);
             }
-            if (tabControlCustomStats.SelectedIndex == 4)
+            else if (tabControlCustomStats.SelectedIndex == 4)
             {
-                StatsByShip(he, hl);
+                if (!byShipInitialised || he == null || last_he == null || hl.AnyBetween(last_he, he, journalsForShipStats))
+                    StatsByShip(hl);
             }
+
+            last_hl = hl;
+            last_he = he;
         }
 
         #endregion
@@ -177,25 +184,22 @@ namespace EDDiscovery.UserControls
                                       ", One Year: ".T(EDTx.UserControlStats_OneYear) + hl.GetFSDJumps(new TimeSpan(365, 0, 0, 0))
                                       );
 
-                int discovered = hl.Where(x => x.journalEntry.EventTypeID == JournalTypeEnum.SellExplorationData).Sum(x => ((JournalSellExplorationData)x.journalEntry).Discovered.Count());
-                StatToDGVStats("First Discoveries".T(EDTx.UserControlStats_FirstDiscoveries), discovered.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-
-                HistoryEntry north = hl.GetConditionally(Double.MinValue, (HistoryEntry s, ref double l) =>
+                HistoryEntry north = hl.GetConditionally(double.MinValue, (HistoryEntry s, ref double l) =>
                 { bool v = s.IsFSDJump && s.System.HasCoordinate && s.System.Z > l; if (v) l = s.System.Z; return v; });
 
-                HistoryEntry south = hl.GetConditionally(Double.MaxValue, (HistoryEntry s, ref double l) =>
+                HistoryEntry south = hl.GetConditionally(double.MaxValue, (HistoryEntry s, ref double l) =>
                 { bool v = s.IsFSDJump && s.System.HasCoordinate && s.System.Z < l; if (v) l = s.System.Z; return v; });
 
-                HistoryEntry east = hl.GetConditionally(Double.MinValue, (HistoryEntry s, ref double l) =>
+                HistoryEntry east = hl.GetConditionally(double.MinValue, (HistoryEntry s, ref double l) =>
                 { bool v = s.IsFSDJump && s.System.HasCoordinate && s.System.X > l; if (v) l = s.System.X; return v; });
 
-                HistoryEntry west = hl.GetConditionally(Double.MaxValue, (HistoryEntry s, ref double l) =>
+                HistoryEntry west = hl.GetConditionally(double.MaxValue, (HistoryEntry s, ref double l) =>
                 { bool v = s.IsFSDJump && s.System.HasCoordinate && s.System.X < l; if (v) l = s.System.X; return v; });
 
-                HistoryEntry up = hl.GetConditionally(Double.MinValue, (HistoryEntry s, ref double l) =>
+                HistoryEntry up = hl.GetConditionally(double.MinValue, (HistoryEntry s, ref double l) =>
                 { bool v = s.IsFSDJump && s.System.HasCoordinate && s.System.Y > l; if (v) l = s.System.Y; return v; });
 
-                HistoryEntry down = hl.GetConditionally(Double.MaxValue, (HistoryEntry s, ref double l) =>
+                HistoryEntry down = hl.GetConditionally(double.MaxValue, (HistoryEntry s, ref double l) =>
                 { bool v = s.IsFSDJump && s.System.HasCoordinate && s.System.Y < l; if (v) l = s.System.Y; return v; });
 
                 StatToDGVStats("Most North".T(EDTx.UserControlStats_MostNorth), GetSystemDataString(north));
@@ -240,11 +244,8 @@ namespace EDDiscovery.UserControls
                     mostVisited.BorderlineColor = Color.Transparent;
 
                     int i = 0;
-                    foreach (var data in from a in groupeddata orderby a.Count descending select a)
+                    foreach (var data in groupeddata.OrderByDescending(g => g.Count).Take(10).Where(g => g.Count > 1))
                     {
-                        if (data.Count <= 1 || i == 10)
-                            break;
-
                         mostVisited.Series[0].Points.Add(new DataPoint(i, data.Count));
                         mostVisited.Series[0].Points[i].AxisLabel = data.Title;
                         mostVisited.Series[0].Points[i].LabelForeColor = TextC;
@@ -257,6 +258,7 @@ namespace EDDiscovery.UserControls
                 mostVisited.Visible = false;
             }
 
+            generalInitialised = true;
             PerformLayout();
         }
 
@@ -292,7 +294,17 @@ namespace EDDiscovery.UserControls
 
         #region Travel Panel
 
-        void StatsTravel(HistoryEntry heunused, HistoryList hl)
+        static JournalTypeEnum[] journalsForStatsTravel = new JournalTypeEnum[]
+        {
+            JournalTypeEnum.FSDJump,
+            JournalTypeEnum.Docked,
+            JournalTypeEnum.Undocked,
+            JournalTypeEnum.JetConeBoost,
+            JournalTypeEnum.Scan,
+            JournalTypeEnum.SAAScanComplete,
+        };
+
+        void StatsTravel(HistoryList hl)
         {
             int sortcol = dataGridViewTravel.SortedColumn?.Index ?? 99;
             SortOrder sortorder = dataGridViewTravel.SortOrder;
@@ -305,35 +317,56 @@ namespace EDDiscovery.UserControls
 
                 if (userControlStatsTimeTravel.TimeMode == StatsTimeUserControl.TimeModeType.Summary)   // Summary
                 {
-                    intervals = 6;
+                    var isTravelling = hl.IsTravellingUTC(out var tripStartutc);
+                    intervals = isTravelling ? 6 : 5;
+                    if (isTravelling != wasTravelling)
+                        dataGridViewTravel.Columns.Clear();
 
+                    wasTravelling = isTravelling;
                     if (dataGridViewTravel.Columns.Count == 0)  // if DGV is clear..
                     {
-                        var Col1 = new DataGridViewTextBoxColumn();
-                        Col1.HeaderText = "Type".T(EDTx.UserControlStats_Type);
-                        Col1.Tag = "AlphaSort";
+                        var cols = new List<DataGridViewColumn>(intervals + 1);
+                        cols.Add(new DataGridViewTextBoxColumn()
+                        {
+                            HeaderText = "Type".T(EDTx.UserControlStats_Type),
+                            Tag = "AlphaSort"
+                        });
 
-                        var Col2 = new DataGridViewTextBoxColumn();
-                        Col2.HeaderText = "24 Hours".T(EDTx.UserControlStats_24Hours);
 
-                        var Col3 = new DataGridViewTextBoxColumn();
-                        Col3.HeaderText = "Week".T(EDTx.UserControlStats_Week);
+                        cols.Add(new DataGridViewTextBoxColumn
+                        {
+                            HeaderText = "24 Hours".T(EDTx.UserControlStats_24Hours)
+                        });
 
-                        var Col4 = new DataGridViewTextBoxColumn();
-                        Col4.HeaderText = "Month".T(EDTx.UserControlStats_Month);
+                        cols.Add(new DataGridViewTextBoxColumn
+                        {
+                            HeaderText = "Week".T(EDTx.UserControlStats_Week)
+                        });
 
-                        var Col5 = new DataGridViewTextBoxColumn();
-                        Col5.HeaderText = "Last dock".T(EDTx.UserControlStats_Lastdock);
+                        cols.Add(new DataGridViewTextBoxColumn
+                        {
+                            HeaderText = "Month".T(EDTx.UserControlStats_Month)
+                        });
 
-                        var Col6 = new DataGridViewTextBoxColumn();
-                        Col6.HeaderText = "Trip".T(EDTx.UserControlStats_Trip);
+                        cols.Add(new DataGridViewTextBoxColumn
+                        {
+                            HeaderText = "Last dock".T(EDTx.UserControlStats_Lastdock)
+                        });
 
-                        var Col7 = new DataGridViewTextBoxColumn();
-                        Col7.HeaderText = "All".T(EDTx.UserControlStats_All);
+                        if (isTravelling)
+                            cols.Add(new DataGridViewTextBoxColumn
+                            {
+                                HeaderText = "Trip".T(EDTx.UserControlStats_Trip)
+                            });
 
-                        dataGridViewTravel.Columns.AddRange(new DataGridViewColumn[] { Col1, Col2, Col3, Col4, Col5, Col6, Col7 });
+                        cols.Add(new DataGridViewTextBoxColumn
+                        {
+                            HeaderText = "All".T(EDTx.UserControlStats_All)
+                        });
+
+                        dataGridViewTravel.Columns.AddRange(cols.ToArray());
                     }
-                    
+
                     timearrutc = new DateTime[intervals];
 
                     timearrutc[0] = DateTime.UtcNow.AddDays(-1);
@@ -344,11 +377,17 @@ namespace EDDiscovery.UserControls
                     DateTime lastdockTimeutc = (lastdocked != null) ? lastdocked.EventTimeUTC : DateTime.UtcNow;
                     timearrutc[3] = lastdockTimeutc;
 
-                    hl.IsTravellingUTC(out DateTime tripStartutc);
-                    timearrutc[4] = tripStartutc;
+                    if (isTravelling)
+                    {
+                        timearrutc[4] = tripStartutc;
+                        timearrutc[5] = new DateTime(2012, 1, 1);
+                    }
+                    else
+                    {
+                        timearrutc[4] = new DateTime(2012, 1, 1);
+                    }
 
-                    timearrutc[5] = new DateTime(2012, 1, 1);
-                    endTimeutc = DateTime.UtcNow;          
+                    endTimeutc = DateTime.UtcNow;
                 }
                 else  // Custom
                 {
@@ -368,66 +407,48 @@ namespace EDDiscovery.UserControls
 
                     timearrutc = new DateTime[intervals];
                     timearrutc[0] = userControlStatsTimeTravel.CustomDateTimePickerFrom.Value.ToUniversalTime();
-                    endTimeutc = userControlStatsTimeTravel.CustomDateTimePickerTo.Value.AddDays(1).ToUniversalTime();  
+                    endTimeutc = userControlStatsTimeTravel.CustomDateTimePickerTo.Value.AddDays(1).ToUniversalTime();
+
+                    // if we've already populated the grid and our history is past the end of the custom period we don't need to repopulate
+                    if (last_he is object && endTimeutc < last_he.EventTimeUTC)
+                        return;
                 }
 
-                string[] strarr = new string[intervals];
+                var jumps = new string[intervals];
+                var distances = new string[intervals];
+                var basicBoosts = new string[intervals];
+                var standardBoosts = new string[intervals];
+                var premiumBoosts = new string[intervals];
+                var jetBoosts = new string[intervals];
+                var scanned = new string[intervals];
+                var mapped = new string[intervals];
+                var ucValue = new string[intervals];
 
-                for (int ii = 0; ii<intervals; ii++)
-                    strarr[ii] = hl.GetFSDJumpsUTC(timearrutc[ii], endTimeutc).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
-                StatToDGV(dataGridViewTravel, "Jumps".T(EDTx.UserControlStats_Jumps), strarr);
+                for (var ii = 0; ii < intervals; ii++)
+                {
+                    var fsdStats = hl.GetFsdJumpStatistics(timearrutc[ii], endTimeutc);
+                    var scanStats = hl.GetScanCountAndValueUTC(timearrutc[ii], endTimeutc);
 
-                for (int ii = 0; ii < intervals; ii++)
-                    strarr[ii] = hl.GetTraveledLyUTC(timearrutc[ii], endTimeutc).ToString("N2", System.Globalization.CultureInfo.CurrentCulture);
-                StatToDGV(dataGridViewTravel, "Travelled Ly".T(EDTx.UserControlStats_TravelledLy), strarr);
+                    jumps[ii] = fsdStats.Count.ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
+                    distances[ii] = fsdStats.Distance.ToString("N2", System.Globalization.CultureInfo.CurrentCulture);
+                    basicBoosts[ii] = fsdStats.BasicBoosts.ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
+                    standardBoosts[ii] = fsdStats.StandardBoosts.ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
+                    premiumBoosts[ii] = fsdStats.PremiumBoosts.ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
+                    scanned[ii] = scanStats.Item1.ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
+                    ucValue[ii] = scanStats.Item2.ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
+                    mapped[ii] = hl.GetNrMappedUTC(timearrutc[ii], endTimeutc).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
+                    jetBoosts[ii] = hl.GetJetConeBoostUTC(timearrutc[ii], endTimeutc).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
+                }
 
-                for (int ii = 0; ii < intervals; ii++)
-                    strarr[ii] = hl.GetFSDBoostUsedUTC(timearrutc[ii], endTimeutc, 3).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
-                StatToDGV(dataGridViewTravel, "Premium Boost".T(EDTx.UserControlStats_PremiumBoost), strarr);
-
-                for (int ii = 0; ii < intervals; ii++)
-                    strarr[ii] = hl.GetFSDBoostUsedUTC(timearrutc[ii], endTimeutc, 2).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
-                StatToDGV(dataGridViewTravel, "Standard Boost".T(EDTx.UserControlStats_StandardBoost), strarr);
-
-                for (int ii = 0; ii < intervals; ii++)
-                    strarr[ii] = hl.GetFSDBoostUsedUTC(timearrutc[ii], endTimeutc, 1).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
-                StatToDGV(dataGridViewTravel, "Basic Boost".T(EDTx.UserControlStats_BasicBoost), strarr);
-
-                for (int ii = 0; ii < intervals; ii++)
-                    strarr[ii] = hl.GetJetConeBoostUTC(timearrutc[ii], endTimeutc).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
-                StatToDGV(dataGridViewTravel, "Jet Cone Boost".T(EDTx.UserControlStats_JetConeBoost), strarr);
-
-                for (int ii = 0; ii < intervals; ii++)
-                    strarr[ii] = hl.GetPlayerControlledTouchDownUTC(timearrutc[ii], endTimeutc).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
-                StatToDGV(dataGridViewTravel, "Landed".T(EDTx.UserControlStats_Landed), strarr);
-
-                for (int ii = 0; ii < intervals; ii++)
-                    strarr[ii] = hl.GetHeatWarningUTC(timearrutc[ii], endTimeutc).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
-                StatToDGV(dataGridViewTravel, "Heat Warning".T(EDTx.UserControlStats_HeatWarning), strarr);
-
-                for (int ii = 0; ii < intervals; ii++)
-                    strarr[ii] = hl.GetHeatDamageUTC(timearrutc[ii], endTimeutc).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
-                StatToDGV(dataGridViewTravel, "Heat damage".T(EDTx.UserControlStats_Heatdamage), strarr);
-
-                for (int ii = 0; ii < intervals; ii++)
-                    strarr[ii] = hl.GetFuelScoopedUTC(timearrutc[ii], endTimeutc).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
-                StatToDGV(dataGridViewTravel, "Fuel Scooped".T(EDTx.UserControlStats_FuelScooped), strarr);
-
-                for (int ii = 0; ii < intervals; ii++)
-                    strarr[ii] = hl.GetFuelScoopedTonsUTC(timearrutc[ii], endTimeutc).ToString("N2", System.Globalization.CultureInfo.CurrentCulture);
-                StatToDGV(dataGridViewTravel, "Scooped Tons".T(EDTx.UserControlStats_ScoopedTons), strarr);
-
-                for (int ii = 0; ii < intervals; ii++)
-                    strarr[ii] = hl.GetNrScansUTC(timearrutc[ii], endTimeutc).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
-                StatToDGV(dataGridViewTravel, "Scans".T(EDTx.UserControlStats_Scans), strarr);
-
-                for (int ii = 0; ii < intervals; ii++)
-                    strarr[ii] = hl.GetScanValueUTC(timearrutc[ii], endTimeutc).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
-                StatToDGV(dataGridViewTravel, "Scan value".T(EDTx.UserControlStats_Scanvalue), strarr);
-
-                for (int ii = 0; ii < intervals; ii++)
-                    strarr[ii] = hl.GetNrMappedUTC(timearrutc[ii], endTimeutc).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
-                StatToDGV(dataGridViewTravel, "Mapped".T(EDTx.UserControlStats_Mapped), strarr);
+                StatToDGV(dataGridViewTravel, "Jumps".T(EDTx.UserControlStats_Jumps), jumps);
+                StatToDGV(dataGridViewTravel, "Travelled Ly".T(EDTx.UserControlStats_TravelledLy), distances);
+                StatToDGV(dataGridViewTravel, "Premium Boost".T(EDTx.UserControlStats_PremiumBoost), premiumBoosts);
+                StatToDGV(dataGridViewTravel, "Standard Boost".T(EDTx.UserControlStats_StandardBoost), standardBoosts);
+                StatToDGV(dataGridViewTravel, "Basic Boost".T(EDTx.UserControlStats_BasicBoost), basicBoosts);
+                StatToDGV(dataGridViewTravel, "Jet Cone Boost".T(EDTx.UserControlStats_JetConeBoost), jetBoosts);
+                StatToDGV(dataGridViewTravel, "Scans".T(EDTx.UserControlStats_Scans), scanned);
+                StatToDGV(dataGridViewTravel, "Mapped".T(EDTx.UserControlStats_Mapped), mapped);
+                StatToDGV(dataGridViewTravel, "Scan value".T(EDTx.UserControlStats_Scanvalue), ucValue);
             }
             else // MAJOR
             {
@@ -445,7 +466,7 @@ namespace EDDiscovery.UserControls
                 }
                 else if (userControlStatsTimeTravel.TimeMode == StatsTimeUserControl.TimeModeType.Week)
                 {
-                    DateTime startOfWeek = currentdaylocal.AddDays(-1 * (int)(DateTime.Today.DayOfWeek -1));
+                    DateTime startOfWeek = currentdaylocal.AddDays(-1 * (int)(DateTime.Today.DayOfWeek - 1));
                     timeintervalslocal[0] = startOfWeek.AddDays(7);
                     for (int ii = 0; ii < intervals; ii++)
                         timeintervalslocal[ii + 1] = timeintervalslocal[ii].AddDays(-7);
@@ -476,67 +497,41 @@ namespace EDDiscovery.UserControls
 
                 DateTime[] timeintervalsutc = (from x in timeintervalslocal select x.ToUniversalTime()).ToArray();  // need it in UTC for the functions
 
-                string[] strarr = new string[intervals];
+                var jumps = new string[intervals];
+                var distances = new string[intervals];
+                var basicBoosts = new string[intervals];
+                var standardBoosts = new string[intervals];
+                var premiumBoosts = new string[intervals];
+                var jetBoosts = new string[intervals];
+                var scanned = new string[intervals];
+                var mapped = new string[intervals];
+                var ucValue = new string[intervals];
 
-                for (int ii = 0; ii < intervals; ii++)
-                    strarr[ii] = hl.GetFSDJumpsUTC(timeintervalsutc[ii + 1], timeintervalsutc[ii]).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
-                StatToDGV(dataGridViewTravel, "Jumps".T(EDTx.UserControlStats_Jumps), strarr);
+                for (var ii = 0; ii < intervals; ii++)
+                {
+                    var fsdStats = hl.GetFsdJumpStatistics(timeintervalsutc[ii + 1], timeintervalsutc[ii]);
+                    var scanStats = hl.GetScanCountAndValueUTC(timeintervalsutc[ii + 1], timeintervalsutc[ii]);
 
-                for (int ii = 0; ii < intervals; ii++)
-                    strarr[ii] = hl.GetTraveledLyUTC(timeintervalsutc[ii + 1], timeintervalsutc[ii]).ToString("N2", System.Globalization.CultureInfo.CurrentCulture);
-                StatToDGV(dataGridViewTravel, "Travelled Ly".T(EDTx.UserControlStats_TravelledLy), strarr);
+                    jumps[ii] = fsdStats.Count.ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
+                    distances[ii] = fsdStats.Distance.ToString("N2", System.Globalization.CultureInfo.CurrentCulture);
+                    basicBoosts[ii] = fsdStats.BasicBoosts.ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
+                    standardBoosts[ii] = fsdStats.StandardBoosts.ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
+                    premiumBoosts[ii] = fsdStats.PremiumBoosts.ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
+                    scanned[ii] = scanStats.Item1.ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
+                    ucValue[ii] = scanStats.Item2.ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
+                    mapped[ii] = hl.GetNrMappedUTC(timeintervalsutc[ii + 1], timeintervalsutc[ii]).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
+                    jetBoosts[ii] = hl.GetJetConeBoostUTC(timeintervalsutc[ii + 1], timeintervalsutc[ii]).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
+                }
 
-                for (int ii = 0; ii < intervals; ii++)
-                    strarr[ii] = hl.GetFSDBoostUsedUTC(timeintervalsutc[ii + 1], timeintervalsutc[ii], 3).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
-                StatToDGV(dataGridViewTravel, "Premium Boost".T(EDTx.UserControlStats_PremiumBoost), strarr);
-
-                for (int ii = 0; ii < intervals; ii++)
-                    strarr[ii] = hl.GetFSDBoostUsedUTC(timeintervalsutc[ii + 1], timeintervalsutc[ii], 2).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
-                StatToDGV(dataGridViewTravel, "Standard Boost".T(EDTx.UserControlStats_StandardBoost), strarr);
-
-                for (int ii = 0; ii < intervals; ii++)
-                    strarr[ii] = hl.GetFSDBoostUsedUTC(timeintervalsutc[ii+ 1], timeintervalsutc[ii], 1).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
-                StatToDGV(dataGridViewTravel, "Basic Boost".T(EDTx.UserControlStats_BasicBoost), strarr);
-
-                for (int ii = 0; ii < intervals; ii++)
-                    strarr[ii] = hl.GetJetConeBoostUTC(timeintervalsutc[ii + 1], timeintervalsutc[ii]).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
-                StatToDGV(dataGridViewTravel, "Jet Cone Boost".T(EDTx.UserControlStats_JetConeBoost), strarr);
-
-                for (int ii = 0; ii < intervals; ii++)
-                    strarr[ii] = hl.GetDockedUTC(timeintervalsutc[ii + 1], timeintervalsutc[ii]).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
-                StatToDGV(dataGridViewTravel, "Docked".T(EDTx.UserControlStats_Docked), strarr);
-
-                for (int ii = 0; ii < intervals; ii++)
-                    strarr[ii] = hl.GetPlayerControlledTouchDownUTC(timeintervalsutc[ii + 1], timeintervalsutc[ii]).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
-                StatToDGV(dataGridViewTravel, "Landed".T(EDTx.UserControlStats_Landed), strarr);
-
-                for (int ii = 0; ii < intervals; ii++)
-                    strarr[ii] = hl.GetHeatWarningUTC(timeintervalsutc[ii + 1], timeintervalsutc[ii]).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
-                StatToDGV(dataGridViewTravel, "Heat Warning".T(EDTx.UserControlStats_HeatWarning), strarr);
-
-                for (int ii = 0; ii < intervals; ii++)
-                    strarr[ii] = hl.GetHeatDamageUTC(timeintervalsutc[ii + 1], timeintervalsutc[ii]).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
-                StatToDGV(dataGridViewTravel, "Heat damage".T(EDTx.UserControlStats_Heatdamage), strarr);
-
-                for (int ii = 0; ii < intervals; ii++)
-                    strarr[ii] = hl.GetFuelScoopedUTC(timeintervalsutc[ii + 1], timeintervalsutc[ii]).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
-                StatToDGV(dataGridViewTravel, "Fuel Scooped".T(EDTx.UserControlStats_FuelScooped), strarr);
-
-                for (int ii = 0; ii < intervals; ii++)
-                    strarr[ii] = hl.GetFuelScoopedTonsUTC(timeintervalsutc[ii + 1], timeintervalsutc[ii]).ToString("N2", System.Globalization.CultureInfo.CurrentCulture);
-                StatToDGV(dataGridViewTravel, "Scooped Tons".T(EDTx.UserControlStats_ScoopedTons), strarr);
-
-                for (int ii = 0; ii < intervals; ii++)
-                    strarr[ii] = hl.GetNrScansUTC(timeintervalsutc[ii + 1], timeintervalsutc[ii]).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
-                StatToDGV(dataGridViewTravel, "Scans".T(EDTx.UserControlStats_Scans), strarr);
-
-                for (int ii = 0; ii < intervals; ii++)
-                    strarr[ii] = hl.GetScanValueUTC(timeintervalsutc[ii + 1], timeintervalsutc[ii]).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
-                StatToDGV(dataGridViewTravel, "Scan value".T(EDTx.UserControlStats_Scanvalue), strarr);
-
-                for (int ii = 0; ii < intervals; ii++)
-                    strarr[ii] = hl.GetNrMappedUTC(timeintervalsutc[ii + 1], timeintervalsutc[ii]).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
-                StatToDGV(dataGridViewTravel, "Mapped".T(EDTx.UserControlStats_Mapped), strarr);
+                StatToDGV(dataGridViewTravel, "Jumps".T(EDTx.UserControlStats_Jumps), jumps);
+                StatToDGV(dataGridViewTravel, "Travelled Ly".T(EDTx.UserControlStats_TravelledLy), distances);
+                StatToDGV(dataGridViewTravel, "Premium Boost".T(EDTx.UserControlStats_PremiumBoost), premiumBoosts);
+                StatToDGV(dataGridViewTravel, "Standard Boost".T(EDTx.UserControlStats_StandardBoost), standardBoosts);
+                StatToDGV(dataGridViewTravel, "Basic Boost".T(EDTx.UserControlStats_BasicBoost), basicBoosts);
+                StatToDGV(dataGridViewTravel, "Jet Cone Boost".T(EDTx.UserControlStats_JetConeBoost), jetBoosts);
+                StatToDGV(dataGridViewTravel, "Scans".T(EDTx.UserControlStats_Scans), scanned);
+                StatToDGV(dataGridViewTravel, "Mapped".T(EDTx.UserControlStats_Mapped), mapped);
+                StatToDGV(dataGridViewTravel, "Scan value".T(EDTx.UserControlStats_Scanvalue), ucValue);
             }
 
             for (int i = 1; i < dataGridViewTravel.Columns.Count; i++)
@@ -547,6 +542,8 @@ namespace EDDiscovery.UserControls
                 dataGridViewTravel.Sort(dataGridViewTravel.Columns[sortcol], (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
                 dataGridViewTravel.Columns[sortcol].HeaderCell.SortGlyphDirection = sortorder;
             }
+
+            travelInitialised = true;
         }
 
         private void dataGridViewTravel_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
@@ -567,7 +564,7 @@ namespace EDDiscovery.UserControls
         /////////////////////////////////////////////////////////////        
         #region SCAN 
 
-        void StatsScan(HistoryEntry heunused, HistoryList hl)
+        void StatsScan(HistoryList hl)
         {
             int sortcol = dataGridViewScan.SortedColumn?.Index ?? 0;
             SortOrder sortorder = dataGridViewScan.SortOrder;
@@ -748,6 +745,8 @@ namespace EDDiscovery.UserControls
                 dataGridViewScan.Sort(dataGridViewScan.Columns[sortcol], (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
                 dataGridViewScan.Columns[sortcol].HeaderCell.SortGlyphDirection = sortorder;
             }
+
+            scansInitialised = true;
         }
 
         private void dataGridViewScan_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
@@ -779,9 +778,9 @@ namespace EDDiscovery.UserControls
             string collapseExpand = GameStatTreeState();
 
             if (string.IsNullOrEmpty(collapseExpand))
-                 collapseExpand = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbStatsTreeStateSave, "YYYYYYYYYYYYY");
+                collapseExpand = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbStatsTreeStateSave, "YYYYYYYYYYYYY");
 
-            if (collapseExpand.Length < 13) 
+            if (collapseExpand.Length < 13)
                 collapseExpand += new string('Y', 13);
 
             HistoryEntry hestats = (he != null) ? hl.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.Statistics, he) : hl.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.Statistics);
@@ -790,177 +789,153 @@ namespace EDDiscovery.UserControls
 
             if (stats != null)
             {
+                AddTreeNode("@", "@", hestats.System.Name);
+                AddTreeNode("@", "T", EDDConfig.Instance.ConvertTimeToSelectedFromUTC(hestats.EventTimeUTC).ToString());
+                AddTreeNode("@", "UTC", hestats.EventTimeUTC.ToString());
+                if (he != null)
                 {
-                    AddTreeNode("@", "@", hestats.System.Name);
-                    AddTreeNode("@", "T", EDDConfig.Instance.ConvertTimeToSelectedFromUTC(hestats.EventTimeUTC).ToString());
-                    AddTreeNode("@", "UTC", hestats.EventTimeUTC.ToString());
-                    if (he != null)
-                    {
-                        int rown = EDDConfig.Instance.OrderRowsInverted ? hestats.Indexno : (hl.Count - he.Indexno + 1);
-                        AddTreeNode("@", "N", rown.ToString());
-                    }
-                }
-                {
-                    string bank = "Bank Account".T(EDTx.UserControlStats_BankAccount);
-                    var n = AddTreeNode(bank, "Current Assets".T(EDTx.UserControlStats_CurrentAssets), stats.BankAccount?.CurrentWealth.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                    AddTreeNode(bank, "Spent on Ships".T(EDTx.UserControlStats_SpentonShips), stats.BankAccount?.SpentOnShips.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                    AddTreeNode(bank, "Spent on Outfitting".T(EDTx.UserControlStats_SpentonOutfitting), stats.BankAccount?.SpentOnOutfitting.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                    AddTreeNode(bank, "Spent on Repairs".T(EDTx.UserControlStats_SpentonRepairs), stats.BankAccount?.SpentOnRepairs.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                    AddTreeNode(bank, "Spent on Fuel".T(EDTx.UserControlStats_SpentonFuel), stats.BankAccount?.SpentOnFuel.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                    AddTreeNode(bank, "Spent on Munitions".T(EDTx.UserControlStats_SpentonMunitions), stats.BankAccount?.SpentOnAmmoConsumables.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                    AddTreeNode(bank, "Insurance Claims".T(EDTx.UserControlStats_InsuranceClaims), stats.BankAccount?.InsuranceClaims.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                    AddTreeNode(bank, "Total Claim Costs".T(EDTx.UserControlStats_TotalClaimCosts), stats.BankAccount?.SpentOnInsurance.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                    if (collapseExpand[0] == 'Y')
-                        n.Item1.Expand();
+                    int rown = EDDConfig.Instance.OrderRowsInverted ? hestats.Indexno : (hl.Count - he.Indexno + 1);
+                    AddTreeNode("@", "N", rown.ToString());
                 }
 
-                {
-                    string combat = "Combat".T(EDTx.UserControlStats_Combat);
-                    var n = AddTreeNode(combat, "Bounties Claimed".T(EDTx.UserControlStats_BountiesClaimed), stats.Combat?.BountiesClaimed.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "");
-                    AddTreeNode(combat, "Profit from Bounty Hunting".T(EDTx.UserControlStats_ProfitfromBountyHunting), stats.Combat?.BountyHuntingProfit.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                    AddTreeNode(combat, "Combat Bonds".T(EDTx.UserControlStats_CombatBonds), stats.Combat?.CombatBonds.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                    AddTreeNode(combat, "Profit from Combat Bonds".T(EDTx.UserControlStats_ProfitfromCombatBonds), stats.Combat?.CombatBondProfits.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                    AddTreeNode(combat, "Assassinations".T(EDTx.UserControlStats_Assassinations), stats.Combat?.Assassinations.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                    AddTreeNode(combat, "Profit from Assassination".T(EDTx.UserControlStats_ProfitfromAssassination), stats.Combat?.AssassinationProfits.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                    AddTreeNode(combat, "Highest Single Reward".T(EDTx.UserControlStats_HighestSingleReward), stats.Combat?.HighestSingleReward.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                    AddTreeNode(combat, "Skimmers Killed".T(EDTx.UserControlStats_SkimmersKilled), stats.Combat?.SkimmersKilled.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                    if (collapseExpand[1] == 'Y')
-                        n.Item1.Expand();
-                }
+                string bank = "Bank Account".T(EDTx.UserControlStats_BankAccount);
+                var node = AddTreeNode(bank, "Current Assets".T(EDTx.UserControlStats_CurrentAssets), stats.BankAccount?.CurrentWealth.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
+                AddTreeNode(bank, "Spent on Ships".T(EDTx.UserControlStats_SpentonShips), stats.BankAccount?.SpentOnShips.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
+                AddTreeNode(bank, "Spent on Outfitting".T(EDTx.UserControlStats_SpentonOutfitting), stats.BankAccount?.SpentOnOutfitting.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
+                AddTreeNode(bank, "Spent on Repairs".T(EDTx.UserControlStats_SpentonRepairs), stats.BankAccount?.SpentOnRepairs.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
+                AddTreeNode(bank, "Spent on Fuel".T(EDTx.UserControlStats_SpentonFuel), stats.BankAccount?.SpentOnFuel.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
+                AddTreeNode(bank, "Spent on Munitions".T(EDTx.UserControlStats_SpentonMunitions), stats.BankAccount?.SpentOnAmmoConsumables.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
+                AddTreeNode(bank, "Insurance Claims".T(EDTx.UserControlStats_InsuranceClaims), stats.BankAccount?.InsuranceClaims.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
+                AddTreeNode(bank, "Total Claim Costs".T(EDTx.UserControlStats_TotalClaimCosts), stats.BankAccount?.SpentOnInsurance.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
+                if (collapseExpand[0] == 'Y')
+                    node.Item1.Expand();
 
-                {
-                    string crime = "Crime".T(EDTx.UserControlStats_Crime);
-                    var n = AddTreeNode(crime, "Notoriety".T(EDTx.UserControlStats_Notoriety), stats.Crime?.Notoriety.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                    AddTreeNode(crime, "Number of Fines".T(EDTx.UserControlStats_NumberofFines), stats.Crime?.Fines.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                    AddTreeNode(crime, "Lifetime Fines Value".T(EDTx.UserControlStats_LifetimeFinesValue), stats.Crime?.TotalFines.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                    AddTreeNode(crime, "Bounties Received".T(EDTx.UserControlStats_BountiesReceived), stats.Crime?.BountiesReceived.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                    AddTreeNode(crime, "Lifetime Bounty Value".T(EDTx.UserControlStats_LifetimeBountyValue), stats.Crime?.TotalBounties.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                    AddTreeNode(crime, "Highest Bounty Issued".T(EDTx.UserControlStats_HighestBountyIssued), stats.Crime?.HighestBounty.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                    if (collapseExpand[2] == 'Y')
-                        n.Item1.Expand();
-                }
+                string combat = "Combat".T(EDTx.UserControlStats_Combat);
+                node = AddTreeNode(combat, "Bounties Claimed".T(EDTx.UserControlStats_BountiesClaimed), stats.Combat?.BountiesClaimed.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "");
+                AddTreeNode(combat, "Profit from Bounty Hunting".T(EDTx.UserControlStats_ProfitfromBountyHunting), stats.Combat?.BountyHuntingProfit.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
+                AddTreeNode(combat, "Combat Bonds".T(EDTx.UserControlStats_CombatBonds), stats.Combat?.CombatBonds.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddTreeNode(combat, "Profit from Combat Bonds".T(EDTx.UserControlStats_ProfitfromCombatBonds), stats.Combat?.CombatBondProfits.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
+                AddTreeNode(combat, "Assassinations".T(EDTx.UserControlStats_Assassinations), stats.Combat?.Assassinations.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddTreeNode(combat, "Profit from Assassination".T(EDTx.UserControlStats_ProfitfromAssassination), stats.Combat?.AssassinationProfits.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
+                AddTreeNode(combat, "Highest Single Reward".T(EDTx.UserControlStats_HighestSingleReward), stats.Combat?.HighestSingleReward.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
+                AddTreeNode(combat, "Skimmers Killed".T(EDTx.UserControlStats_SkimmersKilled), stats.Combat?.SkimmersKilled.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                if (collapseExpand[1] == 'Y')
+                    node.Item1.Expand();
 
-                {
-                    string smuggling = "Smuggling".T(EDTx.UserControlStats_Smuggling);
-                    var n = AddTreeNode(smuggling, "Black Market Network".T(EDTx.UserControlStats_BlackMarketNetwork), stats.Smuggling?.BlackMarketsTradedWith.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                    AddTreeNode(smuggling, "Black Market Profits".T(EDTx.UserControlStats_BlackMarketProfits), stats.Smuggling?.BlackMarketsProfits.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                    AddTreeNode(smuggling, "Commodities Smuggled".T(EDTx.UserControlStats_CommoditiesSmuggled), stats.Smuggling?.ResourcesSmuggled.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                    AddTreeNode(smuggling, "Average Profit".T(EDTx.UserControlStats_AverageProfit), stats.Smuggling?.AverageProfit.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                    AddTreeNode(smuggling, "Highest Single Transaction".T(EDTx.UserControlStats_HighestSingleTransaction), stats.Smuggling?.HighestSingleTransaction.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                    if (collapseExpand[3] == 'Y')
-                        n.Item1.Expand();
-                }
+                string crime = "Crime".T(EDTx.UserControlStats_Crime);
+                node = AddTreeNode(crime, "Notoriety".T(EDTx.UserControlStats_Notoriety), stats.Crime?.Notoriety.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddTreeNode(crime, "Number of Fines".T(EDTx.UserControlStats_NumberofFines), stats.Crime?.Fines.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddTreeNode(crime, "Lifetime Fines Value".T(EDTx.UserControlStats_LifetimeFinesValue), stats.Crime?.TotalFines.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
+                AddTreeNode(crime, "Bounties Received".T(EDTx.UserControlStats_BountiesReceived), stats.Crime?.BountiesReceived.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddTreeNode(crime, "Lifetime Bounty Value".T(EDTx.UserControlStats_LifetimeBountyValue), stats.Crime?.TotalBounties.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
+                AddTreeNode(crime, "Highest Bounty Issued".T(EDTx.UserControlStats_HighestBountyIssued), stats.Crime?.HighestBounty.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
+                if (collapseExpand[2] == 'Y')
+                    node.Item1.Expand();
 
-                {
-                    string trading = "Trading".T(EDTx.UserControlStats_Trading);
-                    var n = AddTreeNode(trading, "Market Network".T(EDTx.UserControlStats_MarketNetwork), stats.Trading?.MarketsTradedWith.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                    AddTreeNode(trading, "Market Profits".T(EDTx.UserControlStats_MarketProfits), stats.Trading?.MarketProfits.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                    AddTreeNode(trading, "Commodities Traded".T(EDTx.UserControlStats_CommoditiesTraded), stats.Trading?.ResourcesTraded.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                    AddTreeNode(trading, "Average Profit".T(EDTx.UserControlStats_AverageProfit), stats.Trading?.AverageProfit.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                    AddTreeNode(trading, "Highest Single Transaction".T(EDTx.UserControlStats_HighestSingleTransaction), stats.Trading?.HighestSingleTransaction.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                    if (collapseExpand[4] == 'Y')
-                        n.Item1.Expand();
-                }
+                string smuggling = "Smuggling".T(EDTx.UserControlStats_Smuggling);
+                node = AddTreeNode(smuggling, "Black Market Network".T(EDTx.UserControlStats_BlackMarketNetwork), stats.Smuggling?.BlackMarketsTradedWith.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddTreeNode(smuggling, "Black Market Profits".T(EDTx.UserControlStats_BlackMarketProfits), stats.Smuggling?.BlackMarketsProfits.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
+                AddTreeNode(smuggling, "Commodities Smuggled".T(EDTx.UserControlStats_CommoditiesSmuggled), stats.Smuggling?.ResourcesSmuggled.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddTreeNode(smuggling, "Average Profit".T(EDTx.UserControlStats_AverageProfit), stats.Smuggling?.AverageProfit.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
+                AddTreeNode(smuggling, "Highest Single Transaction".T(EDTx.UserControlStats_HighestSingleTransaction), stats.Smuggling?.HighestSingleTransaction.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
+                if (collapseExpand[3] == 'Y')
+                    node.Item1.Expand();
 
-                {
-                    string mining = "Mining".T(EDTx.UserControlStats_Mining);
-                    var n = AddTreeNode(mining, "Mining Profits".T(EDTx.UserControlStats_MiningProfits), stats.Mining?.MiningProfits.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                    AddTreeNode(mining, "Materials Refined".T(EDTx.UserControlStats_MaterialsRefined), stats.Mining?.QuantityMined.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                    AddTreeNode(mining, "Materials Collected".T(EDTx.UserControlStats_MaterialsCollected), stats.Mining?.MaterialsCollected.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                    if (collapseExpand[5] == 'Y')
-                        n.Item1.Expand();
-                }
+                string trading = "Trading".T(EDTx.UserControlStats_Trading);
+                node = AddTreeNode(trading, "Market Network".T(EDTx.UserControlStats_MarketNetwork), stats.Trading?.MarketsTradedWith.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddTreeNode(trading, "Market Profits".T(EDTx.UserControlStats_MarketProfits), stats.Trading?.MarketProfits.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
+                AddTreeNode(trading, "Commodities Traded".T(EDTx.UserControlStats_CommoditiesTraded), stats.Trading?.ResourcesTraded.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddTreeNode(trading, "Average Profit".T(EDTx.UserControlStats_AverageProfit), stats.Trading?.AverageProfit.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
+                AddTreeNode(trading, "Highest Single Transaction".T(EDTx.UserControlStats_HighestSingleTransaction), stats.Trading?.HighestSingleTransaction.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
+                if (collapseExpand[4] == 'Y')
+                    node.Item1.Expand();
 
-                {
-                    string exploration = "Exploration".T(EDTx.UserControlStats_Exploration);
-                    var n = AddTreeNode(exploration, "Systems Visited".T(EDTx.UserControlStats_SystemsVisited), stats.Exploration?.SystemsVisited.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                    AddTreeNode(exploration, "Exploration Profits".T(EDTx.UserControlStats_ExplorationProfits), stats.Exploration?.ExplorationProfits.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                    AddTreeNode(exploration, "Level 2 Scans".T(EDTx.UserControlStats_Level2Scans), stats.Exploration?.PlanetsScannedToLevel2.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                    AddTreeNode(exploration, "Level 3 Scans".T(EDTx.UserControlStats_Level3Scans), stats.Exploration?.PlanetsScannedToLevel3.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                    AddTreeNode(exploration, "Highest Payout".T(EDTx.UserControlStats_HighestPayout), stats.Exploration?.HighestPayout.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                    AddTreeNode(exploration, "Total Hyperspace Distance".T(EDTx.UserControlStats_TotalHyperspaceDistance), stats.Exploration?.TotalHyperspaceDistance.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "ly");
-                    AddTreeNode(exploration, "Total Hyperspace Jumps".T(EDTx.UserControlStats_TotalHyperspaceJumps), stats.Exploration?.TotalHyperspaceJumps.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                    AddTreeNode(exploration, "Farthest From Start".T(EDTx.UserControlStats_FarthestFromStart), stats.Exploration?.GreatestDistanceFromStart.ToString("N2", System.Globalization.CultureInfo.CurrentCulture), "ly");
-                    AddTreeNode(exploration, "Time Played".T(EDTx.UserControlStats_TimePlayed), stats.Exploration?.TimePlayed.SecondsToWeeksDaysHoursMinutesSeconds());
-                    if (collapseExpand[6] == 'Y')
-                        n.Item1.Expand();
-                }
+                string mining = "Mining".T(EDTx.UserControlStats_Mining);
+                node = AddTreeNode(mining, "Mining Profits".T(EDTx.UserControlStats_MiningProfits), stats.Mining?.MiningProfits.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
+                AddTreeNode(mining, "Materials Refined".T(EDTx.UserControlStats_MaterialsRefined), stats.Mining?.QuantityMined.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddTreeNode(mining, "Materials Collected".T(EDTx.UserControlStats_MaterialsCollected), stats.Mining?.MaterialsCollected.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                if (collapseExpand[5] == 'Y')
+                    node.Item1.Expand();
 
-                {
-                    string passengers = "Passengers".T(EDTx.UserControlStats_Passengers);
-                    var n = AddTreeNode(passengers, "Total Bulk Passengers Delivered".T(EDTx.UserControlStats_TotalBulkPassengersDelivered), stats.PassengerMissions?.Bulk.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                    AddTreeNode(passengers, "Total VIPs Delivered".T(EDTx.UserControlStats_TotalVIPsDelivered), stats.PassengerMissions?.VIP.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                    AddTreeNode(passengers, "Delivered".T(EDTx.UserControlStats_Delivered), stats.PassengerMissions?.Delivered.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                    AddTreeNode(passengers, "Ejected".T(EDTx.UserControlStats_Ejected), stats.PassengerMissions?.Ejected.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                    if (collapseExpand[7] == 'Y')
-                        n.Item1.Expand();
-                }
+                string exploration = "Exploration".T(EDTx.UserControlStats_Exploration);
+                node = AddTreeNode(exploration, "Systems Visited".T(EDTx.UserControlStats_SystemsVisited), stats.Exploration?.SystemsVisited.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddTreeNode(exploration, "Exploration Profits".T(EDTx.UserControlStats_ExplorationProfits), stats.Exploration?.ExplorationProfits.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddTreeNode(exploration, "Level 2 Scans".T(EDTx.UserControlStats_Level2Scans), stats.Exploration?.PlanetsScannedToLevel2.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddTreeNode(exploration, "Level 3 Scans".T(EDTx.UserControlStats_Level3Scans), stats.Exploration?.PlanetsScannedToLevel3.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddTreeNode(exploration, "Highest Payout".T(EDTx.UserControlStats_HighestPayout), stats.Exploration?.HighestPayout.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
+                AddTreeNode(exploration, "Total Hyperspace Distance".T(EDTx.UserControlStats_TotalHyperspaceDistance), stats.Exploration?.TotalHyperspaceDistance.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "ly");
+                AddTreeNode(exploration, "Total Hyperspace Jumps".T(EDTx.UserControlStats_TotalHyperspaceJumps), stats.Exploration?.TotalHyperspaceJumps.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddTreeNode(exploration, "Farthest From Start".T(EDTx.UserControlStats_FarthestFromStart), stats.Exploration?.GreatestDistanceFromStart.ToString("N2", System.Globalization.CultureInfo.CurrentCulture), "ly");
+                AddTreeNode(exploration, "Time Played".T(EDTx.UserControlStats_TimePlayed), stats.Exploration?.TimePlayed.SecondsToWeeksDaysHoursMinutesSeconds());
+                if (collapseExpand[6] == 'Y')
+                    node.Item1.Expand();
 
-                {
-                    string search = "Search and Rescue".T(EDTx.UserControlStats_SearchandRescue);
-                    var n = AddTreeNode(search, "Total Items Rescued".T(EDTx.UserControlStats_TotalItemsRescued), stats.SearchAndRescue?.Traded.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                    AddTreeNode(search, "Total Profit".T(EDTx.UserControlStats_TotalProfit), stats.SearchAndRescue?.Profit.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                    AddTreeNode(search, "Total Rescue Transactions".T(EDTx.UserControlStats_TotalRescueTransactions), stats.SearchAndRescue?.Count.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                    if (collapseExpand[8] == 'Y')
-                        n.Item1.Expand();
-                }
+                string passengers = "Passengers".T(EDTx.UserControlStats_Passengers);
+                node = AddTreeNode(passengers, "Total Bulk Passengers Delivered".T(EDTx.UserControlStats_TotalBulkPassengersDelivered), stats.PassengerMissions?.Bulk.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddTreeNode(passengers, "Total VIPs Delivered".T(EDTx.UserControlStats_TotalVIPsDelivered), stats.PassengerMissions?.VIP.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddTreeNode(passengers, "Delivered".T(EDTx.UserControlStats_Delivered), stats.PassengerMissions?.Delivered.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddTreeNode(passengers, "Ejected".T(EDTx.UserControlStats_Ejected), stats.PassengerMissions?.Ejected.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                if (collapseExpand[7] == 'Y')
+                    node.Item1.Expand();
 
-                {
-                    string craft = "Crafting".T(EDTx.UserControlStats_Crafting);
-                    var n = AddTreeNode(craft, "Engineers Used".T(EDTx.UserControlStats_EngineersUsed), stats.Crafting?.CountOfUsedEngineers.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                    AddTreeNode(craft, "Total Recipes Generated".T(EDTx.UserControlStats_TotalRecipesGenerated), stats.Crafting?.RecipesGenerated.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                    AddTreeNode(craft, "Grade 1 Recipes Generated".T(EDTx.UserControlStats_Grade1RecipesGenerated), stats.Crafting?.RecipesGeneratedRank1.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                    AddTreeNode(craft, "Grade 2 Recipes Generated".T(EDTx.UserControlStats_Grade2RecipesGenerated), stats.Crafting?.RecipesGeneratedRank2.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                    AddTreeNode(craft, "Grade 3 Recipes Generated".T(EDTx.UserControlStats_Grade3RecipesGenerated), stats.Crafting?.RecipesGeneratedRank3.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                    AddTreeNode(craft, "Grade 4 Recipes Generated".T(EDTx.UserControlStats_Grade4RecipesGenerated), stats.Crafting?.RecipesGeneratedRank4.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                    AddTreeNode(craft, "Grade 5 Recipes Generated".T(EDTx.UserControlStats_Grade5RecipesGenerated), stats.Crafting?.RecipesGeneratedRank5.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                    if (collapseExpand[9] == 'Y')
-                        n.Item1.Expand();
-                }
+                string search = "Search and Rescue".T(EDTx.UserControlStats_SearchandRescue);
+                node = AddTreeNode(search, "Total Items Rescued".T(EDTx.UserControlStats_TotalItemsRescued), stats.SearchAndRescue?.Traded.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddTreeNode(search, "Total Profit".T(EDTx.UserControlStats_TotalProfit), stats.SearchAndRescue?.Profit.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
+                AddTreeNode(search, "Total Rescue Transactions".T(EDTx.UserControlStats_TotalRescueTransactions), stats.SearchAndRescue?.Count.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                if (collapseExpand[8] == 'Y')
+                    node.Item1.Expand();
 
-                {
-                    string crew = "Crew".T(EDTx.UserControlStats_Crew);
-                    var n = AddTreeNode(crew, "Total Wages".T(EDTx.UserControlStats_TotalWages), stats.Crew?.TotalWages.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                    AddTreeNode(crew, "Total Hired".T(EDTx.UserControlStats_TotalHired), stats.Crew?.Hired.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                    AddTreeNode(crew, "Total Fired".T(EDTx.UserControlStats_TotalFired), stats.Crew?.Fired.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                    AddTreeNode(crew, "Died in Line of Duty".T(EDTx.UserControlStats_DiedinLineofDuty), stats.Crew?.Died.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                    if (collapseExpand[10] == 'Y')
-                        n.Item1.Expand();
-                }
+                string craft = "Crafting".T(EDTx.UserControlStats_Crafting);
+                node = AddTreeNode(craft, "Engineers Used".T(EDTx.UserControlStats_EngineersUsed), stats.Crafting?.CountOfUsedEngineers.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddTreeNode(craft, "Total Recipes Generated".T(EDTx.UserControlStats_TotalRecipesGenerated), stats.Crafting?.RecipesGenerated.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddTreeNode(craft, "Grade 1 Recipes Generated".T(EDTx.UserControlStats_Grade1RecipesGenerated), stats.Crafting?.RecipesGeneratedRank1.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddTreeNode(craft, "Grade 2 Recipes Generated".T(EDTx.UserControlStats_Grade2RecipesGenerated), stats.Crafting?.RecipesGeneratedRank2.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddTreeNode(craft, "Grade 3 Recipes Generated".T(EDTx.UserControlStats_Grade3RecipesGenerated), stats.Crafting?.RecipesGeneratedRank3.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddTreeNode(craft, "Grade 4 Recipes Generated".T(EDTx.UserControlStats_Grade4RecipesGenerated), stats.Crafting?.RecipesGeneratedRank4.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddTreeNode(craft, "Grade 5 Recipes Generated".T(EDTx.UserControlStats_Grade5RecipesGenerated), stats.Crafting?.RecipesGeneratedRank5.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                if (collapseExpand[9] == 'Y')
+                    node.Item1.Expand();
 
-                {
-                    string multicrew = "Multi-crew".T(EDTx.UserControlStats_Multi);
-                    var n = AddTreeNode(multicrew, "Total Time".T(EDTx.UserControlStats_TotalTime), SecondsToDHMString(stats.Multicrew?.TimeTotal));
-                    AddTreeNode(multicrew, "Fighter Time".T(EDTx.UserControlStats_FighterTime), SecondsToDHMString(stats.Multicrew?.FighterTimeTotal));
-                    AddTreeNode(multicrew, "Gunner Time".T(EDTx.UserControlStats_GunnerTime), SecondsToDHMString(stats.Multicrew?.GunnerTimeTotal));
-                    AddTreeNode(multicrew, "Credits Made".T(EDTx.UserControlStats_CreditsMade), stats.Multicrew?.CreditsTotal.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                    AddTreeNode(multicrew, "Fines Accrued".T(EDTx.UserControlStats_FinesAccrued), stats.Multicrew?.FinesTotal.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                    if (collapseExpand[11] == 'Y')
-                        n.Item1.Expand();
-                }
+                string crew = "Crew".T(EDTx.UserControlStats_Crew);
+                node = AddTreeNode(crew, "Total Wages".T(EDTx.UserControlStats_TotalWages), stats.Crew?.TotalWages.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
+                AddTreeNode(crew, "Total Hired".T(EDTx.UserControlStats_TotalHired), stats.Crew?.Hired.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddTreeNode(crew, "Total Fired".T(EDTx.UserControlStats_TotalFired), stats.Crew?.Fired.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddTreeNode(crew, "Died in Line of Duty".T(EDTx.UserControlStats_DiedinLineofDuty), stats.Crew?.Died.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                if (collapseExpand[10] == 'Y')
+                    node.Item1.Expand();
 
-                {
-                    string mattrader = "Materials Trader".T(EDTx.UserControlStats_MaterialsTrader);
-                    var n = AddTreeNode(mattrader, "Trades Completed".T(EDTx.UserControlStats_TradesCompleted), stats.MaterialTraderStats?.TradesCompleted.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                    AddTreeNode(mattrader, "Materials Traded".T(EDTx.UserControlStats_MaterialsTraded), stats.MaterialTraderStats?.MaterialsTraded.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                    if (collapseExpand[12] == 'Y')
-                        n.Item1.Expand();
-                }
+                string multicrew = "Multi-crew".T(EDTx.UserControlStats_Multi);
+                node = AddTreeNode(multicrew, "Total Time".T(EDTx.UserControlStats_TotalTime), SecondsToDHMString(stats.Multicrew?.TimeTotal));
+                AddTreeNode(multicrew, "Fighter Time".T(EDTx.UserControlStats_FighterTime), SecondsToDHMString(stats.Multicrew?.FighterTimeTotal));
+                AddTreeNode(multicrew, "Gunner Time".T(EDTx.UserControlStats_GunnerTime), SecondsToDHMString(stats.Multicrew?.GunnerTimeTotal));
+                AddTreeNode(multicrew, "Credits Made".T(EDTx.UserControlStats_CreditsMade), stats.Multicrew?.CreditsTotal.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
+                AddTreeNode(multicrew, "Fines Accrued".T(EDTx.UserControlStats_FinesAccrued), stats.Multicrew?.FinesTotal.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
+                if (collapseExpand[11] == 'Y')
+                    node.Item1.Expand();
+
+                string mattrader = "Materials Trader".T(EDTx.UserControlStats_MaterialsTrader);
+                node = AddTreeNode(mattrader, "Trades Completed".T(EDTx.UserControlStats_TradesCompleted), stats.MaterialTraderStats?.TradesCompleted.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddTreeNode(mattrader, "Materials Traded".T(EDTx.UserControlStats_MaterialsTraded), stats.MaterialTraderStats?.MaterialsTraded.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                if (collapseExpand[12] == 'Y')
+                    node.Item1.Expand();
+
+                gameStatsInitialised = true;
             }
         }
 
         string SecondsToDHMString(int? seconds)
         {
-            if (!seconds.HasValue) return "";
+            if (!seconds.HasValue)
+                return "";
 
             TimeSpan time = TimeSpan.FromSeconds(seconds.Value);
-            return string.Format("{0} days {1} hours {1} minutes".T(EDTx.UserControlStats_TME), time.Days,time.Hours,time.Minutes);
+            return string.Format("{0} days {1} hours {1} minutes".T(EDTx.UserControlStats_TME), time.Days, time.Hours, time.Minutes);
         }
 
-        Tuple<TreeNode,TreeNode> AddTreeNode(string parentname, string name, string value, string units = "")
+        Tuple<TreeNode, TreeNode> AddTreeNode(string parentname, string name, string value, string units = "")
         {
             TreeNode[] parents = treeViewStats.Nodes.Find(parentname, false);
-            TreeNode parent = (parents.Length == 0) ? (treeViewStats.Nodes.Add(parentname,parentname)) : parents[0];
+            TreeNode parent = (parents.Length == 0) ? (treeViewStats.Nodes.Add(parentname, parentname)) : parents[0];
 
             TreeNode[] childs = parent.Nodes.Find(name, false);
             TreeNode child = (childs.Length == 0) ? (parent.Nodes.Add(name, "")) : childs[0];
@@ -981,11 +956,20 @@ namespace EDDiscovery.UserControls
             return result;
         }
 
-#endregion
+        #endregion
 
-#region STATS_BY_SHIP
+        #region STATS_BY_SHIP
 
-        void StatsByShip(HistoryEntry heunused, HistoryList hl)
+        static JournalTypeEnum[] journalsForShipStats = new JournalTypeEnum[]
+        {
+            JournalTypeEnum.FSDJump,
+            JournalTypeEnum.Scan,
+            JournalTypeEnum.MarketBuy,
+            JournalTypeEnum.MarketSell,
+            JournalTypeEnum.Died,
+        };
+
+        void StatsByShip(HistoryList hl)
         {
             int sortcol = dataGridViewByShip.SortedColumn?.Index ?? 0;
             SortOrder sortorder = dataGridViewByShip.SortOrder;
@@ -1027,7 +1011,7 @@ namespace EDDiscovery.UserControls
 
             string[] strarr = new string[8];
 
-            foreach(var si in hl.shipinformationlist.Ships.Where(val => !ShipModuleData.IsSRVOrFighter(val.Value.ShipFD)))
+            foreach (var si in hl.shipinformationlist.Ships.Where(val => !ShipModuleData.IsSRVOrFighter(val.Value.ShipFD)))
             {
                 strarr[0] = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(si.Value.ShipUserName ?? "-");
                 strarr[1] = (si.Value.ShipUserIdent ?? "-").ToUpper();
@@ -1045,6 +1029,8 @@ namespace EDDiscovery.UserControls
                 dataGridViewByShip.Sort(dataGridViewByShip.Columns[sortcol], (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
                 dataGridViewByShip.Columns[sortcol].HeaderCell.SortGlyphDirection = sortorder;
             }
+
+            byShipInitialised = true;
         }
 
         private void dataGridViewByShip_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
@@ -1053,9 +1039,9 @@ namespace EDDiscovery.UserControls
                 e.SortDataGridViewColumnNumeric();
         }
 
-#endregion
+        #endregion
 
-#region Helpers
+        #region Helpers
 
         private static void ColumnValueAlignment(DataGridViewTextBoxColumn Col2)
         {
@@ -1063,8 +1049,8 @@ namespace EDDiscovery.UserControls
             Col2.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
             Col2.SortMode = DataGridViewColumnSortMode.Automatic;
         }
-       
-        void StatToDGV(DataGridView datagrid,  string title, string[] data)
+
+        void StatToDGV(DataGridView datagrid, string title, string[] data)
         {
             object[] rowobj = new object[data.Length + 1];
 
@@ -1077,7 +1063,7 @@ namespace EDDiscovery.UserControls
 
             int rowpresent = datagrid.FindRowWithValue(0, title);
 
-            if ( rowpresent != -1 )
+            if (rowpresent != -1)
             {
                 for (int ii = 1; ii < rowobj.Length; ii++)
                 {
@@ -1116,8 +1102,8 @@ namespace EDDiscovery.UserControls
             base.OnLayout(e);
         }
 
-#endregion
+        #endregion
 
-        
+
     }
 }
