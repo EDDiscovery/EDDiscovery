@@ -80,7 +80,7 @@ namespace EliteDangerousCore
 
             public string StarTypesFound(bool bracketit = true) // first is primary star
             {
-                var sortedset = (from x in Bodies where x.ScanData != null && x.type == ScanNodeType.star orderby x.ScanData.DistanceFromArrivalLS select x.ScanData.StarTypeID.ToString()).ToList();
+                var sortedset = (from x in Bodies where x.ScanData != null && x.type == ScanNodeType.star orderby x.ScanData.DistanceFromArrivalLS select x.ScanData.StarClassID.ToString()).ToList();
                 string s = string.Join("; ", sortedset);
                 if (bracketit && s.HasChars())
                     s = "(" + s + ")";
@@ -228,9 +228,9 @@ namespace EliteDangerousCore
                 if (scandata != null)
                 {
                     if (type == ScanNodeType.star)
-                        name = scandata.StarTypeID.ToString();
+                        name = scandata.StarClassID.ToString();
                     else if (type == ScanNodeType.body)
-                        name = scandata.PlanetTypeID.ToString();
+                        name = scandata.PlanetClassID.ToString();
                 }
 
                 return filternames.Contains(name, StringComparer.InvariantCultureIgnoreCase);

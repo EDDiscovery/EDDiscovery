@@ -63,8 +63,8 @@ namespace EliteDangerousCore.JournalEvents
 
         // STAR
         public string StarType { get; set; }                        // null if no StarType, direct from journal, K, A, B etc
-        public EDStar StarTypeID { get; }                           // star type -> identifier
-        public string StarTypeText { get { return IsStar ? GetStarTypeName() : ""; } }   // Long form star name, from StarTypeID
+        public EDStar StarClassID { get; }                           // star type -> identifier
+        public string StarTypeText { get { return IsStar ? GetStarClassName() : ""; } }   // Long form star name, from StarTypeID
         public double? nStellarMass { get; set; }                   // direct
         public double? nAbsoluteMagnitude { get; set; }             // direct
         public string Luminosity { get; set; }                      // character string (I,II,.. V)
@@ -103,14 +103,14 @@ namespace EliteDangerousCore.JournalEvents
         // Planets
         public string PlanetClass { get; set; }                     // planet class, direct
 
-        public EDPlanet PlanetTypeID { get; }                       // planet class -> ID
-        public bool AmmoniaWorld { get { return Bodies.AmmoniaWorld(PlanetTypeID); } }
-        public bool Earthlike { get { return Bodies.Earthlike(PlanetTypeID); } }
-        public bool WaterWorld { get { return Bodies.WaterWorld(PlanetTypeID); } }
-        public bool SudarskyGasGiant { get { return Bodies.SudarskyGasGiant(PlanetTypeID); } }
-        public bool GasGiant { get { return Bodies.GasGiant(PlanetTypeID); } }
-        public bool WaterGiant { get { return Bodies.WaterGiant(PlanetTypeID); } }
-        public bool HeliumGasGiant { get { return Bodies.HeliumGasGiant(PlanetTypeID); } }
+        public EDPlanet PlanetClassID { get; }                       // planet class -> ID
+        public bool AmmoniaWorld { get { return Bodies.AmmoniaWorld(PlanetClassID); } }
+        public bool Earthlike { get { return Bodies.Earthlike(PlanetClassID); } }
+        public bool WaterWorld { get { return Bodies.WaterWorld(PlanetClassID); } }
+        public bool SudarskyGasGiant { get { return Bodies.SudarskyGasGiant(PlanetClassID); } }
+        public bool GasGiant { get { return Bodies.GasGiant(PlanetClassID); } }
+        public bool WaterGiant { get { return Bodies.WaterGiant(PlanetClassID); } }
+        public bool HeliumGasGiant { get { return Bodies.HeliumGasGiant(PlanetClassID); } }
 
         public bool? nTidalLock { get; set; }                       // direct
         public string TerraformState { get; set; }                  // direct, can be empty or a string
@@ -383,7 +383,7 @@ namespace EliteDangerousCore.JournalEvents
 
             if (IsStar)
             {
-                StarTypeID = Bodies.StarStr2Enum(StarType);
+                StarClassID = Bodies.StarStr2Enum(StarType);
                 StarSubclass = evt["Subclass"].IntNull();
 
                 if (nRadius.HasValue && nSurfaceTemperature.HasValue)
@@ -406,14 +406,14 @@ namespace EliteDangerousCore.JournalEvents
             }
             else if (PlanetClass != null)
             {
-                PlanetTypeID = Bodies.PlanetStr2Enum(PlanetClass);
+                PlanetClassID = Bodies.PlanetStr2Enum(PlanetClass);
                 // Fix naming to standard and fix case..
                 PlanetClass = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.
                                         ToTitleCase(PlanetClass.ToLowerInvariant()).Replace("Ii ", "II ").Replace("Iv ", "IV ").Replace("Iii ", "III ");
             }
             else
             {
-                PlanetTypeID = EDPlanet.Unknown_Body_Type;
+                PlanetClassID = EDPlanet.Unknown_Body_Type;
             }
 
             JToken mats = (JToken)evt["Materials"];
@@ -562,7 +562,7 @@ namespace EliteDangerousCore.JournalEvents
         {
             if (IsStar)
             {
-                info = BaseUtils.FieldBuilder.Build("", GetStarTypeName(), "Mass:;SM;0.00".T(EDTx.JournalScan_MSM), nStellarMass,
+                info = BaseUtils.FieldBuilder.Build("", GetStarClassName(), "Mass:;SM;0.00".T(EDTx.JournalScan_MSM), nStellarMass,
                                                 "Age:;my;0.0".T(EDTx.JournalScan_Age), nAge,
                                                 "Radius:".T(EDTx.JournalScan_RS), RadiusText(),
                                                 "Dist:;ls;0.0".T(EDTx.JournalScan_DISTA), DistanceFromArrivalLS,
@@ -586,7 +586,7 @@ namespace EliteDangerousCore.JournalEvents
         {
             if (IsStar)
             {
-                return BaseUtils.FieldBuilder.Build("", GetStarTypeName(), "Mass:;SM;0.00".T(EDTx.JournalScan_MSM), nStellarMass,
+                return BaseUtils.FieldBuilder.Build("", GetStarClassName(), "Mass:;SM;0.00".T(EDTx.JournalScan_MSM), nStellarMass,
                                                 "Age:;my;0.0".T(EDTx.JournalScan_Age), nAge,
                                                 "Radius:".T(EDTx.JournalScan_RS), RadiusText(),
                                                 "Dist:".T(EDTx.JournalScan_DIST), DistanceFromArrivalText,
@@ -619,7 +619,7 @@ namespace EliteDangerousCore.JournalEvents
 
                 if (IsStar)
                 {
-                    scanText.AppendFormat(GetStarTypeName() + " (" + StarClassification + ")");
+                    scanText.AppendFormat(GetStarClassName() + " (" + StarClassification + ")");
                 }
                 else if (PlanetClass != null)
                 {
@@ -1094,154 +1094,155 @@ namespace EliteDangerousCore.JournalEvents
             return ring.RingInformation(scale, scaletype, IsStar);
         }
 
-        public string GetStarTypeName()           // give description to star class
+        public string GetStarClassName()           // give description to star class
         {
-            return Bodies.StarName(StarTypeID);
+            return Bodies.StarName(StarClassID);
         }
 
-        public System.Drawing.Image GetStarTypeImage()           // give image and description to star class
+        public Image GetStarClassImage()           // give image and description to star class
         {
             var sm = nStellarMass;
             var st = nSurfaceTemperature;
 
-            string iconname = StarTypeID.ToString();
+            string iconName = StarClassID.ToString();
 
             // black holes variations. According to theorethical papers, we should find four classes of black holes: 
             // supermassive, intermediate, stellar and micro (https://en.wikipedia.org/wiki/Black_hole) gravitional collapses.
             // The in-game black hole population do not really fit quite well that nomenclature, they are somewhat capped. so we have to quantize the masses ranges to more reasonable limits.
             // For example, SagA* is known to have at least 4 millions solar masses, in real life: the in-game stats shows only 516.608, way smaller! The same for Great Annihilator: the biggest
             // of the couple should be more than some hundrends of thousands of solar masses, which is the expected mass range of an intermediate black holes...
-            if (StarTypeID == EDStar.H)
+            if (StarClassID == EDStar.H)
             {
                 if (sm <= 7.0)
-                    iconname = "H_stellar";
+                    iconName = "H_stellar";
                 else if (sm < 70.0)
-                    iconname = "H";
+                    iconName = "H";
                 else
-                    iconname = "H_intermediate";
+                    iconName = "H_intermediate";
             }
 
             // neutron stars variations. 
             // Uses theorethical masses: https://en.wikipedia.org/wiki/Neutron_star
-            if (StarTypeID == EDStar.N)
+            if (StarClassID == EDStar.N)
             {
                 if (sm < 1.1)
-                    iconname = "N";
+                    iconName = "N";
                 else if (sm < 1.9)
-                    iconname = "N_massive";
+                    iconName = "N_massive";
                 else
-                    iconname = "N_veryMassive";
+                    iconName = "N_veryMassive";
             }
 
             // white dwarfs variations
-            if (StarTypeID == EDStar.D || StarTypeID == EDStar.DA || StarTypeID == EDStar.DAB || StarTypeID == EDStar.DAO || StarTypeID == EDStar.DAV || StarTypeID == EDStar.DAZ || StarTypeID == EDStar.DB ||
-                StarTypeID == EDStar.DBV || StarTypeID == EDStar.DBZ || StarTypeID == EDStar.DC || StarTypeID == EDStar.DCV || StarTypeID == EDStar.DO || StarTypeID == EDStar.DOV || StarTypeID == EDStar.DQ ||
-                StarTypeID == EDStar.DX)
+            if (StarClassID == EDStar.D || StarClassID == EDStar.DA || StarClassID == EDStar.DAB || StarClassID == EDStar.DAO || StarClassID == EDStar.DAV || StarClassID == EDStar.DAZ || StarClassID == EDStar.DB ||
+                StarClassID == EDStar.DBV || StarClassID == EDStar.DBZ || StarClassID == EDStar.DC || StarClassID == EDStar.DCV || StarClassID == EDStar.DO || StarClassID == EDStar.DOV || StarClassID == EDStar.DQ ||
+                StarClassID == EDStar.DX)
             {
                 if (st <= 5500)
-                    iconname = "D";
+                    iconName = "D";
                 else if (st < 8000)
-                    iconname = "D_hot";
+                    iconName = "D_hot";
                 else if (st < 14000)
-                    iconname = "D_veryHot";
+                    iconName = "D_veryHot";
                 else if (st >= 14000)
-                    iconname = "D_extremelyHot";
+                    iconName = "D_extremelyHot";
             }
 
             // carbon stars
-            if (StarTypeID == EDStar.C || StarTypeID == EDStar.CHd || StarTypeID == EDStar.CJ || StarTypeID == EDStar.CN || StarTypeID == EDStar.CS)
-                iconname = "C";
+            if (StarClassID == EDStar.C || StarClassID == EDStar.CHd || StarClassID == EDStar.CJ || StarClassID == EDStar.CN || StarClassID == EDStar.CS)
+                iconName = "C";
 
             // Herbig AeBe
             // https://en.wikipedia.org/wiki/Herbig_Ae/Be_star
             // This kind of star classes show a spectrum of an A or B star class. It all depend on their surface temperature
-            if (StarTypeID == EDStar.AeBe)
+            if (StarClassID == EDStar.AeBe)
             {
                 if (st < 5000)
-                    iconname = "A";
+                    iconName = "A";
                 else
-                    iconname = "B";
+                    iconName = "B";
             }
 
             // giants and supergiants can use the same icons of their classes, so we'll use them, to avoid duplication. In case we really want, we can force a bigger size in scan panel...
             // better: huge corona overlay? ;)
-            if (StarTypeID == EDStar.A_BlueWhiteSuperGiant)
+            if (StarClassID == EDStar.A_BlueWhiteSuperGiant)
             {
-                iconname = "A";
+                iconName = "A";
             }
-            else if (StarTypeID == EDStar.B_BlueWhiteSuperGiant)
+            else if (StarClassID == EDStar.B_BlueWhiteSuperGiant)
             {
-                iconname = "B";
+                iconName = "B";
             }
-            else if (StarTypeID == EDStar.F_WhiteSuperGiant)
+            else if (StarClassID == EDStar.F_WhiteSuperGiant)
             {
-                iconname = "F";
+                iconName = "F";
             }
-            else if (StarTypeID == EDStar.G_WhiteSuperGiant)
+            else if (StarClassID == EDStar.G_WhiteSuperGiant)
             {
-                iconname = "G";
+                iconName = "G";
             }
-            else if (StarTypeID == EDStar.K_OrangeGiant)
+            else if (StarClassID == EDStar.K_OrangeGiant)
             {
-                iconname = "K";
+                iconName = "K";
             }
-            else if (StarTypeID == EDStar.M_RedGiant)
+            else if (StarClassID == EDStar.M_RedGiant)
             {
-                iconname = "M";
+                iconName = "M";
             }
-            else if (StarTypeID == EDStar.M_RedSuperGiant)
+            else if (StarClassID == EDStar.M_RedSuperGiant)
             {
-                iconname = "M";
+                iconName = "M";
             }
 
             // t-tauri shows spectral colours related to their surface temperature...
             // They are pre-main sequence stars, so their spectrum shows similarities to main-sequence stars with the same surface temperature; are usually brighter, however, because of the contraction process.
             // https://en.wikipedia.org/wiki/Stellar_classification
             // https://en.wikipedia.org/wiki/T_Tauri_star
-            if (StarTypeID == EDStar.TTS)
+            if (StarClassID == EDStar.TTS)
             {
                 if (st < 3700)
-                    iconname = "M";
+                    iconName = "M";
                 else if (st < 5200)
-                    iconname = "K";
+                    iconName = "K";
                 else if (st < 6000)
-                    iconname = "G";
+                    iconName = "G";
                 else if (st < 7500)
-                    iconname = "F";
+                    iconName = "F";
                 else if (st < 10000)
-                    iconname = "A";
+                    iconName = "A";
                 else if (st < 30000)
-                    iconname = "B";
+                    iconName = "B";
                 else
-                    iconname = "O";
+                    iconName = "O";
             }
 
             // wolf-rayets stars
             // https://en.wikipedia.org/wiki/Wolf%E2%80%93Rayet_star
-            if (StarTypeID == EDStar.W || StarTypeID == EDStar.WC || StarTypeID == EDStar.WN || StarTypeID == EDStar.WNC || StarTypeID == EDStar.WO)
+            if (StarClassID == EDStar.W || StarClassID == EDStar.WC || StarClassID == EDStar.WN || StarClassID == EDStar.WNC || StarClassID == EDStar.WO)
             {
                 if (st < 50000)
-                    iconname = "F";
+                    iconName = "F";
                 if (st < 90000)
-                    iconname = "A";
+                    iconName = "A";
                 if (st < 140000)
-                    iconname = "B";
+                    iconName = "B";
                 if (st > 140000)
-                    iconname = "O";
+                    iconName = "O";
             }
 
-            if (StarTypeID == EDStar.MS)
-                iconname = "M";
+            if (StarClassID == EDStar.MS)
+                iconName = "M";
 
-            return EDDiscovery.Icons.IconSet.GetIcon("Bodies.Stars." + iconname); //temporarily switching of gamma correction;
+            System.Diagnostics.Debug.WriteLine(StarClassID + iconName);
+            return EDDiscovery.Icons.IconSet.GetIcon("Bodies.Stars." + iconName); //temporarily switching of gamma correction;
         }
 
-        static public System.Drawing.Image GetStarImageNotScanned()
+        static public Image GetStarImageNotScanned()
         {
             return EDDiscovery.Icons.IconSet.GetIcon("Bodies.Stars.Unknown");
         }
 
-        public System.Drawing.Image GetPlanetClassImage()
+        public Image GetPlanetClassImage()
         {
             var st = nSurfaceTemperature;
 
@@ -1250,173 +1251,173 @@ namespace EliteDangerousCore.JournalEvents
                 return GetPlanetImageNotScanned();
             }
 
-            string iconname = PlanetTypeID.ToString();
+            string iconName = PlanetClassID.ToString();
 
             // Gas Giants variants
-            if (PlanetTypeID.ToNullSafeString().ToLowerInvariant().Contains("giant"))
+            if (PlanetClassID.ToNullSafeString().ToLowerInvariant().Contains("giant"))
             {
-                iconname = "GG1v1"; // fallback
+                iconName = "GG1v1"; // fallback
 
-                if (PlanetTypeID == EDPlanet.Gas_giant_with_ammonia_based_life)
+                if (PlanetClassID == EDPlanet.Gas_giant_with_ammonia_based_life)
                 {
                     if (st < 150)
-                        iconname = "GGAv1";
+                        iconName = "GGAv1";
                     else
-                        iconname = "GGAv2";
+                        iconName = "GGAv2";
                 }
 
-                if (PlanetTypeID == EDPlanet.Gas_giant_with_water_based_life)
+                if (PlanetClassID == EDPlanet.Gas_giant_with_water_based_life)
                 {
                     if (st < 150)
-                        iconname = "GGWv1";
+                        iconName = "GGWv1";
                     else
-                        iconname = "GGWv2";
+                        iconName = "GGWv2";
                 }
 
-                if (PlanetTypeID == EDPlanet.Helium_gas_giant)
+                if (PlanetClassID == EDPlanet.Helium_gas_giant)
                 {
-                    iconname = "GG3v5";
+                    iconName = "GG3v5";
                 }
 
-                if (PlanetTypeID == EDPlanet.Helium_rich_gas_giant)
+                if (PlanetClassID == EDPlanet.Helium_rich_gas_giant)
                 {
-                    iconname = "GG3v8";
+                    iconName = "GG3v8";
                 }
 
-                if (PlanetTypeID == EDPlanet.Sudarsky_class_I_gas_giant)
+                if (PlanetClassID == EDPlanet.Sudarsky_class_I_gas_giant)
                 {
                     if (st <= 45) // neptune
-                        iconname = "GG1v2";
+                        iconName = "GG1v2";
                     else if (st < 55)
-                        iconname = "GG1v9";
+                        iconName = "GG1v9";
                     else if (st < 65) // uranus
-                        iconname = "GG1v4";
+                        iconName = "GG1v4";
                     else if (st < 85)
-                        iconname = "GG1v6";
+                        iconName = "GG1v6";
                     else if (st < 100)
-                        iconname = "GG1v8";
+                        iconName = "GG1v8";
                     else if (st < 110)
-                        iconname = "GG1v1";
+                        iconName = "GG1v1";
                     else if (st < 130)
-                        iconname = "GG1v3";
+                        iconName = "GG1v3";
                     else if (st < 150)
-                        iconname = "GG1v5"; // jupiter
+                        iconName = "GG1v5"; // jupiter
                     else if (st < 170)
-                        iconname = "GG1v7";
+                        iconName = "GG1v7";
                     else
-                        iconname = "GG1v10";
+                        iconName = "GG1v10";
                 }
 
-                if (PlanetTypeID == EDPlanet.Sudarsky_class_II_gas_giant)
+                if (PlanetClassID == EDPlanet.Sudarsky_class_II_gas_giant)
                 {
                     if (st < 250)
-                        iconname = "GG2v1";
+                        iconName = "GG2v1";
                     else if (st < 300)
-                        iconname = "GG2v2";
+                        iconName = "GG2v2";
                     else
-                        iconname = "GG2v3";
+                        iconName = "GG2v3";
                 }
 
-                if (PlanetTypeID == EDPlanet.Sudarsky_class_III_gas_giant)
+                if (PlanetClassID == EDPlanet.Sudarsky_class_III_gas_giant)
                 {
                     if (st < 300)
-                        iconname = "GG3v2";
+                        iconName = "GG3v2";
                     else if (st < 350)
                     {
-                        iconname = "GG3v3";
+                        iconName = "GG3v3";
                     }
                     else if (st < 400)
-                        iconname = "GG3v1";
+                        iconName = "GG3v1";
                     else if (st < 500)
-                        iconname = "GG3v5";
+                        iconName = "GG3v5";
                     else if (st < 600)
-                        iconname = "GG3v4";
+                        iconName = "GG3v4";
                     else if (st < 700)
-                        iconname = "GG3v7";
+                        iconName = "GG3v7";
                     else
                     {
-                        iconname = "GG3v6";
+                        iconName = "GG3v6";
                     }
                 }
 
-                if (PlanetTypeID == EDPlanet.Sudarsky_class_IV_gas_giant)
+                if (PlanetClassID == EDPlanet.Sudarsky_class_IV_gas_giant)
                 {
                     if (st < 1000)
-                        iconname = "GG4v3";
+                        iconName = "GG4v3";
                     else if (st < 1100)
-                        iconname = "GG4v1";
+                        iconName = "GG4v1";
                     else
-                        iconname = "GG4v2";
+                        iconName = "GG4v2";
                 }
 
-                if (PlanetTypeID == EDPlanet.Sudarsky_class_V_gas_giant)
+                if (PlanetClassID == EDPlanet.Sudarsky_class_V_gas_giant)
                 {
-                    iconname = "GG3v5";
+                    iconName = "GG3v5";
                 }
 
-                if (PlanetTypeID == EDPlanet.Water_giant)
+                if (PlanetClassID == EDPlanet.Water_giant)
                 {
-                    iconname = "WTGv1";
+                    iconName = "WTGv1";
                 }
 
-                if (PlanetTypeID == EDPlanet.Water_giant_with_life)
+                if (PlanetClassID == EDPlanet.Water_giant_with_life)
                 {
-                    iconname = "GGWv1";
+                    iconName = "GGWv1";
                 }
 
-                return EDDiscovery.Icons.IconSet.GetIcon("Bodies.Giants." + iconname);
+                return EDDiscovery.Icons.IconSet.GetIcon("Bodies.Giants." + iconName);
             }
 
             // Terrestrial planets variants
 
             // Ammonia world 
-            if (PlanetTypeID == EDPlanet.Ammonia_world)
+            if (PlanetClassID == EDPlanet.Ammonia_world)
             {
-                iconname = "AMWv1"; // fallback                
+                iconName = "AMWv1"; // fallback                
 
                 if (Terraformable) // extremely rare, but they exists
-                    iconname = "AMWv2";
+                    iconName = "AMWv2";
                 else if (AtmosphereProperty == EDAtmosphereProperty.Thick || AtmosphereProperty == EDAtmosphereProperty.Hot)
-                    iconname = "AMWv3";
+                    iconName = "AMWv3";
                 else if (AtmosphereProperty == EDAtmosphereProperty.Rich || AtmosphereID == EDAtmosphereType.Ammonia_and_oxygen)
-                    iconname = "AMWv4"; // kindly provided by CMDR CompleteNOOB
+                    iconName = "AMWv4"; // kindly provided by CMDR CompleteNOOB
                 else if (nLandable == true || AtmosphereID == EDAtmosphereType.No_atmosphere && st < 140)
-                    iconname = "AMWv5"; // kindly provided by CMDR CompleteNOOB
+                    iconName = "AMWv5"; // kindly provided by CMDR CompleteNOOB
                 else if (st < 180)
-                    iconname = "AMWv3";
+                    iconName = "AMWv3";
                 else if (st < 210)
                 {
-                    iconname = "AMWv1";
+                    iconName = "AMWv1";
                 }
                 else
-                    iconname = "AMWv4";
+                    iconName = "AMWv4";
             }
 
             // Earth world
-            if (PlanetTypeID == EDPlanet.Earthlike_body)
+            if (PlanetClassID == EDPlanet.Earthlike_body)
             {
-                iconname = "ELWv5"; // fallback
+                iconName = "ELWv5"; // fallback
 
                 if ((int)nMassEM == 1 && st == 288) // earth, or almost identical to
                 {
-                    iconname = "ELWv1";
+                    iconName = "ELWv1";
                 }
                 else
                 {
                     if (nMassEM < 0.15 && st < 262) // mars, or extremely similar to
-                        iconname = "ELWv4";
+                        iconName = "ELWv4";
                     else if (st < 280)
-                        iconname = "ELWv2";
+                        iconName = "ELWv2";
                     else if (st < 300)
-                        iconname = "ELWv3";
+                        iconName = "ELWv3";
                     else
-                        iconname = "ELWv5"; // kindly provided by CMDR CompleteNOOB
+                        iconName = "ELWv5"; // kindly provided by CMDR CompleteNOOB
                 }
             }
 
-            if (PlanetTypeID == EDPlanet.High_metal_content_body)
+            if (PlanetClassID == EDPlanet.High_metal_content_body)
             {
-                iconname = "HMCv3"; // fallback
+                iconName = "HMCv3"; // fallback
 
                 // landable, atmosphere-less high metal content bodies
                 if (nLandable == true || AtmosphereProperty == EDAtmosphereProperty.None || AtmosphereID == EDAtmosphereType.No_atmosphere)
@@ -1424,25 +1425,25 @@ namespace EliteDangerousCore.JournalEvents
                     if (st < 300)
                     {
                         if (nTidalLock == true)
-                            iconname = "HMCv30";
+                            iconName = "HMCv30";
                         else
-                            iconname = "HMCv27"; // kindly provided by CMDR CompleteNOOB
+                            iconName = "HMCv27"; // kindly provided by CMDR CompleteNOOB
                     }
                     else if (st < 500)
-                        iconname = "HMCv34";
+                        iconName = "HMCv34";
                     else if (st < 700)
-                        iconname = "HMCv32";
+                        iconName = "HMCv32";
                     else if (st < 900)
-                        iconname = "HMCv31";
+                        iconName = "HMCv31";
                     else if (st < 1000)
                     {
                         if (nTidalLock == true)
-                            iconname = "HMCv33";
+                            iconName = "HMCv33";
                         else
-                            iconname = "HMCv35";
+                            iconName = "HMCv35";
                     }
                     else if (st >= 1000)
-                        iconname = "HMCv36";
+                        iconName = "HMCv36";
                 }
                 // non landable, high metal content bodies with atmosphere
                 else if (nLandable == false)
@@ -1450,253 +1451,253 @@ namespace EliteDangerousCore.JournalEvents
                     if (AtmosphereID == EDAtmosphereType.Ammonia)
                     {
                         if (nTidalLock == true)
-                            iconname = "HMCv29";
+                            iconName = "HMCv29";
                         else
-                            iconname = "HMCv17";
+                            iconName = "HMCv17";
                     }
                     else if (AtmosphereID == EDAtmosphereType.Argon)
-                        iconname = "HMCv26";
+                        iconName = "HMCv26";
                     else if (AtmosphereID == EDAtmosphereType.Carbon_dioxide)
                     {
                         if (st < 220)
-                            iconname = "HMCv9";
+                            iconName = "HMCv9";
                         else if (st < 250)
-                            iconname = "HMCv12";
+                            iconName = "HMCv12";
                         else if (st < 285)
-                            iconname = "HMCv6";
+                            iconName = "HMCv6";
                         else if (st < 350)
-                            iconname = "HMCv28";
+                            iconName = "HMCv28";
                         else if (st < 400)
                         {
                             if (nTidalLock == true)
-                                iconname = "HMCv7";
+                                iconName = "HMCv7";
                             else
-                                iconname = "HMCv8";
+                                iconName = "HMCv8";
                         }
                         else if (st < 600)
                         {
                             if (nTidalLock == true)
-                                iconname = "HMCv1";
+                                iconName = "HMCv1";
                             else
-                                iconname = "HMCv24";
+                                iconName = "HMCv24";
                         }
                         else if (st < 700)
-                            iconname = "HMCv3";
+                            iconName = "HMCv3";
                         else if (st < 900)
-                            iconname = "HMCv25";
+                            iconName = "HMCv25";
                         else if (st > 1250)
-                            iconname = "HMCv14";
+                            iconName = "HMCv14";
                         else
-                            iconname = "HMCv18"; // kindly provided by CMDR CompleteNOOB
+                            iconName = "HMCv18"; // kindly provided by CMDR CompleteNOOB
                     }
                     else if (AtmosphereID == EDAtmosphereType.Methane)
                     {
                         if (nTidalLock == true)
-                            iconname = "HMCv19";
+                            iconName = "HMCv19";
                         else
-                            iconname = "HMCv11";
+                            iconName = "HMCv11";
                     }
                     else if (AtmosphereID == EDAtmosphereType.Nitrogen)
                     {
                         if (st < 200)
-                            iconname = "HMCv2";
+                            iconName = "HMCv2";
                         else
-                            iconname = "HMCv5";
+                            iconName = "HMCv5";
                     }
                     else if (AtmosphereID == EDAtmosphereType.Sulphur_dioxide)
                     {
                         if (st < 700)
-                            iconname = "HMCv23";
+                            iconName = "HMCv23";
                         else
-                            iconname = "HMCv37"; // kindly provided by CMDR CompleteNOOB
+                            iconName = "HMCv37"; // kindly provided by CMDR CompleteNOOB
                     }
                     else if (AtmosphereID == EDAtmosphereType.Water)
                     {
                         if (st < 400)
-                            iconname = "HMCv4";
+                            iconName = "HMCv4";
                         else if (st < 700)
-                            iconname = "HMCv13";
+                            iconName = "HMCv13";
                         else if (st < 1000)
-                            iconname = "HMCv16";
+                            iconName = "HMCv16";
                         else
-                            iconname = "HMCv20";
+                            iconName = "HMCv20";
                     }
                     else // for all other non yet available atmospheric types
-                        iconname = "HMCv3"; // fallback
+                        iconName = "HMCv3"; // fallback
                 }
                 else
-                    iconname = "HMCv3"; // fallback                                
+                    iconName = "HMCv3"; // fallback                                
             }
 
-            if (PlanetTypeID == EDPlanet.Icy_body)
+            if (PlanetClassID == EDPlanet.Icy_body)
             {
-                iconname = "ICYv4"; // fallback
+                iconName = "ICYv4"; // fallback
 
                 if (nLandable == true)
                 {
-                    iconname = "ICYv7";
+                    iconName = "ICYv7";
                 }
                 else
                 {
                     if (AtmosphereID == EDAtmosphereType.Helium)
-                        iconname = "ICYv10";
+                        iconName = "ICYv10";
                     else if (AtmosphereID == EDAtmosphereType.Neon)
                     {
                         if (st < 75)
-                            iconname = "ICYv6";
+                            iconName = "ICYv6";
                         else
-                            iconname = "ICYv9";
+                            iconName = "ICYv9";
                     }
                     else if (AtmosphereID == EDAtmosphereType.Argon)
-                        iconname = "ICYv1";
+                        iconName = "ICYv1";
                     else if (AtmosphereID == EDAtmosphereType.Nitrogen)
-                        iconname = "ICYv2";
+                        iconName = "ICYv2";
                     else if (AtmosphereID == EDAtmosphereType.Methane)
                     {
                         if (nTidalLock == true)
-                            iconname = "ICYv3";
+                            iconName = "ICYv3";
                         else
-                            iconname = "ICYv8";
+                            iconName = "ICYv8";
                     }
                     else
-                        iconname = "ICYv5";
+                        iconName = "ICYv5";
                 }
                 if (st < 150)
                 {
                     if (nTidalLock == true)
                     {
-                        iconname = "ICYv3";
+                        iconName = "ICYv3";
                     }
                     else
                     {
-                        iconname = "ICYv8";
+                        iconName = "ICYv8";
                     }
                 }
                 else if (st < 60)
-                    iconname = "ICYv6";
+                    iconName = "ICYv6";
                 else if (st < 120)
-                    iconname = "ICYv9";
+                    iconName = "ICYv9";
                 else
-                    iconname = "ICYv4"; // fallback                
+                    iconName = "ICYv4"; // fallback                
             }
 
-            if (PlanetTypeID == EDPlanet.Metal_rich_body)
+            if (PlanetClassID == EDPlanet.Metal_rich_body)
             {
-                iconname = "MRBv1"; // fallback
+                iconName = "MRBv1"; // fallback
 
                 if (nLandable == true)
                 {
                     if (st < 300)
-                        iconname = "MRBv2";
+                        iconName = "MRBv2";
                     else if (st < 1000)
-                        iconname = "HMCv36";
+                        iconName = "HMCv36";
                     else
-                        iconname = "MRBv1";
+                        iconName = "MRBv1";
                 }
                 else
                 {
                     if (st < 1000)
-                        iconname = "MRBv4";
+                        iconName = "MRBv4";
                     else if (st < 2000)
-                        iconname = "MRBv3";
+                        iconName = "MRBv3";
                     else
-                        iconname = "MRBv5";
+                        iconName = "MRBv5";
                 }
             }
 
-            if (PlanetTypeID == EDPlanet.Rocky_body)
+            if (PlanetClassID == EDPlanet.Rocky_body)
             {
-                iconname = "RBDv1"; // fallback
+                iconName = "RBDv1"; // fallback
 
                 if (st == 55 && !IsLandable) // pluto (actually, pluto is a rocky-ice body, in real life; however, the game consider it a rocky body. Too bad...)
-                    iconname = "RBDv6";
+                    iconName = "RBDv6";
                 else if (st < 150)
-                    iconname = "RBDv2";
+                    iconName = "RBDv2";
                 else if (st < 300)
-                    iconname = "RBDv1";
+                    iconName = "RBDv1";
                 else if (st < 400)
-                    iconname = "RBDv3";
+                    iconName = "RBDv3";
                 else if (st < 500)
-                    iconname = "RBDv4";
+                    iconName = "RBDv4";
                 else // for high temperature rocky bodies
-                    iconname = "RBDv5";
+                    iconName = "RBDv5";
             }
 
-            if (PlanetTypeID == EDPlanet.Rocky_ice_body)
+            if (PlanetClassID == EDPlanet.Rocky_ice_body)
             {
-                iconname = "RIBv1"; // fallback
+                iconName = "RIBv1"; // fallback
 
                 if (st < 50)
-                    iconname = "RIBv1";
+                    iconName = "RIBv1";
                 else if (st < 150)
-                    iconname = "RIBv2";
+                    iconName = "RIBv2";
                 else
-                    iconname = "RIBv4";
+                    iconName = "RIBv4";
 
                 if (nTidalLock == true)
-                    iconname = "RIBv3";
+                    iconName = "RIBv3";
                 else
                 {
                     if (AtmosphereProperty == (EDAtmosphereProperty.Thick | EDAtmosphereProperty.Rich))
                     {
-                        iconname = "RIBv4";
+                        iconName = "RIBv4";
                     }
                     else if (AtmosphereProperty == (EDAtmosphereProperty.Hot | EDAtmosphereProperty.Thin))
-                        iconname = "RIBv1";
+                        iconName = "RIBv1";
                 }
             }
 
-            if (PlanetTypeID == EDPlanet.Water_world)
+            if (PlanetClassID == EDPlanet.Water_world)
             {
-                iconname = "WTRv7"; // fallback
+                iconName = "WTRv7"; // fallback
 
                 if (AtmosphereID == EDAtmosphereType.No_atmosphere)
                 {
-                    iconname = "WTRv10"; // kindly provided by CMDR CompleteNOOB
+                    iconName = "WTRv10"; // kindly provided by CMDR CompleteNOOB
                 }
                 else
                 {
                     if (AtmosphereID == EDAtmosphereType.Carbon_dioxide)
                     {
                         if (st < 260)
-                            iconname = "WTRv6";
+                            iconName = "WTRv6";
                         else if (st < 280)
-                            iconname = "WTRv5";
+                            iconName = "WTRv5";
                         else if (st < 300)
-                            iconname = "WTRv7";
+                            iconName = "WTRv7";
                         else if (st > 300)
-                            iconname = "WTRv2";
+                            iconName = "WTRv2";
                     }
                     else if (AtmosphereID == EDAtmosphereType.Ammonia)
                     {
                         if (st < 275)
-                            iconname = "WTRv1";
+                            iconName = "WTRv1";
                         else if (st < 350)
-                            iconname = "WTRv9"; // kindly provided by CMDR CompleteNOOB
+                            iconName = "WTRv9"; // kindly provided by CMDR CompleteNOOB
                         else
-                            iconname = "WTRv4";
+                            iconName = "WTRv4";
                     }
                     else if (AtmosphereID == EDAtmosphereType.Nitrogen)
                     {
                         if (st < 250)
-                            iconname = "WTRv3";
+                            iconName = "WTRv3";
                         else
-                            iconname = "WTRv8";
+                            iconName = "WTRv8";
                     }
                     else
-                        iconname = "WTRv7"; // fallback                                
+                        iconName = "WTRv7"; // fallback                                
                 }
             }
 
-            return EDDiscovery.Icons.IconSet.GetIcon("Bodies.Planets." + iconname);
+            return EDDiscovery.Icons.IconSet.GetIcon("Bodies.Planets." + iconName);
         }
 
-        static public System.Drawing.Image GetPlanetImageNotScanned()
+        static public Image GetPlanetImageNotScanned()
         {
             return EDDiscovery.Icons.IconSet.GetIcon("Bodies.Planets.Unknown");
         }
 
-        static public System.Drawing.Image GetMoonImageNotScanned()
+        static public Image GetMoonImageNotScanned()
         {
             return EDDiscovery.Icons.IconSet.GetIcon("Bodies.Planets.Unknown");
         }
@@ -1823,7 +1824,7 @@ namespace EliteDangerousCore.JournalEvents
 
             if (IsStar)
             {
-                switch (StarTypeID)
+                switch (StarClassID)
                 {
                     // white dwarf
                     case EDStar.D:
@@ -1867,7 +1868,7 @@ namespace EliteDangerousCore.JournalEvents
 
                 if (PlanetClass != null)  //Asteroid belt is null
                 {
-                    switch (PlanetTypeID)
+                    switch (PlanetClassID)
                     {
                         case EDPlanet.Metal_rich_body:
                             // CFT value is scaled same as WW/ELW from 3.2, not confirmed in game
@@ -1941,7 +1942,7 @@ namespace EliteDangerousCore.JournalEvents
 
             if (IsStar)
             {
-                switch (StarTypeID)      // http://elite-dangerous.wikia.com/wiki/Explorer
+                switch (StarClassID)      // http://elite-dangerous.wikia.com/wiki/Explorer
                 {
                     // white dwarf
                     case EDStar.D:
@@ -1982,7 +1983,7 @@ namespace EliteDangerousCore.JournalEvents
                 return 0;
             else   // Planet
             {
-                switch (PlanetTypeID)      // http://elite-dangerous.wikia.com/wiki/Explorer
+                switch (PlanetClassID)      // http://elite-dangerous.wikia.com/wiki/Explorer
                 {
 
                     case EDPlanet.Metal_rich_body:
@@ -2017,7 +2018,7 @@ namespace EliteDangerousCore.JournalEvents
                 double mass = nMassEM.HasValue ? nMassEM.Value : 1.0;       // some old entries don't have mass, so just presume 1
 
                 int val = (int)PlanetValueED32(kValue, mass);
-                if (Terraformable || PlanetTypeID == EDPlanet.Earthlike_body)
+                if (Terraformable || PlanetClassID == EDPlanet.Earthlike_body)
                 {
                     val += (int)PlanetValueED32(kBonus, mass);
                 }
@@ -2039,7 +2040,7 @@ namespace EliteDangerousCore.JournalEvents
         {
             if (IsStar)
             {
-                switch (StarTypeID)      // http://elite-dangerous.wikia.com/wiki/Explorer
+                switch (StarClassID)      // http://elite-dangerous.wikia.com/wiki/Explorer
                 {
                     case EDStar.O:
                         //low = 3677;
@@ -2172,7 +2173,7 @@ namespace EliteDangerousCore.JournalEvents
             }
             else   // Planet
             {
-                switch (PlanetTypeID)      // http://elite-dangerous.wikia.com/wiki/Explorer
+                switch (PlanetClassID)      // http://elite-dangerous.wikia.com/wiki/Explorer
                 {
                     case EDPlanet.Icy_body:
                         //low = 792; // (0.0001 EM)

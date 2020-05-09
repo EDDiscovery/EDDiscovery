@@ -307,27 +307,27 @@ namespace EDDiscovery.UserControls
                             // habitable zone for stars - do not display for black holes.
                             if (showStellarZones)
                             {
-                                if (showHabitable && sn.ScanData.HabitableZoneInner != null && sn.ScanData.HabitableZoneOuter != null && sn.ScanData.StarTypeID != EDStar.H)
+                                if (showHabitable && sn.ScanData.HabitableZoneInner != null && sn.ScanData.HabitableZoneOuter != null && sn.ScanData.StarClassID != EDStar.H)
                                 {
                                     bdDetails.AppendFormat(Environment.NewLine + "Habitable Zone".T(EDTx.UserControlScanGrid_HabitableZone) + ": {0}-{1}AU ({2}). ", (sn.ScanData.HabitableZoneInner.Value / JournalScan.oneAU_LS).ToString("N2"), (sn.ScanData.HabitableZoneOuter.Value / JournalScan.oneAU_LS).ToString("N2"), sn.ScanData.GetHabZoneStringLs());
                                 }
-                                if (showMetalRich && sn.ScanData.MetalRichZoneInner != null && sn.ScanData.MetalRichZoneOuter != null && sn.ScanData.StarTypeID != EDStar.H)
+                                if (showMetalRich && sn.ScanData.MetalRichZoneInner != null && sn.ScanData.MetalRichZoneOuter != null && sn.ScanData.StarClassID != EDStar.H)
                                 {
                                     bdDetails.AppendFormat(Environment.NewLine + "Metal Rich bodies".T(EDTx.UserControlScanGrid_MetalRichbodies) + ": {0}-{1}AU ({2}). ", (sn.ScanData.MetalRichZoneInner.Value / JournalScan.oneAU_LS).ToString("N2"), (sn.ScanData.MetalRichZoneOuter.Value / JournalScan.oneAU_LS).ToString("N2"), sn.ScanData.GetMetalRichZoneStringLs());
                                 }
-                                if (showWaterWorlds && sn.ScanData.WaterWrldZoneInner != null && sn.ScanData.WaterWrldZoneOuter != null && sn.ScanData.StarTypeID != EDStar.H)
+                                if (showWaterWorlds && sn.ScanData.WaterWrldZoneInner != null && sn.ScanData.WaterWrldZoneOuter != null && sn.ScanData.StarClassID != EDStar.H)
                                 {
                                     bdDetails.AppendFormat(Environment.NewLine + "Water worlds".T(EDTx.UserControlScanGrid_Waterworlds) + ": {0}-{1}AU ({2}). ", (sn.ScanData.WaterWrldZoneInner.Value / JournalScan.oneAU_LS).ToString("N2"), (sn.ScanData.WaterWrldZoneOuter.Value / JournalScan.oneAU_LS).ToString("N2"), sn.ScanData.GetWaterWorldZoneStringLs());
                                 }
-                                if (showEarthLike && sn.ScanData.EarthLikeZoneInner != null && sn.ScanData.EarthLikeZoneOuter != null && sn.ScanData.StarTypeID != EDStar.H)
+                                if (showEarthLike && sn.ScanData.EarthLikeZoneInner != null && sn.ScanData.EarthLikeZoneOuter != null && sn.ScanData.StarClassID != EDStar.H)
                                 {
                                     bdDetails.AppendFormat(Environment.NewLine + "Earth likes planets".T(EDTx.UserControlScanGrid_Earthlikesplanets) + ": {0}-{1}AU ({2}). ", (sn.ScanData.EarthLikeZoneInner.Value / JournalScan.oneAU_LS).ToString("N2"), (sn.ScanData.EarthLikeZoneOuter.Value / JournalScan.oneAU_LS).ToString("N2"), sn.ScanData.GetEarthLikeZoneStringLs());
                                 }
-                                if (showAmmonia && sn.ScanData.AmmonWrldZoneInner != null && sn.ScanData.AmmonWrldZoneOuter != null && sn.ScanData.StarTypeID != EDStar.H)
+                                if (showAmmonia && sn.ScanData.AmmonWrldZoneInner != null && sn.ScanData.AmmonWrldZoneOuter != null && sn.ScanData.StarClassID != EDStar.H)
                                 {
                                     bdDetails.AppendFormat(Environment.NewLine + "Ammonia worlds".T(EDTx.UserControlScanGrid_Ammoniaworlds) + ": {0}-{1}AU ({2}). ", (sn.ScanData.AmmonWrldZoneInner.Value / JournalScan.oneAU_LS).ToString("N2"), (sn.ScanData.AmmonWrldZoneOuter.Value / JournalScan.oneAU_LS).ToString("N2"), sn.ScanData.GetAmmoniaWorldZoneStringLs());
                                 }
-                                if (showIcyBodies && sn.ScanData.IcyPlanetZoneInner != null && sn.ScanData.IcyPlanetZoneOuter != null && sn.ScanData.StarTypeID != EDStar.H)
+                                if (showIcyBodies && sn.ScanData.IcyPlanetZoneInner != null && sn.ScanData.IcyPlanetZoneOuter != null && sn.ScanData.StarClassID != EDStar.H)
                                 {
                                     bdDetails.AppendFormat(Environment.NewLine + "Habitable Zone".T(EDTx.UserControlScanGrid_HabitableZone) + ": {0}AU-{1} ({2}). ", (sn.ScanData.IcyPlanetZoneInner.Value / JournalScan.oneAU_LS).ToString("N2"), (sn.ScanData.IcyPlanetZoneOuter), sn.ScanData.GetIcyPlanetsZoneStringLs());
                                 }
@@ -483,7 +483,7 @@ namespace EDDiscovery.UserControls
                         }
 
                         // pick an image
-                        var img = sn.ScanData.IsStar ? sn.ScanData.GetStarTypeImage() : sn.ScanData.GetPlanetClassImage();
+                        var img = sn.ScanData.IsStar ? sn.ScanData.GetStarClassImage() : sn.ScanData.GetPlanetClassImage();
 
                         dataGridViewScangrid.Rows.Add(new object[] { null, sn.ScanData.BodyName, bdClass, bdDist, bdDetails });
 

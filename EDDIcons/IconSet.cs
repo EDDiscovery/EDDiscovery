@@ -221,7 +221,7 @@ namespace EDDiscovery.Icons
                 return defaultIcons[name];
             else
             {
-                System.Diagnostics.Debug.WriteLine("**************************** ************************" + Environment.NewLine + " Missing Icon " + name);
+                //System.Diagnostics.Debug.WriteLine("**************************** ************************" + Environment.NewLine + " Missing Icon " + name);
                 return defaultIcons["Legacy.star"];
             }
         }

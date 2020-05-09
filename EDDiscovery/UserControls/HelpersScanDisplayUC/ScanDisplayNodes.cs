@@ -63,7 +63,7 @@ namespace EDDiscovery.UserControls
                     if (sn.Signals != null)
                         tip += "\n" + "Signals".T(EDTx.ScanDisplayUserControl_Signals) + ":\n" + JournalSAASignalsFound.SignalList(sn.Signals, 4, "\n");
 
-                    Bitmap nodeimage = (Bitmap)(sc.IsStar ? sc.GetStarTypeImage() : sc.GetPlanetClassImage());
+                    Bitmap nodeimage = (Bitmap)(sc.IsStar ? sc.GetStarClassImage() : sc.GetPlanetClassImage());
 
                     string overlaytext = "";
                     var nodelabels = new string[2] { "", "" };
@@ -96,7 +96,7 @@ namespace EDDiscovery.UserControls
                     else
                     {
                         if (ShowPlanetClasses)
-                            overlaytext = Bodies.PlanetAbv(sc.PlanetTypeID);
+                            overlaytext = Bodies.PlanetAbv(sc.PlanetClassID);
 
                         if ((sn.ScanData.IsLandable || ShowAllG) && sn.ScanData.nSurfaceGravity != null)
                         {

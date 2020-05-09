@@ -711,7 +711,7 @@ namespace EDDiscovery.UserControls
                         int nr = 0;
                         for (int jj = 0; jj < scanlists[ii].Count; jj++)
                         {
-                            if (scanlists[ii][jj].StarTypeID == obj && scanlists[ii][jj].IsStar)
+                            if (scanlists[ii][jj].StarClassID == obj && scanlists[ii][jj].IsStar)
                                 nr++;
                         }
 
@@ -731,7 +731,7 @@ namespace EDDiscovery.UserControls
                         int nr = 0;
                         for (int jj = 0; jj < scanlists[ii].Count; jj++)
                         {
-                            if (scanlists[ii][jj].PlanetTypeID == obj && scanlists[ii][jj].IsStar == false)
+                            if (scanlists[ii][jj].PlanetClassID == obj && scanlists[ii][jj].IsStar == false)
                                 nr++;
                         }
 

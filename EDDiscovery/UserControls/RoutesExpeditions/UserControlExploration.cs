@@ -178,22 +178,22 @@ namespace EDDiscovery.UserControls
                             {
                                 if (sd.IsStar)
                                 {
-                                    if (sd.StarTypeID == EDStar.AeBe)
+                                    if (sd.StarClassID == EDStar.AeBe)
                                         info = info + " " + "AeBe";
-                                    if (sd.StarTypeID == EDStar.N)
+                                    if (sd.StarClassID == EDStar.N)
                                         info = info + " " + "NS";
-                                    if (sd.StarTypeID == EDStar.H)
+                                    if (sd.StarClassID == EDStar.H)
                                         info = info + " " + "BH";
                                 }
                                 else
                                 {
-                                    if (sd.PlanetTypeID == EDPlanet.Earthlike_body)
+                                    if (sd.PlanetClassID == EDPlanet.Earthlike_body)
                                     {
                                         info = info + " " + (sd.Terraformable ? "T-ELW" : "ELW");
                                     }
-                                    else if (sd.PlanetTypeID == EDPlanet.Water_world)
+                                    else if (sd.PlanetClassID == EDPlanet.Water_world)
                                         info = info + " " + (sd.Terraformable ? "T-WW" : "WW");
-                                    else if (sd.PlanetTypeID == EDPlanet.High_metal_content_body && sd.Terraformable)
+                                    else if (sd.PlanetClassID == EDPlanet.High_metal_content_body && sd.Terraformable)
                                         info = info + " " + "T-HMC";
                                 }
                             }
