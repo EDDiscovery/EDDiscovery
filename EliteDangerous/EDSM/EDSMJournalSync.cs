@@ -273,6 +273,10 @@ namespace EliteDangerousCore.EDSM
                             hqe.Logger?.Invoke("Manual EDSM journal sync complete");
                             continue; // Discard end-of-sync event
                         }
+                        else if (discardEvents.Contains(first.EntryType.ToString()))
+                        {
+                            continue;
+                        }
                         else
                         {
                             manualcount++;
@@ -307,6 +311,11 @@ namespace EliteDangerousCore.EDSM
 
                             historylist.TryDequeue(out hqe);
                             historyevent.Reset();
+
+                            if (hqe.HistoryEntry != null && discardEvents.Contains(hqe.HistoryEntry.EntryType.ToString()))
+                            {
+                                continue;
+                            }
 
                             logline = $"Adding {he.EntryType.ToString()} event to EDSM journal sync ({he.EventSummary})";
                             System.Diagnostics.Trace.WriteLine(logline);
