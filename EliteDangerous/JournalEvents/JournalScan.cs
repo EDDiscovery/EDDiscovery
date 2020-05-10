@@ -1274,16 +1274,16 @@ namespace EliteDangerousCore.JournalEvents
                         iconName = "GGWv2";
                 }
 
-                if (PlanetClassID == EDPlanet.Helium_gas_giant)
+                if (PlanetClassID == (EDPlanet.Helium_gas_giant | EDPlanet.Helium_rich_gas_giant))
                 {
-                    iconName = "GG3v5";
+                    if (st < 125)
+                        iconName = "GGHv3";
+                    else if (st < 200)
+                        iconName = "GGHv2";
+                    else 
+                        iconName = "GGHv1";
                 }
-
-                if (PlanetClassID == EDPlanet.Helium_rich_gas_giant)
-                {
-                    iconName = "GG3v8";
-                }
-
+                                
                 if (PlanetClassID == EDPlanet.Sudarsky_class_I_gas_giant)
                 {
                     if (st <= 45) // neptune
@@ -1342,17 +1342,38 @@ namespace EliteDangerousCore.JournalEvents
 
                 if (PlanetClassID == EDPlanet.Sudarsky_class_IV_gas_giant)
                 {
-                    if (st < 1000)
+                    if (st < 830)
+                        iconName = "GG4v6";
+                    else if (st < 880)
+                        iconName = "GG4v4";
+                    else if (st < 1010)
                         iconName = "GG4v3";
-                    else if (st < 1100)
+                    else if (st < 1070)
                         iconName = "GG4v1";
+                    else if (st < 1150)
+                    {
+                        if (AtmosphereComposition.ToNullSafeString().ToLowerInvariant().Contains("vanadium") || AtmosphereComposition.ToNullSafeString().ToLowerInvariant().Contains("manganese"))
+                            iconName = "GG4v2";
+                        else
+                            iconName = "GG4v7";
+                    }
                     else
-                        iconName = "GG4v2";
+                        iconName = "GG4v5";
                 }
 
                 if (PlanetClassID == EDPlanet.Sudarsky_class_V_gas_giant)
                 {
-                    iconName = "GG3v5";
+                    if (st < 1600)
+                        iconName = "GG5v3";
+                    else if (st < 1750)
+                    {
+                        if (AtmosphereComposition.ToNullSafeString().ToLowerInvariant().Contains("zirconium") || AtmosphereComposition.ToNullSafeString().ToLowerInvariant().Contains("manganese"))
+                            iconName = "GG5v4";
+                        else
+                            iconName = "GG5v1";
+                    }
+                    else
+                        iconName = "GG5v2";
                 }
 
                 if (PlanetClassID == EDPlanet.Water_giant)
