@@ -1282,7 +1282,7 @@ namespace EliteDangerousCore.JournalEvents
                         iconName = "GGHv2";
                     else 
                         iconName = "GGHv1";
-                }
+                }Dd
                                 
                 if (PlanetClassID == EDPlanet.Sudarsky_class_I_gas_giant)
                 {
