@@ -167,8 +167,8 @@ namespace EDDiscovery.Actions
 
                 if ( sc.IsStar )
                 {
-                    ap[prefix + "_startype"] = sc.StarType;
-                    ap[prefix + "_startypetext"] = sc.StarTypeText;
+                    ap[prefix + "_startype"] = sc.StarClass;
+                    ap[prefix + "_startypetext"] = sc.StarClassText;
                     ap[prefix + "_stellarmass"] = (sc.nStellarMass ?? 0).ToString("0.###");
                     ap[prefix + "_age"] = sc.nAge.ToNANNullSafeString("0.##");
                     ap[prefix + "_mag"] = sc.nAbsoluteMagnitude.ToNANNullSafeString("0");

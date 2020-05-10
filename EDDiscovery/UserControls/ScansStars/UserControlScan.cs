@@ -354,7 +354,7 @@ namespace EDDiscovery.UserControls
                 global::EDDiscovery.Icons.Controls.Scan_SizeMinuscule ,
             };
 
-            string[] textlist = new string[] { "128", "96", "64", "48", "32", "16" };
+            string[] textlist = new string[] { "256", "192", "128", "96", "64", "48", "32", "16" };
 
             dropdown.Items = textlist.ToList();
             dropdown.ImageItems = imagelist.ToList();
@@ -374,7 +374,11 @@ namespace EDDiscovery.UserControls
 
         private void SetSizeImage(int size)
         {
-            if (size == 128)
+            if (size == 256)
+                buttonSize.Image = global::EDDiscovery.Icons.Controls.Scan_SizeHuge;
+            else if (size == 192)
+                buttonSize.Image = global::EDDiscovery.Icons.Controls.Scan_SizeVeryLarge;
+            else if (size == 128)
                 buttonSize.Image = global::EDDiscovery.Icons.Controls.Scan_SizeLarge;
             else if (size == 96)
                 buttonSize.Image = global::EDDiscovery.Icons.Controls.Scan_SizeMedium;
@@ -618,7 +622,7 @@ namespace EDDiscovery.UserControls
                                 JournalScan scan = je as JournalScan;
 
                                 if (ShowPlanets == false)  // Then only show stars.
-                                    if (String.IsNullOrEmpty(scan.StarType))
+                                    if (String.IsNullOrEmpty(scan.StarClass))
                                         continue;
 
                                 if (ShowStars == false)   // Then only show planets
@@ -644,7 +648,7 @@ namespace EDDiscovery.UserControls
 
                                 if (ShowStars)
                                 {
-                                    writer.Write(csv.Format(scan.StarType));
+                                    writer.Write(csv.Format(scan.StarClass));
                                     writer.Write(csv.Format((scan.nStellarMass.HasValue) ? scan.nStellarMass.Value : 0));
                                     writer.Write(csv.Format((scan.nAbsoluteMagnitude.HasValue) ? scan.nAbsoluteMagnitude.Value : 0));
                                     writer.Write(csv.Format((scan.nAge.HasValue) ? scan.nAge.Value : 0));
