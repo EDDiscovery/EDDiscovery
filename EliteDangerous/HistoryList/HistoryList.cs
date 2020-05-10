@@ -15,7 +15,6 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
-using EliteDangerous.HistoryList;
 using EliteDangerousCore.DB;
 using EliteDangerousCore.JournalEvents;
 using System;
@@ -371,14 +370,14 @@ namespace EliteDangerousCore
         }
 
 
-        public FsdJumpStatistics GetFsdJumpStatistics(DateTime startUtc, DateTime toUtc)
+        public HistoryFsdJumpStatistics GetFsdJumpStatistics(DateTime startUtc, DateTime toUtc)
         {
             var jumps = historylist
                 .Where(s => s.EntryType == JournalTypeEnum.FSDJump && s.EventTimeUTC >= startUtc && s.EventTimeUTC < toUtc)
                 .Select(h => h.journalEntry as JournalFSDJump)
                 .ToArray();
 
-            return new FsdJumpStatistics(
+            return new HistoryFsdJumpStatistics(
                 jumps.Length,
                 jumps.Sum(j => j.JumpDist),
                 jumps.Where(j => j.BoostValue == 1).Count(),
