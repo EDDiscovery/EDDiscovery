@@ -1231,6 +1231,19 @@ namespace EliteDangerousCore.JournalEvents
             if (StarClassID == EDStar.MS)
                 iconName = "M";
 
+            if (StarClassID == EDStar.Nebula)
+                return EDDiscovery.Icons.IconSet.GetIcon($"Bodies.Nebula");
+
+            if (StarClassID == EDStar.StellarRemnantNebula)
+                return EDDiscovery.Icons.IconSet.GetIcon($"Bodies.StellarRemnantNebula");
+
+            if (StarClassID == EDStar.X || StarClassID == EDStar.RoguePlanet)
+            {
+                System.Diagnostics.Debug.WriteLine(StarClassID + ": " + iconName);
+                return EDDiscovery.Icons.IconSet.GetIcon($"Bodies.Unknown");
+            }
+            else            
+           
             System.Diagnostics.Debug.WriteLine(StarClassID + ": " + iconName);
             return EDDiscovery.Icons.IconSet.GetIcon($"Bodies.Stars.{iconName}");
         }

@@ -216,85 +216,11 @@
   <ItemGroup>
     <EmbeddedResource Include="Legacy\speaker.png" />
     <EmbeddedResource Include="Legacy\star.png" />
-    <EmbeddedResource Include="Planets\Ammonia_world.png" />
-    <EmbeddedResource Include="Planets\Earthlike_body.png" />
-    <EmbeddedResource Include="Planets\Gas_giant_with_ammonia_based_life.png" />
-    <EmbeddedResource Include="Planets\Gas_giant_with_water_based_life.png" />
-    <EmbeddedResource Include="Planets\Helium_gas_giant.png" />
-    <EmbeddedResource Include="Planets\Helium_rich_gas_giant.png" />
-    <EmbeddedResource Include="Planets\High_metal_content_body.png" />
-    <EmbeddedResource Include="Planets\High_metal_content_body_250.png" />
-    <EmbeddedResource Include="Planets\High_metal_content_body_700.png" />
-    <EmbeddedResource Include="Planets\High_metal_content_body_hot_thick.png" />
-    <EmbeddedResource Include="Planets\Icy_body.png" />
-    <EmbeddedResource Include="Planets\Metal_rich_body.png" />
-    <EmbeddedResource Include="Planets\Rocky_body.png" />
-    <EmbeddedResource Include="Planets\Rocky_ice_body.png" />
-    <EmbeddedResource Include="Planets\Sudarsky_class_III_gas_giant.png" />
-    <EmbeddedResource Include="Planets\Sudarsky_class_II_gas_giant.png" />
-    <EmbeddedResource Include="Planets\Sudarsky_class_IV_gas_giant.png" />
-    <EmbeddedResource Include="Planets\Sudarsky_class_I_gas_giant.png" />
-    <EmbeddedResource Include="Planets\Sudarsky_class_V_gas_giant.png" />
-    <EmbeddedResource Include="Planets\Unknown.png" />
-    <EmbeddedResource Include="Planets\Water_giant.png" />
-    <EmbeddedResource Include="Planets\Water_giant_with_life.png" />
-    <EmbeddedResource Include="Planets\Water_world.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Stars\A.png" />
-    <EmbeddedResource Include="Stars\AeBe.png" />
-    <EmbeddedResource Include="Stars\A_BlueWhiteSuperGiant.png" />
-    <EmbeddedResource Include="Stars\B.png" />
-    <EmbeddedResource Include="Stars\C.png" />
-    <EmbeddedResource Include="Stars\CHd.png" />
-    <EmbeddedResource Include="Stars\CJ.png" />
-    <EmbeddedResource Include="Stars\CN.png" />
-    <EmbeddedResource Include="Stars\CS.png" />
-    <EmbeddedResource Include="Stars\D.png" />
-    <EmbeddedResource Include="Stars\DA.png" />
-    <EmbeddedResource Include="Stars\DAB.png" />
-    <EmbeddedResource Include="Stars\DAO.png" />
-    <EmbeddedResource Include="Stars\DAV.png" />
-    <EmbeddedResource Include="Stars\DAZ.png" />
-    <EmbeddedResource Include="Stars\DB.png" />
-    <EmbeddedResource Include="Stars\DBV.png" />
-    <EmbeddedResource Include="Stars\DBZ.png" />
-    <EmbeddedResource Include="Stars\DC.png" />
-    <EmbeddedResource Include="Stars\DCV.png" />
-    <EmbeddedResource Include="Stars\DO.png" />
-    <EmbeddedResource Include="Stars\DOV.png" />
-    <EmbeddedResource Include="Stars\DQ.png" />
-    <EmbeddedResource Include="Stars\DX.png" />
-    <EmbeddedResource Include="Stars\F.png" />
-    <EmbeddedResource Include="Stars\F_WhiteSuperGiant.png" />
-    <EmbeddedResource Include="Stars\G.png" />
-    <EmbeddedResource Include="Stars\H.png" />
-    <EmbeddedResource Include="Stars\K.png" />
-    <EmbeddedResource Include="Stars\K_OrangeGiant.png" />
-    <EmbeddedResource Include="Stars\L.png" />
-    <EmbeddedResource Include="Stars\M.png" />
-    <EmbeddedResource Include="Stars\MS.png" />
-    <EmbeddedResource Include="Stars\M_RedGiant.png" />
-    <EmbeddedResource Include="Stars\M_RedSuperGiant.png" />
-    <EmbeddedResource Include="Stars\N.png" />
-    <EmbeddedResource Include="Stars\Nebula.png" />
-    <EmbeddedResource Include="Stars\O.png" />
-    <EmbeddedResource Include="Stars\RoguePlanet.png" />
-    <EmbeddedResource Include="Stars\S.png" />
-    <EmbeddedResource Include="Stars\StellarRemnantNebula.png" />
-    <EmbeddedResource Include="Stars\SuperMassiveBlackHole.png" />
-    <EmbeddedResource Include="Stars\T.png" />
-    <EmbeddedResource Include="Stars\TTS.png" />
-    <EmbeddedResource Include="Stars\W.png" />
-    <EmbeddedResource Include="Stars\WC.png" />
-    <EmbeddedResource Include="Stars\WN.png" />
-    <EmbeddedResource Include="Stars\WNC.png" />
-    <EmbeddedResource Include="Stars\WO.png" />
-    <EmbeddedResource Include="Stars\X.png" />
-    <EmbeddedResource Include="Stars\Y.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Stars\Unknown.png" />
+    <EmbeddedResource Include="Bodies\Nebula.png" />
+    <EmbeddedResource Include="Bodies\RoguePlanet.png" />
+    <EmbeddedResource Include="Bodies\StellarRemnantNebula.png" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Journal\RestockVehicle.png" />
@@ -666,8 +592,6 @@
     <EmbeddedResource Include="Controls\TravelGrid\WordWrapOn.png" />
     <EmbeddedResource Include="Controls\Scan\Bodies\Signals.png" />
     <EmbeddedResource Include="Journal\SAASignalsFound.png" />
-    <EmbeddedResource Include="Stars\G_WhiteSuperGiant.png" />
-    <EmbeddedResource Include="Stars\B_BlueWhiteSuperGiant.png" />
     <EmbeddedResource Include="General\OrderHoldPosition.png" />
     <EmbeddedResource Include="General\ResetPowerDistribution.png" />
     <EmbeddedResource Include="General\SrvDriveAssist.png" />
