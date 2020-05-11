@@ -149,6 +149,7 @@ namespace EliteDangerousCore
         MultiSellExplorationData = 533,
         Music = 535,
         NavBeaconScan = 538,
+        NavRoute = 1400,
         NewCommander = 540,
         NpcCrewPaidWage = 541,
         NpcCrewRank = 542,
