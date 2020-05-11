@@ -409,7 +409,6 @@
     <EmbeddedResource Include="Controls\Scan\ShowMoons.png" />
     <EmbeddedResource Include="Controls\Scan\ShowOverlays.png" />
     <EmbeddedResource Include="Controls\Scan\ShowRareMaterials.png" />
-    <EmbeddedResource Include="Controls\Scan\SizeVeryLarge.png" />
     <EmbeddedResource Include="Controls\Scan\SizeMedium.png" />
     <EmbeddedResource Include="Controls\Scan\SizeSmall.png" />
     <EmbeddedResource Include="Controls\Scan\SizeTiny.png" />
@@ -710,7 +709,6 @@
     <EmbeddedResource Include="Bodies\Stars\N_massive.png" />
     <EmbeddedResource Include="Bodies\Stars\N_veryMassive.png" />
     <EmbeddedResource Include="Bodies\Stars\O.png" />
-    <EmbeddedResource Include="Bodies\Stars\SagittariusA.png" />
     <EmbeddedResource Include="Bodies\Stars\T.png" />
     <EmbeddedResource Include="Bodies\Stars\Y.png" />
     <EmbeddedResource Include="Bodies\Planets\Giant\GG1v1.png" />
@@ -836,6 +834,11 @@
     <EmbeddedResource Include="Bodies\Planets\Terrestrial\WTRv8.png" />
     <EmbeddedResource Include="Bodies\Planets\Terrestrial\WTRv9.png" />
     <EmbeddedResource Include="Bodies\Unknown.png" />
+    <EmbeddedResource Include="Bodies\Planets\Giant\GGWv4.png" />
+    <EmbeddedResource Include="Bodies\Planets\Giant\GG4v8.png" />
+    <EmbeddedResource Include="Bodies\Planets\Giant\GGWv3.png" />
+    <EmbeddedResource Include="Bodies\Planets\Giant\WTGv2.png" />
+    <EmbeddedResource Include="Bodies\Stars\SuperMassiveBlackHole.png" />
     <Content Include="Controls\readme.txt" />
     <EmbeddedResource Include="Panels\MissionOverlay.png" />
     <EmbeddedResource Include="Journal\CrimeVictim.png" />

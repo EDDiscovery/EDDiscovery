@@ -1118,6 +1118,10 @@ namespace EliteDangerousCore.JournalEvents
                     iconName = "H_intermediate";
             }
 
+            // Sagittarius A* receive it's own icon, by David Braben himself.
+            if (StarClassID == EDStar.SuperMassiveBlackHole)
+                iconName = "SuperMassiveBlackHole";
+
             // neutron stars variations. 
             // Uses theorethical masses: https://en.wikipedia.org/wiki/Neutron_star
             if (StarClassID == EDStar.N)
@@ -1389,12 +1393,22 @@ namespace EliteDangerousCore.JournalEvents
 
                 if (PlanetClassID == EDPlanet.Water_giant)
                 {
-                    iconName = "WTGv1";
+                    if (st < 155)
+                        iconName = "WTGv2";
+                    else
+                        iconName = "WTGv1";
                 }
 
                 if (PlanetClassID == EDPlanet.Water_giant_with_life)
                 {
-                    iconName = "GGWv1";
+                    if (st < 155)
+                        iconName = "GGWv1";
+                    else if (st < 180)
+                        iconName = "GGWv3";
+                    else if (st < 200)
+                        iconName = "GGWv2";
+                    else
+                        iconName = "GGWv4";
                 }
 
                 System.Diagnostics.Debug.WriteLine(PlanetClassID + ": " + iconName);
