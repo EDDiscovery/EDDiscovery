@@ -377,17 +377,17 @@ namespace EDDiscovery.UserControls
             if (size == 256)
                 buttonSize.Image = global::EDDiscovery.Icons.Controls.Scan_SizeHuge;
             else if (size == 192)
-                buttonSize.Image = global::EDDiscovery.Icons.Controls.Scan_SizeVeryLarge;
-            else if (size == 128)
                 buttonSize.Image = global::EDDiscovery.Icons.Controls.Scan_SizeLarge;
-            else if (size == 96)
+            else if (size == 128)
                 buttonSize.Image = global::EDDiscovery.Icons.Controls.Scan_SizeMedium;
-            else if (size == 64)
+            else if (size == 96)
                 buttonSize.Image = global::EDDiscovery.Icons.Controls.Scan_SizeSmall;
-            else if (size == 48)
+            else if (size == 64)
                 buttonSize.Image = global::EDDiscovery.Icons.Controls.Scan_SizeTiny;
-            else if (size == 32)
+            else if (size == 48)
                 buttonSize.Image = global::EDDiscovery.Icons.Controls.Scan_SizeTinyTiny;
+            else if (size == 32)
+                buttonSize.Image = global::EDDiscovery.Icons.Controls.Scan_SizeMinuscule;
             else
                 buttonSize.Image = global::EDDiscovery.Icons.Controls.Scan_SizeMinuscule;
 
