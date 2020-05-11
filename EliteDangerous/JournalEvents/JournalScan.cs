@@ -1253,7 +1253,7 @@ namespace EliteDangerousCore.JournalEvents
 
         static public System.Drawing.Image GetStarImageNotScanned()
         {
-            return EDDiscovery.Icons.IconSet.GetIcon("Stars.Unknown");
+            return EDDiscovery.Icons.IconSet.GetIcon($"Bodies.Unknown");
         }
 
         public System.Drawing.Image GetPlanetClassImage()
@@ -1738,12 +1738,12 @@ namespace EliteDangerousCore.JournalEvents
 
         static public System.Drawing.Image GetPlanetImageNotScanned()
         {
-            return EDDiscovery.Icons.IconSet.GetIcon("Planets.Unknown");
+            return EDDiscovery.Icons.IconSet.GetIcon($"Bodies.Unknown");
         }
 
         static public System.Drawing.Image GetMoonImageNotScanned()
         {
-            return EDDiscovery.Icons.IconSet.GetIcon("Planets.Unknown");
+            return EDDiscovery.Icons.IconSet.GetIcon($"Bodies.Unknown");
         }
 
         public double GetMaterial(string v)

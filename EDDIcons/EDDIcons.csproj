@@ -863,6 +863,7 @@
     <EmbeddedResource Include="Bodies\Planets\Terrestrial\WTRv9.png" />
     <EmbeddedResource Include="Bodies\Nebula.png" />
     <EmbeddedResource Include="Bodies\StellarRemnantNebula.png" />
+    <EmbeddedResource Include="Bodies\Unknown.png" />
     <Content Include="Controls\readme.txt" />
     <EmbeddedResource Include="Panels\MissionOverlay.png" />
     <EmbeddedResource Include="Journal\CrimeVictim.png" />
