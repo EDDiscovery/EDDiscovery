@@ -216,29 +216,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Legacy\speaker.png" />
     <EmbeddedResource Include="Legacy\star.png" />
-    <EmbeddedResource Include="Planets\Ammonia_world.png" />
-    <EmbeddedResource Include="Planets\Earthlike_body.png" />
-    <EmbeddedResource Include="Planets\Gas_giant_with_ammonia_based_life.png" />
-    <EmbeddedResource Include="Planets\Gas_giant_with_water_based_life.png" />
-    <EmbeddedResource Include="Planets\Helium_gas_giant.png" />
-    <EmbeddedResource Include="Planets\Helium_rich_gas_giant.png" />
-    <EmbeddedResource Include="Planets\High_metal_content_body.png" />
-    <EmbeddedResource Include="Planets\High_metal_content_body_250.png" />
-    <EmbeddedResource Include="Planets\High_metal_content_body_700.png" />
-    <EmbeddedResource Include="Planets\High_metal_content_body_hot_thick.png" />
-    <EmbeddedResource Include="Planets\Icy_body.png" />
-    <EmbeddedResource Include="Planets\Metal_rich_body.png" />
-    <EmbeddedResource Include="Planets\Rocky_body.png" />
-    <EmbeddedResource Include="Planets\Rocky_ice_body.png" />
-    <EmbeddedResource Include="Planets\Sudarsky_class_III_gas_giant.png" />
-    <EmbeddedResource Include="Planets\Sudarsky_class_II_gas_giant.png" />
-    <EmbeddedResource Include="Planets\Sudarsky_class_IV_gas_giant.png" />
-    <EmbeddedResource Include="Planets\Sudarsky_class_I_gas_giant.png" />
-    <EmbeddedResource Include="Planets\Sudarsky_class_V_gas_giant.png" />
-    <EmbeddedResource Include="Planets\Unknown.png" />
-    <EmbeddedResource Include="Planets\Water_giant.png" />
-    <EmbeddedResource Include="Planets\Water_giant_with_life.png" />
-    <EmbeddedResource Include="Planets\Water_world.png" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Journal\RestockVehicle.png" />
