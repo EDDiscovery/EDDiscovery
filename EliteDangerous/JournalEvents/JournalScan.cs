@@ -1306,7 +1306,10 @@ namespace EliteDangerousCore.JournalEvents
 
                 if (PlanetTypeID == EDPlanet.Sudarsky_class_I_gas_giant)
                 {
-                    if (st <= 45)
+
+                    if (st <= 30)
+                        iconName = "GG1v12";
+                    else if (st < 45)
                         iconName = "GG1v2"; // neptune
                     else if (st < 55)
                         iconName = "GG1v9";
