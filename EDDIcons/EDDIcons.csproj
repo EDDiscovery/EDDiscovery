@@ -574,6 +574,8 @@
     <EmbeddedResource Include="Controls\SysInfo\notfirstdiscover.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Controls\Scan\SizeHuge.png" />
+    <EmbeddedResource Include="Controls\Scan\SizeVeryLarge.png" />
     <EmbeddedResource Include="Controls\Scan\ShowAllG.png" />
     <EmbeddedResource Include="Controls\Scan\ShowDistances.png" />
     <EmbeddedResource Include="Controls\Scan\ShowPlanetClasses.png" />
