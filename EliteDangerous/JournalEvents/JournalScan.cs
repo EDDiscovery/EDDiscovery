@@ -1372,13 +1372,10 @@ namespace EliteDangerousCore.JournalEvents
                         iconName = "GG4v3";
                     else if (st < 1070)
                         iconName = "GG4v1";
-                    else if (st < 1150)
-                    {
-                        if (MaterialList.ToNullSafeString().ToLowerInvariant().Contains("vanadium") || MaterialList.ToNullSafeString().ToLowerInvariant().Contains("manganese"))
-                            iconName = "GG4v2";
-                        else
-                            iconName = "GG4v7";
-                    }
+                    else if (st < 1125)                    
+                        iconName = "GG4v7";
+                    else if (st < 1250)
+                        iconName = "GG4v2";
                     else
                         iconName = "GG4v5";
                 }
@@ -1387,13 +1384,10 @@ namespace EliteDangerousCore.JournalEvents
                 {
                     if (st < 1600)
                         iconName = "GG5v3";
-                    else if (st < 1750)
-                    {
-                        if (MaterialList.ToNullSafeString().ToLowerInvariant().Contains("zirconium") || MaterialList.ToNullSafeString().ToLowerInvariant().Contains("manganese"))
-                            iconName = "GG5v4";
-                        else
-                            iconName = "GG5v1";
-                    }
+                    else if (st < 1620)
+                        iconName = "GG5v4";
+                    else if (st < 1700)
+                        iconName = "GG5v1";                    
                     else
                         iconName = "GG5v2";
                 }
@@ -1719,17 +1713,26 @@ namespace EliteDangerousCore.JournalEvents
                             iconName = "WTRv5";
                         else if (st < 300)
                             iconName = "WTRv7";
-                        else if (st > 300)
+                        else if (st < 400)
                             iconName = "WTRv2";
+                        else
+                            iconName = "WTRv11"; // kindly provided by CMDR Eahlstan
                     }
                     else if (AtmosphereID == EDAtmosphereType.Ammonia)
                     {
-                        if (st < 275)
-                            iconName = "WTRv1";
-                        else if (st < 350)
-                            iconName = "WTRv9"; // kindly provided by CMDR CompleteNOOB
+                        if (nTidalLock == true)
+                            iconName = "WTRv12"; // kindly provided by CMDR Eahlstan
                         else
-                            iconName = "WTRv4";
+                        {
+                            if (st < 275)
+                                iconName = "WTRv1";
+                            else if (st < 350)
+                                iconName = "WTRv13"; // kindly provided by CMDR Eahlstan
+                            else if (st < 380)
+                                iconName = "WTRv9"; // kindly provided by CMDR CompleteNOOB
+                            else
+                                iconName = "WTRv4";
+                        }
                     }
                     else if (AtmosphereID == EDAtmosphereType.Nitrogen)
                     {
