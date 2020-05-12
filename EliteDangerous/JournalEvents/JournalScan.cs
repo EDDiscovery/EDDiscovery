@@ -1274,10 +1274,12 @@ namespace EliteDangerousCore.JournalEvents
 
                 if (PlanetTypeID == EDPlanet.Gas_giant_with_ammonia_based_life)
                 {
-                    if (st < 150)
+                    if (st < 120)
                         iconName = "GGAv1";
-                    else
+                    else if (st < 140)
                         iconName = "GGAv2";
+                    else
+                        iconName = "GGAv3";
                 }
 
                 if (PlanetTypeID == EDPlanet.Gas_giant_with_water_based_life)
@@ -1292,8 +1294,12 @@ namespace EliteDangerousCore.JournalEvents
                 {
                     if (st < 125)
                         iconName = "GGHv3";
-                    else if (st < 200)
+                    else if (st < 140)
                         iconName = "GGHv2";
+                    else if (st < 180)
+                        iconName = "GGHv5";
+                    else if (st < 270)
+                        iconName = "GGHv4";
                     else
                         iconName = "GGHv1";
                 }
@@ -1452,14 +1458,19 @@ namespace EliteDangerousCore.JournalEvents
                 }
                 else
                 {
-                    if (nMassEM < 0.15 && st < 262) // mars, or extremely similar to
-                        iconName = "ELWv4";
-                    else if (st < 280)
-                        iconName = "ELWv2";
-                    else if (st < 300)
-                        iconName = "ELWv3";
+                    if (nTidalLock == true)
+                        iconName = "ELWv7";
                     else
-                        iconName = "ELWv5"; // kindly provided by CMDR CompleteNOOB
+                    {
+                        if (nMassEM < 0.15 && st < 262) // mars, or extremely similar to
+                            iconName = "ELWv4";
+                        else if (st < 280)
+                            iconName = "ELWv2";
+                        else if (st < 300)
+                            iconName = "ELWv3";
+                        else
+                            iconName = "ELWv5"; // kindly provided by CMDR CompleteNOOB
+                    }
                 }
             }
 
@@ -2333,3 +2344,4 @@ namespace EliteDangerousCore.JournalEvents
         }
     }
 }
+
