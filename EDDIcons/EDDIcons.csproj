@@ -574,6 +574,13 @@
     <EmbeddedResource Include="Controls\SysInfo\notfirstdiscover.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Controls\Scan\Bodies\Corona_A.png" />
+    <EmbeddedResource Include="Controls\Scan\Bodies\Corona_B.png" />
+    <EmbeddedResource Include="Controls\Scan\Bodies\Corona_F.png" />
+    <EmbeddedResource Include="Controls\Scan\Bodies\Corona_G.png" />
+    <EmbeddedResource Include="Controls\Scan\Bodies\Corona_K.png" />
+    <EmbeddedResource Include="Controls\Scan\Bodies\Corona_M.png" />
+    <EmbeddedResource Include="Controls\Scan\Bodies\Corona_O.png" />
     <EmbeddedResource Include="Controls\Scan\SizeHuge.png" />
     <EmbeddedResource Include="Controls\Scan\SizeVeryLarge.png" />
     <EmbeddedResource Include="Controls\Scan\ShowAllG.png" />

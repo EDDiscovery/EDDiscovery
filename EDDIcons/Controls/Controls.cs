@@ -24,7 +24,7 @@ using System.Threading.Tasks;
 namespace EDDiscovery.Icons
 {
     public static class Controls
-    {
+    {        
         #region EDDiscovery.EDDiscoveryForm
         public static Image Main_Addons_ConfigureAddOnActions { get { return IconSet.GetIcon("Controls.Main.Addons.ConfigureAddOnActions"); } }
         public static Image Main_Addons_EditLastActionPack { get { return IconSet.GetIcon("Controls.Main.Addons.EditLastActionPack"); } }
@@ -170,6 +170,13 @@ namespace EDDiscovery.Icons
         public static Image Scan_Bodies_RingGap { get { return IconSet.GetIcon("Controls.Scan.Bodies.RingGap"); } }
         public static Image Scan_Bodies_MaterialMore { get { return IconSet.GetIcon("Controls.Scan.Bodies.MaterialMore"); } }
         public static Image Scan_Bodies_Material { get { return IconSet.GetIcon("Controls.Scan.Bodies.Material"); } }
+        public static Image Scan_Bodies_Corona_O { get { return IconSet.GetIcon("Controls.Scan.Bodies.Corona_O"); } }
+        public static Image Scan_Bodies_Corona_B { get { return IconSet.GetIcon("Controls.Scan.Bodies.Corona_B"); } }
+        public static Image Scan_Bodies_Corona_A { get { return IconSet.GetIcon("Controls.Scan.Bodies.Corona_A"); } }
+        public static Image Scan_Bodies_Corona_F { get { return IconSet.GetIcon("Controls.Scan.Bodies.Corona_F"); } }
+        public static Image Scan_Bodies_Corona_G { get { return IconSet.GetIcon("Controls.Scan.Bodies.Corona_G"); } }
+        public static Image Scan_Bodies_Corona_K { get { return IconSet.GetIcon("Controls.Scan.Bodies.Corona_K"); } }
+        public static Image Scan_Bodies_Corona_M { get { return IconSet.GetIcon("Controls.Scan.Bodies.Corona_M"); } }
         public static Image Scan_DisplaySystemAlways { get { return IconSet.GetIcon("Controls.Scan.DisplaySystemAlways"); } }
         public static Image Scan_ExportToExcel { get { return IconSet.GetIcon("Controls.Scan.ExportToExcel"); } }
         public static Image Scan_FetchEDSMBodies { get { return IconSet.GetIcon("Controls.Scan.FetchEDSMBodies"); } }

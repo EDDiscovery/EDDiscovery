@@ -72,6 +72,25 @@ namespace EDDiscovery.UserControls
                     if (sc.IsEDSMBody)
                         nodelabels[0] = "_" + nodelabels[0];
 
+                    bool valuable = sc.EstimatedValue >= ValueLimit;
+                    int iconoverlays = ShowOverlays ? ((sc.Terraformable ? 1 : 0) + (sc.HasMeaningfulVolcanism ? 1 : 0) + (valuable ? 1 : 0) + (sc.Mapped ? 1 : 0) + (sn.Signals != null ? 1 : 0)) : 0;
+
+                    //   if (sc.BodyName.Contains("4 b"))  iconoverlays = 0;
+
+                    bool materialsicon = sc.HasMaterials && !ShowMaterials;
+                    bool imageoverlays = sc.IsLandable || (sc.HasRings && drawtype != DrawLevel.TopLevelStar) || materialsicon;
+
+                    int bitmapheight = size.Height * nodeheightratio / noderatiodivider;
+                    int overlaywidth = bitmapheight / 6;
+                    int imagewidtharea = (imageoverlays ? 2 : 1) * size.Width;            // area used by image+overlay if any
+                    int iconwidtharea = (iconoverlays > 0 ? overlaywidth : 0);          // area used by icon width area on left
+
+                    int bitmapwidth = iconwidtharea + imagewidtharea;                   // total width
+                    int imageleft = iconwidtharea + imagewidtharea / 2 - size.Width / 2;  // calculate where the left of the image is 
+                    int imagetop = bitmapheight / 2 - size.Height / 2;                  // and the top
+
+                    Bitmap bmp = new Bitmap(bitmapwidth, bitmapheight);
+
                     if (sc.IsStar)
                     {
                         if (ShowStarClasses)
@@ -90,6 +109,35 @@ namespace EDDiscovery.UserControls
                                 var habZone = sc.GetHabZoneStringLs();
                                 if (habZone.HasChars())
                                     nodelabels[1] = nodelabels[1].AppendPrePad($"{habZone}", Environment.NewLine);
+                            }                            
+                        }
+                                                
+                        // apply stellar corona overlay
+                        using (Graphics g = Graphics.FromImage(bmp))
+                        {
+                            if (drawtype == DrawLevel.TopLevelStar)
+                            {
+                                if (sc.StarTypeID == EDStar.A_BlueWhiteSuperGiant)
+                                    g.DrawImage(Icons.Controls.Scan_Bodies_Corona_A,
+                                                new Rectangle(imageleft, imagetop, size.Width, size.Height));
+                                else if (sc.StarTypeID == EDStar.B_BlueWhiteSuperGiant)
+                                    g.DrawImage(Icons.Controls.Scan_Bodies_Corona_B,
+                                                new Rectangle(imageleft, imagetop, size.Width, size.Height));
+                                else if (sc.StarTypeID == EDStar.F_WhiteSuperGiant)
+                                    g.DrawImage(Icons.Controls.Scan_Bodies_Corona_F,
+                                                new Rectangle(imageleft, imagetop, size.Width, size.Height));
+                                else if (sc.StarTypeID == EDStar.G_WhiteSuperGiant)
+                                    g.DrawImage(Icons.Controls.Scan_Bodies_Corona_G,
+                                                new Rectangle(imageleft, imagetop, size.Width, size.Height));
+                                else if (sc.StarTypeID == EDStar.K_OrangeGiant)
+                                    g.DrawImage(Icons.Controls.Scan_Bodies_Corona_K,
+                                                new Rectangle(imageleft, imagetop, size.Width, size.Height));
+                                else if (sc.StarTypeID == EDStar.M_RedGiant)
+                                    g.DrawImage(Icons.Controls.Scan_Bodies_Corona_M,
+                                                new Rectangle(imageleft, imagetop, size.Width, size.Height));
+                                else if (sc.StarTypeID == EDStar.M_RedSuperGiant)
+                                    g.DrawImage(Icons.Controls.Scan_Bodies_Corona_M,
+                                                new Rectangle(imageleft, imagetop, size.Width, size.Height));
                             }
                         }
                     }
@@ -131,27 +179,8 @@ namespace EDDiscovery.UserControls
 
                     nodelabels[1] = nodelabels[1].AppendPrePad(appendlabeltext, Environment.NewLine);
 
-   nodelabels[1] = nodelabels[1].AppendPrePad("" + sn.ScanData?.BodyID, Environment.NewLine);
-
-                    bool valuable = sc.EstimatedValue >= ValueLimit;
-                    int iconoverlays = ShowOverlays ? ((sc.Terraformable ? 1 : 0) + (sc.HasMeaningfulVolcanism ? 1 : 0) + (valuable ? 1 : 0) + (sc.Mapped ? 1 : 0) + (sn.Signals != null ? 1 : 0)) : 0;
-
-                    //   if (sc.BodyName.Contains("4 b"))  iconoverlays = 0;
-
-                    bool materialsicon = sc.HasMaterials && !ShowMaterials;
-                    bool imageoverlays = sc.IsLandable || (sc.HasRings && drawtype != DrawLevel.TopLevelStar) || materialsicon;
-
-                    int bitmapheight = size.Height * nodeheightratio / noderatiodivider;
-                    int overlaywidth = bitmapheight / 6;
-                    int imagewidtharea = (imageoverlays ? 2 : 1) * size.Width;            // area used by image+overlay if any
-                    int iconwidtharea = (iconoverlays > 0 ? overlaywidth : 0);          // area used by icon width area on left
-
-                    int bitmapwidth = iconwidtharea + imagewidtharea;                   // total width
-                    int imageleft = iconwidtharea + imagewidtharea / 2 - size.Width / 2;  // calculate where the left of the image is 
-                    int imagetop = bitmapheight / 2 - size.Height / 2;                  // and the top
-
-                    Bitmap bmp = new Bitmap(bitmapwidth, bitmapheight);
-
+                    nodelabels[1] = nodelabels[1].AppendPrePad("" + sn.ScanData?.BodyID, Environment.NewLine);
+                                                            
                     using (Graphics g = Graphics.FromImage(bmp))
                     {
                         //backwash = Color.FromArgb(128, 40, 40, 40);
@@ -178,7 +207,7 @@ namespace EDDiscovery.UserControls
                             g.DrawImage(sc.Rings.Count() > 1 ? Icons.Controls.Scan_Bodies_RingGap : Icons.Controls.Scan_Bodies_RingOnly,
                                             new Rectangle(imageleft - size.Width / 2, imagetop, size.Width * 2, size.Height));
                         }
-
+                                                
                         if (iconoverlays > 0)
                         {
                             int ovsize = bmp.Height / 6;
