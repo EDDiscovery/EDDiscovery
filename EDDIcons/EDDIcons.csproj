@@ -864,6 +864,8 @@
     <EmbeddedResource Include="Bodies\Nebula.png" />
     <EmbeddedResource Include="Bodies\StellarRemnantNebula.png" />
     <EmbeddedResource Include="Bodies\Unknown.png" />
+    <EmbeddedResource Include="Bodies\Planets\Terrestrial\WTRv12.png" />
+    <EmbeddedResource Include="Bodies\Planets\Terrestrial\WTRv13.png" />
     <Content Include="Controls\readme.txt" />
     <EmbeddedResource Include="Panels\MissionOverlay.png" />
     <EmbeddedResource Include="Journal\CrimeVictim.png" />
