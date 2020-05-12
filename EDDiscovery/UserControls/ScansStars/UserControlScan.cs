@@ -377,7 +377,11 @@ namespace EDDiscovery.UserControls
 
         private void SetSizeImage(int size)
         {
-            if (size == 128)
+            if (size == 256)
+                buttonSize.Image = global::EDDiscovery.Icons.Controls.Scan_SizeHuge;
+            else if (size == 192)
+                buttonSize.Image = global::EDDiscovery.Icons.Controls.Scan_SizeVeryLarge;
+            else if (size == 128)
                 buttonSize.Image = global::EDDiscovery.Icons.Controls.Scan_SizeLarge;
             else if (size == 96)
                 buttonSize.Image = global::EDDiscovery.Icons.Controls.Scan_SizeMedium;
