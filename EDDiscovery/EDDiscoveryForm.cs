@@ -643,12 +643,15 @@ namespace EDDiscovery
             panel_minimize.Visible = !theme.WindowsFrame;
             label_version.Visible = !theme.WindowsFrame;
 
+            // debug label_version.Visible = true; labelInfoBoxTop.Text = "New! X.Y.Z.A";
+
             this.Text = "EDDiscovery " + label_version.Text;            // note in no border mode, this is not visible on the title bar but it is in the taskbar..
 
             theme.ApplyStd(this);
 
             statusStrip.Font = contextMenuStripTabs.Font = this.Font;
-            labelInfoBoxTop.Location = new Point(label_version.Right + 16, labelInfoBoxTop.Top);
+
+            //System.Diagnostics.Debug.WriteLine("Label version " + label_version.Location + " " + label_version.Size + " " + mainMenu.Size);
 
             OnThemeChanged?.Invoke();
 
