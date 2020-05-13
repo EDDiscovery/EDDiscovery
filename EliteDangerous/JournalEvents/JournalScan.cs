@@ -1335,7 +1335,11 @@ namespace EliteDangerousCore.JournalEvents
 
                 if (PlanetTypeID == EDPlanet.Sudarsky_class_II_gas_giant)
                 {
-                    if (st < 250)
+                    if (st <= 150)
+                        iconName = "GG2v4";
+                    else if (st < 200)
+                        iconName = "GG2v5";
+                    else if (st < 275)
                         iconName = "GG2v1";
                     else if (st < 300)
                         iconName = "GG2v2";
@@ -1355,8 +1359,10 @@ namespace EliteDangerousCore.JournalEvents
                         iconName = "GG3v1";
                     else if (st < 500)
                         iconName = "GG3v5";
-                    else if (st < 600)
+                    else if (st < 550)
                         iconName = "GG3v4";
+                    else if (st < 620)
+                        iconName = "GG3v8";
                     else if (st < 700)
                         iconName = "GG3v7";
                     else
@@ -1411,6 +1417,8 @@ namespace EliteDangerousCore.JournalEvents
                         iconName = "GGWv3";
                     else if (st < 200)
                         iconName = "GGWv2";
+                    else if (st < 235)
+                        iconName = "GGWv5";
                     else
                         iconName = "GGWv4";
                 }
