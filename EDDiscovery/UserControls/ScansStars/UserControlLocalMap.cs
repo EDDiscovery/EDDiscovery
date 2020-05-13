@@ -202,7 +202,7 @@ namespace EDDiscovery.UserControls
 
                         if (distFromCurrentSys > textMinRadius.Value) // we want to be able to define a shell 
                         {
-                            int visits = discoveryform.history.GetVisitsCount(tvp.Value.Name, tvp.Value.EDSMID);
+                            int visits = discoveryform.history.GetVisitsCount(tvp.Value.Name);
 
                             // calculate distance for each axis; this provide a cubical distribution
                             double dx = curX - sysX;
