@@ -1292,7 +1292,9 @@ namespace EliteDangerousCore.JournalEvents
 
                 if (PlanetTypeID == (EDPlanet.Helium_gas_giant | EDPlanet.Helium_rich_gas_giant))
                 {
-                    if (st < 125)
+                    if (st < 110)
+                        iconName = "GGHv6";
+                    else if (st < 125)
                         iconName = "GGHv3";
                     else if (st < 140)
                         iconName = "GGHv2";
