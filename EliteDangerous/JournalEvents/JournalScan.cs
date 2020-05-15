@@ -1274,25 +1274,47 @@ namespace EliteDangerousCore.JournalEvents
 
                 if (PlanetTypeID == EDPlanet.Gas_giant_with_ammonia_based_life)
                 {
-                    if (st < 120)
-                        iconName = "GGAv1";
-                    else if (st < 140)
+                    if (st < 105)
+                        iconName = "GGAv8";
+                    else if (st < 115)
+                        iconName = "GGAv9";
+                    else if (st < 120)
                         iconName = "GGAv2";
-                    else
+                    else if (st < 130)
+                        iconName = "GGAv7";
+                    else if (st < 138)
+                        iconName = "GGAv6";
+                    else if (st < 142)
+                        iconName = "GGAv1";
+                    else if (st < 148)
                         iconName = "GGAv3";
+                    else if (st < 152)
+                        iconName = "GGAv5";
+                    else
+                        iconName = "GGAv4";
                 }
 
                 if (PlanetTypeID == (EDPlanet.Water_giant_with_life | EDPlanet.Gas_giant_with_water_based_life))
                 {
                     if (st < 155)
                         iconName = "GGWv1";
-                    else if (st < 180)
+                    else if (st < 165)
                         iconName = "GGWv3";
-                    else if (st < 200)
+                    else if (st < 175)
                         iconName = "GGWv2";
-                    else if (st < 215)
+                    else if (st < 185)
+                        iconName = "GGWv9";
+                    else if (st < 205)
+                        iconName = "GGWv7";
+                    else if (st < 212)
+                        iconName = "GGWv8";
+                    else if (st < 220)
                         iconName = "GGWv6";
+                    else if (st < 230)
+                        iconName = "GGWv10";
                     else if (st < 235)
+                        iconName = "GGWv11";
+                    else if (st < 240)
                         iconName = "GGWv5";
                     else
                         iconName = "GGWv4";
@@ -1301,9 +1323,9 @@ namespace EliteDangerousCore.JournalEvents
                 if (PlanetTypeID == (EDPlanet.Helium_gas_giant | EDPlanet.Helium_rich_gas_giant))
                 {
                     if (st < 110)
-                        iconName = "GGHv6";
-                    else if (st < 125)
                         iconName = "GGHv3";
+                    else if (st < 125)
+                        iconName = "GGHv6";
                     else if (st < 140)
                         iconName = "GGHv2";
                     else if (st < 180)
@@ -1320,11 +1342,11 @@ namespace EliteDangerousCore.JournalEvents
                     if (st <= 30)
                         iconName = "GG1v12";
                     else if (st < 45)
-                        iconName = "GG1v2"; // neptune
+                        iconName = "GG1v4"; // neptune
                     else if (st < 55)
                         iconName = "GG1v9";
                     else if (st < 65)
-                        iconName = "GG1v4"; // uranus
+                        iconName = "GG1v2"; // uranus
                     else if (st < 80)
                         iconName = "GG1v11";
                     else if (st < 90)
@@ -1374,9 +1396,9 @@ namespace EliteDangerousCore.JournalEvents
                     else if (st < 620)
                         iconName = "GG3v8";
                     else if (st < 660)
-                        iconName = "GG3v9";
-                    else if (st < 700)
                         iconName = "GG3v7";
+                    else if (st < 700)
+                        iconName = "GG3v9";
                     else                    
                         iconName = "GG3v6";                    
                 }
@@ -1415,8 +1437,10 @@ namespace EliteDangerousCore.JournalEvents
                 {
                     if (st < 155)
                         iconName = "WTGv2";
-                    else
+                    else if (st < 160)
                         iconName = "WTGv1";
+                    else
+                        iconName = "WTGv3";
                 }
 
                 System.Diagnostics.Debug.WriteLine(PlanetTypeID + ": " + iconName);
