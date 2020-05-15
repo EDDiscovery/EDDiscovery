@@ -1282,12 +1282,20 @@ namespace EliteDangerousCore.JournalEvents
                         iconName = "GGAv3";
                 }
 
-                if (PlanetTypeID == EDPlanet.Gas_giant_with_water_based_life)
+                if (PlanetTypeID == (EDPlanet.Water_giant_with_life | EDPlanet.Gas_giant_with_water_based_life))
                 {
-                    if (st < 150)
+                    if (st < 155)
                         iconName = "GGWv1";
-                    else
+                    else if (st < 180)
+                        iconName = "GGWv3";
+                    else if (st < 200)
                         iconName = "GGWv2";
+                    else if (st < 215)
+                        iconName = "GGWv6";
+                    else if (st < 235)
+                        iconName = "GGWv5";
+                    else
+                        iconName = "GGWv4";
                 }
 
                 if (PlanetTypeID == (EDPlanet.Helium_gas_giant | EDPlanet.Helium_rich_gas_giant))
@@ -1337,7 +1345,13 @@ namespace EliteDangerousCore.JournalEvents
 
                 if (PlanetTypeID == EDPlanet.Sudarsky_class_II_gas_giant)
                 {
-                    if (st < 250)
+                    if (st < 160)
+                        iconName = "GG2v4";
+                    else if (st < 200)
+                        iconName = "GG2v5";
+                    else if (st < 245)
+                        iconName = "GG2v6";
+                    else if (st < 275)
                         iconName = "GG2v1";
                     else if (st < 300)
                         iconName = "GG2v2";
@@ -1350,21 +1364,21 @@ namespace EliteDangerousCore.JournalEvents
                     if (st < 300)
                         iconName = "GG3v2";
                     else if (st < 350)
-                    {
-                        iconName = "GG3v3";
-                    }
+                        iconName = "GG3v3";                    
                     else if (st < 400)
                         iconName = "GG3v1";
                     else if (st < 500)
                         iconName = "GG3v5";
-                    else if (st < 600)
+                    else if (st < 570)
                         iconName = "GG3v4";
+                    else if (st < 620)
+                        iconName = "GG3v8";
+                    else if (st < 660)
+                        iconName = "GG3v9";
                     else if (st < 700)
                         iconName = "GG3v7";
-                    else
-                    {
-                        iconName = "GG3v6";
-                    }
+                    else                    
+                        iconName = "GG3v6";                    
                 }
 
                 if (PlanetTypeID == EDPlanet.Sudarsky_class_IV_gas_giant)
@@ -1403,18 +1417,6 @@ namespace EliteDangerousCore.JournalEvents
                         iconName = "WTGv2";
                     else
                         iconName = "WTGv1";
-                }
-
-                if (PlanetTypeID == EDPlanet.Water_giant_with_life)
-                {
-                    if (st < 155)
-                        iconName = "GGWv1";
-                    else if (st < 180)
-                        iconName = "GGWv3";
-                    else if (st < 200)
-                        iconName = "GGWv2";
-                    else
-                        iconName = "GGWv4";
                 }
 
                 System.Diagnostics.Debug.WriteLine(PlanetTypeID + ": " + iconName);
@@ -1463,7 +1465,9 @@ namespace EliteDangerousCore.JournalEvents
                     {
                         if (nMassEM < 0.15 && st < 262) // mars, or extremely similar to
                             iconName = "ELWv4";
-                        else if (st < 280)
+                        else if (st < 270)
+                            iconName = "ELWv8";
+                        else if (st < 285)
                             iconName = "ELWv2";
                         else if (st < 300)
                             iconName = "ELWv3";
@@ -2352,4 +2356,5 @@ namespace EliteDangerousCore.JournalEvents
         }
     }
 }
+
 

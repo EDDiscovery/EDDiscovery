@@ -847,6 +847,10 @@
     <EmbeddedResource Include="Bodies\Planets\Terrestrial\WTRv13.png" />
     <EmbeddedResource Include="Bodies\Planets\Giant\GG1v12.png" />
     <EmbeddedResource Include="Bodies\Planets\Giant\GGHv6.png" />
+    <EmbeddedResource Include="Bodies\Planets\Terrestrial\ELWv8.png" />
+    <EmbeddedResource Include="Bodies\Planets\Giant\GG2v6.png" />
+    <EmbeddedResource Include="Bodies\Planets\Giant\GG3v9.png" />
+    <EmbeddedResource Include="Bodies\Planets\Giant\GGWv6.png" />
     <Content Include="Controls\readme.txt" />
     <EmbeddedResource Include="Panels\MissionOverlay.png" />
     <EmbeddedResource Include="Journal\CrimeVictim.png" />
