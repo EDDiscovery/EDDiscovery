@@ -1436,11 +1436,19 @@ namespace EliteDangerousCore.JournalEvents
                 if (PlanetTypeID == EDPlanet.Water_giant)
                 {
                     if (st < 155)
-                        iconName = "WTGv2";
+                        iconName = "WTGv6";
                     else if (st < 160)
+                        iconName = "WTGv2";
+                    else if (st < 165)
                         iconName = "WTGv1";
-                    else
+                    else if (st < 170)
                         iconName = "WTGv3";
+                    else if (st < 180)
+                        iconName = "WTGv4";
+                    else if (st < 190)
+                        iconName = "WTGv5";
+                    else
+                        iconName = "WTGv7";
                 }
 
                 System.Diagnostics.Debug.WriteLine(PlanetTypeID + ": " + iconName);
@@ -1462,7 +1470,9 @@ namespace EliteDangerousCore.JournalEvents
                     iconName = "AMWv4"; // kindly provided by CMDR CompleteNOOB
                 else if (nLandable == true || AtmosphereID == EDAtmosphereType.No_atmosphere && st < 140)
                     iconName = "AMWv5"; // kindly provided by CMDR CompleteNOOB
-                else if (st < 180)
+                else if (st < 190)
+                    iconName = "AMWv6";
+                else if (st < 200)
                     iconName = "AMWv3";
                 else if (st < 210)
                 {

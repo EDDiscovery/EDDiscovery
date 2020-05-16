@@ -868,6 +868,11 @@
     <EmbeddedResource Include="Bodies\Planets\Giant\GGWv9.png" />
     <EmbeddedResource Include="Bodies\Planets\Giant\WTGv3.png" />
     <EmbeddedResource Include="Bodies\Planets\Giant\GGWv11.png" />
+    <EmbeddedResource Include="Bodies\Planets\Giant\WTGv4.png" />
+    <EmbeddedResource Include="Bodies\Planets\Giant\WTGv5.png" />
+    <EmbeddedResource Include="Bodies\Planets\Giant\WTGv6.png" />
+    <EmbeddedResource Include="Bodies\Planets\Giant\WTGv7.png" />
+    <EmbeddedResource Include="Bodies\Planets\Terrestrial\AMWv6.png" />
     <Content Include="Controls\readme.txt" />
     <EmbeddedResource Include="Panels\MissionOverlay.png" />
     <EmbeddedResource Include="Journal\CrimeVictim.png" />
