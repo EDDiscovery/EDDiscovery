@@ -317,16 +317,16 @@ namespace EliteDangerousCore
         }
 
 
-        public int GetVisitsCount(string name, long edsmid = 0)
+        public int GetVisitsCount(string name)
         {
             return (from he in historylist.AsParallel()
-                    where (he.IsFSDJump && (edsmid <= 0 || he.System.EDSMID == edsmid) && he.System.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase))
+                    where (he.IsFSDJump && he.System.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase))
                     select he).Count();
         }
-        public List<JournalScan> GetScans(string name, long edsmid = 0)
+        public List<JournalScan> GetScans(string name)
         {
             return (from s in historylist.AsParallel()
-                    where (s.journalEntry.EventTypeID == JournalTypeEnum.Scan && (edsmid <= 0 || s.System.EDSMID == edsmid) && s.System.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase))
+                    where (s.journalEntry.EventTypeID == JournalTypeEnum.Scan && s.System.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase))
                     select s.journalEntry as JournalScan).ToList<JournalScan>();
         }
 

@@ -449,13 +449,20 @@ namespace EDDiscovery.UserControls
 
                 if (selected != null)
                 {
-                    var curmat = last_mcl.Find(current.element);   // current mat
+                    int currenttotal = last_mcl.Find(current.element)?.Count ?? 0;   // current mat total. If not there, its zero
+                    foreach (var trade in trades)
+                    {
+                        if (trade.fromelement.FDName == current.element.FDName)
+                            currenttotal -= trade.offer;                              // may go negative if over offered
+                        if (trade.element.FDName == current.element.FDName)
+                            currenttotal += trade.receive;
+                    }
 
                     if (selected.element.FDName == current.element.FDName)        // clicked on same.. deselect
                     {
                         selected = null;
                     }
-                    else if ( curmat != null && curmat.Count >= current.offer )                       // if we have enough for at least 1 trade
+                    else if ( currenttotal >= current.offer )                       // if we have enough for at least 1 trade
                     {
                         DisplayTradeSelection(current.element);
 
@@ -473,7 +480,7 @@ namespace EDDiscovery.UserControls
 
                         f.Add(new ExtendedControls.ConfigurableForm.Entry("olabel", typeof(Label), "Offer".T(EDTx.UserControlMaterialTrader_Offer), new Point(margin, 30), new Size(width - margin * 2, 20), null, 1.5f, ContentAlignment.MiddleCenter));
 
-                        f.Add(new ExtendedControls.ConfigurableForm.Entry("offer", typeof(Label), "0/" + curmat.Count.ToStringInvariant(), new Point(width / 2 - 12, 50), new Size(width / 2 - 20, 20), null, 1.2f, ContentAlignment.MiddleLeft));
+                        f.Add(new ExtendedControls.ConfigurableForm.Entry("offer", typeof(Label), "0/" + currenttotal.ToStringInvariant(), new Point(width / 2 - 12, 50), new Size(width / 2 - 20, 20), null, 1.2f, ContentAlignment.MiddleLeft));
 
                         var bar = new PictureBox();
                         bar.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -513,14 +520,14 @@ namespace EDDiscovery.UserControls
                                 else if (controlname == "more")
                                 {
                                     int newoffer = currentoffer + current.offer;
-                                    if (newoffer <= curmat.Count)
+                                    if (newoffer <= currenttotal)
                                     {
                                         currentoffer = newoffer;
                                         currentreceive += current.receive;
                                     }
                                 }
 
-                                f.GetControl<Label>("offer").Text = currentoffer.ToStringInvariant() + "/" + curmat.Count.ToStringInvariant();
+                                f.GetControl<Label>("offer").Text = currentoffer.ToStringInvariant() + "/" + currenttotal.ToStringInvariant();
                                 f.GetControl<Label>("receive").Text = currentreceive.ToStringInvariant();
                             }
                         };
