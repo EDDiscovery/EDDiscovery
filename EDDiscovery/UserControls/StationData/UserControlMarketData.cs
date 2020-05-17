@@ -191,7 +191,7 @@ namespace EDDiscovery.UserControls
                 List<MaterialCommodities> notfound = new List<MaterialCommodities>();
                 foreach (MaterialCommodities m in mclist)
                 {
-                    int index = list.FindIndex(x => x.fdname.EqualsAlphaNumOnlyNoCase(m.Details.Name));   // try and match, remove any spaces/_ and lower case it for matching
+                    int index = list.FindIndex(x => x.fdname.EqualsAlphaNumOnlyNoCase(m.Details.FDName));   // try and match, remove any spaces/_ and lower case it for matching
                     if (index >= 0)
                         list[index].CargoCarried = m.Count; // found it, set cargo count..
                     else
