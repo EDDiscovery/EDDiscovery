@@ -285,6 +285,11 @@ namespace EliteDangerousCore.JournalEvents
                         return ringClass.Replace("eRingClass_", "");
                 }
             }
+
+            public string RingClassNormalised()
+            {
+                return RingClass.Replace("eRingClass_", "").SplitCapsWordFull();
+            }
         }
 
         public class BodyParent
@@ -1088,6 +1093,14 @@ namespace EliteDangerousCore.JournalEvents
         {
             StarPlanetRing ring = Rings[ringno];
             return ring.RingInformation(scale, scaletype, IsStar);
+        }
+
+        public StarPlanetRing FindRing(string name)
+        {
+            if (Rings != null)
+                return Array.Find(Rings,x => x.Name.Equals(name,StringComparison.InvariantCultureIgnoreCase));
+            else
+                return null;
         }
 
         public string GetStarTypeName()           // give description to star class
