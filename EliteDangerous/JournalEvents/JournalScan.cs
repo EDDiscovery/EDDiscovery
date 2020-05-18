@@ -1276,10 +1276,14 @@ namespace EliteDangerousCore.JournalEvents
                 {
                     if (st < 105)
                         iconName = "GGAv8";
+                    else if (st < 110)
+                        iconName = "GGAv11";
                     else if (st < 115)
                         iconName = "GGAv9";
                     else if (st < 120)
                         iconName = "GGAv2";
+                    else if (st < 125)
+                        iconName = "GGAv12";
                     else if (st < 130)
                         iconName = "GGAv7";
                     else if (st < 138)
@@ -1341,14 +1345,26 @@ namespace EliteDangerousCore.JournalEvents
 
                     if (st <= 30)
                         iconName = "GG1v12";
+                    else if (st < 35)
+                        iconName = "GG1v15";
+                    else if (st < 40)
+                        iconName = "GG1v13";
                     else if (st < 45)
                         iconName = "GG1v4"; // neptune
-                    else if (st < 55)
+                    else if (st < 50)
                         iconName = "GG1v9";
+                    else if (st < 55)
+                        iconName = "GG1v2";
+                    else if (st < 60)
+                        iconName = "GG1v16"; // uranus
                     else if (st < 65)
-                        iconName = "GG1v2"; // uranus
-                    else if (st < 80)
+                        iconName = "GG1v19";
+                    else if (st < 70)
+                        iconName = "GG1v18";
+                    else if (st < 78)
                         iconName = "GG1v11";
+                    else if (st < 85)
+                        iconName = "GG1v3";
                     else if (st < 90)
                         iconName = "GG1v6";
                     else if (st < 100)
@@ -1356,9 +1372,13 @@ namespace EliteDangerousCore.JournalEvents
                     else if (st < 110)
                         iconName = "GG1v1";
                     else if (st < 130)
-                        iconName = "GG1v3";
+                        iconName = "GG1v5";
+                    else if (st < 135)
+                        iconName = "GG1v17";
+                    else if (st < 140)
+                        iconName = "GG1v20";
                     else if (st < 150)
-                        iconName = "GG1v5"; // jupiter
+                        iconName = "GG1v14"; // jupiter
                     else if (st < 170)
                         iconName = "GG1v7";
                     else
