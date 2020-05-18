@@ -489,8 +489,8 @@ namespace EDDiscovery.UserControls
                         BaseUtils.CSVWriteGrid grd = new BaseUtils.CSVWriteGrid();
                         grd.SetCSVDelimiter(frm.Comma);
 
-                        string[] headers1 = { "", "", "", "",
-                            "Icy Ring" , "","","","","","","","",
+                        string[] headers1 = { "", "", "", "", "","",
+                            "Icy Ring" , "","","","","","","","","",
                             "Rocky","","","","","","","",
                             "Metal Rich","","","","",
                             "Metalic","","","","",
@@ -500,7 +500,7 @@ namespace EDDiscovery.UserControls
                         string[] headers2 = { "Time", "BodyName", "Ring Types", "Mass MT", "Inner Rad (ls)","Outer Rad (ls)",
 
                             // icy ring
-                            "Water", "Liquid Oxygen", "Methanol Mono", "Methane","Bromellite", "Grandidierite", "Low Temp Diamonds", "Void Opals","Alexandrite" ,
+                            "Water", "Liquid Oxygen", "Methanol Mono", "Methane","Bromellite", "Grandidierite", "Low Temp Diamonds", "Void Opals","Alexandrite" , "Tritium",
                             // rocky
                             "Bauxite","Indite","Alexandrite","Monazite","Musgravite","Benitoite","Serendibite","Rhodplumsite",
                             // metal rich
@@ -513,7 +513,7 @@ namespace EDDiscovery.UserControls
 
                         string[] fdname = { "Water", "LiquidOxygen", "methanolmonohydratecrystals", "MethaneClathrate",     // icy
                                             "Bromellite", "Grandidierite", "lowtemperaturediamond", "Opal",
-                                            "Alexandrite",
+                                            "Alexandrite", "Tritium",
                                             "Bauxite","Indite","Alexandrite","Monazite","Musgravite","Benitoite","Serendibite","Rhodplumsite",          // rocky
                                             "Rhodplumsite","Serendibite","Platinum","Monazite","Painite",   // metal rich  
                                             "Rhodplumsite","Serendibite","Platinum","Monazite","Painite", // metalic
@@ -544,7 +544,7 @@ namespace EDDiscovery.UserControls
 
                             JournalScan scanof = scanentries.Find(x => x.FindRing(entry.BodyName) != null);
 
-                            bool showrocky = true, showmr = true, showmetalic = true;       // only used if item appears more than once below
+                            bool showrocky = true, showmr = true, showmetalic = true, showicy = true;       // only used if item appears more than once below
 
                             string ringtype = "", mass = "", innerrad = "",outerrad = "";
                             if (scanof != null)
@@ -553,15 +553,19 @@ namespace EDDiscovery.UserControls
                                 ringtype = ri.RingClassNormalised();
                                 if (ringtype.Contains("metalic", StringComparison.InvariantCultureIgnoreCase))
                                 {
-                                    showrocky = showmr = false;
+                                    showicy = showrocky = showmr = false;
                                 }
                                 else if (ringtype.Contains("Metal", StringComparison.InvariantCultureIgnoreCase))
                                 {
-                                    showrocky = showmetalic = false;
+                                    showicy = showrocky = showmetalic = false;
                                 }
                                 else if (ringtype.Contains("rocky", StringComparison.InvariantCultureIgnoreCase))
                                 {
-                                    showmetalic = showmr = false;
+                                    showicy = showmetalic = showmr = false;
+                                }
+                                else if (ringtype.Contains("icy", StringComparison.InvariantCultureIgnoreCase))
+                                {
+                                    showrocky= showmetalic = showmr = false;
                                 }
 
                                 mass = ri.MassMT.ToStringInvariant();
@@ -569,20 +573,26 @@ namespace EDDiscovery.UserControls
                                 outerrad = (ri.OuterRad / JournalScan.oneLS_m).ToStringInvariant("N3");
                             }
 
+                            //string sig = string.Join(",", entry.Signals.Select(x=>x.Type)); // debug
 
-                            return new object[] { EDDConfig.Instance.ConvertTimeToSelectedFromUTC(entry.EventTimeUTC), entry.BodyName, ringtype, mass,innerrad,outerrad ,
+                            return new object[] { EDDConfig.Instance.ConvertTimeToSelectedFromUTC(entry.EventTimeUTC), entry.BodyName, ringtype,
+                                mass,innerrad,outerrad ,
                                 entry.ContainsStr(fdname[0]),entry.ContainsStr(fdname[1]),entry.ContainsStr(fdname[2]),entry.ContainsStr(fdname[3]),
                                 entry.ContainsStr(fdname[4]),entry.ContainsStr(fdname[5]),entry.ContainsStr(fdname[6]),entry.ContainsStr(fdname[7]),
-                                entry.ContainsStr(fdname[8]),
+                                entry.ContainsStr(fdname[8], showicy), entry.ContainsStr(fdname[9]),
 
-                                entry.ContainsStr(fdname[9]),entry.ContainsStr(fdname[10]),entry.ContainsStr(fdname[11],showrocky),entry.ContainsStr(fdname[12]),
-                                entry.ContainsStr(fdname[13]),entry.ContainsStr(fdname[14]),entry.ContainsStr(fdname[15],showrocky),entry.ContainsStr(fdname[16],showrocky),
+                                // "Bauxite","Indite","Alexandrite","Monazite", // rocky
+                                entry.ContainsStr(fdname[10]),entry.ContainsStr(fdname[11]),entry.ContainsStr(fdname[12],showrocky),entry.ContainsStr(fdname[13], showrocky),
+                                // "Musgravite","Benitoite","Serendibite","Rhodplumsite",          // rocky
+                                entry.ContainsStr(fdname[14]),entry.ContainsStr(fdname[15]),entry.ContainsStr(fdname[16],showrocky),entry.ContainsStr(fdname[17],showrocky),
 
-                                entry.ContainsStr(fdname[17],showmr),entry.ContainsStr(fdname[18],showmr),entry.ContainsStr(fdname[19],showmr),entry.ContainsStr(fdname[20],showmr),entry.ContainsStr(fdname[21],showmr),
+                                // "Rhodplumsite","Serendibite","Platinum","Monazite","Painite",   // metal rich  
+                                entry.ContainsStr(fdname[18],showmr),entry.ContainsStr(fdname[19],showmr),entry.ContainsStr(fdname[20],showmr),entry.ContainsStr(fdname[21],showmr),entry.ContainsStr(fdname[22],showmr),
 
-                                entry.ContainsStr(fdname[22],showmetalic),entry.ContainsStr(fdname[23],showmetalic),entry.ContainsStr(fdname[24],showmetalic),entry.ContainsStr(fdname[25],showmetalic),entry.ContainsStr(fdname[26],showmetalic),
+                                // "Rhodplumsite","Serendibite","Platinum","Monazite","Painite", // metalic
+                                entry.ContainsStr(fdname[23],showmetalic),entry.ContainsStr(fdname[24],showmetalic),entry.ContainsStr(fdname[25],showmetalic),entry.ContainsStr(fdname[26],showmetalic),entry.ContainsStr(fdname[27],showmetalic),
 
-                                entry.ContainsStr(fdname[27]),entry.ContainsStr(fdname[28]),entry.ContainsStr(fdname[29]),entry.ContainsStr(fdname[30]),entry.ContainsStr(fdname[31]),
+                                entry.ContainsStr(fdname[28]),entry.ContainsStr(fdname[29]),entry.ContainsStr(fdname[30]),entry.ContainsStr(fdname[31]),entry.ContainsStr(fdname[32]),
                             };
                         };
 
