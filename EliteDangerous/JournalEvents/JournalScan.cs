@@ -1302,36 +1302,62 @@ namespace EliteDangerousCore.JournalEvents
 
                 if (PlanetTypeID == (EDPlanet.Water_giant_with_life | EDPlanet.Gas_giant_with_water_based_life))
                 {
-                    if (st < 155)
-                        iconName = "GGWv1";
-                    else if (st < 165)
+                    if (st < 152)
+                        iconName = "GGWv24";
+                    else if (st < 155)
+                    {
+                        if (AtmosphereComposition.ToNullSafeString().ToLowerInvariant().Contains("oxygen"))
+                            iconName = "GGWv1";
+                        else
+                            iconName = "GGWv16";
+                    }
+                    else if (st < 158)
                         iconName = "GGWv3";
-                    else if (st < 165)
+                    else if (st < 160)
                         iconName = "GGWv14";
+                    else if (st < 162)
+                        iconName = "GGWv22";
+                    else if (st < 165)
+                        iconName = "GGWv20";
+                    else if (st < 172)
+                        iconName = "GGWv25";
                     else if (st < 175)
                         iconName = "GGWv2";
                     else if (st < 180)
                         iconName = "GGWv13";
                     else if (st < 185)
                         iconName = "GGWv9";
-                    else if (st < 205)
+                    else if (st < 190)
+                        iconName = "GGWv21";
+                    else if (st < 200)
                         iconName = "GGWv7";
-                    else if (st < 212)
+                    else if (st < 205)
                         iconName = "GGWv8";
-                    else if (st < 216)
+                    else if (st < 210)
                         iconName = "GGWv15";
-                    else if (st < 220)
+                    else if (st < 213)
+                        iconName = "GGWv17";
+                    else if (st < 216)
                         iconName = "GGWv6";
-                    else if (st < 230)
+                    else if (st < 219)
+                        iconName = "GGWv18";
+                    else if (st < 222)
                         iconName = "GGWv10";
-                    else if (st < 233)
+                    else if (st < 225)
                         iconName = "GGWv11";
-                    else if (st < 236)
+                    else if (st < 228)
+                        iconName = "GGWv23";
+                    else if (st < 232)
                         iconName = "GGWv5";
-                    else if (st < 240)
+                    else if (st < 236)
                         iconName = "GGWv12";
                     else
-                        iconName = "GGWv4";
+                    {
+                        if (AtmosphereComposition.ToNullSafeString().ToLowerInvariant().Contains("oxygen"))
+                            iconName = "GGWv19";
+                        else
+                            iconName = "GGWv4";
+                    }
                 }
 
                 if (PlanetTypeID == (EDPlanet.Helium_gas_giant | EDPlanet.Helium_rich_gas_giant))
