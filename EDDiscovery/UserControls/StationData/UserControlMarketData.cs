@@ -276,7 +276,7 @@ namespace EDDiscovery.UserControls
                     if ( v.Equals(commodity))           // Find the commodity, and set it to the same relative position as before.
                     {
                         dataGridViewMarketData.CurrentCell = dataGridViewMarketData.Rows[rw.Index].Cells[1];
-                        dataGridViewMarketData.FirstDisplayedScrollingRowIndex = Math.Max(rw.Index - currentoffset,0);
+                        dataGridViewMarketData.SafeFirstDisplayedScrollingRowIndex( Math.Max(rw.Index - currentoffset,0));
                         break;
                     }
                 }

@@ -238,7 +238,7 @@ namespace EDDiscovery.UserControls
             dataGridViewModules.Sort(sortcolprev, (sortorderprev == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
             dataGridViewModules.Columns[sortcolprev.Index].HeaderCell.SortGlyphDirection = sortorderprev;
             if (firstline >= 0 && firstline < dataGridViewModules.RowCount)
-                dataGridViewModules.FirstDisplayedScrollingRowIndex = firstline;
+                dataGridViewModules.SafeFirstDisplayedScrollingRowIndex(firstline);
         }
 
         private void DisplayShip(ShipInformation si)

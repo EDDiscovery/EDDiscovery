@@ -295,7 +295,7 @@ namespace EDDiscovery.UserControls
                 dataGridViewRoute.Rows.Add(rw);
                 if (!rw.Displayed)
                 {
-                    dataGridViewRoute.FirstDisplayedScrollingRowIndex++;
+                    dataGridViewRoute.SafeFirstDisplayedScrollingRowIndex(dataGridViewRoute.FirstDisplayedScrollingRowIndex+1);
                 }
             });
 
