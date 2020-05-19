@@ -269,5 +269,12 @@ namespace EDDiscovery.UserControls
             KickComputation(last_he, true);
         }
 
+        private void dataGridViewNearest_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if ( e.ColumnIndex == 0 && e.RowIndex>=0 && e.RowIndex < dataGridViewNearest.Rows.Count )
+            {
+                Clipboard.SetText(dataGridViewNearest.Rows[e.RowIndex].Cells[0].Value as string);
+            }
+        }
     }
 }
