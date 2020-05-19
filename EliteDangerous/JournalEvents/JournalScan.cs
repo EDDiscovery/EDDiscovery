@@ -1286,6 +1286,8 @@ namespace EliteDangerousCore.JournalEvents
                         iconName = "GGAv12";
                     else if (st < 130)
                         iconName = "GGAv7";
+                    else if (st < 134)
+                        iconName = "GGAv13";
                     else if (st < 138)
                         iconName = "GGAv6";
                     else if (st < 142)
@@ -1304,22 +1306,30 @@ namespace EliteDangerousCore.JournalEvents
                         iconName = "GGWv1";
                     else if (st < 165)
                         iconName = "GGWv3";
+                    else if (st < 165)
+                        iconName = "GGWv14";
                     else if (st < 175)
                         iconName = "GGWv2";
+                    else if (st < 180)
+                        iconName = "GGWv13";
                     else if (st < 185)
                         iconName = "GGWv9";
                     else if (st < 205)
                         iconName = "GGWv7";
                     else if (st < 212)
                         iconName = "GGWv8";
+                    else if (st < 216)
+                        iconName = "GGWv15";
                     else if (st < 220)
                         iconName = "GGWv6";
                     else if (st < 230)
                         iconName = "GGWv10";
-                    else if (st < 235)
+                    else if (st < 233)
                         iconName = "GGWv11";
-                    else if (st < 240)
+                    else if (st < 236)
                         iconName = "GGWv5";
+                    else if (st < 240)
+                        iconName = "GGWv12";
                     else
                         iconName = "GGWv4";
                 }
@@ -1389,9 +1399,13 @@ namespace EliteDangerousCore.JournalEvents
                 {
                     if (st < 160)
                         iconName = "GG2v4";
+                    else if (st < 175)
+                        iconName = "GG2v7";
                     else if (st < 200)
                         iconName = "GG2v5";
-                    else if (st < 245)
+                    else if (st < 2450)
+                        iconName = "GG2v8";
+                    else if (st < 260)
                         iconName = "GG2v6";
                     else if (st < 275)
                         iconName = "GG2v1";
@@ -1405,38 +1419,52 @@ namespace EliteDangerousCore.JournalEvents
                 {
                     if (st < 300)
                         iconName = "GG3v2";
-                    else if (st < 350)
-                        iconName = "GG3v3";                    
+                    else if (st < 340)
+                        iconName = "GG3v3";
+                    else if (st < 370)
+                        iconName = "GG3v12";
                     else if (st < 400)
                         iconName = "GG3v1";
                     else if (st < 500)
                         iconName = "GG3v5";
                     else if (st < 570)
                         iconName = "GG3v4";
-                    else if (st < 620)
+                    else if (st < 600)
                         iconName = "GG3v8";
+                    else if (st < 620)
+                        iconName = "GG3v10";
                     else if (st < 660)
                         iconName = "GG3v7";
                     else if (st < 700)
                         iconName = "GG3v9";
+                    else if (st < 750)
+                        iconName = "GG3v11";
                     else                    
                         iconName = "GG3v6";                    
                 }
 
                 if (PlanetTypeID == EDPlanet.Sudarsky_class_IV_gas_giant)
                 {
-                    if (st < 830)
+                    if (st < 810)
+                        iconName = "GG4v9";
+                    else if (st < 830)
                         iconName = "GG4v6";
                     else if (st < 880)
                         iconName = "GG4v4";
+                    else if (st < 950)
+                        iconName = "GG4v10";
                     else if (st < 1010)
                         iconName = "GG4v3";
                     else if (st < 1070)
                         iconName = "GG4v1";
                     else if (st < 1125)                    
                         iconName = "GG4v7";
-                    else if (st < 1250)
+                    else if (st < 1200)
                         iconName = "GG4v2";
+                    else if (st < 1225)
+                        iconName = "GG4v11";
+                    else if (st < 1250)
+                        iconName = "GG4v8";
                     else
                         iconName = "GG4v5";
                 }
@@ -1448,9 +1476,11 @@ namespace EliteDangerousCore.JournalEvents
                     else if (st < 1620)
                         iconName = "GG5v4";
                     else if (st < 1700)
-                        iconName = "GG5v1";                    
-                    else
+                        iconName = "GG5v1";
+                    else if (st < 1850)
                         iconName = "GG5v2";
+                    else
+                        iconName = "GG5v5";
                 }
 
                 if (PlanetTypeID == EDPlanet.Water_giant)
