@@ -1231,7 +1231,7 @@ namespace EliteDangerousCore.JournalEvents
                     iconName = "O";
             }
 
-            if (StarTypeID == EDStar.MS)
+            if (StarTypeID == (EDStar.MS | EDStar.S ))
                 iconName = "M";
 
             if (StarTypeID == EDStar.Nebula)
