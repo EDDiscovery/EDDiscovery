@@ -1363,7 +1363,14 @@ namespace EliteDangerousCore.JournalEvents
                 if (PlanetTypeID == (EDPlanet.Helium_gas_giant | EDPlanet.Helium_rich_gas_giant))
                 {
                     if (st < 110)
-                        iconName = "GGHv3";
+                    {
+                        if (AtmosphereComposition.ToNullSafeString().ToLowerInvariant().Contains("antimony") || 
+                            AtmosphereComposition.ToNullSafeString().ToLowerInvariant().Contains("cadmium") || 
+                            AtmosphereComposition.ToNullSafeString().ToLowerInvariant().Contains("niobium"))
+                            iconName = "GGHv7";
+                        else
+                            iconName = "GGHv7";
+                    }
                     else if (st < 125)
                         iconName = "GGHv6";
                     else if (st < 140)
@@ -1372,8 +1379,10 @@ namespace EliteDangerousCore.JournalEvents
                         iconName = "GGHv5";
                     else if (st < 270)
                         iconName = "GGHv4";
-                    else
+                    else if (st < 600)
                         iconName = "GGHv1";
+                    else
+                        iconName = "GGHv8";
                 }
 
                 if (PlanetTypeID == EDPlanet.Sudarsky_class_I_gas_giant)
@@ -1463,8 +1472,10 @@ namespace EliteDangerousCore.JournalEvents
                         iconName = "GG3v7";
                     else if (st < 700)
                         iconName = "GG3v9";
-                    else if (st < 750)
+                    else if (st < 742)
                         iconName = "GG3v11";
+                    else if (st < 760)
+                        iconName = "GG3v13";
                     else                    
                         iconName = "GG3v6";                    
                 }
