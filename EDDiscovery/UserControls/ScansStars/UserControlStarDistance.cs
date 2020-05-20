@@ -32,7 +32,7 @@ namespace EDDiscovery.UserControls
             var corner = dataGridViewNearest.TopLeftHeaderCell; // work around #1487
         }
 
-        private string DbSave { get { return DBName("StarDistancePanel" ); } }
+        private string DbSave { get { return DBName("StarDistancePanel"); } }
 
         private StarDistanceComputer computer = null;
         private HistoryEntry last_he = null;
@@ -114,8 +114,8 @@ namespace EDDiscovery.UserControls
                 //System.Diagnostics.Debug.WriteLine("Lookup limit " + lookup_limit + " lookup " + lookup_max);
 
                 // Get nearby systems from the systems DB.
-                computer.CalculateClosestSystems(he.System, 
-                    NewStarListComputedAsync, 
+                computer.CalculateClosestSystems(he.System,
+                    NewStarListComputedAsync,
                     maxitems, textMinRadius.Value, lookup_max, !checkBoxCube.Checked
                     );     // hook here, force closes system update
 
@@ -168,7 +168,7 @@ namespace EDDiscovery.UserControls
                     }
                 }
 
-                if (csl.Count > maxitems/2)             // if we filled up at least half the list, we limit to max distance plus
+                if (csl.Count > maxitems / 2)             // if we filled up at least half the list, we limit to max distance plus
                 {
                     lookup_limit = maxdist * 11 / 10;   // lookup limit is % more than max dist, to allow for growth
                 }
@@ -208,7 +208,7 @@ namespace EDDiscovery.UserControls
         }
 
         private void AddTo(OnNewStarsPushType pushtype)
-        { 
+        {
             IEnumerable<DataGridViewRow> selectedRows = dataGridViewNearest.SelectedCells.Cast<DataGridViewCell>()
                                                                         .Select(cell => cell.OwningRow)
                                                                         .Distinct()
@@ -224,25 +224,28 @@ namespace EDDiscovery.UserControls
 
         private void viewOnEDSMToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            if (rightclickrow >= 0)
+            if (rightclickrow >= 0 && rightclickrow < dataGridViewNearest.Rows.Count)
             {
                 var rightclicksystem = (ISystem)dataGridViewNearest.Rows[rightclickrow].Tag;
 
-                this.Cursor = Cursors.WaitCursor;
-                EDSMClass edsm = new EDSMClass();
-                long? id_edsm = rightclicksystem.EDSMID;
-
-                if (id_edsm == 0)
+                if (rightclicksystem != null)
                 {
-                    id_edsm = null;
-                }
+                    this.Cursor = Cursors.WaitCursor;
+                    EDSMClass edsm = new EDSMClass();
+                    long? id_edsm = rightclicksystem.EDSMID;
 
-                if (!edsm.ShowSystemInEDSM(rightclicksystem.Name, id_edsm))
-                {
-                    ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable".T(EDTx.UserControlStarDistance_NoEDSMSys));
-                }
+                    if (id_edsm == 0)
+                    {
+                        id_edsm = null;
+                    }
 
-                this.Cursor = Cursors.Default;
+                    if (!edsm.ShowSystemInEDSM(rightclicksystem.Name, id_edsm))
+                    {
+                        ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable".T(EDTx.UserControlStarDistance_NoEDSMSys));
+                    }
+
+                    this.Cursor = Cursors.Default;
+                }
             }
         }
 
@@ -271,10 +274,31 @@ namespace EDDiscovery.UserControls
 
         private void dataGridViewNearest_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if ( e.ColumnIndex == 0 && e.RowIndex>=0 && e.RowIndex < dataGridViewNearest.Rows.Count )
+            if (e.ColumnIndex == 0 && e.RowIndex >= 0 && e.RowIndex < dataGridViewNearest.Rows.Count)
             {
                 Clipboard.SetText(dataGridViewNearest.Rows[e.RowIndex].Cells[0].Value as string);
             }
+        }
+
+        private void viewSystemToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+                if (rightclickrow >= 0 && rightclickrow < dataGridViewNearest.Rows.Count)
+                {
+                    var rightclicksystem = (ISystem)dataGridViewNearest.Rows[rightclickrow].Tag;
+                if ( rightclicksystem != null )
+                    ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), rightclicksystem, true, discoveryform.history);
+            }
+        }
+
+        private void dataGridViewNearest_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.RowIndex < dataGridViewNearest.Rows.Count)
+            { 
+                var clicksystem = (ISystem)dataGridViewNearest.Rows[e.RowIndex].Tag;
+                if ( clicksystem != null )
+                    ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), clicksystem, true, discoveryform.history);
+            }
+
         }
     }
 }
