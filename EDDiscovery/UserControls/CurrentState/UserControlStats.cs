@@ -33,11 +33,6 @@ namespace EDDiscovery.UserControls
         private string DbStatsTreeStateSave { get { return DBName("StatsTreeExpanded"); } }
         private Chart mostVisited { get; set; }
         bool wasTravelling;
-        bool generalInitialised;
-        bool travelInitialised;
-        bool scansInitialised;
-        bool gameStatsInitialised;
-        bool byShipInitialised;
 
         #region Init
 
@@ -84,6 +79,11 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.Translate(this);
         }
 
+        public override void LoadLayout()
+        {
+            uctg.OnTravelSelectionChanged += TravelGridChanged;
+        }
+
         public override void ChangeCursorType(IHistoryCursor thc)
         {
             uctg.OnTravelSelectionChanged -= TravelGridChanged;
@@ -91,69 +91,57 @@ namespace EDDiscovery.UserControls
             uctg.OnTravelSelectionChanged += TravelGridChanged;
         }
 
-        public override void LoadLayout()
-        {
-            uctg.OnTravelSelectionChanged += TravelGridChanged;
-            discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
-        }
-
         public override void Closing()
         {
             UserDatabase.Instance.PutSettingInt(DbSelectedTabSave, tabControlCustomStats.SelectedIndex);
             UserDatabase.Instance.PutSettingString(DbStatsTreeStateSave, GameStatTreeState());
             uctg.OnTravelSelectionChanged -= TravelGridChanged;
+            discoveryform.OnNewEntry -= AddNewEntry;
         }
 
         public override void InitialDisplay() =>
-            Stats(uctg.GetCurrentHistoryEntry, discoveryform.history);
+            Stats(uctg.GetCurrentHistoryEntry, discoveryform.history,true);
 
         public void TravelGridChanged(HistoryEntry he, HistoryList hl, bool selectedEntry) =>
-            Stats(he, hl);
+            Stats(he, hl,false);
 
         private void AddNewEntry(HistoryEntry he, HistoryList hl) =>
-            Stats(he, hl);
-
-        private void Discoveryform_OnHistoryChange(HistoryList obj)
-        {
-            last_he = null;
-            last_hl = null;
-            Stats(null, obj);
-        }
+            Stats(he, hl,false);
 
         private void tabControlCustomStats_SelectedIndexChanged(object sender, EventArgs e) =>
-            Stats(last_he, last_hl);
+            Stats(last_he, last_hl,true);
 
         private HistoryEntry last_he = null;
         private HistoryList last_hl = null;
 
-        private void Stats(HistoryEntry he, HistoryList hl)     // paint new stats..
+        private void Stats(HistoryEntry he, HistoryList hl, bool forceupdate)     // paint new stats..
         {
             if (hl == null)
                 return;
 
             if (tabControlCustomStats.SelectedIndex == 0)
             {
-                if (!generalInitialised || he == null || last_he == null || hl.IsBetween(last_he, he, x => x.IsLocOrJump))
+                if (forceupdate || he == null || last_he == null || hl.IsBetween(last_he, he, x => x.IsLocOrJump))
                     StatsGeneral(he, hl);
             }
             else if (tabControlCustomStats.SelectedIndex == 1)
             {
-                if (!travelInitialised || he == null || last_he == null || hl.AnyBetween(last_he, he, journalsForStatsTravel))
+                if (forceupdate || he == null || last_he == null || hl.AnyBetween(last_he, he, journalsForStatsTravel))
                     StatsTravel(hl);
             }
             else if (tabControlCustomStats.SelectedIndex == 2)
             {
-                if (!scansInitialised || he == null || last_he == null || hl.AnyBetween(last_he, he, new[] { JournalTypeEnum.Scan }))
+                if (forceupdate || he == null || last_he == null || hl.AnyBetween(last_he, he, new[] { JournalTypeEnum.Scan }))
                     StatsScan(hl);
             }
             else if (tabControlCustomStats.SelectedIndex == 3)
             {
-                if (!gameStatsInitialised || he == null || last_he == null || hl.AnyBetween(last_he, he, new[] { JournalTypeEnum.Statistics }))
+                if (forceupdate || he == null || last_he == null || hl.AnyBetween(last_he, he, new[] { JournalTypeEnum.Statistics }))
                     StatsGame(he, hl);
             }
             else if (tabControlCustomStats.SelectedIndex == 4)
             {
-                if (!byShipInitialised || he == null || last_he == null || hl.AnyBetween(last_he, he, journalsForShipStats))
+                if (forceupdate || he == null || last_he == null || hl.AnyBetween(last_he, he, journalsForShipStats))
                     StatsByShip(hl);
             }
 
@@ -258,7 +246,6 @@ namespace EDDiscovery.UserControls
                 mostVisited.Visible = false;
             }
 
-            generalInitialised = true;
             PerformLayout();
         }
 
@@ -543,7 +530,6 @@ namespace EDDiscovery.UserControls
                 dataGridViewTravel.Columns[sortcol].HeaderCell.SortGlyphDirection = sortorder;
             }
 
-            travelInitialised = true;
         }
 
         private void dataGridViewTravel_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
@@ -556,7 +542,7 @@ namespace EDDiscovery.UserControls
         {
             dataGridViewTravel.Rows.Clear();        // reset all
             dataGridViewTravel.Columns.Clear();
-            Stats(last_he, last_hl);
+            Stats(last_he, last_hl,true);
         }
 
         #endregion
@@ -745,8 +731,6 @@ namespace EDDiscovery.UserControls
                 dataGridViewScan.Sort(dataGridViewScan.Columns[sortcol], (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
                 dataGridViewScan.Columns[sortcol].HeaderCell.SortGlyphDirection = sortorder;
             }
-
-            scansInitialised = true;
         }
 
         private void dataGridViewScan_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
@@ -764,7 +748,7 @@ namespace EDDiscovery.UserControls
         {
             dataGridViewScan.Rows.Clear();        // reset all
             dataGridViewScan.Columns.Clear();
-            Stats(last_he, last_hl);
+            Stats(last_he, last_hl, true);
         }
 
         #endregion
@@ -918,8 +902,6 @@ namespace EDDiscovery.UserControls
                 AddTreeNode(mattrader, "Materials Traded".T(EDTx.UserControlStats_MaterialsTraded), stats.MaterialTraderStats?.MaterialsTraded.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
                 if (collapseExpand[12] == 'Y')
                     node.Item1.Expand();
-
-                gameStatsInitialised = true;
             }
         }
 
@@ -1029,8 +1011,6 @@ namespace EDDiscovery.UserControls
                 dataGridViewByShip.Sort(dataGridViewByShip.Columns[sortcol], (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
                 dataGridViewByShip.Columns[sortcol].HeaderCell.SortGlyphDirection = sortorder;
             }
-
-            byShipInitialised = true;
         }
 
         private void dataGridViewByShip_SortCompare(object sender, DataGridViewSortCompareEventArgs e)

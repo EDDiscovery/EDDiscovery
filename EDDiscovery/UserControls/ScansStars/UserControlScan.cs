@@ -473,10 +473,12 @@ namespace EDDiscovery.UserControls
         private void buttonExtExcel_Click(object sender, EventArgs e)
         {
             Forms.ExportForm frm = new Forms.ExportForm();
-            frm.Init(new string[] { "All", "Stars only",
+            frm.Init(new string[] { "All",
+                                    "Stars only",
                                     "Planets only", //2
                                     "Exploration List Stars", //3
                                     "Exploration List Planets", //4
+                                    "Ring Scans", //5
                                         });
 
             if (frm.ShowDialog(FindForm()) == DialogResult.OK)
@@ -486,11 +488,129 @@ namespace EDDiscovery.UserControls
 
                 try
                 {
-                    using (System.IO.StreamWriter writer = new System.IO.StreamWriter(frm.Path))
+                    if (frm.SelectedIndex == 5)
                     {
+                        var saaentries = JournalEntry.GetByEventType(JournalTypeEnum.SAASignalsFound, EDCommander.CurrentCmdrID, frm.StartTimeUTC, frm.EndTimeUTC).ConvertAll(x => (JournalSAASignalsFound)x);
+                        var scanentries = JournalEntry.GetByEventType(JournalTypeEnum.Scan, EDCommander.CurrentCmdrID, frm.StartTimeUTC, frm.EndTimeUTC).ConvertAll(x => (JournalScan)x);
+
+                        BaseUtils.CSVWriteGrid grd = new BaseUtils.CSVWriteGrid();
+                        grd.SetCSVDelimiter(frm.Comma);
+
+                        string[] headers1 = { "", "", "", "", "","",
+                            "Icy Ring" , "","","","","","","","","",
+                            "Rocky","","","","","","","",
+                            "Metal Rich","","","","",
+                            "Metalic","","","","",
+                            "Other"
+                        };
+
+                        string[] headers2 = { "Time", "BodyName", "Ring Types", "Mass MT", "Inner Rad (ls)","Outer Rad (ls)",
+
+                            // icy ring
+                            "Water", "Liquid Oxygen", "Methanol Mono", "Methane","Bromellite", "Grandidierite", "Low Temp Diamonds", "Void Opals","Alexandrite" , "Tritium",
+                            // rocky
+                            "Bauxite","Indite","Alexandrite","Monazite","Musgravite","Benitoite","Serendibite","Rhodplumsite",
+                            // metal rich
+                            "Rhodplumsite","Serendibite","Platinum","Monazite","Painite",
+                            // metalic
+                            "Rhodplumsite","Serendibite","Platinum","Monazite","Painite",
+                            // others
+                            "Geological","Biological","Thargoid","Human","Guardian",
+                        };
+
+                        string[] fdname = { "Water", "LiquidOxygen", "methanolmonohydratecrystals", "MethaneClathrate",     // icy
+                                            "Bromellite", "Grandidierite", "lowtemperaturediamond", "Opal",
+                                            "Alexandrite", "Tritium",
+                                            "Bauxite","Indite","Alexandrite","Monazite","Musgravite","Benitoite","Serendibite","Rhodplumsite",          // rocky
+                                            "Rhodplumsite","Serendibite","Platinum","Monazite","Painite",   // metal rich  
+                                            "Rhodplumsite","Serendibite","Platinum","Monazite","Painite", // metalic
+                                            "$SAA_SignalType_Geological;","$SAA_SignalType_Biological;","$SAA_SignalType_Thargoid;","$SAA_SignalType_Human;","$SAA_SignalType_Guardian;"
+                                          };
+
+                        grd.GetLineHeader = (row) => { return row == 1 ? headers2 : row == 0 ? headers1 : null; };
+                        grd.GetLineStatus = (row) =>
+                        {
+                            if (row < saaentries.Count)
+                            {
+                                for (int rp = row + 1; rp < saaentries.Count; rp++)
+                                {
+                                    if (saaentries[rp].BodyName == saaentries[row].BodyName && (saaentries[rp].EventTimeUTC - saaentries[row].EventTimeUTC) < new TimeSpan(30, 0, 0, 0))
+                                        return CSVWriteGrid.LineStatus.Skip; // if matches one in front, and its less than 30 days from it, ignore
+                                }
+
+                                return CSVWriteGrid.LineStatus.OK;
+                            }
+                            else
+                                return CSVWriteGrid.LineStatus.EOF;
+                        };
+
+                        grd.GetLine = (r) =>
+                        {
+                            var entry = saaentries[r];
+                            string signals = string.Join(",", entry.Signals.Select(x => x.Type_Localised));
+
+                            JournalScan scanof = scanentries.Find(x => x.FindRing(entry.BodyName) != null);
+
+                            bool showrocky = true, showmr = true, showmetalic = true, showicy = true;       // only used if item appears more than once below
+
+                            string ringtype = "", mass = "", innerrad = "",outerrad = "";
+                            if (scanof != null)
+                            {
+                                var ri = scanof.FindRing(entry.BodyName);
+                                ringtype = ri.RingClassNormalised();
+                                if (ringtype.Contains("metalic", StringComparison.InvariantCultureIgnoreCase))
+                                {
+                                    showicy = showrocky = showmr = false;
+                                }
+                                else if (ringtype.Contains("Metal", StringComparison.InvariantCultureIgnoreCase))
+                                {
+                                    showicy = showrocky = showmetalic = false;
+                                }
+                                else if (ringtype.Contains("rocky", StringComparison.InvariantCultureIgnoreCase))
+                                {
+                                    showicy = showmetalic = showmr = false;
+                                }
+                                else if (ringtype.Contains("icy", StringComparison.InvariantCultureIgnoreCase))
+                                {
+                                    showrocky= showmetalic = showmr = false;
+                                }
+
+                                mass = ri.MassMT.ToStringInvariant();
+                                innerrad = (ri.InnerRad / JournalScan.oneLS_m).ToStringInvariant("N3");
+                                outerrad = (ri.OuterRad / JournalScan.oneLS_m).ToStringInvariant("N3");
+                            }
+
+                            //string sig = string.Join(",", entry.Signals.Select(x=>x.Type)); // debug
+
+                            return new object[] { EDDConfig.Instance.ConvertTimeToSelectedFromUTC(entry.EventTimeUTC), entry.BodyName, ringtype,
+                                mass,innerrad,outerrad ,
+                                entry.ContainsStr(fdname[0]),entry.ContainsStr(fdname[1]),entry.ContainsStr(fdname[2]),entry.ContainsStr(fdname[3]),
+                                entry.ContainsStr(fdname[4]),entry.ContainsStr(fdname[5]),entry.ContainsStr(fdname[6]),entry.ContainsStr(fdname[7]),
+                                entry.ContainsStr(fdname[8], showicy), entry.ContainsStr(fdname[9]),
+
+                                // "Bauxite","Indite","Alexandrite","Monazite", // rocky
+                                entry.ContainsStr(fdname[10]),entry.ContainsStr(fdname[11]),entry.ContainsStr(fdname[12],showrocky),entry.ContainsStr(fdname[13], showrocky),
+                                // "Musgravite","Benitoite","Serendibite","Rhodplumsite",          // rocky
+                                entry.ContainsStr(fdname[14]),entry.ContainsStr(fdname[15]),entry.ContainsStr(fdname[16],showrocky),entry.ContainsStr(fdname[17],showrocky),
+
+                                // "Rhodplumsite","Serendibite","Platinum","Monazite","Painite",   // metal rich  
+                                entry.ContainsStr(fdname[18],showmr),entry.ContainsStr(fdname[19],showmr),entry.ContainsStr(fdname[20],showmr),entry.ContainsStr(fdname[21],showmr),entry.ContainsStr(fdname[22],showmr),
+
+                                // "Rhodplumsite","Serendibite","Platinum","Monazite","Painite", // metalic
+                                entry.ContainsStr(fdname[23],showmetalic),entry.ContainsStr(fdname[24],showmetalic),entry.ContainsStr(fdname[25],showmetalic),entry.ContainsStr(fdname[26],showmetalic),entry.ContainsStr(fdname[27],showmetalic),
+
+                                entry.ContainsStr(fdname[28]),entry.ContainsStr(fdname[29]),entry.ContainsStr(fdname[30]),entry.ContainsStr(fdname[31]),entry.ContainsStr(fdname[32]),
+                            };
+                        };
+
+                        grd.WriteGrid(frm.Path, frm.AutoOpen, FindForm());
+                    }
+                    else
+                    { 
+                        using (System.IO.StreamWriter writer = new System.IO.StreamWriter(frm.Path))
                         {
                             List<JournalScan> scans = null;
-
+                            
                             if (frm.SelectedIndex < 3)
                             {
                                 var entries = JournalEntry.GetByEventType(JournalTypeEnum.Scan, EDCommander.CurrentCmdrID, frm.StartTimeUTC, frm.EndTimeUTC);
@@ -524,11 +644,11 @@ namespace EDDiscovery.UserControls
 
                             bool ShowStars = frm.SelectedIndex < 2 || frm.SelectedIndex == 3;
                             bool ShowPlanets = frm.SelectedIndex == 0 || frm.SelectedIndex == 2 || frm.SelectedIndex == 4;
+                            bool ShowBeltClusters = frm.SelectedIndex == 0;
 
                             List<JournalSAAScanComplete> mappings = ShowPlanets ?
-                                                      JournalEntry.GetByEventType(JournalTypeEnum.SAAScanComplete, EDCommander.CurrentCmdrID, frm.StartTimeUTC, frm.EndTimeUTC)
-                                                      .ConvertAll(x => (JournalSAAScanComplete)x)
-                                                      : null;
+                                                        JournalEntry.GetByEventType(JournalTypeEnum.SAAScanComplete, EDCommander.CurrentCmdrID, frm.StartTimeUTC, frm.EndTimeUTC).ConvertAll(x => (JournalSAAScanComplete)x)
+                                                        : null;
 
                             if (frm.IncludeHeader)
                             {
@@ -624,113 +744,108 @@ namespace EDDiscovery.UserControls
                             {
                                 JournalScan scan = je as JournalScan;
 
-                                if (ShowPlanets == false)  // Then only show stars.
-                                    if (String.IsNullOrEmpty(scan.StarType))
-                                        continue;
-
-                                if (ShowStars == false)   // Then only show planets
-                                    if (String.IsNullOrEmpty(scan.PlanetClass))
-                                        continue;
-
-                                if (ShowPlanets == true && !string.IsNullOrEmpty(scan.PlanetClass))
+                                if ((je.IsPlanet && ShowPlanets) || (je.IsStar && ShowStars) || (je.IsBeltCluster && ShowBeltClusters))
                                 {
-                                    var mapping = mappings?.FirstOrDefault(m => m.BodyID == scan.BodyID && m.BodyName == scan.BodyName);
-
-                                    if (mapping != null)
+                                    if (je.IsPlanet)
                                     {
-                                        scan.SetMapped(true, mapping.ProbesUsed <= mapping.EfficiencyTarget);
+                                        var mapping = mappings?.FirstOrDefault(m => m.BodyID == scan.BodyID && m.BodyName == scan.BodyName);
+
+                                        if (mapping != null)
+                                        {
+                                            scan.SetMapped(true, mapping.ProbesUsed <= mapping.EfficiencyTarget);
+                                        }
                                     }
+
+                                    writer.Write(csv.Format(EDDConfig.Instance.ConvertTimeToSelectedFromUTC(scan.EventTimeUTC)));
+                                    writer.Write(csv.Format(scan.BodyName));
+                                    writer.Write(csv.Format(scan.EstimatedValue));
+                                    writer.Write(csv.Format(scan.DistanceFromArrivalLS));
+                                    writer.Write(csv.Format(scan.WasMapped));
+                                    writer.Write(csv.Format(scan.WasDiscovered));
+
+                                    if (ShowStars)
+                                    {
+                                        writer.Write(csv.Format(scan.StarType));
+                                        writer.Write(csv.Format((scan.nStellarMass.HasValue) ? scan.nStellarMass.Value : 0));
+                                        writer.Write(csv.Format((scan.nAbsoluteMagnitude.HasValue) ? scan.nAbsoluteMagnitude.Value : 0));
+                                        writer.Write(csv.Format((scan.nAge.HasValue) ? scan.nAge.Value : 0));
+                                        writer.Write(csv.Format(scan.Luminosity));
+                                    }
+
+
+                                    writer.Write(csv.Format(scan.nRadius.HasValue ? scan.nRadius.Value : 0));
+                                    writer.Write(csv.Format(scan.nRotationPeriod.HasValue ? scan.nRotationPeriod.Value : 0));
+                                    writer.Write(csv.Format(scan.nSurfaceTemperature.HasValue ? scan.nSurfaceTemperature.Value : 0));
+
+                                    if (ShowPlanets)
+                                    {
+                                        writer.Write(csv.Format(scan.nTidalLock.HasValue ? scan.nTidalLock.Value : false));
+                                        writer.Write(csv.Format((scan.TerraformState != null) ? scan.TerraformState : ""));
+                                        writer.Write(csv.Format((scan.PlanetClass != null) ? scan.PlanetClass : ""));
+                                        writer.Write(csv.Format((scan.Atmosphere != null) ? scan.Atmosphere : ""));
+                                        writer.Write(csv.Format(scan.GetAtmosphereComponent("Iron")));
+                                        writer.Write(csv.Format(scan.GetAtmosphereComponent("Silicates")));
+                                        writer.Write(csv.Format(scan.GetAtmosphereComponent("SulphurDioxide")));
+                                        writer.Write(csv.Format(scan.GetAtmosphereComponent("CarbonDioxide")));
+                                        writer.Write(csv.Format(scan.GetAtmosphereComponent("Nitrogen")));
+                                        writer.Write(csv.Format(scan.GetAtmosphereComponent("Oxygen")));
+                                        writer.Write(csv.Format(scan.GetAtmosphereComponent("Water")));
+                                        writer.Write(csv.Format(scan.GetAtmosphereComponent("Argon")));
+                                        writer.Write(csv.Format(scan.GetAtmosphereComponent("Ammonia")));
+                                        writer.Write(csv.Format(scan.GetAtmosphereComponent("Methane")));
+                                        writer.Write(csv.Format(scan.GetAtmosphereComponent("Hydrogen")));
+                                        writer.Write(csv.Format(scan.GetAtmosphereComponent("Helium")));
+                                        writer.Write(csv.Format((scan.Volcanism != null) ? scan.Volcanism : ""));
+                                        writer.Write(csv.Format(scan.nSurfaceGravity.HasValue ? scan.nSurfaceGravity.Value : 0));
+                                        writer.Write(csv.Format(scan.nSurfacePressure.HasValue ? scan.nSurfacePressure.Value : 0));
+                                        writer.Write(csv.Format(scan.nLandable.HasValue ? scan.nLandable.Value : false));
+                                        writer.Write(csv.Format((scan.nMassEM.HasValue) ? scan.nMassEM.Value : 0));
+                                        writer.Write(csv.Format(scan.GetCompositionPercent("Ice")));
+                                        writer.Write(csv.Format(scan.GetCompositionPercent("Rock")));
+                                        writer.Write(csv.Format(scan.GetCompositionPercent("Metal")));
+                                    }
+                                    // Common orbital param
+                                    writer.Write(csv.Format(scan.nSemiMajorAxis.HasValue ? scan.nSemiMajorAxis.Value : 0));
+                                    writer.Write(csv.Format(scan.nEccentricity.HasValue ? scan.nEccentricity.Value : 0));
+                                    writer.Write(csv.Format(scan.nOrbitalInclination.HasValue ? scan.nOrbitalInclination.Value : 0));
+                                    writer.Write(csv.Format(scan.nPeriapsis.HasValue ? scan.nPeriapsis.Value : 0));
+                                    writer.Write(csv.Format(scan.nOrbitalPeriod.HasValue ? scan.nOrbitalPeriod.Value : 0));
+                                    writer.Write(csv.Format(scan.nAxialTilt.HasValue ? scan.nAxialTilt : null));
+
+                                    if (ShowPlanets)
+                                    {
+                                        writer.Write(csv.Format(scan.GetMaterial("Carbon")));
+                                        writer.Write(csv.Format(scan.GetMaterial("Iron")));
+                                        writer.Write(csv.Format(scan.GetMaterial("Nickel")));
+                                        writer.Write(csv.Format(scan.GetMaterial("Phosphorus")));
+                                        writer.Write(csv.Format(scan.GetMaterial("Sulphur")));
+                                        writer.Write(csv.Format(scan.GetMaterial("Arsenic")));
+                                        writer.Write(csv.Format(scan.GetMaterial("Chromium")));
+                                        writer.Write(csv.Format(scan.GetMaterial("Germanium")));
+                                        writer.Write(csv.Format(scan.GetMaterial("Manganese")));
+                                        writer.Write(csv.Format(scan.GetMaterial("Selenium")));
+                                        writer.Write(csv.Format(scan.GetMaterial("Vanadium")));
+                                        writer.Write(csv.Format(scan.GetMaterial("Zinc")));
+                                        writer.Write(csv.Format(scan.GetMaterial("Zirconium")));
+                                        writer.Write(csv.Format(scan.GetMaterial("Cadmium")));
+                                        writer.Write(csv.Format(scan.GetMaterial("Mercury")));
+                                        writer.Write(csv.Format(scan.GetMaterial("Molybdenum")));
+                                        writer.Write(csv.Format(scan.GetMaterial("Niobium")));
+                                        writer.Write(csv.Format(scan.GetMaterial("Tin")));
+                                        writer.Write(csv.Format(scan.GetMaterial("Tungsten")));
+                                        writer.Write(csv.Format(scan.GetMaterial("Antimony")));
+                                        writer.Write(csv.Format(scan.GetMaterial("Polonium")));
+                                        writer.Write(csv.Format(scan.GetMaterial("Ruthenium")));
+                                        writer.Write(csv.Format(scan.GetMaterial("Technetium")));
+                                        writer.Write(csv.Format(scan.GetMaterial("Tellurium")));
+                                        writer.Write(csv.Format(scan.GetMaterial("Yttrium")));
+                                    }
+                                    writer.WriteLine();
                                 }
-
-                                writer.Write(csv.Format(EDDConfig.Instance.ConvertTimeToSelectedFromUTC(scan.EventTimeUTC)));
-                                writer.Write(csv.Format(scan.BodyName));
-                                writer.Write(csv.Format(scan.EstimatedValue));
-                                writer.Write(csv.Format(scan.DistanceFromArrivalLS));
-                                writer.Write(csv.Format(scan.WasMapped));
-                                writer.Write(csv.Format(scan.WasDiscovered));
-
-                                if (ShowStars)
-                                {
-                                    writer.Write(csv.Format(scan.StarType));
-                                    writer.Write(csv.Format((scan.nStellarMass.HasValue) ? scan.nStellarMass.Value : 0));
-                                    writer.Write(csv.Format((scan.nAbsoluteMagnitude.HasValue) ? scan.nAbsoluteMagnitude.Value : 0));
-                                    writer.Write(csv.Format((scan.nAge.HasValue) ? scan.nAge.Value : 0));
-                                    writer.Write(csv.Format(scan.Luminosity));
-                                }
-
-
-                                writer.Write(csv.Format(scan.nRadius.HasValue ? scan.nRadius.Value : 0));
-                                writer.Write(csv.Format(scan.nRotationPeriod.HasValue ? scan.nRotationPeriod.Value : 0));
-                                writer.Write(csv.Format(scan.nSurfaceTemperature.HasValue ? scan.nSurfaceTemperature.Value : 0));
-
-                                if (ShowPlanets)
-                                {
-                                    writer.Write(csv.Format(scan.nTidalLock.HasValue ? scan.nTidalLock.Value : false));
-                                    writer.Write(csv.Format((scan.TerraformState != null) ? scan.TerraformState : ""));
-                                    writer.Write(csv.Format((scan.PlanetClass != null) ? scan.PlanetClass : ""));
-                                    writer.Write(csv.Format((scan.Atmosphere != null) ? scan.Atmosphere : ""));
-                                    writer.Write(csv.Format(scan.GetAtmosphereComponent("Iron")));
-                                    writer.Write(csv.Format(scan.GetAtmosphereComponent("Silicates")));
-                                    writer.Write(csv.Format(scan.GetAtmosphereComponent("SulphurDioxide")));
-                                    writer.Write(csv.Format(scan.GetAtmosphereComponent("CarbonDioxide")));
-                                    writer.Write(csv.Format(scan.GetAtmosphereComponent("Nitrogen")));
-                                    writer.Write(csv.Format(scan.GetAtmosphereComponent("Oxygen")));
-                                    writer.Write(csv.Format(scan.GetAtmosphereComponent("Water")));
-                                    writer.Write(csv.Format(scan.GetAtmosphereComponent("Argon")));
-                                    writer.Write(csv.Format(scan.GetAtmosphereComponent("Ammonia")));
-                                    writer.Write(csv.Format(scan.GetAtmosphereComponent("Methane")));
-                                    writer.Write(csv.Format(scan.GetAtmosphereComponent("Hydrogen")));
-                                    writer.Write(csv.Format(scan.GetAtmosphereComponent("Helium")));
-                                    writer.Write(csv.Format((scan.Volcanism != null) ? scan.Volcanism : ""));
-                                    writer.Write(csv.Format(scan.nSurfaceGravity.HasValue ? scan.nSurfaceGravity.Value : 0));
-                                    writer.Write(csv.Format(scan.nSurfacePressure.HasValue ? scan.nSurfacePressure.Value : 0));
-                                    writer.Write(csv.Format(scan.nLandable.HasValue ? scan.nLandable.Value : false));
-                                    writer.Write(csv.Format((scan.nMassEM.HasValue) ? scan.nMassEM.Value : 0));
-                                    writer.Write(csv.Format(scan.GetCompositionPercent("Ice")));
-                                    writer.Write(csv.Format(scan.GetCompositionPercent("Rock")));
-                                    writer.Write(csv.Format(scan.GetCompositionPercent("Metal")));
-                                }
-                                // Common orbital param
-                                writer.Write(csv.Format(scan.nSemiMajorAxis.HasValue ? scan.nSemiMajorAxis.Value : 0));
-                                writer.Write(csv.Format(scan.nEccentricity.HasValue ? scan.nEccentricity.Value : 0));
-                                writer.Write(csv.Format(scan.nOrbitalInclination.HasValue ? scan.nOrbitalInclination.Value : 0));
-                                writer.Write(csv.Format(scan.nPeriapsis.HasValue ? scan.nPeriapsis.Value : 0));
-                                writer.Write(csv.Format(scan.nOrbitalPeriod.HasValue ? scan.nOrbitalPeriod.Value : 0));
-                                writer.Write(csv.Format(scan.nAxialTilt.HasValue ? scan.nAxialTilt : null));
-
-                                if (ShowPlanets)
-                                {
-                                    writer.Write(csv.Format(scan.GetMaterial("Carbon")));
-                                    writer.Write(csv.Format(scan.GetMaterial("Iron")));
-                                    writer.Write(csv.Format(scan.GetMaterial("Nickel")));
-                                    writer.Write(csv.Format(scan.GetMaterial("Phosphorus")));
-                                    writer.Write(csv.Format(scan.GetMaterial("Sulphur")));
-                                    writer.Write(csv.Format(scan.GetMaterial("Arsenic")));
-                                    writer.Write(csv.Format(scan.GetMaterial("Chromium")));
-                                    writer.Write(csv.Format(scan.GetMaterial("Germanium")));
-                                    writer.Write(csv.Format(scan.GetMaterial("Manganese")));
-                                    writer.Write(csv.Format(scan.GetMaterial("Selenium")));
-                                    writer.Write(csv.Format(scan.GetMaterial("Vanadium")));
-                                    writer.Write(csv.Format(scan.GetMaterial("Zinc")));
-                                    writer.Write(csv.Format(scan.GetMaterial("Zirconium")));
-                                    writer.Write(csv.Format(scan.GetMaterial("Cadmium")));
-                                    writer.Write(csv.Format(scan.GetMaterial("Mercury")));
-                                    writer.Write(csv.Format(scan.GetMaterial("Molybdenum")));
-                                    writer.Write(csv.Format(scan.GetMaterial("Niobium")));
-                                    writer.Write(csv.Format(scan.GetMaterial("Tin")));
-                                    writer.Write(csv.Format(scan.GetMaterial("Tungsten")));
-                                    writer.Write(csv.Format(scan.GetMaterial("Antimony")));
-                                    writer.Write(csv.Format(scan.GetMaterial("Polonium")));
-                                    writer.Write(csv.Format(scan.GetMaterial("Ruthenium")));
-                                    writer.Write(csv.Format(scan.GetMaterial("Technetium")));
-                                    writer.Write(csv.Format(scan.GetMaterial("Tellurium")));
-                                    writer.Write(csv.Format(scan.GetMaterial("Yttrium")));
-                                }
-                                writer.WriteLine();
                             }
-                        }
 
-                        writer.Close();
+                            writer.Close();
+                        }
 
                         if (frm.AutoOpen)
                             System.Diagnostics.Process.Start(frm.Path);

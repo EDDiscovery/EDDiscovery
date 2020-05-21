@@ -287,7 +287,7 @@ namespace EDDiscovery.UserControls
                 }
 
                 if (fdrow >= 0 && dataGridViewSynthesis.Rows[fdrow].Visible)        // better check visible, may have changed..
-                    dataGridViewSynthesis.FirstDisplayedScrollingRowIndex = fdrow;
+                    dataGridViewSynthesis.SafeFirstDisplayedScrollingRowIndex(fdrow);
 
             }
 

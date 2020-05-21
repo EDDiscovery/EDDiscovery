@@ -309,7 +309,7 @@ namespace EDDiscovery.UserControls
                 }
 
                 if ( fdrow>=0 && dataGridViewEngineering.Rows[fdrow].Visible )        // better check visible, may have changed..
-                    dataGridViewEngineering.FirstDisplayedScrollingRowIndex = fdrow;
+                    dataGridViewEngineering.SafeFirstDisplayedScrollingRowIndex(fdrow);
             }
 
             if (OnDisplayComplete != null)

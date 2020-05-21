@@ -220,7 +220,7 @@ namespace EDDiscovery.UserControls
             dataGridViewMC.Sort(sortcolprev, (sortorderprev == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
             dataGridViewMC.Columns[sortcolprev.Index].HeaderCell.SortGlyphDirection = sortorderprev;
             if (firstline >= 0 && firstline < dataGridViewMC.RowCount)
-                dataGridViewMC.FirstDisplayedScrollingRowIndex = firstline;
+                dataGridViewMC.SafeFirstDisplayedScrollingRowIndex( firstline);
 
             if (materials)
             {
