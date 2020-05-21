@@ -1765,21 +1765,25 @@ namespace EliteDangerousCore.JournalEvents
 
                 if (nLandable == true)
                 {
-                    if (st < 300)
+                    if (st < 1000)
+                        iconName = "MRBv7";
+                    else if (st < 2000)
                         iconName = "MRBv2";
-                    else if (st < 1000)
-                        iconName = "HMCv36";
                     else
-                        iconName = "MRBv1";
+                        iconName = "MRBv8";
                 }
                 else
                 {
-                    if (st < 1000)
-                        iconName = "MRBv4";
-                    else if (st < 2000)
+                    if (st < 1800)
                         iconName = "MRBv3";
-                    else
+                    else if (st < 3000)
+                        iconName = "MRBv4";
+                    else if (st < 5000)
+                        iconName = "MRBv1";
+                    else if (st < 6000)
                         iconName = "MRBv5";
+                    else
+                        iconName = "MRBv6";
                 }
             }
 
