@@ -41,8 +41,8 @@ namespace EDDiscovery.Forms
             outputextension = outputext;
 
             comboBoxCustomExportType.Items.AddRange(exportlist);
-            customDateTimePickerFrom.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(new DateTime(2014, 11, 22, 4, 0, 0, DateTimeKind.Utc)); //Gamma start
-            customDateTimePickerTo.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(DateTime.UtcNow);
+            customDateTimePickerFrom.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(new DateTime(2014, 11, 22, 0, 0, 0, DateTimeKind.Utc)); //Gamma start
+            customDateTimePickerTo.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(new DateTime(DateTime.UtcNow.Year,DateTime.UtcNow.Month,DateTime.UtcNow.Day,23,59,59));
 
             if (System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator.Equals("."))
                 radioButtonComma.Checked = true;
