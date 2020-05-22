@@ -183,6 +183,9 @@
     <Compile Include="UserControls\EngineeringSynthesis\UserControlMaterialTrader.Designer.cs">
       <DependentUpon>UserControlMaterialTrader.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\HelpersNeighborhoodUC\Algebra.cs" />
+    <Compile Include="UserControls\HelpersNeighborhoodUC\MouseWheelHandler.cs" />
+    <Compile Include="UserControls\HelpersNeighborhoodUC\Projection.cs" />
     <Compile Include="UserControls\HelpersScanDisplayUC\ScanDisplayNodes.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -190,6 +193,12 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="UserControls\Helpers\CSVHelpers.cs" />
+    <Compile Include="UserControls\ScansStars\UserControlNeighborhood.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\ScansStars\UserControlNeighborhood.Designer.cs">
+      <DependentUpon>UserControlNeighborhood.cs</DependentUpon>
+    </Compile>
     <Compile Include="WebServer\WebServer.cs" />
     <None Include="..\EDDIcons\Controls\Fakes\Controls.Designer.cs">
       <Link>Icons\Controls.Designer.cs</Link>
