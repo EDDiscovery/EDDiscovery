@@ -28,38 +28,37 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.scatterPlot1 = new EDDiscovery.UserControls.ScatterPlot();
+            this.scatterPlot1 = new ExtendedControls.ScatterPlot();
             this.SuspendLayout();
             // 
             // scatterPlot1
             // 
+            this.scatterPlot1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.scatterPlot1.Azimuth = 0D;
             this.scatterPlot1.CameraPos = new double[] {
         0D,
         0D,
-        0D};
+        -5D};
             this.scatterPlot1.Distance = 5D;
             this.scatterPlot1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.scatterPlot1.Elevation = 0D;
-            this.scatterPlot1.F = 1000D;
+            this.scatterPlot1.Field = 1000D;
             this.scatterPlot1.Location = new System.Drawing.Point(0, 0);
             this.scatterPlot1.Name = "scatterPlot1";
-            this.scatterPlot1.Size = new System.Drawing.Size(349, 334);
+            this.scatterPlot1.Size = new System.Drawing.Size(352, 340);
             this.scatterPlot1.TabIndex = 0;
             // 
             // UserControlNeighborhood
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.scatterPlot1);
             this.Name = "UserControlNeighborhood";
-            this.Size = new System.Drawing.Size(349, 334);
+            this.Size = new System.Drawing.Size(352, 340);
             this.ResumeLayout(false);
 
         }
 
-        #endregion
-
-        private ScatterPlot scatterPlot1;
+        private ExtendedControls.ScatterPlot scatterPlot1;
     }
+
+    #endregion
 }
