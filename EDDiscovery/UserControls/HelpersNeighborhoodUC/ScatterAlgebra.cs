@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EDDiscovery.UserControls
 {
-    class Algebra
+    class ScatterAlgebra
     {
         public class Matrix<T>
         {
@@ -100,7 +100,5 @@ namespace EDDiscovery.UserControls
                 return output;
             }
         }
-
-
     }
 }

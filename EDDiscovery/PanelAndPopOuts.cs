@@ -77,6 +77,7 @@ namespace EDDiscovery
             Surveyor,               // 42
             EDSM,                   // 43
             MaterialTrader,         // 44
+            Neighborhood,           // 45
             // ****** ADD More here DO NOT REORDER *****
         };
 
@@ -118,6 +119,7 @@ namespace EDDiscovery
             { new PanelInfo( PanelIDs.EstimatedValues, typeof(UserControlEstimatedValues),"Estimated Values", "EstimatedValues", "Estimated Scan values of bodies in system", transparent: false) },
             { new PanelInfo( PanelIDs.LocalMap, typeof(UserControlLocalMap), "Map 3D Local Systems", "LocalMap", "Map in 3D of local systems", transparent: false) },
             { new PanelInfo( PanelIDs.Plot, typeof(UserControlPlot), "Map 2D Local Systems", "Plot", "Map in 2D of local systems", transparent: false) },
+            { new PanelInfo( PanelIDs.Neighborhood, typeof(UserControlNeighborhood), "3d representation of mapped neighborhood", "Neighborhood", "3d map representaiton of local neighborhood", transparent: false) },
             { new PanelInfo( PanelIDs.Search, typeof(UserControlSearch), "Search", "SearchFinder", "Search") },
             { new PanelInfo( PanelIDs.Trilateration, typeof(UserControlTrilateration) ,"Trilateration", "Trilateration", "Trilateration of stars with unknown positions") },
 

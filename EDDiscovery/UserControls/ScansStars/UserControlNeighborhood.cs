@@ -15,164 +15,74 @@ namespace EDDiscovery.UserControls
         public UserControlNeighborhood()
         {
             InitializeComponent();
-            MouseWheelHandler.Add(this, MyOnMouseWheel);
+            AddDemoContent();
         }
 
-        List<List<double[]>> Points = new List<List<double[]>>();
-        List<PointF[]> ProjPoints = new List<PointF[]>();
-        private double f = 1000;
-        private double d = 5;
-        private double[] d_w = new double[3];
-        private double last_azimuth, azimuth = 0, last_elevation, elevation = 0;
-        private bool leftMousePressed = false;
-        private PointF ptMouseClick;
-
-        public double Distance
+        private void AddDemoContent()
         {
-            get { return d; }
-            set { d = (value >= 0.1) ? d = value : d; UpdateProjection(); }
-        }
+            scatterPlot1.Clear();
+            Random rand = new Random();
+            double R = 1;
+            List<double[]> Points = new List<double[]>();
 
-        public double F
-        {
-            get { return f; }
-            set { f = value; UpdateProjection(); }
-        }
-
-        public double[] CameraPos
-        {
-            get { return d_w; }
-            set { d_w = value; UpdateProjection(); }
-        }
-
-        public double Azimuth
-        {
-            get { return azimuth; }
-            set { azimuth = value; UpdateProjection(); }
-        }
-
-        public double Elevation
-        {
-            get { return elevation; }
-            set { elevation = value; UpdateProjection(); }
-        }
-
-        protected override CreateParams CreateParams
-        {
-            get
+            for (int j = 0; j < 5; j++)
             {
-                var cp = base.CreateParams;
-                cp.ExStyle |= 0x02000000;    // Turn on WS_EX_COMPOSITED
-                return cp;
-            }
-        }
-
-        Color[] colorIdx = new Color[] { Color.Blue, Color.Red, Color.Green, Color.Orange, Color.Fuchsia, Color.Black };
-
-        protected override void OnPaint(PaintEventArgs e)
-        {
-            base.OnPaint(e);
-
-            Graphics g = this.CreateGraphics();
-            g.FillRectangle(Brushes.White, new Rectangle(0, 0, this.Width, this.Height));
-            if (ProjPoints != null)
-            {
-                for (int i = 0; i < ProjPoints.Count; i++)
+                for (int i = 0; i < 100; i++)
                 {
-                    foreach (PointF p in ProjPoints[i])
-                    {
-                        g.FillEllipse(new SolidBrush(colorIdx[i % colorIdx.Length]), new RectangleF(p.X, p.Y, 4, 4));
-                    }
+                    double theta = Math.PI * rand.NextDouble();
+                    double phi = 2 * Math.PI * rand.NextDouble();
+                    double x = R * Math.Sin(theta) * Math.Cos(phi);
+                    double y = R * Math.Sin(theta) * Math.Sin(phi);
+                    double z = R * Math.Cos(theta);
+                    Points.Add(new double[] { x, y, z });
                 }
+                scatterPlot1.AddPoints(Points);
+
+                Points.Clear();
             }
         }
 
-        public void AddPoint(double x, double y, double z, int series)
+        private void button1_Click(object sender, EventArgs e)
         {
-            if (Points.Count - 1 < series)
+            scatterPlot1.Clear();
+            Random rand = new Random();
+            double R = 1;
+            List<double[]> Points = new List<double[]>();
+
+            for (int j = 0; j < 5; j++)
             {
-                Points.Add(new List<double[]>());
+                for (int i = 0; i < 100; i++)
+                {
+                    double theta = Math.PI * rand.NextDouble();
+                    double phi = 2 * Math.PI * rand.NextDouble();
+                    double x = R * Math.Sin(theta) * Math.Cos(phi);
+                    double y = R * Math.Sin(theta) * Math.Sin(phi);
+                    double z = R * Math.Cos(theta);
+                    Points.Add(new double[] { x, y, z });
+                }
+                scatterPlot1.AddPoints(Points);
+
+                Points.Clear();
             }
 
-            Points[series].Add(new double[] { x, y, z });
-
-            foreach (List<double[]> ser in Points)
+            for (int i = 0; i < 200; i++)
             {
-                if (ProjPoints.Count - 1 < series)
-                    ProjPoints.Add(Projection.ProjectVector(ser, this.Width, this.Height, f, d_w, azimuth, elevation));
-                else
-                    ProjPoints[series] = Projection.ProjectVector(ser, this.Width, this.Height, f, d_w, azimuth, elevation);
+                //double theta = Math.PI * rand.NextDouble();
+                //double phi = 2 * Math.PI * rand.NextDouble();
+                double theta = 10D / 180 * Math.PI * Math.Sin(10 * 2 * Math.PI * i / 200);
+                double phi = 2 * Math.PI * i / 200;
+                double x = R * Math.Cos(theta) * Math.Cos(phi);
+                double y = R * Math.Cos(theta) * Math.Sin(phi);
+                double z = R * Math.Sin(theta);
+                Points.Add(new double[] { x, y, z });
+
             }
-            this.Invalidate();
+            scatterPlot1.AddPoints(Points);
         }
 
-        public void AddPoints(List<double[]> points)
+        private void trackBar2_Scroll(object sender, EventArgs e)
         {
-            List<double[]> _tmp = new List<double[]>(points);
-            Points.Add(_tmp);
-            ProjPoints.Add(Projection.ProjectVector(Points[Points.Count - 1], this.Width, this.Height, f, d_w, azimuth, elevation));
-            UpdateProjection();
+            //scatterPlot1.F = trackBar2.Value / 100D * 1000;
         }
-
-        public void Clear()
-        {
-            ProjPoints.Clear();
-            Points.Clear();
-            Azimuth = 0;
-            Elevation = 0;
-        }
-
-        private void ScatterPlot_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (leftMousePressed)
-            {
-                azimuth = last_azimuth - (ptMouseClick.X - e.X) / 100;
-                elevation = last_elevation + (ptMouseClick.Y - e.Y) / 100;
-                UpdateProjection();
-            }
-        }
-
-        private void ScatterPlot_SizeChanged(object sender, EventArgs e)
-        {
-            if (ProjPoints != null)
-                UpdateProjection();
-        }
-
-        private void ScatterPlot_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button == System.Windows.Forms.MouseButtons.Left)
-            {
-                leftMousePressed = true;
-                ptMouseClick = new PointF(e.X, e.Y);
-                last_azimuth = azimuth;
-                last_elevation = elevation;
-            }
-        }
-
-        private void ScatterPlot_MouseUp(object sender, MouseEventArgs e)
-        {
-            if (e.Button == System.Windows.Forms.MouseButtons.Left)
-                leftMousePressed = false;
-        }
-
-        private void MyOnMouseWheel(MouseEventArgs e)
-        {
-            Distance += -e.Delta / 500D;
-        }
-
-        private void UpdateProjection()
-        {
-            if (ProjPoints == null)
-                return;
-            double x = d * Math.Cos(elevation) * Math.Cos(azimuth);
-            double y = d * Math.Cos(elevation) * Math.Sin(azimuth);
-            double z = d * Math.Sin(elevation);
-            d_w = new double[3] { -y, z, -x };
-            for (int i = 0; i < ProjPoints.Count; i++)
-                ProjPoints[i] = Projection.ProjectVector(Points[i], this.Width, this.Height, f, d_w, azimuth, elevation);
-            this.Invalidate();
-        }
-
     }
-}
 }

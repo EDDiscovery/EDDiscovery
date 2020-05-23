@@ -183,9 +183,15 @@
     <Compile Include="UserControls\EngineeringSynthesis\UserControlMaterialTrader.Designer.cs">
       <DependentUpon>UserControlMaterialTrader.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\HelpersNeighborhoodUC\Algebra.cs" />
+    <Compile Include="UserControls\HelpersNeighborhoodUC\ScatterAlgebra.cs" />
     <Compile Include="UserControls\HelpersNeighborhoodUC\MouseWheelHandler.cs" />
-    <Compile Include="UserControls\HelpersNeighborhoodUC\Projection.cs" />
+    <Compile Include="UserControls\HelpersNeighborhoodUC\ScatterProjection.cs" />
+    <Compile Include="UserControls\HelpersNeighborhoodUC\ScatterPlot.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\HelpersNeighborhoodUC\ScatterPlot.Designer.cs">
+      <DependentUpon>ScatterPlot.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\HelpersScanDisplayUC\ScanDisplayNodes.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -861,6 +867,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\ScansStars\UserControlEDSM.resx">
       <DependentUpon>UserControlEDSM.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\ScansStars\UserControlNeighborhood.resx">
+      <DependentUpon>UserControlNeighborhood.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\Search\SearchMaterialsCommodities.resx">
       <DependentUpon>SearchMaterialsCommodities.cs</DependentUpon>
