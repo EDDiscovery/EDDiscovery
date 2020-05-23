@@ -913,6 +913,11 @@
     <EmbeddedResource Include="Bodies\Planets\Terrestrial\MRBv6.png" />
     <EmbeddedResource Include="Bodies\Planets\Terrestrial\MRBv7.png" />
     <EmbeddedResource Include="Bodies\Planets\Terrestrial\MRBv8.png" />
+    <EmbeddedResource Include="Bodies\Planets\Terrestrial\MRBv10.png" />
+    <EmbeddedResource Include="Bodies\Planets\Terrestrial\MRBv11.png" />
+    <EmbeddedResource Include="Bodies\Planets\Terrestrial\MRBv12.png" />
+    <EmbeddedResource Include="Bodies\Planets\Terrestrial\MRBv13.png" />
+    <EmbeddedResource Include="Bodies\Planets\Terrestrial\MRBv9.png" />
     <Content Include="Controls\readme.txt" />
     <EmbeddedResource Include="Panels\MissionOverlay.png" />
     <EmbeddedResource Include="Journal\CrimeVictim.png" />
