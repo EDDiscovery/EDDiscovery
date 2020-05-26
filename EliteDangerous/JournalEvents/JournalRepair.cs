@@ -14,6 +14,7 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
@@ -23,15 +24,45 @@ namespace EliteDangerousCore.JournalEvents
     {
         public JournalRepair(JObject evt ) : base(evt, JournalTypeEnum.Repair)
         {
-            ItemFD = JournalFieldNaming.NormaliseFDItemName(evt["Item"].Str());
-            Item = JournalFieldNaming.GetBetterItemName(ItemFD);
-            ItemLocalised = JournalFieldNaming.CheckLocalisation(evt["Item_Localised"].Str(),Item);
+            if (evt["Items"] is JArray)
+            {
+                Items = new List<RepairItem>();
+
+                foreach (var jitem in evt["Items"])
+                {
+                    var itemfd = JournalFieldNaming.NormaliseFDItemName(jitem.Str());
+                    var item = JournalFieldNaming.GetBetterItemName(itemfd);
+
+                    var repairitem = new RepairItem
+                    {
+                        ItemFD = itemfd,
+                        Item = item,
+                        ItemLocalised = item.SplitCapsWordFull()
+                    };
+
+                    Items.Add(repairitem);
+                }
+            }
+            else
+            {
+                ItemFD = JournalFieldNaming.NormaliseFDItemName(evt["Item"].Str());
+                Item = JournalFieldNaming.GetBetterItemName(ItemFD);
+                ItemLocalised = JournalFieldNaming.CheckLocalisation(evt["Item_Localised"].Str(),Item);
+            }
             Cost = evt["Cost"].Long();
+        }
+
+        public class RepairItem
+        {
+            public string Item { get; set; }
+            public string ItemFD { get; set; }
+            public string ItemLocalised { get; set; }
         }
 
         public string ItemFD { get; set; }
         public string Item { get; set; }
         public string ItemLocalised { get; set; }
+        public List<RepairItem> Items { get; set; }
         public long Cost { get; set; }
 
         public void Ledger(Ledger mcl)

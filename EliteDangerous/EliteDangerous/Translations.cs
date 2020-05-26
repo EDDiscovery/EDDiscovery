@@ -517,6 +517,8 @@ namespace EliteDangerousCore
         JournalLocation_LND, // Landed on {0}
         JournalLocation_AtStar, // At {0}
 
+        JournalCarrierJump_JumpedWith, // Jumped with carrier {0} to {1}
+
         JournalFSDJump_Jumpto, // Jump to {0}
         JournalFSDJump_Fuel, //  Fuel
         JournalFSDJump_left, //  left
