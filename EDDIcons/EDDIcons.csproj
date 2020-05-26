@@ -918,6 +918,9 @@
     <EmbeddedResource Include="Bodies\Planets\Terrestrial\MRBv12.png" />
     <EmbeddedResource Include="Bodies\Planets\Terrestrial\MRBv13.png" />
     <EmbeddedResource Include="Bodies\Planets\Terrestrial\MRBv9.png" />
+    <EmbeddedResource Include="Bodies\Planets\Giant\GGAv14.png" />
+    <EmbeddedResource Include="Bodies\Planets\Giant\GGHv9.png" />
+    <EmbeddedResource Include="Bodies\Planets\Terrestrial\MRBv14.png" />
     <Content Include="Controls\readme.txt" />
     <EmbeddedResource Include="Panels\MissionOverlay.png" />
     <EmbeddedResource Include="Journal\CrimeVictim.png" />

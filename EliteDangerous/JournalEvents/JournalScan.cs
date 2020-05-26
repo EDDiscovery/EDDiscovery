@@ -1295,8 +1295,10 @@ namespace EliteDangerousCore.JournalEvents
                         iconName = "GGAv9";
                     else if (st < 120)
                         iconName = "GGAv2";
-                    else if (st < 125)
+                    else if (st < 124)
                         iconName = "GGAv12";
+                    else if (st < 128)
+                        iconName = "GGAv14";
                     else if (st < 130)
                         iconName = "GGAv7";
                     else if (st < 134)
@@ -1394,6 +1396,8 @@ namespace EliteDangerousCore.JournalEvents
                         iconName = "GGHv4";
                     else if (st < 600)
                         iconName = "GGHv1";
+                    else if (st < 700)
+                        iconName = "GGHv9";
                     else
                         iconName = "GGHv8";
                 }
@@ -1797,8 +1801,10 @@ namespace EliteDangerousCore.JournalEvents
                         iconName = "MRBv4";
                     else if (st < 2000)
                         iconName = "MRBv10";
-                    else if (st < 2100)
+                    else if (st < 2200)
                         iconName = "MRBv11";
+                    else if (st < 2400)
+                        iconName = "MRBv14";
                     else if (st < 2600)
                         iconName = "MRBv8";
                     else if (st < 3500)
