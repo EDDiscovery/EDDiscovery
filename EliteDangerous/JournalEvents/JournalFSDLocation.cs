@@ -692,17 +692,19 @@ namespace EliteDangerousCore.JournalEvents
         public JournalFSDTarget(JObject evt) : base(evt, JournalTypeEnum.FSDTarget)
         {
             StarSystem = evt["Name"].Str();
+            StarClass = evt["StarClass"].Str();
             SystemAddress = evt["SystemAddress"].Long();
             RemainingJumpsInRoute = evt["RemainingJumpsInRoute"].IntNull();
         }
 
         public string StarSystem { get; set; }
+        public string StarClass { get; set; }
         public long SystemAddress { get; set; }
         public int? RemainingJumpsInRoute { get; set; }
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = BaseUtils.FieldBuilder.Build("", StarSystem,"Remaining Jumps".T(EDTx.JournalEntry_RemainingJumps), RemainingJumpsInRoute);
+            info = BaseUtils.FieldBuilder.Build("", StarSystem,"",StarClass,"Remaining Jumps".T(EDTx.JournalEntry_RemainingJumps), RemainingJumpsInRoute);
             detailed = "";
         }
     }

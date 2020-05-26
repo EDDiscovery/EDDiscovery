@@ -294,8 +294,9 @@ namespace EliteDangerousCore.JournalEvents
         public class TransferClass
         {
             public string Type { get; set; }
+            public string Type_Localised { get; set; }
             public int Count { get; set; }
-            public string Direction { get; set; }
+            public string Direction { get; set; }       // tocarrier , toship, tosrv
         }
 
         public TransferClass[] Transfers { get; set; }
@@ -303,12 +304,22 @@ namespace EliteDangerousCore.JournalEvents
         public JournalCargoTransfer(JObject evt) : base(evt, JournalTypeEnum.CargoTransfer)
         {
             Transfers = evt["Transfers"].ToObjectProtected<TransferClass[]>();
+            if (Transfers != null)
+            {
+                foreach (var t in Transfers)
+                    t.Type_Localised = JournalFieldNaming.CheckLocalisation(t.Type_Localised, t.Type);
+            }
         }
 
         public override void FillInformation(out string info, out string detailed)
         {
             info = "Cargo Transfer";
             detailed = "";
+            if ( Transfers != null )
+            {
+                foreach (var t in Transfers)
+                    detailed = detailed.AppendPrePad(t.Type_Localised + "->" + t.Direction, Environment.NewLine);
+            }
         }
 
         public void UpdateCommodities(MaterialCommoditiesList mc)
@@ -316,6 +327,8 @@ namespace EliteDangerousCore.JournalEvents
             foreach (var transfer in Transfers)
             {
                 // How to determine if "toship" is Carrier to Ship or SRV to Ship?
+                // tbd we should know we are in the SRV or the ship.
+                // maybe we need to pass more info into this function to help it.
             }
         }
     }

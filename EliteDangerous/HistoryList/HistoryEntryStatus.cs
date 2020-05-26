@@ -87,6 +87,7 @@ namespace EliteDangerousCore
                         StationType = jloc.StationType.Alt(null),
                     };
                 case JournalTypeEnum.FSDJump:
+                case JournalTypeEnum.CarrierJump:
                     JournalFSDJump jfsd = (je as JournalFSDJump);
                     return new HistoryEntryStatus(prev)
                     {

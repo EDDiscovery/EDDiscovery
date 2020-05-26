@@ -469,7 +469,7 @@ namespace EliteDangerousCore.EDSM
 
                             if ((msgnr >= 100 && msgnr < 200) || msgnr == 500)
                             {
-                                if (he.EntryType == JournalTypeEnum.FSDJump || he.EntryType == JournalTypeEnum.Location)
+                                if (he.IsLocOrJump)
                                 {
                                     if (systemId != 0)
                                     {

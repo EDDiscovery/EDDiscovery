@@ -150,7 +150,7 @@ namespace EliteDangerousCore.Inara
 
                         if (je.StoreOldShipFD != null && je.StoreOldShipId.HasValue)
                             eventstosend.Add(InaraClass.setCommanderShip(je.StoreOldShipFD, je.StoreOldShipId.Value, he.EventTimeUTC, curship: false, starsystemName: he.System.Name, stationName: he.WhereAmI));
-                        if (je.SellOldShipFD != null && je.SellOldShipId.HasValue )
+                        if (je.SellOldShipFD != null && je.SellOldShipId.HasValue)
                             eventstosend.Add(InaraClass.delCommanderShip(je.SellOldShipFD, je.SellOldShipId.Value, he.EventTimeUTC));
 
                         eventstosend.Add(InaraClass.setCommanderCredits(he.Credits, he.EventTimeUTC));
@@ -216,7 +216,7 @@ namespace EliteDangerousCore.Inara
                         eventstosend.Add(InaraClass.setCommanderStorageModules(he.StoredModules.StoredModules, he.EventTimeUTC));
                         break;
                     }
-       
+
                 case JournalTypeEnum.SetUserShipName: // VERIFIED 18/5/2018
                     {
                         var je = he.journalEntry as JournalSetUserShipName;
@@ -240,6 +240,16 @@ namespace EliteDangerousCore.Inara
                         {
                             var je = he.journalEntry as JournalFSDJump;
                             eventstosend.Add(InaraClass.addCommanderTravelFSDJump(he.ShipInformation.ShipFD, he.ShipInformation.ID, je.StarSystem, je.JumpDist, he.EventTimeUTC));
+                        }
+                        break;
+                    }
+
+                case JournalTypeEnum.CarrierJump: // NEW! 26/5/2020
+                    {
+                        if (he.ShipInformation != null)     // PR2754 error - a empty list can end up with he.shipinformation = null if all is hidden.
+                        {
+                            var je = he.journalEntry as JournalCarrierJump;
+                            eventstosend.Add(InaraClass.addCommanderTravelCarrierJump(he.ShipInformation.ShipFD, he.ShipInformation.ID, je.StarSystem, he.EventTimeUTC));
                         }
                         break;
                     }

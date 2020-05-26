@@ -28,6 +28,8 @@ namespace EliteDangerousCore.JournalEvents
             {
                 Items = new List<RepairItem>();
 
+                ItemLocalised = Item = ItemFD = "";
+
                 foreach (var jitem in evt["Items"])
                 {
                     var itemfd = JournalFieldNaming.NormaliseFDItemName(jitem.Str());
@@ -40,6 +42,8 @@ namespace EliteDangerousCore.JournalEvents
                         ItemLocalised = item.SplitCapsWordFull()
                     };
 
+                    ItemLocalised = ItemLocalised.AppendPrePad(repairitem.ItemLocalised, ", "); // for the voice pack, keep this going
+ 
                     Items.Add(repairitem);
                 }
             }
@@ -49,6 +53,7 @@ namespace EliteDangerousCore.JournalEvents
                 Item = JournalFieldNaming.GetBetterItemName(ItemFD);
                 ItemLocalised = JournalFieldNaming.CheckLocalisation(evt["Item_Localised"].Str(),Item);
             }
+
             Cost = evt["Cost"].Long();
         }
 
@@ -59,15 +64,16 @@ namespace EliteDangerousCore.JournalEvents
             public string ItemLocalised { get; set; }
         }
 
-        public string ItemFD { get; set; }
+        public string ItemFD { get; set; }      // older style ones, OR first entry of new ones
         public string Item { get; set; }
         public string ItemLocalised { get; set; }
+
         public List<RepairItem> Items { get; set; }
         public long Cost { get; set; }
 
         public void Ledger(Ledger mcl)
         {
-            mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Item, -Cost);
+            mcl.AddEvent(Id, EventTimeUTC, EventTypeID, ItemLocalised, -Cost);
         }
 
         public override void FillInformation(out string info, out string detailed) 

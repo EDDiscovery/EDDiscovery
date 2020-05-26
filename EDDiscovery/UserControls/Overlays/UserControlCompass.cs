@@ -181,6 +181,7 @@ namespace EDDiscovery.UserControls
                         altitude = null;
                         break;
                     case JournalTypeEnum.FSDJump:       // to allow us to do PopulateBookmark..
+                    case JournalTypeEnum.CarrierJump:     
                         break;
                     default:
                         return;
