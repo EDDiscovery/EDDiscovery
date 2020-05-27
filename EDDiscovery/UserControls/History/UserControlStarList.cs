@@ -880,7 +880,7 @@ namespace EDDiscovery.UserControls
                 if (frm.SelectedIndex == 0)
                 {
                     // 0        1       2           3            4               5           6           7             8              9              10              11              12          
-                    string[] colh = { "Time", "System", "Visits", "Other Info", "Visit List", "Body", "Ship", "Description", "Detailed Info", "Travel Dist", "Travel Time", "Travel Jumps", "Travelled MisJumps" };
+                    string[] colh = { "Time", "System", "Visits", "Other Info", "Scan Value", "Visit List", "Body", "Ship", "Description", "Detailed Info", "Travel Dist", "Travel Time", "Travel Jumps", "Travelled MisJumps" };
 
                     BaseUtils.CSVWriteGrid grd = new BaseUtils.CSVWriteGrid();
                     grd.SetCSVDelimiter(frm.Comma);
@@ -920,6 +920,7 @@ namespace EDDiscovery.UserControls
                             rw.Cells[1].Value,
                             rw.Cells[2].Value ,
                             rw.Cells[3].Value ,
+                            rw.Cells[4].Value ,
                             tlist,
                             he.WhereAmI ,
                             he.ShipInformation != null ? he.ShipInformation.Name : "Unknown",
