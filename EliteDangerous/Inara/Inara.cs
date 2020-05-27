@@ -462,7 +462,7 @@ namespace EliteDangerousCore.Inara
             eventData["shipType"] = fdname;
             eventData["shipGameID"] = id;
             eventData["starsystemName"] = starsystem;
-            return Event("addCommanderTravelFSDJump", dt, eventData);
+            return Event("addCommanderTravelCarrierJump", dt, eventData);
         }
 
         static public JToken setCommanderTravelLocation(string starsystem, string station, long? marketid, DateTime dt)

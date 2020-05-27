@@ -313,22 +313,29 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = "Cargo Transfer";
+            info = "";
             detailed = "";
             if ( Transfers != null )
             {
                 foreach (var t in Transfers)
-                    detailed = detailed.AppendPrePad(t.Type_Localised + "->" + t.Direction, Environment.NewLine);
+                {
+                    string d = t.Direction.Replace("to", "To ", StringComparison.InvariantCultureIgnoreCase);
+                    info = info.AppendPrePad(t.Type_Localised + "->" + d, ", ");
+                }
             }
         }
 
         public void UpdateCommodities(MaterialCommoditiesList mc)
         {
-            foreach (var transfer in Transfers)
+            if (Transfers != null)
             {
-                // How to determine if "toship" is Carrier to Ship or SRV to Ship?
-                // tbd we should know we are in the SRV or the ship.
-                // maybe we need to pass more info into this function to help it.
+                foreach (var t in Transfers)
+                {
+                    if (t.Direction.Contains("ship", StringComparison.InvariantCultureIgnoreCase))     // toship, with some leaway to allow fd to change their formatting in future
+                        mc.Change(MaterialCommodityData.CatType.Commodity, t.Type, t.Count, 0);
+                    else
+                        mc.Change(MaterialCommodityData.CatType.Commodity, t.Type, -t.Count, 0);
+                }
             }
         }
     }

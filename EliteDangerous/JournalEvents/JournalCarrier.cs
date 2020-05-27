@@ -357,8 +357,8 @@ namespace EliteDangerousCore.JournalEvents
         public string Operation { get; set; }       // BuyPack, SellPack
         public string PackTheme { get; set; }
         public int PackTier { get; set; }
-        public long Cost { get; set; }
-        public long Refund { get; set; }
+        public long? Cost { get; set; }
+        public long? Refund { get; set; }
 
         public JournalCarrierShipPack(JObject evt) : base(evt, JournalTypeEnum.CarrierShipPack)
         {
@@ -366,24 +366,18 @@ namespace EliteDangerousCore.JournalEvents
             Operation = evt["Operation"].Str();
             PackTheme = evt["PackTheme"].Str();
             PackTier = evt["PackTier"].Int();
-            Cost = evt["Cost"].Long();
-            Refund = evt["Refund"].Long();
+            Cost = evt["Cost"].LongNull();
+            Refund = evt["Refund"].LongNull();
         }
 
         public override void FillInformation(out string info, out string detailed)
         {
-            long? ncost = null, nrefund = null;
-            if (Cost > 0)
-                ncost = Cost;
-            if (Refund > 0)
-                nrefund = Refund;
-
             info = BaseUtils.FieldBuilder.Build(
                                                 "", Operation.SplitCapsWordFull(),
                                                 "", PackTheme,
                                                 "Tier:".T(EDTx.JournalCarrier_Tier), PackTier,
-                                                "Cost:; cr;N0".T(EDTx.JournalEntry_Cost), ncost,
-                                                "Refund:; cr;N0".T(EDTx.JournalCarrier_Refund), nrefund
+                                                "Cost:; cr;N0".T(EDTx.JournalEntry_Cost), Cost,
+                                                "Refund:; cr;N0".T(EDTx.JournalCarrier_Refund), Refund
                                                 );
 
             detailed = "";
@@ -402,8 +396,8 @@ namespace EliteDangerousCore.JournalEvents
         public string Operation { get; set; }
         public string PackTheme { get; set; }
         public int PackTier { get; set; }
-        public long Cost { get; set; }
-        public long Refund { get; set; }
+        public long? Cost { get; set; }
+        public long? Refund { get; set; }
 
         public JournalCarrierModulePack(JObject evt) : base(evt, JournalTypeEnum.CarrierModulePack)
         {
@@ -411,23 +405,17 @@ namespace EliteDangerousCore.JournalEvents
             Operation = evt["Operation"].Str();
             PackTheme = evt["PackTheme"].Str();
             PackTier = evt["PackTier"].Int();
-            Cost = evt["Cost"].Long();
-            Refund = evt["Refund"].Long();
+            Cost = evt["Cost"].LongNull();
+            Refund = evt["Refund"].LongNull();
         }
 
         public override void FillInformation(out string info, out string detailed)
         {
-            long? ncost = null, nrefund = null;
-            if (Cost > 0)
-                ncost = Cost;
-            if (Refund > 0)
-                nrefund = Refund;
-
             info = BaseUtils.FieldBuilder.Build("", Operation.SplitCapsWordFull(),
                                                 "", PackTheme,
                                                 "Tier:".T(EDTx.JournalCarrier_Tier), PackTier,
-                                                "Cost:; cr;N0".T(EDTx.JournalEntry_Cost), ncost,
-                                                "Refund:; cr;N0".T(EDTx.JournalCarrier_Refund), nrefund
+                                                "Cost:; cr;N0".T(EDTx.JournalEntry_Cost), Cost,
+                                                "Refund:; cr;N0".T(EDTx.JournalCarrier_Refund), Refund
                                                 );
 
             detailed = "";
@@ -446,9 +434,9 @@ namespace EliteDangerousCore.JournalEvents
         public bool BlackMarket { get; set; }
         public string Commodity { get; set; }
         public string Commodity_Localised { get; set; }
-        public int PurchaseOrder { get; set; }
-        public int SaleOrder { get; set; }
-        public bool CancelTrade { get; set; }
+        public int? PurchaseOrder { get; set; }
+        public int? SaleOrder { get; set; }
+        public bool? CancelTrade { get; set; }
         public int Price { get; set; }
 
         public JournalCarrierTradeOrder(JObject evt) : base(evt, JournalTypeEnum.CarrierTradeOrder)
@@ -457,27 +445,27 @@ namespace EliteDangerousCore.JournalEvents
             BlackMarket = evt["BlackMarket"].Bool();
             Commodity = evt["Commodity"].Str();
             Commodity_Localised =JournalFieldNaming.CheckLocalisation(evt["Commodity_Localised"].Str(),Commodity);
-            PurchaseOrder = evt["PurchaseOrder"].Int();
-            SaleOrder = evt["SaleOrder"].Int();
-            CancelTrade = evt["CancelTrade"].Bool();
+            PurchaseOrder = evt["PurchaseOrder"].IntNull();
+            SaleOrder = evt["SaleOrder"].IntNull();
+            CancelTrade = evt["CancelTrade"].BoolNull();
             Price = evt["Price"].Int();
         }
 
         public override void FillInformation(out string info, out string detailed)
         {
-            if (PurchaseOrder > 0)
+            if (PurchaseOrder != null)
             {
                 info = BaseUtils.FieldBuilder.Build("Purchase:".T(EDTx.JournalCarrier_Purchase), Commodity_Localised,
                                                     "", PurchaseOrder,
                                                     "Cost:; cr;N0".T(EDTx.JournalEntry_Cost), Price);
             }
-            else if ( SaleOrder > 0)
+            else if ( SaleOrder != null)
             {
                 info = BaseUtils.FieldBuilder.Build("Sell:".T(EDTx.JournalCarrier_Sell), Commodity_Localised,
                                                     "", SaleOrder,
                                                     "Cost:; cr;N0".T(EDTx.JournalEntry_Cost), Price);
             }
-            else if ( CancelTrade == true )
+            else if ( CancelTrade != null && CancelTrade.Value == true )
             {
                 info = BaseUtils.FieldBuilder.Build("Cancel Sell of:".T(EDTx.JournalCarrier_CancelSell), Commodity_Localised);
             }

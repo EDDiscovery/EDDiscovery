@@ -86,9 +86,23 @@ namespace EliteDangerousCore
                         StationName = jloc.StationName.Alt(null),       // if empty string, set to null
                         StationType = jloc.StationType.Alt(null),
                     };
-                case JournalTypeEnum.FSDJump:
+
                 case JournalTypeEnum.CarrierJump:
-                    JournalFSDJump jfsd = (je as JournalFSDJump);
+                    var jcj = (je as JournalCarrierJump);
+                    return new HistoryEntryStatus(prev)     // we are docked on a carrier
+                    {
+                        TravelState = TravelStateType.Docked,
+                        MarketId = jcj.MarketID,
+                        BodyID = jcj.BodyID,
+                        BodyType = jcj.BodyType,
+                        BodyName = jcj.Body,
+                        Wanted = jcj.Wanted,
+                        StationName = jcj.StationName.Alt(null),       // if empty string, set to null
+                        StationType = jcj.StationType.Alt(null),
+                    };
+
+                case JournalTypeEnum.FSDJump:
+                    var jfsd = (je as JournalFSDJump);
                     return new HistoryEntryStatus(prev)
                     {
                         TravelState = TravelStateType.Hyperspace,
