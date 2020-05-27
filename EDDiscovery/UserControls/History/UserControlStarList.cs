@@ -502,7 +502,7 @@ namespace EDDiscovery.UserControls
 
                                 //Add Distance - Remember no newline
                                 double distance = sc.DistanceFromArrivalLS;
-                                if (bodyinfo != "") extrainfo = bodyinfo.AppendPrePad(string.Format("({0} ls)".T(EDTx.UserControlStarList_Distance), distance.ToString("n0")), noprefix);
+                                if (bodyinfo != "") extrainfo = bodyinfo.AppendPrePad(string.Format(" ({0} ls)".T(EDTx.UserControlStarList_Distance), distance.ToString("n0")), noprefix);
                             }
                         }
 
