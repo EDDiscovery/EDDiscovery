@@ -55,8 +55,8 @@ namespace EliteDangerousCore
         public bool EDDNSync { get { return journalEntry.SyncedEDDN; } }
         public bool StartMarker { get { return journalEntry.StartMarker; } }
         public bool StopMarker { get { return journalEntry.StopMarker; } }
-        public bool IsFSDJump { get { return EntryType == JournalTypeEnum.FSDJump; } }
-        public bool IsLocOrJump { get { return EntryType == JournalTypeEnum.FSDJump || EntryType == JournalTypeEnum.Location; } }
+        public bool IsFSDJump { get { return EntryType == JournalTypeEnum.FSDJump || EntryType == JournalTypeEnum.CarrierJump; } }
+        public bool IsLocOrJump { get { return EntryType == JournalTypeEnum.FSDJump || EntryType == JournalTypeEnum.Location || EntryType == JournalTypeEnum.CarrierJump; } }
         public bool IsFuelScoop { get { return EntryType == JournalTypeEnum.FuelScoop; } }
         public bool IsShipChange { get { return (EntryType == JournalTypeEnum.LoadGame || EntryType == JournalTypeEnum.Docked) && ShipInformation != null; } }
         public bool IsBetaMessage { get { return journalEntry?.Beta ?? false; } }
@@ -137,7 +137,7 @@ namespace EliteDangerousCore
 
             journalupdate = false;
 
-            if (je.EventTypeID == JournalTypeEnum.Location || je.EventTypeID == JournalTypeEnum.FSDJump)
+            if (je.EventTypeID == JournalTypeEnum.Location || je.EventTypeID == JournalTypeEnum.FSDJump || je.EventTypeID == JournalTypeEnum.CarrierJump)
             {
                 JournalLocOrJump jl = je as JournalLocOrJump;
 

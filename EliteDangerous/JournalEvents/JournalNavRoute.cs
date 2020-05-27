@@ -37,7 +37,7 @@ namespace EliteDangerousCore.JournalEvents
 
                 foreach (JObject jo in route)
                 {
-                    var starsys = jo["StarSystem"];
+                    var starsys = jo["StarSystem"];         // StarSystem was not in initial beta of this
                     var sysaddr = jo["SystemAddress"];
                     var starpos = new EMK.LightGeometry.Vector3(
                         jo["StarPos"][0].Float(),
@@ -46,11 +46,11 @@ namespace EliteDangerousCore.JournalEvents
                     );
                     var starclass = jo["StarClass"].Str();
 
-                    if (sysaddr == null)
+                    if (starsys == null)                    // beta only does not have this
                     {
                         routeents.Add(new NavRouteEntry
                         {
-                            SystemAddress = starsys.Long(),
+                            SystemAddress = sysaddr.Long(),
                             StarPos = starpos,
                             StarClass = starclass
                         });
@@ -58,7 +58,7 @@ namespace EliteDangerousCore.JournalEvents
                     }
                     else
                     {
-                        routeents.Add(new NavRouteEntry
+                        routeents.Add(new NavRouteEntry     // 3.7 will have this
                         {
                             StarSystem = starsys.Str(),
                             SystemAddress = sysaddr.Long(),
@@ -72,7 +72,7 @@ namespace EliteDangerousCore.JournalEvents
             }
         }
 
-        public NavRouteEntry[] Route { get; set; }
+        public NavRouteEntry[] Route { get; set; }      // check route is not null
 
         public bool ReadAdditionalFiles(string directory, bool inhistoryparse, ref JObject jo)
         {
@@ -94,8 +94,17 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = "Nav Route";
-            detailed = $"{Route?.Length ?? 0} jumps";
+            detailed = info = "";
+            if ( Route != null )
+            {
+                foreach( var r in Route )
+                {
+                    string n = r.StarSystem ?? r.SystemAddress.ToStringInvariant();
+                    info = info.AppendPrePad(n, ", ");
+                    detailed = detailed.AppendPrePad(n + " @ " + r.StarPos.X.ToString("N1") + "," + r.StarPos.Y.ToString("N1") + "," + r.StarPos.Z.ToString("N1") + " " + r.StarClass, System.Environment.NewLine);
+                }
+                info = string.Format("{0} jumps: ".T(EDTx.BankAccountClass_InsuranceClaims), Route.Length) + info;
+            }
         }
 
         public class NavRouteEntry

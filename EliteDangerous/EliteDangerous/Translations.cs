@@ -478,6 +478,39 @@ namespace EliteDangerousCore
         JournalCodexEntry_NewEntry, // ;New Entry
         JournalCodexEntry_Traits, // ;Traits
 
+        JournalCarrier_At, 
+        JournalCarrier_Callsign, 
+        JournalCarrier_Name,
+        JournalCarrier_JumpRange, 
+        JournalCarrier_FuelLevel, 
+        JournalCarrier_ToSystem, 
+        JournalCarrier_Body,
+        JournalCarrier_Refund, 
+        JournalCarrier_RefundTime, 
+        JournalCarrier_Deposit, 
+        JournalCarrier_Withdraw,
+        JournalCarrier_Balance, 
+        JournalCarrier_ReserveBalance, 
+        JournalCarrier_AvailableBalance,
+        JournalCarrier_ReservePercent,
+        JournalCarrier_TaxRate,
+        JournalCarrier_Amount, 
+        JournalCarrier_Operation, 
+        JournalCarrier_Tier,
+        JournalCarrier_Purchase,
+        JournalCarrier_Sell,
+        JournalCarrier_CancelSell,
+        JournalCarrier_AllowNotorious,
+        JournalCarrier_Access,
+
+        JournalCarrier_TotalCapacity, 
+        JournalCarrier_Crew,
+        JournalCarrier_Cargo,
+        JournalCarrier_CargoReserved,
+        JournalCarrier_ShipPacks,
+        JournalCarrier_ModulePacks,
+        JournalCarrier_FreeSpace,
+
         CommunityGoal_Title, // Title:
         CommunityGoal_System, // System:
         CommunityGoal_At, // At:

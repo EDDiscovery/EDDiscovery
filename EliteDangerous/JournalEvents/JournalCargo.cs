@@ -294,8 +294,9 @@ namespace EliteDangerousCore.JournalEvents
         public class TransferClass
         {
             public string Type { get; set; }
+            public string Type_Localised { get; set; }
             public int Count { get; set; }
-            public string Direction { get; set; }
+            public string Direction { get; set; }       // tocarrier , toship, tosrv
         }
 
         public TransferClass[] Transfers { get; set; }
@@ -303,19 +304,38 @@ namespace EliteDangerousCore.JournalEvents
         public JournalCargoTransfer(JObject evt) : base(evt, JournalTypeEnum.CargoTransfer)
         {
             Transfers = evt["Transfers"].ToObjectProtected<TransferClass[]>();
+            if (Transfers != null)
+            {
+                foreach (var t in Transfers)
+                    t.Type_Localised = JournalFieldNaming.CheckLocalisation(t.Type_Localised, t.Type);
+            }
         }
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = "Cargo Transfer";
+            info = "";
             detailed = "";
+            if ( Transfers != null )
+            {
+                foreach (var t in Transfers)
+                {
+                    string d = t.Direction.Replace("to", "To ", StringComparison.InvariantCultureIgnoreCase);
+                    info = info.AppendPrePad(t.Type_Localised + "->" + d, ", ");
+                }
+            }
         }
 
         public void UpdateCommodities(MaterialCommoditiesList mc)
         {
-            foreach (var transfer in Transfers)
+            if (Transfers != null)
             {
-                // How to determine if "toship" is Carrier to Ship or SRV to Ship?
+                foreach (var t in Transfers)
+                {
+                    if (t.Direction.Contains("ship", StringComparison.InvariantCultureIgnoreCase))     // toship, with some leaway to allow fd to change their formatting in future
+                        mc.Change(MaterialCommodityData.CatType.Commodity, t.Type, t.Count, 0);
+                    else
+                        mc.Change(MaterialCommodityData.CatType.Commodity, t.Type, -t.Count, 0);
+                }
             }
         }
     }

@@ -87,7 +87,7 @@ namespace EDDiscovery.UserControls
 
         public void NewEntry(HistoryEntry he, HistoryList hl)               // called when a new entry is made.. check to see if its a scan update
         {
-            if (he.EntryType == JournalTypeEnum.Scan || he.EntryType == JournalTypeEnum.FSDJump || he.EntryType == JournalTypeEnum.FSSDiscoveryScan )
+            if (he.EntryType == JournalTypeEnum.Scan || he.IsFSDJump || he.EntryType == JournalTypeEnum.FSSDiscoveryScan )
                 UpdateSystemRows();
         }
 

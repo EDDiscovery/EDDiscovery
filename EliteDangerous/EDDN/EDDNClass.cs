@@ -63,8 +63,7 @@ namespace EliteDangerousCore.EDDN
             DateTime ed22 = new DateTime(2016, 10, 25, 12, 0, 0);
             if ((EntryType == JournalTypeEnum.Scan ||
                  EntryType == JournalTypeEnum.Docked ||
-                 EntryType == JournalTypeEnum.FSDJump ||
-                 EntryType == JournalTypeEnum.Location ||
+                 EntryType == JournalTypeEnum.FSDJump || EntryType == JournalTypeEnum.CarrierJump || EntryType == JournalTypeEnum.Location ||
                  EntryType == JournalTypeEnum.Market ||
                  EntryType == JournalTypeEnum.Shipyard ||
                  EntryType == JournalTypeEnum.SAASignalsFound ||
