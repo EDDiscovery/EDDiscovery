@@ -398,9 +398,11 @@ namespace EDDiscovery.UserControls
 
                     string extrainfo = "";
                     string prefix = Environment.NewLine;
+                    string noprefix = "";
 
                     foreach (StarScan.ScanNode sn in sysnode.Bodies)
                     {
+                        string bodyinfo = "";
                         if (sn.ScanData != null && checkBoxBodyClasses.Checked)
                         {
                             JournalScan sc = sn.ScanData;
@@ -410,33 +412,33 @@ namespace EDDiscovery.UserControls
                             {
                                 // Sagittarius A* is a special body: is the centre of the Milky Way, and the only one which is classified as a Super Massive Black Hole. As far as we know...                                
                                 if (sc.StarTypeID == EDStar.SuperMassiveBlackHole)
-                                    extrainfo = extrainfo.AppendPrePad(string.Format("{0} is a super massive black hole".T(EDTx.UserControlStarList_SMBH), sc.BodyName) , prefix);
-
+                                    bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a super massive black hole".T(EDTx.UserControlStarList_SMBH), sc.BodyName), prefix);
+                                    
                                 // black holes
                                 if (sc.StarTypeID == EDStar.H)
-                                    extrainfo = extrainfo.AppendPrePad(string.Format("{0} is a black hole".T(EDTx.UserControlStarList_BH), sc.BodyName), prefix);
+                                    bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a black hole".T(EDTx.UserControlStarList_BH), sc.BodyName), prefix);
 
                                 // neutron stars
                                 if (sc.StarTypeID == EDStar.N)
-                                    extrainfo = extrainfo.AppendPrePad(string.Format("{0} is a neutron star".T(EDTx.UserControlStarList_NS), sc.BodyName), prefix);
+                                    bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a neutron star".T(EDTx.UserControlStarList_NS), sc.BodyName), prefix);
 
                                 // white dwarf (D, DA, DAB, DAO, DAZ, DAV, DB, DBZ, DBV, DO, DOV, DQ, DC, DCV, DX)
                                 string WhiteDwarf = "White Dwarf";
                                 if (sc.StarTypeText.Contains(WhiteDwarf))
-                                    extrainfo = extrainfo.AppendPrePad(string.Format("{0} is a {1} white dwarf star".T(EDTx.UserControlStarList_WD), sc.BodyName, sc.StarTypeID), prefix);
+                                    bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a {1} white dwarf star".T(EDTx.UserControlStarList_WD), sc.BodyName, sc.StarTypeID), prefix);
 
                                 // wolf rayet (W, WN, WNC, WC, WO)
                                 string WolfRayet = "Wolf-Rayet";
                                 if (sc.StarTypeText.Contains(WolfRayet))
-                                    extrainfo = extrainfo.AppendPrePad(string.Format("{0} is a {1} wolf-rayet star".T(EDTx.UserControlStarList_WR), sc.BodyName, sc.StarTypeID), prefix);
+                                    bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a {1} wolf-rayet star".T(EDTx.UserControlStarList_WR), sc.BodyName, sc.StarTypeID), prefix);
 
                                 // giants. It should recognize all classes of giants.
                                 if (sc.StarTypeText.Contains("Giant"))
-                                    extrainfo = extrainfo.AppendPrePad(string.Format("{0} is a {1}".T(EDTx.UserControlStarList_OTHER), sc.BodyName, sc.StarTypeText), prefix);
+                                    bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a {1}".T(EDTx.UserControlStarList_OTHER), sc.BodyName, sc.StarTypeText), prefix);
 
                                 // rogue planets - not sure if they really exists, but they are in the journal, so...
                                 if (sc.StarTypeID == EDStar.RoguePlanet)
-                                    extrainfo = extrainfo.AppendPrePad(string.Format("{0} is a rogue planet".T(EDTx.UserControlStarList_RP), sc.BodyName), prefix);
+                                    bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a rogue planet".T(EDTx.UserControlStarList_RP), sc.BodyName), prefix);
                             }
 
                             else
@@ -451,22 +453,22 @@ namespace EDDiscovery.UserControls
                                 {
                                     // Earth-like moon
                                     if (sc.PlanetTypeID == EDPlanet.Earthlike_body)
-                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is an earth like moon".T(EDTx.UserControlStarList_ELM), bodynameshort), prefix);
+                                        bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is an earth like moon".T(EDTx.UserControlStarList_ELM), bodynameshort), prefix);
 
                                     // Terraformable water moon
                                     if (sc.Terraformable == true && sc.PlanetTypeID == EDPlanet.Water_world)
-                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is a terraformable water moon".T(EDTx.UserControlStarList_TWM), bodynameshort), prefix);
+                                        bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a terraformable water moon".T(EDTx.UserControlStarList_TWM), bodynameshort), prefix);
                                     // Water moon
                                     if (sc.Terraformable == false && sc.PlanetTypeID == EDPlanet.Water_world)
-                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is a water moon".T(EDTx.UserControlStarList_WM), bodynameshort), prefix);
+                                        bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a water moon".T(EDTx.UserControlStarList_WM), bodynameshort), prefix);
 
                                     // Terraformable moon
                                     if (sc.Terraformable == true && sc.PlanetTypeID != EDPlanet.Water_world)
-                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is a terraformable moon".T(EDTx.UserControlStarList_TM), bodynameshort), prefix);
+                                        bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a terraformable moon".T(EDTx.UserControlStarList_TM), bodynameshort), prefix);
 
                                     // Ammonia moon
                                     if (sc.PlanetTypeID == EDPlanet.Ammonia_world)
-                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is an ammonia moon".T(EDTx.UserControlStarList_AM), bodynameshort), prefix);
+                                        bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is an ammonia moon".T(EDTx.UserControlStarList_AM), bodynameshort), prefix);
                                 }
 
                                 else
@@ -475,28 +477,32 @@ namespace EDDiscovery.UserControls
                                 {
                                     // Earth Like planet
                                     if (sc.PlanetTypeID == EDPlanet.Earthlike_body)
-                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is an earth like planet".T(EDTx.UserControlStarList_ELP), bodynameshort), prefix);
+                                        bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is an earth like planet".T(EDTx.UserControlStarList_ELP), bodynameshort), prefix);
 
                                     // Terraformable water world
                                     if (sc.PlanetTypeID == EDPlanet.Water_world && sc.Terraformable == true)
-                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is a terraformable water world".T(EDTx.UserControlStarList_TWW), bodynameshort), prefix);
+                                        bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a terraformable water world".T(EDTx.UserControlStarList_TWW), bodynameshort), prefix);
                                     // Water world
                                     if (sc.PlanetTypeID == EDPlanet.Water_world && sc.Terraformable == false)
-                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is a water world".T(EDTx.UserControlStarList_WW), bodynameshort), prefix);
+                                        bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a water world".T(EDTx.UserControlStarList_WW), bodynameshort), prefix);
 
                                     // Terraformable planet
                                     if (sc.Terraformable == true && sc.PlanetTypeID != EDPlanet.Water_world)
-                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is a terraformable planet".T(EDTx.UserControlStarList_TP), bodynameshort), prefix);
+                                        bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a terraformable planet".T(EDTx.UserControlStarList_TP), bodynameshort), prefix);
 
                                     // Ammonia world
                                     if (sc.PlanetTypeID == EDPlanet.Ammonia_world)
-                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is an ammonia world".T(EDTx.UserControlStarList_AW), bodynameshort), prefix);
+                                        bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is an ammonia world".T(EDTx.UserControlStarList_AW), bodynameshort), prefix);
                                 }
 
                                 if ( sn.Signals != null )
                                 {
-                                    extrainfo = extrainfo.AppendPrePad(string.Format("{0} has signals".T(EDTx.UserControlStarList_Signals), bodynameshort), prefix);
+                                    bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} has signals".T(EDTx.UserControlStarList_Signals), bodynameshort), prefix);
                                 }
+
+                                //Add Distance - Remember no newline
+                                double distance = sc.DistanceFromArrivalLS;
+                                if (bodyinfo != "") extrainfo = bodyinfo.AppendPrePad(string.Format("({0} ls)".T(EDTx.UserControlStarList_Distance), distance.ToString("n0")), noprefix);
                             }
                         }
 
