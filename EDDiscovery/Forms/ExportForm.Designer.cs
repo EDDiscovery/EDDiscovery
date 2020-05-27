@@ -44,6 +44,8 @@
             this.label_index = new System.Windows.Forms.Label();
             this.panelOuter = new System.Windows.Forms.Panel();
             this.panelTop = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.panelBottom.SuspendLayout();
             this.panelOuter.SuspendLayout();
             this.panelTop.SuspendLayout();
@@ -171,8 +173,8 @@
             this.customDateTimePickerFrom.BorderColor = System.Drawing.Color.Transparent;
             this.customDateTimePickerFrom.BorderColorScaling = 0.5F;
             this.customDateTimePickerFrom.Checked = false;
-            this.customDateTimePickerFrom.CustomFormat = "dd MMMM yyyy";
-            this.customDateTimePickerFrom.Format = System.Windows.Forms.DateTimePickerFormat.Long;
+            this.customDateTimePickerFrom.CustomFormat = "dd MMMM yyyy    HH:mm:ss";
+            this.customDateTimePickerFrom.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.customDateTimePickerFrom.Location = new System.Drawing.Point(18, 40);
             this.customDateTimePickerFrom.Name = "customDateTimePickerFrom";
             this.customDateTimePickerFrom.SelectedColor = System.Drawing.Color.Yellow;
@@ -188,8 +190,8 @@
             this.customDateTimePickerTo.BorderColor = System.Drawing.Color.Transparent;
             this.customDateTimePickerTo.BorderColorScaling = 0.5F;
             this.customDateTimePickerTo.Checked = false;
-            this.customDateTimePickerTo.CustomFormat = "dd MMMM yyyy";
-            this.customDateTimePickerTo.Format = System.Windows.Forms.DateTimePickerFormat.Long;
+            this.customDateTimePickerTo.CustomFormat = "dd MMMM yyyy    HH:mm:ss";
+            this.customDateTimePickerTo.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.customDateTimePickerTo.Location = new System.Drawing.Point(18, 73);
             this.customDateTimePickerTo.Name = "customDateTimePickerTo";
             this.customDateTimePickerTo.SelectedColor = System.Drawing.Color.Yellow;
@@ -280,6 +282,8 @@
             // panelOuter
             // 
             this.panelOuter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panelOuter.Controls.Add(this.label2);
+            this.panelOuter.Controls.Add(this.label1);
             this.panelOuter.Controls.Add(this.comboBoxCustomExportType);
             this.panelOuter.Controls.Add(this.panelBottom);
             this.panelOuter.Controls.Add(this.customDateTimePickerFrom);
@@ -301,6 +305,24 @@
             this.panelTop.Size = new System.Drawing.Size(378, 32);
             this.panelTop.TabIndex = 32;
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(297, 50);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(29, 13);
+            this.label1.TabIndex = 5;
+            this.label1.Text = "UTC";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(297, 83);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(29, 13);
+            this.label2.TabIndex = 5;
+            this.label2.Text = "UTC";
+            // 
             // ExportForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -316,6 +338,7 @@
             this.panelBottom.ResumeLayout(false);
             this.panelBottom.PerformLayout();
             this.panelOuter.ResumeLayout(false);
+            this.panelOuter.PerformLayout();
             this.panelTop.ResumeLayout(false);
             this.panelTop.PerformLayout();
             this.ResumeLayout(false);
@@ -340,5 +363,7 @@
         private ExtendedControls.ExtButton buttonExport;
         private System.Windows.Forms.Panel panelOuter;
         private System.Windows.Forms.Panel panelTop;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label1;
     }
 }

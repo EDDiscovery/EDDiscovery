@@ -14,6 +14,7 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
@@ -23,20 +24,56 @@ namespace EliteDangerousCore.JournalEvents
     {
         public JournalRepair(JObject evt ) : base(evt, JournalTypeEnum.Repair)
         {
-            ItemFD = JournalFieldNaming.NormaliseFDItemName(evt["Item"].Str());
-            Item = JournalFieldNaming.GetBetterItemName(ItemFD);
-            ItemLocalised = JournalFieldNaming.CheckLocalisation(evt["Item_Localised"].Str(),Item);
+            if (evt["Items"] is JArray)
+            {
+                Items = new List<RepairItem>();
+
+                ItemLocalised = Item = ItemFD = "";
+
+                foreach (var jitem in evt["Items"])
+                {
+                    var itemfd = JournalFieldNaming.NormaliseFDItemName(jitem.Str());
+                    var item = JournalFieldNaming.GetBetterItemName(itemfd);
+
+                    var repairitem = new RepairItem
+                    {
+                        ItemFD = itemfd,
+                        Item = item,
+                        ItemLocalised = item.SplitCapsWordFull()
+                    };
+
+                    ItemLocalised = ItemLocalised.AppendPrePad(repairitem.ItemLocalised, ", "); // for the voice pack, keep this going
+ 
+                    Items.Add(repairitem);
+                }
+            }
+            else
+            {
+                ItemFD = JournalFieldNaming.NormaliseFDItemName(evt["Item"].Str());
+                Item = JournalFieldNaming.GetBetterItemName(ItemFD);
+                ItemLocalised = JournalFieldNaming.CheckLocalisation(evt["Item_Localised"].Str(),Item);
+            }
+
             Cost = evt["Cost"].Long();
         }
 
-        public string ItemFD { get; set; }
+        public class RepairItem
+        {
+            public string Item { get; set; }
+            public string ItemFD { get; set; }
+            public string ItemLocalised { get; set; }
+        }
+
+        public string ItemFD { get; set; }      // older style ones, OR first entry of new ones
         public string Item { get; set; }
         public string ItemLocalised { get; set; }
+
+        public List<RepairItem> Items { get; set; }
         public long Cost { get; set; }
 
         public void Ledger(Ledger mcl)
         {
-            mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Item, -Cost);
+            mcl.AddEvent(Id, EventTimeUTC, EventTypeID, ItemLocalised, -Cost);
         }
 
         public override void FillInformation(out string info, out string detailed) 

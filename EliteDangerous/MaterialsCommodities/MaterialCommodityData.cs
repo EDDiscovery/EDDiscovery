@@ -574,6 +574,7 @@ namespace EliteDangerousCore
 
             AddCommodity("Rockforth Fertiliser", ItemType.Chemicals, "RockforthFertiliser");
             AddCommodity("Agronomic Treatment", ItemType.Chemicals, "AgronomicTreatment");
+            AddCommodity("Tritium", ItemType.Chemicals, "Tritium");
             AddCommodityList("Explosives;Hydrogen Fuel;Hydrogen Peroxide;Liquid Oxygen;Mineral Oil;Nerve Agents;Pesticides;Surface Stabilisers;Synthetic Reagents;Water", ItemType.Chemicals);
 
             ItemType ci = ItemType.ConsumerItems;
@@ -685,6 +686,8 @@ namespace EliteDangerousCore
             AddCommodity("Mollusc Mycelium", sv, "M3_TissueSample_Mycelium");
             AddCommodity("Mollusc Spores", sv, "M3_TissueSample_Spores");
             AddCommodity("Pod Shell Tissue", sv, "S6_TissueSample_Coenosarc");
+            AddCommodity("Pod Mesoglea", sv, "S6_TissueSample_Mesoglea");
+            AddCommodity("Pod Outer Tissue", sv, "S6_TissueSample_Cells");
 
             ItemType nc = ItemType.Narcotics;
             AddCommodity("Narcotics", nc, "BasicNarcotics");

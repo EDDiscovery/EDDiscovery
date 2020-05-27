@@ -184,7 +184,7 @@ namespace EliteDangerousCore
                     resurrect = true;
                     ents.Add(he);
                 }
-                else if ((resurrect && he.EntryType == JournalTypeEnum.Location) || he.EntryType == JournalTypeEnum.FSDJump)
+                else if ((resurrect && he.EntryType == JournalTypeEnum.Location) || he.EntryType == JournalTypeEnum.FSDJump || he.EntryType == JournalTypeEnum.CarrierJump)
                 {
                     resurrect = false;
                     ents.Add(he);
@@ -635,7 +635,7 @@ namespace EliteDangerousCore
 
                 foreach (HistoryEntry he in alsomatching)       // list of systems in historylist using the same system object
                 {
-                    bool updatepos = (he.EntryType == JournalTypeEnum.FSDJump || he.EntryType == JournalTypeEnum.Location) && updatesyspos;
+                    bool updatepos = he.IsLocOrJump && updatesyspos;
 
                     if (updatepos || updateedsmid)
                         JournalEntry.UpdateEDSMIDPosJump(he.Journalid, edsmsys, updatepos, -1, uconn, utn);  // update pos and edsmid, jdist not updated

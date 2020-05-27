@@ -43,6 +43,8 @@ namespace EliteDangerousCore.JournalEvents
 
             if (Target != null)
             {
+                TargetLocalised = JournalFieldNaming.CheckLocalisation(evt["Target_Localised"].Str(), Target);  // 3.7 added a localised target field, so try it
+
                 var sp = ShipModuleData.Instance.GetShipProperties(Target);
                 if (sp != null)
                 {

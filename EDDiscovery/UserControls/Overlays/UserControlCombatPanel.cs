@@ -473,7 +473,7 @@ namespace EDDiscovery.UserControls
             JournalTypeEnum.Died,
             JournalTypeEnum.FighterDestroyed,
             JournalTypeEnum.SupercruiseEntry,
-            JournalTypeEnum.FSDJump,
+            JournalTypeEnum.FSDJump,             JournalTypeEnum.CarrierJump,
             JournalTypeEnum.Docked,
             JournalTypeEnum.LaunchSRV,
             JournalTypeEnum.LaunchFighter,

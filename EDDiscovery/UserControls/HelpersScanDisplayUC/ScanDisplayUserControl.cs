@@ -175,7 +175,12 @@ namespace EDDiscovery.UserControls
                                     leftmiddle = new Point(firstcolumn.X, maxitemspos.Y + planetspacery + planetsize.Height / 2); // move to left at maxy+space+h/2
                                 }
 
-                                string appendlabel = Environment.NewLine + $"{lastbelt.BeltData.OuterRad / JournalScan.oneLS_m:N1}ls";
+                                string appendlabel = "";
+
+                                if (lastbelt.BeltData != null)
+                                {
+                                    appendlabel.AppendPrePad($"{lastbelt.BeltData.OuterRad / JournalScan.oneLS_m:N1}ls", Environment.NewLine);
+                                }
 
                                 appendlabel = appendlabel.AppendPrePad("" + lastbelt.ScanData?.BodyID, Environment.NewLine);
 

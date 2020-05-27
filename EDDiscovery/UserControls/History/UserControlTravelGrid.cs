@@ -463,7 +463,7 @@ namespace EDDiscovery.UserControls
 
             rw.Tag = item;  //tag on row
 
-            rw.DefaultCellStyle.ForeColor = (item.System.HasCoordinate || item.EntryType != JournalTypeEnum.FSDJump) ? discoveryform.theme.VisitedSystemColor : discoveryform.theme.NonVisitedSystemColor;
+            rw.DefaultCellStyle.ForeColor = (item.System.HasCoordinate || !item.IsFSDJump) ? discoveryform.theme.VisitedSystemColor : discoveryform.theme.NonVisitedSystemColor;
 
             string tip = item.EventSummary + Environment.NewLine + EventDescription + Environment.NewLine + EventDetailedInfo;
 
