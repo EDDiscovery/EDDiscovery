@@ -37,8 +37,8 @@ namespace EliteDangerousCore.JournalEvents
 
                 foreach (JObject jo in route)
                 {
-                    var starsys = jo["StarSystem"];         // StarSystem was not in initial beta of this
-                    var sysaddr = jo["SystemAddress"];
+                    var starsys = jo["StarSystem"];         // beta: address, 3.7 : StarSystem 
+                    var sysaddr = jo["SystemAddress"];      // beta: not present, 3.7 address
                     var starpos = new EMK.LightGeometry.Vector3(
                         jo["StarPos"][0].Float(),
                         jo["StarPos"][1].Float(),
@@ -46,11 +46,11 @@ namespace EliteDangerousCore.JournalEvents
                     );
                     var starclass = jo["StarClass"].Str();
 
-                    if (starsys == null)                    // beta only does not have this
+                    if (sysaddr == null)                    // if no SystemAddress, its beta
                     {
                         routeents.Add(new NavRouteEntry
                         {
-                            SystemAddress = sysaddr.Long(),
+                            SystemAddress = starsys.Long(), // yes the beta had it in there
                             StarPos = starpos,
                             StarClass = starclass
                         });
