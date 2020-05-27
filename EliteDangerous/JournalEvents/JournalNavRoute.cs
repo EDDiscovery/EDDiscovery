@@ -37,16 +37,35 @@ namespace EliteDangerousCore.JournalEvents
 
                 foreach (JObject jo in route)
                 {
-                    routeents.Add(new NavRouteEntry
+                    var starsys = jo["StarSystem"];
+                    var sysaddr = jo["SystemAddress"];
+                    var starpos = new EMK.LightGeometry.Vector3(
+                        jo["StarPos"][0].Float(),
+                        jo["StarPos"][1].Float(),
+                        jo["StarPos"][2].Float()
+                    );
+                    var starclass = jo["StarClass"].Str();
+
+                    if (sysaddr == null)
                     {
-                        StarSystem = jo["StarSystem"].Long(),
-                        StarPos = new EMK.LightGeometry.Vector3(
-                            jo["StarPos"][0].Float(),
-                            jo["StarPos"][1].Float(),
-                            jo["StarPos"][2].Float()
-                        ),
-                        StarClass = jo["StarClass"].Str()
-                    });
+                        routeents.Add(new NavRouteEntry
+                        {
+                            SystemAddress = starsys.Long(),
+                            StarPos = starpos,
+                            StarClass = starclass
+                        });
+
+                    }
+                    else
+                    {
+                        routeents.Add(new NavRouteEntry
+                        {
+                            StarSystem = starsys.Str(),
+                            SystemAddress = sysaddr.Long(),
+                            StarPos = starpos,
+                            StarClass = starclass
+                        });
+                    }
                 }
 
                 Route = routeents.ToArray();
@@ -81,7 +100,8 @@ namespace EliteDangerousCore.JournalEvents
 
         public class NavRouteEntry
         {
-            public long StarSystem { get; set; }
+            public string StarSystem { get; set; }
+            public long SystemAddress { get; set; }
             public EMK.LightGeometry.Vector3 StarPos { get; set; }
             public string StarClass { get; set; }
         }
