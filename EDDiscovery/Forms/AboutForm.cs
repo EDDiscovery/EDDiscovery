@@ -47,6 +47,8 @@ namespace EDDiscovery.Forms
             panel_close.Visible = !winborder;
 
             panelLogo.Tag = Resources.URLProjectGithub;
+
+            labelDevelopersEnum.Text = Properties.Resources.Credits;
         }
 
         private void AboutForm_Load(object sender, EventArgs e)

@@ -44,7 +44,6 @@ namespace EDDiscovery.Forms
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AboutForm));
             this.labelVersion = new System.Windows.Forms.Label();
             this.labelDevelopersEnum = new System.Windows.Forms.Label();
             this.buttonOK = new ExtendedControls.ExtButton();
@@ -88,9 +87,9 @@ namespace EDDiscovery.Forms
             this.labelDevelopersEnum.BackColor = System.Drawing.Color.Transparent;
             this.labelDevelopersEnum.Location = new System.Drawing.Point(681, 57);
             this.labelDevelopersEnum.Name = "labelDevelopersEnum";
-            this.labelDevelopersEnum.Size = new System.Drawing.Size(267, 334);
+            this.labelDevelopersEnum.Size = new System.Drawing.Size(267, 372);
             this.labelDevelopersEnum.TabIndex = 3;
-            this.labelDevelopersEnum.Text = resources.GetString("labelDevelopersEnum.Text");
+            this.labelDevelopersEnum.Text = "See Resource File";
             // 
             // buttonOK
             // 
@@ -147,9 +146,9 @@ namespace EDDiscovery.Forms
             this.panelLinks.Controls.Add(this.linkLabelEDDB);
             this.panelLinks.Controls.Add(this.linkLabelEliteDangerous);
             this.panelLinks.Controls.Add(this.labelLinks);
-            this.panelLinks.Location = new System.Drawing.Point(681, 389);
+            this.panelLinks.Location = new System.Drawing.Point(681, 432);
             this.panelLinks.Name = "panelLinks";
-            this.panelLinks.Size = new System.Drawing.Size(267, 249);
+            this.panelLinks.Size = new System.Drawing.Size(267, 206);
             this.panelLinks.TabIndex = 5;
             // 
             // linkLabelDeveloperChat
