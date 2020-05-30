@@ -495,15 +495,17 @@ namespace EDDiscovery.UserControls
                                         bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is an ammonia world".T(EDTx.UserControlStarList_AW), bodynameshort), prefix);
                                 }
 
-                                //Add Distance - Remember no newline
-                                double distance = sc.DistanceFromArrivalLS;
-                                if (bodyinfo != "") {
-                                    bodyinfo = bodyinfo.AppendPrePad(string.Format(" ({0} ls)".T(EDTx.UserControlStarList_Distance), distance.ToString("n0")), noprefix);
-                                    extrainfo = extrainfo.AppendPrePad(bodyinfo, prefix);
-                                }
                                 if (sn.Signals != null)
                                 {
-                                    extrainfo = extrainfo.AppendPrePad(string.Format("{0} has signals".T(EDTx.UserControlStarList_Signals), bodynameshort), prefix);
+                                    bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} has signals".T(EDTx.UserControlStarList_Signals), bodynameshort), prefix);
+                                }
+
+                                //Add Distance - Remember no newline
+                                if (bodyinfo != "")
+                                {
+                                    double distance = sc.DistanceFromArrivalLS;
+                                    bodyinfo = bodyinfo.AppendPrePad(string.Format(" ({0} ls)".T(EDTx.UserControlStarList_Distance), distance.ToString("n0")), noprefix);
+                                    extrainfo = extrainfo.AppendPrePad(bodyinfo, prefix);
                                 }
                             }
                         }
