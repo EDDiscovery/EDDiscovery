@@ -286,6 +286,9 @@ namespace EliteDangerousCore
 
         public HistoryEntry GetLastHistoryEntry(Predicate<HistoryEntry> where, HistoryEntry frominclusive)
         {
+            if (frominclusive is null)
+                return GetLastHistoryEntry(where);
+
             int hepos = historylist.FindIndex(x => x.Journalid == frominclusive.Journalid);
             if (hepos != -1)
                 hepos = historylist.FindLastIndex(hepos, where);

@@ -100,16 +100,16 @@ namespace EDDiscovery.UserControls
         }
 
         public override void InitialDisplay() =>
-            Stats(uctg.GetCurrentHistoryEntry, discoveryform.history,true);
+            Stats(uctg.GetCurrentHistoryEntry, discoveryform.history, true);
 
         public void TravelGridChanged(HistoryEntry he, HistoryList hl, bool selectedEntry) =>
-            Stats(he, hl,false);
+            Stats(he, hl, false);
 
         private void AddNewEntry(HistoryEntry he, HistoryList hl) =>
-            Stats(he, hl,false);
+            Stats(he, hl, false);
 
         private void tabControlCustomStats_SelectedIndexChanged(object sender, EventArgs e) =>
-            Stats(last_he, last_hl,true);
+            Stats(last_he, last_hl, true);
 
         private HistoryEntry last_he = null;
         private HistoryList last_hl = null;
@@ -542,7 +542,7 @@ namespace EDDiscovery.UserControls
         {
             dataGridViewTravel.Rows.Clear();        // reset all
             dataGridViewTravel.Columns.Clear();
-            Stats(last_he, last_hl,true);
+            Stats(last_he, last_hl, true);
         }
 
         #endregion
@@ -767,7 +767,7 @@ namespace EDDiscovery.UserControls
             if (collapseExpand.Length < 13)
                 collapseExpand += new string('Y', 13);
 
-            HistoryEntry hestats = (he != null) ? hl.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.Statistics, he) : hl.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.Statistics);
+            HistoryEntry hestats = hl.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.Statistics, he);
 
             JournalStatistics stats = hestats?.journalEntry as JournalStatistics;
 
