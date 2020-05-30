@@ -473,6 +473,7 @@ namespace EDDiscovery
         UserControlStarList_FSD, // This system has materials for FSD boost:
         UserControlStarList_NoEDSM, // System could not be found - has not been synched or EDSM is unavailable
         UserControlStarList_Signals, // {0} has signals
+        UserControlStarList_Distance, // {0} ls
 
         UserControlCaptainsLog_Diary, // Diary
         UserControlCaptainsLog_Entries, // Entries
