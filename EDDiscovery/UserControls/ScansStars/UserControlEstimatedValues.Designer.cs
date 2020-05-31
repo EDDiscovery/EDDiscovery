@@ -155,6 +155,7 @@ namespace EDDiscovery.UserControls
             this.Mapped.HeaderText = "Mapped";
             this.Mapped.Name = "Mapped";
             this.Mapped.Width = 52;
+            this.Mapped.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
             // 
             // EstValue
             // 
