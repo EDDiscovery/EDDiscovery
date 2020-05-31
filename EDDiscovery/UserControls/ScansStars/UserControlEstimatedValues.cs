@@ -17,10 +17,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using EliteDangerousCore;
-using System.Windows.Documents;
-using System.Windows.Controls;
-using System.Windows;
-using System.Drawing;
+
 
 namespace EDDiscovery.UserControls
 {
@@ -46,6 +43,7 @@ namespace EDDiscovery.UserControls
 
             checkBoxEDSM.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbEDSM, false);
             checkBoxEDSM.CheckedChanged += CheckBoxEDSM_CheckedChanged;
+
         }
 
         public override void LoadLayout()
