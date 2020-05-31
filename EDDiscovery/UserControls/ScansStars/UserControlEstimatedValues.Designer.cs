@@ -48,15 +48,15 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel2 = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.vScrollBarCustom2 = new ExtendedControls.ExtScrollBar();
             this.dataGridViewEstimatedValues = new System.Windows.Forms.DataGridView();
+            this.BodyName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.BodyType = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.EDSM = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Mapped = new System.Windows.Forms.DataGridViewImageColumn();
+            this.EstValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.checkBoxEDSM = new ExtendedControls.ExtCheckBox();
             this.extPanelRollUp = new ExtendedControls.ExtPanelRollUp();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.BodyName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.EDSM = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Mapped = new System.Windows.Forms.DataGridViewImageColumn();
-            this.EstValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataViewScrollerPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewEstimatedValues)).BeginInit();
             this.flowLayoutPanel1.SuspendLayout();
@@ -126,11 +126,42 @@ namespace EDDiscovery.UserControls
             this.dataGridViewEstimatedValues.Size = new System.Drawing.Size(556, 542);
             this.dataGridViewEstimatedValues.TabIndex = 23;
             // 
+            // BodyName
+            // 
+            this.BodyName.FillWeight = 57.69881F;
+            this.BodyName.HeaderText = "Body Name";
+            this.BodyName.MinimumWidth = 50;
+            this.BodyName.Name = "BodyName";
+            // 
             // BodyType
             // 
             this.BodyType.FillWeight = 57F;
             this.BodyType.HeaderText = "Body Type";
             this.BodyType.Name = "BodyType";
+            // 
+            // EDSM
+            // 
+            this.EDSM.FillWeight = 16.48537F;
+            this.EDSM.HeaderText = "EDSM";
+            this.EDSM.Name = "EDSM";
+            // 
+            // Mapped
+            // 
+            this.Mapped.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.NullValue = null;
+            this.Mapped.DefaultCellStyle = dataGridViewCellStyle1;
+            this.Mapped.FillWeight = 30F;
+            this.Mapped.HeaderText = "Mapped";
+            this.Mapped.Name = "Mapped";
+            this.Mapped.Width = 52;
+            // 
+            // EstValue
+            // 
+            this.EstValue.FillWeight = 16.48537F;
+            this.EstValue.HeaderText = "Est Value";
+            this.EstValue.MinimumWidth = 50;
+            this.EstValue.Name = "EstValue";
             // 
             // flowLayoutPanel1
             // 
@@ -193,37 +224,6 @@ namespace EDDiscovery.UserControls
             // toolTip
             // 
             this.toolTip.ShowAlways = true;
-            // 
-            // BodyName
-            // 
-            this.BodyName.FillWeight = 57.69881F;
-            this.BodyName.HeaderText = "Body Name";
-            this.BodyName.MinimumWidth = 50;
-            this.BodyName.Name = "BodyName";
-            // 
-            // EDSM
-            // 
-            this.EDSM.FillWeight = 16.48537F;
-            this.EDSM.HeaderText = "EDSM";
-            this.EDSM.Name = "EDSM";
-            // 
-            // Mapped
-            // 
-            this.Mapped.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle1.NullValue = null;
-            this.Mapped.DefaultCellStyle = dataGridViewCellStyle1;
-            this.Mapped.FillWeight = 30F;
-            this.Mapped.HeaderText = "Mapped";
-            this.Mapped.Name = "Mapped";
-            this.Mapped.Width = 52;
-            // 
-            // EstValue
-            // 
-            this.EstValue.FillWeight = 16.48537F;
-            this.EstValue.HeaderText = "Est Value";
-            this.EstValue.MinimumWidth = 50;
-            this.EstValue.Name = "EstValue";
             // 
             // UserControlEstimatedValues
             // 
