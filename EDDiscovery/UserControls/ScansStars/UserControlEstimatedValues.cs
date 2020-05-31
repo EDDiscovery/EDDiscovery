@@ -17,6 +17,10 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using EliteDangerousCore;
+using System.Windows.Documents;
+using System.Windows.Controls;
+using System.Windows;
+using System.Drawing;
 
 namespace EDDiscovery.UserControls
 {
@@ -25,6 +29,7 @@ namespace EDDiscovery.UserControls
         private HistoryEntry last_he = null;
 
         private string DbEDSM { get { return DBName("EstimatedValueEDSM"); } }
+
 
         public UserControlEstimatedValues()
         {
@@ -105,7 +110,7 @@ namespace EDDiscovery.UserControls
                 {
                     if ( bodies.ScanData != null && bodies.ScanData.BodyName != null && (checkBoxEDSM.Checked || !bodies.ScanData.IsEDSMBody))     // if check edsm, or not edsm body, with scandata
                     {
-                        dataGridViewEstimatedValues.Rows.Add(new object[] { bodies.ScanData.BodyName, bodies.ScanData.IsEDSMBody ? "EDSM" : "", bodies.ScanData.EstimatedValue });
+                         dataGridViewEstimatedValues.Rows.Add(new object[] { bodies.ScanData.BodyName, bodies.ScanData.PlanetClass, bodies.ScanData.IsEDSMBody ? "EDSM" : "", (bodies.IsMapped? Icons.Controls.Scan_Bodies_Mapped : null), bodies.ScanData.EstimatedValue });
                     }
                 }
                 dataGridViewEstimatedValues.Sort(this.EstValue, ListSortDirection.Descending);
