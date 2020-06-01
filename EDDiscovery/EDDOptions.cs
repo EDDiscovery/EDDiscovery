@@ -136,6 +136,7 @@ namespace EDDiscovery
                     case "backgroundpriority": BackgroundPriority = true; break;
                     case "nobackgroundpriority": BackgroundPriority = false; break;
                     case "forcetls12": ForceTLS12 = true; break;
+                    case "disabletimedisplay": DisableTimeDisplay = true; break;
                     default:
                         System.Diagnostics.Debug.WriteLine($"Unrecognized option -{opt}");
                         break;
@@ -203,6 +204,7 @@ namespace EDDiscovery
         public bool LowPriority { get; set; }
         public bool BackgroundPriority { get; set; }
         public bool ForceTLS12 { get; set; }
+        public bool DisableTimeDisplay { get; set; }
         public string OutputEventHelp { get; set; }
 
         public string SubAppDirectory(string subfolder)     // ensures its there.. name without \ slashes

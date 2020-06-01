@@ -488,10 +488,13 @@ namespace EDDiscovery
                 File.WriteAllText(EDDOptions.Instance.OutputEventHelp, s);
             }
 
-            datetimetimer = new Timer();
-            datetimetimer.Interval = 1000;
-            datetimetimer.Tick += (sv, ev) => { DateTime gameutc = DateTime.UtcNow.AddYears(1286); labelGameDateTime.Text = gameutc.ToShortDateString() + " " + gameutc.ToShortTimeString(); };
-            datetimetimer.Start();
+            if (!EDDOptions.Instance.DisableTimeDisplay)
+            {
+                datetimetimer = new Timer();
+                datetimetimer.Interval = 1000;
+                datetimetimer.Tick += (sv, ev) => { DateTime gameutc = DateTime.UtcNow.AddYears(1286); labelGameDateTime.Text = gameutc.ToShortDateString() + " " + gameutc.ToShortTimeString(); };
+                datetimetimer.Start();
+            }
         }
 
         List<Notifications.Notification> popupnotificationlist = new List<Notifications.Notification>();
