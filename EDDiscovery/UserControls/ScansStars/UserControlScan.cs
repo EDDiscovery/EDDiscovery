@@ -370,7 +370,7 @@ namespace EDDiscovery.UserControls
                 DrawSystem();
             };
 
-            EDDTheme.Instance.ApplyStd(dropdown);
+            EDDTheme.Instance.ApplyStd(dropdown,true);
 
             dropdown.Show(this.FindForm());
         }

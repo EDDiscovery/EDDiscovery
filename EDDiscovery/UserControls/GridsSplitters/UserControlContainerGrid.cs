@@ -345,7 +345,7 @@ namespace EDDiscovery.UserControls
                 AssignTHC();
             };
 
-            discoveryform.theme.ApplyStd(popoutdropdown);
+            discoveryform.theme.ApplyStd(popoutdropdown,true);
             popoutdropdown.SelectionBackColor = discoveryform.theme.ButtonBackColor;
             popoutdropdown.Show(this);
         }

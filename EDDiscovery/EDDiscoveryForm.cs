@@ -1650,7 +1650,7 @@ namespace EDDiscovery
                 PopOuts.PopOut(pids[popoutdropdown.SelectedIndex]);
             };
 
-            theme.ApplyStd(popoutdropdown);
+            theme.ApplyStd(popoutdropdown,true);
             popoutdropdown.SelectionBackColor = theme.ButtonBackColor;
             popoutdropdown.Show(this);
         }
