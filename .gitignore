@@ -8,6 +8,7 @@ packages
 /Installer/EDDiscovery-cache
 /Installer/AnyCPU_DebugSetupFiles
 /Installer/EDDiscovery
+/Installer/installers
 */*Secrets.config
 /EDDiscovery.v12.suo
 *.ncrunch*
