@@ -178,6 +178,8 @@ namespace EDDiscovery.Icons
         public static Image Scan_ShowMoons { get { return IconSet.GetIcon("Controls.Scan.ShowMoons"); } }
         public static Image Scan_ShowOverlays { get { return IconSet.GetIcon("Controls.Scan.ShowOverlays"); } }
         public static Image Scan_ShowRareMaterials { get { return IconSet.GetIcon("Controls.Scan.ShowRareMaterials"); } }
+        public static Image Scan_SizeHuge { get { return IconSet.GetIcon("Controls.Scan.SizeHuge"); } }
+        public static Image Scan_SizeVeryLarge { get { return IconSet.GetIcon("Controls.Scan.SizeVeryLarge"); } }
         public static Image Scan_SizeLarge { get { return IconSet.GetIcon("Controls.Scan.SizeLarge"); } }
         public static Image Scan_SizeMedium { get { return IconSet.GetIcon("Controls.Scan.SizeMedium"); } }
         public static Image Scan_SizeSmall { get { return IconSet.GetIcon("Controls.Scan.SizeSmall"); } }

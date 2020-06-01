@@ -346,7 +346,10 @@ namespace EDDiscovery.UserControls
         {
             dropdown = new ExtListBoxForm("", true);
 
-            Image[] imagelist = new Image[] { global::EDDiscovery.Icons.Controls.Scan_SizeLarge ,
+            Image[] imagelist = new Image[] {
+                global::EDDiscovery.Icons.Controls.Scan_SizeHuge ,
+                global::EDDiscovery.Icons.Controls.Scan_SizeVeryLarge ,
+                global::EDDiscovery.Icons.Controls.Scan_SizeLarge ,
                 global::EDDiscovery.Icons.Controls.Scan_SizeMedium ,
                 global::EDDiscovery.Icons.Controls.Scan_SizeSmall ,
                 global::EDDiscovery.Icons.Controls.Scan_SizeTiny ,
@@ -354,7 +357,7 @@ namespace EDDiscovery.UserControls
                 global::EDDiscovery.Icons.Controls.Scan_SizeMinuscule ,
             };
 
-            string[] textlist = new string[] { "128", "96", "64", "48", "32", "16" };
+            string[] textlist = new string[] { "256", "192", "128", "96", "64", "48", "32", "16" };
 
             dropdown.Items = textlist.ToList();
             dropdown.ImageItems = imagelist.ToList();
@@ -374,7 +377,11 @@ namespace EDDiscovery.UserControls
 
         private void SetSizeImage(int size)
         {
-            if (size == 128)
+            if (size == 256)
+                buttonSize.Image = global::EDDiscovery.Icons.Controls.Scan_SizeHuge;
+            else if (size == 192)
+                buttonSize.Image = global::EDDiscovery.Icons.Controls.Scan_SizeVeryLarge;
+            else if (size == 128)
                 buttonSize.Image = global::EDDiscovery.Icons.Controls.Scan_SizeLarge;
             else if (size == 96)
                 buttonSize.Image = global::EDDiscovery.Icons.Controls.Scan_SizeMedium;
