@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "EDDiscovery"
-#define MyAppVersion "11.4.503"
+#define MyAppVersion "11.4.505"
 #define MyAppPublisher "EDDiscovery Team (Robby)"
 #define MyAppURL "https://github.com/EDDiscovery"
 #define MyAppExeName "EDDiscovery.exe"
@@ -77,4 +77,23 @@ Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChang
 [Messages]
 SelectDirBrowseLabel=To continue, click Next {localappdata} %{LOCALAPPDATA}.
 ConfirmUninstall=Are you sure you want to completely remove %1 and all of its components? Note that all your user data is not removed by this uninstall and is still stored in your local app data
+
+[Code]
+
+const
+  QuitMessageReboot = 'Detected an older version of EDDiscovery'#13#10'Please manually remove this via add/remove programs before running setup again';
+
+function InitializeSetup(): Boolean;
+var Path:String;
+begin
+  Path := ExpandConstant('{autopf}');
+  Path := Path + '\EDDiscovery\EDDiscovery';  // where Advanced installer stuffed it
+  Log('Path computed as ' + Path);   // use /Log="c:\code\setup.log" in Run | Parameters, also appears in log window below
+  if ( DirExists(Path)) Then begin
+    MsgBox(QuitMessageReboot, mbError, mb_Ok);
+  end else
+      Result := True;
+
+end;
+
 

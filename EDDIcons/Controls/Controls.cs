@@ -246,6 +246,7 @@ namespace EDDiscovery.Icons
         #endregion
         #region Selector
         public static Image Selector_Background { get { return IconSet.GetIcon("Controls.Selector.Selector"); } }
+        public static Image Selector_Background2 { get { return IconSet.GetIcon("Controls.Selector.Selector2"); } }
         public static Image Selector_AddTab { get { return IconSet.GetIcon("Controls.Selector.Addtab"); } }
         #endregion
         #region Bookmarks

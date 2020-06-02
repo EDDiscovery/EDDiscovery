@@ -44,11 +44,18 @@ namespace EDDiscovery.UserControls
         public override void Init()
         {
             discoveryform.OnAddOnsChanged += Discoveryform_OnAddOnsChanged;
+            discoveryform.OnThemeChanged += Discoveryform_OnThemeChanged;
         }
 
         public override void Closing()
         {
             discoveryform.OnAddOnsChanged -= Discoveryform_OnAddOnsChanged;
+            discoveryform.OnThemeChanged -= Discoveryform_OnThemeChanged;
+        }
+
+        private void Discoveryform_OnThemeChanged()
+        {
+            Redraw();
         }
 
         private void Redraw()
@@ -65,6 +72,9 @@ namespace EDDiscovery.UserControls
             int width = 96;
             int padbot = 6, padbetween = 5;
 
+            float brigthness = EDDTheme.Instance.Form.GetBrightness();
+            Image selback = brigthness < 0.3 ? EDDiscovery.Icons.Controls.Selector_Background : EDDiscovery.Icons.Controls.Selector_Background2;
+
             {
                 Versions.VersioningManager mgr = new Versions.VersioningManager();
                 AddOnManagerForm.ReadLocalFiles(mgr, true);
@@ -72,7 +82,7 @@ namespace EDDiscovery.UserControls
                 int i = mgr.DownloadItems.Count;
 
                 CompositeButton cb = CompositeButton.QuickInit(
-                            EDDiscovery.Icons.Controls.Selector_Background,
+                            selback,
                             (i == 0) ? "NO ADD ONS!".T(EDTx.UserControlPanelSelector_NOADDONS) : i.ToString() + " Add Ons".T(EDTx.UserControlPanelSelector_AddOns),
                             EDDTheme.Instance.GetFont,
                             (i == 0) ? Color.Red : (EDDTheme.Instance.TextBlockColor.GetBrightness() < 0.1 ? Color.AntiqueWhite : EDDTheme.Instance.TextBlockColor),
@@ -90,7 +100,7 @@ namespace EDDiscovery.UserControls
 
                 EDDTheme.Instance.ApplyStd(cb);       // need to theme up the button
                 cb.Size = new Size(width, cb.FindMaxSubControlArea(0, padbot).Height);
-                cb.Label.BackColor = cb.Label.TextBackColor = cb.Decals[0].BackColor = Color.Transparent;
+                cb.Label.BackColor = cb.Decals[0].BackColor = Color.Transparent;
                 cb.Buttons[0].BackColor = centre;   // but then fix the back colour again
             }
 
@@ -101,7 +111,7 @@ namespace EDDiscovery.UserControls
                 PanelInformation.PanelInfo pi = PanelInformation.GetPanelInfoByPanelID(pids[i]);
 
                 CompositeButton cb = CompositeButton.QuickInit(
-                            EDDiscovery.Icons.Controls.Selector_Background,
+                            selback,
                             pi.WindowTitle,
                             EDDTheme.Instance.GetFont,
                             EDDTheme.Instance.TextBlockColor.GetBrightness() < 0.1 ? Color.AntiqueWhite : EDDTheme.Instance.TextBlockColor,
@@ -121,7 +131,7 @@ namespace EDDiscovery.UserControls
                 cb.ResumeLayout();
 
                 cb.Size = new Size(width, cb.FindMaxSubControlArea(0, padbot).Height);
-                cb.Label.BackColor = cb.Label.TextBackColor = cb.Decals[0].BackColor = Color.Transparent;
+                cb.Label.BackColor =  cb.Decals[0].BackColor = Color.Transparent;
                 cb.Buttons[0].BackColor = centre; // need to reset the colour back!
                 cb.Buttons[1].BackColor = centre; // need to reset the colour back!
             }
