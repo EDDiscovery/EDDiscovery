@@ -251,7 +251,7 @@ namespace EliteDangerousCore
 
         private void AddEntry( JournalReaderEntry newentry, ref List<JournalReaderEntry> jent, ref List<UIEvent> uievents )
         {
-            if (newentry.JournalEntry.EventTypeID == JournalTypeEnum.Music)
+            if (newentry.JournalEntry.EventTypeID == JournalTypeEnum.Music)     // MANUALLY sync this list with ActionEventList.cs::EventList function
             {
                 var jm = newentry.JournalEntry as JournalEvents.JournalMusic;
                 uievents.Add(new UIEvents.UIMusic(jm.MusicTrack, jm.MusicTrackID, jm.EventTimeUTC, false));
