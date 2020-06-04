@@ -16,6 +16,8 @@
 
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Windows.Forms;
+using EDDiscovery.Controls;
 using EliteDangerousCore;
 
 
@@ -43,6 +45,11 @@ namespace EDDiscovery.UserControls
 
             checkBoxEDSM.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbEDSM, false);
             checkBoxEDSM.CheckedChanged += CheckBoxEDSM_CheckedChanged;
+
+            dataGridViewEstimatedValues.MakeDoubleBuffered();
+            dataGridViewEstimatedValues.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+            dataGridViewEstimatedValues.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
+            dataGridViewEstimatedValues.DefaultCellStyle.Padding = new System.Windows.Forms.Padding(0, 1, 0, 1);
 
         }
 
