@@ -36,6 +36,8 @@ namespace EDDiscovery.Forms
             SetTipAndTag(linkLabelGitHubIssue, Resources.URLProjectFeedback);
             SetTipAndTag(linkLabelHelp, Resources.URLProjectWiki);
             SetTipAndTag(linkLabelLicense, Resources.URLProjectLicense);
+            SetTipAndTag(panelLogo, Resources.URLProjectWiki);
+            SetTipAndTag(panelEDCD, Resources.URLEDCD);
 
             var x = Properties.Resources.EDD_License;
             textBoxLicense.Rtf = x;     // we use the RTB to convert from RTF to text, and double space the result. this makes the scroll bar work.
@@ -45,8 +47,6 @@ namespace EDDiscovery.Forms
             EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
             bool winborder = theme.ApplyDialog(this);
             panel_close.Visible = !winborder;
-
-            panelLogo.Tag = Resources.URLProjectGithub;
 
             labelDevelopersEnum.Text = Properties.Resources.Credits;
         }
@@ -61,7 +61,7 @@ namespace EDDiscovery.Forms
             Close();
         }
 
-        private void SetTipAndTag(LinkLabel c, string text)
+        private void SetTipAndTag(Control c, string text)
         {
             toolTip1.SetToolTip(c, text);
             c.Tag = text;

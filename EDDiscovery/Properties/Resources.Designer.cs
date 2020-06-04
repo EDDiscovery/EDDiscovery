@@ -65,17 +65,31 @@ namespace EDDiscovery.Properties {
         ///Cmdr Finwen  (Robert Wahlström)
         ///
         ///Developers for this release series:
-        ///Robby (Releaser), Bravada Cadelanne, Iain Ross, Andrea Spada, Carcher99
+        ///Robby (Releaser)
+        ///Bravada Cadelanne, Iain Ross, Andrea Spada, Carcher99
+        ///
+        ///Images Captured by:
+        ///Spandino, Robby, Eahlstan, Ettanin, CompleteNOOB from Frontier Elite Dangerous Images (C) Frontier Developments PLC
         ///
         ///Languages Translations:
         ///Potatossuaro, Zafford, Andrea Spada, Goscickiw, Nats-ji, Jay
         ///
         ///Previous Contributors:
-        ///IGAU, EoD, Imathrowback, phwoelfel, Robosa, Daniel-finger, Phroggie, Finwen, Corbin Moran, Myshka, Zed, Marlon Blake, Smacker, Jason Thorpe, Greg Malcolm,  Majkl578, MWerle...
+        ///IGAU, EoD, Imathrowback, phwoelfel, Robosa, Daniel-finger, Phroggie, Finwen, Corbin Moran,  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Credits {
             get {
                 return ResourceManager.GetString("Credits", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap EDCD {
+            get {
+                object obj = ResourceManager.GetObject("EDCD", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -171,6 +185,15 @@ namespace EDDiscovery.Properties {
         internal static string URLCoriolis {
             get {
                 return ResourceManager.GetString("URLCoriolis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://edcd.github.io/.
+        /// </summary>
+        internal static string URLEDCD {
+            get {
+                return ResourceManager.GetString("URLEDCD", resourceCulture);
             }
         }
         

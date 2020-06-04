@@ -48,7 +48,7 @@ namespace EDDiscovery.Forms
             this.labelDevelopersEnum = new System.Windows.Forms.Label();
             this.buttonOK = new ExtendedControls.ExtButton();
             this.textBoxLicense = new ExtendedControls.ExtRichTextBox();
-            this.panelLinks = new System.Windows.Forms.Panel();
+            this.panelLinksBR = new System.Windows.Forms.Panel();
             this.linkLabelDeveloperChat = new System.Windows.Forms.LinkLabel();
             this.linkLabelHelp = new System.Windows.Forms.LinkLabel();
             this.linkLabelLicense = new System.Windows.Forms.LinkLabel();
@@ -60,21 +60,35 @@ namespace EDDiscovery.Forms
             this.linkLabelEliteDangerous = new System.Windows.Forms.LinkLabel();
             this.labelLinks = new System.Windows.Forms.Label();
             this.labelDevelopers = new System.Windows.Forms.Label();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.labelNoAffiliation = new System.Windows.Forms.Label();
-            this.panelLogo = new System.Windows.Forms.PictureBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.panel_close = new ExtendedControls.ExtButtonDrawn();
-            this.panelLinks.SuspendLayout();
+            this.tableMainLayout = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanelTL = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanelTR = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanelBL = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.panelLogo = new System.Windows.Forms.PictureBox();
+            this.panelEDCD = new System.Windows.Forms.PictureBox();
+            this.labelNoAffiliation = new System.Windows.Forms.Label();
+            this.paneltop = new System.Windows.Forms.Panel();
+            this.panelbot = new System.Windows.Forms.Panel();
+            this.panelLinksBR.SuspendLayout();
+            this.tableMainLayout.SuspendLayout();
+            this.tableLayoutPanelTL.SuspendLayout();
+            this.tableLayoutPanelTR.SuspendLayout();
+            this.tableLayoutPanelBL.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.panelLogo)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.panelEDCD)).BeginInit();
+            this.paneltop.SuspendLayout();
+            this.panelbot.SuspendLayout();
             this.SuspendLayout();
             // 
             // labelVersion
             // 
             this.labelVersion.AutoSize = true;
             this.labelVersion.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelVersion.Location = new System.Drawing.Point(12, 19);
+            this.labelVersion.Location = new System.Drawing.Point(3, 0);
             this.labelVersion.Name = "labelVersion";
             this.labelVersion.Size = new System.Drawing.Size(187, 24);
             this.labelVersion.TabIndex = 0;
@@ -82,19 +96,18 @@ namespace EDDiscovery.Forms
             // 
             // labelDevelopersEnum
             // 
-            this.labelDevelopersEnum.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.labelDevelopersEnum.BackColor = System.Drawing.Color.Transparent;
-            this.labelDevelopersEnum.Location = new System.Drawing.Point(681, 57);
+            this.labelDevelopersEnum.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.labelDevelopersEnum.Location = new System.Drawing.Point(3, 35);
             this.labelDevelopersEnum.Name = "labelDevelopersEnum";
-            this.labelDevelopersEnum.Size = new System.Drawing.Size(267, 372);
+            this.labelDevelopersEnum.Size = new System.Drawing.Size(276, 374);
             this.labelDevelopersEnum.TabIndex = 3;
             this.labelDevelopersEnum.Text = "See Resource File";
             // 
             // buttonOK
             // 
             this.buttonOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonOK.Location = new System.Drawing.Point(832, 652);
+            this.buttonOK.Location = new System.Drawing.Point(852, 13);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(100, 24);
             this.buttonOK.TabIndex = 6;
@@ -111,7 +124,7 @@ namespace EDDiscovery.Forms
             this.textBoxLicense.BorderColorScaling = 0.5F;
             this.textBoxLicense.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxLicense.HideScrollBar = true;
-            this.textBoxLicense.Location = new System.Drawing.Point(12, 57);
+            this.textBoxLicense.Location = new System.Drawing.Point(3, 37);
             this.textBoxLicense.Name = "textBoxLicense";
             this.textBoxLicense.ReadOnly = true;
             this.textBoxLicense.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 Microsoft S" +
@@ -128,28 +141,28 @@ namespace EDDiscovery.Forms
             this.textBoxLicense.ScrollBarThumbBorderColor = System.Drawing.Color.Yellow;
             this.textBoxLicense.ScrollBarThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.textBoxLicense.ShowLineCount = false;
-            this.textBoxLicense.Size = new System.Drawing.Size(649, 412);
+            this.textBoxLicense.Size = new System.Drawing.Size(667, 369);
             this.textBoxLicense.TabIndex = 1;
             this.textBoxLicense.TextBoxBackColor = System.Drawing.SystemColors.Control;
             this.textBoxLicense.TextBoxForeColor = System.Drawing.SystemColors.ControlText;
             // 
-            // panelLinks
+            // panelLinksBR
             // 
-            this.panelLinks.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.panelLinks.Controls.Add(this.linkLabelDeveloperChat);
-            this.panelLinks.Controls.Add(this.linkLabelHelp);
-            this.panelLinks.Controls.Add(this.linkLabelLicense);
-            this.panelLinks.Controls.Add(this.linkLabelFDForum);
-            this.panelLinks.Controls.Add(this.linkLabelGitHubIssue);
-            this.panelLinks.Controls.Add(this.linkLabelGitHub);
-            this.panelLinks.Controls.Add(this.linkLabelEDSM);
-            this.panelLinks.Controls.Add(this.linkLabelEDDB);
-            this.panelLinks.Controls.Add(this.linkLabelEliteDangerous);
-            this.panelLinks.Controls.Add(this.labelLinks);
-            this.panelLinks.Location = new System.Drawing.Point(681, 432);
-            this.panelLinks.Name = "panelLinks";
-            this.panelLinks.Size = new System.Drawing.Size(267, 206);
-            this.panelLinks.TabIndex = 5;
+            this.panelLinksBR.Controls.Add(this.linkLabelDeveloperChat);
+            this.panelLinksBR.Controls.Add(this.linkLabelHelp);
+            this.panelLinksBR.Controls.Add(this.linkLabelLicense);
+            this.panelLinksBR.Controls.Add(this.linkLabelFDForum);
+            this.panelLinksBR.Controls.Add(this.linkLabelGitHubIssue);
+            this.panelLinksBR.Controls.Add(this.linkLabelGitHub);
+            this.panelLinksBR.Controls.Add(this.linkLabelEDSM);
+            this.panelLinksBR.Controls.Add(this.linkLabelEDDB);
+            this.panelLinksBR.Controls.Add(this.linkLabelEliteDangerous);
+            this.panelLinksBR.Controls.Add(this.labelLinks);
+            this.panelLinksBR.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelLinksBR.Location = new System.Drawing.Point(682, 418);
+            this.panelLinksBR.Name = "panelLinksBR";
+            this.panelLinksBR.Size = new System.Drawing.Size(282, 189);
+            this.panelLinksBR.TabIndex = 5;
             // 
             // linkLabelDeveloperChat
             // 
@@ -270,54 +283,13 @@ namespace EDDiscovery.Forms
             // 
             // labelDevelopers
             // 
-            this.labelDevelopers.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelDevelopers.AutoSize = true;
             this.labelDevelopers.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelDevelopers.Location = new System.Drawing.Point(677, 19);
+            this.labelDevelopers.Location = new System.Drawing.Point(3, 0);
             this.labelDevelopers.Name = "labelDevelopers";
             this.labelDevelopers.Size = new System.Drawing.Size(106, 24);
             this.labelDevelopers.TabIndex = 7;
             this.labelDevelopers.Text = "Developers";
-            // 
-            // tableLayoutPanel1
-            // 
-            this.tableLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tableLayoutPanel1.ColumnCount = 1;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel1.Controls.Add(this.labelNoAffiliation, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.panelLogo, 0, 0);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(12, 476);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 2;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(649, 200);
-            this.tableLayoutPanel1.TabIndex = 9;
-            // 
-            // labelNoAffiliation
-            // 
-            this.labelNoAffiliation.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelNoAffiliation.Location = new System.Drawing.Point(3, 156);
-            this.labelNoAffiliation.Name = "labelNoAffiliation";
-            this.labelNoAffiliation.Size = new System.Drawing.Size(698, 44);
-            this.labelNoAffiliation.TabIndex = 12;
-            this.labelNoAffiliation.Text = "EDDiscovery is not affiliated with Frontier Developments plc.\r\nFree Advanced Inst" +
-    "aller License for Open-Source";
-            this.labelNoAffiliation.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // panelLogo
-            // 
-            this.panelLogo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelLogo.Image = global::EDDiscovery.Properties.Resources.Logo;
-            this.panelLogo.Location = new System.Drawing.Point(3, 3);
-            this.panelLogo.Name = "panelLogo";
-            this.panelLogo.Padding = new System.Windows.Forms.Padding(1);
-            this.panelLogo.Size = new System.Drawing.Size(698, 150);
-            this.panelLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.panelLogo.TabIndex = 14;
-            this.panelLogo.TabStop = false;
-            this.panelLogo.Click += new System.EventHandler(this.link_Click);
             // 
             // panel_close
             // 
@@ -326,7 +298,7 @@ namespace EDDiscovery.Forms
             this.panel_close.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.panel_close.Image = null;
             this.panel_close.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Close;
-            this.panel_close.Location = new System.Drawing.Point(941, 1);
+            this.panel_close.Location = new System.Drawing.Point(940, 3);
             this.panel_close.MouseOverColor = System.Drawing.Color.White;
             this.panel_close.MouseSelectedColor = System.Drawing.Color.Green;
             this.panel_close.MouseSelectedColorEnable = true;
@@ -341,20 +313,243 @@ namespace EDDiscovery.Forms
             this.panel_close.UseMnemonic = true;
             this.panel_close.Click += new System.EventHandler(this.panel_close_Click);
             // 
+            // tableMainLayout
+            // 
+            this.tableMainLayout.ColumnCount = 2;
+            this.tableMainLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 70.21716F));
+            this.tableMainLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 29.78283F));
+            this.tableMainLayout.Controls.Add(this.tableLayoutPanelTL, 0, 0);
+            this.tableMainLayout.Controls.Add(this.tableLayoutPanelTR, 1, 0);
+            this.tableMainLayout.Controls.Add(this.panelLinksBR, 1, 1);
+            this.tableMainLayout.Controls.Add(this.tableLayoutPanelBL, 0, 1);
+            this.tableMainLayout.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableMainLayout.Location = new System.Drawing.Point(0, 28);
+            this.tableMainLayout.Name = "tableMainLayout";
+            this.tableMainLayout.RowCount = 2;
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 68.03278F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 31.96721F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableMainLayout.Size = new System.Drawing.Size(967, 610);
+            this.tableMainLayout.TabIndex = 2;
+            // 
+            // tableLayoutPanelTL
+            // 
+            this.tableLayoutPanelTL.ColumnCount = 1;
+            this.tableLayoutPanelTL.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanelTL.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanelTL.Controls.Add(this.labelVersion, 0, 0);
+            this.tableLayoutPanelTL.Controls.Add(this.textBoxLicense, 0, 1);
+            this.tableLayoutPanelTL.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanelTL.Location = new System.Drawing.Point(3, 3);
+            this.tableLayoutPanelTL.Name = "tableLayoutPanelTL";
+            this.tableLayoutPanelTL.RowCount = 2;
+            this.tableLayoutPanelTL.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 8.359133F));
+            this.tableLayoutPanelTL.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 91.64087F));
+            this.tableLayoutPanelTL.Size = new System.Drawing.Size(673, 409);
+            this.tableLayoutPanelTL.TabIndex = 2;
+            // 
+            // tableLayoutPanelTR
+            // 
+            this.tableLayoutPanelTR.ColumnCount = 1;
+            this.tableLayoutPanelTR.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanelTR.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanelTR.Controls.Add(this.labelDevelopers, 0, 0);
+            this.tableLayoutPanelTR.Controls.Add(this.labelDevelopersEnum, 0, 1);
+            this.tableLayoutPanelTR.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanelTR.Location = new System.Drawing.Point(682, 3);
+            this.tableLayoutPanelTR.Name = "tableLayoutPanelTR";
+            this.tableLayoutPanelTR.RowCount = 2;
+            this.tableLayoutPanelTR.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 8.578431F));
+            this.tableLayoutPanelTR.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 91.42157F));
+            this.tableLayoutPanelTR.Size = new System.Drawing.Size(282, 409);
+            this.tableLayoutPanelTR.TabIndex = 3;
+            // 
+            // tableLayoutPanelBL
+            // 
+            this.tableLayoutPanelBL.ColumnCount = 1;
+            this.tableLayoutPanelBL.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanelBL.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanelBL.Controls.Add(this.tableLayoutPanel1, 0, 0);
+            this.tableLayoutPanelBL.Controls.Add(this.labelNoAffiliation, 0, 1);
+            this.tableLayoutPanelBL.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanelBL.Location = new System.Drawing.Point(3, 418);
+            this.tableLayoutPanelBL.Name = "tableLayoutPanelBL";
+            this.tableLayoutPanelBL.RowCount = 3;
+            this.tableLayoutPanelBL.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 83.94649F));
+            this.tableLayoutPanelBL.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.05351F));
+            this.tableLayoutPanelBL.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanelBL.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanelBL.Size = new System.Drawing.Size(673, 189);
+            this.tableLayoutPanelBL.TabIndex = 6;
+            // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.ColumnCount = 2;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 73.42342F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 26.57658F));
+            this.tableLayoutPanel1.Controls.Add(this.panelLogo, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.panelEDCD, 1, 0);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 1;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(667, 135);
+            this.tableLayoutPanel1.TabIndex = 2;
+            // 
+            // panelLogo
+            // 
+            this.panelLogo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelLogo.Image = global::EDDiscovery.Properties.Resources.Logo;
+            this.panelLogo.Location = new System.Drawing.Point(3, 3);
+            this.panelLogo.Name = "panelLogo";
+            this.panelLogo.Padding = new System.Windows.Forms.Padding(1);
+            this.panelLogo.Size = new System.Drawing.Size(483, 129);
+            this.panelLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.panelLogo.TabIndex = 15;
+            this.panelLogo.TabStop = false;
+            this.panelLogo.Click += new System.EventHandler(this.link_Click);
+            // 
+            // panelEDCD
+            // 
+            this.panelEDCD.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelEDCD.Image = global::EDDiscovery.Properties.Resources.EDCD;
+            this.panelEDCD.Location = new System.Drawing.Point(492, 3);
+            this.panelEDCD.Name = "panelEDCD";
+            this.panelEDCD.Size = new System.Drawing.Size(172, 129);
+            this.panelEDCD.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.panelEDCD.TabIndex = 16;
+            this.panelEDCD.TabStop = false;
+            this.panelEDCD.Click += new System.EventHandler(this.link_Click);
+            // 
+            // labelNoAffiliation
+            // 
+            this.labelNoAffiliation.AutoSize = true;
+            this.labelNoAffiliation.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.labelNoAffiliation.Location = new System.Drawing.Point(3, 142);
+            this.labelNoAffiliation.Name = "labelNoAffiliation";
+            this.labelNoAffiliation.Size = new System.Drawing.Size(667, 26);
+            this.labelNoAffiliation.TabIndex = 16;
+            this.labelNoAffiliation.Text = "(C) 2015-2020 EDDiscovery Team\r\nEDDiscovery is not affiliated with Frontier Devel" +
+    "opments plc.\r\n";
+            this.labelNoAffiliation.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // paneltop
+            // 
+            this.paneltop.Controls.Add(this.panel_close);
+            this.paneltop.Dock = System.Windows.Forms.DockStyle.Top;
+            this.paneltop.Location = new System.Drawing.Point(0, 0);
+            this.paneltop.Name = "paneltop";
+            this.paneltop.Size = new System.Drawing.Size(967, 28);
+            this.paneltop.TabIndex = 29;
+            // 
+            // panelbot
+            // 
+            this.panelbot.Controls.Add(this.buttonOK);
+            this.panelbot.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panelbot.Location = new System.Drawing.Point(0, 638);
+            this.panelbot.Name = "panelbot";
+            this.panelbot.Size = new System.Drawing.Size(967, 49);
+            this.panelbot.TabIndex = 30;
+            // 
             // AboutForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.ClientSize = new System.Drawing.Size(967, 687);
-            this.Controls.Add(this.panel_close);
-            this.Controls.Add(this.tableLayoutPanel1);
-            this.Controls.Add(this.labelDevelopers);
-            this.Controls.Add(this.panelLinks);
-            this.Controls.Add(this.textBoxLicense);
-            this.Controls.Add(this.labelVersion);
-            this.Controls.Add(this.buttonOK);
-            this.Controls.Add(this.labelDevelopersEnum);
+            this.Controls.Add(this.tableMainLayout);
+            this.Controls.Add(this.panelbot);
+            this.Controls.Add(this.paneltop);
             this.DoubleBuffered = true;
             this.Icon = global::EDDiscovery.Properties.Resources.edlogo_3mo_icon;
             this.MaximizeBox = false;
@@ -364,12 +559,21 @@ namespace EDDiscovery.Forms
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "About EDDiscovery";
             this.Load += new System.EventHandler(this.AboutForm_Load);
-            this.panelLinks.ResumeLayout(false);
-            this.panelLinks.PerformLayout();
+            this.panelLinksBR.ResumeLayout(false);
+            this.panelLinksBR.PerformLayout();
+            this.tableMainLayout.ResumeLayout(false);
+            this.tableLayoutPanelTL.ResumeLayout(false);
+            this.tableLayoutPanelTL.PerformLayout();
+            this.tableLayoutPanelTR.ResumeLayout(false);
+            this.tableLayoutPanelTR.PerformLayout();
+            this.tableLayoutPanelBL.ResumeLayout(false);
+            this.tableLayoutPanelBL.PerformLayout();
             this.tableLayoutPanel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.panelLogo)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.panelEDCD)).EndInit();
+            this.paneltop.ResumeLayout(false);
+            this.panelbot.ResumeLayout(false);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -378,7 +582,7 @@ namespace EDDiscovery.Forms
         private ExtendedControls.ExtButton buttonOK;
         internal System.Windows.Forms.Label labelVersion;
         private ExtendedControls.ExtRichTextBox textBoxLicense;
-        private System.Windows.Forms.Panel panelLinks;
+        private System.Windows.Forms.Panel panelLinksBR;
         internal System.Windows.Forms.Label labelLinks;
         private System.Windows.Forms.LinkLabel linkLabelEliteDangerous;
         private System.Windows.Forms.LinkLabel linkLabelDeveloperChat;
@@ -390,10 +594,17 @@ namespace EDDiscovery.Forms
         private System.Windows.Forms.LinkLabel linkLabelLicense;
         private System.Windows.Forms.LinkLabel linkLabelGitHubIssue;
         internal System.Windows.Forms.Label labelDevelopers;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.Label labelNoAffiliation;
-        private System.Windows.Forms.PictureBox panelLogo;
         private System.Windows.Forms.ToolTip toolTip1;
         private ExtendedControls.ExtButtonDrawn panel_close;
+        private System.Windows.Forms.TableLayoutPanel tableMainLayout;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanelTL;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanelTR;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanelBL;
+        private System.Windows.Forms.Label labelNoAffiliation;
+        private System.Windows.Forms.PictureBox panelLogo;
+        private System.Windows.Forms.Panel paneltop;
+        private System.Windows.Forms.Panel panelbot;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.PictureBox panelEDCD;
     }
 }
