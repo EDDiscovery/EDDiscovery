@@ -292,7 +292,6 @@ namespace EDDiscovery.UserControls
             this.dataGridViewScan.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewScan.Size = new System.Drawing.Size(687, 520);
             this.dataGridViewScan.TabIndex = 4;
-            this.dataGridViewScan.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewScan_SortCompare);
             // 
             // extScrollBarScan
             // 

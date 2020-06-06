@@ -552,9 +552,6 @@ namespace EDDiscovery.UserControls
 
         void StatsScan(HistoryList hl)
         {
-            int sortcol = dataGridViewScan.SortedColumn?.Index ?? 0;
-            SortOrder sortorder = dataGridViewScan.SortOrder;
-
             dataGridViewScan.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
 
             int intervals = 0;
@@ -683,7 +680,7 @@ namespace EDDiscovery.UserControls
             for (int i = 1; i < dataGridViewScan.Columns.Count; i++)
                 ColumnValueAlignment(dataGridViewScan.Columns[i] as DataGridViewTextBoxColumn);
 
-            string[] strarr = new string[intervals];
+            int[] intarr = new int[intervals];
 
             if (userControlStatsTimeScan.StarPlanetMode)
             {
@@ -698,11 +695,11 @@ namespace EDDiscovery.UserControls
                                 nr++;
                         }
 
-                        strarr[ii] = nr.ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
+                        intarr[ii] = nr;
 
                     }
 
-                    StatToDGV(dataGridViewScan, Bodies.StarTypeNameShorter(obj), strarr);
+                    StatScanToDGV(dataGridViewScan, Bodies.StarTypeNameShorter(obj), intarr);
                 }
             }
             else
@@ -718,18 +715,12 @@ namespace EDDiscovery.UserControls
                                 nr++;
                         }
 
-                        strarr[ii] = nr.ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
+                        intarr[ii] = nr;
 
                     }
 
-                    StatToDGV(dataGridViewScan, obj == EDPlanet.Unknown_Body_Type ? "Belt Cluster" : Bodies.PlanetTypeName(obj), strarr);
+                    StatScanToDGV(dataGridViewScan, obj == EDPlanet.Unknown_Body_Type ? "Belt Cluster" : Bodies.PlanetTypeName(obj), intarr);
                 }
-            }
-
-            if (sortcol < dataGridViewScan.Columns.Count)
-            {
-                dataGridViewScan.Sort(dataGridViewScan.Columns[sortcol], (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
-                dataGridViewScan.Columns[sortcol].HeaderCell.SortGlyphDirection = sortorder;
             }
         }
 
@@ -1054,6 +1045,30 @@ namespace EDDiscovery.UserControls
             }
             else
                 datagrid.Rows.Add(rowobj);
+        }
+
+        void StatScanToDGV(DataGridView datagrid, string title, int[] data)
+        {
+
+            int rowpresent = datagrid.FindRowWithValue(0, title);
+
+            if (rowpresent != -1)
+            {
+                for (int ii = 0; ii < data.Length; ii++)
+                {
+                    var row = datagrid.Rows[rowpresent];
+                    var cell = row.Cells[ii + 1]; //Title is column Zero
+                    cell.Value = data[ii];
+                }
+            }
+            else
+            {
+                //Add title as String, then cells as ints - fixes sorting
+                var rowIndex = datagrid.Rows.Add();
+                datagrid.Rows[rowIndex].Cells[0].Value = title;
+                for (int ii = 0; ii < data.Length; ii++)
+                    datagrid.Rows[rowIndex].Cells[ii + 1].Value = data[ii];
+            }
         }
 
         protected override void OnLayout(LayoutEventArgs e)
