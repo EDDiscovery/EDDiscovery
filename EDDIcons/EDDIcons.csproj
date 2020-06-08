@@ -574,6 +574,24 @@
     <EmbeddedResource Include="Controls\SysInfo\notfirstdiscover.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Journal\CargoTransfer.png" />
+    <EmbeddedResource Include="Journal\CarrierStats.png" />
+    <EmbeddedResource Include="Journal\NavRoute.png" />
+    <EmbeddedResource Include="Journal\CarrierCancelDecommission.png" />
+    <EmbeddedResource Include="Journal\CarrierModulePack.png" />
+    <EmbeddedResource Include="Journal\CarrierNameChanged.png" />
+    <EmbeddedResource Include="Journal\CarrierShipPack.png" />
+    <EmbeddedResource Include="Journal\CarrierTradeOrder.png" />
+    <EmbeddedResource Include="Journal\CarrierBankTransfer.png" />
+    <EmbeddedResource Include="Journal\CarrierBuy.png" />
+    <EmbeddedResource Include="Journal\CarrierCrewServices.png" />
+    <EmbeddedResource Include="Journal\CarrierDecommission.png" />
+    <EmbeddedResource Include="Journal\CarrierDepositFuel.png" />
+    <EmbeddedResource Include="Journal\CarrierDockingPermission.png" />
+    <EmbeddedResource Include="Journal\CarrierFinance.png" />
+    <EmbeddedResource Include="Journal\CarrierJump.png" />
+    <EmbeddedResource Include="Journal\CarrierJumpCancelled.png" />
+    <EmbeddedResource Include="Journal\CarrierJumpRequest.png" />
     <EmbeddedResource Include="Controls\Selector\Selector2.png" />
     <EmbeddedResource Include="Controls\Scan\SizeHuge.png" />
     <EmbeddedResource Include="Controls\Scan\SizeVeryLarge.png" />
