@@ -245,6 +245,11 @@ namespace EDDiscovery
             Init();
         }
 
+        public void ReRead()        // if you've changed the option file .opt then call reread
+        {
+            Init();
+        }
+
         private void SetAppDataDirectory()
         {
             ProcessCommandLineOptions((optname, ca, toeol) =>              //FIRST pass thru command line options looking
