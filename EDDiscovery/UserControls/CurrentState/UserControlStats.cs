@@ -393,12 +393,9 @@ namespace EDDiscovery.UserControls
                     }
 
                     timearrutc = new DateTime[intervals];
-                    timearrutc[0] = userControlStatsTimeTravel.CustomDateTimePickerFrom.Value.ToUniversalTime();
-                    endTimeutc = userControlStatsTimeTravel.CustomDateTimePickerTo.Value.AddDays(1).ToUniversalTime();
-
-                    // if we've already populated the grid and our history is past the end of the custom period we don't need to repopulate
-                    if (last_he is object && endTimeutc < last_he.EventTimeUTC)
-                        return;
+                    timearrutc[0] = EDDConfig.Instance.ConvertTimeToUTCFromSelected(userControlStatsTimeTravel.CustomDateTimePickerFrom.Value);
+                    endTimeutc = EDDConfig.Instance.ConvertTimeToUTCFromSelected(userControlStatsTimeTravel.CustomDateTimePickerTo.Value.AddDays(1));
+                    System.Diagnostics.Debug.WriteLine("Date " + timearrutc[0].ToString() + "-" + endTimeutc.ToString());
                 }
 
                 var jumps = new string[intervals];
@@ -625,8 +622,12 @@ namespace EDDiscovery.UserControls
                         dataGridViewScan.Columns.AddRange(new DataGridViewColumn[] { Col1, Col2 });
                     }
 
+                    DateTime fromTimeutc = EDDConfig.Instance.ConvertTimeToUTCFromSelected(userControlStatsTimeScan.CustomDateTimePickerFrom.Value);
+                    DateTime endTimeutc = EDDConfig.Instance.ConvertTimeToUTCFromSelected(userControlStatsTimeScan.CustomDateTimePickerTo.Value.AddDays(1));
+                    System.Diagnostics.Debug.WriteLine("Date " + fromTimeutc.ToString() + "-" + endTimeutc.ToString());
+
                     scanlists = new List<JournalScan>[intervals];
-                    scanlists[0] = hl.GetScanListUTC(userControlStatsTimeScan.CustomDateTimePickerFrom.Value.ToUniversalTime(), userControlStatsTimeScan.CustomDateTimePickerTo.Value.ToUniversalTime().AddDays(1));
+                    scanlists[0] = hl.GetScanListUTC(fromTimeutc,endTimeutc);
                 }
             }
             else
