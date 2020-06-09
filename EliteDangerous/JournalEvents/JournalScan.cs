@@ -1240,11 +1240,11 @@ namespace EliteDangerousCore.JournalEvents
                     iconName = "A";
                 if (st < 140000)
                     iconName = "B";
-                if (st > 140000)
+                if (st > 140000)    
                     iconName = "O";
             }
 
-            if (StarTypeID == (EDStar.MS | EDStar.S ))
+            if (StarTypeID == EDStar.MS || StarTypeID == EDStar.S)
                 iconName = "M";
 
             if (StarTypeID == EDStar.Nebula)
