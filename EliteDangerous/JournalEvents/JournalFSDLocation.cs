@@ -408,7 +408,7 @@ namespace EliteDangerousCore.JournalEvents
 
     //When written: when jumping with a fleet carrier
     [JournalEntryType(JournalTypeEnum.CarrierJump)]
-    public class JournalCarrierJump : JournalLocOrJump, ISystemStationEntry, IBodyNameAndID
+    public class JournalCarrierJump : JournalLocOrJump, ISystemStationEntry, IBodyNameAndID, IJournalJumpColor
     {
         public JournalCarrierJump(JObject evt) : base(evt, JournalTypeEnum.CarrierJump)
         {
@@ -444,6 +444,11 @@ namespace EliteDangerousCore.JournalEvents
                                                                       // tbd bug in journal over FactionState - its repeated twice..
             StationServices = evt["StationServices"]?.ToObjectProtected<string[]>();
             StationEconomyList = evt["StationEconomies"]?.ToObjectProtected<JournalDocked.Economies[]>();
+
+            JToken jm = evt["EDDMapColor"];
+            MapColor = jm.Int(EDCommander.Current.MapColour);
+            if (jm.Empty())
+                evt["EDDMapColor"] = EDCommander.Current.MapColour;      // new entries get this default map colour if its not already there
         }
 
         public bool Docked { get; set; }
@@ -459,6 +464,7 @@ namespace EliteDangerousCore.JournalEvents
         public double? Longitude { get; set; }
 
         public long? MarketID { get; set; }
+        public int MapColor { get; set; }
 
         public string StationFaction { get; set; }
         public string StationFactionState { get; set; }
@@ -518,7 +524,7 @@ namespace EliteDangerousCore.JournalEvents
     }
 
     [JournalEntryType(JournalTypeEnum.FSDJump)]
-    public class JournalFSDJump : JournalLocOrJump, IShipInformation, ISystemStationEntry
+    public class JournalFSDJump : JournalLocOrJump, IShipInformation, ISystemStationEntry, IJournalJumpColor
     {
         public JournalFSDJump(JObject evt) : base(evt, JournalTypeEnum.FSDJump)
         {

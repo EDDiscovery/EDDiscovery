@@ -669,9 +669,9 @@ namespace EDDiscovery.UserControls
             e.Graphics.DrawImage(he.journalEntry.Icon, new Rectangle(hstart, top, size, size));
             hstart += size + padding;
 
-            if (he.IsFSDJump && showfsdmapcolour)
+            if (he.journalEntry is IJournalJumpColor && showfsdmapcolour)
             {
-                Color c = Color.FromArgb((he.journalEntry as EliteDangerousCore.JournalEvents.JournalFSDJump).MapColor);
+                Color c = Color.FromArgb(((IJournalJumpColor)he.journalEntry).MapColor);
 
                 using (Brush b = new SolidBrush(c))
                 {

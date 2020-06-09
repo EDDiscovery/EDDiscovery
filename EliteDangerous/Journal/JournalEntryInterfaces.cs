@@ -73,4 +73,8 @@ namespace EliteDangerousCore
 
     }
 
+    public interface IJournalJumpColor
+    {
+        int MapColor { get; set; }
+    }
 }

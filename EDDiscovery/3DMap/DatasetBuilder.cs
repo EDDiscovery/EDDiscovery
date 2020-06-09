@@ -711,9 +711,9 @@ namespace EDDiscovery._3DMap
                         }
                         else if (sp.IsLocOrJump && sp.System.HasCoordinate)
                         {
-                            if (sp.IsFSDJump)
+                            if (sp.journalEntry is IJournalJumpColor)
                             {
-                                drawcolour = Color.FromArgb((sp.journalEntry as EliteDangerousCore.JournalEvents.JournalFSDJump).MapColor);
+                                drawcolour = Color.FromArgb(((IJournalJumpColor)sp.journalEntry).MapColor);
                                 if (drawcolour.GetBrightness() < 0.05)
                                     drawcolour = Color.Red;
                             }
@@ -741,9 +741,9 @@ namespace EDDiscovery._3DMap
                     {
                         if (vs.System.HasCoordinate)
                         {
-                            if (vs.IsFSDJump)
+                            if (vs.journalEntry is IJournalJumpColor)
                             {
-                                drawcolour = Color.FromArgb((vs.journalEntry as EliteDangerousCore.JournalEvents.JournalFSDJump).MapColor);
+                                drawcolour = Color.FromArgb(((IJournalJumpColor)vs.journalEntry).MapColor);
                                 if (drawcolour.GetBrightness() < 0.05)
                                     drawcolour = Color.Red;
                             }

@@ -134,9 +134,9 @@ namespace EDDiscovery
             {
                 for (int ii = 0; ii < jumps.Count-1; ii++)
                 {
-                    if (jumps[ii].IsFSDJump)
+                    if (jumps[ii].journalEntry is IJournalJumpColor)
                     {
-                        drawcolour = Color.FromArgb((jumps[ii].journalEntry as EliteDangerousCore.JournalEvents.JournalFSDJump).MapColor);
+                        drawcolour = Color.FromArgb(((IJournalJumpColor)jumps[ii].journalEntry).MapColor);
                         if (drawcolour.GetBrightness() < 0.05)
                             drawcolour = Color.Red;
                     }
