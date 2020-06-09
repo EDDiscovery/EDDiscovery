@@ -761,12 +761,12 @@ namespace EliteDangerousCore.EDSM
 
                     if (DictEDSMBodies != null && sys.EDSMID > 0 && DictEDSMBodies.ContainsKey(sys.EDSMID))  // Cache EDSM bidies during run of EDD.
                     {
-                        System.Diagnostics.Debug.WriteLine("Found sys.EDSMID " + sys.EDSMID + " Lookup bodies from cache " + DictEDSMBodies[sys.EDSMID].Count);
+                        System.Diagnostics.Debug.WriteLine("Found sys.EDSMID " + sys.EDSMID);
                         return new Tuple<List<JournalScan>, bool>(DictEDSMBodies[sys.EDSMID], true);
                     }
                     else if (DictEDSMBodiesByID64 != null && sys.SystemAddress != null && sys.SystemAddress > 0 && DictEDSMBodiesByID64.ContainsKey(sys.SystemAddress.Value))
                     {
-                        System.Diagnostics.Debug.WriteLine("Found sys.EDSMID64 " + sys.SystemAddress.Value + " Lookup bodies from cache " + DictEDSMBodiesByID64[sys.SystemAddress.Value].Count);
+                        System.Diagnostics.Debug.WriteLine("Found sys.EDSMID64 " + sys.SystemAddress.Value );
                         return new Tuple<List<JournalScan>, bool>(DictEDSMBodiesByID64[sys.SystemAddress.Value], true);
                     }
 
