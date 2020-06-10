@@ -137,8 +137,6 @@ namespace EDDiscovery
         CSV_Helpers_OpenFailed, // Failed to open<spc>
         CSV_Helpers_WriteFailed, // Failed to write to<spc>
 
-        CommanderForm_LF, // Select folder where Journal*.log files are stored by Frontier in
-
         ExportForm_ECH, // Export current History view to {0}
         ExportForm_JF, // Journal File
 

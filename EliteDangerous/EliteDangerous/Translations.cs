@@ -720,6 +720,9 @@ namespace EliteDangerousCore
         EDPlanet_Heliumgasgiant, // Helium gas giant
         EDPlanet_Unknown, // Unknown planet type
 
+        CommanderForm_LF, // Select folder where Journal*.log files are stored by Frontier in
+
+
     }
 
     public static class EDTranslatorExtensions

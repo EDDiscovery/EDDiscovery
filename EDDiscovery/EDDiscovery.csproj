@@ -428,12 +428,6 @@
     <Compile Include="UserControls\Helpers\TargetClassHelpers.cs" />
     <Compile Include="EDDApplicationContext.cs" />
     <Compile Include="EDDiscoveryControllerMain.cs" />
-    <Compile Include="Forms\CommanderForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\CommanderForm.Designer.cs">
-      <DependentUpon>CommanderForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\AddOnManagerForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -718,9 +712,6 @@
     <Compile Include="UserControls\Helpers\StatsTimeUserControl.Designer.cs">
       <DependentUpon>StatsTimeUserControl.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Forms\CommanderForm.resx">
-      <DependentUpon>CommanderForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\AddOnManagerForm.resx">
       <DependentUpon>AddOnManagerForm.cs</DependentUpon>
     </EmbeddedResource>

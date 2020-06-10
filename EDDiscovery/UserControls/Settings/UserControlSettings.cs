@@ -175,7 +175,7 @@ namespace EDDiscovery.UserControls
 
         private void buttonAddCommander_Click(object sender, EventArgs e)
         {
-            CommanderForm cf = new CommanderForm();
+            EliteDangerousCore.Forms.CommanderForm cf = new EliteDangerousCore.Forms.CommanderForm();
             cf.Init(true);
 
             if (cf.ShowDialog(FindForm()) == DialogResult.OK)
@@ -202,7 +202,7 @@ namespace EDDiscovery.UserControls
                 int row = dataGridViewCommanders.SelectedRows[0].Index;
                 EDCommander cmdr = dataGridViewCommanders.Rows[row].DataBoundItem as EDCommander;
 
-                CommanderForm cf = new CommanderForm();
+                EliteDangerousCore.Forms.CommanderForm cf = new EliteDangerousCore.Forms.CommanderForm();
                 cf.Init(cmdr,false);
 
                 if (cf.ShowDialog(FindForm()) == DialogResult.OK)

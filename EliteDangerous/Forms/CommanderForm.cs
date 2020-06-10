@@ -19,14 +19,14 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace EDDiscovery.Forms
+namespace EliteDangerousCore.Forms
 {
     public partial class CommanderForm : ExtendedControls.DraggableForm
     {
         public CommanderForm()
         {
             InitializeComponent();
-            EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
+            var theme = ExtendedControls.ThemeableFormsInstance.Instance;
             bool winborder = theme.ApplyDialog(this);
             panelTop.Visible = panelTop.Enabled = !winborder;
 

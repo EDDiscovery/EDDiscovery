@@ -940,7 +940,8 @@ namespace EliteDangerousCore
 
             if (CurrentCommander >= 0)
             {
-                journalmonitor.ParseJournalFiles(() => cancelRequested(), (p, s) => reportProgress(p, s), forceReload: ForceJournalReload);   // Parse files stop monitor..
+                journalmonitor.SetupWatchers();   // Parse files stop monitor..
+                journalmonitor.ParseJournalFilesOnWatchers((p, s) => reportProgress(p, s), forceReload: ForceJournalReload);   // Parse files stop monitor..
 
                 if (NetLogPath != null)
                 {

@@ -1,5 +1,5 @@
-﻿namespace EDDiscovery.Forms
-{
+﻿namespace EliteDangerousCore.Forms
+{ 
     partial class CommanderForm
     {
         /// <summary>
@@ -955,7 +955,6 @@
             this.Controls.Add(this.groupBoxCustomJournal);
             this.Controls.Add(this.panelI1);
             this.Controls.Add(this.panelTop);
-            this.Icon = global::EDDiscovery.Properties.Resources.edlogo_3mo_icon;
             this.Name = "CommanderForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "CommanderForm";
