@@ -40,9 +40,12 @@ namespace EliteDangerousCore
         private ConcurrentQueue<string> m_netLogFileQueue;
         private const string journalfilematch = "Journal*.log";       // this picks up beta and normal logs
 
-        public JournalMonitorWatcher(string folder)
+        bool StoreJsonInJE { get; set; } = false;
+
+        public JournalMonitorWatcher(string folder, bool storejsoninje)
         {
             WatcherFolder = folder;
+            StoreJsonInJE = storejsoninje;
         }
 
         #region Scan start stop and monitor
@@ -354,18 +357,18 @@ namespace EliteDangerousCore
             {
                 tlu = tlu_lookup[fi.Name];
                 tlu.Path = fi.DirectoryName;
-                reader = new EDJournalReader(tlu);
+                reader = new EDJournalReader(tlu,StoreJsonInJE);
                 netlogreaders[fi.Name] = reader;
             }
             else if (TravelLogUnit.TryGet(fi.Name, out tlu))
             {
                 tlu.Path = fi.DirectoryName;
-                reader = new EDJournalReader(tlu);
+                reader = new EDJournalReader(tlu,StoreJsonInJE);
                 netlogreaders[fi.Name] = reader;
             }
             else
             {
-                reader = new EDJournalReader(fi.FullName);
+                reader = new EDJournalReader(fi.FullName,StoreJsonInJE);
 
                 netlogreaders[fi.Name] = reader;
             }

@@ -151,7 +151,7 @@ namespace EliteDangerousCore
             }
         }
 
-        public List<HistoryEntry> FilterByFSDAndPosition
+        public List<HistoryEntry> FilterByFSDAndPosition        // FSD and Carrier Jumps note
         {
             get
             {
@@ -198,7 +198,7 @@ namespace EliteDangerousCore
         {
             get
             {
-                return (from s in historylist where s.IsFSDJump select s).ToList();
+                return (from s in historylist where s.EntryType == JournalTypeEnum.FSDJump select s).ToList();
             }
         }
 
@@ -869,7 +869,8 @@ namespace EliteDangerousCore
                 }
             }
 
-            he.ProcessWithUserDb(je, prev, this);           // let some processes which need the user db to work
+            he.UpdateMaterials(je, prev);           // let some processes which need the user db to work
+            he.UpdateSystemNote();
 
             cashledger.Process(je);
             he.Credits = cashledger.CashTotal;
@@ -1057,6 +1058,8 @@ namespace EliteDangerousCore
 
             hist.CommanderId = CurrentCommander;
 
+            EDCommander.Current.FID = hist.GetCommanderFID();               // ensure FID is set.. the other place it gets changed is a read of LoadGame.
+
             reportProgress(-1, "Updating user statistics");
 
             hist.ProcessUserHistoryListEntries();      // here, we update the DBs in HistoryEntry and any global DBs in historylist
@@ -1077,7 +1080,8 @@ namespace EliteDangerousCore
                 HistoryEntry he = hl[i];
                 JournalEntry je = he.journalEntry;
 
-                he.ProcessWithUserDb(je, (i > 0) ? hl[i - 1] : null, this);        // let the HE do what it wants to with the user db
+                he.UpdateMaterials(je, (i > 0) ? hl[i - 1] : null);        // let the HE do what it wants to with the user db
+                he.UpdateSystemNote();
 
                 Debug.Assert(he.MaterialCommodity != null);
 

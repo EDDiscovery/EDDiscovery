@@ -37,15 +37,18 @@ namespace EliteDangerousCore
         JournalEvents.JournalOutfitting lastoutfitting = null;
         JournalEvents.JournalMarket lastmarket = null;
         const int timelimit = 5 * 60;   //seconds.. 5 mins between logs. Note if we undock, we reset the counters.
+        bool StoreJsonInJE { get; set; } = false;
 
         private Queue<JournalReaderEntry> StartEntries = new Queue<JournalReaderEntry>();
 
-        public EDJournalReader(string filename) : base(filename)
+        public EDJournalReader(string filename, bool storejson) : base(filename)
         {
+            StoreJsonInJE = storejson;
         }
 
-        public EDJournalReader(TravelLogUnit tlu) : base(tlu)
+        public EDJournalReader(TravelLogUnit tlu, bool storejson) : base(tlu)
         {
+            StoreJsonInJE = storejson;
         }
 
         // inhistoryrefreshparse = means reading history in batch mode
@@ -90,6 +93,9 @@ namespace EliteDangerousCore
                 return null;
             }
 
+            if (StoreJsonInJE)
+                je.JsonCached = jo;
+
             bool toosoon = false;
 
             if (je.EventTypeID == JournalTypeEnum.Fileheader)
@@ -114,7 +120,8 @@ namespace EliteDangerousCore
             }
             else if (je.EventTypeID == JournalTypeEnum.LoadGame)
             {
-                string newname = (je as JournalEvents.JournalLoadGame).LoadGameCommander;
+                var jlg = je as JournalEvents.JournalLoadGame;
+                string newname = jlg.LoadGameCommander;
 
                 if ((TravelLogUnit.type & TravelLogUnit.BetaMarker) == TravelLogUnit.BetaMarker)
                 {
@@ -137,6 +144,8 @@ namespace EliteDangerousCore
                         commander = EDCommander.Create(newname, null, EDJournalClass.GetDefaultJournalDir().Equals(TravelLogUnit.Path) ? "" : TravelLogUnit.Path);
 
                 }
+
+                commander.FID = jlg.FID;
 
                 cmdrid = commander.Nr;
 

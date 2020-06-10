@@ -32,14 +32,14 @@ namespace EliteDangerousCore.EDDN
     {
         public string commanderName;
         public bool isBeta;
-        
+
+        static public string SoftwareName { get; set; } = "EDDiscovery";
+
         private readonly string fromSoftwareVersion;
-        private readonly string fromSoftware;
         private readonly string EDDNServer = "https://eddn.edcd.io:4430/upload/";
 
         public EDDNClass()
         {
-            fromSoftware = "EDDiscovery";
             var assemblyFullName = Assembly.GetEntryAssembly().FullName;
             fromSoftwareVersion = assemblyFullName.Split(',')[1].Split('=')[1];
             commanderName = EDCommander.Current.Name;
@@ -52,7 +52,7 @@ namespace EliteDangerousCore.EDDN
             JObject header = new JObject();
 
             header["uploaderID"] = commanderName;
-            header["softwareName"] = fromSoftware;
+            header["softwareName"] = SoftwareName;
             header["softwareVersion"] = fromSoftwareVersion;
 
             return header;

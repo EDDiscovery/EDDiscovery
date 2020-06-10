@@ -205,7 +205,7 @@ namespace EliteDangerousCore
 
         #region History refresh calls this for a set up of watchers.. then a global reparse of all journal event folders during load history
 
-        public void SetupWatchers()
+        public void SetupWatchers(bool storejsoninje = false)
         {
             List<EDCommander> listCommanders = EDCommander.GetListCommanders();
 
@@ -216,7 +216,7 @@ namespace EliteDangerousCore
                 if (watchers.FindIndex(x => x.WatcherFolder.Equals(frontierfolder)) < 0)  // and we are not watching it..
                 {
                     System.Diagnostics.Trace.WriteLine(string.Format("New watch on {0}", frontierfolder));
-                    JournalMonitorWatcher mw = new JournalMonitorWatcher(frontierfolder);
+                    JournalMonitorWatcher mw = new JournalMonitorWatcher(frontierfolder, storejsoninje);
                     watchers.Add(mw);
 
                     StatusMonitorWatcher sw = new StatusMonitorWatcher(frontierfolder, ScanTick);
@@ -236,7 +236,7 @@ namespace EliteDangerousCore
                     continue;       // already done
 
                 System.Diagnostics.Trace.WriteLine(string.Format("New watch on {0}", datapath));
-                JournalMonitorWatcher mw = new JournalMonitorWatcher(datapath);
+                JournalMonitorWatcher mw = new JournalMonitorWatcher(datapath, storejsoninje);
                 watchers.Add(mw);
 
                 StatusMonitorWatcher sw = new StatusMonitorWatcher(datapath, ScanTick);
