@@ -263,7 +263,7 @@ namespace EDDiscovery.UserControls
                 return;
             }
 
-            if (he.IsFSDJump || he.journalEntry is JournalScan || he.journalEntry is JournalFSSDiscoveryScan)
+            if (he.IsFSDCarrierJump || he.journalEntry is JournalScan || he.journalEntry is JournalFSSDiscoveryScan)
             {
                 DataGridViewRow rowpresent = null;
                 foreach (DataGridViewRow rowf in dataGridViewStarList.Rows)
@@ -276,7 +276,7 @@ namespace EDDiscovery.UserControls
                     }
                 }
 
-                if (he.IsFSDJump)
+                if (he.IsFSDCarrierJump)
                 {
                     if (rowpresent != null) // if its in the list, move to top and increment he's
                     {
@@ -361,7 +361,7 @@ namespace EDDiscovery.UserControls
 
             rw.Tag = syslist;
 
-            rw.DefaultCellStyle.ForeColor = (he.System.HasCoordinate || !he.IsFSDJump) ? discoveryform.theme.VisitedSystemColor : discoveryform.theme.NonVisitedSystemColor;
+            rw.DefaultCellStyle.ForeColor = (he.System.HasCoordinate || !he.IsFSDCarrierJump) ? discoveryform.theme.VisitedSystemColor : discoveryform.theme.NonVisitedSystemColor;
 
             he.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
 

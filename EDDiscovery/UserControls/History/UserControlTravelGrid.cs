@@ -463,7 +463,7 @@ namespace EDDiscovery.UserControls
 
             rw.Tag = item;  //tag on row
 
-            rw.DefaultCellStyle.ForeColor = (item.System.HasCoordinate || !item.IsFSDJump) ? discoveryform.theme.VisitedSystemColor : discoveryform.theme.NonVisitedSystemColor;
+            rw.DefaultCellStyle.ForeColor = (item.System.HasCoordinate || !item.IsFSDCarrierJump) ? discoveryform.theme.VisitedSystemColor : discoveryform.theme.NonVisitedSystemColor;
 
             string tip = item.EventSummary + Environment.NewLine + EventDescription + Environment.NewLine + EventDetailedInfo;
 
@@ -642,7 +642,7 @@ namespace EDDiscovery.UserControls
                     e.Graphics.DrawString(rowIdx, grid.RowHeadersDefaultCellStyle.Font, br, headerBounds, centerFormat);
             }
 
-            int noicons = (he.IsFSDJump && showfsdmapcolour) ? 2 : 1;
+            int noicons = (he.IsFSDCarrierJump && showfsdmapcolour) ? 2 : 1;
             if (he.StartMarker || he.StopMarker)
                 noicons++;
 

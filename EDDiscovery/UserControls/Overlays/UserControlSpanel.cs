@@ -421,7 +421,7 @@ namespace EDDiscovery.UserControls
                 coldata.Add((he.snc != null) ? he.snc.Note.Replace("\r\n", " ") : "");
             }
 
-            bool showdistance = !Config(Configuration.showDistancesOnFSDJumpsOnly) || he.IsFSDJump;
+            bool showdistance = !Config(Configuration.showDistancesOnFSDJumpsOnly) || he.IsFSDCarrierJump;
 
             if (layoutorder == 2 && Config(Configuration.showDistancePerStar))
                 coldata.Add(showdistance ? DistToStar(he, tpos) : "");

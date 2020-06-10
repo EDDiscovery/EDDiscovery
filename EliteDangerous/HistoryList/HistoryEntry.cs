@@ -55,7 +55,7 @@ namespace EliteDangerousCore
         public bool EDDNSync { get { return journalEntry.SyncedEDDN; } }
         public bool StartMarker { get { return journalEntry.StartMarker; } }
         public bool StopMarker { get { return journalEntry.StopMarker; } }
-        public bool IsFSDJump { get { return EntryType == JournalTypeEnum.FSDJump || EntryType == JournalTypeEnum.CarrierJump; } }
+        public bool IsFSDCarrierJump { get { return EntryType == JournalTypeEnum.FSDJump || EntryType == JournalTypeEnum.CarrierJump; } }
         public bool IsLocOrJump { get { return EntryType == JournalTypeEnum.FSDJump || EntryType == JournalTypeEnum.Location || EntryType == JournalTypeEnum.CarrierJump; } }
         public bool IsFuelScoop { get { return EntryType == JournalTypeEnum.FuelScoop; } }
         public bool IsShipChange { get { return (EntryType == JournalTypeEnum.LoadGame || EntryType == JournalTypeEnum.Docked) && ShipInformation != null; } }
@@ -241,7 +241,7 @@ namespace EliteDangerousCore
         {
             MaterialCommodity = MaterialCommoditiesList.Process(je, prev?.MaterialCommodity);
 
-            snc = SystemNoteClass.GetSystemNote(Journalid, IsFSDJump, System);       // may be null
+            snc = SystemNoteClass.GetSystemNote(Journalid, IsFSDCarrierJump, System);       // may be null
         }
 
         #endregion
@@ -251,9 +251,9 @@ namespace EliteDangerousCore
         public void SetJournalSystemNoteText(string text, bool commit, bool sendtoedsm)
         {
             if (snc == null || snc.Journalid == 0)           // if no system note, or its one on a system, from now on we assign journal system notes only from this IF
-                snc = SystemNoteClass.MakeSystemNote("", DateTime.Now, System.Name, Journalid, System.EDSMID, IsFSDJump);
+                snc = SystemNoteClass.MakeSystemNote("", DateTime.Now, System.Name, Journalid, System.EDSMID, IsFSDCarrierJump);
 
-            snc = snc.UpdateNote(text, commit, DateTime.Now, snc.EdsmId, IsFSDJump);        // and update info, and update our ref in case it has changed or gone null
+            snc = snc.UpdateNote(text, commit, DateTime.Now, snc.EdsmId, IsFSDCarrierJump);        // and update info, and update our ref in case it has changed or gone null
                                                                                             // remember for EDSM send purposes if its an FSD entry
 
             if (snc != null && commit && sendtoedsm && snc.FSDEntry)                    // if still have a note, and commiting, and send to esdm, and FSD jump

@@ -159,36 +159,36 @@ namespace EDDiscovery.UserControls
             if (he != null)
             {
                 StatToDGVStats("Visits".T(EDTx.UserControlStats_Visits), hl.GetVisitsCount(he.System.Name) + " to system ".T(EDTx.UserControlStats_tosystem) + he.System.Name);
-                StatToDGVStats("Jumps Before System".T(EDTx.UserControlStats_JumpsBeforeSystem), hl.GetFSDJumpsBeforeUTC(he.EventTimeUTC) + " to system ".T(EDTx.UserControlStats_tosystem) + he.System.Name);
+                StatToDGVStats("Jumps Before System".T(EDTx.UserControlStats_JumpsBeforeSystem), hl.GetFSDCarrierJumpsBeforeUTC(he.EventTimeUTC) + " to system ".T(EDTx.UserControlStats_tosystem) + he.System.Name);
             }
 
-            int totaljumps = hl.GetFSDJumps(new TimeSpan(10000, 0, 0, 0));
+            int totaljumps = hl.GetFSDCarrierJumps(new TimeSpan(10000, 0, 0, 0));
             StatToDGVStats("Total No of jumps: ".T(EDTx.UserControlStats_TotalNoofjumps), totaljumps);
             if (totaljumps > 0)
             {
-                StatToDGVStats("Jump History".T(EDTx.UserControlStats_JumpHistory), "24 Hours: ".T(EDTx.UserControlStats_24hc) + hl.GetFSDJumps(new TimeSpan(1, 0, 0, 0)) +
-                                      ", One Week: ".T(EDTx.UserControlStats_OneWeek) + hl.GetFSDJumps(new TimeSpan(7, 0, 0, 0)) +
-                                      ", 30 Days: ".T(EDTx.UserControlStats_30Days) + hl.GetFSDJumps(new TimeSpan(30, 0, 0, 0)) +
-                                      ", One Year: ".T(EDTx.UserControlStats_OneYear) + hl.GetFSDJumps(new TimeSpan(365, 0, 0, 0))
+                StatToDGVStats("Jump History".T(EDTx.UserControlStats_JumpHistory), "24 Hours: ".T(EDTx.UserControlStats_24hc) + hl.GetFSDCarrierJumps(new TimeSpan(1, 0, 0, 0)) +
+                                      ", One Week: ".T(EDTx.UserControlStats_OneWeek) + hl.GetFSDCarrierJumps(new TimeSpan(7, 0, 0, 0)) +
+                                      ", 30 Days: ".T(EDTx.UserControlStats_30Days) + hl.GetFSDCarrierJumps(new TimeSpan(30, 0, 0, 0)) +
+                                      ", One Year: ".T(EDTx.UserControlStats_OneYear) + hl.GetFSDCarrierJumps(new TimeSpan(365, 0, 0, 0))
                                       );
 
                 HistoryEntry north = hl.GetConditionally(double.MinValue, (HistoryEntry s, ref double l) =>
-                { bool v = s.IsFSDJump && s.System.HasCoordinate && s.System.Z > l; if (v) l = s.System.Z; return v; });
+                { bool v = s.IsFSDCarrierJump && s.System.HasCoordinate && s.System.Z > l; if (v) l = s.System.Z; return v; });
 
                 HistoryEntry south = hl.GetConditionally(double.MaxValue, (HistoryEntry s, ref double l) =>
-                { bool v = s.IsFSDJump && s.System.HasCoordinate && s.System.Z < l; if (v) l = s.System.Z; return v; });
+                { bool v = s.IsFSDCarrierJump && s.System.HasCoordinate && s.System.Z < l; if (v) l = s.System.Z; return v; });
 
                 HistoryEntry east = hl.GetConditionally(double.MinValue, (HistoryEntry s, ref double l) =>
-                { bool v = s.IsFSDJump && s.System.HasCoordinate && s.System.X > l; if (v) l = s.System.X; return v; });
+                { bool v = s.IsFSDCarrierJump && s.System.HasCoordinate && s.System.X > l; if (v) l = s.System.X; return v; });
 
                 HistoryEntry west = hl.GetConditionally(double.MaxValue, (HistoryEntry s, ref double l) =>
-                { bool v = s.IsFSDJump && s.System.HasCoordinate && s.System.X < l; if (v) l = s.System.X; return v; });
+                { bool v = s.IsFSDCarrierJump && s.System.HasCoordinate && s.System.X < l; if (v) l = s.System.X; return v; });
 
                 HistoryEntry up = hl.GetConditionally(double.MinValue, (HistoryEntry s, ref double l) =>
-                { bool v = s.IsFSDJump && s.System.HasCoordinate && s.System.Y > l; if (v) l = s.System.Y; return v; });
+                { bool v = s.IsFSDCarrierJump && s.System.HasCoordinate && s.System.Y > l; if (v) l = s.System.Y; return v; });
 
                 HistoryEntry down = hl.GetConditionally(double.MaxValue, (HistoryEntry s, ref double l) =>
-                { bool v = s.IsFSDJump && s.System.HasCoordinate && s.System.Y < l; if (v) l = s.System.Y; return v; });
+                { bool v = s.IsFSDCarrierJump && s.System.HasCoordinate && s.System.Y < l; if (v) l = s.System.Y; return v; });
 
                 StatToDGVStats("Most North".T(EDTx.UserControlStats_MostNorth), GetSystemDataString(north));
                 StatToDGVStats("Most South".T(EDTx.UserControlStats_MostSouth), GetSystemDataString(south));
@@ -200,7 +200,7 @@ namespace EDDiscovery.UserControls
                 if (mostVisited != null)
                 {
                     var groupeddata = from data in hl.OrderByDate
-                                      where data.IsFSDJump
+                                      where data.IsFSDCarrierJump
                                       group data by data.System.Name
                                           into grouped
                                       select new
@@ -998,7 +998,7 @@ namespace EDDiscovery.UserControls
             {
                 strarr[0] = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(si.Value.ShipUserName ?? "-");
                 strarr[1] = (si.Value.ShipUserIdent ?? "-").ToUpper();
-                strarr[2] = hl.GetFSDJumps(si.Key).ToString();
+                strarr[2] = hl.GetFSDCarrierJumps(si.Key).ToString();
                 strarr[3] = hl.GetTraveledLy(si.Key).ToString("N0");
                 strarr[4] = hl.GetBodiesScanned(si.Key).ToString();
                 strarr[5] = hl.GetTonnesBought(si.Key).ToString("N0");
