@@ -1,5 +1,5 @@
 if "%1" == "" (
-set /P vno="Version Number (10.1.2 etc) :"
+set /P vno=Version Number (10.1.2 etc) :
 ) else (
 echo set to %1
 set vno=%1
