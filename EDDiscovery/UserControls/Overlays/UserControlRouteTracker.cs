@@ -96,13 +96,13 @@ namespace EDDiscovery.UserControls
 
         private void Display(HistoryList hl)            // when user clicks around..  HE may be null here
         {
-            currentHE = hl.GetLastFSD;
+            currentHE = hl.GetLastFSDCarrierJump;
             Display();
         }
 
         private void NewEntry(HistoryEntry l, HistoryList hl)
         {
-            currentHE = hl.GetLastFSD;
+            currentHE = hl.GetLastFSDCarrierJump;
             Display();
         }
 

@@ -736,7 +736,7 @@ namespace EDDiscovery
                 Trace.WriteLine(new StackTrace(true).ToString());
             }
 
-            if (he.IsFSDJump)
+            if (he.IsFSDCarrierJump)
             {
                 int count = history.GetVisitsCount(he.System.Name);
                 LogLine(string.Format("Arrived at system {0} Visit No. {1}".T(EDTx.EDDiscoveryForm_Arrived), he.System.Name, count));
@@ -1189,7 +1189,7 @@ namespace EDDiscovery
         public void Open2DMap()
         {
             this.Cursor = Cursors.WaitCursor;
-            Form2DMap frm = new Form2DMap(Controller.history.FilterByFSDAndPosition);
+            Form2DMap frm = new Form2DMap(Controller.history.FilterByFSDCarrierJumpAndPosition);
             frm.Show();
             this.Cursor = Cursors.Default;
         }

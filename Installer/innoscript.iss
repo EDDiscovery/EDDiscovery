@@ -76,7 +76,7 @@ Name: "{userappdata}\Microsoft\Internet Explorer\Quick Launch\{#MyAppName}"; Fil
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
 
 [Messages]
-SelectDirBrowseLabel=To continue, click Next {localappdata} %{LOCALAPPDATA}.
+SelectDirBrowseLabel=To continue, click Next.
 ConfirmUninstall=Are you sure you want to completely remove %1 and all of its components? Note that all your user data is not removed by this uninstall and is still stored in your local app data
 
 [Code]
@@ -86,11 +86,13 @@ const
 
 function InitializeSetup(): Boolean;
 var Path:String;
+var EDD:String;
 begin
   Path := ExpandConstant('{autopf}');
   Path := Path + '\EDDiscovery\EDDiscovery';  // where Advanced installer stuffed it
-  Log('Path computed as ' + Path);   // use /Log="c:\code\setup.log" in Run | Parameters, also appears in log window below
-  if ( DirExists(Path)) Then begin
+  EDD := Path + '\EDDiscovery.exe';          // and the file
+  Log('Path computed as ' + Path + ' file ' + EDD);   // use /Log="c:\code\setup.log" in Run | Parameters, also appears in log window below
+  if ( DirExists(Path) And FileExists(EDD)) Then begin
     MsgBox(QuitMessageReboot, mbError, mb_Ok);
   end else
       Result := True;

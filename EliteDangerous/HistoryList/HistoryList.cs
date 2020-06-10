@@ -151,11 +151,11 @@ namespace EliteDangerousCore
             }
         }
 
-        public List<HistoryEntry> FilterByFSDAndPosition        // FSD and Carrier Jumps note
+        public List<HistoryEntry> FilterByFSDCarrierJumpAndPosition
         {
             get
             {
-                return (from s in historylist where s.IsFSDJump && s.System.HasCoordinate select s).ToList();
+                return (from s in historylist where s.IsFSDCarrierJump && s.System.HasCoordinate select s).ToList();
             }
         }
 
@@ -194,7 +194,15 @@ namespace EliteDangerousCore
             return ents;
         }
 
-        public List<HistoryEntry> FilterByFSD
+        public List<HistoryEntry> FilterByFSDCarrierJump
+        {
+            get
+            {
+                return (from s in historylist where s.IsFSDCarrierJump select s).ToList();
+            }
+        }
+
+        public List<HistoryEntry> FilterByFSDOnly
         {
             get
             {
@@ -266,11 +274,19 @@ namespace EliteDangerousCore
             return cursys != null ? cursys.Distance(other) : -1;  // current can be null, shipsystem can be null, cursys can not have co-ord, -1 if failed.
         }
 
-        public HistoryEntry GetLastFSD
+        public HistoryEntry GetLastFSDCarrierJump
         {
             get
             {
-                return historylist.FindLast(x => x.IsFSDJump);
+                return historylist.FindLast(x => x.IsFSDCarrierJump);
+            }
+        }
+
+        public HistoryEntry GetLastFSDOnly
+        {
+            get
+            {
+                return historylist.FindLast(x => x.EntryType == JournalTypeEnum.FSDJump);
             }
         }
 
@@ -323,7 +339,7 @@ namespace EliteDangerousCore
         public int GetVisitsCount(string name)
         {
             return (from he in historylist.AsParallel()
-                    where (he.IsFSDJump && he.System.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase))
+                    where (he.IsFSDCarrierJump && he.System.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase))
                     select he).Count();
         }
         public List<JournalScan> GetScans(string name)
@@ -333,20 +349,20 @@ namespace EliteDangerousCore
                     select s.journalEntry as JournalScan).ToList<JournalScan>();
         }
 
-        public int GetFSDJumps(TimeSpan t)
+        public int GetFSDCarrierJumps(TimeSpan t)
         {
             DateTime tme = DateTime.UtcNow.Subtract(t);
-            return (from s in historylist where s.IsFSDJump && s.EventTimeUTC >= tme select s).Count();
+            return (from s in historylist where s.IsFSDCarrierJump && s.EventTimeUTC >= tme select s).Count();
         }
 
-        public int GetFSDJumpsUTC(DateTime startutc, DateTime toutc)
+        public int GetFSDCarrierJumpsUTC(DateTime startutc, DateTime toutc)
         {
-            return (from s in historylist where s.IsFSDJump && s.EventTimeUTC >= startutc && s.EventTimeUTC < toutc select s).Count();
+            return (from s in historylist where s.IsFSDCarrierJump && s.EventTimeUTC >= startutc && s.EventTimeUTC < toutc select s).Count();
         }
 
-        public int GetFSDJumps(string forShipKey)
+        public int GetFSDCarrierJumps(string forShipKey)
         {
-            return (from s in historylist where s.IsFSDJump && $"{s.ShipTypeFD.ToLowerInvariant()}:{s.ShipId}" == forShipKey select s).Count();
+            return (from s in historylist where s.IsFSDCarrierJump && $"{s.ShipTypeFD.ToLowerInvariant()}:{s.ShipId}" == forShipKey select s).Count();
         }
 
         public int GetNrMappedUTC(DateTime startutc, DateTime toutc)
@@ -442,9 +458,9 @@ namespace EliteDangerousCore
                 .Distinct(new ScansAreForSameBody()).Count();
         }
 
-        public int GetFSDJumpsBeforeUTC(DateTime utc)
+        public int GetFSDCarrierJumpsBeforeUTC(DateTime utc)
         {
-            return (from s in historylist where s.IsFSDJump && s.EventTimeUTC < utc select s).Count();
+            return (from s in historylist where s.IsFSDCarrierJump && s.EventTimeUTC < utc select s).Count();
         }
 
         public string GetCommanderFID()     // may be null
@@ -535,7 +551,7 @@ namespace EliteDangerousCore
                 {
                     foreach (HistoryEntry he in historylist)
                     {
-                        if (he.IsFSDJump && !he.System.HasCoordinate)// try and load ones without position.. if its got pos we are happy
+                        if (he.IsFSDCarrierJump && !he.System.HasCoordinate)// try and load ones without position.. if its got pos we are happy
                         {           // done in two IFs for debugging, in case your wondering why!
                             if (he.System.source != SystemSource.FromEDSM && he.System.EDSMID == 0)   // and its not from EDSM and we have not already tried
                             {
@@ -703,7 +719,7 @@ namespace EliteDangerousCore
             if (fsdjump)
                 return historylist.FindLast(x => x.System.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
             else
-                return historylist.FindLast(x => x.IsFSDJump && x.System.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
+                return historylist.FindLast(x => x.IsFSDCarrierJump && x.System.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
         }
 
         public ISystem FindSystem(string name, EDSM.GalacticMapping glist = null)        // in system or name
@@ -788,7 +804,7 @@ namespace EliteDangerousCore
 
                 if (curindex > 0)       // no point with index=0, there is no last.
                 {
-                    int lastindex = historylist.FindLastIndex(curindex - 1, x => (fsdjumps) ? x.IsFSDJump : true);
+                    int lastindex = historylist.FindLastIndex(curindex - 1, x => (fsdjumps) ? x.IsFSDCarrierJump : true);
 
                     if (lastindex >= 0)
                         return historylist[lastindex];
