@@ -19,14 +19,14 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace EDDiscovery.Forms
+namespace EliteDangerousCore.Forms
 {
     public partial class CommanderForm : ExtendedControls.DraggableForm
     {
         public CommanderForm()
         {
             InitializeComponent();
-            EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
+            var theme = ExtendedControls.ThemeableFormsInstance.Instance;
             bool winborder = theme.ApplyDialog(this);
             panelTop.Visible = panelTop.Enabled = !winborder;
 
@@ -38,15 +38,19 @@ namespace EDDiscovery.Forms
         {
         }
 
-        public void Init(bool enablecmdredit)
+        public void Init(bool enablecmdredit, bool disablefromedsm = false, bool disable3dmapsettings = false)
         {
             textBoxBorderCmdr.Enabled = enablecmdredit;
+            checkBoxCustomEDSMFrom.Visible = !disablefromedsm;
+            extGroupBoxCommanderInfo.Visible = !disable3dmapsettings;
+            Height -= extGroupBoxCommanderInfo.Height;
         }
 
-        public void Init(EDCommander cmdr, bool enablecmdredit)
+        public void Init(EDCommander cmdr, bool enablecmdredit, bool disablefromedsm = false, bool disable3dmapsettings = false)
         {
+            Init(enablecmdredit, disablefromedsm, disable3dmapsettings);
+
             textBoxBorderCmdr.Text = cmdr.Name;
-            textBoxBorderCmdr.Enabled = enablecmdredit;
             textBoxBorderJournal.Text = cmdr.JournalDir;
             textBoxBorderEDSMName.Text = cmdr.EdsmName;
             textBoxBorderEDSMAPI.Text = cmdr.EDSMAPIKey;

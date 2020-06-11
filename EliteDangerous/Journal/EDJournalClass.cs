@@ -203,9 +203,9 @@ namespace EliteDangerousCore
 
         #endregion
 
-        #region History refresh calls this for a global reparse of all journal event folders during load history
+        #region History refresh calls this for a set up of watchers.. then a global reparse of all journal event folders during load history
 
-        public void ParseJournalFiles(Func<bool> cancelRequested, Action<int, string> updateProgress, bool forceReload = false)
+        public void SetupWatchers(bool storejsoninje = false)
         {
             List<EDCommander> listCommanders = EDCommander.GetListCommanders();
 
@@ -216,7 +216,7 @@ namespace EliteDangerousCore
                 if (watchers.FindIndex(x => x.WatcherFolder.Equals(frontierfolder)) < 0)  // and we are not watching it..
                 {
                     System.Diagnostics.Trace.WriteLine(string.Format("New watch on {0}", frontierfolder));
-                    JournalMonitorWatcher mw = new JournalMonitorWatcher(frontierfolder);
+                    JournalMonitorWatcher mw = new JournalMonitorWatcher(frontierfolder, storejsoninje);
                     watchers.Add(mw);
 
                     StatusMonitorWatcher sw = new StatusMonitorWatcher(frontierfolder, ScanTick);
@@ -236,7 +236,7 @@ namespace EliteDangerousCore
                     continue;       // already done
 
                 System.Diagnostics.Trace.WriteLine(string.Format("New watch on {0}", datapath));
-                JournalMonitorWatcher mw = new JournalMonitorWatcher(datapath);
+                JournalMonitorWatcher mw = new JournalMonitorWatcher(datapath, storejsoninje);
                 watchers.Add(mw);
 
                 StatusMonitorWatcher sw = new StatusMonitorWatcher(datapath, ScanTick);
@@ -296,10 +296,15 @@ namespace EliteDangerousCore
                     statuswatchers.Remove(mw);
                 }
             }
+        }
 
+        public void ParseJournalFilesOnWatchers(Action<int, string> updateProgress, bool forceReload = false, bool forceLastReload = false, Action<JournalEntry> firebacknostore = null)
+        {
             for (int i = 0; i < watchers.Count; i++)             // parse files of all folders being watched
             {
-                watchers[i].ParseJournalFiles(cancelRequested, updateProgress, forceReload);     // may create new commanders at the end, but won't need any new watchers, because they will obv be in the same folder
+                // may create new commanders at the end, but won't need any new watchers, because they will obv be in the same folder
+                var list = watchers[i].ScanJournalFiles(forceReload, forceLastReload);    
+                watchers[i].ProcessDetectedNewFiles(list, updateProgress, firebacknostore);
             }
         }
 

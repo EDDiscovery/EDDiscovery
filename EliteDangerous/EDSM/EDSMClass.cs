@@ -34,17 +34,16 @@ namespace EliteDangerousCore.EDSM
         // use if you need an API/name pair to get info from EDSM.  Not all queries need it
         public bool ValidCredentials { get { return !string.IsNullOrEmpty(commanderName) && !string.IsNullOrEmpty(apiKey); } }
 
+        static public string SoftwareName { get; set; } = "EDDiscovery";
         private string commanderName;
         private string apiKey;
 
         private readonly string fromSoftwareVersion;
-        private readonly string fromSoftware;
         static private Dictionary<long, List<JournalScan>> DictEDSMBodies = new Dictionary<long, List<JournalScan>>();
         static private Dictionary<long, List<JournalScan>> DictEDSMBodiesByID64 = new Dictionary<long, List<JournalScan>>();
 
         public EDSMClass()
         {
-            fromSoftware = "EDDiscovery";
             var assemblyFullName = Assembly.GetEntryAssembly().FullName;
             fromSoftwareVersion = assemblyFullName.Split(',')[1].Split('=')[1];
 
@@ -72,7 +71,7 @@ namespace EliteDangerousCore.EDSM
 
         public string SubmitDistances(string from, Dictionary<string, double> distances)
         {
-            string query = "{\"ver\":2," + " \"commander\":\"" + commanderName + "\", \"fromSoftware\":\"" + fromSoftware + "\",  \"fromSoftwareVersion\":\"" + fromSoftwareVersion + "\", \"p0\": { \"name\": \"" + from + "\" },   \"refs\": [";
+            string query = "{\"ver\":2," + " \"commander\":\"" + commanderName + "\", \"fromSoftware\":\"" + SoftwareName + "\",  \"fromSoftwareVersion\":\"" + fromSoftwareVersion + "\", \"p0\": { \"name\": \"" + from + "\" },   \"refs\": [";
 
             var counter = 0;
             foreach (var item in distances)
@@ -1030,7 +1029,7 @@ namespace EliteDangerousCore.EDSM
 
             string postdata = "commanderName=" + Uri.EscapeDataString(commanderName) +
                               "&apiKey=" + Uri.EscapeDataString(apiKey) +
-                              "&fromSoftware=" + Uri.EscapeDataString(fromSoftware) +
+                              "&fromSoftware=" + Uri.EscapeDataString(SoftwareName) +
                               "&fromSoftwareVersion=" + Uri.EscapeDataString(fromSoftwareVersion) +
                               "&message=" + EscapeLongDataString(message.ToString(Newtonsoft.Json.Formatting.None));
 

@@ -1251,7 +1251,7 @@ namespace EDDiscovery.UserControls
         {
             if (rightclickhe != null)
             {
-                List<Newtonsoft.Json.Linq.JToken> list = EliteDangerousCore.Inara.InaraSync.NewEntryList(discoveryform.history, rightclickhe);
+                List<Newtonsoft.Json.Linq.JToken> list = EliteDangerousCore.Inara.InaraSync.NewEntryList(rightclickhe);
 
                 foreach (Newtonsoft.Json.Linq.JToken j in list)
                 {
@@ -1270,7 +1270,7 @@ namespace EDDiscovery.UserControls
                 string json = jo?.ToString();
                 discoveryform.LogLine(json);
 
-                EliteDangerousCore.Inara.InaraClass inara = new EliteDangerousCore.Inara.InaraClass(EDCommander.Current,current_historylist.GetCommanderFID());
+                EliteDangerousCore.Inara.InaraClass inara = new EliteDangerousCore.Inara.InaraClass(EDCommander.Current);
                 string str = inara.ToJSONString(list);
                 discoveryform.LogLine(str);
                 System.IO.File.WriteAllText(@"c:\code\inaraentry.json", str);

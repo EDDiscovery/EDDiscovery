@@ -91,6 +91,12 @@
     <Compile Include="EliteDangerous\EDCalculations.cs" />
     <Compile Include="DB\EDCommander.cs" />
     <Compile Include="EliteDangerous\Translations.cs" />
+    <Compile Include="Forms\CommanderForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\CommanderForm.Designer.cs">
+      <DependentUpon>CommanderForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="HistoryList\HistoryFsdJumpStatistics.cs" />
     <Compile Include="IGAU\IGAUSync.cs" />
     <Compile Include="IGAU\IGAUClass.cs" />
@@ -266,6 +272,9 @@
     <Compile Include="UIEvents\UISrvTurret.cs" />
     <Compile Include="UIEvents\UISrvUnderShip.cs" />
     <Compile Include="UIEvents\UISupercruise.cs" />
+    <EmbeddedResource Include="Forms\CommanderForm.resx">
+      <DependentUpon>CommanderForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

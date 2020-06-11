@@ -750,7 +750,7 @@ namespace EDDiscovery
 
             if (EDCommander.Current.SyncToInara)
             {
-                EliteDangerousCore.Inara.InaraSync.NewEvent(LogLine, history, he);
+                EliteDangerousCore.Inara.InaraSync.NewEvent(LogLine, he);
             }
 
             if (EDCommander.Current.SyncToIGAU )

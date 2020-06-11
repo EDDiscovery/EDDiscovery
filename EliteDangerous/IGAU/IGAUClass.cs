@@ -31,15 +31,15 @@ namespace EliteDangerousCore.IGAU
 {
     public class IGAUClass : BaseUtils.HttpCom
     {
+        static public string SoftwareName { get; set; } = "EDDiscovery";
+
         private readonly string App_Version;
-        private readonly string App_Name;
 
         private readonly string igau_address = "https://ddss70885k.execute-api.us-west-1.amazonaws.com/Prod";
 
         public IGAUClass()
         {
             httpserveraddress = igau_address;
-            App_Name = "EDDiscovery";
             var assemblyFullName = Assembly.GetEntryAssembly().FullName;
             App_Version = assemblyFullName.Split(',')[1].Split('=')[1];
         }
@@ -58,7 +58,7 @@ namespace EliteDangerousCore.IGAU
             detail["Name_Localised"] = Name_Localised;
             detail["System"] = System;
             detail["SystemAddress"] = SystemAddress.ToString();
-            detail["App_Name"] = App_Name;
+            detail["App_Name"] = SoftwareName;
             detail["App_Version"] = App_Version;
             return detail;
         }
