@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk" InitialTargets="Version">
-  <Import Sdk="Microsoft.NET.Sdk.WindowsDesktop" Project="Sdk.props" Condition="'$(TargetFramework)' == 'netcoreapp3.0'"/>
+  <Import Sdk="Microsoft.NET.Sdk.WindowsDesktop" Project="Sdk.props" Condition="'$(TargetFramework)' == 'netcoreapp3.0'" />
   <PropertyGroup>
     <ProjectGuid>{6EE10D92-E3E4-44D9-8E6B-851801B0B510}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -131,6 +131,7 @@
     <ProjectReference Include="..\BaseUtilities\OpenTKUtils\OpenTKUtils.csproj" />
     <ProjectReference Include="..\BaseUtilities\SQLLite\SQLLite.csproj" />
     <ProjectReference Include="..\EDDIcons\EDDIcons.csproj" />
+    <ProjectReference Include="..\EliteDangerous.WinForms\EliteDangerous.WinForms.csproj" />
     <ProjectReference Include="..\EliteDangerous\EliteDangerous.csproj" />
     <ProjectReference Include="..\ExtendedControls\ExtendedControls\ExtendedControls.csproj" />
     <ProjectReference Include="..\ExtendedControls\ExtendedForms\ExtendedForms.csproj" />
@@ -241,7 +242,7 @@
       <WebFiles Include="$(MSBuildProjectDirectory)\..\WebSite\EDD\**" />
     </ItemGroup>
     <Message Text="Webfiles zip up '@(WebFiles)'" />
-    <Zip OutputFilename="$(OutDir)eddwebsite.zip" Files="@(WebFiles)" BaseDirectory="$(MSBuildProjectDirectory)\..\WebSite\EDD\"  />
+    <Zip OutputFilename="$(OutDir)eddwebsite.zip" Files="@(WebFiles)" BaseDirectory="$(MSBuildProjectDirectory)\..\WebSite\EDD\" />
     <ItemGroup>
       <ZipFiles Include="$(TargetPath)" />
       <ZipFiles Include="$(OutDir)*.dll" />
@@ -315,5 +316,5 @@
     </ItemGroup>
     <WriteCodeFragment AssemblyAttributes="@(AssemblyAttribute)" Language="C#" OutputFile="Properties\ExtraVersion.cs" />
   </Target>
-  <Import Sdk="Microsoft.NET.Sdk.WindowsDesktop" Project="Sdk.targets" Condition="'$(TargetFramework)' == 'netcoreapp3.0'"/>
+  <Import Sdk="Microsoft.NET.Sdk.WindowsDesktop" Project="Sdk.targets" Condition="'$(TargetFramework)' == 'netcoreapp3.0'" />
 </Project>

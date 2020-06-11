@@ -38,9 +38,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BaseUtils.WinForms", "BaseU
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ActionLanguage.WinForms", "ActionLanguage\ActionLanguage.WinForms\ActionLanguage.WinForms.csproj", "{76685C00-06B5-4C26-8ECA-CFCE03323EF7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Audio.CSCore", "BaseUtilities\Audio.CSCore\Audio.CSCore.csproj", "{CC02F19A-7579-4308-888E-E28B54673BB5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Audio.CSCore", "BaseUtilities\Audio.CSCore\Audio.CSCore.csproj", "{CC02F19A-7579-4308-888E-E28B54673BB5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Audio.WindowsSpeech", "BaseUtilities\Audio.WindowsSpeech\Audio.WindowsSpeech.csproj", "{14961C37-E59D-49DE-9CA3-DD1BEDDEDCD7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Audio.WindowsSpeech", "BaseUtilities\Audio.WindowsSpeech\Audio.WindowsSpeech.csproj", "{14961C37-E59D-49DE-9CA3-DD1BEDDEDCD7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EliteDangerous.WinForms", "EliteDangerous.WinForms\EliteDangerous.WinForms.csproj", "{782384EA-70CB-4CF5-855C-FDBF19EEF0E6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -243,6 +245,18 @@ Global
 		{14961C37-E59D-49DE-9CA3-DD1BEDDEDCD7}.Release|x64.Build.0 = Release|Any CPU
 		{14961C37-E59D-49DE-9CA3-DD1BEDDEDCD7}.Release|x86.ActiveCfg = Release|Any CPU
 		{14961C37-E59D-49DE-9CA3-DD1BEDDEDCD7}.Release|x86.Build.0 = Release|Any CPU
+		{782384EA-70CB-4CF5-855C-FDBF19EEF0E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{782384EA-70CB-4CF5-855C-FDBF19EEF0E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{782384EA-70CB-4CF5-855C-FDBF19EEF0E6}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{782384EA-70CB-4CF5-855C-FDBF19EEF0E6}.Debug|x64.Build.0 = Debug|Any CPU
+		{782384EA-70CB-4CF5-855C-FDBF19EEF0E6}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{782384EA-70CB-4CF5-855C-FDBF19EEF0E6}.Debug|x86.Build.0 = Debug|Any CPU
+		{782384EA-70CB-4CF5-855C-FDBF19EEF0E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{782384EA-70CB-4CF5-855C-FDBF19EEF0E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{782384EA-70CB-4CF5-855C-FDBF19EEF0E6}.Release|x64.ActiveCfg = Release|Any CPU
+		{782384EA-70CB-4CF5-855C-FDBF19EEF0E6}.Release|x64.Build.0 = Release|Any CPU
+		{782384EA-70CB-4CF5-855C-FDBF19EEF0E6}.Release|x86.ActiveCfg = Release|Any CPU
+		{782384EA-70CB-4CF5-855C-FDBF19EEF0E6}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -435,7 +435,6 @@ namespace EliteDangerousCore
 
         public async System.Threading.Tasks.Task<SystemNode> FindSystemAsync(ISystem sys, bool edsmweblookup )    // Find the system. Optionally do a EDSM web lookup
         {
-            System.Diagnostics.Debug.Assert(System.Windows.Forms.Application.MessageLoop);  // foreground only
             System.Diagnostics.Debug.Assert(sys != null);
 
             SystemNode sn = FindSystemNode(sys);

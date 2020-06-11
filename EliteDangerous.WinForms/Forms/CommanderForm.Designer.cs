@@ -353,7 +353,7 @@
             this.textBoxBorderJournal.Size = new System.Drawing.Size(197, 20);
             this.textBoxBorderJournal.TabIndex = 3;
             this.textBoxBorderJournal.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.toolTip.SetToolTip(this.textBoxBorderJournal, EDDiscovery.Properties.Resources.Tooltip_JournalLocation);
+            this.toolTip.SetToolTip(this.textBoxBorderJournal, global::EliteDangerous.WinForms.Properties.Resources.Tooltip_JournalLocation);
             this.textBoxBorderJournal.WordWrap = true;
             // 
             // textBoxBorderCmdr
