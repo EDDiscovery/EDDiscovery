@@ -1043,7 +1043,7 @@
       <Project>{646f71be-f102-444e-9254-818e5a320ab8}</Project>
       <Name>EDDIcons</Name>
     </ProjectReference>
-    <ProjectReference Include="..\EliteDangerous\EliteDangerous.csproj">
+    <ProjectReference Include="..\EliteDangerousCore\EliteDangerous\EliteDangerous.csproj">
       <Project>{019917a4-7342-4f67-8aaf-9e20c016a935}</Project>
       <Name>EliteDangerous</Name>
     </ProjectReference>
