@@ -14,7 +14,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EDDiscovery", "EDDiscovery\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "EDDiscoveryTests\Tests.csproj", "{C4452886-6A1B-4AFD-9E76-AB0E5D8AABA5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EliteDangerous", "EliteDangerous\EliteDangerous.csproj", "{019917A4-7342-4F67-8AAF-9E20C016A935}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EliteDangerous", "EliteDangerousCore\EliteDangerous\EliteDangerous.csproj", "{019917A4-7342-4F67-8AAF-9E20C016A935}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EDDIcons", "EDDIcons\EDDIcons.csproj", "{646F71BE-F102-444E-9254-818E5A320AB8}"
 EndProject
@@ -42,7 +42,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Audio.CSCore", "BaseUtiliti
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Audio.WindowsSpeech", "BaseUtilities\Audio.WindowsSpeech\Audio.WindowsSpeech.csproj", "{14961C37-E59D-49DE-9CA3-DD1BEDDEDCD7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EliteDangerous.WinForms", "EliteDangerous.WinForms\EliteDangerous.WinForms.csproj", "{782384EA-70CB-4CF5-855C-FDBF19EEF0E6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EliteDangerous.WinForms", "EliteDangerousCore\EliteDangerous.WinForms\EliteDangerous.WinForms.csproj", "{782384EA-70CB-4CF5-855C-FDBF19EEF0E6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

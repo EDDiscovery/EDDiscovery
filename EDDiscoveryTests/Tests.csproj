@@ -24,7 +24,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EDDiscovery\EDDiscovery.csproj" />
-    <ProjectReference Include="..\EliteDangerous\EliteDangerous.csproj" />
+    <ProjectReference Include="..\EliteDangerousCore\EliteDangerous\EliteDangerous.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
