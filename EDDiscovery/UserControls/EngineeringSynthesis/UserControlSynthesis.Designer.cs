@@ -54,13 +54,14 @@ namespace EDDiscovery.UserControls
             this.Notes = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Recipe = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.vScrollBarCustomMC = new ExtendedControls.ExtScrollBar();
-            this.chkHistoric = new ExtendedControls.ExtCheckBox();
+            this.chkNotHistoric = new ExtendedControls.ExtCheckBox();
             this.buttonMaterialFilter = new ExtendedControls.ExtButton();
             this.buttonFilterLevel = new ExtendedControls.ExtButton();
             this.buttonRecipeFilter = new ExtendedControls.ExtButton();
             this.buttonClear = new ExtendedControls.ExtButton();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.panelTop = new System.Windows.Forms.FlowLayoutPanel();
+            this.extCheckBoxWordWrap = new ExtendedControls.ExtCheckBox();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewSynthesis)).BeginInit();
             this.panelTop.SuspendLayout();
@@ -72,9 +73,9 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel.Controls.Add(this.vScrollBarCustomMC);
             this.dataViewScrollerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewScrollerPanel.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.dataViewScrollerPanel.Location = new System.Drawing.Point(0, 25);
+            this.dataViewScrollerPanel.Location = new System.Drawing.Point(0, 30);
             this.dataViewScrollerPanel.Name = "dataViewScrollerPanel";
-            this.dataViewScrollerPanel.Size = new System.Drawing.Size(800, 547);
+            this.dataViewScrollerPanel.Size = new System.Drawing.Size(800, 542);
             this.dataViewScrollerPanel.TabIndex = 0;
             this.dataViewScrollerPanel.VerticalScrollBarDockRight = true;
             // 
@@ -98,7 +99,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewSynthesis.RowHeadersVisible = false;
             this.dataGridViewSynthesis.RowHeadersWidth = 25;
             this.dataGridViewSynthesis.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewSynthesis.Size = new System.Drawing.Size(787, 547);
+            this.dataGridViewSynthesis.Size = new System.Drawing.Size(784, 542);
             this.dataGridViewSynthesis.TabIndex = 1;
             this.dataGridViewSynthesis.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewModules_CellEndEdit);
             this.dataGridViewSynthesis.DragDrop += new System.Windows.Forms.DragEventHandler(this.dataGridViewSynthesis_DragDrop);
@@ -177,13 +178,13 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustomMC.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustomMC.HideScrollBar = false;
             this.vScrollBarCustomMC.LargeChange = 0;
-            this.vScrollBarCustomMC.Location = new System.Drawing.Point(787, 0);
+            this.vScrollBarCustomMC.Location = new System.Drawing.Point(784, 0);
             this.vScrollBarCustomMC.Maximum = -1;
             this.vScrollBarCustomMC.Minimum = 0;
             this.vScrollBarCustomMC.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustomMC.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustomMC.Name = "vScrollBarCustomMC";
-            this.vScrollBarCustomMC.Size = new System.Drawing.Size(13, 547);
+            this.vScrollBarCustomMC.Size = new System.Drawing.Size(16, 542);
             this.vScrollBarCustomMC.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustomMC.SmallChange = 1;
             this.vScrollBarCustomMC.TabIndex = 0;
@@ -194,26 +195,29 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustomMC.Value = -1;
             this.vScrollBarCustomMC.ValueLimited = -1;
             // 
-            // chkHistoric
+            // chkNotHistoric
             // 
-            this.chkHistoric.AutoSize = true;
-            this.chkHistoric.CheckBoxColor = System.Drawing.Color.Gray;
-            this.chkHistoric.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.chkHistoric.CheckColor = System.Drawing.Color.DarkBlue;
-            this.chkHistoric.ImageButtonDisabledScaling = 0.5F;
-            this.chkHistoric.ImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.chkHistoric.Location = new System.Drawing.Point(264, 1);
-            this.chkHistoric.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.chkHistoric.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.chkHistoric.Name = "chkHistoric";
-            this.chkHistoric.Size = new System.Drawing.Size(118, 17);
-            this.chkHistoric.TabIndex = 7;
-            this.chkHistoric.Text = "Use Cursor Position";
-            this.chkHistoric.TickBoxReductionRatio = 0.75F;
-            this.toolTip.SetToolTip(this.chkHistoric, "When clicked on, use the materials at the cursor to estimate, when off always use" +
-        " the latest materials.");
-            this.chkHistoric.UseVisualStyleBackColor = true;
-            this.chkHistoric.CheckedChanged += new System.EventHandler(this.chkHistoric_CheckedChanged);
+            this.chkNotHistoric.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkNotHistoric.CheckBoxColor = System.Drawing.Color.Gray;
+            this.chkNotHistoric.CheckBoxDisabledScaling = 0.5F;
+            this.chkNotHistoric.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.chkNotHistoric.CheckColor = System.Drawing.Color.DarkBlue;
+            this.chkNotHistoric.Image = global::EDDiscovery.Icons.Controls.TravelGrid_CursorToTop;
+            this.chkNotHistoric.ImageButtonDisabledScaling = 0.5F;
+            this.chkNotHistoric.ImageIndeterminate = null;
+            this.chkNotHistoric.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.chkNotHistoric.ImageUnchecked = global::EDDiscovery.Icons.Controls.TravelGrid_CursorStill;
+            this.chkNotHistoric.Location = new System.Drawing.Point(352, 1);
+            this.chkNotHistoric.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.chkNotHistoric.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.chkNotHistoric.Name = "chkNotHistoric";
+            this.chkNotHistoric.Size = new System.Drawing.Size(28, 28);
+            this.chkNotHistoric.TabIndex = 7;
+            this.chkNotHistoric.TickBoxReductionRatio = 0.75F;
+            this.toolTip.SetToolTip(this.chkNotHistoric, "When red, use the materials at the cursor to estimate, when green always use the " +
+        "latest materials.");
+            this.chkNotHistoric.UseVisualStyleBackColor = true;
+            this.chkNotHistoric.CheckedChanged += new System.EventHandler(this.chkHistoric_CheckedChanged);
             // 
             // buttonMaterialFilter
             // 
@@ -254,7 +258,7 @@ namespace EDDiscovery.UserControls
             // buttonClear
             // 
             this.buttonClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonClear.Location = new System.Drawing.Point(390, 1);
+            this.buttonClear.Location = new System.Drawing.Point(264, 1);
             this.buttonClear.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonClear.Name = "buttonClear";
             this.buttonClear.Size = new System.Drawing.Size(80, 23);
@@ -274,14 +278,45 @@ namespace EDDiscovery.UserControls
             this.panelTop.Controls.Add(this.buttonRecipeFilter);
             this.panelTop.Controls.Add(this.buttonFilterLevel);
             this.panelTop.Controls.Add(this.buttonMaterialFilter);
-            this.panelTop.Controls.Add(this.chkHistoric);
             this.panelTop.Controls.Add(this.buttonClear);
+            this.panelTop.Controls.Add(this.chkNotHistoric);
+            this.panelTop.Controls.Add(this.extCheckBoxWordWrap);
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
             this.panelTop.Margin = new System.Windows.Forms.Padding(0);
             this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(800, 25);
+            this.panelTop.Size = new System.Drawing.Size(800, 30);
             this.panelTop.TabIndex = 2;
+            // 
+            // extCheckBoxWordWrap
+            // 
+            this.extCheckBoxWordWrap.Appearance = System.Windows.Forms.Appearance.Button;
+            this.extCheckBoxWordWrap.BackColor = System.Drawing.Color.Transparent;
+            this.extCheckBoxWordWrap.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.extCheckBoxWordWrap.CheckBoxColor = System.Drawing.Color.White;
+            this.extCheckBoxWordWrap.CheckBoxDisabledScaling = 0.5F;
+            this.extCheckBoxWordWrap.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.extCheckBoxWordWrap.CheckColor = System.Drawing.Color.DarkBlue;
+            this.extCheckBoxWordWrap.Cursor = System.Windows.Forms.Cursors.Default;
+            this.extCheckBoxWordWrap.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.extCheckBoxWordWrap.FlatAppearance.CheckedBackColor = System.Drawing.Color.Green;
+            this.extCheckBoxWordWrap.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.extCheckBoxWordWrap.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
+            this.extCheckBoxWordWrap.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.extCheckBoxWordWrap.Image = global::EDDiscovery.Icons.Controls.WordWrapOn;
+            this.extCheckBoxWordWrap.ImageButtonDisabledScaling = 0.5F;
+            this.extCheckBoxWordWrap.ImageIndeterminate = null;
+            this.extCheckBoxWordWrap.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.extCheckBoxWordWrap.ImageUnchecked = global::EDDiscovery.Icons.Controls.WordWrapOff;
+            this.extCheckBoxWordWrap.Location = new System.Drawing.Point(388, 1);
+            this.extCheckBoxWordWrap.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.extCheckBoxWordWrap.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.extCheckBoxWordWrap.Name = "extCheckBoxWordWrap";
+            this.extCheckBoxWordWrap.Size = new System.Drawing.Size(28, 28);
+            this.extCheckBoxWordWrap.TabIndex = 32;
+            this.extCheckBoxWordWrap.TickBoxReductionRatio = 0.75F;
+            this.toolTip.SetToolTip(this.extCheckBoxWordWrap, "Enable or disable word wrap");
+            this.extCheckBoxWordWrap.UseVisualStyleBackColor = false;
             // 
             // UserControlSynthesis
             // 
@@ -294,7 +329,6 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewSynthesis)).EndInit();
             this.panelTop.ResumeLayout(false);
-            this.panelTop.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -310,7 +344,7 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtButton buttonRecipeFilter;
         private ExtendedControls.ExtButton buttonFilterLevel;
         private ExtendedControls.ExtButton buttonMaterialFilter;
-        private ExtendedControls.ExtCheckBox chkHistoric;
+        private ExtendedControls.ExtCheckBox chkNotHistoric;
         private System.Windows.Forms.DataGridViewTextBoxColumn UpgradeCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn Level;
         private System.Windows.Forms.DataGridViewTextBoxColumn MaxCol;
@@ -319,5 +353,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn Notes;
         private System.Windows.Forms.DataGridViewTextBoxColumn Recipe;
         private System.Windows.Forms.FlowLayoutPanel panelTop;
+        private ExtendedControls.ExtCheckBox extCheckBoxWordWrap;
     }
 }

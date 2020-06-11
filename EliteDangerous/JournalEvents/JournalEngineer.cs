@@ -84,13 +84,13 @@ namespace EliteDangerousCore.JournalEvents
         public void UpdateMaterials(MaterialCommoditiesList mc)
         {
             if (Type.Equals("Materials"))
-                mc.Change(MaterialCommodityData.MaterialRawCategory, Material, -Quantity, 0, true);
+                mc.Change(MaterialCommodityData.CatType.Raw, Material, -Quantity, 0, true);
         }
 
         public void UpdateCommodities(MaterialCommoditiesList mc)
         {
             if (Type.Equals("Commodity"))
-                mc.Change(MaterialCommodityData.CommodityCategory, Commodity, -Quantity, 0);
+                mc.Change(MaterialCommodityData.CatType.Commodity, Commodity, -Quantity, 0);
         }
 
         public void Ledger(Ledger mcl)

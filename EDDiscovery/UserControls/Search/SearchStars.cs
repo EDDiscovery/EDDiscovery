@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2017 EDDiscovery development team
+ * Copyright © 2016 - 2020 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -13,20 +13,13 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using EDDiscovery.Controls;
+using EliteDangerousCore;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using EDDiscovery.Controls;
-using EliteDangerousCore.EDSM;
-using EliteDangerousCore.EDDN;
-using EliteDangerousCore.DB;
-using EliteDangerousCore;
 
 namespace EDDiscovery.UserControls
 {
@@ -62,6 +55,11 @@ namespace EDDiscovery.UserControls
             //BaseUtils.Translator.Instance.Translate(dataGridViewEDSM.ContextMenu, this);
 
             dataGridView.Init(discoveryform);
+        }
+
+        public override void ChangeCursorType(IHistoryCursor thc)
+        {
+            uctg = thc;
         }
 
         public override void LoadLayout()

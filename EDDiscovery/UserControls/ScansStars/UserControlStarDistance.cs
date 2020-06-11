@@ -32,12 +32,10 @@ namespace EDDiscovery.UserControls
             var corner = dataGridViewNearest.TopLeftHeaderCell; // work around #1487
         }
 
-        private string DbSave { get { return DBName("StarDistancePanel" ); } }
+        private string DbSave { get { return DBName("StarDistancePanel"); } }
 
         private StarDistanceComputer computer = null;
         private HistoryEntry last_he = null;
-        private ISystem rightclicksystem = null;
-        private int rightclickrow = -1;
 
         private const double defaultMaxRadius = 100;
         private const double defaultMinRadius = 0;
@@ -113,11 +111,11 @@ namespace EDDiscovery.UserControls
                 //System.Diagnostics.Debug.WriteLine("Star grid started, uctg selected, ask");
 
                 double lookup_max = Math.Min(textMaxRadius.Value, lookup_limit);
-               // System.Diagnostics.Debug.WriteLine("Lookup limit " + lookup_limit + " lookup " + lookup_max);
+                //System.Diagnostics.Debug.WriteLine("Lookup limit " + lookup_limit + " lookup " + lookup_max);
 
                 // Get nearby systems from the systems DB.
-                computer.CalculateClosestSystems(he.System, 
-                    NewStarListComputedAsync, 
+                computer.CalculateClosestSystems(he.System,
+                    NewStarListComputedAsync,
                     maxitems, textMinRadius.Value, lookup_max, !checkBoxCube.Checked
                     );     // hook here, force closes system update
 
@@ -162,7 +160,7 @@ namespace EDDiscovery.UserControls
 
                     if (tvp.Value.Name != name && (checkBoxCube.Checked || (dist >= textMinRadius.Value && dist <= textMaxRadius.Value)))
                     {
-                        int visits = discoveryform.history.GetVisitsCount(tvp.Value.Name, tvp.Value.EDSMID);
+                        int visits = discoveryform.history.GetVisitsCount(tvp.Value.Name);
                         object[] rowobj = { tvp.Value.Name, $"{dist:0.00}", $"{visits:n0}" };
 
                         int rowindex = dataGridViewNearest.Rows.Add(rowobj);
@@ -170,7 +168,7 @@ namespace EDDiscovery.UserControls
                     }
                 }
 
-                if (csl.Count > maxitems/2)             // if we filled up at least half the list, we limit to max distance plus
+                if (csl.Count > maxitems / 2)             // if we filled up at least half the list, we limit to max distance plus
                 {
                     lookup_limit = maxdist * 11 / 10;   // lookup limit is % more than max dist, to allow for growth
                 }
@@ -185,31 +183,12 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        private int rightclickrow = -1;
+
         private void dataGridViewNearest_MouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Right)         // right click on travel map, get in before the context menu
-            {
-                rightclicksystem = null;
-                rightclickrow = -1;
-            }
-
-            if (dataGridViewNearest.SelectedCells.Count < 2 || dataGridViewNearest.SelectedRows.Count == 1)      // if single row completely selected, or 1 cell or less..
-            {
-                DataGridView.HitTestInfo hti = dataGridViewNearest.HitTest(e.X, e.Y);
-                if (hti.Type == DataGridViewHitTestType.Cell)
-                {
-                    dataGridViewNearest.ClearSelection();                // select row under cursor.
-                    dataGridViewNearest.Rows[hti.RowIndex].Selected = true;
-
-                    if (e.Button == MouseButtons.Right)         // right click on travel map, get in before the context menu
-                    {
-                        rightclickrow = hti.RowIndex;
-                        rightclicksystem = (ISystem)dataGridViewNearest.Rows[hti.RowIndex].Tag;
-                    }
-                }
-            }
-
-            viewOnEDSMToolStripMenuItem1.Enabled = rightclicksystem != null;
+            dataGridViewNearest.HandleClickOnDataGrid(e, out int unusedleftclickrow, out rightclickrow);
+            viewOnEDSMToolStripMenuItem1.Enabled = rightclickrow != -1;
         }
 
         private void addToTrilaterationToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -229,7 +208,7 @@ namespace EDDiscovery.UserControls
         }
 
         private void AddTo(OnNewStarsPushType pushtype)
-        { 
+        {
             IEnumerable<DataGridViewRow> selectedRows = dataGridViewNearest.SelectedCells.Cast<DataGridViewCell>()
                                                                         .Select(cell => cell.OwningRow)
                                                                         .Distinct()
@@ -245,21 +224,29 @@ namespace EDDiscovery.UserControls
 
         private void viewOnEDSMToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            this.Cursor = Cursors.WaitCursor;
-            EDSMClass edsm = new EDSMClass();
-            long? id_edsm = rightclicksystem.EDSMID;
-
-            if (id_edsm == 0)
+            if (rightclickrow >= 0 && rightclickrow < dataGridViewNearest.Rows.Count)
             {
-                id_edsm = null;
-            }
+                var rightclicksystem = (ISystem)dataGridViewNearest.Rows[rightclickrow].Tag;
 
-            if (!edsm.ShowSystemInEDSM(rightclicksystem.Name, id_edsm))
-            {
-                ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable".T(EDTx.UserControlStarDistance_NoEDSMSys));
-            }
+                if (rightclicksystem != null)
+                {
+                    this.Cursor = Cursors.WaitCursor;
+                    EDSMClass edsm = new EDSMClass();
+                    long? id_edsm = rightclicksystem.EDSMID;
 
-            this.Cursor = Cursors.Default;
+                    if (id_edsm == 0)
+                    {
+                        id_edsm = null;
+                    }
+
+                    if (!edsm.ShowSystemInEDSM(rightclicksystem.Name, id_edsm))
+                    {
+                        ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable".T(EDTx.UserControlStarDistance_NoEDSMSys));
+                    }
+
+                    this.Cursor = Cursors.Default;
+                }
+            }
         }
 
         private void dataGridViewNearest_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
@@ -275,13 +262,43 @@ namespace EDDiscovery.UserControls
 
         private void textMinRadius_ValueChanged(object sender, EventArgs e)
         {
+            lookup_limit = textMaxRadius.Value;
             KickComputation(last_he, true);
         }
 
         private void textMaxRadius_ValueChanged(object sender, EventArgs e)
         {
+            lookup_limit = textMaxRadius.Value;
             KickComputation(last_he, true);
         }
 
+        private void dataGridViewNearest_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex == 0 && e.RowIndex >= 0 && e.RowIndex < dataGridViewNearest.Rows.Count)
+            {
+                Clipboard.SetText(dataGridViewNearest.Rows[e.RowIndex].Cells[0].Value as string);
+            }
+        }
+
+        private void viewSystemToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+                if (rightclickrow >= 0 && rightclickrow < dataGridViewNearest.Rows.Count)
+                {
+                    var rightclicksystem = (ISystem)dataGridViewNearest.Rows[rightclickrow].Tag;
+                if ( rightclicksystem != null )
+                    ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), rightclicksystem, true, discoveryform.history);
+            }
+        }
+
+        private void dataGridViewNearest_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.RowIndex < dataGridViewNearest.Rows.Count)
+            { 
+                var clicksystem = (ISystem)dataGridViewNearest.Rows[e.RowIndex].Tag;
+                if ( clicksystem != null )
+                    ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), clicksystem, true, discoveryform.history);
+            }
+
+        }
     }
 }

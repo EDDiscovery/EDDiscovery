@@ -155,7 +155,7 @@ namespace EliteDangerousCore
                             elements[1].Equals("belt", StringComparison.InvariantCultureIgnoreCase) &&
                             elements[2].Equals("cluster", StringComparison.InvariantCultureIgnoreCase))
                     {
-                        elements = new List<string> { "Main Star", elements[0] + " " + elements[1], elements[2] + " " + elements[3] };
+                        elements = new List<string> { MainStar, elements[0] + " " + elements[1], elements[2] + " " + elements[3] };
                         isbeltcluster = true;
                     }
                     else if (elements.Count == 5 && elements[0].Length >= 1 &&
@@ -168,20 +168,20 @@ namespace EliteDangerousCore
                     }
 
                     if (char.IsDigit(elements[0][0]))       // if digits, planet number, no star designator
-                        elements.Insert(0, "Main Star");         // no star designator, main star, add MAIN
+                        elements.Insert(0, MainStar);         // no star designator, main star, add MAIN
                     else if (elements[0].Length > 1)        // designator, is it multiple chars.. 
                         starscannodetype = ScanNodeType.barycentre;
                 }
                 else
                 {
                     elements = new List<string>();          // only 1 item, the star, which is the same as the system name..
-                    elements.Add("Main Star");              // Sol / SN:Sol should come thru here
+                    elements.Add(MainStar);              // Sol / SN:Sol should come thru here
                 }
             }
             else
             {                                               // so not part of starname        
                 elements = sc.Body.Split(' ').ToList();     // not related in any way (earth) so assume all bodyparts, and 
-                elements.Insert(0, "Main Star");                     // insert the MAIN designator as the star designator
+                elements.Insert(0, MainStar);                     // insert the MAIN designator as the star designator
             }
 
             return elements;

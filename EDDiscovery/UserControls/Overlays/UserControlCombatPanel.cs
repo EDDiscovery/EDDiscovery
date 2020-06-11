@@ -141,6 +141,9 @@ namespace EDDiscovery.UserControls
             string filter = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbSave + "Campaign", "");
             List<string> filtarray = BaseUtils.StringParser.ParseWordList(filter);
 
+            dataGridViewCombat.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
+            dataGridViewCombat.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;
+
             savedfilterentries = new List<FilterEntry>();
 
             for (int i = 0; i < filtarray.Count / 5; i++)
@@ -286,11 +289,15 @@ namespace EDDiscovery.UserControls
                 else
                     hel = discoveryform.history.FilterByDateRangeLatestFirst(current.StartTimeUTC, current.EndTimeUTC);
 
-                foreach ( HistoryEntry he in hel )
+                var rows = new List<DataGridViewRow>(hel.Count);
+                foreach (HistoryEntry he in hel)
                 {
                     //System.Diagnostics.Debug.WriteLine("Combat Add {0} {1} {2}", he.EventTimeUTC.ToStringZulu(), he.EventSummary, he.EventDescription);
-                    AddToGrid(he);
+                    var row = createRow(he);
+                    if ( row != null)
+                        rows.Add(row);
                 }
+                dataGridViewCombat.Rows.AddRange(rows.ToArray());
             }
 
             dataGridViewCombat.Sort(sortcol, (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
@@ -315,7 +322,7 @@ namespace EDDiscovery.UserControls
 
                 if (tryadd)
                 {
-                    if (AddToGrid(he, true))        // if did add..
+                    if (insertToGrid(he))        // if did add..
                     {
                         SetLabels();
                     }
@@ -334,27 +341,31 @@ namespace EDDiscovery.UserControls
             SetTarget(he);
         }
 
-        bool AddToGrid(HistoryEntry he , bool ins = false )
+        DataGridViewRow createRow(HistoryEntry he)
         {
-            if (CreateEntry(he, out string summarycol, out string descriptioncol, out string rewardcol))
+            if (CreateEntry(he, out var rewardcol))
             {
                 var rw = dataGridViewCombat.RowTemplate.Clone() as DataGridViewRow;
-                he.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
+                he.journalEntry.FillInformation(out var eventDescription, out _);
 
                 rw.CreateCells(dataGridViewCombat, EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(he.EventTimeUTC),
-                    he.EventSummary, EventDescription, rewardcol);
+                    he.EventSummary, eventDescription, rewardcol);
 
                 rw.Tag = he;
-
-                if (ins)
-                    dataGridViewCombat.Rows.Insert(0, rw);
-                else
-                    dataGridViewCombat.Rows.Add(rw);
-
-                return true;
+                return rw;
             }
-            else
+
+            return null;
+        }
+
+        bool insertToGrid(HistoryEntry he)
+        {
+            var row = createRow(he);
+            if (row is null)
                 return false;
+
+            dataGridViewCombat.Rows.Insert(0, row);
+            return true;
         }
 
         static JournalTypeEnum[] jtelist = new JournalTypeEnum[]            // ones to display without any extra detail
@@ -366,14 +377,9 @@ namespace EDDiscovery.UserControls
             JournalTypeEnum.SRVDestroyed
         };
 
-        bool CreateEntry( HistoryEntry he, out string summarycol, out string descriptioncol, out string rewardcol )
+        bool CreateEntry(HistoryEntry he, out string rewardcol)
         {
             rewardcol = "";
-
-            he.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
-
-            summarycol = he.EventSummary;
-            descriptioncol = EventDescription;
 
             MissionState ml = current.MissionKey != null && he.MissionList.Missions.ContainsKey(current.MissionKey) ? he.MissionList.Missions[current.MissionKey] : null;
 
@@ -467,7 +473,7 @@ namespace EDDiscovery.UserControls
             JournalTypeEnum.Died,
             JournalTypeEnum.FighterDestroyed,
             JournalTypeEnum.SupercruiseEntry,
-            JournalTypeEnum.FSDJump,
+            JournalTypeEnum.FSDJump,             JournalTypeEnum.CarrierJump,
             JournalTypeEnum.Docked,
             JournalTypeEnum.LaunchSRV,
             JournalTypeEnum.LaunchFighter,
@@ -621,8 +627,9 @@ namespace EDDiscovery.UserControls
             f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "End:".T(EDTx.UserControlCombatPanel_End), new Point(10, 130), new Size(80, 24), ""));
             f.Add(new ExtendedControls.ConfigurableForm.Entry("DTE", typeof(ExtendedControls.ExtDateTimePicker), endtime.ToStringZulu(), new Point(100, 130), new Size(width - 100 - 20, 24), "Select Start time".T(EDTx.UserControlCombatPanel_C4)) { customdateformat = "yyyy-MM-dd HH:mm:ss" });
 
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("OK", typeof(ExtendedControls.ExtButton), "OK".T(EDTx.OK), new Point(width - 100, 180), new Size(80, 24), "Press to Accept".T(EDTx.UserControlCombatPanel_C5)));
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("Cancel", typeof(ExtendedControls.ExtButton), "Cancel".T(EDTx.Cancel), new Point(width - 200, 180), new Size(80, 24), "Press to Cancel".T(EDTx.UserControlCombatPanel_C6)));
+            f.AddOK(new Point(width - 100, 180), "Press to Accept".T(EDTx.UserControlCombatPanel_C5));
+            f.AddCancel(new Point(width - 200, 180), "Press to Cancel".T(EDTx.UserControlCombatPanel_C6));
+
             if ( allowdel )
                 f.Add(new ExtendedControls.ConfigurableForm.Entry("Delete", typeof(ExtendedControls.ExtButton), "Delete".T(EDTx.Delete), new Point(10, 180), new Size(80, 24), "Press to Delete".T(EDTx.UserControlCombatPanel_C7)));
 
@@ -653,13 +660,13 @@ namespace EDDiscovery.UserControls
                         ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Name changed - can't delete".T(EDTx.UserControlCombatPanel_NC), "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
-                else if ( controlname == "Cancel" )
+                else if ( controlname == "Cancel" || controlname == "Close" )
                 {
                     f.ReturnResult(DialogResult.Cancel);
                 }
             };
 
-            DialogResult res = f.ShowDialogCentred(this.FindForm(), this.FindForm().Icon,  "Campaign".T(EDTx.Campaign));
+            DialogResult res = f.ShowDialogCentred(this.FindForm(), this.FindForm().Icon,  "Campaign".T(EDTx.Campaign) , closeicon:true);
             if (res == DialogResult.OK)
             {
                 entry.Reset(f.Get("Name"), f.Get("Faction"),
@@ -674,82 +681,37 @@ namespace EDDiscovery.UserControls
 
         #region Clicks
 
-        HistoryEntry rightclicksystem = null;
-        int rightclickrow = -1;
-        HistoryEntry leftclicksystem = null;
         int leftclickrow = -1;
 
         private void dataGridViewCombat_MouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Right)         // right click on travel map, get in before the context menu
-            {
-                rightclicksystem = null;
-                rightclickrow = -1;
-            }
-            if (e.Button == MouseButtons.Left)         // right click on travel map, get in before the context menu
-            {
-                leftclicksystem = null;
-                leftclickrow = -1;
-            }
-
-            if (dataGridViewCombat.SelectedCells.Count < 2 || dataGridViewCombat.SelectedRows.Count == 1)      // if single row completely selected, or 1 cell or less..
-            {
-                DataGridView.HitTestInfo hti = dataGridViewCombat.HitTest(e.X, e.Y);
-                if (hti.Type == DataGridViewHitTestType.Cell)
-                {
-                    dataGridViewCombat.ClearSelection();                // select row under cursor.
-                    dataGridViewCombat.Rows[hti.RowIndex].Selected = true;
-
-                    if (e.Button == MouseButtons.Right)         // right click on travel map, get in before the context menu
-                    {
-                        rightclickrow = hti.RowIndex;
-                        rightclicksystem = (HistoryEntry)dataGridViewCombat.Rows[hti.RowIndex].Tag;
-                    }
-                    if (e.Button == MouseButtons.Left)         // right click on travel map, get in before the context menu
-                    {
-                        leftclickrow = hti.RowIndex;
-                        leftclicksystem = (HistoryEntry)dataGridViewCombat.Rows[hti.RowIndex].Tag;
-                    }
-                }
-            }
+            dataGridViewCombat.HandleClickOnDataGrid(e, out leftclickrow, out int unusedrightclickrow);
         }
 
         private void dataGridViewCombat_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            int defaultRowHeight = Font.ScalePixels(26);
-
             if (leftclickrow >= 0)                                                   // Click expands it..
             {
-                int ch = dataGridViewCombat.Rows[leftclickrow].Height;
-                bool toexpand = (ch <= defaultRowHeight);
+                DataGridViewRow row = dataGridViewCombat.Rows[leftclickrow];
+                bool expanded = row.Cells[0].Tag != null;
+
+                var leftclicksystem = (HistoryEntry)dataGridViewCombat.Rows[leftclickrow].Tag;
 
                 leftclicksystem.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
-                string infotext = EventDescription + ((toexpand && EventDetailedInfo.Length > 0) ? (Environment.NewLine + EventDetailedInfo) : "");
 
-                int h = defaultRowHeight;
-
-                if (toexpand)
+                if (expanded) // put it back to original text
                 {
-                    using (Graphics g = Parent.CreateGraphics())
-                    {
-                        int desch = (int)(g.MeasureString((string)dataGridViewCombat.Rows[leftclickrow].Cells[1].Value, dataGridViewCombat.Font, dataGridViewCombat.Columns[1].Width - 4).Height + 2);
-                        int infoh = (int)(g.MeasureString(infotext, dataGridViewCombat.Font, dataGridViewCombat.Columns[2].Width - 4).Height + 2);
+                    dataGridViewCombat.Rows[leftclickrow].Cells[2].Value = EventDescription;
+                    row.Cells[0].Tag = null;
 
-                        h = Math.Max(desch, h);
-                        h = Math.Max(infoh, h);
-                        h += 20;
-                    }
+                    row.Cells[2].Style.WrapMode = row.Cells[1].Style.WrapMode = DataGridViewTriState.NotSet;
                 }
-
-                toexpand = (h > defaultRowHeight);      // now we have our h, is it bigger? If so, we need to go into wrap mode
-
-                dataGridViewCombat.Rows[leftclickrow].Height = h;
-                dataGridViewCombat.Rows[leftclickrow].Cells[2].Value = infotext;
-
-                DataGridViewTriState ti = (toexpand) ? DataGridViewTriState.True : DataGridViewTriState.False;
-
-                dataGridViewCombat.Rows[leftclickrow].Cells[1].Style.WrapMode = ti;
-                dataGridViewCombat.Rows[leftclickrow].Cells[2].Style.WrapMode = ti;
+                else
+                {
+                    dataGridViewCombat.Rows[leftclickrow].Cells[2].Value = EventDescription + ((EventDetailedInfo.Length > 0) ? (Environment.NewLine + EventDetailedInfo) : "");
+                    row.Cells[0].Tag = true;
+                    row.Cells[2].Style.WrapMode = row.Cells[1].Style.WrapMode = DataGridViewTriState.True;
+                }
             }
         }
 

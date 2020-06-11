@@ -183,14 +183,16 @@ namespace EDDiscovery.UserControls
             Display();
         }
         
-        private void Display()
+        private async void Display()
         {
             HistoryEntry last_he = userControlSynthesis.CurrentHistoryEntry;        // sync with what its showing
 
             if (EngineeringWanted != null && SynthesisWanted != null && last_he != null)    // if we have all the ingredients (get it!)
             {
                 List<MaterialCommodities> mcl = last_he.MaterialCommodity.Sort(false);
-                MaterialCommoditiesRecipe.ResetUsed(mcl);
+
+                var totals = MaterialCommoditiesRecipe.TotalList(mcl);                  // start with totals present
+
                 Color textcolour = IsTransparent ? discoveryform.theme.SPanelColor : discoveryform.theme.LabelColor;
                 Color backcolour = this.BackColor;
                 List<Tuple<Recipes.Recipe, int>> totalWanted = EngineeringWanted.Concat(SynthesisWanted).ToList();
@@ -217,7 +219,8 @@ namespace EDDiscovery.UserControls
                     }
                 }
 
-                List<MaterialCommodities> shoppinglist = MaterialCommoditiesRecipe.GetShoppingList(totalWanted, mcl);
+                var shoppinglist = MaterialCommoditiesRecipe.GetShoppingList(totalWanted, mcl);
+
                 JournalScan sd = null;
                 StarScan.SystemNode last_sn = null;
 
@@ -227,7 +230,7 @@ namespace EDDiscovery.UserControls
                 }
                 if (!last_he.IsLanded && showSystemAvailability)
                 {
-                    last_sn = discoveryform.history.starscan.FindSystem(last_he.System, useEDSMForSystemAvailability);
+                    last_sn = await discoveryform.history.starscan.FindSystemAsync(last_he.System, useEDSMForSystemAvailability);
                 }
 
                 StringBuilder wantedList = new StringBuilder();
@@ -237,14 +240,14 @@ namespace EDDiscovery.UserControls
                     double available;
                     wantedList.Append("Needed Mats".T(EDTx.UserControlShoppingList_NM) + ":" +  Environment.NewLine);
                     List<string> capExceededMats = new List<string>();
-                    foreach (MaterialCommodities c in shoppinglist.OrderBy(mat => mat.Details.Name))      // and add new..
+                    foreach (var c in shoppinglist)      // and add new..
                     {
                         string present = "";
                         if (showListAvailability)
                         {
                             if (sd != null && sd.HasMaterials)
                             {
-                                if (sd.Materials.TryGetValue(c.Details.FDName, out available))
+                                if (sd.Materials.TryGetValue(c.Item1.Details.FDName, out available))
                                 {
                                     present = $" {available.ToString("N1")}%";
                                 }
@@ -252,28 +255,28 @@ namespace EDDiscovery.UserControls
                                 { present = " -"; }
                             }
                         }
-                        wantedList.Append($"  {c.scratchpad} {c.Details.Name}{present}");
-                        int? onHand = mcl.Where(m => m.Details.Shortname == c.Details.Shortname).FirstOrDefault()?.Count;
-                        int totalReq = c.scratchpad + (onHand.HasValue ? onHand.Value : 0);
-                        if ((c.Details.Type == MaterialFreqVeryCommon && totalReq > VeryCommonCap) ||
-                            (c.Details.Type == MaterialFreqCommon && totalReq > CommonCap) ||
-                            (c.Details.Type == MaterialFreqStandard && totalReq > StandardCap) ||
-                            (c.Details.Type == MaterialFreqRare && totalReq > RareCap) ||
-                            (c.Details.Type == MaterialFreqVeryRare && totalReq > VeryRareCap))
+                        wantedList.Append($"  {c.Item2} {c.Item1.Details.Name}{present}");
+                        int? onHand = mcl.Where(m => m.Details.Shortname == c.Item1.Details.Shortname).FirstOrDefault()?.Count;
+                        int totalReq = c.Item2 + (onHand.HasValue ? onHand.Value : 0);
+                        if ((c.Item1.Details.Type == MaterialCommodityData.ItemType.VeryCommon && totalReq > VeryCommonCap) ||
+                            (c.Item1.Details.Type == MaterialCommodityData.ItemType.Common && totalReq > CommonCap) ||
+                            (c.Item1.Details.Type == MaterialCommodityData.ItemType.Standard && totalReq > StandardCap) ||
+                            (c.Item1.Details.Type == MaterialCommodityData.ItemType.Rare && totalReq > RareCap) ||
+                            (c.Item1.Details.Type == MaterialCommodityData.ItemType.VeryRare && totalReq > VeryRareCap))
                         {
-                            capExceededMats.Add(c.Details.Name);
+                            capExceededMats.Add(c.Item1.Details.Name);
                         }
                         if (!last_he.IsLanded && last_sn != null)
                         {
                             var landables = last_sn.Bodies.Where(b => b.ScanData != null && (!b.ScanData.IsEDSMBody || useEDSMForSystemAvailability) && 
-                                                                 b.ScanData.HasMaterials && b.ScanData.Materials.ContainsKey(c.Details.FDName));
+                                                                 b.ScanData.HasMaterials && b.ScanData.Materials.ContainsKey(c.Item1.Details.FDName));
                             if (landables.Count() > 0)
                             {
                                 wantedList.Append("\n    ");
                                 List<Tuple<string, double>> allMats = new List<Tuple<string, double>>();
                                 foreach (StarScan.ScanNode sn in landables)
                                 {
-                                    sn.ScanData.Materials.TryGetValue(c.Details.FDName, out available);
+                                    sn.ScanData.Materials.TryGetValue(c.Item1.Details.FDName, out available);
                                     allMats.Add(new Tuple<string, double>(sn.fullname.Replace(last_he.System.Name, "", StringComparison.InvariantCultureIgnoreCase).Trim(), available));
                                 }
                                 allMats = allMats.OrderByDescending(m => m.Item2).ToList();
@@ -305,10 +308,11 @@ namespace EDDiscovery.UserControls
 
                 if (showMaxInjections)
                 {
-                    MaterialCommoditiesRecipe.ResetUsed(mcl);
-                    Tuple<int, int, string, string> basic = MaterialCommoditiesRecipe.HowManyLeft(mcl, Recipes.SynthesisRecipes.First(r => r.Name == "FSD" && r.level == "Basic"));
-                    Tuple<int, int, string, string> standard = MaterialCommoditiesRecipe.HowManyLeft(mcl, Recipes.SynthesisRecipes.First(r => r.Name == "FSD" && r.level == "Standard"));
-                    Tuple<int, int, string, string> premium = MaterialCommoditiesRecipe.HowManyLeft(mcl, Recipes.SynthesisRecipes.First(r => r.Name == "FSD" && r.level == "Premium"));
+                    var totals2 = MaterialCommoditiesRecipe.TotalList(mcl);                  // start with totals present
+
+                    Tuple<int, int, string, string> basic = MaterialCommoditiesRecipe.HowManyLeft(mcl, totals2, Recipes.SynthesisRecipes.First(r => r.Name == "FSD" && r.level == "Basic"));
+                    Tuple<int, int, string, string> standard = MaterialCommoditiesRecipe.HowManyLeft(mcl, totals2, Recipes.SynthesisRecipes.First(r => r.Name == "FSD" && r.level == "Standard"));
+                    Tuple<int, int, string, string> premium = MaterialCommoditiesRecipe.HowManyLeft(mcl, totals2, Recipes.SynthesisRecipes.First(r => r.Name == "FSD" && r.level == "Premium"));
                     wantedList.Append(Environment.NewLine +
                         string.Format("Max FSD Injections\r\n   {0} Basic\r\n   {1} Standard\r\n   {2} Premium".T(EDTx.UserControlShoppingList_FSD), basic.Item1, standard.Item1, premium.Item1));
                 }
@@ -337,7 +341,7 @@ namespace EDDiscovery.UserControls
 
                 try
                 {
-                    splitContainerVertical.Panel1MinSize = displayList.img.Width + 8;       // panel left has minimum width to accomodate the text
+                    splitContainerVertical.Panel1MinSize = displayList.Image.Width + 8;       // panel left has minimum width to accomodate the text
                 }
                 catch (Exception e)
                 {
@@ -347,8 +351,8 @@ namespace EDDiscovery.UserControls
                 if (IsTransparent)
                 {
                     RevertToNormalSize();
-                    int minWidth = Math.Max(((UserControlForm)FindForm()).TitleBarMinWidth(), displayList.img.Width) + 8;
-                    RequestTemporaryResize(new Size(minWidth, displayList.img.Height + 4));
+                    int minWidth = Math.Max(((UserControlForm)FindForm()).TitleBarMinWidth(), displayList.Image.Width) + 8;
+                    RequestTemporaryResize(new Size(minWidth, displayList.Image.Height + 4));
                 }
                 else
                 {

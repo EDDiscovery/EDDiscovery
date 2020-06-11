@@ -424,55 +424,82 @@ namespace EDDiscovery.UserControls
 
         private void toolStripButtonExport_Click(object sender, EventArgs e)
         {
-            string filename = "";
             var rt = new SavedRouteClass();
             UpdateRouteInfo(rt);
 
-            try
+            if (rt.Systems.Count < 1)
             {
-                if (rt.Systems.Count < 1)
-                {
-                    ExtendedControls.MessageBoxTheme.Show(FindForm(), "There is no route to export ".T(EDTx.UserControlExpedition_NoRouteExport),
-                        "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                    return;
-                }
-
-                SaveFileDialog dlg = new SaveFileDialog();
-                dlg.Filter = "Route export| *.txt";
-                dlg.Title = "Export route".T(EDTx.UserControlExpedition_Export);
-                if (currentroute != null && !String.IsNullOrWhiteSpace(currentroute.Name))
-                    dlg.FileName = currentroute.Name + ".txt";
-                else
-                    dlg.FileName = "route.txt";
-
-                string fileName = dlg.FileName;
-                foreach (char c in System.IO.Path.GetInvalidFileNameChars())
-                {
-                    fileName = fileName.Replace(c, '_');
-                }
-                dlg.FileName = fileName;
-
-                if (dlg.ShowDialog(FindForm()) != DialogResult.OK)
-                    return;
-                filename = dlg.FileName;
-                using (StreamWriter writer = new StreamWriter(filename, false))
-                {
-                    foreach (var sysname in rt.Systems)
-                    {
-                        if (!string.IsNullOrWhiteSpace(sysname))
-                            writer.WriteLine(sysname);
-                    }
-                }
-            }
-            catch (IOException)
-            {
-                ExtendedControls.MessageBoxTheme.Show(FindForm(), $"Problem exporting route. Is file {filename} already open?",
-                    "Export route", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "There is no route to export ".T(EDTx.UserControlExpedition_NoRouteExport),
+                    "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
+
+            Forms.ExportForm frm = new Forms.ExportForm();
+            frm.Init(new string[] { "Route", "Grid" }, disablestartendtime: true, outputext: new string[] { "Text File|*.txt", "CSV export| *.csv"});
+
+            if (frm.ShowDialog(FindForm()) == DialogResult.OK)
+            {
+                if (frm.SelectedIndex == 0)     // old route export
+                {
+                    try
+                    {
+                        using (StreamWriter writer = new StreamWriter(frm.Path, false))
+                        {
+                            foreach (var sysname in rt.Systems)
+                            {
+                                if (!string.IsNullOrWhiteSpace(sysname))
+                                    writer.WriteLine(sysname);
+                            }
+                        }
+
+                        if (frm.AutoOpen)
+                        {
+                            try
+                            {
+                                System.Diagnostics.Process.Start(frm.Path);
+                            }
+                            catch
+                            {
+                                ExtendedControls.MessageBoxTheme.Show(FindForm(), "Failed to open " + frm.Path, "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                            }
+                        }
+                    }
+                    catch 
+                    {
+                        ExtendedControls.MessageBoxTheme.Show(FindForm(), $"Problem exporting route. Is file {frm.Path} already open?",
+                            "Export route", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                }
+                else
+                {
+                    BaseUtils.CSVWriteGrid grd = new BaseUtils.CSVWriteGrid();
+                    grd.SetCSVDelimiter(frm.Comma);
+                    grd.GetLineStatus += delegate (int r)
+                    {
+                        if (r < dataGridViewRouteSystems.Rows.Count)
+                        {
+                            return BaseUtils.CSVWriteGrid.LineStatus.OK;
+                        }
+                        else
+                            return BaseUtils.CSVWriteGrid.LineStatus.EOF;
+                    };
+
+                    grd.GetLine += delegate (int r)
+                    {
+                        DataGridViewRow rw = dataGridViewRouteSystems.Rows[r];
+                        return new Object[] { rw.Cells[0].Value, rw.Cells[1].Value, rw.Cells[2].Value };
+                    };
+
+                    grd.GetHeader += delegate (int c)
+                    {
+                        return (c < 3 && frm.IncludeHeader) ? dataGridViewRouteSystems.Columns[c].HeaderText : null;
+                    };
+
+                    grd.WriteGrid(frm.Path, frm.AutoOpen, FindForm());
+                }
+            }
         }
-
-
 
         #endregion
 

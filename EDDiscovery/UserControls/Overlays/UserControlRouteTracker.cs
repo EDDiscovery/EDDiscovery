@@ -96,13 +96,13 @@ namespace EDDiscovery.UserControls
 
         private void Display(HistoryList hl)            // when user clicks around..  HE may be null here
         {
-            currentHE = hl.GetLastFSD;
+            currentHE = hl.GetLastFSDCarrierJump;
             Display();
         }
 
         private void NewEntry(HistoryEntry l, HistoryList hl)
         {
-            currentHE = hl.GetLastFSD;
+            currentHE = hl.GetLastFSDCarrierJump;
             Display();
         }
 
@@ -222,7 +222,7 @@ namespace EDDiscovery.UserControls
             Color textcolour = IsTransparent ? discoveryform.theme.SPanelColor : discoveryform.theme.LabelColor;
             Color backcolour = IsTransparent ? Color.Transparent : this.BackColor;
             var ie = pictureBox.AddTextAutoSize(new Point(10, 5), new Size(10000, 100), topline == null ? "" : topline, displayfont, textcolour, backcolour, 1.0F);
-            pictureBox.AddTextAutoSize(new Point(10, ie.pos.Bottom + displayfont.ScalePixels(4)), new Size(10000, 100), bottomLine == null ? "" : bottomLine, displayfont, textcolour, backcolour, 1.0F);
+            pictureBox.AddTextAutoSize(new Point(10, ie.Location.Bottom + displayfont.ScalePixels(4)), new Size(10000, 100), bottomLine == null ? "" : bottomLine, displayfont, textcolour, backcolour, 1.0F);
             pictureBox.Render();
         }
 
@@ -257,7 +257,8 @@ namespace EDDiscovery.UserControls
             var routes = SavedRouteClass.GetAllSavedRoutes();
             var routenames = (from x in routes select x.Name).ToList();
             f.Add(new ExtendedControls.ConfigurableForm.Entry("Route", "", new Point(10, 40), new Size(400, 24), "Select route".T(EDTx.UserControlRouteTracker_Selectroute), routenames));
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("Cancel", typeof(ExtendedControls.ExtButton), "Cancel".T(EDTx.Cancel), new Point(410-100, 80), new Size(100, 24), "Press to Cancel".T(EDTx.UserControlRouteTracker_PresstoCancel)));
+            f.AddCancel(new Point(410 - 100, 80), "Press to Cancel".T(EDTx.UserControlRouteTracker_PresstoCancel));
+
             f.Trigger += (dialogname, controlname, tag) =>
             {
                 if (controlname != "Route")
@@ -265,7 +266,8 @@ namespace EDDiscovery.UserControls
                 else
                     f.ReturnResult(DialogResult.OK);
             };
-            if ( f.ShowDialogCentred(this.FindForm(), this.FindForm().Icon,  "Enter route".T(EDTx.UserControlRouteTracker_Enterroute)) == DialogResult.OK )
+
+            if ( f.ShowDialogCentred(this.FindForm(), this.FindForm().Icon,  "Enter route".T(EDTx.UserControlRouteTracker_Enterroute), closeicon:true) == DialogResult.OK )
             {
                 string routename = f.Get("Route");
                 currentRoute = routes.Find(x => x.Name.Equals(routename));       // not going to be null, but consider the upset.

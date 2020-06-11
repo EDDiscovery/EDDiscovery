@@ -150,7 +150,7 @@ namespace EDDiscovery.Actions
 
             vars[prefix + "VisitCount"] = hl.GetVisitsCount(s.Name).ToString(ct);
             vars[prefix + "ScanCount"] = hl.GetScans(s.Name).Count.ToString(ct);
-            vars[prefix + "FSDJumpsTotal"] = hl.GetFSDJumps(new TimeSpan(100000, 0, 0, 0)).ToString(ct);
+            vars[prefix + "FSDJumpsTotal"] = hl.GetFSDCarrierJumps(new TimeSpan(100000, 0, 0, 0)).ToString(ct);
         }
 
         static public void HistoryEventFurtherInfo(ActionLanguage.ActionProgramRun vars, HistoryList hl, HistoryEntry he, string prefix)
@@ -159,8 +159,8 @@ namespace EDDiscovery.Actions
             {
                 System.Globalization.CultureInfo ct = System.Globalization.CultureInfo.InvariantCulture;
 
-                int fsd = hl.GetFSDJumpsUTC(new DateTime(1980, 1, 1), he.EventTimeUTC);    // total before
-                if (he.IsFSDJump)   // if on an fsd, count this in
+                int fsd = hl.GetFSDCarrierJumpsUTC(new DateTime(1980, 1, 1), he.EventTimeUTC);    // total before
+                if (he.IsFSDCarrierJump)   // if on an fsd, count this in
                     fsd++;
                 vars[prefix + "FSDJump"] = fsd.ToString(ct);
             }
@@ -226,8 +226,9 @@ namespace EDDiscovery.Actions
                 {
                     vars[mp + "Reward"] = ms.Completed.Reward.ToStringInvariant();
                     vars[mp + "Donation"] = ms.Completed.Donation.ToStringInvariant();
-                    vars[mp + "RewardCommodity"] = ms.Completed.CommoditiesList(false);
-                    vars[mp + "RewardPermit"] = ms.Completed.PermitsList(false);
+                    vars[mp + "RewardCommodity"] = ms.Completed.CommoditiesList(false,false);
+                    vars[mp + "RewardPermit"] = ms.Completed.PermitsList(false, false);
+                    vars[mp + "RewardMaterials"] = ms.Completed.MaterialList(false, false);
                 }
                 i++;
             }

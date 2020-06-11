@@ -34,17 +34,16 @@ namespace EliteDangerousCore.EDSM
         // use if you need an API/name pair to get info from EDSM.  Not all queries need it
         public bool ValidCredentials { get { return !string.IsNullOrEmpty(commanderName) && !string.IsNullOrEmpty(apiKey); } }
 
+        static public string SoftwareName { get; set; } = "EDDiscovery";
         private string commanderName;
         private string apiKey;
 
         private readonly string fromSoftwareVersion;
-        private readonly string fromSoftware;
         static private Dictionary<long, List<JournalScan>> DictEDSMBodies = new Dictionary<long, List<JournalScan>>();
         static private Dictionary<long, List<JournalScan>> DictEDSMBodiesByID64 = new Dictionary<long, List<JournalScan>>();
 
         public EDSMClass()
         {
-            fromSoftware = "EDDiscovery";
             var assemblyFullName = Assembly.GetEntryAssembly().FullName;
             fromSoftwareVersion = assemblyFullName.Split(',')[1].Split('=')[1];
 
@@ -72,7 +71,7 @@ namespace EliteDangerousCore.EDSM
 
         public string SubmitDistances(string from, Dictionary<string, double> distances)
         {
-            string query = "{\"ver\":2," + " \"commander\":\"" + commanderName + "\", \"fromSoftware\":\"" + fromSoftware + "\",  \"fromSoftwareVersion\":\"" + fromSoftwareVersion + "\", \"p0\": { \"name\": \"" + from + "\" },   \"refs\": [";
+            string query = "{\"ver\":2," + " \"commander\":\"" + commanderName + "\", \"fromSoftware\":\"" + SoftwareName + "\",  \"fromSoftwareVersion\":\"" + fromSoftwareVersion + "\", \"p0\": { \"name\": \"" + from + "\" },   \"refs\": [";
 
             var counter = 0;
             foreach (var item in distances)
@@ -735,102 +734,104 @@ namespace EliteDangerousCore.EDSM
             return msg;
         }
 
-        // Example ASYNC call
-
-        public void GetBodiesAsync(long edsmID, Action<JObject> ret)        // ret is called in thread, must deal with that
+        public async static System.Threading.Tasks.Task<Tuple<List<JournalScan>, bool>> GetBodiesListAsync(ISystem sys, bool edsmweblookup = true, Action<List<JournalScan>, ISystem> onnewbodies = null) // get this edsmid,  optionally lookup web protected against bad json
         {
-            string query = "bodies?systemId=" + edsmID.ToString();
-            RequestGetAsync("api-system-v1/" + query,
-                (response, tag) =>
-                {
-                    JObject msg = null;
-                    if (!response.Error)
-                    {
-                        var json = response.Body;
-                        if (json != null && json.ToString() != "[]")
-                        {
-                            msg = JObject.Parse(json);
-                        }
-                    }
-
-                    (tag as Action<JObject>).Invoke(msg);
-                }
-                , ret, handleException: true);
+            return await System.Threading.Tasks.Task.Run(() =>
+            {
+                return GetBodiesList(sys, edsmweblookup, onnewbodies);
+            });
         }
 
-        public static List<JournalScan> GetBodiesList(long edsmid, bool edsmweblookup = true, long? id64 = null, string sysname = null) // get this edsmid,  optionally lookup web protected against bad json
+        static Object bodylock = new object();
+
+        // returns null if EDSM says not there, else if returns list of bodies and a flag indicating if from cache. 
+        // all this is done in a lock inside a task - the only way to sequence the code and prevent multiple lookups in an await structure
+        // so we must pass back all the info we can to tell the caller what happened.
+        // optional call back is allowed in lock - may not be used.
+
+        public static Tuple<List<JournalScan>, bool> GetBodiesList(ISystem sys, bool edsmweblookup = true, Action<List<JournalScan>, ISystem> onnewbodies = null) 
         {
             try
             {
-                if (DictEDSMBodies!=null && edsmid > 0 && DictEDSMBodies.ContainsKey(edsmid))  // Cache EDSM bidies during run of EDD.
+                lock (bodylock) // only one request at a time going, this is to prevent multiple requests for the same body
                 {
-                   // System.Diagnostics.Debug.WriteLine(".. found EDSM Lookup bodies from cache " + edsmid);
-                    return DictEDSMBodies[edsmid];
-                }
-                else if (DictEDSMBodiesByID64 != null && id64 != null && id64 > 0 && DictEDSMBodiesByID64.ContainsKey(id64.Value))
-                {
-                    return DictEDSMBodiesByID64[id64.Value];
-                }
+                    // System.Threading.Thread.Sleep(2000); //debug - delay to show its happening 
+                   // System.Diagnostics.Debug.WriteLine("EDSM Cache check " + sys.EDSMID + " " + sys.SystemAddress + " " + sys.Name);
 
-                if (!edsmweblookup)      // must be set for a web lookup
-                    return null;
-
-                List<JournalScan> bodies = new List<JournalScan>();
-
-                EDSMClass edsm = new EDSMClass();
-
-                //System.Diagnostics.Debug.WriteLine("EDSM Web Lookup bodies " + edsmid);
-
-                JObject jo = null;
-
-                if (edsmid > 0)
-                    jo = edsm.GetBodies(edsmid);  // Colonia 
-                else if (id64 != null && id64 > 0)
-                    jo = edsm.GetBodiesByID64(id64.Value);
-                else if (sysname != null)
-                    jo = edsm.GetBodies(sysname);
-
-                if (jo != null && jo["bodies"] != null )
-                {
-                    foreach (JObject edsmbody in jo["bodies"])
+                    if (DictEDSMBodies != null && sys.EDSMID > 0 && DictEDSMBodies.ContainsKey(sys.EDSMID))  // Cache EDSM bidies during run of EDD.
                     {
-                        try
+                        System.Diagnostics.Debug.WriteLine("Found sys.EDSMID " + sys.EDSMID);
+                        return new Tuple<List<JournalScan>, bool>(DictEDSMBodies[sys.EDSMID], true);
+                    }
+                    else if (DictEDSMBodiesByID64 != null && sys.SystemAddress != null && sys.SystemAddress > 0 && DictEDSMBodiesByID64.ContainsKey(sys.SystemAddress.Value))
+                    {
+                        System.Diagnostics.Debug.WriteLine("Found sys.EDSMID64 " + sys.SystemAddress.Value );
+                        return new Tuple<List<JournalScan>, bool>(DictEDSMBodiesByID64[sys.SystemAddress.Value], true);
+                    }
+
+                    if (!edsmweblookup)      // must be set for a web lookup
+                        return null;
+
+                    System.Diagnostics.Debug.WriteLine("EDSM Web lookup");
+                    List<JournalScan> bodies = new List<JournalScan>();
+
+                    EDSMClass edsm = new EDSMClass();
+
+                    JObject jo = null;
+
+                    if (sys.EDSMID > 0)
+                        jo = edsm.GetBodies(sys.EDSMID);  // Colonia 
+                    else if (sys.SystemAddress != null && sys.SystemAddress > 0)
+                        jo = edsm.GetBodiesByID64(sys.SystemAddress.Value);
+                    else if (sys.Name != null)
+                        jo = edsm.GetBodies(sys.Name);
+
+                    if (jo != null && jo["bodies"] != null)
+                    {
+                        foreach (JObject edsmbody in jo["bodies"])
                         {
-                            JObject jbody = EDSMClass.ConvertFromEDSMBodies(edsmbody);
-                            JournalScan js = new JournalScan(jbody, edsmid);
+                            try
+                            {
+                                JObject jbody = EDSMClass.ConvertFromEDSMBodies(edsmbody);
+                                JournalScan js = new JournalScan(jbody, sys.EDSMID);
 
-                            bodies.Add(js);
+                                bodies.Add(js);
+                            }
+                            catch (Exception ex)
+                            {
+                                BaseUtils.HttpCom.WriteLog($"Exception Loop: {ex.Message}", "");
+                                BaseUtils.HttpCom.WriteLog($"ETrace: {ex.StackTrace}", "");
+                                Trace.WriteLine($"Exception Loop: {ex.Message}");
+                                Trace.WriteLine($"ETrace: {ex.StackTrace}");
+                            }
                         }
-                        catch (Exception ex)
+
+                        if (sys.EDSMID > 0)
                         {
-                            BaseUtils.HttpCom.WriteLog($"Exception Loop: {ex.Message}", "");
-                            BaseUtils.HttpCom.WriteLog($"ETrace: {ex.StackTrace}", "");
-                            Trace.WriteLine($"Exception Loop: {ex.Message}");
-                            Trace.WriteLine($"ETrace: {ex.StackTrace}");
+                            DictEDSMBodies[sys.EDSMID] = bodies;
                         }
+
+                        if (sys.SystemAddress != null && sys.SystemAddress > 0)
+                        {
+                            DictEDSMBodiesByID64[sys.SystemAddress.Value] = bodies;
+                        }
+
+                        System.Diagnostics.Debug.WriteLine("EDSM Web Lookup complete " + sys.Name + " " + bodies.Count);
+
+                        onnewbodies?.Invoke(bodies,sys);        // inside the lock, with new bodies, allow it to do processsing.
+
+                        return new Tuple<List<JournalScan>, bool>(bodies, false);
                     }
 
-                    if (edsmid > 0)
+                    if (sys.EDSMID > 0)
                     {
-                        DictEDSMBodies[edsmid] = bodies;
+                        DictEDSMBodies[sys.EDSMID] = null;
                     }
 
-                    if (id64 != null && id64 > 0)
+                    if (sys.SystemAddress != null && sys.SystemAddress > 0)
                     {
-                        DictEDSMBodiesByID64[id64.Value] = bodies;
+                        DictEDSMBodiesByID64[sys.SystemAddress.Value] = null;
                     }
-
-                    return bodies;
-                }
-
-                if (edsmid > 0)
-                {
-                    DictEDSMBodies[edsmid] = null;
-                }
-
-                if (id64 != null && id64 > 0)
-                {
-                    DictEDSMBodiesByID64[id64.Value] = null;
                 }
             }
             catch (Exception ex)
@@ -840,6 +841,7 @@ namespace EliteDangerousCore.EDSM
                 return null;
 
             }
+
             return null;
         }
 
@@ -884,6 +886,9 @@ namespace EliteDangerousCore.EDSM
                 {
                     jout["Landable"] = jo["isLandable"];
                     jout["MassEM"] = jo["earthMasses"];
+
+                    jout["SurfaceGravity"] = jo["gravity"].Double() * JournalScan.oneGee_m_s2;      // if not there, we get 0
+
                     jout["Volcanism"] = jo["volcanismType"];
                     string atmos = jo["atmosphereType"].StrNull();
                     if ( atmos != null && atmos.IndexOf("atmosphere",StringComparison.InvariantCultureIgnoreCase)==-1)
@@ -1024,7 +1029,7 @@ namespace EliteDangerousCore.EDSM
 
             string postdata = "commanderName=" + Uri.EscapeDataString(commanderName) +
                               "&apiKey=" + Uri.EscapeDataString(apiKey) +
-                              "&fromSoftware=" + Uri.EscapeDataString(fromSoftware) +
+                              "&fromSoftware=" + Uri.EscapeDataString(SoftwareName) +
                               "&fromSoftwareVersion=" + Uri.EscapeDataString(fromSoftwareVersion) +
                               "&message=" + EscapeLongDataString(message.ToString(Newtonsoft.Json.Formatting.None));
 

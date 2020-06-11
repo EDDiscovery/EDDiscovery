@@ -255,12 +255,16 @@ namespace EliteDangerousCore
                         {
                             double? curfuel = jfuel["FuelMain"].DoubleNull();
                             double? curres = jfuel["FuelReservoir"].DoubleNull();
-                            if (curfuel != null && curres != null && ( curfuel.Value != prev_curfuel || curres.Value != prev_curres) )
+                            if (curfuel != null && curres != null)
                             {
-                                events.Add(new UIEvents.UIFuel(curfuel.Value,  curres.Value, ShipType(prev_flags.Value), EventTimeUTC, prev_firegroup == -1));
-                                prev_curfuel = curfuel.Value;
-                                prev_curres = curres.Value;
-                                fireoverall = true;
+                                if (Math.Abs(curfuel.Value - prev_curfuel) >= 0.1 || Math.Abs(curres.Value - prev_curres) >= 0.01)  // don't fire if small changes
+                                {
+                                    //System.Diagnostics.Debug.WriteLine("UIEvent Fuel " + curfuel.Value + " " + prev_curfuel + " Res " + curres.Value + " " + prev_curres);
+                                    events.Add(new UIEvents.UIFuel(curfuel.Value, curres.Value, ShipType(prev_flags.Value), EventTimeUTC, prev_firegroup == -1));
+                                    prev_curfuel = curfuel.Value;
+                                    prev_curres = curres.Value;
+                                    fireoverall = true;
+                                }
                             }
                         }
 

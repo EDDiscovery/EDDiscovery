@@ -69,6 +69,11 @@ namespace EDDiscovery.UserControls
             TravelHistoryFilter.InitaliseComboBox(comboBoxHistoryWindow, DbHistorySave, incldockstartend: false);
         }
 
+        public override void ChangeCursorType(IHistoryCursor thc)
+        {
+            uctg = thc;
+        }
+
         public override void LoadLayout()
         {
             dataGridViewLedger.RowTemplate.MinimumHeight = Font.ScalePixels(26);
@@ -121,6 +126,7 @@ namespace EDDiscovery.UserControls
 
                 if (filteredlist.Count > 0)
                 {
+                    var rowsToAdd = new List<DataGridViewRow>(filteredlist.Count);
                     for (int i = filteredlist.Count - 1; i >= 0; i--)
                     {
                         Ledger.Transaction tx = filteredlist[i];
@@ -134,10 +140,13 @@ namespace EDDiscovery.UserControls
                                             (tx.profitperunit!=0) ? tx.profitperunit.ToString("N0") : ""
                                         };
 
-                        dataGridViewLedger.Rows.Add(rowobj);
-                        dataGridViewLedger.Rows[dataGridViewLedger.Rows.Count - 1].Tag = tx.jid;
-
+                        var row = dataGridViewLedger.RowTemplate.Clone() as DataGridViewRow;
+                        row.CreateCells(dataGridViewLedger, rowobj);
+                        row.Tag = tx.jid;
+                        rowsToAdd.Add(row);
                     }
+
+                    dataGridViewLedger.Rows.AddRange(rowsToAdd.ToArray());
 
                     dataGridViewLedger.FilterGridView(textBoxFilter.Text);
                 }
@@ -191,37 +200,10 @@ namespace EDDiscovery.UserControls
         #region right clicks
 
         int rightclickrow = -1;
-        int leftclickrow = -1;
 
         private void dataGridViewLedger_MouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Right)         // right click on travel map, get in before the context menu
-            {
-                rightclickrow = -1;
-            }
-            if (e.Button == MouseButtons.Left)         // right click on travel map, get in before the context menu
-            {
-                leftclickrow = -1;
-            }
-
-            if (dataGridViewLedger.SelectedCells.Count < 2 || dataGridViewLedger.SelectedRows.Count == 1)      // if single row completely selected, or 1 cell or less..
-            {
-                DataGridView.HitTestInfo hti = dataGridViewLedger.HitTest(e.X, e.Y);
-                if (hti.Type == DataGridViewHitTestType.Cell)
-                {
-                    dataGridViewLedger.ClearSelection();                // select row under cursor.
-                    dataGridViewLedger.Rows[hti.RowIndex].Selected = true;
-
-                    if (e.Button == MouseButtons.Right)         // right click on travel map, get in before the context menu
-                    {
-                        rightclickrow = hti.RowIndex;
-                    }
-                    if (e.Button == MouseButtons.Left)         // right click on travel map, get in before the context menu
-                    {
-                        leftclickrow = hti.RowIndex;
-                    }
-                }
-            }
+            dataGridViewLedger.HandleClickOnDataGrid(e, out int unusedleftclickrow, out rightclickrow);
         }
 
         private void toolStripMenuItemGotoItem_Click(object sender, EventArgs e)
@@ -249,7 +231,7 @@ namespace EDDiscovery.UserControls
             if (current_mc != null)
             {
                 Forms.ExportForm frm = new Forms.ExportForm();
-                frm.Init(new string[] { "Export Current View" }, disablestartendtime: true, allowRawJournalExport: false);
+                frm.Init(new string[] { "Export Current View" }, disablestartendtime: true);
 
                 if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)
                 {

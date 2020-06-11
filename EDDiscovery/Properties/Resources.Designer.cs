@@ -64,18 +64,32 @@ namespace EDDiscovery.Properties {
         ///   Looks up a localized string similar to Program Concept by:
         ///Cmdr Finwen  (Robert Wahlström)
         ///
-        ///Developers for this release:
-        ///Robby (Releaser), Bravada Cadelanne, Iain Ross, Andrea Spada, Robosa
+        ///Developers for this release series:
+        ///Robby (Releaser)
+        ///Bravada Cadelanne, Iain Ross, Andrea Spada, Carcher99
+        ///
+        ///Images Captured by:
+        ///Spandino, Robby, Eahlstan, Ettanin, CompleteNOOB from Frontier Elite Dangerous Images (C) Frontier Developments PLC
         ///
         ///Languages Translations:
         ///Potatossuaro, Zafford, Andrea Spada, Goscickiw, Nats-ji, Jay
         ///
         ///Previous Contributors:
-        ///Daniel-finger, Phroggie, Finwen, Corbin Moran, Myshka, Zed, Marlon Blake, Smacker, Jason Thorpe, Greg Malcolm,  Majkl578, MWerle...
+        ///IGAU, EoD, Imathrowback, phwoelfel, Robosa, Daniel-finger, Phroggie, Finwen, Corbin Moran,  [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string Developers {
+        internal static string Credits {
             get {
-                return ResourceManager.GetString("Developers", resourceCulture);
+                return ResourceManager.GetString("Credits", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap EDCD {
+            get {
+                object obj = ResourceManager.GetObject("EDCD", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -95,16 +109,6 @@ namespace EDDiscovery.Properties {
         internal static System.Drawing.Icon edlogo_3mo_icon {
             get {
                 object obj = ResourceManager.GetObject("edlogo_3mo_icon", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        internal static System.Drawing.Icon GNE {
-            get {
-                object obj = ResourceManager.GetObject("GNE", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
@@ -225,6 +229,15 @@ namespace EDDiscovery.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to https://edcd.github.io/.
+        /// </summary>
+        internal static string URLEDCD {
+            get {
+                return ResourceManager.GetString("URLEDCD", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to https://eddb.io/.
         /// </summary>
         internal static string URLeddb {
@@ -279,7 +292,7 @@ namespace EDDiscovery.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://www.edsm.net/dump/systemsWithCoordinates.json.
+        ///   Looks up a localized string similar to https://www.edsm.net/dump/systemsWithCoordinates.json.gz.
         /// </summary>
         internal static string URLEDSMFullSystems {
             get {

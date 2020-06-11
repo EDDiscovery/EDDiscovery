@@ -27,20 +27,19 @@ namespace EliteDangerousCore.Inara
     {
         // use if you need an API/name pair to get info from Inara.  Not all queries need it
         public bool ValidCredentials { get { return !string.IsNullOrEmpty(commanderName) && !string.IsNullOrEmpty(apiKey); } }
+        static public string SoftwareName { get; set; } = "EDDiscovery";
 
         private string commanderName;
         private string commanderFrontierID;
         private string apiKey;
 
         private readonly string fromSoftwareVersion;
-        private readonly string fromSoftware;
         static private Dictionary<long, List<JournalScan>> DictEDSMBodies = new Dictionary<long, List<JournalScan>>();
 
         private string InaraAPI = "inapi/v1/";      // Action end point
 
         private InaraClass()
         {
-            fromSoftware = "EDDiscovery";
             var assemblyFullName = Assembly.GetEntryAssembly().FullName;
             fromSoftwareVersion = assemblyFullName.Split(',')[1].Split('=')[1];
 
@@ -52,12 +51,12 @@ namespace EliteDangerousCore.Inara
             MimeType = "application/json";      // sets Content-type
         }
 
-        public InaraClass(EDCommander cmdr, string cmdrfid) : this()
+        public InaraClass(EDCommander cmdr) : this()
         {
             if (cmdr != null)
             {
                 apiKey = cmdr.InaraAPIKey;
-                commanderFrontierID = cmdrfid;
+                commanderFrontierID = cmdr.FID;
                 commanderName = string.IsNullOrEmpty(cmdr.InaraName) ? cmdr.Name : cmdr.InaraName;
             }
         }
@@ -456,6 +455,15 @@ namespace EliteDangerousCore.Inara
             return Event("addCommanderTravelFSDJump", dt, eventData);
         }
 
+        static public JToken addCommanderTravelCarrierJump(string fdname, int id, string starsystem, DateTime dt)
+        {
+            JObject eventData = new JObject();
+            eventData["shipType"] = fdname;
+            eventData["shipGameID"] = id;
+            eventData["starsystemName"] = starsystem;
+            return Event("addCommanderTravelCarrierJump", dt, eventData);
+        }
+
         static public JToken setCommanderTravelLocation(string starsystem, string station, long? marketid, DateTime dt)
         {
             JObject eventData = new JObject();
@@ -744,7 +752,7 @@ namespace EliteDangerousCore.Inara
         private JToken Header()         // Inara header
         {
             JObject jo = new JObject();
-            jo["appName"] = fromSoftware;
+            jo["appName"] = SoftwareName;
             jo["appVersion"] = fromSoftwareVersion;
             jo["isDeveloped"] = false;
             jo["APIkey"] = apiKey;

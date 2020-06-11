@@ -100,8 +100,7 @@ namespace EliteDangerousCore
     public enum EDPlanet
     {
         Unknown_Body_Type = 0,
-
-        Metal_rich_body = 1000,
+        Metal_rich_body = 1000,     // no idea why it does this, but keeping it
         High_metal_content_body,
         Rocky_body,
         Icy_body,
@@ -391,9 +390,9 @@ namespace EliteDangerousCore
 
                 // proto stars
                 case EDStar.AeBe:    // Herbig
-                    return "Herbig Ae/Be";
+                    return "Herbig Ae/Be".T(EDTx.Bodies_Herbig);
                 case EDStar.TTS:     // seen in logs
-                    return "T Tauri";
+                    return "T Tauri".T(EDTx.Bodies_TTauri);
 
                 // wolf rayet
                 case EDStar.W:
@@ -464,7 +463,7 @@ namespace EliteDangerousCore
                     return "Rogue Planet".T(EDTx.Bodies_RP);
 
                 default:
-                    return string.Format("Class {0} star\n", id.ToString());
+                    return string.Format("Class {0} star".T(EDTx.Bodies_UNK), id.ToString());
             }
         }
 
@@ -520,6 +519,7 @@ namespace EliteDangerousCore
             [EDStar.N] = "Neutron Star".T(EDTx.EDStar_N),
             [EDStar.H] = "Black Hole".T(EDTx.EDStar_H),
             [EDStar.SuperMassiveBlackHole] = "Supermassive Black Hole".T(EDTx.EDStar_SuperMassiveBlackHole),
+            [EDStar.Unknown] = "Unknown star type".T(EDTx.EDStar_Unknown),
         };
 
         // Removed the reverse lookups since they are english dependent. If we need them they are in 11.0.0.   They are not used and i'm worried
@@ -567,6 +567,7 @@ namespace EliteDangerousCore
             [EDPlanet.Sudarsky_class_V_gas_giant] = "Class V gas giant".T(EDTx.EDPlanet_SudarskyclassVgasgiant),
             [EDPlanet.Helium_rich_gas_giant] = "Helium-rich gas giant".T(EDTx.EDPlanet_Heliumrichgasgiant),
             [EDPlanet.Helium_gas_giant] = "Helium gas giant".T(EDTx.EDPlanet_Heliumgasgiant),
+            [EDPlanet.Unknown_Body_Type] = "Unknown planet type".T(EDTx.EDPlanet_Unknown),
         };
 
         public static string PlanetTypeName(EDPlanet type)
@@ -582,5 +583,26 @@ namespace EliteDangerousCore
             }
         }
 
+        public static bool AmmoniaWorld(EDPlanet PlanetTypeID) { return PlanetTypeID == EDPlanet.Ammonia_world; }
+        public static bool Earthlike(EDPlanet PlanetTypeID) { return PlanetTypeID == EDPlanet.Earthlike_body; } 
+        public static bool WaterWorld(EDPlanet PlanetTypeID) { return PlanetTypeID == EDPlanet.Water_world; } 
+        public static bool SudarskyGasGiant(EDPlanet PlanetTypeID) { return PlanetTypeID >= EDPlanet.Sudarsky_class_I_gas_giant && PlanetTypeID <= EDPlanet.Sudarsky_class_V_gas_giant; }
+        public static string SudarskyClass(EDPlanet PlanetTypeID) { return (new string[] { "I", "II", "III", "IV", "V" })[(int)(PlanetTypeID-EDPlanet.Sudarsky_class_I_gas_giant)]; }
+        public static bool GasGiant(EDPlanet PlanetTypeID) { return PlanetTypeID >= EDPlanet.Gas_giant_with_water_based_life && PlanetTypeID <= EDPlanet.Gas_giant_with_ammonia_based_life; }
+        public static bool WaterGiant(EDPlanet PlanetTypeID) { return PlanetTypeID >= EDPlanet.Water_giant && PlanetTypeID <= EDPlanet.Water_giant_with_life; }
+        public static bool HeliumGasGiant(EDPlanet PlanetTypeID) { return PlanetTypeID >= EDPlanet.Helium_rich_gas_giant && PlanetTypeID <= EDPlanet.Helium_gas_giant; }
+
+        private static string[] ClassificationAbv = new string[]
+        {
+            "MR","HMC","R","I","R+I","E","W","A","WG","WGL","GWL","GAL","S-I","S-II","S-III","S-IV","S-V","HRG","HG"
+        };
+
+        public static string PlanetAbv(EDPlanet PlanetTypeID)
+        {
+            if (PlanetTypeID == EDPlanet.Unknown_Body_Type)
+                return "U";
+            else
+                return ClassificationAbv[(int)PlanetTypeID - (int)EDPlanet.Metal_rich_body];
+        }
     }
 }

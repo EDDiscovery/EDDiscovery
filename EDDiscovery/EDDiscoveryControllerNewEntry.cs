@@ -72,7 +72,7 @@ namespace EDDiscovery
                 ActionEntry(prev);
         }
 
-        void ActionEntry(JournalEntry je)               // UI thread issue the JE to the system
+        private void ActionEntry(JournalEntry je)               // UI thread issue the JE to the system
         {
             OnNewJournalEntry?.Invoke(je);          // Always call this on all entries...
 

@@ -13,27 +13,22 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using EDDiscovery.Controls;
+using EliteDangerousCore;
+using EliteDangerousCore.JournalEvents;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using EDDiscovery.Controls;
-using EliteDangerousCore.JournalEvents;
-using EliteDangerousCore;
-using EliteDangerousCore.DB;
-using System.Diagnostics;
 
 namespace EDDiscovery.UserControls
 {
     public partial class UserControlMarketData : UserControlCommonBase
     {
         private string DbColumnSave { get { return DBName("MarketDataGrid" ,  "DGVCol"); } }
-        private string DbBuyOnly { get { return DBName("MarketDataBuyOnly" ); } }
+        private string DbBuyOnly { get { return DBName("MarketDataBuyOnly"); } }
+        private string DbSellOnly { get { return DBName("MarketDataSellOnly"); } }
         private string DbAutoSwap { get { return DBName("MarketDataAutoSwap" ); } }
 
         #region Init
@@ -51,6 +46,10 @@ namespace EDDiscovery.UserControls
 
             checkBoxBuyOnly.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbBuyOnly, false);
             this.checkBoxBuyOnly.CheckedChanged += new System.EventHandler(this.checkBoxBuyOnly_CheckedChanged);
+
+            checkBoxSellOnly.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSellOnly, false);
+            this.checkBoxSellOnly.CheckedChanged += new System.EventHandler(this.checkBoxSellOnly_CheckedChanged);
+
             checkBoxAutoSwap.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbAutoSwap, false);
 
             discoveryform.OnNewEntry += OnChanged;
@@ -78,6 +77,7 @@ namespace EDDiscovery.UserControls
         {
             DGVSaveColumnLayout(dataGridViewMarketData, DbColumnSave);
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbBuyOnly, checkBoxBuyOnly.Checked);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSellOnly, checkBoxSellOnly.Checked);
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbAutoSwap, checkBoxAutoSwap.Checked);
             discoveryform.OnNewEntry -= OnChanged;
             uctg.OnTravelSelectionChanged -= OnChanged;
@@ -135,25 +135,21 @@ namespace EDDiscovery.UserControls
 
         private void Display()
         {
-            //Stopwatch swp = new Stopwatch(); swp.Start();
-
-            System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCountLap(this,true) + " MK " + displaynumber + " Begin Display");
-
             DataGridViewColumn sortcol = dataGridViewMarketData.SortedColumn != null ? dataGridViewMarketData.SortedColumn : dataGridViewMarketData.Columns[0];
             SortOrder sortorder = dataGridViewMarketData.SortOrder;
+
+            dataViewScrollerPanel.SuspendLayout();
 
             int firstdisplayed = dataGridViewMarketData.FirstDisplayedScrollingRowIndex;
             string commodity = (dataGridViewMarketData.CurrentRow != null) ? (string)dataGridViewMarketData.CurrentRow.Cells[1].Value : null;
             int currentoffset = (dataGridViewMarketData.CurrentRow != null) ? Math.Max(0,dataGridViewMarketData.CurrentRow.Index - firstdisplayed) : 0;
             
             dataGridViewMarketData.Rows.Clear();
-            labelLocation.Text = "No Data".T(EDTx.NoData);
-            toolTip.SetToolTip(labelLocation, null);
 
             HistoryEntry left = (eddmd_left != null) ? eddmd_left : last_eddmd;       // if we have a selected left, use it, else use the last eddmd
             HistoryEntry cargo = (eddmd_left != null) ? eddmd_left : last_he;           // if we have a selected left, use it, else use the last he
 
-            if (left != null )       // we know it has a journal entry of EDD commodity..
+            if (left != null)       // we know it has a journal entry of EDD commodity..
             {
                 //System.Diagnostics.Debug.WriteLine(Environment.NewLine + "From " + current_displayed?.WhereAmI + " to " + left.WhereAmI);
 
@@ -163,17 +159,17 @@ namespace EDDiscovery.UserControls
                 //System.Diagnostics.Debug.WriteLine("Test Right " + eddmd_right?.WhereAmI + " vs " + left.WhereAmI);
                 if (eddmd_right != null && !Object.ReferenceEquals(eddmd_right, left))   // if got a comparision, and not the same data..
                 {
-                    if ( checkBoxAutoSwap.Checked &&
+                    if (checkBoxAutoSwap.Checked &&
                         left.System.Name.Equals(eddmd_right.System.Name) &&     // if left system being displayed is same as right system
-                        left.WhereAmI.Equals(eddmd_right.WhereAmI) )            // that means we can autoswap comparisions around
+                        left.WhereAmI.Equals(eddmd_right.WhereAmI))            // that means we can autoswap comparisions around
                     {
                         //System.Diagnostics.Debug.WriteLine("Arrived at last left station, repick " + current_displayed.WhereAmI + " as comparision");
 
                         int index = comboboxentries.FindIndex(x => x.System.Name.Equals(current_displayed.System.Name) && x.WhereAmI.Equals(current_displayed.WhereAmI));
-                        if ( index >= 0 )       // if found it, swap to last instance of system
+                        if (index >= 0)       // if found it, swap to last instance of system
                         {
                             comboBoxCustomTo.Enabled = false;
-                            comboBoxCustomTo.SelectedIndex = index+1;
+                            comboBoxCustomTo.SelectedIndex = index + 1;
                             comboBoxCustomTo.Enabled = true;
                             eddmd_right = comboboxentries[index];
                             //System.Diagnostics.Debug.WriteLine("Right is now " + eddmd_right.WhereAmI);
@@ -182,14 +178,14 @@ namespace EDDiscovery.UserControls
                     }
 
                     //System.Diagnostics.Debug.WriteLine("Right " + eddmd_right.System.Name + " " + eddmd_right.WhereAmI);
-                    list = CCommodities.Merge(list, ((JournalCommodityPricesBase)eddmd_right.journalEntry).Commodities , eddmd_right.WhereAmI);
+                    list = CCommodities.Merge(list, ((JournalCommodityPricesBase)eddmd_right.journalEntry).Commodities);
                 }
 
                 List<MaterialCommodities> mclist = cargo.MaterialCommodity.Sort(true);      // stuff we have..  commodities only
                 List<MaterialCommodities> notfound = new List<MaterialCommodities>();
                 foreach (MaterialCommodities m in mclist)
                 {
-                    int index = list.FindIndex(x => x.fdname.EqualsAlphaNumOnlyNoCase(m.Details.Name));   // try and match, remove any spaces/_ and lower case it for matching
+                    int index = list.FindIndex(x => x.fdname.EqualsAlphaNumOnlyNoCase(m.Details.FDName));   // try and match, remove any spaces/_ and lower case it for matching
                     if (index >= 0)
                         list[index].CargoCarried = m.Count; // found it, set cargo count..
                     else
@@ -198,15 +194,20 @@ namespace EDDiscovery.UserControls
 
                 FontFamily ff = new FontFamily(this.Font.Name);
                 bool buyonly = checkBoxBuyOnly.Checked;
+                bool sellonly = checkBoxSellOnly.Checked;
 
                 foreach (CCommodities c in list)
                 {
-                    if (!buyonly || (c.buyPrice > 0 || c.ComparisionBuy))
+                    if (sellonly ? c.buyPrice == 0 : (!buyonly || (c.buyPrice > 0 || c.ComparisionBuy)))
                     {
                         MaterialCommodityData mc = MaterialCommodityData.GetByFDName(c.fdname);
 
+                        string name = mc?.Name ?? c.locName;
+                        if (c.ComparisionRightOnly)
+                            name += " @ " + eddmd_right.WhereAmI;
+
                         object[] rowobj = { mc?.TranslatedType ?? c.loccategory.Alt(c.category) ,
-                                            mc?.Name ?? c.locName ,
+                                            name,
                                             c.sellPrice > 0 ? c.sellPrice.ToString() : "" ,
                                             c.buyPrice > 0 ? c.buyPrice.ToString() : "" ,
                                             c.CargoCarried,
@@ -255,8 +256,14 @@ namespace EDDiscovery.UserControls
                 string r = EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(left.EventTimeUTC).ToString();
                 toolTip.SetToolTip(labelLocation, r);
 
-                System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCountLap(this) + " MK " + displaynumber + " Load Finished");
             }
+            else
+            {
+                toolTip.SetToolTip(labelLocation, null);
+                labelLocation.Text = "No Data".T(EDTx.NoData);
+            }
+
+            dataViewScrollerPanel.ResumeLayout();
 
             dataGridViewMarketData.Sort(sortcol, (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
             dataGridViewMarketData.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
@@ -269,7 +276,7 @@ namespace EDDiscovery.UserControls
                     if ( v.Equals(commodity))           // Find the commodity, and set it to the same relative position as before.
                     {
                         dataGridViewMarketData.CurrentCell = dataGridViewMarketData.Rows[rw.Index].Cells[1];
-                        dataGridViewMarketData.FirstDisplayedScrollingRowIndex = Math.Max(rw.Index - currentoffset,0);
+                        dataGridViewMarketData.SafeFirstDisplayedScrollingRowIndex( Math.Max(rw.Index - currentoffset,0));
                         break;
                     }
                 }
@@ -360,6 +367,17 @@ namespace EDDiscovery.UserControls
 
         private void checkBoxBuyOnly_CheckedChanged(object sender, EventArgs e)
         {
+            if (checkBoxBuyOnly.Checked)
+                checkBoxSellOnly.Checked = false;
+
+            Display();
+        }
+
+        private void checkBoxSellOnly_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxSellOnly.Checked)
+                checkBoxBuyOnly.Checked = false;
+
             Display();
         }
 

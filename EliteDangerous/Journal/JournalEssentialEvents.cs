@@ -38,7 +38,7 @@ namespace EliteDangerousCore
                 JournalTypeEnum.Died, JournalTypeEnum.Resurrect, JournalTypeEnum.SelfDestruct, 
 
                 // Journey
-                JournalTypeEnum.FSDJump, JournalTypeEnum.Location, JournalTypeEnum.Docked,
+                JournalTypeEnum.FSDJump, JournalTypeEnum.CarrierJump, JournalTypeEnum.Location, JournalTypeEnum.Docked,
 
                 // Ship state
                 JournalTypeEnum.Loadout, JournalTypeEnum.MassModuleStore, JournalTypeEnum.ModuleBuy, JournalTypeEnum.ModuleSell,
@@ -61,8 +61,7 @@ namespace EliteDangerousCore
                 var statsAdditional = new JournalTypeEnum[]
                 {
                     // Travel
-                    JournalTypeEnum.JetConeBoost, JournalTypeEnum.Touchdown, JournalTypeEnum.HeatWarning, JournalTypeEnum.HeatDamage,
-                    JournalTypeEnum.FuelScoop, JournalTypeEnum.SAAScanComplete
+                    JournalTypeEnum.JetConeBoost, JournalTypeEnum.SAAScanComplete
                 };
                 return EssentialEvents.Concat(statsAdditional).ToArray();
             }
@@ -70,12 +69,12 @@ namespace EliteDangerousCore
 
         static public JournalTypeEnum[] JumpScanEssentialEvents = new JournalTypeEnum[]     // 
             {
-                JournalTypeEnum.FSDJump,
+                JournalTypeEnum.FSDJump,JournalTypeEnum.CarrierJump,
                 JournalTypeEnum.Scan,
             };
         static public JournalTypeEnum[] JumpEssentialEvents = new JournalTypeEnum[]     // 
             {
-                JournalTypeEnum.FSDJump,
+                JournalTypeEnum.FSDJump,JournalTypeEnum.CarrierJump
             };
 
         static public JournalTypeEnum[] NoEssentialEvents = new JournalTypeEnum[]     // 

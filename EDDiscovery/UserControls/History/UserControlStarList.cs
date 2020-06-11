@@ -44,7 +44,7 @@ namespace EDDiscovery.UserControls
         #endregion
 
         #region Init
-        private class StarHistoryColumns
+        private class Columns
         {
             public const int LastVisit = 0;
             public const int StarName = 1;
@@ -162,10 +162,10 @@ namespace EDDiscovery.UserControls
                 sortcol = -1;
             }
 
-            System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCountLap(this,true) + " SL " + displaynumber + " Load start");
-
             rowsbyjournalid.Clear();
             dataGridViewStarList.Rows.Clear();
+
+            checkBoxJumponium.Enabled = checkBoxBodyClasses.Enabled = buttonExtExcel.Enabled = comboBoxHistoryWindow.Enabled = false;
 
             dataGridViewStarList.Columns[0].HeaderText = EDDiscoveryForm.EDDConfig.GetTimeTitle();
 
@@ -176,9 +176,10 @@ namespace EDDiscovery.UserControls
             List<List<HistoryEntry>> syslists = HistoryList.SystemAggregateList(result);
             List<List<HistoryEntry>[]> syslistchunks = new List<List<HistoryEntry>[]>();
 
-            for (int i = 0; i < syslists.Count; i += 1000)
+            int chunksize = 500;
+            for (int i = 0; i < syslists.Count; i += chunksize, chunksize = 2000)
             {
-                int totake = Math.Min(1000, syslists.Count - i);
+                int totake = Math.Min(chunksize, syslists.Count - i);
                 List<HistoryEntry>[] syslistchunk = new List<HistoryEntry>[totake];
                 syslists.CopyTo(i, syslistchunk, 0, totake);
                 syslistchunks.Add(syslistchunk);
@@ -188,41 +189,35 @@ namespace EDDiscovery.UserControls
 
             string filtertext = textBoxFilter.Text;
 
+            System.Diagnostics.Stopwatch swtotal = new System.Diagnostics.Stopwatch(); swtotal.Start();
+
             foreach (var syslistchunk in syslistchunks)
             {
                 todo.Enqueue(() =>
                 {
-                    dataViewScrollerPanel.Suspend();
+                    List<DataGridViewRow> rowstoadd = new List<DataGridViewRow>();
+
                     foreach (var syslist in syslistchunk)
                     {
                         var row = CreateHistoryRow(syslist, filtertext);
                         if (row != null)
-                            dataGridViewStarList.Rows.Add(row);
+                            rowstoadd.Add(row);
                     }
 
-                    dataViewScrollerPanel.Resume();
+                    dataGridViewStarList.Rows.AddRange(rowstoadd.ToArray());
                 });
+
+                if (dataGridViewStarList.MoveToSelection(rowsbyjournalid, ref pos, false, Columns.StarName))
+                    FireChangeSelection();
             }
 
             todo.Enqueue(() =>
             {
                 dataGridViewStarList.FilterGridView(filtertext);
+                System.Diagnostics.Debug.WriteLine(BaseUtils.AppTicks.TickCount + " SL TOTAL TIME " + swtotal.ElapsedMilliseconds);
 
-                int rowno = FindGridPosByJID(pos.Item1, true);     // find row.. must be visible..  -1 if not found/not visible
-
-                if (rowno >= 0)
-                {
-                    dataGridViewStarList.CurrentCell = dataGridViewStarList.Rows[rowno].Cells[pos.Item2];       // its the current cell which needs to be set, moves the row marker as well currentGridRow = (rowno!=-1) ? 
-                }
-                else if (dataGridViewStarList.Rows.GetRowCount(DataGridViewElementStates.Visible) > 0)
-                {
-                    rowno = dataGridViewStarList.Rows.GetFirstRow(DataGridViewElementStates.Visible);
-                    dataGridViewStarList.CurrentCell = dataGridViewStarList.Rows[rowno].Cells[StarHistoryColumns.StarName];
-                }
-                else
-                    rowno = -1;
-
-                System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCountLap(this) + " SL " + displaynumber + " Load Finish");
+                if (dataGridViewStarList.MoveToSelection(rowsbyjournalid, ref pos, true, Columns.StarName))
+                    FireChangeSelection();
 
                 if (sortcol >= 0)
                 {
@@ -235,9 +230,8 @@ namespace EDDiscovery.UserControls
                 autoupdaterowoffset = autoupdaterowstart = 0;
                 autoupdateedsm.Start();
 
-                FireChangeSelection();      // and since we repainted, we should fire selection, as we in effect may have selected a new one
-
                 loadcomplete = true;
+                checkBoxJumponium.Enabled = checkBoxBodyClasses.Enabled = buttonExtExcel.Enabled = comboBoxHistoryWindow.Enabled = true;
             });
 
             todotimer.Start();
@@ -269,7 +263,7 @@ namespace EDDiscovery.UserControls
                 return;
             }
 
-            if (he.IsFSDJump || he.journalEntry is JournalScan || he.journalEntry is JournalFSSDiscoveryScan)
+            if (he.IsFSDCarrierJump || he.journalEntry is JournalScan || he.journalEntry is JournalFSSDiscoveryScan)
             {
                 DataGridViewRow rowpresent = null;
                 foreach (DataGridViewRow rowf in dataGridViewStarList.Rows)
@@ -282,7 +276,7 @@ namespace EDDiscovery.UserControls
                     }
                 }
 
-                if (he.IsFSDJump)
+                if (he.IsFSDCarrierJump)
                 {
                     if (rowpresent != null) // if its in the list, move to top and increment he's
                     {
@@ -326,7 +320,7 @@ namespace EDDiscovery.UserControls
                     if ( rowpresent != null )       // only need to do something if its displayed
                     {
                         List<HistoryEntry> syslist = (List<HistoryEntry>)rowpresent.Tag;
-                        var node = discoveryform.history.starscan?.FindSystem(syslist[0].System, false); // may be null
+                        var node = discoveryform.history.starscan?.FindSystemSynchronous(syslist[0].System, false); // may be null
                         string info = Infoline(syslist, node);  // lookup node, using star name, no EDSM lookup.
                         rowpresent.Cells[3].Value = info;   // update info
                         rowpresent.Cells[4].Value = node?.ScanValue(true).ToString("N0") ?? "0"; // update scan value
@@ -344,7 +338,7 @@ namespace EDDiscovery.UserControls
             DateTime time = EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(he.EventTimeUTC);
             string visits = $"{syslist.Count:N0}";
 
-            var node = discoveryform.history.starscan?.FindSystem(syslist[0].System, false); // may be null
+            var node = discoveryform.history.starscan?.FindSystemSynchronous(syslist[0].System, false); // may be null
 
             string info = Infoline(syslist, node);  // lookup node, using star name, no EDSM lookup.
 
@@ -367,7 +361,7 @@ namespace EDDiscovery.UserControls
 
             rw.Tag = syslist;
 
-            rw.DefaultCellStyle.ForeColor = (he.System.HasCoordinate || he.EntryType != JournalTypeEnum.FSDJump) ? discoveryform.theme.VisitedSystemColor : discoveryform.theme.NonVisitedSystemColor;
+            rw.DefaultCellStyle.ForeColor = (he.System.HasCoordinate || !he.IsFSDCarrierJump) ? discoveryform.theme.VisitedSystemColor : discoveryform.theme.NonVisitedSystemColor;
 
             he.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
 
@@ -404,9 +398,11 @@ namespace EDDiscovery.UserControls
 
                     string extrainfo = "";
                     string prefix = Environment.NewLine;
+                    string noprefix = "";
 
                     foreach (StarScan.ScanNode sn in sysnode.Bodies)
                     {
+                        string bodyinfo = "";
                         if (sn.ScanData != null && checkBoxBodyClasses.Checked)
                         {
                             JournalScan sc = sn.ScanData;
@@ -416,33 +412,33 @@ namespace EDDiscovery.UserControls
                             {
                                 // Sagittarius A* is a special body: is the centre of the Milky Way, and the only one which is classified as a Super Massive Black Hole. As far as we know...                                
                                 if (sc.StarTypeID == EDStar.SuperMassiveBlackHole)
-                                    extrainfo = extrainfo.AppendPrePad(string.Format("{0} is a super massive black hole".T(EDTx.UserControlStarList_SMBH), sc.BodyName) , prefix);
-
+                                    bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a super massive black hole".T(EDTx.UserControlStarList_SMBH), sc.BodyName), prefix);
+                                    
                                 // black holes
                                 if (sc.StarTypeID == EDStar.H)
-                                    extrainfo = extrainfo.AppendPrePad(string.Format("{0} is a black hole".T(EDTx.UserControlStarList_BH), sc.BodyName), prefix);
+                                    bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a black hole".T(EDTx.UserControlStarList_BH), sc.BodyName), prefix);
 
                                 // neutron stars
                                 if (sc.StarTypeID == EDStar.N)
-                                    extrainfo = extrainfo.AppendPrePad(string.Format("{0} is a neutron star".T(EDTx.UserControlStarList_NS), sc.BodyName), prefix);
+                                    bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a neutron star".T(EDTx.UserControlStarList_NS), sc.BodyName), prefix);
 
                                 // white dwarf (D, DA, DAB, DAO, DAZ, DAV, DB, DBZ, DBV, DO, DOV, DQ, DC, DCV, DX)
                                 string WhiteDwarf = "White Dwarf";
                                 if (sc.StarTypeText.Contains(WhiteDwarf))
-                                    extrainfo = extrainfo.AppendPrePad(string.Format("{0} is a {1} white dwarf star".T(EDTx.UserControlStarList_WD), sc.BodyName, sc.StarTypeID), prefix);
+                                    bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a {1} white dwarf star".T(EDTx.UserControlStarList_WD), sc.BodyName, sc.StarTypeID), prefix);
 
                                 // wolf rayet (W, WN, WNC, WC, WO)
                                 string WolfRayet = "Wolf-Rayet";
                                 if (sc.StarTypeText.Contains(WolfRayet))
-                                    extrainfo = extrainfo.AppendPrePad(string.Format("{0} is a {1} wolf-rayet star".T(EDTx.UserControlStarList_WR), sc.BodyName, sc.StarTypeID), prefix);
+                                    bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a {1} wolf-rayet star".T(EDTx.UserControlStarList_WR), sc.BodyName, sc.StarTypeID), prefix);
 
                                 // giants. It should recognize all classes of giants.
                                 if (sc.StarTypeText.Contains("Giant"))
-                                    extrainfo = extrainfo.AppendPrePad(string.Format("{0} is a {1}".T(EDTx.UserControlStarList_OTHER), sc.BodyName, sc.StarTypeText), prefix);
+                                    bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a {1}".T(EDTx.UserControlStarList_OTHER), sc.BodyName, sc.StarTypeText), prefix);
 
                                 // rogue planets - not sure if they really exists, but they are in the journal, so...
                                 if (sc.StarTypeID == EDStar.RoguePlanet)
-                                    extrainfo = extrainfo.AppendPrePad(string.Format("{0} is a rogue planet".T(EDTx.UserControlStarList_RP), sc.BodyName), prefix);
+                                    bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a rogue planet".T(EDTx.UserControlStarList_RP), sc.BodyName), prefix);
                             }
 
                             else
@@ -457,22 +453,22 @@ namespace EDDiscovery.UserControls
                                 {
                                     // Earth-like moon
                                     if (sc.PlanetTypeID == EDPlanet.Earthlike_body)
-                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is an earth like moon".T(EDTx.UserControlStarList_ELM), bodynameshort), prefix);
+                                        bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is an earth like moon".T(EDTx.UserControlStarList_ELM), bodynameshort), prefix);
 
                                     // Terraformable water moon
                                     if (sc.Terraformable == true && sc.PlanetTypeID == EDPlanet.Water_world)
-                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is a terraformable water moon".T(EDTx.UserControlStarList_TWM), bodynameshort), prefix);
+                                        bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a terraformable water moon".T(EDTx.UserControlStarList_TWM), bodynameshort), prefix);
                                     // Water moon
                                     if (sc.Terraformable == false && sc.PlanetTypeID == EDPlanet.Water_world)
-                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is a water moon".T(EDTx.UserControlStarList_WM), bodynameshort), prefix);
+                                        bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a water moon".T(EDTx.UserControlStarList_WM), bodynameshort), prefix);
 
                                     // Terraformable moon
                                     if (sc.Terraformable == true && sc.PlanetTypeID != EDPlanet.Water_world)
-                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is a terraformable moon".T(EDTx.UserControlStarList_TM), bodynameshort), prefix);
+                                        bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a terraformable moon".T(EDTx.UserControlStarList_TM), bodynameshort), prefix);
 
                                     // Ammonia moon
                                     if (sc.PlanetTypeID == EDPlanet.Ammonia_world)
-                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is an ammonia moon".T(EDTx.UserControlStarList_AM), bodynameshort), prefix);
+                                        bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is an ammonia moon".T(EDTx.UserControlStarList_AM), bodynameshort), prefix);
                                 }
 
                                 else
@@ -481,27 +477,35 @@ namespace EDDiscovery.UserControls
                                 {
                                     // Earth Like planet
                                     if (sc.PlanetTypeID == EDPlanet.Earthlike_body)
-                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is an earth like planet".T(EDTx.UserControlStarList_ELP), bodynameshort), prefix);
+                                        bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is an earth like planet".T(EDTx.UserControlStarList_ELP), bodynameshort), prefix);
 
                                     // Terraformable water world
                                     if (sc.PlanetTypeID == EDPlanet.Water_world && sc.Terraformable == true)
-                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is a terraformable water world".T(EDTx.UserControlStarList_TWW), bodynameshort), prefix);
+                                        bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a terraformable water world".T(EDTx.UserControlStarList_TWW), bodynameshort), prefix);
                                     // Water world
                                     if (sc.PlanetTypeID == EDPlanet.Water_world && sc.Terraformable == false)
-                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is a water world".T(EDTx.UserControlStarList_WW), bodynameshort), prefix);
+                                        bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a water world".T(EDTx.UserControlStarList_WW), bodynameshort), prefix);
 
                                     // Terraformable planet
                                     if (sc.Terraformable == true && sc.PlanetTypeID != EDPlanet.Water_world)
-                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is a terraformable planet".T(EDTx.UserControlStarList_TP), bodynameshort), prefix);
+                                        bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a terraformable planet".T(EDTx.UserControlStarList_TP), bodynameshort), prefix);
 
                                     // Ammonia world
                                     if (sc.PlanetTypeID == EDPlanet.Ammonia_world)
-                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is an ammonia world".T(EDTx.UserControlStarList_AW), bodynameshort), prefix);
+                                        bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is an ammonia world".T(EDTx.UserControlStarList_AW), bodynameshort), prefix);
                                 }
 
-                                if ( sn.Signals != null )
+                                if (sn.Signals != null)
                                 {
-                                    extrainfo = extrainfo.AppendPrePad(string.Format("{0} has signals".T(EDTx.UserControlStarList_Signals), bodynameshort), prefix);
+                                    bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} has signals".T(EDTx.UserControlStarList_Signals), bodynameshort), prefix);
+                                }
+
+                                //Add Distance - Remember no newline
+                                if (bodyinfo != "")
+                                {
+                                    double distance = sc.DistanceFromArrivalLS;
+                                    bodyinfo = bodyinfo.AppendPrePad(string.Format(" ({0} ls)".T(EDTx.UserControlStarList_Distance), distance.ToString("n0")), noprefix);
+                                    extrainfo = extrainfo.AppendPrePad(bodyinfo, prefix);
                                 }
                             }
                         }
@@ -608,20 +612,12 @@ namespace EDDiscovery.UserControls
             return new Tuple<long, int>(jid, cellno);
         }
 
-        int FindGridPosByJID(long jid, bool checkvisible)
-        {
-            if (rowsbyjournalid.ContainsKey(jid) && (!checkvisible || rowsbyjournalid[jid].Visible))
-                return rowsbyjournalid[jid].Index;
-            else
-                return -1;
-        }
-
         public void GotoPosByJID(long jid)      // uccursor requirement
         {
-            int rowno = FindGridPosByJID(jid, true);
+            int rowno = DataGridViewControlHelpersStaticFunc.FindGridPosByID(rowsbyjournalid, jid, true);
             if (rowno >= 0)
             {
-                dataGridViewStarList.CurrentCell = dataGridViewStarList.Rows[rowno].Cells[StarHistoryColumns.StarName];
+                dataGridViewStarList.CurrentCell = dataGridViewStarList.Rows[rowno].Cells[Columns.StarName];
                 dataGridViewStarList.Rows[rowno].Selected = true;
                 FireChangeSelection();
             }
@@ -633,13 +629,13 @@ namespace EDDiscovery.UserControls
                 CheckEDSM(dataGridViewStarList.CurrentRow);
         }
 
-        public void CheckEDSM(DataGridViewRow row)
+        public async void CheckEDSM(DataGridViewRow row)
         {
             List<HistoryEntry> syslist = row.Tag as List<HistoryEntry>;
 
-            var node = discoveryform.history.starscan?.FindSystem(syslist[0].System, true);  // try an EDSM lookup, cache data, then redisplay.
-            row.Cells[StarHistoryColumns.OtherInformation].Value = Infoline(syslist,node);
-            row.Cells[StarHistoryColumns.SystemValue].Value = node?.ScanValue(true).ToString("N0") ?? "";
+            var node = await discoveryform.history.starscan?.FindSystemAsync(syslist[0].System, true);  // try an EDSM lookup, cache data, then redisplay.
+            row.Cells[Columns.OtherInformation].Value = Infoline(syslist,node);
+            row.Cells[Columns.SystemValue].Value = node?.ScanValue(true).ToString("N0") ?? "";
         }
 
         private void Autoupdateedsm_Tick(object sender, EventArgs e)            // tick tock to get edsm data very slowly!
@@ -760,42 +756,11 @@ namespace EDDiscovery.UserControls
 
         HistoryEntry rightclicksystem = null;
         int rightclickrow = -1;
-        HistoryEntry leftclicksystem = null;
-        int leftclickrow = -1;
 
         private void dataGridViewTravel_MouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Right)         // right click on travel map, get in before the context menu
-            {
-                rightclicksystem = null;
-                rightclickrow = -1;
-            }
-            if (e.Button == MouseButtons.Left)         // right click on travel map, get in before the context menu
-            {
-                leftclicksystem = null;
-                leftclickrow = -1;
-            }
-
-            if (dataGridViewStarList.SelectedCells.Count < 2 || dataGridViewStarList.SelectedRows.Count == 1)      // if single row completely selected, or 1 cell or less..
-            {
-                DataGridView.HitTestInfo hti = dataGridViewStarList.HitTest(e.X, e.Y);
-                if (hti.Type == DataGridViewHitTestType.Cell)
-                {
-                    dataGridViewStarList.ClearSelection();                // select row under cursor.
-                    dataGridViewStarList.Rows[hti.RowIndex].Selected = true;
-
-                    if (e.Button == MouseButtons.Right)         // right click on travel map, get in before the context menu
-                    {
-                        rightclickrow = hti.RowIndex;
-                        rightclicksystem = (dataGridViewStarList.Rows[hti.RowIndex].Tag as List<HistoryEntry>)[0];
-                    }
-                    if (e.Button == MouseButtons.Left)         // right click on travel map, get in before the context menu
-                    {
-                        leftclickrow = hti.RowIndex;
-                        leftclicksystem = (dataGridViewStarList.Rows[hti.RowIndex].Tag as List<HistoryEntry>)[0];
-                    }
-                }
-            }
+            dataGridViewStarList.HandleClickOnDataGrid(e, out int unusedleftclickrow, out rightclickrow);
+            rightclicksystem = (rightclickrow != -1) ? (HistoryEntry)(dataGridViewStarList.Rows[rightclickrow].Tag as List<HistoryEntry>)[0] : null;
         }
 
         #endregion
@@ -925,7 +890,7 @@ namespace EDDiscovery.UserControls
                 if (frm.SelectedIndex == 0)
                 {
                     // 0        1       2           3            4               5           6           7             8              9              10              11              12          
-                    string[] colh = { "Time", "System", "Visits", "Other Info", "Visit List", "Body", "Ship", "Description", "Detailed Info", "Travel Dist", "Travel Time", "Travel Jumps", "Travelled MisJumps" };
+                    string[] colh = { "Time", "System", "Visits", "Other Info", "Scan Value", "Visit List", "Body", "Ship", "Description", "Detailed Info", "Travel Dist", "Travel Time", "Travel Jumps", "Travelled MisJumps" };
 
                     BaseUtils.CSVWriteGrid grd = new BaseUtils.CSVWriteGrid();
                     grd.SetCSVDelimiter(frm.Comma);
@@ -965,6 +930,7 @@ namespace EDDiscovery.UserControls
                             rw.Cells[1].Value,
                             rw.Cells[2].Value ,
                             rw.Cells[3].Value ,
+                            rw.Cells[4].Value ,
                             tlist,
                             he.WhereAmI ,
                             he.ShipInformation != null ? he.ShipInformation.Name : "Unknown",

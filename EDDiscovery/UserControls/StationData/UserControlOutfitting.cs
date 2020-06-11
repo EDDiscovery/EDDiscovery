@@ -145,6 +145,7 @@ namespace EDDiscovery.UserControls
             SortOrder sortorder = dataGridViewOutfitting.SortOrder;
 
             dataGridViewOutfitting.Rows.Clear();
+            dataViewScrollerPanel.SuspendLayout();
 
             labelYard.Visible = false;
 
@@ -171,6 +172,8 @@ namespace EDDiscovery.UserControls
                 if ( itemlist.Count > 0 )
                     DisplayItems(itemlist, comboBoxYards.Text);
             }
+
+            dataViewScrollerPanel.ResumeLayout();
 
             dataGridViewOutfitting.Sort(sortcol, (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
             dataGridViewOutfitting.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;

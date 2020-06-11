@@ -126,6 +126,7 @@ SECTION JournalTypeEnum
 .Reputation: "Reputation" => "Reputacja"
 .RestockVehicle: "Restock Vehicle" => "Uzupełnienie Pojazdów"
 .Resurrect: "Resurrect" => "Wskrzeszenie"
+.SAASignalsFound: "SAA Signals Found" @
 .Scan: "Scan" => "Skan"
 .Scanned: "Scanned" => "Skanowany"
 .ScientificResearch: "Scientific Research" => "Badania Naukowe"
@@ -254,7 +255,7 @@ SECTION FSSSignal
 .State: "State:" => "Stan:"
 .Faction: "Faction:" => "Frakcja:"
 .USSType: "USS Type:" => "Typ USS:"
-.ThreatLevel: " Threat Level:" => " Poziom Zagrożenia:"
+.ThreatLevel: "Threat Level:" => " Poziom Zagrożenia:"
 .StationBool: ";Station" => ";Stacja"
 
 SECTION JournalFSSDiscoveryScan
@@ -452,6 +453,8 @@ SECTION StarPlanetRing
 
 SECTION JournalScan
 
+.CV: "Current value: {0:N0}" @
+.FDV: "First Discovered value: {0:N0}" @
 .Autoscanof: "Autoscan of {0}" => "Autoskan {0}"
 .Detailedscanof: "Detailed scan of {0}" => "Dokładny skan {0}"
 .Basicscanof: "Basic scan of {0}" => "Podstawowy skan {0}"
@@ -466,7 +469,7 @@ SECTION JournalScan
 .MEM: "Mass:;EM;0.00" => "Masa:;MZ;0.00"
 .Landable: "<;, Landable" => "<;, Możliwe Lądowanie"
 .Terraformable: "<;, Terraformable" => "<;, Możliwe Terraformowanie"
-.Gravity: "Gravity:;G;0.0" => "Grawitacja:;G;0.0"
+.Gravity: "Gravity:;G;0.00" => "Grawitacja:;G;0.0"
 .RK: "Radius:;km;0" => "Promień:;km;0"
 .NoAtmosphere: ", No Atmosphere" => ", Brak Atmosfery"
 .LandC: ", Landable" => ", Możliwe Lądowanie"
@@ -476,7 +479,6 @@ SECTION JournalScan
 .SolarRadius: "Solar Radius: {0:0.00} Sols\n" => "Promień Słońca: {0:0.00}x Sol\n"
 .BodyRadius: "Body Radius: {0:0.00}km\n" => "Promień Ciała Niebieskiego: {0:0.00}km\n"
 .SurfaceTemp: "Surface Temp: {0}K\n" => "Temp. Powierzchni: {0}K\n"
-.Luminosity: "Luminosity: {0}\n" => "Jasność: {0}\n"
 .GV: "Gravity: {0:0.00}g\n" => "Grawitacja: {0:0.0}g\n"
 .SPA: "Surface Pressure: {0} Atmospheres\n" => "Ciśnienie na Powierzchni: {0} atm\n"
 .SPP: "Surface Pressure: {0} Pa\n" => "Ciśnienie na Powierzchni: {0} Pa\n"
@@ -499,10 +501,10 @@ SECTION JournalScan
 .Belts: "Belts" => "Pasy"
 .Ring: "Ring" => "Pierścienie {0}"
 .Rings: "Rings" => "Pierścienie"
-.EV: "\nEstimated value: {0:N0}" => "Szacowana wartość: {0:N0}"
-.DB: "\n\nDiscovered by {0} on {1}" => "Odkryte przez {0} dnia {1}"
+.EV: "Base Estimated value: {0:N0}" => "Szacowana wartość: {0:N0}"
+.DB: "Discovered by {0} on {1}" => "Odkryte przez {0} dnia {1}"
 .HabitableZoneApprox: "Habitable Zone Approx. {0} ({1}-{2} AU)\n" => "Ekosfera ok. {0} ({1}-{2} AU)\n"
-.Othersstarsnotconsidered: "(Others stars not considered)\n\n" => " (Nie licząc innych gwiazd)\n"
+.Othersstarsnotconsidered: " - Others stars not considered\n" => " (Nie licząc innych gwiazd)\n"
 .Materials: "Materials:\n" => "Materiały: \n"
 .AtmosphericComposition: "Atmospheric Composition:\n" => "Skład Atmosfery:\n"
 .PlanetaryComposition: "Planetary Composition:\n" => "Skład Planety:\n"
@@ -516,17 +518,18 @@ SECTION JournalScan
 .WaterWorlds: " - Water Worlds, {0} ({1}-{2} AU),\n" => " - Planety Oceaniczne, {0} ({1}-{2} AU),\n"
 .EarthLikeWorlds: " - Earth Like Worlds, {0} ({1}-{2} AU),\n" => " - Planety Ziemiopodobne, {0} ({1}-{2} AU),\n"
 .AmmoniaWorlds: " - Ammonia Worlds, {0} ({1}-{2} AU),\n" => " - Planety Amoniakowe, {0} ({1}-{2} AU),\n"
-.IcyPlanets: " - Icy Planets, {0} (from {1} AU)\n\n" => " - Planety Lodowe, {0} (od {1} AU)\n\n"
+.IcyPlanets: " - Icy Planets, {0} (from {1} AU)\n" => " - Planety Lodowe, {0} (od {1} AU)\n\n"
 .DISTA: "Dist:;ls;0.0" => "Odległość:;ls;0.0"
+.DIST: "Dist:" @
 .BNME: "Name:" => "Nazwa:"
 .MMoM: "Mass:;MM;0.00" => "Masa:;MM;0.00"
 .SNME: "Name:" => "Nazwa:"
 .MoonMasses: "Moon Masses: {0:0.00}\n" => "Mas Księżyca: {0:0.00}\n"
 .MPI: "Mapped" => "Zmapowano"
 .MPIE: "Efficiently" => "Wydajnie"
-.EVFD: "\nFirst Discovered+Mapped value: {0:N0}/{1:N0}" => "Wartość Pierwszego Odkrycia+Mapowania: {0:N0}/{1:N0}e"
-.EVFM: "\nFirst Mapped value: {0:N0}/{1:N0}" @ => "Wartość Pierwszego Mapowania: {0:N0}/{1:N0}e"
-.SCNT: "\nScan Type: {0}" => "Typ Skanu: {0}"
+.EVFD: "First Discovered+Mapped value: {0:N0}/{1:N0}e" => "Wartość Pierwszego Odkrycia+Mapowania: {0:N0}/{1:N0}e"
+.EVFM: "First Mapped value: {0:N0}/{1:N0}e" @
+.SCNT: "Scan Type: {0}" => "Typ Skanu: {0}"
 .EVAD: "Already Discovered" => "Już Odkryto"
 .EVAM: "Already Mapped" => "Już Zmapowano"
 .InferredCircumstellarzones: "Inferred Circumstellar zones:\n" => "Obliczone Strefy Okołogwiazdowe:\n"
@@ -794,6 +797,7 @@ SECTION JournalEntry
 .PowerPlay: "PowerPlay:" @
 .Collected: "Collected:" => "Zebrano:"
 .of: "< of " => "< szt. "
+.ofa: "of " @
 .Total: "Total:" => "Razem:"
 .Progress: "Progress:;%;N1" => "Postęp:;%;N1"
 .Delivered: "Delivered:" => "Dostarczono:"
@@ -930,3 +934,5 @@ SECTION JournalEntry
 .Ships: "Ships" => "Statki/ów"
 .Distance: "Distance:; ly;0.0" => "Odległość:; lat świetlnych;0.0"
 .Threat: "Threat:" => "Zagrożenie:"
+.RemaingJumps: "Remaining Jumps" @
+.Nearest: "Nearest:" @

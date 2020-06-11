@@ -39,7 +39,19 @@ namespace EliteDangerousCore.JournalEvents
             SharedWithOthers = evt["SharedWithOthers"].Bool(false);
             Rewards = evt["Rewards"]?.ToObjectProtected<BountyReward[]>();
 
-            Target = evt["Target"].StrNull();       // only set for skimmer target missions
+            TargetLocalised = Target = evt["Target"].StrNull();       // only set for skimmer target missions
+
+            if (Target != null)
+            {
+                TargetLocalised = JournalFieldNaming.CheckLocalisation(evt["Target_Localised"].Str(), Target);  // 3.7 added a localised target field, so try it
+
+                var sp = ShipModuleData.Instance.GetShipProperties(Target);
+                if (sp != null)
+                {
+                    TargetLocalised = ((ShipModuleData.ShipInfoString)sp[ShipModuleData.ShipPropID.Name]).Value;
+                }
+            }
+
 
             if ( Rewards == null )                  // for skimmers, its Faction/Reward.  Bug in manual reported to FD 23/5/2018
             {
@@ -59,6 +71,7 @@ namespace EliteDangerousCore.JournalEvents
         public string VictimFaction { get; set; }
         public string VictimFactionLocalised { get; set; }
         public string Target { get; set; }
+        public string TargetLocalised { get; set; }
         public bool SharedWithOthers { get; set; }
         public BountyReward[] Rewards { get; set; }
 
@@ -70,7 +83,7 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string info, out string detailed) 
         {
             
-            info = BaseUtils.FieldBuilder.Build("; cr;N0", TotalReward, "Target:".T(EDTx.JournalEntry_Target), (string)Target, "Victim faction:".T(EDTx.JournalEntry_Victimfaction), VictimFactionLocalised);
+            info = BaseUtils.FieldBuilder.Build("; cr;N0", TotalReward, "Target:".T(EDTx.JournalEntry_Target), TargetLocalised, "Victim faction:".T(EDTx.JournalEntry_Victimfaction), VictimFactionLocalised);
 
             detailed = "";
             if ( Rewards!=null)

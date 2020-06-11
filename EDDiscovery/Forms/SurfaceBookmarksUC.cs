@@ -148,14 +148,15 @@ namespace EDDiscovery.Forms
             }
         }
 
-        private void UpdateComboBox(string systemName)
+        private async void UpdateComboBox(string systemName)
         {
             ISystem thisSystem = EDDApplicationContext.EDDMainForm.history.FindSystem(systemName);
 
             BodyName.Items.Clear();
             if (thisSystem != null)
             {
-                var landables = EDDApplicationContext.EDDMainForm.history.starscan.FindSystem(thisSystem, true)?.Bodies?.Where(b => b.ScanData != null && b.ScanData.IsLandable)?.Select(b => b.fullname);
+                var lookup = await EDDApplicationContext.EDDMainForm.history.starscan.FindSystemAsync(thisSystem, true);
+                var landables = lookup?.Bodies?.Where(b => b.ScanData != null && b.ScanData.IsLandable)?.Select(b => b.fullname);
 
                 if (landables != null)
                 {
@@ -218,8 +219,8 @@ namespace EDDiscovery.Forms
             f.Add(new ExtendedControls.ConfigurableForm.Entry("Planet", typeof(ExtendedControls.ExtTextBox),
                 "", new Point(ctrlleft, 40), new Size(width - ctrlleft - 20, 24), "Enter planet name".T(EDTx.SurfaceBookmarkUserControl_EPN)));
 
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("OK", typeof(ExtendedControls.ExtButton), "OK".T(EDTx.OK), new Point(width - 100, 70), new Size(80, 24), "Press to Accept".T(EDTx.SurfaceBookmarkUserControl_PresstoAccept)));
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("Cancel", typeof(ExtendedControls.ExtButton), "Cancel".T(EDTx.Cancel), new Point(width - 200, 70), new Size(80, 24), "Press to Cancel".T(EDTx.SurfaceBookmarkUserControl_PresstoCancel)));
+            f.AddOK(new Point(width - 100, 70), "Press to Accept".T(EDTx.SurfaceBookmarkUserControl_PresstoAccept));
+            f.AddCancel(new Point(width - 200, 70), "Press to Cancel".T(EDTx.SurfaceBookmarkUserControl_PresstoCancel));
 
             f.Trigger += (dialogname, controlname, tag) =>
             {
@@ -227,13 +228,13 @@ namespace EDDiscovery.Forms
                 {
                     f.ReturnResult(DialogResult.OK);
                 }
-                else if (controlname == "Cancel")
+                else if (controlname == "Cancel" || controlname == "Close" )
                 {
                     f.ReturnResult(DialogResult.Cancel);
                 }
             };
 
-            DialogResult res = f.ShowDialogCentred(this.FindForm(), this.FindForm().Icon, "Manually Add Planet".T(EDTx.SurfaceBookmarkUserControl_MAP));
+            DialogResult res = f.ShowDialogCentred(this.FindForm(), this.FindForm().Icon, "Manually Add Planet".T(EDTx.SurfaceBookmarkUserControl_MAP), closeicon:true);
 
             string pname = f.Get("Planet");
             if (res == DialogResult.OK && pname.HasChars())

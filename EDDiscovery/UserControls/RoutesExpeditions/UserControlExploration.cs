@@ -31,7 +31,7 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlExploration :  UserControlCommonBase
     {
-        private string DbColumnSave { get { return DBName("ModulesGrid",  "DGVCol"); } }
+        private string DbColumnSave { get { return DBName("UserControlExploration",  "DGVCol"); } }
 
         private ExplorationSetClass currentexplorationset;
 
@@ -87,7 +87,7 @@ namespace EDDiscovery.UserControls
 
         public void NewEntry(HistoryEntry he, HistoryList hl)               // called when a new entry is made.. check to see if its a scan update
         {
-            if (he.EntryType == JournalTypeEnum.Scan || he.EntryType == JournalTypeEnum.FSDJump || he.EntryType == JournalTypeEnum.FSSDiscoveryScan )
+            if (he.EntryType == JournalTypeEnum.Scan || he.IsFSDCarrierJump || he.EntryType == JournalTypeEnum.FSSDiscoveryScan )
                 UpdateSystemRows();
         }
 
@@ -160,7 +160,7 @@ namespace EDDiscovery.UserControls
 
                     dataGridViewExplore[idxVisits, rowindex].Value = discoveryform.history.GetVisitsCount(sysname).ToString();
 
-                    StarScan.SystemNode sysnode = discoveryform.history.starscan.FindSystem(sys,false);
+                    StarScan.SystemNode sysnode = discoveryform.history.starscan.FindSystemSynchronous(sys,false);
                     
                     if ( sysnode != null)
                     {
@@ -356,49 +356,84 @@ namespace EDDiscovery.UserControls
 
         private void toolStripButtonExport_Click(object sender, EventArgs e)
         {
-            string filename = "";
-            try
+            if (dataGridViewExplore.Rows.Count == 0
+                || (dataGridViewExplore.Rows.Count == 1 && ((string)dataGridViewExplore[0, 0].Value).IsEmpty()))
             {
-                if (dataGridViewExplore.Rows.Count == 0
-                    || (dataGridViewExplore.Rows.Count == 1 && dataGridViewExplore[0, 0].Value == null))
-                {
-                    ExtendedControls.MessageBoxTheme.Show(FindForm(),
-                    "There is no route to export".T(EDTx.UserControlExploration_NoRoute), "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                    return;
-                }
-
-                SaveFileDialog dlg = new SaveFileDialog();
-                dlg.Filter = "Route export| *.txt";
-                dlg.Title = "Export route".T(EDTx.UserControlExploration_Export);
-                if (currentexplorationset != null && !String.IsNullOrWhiteSpace(currentexplorationset.Name))
-                    dlg.FileName = currentexplorationset.Name + ".txt";
-                else
-                    dlg.FileName = "route.txt";
-
-                dlg.FileName = dlg.FileName.SafeFileString();
-
-                if (dlg.ShowDialog(FindForm()) != DialogResult.OK)
-                    return;
-
-                filename = dlg.FileName;
-                using (StreamWriter writer = new StreamWriter(filename, false))
-                {
-                    for (int i = 0; i < dataGridViewExplore.Rows.Count; i++)
-                    {
-                        String sysname = (String)dataGridViewExplore[0, i].Value;
-                        if (!String.IsNullOrWhiteSpace(sysname))
-                            writer.WriteLine(sysname);
-                    }
-                }
-            }
-            catch (IOException)
-            {
-                ExtendedControls.MessageBoxTheme.Show(FindForm(), string.Format("Error exporting route. Is file {0} open?".T(EDTx.UserControlExploration_ErrorW),filename), "Warning".T(EDTx.Warning),
-                      MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ExtendedControls.MessageBoxTheme.Show(FindForm(),
+                "There is no route to export".T(EDTx.UserControlExploration_NoRoute), "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
-        }
 
+            Forms.ExportForm frm = new Forms.ExportForm();
+            frm.Init(new string[] { "Route", "Grid" }, disablestartendtime: true, outputext: new string[] { "Text File|*.txt", "CSV export| *.csv" });
+
+            if (frm.ShowDialog(FindForm()) == DialogResult.OK)
+            {
+                if (frm.SelectedIndex == 0)     // old route export
+                {
+                    try
+                    {
+                        using (StreamWriter writer = new StreamWriter(frm.Path, false))
+                        {
+                            for (int i = 0; i < dataGridViewExplore.Rows.Count; i++)
+                            {
+                                String sysname = (String)dataGridViewExplore[0, i].Value;
+                                if (!String.IsNullOrWhiteSpace(sysname))
+                                    writer.WriteLine(sysname);
+                            }
+                        }
+
+                        if (frm.AutoOpen)
+                        {
+                            try
+                            {
+                                System.Diagnostics.Process.Start(frm.Path);
+                            }
+                            catch
+                            {
+                                ExtendedControls.MessageBoxTheme.Show(FindForm(), "Failed to open " + frm.Path, "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                            }
+                        }
+
+                    }
+                    catch (IOException)
+                    {
+                        ExtendedControls.MessageBoxTheme.Show(FindForm(), string.Format("Error exporting route. Is file {0} open?".T(EDTx.UserControlExploration_ErrorW), frm.Path), "Warning".T(EDTx.Warning),
+                              MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                }
+                else
+                {
+                    BaseUtils.CSVWriteGrid grd = new BaseUtils.CSVWriteGrid();
+                    grd.SetCSVDelimiter(frm.Comma);
+                    grd.GetLineStatus += delegate (int r)
+                    {
+                        if (r < dataGridViewExplore.Rows.Count)
+                        {
+                            return BaseUtils.CSVWriteGrid.LineStatus.OK;
+                        }
+                        else
+                            return BaseUtils.CSVWriteGrid.LineStatus.EOF;
+                    };
+
+                    grd.GetLine += delegate (int r)
+                    {
+                        DataGridViewRow rw = dataGridViewExplore.Rows[r];
+                        return new Object[] { rw.Cells[0].Value, rw.Cells[1].Value, rw.Cells[2].Value, rw.Cells[3].Value,
+                                              rw.Cells[4].Value, rw.Cells[5].Value, rw.Cells[6].Value, rw.Cells[7].Value,
+                                              rw.Cells[8].Value, rw.Cells[9].Value, rw.Cells[10].Value };
+                    };
+
+                    grd.GetHeader += delegate (int c)
+                    {
+                        return (c < 3 && frm.IncludeHeader) ? dataGridViewExplore.Columns[c].HeaderText : null;
+                    };
+
+                    grd.WriteGrid(frm.Path, frm.AutoOpen, FindForm());
+                }
+            }
+        }
 
         private void toolStripButtonClear_Click(object sender, EventArgs e)
         {
@@ -442,19 +477,20 @@ namespace EDDiscovery.UserControls
                 f.ReturnResult(DialogResult.OK);
             };
 
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("UC", null, "", new Point(5, 30), new Size(740, 200), null) { control = usc });
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("Cancel", typeof(ExtendedControls.ExtButton), "Cancel".T(EDTx.Cancel), new Point(650, 230), new Size(80, 24),""));
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("UC", null, "", new Point(5, 30), usc.Size, null) { control = usc });
+            f.AddCancel(new Point(4+usc.Width - 80, usc.Height + 50));
 
             f.Trigger += (dialogname, controlname, tag) =>
             {
-                if (controlname == "Cancel")
+                if (controlname == "Cancel" || controlname == "Close")
                 {
                     f.ReturnResult(DialogResult.Cancel);
                 }
             };
 
+            // usc.Font = EDDTheme.Instance.GetScaledFont(0.8f)
             f.ShowDialogCentred(this.FindForm(), this.FindForm().Icon, "Add Systems".T(EDTx.UserControlExploration_AddSys), 
-                                callback: () => { usc.Font = EDDTheme.Instance.GetScaledFont(0.8f); usc.Init(0, "ExplorationFindSys", false, discoveryform); });
+                                callback: () => {; usc.Init(0, "ExplorationFindSys", false, discoveryform); }, closeicon:true);
             usc.Closing();
         }
 

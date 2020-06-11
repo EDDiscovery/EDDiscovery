@@ -164,7 +164,7 @@ namespace EliteDangerousCore
             });
         }
 
-        public static List<CCommodities> Merge(List<CCommodities> left, List<CCommodities> right, string otherstation)
+        public static List<CCommodities> Merge(List<CCommodities> left, List<CCommodities> right)
         {
             List<CCommodities> merged = new List<CCommodities>();
 
@@ -198,13 +198,13 @@ namespace EliteDangerousCore
             foreach (CCommodities r in right)
             {
                 CCommodities m = merged.Find(x => x.fdname == r.fdname);        // see if any in right we have not merged
-                if (m == null)
+
+                if (m == null)  // not in left list,add
                 {
                     m = new CCommodities(r);
-                    m.fdname = m.fdname + " at " + otherstation;
                     m.ComparisionRightOnly = true;
 
-                    if (r.buyPrice > 0)                             // if we can buy it here, note you can't price it in left
+                    if (r.buyPrice > 0)                             // if we can buy it there, but its not in the left list
                     {
                         m.ComparisionBuy = true;
                         m.ComparisionRL = "No price";

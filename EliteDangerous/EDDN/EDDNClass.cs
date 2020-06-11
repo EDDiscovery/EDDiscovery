@@ -32,14 +32,14 @@ namespace EliteDangerousCore.EDDN
     {
         public string commanderName;
         public bool isBeta;
-        
+
+        static public string SoftwareName { get; set; } = "EDDiscovery";
+
         private readonly string fromSoftwareVersion;
-        private readonly string fromSoftware;
         private readonly string EDDNServer = "https://eddn.edcd.io:4430/upload/";
 
         public EDDNClass()
         {
-            fromSoftware = "EDDiscovery";
             var assemblyFullName = Assembly.GetEntryAssembly().FullName;
             fromSoftwareVersion = assemblyFullName.Split(',')[1].Split('=')[1];
             commanderName = EDCommander.Current.Name;
@@ -52,7 +52,7 @@ namespace EliteDangerousCore.EDDN
             JObject header = new JObject();
 
             header["uploaderID"] = commanderName;
-            header["softwareName"] = fromSoftware;
+            header["softwareName"] = SoftwareName;
             header["softwareVersion"] = fromSoftwareVersion;
 
             return header;
@@ -63,8 +63,7 @@ namespace EliteDangerousCore.EDDN
             DateTime ed22 = new DateTime(2016, 10, 25, 12, 0, 0);
             if ((EntryType == JournalTypeEnum.Scan ||
                  EntryType == JournalTypeEnum.Docked ||
-                 EntryType == JournalTypeEnum.FSDJump ||
-                 EntryType == JournalTypeEnum.Location ||
+                 EntryType == JournalTypeEnum.FSDJump || EntryType == JournalTypeEnum.CarrierJump || EntryType == JournalTypeEnum.Location ||
                  EntryType == JournalTypeEnum.Market ||
                  EntryType == JournalTypeEnum.Shipyard ||
                  EntryType == JournalTypeEnum.SAASignalsFound ||
@@ -533,6 +532,41 @@ namespace EliteDangerousCore.EDDN
         }
 
         public JObject CreateEDDNMessage(JournalLocation journal)
+        {
+            if (!journal.HasCoordinate || journal.StarPosFromEDSM || journal.SystemAddress == null)
+                return null;
+
+            JObject msg = new JObject();
+
+            msg["header"] = Header();
+            msg["$schemaRef"] = GetEDDNJournalSchemaRef();
+
+            JObject message = journal.GetJson();
+
+            if (message == null)
+            {
+                return null;
+            }
+
+            if (message["StarPosFromEDSM"] != null)  // Reject systems recently updated with EDSM coords
+                return null;
+
+            message = RemoveCommonKeys(message);
+            message = RemoveFactionReputation(message);
+            message = RemoveStationEconomyKeys(message);
+            message.Remove("StarPosFromEDSM");
+            message.Remove("Latitude");
+            message.Remove("Longitude");
+            message.Remove("MyReputation");
+            message.Remove("ActiveFine");
+
+            message = FilterJournalEvent(message, AllowedFieldsLocation);
+
+            msg["message"] = message;
+            return msg;
+        }
+
+        public JObject CreateEDDNMessage(JournalCarrierJump journal)
         {
             if (!journal.HasCoordinate || journal.StarPosFromEDSM || journal.SystemAddress == null)
                 return null;

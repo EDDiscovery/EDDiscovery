@@ -70,9 +70,9 @@ namespace EDDiscovery.UserControls
             this.pColInfo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.vScrollBarCustomPrev = new ExtendedControls.ExtScrollBar();
             this.panelButtons = new System.Windows.Forms.FlowLayoutPanel();
-            this.customDateTimePickerEnd = new ExtendedControls.ExtDateTimePicker();
-            this.labelTo = new System.Windows.Forms.Label();
             this.customDateTimePickerStart = new ExtendedControls.ExtDateTimePicker();
+            this.labelTo = new System.Windows.Forms.Label();
+            this.customDateTimePickerEnd = new ExtendedControls.ExtDateTimePicker();
             this.labelValue = new System.Windows.Forms.Label();
             this.panelCurrent = new System.Windows.Forms.Panel();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
@@ -385,35 +385,6 @@ namespace EDDiscovery.UserControls
             this.panelButtons.Size = new System.Drawing.Size(800, 22);
             this.panelButtons.TabIndex = 2;
             // 
-            // customDateTimePickerEnd
-            // 
-            this.customDateTimePickerEnd.BorderColor = System.Drawing.Color.Transparent;
-            this.customDateTimePickerEnd.BorderColorScaling = 0.5F;
-            this.customDateTimePickerEnd.Checked = false;
-            this.customDateTimePickerEnd.CustomFormat = "yyyy/MM/dd | HH:mm:ss";
-            this.customDateTimePickerEnd.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.customDateTimePickerEnd.Location = new System.Drawing.Point(252, 1);
-            this.customDateTimePickerEnd.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.customDateTimePickerEnd.Name = "customDateTimePickerEnd";
-            this.customDateTimePickerEnd.SelectedColor = System.Drawing.Color.Yellow;
-            this.customDateTimePickerEnd.ShowCheckBox = true;
-            this.customDateTimePickerEnd.ShowUpDown = false;
-            this.customDateTimePickerEnd.Size = new System.Drawing.Size(218, 20);
-            this.customDateTimePickerEnd.TabIndex = 0;
-            this.customDateTimePickerEnd.TextBackColor = System.Drawing.SystemColors.ControlLight;
-            this.customDateTimePickerEnd.Value = new System.DateTime(2017, 4, 7, 9, 2, 29, 549);
-            this.customDateTimePickerEnd.ValueChanged += new System.EventHandler(this.customDateTimePickerEnd_ValueChanged);
-            // 
-            // labelTo
-            // 
-            this.labelTo.AutoSize = true;
-            this.labelTo.Location = new System.Drawing.Point(228, 1);
-            this.labelTo.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.labelTo.Name = "labelTo";
-            this.labelTo.Size = new System.Drawing.Size(16, 13);
-            this.labelTo.TabIndex = 1;
-            this.labelTo.Text = "to";
-            // 
             // customDateTimePickerStart
             // 
             this.customDateTimePickerStart.BorderColor = System.Drawing.Color.Transparent;
@@ -432,6 +403,35 @@ namespace EDDiscovery.UserControls
             this.customDateTimePickerStart.TextBackColor = System.Drawing.SystemColors.ControlLight;
             this.customDateTimePickerStart.Value = new System.DateTime(2017, 4, 7, 9, 2, 29, 549);
             this.customDateTimePickerStart.ValueChanged += new System.EventHandler(this.customDateTimePickerStart_ValueChanged);
+            // 
+            // labelTo
+            // 
+            this.labelTo.AutoSize = true;
+            this.labelTo.Location = new System.Drawing.Point(228, 1);
+            this.labelTo.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.labelTo.Name = "labelTo";
+            this.labelTo.Size = new System.Drawing.Size(16, 13);
+            this.labelTo.TabIndex = 1;
+            this.labelTo.Text = "to";
+            // 
+            // customDateTimePickerEnd
+            // 
+            this.customDateTimePickerEnd.BorderColor = System.Drawing.Color.Transparent;
+            this.customDateTimePickerEnd.BorderColorScaling = 0.5F;
+            this.customDateTimePickerEnd.Checked = false;
+            this.customDateTimePickerEnd.CustomFormat = "yyyy/MM/dd | HH:mm:ss";
+            this.customDateTimePickerEnd.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.customDateTimePickerEnd.Location = new System.Drawing.Point(252, 1);
+            this.customDateTimePickerEnd.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.customDateTimePickerEnd.Name = "customDateTimePickerEnd";
+            this.customDateTimePickerEnd.SelectedColor = System.Drawing.Color.Yellow;
+            this.customDateTimePickerEnd.ShowCheckBox = true;
+            this.customDateTimePickerEnd.ShowUpDown = false;
+            this.customDateTimePickerEnd.Size = new System.Drawing.Size(218, 20);
+            this.customDateTimePickerEnd.TabIndex = 0;
+            this.customDateTimePickerEnd.TextBackColor = System.Drawing.SystemColors.ControlLight;
+            this.customDateTimePickerEnd.Value = new System.DateTime(2017, 4, 7, 9, 2, 29, 549);
+            this.customDateTimePickerEnd.ValueChanged += new System.EventHandler(this.customDateTimePickerEnd_ValueChanged);
             // 
             // labelValue
             // 

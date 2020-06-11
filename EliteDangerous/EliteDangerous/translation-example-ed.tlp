@@ -26,6 +26,86 @@ SECTION Bodies
 .MOG: "M Red Giant" @
 .KOG: "K Orange Giant" @
 .RP: "Rogue Planet" @
+.UNK: "Class {0} star" @
+.Herbig: "Herbig Ae/Be" @
+.TTauri: "T Tauri" @
+
+
+Section EDStar
+
+EDStar.O: "O (Blue-White) Star" @
+EDStar.B: "B (Blue-White) Star" @
+EDStar.BBlueWhiteSuperGiant: "B (Blue-White super giant) Star" @
+EDStar.A: "A (Blue-White) Star" @
+EDStar.ABlueWhiteSuperGiant: "A (Blue-White super giant) Star" @
+EDStar.F: "F (White) Star" @
+EDStar.FWhiteSuperGiant: "F (White super giant) Star" @
+EDStar.G: "G (White-Yellow) Star" @
+EDStar.GWhiteSuperGiant: "G (White-Yellow super giant) Star" @
+EDStar.K: "K (Yellow-Orange) Star" @
+EDStar.KOrangeGiant: "K (Yellow-Orange giant) Star" @
+EDStar.M: "M (Red dwarf) Star" @
+EDStar.MRedGiant: "M (Red giant) Star" @
+EDStar.MRedSuperGiant: "M (Red super giant) Star" @
+EDStar.L: "L (Brown dwarf) Star" @
+EDStar.T: "T (Brown dwarf) Star" @
+EDStar.Y: "Y (Brown dwarf) Star" @
+EDStar.TTS: "T Tauri Star" @
+EDStar.AeBe: "Herbig Ae/Be Star" @
+EDStar.W: "Wolf-Rayet Star" @
+EDStar.WN: "Wolf-Rayet N Star" @
+EDStar.WNC: "Wolf-Rayet NC Star" @
+EDStar.WC: "Wolf-Rayet C Star" @
+EDStar.WO: "Wolf-Rayet O Star" @
+EDStar.CS: "CS Star" @
+EDStar.C: "C Star" @
+EDStar.CN: "CN Star" @
+EDStar.CJ: "CJ Star" @
+EDStar.CHd: "CHd Star" @
+EDStar.MS: "MS-type Star" @
+EDStar.S: "S-type Star" @
+EDStar.D: "White Dwarf (D) Star" @
+EDStar.DA: "White Dwarf (DA) Star" @
+EDStar.DAB: "White Dwarf (DAB) Star" @
+EDStar.DAO: "White Dwarf (DAO) Star" @
+EDStar.DAZ: "White Dwarf (DAZ) Star" @
+EDStar.DAV: "White Dwarf (DAV) Star" @
+EDStar.DB: "White Dwarf (DB) Star" @
+EDStar.DBZ: "White Dwarf (DBZ) Star" @
+EDStar.DBV: "White Dwarf (DBV) Star" @
+EDStar.DO: "White Dwarf (DO) Star" @
+EDStar.DOV: "White Dwarf (DOV) Star" @
+EDStar.DQ: "White Dwarf (DQ) Star" @
+EDStar.DC: "White Dwarf (DC) Star" @
+EDStar.DCV: "White Dwarf (DCV) Star" @
+EDStar.DX: "White Dwarf (DX) Star" @
+EDStar.N: "Neutron Star" @
+EDStar.H: "Black Hole" @
+EDStar.SuperMassiveBlackHole: "Supermassive Black Hole" @
+EDStar.Unknown: "Unknown star type" @
+
+Section EDPlanet
+
+EDPlanet.Metalrichbody: "Metal-rich body" @
+EDPlanet.Highmetalcontentbody: "High metal content world" @
+EDPlanet.Rockybody: "Rocky body" @
+EDPlanet.Icybody: "Icy body" @
+EDPlanet.Rockyicebody: "Rocky ice world" @
+EDPlanet.Earthlikebody: "Earth-like world" @
+EDPlanet.Waterworld: "Water world" @
+EDPlanet.Ammoniaworld: "Ammonia world" @
+EDPlanet.Watergiant: "Water giant" @
+EDPlanet.Watergiantwithlife: "Water giant with life" @
+EDPlanet.Gasgiantwithwaterbasedlife: "Gas giant with water-based life" @
+EDPlanet.Gasgiantwithammoniabasedlife: "Gas giant with ammonia-based life" @
+EDPlanet.SudarskyclassIgasgiant: "Class I gas giant" @
+EDPlanet.SudarskyclassIIgasgiant: "Class II gas giant" @
+EDPlanet.SudarskyclassIIIgasgiant: "Class III gas giant" @
+EDPlanet.SudarskyclassIVgasgiant: "Class IV gas giant" @
+EDPlanet.SudarskyclassVgasgiant: "Class V gas giant" @
+EDPlanet.Heliumrichgasgiant: "Helium-rich gas giant" @
+EDPlanet.Heliumgasgiant: "Helium gas giant" @
+EDPlanet.Unknown: "Unknown planet type" @
 
 SECTION MaterialCommodityData
 
@@ -586,6 +666,42 @@ SECTION MaterialCommodityData
 .opal: "Opal" @
 .thargoidtissuesampletype4: "Thargoid Hydra Tissue Sample" @
 .ancientkey: "Ancient Key" @
+.rockforthfertiliser: "Rockforth Fertiliser" @
+.agronomictreatment: "Agronomic Treatment" @
+.m_tissuesample_soft: "Mollusc Soft Tissue" @
+.s_tissuesample_cells: "Pod Core Tissue" @
+.s_tissuesample_surface: "Pod Dead Tissue" @
+.s_tissuesample_core: "Pod Surface Tissue" @
+.m3_tissuesample_membrane: "Mollusc Membrane" @
+.m3_tissuesample_mycelium: "Mollusc Mycelium" @
+.m3_tissuesample_spores: "Mollusc Spores" @
+.s6_tissuesample_coenosarc: "Pod Shell Tissue" @
+.apavietii: "Apa Vietii" @
+
+.RawCategory1: "Raw Category 1" @
+.RawCategory2: "Raw Category 2" @
+.RawCategory3: "Raw Category 3" @
+.RawCategory4: "Raw Category 4" @
+.RawCategory5: "Raw Category 5" @
+.RawCategory6: "Raw Category 6" @
+.RawCategory7: "Raw Category 7" @
+.EncodedEmissionData: "Encoded Emission Data" @
+.EncodedWakeScans: "Encoded Wake Scans" @
+.EncodedShieldData: "Encoded Shield Data" @
+.EncodedEncryptionFiles: "Encoded Encryption Files" @
+.EncodedDataArchives: "Encoded Data Archives" @
+.EncodedFirmware: "Encoded Firmware" @
+.ManufacturedChemical: "Manufactured Chemical" @
+.ManufacturedThermic: "Manufactured Thermic" @
+.ManufacturedHeat: "Manufactured Heat" @
+.ManufacturedConductive: "Manufactured Conductive" @
+.ManufacturedMechanicalComponents: "Manufactured Mechanical Components" @
+.ManufacturedCapacitors: "Manufactured Capacitors" @
+.ManufacturedShielding: "Manufactured Shielding" @
+.ManufacturedComposite: "Manufactured Composite" @
+.ManufacturedCrystals: "Manufactured Crystals" @
+.ManufacturedAlloys: "Manufactured Alloys" @
+.NA: "NA" @
 
 SECTION EngineeringData
 

@@ -83,7 +83,7 @@ namespace EliteDangerousCore
 
             if ( !hecur.MultiPlayer )           // multiplayer bits don't count, but we need a fresh entry because we are now monitoring for shutdown.
             { 
-                if (hecur.IsFSDJump )   // if jump, and not multiplayer..
+                if (hecur.journalEntry is JournalFSDJump )   // if jump, and not multiplayer..
                 {
                     double dist = ((JournalFSDJump)hecur.journalEntry).JumpDist;
                     if (dist <= 0)

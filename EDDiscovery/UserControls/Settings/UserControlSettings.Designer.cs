@@ -573,7 +573,7 @@ namespace EDDiscovery.UserControls
             this.extScrollBarSettings.HideScrollBar = true;
             this.extScrollBarSettings.LargeChange = 10;
             this.extScrollBarSettings.Location = new System.Drawing.Point(965, 0);
-            this.extScrollBarSettings.Maximum = -4;
+            this.extScrollBarSettings.Maximum = -5;
             this.extScrollBarSettings.Minimum = 0;
             this.extScrollBarSettings.MouseOverButtonColor = System.Drawing.Color.Green;
             this.extScrollBarSettings.MousePressedButtonColor = System.Drawing.Color.Red;
@@ -586,8 +586,8 @@ namespace EDDiscovery.UserControls
             this.extScrollBarSettings.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.extScrollBarSettings.ThumbColorScaling = 0.5F;
             this.extScrollBarSettings.ThumbDrawAngle = 0F;
-            this.extScrollBarSettings.Value = -4;
-            this.extScrollBarSettings.ValueLimited = -4;
+            this.extScrollBarSettings.Value = -5;
+            this.extScrollBarSettings.ValueLimited = -5;
             // 
             // groupBoxCommanders
             // 
@@ -615,6 +615,7 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerCommanders.Controls.Add(this.vScrollBarCommanders);
             this.dataViewScrollerCommanders.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewScrollerCommanders.InternalMargin = new System.Windows.Forms.Padding(0);
+            this.dataViewScrollerCommanders.LimitLargeChange = 2147483647;
             this.dataViewScrollerCommanders.Location = new System.Drawing.Point(3, 16);
             this.dataViewScrollerCommanders.Name = "dataViewScrollerCommanders";
             this.dataViewScrollerCommanders.Size = new System.Drawing.Size(956, 104);

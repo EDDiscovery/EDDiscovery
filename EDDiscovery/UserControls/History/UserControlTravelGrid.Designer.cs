@@ -72,7 +72,6 @@ namespace EDDiscovery.UserControls
             this.explorationPanelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.moveToAnotherCommanderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hideSystemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.selectCorrectSystemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.removeJournalEntryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sendUnsyncedScanToEDDNToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runActionsOnThisEntryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -83,6 +82,7 @@ namespace EDDiscovery.UserControls
             this.runEntryThroughProfileSystemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runSelectionThroughIGAUDebugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.extCheckBoxWordWrap = new ExtendedControls.ExtCheckBox();
             this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.panelOutlining = new ExtendedControls.ExtPanelDataGridViewScrollOutlining();
             this.vScrollBarCustom = new ExtendedControls.ExtScrollBar();
@@ -127,7 +127,7 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxOutlines.ImageIndeterminate = null;
             this.extCheckBoxOutlines.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxOutlines.ImageUnchecked = null;
-            this.extCheckBoxOutlines.Location = new System.Drawing.Point(495, 1);
+            this.extCheckBoxOutlines.Location = new System.Drawing.Point(531, 1);
             this.extCheckBoxOutlines.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.extCheckBoxOutlines.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.extCheckBoxOutlines.Name = "extCheckBoxOutlines";
@@ -294,7 +294,6 @@ namespace EDDiscovery.UserControls
             this.addToTrilaterationToolStripMenuItem,
             this.moveToAnotherCommanderToolStripMenuItem,
             this.hideSystemToolStripMenuItem,
-            this.selectCorrectSystemToolStripMenuItem,
             this.removeJournalEntryToolStripMenuItem,
             this.sendUnsyncedScanToEDDNToolStripMenuItem,
             this.runActionsOnThisEntryToolStripMenuItem,
@@ -305,7 +304,7 @@ namespace EDDiscovery.UserControls
             this.runEntryThroughProfileSystemToolStripMenuItem,
             this.runSelectionThroughIGAUDebugToolStripMenuItem});
             this.historyContextMenu.Name = "historyContextMenu";
-            this.historyContextMenu.Size = new System.Drawing.Size(388, 488);
+            this.historyContextMenu.Size = new System.Drawing.Size(388, 466);
             this.historyContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.historyContextMenu_Opening);
             // 
             // removeSortingOfColumnsToolStripMenuItem
@@ -432,13 +431,6 @@ namespace EDDiscovery.UserControls
             this.hideSystemToolStripMenuItem.Text = "Hide Entries";
             this.hideSystemToolStripMenuItem.Click += new System.EventHandler(this.hideSystemToolStripMenuItem_Click);
             // 
-            // selectCorrectSystemToolStripMenuItem
-            // 
-            this.selectCorrectSystemToolStripMenuItem.Name = "selectCorrectSystemToolStripMenuItem";
-            this.selectCorrectSystemToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
-            this.selectCorrectSystemToolStripMenuItem.Text = "Assign new system";
-            this.selectCorrectSystemToolStripMenuItem.Click += new System.EventHandler(this.selectCorrectSystemToolStripMenuItem_Click);
-            // 
             // removeJournalEntryToolStripMenuItem
             // 
             this.removeJournalEntryToolStripMenuItem.Name = "removeJournalEntryToolStripMenuItem";
@@ -508,6 +500,36 @@ namespace EDDiscovery.UserControls
             this.toolTip.InitialDelay = 250;
             this.toolTip.ReshowDelay = 100;
             this.toolTip.ShowAlways = true;
+            // 
+            // extCheckBoxWordWrap
+            // 
+            this.extCheckBoxWordWrap.Appearance = System.Windows.Forms.Appearance.Button;
+            this.extCheckBoxWordWrap.BackColor = System.Drawing.Color.Transparent;
+            this.extCheckBoxWordWrap.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.extCheckBoxWordWrap.CheckBoxColor = System.Drawing.Color.White;
+            this.extCheckBoxWordWrap.CheckBoxDisabledScaling = 0.5F;
+            this.extCheckBoxWordWrap.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.extCheckBoxWordWrap.CheckColor = System.Drawing.Color.DarkBlue;
+            this.extCheckBoxWordWrap.Cursor = System.Windows.Forms.Cursors.Default;
+            this.extCheckBoxWordWrap.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.extCheckBoxWordWrap.FlatAppearance.CheckedBackColor = System.Drawing.Color.Green;
+            this.extCheckBoxWordWrap.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.extCheckBoxWordWrap.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
+            this.extCheckBoxWordWrap.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.extCheckBoxWordWrap.Image = global::EDDiscovery.Icons.Controls.WordWrapOn;
+            this.extCheckBoxWordWrap.ImageButtonDisabledScaling = 0.5F;
+            this.extCheckBoxWordWrap.ImageIndeterminate = null;
+            this.extCheckBoxWordWrap.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.extCheckBoxWordWrap.ImageUnchecked = global::EDDiscovery.Icons.Controls.WordWrapOff;
+            this.extCheckBoxWordWrap.Location = new System.Drawing.Point(495, 1);
+            this.extCheckBoxWordWrap.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.extCheckBoxWordWrap.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.extCheckBoxWordWrap.Name = "extCheckBoxWordWrap";
+            this.extCheckBoxWordWrap.Size = new System.Drawing.Size(28, 28);
+            this.extCheckBoxWordWrap.TabIndex = 30;
+            this.extCheckBoxWordWrap.TickBoxReductionRatio = 0.75F;
+            this.toolTip.SetToolTip(this.extCheckBoxWordWrap, "Enable or disable word wrap");
+            this.extCheckBoxWordWrap.UseVisualStyleBackColor = false;
             // 
             // dataViewScrollerPanel
             // 
@@ -698,6 +720,7 @@ namespace EDDiscovery.UserControls
             this.panelTop.Controls.Add(this.buttonField);
             this.panelTop.Controls.Add(this.buttonExtExcel);
             this.panelTop.Controls.Add(this.checkBoxCursorToTop);
+            this.panelTop.Controls.Add(this.extCheckBoxWordWrap);
             this.panelTop.Controls.Add(this.extCheckBoxOutlines);
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
@@ -744,7 +767,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripMenuItem bothToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem routeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem viewOnEDSMToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem selectCorrectSystemToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemStartStop;
         private System.Windows.Forms.ToolStripMenuItem removeJournalEntryToolStripMenuItem;
         private System.Windows.Forms.ToolTip toolTip;
@@ -780,5 +802,6 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtCheckBox extCheckBoxOutlines;
         private System.Windows.Forms.FlowLayoutPanel panelTop;
         private System.Windows.Forms.ToolStripMenuItem runSelectionThroughIGAUDebugToolStripMenuItem;
+        private ExtendedControls.ExtCheckBox extCheckBoxWordWrap;
     }
 }

@@ -32,6 +32,7 @@ namespace EDDiscovery.UserControls
         private string DbColumnSave { get { return DBName((materials) ? "MaterialsGrid" : "CommoditiesGrid",  "DGVCol"); } }
         private string DbFilterSave { get { return DBName((materials) ? "MaterialsGrid" : "CommoditiesGrid", "Filter2"); } }
         private string DbClearZeroSave { get { return DBName((materials) ? "MaterialsGrid" : "CommoditiesGrid", "ClearZero"); } }
+        private string DbWordWrap { get { return DBName((materials) ? "MaterialsGrid" : "CommoditiesGrid", "WrapText"); } }
 
         MaterialCommoditiesList last_mcl;
 
@@ -46,7 +47,9 @@ namespace EDDiscovery.UserControls
         public override void Init()
         {
             dataGridViewMC.MakeDoubleBuffered();
-            dataGridViewMC.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
+            extCheckBoxWordWrap.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbWordWrap, false);
+            UpdateWordWrap();
+            extCheckBoxWordWrap.Click += extCheckBoxWordWrap_Click;
 
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
@@ -54,20 +57,20 @@ namespace EDDiscovery.UserControls
             cfs = new FilterSelector(DbFilterSave);
 
             MaterialCommodityData[] items;
-            Tuple<string, string>[] types;
+            Tuple<MaterialCommodityData.ItemType, string>[] types;
 
             cfs.AddAllNone();
 
             if (materials)
             {
-                dataGridViewMC.Columns.Remove(dataGridViewMC.Columns[5]);       // to give name,shortname abv,category,type,number
+                dataGridViewMC.Columns[5].HeaderText = "Recipes".T(EDTx.UserControlMaterialCommodities_Recipes);
                 labelItems1.Text = "Data".T(EDTx.UserControlMaterialCommodities_Data);
                 labelItems2.Text = "Mats".T(EDTx.UserControlMaterialCommodities_Mats);
 
                 items = MaterialCommodityData.GetMaterials(true);
                 types = MaterialCommodityData.GetTypes((x) => !x.IsCommodity, true);
 
-                Tuple<string, string>[] cats = MaterialCommodityData.GetCategories((x) => !x.IsCommodity, true);
+                var cats = MaterialCommodityData.GetCategories((x) => !x.IsCommodity, true);
 
                 foreach (var t in cats)
                 {
@@ -77,11 +80,17 @@ namespace EDDiscovery.UserControls
             }
             else
             {
-                dataGridViewMC.Columns.Remove(dataGridViewMC.Columns[1]);       //shortname
-                dataGridViewMC.Columns.Remove(dataGridViewMC.Columns[1]);       //then category to give name,type,number, avg price
+                dataGridViewMC.Columns.Remove(dataGridViewMC.Columns[1]);       //remove cat
+
+                DataGridViewColumn c = dataGridViewMC.Columns[1];       // reassign column 1 to end and call recipes
+                c.HeaderText = "Recipes".T(EDTx.UserControlMaterialCommodities_Recipes);
+                c.DisplayIndex = 4; // need to change its display pos
+                dataGridViewMC.Columns.Remove(c);   // and to place it at the end otherwise it does not fill in the right order
+                dataGridViewMC.Columns.Add(c);
+
                 labelItems1.Text = "Total".T(EDTx.UserControlMaterialCommodities_Total);
                 textBoxItems2.Visible = labelItems2.Visible = false;
-                checkBoxClear.Location = new Point(textBoxItems1.Right + 8, checkBoxClear.Top);
+                checkBoxShowZeros.Location = new Point(textBoxItems1.Right + 8, checkBoxShowZeros.Top);
 
                 items = MaterialCommodityData.GetCommodities(true);
                 types = MaterialCommodityData.GetTypes((x) => x.IsCommodity, true);
@@ -99,23 +108,23 @@ namespace EDDiscovery.UserControls
             foreach (var x in items)
                 cfs.AddStandardOption(x.FDName,x.Name);
 
-            checkBoxClear.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbClearZeroSave, true);
-            checkBoxClear.CheckedChanged += CheckBoxClear_CheckedChanged;
+            checkBoxShowZeros.Checked = !EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbClearZeroSave, true); // used to be clear zeros, now its show zeros, invert
+            checkBoxShowZeros.CheckedChanged += CheckBoxClear_CheckedChanged;
 
             cfs.SaveSettings += FilterChanged;
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
         {
-            uctg.OnTravelSelectionChanged -= Display;
+            uctg.OnTravelSelectionChanged -= CallBackDisplayWithCheck;
             uctg = thc;
-            uctg.OnTravelSelectionChanged += Display;
+            uctg.OnTravelSelectionChanged += CallBackDisplayWithCheck;
         }
 
         public override void LoadLayout()
         {
             dataGridViewMC.RowTemplate.MinimumHeight = Font.ScalePixels(26);
-            uctg.OnTravelSelectionChanged += Display;
+            uctg.OnTravelSelectionChanged += CallBackDisplayWithCheck;
             DGVLoadColumnLayout(dataGridViewMC, DbColumnSave);
         }
 
@@ -123,7 +132,7 @@ namespace EDDiscovery.UserControls
         {
             DGVSaveColumnLayout(dataGridViewMC, DbColumnSave);
 
-            uctg.OnTravelSelectionChanged -= Display;
+            uctg.OnTravelSelectionChanged -= CallBackDisplayWithCheck;
         }
 
         #endregion
@@ -132,25 +141,20 @@ namespace EDDiscovery.UserControls
 
         public override void InitialDisplay()
         {
-            Display(uctg.GetCurrentHistoryEntry, discoveryform.history, true);
+            MaterialCommoditiesList mcl = uctg?.GetCurrentHistoryEntry?.MaterialCommodity;
+            Display(mcl);
         }
 
-        private void Display(HistoryEntry he, HistoryList hl, bool selectedEntry)
+        private void CallBackDisplayWithCheck(HistoryEntry he, HistoryList hl, bool selectedEntry)
         {
-            Display(he?.MaterialCommodity);
+            MaterialCommoditiesList mcl = he?.MaterialCommodity;
+            if ( mcl != last_mcl )
+                Display(mcl);
         }
 
-        private void Display(MaterialCommoditiesList mcl)
+        private void Display(MaterialCommoditiesList mcl)       // update display. mcl can be null
         {
-            if (mcl == last_mcl)        // same list, nothing to do
-            {
-                //System.Diagnostics.Debug.WriteLine("Same mcl " + mcl?.GetHashCode());
-                return;
-            }
-
             last_mcl = mcl;
-
-            //System.Diagnostics.Debug.WriteLine("Display mcl " + mcl.GetHashCode());
 
             DataGridViewColumn sortcolprev = dataGridViewMC.SortedColumn != null ? dataGridViewMC.SortedColumn : dataGridViewMC.Columns[0];
             SortOrder sortorderprev = dataGridViewMC.SortedColumn != null ? dataGridViewMC.SortOrder : SortOrder.Ascending;
@@ -162,10 +166,16 @@ namespace EDDiscovery.UserControls
 
             if (mcl == null)
                 return;
+            
+            //System.Diagnostics.Debug.WriteLine("Display mcl " + mcl.GetHashCode());
 
-            string[] filter = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbFilterSave, "All").SplitNoEmptyStartFinish(';');
+            string filters = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbFilterSave, "All");
+            //System.Diagnostics.Debug.WriteLine("Filter is " + filters);
+            string[] filter = filters.SplitNoEmptyStartFinish(';');
             bool all = filter.Length > 0 && filter[0] == "All";
-            bool clearzero = checkBoxClear.Checked;
+            bool showzeros = checkBoxShowZeros.Checked;
+
+            dataViewScrollerPanel.SuspendLayout();
 
             MaterialCommodityData[] allitems = materials ? MaterialCommodityData.GetMaterials(true) : MaterialCommodityData.GetCommodities(true);
 
@@ -177,43 +187,40 @@ namespace EDDiscovery.UserControls
 
                     MaterialCommodities m = mcl.List.Find(x => x.Details.Name == mcd.Name);     // and we see if we actually have some at this time
 
-                    if (!clearzero || (m != null && m.Count > 0))       // if display zero, or we have some..
+                    if (showzeros || (m != null && m.Count > 0))       // if display zero, or we have some..
                     {
+                        string s = Recipes.UsedInRecipesByFDName(mcd.FDName, Environment.NewLine);
+
                         if (materials)
                         {
                             int limit = mcd.MaterialLimit() ?? 0;
 
                             rowobj = new[] { mcd.Name, mcd.Shortname, mcd.TranslatedCategory,
                                                 mcd.TranslatedType + ( limit>0 ? " (" + limit.ToString() + ")" : "") ,
-                                                m != null ? m.Count.ToString() : "0"
+                                                m != null ? m.Count.ToString() : "0",  s
                             };
                         }
                         else
                         {
                             rowobj = new[] { mcd.Name, mcd.TranslatedType,
                                                 m != null ? m.Count.ToString() : "0",
-                                                m != null ? m.Price.ToString("0.#") : "-" };
+                                                m != null ? m.Price.ToString("0.#") : "-", s
+                            };
                         }
 
-                        string s = Recipes.UsedInSythesisByFDName(mcd.FDName, Environment.NewLine);
-                        string e = Recipes.UsedInEngineeringByFDName(mcd.FDName, Environment.NewLine);
-                        s = s.AppendPrePad(e, Environment.NewLine);
-                        string b = Recipes.UsedInTechBrokerUnlocksByFDName(mcd.FDName, Environment.NewLine);
-                        s = s.AppendPrePad(b, Environment.NewLine);
-                        string se = Recipes.UsedInSpecialEffectsyFDName(mcd.FDName, Environment.NewLine);
-                        s = s.AppendPrePad(se, Environment.NewLine);
-
                         dataGridViewMC.Rows.Add(rowobj);
-                        dataGridViewMC.Rows[dataGridViewMC.RowCount - 1].Cells[0].ToolTipText = s;
+                        dataGridViewMC.Rows[dataGridViewMC.RowCount - 1].Cells[dataGridViewMC.ColumnCount-1].ToolTipText = s;
                         dataGridViewMC.Rows[dataGridViewMC.RowCount - 1].Tag = s;
                     }
                 }
             }
 
+            dataViewScrollerPanel.ResumeLayout();
+
             dataGridViewMC.Sort(sortcolprev, (sortorderprev == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
             dataGridViewMC.Columns[sortcolprev.Index].HeaderCell.SortGlyphDirection = sortorderprev;
             if (firstline >= 0 && firstline < dataGridViewMC.RowCount)
-                dataGridViewMC.FirstDisplayedScrollingRowIndex = firstline;
+                dataGridViewMC.SafeFirstDisplayedScrollingRowIndex( firstline);
 
             if (materials)
             {
@@ -237,18 +244,31 @@ namespace EDDiscovery.UserControls
         private void FilterChanged(object sender, bool same, Object e)
         {
             if (!same)
-                Display(uctg.GetCurrentHistoryEntry, discoveryform.history, true);
+                Display(last_mcl);
+        }
+
+        private void extCheckBoxWordWrap_Click(object sender, EventArgs e)
+        {
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbWordWrap, extCheckBoxWordWrap.Checked);
+            UpdateWordWrap();
+        }
+
+        private void UpdateWordWrap()
+        {
+            dataGridViewMC.DefaultCellStyle.WrapMode = extCheckBoxWordWrap.Checked ? DataGridViewTriState.True : DataGridViewTriState.False;
+            dataGridViewMC.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;
+            dataViewScrollerPanel.UpdateScroll();
         }
 
         private void CheckBoxClear_CheckedChanged(object sender, EventArgs e)
         {
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbClearZeroSave, checkBoxClear.Checked);
-            Display(uctg.GetCurrentHistoryEntry, discoveryform.history, true);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbClearZeroSave, !checkBoxShowZeros.Checked);    // negative because we changed button sense
+            Display(last_mcl);
         }
 
         private void dataGridViewMC_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {
-            if ((materials && e.Column.Index == 4) || (!materials && e.Column.Index == 3))
+            if ((materials && e.Column.Index == 4) || (!materials && (e.Column.Index == 3 || e.Column.Index ==2)))
             {
                 e.SortDataGridViewColumnNumeric();
             }
@@ -256,20 +276,69 @@ namespace EDDiscovery.UserControls
 
         private void dataGridViewMC_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex >= 0 && e.RowIndex < dataGridViewMC.Rows.Count)
+            int rcell = dataGridViewMC.ColumnCount - 1;
+            if (e.RowIndex >= 0 && e.RowIndex < dataGridViewMC.Rows.Count && e.ColumnIndex == rcell)
             {
-                string mats = (string)dataGridViewMC.Rows[e.RowIndex].Tag;
+                DataGridViewRow row = dataGridViewMC.Rows[e.RowIndex];
+
+                if (row.Height > dataGridViewMC.RowTemplate.Height)
+                {
+                    row.Height = dataGridViewMC.RowTemplate.Height;
+                }
+                else
+                {
+
+                    using (Graphics g = Parent.CreateGraphics())
+                    {
+                        using (StringFormat f = new StringFormat())
+                        {
+                            string ms = (string)row.Cells[rcell].Value + ".";
+                            var sz = g.MeasureString(ms, dataGridViewMC.Font, new SizeF(dataGridViewMC.Columns[rcell].Width - 4, 1000), f);
+                            sz.Height *= 63.0f / 56.0f; // it underestimates of course, scale it a bit
+                            row.Height = (int)sz.Height;
+                            //System.Diagnostics.Debug.WriteLine("Measured h" + sz);
+                        }
+
+                    }
+                }
+
+                dataViewScrollerPanel.UpdateScroll();
+            }
+
+        }
+
+        #region Right click
+
+        int rightclickrow = -1;
+
+        private void dataGridViewMC_MouseDown(object sender, MouseEventArgs e)
+        {
+            dataGridViewMC.HandleClickOnDataGrid(e, out int unusedleftclickrow, out rightclickrow);
+        }
+
+        private void contextMenuStrip_Opening(object sender, CancelEventArgs e)
+        {
+        }
+
+        private void openRecipeInWindowToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (rightclickrow >= 0 && rightclickrow < dataGridViewMC.RowCount)
+            {
+                string mats = (string)dataGridViewMC.Rows[rightclickrow].Tag;
                 if (mats != null)   // sheer paranoia.
                 {
                     mats = mats.Replace(": ", Environment.NewLine + "      ");
                     ExtendedControls.InfoForm info = new ExtendedControls.InfoForm();
-                    info.Info(dataGridViewMC.Rows[e.RowIndex].Cells[0].Value as string, FindForm().Icon, mats);
+                    info.Info(dataGridViewMC.Rows[rightclickrow].Cells[0].Value as string, FindForm().Icon, mats);
                     info.Size = new Size(800, 600);
                     info.StartPosition = FormStartPosition.CenterParent;
                     info.ShowDialog(FindForm());
                 }
             }
         }
+
+        #endregion
+
     }
 
     public class UserControlMaterials : UserControlMaterialCommodities

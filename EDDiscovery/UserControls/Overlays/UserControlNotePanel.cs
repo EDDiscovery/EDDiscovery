@@ -87,7 +87,7 @@ namespace EDDiscovery.UserControls
 
         private void DisplaySelected(HistoryEntry he, HistoryList hl, bool selectedEntry)
         {
-            if (he != null && he.EntryType == JournalTypeEnum.FSDJump)
+            if (he != null && he.IsFSDCarrierJump )
                 Display(he);
             else
                 Display(hl);
@@ -103,7 +103,7 @@ namespace EDDiscovery.UserControls
 
         public void NewEntry(HistoryEntry he, HistoryList hl)               // called when a new entry is made..
         {
-            if (he != null && he.EntryType == JournalTypeEnum.FSDJump)
+            if (he != null && he.IsFSDCarrierJump)
                 Display(he);
             else
                 Display(hl);
@@ -118,7 +118,7 @@ namespace EDDiscovery.UserControls
 
         private void Display( HistoryList hl)            // when user clicks around..  HE may be null here
         {
-            Display(hl.GetLastFSD);
+            Display(hl.GetLastFSDCarrierJump);
         }
 
         void FlipConfig(Configuration item, bool ch, bool redisplay = false)

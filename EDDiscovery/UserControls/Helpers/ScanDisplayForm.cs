@@ -24,7 +24,7 @@ namespace EDDiscovery.UserControls
 {
     public static class ScanDisplayForm
     {
-        public static void ShowScanOrMarketForm(Form parent, Object tag, bool checkedsm, HistoryList hl)     // tag can be a Isystem or an He.. output depends on it.
+        public static async void ShowScanOrMarketForm(Form parent, Object tag, bool checkedsm, HistoryList hl)     // tag can be a Isystem or an He.. output depends on it.
         {
             if (tag == null)
                 return;
@@ -54,12 +54,12 @@ namespace EDDiscovery.UserControls
             {      
                 sd = new ScanDisplayUserControl();
                 sd.CheckEDSM =checkedsm;
-                sd.ShowMoons = sd.ShowMaterials = sd.ShowOverlays = true;
                 int selsize = (int)(EDDTheme.Instance.GetFont.Height / 16.0f * 48.0f);
                 sd.SetSize( selsize );
                 sd.Size = infosize;
 
-                StarScan.SystemNode data = sd.FindSystem(sys, hl);
+                StarScan.SystemNode data = await hl.starscan.FindSystemAsync(sys, sd.CheckEDSM);    // look up system async
+                    
                 if ( data != null )
                 {
                     long value = data.ScanValue(sd.CheckEDSM);
@@ -78,15 +78,14 @@ namespace EDDiscovery.UserControls
                 f.Add(new ExtendedControls.ConfigurableForm.Entry("Sys", null, null, new Point(0, topmargin), infosize, null) { control = sd });
             }
 
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("OK", typeof(ExtendedControls.ExtButton), "OK".T(EDTx.OK), new Point(infosize.Width - 120, topmargin + infosize.Height + 10), new Size(100, 24), ""));
+            f.AddOK(new Point(infosize.Width - 120, topmargin + infosize.Height + 10));
 
             f.Trigger += (dialogname, controlname, ttag) =>
             {
-                if (controlname == "OK" || controlname == "Cancel")
-                    f.ReturnResult(f.DialogResult);
+                f.ReturnResult(DialogResult.OK);
             };
 
-            f.InitCentred( parent, parent.Icon, title, null, null, asm);
+            f.InitCentred( parent, parent.Icon, title, null, null, asm , closeicon:true);
 
             f.Show(parent);
         }

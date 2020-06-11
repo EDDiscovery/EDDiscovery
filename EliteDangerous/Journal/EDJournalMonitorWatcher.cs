@@ -40,9 +40,12 @@ namespace EliteDangerousCore
         private ConcurrentQueue<string> m_netLogFileQueue;
         private const string journalfilematch = "Journal*.log";       // this picks up beta and normal logs
 
-        public JournalMonitorWatcher(string folder)
+        bool StoreJsonInJE { get; set; } = false;
+
+        public JournalMonitorWatcher(string folder, bool storejsoninje)
         {
             WatcherFolder = folder;
+            StoreJsonInJE = storejsoninje;
         }
 
         #region Scan start stop and monitor
@@ -228,9 +231,9 @@ namespace EliteDangerousCore
 
         #region Called during history refresh, by EDJournalClass, for a reparse.
 
-        public void ParseJournalFiles(Func<bool> cancelRequested, Action<int, string> updateProgress, bool forceReload = false)
+        public List<EDJournalReader> ScanJournalFiles(bool forceAllReload = false, bool forceLastReload = false)
         {
-//            System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCountLap("PJF", true), "Scanned " + WatcherFolder);
+            //            System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCountLap("PJF", true), "Scanned " + WatcherFolder);
 
             Dictionary<string, TravelLogUnit> m_travelogUnits = TravelLogUnit.GetAll().Where(t => (t.type & TravelLogUnit.TypeMask) == TravelLogUnit.JournalType).GroupBy(t => t.Name).Select(g => g.First()).ToDictionary(t => t.Name);
 
@@ -257,18 +260,25 @@ namespace EliteDangerousCore
                     netlogreaders[reader.TravelLogUnit.Name] = reader;
                 }
 
-                if (forceReload)
+                bool islast = (i == allFiles.Length - 1);
+
+                if (forceAllReload || ( islast && forceLastReload))     // Force a reload of the travel log
                 {
-                    // Force a reload of the travel log
-                    reader.TravelLogUnit.Size = 0;
+                    reader.TravelLogUnit.Size = 0;      // by setting the start zero (reader.filePos is the same as Size)
                 }
 
-                if (reader.filePos != fi.Length || i == allFiles.Length - 1)  // File not already in DB, or is the last one
+                if (reader.filePos != fi.Length || islast )  // File not already in DB, or is the last one
                 {
                     readersToUpdate.Add(reader);
                 }
             }
 
+            return readersToUpdate;
+        }
+
+        public void ProcessDetectedNewFiles(List<EDJournalReader> readersToUpdate,  Action<int, string> updateProgress, 
+                                            Action<JournalEntry> fireback = null)
+        {
             //System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCountLap("PJF"), "Ready to update");
 
             for (int i = 0; i < readersToUpdate.Count; i++)
@@ -282,24 +292,35 @@ namespace EliteDangerousCore
 
                 UserDatabase.Instance.ExecuteWithDatabase(cn =>
                 {
-                    if (entries.Count > 0)
+                    if (entries.Count > 0 )
                     {
-                        ILookup<DateTime, JournalEntry> existing = JournalEntry.GetAllByTLU(reader.TravelLogUnit.id, cn.Connection).ToLookup(e => e.EventTimeUTC);
-
-                        //System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCountLap("PJF"), i + " into db");
-
-                        using (DbTransaction tn = cn.Connection.BeginTransaction())
+                        if (fireback != null)
                         {
                             foreach (JournalReaderEntry jre in entries)
-                            {
-                                if (!existing[jre.JournalEntry.EventTimeUTC].Any(e => JournalEntry.AreSameEntry(jre.JournalEntry, e, cn.Connection, ent1jo: jre.Json)))
-                                {
-                                    jre.JournalEntry.Add(jre.Json, cn.Connection, tn);
-                                    //System.Diagnostics.Trace.WriteLine(string.Format("Write Journal to db {0} {1}", jre.JournalEntry.EventTimeUTC, jre.JournalEntry.EventTypeStr));
-                                }
-                            }
+                                fireback(jre.JournalEntry);
+                        }
+                        else
+                        {
+                            ILookup<DateTime, JournalEntry> existing = JournalEntry.GetAllByTLU(reader.TravelLogUnit.id, cn.Connection).ToLookup(e => e.EventTimeUTC);
 
-                            tn.Commit();
+                            //System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCountLap("PJF"), i + " into db");
+
+                            using (DbTransaction tn = cn.Connection.BeginTransaction())
+                            {
+                                foreach (JournalReaderEntry jre in entries)
+                                {
+                                    JObject jsonofentry = jre.Json;
+
+                                    if (!existing[jre.JournalEntry.EventTimeUTC].Any(e => JournalEntry.AreSameEntry(jre.JournalEntry, e, cn.Connection, ent1jo: jsonofentry)))
+                                    {
+                                        jre.JournalEntry.Add(jsonofentry, cn.Connection, tn);
+
+                                        //System.Diagnostics.Trace.WriteLine(string.Format("Write Journal to db {0} {1}", jre.JournalEntry.EventTimeUTC, jre.JournalEntry.EventTypeStr));
+                                    }
+                                }
+
+                                tn.Commit();
+                            }
                         }
                     }
 
@@ -335,18 +356,18 @@ namespace EliteDangerousCore
             {
                 tlu = tlu_lookup[fi.Name];
                 tlu.Path = fi.DirectoryName;
-                reader = new EDJournalReader(tlu);
+                reader = new EDJournalReader(tlu,StoreJsonInJE);
                 netlogreaders[fi.Name] = reader;
             }
             else if (TravelLogUnit.TryGet(fi.Name, out tlu))
             {
                 tlu.Path = fi.DirectoryName;
-                reader = new EDJournalReader(tlu);
+                reader = new EDJournalReader(tlu,StoreJsonInJE);
                 netlogreaders[fi.Name] = reader;
             }
             else
             {
-                reader = new EDJournalReader(fi.FullName);
+                reader = new EDJournalReader(fi.FullName,StoreJsonInJE);
 
                 netlogreaders[fi.Name] = reader;
             }

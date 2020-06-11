@@ -109,7 +109,7 @@ namespace EDDiscovery.UserControls
         private void Display(HistoryList hl)            // when user clicks around..  HE may be null here
         {
             HistoryEntry lfs = hl.GetLastHistoryEntry(x => x.IsFuelScoop);
-            HistoryEntry fsd = hl.GetLastHistoryEntry(x => x.IsFSDJump);
+            HistoryEntry fsd = hl.GetLastHistoryEntry(x => x.journalEntry.EventTypeID == JournalTypeEnum.FSDJump);      // fsd is presumed to be JournalFSDJump below
             HistoryEntry fuel = hl.GetLastHistoryEntry(x => x.journalEntry.EventTypeID == JournalTypeEnum.RefuelAll
                     || x.journalEntry.EventTypeID == JournalTypeEnum.RefuelPartial);
             HistoryEntry hex = fsd;
@@ -157,8 +157,8 @@ namespace EDDiscovery.UserControls
                 if (showEDSMStartButtonsToolStripMenuItem.Checked)
                 {
                     iedsm = pictureBox.AddTextAutoSize(new Point(leftstart, topstart), new Size(1000, 1000), "EDSM", displayfont, backcolour, textcolour, 0.5F, he, "View system on EDSM");
-                    iedsm.SetAlternateImage(BaseUtils.BitMapHelpers.DrawTextIntoAutoSizedBitmap("EDSM", iedsm.img.Size, displayfont, backcolour, textcolour.Multiply(1.2F), 0.5F), iedsm.pos, true);
-                    coltext = iedsm.pos.Right + displayfont.ScalePixels(8);
+                    iedsm.SetAlternateImage(BaseUtils.BitMapHelpers.DrawTextIntoAutoSizedBitmap("EDSM", iedsm.Image.Size, displayfont, backcolour, textcolour.Multiply(1.2F), 0.5F), iedsm.Location, true);
+                    coltext = iedsm.Location.Right + displayfont.ScalePixels(8);
                 }
 
                 backcolour = IsTransparent ? Color.Transparent : this.BackColor;
@@ -194,11 +194,11 @@ namespace EDDiscovery.UserControls
                 if ( firstdiscovery )
                 {
                     var i1 = pictureBox.AddImage(new Rectangle(line1hpos, 5, 24, 24), Icons.Controls.firstdiscover, null, "Shows if EDSM indicates your it's first discoverer".T(EDTx.UserControlTrippanel_FDEDSM), false);
-                    line1hpos = i1.pos.Right + Font.ScalePixels(8);
+                    line1hpos = i1.Location.Right + Font.ScalePixels(8);
                 }
 
                 var eline1 = pictureBox.AddTextAutoSize(new Point(line1hpos, topstart), new Size(1000, 1000), line, displayfont, textcolour, backcolour, 1.0F);
-                int line2vpos = eline1.pos.Bottom + displayfont.ScalePixels(8);
+                int line2vpos = eline1.Location.Bottom + displayfont.ScalePixels(8);
 
                 line = "";
 
@@ -259,8 +259,8 @@ namespace EDDiscovery.UserControls
 
                 if (showEDSMStartButtonsToolStripMenuItem.Checked)
                 {
-                    ExtendedControls.ExtPictureBox.ImageElement start = pictureBox.AddTextFixedSizeC(new Point(leftstart, line2vpos), iedsm.img.Size, "Start", displayfont, backcolour, textcolour, 0.5F, true, "Start", "Set a journey start point");
-                    start.SetAlternateImage(BaseUtils.BitMapHelpers.DrawTextIntoFixedSizeBitmapC("Start", start.img.Size, displayfont, backcolour, textcolour.Multiply(1.2F), 0.5F, true), start.pos, true);
+                    ExtendedControls.ExtPictureBox.ImageElement start = pictureBox.AddTextFixedSizeC(new Point(leftstart, line2vpos), iedsm.Image.Size, "Start", displayfont, backcolour, textcolour, 0.5F, true, "Start", "Set a journey start point");
+                    start.SetAlternateImage(BaseUtils.BitMapHelpers.DrawTextIntoFixedSizeBitmapC("Start", start.Image.Size, displayfont, backcolour, textcolour.Multiply(1.2F), 0.5F, true), start.Location, true);
                 }
 
                 if (line.HasChars())
@@ -293,7 +293,7 @@ namespace EDDiscovery.UserControls
                 }
                 else
                 {
-                    var list = discoveryform.history.Where(p => p.IsFSDJump).OrderByDescending(p => p.EventTimeUTC).Take(2);
+                    var list = discoveryform.history.Where(p => p.IsFSDCarrierJump).OrderByDescending(p => p.EventTimeUTC).Take(2);
                     if (list.Count() == 0)
                         return;
                     he = list.ToArray()[0];

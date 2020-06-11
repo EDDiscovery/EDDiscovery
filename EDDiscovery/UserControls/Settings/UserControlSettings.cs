@@ -39,9 +39,9 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
-            extComboBoxGameTime.Items.Add("Local");
+            extComboBoxGameTime.Items.Add("Local".T(EDTx.UserControlSettings_Local));
             extComboBoxGameTime.Items.Add("UTC");
-            extComboBoxGameTime.Items.Add("Game Time");
+            extComboBoxGameTime.Items.Add("Game Time".T(EDTx.UserControlSettings_GameTime));
 
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
@@ -175,7 +175,7 @@ namespace EDDiscovery.UserControls
 
         private void buttonAddCommander_Click(object sender, EventArgs e)
         {
-            CommanderForm cf = new CommanderForm();
+            EliteDangerousCore.Forms.CommanderForm cf = new EliteDangerousCore.Forms.CommanderForm();
             cf.Init(true);
 
             if (cf.ShowDialog(FindForm()) == DialogResult.OK)
@@ -202,7 +202,7 @@ namespace EDDiscovery.UserControls
                 int row = dataGridViewCommanders.SelectedRows[0].Index;
                 EDCommander cmdr = dataGridViewCommanders.Rows[row].DataBoundItem as EDCommander;
 
-                CommanderForm cf = new CommanderForm();
+                EliteDangerousCore.Forms.CommanderForm cf = new EliteDangerousCore.Forms.CommanderForm();
                 cf.Init(cmdr,false);
 
                 if (cf.ShowDialog(FindForm()) == DialogResult.OK)
@@ -211,6 +211,7 @@ namespace EDDiscovery.UserControls
                     List<EDCommander> edcommanders = (List<EDCommander>)dataGridViewCommanders.DataSource;
                     discoveryform.LoadCommandersListBox();
                     EDCommander.Update(edcommanders, false);
+                    dataGridViewCommanders.Refresh();
 
                     if ( forceupdate )                  // journal loc change forcing update
                         discoveryform.RefreshHistoryAsync();        // do a resync
@@ -337,17 +338,12 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        public void UpdateThemeChanges()
-        {
-            discoveryform.ApplyTheme(true);
-        }
-
         public void button_edittheme_Click(object sender, EventArgs e)
         {
             if (themeeditor == null)                    // no theme editor, make one..
             {
                 themeeditor = new ExtendedControls.ThemeStandardEditor() { TopMost = FindForm().TopMost };
-                themeeditor.ApplyChanges = UpdateThemeChanges;
+                themeeditor.ApplyChanges = () => { discoveryform.ApplyTheme(true); };
                 themeeditor.InitForm();
                 themeeditor.FormClosing += close_edit;  // lets see when it closes
 
@@ -400,9 +396,13 @@ namespace EDDiscovery.UserControls
                 discoveryform.screenshotconverter.InputFileExtension = frm.InputFileExtension;
                 discoveryform.screenshotconverter.OutputFileExtension = frm.OutputFileExtension;
                 discoveryform.screenshotconverter.FolderNameFormat = frm.FolderNameFormat;
+                discoveryform.screenshotconverter.RemoveOriginal = frm.RemoveOriginal;
                 discoveryform.screenshotconverter.FileNameFormat = frm.FileNameFormat;
-                discoveryform.screenshotconverter.CropImage = frm.CropImage;
-                discoveryform.screenshotconverter.CropArea = frm.CropArea;
+                discoveryform.screenshotconverter.CropResize1 = frm.CropResize1;
+                discoveryform.screenshotconverter.CropResize2 = frm.CropResize2;
+                discoveryform.screenshotconverter.CropResizeArea1 = frm.CropResizeArea1;
+                discoveryform.screenshotconverter.CropResizeArea2 = frm.CropResizeArea2;
+                discoveryform.screenshotconverter.KeepMasterConvertedImage = frm.KeepMasterConvertedImage;
                 discoveryform.screenshotconverter.Start();
             }
         }
@@ -625,10 +625,10 @@ namespace EDDiscovery.UserControls
 
             if (runit)
             {
-                var res = ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "You need to configure Windows to allow EDD to webserve" + Environment.NewLine +
+                var res = ExtendedControls.MessageBoxTheme.Show(this.FindForm(), ("You need to configure Windows to allow EDD to webserve" + Environment.NewLine +
                                                                            "Click Yes to do this. If you are not the adminstrator, a dialog will appear to ask you" + Environment.NewLine +
                                                                            "to sign in as an admin to allow this to happen" + Environment.NewLine +
-                                                                           "If you have previously done this on this same port number you can click No and the enable will work".T(EDTx.UserControlSettings_WSQ),
+                                                                           "If you have previously done this on this same port number you can click No and the enable will work").T(EDTx.UserControlSettings_WSQ),
                                                                            "Web Server",
                                                                            MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 

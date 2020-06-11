@@ -39,7 +39,7 @@ namespace EliteDangerousCore.JournalEvents
     }
 
     [JournalEntryType(JournalTypeEnum.FSSDiscoveryScan)]
-    public class JournalFSSDiscoveryScan : JournalEntry
+    public class JournalFSSDiscoveryScan : JournalEntry, IScanDataChanges
     {
         public JournalFSSDiscoveryScan(JObject evt) : base(evt, JournalTypeEnum.FSSDiscoveryScan)
         {
@@ -192,7 +192,7 @@ namespace EliteDangerousCore.JournalEvents
     }
 
     [JournalEntryType(JournalTypeEnum.SAAScanComplete)]
-    public class JournalSAAScanComplete : JournalEntry
+    public class JournalSAAScanComplete : JournalEntry, IScanDataChanges
     {
         public JournalSAAScanComplete(JObject evt) : base(evt, JournalTypeEnum.SAAScanComplete)
         {
@@ -213,7 +213,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public override string SummaryName(ISystem sys)
         {
-            return base.SummaryName(sys) + " " + "Of ".T(EDTx.JournalEntry_of) + BodyName.ReplaceIfStartsWith(sys.Name);
+            return base.SummaryName(sys) + " " + "of ".T(EDTx.JournalEntry_ofa) + BodyName.ReplaceIfStartsWith(sys.Name);
         }
 
         public override void FillInformation(out string info, out string detailed)
@@ -225,7 +225,7 @@ namespace EliteDangerousCore.JournalEvents
     }
 
     [JournalEntryType(JournalTypeEnum.SAASignalsFound)]
-    public class JournalSAASignalsFound : JournalEntry
+    public class JournalSAASignalsFound : JournalEntry, IScanDataChanges
     {
         public JournalSAASignalsFound(JObject evt) : base(evt, JournalTypeEnum.SAASignalsFound)
         {
@@ -233,6 +233,13 @@ namespace EliteDangerousCore.JournalEvents
             BodyName = evt["BodyName"].Str();
             BodyID = evt["BodyID"].Int();
             Signals = evt["Signals"].ToObjectProtected<List<SAASignal>>();
+            if ( Signals != null )
+            {
+                foreach (var s in Signals)      // some don't have localisation
+                {
+                    s.Type_Localised = JournalFieldNaming.CheckLocalisation(s.Type_Localised, s.Type.SplitCapsWordFull());
+                }
+            }
         }
 
         public long SystemAddress { get; set; }
@@ -242,16 +249,16 @@ namespace EliteDangerousCore.JournalEvents
 
         public string BodyDesignation { get; set; }     // set by scan system to best body designation for this entry
 
-        public class SAASignal
+        public class SAASignal 
         {
-            public string Type { get; set; }
+            public string Type { get; set; }        // material fdname, or $SAA_SignalType..
             public string Type_Localised { get; set; }
             public int Count { get; set; }
         }
-
+      
         public override string SummaryName(ISystem sys)
         {
-            return base.SummaryName(sys) + " " + "Of ".T(EDTx.JournalEntry_of) + BodyName.ReplaceIfStartsWith(sys.Name);
+            return base.SummaryName(sys) + " " + "of ".T(EDTx.JournalEntry_ofa) + BodyName.ReplaceIfStartsWith(sys.Name);
         }
 
         static public string SignalList(List<SAASignal> list, int indent = 0, string separ = ", " , bool logtype = false)
@@ -273,6 +280,18 @@ namespace EliteDangerousCore.JournalEvents
         {
             info = SignalList(Signals);
             detailed = "";
+        }
+
+        public int Contains(string fdname)      // give count if contains fdname, else zero
+        {
+            int index = Signals?.FindIndex((x) => x.Type.Equals(fdname, System.StringComparison.InvariantCultureIgnoreCase)) ?? -1;
+            return (index >= 0) ? Signals[index].Count : 0;
+        }
+
+        public string ContainsStr(string fdname, bool showit = true)      // give count if contains fdname, else empty string
+        {
+            int contains = Contains(fdname);
+            return showit && contains > 0 ? contains.ToStringInvariant() : "";
         }
     }
 

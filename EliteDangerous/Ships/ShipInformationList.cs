@@ -470,11 +470,11 @@ namespace EliteDangerousCore
             VerifyList();
         }
 
-        public void UIFuel(UIEvents.UIFuel e)
+        public void UIFuel(UIEvents.UIFuel e)       // called by controller if a new UI fuel is found
         {
-            if (HaveCurrentShip && Math.Abs(Ships[currentid].FuelLevel - e.Fuel) > 0.05 )       // if fuel level changed (may not, UI may be just telling us the same figure)
+            if (HaveCurrentShip )
             {
-                Ships[currentid] = CurrentShip.SetFuelLevel(e.Fuel);
+                Ships[currentid] = CurrentShip.SetFuelLevel(e.Fuel,e.FuelRes);
             }
             VerifyList();
         }

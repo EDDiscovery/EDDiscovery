@@ -59,6 +59,7 @@ namespace EDDiscovery.UserControls
             DataGridViewColumn sortcol = dataGridViewBookMarks.SortedColumn != null ? dataGridViewBookMarks.SortedColumn : dataGridViewBookMarks.Columns[0];
             SortOrder sortorder = dataGridViewBookMarks.SortOrder;
 
+            dataViewScrollerPanel.SuspendLayout();
             dataGridViewBookMarks.SuspendLayout();
 
             dataGridViewBookMarks.Rows.Clear();
@@ -79,6 +80,7 @@ namespace EDDiscovery.UserControls
             }
 
             dataGridViewBookMarks.ResumeLayout();
+            dataViewScrollerPanel.ResumeLayout();
 
             dataGridViewBookMarks.Sort(sortcol, (sortorder == SortOrder.Descending) ? System.ComponentModel.ListSortDirection.Descending : System.ComponentModel.ListSortDirection.Ascending);
             dataGridViewBookMarks.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
@@ -293,25 +295,8 @@ namespace EDDiscovery.UserControls
 
         private void dataGridViewBookMarks_MouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Right)         // right click on travel map, get in before the context menu
-            {
-                rightclickbookmark = null;
-            }
-
-            if (dataGridViewBookMarks.SelectedCells.Count < 2 || dataGridViewBookMarks.SelectedRows.Count == 1)      // if single row completely selected, or 1 cell or less..
-            {
-                DataGridView.HitTestInfo hti = dataGridViewBookMarks.HitTest(e.X, e.Y);
-                if (hti.Type == DataGridViewHitTestType.Cell)
-                {
-                    dataGridViewBookMarks.ClearSelection();                // select row under cursor.
-                    dataGridViewBookMarks.Rows[hti.RowIndex].Selected = true;
-
-                    if (e.Button == MouseButtons.Right)         // right click on travel map, get in before the context menu
-                    {
-                        rightclickbookmark = (BookmarkClass)dataGridViewBookMarks.Rows[hti.RowIndex].Tag;
-                    }
-                }
-            }
+            dataGridViewBookMarks.HandleClickOnDataGrid(e, out int unusedleftclickrow, out int rightclickrow);
+            rightclickbookmark = (rightclickrow !=-1) ? (BookmarkClass)dataGridViewBookMarks.Rows[rightclickrow].Tag : null;
         }
 
         private void contextMenuStripBookmarks_Opening(object sender, System.ComponentModel.CancelEventArgs e)

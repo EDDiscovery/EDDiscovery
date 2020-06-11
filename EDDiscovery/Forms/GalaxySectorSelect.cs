@@ -81,6 +81,7 @@ namespace EDDiscovery.Forms
                     imageViewer.Image = new Bitmap(galaxy.FilePath);
                     imageViewer.ZoomToFit();
                     imageViewer.Init(galaxy);
+                    imageViewer.MinZoom = 1;
 
                     comboBoxSelections.Items.AddRange((from x in DefaultGalaxyOptions select x.Item1));
 
@@ -102,6 +103,12 @@ namespace EDDiscovery.Forms
             }
 
             return false;
+        }
+
+
+        private void GalaxySectorSelect_Resize(object sender, EventArgs e)
+        {
+            imageViewer.ZoomToFit();
         }
 
         void SetComboBox()
@@ -235,18 +242,11 @@ namespace EDDiscovery.Forms
                         new Point(140, 100), new Size(width-140-100, 24),
                         "Select the data set".T(EDTx.GalaxySectorSelect_GALSELEN), list));
 
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("OK", typeof(ExtendedControls.ExtButton), "OK".T(EDTx.OK), new Point(width-40-80, 150), new Size(80, 24), "Press to Accept".T(EDTx.GalaxySectorSelect_PresstoAccept)));
+            f.AddOK(new Point(width - 40 - 80, 150), "Press to Accept".T(EDTx.GalaxySectorSelect_PresstoAccept));
 
             f.Trigger += (dialogname, controlname, tag) =>
             {
-                if (controlname == "OK")
-                {
-                    f.ReturnResult(DialogResult.OK);
-                }
-                else if (controlname == "Cancel")
-                {
-                    f.ReturnResult(DialogResult.Cancel);
-                }
+                f.ReturnResult(DialogResult.OK);
             };
             
             DialogResult res = f.ShowDialogCentred(parent, parent.Icon, "Select EDSM Galaxy Data".T(EDTx.GalaxySectorSelect_GALSELTitle));

@@ -527,6 +527,8 @@ namespace EliteDangerousCore
                 return BaseUtils.FieldBuilder.Build(";To EDDN", SyncToEddn, ";To EDSM", SyncToEdsm, ";From EDSM", SyncFromEdsm, ";To Inara" , SyncToInara, ";To EGO", SyncToEGO, ";To IGAU", SyncToIGAU);
             } }
 
+        public string FID { get; set; }      // Frontier ID, not persistent.
+
         #endregion
     }
 }

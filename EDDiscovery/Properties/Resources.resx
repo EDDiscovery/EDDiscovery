@@ -154,9 +154,6 @@
   <data name="URLCoriolis" xml:space="preserve">
     <value>https://coriolis.io/import?</value>
   </data>
-  <data name="GNE" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\GNE.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="URLGithubDownload" xml:space="preserve">
     <value>https://api.github.com/repos/EDDiscovery/EDDiscovery/</value>
   </data>
@@ -224,5 +221,14 @@ Not all keys are guaranteed active on all keyboards</value>
   </data>
   <data name="EDD_License" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\EDD License.rtf;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;iso-8859-1</value>
+  </data>
+  <data name="Credits" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Credits.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="EDCD" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\EDCD.PNG;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="URLEDCD" xml:space="preserve">
+    <value>https://edcd.github.io/</value>
   </data>
 </root>

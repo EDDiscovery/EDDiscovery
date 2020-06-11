@@ -66,7 +66,7 @@ namespace EDDiscovery.UserControls
             itemlist = MaterialCommodityData.GetAll();
             Array.Sort(itemlist, (left, right) => left.Name.CompareTo(right.Name));
 
-            var list = (from x in itemlist select x.Name + " (" + x.Category + ", " + x.Type + ((x.Rarity) ? ", Rare Commodity".T(EDTx.SearchMaterialsCommodities_RareCommodity):"") + ")");
+            var list = (from x in itemlist select x.Name + " (" + x.TranslatedCategory + ", " + x.TranslatedType + (x.Rarity ? ", Rare Commodity".T(EDTx.SearchMaterialsCommodities_RareCommodity):"") + ")");
 
             comboBoxCustomCM1.Items.AddRange(list);
             comboBoxCustomCM1.SelectedIndex = Math.Min(EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(DbCM1, 0), list.Count() - 1);
@@ -77,6 +77,12 @@ namespace EDDiscovery.UserControls
             comboBoxCustomCMANDOR.Items.AddRange(new string[] { "AND".T(EDTx.SearchMaterialsCommodities_AND), "OR".T(EDTx.SearchMaterialsCommodities_OR) });
             comboBoxCustomCMANDOR.SelectedIndex = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(DbCMANDOR, 0);
 
+            dataGridView.GotoEntryClicked += (he) => { uctg.GotoPosByJID(he.Journalid); };
+        }
+
+        public override void ChangeCursorType(IHistoryCursor thc)
+        {
+            uctg = thc;
         }
 
         public override void LoadLayout()
@@ -155,6 +161,13 @@ namespace EDDiscovery.UserControls
                     var je = he.journalEntry as JournalMaterialCollected;
                     if (je.Name.Equals(cm.FDName))
                         found = new Tuple<HistoryEntry, string>(he, prefix + "Collected at ".T(EDTx.SearchMaterialsCommodities_COL) + he.WhereAmI);
+                }
+
+                else if (he.EntryType == JournalTypeEnum.MissionCompleted)
+                {
+                    var je = he.journalEntry as JournalMissionCompleted;
+                    if (je.HasReceivedReward(cm.FDName))
+                        found = new Tuple<HistoryEntry, string>(he, prefix + "Mission Reward at ".T(EDTx.SearchMaterialsCommodities_COL) + he.WhereAmI);
                 }
 
                 if (found != null)

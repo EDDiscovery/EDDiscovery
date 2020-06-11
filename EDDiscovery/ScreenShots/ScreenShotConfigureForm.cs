@@ -15,12 +15,16 @@ namespace EDDiscovery.ScreenShots
     {
         public string ScreenshotsDir { get { return textBoxScreenshotsDir.Text; } }
         public string OutputDir { get { return textBoxOutputDir.Text; } }
+        public bool RemoveOriginal { get { return extCheckBoxRemoveOriginal.Checked; } }
         public ScreenShotImageConverter.InputTypes InputFileExtension { get { return (ScreenShotImageConverter.InputTypes)comboBoxScanFor.SelectedIndex; } }
         public ScreenShotImageConverter.OutputTypes OutputFileExtension { get { return (ScreenShotImageConverter.OutputTypes)comboBoxOutputAs.SelectedIndex; } }
         public int FileNameFormat { get { return comboBoxFileNameFormat.SelectedIndex; } }
         public int FolderNameFormat { get { return comboBoxSubFolder.SelectedIndex; } }
-        public bool CropImage { get { return checkBoxCropImage.Checked; } }
-        public Rectangle CropArea { get { return new Rectangle(numericUpDownLeft.Value,numericUpDownTop.Value,numericUpDownWidth.Value,numericUpDownHeight.Value); } }
+        public bool KeepMasterConvertedImage { get { return extCheckBoxKeepMasterConvertedImage.Checked; } }
+        public ScreenShotConverter.CropResizeOptions CropResize1 { get { return (ScreenShotConverter.CropResizeOptions)extComboBoxConvert1.SelectedIndex; } }
+        public Rectangle CropResizeArea1 { get { return new Rectangle(numericUpDownLeft1.Value, numericUpDownTop1.Value, numericUpDownWidth1.Value, numericUpDownHeight1.Value); } }
+        public ScreenShotConverter.CropResizeOptions CropResize2 { get { return (ScreenShotConverter.CropResizeOptions)extComboBoxConvert2.SelectedIndex; } }
+        public Rectangle CropResizeArea2 { get { return new Rectangle(extNumericUpDownLeft2.Value, extNumericUpDownTop2.Value, extNumericUpDownWidth2.Value, extNumericUpDownHeight2.Value); } }
 
         string initialssfolder;
         bool hires; // for file name presentation only
@@ -46,17 +50,35 @@ namespace EDDiscovery.ScreenShots
             comboBoxSubFolder.SelectedIndex = cf.FolderNameFormat;
             comboBoxFileNameFormat.Items.AddRange(ScreenShotImageConverter.FileNameFormats);
             comboBoxFileNameFormat.SelectedIndex = cf.FileNameFormat;
+            string[] opt = new string[] { "Off", "Crop", "Resize" };
+            extComboBoxConvert1.Items.AddRange(opt);
+            extComboBoxConvert2.Items.AddRange(opt);
 
-            checkBoxCropImage.Checked = cf.CropImage;
-            numericUpDownTop.Value = cf.CropArea.Top;
-            numericUpDownLeft.Value = cf.CropArea.Left;
-            numericUpDownWidth.Value = cf.CropArea.Width;
-            numericUpDownHeight.Value = cf.CropArea.Height;
+            extComboBoxConvert1.SelectedIndex = (int)cf.CropResize1;
+            extComboBoxConvert2.SelectedIndex = (int)cf.CropResize2;
+
+            extCheckBoxRemoveOriginal.Checked = cf.RemoveOriginal;
+            extCheckBoxKeepMasterConvertedImage.Checked = cf.KeepMasterConvertedImage;
+
+            numericUpDownTop1.Value = cf.CropResizeArea1.Top;
+            numericUpDownLeft1.Value = cf.CropResizeArea1.Left;
+            numericUpDownWidth1.Value = cf.CropResizeArea1.Width;
+            numericUpDownHeight1.Value = cf.CropResizeArea1.Height;
+
+            extNumericUpDownTop2.Value = cf.CropResizeArea2.Top;
+            extNumericUpDownLeft2.Value = cf.CropResizeArea2.Left;
+            extNumericUpDownWidth2.Value = cf.CropResizeArea2.Width;
+            extNumericUpDownHeight2.Value = cf.CropResizeArea2.Height;
+
             SetNumEnabled();
+
+            extComboBoxConvert1.SelectedIndexChanged += (s, e) => { SetNumEnabled(); };
+            extComboBoxConvert2.SelectedIndexChanged += (s, e) => { SetNumEnabled(); };
 
             textBoxFileNameExample.Text = ScreenShotImageConverter.CreateFileName("Sol", "Earth", "HighResScreenshot_0000.bmp", comboBoxFileNameFormat.SelectedIndex, hires, DateTime.Now);
 
             BaseUtils.Translator.Instance.Translate(this);
+
             label_index.Text = this.Text;
         }
 
@@ -66,7 +88,10 @@ namespace EDDiscovery.ScreenShots
 
         private void SetNumEnabled()
         {
-            numericUpDownTop.Enabled = numericUpDownLeft.Enabled = numericUpDownWidth.Enabled = numericUpDownHeight.Enabled = checkBoxCropImage.Checked;
+            numericUpDownTop1.Enabled = numericUpDownLeft1.Enabled = extComboBoxConvert1.SelectedIndex == 1;
+            numericUpDownWidth1.Enabled = numericUpDownHeight1.Enabled = extComboBoxConvert1.SelectedIndex > 0;
+            extNumericUpDownTop2.Enabled = extNumericUpDownLeft2.Enabled = extComboBoxConvert2.SelectedIndex == 1;
+            extNumericUpDownWidth2.Enabled = extNumericUpDownHeight2.Enabled = extComboBoxConvert2.SelectedIndex > 0;
         }
 
         private void panel_close_Click(object sender, EventArgs e)
@@ -114,11 +139,6 @@ namespace EDDiscovery.ScreenShots
             {
                 textBoxOutputDir.Text = dlg.SelectedPath;
             }
-        }
-
-        private void checkBoxCropImage_CheckedChanged(object sender, EventArgs e)
-        {
-            SetNumEnabled();
         }
 
         private void textBoxScreenshotsDir_Leave(object sender, EventArgs e)

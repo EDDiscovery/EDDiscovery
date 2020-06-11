@@ -198,7 +198,7 @@ namespace EDDiscovery.UserControls
                     StringFormat frmt = new StringFormat();
 
                     var ie = pictureBox.AddTextAutoSize(new Point(10, vpos), new Size(this.Width-20, this.Height), text, displayfont, textcolour, backcolour, 1.0F, frmt:frmt);
-                    vpos = ie.pos.Bottom + displayfont.ScalePixels(4);
+                    vpos = ie.Location.Bottom + displayfont.ScalePixels(4);
                 }
             }
 

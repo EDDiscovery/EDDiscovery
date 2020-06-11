@@ -158,6 +158,29 @@ namespace EliteDangerousCore.EDSM
             historyevent.Set();     // also trigger in case we are in thread hold
         }
 
+        public static void UpdateDiscardList()
+        {
+            if (lastDiscardFetch < DateTime.UtcNow.AddMinutes(-120))     // check if we need a new discard list
+            {
+                try
+                {
+                    EDSMClass edsm = new EDSMClass();
+                    var newdiscardEvents = new HashSet<string>(edsm.GetJournalEventsToDiscard());
+
+                    lock (alwaysDiscard)        // use this as a perm proxy to lock discardEvents
+                    {
+                        discardEvents = newdiscardEvents;
+                    }
+
+                    lastDiscardFetch = DateTime.UtcNow;
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Trace.WriteLine($"Unable to retrieve events to be discarded: {ex.ToString()}");
+                }
+            }
+        }
+
         // called by onNewEntry
 
         public static bool SendEDSMEvents(Action<string> logger, params HistoryEntry[] helist)
@@ -169,42 +192,31 @@ namespace EliteDangerousCore.EDSM
 
         public static bool SendEDSMEvents(Action<string> log, IEnumerable<HistoryEntry> helist, bool manual = false)
         {
-            if (lastDiscardFetch < DateTime.UtcNow.AddMinutes(-120))     // check if we need a new discard list
-            {
-                try
-                {
-                    EDSMClass edsm = new EDSMClass();
-                    discardEvents = new HashSet<string>(edsm.GetJournalEventsToDiscard());
-                    lastDiscardFetch = DateTime.UtcNow;
-                }
-                catch (Exception ex)
-                {
-                    System.Diagnostics.Trace.WriteLine($"Unable to retrieve events to be discarded: {ex.ToString()}");
-                }
-            }
-
             System.Diagnostics.Debug.WriteLine("Send " + helist.Count());
 
             int eventCount = 0;
             bool hasbeta = false;
             DateTime betatime = DateTime.MinValue;
 
-            foreach (HistoryEntry he in helist)     // push list of events to historylist queue..
+            lock (alwaysDiscard)        // use this as a perm proxy to lock discardEvents
             {
-                if ( !he.EdsmSync )     // if we have not sent it..
+                foreach (HistoryEntry he in helist)     // push list of events to historylist queue..
                 {
-                    string eventtype = he.EntryType.ToString();
+                    if (!he.EdsmSync)     // if we have not sent it..
+                    {
+                        string eventtype = he.EntryType.ToString();
 
-                    if (he.Commander.Name.StartsWith("[BETA]", StringComparison.InvariantCultureIgnoreCase) || he.IsBetaMessage)
-                    {
-                        hasbeta = true;
-                        betatime = he.EventTimeUTC;
-                        he.journalEntry.SetEdsmSync();       // crappy slow but unusual, but lets mark them as sent..
-                    }
-                    else if (! ( he.MultiPlayer || discardEvents.Contains(eventtype) || alwaysDiscard.Contains(eventtype) ))
-                    {
-                        historylist.Enqueue(new HistoryQueueEntry { HistoryEntry = he, Logger = log, ManualSync = manual });
-                        eventCount++;
+                        if (he.Commander.Name.StartsWith("[BETA]", StringComparison.InvariantCultureIgnoreCase) || he.IsBetaMessage)
+                        {
+                            hasbeta = true;
+                            betatime = he.EventTimeUTC;
+                            he.journalEntry.SetEdsmSync();       // crappy slow but unusual, but lets mark them as sent..
+                        }
+                        else if (!(he.MultiPlayer || discardEvents.Contains(eventtype) || alwaysDiscard.Contains(eventtype)))
+                        {
+                            historylist.Enqueue(new HistoryQueueEntry { HistoryEntry = he, Logger = log, ManualSync = manual });
+                            eventCount++;
+                        }
                     }
                 }
             }
@@ -246,6 +258,8 @@ namespace EliteDangerousCore.EDSM
         {
             try
             {
+                UpdateDiscardList();
+
                 running = 1;
 
                 int manualcount = 0;
@@ -267,6 +281,10 @@ namespace EliteDangerousCore.EDSM
                         {
                             hqe.Logger?.Invoke("Manual EDSM journal sync complete");
                             continue; // Discard end-of-sync event
+                        }
+                        else if (discardEvents.Contains(first.EntryType.ToString()))
+                        {
+                            continue;
                         }
                         else
                         {
@@ -302,6 +320,11 @@ namespace EliteDangerousCore.EDSM
 
                             historylist.TryDequeue(out hqe);
                             historyevent.Reset();
+
+                            if (hqe.HistoryEntry != null && discardEvents.Contains(hqe.HistoryEntry.EntryType.ToString()))
+                            {
+                                continue;
+                            }
 
                             logline = $"Adding {he.EntryType.ToString()} event to EDSM journal sync ({he.EventSummary})";
                             System.Diagnostics.Trace.WriteLine(logline);
@@ -446,7 +469,7 @@ namespace EliteDangerousCore.EDSM
 
                             if ((msgnr >= 100 && msgnr < 200) || msgnr == 500)
                             {
-                                if (he.EntryType == JournalTypeEnum.FSDJump || he.EntryType == JournalTypeEnum.Location)
+                                if (he.IsLocOrJump)
                                 {
                                     if (systemId != 0)
                                     {

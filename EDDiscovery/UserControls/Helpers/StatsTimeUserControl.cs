@@ -93,8 +93,8 @@ namespace EDDiscovery.UserControls
         {
             InitializeComponent();
 
-            CustomDateTimePickerFrom.Value = DateTime.Today.AddMonths(-1);
-            CustomDateTimePickerTo.Value = DateTime.Today;
+            CustomDateTimePickerFrom.Value = EDDConfig.Instance.ConvertTimeToSelectedNoKind(DateTime.Today.AddMonths(-1));
+            CustomDateTimePickerTo.Value = EDDConfig.Instance.ConvertTimeToSelectedNoKind(DateTime.Today);
             CustomDateTimePickerFrom.CustomFormat = "yyyy-MM-dd";
             CustomDateTimePickerTo.CustomFormat = "yyyy-MM-dd";
             PositionControls();
@@ -146,6 +146,8 @@ namespace EDDiscovery.UserControls
             bool showtime = comboBoxTimeMode.SelectedIndex == 4; // Custom'
             CustomDateTimePickerFrom.Visible = showtime;
             CustomDateTimePickerTo.Visible = showtime;
+            labelGameTime.Visible = showtime;
+            labelGameTime.Text = EDDConfig.Instance.GetTimeTitle();
             PositionControls();
             TimeModeChanged?.Invoke(this, e);
         }

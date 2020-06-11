@@ -21,18 +21,16 @@ using System.Linq;
 
 namespace EliteDangerousCore
 {
-    [System.Diagnostics.DebuggerDisplay("Mat {Name} count {Count} left {scratchpad}")]
+    [System.Diagnostics.DebuggerDisplay("MatC {Details.Category} {Details.Name} {Details.FDName} count {Count}")]
     public class MaterialCommodities               // in memory version of it
     {
         public int Count { get; set; }
         public double Price { get; set; }
         public MaterialCommodityData Details { get; set; }
 
-        public int scratchpad { get; set; }        // for synthesis dialog..
-
         public MaterialCommodities(MaterialCommodityData c)
         {
-            Count = scratchpad = 0;
+            Count = 0;
             Price = 0;
             this.Details = c;
         }
@@ -95,39 +93,29 @@ namespace EliteDangerousCore
             return ret;
         }
 
-        public int Count(string [] cats)    // for all types of cat, if item matches or does not, count
+        public int Count(MaterialCommodityData.CatType [] cats)    // for all types of cat, if item matches or does not, count
         {
             int total = 0;
             foreach (MaterialCommodities c in list)
             {
-                if ( Array.IndexOf<string>(cats, c.Details.Category) != -1 )
+                if ( Array.IndexOf<MaterialCommodityData.CatType>(cats, c.Details.Category) != -1 )
                     total += c.Count;
             }
 
             return total;
         }
 
-        public int DataCount { get { return Count(new string[] { MaterialCommodityData.MaterialEncodedCategory }); } }
-        public int MaterialsCount { get { return Count(new string[] { MaterialCommodityData.MaterialRawCategory, MaterialCommodityData.MaterialManufacturedCategory }); } }
-        public int CargoCount { get { return Count(new string[] { MaterialCommodityData.CommodityCategory }); } }
+        public int DataCount { get { return Count(new MaterialCommodityData.CatType[] { MaterialCommodityData.CatType.Encoded }); } }
+        public int MaterialsCount { get { return Count(new MaterialCommodityData.CatType[] { MaterialCommodityData.CatType.Raw, MaterialCommodityData.CatType.Manufactured }); } }
+        public int CargoCount { get { return Count(new MaterialCommodityData.CatType[] { MaterialCommodityData.CatType.Commodity }); } }
 
         public int DataHash() { return list.GetHashCode(); }
 
-        void Dump()
-        {
-            System.Diagnostics.Debug.Write(list.GetHashCode() + " ");
-            foreach ( MaterialCommodities m in list )
-            {
-                System.Diagnostics.Debug.Write( "{" + m.GetHashCode() + " " + m.Details.Category + " " + m.Details.FDName + " " + m.Count + "}");
-            }
-            System.Diagnostics.Debug.WriteLine("");
-        }
-
         // ifnorecatonsearch is used if you don't know if its a material or commodity.. for future use.
 
-        private MaterialCommodities GetNewCopyOf(string cat, string fdname, bool ignorecatonsearch = false)
+        private MaterialCommodities GetNewCopyOf(MaterialCommodityData.CatType cat, string fdname, bool ignorecatonsearch = false)
         {
-            int index = list.FindIndex(x => x.Details.FDName.Equals(fdname, StringComparison.InvariantCultureIgnoreCase) && (ignorecatonsearch || x.Details.Category.Equals(cat, StringComparison.InvariantCultureIgnoreCase)));
+            int index = list.FindIndex(x => x.Details.FDName.Equals(fdname, StringComparison.InvariantCultureIgnoreCase) && (ignorecatonsearch || x.Details.Category == cat));
 
             if (index >= 0)
             {
@@ -146,8 +134,19 @@ namespace EliteDangerousCore
             }
         }
 
+        public void Change(string catname, string fdname, int num, long price, bool ignorecatonsearch = false)
+        {
+            var cat = MaterialCommodityData.CategoryFrom(catname);
+            if (cat.HasValue)
+            {
+                Change(cat.Value, fdname, num, price, ignorecatonsearch);
+            }
+            else
+                System.Diagnostics.Debug.WriteLine("Unknown Cat " + catname);
+        }
+
         // ignore cat is only used if you don't know what it is 
-        public void Change(string cat, string fdname, int num, long price, bool ignorecatonsearch = false)
+        public void Change(MaterialCommodityData.CatType cat, string fdname, int num, long price, bool ignorecatonsearch = false)
         {
             MaterialCommodities mc = GetNewCopyOf(cat, fdname, ignorecatonsearch);
        
@@ -180,7 +179,18 @@ namespace EliteDangerousCore
             list.RemoveAll(x => x.Details.IsCommodity);      // empty the list of all commodities
         }
 
-        public void Set(string cat, string fdname, int num, double price)
+        public void Set(string catname, string fdname, int num, double price)
+        {
+            var cat = MaterialCommodityData.CategoryFrom(catname);
+            if (cat.HasValue)
+            {
+                Set(cat.Value, fdname, num, price);
+            }
+            else
+                System.Diagnostics.Debug.WriteLine("Unknown Cat " + catname);
+        }
+
+        public void Set(MaterialCommodityData.CatType cat, string fdname, int num, double price)
         {
             MaterialCommodities mc = GetNewCopyOf(cat, fdname);
 

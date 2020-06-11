@@ -120,7 +120,7 @@ namespace EliteDangerousCore.JournalEvents
                 if (Inventory != null)
                 {
                     foreach (Cargo c in Inventory)
-                        mc.Set(MaterialCommodityData.CommodityCategory, c.Name, c.Count, 0);
+                        mc.Set(MaterialCommodityData.CatType.Commodity, c.Name, c.Count, 0);
                 }
             }
         }
@@ -154,7 +154,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public void UpdateCommodities(MaterialCommoditiesList mc)
         {
-            mc.Change(MaterialCommodityData.CommodityCategory, Type, -Count, 0);
+            mc.Change(MaterialCommodityData.CatType.Commodity, Type, -Count, 0);
         }
 
         public void LedgerNC(Ledger mcl)
@@ -220,7 +220,7 @@ namespace EliteDangerousCore.JournalEvents
         public void UpdateCommodities(MaterialCommoditiesList mc)
         {
             if (CargoType.Length > 0 && Count > 0)
-                mc.Change(MaterialCommodityData.CommodityCategory, CargoType, (UpdateEnum == UpdateTypeEnum.Collect) ? Count : -Count, 0);
+                mc.Change(MaterialCommodityData.CatType.Commodity, CargoType, (UpdateEnum == UpdateTypeEnum.Collect) ? Count : -Count, 0);
         }
 
         public void UpdateMissions(MissionListAccumulator mlist, EliteDangerousCore.ISystem sys, string body)
@@ -273,7 +273,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public void UpdateCommodities(MaterialCommoditiesList mc)
         {
-            mc.Change(MaterialCommodityData.CommodityCategory, Type, 1, 0);
+            mc.Change(MaterialCommodityData.CatType.Commodity, Type, 1, 0);
         }
 
         public void LedgerNC(Ledger mcl)
@@ -288,5 +288,55 @@ namespace EliteDangerousCore.JournalEvents
         }
     }
 
+    [JournalEntryType(JournalTypeEnum.CargoTransfer)]
+    public class JournalCargoTransfer : JournalEntry, ICommodityJournalEntry
+    {
+        public class TransferClass
+        {
+            public string Type { get; set; }
+            public string Type_Localised { get; set; }
+            public int Count { get; set; }
+            public string Direction { get; set; }       // tocarrier , toship, tosrv
+        }
 
+        public TransferClass[] Transfers { get; set; }
+
+        public JournalCargoTransfer(JObject evt) : base(evt, JournalTypeEnum.CargoTransfer)
+        {
+            Transfers = evt["Transfers"].ToObjectProtected<TransferClass[]>();
+            if (Transfers != null)
+            {
+                foreach (var t in Transfers)
+                    t.Type_Localised = JournalFieldNaming.CheckLocalisation(t.Type_Localised, t.Type);
+            }
+        }
+
+        public override void FillInformation(out string info, out string detailed)
+        {
+            info = "";
+            detailed = "";
+            if ( Transfers != null )
+            {
+                foreach (var t in Transfers)
+                {
+                    string d = t.Direction.Replace("to", "To ", StringComparison.InvariantCultureIgnoreCase);
+                    info = info.AppendPrePad(t.Type_Localised + "->" + d, ", ");
+                }
+            }
+        }
+
+        public void UpdateCommodities(MaterialCommoditiesList mc)
+        {
+            if (Transfers != null)
+            {
+                foreach (var t in Transfers)
+                {
+                    if (t.Direction.Contains("ship", StringComparison.InvariantCultureIgnoreCase))     // toship, with some leaway to allow fd to change their formatting in future
+                        mc.Change(MaterialCommodityData.CatType.Commodity, t.Type, t.Count, 0);
+                    else
+                        mc.Change(MaterialCommodityData.CatType.Commodity, t.Type, -t.Count, 0);
+                }
+            }
+        }
+    }
 }

@@ -295,7 +295,7 @@ namespace EDDiscovery.UserControls
                 dataGridViewRoute.Rows.Add(rw);
                 if (!rw.Displayed)
                 {
-                    dataGridViewRoute.FirstDisplayedScrollingRowIndex++;
+                    dataGridViewRoute.SafeFirstDisplayedScrollingRowIndex(dataGridViewRoute.FirstDisplayedScrollingRowIndex+1);
                 }
             });
 
@@ -735,25 +735,7 @@ namespace EDDiscovery.UserControls
 
         private void dataGridViewRoute_MouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Right)         // right click on travel map, get in before the context menu
-            {
-                rightclickrow = -1;
-            }
-
-            if (dataGridViewRoute.SelectedCells.Count < 2 || dataGridViewRoute.SelectedRows.Count == 1)      // if single row completely selected, or 1 cell or less..
-            {
-                DataGridView.HitTestInfo hti = dataGridViewRoute.HitTest(e.X, e.Y);
-                if (hti.Type == DataGridViewHitTestType.Cell)
-                {
-                    dataGridViewRoute.ClearSelection();                // select row under cursor.
-                    dataGridViewRoute.Rows[hti.RowIndex].Selected = true;
-
-                    if (e.Button == MouseButtons.Right)         // right click on travel map, get in before the context menu
-                    {
-                        rightclickrow = hti.RowIndex;
-                    }
-                }
-            }
+            dataGridViewRoute.HandleClickOnDataGrid(e, out int unusedleftclickrow, out rightclickrow);
 
             showInEDSMToolStripMenuItem.Enabled = rightclickrow != -1 && dataGridViewRoute.Rows[rightclickrow].Tag != null;
             showScanToolStripMenuItem.Enabled = rightclickrow != -1 && dataGridViewRoute.Rows[rightclickrow].Tag != null;

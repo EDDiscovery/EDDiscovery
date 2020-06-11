@@ -53,13 +53,13 @@ namespace EliteDangerousCore
                 get
                 {
                     var ing = (from x in Ingredients select Amount[Array.IndexOf(Ingredients, x)].ToString() + x.Shortname).ToArray();
-                    return string.Join(",", ing);
+                    return string.Join(", ", ing);
                 }
             }
             public string IngredientsStringvsCurrent(MaterialCommoditiesList cur)
             {
                 var ing = (from x in Ingredients select Amount[Array.IndexOf(Ingredients, x)].ToString() + x.Shortname + "(" + (cur.Find(x)?.Count ?? 0).ToStringInvariant() + ")").ToArray();
-                return string.Join(",", ing);
+                return string.Join(", ", ing);
             }
 
             public string IngredientsStringLong
@@ -67,7 +67,7 @@ namespace EliteDangerousCore
                 get
                 {
                     var ing = (from x in Ingredients select Amount[Array.IndexOf(Ingredients, x)].ToString() + " "+ x.Name).ToArray();
-                    return string.Join(",", ing);
+                    return string.Join(", ", ing);
                 }
             }
 
@@ -117,37 +117,47 @@ namespace EliteDangerousCore
             { }
         }
 
-        public static string UsedInSythesisByFDName(string fdname, string join=",")
+        public static string UsedInRecipesByFDName(string fdname, string join = ", ")
+        {
+            string s =Recipes.UsedInEngineeringByFDName(fdname, join);
+            s = s.AppendPrePad(Recipes.UsedInSythesisByFDName(fdname, join),join);
+            s = s.AppendPrePad(Recipes.UsedInTechBrokerUnlocksByFDName(fdname, join), join);
+            s = s.AppendPrePad(Recipes.UsedInSpecialEffectsyFDName(fdname, join), join);
+            return s;
+        }
+
+
+        public static string UsedInSythesisByFDName(string fdname, string join=", ")
         {
             MaterialCommodityData mc = MaterialCommodityData.GetByFDName(fdname);
-            if (SynthesisRecipesByMaterial.ContainsKey(mc))
+            if (mc != null && SynthesisRecipesByMaterial.ContainsKey(mc))
                 return String.Join(join, SynthesisRecipesByMaterial[mc].Select(x => x.Name + "-" + x.level + ": " + x.IngredientsStringLong));
             else
                 return "";
         }
 
-        public static string UsedInEngineeringByFDName(string fdname, string join = ",")
+        public static string UsedInEngineeringByFDName(string fdname, string join = ", ")
         {
             MaterialCommodityData mc = MaterialCommodityData.GetByFDName(fdname);
-            if (EngineeringRecipesByMaterial.ContainsKey(mc))
+            if (mc != null && EngineeringRecipesByMaterial.ContainsKey(mc))
                 return String.Join(join, EngineeringRecipesByMaterial[mc].Select(x => x.modulesstring + " "+ x.Name + "-" + x.level + ": " + x.IngredientsStringLong + " @ " + x.engineersstring));
             else
                 return "";
         }
 
-        public static string UsedInSpecialEffectsyFDName(string fdname, string join = ",")
+        public static string UsedInSpecialEffectsyFDName(string fdname, string join = ", ")
         {
             MaterialCommodityData mc = MaterialCommodityData.GetByFDName(fdname);
-            if (SpecialEffectsRecipesByMaterial.ContainsKey(mc))
+            if (mc != null && SpecialEffectsRecipesByMaterial.ContainsKey(mc))
                 return String.Join(join, SpecialEffectsRecipesByMaterial[mc].Select(x => x.Name + ": " + x.IngredientsStringLong));
             else
                 return "";
         }
 
-        public static string UsedInTechBrokerUnlocksByFDName(string fdname, string join = ",")
+        public static string UsedInTechBrokerUnlocksByFDName(string fdname, string join = ", ")
         {
             MaterialCommodityData mc = MaterialCommodityData.GetByFDName(fdname);
-            if (TechBrokerUnlockRecipesByMaterial.ContainsKey(mc))
+            if (mc != null && TechBrokerUnlockRecipesByMaterial.ContainsKey(mc))
                 return String.Join(join, TechBrokerUnlockRecipesByMaterial[mc].Select(x => x.Name + ": " + x.IngredientsStringLong));
             else
                 return "";
@@ -1008,21 +1018,7 @@ namespace EliteDangerousCore
         new EngineeringRecipe("Thermal Resistant Shields", "1DSCR,1Ge,1Se", "Shield Generator", "3", "Didi Vatermann,Elvira Martuuk,Lei Cheung" ),
         new EngineeringRecipe("Thermal Resistant Shields", "1ISSA,1FoC,1Hg", "Shield Generator", "4", "Lei Cheung" ),
         new EngineeringRecipe("Thermal Resistant Shields", "1USS,1RFC,1Ru", "Shield Generator", "5", "Lei Cheung" ),
-        new EngineeringRecipe("Fast Scanner", "1P", "Surface Scanner", "1", "Felicity Farseer,Lei Cheung,Hera Tani,Juri Ishmaak,Tiana Fortune,Bill Turner,Lori Jameson" ),
-        new EngineeringRecipe("Fast Scanner", "1P,1FFC", "Surface Scanner", "2", "Felicity Farseer,Lei Cheung,Hera Tani,Juri Ishmaak,Tiana Fortune,Bill Turner,Lori Jameson" ),
-        new EngineeringRecipe("Fast Scanner", "1P,1FFC,1OSK", "Surface Scanner", "3", "Felicity Farseer,Lei Cheung,Hera Tani,Juri Ishmaak,Tiana Fortune,Bill Turner,Lori Jameson" ),
-        new EngineeringRecipe("Fast Scanner", "1Mn,1FoC,1AEA", "Surface Scanner", "4", "Lei Cheung,Hera Tani,Juri Ishmaak,Bill Turner,Lori Jameson" ),
-        new EngineeringRecipe("Fast Scanner", "1As,1RFC,1AEC", "Surface Scanner", "5", "Lei Cheung,Hera Tani,Juri Ishmaak,Bill Turner,Lori Jameson" ),
-        new EngineeringRecipe("Long-Range Scanner", "1Fe", "Surface Scanner", "1", "Felicity Farseer,Lei Cheung,Hera Tani,Juri Ishmaak,Tiana Fortune,Bill Turner,Lori Jameson" ),
-        new EngineeringRecipe("Long-Range Scanner", "1Fe,1HC", "Surface Scanner", "2", "Felicity Farseer,Lei Cheung,Hera Tani,Juri Ishmaak,Tiana Fortune,Bill Turner,Lori Jameson" ),
-        new EngineeringRecipe("Long-Range Scanner", "1Fe,1HC,1UED", "Surface Scanner", "3", "Felicity Farseer,Lei Cheung,Hera Tani,Juri Ishmaak,Tiana Fortune,Bill Turner,Lori Jameson" ),
-        new EngineeringRecipe("Long-Range Scanner", "1Ge,1EA,1DED", "Surface Scanner", "4", "Lei Cheung,Hera Tani,Juri Ishmaak,Bill Turner,Lori Jameson" ),
-        new EngineeringRecipe("Long-Range Scanner", "1Nb,1PCa,1CED", "Surface Scanner", "5", "Lei Cheung,Hera Tani,Juri Ishmaak,Bill Turner,Lori Jameson" ),
-        new EngineeringRecipe("Wide Angle Scanner", "1MS", "Surface Scanner", "1", "Felicity Farseer,Lei Cheung,Hera Tani,Juri Ishmaak,Tiana Fortune,Bill Turner,Lori Jameson" ),
-        new EngineeringRecipe("Wide Angle Scanner", "1MS,1Ge", "Surface Scanner", "2", "Felicity Farseer,Lei Cheung,Hera Tani,Juri Ishmaak,Tiana Fortune,Bill Turner,Lori Jameson" ),
-        new EngineeringRecipe("Wide Angle Scanner", "1MS,1Ge,1CSD", "Surface Scanner", "3", "Felicity Farseer,Lei Cheung,Hera Tani,Juri Ishmaak,Tiana Fortune,Bill Turner,Lori Jameson" ),
-        new EngineeringRecipe("Wide Angle Scanner", "1ME,1Nb,1DSD", "Surface Scanner", "4", "Lei Cheung,Hera Tani,Juri Ishmaak,Bill Turner,Lori Jameson" ),
-        new EngineeringRecipe("Wide Angle Scanner", "1MC,1Sn,1CFSD", "Surface Scanner", "5", "Lei Cheung,Hera Tani,Juri Ishmaak,Bill Turner,Lori Jameson" ),
+
         new EngineeringRecipe("Light Weight Mount", "1P", "Torpedo", "1", "Juri Ishmaak,Liz Ryder" ),
         new EngineeringRecipe("Light Weight Mount", "1SAll,1Mn", "Torpedo", "2", "Juri Ishmaak,Liz Ryder" ),
         new EngineeringRecipe("Light Weight Mount", "1SAll,1Mn,1CCe", "Torpedo", "3", "Juri Ishmaak,Liz Ryder" ),

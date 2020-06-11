@@ -188,6 +188,10 @@ namespace EliteDangerousCore.JournalEvents
             System = evt["System"].Str();
         }
 
+        public JournalShipyardSell(DateTime utc) : base(utc, JournalTypeEnum.ShipyardSell, false)
+        {
+        }
+
         public string ShipTypeFD { get; set; }
         public string ShipType { get; set; }
         public int SellShipId { get; set; }
@@ -210,6 +214,22 @@ namespace EliteDangerousCore.JournalEvents
         {
             info = BaseUtils.FieldBuilder.Build("", ShipType, "Amount:; cr;N0".T(EDTx.JournalEntry_Amount), ShipPrice, "At:".T(EDTx.JournalShipyardSell_At), System);
             detailed = "";
+        }
+
+        public JObject Json()            // create JSON of this record..
+        {
+            JObject evt = new JObject();
+            evt["timestamp"] = EventTimeUTC;
+            evt["event"] = EventTypeStr;
+            if ( MarketID.HasValue )
+                evt["MarketID"] = MarketID.Value;
+            evt["ShipType"] = ShipTypeFD;
+            evt["SellShipID"] = SellShipId;
+            evt["ShipPrice"] = ShipPrice;
+            if (System.HasChars())
+                evt["System"] = System;
+
+            return evt;
         }
     }
 

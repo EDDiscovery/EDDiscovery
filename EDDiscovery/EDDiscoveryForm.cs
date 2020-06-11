@@ -58,13 +58,14 @@ namespace EDDiscovery
 
         public EDDiscovery._3DMap.MapManager Map { get; private set; }
 
-        Task checkInstallerTask = null;
         private bool themeok = true;
         private bool in_system_sync = false;        // between start/end sync of databases
 
         BaseUtils.GitHubRelease newRelease;
 
         public PopOutControl PopOuts;
+
+        Timer datetimetimer;
 
         #endregion
 
@@ -76,6 +77,8 @@ namespace EDDiscovery
         public event Action<int,string> OnEDSMSyncComplete;             // EDSM Sync has completed with this list of stars are newly created
         public event Action<int> OnEDDNSyncComplete;                    // Sync has completed
         public event Action<int> OnIGAUSyncComplete;                    // Sync has completed
+                                                                        // theme has changed by settings, hook if you have some UI which needs refreshing due to it. 
+        public event Action OnThemeChanged;                             // Note you won't get it on startup because theme is applied to form before tabs/panels are setup
         #endregion
 
 
@@ -93,7 +96,6 @@ namespace EDDiscovery
         public event Action<JournalEntry> OnNewJournalEntry { add { Controller.OnNewJournalEntry += value; } remove { Controller.OnNewJournalEntry -= value; } }
         public event Action<string, Color> OnNewLogEntry { add { Controller.OnNewLogEntry += value; } remove { Controller.OnNewLogEntry -= value; } }
         public event Action OnRefreshCommanders { add { Controller.OnRefreshCommanders += value; } remove { Controller.OnRefreshCommanders -= value; } }
-        //public event Action<EliteDangerousCore.CompanionAPI.CompanionAPIClass,HistoryEntry> OnNewCompanionAPIData;
         public event Action OnMapsDownloaded { add { Controller.OnMapsDownloaded += value; } remove { Controller.OnMapsDownloaded -= value; } }
         public event Action<bool> OnExpeditionsDownloaded { add { Controller.OnExpeditionsDownloaded += value; } remove { Controller.OnExpeditionsDownloaded -= value; } }
 
@@ -159,9 +161,10 @@ namespace EDDiscovery
                     EDDOptions.Instance.TranslatorFolders(),
                     EDDOptions.Instance.TranslatorDirectoryIncludeSearchUpDepth, EDDOptions.Instance.AppDataDirectory);
 
-            BaseUtils.Translator.Instance.AddExcludedControls(new string[]
-            { "ComboBoxCustom", "NumberBoxDouble", "NumberBoxLong", "VScrollBarCustom",     // Controls not for translation..
-                "StatusStripCustom" , "RichTextBoxScroll","TextBoxBorder", "AutoCompleteTextBox", "DateTimePicker" , "NumericUpDownCustom" });
+            BaseUtils.Translator.Instance.AddExcludedControls(new Type[]
+            {   typeof(ExtendedControls.ExtComboBox), typeof(ExtendedControls.NumberBoxDouble),typeof(ExtendedControls.NumberBoxFloat),typeof(ExtendedControls.NumberBoxLong),
+                typeof(ExtendedControls.ExtScrollBar),typeof(ExtendedControls.ExtStatusStrip),typeof(ExtendedControls.ExtRichTextBox),typeof(ExtendedControls.ExtTextBox),
+                typeof(ExtendedControls.ExtTextBoxAutoComplete),typeof(ExtendedControls.ExtDateTimePicker),typeof(ExtendedControls.ExtNumericUpDown) });
 
             Controller.Init();
             PanelInformation.Init();
@@ -182,6 +185,7 @@ namespace EDDiscovery
             panelToolBar.SecondHiddenMarkerWidth = 60;
             panelToolBar.PinState = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("ToolBarPanelPinState", true);
 
+            labelGameDateTime.Text = "";
             labelInfoBoxTop.Text = "";
             label_version.Text = EDDOptions.Instance.VersionDisplayString;
 
@@ -197,8 +201,6 @@ namespace EDDiscovery
                 theme.FontName = EDDOptions.Instance.Font;
 
             ApplyTheme();                       // we apply and scale (because its being applied to Form) before any tabs parts are setup.
-
-            panelToolBar.SetToolTip(toolTip);    // use the defaults
 
             this.TopMost = EDDConfig.KeepOnTop;
             notifyIcon1.Visible = EDDConfig.UseNotifyIcon;
@@ -312,6 +314,8 @@ namespace EDDiscovery
 
             BaseUtils.Translator.Instance.Translate(mainMenu, this);
             BaseUtils.Translator.Instance.Translate(toolTip,this);
+
+            panelToolBar.SetToolTip(toolTip);    // use the defaults
 
             if (EDDOptions.Instance.ActionButton)
                 buttonReloadActions.Visible = true;
@@ -448,7 +452,7 @@ namespace EDDiscovery
 
             });
 
-            checkInstallerTask = Installer.CheckForNewInstallerAsync((rel) =>  // in thread
+            Installer.CheckForNewInstallerAsync((rel) =>  // in thread
             {
                 newRelease = rel;
                 BeginInvoke(new Action(() => Controller.LogLineHighlight(string.Format("New EDDiscovery installer available: {0}".T(EDTx.EDDiscoveryForm_NI), newRelease.ReleaseName))));
@@ -456,6 +460,41 @@ namespace EDDiscovery
             });
 
             // this.DebugSizePosition(toolTip); // Debug - theme all the tooltips to show info on control - useful
+
+            if (EDDOptions.Instance.OutputEventHelp != null)        // help for events, going to have to do this frequently, so keep
+            {
+                string s = "All Events" + Environment.NewLine;
+                var infoe = BaseUtils.TypeHelpers.GetPropertyFieldNames(typeof(JournalEntry), "EventClass_", fields: true);
+                foreach (var ix in infoe)
+                {
+                    s += "    " + ix.Name + " " + ix.Help + Environment.NewLine;
+                }
+
+                foreach (var x in Enum.GetValues(typeof(JournalTypeEnum)))
+                {
+                    JournalEntry je = JournalEntry.CreateJournalEntry(x.ToString(), DateTime.UtcNow);
+
+                    if (!(je is JournalUnknown))
+                    {
+                        s += "Event " + x + Environment.NewLine;
+                        var info = BaseUtils.TypeHelpers.GetPropertyFieldNames(je.GetType(), "EventClass_", excludedeclaretype: typeof(JournalEntry), fields: true);
+                        foreach (var ix in info)
+                        {
+                            s += "    " + ix.Name + " : " + ix.Help + Environment.NewLine;
+                        }
+                    }
+                }
+
+                File.WriteAllText(EDDOptions.Instance.OutputEventHelp, s);
+            }
+
+            if (!EDDOptions.Instance.DisableTimeDisplay)
+            {
+                datetimetimer = new Timer();
+                datetimetimer.Interval = 1000;
+                datetimetimer.Tick += (sv, ev) => { DateTime gameutc = DateTime.UtcNow.AddYears(1286); labelGameDateTime.Text = gameutc.ToShortDateString() + " " + gameutc.ToShortTimeString(); };
+                datetimetimer.Start();
+            }
         }
 
         List<Notifications.Notification> popupnotificationlist = new List<Notifications.Notification>();
@@ -607,13 +646,17 @@ namespace EDDiscovery
             panel_minimize.Visible = !theme.WindowsFrame;
             label_version.Visible = !theme.WindowsFrame;
 
+            // debug label_version.Visible = true; labelInfoBoxTop.Text = "New! X.Y.Z.A";
+
             this.Text = "EDDiscovery " + label_version.Text;            // note in no border mode, this is not visible on the title bar but it is in the taskbar..
 
-            //this.DumpTree(0);
             theme.ApplyStd(this);
-            
+
             statusStrip.Font = contextMenuStripTabs.Font = this.Font;
-            labelInfoBoxTop.Location = new Point(label_version.Right + 16, labelInfoBoxTop.Top);
+
+            //System.Diagnostics.Debug.WriteLine("Label version " + label_version.Location + " " + label_version.Size + " " + mainMenu.Size);
+
+            OnThemeChanged?.Invoke();
 
             if ( panelrefreshaswell)
                 Controller.RefreshDisplays(); // needed to cause them to cope with theme change
@@ -667,6 +710,11 @@ namespace EDDiscovery
             Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Refresh complete finished");
         }
 
+        public void NewEntry( JournalEntry e)       // programatically do a new entry
+        {
+            Controller.NewEntry(e);                 // push it thru as if the monitor watcher saw it
+        }
+
 
         private void Controller_NewEntrySecond(HistoryEntry he, HistoryList hl)         // called after all UI's have had their chance
         {
@@ -688,7 +736,7 @@ namespace EDDiscovery
                 Trace.WriteLine(new StackTrace(true).ToString());
             }
 
-            if (he.IsFSDJump)
+            if (he.IsFSDCarrierJump)
             {
                 int count = history.GetVisitsCount(he.System.Name);
                 LogLine(string.Format("Arrived at system {0} Visit No. {1}".T(EDTx.EDDiscoveryForm_Arrived), he.System.Name, count));
@@ -702,7 +750,7 @@ namespace EDDiscovery
 
             if (EDCommander.Current.SyncToInara)
             {
-                EliteDangerousCore.Inara.InaraSync.NewEvent(LogLine, history, he);
+                EliteDangerousCore.Inara.InaraSync.NewEvent(LogLine, he);
             }
 
             if (EDCommander.Current.SyncToIGAU )
@@ -1141,7 +1189,7 @@ namespace EDDiscovery
         public void Open2DMap()
         {
             this.Cursor = Cursors.WaitCursor;
-            Form2DMap frm = new Form2DMap(Controller.history.FilterByFSDAndPosition);
+            Form2DMap frm = new Form2DMap(Controller.history.FilterByFSDCarrierJumpAndPosition);
             frm.Show();
             this.Cursor = Cursors.Default;
         }
@@ -1605,7 +1653,7 @@ namespace EDDiscovery
                 PopOuts.PopOut(pids[popoutdropdown.SelectedIndex]);
             };
 
-            theme.ApplyStd(popoutdropdown);
+            theme.ApplyStd(popoutdropdown,true);
             popoutdropdown.SelectionBackColor = theme.ButtonBackColor;
             popoutdropdown.Show(this);
         }

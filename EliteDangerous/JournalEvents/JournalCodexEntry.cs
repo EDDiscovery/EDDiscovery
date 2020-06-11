@@ -73,7 +73,7 @@ namespace EliteDangerousCore.JournalEvents
                                                 "", SubCategory_Localised,
                                                 ";New Entry".T(EDTx.JournalCodexEntry_NewEntry), IsNewEntry,
                                                 ";Traits".T(EDTx.JournalCodexEntry_Traits), NewTraitsDiscovered,
-                                                "Nearest:".T(EDTx.JournalNearest), NearestDestination_Localised
+                                                "Nearest:".T(EDTx.JournalEntry_Nearest), NearestDestination_Localised
                                                 );
             detailed = "";
 

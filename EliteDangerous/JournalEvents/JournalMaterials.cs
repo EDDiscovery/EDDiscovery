@@ -105,15 +105,15 @@ namespace EliteDangerousCore.JournalEvents
 
             if ( Raw != null )
                 foreach (Material m in Raw)
-                    mc.Set(MaterialCommodityData.MaterialRawCategory, m.Name, m.Count, 0);
+                    mc.Set(MaterialCommodityData.CatType.Raw, m.Name, m.Count, 0);
 
             if ( Manufactured != null )
                 foreach (Material m in Manufactured)
-                    mc.Set(MaterialCommodityData.MaterialManufacturedCategory, m.Name, m.Count, 0);
+                    mc.Set(MaterialCommodityData.CatType.Manufactured, m.Name, m.Count, 0);
 
             if ( Encoded != null )
                 foreach (Material m in Encoded)
-                    mc.Set(MaterialCommodityData.MaterialEncodedCategory, m.Name, m.Count, 0);
+                    mc.Set(MaterialCommodityData.CatType.Encoded, m.Name, m.Count, 0);
         }
     }
 
@@ -146,7 +146,7 @@ namespace EliteDangerousCore.JournalEvents
         {
             MaterialCommodityData mcd = MaterialCommodityData.GetByFDName(Name);
             if (mcd != null)
-                info = BaseUtils.FieldBuilder.Build("", FriendlyName, "< (", mcd.TranslatedCategory, ";)", mcd.TranslatedType, "; items".T(EDTx.JournalEntry_MatC), Count, "Total: ".T(EDTx.JournalEntry_Total), Total);
+                info = BaseUtils.FieldBuilder.Build("", FriendlyName, "< (", mcd.TranslatedCategory, ";)", mcd.TranslatedType, "< ; items".T(EDTx.JournalEntry_MatC), Count, "Total:".T(EDTx.JournalEntry_Total), Total);
             else
                 info = BaseUtils.FieldBuilder.Build("", FriendlyName, "< ; items".T(EDTx.JournalEntry_MatC), Count);
 
@@ -182,7 +182,7 @@ namespace EliteDangerousCore.JournalEvents
         {
             MaterialCommodityData mcd = MaterialCommodityData.GetByFDName(Name);
             if (mcd != null)
-                info = BaseUtils.FieldBuilder.Build("", FriendlyName, "< (", mcd.TranslatedCategory, ";)", mcd.TranslatedType, "; items".T(EDTx.JournalEntry_MatC), Count, "Total: ".T(EDTx.JournalEntry_Total), Total);
+                info = BaseUtils.FieldBuilder.Build("", FriendlyName, "< (", mcd.TranslatedCategory, ";)", mcd.TranslatedType, "< ; items".T(EDTx.JournalEntry_MatC), Count, "Total:".T(EDTx.JournalEntry_Total), Total);
             else
                 info = BaseUtils.FieldBuilder.Build("", FriendlyName, "< ; items".T(EDTx.JournalEntry_MatC), Count);
     
@@ -333,7 +333,7 @@ namespace EliteDangerousCore.JournalEvents
 
             if (Name.Contains("Limpet", StringComparison.InvariantCultureIgnoreCase) )      // hard code limpets mean 1 more cargo of them
             {
-                mc.Change(MaterialCommodityData.CommodityCategory, "drones", 1, 0);
+                mc.Change(MaterialCommodityData.CatType.Commodity, "drones", 1, 0);
             }
         }
 

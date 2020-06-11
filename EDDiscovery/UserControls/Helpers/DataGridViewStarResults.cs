@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2019 EDDiscovery development team
+ * Copyright © 2019-2020 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -14,20 +14,20 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Windows.Forms;
 using EliteDangerousCore;
 using EliteDangerousCore.EDSM;
-using EliteDangerousCore.JournalEvents;
+using System;
+using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls.Search
 {
     public class DataGridViewStarResults : DataGridView
     {
-        EDDiscoveryForm discoveryform;
         public bool CheckEDSM { get; set; }
+        public Action<HistoryEntry> GotoEntryClicked = null;
+
+        private EDDiscoveryForm discoveryform;
 
         public DataGridViewStarResults()
         {
@@ -35,6 +35,7 @@ namespace EDDiscovery.UserControls.Search
             ContextMenuStrip = cms;
 
             cms.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            new System.Windows.Forms.ToolStripMenuItem(),
             new System.Windows.Forms.ToolStripMenuItem(),
             new System.Windows.Forms.ToolStripMenuItem(),
             new System.Windows.Forms.ToolStripMenuItem()
@@ -55,6 +56,9 @@ namespace EDDiscovery.UserControls.Search
             cms.Items[2].Text = "View Data On Entry";
             cms.Items[2].Name = "Data";
             cms.Items[2].Click += new System.EventHandler(this.viewScanOfSystemToolStripMenuItem_Click);
+            cms.Items[3].Text = "Go to entry on grid";
+            cms.Items[3].Name = "Data";
+            cms.Items[3].Click += new System.EventHandler(this.GotoEntryToolStripMenuItem_Click);
 
             CellDoubleClick += cellDoubleClick;
             MouseDown += mouseDown;
@@ -72,27 +76,9 @@ namespace EDDiscovery.UserControls.Search
 
         private void mouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Right)         // right click on travel map, get in before the context menu
-            {
-                rightclicktag = null;
-                rightclickrow = -1;
-            }
-
-            if (SelectedCells.Count < 2 || SelectedRows.Count == 1)      // if single row completely selected, or 1 cell or less..
-            {
-                DataGridView.HitTestInfo hti = HitTest(e.X, e.Y);
-                if (hti.Type == DataGridViewHitTestType.Cell)
-                {
-                    ClearSelection();                // select row under cursor.
-                    Rows[hti.RowIndex].Selected = true;
-
-                    if (e.Button == MouseButtons.Right)         // right click on travel map, get in before the context menu
-                    {
-                        rightclickrow = hti.RowIndex;
-                        rightclicktag = Rows[hti.RowIndex].Tag;
-                    }
-                }
-            }
+            this.HandleClickOnDataGrid(e, out int unusedleftclickrow, out rightclickrow);
+            rightclicktag = (rightclickrow != -1) ? Rows[rightclickrow].Tag : null;
+            ContextMenuStrip.Items[3].Enabled = rightclicktag is HistoryEntry;
         }
 
         private ISystem SysFrom(Object t)   // given tag, find the isystem
@@ -139,6 +125,14 @@ namespace EDDiscovery.UserControls.Search
                     if (discoveryform.Map.MoveToSystem(SysFrom(rightclicktag)))
                         discoveryform.Map.Show();
                 }
+            }
+        }
+
+        private void GotoEntryToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (rightclicktag != null)
+            {
+                GotoEntryClicked?.Invoke(rightclicktag as HistoryEntry);
             }
         }
 

@@ -19,14 +19,16 @@ namespace EDDiscovery.ScreenShots
         public bool RemoveOriginal;
         public bool MarkHiRes;
         public bool CopyToClipboard; 
-        public bool CropImage;
-        public Rectangle CropArea = new Rectangle();
+        public enum CropResizeOptions { Off, Crop, Resize };
+        public bool KeepMasterConvertedImage;
+        public CropResizeOptions CropResize1, CropResize2;
+        public Rectangle CropResizeArea1 = new Rectangle();
+        public Rectangle CropResizeArea2 = new Rectangle();
         public ScreenShotImageConverter.InputTypes InputFileExtension { get; set; } = ScreenShotImageConverter.InputTypes.bmp;
         public ScreenShotImageConverter.OutputTypes OutputFileExtension { get; set; } = ScreenShotImageConverter.OutputTypes.png;
 
         public int FileNameFormat;
         public int FolderNameFormat;
-
 
         private EDDiscoveryForm discoveryform;
         private ScreenshotDirectoryWatcher Watcher;
@@ -54,16 +56,31 @@ namespace EDDiscovery.ScreenShots
             MarkHiRes = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("checkBoxHires", false);
             CopyToClipboard = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("ImageHandlerClipboard", false);
 
-            CropImage = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("ImageHandlerCropImage", false);      // fires the checked handler which sets the readonly mode of the controls
-            CropArea = new Rectangle(EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt("ImageHandlerCropLeft", 0), EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt("ImageHandlerCropTop", 0),
-                                    EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt("ImageHandlerCropWidth", 1920), EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt("ImageHandlerCropHeight", 1024));
-
             try
             {       // just in case
+                if (EliteDangerousCore.DB.UserDatabase.Instance.KeyExists("ImageHandlerCropImage"))
+                {
+                    CropResize1 = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("ImageHandlerCropImage", false) ? CropResizeOptions.Crop : CropResizeOptions.Off;
+                    EliteDangerousCore.DB.UserDatabase.Instance.DeleteKey("ImageHandlerCropImage");
+                }
+                else
+                    CropResize1 = (CropResizeOptions)EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt("ImageHandlerCropResizeImage1", 0);
+
+                CropResize2 = (CropResizeOptions)EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt("ImageHandlerCropResizeImage2", 0);
+                CropResizeArea1 = new Rectangle(EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt("ImageHandlerCropLeft", 0), EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt("ImageHandlerCropTop", 0),
+                                        EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt("ImageHandlerCropWidth", 1920), EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt("ImageHandlerCropHeight", 1024));
+                CropResizeArea2 = new Rectangle(EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt("ImageHandlerCropLeft2", 0), EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt("ImageHandlerCropTop2", 0),
+                                        EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt("ImageHandlerCropWidth2", 1920), EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt("ImageHandlerCropHeight2", 1024));
+
                 InputFileExtension = (ScreenShotImageConverter.InputTypes)EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt("comboBoxScanFor", 0);
                 OutputFileExtension = (ScreenShotImageConverter.OutputTypes)EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt("ImageHandlerFormatNr", 0);
+
+                KeepMasterConvertedImage = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("ImageHandlerKeepFullSized", false);
             }
-            catch { }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Exception " + ex.ToString());
+            }
 
             FileNameFormat = Math.Min(Math.Max(0, EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt("comboBoxFileNameFormat", 0)), ScreenShotImageConverter.FileNameFormats.Length - 1);
             FolderNameFormat = Math.Min(Math.Max(0, EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt("comboBoxSubFolder", 0)), ScreenShotImageConverter.SubFolderSelections.Length - 1);
@@ -76,20 +93,28 @@ namespace EDDiscovery.ScreenShots
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("ImageHandlerAutoconvert", AutoConvert );      // names are all over the place.. historical
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("checkBoxRemove", RemoveOriginal );
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("checkBoxHires", MarkHiRes );
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("ImageHandlerClipboard", CopyToClipboard );
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("ImageHandlerClipboard", CopyToClipboard);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("ImageHandlerKeepFullSized", KeepMasterConvertedImage);
 
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("ImageHandlerCropImage", CropImage );      // fires the checked handler which sets the readonly mode of the controls
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt("ImageHandlerCropTop", CropArea.Top ) ;
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt("ImageHandlerCropLeft", CropArea.Left );
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt("ImageHandlerCropWidth", CropArea.Width );
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt("ImageHandlerCropHeight", CropArea.Height );
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt("ImageHandlerCropResizeImage1", (int)CropResize1);      // fires the checked handler which sets the readonly mode of the controls
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt("ImageHandlerCropTop", CropResizeArea1.Top);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt("ImageHandlerCropLeft", CropResizeArea1.Left);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt("ImageHandlerCropWidth", CropResizeArea1.Width);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt("ImageHandlerCropHeight", CropResizeArea1.Height);
+
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt("ImageHandlerCropResizeImage2", (int)CropResize2);      // fires the checked handler which sets the readonly mode of the controls
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt("ImageHandlerCropTop2", CropResizeArea2.Top);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt("ImageHandlerCropLeft2", CropResizeArea2.Left);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt("ImageHandlerCropWidth2", CropResizeArea2.Width);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt("ImageHandlerCropHeight2", CropResizeArea2.Height);
 
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt("comboBoxScanFor", (int)InputFileExtension);
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt("ImageHandlerFormatNr", (int)OutputFileExtension);
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt("comboBoxFileNameFormat", FileNameFormat);
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt("comboBoxSubFolder", FolderNameFormat);
+
         }
-    
+   
 
         public bool Start()
         {
@@ -127,9 +152,12 @@ namespace EDDiscovery.ScreenShots
                     p.FolderFormatIndex = FolderNameFormat;
                     p.FilenameFormatIndex = FileNameFormat;
                     p.HighRes = MarkHiRes;
-                    p.CropImage = CropImage;
-                    p.CropArea = CropArea;
-                    p.RemoveInputFile = RemoveOriginal;
+                    p.KeepMasterConvertedImage = KeepMasterConvertedImage;
+                    p.CropResizeImage1 = CropResize1;
+                    p.CropResizeArea1 = CropResizeArea1;
+                    p.CropResizeImage2 = CropResize2;
+                    p.CropResizeArea2 = CropResizeArea2;
+                    p.RemoveOriginal = RemoveOriginal;
                     p.OutputFileExtension = OutputFileExtension;
                     p.InputFileExtension = InputFileExtension;
                     p.CopyToClipboard = CopyToClipboard;

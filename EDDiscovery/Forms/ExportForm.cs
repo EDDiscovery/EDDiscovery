@@ -27,19 +27,22 @@ namespace EDDiscovery.Forms
         public bool Comma { get { return radioButtonComma.Checked; } }
         public bool AutoOpen { get { return checkBoxCustomAutoOpen.Checked; } }
         public bool IncludeHeader { get { return checkBoxIncludeHeader.Checked; } }
-        public bool ExportAsJournals {  get { return checkBoxRawJournal.Checked; } }
         public string Path { get; private set; }
+
+        private string[] outputextension;
 
         public ExportForm()
         {
             InitializeComponent();
         }
 
-        public void Init(string[] exportlist, bool disablestartendtime = false, bool allowRawJournalExport = false)
+        public void Init(string[] exportlist, bool disablestartendtime = false, string[] outputext = null)
         {
+            outputextension = outputext;
+
             comboBoxCustomExportType.Items.AddRange(exportlist);
-            customDateTimePickerFrom.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(new DateTime(2014, 11, 22, 4, 0, 0, DateTimeKind.Utc)); //Gamma start
-            customDateTimePickerTo.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(DateTime.UtcNow);
+            customDateTimePickerFrom.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(new DateTime(2014, 11, 22, 0, 0, 0, DateTimeKind.Utc)); //Gamma start
+            customDateTimePickerTo.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(new DateTime(DateTime.UtcNow.Year,DateTime.UtcNow.Month,DateTime.UtcNow.Day,23,59,59));
 
             if (System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator.Equals("."))
                 radioButtonComma.Checked = true;
@@ -48,7 +51,6 @@ namespace EDDiscovery.Forms
 
             checkBoxIncludeHeader.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("ExportFormIncludeHeader", true);
             checkBoxCustomAutoOpen.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("ExportFormOpenExcel", true);
-            checkBoxRawJournal.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("ExportAsJournals", true);
 
             comboBoxCustomExportType.SelectedIndex = 0;
 
@@ -64,12 +66,8 @@ namespace EDDiscovery.Forms
                 panelOuter.Height -= d;
                 Height -= d;
             }
-            checkBoxRawJournal.Visible = checkBoxRawJournal.Enabled = allowRawJournalExport;
-            if (!allowRawJournalExport)
-                checkBoxRawJournal.Checked = false;
 
             BaseUtils.Translator.Instance.Translate(this);
-
         }
 
         private void buttonCancel_Click(object sender, EventArgs e)
@@ -86,15 +84,13 @@ namespace EDDiscovery.Forms
         {
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("ExportFormIncludeHeader", checkBoxIncludeHeader.Checked);
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("ExportFormOpenExcel", checkBoxCustomAutoOpen.Checked);
-            if (checkBoxRawJournal.Visible)
-                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("ExportAsJournals", checkBoxRawJournal.Checked);
 
             SelectedIndex = comboBoxCustomExportType.SelectedIndex;
 
             SaveFileDialog dlg = new SaveFileDialog();
 
-            dlg.Filter = ExportAsJournals ? "Journal export| *.log" : "CSV export| *.csv";
-            dlg.Title = string.Format("Export current History view to {0}".T(EDTx.ExportForm_ECH), ExportAsJournals ? "Journal file".T(EDTx.ExportForm_JF) : "Excel(csv)");
+            dlg.Filter = outputextension != null ? outputextension[SelectedIndex] : "CSV export| *.csv";
+            dlg.Title = string.Format("Export current data {0}".T(EDTx.ExportForm_ECH), dlg.Filter);
 
             if (dlg.ShowDialog(this) == DialogResult.OK)
             {

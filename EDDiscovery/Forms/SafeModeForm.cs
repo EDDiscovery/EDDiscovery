@@ -111,6 +111,7 @@ namespace EDDiscovery.Forms
                             {
                                 File.Delete(opt.UserDatabasePath);
                                 File.Delete(opt.SystemDatabasePath);
+                                EDDOptions.Instance.ReRead();
                             }
                         }
                         catch

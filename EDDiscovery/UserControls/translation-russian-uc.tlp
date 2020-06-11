@@ -170,12 +170,16 @@ SECTION UserControlEngineering
 .buttonFilterEngineer.ToolTip: "Filter the table by engineer" => "Фильтровать таблицу по инженерам"
 .buttonFilterModule.ToolTip: "Filter the table by module type" => "Фильтровать таблицу по модулям"
 .panelButtons.ToolTip: "Left click and drag on grid to reorder" => "Столбцы можно перетаскивать с зажатой левой кнопкой мыши"
+.chkNotHistoric.ToolTip: "When red, use the materials at the cursor to estimate, when green always use the latest materials." @
+.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 
 SECTION UserControlEstimatedValues
 
 .BodyName: "Body Name" => "Название тела"
 .EstValue: "Est Value" => "Примерная стоимость"
 .SV: "Estimated Scan Values for {0}" => "Примерная стоимость данных сканирования для {0}"
+.EDSM: "EDSM" @
+.checkBoxEDSM.ToolTip: "Get and show information from EDSM" @
 
 SECTION UserControlExpedition
 
@@ -226,17 +230,17 @@ SECTION UserControlExploration
 .ColumnZ: "Z" @
 .ColumnVisits: "Visits" => "Посещений"
 .ColumnScans: "Scans" => "Отсканировано"
-.ColumnPrimaryStar: "Pri star" => "Главная звезда"
+.ColumnPrimaryStar: "Stars" => "Главная звезда"
 .ColumnInfo: "Info" => "Информация"
 .ColumnNote: "Note" => "Примечание"
 .labelFilename: "Filename:" => "Имя файла"
-.labelName: "Exploration set:" => "Имя списка"
+.labelName: "Description:" => "Имя списка"
 .toolStripButtonNew: "New" => "Новый"
 .toolStripButtonLoad: "Load" => "Загрузить"
 .toolStripButtonSave: "Save" => "Сохранить"
 .tsbAddSystems: "Add Systems" => "Добавить системы"
 .toolStripButtonImportFile: "Import Text File" => "Импорт из txt"
-.toolStripButtonExport: "Export Text File" => "Экспорт в txt"
+.toolStripButtonExport: "Export" => "Экспорт в txt"
 .toolStripButtonClear: "Clear List" => "Очистить список"
 .copyToolStripMenuItem: "Copy" => "Копировать"
 .pasteToolStripMenuItem: "Paste" => "Вставить"
@@ -255,6 +259,7 @@ SECTION UserControlExploration
 .AddSys: "Add Systems" => "Добавить системы"
 .EDSMUnk: "System not known to EDSM" => "Система неизвестна в EDSM"
 .UnknownS: "Unknown system, system is without co-ordinates" => "Неизвестная система, у системы нет координат"
+.Bodies: "Bodies" @
 
 SECTION UserControlJournalGrid
 
@@ -306,6 +311,7 @@ SECTION UserControlLedger
 .comboBoxHistoryWindow.ToolTip: "Select the entries by age" => "Выбор записей по времени"
 .toolStripMenuItemGotoItem: "Go to entry on grid" => "Перейти к записи в таблице"
 .CashTransactions: "Cash Transactions" => "Финансовые операции"
+.buttonExtExcel.ToolTip: "Send data on grid to excel" @
 
 SECTION UserControlLocalMap
 
@@ -374,6 +380,8 @@ SECTION UserControlMaterials
 .textBoxItems1.ToolTip: "Count of Items" => "Количество предметов"
 .checkBoxClear.ToolTip: "Remove zero items the time after they go to zero" => "Скрывать предметы, когда их количество упадет до 0"
 .buttonFilter.ToolTip: "Filter out items" => "Фильтровать"
+.checkBoxShowZeros.ToolTip: "Green will show materials with zero counts, red means remove them" @
+.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 
 SECTION UserControlMaterialCommodities
 
@@ -381,6 +389,7 @@ SECTION UserControlMaterialCommodities
 .Mats: "Mats" => "Мат-лы"
 .Total: "Total" => "Всего"
 .Rare: "Rare" => "Редкие товары"
+.Recipes: "Recipes" @
 
 SECTION UserControlCommodities
 
@@ -396,6 +405,8 @@ SECTION UserControlCommodities
 .textBoxItems1.ToolTip: "Count of Items" => "Количество предметов"
 .checkBoxClear.ToolTip: "Remove zero items the time after they go to zero" => "Скрывать предметы, когда их количество упадет до 0"
 .buttonFilter.ToolTip: "Filter out items" => "Фильтровать"
+.checkBoxShowZeros.ToolTip: "Green will show materials with zero counts, red means remove them" @
+.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 
 SECTION UserControlMissionOverlay
 
@@ -409,6 +420,7 @@ SECTION UserControlMissionOverlay
 
 SECTION UserControlSurveyor
 
+.Scan: "Scan" @
 .MandD: " (Mapped & Discovered)" @
 .MP: " (Mapped)" @
 .DIS: " (Discovered)" @
@@ -429,6 +441,7 @@ SECTION UserControlSurveyor
 .isaterraformableplanet: " is a terraformable planet." => ", терраформируемая планета"
 .Hasring: " Has ring." => ", есть кольцо"
 .Has: " Has " => ", "
+.Signals: " Has Signals." @
 .planetaryClassesToolStripMenuItem: "Planetary Classes" => "Классы планет"
 .planetaryClassesToolStripMenuItem.ammoniaWorldToolStripMenuItem: "Ammonia World" => "Аммиачные планеты"
 .planetaryClassesToolStripMenuItem.earthlikeWorldToolStripMenuItem: "Earthlike World" => "Землеподобные планеты"
@@ -442,6 +455,13 @@ SECTION UserControlSurveyor
 .textAlignToolStripMenuItem.leftToolStripMenuItem: "Left" => "По левому краю"
 .textAlignToolStripMenuItem.centerToolStripMenuItem: "Center" => "По центру"
 .textAlignToolStripMenuItem.rightToolStripMenuItem: "Right" => "По правому краю"
+.bodyFeaturesToolStripMenuItem.hasSignalsToolStripMenuItem: "Has Signals" @
+.showAllPlanetsToolStripMenuItem: "Show All Planets" @
+.showAllStarsToolStripMenuItem: "Show All Stars" @
+.showBeltClustersToolStripMenuItem: "Show Belt Clusters" @
+.showMoreInformationToolStripMenuItem: "Show More Information" @
+.showValuesToolStripMenuItem: "Show values" @
+.wordWrapToolStripMenuItem: "Word Wrap" @
 
 SECTION UserControlMissions
 
@@ -529,6 +549,9 @@ SECTION UserControlModules
 .labelShip: "Ship" => "Объект"
 .EDSURL: "Enter ED Shipyard URL" @
 .CURL: "Enter Coriolis URL" @
+.buttonExtExcel.ToolTip: "Send data on grid to excel" @
+.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
+.AllModules: "All Modules" @
 
 SECTION UserControlNotePanel
 
@@ -644,7 +667,9 @@ SECTION UserControlRoute
 .textBox_FromX.ToolTip: "X Co-ord" => "Координата X"
 .Confirm: "This will result in a large number ({0})) of jumps\r\nConfirm please" => "Это приведет к большому количеству  ({0}) прыжков\r\nВы уверены?"
 .NoRoute: "No route set up, retry" => "Маршрут не задан, попробуйте еще раз"
-.comboBoxRoutingMetric: "Nearest to Waypoint" @
+.checkBox_FsdBoost: "Use Boosts" @
+.checkBox_FsdBoost.ToolTip: "The route finder will try and use FSD injections in case a direct route could not" @
+.showScanToolStripMenuItem: "View Scan Display" @
 
 SECTION UserControlRouteTracker
 
@@ -680,13 +705,13 @@ SECTION UserControlScan
 .extButtonHighValue.ToolTip: "Set High Value Limit" => "Выбрать стоимость скана"
 .toolStripMenuItemToolbar: "Show/Hide Toolbar" => "Показать панель инструментов"
 .ToolTip: "Right click on panel to show/hide the toolbar" => "Нажмите, чтобы показать/скрыть панель инструментов"
-.checkBoxCustomHideFullMats.ToolTip: "Show/Hide materials which have reached their storage limit" => "Показать материалы, число которых достигло максимума"
-.chkShowOverlays.ToolTip: "Show/Hide body status icons" => "Показать значки статуса небесных тел"
+.MatFull: "Hide materials which have reached their storage limit" @
+.StatusIcons: "Show body status icons" @
 .checkBoxTiny.ToolTip: "Image size teeny tiny" => "Крошечный размер изображений"
-.checkBoxMaterials.ToolTip: "Show/Hide Materials" => "Показать материалы"
-.checkBoxMaterialsRare.ToolTip: "Show rare materials only" => "Показать только редкие материалы"
+.ShowMaterials: "Show Materials" @
+.ShowRaresOnly: "Show rare materials only" @
 .checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM" => "Использовать данные о телах с EDSM"
-.checkBoxMoons.ToolTip: "Show/Hide Moons" => "Показать луны"
+.ShowMoons: "Show Moons" @
 .buttonExtExcel.ToolTip: "Send data on grid to excel" => "Передать данные в Excel"
 .lblSystemInfo.ToolTip: "Right click on panel to show/hide the toolbar" => "Нажмите, чтобы показать/скрыть панель инструментов"
 .AV: "Approx value: {0:N0}" => "Примерная стоимость данных сканирования: {0:N0}"
@@ -696,7 +721,16 @@ SECTION UserControlScan
 .cancelShowSystemToolStripMenuItem: "Cancel Show System" => "Отменить показ системы"
 .panelControls.ToolTip: "Right click on panel to show/hide the toolbar" => "Нажмите, чтобы показать/скрыть панель инструментов"
 .rollUpPanelTop.ToolTip: "Right click on panel to show/hide the toolbar" => "Нажмите, чтобы показать/скрыть панель инструментов"
-.extCheckBoxDisplaySystemAlways.ToolTip: "Show system and value in main display" => "Показать название системы и примерную стоимость"
+.SystemValue: "Show system and value in main display" @
+.AllG: "Show G on all planets" @
+.HabZone: "Show Habitation Zone" @
+.StarClass: "Show Classes of Stars" @
+.PlanetClass: "Show Classes of Planets" @
+.Distance: "Show distance of bodies" @
+.Barycentre: "Barycentre" @
+.Belt: "Belt" @
+.Body: "Body" @
+.Star: "Star" @
 
 SECTION UserControlScanGrid
 
@@ -752,94 +786,71 @@ SECTION UserControlScanGrid
 
 SECTION UserControlSettings
 
+.groupBoxCommanders: "Commanders" => "Командир"
+.ColumnCommander: "Commander" => "Командир"
+.EdsmName: "EDSM Name" => "Имя в EDSM"
+.JournalDirCol: "Journal Folder" => "Путь к файлам журнала"
+.NotesCol: "Notes" => "Примечание"
+.btnDeleteCommander: "Delete" => "Удалить"
+.buttonEditCommander: "Edit" => "Изменить"
+.buttonAddCommander: "Add" => "Добавить"
+.groupBoxTheme: "Theme" => "Тема"
+.button_edittheme: "Edit Theme" => "Изменить тему"
+.buttonSaveTheme: "Save Theme" => "Сохранить тему"
+.groupBoxCustomHistoryLoad: "History" => "Настройки истории"
+.checkBoxOrderRowsInverted: "Number Rows Lastest Entry Highest" => "Нумерация строк снизу вверх"
+.labelTimeDisplay: "Time:" @
 .extGroupBoxWebServer: "Web Server" @
-.WSQ: "If you have previously done this on this same port number you can click No and the enable will work" @
-.WSF: "Did not start - click OK to configure windows" @
 .labelPortNo: "Port" @
 .extButtonTestWeb: "Test" @
 .extCheckBoxWebServerEnable: "Enable" @
-.FS: "All entries for Statistics" => "Все события (для статистики)"
-.SM: "Safe Mode" => "Вы действительно хотите перезапустить программу в безопасном режиме?"
-.CSM: "Confirm restart to safe mode" => "Безопасный режим"
-.comboBoxCustomEssentialEntries.ToolTip: "Select which items you consider essential to load older than the time above" => "Какие события считать важными, если загружать не все события старше определенного интервала времени"
-.groupBoxCustomHistoryLoad: "History Options" => "Настройки истории"
-.checkBoxShowUIEvents: "Show Elite UI Events in history" => "Показывать события Elite UI"
-.checkBoxOrderRowsInverted: "Number Rows Lastest Entry Highest" => "Нумерация строк снизу вверх"
-.checkBoxUTC: "Display Game time instead of local time" => "Игровое время вместо местного"
-.labelHistorySel: "Only Read Essential Entries" => "Только важные события"
-.groupBoxCustomLanguage: "Language" => "Язык"
-.groupBoxCustomEDSM: "EDSM/EDDB Control" => "Управление EDSM/EDDB"
-.buttonExtEDSMConfigureArea: "Galaxy Select" => "Размер Галактики"
-.checkBoxCustomEDSMEDDBDownload: "Enable Star Data Download" => "Загрузка данных о системах"
-.groupBoxCustomScreenShots: "Screenshots" => "Скриншоты"
+.groupBoxInteraction: "Interaction" @
+.labelTKey: "Key to activate transparent windows" => "Клавиша для включения прозрачности"
+.groupBoxMemory: "Memory" @
+.labelHistoryEssItems: "Essential entries:" => "Важные события это"
+.labelHistorySel: "Entries to read:" => "Только важные события"
+.groupBoxCustomScreenShots: "Screenshots conversion" => "Скриншоты"
 .checkBoxCustomCopyToClipboard: "Copy to clipboard" => "Копировать в буфер обмена"
 .checkBoxCustomMarkHiRes: "Mark HiRes files" => "Отмечать файлы высокого разрешения"
 .checkBoxCustomRemoveOriginals: "Remove Originals" => "Удалять оригинальные файлы"
 .buttonExtScreenshot: "Configure" => "Настройки"
-.checkBoxCustomEnableScreenshots: "Enable screenshot conversion" => "Преобразовывать скриншоты"
+.checkBoxCustomEnableScreenshots: "Enable" => "Преобразовывать скриншоты"
+.groupBoxCustomEDSM: "EDSM/EDDB Control" => "Управление EDSM/EDDB"
+.buttonExtEDSMConfigureArea: "Select Galaxy Sectors" => "Размер Галактики"
+.checkBoxCustomEDSMEDDBDownload: "Enable Star Data Download" => "Загрузка данных о системах"
 .groupBoxPopOuts: "Window Options" => "Параметры окна"
+.checkBoxPanelSortOrder: "Panel List Sorted Alphanumerically" => "Сортировать список панелей по алфавиту"
+.checkBoxKeepOnTop: "Keep on Top" => "Закрепить поверх других окон"
+.checkBoxCustomResize: "Redraw the screen during resizing" => "Обновлять окно после изменения размера"
 .checkBoxMinimizeToNotifyIcon: "Minimize to notification area icon" => "Сворачивать в трей"
 .checkBoxUseNotifyIcon: "Show notification area icon" => "Показать значок в трее"
-.buttonReloadSaved: "Open Saved Setup" => "Загрузить сохраненные настройки"
-.buttonSaveSetup: "Save Current Setup" => "Сохранить текущие настройки"
-.labelTKey: "Key to activate transparent windows" => "Клавиша для включения прозрачности"
-.checkBoxAutoSave: "Save Pop Outs on Exit" => "Сохранить отдельные окна при выходе"
-.checkBoxAutoLoad: "Load Pop Outs at Start" => "Загружать отдельные окна при запуске"
-.groupBoxTheme: "Theme" => "Тема"
-.checkBoxKeepOnTop: "Keep on Top" => "Закрепить поверх других окон"
-.button_edittheme: "Edit Theme" => "Изменить тему"
-.buttonSaveTheme: "Save Theme" => "Сохранить тему"
-.groupBox3dmap: "3D Map Settings" => "Настройки 3D-карты"
-.labelMapCol: "Default Map Color" => "Цвет на карте"
-.labelZoom: "Default Zoom" => "Увеличение"
-.radioButtonHistorySelection: "History Grid Selection" => "выбранной в истории"
-.radioButtonCentreHome: "Home System" => "дом. системе"
-.labelOpenOn: "Open Centred On" => "Центрировать на"
-.labelHome: "Now in Commander Settings" => "Дом. система"
-.groupBoxCommanders: "Commanders" => "Командир"
-.buttonEditCommander: "Edit" => "Изменить"
-.ColumnCommander: "Commander" => "Командир"
-.EdsmName: "EDSM Name" => "Имя в EDSM"
-.JournalDirCol: "Journal Dir" => "Путь к файлам журнала"
-.NotesCol: "Notes" => "Примечание"
-.btnDeleteCommander: "Delete" => "Удалить"
-.buttonAddCommander: "Add" => "Добавить"
-.checkBoxPanelSortOrder: "Panel List Sorted Alphanumerically" => "Сортировать список панелей по алфавиту"
-.checkBoxPanelSortOrder.ToolTip: "Panel lists sorted alphanumerically instead of ordered in groups. Note Requires Restart" => "Список панелей отсортирован по алфавиту, а не по группам. Потребуется перезапуск."
-.comboBoxCustomHistoryLoadTime.ToolTip: "Select either load all records, or load only essential items of records older than a set time before now" => "Для записей старше определенного интервала времени загружать только важные события"
-.checkBoxShowUIEvents.ToolTip: "Show the UI events (such as Music) in the history. The quantity of them can be very large" => "Отображать в истории события пользовательского интерфейса (например, музыку). Количество этих событий может быть очень большим"
+.groupBoxCustomLanguage: "Language" => "Язык"
+.groupBoxCustomSafeMode: "Advanced" @
+.buttonExtSafeMode: "Restart in Safe Mode" => "Перезапуск в безопасном режиме"
+.labelSafeMode: "Click this to perform special operations like to move system databases to another drive, reset UI, and other maintenance tasks...\r\n\r\n" => "Выполнение специфичных действий"
+.btnDeleteCommander.ToolTip: "Delete selected commander" => "Удалить выбранного командира"
+.buttonEditCommander.ToolTip: "Edit selected commander" => "Редактировать настройки выбранного командира"
+.buttonAddCommander.ToolTip: "Add a new commander" => "Добавить нового командира"
+.comboBoxTheme.ToolTip: "Select the theme to use" => "Выбрать тему интерфейса"
+.button_edittheme.ToolTip: "Edit theme and change colours fonts" => "Изменить тему и цвет шрифтов"
+.buttonSaveTheme.ToolTip: "Save theme to disk" => "Сохранить тему на диск"
 .checkBoxOrderRowsInverted.ToolTip: "Number oldest entry 1, latest entry highest" => "Нумерация начнется от самой старой записи к самой новой"
-.checkBoxUTC.ToolTip: "Display game time (UTC) instead of your local time" => "Показывать игровое время (UTC) вместо местного времени"
-.buttonExtEDSMConfigureArea.ToolTip: "Configure what parts of the galaxy is stored in the databases" => "Выберите, какая часть Галактики будет храниться в базе данных"
-.checkBoxCustomEDSMEDDBDownload.ToolTip: "Click to enable downloading of stars from EDSM and system information from EDDB.  Will apply at next start." => "Разрешить загрузку систем из EDSM и информацию о них из EDDB. Начнет действовать после перезапуска"
+.comboBoxClickThruKey.ToolTip: "Select the key to hold down for at least 500 ms\r\nto show the form of a transparent pop out, when\r\nthe pop out transparency mode if Tc (Click thru,\r\ncontrols still active) or Tf (controls inactive)\r\nNot all keys are guaranteed active on all keyboards" => "Выбор клавиши, удержание которой не менее 500 мс покажет форму внешнего прозрачного окна, если\r\nего режим прозрачности Tc (элементы управления активны) или Tf (элементы управления неактивны)\r\nНе все клавиши гарантированно работают на всех клавиатурах"
+.comboBoxCustomEssentialEntries.ToolTip: "Select which items you consider essential to load older than the time above" => "Какие события считать важными, если загружать не все события старше определенного интервала времени"
+.comboBoxCustomHistoryLoadTime.ToolTip: "Reduce Memory use. Select either load all records, or load only essential items of records older than a set time before now" => "Для записей старше определенного интервала времени загружать только важные события"
 .checkBoxCustomCopyToClipboard.ToolTip: "Auto copy the image to the clipboard" => "Автоматически копировать изображение в буфер обмена"
 .checkBoxCustomMarkHiRes.ToolTip: "For Hi-Res files, mark them in the file name" => "Отмечать файлы высокого разрешения в имени файла"
 .checkBoxCustomRemoveOriginals.ToolTip: "After conversion, remove originals" => "Удалять оригиналы после преобразования"
 .buttonExtScreenshot.ToolTip: "Configure further screenshot options" => "Дополнительные настройки для скриншотов"
 .checkBoxCustomEnableScreenshots.ToolTip: "Screen shot conversion on/off" => "Включить / выключить преобразование скриншотов"
-.checkBoxMinimizeToNotifyIcon.ToolTip: "Minimize the main window to the system notification area (system tray) icon." => "Сворачивать основное окно в область уведомлений (трей)"
-.comboBoxClickThruKey.ToolTip: "Select the key to hold down for at least 500 ms\r\nto show the form of a transparent pop out, when\r\nthe pop out transparency mode if Tc (Click thru,\r\ncontrols still active) or Tf (controls inactive)\r\nNot all keys are guaranteed active on all keyboards" => "Выбор клавиши, удержание которой не менее 500 мс покажет форму внешнего прозрачного окна, если\r\nего режим прозрачности Tc (элементы управления активны) или Tf (элементы управления неактивны)\r\nНе все клавиши гарантированно работают на всех клавиатурах"
-.checkBoxUseNotifyIcon.ToolTip: "Show a system notification area (system tray) icon for EDDiscovery." => "Показать значок EDDiscovery в области уведомлений (трее)"
-.buttonReloadSaved.ToolTip: "Open now the saved setup of pop outs" => "Загрузить положение отдельных окон"
-.buttonSaveSetup.ToolTip: "Save now the current pop out state" => "Сохранить положение отдельных окон"
-.checkBoxAutoSave.ToolTip: "Save pop out state on exit" => "Сохранять положение отдельных окон при выходе"
-.checkBoxAutoLoad.ToolTip: "Auto show pop outs" => "Автоматически показывать отдельные окна"
+.buttonExtEDSMConfigureArea.ToolTip: "Configure what parts of the galaxy is stored in the databases" => "Выберите, какая часть Галактики будет храниться в базе данных"
+.checkBoxCustomEDSMEDDBDownload.ToolTip: "Click to enable downloading of stars from EDSM and system information from EDDB.  Will apply at next start." => "Разрешить загрузку систем из EDSM и информацию о них из EDDB. Начнет действовать после перезапуска"
+.checkBoxPanelSortOrder.ToolTip: "Panel lists sorted alphanumerically instead of ordered in groups. Note Requires Restart" => "Список панелей отсортирован по алфавиту, а не по группам. Потребуется перезапуск."
 .checkBoxKeepOnTop.ToolTip: "This window, and its children, top" => "Закрепить это окно (и все дочерние) поверх других окон"
-.comboBoxTheme.ToolTip: "Select the theme to use" => "Выбрать тему интерфейса"
-.button_edittheme.ToolTip: "Edit theme and change colours fonts" => "Изменить тему и цвет шрифтов"
-.buttonSaveTheme.ToolTip: "Save theme to disk" => "Сохранить тему на диск"
-.textBoxDefaultZoom.ToolTip: "Set the zoom level of the map. 1 is normal" => "Выбрать уровень увеличения карты. По умолчанию 1"
-.radioButtonHistorySelection.ToolTip: "Select history entry as opening location" => "При открытии карты центрировать ее на системе, выбранной в истории"
-.radioButtonCentreHome.ToolTip: "Select home system as opening location" => "При открытии карты центрировать ее на домашней системе"
-.textBoxHomeSystem.ToolTip: "Pick a home system" => "Выбрать домашнюю систему"
-.panel_defaultmapcolor.ToolTip: "New travel entries get this colour on the map" => "Цвет новых записей полетов на карте"
-.buttonEditCommander.ToolTip: "Edit selected commander" => "Редактировать настройки выбранного командира"
-.btnDeleteCommander.ToolTip: "Delete selected commander" => "Удалить выбранного командира"
-.buttonAddCommander.ToolTip: "Add a new commander" => "Добавить нового командира"
-.Font: "The font used by this theme is not available on your system.\r\nThe font needed is \"{0}\".\r\nInstall this font to fully use this theme.\r\nEuro Caps font is freely available from www.edassets.org.\r\n\r\nWould you like to load this theme using a replacement font?" => "Шрифт \"{0}\", используемый этой темой, не установлен в вашей системе\r\nЧтобы тема отображалась, как задумано, пожалуйста, установите этот шрифт.\r\nШрифт 'Euro Caps' доступен бесплатно на сайте www.edassets.org\r\n\r\nХотите загрузить эту тему с измененным шрифтом?"
-.Information: "Applies at next restart of ED Discovery" => "Изменения вступят в силу после перезапуска ED Discovery"
-.checkBoxCustomResize: "Redraw the screen during resizing" => "Обновлять окно после изменения размера"
 .checkBoxCustomResize.ToolTip: "Check to allow EDD to redraw the screen during main window resize. Only disable if its too slow" => "Разрешить EDD перерисовать окна при изменении размера главного окна. Помогает, если EDD работает слишком медленно"
+.checkBoxMinimizeToNotifyIcon.ToolTip: "Minimize the main window to the system notification area (system tray) icon." => "Сворачивать основное окно в область уведомлений (трей)"
+.checkBoxUseNotifyIcon.ToolTip: "Show a system notification area (system tray) icon for EDDiscovery." => "Показать значок EDDiscovery в области уведомлений (трее)"
+.buttonExtSafeMode.ToolTip: "Safe Mode allows you to perform special operations, such as moving the databases, resetting the UI, resetting the action packs,  DLLs etc." => "В безопасном режиме вы сможете восстановить настройки интерфейса, сбросить дополнения, переместить файл базы и т. д."
 .DLA: "Disabled-Load All" => "Откл. (загружать все)"
 .7daysold: ">7 days old" => ">7 дней"
 .30daysold: ">30 days old" => ">30 дней"
@@ -848,23 +859,38 @@ SECTION UserControlSettings
 .180daysold: ">180 days old" => ">180 дней"
 .270daysold: ">270 days old" => ">270 дней"
 .365daysold: "> 365 days old" => ">365 дней"
+.ESM: "Scans,Cargo,Missions,State,Jumps etc" => "Сканы, груз, миссии, состояния, прыжки и пр."
+.FS: "All entries for Statistics" => "Все события (для статистики)"
+.EJS: "Jumps and Scans" => "Прыжки и сканы"
+.EJ: "Jumps" => "Прыжки"
+.EN: "Nothing" => "Ничего"
+.WSQ: "Warning about webserver-  see english text" @
+.WSF: "Did not start - click OK to configure windows" @
+.CSM: "Confirm restart to safe mode" => "Безопасный режим"
+.SM: "Safe Mode" => "Вы действительно хотите перезапустить программу в безопасном режиме?"
+.checkBoxShowUIEvents: "Show Elite UI Events in history" => "Показывать события Elite UI"
+.checkBoxUTC: "Display Game time instead of local time" => "Игровое время вместо местного"
+.buttonReloadSaved: "Open Saved Setup" => "Загрузить сохраненные настройки"
+.buttonSaveSetup: "Save Current Setup" => "Сохранить текущие настройки"
+.checkBoxAutoSave: "Save Pop Outs on Exit" => "Сохранить отдельные окна при выходе"
+.checkBoxAutoLoad: "Load Pop Outs at Start" => "Загружать отдельные окна при запуске"
+.groupBox3dmap: "3D Map Settings" => "Настройки 3D-карты"
+.labelMapCol: "Default Map Color" => "Цвет на карте"
+.labelZoom: "Default Zoom" => "Увеличение"
+.radioButtonHistorySelection: "History Grid Selection" => "выбранной в истории"
+.radioButtonCentreHome: "Home System" => "дом. системе"
+.labelOpenOn: "Open Centred On" => "Центрировать на"
+.labelHome: "Now in Commander Settings" => "Дом. система"
+.Font: "The font used by this theme is not available on your system.\r\nThe font needed is \"{0}\".\r\nInstall this font to fully use this theme.\r\nEuro Caps font is freely available from www.edassets.org.\r\n\r\nWould you like to load this theme using a replacement font?" => "Шрифт \"{0}\", используемый этой темой, не установлен в вашей системе\r\nЧтобы тема отображалась, как задумано, пожалуйста, установите этот шрифт.\r\nШрифт 'Euro Caps' доступен бесплатно на сайте www.edassets.org\r\n\r\nХотите загрузить эту тему с измененным шрифтом?"
+.Information: "Applies at next restart of ED Discovery" => "Изменения вступят в силу после перезапуска ED Discovery"
 .AddC: "Commander name is not valid or duplicate" => "Неправильное или дублирующееся имя командира"
 .AddT: "Cannot create Commander" => "Не удалось создать командира"
 .Language: "Applies at next restart of ED Discovery" => "Изменения вступят в силу после перезапуска ED Discovery"
 .RemoveSectors: "Remove Sectors" => "Удалить сектора"
 .GalRemove: "Removing {0} Sector(s).\r\n\r\nThis will take a while (up to 30 mins dep on drive type and amount of sectors).\r\nYou may continue to use EDD while this operation takes place\r\nbut it may be slow to respond. Do not close down EDD until this window says\r\nthe process has finished\r\n\r\n" => "Число удаляемых секторов: {0}\r\n\r\nЭто может занять некоторое время (до 30 минут, в зависимости от типа диска и числа секторов).\r\nВ процессе удаления вы можете продолжать пользоваться EDD, но скорость работы программы будет снижена.\r\nНе выходите из программы, пока в этом окне не появится надпись о завершении процесса удаления\r\n\r\n"
 .GalFini: "Finished, Please close the window.\r\nIf you already have the 3dmap open, changes will not be reflected in that map until the next start of EDD\r\n" => "Процесс удаления завершен, можете закрыть это окно.\r\nЕсли 3D-карта была открыта, то изменения не будут видны до перезапуска ED Discovery\r\n"
-.ESM: "Scans,Cargo,Missions,State,Jumps etc" => "Сканы, груз, миссии, состояния, прыжки и пр."
-.EJS: "Jumps and Scans" => "Прыжки и сканы"
-.EJ: "Jumps" => "Прыжки"
-.EN: "Nothing" => "Ничего"
-.labelHistoryEssItems: "Essential Entries Are" => "Важные события это"
-.groupBoxCustomSafeMode: "Move System DB / Reset UI etc" @
-.labelSafeMode: "Click this to perform special operations" => "Выполнение специфичных действий"
-.buttonExtSafeMode: "Restart in Safe Mode" => "Перезапуск в безопасном режиме"
-.buttonExtSafeMode.ToolTip: "Safe Mode allows you to perform special operations, such as moving the databases, resetting the UI, resetting the action packs,  DLLs etc." => "В безопасном режиме вы сможете восстановить настройки интерфейса, сбросить дополнения, переместить файл базы и т. д."
-.groupBoxMemory: "Memory" @
-.groupBoxInteraction: "Interaction" @
+.GameTime: "Game Time" @
+.Local: "Local" @
 
 SECTION UserControlShipYards
 
@@ -987,8 +1013,12 @@ SECTION UserControlStarList
 .textBoxFilter.ToolTip: "Enter text to search in any fields for an item" => "Введите текст для поиска в любых полях"
 .checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM. Due to server constraints, you must click on a system to retreive data on it from EDSM." => "Показать/скрыть EDSM-данные о телах. Из-за ограничений сервера нужно нажать на систему, чтобы получить данные из EDSM."
 .comboBoxHistoryWindow.ToolTip: "Select the entries by age" => "Выбор записей по времени"
+.Value: "Scan Value" @
+.viewScanDisplayToolStripMenuItem: "View Scan Display" @
+.Total: "Total" @
+.Signals: "{0} has signals" @
 .FV: "First visit {0}" => "Первое посещение {0}"
-.CS: "{0} Star(s)" => "Число звезд: {0}"
+.CS: "{0} Star(s) {1}" => "Число звезд: {0}"
 .SMBH: "{0} is a super massive black hole" => "{0} — сверхмассивная черная дыра"
 .BH: "{0} is a black hole" => "{0} — черная дыра"
 .NS: "{0} is a neutron star" => "{0} — нейтронная звезда"
@@ -1180,10 +1210,10 @@ SECTION UserControlSynthesis
 .Notes: "Notes" => "Примечания"
 .Recipe: "Recipe" => "Рецепт"
 .chkHistoric: "Use Cursor Position" => "Использовать позицию курсора"
-.buttonMaterialFilter: "Filter By Material" => "Материалы"
-.buttonFilterLevel: "Filter By Level" => "Уровни"
-.buttonRecipeFilter: "Filter By Synthesis" => "Синтез"
-.buttonClear: "Clear Wanted" => "Сброс"
+.buttonMaterialFilter: "Material" => "Материалы"
+.buttonFilterLevel: "Level" => "Уровни"
+.buttonRecipeFilter: "Synthesis" => "Синтез"
+.buttonClear: "Clear" => "Сброс"
 .ToolTip: "Left click and drag on grid to reorder" => "Столбцы можно перетаскивать с зажатой левой кнопкой мыши"
 .chkHistoric.ToolTip: "When clicked on, use the materials at the cursor to estimate, when off always use the latest materials." => "Вкл — для оценки используются материалы под курсором, выкл — используется последний выбранный материал"
 .buttonMaterialFilter.ToolTip: "Filter the table by the material type" => "Фильтровать таблицу по материалам"
@@ -1191,6 +1221,8 @@ SECTION UserControlSynthesis
 .buttonRecipeFilter.ToolTip: "Filter the table by the synthesis type" => "Фильтровать таблицу по виду синтеза"
 .buttonClear.ToolTip: "Set all wanted values to zero" => "Сбросить все значения в столбце «Требуется»"
 .panelButtons.ToolTip: "Left click and drag on grid to reorder" => "Столбцы можно перетаскивать с зажатой левой кнопкой мыши"
+.chkNotHistoric.ToolTip: "When red, use the materials at the cursor to estimate, when green always use the latest materials." @
+.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 
 SECTION UserControlSysInfo
 
@@ -1338,6 +1370,8 @@ SECTION UserControlTravelGrid
 .toolStripRollUpOlderOutlines.rollUpAfterFirstToolStripMenuItem: "After First" => "После первой группы"
 .toolStripRollUpOlderOutlines.rollUpAfter5ToolStripMenuItem: "After 5" => "После первых пяти групп"
 .addToTrilaterationToolStripMenuItem.explorationPanelToolStripMenuItem: "Exploration Panel" => "Панели исследований"
+.runSelectionThroughIGAUDebugToolStripMenuItem: "Run selection through IGAU (Debug)" @
+.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 
 SECTION UserControlCaptainsLog
 
@@ -1352,7 +1386,7 @@ SECTION CaptainsLogDiary
 
 SECTION CaptainsLogEntries
 
-.DTF: "Bad Date Time format" => "Неправильный формат времени"
+.DTF: "Bad/Out of Range Date Time format" => "Неправильный формат времени"
 .Note: "Note:" => "Текст:"
 .EnterNote: "Enter Note" => "Заметка"
 .CFN: "Do you really want to delete {0} notes?\r\nConfirm or Cancel" => "Вы действительно хотите удалить заметки ({0} шт.)?"
@@ -1418,6 +1452,8 @@ SECTION UserControlTrilateration
 .Co: "Only systems with coordinates or already known to EDSM can be added" => "Можно добавлять только системы с координатами или системы, уже известные EDSM"
 .PU: "Position unknown" => "Положение неизвестно"
 .PF: "Position found" => "Положение найдено"
+.addAllSectorSystemsToolStripMenuItem: "Add all Sector systems" @
+.toolStripButtonSector: "Sector Systems" @
 
 SECTION UserControlTrippanel
 
@@ -1435,10 +1471,29 @@ SECTION UserControlTrippanel
 .FDEDSM: "Shows if EDSM indicates your it's first discoverer" => "Показать, если вы первооткрыватель согласно EDSM"
 .UKN: "System {0} unknown to EDSM" => "Система {0} неизвестна EDSM"
 
+SECTION UserControlMaterialTrader
+
+.UpgradeCol: "From" @
+.LevelCol: "Use" @
+.WantedCol: "Left" @
+.ModuleCol: "To" @
+.MaxCol: "Get" @
+.AvailableCol: "Total" @
+.buttonClear: "Clear" @
+.checkBoxCursorToTop.ToolTip: "When red, use the materials at the cursor to estimate, when green always use the latest materials." @
+.buttonClear.ToolTip: "Set all wanted values to zero" @
+.Offer: "Offer" @
+.Receive: "Receive" @
+.clearTradeToolStripMenuItem: "Clear Trade" @
+.Raw: "Raw" @
+.Encoded: "Encoded" @
+.Manufactured: "Manufactured" @
+
 SECTION ScanDisplayUserControl
 
 .NSD: "No scan data available" => "Нет доступных данных сканирования"
 .BC: "Barycentre of {0}" => "Барицентр {0}"
+.Signals: "Signals" @
 
 SECTION ScanDisplayForm
 

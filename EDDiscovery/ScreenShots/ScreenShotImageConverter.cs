@@ -13,16 +13,14 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using BaseUtils;
 using EliteDangerousCore;
 using EliteDangerousCore.JournalEvents;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 // Except for naming, same code as before. Just removed dependency on discovery form.
 
@@ -74,9 +72,12 @@ namespace EDDiscovery.ScreenShots
         };
 
         public bool HighRes = false;
-        public bool CropImage = false;
-        public Rectangle CropArea = new Rectangle();
-        public bool RemoveInputFile = false;
+        public ScreenShotConverter.CropResizeOptions CropResizeImage1;
+        public ScreenShotConverter.CropResizeOptions CropResizeImage2;
+        public Rectangle CropResizeArea1 = new Rectangle();
+        public Rectangle CropResizeArea2 = new Rectangle();
+        public bool KeepMasterConvertedImage = false;
+        public bool RemoveOriginal = false;
 
         public enum OutputTypes { png, jpg, bmp, tiff };
         public OutputTypes OutputFileExtension { get; set; } = OutputTypes.png;
@@ -114,33 +115,69 @@ namespace EDDiscovery.ScreenShots
                 return false;
             }
 
-            using (Bitmap croppedbmp = ConvertImage(bmp))   // do the convert to BMP
+            // bmp is the original bitmap at full res
+
+            int index = 0;
+
+            string bodyname = (JournalScreenShot.Body == null) ? "" : (JournalScreenShot.Body.Equals(SystemName, StringComparison.InvariantCultureIgnoreCase) ? "" : JournalScreenShot.Body);
+
+            string secondfilename, thirdfilename;
+            do                                          // add _N on the filename for index>0, to make them unique.
             {
-                if (OutputFileExtension == OutputTypes.jpg)
+                string fn = CreateFileName(SystemName, bodyname, InputFilename, FilenameFormatIndex, HighRes, Timestamp) + (index == 0 ? "" : "_" + index);
+
+                OutputFilename = Path.Combine(OutputFolder, fn + "." + OutputFileExtension.ToString());
+                secondfilename = Path.Combine(OutputFolder, fn + "-1." + OutputFileExtension.ToString());
+                thirdfilename = Path.Combine(OutputFolder, fn + "-2." + OutputFileExtension.ToString());
+                index++;
+            } while (File.Exists(OutputFilename));          // if name exists, pick another
+
+            // the OutputFilename should point to the best screenshot, and FinalSize points to this
+
+            if (CropResizeImage1 == ScreenShotConverter.CropResizeOptions.Off || KeepMasterConvertedImage) // if resize 1 off, or keep full size.
+            {
+                WriteBMP(bmp, OutputFilename);
+                FinalSize = new Point(bmp.Size);        // this is our image to use in the rest of the system
+            }
+
+            if (CropResizeImage1 != ScreenShotConverter.CropResizeOptions.Off)
+            {
+                string nametouse = KeepMasterConvertedImage ? secondfilename : OutputFilename;     // if keep full sized off, we use this one as our image
+
+                if (CropResizeImage1 == ScreenShotConverter.CropResizeOptions.Crop)
                 {
-                    croppedbmp.Save(OutputFilename, System.Drawing.Imaging.ImageFormat.Jpeg);
-                }
-                else if (OutputFileExtension == OutputTypes.tiff)
-                {
-                    croppedbmp.Save(OutputFilename, System.Drawing.Imaging.ImageFormat.Tiff);
-                }
-                else if (OutputFileExtension == OutputTypes.bmp)
-                {
-                    croppedbmp.Save(OutputFilename, System.Drawing.Imaging.ImageFormat.Bmp);
+                    Bitmap cropped = bmp.CropImage(CropResizeArea1);
+                    WriteBMP(cropped, nametouse);
+                    cropped.Dispose();
                 }
                 else
                 {
-                    croppedbmp.Save(OutputFilename, System.Drawing.Imaging.ImageFormat.Png);
+                    Bitmap resized = bmp.ResizeImage(CropResizeArea1.Width, CropResizeArea1.Height);
+                    WriteBMP(resized, nametouse);
+                    resized.Dispose();
                 }
 
-                FinalSize = new Point(croppedbmp.Size);
-                Converted = true;
+                if (!KeepMasterConvertedImage)       // if not keeping the full sized one, its final
+                    FinalSize = new Point(bmp.Size);
             }
+
+            if (CropResizeImage2 == ScreenShotConverter.CropResizeOptions.Crop)
+            {
+                Bitmap cropped = bmp.CropImage(CropResizeArea2);
+                WriteBMP(cropped, thirdfilename);
+                cropped.Dispose();
+            }
+            else if (CropResizeImage2 == ScreenShotConverter.CropResizeOptions.Resize)
+            {
+                Bitmap resized = bmp.ResizeImage(CropResizeArea2.Width, CropResizeArea2.Height);
+                WriteBMP(resized, thirdfilename);
+                resized.Dispose();
+            }
+
+            Converted = true;
 
             if (Converted)
             {
-                File.SetCreationTime(OutputFilename, Timestamp);
-
                 if (JournalScreenShot != null)
                 {
                     JournalScreenShot.SetConvertedFilename(InputFilename, OutputFilename, FinalSize.X, FinalSize.Y);
@@ -154,61 +191,33 @@ namespace EDDiscovery.ScreenShots
             return Converted;
         }
 
-        private Bitmap ConvertImage(Bitmap bmp)
+        private void WriteBMP(Bitmap bmp, string filename)
         {
-            int index = 0;
-
-            string bodyname = (JournalScreenShot.Body == null) ? "" : (JournalScreenShot.Body.Equals(SystemName, StringComparison.InvariantCultureIgnoreCase) ? "" : JournalScreenShot.Body);
-
-            do                                          // add _N on the filename for index>0, to make them unique.
+            using (var memstream = new MemoryStream())
             {
-
-                OutputFilename = Path.Combine(OutputFolder, CreateFileName(SystemName, bodyname, InputFilename, FilenameFormatIndex, HighRes, Timestamp) + (index == 0 ? "" : "_" + index) + "." + OutputFileExtension.ToString());
-                index++;
-            } while (File.Exists(OutputFilename));          // if name exists, pick another
-
-            System.Drawing.Bitmap croppedbmp = null;
-
-            if (CropImage)
-            {
-                /* check that crop settings are within the image, otherwise adjust. */
-                if ((CropArea.Width <= 0) || (CropArea.Width > bmp.Width))
+                if (OutputFileExtension == OutputTypes.jpg)
                 {
-                    CropArea.X = 0;
-                    CropArea.Width = bmp.Width;
+                    bmp.Save(memstream, System.Drawing.Imaging.ImageFormat.Jpeg);
                 }
-                else if (CropArea.Left + CropArea.Width > bmp.Width)
+                else if (OutputFileExtension == OutputTypes.tiff)
                 {
-                    CropArea.X = bmp.Width - CropArea.Width;
+                    bmp.Save(memstream, System.Drawing.Imaging.ImageFormat.Tiff);
                 }
-                if ((CropArea.Height <= 0) || (CropArea.Height > bmp.Height))
+                else if (OutputFileExtension == OutputTypes.bmp)
                 {
-                    CropArea.Y = 0;
-                    CropArea.Height = bmp.Height;
-                }
-                else if (CropArea.Top + CropArea.Height > bmp.Height)
-                {
-                    CropArea.Y = bmp.Height - CropArea.Height;
-                }
-
-                /* Only crop if we need to */
-                if ((CropArea.Width != bmp.Width) || (CropArea.Height != bmp.Height))
-                {                                                   // CLONE new one, which creates a new object
-                    croppedbmp = bmp.Clone(CropArea, System.Drawing.Imaging.PixelFormat.DontCare);
+                    bmp.Save(memstream, System.Drawing.Imaging.ImageFormat.Bmp);
                 }
                 else
-                    croppedbmp = bmp;           // just copy reference.. no need to crop.
-            }
-            else
-                croppedbmp = bmp;               // just copy reference..
+                {
+                    bmp.Save(memstream, System.Drawing.Imaging.ImageFormat.Png);
+                }
 
-            return croppedbmp;
+                File.WriteAllBytes(filename, memstream.ToArray());
+                File.SetCreationTime(filename, Timestamp);
+            }
         }
 
-
-
-
-        // given a file, get the screenshot as a bmp
+         // given a file, get the screenshot as a bmp
 
         public Bitmap GetScreenshot(ref string filename, Action<string> logit)
         {

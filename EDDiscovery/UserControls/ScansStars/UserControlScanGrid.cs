@@ -163,7 +163,7 @@ namespace EDDiscovery.UserControls
             public bool landable, materials, volcanism, mapped;     // all false on creation
         }
 
-        private void DrawSystem(HistoryEntry he, bool force)
+        private async void DrawSystem(HistoryEntry he, bool force)
         {
             StarScan.SystemNode scannode = null;
 
@@ -180,7 +180,7 @@ namespace EDDiscovery.UserControls
             }
             else
             {
-                scannode = discoveryform.history.starscan.FindSystem(he.System, true);        // get data with EDSM
+                scannode = await discoveryform.history.starscan.FindSystemAsync(he.System, true);        // get data with EDSM
 
                 if (scannode == null)     // no data, clear display, clear any last_he so samesys is false next time
                 {
@@ -513,7 +513,7 @@ namespace EDDiscovery.UserControls
                 // set a meaningful title for the controller            
                 SetControlText(string.Format("Scan Summary for {0}: {1} stars; {2} planets ({3} terrestrial, {4} gas giants), {5} moons".T(EDTx.UserControlScanGrid_ScanSummaryfor), scannode.system.Name, stars, planets, terrestrial, gasgiants, moons));
                 if (firstdisplayedrow >= 0 && firstdisplayedrow < dataGridViewScangrid.RowCount)
-                    dataGridViewScangrid.FirstDisplayedScrollingRowIndex = firstdisplayedrow;
+                    dataGridViewScangrid.SafeFirstDisplayedScrollingRowIndex(firstdisplayedrow);
 
                 toolStripStatusTotalValue.Text = "~"+ scannode.ScanValue(true).ToString() + " cr";
             }

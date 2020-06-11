@@ -69,6 +69,8 @@ namespace EliteDangerousCore
             }
         }
 
+        public JObject JsonCached { get; set; }             // EDD does not use this, EDDLite uses this to keep JSON.
+
         public abstract void FillInformation(out string info, out string detailed);     // all entries must implement
 
         // the long name of it, such as Approach Body. May be overridden, is translated
@@ -204,9 +206,17 @@ namespace EliteDangerousCore
 
         #endregion
 
-            #region Factory creation
+        #region Factory creation
 
-            static public JournalEntry CreateJournalEntry(string text)
+        static public JournalEntry CreateJournalEntry(string events, DateTime t)
+        {
+            JObject jo = new JObject();
+            jo.Add("event", events);
+            jo.Add("timestamp", t);
+            return CreateJournalEntry(jo.ToString());
+        }
+
+        static public JournalEntry CreateJournalEntry(string text)
         {
             JObject jo;
 

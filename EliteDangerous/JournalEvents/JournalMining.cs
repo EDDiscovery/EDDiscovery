@@ -33,9 +33,12 @@ namespace EliteDangerousCore.JournalEvents
         public string FriendlyType { get; set; }
         public string Type_Localised { get; set; }
 
+        public int Total { get; set; }      // found from MCL
+
         public void UpdateCommodities(MaterialCommoditiesList mc)
         {
-            mc.Change(MaterialCommodityData.CommodityCategory, Type, 1, 0);
+            mc.Change(MaterialCommodityData.CatType.Commodity, Type, 1, 0);
+            Total = mc.FindFDName(Type)?.Count ?? 0;
         }
 
         public void LedgerNC(Ledger mcl)
@@ -45,7 +48,11 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = Type_Localised;
+            MaterialCommodityData mcd = MaterialCommodityData.GetByFDName(Type);
+            if (mcd != null)
+                info = BaseUtils.FieldBuilder.Build("", Type_Localised, "< (", mcd.TranslatedCategory, ";)", mcd.TranslatedType, "Total:".T(EDTx.JournalEntry_Total), Total);
+            else
+                info = Type_Localised;
             detailed = "";
         }
     }
@@ -113,15 +120,17 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string info, out string detailed)
         {
             info = BaseUtils.FieldBuilder.Build("", FriendlyMotherlodeMaterial, "", Content_Localised, "Remaining:;%;N1".T(EDTx.JournalProspectedAsteroid_Remaining), Remaining);
-            detailed = "";
-
+            
             if ( Materials != null )
             {
+                info += " ";
                 foreach (Material m in Materials)
                 {
-                    detailed = detailed.AppendPrePad( BaseUtils.FieldBuilder.Build("", m.FriendlyName, "< ;%;N1", m.Proportion), System.Environment.NewLine );
+                    info = info.AppendPrePad( BaseUtils.FieldBuilder.Build("", m.FriendlyName, "< ;%;N1", m.Proportion), System.Environment.NewLine );
                 }
             }
+
+            detailed = "";
         }
     }
 

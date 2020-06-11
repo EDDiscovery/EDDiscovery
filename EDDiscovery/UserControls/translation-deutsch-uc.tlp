@@ -170,12 +170,16 @@ SECTION UserControlEngineering
 .buttonFilterEngineer.ToolTip: "Filter the table by engineer" => "Tabelle nach Ingenieur filtern"
 .buttonFilterModule.ToolTip: "Filter the table by module type" => "Tabelle nach Modulart filtern"
 .panelButtons.ToolTip: "Left click and drag on grid to reorder" @
+.chkNotHistoric.ToolTip: "When red, use the materials at the cursor to estimate, when green always use the latest materials." @
+.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 
 SECTION UserControlEstimatedValues
 
 .BodyName: "Body Name" => "Name des Objektes"
 .EstValue: "Est Value" => "Geschätzter Wert"
 .SV: "Estimated Scan Values for {0}" => "Geschätzer Scan-Wert für {0}"
+.EDSM: "EDSM" @
+.checkBoxEDSM.ToolTip: "Get and show information from EDSM" @
 
 SECTION UserControlExpedition
 
@@ -226,17 +230,17 @@ SECTION UserControlExploration
 .ColumnZ: "Z" @
 .ColumnVisits: "Visits" => "Besuche"
 .ColumnScans: "Scans" @
-.ColumnPrimaryStar: "Pri star" => "Hauptstern"
+.ColumnPrimaryStar: "Stars" => "Hauptstern"
 .ColumnInfo: "Info" => "Information"
 .ColumnNote: "Note" => "Kommentar"
 .labelFilename: "Filename:" => "Dateiname"
-.labelName: "Exploration set:" => "Erkundungsdatensatz:"
+.labelName: "Description:" => "Erkundungsdatensatz:"
 .toolStripButtonNew: "New" => "Neu"
 .toolStripButtonLoad: "Load" => "Laden"
 .toolStripButtonSave: "Save" => "Speichern"
 .tsbAddSystems: "Add Systems" => "Systeme hinzufügen"
 .toolStripButtonImportFile: "Import Text File" => "Textdatei einlesen"
-.toolStripButtonExport: "Export Text File" => "Textdatei exportieren"
+.toolStripButtonExport: "Export" => "Textdatei exportieren"
 .toolStripButtonClear: "Clear List" => "Liste leeren"
 .copyToolStripMenuItem: "Copy" => "Kopieren"
 .pasteToolStripMenuItem: "Paste" => "Einfügen"
@@ -255,6 +259,7 @@ SECTION UserControlExploration
 .AddSys: "Add Systems" => "Systeme hinzufügen"
 .EDSMUnk: "System not known to EDSM" => "System ist EDSM nicht bekannt"
 .UnknownS: "Unknown system, system is without co-ordinates" => "Unbekanntes System, System hat keine Koordinaten"
+.Bodies: "Bodies" @
 
 SECTION UserControlJournalGrid
 
@@ -306,6 +311,7 @@ SECTION UserControlLedger
 .comboBoxHistoryWindow.ToolTip: "Select the entries by age" => "Einträge nach Alter auswählen"
 .toolStripMenuItemGotoItem: "Go to entry on grid" => "Zu Eintrag in Tabelle springen"
 .CashTransactions: "Cash Transactions" => "Finanztransaktionen"
+.buttonExtExcel.ToolTip: "Send data on grid to excel" @
 
 SECTION UserControlLocalMap
 
@@ -374,6 +380,8 @@ SECTION UserControlMaterials
 .textBoxItems1.ToolTip: "Count of Items" => "Anzahl"
 .checkBoxClear.ToolTip: "Remove zero items the time after they go to zero" => "Objekte ausblenden, nachdem ihre Anzahl auf 0 gefallen ist"
 .buttonFilter.ToolTip: "Filter out items" @
+.checkBoxShowZeros.ToolTip: "Green will show materials with zero counts, red means remove them" @
+.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 
 SECTION UserControlMaterialCommodities
 
@@ -381,6 +389,7 @@ SECTION UserControlMaterialCommodities
 .Mats: "Mats" => "Materialien"
 .Total: "Total" => "Gesamt"
 .Rare: "Rare" @
+.Recipes: "Recipes" @
 
 SECTION UserControlCommodities
 
@@ -396,6 +405,8 @@ SECTION UserControlCommodities
 .textBoxItems1.ToolTip: "Count of Items" => "Anzahl"
 .checkBoxClear.ToolTip: "Remove zero items the time after they go to zero" => "Objekte ausblenden, nachdem ihre Anzahl auf 0 gefallen ist"
 .buttonFilter.ToolTip: "Filter out items" @
+.checkBoxShowZeros.ToolTip: "Green will show materials with zero counts, red means remove them" @
+.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 
 SECTION UserControlMissionOverlay
 
@@ -409,6 +420,7 @@ SECTION UserControlMissionOverlay
 
 SECTION UserControlSurveyor
 
+.Scan: "Scan" @
 .MandD: " (Mapped & Discovered)" @
 .MP: " (Mapped)" @
 .DIS: " (Discovered)" @
@@ -429,6 +441,7 @@ SECTION UserControlSurveyor
 .isaterraformableplanet: " is a terraformable planet." @
 .Hasring: " Has ring." @
 .Has: " Has " @
+.Signals: " Has Signals." @
 .planetaryClassesToolStripMenuItem: "Planetary Classes" @
 .planetaryClassesToolStripMenuItem.ammoniaWorldToolStripMenuItem: "Ammonia World" @
 .planetaryClassesToolStripMenuItem.earthlikeWorldToolStripMenuItem: "Earthlike World" @
@@ -442,6 +455,13 @@ SECTION UserControlSurveyor
 .textAlignToolStripMenuItem.leftToolStripMenuItem: "Left" @
 .textAlignToolStripMenuItem.centerToolStripMenuItem: "Center" @
 .textAlignToolStripMenuItem.rightToolStripMenuItem: "Right" @
+.bodyFeaturesToolStripMenuItem.hasSignalsToolStripMenuItem: "Has Signals" @
+.showAllPlanetsToolStripMenuItem: "Show All Planets" @
+.showAllStarsToolStripMenuItem: "Show All Stars" @
+.showBeltClustersToolStripMenuItem: "Show Belt Clusters" @
+.showMoreInformationToolStripMenuItem: "Show More Information" @
+.showValuesToolStripMenuItem: "Show values" @
+.wordWrapToolStripMenuItem: "Word Wrap" @
 
 SECTION UserControlMissions
 
@@ -529,6 +549,9 @@ SECTION UserControlModules
 .labelShip: "Ship" @
 .EDSURL: "Enter ED Shipyard URL" @
 .CURL: "Enter Coriolis URL" @
+.buttonExtExcel.ToolTip: "Send data on grid to excel" @
+.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
+.AllModules: "All Modules" @
 
 SECTION UserControlNotePanel
 
@@ -644,7 +667,9 @@ SECTION UserControlRoute
 .textBox_FromX.ToolTip: "X Co-ord" => "X-Koordinate"
 .Confirm: "This will result in a large number ({0})) of jumps\r\nConfirm please" => "Dies wird zu einer grossen Anzahl ({0}) von Sprüngen führen\r\nOK?"
 .NoRoute: "No route set up, retry" => "Keine Route gesetzt, bitte nochmals versuchen"
-.comboBoxRoutingMetric: "Nearest to Waypoint" @
+.checkBox_FsdBoost: "Use Boosts" @
+.checkBox_FsdBoost.ToolTip: "The route finder will try and use FSD injections in case a direct route could not" @
+.showScanToolStripMenuItem: "View Scan Display" @
 
 SECTION UserControlRouteTracker
 
@@ -680,13 +705,13 @@ SECTION UserControlScan
 .extButtonHighValue.ToolTip: "Set High Value Limit" @
 .toolStripMenuItemToolbar: "Show/Hide Toolbar" => "Werkzeugliste anzeigen/ausblenden"
 .ToolTip: "Right click on panel to show/hide the toolbar" => "Auf Feld rechtsklicken um die Werkzeugleiste anzuzeigen/auszublenden"
-.checkBoxCustomHideFullMats.ToolTip: "Show/Hide materials which have reached their storage limit" => "Materialen, die die Speicherkapazität überschritten haben, anzeigen/ausblenden"
-.chkShowOverlays.ToolTip: "Show/Hide body status icons" => "Statussymbol für die Himmelskörper anzeigen/ausblenden"
+.MatFull: "Hide materials which have reached their storage limit" @
+.StatusIcons: "Show body status icons" @
 .checkBoxTiny.ToolTip: "Image size teeny tiny" => "Winzige Bildgrösse"
-.checkBoxMaterials.ToolTip: "Show/Hide Materials" => "Materialien anzeigen/ausblenden"
-.checkBoxMaterialsRare.ToolTip: "Show rare materials only" => "Nur seltene Materialien anzeigen"
+.ShowMaterials: "Show Materials" @
+.ShowRaresOnly: "Show rare materials only" @
 .checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM" => "Himmelskörperdaten von EDSM anzeigen/ausblenden"
-.checkBoxMoons.ToolTip: "Show/Hide Moons" => "Monde anzeigen/ausblenden"
+.ShowMoons: "Show Moons" @
 .buttonExtExcel.ToolTip: "Send data on grid to excel" => "Daten in der Tabelle an Excel senden"
 .lblSystemInfo.ToolTip: "Right click on panel to show/hide the toolbar" => "Auf Feld rechtsklicken um die Werkzeugleiste anzuzeigen/auszublenden"
 .AV: "Approx value: {0:N0}" => "Ungefährer Wert: {0:N0}"
@@ -696,7 +721,16 @@ SECTION UserControlScan
 .cancelShowSystemToolStripMenuItem: "Cancel Show System" @
 .panelControls.ToolTip: "Right click on panel to show/hide the toolbar" @
 .rollUpPanelTop.ToolTip: "Right click on panel to show/hide the toolbar" @
-.extCheckBoxDisplaySystemAlways.ToolTip: "Show system and value in main display" @
+.SystemValue: "Show system and value in main display" @
+.AllG: "Show G on all planets" @
+.HabZone: "Show Habitation Zone" @
+.StarClass: "Show Classes of Stars" @
+.PlanetClass: "Show Classes of Planets" @
+.Distance: "Show distance of bodies" @
+.Barycentre: "Barycentre" @
+.Belt: "Belt" @
+.Body: "Body" @
+.Star: "Star" @
 
 SECTION UserControlScanGrid
 
@@ -752,94 +786,71 @@ SECTION UserControlScanGrid
 
 SECTION UserControlSettings
 
+.groupBoxCommanders: "Commanders" => "Kommandanten"
+.ColumnCommander: "Commander" => "Kommandanten"
+.EdsmName: "EDSM Name" @
+.JournalDirCol: "Journal Folder" => "Journalverzeichnis"
+.NotesCol: "Notes" => "Systemkommentare"
+.btnDeleteCommander: "Delete" => "Löschen"
+.buttonEditCommander: "Edit" => "Anpassen"
+.buttonAddCommander: "Add" => "Hinzufügen"
+.groupBoxTheme: "Theme" => "Design"
+.button_edittheme: "Edit Theme" => "Design anpassen"
+.buttonSaveTheme: "Save Theme" => "Design speichern"
+.groupBoxCustomHistoryLoad: "History" => "Optionen für Historie"
+.checkBoxOrderRowsInverted: "Number Rows Lastest Entry Highest" => "Letzer Eintrag hat höchste Zeilennummer"
+.labelTimeDisplay: "Time:" @
 .extGroupBoxWebServer: "Web Server" @
-.WSQ: "If you have previously done this on this same port number you can click No and the enable will work" @
-.WSF: "Did not start - click OK to configure windows" @
 .labelPortNo: "Port" @
 .extButtonTestWeb: "Test" @
 .extCheckBoxWebServerEnable: "Enable" @
-.FS: "All entries for Statistics" @
-.SM: "Safe Mode" @
-.CSM: "Confirm restart to safe mode" @
-.comboBoxCustomEssentialEntries.ToolTip: "Select which items you consider essential to load older than the time above" @
-.groupBoxCustomHistoryLoad: "History Options" => "Optionen für Historie"
-.checkBoxShowUIEvents: "Show Elite UI Events in history" => "Elite UI Ereignisse in der Historie anzeigen"
-.checkBoxOrderRowsInverted: "Number Rows Lastest Entry Highest" => "Letzer Eintrag hat höchste Zeilennummer"
-.checkBoxUTC: "Display Game time instead of local time" => "Uhrzeit im Spiel anstelle von Lokalzeit anzeigen"
-.labelHistorySel: "Only Read Essential Entries" => "Nur wichtige Ereignisse anzeigen"
-.groupBoxCustomLanguage: "Language" => "Sprache"
-.groupBoxCustomEDSM: "EDSM/EDDB Control" => "EDSM/EDDB Kontrolle"
-.buttonExtEDSMConfigureArea: "Galaxy Select" => "Galaxie-Auswahl"
-.checkBoxCustomEDSMEDDBDownload: "Enable Star Data Download" => "Sterndatendownload erlauben"
-.groupBoxCustomScreenShots: "Screenshots" => "Bildschirmphotos"
+.groupBoxInteraction: "Interaction" @
+.labelTKey: "Key to activate transparent windows" => "Taste für transparente Fenster"
+.groupBoxMemory: "Memory" @
+.labelHistoryEssItems: "Essential entries:" @
+.labelHistorySel: "Entries to read:" => "Nur wichtige Ereignisse anzeigen"
+.groupBoxCustomScreenShots: "Screenshots conversion" => "Bildschirmphotos"
 .checkBoxCustomCopyToClipboard: "Copy to clipboard" => "In die Zwischenablage kopieren"
 .checkBoxCustomMarkHiRes: "Mark HiRes files" => "Hochauflösende Bilder kennzeichnen"
 .checkBoxCustomRemoveOriginals: "Remove Originals" => "Originaldateien entfernen"
 .buttonExtScreenshot: "Configure" => "Einstellen"
-.checkBoxCustomEnableScreenshots: "Enable screenshot conversion" => "Screenshot-Umwandlung erlauben"
+.checkBoxCustomEnableScreenshots: "Enable" => "Screenshot-Umwandlung erlauben"
+.groupBoxCustomEDSM: "EDSM/EDDB Control" => "EDSM/EDDB Kontrolle"
+.buttonExtEDSMConfigureArea: "Select Galaxy Sectors" => "Galaxie-Auswahl"
+.checkBoxCustomEDSMEDDBDownload: "Enable Star Data Download" => "Sterndatendownload erlauben"
 .groupBoxPopOuts: "Window Options" => "Fenstereinstellungen"
+.checkBoxPanelSortOrder: "Panel List Sorted Alphanumerically" @
+.checkBoxKeepOnTop: "Keep on Top" => "Fenster oben halten"
+.checkBoxCustomResize: "Redraw the screen during resizing" => "Fenster nach Grössenänderung neu aufbauen"
 .checkBoxMinimizeToNotifyIcon: "Minimize to notification area icon" => "Zu Icon minimieren"
 .checkBoxUseNotifyIcon: "Show notification area icon" => "Icon anzeigen"
-.buttonReloadSaved: "Open Saved Setup" => "Gespeicherte Einstellungen öffnen"
-.buttonSaveSetup: "Save Current Setup" => "Momentane Einstellungen speichern"
-.labelTKey: "Key to activate transparent windows" => "Taste für transparente Fenster"
-.checkBoxAutoSave: "Save Pop Outs on Exit" => "Separate Fenster beim Beenden speichern"
-.checkBoxAutoLoad: "Load Pop Outs at Start" => "Separate Fenster beim Start laden"
-.groupBoxTheme: "Theme" => "Design"
-.checkBoxKeepOnTop: "Keep on Top" => "Fenster oben halten"
-.button_edittheme: "Edit Theme" => "Design anpassen"
-.buttonSaveTheme: "Save Theme" => "Design speichern"
-.groupBox3dmap: "3D Map Settings" => "3D-Karteneinstellungen"
-.labelMapCol: "Default Map Color" => "Standardkartenfarbe"
-.labelZoom: "Default Zoom" => "Standardzoom"
-.radioButtonHistorySelection: "History Grid Selection" => "Auswahl Historienliste"
-.radioButtonCentreHome: "Home System" => "Heimatsystem"
-.labelOpenOn: "Open Centred On" => "Zentriert auf ... öffnen"
-.labelHome: "Now in Commander Settings" => "Heimatsystem"
-.groupBoxCommanders: "Commanders" => "Kommandanten"
-.buttonEditCommander: "Edit" => "Anpassen"
-.ColumnCommander: "Commander" => "Kommandanten"
-.EdsmName: "EDSM Name" @
-.JournalDirCol: "Journal Dir" => "Journalverzeichnis"
-.NotesCol: "Notes" => "Systemkommentare"
-.btnDeleteCommander: "Delete" => "Löschen"
-.buttonAddCommander: "Add" => "Hinzufügen"
-.checkBoxPanelSortOrder: "Panel List Sorted Alphanumerically" @
-.checkBoxPanelSortOrder.ToolTip: "Panel lists sorted alphanumerically instead of ordered in groups. Note Requires Restart" @
-.comboBoxCustomHistoryLoadTime.ToolTip: "Select either load all records, or load only essential items of records older than a set time before now" => "Entweder alle Einträge laden oder nur die wichtigsten Einträge die älter als ein bestimmtes Datum sind"
-.checkBoxShowUIEvents.ToolTip: "Show the UI events (such as Music) in the history. The quantity of them can be very large" => "Ereignisse der Benutzeroberfläche (z.B. Musik) in der Historie anzeigen. Die Anzahl dieser Ereignisse kann sehr gross sein"
+.groupBoxCustomLanguage: "Language" => "Sprache"
+.groupBoxCustomSafeMode: "Advanced" @
+.buttonExtSafeMode: "Restart in Safe Mode" @
+.labelSafeMode: "Click this to perform special operations like to move system databases to another drive, reset UI, and other maintenance tasks...\r\n\r\n" @
+.btnDeleteCommander.ToolTip: "Delete selected commander" => "Ausgewählten Kommandanten löschen"
+.buttonEditCommander.ToolTip: "Edit selected commander" => "Ausgewählten Kommandanten anpassen"
+.buttonAddCommander.ToolTip: "Add a new commander" => "Neuen Kommandanten hinzufügen"
+.comboBoxTheme.ToolTip: "Select the theme to use" => "Design auswählen"
+.button_edittheme.ToolTip: "Edit theme and change colours fonts" => "Design und Farbe der Texte anpassen"
+.buttonSaveTheme.ToolTip: "Save theme to disk" => "Design auf Festplatte speichern"
 .checkBoxOrderRowsInverted.ToolTip: "Number oldest entry 1, latest entry highest" => "Nummer des ältesten Eintrags ist 1, der neueste Eintrag hat die höchste Nummer"
-.checkBoxUTC.ToolTip: "Display game time (UTC) instead of your local time" => "Spielzeit (UTC) anstatt lokale Zeit anzeigen"
-.buttonExtEDSMConfigureArea.ToolTip: "Configure what parts of the galaxy is stored in the databases" => "Einstellen, welche Teile der Galaxis in der Datenbank gespeichert werden sollen"
-.checkBoxCustomEDSMEDDBDownload.ToolTip: "Click to enable downloading of stars from EDSM and system information from EDDB.  Will apply at next start." => "Klicken, um das Herunterladen von Sternen von EDSM und Systeminformationen von EDDB zu erlauben. Ab dem nächsten Start gültig."
+.comboBoxClickThruKey.ToolTip: "Select the key to hold down for at least 500 ms\r\nto show the form of a transparent pop out, when\r\nthe pop out transparency mode if Tc (Click thru,\r\ncontrols still active) or Tf (controls inactive)\r\nNot all keys are guaranteed active on all keyboards" => "Auswahl der Taste, die mindestens 500ms gedrückt werden muss\r\num die Form eines transparenten Fensters zu zeigen, falls\r\nder Transparenzmodus des Fensters entweder Tc (Klicks gehen durch\r\nKontrollen noch aktiv) oder Tf (Kontrollen inaktiv) ist\r\nNicht alle Tasten sind auf alles Tastaturen aktiv"
+.comboBoxCustomEssentialEntries.ToolTip: "Select which items you consider essential to load older than the time above" @
+.comboBoxCustomHistoryLoadTime.ToolTip: "Reduce Memory use. Select either load all records, or load only essential items of records older than a set time before now" => "Entweder alle Einträge laden oder nur die wichtigsten Einträge die älter als ein bestimmtes Datum sind"
 .checkBoxCustomCopyToClipboard.ToolTip: "Auto copy the image to the clipboard" => "Das Bild automatisch in die Zwischenablage kopieren"
 .checkBoxCustomMarkHiRes.ToolTip: "For Hi-Res files, mark them in the file name" => "Hochauflösende Bilder im Dateinamen kennzeichen"
 .checkBoxCustomRemoveOriginals.ToolTip: "After conversion, remove originals" => "Originale nach der Konvertierung löschen"
 .buttonExtScreenshot.ToolTip: "Configure further screenshot options" => "Weitere Bildschirmphoto-Einstellungen anpassen"
 .checkBoxCustomEnableScreenshots.ToolTip: "Screen shot conversion on/off" => "Umwandlung von Bildschirmphotos ein-/ausschalten"
-.checkBoxMinimizeToNotifyIcon.ToolTip: "Minimize the main window to the system notification area (system tray) icon." => "Hauptfenster in den Infobereich minimieren"
-.comboBoxClickThruKey.ToolTip: "Select the key to hold down for at least 500 ms\r\nto show the form of a transparent pop out, when\r\nthe pop out transparency mode if Tc (Click thru,\r\ncontrols still active) or Tf (controls inactive)\r\nNot all keys are guaranteed active on all keyboards" => "Auswahl der Taste, die mindestens 500ms gedrückt werden muss\r\num die Form eines transparenten Fensters zu zeigen, falls\r\nder Transparenzmodus des Fensters entweder Tc (Klicks gehen durch\r\nKontrollen noch aktiv) oder Tf (Kontrollen inaktiv) ist\r\nNicht alle Tasten sind auf alles Tastaturen aktiv"
-.checkBoxUseNotifyIcon.ToolTip: "Show a system notification area (system tray) icon for EDDiscovery." => "EDDiscovery als Symbol im Infobereich anzeigen"
-.buttonReloadSaved.ToolTip: "Open now the saved setup of pop outs" => "Gespeicherte Fensterzusammenstellung laden"
-.buttonSaveSetup.ToolTip: "Save now the current pop out state" => "Momentane Fensterzusammenstellung speichern"
-.checkBoxAutoSave.ToolTip: "Save pop out state on exit" => "Fensterzusammenstellung beim Verlassen speichern"
-.checkBoxAutoLoad.ToolTip: "Auto show pop outs" => "Satellitenfenster automatisch anzeigen"
+.buttonExtEDSMConfigureArea.ToolTip: "Configure what parts of the galaxy is stored in the databases" => "Einstellen, welche Teile der Galaxis in der Datenbank gespeichert werden sollen"
+.checkBoxCustomEDSMEDDBDownload.ToolTip: "Click to enable downloading of stars from EDSM and system information from EDDB.  Will apply at next start." => "Klicken, um das Herunterladen von Sternen von EDSM und Systeminformationen von EDDB zu erlauben. Ab dem nächsten Start gültig."
+.checkBoxPanelSortOrder.ToolTip: "Panel lists sorted alphanumerically instead of ordered in groups. Note Requires Restart" @
 .checkBoxKeepOnTop.ToolTip: "This window, and its children, top" => "Dieses Fenster und seine Kinder, oben"
-.comboBoxTheme.ToolTip: "Select the theme to use" => "Design auswählen"
-.button_edittheme.ToolTip: "Edit theme and change colours fonts" => "Design und Farbe der Texte anpassen"
-.buttonSaveTheme.ToolTip: "Save theme to disk" => "Design auf Festplatte speichern"
-.textBoxDefaultZoom.ToolTip: "Set the zoom level of the map. 1 is normal" => "Vergrösserungsstufe der Karte wählen. 1 ist normal"
-.radioButtonHistorySelection.ToolTip: "Select history entry as opening location" => "Historieneintrag als Anzeigeort wählen"
-.radioButtonCentreHome.ToolTip: "Select home system as opening location" => "Heimatsystem als Anzeigeort wählen"
-.textBoxHomeSystem.ToolTip: "Pick a home system" => "Ein Heimatsystem wählen"
-.panel_defaultmapcolor.ToolTip: "New travel entries get this colour on the map" => "Neue Reiseeinträge bekommen auf der Karte diese Farbe"
-.buttonEditCommander.ToolTip: "Edit selected commander" => "Ausgewählten Kommandanten anpassen"
-.btnDeleteCommander.ToolTip: "Delete selected commander" => "Ausgewählten Kommandanten löschen"
-.buttonAddCommander.ToolTip: "Add a new commander" => "Neuen Kommandanten hinzufügen"
-.Font: "The font used by this theme is not available on your system.\r\nThe font needed is \"{0}\".\r\nInstall this font to fully use this theme.\r\nEuro Caps font is freely available from www.edassets.org.\r\n\r\nWould you like to load this theme using a replacement font?" => "Die Schriftart, die von diesem Design verwendet wird, ist auf Ihrem System nicht vorhanden.\r\nDie benötigte Schriftart ist \"{0}\".\r\nBitte diese Schriftart installieren um das Design vollständig verwenden zu können.\r\n Die Schriftart 'Euro Caps' ist kostenlos auf www.edassets.org verfügbar.\r\n\r\nMöchten Sie dieses Design mit einer Ersatzschriftart laden?"
-.Information: "Applies at next restart of ED Discovery" => "Ab einem Neustart von ED Discovery verfügbar"
-.checkBoxCustomResize: "Redraw the screen during resizing" => "Fenster nach Grössenänderung neu aufbauen"
 .checkBoxCustomResize.ToolTip: "Check to allow EDD to redraw the screen during main window resize. Only disable if its too slow" => "Klicken, um EDD das Neuzeichnen der Fenster während der Grössenänderung des Hauptfensters zu erlauben. Nur ausschalten, wenn zu langsam"
+.checkBoxMinimizeToNotifyIcon.ToolTip: "Minimize the main window to the system notification area (system tray) icon." => "Hauptfenster in den Infobereich minimieren"
+.checkBoxUseNotifyIcon.ToolTip: "Show a system notification area (system tray) icon for EDDiscovery." => "EDDiscovery als Symbol im Infobereich anzeigen"
+.buttonExtSafeMode.ToolTip: "Safe Mode allows you to perform special operations, such as moving the databases, resetting the UI, resetting the action packs,  DLLs etc." @
 .DLA: "Disabled-Load All" => "Alles Laden ausgeschaltet"
 .7daysold: ">7 days old" => ">7 Tage alt"
 .30daysold: ">30 days old" => ">30 Tage alt"
@@ -848,23 +859,38 @@ SECTION UserControlSettings
 .180daysold: ">180 days old" => ">180 Tage alt"
 .270daysold: ">270 days old" @
 .365daysold: "> 365 days old" => "> 365 Tage alt"
+.ESM: "Scans,Cargo,Missions,State,Jumps etc" @
+.FS: "All entries for Statistics" @
+.EJS: "Jumps and Scans" @
+.EJ: "Jumps" @
+.EN: "Nothing" @
+.WSQ: "Warning about webserver-  see english text" @
+.WSF: "Did not start - click OK to configure windows" @
+.CSM: "Confirm restart to safe mode" @
+.SM: "Safe Mode" @
+.checkBoxShowUIEvents: "Show Elite UI Events in history" => "Elite UI Ereignisse in der Historie anzeigen"
+.checkBoxUTC: "Display Game time instead of local time" => "Uhrzeit im Spiel anstelle von Lokalzeit anzeigen"
+.buttonReloadSaved: "Open Saved Setup" => "Gespeicherte Einstellungen öffnen"
+.buttonSaveSetup: "Save Current Setup" => "Momentane Einstellungen speichern"
+.checkBoxAutoSave: "Save Pop Outs on Exit" => "Separate Fenster beim Beenden speichern"
+.checkBoxAutoLoad: "Load Pop Outs at Start" => "Separate Fenster beim Start laden"
+.groupBox3dmap: "3D Map Settings" => "3D-Karteneinstellungen"
+.labelMapCol: "Default Map Color" => "Standardkartenfarbe"
+.labelZoom: "Default Zoom" => "Standardzoom"
+.radioButtonHistorySelection: "History Grid Selection" => "Auswahl Historienliste"
+.radioButtonCentreHome: "Home System" => "Heimatsystem"
+.labelOpenOn: "Open Centred On" => "Zentriert auf ... öffnen"
+.labelHome: "Now in Commander Settings" => "Heimatsystem"
+.Font: "The font used by this theme is not available on your system.\r\nThe font needed is \"{0}\".\r\nInstall this font to fully use this theme.\r\nEuro Caps font is freely available from www.edassets.org.\r\n\r\nWould you like to load this theme using a replacement font?" => "Die Schriftart, die von diesem Design verwendet wird, ist auf Ihrem System nicht vorhanden.\r\nDie benötigte Schriftart ist \"{0}\".\r\nBitte diese Schriftart installieren um das Design vollständig verwenden zu können.\r\n Die Schriftart 'Euro Caps' ist kostenlos auf www.edassets.org verfügbar.\r\n\r\nMöchten Sie dieses Design mit einer Ersatzschriftart laden?"
+.Information: "Applies at next restart of ED Discovery" => "Ab einem Neustart von ED Discovery verfügbar"
 .AddC: "Commander name is not valid or duplicate" => "Name des Kommandaten nicht erlaubt oder ein Duplikat"
 .AddT: "Cannot create Commander" => "Kommandant kann nicht angelegt werden"
 .Language: "Applies at next restart of ED Discovery" => "Wird nach dem Neustart von ED Discovery gültig"
 .RemoveSectors: "Remove Sectors" => "Sektoren entfernen"
 .GalRemove: "Removing {0} Sector(s).\r\n\r\nThis will take a while (up to 30 mins dep on drive type and amount of sectors).\r\nYou may continue to use EDD while this operation takes place\r\nbut it may be slow to respond. Do not close down EDD until this window says\r\nthe process has finished\r\n\r\n" => "{0} Sektor(en) wird/werden entfernt.\r\n\r\nDies kann eine Weile dauern (bis zu 30 Minuten, abhänging von Laufwerkstyp und Anzahl der Sektoren).\r\nSie können EDD während dieser Zeit weiter benutzen,\r\nallerdings werden die Antwortzeiten verlängert sein. Beenden Sie EDD nicht bevor dieses Fenster anzeigt,\r\ndass der Prozess beeandet ist\r\n\r\n"
 .GalFini: "Finished, Please close the window.\r\nIf you already have the 3dmap open, changes will not be reflected in that map until the next start of EDD\r\n" => "Beendet, Sie können dieses Fenster jetzt schlissen.\r\nWenn Sie die 3D-Karte bereits offen haben, werden diese Änderungen nicht sichbar, bis Sie EDD das nächste Mal starten\r\n"
-.ESM: "Scans,Cargo,Missions,State,Jumps etc" @
-.EJS: "Jumps and Scans" @
-.EJ: "Jumps" @
-.EN: "Nothing" @
-.labelHistoryEssItems: "Essential Entries Are" @
-.groupBoxCustomSafeMode: "Move System DB / Reset UI etc" @
-.labelSafeMode: "Click this to perform special operations" @
-.buttonExtSafeMode: "Restart in Safe Mode" @
-.buttonExtSafeMode.ToolTip: "Safe Mode allows you to perform special operations, such as moving the databases, resetting the UI, resetting the action packs,  DLLs etc." @
-.groupBoxMemory: "Memory" @
-.groupBoxInteraction: "Interaction" @
+.GameTime: "Game Time" @
+.Local: "Local" @
 
 SECTION UserControlShipYards
 
@@ -987,8 +1013,12 @@ SECTION UserControlStarList
 .textBoxFilter.ToolTip: "Enter text to search in any fields for an item" => "Text eingeben, der in allen Feldern gesucht werden soll"
 .checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM. Due to server constraints, you must click on a system to retreive data on it from EDSM." => "Körperdaten von EDSM anzeigen/nicht anzeigen. Aufgrund von Serverbeschränkungen muss auf ein System geklickt werden, um die Daten von EDSM abzurufen."
 .comboBoxHistoryWindow.ToolTip: "Select the entries by age" => "Einträge nach Alter auswählen"
+.Value: "Scan Value" @
+.viewScanDisplayToolStripMenuItem: "View Scan Display" @
+.Total: "Total" @
+.Signals: "{0} has signals" @
 .FV: "First visit {0}" => "Erster Besuch {0}"
-.CS: "{0} Star(s)" => "{0} Stern(e)"
+.CS: "{0} Star(s) {1}" => "{0} Stern(e)"
 .SMBH: "{0} is a super massive black hole" => "{0} ist ein supermassives schwarzes Loch"
 .BH: "{0} is a black hole" => "{0} ist ein schwarzes Loch"
 .NS: "{0} is a neutron star" => "{0} ist ein Neutronenstern"
@@ -1180,10 +1210,10 @@ SECTION UserControlSynthesis
 .Notes: "Notes" => "Kommentare"
 .Recipe: "Recipe" => "Rezept"
 .chkHistoric: "Use Cursor Position" => "Zeigerposition benutzen"
-.buttonMaterialFilter: "Filter By Material" => "Nach Material filtern"
-.buttonFilterLevel: "Filter By Level" => "Nach Stufe filtern"
-.buttonRecipeFilter: "Filter By Synthesis" => "Nach Synthese filtern"
-.buttonClear: "Clear Wanted" => "Gesucht löschen"
+.buttonMaterialFilter: "Material" => "Nach Material filtern"
+.buttonFilterLevel: "Level" => "Nach Stufe filtern"
+.buttonRecipeFilter: "Synthesis" => "Nach Synthese filtern"
+.buttonClear: "Clear" => "Gesucht löschen"
 .ToolTip: "Left click and drag on grid to reorder" => "Auf dem Gitter linksklicken und ziehen um umzusortieren"
 .chkHistoric.ToolTip: "When clicked on, use the materials at the cursor to estimate, when off always use the latest materials." => "Wenn angeklickt, Material an der Zeigerposition zur Abschätzung verwenden, sonst das letzte Material verwenden."
 .buttonMaterialFilter.ToolTip: "Filter the table by the material type" => "Tabelle nach Materialart filtern"
@@ -1191,6 +1221,8 @@ SECTION UserControlSynthesis
 .buttonRecipeFilter.ToolTip: "Filter the table by the synthesis type" => "Tabelle nach Syntheseart filtern"
 .buttonClear.ToolTip: "Set all wanted values to zero" => "Alle Gesucht-Werte auf 0 setzen"
 .panelButtons.ToolTip: "Left click and drag on grid to reorder" @
+.chkNotHistoric.ToolTip: "When red, use the materials at the cursor to estimate, when green always use the latest materials." @
+.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 
 SECTION UserControlSysInfo
 
@@ -1338,6 +1370,8 @@ SECTION UserControlTravelGrid
 .toolStripRollUpOlderOutlines.rollUpAfterFirstToolStripMenuItem: "After First" @
 .toolStripRollUpOlderOutlines.rollUpAfter5ToolStripMenuItem: "After 5" @
 .addToTrilaterationToolStripMenuItem.explorationPanelToolStripMenuItem: "Exploration Panel" @
+.runSelectionThroughIGAUDebugToolStripMenuItem: "Run selection through IGAU (Debug)" @
+.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 
 SECTION UserControlCaptainsLog
 
@@ -1352,7 +1386,7 @@ SECTION CaptainsLogDiary
 
 SECTION CaptainsLogEntries
 
-.DTF: "Bad Date Time format" @
+.DTF: "Bad/Out of Range Date Time format" @
 .Note: "Note:" @
 .EnterNote: "Enter Note" @
 .CFN: "Do you really want to delete {0} notes?\r\nConfirm or Cancel" @
@@ -1418,6 +1452,8 @@ SECTION UserControlTrilateration
 .Co: "Only systems with coordinates or already known to EDSM can be added" => "Nur Systeme, die Koordinaten haben oder EDSM bereits bekannt sind, können hinzugefügt werden"
 .PU: "Position unknown" => "Position unbekannt"
 .PF: "Position found" => "Position gefunden"
+.addAllSectorSystemsToolStripMenuItem: "Add all Sector systems" @
+.toolStripButtonSector: "Sector Systems" @
 
 SECTION UserControlTrippanel
 
@@ -1435,10 +1471,29 @@ SECTION UserControlTrippanel
 .FDEDSM: "Shows if EDSM indicates your it's first discoverer" => "Anzeigen, ob EDSM angibt, dass Sie der erste Entdecker sind"
 .UKN: "System {0} unknown to EDSM" => "System {0} ist EDSM nicht bekannt"
 
+SECTION UserControlMaterialTrader
+
+.UpgradeCol: "From" @
+.LevelCol: "Use" @
+.WantedCol: "Left" @
+.ModuleCol: "To" @
+.MaxCol: "Get" @
+.AvailableCol: "Total" @
+.buttonClear: "Clear" @
+.checkBoxCursorToTop.ToolTip: "When red, use the materials at the cursor to estimate, when green always use the latest materials." @
+.buttonClear.ToolTip: "Set all wanted values to zero" @
+.Offer: "Offer" @
+.Receive: "Receive" @
+.clearTradeToolStripMenuItem: "Clear Trade" @
+.Raw: "Raw" @
+.Encoded: "Encoded" @
+.Manufactured: "Manufactured" @
+
 SECTION ScanDisplayUserControl
 
 .NSD: "No scan data available" @
 .BC: "Barycentre of {0}" @
+.Signals: "Signals" @
 
 SECTION ScanDisplayForm
 

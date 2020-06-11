@@ -235,7 +235,7 @@ namespace EDDiscovery.UserControls
 
             // Fill with some information for the report                    
             //reportView.AppendText("\nText " + currentSystem.some_value_interesting_to_report);
-            reportView.Text += string.Format((Environment.NewLine + "    Visits: {0}").T(EDTx.UserControlPlot_Vs) ,discoveryform.history.GetVisitsCount(currentSystem.Name, currentSystem.EDSMID));
+            reportView.Text += string.Format((Environment.NewLine + "    Visits: {0}").T(EDTx.UserControlPlot_Vs) ,discoveryform.history.GetVisitsCount(currentSystem.Name));
             //removed - system does not have a note. reportView.Text += string.Format((Environment.NewLine + "    Notes: {0}" + Environment.NewLine).T(EDTx.UserControlPlot_Nt") ,currentSystem.SystemNote);
 
             // If the are any system inside the defined range...
@@ -248,7 +248,7 @@ namespace EDDiscovery.UserControls
                     var distFromCurrentSys = Math.Round(Math.Sqrt(tvp.Key), 2, MidpointRounding.AwayFromZero);
 
                     // count the total visits for each system;
-                    int visits = discoveryform.history.GetVisitsCount(tvp.Value.Name, tvp.Value.EDSMID);
+                    int visits = discoveryform.history.GetVisitsCount(tvp.Value.Name);
 
                     // Then, populate the Grid with the systems in range
                     if (distFromCurrentSys >= textMinRadius.Value && distFromCurrentSys <= textMaxRadius.Value && tvp.Value.Name != currentSystemName)

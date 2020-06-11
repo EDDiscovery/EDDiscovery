@@ -185,13 +185,20 @@ namespace EDDiscovery.Actions
             return be;
         }
 
-        public static List<ActionEvent> EventList(bool excludestatics = false, bool excludejournal = false, bool excludeui = false)
+        public static List<ActionEvent> EventList(bool excludestatics = false, bool excludejournal = false, bool excludeui = false, bool excludejournaluitranslatedevents = false)
         {
             List<ActionEvent> eventlist = new List<ActionEvent>();
 
             if (!excludejournal)
             {
                 List<string> jevents = EliteDangerousCore.JournalEntry.GetNameOfEvents();
+                if (excludejournaluitranslatedevents)
+                {
+                    jevents.Remove("Music");        // manually synchronise with EDJournalReader . 
+                    jevents.Remove("UnderAttack"); 
+                    jevents.Remove("FSDTarget");   
+                }
+
                 jevents.Sort();
                 eventlist.AddRange(ActionEventEDList.EventsFromNames(jevents, "", "NewEntry", "Journal"));      // presume NewEntry as its the most prevalent.  Trigger type is not used in this circumstance except in Perform
             }

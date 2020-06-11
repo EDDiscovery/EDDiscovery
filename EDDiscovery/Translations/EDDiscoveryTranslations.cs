@@ -137,8 +137,6 @@ namespace EDDiscovery
         CSV_Helpers_OpenFailed, // Failed to open<spc>
         CSV_Helpers_WriteFailed, // Failed to write to<spc>
 
-        CommanderForm_LF, // Select folder where Journal*.log files are stored by Frontier in
-
         ExportForm_ECH, // Export current History view to {0}
         ExportForm_JF, // Journal File
 
@@ -176,6 +174,9 @@ namespace EDDiscovery
         ProfileEditor_BackEdit, // Edit Profile {0} Back Trigger
         ProfileEditor_DeleteWarning, // Do you wish to delete profile {0}?
 
+
+        UserControlSettings_GameTime, // Game Time
+        UserControlSettings_Local, // Local
         UserControlSettings_WSQ, // If you have previously done this on this same port number you can click No and the enable will work
         UserControlSettings_WSF, // Did not start - click OK to configure windows
         UserControlSettings_FS, // All entries for Statistics
@@ -207,6 +208,7 @@ namespace EDDiscovery
         UserControlMaterialCommodities_Mats, // Data !! NOTE
         UserControlMaterialCommodities_Total, // Data !! NOTE
         UserControlMaterialCommodities_Rare, // Rare !! NOTE
+        UserControlMaterialCommodities_Recipes, // Recipes !! NOTE
 
         UserControlMissions_MPlural, //  Missions
         UserControlMissions_MSingular, //  Mission
@@ -215,6 +217,8 @@ namespace EDDiscovery
         UserControlMissions_ValueN, // Value (cr)
         UserControlMissions_ValueC, // Value:
 
+        UserControlModules_ForceSell, // Force Sell
+        UserControlModules_ConfirmForceSell, // Confirm sell of ship
         UserControlModules_StoredModules, // Stored Modules
         UserControlModules_TravelHistoryEntry, // Travel History Entry
         UserControlModules_System, // System
@@ -223,6 +227,8 @@ namespace EDDiscovery
         UserControlModules_SlotCol, // Slot
         UserControlModules_ItemInfo, // Info
         UserControlModules_Value, // Value
+        UserControlModules_Stored, // Stored
+        UserControlModules_AllModules, // All Modules
 
         UserControlModules_FSDAvgJump, // FSD Avg Jump
         UserControlModules_HT, // Half tank, no cargo
@@ -465,6 +471,7 @@ namespace EDDiscovery
         UserControlStarList_FSD, // This system has materials for FSD boost:
         UserControlStarList_NoEDSM, // System could not be found - has not been synched or EDSM is unavailable
         UserControlStarList_Signals, // {0} has signals
+        UserControlStarList_Distance, // {0} ls
 
         UserControlCaptainsLog_Diary, // Diary
         UserControlCaptainsLog_Entries, // Entries
@@ -615,6 +622,22 @@ namespace EDDiscovery
         UserControlScan_System, // System:
         UserControlScan_EnterSys, // Show System
         UserControlScan_VLMT, // Set Valuable Minimum
+
+        UserControlScan_StatusIcons, // Show body status icons
+        UserControlScan_SystemValue, // Show syatem and value in main display
+        UserControlScan_MatFull, // Hide materials which have reached their storage limit
+        UserControlScan_ShowMaterials, //  Show Materials
+        UserControlScan_ShowRaresOnly, // Show rare materials only
+        UserControlScan_ShowMoons, // Show Moons
+        UserControlScan_Belt,
+        UserControlScan_Star,
+        UserControlScan_Barycentre,
+        UserControlScan_Body,
+        UserControlScan_AllG,
+        UserControlScan_HabZone,
+        UserControlScan_PlanetClass,
+        UserControlScan_StarClass,
+        UserControlScan_Distance,
 
         UserControlStarDistance_From, // From {0}
         UserControlStarDistance_NoEDSMSys, // System could not be found - has not been synched or EDSM is unavailable
@@ -775,6 +798,12 @@ namespace EDDiscovery
         TravelHistoryFilter_LDock, // Last dock
         TravelHistoryFilter_StartEnd, // Start/End Flag
 
+        UserControlMaterialTrader_Raw, // Raw
+        UserControlMaterialTrader_Encoded, // Encoded
+        UserControlMaterialTrader_Manufactured, // Manufactured
+        // not used UserControlMaterialTrader_Trade, // Trade
+        UserControlMaterialTrader_Offer, // Offer
+        UserControlMaterialTrader_Receive, // Receive
 
     }
 

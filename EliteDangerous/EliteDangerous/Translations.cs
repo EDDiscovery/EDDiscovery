@@ -28,6 +28,7 @@ namespace EliteDangerousCore
         Information, // Information
         NoPos, // No Pos
 
+        NoTranslate, // DO NOT Define this attribute, used to cause a purposeful mismatch
 
         Bodies_HMS, //"Luminous Hot Main Sequence {0} star" @
         Bodies_BMS, //"Luminous Blue Main Sequence {0} star" @
@@ -54,6 +55,9 @@ namespace EliteDangerousCore
         Bodies_MOG, //"M Red Giant" @
         Bodies_KOG, //"K Orange Giant" @
         Bodies_RP, //"Rogue Planet" @
+        Bodies_UNK, // "Class {0} star" @
+        Bodies_Herbig, //"Herbig Ae/Be"
+        Bodies_TTauri, //"T Tauri"
 
         MissionState_ToGo, // To Go:
         MissionState_Progress, // Progress:;%;N1
@@ -94,6 +98,7 @@ namespace EliteDangerousCore
         JournalEntry_PowerPlay, // PowerPlay:
         JournalEntry_Collected, // Collected:
         JournalEntry_of, // < of
+        JournalEntry_ofa, // < of
         JournalEntry_Total, // Total:
         JournalEntry_Progress, // Progress:;%;N1
         JournalEntry_Delivered, // Delivered:
@@ -190,6 +195,7 @@ namespace EliteDangerousCore
         JournalEntry_Donation, // Donation:
         JournalEntry_Permits, // Permits:
         JournalEntry_Rewards, // Rewards:
+        JournalEntry_FactionEffects, // Faction Effects:
         JournalEntry_Fine, // Fine:
         JournalEntry_Missionname, // Mission name:
         JournalEntry_Hot, // ;(Hot)
@@ -235,6 +241,8 @@ namespace EliteDangerousCore
         JournalEntry_Old, // New:
         JournalEntry_Wealth, // Wealth:;cr;N
         JournalEntry_NotorietyIndex, // Notoriety Index:;;N0
+        JournalEntry_RemainingJumps,  // Remaining Jumps
+        JournalEntry_Nearest, // Nearest:
 
 
         JournalLocOrJump_Type, // "Type " @
@@ -417,6 +425,7 @@ namespace EliteDangerousCore
         JournalScan_AmmoniaWorlds, //  - Ammonia Worlds, {0} ({1}-{2} AU),
         JournalScan_IcyPlanets, //  - Icy Planets, {0} (from {1} AU)
         JournalScan_DISTA, // Dist:;ls;0.0
+        JournalScan_DIST, // Dist:
         JournalScan_BNME, // Name:
         JournalScan_MMoM, // Mass:;MM;0.00
         JournalScan_SNME, // Name:
@@ -469,6 +478,39 @@ namespace EliteDangerousCore
         JournalCodexEntry_NewEntry, // ;New Entry
         JournalCodexEntry_Traits, // ;Traits
 
+        JournalCarrier_At, 
+        JournalCarrier_Callsign, 
+        JournalCarrier_Name,
+        JournalCarrier_JumpRange, 
+        JournalCarrier_FuelLevel, 
+        JournalCarrier_ToSystem, 
+        JournalCarrier_Body,
+        JournalCarrier_Refund, 
+        JournalCarrier_RefundTime, 
+        JournalCarrier_Deposit, 
+        JournalCarrier_Withdraw,
+        JournalCarrier_Balance, 
+        JournalCarrier_ReserveBalance, 
+        JournalCarrier_AvailableBalance,
+        JournalCarrier_ReservePercent,
+        JournalCarrier_TaxRate,
+        JournalCarrier_Amount, 
+        JournalCarrier_Operation, 
+        JournalCarrier_Tier,
+        JournalCarrier_Purchase,
+        JournalCarrier_Sell,
+        JournalCarrier_CancelSell,
+        JournalCarrier_AllowNotorious,
+        JournalCarrier_Access,
+
+        JournalCarrier_TotalCapacity, 
+        JournalCarrier_Crew,
+        JournalCarrier_Cargo,
+        JournalCarrier_CargoReserved,
+        JournalCarrier_ShipPacks,
+        JournalCarrier_ModulePacks,
+        JournalCarrier_FreeSpace,
+
         CommunityGoal_Title, // Title:
         CommunityGoal_System, // System:
         CommunityGoal_At, // At:
@@ -507,6 +549,8 @@ namespace EliteDangerousCore
         JournalLocation_AtStat, // At {0}
         JournalLocation_LND, // Landed on {0}
         JournalLocation_AtStar, // At {0}
+
+        JournalCarrierJump_JumpedWith, // Jumped with carrier {0} to {1}
 
         JournalFSDJump_Jumpto, // Jump to {0}
         JournalFSDJump_Fuel, //  Fuel
@@ -604,9 +648,6 @@ namespace EliteDangerousCore
         JournalReservoirReplenished_Reservoir, // Reservoir:;t;0.0
         JournalUnknown_UnhandledJournalevent, // Unhandled Journal event, Report to EDDiscovery team.
 
-        JournalRemainingJumps,  // Remaining Jumps
-        JournalNearest, // Nearest:
-
         EDStar_O, // O (Blue-White) Star,
         EDStar_B, // B (Blue-White) Star,
         EDStar_BBlueWhiteSuperGiant, // B (Blue-White super giant) Star,
@@ -656,6 +697,7 @@ namespace EliteDangerousCore
         EDStar_N, // Neutron Star,
         EDStar_H, // Black Hole,
         EDStar_SuperMassiveBlackHole, // Supermassive Black Hole
+        EDStar_Unknown, // Unknown star type
 
         EDPlanet_Metalrichbody, // Metal-rich body
         EDPlanet_Highmetalcontentbody, // High metal content world
@@ -676,6 +718,10 @@ namespace EliteDangerousCore
         EDPlanet_SudarskyclassVgasgiant, // Class V gas giant
         EDPlanet_Heliumrichgasgiant, // Helium-rich gas giant
         EDPlanet_Heliumgasgiant, // Helium gas giant
+        EDPlanet_Unknown, // Unknown planet type
+
+        CommanderForm_LF, // Select folder where Journal*.log files are stored by Frontier in
+
 
     }
 

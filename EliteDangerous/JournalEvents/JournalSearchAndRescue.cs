@@ -41,7 +41,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public void UpdateCommodities(MaterialCommoditiesList mc)
         {
-            mc.Change(MaterialCommodityData.CommodityCategory, FDName, -Count, 0);
+            mc.Change(MaterialCommodityData.CatType.Commodity, FDName, -Count, 0);
         }
 
         public override void FillInformation(out string info, out string detailed) 

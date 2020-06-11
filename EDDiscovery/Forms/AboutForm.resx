@@ -117,19 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="labelDevelopersEnum.Text" xml:space="preserve">
-    <value>Program Concept by:
-Cmdr Finwen  (Robert Wahlström)
-
-Developers for this release series:
-Robby (Releaser), Bravada Cadelanne, Iain Ross, Andrea Spada, IGAU
-
-Languages Translations:
-Potatossuaro, Zafford, Andrea Spada, Goscickiw, Nats-ji, Jay
-
-Previous Contributors:
-EoD, Imathrowback, phwoelfel, Robosa, Daniel-finger, Phroggie, Finwen, Corbin Moran, Myshka, Zed, Marlon Blake, Smacker, Jason Thorpe, Greg Malcolm,  Majkl578, MWerle..</value>
-  </data>
   <metadata name="toolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>

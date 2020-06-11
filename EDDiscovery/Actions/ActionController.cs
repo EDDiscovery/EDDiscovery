@@ -200,7 +200,7 @@ namespace EDDiscovery.Actions
             {
                 string collapsestate = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("ActionEditorCollapseState_" + name, "");  // get any collapsed state info for this pack
 
-                frm.Init("Edit pack " + name, this.Icon, this, EDDOptions.Instance.ActionsAppDirectory(), f, ActionEventEDList.EventList(), collapsestate);
+                frm.Init("Edit pack " + name, this.Icon, this, EDDOptions.Instance.ActionsAppDirectory(), f, ActionEventEDList.EventList(excludejournaluitranslatedevents:true), collapsestate);
 
                 frm.ShowDialog(discoveryform); // don't care about the result, the form does all the saving
 
@@ -501,10 +501,10 @@ namespace EDDiscovery.Actions
             SetInternalGlobal("RefreshCount", refreshcount);
             SetInternalGlobal("Commander", commander);
 
-            if (actionfiles.IsConditionFlagSet(Variables.flagRunAtRefresh))      // any events have this flag? .. don't usually do this, so worth checking first
+            if (actionfiles.IsActionVarDefined("RunAtRefresh"))      // any events have this flag? .. don't usually do this, so worth checking first
             {
                 foreach (HistoryEntry he in discoverycontroller.history.EntryOrder)
-                    ActionRunOnEntry(he, ActionEventEDList.RefreshJournal(he), Variables.flagRunAtRefresh);
+                    ActionRunOnEntry(he, ActionEventEDList.RefreshJournal(he), "RunAtRefresh");
             }
 
             ActionRun(ActionEventEDList.onRefreshEnd);

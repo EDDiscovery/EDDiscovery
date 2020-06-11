@@ -45,6 +45,8 @@ namespace EDDiscovery.UserControls
         {
             ExtendedControls.TabStyleSquare tabStyleSquare1 = new ExtendedControls.TabStyleSquare();
             this.dataGridViewStats = new System.Windows.Forms.DataGridView();
+            this.ItemName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Information = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panelGeneral = new ExtendedControls.ExtPanelScroll();
             this.vScrollBarCustom = new ExtendedControls.ExtScrollBar();
             this.tabControlCustomStats = new ExtendedControls.ExtTabControl();
@@ -65,8 +67,6 @@ namespace EDDiscovery.UserControls
             this.extPanelDataGridViewScrollByShip = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.dataGridViewByShip = new System.Windows.Forms.DataGridView();
             this.extScrollBarByShip = new ExtendedControls.ExtScrollBar();
-            this.ItemName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Information = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewStats)).BeginInit();
             this.panelGeneral.SuspendLayout();
             this.tabControlCustomStats.SuspendLayout();
@@ -99,6 +99,18 @@ namespace EDDiscovery.UserControls
             this.dataGridViewStats.Size = new System.Drawing.Size(634, 190);
             this.dataGridViewStats.TabIndex = 2;
             // 
+            // ItemName
+            // 
+            this.ItemName.HeaderText = "Item";
+            this.ItemName.Name = "ItemName";
+            // 
+            // Information
+            // 
+            this.Information.FillWeight = 400F;
+            this.Information.HeaderText = "Information";
+            this.Information.MinimumWidth = 50;
+            this.Information.Name = "Information";
+            // 
             // panelGeneral
             // 
             this.panelGeneral.Controls.Add(this.dataGridViewStats);
@@ -123,7 +135,7 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom.HideScrollBar = false;
             this.vScrollBarCustom.LargeChange = 10;
             this.vScrollBarCustom.Location = new System.Drawing.Point(681, 0);
-            this.vScrollBarCustom.Maximum = -100;
+            this.vScrollBarCustom.Maximum = -338;
             this.vScrollBarCustom.Minimum = 0;
             this.vScrollBarCustom.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom.MousePressedButtonColor = System.Drawing.Color.Red;
@@ -136,8 +148,8 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.vScrollBarCustom.ThumbColorScaling = 0.5F;
             this.vScrollBarCustom.ThumbDrawAngle = 0F;
-            this.vScrollBarCustom.Value = -100;
-            this.vScrollBarCustom.ValueLimited = -100;
+            this.vScrollBarCustom.Value = -338;
+            this.vScrollBarCustom.ValueLimited = -338;
             // 
             // tabControlCustomStats
             // 
@@ -196,6 +208,7 @@ namespace EDDiscovery.UserControls
             this.extPanelDataGridViewScrollTravel.Controls.Add(this.dataGridViewTravel);
             this.extPanelDataGridViewScrollTravel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.extPanelDataGridViewScrollTravel.InternalMargin = new System.Windows.Forms.Padding(0);
+            this.extPanelDataGridViewScrollTravel.LimitLargeChange = 2147483647;
             this.extPanelDataGridViewScrollTravel.Location = new System.Drawing.Point(0, 23);
             this.extPanelDataGridViewScrollTravel.Name = "extPanelDataGridViewScrollTravel";
             this.extPanelDataGridViewScrollTravel.Size = new System.Drawing.Size(703, 520);
@@ -273,6 +286,7 @@ namespace EDDiscovery.UserControls
             this.extPanelDataGridViewScrollScan.Controls.Add(this.extScrollBarScan);
             this.extPanelDataGridViewScrollScan.Dock = System.Windows.Forms.DockStyle.Fill;
             this.extPanelDataGridViewScrollScan.InternalMargin = new System.Windows.Forms.Padding(0);
+            this.extPanelDataGridViewScrollScan.LimitLargeChange = 2147483647;
             this.extPanelDataGridViewScrollScan.Location = new System.Drawing.Point(0, 23);
             this.extPanelDataGridViewScrollScan.Name = "extPanelDataGridViewScrollScan";
             this.extPanelDataGridViewScrollScan.Size = new System.Drawing.Size(703, 520);
@@ -389,6 +403,7 @@ namespace EDDiscovery.UserControls
             this.extPanelDataGridViewScrollByShip.Controls.Add(this.extScrollBarByShip);
             this.extPanelDataGridViewScrollByShip.Dock = System.Windows.Forms.DockStyle.Fill;
             this.extPanelDataGridViewScrollByShip.InternalMargin = new System.Windows.Forms.Padding(0);
+            this.extPanelDataGridViewScrollByShip.LimitLargeChange = 2147483647;
             this.extPanelDataGridViewScrollByShip.Location = new System.Drawing.Point(3, 3);
             this.extPanelDataGridViewScrollByShip.Name = "extPanelDataGridViewScrollByShip";
             this.extPanelDataGridViewScrollByShip.Size = new System.Drawing.Size(697, 537);
@@ -438,18 +453,6 @@ namespace EDDiscovery.UserControls
             this.extScrollBarByShip.Value = -1;
             this.extScrollBarByShip.ValueLimited = -1;
             // 
-            // ItemName
-            // 
-            this.ItemName.HeaderText = "Item";
-            this.ItemName.Name = "ItemName";
-            // 
-            // Information
-            // 
-            this.Information.FillWeight = 400F;
-            this.Information.HeaderText = "Information";
-            this.Information.MinimumWidth = 50;
-            this.Information.Name = "Information";
-            // 
             // UserControlStats
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -474,6 +477,7 @@ namespace EDDiscovery.UserControls
             this.extPanelDataGridViewScrollByShip.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewByShip)).EndInit();
             this.ResumeLayout(false);
+
         }
 
         #endregion

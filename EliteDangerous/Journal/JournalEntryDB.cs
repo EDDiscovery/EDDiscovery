@@ -244,7 +244,7 @@ namespace EliteDangerousCore
 
         public JObject GetJson()
         {
-            return UserDatabase.Instance.ExecuteWithDatabase<JObject>(cn => { return GetJson(Id, cn.Connection); });
+            return JsonCached != null ? JsonCached : UserDatabase.Instance.ExecuteWithDatabase<JObject>(cn => { return GetJson(Id, cn.Connection); });
         }
 
         static internal JObject GetJson(long journalid, SQLiteConnectionUser cn, DbTransaction tn = null)

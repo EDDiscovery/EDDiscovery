@@ -661,4 +661,37 @@
   <data name="backbutton" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Scan\backbutton.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="WordWrapOff" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\travelgrid\wordwrapoff.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="WordWrapOn" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\travelgrid\wordwrapon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SendInara" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Main\Admin\SendInara.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="matnozeros" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\MatCommds\matnozeros.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="matshowzeros" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\MatCommds\matshowzeros.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="DisplayFilters" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Scan\DisplayFilters.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ShowAllG" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Scan\ShowAllG.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ShowDistances" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Scan\ShowDistances.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ShowHabZone" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Scan\ShowHabZone.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ShowPlanetClasses" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Scan\ShowPlanetClasses.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ShowStarClasses" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Scan\ShowStarClasses.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

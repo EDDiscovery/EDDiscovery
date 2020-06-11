@@ -172,7 +172,7 @@ namespace EDDiscovery.UserControls
                 but.Image = img;
             };
 
-            EDDTheme.Instance.ApplyDialog(dropdown);
+            EDDTheme.Instance.ApplyDialog(dropdown, true);
             dropdown.Show(this.FindForm());
         }
 

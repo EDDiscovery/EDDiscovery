@@ -1216,7 +1216,7 @@ namespace EDDiscovery
         {
             if (systemlist != null)
             {
-                HistoryEntry he = HistoryList.FindLastFSDKnownPosition(systemlist);
+                HistoryEntry he = HistoryList.FindLastKnownPosition(systemlist);
 
                 if (he != null )
                     SetCenterSystemTo(FindSystem(he.System.Name,true));
@@ -2382,18 +2382,18 @@ namespace EDDiscovery
 
             f.Add(new ExtendedControls.ConfigurableForm.Entry("From", typeof(ExtendedControls.ExtDateTimePicker), filterStartTime.ToStringUS(), new Point(10, 40), new Size(width - 20, 24), null));
             f.Add(new ExtendedControls.ConfigurableForm.Entry("To", typeof(ExtendedControls.ExtDateTimePicker), filterEndTime.ToStringUS(), new Point(10, 80), new Size(width - 20, 24), null));
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("OK", typeof(ExtendedControls.ExtButton), "OK".T(EDTx.OK), new Point(width - 20 - 80, 120), new Size(80, 24), ""));
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("Cancel", typeof(ExtendedControls.ExtButton), "Cancel".T(EDTx.Cancel), new Point(width - 200, 120), new Size(80, 24), ""));
+            f.AddOK(new Point(width - 20 - 80, 120));
+            f.AddCancel(new Point(width - 200, 120));
 
             f.Trigger += (dialogname, controlname, tag) =>
             {
-                if (controlname == "OK" || controlname == "Cancel")
+                if (controlname == "OK" || controlname == "Cancel" || controlname == "Close")
                 {
                     f.ReturnResult(controlname == "OK" ? DialogResult.OK : DialogResult.Cancel);
                 }
             };
 
-            DialogResult res = f.ShowDialogCentred(this.FindForm(), this.FindForm().Icon, "Time".T(EDTx.Time));
+            DialogResult res = f.ShowDialogCentred(this.FindForm(), this.FindForm().Icon, "Time".T(EDTx.Time), closeicon:true);
 
             if (res == DialogResult.OK)
             {

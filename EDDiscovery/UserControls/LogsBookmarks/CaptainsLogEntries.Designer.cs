@@ -199,6 +199,7 @@
             this.dataViewScrollerPanel.Controls.Add(this.dataGridView);
             this.dataViewScrollerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewScrollerPanel.InternalMargin = new System.Windows.Forms.Padding(0);
+            this.dataViewScrollerPanel.LimitLargeChange = 2147483647;
             this.dataViewScrollerPanel.Location = new System.Drawing.Point(0, 52);
             this.dataViewScrollerPanel.Name = "dataViewScrollerPanel";
             this.dataViewScrollerPanel.Size = new System.Drawing.Size(676, 391);

@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.panelBottom = new System.Windows.Forms.Panel();
-            this.checkBoxRawJournal = new ExtendedControls.ExtCheckBox();
             this.buttonCancel = new ExtendedControls.ExtButton();
             this.labelCVSSep = new System.Windows.Forms.Label();
             this.radioButtonSemiColon = new ExtendedControls.ExtRadioButton();
@@ -45,6 +44,8 @@
             this.label_index = new System.Windows.Forms.Label();
             this.panelOuter = new System.Windows.Forms.Panel();
             this.panelTop = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.panelBottom.SuspendLayout();
             this.panelOuter.SuspendLayout();
             this.panelTop.SuspendLayout();
@@ -52,7 +53,6 @@
             // 
             // panelBottom
             // 
-            this.panelBottom.Controls.Add(this.checkBoxRawJournal);
             this.panelBottom.Controls.Add(this.buttonCancel);
             this.panelBottom.Controls.Add(this.labelCVSSep);
             this.panelBottom.Controls.Add(this.radioButtonSemiColon);
@@ -64,23 +64,6 @@
             this.panelBottom.Name = "panelBottom";
             this.panelBottom.Size = new System.Drawing.Size(359, 154);
             this.panelBottom.TabIndex = 0;
-            // 
-            // checkBoxRawJournal
-            // 
-            this.checkBoxRawJournal.AutoSize = true;
-            this.checkBoxRawJournal.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxRawJournal.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBoxRawJournal.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxRawJournal.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxRawJournal.Location = new System.Drawing.Point(184, 14);
-            this.checkBoxRawJournal.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxRawJournal.Name = "checkBoxRawJournal";
-            this.checkBoxRawJournal.Size = new System.Drawing.Size(98, 17);
-            this.checkBoxRawJournal.TabIndex = 6;
-            this.checkBoxRawJournal.Text = "Export Journals";
-            this.checkBoxRawJournal.TickBoxReductionRatio = 0.75f;
-            this.checkBoxRawJournal.UseVisualStyleBackColor = true;
-            this.checkBoxRawJournal.CheckedChanged += new System.EventHandler(this.checkBoxRawJournal_CheckedChanged);
             // 
             // buttonCancel
             // 
@@ -149,32 +132,40 @@
             // 
             this.checkBoxIncludeHeader.AutoSize = true;
             this.checkBoxIncludeHeader.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxIncludeHeader.CheckBoxDisabledScaling = 0.5F;
             this.checkBoxIncludeHeader.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxIncludeHeader.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxIncludeHeader.ImageButtonDisabledScaling = 0.5F;
+            this.checkBoxIncludeHeader.ImageIndeterminate = null;
+            this.checkBoxIncludeHeader.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.checkBoxIncludeHeader.ImageUnchecked = null;
             this.checkBoxIncludeHeader.Location = new System.Drawing.Point(12, 14);
             this.checkBoxIncludeHeader.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxIncludeHeader.Name = "checkBoxIncludeHeader";
             this.checkBoxIncludeHeader.Size = new System.Drawing.Size(99, 17);
             this.checkBoxIncludeHeader.TabIndex = 1;
             this.checkBoxIncludeHeader.Text = "Include Header";
-            this.checkBoxIncludeHeader.TickBoxReductionRatio = 0.75f;
+            this.checkBoxIncludeHeader.TickBoxReductionRatio = 0.75F;
             this.checkBoxIncludeHeader.UseVisualStyleBackColor = true;
             // 
             // checkBoxCustomAutoOpen
             // 
             this.checkBoxCustomAutoOpen.AutoSize = true;
             this.checkBoxCustomAutoOpen.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxCustomAutoOpen.CheckBoxDisabledScaling = 0.5F;
             this.checkBoxCustomAutoOpen.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxCustomAutoOpen.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxCustomAutoOpen.ImageButtonDisabledScaling = 0.5F;
+            this.checkBoxCustomAutoOpen.ImageIndeterminate = null;
+            this.checkBoxCustomAutoOpen.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.checkBoxCustomAutoOpen.ImageUnchecked = null;
             this.checkBoxCustomAutoOpen.Location = new System.Drawing.Point(12, 37);
             this.checkBoxCustomAutoOpen.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxCustomAutoOpen.Name = "checkBoxCustomAutoOpen";
-            this.checkBoxCustomAutoOpen.Size = new System.Drawing.Size(91, 17);
+            this.checkBoxCustomAutoOpen.Size = new System.Drawing.Size(52, 17);
             this.checkBoxCustomAutoOpen.TabIndex = 1;
-            this.checkBoxCustomAutoOpen.Text = "Open in excel";
-            this.checkBoxCustomAutoOpen.TickBoxReductionRatio = 0.75f;
+            this.checkBoxCustomAutoOpen.Text = "Open";
+            this.checkBoxCustomAutoOpen.TickBoxReductionRatio = 0.75F;
             this.checkBoxCustomAutoOpen.UseVisualStyleBackColor = true;
             // 
             // customDateTimePickerFrom
@@ -182,8 +173,8 @@
             this.customDateTimePickerFrom.BorderColor = System.Drawing.Color.Transparent;
             this.customDateTimePickerFrom.BorderColorScaling = 0.5F;
             this.customDateTimePickerFrom.Checked = false;
-            this.customDateTimePickerFrom.CustomFormat = "dd MMMM yyyy";
-            this.customDateTimePickerFrom.Format = System.Windows.Forms.DateTimePickerFormat.Long;
+            this.customDateTimePickerFrom.CustomFormat = "dd MMMM yyyy    HH:mm:ss";
+            this.customDateTimePickerFrom.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.customDateTimePickerFrom.Location = new System.Drawing.Point(18, 40);
             this.customDateTimePickerFrom.Name = "customDateTimePickerFrom";
             this.customDateTimePickerFrom.SelectedColor = System.Drawing.Color.Yellow;
@@ -199,8 +190,8 @@
             this.customDateTimePickerTo.BorderColor = System.Drawing.Color.Transparent;
             this.customDateTimePickerTo.BorderColorScaling = 0.5F;
             this.customDateTimePickerTo.Checked = false;
-            this.customDateTimePickerTo.CustomFormat = "dd MMMM yyyy";
-            this.customDateTimePickerTo.Format = System.Windows.Forms.DateTimePickerFormat.Long;
+            this.customDateTimePickerTo.CustomFormat = "dd MMMM yyyy    HH:mm:ss";
+            this.customDateTimePickerTo.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.customDateTimePickerTo.Location = new System.Drawing.Point(18, 73);
             this.customDateTimePickerTo.Name = "customDateTimePickerTo";
             this.customDateTimePickerTo.SelectedColor = System.Drawing.Color.Yellow;
@@ -236,26 +227,45 @@
             // panel_close
             // 
             this.panel_close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel_close.AutoEllipsis = false;
+            this.panel_close.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.panel_close.Image = null;
+            this.panel_close.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Close;
             this.panel_close.Location = new System.Drawing.Point(351, 2);
+            this.panel_close.MouseOverColor = System.Drawing.Color.White;
+            this.panel_close.MouseSelectedColor = System.Drawing.Color.Green;
+            this.panel_close.MouseSelectedColorEnable = true;
             this.panel_close.Name = "panel_close";
             this.panel_close.Padding = new System.Windows.Forms.Padding(6);
+            this.panel_close.PanelDisabledScaling = 0.25F;
             this.panel_close.Selectable = false;
             this.panel_close.Size = new System.Drawing.Size(24, 24);
             this.panel_close.TabIndex = 30;
             this.panel_close.TabStop = false;
+            this.panel_close.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.panel_close.UseMnemonic = true;
             this.panel_close.Click += new System.EventHandler(this.panel_close_Click);
             // 
             // panel_minimize
             // 
             this.panel_minimize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel_minimize.AutoEllipsis = false;
+            this.panel_minimize.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.panel_minimize.Image = null;
             this.panel_minimize.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Minimize;
             this.panel_minimize.Location = new System.Drawing.Point(327, 2);
+            this.panel_minimize.MouseOverColor = System.Drawing.Color.White;
+            this.panel_minimize.MouseSelectedColor = System.Drawing.Color.Green;
+            this.panel_minimize.MouseSelectedColorEnable = true;
             this.panel_minimize.Name = "panel_minimize";
             this.panel_minimize.Padding = new System.Windows.Forms.Padding(6);
+            this.panel_minimize.PanelDisabledScaling = 0.25F;
             this.panel_minimize.Selectable = false;
             this.panel_minimize.Size = new System.Drawing.Size(24, 24);
             this.panel_minimize.TabIndex = 29;
             this.panel_minimize.TabStop = false;
+            this.panel_minimize.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.panel_minimize.UseMnemonic = true;
             this.panel_minimize.Click += new System.EventHandler(this.panel_minimize_Click);
             // 
             // label_index
@@ -272,6 +282,8 @@
             // panelOuter
             // 
             this.panelOuter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panelOuter.Controls.Add(this.label2);
+            this.panelOuter.Controls.Add(this.label1);
             this.panelOuter.Controls.Add(this.comboBoxCustomExportType);
             this.panelOuter.Controls.Add(this.panelBottom);
             this.panelOuter.Controls.Add(this.customDateTimePickerFrom);
@@ -293,6 +305,24 @@
             this.panelTop.Size = new System.Drawing.Size(378, 32);
             this.panelTop.TabIndex = 32;
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(297, 50);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(29, 13);
+            this.label1.TabIndex = 5;
+            this.label1.Text = "UTC";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(297, 83);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(29, 13);
+            this.label2.TabIndex = 5;
+            this.label2.Text = "UTC";
+            // 
             // ExportForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -308,6 +338,7 @@
             this.panelBottom.ResumeLayout(false);
             this.panelBottom.PerformLayout();
             this.panelOuter.ResumeLayout(false);
+            this.panelOuter.PerformLayout();
             this.panelTop.ResumeLayout(false);
             this.panelTop.PerformLayout();
             this.ResumeLayout(false);
@@ -331,7 +362,8 @@
         private ExtendedControls.ExtCheckBox checkBoxCustomAutoOpen;
         private ExtendedControls.ExtButton buttonExport;
         private System.Windows.Forms.Panel panelOuter;
-        private ExtendedControls.ExtCheckBox checkBoxRawJournal;
         private System.Windows.Forms.Panel panelTop;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label1;
     }
 }

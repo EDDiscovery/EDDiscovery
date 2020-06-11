@@ -35,6 +35,7 @@ namespace EDDiscovery.UserControls
         private string DbLevelFilterSave { get { return PrefixName + "LevelFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
         private string DbMaterialFilterSave { get { return PrefixName + "MaterialFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
         private string DbHistoricMatsSave { get { return PrefixName + "HistoricMaterials" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        private string DbWordWrap { get { return PrefixName + "WordWrap" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
 
         int[] Order;        // order
         int[] Wanted;       // wanted, in order terms
@@ -49,6 +50,8 @@ namespace EDDiscovery.UserControls
 
         public HistoryEntry CurrentHistoryEntry { get {return last_he;} }     //one in use, may be null
 
+        HistoryEntry last_he = null;
+
         #region Init
 
         public UserControlSynthesis()
@@ -60,7 +63,9 @@ namespace EDDiscovery.UserControls
         public override void Init()
         {
             dataGridViewSynthesis.MakeDoubleBuffered();
-            dataGridViewSynthesis.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
+            extCheckBoxWordWrap.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbWordWrap, false);
+            UpdateWordWrap();
+            extCheckBoxWordWrap.Click += extCheckBoxWordWrap_Click;
 
             Order = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbOSave, "").RestoreArrayFromString(0, Recipes.SynthesisRecipes.Count);
             if (Order.Max() >= Recipes.SynthesisRecipes.Count || Order.Min() < 0 || Order.Distinct().Count() != Recipes.SynthesisRecipes.Count)       // if not distinct..
@@ -105,6 +110,7 @@ namespace EDDiscovery.UserControls
             isHistoric = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbHistoricMatsSave, false);
 
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
+            discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
 
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
@@ -112,26 +118,27 @@ namespace EDDiscovery.UserControls
 
         public override void ChangeCursorType(IHistoryCursor thc)
         {
-            uctg.OnTravelSelectionChanged -= Display;
+            uctg.OnTravelSelectionChanged -= UCTGChanged;
             uctg = thc;
-            uctg.OnTravelSelectionChanged += Display;
+            uctg.OnTravelSelectionChanged += UCTGChanged;
         }
 
         public override void LoadLayout()
         {
             dataGridViewSynthesis.RowTemplate.MinimumHeight = Font.ScalePixels(26);
-            uctg.OnTravelSelectionChanged += Display;
+            uctg.OnTravelSelectionChanged += UCTGChanged;
             DGVLoadColumnLayout(dataGridViewSynthesis, DbColumnSave);
-            chkHistoric.Checked = isHistoric;
-            chkHistoric.Visible = !isEmbedded;
+            chkNotHistoric.Checked = !isHistoric;
+            chkNotHistoric.Visible = !isEmbedded;
         }
 
         public override void Closing()
         {
             DGVSaveColumnLayout(dataGridViewSynthesis, DbColumnSave);
 
-            uctg.OnTravelSelectionChanged -= Display;
+            uctg.OnTravelSelectionChanged -= UCTGChanged;
             discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
+            discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
 
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbOSave, Order.ToString(","));
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbWSave, Wanted.ToString(","));
@@ -162,17 +169,23 @@ namespace EDDiscovery.UserControls
             Display();
         }
 
+        private void Discoveryform_OnHistoryChange(HistoryList obj)
+        {
+            InitialDisplay();
+        }
+
         private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)
         {
             last_he = he;
             //touchdown and liftoff ensure shopping list refresh in case displaying landed planet mats, scan for mat availability while flying in same
-            if (he.journalEntry is IMaterialJournalEntry || he.journalEntry.EventTypeID == JournalTypeEnum.Touchdown || he.journalEntry.EventTypeID == JournalTypeEnum.Liftoff  
+            if (he.journalEntry is IMaterialJournalEntry || he.journalEntry.EventTypeID == JournalTypeEnum.Touchdown || he.journalEntry.EventTypeID == JournalTypeEnum.Liftoff
                 || he.IsLocOrJump || he.journalEntry.EventTypeID == JournalTypeEnum.Scan)
+            {
                 Display();
+            }
         }
 
-        HistoryEntry last_he = null;
-        private void Display(HistoryEntry he, HistoryList hl, bool selectedEntry)
+        private void UCTGChanged(HistoryEntry he, HistoryList hl, bool selectedEntry)
         {
             if (isHistoric || last_he == null)
             {
@@ -187,14 +200,12 @@ namespace EDDiscovery.UserControls
             // the order of recipies.
             List<Tuple<Recipes.Recipe, int>> wantedList = null;
 
-            System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCountLap(this,true) + " SY " + displaynumber + " Begin Display");
-
             if (last_he != null)
             {
                 List<MaterialCommodities> mcl = last_he.MaterialCommodity.Sort(false);
                 int fdrow = dataGridViewSynthesis.FirstDisplayedScrollingRowIndex;      // remember where we were displaying
 
-                MaterialCommoditiesRecipe.ResetUsed(mcl);
+                var totals = MaterialCommoditiesRecipe.TotalList(mcl);                  // start with totals present
 
                 wantedList = new List<Tuple<Recipes.Recipe, int>>();
 
@@ -208,7 +219,7 @@ namespace EDDiscovery.UserControls
                 for (int i = 0; i < Recipes.SynthesisRecipes.Count; i++)
                 {
                     int rno = (int)dataGridViewSynthesis.Rows[i].Tag;
-                    dataGridViewSynthesis.Rows[i].Cells[2].Value = MaterialCommoditiesRecipe.HowManyLeft(mcl, Recipes.SynthesisRecipes[rno]).Item1.ToString();
+                    dataGridViewSynthesis.Rows[i].Cells[2].Value = MaterialCommoditiesRecipe.HowManyLeft(mcl, totals, Recipes.SynthesisRecipes[rno]).Item1.ToString();
                     bool visible = true;
                 
                     if (recep != "All" || levels != "All" || materials != "All")
@@ -237,10 +248,11 @@ namespace EDDiscovery.UserControls
                 for (int i = 0; i < Recipes.SynthesisRecipes.Count; i++)
                 {
                     int rno = (int)dataGridViewSynthesis.Rows[i].Tag;
+
                     if (dataGridViewSynthesis.Rows[i].Visible)
                     {
                         Recipes.Recipe r = Recipes.SynthesisRecipes[rno];
-                        Tuple<int, int, string, string> res = MaterialCommoditiesRecipe.HowManyLeft(mcl,r , Wanted[rno]);
+                        Tuple<int, int, string, string> res = MaterialCommoditiesRecipe.HowManyLeft(mcl, totals, r , Wanted[rno]);
                         //System.Diagnostics.Debug.WriteLine("{0} Recipe {1} executed {2} {3} ", i, rno, Wanted[rno], res.Item2);
 
                         using (DataGridViewRow row = dataGridViewSynthesis.Rows[i])
@@ -263,28 +275,25 @@ namespace EDDiscovery.UserControls
 
                 if (!isEmbedded)
                 {
-                    MaterialCommoditiesRecipe.ResetUsed(mcl);
-                    List<MaterialCommodities> shoppinglist = MaterialCommoditiesRecipe.GetShoppingList(wantedList, mcl);
-                    shoppinglist.Sort(delegate (MaterialCommodities left, MaterialCommodities right) { return left.Details.Name.CompareTo(right.Details.Name); });
+                    var shoppinglist = MaterialCommoditiesRecipe.GetShoppingList(wantedList, mcl);
 
-                    foreach (MaterialCommodities c in shoppinglist)        // and add new..
+                    foreach (var c in shoppinglist)        // and add new..
                     {
-                        var cur = last_he.MaterialCommodity.Find(c.Details);    // may be null
-                        Object[] values = { c.Details.Name, c.Details.Category, (cur?.Count??0).ToString(), c.scratchpad.ToString(), "","",c.Details.Shortname };
+                        var cur = last_he.MaterialCommodity.Find(c.Item1.Details);    // may be null
+                        Object[] values = { c.Item1.Details.Name, c.Item1.Details.TranslatedCategory, (cur?.Count ?? 0).ToString(), c.Item2.ToString(), "", "", c.Item1.Details.Shortname };
                         int rn = dataGridViewSynthesis.Rows.Add(values);
                         dataGridViewSynthesis.Rows[rn].ReadOnly = true;     // disable editing wanted..
                     }
                 }
 
                 if (fdrow >= 0 && dataGridViewSynthesis.Rows[fdrow].Visible)        // better check visible, may have changed..
-                    dataGridViewSynthesis.FirstDisplayedScrollingRowIndex = fdrow;
+                    dataGridViewSynthesis.SafeFirstDisplayedScrollingRowIndex(fdrow);
 
             }
 
             if (OnDisplayComplete != null)
                 OnDisplayComplete(wantedList);
 
-            System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCountLap(this) + " SY " + displaynumber + " Load Finished");
         }
 
         #endregion
@@ -298,6 +307,19 @@ namespace EDDiscovery.UserControls
         private void FilterChanged()
         {
             Display();
+        }
+
+        private void extCheckBoxWordWrap_Click(object sender, EventArgs e)
+        {
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbWordWrap, extCheckBoxWordWrap.Checked);
+            UpdateWordWrap();
+        }
+
+        private void UpdateWordWrap()
+        {
+            dataGridViewSynthesis.DefaultCellStyle.WrapMode = extCheckBoxWordWrap.Checked ? DataGridViewTriState.True : DataGridViewTriState.False;
+            dataGridViewSynthesis.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;
+            dataViewScrollerPanel.UpdateScroll();
         }
 
         private void dataGridViewModules_CellEndEdit(object sender, DataGridViewCellEventArgs e)
@@ -409,7 +431,7 @@ namespace EDDiscovery.UserControls
 
         private void chkHistoric_CheckedChanged(object sender, EventArgs e)
         {
-            SetHistoric(chkHistoric.Checked);
+            SetHistoric(!chkNotHistoric.Checked);       // button sense changed
         }
     }
 }

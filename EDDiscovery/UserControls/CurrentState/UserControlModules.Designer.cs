@@ -62,8 +62,9 @@ namespace EDDiscovery.UserControls
             this.labelShip = new System.Windows.Forms.Label();
             this.comboBoxShips = new ExtendedControls.ExtComboBox();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.panelTop = new System.Windows.Forms.FlowLayoutPanel();
             this.buttonExtExcel = new ExtendedControls.ExtButton();
+            this.panelTop = new System.Windows.Forms.FlowLayoutPanel();
+            this.extCheckBoxWordWrap = new ExtendedControls.ExtCheckBox();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewModules)).BeginInit();
             this.panelTop.SuspendLayout();
@@ -103,6 +104,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewModules.Size = new System.Drawing.Size(784, 542);
             this.dataGridViewModules.TabIndex = 1;
             this.dataGridViewModules.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewModules_CellClick);
+            this.dataGridViewModules.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewModules_CellDoubleClick);
             this.dataGridViewModules.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewModules_SortCompare);
             // 
             // ItemLocalised
@@ -199,7 +201,7 @@ namespace EDDiscovery.UserControls
             // 
             this.buttonExtConfigure.BackColor = System.Drawing.Color.Transparent;
             this.buttonExtConfigure.Image = global::EDDiscovery.Icons.Controls.Modules_Configure;
-            this.buttonExtConfigure.Location = new System.Drawing.Point(296, 1);
+            this.buttonExtConfigure.Location = new System.Drawing.Point(332, 1);
             this.buttonExtConfigure.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonExtConfigure.Name = "buttonExtConfigure";
             this.buttonExtConfigure.Size = new System.Drawing.Size(24, 24);
@@ -212,7 +214,7 @@ namespace EDDiscovery.UserControls
             // 
             this.buttonExtEDShipyard.BackColor = System.Drawing.Color.Transparent;
             this.buttonExtEDShipyard.Image = global::EDDiscovery.Icons.Controls.Modules_EDShipYard;
-            this.buttonExtEDShipyard.Location = new System.Drawing.Point(264, 1);
+            this.buttonExtEDShipyard.Location = new System.Drawing.Point(300, 1);
             this.buttonExtEDShipyard.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonExtEDShipyard.Name = "buttonExtEDShipyard";
             this.buttonExtEDShipyard.Size = new System.Drawing.Size(24, 24);
@@ -226,7 +228,7 @@ namespace EDDiscovery.UserControls
             // 
             this.buttonExtCoriolis.BackColor = System.Drawing.Color.Transparent;
             this.buttonExtCoriolis.Image = global::EDDiscovery.Icons.Controls.Modules_ShowOnCoriolis;
-            this.buttonExtCoriolis.Location = new System.Drawing.Point(232, 1);
+            this.buttonExtCoriolis.Location = new System.Drawing.Point(268, 1);
             this.buttonExtCoriolis.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonExtCoriolis.Name = "buttonExtCoriolis";
             this.buttonExtCoriolis.Size = new System.Drawing.Size(24, 24);
@@ -239,7 +241,7 @@ namespace EDDiscovery.UserControls
             // labelVehicle
             // 
             this.labelVehicle.AutoSize = true;
-            this.labelVehicle.Location = new System.Drawing.Point(364, 1);
+            this.labelVehicle.Location = new System.Drawing.Point(400, 1);
             this.labelVehicle.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.labelVehicle.Name = "labelVehicle";
             this.labelVehicle.Size = new System.Drawing.Size(53, 13);
@@ -285,11 +287,25 @@ namespace EDDiscovery.UserControls
             // 
             this.toolTip.ShowAlways = true;
             // 
+            // buttonExtExcel
+            // 
+            this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonExtExcel.Image = global::EDDiscovery.Icons.Controls.JournalGrid_ExportToExcel;
+            this.buttonExtExcel.Location = new System.Drawing.Point(364, 1);
+            this.buttonExtExcel.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.buttonExtExcel.Name = "buttonExtExcel";
+            this.buttonExtExcel.Size = new System.Drawing.Size(28, 28);
+            this.buttonExtExcel.TabIndex = 31;
+            this.toolTip.SetToolTip(this.buttonExtExcel, "Send data on grid to excel");
+            this.buttonExtExcel.UseVisualStyleBackColor = true;
+            this.buttonExtExcel.Click += new System.EventHandler(this.buttonExtExcel_Click);
+            // 
             // panelTop
             // 
             this.panelTop.AutoSize = true;
             this.panelTop.Controls.Add(this.labelShip);
             this.panelTop.Controls.Add(this.comboBoxShips);
+            this.panelTop.Controls.Add(this.extCheckBoxWordWrap);
             this.panelTop.Controls.Add(this.buttonExtCoriolis);
             this.panelTop.Controls.Add(this.buttonExtEDShipyard);
             this.panelTop.Controls.Add(this.buttonExtConfigure);
@@ -301,18 +317,35 @@ namespace EDDiscovery.UserControls
             this.panelTop.Size = new System.Drawing.Size(800, 30);
             this.panelTop.TabIndex = 30;
             // 
-            // buttonExtExcel
+            // extCheckBoxWordWrap
             // 
-            this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonExtExcel.Image = global::EDDiscovery.Icons.Controls.JournalGrid_ExportToExcel;
-            this.buttonExtExcel.Location = new System.Drawing.Point(328, 1);
-            this.buttonExtExcel.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.buttonExtExcel.Name = "buttonExtExcel";
-            this.buttonExtExcel.Size = new System.Drawing.Size(28, 28);
-            this.buttonExtExcel.TabIndex = 31;
-            this.toolTip.SetToolTip(this.buttonExtExcel, "Send data on grid to excel");
-            this.buttonExtExcel.UseVisualStyleBackColor = true;
-            this.buttonExtExcel.Click += new System.EventHandler(this.buttonExtExcel_Click);
+            this.extCheckBoxWordWrap.Appearance = System.Windows.Forms.Appearance.Button;
+            this.extCheckBoxWordWrap.BackColor = System.Drawing.Color.Transparent;
+            this.extCheckBoxWordWrap.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.extCheckBoxWordWrap.CheckBoxColor = System.Drawing.Color.White;
+            this.extCheckBoxWordWrap.CheckBoxDisabledScaling = 0.5F;
+            this.extCheckBoxWordWrap.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.extCheckBoxWordWrap.CheckColor = System.Drawing.Color.DarkBlue;
+            this.extCheckBoxWordWrap.Cursor = System.Windows.Forms.Cursors.Default;
+            this.extCheckBoxWordWrap.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.extCheckBoxWordWrap.FlatAppearance.CheckedBackColor = System.Drawing.Color.Green;
+            this.extCheckBoxWordWrap.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.extCheckBoxWordWrap.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
+            this.extCheckBoxWordWrap.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.extCheckBoxWordWrap.Image = global::EDDiscovery.Icons.Controls.WordWrapOn;
+            this.extCheckBoxWordWrap.ImageButtonDisabledScaling = 0.5F;
+            this.extCheckBoxWordWrap.ImageIndeterminate = null;
+            this.extCheckBoxWordWrap.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.extCheckBoxWordWrap.ImageUnchecked = global::EDDiscovery.Icons.Controls.WordWrapOff;
+            this.extCheckBoxWordWrap.Location = new System.Drawing.Point(232, 1);
+            this.extCheckBoxWordWrap.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.extCheckBoxWordWrap.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.extCheckBoxWordWrap.Name = "extCheckBoxWordWrap";
+            this.extCheckBoxWordWrap.Size = new System.Drawing.Size(28, 28);
+            this.extCheckBoxWordWrap.TabIndex = 32;
+            this.extCheckBoxWordWrap.TickBoxReductionRatio = 0.75F;
+            this.toolTip.SetToolTip(this.extCheckBoxWordWrap, "Enable or disable word wrap");
+            this.extCheckBoxWordWrap.UseVisualStyleBackColor = false;
             // 
             // UserControlModules
             // 
@@ -353,5 +386,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn PriorityEnable;
         private System.Windows.Forms.FlowLayoutPanel panelTop;
         private ExtendedControls.ExtButton buttonExtExcel;
+        private ExtendedControls.ExtCheckBox extCheckBoxWordWrap;
     }
 }
