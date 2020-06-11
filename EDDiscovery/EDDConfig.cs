@@ -421,9 +421,9 @@ namespace EDDiscovery
                 {
                     string[] parts = s.Split('=');
                     // valid number, valid length, image exists
-                    if (parts.Length == 2 && parts[0].Length > 0 && parts[1].Length > 0 && EDDiscovery.Icons.IconSet.Icons.ContainsKey(parts[1]))
+                    if (parts.Length == 2 && parts[0].Length > 0 && parts[1].Length > 0 && BaseUtils.Icons.IconSet.Instance.Icons.ContainsKey(parts[1]))
                     {
-                        Image img = EDDiscovery.Icons.IconSet.Icons[parts[1]];      // image.tag has name - defined by icon system
+                        Image img = BaseUtils.Icons.IconSet.Instance.Icons[parts[1]];      // image.tag has name - defined by icon system
                         captainslogtaglist[parts[0]] = img;
                     }
                 }

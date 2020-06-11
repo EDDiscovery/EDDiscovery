@@ -48,14 +48,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ForceInclusion.cs" />
     <Compile Include="Controls\Controls.cs" />
     <None Include="Controls\Fakes\Controls.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Controls.resx</DependentUpon>
     </None>
-    <Compile Include="IconGroup.cs" />
-    <Compile Include="IconSet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

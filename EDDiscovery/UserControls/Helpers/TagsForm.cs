@@ -157,9 +157,9 @@ namespace EDDiscovery.UserControls
 
             dropdown = new ExtendedControls.ExtListBoxForm("", true);
 
-            List<string> Dickeys = new List<string>(EDDiscovery.Icons.IconSet.Icons.Keys);
+            List<string> Dickeys = new List<string>(BaseUtils.Icons.IconSet.Instance.Icons.Keys);
             Dickeys.Sort();
-            List<Image> images = (from x in Dickeys select EDDiscovery.Icons.IconSet.Icons[x]).ToList();
+            List<Image> images = (from x in Dickeys select BaseUtils.Icons.IconSet.Instance.Icons[x]).ToList();
 
             dropdown.FitImagesToItemHeight = true;
             dropdown.Items = Dickeys;
@@ -209,7 +209,7 @@ namespace EDDiscovery.UserControls
 
         private void buttonMore_Click(object sender, EventArgs e)
         {
-            CreateEntry("", EDDiscovery.Icons.IconSet.GetIcon("Legacy.star"));
+            CreateEntry("", BaseUtils.Icons.IconSet.GetIcon("Legacy.star"));
         }
 
         private void panel_close_Click(object sender, EventArgs e)
