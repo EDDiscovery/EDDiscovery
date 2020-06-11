@@ -135,14 +135,6 @@ namespace EliteDangerousCore
             return historylist.Where(s => s.EventTimeUTC >= startutc && s.EventTimeUTC <= endutc).OrderByDescending(s => s.EventTimeUTC).ToList();
         }
 
-        public List<HistoryEntry> FilterByNotEDSMSyncedAndFSD
-        {
-            get
-            {
-                return (from s in historylist where s.EdsmSync == false && s.IsLocOrJump orderby s.EventTimeUTC ascending select s).ToList();
-            }
-        }
-
         public List<HistoryEntry> FilterByScanNotEDDNSynced
         {
             get
@@ -498,7 +490,7 @@ namespace EliteDangerousCore
                 return historylist.Where(h => h.Indexno >= first.Indexno && h.Indexno < last.Indexno && journalTypes.Contains(h.EntryType)).Any();
         }
 
-        public static HistoryEntry FindLastFSDKnownPosition(List<HistoryEntry> syslist)
+        public static HistoryEntry FindLastKnownPosition(List<HistoryEntry> syslist)        // can return FSD, Carrier or Location
         {
             return syslist.FindLast(x => x.System.HasCoordinate && x.IsLocOrJump);
         }

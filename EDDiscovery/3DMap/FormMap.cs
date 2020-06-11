@@ -1216,7 +1216,7 @@ namespace EDDiscovery
         {
             if (systemlist != null)
             {
-                HistoryEntry he = HistoryList.FindLastFSDKnownPosition(systemlist);
+                HistoryEntry he = HistoryList.FindLastKnownPosition(systemlist);
 
                 if (he != null )
                     SetCenterSystemTo(FindSystem(he.System.Name,true));
