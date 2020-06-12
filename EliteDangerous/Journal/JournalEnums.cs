@@ -48,7 +48,7 @@ namespace EliteDangerousCore
         CarrierShipPack = 1355,
         CarrierStats = 1360,
         CarrierTradeOrder = 1365,
-        CarrierNameChanged = 1366,
+        CarrierNameChange = 1366,
         CarrierJumpCancelled = 1367,
         ChangeCrewRole = 65,
         ClearSavedGame = 70,

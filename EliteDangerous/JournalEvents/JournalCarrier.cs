@@ -500,14 +500,14 @@ namespace EliteDangerousCore.JournalEvents
         }
     }
 
-    [JournalEntryType(JournalTypeEnum.CarrierNameChanged)]
-    public class JournalCarrierNameChanged : JournalEntry
+    [JournalEntryType(JournalTypeEnum.CarrierNameChange)]
+    public class JournalCarrierNameChange : JournalEntry
     {
         public long CarrierID { get; set; }
         public string Callsign { get; set; }
         public string Name { get; set; }
 
-        public JournalCarrierNameChanged(JObject evt) : base(evt, JournalTypeEnum.CarrierNameChanged)
+        public JournalCarrierNameChange(JObject evt) : base(evt, JournalTypeEnum.CarrierNameChange)
         {
             CarrierID = evt["CarrierID"].Long();
             Callsign = evt["Callsign"].Str();
