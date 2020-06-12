@@ -204,10 +204,6 @@
     <Compile Include="Actions\ActionsEDDCmds\ActionDLLCall.cs" />
     <Compile Include="Actions\ActionsEDDCmds\ActionBookmarks.cs" />
     <Compile Include="Actions\AudioHelper.cs" />
-    <Compile Include="DLL\EDDDLLHistoryEntry.cs" />
-    <Compile Include="DLL\EDDDLLCaller.cs" />
-    <Compile Include="DLL\EDDDLLManager.cs" />
-    <Compile Include="DLL\EDDInterface.cs" />
     <Compile Include="EDDiscoveryControllerNewEntry.cs" />
     <Compile Include="EDDiscoveryControllerHistory.cs" />
     <Compile Include="EDDiscoveryControllerSync.cs" />
