@@ -41,8 +41,8 @@ namespace EDDiscovery
         private EDDiscoveryController Controller;
         private Actions.ActionController actioncontroller;
 
-        public EDDiscovery.DLL.EDDDLLManager DLLManager;
-        public EDDiscovery.DLL.EDDDLLIF.EDDCallBacks DLLCallBacks;
+        public EliteDangerousCore.DLL.EDDDLLManager DLLManager;
+        public EliteDangerousCore.DLL.EDDDLLIF.EDDCallBacks DLLCallBacks;
 
         public WebServer.WebServer WebServer;
 
@@ -304,8 +304,8 @@ namespace EDDiscovery
 
             Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Finish ED Init");
 
-            DLLManager = new DLL.EDDDLLManager();
-            DLLCallBacks = new EDDiscovery.DLL.EDDDLLIF.EDDCallBacks();
+            DLLManager = new EliteDangerousCore.DLL.EDDDLLManager();
+            DLLCallBacks = new EliteDangerousCore.DLL.EDDDLLIF.EDDCallBacks();
 
             WebServer = new WebServer.WebServer(this);
 
@@ -530,10 +530,10 @@ namespace EDDiscovery
             return true;
         }
 
-        public bool DLLRequestHistory(long index, bool isjid, out EDDiscovery.DLL.EDDDLLIF.JournalEntry f)
+        public bool DLLRequestHistory(long index, bool isjid, out EliteDangerousCore.DLL.EDDDLLIF.JournalEntry f)
         {
             HistoryEntry he = isjid ? history.GetByJID(index) : history.GetByIndex((int)index);
-            f = EDDiscovery.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(he);
+            f = EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(he);
             return he != null;
         }
 
@@ -705,7 +705,7 @@ namespace EDDiscovery
                 EliteDangerousCore.Inara.InaraSync.Refresh(LogLine, history, EDCommander.Current);
             }
 
-            DLLManager.Refresh(EDCommander.Current.Name, DLL.EDDDLLCallerHE.CreateFromHistoryEntry(history.GetLast));
+            DLLManager.Refresh(EDCommander.Current.Name, EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(history.GetLast));
 
             Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Refresh complete finished");
         }
@@ -763,7 +763,7 @@ namespace EDDiscovery
                 EDDNSync.SendEDDNEvents(LogLine, he);
             }
 
-            DLLManager.NewJournalEntry( DLL.EDDDLLCallerHE.CreateFromHistoryEntry(he));
+            DLLManager.NewJournalEntry(EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(he));
 
             CheckActionProfile(he);
         }
@@ -1377,7 +1377,7 @@ namespace EDDiscovery
             else
                 return false;
 
-            Image img = IconSet.GetIcon(icon);
+            Image img = BaseUtils.Icons.IconSet.GetIcon(icon);
 
             var x = (from ToolStripItem p in parent.DropDownItems where p.Text.Equals(menutext) && p.Tag != null && p.Name.Equals(menuname) select p);
 

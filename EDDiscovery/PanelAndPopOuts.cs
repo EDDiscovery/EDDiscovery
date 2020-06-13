@@ -165,7 +165,7 @@ namespace EDDiscovery
         static private List<PanelInfo> userselectablepanellist;   // filled by Init - all panels that the user can select directly
         static private int[] userselectablepanelseperatorlistgroup;    // filled by Init - the seperator group index into userselectablepanellist
 
-        public static IReadOnlyDictionary<PanelIDs, Image> PanelTypeIcons { get; private set; } = new IconGroup<PanelIDs>("Panels");
+        public static IReadOnlyDictionary<PanelIDs, Image> PanelTypeIcons { get; private set; } = new BaseUtils.Icons.IconGroup<PanelIDs>("Panels");
 
         public static void Init()
         {
@@ -198,7 +198,7 @@ namespace EDDiscovery
             displayablepanels = (from x in paneldefinition where x.PopoutID != PanelIDs.GroupMarker select x).ToList(); //remove groups..
             userselectablepanellist = (from x in displayablepanels where x.Description.Length>0 select x).ToList(); //remove non selectables..
 
-            PanelTypeIcons = new IconGroup<PanelIDs>("Panels");
+            PanelTypeIcons = new BaseUtils.Icons.IconGroup<PanelIDs>("Panels");
         }
 
         [System.Diagnostics.DebuggerDisplay("{PopoutID} {WindowTitle}")]

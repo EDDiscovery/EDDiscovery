@@ -202,13 +202,13 @@ namespace EDDiscovery.WebServer
                     Bitmap img;
 
                     if ( nopng.Contains("."))       // if path, use it
-                        img = EDDiscovery.Icons.IconSet.GetIcon(nopng) as Bitmap;
-                    else if (EDDiscovery.Icons.IconSet.Icons.ContainsKey("Journal." + nopng))  // no path, may be a journal one
-                        img = EDDiscovery.Icons.IconSet.GetIcon("Journal." + nopng) as Bitmap;
-                    else if (EDDiscovery.Icons.IconSet.Icons.ContainsKey("General." + nopng))  // no path, may be a journal one
-                        img = EDDiscovery.Icons.IconSet.GetIcon("General." + nopng) as Bitmap;
+                        img = BaseUtils.Icons.IconSet.GetIcon(nopng) as Bitmap;
+                    else if (BaseUtils.Icons.IconSet.Instance.Icons.ContainsKey("Journal." + nopng))  // no path, may be a journal one
+                        img = BaseUtils.Icons.IconSet.GetIcon("Journal." + nopng) as Bitmap;
+                    else if (BaseUtils.Icons.IconSet.Instance.Icons.ContainsKey("General." + nopng))  // no path, may be a journal one
+                        img = BaseUtils.Icons.IconSet.GetIcon("General." + nopng) as Bitmap;
                     else
-                        img = EDDiscovery.Icons.IconSet.GetIcon(nopng) as Bitmap;
+                        img = BaseUtils.Icons.IconSet.GetIcon(nopng) as Bitmap;
 
                     return img.ConvertTo(System.Drawing.Imaging.ImageFormat.Png);   // this converts to png and returns the raw PNG bytes..
                 }
