@@ -34,6 +34,11 @@ namespace EDDiscoveryTests
             Z = 0
         };
 
+        public TravelHistoryFilterTests()
+        {
+            BaseUtils.Icons.IconSet.CreateSingleton();
+        }
+
         [Test]
         public void No_filter_does_not_filter_anything()
         {
