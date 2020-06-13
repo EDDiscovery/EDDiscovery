@@ -34,6 +34,18 @@ namespace EDDiscoveryTests
             Z = 0
         };
 
+        public TravelHistoryFilterTests()
+        {
+            EDDiscovery.Icons.ForceInclusion.Include();      // Force the assembly into the project by a empty call
+            BaseUtils.Icons.IconSet.CreateSingleton();
+            System.Reflection.Assembly iconasm = BaseUtils.ResourceHelpers.GetAssemblyByName("EDDiscovery.Icons");
+            BaseUtils.Icons.IconSet.Instance.LoadIconsFromAssembly(iconasm);
+            BaseUtils.Icons.IconSet.Instance.AddAlias("settings", "Controls.Main.Tools.Settings");             // from use by action system..
+            BaseUtils.Icons.IconSet.Instance.AddAlias("missioncompleted", "Journal.MissionCompleted");
+            BaseUtils.Icons.IconSet.Instance.AddAlias("speaker", "Legacy.speaker");
+            BaseUtils.Icons.IconSet.Instance.AddAlias("Default", "Legacy.star");        // MUST be present
+        }
+
         [Test]
         public void No_filter_does_not_filter_anything()
         {
