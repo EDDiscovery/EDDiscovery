@@ -108,6 +108,10 @@
       <Project>{c657c881-f3e1-45ba-aca5-966348010414}</Project>
       <Name>BaseUtils</Name>
     </ProjectReference>
+    <ProjectReference Include="..\EDDIcons\EDDIcons.csproj">
+      <Project>{646f71be-f102-444e-9254-818e5a320ab8}</Project>
+      <Name>EDDIcons</Name>
+    </ProjectReference>
     <ProjectReference Include="..\EDDiscovery\EDDiscovery.csproj">
       <Project>{6EE10D92-E3E4-44D9-8E6B-851801B0B510}</Project>
       <Name>EDDiscovery</Name>
