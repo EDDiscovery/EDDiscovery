@@ -14,7 +14,6 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using Newtonsoft.Json.Linq;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -23,8 +22,6 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.NavRoute)]
     public class JournalNavRoute : JournalEntry, IAdditionalFiles
     {
-        private static DateTime LastNavRoute;
-
         public JournalNavRoute(JObject evt) : base(evt, JournalTypeEnum.NavRoute)
         {
             Rescan(evt);
@@ -79,15 +76,6 @@ namespace EliteDangerousCore.JournalEvents
 
         public bool ReadAdditionalFiles(string directory, bool inhistoryparse, ref JObject jo)
         {
-            var lastnavroute = LastNavRoute;
-            LastNavRoute = this.EventTimeUTC;
-
-            // Don't process if the game is spamming the NavRoute event
-            if (EventTimeUTC == lastnavroute || EventTimeUTC == lastnavroute.AddSeconds(1))
-            {
-                return false;
-            }
-
             if (Route == null)
             {
                 JObject jnew = ReadAdditionalFile(System.IO.Path.Combine(directory, "NavRoute.json"), waitforfile: !inhistoryparse, checktimestamptype: true);  // check timestamp..
