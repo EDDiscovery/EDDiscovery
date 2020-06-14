@@ -36,6 +36,7 @@ namespace EliteDangerousCore
         JournalEvents.JournalStoredModules laststoredmodules = null;
         JournalEvents.JournalOutfitting lastoutfitting = null;
         JournalEvents.JournalMarket lastmarket = null;
+        JournalEvents.JournalNavRoute lastnavroute = null;
         const int timelimit = 5 * 60;   //seconds.. 5 mins between logs. Note if we undock, we reset the counters.
 
         private Queue<JournalReaderEntry> StartEntries = new Queue<JournalReaderEntry>();
@@ -192,6 +193,17 @@ namespace EliteDangerousCore
                 lastoutfitting = null;
                 laststoredmodules = null;
                 laststoredships = null;
+            }
+            else if (je is JournalEvents.JournalNavRoute)
+            {
+                var route = je as JournalEvents.JournalNavRoute;
+
+                if (lastnavroute != null && (route.EventTimeUTC == lastnavroute.EventTimeUTC || route.EventTimeUTC == lastnavroute.EventTimeUTC.AddSeconds(1)))
+                {
+                    toosoon = true;
+                }
+
+                lastnavroute = route;
             }
 
             if (toosoon)                                                // if seeing repeats, remove
