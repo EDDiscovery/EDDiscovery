@@ -9,4 +9,4 @@
 	url = https://github.com/EDDiscovery/ActionLanguage.git
 [submodule "EliteDangerousCore"]
 	path = EliteDangerousCore
-	url = https://github.com/klightspeed/EliteDangerousCore.git
+	url = https://github.com/EDDiscovery/EliteDangerousCore.git
