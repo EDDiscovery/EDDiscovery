@@ -89,7 +89,7 @@ namespace EDDiscovery
         #region Variables
         private string logtext = "";     // to keep in case of no logs..
 
-        private EDJournalClass journalmonitor;
+        private EDJournalUIScanner journalmonitor;
 
         private Thread backgroundWorker;
         private Thread backgroundRefreshWorker;
@@ -216,7 +216,7 @@ namespace EDDiscovery
             EdsmLogFetcher = new EDSMLogFetcher(LogLine);
             EdsmLogFetcher.OnDownloadedSystems += () => RefreshHistoryAsync();
 
-            journalmonitor = new EDJournalClass(InvokeAsyncOnUiThread);
+            journalmonitor = new EDJournalUIScanner(InvokeAsyncOnUiThread);
             journalmonitor.OnNewJournalEntry += NewEntry;
             journalmonitor.OnNewUIEvent += NewUIEvent;
         }

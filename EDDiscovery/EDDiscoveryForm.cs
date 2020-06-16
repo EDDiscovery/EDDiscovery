@@ -386,7 +386,8 @@ namespace EDDiscovery
                                 "Warning".T(EDTx.Warning),
                                 MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                 {
-                    EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("DLLAllowed", alloweddlls.AppendPrePad(res.Item3, ","));
+                    alloweddlls = alloweddlls.AppendPrePad(res.Item3, ",");
+                    EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("DLLAllowed", alloweddlls);
                     DLLManager.UnLoad();
                     res = DLLManager.Load(EDDOptions.Instance.DLLAppDirectory(), EDDApplicationContext.AppVersion, EDDOptions.Instance.DLLAppDirectory(), DLLCallBacks, alloweddlls);
                 }
@@ -700,9 +701,9 @@ namespace EDDiscovery
             RefreshButton(true);
             actioncontroller.ActionRunOnRefresh();
 
-            if (EDCommander.Current.SyncToInara)
+            if (EDCommander.Current.SyncToInara && history.GetLast != null)
             {
-                EliteDangerousCore.Inara.InaraSync.Refresh(LogLine, history, EDCommander.Current);
+                EliteDangerousCore.Inara.InaraSync.Refresh(LogLine, history.GetLast, EDCommander.Current);
             }
 
             DLLManager.Refresh(EDCommander.Current.Name, EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(history.GetLast));
@@ -912,7 +913,7 @@ namespace EDDiscovery
             {
                 string cmdrfolder = cmdr.JournalDir;
                 if (cmdrfolder == null || cmdrfolder.Length < 1)
-                    cmdrfolder = EDJournalClass.GetDefaultJournalDir();
+                    cmdrfolder = EDJournalUIScanner.GetDefaultJournalDir();
 
                 if (Directory.Exists(cmdrfolder))
                 {
