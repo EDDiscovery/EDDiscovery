@@ -157,9 +157,9 @@ namespace EDDiscovery.UserControls
 
             dropdown = new ExtendedControls.ExtListBoxForm("", true);
 
-            List<string> Dickeys = new List<string>(BaseUtils.Icons.IconSet.Instance.Icons.Keys);
+            List<string> Dickeys = new List<string>(BaseUtils.Icons.IconSet.Instance.Names());
             Dickeys.Sort();
-            List<Image> images = (from x in Dickeys select BaseUtils.Icons.IconSet.Instance.Icons[x]).ToList();
+            List<Image> images = (from x in Dickeys select BaseUtils.Icons.IconSet.Instance.Get(x)).ToList();
 
             dropdown.FitImagesToItemHeight = true;
             dropdown.Items = Dickeys;

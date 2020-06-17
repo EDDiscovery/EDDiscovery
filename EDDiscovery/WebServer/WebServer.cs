@@ -203,9 +203,9 @@ namespace EDDiscovery.WebServer
 
                     if ( nopng.Contains("."))       // if path, use it
                         img = BaseUtils.Icons.IconSet.GetIcon(nopng) as Bitmap;
-                    else if (BaseUtils.Icons.IconSet.Instance.Icons.ContainsKey("Journal." + nopng))  // no path, may be a journal one
+                    else if (BaseUtils.Icons.IconSet.Instance.Contains("Journal." + nopng))  // no path, may be a journal one
                         img = BaseUtils.Icons.IconSet.GetIcon("Journal." + nopng) as Bitmap;
-                    else if (BaseUtils.Icons.IconSet.Instance.Icons.ContainsKey("General." + nopng))  // no path, may be a journal one
+                    else if (BaseUtils.Icons.IconSet.Instance.Contains("General." + nopng))  // no path, may be a journal one
                         img = BaseUtils.Icons.IconSet.GetIcon("General." + nopng) as Bitmap;
                     else
                         img = BaseUtils.Icons.IconSet.GetIcon(nopng) as Bitmap;
