@@ -424,6 +424,7 @@ namespace EDDiscovery
                     if (parts.Length == 2 && parts[0].Length > 0 && parts[1].Length > 0 && BaseUtils.Icons.IconSet.Instance.Contains(parts[1]))
                     {
                         Image img = BaseUtils.Icons.IconSet.Instance.Get(parts[1]);      // image.tag has name - defined by icon system
+                        img.Tag = parts[1]; // store name in tag
                         captainslogtaglist[parts[0]] = img;
                     }
                 }

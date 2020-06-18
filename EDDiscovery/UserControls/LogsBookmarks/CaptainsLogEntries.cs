@@ -312,6 +312,8 @@ namespace EDDiscovery.UserControls
             cfs.SaveSettings += TagsChanged;
             cfs.AddAllNone();
             cfs.AddStandardOption(options);
+            cfs.ImageSize = new Size(24, 24);
+
 
             List<string> curtags = rw.Cells[4].Tag as List<string>;     // may be null
             string taglist = curtags != null ? string.Join(";", curtags) : "";
