@@ -44,7 +44,7 @@ namespace EDDiscovery.UserControls
         public UserControlLocalMap()
         {
             InitializeComponent();
-            this.chartMap.MouseWheel += Zoom_MouseWheel;
+            //this.extAstroPlot.MouseWheel += Zoom_MouseWheel;
         }
 
         private HistoryEntry last_he = null;
@@ -68,9 +68,9 @@ namespace EDDiscovery.UserControls
             slidetimer.Interval = 500;
             slidetimer.Tick += Slidetimer_Tick;
 
-            var style = chartMap.ChartAreas[0].Area3DStyle;
-            style.Rotation = Math.Min(180, Math.Max(-180, style.Rotation - (Convert.ToInt32(EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble(DbSave + "MapRotationX", xr)))));
-            style.Inclination = Math.Min(90, Math.Max(-90, style.Inclination + (Convert.ToInt32(EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble(DbSave + "MapRotationY", yr)))));
+            //var style = chartMap.ChartAreas[0].Area3DStyle;
+            //style.Rotation = Math.Min(180, Math.Max(-180, style.Rotation - (Convert.ToInt32(EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble(DbSave + "MapRotationX", xr)))));
+            //style.Inclination = Math.Min(90, Math.Max(-90, style.Inclination + (Convert.ToInt32(EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble(DbSave + "MapRotationY", yr)))));
 
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
@@ -108,8 +108,9 @@ namespace EDDiscovery.UserControls
         private void Uctg_OnTravelSelectionChanged(HistoryEntry he, HistoryList hl, bool selectedEntry)
         {
             KickComputation(he);
+            extAstroPlot.Clear();
             RefreshMap();
-            ControlReset(chartMap);
+            //ControlReset(chartMap);            
         }
 
         #endregion
@@ -139,13 +140,13 @@ namespace EDDiscovery.UserControls
 
             for (int s = 0; s <= 100; s++)
             {
-               chartMap.Series[s].MarkerSize = 6;
+               //chartMap.Series[s].MarkerSize = 6;
             }
-            chartMap.Series[50].MarkerSize = 8;
+            //chartMap.Series[50].MarkerSize = 8;
 
             // Add the current system
-            chartMap.Series[50].Points.AddXY(0, 0);
-            chartMap.Series[50].ToolTip = centerSystem.Name; // tooltip
+            //chartMap.Series[50].Points.AddXY(0, 0);
+            //chartMap.Series[50].ToolTip = centerSystem.Name; // tooltip
 
             System.Diagnostics.Debug.WriteLine("Max " + textMaxRadius.Value + " Min " + textMinRadius.Value + " Count " + csl.Count()); ;
             if (csl.Count() > 0)
@@ -164,12 +165,12 @@ namespace EDDiscovery.UserControls
                         var curZ = centerSystem.Z;
 
                         // reset charts axis
-                        chartMap.ChartAreas[0].AxisY.IsStartedFromZero = false;
-                        chartMap.ChartAreas[0].AxisX.IsStartedFromZero = false;
-                        chartMap.ChartAreas[0].AxisX.Maximum = textMaxRadius.Value;
-                        chartMap.ChartAreas[0].AxisX.Minimum = textMaxRadius.Value * -1;
-                        chartMap.ChartAreas[0].AxisY.Maximum = textMaxRadius.Value;
-                        chartMap.ChartAreas[0].AxisY.Minimum = textMaxRadius.Value * -1;
+                        //chartMap.ChartAreas[0].AxisY.IsStartedFromZero = false;
+                        //chartMap.ChartAreas[0].AxisX.IsStartedFromZero = false;
+                        //chartMap.ChartAreas[0].AxisX.Maximum = textMaxRadius.Value;
+                        //chartMap.ChartAreas[0].AxisX.Minimum = textMaxRadius.Value * -1;
+                        //chartMap.ChartAreas[0].AxisY.Maximum = textMaxRadius.Value;
+                        //chartMap.ChartAreas[0].AxisY.Minimum = textMaxRadius.Value * -1;
 
                         // depth of the series layers need to be adjusted, so to follow the X and Y axis
 
@@ -198,7 +199,7 @@ namespace EDDiscovery.UserControls
                             sdepth = 1000;
                         }
 
-                        chartMap.ChartAreas[0].Area3DStyle.PointDepth = sdepth;
+                        //chartMap.ChartAreas[0].Area3DStyle.PointDepth = sdepth;
 
                         if (distFromCurrentSys > textMinRadius.Value) // we want to be able to define a shell 
                         {
@@ -238,17 +239,16 @@ namespace EDDiscovery.UserControls
                             label.Append(theISystemInQuestion.Name + " / " + visits + " visits" + "\n" + distFromCurrentSys + "\n" +
                                           "X: " + sysX + ", Y: " + sysY + ", Z:" + sysZ);
 
-                            chartMap.Series[ispy].Points.AddXY(px, pz);
-                            chartMap.Series[ispy].ToolTip = label.ToString(); // tooltips
+                            //chartMap.Series[ispy].Points.AddXY(px, pz);
+                            //chartMap.Series[ispy].ToolTip = label.ToString(); // tooltips
                         }
                     }
                 }
             }
             else
             {
-                for (int i = 0; i < chartMap.Series.Count; i++)
-                    chartMap.Series[i].Points.Clear();
-
+                //for (int i = 0; i < chartMap.Series.Count; i++)
+                //    chartMap.Series[i].Points.Clear();
             }
         }
 
@@ -271,11 +271,11 @@ namespace EDDiscovery.UserControls
             // clean up all the series
             foreach (int s in Enumerable.Range(0, 100))
             {
-                chartMap.Series[s].Points.Clear();
+                //chartMap.Series[s].Points.Clear();
             }
 
             // update the chart
-            chartMap.Update();
+            //chartMap.Update();
         }
 
         #endregion
@@ -311,35 +311,35 @@ namespace EDDiscovery.UserControls
         private double[] zoomFactor = { 1.0, 1.25, 1.5, 1.75, 2.0, 2.5, 3.0, 3.5, 4.0, 5.0, 6.0, 8.0, 10.0 };
         private int zoomIndex = 0; // default zoom at 1:1
 
-        private void Zoom_MouseWheel(object sender, MouseEventArgs e)
-        {
-            chartMap.Left = chartMap.Parent.Left;
-            chartMap.Top = chartMap.Parent.Top;
+        //private void Zoom_MouseWheel(object sender, MouseEventArgs e)
+        //{
+        //    //chartMap.Left = chartMap.Parent.Left;
+        //    //chartMap.Top = chartMap.Parent.Top;
 
-            // Zoom In
-            if (e.Delta > 0)
-            {
-                if (zoomIndex < 12)
-                {
-                    zoomIndex++;
-                    ZoomControl(chartMap, zoomIndex, e);
-                }
-            }
+        //    // Zoom In
+        //    if (e.Delta > 0)
+        //    {
+        //        if (zoomIndex < 12)
+        //        {
+        //            zoomIndex++;
+        //            //ZoomControl(chartMap, zoomIndex, e);
+        //        }
+        //    }
 
-            // Zoom Out
-            else if (e.Delta < 0)
-            {
-                if (zoomIndex > 0)
-                {
-                    zoomIndex--;
-                    ZoomControl(chartMap, zoomIndex, e);
-                }
-                else if (zoomIndex == 0) // necessary to avoid zoom try to reduce the map when 1:1
-                {
-                    zoomIndex = 0; // do nothing...
-                }
-            }
-        }
+        //    // Zoom Out
+        //    else if (e.Delta < 0)
+        //    {
+        //        if (zoomIndex > 0)
+        //        {
+        //            zoomIndex--;
+        //            //ZoomControl(chartMap, zoomIndex, e);
+        //        }
+        //        else if (zoomIndex == 0) // necessary to avoid zoom try to reduce the map when 1:1
+        //        {
+        //            zoomIndex = 0; // do nothing...
+        //        }
+        //    }
+        //}
 
         private void ZoomControl(Control ctrlToZoom, int zoomIndex, MouseEventArgs e)
         {
@@ -440,7 +440,7 @@ namespace EDDiscovery.UserControls
                 EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble(DbSave + "MapRotationX", prevxr);
                 EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble(DbSave + "MapRotationY", prevyr);
 
-                CenterMouseOverControl(chartMap);
+                //CenterMouseOverControl(chartMap);
                 Cursor.Show(); // show the cursor                
             }
             if (e.Button == MouseButtons.Middle)
@@ -469,9 +469,9 @@ namespace EDDiscovery.UserControls
                 // rotate the chart            
                 if (!mousePosRotate.IsEmpty)
                 {
-                    var style = chartMap.ChartAreas[0].Area3DStyle;
-                    style.Rotation = Math.Min(180, Math.Max(-180, style.Rotation - (e.Location.X - mousePosRotate.X)));
-                    style.Inclination = Math.Min(90, Math.Max(-90, style.Inclination + (e.Location.Y - mousePosRotate.Y)));
+                    //var style = chartMap.ChartAreas[0].Area3DStyle;
+                    //style.Rotation = Math.Min(180, Math.Max(-180, style.Rotation - (e.Location.X - mousePosRotate.X)));
+                    //style.Inclination = Math.Min(90, Math.Max(-90, style.Inclination + (e.Location.Y - mousePosRotate.Y)));
                 }
 
                 mousePosRotate = e.Location;
@@ -480,7 +480,7 @@ namespace EDDiscovery.UserControls
             // pan the chart with the middle mouse buttom
             if (e.Button == MouseButtons.Middle & panSwitch == true)
             {
-                PanControl(chartMap, e);
+                //PanControl(chartMap, e);
             }
         }
 
@@ -505,10 +505,10 @@ namespace EDDiscovery.UserControls
         // reset the size of the map to the default
         private void ControlReset(Control ctrlToReset)
         {
-            ctrlToReset.Height = chartMap.Parent.Height;
-            ctrlToReset.Width = chartMap.Parent.Width;
-            var Origin = new Point(chartMap.Parent.Location.X, chartMap.Parent.Location.Y);
-            ctrlToReset.Location = Origin;
+            //ctrlToReset.Height = chartMap.Parent.Height;
+            //ctrlToReset.Width = chartMap.Parent.Width;
+            //var Origin = new Point(chartMap.Parent.Location.X, chartMap.Parent.Location.Y);
+            //ctrlToReset.Location = Origin;
         }
 
         // Center the mouse cursor over a control.
@@ -542,13 +542,13 @@ namespace EDDiscovery.UserControls
         // on load
         private void UserControlMap_Load(object sender, EventArgs e)
         {
-            ControlReset(chartMap);
+            //ControlReset(chartMap);
         }
 
         // on resize the panel, reset the map to the default size
         private void UserControlMap_Resize(object sender, EventArgs e)
         {
-            ControlReset(chartMap);
+            //ControlReset(chartMap);
         }
 
         #endregion
@@ -558,123 +558,123 @@ namespace EDDiscovery.UserControls
         // reset
         private void toolStripMenuReset_Click(object sender, EventArgs e)
         {
-            ControlReset(chartMap);
+            //ControlReset(chartMap);
             Refresh();
         }
 
         private void toolStripMenuZoomCenterMap_Click(object sender, EventArgs e)
         {
-            CenterControlToParent(chartMap);
+            //CenterControlToParent(chartMap);
         }
 
         // zoom factor
         // 1:1
         private void toolStripMenuZoom1_Click(object sender, EventArgs e)
         {
-            CenterControlToParent(chartMap);
+            //CenterControlToParent(chartMap);
             zoomFactor[zoomIndex] = 0;
             // resize to the minimum width and height
-            chartMap.Width = chartMap.Parent.Width;
-            chartMap.Height = chartMap.Parent.Height;
+            //chartMap.Width = chartMap.Parent.Width;
+            //chartMap.Height = chartMap.Parent.Height;
 
             // position the chart in the center of the panel
-            var chartNoZoom = new Point(chartMap.Parent.Left, chartMap.Parent.Top);
-            chartMap.Left = chartNoZoom.X;
-            chartMap.Top = chartNoZoom.Y;
+            //var chartNoZoom = new Point(chartMap.Parent.Left, chartMap.Parent.Top);
+            //chartMap.Left = chartNoZoom.X;
+            //chartMap.Top = chartNoZoom.Y;
         }
 
         // 1.25:1
         private void toolStripMenuZoom125_Click(object sender, EventArgs e)
         {
-            ControlReset(chartMap);
-            ZoomToFactor(chartMap, 1.25);
-            CenterControlToParent(chartMap);
+            //ControlReset(chartMap);
+            //ZoomToFactor(chartMap, 1.25);
+            //CenterControlToParent(chartMap);
         }
 
         // 1.5:1
         private void toolStripMenuZoom15_Click(object sender, EventArgs e)
         {
-            ControlReset(chartMap);
-            ZoomToFactor(chartMap, 1.5);
-            CenterControlToParent(chartMap);
+            //ControlReset(chartMap);
+            //ZoomToFactor(chartMap, 1.5);
+            //CenterControlToParent(chartMap);
         }
 
         // 1.75:1
         private void toolStripMenuZoom175_Click(object sender, EventArgs e)
         {
-            ControlReset(chartMap);
-            ZoomToFactor(chartMap, 1.75);
-            CenterControlToParent(chartMap);
+            //ControlReset(chartMap);
+            //ZoomToFactor(chartMap, 1.75);
+            //CenterControlToParent(chartMap);
         }
 
         // 2:1
         private void toolStripMenuZoom2_Click(object sender, EventArgs e)
         {
-            ControlReset(chartMap);
-            ZoomToFactor(chartMap, 2);
-            CenterControlToParent(chartMap);
+            //ControlReset(chartMap);
+            //ZoomToFactor(chartMap, 2);
+            //CenterControlToParent(chartMap);
         }
 
         // 2.5:1
         private void toolStripMenuZoom25_Click(object sender, EventArgs e)
         {
-            ControlReset(chartMap);
-            ZoomToFactor(chartMap, 2.5);
-            CenterControlToParent(chartMap);
+            //ControlReset(chartMap);
+            //ZoomToFactor(chartMap, 2.5);
+            //CenterControlToParent(chartMap);
         }
 
         // 3:1
         private void toolStripMenuZoom3_Click(object sender, EventArgs e)
         {
-            ControlReset(chartMap);
-            ZoomToFactor(chartMap, 3);
-            CenterControlToParent(chartMap);
+            //ControlReset(chartMap);
+            //ZoomToFactor(chartMap, 3);
+            //CenterControlToParent(chartMap);
         }
 
         // 3.5:1
         private void toolStripMenuZoom35_Click(object sender, EventArgs e)
         {
-            ControlReset(chartMap);
-            ZoomToFactor(chartMap, 3.5);
-            CenterControlToParent(chartMap);
+            //ControlReset(chartMap);
+            //ZoomToFactor(chartMap, 3.5);
+            //CenterControlToParent(chartMap);
         }
 
         // 4:1
         private void toolStripMenuZoom4_Click(object sender, EventArgs e)
         {
-            ZoomToFactor(chartMap, 4);
-            CenterControlToParent(chartMap);
+            //ZoomToFactor(chartMap, 4);
+            //CenterControlToParent(chartMap);
         }
 
         // 5:1
         private void toolStripMenuZoom5_Click(object sender, EventArgs e)
         {
-            ControlReset(chartMap);
-            ZoomToFactor(chartMap, 5);
-            CenterControlToParent(chartMap);
+            //ControlReset(chartMap);
+            //ZoomToFactor(chartMap, 5);
+            //CenterControlToParent(chartMap);
         }
 
         // 6:1
         private void toolStripMenuZoom6_Click(object sender, EventArgs e)
         {
-            ControlReset(chartMap);
-            ZoomToFactor(chartMap, 6);
-            CenterControlToParent(chartMap);
+            //ControlReset(chartMap);
+            //ZoomToFactor(chartMap, 6);
+            //CenterControlToParent(chartMap);
         }
 
         // 8:1
         private void toolStripMenuZoom8_Click(object sender, EventArgs e)
         {
-            ZoomToFactor(chartMap, 8);
-            CenterControlToParent(chartMap);
+            //ZoomToFactor(chartMap, 8);
+            //CenterControlToParent(chartMap);
         }
 
         // 10:1
         private void toolStripMenuZoom10_Click(object sender, EventArgs e)
         {
-            ControlReset(chartMap);
-            ZoomToFactor(chartMap, 10);
-            CenterControlToParent(chartMap);
+            //ControlReset(chartMap);
+            //ZoomToFactor(chartMap, 10);
+            //CenterControlToParent(chartMap);
         }
 
         // About Map
