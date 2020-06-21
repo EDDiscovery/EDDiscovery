@@ -54,30 +54,10 @@ namespace EDDiscovery.UserControls
             this.textMaxRadius = new ExtendedControls.NumberBoxDouble();
             this.slideMaxItems = new System.Windows.Forms.TrackBar();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.toolStripMenuZoom = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuZoom1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuZoom125 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuZoom15 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuZoom175 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuZoom2 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuZoom25 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuZoom3 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuZoom35 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuZoom4 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuZoom5 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuZoom6 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuZoom8 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuZoom10 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuZoomCenterMap = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuReset = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
-            this.aboutToolStripAbout = new System.Windows.Forms.ToolStripMenuItem();
-            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.flowLayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.extAstroPlot = new ExtendedControls.Controls.ExtAstroPlot();
             ((System.ComponentModel.ISupportInitialize)(this.slideMaxItems)).BeginInit();
-            this.contextMenuStrip.SuspendLayout();
-            this.flowLayoutPanel1.SuspendLayout();
+            this.flowLayoutPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // labelExtMin
@@ -121,7 +101,7 @@ namespace EDDiscovery.UserControls
             this.textMinRadius.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textMinRadius.Value = 0D;
             this.textMinRadius.WordWrap = true;
-            this.textMinRadius.ValueChanged += new System.EventHandler(this.textMinRadius_ValueChanged);
+            this.textMinRadius.ValueChanged += new System.EventHandler(this.TextMinRadius_ValueChanged);
             // 
             // labelExtMax
             // 
@@ -164,7 +144,7 @@ namespace EDDiscovery.UserControls
             this.textMaxRadius.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textMaxRadius.Value = 0D;
             this.textMaxRadius.WordWrap = true;
-            this.textMaxRadius.ValueChanged += new System.EventHandler(this.textMaxRadius_ValueChanged);
+            this.textMaxRadius.ValueChanged += new System.EventHandler(this.TextMaxRadius_ValueChanged);
             // 
             // slideMaxItems
             // 
@@ -183,168 +163,20 @@ namespace EDDiscovery.UserControls
             this.slideMaxItems.Scroll += new System.EventHandler(this.SlideMaxItems_Scroll);
             this.slideMaxItems.MouseHover += new System.EventHandler(this.SlideMaxItems_MouseHover);
             // 
-            // contextMenuStrip
+            // flowLayoutPanel
             // 
-            this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuZoom,
-            this.toolStripMenuZoomCenterMap,
-            this.toolStripMenuReset,
-            this.toolStripSeparator,
-            this.aboutToolStripAbout});
-            this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(137, 98);
-            // 
-            // toolStripMenuZoom
-            // 
-            this.toolStripMenuZoom.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuZoom1,
-            this.toolStripMenuZoom125,
-            this.toolStripMenuZoom15,
-            this.toolStripMenuZoom175,
-            this.toolStripMenuZoom2,
-            this.toolStripMenuZoom25,
-            this.toolStripMenuZoom3,
-            this.toolStripMenuZoom35,
-            this.toolStripMenuZoom4,
-            this.toolStripMenuZoom5,
-            this.toolStripMenuZoom6,
-            this.toolStripMenuZoom8,
-            this.toolStripMenuZoom10});
-            this.toolStripMenuZoom.Name = "toolStripMenuZoom";
-            this.toolStripMenuZoom.Size = new System.Drawing.Size(136, 22);
-            this.toolStripMenuZoom.Text = "Zoom";
-            // 
-            // toolStripMenuZoom1
-            // 
-            this.toolStripMenuZoom1.Name = "toolStripMenuZoom1";
-            this.toolStripMenuZoom1.Size = new System.Drawing.Size(104, 22);
-            this.toolStripMenuZoom1.Text = "1:1";
-            this.toolStripMenuZoom1.Click += new System.EventHandler(this.toolStripMenuZoom1_Click);
-            // 
-            // toolStripMenuZoom125
-            // 
-            this.toolStripMenuZoom125.Name = "toolStripMenuZoom125";
-            this.toolStripMenuZoom125.Size = new System.Drawing.Size(104, 22);
-            this.toolStripMenuZoom125.Text = "1.25:1";
-            this.toolStripMenuZoom125.Click += new System.EventHandler(this.toolStripMenuZoom125_Click);
-            // 
-            // toolStripMenuZoom15
-            // 
-            this.toolStripMenuZoom15.Name = "toolStripMenuZoom15";
-            this.toolStripMenuZoom15.Size = new System.Drawing.Size(104, 22);
-            this.toolStripMenuZoom15.Text = "1.5:1";
-            this.toolStripMenuZoom15.Click += new System.EventHandler(this.toolStripMenuZoom15_Click);
-            // 
-            // toolStripMenuZoom175
-            // 
-            this.toolStripMenuZoom175.Name = "toolStripMenuZoom175";
-            this.toolStripMenuZoom175.Size = new System.Drawing.Size(104, 22);
-            this.toolStripMenuZoom175.Text = "1.75:1";
-            this.toolStripMenuZoom175.Click += new System.EventHandler(this.toolStripMenuZoom175_Click);
-            // 
-            // toolStripMenuZoom2
-            // 
-            this.toolStripMenuZoom2.Name = "toolStripMenuZoom2";
-            this.toolStripMenuZoom2.Size = new System.Drawing.Size(104, 22);
-            this.toolStripMenuZoom2.Text = "2:1";
-            this.toolStripMenuZoom2.Click += new System.EventHandler(this.toolStripMenuZoom2_Click);
-            // 
-            // toolStripMenuZoom25
-            // 
-            this.toolStripMenuZoom25.Name = "toolStripMenuZoom25";
-            this.toolStripMenuZoom25.Size = new System.Drawing.Size(104, 22);
-            this.toolStripMenuZoom25.Text = "2.5:1";
-            this.toolStripMenuZoom25.Click += new System.EventHandler(this.toolStripMenuZoom25_Click);
-            // 
-            // toolStripMenuZoom3
-            // 
-            this.toolStripMenuZoom3.Name = "toolStripMenuZoom3";
-            this.toolStripMenuZoom3.Size = new System.Drawing.Size(104, 22);
-            this.toolStripMenuZoom3.Text = "3:1";
-            this.toolStripMenuZoom3.Click += new System.EventHandler(this.toolStripMenuZoom3_Click);
-            // 
-            // toolStripMenuZoom35
-            // 
-            this.toolStripMenuZoom35.Name = "toolStripMenuZoom35";
-            this.toolStripMenuZoom35.Size = new System.Drawing.Size(104, 22);
-            this.toolStripMenuZoom35.Text = "3.5:1";
-            this.toolStripMenuZoom35.Click += new System.EventHandler(this.toolStripMenuZoom35_Click);
-            // 
-            // toolStripMenuZoom4
-            // 
-            this.toolStripMenuZoom4.Name = "toolStripMenuZoom4";
-            this.toolStripMenuZoom4.Size = new System.Drawing.Size(104, 22);
-            this.toolStripMenuZoom4.Text = "4:1";
-            this.toolStripMenuZoom4.Click += new System.EventHandler(this.toolStripMenuZoom4_Click);
-            // 
-            // toolStripMenuZoom5
-            // 
-            this.toolStripMenuZoom5.Name = "toolStripMenuZoom5";
-            this.toolStripMenuZoom5.Size = new System.Drawing.Size(104, 22);
-            this.toolStripMenuZoom5.Text = "5:1";
-            this.toolStripMenuZoom5.Click += new System.EventHandler(this.toolStripMenuZoom5_Click);
-            // 
-            // toolStripMenuZoom6
-            // 
-            this.toolStripMenuZoom6.Name = "toolStripMenuZoom6";
-            this.toolStripMenuZoom6.Size = new System.Drawing.Size(104, 22);
-            this.toolStripMenuZoom6.Text = "6:1";
-            this.toolStripMenuZoom6.Click += new System.EventHandler(this.toolStripMenuZoom6_Click);
-            // 
-            // toolStripMenuZoom8
-            // 
-            this.toolStripMenuZoom8.Name = "toolStripMenuZoom8";
-            this.toolStripMenuZoom8.Size = new System.Drawing.Size(104, 22);
-            this.toolStripMenuZoom8.Text = "8:1";
-            this.toolStripMenuZoom8.Click += new System.EventHandler(this.toolStripMenuZoom8_Click);
-            // 
-            // toolStripMenuZoom10
-            // 
-            this.toolStripMenuZoom10.Name = "toolStripMenuZoom10";
-            this.toolStripMenuZoom10.Size = new System.Drawing.Size(104, 22);
-            this.toolStripMenuZoom10.Text = "10:1";
-            this.toolStripMenuZoom10.Click += new System.EventHandler(this.toolStripMenuZoom10_Click);
-            // 
-            // toolStripMenuZoomCenterMap
-            // 
-            this.toolStripMenuZoomCenterMap.Name = "toolStripMenuZoomCenterMap";
-            this.toolStripMenuZoomCenterMap.Size = new System.Drawing.Size(136, 22);
-            this.toolStripMenuZoomCenterMap.Text = "Center Map";
-            this.toolStripMenuZoomCenterMap.Click += new System.EventHandler(this.toolStripMenuZoomCenterMap_Click);
-            // 
-            // toolStripMenuReset
-            // 
-            this.toolStripMenuReset.Name = "toolStripMenuReset";
-            this.toolStripMenuReset.Size = new System.Drawing.Size(136, 22);
-            this.toolStripMenuReset.Text = "Reset";
-            this.toolStripMenuReset.Click += new System.EventHandler(this.toolStripMenuReset_Click);
-            // 
-            // toolStripSeparator
-            // 
-            this.toolStripSeparator.Name = "toolStripSeparator";
-            this.toolStripSeparator.Size = new System.Drawing.Size(133, 6);
-            // 
-            // aboutToolStripAbout
-            // 
-            this.aboutToolStripAbout.Name = "aboutToolStripAbout";
-            this.aboutToolStripAbout.Size = new System.Drawing.Size(136, 22);
-            this.aboutToolStripAbout.Text = "About";
-            this.aboutToolStripAbout.Click += new System.EventHandler(this.aboutToolStripAbout_Click);
-            // 
-            // flowLayoutPanel1
-            // 
-            this.flowLayoutPanel1.AutoSize = true;
-            this.flowLayoutPanel1.BackColor = System.Drawing.SystemColors.Control;
-            this.flowLayoutPanel1.Controls.Add(this.labelExtMin);
-            this.flowLayoutPanel1.Controls.Add(this.textMinRadius);
-            this.flowLayoutPanel1.Controls.Add(this.labelExtMax);
-            this.flowLayoutPanel1.Controls.Add(this.textMaxRadius);
-            this.flowLayoutPanel1.Controls.Add(this.slideMaxItems);
-            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(380, 26);
-            this.flowLayoutPanel1.TabIndex = 5;
+            this.flowLayoutPanel.AutoSize = true;
+            this.flowLayoutPanel.BackColor = System.Drawing.SystemColors.Control;
+            this.flowLayoutPanel.Controls.Add(this.labelExtMin);
+            this.flowLayoutPanel.Controls.Add(this.textMinRadius);
+            this.flowLayoutPanel.Controls.Add(this.labelExtMax);
+            this.flowLayoutPanel.Controls.Add(this.textMaxRadius);
+            this.flowLayoutPanel.Controls.Add(this.slideMaxItems);
+            this.flowLayoutPanel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.flowLayoutPanel.Location = new System.Drawing.Point(0, 0);
+            this.flowLayoutPanel.Name = "flowLayoutPanel";
+            this.flowLayoutPanel.Size = new System.Drawing.Size(380, 26);
+            this.flowLayoutPanel.TabIndex = 5;
             // 
             // extAstroPlot
             // 
@@ -354,9 +186,9 @@ namespace EDDiscovery.UserControls
             this.extAstroPlot.Azimuth = 0.3D;
             this.extAstroPlot.BackColor = System.Drawing.Color.Black;
             this.extAstroPlot.Camera = new double[] {
-        0D,
-        0D,
-        0D};
+        -1.693927420185106D,
+        1.7731212399680372D,
+        -5.4760068447290351D};
             this.extAstroPlot.CoordsCenter = new double[] {
         0D,
         0D,
@@ -389,16 +221,12 @@ namespace EDDiscovery.UserControls
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
             this.Controls.Add(this.extAstroPlot);
-            this.Controls.Add(this.flowLayoutPanel1);
+            this.Controls.Add(this.flowLayoutPanel);
             this.Name = "UserControlLocalMap";
-            this.Size = new System.Drawing.Size(380, 406);
-            this.Load += new System.EventHandler(this.UserControlMap_Load);
-            this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.UserControlMap_MouseClick);
-            this.Resize += new System.EventHandler(this.UserControlMap_Resize);
+            this.Size = new System.Drawing.Size(380, 406);            
             ((System.ComponentModel.ISupportInitialize)(this.slideMaxItems)).EndInit();
-            this.contextMenuStrip.ResumeLayout(false);
-            this.flowLayoutPanel1.ResumeLayout(false);
-            this.flowLayoutPanel1.PerformLayout();
+            this.flowLayoutPanel.ResumeLayout(false);
+            this.flowLayoutPanel.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -411,26 +239,7 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.NumberBoxDouble textMaxRadius;
         private TrackBar slideMaxItems;
         private ToolTip toolTip;
-        private ContextMenuStrip contextMenuStrip;
-        private ToolStripMenuItem toolStripMenuZoom;
-        private ToolStripMenuItem toolStripMenuZoom1;
-        private ToolStripMenuItem toolStripMenuZoom125;
-        private ToolStripMenuItem toolStripMenuZoom15;
-        private ToolStripMenuItem toolStripMenuZoom175;
-        private ToolStripMenuItem toolStripMenuZoom2;
-        private ToolStripMenuItem toolStripMenuZoom25;
-        private ToolStripMenuItem toolStripMenuZoom3;
-        private ToolStripMenuItem toolStripMenuZoom35;
-        private ToolStripMenuItem toolStripMenuZoom4;
-        private ToolStripMenuItem toolStripMenuZoom5;
-        private ToolStripMenuItem toolStripMenuZoom6;
-        private ToolStripMenuItem toolStripMenuZoom8;
-        private ToolStripMenuItem toolStripMenuZoom10;
-        private ToolStripMenuItem toolStripMenuZoomCenterMap;
-        private ToolStripMenuItem toolStripMenuReset;
-        private ToolStripSeparator toolStripSeparator;
-        private ToolStripMenuItem aboutToolStripAbout;
-        private FlowLayoutPanel flowLayoutPanel1;
+        private FlowLayoutPanel flowLayoutPanel;
         private ExtendedControls.Controls.ExtAstroPlot extAstroPlot;
     }
 }
