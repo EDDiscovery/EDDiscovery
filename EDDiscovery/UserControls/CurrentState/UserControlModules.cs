@@ -120,6 +120,7 @@ namespace EDDiscovery.UserControls
                     if (rowfuel != -1)
                         dataGridViewModules.Rows[rowfuel].Cells[1].Value = last_he.ShipInformation.FuelLevel.ToString("N1") + "t";
                     int rowres = dataGridViewModules.FindRowWithValue(0, fuelresname);
+                    if (rowres != -1)
                         dataGridViewModules.Rows[rowres].Cells[1].Value = last_he.ShipInformation.ReserveFuelCapacity.ToString("N2") + "t";
 
                     System.Diagnostics.Debug.WriteLine("Modules Fuel update");
