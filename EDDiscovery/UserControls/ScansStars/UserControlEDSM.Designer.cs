@@ -161,6 +161,7 @@ namespace EDDiscovery.UserControls
             this.webBrowser.TabIndex = 5;
             this.webBrowser.Navigating += new System.Windows.Forms.WebBrowserNavigatingEventHandler(this.webBrowser_Navigating);
             this.webBrowser.NewWindow += new System.ComponentModel.CancelEventHandler(this.webBrowser_NewWindow);
+            this.webBrowser.ScriptErrorsSuppressed = true;
             // 
             // UserControlEDSM
             // 
