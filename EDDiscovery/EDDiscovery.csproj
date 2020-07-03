@@ -1039,6 +1039,10 @@
       <Project>{646f71be-f102-444e-9254-818e5a320ab8}</Project>
       <Name>EDDIcons</Name>
     </ProjectReference>
+    <ProjectReference Include="..\EliteDangerousCore\EDDDLLInterfaces\EDDDLLInterfaces.csproj">
+      <Project>{829041b1-d4a5-48d9-8260-b5eeff28bcd8}</Project>
+      <Name>EDDDLLInterfaces</Name>
+    </ProjectReference>
     <ProjectReference Include="..\EliteDangerousCore\EliteDangerous\EliteDangerous.csproj">
       <Project>{019917a4-7342-4f67-8aaf-9e20c016a935}</Project>
       <Name>EliteDangerous</Name>

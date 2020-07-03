@@ -42,7 +42,7 @@ namespace EDDiscovery
         private Actions.ActionController actioncontroller;
 
         public EliteDangerousCore.DLL.EDDDLLManager DLLManager;
-        public EliteDangerousCore.DLL.EDDDLLIF.EDDCallBacks DLLCallBacks;
+        public EDDDLLInterfaces.EDDDLLIF.EDDCallBacks DLLCallBacks;
 
         public WebServer.WebServer WebServer;
 
@@ -305,7 +305,7 @@ namespace EDDiscovery
             Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Finish ED Init");
 
             DLLManager = new EliteDangerousCore.DLL.EDDDLLManager();
-            DLLCallBacks = new EliteDangerousCore.DLL.EDDDLLIF.EDDCallBacks();
+            DLLCallBacks = new EDDDLLInterfaces.EDDDLLIF.EDDCallBacks();
 
             WebServer = new WebServer.WebServer(this);
 
@@ -367,29 +367,51 @@ namespace EDDiscovery
 
             // DLL loads
 
-            string alloweddlls = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("DLLAllowed", "");
-
             DLLCallBacks.RequestHistory = DLLRequestHistory;
             DLLCallBacks.RunAction = DLLRunAction;
+            DLLCallBacks.GetShipLoadout = (s) => { return null; };
 
-            Tuple<string, string, string> res = DLLManager.Load(EDDOptions.Instance.DLLAppDirectory(), EDDApplicationContext.AppVersion, EDDOptions.Instance.DLLAppDirectory(), DLLCallBacks, alloweddlls);
+            string verstring = EDDApplicationContext.AppVersion;
+            string[] options = new string[] { EDDDLLInterfaces.EDDDLLIF.FLAG_HOSTNAME + "EDDiscovery",
+                                              EDDDLLInterfaces.EDDDLLIF.FLAG_JOURNALVERSION + "2",
+                                              EDDDLLInterfaces.EDDDLLIF.FLAG_CALLBACKVERSION + "2",
+                                            };
 
-            if (res.Item3.HasChars())
+            string alloweddlls = EDDConfig.Instance.DLLPermissions;
+
+            Tuple<string, string, string> res = DLLManager.Load(EDDOptions.Instance.DLLAppDirectory(), verstring, options, DLLCallBacks, alloweddlls);
+
+            if (res.Item3.HasChars())       // new DLLs
             {
-                if (ExtendedControls.MessageBoxTheme.Show(this,
-                                string.Format(("The following application extension DLLs have been found" + Environment.NewLine +
-                                "Do you wish to allow these to be used?" + Environment.NewLine +
-                                "{0} " + Environment.NewLine +
-                                "If you do not, either remove the DLLs from the DLL folder in ED Appdata" + Environment.NewLine +
-                                "or deinstall the action pack which introduced the DLL" + Environment.NewLine +
-                                "or hold down shift when launching and use the Remove all Extensions DLL option").T(EDTx.EDDiscoveryForm_DLLW), res.Item3),
-                                "Warning".T(EDTx.Warning),
-                                MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                string[] list = res.Item3.Split(',');
+                bool changed = false;
+                foreach (var dll in list)
                 {
-                    alloweddlls = alloweddlls.AppendPrePad(res.Item3, ",");
-                    EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("DLLAllowed", alloweddlls);
+                    if (ExtendedControls.MessageBoxTheme.Show(this,
+                                    string.Format(("The following application extension DLLs have been found" + Environment.NewLine +
+                                    "Do you wish to allow these to be used?" + Environment.NewLine +
+                                    "{0} " + Environment.NewLine +
+                                    "If you do not, either remove the DLLs from the DLL folder in ED Appdata" + Environment.NewLine +
+                                    "or deinstall the action pack which introduced the DLL" + Environment.NewLine +
+                                    "or hold down shift when launching and use the Remove all Extensions DLL option").T(EDTx.EDDiscoveryForm_DLLW), dll),
+                                    "Warning".T(EDTx.Warning),
+                                    MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                    {
+                        alloweddlls = alloweddlls.AppendPrePad("+" + dll, ",");
+                        changed = true;
+                    }
+                    else
+                    {
+                        alloweddlls = alloweddlls.AppendPrePad("-" + dll, ",");
+                    }
+                }
+
+                EDDConfig.Instance.DLLPermissions = alloweddlls;
+
+                if (changed)
+                {
                     DLLManager.UnLoad();
-                    res = DLLManager.Load(EDDOptions.Instance.DLLAppDirectory(), EDDApplicationContext.AppVersion, EDDOptions.Instance.DLLAppDirectory(), DLLCallBacks, alloweddlls);
+                    res = DLLManager.Load(EDDOptions.Instance.DLLAppDirectory(), verstring, options, DLLCallBacks, alloweddlls);
                 }
             }
 
@@ -531,7 +553,7 @@ namespace EDDiscovery
             return true;
         }
 
-        public bool DLLRequestHistory(long index, bool isjid, out EliteDangerousCore.DLL.EDDDLLIF.JournalEntry f)
+        public bool DLLRequestHistory(long index, bool isjid, out EDDDLLInterfaces.EDDDLLIF.JournalEntry f)
         {
             HistoryEntry he = isjid ? history.GetByJID(index) : history.GetByIndex((int)index);
             f = EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(he);
@@ -706,6 +728,8 @@ namespace EDDiscovery
                 EliteDangerousCore.Inara.InaraSync.Refresh(LogLine, history.GetLast, EDCommander.Current);
             }
 
+//TBD replay entries for DLLs if PLAYBACK
+
             DLLManager.Refresh(EDCommander.Current.Name, EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(history.GetLast));
 
             Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Refresh complete finished");
@@ -764,7 +788,7 @@ namespace EDDiscovery
                 EDDNSync.SendEDDNEvents(LogLine, he);
             }
 
-            DLLManager.NewJournalEntry(EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(he));
+            DLLManager.NewJournalEntry(EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(he),false);
 
             CheckActionProfile(he);
         }
@@ -1217,9 +1241,17 @@ namespace EDDiscovery
 
         private void rebuildSystemDBIndexesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (ExtendedControls.MessageBoxTheme.Show(this, "Are you sure to Rebuild Indexes? It may take a long time.".T(EDTx.EDDiscoveryForm_IndexW), "Warning".T(EDTx.Warning),MessageBoxButtons.OKCancel,MessageBoxIcon.Warning) == DialogResult.OK )
+            if (ExtendedControls.MessageBoxTheme.Show(this, "Are you sure to Rebuild Indexes? It may take a long time.".T(EDTx.EDDiscoveryForm_IndexW), "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
             {
                 SystemsDatabase.Instance.RebuildIndexes(LogLine);
+            }
+        }
+
+        private void removeAllDLLPermissionsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (ExtendedControls.MessageBoxTheme.Show(this, "Remove all DLL permissions, on next start, you will be asked per DLL if you wish to allow the DLL to run. Are you sure?".T(EDTx.EDDiscoveryForm_RemoveDLLPerms), "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+            {
+                EDDConfig.Instance.DLLPermissions = "";
             }
         }
 
@@ -1658,6 +1690,7 @@ namespace EDDiscovery
             popoutdropdown.SelectionBackColor = theme.ButtonBackColor;
             popoutdropdown.Show(this);
         }
+
 
 
 

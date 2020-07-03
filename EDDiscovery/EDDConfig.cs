@@ -67,6 +67,7 @@ namespace EDDiscovery
         private string edsmfullsystemsurl = "";
         private int webserverport = 6502;
         private bool webserverenable = false;
+        private string dllpermissions = "";
         Dictionary<string, Image> captainslogtaglist;
 
         /// <summary>
@@ -477,11 +478,24 @@ namespace EDDiscovery
             }
         }
 
+        public string DLLPermissions
+        {
+            get
+            {
+                return dllpermissions;
+            }
+            set
+            {
+                dllpermissions = value;
+                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("DLLAllowed", value);
+            }
+        }
+
         #endregion
 
         #region Update at start
 
-       
+
         public void Update(bool write = true)     // call at start to populate above
         {
             try
@@ -512,6 +526,7 @@ namespace EDDiscovery
                 CaptainsLogTags = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("CaptainsLogPanelTagNames", "Expedition=Journal.FSDJump;Died=Journal.Died");
                 webserverport = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt("WebServerPort", 6502);
                 webserverenable = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("WebServerEnable", false);
+                dllpermissions = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("DLLAllowed", "");
 
                 EliteDangerousCore.EDCommander.Load(write);
             }
