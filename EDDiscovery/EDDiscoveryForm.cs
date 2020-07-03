@@ -728,7 +728,16 @@ namespace EDDiscovery
                 EliteDangerousCore.Inara.InaraSync.Refresh(LogLine, history.GetLast, EDCommander.Current);
             }
 
-//TBD replay entries for DLLs if PLAYBACK
+            HistoryEntry lastfileh = history.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.Fileheader);
+
+            if ( lastfileh != null )
+            {
+                for( int i = lastfileh.Indexno-1; i < history.Count; i++ )      // play thru last history entries up to last file position for the DLLs, indicating stored
+                {
+                    //System.Diagnostics.Debug.WriteLine("{0} : {1} {2}", i, history.EntryOrder[i].EventTimeUTC, history.EntryOrder[i].EventSummary);
+                    DLLManager.NewJournalEntry(EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(history.EntryOrder[i], true), true);
+                }
+            }
 
             DLLManager.Refresh(EDCommander.Current.Name, EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(history.GetLast));
 
