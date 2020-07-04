@@ -548,6 +548,7 @@ namespace EDDiscovery
         UserControlSurveyor_isawaterworld, //  is a water world.
         UserControlSurveyor_isaterraformablewaterworld, //  is a terraformable water world.
         UserControlSurveyor_isaterraformableplanet, //  is a terraformable planet.
+        UserControlSurveyor_islandable, // is landable
         UserControlSurveyor_Hasring, //  Has ring.
         UserControlSurveyor_Has, //  Has
         UserControlSurveyor_Scan, //  Scan
