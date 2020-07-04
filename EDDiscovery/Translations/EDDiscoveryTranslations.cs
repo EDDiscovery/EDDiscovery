@@ -602,6 +602,7 @@ namespace EDDiscovery
 
         UserControlLocalMap_3dmap, // 3D Map of closest systems from {0}
 
+        UserControlAstroPlot, // 3D map of closest systems from {0}
 
         UserControlPlot_Top, // Top
         UserControlPlot_Front, // Front

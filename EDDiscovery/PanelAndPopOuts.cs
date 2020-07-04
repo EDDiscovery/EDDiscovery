@@ -64,7 +64,7 @@ namespace EDDiscovery
             Settings,               // 29
             ScanGrid,               // 30
             Compass,                // 31
-            LocalMap,               // 32
+            AstroPlot,              // 32
             Plot,                   // 33
             PanelSelector,          // 34
             BookmarkManager,        // 35
@@ -76,7 +76,7 @@ namespace EDDiscovery
             CaptainsLog,            // 41 Actually its important for debugging purposes so you can recognised the ID as its stored by ID in the DB
             Surveyor,               // 42
             EDSM,                   // 43
-            MaterialTrader,         // 44
+            MaterialTrader,         // 44            
             // ****** ADD More here DO NOT REORDER *****
         };
 
@@ -116,7 +116,7 @@ namespace EDDiscovery
             { new PanelInfo( PanelIDs.ScanGrid, typeof(UserControlScanGrid), "Scan Grid", "ScanGrid", "Scan data on system in a grid", transparent: false) },
             { new PanelInfo( PanelIDs.StarDistance, typeof(UserControlStarDistance), "Nearest Stars", "StarDistance","Nearest stars from current position") },
             { new PanelInfo( PanelIDs.EstimatedValues, typeof(UserControlEstimatedValues),"Estimated Values", "EstimatedValues", "Estimated Scan values of bodies in system", transparent: false) },
-            { new PanelInfo( PanelIDs.LocalMap, typeof(UserControlLocalMap), "Map 3D Local Systems", "LocalMap", "Map in 3D of local systems", transparent: false) },
+            { new PanelInfo( PanelIDs.AstroPlot, typeof(UserControlAstroPlot), "3D Map of nearest systems", "AstroPlot", "Map in 3D of nearest systems", transparent: false) },            
             { new PanelInfo( PanelIDs.Plot, typeof(UserControlPlot), "Map 2D Local Systems", "Plot", "Map in 2D of local systems", transparent: false) },
             { new PanelInfo( PanelIDs.Search, typeof(UserControlSearch), "Search", "SearchFinder", "Search") },
             { new PanelInfo( PanelIDs.Trilateration, typeof(UserControlTrilateration) ,"Trilateration", "Trilateration", "Trilateration of stars with unknown positions") },
@@ -157,9 +157,9 @@ namespace EDDiscovery
             { new PanelInfo( PanelIDs.PanelSelector, typeof(UserControlPanelSelector), "+", "Selector", "") },       // no description, not presented to user
         };
 
-        private static HashSet<PanelIDs> WindowsOnlyPanels = new HashSet<PanelIDs>(new[] {
-            PanelIDs.LocalMap, // Depends on System.Windows.Forms.DataVizualization.Charting, not implemented in Mono
-        });
+        //private static HashSet<PanelIDs> WindowsOnlyPanels = new HashSet<PanelIDs>(new[] {
+        //    PanelIDs.LocalMap, // Depends on System.Windows.Forms.DataVizualization.Charting, not implemented in Mono
+        //});
 
         static private List<PanelInfo> displayablepanels;   // filled by Init - all panels that can be displayed
         static private List<PanelInfo> userselectablepanellist;   // filled by Init - all panels that the user can select directly
@@ -172,10 +172,10 @@ namespace EDDiscovery
             int offset = 0;
             List<int> separs = new List<int>();
 
-            if (Environment.OSVersion.Platform != PlatformID.Win32NT)
-            {
-                paneldefinition = paneldefinition.Where(e => !WindowsOnlyPanels.Contains(e.PopoutID)).ToList();
-            }
+            //if (Environment.OSVersion.Platform != PlatformID.Win32NT)
+            //{
+            //    paneldefinition = paneldefinition.Where(e => !WindowsOnlyPanels.Contains(e.PopoutID)).ToList();
+            //}
 
             foreach (PanelInfo i in paneldefinition)
             {

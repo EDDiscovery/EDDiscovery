@@ -190,6 +190,12 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="UserControls\Helpers\CSVHelpers.cs" />
+    <Compile Include="UserControls\ScansStars\UserControlAstroPlot.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\ScansStars\UserControlAstroPlot.Designer.cs">
+      <DependentUpon>UserControlAstroPlot.cs</DependentUpon>
+    </Compile>
     <Compile Include="WebServer\WebServer.cs" />
     <None Include="..\EDDIcons\Controls\Fakes\Controls.Designer.cs">
       <Link>Icons\Controls.Designer.cs</Link>
@@ -836,6 +842,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\LogsBookmarks\UserControlBookmarks.resx">
       <DependentUpon>UserControlBookmarks.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\ScansStars\UserControlAstroPlot.resx">
+      <DependentUpon>UserControlAstroPlot.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\ScansStars\UserControlEDSM.resx">
       <DependentUpon>UserControlEDSM.cs</DependentUpon>
