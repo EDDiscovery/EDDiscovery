@@ -59,15 +59,13 @@ namespace EDDiscovery.UserControls
         {
             computer = new StarDistanceComputer();
 
-            astroPlot.Distance = 50;
-            astroPlot.Elevation = -0.4;
-            astroPlot.Azimuth = -0.3;
-
             astroPlot.MouseWheel_Multiply = 1;
             astroPlot.MouseWheel_Resistance = 70;
 
+            astroPlot.Distance = 50;
+            astroPlot.Elevation = -0.4;
+            astroPlot.Azimuth = -0.3;
             astroPlot.SmallDotSize = 10;
-
             astroPlot.HotSpotSize = 10;
 
             astroPlot.OnSystemSelected += AstroPlot_OnSystemSelected;
@@ -79,7 +77,7 @@ namespace EDDiscovery.UserControls
         private void AstroPlot_OnSystemSelected()
         {
             howerName = astroPlot.SelectedObjectName;
-            howerLocation = astroPlot.SelectedObjectLocation;            
+            howerLocation = astroPlot.SelectedObjectLocation;
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
@@ -104,6 +102,12 @@ namespace EDDiscovery.UserControls
             KickComputation(uctg.GetCurrentHistoryEntry);
         }
 
+        /// <summary>
+        /// Triggered when the highlighted system in the history list changes
+        /// </summary>
+        /// <param name="he"></param>
+        /// <param name="hl"></param>
+        /// <param name="selectedEntry"></param>
         private void Uctg_OnTravelSelectionChanged(HistoryEntry he, HistoryList hl, bool selectedEntry)
         {
             systemsInRange.Clear();
@@ -111,6 +115,10 @@ namespace EDDiscovery.UserControls
             KickComputation(he);
         }
 
+        /// <summary>
+        /// Calculate a list of nearest systems, according to given parameters
+        /// </summary>
+        /// <param name="he"></param>
         private void KickComputation(HistoryEntry he)
         {
             if (he?.System != null && he.System.HasCoordinate)
@@ -121,6 +129,11 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        /// <summary>
+        /// Tirgger the population of the plot with the generated systems list
+        /// </summary>
+        /// <param name="sys"></param>
+        /// <param name="list"></param>
         private void NewStarListComputed(ISystem sys, BaseUtils.SortedListDoubleDuplicate<ISystem> list)      // In UI
         {
             //Debug.Assert(Application.MessageLoop);       // check!
@@ -128,6 +141,11 @@ namespace EDDiscovery.UserControls
             FillMap(list, sys);
         }
 
+        /// <summary>
+        /// Populate the plot with the given systems list
+        /// </summary>
+        /// <param name="list"></param>
+        /// <param name="sys"></param>
         private void FillMap(SortedListDoubleDuplicate<ISystem> list, ISystem sys)
         {
             SetControlText(string.Format("3D Map of closest systems from {0}".T(EDTx.UserControlAstroPlot), sys.Name));
@@ -138,9 +156,9 @@ namespace EDDiscovery.UserControls
                 sys.X,
                 sys.Y,
                 sys.Z,
-                true,
-                false,
-                true
+                true, // is visited
+                false, // is waypoint
+                true // is current
             });
 
             if (list.Any())
