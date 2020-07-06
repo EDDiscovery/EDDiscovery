@@ -120,13 +120,13 @@ namespace EDDiscovery.UserControls
         public override void InitialDisplay()
         {
             last_sys = uctg.GetCurrentHistoryEntry?.System;
-            RenderInformation(last_sys, last_sys?.Name);    // may be null
+            DrawSystem(last_sys, last_sys?.Name);    // may be null
         }
 
         private void Discoveryform_OnHistoryChange(HistoryList hl)
         {
             last_sys = hl.GetLast?.System;      // may be null
-            RenderInformation(last_sys, last_sys?.Name);    // may be null
+            DrawSystem(last_sys, last_sys?.Name);    // may be null
         }
 
         public override void Closing()
@@ -141,7 +141,7 @@ namespace EDDiscovery.UserControls
         {
             System.Diagnostics.Debug.WriteLine("Set colour to " + curcol);
             pictureBoxSurveyor.BackColor = this.BackColor = curcol;
-            RenderInformation(last_sys);   // need to redraw as we use backcolour
+            DrawSystem(last_sys);   // need to redraw as we use backcolour
         }
 
         private void Uctg_OnTravelSelectionChanged(HistoryEntry he, HistoryList hl, bool selectedEntry)
@@ -151,27 +151,27 @@ namespace EDDiscovery.UserControls
                 if (last_sys == null || last_sys.Name != he.System.Name) // if new entry is scan, may be new data.. or not presenting or diff sys
                 {
                     last_sys = he.System;
-                    RenderInformation(last_sys, last_sys.Name);
+                    DrawSystem(last_sys, last_sys.Name);
                 }
                 else if (he.EntryType == JournalTypeEnum.StartJump)  // we ignore start jump if overriden      
                 {
                     JournalStartJump jsj = he.journalEntry as JournalStartJump;
                     last_sys = new SystemClass(jsj.StarSystem);
-                    RenderInformation(last_sys, last_sys.Name);
+                    DrawSystem(last_sys, last_sys.Name);
                 }
                 else if (he.EntryType == JournalTypeEnum.FSSAllBodiesFound)
                 {
-                    RenderInformation(last_sys, last_sys.Name + " " + "System scan complete.".T(EDTx.UserControlSurveyor_Systemscancomplete));
+                    DrawSystem(last_sys, last_sys.Name + " " + "System scan complete.".T(EDTx.UserControlSurveyor_Systemscancomplete));
                 }
                 else if (he.EntryType == JournalTypeEnum.FSSDiscoveryScan)
                 {
                     var je = he.journalEntry as JournalFSSDiscoveryScan;
                     var bodies_found = je.BodyCount;
-                    RenderInformation( last_sys, last_sys.Name + " " + bodies_found + " bodies found.".T(EDTx.UserControlSurveyor_bodiesfound));
+                    DrawSystem( last_sys, last_sys.Name + " " + bodies_found + " bodies found.".T(EDTx.UserControlSurveyor_bodiesfound));
                 }
                 else if (he.EntryType == JournalTypeEnum.Scan)
                 {
-                    RenderInformation(last_sys);
+                    DrawSystem(last_sys);
                 }
             }
         }
@@ -187,13 +187,13 @@ namespace EDDiscovery.UserControls
 
                 System.Diagnostics.Debug.WriteLine("Surveyor UI event " + uistate);
                 if (refresh)
-                    RenderInformation(last_sys);
+                    DrawSystem(last_sys);
             }
         }
 
         public override void onControlTextVisibilityChanged(bool newvalue)       // user changed vis, update
         {
-            RenderInformation(last_sys);
+            DrawSystem(last_sys);
         }
 
 
@@ -201,7 +201,7 @@ namespace EDDiscovery.UserControls
 
         #region Main
 
-        async private void RenderInformation(ISystem sys, string tt = null)
+        async private void DrawSystem(ISystem sys, string tt = null)
         {
             if ( tt != null )
             {
@@ -407,121 +407,121 @@ namespace EDDiscovery.UserControls
         private void ammoniaWorldToolStripMenuItem_Click(object sender, EventArgs e)
         {
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "showAmmonia", ammoniaWorldToolStripMenuItem.Checked);
-            RenderInformation(last_sys);
+            DrawSystem(last_sys);
         }
 
         private void earthlikeWorldToolStripMenuItem_Click(object sender, EventArgs e)
         {
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "showEarthlike", earthlikeWorldToolStripMenuItem.Checked);
-            RenderInformation(last_sys);
+            DrawSystem(last_sys);
         }
 
         private void waterWorldToolStripMenuItem_Click(object sender, EventArgs e)
         {
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "showWaterWorld", waterWorldToolStripMenuItem.Checked);
-            RenderInformation(last_sys);
+            DrawSystem(last_sys);
         }
 
         private void terraformableToolStripMenuItem_Click(object sender, EventArgs e)
         {
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "showTerraformable", terraformableToolStripMenuItem.Checked);
-            RenderInformation(last_sys);
+            DrawSystem(last_sys);
         }
 
         private void landableToolStripMenuItem_Click(object sender, EventArgs e)
         {
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "isLandable", landableToolStripMenuItem.Checked);
-            RenderInformation(last_sys);
+            DrawSystem(last_sys);
         }
 
         private void hasVolcanismToolStripMenuItem_Click(object sender, EventArgs e)
         {
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "showVolcanism", hasVolcanismToolStripMenuItem.Checked);
-            RenderInformation(last_sys);
+            DrawSystem(last_sys);
         }
 
         private void hasRingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "showRinged", hasRingsToolStripMenuItem.Checked);
-            RenderInformation(last_sys);
+            DrawSystem(last_sys);
         }
 
         private void hideAlreadyMappedBodiesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "hideMapped", hideAlreadyMappedBodiesToolStripMenuItem.Checked);
-            RenderInformation(last_sys);
+            DrawSystem(last_sys);
         }
 
         private void autoHideToolStripMenuItem_Click(object sender, EventArgs e)
         {
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "autohide", autoHideToolStripMenuItem.Checked);
-            RenderInformation(last_sys);
+            DrawSystem(last_sys);
         }
 
         private void lowRadiusToolStripMenuItem_Click(object sender, EventArgs e)
         {
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "lowradius", lowRadiusToolStripMenuItem.Checked);
-            RenderInformation(last_sys);
+            DrawSystem(last_sys);
         }
 
         private void checkEDSMForInformationToolStripMenuItem_Click(object sender, EventArgs e)
         {
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "edsm", checkEDSMForInformationToolStripMenuItem.Checked);
-            RenderInformation(last_sys);
+            DrawSystem(last_sys);
         }
 
         private void showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "showsysinfo", showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem.Checked);
-            RenderInformation(last_sys);
+            DrawSystem(last_sys);
         }
 
         private void dontHideInFSSModeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "donthidefssmode", dontHideInFSSModeToolStripMenuItem.Checked);
-            RenderInformation(last_sys);
+            DrawSystem(last_sys);
         }
 
         private void hasSignalsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "signals", hasSignalsToolStripMenuItem.Checked);
-            RenderInformation(last_sys);
+            DrawSystem(last_sys);
         }
 
         private void showValuesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "showValues", showValuesToolStripMenuItem.Checked);
-            RenderInformation(last_sys);
+            DrawSystem(last_sys);
         }
 
         private void showAllPlanetsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "allplanets", showAllPlanetsToolStripMenuItem.Checked);
-            RenderInformation(last_sys);
+            DrawSystem(last_sys);
         }
 
         private void showAllStarsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "allstars", showAllStarsToolStripMenuItem.Checked);
-            RenderInformation(last_sys);
+            DrawSystem(last_sys);
         }
 
         private void showBeltClustersToolStripMenuItem_Click(object sender, EventArgs e)
         {
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "beltclusters", showBeltClustersToolStripMenuItem.Checked);
-            RenderInformation(last_sys);
+            DrawSystem(last_sys);
         }
 
         private void showMoreInformationToolStripMenuItem_Click(object sender, EventArgs e)
         {
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "moreinfo", showMoreInformationToolStripMenuItem.Checked);
-            RenderInformation(last_sys);
+            DrawSystem(last_sys);
         }
 
         private void wordWrapToolStripMenuItem_Click(object sender, EventArgs e)
         {
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "wordwrap", wordWrapToolStripMenuItem.Checked);
-            RenderInformation(last_sys);
+            DrawSystem(last_sys);
         }
 
         
@@ -529,7 +529,7 @@ namespace EDDiscovery.UserControls
         private void leftToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SetAlign(StringAlignment.Near);
-            RenderInformation(last_sys);
+            DrawSystem(last_sys);
         }
 
         private void SetAlign(StringAlignment al)
@@ -544,18 +544,18 @@ namespace EDDiscovery.UserControls
         private void centerToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SetAlign(StringAlignment.Center);
-            RenderInformation(last_sys);
+            DrawSystem(last_sys);
         }
 
         private void rightToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SetAlign(StringAlignment.Far);
-            RenderInformation(last_sys);
+            DrawSystem(last_sys);
         }
 
         private void UserControlSurveyor_Resize(object sender, EventArgs e)
         {
-            RenderInformation(last_sys);
+            DrawSystem(last_sys);
         }        
     }
 }
