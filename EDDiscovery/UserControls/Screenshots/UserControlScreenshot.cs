@@ -31,9 +31,6 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlScreenshot : UserControlCommonBase
     {
-        string ImagePath = null;
-        Point ImageSize;
-
         public UserControlScreenshot()
         {
             InitializeComponent();
@@ -42,114 +39,99 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
-            discoveryform.screenshotconverter.OnScreenShot += ScreenShot;
+            discoveryform.ScreenShotCaptured += Discoveryform_ScreenShotCaptured;
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
         {
-            uctg.OnTravelSelectionChanged -= Display;
+            uctg.OnTravelSelectionChanged -= TGChanged;
             uctg = thc;
-            uctg.OnTravelSelectionChanged += Display;
+            uctg.OnTravelSelectionChanged += TGChanged;
         }
 
         public override void LoadLayout()
         {
-            uctg.OnTravelSelectionChanged += Display;
-        }
-
-        public override void Closing()
-        {
-            discoveryform.screenshotconverter.OnScreenShot -= ScreenShot;
-            uctg.OnTravelSelectionChanged -= Display;
-        }
-
-        public void ScreenShot(string path, Point size)
-        {
-            ImagePath = path;
-            ImageSize = size;
-
-            FitToWindow();
+            uctg.OnTravelSelectionChanged += TGChanged;
         }
 
         public override void InitialDisplay()
         {
-            Display(uctg.GetCurrentHistoryEntry, discoveryform.history);
+            TGChanged(uctg.GetCurrentHistoryEntry, discoveryform.history, true);
         }
 
-        private void Display(HistoryEntry he, HistoryList hl) =>
-            Display(he, hl, true);
-
-        private void Display(HistoryEntry he, HistoryList hl, bool selectedEntry)
+        public override void Closing()
         {
-            if (he != null)
+            discoveryform.ScreenShotCaptured -= Discoveryform_ScreenShotCaptured;
+            uctg.OnTravelSelectionChanged -= TGChanged;
+        }
+
+        private void Discoveryform_ScreenShotCaptured(string file, Size size)
+        {
+            Display(file, size);
+        }
+
+        private void TGChanged(HistoryEntry he, HistoryList hl, bool selectedEntry)
+        {
+            if (he != null && he.EntryType == EliteDangerousCore.JournalTypeEnum.Screenshot)
             {
-                if (he.EntryType == EliteDangerousCore.JournalTypeEnum.Screenshot)
-                {
-                    JournalScreenshot ss = (JournalScreenshot)he.journalEntry;
-
-                    JObject jo = ss.GetJson();
-
-                    if (jo != null)
-                    {
-                        if (jo["EDDOutputFile"] != null && File.Exists(jo["EDDOutputFile"].Str()))
-                        {
-                            string store_name = jo["EDDOutputFile"].Str();
-                            Point size = new Point(jo["EDDOutputWidth"].Int(), jo["EDDOutputHeight"].Int());
-
-                            ScreenShot(store_name, size);
-                        }
-                        else if (jo["EDDInputFile"] != null && File.Exists(jo["EDDInputFile"].Str()))
-                        {
-                            string filename = jo["EDDInputFile"].Str();
-                            ScreenShot(filename, new Point(ss.Width, ss.Height));
-                        }
-                        else
-                        {
-                            string filename = discoveryform.screenshotconverter.GetScreenshotPath(ss);
-
-                            if (File.Exists(filename))
-                            {
-                                ScreenShot(filename, new Point(ss.Width, ss.Height));
-                            }
-                        }
-                    }
-                }
+                var ss = he.journalEntry as JournalScreenshot;
+                Display(ss.EDDOutputFile, new Size(ss.EDDOutputWidth, ss.EDDOutputHeight));
             }
         }
+
+        private void Display(string file, Size s)
+        {
+            try
+            {
+                if (file.HasChars() && File.Exists(file))
+                {
+                    pictureBox.ImageLocation = file;                       // this could except, so protect..
+                    imagesize = s;
+                    FitToWindow();
+                }
+                else
+                {
+                    pictureBox.Visible = false;
+                    pictureBox.ImageLocation = null;
+                }
+            }
+            catch(Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Cannot assign " + file + " to screenshot img " + ex);
+            }
+        }
+
+        Size imagesize;
 
         void FitToWindow()
         {
-            //System.Diagnostics.Debug.WriteLine("Screen shot " + ImagePath);
-
-            double ratiopicture = (double)ImageSize.X / (double)ImageSize.Y;
-
-            int boxwidth = ClientRectangle.Width;
-            int boxheight = ClientRectangle.Height;
-
-            int imagewidth = boxwidth;
-            int imageheight = (int)((double)imagewidth / ratiopicture);
-
-            if (imageheight > boxheight)        // if width/ratio > available height, scale down width
+            if (ClientRectangle.Width > 15 && ClientRectangle.Height > 15)
             {
-                double scaledownwidth = (double)imageheight / (double)boxheight;
-                imagewidth = (int)((double)imagewidth / scaledownwidth);
-            }
+                //System.Diagnostics.Debug.WriteLine("Screen shot " + ImagePath);
 
-            imageheight = (int)((double)imagewidth / ratiopicture);
+                double ratiopicture = (double)imagesize.Width / (double)imagesize.Height;
 
-            try
-            {
+                int boxwidth = ClientRectangle.Width;
+                int boxheight = ClientRectangle.Height;
+
+                int imagewidth = boxwidth;
+                int imageheight = (int)((double)imagewidth / ratiopicture);
+
+                if (imageheight > boxheight)        // if width/ratio > available height, scale down width
+                {
+                    double scaledownwidth = (double)imageheight / (double)boxheight;
+                    imagewidth = (int)((double)imagewidth / scaledownwidth);
+                }
+
+                imageheight = (int)((double)imagewidth / ratiopicture);
                 pictureBox.Location = new Point((boxwidth - imagewidth) / 2, (boxheight - imageheight) / 2);
                 pictureBox.Size = new Size(imagewidth, imageheight);
 
-                pictureBox.ImageLocation = ImagePath;                       // this could except, so protect..
                 pictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
                 pictureBox.Visible = true;
             }
-            catch
-            {
+            else
                 pictureBox.Visible = false;
-            }
         }
 
         private void UserControlScreenshot_Resize(object sender, EventArgs e)

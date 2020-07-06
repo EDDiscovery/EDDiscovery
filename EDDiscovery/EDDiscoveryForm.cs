@@ -54,7 +54,7 @@ namespace EDDiscovery
         public UserControls.IHistoryCursor PrimaryCursor { get { return tabControlMain.PrimaryTab.GetTravelGrid; } }
         public UserControls.UserControlContainerSplitter PrimarySplitter { get { return tabControlMain.PrimaryTab; } }
 
-        public ScreenShots.ScreenShotConverter screenshotconverter;
+        public EliteDangerousCore.ScreenShots.ScreenShotConverter screenshotconverter;
 
         public EDDiscovery._3DMap.MapManager Map { get; private set; }
 
@@ -79,6 +79,8 @@ namespace EDDiscovery
         public event Action<int> OnIGAUSyncComplete;                    // Sync has completed
                                                                         // theme has changed by settings, hook if you have some UI which needs refreshing due to it. 
         public event Action OnThemeChanged;                             // Note you won't get it on startup because theme is applied to form before tabs/panels are setup
+        public event Action<string, Size> ScreenShotCaptured;           // screen shot has been captured
+
         #endregion
 
 
@@ -113,6 +115,7 @@ namespace EDDiscovery
         {
             return Controller.RefreshHistoryAsync();
         }
+
         public void RefreshDisplays() { Controller.RefreshDisplays(); }
 
         public void ChangeToCommander(int id)
@@ -173,7 +176,7 @@ namespace EDDiscovery
             // obsolete remove IconSet.SetPanelImageListGetter(PanelInformation.GetPanelImages);
             InitializeComponent();
 
-            screenshotconverter = new ScreenShots.ScreenShotConverter(this);
+            screenshotconverter = new EliteDangerousCore.ScreenShots.ScreenShotConverter();
             PopOuts = new PopOutControl(this);
             Map = new EDDiscovery._3DMap.MapManager(this);
 
@@ -355,7 +358,30 @@ namespace EDDiscovery
 
             actioncontroller.CheckWarn();
 
-            screenshotconverter.Start();
+            screenshotconverter.Start((a) => Invoke(a),
+                             (b) => LogLine(b),
+                             () =>
+                             {
+                                 if (history.GetLast != null)        // lasthe should have name and whereami, and an indication of commander
+                                 {
+                                     return new Tuple<string, string, string>(history.GetLast.System.Name, history.GetLast.WhereAmI, history.GetLast.Commander?.Name ?? "Unknown");
+                                 }
+                                 else
+                                 {
+                                     return new Tuple<string, string, string>("Unknown", "Unknown", "Unknown");
+                                 }
+                             }
+                             );
+
+            screenshotconverter.OnScreenshot += (infile, outfile, imagesize, ss) => // screenshot seen
+            {
+                if ( ss!= null)
+                {
+                    ss.SetConvertedFilename(infile ?? "Deleted", outfile, imagesize.Width, imagesize.Height);       // record in SS the in/out files
+                }
+
+                ScreenShotCaptured?.Invoke(outfile, imagesize);         // tell others screen shot is captured
+            };
 
             WebServerControl(EDDConfig.Instance.WebServerEnable);
 
@@ -798,6 +824,8 @@ namespace EDDiscovery
             }
 
             DLLManager.NewJournalEntry(EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(he),false);
+
+            screenshotconverter.NewJournalEntry(he.journalEntry);       // tell the screenshotter.
 
             CheckActionProfile(he);
         }

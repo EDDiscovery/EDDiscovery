@@ -91,15 +91,8 @@ namespace EDDiscovery.UserControls
 
             this.comboBoxTheme.SelectedIndexChanged += this.comboBoxTheme_SelectedIndexChanged;    // now turn on the handler..
 
-            checkBoxCustomRemoveOriginals.Checked = discoveryform.screenshotconverter.RemoveOriginal;
-            checkBoxCustomMarkHiRes.Checked = discoveryform.screenshotconverter.MarkHiRes;
             checkBoxCustomEnableScreenshots.Checked = discoveryform.screenshotconverter.AutoConvert;
-            checkBoxCustomCopyToClipboard.Checked = discoveryform.screenshotconverter.CopyToClipboard;
-
-            this.checkBoxCustomRemoveOriginals.CheckedChanged += new System.EventHandler(this.checkBoxCustomRemoveOriginals_CheckedChanged);
-            this.checkBoxCustomMarkHiRes.CheckedChanged += new System.EventHandler(this.checkBoxCustomMarkHiRes_CheckedChanged);
             this.checkBoxCustomEnableScreenshots.CheckedChanged += new System.EventHandler(this.checkBoxCustomEnableScreenshots_CheckedChanged);
-            this.checkBoxCustomCopyToClipboard.CheckedChanged += new System.EventHandler(this.checkBoxCustomCopyToClipboard_CheckedChanged);
 
             checkBoxCustomEDSMEDDBDownload.Checked = EDDConfig.Instance.EDSMEDDBDownload;
             this.checkBoxCustomEDSMEDDBDownload.CheckedChanged += new System.EventHandler(this.checkBoxCustomEDSMDownload_CheckedChanged);
@@ -385,46 +378,12 @@ namespace EDDiscovery.UserControls
 
         private void buttonExtScreenshot_Click(object sender, EventArgs e)
         {
-            ScreenShots.ScreenShotConfigureForm frm = new ScreenShots.ScreenShotConfigureForm();
-            frm.Init(discoveryform.screenshotconverter, discoveryform.screenshotconverter.MarkHiRes);
-
-            if (frm.ShowDialog(FindForm()) == DialogResult.OK)
-            {
-                discoveryform.screenshotconverter.Stop();
-                discoveryform.screenshotconverter.ScreenshotsDir = frm.ScreenshotsDir;
-                discoveryform.screenshotconverter.OutputDir = frm.OutputDir;
-                discoveryform.screenshotconverter.InputFileExtension = frm.InputFileExtension;
-                discoveryform.screenshotconverter.OutputFileExtension = frm.OutputFileExtension;
-                discoveryform.screenshotconverter.FolderNameFormat = frm.FolderNameFormat;
-                discoveryform.screenshotconverter.RemoveOriginal = frm.RemoveOriginal;
-                discoveryform.screenshotconverter.FileNameFormat = frm.FileNameFormat;
-                discoveryform.screenshotconverter.CropResize1 = frm.CropResize1;
-                discoveryform.screenshotconverter.CropResize2 = frm.CropResize2;
-                discoveryform.screenshotconverter.CropResizeArea1 = frm.CropResizeArea1;
-                discoveryform.screenshotconverter.CropResizeArea2 = frm.CropResizeArea2;
-                discoveryform.screenshotconverter.KeepMasterConvertedImage = frm.KeepMasterConvertedImage;
-                discoveryform.screenshotconverter.Start();
-            }
+            discoveryform.screenshotconverter.Configure(this.discoveryform);
         }
 
         private void checkBoxCustomEnableScreenshots_CheckedChanged(object sender, EventArgs e)
         {
             discoveryform.screenshotconverter.AutoConvert = checkBoxCustomEnableScreenshots.Checked;
-        }
-
-        private void checkBoxCustomRemoveOriginals_CheckedChanged(object sender, EventArgs e)
-        {
-            discoveryform.screenshotconverter.RemoveOriginal = checkBoxCustomRemoveOriginals.Checked;
-        }
-
-        private void checkBoxCustomMarkHiRes_CheckedChanged(object sender, EventArgs e)
-        {
-            discoveryform.screenshotconverter.MarkHiRes = checkBoxCustomMarkHiRes.Checked;
-        }
-
-        private void checkBoxCustomCopyToClipboard_CheckedChanged(object sender, EventArgs e)
-        {
-            discoveryform.screenshotconverter.CopyToClipboard = checkBoxCustomCopyToClipboard.Checked;
         }
 
         #endregion

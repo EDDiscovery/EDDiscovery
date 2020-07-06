@@ -58,9 +58,6 @@ namespace EDDiscovery.UserControls
             this.checkBoxMinimizeToNotifyIcon = new ExtendedControls.ExtCheckBox();
             this.comboBoxClickThruKey = new ExtendedControls.ExtComboBox();
             this.checkBoxUseNotifyIcon = new ExtendedControls.ExtCheckBox();
-            this.checkBoxCustomCopyToClipboard = new ExtendedControls.ExtCheckBox();
-            this.checkBoxCustomMarkHiRes = new ExtendedControls.ExtCheckBox();
-            this.checkBoxCustomRemoveOriginals = new ExtendedControls.ExtCheckBox();
             this.buttonExtScreenshot = new ExtendedControls.ExtButton();
             this.checkBoxCustomEnableScreenshots = new ExtendedControls.ExtCheckBox();
             this.buttonExtEDSMConfigureArea = new ExtendedControls.ExtButton();
@@ -353,72 +350,9 @@ namespace EDDiscovery.UserControls
             this.toolTip.SetToolTip(this.checkBoxUseNotifyIcon, "Show a system notification area (system tray) icon for EDDiscovery.");
             this.checkBoxUseNotifyIcon.UseVisualStyleBackColor = true;
             // 
-            // checkBoxCustomCopyToClipboard
-            // 
-            this.checkBoxCustomCopyToClipboard.AutoSize = true;
-            this.checkBoxCustomCopyToClipboard.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxCustomCopyToClipboard.CheckBoxDisabledScaling = 0.5F;
-            this.checkBoxCustomCopyToClipboard.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBoxCustomCopyToClipboard.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxCustomCopyToClipboard.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxCustomCopyToClipboard.ImageIndeterminate = null;
-            this.checkBoxCustomCopyToClipboard.ImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.checkBoxCustomCopyToClipboard.ImageUnchecked = null;
-            this.checkBoxCustomCopyToClipboard.Location = new System.Drawing.Point(157, 61);
-            this.checkBoxCustomCopyToClipboard.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxCustomCopyToClipboard.Name = "checkBoxCustomCopyToClipboard";
-            this.checkBoxCustomCopyToClipboard.Size = new System.Drawing.Size(108, 17);
-            this.checkBoxCustomCopyToClipboard.TabIndex = 5;
-            this.checkBoxCustomCopyToClipboard.Text = "Copy to clipboard";
-            this.checkBoxCustomCopyToClipboard.TickBoxReductionRatio = 0.75F;
-            this.toolTip.SetToolTip(this.checkBoxCustomCopyToClipboard, "Auto copy the image to the clipboard");
-            this.checkBoxCustomCopyToClipboard.UseVisualStyleBackColor = true;
-            // 
-            // checkBoxCustomMarkHiRes
-            // 
-            this.checkBoxCustomMarkHiRes.AutoSize = true;
-            this.checkBoxCustomMarkHiRes.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxCustomMarkHiRes.CheckBoxDisabledScaling = 0.5F;
-            this.checkBoxCustomMarkHiRes.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBoxCustomMarkHiRes.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxCustomMarkHiRes.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxCustomMarkHiRes.ImageIndeterminate = null;
-            this.checkBoxCustomMarkHiRes.ImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.checkBoxCustomMarkHiRes.ImageUnchecked = null;
-            this.checkBoxCustomMarkHiRes.Location = new System.Drawing.Point(9, 61);
-            this.checkBoxCustomMarkHiRes.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxCustomMarkHiRes.Name = "checkBoxCustomMarkHiRes";
-            this.checkBoxCustomMarkHiRes.Size = new System.Drawing.Size(103, 17);
-            this.checkBoxCustomMarkHiRes.TabIndex = 5;
-            this.checkBoxCustomMarkHiRes.Text = "Mark HiRes files";
-            this.checkBoxCustomMarkHiRes.TickBoxReductionRatio = 0.75F;
-            this.toolTip.SetToolTip(this.checkBoxCustomMarkHiRes, "For Hi-Res files, mark them in the file name");
-            this.checkBoxCustomMarkHiRes.UseVisualStyleBackColor = true;
-            // 
-            // checkBoxCustomRemoveOriginals
-            // 
-            this.checkBoxCustomRemoveOriginals.AutoSize = true;
-            this.checkBoxCustomRemoveOriginals.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxCustomRemoveOriginals.CheckBoxDisabledScaling = 0.5F;
-            this.checkBoxCustomRemoveOriginals.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBoxCustomRemoveOriginals.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxCustomRemoveOriginals.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxCustomRemoveOriginals.ImageIndeterminate = null;
-            this.checkBoxCustomRemoveOriginals.ImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.checkBoxCustomRemoveOriginals.ImageUnchecked = null;
-            this.checkBoxCustomRemoveOriginals.Location = new System.Drawing.Point(9, 40);
-            this.checkBoxCustomRemoveOriginals.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxCustomRemoveOriginals.Name = "checkBoxCustomRemoveOriginals";
-            this.checkBoxCustomRemoveOriginals.Size = new System.Drawing.Size(109, 17);
-            this.checkBoxCustomRemoveOriginals.TabIndex = 5;
-            this.checkBoxCustomRemoveOriginals.Text = "Remove Originals";
-            this.checkBoxCustomRemoveOriginals.TickBoxReductionRatio = 0.75F;
-            this.toolTip.SetToolTip(this.checkBoxCustomRemoveOriginals, "After conversion, remove originals");
-            this.checkBoxCustomRemoveOriginals.UseVisualStyleBackColor = true;
-            // 
             // buttonExtScreenshot
             // 
-            this.buttonExtScreenshot.Location = new System.Drawing.Point(157, 23);
+            this.buttonExtScreenshot.Location = new System.Drawing.Point(157, 19);
             this.buttonExtScreenshot.Name = "buttonExtScreenshot";
             this.buttonExtScreenshot.Size = new System.Drawing.Size(99, 23);
             this.buttonExtScreenshot.TabIndex = 10;
@@ -438,7 +372,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxCustomEnableScreenshots.ImageIndeterminate = null;
             this.checkBoxCustomEnableScreenshots.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxCustomEnableScreenshots.ImageUnchecked = null;
-            this.checkBoxCustomEnableScreenshots.Location = new System.Drawing.Point(9, 19);
+            this.checkBoxCustomEnableScreenshots.Location = new System.Drawing.Point(10, 23);
             this.checkBoxCustomEnableScreenshots.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxCustomEnableScreenshots.Name = "checkBoxCustomEnableScreenshots";
             this.checkBoxCustomEnableScreenshots.Size = new System.Drawing.Size(59, 17);
@@ -956,9 +890,6 @@ namespace EDDiscovery.UserControls
             this.groupBoxCustomScreenShots.BackColorScaling = 0.5F;
             this.groupBoxCustomScreenShots.BorderColor = System.Drawing.Color.LightGray;
             this.groupBoxCustomScreenShots.BorderColorScaling = 0.5F;
-            this.groupBoxCustomScreenShots.Controls.Add(this.checkBoxCustomCopyToClipboard);
-            this.groupBoxCustomScreenShots.Controls.Add(this.checkBoxCustomMarkHiRes);
-            this.groupBoxCustomScreenShots.Controls.Add(this.checkBoxCustomRemoveOriginals);
             this.groupBoxCustomScreenShots.Controls.Add(this.buttonExtScreenshot);
             this.groupBoxCustomScreenShots.Controls.Add(this.checkBoxCustomEnableScreenshots);
             this.groupBoxCustomScreenShots.FillClientAreaWithAlternateColor = false;
@@ -1131,11 +1062,8 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtComboBox comboBoxClickThruKey;
         private System.Windows.Forms.Label labelTKey;
         private ExtendedControls.ExtGroupBox groupBoxCustomScreenShots;
-        private ExtendedControls.ExtCheckBox checkBoxCustomMarkHiRes;
-        private ExtendedControls.ExtCheckBox checkBoxCustomRemoveOriginals;
         private ExtendedControls.ExtButton buttonExtScreenshot;
         private ExtendedControls.ExtCheckBox checkBoxCustomEnableScreenshots;
-        private ExtendedControls.ExtCheckBox checkBoxCustomCopyToClipboard;
         private ExtendedControls.ExtGroupBox groupBoxCustomEDSM;
         private ExtendedControls.ExtButton buttonExtEDSMConfigureArea;
         private ExtendedControls.ExtCheckBox checkBoxCustomEDSMEDDBDownload;
