@@ -685,4 +685,19 @@
   <data name="ShowStarClasses" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Scan\ShowStarClasses.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="EDDB" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\SysInfo\EDDB.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="EDSM" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\SysInfo\EDSM.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Inara" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\SysInfo\Inara.PNG;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="spansh" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\SysInfo\spansh.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Ross" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\SysInfo\Ross.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

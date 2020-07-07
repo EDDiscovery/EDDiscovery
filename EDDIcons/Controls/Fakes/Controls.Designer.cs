@@ -163,6 +163,26 @@ namespace EDDiscovery.Icons {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap EDDB {
+            get {
+                object obj = ResourceManager.GetObject("EDDB", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap EDSM {
+            get {
+                object obj = ResourceManager.GetObject("EDSM", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap Expedition_Delete {
             get {
                 object obj = ResourceManager.GetObject("Expedition_Delete", resourceCulture);
@@ -316,6 +336,16 @@ namespace EDDiscovery.Icons {
         public static System.Drawing.Bitmap ImportExcel {
             get {
                 object obj = ResourceManager.GetObject("ImportExcel", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap Inara {
+            get {
+                object obj = ResourceManager.GetObject("Inara", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1363,6 +1393,16 @@ namespace EDDiscovery.Icons {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap Ross {
+            get {
+                object obj = ResourceManager.GetObject("Ross", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap Route_ExportToExcel {
             get {
                 object obj = ResourceManager.GetObject("Route_ExportToExcel", resourceCulture);
@@ -1686,6 +1726,16 @@ namespace EDDiscovery.Icons {
         public static System.Drawing.Bitmap SPanel_ResizeColumn {
             get {
                 object obj = ResourceManager.GetObject("SPanel_ResizeColumn", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap spansh {
+            get {
+                object obj = ResourceManager.GetObject("spansh", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

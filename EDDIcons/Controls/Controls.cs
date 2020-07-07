@@ -240,6 +240,11 @@ namespace EDDiscovery.Icons
         #region EDDiscovery.UserControls.UserControlSysInfo
         public static Image firstdiscover { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.SysInfo.firstdiscover"); } }
         public static Image notfirstdiscover { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.SysInfo.notfirstdiscover"); } }
+        public static Image spansh { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.SysInfo.spansh"); } }
+        public static Image EDDB { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.SysInfo.EDDB"); } }
+        public static Image EDSM { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.SysInfo.EDSM"); } }
+        public static Image Inara { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.SysInfo.Inara"); } }
+        public static Image Ross { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.SysInfo.Ross"); } }
         #endregion
         #region TabStrip
         public static Image TabStrip_Popout { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.TabStrip.Popout"); } }

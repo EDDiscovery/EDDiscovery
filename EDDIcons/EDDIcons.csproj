@@ -573,6 +573,11 @@
     <EmbeddedResource Include="Controls\SysInfo\notfirstdiscover.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Controls\SysInfo\Ross.png" />
+    <EmbeddedResource Include="Controls\SysInfo\spansh.png" />
+    <EmbeddedResource Include="Controls\SysInfo\EDDB.png" />
+    <EmbeddedResource Include="Controls\SysInfo\EDSM.png" />
+    <EmbeddedResource Include="Controls\SysInfo\Inara.PNG" />
     <EmbeddedResource Include="Journal\CargoTransfer.png" />
     <EmbeddedResource Include="Journal\CarrierStats.png" />
     <EmbeddedResource Include="Journal\NavRoute.png" />

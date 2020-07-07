@@ -196,4 +196,25 @@
   <data name="URLEDCD" xml:space="preserve">
     <value>https://edcd.github.io/</value>
   </data>
+  <data name="URLEDDBStationMarketId" xml:space="preserve">
+    <value>https://eddb.io/station/market-id/</value>
+  </data>
+  <data name="URLEDDBSystemName" xml:space="preserve">
+    <value>https://eddb.io/system/name/</value>
+  </data>
+  <data name="URLInaraStarSystem" xml:space="preserve">
+    <value>https://inara.cz/galaxy-starsystem/?search=</value>
+  </data>
+  <data name="URLInaraStation" xml:space="preserve">
+    <value>https://inara.cz/galaxy-station/?search=</value>
+  </data>
+  <data name="URLSpanshBodyId" xml:space="preserve">
+    <value>https://spansh.co.uk/body/</value>
+  </data>
+  <data name="URLSpanshStationMarketId" xml:space="preserve">
+    <value>https://spansh.co.uk/station/</value>
+  </data>
+  <data name="URLSpanshSystemSystemId" xml:space="preserve">
+    <value>https://spansh.co.uk/system/</value>
+  </data>
 </root>
