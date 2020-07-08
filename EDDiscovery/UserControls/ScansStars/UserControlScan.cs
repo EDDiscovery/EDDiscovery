@@ -662,7 +662,11 @@ namespace EDDiscovery.UserControls
                                 writer.Write(csv.Format("WasDiscovered"));
                                 if (ShowStars)
                                 {
-                                    writer.Write(csv.Format("StarType"));
+                                    writer.Write(csv.Format("X"));
+                                    writer.Write(csv.Format("Y"));
+                                    writer.Write(csv.Format("Z"));
+                                    writer.Write(csv.Format("Star Type"));
+                                    writer.Write(csv.Format("Star Class"));
                                     writer.Write(csv.Format("StellarMass"));
                                     writer.Write(csv.Format("AbsoluteMagnitude"));
                                     writer.Write(csv.Format("Age MY"));
@@ -765,7 +769,26 @@ namespace EDDiscovery.UserControls
 
                                     if (ShowStars)
                                     {
+                                        string name = scan.StarSystem ?? scan.BodyName;   // early scans did not have starsystem
+                                        ISystem sys = null;
+                                        if ( name.HasChars() )
+                                            sys = discoveryform.history.FindSystem(name);
+
+                                        if (sys != null)
+                                        {
+                                            writer.Write(csv.Format(sys.X));
+                                            writer.Write(csv.Format(sys.Y));
+                                            writer.Write(csv.Format(sys.Z));
+                                        }
+                                        else
+                                        {
+                                            writer.Write(csv.Format(""));
+                                            writer.Write(csv.Format(""));
+                                            writer.Write(csv.Format(""));
+                                        }
+
                                         writer.Write(csv.Format(scan.StarType));
+                                        writer.Write(csv.Format(scan.StarClassification));
                                         writer.Write(csv.Format((scan.nStellarMass.HasValue) ? scan.nStellarMass.Value : 0));
                                         writer.Write(csv.Format((scan.nAbsoluteMagnitude.HasValue) ? scan.nAbsoluteMagnitude.Value : 0));
                                         writer.Write(csv.Format((scan.nAge.HasValue) ? scan.nAge.Value : 0));
@@ -851,8 +874,9 @@ namespace EDDiscovery.UserControls
                             System.Diagnostics.Process.Start(frm.Path);
                     }
                 }
-                catch
+                catch (Exception ex)
                 {
+                    System.Diagnostics.Debug.WriteLine("Scan excel " + ex);
                     ExtendedControls.MessageBoxTheme.Show(FindForm(), "Failed to write to " + frm.Path, "Export Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
             }
