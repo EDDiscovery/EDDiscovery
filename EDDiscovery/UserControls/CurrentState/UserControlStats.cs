@@ -1004,7 +1004,7 @@ namespace EDDiscovery.UserControls
                 strarr[5] = hl.GetTonnesBought(si.Key).ToString("N0");
                 strarr[6] = hl.GetTonnesSold(si.Key).ToString("N0");
                 strarr[7] = hl.GetDeathCount(si.Key).ToString();
-                StatToDGV(dataGridViewByShip, si.Value.ShipType ?? "Unknown".T(EDTx.Unknown), strarr);
+                StatToDGV(dataGridViewByShip, (si.Value.ShipType ?? "Unknown".T(EDTx.Unknown)) + $" ({si.Value.ID})", strarr);
             }
 
             if (sortcol < dataGridViewByShip.Columns.Count)
