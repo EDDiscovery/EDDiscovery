@@ -170,6 +170,13 @@ namespace EDDiscovery.UserControls
                         found = new Tuple<HistoryEntry, string>(he, prefix + "Mission Reward at ".T(EDTx.SearchMaterialsCommodities_COL) + he.WhereAmI);
                 }
 
+                else if (he.EntryType == JournalTypeEnum.SAASignalsFound)
+                {
+                    var je = he.journalEntry as JournalSAASignalsFound;
+                    if (je.Contains(cm.FDName) > 0)
+                        found = new Tuple<HistoryEntry, string>(he, prefix + "Discovered at ".T(EDTx.SearchMaterialsCommodities_DIS) + je.BodyName);
+                }
+
                 if (found != null)
                 {
                     string keyname = he.System.Name + (checkstation ? ":"+he.WhereAmI : "");
