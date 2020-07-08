@@ -49,6 +49,7 @@ namespace EDDiscovery.UserControls
             this.toolStripButtonNew = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonImportFile = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonImportRoute = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonImportNavRoute = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonSave = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonExport = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonDelete = new System.Windows.Forms.ToolStripButton();
@@ -100,6 +101,7 @@ namespace EDDiscovery.UserControls
             this.toolStripButtonNew,
             this.toolStripButtonImportFile,
             this.toolStripButtonImportRoute,
+            this.toolStripButtonImportNavRoute,
             this.toolStripButtonSave,
             this.toolStripButtonExport,
             this.toolStripButtonDelete,
@@ -136,10 +138,21 @@ namespace EDDiscovery.UserControls
             this.toolStripButtonImportRoute.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.toolStripButtonImportRoute.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonImportRoute.Name = "toolStripButtonImportRoute";
-            this.toolStripButtonImportRoute.Size = new System.Drawing.Size(102, 29);
-            this.toolStripButtonImportRoute.Text = "Import route";
+            this.toolStripButtonImportRoute.Size = new System.Drawing.Size(105, 29);
+            this.toolStripButtonImportRoute.Text = "Import Route";
             this.toolStripButtonImportRoute.ToolTipText = "Import from route tab";
             this.toolStripButtonImportRoute.Click += new System.EventHandler(this.toolStripButtonImportRoute_Click);
+            // 
+            // toolStripButtonImportNavRoute
+            // 
+            this.toolStripButtonImportNavRoute.Image = global::EDDiscovery.Icons.Controls.Expedition_ImportRoute;
+            this.toolStripButtonImportNavRoute.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.toolStripButtonImportNavRoute.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonImportNavRoute.Name = "toolStripButtonImportNavRoute";
+            this.toolStripButtonImportNavRoute.Size = new System.Drawing.Size(126, 29);
+            this.toolStripButtonImportNavRoute.Text = "Import Nav route";
+            this.toolStripButtonImportNavRoute.ToolTipText = "Import from route tab";
+            this.toolStripButtonImportNavRoute.Click += new System.EventHandler(this.toolStripButtonImportNavRoute_Click);
             // 
             // toolStripButtonSave
             // 
@@ -573,6 +586,7 @@ namespace EDDiscovery.UserControls
             this.extPanelDataGridViewScroll.Controls.Add(this.dataGridViewRouteSystems);
             this.extPanelDataGridViewScroll.Dock = System.Windows.Forms.DockStyle.Fill;
             this.extPanelDataGridViewScroll.InternalMargin = new System.Windows.Forms.Padding(0);
+            this.extPanelDataGridViewScroll.LimitLargeChange = 2147483647;
             this.extPanelDataGridViewScroll.Location = new System.Drawing.Point(0, 115);
             this.extPanelDataGridViewScroll.Name = "extPanelDataGridViewScroll";
             this.extPanelDataGridViewScroll.Size = new System.Drawing.Size(1134, 558);
@@ -670,5 +684,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private ExtendedControls.ExtPanelDataGridViewScroll extPanelDataGridViewScroll;
         private ExtendedControls.ExtScrollBar extScrollBarDGV;
+        private System.Windows.Forms.ToolStripButton toolStripButtonImportNavRoute;
     }
 }

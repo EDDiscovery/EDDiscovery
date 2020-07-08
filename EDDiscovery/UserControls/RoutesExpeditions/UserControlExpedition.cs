@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2017 EDDiscovery development team
+ * Copyright © 2016 - 2020 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -15,7 +15,6 @@
  */
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
-using EliteDangerousCore.EDSM;
 using ExtendedControls;
 using System;
 using System.Collections.Generic;
@@ -24,7 +23,6 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
@@ -409,17 +407,27 @@ namespace EDDiscovery.UserControls
                 ExtendedControls.MessageBoxTheme.Show(FindForm(), "Please create a route on a route panel".T(EDTx.UserControlExpedition_Createroute), "Warning".T(EDTx.Warning));
                 return;
             }
-            else if (!PromptAndSaveIfNeeded())
-                return;
-
-            ClearRoute();
-            toolStripComboBoxRouteSelection.SelectedItem = null;
 
             foreach (ISystem s in latestplottedroute)
             {
                 dataGridViewRouteSystems.Rows.Add(s.Name, "", "");
             }
             UpdateSystemRows();
+        }
+
+        private void toolStripButtonImportNavRoute_Click(object sender, EventArgs e)
+        {
+            var route = discoveryform.history.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.NavRoute)?.journalEntry as EliteDangerousCore.JournalEvents.JournalNavRoute;
+            if ( route != null ) 
+            {
+                foreach (var s in route.Route)
+                {
+                    if ( s.StarSystem.HasChars())
+                        dataGridViewRouteSystems.Rows.Add(s.StarSystem, "", "");
+                }
+
+                UpdateSystemRows();
+            }
         }
 
         private void toolStripButtonExport_Click(object sender, EventArgs e)
