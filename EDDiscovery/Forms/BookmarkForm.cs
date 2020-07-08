@@ -35,12 +35,14 @@ namespace EDDiscovery.Forms
         private string edsmurl = null;
         bool validatestarname = false;
 
-        public BookmarkForm()
+        private HistoryList helist;
+
+        public BookmarkForm( HistoryList he)
         {
             InitializeComponent();
             EDDTheme.Instance.ApplyDialog(this);
-
             BaseUtils.Translator.Instance.Translate(this, new Control[] { labelX, labelY, labelZ, SurfaceBookmarks  });
+            helist = he;
         }
 
         #region External Initialisation
@@ -148,7 +150,7 @@ namespace EDDiscovery.Forms
             {
                 var edsm = new EDSMClass();
                 edsmurl = edsm.GetUrlToEDSMSystem(name, edsmid);
-                SurfaceBookmarks.Init(bk.StarName, bk.PlanetaryMarks);
+                SurfaceBookmarks.Init(bk.StarName, bk.PlanetaryMarks, helist);
             }
 
 
@@ -172,7 +174,7 @@ namespace EDDiscovery.Forms
             buttonDelete.Hide();
             var edsm = new EDSMClass();
             edsmurl = edsm.GetUrlToEDSMSystem(system.Name,system.EDSMID);
-            SurfaceBookmarks.Init(system.Name);
+            SurfaceBookmarks.Init(system.Name, helist);
             buttonOK.Enabled = true;
         }
 
@@ -198,7 +200,7 @@ namespace EDDiscovery.Forms
             buttonDelete.Hide();
             buttonEDSM.Enabled = false;
             buttonOK.Enabled = false;
-            SurfaceBookmarks.Init("");
+            SurfaceBookmarks.Init("", helist);
         }
 
         public void GMO(string name, string descr , bool istarget , string url )    // from formmap, new GMO bookmark
@@ -277,7 +279,7 @@ namespace EDDiscovery.Forms
                     InitialisePos(f);
                     var edsm = new EDSMClass();
                     edsmurl = edsm.GetUrlToEDSMSystem(f.Name,f.EDSMID);
-                    SurfaceBookmarks.Init(f.Name);
+                    SurfaceBookmarks.Init(f.Name, helist);
                 }
                 else
                     textBoxX.Text = textBoxY.Text = textBoxZ.Text = "";

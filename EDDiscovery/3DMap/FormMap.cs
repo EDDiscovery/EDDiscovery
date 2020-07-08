@@ -1333,7 +1333,7 @@ namespace EDDiscovery
 
         private void newRegionBookmarkToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            BookmarkForm frm = new BookmarkForm();
+            BookmarkForm frm = new BookmarkForm(discoveryForm.history);
             frm.InitialisePos(position.Current.X, position.Current.Y, position.Current.Z);
             DateTime bookmarktime = DateTime.UtcNow;
             frm.NewRegionBookmark(bookmarktime);
@@ -1677,7 +1677,7 @@ namespace EDDiscovery
                 {
                     long targetid = TargetClass.GetTargetGMO();      // who is the target of a bookmark (0=none)
 
-                    BookmarkForm frm = new BookmarkForm();
+                    BookmarkForm frm = new BookmarkForm(discoveryForm.history);
 
                     frm.Name = gmo.name;
                     frm.InitialisePos(gmo.points[0].X, gmo.points[0].Y, gmo.points[0].Z);

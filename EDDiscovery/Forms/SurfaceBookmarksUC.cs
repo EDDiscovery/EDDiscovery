@@ -45,7 +45,7 @@ namespace EDDiscovery.Forms
             InitializeComponent();
         }
 
-        public void Init(string systemName)     // from bookmark form.  new system or update with name..  name can be blank
+        public void Init(string systemName, HistoryList helist)     // from bookmark form.  new system or update with name..  name can be blank
         {
             planetmarks = new PlanetMarks();
 
@@ -56,7 +56,7 @@ namespace EDDiscovery.Forms
             dataGridViewMarks.ColumnHeadersDefaultCellStyle.BackColor = dataGridViewMarks.RowHeadersDefaultCellStyle.BackColor = EDDTheme.Instance.GridBorderBack;
 
             if (!string.IsNullOrEmpty(systemName))
-                UpdateComboBox(systemName);
+                UpdateComboBox(systemName , helist);
 
             Edited = false;
 
@@ -64,7 +64,7 @@ namespace EDDiscovery.Forms
             BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
         }
 
-        public void Init(string systemName, PlanetMarks pm)          // from UCB or Bookmark form, Init with a bookmark
+        public void Init(string systemName, PlanetMarks pm, HistoryList helist)          // from UCB or Bookmark form, Init with a bookmark
         {
             Edited = false;
             planetmarks = pm != null ? pm : new PlanetMarks();
@@ -77,7 +77,7 @@ namespace EDDiscovery.Forms
             dataGridViewMarks.SuspendLayout();
 
             if (!string.IsNullOrEmpty(systemName))
-                UpdateComboBox(systemName);
+                UpdateComboBox(systemName, helist);
 
             if (planetmarks.Planets != null)
             {
@@ -148,14 +148,14 @@ namespace EDDiscovery.Forms
             }
         }
 
-        private async void UpdateComboBox(string systemName)
+        private async void UpdateComboBox(string systemName, HistoryList helist)
         {
-            ISystem thisSystem = EDDApplicationContext.EDDMainForm.history.FindSystem(systemName);
+            ISystem thisSystem = helist.FindSystem(systemName);
 
             BodyName.Items.Clear();
             if (thisSystem != null)
             {
-                var lookup = await EDDApplicationContext.EDDMainForm.history.starscan.FindSystemAsync(thisSystem, true);
+                var lookup = await helist.starscan.FindSystemAsync(thisSystem, true);
                 var landables = lookup?.Bodies?.Where(b => b.ScanData != null && b.ScanData.IsLandable)?.Select(b => b.fullname);
 
                 if (landables != null)

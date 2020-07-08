@@ -420,7 +420,7 @@ namespace EDDiscovery.UserControls
             if (last_he == null)
                 return;
 
-            BookmarkForm frm = new BookmarkForm();
+            BookmarkForm frm = new BookmarkForm(discoveryform.history);
             DateTime timeutc = DateTime.UtcNow;
             if (currentBookmark == null)
             {

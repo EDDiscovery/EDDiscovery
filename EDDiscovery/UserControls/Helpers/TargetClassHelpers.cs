@@ -130,7 +130,7 @@ namespace EDDiscovery.UserControls
             SystemNoteClass sn = (cursystem != null) ? SystemNoteClass.GetNoteOnSystem(cursystem.Name, cursystem.EDSMID) : null;
             string note = (sn != null) ? sn.Note : "";
 
-            BookmarkForm frm = new BookmarkForm();
+            BookmarkForm frm = new BookmarkForm(discoveryForm.history);
 
             if (notedsystem && bkmark == null)              // note on a system
             {

@@ -98,6 +98,8 @@ namespace EDDiscovery
                 {
                     case "safemode": SafeMode = true; break;
                     case "norepositionwindow": NoWindowReposition = true; break;
+                    case "minimize": case "minimise": MinimiseOnOpen = true; break;
+                    case "maximise": case "maximize": MaximiseOnOpen = true; break;
                     case "portable": StoreDataInProgramDirectory = true; break;
                     case "nrw": NoWindowReposition = true; break;
                     case "showactionbutton": ActionButton = true; break;
@@ -173,6 +175,8 @@ namespace EDDiscovery
         public string SystemDatabasePath { get; private set; }
         public string IconsPath { get; private set; }
         public bool NoWindowReposition { get; set; }
+        public bool MinimiseOnOpen { get; set; }
+        public bool MaximiseOnOpen { get; set; }
         public bool ActionButton { get; private set; }
         public bool NoLoad { get; private set; }
         public bool NoTheme { get; set; }

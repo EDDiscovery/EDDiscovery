@@ -322,8 +322,6 @@ namespace EDDiscovery
 
             if (EDDOptions.Instance.ActionButton)
                 buttonReloadActions.Visible = true;
-
-       //     Hookable.Hook();
         }
 
         // OnLoad is called the first time the form is shown, before OnShown or OnActivated are called
@@ -544,6 +542,11 @@ namespace EDDiscovery
                 datetimetimer.Tick += (sv, ev) => { DateTime gameutc = DateTime.UtcNow.AddYears(1286); labelGameDateTime.Text = gameutc.ToShortDateString() + " " + gameutc.ToShortTimeString(); };
                 datetimetimer.Start();
             }
+
+            if (EDDOptions.Instance.MinimiseOnOpen)
+                WindowState = FormWindowState.Minimized;
+            else if (EDDOptions.Instance.MaximiseOnOpen)
+                WindowState = FormWindowState.Maximized;
         }
 
         List<Notifications.Notification> popupnotificationlist = new List<Notifications.Notification>();

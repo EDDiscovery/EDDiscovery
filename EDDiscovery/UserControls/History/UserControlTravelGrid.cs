@@ -1135,7 +1135,7 @@ namespace EDDiscovery.UserControls
 
         private void createEditBookmarkToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            BookmarkForm bookmarkForm = new BookmarkForm();
+            BookmarkForm bookmarkForm = new BookmarkForm(discoveryform.history);
             BookmarkClass existing = GlobalBookMarkList.Instance.FindBookmarkOnSystem(rightclickhe.System.Name);
             DateTime timeutc;
             if (existing != null)

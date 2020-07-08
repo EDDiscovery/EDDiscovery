@@ -1,30 +1,23 @@
-﻿﻿/*
- * Copyright © 2017 EDDiscovery development team
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
- * file except in compliance with the License. You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software distributed under
- * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
- * ANY KIND, either express or implied. See the License for the specific language
- * governing permissions and limitations under the License.
- * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
- */
+﻿/*
+* Copyright © 2017-2020 EDDiscovery development team
+*
+* Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+* file except in compliance with the License. You may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+* 
+* Unless required by applicable law or agreed to in writing, software distributed under
+* the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
+* ANY KIND, either express or implied. See the License for the specific language
+* governing permissions and limitations under the License.
+* 
+* EDDiscovery is not affiliated with Frontier Developments plc.
+*/
+
+using BaseUtils.Win32;
 using EDDiscovery.Forms;
-using ExtendedControls;
 using System;
-using System.Diagnostics;
-using System.IO;
-using System.IO.Pipes;
 using System.Reflection;                //Assembly
-using System.Runtime.InteropServices;   //GuidAttribute
-using System.Security.AccessControl;    //MutexAccessRule
-using System.Security.Principal;        //SecurityIdentifier
-using System.Threading;                 //Tasks and Mutex
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 using Timer = System.Windows.Forms.Timer;
@@ -34,18 +27,6 @@ namespace EDDiscovery
     // Class for managing application initialization, and proud owner of SplashScreen and EDDiscoveryForm. Singleton.
     internal class EDDApplicationContext : ApplicationContext
     {
-        public EDDApplicationContext() : base(StartupForm)
-        {
-            if (typeof(SafeModeForm).IsAssignableFrom(MainForm?.GetType()))
-            {
-                ((SafeModeForm)MainForm).Run += ((p, theme, tabs, lang) => { GoForAutoSequenceStart(new EDDFormLaunchArgs(p, theme , tabs, lang)); });
-            }
-            else
-            {
-                GoForAutoSequenceStart();
-            }
-        }
-
         #region Public static properties
 
         /// <summary>
@@ -63,19 +44,28 @@ namespace EDDiscovery
         /// </summary>
         public static string UserAgent { get; } = $"{FriendlyName} v{AppVersion}";
 
-
         /// <summary>
         /// The main <see cref="EDDiscoveryForm"/> of this application. If this is <c>null</c>, then you probably
         /// need to `<c>Application.Run(new EDDApplicationContext());</c>` and check back later, because it is
         /// still being initialized and is not yet in a valid state.
         /// </summary>
-        public static EDDiscoveryForm EDDMainForm { get; private set; } = null;
-
         public static bool RestartInSafeMode { get; set; } = false;
 
         #endregion
 
         #region Implementation
+
+        public EDDApplicationContext() : base(StartupForm)
+        {
+            if (typeof(SafeModeForm).IsAssignableFrom(MainForm?.GetType()))
+            {
+                ((SafeModeForm)MainForm).Run += ((p, theme, tabs, lang) => { GoForAutoSequenceStart(new EDDFormLaunchArgs(p, theme , tabs, lang)); });
+            }
+            else
+            {
+                GoForAutoSequenceStart();
+            }
+        }
 
         // Return whichever form should initially be displayed; normally SplashForm, but maybe SafeModeForm or even something else.
         private static Form StartupForm
@@ -131,6 +121,8 @@ namespace EDDiscovery
             var launchArg = ((EDDFormLaunchArgs)tim?.Tag)?.Clone() ?? new EDDFormLaunchArgs();
             tim?.Dispose();
 
+            EDDiscoveryForm EDDMainForm = null;
+
             try
             {
                 EDDMainForm = new EDDiscoveryForm();
@@ -147,6 +139,21 @@ namespace EDDiscovery
 
                 SetLoadingMsg("Starting Program");
                 SwitchContext(EDDMainForm);         // Ignition, and liftoff!
+
+                NativeMethods.STARTUPINFO_I si = new NativeMethods.STARTUPINFO_I();
+                UnsafeNativeMethods.GetStartupInfo(si);        // duplicate of form.cs WmCreate check of code.
+
+                if ((si.dwFlags & NativeMethods.STARTF_USESHOWWINDOW) != 0)
+                {
+                    if (si.wShowWindow == NativeMethods.SW_MINIMIZE || si.wShowWindow == NativeMethods.SW_SHOWMINNOACTIVE)
+                    {
+                        EDDOptions.Instance.MinimiseOnOpen = true;
+                    }
+                    else if (si.wShowWindow == NativeMethods.SW_SHOWMAXIMIZED || si.wShowWindow == NativeMethods.SW_MAXIMIZE)
+                    {
+                        EDDOptions.Instance.MaximiseOnOpen = true;
+                    }
+                }
             }
             catch (Exception ex)
             {   // There's so many ways that things could go wrong during init; let's fail for everything!

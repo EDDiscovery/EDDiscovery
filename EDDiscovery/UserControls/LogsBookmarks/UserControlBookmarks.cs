@@ -103,7 +103,7 @@ namespace EDDiscovery.UserControls
                 if (bk.isRegion)
                     userControlSurfaceBookmarks.Disable();
                 else
-                    userControlSurfaceBookmarks.Init(bk.StarName,bk.PlanetaryMarks);
+                    userControlSurfaceBookmarks.Init(bk.StarName,bk.PlanetaryMarks, discoveryform.history);
             }
             else
             {
@@ -267,7 +267,7 @@ namespace EDDiscovery.UserControls
             {
                 BookmarkClass bk = (BookmarkClass)currentedit.Tag;
 
-                UserControlCompass comp = (UserControlCompass)EDDApplicationContext.EDDMainForm.PopOuts.PopOut(PanelInformation.PanelIDs.Compass);
+                UserControlCompass comp = (UserControlCompass)discoveryform.PopOuts.PopOut(PanelInformation.PanelIDs.Compass);
                 comp.SetSurfaceBookmark(bk, planet, locname);
             }
         }
