@@ -13,21 +13,15 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using EDDiscovery;
 using EDDiscovery._3DMap;
-using OpenTK;
-using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
-using OpenTKUtils.GL1;
+using OpenTK;
 using OpenTKUtils.Common;
+using OpenTKUtils.GL1;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
 
 namespace EDDiscovery
 {

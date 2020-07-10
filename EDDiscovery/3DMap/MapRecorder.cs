@@ -13,19 +13,17 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using EDDiscovery;
+using EDDiscovery.Forms;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OpenTK;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Text;
-using System.Windows.Forms;
-using Newtonsoft.Json;
-using System.Linq;
 using System.Drawing;
-using EDDiscovery.Forms;
+using System.IO;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace EDDiscovery._3DMap
 {

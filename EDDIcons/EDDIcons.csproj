@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LoadGalMaps.cs" />
     <Compile Include="ForceInclusion.cs" />
     <Compile Include="Controls\Controls.cs" />
     <None Include="Controls\Fakes\Controls.Designer.cs">
@@ -573,6 +574,8 @@
     <EmbeddedResource Include="Controls\SysInfo\notfirstdiscover.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="GalMap\Galaxy_L.jpg" />
+    <EmbeddedResource Include="GalMap\Galaxy_L_Grid.jpg" />
     <EmbeddedResource Include="Controls\SysInfo\Ross.png" />
     <EmbeddedResource Include="Controls\SysInfo\spansh.png" />
     <EmbeddedResource Include="Controls\SysInfo\EDDB.png" />

@@ -13,29 +13,23 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using EDDiscovery;
 using EDDiscovery._3DMap;
 using EDDiscovery.Forms;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using EliteDangerousCore.EDSM;
 using OpenTK;
-using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
-using OpenTK.Input;
+using OpenTKUtils.Common;
+using OpenTKUtils.GL1;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
-using System.Resources;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using OpenTKUtils.GL1;
-using OpenTKUtils.Common;
 
 namespace EDDiscovery
 {
@@ -105,7 +99,7 @@ namespace EDDiscovery
         public List<HistoryEntry> systemlist { get; set; }
         private List<ISystem> plannedRoute { get; set; }
 
-        public List<BaseUtils.Map2d> fgeimages = new List<BaseUtils.Map2d>();
+        public List<BaseUtils.Map2d> maps2d = new List<BaseUtils.Map2d>();
 
         public DateTime filterStartTime { get; set; }
         public DateTime filterEndTime { get; set; }
@@ -2261,10 +2255,12 @@ namespace EDDiscovery
 
         private void LoadMapImages()
         {
-            fgeimages = BaseUtils.Map2d.LoadImages(EDDOptions.Instance.MapsAppDirectory());
+            maps2d = EDDiscovery.Icons.IconMaps.StandardMaps();
+            maps2d.AddRange(BaseUtils.Map2d.LoadFromFolder(EDDOptions.Instance.MapsAppDirectory()));
+
             dropdownMapNames.DropDownItems.Clear();
 
-            foreach (var img in fgeimages)
+            foreach (var img in maps2d)
             {
                 ToolStripButton item = new ToolStripButton
                 {

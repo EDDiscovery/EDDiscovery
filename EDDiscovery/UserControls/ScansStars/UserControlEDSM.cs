@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2017 EDDiscovery development team
+ * Copyright © 2016 - 2020 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -13,22 +13,16 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+
+
+using EliteDangerousCore;
+using EliteDangerousCore.DB;
+using EliteDangerousCore.EDSM;
+using EliteDangerousCore.JournalEvents;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using ExtendedControls;
-using System.Drawing.Drawing2D;
-using EliteDangerousCore.EDSM;
-using EliteDangerousCore.DB;
-using EliteDangerousCore;
-using EliteDangerousCore.JournalEvents;
-using System.Threading;
 
 namespace EDDiscovery.UserControls
 {

@@ -389,8 +389,8 @@ namespace EDDiscovery
         private float curx = 0, curz = 0;
 
         private float middistance = 5000;
-        private int midpercentage = 10;
-        private int farpercentage = 5;
+        private int midpercentage = 5;
+        private int farpercentage = 2;
         private float fardistance = 20000;
         private float MinRecalcDistance = 2500;            // only recalc a grid if we are more than this away from its prev calc pos
 

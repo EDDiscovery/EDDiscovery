@@ -74,7 +74,7 @@ namespace EDDiscovery.Actions
                     }
                     else if (cmdname.Equals("2dmap"))
                     {
-                        (ap.actioncontroller as ActionController).DiscoveryForm.Open2DMap();
+                        (ap.actioncontroller as ActionController).DiscoveryForm.PopOuts.PopOut(PanelInformation.PanelIDs.Map2D);
                     }
                     else if (cmdname.Equals("edsm"))
                     {

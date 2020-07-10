@@ -14,21 +14,17 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
+using EliteDangerousCore;
+using EliteDangerousCore.DB;
+using EliteDangerousCore.EDSM;
+using OpenTK;
+using OpenTKUtils;
+using OpenTKUtils.GL1;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Drawing;
 using System.Diagnostics;
-using OpenTK;
-using System.Resources;
-using EDDiscovery.Properties;
-using EliteDangerousCore.EDSM;
-using EliteDangerousCore.DB;
-using EliteDangerousCore;
-using System.IO;
-using OpenTKUtils.GL1;
-using OpenTKUtils;
+using System.Drawing;
+using System.Linq;
 
 namespace EDDiscovery._3DMap
 {
@@ -66,23 +62,23 @@ namespace EDDiscovery._3DMap
 
                 for( int i = 0; i < list.Length; i++)
                 {
-                    BaseUtils.Map2d img = list[i];
+                    BaseUtils.Map2d map = list[i];
 
-                    if (_cachedTextures.ContainsKey(img.FileName))
+                    if (_cachedTextures.ContainsKey(map.FileName))
                     {
-                        datasetMapImg.Add(_cachedTextures[img.FileName]);
+                        datasetMapImg.Add(_cachedTextures[map.FileName]);
                     }
                     else
                     {
-                        Bitmap bmp = (Bitmap)Bitmap.FromFile(img.FilePath);
+                        Bitmap bmp = map.Image as Bitmap;      // either a stored one, or loaded
                                                                                     
-                        Vector3 centre = new Vector3((img.TopLeft.X + img.BottomRight.X) / 2, 0, (img.TopRight.Y + img.BottomLeft.Y) / 2);
-                        float width = img.TopRight.X - img.BottomLeft.X;
-                        float height = img.TopLeft.Y - img.BottomRight.Y;           // its rectangular.. so does not really matter which left/right/top/bot you use
+                        Vector3 centre = new Vector3((map.TopLeft.X + map.BottomRight.X) / 2, 0, (map.TopRight.Y + map.BottomLeft.Y) / 2);
+                        float width = map.TopRight.X - map.BottomLeft.X;
+                        float height = map.TopLeft.Y - map.BottomRight.Y;           // its rectangular.. so does not really matter which left/right/top/bot you use
 
                         var texture = TexturedQuadData.FromBitmap(bmp, centre, TexturedQuadData.NoRotation, width, height );
 
-                        _cachedTextures[img.FileName] = texture;
+                        _cachedTextures[map.FileName] = texture;
                         datasetMapImg.Add(texture);
                     }
                 }

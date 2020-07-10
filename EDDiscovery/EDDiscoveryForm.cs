@@ -98,7 +98,6 @@ namespace EDDiscovery
         public event Action<JournalEntry> OnNewJournalEntry { add { Controller.OnNewJournalEntry += value; } remove { Controller.OnNewJournalEntry -= value; } }
         public event Action<string, Color> OnNewLogEntry { add { Controller.OnNewLogEntry += value; } remove { Controller.OnNewLogEntry -= value; } }
         public event Action OnRefreshCommanders { add { Controller.OnRefreshCommanders += value; } remove { Controller.OnRefreshCommanders -= value; } }
-        public event Action OnMapsDownloaded { add { Controller.OnMapsDownloaded += value; } remove { Controller.OnMapsDownloaded -= value; } }
         public event Action<bool> OnExpeditionsDownloaded { add { Controller.OnExpeditionsDownloaded += value; } remove { Controller.OnExpeditionsDownloaded -= value; } }
 
         #endregion
@@ -412,12 +411,10 @@ namespace EDDiscovery
                 foreach (var dll in list)
                 {
                     if (ExtendedControls.MessageBoxTheme.Show(this,
-                                    string.Format(("The following application extension DLLs have been found" + Environment.NewLine +
-                                    "Do you wish to allow these to be used?" + Environment.NewLine +
-                                    "{0} " + Environment.NewLine +
-                                    "If you do not, either remove the DLLs from the DLL folder in ED Appdata" + Environment.NewLine +
-                                    "or deinstall the action pack which introduced the DLL" + Environment.NewLine +
-                                    "or hold down shift when launching and use the Remove all Extensions DLL option").T(EDTx.EDDiscoveryForm_DLLW), dll),
+                                    string.Format(("The following application extension DLL have been found" + Environment.NewLine +
+                                    "Do you wish to allow it to be used?" + Environment.NewLine + Environment.NewLine + 
+                                    "{0} " + Environment.NewLine
+                                    ).T(EDTx.EDDiscoveryForm_DLLW), dll),
                                     "Warning".T(EDTx.Warning),
                                     MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                     {
@@ -986,11 +983,6 @@ namespace EDDiscovery
             }
         }
 
-        private void show2DMapsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Open2DMap();
-        }
-
         private void show3DMapsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Open3DMap(PrimaryCursor.GetCurrentHistoryEntry);
@@ -1248,14 +1240,6 @@ namespace EDDiscovery
                              EDCommander.Current.MapZoom, history.FilterByTravel);
 
             Map.Show();
-            this.Cursor = Cursors.Default;
-        }
-
-        public void Open2DMap()
-        {
-            this.Cursor = Cursors.WaitCursor;
-            Form2DMap frm = new Form2DMap(Controller.history.FilterByFSDCarrierJumpAndPosition);
-            frm.Show();
             this.Cursor = Cursors.Default;
         }
 
@@ -1557,11 +1541,6 @@ namespace EDDiscovery
         private void buttonExt3dmap_Click(object sender, EventArgs e)
         {
             Open3DMap(PrimaryCursor.GetCurrentHistoryEntry);
-        }
-
-        private void buttonExt2dmap_Click(object sender, EventArgs e)
-        {
-            Open2DMap();
         }
 
         public void RefreshButton(bool state)

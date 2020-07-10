@@ -13,14 +13,10 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using EDDiscovery;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
+using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace EDDiscovery._3DMap
 {

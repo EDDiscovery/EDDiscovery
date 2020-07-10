@@ -80,7 +80,6 @@ namespace EDDiscovery
 
         // Due to background taskc completing async to the rest
 
-        public event Action OnMapsDownloaded;                               // UI
         public event Action<bool> OnExpeditionsDownloaded;                  // UI, true if changed entries
         public event Action OnExplorationDownloaded;                        // UI
 
@@ -263,9 +262,6 @@ namespace EDDiscovery
             bool checkGithub = EDDOptions.Instance.CheckGithubFiles;
             if (checkGithub)      // not normall in debug, due to git hub chokeing
             {
-                // Async load of maps in another thread
-                DownloadMaps(() => PendingClose);
-
                 // and Expedition data
                 DownloadExpeditions(() => PendingClose);
 
@@ -418,28 +414,6 @@ namespace EDDiscovery
         #endregion
 
         #region Aux file downloads
-
-        // in its own thread..
-        public void DownloadMaps(Func<bool> cancelRequested)
-        {
-            LogLine("Checking for new EDDiscovery maps".T(EDTx.EDDiscoveryController_Maps));
-
-            Task.Factory.StartNew(() =>
-            {
-                BaseUtils.GitHubClass github = new BaseUtils.GitHubClass(EDDiscovery.Properties.Resources.URLGithubDataDownload, LogLine);
-                var files = github.ReadDirectory("Maps/V1");
-                if (files != null)
-                {
-                    string mapsdir = EDDOptions.Instance.MapsAppDirectory();
-
-                    if ( github.DownloadFiles(files, mapsdir) )
-                    {
-                        if (!cancelRequested())
-                            InvokeAsyncOnUiThread(() => { OnMapsDownloaded?.Invoke(); });
-                    }
-                }
-            });
-        }
 
         // in its own thread..
         public void DownloadExpeditions(Func<bool> cancelRequested)

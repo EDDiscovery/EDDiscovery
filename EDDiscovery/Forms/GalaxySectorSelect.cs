@@ -75,31 +75,29 @@ namespace EDDiscovery.Forms
             string datapath = EDDOptions.Instance.MapsAppDirectory();
             if (Directory.Exists(datapath))
             {
-                galaxy = Map2d.LoadImage(Path.Combine(datapath, "Galaxy_L_Grid.json"));
-                if (galaxy != null)
-                {
-                    imageViewer.Image = new Bitmap(galaxy.FilePath);
-                    imageViewer.ZoomToFit();
-                    imageViewer.Init(galaxy);
-                    imageViewer.MinZoom = 1;
+                galaxy = EDDiscovery.Icons.IconMaps.StandardMaps().Find(x=>x.FilePath.Contains("Galaxy L"));
 
-                    comboBoxSelections.Items.AddRange((from x in DefaultGalaxyOptions select x.Item1));
+                imageViewer.Image = galaxy.Image;
+                imageViewer.ZoomToFit();
+                imageViewer.Init(galaxy);
+                imageViewer.MinZoom = 1;
 
-                    initialsel = Selection = cellset;
-                    initiallist = new List<int>(imageViewer.Selection);     // copy of..
+                comboBoxSelections.Items.AddRange((from x in DefaultGalaxyOptions select x.Item1));
 
-                    EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
-                    bool winborder = theme.ApplyDialog(this);
-                    statusStripCustom.Visible = panel_close.Visible = panel_minimize.Visible = !winborder;
+                initialsel = Selection = cellset;
+                initiallist = new List<int>(imageViewer.Selection);     // copy of..
 
-                    BaseUtils.Translator.Instance.Translate(this, new Control[] { labelX, labelXName, labelZ, labelZName, labelID });
+                EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
+                bool winborder = theme.ApplyDialog(this);
+                statusStripCustom.Visible = panel_close.Visible = panel_minimize.Visible = !winborder;
 
-                    SetComboBox();
+                BaseUtils.Translator.Instance.Translate(this, new Control[] { labelX, labelXName, labelZ, labelZName, labelID });
 
-                    imageViewer.BackColor = Color.FromArgb(5, 5, 5);
+                SetComboBox();
 
-                    return true;
-                }
+                imageViewer.BackColor = Color.FromArgb(5, 5, 5);
+
+                return true;
             }
 
             return false;
