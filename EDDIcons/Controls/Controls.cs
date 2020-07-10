@@ -52,13 +52,11 @@ namespace EDDiscovery.Icons
         public static Image Main_Help_SafeModeHelp { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Main.Help.SafeModeHelp"); } }
         public static Image Main_Toolbar_EditAddons { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Main.Toolbar.EditAddons"); } }
         public static Image Main_Toolbar_ManageAddOns { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Main.Toolbar.ManageAddOns"); } }
-        public static Image Main_Toolbar_Open2DMap { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Main.Toolbar.Open2DMap"); } }
         public static Image Main_Toolbar_Open3DMap { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Main.Toolbar.Open3DMap"); } }
         public static Image Main_Toolbar_Popouts { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Main.Toolbar.Popouts"); } }
         public static Image Main_Toolbar_Refresh { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Main.Toolbar.Refresh"); } }
         public static Image Main_Toolbar_SyncEDSM { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Main.Toolbar.SyncEDSM"); } }
         public static Image Main_Tools_Exit { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Main.Tools.Exit"); } }
-        public static Image Main_Tools_Open2DMap { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Main.Tools.Open2DMap"); } }
         public static Image Main_Tools_Open3DMap { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Main.Tools.Open3DMap"); } }
         public static Image Main_Tools_Popouts_DisableTransparency { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Main.Tools.Popouts.DisableTransparency"); } }
         public static Image Main_Tools_Popouts_Menu { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Main.Tools.Popouts.Menu"); } }

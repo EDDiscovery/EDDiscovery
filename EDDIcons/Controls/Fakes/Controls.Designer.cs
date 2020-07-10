@@ -613,16 +613,6 @@ namespace EDDiscovery.Icons {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Main_Toolbar_Open2DMap {
-            get {
-                object obj = ResourceManager.GetObject("Main_Toolbar_Open2DMap", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         public static System.Drawing.Bitmap Main_Toolbar_Open3DMap {
             get {
                 object obj = ResourceManager.GetObject("Main_Toolbar_Open3DMap", resourceCulture);
@@ -669,17 +659,7 @@ namespace EDDiscovery.Icons {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Main_Tools_Open2DMap {
-            get {
-                object obj = ResourceManager.GetObject("Main_Tools_Open2DMap", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
+
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
