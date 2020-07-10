@@ -137,23 +137,26 @@ namespace EDDiscovery
 
                 EDDMainForm.Init(SetLoadingMsg);    // call the init function, which will initialize the eddiscovery form
 
-                SetLoadingMsg("Starting Program");
-                SwitchContext(EDDMainForm);         // Ignition, and liftoff!
-
-                NativeMethods.STARTUPINFO_I si = new NativeMethods.STARTUPINFO_I();
-                UnsafeNativeMethods.GetStartupInfo(si);        // duplicate of form.cs WmCreate check of code.
-
-                if ((si.dwFlags & NativeMethods.STARTF_USESHOWWINDOW) != 0)
+                if (Environment.OSVersion.Platform == PlatformID.Win32NT)
                 {
-                    if (si.wShowWindow == NativeMethods.SW_MINIMIZE || si.wShowWindow == NativeMethods.SW_SHOWMINNOACTIVE)
+                    NativeMethods.STARTUPINFO_I si = new NativeMethods.STARTUPINFO_I();
+                    UnsafeNativeMethods.GetStartupInfo(si);        // duplicate of form.cs WmCreate check of code.
+
+                    if ((si.dwFlags & NativeMethods.STARTF_USESHOWWINDOW) != 0)
                     {
-                        EDDOptions.Instance.MinimiseOnOpen = true;
-                    }
-                    else if (si.wShowWindow == NativeMethods.SW_SHOWMAXIMIZED || si.wShowWindow == NativeMethods.SW_MAXIMIZE)
-                    {
-                        EDDOptions.Instance.MaximiseOnOpen = true;
+                        if (si.wShowWindow == NativeMethods.SW_MINIMIZE || si.wShowWindow == NativeMethods.SW_SHOWMINNOACTIVE)
+                        {
+                            EDDOptions.Instance.MinimiseOnOpen = true;
+                        }
+                        else if (si.wShowWindow == NativeMethods.SW_SHOWMAXIMIZED || si.wShowWindow == NativeMethods.SW_MAXIMIZE)
+                        {
+                            EDDOptions.Instance.MaximiseOnOpen = true;
+                        }
                     }
                 }
+
+                SetLoadingMsg("Starting Program");
+                SwitchContext(EDDMainForm);         // Ignition, and liftoff!
             }
             catch (Exception ex)
             {   // There's so many ways that things could go wrong during init; let's fail for everything!
