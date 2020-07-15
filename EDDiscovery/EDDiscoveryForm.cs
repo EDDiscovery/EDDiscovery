@@ -13,9 +13,12 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using EDDiscovery.Forms;
+using EliteDangerousCore;
+using EliteDangerousCore.DB;
 using EliteDangerousCore.EDDN;
 using EliteDangerousCore.EDSM;
-using EDDiscovery.Forms;
+using EliteDangerousCore.JournalEvents;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -25,12 +28,7 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using EliteDangerousCore;
-using EliteDangerousCore.DB;
-using EliteDangerousCore.JournalEvents;
-using EDDiscovery.Icons;
 
 namespace EDDiscovery
 {
@@ -917,6 +915,8 @@ namespace EDDiscovery
             SystemNoteClass.CommitDirtyNotes((snc) => { if (EDCommander.Current.SyncToEdsm && snc.FSDEntry) EDSMClass.SendComments(snc.SystemName, snc.Note, snc.EdsmId); });
 
             screenshotconverter.SaveSettings();
+            screenshotconverter.Stop();
+
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("ToolBarPanelPinState", panelToolBar.PinState);
 
             theme.SaveSettings(null);
