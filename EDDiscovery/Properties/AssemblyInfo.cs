@@ -21,9 +21,9 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("EDDiscovery")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Captains Log and more for Elite Dangerous")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("EDDiscovery Team")]
 [assembly: AssemblyProduct("EDDiscovery")]
 [assembly: AssemblyCopyright("Copyright © EDD Team 2015-2020")]
 [assembly: AssemblyTrademark("")]
@@ -47,6 +47,6 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("11.5.2.0")]
+[assembly: AssemblyVersion("11.6.0.0")]
 
 
