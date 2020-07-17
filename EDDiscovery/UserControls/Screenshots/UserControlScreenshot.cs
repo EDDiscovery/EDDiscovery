@@ -72,11 +72,42 @@ namespace EDDiscovery.UserControls
 
         private void TGChanged(HistoryEntry he, HistoryList hl, bool selectedEntry)
         {
-            if (he != null && he.EntryType == EliteDangerousCore.JournalTypeEnum.Screenshot)
+            if (he != null && he.journalEntry is JournalScreenshot)
             {
-                var ss = he.journalEntry as JournalScreenshot;
-                Display(ss.EDDOutputFile, new Size(ss.EDDOutputWidth, ss.EDDOutputHeight));
+                var ss = (JournalScreenshot)he.journalEntry;
+                if (!String.IsNullOrEmpty(ss.EDDOutputFile) && File.Exists(ss.EDDOutputFile))
+                {
+                    Display(ss.EDDOutputFile, new Size(ss.EDDOutputWidth, ss.EDDOutputHeight));
+                }
+                else
+                {
+                    var filename = GetScreenshotPath(ss.Filename);
+
+                    if (filename != null && File.Exists(filename) && ss.Width != 0 && ss.Height != 0)
+                    {
+                        Display(filename, new Size(ss.Width, ss.Height));
+                    }
+                }
             }
+        }
+
+        private string GetScreenshotPath(string filepart)
+        {
+            var filenameout = filepart;
+
+            if (filepart.StartsWith("\\ED_Pictures\\"))     // if its an ss record, try and find it either in watchedfolder or in default loc
+            {
+                filepart = filepart.Substring(13);
+                filenameout = Path.Combine(discoveryform.screenshotconverter.InputFolder, filepart);
+
+                if (!File.Exists(filenameout))
+                {
+                    string defaultInputDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures), "Frontier Developments", "Elite Dangerous");
+                    filenameout = Path.Combine(defaultInputDir, filepart);
+                }
+            }
+
+            return filenameout;
         }
 
         private void Display(string file, Size s)
