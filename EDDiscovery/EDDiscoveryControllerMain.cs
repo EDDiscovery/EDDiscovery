@@ -291,14 +291,6 @@ namespace EDDiscovery
 
             LogLine("Loaded Notes, Bookmarks and Galactic mapping.".T(EDTx.EDDiscoveryController_LN));
 
-            if (EliteDangerousCore.EDDN.EDDNClass.CheckforEDMC()) // EDMC is running
-            {
-                if (EDCommander.Current.SyncToEddn)  // Both EDD and EDMC should not sync to EDDN.
-                {
-                    LogLineHighlight("EDDiscovery and EDMarketConnector should not both sync to EDDN. Stop EDMC or uncheck 'send to EDDN' in settings tab!".T(EDTx.EDDiscoveryController_EDMC));
-                }
-            }
-
             if (!EDDOptions.Instance.NoLoad)        // here in this thread, we do a refresh of history. 
             {
                 LogLine("Reading travel history".T(EDTx.EDDiscoveryController_RTH));
