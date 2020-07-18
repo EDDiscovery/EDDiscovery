@@ -6,6 +6,12 @@ body
     background-color: black;
 	font-family: Arial,Helvetica,Sans-serif;
 	margin: 0px;
+    height: 100%;
+}
+
+div.page {
+	overflow: hidden;
+	height: 100%;
 }
 
 .wrapper
@@ -17,14 +23,15 @@ body
 .wrapleft
 {
     float:left;
-    width:100%;
 }
 
 article
 {
-    height: 800px;
-    overflow: auto;
+    height: 100vh;
+    overflow-y: scroll;
     margin-right: 310px;
+	/* header+nav+footer = 34 + 33 + 24 = 91 */
+	margin-bottom: -75px;
 }
 
 article table
@@ -37,11 +44,6 @@ article table tr
 {
     background-color: #000000;
     color: darkorange;
-}
-
-article table tr td
-{
-    border: 1px solid #9b5500;
 }
 
 article table td:nth-child(1)
@@ -69,7 +71,7 @@ article table td:nth-child(5)
     width: 20%;
 }
 article table tr:nth-child(even) {
-	background: #1f1f1f;
+	background: #2b2b2b;
 }
 article table tr:nth-child(odd) {
 	background: #000000;
@@ -107,7 +109,7 @@ aside tr td:last-of-type
     font-style: italic;
 }
 aside table tr:nth-child(even) {
-	background: #1f1f1f;
+	background: #2b2b2b;
 }
 aside table tr:nth-child(odd) {
 	background: #000000;
@@ -116,8 +118,9 @@ aside table tr:nth-child(odd) {
 /* EDSM Buttons on aside */
 .edsmetcbuttons
 {
-    width: 6em;
-    margin: 1px 0px 1px 10px;
+    float: right;
+    margin: -20px 10px 1px 10px;
+	padding: 2px 10px 2px 10px;
     line-height: 1;
     background-color: orange;
     border: 1px solid darkorange;
@@ -131,6 +134,8 @@ footer button
     color: orange;
     background-color: black;
     border: 1px solid darkorange;
+	vertical-align: top;
+	padding: 2px;
 }
 
 /* Chrome only */

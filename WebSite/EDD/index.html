@@ -25,22 +25,24 @@ and open the template in the editor.
 
 </head>
 <body onload="OnLoad()">
-    <script>write_header(); write_nav();</script>
 
-    <div class="wrapper">
-        <div class="wrapleft">
-            <article id="JArticle" onscroll="ArticleScrolled()">
-                <table id="Journal"></table>
-            </article>
-        </div>
+    <div class="page">
+		<script>write_header(); write_nav();</script>
 
-        <aside>
-            <table id="StarData"></table>
-        </aside>
-    </div>
+		<div class="wrapper">
+			<div class="wrapleft">
+				<article id="JArticle" onscroll="ArticleScrolled()">
+					<table id="Journal"></table>
+				</article>
+			</div>
 
+			<aside>
+				<table id="StarData"></table>
+			</aside>
+		</div>
+
+	</div>
     <script>write_footer(["+1000"]);</script>
-
 
 </body>
 </html>
