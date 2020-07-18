@@ -61,7 +61,7 @@ article table tr
     color: darkorange;
 }
 article table tr:nth-child(even) {
-	background: #1f1f1f;
+	background: #2b2b2b;
 }
 article table tr:nth-child(odd) {
 	background: #000000;
@@ -152,13 +152,14 @@ aside div#StatusOther p:nth-child(odd) {
 /* class to theme the status buttons */
 .edsmetcbuttons
 {
-    width: 6em;
-    margin: 1px 0px 1px 10px;
+	float: right;
+    margin: -20px 10px 4px 10px;
     line-height: 1;
     background-color: orange;
     border: 1px solid darkorange;
     color: #000;
     text-decoration: none;
+	padding: 2px;
 }
 
 .tooltip .tooltiptext
