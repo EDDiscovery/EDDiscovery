@@ -1,9 +1,20 @@
 
 /* Style the article section */
+html {
+    height: 100%;
+}
 
 body
 {
     background-color: black;
+	font-family: Arial,Helvetica,Sans-serif;
+	margin: 0px;
+	height: 100%;
+}
+
+div.page {
+	overflow: auto;
+	min-height: 100%;
 }
 
 .wrapper
@@ -17,7 +28,7 @@ body
 {
     content: "";
     visibility: hidden;
-    height: 0;
+    min-height: 100%;
     display: block;
     clear: both;
 }
@@ -49,6 +60,12 @@ article table tr
     background-color: #000000;
     color: darkorange;
 }
+article table tr:nth-child(even) {
+	background: #1f1f1f;
+}
+article table tr:nth-child(odd) {
+	background: #000000;
+}
 
 
 /* The aside holds the status indicators */
@@ -58,6 +75,12 @@ aside
     float: Right;
     width: 300px;
     margin-left: -300px;
+}
+aside div#StatusOther p:nth-child(even) {
+	background: #1f1f1f;
+}
+aside div#StatusOther p:nth-child(odd) {
+	background: #000000;
 }
 
 /* Common status and action box styling */
@@ -71,7 +94,8 @@ aside
 
 #ActionBox
 {
-    border: 2px solid #ffac28;
+    border: 1px solid #ffac28;
+	margin-bottom: 2px;
 }
 
 /* the p element can hold the name of the box, move it relative to give a inline label */
@@ -84,12 +108,13 @@ aside
     margin-left: 0.5em;
     display: inline;
     background-color: #ffac28;
+	padding: 2px;
 }
 
 #StatusBox p
 {
     color: darkorange;
-    line-height:0.1em;
+	margin: 1px 2px 1px 2px;
 }
 
 #ActionBox td
@@ -107,13 +132,14 @@ aside
 #StatusBox img, #ActionBox img
 {
     padding: 10px;
-    border: 2px solid darkorange;
-    border-radius: 8px;
+    border: 1px solid darkorange;
+    border-radius: 4px;
+	margin: 2px 2px 2px 2px;
 }
 
 #StatusBox img
 {
-    border-radius: 16px;
+    border-radius: 4px;
 }
 
 /* class assigned to say selected */
@@ -135,10 +161,9 @@ aside
     text-decoration: none;
 }
 
-
 .tooltip .tooltiptext
 {
-    margin-left: -120px;
+    margin-left: -58px;
     margin-top: 60px;
-    width:200px;
+    width: auto;
 }

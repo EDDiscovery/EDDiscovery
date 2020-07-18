@@ -19,21 +19,22 @@
     <script src="grid.js"></script>
 </head>
 <body onload="OnLoad()">
-    <script>write_header(); write_nav();</script>
+    <div class="page">
+		<script>write_header(); write_nav();</script>
 
-    <div class="wrapper">
-        <article>
-            <div id="StatusBox">
-                <table id="Status"></table>
-            </div>
+		<div class="wrapper">
+			<article>
+				<div id="StatusBox">
+					<table id="Status"></table>
+				</div>
 
-            <div id="ActionBox">
-                <p>Actions</p>
-                <table id="Actions"></table>
-            </div>
-        </article>
+				<div id="ActionBox">
+					<p>Actions</p>
+					<table id="Actions"></table>
+				</div>
+			</article>
+		</div>
     </div>
-
     <script>write_footer([]);</script>
 
 </body>

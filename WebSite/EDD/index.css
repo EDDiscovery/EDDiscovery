@@ -4,6 +4,8 @@
 body
 {
     background-color: black;
+	font-family: Arial,Helvetica,Sans-serif;
+	margin: 0px;
 }
 
 .wrapper
@@ -39,7 +41,7 @@ article table tr
 
 article table tr td
 {
-    border: 2px solid darkorange;
+    border: 1px solid #9b5500;
 }
 
 article table td:nth-child(1)
@@ -66,6 +68,12 @@ article table td:nth-child(5)
 {
     width: 20%;
 }
+article table tr:nth-child(even) {
+	background: #1f1f1f;
+}
+article table tr:nth-child(odd) {
+	background: #000000;
+}
 
 /* Style the aside */
 
@@ -88,10 +96,6 @@ aside table tr
     color: darkorange;
 }
 
-article table tr td
-{
-    border: 2px solid darkorange;
-}
 aside tr td:first-of-type
 {
     width: 40%;
@@ -101,6 +105,12 @@ aside tr td:last-of-type
 {
     width: 60%;
     font-style: italic;
+}
+aside table tr:nth-child(even) {
+	background: #1f1f1f;
+}
+aside table tr:nth-child(odd) {
+	background: #000000;
 }
 
 /* EDSM Buttons on aside */

@@ -1,9 +1,20 @@
 
 /* Style the article section */
+html {
+    height: 100%;
+}
 
 body
 {
     background-color: black;
+    font-family: Arial,Helvetica,Sans-serif;
+	margin: 0px;
+	height: 100%;
+}
+
+div.page {
+	overflow: auto;
+	min-height: 100%;
 }
 
 .wrapper
@@ -17,7 +28,7 @@ body
 {
     content: "";
     visibility: hidden;
-    height: 0;
+    min-height: 100%;
     display: block;
     clear: both;
 }
@@ -33,7 +44,8 @@ body
 
 #ActionBox
 {
-    border: 2px solid #ffac28;
+    border: 1px solid #ffac28;
+	margin-bottom: 2px;
 }
 
 /* the p element can hold the name of the box, move it relative to give a inline label */
@@ -46,6 +58,7 @@ body
     margin-left: 0.5em;
     display: inline;
     background-color: #ffac28;
+	padding: 2px;
 }
 
 #StatusBox p
@@ -69,12 +82,13 @@ body
 {
     padding: 10px;
     border: 2px solid darkorange;
-    border-radius: 8px;
+    border-radius: 4px;
+	margin: 2px 2px 2px 2px;
 }
 
 #StatusBox img
 {
-    border-radius: 16px;
+    border-radius: 4px;
 }
 
 /* class assigned to say selected */
@@ -86,7 +100,7 @@ body
 
 .tooltip .tooltiptext
 {
-    margin-left: -140px;
+    margin-left: -58px;
     margin-top: 90px;
-    width: 200px;
+    width: auto;
 }

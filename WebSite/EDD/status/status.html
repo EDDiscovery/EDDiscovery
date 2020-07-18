@@ -19,29 +19,30 @@
     <script src="status.js"></script>
 </head>
 <body onload="OnLoad()">
-    <script>write_header(); write_nav();</script>
+    <div class="page">
+		<script>write_header(); write_nav();</script>
 
-    <div class="wrapper">
-        <div class="wrapleft">
-            <article>
-                <table id="StarData"></table>
-            </article>
-        </div>
+		<div class="wrapper">
+			<div class="wrapleft">
+				<article>
+					<table id="StarData"></table>
+				</article>
+			</div>
 
-        <aside>
-            <div id="StatusBox">
-                <table id="Status"></table>
-                <div id="StatusOther"></div>
-            </div>
-        </aside>
+			<aside>
+				<div id="StatusBox">
+					<table id="Status"></table>
+					<div id="StatusOther"></div>
+				</div>
+			</aside>
 
-    </div>
+		</div>
 
-    <div id="ActionBox">
-        <p>Actions</p>
-        <table id="Actions"></table>
-    </div>
-
+		<div id="ActionBox">
+			<p>Actions</p>
+			<table id="Actions"></table>
+		</div>
+	</div>
     <script>write_footer([]);</script>
 
 </body>

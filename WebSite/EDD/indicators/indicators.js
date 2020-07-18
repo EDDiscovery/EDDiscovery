@@ -20,7 +20,7 @@ function CreateIndicator(itype, enableit = true, tooltip = null)
         if ( tooltip == null )
             tooltip = itype.replace(/([a-z](?=[A-Z]))/g, '$1 ');
 
-        return CreateImage("/statusicons/" + itype + ".png", itype, indicatoriconsize, null, [itype, null], tooltip);
+        return CreateImage("/icons/" + itype + ".png", itype, indicatoriconsize, null, [itype, null], tooltip);
     } 
     else
         return null;
@@ -37,7 +37,7 @@ function CreateAction(name, bindingname = null, enableit = true, flashit = 0, co
             tooltip = bindingname.replace(/([a-z](?=[A-Z]))/g, '$1 ');
 
         //console.log("create action image name:" + itype + " a:" + action + " ");
-        return CreateImage("/statusicons/" + name + ".png", name, indicatoriconsize, ClickActionItem, [name, bindingname, flashit, confirmit], tooltip);
+        return CreateImage("/icons/" + name + ".png", name, indicatoriconsize, ClickActionItem, [name, bindingname, flashit, confirmit], tooltip);
     }
     else
         return null;

@@ -8,37 +8,36 @@ header
     overflow: hidden; /* this causes the header to assume the height of its children*/
 }
 
-header h1:first-of-type
+header h1
 {
-    float: left;
-    width: 70%;
+    float: right;
     text-align: left;
     line-height: 1;
-    margin: 10px;
-    font-size: 20pt;
+    margin: 4px 10px 0px 10px;
+    font-size: 14pt;
     font-style: italic;
     font-weight: normal;
-}
-
-header h1:last-of-type {
-    float: right;
-    margin: 2px;
 }
 
 header h1 input
 {
     background-color: #ff9c08;
-    margin: 0px 10px;
+    margin: 0px 6px 0px 6px;
     border: 1px solid black;
-    border-radius: 8px;
-    transform: translateY(-50%);
-    -ms-transform: translateY(-50%);
+    border-radius: 4px;
+	padding: 6px 8px 6px 8px;
+	background: #e67e00;
 }
 
+header h1 img {
+	margin: 2px 2px 0px 2px;
+	vertical-align: bottom;
+}
 nav
 {
     clear:both;
     background: darkorange;
+	margin-top: -16px;
 }
 
 nav ul
@@ -60,6 +59,9 @@ nav ul li
     border-top-right-radius: 8px;
     border-left: 1px solid black;
     border-top-left-radius: 8px;
+	letter-spacing: 2px;
+	padding-left: 4px;
+	padding-right:4px;
 }
 
 /* this style gets assigned to the highlighted tab classList and overrides the background-color.  Hover still works though */
@@ -84,16 +86,37 @@ nav ul li:first-child
 nav * a
 {
     padding: 0.2em;
-    line-height: 2.1em;
+    line-height: 2.0em;
     text-decoration: none;
     color: #000;
 }
 
 footer
 {
+	position: relative;
+	margin-top: -24px;
     background-color: darkorange;
     clear: both;
     font-size: 15pt;
+	height: 24px;
+}
+
+footer h1:first-of-type
+{
+    float: left;
+    width: 70%;
+    text-align: left;
+    line-height: 1;
+    margin: 4px 10px 2px 10px;
+    font-size: 12pt;
+    font-style: italic;
+    font-weight: normal;
+}
+
+footer h1:last-of-type {
+    font-size: 12pt;
+    float: right;
+    margin: 2px;
 }
 
 
