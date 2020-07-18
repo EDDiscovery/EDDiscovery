@@ -22,7 +22,7 @@ function FillJournalTable(jdata, insert)
             var rowno = firstrow - i;
 
             var obj = rows[i];
-            var image = CreateImage("journalicons/" + obj[0] + ".png", obj[1], 24, ClickJournalItem, firstrow - i);
+            var image = CreateImage("journalicons/" + obj[0] + ".png", obj[1], 24, ClickJournalItem, firstrow - i, obj[2]);
             var t1 = document.createTextNode(obj[1]);
             var t2 = document.createTextNode(obj[2]);
             //var t3 = document.createTextNode(rowno + " " + obj[3]);
