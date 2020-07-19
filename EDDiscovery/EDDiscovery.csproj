@@ -190,11 +190,11 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="UserControls\Helpers\CSVHelpers.cs" />
-    <Compile Include="UserControls\ScansStars\UserControlAstroPlot.cs">
+    <Compile Include="UserControls\ScansStars\UserControlNeighborhood.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\ScansStars\UserControlAstroPlot.Designer.cs">
-      <DependentUpon>UserControlAstroPlot.cs</DependentUpon>
+    <Compile Include="UserControls\ScansStars\UserControlNeighborhood.Designer.cs">
+      <DependentUpon>UserControlNeighborhood.cs</DependentUpon>
     </Compile>
     <Compile Include="WebServer\WebServer.cs" />
     <None Include="..\EDDIcons\Controls\Fakes\Controls.Designer.cs">
@@ -830,6 +830,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\LogsBookmarks\UserControlBookmarks.resx">
       <DependentUpon>UserControlBookmarks.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\ScansStars\UserControlNeighborhood.resx">
+      <DependentUpon>UserControlNeighborhood.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\ScansStars\UserControlEDSM.resx">
       <DependentUpon>UserControlEDSM.cs</DependentUpon>

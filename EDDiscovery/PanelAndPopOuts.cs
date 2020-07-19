@@ -117,7 +117,7 @@ namespace EDDiscovery
             { new PanelInfo( PanelIDs.ScanGrid, typeof(UserControlScanGrid), "Scan Grid", "ScanGrid", "Scan data on system in a grid", transparent: false) },
             { new PanelInfo( PanelIDs.StarDistance, typeof(UserControlStarDistance), "Nearest Stars", "StarDistance","Nearest stars from current position") },
             { new PanelInfo( PanelIDs.EstimatedValues, typeof(UserControlEstimatedValues),"Estimated Values", "EstimatedValues", "Estimated Scan values of bodies in system", transparent: false) },
-            { new PanelInfo( PanelIDs.AstroPlot, typeof(UserControlAstroPlot), "AstroPlot", "AstroPlot", "Map of stellar neighborhood", transparent: false) },
+            { new PanelInfo( PanelIDs.AstroPlot, typeof(UserControlNeighborhood), "Stellar Neighborhood", "AstroPlot", "Stellar neighborhood map", transparent: false) },
             { new PanelInfo( PanelIDs.Plot, typeof(UserControlPlot), "Map 2D Local Systems", "Plot", "Map in 2D of local systems", transparent: false) },
             { new PanelInfo( PanelIDs.Search, typeof(UserControlSearch), "Search", "SearchFinder", "Search") },
             { new PanelInfo( PanelIDs.Trilateration, typeof(UserControlTrilateration) ,"Trilateration", "Trilateration", "Trilateration of stars with unknown positions") },
