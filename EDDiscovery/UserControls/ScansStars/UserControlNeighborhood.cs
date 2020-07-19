@@ -52,6 +52,8 @@ namespace EDDiscovery.UserControls
         public override void Init()
         {
             computer = new StarDistanceComputer();
+
+            astroPlot1.HotSpotSize = 10;
         }
 
         public override void LoadLayout()
