@@ -1,17 +1,34 @@
-version: 8.4.1.{build}
-image: Visual Studio 2017
+version: 11.6.0.{build}
+image: 
+  - Visual Studio 2017
+  - Ubuntu
 configuration: Release
 install:
   - git submodule update --init
 before_build:
   - nuget restore
-build:
-  project: EDDiscovery.sln
-test_script:
-  - nunit3-console EDDiscoveryTests\bin\Release\EDDiscoveryTests.dll --result=myresults.xml;format=AppVeyor
-after_build:
-  - cmd: copy EDDiscovery\bin\Release\EDDiscovery.Portable.zip EDDiscovery.Portable.zip
-artifacts:
-  - path: EDDiscovery.Portable.zip
+for:
+-
+  matrix:
+    only:
+      - image: Visual Studio 2017
+
+  build:
+    project: EDDiscovery.sln
+  after_build:
+    - cmd: copy EDDiscovery\bin\Release\EDDiscovery.Portable.zip EDDiscovery.Portable.zip
+  test_script:
+    - nunit3-console EDDiscoveryTests\bin\Release\EDDiscoveryTests.dll --result=myresults.xml;format=AppVeyor
+  artifacts:
+    - path: EDDiscovery.Portable.zip
+-
+  matrix:
+    only:
+      - image: Ubuntu
+  build_script:
+    - msbuild /p:Configuration=Release EDDiscovery.sln /p:DefineConstants=NO_SYSTEM_SPEECH
+  test_script:
+    - nuget install NUnit.ConsoleRunner -OutputDirectory testrunner
+    - mono ./testrunner/NUnit.ConsoleRunner.*/tools/nunit3-console.exe ./EDDiscoveryTests/bin/Release/EDDiscoveryTests.dll --result=myresults.xml;format=AppVeyor
 cache:
   - packages -> **\packages.config
