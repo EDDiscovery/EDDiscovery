@@ -18,7 +18,7 @@ using BaseUtils;
 using BaseUtils.WebServer;
 using EliteDangerousCore;
 using EliteDangerousCore.UIEvents;
-using Newtonsoft.Json.Linq;
+using BaseUtils.JSON;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -227,7 +227,7 @@ namespace EDDiscovery.WebServer
 
             public JToken Response(string key, JToken message, HttpListenerRequest request)     // response to requesttype=journal
             {
-                System.Diagnostics.Debug.WriteLine("Journal Request " + key + " Fields " + message.ToString(Newtonsoft.Json.Formatting.None));
+                System.Diagnostics.Debug.WriteLine("Journal Request " + key + " Fields " + message.ToString());
 
                 int startindex = message["start"].Int(0);
                 int length = message["length"].Int(0);
@@ -324,7 +324,7 @@ namespace EDDiscovery.WebServer
 
             public JToken Response(string key, JToken message, HttpListenerRequest request)
             {
-                System.Diagnostics.Debug.WriteLine("Status Request " + key + " Fields " + message.ToString(Newtonsoft.Json.Formatting.None));
+                System.Diagnostics.Debug.WriteLine("Status Request " + key + " Fields " + message.ToString());
                 int entry = message["entry"].Int(0);
                 return MakeResponse(entry, "status");
             }
@@ -468,7 +468,7 @@ namespace EDDiscovery.WebServer
 
             public JToken Response(string key, JToken message, HttpListenerRequest request) // request indicator state
             {
-                System.Diagnostics.Debug.WriteLine("indicator Request " + key + " Fields " + message.ToString(Newtonsoft.Json.Formatting.None));
+                System.Diagnostics.Debug.WriteLine("indicator Request " + key + " Fields " + message.ToString());
                 return NewIRec(uistate, "indicator");
             }
 
@@ -568,7 +568,7 @@ namespace EDDiscovery.WebServer
             
             public JToken Response(string key, JToken message, HttpListenerRequest request)
             {
-                System.Diagnostics.Debug.WriteLine("press key Request " + key + " Fields " + message.ToString(Newtonsoft.Json.Formatting.None));
+                System.Diagnostics.Debug.WriteLine("press key Request " + key + " Fields " + message.ToString());
                 JObject response = new JObject();
                 response["responsetype"] = "presskey";
                 response["status"] = "400";
