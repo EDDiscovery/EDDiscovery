@@ -57,6 +57,7 @@ namespace EDDiscovery.Forms
         {
             AdditionalSysMenus = new List<string>() { "&Transparent", "Show icon in Task&Bar for window" };
             AdditionalSysMenuSelected += SystemMenu;        // DO this first, enable extra system menu options for SmartSysMenuForm
+            TopMostChanged += SaveTopMost;
 
             InitializeComponent();
 
@@ -146,6 +147,11 @@ namespace EDDiscovery.Forms
                                 // and loses the transparency bit!  So therefore
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(dbrefname + "TopMost", TopMost);
             UpdateTransparency();   // need to reestablish correct transparency again
+        }
+
+        private void SaveTopMost(object sender, EventArgs e)
+        {
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(dbrefname + "TopMost", TopMost);
         }
 
         public void SetShowInTaskBar(bool t)
