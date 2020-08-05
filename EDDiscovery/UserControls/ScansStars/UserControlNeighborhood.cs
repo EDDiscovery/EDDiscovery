@@ -36,13 +36,13 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlNeighborhood : UserControlCommonBase
     {
-        private string DbSave { get { return DBName("AstroPlot"); } }
+        private string DbSave { get { return DBName("Neighborhood"); } }
 
         private StarDistanceComputer computer;
         private HistoryEntry last_he = null;
         private const double defaultMapMaxRadius = 100;
         private const double defaultMapMinRadius = 0;
-        private int maxitems = 250;
+        private readonly int maxitems = 250;
 
         public UserControlNeighborhood()
         {
@@ -52,8 +52,20 @@ namespace EDDiscovery.UserControls
         public override void Init()
         {
             computer = new StarDistanceComputer();
+            
+            numberBoxMin.ValueNoChange = UserDatabase.Instance.GetSettingDouble(DbSave + "MinRange", defaultMapMinRadius);
+            numberBoxMax.ValueNoChange = UserDatabase.Instance.GetSettingDouble(DbSave + "MaxRange", defaultMapMaxRadius);
+            numberBoxMin.SetComparitor(numberBoxMax, -2);
+            numberBoxMax.SetComparitor(numberBoxMin, 2);
 
-            astroPlot1.HotSpotSize = 10;
+            astroPlot.HotSpotSize = 10;
+            astroPlot.SmallDotSize = 7;
+            astroPlot.Distance = (int)(numberBoxMax.Value * 0.75);
+            astroPlot.AxesLength = (int)(numberBoxMax.Value / 2);
+            astroPlot.MouseWheel_Multiply = 0.8;
+            astroPlot.MouseWheel_Resistance = 1.2;
+            astroPlot.Elevation = -0.3;
+            astroPlot.Azimuth = -0.3;
         }
 
         public override void LoadLayout()
@@ -66,6 +78,12 @@ namespace EDDiscovery.UserControls
             uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
             uctg = thc;
             uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
+        }
+
+        public override void Closing()
+        {
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble(DbSave + "MinRange", numberBoxMin.Value);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble(DbSave + "MaxRange", numberBoxMax.Value);
         }
 
         public override void InitialDisplay()
@@ -81,7 +99,7 @@ namespace EDDiscovery.UserControls
         private void NewStarListComputed(ISystem sys, BaseUtils.SortedListDoubleDuplicate<ISystem> list)      // In UI
         {
             System.Diagnostics.Debug.Assert(Application.MessageLoop);       // check!
-            discoveryform.history.CalculateSqDistances(list, sys.X, sys.Y, sys.Z, maxitems, defaultMapMinRadius, defaultMapMaxRadius, true);
+            discoveryform.history.CalculateSqDistances(list, sys.X, sys.Y, sys.Z, maxitems, numberBoxMin.Value, numberBoxMax.Value, true);
             FillMap(list, sys);
         }
         
@@ -99,7 +117,7 @@ namespace EDDiscovery.UserControls
 
         private void FillMap(SortedList<double, ISystem> sysInRange, ISystem centerSystem)
         {
-            astroPlot1.Clear();
+            astroPlot.Clear();
             systemsInRange.Clear();
 
             if (sysInRange.Count > 0)
@@ -108,7 +126,7 @@ namespace EDDiscovery.UserControls
                 {
                     if (tvp.Value == centerSystem)
                     {
-                        astroPlot1.SetCenterCoordinates(new double[] {tvp.Value.X, tvp.Value.Y, tvp.Value.Z });
+                        astroPlot.SetCenterCoordinates(new double[] {tvp.Value.X, tvp.Value.Y, tvp.Value.Z });
                     }
 
                     systemsInRange.Add(new object[]
@@ -123,8 +141,18 @@ namespace EDDiscovery.UserControls
                     });
                 }
                 
-                astroPlot1.AddSystemsToMap(systemsInRange);
+                astroPlot.AddSystemsToMap(systemsInRange);
             }
+        }
+
+        private void NumberBoxMax_ValueChanged(object sender, EventArgs e)
+        {
+            KickComputation(last_he ?? uctg.GetCurrentHistoryEntry);
+        }
+
+        private void NumberBoxMin_ValueChanged(object sender, EventArgs e)
+        {
+            KickComputation(last_he ?? uctg.GetCurrentHistoryEntry);
         }
     }
 }
