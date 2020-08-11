@@ -13,11 +13,12 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+
+using BaseUtils.JSON;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using EliteDangerousCore.EDSM;
 using EliteDangerousCore.JournalEvents;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -741,8 +742,8 @@ namespace EDDiscovery.UserControls
 
                 foreach (var jsys in ja)
                 {
-                    string sysname = jsys.Value<String>();
-                    if (!Systems.Contains(sysname))
+                    string sysname = jsys.StrNull();
+                    if (sysname != null && !Systems.Contains(sysname))
                         Systems.Add(sysname);
                 }
 

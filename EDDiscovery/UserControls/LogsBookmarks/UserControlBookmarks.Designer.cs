@@ -188,6 +188,7 @@
             this.dataViewScrollerPanel.Controls.Add(this.dataGridViewBookMarks);
             this.dataViewScrollerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewScrollerPanel.InternalMargin = new System.Windows.Forms.Padding(0);
+            this.dataViewScrollerPanel.LimitLargeChange = 2147483647;
             this.dataViewScrollerPanel.Location = new System.Drawing.Point(0, 0);
             this.dataViewScrollerPanel.Name = "dataViewScrollerPanel";
             this.dataViewScrollerPanel.Size = new System.Drawing.Size(676, 204);
@@ -205,13 +206,13 @@
             this.vScrollBarCustom1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom1.HideScrollBar = false;
             this.vScrollBarCustom1.LargeChange = 0;
-            this.vScrollBarCustom1.Location = new System.Drawing.Point(663, 0);
+            this.vScrollBarCustom1.Location = new System.Drawing.Point(660, 0);
             this.vScrollBarCustom1.Maximum = -1;
             this.vScrollBarCustom1.Minimum = 0;
             this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom1.Name = "vScrollBarCustom1";
-            this.vScrollBarCustom1.Size = new System.Drawing.Size(13, 204);
+            this.vScrollBarCustom1.Size = new System.Drawing.Size(16, 204);
             this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom1.SmallChange = 1;
             this.vScrollBarCustom1.TabIndex = 6;
@@ -240,7 +241,7 @@
             this.dataGridViewBookMarks.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewBookMarks.Name = "dataGridViewBookMarks";
             this.dataGridViewBookMarks.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewBookMarks.Size = new System.Drawing.Size(663, 204);
+            this.dataGridViewBookMarks.Size = new System.Drawing.Size(660, 204);
             this.dataGridViewBookMarks.TabIndex = 4;
             this.dataGridViewBookMarks.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewBookMarks_CellDoubleClick);
             this.dataGridViewBookMarks.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewBookMarks_CellEndEdit);

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2020 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -13,9 +13,9 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+
 using EDDiscovery.Forms;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using BaseUtils.JSON;
 using OpenTK;
 using System;
 using System.Collections.Generic;
@@ -365,75 +365,63 @@ namespace EDDiscovery._3DMap
         {
             try
             {
-                using (StreamWriter sr = new StreamWriter(filename))
+                JArray outer = new JArray();
+
+                JObject ftype = new JObject();
+                ftype["FlightType"] = "V1";
+                ftype["Date"] = DateTime.Now;
+
+                outer.Add(ftype);
+
+                for (int i = 0; i < entries.Count; i++)
                 {
-                    using (JsonTextWriter jr = new JsonTextWriter(sr))
+                    JObject entry = new JObject();
+                    entry["T"] = entries[i].offsettime;
+
+                    if (entries[i].IsPosSet)
                     {
-                        jr.WriteRaw("[");
-                        jr.WriteStartObject();
-                        jr.WritePropertyName("FlightType"); jr.WriteValue("V1");
-                        jr.WritePropertyName("Date"); jr.WriteValue(DateTime.Now.ToString());
-                        jr.WriteEndObject();
-                        jr.WriteRaw(",");
-                        jr.WriteWhitespace(Environment.NewLine);
+                        entry["Pos"] = new JArray(entries[i].pos.X, entries[i].pos.Y, entries[i].pos.Z);
 
-                        for (int i = 0; i < entries.Count; i++)
+                        if (entries[i].timetofly != 0)
                         {
-                            jr.WriteStartObject();
-                            jr.WritePropertyName("T"); jr.WriteValue(entries[i].offsettime);
-
-                            if (entries[i].IsPosSet)
-                            {
-                                jr.WritePropertyName("Pos"); jr.WriteStartArray(); jr.WriteValue(entries[i].pos.X);
-                                jr.WriteValue(entries[i].pos.Y); jr.WriteValue(entries[i].pos.Z); jr.WriteEndArray();
-
-                                if (entries[i].timetofly != 0)
-                                {
-                                    jr.WritePropertyName("FlyTime"); jr.WriteValue(entries[i].timetofly);
-                                }
-                            }
-
-                            if (entries[i].IsDirSet)
-                            {
-                                jr.WritePropertyName("Dir"); jr.WriteStartArray(); jr.WriteValue(entries[i].dir.X);
-                                jr.WriteValue(entries[i].dir.Y); jr.WriteValue(entries[i].dir.Z); jr.WriteEndArray();
-
-                                if (entries[i].timetopan != 0)
-                                {
-                                    jr.WritePropertyName("PanTime"); jr.WriteValue(entries[i].timetopan);
-                                }
-                            }
-
-                            if (entries[i].IsZoomSet)
-                            {
-                                jr.WritePropertyName("Z"); jr.WriteValue(entries[i].zoom);
-
-                                if (entries[i].timetozoom != 0)
-                                {
-                                    jr.WritePropertyName("ZTime"); jr.WriteValue(entries[i].timetozoom);
-                                }
-                            }
-
-                            if ( entries[i].IsMessageSet )
-                            {
-                                jr.WritePropertyName("Msg"); jr.WriteValue(entries[i].message);
-
-                                if (entries[i].messagetime != 0)
-                                {
-                                    jr.WritePropertyName("MsgTime"); jr.WriteValue(entries[i].messagetime);
-                                }
-                            }
-
-                            jr.WriteEndObject();
-
-                            if ( i < entries.Count-1 )
-                                jr.WriteRaw(",");
-                            jr.WriteWhitespace(Environment.NewLine);
+                            entry["FlyTime"] = entries[i].timetofly;
                         }
-
-                        jr.WriteRaw("]");
                     }
+
+                    if (entries[i].IsDirSet)
+                    {
+                        entry["Dir"] = new JArray(entries[i].dir.X, entries[i].dir.Y, entries[i].dir.Z);
+
+                        if (entries[i].timetopan != 0)
+                        {
+                            entry["PanTime"] = entries[i].timetopan;
+                        }
+                    }
+
+                    if (entries[i].IsZoomSet)
+                    {
+                        entry["Z"] = entries[i].zoom;
+
+                        if (entries[i].timetozoom != 0)
+                        {
+                            entry["ZTime"] = entries[i].timetozoom;
+                        }
+                    }
+
+                    if (entries[i].IsMessageSet)
+                    {
+                        entry["Msg"] = entries[i].message;
+
+                        if (entries[i].messagetime != 0)
+                        {
+                            entry["MsgTime"] = entries[i].messagetime;
+                        }
+                    }
+
+                    outer.Add(entry);
                 }
+
+                File.WriteAllText(filename, outer.ToString(true));
 
                 return true;
             }
@@ -452,64 +440,59 @@ namespace EDDiscovery._3DMap
 
             try
             {
-                using (StreamReader sr = new StreamReader(filename))
+                string json = File.ReadAllText(filename);
+                JArray outer = JArray.Parse(json);
+
+                if (outer != null)
                 {
-                    using (JsonTextReader jr = new JsonTextReader(sr))
+                    JObject ftype = outer[0].Object();
+                    if (ftype != null)
                     {
-                        bool first = true;
-
-                        while (jr.Read())
+                        for (int i = 1; i < outer.Count; i++)
                         {
-                            if (jr.TokenType == JsonToken.StartObject)
+                            JObject entry = outer[i].Object();
+
+                            if (entry == null)
+                                continue;
+
+                            FlightEntry fe = new FlightEntry();
+                            fe.offsettime = entry["T"].Long();
+
+                            JArray ja = entry["Pos"].Array();
+
+                            if (ja != null)
                             {
-                                JObject jo = JObject.Load(jr);
-
-                                if (first)
-                                {
-                                    string vnum = (string)jo["FlightType"];
-                                    string datetime = (string)jo["Date"];
-                                    first = false;
-                                }
-                                else
-                                {
-                                    FlightEntry fe = new FlightEntry();
-                                    fe.offsettime = (long)jo["T"];
-                                    JArray ja = (JArray)jo["Pos"];
-
-                                    if (ja != null)
-                                    {
-                                        fe.pos = new Vector3((float)ja[0], (float)ja[1], (float)ja[2]);
-                                        fe.timetofly = ReadLong(jo, "FlyTime", 0);
-                                    }
-                                    else
-                                        fe.pos = FlightEntry.NullVector;
-
-                                    JArray jb = (JArray)jo["Dir"];
-
-                                    if (jb != null)
-                                    {
-                                        fe.dir = new Vector3((float)jb[0], (float)jb[1], (float)jb[2]);
-                                        fe.timetopan = ReadLong(jo, "PanTime", 0);
-                                    }
-                                    else
-                                        fe.dir = FlightEntry.NullVector;
-
-                                    JToken jtmt = jo["Z"];
-
-                                    if (jtmt != null)
-                                    {
-                                        fe.zoom = (float)jo["Z"];
-                                        fe.timetozoom = ReadLong(jo, "ZTime", 0);
-                                    }
-                                    else
-                                        fe.zoom = FlightEntry.NullZoom;
-
-                                    fe.message = (string)jo["Msg"];
-                                    fe.messagetime = ReadLong(jo, "MsgTime", 0);
-
-                                    newentries.Add(fe);
-                                }
+                                fe.pos = new Vector3((float)ja[0], (float)ja[1], (float)ja[2]);
+                                fe.timetofly = entry["FlyTime"].Long();
                             }
+                            else
+                                fe.pos = FlightEntry.NullVector;
+
+                            JArray jb = entry["Dir"].Array();
+
+                            if (jb != null)
+                            {
+                                fe.dir = new Vector3((float)jb[0], (float)jb[1], (float)jb[2]);
+                                fe.timetopan = entry["PanTime"].Long();
+                            }
+                            else
+                                fe.dir = FlightEntry.NullVector;
+
+
+                            JToken jtmt = entry["Z"];
+
+                            if (jtmt != null)
+                            {
+                                fe.zoom = entry["Z"].Float();
+                                fe.timetozoom = entry["ZTime"].Long();
+                            }
+                            else
+                                fe.zoom = FlightEntry.NullZoom;
+
+                            fe.message = entry["Msg"].Str();
+                            fe.messagetime = entry["MsgTime"].Long();
+
+                            newentries.Add(fe);
                         }
                     }
                 }
@@ -522,16 +505,5 @@ namespace EDDiscovery._3DMap
             return false;
         }
 
-        long ReadLong(JObject jo, string t, long def)
-        {
-            JToken jtmt = jo[t];
-            return (jtmt != null) ? (long)jo[t] : def;
-        }
-
-        float ReadFloat(JObject jo, string t, float def)
-        {
-            JToken jtmt = jo[t];
-            return (jtmt != null) ? (float)jo[t] : def;
-        }
     }
 }

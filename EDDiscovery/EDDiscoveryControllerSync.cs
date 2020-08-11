@@ -133,6 +133,8 @@ namespace EDDiscovery
 
                                 bool success = BaseUtils.DownloadFile.HTTPDownloadFile(EliteConfigInstance.InstanceConfig.EDSMFullSystemsURL, edsmsystems, false, out bool newfile);
 
+                                //edsmsystems = Path.Combine(EliteConfigInstance.InstanceOptions.AppDataDirectory, "edsmtest.json");
+
                                 syncstate.perform_edsm_fullsync = false;
 
                                 if (success)

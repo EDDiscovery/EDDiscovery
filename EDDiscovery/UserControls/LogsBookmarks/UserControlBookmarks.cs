@@ -136,8 +136,6 @@ namespace EDDiscovery.UserControls
                     updating = false;
                     userControlSurfaceBookmarks.Edited = false;
                 }
-
-                currentedit = null;
             }
         }
 

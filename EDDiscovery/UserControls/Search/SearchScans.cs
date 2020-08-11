@@ -266,7 +266,7 @@ namespace EDDiscovery.UserControls
                     JournalScan js = he.journalEntry as JournalScan;
 
                     BaseUtils.Variables scandata = new BaseUtils.Variables();
-                    scandata.AddPropertiesFieldsOfClass(js, "", new Type[] { typeof(System.Drawing.Icon), typeof(System.Drawing.Image), typeof(System.Drawing.Bitmap), typeof(Newtonsoft.Json.Linq.JObject) }, 5);
+                    scandata.AddPropertiesFieldsOfClass(js, "", new Type[] { typeof(System.Drawing.Icon), typeof(System.Drawing.Image), typeof(System.Drawing.Bitmap), typeof(BaseUtils.JSON.JObject) }, 5);
 
                     bool? res = cond.CheckAll(scandata, out string errlist, out BaseUtils.ConditionLists.ErrorClass errclass );  // need function handler..
 

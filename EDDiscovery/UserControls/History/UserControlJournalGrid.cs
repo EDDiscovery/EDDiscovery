@@ -524,8 +524,7 @@ namespace EDDiscovery.UserControls
         {
             if (rightclicksystem != null && rightclicksystem.journalEntry != null)
             {
-                Newtonsoft.Json.Linq.JObject jo = rightclicksystem.journalEntry.GetJson();
-                string json = jo?.ToString();
+                string json = rightclicksystem.journalEntry.GetJsonString();
                 if (json != null)
                 {
                     SetClipboardText(json);
@@ -606,7 +605,7 @@ namespace EDDiscovery.UserControls
                                 HistoryEntry he = dgvr.Tag as HistoryEntry;
                                 if (dgvr.Visible && he.EventTimeUTC.CompareTo(frm.StartTimeUTC) >= 0 && he.EventTimeUTC.CompareTo(frm.EndTimeUTC) <= 0)
                                 {
-                                    string forExport = he.journalEntry.GetJson()?.ToString().Replace("\r\n", "");
+                                    string forExport = he.journalEntry.GetJsonString().Replace("\r\n", "");
                                     if (forExport != null)
                                     {
                                         forExport = System.Text.RegularExpressions.Regex.Replace(forExport, "(\"(?:[^\"\\\\]|\\\\.)*\")|\\s+", "$1");

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2020 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -13,18 +13,13 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+
+using BaseUtils.JSON;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using Newtonsoft.Json.Linq;
-using System.IO;
 using System.Diagnostics;
-using ExtendedControls;
-using System.Windows.Forms.DataVisualization.Charting;
-using EliteDangerousCore.DB;
+using System.Drawing;
+using System.IO;
 
 namespace EDDiscovery
 {
@@ -150,8 +145,16 @@ namespace EDDiscovery
 
                         foreach (Settings.CI ck in Enum.GetValues(typeof(Settings.CI)))           // all enums
                         {
-                            Color d = themelist[0].colors[ck];
-                            set.colors.Add(ck, jo[ck.ToString()].Color(d));
+                            try
+                            {
+                                Color c = System.Drawing.ColorTranslator.FromHtml(jo[ck.ToString()].Str("not found"));   // may except if not valid HTML colour
+                                set.colors.Add(ck, c);
+                            }
+                            catch
+                            {
+                                Color def = themelist[0].colors[ck];
+                                set.colors.Add(ck, def);
+                            }
                         }
 
                         set.windowsframe = jo["windowsframe"].Bool(themelist[0].windowsframe);

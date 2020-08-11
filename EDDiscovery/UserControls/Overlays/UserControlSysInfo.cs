@@ -488,9 +488,7 @@ namespace EDDiscovery.UserControls
             {
                 var si = last_he.ShipInformation;
 
-                Newtonsoft.Json.Linq.JObject jo = si.ToJSONLoadout();
-
-                string loadoutjournalline = jo.ToString(Newtonsoft.Json.Formatting.Indented);
+                string loadoutjournalline = si.ToJSONLoadout();
 
                 //     File.WriteAllText(@"c:\code\loadoutout.txt", loadoutjournalline);
 

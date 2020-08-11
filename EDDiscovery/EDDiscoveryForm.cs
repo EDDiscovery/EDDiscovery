@@ -794,8 +794,8 @@ namespace EDDiscovery
             {
                 LogLineHighlight(string.Format("Current history entry is not last in history - possible re-entrancy.\nAlert the EDDiscovery developers using either discord or Github (see help) and attach log file {0}", BaseUtils.TraceLog.LogFileName));
                 Trace.WriteLine($"Current history entry is not last in history");
-                Trace.WriteLine($"Current entry: {he.journalEntry?.GetJson()?.ToString()}");
-                Trace.WriteLine($"Last entry: {lastent.journalEntry?.GetJson()?.ToString()}");
+                Trace.WriteLine($"Current entry: {he.journalEntry?.GetJsonString()}");
+                Trace.WriteLine($"Last entry: {lastent.journalEntry?.GetJsonString()}");
                 Trace.WriteLine($"Stack Trace:");
                 Trace.WriteLine(new StackTrace(true).ToString());
             }
@@ -839,7 +839,7 @@ namespace EDDiscovery
             BaseUtils.Variables cv = new BaseUtils.Variables();
 
             string prefix = "EventClass_";
-            cv.AddPropertiesFieldsOfClass(uievent, prefix, new Type[] { typeof(System.Drawing.Icon), typeof(System.Drawing.Image), typeof(System.Drawing.Bitmap), typeof(Newtonsoft.Json.Linq.JObject) }, 5);
+            cv.AddPropertiesFieldsOfClass(uievent, prefix, new Type[] { typeof(System.Drawing.Icon), typeof(System.Drawing.Image), typeof(System.Drawing.Bitmap), typeof(BaseUtils.JSON.JObject) }, 5);
             cv[prefix + "UIDisplayed"] = "0";
             actioncontroller.ActionRun(Actions.ActionEventEDList.onUIEvent, cv);
             actioncontroller.ActionRun(Actions.ActionEventEDList.EliteUIEvent(uievent), cv);
@@ -859,8 +859,11 @@ namespace EDDiscovery
                 {
                     if (DLLManager.Count > 0)       // if worth calling..
                     {
-                        string output = Newtonsoft.Json.JsonConvert.SerializeObject(uievent);
-                        DLLManager.NewUIEvent(output);
+                        string output = BaseUtils.JSON.JToken.FromObject(uievent)?.ToString();
+                        if (output != null)
+                            DLLManager.NewUIEvent(output);
+                        else
+                            System.Diagnostics.Debug.WriteLine("JSON convert error from object in DLL");
                     }
                 }
                 catch (Exception ex)
