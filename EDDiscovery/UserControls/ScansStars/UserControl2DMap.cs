@@ -98,6 +98,7 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
+            discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
             imageViewer.Image?.Dispose();
             imageViewer.Image = null;
             foreach (var i in images)
