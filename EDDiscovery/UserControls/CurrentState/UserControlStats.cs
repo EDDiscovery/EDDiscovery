@@ -737,7 +737,7 @@ namespace EDDiscovery.UserControls
         private void dataGridViewScan_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {
             if (e.Column.Tag == null)     // tag null means numeric sort.
-                e.SortDataGridViewColumnDate();
+                e.SortDataGridViewColumnNumeric();
         }
 
         private void userControlStatsTimeScan_DrawModeChanged(object sender, EventArgs e)
