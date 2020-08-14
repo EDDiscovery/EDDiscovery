@@ -179,7 +179,7 @@ namespace EDDiscovery.UserControls
 
                                 if (lastbelt.BeltData != null)
                                 {
-                                    appendlabel.AppendPrePad($"{lastbelt.BeltData.OuterRad / JournalScan.oneLS_m:N1}ls", Environment.NewLine);
+                                    appendlabel = appendlabel.AppendPrePad($"{lastbelt.BeltData.OuterRad / JournalScan.oneLS_m:N1}ls", Environment.NewLine);
                                 }
 
                                 appendlabel = appendlabel.AppendPrePad("" + lastbelt.ScanData?.BodyID, Environment.NewLine);
@@ -243,9 +243,16 @@ namespace EDDiscovery.UserControls
                                 leftmiddle = new Point(firstcolumn.X, maxitemspos.Y + planetspacery + planetsize.Height / 2); // move to left at maxy+space+h/2
                             }
 
-                            string appendlabel = Environment.NewLine + $"{lastbelt.BeltData.OuterRad / JournalScan.oneLS_m:N1}ls";
+                            string appendlabel = "";
 
-                            Point maxbeltpos = DrawNode(starcontrols, lastbelt, curmats, hl, Icons.Controls.Scan_Bodies_Belt, leftmiddle, false, out int unusedbelt2centre, beltsize, DrawLevel.PlanetLevel, appendlabeltext:appendlabel);
+                            if (lastbelt.BeltData != null)
+                            {
+                                appendlabel = appendlabel.AppendPrePad($"{lastbelt.BeltData.OuterRad / JournalScan.oneLS_m:N1}ls", Environment.NewLine);
+                            }
+
+                            appendlabel = appendlabel.AppendPrePad("" + lastbelt.ScanData?.BodyID, Environment.NewLine);
+
+                            Point maxbeltpos = DrawNode(starcontrols, lastbelt, curmats, hl, Icons.Controls.Scan_Bodies_Belt, leftmiddle, false, out int unusedbelt2centre, beltsize, DrawLevel.PlanetLevel, appendlabeltext: appendlabel);
 
                             leftmiddle = new Point(maxbeltpos.X + planetspacerx, leftmiddle.Y);
                             lastbelt = belts.Count != 0 ? belts.Dequeue() : null;
