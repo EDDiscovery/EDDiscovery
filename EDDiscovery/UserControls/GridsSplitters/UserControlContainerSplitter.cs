@@ -489,7 +489,8 @@ namespace EDDiscovery.UserControls
 
         #region Transparency
 
-        public override Color ColorTransparency { get { return Color.Green; } }
+        public override bool SupportTransparency { get { return true; } }
+
         public override void SetTransparency(bool on, Color curcol)
         {
             //System.Diagnostics.Debug.WriteLine("Splitter panel to tx " + on + " " + curcol);

@@ -93,7 +93,7 @@ namespace EDDiscovery.Actions
                         {
                             ap[prefix + "Transparent"] = ucf.IsTransparent ? "1" : "0";
                             ap[prefix + "TopMost"] = ucf.TopMost ? "1" : "0";
-                            ap[prefix + "DisplayTitle"] = ucf.displayTitle ? "1" : "0";
+                            ap[prefix + "DisplayTitle"] = ucf.DisplayTitle ? "1" : "0";
                             ap[prefix + "ShowInTaskbar"] = ucf.ShowInTaskbar ? "1" : "0";
                             ap[prefix + "WindowState"] = ucf.WindowState.ToString();
                             ap[prefix + "Top"] = ucf.Top.ToString(System.Globalization.CultureInfo.InvariantCulture);

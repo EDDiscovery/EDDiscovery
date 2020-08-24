@@ -187,6 +187,12 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="UserControls\Helpers\CSVHelpers.cs" />
+    <Compile Include="UserControls\Overlays\UserControlMiningOverlay.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\Overlays\UserControlMiningOverlay.Designer.cs">
+      <DependentUpon>UserControlMiningOverlay.cs</DependentUpon>
+    </Compile>
     <Compile Include="WebServer\WebServer.cs" />
     <None Include="..\EDDIcons\Controls\Fakes\Controls.Designer.cs">
       <Link>Icons\Controls.Designer.cs</Link>
@@ -785,6 +791,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\Overlays\UserControlCompass.resx">
       <DependentUpon>UserControlCompass.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Overlays\UserControlMiningOverlay.resx">
+      <DependentUpon>UserControlMiningOverlay.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\Overlays\UserControlNotePanel.resx">
       <DependentUpon>UserControlNotePanel.cs</DependentUpon>

@@ -92,7 +92,7 @@ namespace EDDiscovery.UserControls
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "travel", showTravelledDistanceToolStripMenuItem.Checked);
         }
 
-        public override Color ColorTransparency { get { return Color.Green; } }
+        public override bool SupportTransparency { get { return true; } }
         public override void SetTransparency(bool on, Color curcol)
         {
             pictureBox.BackColor = this.BackColor = curcol;

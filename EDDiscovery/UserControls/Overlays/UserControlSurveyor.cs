@@ -135,7 +135,7 @@ namespace EDDiscovery.UserControls
             discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
         }
 
-        public override Color ColorTransparency => Color.Green;
+        public override bool SupportTransparency { get { return true; } }
         public override void SetTransparency(bool on, Color curcol)
         {
             System.Diagnostics.Debug.WriteLine("Set colour to " + curcol);

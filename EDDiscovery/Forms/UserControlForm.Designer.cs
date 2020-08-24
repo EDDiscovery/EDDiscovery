@@ -45,8 +45,8 @@ namespace EDDiscovery.Forms
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControlForm));
-            this.label_index = new ExtendedControls.ExtLabel();
-            this.labelControlText = new ExtendedControls.ExtLabel();
+            this.label_index = new System.Windows.Forms.Label();
+            this.labelControlText = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.panel_minimize = new ExtendedControls.ExtButtonDrawn();
             this.panel_ontop = new ExtendedControls.ExtButtonDrawn();
@@ -68,7 +68,6 @@ namespace EDDiscovery.Forms
             this.label_index.Size = new System.Drawing.Size(43, 13);
             this.label_index.TabIndex = 23;
             this.label_index.Text = "<code>";
-            this.label_index.TextBackColor = System.Drawing.Color.Transparent;
             this.label_index.MouseDown += new System.Windows.Forms.MouseEventHandler(this.label_index_MouseDown);
             // 
             // labelControlText
@@ -79,7 +78,6 @@ namespace EDDiscovery.Forms
             this.labelControlText.Size = new System.Drawing.Size(43, 13);
             this.labelControlText.TabIndex = 23;
             this.labelControlText.Text = "<code>";
-            this.labelControlText.TextBackColor = System.Drawing.Color.Transparent;
             this.labelControlText.MouseDown += new System.Windows.Forms.MouseEventHandler(this.labelControlText_MouseDown);
             // 
             // toolTip1
@@ -276,11 +274,11 @@ namespace EDDiscovery.Forms
 
         #endregion
 
-        private ExtendedControls.ExtLabel label_index;
+        private System.Windows.Forms.Label label_index;
         private ExtendedControls.ExtButtonDrawn panel_minimize;
         private ExtendedControls.ExtButtonDrawn panel_close;
         private ExtendedControls.ExtStatusStrip statusStripBottom;
-        private ExtendedControls.ExtLabel labelControlText;
+        private System.Windows.Forms.Label labelControlText;
         private ExtendedControls.ExtButtonDrawn panel_ontop;
         private System.Windows.Forms.ToolTip toolTip1;
         private ExtendedControls.ExtButtonDrawn panel_transparent;

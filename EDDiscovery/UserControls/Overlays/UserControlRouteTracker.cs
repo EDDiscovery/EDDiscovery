@@ -36,7 +36,7 @@ namespace EDDiscovery.UserControls
         private  HistoryEntry currentHE;
         private string lastsystem;
 
-        public override Color ColorTransparency { get { return Color.Green; } }
+        public override bool SupportTransparency { get { return true; } }
         public override void SetTransparency(bool on, Color curcol)
         {
             pictureBox.BackColor = this.BackColor = curcol;

@@ -70,7 +70,8 @@ namespace EDDiscovery.UserControls
             // contract states the PanelAndPopOuts OR the MajorTabControl will now theme and size it.
         }
 
-        public override Color ColorTransparency { get { return Color.Green; } }
+        public override bool SupportTransparency { get { return true; } }
+
         public override void SetTransparency(bool on, Color curcol)
         {
             this.BackColor = curcol;

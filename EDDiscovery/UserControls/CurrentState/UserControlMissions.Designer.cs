@@ -96,6 +96,7 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanelCurrent.Controls.Add(this.vScrollBarCustomCur);
             this.dataViewScrollerPanelCurrent.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewScrollerPanelCurrent.InternalMargin = new System.Windows.Forms.Padding(0);
+            this.dataViewScrollerPanelCurrent.LimitLargeChange = 2147483647;
             this.dataViewScrollerPanelCurrent.Location = new System.Drawing.Point(0, 0);
             this.dataViewScrollerPanelCurrent.Name = "dataViewScrollerPanelCurrent";
             this.dataViewScrollerPanelCurrent.Size = new System.Drawing.Size(800, 266);
@@ -240,6 +241,7 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanelPrev.Controls.Add(this.vScrollBarCustomPrev);
             this.dataViewScrollerPanelPrev.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewScrollerPanelPrev.InternalMargin = new System.Windows.Forms.Padding(0);
+            this.dataViewScrollerPanelPrev.LimitLargeChange = 2147483647;
             this.dataViewScrollerPanelPrev.Location = new System.Drawing.Point(0, 22);
             this.dataViewScrollerPanelPrev.Name = "dataViewScrollerPanelPrev";
             this.dataViewScrollerPanelPrev.Size = new System.Drawing.Size(800, 280);

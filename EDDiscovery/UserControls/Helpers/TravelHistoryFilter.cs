@@ -119,7 +119,7 @@ namespace EDDiscovery.UserControls
             }
             else if (MaximumNumberOfItems.HasValue)
             {
-                return hl.FilterByNumber(MaximumNumberOfItems.Value);
+                return hl.FilterLastN(MaximumNumberOfItems.Value);
             }
             else if (MaximumDataAge.HasValue)
             {

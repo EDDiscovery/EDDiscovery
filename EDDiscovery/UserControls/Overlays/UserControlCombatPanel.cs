@@ -232,7 +232,7 @@ namespace EDDiscovery.UserControls
             labelTarget.TextBackColor = labelCredits.TextBackColor = labelTotalKills.TextBackColor = labelTotalReward.TextBackColor = labelFactionKills.TextBackColor = labelFactionReward.TextBackColor = labelFaction.TextBackColor = labelTotalCrimes.TextBackColor = labelBalance.TextBackColor = curbackcol;
 
         }
-        public override Color ColorTransparency { get { return Color.Green; } }
+        public override bool SupportTransparency { get { return true; } }
 
         private void dataGridViewCombat_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {

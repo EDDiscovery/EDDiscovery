@@ -114,11 +114,10 @@ namespace EDDiscovery.UserControls
             closing = true;
         }
 
-#endregion
+        #endregion
 
-#region Transparency
-        Color transparencycolor = Color.Green;
-        public override Color ColorTransparency { get { return transparencycolor; } }
+        #region Transparency
+        public override bool SupportTransparency { get { return true; } }
         public override void SetTransparency(bool on, Color curcol)
         {
             panelStars.SetBackground(curcol);

@@ -30,18 +30,18 @@ namespace EDDiscovery.Forms
 
         public enum TransparencyMode { Off, On, OnClickThru, OnFullyTransparent };
 
-        public TransparencyMode transparentmode = TransparencyMode.Off;
-        public bool IsTransparent { get { return transparentmode != TransparencyMode.Off; } }
-        public bool IsClickThruOn { get { return transparentmode == TransparencyMode.OnClickThru || transparentmode == TransparencyMode.OnFullyTransparent; } }
+        public TransparencyMode TransparentMode = TransparencyMode.Off;
+        public Color TransparencyColorKey = Color.Transparent;     // if required, the control could modify this during its Init
+        public bool IsTransparent { get { return TransparentMode != TransparencyMode.Off; } }
+        public bool IsClickThruOn { get { return TransparentMode == TransparencyMode.OnClickThru || TransparentMode == TransparencyMode.OnFullyTransparent; } }
 
-        public bool displayTitle = true;            // we are displaying the title
-        public string dbrefname;
-        public string wintitle;
+        public bool DisplayTitle = true;            // we are displaying the title
+        public string DBRefName;
+        public string WinTitle;
 
         private bool inpanelshow = false;       // if we are in a panel show when we were transparent
         private bool defwindowsborder;
         private bool curwindowsborder;          // applied setting
-        private Color transparencycolor = Color.Transparent;
         private Color beforetransparency = Color.Transparent;
         private Color tkey = Color.Transparent;
         private Color labelnormalcolour, labeltransparentcolour;
@@ -51,7 +51,7 @@ namespace EDDiscovery.Forms
 
         private DirectInputDevices.InputDeviceKeyboard idk;     // used to sniff in transparency mode
 
-        public bool IsTransparencySupported { get { return !transparencycolor.IsFullyTransparent(); } }
+        public bool IsTransparencySupported { get { return !TransparencyColorKey.IsFullyTransparent(); } }
 
         public UserControlForm()
         {
@@ -68,7 +68,7 @@ namespace EDDiscovery.Forms
         #region Public Interface
 
         public void Init(EDDiscovery.UserControls.UserControlCommonBase c, string title, bool winborder, string rf, bool deftopmostp ,
-                         bool deftransparentp , Color labelnormal , Color labeltransparent )
+                         bool deftransparentp , Color labelnormal , Color labeltransparent, Color transparentkey )
         {
             //System.Diagnostics.Debug.WriteLine("UCF Init+");
             RestoreFormPositionRegKey = "PopUpForm" + rf;      // position remember key
@@ -82,21 +82,20 @@ namespace EDDiscovery.Forms
             labelnormalcolour = labelnormal;
             labeltransparentcolour = labeltransparent;
 
-            transparencycolor = c.ColorTransparency;
-
-            wintitle = label_index.Text = this.Text = title;            // label index always contains the wintitle, but may not be shown
+            TransparencyColorKey = c.SupportTransparency ? transparentkey : Color.Transparent;
+            WinTitle = label_index.Text = this.Text = title;            // label index always contains the wintitle, but may not be shown
 
             curwindowsborder = defwindowsborder = winborder;
-            dbrefname = "PopUpForm" + rf;
+            DBRefName = "PopUpForm" + rf;
             this.Name = rf;
             deftopmost = deftopmostp;
             deftransparent = false;
 
             labelControlText.Text = "";                                 // always starts blank..
 
-            this.ShowInTaskbar = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(dbrefname + "Taskbar", true);
+            this.ShowInTaskbar = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DBRefName + "Taskbar", true);
 
-            displayTitle = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(dbrefname + "ShowTitle", true);
+            DisplayTitle = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DBRefName + "ShowTitle", true);
 
             if (Environment.OSVersion.Platform == PlatformID.Win32NT)
             {
@@ -115,50 +114,50 @@ namespace EDDiscovery.Forms
         {
             labelControlText.Location = new Point(label_index.Location.X + label_index.Width + 16, labelControlText.Location.Y);
             labelControlText.Text = text;
-            this.Text = wintitle + " " + text;
+            this.Text = WinTitle + " " + text;
         }
 
         public void SetTransparency(TransparencyMode t)
         {
             if (IsTransparencySupported)
             {
-                transparentmode = t;
+                TransparentMode = t;
                 UpdateTransparency();
-                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(dbrefname + "Transparent", (int)transparentmode);
+                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(DBRefName + "Transparent", (int)TransparentMode);
             }
         }
 
         public void SetShowTitleInTransparency(bool t)
         {
-            displayTitle = t;
+            DisplayTitle = t;
             UpdateControls();
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(dbrefname + "ShowTitle", displayTitle);
-            UserControl.onControlTextVisibilityChanged(displayTitle);            
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DBRefName + "ShowTitle", DisplayTitle);
+            UserControl.onControlTextVisibilityChanged(DisplayTitle);            
         }
 
         public bool IsControlTextVisible()
         {
-            return displayTitle;
+            return DisplayTitle;
         }
 
         public void SetTopMost(bool t)
         {
             TopMost = t;        // this calls Win32.SetWindowPos, which then plays with the actual topmost bit in windows extended style
                                 // and loses the transparency bit!  So therefore
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(dbrefname + "TopMost", TopMost);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DBRefName + "TopMost", TopMost);
             UpdateTransparency();   // need to reestablish correct transparency again
         }
 
         private void SaveTopMost(object sender, EventArgs e)
         {
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(dbrefname + "TopMost", TopMost);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DBRefName + "TopMost", TopMost);
         }
 
         public void SetShowInTaskBar(bool t)
         {
             this.ShowInTaskbar = t;
             UpdateControls();
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(dbrefname + "Taskbar", t);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DBRefName + "Taskbar", t);
         }
 
         public UserControlCommonBase FindUserControl(Type c)
@@ -200,8 +199,8 @@ namespace EDDiscovery.Forms
 
             //System.Diagnostics.Debug.WriteLine(Text + " tr " + transparentmode);
 
-            this.TransparencyKey = (showtransparent) ? transparencycolor : tkey;
-            Color togo = (showtransparent) ? transparencycolor : beforetransparency;
+            this.TransparencyKey = (showtransparent) ? TransparencyColorKey : tkey;
+            Color togo = (showtransparent) ? TransparencyColorKey : beforetransparency;
 
             this.BackColor = togo;
             statusStripBottom.BackColor = togo;
@@ -209,14 +208,13 @@ namespace EDDiscovery.Forms
                     panel_minimize.BackColor = panel_ontop.BackColor = panel_showtitle.BackColor = panelTop.BackColor = togo;
 
             label_index.ForeColor = labelControlText.ForeColor = showtransparent ? labeltransparentcolour : labelnormalcolour;
-            label_index.TextBackColor = labelControlText.TextBackColor = togo;
 
             UserControl.SetTransparency(showtransparent, togo);
             PerformLayout();
 
             // if in transparent click thru, we set transparent style.. else clear it.
             BaseUtils.Win32.UnsafeNativeMethods.ChangeWindowLong(this.Handle, BaseUtils.Win32.UnsafeNativeMethods.GWL.ExStyle,
-                                WS_EX.TRANSPARENT, showtransparent && transparentmode == TransparencyMode.OnFullyTransparent ? WS_EX.TRANSPARENT : 0);
+                                WS_EX.TRANSPARENT, showtransparent && TransparentMode == TransparencyMode.OnFullyTransparent ? WS_EX.TRANSPARENT : 0);
 
             if (showtransparent || inpanelshow)     // timer needed if transparent, or if in panel show
                 timer.Start();
@@ -240,19 +238,19 @@ namespace EDDiscovery.Forms
             panel_transparent.Visible = IsTransparencySupported && !transparent;
             panel_showtitle.Visible = IsTransparencySupported && !transparent;
 
-            if (transparentmode == TransparencyMode.On)
+            if (TransparentMode == TransparencyMode.On)
                 panel_transparent.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Transparent;
-            else if (transparentmode == TransparencyMode.OnClickThru)
+            else if (TransparentMode == TransparencyMode.OnClickThru)
                 panel_transparent.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.TransparentClickThru;
-            else if (transparentmode == TransparencyMode.OnFullyTransparent)
+            else if (TransparentMode == TransparencyMode.OnFullyTransparent)
                 panel_transparent.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.FullyTransparent;
             else
                 panel_transparent.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.NotTransparent;
 
-            label_index.Visible = labelControlText.Visible = (displayTitle || !transparent);   //  titles are on, or transparent is off
+            label_index.Visible = labelControlText.Visible = (DisplayTitle || !transparent);   //  titles are on, or transparent is off
 
             panel_taskbaricon.ImageSelected = this.ShowInTaskbar ? ExtendedControls.ExtButtonDrawn.ImageType.WindowInTaskBar : ExtendedControls.ExtButtonDrawn.ImageType.WindowNotInTaskBar;
-            panel_showtitle.ImageSelected = displayTitle ? ExtendedControls.ExtButtonDrawn.ImageType.Captioned : ExtendedControls.ExtButtonDrawn.ImageType.NotCaptioned;
+            panel_showtitle.ImageSelected = DisplayTitle ? ExtendedControls.ExtButtonDrawn.ImageType.Captioned : ExtendedControls.ExtButtonDrawn.ImageType.NotCaptioned;
             panel_ontop.ImageSelected = TopMost ? ExtendedControls.ExtButtonDrawn.ImageType.OnTop : ExtendedControls.ExtButtonDrawn.ImageType.Floating;
         }
 
@@ -273,15 +271,15 @@ namespace EDDiscovery.Forms
             this.BringToFront();
 
             if (IsTransparencySupported)
-                transparentmode = (TransparencyMode)EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(dbrefname + "Transparent", deftransparent ? (int)TransparencyMode.On : (int)TransparencyMode.Off);
+                TransparentMode = (TransparencyMode)EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(DBRefName + "Transparent", deftransparent ? (int)TransparencyMode.On : (int)TransparencyMode.Off);
 
-            bool wantedTopMost = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(dbrefname + "TopMost", deftopmost);
+            bool wantedTopMost = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DBRefName + "TopMost", deftopmost);
             //kludge 
             SetTopMost(wantedTopMost);
             SetTopMost(!wantedTopMost);
             SetTopMost(wantedTopMost); // this also establishes transparency
 
-            var top = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(dbrefname + "Top", -999);
+            var top = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(DBRefName + "Top", -999);
             //System.Diagnostics.Debug.WriteLine("Position Top is {0} {1}", dbrefname, top);
 
             if (UserControl != null)
@@ -335,14 +333,14 @@ namespace EDDiscovery.Forms
             //nasty.. but nice
             if (Environment.OSVersion.Platform == PlatformID.Win32NT)
             {
-                transparentmode = (TransparencyMode)(((int)transparentmode + 1) % Enum.GetValues(typeof(TransparencyMode)).Length);
+                TransparentMode = (TransparencyMode)(((int)TransparentMode + 1) % Enum.GetValues(typeof(TransparencyMode)).Length);
             }
             else
             {
-                transparentmode = (transparentmode == TransparencyMode.Off) ? TransparencyMode.On : TransparencyMode.Off;   // no idea what happens in Mono
+                TransparentMode = (TransparentMode == TransparencyMode.Off) ? TransparencyMode.On : TransparencyMode.Off;   // no idea what happens in Mono
             }
 
-            SetTransparency(transparentmode);
+            SetTransparency(TransparentMode);
         }
 
         private void panel_taskbaricon_Click(object sender, EventArgs e)
@@ -352,7 +350,7 @@ namespace EDDiscovery.Forms
 
         private void panel_showtitle_Click(object sender, EventArgs e)
         {
-            SetShowTitleInTransparency(!displayTitle);
+            SetShowTitleInTransparency(!DisplayTitle);
         }
 
         private void CheckMouse(object sender, EventArgs e)     // best way of knowing your inside the client.. using mouseleave/enter with transparency does not work..
@@ -511,7 +509,7 @@ namespace EDDiscovery.Forms
         {
             UserControlForm tcf = (UserControlForm)sender;
             tabforms.Remove(tcf);
-            discoveryform.ActionRun(Actions.ActionEventEDList.onPopDown, null, new BaseUtils.Variables(new string[] { "PopOutName", tcf.dbrefname.Substring(9), "PopOutTitle", tcf.wintitle }));
+            discoveryform.ActionRun(Actions.ActionEventEDList.onPopDown, null, new BaseUtils.Variables(new string[] { "PopOutName", tcf.DBRefName.Substring(9), "PopOutTitle", tcf.WinTitle }));
         }
 
         public List<UserControlCommonBase> GetListOfControls(Type c)

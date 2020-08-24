@@ -161,8 +161,8 @@ namespace EDDiscovery.UserControls
             userControlSynthesis.LoadLayout();
         }
 
-        public override Color ColorTransparency { get { return Color.Green; } }
-                
+        public override bool SupportTransparency { get { return true; } }
+
         public override void SetTransparency(bool on, Color curcol)
         {
             pictureBoxList.BackColor = this.BackColor = splitContainerVertical.BackColor = splitContainerRightHorz.BackColor = curcol;

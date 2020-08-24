@@ -56,7 +56,6 @@ namespace EDDiscovery
 
         public EDDiscovery._3DMap.MapManager Map { get; private set; }
 
-        private bool themeok = true;
         private bool in_system_sync = false;        // between start/end sync of databases
 
         BaseUtils.GitHubRelease newRelease;
@@ -192,7 +191,7 @@ namespace EDDiscovery
             theme.LoadThemes();                                         // default themes and ones on disk loaded
 
             if (!EDDOptions.Instance.NoTheme)
-                themeok = theme.RestoreSettings();                                    // theme, remember your saved settings
+                theme.RestoreSettings();                                // theme, remember your saved settings
 
             if (EDDOptions.Instance.FontSize > 0)
                 theme.FontSize = EDDOptions.Instance.FontSize;
@@ -443,15 +442,6 @@ namespace EDDiscovery
                 LogLineHighlight(string.Format("DLLs failed to load: {0}".T(EDTx.EDDiscoveryForm_DLLF), res.Item2));
 
             LogLine(string.Format("Profile {0} Loaded".T(EDTx.EDDiscoveryForm_PROFL), EDDProfiles.Instance.Current.Name));
-
-
-            // Notifications
-
-            if (!themeok)
-            {
-                Controller.LogLineHighlight(("The theme stored has missing colors or other missing information" + Environment.NewLine +
-                "Correct the missing colors or other information manually using the Theme Editor in Settings").T(EDTx.EDDiscoveryForm_ThemeW));
-            }
 
             Notifications.CheckForNewNotifications((notelist) =>
             {

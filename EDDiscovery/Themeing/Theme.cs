@@ -50,26 +50,8 @@ namespace EDDiscovery
         /// 
         /// </summary>
         /// <returns>true if ok.  False  Means missing colors in theme. </returns>
-        public bool RestoreSettings()
+        public void RestoreSettings()
         {
-            bool ok = true;
-            Trace.WriteLine("Theme ID " + Settings.ThemeID);
-
-            int themeidstored = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt("ThemeID", -1);
-
-            if ( themeidstored != -1 && themeidstored != Settings.ThemeID )
-            {
-                //DialogResult res = ExtendedControls.MessageBoxTheme.Show("The theme stored has missing colors or other missing information" + Environment.NewLine +
-                //      "that this new version of EDDiscovery needs." + Environment.NewLine + Environment.NewLine +
-                //      "Choose OK to use the stored theme, and then correct the missing colors or other information manually using the Theme Editor in Settings" + Environment.NewLine + Environment.NewLine +
-                //      "Choose Cancel to go back to windows default, then pick a new standard theme.", "ED Discovery Theme Warning!" , MessageBoxButtons.OKCancel);
-
-                //if (res == DialogResult.Cancel)     // if cancel, we abort,
-                //    return;
-                ok = false;
-
-            }
-
             if (EliteDangerousCore.DB.UserDatabase.Instance.KeyExists("ThemeNameOf"))           // (keep previous check) if there.. get the others with a good default in case the db is screwed.
             {
                 currentsettings.name = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("ThemeNameOf", "Custom");
@@ -87,12 +69,10 @@ namespace EDDiscovery
                     currentsettings.colors[ck] = c;
                 }
             }
-            return ok;
         }
 
         public void SaveSettings(string filename)
         {
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt("ThemeID", Settings.ThemeID);
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("ThemeNameOf", currentsettings.name);
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("ThemeWindowsFrame", currentsettings.windowsframe);
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble("ThemeFormOpacity", currentsettings.formopacity);

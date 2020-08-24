@@ -573,6 +573,7 @@
     <EmbeddedResource Include="Controls\SysInfo\notfirstdiscover.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Panels\MiningOverlay.png" />
     <EmbeddedResource Include="GalMap\Galaxy_L.jpg" />
     <EmbeddedResource Include="GalMap\Galaxy_L_Grid.jpg" />
     <EmbeddedResource Include="Controls\SysInfo\Ross.png" />

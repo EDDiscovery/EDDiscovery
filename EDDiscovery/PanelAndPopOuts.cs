@@ -78,6 +78,7 @@ namespace EDDiscovery
             EDSM,                   // 43
             MaterialTrader,         // 44
             Map2D,                  // 45
+            MiningOverlay,          // 46
             // ****** ADD More here DO NOT REORDER *****
         };
 
@@ -144,6 +145,7 @@ namespace EDDiscovery
             { new PanelInfo( PanelIDs.RouteTracker, typeof(UserControlRouteTracker),"Route Tracker", "RouteTracker", "Route tracker overlay", transparent: false) },
             { new PanelInfo( PanelIDs.Compass, typeof(UserControlCompass), "Compass", "Compass", "Compass overlay to show bearing to planetary coordinates", transparent:true) },
             { new PanelInfo( PanelIDs.MissionOverlay, typeof(UserControlMissionOverlay), "Mission Overlay", "MissionOV", "Mission List overlay", transparent:true) },
+            { new PanelInfo( PanelIDs.MiningOverlay, typeof(UserControlMiningOverlay), "Mining Overlay", "MiningOV", "Mining List overlay", transparent:true) },
 
             { new PanelInfo( "Settings") },
             { new PanelInfo( PanelIDs.Settings, typeof(UserControlSettings), "Settings", "SettingsPanel", "Settings for ED Discovery ") },
@@ -412,7 +414,7 @@ namespace EDDiscovery
 
                 //System.Diagnostics.Debug.WriteLine("TCF init");
                 tcf.Init(ctrl, windowtitle, discoveryform.theme.WindowsFrame, refname, discoveryform.TopMost,
-                            poi.DefaultTransparent, discoveryform.theme.LabelColor, discoveryform.theme.SPanelColor);
+                            poi.DefaultTransparent, discoveryform.theme.LabelColor, discoveryform.theme.SPanelColor, discoveryform.theme.TransparentColorKey);
 
                 //System.Diagnostics.Debug.WriteLine("UCCB init of " + ctrl.GetType().Name);
                 ctrl.Init(discoveryform, UserControls.UserControlCommonBase.DisplayNumberPopOuts + numopened - 1);

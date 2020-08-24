@@ -66,6 +66,7 @@ namespace EDDiscovery.UserControls
         }
 
         public virtual void Init() { }              // start up, called by above Init.  no cursor available
+        // For forms, the transparency key color is set by theme during UserControlForm init. The Init function above for a UC could override if required
         // themeing and scaling happens at this point.  Init has a chance to make new controls if required to be autothemed/scaled.
         // contract is in majortabcontrol::CreateTab, PanelAndPopOuts::PopOut, SplitterControl::OnPostCreateTab
         public virtual void SetTransparency(bool ison, Color curcol) { }  // set on/off transparency of components - occurs before SetCursor/LoadLayout/InitialDisplay in a pop out form
@@ -78,7 +79,7 @@ namespace EDDiscovery.UserControls
 
         public virtual void ChangeCursorType(IHistoryCursor thc) { }     // implement if you call the uctg
 
-        public virtual Color ColorTransparency { get { return Color.Transparent; } }  // override to say support transparency, and what colour you want.
+        public virtual bool SupportTransparency { get { return false; } }  // override to say support transparency
 
         // Close
 

@@ -84,7 +84,7 @@ namespace EDDiscovery.UserControls
             GlobalBookMarkList.Instance.OnBookmarkChange -= GlobalBookMarkList_OnBookmarkChange;
         }
 
-        public override Color ColorTransparency { get { return Color.Green; } }
+        public override bool SupportTransparency { get { return true; } }
 
         public override void SetTransparency(bool on, Color curbackcol)
         {

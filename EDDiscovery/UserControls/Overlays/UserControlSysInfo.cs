@@ -1136,7 +1136,7 @@ namespace EDDiscovery.UserControls
             //  later we may resize to width if other column is not used, but not now
         }
 
-        public override Color ColorTransparency { get { return Color.Green; } }
+        public override bool SupportTransparency { get { return true; } }
         public override void SetTransparency(bool on, Color curcol)
         {
             BackColor = curcol;
