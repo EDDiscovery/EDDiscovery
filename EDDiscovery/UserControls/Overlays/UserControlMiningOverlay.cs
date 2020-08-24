@@ -27,38 +27,6 @@ namespace EDDiscovery.UserControls
     public partial class UserControlMiningOverlay :   UserControlCommonBase
     {
         private string DBChart { get { return DBName("MiningOverlay", "ChartSel"); } }
-
-        class MaterialsFound
-        {
-            public string matnamefd2;
-            public string friendlyname;
-
-            public double amountrefined;            // amount refined
-            public double amountcollected;          // amount collected
-            public double amountdiscarded;
-            public bool discovered;
-
-            public int prospectednoasteroids;      // prospector entry updates this
-            public List<double> prospectedamounts;
-
-            public int motherloadasteroids;         // number where in motherload.
-
-            public static MaterialsFound Find(string fdname, List<MaterialsFound> list)
-            {
-                MaterialsFound mat = list.Find(x => x.matnamefd2.Equals(fdname, StringComparison.InvariantCultureIgnoreCase));
-                if (mat == null)
-                {
-                    mat = new MaterialsFound();
-                    mat.matnamefd2 = fdname;
-                    mat.friendlyname = MaterialCommodityData.GetByFDName(fdname)?.Name ?? fdname;
-                    mat.prospectedamounts = new List<double>();
-                    list.Add(mat);
-                }
-
-                return mat;
-            }
-        }
-
         #region Init
 
         public UserControlMiningOverlay()
@@ -156,6 +124,41 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        class MaterialsFound
+        {
+            public string matnamefd2;
+            public string friendlyname;
+
+            public double amountrefined;            // amount refined
+            public double amountcollected;          // amount collected
+            public double amountdiscarded;
+            public bool discovered;
+
+            public int prospectednoasteroids;      // prospector entry updates this
+            public List<double> prospectedamounts;
+
+            public int motherloadasteroids;         // number where in motherload.
+
+            public int highcontent;
+            public int mediumcontent;
+            public int lowcontent;
+
+            public static MaterialsFound Find(string fdname, List<MaterialsFound> list)
+            {
+                MaterialsFound mat = list.Find(x => x.matnamefd2.Equals(fdname, StringComparison.InvariantCultureIgnoreCase));
+                if (mat == null)
+                {
+                    mat = new MaterialsFound();
+                    mat.matnamefd2 = fdname;
+                    mat.friendlyname = MaterialCommodityData.GetByFDName(fdname)?.Name ?? fdname;
+                    mat.prospectedamounts = new List<double>();
+                    list.Add(mat);
+                }
+
+                return mat;
+            }
+        }
+
         private List<MaterialsFound> ReadHistory(out int limpetsleft, out int prospectorsused, out int collectorsused, out int asteroidscracked, out int prospected)
         {
             limpetsleft = heabove.MaterialCommodity.FindFDName("drones")?.Count ?? 0;
@@ -167,7 +170,7 @@ namespace EDDiscovery.UserControls
 
             foreach (var e in curlist)
             {
-                System.Diagnostics.Debug.WriteLine("{0} {1} {2}", e.Indexno, e.EventTimeUTC, e.EventSummary);
+                //System.Diagnostics.Debug.WriteLine("{0} {1} {2}", e.Indexno, e.EventTimeUTC, e.EventSummary);
 
                 switch (e.EntryType)
                 {
@@ -184,8 +187,11 @@ namespace EDDiscovery.UserControls
                                 var matpa = MaterialsFound.Find(m.Name, found);
                                 matpa.prospectednoasteroids++;
                                 matpa.prospectedamounts.Add(m.Proportion);
+                                matpa.highcontent += pa.Content == JournalProspectedAsteroid.AsteroidContent.High ? 1 : 0;
+                                matpa.mediumcontent += pa.Content == JournalProspectedAsteroid.AsteroidContent.Medium ? 1 : 0;
+                                matpa.lowcontent += pa.Content == JournalProspectedAsteroid.AsteroidContent.Low ? 1 : 0;
 
-                                System.Diagnostics.Debug.WriteLine("Prospected {0} {1}", m.Name, m.Proportion);
+                                System.Diagnostics.Debug.WriteLine("Prospected {0} {1} {2}", m.Name, m.Proportion, pa.Content );
                             }
 
                             if (pa.MotherlodeMaterial.HasChars())
@@ -211,7 +217,7 @@ namespace EDDiscovery.UserControls
                         var mc = e.journalEntry as JournalMaterialCollected;
                         var matmc = MaterialsFound.Find(mc.Name, found);
                         matmc.amountcollected += mc.Count;
-                        System.Diagnostics.Debug.WriteLine("Collected {0} {1}", mc.Count, matmc.amountcollected);
+                        //System.Diagnostics.Debug.WriteLine("Collected {0} {1}", mc.Count, matmc.amountcollected);
                         break;
                     case JournalTypeEnum.MaterialDiscarded:
                         var md = e.journalEntry as JournalMaterialDiscarded;
@@ -264,7 +270,7 @@ namespace EDDiscovery.UserControls
                     int colwidth = (int)BaseUtils.BitMapHelpers.MeasureStringInBitmap("0000", displayfont, frmt).Width;
                     int percentwidth = (int)BaseUtils.BitMapHelpers.MeasureStringInBitmap("00000.0", displayfont, frmt).Width;
 
-                    int[] colsw = new int[] { colwidth * 4, colwidth, colwidth, colwidth, percentwidth, percentwidth, percentwidth, percentwidth, percentwidth, percentwidth};
+                    int[] colsw = new int[] { colwidth * 4, colwidth, colwidth, colwidth, percentwidth, percentwidth, percentwidth, percentwidth, percentwidth, percentwidth, percentwidth};
                     int[] hpos = new int[colsw.Length];
                     hpos[0] = 4;
                     for (int i = 1; i < hpos.Length; i++)
@@ -289,7 +295,8 @@ namespace EDDiscovery.UserControls
                         pictureBox.AddTextAutoSize(new Point(hpos[5], vpos), new Size(colsw[5], this.Height), "Avg%", displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
                         pictureBox.AddTextAutoSize(new Point(hpos[6], vpos), new Size(colsw[6], this.Height), "Min%", displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
                         pictureBox.AddTextAutoSize(new Point(hpos[7], vpos), new Size(colsw[7], this.Height), "Max%", displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
-                        pictureBox.AddTextAutoSize(new Point(hpos[8], vpos), new Size(colsw[7], this.Height), "M.Lode", displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+                        pictureBox.AddTextAutoSize(new Point(hpos[8], vpos), new Size(colsw[8], this.Height), "M.Lode", displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+                        pictureBox.AddTextAutoSize(new Point(hpos[9], vpos), new Size(colsw[9], this.Height), "HML Ct.", displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
                         vpos = ie.Location.Bottom + displayfont.ScalePixels(2);
                     }
 
@@ -313,6 +320,7 @@ namespace EDDiscovery.UserControls
                             pictureBox.AddTextAutoSize(new Point(hpos[5], vpos), new Size(colsw[5], this.Height), m.prospectedamounts.Average().ToString("N1"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
                             pictureBox.AddTextAutoSize(new Point(hpos[6], vpos), new Size(colsw[6], this.Height), m.prospectedamounts.Min().ToString("N1"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
                             pictureBox.AddTextAutoSize(new Point(hpos[7], vpos), new Size(colsw[7], this.Height), m.prospectedamounts.Max().ToString("N1"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+                            pictureBox.AddTextAutoSize(new Point(hpos[9], vpos), new Size(colsw[9], this.Height), m.highcontent.ToString("N0") + "/" + m.mediumcontent.ToString("N0") + "/" + m.lowcontent.ToString("N0"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
                         }
 
                         if ( m.motherloadasteroids>0)

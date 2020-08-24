@@ -54,7 +54,8 @@ namespace EDDiscovery.Actions
                 }
                 else if (nextcmd.Equals("tab"))
                 {
-                    string tabname = sp.NextWordLCInvariant(" ");
+                    string tabname = sp.NextQuotedWord(lowercase: System.Globalization.CultureInfo.InvariantCulture, replaceescape:true);
+
                     if (!(ap.actioncontroller as ActionController).DiscoveryForm.SelectTabPage(tabname))
                         ap.ReportError("Tab page name " + tabname + " not found");
                 }
