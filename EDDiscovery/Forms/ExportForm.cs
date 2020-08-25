@@ -60,7 +60,7 @@ namespace EDDiscovery.Forms
 
             if (disablestartendtime)
             {
-                customDateTimePickerFrom.Visible = customDateTimePickerTo.Visible = false;
+                customDateTimePickerFrom.Visible = customDateTimePickerTo.Visible =  labelUTCStart.Visible = labelUTCEnd.Visible= false;
                 int d = panelBottom.Top - customDateTimePickerFrom.Top;
                 panelBottom.Top -= d;
                 panelOuter.Height -= d;

@@ -38,6 +38,7 @@ namespace EDDiscovery.UserControls
         {
             UpdateComboBox(null);
             BaseUtils.Translator.Instance.Translate(this);
+            buttonExtExcel.Enabled = false;
         }
 
         public override void LoadLayout()
@@ -87,6 +88,7 @@ namespace EDDiscovery.UserControls
         List<HistoryEntry> curlist;
         HistoryEntry heabove, hebelow;
         object selectedchart = null;
+        const int CFDbMax = 50;
 
         private void Display(HistoryEntry he)       // at he, see if changed
         {
@@ -139,9 +141,7 @@ namespace EDDiscovery.UserControls
 
             public int motherloadasteroids;         // number where in motherload.
 
-            public int highcontent;
-            public int mediumcontent;
-            public int lowcontent;
+            public int[] content;                  // number in each cat, high/med/low
 
             public static MaterialsFound Find(string fdname, List<MaterialsFound> list)
             {
@@ -152,6 +152,7 @@ namespace EDDiscovery.UserControls
                     mat.matnamefd2 = fdname;
                     mat.friendlyname = MaterialCommodityData.GetByFDName(fdname)?.Name ?? fdname;
                     mat.prospectedamounts = new List<double>();
+                    mat.content = new int[3];
                     list.Add(mat);
                 }
 
@@ -159,13 +160,14 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private List<MaterialsFound> ReadHistory(out int limpetsleft, out int prospectorsused, out int collectorsused, out int asteroidscracked, out int prospected)
+        private List<MaterialsFound> ReadHistory(out int limpetsleft, out int prospectorsused, out int collectorsused, out int asteroidscracked, out int prospected, out int[] content)
         {
             limpetsleft = heabove.MaterialCommodity.FindFDName("drones")?.Count ?? 0;
             prospectorsused = 0;
             collectorsused = 0;
             asteroidscracked = 0;
             prospected = 0;
+            content = new int[3];
             var found = new List<MaterialsFound>();
 
             foreach (var e in curlist)
@@ -187,9 +189,9 @@ namespace EDDiscovery.UserControls
                                 var matpa = MaterialsFound.Find(m.Name, found);
                                 matpa.prospectednoasteroids++;
                                 matpa.prospectedamounts.Add(m.Proportion);
-                                matpa.highcontent += pa.Content == JournalProspectedAsteroid.AsteroidContent.High ? 1 : 0;
-                                matpa.mediumcontent += pa.Content == JournalProspectedAsteroid.AsteroidContent.Medium ? 1 : 0;
-                                matpa.lowcontent += pa.Content == JournalProspectedAsteroid.AsteroidContent.Low ? 1 : 0;
+                                matpa.content[0] += pa.Content == JournalProspectedAsteroid.AsteroidContent.High ? 1 : 0;
+                                matpa.content[1] += pa.Content == JournalProspectedAsteroid.AsteroidContent.Medium ? 1 : 0;
+                                matpa.content[2] += pa.Content == JournalProspectedAsteroid.AsteroidContent.Low ? 1 : 0;
 
                                 System.Diagnostics.Debug.WriteLine("Prospected {0} {1} {2}", m.Name, m.Proportion, pa.Content );
                             }
@@ -200,6 +202,11 @@ namespace EDDiscovery.UserControls
                                 matpa.motherloadasteroids++;
                             }
                         }
+
+                        content[0] += pa.Content == JournalProspectedAsteroid.AsteroidContent.High ? 1 : 0;
+                        content[1] += pa.Content == JournalProspectedAsteroid.AsteroidContent.Medium ? 1 : 0;
+                        content[2] += pa.Content == JournalProspectedAsteroid.AsteroidContent.Low ? 1 : 0;
+
                         break;
                     case JournalTypeEnum.LaunchDrone:
                         var ld = e.journalEntry as JournalLaunchDrone;
@@ -248,9 +255,9 @@ namespace EDDiscovery.UserControls
             pictureBox.ClearImageList();
             Controls.RemoveByKey("chart");
 
-            if ( curlist != null)
+            if (curlist != null)
             {
-                var found = ReadHistory(out int limpetsleft, out int prospectorsused, out int collectorsused, out int asteroidscracked, out int prospected);
+                var found = ReadHistory(out int limpetsleft, out int prospectorsused, out int collectorsused, out int asteroidscracked, out int prospected, out int[] content);
 
                 Font displayfont = discoveryform.theme.GetFont;
                 Color textcolour = IsTransparent ? discoveryform.theme.SPanelColor : discoveryform.theme.LabelColor;
@@ -269,8 +276,9 @@ namespace EDDiscovery.UserControls
                     int vpos = 5;
                     int colwidth = (int)BaseUtils.BitMapHelpers.MeasureStringInBitmap("0000", displayfont, frmt).Width;
                     int percentwidth = (int)BaseUtils.BitMapHelpers.MeasureStringInBitmap("00000.0", displayfont, frmt).Width;
+                    int hmlwidth = percentwidth * 2;
 
-                    int[] colsw = new int[] { colwidth * 4, colwidth, colwidth, colwidth, percentwidth, percentwidth, percentwidth, percentwidth, percentwidth, percentwidth, percentwidth};
+                    int[] colsw = new int[] { colwidth * 4, colwidth, colwidth, colwidth, percentwidth, percentwidth, percentwidth, percentwidth, percentwidth, percentwidth, hmlwidth };
                     int[] hpos = new int[colsw.Length];
                     hpos[0] = 4;
                     for (int i = 1; i < hpos.Length; i++)
@@ -285,8 +293,8 @@ namespace EDDiscovery.UserControls
                         pictureBox.AddTextAutoSize(new Point(ieprosp.Location.Right, ieprosp.Location.Top), new Size(this.Width - ieprosp.Location.Right - 20, this.Height), text, displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
                     }
 
-                    if ( prospected > 0 || found.Count>0 )
-                    { 
+                    if (prospected > 0 || found.Count > 0)
+                    {
                         var ie = pictureBox.AddTextAutoSize(new Point(hpos[1], vpos), new Size(colsw[1], this.Height), "Ref.", displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
                         pictureBox.AddTextAutoSize(new Point(hpos[2], vpos), new Size(colsw[2], this.Height), "Coll.", displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
                         pictureBox.AddTextAutoSize(new Point(hpos[3], vpos), new Size(colsw[3], this.Height), "Prosp.", displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
@@ -300,10 +308,11 @@ namespace EDDiscovery.UserControls
                         vpos = ie.Location.Bottom + displayfont.ScalePixels(2);
                     }
 
-                    if ( prospected > 0 )
+                    if (prospected > 0)
                     {
                         var ie = pictureBox.AddTextAutoSize(new Point(hpos[0], vpos), new Size(colsw[0], this.Height), "Asteroids Pros.", displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
                         pictureBox.AddTextAutoSize(new Point(hpos[3], vpos), new Size(colsw[3], this.Height), prospected.ToString("N0"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+                        pictureBox.AddTextAutoSize(new Point(hpos[9], vpos), new Size(colsw[9], this.Height), content[0].ToString("N0") + "/" + content[1].ToString("N0") + "/" + content[2].ToString("N0"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
                         vpos = ie.Location.Bottom + displayfont.ScalePixels(2);
                     }
 
@@ -311,19 +320,19 @@ namespace EDDiscovery.UserControls
                     {
                         var ie1 = pictureBox.AddTextAutoSize(new Point(hpos[0], vpos), new Size(colsw[0], this.Height), m.friendlyname, displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
                         pictureBox.AddTextAutoSize(new Point(hpos[1], vpos), new Size(colsw[1], this.Height), m.amountrefined.ToString("N0"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
-                        pictureBox.AddTextAutoSize(new Point(hpos[2], vpos), new Size(colsw[2], this.Height), (m.amountcollected-m.amountdiscarded).ToString("N0"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
-                        if ( m.prospectednoasteroids>0)
+                        pictureBox.AddTextAutoSize(new Point(hpos[2], vpos), new Size(colsw[2], this.Height), (m.amountcollected - m.amountdiscarded).ToString("N0"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+                        if (m.prospectednoasteroids > 0)
                         {
                             pictureBox.AddTextAutoSize(new Point(hpos[3], vpos), new Size(colsw[3], this.Height), m.prospectednoasteroids.ToString("N0"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
 
-                            pictureBox.AddTextAutoSize(new Point(hpos[4], vpos), new Size(colsw[4], this.Height), (100.0*(double)m.prospectednoasteroids/prospected).ToString("N1"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+                            pictureBox.AddTextAutoSize(new Point(hpos[4], vpos), new Size(colsw[4], this.Height), (100.0 * (double)m.prospectednoasteroids / prospected).ToString("N1"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
                             pictureBox.AddTextAutoSize(new Point(hpos[5], vpos), new Size(colsw[5], this.Height), m.prospectedamounts.Average().ToString("N1"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
                             pictureBox.AddTextAutoSize(new Point(hpos[6], vpos), new Size(colsw[6], this.Height), m.prospectedamounts.Min().ToString("N1"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
                             pictureBox.AddTextAutoSize(new Point(hpos[7], vpos), new Size(colsw[7], this.Height), m.prospectedamounts.Max().ToString("N1"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
-                            pictureBox.AddTextAutoSize(new Point(hpos[9], vpos), new Size(colsw[9], this.Height), m.highcontent.ToString("N0") + "/" + m.mediumcontent.ToString("N0") + "/" + m.lowcontent.ToString("N0"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+                            pictureBox.AddTextAutoSize(new Point(hpos[9], vpos), new Size(colsw[9], this.Height), m.content[0].ToString("N0") + "/" + m.content[1].ToString("N0") + "/" + m.content[2].ToString("N0"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
                         }
 
-                        if ( m.motherloadasteroids>0)
+                        if (m.motherloadasteroids > 0)
                         {
                             pictureBox.AddTextAutoSize(new Point(hpos[8], vpos), new Size(colsw[8], this.Height), m.motherloadasteroids.ToString("N0"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
                         }
@@ -335,7 +344,7 @@ namespace EDDiscovery.UserControls
 
                     var prospectedlist = found.Where(m => m.prospectednoasteroids > 0).ToList();
 
-                    UpdateComboBox(prospectedlist.Select(m=>m.friendlyname).ToList());
+                    UpdateComboBox(prospectedlist.Select(m => m.friendlyname).ToList());
 
                     int? seli = selectedchart as int?;
                     int? selm = selectedchart is string ? prospectedlist.FindIndex(x => x.friendlyname == selectedchart as string) : default(int?);
@@ -348,7 +357,7 @@ namespace EDDiscovery.UserControls
                             if (seli == chartfixeditems.Length - 1)
                                 seli = LineC.Length;
 
-                            for (int i =0; i < seli.Value && i < prospectedlist.Count; i++)
+                            for (int i = 0; i < seli.Value && i < prospectedlist.Count; i++)
                                 matdata.Add(prospectedlist[i]);
                         }
                         else
@@ -394,7 +403,7 @@ namespace EDDiscovery.UserControls
                             chart.ChartAreas.Add(chartarea);
 
                             chart.Titles.Clear();
-                            var title = new Title((matdata.Count == 1 ? (matdata[0].friendlyname+ " ") : "") + "Distribution", Docking.Top, displayfont, TextC);
+                            var title = new Title((matdata.Count == 1 ? (matdata[0].friendlyname + " ") : "") + "Distribution", Docking.Top, displayfont, TextC);
                             chart.Titles.Add(title);
 
                             Legend legend = null;
@@ -421,7 +430,7 @@ namespace EDDiscovery.UserControls
                                 series.Legend = "Legend1";
 
                                 int i = 0;
-                                for (i = 0; i < 50; i++)        // 0 - 50% fixed
+                                for (i = 0; i < CFDbMax; i++)        // 0 - fixed
                                 {
                                     int numberabove = m.prospectedamounts.Count(x => x >= i);
                                     series.Points.Add(new DataPoint(i, (double)numberabove / m.prospectednoasteroids * 100.0));
@@ -445,9 +454,14 @@ namespace EDDiscovery.UserControls
                     }
 
                 }
+
+                buttonExtExcel.Enabled = found.Count != 0;
             }
             else
+            {
                 pictureBox.Render();
+                buttonExtExcel.Enabled = false;
+            }
 
             Update();
         }
@@ -490,6 +504,7 @@ namespace EDDiscovery.UserControls
             extComboBoxChartOptions.SelectedIndexChanged += ExtComboBoxChartOptions_SelectedIndexChanged;
         }
 
+
         private void ExtComboBoxChartOptions_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (extComboBoxChartOptions.SelectedIndex < chartfixeditems.Length)
@@ -502,6 +517,189 @@ namespace EDDiscovery.UserControls
             Display();
         }
 
+
+        #endregion
+
+        #region excel
+
+        private void buttonExtExcel_Click(object sender, EventArgs e)
+        {
+            Forms.ExportForm frm = new Forms.ExportForm();
+            frm.Init(new string[] { "All" }, disablestartendtime: true);
+
+            if (frm.ShowDialog(FindForm()) == DialogResult.OK)
+            {
+                BaseUtils.CSVWriteGrid grd = new BaseUtils.CSVWriteGrid();
+                grd.SetCSVDelimiter(frm.Comma);
+
+                var found = ReadHistory(out int limpetsleft, out int prospectorsused, out int collectorsused, out int asteroidscracked, out int prospected, out int[] content);
+
+                grd.GetPreHeader += delegate (int r)
+                {
+                    if (r == 0)
+                        return new Object[] { "Limpets left ", limpetsleft, "Prospectors Fired", prospectorsused, "Collectors Deployed", collectorsused };
+                    else if (r == 1)
+                        return new object[0];
+                    else
+                        return null;
+                };
+
+                {
+                    grd.GetLinePreHeaderSets.Add(delegate (int s, int r)
+                    {
+                        if (r == 0)
+                            return new object[] { "", "Ref.", "Coll.", "Pros", "Ratio%", "Avg%", "Min%", "Max%", "M.Load", "High Ct", "Med Ct", "Low Ct" };
+                        else
+                            return null;
+                    });
+
+                    grd.GetLinePostHeaderSets.Add(delegate (int s, int r)
+                    {
+                        if (r < 2)
+                            return new object[0];
+                        else
+                            return null;
+                    });
+
+                    grd.GetLineSets.Add(delegate (int s, int r)
+                    {
+                        if (r == 0)
+                        {
+                            return new object[] { "","","", prospected.ToString("N0"),"","","","","",
+                                              content[0].ToString("N0"),
+                                              content[1].ToString("N0"),
+                                              content[2].ToString("N0") };
+                        }
+                        else if (r <= found.Count)
+                        {
+                            MaterialsFound f = found[r - 1];
+                            return new object[] { f.friendlyname, f.amountrefined, f.amountcollected-f.amountdiscarded,
+                                              f.prospectednoasteroids>0 ? f.prospectednoasteroids.ToString("N0") : "" ,
+                                              f.prospectednoasteroids>0 ? (100.0 * (double)f.prospectednoasteroids / prospected).ToString("N1") : "" ,
+                                              f.prospectednoasteroids>0 ? f.prospectedamounts.Average().ToString("N1") : "",
+                                              f.prospectednoasteroids>0 ? f.prospectedamounts.Min().ToString("N1") : "",
+                                              f.prospectednoasteroids>0 ? f.prospectedamounts.Max().ToString("N1") : "",
+                                              f.motherloadasteroids>0 ? f.motherloadasteroids.ToString("N0") : "" ,
+                                              f.prospectednoasteroids>0 ? f.content[0].ToString("N0") :"",
+                                              f.prospectednoasteroids>0 ? f.content[1].ToString("N0") : "",
+                                              f.prospectednoasteroids>0 ? f.content[2].ToString("N0") : "" };
+                        }
+                        else
+                            return null;
+                    });
+                }
+
+                var prosmat = found.Where(x => x.prospectednoasteroids > 0).ToList();
+
+                {
+                    grd.GetLinePreHeaderSets.Add(delegate (int s, int r)
+                    {
+                        if (r == 0)
+                        {
+                            Object[] ret = new object[prosmat.Count + 1];
+                            ret[0] = "CDFb";
+
+                            for (int i = 0; i < prosmat.Count; i++)
+                                ret[i + 1] = prosmat[i].friendlyname;
+
+                            return ret;
+                        }
+                        else
+                            return null;
+                    });
+
+                    grd.GetLinePostHeaderSets.Add(delegate (int s, int r)
+                    {
+                        return (r < 2) ? new object[0] { } : null;
+                    });
+
+                    grd.GetLineSets.Add(delegate (int s, int r)
+                    {
+                        if (r < CFDbMax)
+                        {
+                            Object[] ret = new object[prosmat.Count + 1];
+                            int percent = r;
+                            ret[0] = percent.ToString("N0") + "%";
+                            for (int m = 0; m < prosmat.Count; m++)
+                            {
+                                if (prosmat[m].prospectednoasteroids > 0)
+                                    ret[m + 1] = ((double)prosmat[m].prospectedamounts.Count(x => x >= percent) / prosmat[m].prospectednoasteroids * 100.0).ToString("N1");
+                                else
+                                    ret[m + 1] = "";
+                            }
+
+                            return ret;
+                        }
+                        else
+                            return null;
+                    });
+                }
+
+
+
+                {
+                    const int precol = 4;
+
+                    grd.GetLinePreHeaderSets.Add(delegate (int s, int r)
+                    {
+                        if (r == 0)
+                        {
+                            Object[] ret = new object[found.Count + precol];
+                            ret[0] = "Event";
+                            ret[1] = "Time";
+                            ret[2] = "Content";
+                            ret[3] = "Motherload";
+
+                            for (int i = 0; i < prosmat.Count; i++)
+                                ret[i + precol] = prosmat[i].friendlyname;
+
+                            return ret;
+                        }
+                        else
+                            return null;
+                    });
+
+                    grd.GetLinePostHeaderSets.Add(delegate (int s, int r)
+                    {
+                        return (r < 2) ? new object[0] { } : null;
+                    });
+
+                    var proslist = curlist.Where(x => x.EntryType == JournalTypeEnum.ProspectedAsteroid).ToList();
+
+                    grd.GetLineSets.Add(delegate (int s, int r)
+                    {
+                        if (r < proslist.Count)
+                        {
+                            var jp = proslist[r].journalEntry as JournalProspectedAsteroid;
+
+                            Object[] ret = new object[prosmat.Count + precol];
+                            ret[0] = (r + 1).ToString("N0");
+                            ret[1] = jp.EventTimeUTC.ToStringZulu();
+                            ret[2] = jp.Content.ToString();
+                            ret[3] = MaterialCommodityData.GetByFDName(jp.MotherlodeMaterial)?.Name ?? jp.MotherlodeMaterial;
+
+                            for (int m = 0; m < prosmat.Count; m++)
+                            {
+                                int mi = Array.FindIndex(jp.Materials, x => x.Name == prosmat[m].matnamefd2);
+                                if (mi >= 0)
+                                    ret[m + precol] = jp.Materials[mi].Proportion.ToString("N2");
+                                else
+                                    ret[m + precol] = "";
+                            }
+                            return ret;
+                        }
+                        else
+                            return null;
+                    });
+
+                }
+
+
+                grd.WriteGrid(frm.Path, frm.AutoOpen, FindForm());
+            }
+
+
+        }
 
         #endregion
     }

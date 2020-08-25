@@ -43,9 +43,9 @@
             this.panel_minimize = new ExtendedControls.ExtButtonDrawn();
             this.label_index = new System.Windows.Forms.Label();
             this.panelOuter = new System.Windows.Forms.Panel();
+            this.labelUTCEnd = new System.Windows.Forms.Label();
+            this.labelUTCStart = new System.Windows.Forms.Label();
             this.panelTop = new System.Windows.Forms.Panel();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
             this.panelBottom.SuspendLayout();
             this.panelOuter.SuspendLayout();
             this.panelTop.SuspendLayout();
@@ -282,8 +282,8 @@
             // panelOuter
             // 
             this.panelOuter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panelOuter.Controls.Add(this.label2);
-            this.panelOuter.Controls.Add(this.label1);
+            this.panelOuter.Controls.Add(this.labelUTCEnd);
+            this.panelOuter.Controls.Add(this.labelUTCStart);
             this.panelOuter.Controls.Add(this.comboBoxCustomExportType);
             this.panelOuter.Controls.Add(this.panelBottom);
             this.panelOuter.Controls.Add(this.customDateTimePickerFrom);
@@ -293,6 +293,24 @@
             this.panelOuter.Name = "panelOuter";
             this.panelOuter.Size = new System.Drawing.Size(378, 275);
             this.panelOuter.TabIndex = 31;
+            // 
+            // labelUTCEnd
+            // 
+            this.labelUTCEnd.AutoSize = true;
+            this.labelUTCEnd.Location = new System.Drawing.Point(297, 83);
+            this.labelUTCEnd.Name = "labelUTCEnd";
+            this.labelUTCEnd.Size = new System.Drawing.Size(29, 13);
+            this.labelUTCEnd.TabIndex = 5;
+            this.labelUTCEnd.Text = "UTC";
+            // 
+            // labelUTCStart
+            // 
+            this.labelUTCStart.AutoSize = true;
+            this.labelUTCStart.Location = new System.Drawing.Point(297, 50);
+            this.labelUTCStart.Name = "labelUTCStart";
+            this.labelUTCStart.Size = new System.Drawing.Size(29, 13);
+            this.labelUTCStart.TabIndex = 5;
+            this.labelUTCStart.Text = "UTC";
             // 
             // panelTop
             // 
@@ -304,24 +322,6 @@
             this.panelTop.Name = "panelTop";
             this.panelTop.Size = new System.Drawing.Size(378, 32);
             this.panelTop.TabIndex = 32;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(297, 50);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(29, 13);
-            this.label1.TabIndex = 5;
-            this.label1.Text = "UTC";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(297, 83);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(29, 13);
-            this.label2.TabIndex = 5;
-            this.label2.Text = "UTC";
             // 
             // ExportForm
             // 
@@ -363,7 +363,7 @@
         private ExtendedControls.ExtButton buttonExport;
         private System.Windows.Forms.Panel panelOuter;
         private System.Windows.Forms.Panel panelTop;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label labelUTCEnd;
+        private System.Windows.Forms.Label labelUTCStart;
     }
 }

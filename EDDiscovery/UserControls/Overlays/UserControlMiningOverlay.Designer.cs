@@ -46,6 +46,7 @@ namespace EDDiscovery.UserControls
             this.pictureBox = new ExtendedControls.ExtPictureBox();
             this.extPanelRollUp1 = new ExtendedControls.ExtPanelRollUp();
             this.extComboBoxChartOptions = new ExtendedControls.ExtComboBox();
+            this.buttonExtExcel = new ExtendedControls.ExtButton();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.extPanelRollUp1.SuspendLayout();
             this.SuspendLayout();
@@ -60,6 +61,7 @@ namespace EDDiscovery.UserControls
             // 
             // extPanelRollUp1
             // 
+            this.extPanelRollUp1.Controls.Add(this.buttonExtExcel);
             this.extPanelRollUp1.Controls.Add(this.extComboBoxChartOptions);
             this.extPanelRollUp1.Dock = System.Windows.Forms.DockStyle.Top;
             this.extPanelRollUp1.HiddenMarkerWidth = 40;
@@ -98,6 +100,18 @@ namespace EDDiscovery.UserControls
             this.extComboBoxChartOptions.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.extComboBoxChartOptions.ValueMember = "";
             // 
+            // buttonExtExcel
+            // 
+            this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonExtExcel.Image = global::EDDiscovery.Icons.Controls.Route_ExportToExcel;
+            this.buttonExtExcel.Location = new System.Drawing.Point(235, 3);
+            this.buttonExtExcel.Name = "buttonExtExcel";
+            this.buttonExtExcel.Size = new System.Drawing.Size(24, 24);
+            this.buttonExtExcel.TabIndex = 60;
+            this.buttonExtExcel.Text = "2";
+            this.buttonExtExcel.UseVisualStyleBackColor = true;
+            this.buttonExtExcel.Click += new System.EventHandler(this.buttonExtExcel_Click);
+            // 
             // UserControlMiningOverlay
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -117,5 +131,6 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtPictureBox pictureBox;
         private ExtendedControls.ExtPanelRollUp extPanelRollUp1;
         private ExtendedControls.ExtComboBox extComboBoxChartOptions;
+        private ExtendedControls.ExtButton buttonExtExcel;
     }
 }
