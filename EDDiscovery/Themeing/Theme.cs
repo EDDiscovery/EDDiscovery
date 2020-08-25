@@ -116,7 +116,7 @@ namespace EDDiscovery
             {
                 try
                 {
-                    JObject jo = JObject.Parse(File.ReadAllText(fi.FullName));
+                    JObject jo = JObject.ParseThrowCommaEOL(File.ReadAllText(fi.FullName));
                     {
                         Settings set = new Settings();
 
