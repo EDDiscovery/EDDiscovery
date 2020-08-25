@@ -18,6 +18,7 @@ using EliteDangerousCore.DB;
 using EliteDangerousCore.EDSM;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Windows.Forms;
@@ -33,6 +34,7 @@ namespace EDDiscovery.UserControls
         }
 
         private string DbSave { get { return DBName("StarDistancePanel"); } }
+        private string DbColumnSave { get { return DBName("StarDistancePanel", "DGVCol"); } }
 
         private StarDistanceComputer computer = null;
         private HistoryEntry last_he = null;
@@ -68,18 +70,22 @@ namespace EDDiscovery.UserControls
 
         public override void LoadLayout()
         {
+            DGVLoadColumnLayout(dataGridViewNearest, DbColumnSave);
+
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
             uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
         }
 
         public override void Closing()
         {
+            DGVSaveColumnLayout(dataGridViewNearest, DbColumnSave);
             discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
             uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
             computer.ShutDown();
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble(DbSave + "Min", textMinRadius.Value);
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble(DbSave + "Max", textMaxRadius.Value);
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "Behaviour", checkBoxCube.Checked);
+
         }
 
         public override void InitialDisplay()
@@ -145,6 +151,9 @@ namespace EDDiscovery.UserControls
 
         private void FillGrid(string name, BaseUtils.SortedListDoubleDuplicate<ISystem> csl)
         {
+            DataGridViewColumn sortcolprev = dataGridViewNearest.SortedColumn != null ? dataGridViewNearest.SortedColumn : dataGridViewNearest.Columns[1];
+            SortOrder sortorderprev = dataGridViewNearest.SortedColumn != null ? dataGridViewNearest.SortOrder : SortOrder.Ascending;
+
             dataGridViewNearest.Rows.Clear();
 
             if (csl != null && csl.Any())
@@ -168,12 +177,14 @@ namespace EDDiscovery.UserControls
                     }
                 }
 
-                if (csl.Count > maxitems / 2)             // if we filled up at least half the list, we limit to max distance plus
+                if (csl.Count > maxitems / 2)           // if we filled up at least half the list, we limit to max distance plus
                 {
                     lookup_limit = maxdist * 11 / 10;   // lookup limit is % more than max dist, to allow for growth
                 }
-                else
+                else if ( csl.Count > maxitems / 10 )
                     lookup_limit = maxdist * 2;         // else we did not get close to filling the list, so double the limit and try again
+                else
+                    lookup_limit = 100;                 // got so few, lets reset
 
                 System.Diagnostics.Debug.WriteLine("Star distance Lookup " + name + " found " + csl.Count + " max was " + maxdist + " New limit " + lookup_limit);
             }
@@ -181,6 +192,9 @@ namespace EDDiscovery.UserControls
             {
                 SetControlText(string.Empty);
             }
+
+            dataGridViewNearest.Sort(sortcolprev, (sortorderprev == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
+            dataGridViewNearest.Columns[sortcolprev.Index].HeaderCell.SortGlyphDirection = sortorderprev;
         }
 
         private int rightclickrow = -1;
