@@ -125,14 +125,25 @@ namespace EDDiscovery
 
                         foreach (Settings.CI ck in Enum.GetValues(typeof(Settings.CI)))           // all enums
                         {
+                            bool done = false;
+
                             try
                             {
-                                Color c = System.Drawing.ColorTranslator.FromHtml(jo[ck.ToString()].Str("not found"));   // may except if not valid HTML colour
-                                set.colors.Add(ck, c);
+                                string s = jo[ck.ToString()].StrNull();
+                                if (s != null)
+                                {
+                                    Color c = System.Drawing.ColorTranslator.FromHtml(s);   // may except if not valid HTML colour
+                                    set.colors.Add(ck, c);
+                                    done = true;
+                                }
                             }
                             catch
                             {
-                                Color def = themelist[0].colors[ck];
+                                System.Diagnostics.Debug.WriteLine("Theme has invalid colour ");
+                            }
+                            if (!done)
+                            {
+                                Color def = themelist[0].colors[ck];        // 
                                 set.colors.Add(ck, def);
                             }
                         }
