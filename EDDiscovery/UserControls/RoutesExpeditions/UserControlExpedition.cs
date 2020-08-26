@@ -353,7 +353,7 @@ namespace EDDiscovery.UserControls
                 return;
 
             OpenFileDialog ofd = new OpenFileDialog();
-            ofd.Filter = "Text Files|*.txt";
+            ofd.Filter = "Text Files|*.txt|CSV Files|*.csv";
             ofd.Title = "Select a route file".T(EDTx.UserControlExpedition_SelRoute);
 
             if (ofd.ShowDialog(FindForm()) != System.Windows.Forms.DialogResult.OK)
@@ -381,7 +381,11 @@ namespace EDDiscovery.UserControls
                     sysname = values[0];
                 }
                 if (!String.IsNullOrWhiteSpace(sysname))
-                    systems.Add(sysname.Trim());
+                {
+                    sysname = sysname.Trim();
+                    sysname = sysname.Trim('"');
+                    systems.Add(sysname);
+                }
             }
             if (systems.Count == 0)
             {
