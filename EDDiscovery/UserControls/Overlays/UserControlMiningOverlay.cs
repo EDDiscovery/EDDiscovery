@@ -278,7 +278,7 @@ namespace EDDiscovery.UserControls
                     int percentwidth = (int)BaseUtils.BitMapHelpers.MeasureStringInBitmap("00000.0", displayfont, frmt).Width;
                     int hmlwidth = percentwidth * 2;
 
-                    int[] colsw = new int[] { colwidth * 4, colwidth, colwidth, colwidth, percentwidth, percentwidth, percentwidth, percentwidth, percentwidth, percentwidth, hmlwidth };
+                    int[] colsw = new int[] { colwidth * 4, colwidth, colwidth, colwidth, percentwidth, percentwidth, percentwidth, percentwidth, percentwidth, percentwidth, hmlwidth, colwidth };
                     int[] hpos = new int[colsw.Length];
                     hpos[0] = 4;
                     for (int i = 1; i < hpos.Length; i++)
@@ -305,6 +305,7 @@ namespace EDDiscovery.UserControls
                         pictureBox.AddTextAutoSize(new Point(hpos[7], vpos), new Size(colsw[7], this.Height), "Max%", displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
                         pictureBox.AddTextAutoSize(new Point(hpos[8], vpos), new Size(colsw[8], this.Height), "M.Lode", displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
                         pictureBox.AddTextAutoSize(new Point(hpos[9], vpos), new Size(colsw[9], this.Height), "HML Ct.", displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+                        pictureBox.AddTextAutoSize(new Point(hpos[10], vpos), new Size(colsw[10], this.Height), "Discv", displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
                         vpos = ie.Location.Bottom + displayfont.ScalePixels(2);
                     }
 
@@ -336,6 +337,9 @@ namespace EDDiscovery.UserControls
                         {
                             pictureBox.AddTextAutoSize(new Point(hpos[8], vpos), new Size(colsw[8], this.Height), m.motherloadasteroids.ToString("N0"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
                         }
+
+                        if ( m.discovered )
+                            pictureBox.AddTextAutoSize(new Point(hpos[10], vpos), new Size(colsw[10], this.Height), " *", displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
 
                         vpos = ie1.Location.Bottom + displayfont.ScalePixels(2);
                     }
@@ -553,7 +557,7 @@ namespace EDDiscovery.UserControls
                     grd.GetSetsHeader.Add(delegate (int s, int r)
                     {
                         if (r == 0)
-                            return new object[] { "", "Ref.", "Coll.", "Pros", "Ratio%", "Avg%", "Min%", "Max%", "M.Load", "High Ct", "Med Ct", "Low Ct" };
+                            return new object[] { "", "Ref.", "Coll.", "Pros", "Ratio%", "Avg%", "Min%", "Max%", "M.Load", "High Ct", "Med Ct", "Low Ct", "Discv" };
                         else
                             return null;
                     });
@@ -579,7 +583,8 @@ namespace EDDiscovery.UserControls
                                               f.motherloadasteroids>0 ? f.motherloadasteroids.ToString("N0") : "" ,
                                               f.prospectednoasteroids>0 ? f.content[0].ToString("N0") :"",
                                               f.prospectednoasteroids>0 ? f.content[1].ToString("N0") : "",
-                                              f.prospectednoasteroids>0 ? f.content[2].ToString("N0") : "" };
+                                              f.prospectednoasteroids>0 ? f.content[2].ToString("N0") : "",
+                                              f.discovered ? "*" : ""  };
                         }
                         else
                             return null;
