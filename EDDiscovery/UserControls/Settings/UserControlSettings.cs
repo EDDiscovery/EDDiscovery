@@ -188,27 +188,39 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        private void dataGridViewCommanders_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.RowIndex < dataGridViewCommanders.Rows.Count)
+            {
+                CmdrEdit(e.RowIndex);
+            }
+        }
+
         private void buttonEditCommander_Click(object sender, EventArgs e)
         {
             if (dataGridViewCommanders.SelectedRows.Count > 0)
             {
-                int row = dataGridViewCommanders.SelectedRows[0].Index;
-                EDCommander cmdr = dataGridViewCommanders.Rows[row].DataBoundItem as EDCommander;
+                CmdrEdit(dataGridViewCommanders.SelectedRows[0].Index);
+            }
+        }
 
-                EliteDangerousCore.Forms.CommanderForm cf = new EliteDangerousCore.Forms.CommanderForm();
-                cf.Init(cmdr,false);
+        private void CmdrEdit(int row)
+        { 
+            EDCommander cmdr = dataGridViewCommanders.Rows[row].DataBoundItem as EDCommander;
 
-                if (cf.ShowDialog(FindForm()) == DialogResult.OK)
-                {
-                    bool forceupdate = cf.Update(cmdr);
-                    List<EDCommander> edcommanders = (List<EDCommander>)dataGridViewCommanders.DataSource;
-                    discoveryform.LoadCommandersListBox();
-                    EDCommander.Update(edcommanders, false);
-                    dataGridViewCommanders.Refresh();
+            EliteDangerousCore.Forms.CommanderForm cf = new EliteDangerousCore.Forms.CommanderForm();
+            cf.Init(cmdr,false);
 
-                    if ( forceupdate )                  // journal loc change forcing update
-                        discoveryform.RefreshHistoryAsync();        // do a resync
-                }
+            if (cf.ShowDialog(FindForm()) == DialogResult.OK)
+            {
+                bool forceupdate = cf.Update(cmdr);
+                List<EDCommander> edcommanders = (List<EDCommander>)dataGridViewCommanders.DataSource;
+                discoveryform.LoadCommandersListBox();
+                EDCommander.Update(edcommanders, false);
+                dataGridViewCommanders.Refresh();
+
+                if ( forceupdate )                  // journal loc change forcing update
+                    discoveryform.RefreshHistoryAsync();        // do a resync
             }
         }
 
@@ -641,6 +653,7 @@ namespace EDDiscovery.UserControls
 
             BaseUtils.BrowserInfo.LaunchBrowser("http://" + ipv4 + ":" + EDDConfig.Instance.WebServerPort.ToStringInvariant() + "/");
         }
+
     }
 }
 

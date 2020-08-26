@@ -581,6 +581,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewCommanders.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridViewCommanders.Size = new System.Drawing.Size(940, 104);
             this.dataGridViewCommanders.TabIndex = 2;
+            this.dataGridViewCommanders.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewCommanders_CellDoubleClick);
             // 
             // ColumnCommander
             // 
