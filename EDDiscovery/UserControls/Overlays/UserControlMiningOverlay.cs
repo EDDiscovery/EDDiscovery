@@ -544,8 +544,13 @@ namespace EDDiscovery.UserControls
                         return null;
                 };
 
+                grd.GetSetsPad = delegate (int s, int r)
                 {
-                    grd.GetLinePreHeaderSets.Add(delegate (int s, int r)
+                    return r < 2 ? new object[0] : null;
+                };
+
+                {
+                    grd.GetSetsHeader.Add(delegate (int s, int r)
                     {
                         if (r == 0)
                             return new object[] { "", "Ref.", "Coll.", "Pros", "Ratio%", "Avg%", "Min%", "Max%", "M.Load", "High Ct", "Med Ct", "Low Ct" };
@@ -553,15 +558,7 @@ namespace EDDiscovery.UserControls
                             return null;
                     });
 
-                    grd.GetLinePostHeaderSets.Add(delegate (int s, int r)
-                    {
-                        if (r < 2)
-                            return new object[0];
-                        else
-                            return null;
-                    });
-
-                    grd.GetLineSets.Add(delegate (int s, int r)
+                    grd.GetSetsData.Add(delegate (int s, int r)
                     {
                         if (r == 0)
                         {
@@ -592,7 +589,7 @@ namespace EDDiscovery.UserControls
                 var prosmat = found.Where(x => x.prospectednoasteroids > 0).ToList();
 
                 {
-                    grd.GetLinePreHeaderSets.Add(delegate (int s, int r)
+                    grd.GetSetsHeader.Add(delegate (int s, int r)
                     {
                         if (r == 0)
                         {
@@ -608,12 +605,7 @@ namespace EDDiscovery.UserControls
                             return null;
                     });
 
-                    grd.GetLinePostHeaderSets.Add(delegate (int s, int r)
-                    {
-                        return (r < 2) ? new object[0] { } : null;
-                    });
-
-                    grd.GetLineSets.Add(delegate (int s, int r)
+                    grd.GetSetsData.Add(delegate (int s, int r)
                     {
                         if (r < CFDbMax)
                         {
@@ -635,12 +627,10 @@ namespace EDDiscovery.UserControls
                     });
                 }
 
-
-
                 {
                     const int precol = 4;
 
-                    grd.GetLinePreHeaderSets.Add(delegate (int s, int r)
+                    grd.GetSetsHeader.Add(delegate (int s, int r)
                     {
                         if (r == 0)
                         {
@@ -659,14 +649,9 @@ namespace EDDiscovery.UserControls
                             return null;
                     });
 
-                    grd.GetLinePostHeaderSets.Add(delegate (int s, int r)
-                    {
-                        return (r < 2) ? new object[0] { } : null;
-                    });
-
                     var proslist = curlist.Where(x => x.EntryType == JournalTypeEnum.ProspectedAsteroid).ToList();
 
-                    grd.GetLineSets.Add(delegate (int s, int r)
+                    grd.GetSetsData.Add(delegate (int s, int r)
                     {
                         if (r < proslist.Count)
                         {
@@ -693,7 +678,6 @@ namespace EDDiscovery.UserControls
                     });
 
                 }
-
 
                 grd.WriteGrid(frm.Path, frm.AutoOpen, FindForm());
             }

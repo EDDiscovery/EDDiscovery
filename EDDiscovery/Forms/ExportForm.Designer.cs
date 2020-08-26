@@ -42,13 +42,17 @@
             this.panel_close = new ExtendedControls.ExtButtonDrawn();
             this.panel_minimize = new ExtendedControls.ExtButtonDrawn();
             this.label_index = new System.Windows.Forms.Label();
-            this.panelOuter = new System.Windows.Forms.Panel();
             this.labelUTCEnd = new System.Windows.Forms.Label();
             this.labelUTCStart = new System.Windows.Forms.Label();
             this.panelTop = new System.Windows.Forms.Panel();
+            this.flowLayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
+            this.panelDate = new System.Windows.Forms.Panel();
+            this.panelCombo = new System.Windows.Forms.Panel();
             this.panelBottom.SuspendLayout();
-            this.panelOuter.SuspendLayout();
             this.panelTop.SuspendLayout();
+            this.flowLayoutPanel.SuspendLayout();
+            this.panelDate.SuspendLayout();
+            this.panelCombo.SuspendLayout();
             this.SuspendLayout();
             // 
             // panelBottom
@@ -60,7 +64,7 @@
             this.panelBottom.Controls.Add(this.radioButtonComma);
             this.panelBottom.Controls.Add(this.checkBoxIncludeHeader);
             this.panelBottom.Controls.Add(this.checkBoxCustomAutoOpen);
-            this.panelBottom.Location = new System.Drawing.Point(6, 107);
+            this.panelBottom.Location = new System.Drawing.Point(3, 132);
             this.panelBottom.Name = "panelBottom";
             this.panelBottom.Size = new System.Drawing.Size(359, 154);
             this.panelBottom.TabIndex = 0;
@@ -175,7 +179,7 @@
             this.customDateTimePickerFrom.Checked = false;
             this.customDateTimePickerFrom.CustomFormat = "dd MMMM yyyy    HH:mm:ss";
             this.customDateTimePickerFrom.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.customDateTimePickerFrom.Location = new System.Drawing.Point(18, 40);
+            this.customDateTimePickerFrom.Location = new System.Drawing.Point(3, 12);
             this.customDateTimePickerFrom.Name = "customDateTimePickerFrom";
             this.customDateTimePickerFrom.SelectedColor = System.Drawing.Color.Yellow;
             this.customDateTimePickerFrom.ShowCheckBox = false;
@@ -192,7 +196,7 @@
             this.customDateTimePickerTo.Checked = false;
             this.customDateTimePickerTo.CustomFormat = "dd MMMM yyyy    HH:mm:ss";
             this.customDateTimePickerTo.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.customDateTimePickerTo.Location = new System.Drawing.Point(18, 73);
+            this.customDateTimePickerTo.Location = new System.Drawing.Point(3, 45);
             this.customDateTimePickerTo.Name = "customDateTimePickerTo";
             this.customDateTimePickerTo.SelectedColor = System.Drawing.Color.Yellow;
             this.customDateTimePickerTo.ShowCheckBox = false;
@@ -211,7 +215,7 @@
             this.comboBoxCustomExportType.DisplayMember = "";
             this.comboBoxCustomExportType.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.comboBoxCustomExportType.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxCustomExportType.Location = new System.Drawing.Point(18, 8);
+            this.comboBoxCustomExportType.Location = new System.Drawing.Point(3, 3);
             this.comboBoxCustomExportType.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxCustomExportType.Name = "comboBoxCustomExportType";
             this.comboBoxCustomExportType.ScrollBarButtonColor = System.Drawing.Color.LightGray;
@@ -231,7 +235,7 @@
             this.panel_close.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.panel_close.Image = null;
             this.panel_close.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Close;
-            this.panel_close.Location = new System.Drawing.Point(351, 2);
+            this.panel_close.Location = new System.Drawing.Point(348, 2);
             this.panel_close.MouseOverColor = System.Drawing.Color.White;
             this.panel_close.MouseSelectedColor = System.Drawing.Color.Green;
             this.panel_close.MouseSelectedColorEnable = true;
@@ -253,7 +257,7 @@
             this.panel_minimize.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.panel_minimize.Image = null;
             this.panel_minimize.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Minimize;
-            this.panel_minimize.Location = new System.Drawing.Point(327, 2);
+            this.panel_minimize.Location = new System.Drawing.Point(324, 2);
             this.panel_minimize.MouseOverColor = System.Drawing.Color.White;
             this.panel_minimize.MouseSelectedColor = System.Drawing.Color.Green;
             this.panel_minimize.MouseSelectedColorEnable = true;
@@ -279,25 +283,10 @@
             this.label_index.MouseDown += new System.Windows.Forms.MouseEventHandler(this.label_index_MouseDown);
             this.label_index.MouseUp += new System.Windows.Forms.MouseEventHandler(this.label_index_MouseUp);
             // 
-            // panelOuter
-            // 
-            this.panelOuter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panelOuter.Controls.Add(this.labelUTCEnd);
-            this.panelOuter.Controls.Add(this.labelUTCStart);
-            this.panelOuter.Controls.Add(this.comboBoxCustomExportType);
-            this.panelOuter.Controls.Add(this.panelBottom);
-            this.panelOuter.Controls.Add(this.customDateTimePickerFrom);
-            this.panelOuter.Controls.Add(this.customDateTimePickerTo);
-            this.panelOuter.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelOuter.Location = new System.Drawing.Point(0, 32);
-            this.panelOuter.Name = "panelOuter";
-            this.panelOuter.Size = new System.Drawing.Size(378, 275);
-            this.panelOuter.TabIndex = 31;
-            // 
             // labelUTCEnd
             // 
             this.labelUTCEnd.AutoSize = true;
-            this.labelUTCEnd.Location = new System.Drawing.Point(297, 83);
+            this.labelUTCEnd.Location = new System.Drawing.Point(282, 55);
             this.labelUTCEnd.Name = "labelUTCEnd";
             this.labelUTCEnd.Size = new System.Drawing.Size(29, 13);
             this.labelUTCEnd.TabIndex = 5;
@@ -306,7 +295,7 @@
             // labelUTCStart
             // 
             this.labelUTCStart.AutoSize = true;
-            this.labelUTCStart.Location = new System.Drawing.Point(297, 50);
+            this.labelUTCStart.Location = new System.Drawing.Point(282, 22);
             this.labelUTCStart.Name = "labelUTCStart";
             this.labelUTCStart.Size = new System.Drawing.Size(29, 13);
             this.labelUTCStart.TabIndex = 5;
@@ -320,27 +309,62 @@
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
             this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(378, 32);
+            this.panelTop.Size = new System.Drawing.Size(375, 32);
             this.panelTop.TabIndex = 32;
+            this.panelTop.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelTop_MouseDown);
+            this.panelTop.MouseUp += new System.Windows.Forms.MouseEventHandler(this.panelTop_MouseUp);
+            // 
+            // flowLayoutPanel
+            // 
+            this.flowLayoutPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.flowLayoutPanel.Controls.Add(this.panelCombo);
+            this.flowLayoutPanel.Controls.Add(this.panelDate);
+            this.flowLayoutPanel.Controls.Add(this.panelBottom);
+            this.flowLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.flowLayoutPanel.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.flowLayoutPanel.Location = new System.Drawing.Point(0, 32);
+            this.flowLayoutPanel.Name = "flowLayoutPanel";
+            this.flowLayoutPanel.Size = new System.Drawing.Size(375, 792);
+            this.flowLayoutPanel.TabIndex = 6;
+            // 
+            // panelDate
+            // 
+            this.panelDate.Controls.Add(this.customDateTimePickerFrom);
+            this.panelDate.Controls.Add(this.labelUTCEnd);
+            this.panelDate.Controls.Add(this.customDateTimePickerTo);
+            this.panelDate.Controls.Add(this.labelUTCStart);
+            this.panelDate.Location = new System.Drawing.Point(3, 43);
+            this.panelDate.Name = "panelDate";
+            this.panelDate.Size = new System.Drawing.Size(359, 83);
+            this.panelDate.TabIndex = 5;
+            // 
+            // panelCombo
+            // 
+            this.panelCombo.Controls.Add(this.comboBoxCustomExportType);
+            this.panelCombo.Location = new System.Drawing.Point(3, 3);
+            this.panelCombo.Name = "panelCombo";
+            this.panelCombo.Size = new System.Drawing.Size(359, 34);
+            this.panelCombo.TabIndex = 7;
             // 
             // ExportForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(378, 307);
-            this.Controls.Add(this.panelOuter);
+            this.ClientSize = new System.Drawing.Size(375, 824);
+            this.Controls.Add(this.flowLayoutPanel);
             this.Controls.Add(this.panelTop);
             this.Icon = global::EDDiscovery.Properties.Resources.edlogo_3mo_icon;
             this.Name = "ExportForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "ExportForm";
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ExportForm_FormClosed);
             this.panelBottom.ResumeLayout(false);
             this.panelBottom.PerformLayout();
-            this.panelOuter.ResumeLayout(false);
-            this.panelOuter.PerformLayout();
             this.panelTop.ResumeLayout(false);
             this.panelTop.PerformLayout();
+            this.flowLayoutPanel.ResumeLayout(false);
+            this.panelDate.ResumeLayout(false);
+            this.panelDate.PerformLayout();
+            this.panelCombo.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -361,9 +385,11 @@
         private System.Windows.Forms.Label label_index;
         private ExtendedControls.ExtCheckBox checkBoxCustomAutoOpen;
         private ExtendedControls.ExtButton buttonExport;
-        private System.Windows.Forms.Panel panelOuter;
         private System.Windows.Forms.Panel panelTop;
         private System.Windows.Forms.Label labelUTCEnd;
         private System.Windows.Forms.Label labelUTCStart;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel;
+        private System.Windows.Forms.Panel panelCombo;
+        private System.Windows.Forms.Panel panelDate;
     }
 }
