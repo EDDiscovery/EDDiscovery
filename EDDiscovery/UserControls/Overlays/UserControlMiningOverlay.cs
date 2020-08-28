@@ -212,7 +212,7 @@ namespace EDDiscovery.UserControls
                         var ld = e.journalEntry as JournalLaunchDrone;
                         if (ld.Type == JournalLaunchDrone.DroneType.Collection)
                             collectorsused++;
-                        else
+                        else if (ld.Type == JournalLaunchDrone.DroneType.Prospector)
                             prospectorsused++;
                         break;
                     case JournalTypeEnum.MiningRefined:
