@@ -196,7 +196,7 @@ namespace EDDiscovery
 
                 Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " JM On");
 
-                journalmonitor.StartMonitor();
+                journalmonitor.StartMonitor(true);
 
                 Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Call Refresh Complete");
 

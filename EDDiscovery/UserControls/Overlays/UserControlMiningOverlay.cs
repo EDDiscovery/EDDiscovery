@@ -39,6 +39,9 @@ namespace EDDiscovery.UserControls
             UpdateComboBox(null);
             BaseUtils.Translator.Instance.Translate(this);
             buttonExtExcel.Enabled = false;
+            timetimer = new Timer();
+            timetimer.Interval = 1000;
+            timetimer.Tick += Timetimer_Tick;
         }
 
         public override void LoadLayout()
@@ -90,6 +93,11 @@ namespace EDDiscovery.UserControls
         object selectedchart = null;
         const int CFDbMax = 50;
 
+        DateTime lasteventtime;     // timer system uses these
+        double lastrefined;
+        ExtendedControls.ExtPictureBox.ImageElement timeie;
+        Timer timetimer;
+
         private void Display(HistoryEntry he)       // at he, see if changed
         {
             if ( he != null )
@@ -131,7 +139,7 @@ namespace EDDiscovery.UserControls
             public string matnamefd2;
             public string friendlyname;
 
-            public double amountrefined;            // amount refined
+            public double amountrefined;            // amount refined. Double because i've seen entries with floats
             public double amountcollected;          // amount collected
             public double amountdiscarded;
             public bool discovered;
@@ -193,7 +201,7 @@ namespace EDDiscovery.UserControls
                                 matpa.content[1] += pa.Content == JournalProspectedAsteroid.AsteroidContent.Medium ? 1 : 0;
                                 matpa.content[2] += pa.Content == JournalProspectedAsteroid.AsteroidContent.Low ? 1 : 0;
 
-                                System.Diagnostics.Debug.WriteLine("Prospected {0} {1} {2}", m.Name, m.Proportion, pa.Content );
+                                //System.Diagnostics.Debug.WriteLine("Prospected {0} {1} {2}", m.Name, m.Proportion, pa.Content );
                             }
 
                             if (pa.MotherlodeMaterial.HasChars())
@@ -252,6 +260,9 @@ namespace EDDiscovery.UserControls
 
         private void Display()
         {
+            timetimer.Stop();       // redisplay, stop the time timer and lose the timeie.
+            timeie = null;
+
             pictureBox.ClearImageList();
             Controls.RemoveByKey("chart");
 
@@ -268,7 +279,6 @@ namespace EDDiscovery.UserControls
                 Color[] LineC = new Color[] { discoveryform.theme.VisitedSystemColor , discoveryform.theme.TextBlockHighlightColor,
                                                          Color.Blue, Color.Yellow, Color.Green, Color.Gray, Color.HotPink, Color.Teal };
 
-
                 using (StringFormat frmt = new StringFormat())
                 {
                     frmt.FormatFlags = StringFormatFlags.NoWrap;
@@ -284,7 +294,15 @@ namespace EDDiscovery.UserControls
                     for (int i = 1; i < hpos.Length; i++)
                         hpos[i] = hpos[i - 1] + colsw[i - 1];
 
-                    var ieprosp = pictureBox.AddTextAutoSize(new Point(hpos[0], vpos), new Size(this.Width - 20, this.Height), "Limpets left " + limpetsleft, displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+                    if (curlist.Count() > 0)
+                    {
+                        lasteventtime = curlist.Last().EventTimeUTC;        // record these for timer system
+                        lastrefined = found.Sum(x => x.amountrefined);
+                        string timetext = TimeText(true);
+                        timeie = pictureBox.AddTextAutoSize(new Point(hpos[0], vpos), new Size(colsw[0], this.Height), timetext, displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+                    }
+
+                    var ieprosp = pictureBox.AddTextAutoSize(new Point(hpos[1], vpos), new Size(this.Width - hpos[1] - 20, this.Height), "Limpets left " + limpetsleft, displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
                     vpos = ieprosp.Location.Bottom + displayfont.ScalePixels(2);
 
                     if (collectorsused > 0 || prospectorsused > 0)
@@ -469,6 +487,43 @@ namespace EDDiscovery.UserControls
 
             Update();
         }
+
+        private void Timetimer_Tick(object sender, EventArgs e)
+        {
+            Font displayfont = discoveryform.theme.GetFont;
+            Color textcolour = IsTransparent ? discoveryform.theme.SPanelColor : discoveryform.theme.LabelColor;
+            Color backcolour = IsTransparent ? Color.Transparent : this.BackColor;
+
+            using (StringFormat frmt = new StringFormat())
+            {
+                var lab = new ExtendedControls.ExtPictureBox.ImageElement();
+                lab.TextAutosize(timeie.Position, timeie.Size, TimeText(false), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+                pictureBox.RemoveItem(timeie, backcolour);
+                pictureBox.AddItem(lab);
+                timeie = lab;
+            }
+        }
+
+        private string TimeText(bool setstart)
+        {
+            if (curlist != null && curlist.Count > 0 )
+            {
+                bool inprogress = (DateTime.UtcNow - lasteventtime) < new TimeSpan(0, 15, 0);      // 15 min we are still in progress
+                TimeSpan timemining = inprogress ? (DateTime.UtcNow - curlist.First().EventTimeUTC) : (lasteventtime - curlist.First().EventTimeUTC);
+                string text = timemining.ToString(@"hh\:mm\:ss");
+                if (lastrefined > 0 && timemining.TotalHours>0)
+                {
+                    double rate = lastrefined / timemining.TotalHours;
+                    text += " " + rate.ToString("N1") + "t/Hr";
+                }
+                if (setstart && inprogress)
+                    timetimer.Start();
+                return text;
+            }
+            else
+                return "";
+        }
+
 
         #endregion
 
