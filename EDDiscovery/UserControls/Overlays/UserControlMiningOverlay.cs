@@ -27,6 +27,9 @@ namespace EDDiscovery.UserControls
     public partial class UserControlMiningOverlay :   UserControlCommonBase
     {
         private string DBChart { get { return DBName("MiningOverlay", "ChartSel"); } }
+        private string DBZeroRefined { get { return DBName("MiningOverlay", "ZeroRefined"); } }
+        private string DBRolledUp { get { return DBName("MiningOverlay", "RolledUp"); } }
+
         #region Init
 
         public UserControlMiningOverlay()
@@ -39,6 +42,10 @@ namespace EDDiscovery.UserControls
             UpdateComboBox(null);
             BaseUtils.Translator.Instance.Translate(this);
             buttonExtExcel.Enabled = false;
+            extCheckBoxZeroRefined.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DBZeroRefined, false);
+            extCheckBoxZeroRefined.CheckedChanged += new System.EventHandler(this.extCheckBoxZeroRefined_CheckedChanged);
+            extPanelRollUp.PinState = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DBRolledUp, true);
+
             timetimer = new Timer();
             timetimer.Interval = 1000;
             timetimer.Tick += Timetimer_Tick;
@@ -65,13 +72,27 @@ namespace EDDiscovery.UserControls
         public override bool SupportTransparency { get { return true; } }
         public override void SetTransparency(bool on, Color curcol)
         {
-            pictureBox.BackColor = this.BackColor = curcol;
+            if (on)
+            {
+                buttonExtExcel.ButtonColorScaling = extComboBoxChartOptions.ButtonColorScaling = 1.0f;
+                buttonExtExcel.BackColor = extComboBoxChartOptions.BackColor = curcol;
+            }
+            else
+            {
+                buttonExtExcel.ButtonColorScaling = extComboBoxChartOptions.ButtonColorScaling = 0.5f;
+                buttonExtExcel.BackColor = EDDTheme.Instance.Form;
+                extComboBoxChartOptions.BackColor = EDDTheme.Instance.ButtonBackColor;
+            }
+            extCheckBoxZeroRefined.BackColor = 
+            extPanelRollUp.BackColor = pictureBox.BackColor = this.BackColor = curcol;
             Display();
         }
 
         public override void Closing()
         {
+            timetimer.Stop();
             uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DBRolledUp, extPanelRollUp.PinState);
         }
 
         private void Uctg_OnTravelSelectionChanged(HistoryEntry he, HistoryList hl, bool selectedEntry)
@@ -88,15 +109,18 @@ namespace EDDiscovery.UserControls
 
         #region Implementation
 
-        List<HistoryEntry> curlist;
-        HistoryEntry heabove, hebelow;
-        object selectedchart = null;
-        const int CFDbMax = 50;
+        List<HistoryEntry> curlist;     // found events
+        HistoryEntry heabove, hebelow;  // markers
+        bool incurrentplay;             // true when heabove is at top of history AND its not a stop event - so we are in a play session
+        object selectedchart = null;    // chart count (if int) or material (string)
+        const int CFDbMax = 50;         // 0-N% on CFDB
 
-        DateTime lasteventtime;     // timer system uses these
-        double lastrefined;
-        ExtendedControls.ExtPictureBox.ImageElement timeie;
-        Timer timetimer;
+        double lastrefined;             // used for timer display - refined count   
+        ExtendedControls.ExtPictureBox.ImageElement timeie; // image element of time
+        Timer timetimer;                // and its timer
+
+        int limpetsleftdisplay = 0;     // used to track if we need to redisplay due to limpet change
+        int cargoleftdisplay = 0;       // used to track what we wrote for cargo
 
         private void Display(HistoryEntry he)       // at he, see if changed
         {
@@ -111,13 +135,19 @@ namespace EDDiscovery.UserControls
 
                 if (newlist != null)        // only if no history would we get null, unlikely since he has been tested, but still..
                 {
+                    int limpetsleft = newheabove.MaterialCommodity.FindFDName("drones")?.Count ?? 0;
+                    int cargoleft = newheabove.ShipInformation.CargoCapacity() - newheabove.MaterialCommodity.CargoCount;
+
                     // if no list, or diff no of items (due to new entry) or different start point, we reset and display, else we just quit as current is good
-                    if (curlist == null || newlist.Count != curlist.Count || hebelow != newhebelow) 
+                    if (curlist == null || newlist.Count != curlist.Count || hebelow != newhebelow || limpetsleft != limpetsleftdisplay || cargoleft != cargoleftdisplay) 
                     {
                         curlist = newlist;
                         heabove = newheabove;
                         hebelow = newhebelow;
-                        System.Diagnostics.Debug.WriteLine("Redisplay {0}", heabove.Indexno);
+                        limpetsleftdisplay = limpetsleft;
+                        cargoleftdisplay = cargoleft;
+                        incurrentplay = heabove == discoveryform.history.GetLast && !boundevents.Contains(heabove.EntryType);
+                        System.Diagnostics.Debug.WriteLine("Redisplay {0} current {1}", heabove.Indexno, incurrentplay);
                         Display();
 
                     }
@@ -168,9 +198,8 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private List<MaterialsFound> ReadHistory(out int limpetsleft, out int prospectorsused, out int collectorsused, out int asteroidscracked, out int prospected, out int[] content)
+        private List<MaterialsFound> ReadHistory(out int prospectorsused, out int collectorsused, out int asteroidscracked, out int prospected, out int[] content)
         {
-            limpetsleft = heabove.MaterialCommodity.FindFDName("drones")?.Count ?? 0;
             prospectorsused = 0;
             collectorsused = 0;
             asteroidscracked = 0;
@@ -268,7 +297,7 @@ namespace EDDiscovery.UserControls
 
             if (curlist != null)
             {
-                var found = ReadHistory(out int limpetsleft, out int prospectorsused, out int collectorsused, out int asteroidscracked, out int prospected, out int[] content);
+                var found = ReadHistory( out int prospectorsused, out int collectorsused, out int asteroidscracked, out int prospected, out int[] content);
 
                 Font displayfont = discoveryform.theme.GetFont;
                 Color textcolour = IsTransparent ? discoveryform.theme.SPanelColor : discoveryform.theme.LabelColor;
@@ -294,26 +323,37 @@ namespace EDDiscovery.UserControls
                     for (int i = 1; i < hpos.Length; i++)
                         hpos[i] = hpos[i - 1] + colsw[i - 1];
 
+                    int limpetscolpos = 0;
                     if (curlist.Count() > 0)
                     {
-                        lasteventtime = curlist.Last().EventTimeUTC;        // record these for timer system
-                        lastrefined = found.Sum(x => x.amountrefined);
+                        lastrefined = found.Sum(x => x.amountrefined);      // for use by timer
+
                         string timetext = TimeText(true);
-                        timeie = pictureBox.AddTextAutoSize(new Point(hpos[0], vpos), new Size(colsw[0], this.Height), timetext, displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+                        if (timetext.HasChars())
+                        {
+                            timeie = pictureBox.AddTextAutoSize(new Point(hpos[0], vpos), new Size(colsw[0], this.Height), timetext, displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+                            limpetscolpos = 1;
+                        }
+                    }
+                    else
+                        lastrefined = 0;
+
+                    {
+                        string text = string.Format("Limpets left {0}, Cargo left {1}", limpetsleftdisplay, cargoleftdisplay);
+                        if (collectorsused > 0 || prospectorsused > 0 || asteroidscracked > 0)
+                            text += string.Format(", Prospectors Fired {0}, Collectors Deployed {1}, Cracked {2}", prospectorsused, collectorsused, asteroidscracked);
+
+                        var ieprosp = pictureBox.AddTextAutoSize(new Point(hpos[limpetscolpos], vpos), new Size(this.Width - hpos[limpetscolpos] - 20, this.Height),
+                                    text, displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+
+                        vpos = ieprosp.Location.Bottom + displayfont.ScalePixels(2);
                     }
 
-                    var ieprosp = pictureBox.AddTextAutoSize(new Point(hpos[1], vpos), new Size(this.Width - hpos[1] - 20, this.Height), "Limpets left " + limpetsleft, displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
-                    vpos = ieprosp.Location.Bottom + displayfont.ScalePixels(2);
+                    bool displaytable = found.Count > 0 && (extCheckBoxZeroRefined.Checked ? lastrefined > 0 : true);
 
-                    if (collectorsused > 0 || prospectorsused > 0)
+                    if (displaytable)
                     {
-                        string text = BaseUtils.FieldBuilder.Build("Prospectors Fired ", prospectorsused, "Collectors Deployed ", collectorsused);
-                        pictureBox.AddTextAutoSize(new Point(ieprosp.Location.Right, ieprosp.Location.Top), new Size(this.Width - ieprosp.Location.Right - 20, this.Height), text, displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
-                    }
-
-                    if (prospected > 0 || found.Count > 0)
-                    {
-                        var ie = pictureBox.AddTextAutoSize(new Point(hpos[1], vpos), new Size(colsw[1], this.Height), "Ref.", displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+                        var ieheader = pictureBox.AddTextAutoSize(new Point(hpos[1], vpos), new Size(colsw[1], this.Height), "Ref.", displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
                         pictureBox.AddTextAutoSize(new Point(hpos[2], vpos), new Size(colsw[2], this.Height), "Coll.", displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
                         pictureBox.AddTextAutoSize(new Point(hpos[3], vpos), new Size(colsw[3], this.Height), "Prosp.", displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
 
@@ -324,42 +364,45 @@ namespace EDDiscovery.UserControls
                         pictureBox.AddTextAutoSize(new Point(hpos[8], vpos), new Size(colsw[8], this.Height), "M.Lode", displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
                         pictureBox.AddTextAutoSize(new Point(hpos[9], vpos), new Size(colsw[9], this.Height), "HML Ct.", displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
                         pictureBox.AddTextAutoSize(new Point(hpos[10], vpos), new Size(colsw[10], this.Height), "Discv", displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
-                        vpos = ie.Location.Bottom + displayfont.ScalePixels(2);
-                    }
+                        vpos = ieheader.Location.Bottom + displayfont.ScalePixels(2);
 
-                    if (prospected > 0)
-                    {
-                        var ie = pictureBox.AddTextAutoSize(new Point(hpos[0], vpos), new Size(colsw[0], this.Height), "Asteroids Pros.", displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
-                        pictureBox.AddTextAutoSize(new Point(hpos[3], vpos), new Size(colsw[3], this.Height), prospected.ToString("N0"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
-                        pictureBox.AddTextAutoSize(new Point(hpos[9], vpos), new Size(colsw[9], this.Height), content[0].ToString("N0") + "/" + content[1].ToString("N0") + "/" + content[2].ToString("N0"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
-                        vpos = ie.Location.Bottom + displayfont.ScalePixels(2);
-                    }
-
-                    foreach (var m in found)
-                    {
-                        var ie1 = pictureBox.AddTextAutoSize(new Point(hpos[0], vpos), new Size(colsw[0], this.Height), m.friendlyname, displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
-                        pictureBox.AddTextAutoSize(new Point(hpos[1], vpos), new Size(colsw[1], this.Height), m.amountrefined.ToString("N0"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
-                        pictureBox.AddTextAutoSize(new Point(hpos[2], vpos), new Size(colsw[2], this.Height), (m.amountcollected - m.amountdiscarded).ToString("N0"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
-                        if (m.prospectednoasteroids > 0)
+                        if (prospected > 0)
                         {
-                            pictureBox.AddTextAutoSize(new Point(hpos[3], vpos), new Size(colsw[3], this.Height), m.prospectednoasteroids.ToString("N0"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
-
-                            pictureBox.AddTextAutoSize(new Point(hpos[4], vpos), new Size(colsw[4], this.Height), (100.0 * (double)m.prospectednoasteroids / prospected).ToString("N1"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
-                            pictureBox.AddTextAutoSize(new Point(hpos[5], vpos), new Size(colsw[5], this.Height), m.prospectedamounts.Average().ToString("N1"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
-                            pictureBox.AddTextAutoSize(new Point(hpos[6], vpos), new Size(colsw[6], this.Height), m.prospectedamounts.Min().ToString("N1"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
-                            pictureBox.AddTextAutoSize(new Point(hpos[7], vpos), new Size(colsw[7], this.Height), m.prospectedamounts.Max().ToString("N1"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
-                            pictureBox.AddTextAutoSize(new Point(hpos[9], vpos), new Size(colsw[9], this.Height), m.content[0].ToString("N0") + "/" + m.content[1].ToString("N0") + "/" + m.content[2].ToString("N0"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+                            var ie = pictureBox.AddTextAutoSize(new Point(hpos[0], vpos), new Size(colsw[0], this.Height), "Asteroids Pros.", displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+                            pictureBox.AddTextAutoSize(new Point(hpos[3], vpos), new Size(colsw[3], this.Height), prospected.ToString("N0"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+                            pictureBox.AddTextAutoSize(new Point(hpos[9], vpos), new Size(colsw[9], this.Height), content[0].ToString("N0") + "/" + content[1].ToString("N0") + "/" + content[2].ToString("N0"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+                            vpos = ie.Location.Bottom + displayfont.ScalePixels(2);
                         }
 
-                        if (m.motherloadasteroids > 0)
+                        foreach (var m in found)
                         {
-                            pictureBox.AddTextAutoSize(new Point(hpos[8], vpos), new Size(colsw[8], this.Height), m.motherloadasteroids.ToString("N0"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+                            if (!extCheckBoxZeroRefined.Checked || m.amountrefined > 0)
+                            {
+                                var ie1 = pictureBox.AddTextAutoSize(new Point(hpos[0], vpos), new Size(colsw[0], this.Height), m.friendlyname, displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+                                pictureBox.AddTextAutoSize(new Point(hpos[1], vpos), new Size(colsw[1], this.Height), m.amountrefined.ToString("N0"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+                                pictureBox.AddTextAutoSize(new Point(hpos[2], vpos), new Size(colsw[2], this.Height), (m.amountcollected - m.amountdiscarded).ToString("N0"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+                                if (m.prospectednoasteroids > 0)
+                                {
+                                    pictureBox.AddTextAutoSize(new Point(hpos[3], vpos), new Size(colsw[3], this.Height), m.prospectednoasteroids.ToString("N0"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+
+                                    pictureBox.AddTextAutoSize(new Point(hpos[4], vpos), new Size(colsw[4], this.Height), (100.0 * (double)m.prospectednoasteroids / prospected).ToString("N1"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+                                    pictureBox.AddTextAutoSize(new Point(hpos[5], vpos), new Size(colsw[5], this.Height), m.prospectedamounts.Average().ToString("N1"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+                                    pictureBox.AddTextAutoSize(new Point(hpos[6], vpos), new Size(colsw[6], this.Height), m.prospectedamounts.Min().ToString("N1"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+                                    pictureBox.AddTextAutoSize(new Point(hpos[7], vpos), new Size(colsw[7], this.Height), m.prospectedamounts.Max().ToString("N1"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+                                    pictureBox.AddTextAutoSize(new Point(hpos[9], vpos), new Size(colsw[9], this.Height), m.content[0].ToString("N0") + "/" + m.content[1].ToString("N0") + "/" + m.content[2].ToString("N0"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+                                }
+
+                                if (m.motherloadasteroids > 0)
+                                {
+                                    pictureBox.AddTextAutoSize(new Point(hpos[8], vpos), new Size(colsw[8], this.Height), m.motherloadasteroids.ToString("N0"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+                                }
+
+                                if (m.discovered)
+                                    pictureBox.AddTextAutoSize(new Point(hpos[10], vpos), new Size(colsw[10], this.Height), " *", displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+
+                                vpos = ie1.Location.Bottom + displayfont.ScalePixels(2);
+                            }
                         }
-
-                        if ( m.discovered )
-                            pictureBox.AddTextAutoSize(new Point(hpos[10], vpos), new Size(colsw[10], this.Height), " *", displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
-
-                        vpos = ie1.Location.Bottom + displayfont.ScalePixels(2);
                     }
 
                     pictureBox.Render(true, new Size(0, vpos + displayfont.ScalePixels(8)));       // control is resized with a min height
@@ -508,7 +551,8 @@ namespace EDDiscovery.UserControls
         {
             if (curlist != null && curlist.Count > 0 )
             {
-                bool inprogress = (DateTime.UtcNow - lasteventtime) < new TimeSpan(0, 15, 0);      // 15 min we are still in progress
+                DateTime lasteventtime = curlist.Last().EventTimeUTC;        // last event time
+                bool inprogress = incurrentplay && (DateTime.UtcNow - lasteventtime) < new TimeSpan(0, 15, 0);      // N min we are still in progress, and we are in current play
                 TimeSpan timemining = inprogress ? (DateTime.UtcNow - curlist.First().EventTimeUTC) : (lasteventtime - curlist.First().EventTimeUTC);
                 string text = timemining.ToString(@"hh\:mm\:ss");
                 if (lastrefined > 0 && timemining.TotalHours>0)
@@ -577,6 +621,12 @@ namespace EDDiscovery.UserControls
         }
 
 
+        private void extCheckBoxZeroRefined_CheckedChanged(object sender, EventArgs e)
+        {
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DBZeroRefined, extCheckBoxZeroRefined.Checked);
+            Display();
+        }
+
         #endregion
 
         #region excel
@@ -591,12 +641,12 @@ namespace EDDiscovery.UserControls
                 BaseUtils.CSVWriteGrid grd = new BaseUtils.CSVWriteGrid();
                 grd.SetCSVDelimiter(frm.Comma);
 
-                var found = ReadHistory(out int limpetsleft, out int prospectorsused, out int collectorsused, out int asteroidscracked, out int prospected, out int[] content);
+                var found = ReadHistory(out int prospectorsused, out int collectorsused, out int asteroidscracked, out int prospected, out int[] content);
 
                 grd.GetPreHeader += delegate (int r)
                 {
                     if (r == 0)
-                        return new Object[] { "Limpets left ", limpetsleft, "Prospectors Fired", prospectorsused, "Collectors Deployed", collectorsused };
+                        return new Object[] { "Limpets left ", limpetsleftdisplay, "Prospectors Fired", prospectorsused, "Collectors Deployed", collectorsused };
                     else if (r == 1)
                         return new object[0];
                     else
