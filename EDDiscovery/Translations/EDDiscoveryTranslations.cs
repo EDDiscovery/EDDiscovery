@@ -530,6 +530,23 @@ namespace EDDiscovery
         UserControlRouteTracker_Unk, // Unknown location
         UserControlRouteTracker_NoCo, // No systems in route have known co-ords
 
+        UserControlMiningOverlay_Limcargo,
+        UserControlMiningOverlay_Proscoll,
+        UserControlMiningOverlay_ref,
+        UserControlMiningOverlay_pros,
+        UserControlMiningOverlay_coll,
+        UserControlMiningOverlay_ratio,
+        UserControlMiningOverlay_avg,
+        UserControlMiningOverlay_min,
+        UserControlMiningOverlay_max,
+        UserControlMiningOverlay_mload,
+        UserControlMiningOverlay_hml,
+        UserControlMiningOverlay_discv,
+        UserControlMiningOverlay_content,
+        UserControlMiningOverlay_above,
+        UserControlMiningOverlay_dist,
+        UserControlMiningOverlay_astpros,
+
         UserControlSpanel_Goldilocks, // Goldilocks, {0} ({1}-{2} AU),
         UserControlSpanel_Target, // Target
         UserControlSpanel_TVE, // View system on EDSM
@@ -668,6 +685,7 @@ namespace EDDiscovery
         SearchMaterialsCommodities_OR, // OR
         SearchMaterialsCommodities_DIS, // Discovered at
         SearchMaterialsCommodities_COL, // Collected at
+        SearchMaterialsCommodities_MR, // Mission Reward at
 
         SearchScans_Select, // Select
         SearchScans_Name, // Name:

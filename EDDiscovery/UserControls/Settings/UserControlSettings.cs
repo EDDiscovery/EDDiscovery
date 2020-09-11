@@ -493,7 +493,7 @@ namespace EDDiscovery.UserControls
 
             if (!gss.Init(EDDConfig.Instance.EDSMGridIDs))
             {
-                ExtendedControls.MessageBoxTheme.Show(this, "Warning".T(EDTx.Warning), "No map downloaded - please wait for it to download".T(EDTx.UserControlSettings_NoMap));
+                ExtendedControls.MessageBoxTheme.Show(this, "Warning".T(EDTx.Warning), "No map available!".T(EDTx.UserControlSettings_NoMap));
             }
             else if (gss.ShowDialog() == DialogResult.OK)
             {

@@ -109,7 +109,6 @@ namespace EDDiscovery.UserControls
             this.buttonExtExcel.Name = "buttonExtExcel";
             this.buttonExtExcel.Size = new System.Drawing.Size(24, 24);
             this.buttonExtExcel.TabIndex = 60;
-            this.buttonExtExcel.Text = "2";
             this.buttonExtExcel.UseVisualStyleBackColor = true;
             this.buttonExtExcel.Click += new System.EventHandler(this.buttonExtExcel_Click);
             // 
@@ -132,7 +131,7 @@ namespace EDDiscovery.UserControls
             this.extComboBoxChartOptions.SelectedValue = null;
             this.extComboBoxChartOptions.Size = new System.Drawing.Size(225, 21);
             this.extComboBoxChartOptions.TabIndex = 3;
-            this.extComboBoxChartOptions.Text = "extComboBox1";
+            this.extComboBoxChartOptions.Text = "";
             this.extComboBoxChartOptions.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.extComboBoxChartOptions.ValueMember = "";
             // 

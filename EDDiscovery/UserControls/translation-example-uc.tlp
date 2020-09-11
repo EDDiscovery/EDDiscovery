@@ -100,6 +100,7 @@ SECTION SearchMaterialsCommodities
 .OR: "OR" @
 .DIS: "Discovered at " @
 .COL: "Collected at " @
+.MR: "Mission Reward at " @
 .label2: "Item 2" @
 .label1: "Item 1" @
 .buttonExtFind: "Find" @
@@ -108,6 +109,7 @@ SECTION SearchMaterialsCommodities
 .ColumnLocation: "Location" @
 .ColumnCurrentDistance: "Current Distance" @
 .ColumnPosition: "Position" @
+
 
 SECTION SearchScans
 
@@ -177,12 +179,18 @@ SECTION UserControlEstimatedValues
 
 .BodyName: "Body Name" @
 .EstValue: "Est Value" @
+.BodyType: "Body Type" @
+.Mapped: "Mapped" @
+.WasMapped: "Already Mapped" @
+.WasDiscovered: "Already Discovered" @
+
 .SV: "Estimated Scan Values for {0}" @
 .EDSM: "EDSM" @
 .checkBoxEDSM.ToolTip: "Get and show information from EDSM" @
 
 SECTION UserControlExpedition
 
+.toolStripButtonImportNavRoute: "Import Nav route" @
 .SystemName: "System Name" @
 .Distance: "Dist." @
 .Note: "Note" @
@@ -312,6 +320,7 @@ SECTION UserControlLedger
 .toolStripMenuItemGotoItem: "Go to entry on grid" @
 .CashTransactions: "Cash Transactions" @
 .buttonExtExcel.ToolTip: "Send data on grid to excel" @
+.NOLG: "No Ledger available" @
 
 SECTION UserControlLocalMap
 
@@ -365,6 +374,8 @@ SECTION UserControlMarketData
 .Conly: "Cargo only, no market data on this item" @
 .LEntry: "Travel History Entry Last" @
 .panelButtons.ToolTip: "When arriving at a station where you are comparing against (on the right)\r\nswap t" @
+.checkBoxSellOnly: "Sell Only" @
+.checkBoxSellOnly.ToolTip: "Show items you can sell only" @
 
 SECTION UserControlMaterials
 
@@ -442,6 +453,7 @@ SECTION UserControlSurveyor
 .Hasring: " Has ring." @
 .Has: " Has " @
 .Signals: " Has Signals." @
+.islandable: " is landable." @
 
 .planetaryClassesToolStripMenuItem: "Planetary Classes" @
 .planetaryClassesToolStripMenuItem.ammoniaWorldToolStripMenuItem: "Ammonia World" @
@@ -458,13 +470,13 @@ SECTION UserControlSurveyor
 .textAlignToolStripMenuItem.rightToolStripMenuItem: "Right" @
 
 .bodyFeaturesToolStripMenuItem.hasSignalsToolStripMenuItem: "Has Signals" @
+.bodyFeaturesToolStripMenuItem.landableToolStripMenuItem: "Landable" @
 .showAllPlanetsToolStripMenuItem: "Show All Planets" @
 .showAllStarsToolStripMenuItem: "Show All Stars" @
 .showBeltClustersToolStripMenuItem: "Show Belt Clusters" @
 .showMoreInformationToolStripMenuItem: "Show More Information" @
 .showValuesToolStripMenuItem: "Show values" @
 .wordWrapToolStripMenuItem: "Word Wrap" @
-
 
 SECTION UserControlMissions
 
@@ -555,6 +567,8 @@ SECTION UserControlModules
 .buttonExtExcel.ToolTip: "Send data on grid to excel" @
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 .AllModules: "All Modules" @
+.ForceSell: "Force Sell" @
+.NOSI: "No Ship Information available" @
 
 SECTION UserControlNotePanel
 
@@ -618,6 +632,7 @@ SECTION UserControlPlot
 .D1: "\r\n{0} distance {1:N2} Ly" @
 .D2: "\r\n    Visits: {0}" @
 .D3: "\r\n    Coordinates: X:{0:N2}, Y:{1:N2}, Z:{2:N2}\r\n" @
+.Nt": "\r\n    Notes: {0}\r\n" @
 
 SECTION UserControlRoute
 
@@ -888,12 +903,14 @@ SECTION UserControlSettings
 .Information: "Applies at next restart of ED Discovery" @
 .AddC: "Commander name is not valid or duplicate" @
 .AddT: "Cannot create Commander" @
+.DelCmdr: "Do you wish to delete commander " @
 .Language: "Applies at next restart of ED Discovery" @
 .RemoveSectors: "Remove Sectors" @
 .GalRemove: "Removing {0} Sector(s).\r\n\r\nThis will take a while (up to 30 mins dep on drive type and amount of sectors).\r\nYou may continue to use EDD while this operation takes place\r\nbut it may be slow to respond. Do not close down EDD until this window says\r\nthe process has finished\r\n\r\n" @
 .GalFini: "Finished, Please close the window.\r\nIf you already have the 3dmap open, changes will not be reflected in that map until the next start of EDD\r\n" @
 .GameTime: "Game Time" @
 .Local: "Local" @
+.NoMap: "No map available!" @
 
 SECTION UserControlShipYards
 
@@ -995,6 +1012,7 @@ SECTION UserControlStarDistance
 .textMaxRadius.ToolTip: "Maximum star distance in ly" @
 .From: "From {0}" @
 .NoEDSMSys: "System could not be found - has not been synched or EDSM is unavailable" @
+.viewSystemToolStripMenuItem: "View System" @
 
 SECTION UserControlStarList
 
@@ -1020,6 +1038,7 @@ SECTION UserControlStarList
 .viewScanDisplayToolStripMenuItem: "View Scan Display" @
 .Total: "Total" @
 .Signals: "{0} has signals" @
+.Distance: " ({0} ls)" @
 
 .FV: "First visit {0}" @
 .CS: "{0} Star(s) {1}" @
@@ -1289,6 +1308,14 @@ SECTION UserControlSysInfo
 .SysUnk: "System unknown to EDSM" @
 .Pos: "Position is {0:0.00},{1:0.00},{2:0.00}" @
 .Target: "On 3D Map right click to make a bookmark, region mark or click on a notemark and then tick on Set Target, or type it here and hit enter" @
+.extButtonEDSMTarget: "EDSM" @
+.labelOpenShip: "Open" @
+.labelOpenStation: "Open" @
+.extButtonSpanshStation: "S" @
+.extButtonSpanshSystem: "S" @
+.displayStationButtonsToolStripMenuItem: "Display Station Buttons" @
+.displayShipButtonsToolStripMenuItem: "Display Ship Buttons" @
+
 
 SECTION UserControlContainerSplitter
 
@@ -1348,6 +1375,7 @@ SECTION UserControlTravelGrid
 .runActionsAcrossSelectionToolSpeechStripMenuItem: "Run actions across selection for speech debugging (Debug)" @
 .runSelectionThroughInaraSystemToolStripMenuItem: "Run selection through Inara System (Debug)" @
 .runEntryThroughProfileSystemToolStripMenuItem: "Run entry through Profile System (Debug)" @
+.runSelectionThroughEDDNDebugNoSendToolStripMenuItem: "Run selection through EDDN no send (Debug)" @
 .TT1: " showing {0} original {1}" @
 .TTFilt1: "Filtered {0}" @
 .TTSelAge: "Select the entries by age, " @
@@ -1461,6 +1489,9 @@ SECTION UserControlTrilateration
 .PF: "Position found" @
 .addAllSectorSystemsToolStripMenuItem: "Add all Sector systems" @
 .toolStripButtonSector: "Sector Systems" @
+.NotProcGen: "Sector name could not be derived from system name (it may not be procedurally generated).  Not getting sector systems." @
+.NoSector: "No systems with unknown coordinates were found for the current sector." @
+.SectorCount: "{0} systems with unknown coordinates found in {1} sector." @
 
 SECTION UserControlTrippanel
 
@@ -1477,6 +1508,7 @@ SECTION UserControlTrippanel
 .NoT: " -> Target not set" @
 .FDEDSM: "Shows if EDSM indicates your it's first discoverer" @
 .UKN: "System {0} unknown to EDSM" @
+.Left: "Left" @
 
 SECTION UserControlMaterialTrader
 
@@ -1495,6 +1527,27 @@ SECTION UserControlMaterialTrader
 .Raw: "Raw" @
 .Encoded: "Encoded" @
 .Manufactured: "Manufactured" @
+
+SECTION UserControlMiningOverlay
+
+.extCheckBoxZeroRefined: ">0" @
+.Proscoll: ", Prospectors Fired {0}, Collectors Deployed {1}, Cracked {2}" @
+.ref: "Ref." @
+.coll: "Coll." @
+.pros: "Prosp." @
+.ratio: "Ratio%" @
+.avg: "Avg%" @
+.min: "Min%" @
+.max: "Max%" @
+.mload: "M.Lode" @
+.hml: "HML Ct." @
+.discv: "Discv" @
+.astpros: "Asteroids Pros." @
+.content: "Content %" @
+.above: "% Above" @
+.dist: "Distribution" @
+.Limcargo: "Limpets left {0}, Cargo left {1}" @
+
 
 
 SECTION ScanDisplayUserControl
@@ -1534,3 +1587,6 @@ SECTION FilterSelector
 SECTION UserControlCommonBase
 
 .Copyingtexttoclipboardfailed: "Copying text to clipboard failed" @
+
+CSV.Helpers.OpenFailed: "Failed to open " @
+CSV.Helpers.WriteFailed: "Failed to write to " @

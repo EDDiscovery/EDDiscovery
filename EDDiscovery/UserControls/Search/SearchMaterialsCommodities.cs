@@ -167,7 +167,7 @@ namespace EDDiscovery.UserControls
                 {
                     var je = he.journalEntry as JournalMissionCompleted;
                     if (je.HasReceivedReward(cm.FDName))
-                        found = new Tuple<HistoryEntry, string>(he, prefix + "Mission Reward at ".T(EDTx.SearchMaterialsCommodities_COL) + he.WhereAmI);
+                        found = new Tuple<HistoryEntry, string>(he, prefix + "Mission Reward at ".T(EDTx.SearchMaterialsCommodities_MR) + he.WhereAmI);
                 }
 
                 else if (he.EntryType == JournalTypeEnum.SAASignalsFound)
