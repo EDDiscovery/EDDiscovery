@@ -1116,7 +1116,7 @@
   <Target Name="BeforeBuild">
   </Target>
   -->
-  <Target Name="AfterBuild" Outputs="$(OutDir)EDDiscovery.Portable.zip" Condition=" '$(OS)' != 'Unix' ">
+  <Target Name="AfterBuild" Outputs="$(OutDir)EDDiscovery.Portable.zip" Condition=" '$(OS)' != 'Unix' And '$(Configuration)' != 'Debug' ">
     <ItemGroup>
       <WebFiles Include="$(MSBuildProjectDirectory)\..\WebSite\EDD\**" />
     </ItemGroup>
