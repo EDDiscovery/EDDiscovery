@@ -345,7 +345,7 @@ namespace EDDiscovery
                 EDDConfig.Instance.EDSMEDDBDownload = ressel.Item1 != "None";
                 EDDConfig.Instance.EDSMGridIDs = ressel.Item2;
                 if (EDDConfig.Instance.EDSMEDDBDownload)
-                    Controller.AsyncPerformSync(edsmfullsync: true, eddb_edsmalias_sync:true);      // order another go.
+                    Controller.AsyncPerformSync(edsmfullsync: true, eddb_edsmalias_sync: true);      // order another go.
             }
 
             if (EDDOptions.Instance.NoWindowReposition == false)
@@ -372,7 +372,7 @@ namespace EDDiscovery
 
             screenshotconverter.OnScreenshot += (infile, outfile, imagesize, ss) => // screenshot seen
             {
-                if ( ss!= null)
+                if (ss != null)
                 {
                     ss.SetConvertedFilename(infile ?? "Deleted", outfile, imagesize.Width, imagesize.Height);       // record in SS the in/out files
                 }
@@ -412,7 +412,7 @@ namespace EDDiscovery
                 {
                     if (ExtendedControls.MessageBoxTheme.Show(this,
                                     string.Format(("The following application extension DLL have been found" + Environment.NewLine +
-                                    "Do you wish to allow it to be used?" + Environment.NewLine + Environment.NewLine + 
+                                    "Do you wish to allow it to be used?" + Environment.NewLine + Environment.NewLine +
                                     "{0} " + Environment.NewLine
                                     ).T(EDTx.EDDiscoveryForm_DLLW), dll),
                                     "Warning".T(EDTx.Warning),
@@ -442,6 +442,11 @@ namespace EDDiscovery
                 LogLineHighlight(string.Format("DLLs failed to load: {0}".T(EDTx.EDDiscoveryForm_DLLF), res.Item2));
 
             LogLine(string.Format("Profile {0} Loaded".T(EDTx.EDDiscoveryForm_PROFL), EDDProfiles.Instance.Current.Name));
+
+            if (actioncontroller.FrontierBindings.FileLoaded != null)
+                LogLine(string.Format("Loaded Bindings {0}", actioncontroller.FrontierBindings.FileLoaded));
+            else
+                LogLine("Frontier bindings did not load");
 
             Notifications.CheckForNewNotifications((notelist) =>
             {
