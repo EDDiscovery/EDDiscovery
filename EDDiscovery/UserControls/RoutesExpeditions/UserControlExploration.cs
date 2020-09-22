@@ -734,7 +734,7 @@ namespace EDDiscovery.UserControls
             {
                 JObject jo = JObject.ParseThrowCommaEOL(File.ReadAllText(fileName));
 
-                Name = jo["Name"].ToString();
+                Name = jo["Name"].Str();
 
                 Systems.Clear();
 
