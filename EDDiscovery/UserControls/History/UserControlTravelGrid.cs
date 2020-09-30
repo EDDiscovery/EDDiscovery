@@ -135,7 +135,7 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNewEntry += AddNewEntry;
             discoveryform.OnNoteChanged += OnNoteChanged;
 
-            contextMenuStripOutlines.SetToolStripState(EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbOutlines, ""));
+            contextMenuStripOutlines.SetToolStripState(EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbOutlines, "rollUpOffToolStripMenuItem;"));
             this.rollUpOffToolStripMenuItem.Click += new System.EventHandler(this.rolluplimitToolStripMenuItem_Click);
             this.rollUpAfterFirstToolStripMenuItem.Click += new System.EventHandler(this.rolluplimitToolStripMenuItem_Click);
             this.rollUpAfter5ToolStripMenuItem.Click += new System.EventHandler(this.rolluplimitToolStripMenuItem_Click);
@@ -256,7 +256,7 @@ namespace EDDiscovery.UserControls
 
             System.Diagnostics.Stopwatch swtotal = new System.Diagnostics.Stopwatch();
 
-            //int lrowno = 0;
+            int lrowno = 0;
 
             if (chunks.Count != 0)
             {
@@ -272,8 +272,9 @@ namespace EDDiscovery.UserControls
                     if (row != null)
                     {
                         //row.Cells[2].Value = (lrowno++).ToString() + " " + item.Journalid + " " + (string)row.Cells[2].Value;
-                        row.Visible = outlining?.Process(item, dataGridViewTravel.RowCount, rollupscans, rollupolder) ?? true;
+                        row.Visible = outlining?.Process(item, lrowno, rollupscans, rollupolder) ?? true;
                         rowstoadd.Add(row);
+                        lrowno++;
                     }
                 }
 
@@ -297,8 +298,9 @@ namespace EDDiscovery.UserControls
                         if (row != null)
                         {
                             //row.Cells[2].Value = (lrowno++).ToString() + " " + item.Journalid + " " + (string)row.Cells[2].Value;
-                            row.Visible = outlining?.Process(item, dataGridViewTravel.RowCount, rollupscans, rollupolder) ?? true;
+                            row.Visible = outlining?.Process(item, lrowno, rollupscans, rollupolder) ?? true;
                             rowstoadd.Add(row);
+                            lrowno++;
                         }
                     }
 

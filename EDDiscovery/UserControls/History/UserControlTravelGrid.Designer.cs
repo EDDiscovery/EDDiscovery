@@ -306,7 +306,7 @@ namespace EDDiscovery.UserControls
             this.runSelectionThroughIGAUDebugToolStripMenuItem,
             this.runSelectionThroughEDDNDebugNoSendToolStripMenuItem});
             this.historyContextMenu.Name = "historyContextMenu";
-            this.historyContextMenu.Size = new System.Drawing.Size(388, 510);
+            this.historyContextMenu.Size = new System.Drawing.Size(388, 488);
             this.historyContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.historyContextMenu_Opening);
             // 
             // removeSortingOfColumnsToolStripMenuItem
@@ -665,7 +665,7 @@ namespace EDDiscovery.UserControls
             this.scanEventsOutliningOnOffToolStripMenuItem,
             this.toolStripRollUpOlderOutlines});
             this.contextMenuStripOutlines.Name = "contextMenuStripOutlines";
-            this.contextMenuStripOutlines.Size = new System.Drawing.Size(190, 70);
+            this.contextMenuStripOutlines.Size = new System.Drawing.Size(190, 92);
             // 
             // outliningOnOffToolStripMenuItem
             // 
@@ -700,7 +700,7 @@ namespace EDDiscovery.UserControls
             this.rollUpOffToolStripMenuItem.Checked = true;
             this.rollUpOffToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.rollUpOffToolStripMenuItem.Name = "rollUpOffToolStripMenuItem";
-            this.rollUpOffToolStripMenuItem.Size = new System.Drawing.Size(125, 22);
+            this.rollUpOffToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.rollUpOffToolStripMenuItem.Text = "Off";
             // 
             // rollUpAfterFirstToolStripMenuItem
@@ -708,7 +708,7 @@ namespace EDDiscovery.UserControls
             this.rollUpAfterFirstToolStripMenuItem.Checked = true;
             this.rollUpAfterFirstToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.rollUpAfterFirstToolStripMenuItem.Name = "rollUpAfterFirstToolStripMenuItem";
-            this.rollUpAfterFirstToolStripMenuItem.Size = new System.Drawing.Size(125, 22);
+            this.rollUpAfterFirstToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.rollUpAfterFirstToolStripMenuItem.Text = "After First";
             // 
             // rollUpAfter5ToolStripMenuItem
@@ -716,7 +716,7 @@ namespace EDDiscovery.UserControls
             this.rollUpAfter5ToolStripMenuItem.Checked = true;
             this.rollUpAfter5ToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.rollUpAfter5ToolStripMenuItem.Name = "rollUpAfter5ToolStripMenuItem";
-            this.rollUpAfter5ToolStripMenuItem.Size = new System.Drawing.Size(125, 22);
+            this.rollUpAfter5ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.rollUpAfter5ToolStripMenuItem.Text = "After 5";
             // 
             // panelTop

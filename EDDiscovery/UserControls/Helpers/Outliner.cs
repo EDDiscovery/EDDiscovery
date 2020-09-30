@@ -45,7 +45,7 @@ public class Outlining
         if (he.EntryType == JournalTypeEnum.Fileheader)                 // main group boundary
         {
             panel.Add(maingroup, rowindex, maingroupvisible, true);        // add it in, no update
-                                                                           //System.Diagnostics.Debug.WriteLine("Main Roll up" + maingroup + "-" + rowindex + " rolled " + maingroupvisible);
+            //System.Diagnostics.Debug.WriteLine("Fileheader Roll up" + maingroup + "-" + rowindex + " rolled " + maingroupvisible);
             maingroup = rowindex + 1;
             maingroupcount++;
             maingroupvisible = linevisible = true; // override to show this line - maingroup as well in case co-indident with scan end
