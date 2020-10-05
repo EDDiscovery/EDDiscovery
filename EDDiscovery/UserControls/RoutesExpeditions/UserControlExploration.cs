@@ -456,12 +456,12 @@ namespace EDDiscovery.UserControls
                 int countunknown = 0;
                 foreach (Tuple<ISystem, double> ret in syslist)
                 {
-                    string name = ret.Item1.Name;
+                    ret.Item1.Name = ret.Item1.Name.Trim();
 
-                    ISystem sc = SystemCache.FindSystem(name.Trim());
+                    ISystem sc = SystemCache.FindCachedJournalSystem(ret.Item1);
                     if (sc == null)
                     {
-                        sc = new SystemClass(name.Trim());
+                        sc = ret.Item1;
                         countunknown++;
                     }
                     systems.Add(sc.Name);
