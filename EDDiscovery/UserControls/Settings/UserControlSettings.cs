@@ -622,7 +622,7 @@ namespace EDDiscovery.UserControls
                                  "-Protocol TCP;" +
                                  "netsh http add urlacl " +
                                 $"url = http://*:{EDDConfig.Instance.WebServerPort.ToStringInvariant()}/ " +
-                                $"user=\"{Environment.GetEnvironmentVariable("USERNAME")}\"";
+                                $"user=\"{Environment.GetEnvironmentVariable("USERDOMAIN")}\\{Environment.GetEnvironmentVariable("USERNAME")}\"";
 
                     int pid = process.StartProcess("Powershell.exe", cmd, "runas");
 
