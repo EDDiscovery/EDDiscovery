@@ -75,7 +75,7 @@ namespace EDDiscovery.UserControls
                     if (sc.IsStar)
                     {
                         if (ShowStarClasses)
-                            overlaytext = sc.StarClassification;
+                            overlaytext = sc.StarClassificationAbv;
 
                         if (sc.nStellarMass.HasValue)
                             nodelabels[1] = nodelabels[1].AppendPrePad($"{sc.nStellarMass.Value:N2} SM", Environment.NewLine);
@@ -285,7 +285,7 @@ namespace EDDiscovery.UserControls
 
                 Size bmpsize = new Size(size.Width, planetsize.Height * nodeheightratio / noderatiodivider);
 
-                endpoint = CreateImageAndLabel(pc, Icons.Controls.Scan_Bodies_Belt, position, bmpsize, out ximagecentre, new string[] { sn.ownname + appendlabeltext }, tip, false);
+                endpoint = CreateImageAndLabel(pc, Icons.Controls.Scan_Bodies_Belt, position, bmpsize, out ximagecentre, new string[] { sn.ownname.AppendPrePad(appendlabeltext, Environment.NewLine) }, tip, false);
             }
             else
             {
@@ -295,7 +295,7 @@ namespace EDDiscovery.UserControls
                     tip = sn.ownname + Environment.NewLine + Environment.NewLine + "No scan data available".T(EDTx.ScanDisplayUserControl_NSD);
 
                 string nodelabel = sn.customname ?? sn.ownname;
-                nodelabel += appendlabeltext;
+                nodelabel = nodelabel.AppendPrePad(appendlabeltext,Environment.NewLine);
 
                 endpoint = CreateImageAndLabel(pc, notscanned, position, size, out ximagecentre, new string[] { nodelabel }, tip, false);
             }
