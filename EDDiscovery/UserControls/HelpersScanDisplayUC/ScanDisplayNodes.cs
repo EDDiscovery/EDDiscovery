@@ -268,7 +268,7 @@ namespace EDDiscovery.UserControls
             else if (sn.type == StarScan.ScanNodeType.belt)
             {
                 if (sn.BeltData != null)
-                    tip = sn.BeltData.RingInformationMoons(true);
+                    tip = sn.BeltData.RingInformationMoons(true,"");
                 else
                     tip = sn.ownname + Environment.NewLine + Environment.NewLine + "No scan data available".T(EDTx.ScanDisplayUserControl_NSD);
 
@@ -278,7 +278,8 @@ namespace EDDiscovery.UserControls
                     {
                         if (snc.ScanData != null)
                         {
-                            tip += "\n\n" + snc.ScanData.DisplayString();
+                            string sd = snc.ScanData.DisplayString() + "\n";
+                            tip += "\n" + sd;
                         }
                     }
                 }
