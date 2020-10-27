@@ -155,6 +155,9 @@ namespace EDDiscovery.UserControls
             TravelHistoryFilter.InitaliseComboBox(comboBoxHistoryWindow, DbHistorySave);
 
             dataViewScrollerPanel.LimitLargeChange = 4; // since row sizes can be variable, estimating large change on visible rows is problematic
+
+            extButtonDrawnHelp.Text = "";
+            extButtonDrawnHelp.Image = ExtendedControls.TabStrip.HelpIcon;
         }
 
         private void ToolStripOutliningOn_CheckStateChanged(object sender, EventArgs e)
@@ -1302,6 +1305,11 @@ namespace EDDiscovery.UserControls
                 EDDNSync.SendToEDDN(rightclickhe, true);
             }
 
+        }
+
+        private void extButtonDrawnHelp_Click(object sender, EventArgs e)
+        {
+            EDDHelp.Help(this.FindForm(), extButtonDrawnHelp.PointToScreen(new Point(0,extButtonDrawnHelp.Bottom)),this);
         }
 
         private void runActionsAcrossSelectionToolStripMenuItem_Click(object sender, EventArgs e)

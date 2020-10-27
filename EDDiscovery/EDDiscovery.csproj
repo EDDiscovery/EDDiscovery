@@ -173,6 +173,7 @@
   <ItemGroup>
     <Compile Include="Actions\ActionControllerKeys.cs" />
     <Compile Include="Actions\ActionControllerVoice.cs" />
+    <Compile Include="EDDHelp.cs" />
     <Compile Include="Translations\EDDiscoveryTranslations.cs" />
     <Compile Include="UserControls\EngineeringSynthesis\UserControlMaterialTrader.cs">
       <SubType>UserControl</SubType>

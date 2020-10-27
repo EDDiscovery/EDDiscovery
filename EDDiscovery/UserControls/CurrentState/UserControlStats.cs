@@ -688,7 +688,7 @@ namespace EDDiscovery.UserControls
 
             if (userControlStatsTimeScan.StarPlanetMode)
             {
-                foreach (EDStar obj in Bodies.StarTypes)
+                foreach (EDStar obj in Enum.GetValues(typeof(EDStar)))
                 {
                     for (int ii = 0; ii < intervals; ii++)
                     {
@@ -703,7 +703,7 @@ namespace EDDiscovery.UserControls
 
                     }
 
-                    StatToDGV(dataGridViewScan, Bodies.StarTypeNameShorter(obj), strarr);
+                    StatToDGV(dataGridViewScan, Bodies.StarName(obj), strarr);
                 }
             }
             else

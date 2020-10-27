@@ -14,18 +14,10 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
 using System.Data;
+using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using EDDiscovery.Forms;
-using EDDiscovery.UserControls;
-using EliteDangerousCore.DB;
-using EliteDangerousCore;
 
 namespace EDDiscovery.UserControls
 {
@@ -238,10 +230,13 @@ namespace EDDiscovery.UserControls
 
                 tabstrip.OnCreateTab += (tab, si) =>        // called when the tab strip wants a new control for a tab. 
                 {
-                    PanelInformation.PanelInfo pi = PanelInformation.GetPanelInfoByPanelID((PanelInformation.PanelIDs)tab.TagList[si]);  // must be valid, as it came from the taglist
+                    PanelInformation.PanelInfo pi = PanelInformation.GetPanelInfoByPanelID((PanelInformation.PanelIDs)tabstrip.TagList[si]);  // must be valid, as it came from the taglist
                     Control c = PanelInformation.Create(pi.PopoutID);
-                    (c as UserControlCommonBase).AutoScaleMode = AutoScaleMode.Inherit; 
+                    var uccb = (c as UserControlCommonBase);
+                    uccb.AutoScaleMode = AutoScaleMode.Inherit;
                     c.Name = pi.WindowTitle;        // tabs uses Name field for display, must set it
+                    tab.HelpAction = (pt) => { EDDHelp.Help(this.FindForm(), pt,uccb); };
+
                     System.Diagnostics.Trace.WriteLine("SP:Create Tab " + c.Name );
                     return c;
                 };

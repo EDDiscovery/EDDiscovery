@@ -949,6 +949,8 @@
     <EmbeddedResource Include="Bodies\Planets\Terrestrial\MRBv14.png" />
     <EmbeddedResource Include="Bodies\Planets\Giant\GG4v12.png" />
     <EmbeddedResource Include="Bodies\Planets\Giant\GG4v13.png" />
+    <EmbeddedResource Include="Controls\Help\Wiki.png" />
+    <EmbeddedResource Include="Controls\Help\Video.png" />
     <Content Include="Controls\readme.txt" />
     <EmbeddedResource Include="Panels\MissionOverlay.png" />
     <EmbeddedResource Include="Journal\CrimeVictim.png" />

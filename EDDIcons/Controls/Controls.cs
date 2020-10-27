@@ -278,6 +278,10 @@ namespace EDDiscovery.Icons
         public static Image All { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.General.All"); } }
         public static Image None { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.General.None"); } }
         #endregion
+        #region Help
+        public static Image Help_Wiki { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Help.Wiki"); } }
+        public static Image Help_Video { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Help.Video"); } }
+        #endregion
 
     }
 }

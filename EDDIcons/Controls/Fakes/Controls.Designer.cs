@@ -333,6 +333,26 @@ namespace EDDiscovery.Icons {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap Help_Video {
+            get {
+                object obj = ResourceManager.GetObject("Help_Video", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap Help_Wiki {
+            get {
+                object obj = ResourceManager.GetObject("Help_Wiki", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap ImportExcel {
             get {
                 object obj = ResourceManager.GetObject("ImportExcel", resourceCulture);
@@ -659,7 +679,7 @@ namespace EDDiscovery.Icons {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>

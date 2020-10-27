@@ -101,6 +101,7 @@ namespace EDDiscovery.UserControls
             this.rollUpAfterFirstToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rollUpAfter5ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelTop = new System.Windows.Forms.FlowLayoutPanel();
+            this.extButtonDrawnHelp = new ExtendedControls.ExtButtonDrawn();
             this.historyContextMenu.SuspendLayout();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTravel)).BeginInit();
@@ -665,7 +666,7 @@ namespace EDDiscovery.UserControls
             this.scanEventsOutliningOnOffToolStripMenuItem,
             this.toolStripRollUpOlderOutlines});
             this.contextMenuStripOutlines.Name = "contextMenuStripOutlines";
-            this.contextMenuStripOutlines.Size = new System.Drawing.Size(190, 92);
+            this.contextMenuStripOutlines.Size = new System.Drawing.Size(190, 70);
             // 
             // outliningOnOffToolStripMenuItem
             // 
@@ -700,7 +701,7 @@ namespace EDDiscovery.UserControls
             this.rollUpOffToolStripMenuItem.Checked = true;
             this.rollUpOffToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.rollUpOffToolStripMenuItem.Name = "rollUpOffToolStripMenuItem";
-            this.rollUpOffToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.rollUpOffToolStripMenuItem.Size = new System.Drawing.Size(125, 22);
             this.rollUpOffToolStripMenuItem.Text = "Off";
             // 
             // rollUpAfterFirstToolStripMenuItem
@@ -708,7 +709,7 @@ namespace EDDiscovery.UserControls
             this.rollUpAfterFirstToolStripMenuItem.Checked = true;
             this.rollUpAfterFirstToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.rollUpAfterFirstToolStripMenuItem.Name = "rollUpAfterFirstToolStripMenuItem";
-            this.rollUpAfterFirstToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.rollUpAfterFirstToolStripMenuItem.Size = new System.Drawing.Size(125, 22);
             this.rollUpAfterFirstToolStripMenuItem.Text = "After First";
             // 
             // rollUpAfter5ToolStripMenuItem
@@ -716,7 +717,7 @@ namespace EDDiscovery.UserControls
             this.rollUpAfter5ToolStripMenuItem.Checked = true;
             this.rollUpAfter5ToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.rollUpAfter5ToolStripMenuItem.Name = "rollUpAfter5ToolStripMenuItem";
-            this.rollUpAfter5ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.rollUpAfter5ToolStripMenuItem.Size = new System.Drawing.Size(125, 22);
             this.rollUpAfter5ToolStripMenuItem.Text = "After 5";
             // 
             // panelTop
@@ -732,11 +733,34 @@ namespace EDDiscovery.UserControls
             this.panelTop.Controls.Add(this.checkBoxCursorToTop);
             this.panelTop.Controls.Add(this.extCheckBoxWordWrap);
             this.panelTop.Controls.Add(this.extCheckBoxOutlines);
+            this.panelTop.Controls.Add(this.extButtonDrawnHelp);
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
             this.panelTop.Name = "panelTop";
             this.panelTop.Size = new System.Drawing.Size(870, 30);
             this.panelTop.TabIndex = 31;
+            // 
+            // extButtonDrawnHelp
+            // 
+            this.extButtonDrawnHelp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.extButtonDrawnHelp.AutoEllipsis = false;
+            this.extButtonDrawnHelp.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.extButtonDrawnHelp.Image = null;
+            this.extButtonDrawnHelp.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Text;
+            this.extButtonDrawnHelp.Location = new System.Drawing.Point(570, 3);
+            this.extButtonDrawnHelp.MouseOverColor = System.Drawing.Color.White;
+            this.extButtonDrawnHelp.MouseSelectedColor = System.Drawing.Color.Green;
+            this.extButtonDrawnHelp.MouseSelectedColorEnable = true;
+            this.extButtonDrawnHelp.Name = "extButtonDrawnHelp";
+            this.extButtonDrawnHelp.Padding = new System.Windows.Forms.Padding(6);
+            this.extButtonDrawnHelp.PanelDisabledScaling = 0.25F;
+            this.extButtonDrawnHelp.Selectable = true;
+            this.extButtonDrawnHelp.Size = new System.Drawing.Size(24, 24);
+            this.extButtonDrawnHelp.TabIndex = 31;
+            this.extButtonDrawnHelp.Text = "?";
+            this.extButtonDrawnHelp.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.extButtonDrawnHelp.UseMnemonic = true;
+            this.extButtonDrawnHelp.Click += new System.EventHandler(this.extButtonDrawnHelp_Click);
             // 
             // UserControlTravelGrid
             // 
@@ -814,5 +838,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripMenuItem runSelectionThroughIGAUDebugToolStripMenuItem;
         private ExtendedControls.ExtCheckBox extCheckBoxWordWrap;
         private System.Windows.Forms.ToolStripMenuItem runSelectionThroughEDDNDebugNoSendToolStripMenuItem;
+        private ExtendedControls.ExtButtonDrawn extButtonDrawnHelp;
     }
 }

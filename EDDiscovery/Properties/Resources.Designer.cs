@@ -66,16 +66,16 @@ namespace EDDiscovery.Properties {
         ///
         ///Developers for this release series:
         ///Robby (Releaser)
-        ///Bravada Cadelanne, Iain Ross, Andrea Spada, Carcher99
+        ///Bravada Cadelanne, Iain Ross, Andrea Spada
         ///
         ///Images Captured by:
         ///Spandino, Robby, Eahlstan, Ettanin, CompleteNOOB from Frontier Elite Dangerous Images (C) Frontier Developments PLC
         ///
         ///Languages Translations:
-        ///Potatossuaro, Zafford, Andrea Spada, Goscickiw, Nats-ji, Jay
+        ///Kmizole, Potatossuaro, Zafford, Andrea Spada, Goscickiw, Nats-ji, Jay
         ///
         ///Previous Contributors:
-        ///IGAU, EoD, Imathrowback, phwoelfel, Robosa, Daniel-finger, Phroggie, Finwen, Corbin Moran,  [rest of string was truncated]&quot;;.
+        ///Carcher99, IGAU, EoD, Imathrowback, phwoelfel, Robosa, Daniel-finger, Phroggie, Finwen, Corbi [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Credits {
             get {
@@ -356,6 +356,24 @@ namespace EDDiscovery.Properties {
         internal static string URLProjectLicense {
             get {
                 return ResourceManager.GetString("URLProjectLicense", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://www.youtube.com/channel/UC6CMbualdRleR47ocYPnokg/.
+        /// </summary>
+        internal static string URLProjectVideos {
+            get {
+                return ResourceManager.GetString("URLProjectVideos", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://www.youtube.com.
+        /// </summary>
+        internal static string URLProjectVideosRoot {
+            get {
+                return ResourceManager.GetString("URLProjectVideosRoot", resourceCulture);
             }
         }
         

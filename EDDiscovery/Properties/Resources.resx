@@ -217,4 +217,10 @@
   <data name="URLSpanshSystemSystemId" xml:space="preserve">
     <value>https://spansh.co.uk/system/</value>
   </data>
+  <data name="URLProjectVideos" xml:space="preserve">
+    <value>https://www.youtube.com/channel/UC6CMbualdRleR47ocYPnokg/</value>
+  </data>
+  <data name="URLProjectVideosRoot" xml:space="preserve">
+    <value>https://www.youtube.com</value>
+  </data>
 </root>

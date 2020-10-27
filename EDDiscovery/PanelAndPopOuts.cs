@@ -14,15 +14,11 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
-using EDDiscovery.Icons;
 using EDDiscovery.UserControls;
-using EliteDangerousCore.DB;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EDDiscovery
 {
@@ -113,7 +109,7 @@ namespace EDDiscovery
             { new PanelInfo( PanelIDs.MaterialTrader, typeof(UserControlMaterialTrader), "Material Trader", "MaterialTrader", "Material trader") },
 
             { new PanelInfo( "Scans and Stars") },
-            { new PanelInfo( PanelIDs.Scan, typeof(UserControlScan), "Scan", "Scan", "Scan data on system", transparent: false) },
+            { new PanelInfo( PanelIDs.Scan, typeof(UserControlScan), "Scan", "Scan", "Scan data on system", false ) },
             { new PanelInfo( PanelIDs.EDSM, typeof(UserControlEDSM), "EDSM", "EDSM", "Automatic web view of EDSM page on system") },
             { new PanelInfo( PanelIDs.ScanGrid, typeof(UserControlScanGrid), "Scan Grid", "ScanGrid", "Scan data on system in a grid", transparent: false) },
             { new PanelInfo( PanelIDs.StarDistance, typeof(UserControlStarDistance), "Nearest Stars", "StarDistance","Nearest stars from current position") },
@@ -288,7 +284,12 @@ namespace EDDiscovery
 
         static public PanelIDs? GetPanelIDByWindowsRefName(string name) // null if not found
         {
-            return displayablepanels.Find(x=>x.WindowRefName.Equals(name, StringComparison.InvariantCultureIgnoreCase))?.PopoutID;
+            return displayablepanels.Find(x => x.WindowRefName.Equals(name, StringComparison.InvariantCultureIgnoreCase))?.PopoutID;
+        }
+
+        static public PanelIDs? GetPanelIDByControltype( Type ctrl) // null if not found
+        {
+            return displayablepanels.Find(x => x.PopoutType == ctrl)?.PopoutID;
         }
 
         static public PanelInfo GetPanelInfoByPanelID(PanelIDs p)    // null if p is invalid

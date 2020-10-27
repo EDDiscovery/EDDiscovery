@@ -231,6 +231,7 @@ namespace EDDiscovery
         public string FlightsAppDirectory() { return SubAppDirectory("Flights"); }
         public string ThemeAppDirectory() { return SubAppDirectory("Theme"); }
         public string DLLAppDirectory() { return SubAppDirectory("DLL"); }
+        public string HelpDirectory() { return SubAppDirectory("Help"); }
         public string TranslatorDirectory() { return translationfolder; }
         public int TranslatorDirectoryIncludeSearchUpDepth { get; private set; }
         static public string ExeDirectory() { return System.AppDomain.CurrentDomain.BaseDirectory;  }

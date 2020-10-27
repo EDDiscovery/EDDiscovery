@@ -67,8 +67,10 @@ namespace EDDiscovery
             this.removeTabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.renameTabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.popOutPanelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.helpTabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelToolBar = new ExtendedControls.ExtPanelRollUp();
             this.flowToolBar = new System.Windows.Forms.FlowLayoutPanel();
+            this.extButtonDrawnHelp = new ExtendedControls.ExtButtonDrawn();
             this.statusStrip = new ExtendedControls.ExtStatusStrip();
             this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
@@ -108,7 +110,8 @@ namespace EDDiscovery
             this.stopCurrentlyRunningActionProgramToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.eDDiscoveryHomepageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.wikiHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewHelpVideosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpMenuSeparatorTop = new System.Windows.Forms.ToolStripSeparator();
             this.eDDiscoveryChatDiscordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.frontierForumThreadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -183,11 +186,11 @@ namespace EDDiscovery
             this.tabControlMain.AllowDragReorder = true;
             this.tabControlMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControlMain.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.tabControlMain.Location = new System.Drawing.Point(0, 55);
+            this.tabControlMain.Location = new System.Drawing.Point(0, 58);
             this.tabControlMain.Multiline = true;
             this.tabControlMain.Name = "tabControlMain";
             this.tabControlMain.SelectedIndex = 0;
-            this.tabControlMain.Size = new System.Drawing.Size(969, 644);
+            this.tabControlMain.Size = new System.Drawing.Size(969, 641);
             this.tabControlMain.TabColorScaling = 0.5F;
             this.tabControlMain.TabControlBorderBrightColor = System.Drawing.Color.LightGray;
             this.tabControlMain.TabControlBorderColor = System.Drawing.Color.DarkGray;
@@ -342,7 +345,7 @@ namespace EDDiscovery
             this.buttonReloadActions.Location = new System.Drawing.Point(458, 1);
             this.buttonReloadActions.Margin = new System.Windows.Forms.Padding(1, 1, 3, 1);
             this.buttonReloadActions.Name = "buttonReloadActions";
-            this.buttonReloadActions.Size = new System.Drawing.Size(65, 23);
+            this.buttonReloadActions.Size = new System.Drawing.Size(65, 24);
             this.buttonReloadActions.TabIndex = 1;
             this.buttonReloadActions.Text = "Actions";
             this.buttonReloadActions.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -357,9 +360,10 @@ namespace EDDiscovery
             this.addTabToolStripMenuItem,
             this.removeTabToolStripMenuItem,
             this.renameTabToolStripMenuItem,
-            this.popOutPanelToolStripMenuItem});
+            this.popOutPanelToolStripMenuItem,
+            this.helpTabToolStripMenuItem});
             this.contextMenuStripTabs.Name = "contextMenuStripTabs";
-            this.contextMenuStripTabs.Size = new System.Drawing.Size(189, 92);
+            this.contextMenuStripTabs.Size = new System.Drawing.Size(189, 114);
             this.contextMenuStripTabs.Opening += new System.ComponentModel.CancelEventHandler(this.ContextMenuStripTabs_Opening);
             // 
             // addTabToolStripMenuItem
@@ -386,6 +390,12 @@ namespace EDDiscovery
             this.popOutPanelToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
             this.popOutPanelToolStripMenuItem.Text = "Pop Out Panel..";
             // 
+            // helpTabToolStripMenuItem
+            // 
+            this.helpTabToolStripMenuItem.Name = "helpTabToolStripMenuItem";
+            this.helpTabToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.helpTabToolStripMenuItem.Text = "Help";
+            // 
             // panelToolBar
             // 
             this.panelToolBar.AutoSize = true;
@@ -402,7 +412,7 @@ namespace EDDiscovery
             this.panelToolBar.RollUpDelay = 1000;
             this.panelToolBar.SecondHiddenMarkerWidth = 0;
             this.panelToolBar.ShowHiddenMarker = true;
-            this.panelToolBar.Size = new System.Drawing.Size(969, 27);
+            this.panelToolBar.Size = new System.Drawing.Size(969, 30);
             this.panelToolBar.TabIndex = 1;
             this.panelToolBar.UnrollHoverDelay = 1000;
             // 
@@ -418,12 +428,35 @@ namespace EDDiscovery
             this.flowToolBar.Controls.Add(this.buttonExtPopOut);
             this.flowToolBar.Controls.Add(this.buttonExtEDSMSync);
             this.flowToolBar.Controls.Add(this.buttonReloadActions);
+            this.flowToolBar.Controls.Add(this.extButtonDrawnHelp);
             this.flowToolBar.Location = new System.Drawing.Point(0, 0);
             this.flowToolBar.Margin = new System.Windows.Forms.Padding(0);
             this.flowToolBar.Name = "flowToolBar";
-            this.flowToolBar.Size = new System.Drawing.Size(623, 27);
+            this.flowToolBar.Size = new System.Drawing.Size(623, 30);
             this.flowToolBar.TabIndex = 5;
             this.flowToolBar.WrapContents = false;
+            // 
+            // extButtonDrawnHelp
+            // 
+            this.extButtonDrawnHelp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.extButtonDrawnHelp.AutoEllipsis = false;
+            this.extButtonDrawnHelp.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.extButtonDrawnHelp.Image = null;
+            this.extButtonDrawnHelp.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Text;
+            this.extButtonDrawnHelp.Location = new System.Drawing.Point(529, 3);
+            this.extButtonDrawnHelp.MouseOverColor = System.Drawing.Color.White;
+            this.extButtonDrawnHelp.MouseSelectedColor = System.Drawing.Color.Green;
+            this.extButtonDrawnHelp.MouseSelectedColorEnable = true;
+            this.extButtonDrawnHelp.Name = "extButtonDrawnHelp";
+            this.extButtonDrawnHelp.Padding = new System.Windows.Forms.Padding(6);
+            this.extButtonDrawnHelp.PanelDisabledScaling = 0.25F;
+            this.extButtonDrawnHelp.Selectable = true;
+            this.extButtonDrawnHelp.Size = new System.Drawing.Size(24, 24);
+            this.extButtonDrawnHelp.TabIndex = 25;
+            this.extButtonDrawnHelp.Text = "?";
+            this.extButtonDrawnHelp.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.extButtonDrawnHelp.UseMnemonic = true;
+            this.extButtonDrawnHelp.Click += new System.EventHandler(this.extButtonDrawnHelp_Click);
             // 
             // statusStrip
             // 
@@ -477,7 +510,7 @@ namespace EDDiscovery
             this.menuFlowPanel.Location = new System.Drawing.Point(0, 0);
             this.menuFlowPanel.Margin = new System.Windows.Forms.Padding(0);
             this.menuFlowPanel.Name = "menuFlowPanel";
-            this.menuFlowPanel.Size = new System.Drawing.Size(376, 24);
+            this.menuFlowPanel.Size = new System.Drawing.Size(496, 24);
             this.menuFlowPanel.TabIndex = 23;
             this.menuFlowPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MouseDownCAPTION);
             this.menuFlowPanel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MouseUpCAPTION);
@@ -494,7 +527,7 @@ namespace EDDiscovery
             this.mainMenu.Location = new System.Drawing.Point(0, 0);
             this.mainMenu.Name = "mainMenu";
             this.mainMenu.Padding = new System.Windows.Forms.Padding(0);
-            this.mainMenu.Size = new System.Drawing.Size(214, 24);
+            this.mainMenu.Size = new System.Drawing.Size(334, 24);
             this.mainMenu.TabIndex = 16;
             // 
             // toolsToolStripMenuItem
@@ -632,7 +665,7 @@ namespace EDDiscovery
             this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem.Name = "dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem";
             this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem.Size = new System.Drawing.Size(396, 22);
             this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem.Text = "Reset all history to current commander";
-            this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem.Click += new System.EventHandler(this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem_Click);
+            this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem.Click += new System.EventHandler(this.debugResetAllHistoryToFirstCommanderToolStripMenuItem_Click);
             // 
             // read21AndFormerLogFilesToolStripMenuItem
             // 
@@ -647,14 +680,14 @@ namespace EDDiscovery
             // load21ToolStripMenuItem
             // 
             this.load21ToolStripMenuItem.Name = "load21ToolStripMenuItem";
-            this.load21ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.load21ToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
             this.load21ToolStripMenuItem.Text = "Scan Netlogs";
             this.load21ToolStripMenuItem.Click += new System.EventHandler(this.read21AndFormerLogFilesToolStripMenuItem_Click);
             // 
             // read21AndFormerLogFiles_forceReloadLogsToolStripMenuItem
             // 
             this.read21AndFormerLogFiles_forceReloadLogsToolStripMenuItem.Name = "read21AndFormerLogFiles_forceReloadLogsToolStripMenuItem";
-            this.read21AndFormerLogFiles_forceReloadLogsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.read21AndFormerLogFiles_forceReloadLogsToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
             this.read21AndFormerLogFiles_forceReloadLogsToolStripMenuItem.Text = "Force reload logs";
             this.read21AndFormerLogFiles_forceReloadLogsToolStripMenuItem.Click += new System.EventHandler(this.read21AndFormerLogFiles_forceReloadLogsToolStripMenuItem_Click);
             // 
@@ -768,7 +801,8 @@ namespace EDDiscovery
             // 
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.aboutToolStripMenuItem,
-            this.eDDiscoveryHomepageToolStripMenuItem,
+            this.wikiHelpToolStripMenuItem,
+            this.viewHelpVideosToolStripMenuItem,
             this.helpMenuSeparatorTop,
             this.eDDiscoveryChatDiscordToolStripMenuItem,
             this.frontierForumThreadToolStripMenuItem,
@@ -789,14 +823,23 @@ namespace EDDiscovery
             this.aboutToolStripMenuItem.Text = "&About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
-            // eDDiscoveryHomepageToolStripMenuItem
+            // wikiHelpToolStripMenuItem
             // 
-            this.eDDiscoveryHomepageToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.Main_Help_Help;
-            this.eDDiscoveryHomepageToolStripMenuItem.Name = "eDDiscoveryHomepageToolStripMenuItem";
-            this.eDDiscoveryHomepageToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F1;
-            this.eDDiscoveryHomepageToolStripMenuItem.Size = new System.Drawing.Size(354, 22);
-            this.eDDiscoveryHomepageToolStripMenuItem.Text = "&View Help";
-            this.eDDiscoveryHomepageToolStripMenuItem.Click += new System.EventHandler(this.eDDiscoveryHomepageToolStripMenuItem_Click);
+            this.wikiHelpToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.Main_Help_Help;
+            this.wikiHelpToolStripMenuItem.Name = "wikiHelpToolStripMenuItem";
+            this.wikiHelpToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F1;
+            this.wikiHelpToolStripMenuItem.Size = new System.Drawing.Size(354, 22);
+            this.wikiHelpToolStripMenuItem.Text = "&View Help";
+            this.wikiHelpToolStripMenuItem.Click += new System.EventHandler(this.wikiHelpToolStripMenuItem_Click);
+            // 
+            // viewHelpVideosToolStripMenuItem
+            // 
+            this.viewHelpVideosToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.Main_Help_Help;
+            this.viewHelpVideosToolStripMenuItem.Name = "viewHelpVideosToolStripMenuItem";
+            this.viewHelpVideosToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.F1)));
+            this.viewHelpVideosToolStripMenuItem.Size = new System.Drawing.Size(354, 22);
+            this.viewHelpVideosToolStripMenuItem.Text = "View Help Videos";
+            this.viewHelpVideosToolStripMenuItem.Click += new System.EventHandler(this.viewHelpVideosToolStripMenuItem_Click);
             // 
             // helpMenuSeparatorTop
             // 
@@ -860,7 +903,7 @@ namespace EDDiscovery
             // 
             this.label_version.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label_version.AutoSize = true;
-            this.label_version.Location = new System.Drawing.Point(222, 6);
+            this.label_version.Location = new System.Drawing.Point(342, 6);
             this.label_version.Margin = new System.Windows.Forms.Padding(8, 1, 3, 0);
             this.label_version.Name = "label_version";
             this.label_version.Size = new System.Drawing.Size(43, 13);
@@ -874,7 +917,7 @@ namespace EDDiscovery
             // 
             this.labelInfoBoxTop.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.labelInfoBoxTop.AutoSize = true;
-            this.labelInfoBoxTop.Location = new System.Drawing.Point(276, 6);
+            this.labelInfoBoxTop.Location = new System.Drawing.Point(396, 6);
             this.labelInfoBoxTop.Margin = new System.Windows.Forms.Padding(8, 1, 3, 0);
             this.labelInfoBoxTop.Name = "labelInfoBoxTop";
             this.labelInfoBoxTop.Size = new System.Drawing.Size(43, 13);
@@ -887,7 +930,7 @@ namespace EDDiscovery
             // 
             this.labelGameDateTime.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.labelGameDateTime.AutoSize = true;
-            this.labelGameDateTime.Location = new System.Drawing.Point(330, 6);
+            this.labelGameDateTime.Location = new System.Drawing.Point(450, 6);
             this.labelGameDateTime.Margin = new System.Windows.Forms.Padding(8, 1, 3, 0);
             this.labelGameDateTime.Name = "labelGameDateTime";
             this.labelGameDateTime.Size = new System.Drawing.Size(43, 13);
@@ -1081,7 +1124,7 @@ namespace EDDiscovery
         private System.Windows.Forms.ToolStripMenuItem stopCurrentlyRunningActionProgramToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem eDDiscoveryHomepageToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem wikiHelpToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator helpMenuSeparatorTop;
         private System.Windows.Forms.ToolStripMenuItem eDDiscoveryChatDiscordToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem frontierForumThreadToolStripMenuItem;
@@ -1101,5 +1144,8 @@ namespace EDDiscovery
         private System.Windows.Forms.Label labelGameDateTime;
         private System.Windows.Forms.ToolStripMenuItem removeAllDLLPermissionsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem load21ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem helpTabToolStripMenuItem;
+        private ExtendedControls.ExtButtonDrawn extButtonDrawnHelp;
+        private System.Windows.Forms.ToolStripMenuItem viewHelpVideosToolStripMenuItem;
     }
 }

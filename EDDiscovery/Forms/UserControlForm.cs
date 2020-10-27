@@ -63,6 +63,9 @@ namespace EDDiscovery.Forms
 
             timer.Interval = 500;
             timer.Tick += CheckMouse;
+
+            extButtonDrawnHelp.Image = ExtendedControls.TabStrip.HelpIcon;
+            extButtonDrawnHelp.Text = "";
         }
 
         #region Public Interface
@@ -236,6 +239,7 @@ namespace EDDiscovery.Forms
             panel_taskbaricon.Visible = panel_close.Visible = panel_minimize.Visible = panel_ontop.Visible = panel_showtitle.Visible = !transparent;
 
             panel_transparent.Visible = IsTransparencySupported && !transparent;
+            panel_showtitle.Visible = IsTransparencySupported && !transparent;
             panel_showtitle.Visible = IsTransparencySupported && !transparent;
 
             if (TransparentMode == TransparencyMode.On)
@@ -440,6 +444,10 @@ namespace EDDiscovery.Forms
             }
         }
 
+        private void extButtonDrawnHelp_Click(object sender, EventArgs e)
+        {
+            EDDHelp.Help(this, extButtonDrawnHelp.PointToScreen(new Point(0,extButtonDrawnHelp.Height)), UserControl);
+        }
 
         #endregion
 

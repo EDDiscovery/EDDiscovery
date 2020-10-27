@@ -263,6 +263,7 @@ namespace EDDiscovery
                     tabControlMain.RenameTab(tabControlMain.LastTabClicked, newvalue.Replace(";", "_"));
             };
 
+            helpTabToolStripMenuItem.Click += (s, e) => { tabControlMain.HelpOn(this,contextMenuStripTabs.PointToScreen(new Point(0,0)), tabControlMain.LastTabClicked); };
 
             msg.Invoke("Loading Action Packs");         // STAGE 4 Action packs
 
@@ -321,6 +322,9 @@ namespace EDDiscovery
 
             if (EDDOptions.Instance.ActionButton)
                 buttonReloadActions.Visible = true;
+
+            extButtonDrawnHelp.Text = "";
+            extButtonDrawnHelp.Image = ExtendedControls.TabStrip.HelpIcon;
         }
 
         // OnLoad is called the first time the form is shown, before OnShown or OnActivated are called
@@ -699,6 +703,8 @@ namespace EDDiscovery
 
             statusStrip.Font = contextMenuStripTabs.Font = this.Font;
 
+            this.Refresh();                                             // force thru refresh to make sure its repainted
+
             //System.Diagnostics.Debug.WriteLine("Label version " + label_version.Location + " " + label_version.Size + " " + mainMenu.Size);
 
             OnThemeChanged?.Invoke();
@@ -973,9 +979,14 @@ namespace EDDiscovery
             Process.Start(Properties.Resources.URLProjectEDForumPost);
         }
 
-        private void eDDiscoveryHomepageToolStripMenuItem_Click(object sender, EventArgs e)
+        private void wikiHelpToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Process.Start(Properties.Resources.URLProjectWiki);
+        }
+
+        private void viewHelpVideosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start(Properties.Resources.URLProjectVideos);
         }
 
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1152,7 +1163,7 @@ namespace EDDiscovery
             }
         }
 
-        private void dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem_Click(object sender, EventArgs e)
+        private void debugResetAllHistoryToFirstCommanderToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (ExtendedControls.MessageBoxTheme.Show(this, "Confirm you wish to reset all history entries to the current commander".T(EDTx.EDDiscoveryForm_ResetCMDR), "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
@@ -1730,8 +1741,10 @@ namespace EDDiscovery
             popoutdropdown.Show(this);
         }
 
-
-
+        private void extButtonDrawnHelp_Click(object sender, EventArgs e)
+        {
+            tabControlMain.HelpOn(this,extButtonDrawnHelp.PointToScreen(new Point(0, extButtonDrawnHelp.Bottom)), tabControlMain.SelectedIndex);
+        }
 
         #endregion
 

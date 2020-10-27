@@ -82,6 +82,7 @@ namespace EDDiscovery
 
         public event Action<bool> OnExpeditionsDownloaded;                  // UI, true if changed entries
         public event Action OnExplorationDownloaded;                        // UI
+        public event Action OnHelpDownloaded;                               // UI
 
         #endregion
 
@@ -260,13 +261,23 @@ namespace EDDiscovery
             ReportSyncProgress("");
 
             bool checkGithub = EDDOptions.Instance.CheckGithubFiles;
-            if (checkGithub)      // not normall in debug, due to git hub chokeing
+            if (checkGithub)      // not normal in debug, due to git hub choking
             {
-                // and Expedition data
-                DownloadExpeditions(() => PendingClose);
+                DateTime lastdownloadtime = UserDatabase.Instance.GetSettingDate("DownloadFilesLastTime", DateTime.MinValue);
 
-                // and Exploration data
-                DownloadExploration(() => PendingClose);
+                if (DateTime.UtcNow - lastdownloadtime >= new TimeSpan(24, 0, 0))       // only update once per day
+                {
+                    // Expedition data
+                    DownloadExpeditions(() => PendingClose);
+
+                    // and Exploration data
+                    DownloadExploration(() => PendingClose);
+
+                    // and Help files
+                    DownloadHelp(() => PendingClose);
+
+                    UserDatabase.Instance.PutSettingDate("DownloadFilesLastTime", DateTime.UtcNow);
+                }
             }
 
             if (!EDDOptions.Instance.NoSystemsLoad)
@@ -449,6 +460,27 @@ namespace EDDiscovery
                         if (!cancelRequested())
                         {
                             InvokeAsyncOnUiThread(() => { OnExplorationDownloaded?.Invoke(); });
+                        }
+                    }
+                }
+            });
+        }
+
+        public void DownloadHelp(Func<bool> cancelRequested)
+        {
+            Task.Factory.StartNew(() =>
+            {
+                string helpdir = EDDOptions.Instance.HelpDirectory();
+
+                BaseUtils.GitHubClass github = new BaseUtils.GitHubClass(EDDiscovery.Properties.Resources.URLGithubDataDownload, LogLine);
+                var files = github.ReadDirectory("Help");
+                if (files != null)        // may be empty, unlikely, but
+                {
+                    if (github.DownloadFiles(files, helpdir))
+                    {
+                        if (!cancelRequested())
+                        {
+                            InvokeAsyncOnUiThread(() => { OnHelpDownloaded?.Invoke(); });
                         }
                     }
                 }
