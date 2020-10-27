@@ -56,6 +56,7 @@ namespace EDDiscovery.UserControls
 
             discoveryform.OnNewCalculatedRoute += discoveryForm_OnNewCalculatedRoute;
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
+            discoveryform.OnNoteChanged += Discoveryform_OnNoteChanged;
 
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(toolStrip, this);
@@ -63,16 +64,11 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.Translate(ctxMenuCombo, this);
         }
 
-        private void Discoveryform_OnHistoryChange(HistoryList obj)
-        {
-            DisplayRoute();
-        }
-
         public override void LoadLayout()
         {
             DGVLoadColumnLayout(dataGridViewRouteSystems, DbColumnSave);
 
-            UpdateRoutes();
+            UpdateSavedRoutes();
             discoveryform.OnExpeditionsDownloaded += Discoveryform_OnExpeditionsDownloaded; // only from now on are we interested in a change
 
             if (uctg is IHistoryCursorNewStarList)
@@ -95,19 +91,29 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNewCalculatedRoute -= discoveryForm_OnNewCalculatedRoute;
             discoveryform.OnExpeditionsDownloaded -= Discoveryform_OnExpeditionsDownloaded;
             discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
+            discoveryform.OnNoteChanged -= Discoveryform_OnNoteChanged;
 
             if (uctg is IHistoryCursorNewStarList)
                 (uctg as IHistoryCursorNewStarList).OnNewStarList -= OnNewStars;
         }
 
-        private void Discoveryform_OnExpeditionsDownloaded(bool changed)        // because this is done async, pick up so we can refresh
+        private void Discoveryform_OnNoteChanged(object arg1, HistoryEntry arg2, bool arg3)
         {
-            System.Diagnostics.Debug.WriteLine("Expeditions downloaded, changed " + changed);
-            if (changed)
-                UpdateRoutes();
+            UpdateSystemRows();
         }
 
-        private void UpdateRoutes()
+        private void Discoveryform_OnHistoryChange(HistoryList obj)
+        {
+            UpdateSystemRows();
+        }
+
+        private void Discoveryform_OnExpeditionsDownloaded(bool changed)        // because this is done async, pick up so we can refresh
+        {
+            if (changed)
+                UpdateSavedRoutes();
+        }
+
+        private void UpdateSavedRoutes()
         {
             savedroute = SavedRouteClass.GetAllSavedRoutes();   // all including deleted
             savedroute = savedroute.Where(r => !r.Deleted).OrderBy(r => r.Name).ToList();   // don't list deleted
@@ -162,8 +168,8 @@ namespace EDDiscovery.UserControls
 
         private void OnNewStars(List<string> obj, OnNewStarsPushType command)    // and if a user asked for stars to be added
         {
-            if (command == OnNewStarsPushType.Expedition)
-                AppendRows(obj.ToArray());
+//tbd            if (command == OnNewStarsPushType.Expedition)
+                // AppendRows(obj.ToArray());
         }
 
         #endregion
@@ -317,7 +323,7 @@ namespace EDDiscovery.UserControls
         private void buttonReverseRoute_Click(object sender, EventArgs e)
         {
             var route = new SavedRouteClass();
-            UpdateRouteInfo(route);
+            SaveGridIntoRoute(route);
             dataGridViewRouteSystems.Rows.Clear();
             InsertRows(0, route.Systems.Reverse<string>().ToArray());
         }
@@ -437,7 +443,7 @@ namespace EDDiscovery.UserControls
         private void toolStripButtonExport_Click(object sender, EventArgs e)
         {
             var rt = new SavedRouteClass();
-            UpdateRouteInfo(rt);
+            SaveGridIntoRoute(rt);
 
             if (rt.Systems.Count < 1)
             {
@@ -790,7 +796,7 @@ namespace EDDiscovery.UserControls
         private bool PromptAndSaveIfNeeded()
         {
             var rt = new SavedRouteClass();
-            UpdateRouteInfo(rt);
+            SaveGridIntoRoute(rt);
 
             if (rt.Equals(currentroute))   // No changes have been made.
                 return true;
@@ -824,7 +830,7 @@ namespace EDDiscovery.UserControls
             var oldrt = currentroute;
             bool ret = false;
 
-            UpdateRouteInfo(newrt);
+            SaveGridIntoRoute(newrt);
 
             SavedRouteClass foundedsm = savedroute.Find(x => x.Name.Equals(newrtname, StringComparison.InvariantCultureIgnoreCase) && x.EDSM);
 
@@ -975,7 +981,7 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void UpdateRouteInfo(SavedRouteClass route)
+        private void SaveGridIntoRoute(SavedRouteClass route)
         {
             route.Name = textBoxRouteName.Text.Trim();
             route.Systems.Clear();
