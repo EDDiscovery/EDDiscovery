@@ -471,6 +471,8 @@ namespace EDDiscovery.UserControls
             rw.DefaultCellStyle.ForeColor = (item.System.HasCoordinate || !item.IsFSDCarrierJump) ? discoveryform.theme.VisitedSystemColor : discoveryform.theme.NonVisitedSystemColor;
 
             string tip = item.EventSummary + Environment.NewLine + EventDescription + Environment.NewLine + EventDetailedInfo;
+            if ( tip.Length>2000)
+                tip = tip.Substring(0, 2000);
 
             rw.Cells[0].ToolTipText = tip;
             rw.Cells[1].ToolTipText = tip;

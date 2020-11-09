@@ -17,6 +17,7 @@
 using BaseUtils.JSON;
 using EDDiscovery.UserControls;
 using ExtendedControls;
+using System;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -108,7 +109,13 @@ namespace EDDiscovery
                 string t = BaseUtils.FileHelpers.TryReadAllTextFromFile(helpfile);
                 JToken filejson = t != null ? JToken.Parse(t) : null;
                 if (filejson != null)
-                    helptouse = filejson;
+                {
+                    Version intv = new Version(helptouse["Version"].Str("0.0.0.0"));
+                    Version filev = new Version(filejson["Version"].Str("0.0.0.0"));
+
+                    if ( filev >= intv )
+                        helptouse = filejson;
+                }
             }
 
             //System.IO.File.WriteAllText(@"c:\code\help.json",helptouse.ToString(true));
