@@ -21,6 +21,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace EDDiscovery
 {
@@ -432,6 +433,22 @@ namespace EDDiscovery
 
             if (UserDatabasePath == null) UserDatabasePath = Path.Combine(AppDataDirectory, "EDDUser.sqlite");
             if (SystemDatabasePath == null) SystemDatabasePath = Path.Combine(AppDataDirectory, "EDDSystem.sqlite");
+
+            if (!Directory.Exists(Path.GetDirectoryName(SystemDatabasePath)))
+            {
+                if (MessageBox.Show("Error: EDDSystem.sqlite is inaccessible.  Reset?", "Systems DB inaccessible", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    SystemDatabasePath = Path.Combine(AppDataDirectory, "EDDSystem.sqlite");
+                }
+            }
+
+            if (!Directory.Exists(Path.GetDirectoryName(UserDatabasePath)))
+            {
+                if (MessageBox.Show("Error: EDDUser.sqlite is inaccessible.  Reset?", "User DB inaccessible", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    UserDatabasePath = Path.Combine(AppDataDirectory, "EDDUser.sqlite");
+                }
+            }
 
             EliteDangerousCore.EliteConfigInstance.InstanceOptions = this;
         }
