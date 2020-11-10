@@ -87,7 +87,7 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.panelOutlining = new ExtendedControls.ExtPanelDataGridViewScrollOutlining();
             this.vScrollBarCustom = new ExtendedControls.ExtScrollBar();
-            this.dataGridViewTravel = new System.Windows.Forms.DataGridView();
+            this.dataGridViewTravel = new BaseUtils.DataGridViewColumnHider();
             this.ColumnTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Icon = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -607,8 +607,10 @@ namespace EDDiscovery.UserControls
             this.dataGridViewTravel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewTravel.Location = new System.Drawing.Point(10, 0);
             this.dataGridViewTravel.Name = "dataGridViewTravel";
+            this.dataGridViewTravel.RowHeaderMenuStrip = null;
             this.dataGridViewTravel.RowHeadersWidth = 100;
             this.dataGridViewTravel.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dataGridViewTravel.SingleRowSelect = true;
             this.dataGridViewTravel.Size = new System.Drawing.Size(841, 580);
             this.dataGridViewTravel.TabIndex = 3;
             this.dataGridViewTravel.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewTravel_CellClick);
@@ -789,7 +791,7 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.Label labelTime;
         private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanel;
         private ExtendedControls.ExtScrollBar vScrollBarCustom;
-        public System.Windows.Forms.DataGridView dataGridViewTravel;
+        public BaseUtils.DataGridViewColumnHider dataGridViewTravel;
         private System.Windows.Forms.ContextMenuStrip historyContextMenu;
         private System.Windows.Forms.ToolStripMenuItem mapGotoStartoolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem starMapColourToolStripMenuItem;

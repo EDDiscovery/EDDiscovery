@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2017 EDDiscovery development team
+ * Copyright © 2016 - 2020 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -13,19 +13,15 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using EDDiscovery.Controls;
+using EliteDangerousCore;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
 using System.Data;
+using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using EDDiscovery.Controls;
-using System.IO;
-using EliteDangerousCore;
-using EliteDangerousCore.DB;
 
 namespace EDDiscovery.UserControls
 {
@@ -240,6 +236,8 @@ namespace EDDiscovery.UserControls
             Col3.Tag = null;
             Col4.HeaderText = "Mass".T(EDTx.UserControlOutfitting_Mass);
             Col4.Tag = "t";
+            ColPrice.HeaderText = "Price".T(EDTx.UserControlOutfitting_Price);
+            ColPrice.Tag = "cr";
         }
 
         #endregion

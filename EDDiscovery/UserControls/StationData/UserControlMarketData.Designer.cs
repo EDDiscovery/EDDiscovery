@@ -45,7 +45,7 @@ namespace EDDiscovery.UserControls
         {
             this.components = new System.ComponentModel.Container();
             this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
-            this.dataGridViewMarketData = new System.Windows.Forms.DataGridView();
+            this.dataGridViewMarketData = new BaseUtils.DataGridViewColumnHider();
             this.CategoryCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.NameCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.SellCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -390,7 +390,7 @@ namespace EDDiscovery.UserControls
         #endregion
 
         private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanel;
-        private System.Windows.Forms.DataGridView dataGridViewMarketData;
+        private BaseUtils.DataGridViewColumnHider dataGridViewMarketData;
         private ExtendedControls.ExtScrollBar vScrollBarCustomMC;
         private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.Label labelLocation;

@@ -40,7 +40,7 @@
             this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.vScrollBarCustom1 = new ExtendedControls.ExtScrollBar();
-            this.dataGridViewBookMarks = new System.Windows.Forms.DataGridView();
+            this.dataGridViewBookMarks = new BaseUtils.DataGridViewColumnHider();
             this.ColType = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColBookmarkName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColDescription = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -358,7 +358,7 @@
         private ExtendedControls.ExtTextBox textBoxFilter;
         private System.Windows.Forms.Label labelSearch;
         private System.Windows.Forms.SplitContainer splitContainer;
-        private System.Windows.Forms.DataGridView dataGridViewBookMarks;
+        private BaseUtils.DataGridViewColumnHider dataGridViewBookMarks;
         private EDDiscovery.Forms.SurfaceBookmarkUserControl userControlSurfaceBookmarks;
         private ExtendedControls.ExtButton buttonNew;
         private ExtendedControls.ExtButton buttonEdit;

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2017 EDDiscovery development team
+ * Copyright © 2016 - 2020 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -310,7 +310,7 @@ namespace EDDiscovery.UserControls
                         dataGridViewStarList.ClearSelection();
                         int rowno = dataGridViewStarList.Rows.GetFirstRow(DataGridViewElementStates.Visible);
                         if (rowno != -1)
-                            dataGridViewStarList.CurrentCell = dataGridViewStarList.Rows[rowno].Cells[1];       // its the current cell which needs to be set, moves the row marker as well
+                            dataGridViewStarList.SetCurrentCellOrRow(rowno, Columns.StarName);       // its the current cell which needs to be set, moves the row marker as well
 
                         FireChangeSelection();
                     }
@@ -617,7 +617,7 @@ namespace EDDiscovery.UserControls
             int rowno = DataGridViewControlHelpersStaticFunc.FindGridPosByID(rowsbyjournalid, jid, true);
             if (rowno >= 0)
             {
-                dataGridViewStarList.CurrentCell = dataGridViewStarList.Rows[rowno].Cells[Columns.StarName];
+                dataGridViewStarList.SetCurrentCellOrRow(rowno, Columns.StarName);
                 dataGridViewStarList.Rows[rowno].Selected = true;
                 FireChangeSelection();
             }
@@ -755,12 +755,10 @@ namespace EDDiscovery.UserControls
 
 
         HistoryEntry rightclicksystem = null;
-        int rightclickrow = -1;
 
         private void dataGridViewTravel_MouseDown(object sender, MouseEventArgs e)
         {
-            dataGridViewStarList.HandleClickOnDataGrid(e, out int unusedleftclickrow, out rightclickrow);
-            rightclicksystem = (rightclickrow != -1) ? (HistoryEntry)(dataGridViewStarList.Rows[rightclickrow].Tag as List<HistoryEntry>)[0] : null;
+            rightclicksystem = dataGridViewStarList.RightClickRowValid ? (HistoryEntry)(dataGridViewStarList.Rows[dataGridViewStarList.RightClickRow].Tag as List<HistoryEntry>)[0] : null;
         }
 
         #endregion

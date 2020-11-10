@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2017 EDDiscovery development team
+ * Copyright © 2016 - 2020 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -275,7 +275,7 @@ namespace EDDiscovery.UserControls
                     string v = (string)rw.Cells[1].Value;
                     if ( v.Equals(commodity))           // Find the commodity, and set it to the same relative position as before.
                     {
-                        dataGridViewMarketData.CurrentCell = dataGridViewMarketData.Rows[rw.Index].Cells[1];
+                        dataGridViewMarketData.SetCurrentCellOrRow(rw.Index,1);
                         dataGridViewMarketData.SafeFirstDisplayedScrollingRowIndex( Math.Max(rw.Index - currentoffset,0));
                         break;
                     }

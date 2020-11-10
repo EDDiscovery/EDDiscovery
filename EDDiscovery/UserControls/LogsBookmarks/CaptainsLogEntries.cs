@@ -14,7 +14,6 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
-using EDDiscovery.Forms;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using EliteDangerousCore.EDSM;
@@ -178,7 +177,7 @@ namespace EDDiscovery.UserControls
                 dataGridView.FilterGridView(textBoxFilter.Text, checktags: true);
 
             if (lastrow >= 0 && lastrow < dataGridView.Rows.Count && dataGridView.Rows[lastrow].Visible)
-                dataGridView.CurrentCell = dataGridView.Rows[Math.Min(lastrow, dataGridView.Rows.Count - 1)].Cells[3];
+                dataGridView.SetCurrentCellOrRow(Math.Min(lastrow, dataGridView.Rows.Count - 1), 3);
         }
 
         private void dataGridView_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
@@ -524,8 +523,7 @@ namespace EDDiscovery.UserControls
 
         private void dataGridView_MouseDown(object sender, MouseEventArgs e)
         {
-            dataGridView.HandleClickOnDataGrid(e, out int unusedleftclickrow, out int rightclickrow);
-            rightclickentry = (rightclickrow != -1) ? (CaptainsLogClass)dataGridView.Rows[rightclickrow].Tag : null;
+            rightclickentry = dataGridView.RightClickRowValid ? (CaptainsLogClass)dataGridView.Rows[dataGridView.RightClickRow].Tag : null;
         }
 
         private void contextMenuStrip_Opening(object sender, System.ComponentModel.CancelEventArgs e)

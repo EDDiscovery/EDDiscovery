@@ -309,27 +309,16 @@ namespace EDDiscovery.UserControls
 
         #region Right click
 
-        int rightclickrow = -1;
-
-        private void dataGridViewMC_MouseDown(object sender, MouseEventArgs e)
-        {
-            dataGridViewMC.HandleClickOnDataGrid(e, out int unusedleftclickrow, out rightclickrow);
-        }
-
-        private void contextMenuStrip_Opening(object sender, CancelEventArgs e)
-        {
-        }
-
         private void openRecipeInWindowToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (rightclickrow >= 0 && rightclickrow < dataGridViewMC.RowCount)
+            if (dataGridViewMC.RightClickRowValid)
             {
-                string mats = (string)dataGridViewMC.Rows[rightclickrow].Tag;
+                string mats = (string)dataGridViewMC.Rows[dataGridViewMC.RightClickRow].Tag;
                 if (mats != null)   // sheer paranoia.
                 {
                     mats = mats.Replace(": ", Environment.NewLine + "      ");
                     ExtendedControls.InfoForm info = new ExtendedControls.InfoForm();
-                    info.Info(dataGridViewMC.Rows[rightclickrow].Cells[0].Value as string, FindForm().Icon, mats);
+                    info.Info(dataGridViewMC.Rows[dataGridViewMC.RightClickRow].Cells[0].Value as string, FindForm().Icon, mats);
                     info.Size = new Size(800, 600);
                     info.StartPosition = FormStartPosition.CenterParent;
                     info.ShowDialog(FindForm());

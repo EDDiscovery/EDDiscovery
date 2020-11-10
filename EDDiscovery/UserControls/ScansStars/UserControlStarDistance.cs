@@ -197,12 +197,9 @@ namespace EDDiscovery.UserControls
             dataGridViewNearest.Columns[sortcolprev.Index].HeaderCell.SortGlyphDirection = sortorderprev;
         }
 
-        private int rightclickrow = -1;
-
         private void dataGridViewNearest_MouseDown(object sender, MouseEventArgs e)
         {
-            dataGridViewNearest.HandleClickOnDataGrid(e, out int unusedleftclickrow, out rightclickrow);
-            viewOnEDSMToolStripMenuItem1.Enabled = rightclickrow != -1;
+            viewOnEDSMToolStripMenuItem1.Enabled = dataGridViewNearest.RightClickRowValid;
         }
 
         private void addToTrilaterationToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -238,9 +235,9 @@ namespace EDDiscovery.UserControls
 
         private void viewOnEDSMToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            if (rightclickrow >= 0 && rightclickrow < dataGridViewNearest.Rows.Count)
+            if (dataGridViewNearest.RightClickRowValid) 
             {
-                var rightclicksystem = (ISystem)dataGridViewNearest.Rows[rightclickrow].Tag;
+                var rightclicksystem = (ISystem)dataGridViewNearest.Rows[dataGridViewNearest.RightClickRow].Tag;
 
                 if (rightclicksystem != null)
                 {
@@ -296,9 +293,10 @@ namespace EDDiscovery.UserControls
 
         private void viewSystemToolStripMenuItem_Click(object sender, EventArgs e)
         {
-                if (rightclickrow >= 0 && rightclickrow < dataGridViewNearest.Rows.Count)
-                {
-                    var rightclicksystem = (ISystem)dataGridViewNearest.Rows[rightclickrow].Tag;
+            if (dataGridViewNearest.RightClickRowValid)
+            {
+                var rightclicksystem = (ISystem)dataGridViewNearest.Rows[dataGridViewNearest.RightClickRow].Tag;
+
                 if ( rightclicksystem != null )
                     ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), rightclicksystem, true, discoveryform.history);
             }

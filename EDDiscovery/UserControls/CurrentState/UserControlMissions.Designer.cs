@@ -45,7 +45,7 @@ namespace EDDiscovery.UserControls
         {
             this.components = new System.ComponentModel.Container();
             this.dataViewScrollerPanelCurrent = new ExtendedControls.ExtPanelDataGridViewScroll();
-            this.dataGridViewCurrent = new System.Windows.Forms.DataGridView();
+            this.dataGridViewCurrent = new BaseUtils.DataGridViewColumnHider();
             this.cColName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cColStartDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cColEndDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -58,7 +58,7 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustomCur = new ExtendedControls.ExtScrollBar();
             this.panelPrev = new System.Windows.Forms.Panel();
             this.dataViewScrollerPanelPrev = new ExtendedControls.ExtPanelDataGridViewScroll();
-            this.dataGridViewPrevious = new System.Windows.Forms.DataGridView();
+            this.dataGridViewPrevious = new BaseUtils.DataGridViewColumnHider();
             this.PcolName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pColStart = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pColEnd = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -123,9 +123,11 @@ namespace EDDiscovery.UserControls
             this.dataGridViewCurrent.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewCurrent.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewCurrent.Name = "dataGridViewCurrent";
+            this.dataGridViewCurrent.RowHeaderMenuStrip = null;
             this.dataGridViewCurrent.RowHeadersVisible = false;
             this.dataGridViewCurrent.RowHeadersWidth = 25;
             this.dataGridViewCurrent.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dataGridViewCurrent.SingleRowSelect = true;
             this.dataGridViewCurrent.Size = new System.Drawing.Size(784, 266);
             this.dataGridViewCurrent.TabIndex = 1;
             this.dataGridViewCurrent.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewCurrent_SortCompare);
@@ -268,9 +270,11 @@ namespace EDDiscovery.UserControls
             this.dataGridViewPrevious.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewPrevious.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewPrevious.Name = "dataGridViewPrevious";
+            this.dataGridViewPrevious.RowHeaderMenuStrip = null;
             this.dataGridViewPrevious.RowHeadersVisible = false;
             this.dataGridViewPrevious.RowHeadersWidth = 25;
             this.dataGridViewPrevious.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dataGridViewPrevious.SingleRowSelect = true;
             this.dataGridViewPrevious.Size = new System.Drawing.Size(784, 280);
             this.dataGridViewPrevious.TabIndex = 2;
             this.dataGridViewPrevious.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewPrevious_SortCompare);
@@ -503,11 +507,11 @@ namespace EDDiscovery.UserControls
         #endregion
 
         private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanelCurrent;
-        private System.Windows.Forms.DataGridView dataGridViewCurrent;
+        private BaseUtils.DataGridViewColumnHider dataGridViewCurrent;
         private ExtendedControls.ExtScrollBar vScrollBarCustomCur;
         private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.Panel panelPrev;
-        private System.Windows.Forms.DataGridView dataGridViewPrevious;
+        private BaseUtils.DataGridViewColumnHider dataGridViewPrevious;
         private System.Windows.Forms.Panel panelCurrent;
         private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanelPrev;
         private ExtendedControls.ExtScrollBar vScrollBarCustomPrev;

@@ -66,7 +66,7 @@ namespace EDDiscovery.UserControls
             this.flowLayoutStarDistances = new System.Windows.Forms.FlowLayoutPanel();
             this.dataViewScrollerPanel2 = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.vScrollBarCustom2 = new ExtendedControls.ExtScrollBar();
-            this.dataGridViewNearest = new System.Windows.Forms.DataGridView();
+            this.dataGridViewNearest = new BaseUtils.DataGridViewColumnHider();
             this.colName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colVisited = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -85,40 +85,40 @@ namespace EDDiscovery.UserControls
             this.addToExplorationToolStripMenuItem,
             this.addToExpeditionToolStripMenuItem});
             this.contextMenuStrip.Name = "closestContextMenu";
-            this.contextMenuStrip.Size = new System.Drawing.Size(176, 114);
+            this.contextMenuStrip.Size = new System.Drawing.Size(181, 136);
             // 
             // viewSystemToolStripMenuItem
             // 
             this.viewSystemToolStripMenuItem.Name = "viewSystemToolStripMenuItem";
-            this.viewSystemToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.viewSystemToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.viewSystemToolStripMenuItem.Text = "View System";
             this.viewSystemToolStripMenuItem.Click += new System.EventHandler(this.viewSystemToolStripMenuItem_Click);
             // 
             // viewOnEDSMToolStripMenuItem1
             // 
             this.viewOnEDSMToolStripMenuItem1.Name = "viewOnEDSMToolStripMenuItem1";
-            this.viewOnEDSMToolStripMenuItem1.Size = new System.Drawing.Size(175, 22);
+            this.viewOnEDSMToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
             this.viewOnEDSMToolStripMenuItem1.Text = "View on EDSM";
             this.viewOnEDSMToolStripMenuItem1.Click += new System.EventHandler(this.viewOnEDSMToolStripMenuItem1_Click);
             // 
             // addToTrilaterationToolStripMenuItem1
             // 
             this.addToTrilaterationToolStripMenuItem1.Name = "addToTrilaterationToolStripMenuItem1";
-            this.addToTrilaterationToolStripMenuItem1.Size = new System.Drawing.Size(175, 22);
+            this.addToTrilaterationToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
             this.addToTrilaterationToolStripMenuItem1.Text = "Add to Trilateration";
             this.addToTrilaterationToolStripMenuItem1.Click += new System.EventHandler(this.addToTrilaterationToolStripMenuItem1_Click);
             // 
             // addToExplorationToolStripMenuItem
             // 
             this.addToExplorationToolStripMenuItem.Name = "addToExplorationToolStripMenuItem";
-            this.addToExplorationToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.addToExplorationToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.addToExplorationToolStripMenuItem.Text = "Add To Exploration";
             this.addToExplorationToolStripMenuItem.Click += new System.EventHandler(this.addToExplorationToolStripMenuItem_Click);
             // 
             // addToExpeditionToolStripMenuItem
             // 
             this.addToExpeditionToolStripMenuItem.Name = "addToExpeditionToolStripMenuItem";
-            this.addToExpeditionToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.addToExpeditionToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.addToExpeditionToolStripMenuItem.Text = "Add to Expedition";
             this.addToExpeditionToolStripMenuItem.Click += new System.EventHandler(this.addToExpeditionToolStripMenuItem_Click);
             // 
@@ -322,6 +322,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewNearest.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.dataGridViewNearest.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewNearest.Name = "dataGridViewNearest";
+            this.dataGridViewNearest.RowHeaderMenuStrip = null;
             dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
             dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -332,6 +333,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewNearest.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.dataGridViewNearest.RowHeadersVisible = false;
             this.dataGridViewNearest.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dataGridViewNearest.SingleRowSelect = true;
             this.dataGridViewNearest.Size = new System.Drawing.Size(336, 550);
             this.dataGridViewNearest.TabIndex = 23;
             this.dataGridViewNearest.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewNearest_CellClick);
@@ -385,7 +387,7 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripMenuItem viewOnEDSMToolStripMenuItem1;
         private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanel2;
         private ExtendedControls.ExtScrollBar vScrollBarCustom2;
-        private System.Windows.Forms.DataGridView dataGridViewNearest;
+        private BaseUtils.DataGridViewColumnHider dataGridViewNearest;
         private DataGridViewTextBoxColumn colName;
         private DataGridViewTextBoxColumn colDistance;
         private DataGridViewTextBoxColumn colVisited;

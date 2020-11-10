@@ -161,7 +161,6 @@ namespace EDDiscovery.UserControls
             transparentfont = EDDTheme.Instance.GetFont;
 
             BaseUtils.Translator.Instance.Translate(this);
-            BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
 
             labelTarget.Size = new Size(1280, 24);
@@ -677,34 +676,27 @@ namespace EDDiscovery.UserControls
 
         #region Clicks
 
-        int leftclickrow = -1;
-
-        private void dataGridViewCombat_MouseDown(object sender, MouseEventArgs e)
-        {
-            dataGridViewCombat.HandleClickOnDataGrid(e, out leftclickrow, out int unusedrightclickrow);
-        }
-
         private void dataGridViewCombat_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (leftclickrow >= 0)                                                   // Click expands it..
+            if (dataGridViewCombat.LeftClickRowValid)                                                   // Click expands it..
             {
-                DataGridViewRow row = dataGridViewCombat.Rows[leftclickrow];
+                DataGridViewRow row = dataGridViewCombat.Rows[dataGridViewCombat.LeftClickRow];
                 bool expanded = row.Cells[0].Tag != null;
 
-                var leftclicksystem = (HistoryEntry)dataGridViewCombat.Rows[leftclickrow].Tag;
+                var leftclicksystem = (HistoryEntry)dataGridViewCombat.Rows[dataGridViewCombat.LeftClickRow].Tag;
 
                 leftclicksystem.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
 
                 if (expanded) // put it back to original text
                 {
-                    dataGridViewCombat.Rows[leftclickrow].Cells[2].Value = EventDescription;
+                    dataGridViewCombat.Rows[dataGridViewCombat.LeftClickRow].Cells[2].Value = EventDescription;
                     row.Cells[0].Tag = null;
 
                     row.Cells[2].Style.WrapMode = row.Cells[1].Style.WrapMode = DataGridViewTriState.NotSet;
                 }
                 else
                 {
-                    dataGridViewCombat.Rows[leftclickrow].Cells[2].Value = EventDescription + ((EventDetailedInfo.Length > 0) ? (Environment.NewLine + EventDetailedInfo) : "");
+                    dataGridViewCombat.Rows[dataGridViewCombat.LeftClickRow].Cells[2].Value = EventDescription + ((EventDetailedInfo.Length > 0) ? (Environment.NewLine + EventDetailedInfo) : "");
                     row.Cells[0].Tag = true;
                     row.Cells[2].Style.WrapMode = row.Cells[1].Style.WrapMode = DataGridViewTriState.True;
                 }

@@ -22,7 +22,7 @@ using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls.Search
 {
-    public class DataGridViewStarResults : DataGridView
+    public class DataGridViewStarResults : BaseUtils.DataGridViewColumnHider
     {
         public bool CheckEDSM { get; set; }
         public Action<HistoryEntry> GotoEntryClicked = null;
@@ -59,9 +59,8 @@ namespace EDDiscovery.UserControls.Search
             cms.Items[3].Text = "Go to entry on grid";
             cms.Items[3].Name = "Data";
             cms.Items[3].Click += new System.EventHandler(this.GotoEntryToolStripMenuItem_Click);
-
+            cms.Opening += Cms_Opening;
             CellDoubleClick += cellDoubleClick;
-            MouseDown += mouseDown;
 
             BaseUtils.Translator.Instance.Translate(cms, this);
         }
@@ -72,12 +71,10 @@ namespace EDDiscovery.UserControls.Search
         }
 
         Object rightclicktag = null;
-        int rightclickrow = -1;
 
-        private void mouseDown(object sender, MouseEventArgs e)
+        private void Cms_Opening(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            this.HandleClickOnDataGrid(e, out int unusedleftclickrow, out rightclickrow);
-            rightclicktag = (rightclickrow != -1) ? Rows[rightclickrow].Tag : null;
+            rightclicktag = RightClickRowValid ? Rows[RightClickRow].Tag : null;
             ContextMenuStrip.Items[3].Enabled = rightclicktag is HistoryEntry;
         }
 

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2017 EDDiscovery development team
+ * Copyright © 2016 - 2020 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -13,18 +13,15 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using EDDiscovery.Controls;
+using EliteDangerousCore;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
 using System.Data;
+using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using EDDiscovery.Controls;
-using EliteDangerousCore;
-using EliteDangerousCore.DB;
 
 namespace EDDiscovery.UserControls
 {
@@ -198,18 +195,11 @@ namespace EDDiscovery.UserControls
 
         #region right clicks
 
-        int rightclickrow = -1;
-
-        private void dataGridViewLedger_MouseDown(object sender, MouseEventArgs e)
-        {
-            dataGridViewLedger.HandleClickOnDataGrid(e, out int unusedleftclickrow, out rightclickrow);
-        }
-
         private void toolStripMenuItemGotoItem_Click(object sender, EventArgs e)
         {
-            if (rightclickrow != -1)
+            if (dataGridViewLedger.RightClickRow != -1)
             {
-                long v = (long)dataGridViewLedger.Rows[rightclickrow].Tag;
+                long v = (long)dataGridViewLedger.Rows[dataGridViewLedger.RightClickRow].Tag;
 
                 uctg.GotoPosByJID(v);
             }

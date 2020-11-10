@@ -1057,7 +1057,7 @@ namespace EDDiscovery.UserControls
                     if (row >= dataGridView.RowCount)
                     {
                         row = dataGridView.RowCount - 1;
-                        dataGridView.CurrentCell = dataGridView.Rows[row].Cells[col];
+                        dataGridView.SetCurrentCellOrRow(row, col);
                         return;
                     }
                 }

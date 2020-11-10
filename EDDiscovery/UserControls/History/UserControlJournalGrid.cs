@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2017 EDDiscovery development team
+ * Copyright © 2016 - 2020 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -13,21 +13,17 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using EDDiscovery.Controls;
+using EliteDangerousCore;
+using EliteDangerousCore.EDDN;
+using EliteDangerousCore.EDSM;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using EDDiscovery.Controls;
-using EliteDangerousCore.EDSM;
-using EliteDangerousCore.EDDN;
-using EliteDangerousCore.DB;
-using EliteDangerousCore;
 using System.IO;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
 {
@@ -319,7 +315,7 @@ namespace EDDiscovery.UserControls
                     dataGridViewJournal.ClearSelection();
                     int rowno = dataGridViewJournal.Rows.GetFirstRow(DataGridViewElementStates.Visible);
                     if (rowno != -1)
-                        dataGridViewJournal.CurrentCell = dataGridViewJournal.Rows[rowno].Cells[1];       // its the current cell which needs to be set, moves the row marker as well
+                        dataGridViewJournal.SetCurrentCellOrRow(rowno,1);       // its the current cell which needs to be set, moves the row marker as well
 
                     FireChangeSelection();
                 }
@@ -418,7 +414,8 @@ namespace EDDiscovery.UserControls
             DataGridView grid = sender as DataGridView;
             UserControls.UserControlTravelGrid.PaintEventColumn(sender as DataGridView, e,
                 discoveryform.history.Count, (HistoryEntry)dataGridViewJournal.Rows[e.RowIndex].Tag,
-                grid.RowHeadersWidth + grid.Columns[0].Width, grid.Columns[1].Width, false);
+                grid.Columns[Columns.Event].Visible ? grid.RowHeadersWidth + grid.Columns[0].Width : -1, 
+                grid.Columns[1].Width, false);
         }
 
         #region Mouse Clicks
@@ -433,20 +430,17 @@ namespace EDDiscovery.UserControls
         }
 
         HistoryEntry rightclicksystem = null;
-        int rightclickrow = -1;
         HistoryEntry leftclicksystem = null;
-        int leftclickrow = -1;
 
         private void dataGridViewJournal_MouseDown(object sender, MouseEventArgs e)
         {
-            dataGridViewJournal.HandleClickOnDataGrid(e, out leftclickrow, out rightclickrow);
-            rightclicksystem = (rightclickrow != -1) ? (HistoryEntry)dataGridViewJournal.Rows[rightclickrow].Tag : null;
-            leftclicksystem = (leftclickrow != -1) ? (HistoryEntry)dataGridViewJournal.Rows[leftclickrow].Tag : null;
+            rightclicksystem = dataGridViewJournal.RightClickRowValid ? (HistoryEntry)dataGridViewJournal.Rows[dataGridViewJournal.RightClickRow].Tag : null;
+            leftclicksystem = dataGridViewJournal.LeftClickRowValid ? (HistoryEntry)dataGridViewJournal.Rows[dataGridViewJournal.LeftClickRow].Tag : null;
         }
 
         private void dataGridViewJournal_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (leftclickrow >= 0)                                                   // Click expands it..
+            if (dataGridViewJournal.LeftClickRowValid)                                                   // Click expands it..
             {
                 ExtendedControls.InfoForm info = new ExtendedControls.InfoForm();
                 leftclicksystem.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
@@ -551,7 +545,7 @@ namespace EDDiscovery.UserControls
             int rowno = DataGridViewControlHelpersStaticFunc.FindGridPosByID(rowsbyjournalid, jid, true);
             if (rowno >= 0)
             {
-                dataGridViewJournal.CurrentCell = dataGridViewJournal.Rows[rowno].Cells[Columns.Event];
+                dataGridViewJournal.SetCurrentCellOrRow(rowno, Columns.Event);
                 dataGridViewJournal.Rows[rowno].Selected = true;
                 FireChangeSelection();
             }
@@ -579,7 +573,7 @@ namespace EDDiscovery.UserControls
             if (selrow >= 0)
             {
                 dataGridViewJournal.ClearSelection();
-                dataGridViewJournal.CurrentCell = dataGridViewJournal.Rows[selrow].Cells[1];
+                dataGridViewJournal.SetCurrentCellOrRow(selrow, 1);
                 FireChangeSelection();
             }
         }

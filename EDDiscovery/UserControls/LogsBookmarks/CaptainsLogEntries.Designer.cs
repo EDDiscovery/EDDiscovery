@@ -41,7 +41,7 @@
             this.labelSearch = new System.Windows.Forms.Label();
             this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.vScrollBarCustom1 = new ExtendedControls.ExtScrollBar();
-            this.dataGridView = new System.Windows.Forms.DataGridView();
+            this.dataGridView = new BaseUtils.DataGridViewColumnHider();
             this.ColTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColBodyName = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -294,7 +294,7 @@
             this.openInEDSMToolStripMenuItem,
             this.openAScanPanelViewToolStripMenuItem});
             this.contextMenuStrip.Name = "contextMenuStripBookmarks";
-            this.contextMenuStrip.Size = new System.Drawing.Size(201, 70);
+            this.contextMenuStrip.Size = new System.Drawing.Size(201, 92);
             this.contextMenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Opening);
             // 
             // toolStripMenuItemGotoStar3dmap
@@ -381,7 +381,7 @@
         #endregion
         private ExtendedControls.ExtTextBox textBoxFilter;
         private System.Windows.Forms.Label labelSearch;
-        private System.Windows.Forms.DataGridView dataGridView;
+        private BaseUtils.DataGridViewColumnHider dataGridView;
         private ExtendedControls.ExtButton buttonNew;
         private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanel;
         private ExtendedControls.ExtScrollBar vScrollBarCustom1;

@@ -45,7 +45,7 @@ namespace EDDiscovery.UserControls
         {
             this.components = new System.ComponentModel.Container();
             this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
-            this.dataGridViewOutfitting = new System.Windows.Forms.DataGridView();
+            this.dataGridViewOutfitting = new BaseUtils.DataGridViewColumnHider();
             this.Col1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Col2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Col3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -230,7 +230,7 @@ namespace EDDiscovery.UserControls
         #endregion
 
         private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanel;
-        private System.Windows.Forms.DataGridView dataGridViewOutfitting;
+        private BaseUtils.DataGridViewColumnHider dataGridViewOutfitting;
         private ExtendedControls.ExtScrollBar vScrollBarCustomMC;
         internal ExtendedControls.ExtComboBox comboBoxYards;
         private System.Windows.Forms.Label labelYardSel;

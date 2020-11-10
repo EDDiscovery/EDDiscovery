@@ -30,6 +30,7 @@ namespace EDDiscovery.UserControls
     public partial class UserControlRoute : UserControlCommonBase
     {
         private string DbSave(string s) { return DBName("UCRoute" ,  "_" + s); }
+        private string DbColumnSave { get { return DBName("UCRoute", "DGVCol"); } }
 
         private List<ISystem> routeSystems; // only valid systems get passed back
         private bool changesilence;
@@ -107,8 +108,15 @@ namespace EDDiscovery.UserControls
             uctg = thc;
         }
 
+        public override void LoadLayout()
+        {
+            DGVLoadColumnLayout(dataGridViewRoute, DbColumnSave);
+        }
+
         public override void Closing()
         {
+            DGVSaveColumnLayout(dataGridViewRoute, DbColumnSave);
+
             if (routingthread != null && routingthread.IsAlive && plotter != null)
             {
                 plotter.StopPlotter = true;
@@ -731,22 +739,18 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        int rightclickrow = -1;
-
         private void dataGridViewRoute_MouseDown(object sender, MouseEventArgs e)
         {
-            dataGridViewRoute.HandleClickOnDataGrid(e, out int unusedleftclickrow, out rightclickrow);
-
-            showInEDSMToolStripMenuItem.Enabled = rightclickrow != -1 && dataGridViewRoute.Rows[rightclickrow].Tag != null;
-            showScanToolStripMenuItem.Enabled = rightclickrow != -1 && dataGridViewRoute.Rows[rightclickrow].Tag != null;
+            showInEDSMToolStripMenuItem.Enabled = dataGridViewRoute.RightClickRowValid && dataGridViewRoute.Rows[dataGridViewRoute.RightClickRow].Tag != null;
+            showScanToolStripMenuItem.Enabled = dataGridViewRoute.RightClickRowValid && dataGridViewRoute.Rows[dataGridViewRoute.RightClickRow].Tag != null;
             copyToolStripMenuItem.Enabled = dataGridViewRoute.GetCellCount(DataGridViewElementStates.Selected) > 0;
         }
 
         private void showInEDSMToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (rightclickrow >= 0)
+            if ( dataGridViewRoute.RightClickRowValid)
             {
-                ISystem sys = dataGridViewRoute.Rows[rightclickrow].Tag as ISystem;
+                ISystem sys = dataGridViewRoute.Rows[dataGridViewRoute.RightClickRow].Tag as ISystem;
 
                 if (sys != null) // paranoia because it should not be enabled otherwise
                 {
@@ -782,9 +786,9 @@ namespace EDDiscovery.UserControls
 
         private void showScanToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (rightclickrow >= 0)
+            if (dataGridViewRoute.RightClickRowValid)
             {
-                ISystem sys = dataGridViewRoute.Rows[rightclickrow].Tag as ISystem;
+                ISystem sys = dataGridViewRoute.Rows[dataGridViewRoute.RightClickRow].Tag as ISystem;
                 ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), sys, true, discoveryform.history);    // protected against sys = null
             }
         }

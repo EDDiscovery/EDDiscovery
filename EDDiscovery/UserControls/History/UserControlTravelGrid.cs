@@ -433,7 +433,7 @@ namespace EDDiscovery.UserControls
                     dataGridViewTravel.ClearSelection();
                     int rowno = dataGridViewTravel.Rows.GetFirstRow(DataGridViewElementStates.Visible);
                     if (rowno != -1)
-                        dataGridViewTravel.CurrentCell = dataGridViewTravel.Rows[rowno].Cells[1];       // its the current cell which needs to be set, moves the row marker as well
+                        dataGridViewTravel.SetCurrentCellOrRow(rowno,1);       // its the current cell which needs to be set, moves the row marker as well
 
                     FireChangeSelection();
                 }
@@ -513,7 +513,7 @@ namespace EDDiscovery.UserControls
             int rowno = DataGridViewControlHelpersStaticFunc.FindGridPosByID(rowsbyjournalid,jid, true);
             if (rowno >= 0)
             {
-                dataGridViewTravel.CurrentCell = dataGridViewTravel.Rows[rowno].Cells[Columns.Information];
+                dataGridViewTravel.SetCurrentCellOrRow(rowno,Columns.Information);
                 dataGridViewTravel.Rows[rowno].Selected = true;
                 FireChangeSelection();
             }
@@ -624,14 +624,16 @@ namespace EDDiscovery.UserControls
         private void dataGridViewTravel_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
         {
             DataGridView grid = sender as DataGridView;
+
             PaintEventColumn(grid, e,
-                            discoveryform.history.Count, (HistoryEntry)dataGridViewTravel.Rows[e.RowIndex].Tag,
-                            grid.RowHeadersWidth + grid.Columns[0].Width, grid.Columns[1].Width, true);
+                        discoveryform.history.Count, (HistoryEntry)dataGridViewTravel.Rows[e.RowIndex].Tag,
+                        grid.Columns[Columns.Icon].Visible ? grid.RowHeadersWidth + grid.Columns[0].Width : -1, 
+                        grid.Columns[1].Width, true);
         }
 
         public static void PaintEventColumn(DataGridView grid, DataGridViewRowPostPaintEventArgs e,
                                              int totalentries, HistoryEntry he,
-                                             int hpos, int colwidth, bool showfsdmapcolour)
+                                             int iconhpos, int iconcolumnwidth, bool showfsdmapcolour)
         {
             System.Diagnostics.Debug.Assert(he != null);    // Trip for debug builds if something is wrong,
             if (he == null)                                 // otherwise, ignore it and return.
@@ -649,81 +651,81 @@ namespace EDDiscovery.UserControls
                     e.Graphics.DrawString(rowIdx, grid.RowHeadersDefaultCellStyle.Font, br, headerBounds, centerFormat);
             }
 
-            int noicons = (he.IsFSDCarrierJump && showfsdmapcolour) ? 2 : 1;
-            if (he.StartMarker || he.StopMarker)
-                noicons++;
-
-            BookmarkClass bk = null;
-            if (he.IsLocOrJump)
+            if (iconhpos > 0)
             {
-                bk = GlobalBookMarkList.Instance.FindBookmarkOnSystem(he.System.Name);
-                if (bk != null)
+                int noicons = (he.IsFSDCarrierJump && showfsdmapcolour) ? 2 : 1;
+                if (he.StartMarker || he.StopMarker)
                     noicons++;
-            }
 
-            int padding = 4;
-            int size = 24;
-
-            if (size * noicons > (colwidth - 2))
-                size = (colwidth - 2) / noicons;
-
-            int hstart = (hpos + colwidth / 2) - size / 2 * noicons - padding / 2 * (noicons - 1);
-
-            int top = (e.RowBounds.Top + e.RowBounds.Bottom) / 2 - size / 2;
-
-            e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
-
-            e.Graphics.DrawImage(he.journalEntry.Icon, new Rectangle(hstart, top, size, size));
-            hstart += size + padding;
-
-            if (he.journalEntry is IJournalJumpColor && showfsdmapcolour)
-            {
-                Color c = Color.FromArgb(((IJournalJumpColor)he.journalEntry).MapColor);
-
-                using (Brush b = new SolidBrush(c))
+                BookmarkClass bk = null;
+                if (he.IsLocOrJump)
                 {
-                    e.Graphics.FillEllipse(b, new Rectangle(hstart + 2, top + 2, size - 6, size - 6));
+                    bk = GlobalBookMarkList.Instance.FindBookmarkOnSystem(he.System.Name);
+                    if (bk != null)
+                        noicons++;
                 }
 
-                hstart += size + padding;
-            }
+                int padding = 4;
+                int size = 24;
 
-            if (he.StartMarker)
-            {
-                e.Graphics.DrawImage(Icons.Controls.TravelGrid_FlagStart, new Rectangle(hstart, top, size, size));
+                if (size * noicons > (iconcolumnwidth - 2))
+                    size = (iconcolumnwidth - 2) / noicons;
+
+                int hstart = (iconhpos + iconcolumnwidth / 2) - size / 2 * noicons - padding / 2 * (noicons - 1);
+
+                int top = (e.RowBounds.Top + e.RowBounds.Bottom) / 2 - size / 2;
+
+                e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
+
+                e.Graphics.DrawImage(he.journalEntry.Icon, new Rectangle(hstart, top, size, size));
                 hstart += size + padding;
-            }
-            else if (he.StopMarker)
-            {
-                e.Graphics.DrawImage(Icons.Controls.TravelGrid_FlagStop, new Rectangle(hstart, top, size, size));
-                hstart += size + padding;
-            }
-            if (bk != null)
-            {
-                e.Graphics.DrawImage(Icons.Controls.Map3D_Bookmarks_Star, new Rectangle(hstart, top, size, size));
+
+                if (he.journalEntry is IJournalJumpColor && showfsdmapcolour)
+                {
+                    Color c = Color.FromArgb(((IJournalJumpColor)he.journalEntry).MapColor);
+
+                    using (Brush b = new SolidBrush(c))
+                    {
+                        e.Graphics.FillEllipse(b, new Rectangle(hstart + 2, top + 2, size - 6, size - 6));
+                    }
+
+                    hstart += size + padding;
+                }
+
+                if (he.StartMarker)
+                {
+                    e.Graphics.DrawImage(Icons.Controls.TravelGrid_FlagStart, new Rectangle(hstart, top, size, size));
+                    hstart += size + padding;
+                }
+                else if (he.StopMarker)
+                {
+                    e.Graphics.DrawImage(Icons.Controls.TravelGrid_FlagStop, new Rectangle(hstart, top, size, size));
+                    hstart += size + padding;
+                }
+                if (bk != null)
+                {
+                    e.Graphics.DrawImage(Icons.Controls.Map3D_Bookmarks_Star, new Rectangle(hstart, top, size, size));
+                }
             }
         }
 
 #region Right/Left Clicks
 
         HistoryEntry rightclickhe = null;
-        int rightclickrow = -1;
         HistoryEntry leftclickhe = null;
-        int leftclickrow = -1;
 
         private void dataGridViewTravel_MouseDown(object sender, MouseEventArgs e)
         {
-            dataGridViewTravel.HandleClickOnDataGrid(e, out leftclickrow, out rightclickrow);
-            rightclickhe = (rightclickrow != -1) ? (HistoryEntry)dataGridViewTravel.Rows[rightclickrow].Tag : null;
-            leftclickhe = (leftclickrow != -1) ? (HistoryEntry)dataGridViewTravel.Rows[leftclickrow].Tag : null;
+            rightclickhe = dataGridViewTravel.RightClickRowValid ? (HistoryEntry)dataGridViewTravel.Rows[dataGridViewTravel.RightClickRow].Tag : null;
+            leftclickhe = dataGridViewTravel.LeftClickRowValid ? (HistoryEntry)dataGridViewTravel.Rows[dataGridViewTravel.LeftClickRow].Tag : null;
         }
 
         private void dataGridViewTravel_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (leftclickrow >= 0)                                                   // Click expands it..
+            if (dataGridViewTravel.LeftClickRowValid)                                                   // Click expands it..
             {
                 leftclickhe.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
-                DataGridViewRow row = dataGridViewTravel.Rows[leftclickrow];
+                DataGridViewRow row = dataGridViewTravel.Rows[dataGridViewTravel.LeftClickRow];
 
                 bool expanded = row.Cells[Columns.Information].Tag != null;
 
@@ -1177,14 +1179,14 @@ namespace EDDiscovery.UserControls
             if (selrow >= 0)
             {
                 dataGridViewTravel.ClearSelection();
-                dataGridViewTravel.CurrentCell = dataGridViewTravel.Rows[selrow].Cells[1];
+                dataGridViewTravel.SetCurrentCellOrRow(selrow,1);
                 FireChangeSelection();
             }
         }
 
         private void gotoNextStartStopMarkerToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            for( int rown = rightclickrow+1; rown < dataGridViewTravel.Rows.Count; rown++ )
+            for( int rown = dataGridViewTravel.RightClickRow + 1; rown < dataGridViewTravel.Rows.Count; rown++ )
             {
                 DataGridViewRow r = dataGridViewTravel.Rows[rown];
                 if (r.Visible)

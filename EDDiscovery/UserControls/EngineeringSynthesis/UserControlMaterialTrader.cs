@@ -561,18 +561,11 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        int rightclickrow = -1;
-
-        private void dataGridViewTrades_MouseDown(object sender, MouseEventArgs e)
-        {
-            dataGridViewTrades.HandleClickOnDataGrid(e, out int unusedleftclickrow, out rightclickrow);
-        }
-
         private void clearTradeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if ( rightclickrow >= 0 && rightclickrow < trades.Count)
+            if (dataGridViewTrades.RightClickRowValid)
             {
-                trades.RemoveAt(rightclickrow);
+                trades.RemoveAt(dataGridViewTrades.RightClickRow);
                 StoreTrades();
                 DisplayTradeSelection();
                 DisplayTradeList();

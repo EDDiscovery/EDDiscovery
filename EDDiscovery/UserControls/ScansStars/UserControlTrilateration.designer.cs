@@ -384,6 +384,7 @@ namespace EDDiscovery.UserControls
             this.dataViewScroller_Distances.Controls.Add(this.dataGridViewDistances);
             this.dataViewScroller_Distances.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewScroller_Distances.InternalMargin = new System.Windows.Forms.Padding(0);
+            this.dataViewScroller_Distances.LimitLargeChange = 2147483647;
             this.dataViewScroller_Distances.Location = new System.Drawing.Point(0, 0);
             this.dataViewScroller_Distances.Name = "dataViewScroller_Distances";
             this.dataViewScroller_Distances.Size = new System.Drawing.Size(588, 675);
@@ -482,9 +483,8 @@ namespace EDDiscovery.UserControls
             this.richTextBox_History.Location = new System.Drawing.Point(0, 0);
             this.richTextBox_History.Name = "richTextBox_History";
             this.richTextBox_History.ReadOnly = false;
-            this.richTextBox_History.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\nouicompat\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 " +
-    "Microsoft Sans Serif;}}\r\n{\\*\\generator Riched20 10.0.18362}\\viewkind4\\uc1 \r\n\\par" +
-    "d\\f0\\fs17\\par\r\n}\r\n";
+            this.richTextBox_History.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 Microsoft S" +
+    "ans Serif;}}\r\n\\viewkind4\\uc1\\pard\\f0\\fs17\\par\r\n}\r\n";
             this.richTextBox_History.ScrollBarArrowBorderColor = System.Drawing.Color.LightBlue;
             this.richTextBox_History.ScrollBarArrowButtonColor = System.Drawing.Color.LightGray;
             this.richTextBox_History.ScrollBarBackColor = System.Drawing.SystemColors.Control;
@@ -508,6 +508,7 @@ namespace EDDiscovery.UserControls
             this.dataViewScroller_Wanted.Controls.Add(this.dataGridViewClosestSystems);
             this.dataViewScroller_Wanted.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewScroller_Wanted.InternalMargin = new System.Windows.Forms.Padding(0);
+            this.dataViewScroller_Wanted.LimitLargeChange = 2147483647;
             this.dataViewScroller_Wanted.Location = new System.Drawing.Point(0, 0);
             this.dataViewScroller_Wanted.Name = "dataViewScroller_Wanted";
             this.dataViewScroller_Wanted.Size = new System.Drawing.Size(496, 820);

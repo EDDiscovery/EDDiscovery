@@ -49,7 +49,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxYards = new ExtendedControls.ExtComboBox();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.dataViewScrollerPanel1 = new ExtendedControls.ExtPanelDataGridViewScroll();
-            this.dataGridViewShips = new System.Windows.Forms.DataGridView();
+            this.dataGridViewShips = new BaseUtils.DataGridViewColumnHider();
             this.Col1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Col2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Col3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -226,7 +226,7 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.Label labelYard;
         private System.Windows.Forms.ToolTip toolTip;
         private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanel1;
-        private System.Windows.Forms.DataGridView dataGridViewShips;
+        private BaseUtils.DataGridViewColumnHider dataGridViewShips;
         private ExtendedControls.ExtScrollBar vScrollBarCustom1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Col1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Col2;
