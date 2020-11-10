@@ -627,13 +627,13 @@ namespace EDDiscovery.UserControls
 
             PaintEventColumn(grid, e,
                         discoveryform.history.Count, (HistoryEntry)dataGridViewTravel.Rows[e.RowIndex].Tag,
-                        grid.Columns[Columns.Icon].Visible ? grid.RowHeadersWidth + grid.Columns[0].Width : -1, 
-                        grid.Columns[1].Width, true);
+                        Columns.Icon, true);
         }
 
         public static void PaintEventColumn(DataGridView grid, DataGridViewRowPostPaintEventArgs e,
                                              int totalentries, HistoryEntry he,
-                                             int iconhpos, int iconcolumnwidth, bool showfsdmapcolour)
+                                             int iconcolumn,
+                                             bool showfsdmapcolour)
         {
             System.Diagnostics.Debug.Assert(he != null);    // Trip for debug builds if something is wrong,
             if (he == null)                                 // otherwise, ignore it and return.
@@ -651,7 +651,7 @@ namespace EDDiscovery.UserControls
                     e.Graphics.DrawString(rowIdx, grid.RowHeadersDefaultCellStyle.Font, br, headerBounds, centerFormat);
             }
 
-            if (iconhpos > 0)
+            if (grid.Columns[iconcolumn].Visible)
             {
                 int noicons = (he.IsFSDCarrierJump && showfsdmapcolour) ? 2 : 1;
                 if (he.StartMarker || he.StopMarker)
@@ -667,9 +667,12 @@ namespace EDDiscovery.UserControls
 
                 int padding = 4;
                 int size = 24;
+                int iconcolumnwidth = grid.Columns[iconcolumn].Width;
 
                 if (size * noicons > (iconcolumnwidth - 2))
                     size = (iconcolumnwidth - 2) / noicons;
+
+                int iconhpos = grid.GetColumnPixelPosition(iconcolumn);
 
                 int hstart = (iconhpos + iconcolumnwidth / 2) - size / 2 * noicons - padding / 2 * (noicons - 1);
 

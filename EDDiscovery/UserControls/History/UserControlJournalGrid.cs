@@ -414,8 +414,7 @@ namespace EDDiscovery.UserControls
             DataGridView grid = sender as DataGridView;
             UserControls.UserControlTravelGrid.PaintEventColumn(sender as DataGridView, e,
                 discoveryform.history.Count, (HistoryEntry)dataGridViewJournal.Rows[e.RowIndex].Tag,
-                grid.Columns[Columns.Event].Visible ? grid.RowHeadersWidth + grid.Columns[0].Width : -1, 
-                grid.Columns[1].Width, false);
+                Columns.Event, false);
         }
 
         #region Mouse Clicks
