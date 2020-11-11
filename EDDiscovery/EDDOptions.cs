@@ -385,6 +385,16 @@ namespace EDDiscovery
             }
         }
 
+        public void ResetSystemDatabasePath()
+        {
+            SystemDatabasePath = Path.Combine(AppDataDirectory, "EDDSystem.sqlite");
+        }
+
+        public void ResetUserDatabasePath()
+        {
+            UserDatabasePath = Path.Combine(AppDataDirectory, "EDDUser.sqlite");
+        }
+
 
         private void Init()
         {
