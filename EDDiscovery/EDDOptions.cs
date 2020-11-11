@@ -236,6 +236,9 @@ namespace EDDiscovery
         public int TranslatorDirectoryIncludeSearchUpDepth { get; private set; }
         static public string ExeDirectory() { return System.AppDomain.CurrentDomain.BaseDirectory;  }
         public string[] TranslatorFolders() { return new string[] { TranslatorDirectory(), ExeDirectory() }; }
+        public string ExeOptionsFile() { return Path.Combine(ExeDirectory(), "options.txt"); }
+        public string AppOptionsFile() { return Path.Combine(AppDataDirectory, "options.txt"); }
+        public string DbOptionsFile() { return Path.Combine(AppDataDirectory, "dboptions.txt"); }
 
         private string AppFolder;      // internal to use.. for -appfolder option
         private bool StoreDataInProgramDirectory;  // internal to us, to indicate portable
@@ -287,7 +290,7 @@ namespace EDDiscovery
             }
 
             if (!Directory.Exists(AppDataDirectory))        // make sure its there..
-                Directory.CreateDirectory(AppDataDirectory);
+                BaseUtils.FileHelpers.CreateDirectoryNoError(AppDataDirectory);
 
             if (TempDirInDataDir == true)
             {
@@ -395,7 +398,6 @@ namespace EDDiscovery
             UserDatabasePath = Path.Combine(AppDataDirectory, "EDDUser.sqlite");
         }
 
-
         private void Init()
         {
 #if !DEBUG
@@ -407,7 +409,7 @@ namespace EDDiscovery
 
             ProcessCommandLineForOptionsFile(ExeDirectory(), ProcessOption);     // go thru the command line looking for -optionfile, use relative base dir
 
-            string optval = Path.Combine(ExeDirectory(), "options.txt");      // options in the exe folder.
+            string optval = ExeOptionsFile();      // options in the exe folder.
             if (File.Exists(optval))   // try options.txt in the base folder..
             {
                 ProcessOptionFile(optval, (optname, ca, toeol) =>              //FIRST pass thru options.txt options looking
@@ -427,12 +429,12 @@ namespace EDDiscovery
 
             ProcessCommandLineForOptionsFile(AppDataDirectory, ProcessOption);     // go thru the command line looking for -optionfile relative to app folder, then read them
 
-            optval = Path.Combine(AppDataDirectory, "options.txt");      // options in the base folder.
-            if (File.Exists(optval))   // try options.txt in the base folder..
+            optval = AppOptionsFile();      
+            if (File.Exists(optval))   // try options.txt in the app folder
                 ProcessOptionFile(optval, ProcessOption);
 
             // db move system option file will contain user and system db overrides
-            optval = Path.Combine(AppDataDirectory, "dboptions.txt");   // look for this file in the app folder
+            optval = DbOptionsFile();   // look for this file in the app folder
             if (File.Exists(optval))
                 ProcessOptionFile(optval, ProcessOption);
 
@@ -440,8 +442,10 @@ namespace EDDiscovery
 
             SetVersionDisplayString();  // then set the version display string up dependent on options selected
 
-            if (UserDatabasePath == null) UserDatabasePath = Path.Combine(AppDataDirectory, "EDDUser.sqlite");
-            if (SystemDatabasePath == null) SystemDatabasePath = Path.Combine(AppDataDirectory, "EDDSystem.sqlite");
+            if (UserDatabasePath == null)
+                ResetUserDatabasePath();
+            if (SystemDatabasePath == null)
+                ResetSystemDatabasePath();
 
             EliteDangerousCore.EliteConfigInstance.InstanceOptions = this;
         }

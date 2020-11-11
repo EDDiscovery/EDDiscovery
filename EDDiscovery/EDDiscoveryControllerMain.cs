@@ -171,22 +171,6 @@ namespace EDDiscovery
 
             Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Initializing database");
 
-            if (!Directory.Exists(Path.GetDirectoryName(EDDOptions.Instance.SystemDatabasePath)))
-            {
-                if (System.Windows.Forms.MessageBox.Show("Error: EDDSystem.sqlite is inaccessible.  Reset?", "Systems DB inaccessible", System.Windows.Forms.MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
-                {
-                    EDDOptions.Instance.ResetSystemDatabasePath();
-                }
-            }
-
-            if (!Directory.Exists(Path.GetDirectoryName(EDDOptions.Instance.UserDatabasePath)))
-            {
-                if (System.Windows.Forms.MessageBox.Show("Error: EDDUser.sqlite is inaccessible.  Reset?", "User DB inaccessible", System.Windows.Forms.MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
-                {
-                    EDDOptions.Instance.ResetUserDatabasePath();
-                }
-            }
-
             UserDatabase.Instance.Start("UserDB");
             SystemsDatabase.Instance.Start("SystemDB");
             UserDatabase.Instance.Initialize();

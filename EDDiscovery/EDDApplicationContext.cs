@@ -17,6 +17,7 @@
 using BaseUtils.Win32;
 using EDDiscovery.Forms;
 using System;
+using System.IO;
 using System.Reflection;                //Assembly
 using System.Windows.Forms;
 
@@ -72,7 +73,38 @@ namespace EDDiscovery
         {   // Really just a workaround for the clumsy terniary operator if constructing new but different things.
             get
             {
-                if (Control.ModifierKeys.HasFlag(Keys.Shift) || EDDOptions.Instance.SafeMode )
+
+                bool insafemode = EDDOptions.Instance.SafeMode;     // force reading of options, pick up safe mode option
+
+                // check some basic things can be reached before we start
+
+                string dberror = "Check status of the drive/share" + Environment.NewLine +
+                                "Check options.txt and dboptions.txt for correctness in " + EDDOptions.Instance.AppDataDirectory + Environment.NewLine +
+                                "Or use safemode reset DB to remove dboptions.txt " + Environment.NewLine +
+                                "and go back to using the standard c: location";
+
+                if (!Directory.Exists(Path.GetDirectoryName(EDDOptions.Instance.AppDataDirectory)))
+                {
+                    System.Windows.Forms.MessageBox.Show("Error: App Data Directory is inaccessible at " + EDDOptions.Instance.AppDataDirectory + Environment.NewLine + Environment.NewLine +
+                                                         "Check status of the drive/share" + Environment.NewLine +
+                                                         "Also check options.txt is correct in your " + EDDOptions.ExeDirectory() + " folder", 
+                                                         "Application Folder inaccessible", System.Windows.Forms.MessageBoxButtons.OK);
+                    Environment.Exit(1);
+                }
+                else if (!Directory.Exists(Path.GetDirectoryName(EDDOptions.Instance.SystemDatabasePath)))
+                {
+                    System.Windows.Forms.MessageBox.Show("Error: Systems database is inaccessible at " + EDDOptions.Instance.SystemDatabasePath + Environment.NewLine + Environment.NewLine + dberror,
+                                                        "Systems DB inaccessible", System.Windows.Forms.MessageBoxButtons.OK);
+                    insafemode = true;
+                }
+                else if (!Directory.Exists(Path.GetDirectoryName(EDDOptions.Instance.UserDatabasePath)))
+                {
+                    System.Windows.Forms.MessageBox.Show("Error: User database is inaccessible at " + EDDOptions.Instance.UserDatabasePath + Environment.NewLine + Environment.NewLine + dberror, 
+                                                         "User DB inaccessible", System.Windows.Forms.MessageBoxButtons.OK);
+                    insafemode = true;
+                }
+
+                if (Control.ModifierKeys.HasFlag(Keys.Shift) || insafemode )
                     return new SafeModeForm();
                 else
                     return new SplashForm();
