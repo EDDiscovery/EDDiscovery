@@ -82,25 +82,45 @@ namespace EDDiscovery
                                 "Check options.txt and dboptions.txt for correctness in " + EDDOptions.Instance.AppDataDirectory + Environment.NewLine +
                                 "Or use safemode reset DB to remove dboptions.txt " + Environment.NewLine +
                                 "and go back to using the standard c: location";
+                string apperror = "Check status of the drive/share" + Environment.NewLine +
+                                  "Also check options.txt is correct in your " + EDDOptions.ExeDirectory() + " folder";
+                string sysdbdir = Path.GetDirectoryName(EDDOptions.Instance.SystemDatabasePath);
+                string userdbdir = Path.GetDirectoryName(EDDOptions.Instance.UserDatabasePath);
 
-                if (!Directory.Exists(Path.GetDirectoryName(EDDOptions.Instance.AppDataDirectory)))
+                if (!Directory.Exists(EDDOptions.Instance.AppDataDirectory))
                 {
-                    System.Windows.Forms.MessageBox.Show("Error: App Data Directory is inaccessible at " + EDDOptions.Instance.AppDataDirectory + Environment.NewLine + Environment.NewLine +
-                                                         "Check status of the drive/share" + Environment.NewLine +
-                                                         "Also check options.txt is correct in your " + EDDOptions.ExeDirectory() + " folder", 
+                    System.Windows.Forms.MessageBox.Show("Error: App Data Directory is inaccessible at " + EDDOptions.Instance.AppDataDirectory + Environment.NewLine + Environment.NewLine + apperror,
                                                          "Application Folder inaccessible", System.Windows.Forms.MessageBoxButtons.OK);
                     Environment.Exit(1);
                 }
-                else if (!Directory.Exists(Path.GetDirectoryName(EDDOptions.Instance.SystemDatabasePath)))
+                else if (!BaseUtils.FileHelpers.VerifyWriteToDirectory(EDDOptions.Instance.AppDataDirectory))
+                {
+                    System.Windows.Forms.MessageBox.Show("Error: App Data Directory is not writable at " + EDDOptions.Instance.AppDataDirectory + Environment.NewLine + Environment.NewLine + apperror,
+                                                         "Application Folder not writable", System.Windows.Forms.MessageBoxButtons.OK);
+                    Environment.Exit(1);
+                }
+                else if (!Directory.Exists(sysdbdir))
                 {
                     System.Windows.Forms.MessageBox.Show("Error: Systems database is inaccessible at " + EDDOptions.Instance.SystemDatabasePath + Environment.NewLine + Environment.NewLine + dberror,
                                                         "Systems DB inaccessible", System.Windows.Forms.MessageBoxButtons.OK);
                     insafemode = true;
                 }
-                else if (!Directory.Exists(Path.GetDirectoryName(EDDOptions.Instance.UserDatabasePath)))
+                else if (!BaseUtils.FileHelpers.VerifyWriteToDirectory(sysdbdir))
                 {
-                    System.Windows.Forms.MessageBox.Show("Error: User database is inaccessible at " + EDDOptions.Instance.UserDatabasePath + Environment.NewLine + Environment.NewLine + dberror, 
+                    System.Windows.Forms.MessageBox.Show("Error: Systems database folder is not writable at " + sysdbdir + Environment.NewLine + Environment.NewLine + dberror,
+                                                        "Systems DB not writeable", System.Windows.Forms.MessageBoxButtons.OK);
+                    insafemode = true;
+                }
+                else if (!Directory.Exists(userdbdir))
+                {
+                    System.Windows.Forms.MessageBox.Show("Error: User database is inaccessible at " + EDDOptions.Instance.UserDatabasePath + Environment.NewLine + Environment.NewLine + dberror,
                                                          "User DB inaccessible", System.Windows.Forms.MessageBoxButtons.OK);
+                    insafemode = true;
+                }
+                else if (!BaseUtils.FileHelpers.VerifyWriteToDirectory(userdbdir))
+                {
+                    System.Windows.Forms.MessageBox.Show("Error: User database folder is not writable at " + sysdbdir + Environment.NewLine + Environment.NewLine + dberror,
+                                                        "User DB not writeable", System.Windows.Forms.MessageBoxButtons.OK);
                     insafemode = true;
                 }
 
