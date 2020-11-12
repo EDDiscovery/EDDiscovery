@@ -265,7 +265,7 @@ namespace EDDiscovery.UserControls
                         // make a tree of the planets with their barycentres from the Parents information
                         var barynodes = StarScan.ScanNode.PopulateBarycentres(planetsinorder);  // children always made, barynode tree
 
-                        StarScan.ScanNode.DumpTree(barynodes, "TOP", 0);
+                        //StarScan.ScanNode.DumpTree(barynodes, "TOP", 0);
 
                         List<ExtPictureBox.ImageElement> pcb = new List<ExtPictureBox.ImageElement>();
 
