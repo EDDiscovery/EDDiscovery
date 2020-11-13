@@ -212,7 +212,7 @@ namespace EDDiscovery.UserControls
 
                     // System.Diagnostics.Debug.WriteLine("J Chunk Load in " + sw.ElapsedMilliseconds);
 
-                    if (dataGridViewJournal.MoveToSelection(rowsbyjournalid, ref pos, false, Columns.Event))
+                    if (dataGridViewJournal.MoveToSelection(rowsbyjournalid, ref pos, false))
                         FireChangeSelection();
 
                 });
@@ -224,7 +224,7 @@ namespace EDDiscovery.UserControls
 
                 UpdateToolTipsForFilter();
 
-                if (dataGridViewJournal.MoveToSelection(rowsbyjournalid, ref pos, true, Columns.Event))
+                if (dataGridViewJournal.MoveToSelection(rowsbyjournalid, ref pos, true))
                     FireChangeSelection();
 
                 if (sortcol >= 0)
@@ -315,7 +315,7 @@ namespace EDDiscovery.UserControls
                     dataGridViewJournal.ClearSelection();
                     int rowno = dataGridViewJournal.Rows.GetFirstRow(DataGridViewElementStates.Visible);
                     if (rowno != -1)
-                        dataGridViewJournal.SetCurrentCellOrRow(rowno,1);       // its the current cell which needs to be set, moves the row marker as well
+                        dataGridViewJournal.SetCurrentAndSelectAllCellsOnRow(rowno);       // its the current cell which needs to be set, moves the row marker as well
 
                     FireChangeSelection();
                 }
@@ -544,7 +544,7 @@ namespace EDDiscovery.UserControls
             int rowno = DataGridViewControlHelpersStaticFunc.FindGridPosByID(rowsbyjournalid, jid, true);
             if (rowno >= 0)
             {
-                dataGridViewJournal.SetCurrentCellOrRow(rowno, Columns.Event);
+                dataGridViewJournal.SetCurrentAndSelectAllCellsOnRow(rowno);
                 dataGridViewJournal.Rows[rowno].Selected = true;
                 FireChangeSelection();
             }
@@ -572,7 +572,7 @@ namespace EDDiscovery.UserControls
             if (selrow >= 0)
             {
                 dataGridViewJournal.ClearSelection();
-                dataGridViewJournal.SetCurrentCellOrRow(selrow, 1);
+                dataGridViewJournal.SetCurrentAndSelectAllCellsOnRow(selrow);
                 FireChangeSelection();
             }
         }

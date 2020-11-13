@@ -207,7 +207,7 @@ namespace EDDiscovery.UserControls
                     dataGridViewStarList.Rows.AddRange(rowstoadd.ToArray());
                 });
 
-                if (dataGridViewStarList.MoveToSelection(rowsbyjournalid, ref pos, false, Columns.StarName))
+                if (dataGridViewStarList.MoveToSelection(rowsbyjournalid, ref pos, false))
                     FireChangeSelection();
             }
 
@@ -216,7 +216,7 @@ namespace EDDiscovery.UserControls
                 dataGridViewStarList.FilterGridView(filtertext);
                 System.Diagnostics.Debug.WriteLine(BaseUtils.AppTicks.TickCount + " SL TOTAL TIME " + swtotal.ElapsedMilliseconds);
 
-                if (dataGridViewStarList.MoveToSelection(rowsbyjournalid, ref pos, true, Columns.StarName))
+                if (dataGridViewStarList.MoveToSelection(rowsbyjournalid, ref pos, true))
                     FireChangeSelection();
 
                 if (sortcol >= 0)
@@ -310,7 +310,7 @@ namespace EDDiscovery.UserControls
                         dataGridViewStarList.ClearSelection();
                         int rowno = dataGridViewStarList.Rows.GetFirstRow(DataGridViewElementStates.Visible);
                         if (rowno != -1)
-                            dataGridViewStarList.SetCurrentCellOrRow(rowno, Columns.StarName);       // its the current cell which needs to be set, moves the row marker as well
+                            dataGridViewStarList.SetCurrentAndSelectAllCellsOnRow(rowno);       // its the current cell which needs to be set, moves the row marker as well
 
                         FireChangeSelection();
                     }
@@ -617,7 +617,7 @@ namespace EDDiscovery.UserControls
             int rowno = DataGridViewControlHelpersStaticFunc.FindGridPosByID(rowsbyjournalid, jid, true);
             if (rowno >= 0)
             {
-                dataGridViewStarList.SetCurrentCellOrRow(rowno, Columns.StarName);
+                dataGridViewStarList.SetCurrentAndSelectAllCellsOnRow(rowno);
                 dataGridViewStarList.Rows[rowno].Selected = true;
                 FireChangeSelection();
             }

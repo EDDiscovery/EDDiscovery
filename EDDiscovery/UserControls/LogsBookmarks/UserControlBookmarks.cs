@@ -94,7 +94,7 @@ namespace EDDiscovery.UserControls
             dataGridViewBookMarks.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
 
             if (lastrow >= 0 && lastrow < dataGridViewBookMarks.Rows.Count)
-                dataGridViewBookMarks.SetCurrentCellOrRow(Math.Min(lastrow, dataGridViewBookMarks.Rows.Count - 1), 2);
+                dataGridViewBookMarks.SetCurrentAndSelectAllCellsOnRow(Math.Min(lastrow, dataGridViewBookMarks.Rows.Count - 1));
 
             RefreshCurrentEdit();
 

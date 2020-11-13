@@ -177,7 +177,7 @@ namespace EDDiscovery.UserControls
                 dataGridView.FilterGridView(textBoxFilter.Text, checktags: true);
 
             if (lastrow >= 0 && lastrow < dataGridView.Rows.Count && dataGridView.Rows[lastrow].Visible)
-                dataGridView.SetCurrentCellOrRow(Math.Min(lastrow, dataGridView.Rows.Count - 1), 3);
+                dataGridView.SetCurrentAndSelectAllCellsOnRow(Math.Min(lastrow, dataGridView.Rows.Count - 1));
         }
 
         private void dataGridView_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)

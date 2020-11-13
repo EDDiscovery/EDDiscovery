@@ -275,7 +275,7 @@ namespace EDDiscovery.UserControls
                     string v = (string)rw.Cells[1].Value;
                     if ( v.Equals(commodity))           // Find the commodity, and set it to the same relative position as before.
                     {
-                        dataGridViewMarketData.SetCurrentCellOrRow(rw.Index,1);
+                        dataGridViewMarketData.SetCurrentAndSelectAllCellsOnRow(rw.Index);
                         dataGridViewMarketData.SafeFirstDisplayedScrollingRowIndex( Math.Max(rw.Index - currentoffset,0));
                         break;
                     }

@@ -283,7 +283,7 @@ namespace EDDiscovery.UserControls
 
                 dataGridViewTravel.Rows.AddRange(rowstoadd.ToArray());
 
-                if (dataGridViewTravel.MoveToSelection(rowsbyjournalid, ref pos, false, Columns.Information))
+                if (dataGridViewTravel.MoveToSelection(rowsbyjournalid, ref pos, false))
                     FireChangeSelection();
             }
 
@@ -309,7 +309,7 @@ namespace EDDiscovery.UserControls
 
                     dataGridViewTravel.Rows.AddRange(rowstoadd.ToArray());
 
-                    if (dataGridViewTravel.MoveToSelection(rowsbyjournalid, ref pos, false, Columns.Information))
+                    if (dataGridViewTravel.MoveToSelection(rowsbyjournalid, ref pos, false))
                         FireChangeSelection();
 
                     //System.Diagnostics.Debug.WriteLine("T Chunk Load in " + sw.ElapsedMilliseconds);
@@ -334,7 +334,7 @@ namespace EDDiscovery.UserControls
 
                 //System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCountLap(this) + " TG " + displaynumber + " Load Finish");
 
-                if (dataGridViewTravel.MoveToSelection(rowsbyjournalid, ref pos, true, Columns.Information))
+                if (dataGridViewTravel.MoveToSelection(rowsbyjournalid, ref pos, true))
                     FireChangeSelection();
 
                 if (sortcol >= 0)
@@ -433,7 +433,7 @@ namespace EDDiscovery.UserControls
                     dataGridViewTravel.ClearSelection();
                     int rowno = dataGridViewTravel.Rows.GetFirstRow(DataGridViewElementStates.Visible);
                     if (rowno != -1)
-                        dataGridViewTravel.SetCurrentCellOrRow(rowno,1);       // its the current cell which needs to be set, moves the row marker as well
+                        dataGridViewTravel.SetCurrentAndSelectAllCellsOnRow(rowno);       // its the current cell which needs to be set, moves the row marker as well
 
                     FireChangeSelection();
                 }
@@ -513,7 +513,7 @@ namespace EDDiscovery.UserControls
             int rowno = DataGridViewControlHelpersStaticFunc.FindGridPosByID(rowsbyjournalid,jid, true);
             if (rowno >= 0)
             {
-                dataGridViewTravel.SetCurrentCellOrRow(rowno,Columns.Information);
+                dataGridViewTravel.SetCurrentAndSelectAllCellsOnRow(rowno);
                 dataGridViewTravel.Rows[rowno].Selected = true;
                 FireChangeSelection();
             }
@@ -521,16 +521,17 @@ namespace EDDiscovery.UserControls
 
         public void FireChangeSelection()
         {
-            System.Diagnostics.Debug.WriteLine("TG Fire Change sel" );
-
             if (dataGridViewTravel.CurrentCell != null)
             {
                 int row = dataGridViewTravel.CurrentCell.RowIndex;
-                //System.Diagnostics.Debug.WriteLine("TG:Fire Change Sel row" + row);
-                OnTravelSelectionChanged?.Invoke(dataGridViewTravel.Rows[row].Tag as HistoryEntry, current_historylist, true);
+                var he = dataGridViewTravel.Rows[row].Tag as HistoryEntry;
+                System.Diagnostics.Debug.WriteLine("TG Fire Change sel at " + row + " he " + he.System.Name + " " + dataGridViewTravel.CurrentCell.RowIndex + ":" + dataGridViewTravel.CurrentCell.ColumnIndex);
+                OnTravelSelectionChanged?.Invoke(he, current_historylist, true);
             }
             else if (current_historylist != null && current_historylist.Count > 0)
+            {
                 OnTravelSelectionChanged?.Invoke(current_historylist.Last(), current_historylist, false);
+            }
         }
 
         private void comboBoxHistoryWindow_SelectedIndexChanged(object sender, EventArgs e)
@@ -1182,7 +1183,7 @@ namespace EDDiscovery.UserControls
             if (selrow >= 0)
             {
                 dataGridViewTravel.ClearSelection();
-                dataGridViewTravel.SetCurrentCellOrRow(selrow,1);
+                dataGridViewTravel.SetCurrentAndSelectAllCellsOnRow(selrow);
                 FireChangeSelection();
             }
         }
