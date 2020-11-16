@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using EDDiscovery.Controls;
 using EliteDangerousCore;
+using EliteDangerousCore.DB;
 
 namespace EDDiscovery.UserControls
 {
@@ -172,8 +173,8 @@ namespace EDDiscovery.UserControls
 
         private void Display()
         {
-            DataGridViewColumn sortcolprev = dataGridViewFactions.SortedColumn != null ? dataGridViewFactions.SortedColumn : dataGridViewFactions.Columns[1];
-            SortOrder sortorderprev = dataGridViewFactions.SortedColumn != null ? dataGridViewFactions.SortOrder : SortOrder.Descending;
+            //DataGridViewColumn sortcolprev = dataGridViewFactions.SortedColumn != null ? dataGridViewFactions.SortedColumn : dataGridViewFactions.Columns[1];
+            //SortOrder sortorderprev = dataGridViewFactions.SortedColumn != null ? dataGridViewFactions.SortOrder : SortOrder.Descending;
 
             this.Factions = new Dictionary<string, FactionStatistics>();
             dataGridViewFactions.Rows.Clear();
@@ -194,8 +195,34 @@ namespace EDDiscovery.UserControls
                             System.Diagnostics.Debug.WriteLine(ms.Mission.Faction + " " + ms.Mission.Name + " " + ms.Completed.EventTimeUTC);
                             total++;
                             var faction = ms.Mission.Faction;
-                            int inf = ms.Mission.Influence != null ? ms.Mission.Influence.Length : 0;
-                            int rep = ms.Mission.Reputation != null ? ms.Mission.Reputation.Length : 0;
+                            int inf = 0;
+                            int rep = 0;
+                            foreach(var fe in ms.Completed.FactionEffects)
+                            {
+                                if (fe.Faction == faction)
+                                {
+                                    if (fe.ReputationTrend == "UpGood" && fe.Reputation?.Length > 0)
+                                    {
+                                        rep = fe.Reputation.Length;
+                                    }
+
+                                    foreach(var si in fe.Influence)
+                                    {
+                                        //if (si.SystemAddress > 0)
+                                        //{
+                                        //    var system = SystemCache.FindSystem(si.SystemAddress);
+                                        //    if (system != null)
+                                        //    {
+                                        //        System.Diagnostics.Debug.WriteLine("system ID " + si.SystemAddress + " " + system.Name);
+                                        //    }
+                                        //}
+                                        if (si.Trend == "UpGood" && si.Influence?.Length > 0)
+                                        {
+                                            inf += si.Influence.Length;
+                                        }
+                                    }
+                                }
+                            }
                             long credits = ms.Completed.Reward != null ? (long)ms.Completed.Reward : 0;
                             FactionStatistics factionStats;
                             if (!this.Factions.TryGetValue(faction, out factionStats))
