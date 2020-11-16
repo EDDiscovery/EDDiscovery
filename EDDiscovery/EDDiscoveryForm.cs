@@ -860,9 +860,15 @@ namespace EDDiscovery
                 {
                     if (DLLManager.Count > 0)       // if worth calling..
                     {
-                        string output = BaseUtils.JSON.JToken.FromObject(uievent)?.ToString();
+                        BaseUtils.JSON.JToken t = BaseUtils.JSON.JToken.FromObject(uievent, ignoreunserialisable: true, 
+                                                                                    ignored: new Type[] { typeof(Bitmap), typeof(Image) }, 
+                                                                                    maxrecursiondepth:3);
+                        string output = t?.ToString();
                         if (output != null)
+                        {
+                            //System.Diagnostics.Debug.WriteLine("DLL JSON UI String " + output);
                             DLLManager.NewUIEvent(output);
+                        }
                         else
                             System.Diagnostics.Debug.WriteLine("JSON convert error from object in DLL");
                     }
