@@ -183,12 +183,13 @@ namespace EDDiscovery.UserControls
             var total = 0;
             if (ml != null)
             {
-                foreach(MissionState ms in ml.Missions.Values)
+                foreach (MissionState ms in ml.Missions.Values)
                 {
-                    if (ms.State == MissionState.StateTypes.Completed)
+                    if (ms.State == MissionState.StateTypes.Completed && ms.Completed != null)
                     {
                         DateTime startdateutc = startDateTime.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromSelected(startDateTime.Value) : new DateTime(1980, 1, 1);
                         DateTime enddateutc = endDateTime.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromSelected(endDateTime.Value) : new DateTime(8999, 1, 1);
+
                         if (DateTime.Compare(ms.Completed.EventTimeUTC, startdateutc) >= 0 &&
                             DateTime.Compare(ms.Completed.EventTimeUTC, enddateutc) <= 0)
                         {
@@ -197,7 +198,7 @@ namespace EDDiscovery.UserControls
                             var faction = ms.Mission.Faction;
                             int inf = 0;
                             int rep = 0;
-                            foreach(var fe in ms.Completed.FactionEffects)
+                            foreach (var fe in ms.Completed.FactionEffects)
                             {
                                 if (fe.Faction == faction)
                                 {
@@ -206,7 +207,7 @@ namespace EDDiscovery.UserControls
                                         rep = fe.Reputation.Length;
                                     }
 
-                                    foreach(var si in fe.Influence)
+                                    foreach (var si in fe.Influence)
                                     {
                                         //if (si.SystemAddress > 0)
                                         //{
@@ -252,7 +253,7 @@ namespace EDDiscovery.UserControls
                             }
                             if (ms.Completed.CommodityReward != null)
                             {
-                                foreach (var cr in ms.Completed.MaterialsReward)
+                                foreach (var cr in ms.Completed.CommodityReward)
                                 {
                                     factionStats.AddReward(cr.Name_Localised, cr.Count);
                                 }
