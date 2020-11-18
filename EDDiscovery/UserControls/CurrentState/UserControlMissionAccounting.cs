@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using EDDiscovery.Controls;
+using EDDiscovery.UserControls.Helpers;
 using EliteDangerousCore;
 
 namespace EDDiscovery.UserControls
@@ -185,7 +187,7 @@ namespace EDDiscovery.UserControls
                         if (DateTime.Compare(ms.Completed.EventTimeUTC, startdateutc) >= 0 &&
                             DateTime.Compare(ms.Completed.EventTimeUTC, enddateutc) <= 0)
                         {
-                            System.Diagnostics.Debug.WriteLine(ms.Mission.Faction + " " + ms.Mission.Name + " " + ms.Completed.EventTimeUTC);
+                      //      System.Diagnostics.Debug.WriteLine(ms.Mission.Faction + " " + ms.Mission.Name + " " + ms.Completed.EventTimeUTC);
                             total++;
                             var faction = ms.Mission.Faction;
                             int inf = 0;
@@ -250,7 +252,7 @@ namespace EDDiscovery.UserControls
                 }
                 if (total > 0)
                 {
-                    System.Diagnostics.Debug.WriteLine(total + " missions");
+                    //System.Diagnostics.Debug.WriteLine(total + " missions");
                     var rows = new List<DataGridViewRow>(total);
                     foreach (FactionStatistics fs in this.Factions.Values)
                     {
@@ -317,6 +319,58 @@ namespace EDDiscovery.UserControls
             {
                 e.SortDataGridViewColumnNumeric();
             }
+        }
+
+        private void dataGridViewFactions_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            ShowMissions(dataGridViewFactions.LeftClickRow);
+        }
+
+        void ShowMissions(int row)
+        { 
+            if (row >= 0)
+            {
+                FactionStatistics fs = dataGridViewFactions.Rows[row].Tag as FactionStatistics;
+
+                ExtendedControls.ConfigurableForm f = new ExtendedControls.ConfigurableForm();
+                MissionListUserControl mluc = new MissionListUserControl();
+
+                mluc.Clear();
+                MissionList ml = last_he?.MissionList;
+                if (ml != null)
+                {
+                    foreach (MissionState ms in ml.Missions.Values)
+                    {
+                        if (ms.State == MissionState.StateTypes.Completed && ms.Completed != null)
+                        {
+                            var faction = ms.Mission.Faction;
+                            if (faction == fs.Name)
+                                mluc.Add(ms, true);
+                        }
+                    }
+
+                    mluc.Finish();
+                }
+
+                f.Add(new ExtendedControls.ConfigurableForm.Entry(mluc, "Grid", "", new System.Drawing.Point(3, 30), new System.Drawing.Size(800, 400), null));
+
+                f.AddOK(new Point(800 - 100, 460), "OK");
+
+                f.Trigger += (dialogname, controlname, xtag) =>
+                {
+                    if (controlname == "OK" || controlname == "Close")
+                    {
+                        f.ReturnResult(DialogResult.OK);
+                    }
+                };
+
+                f.ShowDialogCentred(this.FindForm(), this.FindForm().Icon, "Missions for ".Tx(EDTx.UserControlMissionAccounting_MissionsFor) + fs.Name, closeicon:true);
+            }
+        }
+
+        private void showMissionsForFactionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ShowMissions(dataGridViewFactions.RightClickRow);
         }
     }
 }

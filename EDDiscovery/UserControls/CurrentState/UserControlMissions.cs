@@ -151,7 +151,7 @@ namespace EDDiscovery.UserControls
                     missionListCurrent.Add(ms, false);
                 }
 
-                missionListCurrent.Finish(false);
+                missionListCurrent.Finish();
 
                 List<MissionState> mprev = ml.GetAllExpiredMissions(hetime);
 
@@ -162,7 +162,7 @@ namespace EDDiscovery.UserControls
                     missionListPrevious.Add(ms, true);
                 }
 
-                missionListPrevious.Finish(true);
+                missionListPrevious.Finish();
             }
         }
 

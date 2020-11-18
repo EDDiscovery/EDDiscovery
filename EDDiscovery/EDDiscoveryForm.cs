@@ -866,7 +866,7 @@ namespace EDDiscovery
                         string output = t?.ToString();
                         if (output != null)
                         {
-                            //System.Diagnostics.Debug.WriteLine("DLL JSON UI String " + output);
+                          //  System.Diagnostics.Debug.WriteLine("DLL JSON UI String " + output);
                             DLLManager.NewUIEvent(output);
                         }
                         else
