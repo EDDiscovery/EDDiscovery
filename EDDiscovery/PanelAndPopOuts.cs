@@ -75,6 +75,7 @@ namespace EDDiscovery
             MaterialTrader,         // 44
             Map2D,                  // 45
             MiningOverlay,          // 46
+            MissionAccounting,      // 47
             // ****** ADD More here DO NOT REORDER *****
         };
 
@@ -94,6 +95,7 @@ namespace EDDiscovery
             { new PanelInfo( PanelIDs.Commodities, typeof(UserControlCommodities), "Commodities", "Commodities", "Commodity count") },
             { new PanelInfo( PanelIDs.Ledger, typeof(UserControlLedger), "Ledger", "Ledger", "Ledger of cash related entries") },
             { new PanelInfo( PanelIDs.Missions, typeof(UserControlMissions), "Missions", "Missions", "Mission list") },
+            { new PanelInfo( PanelIDs.MissionAccounting, typeof(UserControlMissionAccounting), "Mission Accounting", "MissionAccounting", "Mission rewards tally") },
             { new PanelInfo( PanelIDs.Modules, typeof(UserControlModules), "Ships/Loadout", "Modules", "Ships and their loadouts plus stored modules") },
             { new PanelInfo( PanelIDs.Statistics, typeof(UserControlStats), "Statistics", "Stats", "Statistics Information") },
 

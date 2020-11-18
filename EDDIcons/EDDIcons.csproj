@@ -277,9 +277,6 @@
     <EmbeddedResource Include="Panels\SystemInformation.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Panels\Missions.png" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Journal\AfmuRepair.png" />
     <EmbeddedResource Include="Journal\EngineerContribution.png" />
     <EmbeddedResource Include="Journal\VehicleSwitch_Fighter.png" />
@@ -573,6 +570,7 @@
     <EmbeddedResource Include="Controls\SysInfo\notfirstdiscover.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Panels\MissionAccounting.png" />
     <EmbeddedResource Include="Panels\MiningOverlay.png" />
     <EmbeddedResource Include="GalMap\Galaxy_L.jpg" />
     <EmbeddedResource Include="GalMap\Galaxy_L_Grid.jpg" />
