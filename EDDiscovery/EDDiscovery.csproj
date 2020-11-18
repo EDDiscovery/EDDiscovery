@@ -194,6 +194,12 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="UserControls\Helpers\CSVHelpers.cs" />
+    <Compile Include="UserControls\Helpers\MissionListUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\Helpers\MissionListUserControl.Designer.cs">
+      <DependentUpon>MissionListUserControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\Overlays\UserControlMiningOverlay.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -738,6 +744,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\EngineeringSynthesis\UserControlMaterialTrader.resx">
       <DependentUpon>UserControlMaterialTrader.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Helpers\MissionListUserControl.resx">
+      <DependentUpon>MissionListUserControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\Helpers\TagsForm.resx">
       <DependentUpon>TagsForm.cs</DependentUpon>
