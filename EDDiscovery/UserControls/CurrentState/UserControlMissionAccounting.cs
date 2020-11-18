@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
 using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using EDDiscovery.Controls;
 using EliteDangerousCore;
-using EliteDangerousCore.DB;
 
 namespace EDDiscovery.UserControls
 {
@@ -173,9 +168,6 @@ namespace EDDiscovery.UserControls
 
         private void Display()
         {
-            //DataGridViewColumn sortcolprev = dataGridViewFactions.SortedColumn != null ? dataGridViewFactions.SortedColumn : dataGridViewFactions.Columns[1];
-            //SortOrder sortorderprev = dataGridViewFactions.SortedColumn != null ? dataGridViewFactions.SortOrder : SortOrder.Descending;
-
             this.Factions = new Dictionary<string, FactionStatistics>();
             dataGridViewFactions.Rows.Clear();
 
@@ -198,28 +190,23 @@ namespace EDDiscovery.UserControls
                             var faction = ms.Mission.Faction;
                             int inf = 0;
                             int rep = 0;
-                            foreach (var fe in ms.Completed.FactionEffects)
+                            if (ms.Completed.FactionEffects != null)
                             {
-                                if (fe.Faction == faction)
+                                foreach (var fe in ms.Completed.FactionEffects)
                                 {
-                                    if (fe.ReputationTrend == "UpGood" && fe.Reputation?.Length > 0)
+                                    if (fe.Faction == faction)
                                     {
-                                        rep = fe.Reputation.Length;
-                                    }
-
-                                    foreach (var si in fe.Influence)
-                                    {
-                                        //if (si.SystemAddress > 0)
-                                        //{
-                                        //    var system = SystemCache.FindSystem(si.SystemAddress);
-                                        //    if (system != null)
-                                        //    {
-                                        //        System.Diagnostics.Debug.WriteLine("system ID " + si.SystemAddress + " " + system.Name);
-                                        //    }
-                                        //}
-                                        if (si.Trend == "UpGood" && si.Influence?.Length > 0)
+                                        if (fe.ReputationTrend == "UpGood" && fe.Reputation?.Length > 0)
                                         {
-                                            inf += si.Influence.Length;
+                                            rep = fe.Reputation.Length;
+                                        }
+
+                                        foreach (var si in fe.Influence)
+                                        {
+                                            if (si.Trend == "UpGood" && si.Influence?.Length > 0)
+                                            {
+                                                inf += si.Influence.Length;
+                                            }
                                         }
                                     }
                                 }
