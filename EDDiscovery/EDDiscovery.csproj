@@ -175,11 +175,11 @@
     <Compile Include="Actions\ActionControllerVoice.cs" />
     <Compile Include="EDDHelp.cs" />
     <Compile Include="Translations\EDDiscoveryTranslations.cs" />
-    <Compile Include="UserControls\CurrentState\UserControlMissionAccounting.cs">
+    <Compile Include="UserControls\CurrentState\UserControlFactions.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\CurrentState\UserControlMissionAccounting.Designer.cs">
-      <DependentUpon>UserControlMissionAccounting.cs</DependentUpon>
+    <Compile Include="UserControls\CurrentState\UserControlFactions.Designer.cs">
+      <DependentUpon>UserControlFactions.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\EngineeringSynthesis\UserControlMaterialTrader.cs">
       <SubType>UserControl</SubType>
@@ -739,8 +739,8 @@
     <EmbeddedResource Include="Forms\UserControlForm.resx">
       <DependentUpon>UserControlForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\CurrentState\UserControlMissionAccounting.resx">
-      <DependentUpon>UserControlMissionAccounting.cs</DependentUpon>
+    <EmbeddedResource Include="UserControls\CurrentState\UserControlFactions.resx">
+      <DependentUpon>UserControlFactions.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\EngineeringSynthesis\UserControlMaterialTrader.resx">
       <DependentUpon>UserControlMaterialTrader.cs</DependentUpon>

@@ -148,6 +148,8 @@ namespace EDDiscovery
                 cfg.RightMargin = cfg.BottomMargin = 0;
                 cfg.ForceNoBorder = true;
                 cfg.AllowSpaceForCloseButton = true;
+                cfg.BorderMargin = 0;
+
                 ExtButton wikibutton = new ExtButton();
                 wikibutton.Image = global::EDDiscovery.Icons.Controls.Help_Wiki;
                 cfg.Add(new ConfigurableForm.Entry(wikibutton, "Wiki", null, new Point(0, 0), new Size(24, 24), null));

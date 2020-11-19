@@ -571,7 +571,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Panels\Missions.png" />
-    <EmbeddedResource Include="Panels\MissionAccounting.png" />
+    <EmbeddedResource Include="Panels\Factions.png" />
     <EmbeddedResource Include="Panels\MiningOverlay.png" />
     <EmbeddedResource Include="GalMap\Galaxy_L.jpg" />
     <EmbeddedResource Include="GalMap\Galaxy_L_Grid.jpg" />

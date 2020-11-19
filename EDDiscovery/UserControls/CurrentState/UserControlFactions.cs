@@ -1,4 +1,20 @@
-﻿using System;
+﻿/*
+ * Copyright © 2020 EDDiscovery development team
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
+ * ANY KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ * 
+ * EDDiscovery is not affiliated with Frontier Developments plc.
+ */
+ 
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
@@ -10,7 +26,7 @@ using EliteDangerousCore;
 
 namespace EDDiscovery.UserControls
 {
-    public partial class UserControlMissionAccounting : UserControlCommonBase
+    public partial class UserControlFactions : UserControlCommonBase
     {
         private class MissionReward
         {
@@ -91,7 +107,7 @@ namespace EDDiscovery.UserControls
 
         #region Init
 
-        public UserControlMissionAccounting()
+        public UserControlFactions()
         {
             InitializeComponent();
         }
@@ -352,9 +368,10 @@ namespace EDDiscovery.UserControls
                     mluc.Finish();
                 }
 
-                f.Add(new ExtendedControls.ConfigurableForm.Entry(mluc, "Grid", "", new System.Drawing.Point(3, 30), new System.Drawing.Size(800, 400), null));
+                f.Add(new ExtendedControls.ConfigurableForm.Entry(mluc, "Grid", "", new System.Drawing.Point(3, 30), new System.Drawing.Size(800, 400), null)
+                { anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom });
 
-                f.AddOK(new Point(800 - 100, 460), "OK");
+                f.AddOK(new Point(800 - 100, 460), "OK", anchor:AnchorStyles.Right | AnchorStyles.Bottom);
 
                 f.Trigger += (dialogname, controlname, xtag) =>
                 {
@@ -363,6 +380,8 @@ namespace EDDiscovery.UserControls
                         f.ReturnResult(DialogResult.OK);
                     }
                 };
+
+                f.AllowResize = true;
 
                 f.ShowDialogCentred(this.FindForm(), this.FindForm().Icon, "Missions for ".Tx(EDTx.UserControlMissionAccounting_MissionsFor) + fs.Name, closeicon:true);
             }

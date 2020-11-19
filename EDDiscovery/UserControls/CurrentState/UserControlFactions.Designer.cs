@@ -1,6 +1,6 @@
 ﻿namespace EDDiscovery.UserControls
 {
-    partial class UserControlMissionAccounting
+    partial class UserControlFactions
     {
         /// <summary> 
         /// Required designer variable.
