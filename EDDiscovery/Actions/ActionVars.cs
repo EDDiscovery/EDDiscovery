@@ -70,6 +70,7 @@ namespace EDDiscovery.Actions
                 vars[prefix + "Group"] = he.Group;
                 vars[prefix + "Wanted"] = he.Wanted.ToStringIntValue();
                 vars[prefix + "MarketId"] = he.MarketID.HasValue ? he.MarketID.ToStringInvariant() : "0";
+                vars[prefix + "StationFaction "] = he.StationFaction ?? "";
 
                 vars[prefix + "Note"] = he.snc?.Note ?? "";
 

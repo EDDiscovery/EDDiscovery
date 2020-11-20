@@ -55,16 +55,18 @@ namespace EDDiscovery.UserControls
         const int BitSelJumpRange = 18;
         const int BitSelStationButtons = 19;
         const int BitSelShipyardButtons = 20;
-        const int BitSelTotal = 21;
+        const int BitSelStationFaction = 21;
+        const int BitSelTotal = 22;
         const int BitSelDefault = ((1 << BitSelTotal) - 1) + (1 << BitSelEDSMButtonsNextLine);
 
-        int[,] resetorder = new int[,]
+        int[,] resetorder = new int[,]          // default reset order
         {
             {BitSelSystem,-1},
             {BitSelPosition,-1},
             {BitSelEDSM,-1},
             {BitSelVisits,BitSelCredits},
             {BitSelBody,-1},
+            {BitSelStationFaction,-1},
             {BitSelStationButtons,-1},
             {BitSelShipInfo,-1},
             {BitSelShipyardButtons,-1},
@@ -114,6 +116,7 @@ namespace EDDiscovery.UserControls
                 toolStripGameMode,toolStripTravel, toolStripMissionList,
                 toolStripJumpRange, displayStationButtonsToolStripMenuItem,
                 displayShipButtonsToolStripMenuItem,
+                displayStationFactionToolStripMenuItem,
             };
 
             Debug.Assert(toolstriplist.Length == BitSelTotal);
@@ -143,6 +146,14 @@ namespace EDDiscovery.UserControls
                     else if (bit == BitSelShipyardButtons)
                     {
                         var p = BaseUtils.LineStore.FindValue(Lines, BitSelShipInfo + 1);
+                        if (p != null)
+                            insertat = Lines.IndexOf(p) + 1;
+
+                        Selection |= (1 << bit);
+                    }
+                    else if (bit == BitSelStationFaction)
+                    {
+                        var p = BaseUtils.LineStore.FindValue(Lines, BitSelBody + 1);
                         if (p != null)
                             insertat = Lines.IndexOf(p) + 1;
 
@@ -285,6 +296,8 @@ namespace EDDiscovery.UserControls
                 textBoxGovernment.Text = gov;
                 textBoxState.Text = factionstate;
 
+                extTextBoxStationFaction.Text = he.StationFaction ?? "";
+
                 List<MissionState> mcurrent = (from MissionState ms in he.MissionList.Missions.Values where ms.InProgressDateTime(last_he.EventTimeUTC) orderby ms.Mission.EventTimeUTC descending select ms).ToList();
 
                 if (mcurrent == null || mcurrent.Count == 0)
@@ -371,6 +384,7 @@ namespace EDDiscovery.UserControls
                                 textBoxVisits.Text = textBoxState.Text = textBoxHomeDist.Text = textBoxSolDist.Text =
                                 textBoxGameMode.Text = textBoxTravelDist.Text = textBoxTravelTime.Text = textBoxTravelJumps.Text =
                                 textBoxCargo.Text = textBoxMaterials.Text = textBoxData.Text = textBoxShip.Text = textBoxFuel.Text =
+                                extTextBoxStationFaction.Text = 
                                 "";
 
                 extButtonEDSMSystem.Enabled = extButtonRossSystem.Enabled = extButtonEDDBSystem.Enabled = extButtonInaraSystem.Enabled = extButtonSpanshSystem.Enabled = false;
@@ -685,6 +699,11 @@ namespace EDDiscovery.UserControls
             ToggleSelection(sender, BitSelShipyardButtons);
         }
 
+        private void displayStationFactionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ToggleSelection(sender, BitSelStationFaction);
+        }
+
         private void toolStripRemoveAll_Click(object sender, EventArgs e)
         {
             Selection = (Selection | ((1 << BitSelTotal) - 1)) ^ ((1 << BitSelTotal) - 1);
@@ -901,6 +920,9 @@ namespace EDDiscovery.UserControls
                                     itembottom = this.SetPos(labpos, labelJumpRange, datapos, textBoxJumpRange, si);
                                     break;
 
+                                case BitSelStationFaction:
+                                    itembottom = this.SetPos(labpos, labelStationFaction, datapos, extTextBoxStationFaction, si);
+                                    break;
                                 default:
                                     System.Diagnostics.Debug.WriteLine("Ignoring unknown type");
                                     break;
