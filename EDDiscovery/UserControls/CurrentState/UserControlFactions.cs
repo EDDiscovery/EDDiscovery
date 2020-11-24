@@ -13,16 +13,19 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
- 
+
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
+using BaseUtils.JSON;
 using EDDiscovery.Controls;
 using EDDiscovery.UserControls.Helpers;
 using EliteDangerousCore;
+using EliteDangerousCore.EDSM;
 
 namespace EDDiscovery.UserControls
 {
@@ -32,7 +35,7 @@ namespace EDDiscovery.UserControls
         {
             public string Name { get; }
             public int Count { get; private set; }
-            
+
             public MissionReward(string name)
             {
                 this.Name = name;
@@ -45,6 +48,23 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        private class SystemInfluence
+        {
+            public long SystemAddress { get; }
+            public int Influence { get; private set; }
+
+            public SystemInfluence(long systemAddress, int influence)
+            {
+                this.SystemAddress = systemAddress;
+                this.Influence = influence;
+            }
+
+            public void AddInfluence(int influence)
+            {
+                this.Influence += influence;
+            }
+        }
+
         private class FactionStatistics
         {
             public string Name { get; }
@@ -53,6 +73,7 @@ namespace EDDiscovery.UserControls
             public int Reputation { get; private set; }
             public long Credits { get; private set; }
             public Dictionary<string, MissionReward> Rewards { get; }
+            public Dictionary<long, SystemInfluence> Systems { get; }
 
             public FactionStatistics(string name)
             {
@@ -62,6 +83,7 @@ namespace EDDiscovery.UserControls
                 this.Reputation = 0;
                 this.Credits = 0;
                 this.Rewards = new Dictionary<string, MissionReward>();
+                this.Systems = new Dictionary<long, SystemInfluence>();
             }
 
             public void AddMissions(int amount)
@@ -94,9 +116,40 @@ namespace EDDiscovery.UserControls
                 }
                 reward.Add(amount);
             }
+
+            public void AddSystemInfluence(long systemAddress, int amount)
+            {
+                SystemInfluence si;
+                if (!Systems.TryGetValue(systemAddress, out si))
+                {
+                    si = new SystemInfluence(systemAddress, amount);
+                    Systems.Add(systemAddress, si);
+                }
+                else
+                {
+                    si.AddInfluence(amount);
+                }
+            }
+        }
+
+        private class SystemInfo
+        {
+            public string Name { get; set; }
+            public long Address { get; set; }
+            public int Influence { get; set; }
+            public string Allegiance { get; set; }
+            public string Government { get; set; }
+            public string Faction { get; set; }
+            public string State { get; set; }
+            public int Population { get; set; }
+            public string Security { get; set; }
+            public string Economy { get; set; }
+            public string SecondEconomy { get; set; }
+            public string Reserve { get; set; }
         }
 
         private string DbColumnSaveFactions { get { return DBName("MissionAccountingFactions", "DGVCol"); } }
+        private string DbColumnSaveSystems { get { return DBName("MissionAccountingSystems", "DGVCol"); } }
         private string DbStartDate { get { return DBName("MissionAccountingStartDate"); } }
         private string DbEndDate { get { return DBName("MissionAccountingEndDate"); } }
         private string DbStartDateChecked { get { return DBName("MissionAccountingStartDateCheck"); } }
@@ -104,6 +157,7 @@ namespace EDDiscovery.UserControls
         private DateTime NextExpiry;
         private HistoryEntry last_he = null;
         private Dictionary<string, FactionStatistics> Factions;
+        private Task<List<SystemInfo>> SystemUpdateTask = null;
 
         #region Init
 
@@ -116,10 +170,12 @@ namespace EDDiscovery.UserControls
         {
             dataGridViewFactions.MakeDoubleBuffered();
             colMissions.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleRight;
+            colSystems.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleRight;
             colInfluence.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleRight;
             colReputation.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleRight;
             colCredits.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleRight;
             colMissions.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+            colSystems.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
             colInfluence.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
             colReputation.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
             colCredits.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
@@ -148,11 +204,13 @@ namespace EDDiscovery.UserControls
         {
             uctg.OnTravelSelectionChanged += Display;
             DGVLoadColumnLayout(dataGridViewFactions, DbColumnSaveFactions);
+            DGVLoadColumnLayout(dataGridViewSystems, DbColumnSaveSystems);
         }
 
         public override void Closing()
         {
             DGVSaveColumnLayout(dataGridViewFactions, DbColumnSaveFactions);
+            DGVSaveColumnLayout(dataGridViewSystems, DbColumnSaveSystems);
 
             uctg.OnTravelSelectionChanged -= Display;
             discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
@@ -203,11 +261,15 @@ namespace EDDiscovery.UserControls
                         if (DateTime.Compare(ms.Completed.EventTimeUTC, startdateutc) >= 0 &&
                             DateTime.Compare(ms.Completed.EventTimeUTC, enddateutc) <= 0)
                         {
-                      //      System.Diagnostics.Debug.WriteLine(ms.Mission.Faction + " " + ms.Mission.Name + " " + ms.Completed.EventTimeUTC);
                             total++;
                             var faction = ms.Mission.Faction;
-                            int inf = 0;
-                            int rep = 0;
+                            FactionStatistics factionStats;
+                            if (!this.Factions.TryGetValue(faction, out factionStats))
+                            {
+                                factionStats = new FactionStatistics(faction);
+                                this.Factions.Add(faction, factionStats);
+                            }
+                            factionStats.AddMissions(1);
                             if (ms.Completed.FactionEffects != null)
                             {
                                 foreach (var fe in ms.Completed.FactionEffects)
@@ -216,35 +278,21 @@ namespace EDDiscovery.UserControls
                                     {
                                         if (fe.ReputationTrend == "UpGood" && fe.Reputation?.Length > 0)
                                         {
-                                            rep = fe.Reputation.Length;
+                                            factionStats.AddReputation(fe.Reputation.Length);
                                         }
 
                                         foreach (var si in fe.Influence)
                                         {
                                             if (si.Trend == "UpGood" && si.Influence?.Length > 0)
                                             {
-                                                inf += si.Influence.Length;
+                                                factionStats.AddInfluence(si.Influence.Length);
+                                                factionStats.AddSystemInfluence(si.SystemAddress, si.Influence.Length);
                                             }
                                         }
                                     }
                                 }
                             }
                             long credits = ms.Completed.Reward != null ? (long)ms.Completed.Reward : 0;
-                            FactionStatistics factionStats;
-                            if (!this.Factions.TryGetValue(faction, out factionStats))
-                            {
-                                factionStats = new FactionStatistics(faction);
-                                this.Factions.Add(faction, factionStats);
-                            }
-                            factionStats.AddMissions(1);
-                            if (inf > 0)
-                            {
-                                factionStats.AddInfluence(inf);
-                            }
-                            if (rep > 0)
-                            {
-                                factionStats.AddReputation(rep);
-                            }
                             if (credits > 0)
                             {
                                 factionStats.AddCredits(credits);
@@ -268,7 +316,6 @@ namespace EDDiscovery.UserControls
                 }
                 if (total > 0)
                 {
-                    //System.Diagnostics.Debug.WriteLine(total + " missions");
                     var rows = new List<DataGridViewRow>(total);
                     foreach (FactionStatistics fs in this.Factions.Values)
                     {
@@ -281,7 +328,15 @@ namespace EDDiscovery.UserControls
                             }
                             rewards += reward.Count + " " + reward.Name;
                         }
-                        object[] rowobj = { fs.Name, fs.Missions, fs.Influence, fs.Reputation, String.Format("{0:n0}", fs.Credits), rewards };
+                        object[] rowobj = {
+                            fs.Name,
+                            fs.Missions,
+                            fs.Systems.Values.Count,
+                            fs.Influence,
+                            fs.Reputation,
+                            String.Format("{0:n0}", fs.Credits),
+                            rewards
+                        };
                         var row = dataGridViewFactions.RowTemplate.Clone() as DataGridViewRow;
                         row.CreateCells(dataGridViewFactions, rowobj);
                         row.Tag = fs;
@@ -291,6 +346,7 @@ namespace EDDiscovery.UserControls
                 }
             }
             labelValue.Text = total + " missions";
+            UpdateSystems();
         }
 
         #endregion
@@ -337,13 +393,77 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        private void dataGridViewFactions_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            UpdateSystems();
+        }
+
+        private async void UpdateSystems()
+        {
+            if (SystemUpdateTask != null)
+            {
+                SystemUpdateTask.Wait();
+            }
+            dataGridViewSystems.Rows.Clear();
+            if (dataGridViewFactions.SelectedRows.Count > 0)
+            {
+                FactionStatistics fs = dataGridViewFactions.SelectedRows[0].Tag as FactionStatistics;
+                SystemUpdateTask = Task.Factory.StartNew(() =>
+                {
+                    var sr = new List<SystemInfo>();
+                    var edsm = new EDSMClass();
+                    foreach (SystemInfluence si in fs.Systems.Values)
+                    {
+                        JObject sys = edsm.GetSystemByAddress(si.SystemAddress);
+                        JObject info = sys["information"].Object();
+                        string ex(string v) => info != null ? info[v].Str("Unknown") : "Unknown";
+                        sr.Add(new SystemInfo {
+                            Name = sys["name"].Str("Unknown"),
+                            Address = si.SystemAddress,
+                            Influence = si.Influence,
+                            Allegiance = ex("allegiance"),
+                            Government = ex("government"),
+                            Faction = ex("faction"),
+                            State = ex("factionState"),
+                            Population = info != null ? info["population"].Int(-1) : -1,
+                            Security = ex("security"),
+                            Economy = ex("economy"),
+                            SecondEconomy = ex("secondEconomy"),
+                            Reserve = ex("reserve"),
+                        }); ;
+                    }
+                    return sr;
+                });
+                await SystemUpdateTask;
+
+                var rows = new List<DataGridViewRow>();
+                foreach (var system in SystemUpdateTask.Result)
+                {
+                    object[] rowobj =
+                    {
+                        system.Name,
+                        system.Influence,
+                        system.Faction,
+                        system.Allegiance,
+                        system.Government,
+                        system.State
+                    };
+                    var row = dataGridViewSystems.RowTemplate.Clone() as DataGridViewRow;
+                    row.CreateCells(dataGridViewSystems, rowobj);
+                    row.Tag = system;
+                    rows.Add(row);
+                }
+                dataGridViewSystems.Rows.AddRange(rows.ToArray());
+            }
+        }
+
         private void dataGridViewFactions_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             ShowMissions(dataGridViewFactions.LeftClickRow);
         }
 
         void ShowMissions(int row)
-        { 
+        {
             if (row >= 0)
             {
                 FactionStatistics fs = dataGridViewFactions.Rows[row].Tag as FactionStatistics;
@@ -371,7 +491,7 @@ namespace EDDiscovery.UserControls
                 f.Add(new ExtendedControls.ConfigurableForm.Entry(mluc, "Grid", "", new System.Drawing.Point(3, 30), new System.Drawing.Size(800, 400), null)
                 { anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom });
 
-                f.AddOK(new Point(800 - 100, 460), "OK", anchor:AnchorStyles.Right | AnchorStyles.Bottom);
+                f.AddOK(new Point(800 - 100, 460), "OK", anchor: AnchorStyles.Right | AnchorStyles.Bottom);
 
                 f.Trigger += (dialogname, controlname, xtag) =>
                 {
@@ -383,7 +503,7 @@ namespace EDDiscovery.UserControls
 
                 f.AllowResize = true;
 
-                f.ShowDialogCentred(this.FindForm(), this.FindForm().Icon, "Missions for ".Tx(EDTx.UserControlMissionAccounting_MissionsFor) + fs.Name, closeicon:true);
+                f.ShowDialogCentred(this.FindForm(), this.FindForm().Icon, "Missions for ".Tx(EDTx.UserControlMissionAccounting_MissionsFor) + fs.Name, closeicon: true);
             }
         }
 
