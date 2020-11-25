@@ -35,13 +35,13 @@ namespace EDDiscovery.UserControls
             
             public MissionReward(string name)
             {
-                this.Name = name;
-                this.Count = 0;
+                Name = name;
+                Count = 0;
             }
 
             public void Add(int amount)
             {
-                this.Count += amount;
+                Count += amount;
             }
         }
 
@@ -53,35 +53,44 @@ namespace EDDiscovery.UserControls
             public int Reputation { get; private set; }
             public long Credits { get; private set; }
             public Dictionary<string, MissionReward> Rewards { get; }
+            public Stats.FactionInfo FactionStats { get; private set; }
 
             public FactionStatistics(string name)
             {
-                this.Name = name;
-                this.Missions = 0;
-                this.Influence = 0;
-                this.Reputation = 0;
-                this.Credits = 0;
-                this.Rewards = new Dictionary<string, MissionReward>();
+                Name = name;
+                Missions = 0;
+                Influence = 0;
+                Reputation = 0;
+                Credits = 0;
+                Rewards = new Dictionary<string, MissionReward>();
+                FactionStats = defstats;
             }
+
+            private static Stats.FactionInfo defstats = new Stats.FactionInfo("-");
 
             public void AddMissions(int amount)
             {
-                this.Missions += amount;
+                Missions += amount;
             }
 
             public void AddInfluence(int amount)
             {
-                this.Influence += amount;
+                Influence += amount;
             }
 
             public void AddReputation(int amount)
             {
-                this.Reputation += amount;
+                Reputation += amount;
             }
 
             public void AddCredits(long amount)
             {
-                this.Credits += amount;
+                Credits += amount;
+            }
+
+            public void AddFactionStats(Stats.FactionInfo mc)
+            {
+                FactionStats = mc;
             }
 
             public void AddReward(string name, int amount)
@@ -96,14 +105,13 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private string DbColumnSaveFactions { get { return DBName("MissionAccountingFactions", "DGVCol"); } }
-        private string DbStartDate { get { return DBName("MissionAccountingStartDate"); } }
-        private string DbEndDate { get { return DBName("MissionAccountingEndDate"); } }
-        private string DbStartDateChecked { get { return DBName("MissionAccountingStartDateCheck"); } }
-        private string DbEndDateChecked { get { return DBName("MissionAccountingEndDateCheck"); } }
+        private string DbColumnSaveFactions { get { return DBName("FactionsPanel", "DGVCol"); } }
+        private string DbStartDate { get { return DBName("FactionsPanelStartDate"); } }
+        private string DbEndDate { get { return DBName("FactionsPanelEndDate"); } }
+        private string DbStartDateChecked { get { return DBName("FactionsPanelStartDateCheck"); } }
+        private string DbEndDateChecked { get { return DBName("FactionsPanelEndDateCheck"); } }
         private DateTime NextExpiry;
         private HistoryEntry last_he = null;
-        private Dictionary<string, FactionStatistics> Factions;
 
         #region Init
 
@@ -115,14 +123,9 @@ namespace EDDiscovery.UserControls
         public override void Init()
         {
             dataGridViewFactions.MakeDoubleBuffered();
-            colMissions.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleRight;
-            colInfluence.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleRight;
-            colReputation.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleRight;
-            colCredits.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleRight;
-            colMissions.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-            colInfluence.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-            colReputation.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-            colCredits.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+
+            for (int col = 1; col < dataGridViewFactions.ColumnCount - 1; col++)
+                dataGridViewFactions.Columns[col].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
 
             startDateTime.Value = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDate(DbStartDate, DateTime.UtcNow);
             startDateTime.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbStartDateChecked, false);
@@ -132,6 +135,9 @@ namespace EDDiscovery.UserControls
 
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
+
+            dataGridViewFactions.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+            dataGridViewFactions.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;      
 
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
@@ -186,11 +192,17 @@ namespace EDDiscovery.UserControls
 
         private void Display()
         {
-            this.Factions = new Dictionary<string, FactionStatistics>();
+            var factionslist = new Dictionary<string, FactionStatistics>();
+
+            DataGridViewColumn sortcol = dataGridViewFactions.SortedColumn != null ? dataGridViewFactions.SortedColumn : dataGridViewFactions.Columns[0];
+            SortOrder sortorder = dataGridViewFactions.SortOrder != SortOrder.None ? dataGridViewFactions.SortOrder : SortOrder.Ascending;
+            string toprowfaction = dataGridViewFactions.FirstDisplayedScrollingRowIndex >= 0 ? (dataGridViewFactions.Rows[dataGridViewFactions.FirstDisplayedScrollingRowIndex].Tag as FactionStatistics).Name : "";
+            System.Diagnostics.Debug.WriteLine("Current first row " + toprowfaction);
+
             dataGridViewFactions.Rows.Clear();
 
             MissionList ml = last_he?.MissionList;
-            var total = 0;
+
             if (ml != null)
             {
                 foreach (MissionState ms in ml.Missions.Values)
@@ -203,8 +215,7 @@ namespace EDDiscovery.UserControls
                         if (DateTime.Compare(ms.Completed.EventTimeUTC, startdateutc) >= 0 &&
                             DateTime.Compare(ms.Completed.EventTimeUTC, enddateutc) <= 0)
                         {
-                      //      System.Diagnostics.Debug.WriteLine(ms.Mission.Faction + " " + ms.Mission.Name + " " + ms.Completed.EventTimeUTC);
-                            total++;
+                            //      System.Diagnostics.Debug.WriteLine(ms.Mission.Faction + " " + ms.Mission.Name + " " + ms.Completed.EventTimeUTC);
                             var faction = ms.Mission.Faction;
                             int inf = 0;
                             int rep = 0;
@@ -230,13 +241,15 @@ namespace EDDiscovery.UserControls
                                 }
                             }
                             long credits = ms.Completed.Reward != null ? (long)ms.Completed.Reward : 0;
-                            FactionStatistics factionStats;
-                            if (!this.Factions.TryGetValue(faction, out factionStats))
+
+                            if (!factionslist.TryGetValue(faction, out FactionStatistics factionStats))
                             {
                                 factionStats = new FactionStatistics(faction);
-                                this.Factions.Add(faction, factionStats);
+                                factionslist.Add(faction, factionStats);
                             }
+
                             factionStats.AddMissions(1);
+
                             if (inf > 0)
                             {
                                 factionStats.AddInfluence(inf);
@@ -266,31 +279,76 @@ namespace EDDiscovery.UserControls
                         }
                     }
                 }
-                if (total > 0)
+            }
+
+            Stats mcs = last_he?.Stats;
+
+            if (mcs != null)
+            {
+                foreach (var fkvp in mcs.FactionInformation)
                 {
-                    //System.Diagnostics.Debug.WriteLine(total + " missions");
-                    var rows = new List<DataGridViewRow>(total);
-                    foreach (FactionStatistics fs in this.Factions.Values)
+                    if (!factionslist.TryGetValue(fkvp.Value.Faction, out FactionStatistics factionStats))
                     {
-                        var rewards = "";
-                        foreach (var reward in fs.Rewards.Values)
-                        {
-                            if (rewards.Length > 0)
-                            {
-                                rewards += ", ";
-                            }
-                            rewards += reward.Count + " " + reward.Name;
-                        }
-                        object[] rowobj = { fs.Name, fs.Missions, fs.Influence, fs.Reputation, String.Format("{0:n0}", fs.Credits), rewards };
-                        var row = dataGridViewFactions.RowTemplate.Clone() as DataGridViewRow;
-                        row.CreateCells(dataGridViewFactions, rowobj);
-                        row.Tag = fs;
-                        rows.Add(row);
+                        factionStats = new FactionStatistics(fkvp.Value.Faction);
+                        factionslist.Add(fkvp.Value.Faction, factionStats);
                     }
-                    dataGridViewFactions.Rows.AddRange(rows.ToArray());
+
+                    factionslist[fkvp.Value.Faction].AddFactionStats(fkvp.Value);
                 }
             }
-            labelValue.Text = total + " missions";
+
+            if (factionslist.Count > 0)
+            {
+                //System.Diagnostics.Debug.WriteLine(total + " missions");
+
+                var rows = new List<DataGridViewRow>();
+                foreach (FactionStatistics fs in factionslist.Values)
+                {
+                    var info = "";
+                    foreach (var reward in fs.Rewards.Values)
+                    {
+                        if (info.Length > 0)
+                        {
+                            info += ", ";
+                        }
+                        info += reward.Count + " " + reward.Name;
+                    }
+
+                    object[] rowobj = { fs.Name,
+                                        fs.Missions, fs.Influence, fs.Reputation, String.Format("{0:n0}", fs.Credits),
+                                        fs.FactionStats.BoughtCommodity, fs.FactionStats.SoldCommodity, fs.FactionStats.BoughtMaterial, fs.FactionStats.SoldMaterial,
+                                        fs.FactionStats.CrimesAgainst ,
+                                        fs.FactionStats.BountyKill, fs.FactionStats.BountyRewards, fs.FactionStats.BountyRewardsValue,
+                                        fs.FactionStats.Interdicted,fs.FactionStats.Interdiction,
+                                        fs.FactionStats.KillBondAwardAsVictimFaction, fs.FactionStats.KillBondAwardAsAwaringFaction, fs.FactionStats.KillBondAwardAsAwaringFactionValue,
+                                        info };
+                    var row = dataGridViewFactions.RowTemplate.Clone() as DataGridViewRow;
+                    row.CreateCells(dataGridViewFactions, rowobj);
+                    row.Tag = fs;
+                    rows.Add(row);
+                }
+
+                dataGridViewFactions.Rows.AddRange(rows.ToArray());
+
+                dataGridViewFactions.Sort(sortcol, (sortorder == SortOrder.Descending) ? System.ComponentModel.ListSortDirection.Descending : System.ComponentModel.ListSortDirection.Ascending);
+                dataGridViewFactions.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
+
+                if (toprowfaction.HasChars())
+                {
+                    for( int i = 0; i < dataGridViewFactions.RowCount; i++ )
+                    {
+                        var fs = dataGridViewFactions.Rows[i].Tag as FactionStatistics;
+                        if ( fs.Name == toprowfaction )
+                        {
+                            //System.Diagnostics.Debug.WriteLine("Set row to " + i);
+                            dataGridViewFactions.SafeFirstDisplayedScrollingRowIndex(i);
+                            break;
+                        }
+                    }
+                }
+            }
+
+            labelValue.Text = factionslist.Count + " Missions".T(EDTx.UserControlMissions_MPlural);
         }
 
         #endregion
@@ -331,7 +389,7 @@ namespace EDDiscovery.UserControls
 
         private void dataGridViewFactions_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {
-            if (e.Column.Index >= 1 && e.Column.Index <= 4)
+            if (e.Column.Index >= 1 && e.Column.Index <= dataGridViewFactions.ColumnCount-2)
             {
                 e.SortDataGridViewColumnNumeric();
             }
@@ -383,7 +441,7 @@ namespace EDDiscovery.UserControls
 
                 f.AllowResize = true;
 
-                f.ShowDialogCentred(this.FindForm(), this.FindForm().Icon, "Missions for ".Tx(EDTx.UserControlMissionAccounting_MissionsFor) + fs.Name, closeicon:true);
+                f.ShowDialogCentred(FindForm(), FindForm().Icon, "Missions for ".Tx(EDTx.UserControlFactions_MissionsFor) + fs.Name, closeicon:true);
             }
         }
 

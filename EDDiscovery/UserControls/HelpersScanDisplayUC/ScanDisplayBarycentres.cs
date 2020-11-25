@@ -22,7 +22,6 @@ using System.Linq;
 using System.Windows.Forms;
 using ExtendedControls;
 using EliteDangerousCore;
-using EliteDangerousCore.JournalEvents;
 
 namespace EDDiscovery.UserControls
 {
@@ -56,7 +55,7 @@ namespace EDDiscovery.UserControls
                 if (c.Value.type == StarScan.ScanNodeType.barycentre)       // if a barycentre, draw it
                 {
                     var x = DisplayBarynode(c.Value, level + 1, nodecentres, nodes, pc, imagesize, horz);
-                    System.Diagnostics.Debug.WriteLine("                        ".Substring(0, level * 3) + level + " Draw bary " + c.Value.fullname + " " + x.Item1 + " " + level);
+                    //System.Diagnostics.Debug.WriteLine("                        ".Substring(0, level * 3) + level + " Draw bary " + c.Value.fullname + " " + x.Item1 + " " + level);
                     if (horz)
                         tojoin.Add(new BaryPointInfo() { point = x.Item1, toppos = x.Item1, orderpos = x.Item3 }); // make a join point for a barynode
                     else
@@ -70,7 +69,7 @@ namespace EDDiscovery.UserControls
                     if (nodecentres.ContainsKey(c.Value))
                     {
                         orderpos = nodes.IndexOf(c.Value);
-                        System.Diagnostics.Debug.WriteLine("                        ".Substring(0, level * 3) + level + " Draw Body " + c.Value.fullname + " " + orderpos + " " + nodecentres[c.Value]);
+                        //System.Diagnostics.Debug.WriteLine("                        ".Substring(0, level * 3) + level + " Draw Body " + c.Value.fullname + " " + orderpos + " " + nodecentres[c.Value]);
                         if (horz)
                             tojoin.Add(new BaryPointInfo() { point = nodecentres[c.Value], toppos = new Point( nodecentres[c.Value].X - imagesize/2, nodecentres[c.Value].Y), orderpos = orderpos });
                         else
@@ -110,9 +109,8 @@ namespace EDDiscovery.UserControls
                 ie.OwnerDraw(DrawBaryTree, new Rectangle(0, 0, horz ? 1 : 0, 0), tojoin);         // use Width, which does not get affected by repositiontree, to record if horz
                 pc.Insert(0, ie); // insert first so drawn under
 
-                System.Diagnostics.Debug.Write("                        ".Substring(0, level * 3) + level + " Join co-ords");
-                for (int i = 0; i < tojoin.Count; i++)
-                    System.Diagnostics.Debug.Write(" " + tojoin[i].point + ":" + tojoin[i].toppos);
+                //System.Diagnostics.Debug.Write("                        ".Substring(0, level * 3) + level + " Join co-ords");
+                //for (int i = 0; i < tojoin.Count; i++) System.Diagnostics.Debug.Write(" " + tojoin[i].point + ":" + tojoin[i].toppos);
 
                 Point pi;       // calculate and return the barycentre position 
                 if (horz)
@@ -120,12 +118,12 @@ namespace EDDiscovery.UserControls
                     if (tojoin.Average(x => x.toppos.X) == tojoin[0].toppos.X)      // if all on same line
                     {
                         pi = new Point(tojoin[0].toppos.X, (int)tojoin.Select(y => y.point.Y).Average());
-                        System.Diagnostics.Debug.Write(" same xline");
+                        //System.Diagnostics.Debug.Write(" same xline");
                     }
                     else
                     {
                         pi = new Point(tojoin[0].toppos.X, tojoin[0].toppos.Y + imagesize); 
-                        System.Diagnostics.Debug.Write(" not same xline");
+                        //System.Diagnostics.Debug.Write(" not same xline");
                     }
                 }
                 else
@@ -133,17 +131,17 @@ namespace EDDiscovery.UserControls
                     if (tojoin.Average(x => x.toppos.Y) == tojoin[0].toppos.Y)      // if all on same line
                     {
                         pi = new Point((int)tojoin.Select(x => x.point.X).Average(), tojoin[0].toppos.Y);
-                        System.Diagnostics.Debug.Write(" same yline");
+                        //System.Diagnostics.Debug.Write(" same yline");
                     }
                     else
                     {
                         pi = new Point(tojoin[0].point.X + imagesize, tojoin[0].toppos.Y); // objects are not on same line, so we set the barypoint off to side a bit of the first
-                        System.Diagnostics.Debug.Write(" not same yline");
+                        //System.Diagnostics.Debug.Write(" not same yline");
                     }
                 }
 
-                System.Diagnostics.Debug.WriteLine(" Pass back " + pi);
-                System.Diagnostics.Debug.WriteLine("");
+                //System.Diagnostics.Debug.WriteLine(" Pass back " + pi);
+                //System.Diagnostics.Debug.WriteLine("");
                 return new Tuple<Point, int, int>(pi, level, orderpos);
             }
             else

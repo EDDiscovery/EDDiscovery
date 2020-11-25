@@ -79,10 +79,13 @@ namespace EDDiscovery
             // filter out commanders, and filter out any UI events
             if (je.CommanderId == history.CommanderId)
             {
-                HistoryEntry he = history.AddJournalEntry(je, h => LogLineHighlight(h));        // add a new one on top
-                //System.Diagnostics.Debug.WriteLine("Add HE " + he.EventSummary);
-                OnNewEntry?.Invoke(he, history);            // major hook
-                OnNewEntrySecond?.Invoke(he, history);      // secondary hook..
+                HistoryEntry he = history.AddJournalEntryToHistory(je, h => LogLineHighlight(h));        // add a new one on top
+                if (he != null)     // may reject it 
+                {
+                    //System.Diagnostics.Debug.WriteLine("Add HE " + he.EventSummary);
+                    OnNewEntry?.Invoke(he, history);            // major hook
+                    OnNewEntrySecond?.Invoke(he, history);      // secondary hook..
+                }
             }
 
             if (je.EventTypeID == JournalTypeEnum.LoadGame) // and issue this on Load game
