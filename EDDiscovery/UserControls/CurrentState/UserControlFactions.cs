@@ -307,12 +307,13 @@ namespace EDDiscovery.UserControls
                     var info = "";
                     foreach (var reward in fs.Rewards.Values)
                     {
-                        if (info.Length > 0)
-                        {
-                            info += ", ";
-                        }
-                        info += reward.Count + " " + reward.Name;
+                        info = info.AppendPrePad(reward.Count + " " + reward.Name, ", ");
                     }
+
+                    if (fs.FactionStats.CapShipAwardAsVictimFaction > 0)
+                        info = info.AppendPrePad("Capital ship Victims: " + fs.FactionStats.CapShipAwardAsVictimFaction, ", ");
+                    if (fs.FactionStats.CapShipAwardAsAwaringFaction > 0)
+                        info = info.AppendPrePad("Capital ship Award: " + fs.FactionStats.CapShipAwardAsAwaringFaction + ":" + fs.FactionStats.CapShipAwardAsAwaringFactionValue + "cr", ", ");
 
                     object[] rowobj = { fs.Name,
                                         fs.Missions, fs.Influence, fs.Reputation, String.Format("{0:n0}", fs.Credits),
