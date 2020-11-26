@@ -194,7 +194,6 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerCommanders.Controls.Add(this.vScrollBarCommanders);
             this.dataViewScrollerCommanders.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewScrollerCommanders.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.dataViewScrollerCommanders.LimitLargeChange = 2147483647;
             this.dataViewScrollerCommanders.Location = new System.Drawing.Point(3, 16);
             this.dataViewScrollerCommanders.Name = "dataViewScrollerCommanders";
             this.dataViewScrollerCommanders.Size = new System.Drawing.Size(956, 104);

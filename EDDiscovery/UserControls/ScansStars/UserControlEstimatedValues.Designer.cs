@@ -73,7 +73,6 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel2.Controls.Add(this.dataGridViewEstimatedValues);
             this.dataViewScrollerPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewScrollerPanel2.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.dataViewScrollerPanel2.LimitLargeChange = 2147483647;
             this.dataViewScrollerPanel2.Location = new System.Drawing.Point(0, 30);
             this.dataViewScrollerPanel2.Name = "dataViewScrollerPanel2";
             this.dataViewScrollerPanel2.Size = new System.Drawing.Size(572, 542);

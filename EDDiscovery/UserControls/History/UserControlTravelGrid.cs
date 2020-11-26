@@ -154,8 +154,6 @@ namespace EDDiscovery.UserControls
 
             TravelHistoryFilter.InitaliseComboBox(comboBoxHistoryWindow, DbHistorySave);
 
-            dataViewScrollerPanel.LimitLargeChange = 4; // since row sizes can be variable, estimating large change on visible rows is problematic
-
             extButtonDrawnHelp.Text = "";
             extButtonDrawnHelp.Image = ExtendedControls.TabStrip.HelpIcon;
         }

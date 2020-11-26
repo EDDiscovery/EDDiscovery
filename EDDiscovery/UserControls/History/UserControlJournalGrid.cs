@@ -101,8 +101,6 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.Translate(toolTip, this);
 
             TravelHistoryFilter.InitaliseComboBox(comboBoxJournalWindow, DbHistorySave);
-
-            dataViewScrollerPanel.LimitLargeChange = 4; // since row sizes can be variable, estimating large change on visible rows is problematic
         }
 
         public override void LoadLayout()

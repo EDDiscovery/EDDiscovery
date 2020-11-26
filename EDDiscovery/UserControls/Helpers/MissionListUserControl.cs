@@ -34,7 +34,6 @@ namespace EDDiscovery.UserControls.Helpers
             dataGridView.MakeDoubleBuffered();
             dataGridView.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             dataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
-            extPanelDataGridViewScroll.LimitLargeChange = 4;
             panelButtons.Visible = false;
             labelValue.Visible = false;
         }

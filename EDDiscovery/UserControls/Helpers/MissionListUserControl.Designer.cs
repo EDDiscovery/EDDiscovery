@@ -157,7 +157,6 @@
             this.extPanelDataGridViewScroll.Controls.Add(this.dataGridView);
             this.extPanelDataGridViewScroll.Dock = System.Windows.Forms.DockStyle.Fill;
             this.extPanelDataGridViewScroll.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.extPanelDataGridViewScroll.LimitLargeChange = 2147483647;
             this.extPanelDataGridViewScroll.Location = new System.Drawing.Point(0, 22);
             this.extPanelDataGridViewScroll.Name = "extPanelDataGridViewScroll";
             this.extPanelDataGridViewScroll.Size = new System.Drawing.Size(1090, 597);

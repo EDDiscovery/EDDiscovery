@@ -246,7 +246,6 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanelCombat.Controls.Add(this.dataGridViewCombat);
             this.dataViewScrollerPanelCombat.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewScrollerPanelCombat.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.dataViewScrollerPanelCombat.LimitLargeChange = 2147483647;
             this.dataViewScrollerPanelCombat.Location = new System.Drawing.Point(0, 106);
             this.dataViewScrollerPanelCombat.Name = "dataViewScrollerPanelCombat";
             this.dataViewScrollerPanelCombat.Size = new System.Drawing.Size(713, 255);

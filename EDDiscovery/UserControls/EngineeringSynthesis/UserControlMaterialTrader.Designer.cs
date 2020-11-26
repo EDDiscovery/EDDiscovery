@@ -86,7 +86,6 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel.Controls.Add(this.vScrollBarCustomMC);
             this.dataViewScrollerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewScrollerPanel.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.dataViewScrollerPanel.LimitLargeChange = 2147483647;
             this.dataViewScrollerPanel.Location = new System.Drawing.Point(0, 0);
             this.dataViewScrollerPanel.Name = "dataViewScrollerPanel";
             this.dataViewScrollerPanel.Size = new System.Drawing.Size(800, 572);
@@ -378,7 +377,6 @@ namespace EDDiscovery.UserControls
             this.extPanelDataGridViewScrollDGVTrades.Controls.Add(this.dataGridViewTrades);
             this.extPanelDataGridViewScrollDGVTrades.Dock = System.Windows.Forms.DockStyle.Fill;
             this.extPanelDataGridViewScrollDGVTrades.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.extPanelDataGridViewScrollDGVTrades.LimitLargeChange = 2147483647;
             this.extPanelDataGridViewScrollDGVTrades.Location = new System.Drawing.Point(0, 25);
             this.extPanelDataGridViewScrollDGVTrades.Name = "extPanelDataGridViewScrollDGVTrades";
             this.extPanelDataGridViewScrollDGVTrades.Size = new System.Drawing.Size(800, 143);

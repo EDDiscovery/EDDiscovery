@@ -384,7 +384,6 @@ namespace EDDiscovery.UserControls
             this.dataViewScroller_Distances.Controls.Add(this.dataGridViewDistances);
             this.dataViewScroller_Distances.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewScroller_Distances.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.dataViewScroller_Distances.LimitLargeChange = 2147483647;
             this.dataViewScroller_Distances.Location = new System.Drawing.Point(0, 0);
             this.dataViewScroller_Distances.Name = "dataViewScroller_Distances";
             this.dataViewScroller_Distances.Size = new System.Drawing.Size(588, 675);
@@ -508,7 +507,6 @@ namespace EDDiscovery.UserControls
             this.dataViewScroller_Wanted.Controls.Add(this.dataGridViewClosestSystems);
             this.dataViewScroller_Wanted.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewScroller_Wanted.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.dataViewScroller_Wanted.LimitLargeChange = 2147483647;
             this.dataViewScroller_Wanted.Location = new System.Drawing.Point(0, 0);
             this.dataViewScroller_Wanted.Name = "dataViewScroller_Wanted";
             this.dataViewScroller_Wanted.Size = new System.Drawing.Size(496, 820);
