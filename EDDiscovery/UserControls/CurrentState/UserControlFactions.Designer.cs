@@ -30,7 +30,9 @@
         {
             this.components = new System.ComponentModel.Container();
             this.datePanel = new System.Windows.Forms.Panel();
+            this.startDateTime = new ExtendedControls.ExtDateTimePicker();
             this.labelTo = new System.Windows.Forms.Label();
+            this.endDateTime = new ExtendedControls.ExtDateTimePicker();
             this.labelValue = new System.Windows.Forms.Label();
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.showMissionsForFactionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -38,8 +40,8 @@
             this.dataViewScrollerPanelFactions = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.scrollBarFactions = new ExtendedControls.ExtScrollBar();
             this.dataGridViewFactions = new BaseUtils.DataGridViewColumnHider();
-            this.startDateTime = new ExtendedControls.ExtDateTimePicker();
-            this.endDateTime = new ExtendedControls.ExtDateTimePicker();
+            this.showCommoditymaterialTradesForFactionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showBountiesAndBondsForFactionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.colFaction = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colMissions = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colInfluence = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -78,6 +80,26 @@
             this.datePanel.Size = new System.Drawing.Size(853, 27);
             this.datePanel.TabIndex = 0;
             // 
+            // startDateTime
+            // 
+            this.startDateTime.BorderColor = System.Drawing.Color.Transparent;
+            this.startDateTime.BorderColorScaling = 0.5F;
+            this.startDateTime.Checked = false;
+            this.startDateTime.CustomFormat = "yyyy/MM/dd | HH:mm:ss";
+            this.startDateTime.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.startDateTime.Location = new System.Drawing.Point(0, 1);
+            this.startDateTime.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.startDateTime.Name = "startDateTime";
+            this.startDateTime.SelectedColor = System.Drawing.Color.Yellow;
+            this.startDateTime.ShowCheckBox = true;
+            this.startDateTime.ShowUpDown = false;
+            this.startDateTime.Size = new System.Drawing.Size(220, 20);
+            this.startDateTime.TabIndex = 2;
+            this.startDateTime.TextBackColor = System.Drawing.SystemColors.ControlLight;
+            this.toolTip.SetToolTip(this.startDateTime, "Include missions from");
+            this.startDateTime.Value = new System.DateTime(2017, 4, 7, 9, 2, 29, 549);
+            this.startDateTime.ValueChanged += new System.EventHandler(this.startDateTime_ValueChanged);
+            // 
             // labelTo
             // 
             this.labelTo.AutoSize = true;
@@ -87,6 +109,26 @@
             this.labelTo.Size = new System.Drawing.Size(16, 13);
             this.labelTo.TabIndex = 4;
             this.labelTo.Text = "to";
+            // 
+            // endDateTime
+            // 
+            this.endDateTime.BorderColor = System.Drawing.Color.Transparent;
+            this.endDateTime.BorderColorScaling = 0.5F;
+            this.endDateTime.Checked = false;
+            this.endDateTime.CustomFormat = "yyyy/MM/dd | HH:mm:ss";
+            this.endDateTime.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.endDateTime.Location = new System.Drawing.Point(251, 1);
+            this.endDateTime.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.endDateTime.Name = "endDateTime";
+            this.endDateTime.SelectedColor = System.Drawing.Color.Yellow;
+            this.endDateTime.ShowCheckBox = true;
+            this.endDateTime.ShowUpDown = false;
+            this.endDateTime.Size = new System.Drawing.Size(218, 20);
+            this.endDateTime.TabIndex = 3;
+            this.endDateTime.TextBackColor = System.Drawing.SystemColors.ControlLight;
+            this.toolTip.SetToolTip(this.endDateTime, "Include missions to");
+            this.endDateTime.Value = new System.DateTime(2017, 4, 7, 9, 2, 29, 549);
+            this.endDateTime.ValueChanged += new System.EventHandler(this.endDateTime_ValueChanged);
             // 
             // labelValue
             // 
@@ -101,9 +143,11 @@
             // contextMenuStrip
             // 
             this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.showMissionsForFactionToolStripMenuItem});
+            this.showMissionsForFactionToolStripMenuItem,
+            this.showCommoditymaterialTradesForFactionToolStripMenuItem,
+            this.showBountiesAndBondsForFactionToolStripMenuItem});
             this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(211, 26);
+            this.contextMenuStrip.Size = new System.Drawing.Size(310, 70);
             // 
             // showMissionsForFactionToolStripMenuItem
             // 
@@ -197,45 +241,19 @@
             this.dataGridViewFactions.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewFactions_CellDoubleClick);
             this.dataGridViewFactions.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewFactions_SortCompare);
             // 
-            // startDateTime
+            // showCommoditymaterialTradesForFactionToolStripMenuItem
             // 
-            this.startDateTime.BorderColor = System.Drawing.Color.Transparent;
-            this.startDateTime.BorderColorScaling = 0.5F;
-            this.startDateTime.Checked = false;
-            this.startDateTime.CustomFormat = "yyyy/MM/dd | HH:mm:ss";
-            this.startDateTime.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.startDateTime.Location = new System.Drawing.Point(0, 1);
-            this.startDateTime.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.startDateTime.Name = "startDateTime";
-            this.startDateTime.SelectedColor = System.Drawing.Color.Yellow;
-            this.startDateTime.ShowCheckBox = true;
-            this.startDateTime.ShowUpDown = false;
-            this.startDateTime.Size = new System.Drawing.Size(220, 20);
-            this.startDateTime.TabIndex = 2;
-            this.startDateTime.TextBackColor = System.Drawing.SystemColors.ControlLight;
-            this.toolTip.SetToolTip(this.startDateTime, "Include missions from");
-            this.startDateTime.Value = new System.DateTime(2017, 4, 7, 9, 2, 29, 549);
-            this.startDateTime.ValueChanged += new System.EventHandler(this.startDateTime_ValueChanged);
+            this.showCommoditymaterialTradesForFactionToolStripMenuItem.Name = "showCommoditymaterialTradesForFactionToolStripMenuItem";
+            this.showCommoditymaterialTradesForFactionToolStripMenuItem.Size = new System.Drawing.Size(309, 22);
+            this.showCommoditymaterialTradesForFactionToolStripMenuItem.Text = "Show commodity/material trades for faction";
+            this.showCommoditymaterialTradesForFactionToolStripMenuItem.Click += new System.EventHandler(this.showCommoditymaterialTradesForFactionToolStripMenuItem_Click);
             // 
-            // endDateTime
+            // showBountiesAndBondsForFactionToolStripMenuItem
             // 
-            this.endDateTime.BorderColor = System.Drawing.Color.Transparent;
-            this.endDateTime.BorderColorScaling = 0.5F;
-            this.endDateTime.Checked = false;
-            this.endDateTime.CustomFormat = "yyyy/MM/dd | HH:mm:ss";
-            this.endDateTime.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.endDateTime.Location = new System.Drawing.Point(251, 1);
-            this.endDateTime.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.endDateTime.Name = "endDateTime";
-            this.endDateTime.SelectedColor = System.Drawing.Color.Yellow;
-            this.endDateTime.ShowCheckBox = true;
-            this.endDateTime.ShowUpDown = false;
-            this.endDateTime.Size = new System.Drawing.Size(218, 20);
-            this.endDateTime.TabIndex = 3;
-            this.endDateTime.TextBackColor = System.Drawing.SystemColors.ControlLight;
-            this.toolTip.SetToolTip(this.endDateTime, "Include missions to");
-            this.endDateTime.Value = new System.DateTime(2017, 4, 7, 9, 2, 29, 549);
-            this.endDateTime.ValueChanged += new System.EventHandler(this.endDateTime_ValueChanged);
+            this.showBountiesAndBondsForFactionToolStripMenuItem.Name = "showBountiesAndBondsForFactionToolStripMenuItem";
+            this.showBountiesAndBondsForFactionToolStripMenuItem.Size = new System.Drawing.Size(309, 22);
+            this.showBountiesAndBondsForFactionToolStripMenuItem.Text = "Show bounties and bonds for faction";
+            this.showBountiesAndBondsForFactionToolStripMenuItem.Click += new System.EventHandler(this.showBountiesAndBondsForFactionToolStripMenuItem_Click);
             // 
             // colFaction
             // 
@@ -272,83 +290,96 @@
             this.colMissionCredits.HeaderText = "Mission Credits";
             this.colMissionCredits.Name = "colMissionCredits";
             this.colMissionCredits.ReadOnly = true;
-            this.colMissionCredits.ToolTipText = "Credits earned";
+            this.colMissionCredits.ToolTipText = "Mission Credits earned";
             // 
             // CBought
             // 
             this.CBought.HeaderText = "Commds +";
             this.CBought.Name = "CBought";
             this.CBought.ReadOnly = true;
+            this.CBought.ToolTipText = "Commodities Bought";
             // 
             // CSold
             // 
             this.CSold.HeaderText = "Commds -";
             this.CSold.Name = "CSold";
+            this.CSold.ToolTipText = "Commodities Sold";
             // 
             // MBought
             // 
             this.MBought.HeaderText = "Mats +";
             this.MBought.Name = "MBought";
             this.MBought.ReadOnly = true;
+            this.MBought.ToolTipText = "Materials Acquired";
             // 
             // MSold
             // 
             this.MSold.HeaderText = "Mats -";
             this.MSold.Name = "MSold";
             this.MSold.ReadOnly = true;
+            this.MSold.ToolTipText = "Materials Given";
             // 
             // CrimeCommitted
             // 
             this.CrimeCommitted.HeaderText = "Crimes Committed";
             this.CrimeCommitted.Name = "CrimeCommitted";
+            this.CrimeCommitted.ToolTipText = "How many times you\'ve been naughty";
             // 
             // BountyKills
             // 
             this.BountyKills.HeaderText = "Bounty Kills";
             this.BountyKills.Name = "BountyKills";
             this.BountyKills.ReadOnly = true;
+            this.BountyKills.ToolTipText = "Number of bounty kills";
             // 
             // BountyValue
             // 
             this.BountyValue.HeaderText = "Bounty Rewards";
             this.BountyValue.Name = "BountyValue";
             this.BountyValue.ReadOnly = true;
+            this.BountyValue.ToolTipText = "Number of bounty rewards";
             // 
             // BountyRewardsValue
             // 
             this.BountyRewardsValue.HeaderText = "Bounty Rewards Value";
             this.BountyRewardsValue.Name = "BountyRewardsValue";
             this.BountyRewardsValue.ReadOnly = true;
+            this.BountyRewardsValue.ToolTipText = "Value of bounty rewards";
             // 
             // Interdicted
             // 
             this.Interdicted.HeaderText = "Interdicted";
             this.Interdicted.Name = "Interdicted";
             this.Interdicted.ReadOnly = true;
+            this.Interdicted.ToolTipText = "How many times you\'ve been pulled over";
             // 
             // Interdiction
             // 
             this.Interdiction.HeaderText = "Interdiction";
             this.Interdiction.Name = "Interdiction";
             this.Interdiction.ReadOnly = true;
+            this.Interdiction.ToolTipText = "Number of times you\'ve interdicted someone";
             // 
             // KillBondVictim
             // 
             this.KillBondVictim.HeaderText = "Kill Bonds Victim";
             this.KillBondVictim.Name = "KillBondVictim";
             this.KillBondVictim.ReadOnly = true;
+            this.KillBondVictim.ToolTipText = "Number of kill bonds with faction as a victim";
             // 
             // KillBondsAward
             // 
             this.KillBondsAward.HeaderText = "Kill Bonds Awarded";
             this.KillBondsAward.Name = "KillBondsAward";
             this.KillBondsAward.ReadOnly = true;
+            this.KillBondsAward.ToolTipText = "Number of kill bonds with faction awarded";
             // 
             // KillBondsValue
             // 
             this.KillBondsValue.HeaderText = "Kill Bonds Value";
             this.KillBondsValue.Name = "KillBondsValue";
             this.KillBondsValue.ReadOnly = true;
+            this.KillBondsValue.ToolTipText = "Value of kill bonds awarded by the faction";
             // 
             // colInfo
             // 
@@ -390,6 +421,8 @@
         private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem showMissionsForFactionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem showCommoditymaterialTradesForFactionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem showBountiesAndBondsForFactionToolStripMenuItem;
         private System.Windows.Forms.DataGridViewTextBoxColumn colFaction;
         private System.Windows.Forms.DataGridViewTextBoxColumn colMissions;
         private System.Windows.Forms.DataGridViewTextBoxColumn colInfluence;

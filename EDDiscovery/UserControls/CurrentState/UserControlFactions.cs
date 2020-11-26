@@ -449,5 +449,15 @@ namespace EDDiscovery.UserControls
         {
             ShowMissions(dataGridViewFactions.RightClickRow);
         }
+
+        private void showCommoditymaterialTradesForFactionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void showBountiesAndBondsForFactionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
