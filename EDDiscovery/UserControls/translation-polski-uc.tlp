@@ -463,17 +463,7 @@ SECTION UserControlSurveyor
 .showValuesToolStripMenuItem: "Show values" @
 .wordWrapToolStripMenuItem: "Word Wrap" @
 
-SECTION UserControlMissions
-
-.cColName: "Name" => "Nazwa"
-.cColStartDate: "Start Date" => "Data Rozpocz."
-.cColEndDate: "End Date" => "Data Końca"
-.cColOrigin: "Origin" => "Pochodzenie"
-.cColFromFaction: "Faction" => "Frakcja"
-.cColDestSystem: "Destination" => "Miejsce Docelowe"
-.cColTargetFaction: "Target Faction" => "Frakcja będąca Celem"
-.cColValue: "Value (cr)" => "Wartość (cr)"
-.cColInfo: "Info" => "Informacje"
+SECTION MissionListUserControl
 .PcolName: "Name" => "Nazwa"
 .pColStart: "Start Date" => "Data Rozpocz."
 .pColEnd: "End Date" => "Data Końca"
@@ -484,14 +474,14 @@ SECTION UserControlMissions
 .pColResult: "Result (cr)" => "Wynik (cr)"
 .pColInfo: "Info" => "Informacje"
 .labelTo: "to" => "do"
-.panelButtons.ToolTip: "Left click and drag on grid to reorder" => "Kliknij lewym przyciskiem myszki i przeciągnij w tabeli aby zmienić kolejność"
+
+SECTION UserControlMissions
 .MPlural: " Missions" => "Misje"
 .MSingular: " Mission" => "Misja"
 .Name: "Name" => "Nazwa"
 .Value: "Value (cr):\n{0:N0}" => "Wartość (cr):\n{0:N0}"
 .ValueN: "Value (cr)" => "Wartość (cr)"
 .ValueC: "Value: " => "Wartość: "
-.ToolTip: "Left click and drag on grid to reorder" => "Kliknij lewym przyciskiem myszki i przeciągnij w tabeli aby zmienić kolejność"
 
 SECTION UserControlModules
 

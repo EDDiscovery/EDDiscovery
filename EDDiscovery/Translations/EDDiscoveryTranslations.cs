@@ -826,6 +826,8 @@ namespace EDDiscovery
         UserControlMaterialTrader_Receive, // Receive
 
         UserControlFactions_MissionsFor,
+        UserControlFactions_MaterialCommodsFor,
+        UserControlFactions_MaterialCommods,
     }
 
     public static class EDTranslatorExtensions

@@ -36,12 +36,12 @@
             this.labelValue = new System.Windows.Forms.Label();
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.showMissionsForFactionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showCommoditymaterialTradesForFactionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showBountiesAndBondsForFactionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.dataViewScrollerPanelFactions = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.scrollBarFactions = new ExtendedControls.ExtScrollBar();
             this.dataGridViewFactions = new BaseUtils.DataGridViewColumnHider();
-            this.showCommoditymaterialTradesForFactionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.showBountiesAndBondsForFactionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.colFaction = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colMissions = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colInfluence = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -96,7 +96,7 @@
             this.startDateTime.Size = new System.Drawing.Size(220, 20);
             this.startDateTime.TabIndex = 2;
             this.startDateTime.TextBackColor = System.Drawing.SystemColors.ControlLight;
-            this.toolTip.SetToolTip(this.startDateTime, "Include missions from");
+            this.toolTip.SetToolTip(this.startDateTime, "Include from");
             this.startDateTime.Value = new System.DateTime(2017, 4, 7, 9, 2, 29, 549);
             this.startDateTime.ValueChanged += new System.EventHandler(this.startDateTime_ValueChanged);
             // 
@@ -126,7 +126,7 @@
             this.endDateTime.Size = new System.Drawing.Size(218, 20);
             this.endDateTime.TabIndex = 3;
             this.endDateTime.TextBackColor = System.Drawing.SystemColors.ControlLight;
-            this.toolTip.SetToolTip(this.endDateTime, "Include missions to");
+            this.toolTip.SetToolTip(this.endDateTime, "Include to");
             this.endDateTime.Value = new System.DateTime(2017, 4, 7, 9, 2, 29, 549);
             this.endDateTime.ValueChanged += new System.EventHandler(this.endDateTime_ValueChanged);
             // 
@@ -152,9 +152,23 @@
             // showMissionsForFactionToolStripMenuItem
             // 
             this.showMissionsForFactionToolStripMenuItem.Name = "showMissionsForFactionToolStripMenuItem";
-            this.showMissionsForFactionToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
+            this.showMissionsForFactionToolStripMenuItem.Size = new System.Drawing.Size(309, 22);
             this.showMissionsForFactionToolStripMenuItem.Text = "Show missions for faction";
             this.showMissionsForFactionToolStripMenuItem.Click += new System.EventHandler(this.showMissionsForFactionToolStripMenuItem_Click);
+            // 
+            // showCommoditymaterialTradesForFactionToolStripMenuItem
+            // 
+            this.showCommoditymaterialTradesForFactionToolStripMenuItem.Name = "showCommoditymaterialTradesForFactionToolStripMenuItem";
+            this.showCommoditymaterialTradesForFactionToolStripMenuItem.Size = new System.Drawing.Size(309, 22);
+            this.showCommoditymaterialTradesForFactionToolStripMenuItem.Text = "Show commodity/material trades for faction";
+            this.showCommoditymaterialTradesForFactionToolStripMenuItem.Click += new System.EventHandler(this.showCommoditymaterialTradesForFactionToolStripMenuItem_Click);
+            // 
+            // showBountiesAndBondsForFactionToolStripMenuItem
+            // 
+            this.showBountiesAndBondsForFactionToolStripMenuItem.Name = "showBountiesAndBondsForFactionToolStripMenuItem";
+            this.showBountiesAndBondsForFactionToolStripMenuItem.Size = new System.Drawing.Size(309, 22);
+            this.showBountiesAndBondsForFactionToolStripMenuItem.Text = "Show bounties and bonds for faction";
+            this.showBountiesAndBondsForFactionToolStripMenuItem.Click += new System.EventHandler(this.showBountiesAndBondsForFactionToolStripMenuItem_Click);
             // 
             // dataViewScrollerPanelFactions
             // 
@@ -238,22 +252,7 @@
             this.dataGridViewFactions.SingleRowSelect = true;
             this.dataGridViewFactions.Size = new System.Drawing.Size(837, 545);
             this.dataGridViewFactions.TabIndex = 0;
-            this.dataGridViewFactions.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewFactions_CellDoubleClick);
             this.dataGridViewFactions.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewFactions_SortCompare);
-            // 
-            // showCommoditymaterialTradesForFactionToolStripMenuItem
-            // 
-            this.showCommoditymaterialTradesForFactionToolStripMenuItem.Name = "showCommoditymaterialTradesForFactionToolStripMenuItem";
-            this.showCommoditymaterialTradesForFactionToolStripMenuItem.Size = new System.Drawing.Size(309, 22);
-            this.showCommoditymaterialTradesForFactionToolStripMenuItem.Text = "Show commodity/material trades for faction";
-            this.showCommoditymaterialTradesForFactionToolStripMenuItem.Click += new System.EventHandler(this.showCommoditymaterialTradesForFactionToolStripMenuItem_Click);
-            // 
-            // showBountiesAndBondsForFactionToolStripMenuItem
-            // 
-            this.showBountiesAndBondsForFactionToolStripMenuItem.Name = "showBountiesAndBondsForFactionToolStripMenuItem";
-            this.showBountiesAndBondsForFactionToolStripMenuItem.Size = new System.Drawing.Size(309, 22);
-            this.showBountiesAndBondsForFactionToolStripMenuItem.Text = "Show bounties and bonds for faction";
-            this.showBountiesAndBondsForFactionToolStripMenuItem.Click += new System.EventHandler(this.showBountiesAndBondsForFactionToolStripMenuItem_Click);
             // 
             // colFaction
             // 

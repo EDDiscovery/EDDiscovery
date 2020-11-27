@@ -478,17 +478,8 @@ SECTION UserControlSurveyor
 .showValuesToolStripMenuItem: "Show values" @
 .wordWrapToolStripMenuItem: "Word Wrap" @
 
-SECTION UserControlMissions
+SECTION MissionListUserControl
 
-.cColName: "Name" @
-.cColStartDate: "Start Date" @
-.cColEndDate: "End Date" @
-.cColOrigin: "Origin" @
-.cColFromFaction: "Faction" @
-.cColDestSystem: "Destination" @
-.cColTargetFaction: "Target Faction" @
-.cColValue: "Value (cr)" @
-.cColInfo: "Info" @
 .PcolName: "Name" @
 .pColStart: "Start Date" @
 .pColEnd: "End Date" @
@@ -499,14 +490,14 @@ SECTION UserControlMissions
 .pColResult: "Result (cr)" @
 .pColInfo: "Info" @
 .labelTo: "to" @
-.panelButtons.ToolTip: "Left click and drag on grid to reorder" @
+
+SECTION UserControlMissions
 .MPlural: " Missions" @
 .MSingular: " Mission" @
 .Name: "Name" @
 .Value: "Value (cr):\n{0:N0}" @
 .ValueN: "Value (cr)" @
 .ValueC: "Value: " @
-UserControlMissions.ToolTip: "Left click and drag on grid to reorder" @
 
 SECTION UserControlModules
 
@@ -1547,6 +1538,33 @@ SECTION UserControlMiningOverlay
 .above: "% Above" @
 .dist: "Distribution" @
 .Limcargo: "Limpets left {0}, Cargo left {1}" @
+
+SECTION UserControlFactions
+.colFaction: "Faction" @
+.colMissions: "Missions" @
+.colInfluence: "+Influence" @
+.colReputation: "+Reputation" @
+.colMissionCredits: "Mission Credits" @
+.CBought: "Commds +" @
+.CSold: "Commds -" @
+.MBought: "Mats +" @
+.MSold: "Mats -" @
+.CrimeCommitted: "Crimes Committed" @
+.BountyKills: "Bounty Kills" @
+.BountyValue: "Bounty Rewards" @
+.BountyRewardsValue: "Bounty Rewards Value" @
+.Interdicted: "Interdicted" @
+.Interdiction: "Interdiction" @
+.KillBondVictim: "Kill Bonds Victim" @
+.KillBondsAward: "Kill Bonds Awarded" @
+.KillBondsValue: "Kill Bonds Value" @
+.colInfo: "Other Info" @
+.labelTo: "to" @
+.startDateTime.ToolTip: "Include from" @
+.endDateTime.ToolTip: "Include to" @
+.MissionsFor: "Missions for " @
+.MaterialCommods: "Commodity/Material" @
+.MaterialCommodsFor: "Materials/Commodities for " @
 
 
 

@@ -465,18 +465,8 @@ SECTION UserControlSurveyor
 .showValuesToolStripMenuItem: "Show values" => "Afficher les valeurs"
 .wordWrapToolStripMenuItem: "Word Wrap" => "Retour à la ligne"
 
+SECTION MissionListUserControl
 
-SECTION UserControlMissions
-
-.cColName: "Name" => "Nom"
-.cColStartDate: "Start Date" => "Date de début"
-.cColEndDate: "End Date" => "Date de fin"
-.cColOrigin: "Origin" => "Origine"
-.cColFromFaction: "Faction" @
-.cColDestSystem: "Destination" @
-.cColTargetFaction: "Target Faction" => "Faction Cible"
-.cColValue: "Value (cr)" => "Valeur (cr)"
-.cColInfo: "Info" @
 .PcolName: "Name" => "Nom"
 .pColStart: "Start Date" => "Date de début"
 .pColEnd: "End Date" => "Date de fin"
@@ -487,14 +477,14 @@ SECTION UserControlMissions
 .pColResult: "Result (cr)" => "Résultat (cr)"
 .pColInfo: "Info" @
 .labelTo: "to" => "vers"
-.panelButtons.ToolTip: "Left click and drag on grid to reorder" => "Clic gauche et faire glisser pour réorganiser"
+
+SECTION UserControlMissions
 .MPlural: " Missions" @
 .MSingular: " Mission" @
 .Name: "Name" => "Nom"
 .Value: "Value (cr):\n{0:N0}" => "Valeur (cr):\n{0:N0}"
 .ValueN: "Value (cr)" => "Valeur (cr)"
 .ValueC: "Value: " => "Valeur: "
-UserControlMissions.ToolTip: "Left click and drag on grid to reorder" => "Clic gauche et faire glisser pour réorganiser"
 
 SECTION UserControlModules
 

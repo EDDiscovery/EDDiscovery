@@ -463,17 +463,7 @@ SECTION UserControlSurveyor
 .showValuesToolStripMenuItem: "Show values" @
 .wordWrapToolStripMenuItem: "Word Wrap" @
 
-SECTION UserControlMissions
-
-.cColName: "Name" => "任务名称"
-.cColStartDate: "Start Date" => "开始时间"
-.cColEndDate: "End Date" => "结束时间"
-.cColOrigin: "Origin" => "起点"
-.cColFromFaction: "Faction" => "派系"
-.cColDestSystem: "Destination" => "目的地"
-.cColTargetFaction: "Target Faction" => "目标派系"
-.cColValue: "Value (cr)" => "奖金(Cr)"
-.cColInfo: "Info" => "详情"
+SECTION MissionListUserControl
 .PcolName: "Name" => "任务名称"
 .pColStart: "Start Date" => "开始时间"
 .pColEnd: "End Date" => "结束时间"
@@ -484,14 +474,14 @@ SECTION UserControlMissions
 .pColResult: "Result (cr)" => "奖金(Cr)"
 .pColInfo: "Info" => "详情"
 .labelTo: "to" => "至"
-.panelButtons.ToolTip: "Left click and drag on grid to reorder" => "鼠标左键拖拽可以重新排列行与列的顺序"
+
+SECTION UserControlMissions
 .MPlural: " Missions" => " 任务"
 .MSingular: " Mission" => " 任务"
 .Name: "Name" => "任务名称"
 .Value: "Value (cr):\n{0:N0}" => "奖金(Cr)：\n{0:N0}"
 .ValueN: "Value (cr)" => "奖金(Cr)"
 .ValueC: "Value: " => "奖金："
-.ToolTip: "Left click and drag on grid to reorder" @
 
 SECTION UserControlModules
 

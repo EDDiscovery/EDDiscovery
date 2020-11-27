@@ -463,17 +463,7 @@ SECTION UserControlSurveyor
 .showValuesToolStripMenuItem: "Show values" @
 .wordWrapToolStripMenuItem: "Word Wrap" @
 
-SECTION UserControlMissions
-
-.cColName: "Name" => "Название"
-.cColStartDate: "Start Date" => "Начало"
-.cColEndDate: "End Date" => "Окончание"
-.cColOrigin: "Origin" => "Отправная точка"
-.cColFromFaction: "Faction" => "Фракция"
-.cColDestSystem: "Destination" => "Пункт назначения"
-.cColTargetFaction: "Target Faction" => "Целевая фракция"
-.cColValue: "Value (cr)" => "Награда (кр.)"
-.cColInfo: "Info" => "Информация"
+SECTION MissionListUserControl
 .PcolName: "Name" => "Название"
 .pColStart: "Start Date" => "Начало"
 .pColEnd: "End Date" => "Окончание"
@@ -484,14 +474,14 @@ SECTION UserControlMissions
 .pColResult: "Result (cr)" => "Результат (кр.)"
 .pColInfo: "Info" => "Информация"
 .labelTo: "to" => "в"
-.panelButtons.ToolTip: "Left click and drag on grid to reorder" => "Столбцы можно перетаскивать с зажатой левой кнопкой мыши"
+
+SECTION UserControlMissions
 .MPlural: " Missions" => " Миссии"
 .MSingular: " Mission" => "Миссия"
 .Name: "Name" => "Название"
 .Value: "Value (cr):\n{0:N0}" => "Награда (кр.):\n{0:N0}"
 .ValueN: "Value (cr)" => "Награда (кр.)"
 .ValueC: "Value: " => "Награда: "
-.ToolTip: "Left click and drag on grid to reorder" @
 
 SECTION UserControlModules
 

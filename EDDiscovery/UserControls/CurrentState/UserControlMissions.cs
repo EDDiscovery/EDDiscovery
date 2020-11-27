@@ -52,7 +52,8 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
 
-            BaseUtils.Translator.Instance.Translate(this);
+            BaseUtils.Translator.Instance.Translate(missionListCurrent);
+            BaseUtils.Translator.Instance.Translate(missionListPrevious);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
 
         }

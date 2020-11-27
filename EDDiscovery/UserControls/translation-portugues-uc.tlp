@@ -463,17 +463,7 @@ SECTION UserControlSurveyor
 .showValuesToolStripMenuItem: "Show values" @
 .wordWrapToolStripMenuItem: "Word Wrap" @
 
-SECTION UserControlMissions
-
-.cColName: "Name" @
-.cColStartDate: "Start Date" @
-.cColEndDate: "End Date" @
-.cColOrigin: "Origin" @
-.cColFromFaction: "Faction" @
-.cColDestSystem: "Destination" @
-.cColTargetFaction: "Target Faction" @
-.cColValue: "Value (cr)" @
-.cColInfo: "Info" @
+SECTION MissionListUserControl
 .PcolName: "Name" @
 .pColStart: "Start Date" @
 .pColEnd: "End Date" @
@@ -484,14 +474,14 @@ SECTION UserControlMissions
 .pColResult: "Result (cr)" @
 .pColInfo: "Info" @
 .labelTo: "to" @
-.panelButtons.ToolTip: "Left click and drag on grid to reorder" @
+
+SECTION UserControlMissions
 .MPlural: " Missions" @
 .MSingular: " Mission" @
 .Name: "Name" @
 .Value: "Value (cr):\n{0:N0}" @
 .ValueN: "Value (cr)" @
 .ValueC: "Value: " @
-.ToolTip: "Left click and drag on grid to reorder" @
 
 SECTION UserControlModules
 

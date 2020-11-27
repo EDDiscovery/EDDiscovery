@@ -13,16 +13,16 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
- 
+
+using EDDiscovery.Controls;
+using EDDiscovery.UserControls.Helpers;
+using EliteDangerousCore;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using EDDiscovery.Controls;
-using EDDiscovery.UserControls.Helpers;
-using EliteDangerousCore;
 
 namespace EDDiscovery.UserControls
 {
@@ -396,13 +396,13 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void dataGridViewFactions_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        private void showMissionsForFactionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ShowMissions(dataGridViewFactions.LeftClickRow);
+            ShowMissions(dataGridViewFactions.RightClickRow);
         }
 
         void ShowMissions(int row)
-        { 
+        {
             if (row >= 0)
             {
                 FactionStatistics fs = dataGridViewFactions.Rows[row].Tag as FactionStatistics;
@@ -430,30 +430,64 @@ namespace EDDiscovery.UserControls
                 f.Add(new ExtendedControls.ConfigurableForm.Entry(mluc, "Grid", "", new System.Drawing.Point(3, 30), new System.Drawing.Size(800, 400), null)
                 { anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom });
 
-                f.AddOK(new Point(800 - 100, 460), "OK", anchor:AnchorStyles.Right | AnchorStyles.Bottom);
-
-                f.Trigger += (dialogname, controlname, xtag) =>
-                {
-                    if (controlname == "OK" || controlname == "Close")
-                    {
-                        f.ReturnResult(DialogResult.OK);
-                    }
-                };
+                f.AddOK(new Point(800 - 100, 460), "OK", anchor: AnchorStyles.Right | AnchorStyles.Bottom);
+                f.InstallStandardTriggers();
 
                 f.AllowResize = true;
 
-                f.ShowDialogCentred(FindForm(), FindForm().Icon, "Missions for ".Tx(EDTx.UserControlFactions_MissionsFor) + fs.Name, closeicon:true);
+                f.ShowDialogCentred(FindForm(), FindForm().Icon, "Missions for ".T(EDTx.UserControlFactions_MissionsFor) + fs.Name, closeicon: true);
             }
-        }
-
-        private void showMissionsForFactionToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ShowMissions(dataGridViewFactions.RightClickRow);
         }
 
         private void showCommoditymaterialTradesForFactionToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (dataGridViewFactions.RightClickRow >= 0)
+            {
+                FactionStatistics fs = dataGridViewFactions.Rows[dataGridViewFactions.RightClickRow].Tag as FactionStatistics;
 
+                var dgvpanel = new ExtendedControls.ExtPanelDataGridViewScrollWithDGV<BaseUtils.DataGridViewColumnHider>();
+                dgvpanel.DataGrid.CreateTextColumns("Date".T(EDTx.UserControlOutfitting_Date), 100, 5,
+                                                    "Commodity/Material".T(EDTx.UserControlFactions_MaterialCommods), 150, 5,
+                                                    "Bought".T(EDTx.UserControlStats_GoodsBought), 50, 5,
+                                                    "Sold".T(EDTx.UserControlStats_GoodsSold), 50, 5);
+                dgvpanel.DataGrid.SortCompare += (s, ev) => { if (ev.Column.Index >= 2) ev.SortDataGridViewColumnNumeric(); };
+
+                if (last_he != null)
+                {
+                    var list = discoveryform.history.FilterBefore(last_he,
+                                    (x) => (x.journalEntry is IStatsJournalEntryMatCommod && x.StationFaction == fs.Name));
+
+                    foreach (var he in list)
+                    {
+                        var items = (he.journalEntry as IStatsJournalEntryMatCommod).ItemsList;
+                        foreach (var i in items)
+                        {
+                            var m = EliteDangerousCore.MaterialCommodityData.GetByFDName(i.Item1);     // and we see if we actually have some at this time
+                            string name = m?.Name ?? i.Item1;
+
+                            int bought = i.Item2 > 0 ? i.Item2 : 0;
+                            int sold = i.Item2 < 0 ? -i.Item2 : 0;
+
+                            object[] rowobj = { EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(he.EventTimeUTC),
+                                                name,
+                                                bought.ToString("N0"),
+                                                sold.ToString("N0") };
+                            var row = dgvpanel.DataGrid.RowTemplate.Clone() as DataGridViewRow;
+                            row.CreateCells(dgvpanel.DataGrid, rowobj);
+                            dgvpanel.DataGrid.Rows.Add(row);
+                        }
+                    }
+                }
+
+                ExtendedControls.ConfigurableForm f = new ExtendedControls.ConfigurableForm();
+                f.Add(new ExtendedControls.ConfigurableForm.Entry(dgvpanel, "Grid", "", new System.Drawing.Point(3, 30), new System.Drawing.Size(800, 400), null)
+                { anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom });
+                f.AddOK(new Point(800 - 100, 460), "OK", anchor: AnchorStyles.Right | AnchorStyles.Bottom);
+                f.InstallStandardTriggers();
+                f.AllowResize = true;
+
+                f.ShowDialogCentred(FindForm(), FindForm().Icon, "Materials/Commodities for ".T(EDTx.UserControlFactions_MaterialCommodsFor) + fs.Name, closeicon: true);
+            }
         }
 
         private void showBountiesAndBondsForFactionToolStripMenuItem_Click(object sender, EventArgs e)
