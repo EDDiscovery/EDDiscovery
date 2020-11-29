@@ -658,6 +658,7 @@ namespace EDDiscovery.UserControls
                                                     "Rewards".T(EDTx.UserControlFactions_RewardsPlural), 60, 5);
                 dgvpanel.DataGrid.SortCompare += (s, ev) => { if (ev.Column.Index >= 1) ev.SortDataGridViewColumnNumeric(); };
                 dgvpanel.DataGrid.RowHeadersVisible = false;
+                dgvpanel.DataGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
                 for (int col = 1; col < dgvpanel.DataGrid.ColumnCount - 1; col++)
                     dgvpanel.DataGrid.Columns[col].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
 
