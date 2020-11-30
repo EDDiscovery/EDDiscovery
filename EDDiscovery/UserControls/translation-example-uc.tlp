@@ -1306,7 +1306,8 @@ SECTION UserControlSysInfo
 .extButtonSpanshSystem: "S" @
 .displayStationButtonsToolStripMenuItem: "Display Station Buttons" @
 .displayShipButtonsToolStripMenuItem: "Display Ship Buttons" @
-
+.labelStationFaction: "Faction" @
+.displayStationFactionToolStripMenuItem: "Display Station Faction" @
 
 SECTION UserControlContainerSplitter
 
@@ -1542,8 +1543,8 @@ SECTION UserControlMiningOverlay
 SECTION UserControlFactions
 .colFaction: "Faction" @
 .colMissions: "Missions" @
-.colInfluence: "+Influence" @
-.colReputation: "+Reputation" @
+.colInfluence: "Inf +" @
+.colReputation: "Rep +" @
 .colMissionCredits: "Mission Credits" @
 .CBought: "Commds +" @
 .CSold: "Commds -" @
@@ -1562,9 +1563,21 @@ SECTION UserControlFactions
 .labelTo: "to" @
 .startDateTime.ToolTip: "Include from" @
 .endDateTime.ToolTip: "Include to" @
+.FactionsPlural: "Factions" @
 .MissionsFor: "Missions for " @
-.MaterialCommods: "Commodity/Material" @
+.BountyBond: "Bounty/Bond" @
+.Target: "Target" @
+.TargetFaction: "Target Faction" @
+.Reward: "Reward" @
+.BountiesBondsFor: "Bounties/Bonds for " @
+.Item: "Item" @
 .MaterialCommodsFor: "Materials/Commodities for " @
+.SystemAddress: "System Address" @
+.BountiesPlural: "Bounties" @
+.RewardsPlural: "Rewards" @
+.BondsPlural: "Bonds" @
+.SystemsDetailFor: "Systems Detail for " @
+
 
 
 

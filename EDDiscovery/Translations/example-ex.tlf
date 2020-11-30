@@ -173,9 +173,11 @@ SECTION EDDiscoveryForm
 .addOnsToolStripMenuItem.configureAddOnActionsToolStripMenuItem: "&Edit Add-On Action Files" @
 .addOnsToolStripMenuItem.editLastActionPackToolStripMenuItem: "Edit Last Action Pack" @
 .addOnsToolStripMenuItem.stopCurrentlyRunningActionProgramToolStripMenuItem: "&Stop currently running Action Program" @
+.helpTabToolStripMenuItem: "Help" @
 .helpToolStripMenuItem: "&Help" @
 .helpToolStripMenuItem.aboutToolStripMenuItem: "&About" @
-.helpToolStripMenuItem.eDDiscoveryHomepageToolStripMenuItem: "&View Help" @
+.helpToolStripMenuItem.wikiHelpToolStripMenuItem: "&View Help" @
+.helpToolStripMenuItem.viewHelpVideosToolStripMenuItem: "View Help Videos" @
 .helpToolStripMenuItem.eDDiscoveryChatDiscordToolStripMenuItem: "&Discord - EDD Community Chat" @
 .helpToolStripMenuItem.frontierForumThreadToolStripMenuItem: "&Frontier Forum Thread" @
 .helpToolStripMenuItem.gitHubToolStripMenuItem: "&Project Page (GitHub)" @

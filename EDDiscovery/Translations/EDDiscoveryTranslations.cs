@@ -825,26 +825,30 @@ namespace EDDiscovery
         UserControlMaterialTrader_Offer, // Offer
         UserControlMaterialTrader_Receive, // Receive
 
-        UserControlFactions_MissionsFor, // Missions for
-        UserControlFactions_MaterialCommodsFor, // Materials/Commodities for
-        UserControlFactions_MaterialCommods, // Commodity/Material
+        UserControlFactions_CapShipVictims, // Capital ship Victims: 
+        UserControlFactions_CapShipAward, //  Capital ship Award: 
         UserControlFactions_FactionsPlural, // Factions
+        UserControlFactions_MissionsFor, // Missions for
+
+        UserControlFactions_Item, // Item
+        UserControlFactions_MaterialCommodsFor, // Materials/Commodities for
+
         UserControlFactions_BountyBond, // Bounty/Bond
         UserControlFactions_Target, // Target
         UserControlFactions_TargetFaction, // Target Faction
         UserControlFactions_Reward, // Reward
         UserControlFactions_BountiesBondsFor, // Bounties/Bonds for
-        UserControlFactions_SystemsDetailFor, // Systems Detail for
+
         UserControlFactions_SystemAddress, // System Address
-        UserControlFactions_Influence, // +Influence
+        UserControlFactions_colInfluence,   // +Influence
+        UserControlFactions_CBought,        // Commds +
+        UserControlFactions_CSold,  // Commds -
+        UserControlFactions_MBought, // Mats +
+        UserControlFactions_MSold,  // Mats-
         UserControlFactions_RewardsPlural, // Rewards
         UserControlFactions_BountiesPlural, // Bounties
         UserControlFactions_BondsPlural, // Bonds
-        UserControlFactions_CommoditiesBought, // Commodities Bought
-        UserControlFactions_CommoditiesSold, // Commodities Sold
-        UserControlFactions_MaterialsReceived, // Materials Received
-        UserControlFactions_MaterialsTraded, // Materials Traded
-
+        UserControlFactions_SystemsDetailFor, // Systems Detail for
     }
 
     public static class EDTranslatorExtensions

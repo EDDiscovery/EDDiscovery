@@ -76,8 +76,9 @@
             this.datePanel.Controls.Add(this.labelValue);
             this.datePanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.datePanel.Location = new System.Drawing.Point(0, 0);
+            this.datePanel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.datePanel.Name = "datePanel";
-            this.datePanel.Size = new System.Drawing.Size(1280, 42);
+            this.datePanel.Size = new System.Drawing.Size(853, 27);
             this.datePanel.TabIndex = 0;
             // 
             // startDateTime
@@ -87,13 +88,13 @@
             this.startDateTime.Checked = false;
             this.startDateTime.CustomFormat = "yyyy/MM/dd | HH:mm:ss";
             this.startDateTime.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.startDateTime.Location = new System.Drawing.Point(0, 2);
-            this.startDateTime.Margin = new System.Windows.Forms.Padding(0, 2, 12, 2);
+            this.startDateTime.Location = new System.Drawing.Point(0, 1);
+            this.startDateTime.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.startDateTime.Name = "startDateTime";
             this.startDateTime.SelectedColor = System.Drawing.Color.Yellow;
             this.startDateTime.ShowCheckBox = true;
             this.startDateTime.ShowUpDown = false;
-            this.startDateTime.Size = new System.Drawing.Size(330, 31);
+            this.startDateTime.Size = new System.Drawing.Size(220, 20);
             this.startDateTime.TabIndex = 2;
             this.startDateTime.TextBackColor = System.Drawing.SystemColors.ControlLight;
             this.toolTip.SetToolTip(this.startDateTime, "Include from");
@@ -103,10 +104,10 @@
             // labelTo
             // 
             this.labelTo.AutoSize = true;
-            this.labelTo.Location = new System.Drawing.Point(342, 6);
-            this.labelTo.Margin = new System.Windows.Forms.Padding(0, 2, 12, 2);
+            this.labelTo.Location = new System.Drawing.Point(228, 4);
+            this.labelTo.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.labelTo.Name = "labelTo";
-            this.labelTo.Size = new System.Drawing.Size(23, 20);
+            this.labelTo.Size = new System.Drawing.Size(16, 13);
             this.labelTo.TabIndex = 4;
             this.labelTo.Text = "to";
             // 
@@ -117,13 +118,13 @@
             this.endDateTime.Checked = false;
             this.endDateTime.CustomFormat = "yyyy/MM/dd | HH:mm:ss";
             this.endDateTime.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.endDateTime.Location = new System.Drawing.Point(376, 2);
-            this.endDateTime.Margin = new System.Windows.Forms.Padding(0, 2, 12, 2);
+            this.endDateTime.Location = new System.Drawing.Point(251, 1);
+            this.endDateTime.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.endDateTime.Name = "endDateTime";
             this.endDateTime.SelectedColor = System.Drawing.Color.Yellow;
             this.endDateTime.ShowCheckBox = true;
             this.endDateTime.ShowUpDown = false;
-            this.endDateTime.Size = new System.Drawing.Size(327, 31);
+            this.endDateTime.Size = new System.Drawing.Size(218, 20);
             this.endDateTime.TabIndex = 3;
             this.endDateTime.TextBackColor = System.Drawing.SystemColors.ControlLight;
             this.toolTip.SetToolTip(this.endDateTime, "Include to");
@@ -133,10 +134,10 @@
             // labelValue
             // 
             this.labelValue.AutoSize = true;
-            this.labelValue.Location = new System.Drawing.Point(716, 8);
-            this.labelValue.Margin = new System.Windows.Forms.Padding(0, 2, 12, 2);
+            this.labelValue.Location = new System.Drawing.Point(477, 5);
+            this.labelValue.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.labelValue.Name = "labelValue";
-            this.labelValue.Size = new System.Drawing.Size(62, 20);
+            this.labelValue.Size = new System.Drawing.Size(43, 13);
             this.labelValue.TabIndex = 5;
             this.labelValue.Text = "<code>";
             // 
@@ -149,33 +150,33 @@
             this.showBountiesAndBondsForFactionToolStripMenuItem,
             this.showFactionSystemDetailToolStripMenuItem});
             this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(437, 132);
+            this.contextMenuStrip.Size = new System.Drawing.Size(310, 92);
             // 
             // showMissionsForFactionToolStripMenuItem
             // 
             this.showMissionsForFactionToolStripMenuItem.Name = "showMissionsForFactionToolStripMenuItem";
-            this.showMissionsForFactionToolStripMenuItem.Size = new System.Drawing.Size(436, 32);
+            this.showMissionsForFactionToolStripMenuItem.Size = new System.Drawing.Size(309, 22);
             this.showMissionsForFactionToolStripMenuItem.Text = "Show missions for faction";
             this.showMissionsForFactionToolStripMenuItem.Click += new System.EventHandler(this.showMissionsForFactionToolStripMenuItem_Click);
             // 
             // showCommoditymaterialTradesForFactionToolStripMenuItem
             // 
             this.showCommoditymaterialTradesForFactionToolStripMenuItem.Name = "showCommoditymaterialTradesForFactionToolStripMenuItem";
-            this.showCommoditymaterialTradesForFactionToolStripMenuItem.Size = new System.Drawing.Size(436, 32);
+            this.showCommoditymaterialTradesForFactionToolStripMenuItem.Size = new System.Drawing.Size(309, 22);
             this.showCommoditymaterialTradesForFactionToolStripMenuItem.Text = "Show commodity/material trades for faction";
             this.showCommoditymaterialTradesForFactionToolStripMenuItem.Click += new System.EventHandler(this.showCommoditymaterialTradesForFactionToolStripMenuItem_Click);
             // 
             // showBountiesAndBondsForFactionToolStripMenuItem
             // 
             this.showBountiesAndBondsForFactionToolStripMenuItem.Name = "showBountiesAndBondsForFactionToolStripMenuItem";
-            this.showBountiesAndBondsForFactionToolStripMenuItem.Size = new System.Drawing.Size(436, 32);
+            this.showBountiesAndBondsForFactionToolStripMenuItem.Size = new System.Drawing.Size(309, 22);
             this.showBountiesAndBondsForFactionToolStripMenuItem.Text = "Show bounties and bonds for faction";
             this.showBountiesAndBondsForFactionToolStripMenuItem.Click += new System.EventHandler(this.showBountiesAndBondsForFactionToolStripMenuItem_Click);
             // 
             // showFactionSystemDetailToolStripMenuItem
             // 
             this.showFactionSystemDetailToolStripMenuItem.Name = "showFactionSystemDetailToolStripMenuItem";
-            this.showFactionSystemDetailToolStripMenuItem.Size = new System.Drawing.Size(436, 32);
+            this.showFactionSystemDetailToolStripMenuItem.Size = new System.Drawing.Size(309, 22);
             this.showFactionSystemDetailToolStripMenuItem.Text = "Show system detail for faction";
             this.showFactionSystemDetailToolStripMenuItem.Click += new System.EventHandler(this.showFactionSystemDetailToolStripMenuItem_Click);
             // 
@@ -185,9 +186,10 @@
             this.dataViewScrollerPanelFactions.Controls.Add(this.dataGridViewFactions);
             this.dataViewScrollerPanelFactions.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewScrollerPanelFactions.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.dataViewScrollerPanelFactions.Location = new System.Drawing.Point(0, 42);
+            this.dataViewScrollerPanelFactions.Location = new System.Drawing.Point(0, 27);
+            this.dataViewScrollerPanelFactions.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.dataViewScrollerPanelFactions.Name = "dataViewScrollerPanelFactions";
-            this.dataViewScrollerPanelFactions.Size = new System.Drawing.Size(1280, 838);
+            this.dataViewScrollerPanelFactions.Size = new System.Drawing.Size(853, 545);
             this.dataViewScrollerPanelFactions.TabIndex = 1;
             this.dataViewScrollerPanelFactions.VerticalScrollBarDockRight = true;
             // 
@@ -202,13 +204,14 @@
             this.scrollBarFactions.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.scrollBarFactions.HideScrollBar = false;
             this.scrollBarFactions.LargeChange = 0;
-            this.scrollBarFactions.Location = new System.Drawing.Point(1256, 0);
+            this.scrollBarFactions.Location = new System.Drawing.Point(837, 0);
+            this.scrollBarFactions.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.scrollBarFactions.Maximum = -1;
             this.scrollBarFactions.Minimum = 0;
             this.scrollBarFactions.MouseOverButtonColor = System.Drawing.Color.Green;
             this.scrollBarFactions.MousePressedButtonColor = System.Drawing.Color.Red;
             this.scrollBarFactions.Name = "scrollBarFactions";
-            this.scrollBarFactions.Size = new System.Drawing.Size(24, 838);
+            this.scrollBarFactions.Size = new System.Drawing.Size(16, 545);
             this.scrollBarFactions.SliderColor = System.Drawing.Color.DarkGray;
             this.scrollBarFactions.SmallChange = 1;
             this.scrollBarFactions.TabIndex = 1;
@@ -249,6 +252,7 @@
             this.dataGridViewFactions.ContextMenuStrip = this.contextMenuStrip;
             this.dataGridViewFactions.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewFactions.Location = new System.Drawing.Point(0, 0);
+            this.dataGridViewFactions.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.dataGridViewFactions.Name = "dataGridViewFactions";
             this.dataGridViewFactions.RowHeaderMenuStrip = null;
             this.dataGridViewFactions.RowHeadersVisible = false;
@@ -256,7 +260,7 @@
             this.dataGridViewFactions.RowTemplate.Height = 28;
             this.dataGridViewFactions.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewFactions.SingleRowSelect = true;
-            this.dataGridViewFactions.Size = new System.Drawing.Size(1256, 838);
+            this.dataGridViewFactions.Size = new System.Drawing.Size(837, 545);
             this.dataGridViewFactions.TabIndex = 0;
             this.dataGridViewFactions.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewFactions_SortCompare);
             // 
@@ -415,13 +419,14 @@
             // 
             // UserControlFactions
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.Controls.Add(this.dataViewScrollerPanelFactions);
             this.Controls.Add(this.datePanel);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "UserControlFactions";
-            this.Size = new System.Drawing.Size(1280, 880);
+            this.Size = new System.Drawing.Size(853, 572);
             this.datePanel.ResumeLayout(false);
             this.datePanel.PerformLayout();
             this.contextMenuStrip.ResumeLayout(false);

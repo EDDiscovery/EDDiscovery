@@ -825,7 +825,7 @@ namespace EDDiscovery
             // 
             // wikiHelpToolStripMenuItem
             // 
-            this.wikiHelpToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.Main_Help_Help;
+            this.wikiHelpToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.Help_Wiki;
             this.wikiHelpToolStripMenuItem.Name = "wikiHelpToolStripMenuItem";
             this.wikiHelpToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F1;
             this.wikiHelpToolStripMenuItem.Size = new System.Drawing.Size(354, 22);
@@ -834,7 +834,7 @@ namespace EDDiscovery
             // 
             // viewHelpVideosToolStripMenuItem
             // 
-            this.viewHelpVideosToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.Main_Help_Help;
+            this.viewHelpVideosToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.Help_Video;
             this.viewHelpVideosToolStripMenuItem.Name = "viewHelpVideosToolStripMenuItem";
             this.viewHelpVideosToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.F1)));
             this.viewHelpVideosToolStripMenuItem.Size = new System.Drawing.Size(354, 22);

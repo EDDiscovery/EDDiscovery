@@ -758,7 +758,7 @@ namespace EDDiscovery.UserControls
             this.extButtonDrawnHelp.Selectable = true;
             this.extButtonDrawnHelp.Size = new System.Drawing.Size(24, 24);
             this.extButtonDrawnHelp.TabIndex = 31;
-            this.extButtonDrawnHelp.Text = "?";
+            this.extButtonDrawnHelp.Text = "<code>";
             this.extButtonDrawnHelp.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.extButtonDrawnHelp.UseMnemonic = true;
             this.extButtonDrawnHelp.Click += new System.EventHandler(this.extButtonDrawnHelp_Click);

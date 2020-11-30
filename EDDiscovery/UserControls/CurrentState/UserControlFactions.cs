@@ -235,22 +235,27 @@ namespace EDDiscovery.UserControls
 
         public override void ChangeCursorType(IHistoryCursor thc)
         {
-            uctg.OnTravelSelectionChanged -= Display;
+            uctg.OnTravelSelectionChanged -= Discoveryform_OnTravelSelectionChanged;
             uctg = thc;
-            uctg.OnTravelSelectionChanged += Display;
+            uctg.OnTravelSelectionChanged += Discoveryform_OnTravelSelectionChanged;
         }
 
         public override void LoadLayout()
         {
-            uctg.OnTravelSelectionChanged += Display;
+            uctg.OnTravelSelectionChanged += Discoveryform_OnTravelSelectionChanged;
             DGVLoadColumnLayout(dataGridViewFactions, DbColumnSaveFactions);
+        }
+
+        public override void InitialDisplay()
+        {
+            Discoveryform_OnTravelSelectionChanged(uctg.GetCurrentHistoryEntry, discoveryform.history, true);
         }
 
         public override void Closing()
         {
             DGVSaveColumnLayout(dataGridViewFactions, DbColumnSaveFactions);
 
-            uctg.OnTravelSelectionChanged -= Display;
+            uctg.OnTravelSelectionChanged -= Discoveryform_OnTravelSelectionChanged;
             discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
             discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
 
@@ -261,33 +266,37 @@ namespace EDDiscovery.UserControls
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbEndDateChecked, endDateTime.Checked);
         }
 
-        #endregion
-
-        #region Display
-
-        public override void InitialDisplay()
+        private void Discoveryform_OnHistoryChange(HistoryList obj)     // may have changed date system, this causes this
         {
-            Display(uctg.GetCurrentHistoryEntry, discoveryform.history);
+            VerifyDates();
         }
 
-        private void Display(HistoryEntry he, HistoryList hl) =>
-            Display(he, hl, true);
+        private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)
+        {
+            if (!object.ReferenceEquals(he.MissionList, last_he?.MissionList) || he.EventTimeUTC > NextExpiry)
+            {
+                last_he = he;
+                Display();
+                NextExpiry = he?.MissionList?.GetAllCurrentMissions(he.EventTimeUTC).OrderBy(e => e.MissionEndTime).FirstOrDefault()?.MissionEndTime ?? DateTime.MaxValue;
+            }
+        }
 
-        private void Display(HistoryEntry he, HistoryList hl, bool selectedEntry)
+        private void Discoveryform_OnTravelSelectionChanged(HistoryEntry he, HistoryList hl, bool selectedEntry)
         {
             last_he = he;
             Display();
             NextExpiry = he?.MissionList?.GetAllCurrentMissions(he.EventTimeUTC).OrderBy(e => e.MissionEndTime).FirstOrDefault()?.MissionEndTime ?? DateTime.MaxValue;
         }
 
+        #endregion
+
+        #region Display
+
         private void Display()
         {
-            var factionslist = new Dictionary<string, FactionStatistics>();
-
             DataGridViewColumn sortcol = dataGridViewFactions.SortedColumn != null ? dataGridViewFactions.SortedColumn : dataGridViewFactions.Columns[0];
             SortOrder sortorder = dataGridViewFactions.SortOrder != SortOrder.None ? dataGridViewFactions.SortOrder : SortOrder.Ascending;
             string toprowfaction = dataGridViewFactions.FirstDisplayedScrollingRowIndex >= 0 ? (dataGridViewFactions.Rows[dataGridViewFactions.FirstDisplayedScrollingRowIndex].Tag as FactionStatistics).Name : "";
-            System.Diagnostics.Debug.WriteLine("Current first row " + toprowfaction);
 
             dataGridViewFactions.Rows.Clear();
 
@@ -295,6 +304,8 @@ namespace EDDiscovery.UserControls
 
             DateTime startdateutc = startDateTime.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromSelected(startDateTime.Value) : new DateTime(1980, 1, 1);
             DateTime enddateutc = endDateTime.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromSelected(endDateTime.Value) : new DateTime(8999, 1, 1);
+
+            var factionslist = new Dictionary<string, FactionStatistics>();
 
             if (ml != null)
             {
@@ -361,7 +372,7 @@ namespace EDDiscovery.UserControls
 
             Stats mcs = null;
 
-            if (startDateTime.Checked || endDateTime.Checked)
+            if (startDateTime.Checked || endDateTime.Checked)                           // if we have a date range, can't rely on stats accumulated automatically
             {
                 foreach (var he in discoveryform.history.FilterByDateRange(startdateutc, enddateutc))
                 {
@@ -399,9 +410,9 @@ namespace EDDiscovery.UserControls
                     }
 
                     if (fs.FactionStats.CapShipAwardAsVictimFaction > 0)
-                        info = info.AppendPrePad("Capital ship Victims: " + fs.FactionStats.CapShipAwardAsVictimFaction, ", ");
+                        info = info.AppendPrePad("Capital ship Victims: ".T(EDTx.UserControlFactions_CapShipVictims) + fs.FactionStats.CapShipAwardAsVictimFaction, ", ");
                     if (fs.FactionStats.CapShipAwardAsAwaringFaction > 0)
-                        info = info.AppendPrePad("Capital ship Award: " + fs.FactionStats.CapShipAwardAsAwaringFaction + ":" + fs.FactionStats.CapShipAwardAsAwaringFactionValue.ToString("N0") + "cr", ", ");
+                        info = info.AppendPrePad("Capital ship Award: ".T(EDTx.UserControlFactions_CapShipAward) + fs.FactionStats.CapShipAwardAsAwaringFaction + ":" + fs.FactionStats.CapShipAwardAsAwaringFactionValue.ToString("N0") + "cr", ", ");
 
                     object[] rowobj = { fs.Name,
                                         fs.Missions.ToString("N0"), fs.Influence.ToString("N0"), fs.Reputation.ToString("N0"), fs.Credits.ToString("N0"),
@@ -411,6 +422,7 @@ namespace EDDiscovery.UserControls
                                         fs.FactionStats.Interdicted.ToString("N0"), fs.FactionStats.Interdiction.ToString("N0"),
                                         fs.FactionStats.KillBondAwardAsVictimFaction.ToString("N0"), fs.FactionStats.KillBondAwardAsAwaringFaction.ToString("N0"), fs.FactionStats.KillBondAwardAsAwaringFactionValue.ToString("N0"),
                                         info };
+
                     var row = dataGridViewFactions.RowTemplate.Clone() as DataGridViewRow;
                     row.CreateCells(dataGridViewFactions, rowobj);
                     row.Tag = fs;
@@ -436,25 +448,12 @@ namespace EDDiscovery.UserControls
                 }
             }
 
-            labelValue.Text = factionslist.Count + " Factions".T(EDTx.UserControlFactions_FactionsPlural);
+            labelValue.Text = factionslist.Count + " " + "Factions".T(EDTx.UserControlFactions_FactionsPlural);
         }
 
         #endregion
 
-        private void Discoveryform_OnHistoryChange(HistoryList obj)
-        {
-            VerifyDates();
-        }
-
-        private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)
-        {
-            if (!object.ReferenceEquals(he.MissionList, last_he?.MissionList) || he.EventTimeUTC > NextExpiry)
-            {
-                last_he = he;
-                Display();
-                NextExpiry = he?.MissionList?.GetAllCurrentMissions(he.EventTimeUTC).OrderBy(e => e.MissionEndTime).FirstOrDefault()?.MissionEndTime ?? DateTime.MaxValue;
-            }
-        }
+        #region Misc
 
         private void VerifyDates()
         {
@@ -483,13 +482,14 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        #endregion
+
+        #region Right clicks
+
         private void showMissionsForFactionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ShowMissions(dataGridViewFactions.RightClickRow);
-        }
+            int row = dataGridViewFactions.RightClickRow;
 
-        void ShowMissions(int row)
-        {
             if (row >= 0)
             {
                 FactionStatistics fs = dataGridViewFactions.Rows[row].Tag as FactionStatistics;
@@ -559,7 +559,7 @@ namespace EDDiscovery.UserControls
 
                 var dgvpanel = new ExtendedControls.ExtPanelDataGridViewScrollWithDGV<BaseUtils.DataGridViewColumnHider>();
                 dgvpanel.DataGrid.CreateTextColumns("Date".T(EDTx.UserControlOutfitting_Date), 100, 5,
-                                                    "Commodity/Material".T(EDTx.UserControlFactions_MaterialCommods), 150, 5,
+                                                    "Item".T(EDTx.UserControlFactions_Item), 150, 5,
                                                     "Bought".T(EDTx.UserControlStats_GoodsBought), 50, 5,
                                                     "Sold".T(EDTx.UserControlStats_GoodsSold), 50, 5);
                 dgvpanel.DataGrid.SortCompare += (s, ev) => { if (ev.Column.Index >= 2) ev.SortDataGridViewColumnNumeric(); };
@@ -645,13 +645,13 @@ namespace EDDiscovery.UserControls
 
                 var dgvpanel = new ExtendedControls.ExtPanelDataGridViewScrollWithDGV<BaseUtils.DataGridViewColumnHider>();
                 dgvpanel.DataGrid.CreateTextColumns("System".T(EDTx.UserControlModules_System), 100, 5,
-                                                    "SystemAddress".T(EDTx.UserControlOutfitting_Date), 60, 5,
+                                                    "System Address".T(EDTx.UserControlFactions_SystemAddress), 60, 5,
                                                     "Missions".T(EDTx.UserControlMissions_MPlural), 50, 5,
-                                                    "+Influence".T(EDTx.UserControlFactions_Influence), 50, 5,
-                                                    "Commodities Bought".T(EDTx.UserControlFactions_CommoditiesBought), 50, 5,
-                                                    "Commodities Sold".T(EDTx.UserControlFactions_CommoditiesSold), 50, 5,
-                                                    "Materials Received".T(EDTx.UserControlFactions_MaterialsReceived), 50, 5,
-                                                    "Materials Traded".T(EDTx.UserControlFactions_MaterialsTraded), 50, 5,
+                                                    "+Influence".T(EDTx.UserControlFactions_colInfluence), 50, 5,       // these align with columns of main view, with same names
+                                                    "Commds +".T(EDTx.UserControlFactions_CBought), 50, 5,      
+                                                    "Commds -".T(EDTx.UserControlFactions_CSold), 50, 5,
+                                                    "Mats +".T(EDTx.UserControlFactions_MBought), 50, 5,
+                                                    "Mats -".T(EDTx.UserControlFactions_MSold), 50, 5,
                                                     "Bounties".T(EDTx.UserControlFactions_BountiesPlural), 50, 5,
                                                     "Rewards".T(EDTx.UserControlFactions_RewardsPlural), 60, 5,
                                                     "Bonds".T(EDTx.UserControlFactions_BondsPlural), 50, 5,
@@ -764,5 +764,7 @@ namespace EDDiscovery.UserControls
                 f.ShowDialogCentred(FindForm(), FindForm().Icon, "Systems Detail for ".T(EDTx.UserControlFactions_SystemsDetailFor) + fs.Name, closeicon: true);
             }
         }
+
+        #endregion
     }
 }
