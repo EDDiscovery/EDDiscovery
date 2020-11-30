@@ -161,38 +161,14 @@ namespace EDDiscovery.UserControls
             public int? KillBonds { get; private set; }
             public long? BondsRewardsValue { get; private set; }
 
-            private int AddInt(int? v, int a)
-            {
-                if (v == null)
-                {
-                    return a;
-                }
-                else
-                {
-                    return (int)v + a;
-                }
-            }
-
-            private long AddLong(long? v, long a)
-            {
-                if (v == null)
-                {
-                    return a;
-                }
-                else
-                {
-                    return (long)v + a;
-                }
-            }
-
-            public void AddCommoditiesSold(int a) { CommoditiesSold = AddInt(CommoditiesSold, a); }
-            public void AddCommoditiesBought(int a) { CommoditiesSold = AddInt(CommoditiesSold, a); }
-            public void AddMaterialsSold(int a) { MaterialsSold = AddInt(MaterialsSold, a); }
-            public void AddMaterialsBought(int a) { MaterialsBought = AddInt(MaterialsBought, a); }
-            public void AddBounties(int a) { Bounties = AddInt(Bounties, a); }
-            public void AddBountyRewardsValue(long a) { BountyRewardsValue = AddLong(BountyRewardsValue, a); }
-            public void AddKillBonds(int a) { KillBonds = AddInt(KillBonds, a); }
-            public void AddBondsRewardsValue(long a) { BondsRewardsValue = AddLong(BondsRewardsValue, a); }
+            public void AddCommoditiesSold(int a) { CommoditiesSold = CommoditiesSold ?? 0 - a; }
+            public void AddCommoditiesBought(int a) { CommoditiesSold = CommoditiesSold ?? 0 + a; }
+            public void AddMaterialsSold(int a) { MaterialsSold = MaterialsSold??0 - a; }
+            public void AddMaterialsBought(int a) { MaterialsBought = MaterialsBought??0 - a; }
+            public void AddBounties(int a) { Bounties = Bounties??0 +a; }
+            public void AddBountyRewardsValue(long a) { BountyRewardsValue = BountyRewardsValue??0 + a; }
+            public void AddKillBonds(int a) { KillBonds = KillBonds??0 + a; }
+            public void AddBondsRewardsValue(long a) { BondsRewardsValue = BondsRewardsValue??0 + a; }
         }
 
         private string DbColumnSaveFactions { get { return DBName("FactionsPanel", "DGVCol"); } }
@@ -230,6 +206,7 @@ namespace EDDiscovery.UserControls
             dataGridViewFactions.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;      
 
             BaseUtils.Translator.Instance.Translate(this);
+            BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
         }
 
@@ -522,6 +499,10 @@ namespace EDDiscovery.UserControls
                     mluc.Finish();
                 }
 
+                string keyname = "UserControlFactionsShowMission";
+                mluc.dataGridView.LoadColumnSettings(keyname, (a) => EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(a, int.MinValue),
+                                                                          (b) => EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble(b, double.MinValue));
+
                 f.Add(new ExtendedControls.ConfigurableForm.Entry(mluc, "Grid", "", new System.Drawing.Point(3, 30), new System.Drawing.Size(800, 400), null)
                 { anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom });
 
@@ -531,6 +512,10 @@ namespace EDDiscovery.UserControls
                 f.AllowResize = true;
 
                 f.ShowDialogCentred(FindForm(), FindForm().Icon, "Missions for ".T(EDTx.UserControlFactions_MissionsFor) + fs.Name, closeicon: true);
+
+                mluc.dataGridView.SaveColumnSettings(keyname, (a, b) => EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(a, b),
+                                                 (c, d) => EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble(c, d));
+
             }
         }
 
@@ -567,6 +552,10 @@ namespace EDDiscovery.UserControls
                 dgvpanel.DataGrid.Columns[2].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
                 dgvpanel.DataGrid.Columns[3].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
 
+                string keyname = "UserControlFactionsShowCommdsMats";
+                dgvpanel.DataGrid.LoadColumnSettings(keyname, (a) => EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(a, int.MinValue),
+                                                                          (b) => EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble(b, double.MinValue));
+
                 foreach (var he in FilterHistory((x) => x.journalEntry is IStatsJournalEntryMatCommod && x.StationFaction == fs.Name))
                 {
                     var items = (he.journalEntry as IStatsJournalEntryMatCommod).ItemsList;
@@ -596,6 +585,10 @@ namespace EDDiscovery.UserControls
                 f.AllowResize = true;
 
                 f.ShowDialogCentred(FindForm(), FindForm().Icon, "Materials/Commodities for ".T(EDTx.UserControlFactions_MaterialCommodsFor) + fs.Name, closeicon: true);
+
+                dgvpanel.DataGrid.SaveColumnSettings(keyname, (a, b) => EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(a, b),
+                                                 (c, d) => EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble(c, d));
+
             }
         }
 
@@ -614,6 +607,11 @@ namespace EDDiscovery.UserControls
                 dgvpanel.DataGrid.SortCompare += (s, ev) => { if (ev.Column.Index >= 4) ev.SortDataGridViewColumnNumeric(); };
                 dgvpanel.DataGrid.RowHeadersVisible = false;
                 dgvpanel.DataGrid.Columns[4].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+
+                string keyname = "UserControlFactionsShowBonds";
+                dgvpanel.DataGrid.LoadColumnSettings(keyname, (a) => EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(a, int.MinValue),
+                                                                          (b) => EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble(b, double.MinValue));
+
 
                 foreach (var he in FilterHistory((x) => x.journalEntry is IStatsJournalEntryBountyOrBond &&
                                                     (x.journalEntry as IStatsJournalEntryBountyOrBond).HasFaction(fs.Name)))
@@ -634,6 +632,9 @@ namespace EDDiscovery.UserControls
                 f.AllowResize = true;
 
                 f.ShowDialogCentred(FindForm(), FindForm().Icon, "Bounties/Bonds for ".T(EDTx.UserControlFactions_BountiesBondsFor) + fs.Name, closeicon: true);
+
+                dgvpanel.DataGrid.SaveColumnSettings(keyname, (a, b) => EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(a, b),
+                                                 (c, d) => EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble(c, d));
             }
         }
 
@@ -661,6 +662,10 @@ namespace EDDiscovery.UserControls
                 dgvpanel.DataGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
                 for (int col = 1; col < dgvpanel.DataGrid.ColumnCount - 1; col++)
                     dgvpanel.DataGrid.Columns[col].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+
+                string keyname = "UserControlFactionsShowSystemDetail";
+                dgvpanel.DataGrid.LoadColumnSettings(keyname, (a) => EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(a, int.MinValue),
+                                                                          (b) => EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble(b, double.MinValue));
 
                 var systems = new List<SystemInfo>();
                 foreach (var si in fs.Systems.Values)
@@ -762,6 +767,9 @@ namespace EDDiscovery.UserControls
                 f.AllowResize = true;
 
                 f.ShowDialogCentred(FindForm(), FindForm().Icon, "Systems Detail for ".T(EDTx.UserControlFactions_SystemsDetailFor) + fs.Name, closeicon: true);
+
+                dgvpanel.DataGrid.SaveColumnSettings(keyname, (a, b) => EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(a, b),
+                                                 (c, d) => EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble(c, d));
             }
         }
 
