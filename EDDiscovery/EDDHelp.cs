@@ -31,7 +31,7 @@ namespace EDDiscovery
 
         static private JToken defaulthelp = new JObject()
         {
-            ["Version"] = "1.0.0.0",
+            ["Version"] = "1.1.0.0",
             ["Panels"] = new JArray()
             {
                 new JObject() { ["panel"] = "Log", ["wiki"] = "/Using-the-EDDiscovery-Log-Panel", ["video"] = "" },
@@ -82,6 +82,7 @@ namespace EDDiscovery
                 new JObject() { ["panel"] = "Map2D", ["wiki"] = "/Using-the-2D-Map", ["video"] = "" },
                 new JObject() { ["panel"] = "MiningOverlay", ["wiki"] = "/Using-the-mining-panel", ["video"] = "" },
                 new JObject() { ["panel"] = "HistoryTab", ["wiki"] = "/Using-the-History-Tab", ["video"] = "" },
+                new JObject() { ["panel"] = "Factions", ["wiki"] = "/Using-the-Factions-Panel", ["video"] = "" },
             }
         };
 
