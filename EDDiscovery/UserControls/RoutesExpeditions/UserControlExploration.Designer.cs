@@ -65,7 +65,7 @@ namespace EDDiscovery.UserControls
             this.deleteRowsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setTargetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editBookmarkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.dataGridViewExplore = new System.Windows.Forms.DataGridView();
+            this.dataGridViewExplore = new BaseUtils.DataGridViewColumnHider();
             this.ColumnSystemName = new ExtendedControls.ExtDataGridViewColumnAutoComplete();
             this.ColumnDist = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnX = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -516,7 +516,7 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripButton toolStripButtonExport;
         private System.Windows.Forms.ToolStripMenuItem setTargetToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem editBookmarkToolStripMenuItem;
-        private System.Windows.Forms.DataGridView dataGridViewExplore;
+        private BaseUtils.DataGridViewColumnHider dataGridViewExplore;
         private System.Windows.Forms.ToolStripButton toolStripButtonLoad;
         private ExtendedControls.ExtTextBox textBoxFileName;
         private System.Windows.Forms.Label labelFilename;
