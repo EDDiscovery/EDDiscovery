@@ -1,7 +1,7 @@
 ﻿Warning: "Warning" => "Uwaga"
 Today: "Today" => "Dzisiaj"
-24h: "24h" => "24 godz."
-7days: "7 days" => "7 Dni"
+t24h: "24h" => "24 godz."
+t7days: "7 days" => "7 Dni"
 All: "All" => "Wszystko"
 OK: "OK" @
 Cancel: "Cancel" => "Anuluj"
@@ -19,6 +19,8 @@ Off: "Off" => "Wył."
 Unknown: "Unknown" => "Nieznane"
 Information: "Information" => "Informacja"
 NoPos: "No Pos" => "Brak Pozycji"
+HideColumn: "Hide Column" @
+UnhideallColumns: "Unhide all Columns" @
 
 SECTION StartUp
 
@@ -80,6 +82,10 @@ SECTION PopOutInfo
 .StarDistance.Title: "Nearest Stars" => "Najbliższe Gwiazdy"
 .EstimatedValues.Description: "Estimated scan values of bodies in system" => "Szacowana wartość skanów ciał niebieskich w układzie"
 .EstimatedValues.Title: "Estimated Values" => "Szacowane Wartości"
+.Map2D.Title: "2D Map" @
+.Map2D.Description: "2D Map of galaxy" @
+.MiningOverlay.Title: "Mining Overlay" @
+.MiningOverlay.Description: "Mining overlay" @
 .LocalMap.Description: "3D Map of systems in range" => "Mapa 3D Układów w zasięgu"
 .LocalMap.Title: "Local Map" => "Mapa Lokalna"
 .Plot.Description: "2D Plot of systems in range" => "Plan 2D Układów w zasięgu"
@@ -158,14 +164,18 @@ SECTION EDDiscoveryForm
 .adminToolStripMenuItem.sendHistoricDataToInaraToolStripMenuItem: "Send to Inara historic data (previous ships, stored modules)" => "Wyślij starsze dane do Inara (poprzednie statki, przechowywane moduły)"
 .adminToolStripMenuItem.clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem: "Clear EDSM ID assigned to all records for current commander" => "Wyczyść EDSM ID przypisane do wszystkich wpisów obecnego Dowódcy"
 .adminToolStripMenuItem.exportVistedStarsListToEliteDangerousToolStripMenuItem: "Export Visited Stars List to Elite Dangerous" => "Eksportuj Listę Odwiedzonych Układów do Elite Dangerous"
+.adminToolStripMenuItem.read21AndFormerLogFilesToolStripMenuItem.load21ToolStripMenuItem: "Scan Netlogs" @
+.adminToolStripMenuItem.removeAllDLLPermissionsToolStripMenuItem: "Remove all DLL permissions" @
 .addOnsToolStripMenuItem: "&Add-Ons" => "&Dodatki"
 .addOnsToolStripMenuItem.manageAddOnsToolStripMenuItem: "&Manage Add-Ons" => "&Zarządzaj Dodatkami"
 .addOnsToolStripMenuItem.configureAddOnActionsToolStripMenuItem: "&Edit Add-On Action Files" => "&Zarządzaj Plikami Akcji Dodatków"
 .addOnsToolStripMenuItem.editLastActionPackToolStripMenuItem: "Edit Last Action Pack" => "Edytuj ostatnią paczkę Akcji"
 .addOnsToolStripMenuItem.stopCurrentlyRunningActionProgramToolStripMenuItem: "&Stop currently running Action Program" => "&Zatrzymaj obecnie pracujący program Akcji"
+.helpTabToolStripMenuItem: "Help" @
 .helpToolStripMenuItem: "&Help" => "&Pomoc"
 .helpToolStripMenuItem.aboutToolStripMenuItem: "&About" => "&O programie"
-.helpToolStripMenuItem.eDDiscoveryHomepageToolStripMenuItem: "&View Help" => "&Pokaż pomoc"
+.helpToolStripMenuItem.wikiHelpToolStripMenuItem: "&View Help" @
+.helpToolStripMenuItem.viewHelpVideosToolStripMenuItem: "View Help Videos" @
 .helpToolStripMenuItem.eDDiscoveryChatDiscordToolStripMenuItem: "&Discord - EDD Community Chat" => "&Discord - Czat Społeczności EDD"
 .helpToolStripMenuItem.frontierForumThreadToolStripMenuItem: "&Frontier Forum Thread" => "&Wątek na Forum Frontier"
 .helpToolStripMenuItem.gitHubToolStripMenuItem: "&Project Page (GitHub)" => "&Strona Projektu (GitHub)"
@@ -191,9 +201,11 @@ SECTION EDDiscoveryForm
 .RTABT: "Rename Tab" => "Zmień nazwę Karty"
 .RTABTT: "Enter a new name for the tab" => "Wprowadź nową nazwę dla tej karty"
 .ThemeW: "The theme stored has missing colors or other missing information\r\nCorrect the missing colors or other information manually using the Theme Editor in Settings" => "Zapisany motyw ma brakujące kolory lub inne brakujące informacje.\r\nPopraw brakujące kolory lub inne informacje ręcznie używając Edytora Motywów w Ustawieniach."
-.DLLW: "The following application extension DLLs have been found\r\nDo you wish to allow these to be used?\r\n{0} \r\nIf you do not, either remove the DLLs from the DLL folder in ED Appdata\r\nor deinstall the action pack which introduced the DLL\r\nor hold down shift when launching and use the Remove all Extensions DLL option" => "Znaleziono poniższe pliki DLL rozszerzeń aplikacji\r\nCzy chcesz zezwolić na ich używanie?\r\n{0} \r\nJeśli nie chcesz, usuń pliki DLL z folderu plików DLL w AppData ED\r\nlub odinstaluj paczkę akcji która dodała pliki DLL\r\nlub przytrzymaj Shift podczas uruchamiania i użyj opcji 'Usuń wszystkie DLL Rozszerzeń'."
+.DLLW: "The following application extension DLs have been found\r\nDo you wish it to be used?\r\n\r\n{0} \r\n" => "Znaleziono poniższe pliki DLL rozszerzeń aplikacji\r\nCzy chcesz zezwolić na ich używanie?\r\n{0} \r\nJeśli nie chcesz, usuń pliki DLL z folderu plików DLL w AppData ED\r\nlub odinstaluj paczkę akcji która dodała pliki DLL\r\nlub przytrzymaj Shift podczas uruchamiania i użyj opcji 'Usuń wszystkie DLL Rozszerzeń'."
 .DLLL: "DLLs loaded: {0}" => "Wczytane pliki DLL: {0}"
 .DLLF: "DLLs failed to load: {0}" => "Niewczytane pliki DLL: {0}"
+.IndexW: "Are you sure to Rebuild Indexes? It may take a long time." @
+.RemoveDLLPerms: "Remove all DLL permissions, on next start, you will be asked per DLL if you wish to allow the DLL to run. Are you sure?" @
 .PROFL: "Profile {0} Loaded" => "Wczytano profil: {0}"
 .NI: "New EDDiscovery installer available: {0}" => "Dostępny nowy instalator EDDiscovery: {0}"
 .NRA: "New Release Available!" => "Dostępne Nowe Wydanie!"
@@ -369,6 +381,7 @@ SECTION FindSystemsUserControl
 .labelRadMin: "Radius ly Min" => "Min.Promień LŚw"
 .labelFilter: "Star Name" => "Nazwa Gwiazdy"
 .Cannotfindsystem: "Cannot find system " => "Nie można znaleźć układu "
+.EDSM: "EDSM did not return any data on {0}\nIt may be a galactic object that it does not know about" @
 .buttonExtNames: "From DB Find Names" => "Szukaj Nazwy w Bazie Danych"
 .buttonExtEDSM: "From EDSM" => "Z EDSM"
 .buttonExtDB: "From DB" => "Z Bazy Danych"
@@ -481,7 +494,7 @@ CommanderForm: "CommanderForm" => "Ustawienia Dowódcy"
 .checkBoxCustomEDDNTo.ToolTip: "Click to send journal information to EDDN. EDDN feeds tools such as EDDB, EDSM, Inara with data from commanders. All data is made anonymised" => "Zaznacz, aby przesyłać informacje z dzienników do EDDN. EDDN przekazuje dane od dowódców narzędziom takim jak EDDB, EDSM, Inara. Dane są przekazywane anonimowo"
 .checkBoxCustomEDSMFrom.ToolTip: "Receive any FSD jumps from EDSM that are on their database but not in EDDiscovery" => "Pobierz wszystkie wpisy skoków FSD, które są w bazie danych EDSM, ale nie ma ich w bazie danych EDDiscovery"
 .checkBoxCustomEDSMTo.ToolTip: "Send your travel and ship data to EDSM" => "Przesyłaj swoje dane podróży i statków do EDSM"
-.textBoxBorderEDSMAPI.ToolTip: "Enter the API key from the EDSM Website\nGet an EDSM API key from https://www.edsm.net in \"My account\" menu" => "Wprowadź klucz API ze strony EDSM\nKlucz API można otrzymać na https://www.edsm.net w menu konta"
+.textBoxBorderEDSMAPI.ToolTip: "Enter the API key from the EDSM Website\nGet an EDSM API key from https://www.edsm.net in \\"My account\\" menu" => "Wprowadź klucz API ze strony EDSM\nKlucz API można otrzymać na https://www.edsm.net w menu konta"
 .textBoxBorderEDSMName.ToolTip: "Give the name this commander is known as in EDSM" => "Podaj nazwę tego Dowódcy z EDSM"
 .buttonExtBrowse.ToolTip: "Browse to the the journal folder" => "Przeglądaj, aby wybrać ścieżkę folderu dzienników"
 .textBoxBorderCmdr.ToolTip: "Enter commander name as used in Elite Dangerous" => "Wprowadź nazwę Dowódcy, której używasz w Elite Dangerous"
@@ -510,10 +523,13 @@ SECTION Form2DMap
 .LastYear: "Last Year" => "Ostatni Rok"
 .All: "All" => "Wszystko"
 .Custom: "Custom" => "Niestandardowe"
-Form2DMap: "2D Map" => "Mapa 2D"
-.Nomapsavailable: "No maps available" => "Brak dostępnych map"
-.toolStripButtonStars: "Stars" => "Gwiazdy"
-.toolStripButtonSave: "Save" => "Zapisz"
+
+SECTION UserControl2DMap
+
+UserControl2DMap: "2D Map" @
+.Nomapsavailable: "No maps available" @
+.toolStripButtonStars: "Stars" @
+.toolStripButtonSave: "Save" @
 
 SECTION GalaxySectorSelect
 

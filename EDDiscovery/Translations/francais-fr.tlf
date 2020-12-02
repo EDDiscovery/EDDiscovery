@@ -1,7 +1,7 @@
 ﻿Warning: "Warning" => "Attention"
 Today: "Today" => "Aujourd'hui"
-24h: "24h" => "24h"
-7days: "7 days" => "7 jours"
+t24h: "24h" @
+t7days: "7 days" => "7 jours"
 All: "All" => "Tout"
 OK: "OK" @
 Cancel: "Cancel" => "Annuler"
@@ -14,28 +14,31 @@ GameTime: "Game Time" => "Temps de jeu"
 Time: "Time" => "Heure"
 NoData: "No Data" => "Pas de données"
 None: "None" => "Aucun"
-on: "On" @
+on: "on" @
 Off: "Off" @
 Unknown: "Unknown" => "Inconnu"
-Information: "Information" => "Information"
+Information: "Information" @
 NoPos: "No Pos" => "Pas de position"
+HideColumn: "Hide Column" @
+UnhideallColumns: "Unhide all Columns" @
 
 SECTION StartUp
-.DUPLOAD:"EDDiscovery is already running. Launch anyway?" => "Whoo there, Bessie. Your sure?"
+
+.DUPLOAD: "EDDiscovery is already running. Launch anyway?" => "Whoo there, Bessie. Your sure?"
 
 SECTION SafeModeForm
 
 SafeModeForm: "EDDiscovery Safe Mode" => "EDDiscovery Mode sans échec"
-SafeModeForm.buttonCancel: "Cancel" => "Annuler"
-SafeModeForm.buttonNormal: "Run" => "Démarrer"
-SafeModeForm.buttonDeleteSystemDB: "Delete/Rebuild System DB" => "Supprimer/Reconstuire la base de données des systèmes"
-SafeModeForm.buttonDbs: "Move Databases" => "Déplacer la base de données"
-SafeModeForm.buttonLang: "Reset Language to English" => "Remettre la langue en Anglais"
-SafeModeForm.button1: "Remove all Action Packs" => "Retirer tous les Actions Packs"
-SafeModeForm.buttonRemoveDLLs: "Remove all Extension DLLs" => "Retirer toutes les extensions DLL"
-SafeModeForm.buttonResetTabs: "Reset Tabs, Remove PopOuts" => "RAZ Onglets, Fermer les fenêtres"
-SafeModeForm.buttonPositions: "Reset Window Positions" => "RAZ des positions de fenêtres"
-SafeModeForm.buttonResetTheme: "Reset Theme" => "RAZ du thème"
+.buttonCancel: "Cancel" => "Annuler"
+.buttonNormal: "Run" => "Démarrer"
+.buttonDeleteSystemDB: "Delete/Rebuild System DB" => "Supprimer/Reconstuire la base de données des systèmes"
+.buttonDbs: "Move Databases" => "Déplacer la base de données"
+.buttonLang: "Reset Language to English" => "Remettre la langue en Anglais"
+.button1: "Remove all Action Packs" => "Retirer tous les Actions Packs"
+.buttonRemoveDLLs: "Remove all Extension DLLs" => "Retirer toutes les extensions DLL"
+.buttonResetTabs: "Reset Tabs, Remove PopOuts" => "RAZ Onglets, Fermer les fenêtres"
+.buttonPositions: "Reset Window Positions" => "RAZ des positions de fenêtres"
+.buttonResetTheme: "Reset Theme" => "RAZ du thème"
 
 SECTION PopOutInfo
 
@@ -79,6 +82,10 @@ SECTION PopOutInfo
 .StarDistance.Title: "Nearest Stars" => "Étoile proches"
 .EstimatedValues.Description: "Estimated scan values of bodies in system" => "Valeurs estimées des corps du système"
 .EstimatedValues.Title: "Estimated Values" => "Valeurs Estimées"
+.Map2D.Title: "2D Map" @
+.Map2D.Description: "2D Map of galaxy" @
+.MiningOverlay.Title: "Mining Overlay" @
+.MiningOverlay.Description: "Mining overlay" @
 .LocalMap.Description: "3D Map of systems in range" => "Carte 3D des systèmes à portée"
 .LocalMap.Title: "Local Map" => "Carte Locale"
 .Plot.Description: "2D Plot of systems in range" => "Plan 2D des systèmes à portées"
@@ -130,7 +137,6 @@ SECTION PopOutInfo
 .EDSM.Title: "EDSM" @
 .EDSM.Description: "Automatic web view of EDSM page on system" => "Vue web automatique de la page EDSM d'un système"
 
-
 SECTION EDDiscoveryForm
 
 .ConfirmSyncToEDSM: "You have disabled sync to EDSM for this commander.  Are you sure you want to send unsynced events to EDSM?" => "Vous avez désactivé la synchronisation vers EDSM pour ce commandant. Etes vous sûr de vouloir envoyer les événements non synchronisé vers EDSM ?"
@@ -158,15 +164,19 @@ SECTION EDDiscoveryForm
 .adminToolStripMenuItem.sendHistoricDataToInaraToolStripMenuItem: "Send to Inara historic data (previous ships, stored modules)" => "Envoyer les données d'historique vers Inara"
 .adminToolStripMenuItem.clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem: "Clear EDSM ID assigned to all records for current commander" => "Supprimer l'ID EDSM assigné de tous les enregistrements du commandant en cours d'utilisation"
 .adminToolStripMenuItem.exportVistedStarsListToEliteDangerousToolStripMenuItem: "Export Visited Stars List to Elite Dangerous" => "Exporter la liste des étoiles visitées vers Elite Dangerous"
+.adminToolStripMenuItem.read21AndFormerLogFilesToolStripMenuItem.load21ToolStripMenuItem: "Scan Netlogs" @
+.adminToolStripMenuItem.removeAllDLLPermissionsToolStripMenuItem: "Remove all DLL permissions" @
 .addOnsToolStripMenuItem: "&Add-Ons" @
 .addOnsToolStripMenuItem.manageAddOnsToolStripMenuItem: "&Manage Add-Ons" => "&Gérer les Add-Ons"
 .addOnsToolStripMenuItem.configureAddOnActionsToolStripMenuItem: "&Edit Add-On Action Files" => "&Éditer les fichiers action d'Add-On"
 .addOnsToolStripMenuItem.editLastActionPackToolStripMenuItem: "Edit Last Action Pack" => "Éditer le dernier Action Pack"
 .addOnsToolStripMenuItem.stopCurrentlyRunningActionProgramToolStripMenuItem: "&Stop currently running Action Program" => "&Stopper le programme Action en cours d'utilisation"
+.helpTabToolStripMenuItem: "Help" @
 .helpToolStripMenuItem: "&Help" => "&Aide"
 .helpToolStripMenuItem.aboutToolStripMenuItem: "&About" => "&À propos"
-.helpToolStripMenuItem.eDDiscoveryHomepageToolStripMenuItem: "&View Help" => "&Visualiser l'aide"
-.helpToolStripMenuItem.eDDiscoveryChatDiscordToolStripMenuItem: "&Discord - EDD Community Chat" => "&Discord - EDD Community Chat"
+.helpToolStripMenuItem.wikiHelpToolStripMenuItem: "&View Help" @
+.helpToolStripMenuItem.viewHelpVideosToolStripMenuItem: "View Help Videos" @
+.helpToolStripMenuItem.eDDiscoveryChatDiscordToolStripMenuItem: "&Discord - EDD Community Chat" @
 .helpToolStripMenuItem.frontierForumThreadToolStripMenuItem: "&Frontier Forum Thread" => "&Frontier Forum - fil de discussion"
 .helpToolStripMenuItem.gitHubToolStripMenuItem: "&Project Page (GitHub)" => "&Page du projet (GitHub)"
 .helpToolStripMenuItem.reportIssueIdeasToolStripMenuItem: "&Report Issue / Idea" => "&Rapport de bug / Idées"
@@ -191,9 +201,11 @@ SECTION EDDiscoveryForm
 .RTABT: "Rename Tab" => "Renommer Onglet"
 .RTABTT: "Enter a new name for the tab" => "Entrer un nouveau nom pour l'onglet"
 .ThemeW: "The theme stored has missing colors or other missing information\r\nCorrect the missing colors or other information manually using the Theme Editor in Settings" => "Il manque des couleurs ou d'autres informations pour le thème choisi.\r\nCorriger manuellement les éléments manquants en utilisant l'éditeur de thème dans Paramètres"
-.DLLW: "The following application extension DLLs have been found\r\nDo you wish to allow these to be used?\r\n{0} \r\nIf you do not, either remove the DLLs from the DLL folder in ED Appdata\r\nor deinstall the action pack which introduced the DLL\r\nor hold down shift when launching and use the Remove all Extensions DLL option" => "Les DLL de l'extension suivante ont été trouvées\r\nSouhaitez vous autoriser leur utilisation ?\r\n{0} \r\nSi vous ne le souhaitez pas, vous pouvez soit supprimer les DLL du dossier ED dans Appdata\r\nou desinstaller le pack qui a installé la DLL\r\nou maintenir la touche MAJ en lançant EDD et choisir l'option de Suprimer toutes les extensions"
+.DLLW: "The following application extension DLs have been found\r\nDo you wish it to be used?\r\n\r\n{0} \r\n" => "Les DLL de l'extension suivante ont été trouvées\r\nSouhaitez vous autoriser leur utilisation ?\r\n{0} \r\nSi vous ne le souhaitez pas, vous pouvez soit supprimer les DLL du dossier ED dans Appdata\r\nou desinstaller le pack qui a installé la DLL\r\nou maintenir la touche MAJ en lançant EDD et choisir l'option de Suprimer toutes les extensions"
 .DLLL: "DLLs loaded: {0}" => "DLL chargée(s): {0}"
 .DLLF: "DLLs failed to load: {0}" => "Echec de chargement DLL: {0}"
+.IndexW: "Are you sure to Rebuild Indexes? It may take a long time." @
+.RemoveDLLPerms: "Remove all DLL permissions, on next start, you will be asked per DLL if you wish to allow the DLL to run. Are you sure?" @
 .PROFL: "Profile {0} Loaded" => "Profil {0} chargé"
 .NI: "New EDDiscovery installer available: {0}" => "Nouvelle installation d'EDDiscovery disponible : {0}"
 .NRA: "New Release Available!" => "Nouvelle version disponible !"
@@ -238,7 +250,6 @@ SECTION EDDiscoveryForm
 .buttonExt3dmap: "3D" @
 .adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.fetchLogsAgainToolStripMenuItem: "Fetch Logs Again" => "Récupérer les journaux à nouveau"
 .adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.fetchStarDataAgainToolStripMenuItem: "Fetch Star Data Again" => "Récupérer les données stellaires à nouveau"
-
 .WSE: "Web server enabled" => "Serveur Web activé"
 .WSF: "Web server failed to start" => "Echec du démarrage du serveur Web"
 .WSERR: "Web server disabled due to incorrect folder or missing zip file" => "Serveur web désactivé, car le répertoire est incorrect ou le fichier zip est manquant"
@@ -268,7 +279,7 @@ SECTION ScreenshotDirectoryWatcher
 
 .Scan: "Scanning for {0} screenshots in {1}" => "Analyse de {0} captures d'écran dans {1}"
 .NOF: "Folder specified for image conversion does not exist, check settings in the Screenshots tab" => "Le dossier spécifié pour la conversion d'image n'existe pas, vérifiez les paramètres dans l'onglet Captures d'écran."
-.Excp: "Error in executing image conversion, try another screenshot, check output path settings. (Exception)" => "Erreur dans l'éxécution de la conversion d'image, essayez avec une autre capture d'écran, vérifiez le paramètre de dossier de sortie. (Exception)"
+.Excp: "Error in executing image conversion, try another screenshot, check output path settings. (Exception " => "Erreur dans l'éxécution de la conversion d'image, essayez avec une autre capture d'écran, vérifiez le paramètre de dossier de sortie. (Exception)"
 
 SECTION ScreenShotImageConverter
 
@@ -305,7 +316,6 @@ ScreenShotConfigureForm: "Screen Shot Configure" => "Configuration des captures 
 .labelLeft2: "Left" => "Gauche"
 .labelTop2: "Top" => "Haut"
 .labelCropResizeOptions: "Crop/Resize Options" => "Options de rognage/redimensionnnement"
-
 
 SECTION BookmarkForm
 
@@ -371,6 +381,7 @@ SECTION FindSystemsUserControl
 .labelRadMin: "Radius ly Min" => "Rayon AL Min"
 .labelFilter: "Star Name" => "Nom de l'étoile"
 .Cannotfindsystem: "Cannot find system " => "Système introuvable"
+.EDSM: "EDSM did not return any data on {0}\nIt may be a galactic object that it does not know about" @
 .buttonExtNames: "From DB Find Names" => "Trouver le nom depuis la base de données"
 .buttonExtEDSM: "From EDSM" => "Depuis EDSM"
 .buttonExtDB: "From DB" => "Depuis la base de donnnées"
@@ -443,6 +454,7 @@ AssignTravelLogSystemForm: "AssignTravelLogSystemForm" @
 .label5: "System Coordinates" => "Coordonnées du système"
 
 SECTION CommanderForm
+
 CommanderForm: "CommanderForm" @
 .buttonCancel: "Cancel" => "Annuler"
 .buttonOK: "OK" @
@@ -482,13 +494,12 @@ CommanderForm: "CommanderForm" @
 .checkBoxCustomEDDNTo.ToolTip: "Click to send journal information to EDDN. EDDN feeds tools such as EDDB, EDSM, Inara with data from commanders. All data is made anonymised" => "Cocher pour envoyer les informations du journal à EDDN.\r\nEDDN sert à alimenter les outils tels que EDDB, EDSM, Inara avec les données des commandants. Toutes les données sont anonymisées."
 .checkBoxCustomEDSMFrom.ToolTip: "Receive any FSD jumps from EDSM that are on their database but not in EDDiscovery" => "Recevoir les données de sauts FSD d'EDSM qui sont sur leur base de données mais pas dans EDDiscovery"
 .checkBoxCustomEDSMTo.ToolTip: "Send your travel and ship data to EDSM" => "Envoyer vos voyages et données de vaisseau à EDSM"
-.textBoxBorderEDSMAPI.ToolTip: "Enter the API key from the EDSM Website\nGet an EDSM API key from https://www.edsm.net in \"My account\" menu" => "Entrer la clé API obbtenu sur le site d'EDSM\r\nhttps://www.edsm.net"
+.textBoxBorderEDSMAPI.ToolTip: "Enter the API key from the EDSM Website\nGet an EDSM API key from https://www.edsm.net in \\"My account\\" menu" => "Entrer la clé API obbtenu sur le site d'EDSM\r\nhttps://www.edsm.net"
 .textBoxBorderEDSMName.ToolTip: "Give the name this commander is known as in EDSM" => "Indiquer le nom de ce commandant tel qu'il est connu sur EDSM"
 .buttonExtBrowse.ToolTip: "Browse to the the journal folder" => "Selectionner le fichier de journal sur l'ordinateur"
 .textBoxBorderCmdr.ToolTip: "Enter commander name as used in Elite Dangerous" => "Entrer le nom de commandant utilisé dans Elite Dangerous"
 .textBoxBorderJournal.ToolTip: "Enter the journal location folder.  Normally leave this field blank only if you are using EDD on another computer than your play computer\nLeave override journal location blank to use the standard Frontier location for journals" => "En principe il faut laisser ce champs vide, sauf si vous jouez depuis un autre ordinateur que celui ci. Si vous laissez vite, le répertoire standard d'Elite Dangerous sera utilisé."
 .LF: "Select folder where Journal*.log files are stored by Frontier in" => "Choisir le répertoire ou les fichiers journal*.log sont stockés"
-
 
 SECTION ExportForm
 
@@ -512,10 +523,13 @@ SECTION Form2DMap
 .LastYear: "Last Year" => "Année précédente"
 .All: "All" => "Tout"
 .Custom: "Custom" => "Personnalisé"
-Form2DMap: "2D Map" => "Carte 2D"
-.Nomapsavailable: "No maps available" => "Pas de carte disponible"
-.toolStripButtonStars: "Stars" => "Etoiles"
-.toolStripButtonSave: "Save" => "Sauvegarder"
+
+SECTION UserControl2DMap
+
+UserControl2DMap: "2D Map" @
+.Nomapsavailable: "No maps available" @
+.toolStripButtonStars: "Stars" @
+.toolStripButtonSave: "Save" @
 
 SECTION GalaxySectorSelect
 
@@ -615,7 +629,7 @@ SetNoteForm: "Set Note" => "Définir une note"
 SECTION MessageBoxTheme
 
 .Warning: "Warning" => "Attention"
-.Ignore: "Ignore" => "Ignore"
+.Ignore: "Ignore" @
 .Retry: "Retry" => "Réessayer"
 .Abort: "Abort" => "Abandonner"
 .Cancel: "Cancel" => "Annuler"
@@ -669,9 +683,9 @@ SECTION UserControlForm
 .panel_transparent.ToolTip: "Toggle window transparency thru four settings\r\nOff - normal window\r\nOn (T) - transparent with controls active when mouse not inside window\r\nOn (Tc) - transparent with control active, to activate hold down the activate key\r\nOn (Tf) - fully transparent and inert, to activate hold down the activate key\r\n\r\nSee the settings page for configuring which key is the activate key.  \r\nMouse must be within the boundaries of the window and the key held down for\r\n500ms approx.\r\n\r\n\r\n" @
 
 SECTION ExtPanelRollUp
+
 .RUPPin: "Pin to stop this menu bar disappearing automatically" => "Epingler pour empecher la barre de menu de disparaitre automatiquement"
 .RUPMarker: "Click or hover over this to unroll the menu bar" => "cliquer ou survoler ici pour dérouler la barre de menu"
-
 
 include translation-francais-uc.tlp
 

@@ -976,6 +976,7 @@
     <None Include="Translations\chinese-zh.tlf" />
     <None Include="Translations\deutsch-de.tlf" />
     <None Include="Translations\example-ex.tlf" />
+    <None Include="Translations\francais-fr.tlf" />
     <None Include="Translations\Italiano-it.tlf" />
     <None Include="Translations\polski-pl.tlf" />
     <None Include="Translations\portugues-pt-br.tlf" />

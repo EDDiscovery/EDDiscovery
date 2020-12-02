@@ -100,6 +100,7 @@ SECTION SearchMaterialsCommodities
 .OR: "OR" => "OU"
 .DIS: "Discovered at " => "Découvert à"
 .COL: "Collected at " => "Collecté à"
+.MR: "Mission Reward at " @
 .label2: "Item 2" => "Objet 2"
 .label1: "Item 1" => "Objet 1"
 .buttonExtFind: "Find" => "Chercher"
@@ -177,12 +178,17 @@ SECTION UserControlEstimatedValues
 
 .BodyName: "Body Name" => "Nom du corps"
 .EstValue: "Est Value" => "Valeur est."
+.BodyType: "Body Type" @
+.Mapped: "Mapped" @
+.WasMapped: "Already Mapped" @
+.WasDiscovered: "Already Discovered" @
 .SV: "Estimated Scan Values for {0}" => "Valeur estimé du scan de {0}"
 .EDSM: "EDSM" @
 .checkBoxEDSM.ToolTip: "Get and show information from EDSM" => "Récupérer et montrer les infos d'EDSM"
 
 SECTION UserControlExpedition
 
+.toolStripButtonImportNavRoute: "Import Nav route" @
 .SystemName: "System Name" => "Nom du système"
 .Distance: "Dist." @
 .Note: "Note" @
@@ -312,6 +318,7 @@ SECTION UserControlLedger
 .toolStripMenuItemGotoItem: "Go to entry on grid" => "Aller à l'entrée dans le tableau"
 .CashTransactions: "Cash Transactions" => "Transaction d'argent"
 .buttonExtExcel.ToolTip: "Send data on grid to excel" => "Envoie les données de tableau dans Excel"
+.NOLG: "No Ledger available" @
 
 SECTION UserControlLocalMap
 
@@ -365,6 +372,8 @@ SECTION UserControlMarketData
 .Conly: "Cargo only, no market data on this item" => "Cargaison uniquement, pas de données de marché sur cette marchandise"
 .LEntry: "Travel History Entry Last" @
 .panelButtons.ToolTip: "When arriving at a station where you are comparing against (on the right)\r\nswap t" => "Lorsque vous arrivez à une station ou vous comparez les prix (sur la droite)\r\nEchangez t"
+.checkBoxSellOnly: "Sell Only" @
+.checkBoxSellOnly.ToolTip: "Show items you can sell only" @
 
 SECTION UserControlMaterials
 
@@ -427,7 +436,7 @@ SECTION UserControlSurveyor
 .bodyFeaturesToolStripMenuItem.lowRadiusToolStripMenuItem: "Low Radius" @
 .checkEDSMForInformationToolStripMenuItem: "Check EDSM for information" => "Aller sur EDSM pour plus d'informations"
 .autoHideToolStripMenuItem: "Auto Hide" => "Masquer automatiquement"
-.dontHideInFSSModeToolStripMenuItem: "Don\'t Hide in FSS Mode" => "Ne pas masquer en mode ACS"
+.dontHideInFSSModeToolStripMenuItem: "Don\\'t Hide in FSS Mode" => "Ne pas masquer en mode ACS"
 .showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem: "Show System Info Always" => "Toujours montrer les infos du système"
 .LowRadius: " Low Radius." @
 .Mapped: " (Mapped & Discovered)" => " (cartographiée & découverte)"
@@ -442,7 +451,7 @@ SECTION UserControlSurveyor
 .Hasring: " Has ring." => " a des anneaux."
 .Has: " Has " => " a "
 .Signals: " Has Signals." => " a des signaux."
-
+.islandable: " is landable." @
 .planetaryClassesToolStripMenuItem: "Planetary Classes" => "Classes planétaires"
 .planetaryClassesToolStripMenuItem.ammoniaWorldToolStripMenuItem: "Ammonia World" => "Monde d'amoniaque"
 .planetaryClassesToolStripMenuItem.earthlikeWorldToolStripMenuItem: "Earthlike World" => "Monde tellurique"
@@ -456,8 +465,8 @@ SECTION UserControlSurveyor
 .textAlignToolStripMenuItem.leftToolStripMenuItem: "Left" => "Gauche"
 .textAlignToolStripMenuItem.centerToolStripMenuItem: "Center" => "Centre"
 .textAlignToolStripMenuItem.rightToolStripMenuItem: "Right" => "Droite"
-
 .bodyFeaturesToolStripMenuItem.hasSignalsToolStripMenuItem: "Has Signals" => "a des signaux"
+.bodyFeaturesToolStripMenuItem.landableToolStripMenuItem: "Landable" @
 .showAllPlanetsToolStripMenuItem: "Show All Planets" => "Affiche toutes les planètes"
 .showAllStarsToolStripMenuItem: "Show All Stars" => "Affiche toutes les étoiles"
 .showBeltClustersToolStripMenuItem: "Show Belt Clusters" => "Affiche les ceintures d'astéroides"
@@ -479,6 +488,7 @@ SECTION MissionListUserControl
 .labelTo: "to" => "vers"
 
 SECTION UserControlMissions
+
 .MPlural: " Missions" @
 .MSingular: " Mission" @
 .Name: "Name" => "Nom"
@@ -545,6 +555,8 @@ SECTION UserControlModules
 .buttonExtExcel.ToolTip: "Send data on grid to excel" => "Envoi des données vers Excel"
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" => "Activer/Désactiver retour à la ligne"
 .AllModules: "All Modules" => "Tous les modules"
+.ForceSell: "Force Sell" @
+.NOSI: "No Ship Information available" @
 
 SECTION UserControlNotePanel
 
@@ -604,10 +616,11 @@ SECTION UserControlPlot
 .PSIDE: "Plot around {0}, viewed from the side" => "Tracé autour de {0}, vue du côté"
 .SysAROUND: "Systems around {0}, from {1} to {2}, Ly: {3}" => "Systèmes autour de {0}, depuis {1} vers {2}, AL: {3}"
 .Vs: "\r\n    Visits: {0}" => "\r\n    Visites: {0}"
-.Nt: "\r\n    Notes: {0}\r\n" @ 
+.Nt: "\r\n    Notes: {0}\r\n" @
 .D1: "\r\n{0} distance {1:N2} Ly" => "\r\n{0} distance {1:N2} AL"
 .D2: "\r\n    Visits: {0}" => "\r\n    Visites: {0}"
 .D3: "\r\n    Coordinates: X:{0:N2}, Y:{1:N2}, Z:{2:N2}\r\n" => "\r\n    Coordonnées: X:{0:N2}, Y:{1:N2}, Z:{2:N2}\r\n"
+.Nt": "\r\n    Notes: {0}\r\n" @
 
 SECTION UserControlRoute
 
@@ -874,16 +887,18 @@ SECTION UserControlSettings
 .radioButtonCentreHome: "Home System" => "Système de base"
 .labelOpenOn: "Open Centred On" => "Ouvrir centré sur"
 .labelHome: "Now in Commander Settings" @
-.Font: "The font used by this theme is not available on your system.\r\nThe font needed is \"{0}\".\r\nInstall this font to fully use this theme.\r\nEuro Caps font is freely available from www.edassets.org.\r\n\r\nWould you like to load this theme using a replacement font?" => "La police utilisée par ce thème n'est pas installé sur votre PC.\r\nLa police nécessaire est \"{0}\".\r\nInstaller cette police pour profiter pleinement de ce thème.\r\nLa police Euro Caps est disponible gratuitement sur www.edassets.org.\r\n\r\nVoulez vous charger ce thème en utilisant une police de remplacement ?"
+.Font: "The font used by this theme is not available on your system.\r\nThe font needed is \\"{0}\\".\r\nInstall this font to fully use this theme.\r\nEuro Caps font is freely available from www.edassets.org.\r\n\r\nWould you like to load this theme using a replacement font?" => "La police utilisée par ce thème n'est pas installé sur votre PC.\r\nLa police nécessaire est \\"{0}\\".\r\nInstaller cette police pour profiter pleinement de ce thème.\r\nLa police Euro Caps est disponible gratuitement sur www.edassets.org.\r\n\r\nVoulez vous charger ce thème en utilisant une police de remplacement ?"
 .Information: "Applies at next restart of ED Discovery" => "S'applique au prochain démarrage d'EDD"
 .AddC: "Commander name is not valid or duplicate" => "Le nom de commandant est invalide ou en doublon"
 .AddT: "Cannot create Commander" => "Impossible de créer le commandant"
+.DelCmdr: "Do you wish to delete commander " @
 .Language: "Applies at next restart of ED Discovery" => "S'applique au redémarrage d'EDD"
 .RemoveSectors: "Remove Sectors" => "Supprimer des secteurs"
 .GalRemove: "Removing {0} Sector(s).\r\n\r\nThis will take a while (up to 30 mins dep on drive type and amount of sectors).\r\nYou may continue to use EDD while this operation takes place\r\nbut it may be slow to respond. Do not close down EDD until this window says\r\nthe process has finished\r\n\r\n" => "Suprrime {0} secteur(s).\r\n\r\nCeci prend du temps (jusqu'à 30 mins en fonction du disque et du nombre de secteurs).\r\nVous pouvez continuer à utiliser EDD pendant ce temps\r\nmais il peut être long à repondre. Ne pas fermer EDD avant que la fenêtre affiche que\r\nle processus s'est terminé\r\n\r\n"
 .GalFini: "Finished, Please close the window.\r\nIf you already have the 3dmap open, changes will not be reflected in that map until the next start of EDD\r\n" => "Terminé, Merci de fermer la fenêtre.\r\nSi vous avez déjà une carte 3D ouverte, les changement ne seront visibles qu'au prochain démarrage d'EDD\r\n"
 .GameTime: "Game Time" => "Temps de jeu"
 .Local: "Local" @
+.NoMap: "No map available!" @
 
 SECTION UserControlShipYards
 
@@ -900,6 +915,7 @@ SECTION UserControlShipYards
 .MS: "Mass/Speed" => "Masse/Vitesse"
 
 SECTION UserControlShoppingList
+
 .toggleListPositionToolStripMenuItem: "Toggle Shopping List Position" => "Basculer la position de la liste de courses"
 .buttonSpecialEffects: "Special Effects" => "Effets spéciaux"
 .buttonTechBroker: "Tech Broker Unlocks" @
@@ -965,7 +981,6 @@ SECTION UserControlSpanel
 .showCircumstellarZonesToolStripMenuItem.showIcyPlanetsToolStripMenuItem: "Icy Planets" => "Planètes gelées"
 .dontShowInformationWhenToolStripMenuItem.completelyHideThePanelToolStripMenuItem: "Completely hide the Panel" => "Masquer complètement le panneau"
 .dontShowInformationWhenToolStripMenuItem.dontshowwhenInPanelToolStripMenuItem: ".. when in a Panel" => ".. dans le panneau"
-
 .Goldilocks: "Goldilocks, {0} ({1}-{2} AU),\n" @
 
 SECTION UserControlStarDistance
@@ -985,6 +1000,7 @@ SECTION UserControlStarDistance
 .textMaxRadius.ToolTip: "Maximum star distance in ly" => "Distance max de l'étoile en al"
 .From: "From {0}" => "Depuis {0}"
 .NoEDSMSys: "System could not be found - has not been synched or EDSM is unavailable" => "Système introuvable - n'a pas été synchronisé ou EDSM est indisponible"
+.viewSystemToolStripMenuItem: "View System" @
 
 SECTION UserControlStarList
 
@@ -1010,7 +1026,7 @@ SECTION UserControlStarList
 .viewScanDisplayToolStripMenuItem: "View Scan Display" => "Afficher la vue scan"
 .Total: "Total" @
 .Signals: "{0} has signals" => "{0} a des signaux"
-
+.Distance: " ({0} ls)" @
 .FV: "First visit {0}" => "Première visite {0}"
 .CS: "{0} Star(s) {1}" => "{0} étoile(s) {1}"
 .SMBH: "{0} is a super massive black hole" => "{0} est un trou noir supermassif"
@@ -1171,22 +1187,19 @@ SECTION UserControlStats
 .tabControlCustomStats.tabPageByShip.dataGridViewTextBoxColumn3: "Item" @
 .tabControlCustomStats.tabPageByShip.dataGridViewTextBoxColumn4: "Information" @
 .Mapped: "Mapped" => "Cartographié"
-
-UserControlStats.BankAccount: "Bank Account" => "Compte en banque"
-UserControlStats.Combat: "Combat" @
-UserControlStats.Crime: "Crime" @
-UserControlStats.Smuggling: "Smuggling" => "contrebande"
-UserControlStats.Trading: "Trading" => "Commerce"
-UserControlStats.Mining: "Mining" => "Minage"
-UserControlStats.Exploration: "Exploration" @
-UserControlStats.Passengers: "Passengers" => "Passagers"
-UserControlStats.SearchandRescue: "Search and Rescue" => "Sauvetage"
-UserControlStats.Crafting: "Crafting" => "Fabrication"
-UserControlStats.Crew: "Crew" => "Équipage"
-UserControlStats.Multi: "Multi-crew" => "Multi-équipage"
-UserControlStats.MaterialsTrader: "Materials Trader" => "Commerçants de matériaux"
-
-
+.BankAccount: "Bank Account" => "Compte en banque"
+.Combat: "Combat" @
+.Crime: "Crime" @
+.Smuggling: "Smuggling" => "contrebande"
+.Trading: "Trading" => "Commerce"
+.Mining: "Mining" => "Minage"
+.Exploration: "Exploration" @
+.Passengers: "Passengers" => "Passagers"
+.SearchandRescue: "Search and Rescue" => "Sauvetage"
+.Crafting: "Crafting" => "Fabrication"
+.Crew: "Crew" => "Équipage"
+.Multi: "Multi-crew" => "Multi-équipage"
+.MaterialsTrader: "Materials Trader" => "Commerçants de matériaux"
 
 SECTION StatsTimeUserControl
 
@@ -1277,8 +1290,17 @@ SECTION UserControlSysInfo
 .NoMissions: "No Missions" => "Pas de missions"
 .NA: "N/A" @
 .SysUnk: "System unknown to EDSM" => "Système inconnu d'EDSM"
-.Pos: "Position is {0:0.00},{1:0.00},{2:0.00}" => ""Position : {0:0.00},{1:0.00},{2:0.00}"
+.Pos: "Position is {0:0.00},{1:0.00},{2:0.00}" @
 .Target: "On 3D Map right click to make a bookmark, region mark or click on a notemark and then tick on Set Target, or type it here and hit enter" @
+.extButtonEDSMTarget: "EDSM" @
+.labelOpenShip: "Open" @
+.labelOpenStation: "Open" @
+.extButtonSpanshStation: "S" @
+.extButtonSpanshSystem: "S" @
+.displayStationButtonsToolStripMenuItem: "Display Station Buttons" @
+.displayShipButtonsToolStripMenuItem: "Display Ship Buttons" @
+.labelStationFaction: "Faction" @
+.displayStationFactionToolStripMenuItem: "Display Station Faction" @
 
 SECTION UserControlContainerSplitter
 
@@ -1338,6 +1360,7 @@ SECTION UserControlTravelGrid
 .runActionsAcrossSelectionToolSpeechStripMenuItem: "Run actions across selection for speech debugging (Debug)" => "Éxécution des actions dans la selection pour débug vocal (debug)"
 .runSelectionThroughInaraSystemToolStripMenuItem: "Run selection through Inara System (Debug)" => "Éxécution de la selection via le système d'Inara (Debug)"
 .runEntryThroughProfileSystemToolStripMenuItem: "Run entry through Profile System (Debug)" => "Éxécuter l'entrée via le système de profil (Debug)"
+.runSelectionThroughEDDNDebugNoSendToolStripMenuItem: "Run selection through EDDN no send (Debug)" @
 .TT1: " showing {0} original {1}" => " affiche {0} original {1}"
 .TTFilt1: "Filtered {0}" => "Filtre {0}"
 .TTSelAge: "Select the entries by age, " => "Selection des entrées par âge, "
@@ -1451,6 +1474,9 @@ SECTION UserControlTrilateration
 .PF: "Position found" => "Position trouvée"
 .addAllSectorSystemsToolStripMenuItem: "Add all Sector systems" => "Ajouter tous les systèmes du secteur"
 .toolStripButtonSector: "Sector Systems" => "Systèmes du secteur"
+.NotProcGen: "Sector name could not be derived from system name (it may not be procedurally generated).  Not getting sector systems." @
+.NoSector: "No systems with unknown coordinates were found for the current sector." @
+.SectorCount: "{0} systems with unknown coordinates found in {1} sector." @
 
 SECTION UserControlTrippanel
 
@@ -1467,6 +1493,7 @@ SECTION UserControlTrippanel
 .NoT: " -> Target not set" => " -> cible non définie"
 .FDEDSM: "Shows if EDSM indicates your it's first discoverer" => "Affiche qu'EDSM indique que vous êtes le premier découvreur"
 .UKN: "System {0} unknown to EDSM" => "Système {0} inconnu d'EDSM"
+.Left: "Left" @
 
 SECTION UserControlMaterialTrader
 
@@ -1486,6 +1513,68 @@ SECTION UserControlMaterialTrader
 .Encoded: "Encoded" => "Encodé"
 .Manufactured: "Manufactured" => "Fabriqué"
 
+SECTION UserControlMiningOverlay
+
+.extCheckBoxZeroRefined: ">0" @
+.Proscoll: ", Prospectors Fired {0}, Collectors Deployed {1}, Cracked {2}" @
+.ref: "Ref." @
+.coll: "Coll." @
+.pros: "Prosp." @
+.ratio: "Ratio%" @
+.avg: "Avg%" @
+.min: "Min%" @
+.max: "Max%" @
+.mload: "M.Lode" @
+.hml: "HML Ct." @
+.discv: "Discv" @
+.astpros: "Asteroids Pros." @
+.content: "Content %" @
+.above: "% Above" @
+.dist: "Distribution" @
+.Limcargo: "Limpets left {0}, Cargo left {1}" @
+
+SECTION UserControlFactions
+
+.colFaction: "Faction" @
+.colMissions: "Missions" @
+.colInfluence: "Inf +" @
+.colReputation: "Rep +" @
+.colMissionCredits: "Mission Credits" @
+.CBought: "Commds +" @
+.CSold: "Commds -" @
+.MBought: "Mats +" @
+.MSold: "Mats -" @
+.CrimeCommitted: "Crimes Committed" @
+.BountyKills: "Bounty Kills" @
+.BountyValue: "Bounty Rewards" @
+.BountyRewardsValue: "Bounty Rewards Value" @
+.Interdicted: "Interdicted" @
+.Interdiction: "Interdiction" @
+.KillBondVictim: "Kill Bonds Victim" @
+.KillBondsAward: "Kill Bonds Awarded" @
+.KillBondsValue: "Kill Bonds Value" @
+.colInfo: "Other Info" @
+.labelTo: "to" @
+.startDateTime.ToolTip: "Include from" @
+.endDateTime.ToolTip: "Include to" @
+.FactionsPlural: "Factions" @
+.MissionsFor: "Missions for " @
+.BountyBond: "Bounty/Bond" @
+.Target: "Target" @
+.TargetFaction: "Target Faction" @
+.Reward: "Reward" @
+.BountiesBondsFor: "Bounties/Bonds for " @
+.Item: "Item" @
+.MaterialCommodsFor: "Materials/Commodities for " @
+.SystemAddress: "System Address" @
+.BountiesPlural: "Bounties" @
+.RewardsPlural: "Rewards" @
+.BondsPlural: "Bonds" @
+.SystemsDetailFor: "Systems Detail for " @
+.showMissionsForFactionToolStripMenuItem: "Show missions for faction" @
+.showCommoditymaterialTradesForFactionToolStripMenuItem: "Show commodity/material trades for faction" @
+.showBountiesAndBondsForFactionToolStripMenuItem: "Show bounties and bonds for faction" @
+.showFactionSystemDetailToolStripMenuItem: "Show system detail for faction" @
 
 SECTION ScanDisplayUserControl
 
@@ -1506,10 +1595,9 @@ SECTION TagsForm
 .buttonMore: "+" @
 .buttonMore.ToolTip: "Add more tags" => "Ajouter des tags"
 TagsForm: "Tags" @
-TagsForm.TN: "Tag name" => "Nom du tag"
-TagsForm.SI: "Select image for this tag" => "Sélectionner une image pour ce tag"
-TagsForm.DE: "Delete entry" => "Supprimer entrée"
-
+.TN: "Tag name" => "Nom du tag"
+.SI: "Select image for this tag" => "Sélectionner une image pour ce tag"
+.DE: "Delete entry" => "Supprimer entrée"
 
 SECTION FilterSelector
 
@@ -1524,3 +1612,8 @@ SECTION FilterSelector
 SECTION UserControlCommonBase
 
 .Copyingtexttoclipboardfailed: "Copying text to clipboard failed" => "Échec de la copie du texte vers le presse papier"
+
+SECTION CSV
+
+.Helpers.OpenFailed: "Failed to open " @
+.Helpers.WriteFailed: "Failed to write to " @
