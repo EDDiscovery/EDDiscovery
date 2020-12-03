@@ -876,7 +876,7 @@ namespace EDDiscovery.UserControls
             // (re)set status
             if (system.HasCoordinate)
             {
-                dataGridViewDistances[3, cell.RowIndex].Value = "Pos: " + system.X.ToString() + ";" + "Pos: " + system.Y.ToString() + ";" + "Pos: " + system.Z.ToString();
+                dataGridViewDistances[3, cell.RowIndex].Value = "Pos: " + system.X.ToString() + "," + system.Y.ToString() + "," + system.Z.ToString();
             }
             else
             {

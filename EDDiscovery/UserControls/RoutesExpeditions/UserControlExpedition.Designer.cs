@@ -68,7 +68,7 @@ namespace EDDiscovery.UserControls
             this.labelDateStart = new System.Windows.Forms.Label();
             this.textBoxRouteName = new ExtendedControls.ExtTextBox();
             this.labelRouteName = new System.Windows.Forms.Label();
-            this.dataGridViewRouteSystems = new BaseUtils.DataGridViewColumnHider();
+            this.dataGridView = new BaseUtils.DataGridViewColumnHider();
             this.contextMenuCopyPaste = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pasteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -89,7 +89,7 @@ namespace EDDiscovery.UserControls
             this.ColumnY = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnZ = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.toolStrip.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewRouteSystems)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.contextMenuCopyPaste.SuspendLayout();
             this.ctxMenuCombo.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -430,34 +430,34 @@ namespace EDDiscovery.UserControls
             // 
             // dataGridViewRouteSystems
             // 
-            this.dataGridViewRouteSystems.AllowDrop = true;
-            this.dataGridViewRouteSystems.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dataGridViewRouteSystems.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
-            this.dataGridViewRouteSystems.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewRouteSystems.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridView.AllowDrop = true;
+            this.dataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridView.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
+            this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.SystemName,
             this.Distance,
             this.Note,
             this.ColumnX,
             this.ColumnY,
             this.ColumnZ});
-            this.dataGridViewRouteSystems.ContextMenuStrip = this.contextMenuCopyPaste;
-            this.dataGridViewRouteSystems.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridViewRouteSystems.Location = new System.Drawing.Point(0, 0);
-            this.dataGridViewRouteSystems.Name = "dataGridViewRouteSystems";
-            this.dataGridViewRouteSystems.RowHeaderMenuStrip = null;
-            this.dataGridViewRouteSystems.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewRouteSystems.SingleRowSelect = true;
-            this.dataGridViewRouteSystems.Size = new System.Drawing.Size(1118, 558);
-            this.dataGridViewRouteSystems.TabIndex = 2;
-            this.dataGridViewRouteSystems.CellValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewRouteSystems_CellValidated);
-            this.dataGridViewRouteSystems.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.dataGridViewRouteSystems_CellValidating);
-            this.dataGridViewRouteSystems.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridViewRouteSystems_RowPostPaint);
-            this.dataGridViewRouteSystems.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewRouteSystems_SortCompare);
-            this.dataGridViewRouteSystems.DragDrop += new System.Windows.Forms.DragEventHandler(this.dataGridViewRouteSystems_DragDrop);
-            this.dataGridViewRouteSystems.DragOver += new System.Windows.Forms.DragEventHandler(this.dataGridViewRouteSystems_DragOver);
-            this.dataGridViewRouteSystems.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridViewRouteSystems_MouseDown);
-            this.dataGridViewRouteSystems.MouseMove += new System.Windows.Forms.MouseEventHandler(this.dataGridViewRouteSystems_MouseMove);
+            this.dataGridView.ContextMenuStrip = this.contextMenuCopyPaste;
+            this.dataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridView.Location = new System.Drawing.Point(0, 0);
+            this.dataGridView.Name = "dataGridViewRouteSystems";
+            this.dataGridView.RowHeaderMenuStrip = null;
+            this.dataGridView.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dataGridView.SingleRowSelect = true;
+            this.dataGridView.Size = new System.Drawing.Size(1118, 558);
+            this.dataGridView.TabIndex = 2;
+            this.dataGridView.CellValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewRouteSystems_CellValidated);
+            this.dataGridView.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.dataGridViewRouteSystems_CellValidating);
+            this.dataGridView.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridViewRouteSystems_RowPostPaint);
+            this.dataGridView.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewRouteSystems_SortCompare);
+            this.dataGridView.DragDrop += new System.Windows.Forms.DragEventHandler(this.dataGridViewRouteSystems_DragDrop);
+            this.dataGridView.DragOver += new System.Windows.Forms.DragEventHandler(this.dataGridViewRouteSystems_DragOver);
+            this.dataGridView.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridViewRouteSystems_MouseDown);
+            this.dataGridView.MouseMove += new System.Windows.Forms.MouseEventHandler(this.dataGridViewRouteSystems_MouseMove);
             // 
             // contextMenuCopyPaste
             // 
@@ -573,7 +573,7 @@ namespace EDDiscovery.UserControls
             // extPanelDataGridViewScroll
             // 
             this.extPanelDataGridViewScroll.Controls.Add(this.extScrollBarDGV);
-            this.extPanelDataGridViewScroll.Controls.Add(this.dataGridViewRouteSystems);
+            this.extPanelDataGridViewScroll.Controls.Add(this.dataGridView);
             this.extPanelDataGridViewScroll.Dock = System.Windows.Forms.DockStyle.Fill;
             this.extPanelDataGridViewScroll.InternalMargin = new System.Windows.Forms.Padding(0);
             this.extPanelDataGridViewScroll.Location = new System.Drawing.Point(0, 115);
@@ -659,7 +659,7 @@ namespace EDDiscovery.UserControls
             this.Size = new System.Drawing.Size(1134, 673);
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewRouteSystems)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
             this.contextMenuCopyPaste.ResumeLayout(false);
             this.ctxMenuCombo.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
@@ -682,7 +682,7 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtDateTimePicker dateTimePickerStartDate;
         private System.Windows.Forms.Label labelDateStart;
         private System.Windows.Forms.Label labelRouteName;
-        private BaseUtils.DataGridViewColumnHider dataGridViewRouteSystems;
+        private BaseUtils.DataGridViewColumnHider dataGridView;
         private System.Windows.Forms.ToolStripButton toolStripButtonShowOn3DMap;
         private ExtendedControls.ExtTextBox textBoxRouteName;
         private ExtendedControls.ToolStripComboBoxCustom toolStripComboBoxRouteSelection;
