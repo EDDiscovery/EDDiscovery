@@ -39,6 +39,7 @@
             this.buttonActionPacks = new System.Windows.Forms.Button();
             this.buttonLang = new System.Windows.Forms.Button();
             this.buttonResetDBLoc = new System.Windows.Forms.Button();
+            this.buttonBackup = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // buttonDbs
@@ -95,7 +96,7 @@
             // 
             // buttonDeleteSystemDB
             // 
-            this.buttonDeleteSystemDB.Location = new System.Drawing.Point(89, 239);
+            this.buttonDeleteSystemDB.Location = new System.Drawing.Point(89, 266);
             this.buttonDeleteSystemDB.Name = "buttonDeleteSystemDB";
             this.buttonDeleteSystemDB.Size = new System.Drawing.Size(193, 23);
             this.buttonDeleteSystemDB.TabIndex = 0;
@@ -145,13 +146,23 @@
             // 
             // buttonResetDBLoc
             // 
-            this.buttonResetDBLoc.Location = new System.Drawing.Point(89, 268);
+            this.buttonResetDBLoc.Location = new System.Drawing.Point(89, 295);
             this.buttonResetDBLoc.Name = "buttonResetDBLoc";
             this.buttonResetDBLoc.Size = new System.Drawing.Size(193, 23);
             this.buttonResetDBLoc.TabIndex = 0;
             this.buttonResetDBLoc.Text = "Reset DB Location";
             this.buttonResetDBLoc.UseVisualStyleBackColor = true;
             this.buttonResetDBLoc.Click += new System.EventHandler(this.buttonResetDBLoc_Click);
+            // 
+            // buttonBackup
+            // 
+            this.buttonBackup.Location = new System.Drawing.Point(89, 237);
+            this.buttonBackup.Name = "buttonBackup";
+            this.buttonBackup.Size = new System.Drawing.Size(193, 23);
+            this.buttonBackup.TabIndex = 0;
+            this.buttonBackup.Text = "Backup Database";
+            this.buttonBackup.UseVisualStyleBackColor = true;
+            this.buttonBackup.Click += new System.EventHandler(this.buttonBackup_Click);
             // 
             // SafeModeForm
             // 
@@ -162,6 +173,7 @@
             this.Controls.Add(this.buttonRun);
             this.Controls.Add(this.buttonDeleteSystemDB);
             this.Controls.Add(this.buttonResetDBLoc);
+            this.Controls.Add(this.buttonBackup);
             this.Controls.Add(this.buttonDbs);
             this.Controls.Add(this.buttonLang);
             this.Controls.Add(this.buttonActionPacks);
@@ -189,5 +201,6 @@
         private System.Windows.Forms.Button buttonActionPacks;
         private System.Windows.Forms.Button buttonLang;
         private System.Windows.Forms.Button buttonResetDBLoc;
+        private System.Windows.Forms.Button buttonBackup;
     }
 }

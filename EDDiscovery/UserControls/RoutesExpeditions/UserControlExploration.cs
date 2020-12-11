@@ -143,7 +143,7 @@ namespace EDDiscovery.UserControls
                     sys = discoveryform.history.FindSystem(sysname);
 
                 dataGridViewExplore[0, rowindex].Tag = sys;
-                dataGridViewExplore.Rows[rowindex].DefaultCellStyle.ForeColor = (sys != null && sys.HasCoordinate) ? discoveryform.theme.VisitedSystemColor : discoveryform.theme.NonVisitedSystemColor;
+                dataGridViewExplore.Rows[rowindex].Cells[0].Style.ForeColor = (sys != null && sys.HasCoordinate) ? Color.Empty : discoveryform.theme.UnknownSystemColor;
                 dataGridViewExplore[idxVisits, rowindex].Value = discoveryform.history.GetVisitsCount(sysname).ToString();
 
                 if (sys != null)

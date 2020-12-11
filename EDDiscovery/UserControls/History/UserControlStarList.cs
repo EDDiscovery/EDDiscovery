@@ -361,7 +361,7 @@ namespace EDDiscovery.UserControls
 
             rw.Tag = syslist;
 
-            rw.DefaultCellStyle.ForeColor = (he.System.HasCoordinate || !he.IsFSDCarrierJump) ? discoveryform.theme.VisitedSystemColor : discoveryform.theme.NonVisitedSystemColor;
+            rw.Cells[1].Style.ForeColor = (he.System.HasCoordinate) ? Color.Empty : discoveryform.theme.UnknownSystemColor;
 
             he.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
 

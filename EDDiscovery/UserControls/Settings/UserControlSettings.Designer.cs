@@ -171,13 +171,11 @@ namespace EDDiscovery.UserControls
             // 
             // groupBoxCommanders
             // 
-            this.groupBoxCommanders.AlternateClientBackColor = System.Drawing.Color.Blue;
             this.groupBoxCommanders.BackColorScaling = 0.5F;
             this.groupBoxCommanders.BorderColor = System.Drawing.Color.LightGray;
             this.groupBoxCommanders.BorderColorScaling = 0.5F;
             this.groupBoxCommanders.Controls.Add(this.dataViewScrollerCommanders);
             this.groupBoxCommanders.Controls.Add(this.flowLayoutButtons);
-            this.groupBoxCommanders.FillClientAreaWithAlternateColor = false;
             this.groupBoxCommanders.Location = new System.Drawing.Point(3, 3);
             this.groupBoxCommanders.Name = "groupBoxCommanders";
             this.groupBoxCommanders.Padding = new System.Windows.Forms.Padding(3, 3, 6, 3);
@@ -340,14 +338,12 @@ namespace EDDiscovery.UserControls
             // 
             // groupBoxTheme
             // 
-            this.groupBoxTheme.AlternateClientBackColor = System.Drawing.Color.Blue;
             this.groupBoxTheme.BackColorScaling = 0.5F;
             this.groupBoxTheme.BorderColor = System.Drawing.Color.LightGray;
             this.groupBoxTheme.BorderColorScaling = 0.5F;
             this.groupBoxTheme.Controls.Add(this.comboBoxTheme);
             this.groupBoxTheme.Controls.Add(this.button_edittheme);
             this.groupBoxTheme.Controls.Add(this.buttonSaveTheme);
-            this.groupBoxTheme.FillClientAreaWithAlternateColor = false;
             this.groupBoxTheme.Location = new System.Drawing.Point(3, 162);
             this.groupBoxTheme.Name = "groupBoxTheme";
             this.groupBoxTheme.Size = new System.Drawing.Size(281, 85);
@@ -405,14 +401,12 @@ namespace EDDiscovery.UserControls
             // 
             // groupBoxCustomHistoryLoad
             // 
-            this.groupBoxCustomHistoryLoad.AlternateClientBackColor = System.Drawing.Color.Blue;
             this.groupBoxCustomHistoryLoad.BackColorScaling = 0.5F;
             this.groupBoxCustomHistoryLoad.BorderColor = System.Drawing.Color.LightGray;
             this.groupBoxCustomHistoryLoad.BorderColorScaling = 0.5F;
             this.groupBoxCustomHistoryLoad.Controls.Add(this.checkBoxOrderRowsInverted);
             this.groupBoxCustomHistoryLoad.Controls.Add(this.extComboBoxGameTime);
             this.groupBoxCustomHistoryLoad.Controls.Add(this.labelTimeDisplay);
-            this.groupBoxCustomHistoryLoad.FillClientAreaWithAlternateColor = false;
             this.groupBoxCustomHistoryLoad.Location = new System.Drawing.Point(290, 162);
             this.groupBoxCustomHistoryLoad.Name = "groupBoxCustomHistoryLoad";
             this.groupBoxCustomHistoryLoad.Size = new System.Drawing.Size(281, 85);
@@ -476,7 +470,6 @@ namespace EDDiscovery.UserControls
             // 
             // extGroupBoxWebServer
             // 
-            this.extGroupBoxWebServer.AlternateClientBackColor = System.Drawing.Color.Blue;
             this.extGroupBoxWebServer.BackColorScaling = 0.5F;
             this.extGroupBoxWebServer.BorderColor = System.Drawing.Color.LightGray;
             this.extGroupBoxWebServer.BorderColorScaling = 0.5F;
@@ -484,7 +477,6 @@ namespace EDDiscovery.UserControls
             this.extGroupBoxWebServer.Controls.Add(this.labelPortNo);
             this.extGroupBoxWebServer.Controls.Add(this.extButtonTestWeb);
             this.extGroupBoxWebServer.Controls.Add(this.extCheckBoxWebServerEnable);
-            this.extGroupBoxWebServer.FillClientAreaWithAlternateColor = false;
             this.extGroupBoxWebServer.Location = new System.Drawing.Point(577, 162);
             this.extGroupBoxWebServer.Name = "extGroupBoxWebServer";
             this.extGroupBoxWebServer.Size = new System.Drawing.Size(281, 85);
@@ -566,13 +558,11 @@ namespace EDDiscovery.UserControls
             // 
             // groupBoxInteraction
             // 
-            this.groupBoxInteraction.AlternateClientBackColor = System.Drawing.Color.Blue;
             this.groupBoxInteraction.BackColorScaling = 0.5F;
             this.groupBoxInteraction.BorderColor = System.Drawing.Color.LightGray;
             this.groupBoxInteraction.BorderColorScaling = 0.5F;
             this.groupBoxInteraction.Controls.Add(this.comboBoxClickThruKey);
             this.groupBoxInteraction.Controls.Add(this.labelTKey);
-            this.groupBoxInteraction.FillClientAreaWithAlternateColor = false;
             this.groupBoxInteraction.Location = new System.Drawing.Point(3, 253);
             this.groupBoxInteraction.Name = "groupBoxInteraction";
             this.groupBoxInteraction.Size = new System.Drawing.Size(281, 85);
@@ -616,7 +606,6 @@ namespace EDDiscovery.UserControls
             // 
             // groupBoxMemory
             // 
-            this.groupBoxMemory.AlternateClientBackColor = System.Drawing.Color.Blue;
             this.groupBoxMemory.BackColorScaling = 0.5F;
             this.groupBoxMemory.BorderColor = System.Drawing.Color.LightGray;
             this.groupBoxMemory.BorderColorScaling = 0.5F;
@@ -624,7 +613,6 @@ namespace EDDiscovery.UserControls
             this.groupBoxMemory.Controls.Add(this.comboBoxCustomHistoryLoadTime);
             this.groupBoxMemory.Controls.Add(this.labelHistoryEssItems);
             this.groupBoxMemory.Controls.Add(this.labelHistorySel);
-            this.groupBoxMemory.FillClientAreaWithAlternateColor = false;
             this.groupBoxMemory.Location = new System.Drawing.Point(290, 253);
             this.groupBoxMemory.Name = "groupBoxMemory";
             this.groupBoxMemory.Size = new System.Drawing.Size(281, 85);
@@ -701,13 +689,11 @@ namespace EDDiscovery.UserControls
             // 
             // groupBoxCustomScreenShots
             // 
-            this.groupBoxCustomScreenShots.AlternateClientBackColor = System.Drawing.Color.Blue;
             this.groupBoxCustomScreenShots.BackColorScaling = 0.5F;
             this.groupBoxCustomScreenShots.BorderColor = System.Drawing.Color.LightGray;
             this.groupBoxCustomScreenShots.BorderColorScaling = 0.5F;
             this.groupBoxCustomScreenShots.Controls.Add(this.buttonExtScreenshot);
             this.groupBoxCustomScreenShots.Controls.Add(this.checkBoxCustomEnableScreenshots);
-            this.groupBoxCustomScreenShots.FillClientAreaWithAlternateColor = false;
             this.groupBoxCustomScreenShots.Location = new System.Drawing.Point(577, 253);
             this.groupBoxCustomScreenShots.Name = "groupBoxCustomScreenShots";
             this.groupBoxCustomScreenShots.Size = new System.Drawing.Size(281, 85);
@@ -751,13 +737,11 @@ namespace EDDiscovery.UserControls
             // 
             // groupBoxCustomEDSM
             // 
-            this.groupBoxCustomEDSM.AlternateClientBackColor = System.Drawing.Color.Blue;
             this.groupBoxCustomEDSM.BackColorScaling = 0.5F;
             this.groupBoxCustomEDSM.BorderColor = System.Drawing.Color.LightGray;
             this.groupBoxCustomEDSM.BorderColorScaling = 0.5F;
             this.groupBoxCustomEDSM.Controls.Add(this.buttonExtEDSMConfigureArea);
             this.groupBoxCustomEDSM.Controls.Add(this.checkBoxCustomEDSMEDDBDownload);
-            this.groupBoxCustomEDSM.FillClientAreaWithAlternateColor = false;
             this.groupBoxCustomEDSM.Location = new System.Drawing.Point(3, 344);
             this.groupBoxCustomEDSM.Name = "groupBoxCustomEDSM";
             this.groupBoxCustomEDSM.Size = new System.Drawing.Size(281, 85);
@@ -802,7 +786,6 @@ namespace EDDiscovery.UserControls
             // 
             // groupBoxPopOuts
             // 
-            this.groupBoxPopOuts.AlternateClientBackColor = System.Drawing.Color.Blue;
             this.groupBoxPopOuts.BackColorScaling = 0.5F;
             this.groupBoxPopOuts.BorderColor = System.Drawing.Color.LightGray;
             this.groupBoxPopOuts.BorderColorScaling = 0.5F;
@@ -811,7 +794,6 @@ namespace EDDiscovery.UserControls
             this.groupBoxPopOuts.Controls.Add(this.checkBoxCustomResize);
             this.groupBoxPopOuts.Controls.Add(this.checkBoxMinimizeToNotifyIcon);
             this.groupBoxPopOuts.Controls.Add(this.checkBoxUseNotifyIcon);
-            this.groupBoxPopOuts.FillClientAreaWithAlternateColor = false;
             this.groupBoxPopOuts.Location = new System.Drawing.Point(290, 344);
             this.groupBoxPopOuts.Name = "groupBoxPopOuts";
             this.groupBoxPopOuts.Size = new System.Drawing.Size(281, 129);
@@ -930,12 +912,10 @@ namespace EDDiscovery.UserControls
             // 
             // groupBoxCustomLanguage
             // 
-            this.groupBoxCustomLanguage.AlternateClientBackColor = System.Drawing.Color.Blue;
             this.groupBoxCustomLanguage.BackColorScaling = 0.5F;
             this.groupBoxCustomLanguage.BorderColor = System.Drawing.Color.LightGray;
             this.groupBoxCustomLanguage.BorderColorScaling = 0.5F;
             this.groupBoxCustomLanguage.Controls.Add(this.comboBoxCustomLanguage);
-            this.groupBoxCustomLanguage.FillClientAreaWithAlternateColor = false;
             this.groupBoxCustomLanguage.Location = new System.Drawing.Point(577, 344);
             this.groupBoxCustomLanguage.Name = "groupBoxCustomLanguage";
             this.groupBoxCustomLanguage.Size = new System.Drawing.Size(281, 52);
@@ -970,13 +950,11 @@ namespace EDDiscovery.UserControls
             // 
             // groupBoxCustomSafeMode
             // 
-            this.groupBoxCustomSafeMode.AlternateClientBackColor = System.Drawing.Color.Blue;
             this.groupBoxCustomSafeMode.BackColorScaling = 0.5F;
             this.groupBoxCustomSafeMode.BorderColor = System.Drawing.Color.LightGray;
             this.groupBoxCustomSafeMode.BorderColorScaling = 0.5F;
             this.groupBoxCustomSafeMode.Controls.Add(this.buttonExtSafeMode);
             this.groupBoxCustomSafeMode.Controls.Add(this.labelSafeMode);
-            this.groupBoxCustomSafeMode.FillClientAreaWithAlternateColor = false;
             this.groupBoxCustomSafeMode.Location = new System.Drawing.Point(3, 479);
             this.groupBoxCustomSafeMode.Name = "groupBoxCustomSafeMode";
             this.groupBoxCustomSafeMode.Size = new System.Drawing.Size(281, 127);

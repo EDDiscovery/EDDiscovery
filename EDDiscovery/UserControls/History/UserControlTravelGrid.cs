@@ -78,6 +78,7 @@ namespace EDDiscovery.UserControls
         private string DbFieldFilter { get { return DBName("TravelHistoryControlFieldFilter" ); } }
         private string DbOutlines { get { return DBName("TravelHistoryOutlines"); } }
         private string DbWordWrap { get { return DBName("TravelHistoryWordWrap"); } }
+        private string DbVisitedColour { get { return DBName("TravelHistoryVisitedColour"); } }
 
         private HistoryList current_historylist;        // the last one set, for internal refresh purposes on sort
 
@@ -134,6 +135,9 @@ namespace EDDiscovery.UserControls
             discoveryform.OnHistoryChange += HistoryChanged;
             discoveryform.OnNewEntry += AddNewEntry;
             discoveryform.OnNoteChanged += OnNoteChanged;
+
+            this.showSystemVisitedForeColourToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbVisitedColour, false);
+            this.showSystemVisitedForeColourToolStripMenuItem.Click += new System.EventHandler(this.showSystemVisitedForeColourToolStripMenuItem_Click);
 
             contextMenuStripOutlines.SetToolStripState(EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbOutlines, "rollUpOffToolStripMenuItem;"));
             this.rollUpOffToolStripMenuItem.Click += new System.EventHandler(this.rolluplimitToolStripMenuItem_Click);
@@ -466,7 +470,10 @@ namespace EDDiscovery.UserControls
 
             rw.Tag = item;  //tag on row
 
-            rw.DefaultCellStyle.ForeColor = (item.System.HasCoordinate || !item.IsFSDCarrierJump) ? discoveryform.theme.VisitedSystemColor : discoveryform.theme.NonVisitedSystemColor;
+            if ( showSystemVisitedForeColourToolStripMenuItem.Checked )
+                rw.DefaultCellStyle.ForeColor = (item.System.HasCoordinate) ? discoveryform.theme.KnownSystemColor : discoveryform.theme.UnknownSystemColor;
+            else if ( item.EntryType == JournalTypeEnum.FSDJump || item.EntryType == JournalTypeEnum.CarrierJump)
+                rw.Cells[2].Style.ForeColor = (item.System.HasCoordinate) ? Color.Empty : discoveryform.theme.UnknownSystemColor;
 
             string tip = item.EventSummary + Environment.NewLine + EventDescription + Environment.NewLine + EventDetailedInfo;
             if ( tip.Length>2000)
@@ -1235,7 +1242,7 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
-        #region Word wrap
+        #region Word wrap/visited
 
         private void extCheckBoxWordWrap_Click(object sender, EventArgs e)
         {
@@ -1248,6 +1255,12 @@ namespace EDDiscovery.UserControls
             dataGridViewTravel.DefaultCellStyle.WrapMode = extCheckBoxWordWrap.Checked ? DataGridViewTriState.True : DataGridViewTriState.False;
             dataGridViewTravel.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;
             dataViewScrollerPanel.UpdateScroll();
+        }
+
+        private void showSystemVisitedForeColourToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbVisitedColour, showSystemVisitedForeColourToolStripMenuItem.Checked);
+            HistoryChanged(discoveryform.history);
         }
 
         #endregion

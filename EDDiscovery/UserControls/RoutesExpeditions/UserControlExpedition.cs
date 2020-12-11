@@ -199,7 +199,7 @@ namespace EDDiscovery.UserControls
                     }
 
                     dataGridView[0, rowindex].Tag = sys;
-                    dataGridView.Rows[rowindex].DefaultCellStyle.ForeColor = (sys != null && sys.HasCoordinate) ? discoveryform.theme.VisitedSystemColor : discoveryform.theme.NonVisitedSystemColor;
+                    dataGridView.Rows[rowindex].Cells[0].Style.ForeColor = (sys != null && sys.HasCoordinate) ? Color.Empty : discoveryform.theme.UnknownSystemColor;
 
                     string note = "";
                     SystemNoteClass sn = SystemNoteClass.GetNoteOnSystem(sysname, sys?.EDSMID ?? -1);

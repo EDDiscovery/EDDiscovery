@@ -141,12 +141,36 @@ namespace EDDiscovery
                             }
                             catch
                             {
-                                System.Diagnostics.Debug.WriteLine("Theme has invalid colour ");
+                                System.Diagnostics.Debug.WriteLine("Theme has invalid colour");
                             }
-                            if (!done)
+
+                            try
                             {
-                                Color def = themelist[0].colors[ck];        // 
-                                set.colors.Add(ck, def);
+                                if (!done)
+                                {
+                                    string gridtext = jo[Settings.CI.grid_celltext.ToString()].StrNull();
+                                    string gridback = jo[Settings.CI.grid_cellbackground.ToString()].StrNull();
+
+                                    if (ck == Settings.CI.grid_altcelltext && gridtext != null)
+                                    {
+                                        Color c = System.Drawing.ColorTranslator.FromHtml(gridtext);   // may except if not valid HTML colour
+                                        set.colors.Add(ck, c);
+                                    }
+                                    else if (ck == Settings.CI.grid_altcellbackground && gridback != null)
+                                    {
+                                        Color c = System.Drawing.ColorTranslator.FromHtml(gridback);   // may except if not valid HTML colour
+                                        set.colors.Add(ck, c);
+                                    }
+                                    else
+                                    {
+                                        Color def = themelist[0].colors[ck];        // 
+                                        set.colors.Add(ck, def);
+                                    }
+                                }
+                            }
+                            catch
+                            {
+                                System.Diagnostics.Debug.WriteLine("Theme has invalid colour");
                             }
                         }
 

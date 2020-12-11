@@ -305,7 +305,7 @@ namespace EDDiscovery.UserControls
                 Color GridC = discoveryform.theme.GridBorderLines;
                 Color TextC = discoveryform.theme.GridCellText;
                 Color BackC = discoveryform.theme.GridCellBack;
-                Color[] LineC = new Color[] { discoveryform.theme.VisitedSystemColor , discoveryform.theme.TextBlockHighlightColor,
+                Color[] LineC = new Color[] { discoveryform.theme.KnownSystemColor , discoveryform.theme.TextBlockHighlightColor,
                                                          Color.Blue, Color.Yellow, Color.Green, Color.Gray, Color.HotPink, Color.Teal };
 
                 using (StringFormat frmt = new StringFormat())

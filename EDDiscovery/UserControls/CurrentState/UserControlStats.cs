@@ -211,8 +211,8 @@ namespace EDDiscovery.UserControls
 
                     mostVisited.Visible = true;
 
-                    Color GridC = discoveryform.theme.GridCellText;
-                    Color TextC = discoveryform.theme.VisitedSystemColor;
+                    Color GridC = discoveryform.theme.GridBorderLines;
+                    Color TextC = discoveryform.theme.GridCellText;
                     mostVisited.Titles.Clear();
                     mostVisited.Titles.Add(new Title("Most Visited".T(EDTx.UserControlStats_MostVisited), Docking.Top, discoveryform.theme.GetFont, TextC));
                     mostVisited.Series[0].Points.Clear();
