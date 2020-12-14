@@ -31,7 +31,7 @@ namespace EDDiscovery
 
         static private JToken defaulthelp = new JObject()
         {
-            ["Version"] = "1.1.0.0",
+            ["Version"] = "1.2.0.0",
             ["Panels"] = new JArray()
             {
                 new JObject() { ["panel"] = "Log", ["wiki"] = "/Using-the-EDDiscovery-Log-Panel", ["video"] = "" },
@@ -77,7 +77,10 @@ namespace EDDiscovery
                 new JObject() { ["panel"] = "MissionOverlay", ["wiki"] = "/Using-the-Mission-Overlay-Panel", ["video"] = "" },
                 new JObject() { ["panel"] = "CaptainsLog", ["wiki"] = "/Using-the-Captains-Log-Panel", ["video"] = "" },
                 new JObject() { ["panel"] = "Surveyor", ["wiki"] = "/Using-the-Surveyor-Panel", ["video"] = "" },
-                new JObject() { ["panel"] = "EDSM", ["wiki"] = "/Using-the-EDSM-Panel", ["video"] = "" },
+                new JObject() { ["panel"] = "EDSM", ["wiki"] = "/Using-the-WebView-Panels", ["video"] = "" },
+                new JObject() { ["panel"] = "Inara", ["wiki"] = "/Using-the-WebView-Panels", ["video"] = "" },
+                new JObject() { ["panel"] = "Spansh", ["wiki"] = "/Using-the-WebView-Panels", ["video"] = "" },
+                new JObject() { ["panel"] = "EDDB", ["wiki"] = "/Using-the-WebView-Panels", ["video"] = "" },
                 new JObject() { ["panel"] = "MaterialTrader", ["wiki"] = "/Using-the-Material-Trader-Panel", ["video"] = "" },
                 new JObject() { ["panel"] = "Map2D", ["wiki"] = "/Using-the-2D-Map", ["video"] = "" },
                 new JObject() { ["panel"] = "MiningOverlay", ["wiki"] = "/Using-the-mining-panel", ["video"] = "" },
