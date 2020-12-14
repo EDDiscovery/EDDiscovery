@@ -614,8 +614,8 @@ namespace EDDiscovery
         UserControlRoute_Confirm, // This will result in a large number ({0})) of jumps
         UserControlRoute_NoRoute, // No route set up, retry
 
-        UserControlEDSM_EnterSys, // Show System
-        UserControlEDSM_System, // System:
+        UserControlWebBrowser_EnterSys, // Show System
+        UserControlWebBrowser_System, // System:
 
         UserControlEstimatedValues_SV, // Estimated Scan Values for {0}
 

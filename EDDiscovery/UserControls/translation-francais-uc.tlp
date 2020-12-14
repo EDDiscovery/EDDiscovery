@@ -81,7 +81,7 @@ SECTION UserControlCompass
 .checkBoxHideTransparent: "Hide In Transparent" => "Masquer en transparent"
 .labelTargetLat: "Target" => "Cible"
 
-SECTION UserControlEDSM
+SECTION UserControlWebBrowser
 
 .extCheckBoxStar.ToolTip: "Select another system to view" => "Sélectionner un autre système à afficher"
 .System: "System:" => "Système:"

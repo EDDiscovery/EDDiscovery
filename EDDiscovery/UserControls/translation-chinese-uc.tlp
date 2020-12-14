@@ -81,7 +81,7 @@ SECTION UserControlCompass
 .checkBoxHideTransparent: "Hide In Transparent" => "透明模式下除标尺以外全部隐藏"
 .labelTargetLat: "Target" => "目标"
 
-SECTION UserControlEDSM
+SECTION UserControlWebBrowser
 
 .extCheckBoxStar.ToolTip: "Select another system to view" @
 .System: "System:" @

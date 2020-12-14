@@ -26,13 +26,15 @@ using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
 {
-    public partial class UserControlEDSM : UserControlCommonBase
+    public partial class UserControlWebBrowser : UserControlCommonBase
     {
-        private string DbSave { get { return DBName("EDSMAutoView" ); } }
+        private string DbSave;
+        private string source;
+        private string urlallowed;
         ISystem last_sys = null;
 
         #region Init
-        public UserControlEDSM()
+        public UserControlWebBrowser()
         {
             InitializeComponent();
             toolTip.ShowAlways = true;
@@ -40,13 +42,20 @@ namespace EDDiscovery.UserControls
             BaseUtils.BrowserInfo.FixIECompatibility(System.Diagnostics.Process.GetCurrentProcess().ProcessName + ".exe");
         }
 
-        public override void Init()
+        public void Init(string source,string urlallowed)
         {
+            this.source = source;
+            this.urlallowed = urlallowed;
+            DbSave = DBName(source + "AutoView");
+
             rollUpPanelTop.PinState = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "PinState", true);
             rollUpPanelTop.SetToolTip(toolTip);
 
-            BaseUtils.Translator.Instance.Translate(this);
-            BaseUtils.Translator.Instance.Translate(toolTip, this);
+            string thisname = typeof(UserControlWebBrowser).Name; 
+            BaseUtils.Translator.Instance.Translate(this, thisname, null);          // lookup using the base name, not the derived name, so we don't have repeats
+            BaseUtils.Translator.Instance.Translate(this, toolTip, thisname);
+
+            webBrowser.Visible = false; // hide ugly white until load
         }
 
         public override void LoadLayout()
@@ -72,7 +81,7 @@ namespace EDDiscovery.UserControls
         public override void Closing()
         {
             isClosing = true;
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "PinState", rollUpPanelTop.PinState );
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "PinState", rollUpPanelTop.PinState);
             uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
         }
 
@@ -105,35 +114,58 @@ namespace EDDiscovery.UserControls
         private void LookUpThread(object s)
         {
             ISystem sys = s as ISystem;
+            string url = "";
+            string defaulturl = "";
 
-            EDSMClass edsm = new EDSMClass();
-            string url = edsm.GetUrlToEDSMSystem(sys.Name, sys.EDSMID);
+            if (source == "EDSM")
+            {
+                EDSMClass edsm = new EDSMClass();
+                url = edsm.GetUrlToEDSMSystem(sys.Name, sys.EDSMID);
+                defaulturl = EDSMClass.ServerAddress;
+            }
+            else if (source == "Spansh")
+            {
+                if (sys.SystemAddress.HasValue)
+                    url = Properties.Resources.URLSpanshSystemSystemId + sys.SystemAddress.Value.ToStringInvariant();
+                defaulturl = urlallowed;
+            }
+            else if (source == "EDDB")
+            {
+                url = Properties.Resources.URLEDDBSystemName + System.Web.HttpUtility.UrlEncode(sys.Name);
+                defaulturl = urlallowed;
+            }
+            else if (source == "Inara")
+            {
+                url = Properties.Resources.URLInaraStarSystem + System.Web.HttpUtility.UrlEncode(sys.Name);
+                defaulturl = urlallowed;
+            }
+
             System.Diagnostics.Debug.WriteLine("Url is " + last_sys.Name + "=" + url);
 
-            this.BeginInvoke( (MethodInvoker)delegate 
+            this.BeginInvoke((MethodInvoker)delegate
             {
-                if (!isClosing)
-                {
-                    if (url.HasChars())
-                    {
-                        SetControlText("Data on " + sys.Name);
-                        webBrowser.Navigate(url);
-                    }
-                    else
-                    {
-                        SetControlText("No Data on " + sys.Name);
-                        webBrowser.Navigate(EDSMClass.ServerAddress);
-                    }
-                }
-            });
+               if (!isClosing)
+               {
+                   if (url.HasChars())
+                   {
+                       SetControlText("Data on " + sys.Name);
+                       webBrowser.Navigate(url);
+                   }
+                   else
+                   {
+                       SetControlText("No Data on " + sys.Name);
+                       webBrowser.Navigate(defaulturl);
+                   }
+               }
+           });
         }
 
         void PresentSystem(ISystem sys)
         {
             SetControlText("No Entry");
-            if ( sys != null )
+            if (sys != null)
             {
-                new System.Threading.Thread(new System.Threading.ParameterizedThreadStart( LookUpThread )).Start(sys);
+                new System.Threading.Thread(new System.Threading.ParameterizedThreadStart(LookUpThread)).Start(sys);
             }
         }
 
@@ -147,7 +179,7 @@ namespace EDDiscovery.UserControls
             {
                 ExtendedControls.ConfigurableForm f = new ExtendedControls.ConfigurableForm();
                 int width = 500;
-                f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "System:".T(EDTx.UserControlEDSM_System), new Point(10, 40), new Size(110, 24), null));
+                f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "System:".T(EDTx.UserControlWebBrowser_System), new Point(10, 40), new Size(110, 24), null));
                 f.Add(new ExtendedControls.ConfigurableForm.Entry("Sys", typeof(ExtendedControls.ExtTextBoxAutoComplete), "", new Point(120, 40), new Size(width - 120 - 20, 24), null));
 
                 f.AddOK(new Point(width - 20 - 80, 80));
@@ -170,7 +202,7 @@ namespace EDDiscovery.UserControls
                     }
                 };
 
-                f.InitCentred(this.FindForm(), this.FindForm().Icon, "Show System".T(EDTx.UserControlEDSM_EnterSys), null, null, closeicon:true);
+                f.InitCentred(this.FindForm(), this.FindForm().Icon, "Show System".T(EDTx.UserControlWebBrowser_EnterSys), null, null, closeicon: true);
                 f.GetControl<ExtendedControls.ExtTextBoxAutoComplete>("Sys").SetAutoCompletor(SystemCache.ReturnSystemAutoCompleteList, true);
                 DialogResult res = f.ShowDialog(this.FindForm());
 
@@ -202,9 +234,18 @@ namespace EDDiscovery.UserControls
 
         private void webBrowser_Navigating(object sender, WebBrowserNavigatingEventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine("Gone to " + e.Url.Host);
-            if (!e.Url.Host.StartsWith("www.edsm.net"))
-                e.Cancel = true;
+            if (!e.Url.AbsoluteUri.StartsWith("about:"))
+            {
+                if (!e.Url.Host.StartsWith(urlallowed))
+                {
+                //    System.Diagnostics.Debug.WriteLine("Webbrowser Disallowed " + e.Url.Host + " : " + e.Url.AbsoluteUri);
+                    e.Cancel = true;
+                }
+            }
+            else
+            {
+               // System.Diagnostics.Debug.WriteLine("Webbrowser Allowed " + e.Url.Host + " : " + e.Url.AbsoluteUri);
+            }
         }
 
         private void webBrowser_NewWindow(object sender, CancelEventArgs e)
@@ -217,6 +258,44 @@ namespace EDDiscovery.UserControls
             webBrowser.GoBack();
         }
 
+        private void webBrowser_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
+        {
+            webBrowser.Visible = true;
+        }
     }
+
+
+    public partial class UserControlEDSM : UserControlWebBrowser
+    {
+        public override void Init()
+        {
+            Init("EDSM", "www.edsm.net");
+        }
+    }
+
+    public partial class UserControlSpansh : UserControlWebBrowser
+    {
+        public override void Init()
+        {
+            Init("Spansh", "spansh.co.uk");
+        }
+    }
+
+    public partial class UserControlEDDB : UserControlWebBrowser
+    {
+        public override void Init()
+        {
+            Init("EDDB", "eddb.io");
+        }
+    }
+
+    public partial class UserControlInara : UserControlWebBrowser
+    {
+        public override void Init()
+        {
+            Init("Inara", "inara.cz");
+        }
+    }
+
 }
 

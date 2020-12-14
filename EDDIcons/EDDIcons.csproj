@@ -570,6 +570,9 @@
     <EmbeddedResource Include="Controls\SysInfo\notfirstdiscover.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Panels\Spansh.png" />
+    <EmbeddedResource Include="Panels\Inara.PNG" />
+    <EmbeddedResource Include="Panels\EDDB.png" />
     <EmbeddedResource Include="Panels\Missions.png" />
     <EmbeddedResource Include="Panels\Factions.png" />
     <EmbeddedResource Include="Panels\MiningOverlay.png" />

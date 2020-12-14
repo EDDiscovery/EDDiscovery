@@ -15,7 +15,7 @@
  */
 namespace EDDiscovery.UserControls
 {
-    partial class UserControlEDSM
+    partial class UserControlWebBrowser
     {
         /// <summary> 
         /// Required designer variable.
@@ -157,19 +157,20 @@ namespace EDDiscovery.UserControls
             this.webBrowser.Location = new System.Drawing.Point(0, 30);
             this.webBrowser.MinimumSize = new System.Drawing.Size(20, 20);
             this.webBrowser.Name = "webBrowser";
+            this.webBrowser.ScriptErrorsSuppressed = true;
             this.webBrowser.Size = new System.Drawing.Size(748, 652);
             this.webBrowser.TabIndex = 5;
+            this.webBrowser.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.webBrowser_DocumentCompleted);
             this.webBrowser.Navigating += new System.Windows.Forms.WebBrowserNavigatingEventHandler(this.webBrowser_Navigating);
             this.webBrowser.NewWindow += new System.ComponentModel.CancelEventHandler(this.webBrowser_NewWindow);
-            this.webBrowser.ScriptErrorsSuppressed = true;
             // 
-            // UserControlEDSM
+            // UserControlWebBrowser
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.webBrowser);
             this.Controls.Add(this.rollUpPanelTop);
-            this.Name = "UserControlEDSM";
+            this.Name = "UserControlWebBrowser";
             this.Size = new System.Drawing.Size(748, 682);
             this.rollUpPanelTop.ResumeLayout(false);
             this.rollUpPanelTop.PerformLayout();
