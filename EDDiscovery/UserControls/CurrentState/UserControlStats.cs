@@ -199,7 +199,8 @@ namespace EDDiscovery.UserControls
 
                 if (mostVisited != null)
                 {
-                    var groupeddata = from data in hl.OrderByDate
+                    // TBD fix
+                    var groupeddata = from data in hl.ReverseOrder
                                       where data.IsFSDCarrierJump
                                       group data by data.System.Name
                                           into grouped
@@ -994,7 +995,7 @@ namespace EDDiscovery.UserControls
 
             string[] strarr = new string[8];
 
-            foreach (var si in hl.shipinformationlist.Ships.Where(val => !ShipModuleData.IsSRVOrFighter(val.Value.ShipFD)))
+            foreach (var si in hl.ShipInformationList.Ships.Where(val => !ShipModuleData.IsSRVOrFighter(val.Value.ShipFD)))
             {
                 strarr[0] = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(si.Value.ShipUserName ?? "-");
                 strarr[1] = (si.Value.ShipUserIdent ?? "-").ToUpper();

@@ -145,26 +145,13 @@ namespace EDDiscovery.Actions
             vars[prefix + "Ship_CargoCapacity"] = cargo;
         }
 
+        // expensive. Scan command, Event Info, 
         static public void SystemVarsFurtherInfo(ActionLanguage.ActionProgramRun vars, HistoryList hl, ISystem s, string prefix)
         {
             System.Globalization.CultureInfo ct = System.Globalization.CultureInfo.InvariantCulture;
 
             vars[prefix + "VisitCount"] = hl.GetVisitsCount(s.Name).ToString(ct);
-            vars[prefix + "ScanCount"] = hl.GetScans(s.Name).Count.ToString(ct);
-            vars[prefix + "FSDJumpsTotal"] = hl.GetFSDCarrierJumps(new TimeSpan(100000, 0, 0, 0)).ToString(ct);
-        }
-
-        static public void HistoryEventFurtherInfo(ActionLanguage.ActionProgramRun vars, HistoryList hl, HistoryEntry he, string prefix)
-        {
-            if (he != null)
-            {
-                System.Globalization.CultureInfo ct = System.Globalization.CultureInfo.InvariantCulture;
-
-                int fsd = hl.GetFSDCarrierJumpsUTC(new DateTime(1980, 1, 1), he.EventTimeUTC);    // total before
-                if (he.IsFSDCarrierJump)   // if on an fsd, count this in
-                    fsd++;
-                vars[prefix + "FSDJump"] = fsd.ToString(ct);
-            }
+            // removed due to load in V21 (11.9.4+) vars[prefix + "ScanCount"] = hl.GetScans(s.Name).Count.ToString(ct); vars[prefix + "FSDJumpsTotal"] = hl.GetFSDCarrierJumps(new TimeSpan(100000, 0, 0, 0)).ToString(ct);
         }
 
         static public void ShipModuleInformation(ActionLanguage.ActionProgramRun vars, ShipInformation si, string prefix)

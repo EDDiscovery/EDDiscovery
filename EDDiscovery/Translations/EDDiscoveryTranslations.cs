@@ -795,6 +795,7 @@ namespace EDDiscovery
         FilterSelector_Commodities, // Commodities
         FilterSelector_Ledger, // Ledger
         FilterSelector_Ship, // Ship
+        FilterSelector_Mining, // Mining
 
         ScreenshotDirectoryWatcher_Scan, // Scanning for {0} screenshots in {1}
         ScreenshotDirectoryWatcher_NOF, // Folder specified for image conversion does not exist, check settings in the Screenshots tab

@@ -38,6 +38,7 @@ namespace EDDiscovery.UserControls
         double? heading = null;
         double? altitude = null;
         double? bodyRadius = null;
+        string lastradiusbody = null;
         bool autoHideTargetCoords = false;
         HistoryEntry last_he;
         BookmarkClass currentBookmark;
@@ -133,15 +134,23 @@ namespace EDDiscovery.UserControls
             DisplayCompass();
         }
 
-        private void OnNewEntry(HistoryEntry he, HistoryList hl)
+
+        private async void OnNewEntry(HistoryEntry he, HistoryList hl)
         {
             last_he = he;
             if (last_he != null)
             {
-                // hmm. not checking EDSM for scan data.. do we want to ? prob not.
-
-                JournalScan sd = discoveryform.history.GetScans(he.System.Name).Where(sc => sc.BodyName == he.WhereAmI).FirstOrDefault();
-                bodyRadius = sd?.nRadius;
+                if ( bodyRadius == null || lastradiusbody != he.WhereAmI)       // try and get radius, this is cleared on target selection
+                { 
+                    StarScan.SystemNode last_sn = await discoveryform.history.StarScan.FindSystemAsync(he.System, false);       // find scan if we have one
+                    JournalScan sd = last_sn?.Find(he.WhereAmI)?.ScanData;  // find body scan data if present, null if not
+                    bodyRadius = sd?.nRadius;
+                    if (bodyRadius.HasValue)
+                    {
+                        lastradiusbody = he.WhereAmI;
+                        System.Diagnostics.Debug.WriteLine("Compass Radius Set " + lastradiusbody + " " + bodyRadius.Value);
+                    }
+                }
 
                 switch (he.journalEntry.EventTypeID)
                 {
@@ -309,7 +318,7 @@ namespace EDDiscovery.UserControls
             // c^2 = a^2 + b^2 - 2.a.b.cos(C) -> cos(C) = (a^2 + b^2 - c^2) / (2.a.b)
             double sintgtslope = (1 + dist2 - rad * rad) / (2 * Sqrt(dist2));
 
-            if (sintgtslope > -0.2588)  // Don't return a slope if it would be > -15deg at the target
+            if (sintgtslope >= 0)  // Don't return a slope if it would be > 0 deg at the target (ie. we are facing backwards)
                 return null;
 
             // a = altitude + radius, b = distance, c = radius
@@ -399,6 +408,8 @@ namespace EDDiscovery.UserControls
                         {
                             numberBoxTargetLatitude.Value = loc.Latitude;
                             numberBoxTargetLongitude.Value = loc.Longitude;
+                            bodyRadius = null;
+
                             if (externallyForcedBookmark && comboBoxBookmarks.Text != externalLocationName)
                             {
                                 comboBoxBookmarks.Items.Remove(externalLocationName);

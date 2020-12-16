@@ -180,7 +180,7 @@ namespace EDDiscovery.UserControls
             }
             else
             {
-                scannode = await discoveryform.history.starscan.FindSystemAsync(he.System, true);        // get data with EDSM
+                scannode = await discoveryform.history.StarScan.FindSystemAsync(he.System, true);        // get data with EDSM
 
                 if (scannode == null)     // no data, clear display, clear any last_he so samesys is false next time
                 {

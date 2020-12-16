@@ -82,9 +82,10 @@ namespace EDDiscovery
                 HistoryEntry he = history.AddJournalEntryToHistory(je, h => LogLineHighlight(h));        // add a new one on top
                 if (he != null)     // may reject it 
                 {
-                    //System.Diagnostics.Debug.WriteLine("Add HE " + he.EventSummary);
+                    System.Diagnostics.Debug.WriteLine(BaseUtils.AppTicks.TickCountLapDelta("CTNE", true) + "Controller NE START");
                     OnNewEntry?.Invoke(he, history);            // major hook
                     OnNewEntrySecond?.Invoke(he, history);      // secondary hook..
+                    System.Diagnostics.Debug.WriteLine(BaseUtils.AppTicks.TickCountLapDelta("CTNE") + "Controller NE END");
                 }
             }
 
@@ -112,8 +113,8 @@ namespace EDDiscovery
             var uifuel = u as EliteDangerousCore.UIEvents.UIFuel;       // UI Fuel has information on fuel level - update it.
             if (uifuel != null && history != null)
             {
-                history.shipinformationlist.UIFuel(uifuel);             // update the SI global value
-                history.GetLast?.UpdateShipInformation(history.shipinformationlist.CurrentShip);    // and make the last entry have this updated info.
+                history.ShipInformationList.UIFuel(uifuel);             // update the SI global value
+                history.GetLast?.UpdateShipInformation(history.ShipInformationList.CurrentShip);    // and make the last entry have this updated info.
             }
 
             OnNewUIEvent?.Invoke(u);

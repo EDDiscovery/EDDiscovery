@@ -810,7 +810,7 @@ namespace EDDiscovery
 
             if (EDCommander.Current.SyncToEdsm)
             {
-                EDSMJournalSync.SendEDSMEvents(LogLine, he);
+                EDSMJournalSync.SendEDSMEvents(LogLine, new List<HistoryEntry>() { he });
             }
 
             if (EDCommander.Current.SyncToInara)
@@ -1280,9 +1280,9 @@ namespace EDDiscovery
             this.Cursor = Cursors.Default;
         }
 
-        private void sendUnsuncedEDDNEventsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void sendUnsyncedEDDNEventsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            List<HistoryEntry> hlsyncunsyncedlist = Controller.history.FilterByScanNotEDDNSynced;        // first entry is oldest
+            List<HistoryEntry> hlsyncunsyncedlist = HistoryList.FilterByScanNotEDDNSynced(Controller.history.EntryOrder);        // first entry is oldest
 
             EDDNSync.SendEDDNEvents(LogLine, hlsyncunsyncedlist);
         }
@@ -1614,7 +1614,7 @@ namespace EDDiscovery
 
             try
             {
-                EDSMJournalSync.SendEDSMEvents(l => LogLine(l), history, manual: true);
+                EDSMJournalSync.SendEDSMEvents(l => LogLine(l), history.EntryOrder, manual: true);
             }
             catch (Exception ex)
             {

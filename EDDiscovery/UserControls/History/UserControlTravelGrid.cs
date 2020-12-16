@@ -205,6 +205,7 @@ namespace EDDiscovery.UserControls
             loadcomplete = false;
             current_historylist = hl;
             this.Cursor = Cursors.WaitCursor;
+
             extCheckBoxOutlines.Enabled = extCheckBoxWordWrap.Enabled = buttonExtExcel.Enabled = buttonFilter.Enabled = buttonField.Enabled = comboBoxHistoryWindow.Enabled = false;
 
             Tuple<long, int> pos = CurrentGridPosByJID();
@@ -219,8 +220,8 @@ namespace EDDiscovery.UserControls
 
             var filter = (TravelHistoryFilter)comboBoxHistoryWindow.SelectedItem ?? TravelHistoryFilter.NoFilter;
 
-            List<HistoryEntry> result = filter.Filter(hl);
-            fdropdown = hl.Count() - result.Count();
+            List<HistoryEntry> result = filter.Filter(hl.EntryOrder);
+            fdropdown = hl.Count - result.Count();
 
             result = HistoryList.FilterByJournalEvent(result, EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbFilterSave, "All"), out ftotalevents);
 
@@ -347,7 +348,6 @@ namespace EDDiscovery.UserControls
 
                 this.Cursor = Cursors.Default;
                 extCheckBoxOutlines.Enabled = extCheckBoxWordWrap.Enabled = buttonExtExcel.Enabled = buttonFilter.Enabled = buttonField.Enabled = comboBoxHistoryWindow.Enabled = true;
-
                 loadcomplete = true;
             });
 
@@ -492,7 +492,7 @@ namespace EDDiscovery.UserControls
 
         private void UpdateToolTipsForFilter()
         {
-            string ms = string.Format(" showing {0} original {1}".T(EDTx.UserControlTravelGrid_TT1), dataGridViewTravel.Rows.Count, current_historylist?.Count() ?? 0);
+            string ms = string.Format(" showing {0} original {1}".T(EDTx.UserControlTravelGrid_TT1), dataGridViewTravel.Rows.Count, current_historylist?.Count ?? 0);
             comboBoxHistoryWindow.SetTipDynamically(toolTip, fdropdown > 0 ? string.Format("Filtered {0}".T(EDTx.UserControlTravelGrid_TTFilt1), fdropdown + ms) : "Select the entries by age, ".T(EDTx.UserControlTravelGrid_TTSelAge) + ms);
             toolTip.SetToolTip(buttonFilter, (ftotalevents > 0) ? string.Format("Filtered {0}".T(EDTx.UserControlTravelGrid_TTFilt2), ftotalevents + ms) : "Filter out entries based on event type, ".T(EDTx.UserControlTravelGrid_TTEvent) + ms);
             toolTip.SetToolTip(buttonField, (ftotalfilters > 0) ? string.Format("Total filtered out {0}".T(EDTx.UserControlTravelGrid_TTFilt3), ftotalfilters + ms) : "Filter out entries matching the field selection, ".T(EDTx.UserControlTravelGrid_TTTotal) + ms);
@@ -526,6 +526,8 @@ namespace EDDiscovery.UserControls
 
         public void FireChangeSelection()
         {
+            System.Diagnostics.Debug.WriteLine(BaseUtils.AppTicks.TickCountLapDelta("TGFCS", true) + "TG FCS Start");
+
             if (dataGridViewTravel.CurrentCell != null)
             {
                 int row = dataGridViewTravel.CurrentCell.RowIndex;
@@ -535,8 +537,9 @@ namespace EDDiscovery.UserControls
             }
             else if (current_historylist != null && current_historylist.Count > 0)
             {
-                OnTravelSelectionChanged?.Invoke(current_historylist.Last(), current_historylist, false);
+                OnTravelSelectionChanged?.Invoke(current_historylist.GetLast, current_historylist, false);
             }
+            System.Diagnostics.Debug.WriteLine(BaseUtils.AppTicks.TickCountLapDelta("TGFCS") + "TG FCS END");
         }
 
         private void comboBoxHistoryWindow_SelectedIndexChanged(object sender, EventArgs e)
@@ -846,8 +849,6 @@ namespace EDDiscovery.UserControls
         {
             if (dataGridViewTravel.SelectedCells.Count == 0)      // need something selected  stops context menu opening on nothing..
                 e.Cancel = true;
-
-            HistoryEntry prev = discoveryform.history.PreviousFrom(rightclickhe, true);    // null can be passed in safely
 
             if (rightclickhe != null)
             {

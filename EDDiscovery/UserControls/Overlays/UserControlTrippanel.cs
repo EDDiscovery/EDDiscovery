@@ -293,7 +293,8 @@ namespace EDDiscovery.UserControls
                 }
                 else
                 {
-                    var list = discoveryform.history.Where(p => p.IsFSDCarrierJump).OrderByDescending(p => p.EventTimeUTC).Take(2);
+// TBD horrible fix as its too slow.
+                    var list = discoveryform.history.FilterByFSDOnly.OrderByDescending(p => p.EventTimeUTC).Take(2);
                     if (list.Count() == 0)
                         return;
                     he = list.ToArray()[0];

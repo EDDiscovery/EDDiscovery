@@ -351,7 +351,7 @@ namespace EDDiscovery.UserControls
 
             if (startDateTime.Checked || endDateTime.Checked)                           // if we have a date range, can't rely on stats accumulated automatically
             {
-                foreach (var he in discoveryform.history.FilterByDateRange(startdateutc, enddateutc))
+                foreach (var he in HistoryList.FilterByDateRange(discoveryform.history.EntryOrder, startdateutc, enddateutc))
                 {
                     mcs = Stats.Process(he.journalEntry, mcs, he.StationFaction);
                 }
@@ -525,7 +525,7 @@ namespace EDDiscovery.UserControls
             {
                 DateTime startdateutc = startDateTime.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromSelected(startDateTime.Value) : new DateTime(1980, 1, 1);
                 DateTime enddateutc = endDateTime.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromSelected(endDateTime.Value) : new DateTime(8999, 1, 1);
-                return discoveryform.history.FilterBefore(last_he, 
+                return HistoryList.FilterBefore(discoveryform.history.EntryOrder, last_he, 
                                     (x) => ((DateTime.Compare(x.EventTimeUTC, startdateutc) >= 0 &&
                                              DateTime.Compare(x.EventTimeUTC, enddateutc) <= 0) &&
                                              where(x)));
@@ -673,7 +673,7 @@ namespace EDDiscovery.UserControls
                     string systemName = null;
                     if (last_he != null)
                     {
-                        foreach (var he in discoveryform.history.FilterBefore(last_he, 
+                        foreach (var he in HistoryList.FilterBefore(discoveryform.history.EntryOrder, last_he, 
                                     (x) => x.System.SystemAddress == si.SystemAddress))
                         {
                             systemName = he.System.Name;

@@ -155,7 +155,7 @@ namespace EDDiscovery.Forms
             BodyName.Items.Clear();
             if (thisSystem != null)
             {
-                var lookup = await helist.starscan.FindSystemAsync(thisSystem, true);
+                var lookup = await helist.StarScan.FindSystemAsync(thisSystem, true);
                 var landables = lookup?.Bodies?.Where(b => b.ScanData != null && b.ScanData.IsLandable)?.Select(b => b.fullname);
 
                 if (landables != null)

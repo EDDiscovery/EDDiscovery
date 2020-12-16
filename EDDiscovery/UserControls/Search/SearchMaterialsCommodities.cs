@@ -116,7 +116,7 @@ namespace EDDiscovery.UserControls
         {
             ISystem cursystem = discoveryform.history.CurrentSystem;        // could be null
 
-            foreach ( var he in discoveryform.history)      // oldest first..
+            foreach ( var he in discoveryform.history.EntryOrder)      // oldest first..
             {
                 Tuple<HistoryEntry, string> found = null;
                 bool checkstation = false;

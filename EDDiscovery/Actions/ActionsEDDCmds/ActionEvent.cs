@@ -229,7 +229,6 @@ namespace EDDiscovery.Actions
                         }
                         else if (cmdname.Equals("info"))
                         {
-                            ActionVars.HistoryEventFurtherInfo(ap, hl, he, prefix);
                             ActionVars.SystemVarsFurtherInfo(ap, hl, he.System, prefix);
                             ActionVars.ShipModuleInformation(ap, he.ShipInformation, prefix);
                         }

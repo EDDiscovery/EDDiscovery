@@ -188,7 +188,7 @@ namespace EDDiscovery.UserControls
             {
                 labelVehicle.Visible = buttonExtCoriolis.Visible = buttonExtEDShipyard.Visible = buttonExtConfigure.Visible = false;
 
-                ShipInformationList shm = discoveryform.history.shipinformationlist;
+                ShipInformationList shm = discoveryform.history.ShipInformationList;
                 var ownedships = (from x1 in shm.Ships where x1.Value.State == ShipInformation.ShipState.Owned && !ShipModuleData.IsSRVOrFighter(x1.Value.ShipFD) select x1.Value);
 
                 foreach( var si in ownedships )
@@ -229,7 +229,7 @@ namespace EDDiscovery.UserControls
             }
             else
             {
-                ShipInformation si = discoveryform.history.shipinformationlist.GetShipByNameIdentType(comboBoxShips.Text);
+                ShipInformation si = discoveryform.history.ShipInformationList.GetShipByNameIdentType(comboBoxShips.Text);
                 if (si != null)
                     DisplayShip(si);
             }
@@ -398,7 +398,7 @@ namespace EDDiscovery.UserControls
 
         private void UpdateComboBox(HistoryList hl)
         {
-            ShipInformationList shm = hl.shipinformationlist;
+            ShipInformationList shm = hl.ShipInformationList;
             string cursel = comboBoxShips.Text;
 
             comboBoxShips.Items.Clear();
@@ -449,7 +449,7 @@ namespace EDDiscovery.UserControls
                     si = last_he.ShipInformation;
             }
             else
-                si = discoveryform.history.shipinformationlist.GetShipByNameIdentType(comboBoxShips.Text);
+                si = discoveryform.history.ShipInformationList.GetShipByNameIdentType(comboBoxShips.Text);
 
             if (si != null)
             {
@@ -491,7 +491,7 @@ namespace EDDiscovery.UserControls
                     si = last_he.ShipInformation;
             }
             else
-                si = discoveryform.history.shipinformationlist.GetShipByNameIdentType(comboBoxShips.Text);
+                si = discoveryform.history.ShipInformationList.GetShipByNameIdentType(comboBoxShips.Text);
 
             if (si != null)
             {
@@ -664,7 +664,7 @@ namespace EDDiscovery.UserControls
                             return null;
                     };
 
-                    var x = discoveryform.history.shipinformationlist.Ships.GetEnumerator();
+                    var x = discoveryform.history.ShipInformationList.Ships.GetEnumerator();
                     x.MoveNext();
 
                     grd.GetPostHeader += delegate (int r)

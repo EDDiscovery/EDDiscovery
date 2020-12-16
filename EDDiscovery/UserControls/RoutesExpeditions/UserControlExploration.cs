@@ -155,7 +155,7 @@ namespace EDDiscovery.UserControls
                         dataGridViewExplore[1, rowindex].Value = strdist;
                     }
 
-                    StarScan.SystemNode sysnode = discoveryform.history.starscan.FindSystemSynchronous(sys, false);
+                    StarScan.SystemNode sysnode = discoveryform.history.StarScan.FindSystemSynchronous(sys, false);
 
                     if (sysnode != null)
                     {

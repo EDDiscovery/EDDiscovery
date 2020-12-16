@@ -92,7 +92,7 @@ namespace EDDiscovery.UserControls
 
         private void UpdateComboBox(HistoryList hl)
         {
-            OutfittingList ofl = hl.outfitting;
+            OutfittingList ofl = hl.Outfitting;
             string cursel = comboBoxYards.Text;
 
             string the = "Travel History Entry".T(EDTx.UserControlOutfitting_TravelHistoryEntry);
@@ -155,7 +155,7 @@ namespace EDDiscovery.UserControls
             }
             else
             {
-                yard = discoveryform.history.outfitting.GetFilteredList().Find(x => x.Ident().Equals(comboBoxYards.Text));
+                yard = discoveryform.history.Outfitting.GetFilteredList().Find(x => x.Ident().Equals(comboBoxYards.Text));
             }
 
             if (yard != null)
@@ -164,7 +164,7 @@ namespace EDDiscovery.UserControls
             }
             else
             {
-                List<Tuple<Outfitting, List<Outfitting.OutfittingItem>>> itemlist = discoveryform.history.outfitting.GetItemTypeLocationsFromYardsWithoutRepeat(comboBoxYards.Text,nolocrepeats:true);
+                List<Tuple<Outfitting, List<Outfitting.OutfittingItem>>> itemlist = discoveryform.history.Outfitting.GetItemTypeLocationsFromYardsWithoutRepeat(comboBoxYards.Text,nolocrepeats:true);
                 if ( itemlist.Count > 0 )
                     DisplayItems(itemlist, comboBoxYards.Text);
             }

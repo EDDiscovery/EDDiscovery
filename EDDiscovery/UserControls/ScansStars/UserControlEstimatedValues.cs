@@ -103,7 +103,7 @@ namespace EDDiscovery.UserControls
                 return;
             }
 
-            StarScan.SystemNode last_sn = await discoveryform.history.starscan.FindSystemAsync(last_he.System, checkBoxEDSM.Checked);
+            StarScan.SystemNode last_sn = await discoveryform.history.StarScan.FindSystemAsync(last_he.System, checkBoxEDSM.Checked);
 
             SetControlText((last_sn == null) ? "No Scan".T(EDTx.NoScan) : string.Format("Estimated Scan Values for {0}".T(EDTx.UserControlEstimatedValues_SV), last_sn.system.Name));
 

@@ -91,17 +91,17 @@ namespace EDDiscovery.UserControls
 
         private void Redisplay(HistoryList hl)
         {
-            Display(hl.cashledger);
+            Display(hl.CashLedger);
         }
 
         private void NewEntry(HistoryEntry l, HistoryList hl)
         {
-            Display(hl.cashledger);
+            Display(hl.CashLedger);
         }
 
         public override void InitialDisplay()
         {
-            Display(discoveryform.history.cashledger);
+            Display(discoveryform.history.CashLedger);
         }
 
         private void Display(Ledger mc)

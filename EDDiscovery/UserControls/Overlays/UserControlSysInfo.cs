@@ -231,8 +231,6 @@ namespace EDDiscovery.UserControls
 
         private void Display(HistoryEntry he, HistoryList hl, bool selectedEntry)
         {
-            //System.Diagnostics.Debug.WriteLine("SI:Display ");
-
             if (neverdisplayed)
             {
                 UpdateViewOnSelection();  // then turn the right ones on
@@ -245,7 +243,7 @@ namespace EDDiscovery.UserControls
             {
                 SetControlText(he.System.Name);
 
-                HistoryEntry lastfsd = hl.GetLastHistoryEntry(x => x.journalEntry is EliteDangerousCore.JournalEvents.JournalFSDJump, he);
+                HistoryEntry lastfsd = hl.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.FSDJump, he);
 
                 textBoxSystem.Text = he.System.Name;
                 panelFD.BackgroundImage = (lastfsd != null && (lastfsd.journalEntry as EliteDangerousCore.JournalEvents.JournalFSDJump).EDSMFirstDiscover) ? EDDiscovery.Icons.Controls.firstdiscover : EDDiscovery.Icons.Controls.notfirstdiscover;
@@ -253,7 +251,6 @@ namespace EDDiscovery.UserControls
                 if (!he.System.HasEDDBInformation || !he.System.HasCoordinate)
                     discoveryform.history.FillEDSM(he); // Fill in any EDSM info we have
 
-                //textBoxBody.Text = he.WhereAmI + ((he.IsInHyperSpace) ? " (HS)": "");
                 textBoxBody.Text = he.WhereAmI + " (" + he.BodyType + ")";
 
                 bool hasmarketid = he?.MarketID.HasValue ?? false;
@@ -284,7 +281,8 @@ namespace EDDiscovery.UserControls
                 int count = discoveryform.history.GetVisitsCount(he.System.Name);
                 textBoxVisits.Text = count.ToString();
 
-                System.Diagnostics.Debug.WriteLine("UserControlSysInfo sys info {0} {1} {2}", he.System.Name, he.System.EDSMID, he.System.EDDBID);
+                //                System.Diagnostics.Debug.WriteLine("UserControlSysInfo sys info {0} {1} {2}", he.System.Name, he.System.EDSMID, he.System.EDDBID);
+
 
                 extButtonEDSMSystem.Enabled = extButtonRossSystem.Enabled = extButtonEDDBSystem.Enabled = extButtonInaraSystem.Enabled = extButtonSpanshSystem.Enabled = true;
 

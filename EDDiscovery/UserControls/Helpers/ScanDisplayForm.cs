@@ -58,7 +58,7 @@ namespace EDDiscovery.UserControls
                 sd.SetSize( selsize );
                 sd.Size = infosize;
 
-                StarScan.SystemNode data = await hl.starscan.FindSystemAsync(sys, sd.CheckEDSM);    // look up system async
+                StarScan.SystemNode data = await hl.StarScan.FindSystemAsync(sys, sd.CheckEDSM);    // look up system async
                     
                 if ( data != null )
                 {

@@ -107,27 +107,45 @@ namespace EDDiscovery.UserControls
             return new TravelHistoryFilter(false, true, $"Start/End Flag".T(EDTx.TravelHistoryFilter_StartEnd));
         }
 
-        public List<HistoryEntry> Filter(HistoryList hl )
+        public List<HistoryEntry> Filter(List<HistoryEntry> list)      // list should be in entry order. oldest first
         {
             if (Lastdockflag)
             {
-                return hl.FilterToLastDock();
+                return HistoryList.LatestFirstToLastDock(list);
             }
             else if (Startendflag)
             {
-                return hl.FilterStartEnd();
+                return HistoryList.LatestFirstStartStopFlags(list);
             }
             else if (MaximumNumberOfItems.HasValue)
             {
-                return hl.FilterLastN(MaximumNumberOfItems.Value);
+                return HistoryList.LatestFirstLimitNumber(list, MaximumNumberOfItems.Value);
             }
             else if (MaximumDataAge.HasValue)
             {
-                return hl.FilterByDate(MaximumDataAge.Value);
+                return HistoryList.LatestFirstLimitByDate(list, MaximumDataAge.Value);
             }
             else
             {
-                return hl.LastFirst;
+                return HistoryList.LatestFirst(list);
+            }
+        }
+
+        public List<HistoryEntry> FilterLatestFirst(List<HistoryEntry> list)      // list should be in latest first order, supports a limited set
+        {
+            if (MaximumNumberOfItems.HasValue)
+            {
+                return list.GetRange(0, MaximumNumberOfItems.Value);
+            }
+            else if (MaximumDataAge.HasValue)
+            {
+                var oldestData = DateTime.UtcNow.Subtract(MaximumDataAge.Value);
+                int index = list.FindIndex(x => x.EventTimeUTC < oldestData);       // find first entry with date younger than oldest data
+                return index >= 0 ? list.GetRange(0, index) : new List<HistoryEntry>();
+            }
+            else
+            {
+                return list;
             }
         }
 

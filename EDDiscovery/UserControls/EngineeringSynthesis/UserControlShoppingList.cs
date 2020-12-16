@@ -214,13 +214,14 @@ namespace EDDiscovery.UserControls
                 JournalScan sd = null;
                 StarScan.SystemNode last_sn = null;
 
-                if (last_he.IsLanded && (showListAvailability || showPlanetMats))
+                if (showListAvailability || showPlanetMats)
                 {
-                    sd = discoveryform.history.GetScans(last_he.System.Name).Where(sc => sc.BodyName == last_he.WhereAmI).FirstOrDefault();
-                }
-                if (!last_he.IsLanded && showSystemAvailability)
-                {
-                    last_sn = await discoveryform.history.starscan.FindSystemAsync(last_he.System, useEDSMForSystemAvailability);
+                    last_sn = await discoveryform.history.StarScan.FindSystemAsync(last_he.System, useEDSMForSystemAvailability);
+
+                    if (last_he.IsLanded && last_sn != null )       // if found node, and landed
+                    {
+                        sd = last_sn.Find(last_he.WhereAmI)?.ScanData;  // find scan data for this body
+                    }
                 }
 
                 StringBuilder wantedList = new StringBuilder();
@@ -233,18 +234,18 @@ namespace EDDiscovery.UserControls
                     foreach (var c in shoppinglist)      // and add new..
                     {
                         string present = "";
-                        if (showListAvailability)
+                        if (showListAvailability && sd != null && sd.HasMaterials)
                         {
-                            if (sd != null && sd.HasMaterials)
+                            if (sd.Materials.TryGetValue(c.Item1.Details.FDName, out available))
                             {
-                                if (sd.Materials.TryGetValue(c.Item1.Details.FDName, out available))
-                                {
-                                    present = $" {available.ToString("N1")}%";
-                                }
-                                else
-                                { present = " -"; }
+                                present = $" {available.ToString("N1")}%";
+                            }
+                            else
+                            {
+                                present = " -";
                             }
                         }
+
                         wantedList.Append($"  {c.Item2} {c.Item1.Details.Name}{present}");
                         int? onHand = mcl.Where(m => m.Details.Shortname == c.Item1.Details.Shortname).FirstOrDefault()?.Count;
                         int totalReq = c.Item2 + (onHand.HasValue ? onHand.Value : 0);
