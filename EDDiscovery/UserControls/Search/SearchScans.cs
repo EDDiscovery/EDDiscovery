@@ -259,9 +259,9 @@ namespace EDDiscovery.UserControls
                 DataGridViewColumn sortcol = dataGridView.SortedColumn != null ? dataGridView.SortedColumn : dataGridView.Columns[0];
                 SortOrder sortorder = dataGridView.SortedColumn != null ? dataGridView.SortOrder : SortOrder.Descending;
 
-                ISystem cursystem = discoveryform.history.CurrentSystem;        // could be null
+                ISystem cursystem = discoveryform.history.CurrentSystem();        // could be null
 
-                foreach ( var he in discoveryform.history.FilterByScan)
+                foreach ( var he in discoveryform.history.FilterByScan())
                 {
                     JournalScan js = he.journalEntry as JournalScan;
 

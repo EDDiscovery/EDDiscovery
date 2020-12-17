@@ -105,7 +105,7 @@ namespace EDDiscovery.Actions
                 {
                     if (jidindex != -1)
                     {
-                        ReportEntry(ap, hl.EntryOrder, jidindex, prefix);
+                        ReportEntry(ap, hl.EntryOrder(), jidindex, prefix);
                     }
                     else
                         ap.ReportError("No commands in Event");
@@ -148,11 +148,11 @@ namespace EDDiscovery.Actions
                     List<HistoryEntry> hltest;
 
                     if (jidindex == -1)     // if no JID given..
-                        hltest = hl.EntryOrder; // the whole list
+                        hltest = hl.EntryOrder(); // the whole list
                     else if (fwd)
-                        hltest = hl.EntryOrder.GetRange(jidindex + 1, hl.Count - (jidindex + 1));       // cut down list, excluding this entry
+                        hltest = hl.EntryOrder().GetRange(jidindex + 1, hl.Count - (jidindex + 1));       // cut down list, excluding this entry
                     else
-                        hltest = hl.EntryOrder.GetRange(0, jidindex );
+                        hltest = hl.EntryOrder().GetRange(0, jidindex );
 
                     if (eventnames.Count > 0)       // screen out event names
                         hltest = (from h in hltest where eventnames.Contains(h.journalEntry.EventTypeStr, StringComparer.OrdinalIgnoreCase) == !not select h).ToList();
@@ -173,7 +173,7 @@ namespace EDDiscovery.Actions
                         ap.ReportError("Valid JID must be given for command " + cmdname + " in Event");
                     else
                     {
-                        HistoryEntry he = hl.EntryOrder[jidindex];
+                        HistoryEntry he = hl.EntryOrder()[jidindex];
                         ap[prefix + "JID"] = jidindex.ToStringInvariant();
 
                         if (cmdname.Equals("action"))

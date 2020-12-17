@@ -14,15 +14,11 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using EliteDangerousCore;
-using EliteDangerousCore.DB;
 using EliteDangerousCore.JournalEvents;
-using BaseUtils;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
 {
@@ -138,7 +134,6 @@ namespace EDDiscovery.UserControls
         public override bool SupportTransparency { get { return true; } }
         public override void SetTransparency(bool on, Color curcol)
         {
-            System.Diagnostics.Debug.WriteLine("Set colour to " + curcol);
             pictureBoxSurveyor.BackColor = this.BackColor = curcol;
             DrawSystem(last_sys);   // need to redraw as we use backcolour
         }
@@ -184,7 +179,6 @@ namespace EDDiscovery.UserControls
                 bool refresh = gui.GUIFocus != uistate;
                 uistate = gui.GUIFocus;
 
-                System.Diagnostics.Debug.WriteLine("Surveyor UI event " + uistate);
                 if (refresh)
                     DrawSystem(last_sys);
             }

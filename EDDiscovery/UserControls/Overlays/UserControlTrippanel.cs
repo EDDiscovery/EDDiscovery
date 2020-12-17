@@ -294,7 +294,7 @@ namespace EDDiscovery.UserControls
                 else
                 {
 // TBD horrible fix as its too slow.
-                    var list = discoveryform.history.FilterByFSDOnly.OrderByDescending(p => p.EventTimeUTC).Take(2);
+                    var list = discoveryform.history.FilterByFSDOnly().OrderByDescending(p => p.EventTimeUTC).Take(2);
                     if (list.Count() == 0)
                         return;
                     he = list.ToArray()[0];

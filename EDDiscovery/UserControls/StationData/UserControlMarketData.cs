@@ -310,7 +310,7 @@ namespace EDDiscovery.UserControls
 
             comboboxentries.Clear();
 
-            List<HistoryEntry> hlcpb = HistoryList.FilterByCommodityPricesBackwards(hl.EntryOrder);
+            List<HistoryEntry> hlcpb = HistoryList.FilterByCommodityPricesBackwards(hl.EntryOrder());
 
             foreach (HistoryEntry h in hlcpb)
             {

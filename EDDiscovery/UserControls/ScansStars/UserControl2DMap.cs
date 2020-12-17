@@ -48,7 +48,7 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
-            syslist = HistoryList.FilterByFSDCarrierJumpAndPosition(discoveryform.history.EntryOrder);
+            syslist = HistoryList.FilterByFSDCarrierJumpAndPosition(discoveryform.history.EntryOrder());
 
             pickerStart = new DateTimePicker();
             pickerStop = new DateTimePicker();
@@ -92,7 +92,7 @@ namespace EDDiscovery.UserControls
 
         private void Discoveryform_OnHistoryChange(HistoryList obj)
         {
-            syslist = HistoryList.FilterByFSDCarrierJumpAndPosition(discoveryform.history.EntryOrder);
+            syslist = HistoryList.FilterByFSDCarrierJumpAndPosition(discoveryform.history.EntryOrder());
             Display();
         }
 

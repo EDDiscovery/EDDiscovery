@@ -693,11 +693,10 @@ namespace EDDiscovery
         {
             panel_close.Visible = !theme.WindowsFrame;
             panel_minimize.Visible = !theme.WindowsFrame;
-            label_version.Visible = !theme.WindowsFrame;
+            label_version.Visible = !theme.WindowsFrame && !EDDOptions.Instance.DisableVersionDisplay;
 
-            // debug label_version.Visible = true; labelInfoBoxTop.Text = "New! X.Y.Z.A";
-
-            this.Text = "EDDiscovery " + label_version.Text;            // note in no border mode, this is not visible on the title bar but it is in the taskbar..
+            // note in no border mode, this is not visible on the title bar but it is in the taskbar..
+            this.Text = "EDDiscovery" + (EDDOptions.Instance.DisableVersionDisplay ? "" : " " + label_version.Text);            
 
             theme.ApplyStd(this);
 
@@ -765,7 +764,7 @@ namespace EDDiscovery
                     for (int i = lastfileh.Indexno - 1; i < history.Count; i++)      // play thru last history entries up to last file position for the DLLs, indicating stored
                     {
                         //System.Diagnostics.Debug.WriteLine("{0} : {1} {2}", i, history.EntryOrder[i].EventTimeUTC, history.EntryOrder[i].EventSummary);
-                        DLLManager.NewJournalEntry(EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(history.EntryOrder[i], true), true);
+                        DLLManager.NewJournalEntry(EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(history[i], true), true);
                     }
                 }
 
@@ -1261,7 +1260,7 @@ namespace EDDiscovery
 
             Map.Prepare(he?.System, EDCommander.Current.HomeSystemTextOrSol,
                         EDCommander.Current.MapCentreOnSelection ? he?.System : EDCommander.Current.HomeSystemIOrSol,
-                        EDCommander.Current.MapZoom, Controller.history.FilterByTravel);
+                        EDCommander.Current.MapZoom, Controller.history.FilterByTravel());
             Map.Show();
             this.Cursor = Cursors.Default;
         }
@@ -1271,10 +1270,10 @@ namespace EDDiscovery
             this.Cursor = Cursors.WaitCursor;
 
             if (centerSystem == null || !centerSystem.HasCoordinate)
-                centerSystem = history.GetLastWithPosition.System;
+                centerSystem = history.GetLastWithPosition().System;
 
             Map.Prepare(centerSystem, EDCommander.Current.HomeSystemTextOrSol, centerSystem,
-                             EDCommander.Current.MapZoom, history.FilterByTravel);
+                             EDCommander.Current.MapZoom, history.FilterByTravel());
 
             Map.Show();
             this.Cursor = Cursors.Default;
@@ -1282,7 +1281,7 @@ namespace EDDiscovery
 
         private void sendUnsyncedEDDNEventsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            List<HistoryEntry> hlsyncunsyncedlist = HistoryList.FilterByScanNotEDDNSynced(Controller.history.EntryOrder);        // first entry is oldest
+            List<HistoryEntry> hlsyncunsyncedlist = HistoryList.FilterByScanNotEDDNSynced(Controller.history.EntryOrder());        // first entry is oldest
 
             EDDNSync.SendEDDNEvents(LogLine, hlsyncunsyncedlist);
         }
@@ -1614,7 +1613,7 @@ namespace EDDiscovery
 
             try
             {
-                EDSMJournalSync.SendEDSMEvents(l => LogLine(l), history.EntryOrder, manual: true);
+                EDSMJournalSync.SendEDSMEvents(l => LogLine(l), history.EntryOrder(), manual: true);
             }
             catch (Exception ex)
             {

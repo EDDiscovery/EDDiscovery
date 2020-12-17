@@ -132,7 +132,7 @@ namespace EDDiscovery.UserControls
             const int idxInfo = 9;
             const int idxNote = 10;
 
-            ISystem currentSystem = discoveryform.history.CurrentSystem; // may be null
+            ISystem currentSystem = discoveryform.history.CurrentSystem(); // may be null
 
             if (rowindex < dataGridViewExplore.Rows.Count && dataGridViewExplore[0, rowindex].Value != null)
             {

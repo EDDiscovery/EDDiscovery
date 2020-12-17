@@ -74,18 +74,43 @@ namespace EDDiscovery
 
         private void ActionEntry(JournalEntry je)               // UI thread issue the JE to the system
         {
+            System.Diagnostics.Trace.WriteLine(string.Format(Environment.NewLine + "New JEntry {0} {1}", je.EventTimeUTC, je.EventTypeStr));
+
             OnNewJournalEntry?.Invoke(je);          // Always call this on all entries...
 
             // filter out commanders, and filter out any UI events
             if (je.CommanderId == history.CommanderId)
             {
+                BaseUtils.AppTicks.TickCountLapDelta("CTNE", true);
+
                 HistoryEntry he = history.AddJournalEntryToHistory(je, h => LogLineHighlight(h));        // add a new one on top
+
+                var t1 = BaseUtils.AppTicks.TickCountLapDelta("CTNE");
+                if (t1.Item2 > 5)
+                    System.Diagnostics.Trace.WriteLine(t1.Item1 + " Controller NE First");
+
                 if (he != null)     // may reject it 
                 {
-                    System.Diagnostics.Debug.WriteLine(BaseUtils.AppTicks.TickCountLapDelta("CTNE", true) + "Controller NE START");
-                    OnNewEntry?.Invoke(he, history);            // major hook
+                    if ( OnNewEntry != null)
+                    {
+                        foreach (var e in OnNewEntry.GetInvocationList())
+                        {
+                            var mi = e.Method;
+                            Stopwatch sw = new Stopwatch();
+                            sw.Start();
+                            e.DynamicInvoke(he, history);
+                            System.Diagnostics.Trace.WriteLine("..Method " + mi.DeclaringType + " took " + sw.ElapsedMilliseconds);
+                        }
+                    }
+
+                    var t2 = BaseUtils.AppTicks.TickCountLapDelta("CTNE");
+                    if ( t2.Item2 > 5 )
+                        System.Diagnostics.Trace.WriteLine( t2.Item1 + " Controller NE Second");
+
                     OnNewEntrySecond?.Invoke(he, history);      // secondary hook..
-                    System.Diagnostics.Debug.WriteLine(BaseUtils.AppTicks.TickCountLapDelta("CTNE") + "Controller NE END");
+
+                    var t3 = BaseUtils.AppTicks.TickCountLapDelta("CTNE");
+                    System.Diagnostics.Trace.WriteLine(t3.Item1 + " Controller NE END" + (t3.Item3 > 99 ? "!!!!!!!!!!!!!" : ""));
                 }
             }
 
@@ -110,6 +135,8 @@ namespace EDDiscovery
             Debug.Assert(System.Windows.Forms.Application.MessageLoop);
             //System.Diagnostics.Debug.WriteLine("Dispatch from controller UI event " + u.EventTypeStr);
 
+            BaseUtils.AppTicks.TickCountLapDelta("CTUI", true);
+
             var uifuel = u as EliteDangerousCore.UIEvents.UIFuel;       // UI Fuel has information on fuel level - update it.
             if (uifuel != null && history != null)
             {
@@ -118,6 +145,10 @@ namespace EDDiscovery
             }
 
             OnNewUIEvent?.Invoke(u);
+
+            var t = BaseUtils.AppTicks.TickCountLapDelta("CTUI");
+            if ( t.Item2 > 25 )
+                System.Diagnostics.Debug.WriteLine( t.Item1 + " Controller UI !!!");
         }
     }
 }

@@ -131,7 +131,7 @@ namespace EDDiscovery.UserControls
                 JournalTypeEnum[] miningevents = new JournalTypeEnum[] { JournalTypeEnum.AsteroidCracked, JournalTypeEnum.ProspectedAsteroid, JournalTypeEnum.LaunchDrone,
                                 JournalTypeEnum.MiningRefined, JournalTypeEnum.MaterialCollected, JournalTypeEnum.MaterialDiscovered, JournalTypeEnum.MaterialDiscarded};
 
-                var newlist = HistoryList.FilterBetween(discoveryform.history.EntryOrder, he, x => boundevents.Contains(x.EntryType), y => miningevents.Contains(y.EntryType), out HistoryEntry newhebelow, out HistoryEntry newheabove);
+                var newlist = HistoryList.FilterBetween(discoveryform.history.EntryOrder(), he, x => boundevents.Contains(x.EntryType), y => miningevents.Contains(y.EntryType), out HistoryEntry newhebelow, out HistoryEntry newheabove);
 
                 if (newlist != null)        // only if no history would we get null, unlikely since he has been tested, but still..
                 {

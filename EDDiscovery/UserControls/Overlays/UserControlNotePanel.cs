@@ -118,7 +118,7 @@ namespace EDDiscovery.UserControls
 
         private void Display( HistoryList hl)            // when user clicks around..  HE may be null here
         {
-            Display(hl.GetLastFSDCarrierJump);
+            Display(hl.GetLastFSDCarrierJump());
         }
 
         void FlipConfig(Configuration item, bool ch, bool redisplay = false)

@@ -177,7 +177,7 @@ namespace EDDiscovery.UserControls
 
         private void DisplayShips(List<Tuple<ShipYard, ShipYard.ShipyardItem>> shiplist,string ship)
         {
-            ISystem cursys = discoveryform.history.CurrentSystem;
+            ISystem cursys = discoveryform.history.CurrentSystem();
 
             foreach (Tuple<ShipYard, ShipYard.ShipyardItem> i in shiplist)
             {

@@ -285,7 +285,7 @@ namespace EDDiscovery.WebServer
                 JArray jarray = new JArray();
                 for (int i = startindex; i > Math.Max(-1, startindex - length); i--)
                 {
-                    EliteDangerousCore.HistoryEntry he = hl.EntryOrder[i];
+                    EliteDangerousCore.HistoryEntry he = hl.EntryOrder()[i];
 
                     JArray jent = new JArray();
                     jent.Add(he.journalEntry.GetIconPackPath);
@@ -360,7 +360,7 @@ namespace EDDiscovery.WebServer
 
             public JToken NewSRec(EliteDangerousCore.HistoryList hl, string type, int entry)       // entry = -1 means latest
             {
-                HistoryEntry he = hl.EntryOrder[entry];
+                HistoryEntry he = hl.EntryOrder()[entry];
 
                 JObject response = new JObject();
                 response["responsetype"] = type;

@@ -559,7 +559,7 @@ namespace EDDiscovery.UserControls
                 textBoxTarget.Select(textBoxTarget.Text.Length, textBoxTarget.Text.Length);
                 textBoxTargetDist.Text = "No Pos".T(EDTx.NoPos);
 
-                HistoryEntry cs = discoveryform.history.GetLastWithPosition;
+                HistoryEntry cs = discoveryform.history.GetLastWithPosition();
                 if (cs != null)
                     textBoxTargetDist.Text = cs.System.Distance(x, y, z).ToString("0.0");
 

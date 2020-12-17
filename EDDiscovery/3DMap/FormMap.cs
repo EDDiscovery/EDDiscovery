@@ -279,7 +279,7 @@ namespace EDDiscovery
         {
             if (Is3DMapsRunning )
             {
-                List<HistoryEntry> hfsd = hl.FilterByTravel;
+                List<HistoryEntry> hfsd = hl.FilterByTravel();
 
                 if (hfsd.Count > 0)
                 {

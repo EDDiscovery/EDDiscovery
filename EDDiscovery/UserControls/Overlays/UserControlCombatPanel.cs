@@ -266,23 +266,23 @@ namespace EDDiscovery.UserControls
                 List<HistoryEntry> hel;
 
                 if (current.Type == FilterEntry.EntryType.Lastdock)
-                    hel = HistoryList.LatestFirstToLastDock(discoveryform.history.EntryOrder);
+                    hel = HistoryList.LatestFirstToLastDock(discoveryform.history.EntryOrder());
                 else if (current.Type == FilterEntry.EntryType.All)
-                    hel = discoveryform.history.ReverseOrder;
+                    hel = discoveryform.history.ReverseOrder();
                 else if (current.Type == FilterEntry.EntryType.Oneday)
-                    hel = HistoryList.FilterByDateRangeLatestFirst(discoveryform.history.EntryOrder, DateTime.UtcNow.AddDays(-1), DateTime.UtcNow);
+                    hel = HistoryList.FilterByDateRangeLatestFirst(discoveryform.history.EntryOrder(), DateTime.UtcNow.AddDays(-1), DateTime.UtcNow);
                 else if (current.Type == FilterEntry.EntryType.Sevendays)
-                    hel = HistoryList.FilterByDateRangeLatestFirst(discoveryform.history.EntryOrder, DateTime.UtcNow.AddDays(-7), DateTime.UtcNow);
+                    hel = HistoryList.FilterByDateRangeLatestFirst(discoveryform.history.EntryOrder(), DateTime.UtcNow.AddDays(-7), DateTime.UtcNow);
                 else if (current.Type == FilterEntry.EntryType.Today)
-                    hel = HistoryList.FilterByDateRangeLatestFirst(discoveryform.history.EntryOrder, DateTime.UtcNow.Date, DateTime.UtcNow);
+                    hel = HistoryList.FilterByDateRangeLatestFirst(discoveryform.history.EntryOrder(), DateTime.UtcNow.Date, DateTime.UtcNow);
                 else if (current.Type == FilterEntry.EntryType.Mission)
                 {
                     // look up the mission in the current data
                     MissionState ml = current.MissionKey != null && discoveryform.history.GetLast.MissionList.Missions.ContainsKey(current.MissionKey) ? discoveryform.history.GetLast.MissionList.Missions[current.MissionKey] : null;
-                    hel = ml != null ? HistoryList.FilterByDateRangeLatestFirst(discoveryform.history.EntryOrder, current.StartTimeUTC, ml.MissionEndTime) : new List<HistoryEntry>();
+                    hel = ml != null ? HistoryList.FilterByDateRangeLatestFirst(discoveryform.history.EntryOrder(), current.StartTimeUTC, ml.MissionEndTime) : new List<HistoryEntry>();
                 }
                 else
-                    hel = HistoryList.FilterByDateRangeLatestFirst(discoveryform.history.EntryOrder, current.StartTimeUTC, current.EndTimeUTC);
+                    hel = HistoryList.FilterByDateRangeLatestFirst(discoveryform.history.EntryOrder(), current.StartTimeUTC, current.EndTimeUTC);
 
                 var rows = new List<DataGridViewRow>(hel.Count);
                 foreach (HistoryEntry he in hel)

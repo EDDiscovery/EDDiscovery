@@ -241,7 +241,7 @@ namespace EDDiscovery.UserControls
 
             if (hl != null && hl.Count > 0)     // just for safety
             {
-                List<HistoryEntry> result = current_historylist.ReverseOrder;      // Standard filtering
+                List<HistoryEntry> result = current_historylist.ReverseOrder();      // Standard filtering
 
                 int ftotal;         // event filter
                 result = HistoryList.FilterByJournalEvent(result, EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbFilterSave, "All"), out ftotal);
@@ -264,12 +264,11 @@ namespace EDDiscovery.UserControls
                     int rowmargin = displayfont.ScalePixels(4);
 
 					// Check if need to hide the UI
-                    if (Config(Configuration.showNothingWhenDocked) && 
-						(hl.IsCurrentlyDocked || hl.IsCurrentlyLanded))
+                    if (Config(Configuration.showNothingWhenDocked) && (hl.IsCurrentlyDocked() || hl.IsCurrentlyLanded()))
                     {
 						if (!Config(Configuration.showNoTitleWhenHidden))
 						{
-							AddColText(0, 0, rowpos, (hl.IsCurrentlyDocked) ? "Docked" : "Landed",
+							AddColText(0, 0, rowpos, (hl.IsCurrentlyDocked()) ? "Docked" : "Landed",
 									   textcolour, backcolour, null);
 						}
 					}
@@ -287,7 +286,7 @@ namespace EDDiscovery.UserControls
                         Point3D tpos;
                         bool targetpresent = TargetClass.GetTargetPosition(out name, out tpos);
 
-                        ISystem currentsystem = hl.CurrentSystem; // may be null
+                        ISystem currentsystem = hl.CurrentSystem(); // may be null
 
                         HistoryEntry last = hl.GetLast;
 

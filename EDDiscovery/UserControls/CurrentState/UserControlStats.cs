@@ -118,7 +118,7 @@ namespace EDDiscovery.UserControls
         {
             if (hl == null)
                 return;
-
+//forceupdate = true;
             if (tabControlCustomStats.SelectedIndex == 0)
             {
                 if (forceupdate || he == null || last_he == null || hl.IsBetween(last_he, he, x => x.IsLocOrJump))
@@ -156,39 +156,27 @@ namespace EDDiscovery.UserControls
 
         private void StatsGeneral(HistoryEntry he, HistoryList hl)
         {
+            System.Diagnostics.Debug.WriteLine(BaseUtils.AppTicks.TickCountLapDelta("S1", true) + "S1 START");
+
+            hl.GetJumpStats(out int numberjumps, out int last24hours, out int lastweek, out int last30days, out int last365days,
+                              out HistoryEntry north, out HistoryEntry south, out HistoryEntry east, out HistoryEntry west, out HistoryEntry up, out HistoryEntry down);
+
             if (he != null)
             {
                 StatToDGVStats("Visits".T(EDTx.UserControlStats_Visits), hl.GetVisitsCount(he.System.Name) + " to system ".T(EDTx.UserControlStats_tosystem) + he.System.Name);
-                StatToDGVStats("Jumps Before System".T(EDTx.UserControlStats_JumpsBeforeSystem), hl.GetFSDCarrierJumpsBeforeUTC(he.EventTimeUTC) + " to system ".T(EDTx.UserControlStats_tosystem) + he.System.Name);
             }
 
-            int totaljumps = hl.GetFSDCarrierJumps(new TimeSpan(10000, 0, 0, 0));
-            StatToDGVStats("Total No of jumps: ".T(EDTx.UserControlStats_TotalNoofjumps), totaljumps);
-            if (totaljumps > 0)
+            StatToDGVStats("Total No of jumps: ".T(EDTx.UserControlStats_TotalNoofjumps), numberjumps);
+
+            if (numberjumps > 0)
             {
-                StatToDGVStats("Jump History".T(EDTx.UserControlStats_JumpHistory), "24 Hours: ".T(EDTx.UserControlStats_24hc) + hl.GetFSDCarrierJumps(new TimeSpan(1, 0, 0, 0)) +
-                                      ", One Week: ".T(EDTx.UserControlStats_OneWeek) + hl.GetFSDCarrierJumps(new TimeSpan(7, 0, 0, 0)) +
-                                      ", 30 Days: ".T(EDTx.UserControlStats_30Days) + hl.GetFSDCarrierJumps(new TimeSpan(30, 0, 0, 0)) +
-                                      ", One Year: ".T(EDTx.UserControlStats_OneYear) + hl.GetFSDCarrierJumps(new TimeSpan(365, 0, 0, 0))
+                StatToDGVStats("Jump History".T(EDTx.UserControlStats_JumpHistory), 
+                                      "24 Hours: ".T(EDTx.UserControlStats_24hc) + last24hours +
+                                      ", One Week: ".T(EDTx.UserControlStats_OneWeek) + lastweek +
+                                      ", 30 Days: ".T(EDTx.UserControlStats_30Days) + last30days +
+                                      ", One Year: ".T(EDTx.UserControlStats_OneYear) + last365days
                                       );
 
-                HistoryEntry north = hl.GetConditionally(double.MinValue, (HistoryEntry s, ref double l) =>
-                { bool v = s.IsFSDCarrierJump && s.System.HasCoordinate && s.System.Z > l; if (v) l = s.System.Z; return v; });
-
-                HistoryEntry south = hl.GetConditionally(double.MaxValue, (HistoryEntry s, ref double l) =>
-                { bool v = s.IsFSDCarrierJump && s.System.HasCoordinate && s.System.Z < l; if (v) l = s.System.Z; return v; });
-
-                HistoryEntry east = hl.GetConditionally(double.MinValue, (HistoryEntry s, ref double l) =>
-                { bool v = s.IsFSDCarrierJump && s.System.HasCoordinate && s.System.X > l; if (v) l = s.System.X; return v; });
-
-                HistoryEntry west = hl.GetConditionally(double.MaxValue, (HistoryEntry s, ref double l) =>
-                { bool v = s.IsFSDCarrierJump && s.System.HasCoordinate && s.System.X < l; if (v) l = s.System.X; return v; });
-
-                HistoryEntry up = hl.GetConditionally(double.MinValue, (HistoryEntry s, ref double l) =>
-                { bool v = s.IsFSDCarrierJump && s.System.HasCoordinate && s.System.Y > l; if (v) l = s.System.Y; return v; });
-
-                HistoryEntry down = hl.GetConditionally(double.MaxValue, (HistoryEntry s, ref double l) =>
-                { bool v = s.IsFSDCarrierJump && s.System.HasCoordinate && s.System.Y < l; if (v) l = s.System.Y; return v; });
 
                 StatToDGVStats("Most North".T(EDTx.UserControlStats_MostNorth), GetSystemDataString(north));
                 StatToDGVStats("Most South".T(EDTx.UserControlStats_MostSouth), GetSystemDataString(south));
@@ -197,18 +185,10 @@ namespace EDDiscovery.UserControls
                 StatToDGVStats("Most Highest".T(EDTx.UserControlStats_MostHighest), GetSystemDataString(up));
                 StatToDGVStats("Most Lowest".T(EDTx.UserControlStats_MostLowest), GetSystemDataString(down));
 
-                if (mostVisited != null)
+                if (mostVisited != null)        // chart exists
                 {
-                    // TBD fix
-                    var groupeddata = from data in hl.ReverseOrder
-                                      where data.IsFSDCarrierJump
-                                      group data by data.System.Name
-                                          into grouped
-                                      select new
-                                      {
-                                          Title = grouped.Key,
-                                          Count = grouped.Count()
-                                      };
+                    var visitlist = hl.Visited.Values.ToList();
+                    visitlist.Sort(delegate (HistoryEntry left, HistoryEntry right) { return right.Visits.CompareTo(left.Visits); });
 
                     mostVisited.Visible = true;
 
@@ -233,10 +213,10 @@ namespace EDDiscovery.UserControls
                     mostVisited.BorderlineColor = Color.Transparent;
 
                     int i = 0;
-                    foreach (var data in groupeddata.OrderByDescending(g => g.Count).Take(10).Where(g => g.Count > 1))
+                    foreach (var data in visitlist.Take(10))
                     {
-                        mostVisited.Series[0].Points.Add(new DataPoint(i, data.Count));
-                        mostVisited.Series[0].Points[i].AxisLabel = data.Title;
+                        mostVisited.Series[0].Points.Add(new DataPoint(i, data.Visits));
+                        mostVisited.Series[0].Points[i].AxisLabel = data.System.Name;
                         mostVisited.Series[0].Points[i].LabelForeColor = TextC;
                         i++;
                     }
@@ -246,6 +226,8 @@ namespace EDDiscovery.UserControls
             {
                 mostVisited.Visible = false;
             }
+
+            System.Diagnostics.Debug.WriteLine(BaseUtils.AppTicks.TickCountLapDelta("S1") + "S1 END");
 
             PerformLayout();
         }

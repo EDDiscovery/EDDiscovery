@@ -139,6 +139,7 @@ namespace EDDiscovery
                     case "nobackgroundpriority": BackgroundPriority = false; break;
                     case "forcetls12": ForceTLS12 = true; break;
                     case "disabletimedisplay": DisableTimeDisplay = true; break;
+                    case "disableversiondisplay": DisableVersionDisplay = true; break;
                     default:
                         System.Diagnostics.Debug.WriteLine($"Unrecognized option -{opt}");
                         break;
@@ -204,11 +205,12 @@ namespace EDDiscovery
         public string Commander { get; set; }                   // set commander, null if not
         public string Profile { get; set; }                   // set profile, null if not
         public bool TempDirInDataDir { get; set; }
-        public string WebServerFolder { get; set; }             // normally empty, so selections zip server
+        public string WebServerFolder { get; set; }             // normally empty, so selects zip server
         public bool LowPriority { get; set; }
         public bool BackgroundPriority { get; set; }
         public bool ForceTLS12 { get; set; }
         public bool DisableTimeDisplay { get; set; }
+        public bool DisableVersionDisplay { get; set; }
         public string OutputEventHelp { get; set; }
 
         public string SubAppDirectory(string subfolder)     // ensures its there.. name without \ slashes

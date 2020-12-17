@@ -177,7 +177,7 @@ namespace EDDiscovery.UserControls
 
         private void DisplayItems(List<Tuple<Outfitting, List<Outfitting.OutfittingItem>>> itemlist, string moduletype)
         {
-            ISystem cursys = discoveryform.history.CurrentSystem;
+            ISystem cursys = discoveryform.history.CurrentSystem();
 
             foreach (var yard in itemlist)
             {

@@ -220,7 +220,7 @@ namespace EDDiscovery.UserControls
 
             var filter = (TravelHistoryFilter)comboBoxHistoryWindow.SelectedItem ?? TravelHistoryFilter.NoFilter;
 
-            List<HistoryEntry> result = filter.Filter(hl.EntryOrder);
+            List<HistoryEntry> result = filter.Filter(hl.EntryOrder());
             fdropdown = hl.Count - result.Count();
 
             result = HistoryList.FilterByJournalEvent(result, EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbFilterSave, "All"), out ftotalevents);
@@ -526,20 +526,28 @@ namespace EDDiscovery.UserControls
 
         public void FireChangeSelection()
         {
-            System.Diagnostics.Debug.WriteLine(BaseUtils.AppTicks.TickCountLapDelta("TGFCS", true) + "TG FCS Start");
-
             if (dataGridViewTravel.CurrentCell != null)
             {
                 int row = dataGridViewTravel.CurrentCell.RowIndex;
                 var he = dataGridViewTravel.Rows[row].Tag as HistoryEntry;
-                System.Diagnostics.Debug.WriteLine("TG Fire Change sel at " + row + " he " + he.System.Name + " " + dataGridViewTravel.CurrentCell.RowIndex + ":" + dataGridViewTravel.CurrentCell.ColumnIndex);
-                OnTravelSelectionChanged?.Invoke(he, current_historylist, true);
+              //  System.Diagnostics.Debug.WriteLine("TG Fire Change sel at " + row + " he " + he.System.Name + " " + dataGridViewTravel.CurrentCell.RowIndex + ":" + dataGridViewTravel.CurrentCell.ColumnIndex);
+
+                if ( OnTravelSelectionChanged != null )
+                {
+                    foreach (var e in OnTravelSelectionChanged.GetInvocationList())
+                    {
+                        var mi = e.Method;
+                        System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+                        sw.Start();
+                        e.DynamicInvoke(he, current_historylist, true);
+                        System.Diagnostics.Trace.WriteLine("TG FCS Method " + mi.DeclaringType + " took " + sw.ElapsedMilliseconds);
+                    }
+                }
             }
             else if (current_historylist != null && current_historylist.Count > 0)
             {
                 OnTravelSelectionChanged?.Invoke(current_historylist.GetLast, current_historylist, false);
             }
-            System.Diagnostics.Debug.WriteLine(BaseUtils.AppTicks.TickCountLapDelta("TGFCS") + "TG FCS END");
         }
 
         private void comboBoxHistoryWindow_SelectedIndexChanged(object sender, EventArgs e)

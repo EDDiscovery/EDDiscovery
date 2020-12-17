@@ -207,7 +207,7 @@ namespace EDDiscovery.UserControls
 
             if (sys != null)
             {
-                var list = HistoryList.FindSystemsWithinLy(discoveryform.history.EntryOrder, sys, numberBoxMinRadius.Value, numberBoxMaxRadius.Value, !checkBoxCustomCube.Checked);
+                var list = HistoryList.FindSystemsWithinLy(discoveryform.history.EntryOrder(), sys, numberBoxMinRadius.Value, numberBoxMaxRadius.Value, !checkBoxCustomCube.Checked);
 
                 ReturnSystems((from x in list select new Tuple<ISystem, double>(x, x.Distance(sys))).ToList());
             }
