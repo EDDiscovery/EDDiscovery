@@ -1333,6 +1333,7 @@ SECTION UserControlContainerSplitter
 
 SECTION UserControlTravelGrid
 
+.showSystemVisitedForeColourToolStripMenuItem: "Show lines in System Visited Fore Colour" @
 .THF: "History: Filter out fields" @
 .ColumnTime: "Time" @
 .Icon: "Event" @
@@ -1618,6 +1619,8 @@ SECTION FilterSelector
 .Commodities: "Commodities" @
 .Ledger: "Ledger" @
 .Ship: "Ship" @
+.Mining: "Mining" @
+
 
 SECTION UserControlCommonBase
 

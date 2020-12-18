@@ -135,6 +135,14 @@ SECTION PopOutInfo
 .MaterialTrader.Description: "Material Trader" @
 .EDSM.Title: "EDSM" @
 .EDSM.Description: "Automatic web view of EDSM page on system" @
+.Inara.Title: "Inara" @
+.Inara.Description: "Inara - Automatic web view of system" @
+.Factions.Title: "Factions" @
+.Factions.Description: "Faction rewards and trading tally" @
+.Spansh.Title: "Spansh" @
+.Spansh.Description: "Spansh - Automatic web view of system" @
+.EDDB.Title: "EDDB" @
+.EDDB.Description: "EDDB - Automatic web view of system" @
 
 
 SECTION EDDiscoveryForm

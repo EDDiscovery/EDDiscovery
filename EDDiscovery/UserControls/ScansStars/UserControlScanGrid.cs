@@ -582,7 +582,7 @@ namespace EDDiscovery.UserControls
             var cur = dataGridViewScangrid.Rows[e.RowIndex];
             Overlays overlays = cur.Cells[0].Tag as Overlays;       // may be null
 
-            if (cur.Tag != null)
+            if (cur.Tag != null && colImage.Visible)
             {
                 // we programatically draw the image because we have control over its pos/ size this way, which you can't do
                 // with a image column - there you can only draw a fixed image or stretch it to cell contents.. which we don't want to do
@@ -761,5 +761,6 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
+
     }
 }
