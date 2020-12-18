@@ -782,7 +782,13 @@ namespace EDDiscovery
 
         private void Controller_NewEntrySecond(HistoryEntry he, HistoryList hl)         // called after all UI's have had their chance
         {
+            BaseUtils.AppTicks.TickCountLapDelta("DFS", true);
+
             actioncontroller.ActionRunOnEntry(he, Actions.ActionEventEDList.NewEntry(he));
+
+            var t1 = BaseUtils.AppTicks.TickCountLapDelta("DFS");
+            if (t1.Item2 >= 80)
+                System.Diagnostics.Trace.WriteLine("NE Second Actions slow " + t1.Item1);
 
             // all notes committed
             SystemNoteClass.CommitDirtyNotes((snc) => { if (EDCommander.Current.SyncToEdsm && snc.FSDEntry) EDSMClass.SendComments(snc.SystemName, snc.Note, snc.EdsmId, he.Commander); });

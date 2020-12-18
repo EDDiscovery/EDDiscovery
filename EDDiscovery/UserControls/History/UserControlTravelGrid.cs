@@ -532,15 +532,14 @@ namespace EDDiscovery.UserControls
                 var he = dataGridViewTravel.Rows[row].Tag as HistoryEntry;
               //  System.Diagnostics.Debug.WriteLine("TG Fire Change sel at " + row + " he " + he.System.Name + " " + dataGridViewTravel.CurrentCell.RowIndex + ":" + dataGridViewTravel.CurrentCell.ColumnIndex);
 
-                if ( OnTravelSelectionChanged != null )
+                if ( OnTravelSelectionChanged != null )     // we do this manually, so we can time each reaction if required.
                 {
                     foreach (var e in OnTravelSelectionChanged.GetInvocationList())
                     {
-                        var mi = e.Method;
-                        System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
-                        sw.Start();
+                        System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch(); sw.Start();
                         e.DynamicInvoke(he, current_historylist, true);
-                        System.Diagnostics.Trace.WriteLine("TG FCS Method " + mi.DeclaringType + " took " + sw.ElapsedMilliseconds);
+                        if ( sw.ElapsedMilliseconds>=20)
+                            System.Diagnostics.Trace.WriteLine("TG FCS Method " + e.Method.DeclaringType + " took " + sw.ElapsedMilliseconds);
                     }
                 }
             }

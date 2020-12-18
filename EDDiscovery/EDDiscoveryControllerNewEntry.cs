@@ -86,31 +86,30 @@ namespace EDDiscovery
                 HistoryEntry he = history.AddJournalEntryToHistory(je, h => LogLineHighlight(h));        // add a new one on top
 
                 var t1 = BaseUtils.AppTicks.TickCountLapDelta("CTNE");
-                if (t1.Item2 > 5)
-                    System.Diagnostics.Trace.WriteLine(t1.Item1 + " Controller NE First");
+                if (t1.Item2 >= 20)
+                    System.Diagnostics.Trace.WriteLine(" NE Add Journal slow " + t1.Item1);
 
                 if (he != null)     // may reject it 
                 {
                     if ( OnNewEntry != null)
                     {
-                        foreach (var e in OnNewEntry.GetInvocationList())
+                        foreach (var e in OnNewEntry.GetInvocationList())       // do the invokation manually, so we can time each method
                         {
-                            var mi = e.Method;
-                            Stopwatch sw = new Stopwatch();
-                            sw.Start();
+                            Stopwatch sw = new Stopwatch(); sw.Start();
                             e.DynamicInvoke(he, history);
-                            System.Diagnostics.Trace.WriteLine("..Method " + mi.DeclaringType + " took " + sw.ElapsedMilliseconds);
+                            if ( sw.ElapsedMilliseconds >= 20)
+                                System.Diagnostics.Trace.WriteLine(" NE Add Method " + e.Method.DeclaringType + " took " + sw.ElapsedMilliseconds);
                         }
                     }
 
                     var t2 = BaseUtils.AppTicks.TickCountLapDelta("CTNE");
-                    if ( t2.Item2 > 5 )
-                        System.Diagnostics.Trace.WriteLine( t2.Item1 + " Controller NE Second");
+                    if (t2.Item2 >= 40)
+                        System.Diagnostics.Trace.WriteLine(" NE First Slow " + t2.Item1);
 
                     OnNewEntrySecond?.Invoke(he, history);      // secondary hook..
 
                     var t3 = BaseUtils.AppTicks.TickCountLapDelta("CTNE");
-                    System.Diagnostics.Trace.WriteLine(t3.Item1 + " Controller NE END" + (t3.Item3 > 99 ? "!!!!!!!!!!!!!" : ""));
+                    System.Diagnostics.Trace.WriteLine("NE END " + t3.Item1 + " " + (t3.Item3 > 99 ? "!!!!!!!!!!!!!" : ""));
                 }
             }
 
