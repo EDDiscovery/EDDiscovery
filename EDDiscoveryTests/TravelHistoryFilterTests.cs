@@ -53,7 +53,7 @@ namespace EDDiscoveryTests
             var veryOldData = HistoryEntry.FromJournalEntry(jsd, null, true, out bool notused);
             var input = new HistoryList(new List<HistoryEntry> { veryOldData });
 
-            Check.That(TravelHistoryFilter.NoFilter.Filter(input.EntryOrder)).ContainsExactly(veryOldData);
+            Check.That(TravelHistoryFilter.NoFilter.Filter(input.EntryOrder())).ContainsExactly(veryOldData);
         }
 
         [Test]
@@ -63,7 +63,7 @@ namespace EDDiscoveryTests
             var now = HistoryEntry.FromJournalEntry(new JournalFSDJump(DateTime.UtcNow.Subtract(TimeSpan.FromDays(0)), sol, 0, false, false), null, true, out bool notused2);
             var input = new HistoryList(new List<HistoryEntry> { fourDaysAgo, now });
 
-            Check.That(TravelHistoryFilter.FromDays(2).Filter(input.EntryOrder)).ContainsExactly(now);
+            Check.That(TravelHistoryFilter.FromDays(2).Filter(input.EntryOrder())).ContainsExactly(now);
         }
 
         [Test]
@@ -74,7 +74,7 @@ namespace EDDiscoveryTests
             var thirtyDaysAgo = HistoryEntry.FromJournalEntry(new JournalFSDJump(DateTime.UtcNow.Subtract(TimeSpan.FromDays(30)), sol, 0, false, false), null, true, out bool notused3);
             var input = new HistoryList(new List<HistoryEntry> { twentyDaysAgo, tenDaysAgo, thirtyDaysAgo });
 
-            Check.That(TravelHistoryFilter.Last(2).Filter(input.EntryOrder)).ContainsExactly(tenDaysAgo, twentyDaysAgo);
+            Check.That(TravelHistoryFilter.Last(2).Filter(input.EntryOrder())).ContainsExactly(tenDaysAgo, twentyDaysAgo);
         }
 
         [Test]
