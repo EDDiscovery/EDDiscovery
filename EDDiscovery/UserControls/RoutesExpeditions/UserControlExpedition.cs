@@ -627,7 +627,6 @@ namespace EDDiscovery.UserControls
             if (route.Count >= 2)
             {
                 this.Cursor = Cursors.WaitCursor;
-                discoveryform.history.FillInPositionsFSDJumps();
                 map.Prepare(route[0], EDCommander.Current.HomeSystemTextOrSol, route[0], 400 / CalculateRouteMaxDistFromOrigin(route), discoveryform.history.FilterByTravel());
                 map.SetPlanned(route);
                 map.MoveToSystem(route[0]);

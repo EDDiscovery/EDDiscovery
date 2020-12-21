@@ -183,8 +183,6 @@ namespace EDDiscovery.Actions
                         }
                         else if (cmdname.Equals("edsm"))
                         {
-                            (ap.actioncontroller as ActionController).HistoryList.FillEDSM(he);
-
                             long? id_edsm = he.System.EDSMID;
                             if (id_edsm <= 0)
                             {
@@ -201,8 +199,6 @@ namespace EDDiscovery.Actions
                         }
                         else if (cmdname.Equals("ross"))
                         {
-                            (ap.actioncontroller as ActionController).HistoryList.FillEDSM(he);
-
                             string url = "";
 
                             if (he.System.EDDBID > 0)
@@ -215,16 +211,8 @@ namespace EDDiscovery.Actions
                         }
                         else if (cmdname.Equals("eddb"))
                         {
-                            (ap.actioncontroller as ActionController).HistoryList.FillEDSM(he);
-
-                            string url = "";
-
-                            if (he.System.EDDBID > 0)
-                            {
-                                url = Properties.Resources.URLEDDBSystem + he.System.EDDBID.ToString();
-                                System.Diagnostics.Process.Start(url);
-                            }
-
+                            string url = Properties.Resources.URLEDDBSystemName + System.Web.HttpUtility.UrlEncode(he.System.Name);
+                            System.Diagnostics.Process.Start(url);
                             ap[prefix + "URL"] = url;
                         }
                         else if (cmdname.Equals("info"))

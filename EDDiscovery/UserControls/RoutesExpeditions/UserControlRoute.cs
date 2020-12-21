@@ -320,7 +320,6 @@ namespace EDDiscovery.UserControls
                 if (!float.TryParse(textBox_Distance.Text, out dist))       // in case text is crap
                     dist = 30;
 
-                discoveryform.history.FillInPositionsFSDJumps();
                 map.Prepare(routeSystems.First(), EDCommander.Current.HomeSystemTextOrSol, routeSystems.First(), 400 / dist, discoveryform.history.FilterByTravel());
                 map.SetPlanned(routeSystems);
                 map.Show();

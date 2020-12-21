@@ -248,9 +248,6 @@ namespace EDDiscovery.UserControls
                 textBoxSystem.Text = he.System.Name;
                 panelFD.BackgroundImage = (lastfsd != null && (lastfsd.journalEntry as EliteDangerousCore.JournalEvents.JournalFSDJump).EDSMFirstDiscover) ? EDDiscovery.Icons.Controls.firstdiscover : EDDiscovery.Icons.Controls.notfirstdiscover;
 
-                if (!he.System.HasEDDBInformation || !he.System.HasCoordinate)
-                    discoveryform.history.FillEDSM(he); // Fill in any EDSM info we have
-
                 textBoxBody.Text = he.WhereAmI + " (" + he.BodyType + ")";
 
                 bool hasmarketid = he?.MarketID.HasValue ?? false;
@@ -414,42 +411,27 @@ namespace EDDiscovery.UserControls
 
         private void buttonRossSystem_Click(object sender, EventArgs e)
         {
-            if (last_he != null)
-            {
-                discoveryform.history.FillEDSM(last_he);
-
-                if (last_he.System.EDDBID > 0)
-                    Process.Start(Properties.Resources.URLRossSystem + last_he.System.EDDBID.ToString());
-                else
-                    extButtonRossSystem.Enabled = extButtonEDDBSystem.Enabled = false;
-            }
+            if (last_he != null && last_he.System.EDDBID > 0)
+                Process.Start(Properties.Resources.URLRossSystem + last_he.System.EDDBID.ToString());
         }
 
         private void buttonEDSMSystem_Click(object sender, EventArgs e)
         {
             if (last_he != null)
             {
-                discoveryform.history.FillEDSM(last_he);
-
-                if (last_he.System != null) // solve a possible exception
+                long? id_edsm = last_he.System.EDSMID;
+                if (id_edsm <= 0)
                 {
-                    if (!String.IsNullOrEmpty(last_he.System.Name))
-                    {
-                        long? id_edsm = last_he.System.EDSMID;
-                        if (id_edsm <= 0)
-                        {
-                            id_edsm = null;
-                        }
-
-                        EDSMClass edsm = new EDSMClass();
-                        string url = edsm.GetUrlToEDSMSystem(last_he.System.Name, id_edsm);
-
-                        if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
-                            Process.Start(url);
-                        else
-                            ExtendedControls.MessageBoxTheme.Show(FindForm(), "System unknown to EDSM".T(EDTx.UserControlSysInfo_SysUnk));
-                    }
+                    id_edsm = null;
                 }
+
+                EDSMClass edsm = new EDSMClass();
+                string url = edsm.GetUrlToEDSMSystem(last_he.System.Name, id_edsm);
+
+                if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
+                    Process.Start(url);
+                else
+                    ExtendedControls.MessageBoxTheme.Show(FindForm(), "System unknown to EDSM".T(EDTx.UserControlSysInfo_SysUnk));
             }
         }
 

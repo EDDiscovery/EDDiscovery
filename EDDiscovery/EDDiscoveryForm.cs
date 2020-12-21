@@ -1262,8 +1262,6 @@ namespace EDDiscovery
         {
             this.Cursor = Cursors.WaitCursor;
 
-            history.FillInPositionsFSDJumps();
-
             Map.Prepare(he?.System, EDCommander.Current.HomeSystemTextOrSol,
                         EDCommander.Current.MapCentreOnSelection ? he?.System : EDCommander.Current.HomeSystemIOrSol,
                         EDCommander.Current.MapZoom, Controller.history.FilterByTravel());
