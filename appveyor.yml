@@ -17,8 +17,6 @@ for:
     project: EDDiscovery.sln
   after_build:
     - cmd: copy EDDiscovery\bin\Release\EDDiscovery.Portable.zip EDDiscovery.Portable.zip
-  test_script:
-    - nunit3-console EDDiscoveryTests\bin\Release\EDDiscoveryTests.dll --result=myresults.xml;format=AppVeyor
   artifacts:
     - path: EDDiscovery.Portable.zip
 -
@@ -27,8 +25,5 @@ for:
       - image: Ubuntu
   build_script:
     - msbuild /p:Configuration=Release EDDiscovery.sln /p:DefineConstants=NO_SYSTEM_SPEECH
-  test_script:
-    - nuget install NUnit.ConsoleRunner -OutputDirectory testrunner
-    - mono ./testrunner/NUnit.ConsoleRunner.*/tools/nunit3-console.exe ./EDDiscoveryTests/bin/Release/EDDiscoveryTests.dll --result=myresults.xml;format=AppVeyor
 cache:
   - packages -> **\packages.config
