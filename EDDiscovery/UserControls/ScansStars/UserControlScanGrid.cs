@@ -633,7 +633,7 @@ namespace EDDiscovery.UserControls
 
         void dataGridViewScangrid_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.ColumnIndex == 4)
+            if (e.ColumnIndex == 4 && e.RowIndex>=0)
             {
                 var curdata = dataGridViewScangrid.Rows[e.RowIndex].Cells[4].Value;
                 dataGridViewScangrid.Rows[e.RowIndex].Cells[4].Value = dataGridViewScangrid.Rows[e.RowIndex].Cells[4].Tag;
