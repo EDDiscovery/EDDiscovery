@@ -50,7 +50,7 @@ namespace EDDiscoveryTests
         public void No_filter_does_not_filter_anything()
         {
             JournalFSDJump jsd = new JournalFSDJump(DateTime.UtcNow.Subtract(TimeSpan.FromDays(500000)), sol, 0, false, false);
-            var veryOldData = HistoryEntry.FromJournalEntry(jsd, null, true, out bool notused);
+            var veryOldData = HistoryEntry.FromJournalEntry(jsd, null);
             var input = new HistoryList(new List<HistoryEntry> { veryOldData });
 
             Check.That(TravelHistoryFilter.NoFilter.Filter(input.EntryOrder())).ContainsExactly(veryOldData);
