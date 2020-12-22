@@ -67,6 +67,7 @@ namespace EDDiscovery
         EDDiscoveryForm_VSLFileErr, // Error writing {0} export visited stars
         EDDiscoveryForm_InaraW, // Inara historic upload is disabled until 1 hour has elapsed from the last try to prevent server flooding
         EDDiscoveryForm_IndexW, // Are you sure to Rebuild Indexes? It may take a long time.
+        EDDiscoveryForm_FillPos, // Are you sure to Rebuild Indexes? It may take a long time.
         EDDiscoveryForm_RemoveDLLPerms, // remove dll etc.
         EDDiscoveryForm_RH, // Refresh History.
         EDDiscoveryForm_NoEDSMAPI, // Please ensure a commander is selected and it has a EDSM API key set
@@ -79,7 +80,6 @@ namespace EDDiscovery
         EDDiscoveryForm_WSD, // *** Web server is disabled ***
         EDDiscoveryForm_CloseWarning, // EDDiscovery is updating the EDSM and EDDB databases
         EDDiscoveryForm_SafeMode, // To start in safe mode, exit the program, hold down the shift key
-        EDDiscoveryForm_ResetEDSMID, // Confirm you wish to reset the assigned EDSM ID
 
         EDDiscoveryController_CD, // Closing down, please wait..
         EDDiscoveryController_EDSM, // Get galactic mapping from EDSM.

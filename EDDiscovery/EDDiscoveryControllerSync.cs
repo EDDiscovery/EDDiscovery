@@ -30,15 +30,13 @@ namespace EDDiscovery
         private class SystemsSyncState
         {
             public bool perform_edsm_fullsync = false;
-            public bool perform_eddb_edsmalias_sync = false;
+            public bool perform_edsm_alias_sync = false;
 
             public long edsm_fullsync_count = 0;
             public long edsm_updatesync_count = 0;
-            public long eddb_sync_count = 0;
 
             public void ClearCounters()
             {
-                eddb_sync_count = 0;
                 edsm_fullsync_count = 0;
                 edsm_updatesync_count = 0;
             }
@@ -46,15 +44,15 @@ namespace EDDiscovery
 
         private SystemsSyncState syncstate = new SystemsSyncState();
 
-        private int resyncEDSMEDDBRequestedFlag = 0;            // flag gets set during EDSM refresh, cleared at end, interlocked exchange during request..
+        private int resyncEDSMRequestedFlag = 0;            // flag gets set during EDSM refresh, cleared at end, interlocked exchange during request..
 
-        public bool AsyncPerformSync(bool eddb_edsmalias_sync = false, bool edsmfullsync = false)      // UI thread.
+        public bool AsyncPerformSync(bool edsm_alias_sync = false, bool edsmfullsync = false)      // UI thread.
         {
             Debug.Assert(System.Windows.Forms.Application.MessageLoop);
 
-            if (Interlocked.CompareExchange(ref resyncEDSMEDDBRequestedFlag, 1, 0) == 0)
+            if (Interlocked.CompareExchange(ref resyncEDSMRequestedFlag, 1, 0) == 0)
             {
-                syncstate.perform_eddb_edsmalias_sync |= eddb_edsmalias_sync;
+                syncstate.perform_edsm_alias_sync |= edsm_alias_sync;
                 syncstate.perform_edsm_fullsync |= edsmfullsync;
                 resyncRequestedEvent.Set();
                 return true;
@@ -67,7 +65,7 @@ namespace EDDiscovery
 
         public void CheckForSync()      // called in background init
         {
-            if (!EDDOptions.Instance.NoSystemsLoad && EDDConfig.Instance.EDSMEDDBDownload)        // if enabled
+            if (!EDDOptions.Instance.NoSystemsLoad && EDDConfig.Instance.EDSMDownload)        // if enabled
             {
                 DateTime edsmdatetime = SystemsDatabase.Instance.GetLastEDSMRecordTimeUTC();
 
@@ -77,14 +75,14 @@ namespace EDDiscovery
                     syncstate.perform_edsm_fullsync = true;       // do a full sync.
                 }
 
-                DateTime eddbdatetime = SystemsDatabase.Instance.GetLastEDDBDownloadTime();
+                DateTime aliasdatetime = SystemsDatabase.Instance.GetLastAliasDownloadTime();
 
-                if (DateTime.UtcNow.Subtract(eddbdatetime).TotalDays > 6.5)     // Get EDDB data once every week.
-                    syncstate.perform_eddb_edsmalias_sync = true;
+                if (DateTime.UtcNow.Subtract(aliasdatetime).TotalDays > 6.5)     // Get this data once every week.
+                    syncstate.perform_edsm_alias_sync = true;
 
-                if (syncstate.perform_eddb_edsmalias_sync || syncstate.perform_edsm_fullsync)
+                if (syncstate.perform_edsm_alias_sync || syncstate.perform_edsm_fullsync)
                 {
-                    string databases = (syncstate.perform_edsm_fullsync && syncstate.perform_eddb_edsmalias_sync) ? "EDSM and EDDB" : ((syncstate.perform_edsm_fullsync) ? "EDSM" : "EDDB");
+                    string databases = "EDSM";
 
                     LogLine(string.Format("Full system data download from {0} required." + Environment.NewLine +
                                     "This will take a while, please be patient." + Environment.NewLine +
@@ -101,14 +99,14 @@ namespace EDDiscovery
         {
             InvokeAsyncOnUiThread.Invoke(() => OnSyncStarting?.Invoke());       // tell listeners sync is starting
 
-            resyncEDSMEDDBRequestedFlag = 1;     // sync is happening, stop any async requests..
+            resyncEDSMRequestedFlag = 1;     // sync is happening, stop any async requests..
 
             // check for 102, if so, upgrade it..
             SystemsDatabase.Instance.UpgradeSystemTableFrom102TypeDB(() => PendingClose, ReportSyncProgress, syncstate.perform_edsm_fullsync);
 
-            if (EDDConfig.Instance.EDSMEDDBDownload)      // if no system off, and EDSM download on
+            if (EDDConfig.Instance.EDSMDownload)      // if no system off, and EDSM download on
             {
-                Debug.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Perform System Data Download from EDSM/EDDB");
+                Debug.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Perform System Data Download from EDSM");
 
                 try
                 {
@@ -118,7 +116,7 @@ namespace EDDiscovery
 
                     syncstate.ClearCounters();
 
-                    if (syncstate.perform_edsm_fullsync || syncstate.perform_eddb_edsmalias_sync)
+                    if (syncstate.perform_edsm_fullsync || syncstate.perform_edsm_alias_sync)
                     {
                         if (syncstate.perform_edsm_fullsync && !PendingClose)
                         {
@@ -161,7 +159,7 @@ namespace EDDiscovery
                             }
                         }
 
-                        if (!PendingClose)
+                        if (!PendingClose && syncstate.perform_edsm_alias_sync)
                         {
                             try
                             {
@@ -171,36 +169,14 @@ namespace EDDiscovery
                                 if (jsonhidden != null)
                                 {
                                     SystemsDB.ParseAliasString(jsonhidden);
+                                    syncstate.perform_edsm_alias_sync = false;
 
-                                    string eddbsystems = Path.Combine(EliteConfigInstance.InstanceOptions.AppDataDirectory, "eddbsystems.json");
-
-                                    bool success = BaseUtils.DownloadFile.HTTPDownloadFile(EliteConfigInstance.InstanceConfig.EDDBSystemsURL, eddbsystems, false, out bool newfile);
-
-                                    syncstate.perform_eddb_edsmalias_sync = false;
-
-                                    if (success)
-                                    {
-                                        syncstate.eddb_sync_count = SystemsDB.ParseEDDBJSONFile(eddbsystems, () => PendingClose);
-
-                                        if (syncstate.eddb_sync_count < 0)      // on a cancel or error
-                                            return;
-
-                                        SystemsDatabase.Instance.SetLastEDDBDownloadTime();
-
-                                        BaseUtils.FileHelpers.DeleteFileNoError(eddbsystems);       // remove file - don't hold in storage
-                                    }
-                                    else
-                                    {
-                                        LogLineHighlight("Failed to download EDDB systems file. Try re-running EDD later");
-                                        BaseUtils.FileHelpers.DeleteFileNoError(eddbsystems);       // remove file - don't hold in storage
-                                        // we can continue, as its not the end of the world
-                                    }
-
+                                    SystemsDatabase.Instance.SetLastEDSMAliasDownloadTime();
                                 }
                             }
                             catch (Exception ex)
                             {
-                                LogLineHighlight("GetEDDBUpdate exception: " + ex.Message);
+                                LogLineHighlight("GetEDSMAlias exception: " + ex.Message);
                             }
                         }
                     }
@@ -232,12 +208,9 @@ namespace EDDiscovery
             if (syncstate.edsm_fullsync_count > 0 || syncstate.edsm_updatesync_count > 0)
                 LogLine(string.Format("EDSM systems update complete with {0} systems".T(EDTx.EDDiscoveryController_EDSMU), syncstate.edsm_fullsync_count + syncstate.edsm_updatesync_count));
 
-            if (syncstate.eddb_sync_count > 0)
-                LogLine(string.Format("EDDB systems update complete with {0} systems".T(EDTx.EDDiscoveryController_EDDBU), syncstate.eddb_sync_count));
-
-            if (syncstate.edsm_fullsync_count > 0 || syncstate.eddb_sync_count > 0 || syncstate.edsm_updatesync_count > 20000)   // if we have done a resync, or a major update sync (arb no)
+            if (syncstate.edsm_fullsync_count > 0 )   // if we have done a resync, or a major update sync (arb no)
             {
-                LogLine("Refresh due to updating EDSM or EDDB system data".T(EDTx.EDDiscoveryController_Refresh));
+                LogLine("Refresh due to updating EDSM system data".T(EDTx.EDDiscoveryController_Refresh));
                 RefreshHistoryAsync();
             }
 
@@ -245,7 +218,7 @@ namespace EDDiscovery
 
             ReportSyncProgress("");
 
-            resyncEDSMEDDBRequestedFlag = 0;        // releases flag and allow another async to happen
+            resyncEDSMRequestedFlag = 0;        // releases flag and allow another async to happen
 
             Debug.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Perform sync completed");
         }

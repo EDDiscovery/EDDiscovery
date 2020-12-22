@@ -281,7 +281,7 @@ namespace EDDiscovery.UserControls
                 //                System.Diagnostics.Debug.WriteLine("UserControlSysInfo sys info {0} {1} {2}", he.System.Name, he.System.EDSMID, he.System.EDDBID);
 
 
-                extButtonEDSMSystem.Enabled = extButtonRossSystem.Enabled = extButtonEDDBSystem.Enabled = extButtonInaraSystem.Enabled = extButtonSpanshSystem.Enabled = true;
+                extButtonEDSMSystem.Enabled = extButtonEDDBSystem.Enabled = extButtonInaraSystem.Enabled = extButtonSpanshSystem.Enabled = true;
 
                 string allegiance, economy, gov, faction, factionstate, security;
                 hl.ReturnSystemInfo(he, out allegiance, out economy, out gov, out faction, out factionstate, out security);
@@ -382,7 +382,7 @@ namespace EDDiscovery.UserControls
                                 extTextBoxStationFaction.Text = 
                                 "";
 
-                extButtonEDSMSystem.Enabled = extButtonRossSystem.Enabled = extButtonEDDBSystem.Enabled = extButtonInaraSystem.Enabled = extButtonSpanshSystem.Enabled = false;
+                extButtonEDSMSystem.Enabled = extButtonEDDBSystem.Enabled = extButtonInaraSystem.Enabled = extButtonSpanshSystem.Enabled = false;
                 extButtonEDDBStation.Enabled = extButtonInaraStation.Enabled = extButtonSpanshStation.Enabled = false;
                 extButtonCoriolis.Enabled = extButtonEDSY.Enabled = false;
                 SetNote("");
@@ -407,12 +407,6 @@ namespace EDDiscovery.UserControls
             {
                 System.Diagnostics.Process.Start(Properties.Resources.URLEDDBSystemName + HttpUtility.UrlEncode(last_he.System.Name));
             }
-        }
-
-        private void buttonRossSystem_Click(object sender, EventArgs e)
-        {
-            if (last_he != null && last_he.System.EDDBID > 0)
-                Process.Start(Properties.Resources.URLRossSystem + last_he.System.EDDBID.ToString());
         }
 
         private void buttonEDSMSystem_Click(object sender, EventArgs e)
@@ -772,9 +766,8 @@ namespace EDDiscovery.UserControls
                                         extButtonEDDBSystem.Location = new Point(extButtonEDSMSystem.Right + hspacing, extButtonEDSMSystem.Top);
                                         extButtonInaraSystem.Location = new Point(extButtonEDDBSystem.Right + hspacing, extButtonEDSMSystem.Top);
                                         extButtonSpanshSystem.Location = new Point(extButtonInaraSystem.Right + hspacing, extButtonEDSMSystem.Top);
-                                        extButtonRossSystem.Location = new Point(extButtonSpanshSystem.Right + hspacing, extButtonEDSMSystem.Top);
-                                        extButtonEDSMSystem.Visible = extButtonEDDBSystem.Visible = extButtonRossSystem.Visible = extButtonInaraSystem.Visible = extButtonSpanshSystem.Visible = true;
-                                        extButtonEDSMSystem.Tag = extButtonEDDBSystem.Tag = extButtonRossSystem.Tag = extButtonInaraSystem.Tag = extButtonSpanshSystem.Tag = si;
+                                        extButtonEDSMSystem.Visible = extButtonEDDBSystem.Visible = extButtonInaraSystem.Visible = extButtonSpanshSystem.Visible = true;
+                                        extButtonEDSMSystem.Tag = extButtonEDDBSystem.Tag = extButtonInaraSystem.Tag = extButtonSpanshSystem.Tag = si;
                                         itembottom = Math.Max(extButtonEDSMSystem.Bottom, itembottom);
                                     }
 
@@ -788,9 +781,8 @@ namespace EDDiscovery.UserControls
                                         extButtonEDDBSystem.Location = new Point(extButtonEDSMSystem.Right + hspacing, extButtonEDSMSystem.Top);
                                         extButtonInaraSystem.Location = new Point(extButtonEDDBSystem.Right + hspacing, extButtonEDSMSystem.Top);
                                         extButtonSpanshSystem.Location = new Point(extButtonInaraSystem.Right + hspacing, extButtonEDSMSystem.Top);
-                                        extButtonRossSystem.Location = new Point(extButtonSpanshSystem.Right + hspacing, extButtonEDSMSystem.Top);
-                                        labelOpen.Tag = extButtonEDSMSystem.Tag = extButtonEDDBSystem.Tag = extButtonRossSystem.Tag = extButtonInaraSystem.Tag = extButtonSpanshSystem.Tag = si;
-                                        extButtonEDSMSystem.Visible = extButtonEDDBSystem.Visible = extButtonRossSystem.Visible = extButtonInaraSystem.Visible = extButtonSpanshSystem.Visible = true;
+                                        labelOpen.Tag = extButtonEDSMSystem.Tag = extButtonEDDBSystem.Tag = extButtonInaraSystem.Tag = extButtonSpanshSystem.Tag = si;
+                                        extButtonEDSMSystem.Visible = extButtonEDDBSystem.Visible = extButtonInaraSystem.Visible = extButtonSpanshSystem.Visible = true;
                                         labelOpen.Visible = true;
                                         itembottom = extButtonEDSMSystem.Bottom;
                                     }

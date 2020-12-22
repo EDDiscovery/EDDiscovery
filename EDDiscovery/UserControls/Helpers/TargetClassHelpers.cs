@@ -57,7 +57,7 @@ namespace EDDiscovery.UserControls
 
             if (sc != null && sc.HasCoordinate)
             {
-                SystemNoteClass nc = SystemNoteClass.GetNoteOnSystem(sc.Name, sc.EDSMID);        // has it got a note?
+                SystemNoteClass nc = SystemNoteClass.GetNoteOnSystem(sc.Name);        // has it got a note?
 
                 if (nc != null)
                 {
@@ -127,7 +127,7 @@ namespace EDDiscovery.UserControls
             // try and find the associated bookmark..
             BookmarkClass bkmark = (curbookmark != null) ? curbookmark : (cursystem != null ? GlobalBookMarkList.Instance.FindBookmarkOnSystem(cursystem.Name) : null);
 
-            SystemNoteClass sn = (cursystem != null) ? SystemNoteClass.GetNoteOnSystem(cursystem.Name, cursystem.EDSMID) : null;
+            SystemNoteClass sn = (cursystem != null) ? SystemNoteClass.GetNoteOnSystem(cursystem.Name) : null;
             string note = (sn != null) ? sn.Note : "";
 
             BookmarkForm frm = new BookmarkForm(discoveryForm.history);

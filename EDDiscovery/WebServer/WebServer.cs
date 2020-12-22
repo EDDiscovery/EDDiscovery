@@ -376,17 +376,16 @@ namespace EDDiscovery.WebServer
 
                 // TBD.. if EDSMID = 0 , we may not have looked at it in the historywindow, do we want to do a lookup?
 
-                JObject eddb = new JObject();
-                eddb["EDDBID"] = he.System.EDDBID.ToStringInvariant();
+                JObject sysstate = new JObject();
 
                 hl.ReturnSystemInfo(he, out string allegiance, out string economy, out string gov, out string faction, out string factionstate, out string security);
-                eddb["State"] = factionstate;
-                eddb["Allegiance"] = allegiance;
-                eddb["Gov"] = gov;
-                eddb["Economy"] = economy;
-                eddb["Faction"] = faction;
-                eddb["Security"] = security;
-                response["EDDB"] = eddb;
+                sysstate["State"] = factionstate;
+                sysstate["Allegiance"] = allegiance;
+                sysstate["Gov"] = gov;
+                sysstate["Economy"] = economy;
+                sysstate["Faction"] = faction;
+                sysstate["Security"] = security;
+                response["EDDB"] = sysstate;
 
                 string shipname = "N/A", fuel = "N/A", range = "N/A", tanksize = "N/A";
                 string cargo = he.MaterialCommodity.CargoCount.ToStringInvariant();

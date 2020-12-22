@@ -241,7 +241,7 @@ namespace EDDiscovery.UserControls
 
             if (hl != null && hl.Count > 0)     // just for safety
             {
-                List<HistoryEntry> result = current_historylist.ReverseOrder();      // Standard filtering
+                List<HistoryEntry> result = current_historylist.LatestFirst();      // Standard filtering
 
                 int ftotal;         // event filter
                 result = HistoryList.FilterByJournalEvent(result, EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbFilterSave, "All"), out ftotal);

@@ -199,15 +199,7 @@ namespace EDDiscovery.Actions
                         }
                         else if (cmdname.Equals("ross"))
                         {
-                            string url = "";
-
-                            if (he.System.EDDBID > 0)
-                            {
-                                url = Properties.Resources.URLRossSystem + he.System.EDDBID.ToString();
-                                System.Diagnostics.Process.Start(url);
-                            }
-
-                            ap[prefix + "URL"] = url;
+                            ap.ReportError("Not implemented");
                         }
                         else if (cmdname.Equals("eddb"))
                         {

@@ -75,7 +75,7 @@ namespace EDDiscovery
 
         // During SYNC events
 
-        public event Action OnSyncStarting;                                 // UI. EDSM/EDDB sync starting
+        public event Action OnSyncStarting;                                 // UI. EDSM sync starting
         public event Action OnSyncComplete;                                 // UI. SYNC has completed
         public event Action<int, string> OnReportSyncProgress;              // UI. SYNC progress reporter
 
@@ -317,7 +317,7 @@ namespace EDDiscovery
                 DoRefreshHistory(new RefreshWorkerArgs { CurrentCommander = EDCommander.CurrentCmdrID });       // kick the background refresh worker thread into action
             }
 
-            CheckForSync();     // see if any EDSM/EDDB sync is needed - this just sets some variables up
+            CheckForSync();     // see if any EDSM sync is needed - this just sets some variables up
 
             System.Diagnostics.Debug.WriteLine("Background worker setting up refresh worker");
 
@@ -344,7 +344,7 @@ namespace EDDiscovery
 
                     if (wh == 1)
                     {
-                        if (!EDDOptions.Instance.NoSystemsLoad && EDDConfig.Instance.EDSMEDDBDownload)      // if no system off, and EDSM download on
+                        if (!EDDOptions.Instance.NoSystemsLoad && EDDConfig.Instance.EDSMDownload)      // if no system off, and EDSM download on
                             SystemsDatabase.Instance.WithReadWrite(() => DoPerformSync());
                     }
                 }

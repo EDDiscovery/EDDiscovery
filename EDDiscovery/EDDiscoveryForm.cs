@@ -344,12 +344,12 @@ namespace EDDiscovery
 
             if (EDDConfig.Instance.EDSMGridIDs == "Not Set")        // initial state
             {
-                EDDConfig.Instance.EDSMEDDBDownload = false;        // this stops the download working in the controller thread
+                EDDConfig.Instance.EDSMDownload = false;        // this stops the download working in the controller thread
                 var ressel = GalaxySectorSelect.SelectGalaxyMenu(this);
-                EDDConfig.Instance.EDSMEDDBDownload = ressel.Item1 != "None";
+                EDDConfig.Instance.EDSMDownload = ressel.Item1 != "None";
                 EDDConfig.Instance.EDSMGridIDs = ressel.Item2;
-                if (EDDConfig.Instance.EDSMEDDBDownload)
-                    Controller.AsyncPerformSync(edsmfullsync: true, eddb_edsmalias_sync: true);      // order another go.
+                if (EDDConfig.Instance.EDSMDownload)
+                    Controller.AsyncPerformSync(edsmfullsync: true, edsm_alias_sync: true);      // order another go.
             }
 
             if (EDDOptions.Instance.NoWindowReposition == false)
@@ -714,17 +714,17 @@ namespace EDDiscovery
 
 #endregion
 
-#region EDSM and EDDB syncs code
+#region EDSM syncs code
 
         private void edsmRefreshTimer_Tick(object sender, EventArgs e)
         {
             Controller.AsyncPerformSync();
         }
 
-        public void ForceEDSMEDDBFullRefresh()
+        public void ForceEDSMFullRefresh()
         {
             SystemsDatabase.Instance.ForceEDSMFullUpdate();
-            SystemsDatabase.Instance.ForceEDDBFullUpdate();
+            SystemsDatabase.Instance.ForceEDSMAliasFullUpdate();
             Controller.AsyncPerformSync(true, true);
         }
 
@@ -791,7 +791,7 @@ namespace EDDiscovery
                 System.Diagnostics.Trace.WriteLine("NE Second Actions slow " + t1.Item1);
 
             // all notes committed
-            SystemNoteClass.CommitDirtyNotes((snc) => { if (EDCommander.Current.SyncToEdsm && snc.FSDEntry) EDSMClass.SendComments(snc.SystemName, snc.Note, snc.EdsmId, he.Commander); });
+            SystemNoteClass.CommitDirtyNotes((snc) => { if (EDCommander.Current.SyncToEdsm && snc.FSDEntry) EDSMClass.SendComments(snc.SystemName, snc.Note, 0, he.Commander); });
 
             // HERE PERFORM CAPI.. DOCKED
 
@@ -928,7 +928,7 @@ namespace EDDiscovery
             {
                 e.Cancel = true;
 
-                bool goforit = !in_system_sync || ExtendedControls.MessageBoxTheme.Show("EDDiscovery is updating the EDSM and EDDB databases\r\nPress OK to close now, Cancel to wait until update is complete".T(EDTx.EDDiscoveryForm_CloseWarning), "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK;
+                bool goforit = !in_system_sync || ExtendedControls.MessageBoxTheme.Show("EDDiscovery is updating the EDSM databases\r\nPress OK to close now, Cancel to wait until update is complete".T(EDTx.EDDiscoveryForm_CloseWarning), "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK;
 
                 if (goforit)
                 {
@@ -947,7 +947,7 @@ namespace EDDiscovery
                 WebServer.Stop();
 
             // send any dirty notes.  if they are, the call back gets called. If we have EDSM sync on, and its an FSD entry, send it
-            SystemNoteClass.CommitDirtyNotes((snc) => { if (EDCommander.Current.SyncToEdsm && snc.FSDEntry) EDSMClass.SendComments(snc.SystemName, snc.Note, snc.EdsmId); });
+            SystemNoteClass.CommitDirtyNotes((snc) => { if (EDCommander.Current.SyncToEdsm && snc.FSDEntry) EDSMClass.SendComments(snc.SystemName, snc.Note); });
 
             screenshotconverter.SaveSettings();
             screenshotconverter.Stop();
@@ -1028,17 +1028,9 @@ namespace EDDiscovery
             Open3DMap(PrimaryCursor.GetCurrentHistoryEntry);
         }
 
-        private void forceEDDBUpdateToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (!EDDConfig.Instance.EDSMEDDBDownload)
-                ExtendedControls.MessageBoxTheme.Show(this, "Star Data download is disabled. Use Settings to reenable it".T(EDTx.EDDiscoveryForm_SDDis));
-            else if (!Controller.AsyncPerformSync(eddb_edsmalias_sync: true))      // we want it to have run, to completion, to allow another go..
-                ExtendedControls.MessageBoxTheme.Show(this, "Synchronisation to databases is in operation or pending, please wait".T(EDTx.EDDiscoveryForm_SDSyncErr));
-        }
-
         private void syncEDSMSystemsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (!EDDConfig.Instance.EDSMEDDBDownload)
+            if (!EDDConfig.Instance.EDSMDownload)
                 ExtendedControls.MessageBoxTheme.Show(this, "Star Data download is disabled. Use Settings to reenable it".T(EDTx.EDDiscoveryForm_SDDis));
             else if (ExtendedControls.MessageBoxTheme.Show(this, ("This can take a considerable amount of time and bandwidth" + Environment.NewLine + "Confirm you want to do this?").T(EDTx.EDDiscoveryForm_EDSMQ), "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel, MessageBoxIcon.Asterisk)  == DialogResult.OK )
             {
@@ -1113,29 +1105,6 @@ namespace EDDiscovery
         {
             PopOuts.MakeAllPopoutsOpaque();
         }
-
-        private void clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (ExtendedControls.MessageBoxTheme.Show(this, 
-                                ("Confirm you wish to reset the assigned EDSM ID\r\n" +
-                                "to all the current commander history entries,\r\n" +
-                                "and clear all the assigned EDSM IDs in all your notes for all commanders\r\n\r\n" +
-                                "This will not change your history, but when you next refresh,\r\n" +
-                                "it will try and reassign EDSM systems to your history and notes.\r\n" +
-                                "Use only if you think that the assignment of EDSM systems to entries is grossly wrong," +
-                                "or notes are going missing\r\n" +
-                                "\r\n" +
-                                "You can manually change one EDSM assigned system by right clicking\r\n" +
-                                "on the travel history and selecting the option").T(EDTx.EDDiscoveryForm_ResetEDSMID)
-                                , "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel) == DialogResult.OK)
-            {
-                JournalEntry.ClearEDSMID(EDCommander.CurrentCmdrID);
-                SystemNoteClass.ClearEDSMID();
-                Controller.RefreshHistoryAsync();
-            }
-
-        }
-
 
         private void paneleddiscovery_Click(object sender, EventArgs e)
         {
@@ -1303,11 +1272,29 @@ namespace EDDiscovery
                 ExtendedControls.MessageBoxTheme.Show(this, "Inara historic upload is disabled until 1 hour has elapsed from the last try to prevent server flooding".T(EDTx.EDDiscoveryForm_InaraW), "Warning".T(EDTx.Warning));
         }
 
+        private void rebuildUserDBIndexesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (ExtendedControls.MessageBoxTheme.Show(this, "Are you sure to Rebuild Indexes? It may take a long time.".T(EDTx.EDDiscoveryForm_IndexW), "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+            {
+                UserDatabase.Instance.RebuildIndexes(LogLine);
+            }
+        }
+
         private void rebuildSystemDBIndexesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (ExtendedControls.MessageBoxTheme.Show(this, "Are you sure to Rebuild Indexes? It may take a long time.".T(EDTx.EDDiscoveryForm_IndexW), "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
             {
                 SystemsDatabase.Instance.RebuildIndexes(LogLine);
+            }
+        }
+
+        private void updateUnknownSystemCoordsWithDataFromSystemDBToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (ExtendedControls.MessageBoxTheme.Show(this, 
+                    "Scan your history, and for systems without co-ordinates,\r\ntry and fill them in from your system database\r\nConfirm?".T(EDTx.EDDiscoveryForm_FillPos), 
+                    "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+            {
+                history.FillInPositionsFSDJumps();
             }
         }
 
@@ -1754,6 +1741,12 @@ namespace EDDiscovery
         {
             tabControlMain.HelpOn(this,extButtonDrawnHelp.PointToScreen(new Point(0, extButtonDrawnHelp.Bottom)), tabControlMain.SelectedIndex);
         }
+
+        private void mainMenu_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+
+        }
+
 
         #endregion
 

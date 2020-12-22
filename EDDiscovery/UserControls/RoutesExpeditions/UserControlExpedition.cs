@@ -202,7 +202,7 @@ namespace EDDiscovery.UserControls
                     dataGridView.Rows[rowindex].Cells[0].Style.ForeColor = (sys != null && sys.HasCoordinate) ? Color.Empty : discoveryform.theme.UnknownSystemColor;
 
                     string note = "";
-                    SystemNoteClass sn = SystemNoteClass.GetNoteOnSystem(sysname, sys?.EDSMID ?? -1);
+                    SystemNoteClass sn = SystemNoteClass.GetNoteOnSystem(sysname);
                     if (sn != null && !string.IsNullOrWhiteSpace(sn.Note))
                         note = sn.Note;
 

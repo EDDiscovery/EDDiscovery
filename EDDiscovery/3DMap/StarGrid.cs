@@ -35,7 +35,6 @@ namespace EDDiscovery
         public float Z { get; set; }
         public int Percentage { get; set; }          // foreground flags
         public float CalculatedDistance { get; set; }  // foreground.. what distance did we calc on..
-        public SystemsDB.SystemAskType dBAsk { get; set; } // set for an explicit ask for unpopulated systems
         public int Count { get { return array1displayed ? array1vertices : array2vertices; } }
         public int CountJustMade { get { return array1displayed ? array2vertices : array1vertices; } }
         public bool Working = false;
@@ -85,13 +84,13 @@ namespace EDDiscovery
             GridId.XZ(Id, out float x, out float z);
             if (array1displayed)
             {
-                SystemsDB.GetSystemVector(Id, ref array2, ref carray2, Percentage, FromIntXYZScalar, dBAsk);       // MAY return array/carray is null
+                SystemsDB.GetSystemVector(Id, ref array2, ref carray2, Percentage, FromIntXYZScalar);       // MAY return array/carray is null
                 array2vertices = array2.Length;
 //                System.Diagnostics.Debug.WriteLine("Grid " + Id + " " + x + "," + z + " into 2  at " + Percentage + " for " + array2vertices);
             }
             else
             {
-                SystemsDB.GetSystemVector(Id, ref array1, ref carray1, Percentage, FromIntXYZScalar, dBAsk);
+                SystemsDB.GetSystemVector(Id, ref array1, ref carray1, Percentage, FromIntXYZScalar);
                 array1vertices = array1.Length;
 //                System.Diagnostics.Debug.WriteLine("Grid " + Id + " " + x + "," + z + " into 1  at " + Percentage + " for " + array1vertices);
             }
@@ -119,7 +118,7 @@ namespace EDDiscovery
 
             foreach (HistoryEntry vs in cls)
             {                                                               // all vs stars which are not in edsm and have co-ords.
-                if (vs.IsLocOrJump && vs.System.source != SystemSource.FromEDSM && vs.System.HasCoordinate )
+                if (vs.IsLocOrJump && vs.System.Source != SystemSource.FromEDSM && vs.System.HasCoordinate )
                 {
                     Vector3 ent = new Vector3((float)vs.System.X, (float)vs.System.Y, (float)vs.System.Z);
                     if (!ents.Contains(ent))
@@ -382,7 +381,6 @@ namespace EDDiscovery
         private BlockingCollection<StarGrid> computed = new BlockingCollection<StarGrid>();
         private CancellationTokenSource canceltokensource = new CancellationTokenSource();
         private List<StarGrid> grids = new List<StarGrid>();        // unpopulated grid stars
-        private StarGrid populatedgrid;
         private StarGrid systemlistgrid;
         private System.Threading.Thread computeThread;
         private EventWaitHandle ewh = new EventWaitHandle(false, EventResetMode.AutoReset);
@@ -411,20 +409,12 @@ namespace EDDiscovery
                     bool ok = GridId.XZ(id, out xp, out zp);
                     Debug.Assert(ok);
                     StarGrid grd = new StarGrid(id, xp, zp, Color.Transparent, 1.0F);           //A=0 means use default colour array
-                    if (xp == 0 && zp == 0)                                     // sol grid, unpopulated stars please
-                        grd.dBAsk = SystemsDB.SystemAskType.UnpopulatedStars;
-
                     grids.Add(grd);
                 }
             }
 
             systemlistgrid = new StarGrid(-1, 0, 0, Color.Orange, 1.0F);    // grid ID -1 means it won't be filled by the Update task
             grids.Add(systemlistgrid);
-
-            int solid = GridId.Id(0, 0);                                    
-            populatedgrid = new StarGrid(solid, 0, 0, Color.Transparent, 1.0F);      // Duplicate grid id but asking for populated stars
-            populatedgrid.dBAsk = SystemsDB.SystemAskType.PopulatedStars;
-            grids.Add(populatedgrid);   // add last so shown last
 
             Trace.WriteLine("Grids " + grids.Count + " mid " + midpercentage + " far " + farpercentage);
         }
@@ -609,26 +599,17 @@ namespace EDDiscovery
 
         #region Draw
 
-        public void DrawAll(GLControl control, bool showstars , bool showstations )
+        public void DrawAll(GLControl control, bool showstars )
         {
-            if (ForceWhite)
-                populatedgrid.Color = (showstations) ? popcolour : Color.FromArgb(255, 212, 212, 212);
-            else
-                populatedgrid.Color = (showstations) ? popcolour : Color.Transparent;
-
             if (showstars)
             {
                 foreach (StarGrid grd in grids)
                 {
-                    if (grd != populatedgrid && grd != systemlistgrid)
+                    if ( grd != systemlistgrid)
                         grd.Color = (ForceWhite) ? Color.FromArgb(255, 212, 212, 212) : Color.Transparent;
 
                     grd.Draw(control);              // populated grid is in this list, so will be drawn..
                 }
-            }
-            else if ( showstations )                // if only stations on, draw it specially.
-            {
-                populatedgrid.Draw(control);
             }
         }
 
@@ -637,7 +618,7 @@ namespace EDDiscovery
 #region misc
 
         public Vector3? FindOverSystem(int x, int y, out float cursysdistz, StarGrid.TransFormInfo ti , 
-                                        bool showstars, bool showstations) // UI Call.
+                                        bool showstars) // UI Call.
         {
             Debug.Assert(Application.MessageLoop);
 
@@ -652,10 +633,6 @@ namespace EDDiscovery
                     if (cur != null)        // if found one, better than cursysdistz, use it
                         ret = cur;
                 }
-            }
-            else if ( showstations )
-            {
-                ret = populatedgrid.FindPoint(x, y, ref cursysdistz, ti);
             }
 
             return ret;

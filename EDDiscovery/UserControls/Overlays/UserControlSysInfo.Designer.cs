@@ -52,6 +52,7 @@ namespace EDDiscovery.UserControls
             this.toolStripVisits = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripBody = new System.Windows.Forms.ToolStripMenuItem();
             this.displayStationButtonsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.displayStationFactionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripPosition = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripDistanceFrom = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSystemState = new System.Windows.Forms.ToolStripMenuItem();
@@ -102,7 +103,6 @@ namespace EDDiscovery.UserControls
             this.extButtonEDDBStation = new ExtendedControls.ExtButton();
             this.extButtonEDDBSystem = new ExtendedControls.ExtButton();
             this.labelShip = new System.Windows.Forms.Label();
-            this.extButtonRossSystem = new ExtendedControls.ExtButton();
             this.labelMaterials = new System.Windows.Forms.Label();
             this.labelVisits = new System.Windows.Forms.Label();
             this.labelData = new System.Windows.Forms.Label();
@@ -138,7 +138,6 @@ namespace EDDiscovery.UserControls
             this.labelSolDist = new System.Windows.Forms.Label();
             this.labelHomeDist = new System.Windows.Forms.Label();
             this.textBoxHomeDist = new ExtendedControls.ExtTextBox();
-            this.displayStationFactionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip.SuspendLayout();
             this.extPanelScroll.SuspendLayout();
             this.SuspendLayout();
@@ -173,7 +172,7 @@ namespace EDDiscovery.UserControls
             this.toolStripReset,
             this.toolStripRemoveAll});
             this.contextMenuStrip.Name = "contextMenuStrip1";
-            this.contextMenuStrip.Size = new System.Drawing.Size(256, 598);
+            this.contextMenuStrip.Size = new System.Drawing.Size(256, 576);
             // 
             // toolStripSystem
             // 
@@ -234,6 +233,16 @@ namespace EDDiscovery.UserControls
             this.displayStationButtonsToolStripMenuItem.Size = new System.Drawing.Size(255, 22);
             this.displayStationButtonsToolStripMenuItem.Text = "Display Station Buttons";
             this.displayStationButtonsToolStripMenuItem.Click += new System.EventHandler(this.displayStationButtonsToolStripMenuItem_Click);
+            // 
+            // displayStationFactionToolStripMenuItem
+            // 
+            this.displayStationFactionToolStripMenuItem.Checked = true;
+            this.displayStationFactionToolStripMenuItem.CheckOnClick = true;
+            this.displayStationFactionToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.displayStationFactionToolStripMenuItem.Name = "displayStationFactionToolStripMenuItem";
+            this.displayStationFactionToolStripMenuItem.Size = new System.Drawing.Size(255, 22);
+            this.displayStationFactionToolStripMenuItem.Text = "Display Station Faction";
+            this.displayStationFactionToolStripMenuItem.Click += new System.EventHandler(this.displayStationFactionToolStripMenuItem_Click);
             // 
             // toolStripPosition
             // 
@@ -485,6 +494,7 @@ namespace EDDiscovery.UserControls
             this.textBoxTarget.TabIndex = 15;
             this.textBoxTarget.TabStop = false;
             this.textBoxTarget.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxTarget.TextChangedEvent = "";
             this.toolTip1.SetToolTip(this.textBoxTarget, "Sets the target");
             this.textBoxTarget.WordWrap = true;
             this.textBoxTarget.Click += new System.EventHandler(this.clickTextBox);
@@ -524,7 +534,6 @@ namespace EDDiscovery.UserControls
             this.extPanelScroll.Controls.Add(this.extButtonEDDBStation);
             this.extPanelScroll.Controls.Add(this.extButtonEDDBSystem);
             this.extPanelScroll.Controls.Add(this.labelShip);
-            this.extPanelScroll.Controls.Add(this.extButtonRossSystem);
             this.extPanelScroll.Controls.Add(this.labelMaterials);
             this.extPanelScroll.Controls.Add(this.labelVisits);
             this.extPanelScroll.Controls.Add(this.labelData);
@@ -860,7 +869,7 @@ namespace EDDiscovery.UserControls
             // 
             this.extButtonSpanshSystem.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.extButtonSpanshSystem.Image = global::EDDiscovery.Icons.Controls.spansh;
-            this.extButtonSpanshSystem.Location = new System.Drawing.Point(222, 36);
+            this.extButtonSpanshSystem.Location = new System.Drawing.Point(189, 36);
             this.extButtonSpanshSystem.Name = "extButtonSpanshSystem";
             this.extButtonSpanshSystem.Padding = new System.Windows.Forms.Padding(2);
             this.extButtonSpanshSystem.Size = new System.Drawing.Size(44, 20);
@@ -903,7 +912,7 @@ namespace EDDiscovery.UserControls
             // 
             this.extButtonInaraSystem.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.extButtonInaraSystem.Image = global::EDDiscovery.Icons.Controls.Inara;
-            this.extButtonInaraSystem.Location = new System.Drawing.Point(177, 36);
+            this.extButtonInaraSystem.Location = new System.Drawing.Point(144, 36);
             this.extButtonInaraSystem.Name = "extButtonInaraSystem";
             this.extButtonInaraSystem.Padding = new System.Windows.Forms.Padding(2);
             this.extButtonInaraSystem.Size = new System.Drawing.Size(44, 20);
@@ -995,21 +1004,6 @@ namespace EDDiscovery.UserControls
             this.labelShip.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
             this.labelShip.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
             this.labelShip.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
-            // 
-            // extButtonRossSystem
-            // 
-            this.extButtonRossSystem.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.extButtonRossSystem.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.extButtonRossSystem.Image = global::EDDiscovery.Icons.Controls.Ross;
-            this.extButtonRossSystem.Location = new System.Drawing.Point(151, 36);
-            this.extButtonRossSystem.Name = "extButtonRossSystem";
-            this.extButtonRossSystem.Padding = new System.Windows.Forms.Padding(2);
-            this.extButtonRossSystem.Size = new System.Drawing.Size(20, 20);
-            this.extButtonRossSystem.TabIndex = 6;
-            this.extButtonRossSystem.Click += new System.EventHandler(this.buttonRossSystem_Click);
-            this.extButtonRossSystem.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
-            this.extButtonRossSystem.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
-            this.extButtonRossSystem.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
             // 
             // labelMaterials
             // 
@@ -1838,16 +1832,6 @@ namespace EDDiscovery.UserControls
             this.textBoxHomeDist.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
             this.textBoxHomeDist.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
             // 
-            // displayStationFactionToolStripMenuItem
-            // 
-            this.displayStationFactionToolStripMenuItem.Checked = true;
-            this.displayStationFactionToolStripMenuItem.CheckOnClick = true;
-            this.displayStationFactionToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.displayStationFactionToolStripMenuItem.Name = "displayStationFactionToolStripMenuItem";
-            this.displayStationFactionToolStripMenuItem.Size = new System.Drawing.Size(255, 22);
-            this.displayStationFactionToolStripMenuItem.Text = "Display Station Faction";
-            this.displayStationFactionToolStripMenuItem.Click += new System.EventHandler(this.displayStationFactionToolStripMenuItem_Click);
-            // 
             // UserControlSysInfo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1882,7 +1866,6 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtTextBox textBoxEconomy;
         private ExtendedControls.ExtTextBox textBoxState;
         private ExtendedControls.ExtButton extButtonEDDBSystem;
-        private ExtendedControls.ExtButton extButtonRossSystem;
         private ExtendedControls.ExtTextBox textBoxHomeDist;
         private System.Windows.Forms.Label labelHomeDist;
         private ExtendedControls.ExtButton extButtonEDSMSystem;

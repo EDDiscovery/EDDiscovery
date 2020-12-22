@@ -865,7 +865,7 @@ namespace EDDiscovery
 
             //long t6 = _systemtickinterval.ElapsedMilliseconds;
 
-            stargrids.DrawAll(glControl, showStarstoolStripMenuItem.Checked, showStationsToolStripMenuItem.Checked);
+            stargrids.DrawAll(glControl, showStarstoolStripMenuItem.Checked);
 
            // long t7 = _systemtickinterval.ElapsedMilliseconds;
 
@@ -1854,7 +1854,7 @@ namespace EDDiscovery
                     info += Environment.NewLine + "Distance from " + clickedGMO.name + ": " + dist.ToString("0.0");
                 }
 
-                SystemNoteClass sn = SystemNoteClass.GetNoteOnSystem(sysname, hoversystem == null ? 0 : hoversystem.EDSMID);   // may be null
+                SystemNoteClass sn = SystemNoteClass.GetNoteOnSystem(sysname);   // may be null
                 if (!string.IsNullOrWhiteSpace(sn?.Note))
                 {
                     info += Environment.NewLine + "Notes: " + sn.Note.Trim();
@@ -1999,7 +1999,7 @@ namespace EDDiscovery
             {
                 if ( vs.System.HasCoordinate)
                 { 
-                    SystemNoteClass notecs = SystemNoteClass.GetNoteOnSystem(vs.System.Name, vs.System.EDSMID);
+                    SystemNoteClass notecs = SystemNoteClass.GetNoteOnSystem(vs.System.Name);
 
                     if (notecs!=null )
                     {
@@ -2085,7 +2085,7 @@ namespace EDDiscovery
 
             StarGrid.TransFormInfo ti = new StarGrid.TransFormInfo(matrixcalc.GetResMat, _znear, glControl.Width, glControl.Height, zoom.Current);
 
-            Vector3? posofsystem = stargrids.FindOverSystem(x, y, out cursysdistz, ti, showStarstoolStripMenuItem.Checked, showStationsToolStripMenuItem.Checked);
+            Vector3? posofsystem = stargrids.FindOverSystem(x, y, out cursysdistz, ti, showStarstoolStripMenuItem.Checked);
 
             if ( posofsystem == null )
                 posofsystem = starnameslist.FindOverSystem(x, y, out cursysdistz, ti); // in case these are showing

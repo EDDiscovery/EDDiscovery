@@ -102,7 +102,6 @@ namespace EDDiscovery.Actions
                 vars[prefix + "xpos"] = s.X.ToNANSafeString("0.###");
                 vars[prefix + "ypos"] = s.Y.ToNANSafeString("0.###");
                 vars[prefix + "zpos"] = s.Z.ToNANSafeString("0.###");
-                vars[prefix + "EDDBID"] = s.EDDBID.ToString(ct);
                 vars[prefix + "EDDBGovernment"] = s.Government.ToNullUnknownString();
                 vars[prefix + "EDDBAllegiance"] = s.Allegiance.ToNullUnknownString();
                 vars[prefix + "EDDBState"] = s.State.ToNullUnknownString();

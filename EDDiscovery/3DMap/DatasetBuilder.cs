@@ -122,7 +122,7 @@ namespace EDDiscovery._3DMap
             {
                 foreach (HistoryEntry vs in syslists.Where(s => s.IsLocOrJump))
                 {
-                    SystemNoteClass notecs = SystemNoteClass.GetNoteOnSystem(vs.System.Name, vs.System.EDSMID);
+                    SystemNoteClass notecs = SystemNoteClass.GetNoteOnSystem(vs.System.Name);
 
                     if (notecs != null)         // if we have a note..
                     {

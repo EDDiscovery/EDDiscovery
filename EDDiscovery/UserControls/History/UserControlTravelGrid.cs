@@ -223,6 +223,8 @@ namespace EDDiscovery.UserControls
             List<HistoryEntry> result = filter.Filter(hl.EntryOrder());
             fdropdown = hl.Count - result.Count();
 
+            //for (int i = 0; i < 10 && i < result.Count; i++)  System.Diagnostics.Debug.WriteLine("Hist {0} {1} {2}", result[i].EventTimeUTC, result[i].Indexno , result[i].EventSummary);
+
             result = HistoryList.FilterByJournalEvent(result, EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbFilterSave, "All"), out ftotalevents);
 
             result = FilterHelpers.FilterHistory(result, fieldfilter, discoveryform.Globals, out ftotalfilters);
@@ -1446,7 +1448,7 @@ namespace EDDiscovery.UserControls
                                           "Ship", "Summary", "Description", "Detailed Info",        //4
                                           "Note", "Travel Dist", "Travel Time", "Travel Jumps",     //8
                                           "Travelled MisJumps" , "X", "Y","Z" ,     //12
-                                          "JID", "EDSMID" , "EDDBID" };             //16
+                                          "JID", "EDSMID"};             //16
 
                     grd.GetLine += delegate (int r)
                     {
@@ -1471,7 +1473,6 @@ namespace EDDiscovery.UserControls
                             he.System.Z,
                             he.Journalid,
                             he.System.EDSMID,
-                            he.System.EDDBID,
                         };
                     };
 

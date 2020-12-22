@@ -199,7 +199,7 @@ namespace EDDiscovery.UserControls
                 }
 
                 string note = "";
-                SystemNoteClass sn = SystemNoteClass.GetNoteOnSystem(sysname, sys?.EDSMID ?? -1);
+                SystemNoteClass sn = SystemNoteClass.GetNoteOnSystem(sysname);
                 if (sn != null && !string.IsNullOrWhiteSpace(sn.Note))
                     note = sn.Note;
 

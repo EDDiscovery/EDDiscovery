@@ -92,8 +92,8 @@ namespace EDDiscovery.UserControls
             checkBoxCustomEnableScreenshots.Checked = discoveryform.screenshotconverter.AutoConvert;
             this.checkBoxCustomEnableScreenshots.CheckedChanged += new System.EventHandler(this.checkBoxCustomEnableScreenshots_CheckedChanged);
 
-            checkBoxCustomEDSMEDDBDownload.Checked = EDDConfig.Instance.EDSMEDDBDownload;
-            this.checkBoxCustomEDSMEDDBDownload.CheckedChanged += new System.EventHandler(this.checkBoxCustomEDSMDownload_CheckedChanged);
+            checkBoxCustomEDSMDownload.Checked = EDDConfig.Instance.EDSMDownload;
+            this.checkBoxCustomEDSMDownload.CheckedChanged += new System.EventHandler(this.checkBoxCustomEDSMDownload_CheckedChanged);
 
             comboBoxCustomHistoryLoadTime.Items = new string[] { "Disabled-Load All".T(EDTx.UserControlSettings_DLA), ">7 days old".T(EDTx.UserControlSettings_7daysold),
                 ">30 days old".T(EDTx.UserControlSettings_30daysold), ">60 days old".T(EDTx.UserControlSettings_60daysold), ">90 days old".T(EDTx.UserControlSettings_90daysold),
@@ -463,14 +463,14 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
-        #region EDDB EDSM
+        #region EDSM
 
         private void checkBoxCustomEDSMDownload_CheckedChanged(object sender, EventArgs e)
         {
-            EDDConfig.Instance.EDSMEDDBDownload = checkBoxCustomEDSMEDDBDownload.Checked;
+            EDDConfig.Instance.EDSMDownload = checkBoxCustomEDSMDownload.Checked;
 
 
-            if ( EDDConfig.Instance.EDSMEDDBDownload == true)   // if turned on
+            if ( EDDConfig.Instance.EDSMDownload == true)   // if turned on
             {
                 int gridsel = 0;
                 bool[] grids = new bool[GridId.MaxGridID];
@@ -499,7 +499,7 @@ namespace EDDiscovery.UserControls
 
                 if (gss.Action == GalaxySectorSelect.ActionToDo.Add)
                 {
-                    discoveryform.ForceEDSMEDDBFullRefresh();
+                    discoveryform.ForceEDSMFullRefresh();
                 }
                 else if (gss.Action == GalaxySectorSelect.ActionToDo.Remove)
                 {

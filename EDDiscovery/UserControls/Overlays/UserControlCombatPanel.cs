@@ -268,7 +268,7 @@ namespace EDDiscovery.UserControls
                 if (current.Type == FilterEntry.EntryType.Lastdock)
                     hel = HistoryList.LatestFirstToLastDock(discoveryform.history.EntryOrder());
                 else if (current.Type == FilterEntry.EntryType.All)
-                    hel = discoveryform.history.ReverseOrder();
+                    hel = discoveryform.history.LatestFirst();
                 else if (current.Type == FilterEntry.EntryType.Oneday)
                     hel = HistoryList.FilterByDateRangeLatestFirst(discoveryform.history.EntryOrder(), DateTime.UtcNow.AddDays(-1), DateTime.UtcNow);
                 else if (current.Type == FilterEntry.EntryType.Sevendays)
