@@ -154,7 +154,6 @@ namespace EDDiscovery
             drawADiscOnStarsWithPositionToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("Map3DDrawTravelDisc", true);
             useWhiteForDiscsInsteadOfAssignedMapColourToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("Map3DDrawTravelWhiteDisc", true);
             showStarstoolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("Map3DAllStars", false);
-            showStationsToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("Map3DButtonStations", false);
             toolStripButtonPerspective.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("Map3DPerspective", false);
             toolStripButtonGrid.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("Map3DCoarseGrid", true);
             toolStripButtonFineGrid.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("Map3DFineGrid", true);
@@ -458,7 +457,6 @@ namespace EDDiscovery
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("Map3DDrawTravelWhiteDisc", useWhiteForDiscsInsteadOfAssignedMapColourToolStripMenuItem.Checked);
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("Map3DAllStars", showStarstoolStripMenuItem.Checked);
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("Map3DButtonColours", enableColoursToolStripMenuItem.Checked);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("Map3DButtonStations", showStationsToolStripMenuItem.Checked);
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("Map3DCoarseGrid", toolStripButtonGrid.Checked);
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("Map3DFineGrid", toolStripButtonFineGrid.Checked);
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("Map3DCoords", toolStripButtonCoords.Checked);
