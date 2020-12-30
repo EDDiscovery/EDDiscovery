@@ -570,6 +570,8 @@
     <EmbeddedResource Include="Controls\SysInfo\notfirstdiscover.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Controls\Scan\Bodies\KnownFromEDSM.png" />
+    <EmbeddedResource Include="Controls\Scan\Bodies\NotMappedByAnyone.png" />
     <EmbeddedResource Include="Panels\Spansh.png" />
     <EmbeddedResource Include="Panels\Inara.PNG" />
     <EmbeddedResource Include="Panels\EDDB.png" />

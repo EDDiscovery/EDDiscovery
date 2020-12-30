@@ -136,7 +136,9 @@ namespace EDDiscovery.UserControls
  //  nodelabels[1] = nodelabels[1].AppendPrePad("" + sn.ScanData?.BodyID, Environment.NewLine);
 
                     bool valuable = sc.EstimatedValue >= ValueLimit;
-                    int iconoverlays = ShowOverlays ? ((sc.Terraformable ? 1 : 0) + (sc.HasMeaningfulVolcanism ? 1 : 0) + (valuable ? 1 : 0) + (sc.Mapped ? 1 : 0) + (sn.Signals != null ? 1 : 0)) : 0;
+                    int iconoverlays = ShowOverlays
+                        ? (sc.Terraformable ? 1 : 0) + (sc.HasMeaningfulVolcanism ? 1 : 0) + (valuable ? 1 : 0) + (sc.Mapped ? 1 : 0) + (sn.Signals != null ? 1 : 0) + (sc.BodyScanStatus != BodyScanStatus.Scanned ? 1 : 0)
+                        : 0;
 
                     //   if (sc.BodyName.Contains("4 b"))  iconoverlays = 0;
 
@@ -204,10 +206,26 @@ namespace EDDiscovery.UserControls
                                 pos += ovsize + 1;
                             }
 
-                            if (sc.Mapped)
+                            // Show icon of how well you know this body for meaningful statuses 
+                            switch (sc.BodyScanStatus)
                             {
-                                g.DrawImage(Icons.Controls.Scan_Bodies_Mapped, new Rectangle(0, pos, ovsize, ovsize));
-                                pos += ovsize + 1;
+                                case BodyScanStatus.KnownFromEDSM:
+                                    g.DrawImage(Icons.Controls.Scan_Bodies_KnownFromEDSM, new Rectangle(0, pos, ovsize, ovsize));
+                                    pos += ovsize + 1;
+                                    break;
+                                case BodyScanStatus.MappedByYou:
+                                    g.DrawImage(Icons.Controls.Scan_Bodies_Mapped, new Rectangle(0, pos, ovsize, ovsize));
+                                    pos += ovsize + 1;
+                                    break; 
+                                case BodyScanStatus.ScannedAndNotMappedByAnyone:
+                                    g.DrawImage(Icons.Controls.Scan_Bodies_NotMappedByAnyone, new Rectangle(0, pos, ovsize, ovsize));
+                                    pos += ovsize + 1;
+                                    break;
+                                case BodyScanStatus.ScannedAndWasMappedBySomeone:
+                                    // No special icon, though you may add one
+                                    break; 
+                                default:
+                                    break; 
                             }
 
                             if (sn.Signals != null)

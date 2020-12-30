@@ -168,6 +168,8 @@ namespace EDDiscovery.Icons
         public static Image Scan_Bodies_RingGap { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.Bodies.RingGap"); } }
         public static Image Scan_Bodies_MaterialMore { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.Bodies.MaterialMore"); } }
         public static Image Scan_Bodies_Material { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.Bodies.Material"); } }
+        public static Image Scan_Bodies_NotMappedByAnyone { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.Bodies.NotMappedByAnyone"); } }
+        public static Image Scan_Bodies_KnownFromEDSM { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.Bodies.KnownFromEDSM"); } }
         public static Image Scan_DisplaySystemAlways { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.DisplaySystemAlways"); } }
         public static Image Scan_ExportToExcel { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.ExportToExcel"); } }
         public static Image Scan_FetchEDSMBodies { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.FetchEDSMBodies"); } }
