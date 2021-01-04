@@ -702,7 +702,7 @@ namespace EDDiscovery
 
             if (EDCommander.Current.SyncToInara)
             {
-                EliteDangerousCore.Inara.InaraSync.Refresh(LogLine, history, EDCommander.Current);
+                EliteDangerousCore.Inara.InaraSync.Refresh(LogLine, history.GetLast, EDCommander.Current);
             }
 
             DLLManager.Refresh(EDCommander.Current.Name, EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(history.GetLast));

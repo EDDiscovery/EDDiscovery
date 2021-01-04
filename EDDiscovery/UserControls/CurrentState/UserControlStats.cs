@@ -23,7 +23,10 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+
+#if !NETCOREAPP
 using System.Windows.Forms.DataVisualization.Charting;
+#endif
 
 namespace EDDiscovery.UserControls
 {
@@ -31,10 +34,13 @@ namespace EDDiscovery.UserControls
     {
         private string DbSelectedTabSave { get { return DBName("StatsSelectedTab"); } }
         private string DbStatsTreeStateSave { get { return DBName("StatsTreeExpanded"); } }
+
+#if !NETCOREAPP
         private Chart mostVisited { get; set; }
+#endif
         bool wasTravelling;
 
-        #region Init
+#region Init
 
         public UserControlStats()
         {
@@ -44,6 +50,7 @@ namespace EDDiscovery.UserControls
 
             var corner = dataGridViewStats.TopLeftHeaderCell; // work around #1487
 
+#if !NETCOREAPP
             try
             {
                 Chart chart = new Chart();
@@ -69,6 +76,7 @@ namespace EDDiscovery.UserControls
             {
                 // Charting not implemented in mono System.Windows.Forms
             }
+#endif
         }
 
         public override void Init()
@@ -149,10 +157,10 @@ namespace EDDiscovery.UserControls
             last_he = he;
         }
 
-        #endregion
+#endregion
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////
-        #region Stats General
+#region Stats General
 
         private void StatsGeneral(HistoryEntry he, HistoryList hl)
         {
@@ -197,6 +205,7 @@ namespace EDDiscovery.UserControls
                 StatToDGVStats("Most Highest".T(EDTx.UserControlStats_MostHighest), GetSystemDataString(up));
                 StatToDGVStats("Most Lowest".T(EDTx.UserControlStats_MostLowest), GetSystemDataString(down));
 
+#if !NETCOREAPP
                 if (mostVisited != null)
                 {
                     var groupeddata = from data in hl.OrderByDate
@@ -240,11 +249,14 @@ namespace EDDiscovery.UserControls
                         i++;
                     }
                 }
+#endif
             }
+#if !NETCOREAPP
             else if (mostVisited != null)
             {
                 mostVisited.Visible = false;
             }
+#endif
 
             PerformLayout();
         }
@@ -275,11 +287,11 @@ namespace EDDiscovery.UserControls
             StatToDGVStats(title, data.ToString());
         }
 
-        #endregion
+#endregion
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        #region Travel Panel
+#region Travel Panel
 
         static JournalTypeEnum[] journalsForStatsTravel = new JournalTypeEnum[]
         {
@@ -542,10 +554,10 @@ namespace EDDiscovery.UserControls
             Stats(last_he, last_hl, true);
         }
 
-        #endregion
+#endregion
 
         /////////////////////////////////////////////////////////////        
-        #region SCAN 
+#region SCAN 
 
         void StatsScan(HistoryList hl)
         {
@@ -752,11 +764,11 @@ namespace EDDiscovery.UserControls
             Stats(last_he, last_hl, true);
         }
 
-        #endregion
+#endregion
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        #region STATS IN GAME
+#region STATS IN GAME
 
         void StatsGame(HistoryEntry he, HistoryList hl)
         {
@@ -939,9 +951,9 @@ namespace EDDiscovery.UserControls
             return result;
         }
 
-        #endregion
+#endregion
 
-        #region STATS_BY_SHIP
+#region STATS_BY_SHIP
 
         static JournalTypeEnum[] journalsForShipStats = new JournalTypeEnum[]
         {
@@ -1020,9 +1032,9 @@ namespace EDDiscovery.UserControls
                 e.SortDataGridViewColumnNumeric();
         }
 
-        #endregion
+#endregion
 
-        #region Helpers
+#region Helpers
 
         private static void ColumnValueAlignment(DataGridViewTextBoxColumn Col2)
         {
@@ -1075,15 +1087,18 @@ namespace EDDiscovery.UserControls
             var width = panelGeneral.Width - panelGeneral.ScrollBarWidth - dataGridViewStats.Left;
             dataGridViewStats.Width = width;
 
+#if !NETCOREAPP
             if (mostVisited != null)
             {
                 mostVisited.Width = width;
                 mostVisited.Top = dataGridViewStats.Bottom + 8;
             }
+#endif
+
             base.OnLayout(e);
         }
 
-        #endregion
+#endregion
 
 
     }
