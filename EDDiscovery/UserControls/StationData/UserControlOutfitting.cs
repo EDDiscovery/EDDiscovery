@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2017 EDDiscovery development team
+ * Copyright © 2016 - 2020 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -13,19 +13,15 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using EDDiscovery.Controls;
+using EliteDangerousCore;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
 using System.Data;
+using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using EDDiscovery.Controls;
-using System.IO;
-using EliteDangerousCore;
-using EliteDangerousCore.DB;
 
 namespace EDDiscovery.UserControls
 {
@@ -96,7 +92,7 @@ namespace EDDiscovery.UserControls
 
         private void UpdateComboBox(HistoryList hl)
         {
-            OutfittingList ofl = hl.outfitting;
+            OutfittingList ofl = hl.Outfitting;
             string cursel = comboBoxYards.Text;
 
             string the = "Travel History Entry".T(EDTx.UserControlOutfitting_TravelHistoryEntry);
@@ -159,7 +155,7 @@ namespace EDDiscovery.UserControls
             }
             else
             {
-                yard = discoveryform.history.outfitting.GetFilteredList().Find(x => x.Ident().Equals(comboBoxYards.Text));
+                yard = discoveryform.history.Outfitting.GetFilteredList().Find(x => x.Ident().Equals(comboBoxYards.Text));
             }
 
             if (yard != null)
@@ -168,7 +164,7 @@ namespace EDDiscovery.UserControls
             }
             else
             {
-                List<Tuple<Outfitting, List<Outfitting.OutfittingItem>>> itemlist = discoveryform.history.outfitting.GetItemTypeLocationsFromYardsWithoutRepeat(comboBoxYards.Text,nolocrepeats:true);
+                List<Tuple<Outfitting, List<Outfitting.OutfittingItem>>> itemlist = discoveryform.history.Outfitting.GetItemTypeLocationsFromYardsWithoutRepeat(comboBoxYards.Text,nolocrepeats:true);
                 if ( itemlist.Count > 0 )
                     DisplayItems(itemlist, comboBoxYards.Text);
             }
@@ -181,7 +177,7 @@ namespace EDDiscovery.UserControls
 
         private void DisplayItems(List<Tuple<Outfitting, List<Outfitting.OutfittingItem>>> itemlist, string moduletype)
         {
-            ISystem cursys = discoveryform.history.CurrentSystem;
+            ISystem cursys = discoveryform.history.CurrentSystem();
 
             foreach (var yard in itemlist)
             {
@@ -240,6 +236,8 @@ namespace EDDiscovery.UserControls
             Col3.Tag = null;
             Col4.HeaderText = "Mass".T(EDTx.UserControlOutfitting_Mass);
             Col4.Tag = "t";
+            ColPrice.HeaderText = "Price".T(EDTx.UserControlOutfitting_Price);
+            ColPrice.Tag = "cr";
         }
 
         #endregion

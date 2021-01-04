@@ -98,6 +98,8 @@ namespace EDDiscovery
                 {
                     case "safemode": SafeMode = true; break;
                     case "norepositionwindow": NoWindowReposition = true; break;
+                    case "minimize": case "minimise": MinimiseOnOpen = true; break;
+                    case "maximise": case "maximize": MaximiseOnOpen = true; break;
                     case "portable": StoreDataInProgramDirectory = true; break;
                     case "nrw": NoWindowReposition = true; break;
                     case "showactionbutton": ActionButton = true; break;
@@ -137,6 +139,7 @@ namespace EDDiscovery
                     case "nobackgroundpriority": BackgroundPriority = false; break;
                     case "forcetls12": ForceTLS12 = true; break;
                     case "disabletimedisplay": DisableTimeDisplay = true; break;
+                    case "disableversiondisplay": DisableVersionDisplay = true; break;
                     default:
                         System.Diagnostics.Debug.WriteLine($"Unrecognized option -{opt}");
                         break;
@@ -173,6 +176,8 @@ namespace EDDiscovery
         public string SystemDatabasePath { get; private set; }
         public string IconsPath { get; private set; }
         public bool NoWindowReposition { get; set; }
+        public bool MinimiseOnOpen { get; set; }
+        public bool MaximiseOnOpen { get; set; }
         public bool ActionButton { get; private set; }
         public bool NoLoad { get; private set; }
         public bool NoTheme { get; set; }
@@ -200,11 +205,12 @@ namespace EDDiscovery
         public string Commander { get; set; }                   // set commander, null if not
         public string Profile { get; set; }                   // set profile, null if not
         public bool TempDirInDataDir { get; set; }
-        public string WebServerFolder { get; set; }             // normally empty, so selections zip server
+        public string WebServerFolder { get; set; }             // normally empty, so selects zip server
         public bool LowPriority { get; set; }
         public bool BackgroundPriority { get; set; }
         public bool ForceTLS12 { get; set; }
         public bool DisableTimeDisplay { get; set; }
+        public bool DisableVersionDisplay { get; set; }
         public string OutputEventHelp { get; set; }
 
         public string SubAppDirectory(string subfolder)     // ensures its there.. name without \ slashes
@@ -227,10 +233,14 @@ namespace EDDiscovery
         public string FlightsAppDirectory() { return SubAppDirectory("Flights"); }
         public string ThemeAppDirectory() { return SubAppDirectory("Theme"); }
         public string DLLAppDirectory() { return SubAppDirectory("DLL"); }
+        public string HelpDirectory() { return SubAppDirectory("Help"); }
         public string TranslatorDirectory() { return translationfolder; }
         public int TranslatorDirectoryIncludeSearchUpDepth { get; private set; }
         static public string ExeDirectory() { return System.AppDomain.CurrentDomain.BaseDirectory;  }
         public string[] TranslatorFolders() { return new string[] { TranslatorDirectory(), ExeDirectory() }; }
+        public string ExeOptionsFile() { return Path.Combine(ExeDirectory(), "options.txt"); }
+        public string AppOptionsFile() { return Path.Combine(AppDataDirectory, "options.txt"); }
+        public string DbOptionsFile() { return Path.Combine(AppDataDirectory, "dboptions.txt"); }
 
         private string AppFolder;      // internal to use.. for -appfolder option
         private bool StoreDataInProgramDirectory;  // internal to us, to indicate portable
@@ -282,7 +292,7 @@ namespace EDDiscovery
             }
 
             if (!Directory.Exists(AppDataDirectory))        // make sure its there..
-                Directory.CreateDirectory(AppDataDirectory);
+                BaseUtils.FileHelpers.CreateDirectoryNoError(AppDataDirectory);
 
             if (TempDirInDataDir == true)
             {
@@ -380,6 +390,15 @@ namespace EDDiscovery
             }
         }
 
+        public void ResetSystemDatabasePath()
+        {
+            SystemDatabasePath = Path.Combine(AppDataDirectory, "EDDSystem.sqlite");
+        }
+
+        public void ResetUserDatabasePath()
+        {
+            UserDatabasePath = Path.Combine(AppDataDirectory, "EDDUser.sqlite");
+        }
 
         private void Init()
         {
@@ -392,7 +411,7 @@ namespace EDDiscovery
 
             ProcessCommandLineForOptionsFile(ExeDirectory(), ProcessOption);     // go thru the command line looking for -optionfile, use relative base dir
 
-            string optval = Path.Combine(ExeDirectory(), "options.txt");      // options in the exe folder.
+            string optval = ExeOptionsFile();      // options in the exe folder.
             if (File.Exists(optval))   // try options.txt in the base folder..
             {
                 ProcessOptionFile(optval, (optname, ca, toeol) =>              //FIRST pass thru options.txt options looking
@@ -412,12 +431,12 @@ namespace EDDiscovery
 
             ProcessCommandLineForOptionsFile(AppDataDirectory, ProcessOption);     // go thru the command line looking for -optionfile relative to app folder, then read them
 
-            optval = Path.Combine(AppDataDirectory, "options.txt");      // options in the base folder.
-            if (File.Exists(optval))   // try options.txt in the base folder..
+            optval = AppOptionsFile();      
+            if (File.Exists(optval))   // try options.txt in the app folder
                 ProcessOptionFile(optval, ProcessOption);
 
             // db move system option file will contain user and system db overrides
-            optval = Path.Combine(AppDataDirectory, "dboptions.txt");   // look for this file in the app folder
+            optval = DbOptionsFile();   // look for this file in the app folder
             if (File.Exists(optval))
                 ProcessOptionFile(optval, ProcessOption);
 
@@ -425,8 +444,10 @@ namespace EDDiscovery
 
             SetVersionDisplayString();  // then set the version display string up dependent on options selected
 
-            if (UserDatabasePath == null) UserDatabasePath = Path.Combine(AppDataDirectory, "EDDUser.sqlite");
-            if (SystemDatabasePath == null) SystemDatabasePath = Path.Combine(AppDataDirectory, "EDDSystem.sqlite");
+            if (UserDatabasePath == null)
+                ResetUserDatabasePath();
+            if (SystemDatabasePath == null)
+                ResetSystemDatabasePath();
 
             EliteDangerousCore.EliteConfigInstance.InstanceOptions = this;
         }

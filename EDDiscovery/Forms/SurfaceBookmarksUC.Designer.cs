@@ -38,7 +38,7 @@ namespace EDDiscovery.Forms
             this.labelSurface = new System.Windows.Forms.Label();
             this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.vScrollBarCustom1 = new ExtendedControls.ExtScrollBar();
-            this.dataGridViewMarks = new System.Windows.Forms.DataGridView();
+            this.dataGridViewMarks = new BaseUtils.DataGridViewBaseEnhancements();
             this.BodyName = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.SurfaceName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.SurfaceDesc = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -153,7 +153,6 @@ namespace EDDiscovery.Forms
             this.dataGridViewMarks.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewMarks_CellEndEdit);
             this.dataGridViewMarks.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.dataGridViewMarks_CellValidating);
             this.dataGridViewMarks.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.dataGridViewMarks_UserDeletingRow);
-            this.dataGridViewMarks.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridViewMarks_MouseDown);
             // 
             // BodyName
             // 
@@ -221,7 +220,7 @@ namespace EDDiscovery.Forms
 
         #endregion
 
-        private System.Windows.Forms.DataGridView dataGridViewMarks;
+        private BaseUtils.DataGridViewBaseEnhancements dataGridViewMarks;
         private System.Windows.Forms.Label labelSurface;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem sendToCompassToolStripMenuItem;

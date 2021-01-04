@@ -14,8 +14,6 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
-using EDDiscovery.Forms;
-using EliteDangerousCore.DB;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,7 +43,7 @@ namespace EDDiscovery
 
             int[] panelids;
             int[] displaynumbers;
-            int restoretab = 0;
+            int currentlyselectedtab = 0;
 
             string majortabs = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(EDDProfiles.Instance.UserControlsPrefix + "MajorTabControlList", "");
             string[] majortabnames = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(EDDProfiles.Instance.UserControlsPrefix + "MajorTabControlName", "").Replace("!error!", "+").Split(';');       // if its okay, load the name list
@@ -53,9 +51,9 @@ namespace EDDiscovery
             while (true)
             {
                 int[] rawtabctrl;
-                majortabs.RestoreArrayFromString(out rawtabctrl);
+                majortabs.RestoreArrayFromString(out rawtabctrl);       // string is : selectedtab, [ <PanelID>, <displayno> ]..
 
-                panelids = rawtabctrl.Where((value, index) => index % 2 != 0).ToArray();
+                panelids = rawtabctrl.Where((value, index) => index % 2 != 0).ToArray();          
                 displaynumbers = rawtabctrl.Where((value, index) => index > 0 && index % 2 == 0).ToArray();
 
                 if (resettabs || panelids.Length == 0 || panelids.Length != displaynumbers.Length || !panelids.Contains(-1) || !panelids.Contains((int)PanelInformation.PanelIDs.PanelSelector))
@@ -67,7 +65,7 @@ namespace EDDiscovery
                 else
                 {
                     if (rawtabctrl[0] > 0 && rawtabctrl[0] < panelids.Length)
-                        restoretab = rawtabctrl[0];
+                        currentlyselectedtab = rawtabctrl[0];
                     break;
                 }
             }
@@ -78,7 +76,7 @@ namespace EDDiscovery
 
                 try
                 {
-                    if (panelids[i] == -1)
+                    if (panelids[i] == -1)      // marker indicating the special history tab
                     {
                         TabPage p = CreateTab(PanelInformation.PanelIDs.SplitterControl, name ?? "History", displaynumbers[i], TabPages.Count);
                         p.Tag = true;       // this marks it as the primary tab..
@@ -96,7 +94,7 @@ namespace EDDiscovery
                 }
             }
 
-            SelectedIndex = restoretab;
+            SelectedIndex = currentlyselectedtab;
         }
 
         public void LoadTabs()     // called on Loading..
@@ -159,6 +157,22 @@ namespace EDDiscovery
                 uccb.InitialDisplay();
                 SelectedIndex = tabindex;   // and select the inserted one
             }
+        }
+
+        public void HelpOn(Form parent, System.Drawing.Point pt, int tabIndex)
+        {
+            if (tabIndex >= 0 && tabIndex < TabPages.Count)
+            {
+                TabPage page = TabPages[tabIndex];
+                if (page.Tag != null)
+                    EDDHelp.HistoryTab(parent, pt);
+                else
+                {
+                    UserControls.UserControlCommonBase uccb = page.Controls[0] as UserControls.UserControlCommonBase;
+                    EDDHelp.Help(parent, pt, uccb);
+                }
+            }
+
         }
 
         public void RenameTab(int tabIndex, string newname)

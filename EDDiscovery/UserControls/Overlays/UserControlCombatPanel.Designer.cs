@@ -47,7 +47,6 @@ namespace EDDiscovery.UserControls
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.panelStatus = new System.Windows.Forms.Panel();
             this.labelCredits = new ExtendedControls.ExtLabel();
             this.labelTotalKills = new ExtendedControls.ExtLabel();
@@ -64,7 +63,7 @@ namespace EDDiscovery.UserControls
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.dataViewScrollerPanelCombat = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.vScrollBarCustom1 = new ExtendedControls.ExtScrollBar();
-            this.dataGridViewCombat = new System.Windows.Forms.DataGridView();
+            this.dataGridViewCombat = new BaseUtils.DataGridViewColumnHider();
             this.Time = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Event = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Description = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -75,11 +74,6 @@ namespace EDDiscovery.UserControls
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCombat)).BeginInit();
             this.panelTop.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // contextMenuStrip
-            // 
-            this.contextMenuStrip.Name = "contextMenuStrip1";
-            this.contextMenuStrip.Size = new System.Drawing.Size(61, 4);
             // 
             // panelStatus
             // 
@@ -191,10 +185,13 @@ namespace EDDiscovery.UserControls
             // 
             this.checkBoxCustomGridOn.AutoSize = true;
             this.checkBoxCustomGridOn.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxCustomGridOn.CheckBoxDisabledScaling = 0.5F;
             this.checkBoxCustomGridOn.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxCustomGridOn.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxCustomGridOn.ImageButtonDisabledScaling = 0.5F;
+            this.checkBoxCustomGridOn.ImageIndeterminate = null;
             this.checkBoxCustomGridOn.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.checkBoxCustomGridOn.ImageUnchecked = null;
             this.checkBoxCustomGridOn.Location = new System.Drawing.Point(288, 1);
             this.checkBoxCustomGridOn.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.checkBoxCustomGridOn.MouseOverColor = System.Drawing.Color.CornflowerBlue;
@@ -266,13 +263,13 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom1.HideScrollBar = false;
             this.vScrollBarCustom1.LargeChange = 0;
-            this.vScrollBarCustom1.Location = new System.Drawing.Point(700, 0);
+            this.vScrollBarCustom1.Location = new System.Drawing.Point(697, 0);
             this.vScrollBarCustom1.Maximum = -1;
             this.vScrollBarCustom1.Minimum = 0;
             this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom1.Name = "vScrollBarCustom1";
-            this.vScrollBarCustom1.Size = new System.Drawing.Size(13, 255);
+            this.vScrollBarCustom1.Size = new System.Drawing.Size(16, 255);
             this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom1.SmallChange = 1;
             this.vScrollBarCustom1.TabIndex = 1;
@@ -321,11 +318,10 @@ namespace EDDiscovery.UserControls
             dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.dataGridViewCombat.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.dataGridViewCombat.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewCombat.Size = new System.Drawing.Size(700, 255);
+            this.dataGridViewCombat.Size = new System.Drawing.Size(697, 255);
             this.dataGridViewCombat.TabIndex = 0;
             this.dataGridViewCombat.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewCombat_CellDoubleClick);
             this.dataGridViewCombat.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewCombat_SortCompare);
-            this.dataGridViewCombat.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridViewCombat_MouseDown);
             // 
             // Time
             // 
@@ -384,12 +380,11 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
-        private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
         private ExtendedControls.ExtComboBox comboBoxCustomCampaign;
         private ExtendedControls.ExtButton buttonExtEditCampaign;
         private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanelCombat;
         private ExtendedControls.ExtScrollBar vScrollBarCustom1;
-        private System.Windows.Forms.DataGridView dataGridViewCombat;
+        private BaseUtils.DataGridViewColumnHider dataGridViewCombat;
         private ExtendedControls.ExtLabel labelTotalKills;
         private ExtendedControls.ExtLabel labelFactionKills;
         private ExtendedControls.ExtLabel labelTotalCrimes;

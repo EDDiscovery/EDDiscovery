@@ -70,6 +70,7 @@ namespace EDDiscovery.Actions
                 vars[prefix + "Group"] = he.Group;
                 vars[prefix + "Wanted"] = he.Wanted.ToStringIntValue();
                 vars[prefix + "MarketId"] = he.MarketID.HasValue ? he.MarketID.ToStringInvariant() : "0";
+                vars[prefix + "StationFaction "] = he.StationFaction ?? "";
 
                 vars[prefix + "Note"] = he.snc?.Note ?? "";
 
@@ -77,7 +78,7 @@ namespace EDDiscovery.Actions
                 vars[prefix + "EventDescription"] = EventDescription;
                 vars[prefix + "EventDetailedInfo"] = EventDetailedInfo;
 
-                vars.AddPropertiesFieldsOfClass(he.journalEntry, prefix + "Class_", new Type[] { typeof(System.Drawing.Icon), typeof(System.Drawing.Image), typeof(System.Drawing.Bitmap), typeof(Newtonsoft.Json.Linq.JObject) }, 5);      //depth seems good enough
+                vars.AddPropertiesFieldsOfClass(he.journalEntry, prefix + "Class_", new Type[] { typeof(System.Drawing.Icon), typeof(System.Drawing.Image), typeof(System.Drawing.Bitmap), typeof(BaseUtils.JSON.JObject) }, 5);      //depth seems good enough
 
                 // being backwards compatible to actions packs BEFORE the V3 change to remove JS vars
                 // these were the ones used in the pack..
@@ -101,7 +102,6 @@ namespace EDDiscovery.Actions
                 vars[prefix + "xpos"] = s.X.ToNANSafeString("0.###");
                 vars[prefix + "ypos"] = s.Y.ToNANSafeString("0.###");
                 vars[prefix + "zpos"] = s.Z.ToNANSafeString("0.###");
-                vars[prefix + "EDDBID"] = s.EDDBID.ToString(ct);
                 vars[prefix + "EDDBGovernment"] = s.Government.ToNullUnknownString();
                 vars[prefix + "EDDBAllegiance"] = s.Allegiance.ToNullUnknownString();
                 vars[prefix + "EDDBState"] = s.State.ToNullUnknownString();
@@ -144,26 +144,13 @@ namespace EDDiscovery.Actions
             vars[prefix + "Ship_CargoCapacity"] = cargo;
         }
 
+        // expensive. Scan command, Event Info, 
         static public void SystemVarsFurtherInfo(ActionLanguage.ActionProgramRun vars, HistoryList hl, ISystem s, string prefix)
         {
             System.Globalization.CultureInfo ct = System.Globalization.CultureInfo.InvariantCulture;
 
             vars[prefix + "VisitCount"] = hl.GetVisitsCount(s.Name).ToString(ct);
-            vars[prefix + "ScanCount"] = hl.GetScans(s.Name).Count.ToString(ct);
-            vars[prefix + "FSDJumpsTotal"] = hl.GetFSDCarrierJumps(new TimeSpan(100000, 0, 0, 0)).ToString(ct);
-        }
-
-        static public void HistoryEventFurtherInfo(ActionLanguage.ActionProgramRun vars, HistoryList hl, HistoryEntry he, string prefix)
-        {
-            if (he != null)
-            {
-                System.Globalization.CultureInfo ct = System.Globalization.CultureInfo.InvariantCulture;
-
-                int fsd = hl.GetFSDCarrierJumpsUTC(new DateTime(1980, 1, 1), he.EventTimeUTC);    // total before
-                if (he.IsFSDCarrierJump)   // if on an fsd, count this in
-                    fsd++;
-                vars[prefix + "FSDJump"] = fsd.ToString(ct);
-            }
+            // removed due to load in V21 (11.9.4+) vars[prefix + "ScanCount"] = hl.GetScans(s.Name).Count.ToString(ct); vars[prefix + "FSDJumpsTotal"] = hl.GetFSDCarrierJumps(new TimeSpan(100000, 0, 0, 0)).ToString(ct);
         }
 
         static public void ShipModuleInformation(ActionLanguage.ActionProgramRun vars, ShipInformation si, string prefix)

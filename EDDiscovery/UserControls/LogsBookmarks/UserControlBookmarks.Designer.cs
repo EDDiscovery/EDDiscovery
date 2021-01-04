@@ -40,7 +40,7 @@
             this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.vScrollBarCustom1 = new ExtendedControls.ExtScrollBar();
-            this.dataGridViewBookMarks = new System.Windows.Forms.DataGridView();
+            this.dataGridViewBookMarks = new BaseUtils.DataGridViewColumnHider();
             this.ColType = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColBookmarkName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColDescription = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -205,13 +205,13 @@
             this.vScrollBarCustom1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom1.HideScrollBar = false;
             this.vScrollBarCustom1.LargeChange = 0;
-            this.vScrollBarCustom1.Location = new System.Drawing.Point(663, 0);
+            this.vScrollBarCustom1.Location = new System.Drawing.Point(660, 0);
             this.vScrollBarCustom1.Maximum = -1;
             this.vScrollBarCustom1.Minimum = 0;
             this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom1.Name = "vScrollBarCustom1";
-            this.vScrollBarCustom1.Size = new System.Drawing.Size(13, 204);
+            this.vScrollBarCustom1.Size = new System.Drawing.Size(16, 204);
             this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom1.SmallChange = 1;
             this.vScrollBarCustom1.TabIndex = 6;
@@ -240,7 +240,7 @@
             this.dataGridViewBookMarks.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewBookMarks.Name = "dataGridViewBookMarks";
             this.dataGridViewBookMarks.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewBookMarks.Size = new System.Drawing.Size(663, 204);
+            this.dataGridViewBookMarks.Size = new System.Drawing.Size(660, 204);
             this.dataGridViewBookMarks.TabIndex = 4;
             this.dataGridViewBookMarks.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewBookMarks_CellDoubleClick);
             this.dataGridViewBookMarks.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewBookMarks_CellEndEdit);
@@ -357,7 +357,7 @@
         private ExtendedControls.ExtTextBox textBoxFilter;
         private System.Windows.Forms.Label labelSearch;
         private System.Windows.Forms.SplitContainer splitContainer;
-        private System.Windows.Forms.DataGridView dataGridViewBookMarks;
+        private BaseUtils.DataGridViewColumnHider dataGridViewBookMarks;
         private EDDiscovery.Forms.SurfaceBookmarkUserControl userControlSurfaceBookmarks;
         private ExtendedControls.ExtButton buttonNew;
         private ExtendedControls.ExtButton buttonEdit;

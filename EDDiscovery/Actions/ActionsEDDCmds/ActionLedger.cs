@@ -80,16 +80,16 @@ namespace EDDiscovery.Actions
                         return true;
                     }
 
-                    Ledger ml = (ap.actioncontroller as ActionController).HistoryList.cashledger;
+                    Ledger ml = (ap.actioncontroller as ActionController).HistoryList.CashLedger;
                     Ledger.Transaction tx = ml.Transactions.Find(x => x.jid == jid);// try and find it in the ledger
-                    int jidindex = (ap.actioncontroller as ActionController).HistoryList.EntryOrder.FindIndex(x => x.Journalid == jid);    // find it in the journal
+                    int jidindex = (ap.actioncontroller as ActionController).HistoryList.EntryOrder().FindIndex(x => x.Journalid == jid);    // find it in the journal
 
                     if ( tx == null && nextvalidentry ) // if not directly found..
                     {
                         while ( jidindex > 0 )      // go back, to 0.  if jidindex is -1 above, nothing happens
                         {
                             jidindex--;            // predec so we don't test first one
-                            jid = (ap.actioncontroller as ActionController).HistoryList.EntryOrder[jidindex].Journalid;
+                            jid = (ap.actioncontroller as ActionController).HistoryList.EntryOrder()[jidindex].Journalid;
                             tx = ml.Transactions.Find(x => x.jid == jid);
                             if (tx != null)
                                 break;
@@ -103,7 +103,7 @@ namespace EDDiscovery.Actions
                     }
 
                     ap[prefix + "JID"] = jid.ToString(System.Globalization.CultureInfo.InvariantCulture);
-                    ap[prefix + "IndexOf"] = (ap.actioncontroller as ActionController).HistoryList.EntryOrder[jidindex].Indexno.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                    ap[prefix + "IndexOf"] = (ap.actioncontroller as ActionController).HistoryList.EntryOrder()[jidindex].Indexno.ToString(System.Globalization.CultureInfo.InvariantCulture);
                     ap[prefix + "UTCTime"] = tx.utctime.ToStringUS();
                     ap[prefix + "EntryType"] = tx.jtype.ToString();
                     ap[prefix + "Notes"] = tx.notes;

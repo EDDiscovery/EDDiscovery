@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2017 EDDiscovery development team
+ * Copyright © 2016 - 2020 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -17,12 +17,8 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using EliteDangerousCore.DB;
 using EliteDangerousCore;
 
 namespace EDDiscovery.UserControls
@@ -165,7 +161,6 @@ namespace EDDiscovery.UserControls
             transparentfont = EDDTheme.Instance.GetFont;
 
             BaseUtils.Translator.Instance.Translate(this);
-            BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
 
             labelTarget.Size = new Size(1280, 24);
@@ -232,7 +227,7 @@ namespace EDDiscovery.UserControls
             labelTarget.TextBackColor = labelCredits.TextBackColor = labelTotalKills.TextBackColor = labelTotalReward.TextBackColor = labelFactionKills.TextBackColor = labelFactionReward.TextBackColor = labelFaction.TextBackColor = labelTotalCrimes.TextBackColor = labelBalance.TextBackColor = curbackcol;
 
         }
-        public override Color ColorTransparency { get { return Color.Green; } }
+        public override bool SupportTransparency { get { return true; } }
 
         private void dataGridViewCombat_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {
@@ -271,23 +266,23 @@ namespace EDDiscovery.UserControls
                 List<HistoryEntry> hel;
 
                 if (current.Type == FilterEntry.EntryType.Lastdock)
-                    hel = discoveryform.history.FilterToLastDock();
+                    hel = HistoryList.LatestFirstToLastDock(discoveryform.history.EntryOrder());
                 else if (current.Type == FilterEntry.EntryType.All)
-                    hel = discoveryform.history.LastFirst;
+                    hel = discoveryform.history.LatestFirst();
                 else if (current.Type == FilterEntry.EntryType.Oneday)
-                    hel = discoveryform.history.FilterByDateRangeLatestFirst(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow);
+                    hel = HistoryList.FilterByDateRangeLatestFirst(discoveryform.history.EntryOrder(), DateTime.UtcNow.AddDays(-1), DateTime.UtcNow);
                 else if (current.Type == FilterEntry.EntryType.Sevendays)
-                    hel = discoveryform.history.FilterByDateRangeLatestFirst(DateTime.UtcNow.AddDays(-7), DateTime.UtcNow);
+                    hel = HistoryList.FilterByDateRangeLatestFirst(discoveryform.history.EntryOrder(), DateTime.UtcNow.AddDays(-7), DateTime.UtcNow);
                 else if (current.Type == FilterEntry.EntryType.Today)
-                    hel = discoveryform.history.FilterByDateRangeLatestFirst(DateTime.UtcNow.Date, DateTime.UtcNow);
+                    hel = HistoryList.FilterByDateRangeLatestFirst(discoveryform.history.EntryOrder(), DateTime.UtcNow.Date, DateTime.UtcNow);
                 else if (current.Type == FilterEntry.EntryType.Mission)
                 {
                     // look up the mission in the current data
                     MissionState ml = current.MissionKey != null && discoveryform.history.GetLast.MissionList.Missions.ContainsKey(current.MissionKey) ? discoveryform.history.GetLast.MissionList.Missions[current.MissionKey] : null;
-                    hel = ml != null ? discoveryform.history.FilterByDateRangeLatestFirst(current.StartTimeUTC, ml.MissionEndTime) : new List<HistoryEntry>();
+                    hel = ml != null ? HistoryList.FilterByDateRangeLatestFirst(discoveryform.history.EntryOrder(), current.StartTimeUTC, ml.MissionEndTime) : new List<HistoryEntry>();
                 }
                 else
-                    hel = discoveryform.history.FilterByDateRangeLatestFirst(current.StartTimeUTC, current.EndTimeUTC);
+                    hel = HistoryList.FilterByDateRangeLatestFirst(discoveryform.history.EntryOrder(), current.StartTimeUTC, current.EndTimeUTC);
 
                 var rows = new List<DataGridViewRow>(hel.Count);
                 foreach (HistoryEntry he in hel)
@@ -681,34 +676,27 @@ namespace EDDiscovery.UserControls
 
         #region Clicks
 
-        int leftclickrow = -1;
-
-        private void dataGridViewCombat_MouseDown(object sender, MouseEventArgs e)
-        {
-            dataGridViewCombat.HandleClickOnDataGrid(e, out leftclickrow, out int unusedrightclickrow);
-        }
-
         private void dataGridViewCombat_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (leftclickrow >= 0)                                                   // Click expands it..
+            if (dataGridViewCombat.LeftClickRowValid)                                                   // Click expands it..
             {
-                DataGridViewRow row = dataGridViewCombat.Rows[leftclickrow];
+                DataGridViewRow row = dataGridViewCombat.Rows[dataGridViewCombat.LeftClickRow];
                 bool expanded = row.Cells[0].Tag != null;
 
-                var leftclicksystem = (HistoryEntry)dataGridViewCombat.Rows[leftclickrow].Tag;
+                var leftclicksystem = (HistoryEntry)dataGridViewCombat.Rows[dataGridViewCombat.LeftClickRow].Tag;
 
                 leftclicksystem.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
 
                 if (expanded) // put it back to original text
                 {
-                    dataGridViewCombat.Rows[leftclickrow].Cells[2].Value = EventDescription;
+                    dataGridViewCombat.Rows[dataGridViewCombat.LeftClickRow].Cells[2].Value = EventDescription;
                     row.Cells[0].Tag = null;
 
                     row.Cells[2].Style.WrapMode = row.Cells[1].Style.WrapMode = DataGridViewTriState.NotSet;
                 }
                 else
                 {
-                    dataGridViewCombat.Rows[leftclickrow].Cells[2].Value = EventDescription + ((EventDetailedInfo.Length > 0) ? (Environment.NewLine + EventDetailedInfo) : "");
+                    dataGridViewCombat.Rows[dataGridViewCombat.LeftClickRow].Cells[2].Value = EventDescription + ((EventDetailedInfo.Length > 0) ? (Environment.NewLine + EventDetailedInfo) : "");
                     row.Cells[0].Tag = true;
                     row.Cells[2].Style.WrapMode = row.Cells[1].Style.WrapMode = DataGridViewTriState.True;
                 }

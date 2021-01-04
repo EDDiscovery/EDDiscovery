@@ -41,7 +41,7 @@
             this.labelSearch = new System.Windows.Forms.Label();
             this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.vScrollBarCustom1 = new ExtendedControls.ExtScrollBar();
-            this.dataGridView = new System.Windows.Forms.DataGridView();
+            this.dataGridView = new BaseUtils.DataGridViewColumnHider();
             this.ColTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColBodyName = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -199,7 +199,6 @@
             this.dataViewScrollerPanel.Controls.Add(this.dataGridView);
             this.dataViewScrollerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewScrollerPanel.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.dataViewScrollerPanel.LimitLargeChange = 2147483647;
             this.dataViewScrollerPanel.Location = new System.Drawing.Point(0, 52);
             this.dataViewScrollerPanel.Name = "dataViewScrollerPanel";
             this.dataViewScrollerPanel.Size = new System.Drawing.Size(676, 391);
@@ -294,7 +293,7 @@
             this.openInEDSMToolStripMenuItem,
             this.openAScanPanelViewToolStripMenuItem});
             this.contextMenuStrip.Name = "contextMenuStripBookmarks";
-            this.contextMenuStrip.Size = new System.Drawing.Size(201, 70);
+            this.contextMenuStrip.Size = new System.Drawing.Size(201, 92);
             this.contextMenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Opening);
             // 
             // toolStripMenuItemGotoStar3dmap
@@ -381,7 +380,7 @@
         #endregion
         private ExtendedControls.ExtTextBox textBoxFilter;
         private System.Windows.Forms.Label labelSearch;
-        private System.Windows.Forms.DataGridView dataGridView;
+        private BaseUtils.DataGridViewColumnHider dataGridView;
         private ExtendedControls.ExtButton buttonNew;
         private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanel;
         private ExtendedControls.ExtScrollBar vScrollBarCustom1;

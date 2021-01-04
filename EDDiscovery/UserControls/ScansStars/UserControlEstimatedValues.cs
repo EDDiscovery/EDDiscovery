@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2017 EDDiscovery development team
+ * Copyright © 2016 - 2020 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -14,12 +14,10 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Windows.Forms;
 using EDDiscovery.Controls;
 using EliteDangerousCore;
-
+using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
 {
@@ -28,7 +26,7 @@ namespace EDDiscovery.UserControls
         private HistoryEntry last_he = null;
 
         private string DbEDSM { get { return DBName("EstimatedValueEDSM"); } }
-
+        private string DbColumnSaveFactions { get { return DBName("EstimatedValue", "DGVCol"); } }
 
         public UserControlEstimatedValues()
         {
@@ -56,6 +54,8 @@ namespace EDDiscovery.UserControls
         public override void LoadLayout()
         {
             uctg.OnTravelSelectionChanged += Display;
+            DGVLoadColumnLayout(dataGridViewEstimatedValues, DbColumnSaveFactions);
+
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
@@ -67,6 +67,8 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
+            DGVSaveColumnLayout(dataGridViewEstimatedValues, DbColumnSaveFactions);
+
             uctg.OnTravelSelectionChanged -= Display;
             discoveryform.OnNewEntry -= NewEntry;
         }
@@ -97,6 +99,9 @@ namespace EDDiscovery.UserControls
 
         async void DrawSystem()   // draw last_he
         {
+            DataGridViewColumn sortcol = dataGridViewEstimatedValues.SortedColumn != null ? dataGridViewEstimatedValues.SortedColumn : dataGridViewEstimatedValues.Columns[6];
+            SortOrder sortorder = dataGridViewEstimatedValues.SortOrder != SortOrder.None ? dataGridViewEstimatedValues.SortOrder : SortOrder.Descending;
+
             dataGridViewEstimatedValues.Rows.Clear();
 
             if (last_he == null)
@@ -105,7 +110,7 @@ namespace EDDiscovery.UserControls
                 return;
             }
 
-            StarScan.SystemNode last_sn = await discoveryform.history.starscan.FindSystemAsync(last_he.System, checkBoxEDSM.Checked);
+            StarScan.SystemNode last_sn = await discoveryform.history.StarScan.FindSystemAsync(last_he.System, checkBoxEDSM.Checked);
 
             SetControlText((last_sn == null) ? "No Scan".T(EDTx.NoScan) : string.Format("Estimated Scan Values for {0}".T(EDTx.UserControlEstimatedValues_SV), last_sn.system.Name));
 
@@ -115,10 +120,13 @@ namespace EDDiscovery.UserControls
                 {
                     if ( bodies.ScanData != null && bodies.ScanData.BodyName != null && (checkBoxEDSM.Checked || !bodies.ScanData.IsEDSMBody))     // if check edsm, or not edsm body, with scandata
                     {
-                         dataGridViewEstimatedValues.Rows.Add(new object[] { bodies.ScanData.BodyName, bodies.ScanData.PlanetClass, bodies.ScanData.IsEDSMBody ? "EDSM" : "", (bodies.IsMapped ? Icons.Controls.Scan_Bodies_Mapped : null), (bodies.ScanData.WasMapped == true? Icons.Controls.Scan_Bodies_Mapped : null), (bodies.ScanData.WasDiscovered == true ? Icons.Controls.Scan_DisplaySystemAlways : null), bodies.ScanData.EstimatedValue });
+                        string spclass = bodies.ScanData.IsStar ? bodies.ScanData.StarTypeText : bodies.ScanData.PlanetTypeText;
+                        dataGridViewEstimatedValues.Rows.Add(new object[] { bodies.ScanData.BodyName, spclass, bodies.ScanData.IsEDSMBody ? "EDSM" : "", (bodies.IsMapped ? Icons.Controls.Scan_Bodies_Mapped : null), (bodies.ScanData.WasMapped == true? Icons.Controls.Scan_Bodies_Mapped : null), (bodies.ScanData.WasDiscovered == true ? Icons.Controls.Scan_DisplaySystemAlways : null), bodies.ScanData.EstimatedValue });
                     }
                 }
-                dataGridViewEstimatedValues.Sort(this.EstValue, ListSortDirection.Descending);
+
+                dataGridViewEstimatedValues.Sort(sortcol, (sortorder == SortOrder.Descending) ? System.ComponentModel.ListSortDirection.Descending : System.ComponentModel.ListSortDirection.Ascending);
+                dataGridViewEstimatedValues.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
             }
         }
 
@@ -126,6 +134,13 @@ namespace EDDiscovery.UserControls
         {
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbEDSM, checkBoxEDSM.Checked);
             DrawSystem();
+        }
+
+        private void dataGridViewEstimatedValues_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
+        {
+            if (e.Column.Index == 6)
+                e.SortDataGridViewColumnNumeric();
+
         }
     }
 }

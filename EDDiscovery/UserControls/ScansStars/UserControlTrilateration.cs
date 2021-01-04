@@ -118,14 +118,14 @@ namespace EDDiscovery.UserControls
 
         private void buttonStartNew_Click(object sender, EventArgs e)
         {
-            HistoryEntry he = discoveryform.history.GetLastFSDOnly;
+            HistoryEntry he = discoveryform.history.GetLastFSDOnly();
             if (he != null)
                 Set(he.System);
         }
 
         private void toolStripButtonSector_Click(object sender, EventArgs e)
         {
-            HistoryEntry he = discoveryform.history.GetLastFSDOnly;
+            HistoryEntry he = discoveryform.history.GetLastFSDOnly();
             if (he != null)
                 Set(he.System);
         }
@@ -395,7 +395,7 @@ namespace EDDiscovery.UserControls
         {
             try
             {
-                HistoryEntry he = discoveryform.history.GetLastFSDOnly;
+                HistoryEntry he = discoveryform.history.GetLastFSDOnly();
 
                 if (he != null && !he.System.Name.Equals(targetsystem.Name, StringComparison.OrdinalIgnoreCase))
                 {
@@ -464,8 +464,7 @@ namespace EDDiscovery.UserControls
         {
             if (wanted == null) PopulateLocalWantedSystems();
             int i = 0;
-            var unknown = discoveryform.history
-                            .FilterByFSDOnly.ConvertAll<JournalFSDJump>(he => (he.journalEntry as JournalFSDJump))
+            var unknown = discoveryform.history.FilterByFSDOnly().ConvertAll<JournalFSDJump>(he => (he.journalEntry as JournalFSDJump))
                             .Where(fsd => !fsd.HasCoordinate);
             if(descending) unknown = unknown.OrderByDescending(fsd => fsd.EventTimeUTC);
             else unknown = unknown.OrderBy(fsd => fsd.EventTimeUTC);
@@ -773,7 +772,7 @@ namespace EDDiscovery.UserControls
             }
 
             SetTargetSystemUI();
-            toolStripLabelNoCoords.Text = discoveryform.history.FilterByFSDOnly.Where(j => !(j.journalEntry as JournalFSDJump).HasCoordinate).Count().ToString();
+            toolStripLabelNoCoords.Text = discoveryform.history.FilterByFSDOnly().Where(j => !(j.journalEntry as JournalFSDJump).HasCoordinate).Count().ToString();
 
             UnfreezeTrilaterationUI();
             dataGridViewDistances.Focus();
@@ -876,12 +875,12 @@ namespace EDDiscovery.UserControls
             // (re)set status
             if (system.HasCoordinate)
             {
-                dataGridViewDistances[3, cell.RowIndex].Value = "Pos: " + system.X.ToString() + ";" + "Pos: " + system.Y.ToString() + ";" + "Pos: " + system.Z.ToString();
+                dataGridViewDistances[3, cell.RowIndex].Value = "Pos: " + system.X.ToString() + "," + system.Y.ToString() + "," + system.Z.ToString();
             }
             else
             {
                 dataGridViewDistances[3, cell.RowIndex].Value = "Position unknown".T(EDTx.UserControlTrilateration_PU);
-                dataGridViewDistances[3, cell.RowIndex].Style.ForeColor = discoveryform.theme.NonVisitedSystemColor;
+                dataGridViewDistances[3, cell.RowIndex].Style.ForeColor = discoveryform.theme.UnknownSystemColor;
             }
         }
 
@@ -1030,7 +1029,7 @@ namespace EDDiscovery.UserControls
                     if (newSystem != null && newSystem.HasCoordinate)
                     {
                         systemCell.Tag = newSystem;
-                        dataGridViewDistances[3, i].Style.ForeColor = discoveryform.theme.VisitedSystemColor;
+                        dataGridViewDistances[3, i].Style.ForeColor = discoveryform.theme.KnownSystemColor;
                         dataGridViewDistances[3, i].Value = "Position found".T(EDTx.UserControlTrilateration_PF);
                     }
                 }

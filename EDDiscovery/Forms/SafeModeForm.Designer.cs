@@ -29,15 +29,17 @@
         private void InitializeComponent()
         {
             this.buttonDbs = new System.Windows.Forms.Button();
-            this.buttonNormal = new System.Windows.Forms.Button();
+            this.buttonRun = new System.Windows.Forms.Button();
             this.buttonPositions = new System.Windows.Forms.Button();
             this.buttonResetTheme = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
             this.buttonDeleteSystemDB = new System.Windows.Forms.Button();
             this.buttonResetTabs = new System.Windows.Forms.Button();
             this.buttonRemoveDLLs = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
+            this.buttonActionPacks = new System.Windows.Forms.Button();
             this.buttonLang = new System.Windows.Forms.Button();
+            this.buttonResetDBLoc = new System.Windows.Forms.Button();
+            this.buttonBackup = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // buttonDbs
@@ -50,16 +52,16 @@
             this.buttonDbs.UseVisualStyleBackColor = true;
             this.buttonDbs.Click += new System.EventHandler(this.buttonDbs_Click);
             // 
-            // buttonNormal
+            // buttonRun
             // 
-            this.buttonNormal.Location = new System.Drawing.Point(89, 291);
-            this.buttonNormal.Name = "buttonNormal";
-            this.buttonNormal.Size = new System.Drawing.Size(193, 23);
-            this.buttonNormal.TabIndex = 0;
-            this.buttonNormal.Text = "Run";
-            this.buttonNormal.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.buttonNormal.UseVisualStyleBackColor = true;
-            this.buttonNormal.Click += new System.EventHandler(this.Run_Click);
+            this.buttonRun.Location = new System.Drawing.Point(89, 334);
+            this.buttonRun.Name = "buttonRun";
+            this.buttonRun.Size = new System.Drawing.Size(193, 23);
+            this.buttonRun.TabIndex = 0;
+            this.buttonRun.Text = "Run";
+            this.buttonRun.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.buttonRun.UseVisualStyleBackColor = true;
+            this.buttonRun.Click += new System.EventHandler(this.Run_Click);
             // 
             // buttonPositions
             // 
@@ -83,7 +85,7 @@
             // 
             // buttonCancel
             // 
-            this.buttonCancel.Location = new System.Drawing.Point(89, 321);
+            this.buttonCancel.Location = new System.Drawing.Point(89, 364);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(193, 23);
             this.buttonCancel.TabIndex = 0;
@@ -94,7 +96,7 @@
             // 
             // buttonDeleteSystemDB
             // 
-            this.buttonDeleteSystemDB.Location = new System.Drawing.Point(89, 239);
+            this.buttonDeleteSystemDB.Location = new System.Drawing.Point(89, 266);
             this.buttonDeleteSystemDB.Name = "buttonDeleteSystemDB";
             this.buttonDeleteSystemDB.Size = new System.Drawing.Size(193, 23);
             this.buttonDeleteSystemDB.TabIndex = 0;
@@ -122,15 +124,15 @@
             this.buttonRemoveDLLs.UseVisualStyleBackColor = true;
             this.buttonRemoveDLLs.Click += new System.EventHandler(this.buttonRemoveDLLs_Click);
             // 
-            // button1
+            // buttonActionPacks
             // 
-            this.button1.Location = new System.Drawing.Point(89, 130);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(193, 23);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "Remove all Action Packs";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.buttonActionPacks.Location = new System.Drawing.Point(89, 130);
+            this.buttonActionPacks.Name = "buttonActionPacks";
+            this.buttonActionPacks.Size = new System.Drawing.Size(193, 23);
+            this.buttonActionPacks.TabIndex = 0;
+            this.buttonActionPacks.Text = "Remove all Action Packs";
+            this.buttonActionPacks.UseVisualStyleBackColor = true;
+            this.buttonActionPacks.Click += new System.EventHandler(this.buttonActions_Click);
             // 
             // buttonLang
             // 
@@ -142,17 +144,39 @@
             this.buttonLang.UseVisualStyleBackColor = true;
             this.buttonLang.Click += new System.EventHandler(this.buttonLang_Click);
             // 
+            // buttonResetDBLoc
+            // 
+            this.buttonResetDBLoc.Location = new System.Drawing.Point(89, 295);
+            this.buttonResetDBLoc.Name = "buttonResetDBLoc";
+            this.buttonResetDBLoc.Size = new System.Drawing.Size(193, 23);
+            this.buttonResetDBLoc.TabIndex = 0;
+            this.buttonResetDBLoc.Text = "Reset DB Location";
+            this.buttonResetDBLoc.UseVisualStyleBackColor = true;
+            this.buttonResetDBLoc.Click += new System.EventHandler(this.buttonResetDBLoc_Click);
+            // 
+            // buttonBackup
+            // 
+            this.buttonBackup.Location = new System.Drawing.Point(89, 237);
+            this.buttonBackup.Name = "buttonBackup";
+            this.buttonBackup.Size = new System.Drawing.Size(193, 23);
+            this.buttonBackup.TabIndex = 0;
+            this.buttonBackup.Text = "Backup Database";
+            this.buttonBackup.UseVisualStyleBackColor = true;
+            this.buttonBackup.Click += new System.EventHandler(this.buttonBackup_Click);
+            // 
             // SafeModeForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(370, 360);
+            this.ClientSize = new System.Drawing.Size(370, 408);
             this.Controls.Add(this.buttonCancel);
-            this.Controls.Add(this.buttonNormal);
+            this.Controls.Add(this.buttonRun);
             this.Controls.Add(this.buttonDeleteSystemDB);
+            this.Controls.Add(this.buttonResetDBLoc);
+            this.Controls.Add(this.buttonBackup);
             this.Controls.Add(this.buttonDbs);
             this.Controls.Add(this.buttonLang);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.buttonActionPacks);
             this.Controls.Add(this.buttonRemoveDLLs);
             this.Controls.Add(this.buttonResetTabs);
             this.Controls.Add(this.buttonPositions);
@@ -167,14 +191,16 @@
 
         #endregion
         private System.Windows.Forms.Button buttonDbs;
-        private System.Windows.Forms.Button buttonNormal;
+        private System.Windows.Forms.Button buttonRun;
         private System.Windows.Forms.Button buttonPositions;
         private System.Windows.Forms.Button buttonResetTheme;
         private System.Windows.Forms.Button buttonCancel;
         private System.Windows.Forms.Button buttonDeleteSystemDB;
         private System.Windows.Forms.Button buttonResetTabs;
         private System.Windows.Forms.Button buttonRemoveDLLs;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button buttonActionPacks;
         private System.Windows.Forms.Button buttonLang;
+        private System.Windows.Forms.Button buttonResetDBLoc;
+        private System.Windows.Forms.Button buttonBackup;
     }
 }

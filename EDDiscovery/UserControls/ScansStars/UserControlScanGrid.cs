@@ -180,7 +180,7 @@ namespace EDDiscovery.UserControls
             }
             else
             {
-                scannode = await discoveryform.history.starscan.FindSystemAsync(he.System, true);        // get data with EDSM
+                scannode = await discoveryform.history.StarScan.FindSystemAsync(he.System, true);        // get data with EDSM
 
                 if (scannode == null)     // no data, clear display, clear any last_he so samesys is false next time
                 {
@@ -582,7 +582,7 @@ namespace EDDiscovery.UserControls
             var cur = dataGridViewScangrid.Rows[e.RowIndex];
             Overlays overlays = cur.Cells[0].Tag as Overlays;       // may be null
 
-            if (cur.Tag != null)
+            if (cur.Tag != null && colImage.Visible)
             {
                 // we programatically draw the image because we have control over its pos/ size this way, which you can't do
                 // with a image column - there you can only draw a fixed image or stretch it to cell contents.. which we don't want to do
@@ -633,7 +633,7 @@ namespace EDDiscovery.UserControls
 
         void dataGridViewScangrid_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.ColumnIndex == 4)
+            if (e.ColumnIndex == 4 && e.RowIndex>=0)
             {
                 var curdata = dataGridViewScangrid.Rows[e.RowIndex].Cells[4].Value;
                 dataGridViewScangrid.Rows[e.RowIndex].Cells[4].Value = dataGridViewScangrid.Rows[e.RowIndex].Cells[4].Tag;
@@ -761,5 +761,6 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
+
     }
 }

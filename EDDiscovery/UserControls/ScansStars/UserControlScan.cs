@@ -114,11 +114,10 @@ namespace EDDiscovery.UserControls
             closing = true;
         }
 
-#endregion
+        #endregion
 
-#region Transparency
-        Color transparencycolor = Color.Green;
-        public override Color ColorTransparency { get { return transparencycolor; } }
+        #region Transparency
+        public override bool SupportTransparency { get { return true; } }
         public override void SetTransparency(bool on, Color curcol)
         {
             panelStars.SetBackground(curcol);
@@ -200,7 +199,7 @@ namespace EDDiscovery.UserControls
 #if PLAYTHRU
             StarScan.SystemNode data = showing_system != null ? await discoveryform.history.starscan.FindSystemAsync(showing_system, false, byname: true) : null;
 #else
-            StarScan.SystemNode data = showing_system != null ? await discoveryform.history.starscan.FindSystemAsync(showing_system, panelStars.CheckEDSM) : null;
+            StarScan.SystemNode data = showing_system != null ? await discoveryform.history.StarScan.FindSystemAsync(showing_system, panelStars.CheckEDSM) : null;
 #endif
             string control_text = "No System";
 
@@ -263,7 +262,7 @@ namespace EDDiscovery.UserControls
                     }
                 };
 
-                f.InitCentred(this.FindForm(), this.FindForm().Icon, "Show System".T(EDTx.UserControlScan_EnterSys), null, null, closeicon:true);
+                f.InitCentred(this.FindForm(), new Size(1, 1), new Size(50000, 50000), this.FindForm().Icon, "Show System".T(EDTx.UserControlScan_EnterSys), null, null, closeicon:true);
                 f.GetControl<ExtendedControls.ExtTextBoxAutoComplete>("Sys").SetAutoCompletor(SystemCache.ReturnSystemAutoCompleteList, true);
                 DialogResult res = f.ShowDialog(this.FindForm());
 
@@ -662,7 +661,11 @@ namespace EDDiscovery.UserControls
                                 writer.Write(csv.Format("WasDiscovered"));
                                 if (ShowStars)
                                 {
-                                    writer.Write(csv.Format("StarType"));
+                                    writer.Write(csv.Format("X"));
+                                    writer.Write(csv.Format("Y"));
+                                    writer.Write(csv.Format("Z"));
+                                    writer.Write(csv.Format("Star Type"));
+                                    writer.Write(csv.Format("Star Class"));
                                     writer.Write(csv.Format("StellarMass"));
                                     writer.Write(csv.Format("AbsoluteMagnitude"));
                                     writer.Write(csv.Format("Age MY"));
@@ -765,7 +768,26 @@ namespace EDDiscovery.UserControls
 
                                     if (ShowStars)
                                     {
+                                        string name = scan.StarSystem ?? scan.BodyName;   // early scans did not have starsystem
+                                        ISystem sys = null;
+                                        if ( name.HasChars() )
+                                            sys = discoveryform.history.FindSystem(name);
+
+                                        if (sys != null)
+                                        {
+                                            writer.Write(csv.Format(sys.X));
+                                            writer.Write(csv.Format(sys.Y));
+                                            writer.Write(csv.Format(sys.Z));
+                                        }
+                                        else
+                                        {
+                                            writer.Write(csv.Format(""));
+                                            writer.Write(csv.Format(""));
+                                            writer.Write(csv.Format(""));
+                                        }
+
                                         writer.Write(csv.Format(scan.StarType));
+                                        writer.Write(csv.Format(scan.StarClassification));
                                         writer.Write(csv.Format((scan.nStellarMass.HasValue) ? scan.nStellarMass.Value : 0));
                                         writer.Write(csv.Format((scan.nAbsoluteMagnitude.HasValue) ? scan.nAbsoluteMagnitude.Value : 0));
                                         writer.Write(csv.Format((scan.nAge.HasValue) ? scan.nAge.Value : 0));
@@ -851,8 +873,9 @@ namespace EDDiscovery.UserControls
                             System.Diagnostics.Process.Start(frm.Path);
                     }
                 }
-                catch
+                catch (Exception ex)
                 {
+                    System.Diagnostics.Debug.WriteLine("Scan excel " + ex);
                     ExtendedControls.MessageBoxTheme.Show(FindForm(), "Failed to write to " + frm.Path, "Export Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
             }

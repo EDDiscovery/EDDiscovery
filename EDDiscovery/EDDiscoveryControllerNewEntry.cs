@@ -74,15 +74,43 @@ namespace EDDiscovery
 
         private void ActionEntry(JournalEntry je)               // UI thread issue the JE to the system
         {
+            System.Diagnostics.Trace.WriteLine(string.Format(Environment.NewLine + "New JEntry {0} {1}", je.EventTimeUTC, je.EventTypeStr));
+
             OnNewJournalEntry?.Invoke(je);          // Always call this on all entries...
 
             // filter out commanders, and filter out any UI events
             if (je.CommanderId == history.CommanderId)
             {
-                HistoryEntry he = history.AddJournalEntry(je, h => LogLineHighlight(h));        // add a new one on top
-                //System.Diagnostics.Debug.WriteLine("Add HE " + he.EventSummary);
-                OnNewEntry?.Invoke(he, history);            // major hook
-                OnNewEntrySecond?.Invoke(he, history);      // secondary hook..
+                BaseUtils.AppTicks.TickCountLapDelta("CTNE", true);
+
+                HistoryEntry he = history.AddJournalEntryToHistory(je, h => LogLineHighlight(h));        // add a new one on top
+
+                var t1 = BaseUtils.AppTicks.TickCountLapDelta("CTNE");
+                if (t1.Item2 >= 20)
+                    System.Diagnostics.Trace.WriteLine(" NE Add Journal slow " + t1.Item1);
+
+                if (he != null)     // may reject it 
+                {
+                    if ( OnNewEntry != null)
+                    {
+                        foreach (var e in OnNewEntry.GetInvocationList())       // do the invokation manually, so we can time each method
+                        {
+                            Stopwatch sw = new Stopwatch(); sw.Start();
+                            e.DynamicInvoke(he, history);
+                            if ( sw.ElapsedMilliseconds >= 20)
+                                System.Diagnostics.Trace.WriteLine(" NE Add Method " + e.Method.DeclaringType + " took " + sw.ElapsedMilliseconds);
+                        }
+                    }
+
+                    var t2 = BaseUtils.AppTicks.TickCountLapDelta("CTNE");
+                    if (t2.Item2 >= 40)
+                        System.Diagnostics.Trace.WriteLine(" NE First Slow " + t2.Item1);
+
+                    OnNewEntrySecond?.Invoke(he, history);      // secondary hook..
+
+                    var t3 = BaseUtils.AppTicks.TickCountLapDelta("CTNE");
+                    System.Diagnostics.Trace.WriteLine("NE END " + t3.Item1 + " " + (t3.Item3 > 99 ? "!!!!!!!!!!!!!" : ""));
+                }
             }
 
             if (je.EventTypeID == JournalTypeEnum.LoadGame) // and issue this on Load game
@@ -106,14 +134,20 @@ namespace EDDiscovery
             Debug.Assert(System.Windows.Forms.Application.MessageLoop);
             //System.Diagnostics.Debug.WriteLine("Dispatch from controller UI event " + u.EventTypeStr);
 
+            BaseUtils.AppTicks.TickCountLapDelta("CTUI", true);
+
             var uifuel = u as EliteDangerousCore.UIEvents.UIFuel;       // UI Fuel has information on fuel level - update it.
             if (uifuel != null && history != null)
             {
-                history.shipinformationlist.UIFuel(uifuel);             // update the SI global value
-                history.GetLast?.UpdateShipInformation(history.shipinformationlist.CurrentShip);    // and make the last entry have this updated info.
+                history.ShipInformationList.UIFuel(uifuel);             // update the SI global value
+                history.GetLast?.UpdateShipInformation(history.ShipInformationList.CurrentShip);    // and make the last entry have this updated info.
             }
 
             OnNewUIEvent?.Invoke(u);
+
+            var t = BaseUtils.AppTicks.TickCountLapDelta("CTUI");
+            if ( t.Item2 > 25 )
+                System.Diagnostics.Debug.WriteLine( t.Item1 + " Controller UI !!!");
         }
     }
 }

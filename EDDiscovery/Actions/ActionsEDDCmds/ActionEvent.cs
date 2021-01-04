@@ -105,7 +105,7 @@ namespace EDDiscovery.Actions
                 {
                     if (jidindex != -1)
                     {
-                        ReportEntry(ap, hl.EntryOrder, jidindex, prefix);
+                        ReportEntry(ap, hl.EntryOrder(), jidindex, prefix);
                     }
                     else
                         ap.ReportError("No commands in Event");
@@ -148,11 +148,11 @@ namespace EDDiscovery.Actions
                     List<HistoryEntry> hltest;
 
                     if (jidindex == -1)     // if no JID given..
-                        hltest = hl.EntryOrder; // the whole list
+                        hltest = hl.EntryOrder(); // the whole list
                     else if (fwd)
-                        hltest = hl.EntryOrder.GetRange(jidindex + 1, hl.Count - (jidindex + 1));       // cut down list, excluding this entry
+                        hltest = hl.EntryOrder().GetRange(jidindex + 1, hl.Count - (jidindex + 1));       // cut down list, excluding this entry
                     else
-                        hltest = hl.EntryOrder.GetRange(0, jidindex );
+                        hltest = hl.EntryOrder().GetRange(0, jidindex );
 
                     if (eventnames.Count > 0)       // screen out event names
                         hltest = (from h in hltest where eventnames.Contains(h.journalEntry.EventTypeStr, StringComparer.OrdinalIgnoreCase) == !not select h).ToList();
@@ -173,7 +173,7 @@ namespace EDDiscovery.Actions
                         ap.ReportError("Valid JID must be given for command " + cmdname + " in Event");
                     else
                     {
-                        HistoryEntry he = hl.EntryOrder[jidindex];
+                        HistoryEntry he = hl.EntryOrder()[jidindex];
                         ap[prefix + "JID"] = jidindex.ToStringInvariant();
 
                         if (cmdname.Equals("action"))
@@ -183,8 +183,6 @@ namespace EDDiscovery.Actions
                         }
                         else if (cmdname.Equals("edsm"))
                         {
-                            (ap.actioncontroller as ActionController).HistoryList.FillEDSM(he);
-
                             long? id_edsm = he.System.EDSMID;
                             if (id_edsm <= 0)
                             {
@@ -201,35 +199,16 @@ namespace EDDiscovery.Actions
                         }
                         else if (cmdname.Equals("ross"))
                         {
-                            (ap.actioncontroller as ActionController).HistoryList.FillEDSM(he);
-
-                            string url = "";
-
-                            if (he.System.EDDBID > 0)
-                            {
-                                url = Properties.Resources.URLRossSystem + he.System.EDDBID.ToString();
-                                System.Diagnostics.Process.Start(url);
-                            }
-
-                            ap[prefix + "URL"] = url;
+                            ap.ReportError("Not implemented");
                         }
                         else if (cmdname.Equals("eddb"))
                         {
-                            (ap.actioncontroller as ActionController).HistoryList.FillEDSM(he);
-
-                            string url = "";
-
-                            if (he.System.EDDBID > 0)
-                            {
-                                url = Properties.Resources.URLEDDBSystem + he.System.EDDBID.ToString();
-                                System.Diagnostics.Process.Start(url);
-                            }
-
+                            string url = Properties.Resources.URLEDDBSystemName + Uri.EscapeDataString(he.System.Name);
+                            System.Diagnostics.Process.Start(url);
                             ap[prefix + "URL"] = url;
                         }
                         else if (cmdname.Equals("info"))
                         {
-                            ActionVars.HistoryEventFurtherInfo(ap, hl, he, prefix);
                             ActionVars.SystemVarsFurtherInfo(ap, hl, he.System, prefix);
                             ActionVars.ShipModuleInformation(ap, he.ShipInformation, prefix);
                         }

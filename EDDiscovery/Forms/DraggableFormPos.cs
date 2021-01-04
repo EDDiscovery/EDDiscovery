@@ -150,9 +150,8 @@ namespace EDDiscovery.Forms
 
         protected override void OnShown(EventArgs e)        // some classes need this to screen out stuff as well as us
         {
-            base.OnShown(e);
-
             FormShownOnce = true;
+            base.OnShown(e);
         }
 
         protected override void OnResize(EventArgs e)       // this is a resize or a max..

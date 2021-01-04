@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2017 EDDiscovery development team
+ * Copyright © 2016 - 2020 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -13,21 +13,16 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using EDDiscovery.Controls;
+using EliteDangerousCore;
+using EliteDangerousCore.JournalEvents;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
 using System.Data;
+using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using EDDiscovery.Controls;
-using EliteDangerousCore.EDSM;
-using EliteDangerousCore.EDDN;
-using EliteDangerousCore.DB;
-using EliteDangerousCore;
-using EliteDangerousCore.JournalEvents;
 
 namespace EDDiscovery.UserControls
 {
@@ -119,9 +114,9 @@ namespace EDDiscovery.UserControls
         void Search(MaterialCommodityData cm, Dictionary<string, Tuple<HistoryEntry, string, double>> foundlist, 
                                         string prefix = "")
         {
-            ISystem cursystem = discoveryform.history.CurrentSystem;        // could be null
+            ISystem cursystem = discoveryform.history.CurrentSystem();        // could be null
 
-            foreach ( var he in discoveryform.history)      // oldest first..
+            foreach ( var he in discoveryform.history.EntryOrder())      // oldest first..
             {
                 Tuple<HistoryEntry, string> found = null;
                 bool checkstation = false;
@@ -167,7 +162,14 @@ namespace EDDiscovery.UserControls
                 {
                     var je = he.journalEntry as JournalMissionCompleted;
                     if (je.HasReceivedReward(cm.FDName))
-                        found = new Tuple<HistoryEntry, string>(he, prefix + "Mission Reward at ".T(EDTx.SearchMaterialsCommodities_COL) + he.WhereAmI);
+                        found = new Tuple<HistoryEntry, string>(he, prefix + "Mission Reward at ".T(EDTx.SearchMaterialsCommodities_MR) + he.WhereAmI);
+                }
+
+                else if (he.EntryType == JournalTypeEnum.SAASignalsFound)
+                {
+                    var je = he.journalEntry as JournalSAASignalsFound;
+                    if (je.Contains(cm.FDName) > 0)
+                        found = new Tuple<HistoryEntry, string>(he, prefix + "Discovered at ".T(EDTx.SearchMaterialsCommodities_DIS) + je.BodyName);
                 }
 
                 if (found != null)
@@ -197,7 +199,7 @@ namespace EDDiscovery.UserControls
                 DataGridViewColumn sortcol = dataGridView.SortedColumn != null ? dataGridView.SortedColumn : dataGridView.Columns[0];
                 SortOrder sortorder = dataGridView.SortedColumn != null ? dataGridView.SortOrder : SortOrder.Descending;
 
-                ISystem cursystem = discoveryform.history.CurrentSystem;        // could be null
+                ISystem cursystem = discoveryform.history.CurrentSystem();        // could be null
 
                 foreach (var ret in systems)
                 {
@@ -253,7 +255,9 @@ namespace EDDiscovery.UserControls
 
         private void dataGridView_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {
-            if (e.Column.Index == 2)
+            if (e.Column.Index == 0)
+                e.SortDataGridViewColumnDate();
+            else if (e.Column.Index == 2)
                 e.SortDataGridViewColumnNumeric();
         }
 

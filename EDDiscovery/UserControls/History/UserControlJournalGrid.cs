@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2017 EDDiscovery development team
+ * Copyright © 2016 - 2020 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -13,21 +13,17 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using EDDiscovery.Controls;
+using EliteDangerousCore;
+using EliteDangerousCore.EDDN;
+using EliteDangerousCore.EDSM;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using EDDiscovery.Controls;
-using EliteDangerousCore.EDSM;
-using EliteDangerousCore.EDDN;
-using EliteDangerousCore.DB;
-using EliteDangerousCore;
 using System.IO;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
 {
@@ -105,8 +101,6 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.Translate(toolTip, this);
 
             TravelHistoryFilter.InitaliseComboBox(comboBoxJournalWindow, DbHistorySave);
-
-            dataViewScrollerPanel.LimitLargeChange = 4; // since row sizes can be variable, estimating large change on visible rows is problematic
         }
 
         public override void LoadLayout()
@@ -165,8 +159,8 @@ namespace EDDiscovery.UserControls
 
             var filter = (TravelHistoryFilter)comboBoxJournalWindow.SelectedItem ?? TravelHistoryFilter.NoFilter;
 
-            List<HistoryEntry> result = filter.Filter(hl);
-            fdropdown = hl.Count() - result.Count();
+            List<HistoryEntry> result = filter.Filter(hl.EntryOrder());
+            fdropdown = hl.Count - result.Count();
 
             result = HistoryList.FilterByJournalEvent(result, EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbFilterSave, "All"), out ftotalevents);
             result = FilterHelpers.FilterHistory(result, fieldfilter, discoveryform.Globals, out ftotalfilters);
@@ -216,7 +210,7 @@ namespace EDDiscovery.UserControls
 
                     // System.Diagnostics.Debug.WriteLine("J Chunk Load in " + sw.ElapsedMilliseconds);
 
-                    if (dataGridViewJournal.MoveToSelection(rowsbyjournalid, ref pos, false, Columns.Event))
+                    if (dataGridViewJournal.MoveToSelection(rowsbyjournalid, ref pos, false))
                         FireChangeSelection();
 
                 });
@@ -228,7 +222,7 @@ namespace EDDiscovery.UserControls
 
                 UpdateToolTipsForFilter();
 
-                if (dataGridViewJournal.MoveToSelection(rowsbyjournalid, ref pos, true, Columns.Event))
+                if (dataGridViewJournal.MoveToSelection(rowsbyjournalid, ref pos, true))
                     FireChangeSelection();
 
                 if (sortcol >= 0)
@@ -319,7 +313,7 @@ namespace EDDiscovery.UserControls
                     dataGridViewJournal.ClearSelection();
                     int rowno = dataGridViewJournal.Rows.GetFirstRow(DataGridViewElementStates.Visible);
                     if (rowno != -1)
-                        dataGridViewJournal.CurrentCell = dataGridViewJournal.Rows[rowno].Cells[1];       // its the current cell which needs to be set, moves the row marker as well
+                        dataGridViewJournal.SetCurrentAndSelectAllCellsOnRow(rowno);       // its the current cell which needs to be set, moves the row marker as well
 
                     FireChangeSelection();
                 }
@@ -358,7 +352,7 @@ namespace EDDiscovery.UserControls
 
         private void UpdateToolTipsForFilter()
         {
-            string ms = string.Format(" showing {0} original {1}".T(EDTx.UserControlJournalGrid_TT1), dataGridViewJournal.Rows.Count, current_historylist?.Count() ?? 0);
+            string ms = string.Format(" showing {0} original {1}".T(EDTx.UserControlJournalGrid_TT1), dataGridViewJournal.Rows.Count, current_historylist?.Count ?? 0);
             comboBoxJournalWindow.SetTipDynamically(toolTip, fdropdown > 0 ? string.Format("Filtered {0}".T(EDTx.UserControlJournalGrid_TTFilt1), fdropdown + ms) : "Select the entries by age, ".T(EDTx.UserControlJournalGrid_TTSelAge) + ms);
             toolTip.SetToolTip(buttonFilter, (ftotalevents > 0) ? string.Format("Filtered {0}".T(EDTx.UserControlJournalGrid_TTFilt2), ftotalevents + ms) : "Filter out entries based on event type, ".T(EDTx.UserControlJournalGrid_TTEvent) + ms);
             toolTip.SetToolTip(buttonField, (ftotalfilters > 0) ? string.Format("Total filtered out {0}".T(EDTx.UserControlJournalGrid_TTFilt3), ftotalfilters + ms) : "Filter out entries matching the field selection, ".T(EDTx.UserControlJournalGrid_TTTotal) + ms);
@@ -418,7 +412,7 @@ namespace EDDiscovery.UserControls
             DataGridView grid = sender as DataGridView;
             UserControls.UserControlTravelGrid.PaintEventColumn(sender as DataGridView, e,
                 discoveryform.history.Count, (HistoryEntry)dataGridViewJournal.Rows[e.RowIndex].Tag,
-                grid.RowHeadersWidth + grid.Columns[0].Width, grid.Columns[1].Width, false);
+                Columns.Event, false);
         }
 
         #region Mouse Clicks
@@ -433,20 +427,17 @@ namespace EDDiscovery.UserControls
         }
 
         HistoryEntry rightclicksystem = null;
-        int rightclickrow = -1;
         HistoryEntry leftclicksystem = null;
-        int leftclickrow = -1;
 
         private void dataGridViewJournal_MouseDown(object sender, MouseEventArgs e)
         {
-            dataGridViewJournal.HandleClickOnDataGrid(e, out leftclickrow, out rightclickrow);
-            rightclicksystem = (rightclickrow != -1) ? (HistoryEntry)dataGridViewJournal.Rows[rightclickrow].Tag : null;
-            leftclicksystem = (leftclickrow != -1) ? (HistoryEntry)dataGridViewJournal.Rows[leftclickrow].Tag : null;
+            rightclicksystem = dataGridViewJournal.RightClickRowValid ? (HistoryEntry)dataGridViewJournal.Rows[dataGridViewJournal.RightClickRow].Tag : null;
+            leftclicksystem = dataGridViewJournal.LeftClickRowValid ? (HistoryEntry)dataGridViewJournal.Rows[dataGridViewJournal.LeftClickRow].Tag : null;
         }
 
         private void dataGridViewJournal_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (leftclickrow >= 0)                                                   // Click expands it..
+            if (dataGridViewJournal.LeftClickRowValid)                                                   // Click expands it..
             {
                 ExtendedControls.InfoForm info = new ExtendedControls.InfoForm();
                 leftclicksystem.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
@@ -524,8 +515,7 @@ namespace EDDiscovery.UserControls
         {
             if (rightclicksystem != null && rightclicksystem.journalEntry != null)
             {
-                Newtonsoft.Json.Linq.JObject jo = rightclicksystem.journalEntry.GetJson();
-                string json = jo?.ToString();
+                string json = rightclicksystem.journalEntry.GetJsonString();
                 if (json != null)
                 {
                     SetClipboardText(json);
@@ -552,7 +542,7 @@ namespace EDDiscovery.UserControls
             int rowno = DataGridViewControlHelpersStaticFunc.FindGridPosByID(rowsbyjournalid, jid, true);
             if (rowno >= 0)
             {
-                dataGridViewJournal.CurrentCell = dataGridViewJournal.Rows[rowno].Cells[Columns.Event];
+                dataGridViewJournal.SetCurrentAndSelectAllCellsOnRow(rowno);
                 dataGridViewJournal.Rows[rowno].Selected = true;
                 FireChangeSelection();
             }
@@ -580,7 +570,7 @@ namespace EDDiscovery.UserControls
             if (selrow >= 0)
             {
                 dataGridViewJournal.ClearSelection();
-                dataGridViewJournal.CurrentCell = dataGridViewJournal.Rows[selrow].Cells[1];
+                dataGridViewJournal.SetCurrentAndSelectAllCellsOnRow(selrow);
                 FireChangeSelection();
             }
         }
@@ -606,7 +596,7 @@ namespace EDDiscovery.UserControls
                                 HistoryEntry he = dgvr.Tag as HistoryEntry;
                                 if (dgvr.Visible && he.EventTimeUTC.CompareTo(frm.StartTimeUTC) >= 0 && he.EventTimeUTC.CompareTo(frm.EndTimeUTC) <= 0)
                                 {
-                                    string forExport = he.journalEntry.GetJson()?.ToString().Replace("\r\n", "");
+                                    string forExport = he.journalEntry.GetJsonString().Replace("\r\n", "");
                                     if (forExport != null)
                                     {
                                         forExport = System.Text.RegularExpressions.Regex.Replace(forExport, "(\"(?:[^\"\\\\]|\\\\.)*\")|\\s+", "$1");

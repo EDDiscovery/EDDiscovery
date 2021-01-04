@@ -60,7 +60,7 @@ namespace EDDiscovery.Actions
 
                 if (cmdname != null)
                 {
-                    EliteDangerousCore.ShipInformationList lst = (ap.actioncontroller as ActionController).HistoryList.shipinformationlist;
+                    EliteDangerousCore.ShipInformationList lst = (ap.actioncontroller as ActionController).HistoryList.ShipInformationList;
 
                     Variables values = new Variables();
 

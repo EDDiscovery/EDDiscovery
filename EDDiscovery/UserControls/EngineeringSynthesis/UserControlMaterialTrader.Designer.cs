@@ -46,7 +46,7 @@ namespace EDDiscovery.UserControls
             this.components = new System.ComponentModel.Container();
             this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.vScrollBarCustomMC = new ExtendedControls.ExtScrollBar();
-            this.dataGridViewTrades = new System.Windows.Forms.DataGridView();
+            this.dataGridViewTrades = new BaseUtils.DataGridViewColumnHider();
             this.UpgradeCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.LevelCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.WantedCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -139,12 +139,13 @@ namespace EDDiscovery.UserControls
             this.dataGridViewTrades.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewTrades.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewTrades.Name = "dataGridViewTrades";
+            this.dataGridViewTrades.RowHeaderMenuStrip = null;
             this.dataGridViewTrades.RowHeadersVisible = false;
             this.dataGridViewTrades.RowHeadersWidth = 25;
             this.dataGridViewTrades.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dataGridViewTrades.SingleRowSelect = true;
             this.dataGridViewTrades.Size = new System.Drawing.Size(784, 143);
             this.dataGridViewTrades.TabIndex = 1;
-            this.dataGridViewTrades.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridViewTrades_MouseDown);
             // 
             // UpgradeCol
             // 
@@ -202,12 +203,12 @@ namespace EDDiscovery.UserControls
             this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.clearTradeToolStripMenuItem});
             this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(133, 26);
+            this.contextMenuStrip.Size = new System.Drawing.Size(181, 48);
             // 
             // clearTradeToolStripMenuItem
             // 
             this.clearTradeToolStripMenuItem.Name = "clearTradeToolStripMenuItem";
-            this.clearTradeToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
+            this.clearTradeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.clearTradeToolStripMenuItem.Text = "Clear Trade";
             this.clearTradeToolStripMenuItem.Click += new System.EventHandler(this.clearTradeToolStripMenuItem_Click);
             // 
@@ -439,7 +440,7 @@ namespace EDDiscovery.UserControls
         #endregion
 
         private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanel;
-        private System.Windows.Forms.DataGridView dataGridViewTrades;
+        private BaseUtils.DataGridViewColumnHider dataGridViewTrades;
         private ExtendedControls.ExtScrollBar vScrollBarCustomMC;
         private System.Windows.Forms.ToolTip toolTip;
         private ExtendedControls.ExtButton buttonClear;

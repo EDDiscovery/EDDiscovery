@@ -126,6 +126,36 @@ namespace EDDiscovery.Forms
                 MessageBox.Show(this, "You need to run EDD first and let it create the dBs before it can move them!", "Move Databases", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
 
+        private void buttonBackup_Click(object sender, EventArgs e)
+        {
+            EDDiscovery.EDDOptions opt = EDDiscovery.EDDOptions.Instance;
+
+            if (File.Exists(opt.UserDatabasePath))
+            {
+                using (var folderDialog = new FolderBrowserDialog())
+                {
+                    folderDialog.Description = "Select folder to backup to";
+                    folderDialog.SelectedPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                    if (folderDialog.ShowDialog() == DialogResult.OK)
+                    {
+                        try
+                        {
+                            string localtime = DateTime.Now.ToString("yyyy-MM-dd.HH-mm-ss");
+                            string topath = Path.Combine(folderDialog.SelectedPath, "EDDUser." + localtime + ".sql");
+                            File.Copy(opt.UserDatabasePath, topath);
+                            MessageBox.Show(this, "Backup made to " + topath, "EDDiscovery", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                        catch
+                        {
+                            MessageBox.Show(this, "Copy failed, check destination folder", "EDDiscovery", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        }
+                    }
+                }
+            }
+            else
+                MessageBox.Show(this, "No user database present", "EDDiscovery", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+        }
         private void buttonDeleteSystemDB_Click(object sender, EventArgs e)
         {
             EDDiscovery.EDDOptions opt = EDDiscovery.EDDOptions.Instance;
@@ -145,6 +175,30 @@ namespace EDDiscovery.Forms
                 MessageBox.Show(this, "You need to run EDD first and let it create the dBs before it can delete any!", "Delete/Rebuild System Database", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 
         }
+
+        private void buttonResetDBLoc_Click(object sender, EventArgs e)
+        {
+            EDDiscovery.EDDOptions opt = EDDiscovery.EDDOptions.Instance;
+
+            if (File.Exists(opt.DbOptionsFile()))
+            {
+                if (MessageBox.Show(this, "Current databases are located at:" + Environment.NewLine + Environment.NewLine +
+                                "User: " + opt.UserDatabasePath + Environment.NewLine + "System: " + opt.SystemDatabasePath +
+                                Environment.NewLine + Environment.NewLine +
+                                "Do you wish to change their back to the default in " + EDDiscovery.EDDOptions.Instance.AppDataDirectory + "?",
+                                "Reset Databases", MessageBoxButtons.OKCancel, MessageBoxIcon.Asterisk) == DialogResult.OK)
+                {
+                    BaseUtils.FileHelpers.DeleteFileNoError(opt.DbOptionsFile());
+                    EDDiscovery.EDDOptions.Instance.ResetSystemDatabasePath();
+                    EDDiscovery.EDDOptions.Instance.ResetUserDatabasePath();
+                }
+            }
+            else
+            {
+                MessageBox.Show(this, "There is no dboptions.txt file present to override the DB locations", "Reset Database", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
+        }
+
 
         private void buttonRemoveDLLs_Click(object sender, EventArgs e)
         {
@@ -169,7 +223,7 @@ namespace EDDiscovery.Forms
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void buttonActions_Click(object sender, EventArgs e)
         {
             EDDiscovery.EDDOptions opt = EDDiscovery.EDDOptions.Instance;
 
@@ -198,5 +252,6 @@ namespace EDDiscovery.Forms
             resetlang = true;
             buttonLang.Enabled = false;
         }
+
     }
 }

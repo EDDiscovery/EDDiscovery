@@ -47,7 +47,7 @@ namespace EDDiscovery.UserControls
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControlJournalGrid));
             this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.vScrollBarCustom = new ExtendedControls.ExtScrollBar();
-            this.dataGridViewJournal = new System.Windows.Forms.DataGridView();
+            this.dataGridViewJournal = new BaseUtils.DataGridViewColumnHider();
             this.ColumnTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Event = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnType = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -430,7 +430,7 @@ namespace EDDiscovery.UserControls
         #endregion
 
         private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanel;
-        private System.Windows.Forms.DataGridView dataGridViewJournal;
+        private BaseUtils.DataGridViewColumnHider dataGridViewJournal;
         private ExtendedControls.ExtTextBox textBoxFilter;
         private System.Windows.Forms.Label labelSearch;
         private ExtendedControls.ExtButton buttonFilter;

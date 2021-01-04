@@ -109,7 +109,7 @@ namespace EDDiscovery.UserControls
                 Display(hl);
         }
 
-        public override Color ColorTransparency { get { return Color.Green; } }
+        public override bool SupportTransparency { get { return true; } }
         public override void SetTransparency(bool on, Color curcol)
         {
             pictureBox.BackColor = this.BackColor = curcol;
@@ -118,7 +118,7 @@ namespace EDDiscovery.UserControls
 
         private void Display( HistoryList hl)            // when user clicks around..  HE may be null here
         {
-            Display(hl.GetLastFSDCarrierJump);
+            Display(hl.GetLastFSDCarrierJump());
         }
 
         void FlipConfig(Configuration item, bool ch, bool redisplay = false)
@@ -140,7 +140,6 @@ namespace EDDiscovery.UserControls
                 Color textcolour = IsTransparent ? discoveryform.theme.SPanelColor : discoveryform.theme.LabelColor;
                 Color backcolour = IsTransparent ? Color.Transparent : this.BackColor;
 
-                discoveryform.history.FillEDSM(he); // Fill in any EDSM info we have, force it to try again.. in case system db updated
                 string botline = "";
                 if (Config(Configuration.showGMPNotes))
                 {

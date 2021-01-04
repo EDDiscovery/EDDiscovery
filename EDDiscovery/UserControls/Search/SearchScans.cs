@@ -259,14 +259,14 @@ namespace EDDiscovery.UserControls
                 DataGridViewColumn sortcol = dataGridView.SortedColumn != null ? dataGridView.SortedColumn : dataGridView.Columns[0];
                 SortOrder sortorder = dataGridView.SortedColumn != null ? dataGridView.SortOrder : SortOrder.Descending;
 
-                ISystem cursystem = discoveryform.history.CurrentSystem;        // could be null
+                ISystem cursystem = discoveryform.history.CurrentSystem();        // could be null
 
-                foreach ( var he in discoveryform.history.FilterByScan)
+                foreach ( var he in discoveryform.history.FilterByScan())
                 {
                     JournalScan js = he.journalEntry as JournalScan;
 
                     BaseUtils.Variables scandata = new BaseUtils.Variables();
-                    scandata.AddPropertiesFieldsOfClass(js, "", new Type[] { typeof(System.Drawing.Icon), typeof(System.Drawing.Image), typeof(System.Drawing.Bitmap), typeof(Newtonsoft.Json.Linq.JObject) }, 5);
+                    scandata.AddPropertiesFieldsOfClass(js, "", new Type[] { typeof(System.Drawing.Icon), typeof(System.Drawing.Image), typeof(System.Drawing.Bitmap), typeof(BaseUtils.JSON.JObject) }, 5);
 
                     bool? res = cond.CheckAll(scandata, out string errlist, out BaseUtils.ConditionLists.ErrorClass errclass );  // need function handler..
 

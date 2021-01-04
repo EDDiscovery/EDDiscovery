@@ -332,7 +332,6 @@
     <EmbeddedResource Include="Controls\Main\Admin\ExportVisitedStars.png" />
     <EmbeddedResource Include="Controls\Main\Admin\ResetHistory.png" />
     <EmbeddedResource Include="Controls\Main\Toolbar\SyncEDSM.png" />
-    <EmbeddedResource Include="Controls\Main\Toolbar\Open2DMap.png" />
     <EmbeddedResource Include="Controls\Main\Toolbar\Open3DMap.png" />
     <EmbeddedResource Include="Controls\Main\Toolbar\EditAddons.png" />
     <EmbeddedResource Include="Controls\Main\Toolbar\ManageAddOns.png" />
@@ -349,7 +348,6 @@
     <EmbeddedResource Include="Controls\Main\Tools\Exit.png" />
     <EmbeddedResource Include="Controls\Main\Tools\Popouts\Menu.png" />
     <EmbeddedResource Include="Controls\Main\Tools\Settings.png" />
-    <EmbeddedResource Include="Controls\Main\Tools\Open2DMap.png" />
     <EmbeddedResource Include="Controls\Main\Tools\Open3DMap.png" />
     <EmbeddedResource Include="Controls\Main\Tools\Popouts\ShowAllInTaskbar.png" />
     <EmbeddedResource Include="Controls\Main\Tools\Popouts\DisableTransparency.png" />

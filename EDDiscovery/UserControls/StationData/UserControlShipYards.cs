@@ -93,7 +93,7 @@ namespace EDDiscovery.UserControls
 
         private void UpdateComboBox(HistoryList hl)
         {
-            ShipYardList shm = hl.shipyards;
+            ShipYardList shm = hl.Shipyards;
             string cursel = comboBoxYards.Text;
 
             string the = "Travel History Entry".T(EDTx.UserControlShipYards_TravelHistoryEntry);
@@ -156,7 +156,7 @@ namespace EDDiscovery.UserControls
             }
             else
             {
-                yard = discoveryform.history.shipyards.GetFilteredList().Find(x => x.Ident().Equals(comboBoxYards.Text));
+                yard = discoveryform.history.Shipyards.GetFilteredList().Find(x => x.Ident().Equals(comboBoxYards.Text));
             }
 
             if (yard != null && yard.Ships != null)
@@ -165,7 +165,7 @@ namespace EDDiscovery.UserControls
             }
             else
             {
-                List<Tuple<ShipYard, ShipYard.ShipyardItem>> shiplist = discoveryform.history.shipyards.GetShipLocations(comboBoxYards.Text,nolocrepeats:true);
+                List<Tuple<ShipYard, ShipYard.ShipyardItem>> shiplist = discoveryform.history.Shipyards.GetShipLocations(comboBoxYards.Text,nolocrepeats:true);
                 if ( shiplist.Count > 0 )
                     DisplayShips(shiplist, comboBoxYards.Text);
             }
@@ -177,7 +177,7 @@ namespace EDDiscovery.UserControls
 
         private void DisplayShips(List<Tuple<ShipYard, ShipYard.ShipyardItem>> shiplist,string ship)
         {
-            ISystem cursys = discoveryform.history.CurrentSystem;
+            ISystem cursys = discoveryform.history.CurrentSystem();
 
             foreach (Tuple<ShipYard, ShipYard.ShipyardItem> i in shiplist)
             {

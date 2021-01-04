@@ -13,16 +13,14 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Windows.Forms;
-using System.IO;
 using EDDiscovery.Forms;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
+using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
 {
@@ -91,18 +89,11 @@ namespace EDDiscovery.UserControls
 
             this.comboBoxTheme.SelectedIndexChanged += this.comboBoxTheme_SelectedIndexChanged;    // now turn on the handler..
 
-            checkBoxCustomRemoveOriginals.Checked = discoveryform.screenshotconverter.RemoveOriginal;
-            checkBoxCustomMarkHiRes.Checked = discoveryform.screenshotconverter.MarkHiRes;
             checkBoxCustomEnableScreenshots.Checked = discoveryform.screenshotconverter.AutoConvert;
-            checkBoxCustomCopyToClipboard.Checked = discoveryform.screenshotconverter.CopyToClipboard;
-
-            this.checkBoxCustomRemoveOriginals.CheckedChanged += new System.EventHandler(this.checkBoxCustomRemoveOriginals_CheckedChanged);
-            this.checkBoxCustomMarkHiRes.CheckedChanged += new System.EventHandler(this.checkBoxCustomMarkHiRes_CheckedChanged);
             this.checkBoxCustomEnableScreenshots.CheckedChanged += new System.EventHandler(this.checkBoxCustomEnableScreenshots_CheckedChanged);
-            this.checkBoxCustomCopyToClipboard.CheckedChanged += new System.EventHandler(this.checkBoxCustomCopyToClipboard_CheckedChanged);
 
-            checkBoxCustomEDSMEDDBDownload.Checked = EDDConfig.Instance.EDSMEDDBDownload;
-            this.checkBoxCustomEDSMEDDBDownload.CheckedChanged += new System.EventHandler(this.checkBoxCustomEDSMDownload_CheckedChanged);
+            checkBoxCustomEDSMDownload.Checked = EDDConfig.Instance.EDSMDownload;
+            this.checkBoxCustomEDSMDownload.CheckedChanged += new System.EventHandler(this.checkBoxCustomEDSMDownload_CheckedChanged);
 
             comboBoxCustomHistoryLoadTime.Items = new string[] { "Disabled-Load All".T(EDTx.UserControlSettings_DLA), ">7 days old".T(EDTx.UserControlSettings_7daysold),
                 ">30 days old".T(EDTx.UserControlSettings_30daysold), ">60 days old".T(EDTx.UserControlSettings_60daysold), ">90 days old".T(EDTx.UserControlSettings_90daysold),
@@ -195,27 +186,39 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        private void dataGridViewCommanders_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.RowIndex < dataGridViewCommanders.Rows.Count)
+            {
+                CmdrEdit(e.RowIndex);
+            }
+        }
+
         private void buttonEditCommander_Click(object sender, EventArgs e)
         {
             if (dataGridViewCommanders.SelectedRows.Count > 0)
             {
-                int row = dataGridViewCommanders.SelectedRows[0].Index;
-                EDCommander cmdr = dataGridViewCommanders.Rows[row].DataBoundItem as EDCommander;
+                CmdrEdit(dataGridViewCommanders.SelectedRows[0].Index);
+            }
+        }
 
-                EliteDangerousCore.Forms.CommanderForm cf = new EliteDangerousCore.Forms.CommanderForm();
-                cf.Init(cmdr,false);
+        private void CmdrEdit(int row)
+        { 
+            EDCommander cmdr = dataGridViewCommanders.Rows[row].DataBoundItem as EDCommander;
 
-                if (cf.ShowDialog(FindForm()) == DialogResult.OK)
-                {
-                    bool forceupdate = cf.Update(cmdr);
-                    List<EDCommander> edcommanders = (List<EDCommander>)dataGridViewCommanders.DataSource;
-                    discoveryform.LoadCommandersListBox();
-                    EDCommander.Update(edcommanders, false);
-                    dataGridViewCommanders.Refresh();
+            EliteDangerousCore.Forms.CommanderForm cf = new EliteDangerousCore.Forms.CommanderForm();
+            cf.Init(cmdr,false);
 
-                    if ( forceupdate )                  // journal loc change forcing update
-                        discoveryform.RefreshHistoryAsync();        // do a resync
-                }
+            if (cf.ShowDialog(FindForm()) == DialogResult.OK)
+            {
+                bool forceupdate = cf.Update(cmdr);
+                List<EDCommander> edcommanders = (List<EDCommander>)dataGridViewCommanders.DataSource;
+                discoveryform.LoadCommandersListBox();
+                EDCommander.Update(edcommanders, false);
+                dataGridViewCommanders.Refresh();
+
+                if ( forceupdate )                  // journal loc change forcing update
+                    discoveryform.RefreshHistoryAsync();        // do a resync
             }
         }
 
@@ -385,46 +388,12 @@ namespace EDDiscovery.UserControls
 
         private void buttonExtScreenshot_Click(object sender, EventArgs e)
         {
-            ScreenShots.ScreenShotConfigureForm frm = new ScreenShots.ScreenShotConfigureForm();
-            frm.Init(discoveryform.screenshotconverter, discoveryform.screenshotconverter.MarkHiRes);
-
-            if (frm.ShowDialog(FindForm()) == DialogResult.OK)
-            {
-                discoveryform.screenshotconverter.Stop();
-                discoveryform.screenshotconverter.ScreenshotsDir = frm.ScreenshotsDir;
-                discoveryform.screenshotconverter.OutputDir = frm.OutputDir;
-                discoveryform.screenshotconverter.InputFileExtension = frm.InputFileExtension;
-                discoveryform.screenshotconverter.OutputFileExtension = frm.OutputFileExtension;
-                discoveryform.screenshotconverter.FolderNameFormat = frm.FolderNameFormat;
-                discoveryform.screenshotconverter.RemoveOriginal = frm.RemoveOriginal;
-                discoveryform.screenshotconverter.FileNameFormat = frm.FileNameFormat;
-                discoveryform.screenshotconverter.CropResize1 = frm.CropResize1;
-                discoveryform.screenshotconverter.CropResize2 = frm.CropResize2;
-                discoveryform.screenshotconverter.CropResizeArea1 = frm.CropResizeArea1;
-                discoveryform.screenshotconverter.CropResizeArea2 = frm.CropResizeArea2;
-                discoveryform.screenshotconverter.KeepMasterConvertedImage = frm.KeepMasterConvertedImage;
-                discoveryform.screenshotconverter.Start();
-            }
+            discoveryform.screenshotconverter.Configure();
         }
 
         private void checkBoxCustomEnableScreenshots_CheckedChanged(object sender, EventArgs e)
         {
             discoveryform.screenshotconverter.AutoConvert = checkBoxCustomEnableScreenshots.Checked;
-        }
-
-        private void checkBoxCustomRemoveOriginals_CheckedChanged(object sender, EventArgs e)
-        {
-            discoveryform.screenshotconverter.RemoveOriginal = checkBoxCustomRemoveOriginals.Checked;
-        }
-
-        private void checkBoxCustomMarkHiRes_CheckedChanged(object sender, EventArgs e)
-        {
-            discoveryform.screenshotconverter.MarkHiRes = checkBoxCustomMarkHiRes.Checked;
-        }
-
-        private void checkBoxCustomCopyToClipboard_CheckedChanged(object sender, EventArgs e)
-        {
-            discoveryform.screenshotconverter.CopyToClipboard = checkBoxCustomCopyToClipboard.Checked;
         }
 
         #endregion
@@ -494,14 +463,14 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
-        #region EDDB EDSM
+        #region EDSM
 
         private void checkBoxCustomEDSMDownload_CheckedChanged(object sender, EventArgs e)
         {
-            EDDConfig.Instance.EDSMEDDBDownload = checkBoxCustomEDSMEDDBDownload.Checked;
+            EDDConfig.Instance.EDSMDownload = checkBoxCustomEDSMDownload.Checked;
 
 
-            if ( EDDConfig.Instance.EDSMEDDBDownload == true)   // if turned on
+            if ( EDDConfig.Instance.EDSMDownload == true)   // if turned on
             {
                 int gridsel = 0;
                 bool[] grids = new bool[GridId.MaxGridID];
@@ -522,7 +491,7 @@ namespace EDDiscovery.UserControls
 
             if (!gss.Init(EDDConfig.Instance.EDSMGridIDs))
             {
-                ExtendedControls.MessageBoxTheme.Show(this, "Warning".T(EDTx.Warning), "No map downloaded - please wait for it to download".T(EDTx.UserControlSettings_NoMap));
+                ExtendedControls.MessageBoxTheme.Show(this, "Warning".T(EDTx.Warning), "No map available!".T(EDTx.UserControlSettings_NoMap));
             }
             else if (gss.ShowDialog() == DialogResult.OK)
             {
@@ -530,7 +499,7 @@ namespace EDDiscovery.UserControls
 
                 if (gss.Action == GalaxySectorSelect.ActionToDo.Add)
                 {
-                    discoveryform.ForceEDSMEDDBFullRefresh();
+                    discoveryform.ForceEDSMFullRefresh();
                 }
                 else if (gss.Action == GalaxySectorSelect.ActionToDo.Remove)
                 {
@@ -651,7 +620,7 @@ namespace EDDiscovery.UserControls
                                  "-Protocol TCP;" +
                                  "netsh http add urlacl " +
                                 $"url = http://*:{EDDConfig.Instance.WebServerPort.ToStringInvariant()}/ " +
-                                $"user=\"{Environment.GetEnvironmentVariable("USERNAME")}\"";
+                                $"user=\"{Environment.GetEnvironmentVariable("USERDOMAIN")}\\{Environment.GetEnvironmentVariable("USERNAME")}\"";
 
                     int pid = process.StartProcess("Powershell.exe", cmd, "runas");
 
@@ -682,6 +651,7 @@ namespace EDDiscovery.UserControls
 
             BaseUtils.BrowserInfo.LaunchBrowser("http://" + ipv4 + ":" + EDDConfig.Instance.WebServerPort.ToStringInvariant() + "/");
         }
+
     }
 }
 

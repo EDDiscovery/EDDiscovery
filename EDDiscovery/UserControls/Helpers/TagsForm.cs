@@ -90,9 +90,8 @@ namespace EDDiscovery.UserControls
             int nextpos = g.name.Right;
 
             g.icon = new ExtendedControls.ExtButton();
-            g.icon.Size = new Size(28, 28);
             g.icon.Location = new Point(g.name.Right + 8, panelmargin);
-            g.icon.Image = img;
+            g.icon.Size = new Size(28, 28);     // override autosize after theming
             g.icon.Click += Icon_Click;
             g.icon.ImageLayout = ImageLayout.Stretch;
             toolTip.SetToolTip(g.icon, "Select image for this tag".T(EDTx.TagsForm_SI));
@@ -111,6 +110,9 @@ namespace EDDiscovery.UserControls
 
             panelVScroll1.Controls.Add(g.panel);
             ExtendedControls.ThemeableFormsInstance.Instance?.ApplyDialog(g.panel);
+
+            g.icon.AutoSize = false;    // buttons are normally autosized due to theming, turn it off now
+            g.icon.Image = img;     // assign image - it may be big
 
             FixUpGroups();
 
@@ -157,9 +159,15 @@ namespace EDDiscovery.UserControls
 
             dropdown = new ExtendedControls.ExtListBoxForm("", true);
 
-            List<string> Dickeys = new List<string>(BaseUtils.Icons.IconSet.Instance.Icons.Keys);
+            List<string> Dickeys = new List<string>(BaseUtils.Icons.IconSet.Instance.Names());
             Dickeys.Sort();
-            List<Image> images = (from x in Dickeys select BaseUtils.Icons.IconSet.Instance.Icons[x]).ToList();
+            List<Image> images = new List<Image>();
+            foreach( var x in Dickeys )
+            {
+                Image i = BaseUtils.Icons.IconSet.Instance.Get(x);
+                i.Tag = x;
+                images.Add(i);
+            }
 
             dropdown.FitImagesToItemHeight = true;
             dropdown.Items = Dickeys;
@@ -194,7 +202,9 @@ namespace EDDiscovery.UserControls
             foreach (Group g in groups)
             {
                 if (g.name.Text.Length > 0)      // only ones with names are considered
+                {
                     Result[g.name.Text] = g.icon.Image;
+                }
             }
 
             DialogResult = DialogResult.OK;

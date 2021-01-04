@@ -49,7 +49,7 @@ namespace EDDiscovery.UserControls
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dataViewScrollerPanel2 = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.vScrollBarCustom2 = new ExtendedControls.ExtScrollBar();
-            this.dataGridViewEstimatedValues = new System.Windows.Forms.DataGridView();
+            this.dataGridViewEstimatedValues = new BaseUtils.DataGridViewColumnHider();
             this.BodyName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.BodyType = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.EDSM = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -73,7 +73,6 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel2.Controls.Add(this.dataGridViewEstimatedValues);
             this.dataViewScrollerPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewScrollerPanel2.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.dataViewScrollerPanel2.LimitLargeChange = 2147483647;
             this.dataViewScrollerPanel2.Location = new System.Drawing.Point(0, 30);
             this.dataViewScrollerPanel2.Name = "dataViewScrollerPanel2";
             this.dataViewScrollerPanel2.Size = new System.Drawing.Size(572, 542);
@@ -127,10 +126,13 @@ namespace EDDiscovery.UserControls
             this.dataGridViewEstimatedValues.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.dataGridViewEstimatedValues.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewEstimatedValues.Name = "dataGridViewEstimatedValues";
+            this.dataGridViewEstimatedValues.RowHeaderMenuStrip = null;
             this.dataGridViewEstimatedValues.RowHeadersVisible = false;
             this.dataGridViewEstimatedValues.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dataGridViewEstimatedValues.SingleRowSelect = true;
             this.dataGridViewEstimatedValues.Size = new System.Drawing.Size(556, 542);
             this.dataGridViewEstimatedValues.TabIndex = 23;
+            this.dataGridViewEstimatedValues.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewEstimatedValues_SortCompare);
             // 
             // BodyName
             // 
@@ -272,7 +274,7 @@ namespace EDDiscovery.UserControls
         #endregion
         private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanel2;
         private ExtendedControls.ExtScrollBar vScrollBarCustom2;
-        private System.Windows.Forms.DataGridView dataGridViewEstimatedValues;
+        private BaseUtils.DataGridViewColumnHider dataGridViewEstimatedValues;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private ExtendedControls.ExtCheckBox checkBoxEDSM;
         private ExtendedControls.ExtPanelRollUp extPanelRollUp;

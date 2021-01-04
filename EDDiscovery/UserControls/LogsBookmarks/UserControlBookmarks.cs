@@ -10,8 +10,9 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlBookmarks : UserControlCommonBase
     {
-        DataGridViewRow currentedit = null;
+        private string DbColumnSave { get { return DBName("UCBookmarks", "DGVCol"); } }
 
+        DataGridViewRow currentedit = null;
         Timer searchtimer;
 
         #region init
@@ -31,8 +32,15 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.Translate(toolTip, this);
         }
 
+        public override void LoadLayout()
+        {
+            DGVLoadColumnLayout(dataGridViewBookMarks, DbColumnSave);
+        }
+
         public override void Closing()
         {
+            DGVSaveColumnLayout(dataGridViewBookMarks, DbColumnSave);
+
             SaveBackAnyChanges();
 
             searchtimer.Dispose();
@@ -86,7 +94,7 @@ namespace EDDiscovery.UserControls
             dataGridViewBookMarks.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
 
             if (lastrow >= 0 && lastrow < dataGridViewBookMarks.Rows.Count)
-                dataGridViewBookMarks.CurrentCell = dataGridViewBookMarks.Rows[Math.Min(lastrow, dataGridViewBookMarks.Rows.Count - 1)].Cells[2];
+                dataGridViewBookMarks.SetCurrentAndSelectAllCellsOnRow(Math.Min(lastrow, dataGridViewBookMarks.Rows.Count - 1));
 
             RefreshCurrentEdit();
 
@@ -103,7 +111,7 @@ namespace EDDiscovery.UserControls
                 if (bk.isRegion)
                     userControlSurfaceBookmarks.Disable();
                 else
-                    userControlSurfaceBookmarks.Init(bk.StarName,bk.PlanetaryMarks);
+                    userControlSurfaceBookmarks.Init(bk.StarName,bk.PlanetaryMarks, discoveryform.history);
             }
             else
             {
@@ -136,8 +144,6 @@ namespace EDDiscovery.UserControls
                     updating = false;
                     userControlSurfaceBookmarks.Edited = false;
                 }
-
-                currentedit = null;
             }
         }
 
@@ -267,7 +273,7 @@ namespace EDDiscovery.UserControls
             {
                 BookmarkClass bk = (BookmarkClass)currentedit.Tag;
 
-                UserControlCompass comp = (UserControlCompass)EDDApplicationContext.EDDMainForm.PopOuts.PopOut(PanelInformation.PanelIDs.Compass);
+                UserControlCompass comp = (UserControlCompass)discoveryform.PopOuts.PopOut(PanelInformation.PanelIDs.Compass);
                 comp.SetSurfaceBookmark(bk, planet, locname);
             }
         }
@@ -295,8 +301,7 @@ namespace EDDiscovery.UserControls
 
         private void dataGridViewBookMarks_MouseDown(object sender, MouseEventArgs e)
         {
-            dataGridViewBookMarks.HandleClickOnDataGrid(e, out int unusedleftclickrow, out int rightclickrow);
-            rightclickbookmark = (rightclickrow !=-1) ? (BookmarkClass)dataGridViewBookMarks.Rows[rightclickrow].Tag : null;
+            rightclickbookmark = (dataGridViewBookMarks.RightClickRowValid) ? (BookmarkClass)dataGridViewBookMarks.Rows[dataGridViewBookMarks.RightClickRow].Tag : null;
         }
 
         private void contextMenuStripBookmarks_Opening(object sender, System.ComponentModel.CancelEventArgs e)

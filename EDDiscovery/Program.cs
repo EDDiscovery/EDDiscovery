@@ -13,18 +13,15 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using EDDiscovery.Forms;
+
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Reflection;                //Assembly
 using System.Runtime.InteropServices;   //GuidAttribute
 using System.Security.AccessControl;    //MutexAccessRule
 using System.Security.Principal;        //SecurityIdentifier
 using System.Threading;                 // Tasks and Mutex
 using System.Windows.Forms;
-
 
 namespace EDDiscovery
 {

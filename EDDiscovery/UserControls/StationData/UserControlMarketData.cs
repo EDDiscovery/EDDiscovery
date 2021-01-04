@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2017 EDDiscovery development team
+ * Copyright © 2016 - 2020 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -52,7 +52,7 @@ namespace EDDiscovery.UserControls
 
             checkBoxAutoSwap.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbAutoSwap, false);
 
-            discoveryform.OnNewEntry += OnChanged;
+            discoveryform.OnNewEntry += OnNewEntry;
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
 
             BaseUtils.Translator.Instance.Translate(this);
@@ -79,14 +79,15 @@ namespace EDDiscovery.UserControls
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbBuyOnly, checkBoxBuyOnly.Checked);
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSellOnly, checkBoxSellOnly.Checked);
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbAutoSwap, checkBoxAutoSwap.Checked);
-            discoveryform.OnNewEntry -= OnChanged;
+            discoveryform.OnNewEntry -= OnNewEntry;
             uctg.OnTravelSelectionChanged -= OnChanged;
             discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
         }
 
         public override void InitialDisplay()
         {
-            OnChanged(uctg.GetCurrentHistoryEntry,discoveryform.history);
+            FillComboBoxes(discoveryform.history);
+            OnChanged(uctg.GetCurrentHistoryEntry, discoveryform.history, true);
         }
 
         #endregion
@@ -95,6 +96,7 @@ namespace EDDiscovery.UserControls
 
         HistoryEntry last_he;           // last HE
         HistoryEntry last_eddmd;        // last edd market data from last_he
+        bool notfoundeddmd = false;     // if we did not find one, record it, so we don't keep on checking. cleared on history change or an new journal entry of right type
         HistoryEntry eddmd_left;        // eddmd left comparision, null means use last_he
         HistoryEntry eddmd_right;       // what we are comparing with, null means none
         HistoryEntry current_displayed; // what we are displaying
@@ -104,24 +106,33 @@ namespace EDDiscovery.UserControls
         private void Discoveryform_OnHistoryChange(HistoryList hl)
         {
             FillComboBoxes(hl);     // display time or list may have changed
+            notfoundeddmd = false;
         }
 
-        private void OnChanged(HistoryEntry he, HistoryList hl) =>
+        private void OnNewEntry(HistoryEntry he, HistoryList hl)
+        {
+            if (he.journalEntry is JournalCommodityPricesBase)            // new CMPB, update combo boxes
+            {
+                FillComboBoxes(hl);
+                notfoundeddmd = false;
+            }
+
             OnChanged(he, hl, true);
+        }
 
         private void OnChanged(HistoryEntry he, HistoryList hl, bool selectedEntry)
         {
             if (!Object.ReferenceEquals(he, last_he) )       // if last was null, or he has changed, we have a possible change..
             {
-                FillComboBoxes(hl);
-                // must be a commodity entry, and have items
-                HistoryEntry new_last_eddmd = hl.GetLastHistoryEntry(x => x.journalEntry is JournalCommodityPricesBase && (x.journalEntry as JournalCommodityPricesBase).Commodities.Count > 0, he);
+                // Find last commodity entry, if notfoundeedmd is true.  notfoundeddmd is cleared on a new market data entry of commodity prices
+                HistoryEntry new_last_eddmd = notfoundeddmd ? null : hl.GetLastHistoryEntry(x => x.journalEntry is JournalCommodityPricesBase && (x.journalEntry as JournalCommodityPricesBase).Commodities.Count > 0, he);
+                notfoundeddmd = new_last_eddmd == null;
 
                 bool eddmdchanged = !Object.ReferenceEquals(new_last_eddmd, last_eddmd);
                 bool cargochanged = !Object.ReferenceEquals(last_he?.MaterialCommodity, he?.MaterialCommodity); // is cargo different between he and last_he
 
-                last_he = he;
                 last_eddmd = new_last_eddmd;
+                last_he = he;
 
                 //System.Diagnostics.Debug.WriteLine("left {0} right {1} eddmchanged {2} cargo {3}", last_eddmd?.Indexno, last_he?.Indexno, eddmdchanged, cargochanged);
 
@@ -275,7 +286,7 @@ namespace EDDiscovery.UserControls
                     string v = (string)rw.Cells[1].Value;
                     if ( v.Equals(commodity))           // Find the commodity, and set it to the same relative position as before.
                     {
-                        dataGridViewMarketData.CurrentCell = dataGridViewMarketData.Rows[rw.Index].Cells[1];
+                        dataGridViewMarketData.SetCurrentAndSelectAllCellsOnRow(rw.Index);
                         dataGridViewMarketData.SafeFirstDisplayedScrollingRowIndex( Math.Max(rw.Index - currentoffset,0));
                         break;
                     }
@@ -299,7 +310,7 @@ namespace EDDiscovery.UserControls
 
             comboboxentries.Clear();
 
-            List<HistoryEntry> hlcpb = hl.FilterByCommodityPricesBackwards;
+            List<HistoryEntry> hlcpb = HistoryList.FilterByCommodityPricesBackwards(hl.EntryOrder());
 
             foreach (HistoryEntry h in hlcpb)
             {

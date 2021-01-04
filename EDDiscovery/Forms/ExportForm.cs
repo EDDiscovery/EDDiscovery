@@ -40,9 +40,11 @@ namespace EDDiscovery.Forms
         {
             outputextension = outputext;
 
-            comboBoxCustomExportType.Items.AddRange(exportlist);
+            if ( exportlist != null )
+                comboBoxCustomExportType.Items.AddRange(exportlist);
+
             customDateTimePickerFrom.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(new DateTime(2014, 11, 22, 0, 0, 0, DateTimeKind.Utc)); //Gamma start
-            customDateTimePickerTo.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(new DateTime(DateTime.UtcNow.Year,DateTime.UtcNow.Month,DateTime.UtcNow.Day,23,59,59));
+            customDateTimePickerTo.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, 23, 59, 59));
 
             if (System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator.Equals("."))
                 radioButtonComma.Checked = true;
@@ -56,28 +58,31 @@ namespace EDDiscovery.Forms
 
             EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
             bool winborder = theme.ApplyDialog(this);
-            label_index.Visible = panel_minimize.Visible = panel_close.Visible = !winborder;
+            panelTop.Visible = !winborder;
 
-            if (disablestartendtime)
-            {
-                customDateTimePickerFrom.Visible = customDateTimePickerTo.Visible = false;
-                int d = panelBottom.Top - customDateTimePickerFrom.Top;
-                panelBottom.Top -= d;
-                panelOuter.Height -= d;
-                Height -= d;
-            }
+            if (comboBoxCustomExportType.Items.Count < 2)       // disable if no selection
+                panelCombo.Visible = false;
+
+            if (disablestartendtime)                // disable if required
+                panelDate.Visible = false;
 
             BaseUtils.Translator.Instance.Translate(this);
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            PerformLayout();
+            // calculate height of window from panel sizes after layout
+            int flowbot = flowLayoutPanel.Top + panelBottom.Bottom + panelBottom.Margin.Bottom + flowLayoutPanel.Margin.Bottom;
+            Height = Bounds.Height - ClientRectangle.Height + flowbot;
+
+            base.OnLoad(e);
         }
 
         private void buttonCancel_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;
             Close();
-        }
-
-        private void ExportForm_FormClosed(object sender, FormClosedEventArgs e)
-        {
         }
 
         private void buttonExport_Click(object sender, EventArgs e)
@@ -135,6 +140,16 @@ namespace EDDiscovery.Forms
             }
             else
                 checkBoxIncludeHeader.Enabled = true;
+        }
+
+        private void panelTop_MouseDown(object sender, MouseEventArgs e)
+        {
+            OnCaptionMouseDown((Control)sender, e);
+        }
+
+        private void panelTop_MouseUp(object sender, MouseEventArgs e)
+        {
+            OnCaptionMouseUp((Control)sender, e);
         }
     }
 }

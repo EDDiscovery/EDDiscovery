@@ -503,7 +503,7 @@ namespace EDDiscovery.Actions
 
             if (actionfiles.IsActionVarDefined("RunAtRefresh"))      // any events have this flag? .. don't usually do this, so worth checking first
             {
-                foreach (HistoryEntry he in discoverycontroller.history.EntryOrder)
+                foreach (HistoryEntry he in discoverycontroller.history.EntryOrder())
                     ActionRunOnEntry(he, ActionEventEDList.RefreshJournal(he), "RunAtRefresh");
             }
 

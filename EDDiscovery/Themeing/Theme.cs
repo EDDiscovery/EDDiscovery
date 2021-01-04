@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2020 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -13,12 +13,13 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+
+using BaseUtils.JSON;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
-using Newtonsoft.Json.Linq;
-using System.IO;
 using System.Diagnostics;
+using System.Drawing;
+using System.IO;
 
 namespace EDDiscovery
 {
@@ -49,26 +50,8 @@ namespace EDDiscovery
         /// 
         /// </summary>
         /// <returns>true if ok.  False  Means missing colors in theme. </returns>
-        public bool RestoreSettings()
+        public void RestoreSettings()
         {
-            bool ok = true;
-            Trace.WriteLine("Theme ID " + Settings.ThemeID);
-
-            int themeidstored = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt("ThemeID", -1);
-
-            if ( themeidstored != -1 && themeidstored != Settings.ThemeID )
-            {
-                //DialogResult res = ExtendedControls.MessageBoxTheme.Show("The theme stored has missing colors or other missing information" + Environment.NewLine +
-                //      "that this new version of EDDiscovery needs." + Environment.NewLine + Environment.NewLine +
-                //      "Choose OK to use the stored theme, and then correct the missing colors or other information manually using the Theme Editor in Settings" + Environment.NewLine + Environment.NewLine +
-                //      "Choose Cancel to go back to windows default, then pick a new standard theme.", "ED Discovery Theme Warning!" , MessageBoxButtons.OKCancel);
-
-                //if (res == DialogResult.Cancel)     // if cancel, we abort,
-                //    return;
-                ok = false;
-
-            }
-
             if (EliteDangerousCore.DB.UserDatabase.Instance.KeyExists("ThemeNameOf"))           // (keep previous check) if there.. get the others with a good default in case the db is screwed.
             {
                 currentsettings.name = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("ThemeNameOf", "Custom");
@@ -86,12 +69,10 @@ namespace EDDiscovery
                     currentsettings.colors[ck] = c;
                 }
             }
-            return ok;
         }
 
         public void SaveSettings(string filename)
         {
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt("ThemeID", Settings.ThemeID);
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("ThemeNameOf", currentsettings.name);
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("ThemeWindowsFrame", currentsettings.windowsframe);
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble("ThemeFormOpacity", currentsettings.formopacity);
@@ -135,17 +116,62 @@ namespace EDDiscovery
             {
                 try
                 {
-                    JObject jo = JObject.Parse(File.ReadAllText(fi.FullName));
+                    JObject jo = JObject.ParseThrowCommaEOL(File.ReadAllText(fi.FullName));
                     {
                         Settings set = new Settings();
 
                         set.name = fi.Name.Replace(".eddtheme", "");
                         set.colors = new Dictionary<Settings.CI, Color>();
+                        System.Diagnostics.Debug.WriteLine("Loading Theme : " + set.name);
 
                         foreach (Settings.CI ck in Enum.GetValues(typeof(Settings.CI)))           // all enums
                         {
-                            Color d = themelist[0].colors[ck];
-                            set.colors.Add(ck, jo[ck.ToString()].Color(d));
+                            bool done = false;
+
+                            try
+                            {
+                                string s = jo[ck.ToString()].StrNull();
+                                if (s != null)
+                                {
+                                    Color c = System.Drawing.ColorTranslator.FromHtml(s);   // may except if not valid HTML colour
+                                    set.colors.Add(ck, c);
+                                    done = true;
+                                    System.Diagnostics.Debug.WriteLine("Color.FromArgb({0},{1},{2},{3}), // {4}", c.A, c.R, c.G, c.B, ck.ToString());
+                                }
+                            }
+                            catch
+                            {
+                                System.Diagnostics.Debug.WriteLine("Theme has invalid colour");
+                            }
+
+                            try
+                            {
+                                if (!done)
+                                {
+                                    string gridtext = jo[Settings.CI.grid_celltext.ToString()].StrNull();
+                                    string gridback = jo[Settings.CI.grid_cellbackground.ToString()].StrNull();
+
+                                    if (ck == Settings.CI.grid_altcelltext && gridtext != null)
+                                    {
+                                        Color c = System.Drawing.ColorTranslator.FromHtml(gridtext);   // may except if not valid HTML colour
+                                        set.colors.Add(ck, c);
+                                    }
+                                    else if (ck == Settings.CI.grid_altcellbackground && gridback != null)
+                                    {
+                                        Color c = System.Drawing.ColorTranslator.FromHtml(gridback);   // may except if not valid HTML colour
+                                        set.colors.Add(ck, c);
+                                    }
+                                    else
+                                    {
+                                        Color def = themelist[0].colors[ck];        // 
+                                        set.colors.Add(ck, def);
+                                    }
+                                }
+                            }
+                            catch
+                            {
+                                System.Diagnostics.Debug.WriteLine("Theme has invalid colour");
+                            }
                         }
 
                         set.windowsframe = jo["windowsframe"].Bool(themelist[0].windowsframe);
@@ -154,6 +180,9 @@ namespace EDDiscovery
                         set.fontsize = jo["fontsize"].Float(themelist[0].fontsize);
                         set.buttonstyle = jo["buttonstyle"].Str(themelist[0].buttonstyle);
                         set.textboxborderstyle = jo["textboxborderstyle"].Str(themelist[0].textboxborderstyle);
+
+                        System.Diagnostics.Debug.WriteLine("{0},{1},{2},{3})", set.windowsframe, set.formopacity, set.fontname, set.fontsize);
+
                         themelist.Add(set);
                     }
                 }

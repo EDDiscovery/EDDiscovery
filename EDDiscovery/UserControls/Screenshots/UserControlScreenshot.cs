@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2017 EDDiscovery development team
+ * Copyright © 2016 - 2020 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -13,27 +13,18 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using EliteDangerousCore.JournalEvents;
-using Newtonsoft.Json.Linq;
-using System.IO;
+
 using EliteDangerousCore;
+using EliteDangerousCore.JournalEvents;
+using System;
+using System.Drawing;
+using System.IO;
+using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
 {
     public partial class UserControlScreenshot : UserControlCommonBase
     {
-        string ImagePath = null;
-        Point ImageSize;
-
         public UserControlScreenshot()
         {
             InitializeComponent();
@@ -42,114 +33,130 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
-            discoveryform.screenshotconverter.OnScreenShot += ScreenShot;
+            discoveryform.ScreenShotCaptured += Discoveryform_ScreenShotCaptured;
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
         {
-            uctg.OnTravelSelectionChanged -= Display;
+            uctg.OnTravelSelectionChanged -= TGChanged;
             uctg = thc;
-            uctg.OnTravelSelectionChanged += Display;
+            uctg.OnTravelSelectionChanged += TGChanged;
         }
 
         public override void LoadLayout()
         {
-            uctg.OnTravelSelectionChanged += Display;
-        }
-
-        public override void Closing()
-        {
-            discoveryform.screenshotconverter.OnScreenShot -= ScreenShot;
-            uctg.OnTravelSelectionChanged -= Display;
-        }
-
-        public void ScreenShot(string path, Point size)
-        {
-            ImagePath = path;
-            ImageSize = size;
-
-            FitToWindow();
+            uctg.OnTravelSelectionChanged += TGChanged;
         }
 
         public override void InitialDisplay()
         {
-            Display(uctg.GetCurrentHistoryEntry, discoveryform.history);
+            TGChanged(uctg.GetCurrentHistoryEntry, discoveryform.history, true);
         }
 
-        private void Display(HistoryEntry he, HistoryList hl) =>
-            Display(he, hl, true);
-
-        private void Display(HistoryEntry he, HistoryList hl, bool selectedEntry)
+        public override void Closing()
         {
-            if (he != null)
+            discoveryform.ScreenShotCaptured -= Discoveryform_ScreenShotCaptured;
+            uctg.OnTravelSelectionChanged -= TGChanged;
+        }
+
+        private void Discoveryform_ScreenShotCaptured(string file, Size size)
+        {
+            Display(file, size);
+        }
+
+        private void TGChanged(HistoryEntry he, HistoryList hl, bool selectedEntry)
+        {
+            if (he != null && he.journalEntry is JournalScreenshot)
             {
-                if (he.EntryType == EliteDangerousCore.JournalTypeEnum.Screenshot)
+                var ss = (JournalScreenshot)he.journalEntry;
+                if (!String.IsNullOrEmpty(ss.EDDOutputFile) && File.Exists(ss.EDDOutputFile))
                 {
-                    JournalScreenshot ss = (JournalScreenshot)he.journalEntry;
+                    Display(ss.EDDOutputFile, new Size(ss.EDDOutputWidth, ss.EDDOutputHeight));
+                }
+                else
+                {
+                    var filename = GetScreenshotPath(ss.Filename);
 
-                    JObject jo = ss.GetJson();
-
-                    if (jo != null)
+                    if (filename != null && File.Exists(filename) && ss.Width != 0 && ss.Height != 0)
                     {
-                        if (jo["EDDOutputFile"] != null && File.Exists(jo["EDDOutputFile"].Str()))
-                        {
-                            string store_name = jo["EDDOutputFile"].Str();
-                            Point size = new Point(jo["EDDOutputWidth"].Int(), jo["EDDOutputHeight"].Int());
-
-                            ScreenShot(store_name, size);
-                        }
-                        else if (jo["EDDInputFile"] != null && File.Exists(jo["EDDInputFile"].Str()))
-                        {
-                            string filename = jo["EDDInputFile"].Str();
-                            ScreenShot(filename, new Point(ss.Width, ss.Height));
-                        }
-                        else
-                        {
-                            string filename = discoveryform.screenshotconverter.GetScreenshotPath(ss);
-
-                            if (File.Exists(filename))
-                            {
-                                ScreenShot(filename, new Point(ss.Width, ss.Height));
-                            }
-                        }
+                        Display(filename, new Size(ss.Width, ss.Height));
                     }
                 }
             }
         }
 
-        void FitToWindow()
+        private string GetScreenshotPath(string filepart)
         {
-            //System.Diagnostics.Debug.WriteLine("Screen shot " + ImagePath);
+            var filenameout = filepart;
 
-            double ratiopicture = (double)ImageSize.X / (double)ImageSize.Y;
-
-            int boxwidth = ClientRectangle.Width;
-            int boxheight = ClientRectangle.Height;
-
-            int imagewidth = boxwidth;
-            int imageheight = (int)((double)imagewidth / ratiopicture);
-
-            if (imageheight > boxheight)        // if width/ratio > available height, scale down width
+            if (filepart.StartsWith("\\ED_Pictures\\"))     // if its an ss record, try and find it either in watchedfolder or in default loc
             {
-                double scaledownwidth = (double)imageheight / (double)boxheight;
-                imagewidth = (int)((double)imagewidth / scaledownwidth);
+                filepart = filepart.Substring(13);
+                filenameout = Path.Combine(discoveryform.screenshotconverter.InputFolder, filepart);
+
+                if (!File.Exists(filenameout))
+                {
+                    string defaultInputDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures), "Frontier Developments", "Elite Dangerous");
+                    filenameout = Path.Combine(defaultInputDir, filepart);
+                }
             }
 
-            imageheight = (int)((double)imagewidth / ratiopicture);
+            return filenameout;
+        }
 
+        private void Display(string file, Size s)
+        {
             try
             {
+                if (file.HasChars() && File.Exists(file))
+                {
+                    pictureBox.ImageLocation = file;                       // this could except, so protect..
+                    imagesize = s;
+                    FitToWindow();
+                }
+                else
+                {
+                    pictureBox.Visible = false;
+                    pictureBox.ImageLocation = null;
+                }
+            }
+            catch(Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Cannot assign " + file + " to screenshot img " + ex);
+            }
+        }
+
+        Size imagesize;
+
+        void FitToWindow()
+        {
+            if (ClientRectangle.Width > 15 && ClientRectangle.Height > 15)
+            {
+                //System.Diagnostics.Debug.WriteLine("Screen shot " + ImagePath);
+
+                double ratiopicture = (double)imagesize.Width / (double)imagesize.Height;
+
+                int boxwidth = ClientRectangle.Width;
+                int boxheight = ClientRectangle.Height;
+
+                int imagewidth = boxwidth;
+                int imageheight = (int)((double)imagewidth / ratiopicture);
+
+                if (imageheight > boxheight)        // if width/ratio > available height, scale down width
+                {
+                    double scaledownwidth = (double)imageheight / (double)boxheight;
+                    imagewidth = (int)((double)imagewidth / scaledownwidth);
+                }
+
+                imageheight = (int)((double)imagewidth / ratiopicture);
                 pictureBox.Location = new Point((boxwidth - imagewidth) / 2, (boxheight - imageheight) / 2);
                 pictureBox.Size = new Size(imagewidth, imageheight);
 
-                pictureBox.ImageLocation = ImagePath;                       // this could except, so protect..
                 pictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
                 pictureBox.Visible = true;
             }
-            catch
-            {
+            else
                 pictureBox.Visible = false;
-            }
         }
 
         private void UserControlScreenshot_Resize(object sender, EventArgs e)

@@ -64,15 +64,15 @@ namespace EDDiscovery.UserControls
             this.textMinRadius = new ExtendedControls.NumberBoxDouble();
             this.checkBoxCube = new ExtendedControls.ExtCheckBox();
             this.flowLayoutStarDistances = new System.Windows.Forms.FlowLayoutPanel();
-            this.dataViewScrollerPanel2 = new ExtendedControls.ExtPanelDataGridViewScroll();
-            this.vScrollBarCustom2 = new ExtendedControls.ExtScrollBar();
-            this.dataGridViewNearest = new System.Windows.Forms.DataGridView();
+            this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
+            this.vScrollBarCustom = new ExtendedControls.ExtScrollBar();
+            this.dataGridViewNearest = new BaseUtils.DataGridViewColumnHider();
             this.colName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colVisited = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.contextMenuStrip.SuspendLayout();
             this.flowLayoutStarDistances.SuspendLayout();
-            this.dataViewScrollerPanel2.SuspendLayout();
+            this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewNearest)).BeginInit();
             this.SuspendLayout();
             // 
@@ -248,47 +248,46 @@ namespace EDDiscovery.UserControls
             this.flowLayoutStarDistances.TabIndex = 5;
             this.flowLayoutStarDistances.WrapContents = false;
             // 
-            // dataViewScrollerPanel2
+            // dataViewScrollerPanel
             // 
-            this.dataViewScrollerPanel2.Controls.Add(this.vScrollBarCustom2);
-            this.dataViewScrollerPanel2.Controls.Add(this.dataGridViewNearest);
-            this.dataViewScrollerPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataViewScrollerPanel2.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.dataViewScrollerPanel2.LimitLargeChange = 2147483647;
-            this.dataViewScrollerPanel2.Location = new System.Drawing.Point(0, 22);
-            this.dataViewScrollerPanel2.Name = "dataViewScrollerPanel2";
-            this.dataViewScrollerPanel2.Size = new System.Drawing.Size(352, 550);
-            this.dataViewScrollerPanel2.TabIndex = 25;
-            this.dataViewScrollerPanel2.VerticalScrollBarDockRight = true;
+            this.dataViewScrollerPanel.Controls.Add(this.vScrollBarCustom);
+            this.dataViewScrollerPanel.Controls.Add(this.dataGridViewNearest);
+            this.dataViewScrollerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataViewScrollerPanel.InternalMargin = new System.Windows.Forms.Padding(0);
+            this.dataViewScrollerPanel.Location = new System.Drawing.Point(0, 22);
+            this.dataViewScrollerPanel.Name = "dataViewScrollerPanel";
+            this.dataViewScrollerPanel.Size = new System.Drawing.Size(352, 550);
+            this.dataViewScrollerPanel.TabIndex = 25;
+            this.dataViewScrollerPanel.VerticalScrollBarDockRight = true;
             // 
-            // vScrollBarCustom2
+            // vScrollBarCustom
             // 
-            this.vScrollBarCustom2.ArrowBorderColor = System.Drawing.Color.LightBlue;
-            this.vScrollBarCustom2.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.vScrollBarCustom2.ArrowColorScaling = 0.5F;
-            this.vScrollBarCustom2.ArrowDownDrawAngle = 270F;
-            this.vScrollBarCustom2.ArrowUpDrawAngle = 90F;
-            this.vScrollBarCustom2.BorderColor = System.Drawing.Color.White;
-            this.vScrollBarCustom2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.vScrollBarCustom2.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.vScrollBarCustom2.HideScrollBar = true;
-            this.vScrollBarCustom2.LargeChange = 0;
-            this.vScrollBarCustom2.Location = new System.Drawing.Point(336, 0);
-            this.vScrollBarCustom2.Maximum = -1;
-            this.vScrollBarCustom2.Minimum = 0;
-            this.vScrollBarCustom2.MouseOverButtonColor = System.Drawing.Color.Green;
-            this.vScrollBarCustom2.MousePressedButtonColor = System.Drawing.Color.Red;
-            this.vScrollBarCustom2.Name = "vScrollBarCustom2";
-            this.vScrollBarCustom2.Size = new System.Drawing.Size(16, 550);
-            this.vScrollBarCustom2.SliderColor = System.Drawing.Color.DarkGray;
-            this.vScrollBarCustom2.SmallChange = 1;
-            this.vScrollBarCustom2.TabIndex = 24;
-            this.vScrollBarCustom2.ThumbBorderColor = System.Drawing.Color.Yellow;
-            this.vScrollBarCustom2.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.vScrollBarCustom2.ThumbColorScaling = 0.5F;
-            this.vScrollBarCustom2.ThumbDrawAngle = 0F;
-            this.vScrollBarCustom2.Value = -1;
-            this.vScrollBarCustom2.ValueLimited = -1;
+            this.vScrollBarCustom.ArrowBorderColor = System.Drawing.Color.LightBlue;
+            this.vScrollBarCustom.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.vScrollBarCustom.ArrowColorScaling = 0.5F;
+            this.vScrollBarCustom.ArrowDownDrawAngle = 270F;
+            this.vScrollBarCustom.ArrowUpDrawAngle = 90F;
+            this.vScrollBarCustom.BorderColor = System.Drawing.Color.White;
+            this.vScrollBarCustom.Dock = System.Windows.Forms.DockStyle.Top;
+            this.vScrollBarCustom.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.vScrollBarCustom.HideScrollBar = true;
+            this.vScrollBarCustom.LargeChange = 0;
+            this.vScrollBarCustom.Location = new System.Drawing.Point(336, 0);
+            this.vScrollBarCustom.Maximum = -1;
+            this.vScrollBarCustom.Minimum = 0;
+            this.vScrollBarCustom.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.vScrollBarCustom.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.vScrollBarCustom.Name = "vScrollBarCustom";
+            this.vScrollBarCustom.Size = new System.Drawing.Size(16, 550);
+            this.vScrollBarCustom.SliderColor = System.Drawing.Color.DarkGray;
+            this.vScrollBarCustom.SmallChange = 1;
+            this.vScrollBarCustom.TabIndex = 24;
+            this.vScrollBarCustom.ThumbBorderColor = System.Drawing.Color.Yellow;
+            this.vScrollBarCustom.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.vScrollBarCustom.ThumbColorScaling = 0.5F;
+            this.vScrollBarCustom.ThumbDrawAngle = 0F;
+            this.vScrollBarCustom.Value = -1;
+            this.vScrollBarCustom.ValueLimited = -1;
             // 
             // dataGridViewNearest
             // 
@@ -322,6 +321,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewNearest.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.dataGridViewNearest.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewNearest.Name = "dataGridViewNearest";
+            this.dataGridViewNearest.RowHeaderMenuStrip = null;
             dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
             dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -332,6 +332,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewNearest.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.dataGridViewNearest.RowHeadersVisible = false;
             this.dataGridViewNearest.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dataGridViewNearest.SingleRowSelect = true;
             this.dataGridViewNearest.Size = new System.Drawing.Size(336, 550);
             this.dataGridViewNearest.TabIndex = 23;
             this.dataGridViewNearest.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewNearest_CellClick);
@@ -365,14 +366,14 @@ namespace EDDiscovery.UserControls
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.dataViewScrollerPanel2);
+            this.Controls.Add(this.dataViewScrollerPanel);
             this.Controls.Add(this.flowLayoutStarDistances);
             this.Name = "UserControlStarDistance";
             this.Size = new System.Drawing.Size(352, 572);
             this.contextMenuStrip.ResumeLayout(false);
             this.flowLayoutStarDistances.ResumeLayout(false);
             this.flowLayoutStarDistances.PerformLayout();
-            this.dataViewScrollerPanel2.ResumeLayout(false);
+            this.dataViewScrollerPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewNearest)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -383,9 +384,9 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem addToTrilaterationToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem viewOnEDSMToolStripMenuItem1;
-        private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanel2;
-        private ExtendedControls.ExtScrollBar vScrollBarCustom2;
-        private System.Windows.Forms.DataGridView dataGridViewNearest;
+        private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanel;
+        private ExtendedControls.ExtScrollBar vScrollBarCustom;
+        private BaseUtils.DataGridViewColumnHider dataGridViewNearest;
         private DataGridViewTextBoxColumn colName;
         private DataGridViewTextBoxColumn colDistance;
         private DataGridViewTextBoxColumn colVisited;

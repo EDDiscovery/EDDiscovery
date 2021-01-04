@@ -81,12 +81,14 @@ namespace EDDiscovery.UserControls
             this.runSelectionThroughInaraSystemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runEntryThroughProfileSystemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runSelectionThroughIGAUDebugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.runSelectionThroughEDDNDebugNoSendToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showSystemVisitedForeColourToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.extCheckBoxWordWrap = new ExtendedControls.ExtCheckBox();
             this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.panelOutlining = new ExtendedControls.ExtPanelDataGridViewScrollOutlining();
             this.vScrollBarCustom = new ExtendedControls.ExtScrollBar();
-            this.dataGridViewTravel = new System.Windows.Forms.DataGridView();
+            this.dataGridViewTravel = new BaseUtils.DataGridViewColumnHider();
             this.ColumnTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Icon = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -100,6 +102,7 @@ namespace EDDiscovery.UserControls
             this.rollUpAfterFirstToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rollUpAfter5ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelTop = new System.Windows.Forms.FlowLayoutPanel();
+            this.extButtonDrawnHelp = new ExtendedControls.ExtButtonDrawn();
             this.historyContextMenu.SuspendLayout();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTravel)).BeginInit();
@@ -298,13 +301,15 @@ namespace EDDiscovery.UserControls
             this.sendUnsyncedScanToEDDNToolStripMenuItem,
             this.runActionsOnThisEntryToolStripMenuItem,
             this.copyJournalEntryToClipboardToolStripMenuItem,
+            this.showSystemVisitedForeColourToolStripMenuItem,
             this.writeEventInfoToLogDebugToolStripMenuItem,
             this.runActionsAcrossSelectionToolSpeechStripMenuItem,
             this.runSelectionThroughInaraSystemToolStripMenuItem,
             this.runEntryThroughProfileSystemToolStripMenuItem,
-            this.runSelectionThroughIGAUDebugToolStripMenuItem});
+            this.runSelectionThroughIGAUDebugToolStripMenuItem,
+            this.runSelectionThroughEDDNDebugNoSendToolStripMenuItem});
             this.historyContextMenu.Name = "historyContextMenu";
-            this.historyContextMenu.Size = new System.Drawing.Size(388, 466);
+            this.historyContextMenu.Size = new System.Drawing.Size(388, 532);
             this.historyContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.historyContextMenu_Opening);
             // 
             // removeSortingOfColumnsToolStripMenuItem
@@ -494,6 +499,22 @@ namespace EDDiscovery.UserControls
             this.runSelectionThroughIGAUDebugToolStripMenuItem.Text = "Run selection through IGAU (Debug)";
             this.runSelectionThroughIGAUDebugToolStripMenuItem.Click += new System.EventHandler(this.runSelectionThroughIGAUDebugToolStripMenuItem_Click);
             // 
+            // runSelectionThroughEDDNDebugNoSendToolStripMenuItem
+            // 
+            this.runSelectionThroughEDDNDebugNoSendToolStripMenuItem.Name = "runSelectionThroughEDDNDebugNoSendToolStripMenuItem";
+            this.runSelectionThroughEDDNDebugNoSendToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
+            this.runSelectionThroughEDDNDebugNoSendToolStripMenuItem.Text = "Run selection through EDDN no send (Debug)";
+            this.runSelectionThroughEDDNDebugNoSendToolStripMenuItem.Click += new System.EventHandler(this.runSelectionThroughEDDNDebugNoSendToolStripMenuItem_Click);
+            // 
+            // showSystemVisitedForeColourToolStripMenuItem
+            // 
+            this.showSystemVisitedForeColourToolStripMenuItem.Checked = true;
+            this.showSystemVisitedForeColourToolStripMenuItem.CheckOnClick = true;
+            this.showSystemVisitedForeColourToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.showSystemVisitedForeColourToolStripMenuItem.Name = "showSystemVisitedForeColourToolStripMenuItem";
+            this.showSystemVisitedForeColourToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
+            this.showSystemVisitedForeColourToolStripMenuItem.Text = "Show lines in System Visited Fore Colour";
+            // 
             // toolTip
             // 
             this.toolTip.AutoPopDelay = 30000;
@@ -596,8 +617,10 @@ namespace EDDiscovery.UserControls
             this.dataGridViewTravel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewTravel.Location = new System.Drawing.Point(10, 0);
             this.dataGridViewTravel.Name = "dataGridViewTravel";
+            this.dataGridViewTravel.RowHeaderMenuStrip = null;
             this.dataGridViewTravel.RowHeadersWidth = 100;
             this.dataGridViewTravel.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dataGridViewTravel.SingleRowSelect = true;
             this.dataGridViewTravel.Size = new System.Drawing.Size(841, 580);
             this.dataGridViewTravel.TabIndex = 3;
             this.dataGridViewTravel.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewTravel_CellClick);
@@ -722,11 +745,34 @@ namespace EDDiscovery.UserControls
             this.panelTop.Controls.Add(this.checkBoxCursorToTop);
             this.panelTop.Controls.Add(this.extCheckBoxWordWrap);
             this.panelTop.Controls.Add(this.extCheckBoxOutlines);
+            this.panelTop.Controls.Add(this.extButtonDrawnHelp);
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
             this.panelTop.Name = "panelTop";
             this.panelTop.Size = new System.Drawing.Size(870, 30);
             this.panelTop.TabIndex = 31;
+            // 
+            // extButtonDrawnHelp
+            // 
+            this.extButtonDrawnHelp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.extButtonDrawnHelp.AutoEllipsis = false;
+            this.extButtonDrawnHelp.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.extButtonDrawnHelp.Image = null;
+            this.extButtonDrawnHelp.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Text;
+            this.extButtonDrawnHelp.Location = new System.Drawing.Point(570, 3);
+            this.extButtonDrawnHelp.MouseOverColor = System.Drawing.Color.White;
+            this.extButtonDrawnHelp.MouseSelectedColor = System.Drawing.Color.Green;
+            this.extButtonDrawnHelp.MouseSelectedColorEnable = true;
+            this.extButtonDrawnHelp.Name = "extButtonDrawnHelp";
+            this.extButtonDrawnHelp.Padding = new System.Windows.Forms.Padding(6);
+            this.extButtonDrawnHelp.PanelDisabledScaling = 0.25F;
+            this.extButtonDrawnHelp.Selectable = true;
+            this.extButtonDrawnHelp.Size = new System.Drawing.Size(24, 24);
+            this.extButtonDrawnHelp.TabIndex = 31;
+            this.extButtonDrawnHelp.Text = "<code>";
+            this.extButtonDrawnHelp.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.extButtonDrawnHelp.UseMnemonic = true;
+            this.extButtonDrawnHelp.Click += new System.EventHandler(this.extButtonDrawnHelp_Click);
             // 
             // UserControlTravelGrid
             // 
@@ -755,7 +801,7 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.Label labelTime;
         private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanel;
         private ExtendedControls.ExtScrollBar vScrollBarCustom;
-        public System.Windows.Forms.DataGridView dataGridViewTravel;
+        public BaseUtils.DataGridViewColumnHider dataGridViewTravel;
         private System.Windows.Forms.ContextMenuStrip historyContextMenu;
         private System.Windows.Forms.ToolStripMenuItem mapGotoStartoolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem starMapColourToolStripMenuItem;
@@ -803,5 +849,8 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.FlowLayoutPanel panelTop;
         private System.Windows.Forms.ToolStripMenuItem runSelectionThroughIGAUDebugToolStripMenuItem;
         private ExtendedControls.ExtCheckBox extCheckBoxWordWrap;
+        private System.Windows.Forms.ToolStripMenuItem runSelectionThroughEDDNDebugNoSendToolStripMenuItem;
+        private ExtendedControls.ExtButtonDrawn extButtonDrawnHelp;
+        private System.Windows.Forms.ToolStripMenuItem showSystemVisitedForeColourToolStripMenuItem;
     }
 }

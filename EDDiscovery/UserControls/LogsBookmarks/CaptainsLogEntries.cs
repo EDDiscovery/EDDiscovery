@@ -14,7 +14,6 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
-using EDDiscovery.Forms;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using EliteDangerousCore.EDSM;
@@ -178,7 +177,7 @@ namespace EDDiscovery.UserControls
                 dataGridView.FilterGridView(textBoxFilter.Text, checktags: true);
 
             if (lastrow >= 0 && lastrow < dataGridView.Rows.Count && dataGridView.Rows[lastrow].Visible)
-                dataGridView.CurrentCell = dataGridView.Rows[Math.Min(lastrow, dataGridView.Rows.Count - 1)].Cells[3];
+                dataGridView.SetCurrentAndSelectAllCellsOnRow(Math.Min(lastrow, dataGridView.Rows.Count - 1));
         }
 
         private void dataGridView_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
@@ -312,6 +311,8 @@ namespace EDDiscovery.UserControls
             cfs.SaveSettings += TagsChanged;
             cfs.AddAllNone();
             cfs.AddStandardOption(options);
+            cfs.ImageSize = new Size(24, 24);
+
 
             List<string> curtags = rw.Cells[4].Tag as List<string>;     // may be null
             string taglist = curtags != null ? string.Join(";", curtags) : "";
@@ -402,7 +403,7 @@ namespace EDDiscovery.UserControls
             if (dateTimePickerEndDate.Checked)      // we are not at the current time..
             {
                 entrytimeutc = EDDConfig.Instance.ConvertTimeToUTCFromSelected(dateTimePickerEndDate.Value);
-                entrytimeutc = entrytimeutc.AddHours(DateTime.UtcNow.Hour).AddSeconds(DateTime.UtcNow.Minute);
+                entrytimeutc = entrytimeutc.AddHours(DateTime.UtcNow.Hour).AddMinutes(DateTime.UtcNow.Minute);
                 system = "?";
                 body = "?";
             }
@@ -522,8 +523,7 @@ namespace EDDiscovery.UserControls
 
         private void dataGridView_MouseDown(object sender, MouseEventArgs e)
         {
-            dataGridView.HandleClickOnDataGrid(e, out int unusedleftclickrow, out int rightclickrow);
-            rightclickentry = (rightclickrow != -1) ? (CaptainsLogClass)dataGridView.Rows[rightclickrow].Tag : null;
+            rightclickentry = dataGridView.RightClickRowValid ? (CaptainsLogClass)dataGridView.Rows[dataGridView.RightClickRow].Tag : null;
         }
 
         private void contextMenuStrip_Opening(object sender, System.ComponentModel.CancelEventArgs e)

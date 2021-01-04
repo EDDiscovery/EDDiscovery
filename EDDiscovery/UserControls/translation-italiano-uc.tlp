@@ -81,7 +81,7 @@ SECTION UserControlCompass
 .checkBoxHideTransparent: "Hide In Transparent" @
 .labelTargetLat: "Target" @
 
-SECTION UserControlEDSM
+SECTION UserControlWebBrowser
 
 .extCheckBoxStar.ToolTip: "Select another system to view" @
 .System: "System:" @
@@ -100,6 +100,7 @@ SECTION SearchMaterialsCommodities
 .OR: "OR" @
 .DIS: "Discovered at " @
 .COL: "Collected at " @
+.MR: "Mission Reward at " @
 .label2: "Item 2" @
 .label1: "Item 1" @
 .buttonExtFind: "Find" @
@@ -177,12 +178,17 @@ SECTION UserControlEstimatedValues
 
 .BodyName: "Body Name" => "Nome del Corpo"
 .EstValue: "Est Value" => "Vaore Stimato"
+.BodyType: "Body Type" @
+.Mapped: "Mapped" @
+.WasMapped: "Already Mapped" @
+.WasDiscovered: "Already Discovered" @
 .SV: "Estimated Scan Values for {0}" => "Stima dei valori di scansione per {0}"
 .EDSM: "EDSM" @
 .checkBoxEDSM.ToolTip: "Get and show information from EDSM" @
 
 SECTION UserControlExpedition
 
+.toolStripButtonImportNavRoute: "Import Nav route" @
 .SystemName: "System Name" => "Nome del Sistema"
 .Distance: "Dist." @
 .Note: "Note" => "Nota"
@@ -312,6 +318,7 @@ SECTION UserControlLedger
 .toolStripMenuItemGotoItem: "Go to entry on grid" => "Va al registro nella tabella"
 .CashTransactions: "Cash Transactions" @
 .buttonExtExcel.ToolTip: "Send data on grid to excel" @
+.NOLG: "No Ledger available" @
 
 SECTION UserControlLocalMap
 
@@ -365,6 +372,8 @@ SECTION UserControlMarketData
 .Conly: "Cargo only, no market data on this item" @
 .LEntry: "Travel History Entry Last" @
 .panelButtons.ToolTip: "When arriving at a station where you are comparing against (on the right)\r\nswap t" @
+.checkBoxSellOnly: "Sell Only" @
+.checkBoxSellOnly.ToolTip: "Show items you can sell only" @
 
 SECTION UserControlMaterials
 
@@ -427,7 +436,7 @@ SECTION UserControlSurveyor
 .bodyFeaturesToolStripMenuItem.lowRadiusToolStripMenuItem: "Low Radius" @
 .checkEDSMForInformationToolStripMenuItem: "Check EDSM for information" @
 .autoHideToolStripMenuItem: "Auto Hide" @
-.dontHideInFSSModeToolStripMenuItem: "Don\'t Hide in FSS Mode" @
+.dontHideInFSSModeToolStripMenuItem: "Don\\'t Hide in FSS Mode" @
 .showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem: "Show System Info Always" @
 .LowRadius: " Low Radius." @
 .Mapped: " (Mapped & Discovered)" @
@@ -442,6 +451,7 @@ SECTION UserControlSurveyor
 .Hasring: " Has ring." @
 .Has: " Has " @
 .Signals: " Has Signals." @
+.islandable: " is landable." @
 .planetaryClassesToolStripMenuItem: "Planetary Classes" @
 .planetaryClassesToolStripMenuItem.ammoniaWorldToolStripMenuItem: "Ammonia World" @
 .planetaryClassesToolStripMenuItem.earthlikeWorldToolStripMenuItem: "Earthlike World" @
@@ -456,6 +466,7 @@ SECTION UserControlSurveyor
 .textAlignToolStripMenuItem.centerToolStripMenuItem: "Center" @
 .textAlignToolStripMenuItem.rightToolStripMenuItem: "Right" @
 .bodyFeaturesToolStripMenuItem.hasSignalsToolStripMenuItem: "Has Signals" @
+.bodyFeaturesToolStripMenuItem.landableToolStripMenuItem: "Landable" @
 .showAllPlanetsToolStripMenuItem: "Show All Planets" @
 .showAllStarsToolStripMenuItem: "Show All Stars" @
 .showBeltClustersToolStripMenuItem: "Show Belt Clusters" @
@@ -463,17 +474,8 @@ SECTION UserControlSurveyor
 .showValuesToolStripMenuItem: "Show values" @
 .wordWrapToolStripMenuItem: "Word Wrap" @
 
-SECTION UserControlMissions
+SECTION MissionListUserControl
 
-.cColName: "Name" => "Nome"
-.cColStartDate: "Start Date" => "Data d'Inizio"
-.cColEndDate: "End Date" => "Data di Termine"
-.cColOrigin: "Origin" => "Origine"
-.cColFromFaction: "Faction" => "Fazione"
-.cColDestSystem: "Destination" => "Destinazione"
-.cColTargetFaction: "Target Faction" => "Fazione di Destino"
-.cColValue: "Value (cr)" => "Valore (cr)"
-.cColInfo: "Info" @
 .PcolName: "Name" => "Nome"
 .pColStart: "Start Date" => "Data d'Inizio"
 .pColEnd: "End Date" => "Data di Termine"
@@ -484,14 +486,15 @@ SECTION UserControlMissions
 .pColResult: "Result (cr)" => "Risultato (cr)"
 .pColInfo: "Info" @
 .labelTo: "to" => "a"
-.panelButtons.ToolTip: "Left click and drag on grid to reorder" @
+
+SECTION UserControlMissions
+
 .MPlural: " Missions" @
 .MSingular: " Mission" @
-.Name: "Name" @
+.Name: "Name" => "Nome"
 .Value: "Value (cr):\n{0:N0}" @
 .ValueN: "Value (cr)" @
 .ValueC: "Value: " @
-.ToolTip: "Left click and drag on grid to reorder" @
 
 SECTION UserControlModules
 
@@ -552,6 +555,8 @@ SECTION UserControlModules
 .buttonExtExcel.ToolTip: "Send data on grid to excel" @
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 .AllModules: "All Modules" @
+.ForceSell: "Force Sell" @
+.NOSI: "No Ship Information available" @
 
 SECTION UserControlNotePanel
 
@@ -615,6 +620,7 @@ SECTION UserControlPlot
 .D1: "\r\n{0} distance {1:N2} Ly" @
 .D2: "\r\n    Visits: {0}" @
 .D3: "\r\n    Coordinates: X:{0:N2}, Y:{1:N2}, Z:{2:N2}\r\n" @
+.Nt": "\r\n    Notes: {0}\r\n" @
 
 SECTION UserControlRoute
 
@@ -881,16 +887,18 @@ SECTION UserControlSettings
 .radioButtonCentreHome: "Home System" => "Sistema Preferito"
 .labelOpenOn: "Open Centred On" => "Apri centrata su"
 .labelHome: "Now in Commander Settings" => "Sistema Predefinito"
-.Font: "The font used by this theme is not available on your system.\r\nThe font needed is \"{0}\".\r\nInstall this font to fully use this theme.\r\nEuro Caps font is freely available from www.edassets.org.\r\n\r\nWould you like to load this theme using a replacement font?" => "Avviso di fonte {0}"
+.Font: "The font used by this theme is not available on your system.\r\nThe font needed is \\"{0}\\".\r\nInstall this font to fully use this theme.\r\nEuro Caps font is freely available from www.edassets.org.\r\n\r\nWould you like to load this theme using a replacement font?" => "Avviso di fonte {0}"
 .Information: "Applies at next restart of ED Discovery" => "Applica la prossimo avvio di EDDiscovery"
 .AddC: "Commander name is not valid or duplicate" @
 .AddT: "Cannot create Commander" @
+.DelCmdr: "Do you wish to delete commander " @
 .Language: "Applies at next restart of ED Discovery" @
 .RemoveSectors: "Remove Sectors" @
 .GalRemove: "Removing {0} Sector(s).\r\n\r\nThis will take a while (up to 30 mins dep on drive type and amount of sectors).\r\nYou may continue to use EDD while this operation takes place\r\nbut it may be slow to respond. Do not close down EDD until this window says\r\nthe process has finished\r\n\r\n" @
 .GalFini: "Finished, Please close the window.\r\nIf you already have the 3dmap open, changes will not be reflected in that map until the next start of EDD\r\n" @
 .GameTime: "Game Time" @
 .Local: "Local" @
+.NoMap: "No map available!" @
 
 SECTION UserControlShipYards
 
@@ -992,6 +1000,7 @@ SECTION UserControlStarDistance
 .textMaxRadius.ToolTip: "Maximum star distance in ly" @
 .From: "From {0}" @
 .NoEDSMSys: "System could not be found - has not been synched or EDSM is unavailable" @
+.viewSystemToolStripMenuItem: "View System" @
 
 SECTION UserControlStarList
 
@@ -1017,6 +1026,7 @@ SECTION UserControlStarList
 .viewScanDisplayToolStripMenuItem: "View Scan Display" @
 .Total: "Total" @
 .Signals: "{0} has signals" @
+.Distance: " ({0} ls)" @
 .FV: "First visit {0}" @
 .CS: "{0} Star(s) {1}" @
 .SMBH: "{0} is a super massive black hole" @
@@ -1282,6 +1292,15 @@ SECTION UserControlSysInfo
 .SysUnk: "System unknown to EDSM" @
 .Pos: "Position is {0:0.00},{1:0.00},{2:0.00}" @
 .Target: "On 3D Map right click to make a bookmark, region mark or click on a notemark and then tick on Set Target, or type it here and hit enter" @
+.extButtonEDSMTarget: "EDSM" @
+.labelOpenShip: "Open" @
+.labelOpenStation: "Open" @
+.extButtonSpanshStation: "S" @
+.extButtonSpanshSystem: "S" @
+.displayStationButtonsToolStripMenuItem: "Display Station Buttons" @
+.displayShipButtonsToolStripMenuItem: "Display Ship Buttons" @
+.labelStationFaction: "Faction" @
+.displayStationFactionToolStripMenuItem: "Display Station Faction" @
 
 SECTION UserControlContainerSplitter
 
@@ -1341,6 +1360,7 @@ SECTION UserControlTravelGrid
 .runActionsAcrossSelectionToolSpeechStripMenuItem: "Run actions across selection for speech debugging (Debug)" => "Avvia azioni attraverso le selezione per verificare (Debug) il sistema di pronuncia"
 .runSelectionThroughInaraSystemToolStripMenuItem: "Run selection through Inara System (Debug)" => "Avvia la selezione su Inara (Debug)"
 .runEntryThroughProfileSystemToolStripMenuItem: "Run entry through Profile System (Debug)" => "Avvia il registro attraverso il Profilo di Sistema (Debug)"
+.runSelectionThroughEDDNDebugNoSendToolStripMenuItem: "Run selection through EDDN no send (Debug)" @
 .TT1: " showing {0} original {1}" @
 .TTFilt1: "Filtered {0}" @
 .TTSelAge: "Select the entries by age, " @
@@ -1454,6 +1474,9 @@ SECTION UserControlTrilateration
 .PF: "Position found" @
 .addAllSectorSystemsToolStripMenuItem: "Add all Sector systems" @
 .toolStripButtonSector: "Sector Systems" @
+.NotProcGen: "Sector name could not be derived from system name (it may not be procedurally generated).  Not getting sector systems." @
+.NoSector: "No systems with unknown coordinates were found for the current sector." @
+.SectorCount: "{0} systems with unknown coordinates found in {1} sector." @
 
 SECTION UserControlTrippanel
 
@@ -1470,6 +1493,7 @@ SECTION UserControlTrippanel
 .NoT: " -> Target not set" @
 .FDEDSM: "Shows if EDSM indicates your it's first discoverer" @
 .UKN: "System {0} unknown to EDSM" @
+.Left: "Left" @
 
 SECTION UserControlMaterialTrader
 
@@ -1488,6 +1512,69 @@ SECTION UserControlMaterialTrader
 .Raw: "Raw" @
 .Encoded: "Encoded" @
 .Manufactured: "Manufactured" @
+
+SECTION UserControlMiningOverlay
+
+.extCheckBoxZeroRefined: ">0" @
+.Proscoll: ", Prospectors Fired {0}, Collectors Deployed {1}, Cracked {2}" @
+.ref: "Ref." @
+.coll: "Coll." @
+.pros: "Prosp." @
+.ratio: "Ratio%" @
+.avg: "Avg%" @
+.min: "Min%" @
+.max: "Max%" @
+.mload: "M.Lode" @
+.hml: "HML Ct." @
+.discv: "Discv" @
+.astpros: "Asteroids Pros." @
+.content: "Content %" @
+.above: "% Above" @
+.dist: "Distribution" @
+.Limcargo: "Limpets left {0}, Cargo left {1}" @
+
+SECTION UserControlFactions
+
+.colFaction: "Faction" @
+.colMissions: "Missions" @
+.colInfluence: "Inf +" @
+.colReputation: "Rep +" @
+.colMissionCredits: "Mission Credits" @
+.CBought: "Commds +" @
+.CSold: "Commds -" @
+.MBought: "Mats +" @
+.MSold: "Mats -" @
+.CrimeCommitted: "Crimes Committed" @
+.BountyKills: "Bounty Kills" @
+.BountyValue: "Bounty Rewards" @
+.BountyRewardsValue: "Bounty Rewards Value" @
+.Interdicted: "Interdicted" @
+.Interdiction: "Interdiction" @
+.KillBondVictim: "Kill Bonds Victim" @
+.KillBondsAward: "Kill Bonds Awarded" @
+.KillBondsValue: "Kill Bonds Value" @
+.colInfo: "Other Info" @
+.labelTo: "to" @
+.startDateTime.ToolTip: "Include from" @
+.endDateTime.ToolTip: "Include to" @
+.FactionsPlural: "Factions" @
+.MissionsFor: "Missions for " @
+.BountyBond: "Bounty/Bond" @
+.Target: "Target" @
+.TargetFaction: "Target Faction" @
+.Reward: "Reward" @
+.BountiesBondsFor: "Bounties/Bonds for " @
+.Item: "Item" @
+.MaterialCommodsFor: "Materials/Commodities for " @
+.SystemAddress: "System Address" @
+.BountiesPlural: "Bounties" @
+.RewardsPlural: "Rewards" @
+.BondsPlural: "Bonds" @
+.SystemsDetailFor: "Systems Detail for " @
+.showMissionsForFactionToolStripMenuItem: "Show missions for faction" @
+.showCommoditymaterialTradesForFactionToolStripMenuItem: "Show commodity/material trades for faction" @
+.showBountiesAndBondsForFactionToolStripMenuItem: "Show bounties and bonds for faction" @
+.showFactionSystemDetailToolStripMenuItem: "Show system detail for faction" @
 
 SECTION ScanDisplayUserControl
 
@@ -1525,3 +1612,8 @@ SECTION FilterSelector
 SECTION UserControlCommonBase
 
 .Copyingtexttoclipboardfailed: "Copying text to clipboard failed" @
+
+SECTION CSV
+
+.Helpers.OpenFailed: "Failed to open " @
+.Helpers.WriteFailed: "Failed to write to " @

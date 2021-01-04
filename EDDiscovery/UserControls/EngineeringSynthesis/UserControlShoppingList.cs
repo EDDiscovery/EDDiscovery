@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2017 EDDiscovery development team
+ * Copyright © 2016 - 2020 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -15,7 +15,6 @@
  */
 using EDDiscovery.Forms;
 using EliteDangerousCore;
-using EliteDangerousCore.DB;
 using EliteDangerousCore.JournalEvents;
 using ExtendedControls;
 using System;
@@ -41,16 +40,16 @@ namespace EDDiscovery.UserControls
         private bool showListAvailability;
         private bool showSystemAvailability;
         private bool useEDSMForSystemAvailability;
-        private bool toggleShoppingListPosition;
-                
-        private bool useHistoric = false;        
-        
-        private string DbShowInjectionsSave { get { return DBName("ShoppingListShowFSD" ); } }
-        private string DbShowAllMatsLandedSave { get { return DBName("ShoppingListShowPlanetMats" ); } }
+        private bool HorizonalSplitContainerPos;
+
+        private bool useHistoric = false;
+
+        private string DbShowInjectionsSave { get { return DBName("ShoppingListShowFSD"); } }
+        private string DbShowAllMatsLandedSave { get { return DBName("ShoppingListShowPlanetMats"); } }
         private string DbHideFullMatsLandedSave { get { return DBName("ShoppingListHideFullMats"); } }
-        private string DbHighlightAvailableMats { get { return DBName("ShoppingListHighlightAvailable" ); } }
-        private string DBShowSystemAvailability { get { return DBName("ShoppingListSystemAvailability" ); } }
-        private string DBUseEDSMForSystemAvailability { get { return DBName("ShoppingListUseEDSM" ); } }
+        private string DbHighlightAvailableMats { get { return DBName("ShoppingListHighlightAvailable"); } }
+        private string DBShowSystemAvailability { get { return DBName("ShoppingListSystemAvailability"); } }
+        private string DBUseEDSMForSystemAvailability { get { return DBName("ShoppingListUseEDSM"); } }
         private string DBTechBrokerFilterSave { get { return DBName("ShoppingListTechBrokerFilter"); } }
         private string DBSpecialEffectsFilterSave { get { return DBName("ShoppingListSpecialEffectsFilter"); } }
         private string DbToggleShoppingListPosition { get { return DBName("ShoppingListPositionToggle"); } }
@@ -86,7 +85,7 @@ namespace EDDiscovery.UserControls
             showListAvailability = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbHighlightAvailableMats, true);
             showSystemAvailability = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DBShowSystemAvailability, true);
             useEDSMForSystemAvailability = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DBUseEDSMForSystemAvailability, false);
-            toggleShoppingListPosition = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbToggleShoppingListPosition, false);
+            HorizonalSplitContainerPos = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbToggleShoppingListPosition, false);
 
             pictureBoxList.ContextMenuStrip = contextMenuStrip;
 
@@ -122,7 +121,7 @@ namespace EDDiscovery.UserControls
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbHighlightAvailableMats, showListAvailability);
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DBShowSystemAvailability, showSystemAvailability);
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DBUseEDSMForSystemAvailability, useEDSMForSystemAvailability);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbToggleShoppingListPosition, toggleShoppingListPosition);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbToggleShoppingListPosition, HorizonalSplitContainerPos);
             userControlEngineering.CloseDown();
             userControlSynthesis.CloseDown();
         }
@@ -142,16 +141,7 @@ namespace EDDiscovery.UserControls
             useHistoricMaterialCountsToolStripMenuItem.Checked = useHistoric;
             showSystemAvailabilityOfMaterialsInShoppingListToolStripMenuItem.Checked = showSystemAvailability;
             useEDSMDataInSystemAvailabilityToolStripMenuItem.Checked = useEDSMForSystemAvailability;
-
-            if (toggleShoppingListPosition == true)
-            {
-                splitContainerVertical.Orientation = Orientation.Horizontal;
-            }
-            else
-            {
-                splitContainerVertical.Orientation = Orientation.Vertical;
-            }
-            
+            SetSplitPosition();
             Display();
         }
 
@@ -161,8 +151,8 @@ namespace EDDiscovery.UserControls
             userControlSynthesis.LoadLayout();
         }
 
-        public override Color ColorTransparency { get { return Color.Green; } }
-                
+        public override bool SupportTransparency { get { return true; } }
+
         public override void SetTransparency(bool on, Color curcol)
         {
             pictureBoxList.BackColor = this.BackColor = splitContainerVertical.BackColor = splitContainerRightHorz.BackColor = curcol;
@@ -182,7 +172,7 @@ namespace EDDiscovery.UserControls
             SynthesisWanted = wanted;
             Display();
         }
-        
+
         private async void Display()
         {
             HistoryEntry last_he = userControlSynthesis.CurrentHistoryEntry;        // sync with what its showing
@@ -224,13 +214,14 @@ namespace EDDiscovery.UserControls
                 JournalScan sd = null;
                 StarScan.SystemNode last_sn = null;
 
-                if (last_he.IsLanded && (showListAvailability || showPlanetMats))
+                if (showListAvailability || showPlanetMats)
                 {
-                    sd = discoveryform.history.GetScans(last_he.System.Name).Where(sc => sc.BodyName == last_he.WhereAmI).FirstOrDefault();
-                }
-                if (!last_he.IsLanded && showSystemAvailability)
-                {
-                    last_sn = await discoveryform.history.starscan.FindSystemAsync(last_he.System, useEDSMForSystemAvailability);
+                    last_sn = await discoveryform.history.StarScan.FindSystemAsync(last_he.System, useEDSMForSystemAvailability);
+
+                    if (last_he.IsLanded && last_sn != null )       // if found node, and landed
+                    {
+                        sd = last_sn.Find(last_he.WhereAmI)?.ScanData;  // find scan data for this body
+                    }
                 }
 
                 StringBuilder wantedList = new StringBuilder();
@@ -238,23 +229,23 @@ namespace EDDiscovery.UserControls
                 if (shoppinglist.Any())
                 {
                     double available;
-                    wantedList.Append("Needed Mats".T(EDTx.UserControlShoppingList_NM) + ":" +  Environment.NewLine);
+                    wantedList.Append("Needed Mats".T(EDTx.UserControlShoppingList_NM) + ":" + Environment.NewLine);
                     List<string> capExceededMats = new List<string>();
                     foreach (var c in shoppinglist)      // and add new..
                     {
                         string present = "";
-                        if (showListAvailability)
+                        if (showListAvailability && sd != null && sd.HasMaterials)
                         {
-                            if (sd != null && sd.HasMaterials)
+                            if (sd.Materials.TryGetValue(c.Item1.Details.FDName, out available))
                             {
-                                if (sd.Materials.TryGetValue(c.Item1.Details.FDName, out available))
-                                {
-                                    present = $" {available.ToString("N1")}%";
-                                }
-                                else
-                                { present = " -"; }
+                                present = $" {available.ToString("N1")}%";
+                            }
+                            else
+                            {
+                                present = " -";
                             }
                         }
+
                         wantedList.Append($"  {c.Item2} {c.Item1.Details.Name}{present}");
                         int? onHand = mcl.Where(m => m.Details.Shortname == c.Item1.Details.Shortname).FirstOrDefault()?.Count;
                         int totalReq = c.Item2 + (onHand.HasValue ? onHand.Value : 0);
@@ -268,7 +259,7 @@ namespace EDDiscovery.UserControls
                         }
                         if (!last_he.IsLanded && last_sn != null)
                         {
-                            var landables = last_sn.Bodies.Where(b => b.ScanData != null && (!b.ScanData.IsEDSMBody || useEDSMForSystemAvailability) && 
+                            var landables = last_sn.Bodies.Where(b => b.ScanData != null && (!b.ScanData.IsEDSMBody || useEDSMForSystemAvailability) &&
                                                                  b.ScanData.HasMaterials && b.ScanData.Materials.ContainsKey(c.Item1.Details.FDName));
                             if (landables.Count() > 0)
                             {
@@ -281,7 +272,7 @@ namespace EDDiscovery.UserControls
                                 }
                                 allMats = allMats.OrderByDescending(m => m.Item2).ToList();
                                 int n = 1;
-                                foreach(Tuple<string, double> m in allMats)
+                                foreach (Tuple<string, double> m in allMats)
                                 {
                                     if (n % 6 == 0) wantedList.Append("\n    ");
                                     wantedList.Append($"{m.Item1.ToUpperInvariant()}: {m.Item2.ToString("N1")}% ");
@@ -292,10 +283,10 @@ namespace EDDiscovery.UserControls
                         wantedList.Append("\n");
                     }
 
-                    if(capExceededMats.Any())
+                    if (capExceededMats.Any())
                     {
                         wantedList.Append(Environment.NewLine + "Filling Shopping List would exceed capacity for:".T(EDTx.UserControlShoppingList_FS));
-                        foreach(string mat in capExceededMats)
+                        foreach (string mat in capExceededMats)
                         {
                             wantedList.Append($"\n  {mat}");
                         }
@@ -319,13 +310,13 @@ namespace EDDiscovery.UserControls
 
                 if (showPlanetMats && sd != null && sd.HasMaterials)
                 {
-                    wantedList.Append(Environment.NewLine + Environment.NewLine + string.Format("Materials on {0}".T(EDTx.UserControlShoppingList_MO), last_he.WhereAmI) + Environment.NewLine );
+                    wantedList.Append(Environment.NewLine + Environment.NewLine + string.Format("Materials on {0}".T(EDTx.UserControlShoppingList_MO), last_he.WhereAmI) + Environment.NewLine);
                     foreach (KeyValuePair<string, double> mat in sd.Materials)
                     {
                         int? onHand = mcl.Where(m => m.Details.FDName == mat.Key).FirstOrDefault()?.Count;
-                        MaterialCommodityData md =  GetByFDName(mat.Key);
+                        MaterialCommodityData md = GetByFDName(mat.Key);
                         int max = md.MaterialLimit().Value;
-                        if(!hidePlanetMatsWithNoCapacity || (onHand.HasValue ? onHand.Value : 0) < max)
+                        if (!hidePlanetMatsWithNoCapacity || (onHand.HasValue ? onHand.Value : 0) < max)
                         {
                             wantedList.AppendFormat("   {0} {1}% ({2}/{3})\n", System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(mat.Key.ToLowerInvariant()),
                                                                             mat.Value.ToString("N1"), (onHand.HasValue ? onHand.Value : 0), max);
@@ -341,11 +332,11 @@ namespace EDDiscovery.UserControls
 
                 try
                 {
-                    splitContainerVertical.Panel1MinSize = displayList.Image.Width + 8;       // panel left has minimum width to accomodate the text
+                    splitContainerVertical.SplitterDistance = (HorizonalSplitContainerPos ? displayList.Image.Height : displayList.Image.Width) + 8;       // panel left has minimum width to accomodate the text
                 }
                 catch (Exception e)
                 {
-                    System.Diagnostics.Debug.WriteLine("Swallowed exception " + e);         // swallow the exception - seen an instance of it but wan't reproduce. #2512.
+                    System.Diagnostics.Debug.WriteLine("Shop list exception " + e);         // swallow the exception - seen an instance of it but wan't reproduce. #2512.
                 }
 
                 if (IsTransparent)
@@ -395,7 +386,7 @@ namespace EDDiscovery.UserControls
             userControlEngineering.SetHistoric(useHistoric);
             Display();
         }
-                
+
         private void showSystemAvailabilityOfMaterialsInShoppingListToolStripMenuItem_Click(object sender, EventArgs e)
         {
             showSystemAvailability = ((ToolStripMenuItem)sender).Checked;
@@ -437,24 +428,23 @@ namespace EDDiscovery.UserControls
             hidePlanetMatsWithNoCapacity = ((ToolStripMenuItem)sender).Checked;
             Display();
         }
-                
-        private void ChangeShoppingListOrientation()
-        {
-            if (splitContainerVertical.Orientation == Orientation.Vertical)
-            {
-                splitContainerVertical.Orientation = Orientation.Horizontal;
-                toggleShoppingListPosition = true;
-            }
-            else if (splitContainerVertical.Orientation == Orientation.Horizontal)
-            {
-                splitContainerVertical.Orientation = Orientation.Vertical;
-                toggleShoppingListPosition = false;
-            }
-        }
 
         private void ToggleListPositionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ChangeShoppingListOrientation();
+            HorizonalSplitContainerPos = !HorizonalSplitContainerPos;
+            SetSplitPosition();
+        }
+
+        private void SetSplitPosition()
+        {
+            try
+            {       // if its having a bad day, it can except
+                splitContainerVertical.Orientation = HorizonalSplitContainerPos ? Orientation.Horizontal : Orientation.Vertical;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Exception due to split container " + ex.Message);
+            }
         }
     }
 }

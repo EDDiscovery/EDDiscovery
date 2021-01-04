@@ -74,7 +74,7 @@ namespace EDDiscovery.Actions
                     }
                     else if (cmdname.Equals("2dmap"))
                     {
-                        (ap.actioncontroller as ActionController).DiscoveryForm.Open2DMap();
+                        (ap.actioncontroller as ActionController).DiscoveryForm.PopOuts.PopOut(PanelInformation.PanelIDs.Map2D);
                     }
                     else if (cmdname.Equals("edsm"))
                     {
@@ -83,7 +83,7 @@ namespace EDDiscovery.Actions
                         EliteDangerousCore.EDSM.EDSMClass edsm = new EliteDangerousCore.EDSM.EDSMClass();
 
                         if (edsm.ValidCredentials)
-                            EliteDangerousCore.EDSM.EDSMJournalSync.SendEDSMEvents(ap.actioncontroller.LogLine, ac.DiscoveryForm.history);
+                            EliteDangerousCore.EDSM.EDSMJournalSync.SendEDSMEvents(ap.actioncontroller.LogLine, ac.DiscoveryForm.history.EntryOrder());
                         else
                             ap.ReportError("No valid EDSM Credentials");
                     }
@@ -335,7 +335,7 @@ namespace EDDiscovery.Actions
                                     }
                                     else
                                     {
-                                        EliteDangerousCore.HistoryEntry he = EliteDangerousCore.HistoryEntry.FromJournalEntry(je, null, true, out bool journalupdate);
+                                        EliteDangerousCore.HistoryEntry he = EliteDangerousCore.HistoryEntry.FromJournalEntry(je, null);
                                         (ap.actioncontroller as ActionController).ActionRunOnEntry(he, Actions.ActionEventEDList.NewEntry(he), now: true);
                                     }
                                 }

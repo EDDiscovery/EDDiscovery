@@ -66,16 +66,16 @@ namespace EDDiscovery.Properties {
         ///
         ///Developers for this release series:
         ///Robby (Releaser)
-        ///Bravada Cadelanne, Iain Ross, Andrea Spada, Carcher99
+        ///Bravada Cadelanne, Iain Ross, Andrea Spada
         ///
         ///Images Captured by:
         ///Spandino, Robby, Eahlstan, Ettanin, CompleteNOOB from Frontier Elite Dangerous Images (C) Frontier Developments PLC
         ///
         ///Languages Translations:
-        ///Potatossuaro, Zafford, Andrea Spada, Goscickiw, Nats-ji, Jay
+        ///Kmizole, Potatossuaro, Zafford, Andrea Spada, Goscickiw, Nats-ji, Jay
         ///
         ///Previous Contributors:
-        ///IGAU, EoD, Imathrowback, phwoelfel, Robosa, Daniel-finger, Phroggie, Finwen, Corbin Moran,  [rest of string was truncated]&quot;;.
+        ///Carcher99, IGAU, EoD, Imathrowback, phwoelfel, Robosa, Daniel-finger, Phroggie, Finwen, Corbi [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Credits {
             get {
@@ -247,11 +247,29 @@ namespace EDDiscovery.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to https://eddb.io/station/market-id/.
+        /// </summary>
+        internal static string URLEDDBStationMarketId {
+            get {
+                return ResourceManager.GetString("URLEDDBStationMarketId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to http://eddb.io/system/.
         /// </summary>
         internal static string URLEDDBSystem {
             get {
                 return ResourceManager.GetString("URLEDDBSystem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://eddb.io/system/name/.
+        /// </summary>
+        internal static string URLEDDBSystemName {
+            get {
+                return ResourceManager.GetString("URLEDDBSystemName", resourceCulture);
             }
         }
         
@@ -319,6 +337,24 @@ namespace EDDiscovery.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to https://inara.cz/galaxy-starsystem/?search=.
+        /// </summary>
+        internal static string URLInaraStarSystem {
+            get {
+                return ResourceManager.GetString("URLInaraStarSystem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://inara.cz/galaxy-station/?search=.
+        /// </summary>
+        internal static string URLInaraStation {
+            get {
+                return ResourceManager.GetString("URLInaraStation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to https://discordapp.com/invite/0qIqfCQbziTWzsQu.
         /// </summary>
         internal static string URLProjectDiscord {
@@ -364,6 +400,24 @@ namespace EDDiscovery.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to https://www.youtube.com/channel/UC6CMbualdRleR47ocYPnokg/.
+        /// </summary>
+        internal static string URLProjectVideos {
+            get {
+                return ResourceManager.GetString("URLProjectVideos", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://www.youtube.com.
+        /// </summary>
+        internal static string URLProjectVideosRoot {
+            get {
+                return ResourceManager.GetString("URLProjectVideosRoot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to https://github.com/EDDiscovery/EDDiscovery/wiki.
         /// </summary>
         internal static string URLProjectWiki {
@@ -378,6 +432,33 @@ namespace EDDiscovery.Properties {
         internal static string URLRossSystem {
             get {
                 return ResourceManager.GetString("URLRossSystem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://spansh.co.uk/body/.
+        /// </summary>
+        internal static string URLSpanshBodyId {
+            get {
+                return ResourceManager.GetString("URLSpanshBodyId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://spansh.co.uk/station/.
+        /// </summary>
+        internal static string URLSpanshStationMarketId {
+            get {
+                return ResourceManager.GetString("URLSpanshStationMarketId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://spansh.co.uk/system/.
+        /// </summary>
+        internal static string URLSpanshSystemSystemId {
+            get {
+                return ResourceManager.GetString("URLSpanshSystemSystemId", resourceCulture);
             }
         }
     }

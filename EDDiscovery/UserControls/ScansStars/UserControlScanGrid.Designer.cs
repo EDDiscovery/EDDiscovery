@@ -46,7 +46,7 @@ namespace EDDiscovery.UserControls
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dataViewScrollerPanel2 = new ExtendedControls.ExtPanelDataGridViewScroll();
-            this.dataGridViewScangrid = new System.Windows.Forms.DataGridView();
+            this.dataGridViewScangrid = new BaseUtils.DataGridViewColumnHider();
             this.colImage = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colClass = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -121,10 +121,12 @@ namespace EDDiscovery.UserControls
             this.dataGridViewScangrid.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewScangrid.Name = "dataGridViewScangrid";
             this.dataGridViewScangrid.ReadOnly = true;
+            this.dataGridViewScangrid.RowHeaderMenuStrip = null;
             this.dataGridViewScangrid.RowHeadersVisible = false;
             this.dataGridViewScangrid.RowTemplate.Height = 36;
             this.dataGridViewScangrid.RowTemplate.ReadOnly = true;
             this.dataGridViewScangrid.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dataGridViewScangrid.SingleRowSelect = true;
             this.dataGridViewScangrid.Size = new System.Drawing.Size(556, 550);
             this.dataGridViewScangrid.TabIndex = 23;
             this.dataGridViewScangrid.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewScangrid_CellDoubleClick);
@@ -476,7 +478,7 @@ namespace EDDiscovery.UserControls
         #endregion
         private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanel2;
         private ExtendedControls.ExtScrollBar vScrollBarCustom2;
-        private System.Windows.Forms.DataGridView dataGridViewScangrid;
+        private BaseUtils.DataGridViewColumnHider dataGridViewScangrid;
         private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem circumstellarZoneToolStripMenuItem;

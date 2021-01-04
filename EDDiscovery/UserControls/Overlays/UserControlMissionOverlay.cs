@@ -50,7 +50,8 @@ namespace EDDiscovery.UserControls
             Default = MissionName | StartDate | EndDate | MissionDescription | RewardInfo | FactionInfo
         }
 
-        public override Color ColorTransparency { get { return Color.Green; } }
+        public override bool SupportTransparency { get { return true; } }
+
         public override void SetTransparency(bool on, Color curcol)
         {
             pictureBox.BackColor = this.BackColor = curcol;
@@ -195,10 +196,11 @@ namespace EDDiscovery.UserControls
                     if (rewardToolStripMenuItem.Checked && ms.Mission.Reward.HasValue && ms.Mission.Reward > 0 )
                         text = text.AppendPrePad( BaseUtils.FieldBuilder.Build(" ;cr", ms.Mission.Reward.GetValueOrDefault().ToString("N0")) , ", ");
 
-                    StringFormat frmt = new StringFormat();
-
-                    var ie = pictureBox.AddTextAutoSize(new Point(10, vpos), new Size(this.Width-20, this.Height), text, displayfont, textcolour, backcolour, 1.0F, frmt:frmt);
-                    vpos = ie.Location.Bottom + displayfont.ScalePixels(4);
+                    using (StringFormat frmt = new StringFormat())
+                    {
+                        var ie = pictureBox.AddTextAutoSize(new Point(10, vpos), new Size(this.Width - 20, this.Height), text, displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+                        vpos = ie.Location.Bottom + displayfont.ScalePixels(4);
+                    }
                 }
             }
 

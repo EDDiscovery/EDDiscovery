@@ -49,8 +49,8 @@ namespace EDDiscovery.UserControls
             this.toolStripButtonNew = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonLoad = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonSave = new System.Windows.Forms.ToolStripButton();
-            this.tsbAddSystems = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonImportFile = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonAddSystems = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonImportTextFile = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonExport = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonClear = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -65,7 +65,7 @@ namespace EDDiscovery.UserControls
             this.deleteRowsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setTargetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editBookmarkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.dataGridViewExplore = new System.Windows.Forms.DataGridView();
+            this.dataGridViewExplore = new BaseUtils.DataGridViewColumnHider();
             this.ColumnSystemName = new ExtendedControls.ExtDataGridViewColumnAutoComplete();
             this.ColumnDist = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnX = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -95,8 +95,8 @@ namespace EDDiscovery.UserControls
             this.toolStripButtonNew,
             this.toolStripButtonLoad,
             this.toolStripButtonSave,
-            this.tsbAddSystems,
-            this.toolStripButtonImportFile,
+            this.toolStripButtonAddSystems,
+            this.toolStripButtonImportTextFile,
             this.toolStripButtonExport,
             this.toolStripButtonClear,
             this.toolStripSeparator1});
@@ -135,25 +135,25 @@ namespace EDDiscovery.UserControls
             this.toolStripButtonSave.Text = "Save";
             this.toolStripButtonSave.Click += new System.EventHandler(this.toolStripButtonSave_Click);
             // 
-            // tsbAddSystems
+            // toolStripButtonAddSystems
             // 
-            this.tsbAddSystems.Image = global::EDDiscovery.Icons.Controls.Exploration_ImportSphere;
-            this.tsbAddSystems.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.tsbAddSystems.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbAddSystems.Name = "tsbAddSystems";
-            this.tsbAddSystems.Size = new System.Drawing.Size(103, 29);
-            this.tsbAddSystems.Text = "Add Systems";
-            this.tsbAddSystems.Click += new System.EventHandler(this.tsbAddSystems_Click);
+            this.toolStripButtonAddSystems.Image = global::EDDiscovery.Icons.Controls.Exploration_ImportSphere;
+            this.toolStripButtonAddSystems.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.toolStripButtonAddSystems.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonAddSystems.Name = "toolStripButtonAddSystems";
+            this.toolStripButtonAddSystems.Size = new System.Drawing.Size(103, 29);
+            this.toolStripButtonAddSystems.Text = "Add Systems";
+            this.toolStripButtonAddSystems.Click += new System.EventHandler(this.toolStripButtonAddSystems_Click);
             // 
-            // toolStripButtonImportFile
+            // toolStripButtonImportTextFile
             // 
-            this.toolStripButtonImportFile.Image = global::EDDiscovery.Icons.Controls.Exploration_ImportFile;
-            this.toolStripButtonImportFile.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.toolStripButtonImportFile.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonImportFile.Name = "toolStripButtonImportFile";
-            this.toolStripButtonImportFile.Size = new System.Drawing.Size(116, 29);
-            this.toolStripButtonImportFile.Text = "Import Text File";
-            this.toolStripButtonImportFile.Click += new System.EventHandler(this.toolStripButtonImportFile_Click);
+            this.toolStripButtonImportTextFile.Image = global::EDDiscovery.Icons.Controls.Exploration_ImportFile;
+            this.toolStripButtonImportTextFile.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.toolStripButtonImportTextFile.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonImportTextFile.Name = "toolStripButtonImportTextFile";
+            this.toolStripButtonImportTextFile.Size = new System.Drawing.Size(116, 29);
+            this.toolStripButtonImportTextFile.Text = "Import Text File";
+            this.toolStripButtonImportTextFile.Click += new System.EventHandler(this.toolStripButtonImportTextFile_Click);
             // 
             // toolStripButtonExport
             // 
@@ -326,10 +326,12 @@ namespace EDDiscovery.UserControls
             this.dataGridViewExplore.ContextMenuStrip = this.contextMenuCopyPaste;
             this.dataGridViewExplore.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewExplore.Name = "dataGridViewExplore";
+            this.dataGridViewExplore.RowHeaderMenuStrip = null;
             this.dataGridViewExplore.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dataGridViewExplore.SingleRowSelect = true;
             this.dataGridViewExplore.Size = new System.Drawing.Size(801, 483);
             this.dataGridViewExplore.TabIndex = 2;
-            this.dataGridViewExplore.CellValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewExplore_CellValidated);
+            this.dataGridViewExplore.CellValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView_CellValidated);
             this.dataGridViewExplore.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewExplore_SortCompare);
             // 
             // ColumnSystemName
@@ -512,15 +514,15 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripMenuItem insertCopiedToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem deleteRowsToolStripMenuItem;
         private System.Windows.Forms.ToolStripButton toolStripButtonClear;
-        private System.Windows.Forms.ToolStripButton toolStripButtonImportFile;
+        private System.Windows.Forms.ToolStripButton toolStripButtonImportTextFile;
         private System.Windows.Forms.ToolStripButton toolStripButtonExport;
         private System.Windows.Forms.ToolStripMenuItem setTargetToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem editBookmarkToolStripMenuItem;
-        private System.Windows.Forms.DataGridView dataGridViewExplore;
+        private BaseUtils.DataGridViewColumnHider dataGridViewExplore;
         private System.Windows.Forms.ToolStripButton toolStripButtonLoad;
         private ExtendedControls.ExtTextBox textBoxFileName;
         private System.Windows.Forms.Label labelFilename;
-        private System.Windows.Forms.ToolStripButton tsbAddSystems;
+        private System.Windows.Forms.ToolStripButton toolStripButtonAddSystems;
         private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanel1;
         private ExtendedControls.ExtScrollBar vScrollBarCustom1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;

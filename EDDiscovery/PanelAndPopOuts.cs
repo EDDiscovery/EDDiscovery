@@ -14,15 +14,11 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
-using EDDiscovery.Icons;
 using EDDiscovery.UserControls;
-using EliteDangerousCore.DB;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EDDiscovery
 {
@@ -77,6 +73,12 @@ namespace EDDiscovery
             Surveyor,               // 42
             EDSM,                   // 43
             MaterialTrader,         // 44
+            Map2D,                  // 45
+            MiningOverlay,          // 46
+            Factions,               // 47
+            Spansh,                 // 48
+            EDDB,                   // 49
+            Inara,                  // 50
             // ****** ADD More here DO NOT REORDER *****
         };
 
@@ -96,6 +98,7 @@ namespace EDDiscovery
             { new PanelInfo( PanelIDs.Commodities, typeof(UserControlCommodities), "Commodities", "Commodities", "Commodity count") },
             { new PanelInfo( PanelIDs.Ledger, typeof(UserControlLedger), "Ledger", "Ledger", "Ledger of cash related entries") },
             { new PanelInfo( PanelIDs.Missions, typeof(UserControlMissions), "Missions", "Missions", "Mission list") },
+            { new PanelInfo( PanelIDs.Factions, typeof(UserControlFactions), "Factions", "Factions", "Faction rewards and trading tally") },
             { new PanelInfo( PanelIDs.Modules, typeof(UserControlModules), "Ships/Loadout", "Modules", "Ships and their loadouts plus stored modules") },
             { new PanelInfo( PanelIDs.Statistics, typeof(UserControlStats), "Statistics", "Stats", "Statistics Information") },
 
@@ -111,8 +114,11 @@ namespace EDDiscovery
             { new PanelInfo( PanelIDs.MaterialTrader, typeof(UserControlMaterialTrader), "Material Trader", "MaterialTrader", "Material trader") },
 
             { new PanelInfo( "Scans and Stars") },
-            { new PanelInfo( PanelIDs.Scan, typeof(UserControlScan), "Scan", "Scan", "Scan data on system", transparent: false) },
-            { new PanelInfo( PanelIDs.EDSM, typeof(UserControlEDSM), "EDSM", "EDSM", "Automatic web view of EDSM page on system") },
+            { new PanelInfo( PanelIDs.Scan, typeof(UserControlScan), "Scan", "Scan", "Scan data on system", false ) },
+            { new PanelInfo( PanelIDs.EDSM, typeof(UserControlEDSM), "EDSM", "EDSM", "EDSM - Automatic web view of system") },
+            { new PanelInfo( PanelIDs.Spansh, typeof(UserControlSpansh), "Spansh", "Spansh", "Spansh - Automatic web view of system") },
+            { new PanelInfo( PanelIDs.EDDB, typeof(UserControlEDDB), "EDDB", "EDDB", "EDDB - Automatic web view of system") },
+            { new PanelInfo( PanelIDs.Inara, typeof(UserControlInara), "Inara", "Inara", "Inara - Automatic web view of system") },
             { new PanelInfo( PanelIDs.ScanGrid, typeof(UserControlScanGrid), "Scan Grid", "ScanGrid", "Scan data on system in a grid", transparent: false) },
             { new PanelInfo( PanelIDs.StarDistance, typeof(UserControlStarDistance), "Nearest Stars", "StarDistance","Nearest stars from current position") },
             { new PanelInfo( PanelIDs.EstimatedValues, typeof(UserControlEstimatedValues),"Estimated Values", "EstimatedValues", "Estimated Scan values of bodies in system", transparent: false) },
@@ -122,6 +128,7 @@ namespace EDDiscovery
             { new PanelInfo( PanelIDs.Plot, typeof(UserControlPlot), "Map 2D Local Systems", "Plot", "Map in 2D of local systems", transparent: false) },
             { new PanelInfo( PanelIDs.Search, typeof(UserControlSearch), "Search", "SearchFinder", "Search") },
             { new PanelInfo( PanelIDs.Trilateration, typeof(UserControlTrilateration) ,"Trilateration", "Trilateration", "Trilateration of stars with unknown positions") },
+            { new PanelInfo( PanelIDs.Map2D, typeof(UserControl2DMap) ,"2D Map", "map2d", "2D Map of galaxy") },
 
             { new PanelInfo( "Bookmarks and Logs") },
             { new PanelInfo( PanelIDs.BookmarkManager, typeof(UserControlBookmarks), "Bookmarks", "Bookmarks", "Bookmarks on systems and planets", transparent:false)},
@@ -144,6 +151,7 @@ namespace EDDiscovery
             { new PanelInfo( PanelIDs.RouteTracker, typeof(UserControlRouteTracker),"Route Tracker", "RouteTracker", "Route tracker overlay", transparent: false) },
             { new PanelInfo( PanelIDs.Compass, typeof(UserControlCompass), "Compass", "Compass", "Compass overlay to show bearing to planetary coordinates", transparent:true) },
             { new PanelInfo( PanelIDs.MissionOverlay, typeof(UserControlMissionOverlay), "Mission Overlay", "MissionOV", "Mission List overlay", transparent:true) },
+            { new PanelInfo( PanelIDs.MiningOverlay, typeof(UserControlMiningOverlay), "Mining Overlay", "MiningOV", "Mining overlay", transparent:true) },
 
             { new PanelInfo( "Settings") },
             { new PanelInfo( PanelIDs.Settings, typeof(UserControlSettings), "Settings", "SettingsPanel", "Settings for ED Discovery ") },
@@ -286,7 +294,12 @@ namespace EDDiscovery
 
         static public PanelIDs? GetPanelIDByWindowsRefName(string name) // null if not found
         {
-            return displayablepanels.Find(x=>x.WindowRefName.Equals(name, StringComparison.InvariantCultureIgnoreCase))?.PopoutID;
+            return displayablepanels.Find(x => x.WindowRefName.Equals(name, StringComparison.InvariantCultureIgnoreCase))?.PopoutID;
+        }
+
+        static public PanelIDs? GetPanelIDByControltype( Type ctrl) // null if not found
+        {
+            return displayablepanels.Find(x => x.PopoutType == ctrl)?.PopoutID;
         }
 
         static public PanelInfo GetPanelInfoByPanelID(PanelIDs p)    // null if p is invalid
@@ -412,7 +425,7 @@ namespace EDDiscovery
 
                 //System.Diagnostics.Debug.WriteLine("TCF init");
                 tcf.Init(ctrl, windowtitle, discoveryform.theme.WindowsFrame, refname, discoveryform.TopMost,
-                            poi.DefaultTransparent, discoveryform.theme.LabelColor, discoveryform.theme.SPanelColor);
+                            poi.DefaultTransparent, discoveryform.theme.LabelColor, discoveryform.theme.SPanelColor, discoveryform.theme.TransparentColorKey);
 
                 //System.Diagnostics.Debug.WriteLine("UCCB init of " + ctrl.GetType().Name);
                 ctrl.Init(discoveryform, UserControls.UserControlCommonBase.DisplayNumberPopOuts + numopened - 1);

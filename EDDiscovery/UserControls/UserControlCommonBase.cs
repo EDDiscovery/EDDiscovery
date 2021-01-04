@@ -14,16 +14,8 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using EliteDangerousCore.DB;
-using EliteDangerousCore;
 
 namespace EDDiscovery.UserControls
 {
@@ -66,6 +58,7 @@ namespace EDDiscovery.UserControls
         }
 
         public virtual void Init() { }              // start up, called by above Init.  no cursor available
+        // For forms, the transparency key color is set by theme during UserControlForm init. The Init function above for a UC could override if required
         // themeing and scaling happens at this point.  Init has a chance to make new controls if required to be autothemed/scaled.
         // contract is in majortabcontrol::CreateTab, PanelAndPopOuts::PopOut, SplitterControl::OnPostCreateTab
         public virtual void SetTransparency(bool ison, Color curcol) { }  // set on/off transparency of components - occurs before SetCursor/LoadLayout/InitialDisplay in a pop out form
@@ -78,7 +71,7 @@ namespace EDDiscovery.UserControls
 
         public virtual void ChangeCursorType(IHistoryCursor thc) { }     // implement if you call the uctg
 
-        public virtual Color ColorTransparency { get { return Color.Transparent; } }  // override to say support transparency, and what colour you want.
+        public virtual bool SupportTransparency { get { return false; } }  // override to say support transparency
 
         // Close
 
@@ -208,109 +201,18 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
-        #region DGV Column helpers - used to save/size the DGV of user controls dynamically.
-
-        // need to cope with older saves using int column widths instead of fill percentages
-
-        private double[] DGVColumnSizes(DataGridView dgv, string root, out int hw, out bool useint)
-        {
-            hw = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(root + "HW", -1);     // SET Row header width first
-            useint = false;
-
-            if (hw == -1)
-                return null;
-
-            hw = Math.Max(10, hw);
-
-            // first see if we have a full collection of ints (old style) or floats (new style)
-            // we may have a mixture or not a full set..
-
-            int intpresent = 0;
-            int inttotal = 0;
-            int[] widths = new int[dgv.Columns.Count];      // older saves used ints to save column sizes
-            double[] fillw = new double[dgv.Columns.Count]; // newer ones save the fill weight
-            int doublepresent = 0;
-
-            for (int i = 0; i < dgv.ColumnCount; i++)
-            {
-                string k = root + (i + 1).ToString();
-                widths[i] = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(k, -1);
-                intpresent += widths[i] >= 10 ? 1 : 0;
-                inttotal += widths[i];
-
-                fillw[i] = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble(k, double.NaN);
-                if (!double.IsNaN(fillw[i]) && fillw[i] > 0)
-                    doublepresent++;
-            }
-
-            if (doublepresent == dgv.ColumnCount)   // a full set of doubles
-            {
-                return fillw;
-            }
-            else if (intpresent == dgv.ColumnCount) // full set of ints 
-            {
-                for (int i = 0; i < dgv.ColumnCount; i++)
-                    fillw[i] = (float)widths[i] / (float)inttotal;
-                useint = true;
-                return fillw;
-            }
-            else
-                return null;    // no valid settings
-        }
+        #region DGV Column helpers - used to save/size the DGV of user controls dynamically. Note support for previous INT saving is now withdrawn.
 
         public void DGVLoadColumnLayout(DataGridView dgv, string root)
         {
-            dgv.SuspendLayout();
-
-            var fillw = DGVColumnSizes(dgv, root, out int hw, out bool useint);
-
-            if (fillw != null)
-            {
-                dgv.RowHeadersWidth = hw;
-
-                for (int i = 0; i < dgv.Columns.Count; i++)
-                {
-                    dgv.Columns[i].FillWeight = (float)fillw[i];
-              //      System.Diagnostics.Debug.WriteLine("Load {0} {1} {2} {3}", i, Name, root, dgv.Columns[i].FillWeight);
-                }
-            }
-
-            dgv.ResumeLayout();
+            dgv.LoadColumnSettings(root, (a) => EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(a, int.MinValue),
+                                        (b) => EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble(b, double.MinValue));
         }
 
         public void DGVSaveColumnLayout(DataGridView dgv, string root)
         {
-            var fillw = DGVColumnSizes(dgv, root, out int hw, out bool useint);
-
-            bool storeback = false;
-
-            if (fillw == null || hw != dgv.RowHeadersWidth || useint)
-                storeback = true;
-            else
-            {
-                for (int i = 0; i < dgv.Columns.Count; i++)
-                {
-                    if ( Math.Abs(fillw[i] - dgv.Columns[i].FillWeight) > 0.00001)
-                    {
-                        storeback = true;
-                        break;
-                    }
-                }
-            }
-
-            if (storeback)  // using this to be able to see when a store back occurs for debugging.. we could of course later just always store back
-            {
-                for (int i = 0; i < dgv.Columns.Count; i++)
-                {
-                    string k = root + (i + 1).ToString();
-                    EliteDangerousCore.DB.UserDatabase.Instance.DeleteKey(k);
-                    EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble(k, dgv.Columns[i].FillWeight);
-                    if ( fillw != null )  System.Diagnostics.Debug.WriteLine("Save {0} {1} {2} {3} vs {4}", Name, k, dgv.Columns[i].Width, dgv.Columns[i].FillWeight, fillw[i]);
-                }
-
-                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(root + "HW", dgv.RowHeadersWidth);
-                System.Diagnostics.Debug.WriteLine("Save {0} HW {1}", Name, dgv.RowHeadersWidth);
-            }
+            dgv.SaveColumnSettings(root, (a,b) => EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(a, b),
+                                        (c,d) => EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble(c,d));
         }
 
 

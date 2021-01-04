@@ -13,18 +13,13 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using EliteDangerousCore.DB;
 using EliteDangerousCore;
-using EDDiscovery.Forms;
+using EliteDangerousCore.DB;
+using System;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
 {
@@ -36,7 +31,7 @@ namespace EDDiscovery.UserControls
         private  HistoryEntry currentHE;
         private string lastsystem;
 
-        public override Color ColorTransparency { get { return Color.Green; } }
+        public override bool SupportTransparency { get { return true; } }
         public override void SetTransparency(bool on, Color curcol)
         {
             pictureBox.BackColor = this.BackColor = curcol;
@@ -96,13 +91,13 @@ namespace EDDiscovery.UserControls
 
         private void Display(HistoryList hl)            // when user clicks around..  HE may be null here
         {
-            currentHE = hl.GetLastFSDCarrierJump;
+            currentHE = hl.GetLastFSDCarrierJump();
             Display();
         }
 
         private void NewEntry(HistoryEntry l, HistoryList hl)
         {
-            currentHE = hl.GetLastFSDCarrierJump;
+            currentHE = hl.GetLastFSDCarrierJump();
             Display();
         }
 

@@ -22,6 +22,7 @@ using EliteDangerousCore.EDSM;
 using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -74,22 +75,22 @@ namespace EDDiscovery
 
         // During SYNC events
 
-        public event Action OnSyncStarting;                                 // UI. EDSM/EDDB sync starting
+        public event Action OnSyncStarting;                                 // UI. EDSM sync starting
         public event Action OnSyncComplete;                                 // UI. SYNC has completed
         public event Action<int, string> OnReportSyncProgress;              // UI. SYNC progress reporter
 
         // Due to background taskc completing async to the rest
 
-        public event Action OnMapsDownloaded;                               // UI
         public event Action<bool> OnExpeditionsDownloaded;                  // UI, true if changed entries
         public event Action OnExplorationDownloaded;                        // UI
+        public event Action OnHelpDownloaded;                               // UI
 
         #endregion
 
         #region Variables
         private string logtext = "";     // to keep in case of no logs..
 
-        private EDJournalClass journalmonitor;
+        private EDJournalUIScanner journalmonitor;
 
         private Thread backgroundWorker;
         private Thread backgroundRefreshWorker;
@@ -220,7 +221,7 @@ namespace EDDiscovery
             EdsmLogFetcher = new EDSMLogFetcher(LogLine);
             EdsmLogFetcher.OnDownloadedSystems += () => RefreshHistoryAsync();
 
-            journalmonitor = new EDJournalClass(InvokeAsyncOnUiThread);
+            journalmonitor = new EDJournalUIScanner(InvokeAsyncOnUiThread);
             journalmonitor.OnNewJournalEntry += NewEntry;
             journalmonitor.OnNewUIEvent += NewUIEvent;
         }
@@ -265,16 +266,23 @@ namespace EDDiscovery
             ReportSyncProgress("");
 
             bool checkGithub = EDDOptions.Instance.CheckGithubFiles;
-            if (checkGithub)      // not normall in debug, due to git hub chokeing
+            if (checkGithub)      // not normal in debug, due to git hub choking
             {
-                // Async load of maps in another thread
-                DownloadMaps(() => PendingClose);
+                DateTime lastdownloadtime = UserDatabase.Instance.GetSettingDate("DownloadFilesLastTime", DateTime.MinValue);
 
-                // and Expedition data
-                DownloadExpeditions(() => PendingClose);
+                if (DateTime.UtcNow - lastdownloadtime >= new TimeSpan(24, 0, 0))       // only update once per day
+                {
+                    // Expedition data
+                    DownloadExpeditions(() => PendingClose);
 
-                // and Exploration data
-                DownloadExploration(() => PendingClose);
+                    // and Exploration data
+                    DownloadExploration(() => PendingClose);
+
+                    // and Help files
+                    DownloadHelp(() => PendingClose);
+
+                    UserDatabase.Instance.PutSettingDate("DownloadFilesLastTime", DateTime.UtcNow);
+                }
             }
 
             if (!EDDOptions.Instance.NoSystemsLoad)
@@ -299,14 +307,6 @@ namespace EDDiscovery
 
             LogLine("Loaded Notes, Bookmarks and Galactic mapping.".T(EDTx.EDDiscoveryController_LN));
 
-            if (EliteDangerousCore.EDDN.EDDNClass.CheckforEDMC()) // EDMC is running
-            {
-                if (EDCommander.Current.SyncToEddn)  // Both EDD and EDMC should not sync to EDDN.
-                {
-                    LogLineHighlight("EDDiscovery and EDMarketConnector should not both sync to EDDN. Stop EDMC or uncheck 'send to EDDN' in settings tab!".T(EDTx.EDDiscoveryController_EDMC));
-                }
-            }
-
             if (!EDDOptions.Instance.NoLoad)        // here in this thread, we do a refresh of history. 
             {
                 LogLine("Reading travel history".T(EDTx.EDDiscoveryController_RTH));
@@ -321,7 +321,7 @@ namespace EDDiscovery
                 DoRefreshHistory(new RefreshWorkerArgs { CurrentCommander = EDCommander.CurrentCmdrID });       // kick the background refresh worker thread into action
             }
 
-            CheckForSync();     // see if any EDSM/EDDB sync is needed - this just sets some variables up
+            CheckForSync();     // see if any EDSM sync is needed - this just sets some variables up
 
             System.Diagnostics.Debug.WriteLine("Background worker setting up refresh worker");
 
@@ -348,7 +348,7 @@ namespace EDDiscovery
 
                     if (wh == 1)
                     {
-                        if (!EDDOptions.Instance.NoSystemsLoad && EDDConfig.Instance.EDSMEDDBDownload)      // if no system off, and EDSM download on
+                        if (!EDDOptions.Instance.NoSystemsLoad && EDDConfig.Instance.EDSMDownload)      // if no system off, and EDSM download on
                             SystemsDatabase.Instance.WithReadWrite(() => DoPerformSync());
                     }
                 }
@@ -424,28 +424,6 @@ namespace EDDiscovery
         #region Aux file downloads
 
         // in its own thread..
-        public void DownloadMaps(Func<bool> cancelRequested)
-        {
-            LogLine("Checking for new EDDiscovery maps".T(EDTx.EDDiscoveryController_Maps));
-
-            Task.Factory.StartNew(() =>
-            {
-                BaseUtils.GitHubClass github = new BaseUtils.GitHubClass(EDDiscovery.Properties.Resources.URLGithubDataDownload, LogLine);
-                var files = github.ReadDirectory("Maps/V1");
-                if (files != null)
-                {
-                    string mapsdir = EDDOptions.Instance.MapsAppDirectory();
-
-                    if ( github.DownloadFiles(files, mapsdir) )
-                    {
-                        if (!cancelRequested())
-                            InvokeAsyncOnUiThread(() => { OnMapsDownloaded?.Invoke(); });
-                    }
-                }
-            });
-        }
-
-        // in its own thread..
         public void DownloadExpeditions(Func<bool> cancelRequested)
         {
             LogLine("Checking for new Expedition data".T(EDTx.EDDiscoveryController_EXPD));
@@ -487,6 +465,27 @@ namespace EDDiscovery
                         if (!cancelRequested())
                         {
                             InvokeAsyncOnUiThread(() => { OnExplorationDownloaded?.Invoke(); });
+                        }
+                    }
+                }
+            });
+        }
+
+        public void DownloadHelp(Func<bool> cancelRequested)
+        {
+            Task.Factory.StartNew(() =>
+            {
+                string helpdir = EDDOptions.Instance.HelpDirectory();
+
+                BaseUtils.GitHubClass github = new BaseUtils.GitHubClass(EDDiscovery.Properties.Resources.URLGithubDataDownload, LogLine);
+                var files = github.ReadDirectory("Help");
+                if (files != null)        // may be empty, unlikely, but
+                {
+                    if (github.DownloadFiles(files, helpdir))
+                    {
+                        if (!cancelRequested())
+                        {
+                            InvokeAsyncOnUiThread(() => { OnHelpDownloaded?.Invoke(); });
                         }
                     }
                 }

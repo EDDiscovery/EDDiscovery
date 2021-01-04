@@ -81,7 +81,7 @@ SECTION UserControlCompass
 .checkBoxHideTransparent: "Hide In Transparent" => "透明模式下除标尺以外全部隐藏"
 .labelTargetLat: "Target" => "目标"
 
-SECTION UserControlEDSM
+SECTION UserControlWebBrowser
 
 .extCheckBoxStar.ToolTip: "Select another system to view" @
 .System: "System:" @
@@ -100,6 +100,7 @@ SECTION SearchMaterialsCommodities
 .OR: "OR" => "或"
 .DIS: "Discovered at " @
 .COL: "Collected at " @
+.MR: "Mission Reward at " @
 .label2: "Item 2" => "物件2"
 .label1: "Item 1" => "物件1"
 .buttonExtFind: "Find" => "查找"
@@ -177,12 +178,17 @@ SECTION UserControlEstimatedValues
 
 .BodyName: "Body Name" => "星体名称"
 .EstValue: "Est Value" => "预计价值"
+.BodyType: "Body Type" @
+.Mapped: "Mapped" @
+.WasMapped: "Already Mapped" @
+.WasDiscovered: "Already Discovered" @
 .SV: "Estimated Scan Values for {0}" => "{0}星系的预计价值"
 .EDSM: "EDSM" @
 .checkBoxEDSM.ToolTip: "Get and show information from EDSM" @
 
 SECTION UserControlExpedition
 
+.toolStripButtonImportNavRoute: "Import Nav route" @
 .SystemName: "System Name" => "星系名称"
 .Distance: "Dist." => "距离(ly)"
 .Note: "Note" => "笔记"
@@ -312,6 +318,7 @@ SECTION UserControlLedger
 .toolStripMenuItemGotoItem: "Go to entry on grid" => "跳转到表格中的条目"
 .CashTransactions: "Cash Transactions" => "金融交易"
 .buttonExtExcel.ToolTip: "Send data on grid to excel" @
+.NOLG: "No Ledger available" @
 
 SECTION UserControlLocalMap
 
@@ -365,6 +372,8 @@ SECTION UserControlMarketData
 .Conly: "Cargo only, no market data on this item" => "只有货物，没有这项物品的市场数据"
 .LEntry: "Travel History Entry Last" => "最后一项航行记录"
 .panelButtons.ToolTip: "When arriving at a station where you are comparing against (on the right)\r\nswap t" => "当你到达比较的空间站时（右边的），对调两个空间站的信息\r\n当作A→B→A这样的两地循环贸易时很有用"
+.checkBoxSellOnly: "Sell Only" @
+.checkBoxSellOnly.ToolTip: "Show items you can sell only" @
 
 SECTION UserControlMaterials
 
@@ -427,7 +436,7 @@ SECTION UserControlSurveyor
 .bodyFeaturesToolStripMenuItem.lowRadiusToolStripMenuItem: "Low Radius" @
 .checkEDSMForInformationToolStripMenuItem: "Check EDSM for information" @
 .autoHideToolStripMenuItem: "Auto Hide" @
-.dontHideInFSSModeToolStripMenuItem: "Don\'t Hide in FSS Mode" @
+.dontHideInFSSModeToolStripMenuItem: "Don\\'t Hide in FSS Mode" @
 .showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem: "Show System Info Always" @
 .LowRadius: " Low Radius." @
 .Mapped: " (Mapped & Discovered)" @
@@ -442,6 +451,7 @@ SECTION UserControlSurveyor
 .Hasring: " Has ring." @
 .Has: " Has " @
 .Signals: " Has Signals." @
+.islandable: " is landable." @
 .planetaryClassesToolStripMenuItem: "Planetary Classes" @
 .planetaryClassesToolStripMenuItem.ammoniaWorldToolStripMenuItem: "Ammonia World" @
 .planetaryClassesToolStripMenuItem.earthlikeWorldToolStripMenuItem: "Earthlike World" @
@@ -456,6 +466,7 @@ SECTION UserControlSurveyor
 .textAlignToolStripMenuItem.centerToolStripMenuItem: "Center" @
 .textAlignToolStripMenuItem.rightToolStripMenuItem: "Right" @
 .bodyFeaturesToolStripMenuItem.hasSignalsToolStripMenuItem: "Has Signals" @
+.bodyFeaturesToolStripMenuItem.landableToolStripMenuItem: "Landable" @
 .showAllPlanetsToolStripMenuItem: "Show All Planets" @
 .showAllStarsToolStripMenuItem: "Show All Stars" @
 .showBeltClustersToolStripMenuItem: "Show Belt Clusters" @
@@ -463,17 +474,8 @@ SECTION UserControlSurveyor
 .showValuesToolStripMenuItem: "Show values" @
 .wordWrapToolStripMenuItem: "Word Wrap" @
 
-SECTION UserControlMissions
+SECTION MissionListUserControl
 
-.cColName: "Name" => "任务名称"
-.cColStartDate: "Start Date" => "开始时间"
-.cColEndDate: "End Date" => "结束时间"
-.cColOrigin: "Origin" => "起点"
-.cColFromFaction: "Faction" => "派系"
-.cColDestSystem: "Destination" => "目的地"
-.cColTargetFaction: "Target Faction" => "目标派系"
-.cColValue: "Value (cr)" => "奖金(Cr)"
-.cColInfo: "Info" => "详情"
 .PcolName: "Name" => "任务名称"
 .pColStart: "Start Date" => "开始时间"
 .pColEnd: "End Date" => "结束时间"
@@ -484,14 +486,15 @@ SECTION UserControlMissions
 .pColResult: "Result (cr)" => "奖金(Cr)"
 .pColInfo: "Info" => "详情"
 .labelTo: "to" => "至"
-.panelButtons.ToolTip: "Left click and drag on grid to reorder" => "鼠标左键拖拽可以重新排列行与列的顺序"
+
+SECTION UserControlMissions
+
 .MPlural: " Missions" => " 任务"
 .MSingular: " Mission" => " 任务"
 .Name: "Name" => "任务名称"
 .Value: "Value (cr):\n{0:N0}" => "奖金(Cr)：\n{0:N0}"
 .ValueN: "Value (cr)" => "奖金(Cr)"
 .ValueC: "Value: " => "奖金："
-.ToolTip: "Left click and drag on grid to reorder" @
 
 SECTION UserControlModules
 
@@ -552,6 +555,8 @@ SECTION UserControlModules
 .buttonExtExcel.ToolTip: "Send data on grid to excel" @
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 .AllModules: "All Modules" @
+.ForceSell: "Force Sell" @
+.NOSI: "No Ship Information available" @
 
 SECTION UserControlNotePanel
 
@@ -615,6 +620,7 @@ SECTION UserControlPlot
 .D1: "\r\n{0} distance {1:N2} Ly" => "\r\n{0}，距离{1:N2}ly"
 .D2: "\r\n    Visits: {0}" => "\r\n    访问次数：{0}次"
 .D3: "\r\n    Coordinates: X:{0:N2}, Y:{1:N2}, Z:{2:N2}\r\n" => "\r\n    坐标：X:{0:N2}, Y:{1:N2}, Z:{2:N2}\r\n"
+.Nt": "\r\n    Notes: {0}\r\n" @
 
 SECTION UserControlRoute
 
@@ -881,16 +887,18 @@ SECTION UserControlSettings
 .radioButtonCentreHome: "Home System" => "母星"
 .labelOpenOn: "Open Centred On" => "默认打开显示"
 .labelHome: "Now in Commander Settings" => "母星"
-.Font: "The font used by this theme is not available on your system.\r\nThe font needed is \"{0}\".\r\nInstall this font to fully use this theme.\r\nEuro Caps font is freely available from www.edassets.org.\r\n\r\nWould you like to load this theme using a replacement font?" => "这个主题使用的字体不存在于你的电脑上。\r\n所需要的字体是\"{0}\"。\r\n安装这个字体以完整体验这个主题。\r\nEuro Caps字体可以从www.edassets.org免费下载。\r\n\r你是否想用一个替代字体来加载这个主题？"
+.Font: "The font used by this theme is not available on your system.\r\nThe font needed is \\"{0}\\".\r\nInstall this font to fully use this theme.\r\nEuro Caps font is freely available from www.edassets.org.\r\n\r\nWould you like to load this theme using a replacement font?" => "这个主题使用的字体不存在于你的电脑上。\r\n所需要的字体是\\"{0}\\"。\r\n安装这个字体以完整体验这个主题。\r\nEuro Caps字体可以从www.edassets.org免费下载。\r\n\r你是否想用一个替代字体来加载这个主题？"
 .Information: "Applies at next restart of ED Discovery" => "改变将在重启EDDiscovery后生效"
 .AddC: "Commander name is not valid or duplicate" => "指挥官的名字无效或者重复"
 .AddT: "Cannot create Commander" => "无法创建指挥官"
+.DelCmdr: "Do you wish to delete commander " @
 .Language: "Applies at next restart of ED Discovery" => "改变将在重启EDDiscovery后生效"
 .RemoveSectors: "Remove Sectors" => "移除星域"
 .GalRemove: "Removing {0} Sector(s).\r\n\r\nThis will take a while (up to 30 mins dep on drive type and amount of sectors).\r\nYou may continue to use EDD while this operation takes place\r\nbut it may be slow to respond. Do not close down EDD until this window says\r\nthe process has finished\r\n\r\n" => "正在移除{0}个星域。\r\n\r\n这将会花上一段时间（根据硬盘类型和星域数量至多可花上30分钟）。\r\n你也许想要在这段时间中继续使用EDDiscovery\r\n但是有可能响应会很慢。请不要关闭EDDiscovery直到这个窗口显示操作已完成！\r\n\r\n"
 .GalFini: "Finished, Please close the window.\r\nIf you already have the 3dmap open, changes will not be reflected in that map until the next start of EDD\r\n" => "操作已完成，请关闭此窗口。\r\n如果你已经打开了3D星图，做出的改变在下次启动EDDiscovery之前不会展现\r\n"
 .GameTime: "Game Time" @
 .Local: "Local" @
+.NoMap: "No map available!" @
 
 SECTION UserControlShipYards
 
@@ -992,6 +1000,7 @@ SECTION UserControlStarDistance
 .textMaxRadius.ToolTip: "Maximum star distance in ly" => "最远的星系距离 (ly)"
 .From: "From {0}" => "距离 {0} 星系"
 .NoEDSMSys: "System could not be found - has not been synched or EDSM is unavailable" => "无法找到该星系，该星系未被同步或者EDSM现在不可用。"
+.viewSystemToolStripMenuItem: "View System" @
 
 SECTION UserControlStarList
 
@@ -1017,6 +1026,7 @@ SECTION UserControlStarList
 .viewScanDisplayToolStripMenuItem: "View Scan Display" @
 .Total: "Total" @
 .Signals: "{0} has signals" @
+.Distance: " ({0} ls)" @
 .FV: "First visit {0}" => "首次访问时间：{0}"
 .CS: "{0} Star(s) {1}" => "{0}个恒星"
 .SMBH: "{0} is a super massive black hole" => "{0} 是超大型的黑洞 (Super massive black hole)"
@@ -1282,6 +1292,15 @@ SECTION UserControlSysInfo
 .SysUnk: "System unknown to EDSM" => "该星系还未被收录到EDSM的数据库中"
 .Pos: "Position is {0:0.00},{1:0.00},{2:0.00}" => "当前坐标为 {0:0.00},{1:0.00},{2:0.00}"
 .Target: "On 3D Map right click to make a bookmark, region mark or click on a notemark and then tick on Set Target, or type it here and hit enter" => "在3D星图上右键单击以创建书签，区域标记或单击标记，然后在“设置目标”上打勾，或在此处输入并按Enter键"
+.extButtonEDSMTarget: "EDSM" @
+.labelOpenShip: "Open" @
+.labelOpenStation: "Open" @
+.extButtonSpanshStation: "S" @
+.extButtonSpanshSystem: "S" @
+.displayStationButtonsToolStripMenuItem: "Display Station Buttons" @
+.displayShipButtonsToolStripMenuItem: "Display Ship Buttons" @
+.labelStationFaction: "Faction" @
+.displayStationFactionToolStripMenuItem: "Display Station Faction" @
 
 SECTION UserControlContainerSplitter
 
@@ -1341,6 +1360,7 @@ SECTION UserControlTravelGrid
 .runActionsAcrossSelectionToolSpeechStripMenuItem: "Run actions across selection for speech debugging (Debug)" @
 .runSelectionThroughInaraSystemToolStripMenuItem: "Run selection through Inara System (Debug)" @
 .runEntryThroughProfileSystemToolStripMenuItem: "Run entry through Profile System (Debug)" @
+.runSelectionThroughEDDNDebugNoSendToolStripMenuItem: "Run selection through EDDN no send (Debug)" @
 .TT1: " showing {0} original {1}" => " 显示{1}中的{0}"
 .TTFilt1: "Filtered {0}" => "过滤掉了{0}"
 .TTSelAge: "Select the entries by age, " => "安照时间顺序筛选条目，"
@@ -1454,6 +1474,9 @@ SECTION UserControlTrilateration
 .PF: "Position found" => "已发现位置"
 .addAllSectorSystemsToolStripMenuItem: "Add all Sector systems" @
 .toolStripButtonSector: "Sector Systems" @
+.NotProcGen: "Sector name could not be derived from system name (it may not be procedurally generated).  Not getting sector systems." @
+.NoSector: "No systems with unknown coordinates were found for the current sector." @
+.SectorCount: "{0} systems with unknown coordinates found in {1} sector." @
 
 SECTION UserControlTrippanel
 
@@ -1470,6 +1493,7 @@ SECTION UserControlTrippanel
 .NoT: " -> Target not set" => " → 未设定目标"
 .FDEDSM: "Shows if EDSM indicates your it's first discoverer" => "显示你是否在EDSM上为该星系首个发现者"
 .UKN: "System {0} unknown to EDSM" => "星系{0}还未被收录到EDSM的数据库中"
+.Left: "Left" @
 
 SECTION UserControlMaterialTrader
 
@@ -1488,6 +1512,69 @@ SECTION UserControlMaterialTrader
 .Raw: "Raw" @
 .Encoded: "Encoded" @
 .Manufactured: "Manufactured" @
+
+SECTION UserControlMiningOverlay
+
+.extCheckBoxZeroRefined: ">0" @
+.Proscoll: ", Prospectors Fired {0}, Collectors Deployed {1}, Cracked {2}" @
+.ref: "Ref." @
+.coll: "Coll." @
+.pros: "Prosp." @
+.ratio: "Ratio%" @
+.avg: "Avg%" @
+.min: "Min%" @
+.max: "Max%" @
+.mload: "M.Lode" @
+.hml: "HML Ct." @
+.discv: "Discv" @
+.astpros: "Asteroids Pros." @
+.content: "Content %" @
+.above: "% Above" @
+.dist: "Distribution" @
+.Limcargo: "Limpets left {0}, Cargo left {1}" @
+
+SECTION UserControlFactions
+
+.colFaction: "Faction" @
+.colMissions: "Missions" @
+.colInfluence: "Inf +" @
+.colReputation: "Rep +" @
+.colMissionCredits: "Mission Credits" @
+.CBought: "Commds +" @
+.CSold: "Commds -" @
+.MBought: "Mats +" @
+.MSold: "Mats -" @
+.CrimeCommitted: "Crimes Committed" @
+.BountyKills: "Bounty Kills" @
+.BountyValue: "Bounty Rewards" @
+.BountyRewardsValue: "Bounty Rewards Value" @
+.Interdicted: "Interdicted" @
+.Interdiction: "Interdiction" @
+.KillBondVictim: "Kill Bonds Victim" @
+.KillBondsAward: "Kill Bonds Awarded" @
+.KillBondsValue: "Kill Bonds Value" @
+.colInfo: "Other Info" @
+.labelTo: "to" @
+.startDateTime.ToolTip: "Include from" @
+.endDateTime.ToolTip: "Include to" @
+.FactionsPlural: "Factions" @
+.MissionsFor: "Missions for " @
+.BountyBond: "Bounty/Bond" @
+.Target: "Target" @
+.TargetFaction: "Target Faction" @
+.Reward: "Reward" @
+.BountiesBondsFor: "Bounties/Bonds for " @
+.Item: "Item" @
+.MaterialCommodsFor: "Materials/Commodities for " @
+.SystemAddress: "System Address" @
+.BountiesPlural: "Bounties" @
+.RewardsPlural: "Rewards" @
+.BondsPlural: "Bonds" @
+.SystemsDetailFor: "Systems Detail for " @
+.showMissionsForFactionToolStripMenuItem: "Show missions for faction" @
+.showCommoditymaterialTradesForFactionToolStripMenuItem: "Show commodity/material trades for faction" @
+.showBountiesAndBondsForFactionToolStripMenuItem: "Show bounties and bonds for faction" @
+.showFactionSystemDetailToolStripMenuItem: "Show system detail for faction" @
 
 SECTION ScanDisplayUserControl
 
@@ -1525,3 +1612,8 @@ SECTION FilterSelector
 SECTION UserControlCommonBase
 
 .Copyingtexttoclipboardfailed: "Copying text to clipboard failed" => "复制文本到剪切板失败"
+
+SECTION CSV
+
+.Helpers.OpenFailed: "Failed to open " @
+.Helpers.WriteFailed: "Failed to write to " @

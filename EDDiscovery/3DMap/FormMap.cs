@@ -13,29 +13,23 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using EDDiscovery;
 using EDDiscovery._3DMap;
 using EDDiscovery.Forms;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using EliteDangerousCore.EDSM;
 using OpenTK;
-using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
-using OpenTK.Input;
+using OpenTKUtils.Common;
+using OpenTKUtils.GL1;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
-using System.Resources;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using OpenTKUtils.GL1;
-using OpenTKUtils.Common;
 
 namespace EDDiscovery
 {
@@ -105,7 +99,7 @@ namespace EDDiscovery
         public List<HistoryEntry> systemlist { get; set; }
         private List<ISystem> plannedRoute { get; set; }
 
-        public List<BaseUtils.Map2d> fgeimages = new List<BaseUtils.Map2d>();
+        public List<BaseUtils.Map2d> maps2d = new List<BaseUtils.Map2d>();
 
         public DateTime filterStartTime { get; set; }
         public DateTime filterEndTime { get; set; }
@@ -160,7 +154,6 @@ namespace EDDiscovery
             drawADiscOnStarsWithPositionToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("Map3DDrawTravelDisc", true);
             useWhiteForDiscsInsteadOfAssignedMapColourToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("Map3DDrawTravelWhiteDisc", true);
             showStarstoolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("Map3DAllStars", false);
-            showStationsToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("Map3DButtonStations", false);
             toolStripButtonPerspective.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("Map3DPerspective", false);
             toolStripButtonGrid.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("Map3DCoarseGrid", true);
             toolStripButtonFineGrid.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("Map3DFineGrid", true);
@@ -285,7 +278,7 @@ namespace EDDiscovery
         {
             if (Is3DMapsRunning )
             {
-                List<HistoryEntry> hfsd = hl.FilterByTravel;
+                List<HistoryEntry> hfsd = hl.FilterByTravel();
 
                 if (hfsd.Count > 0)
                 {
@@ -464,7 +457,6 @@ namespace EDDiscovery
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("Map3DDrawTravelWhiteDisc", useWhiteForDiscsInsteadOfAssignedMapColourToolStripMenuItem.Checked);
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("Map3DAllStars", showStarstoolStripMenuItem.Checked);
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("Map3DButtonColours", enableColoursToolStripMenuItem.Checked);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("Map3DButtonStations", showStationsToolStripMenuItem.Checked);
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("Map3DCoarseGrid", toolStripButtonGrid.Checked);
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("Map3DFineGrid", toolStripButtonFineGrid.Checked);
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("Map3DCoords", toolStripButtonCoords.Checked);
@@ -871,7 +863,7 @@ namespace EDDiscovery
 
             //long t6 = _systemtickinterval.ElapsedMilliseconds;
 
-            stargrids.DrawAll(glControl, showStarstoolStripMenuItem.Checked, showStationsToolStripMenuItem.Checked);
+            stargrids.DrawAll(glControl, showStarstoolStripMenuItem.Checked);
 
            // long t7 = _systemtickinterval.ElapsedMilliseconds;
 
@@ -1333,7 +1325,7 @@ namespace EDDiscovery
 
         private void newRegionBookmarkToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            BookmarkForm frm = new BookmarkForm();
+            BookmarkForm frm = new BookmarkForm(discoveryForm.history);
             frm.InitialisePos(position.Current.X, position.Current.Y, position.Current.Z);
             DateTime bookmarktime = DateTime.UtcNow;
             frm.NewRegionBookmark(bookmarktime);
@@ -1677,7 +1669,7 @@ namespace EDDiscovery
                 {
                     long targetid = TargetClass.GetTargetGMO();      // who is the target of a bookmark (0=none)
 
-                    BookmarkForm frm = new BookmarkForm();
+                    BookmarkForm frm = new BookmarkForm(discoveryForm.history);
 
                     frm.Name = gmo.name;
                     frm.InitialisePos(gmo.points[0].X, gmo.points[0].Y, gmo.points[0].Z);
@@ -1860,7 +1852,7 @@ namespace EDDiscovery
                     info += Environment.NewLine + "Distance from " + clickedGMO.name + ": " + dist.ToString("0.0");
                 }
 
-                SystemNoteClass sn = SystemNoteClass.GetNoteOnSystem(sysname, hoversystem == null ? 0 : hoversystem.EDSMID);   // may be null
+                SystemNoteClass sn = SystemNoteClass.GetNoteOnSystem(sysname);   // may be null
                 if (!string.IsNullOrWhiteSpace(sn?.Note))
                 {
                     info += Environment.NewLine + "Notes: " + sn.Note.Trim();
@@ -2005,7 +1997,7 @@ namespace EDDiscovery
             {
                 if ( vs.System.HasCoordinate)
                 { 
-                    SystemNoteClass notecs = SystemNoteClass.GetNoteOnSystem(vs.System.Name, vs.System.EDSMID);
+                    SystemNoteClass notecs = SystemNoteClass.GetNoteOnSystem(vs.System.Name);
 
                     if (notecs!=null )
                     {
@@ -2091,7 +2083,7 @@ namespace EDDiscovery
 
             StarGrid.TransFormInfo ti = new StarGrid.TransFormInfo(matrixcalc.GetResMat, _znear, glControl.Width, glControl.Height, zoom.Current);
 
-            Vector3? posofsystem = stargrids.FindOverSystem(x, y, out cursysdistz, ti, showStarstoolStripMenuItem.Checked, showStationsToolStripMenuItem.Checked);
+            Vector3? posofsystem = stargrids.FindOverSystem(x, y, out cursysdistz, ti, showStarstoolStripMenuItem.Checked);
 
             if ( posofsystem == null )
                 posofsystem = starnameslist.FindOverSystem(x, y, out cursysdistz, ti); // in case these are showing
@@ -2261,10 +2253,12 @@ namespace EDDiscovery
 
         private void LoadMapImages()
         {
-            fgeimages = BaseUtils.Map2d.LoadImages(EDDOptions.Instance.MapsAppDirectory());
+            maps2d = EDDiscovery.Icons.IconMaps.StandardMaps();
+            maps2d.AddRange(BaseUtils.Map2d.LoadFromFolder(EDDOptions.Instance.MapsAppDirectory()));
+
             dropdownMapNames.DropDownItems.Clear();
 
-            foreach (var img in fgeimages)
+            foreach (var img in maps2d)
             {
                 ToolStripButton item = new ToolStripButton
                 {

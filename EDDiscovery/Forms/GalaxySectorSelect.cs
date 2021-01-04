@@ -75,31 +75,29 @@ namespace EDDiscovery.Forms
             string datapath = EDDOptions.Instance.MapsAppDirectory();
             if (Directory.Exists(datapath))
             {
-                galaxy = Map2d.LoadImage(Path.Combine(datapath, "Galaxy_L_Grid.json"));
-                if (galaxy != null)
-                {
-                    imageViewer.Image = new Bitmap(galaxy.FilePath);
-                    imageViewer.ZoomToFit();
-                    imageViewer.Init(galaxy);
-                    imageViewer.MinZoom = 1;
+                galaxy = EDDiscovery.Icons.IconMaps.StandardMaps().Find(x=>x.FilePath.Contains("Galaxy L"));
 
-                    comboBoxSelections.Items.AddRange((from x in DefaultGalaxyOptions select x.Item1));
+                imageViewer.Image = galaxy.Image;
+                imageViewer.ZoomToFit();
+                imageViewer.Init(galaxy);
+                imageViewer.MinZoom = 1;
 
-                    initialsel = Selection = cellset;
-                    initiallist = new List<int>(imageViewer.Selection);     // copy of..
+                comboBoxSelections.Items.AddRange((from x in DefaultGalaxyOptions select x.Item1));
 
-                    EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
-                    bool winborder = theme.ApplyDialog(this);
-                    statusStripCustom.Visible = panel_close.Visible = panel_minimize.Visible = !winborder;
+                initialsel = Selection = cellset;
+                initiallist = new List<int>(imageViewer.Selection);     // copy of..
 
-                    BaseUtils.Translator.Instance.Translate(this, new Control[] { labelX, labelXName, labelZ, labelZName, labelID });
+                EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
+                bool winborder = theme.ApplyDialog(this);
+                statusStripCustom.Visible = panel_close.Visible = panel_minimize.Visible = !winborder;
 
-                    SetComboBox();
+                BaseUtils.Translator.Instance.Translate(this, new Control[] { labelX, labelXName, labelZ, labelZName, labelID });
 
-                    imageViewer.BackColor = Color.FromArgb(5, 5, 5);
+                SetComboBox();
 
-                    return true;
-                }
+                imageViewer.BackColor = Color.FromArgb(5, 5, 5);
+
+                return true;
             }
 
             return false;
@@ -167,7 +165,7 @@ namespace EDDiscovery.Forms
                     ("You have added new sectors!" + Environment.NewLine + "This will require a complete re-download of the EDSM data" + Environment.NewLine + "Confirm you wish to do this?").T(EDTx.GalaxySectorSelect_RD), 
                     "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
                 {
-                    if (!EDDConfig.Instance.EDSMEDDBDownload)
+                    if (!EDDConfig.Instance.EDSMDownload)
                         ExtendedControls.MessageBoxTheme.Show(this, ("Synchronisation to star data disabled in settings." + Environment.NewLine + "Reenable to allow star data to be updated").T(EDTx.GalaxySectorSelect_NoSync), "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                     Action = ActionToDo.Add;
@@ -235,7 +233,7 @@ namespace EDDiscovery.Forms
             var list = DefaultGalaxyOptions.Where(x => x.Item1 != "Custom" && x.Item1 != "Reset").Select(x => x.Item1).ToList();
 
             int width = 500;
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "ED Discovery downloads star data from EDSM/EDDB which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed".T(EDTx.GalaxySectorSelect_GALSELEX), 
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "ED Discovery downloads star data from EDSM which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed".T(EDTx.GalaxySectorSelect_GALSELEX), 
                             new Point(10, 30), new Size(width-50, 70), ""));
             f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "Select:".T(EDTx.GalaxySectorSelect_Select), new Point(10, 100), new Size(130, 24), ""));
             f.Add(new ExtendedControls.ConfigurableForm.Entry("Entry", "All",

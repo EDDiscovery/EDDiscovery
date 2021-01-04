@@ -534,7 +534,7 @@ namespace EDDiscovery.UserControls
 
                         f.RightMargin = margin;
 
-                        f.InitCentred(this.FindForm(), this.FindForm().Icon, " ", closeicon: true);
+                        f.InitCentred(this.FindForm(), new Size(1, 1), new Size(50000, 50000), this.FindForm().Icon, " ", closeicon: true);
 
                         DialogResult res = f.ShowDialog();
 
@@ -561,18 +561,11 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        int rightclickrow = -1;
-
-        private void dataGridViewTrades_MouseDown(object sender, MouseEventArgs e)
-        {
-            dataGridViewTrades.HandleClickOnDataGrid(e, out int unusedleftclickrow, out rightclickrow);
-        }
-
         private void clearTradeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if ( rightclickrow >= 0 && rightclickrow < trades.Count)
+            if (dataGridViewTrades.RightClickRowValid)
             {
-                trades.RemoveAt(rightclickrow);
+                trades.RemoveAt(dataGridViewTrades.RightClickRow);
                 StoreTrades();
                 DisplayTradeSelection();
                 DisplayTradeList();

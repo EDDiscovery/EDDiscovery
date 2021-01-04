@@ -48,7 +48,6 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
-Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
 Source: "EDDiscovery.exe"; DestDir: "{app}"; Flags: ignoreversion
@@ -61,16 +60,15 @@ Source: "*.pdb"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "eddwebsite.zip"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "..\..\Translations\*.tlf"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "..\..\UserControls\*.tlp"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "..\..\..\EliteDangerous\EliteDangerous\*.tlp"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "..\..\..\EliteDangerousCore\EliteDangerous\EliteDangerous\*.tlp"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "..\..\..\Installer\ExtraFiles\EUROCAPS.TTF"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "..\..\..\EliteDangerous\JournalEvents\*.tlp"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "..\..\..\EliteDangerousCore\EliteDangerous\JournalEvents\*.tlp"; DestDir: "{app}"; Flags: ignoreversion;
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
 Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
 Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
-Name: "{userappdata}\Microsoft\Internet Explorer\Quick Launch\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: quicklaunchicon
 
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent

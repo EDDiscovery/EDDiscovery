@@ -179,7 +179,7 @@ namespace EDDiscovery.UserControls
 
                                 if (lastbelt.BeltData != null)
                                 {
-                                    appendlabel.AppendPrePad($"{lastbelt.BeltData.OuterRad / JournalScan.oneLS_m:N1}ls", Environment.NewLine);
+                                    appendlabel = appendlabel.AppendPrePad($"{lastbelt.BeltData.OuterRad / JournalScan.oneLS_m:N1}ls", Environment.NewLine);
                                 }
 
                                 appendlabel = appendlabel.AppendPrePad("" + lastbelt.ScanData?.BodyID, Environment.NewLine);
@@ -243,9 +243,16 @@ namespace EDDiscovery.UserControls
                                 leftmiddle = new Point(firstcolumn.X, maxitemspos.Y + planetspacery + planetsize.Height / 2); // move to left at maxy+space+h/2
                             }
 
-                            string appendlabel = Environment.NewLine + $"{lastbelt.BeltData.OuterRad / JournalScan.oneLS_m:N1}ls";
+                            string appendlabel = "";
 
-                            Point maxbeltpos = DrawNode(starcontrols, lastbelt, curmats, hl, Icons.Controls.Scan_Bodies_Belt, leftmiddle, false, out int unusedbelt2centre, beltsize, DrawLevel.PlanetLevel, appendlabeltext:appendlabel);
+                            if (lastbelt.BeltData != null)
+                            {
+                                appendlabel = appendlabel.AppendPrePad($"{lastbelt.BeltData.OuterRad / JournalScan.oneLS_m:N1}ls", Environment.NewLine);
+                            }
+
+                            appendlabel = appendlabel.AppendPrePad("" + lastbelt.ScanData?.BodyID, Environment.NewLine);
+
+                            Point maxbeltpos = DrawNode(starcontrols, lastbelt, curmats, hl, Icons.Controls.Scan_Bodies_Belt, leftmiddle, false, out int unusedbelt2centre, beltsize, DrawLevel.PlanetLevel, appendlabeltext: appendlabel);
 
                             leftmiddle = new Point(maxbeltpos.X + planetspacerx, leftmiddle.Y);
                             lastbelt = belts.Count != 0 ? belts.Dequeue() : null;
@@ -258,7 +265,7 @@ namespace EDDiscovery.UserControls
                         // make a tree of the planets with their barycentres from the Parents information
                         var barynodes = StarScan.ScanNode.PopulateBarycentres(planetsinorder);  // children always made, barynode tree
 
-                        StarScan.ScanNode.DumpTree(barynodes, "TOP", 0);
+                        //StarScan.ScanNode.DumpTree(barynodes, "TOP", 0);
 
                         List<ExtPictureBox.ImageElement> pcb = new List<ExtPictureBox.ImageElement>();
 
@@ -299,7 +306,8 @@ namespace EDDiscovery.UserControls
             if ( habzone )
                 backwash = Color.FromArgb(64, 0, 128, 0);       // transparent in case we have a non black background
 
-            Point maxtreepos = DrawNode(pc, planetnode, curmats, hl, JournalScan.GetPlanetImageNotScanned(),
+            Point maxtreepos = DrawNode(pc, planetnode, curmats, hl, 
+                                (planetnode.type == StarScan.ScanNodeType.barycentre) ? Icons.Controls.Scan_Bodies_Barycentre : JournalScan.GetPlanetImageNotScanned(),
                                 leftmiddle, false, out planetcentre, planetsize, DrawLevel.PlanetLevel, backwash: backwash);        // offset passes in the suggested offset, returns the centre offset
 
             if (planetnode.children != null && ShowMoons)
@@ -320,7 +328,7 @@ namespace EDDiscovery.UserControls
 
                     if (nonedsmscans || CheckEDSM)
                     {
-                        Point mmax = DrawNode(pc, moonnode, curmats, hl, JournalScan.GetMoonImageNotScanned(), moonposcentremid, true, out int mooncentre, moonsize, DrawLevel.MoonLevel);
+                        Point mmax = DrawNode(pc, moonnode, curmats, hl, (moonnode.type == StarScan.ScanNodeType.barycentre) ? Icons.Controls.Scan_Bodies_Barycentre : JournalScan.GetMoonImageNotScanned(), moonposcentremid, true, out int mooncentre, moonsize, DrawLevel.MoonLevel);
 
                         maxtreepos = new Point(Math.Max(maxtreepos.X, mmax.X), Math.Max(maxtreepos.Y, mmax.Y));
 
@@ -338,7 +346,7 @@ namespace EDDiscovery.UserControls
 
                                 if (nonedsmsubmoonscans || CheckEDSM)
                                 {
-                                    Point sbmax = DrawNode(pc, submoonnode, curmats, hl, JournalScan.GetMoonImageNotScanned(), submoonpos, xiscentre, out int xsubmooncentre, moonsize, DrawLevel.MoonLevel);
+                                    Point sbmax = DrawNode(pc, submoonnode, curmats, hl, (moonnode.type == StarScan.ScanNodeType.barycentre) ? Icons.Controls.Scan_Bodies_Barycentre : JournalScan.GetMoonImageNotScanned(), submoonpos, xiscentre, out int xsubmooncentre, moonsize, DrawLevel.MoonLevel);
 
                                     if (xiscentre)
                                         submoonpos = new Point(submoonpos.X, sbmax.Y + moonspacery + moonsize.Height / 2);

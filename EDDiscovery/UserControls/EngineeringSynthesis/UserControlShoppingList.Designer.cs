@@ -88,13 +88,14 @@ namespace EDDiscovery.UserControls
             // splitContainerVertical.Panel1
             // 
             this.splitContainerVertical.Panel1.Controls.Add(this.pictureBoxList);
-            this.splitContainerVertical.Panel1MinSize = 100;
+            this.splitContainerVertical.Panel1MinSize = 1;
             // 
             // splitContainerVertical.Panel2
             // 
             this.splitContainerVertical.Panel2.Controls.Add(this.splitContainerRightHorz);
+            this.splitContainerVertical.Panel2MinSize = 1;
             this.splitContainerVertical.Size = new System.Drawing.Size(1142, 626);
-            this.splitContainerVertical.SplitterDistance = 141;
+            this.splitContainerVertical.SplitterDistance = 119;
             this.splitContainerVertical.TabIndex = 0;
             // 
             // pictureBoxList
@@ -102,7 +103,7 @@ namespace EDDiscovery.UserControls
             this.pictureBoxList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBoxList.Location = new System.Drawing.Point(0, 0);
             this.pictureBoxList.Name = "pictureBoxList";
-            this.pictureBoxList.Size = new System.Drawing.Size(141, 626);
+            this.pictureBoxList.Size = new System.Drawing.Size(119, 626);
             this.pictureBoxList.TabIndex = 0;
             // 
             // splitContainerRightHorz
@@ -120,7 +121,7 @@ namespace EDDiscovery.UserControls
             // splitContainerRightHorz.Panel2
             // 
             this.splitContainerRightHorz.Panel2.Controls.Add(this.userControlEngineering);
-            this.splitContainerRightHorz.Size = new System.Drawing.Size(997, 626);
+            this.splitContainerRightHorz.Size = new System.Drawing.Size(1019, 626);
             this.splitContainerRightHorz.SplitterDistance = 234;
             this.splitContainerRightHorz.TabIndex = 0;
             // 
@@ -129,7 +130,7 @@ namespace EDDiscovery.UserControls
             this.userControlSynthesis.Dock = System.Windows.Forms.DockStyle.Fill;
             this.userControlSynthesis.Location = new System.Drawing.Point(0, 29);
             this.userControlSynthesis.Name = "userControlSynthesis";
-            this.userControlSynthesis.Size = new System.Drawing.Size(997, 205);
+            this.userControlSynthesis.Size = new System.Drawing.Size(1019, 205);
             this.userControlSynthesis.TabIndex = 0;
             // 
             // panelSpecialButs
@@ -140,7 +141,7 @@ namespace EDDiscovery.UserControls
             this.panelSpecialButs.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelSpecialButs.Location = new System.Drawing.Point(0, 0);
             this.panelSpecialButs.Name = "panelSpecialButs";
-            this.panelSpecialButs.Size = new System.Drawing.Size(997, 29);
+            this.panelSpecialButs.Size = new System.Drawing.Size(1019, 29);
             this.panelSpecialButs.TabIndex = 2;
             // 
             // buttonTechBroker
@@ -171,7 +172,7 @@ namespace EDDiscovery.UserControls
             | System.Windows.Forms.AnchorStyles.Right)));
             this.userControlEngineering.Location = new System.Drawing.Point(0, -1);
             this.userControlEngineering.Name = "userControlEngineering";
-            this.userControlEngineering.Size = new System.Drawing.Size(994, 386);
+            this.userControlEngineering.Size = new System.Drawing.Size(1016, 386);
             this.userControlEngineering.TabIndex = 0;
             // 
             // contextMenuStrip

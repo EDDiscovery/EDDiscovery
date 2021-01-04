@@ -120,6 +120,7 @@ namespace EDDiscovery.UserControls
                     if (rowfuel != -1)
                         dataGridViewModules.Rows[rowfuel].Cells[1].Value = last_he.ShipInformation.FuelLevel.ToString("N1") + "t";
                     int rowres = dataGridViewModules.FindRowWithValue(0, fuelresname);
+                    if (rowres != -1)
                         dataGridViewModules.Rows[rowres].Cells[1].Value = last_he.ShipInformation.ReserveFuelCapacity.ToString("N2") + "t";
 
                     System.Diagnostics.Debug.WriteLine("Modules Fuel update");
@@ -187,7 +188,7 @@ namespace EDDiscovery.UserControls
             {
                 labelVehicle.Visible = buttonExtCoriolis.Visible = buttonExtEDShipyard.Visible = buttonExtConfigure.Visible = false;
 
-                ShipInformationList shm = discoveryform.history.shipinformationlist;
+                ShipInformationList shm = discoveryform.history.ShipInformationList;
                 var ownedships = (from x1 in shm.Ships where x1.Value.State == ShipInformation.ShipState.Owned && !ShipModuleData.IsSRVOrFighter(x1.Value.ShipFD) select x1.Value);
 
                 foreach( var si in ownedships )
@@ -228,7 +229,7 @@ namespace EDDiscovery.UserControls
             }
             else
             {
-                ShipInformation si = discoveryform.history.shipinformationlist.GetShipByNameIdentType(comboBoxShips.Text);
+                ShipInformation si = discoveryform.history.ShipInformationList.GetShipByNameIdentType(comboBoxShips.Text);
                 if (si != null)
                     DisplayShip(si);
             }
@@ -397,7 +398,7 @@ namespace EDDiscovery.UserControls
 
         private void UpdateComboBox(HistoryList hl)
         {
-            ShipInformationList shm = hl.shipinformationlist;
+            ShipInformationList shm = hl.ShipInformationList;
             string cursel = comboBoxShips.Text;
 
             comboBoxShips.Items.Clear();
@@ -448,7 +449,7 @@ namespace EDDiscovery.UserControls
                     si = last_he.ShipInformation;
             }
             else
-                si = discoveryform.history.shipinformationlist.GetShipByNameIdentType(comboBoxShips.Text);
+                si = discoveryform.history.ShipInformationList.GetShipByNameIdentType(comboBoxShips.Text);
 
             if (si != null)
             {
@@ -490,13 +491,11 @@ namespace EDDiscovery.UserControls
                     si = last_he.ShipInformation;
             }
             else
-                si = discoveryform.history.shipinformationlist.GetShipByNameIdentType(comboBoxShips.Text);
+                si = discoveryform.history.ShipInformationList.GetShipByNameIdentType(comboBoxShips.Text);
 
             if (si != null)
             {
-                Newtonsoft.Json.Linq.JObject jo = si.ToJSONLoadout();
-
-                string loadoutjournalline = jo.ToString(Newtonsoft.Json.Formatting.Indented);
+                string loadoutjournalline = si.ToJSONLoadout();
 
                 //     File.WriteAllText(@"c:\code\loadoutout.txt", loadoutjournalline);
 
@@ -665,7 +664,7 @@ namespace EDDiscovery.UserControls
                             return null;
                     };
 
-                    var x = discoveryform.history.shipinformationlist.Ships.GetEnumerator();
+                    var x = discoveryform.history.ShipInformationList.Ships.GetEnumerator();
                     x.MoveNext();
 
                     grd.GetPostHeader += delegate (int r)

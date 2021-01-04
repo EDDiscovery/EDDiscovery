@@ -75,7 +75,7 @@ namespace EDDiscovery.UserControls
                     if (sc.IsStar)
                     {
                         if (ShowStarClasses)
-                            overlaytext = sc.StarClassification;
+                            overlaytext = sc.StarClassificationAbv;
 
                         if (sc.nStellarMass.HasValue)
                             nodelabels[1] = nodelabels[1].AppendPrePad($"{sc.nStellarMass.Value:N2} SM", Environment.NewLine);
@@ -117,7 +117,9 @@ namespace EDDiscovery.UserControls
                             }
                             else
                             {
-                                nodelabels[1] = nodelabels[1].AppendPrePad($"{sn.ScanData.DistanceFromArrivalLS:N1}ls", Environment.NewLine);
+                                //System.Diagnostics.Debug.WriteLine(sn.ScanData.BodyName + " SMA " + sn.ScanData.nSemiMajorAxis + " " + sn.ScanData.DistanceFromArrivalm);
+                                string s = sn.ScanData.nSemiMajorAxis.HasValue && Math.Abs(sn.ScanData.nSemiMajorAxis.Value- sn.ScanData.DistanceFromArrivalm) > JournalScan.oneAU_m ? (" / " + sn.ScanData.SemiMajorAxisLSKM) : "";
+                                nodelabels[1] = nodelabels[1].AppendPrePad($"{sn.ScanData.DistanceFromArrivalLS:N1}ls" + s, Environment.NewLine);
                             }
                         }
                         else
@@ -131,7 +133,7 @@ namespace EDDiscovery.UserControls
 
                     nodelabels[1] = nodelabels[1].AppendPrePad(appendlabeltext, Environment.NewLine);
 
-   nodelabels[1] = nodelabels[1].AppendPrePad("" + sn.ScanData?.BodyID, Environment.NewLine);
+ //  nodelabels[1] = nodelabels[1].AppendPrePad("" + sn.ScanData?.BodyID, Environment.NewLine);
 
                     bool valuable = sc.EstimatedValue >= ValueLimit;
                     int iconoverlays = ShowOverlays ? ((sc.Terraformable ? 1 : 0) + (sc.HasMeaningfulVolcanism ? 1 : 0) + (valuable ? 1 : 0) + (sc.Mapped ? 1 : 0) + (sn.Signals != null ? 1 : 0)) : 0;
@@ -268,7 +270,7 @@ namespace EDDiscovery.UserControls
             else if (sn.type == StarScan.ScanNodeType.belt)
             {
                 if (sn.BeltData != null)
-                    tip = sn.BeltData.RingInformationMoons(true);
+                    tip = sn.BeltData.RingInformationMoons(true,"");
                 else
                     tip = sn.ownname + Environment.NewLine + Environment.NewLine + "No scan data available".T(EDTx.ScanDisplayUserControl_NSD);
 
@@ -278,14 +280,15 @@ namespace EDDiscovery.UserControls
                     {
                         if (snc.ScanData != null)
                         {
-                            tip += "\n\n" + snc.ScanData.DisplayString();
+                            string sd = snc.ScanData.DisplayString() + "\n";
+                            tip += "\n" + sd;
                         }
                     }
                 }
 
                 Size bmpsize = new Size(size.Width, planetsize.Height * nodeheightratio / noderatiodivider);
 
-                endpoint = CreateImageAndLabel(pc, Icons.Controls.Scan_Bodies_Belt, position, bmpsize, out ximagecentre, new string[] { sn.ownname + appendlabeltext }, tip, false);
+                endpoint = CreateImageAndLabel(pc, Icons.Controls.Scan_Bodies_Belt, position, bmpsize, out ximagecentre, new string[] { sn.ownname.AppendPrePad(appendlabeltext, Environment.NewLine) }, tip, false);
             }
             else
             {
@@ -295,7 +298,7 @@ namespace EDDiscovery.UserControls
                     tip = sn.ownname + Environment.NewLine + Environment.NewLine + "No scan data available".T(EDTx.ScanDisplayUserControl_NSD);
 
                 string nodelabel = sn.customname ?? sn.ownname;
-                nodelabel += appendlabeltext;
+                nodelabel = nodelabel.AppendPrePad(appendlabeltext,Environment.NewLine);
 
                 endpoint = CreateImageAndLabel(pc, notscanned, position, size, out ximagecentre, new string[] { nodelabel }, tip, false);
             }

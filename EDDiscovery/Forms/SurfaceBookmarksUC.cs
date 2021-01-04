@@ -45,7 +45,7 @@ namespace EDDiscovery.Forms
             InitializeComponent();
         }
 
-        public void Init(string systemName)     // from bookmark form.  new system or update with name..  name can be blank
+        public void Init(string systemName, HistoryList helist)     // from bookmark form.  new system or update with name..  name can be blank
         {
             planetmarks = new PlanetMarks();
 
@@ -56,7 +56,7 @@ namespace EDDiscovery.Forms
             dataGridViewMarks.ColumnHeadersDefaultCellStyle.BackColor = dataGridViewMarks.RowHeadersDefaultCellStyle.BackColor = EDDTheme.Instance.GridBorderBack;
 
             if (!string.IsNullOrEmpty(systemName))
-                UpdateComboBox(systemName);
+                UpdateComboBox(systemName , helist);
 
             Edited = false;
 
@@ -64,7 +64,7 @@ namespace EDDiscovery.Forms
             BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
         }
 
-        public void Init(string systemName, PlanetMarks pm)          // from UCB or Bookmark form, Init with a bookmark
+        public void Init(string systemName, PlanetMarks pm, HistoryList helist)          // from UCB or Bookmark form, Init with a bookmark
         {
             Edited = false;
             planetmarks = pm != null ? pm : new PlanetMarks();
@@ -77,7 +77,7 @@ namespace EDDiscovery.Forms
             dataGridViewMarks.SuspendLayout();
 
             if (!string.IsNullOrEmpty(systemName))
-                UpdateComboBox(systemName);
+                UpdateComboBox(systemName, helist);
 
             if (planetmarks.Planets != null)
             {
@@ -85,6 +85,7 @@ namespace EDDiscovery.Forms
                 {
                     foreach (Location loc in pl.Locations)
                     {
+                        System.Diagnostics.Debug.WriteLine("Add row {0} {1} {2}", loc.Name, loc.Longitude, loc.Latitude);
                         using (DataGridViewRow dr = dataGridViewMarks.Rows[dataGridViewMarks.Rows.Add()])
                         {
                             if (!BodyName.Items.Contains(pl.Name))      // ensure planet in collection so we don't get errors..
@@ -92,8 +93,8 @@ namespace EDDiscovery.Forms
 
                             dr.Cells[0].Value = pl.Name;
                             dr.Cells[0].ReadOnly = true;
+                            dr.Cells[1].Value = loc.Name;               
                             dr.Cells[2].Value = loc.Comment;
-                            dr.Cells[1].Value = loc.Name;
 
                             if (loc.IsWholePlanetBookmark)              // whole planet gets empty lat/long
                             {
@@ -148,14 +149,14 @@ namespace EDDiscovery.Forms
             }
         }
 
-        private async void UpdateComboBox(string systemName)
+        private async void UpdateComboBox(string systemName, HistoryList helist)
         {
-            ISystem thisSystem = EDDApplicationContext.EDDMainForm.history.FindSystem(systemName);
+            ISystem thisSystem = helist.FindSystem(systemName);
 
             BodyName.Items.Clear();
             if (thisSystem != null)
             {
-                var lookup = await EDDApplicationContext.EDDMainForm.history.starscan.FindSystemAsync(thisSystem, true);
+                var lookup = await helist.StarScan.FindSystemAsync(thisSystem, true);
                 var landables = lookup?.Bodies?.Where(b => b.ScanData != null && b.ScanData.IsLandable)?.Select(b => b.fullname);
 
                 if (landables != null)
@@ -173,38 +174,13 @@ namespace EDDiscovery.Forms
 
         #region UI
 
-        int rightclickrow = -1;
-
-        private void dataGridViewMarks_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Right)         // right click on travel map, get in before the context menu
-            {
-                rightclickrow = -1;
-            }
-
-            if (dataGridViewMarks.SelectedCells.Count < 2 || dataGridViewMarks.SelectedRows.Count == 1)      // if single row completely selected, or 1 cell or less..
-            {
-                DataGridView.HitTestInfo hti = dataGridViewMarks.HitTest(e.X, e.Y);
-                if (hti.Type == DataGridViewHitTestType.Cell)
-                {
-                    dataGridViewMarks.ClearSelection();                // select row under cursor.
-                    dataGridViewMarks.Rows[hti.RowIndex].Selected = true;
-
-                    if (e.Button == MouseButtons.Right)         // right click on Marks map, get in before the context menu
-                    {
-                        rightclickrow = hti.RowIndex;
-                    }
-                }
-            }
-        }
-
         private void contextMenuStrip_Opening(object sender, CancelEventArgs e)
         {
-            if (rightclickrow >= 0)
+            if (dataGridViewMarks.RightClickRow >= 0)
             {
-                deleteToolStripMenuItem.Enabled = dataGridViewMarks.Rows[rightclickrow].IsNewRow == false;
-                var check = (DataGridViewCheckBoxCell)dataGridViewMarks.Rows[rightclickrow].Cells[5];
-                sendToCompassToolStripMenuItem.Enabled = check.Value != null && (bool)(check.Value) == true && !dataGridViewMarks.Rows[rightclickrow].Cells[1].IsNullOrEmpty();
+                deleteToolStripMenuItem.Enabled = dataGridViewMarks.Rows[dataGridViewMarks.RightClickRow].IsNewRow == false;
+                var check = (DataGridViewCheckBoxCell)dataGridViewMarks.Rows[dataGridViewMarks.RightClickRow].Cells[5];
+                sendToCompassToolStripMenuItem.Enabled = check.Value != null && (bool)(check.Value) == true && !dataGridViewMarks.Rows[dataGridViewMarks.RightClickRow].Cells[1].IsNullOrEmpty();
             }
         }
 
@@ -247,19 +223,19 @@ namespace EDDiscovery.Forms
 
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (rightclickrow >= 0)
+            if (dataGridViewMarks.RightClickRow >= 0)
             {
-                DataGridViewRow rw = dataGridViewMarks.Rows[rightclickrow];
+                DataGridViewRow rw = dataGridViewMarks.Rows[dataGridViewMarks.RightClickRow];
 
                 if (rw.Tag != null)
                 {
                     planetmarks.DeleteLocation(rw.Cells[0].Value.ToString(), ((Location)rw.Tag).Name);
-                    dataGridViewMarks.Rows.RemoveAt(rightclickrow);
+                    dataGridViewMarks.Rows.RemoveAt(dataGridViewMarks.RightClickRow);
                     Edited = true;
                     Changed?.Invoke(planetmarks);
                 }
                 else if (!rw.IsNewRow)
-                    dataGridViewMarks.Rows.RemoveAt(rightclickrow); // its not a saved one, just a spurious one..
+                    dataGridViewMarks.Rows.RemoveAt(dataGridViewMarks.RightClickRow); // its not a saved one, just a spurious one..
             }
         }
 
@@ -341,22 +317,22 @@ namespace EDDiscovery.Forms
 
         private bool ValidRow(DataGridViewRow dr)
         {
-            if (dr.Cells[0].IsNullOrEmpty())      // must have a planet
+            if (dr.Cells[0].IsNullOrEmpty() || dr.Cells[1].IsNullOrEmpty())      // must have a planet and a description
                 return false;
 
-            if (dr.Cells[1].IsNullOrEmpty() && dr.Cells[3].IsNullOrEmpty() && dr.Cells[4].IsNullOrEmpty())
-                return true;                    // marker of a planet wide bookmark
+            if (!dr.Cells[1].IsNullOrEmpty() && dr.Cells[3].IsNullOrEmpty() && dr.Cells[4].IsNullOrEmpty())     // if both empty, its a planet wide bookmark
+                return true;
 
-            if (dr.Cells[1].IsNullOrEmpty() || dr.Cells[3].IsNullOrEmpty() || dr.Cells[4].IsNullOrEmpty())     // must be set..
+            if (dr.Cells[3].IsNullOrEmpty() || dr.Cells[4].IsNullOrEmpty())     // if either empty, invalid
                 return false;
 
-            if (!Double.TryParse(dr.Cells[3].Value.ToString(), out double lat))
+            if (!Double.TryParse(dr.Cells[3].Value.ToString(), out double lat)) // else both must decode
                 return false;
 
             if (!Double.TryParse(dr.Cells[4].Value.ToString(), out double lon))
                 return false;
 
-            return lat >= -180 && lat <= 180 && lon >= -180 && lon <= 180;
+            return lat >= -90 && lat <= 90 && lon >= -180 && lon <= 180;      // and be valid
         }
 
 

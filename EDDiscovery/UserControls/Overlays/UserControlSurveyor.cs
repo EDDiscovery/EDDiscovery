@@ -14,15 +14,11 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using EliteDangerousCore;
-using EliteDangerousCore.DB;
 using EliteDangerousCore.JournalEvents;
-using BaseUtils;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
 {
@@ -59,6 +55,7 @@ namespace EDDiscovery.UserControls
             waterWorldToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "showWaterWorld", true);
             terraformableToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "showTerraformable", true);
             hasVolcanismToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "showVolcanism", true);
+            landableToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "isLandable", true);
             hasRingsToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "showRinged", true);
             hideAlreadyMappedBodiesToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "hideMapped", true);
             autoHideToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "autohide", false);
@@ -71,11 +68,12 @@ namespace EDDiscovery.UserControls
             showAllStarsToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "allstars", false);
             showBeltClustersToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "beltclusters", false);
             showMoreInformationToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "moreinfo", true);
-            wordWrapToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "wordwrap", false);
+            wordWrapToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "wordwrap", false);            
 
             SetAlign((StringAlignment)EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(DbSave + "align", 0));
 
             // install the handlers AFTER setup otherwise you get lots of events
+            this.landableToolStripMenuItem.Click += new System.EventHandler(this.landableToolStripMenuItem_Click);            
             this.ammoniaWorldToolStripMenuItem.Click += new System.EventHandler(this.ammoniaWorldToolStripMenuItem_Click);
             this.earthlikeWorldToolStripMenuItem.Click += new System.EventHandler(this.earthlikeWorldToolStripMenuItem_Click);
             this.waterWorldToolStripMenuItem.Click += new System.EventHandler(this.waterWorldToolStripMenuItem_Click);
@@ -133,10 +131,9 @@ namespace EDDiscovery.UserControls
             discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
         }
 
-        public override Color ColorTransparency => Color.Green;
+        public override bool SupportTransparency { get { return true; } }
         public override void SetTransparency(bool on, Color curcol)
         {
-            System.Diagnostics.Debug.WriteLine("Set colour to " + curcol);
             pictureBoxSurveyor.BackColor = this.BackColor = curcol;
             DrawSystem(last_sys);   // need to redraw as we use backcolour
         }
@@ -182,7 +179,6 @@ namespace EDDiscovery.UserControls
                 bool refresh = gui.GUIFocus != uistate;
                 uistate = gui.GUIFocus;
 
-                System.Diagnostics.Debug.WriteLine("Surveyor UI event " + uistate);
                 if (refresh)
                     DrawSystem(last_sys);
             }
@@ -233,7 +229,7 @@ namespace EDDiscovery.UserControls
                     vpos += i.Location.Height;
                 }
 
-                StarScan.SystemNode systemnode = await discoveryform.history.starscan.FindSystemAsync(sys, checkEDSMForInformationToolStripMenuItem.Checked);        // get data with EDSM
+                StarScan.SystemNode systemnode = await discoveryform.history.StarScan.FindSystemAsync(sys, checkEDSMForInformationToolStripMenuItem.Checked);        // get data with EDSM
 
                 if (systemnode != null)     // no data, clear display, clear any last_he so samesys is false next time
                 {
@@ -279,18 +275,19 @@ namespace EDDiscovery.UserControls
                             {
                                 var sd = sn.ScanData;
 
-                                if (    (sd.AmmoniaWorld && ammoniaWorldToolStripMenuItem.Checked) ||
-                                        (sd.Earthlike && earthlikeWorldToolStripMenuItem.Checked) ||
-                                        (sd.WaterWorld && waterWorldToolStripMenuItem.Checked) ||
-                                        (sd.HasRings && !sd.AmmoniaWorld && !sd.Earthlike && !sd.WaterWorld && hasRingsToolStripMenuItem.Checked) ||
-                                        (sd.HasMeaningfulVolcanism && hasVolcanismToolStripMenuItem.Checked) ||
-                                        (sd.Terraformable && terraformableToolStripMenuItem.Checked) ||
-                                        (lowRadiusToolStripMenuItem.Checked && sd.nRadius.HasValue && sd.nRadius < lowRadiusLimit) ||
-                                        (sn.Signals != null && hasSignalsToolStripMenuItem.Checked ) ||
-                                        (sd.IsStar && showAllStarsToolStripMenuItem.Checked) ||
-                                        (sd.IsPlanet && showAllPlanetsToolStripMenuItem.Checked) ||
-                                        (sd.IsBeltCluster && showBeltClustersToolStripMenuItem.Checked)
-                                    )
+                                if  (                                    
+                                    (sd.IsLandable && landableToolStripMenuItem.Checked) ||
+                                    (sd.AmmoniaWorld && ammoniaWorldToolStripMenuItem.Checked) ||
+                                    (sd.Earthlike && earthlikeWorldToolStripMenuItem.Checked) ||
+                                    (sd.WaterWorld && waterWorldToolStripMenuItem.Checked) ||
+                                    (sd.HasRings && !sd.AmmoniaWorld && !sd.Earthlike && !sd.WaterWorld && hasRingsToolStripMenuItem.Checked) ||
+                                    (sd.HasMeaningfulVolcanism && hasVolcanismToolStripMenuItem.Checked) ||
+                                    (sd.Terraformable && terraformableToolStripMenuItem.Checked) ||
+                                    (lowRadiusToolStripMenuItem.Checked && sd.nRadius.HasValue && sd.nRadius < lowRadiusLimit) ||
+                                    (sn.Signals != null && hasSignalsToolStripMenuItem.Checked) ||
+                                    (sd.IsStar && showAllStarsToolStripMenuItem.Checked) ||
+                                    (sd.IsPlanet && showAllPlanetsToolStripMenuItem.Checked) ||
+                                    (sd.IsBeltCluster && showBeltClustersToolStripMenuItem.Checked))
                                 {
                                     if (!sd.Mapped || hideAlreadyMappedBodiesToolStripMenuItem.Checked == false)      // if not mapped, or show mapped
                                     {
@@ -354,13 +351,13 @@ namespace EDDiscovery.UserControls
             information.Append((js.HasMeaningfulVolcanism) ? @" Has ".T(EDTx.UserControlSurveyor_Has) + js.Volcanism + "." : null);
             information.Append((js.nRadius < lowRadiusLimit) ? @" Low Radius.".T(EDTx.UserControlSurveyor_LowRadius) : null);
             information.Append((sn.Signals != null) ? " Has Signals.".T(EDTx.UserControlSurveyor_Signals) : null);
-
+            information.Append((js.IsLandable) ? @" is landable.".T(EDTx.UserControlSurveyor_islandable) : null);            
             if (js.WasMapped == true && js.WasDiscovered == true)
             {
                 information.Append(" (Mapped & Discovered)".T(EDTx.UserControlSurveyor_MandD));
                 if (showValuesToolStripMenuItem.Checked)
                 {
-                    information.Append(" " + js.EstimatedValueBase.ToString("N0") + " cr");
+                    information.Append(' ').Append(js.EstimatedValueBase.ToString("N0")).Append(" cr");
                 }
             }
             else if (js.WasMapped == true && js.WasDiscovered == false)
@@ -368,7 +365,7 @@ namespace EDDiscovery.UserControls
                 information.Append(" (Mapped)".T(EDTx.UserControlSurveyor_MP));
                 if (showValuesToolStripMenuItem.Checked)
                 {
-                    information.Append(" " + js.EstimatedValueBase.ToString("N0") + " cr");
+                    information.Append(' ').Append(js.EstimatedValueBase.ToString("N0")).Append(" cr");
                 }
             }
             else if (js.WasDiscovered == true && js.WasMapped == false)
@@ -376,23 +373,23 @@ namespace EDDiscovery.UserControls
                 information.Append(" (Discovered)".T(EDTx.UserControlSurveyor_DIS));
                 if (showValuesToolStripMenuItem.Checked)
                 {
-                    information.Append(" " + js.EstimatedValueFirstMappedEfficiently.ToString("N0") + " cr");
+                    information.Append(' ').Append(js.EstimatedValueFirstMappedEfficiently.ToString("N0")).Append(" cr");
                 }
             }
             else
             {      
                 if (showValuesToolStripMenuItem.Checked)
                 {
-                    information.Append(" " + (js.EstimatedValueFirstDiscoveredFirstMappedEfficiently > 0 ? js.EstimatedValueFirstDiscoveredFirstMappedEfficiently : js.EstimatedValueBase).ToString("N0") + " cr");
+                    information.Append(' ').Append((js.EstimatedValueFirstDiscoveredFirstMappedEfficiently > 0 ? js.EstimatedValueFirstDiscoveredFirstMappedEfficiently : js.EstimatedValueBase).ToString("N0")).Append(" cr");
                 }
             }
 
             if (showMoreInformationToolStripMenuItem.Checked)
             {
-                information.Append(" " + js.ShortInformation());
+                information.Append(' ').Append(js.ShortInformation());
             }
             else
-                information.Append(@" " + js.DistanceFromArrivalText);
+                information.Append(' ').Append(js.DistanceFromArrivalText);
 
             return information.ToString();
         }
@@ -421,6 +418,12 @@ namespace EDDiscovery.UserControls
         private void terraformableToolStripMenuItem_Click(object sender, EventArgs e)
         {
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "showTerraformable", terraformableToolStripMenuItem.Checked);
+            DrawSystem(last_sys);
+        }
+
+        private void landableToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "isLandable", landableToolStripMenuItem.Checked);
             DrawSystem(last_sys);
         }
 

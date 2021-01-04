@@ -45,7 +45,7 @@ namespace EDDiscovery.UserControls
         {
             this.components = new System.ComponentModel.Container();
             this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
-            this.dataGridViewMarketData = new System.Windows.Forms.DataGridView();
+            this.dataGridViewMarketData = new BaseUtils.DataGridViewColumnHider();
             this.CategoryCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.NameCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.SellCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -77,7 +77,6 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel.Controls.Add(this.vScrollBarCustomMC);
             this.dataViewScrollerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewScrollerPanel.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.dataViewScrollerPanel.LimitLargeChange = 2147483647;
             this.dataViewScrollerPanel.Location = new System.Drawing.Point(0, 23);
             this.dataViewScrollerPanel.Name = "dataViewScrollerPanel";
             this.dataViewScrollerPanel.Size = new System.Drawing.Size(800, 549);
@@ -390,7 +389,7 @@ namespace EDDiscovery.UserControls
         #endregion
 
         private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanel;
-        private System.Windows.Forms.DataGridView dataGridViewMarketData;
+        private BaseUtils.DataGridViewColumnHider dataGridViewMarketData;
         private ExtendedControls.ExtScrollBar vScrollBarCustomMC;
         private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.Label labelLocation;

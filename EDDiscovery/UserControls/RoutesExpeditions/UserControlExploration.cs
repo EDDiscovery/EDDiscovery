@@ -13,11 +13,12 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+
+using BaseUtils.JSON;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using EliteDangerousCore.EDSM;
 using EliteDangerousCore.JournalEvents;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -43,6 +44,8 @@ namespace EDDiscovery.UserControls
         {
             InitializeComponent();
             var corner = dataGridViewExplore.TopLeftHeaderCell; // work around #1487
+            dataGridViewExplore.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+            dataGridViewExplore.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;
             ColumnSystemName.AutoCompleteGenerator = SystemCache.ReturnSystemAutoCompleteList;
             currentexplorationset = new ExplorationSetClass();
         }
@@ -101,15 +104,15 @@ namespace EDDiscovery.UserControls
             UpdateSystemRows();
         }
 
-        #endregion
-
-        #region Updating info due to new record coming in
-
         private void OnNewStars(List<string> obj, OnNewStarsPushType command)    // and if a user asked for stars to be added
         {
             if (command == OnNewStarsPushType.Exploration)
                 AddSystems(obj);
         }
+
+        #endregion
+
+        #region Display and Update grid
 
         private void UpdateSystemRows()
         {
@@ -129,40 +132,32 @@ namespace EDDiscovery.UserControls
             const int idxInfo = 9;
             const int idxNote = 10;
 
-            ISystem currentSystem = discoveryform.history.CurrentSystem; // may be null
+            ISystem currentSystem = discoveryform.history.CurrentSystem(); // may be null
 
             if (rowindex < dataGridViewExplore.Rows.Count && dataGridViewExplore[0, rowindex].Value != null)
             {
                 string sysname = dataGridViewExplore[0, rowindex].Value.ToString();
-                ISystem sys = (ISystem)dataGridViewExplore[0, rowindex].Tag;
 
+                ISystem sys = (ISystem)dataGridViewExplore[0, rowindex].Tag;
                 if (sys == null)
                     sys = discoveryform.history.FindSystem(sysname);
 
-                if (sys != null && currentSystem != null)
-                {
-                    double dist = sys.Distance(currentSystem);
-                    string strdist = dist >= 0 ? ((double)dist).ToString("0.00") : "";
-                    dataGridViewExplore[1, rowindex].Value = strdist;
-                }
-
                 dataGridViewExplore[0, rowindex].Tag = sys;
-                dataGridViewExplore.Rows[rowindex].DefaultCellStyle.ForeColor = (sys != null && sys.HasCoordinate) ? discoveryform.theme.VisitedSystemColor : discoveryform.theme.NonVisitedSystemColor;
+                dataGridViewExplore.Rows[rowindex].Cells[0].Style.ForeColor = (sys != null && sys.HasCoordinate) ? Color.Empty : discoveryform.theme.UnknownSystemColor;
+                dataGridViewExplore[idxVisits, rowindex].Value = discoveryform.history.GetVisitsCount(sysname).ToString();
 
                 if (sys != null)
                 {
-                    if (sys.HasCoordinate)
+                    if ((currentSystem?.HasCoordinate??false) && (currentSystem?.HasCoordinate??false))
                     {
-                        dataGridViewExplore[2, rowindex].Value = sys.X.ToString("0.00");
-                        dataGridViewExplore[3, rowindex].Value = sys.Y.ToString("0.00");
-                        dataGridViewExplore[4, rowindex].Value = sys.Z.ToString("0.00");
+                        double dist = sys.Distance(currentSystem);
+                        string strdist = dist >= 0 ? ((double)dist).ToString("0.00") : "";
+                        dataGridViewExplore[1, rowindex].Value = strdist;
                     }
 
-                    dataGridViewExplore[idxVisits, rowindex].Value = discoveryform.history.GetVisitsCount(sysname).ToString();
+                    StarScan.SystemNode sysnode = discoveryform.history.StarScan.FindSystemSynchronous(sys, false);
 
-                    StarScan.SystemNode sysnode = discoveryform.history.starscan.FindSystemSynchronous(sys,false);
-                    
-                    if ( sysnode != null)
+                    if (sysnode != null)
                     {
                         dataGridViewExplore[idxScans, rowindex].Value = sysnode.StarPlanetsScanned().ToString();
                         if (sysnode.FSSTotalBodies.HasValue)
@@ -171,7 +166,7 @@ namespace EDDiscovery.UserControls
                         dataGridViewExplore[idxstars, rowindex].Value = sysnode.StarTypesFound(false);
 
                         string info = "";
-                        foreach( var scan in sysnode.Bodies)
+                        foreach (var scan in sysnode.Bodies)
                         {
                             JournalScan sd = scan.ScanData;
                             if (sd != null)
@@ -197,48 +192,50 @@ namespace EDDiscovery.UserControls
                                         info = info + " " + "T-HMC";
                                 }
                             }
-
                         }
 
                         dataGridViewExplore[idxInfo, rowindex].Value = info.Trim();
                     }
-
-                    string note = "";
-                    SystemNoteClass sn = SystemNoteClass.GetNoteOnSystem(sys.Name, sys.EDSMID);
-                    if (sn != null && !string.IsNullOrWhiteSpace(sn.Note))
-                    {
-                        note = sn.Note;
-                    }
-                    else
-                    {
-                        BookmarkClass bkmark = GlobalBookMarkList.Instance.FindBookmarkOnSystem(sys.Name);
-                        if (bkmark != null && !string.IsNullOrWhiteSpace(bkmark.Note))
-                            note = bkmark.Note;
-                        else
-                        {
-                            var gmo = discoveryform.galacticMapping.Find(sys.Name);
-                            if (gmo != null && !string.IsNullOrWhiteSpace(gmo.description))
-                                note = gmo.description;
-                        }
-                    }
-                    dataGridViewExplore[idxNote, rowindex].Value = note.WordWrap(60);
                 }
 
-                if (sys == null && sysname != "")
+                string note = "";
+                SystemNoteClass sn = SystemNoteClass.GetNoteOnSystem(sysname);
+                if (sn != null && !string.IsNullOrWhiteSpace(sn.Note))
+                    note = sn.Note;
+
+                BookmarkClass bkmark = GlobalBookMarkList.Instance.FindBookmarkOnSystem(sysname);
+                if (bkmark != null && !string.IsNullOrWhiteSpace(bkmark.Note))
+                    note = note.AppendPrePad(bkmark.Note, "; ");
+
+                var gmo = discoveryform.galacticMapping.Find(sysname);
+                if (gmo != null && !string.IsNullOrWhiteSpace(gmo.description))
+                    note = note.AppendPrePad(gmo.description, "; ");
+
+                dataGridViewExplore[idxNote, rowindex].Value = note;
+
+                if (sys != null && sys.HasCoordinate)
                 {
-                    dataGridViewExplore.Rows[rowindex].ErrorText = "System not known".T(EDTx.Systemnotknown);
-                }
-                else
-                {
+                    dataGridViewExplore[2, rowindex].Value = sys.X.ToString("0.00");
+                    dataGridViewExplore[3, rowindex].Value = sys.Y.ToString("0.00");
+                    dataGridViewExplore[4, rowindex].Value = sys.Z.ToString("0.00");
                     dataGridViewExplore.Rows[rowindex].ErrorText = "";
                 }
+                else
+                    dataGridViewExplore.Rows[rowindex].ErrorText = "System not known".T(EDTx.Systemnotknown);
             }
+        }
+
+        void AddSystems(List<string> systems)
+        {
+            foreach (var sysname in systems)
+                dataGridViewExplore.Rows.Add(sysname, "", "");
+
+            UpdateSystemRows();
         }
 
         #endregion
 
-        #region  Tool strip
-
+        #region Toolbar UI
 
         private void toolStripButtonNew_Click(object sender, EventArgs e)
         {
@@ -269,7 +266,6 @@ namespace EDDiscovery.UserControls
             }
         }
 
-
         private void toolStripButtonSave_Click(object sender, EventArgs e)
         {
             UpdateExplorationInfo(currentexplorationset);
@@ -288,8 +284,57 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        private void toolStripButtonAddSystems_Click(object sender, EventArgs e)
+        {
+            ExtendedControls.ConfigurableForm f = new ExtendedControls.ConfigurableForm();
 
-        private void toolStripButtonImportFile_Click(object sender, EventArgs e)
+            FindSystemsUserControl usc = new FindSystemsUserControl();
+            usc.ReturnSystems = (List<Tuple<ISystem, double>> syslist) =>
+            {
+                List<String> systems = new List<String>();
+                int countunknown = 0;
+                foreach (Tuple<ISystem, double> ret in syslist)
+                {
+                    ret.Item1.Name = ret.Item1.Name.Trim();
+
+                    ISystem sc = discoveryform.history.FindSystem(ret.Item1.Name);
+                    if (sc == null)
+                    {
+                        sc = ret.Item1;
+                        countunknown++;
+                    }
+                    systems.Add(sc.Name);
+                }
+
+                if (systems.Count == 0)
+                {
+                    ExtendedControls.MessageBoxTheme.Show(FindForm(), "The imported file contains no known system names".T(EDTx.UserControlExploration_NoSys),
+                        "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                }
+                else
+                    AddSystems(systems);
+
+                f.ReturnResult(DialogResult.OK);
+            };
+
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("UC", null, "", new Point(5, 30), usc.Size, null) { control = usc });
+            f.AddCancel(new Point(4 + usc.Width - 80, usc.Height + 50));
+
+            f.Trigger += (dialogname, controlname, tag) =>
+            {
+                if (controlname == "Cancel" || controlname == "Close")
+                {
+                    f.ReturnResult(DialogResult.Cancel);
+                }
+            };
+
+            // usc.Font = EDDTheme.Instance.GetScaledFont(0.8f)
+            f.ShowDialogCentred(this.FindForm(), this.FindForm().Icon, "Add Systems".T(EDTx.UserControlExploration_AddSys),
+                                callback: () => {; usc.Init(0, "ExplorationFindSys", false, discoveryform); }, closeicon: true);
+            usc.Closing();
+        }
+
+        private void toolStripButtonImportTextFile_Click(object sender, EventArgs e)
         {
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.Filter = "Text Files|*.txt";
@@ -323,7 +368,7 @@ namespace EDDiscovery.UserControls
                 }
                 if (String.IsNullOrWhiteSpace(sysname))
                     continue;
-                ISystem sc = SystemCache.FindSystem(sysname.Trim());
+                ISystem sc = discoveryform.history.FindSystem(sysname.Trim());
                 if (sc == null)
                 {
                     sc = new SystemClass(sysname.Trim());
@@ -344,15 +389,6 @@ namespace EDDiscovery.UserControls
 
             AddSystems(systems);
         }
-
-        void AddSystems(List<string> systems)
-        { 
-            foreach (var sysname in systems)
-                dataGridViewExplore.Rows.Add(sysname, "", "");
-
-            UpdateSystemRows();
-        }
-
 
         private void toolStripButtonExport_Click(object sender, EventArgs e)
         {
@@ -427,7 +463,7 @@ namespace EDDiscovery.UserControls
 
                     grd.GetHeader += delegate (int c)
                     {
-                        return (c < 3 && frm.IncludeHeader) ? dataGridViewExplore.Columns[c].HeaderText : null;
+                        return (c < 11 && frm.IncludeHeader) ? dataGridViewExplore.Columns[c].HeaderText : null;
                     };
 
                     grd.WriteGrid(frm.Path, frm.AutoOpen, FindForm());
@@ -443,95 +479,8 @@ namespace EDDiscovery.UserControls
             }
         }
 
-
-        private void tsbAddSystems_Click(object sender, EventArgs e)
-        {
-            ExtendedControls.ConfigurableForm f = new ExtendedControls.ConfigurableForm();
-
-            FindSystemsUserControl usc = new FindSystemsUserControl();
-            usc.ReturnSystems = (List<Tuple<ISystem, double>> syslist) =>
-            {
-                List<String> systems = new List<String>();
-                int countunknown = 0;
-                foreach (Tuple<ISystem, double> ret in syslist)
-                {
-                    string name = ret.Item1.Name;
-
-                    ISystem sc = SystemCache.FindSystem(name.Trim());
-                    if (sc == null)
-                    {
-                        sc = new SystemClass(name.Trim());
-                        countunknown++;
-                    }
-                    systems.Add(sc.Name);
-                }
-
-                if (systems.Count == 0)
-                {
-                    ExtendedControls.MessageBoxTheme.Show(FindForm(), "The imported file contains no known system names".T(EDTx.UserControlExploration_NoSys),
-                        "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                }
-                else
-                    AddSystems(systems);
-
-                f.ReturnResult(DialogResult.OK);
-            };
-
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("UC", null, "", new Point(5, 30), usc.Size, null) { control = usc });
-            f.AddCancel(new Point(4+usc.Width - 80, usc.Height + 50));
-
-            f.Trigger += (dialogname, controlname, tag) =>
-            {
-                if (controlname == "Cancel" || controlname == "Close")
-                {
-                    f.ReturnResult(DialogResult.Cancel);
-                }
-            };
-
-            // usc.Font = EDDTheme.Instance.GetScaledFont(0.8f)
-            f.ShowDialogCentred(this.FindForm(), this.FindForm().Icon, "Add Systems".T(EDTx.UserControlExploration_AddSys), 
-                                callback: () => {; usc.Init(0, "ExplorationFindSys", false, discoveryform); }, closeicon:true);
-            usc.Closing();
-        }
-
-
         #endregion
 
-        #region Cell data
-
-        private void dataGridViewRouteSystems_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
-        {
-            if (e.ColumnIndex == 0)
-            {
-                string sysname = e.FormattedValue.ToString();
-                var row = dataGridViewExplore.Rows[e.RowIndex];
-                var cell = dataGridViewExplore[e.ColumnIndex, e.RowIndex];
-
-                ISystem sys = SystemCache.FindSystem(sysname);
-
-                EDSMClass edsm = new EDSMClass();
-
-                if (sysname != "" && sys == null && !edsm.IsKnownSystem(sysname))
-                {
-                    row.ErrorText = "System not known to EDSM".T(EDTx.UserControlExploration_EDSMUnk);
-                }
-                else
-                {
-                    row.ErrorText = "";
-                }
-            }
-        }
-
-        private void dataGridViewExplore_CellValidated(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.ColumnIndex == 0)
-            {
-                UpdateSystemRow(e.RowIndex);
-                dataGridViewExplore.Rows[e.RowIndex].HeaderCell.Value = (e.RowIndex + 1).ToString();
-            }
-        }
-
-        #endregion
 
         #region right clicks
 
@@ -642,6 +591,7 @@ namespace EDDiscovery.UserControls
 
             if (obj == null)
                 return;
+
             TargetHelpers.SetTargetSystem(this, discoveryform, (string)obj);
         }
 
@@ -655,13 +605,16 @@ namespace EDDiscovery.UserControls
 
             if (obj == null)
                 return;
-            ISystem sc = SystemCache.FindSystem((string)obj);
+            ISystem sc = discoveryform.history.FindSystem((string)obj);
             if (sc == null)
             {
                 ExtendedControls.MessageBoxTheme.Show(FindForm(), "Unknown system, system is without co-ordinates".T(EDTx.UserControlExploration_UnknownS), "Warning".T(EDTx.Warning), MessageBoxButtons.OK);
             }
             else
+            {
                 TargetHelpers.ShowBookmarkForm(this, discoveryform, sc, null, false);
+                UpdateSystemRows();
+            }
         }
 
         #endregion
@@ -674,7 +627,6 @@ namespace EDDiscovery.UserControls
                 e.SortDataGridViewColumnNumeric();
 
         }
-
 
         public void InsertRows(int insertIndex, params string[] sysnames)
         {
@@ -701,6 +653,39 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
+
+        #region Validation
+
+        private void dataGridView_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
+        {
+            if (e.ColumnIndex == 0)
+            {
+                string sysname = e.FormattedValue.ToString();
+                var row = dataGridViewExplore.Rows[e.RowIndex];
+                var cell = dataGridViewExplore[e.ColumnIndex, e.RowIndex];
+
+                if (sysname != "" && discoveryform.history.FindSystem(sysname) == null )
+                {
+                    row.ErrorText = "System not known".T(EDTx.UserControlExploration_EDSMUnk);
+                }
+                else
+                {
+                    row.ErrorText = "";
+                }
+            }
+        }
+
+        private void dataGridView_CellValidated(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex == 0)
+            {
+                UpdateSystemRow(e.RowIndex);
+                dataGridViewExplore.Rows[e.RowIndex].HeaderCell.Value = (e.RowIndex + 1).ToString();
+            }
+        }
+
+        #endregion
+
     }
 
     public class ExplorationSetClass
@@ -731,9 +716,9 @@ namespace EDDiscovery.UserControls
         {
             try
             {
-                JObject jo = JObject.Parse(File.ReadAllText(fileName));
+                JObject jo = JObject.ParseThrowCommaEOL(File.ReadAllText(fileName));
 
-                Name = jo["Name"].ToString();
+                Name = jo["Name"].Str();
 
                 Systems.Clear();
 
@@ -741,8 +726,8 @@ namespace EDDiscovery.UserControls
 
                 foreach (var jsys in ja)
                 {
-                    string sysname = jsys.Value<String>();
-                    if (!Systems.Contains(sysname))
+                    string sysname = jsys.StrNull();
+                    if (sysname != null && !Systems.Contains(sysname))
                         Systems.Add(sysname);
                 }
 
@@ -814,5 +799,7 @@ namespace EDDiscovery.UserControls
 
             return null;
         }
+
+
     }
 }

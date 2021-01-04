@@ -74,7 +74,7 @@ namespace EDDiscovery.Actions
                         return true;
                     }
 
-                    int jidindex = (ap.actioncontroller as ActionController).HistoryList.EntryOrder.FindIndex(x => x.Journalid == jid);
+                    int jidindex = (ap.actioncontroller as ActionController).HistoryList.EntryOrder().FindIndex(x => x.Journalid == jid);
 
                     if (jidindex == -1)
                     {
@@ -82,11 +82,11 @@ namespace EDDiscovery.Actions
                         return true;
                     }
 
-                    MaterialCommoditiesList mcl = (ap.actioncontroller as ActionController).HistoryList.EntryOrder[jidindex].MaterialCommodity;
+                    MaterialCommoditiesList mcl = (ap.actioncontroller as ActionController).HistoryList.EntryOrder()[jidindex].MaterialCommodity;
                     List<MaterialCommodities> list = mcl.Sort(commodities);
 
                     ap[prefix + "Count"] = list.Count.ToString(System.Globalization.CultureInfo.InvariantCulture);
-                    ap[prefix + "IndexOf"] = (ap.actioncontroller as ActionController).HistoryList.EntryOrder[jidindex].Indexno.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                    ap[prefix + "IndexOf"] = (ap.actioncontroller as ActionController).HistoryList.EntryOrder()[jidindex].Indexno.ToString(System.Globalization.CultureInfo.InvariantCulture);
 
                     for ( int i = 0; i < list.Count; i++ )
                     {

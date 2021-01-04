@@ -13,19 +13,17 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using EliteDangerousCore;
+using EliteDangerousCore.DB;
+using EliteDangerousCore.EDSM;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Diagnostics;
-using EliteDangerousCore.DB;
-using EliteDangerousCore;
-using EliteDangerousCore.EDSM;
+using System.Drawing;
+using System.Linq;
+using System.Web;
+using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
 {
@@ -33,8 +31,8 @@ namespace EDDiscovery.UserControls
     {
         public bool IsNotesShowing { get { return richTextBoxNote.Visible; } }
 
-        private string DbSelection { get { return DBName("SystemInformationPanel" ,  "Sel"); } }
-        private string DbOSave { get { return DBName("SystemInformationPanel" ,  "Order"); } }
+        private string DbSelection { get { return DBName("SystemInformationPanel", "Sel"); } }
+        private string DbOSave { get { return DBName("SystemInformationPanel", "Order"); } }
 
         const int BitSelSystem = 0;
         const int BitSelEDSM = 1;
@@ -55,20 +53,47 @@ namespace EDDiscovery.UserControls
         const int BitSelTravel = 16;
         const int BitSelMissions = 17;
         const int BitSelJumpRange = 18;
+        const int BitSelStationButtons = 19;
+        const int BitSelShipyardButtons = 20;
+        const int BitSelStationFaction = 21;
+        const int BitSelTotal = 22;
+        const int BitSelDefault = ((1 << BitSelTotal) - 1) + (1 << BitSelEDSMButtonsNextLine);
 
-        int[] SmallItems = new int[] {BitSelFuel,BitSelCargo,BitSelVisits, BitSelMats, BitSelData , BitSelCredits, BitSelJumpRange};
+        int[,] resetorder = new int[,]          // default reset order
+        {
+            {BitSelSystem,-1},
+            {BitSelPosition,-1},
+            {BitSelEDSM,-1},
+            {BitSelVisits,BitSelCredits},
+            {BitSelBody,-1},
+            {BitSelStationFaction,-1},
+            {BitSelStationButtons,-1},
+            {BitSelShipInfo,-1},
+            {BitSelShipyardButtons,-1},
+            {BitSelDistanceFrom,-1},
+            {BitSelSystemState,-1},
+            {BitSelNotes,-1},
+            {BitSelTarget,-1},
+            {BitSelFuel,BitSelCargo},
+            {BitSelMats,BitSelData},
+            {BitSelGameMode,-1},
+            {BitSelTravel,-1},
+            {BitSelMissions,-1},
+            {BitSelJumpRange,-1},
+        };
 
-        const int BitSelTotal = 19;
-        const int Positions = BitSelTotal * 2;      // two columns of positions, one at 0, one at +300 pixels ish, 
-        const int BitSelEDSMButtonsNextLine = 28;
+        int[] SmallItems = new int[] { BitSelFuel, BitSelCargo, BitSelVisits, BitSelMats, BitSelData, BitSelCredits, BitSelJumpRange };
+
+        const int BitSelEDSMButtonsNextLine = 28;       // other options
         const int BitSelSkinny = 29;
-        const int BitSelDefault = ((1<<BitSelTotal)-1)+(1<<BitSelEDSMButtonsNextLine);
-        const int hspacing = 8;
-        ToolStripMenuItem[] toolstriplist;          // ref to toolstrip items for each bit above. in same order as bits BitSel..
+
         public const int HorzPositions = 8;
+        const int hspacing = 2;
+
+        ToolStripMenuItem[] toolstriplist;          // ref to toolstrip items for each bit above. in same order as bits BitSel..
 
         int Selection;          // selection bits
-        List<BaseUtils.LineStore> Lines;      // Lines on the screen
+        List<BaseUtils.LineStore> Lines;            // stores settings on each line, values are BitN+1, 0 means position not used.
 
         #region Init
 
@@ -82,16 +107,22 @@ namespace EDDiscovery.UserControls
             textBoxTarget.SetAutoCompletor(SystemCache.ReturnSystemAutoCompleteList);
 
             // same order as Sel bits are defined in, one bit per selection item.
-            toolstriplist = new ToolStripMenuItem[] { toolStripSystem , toolStripEDSM , toolStripVisits, toolStripBody,
-                                                        toolStripPosition, toolStripDistanceFrom,
-                                                        toolStripSystemState, toolStripNotes, toolStripTarget,
-                                                        toolStripShip, toolStripFuel , toolStripCargo, toolStripMaterialCounts,  toolStripDataCount,
-                                                        toolStripCredits,
-                                                        toolStripGameMode,toolStripTravel, toolStripMissionList,
-                                                        toolStripJumpRange};
+            toolstriplist = new ToolStripMenuItem[]
+            {   toolStripSystem , toolStripEDSM , toolStripVisits, toolStripBody,
+                toolStripPosition, toolStripDistanceFrom,
+                toolStripSystemState, toolStripNotes, toolStripTarget,
+                toolStripShip, toolStripFuel , toolStripCargo, toolStripMaterialCounts,  toolStripDataCount,
+                toolStripCredits,
+                toolStripGameMode,toolStripTravel, toolStripMissionList,
+                toolStripJumpRange, displayStationButtonsToolStripMenuItem,
+                displayShipButtonsToolStripMenuItem,
+                displayStationFactionToolStripMenuItem,
+            };
+
             Debug.Assert(toolstriplist.Length == BitSelTotal);
 
             Selection = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(DbSelection, BitSelDefault);
+
             string rs = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbOSave, "-");
             if (rs == "-")
                 Reset();
@@ -102,8 +133,34 @@ namespace EDDiscovery.UserControls
             {
                 if (BaseUtils.LineStore.FindValue(Lines, bit + 1) == null)   // if can't find
                 {
-                    //System.Diagnostics.Debug.WriteLine("Missing item " + bit);
-                    Lines.Add(new BaseUtils.LineStore() { Items = new int[HorzPositions] { bit + 1, 0, 0, 0, 0, 0, 0, 0 } });
+                    int insertat = Lines.Count;
+
+                    if (bit == BitSelStationButtons)
+                    {
+                        var p = BaseUtils.LineStore.FindValue(Lines, BitSelBody + 1);     // stored +1
+                        if (p != null)
+                            insertat = Lines.IndexOf(p) + 1;
+
+                        Selection |= (1 << bit);
+                    }
+                    else if (bit == BitSelShipyardButtons)
+                    {
+                        var p = BaseUtils.LineStore.FindValue(Lines, BitSelShipInfo + 1);
+                        if (p != null)
+                            insertat = Lines.IndexOf(p) + 1;
+
+                        Selection |= (1 << bit);
+                    }
+                    else if (bit == BitSelStationFaction)
+                    {
+                        var p = BaseUtils.LineStore.FindValue(Lines, BitSelBody + 1);
+                        if (p != null)
+                            insertat = Lines.IndexOf(p) + 1;
+
+                        Selection |= (1 << bit);
+                    }
+
+                    Lines.Insert(insertat, new BaseUtils.LineStore() { Items = new int[HorzPositions] { bit + 1, 0, 0, 0, 0, 0, 0, 0 } });
                 }
             }
 
@@ -111,12 +168,13 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNoteChanged += OnNoteChanged;
             discoveryform.OnEDSMSyncComplete += Discoveryform_OnEDSMSyncComplete;
             discoveryform.OnNewUIEvent += Discoveryform_OnNewUIEvent;
+            discoveryform.OnThemeChanged += Discoveryform_OnThemeChanged;
 
             panelFD.BackgroundImage = EDDiscovery.Icons.Controls.notfirstdiscover;      // just to hide it during boot up
 
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
-            BaseUtils.Translator.Instance.Translate(toolTip1,this);
+            BaseUtils.Translator.Instance.Translate(toolTip1, this);
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
@@ -139,6 +197,7 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNoteChanged -= OnNoteChanged;
             discoveryform.OnEDSMSyncComplete -= Discoveryform_OnEDSMSyncComplete;
             discoveryform.OnNewUIEvent -= Discoveryform_OnNewUIEvent;
+
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbOSave, BaseUtils.LineStore.ToString(Lines));
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(DbSelection, Selection);
         }
@@ -160,7 +219,7 @@ namespace EDDiscovery.UserControls
 
         private void Discoveryform_OnNewUIEvent(UIEvent obj)
         {
-            if ( obj is EliteDangerousCore.UIEvents.UIFuel) // fuel UI update the SI information globally.
+            if (obj is EliteDangerousCore.UIEvents.UIFuel) // fuel UI update the SI information globally.
                 Display(last_he, discoveryform.history);
         }
 
@@ -172,8 +231,6 @@ namespace EDDiscovery.UserControls
 
         private void Display(HistoryEntry he, HistoryList hl, bool selectedEntry)
         {
-            //System.Diagnostics.Debug.WriteLine("SI:Display ");
-
             if (neverdisplayed)
             {
                 UpdateViewOnSelection();  // then turn the right ones on
@@ -182,20 +239,22 @@ namespace EDDiscovery.UserControls
 
             last_he = he;
 
-            if ( last_he != null )
+            if (last_he != null)
             {
                 SetControlText(he.System.Name);
 
-                HistoryEntry lastfsd = hl.GetLastHistoryEntry(x => x.journalEntry is EliteDangerousCore.JournalEvents.JournalFSDJump, he);
+                HistoryEntry lastfsd = hl.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.FSDJump, he);
 
                 textBoxSystem.Text = he.System.Name;
                 panelFD.BackgroundImage = (lastfsd != null && (lastfsd.journalEntry as EliteDangerousCore.JournalEvents.JournalFSDJump).EDSMFirstDiscover) ? EDDiscovery.Icons.Controls.firstdiscover : EDDiscovery.Icons.Controls.notfirstdiscover;
 
-                if ( !he.System.HasEDDBInformation || !he.System.HasCoordinate )
-                    discoveryform.history.FillEDSM(he); // Fill in any EDSM info we have
-
-                //textBoxBody.Text = he.WhereAmI + ((he.IsInHyperSpace) ? " (HS)": "");
                 textBoxBody.Text = he.WhereAmI + " (" + he.BodyType + ")";
+
+                bool hasmarketid = he?.MarketID.HasValue ?? false;
+                bool hasbodyormarketid = hasmarketid || he.FullBodyID.HasValue;
+
+                extButtonEDDBStation.Enabled = extButtonInaraStation.Enabled = hasmarketid;
+                extButtonSpanshStation.Enabled = hasbodyormarketid;
 
                 if (he.System.HasCoordinate)         // cursystem has them?
                 {
@@ -219,9 +278,10 @@ namespace EDDiscovery.UserControls
                 int count = discoveryform.history.GetVisitsCount(he.System.Name);
                 textBoxVisits.Text = count.ToString();
 
-                bool enableedddross = (he.System.EDDBID > 0);  // Only enable eddb/ross for system that it knows about
+                //                System.Diagnostics.Debug.WriteLine("UserControlSysInfo sys info {0} {1} {2}", he.System.Name, he.System.EDSMID, he.System.EDDBID);
 
-                buttonRoss.Enabled = buttonEDDB.Enabled = enableedddross;
+
+                extButtonEDSMSystem.Enabled = extButtonEDDBSystem.Enabled = extButtonInaraSystem.Enabled = extButtonSpanshSystem.Enabled = true;
 
                 string allegiance, economy, gov, faction, factionstate, security;
                 hl.ReturnSystemInfo(he, out allegiance, out economy, out gov, out faction, out factionstate, out security);
@@ -230,6 +290,8 @@ namespace EDDiscovery.UserControls
                 textBoxEconomy.Text = economy;
                 textBoxGovernment.Text = gov;
                 textBoxState.Text = factionstate;
+
+                extTextBoxStationFaction.Text = he.StationFaction ?? "";
 
                 List<MissionState> mcurrent = (from MissionState ms in he.MissionList.Missions.Values where ms.InProgressDateTime(last_he.EventTimeUTC) orderby ms.Mission.EventTimeUTC descending select ms).ToList();
 
@@ -243,8 +305,8 @@ namespace EDDiscovery.UserControls
                         DateTime exp = EliteConfigInstance.InstanceConfig.ConvertTimeToSelectedFromUTC(ms.Mission.Expiry);
 
                         t = ObjectExtensionsStrings.AppendPrePad(t,
-                            JournalFieldNaming.ShortenMissionName(ms.Mission.Name) 
-                            + " Exp:" + exp 
+                            JournalFieldNaming.ShortenMissionName(ms.Mission.Name)
+                            + " Exp:" + exp
                             + " @ " + ms.DestinationSystemStation(),
                             Environment.NewLine);
                     }
@@ -290,17 +352,22 @@ namespace EDDiscovery.UserControls
                         textBoxFuel.Text = "N/A".T(EDTx.UserControlSysInfo_NA);
 
                     EliteDangerousCalculations.FSDSpec fsd = si.GetFSDSpec();
-                    if ( fsd != null )
+                    if (fsd != null)
                     {
-                        EliteDangerousCalculations.FSDSpec.JumpInfo ji = fsd.GetJumpInfo(he.MaterialCommodity.CargoCount, 
+                        EliteDangerousCalculations.FSDSpec.JumpInfo ji = fsd.GetJumpInfo(he.MaterialCommodity.CargoCount,
                                                                     si.ModuleMass() + si.HullMass(), si.FuelLevel, si.FuelCapacity / 2);
 
                         //System.Diagnostics.Debug.WriteLine("Jump range " + si.FuelLevel + " " + si.FuelCapacity + " " + ji.cursinglejump);
                         textBoxJumpRange.Text = ji.cursinglejump.ToString("N2") + "ly";
                     }
+
+                    extButtonCoriolis.Enabled = extButtonEDSY.Enabled = true;
                 }
                 else
+                {
                     textBoxShip.Text = textBoxFuel.Text = "";
+                    extButtonCoriolis.Enabled = extButtonEDSY.Enabled = false;
+                }
 
                 RefreshTargetDisplay(this);
             }
@@ -312,9 +379,12 @@ namespace EDDiscovery.UserControls
                                 textBoxVisits.Text = textBoxState.Text = textBoxHomeDist.Text = textBoxSolDist.Text =
                                 textBoxGameMode.Text = textBoxTravelDist.Text = textBoxTravelTime.Text = textBoxTravelJumps.Text =
                                 textBoxCargo.Text = textBoxMaterials.Text = textBoxData.Text = textBoxShip.Text = textBoxFuel.Text =
+                                extTextBoxStationFaction.Text = 
                                 "";
 
-                buttonRoss.Enabled = buttonEDDB.Enabled = false;
+                extButtonEDSMSystem.Enabled = extButtonEDDBSystem.Enabled = extButtonInaraSystem.Enabled = extButtonSpanshSystem.Enabled = false;
+                extButtonEDDBStation.Enabled = extButtonInaraStation.Enabled = extButtonSpanshStation.Enabled = false;
+                extButtonCoriolis.Enabled = extButtonEDSY.Enabled = false;
                 SetNote("");
             }
         }
@@ -331,47 +401,115 @@ namespace EDDiscovery.UserControls
 
         #region Clicks
 
-        private void buttonEDDB_Click(object sender, EventArgs e)
-        {
-            if (last_he != null && last_he.System.EDDBID > 0)
-                Process.Start(Properties.Resources.URLEDDBSystem + last_he.System.EDDBID.ToString());
-        }
-
-        private void buttonRoss_Click(object sender, EventArgs e)
+        private void buttonEDDBSystem_Click(object sender, EventArgs e)
         {
             if (last_he != null)
             {
-                discoveryform.history.FillEDSM(last_he);
-
-                if (last_he.System.EDDBID > 0)
-                    Process.Start(Properties.Resources.URLRossSystem + last_he.System.EDDBID.ToString());
+                System.Diagnostics.Process.Start(Properties.Resources.URLEDDBSystemName + Uri.EscapeDataString(last_he.System.Name));
             }
         }
 
-        private void buttonEDSM_Click(object sender, EventArgs e)
+        private void buttonEDSMSystem_Click(object sender, EventArgs e)
         {
             if (last_he != null)
             {
-                discoveryform.history.FillEDSM(last_he);
-
-                if (last_he.System != null) // solve a possible exception
+                long? id_edsm = last_he.System.EDSMID;
+                if (id_edsm <= 0)
                 {
-                    if (!String.IsNullOrEmpty(last_he.System.Name))
-                    {
-                        long? id_edsm = last_he.System.EDSMID;
-                        if (id_edsm <= 0)
-                        {
-                            id_edsm = null;
-                        }
+                    id_edsm = null;
+                }
 
-                        EDSMClass edsm = new EDSMClass();
-                        string url = edsm.GetUrlToEDSMSystem(last_he.System.Name, id_edsm);
+                EDSMClass edsm = new EDSMClass();
+                string url = edsm.GetUrlToEDSMSystem(last_he.System.Name, id_edsm);
 
-                        if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
-                            Process.Start(url);
-                        else
-                            ExtendedControls.MessageBoxTheme.Show(FindForm(), "System unknown to EDSM".T(EDTx.UserControlSysInfo_SysUnk));
-                    }
+                if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
+                    Process.Start(url);
+                else
+                    ExtendedControls.MessageBoxTheme.Show(FindForm(), "System unknown to EDSM".T(EDTx.UserControlSysInfo_SysUnk));
+            }
+        }
+
+        private void extButtonInaraSystem_Click(object sender, EventArgs e)
+        {
+            if (last_he != null)
+            {
+                string uri = Properties.Resources.URLInaraStarSystem + Uri.EscapeDataString(last_he.System.Name);
+                BaseUtils.BrowserInfo.LaunchBrowser(uri);
+            }
+        }
+
+        private void extButtonSpanshSystem_Click(object sender, EventArgs e)
+        {
+            if (last_he != null && last_he.System.SystemAddress.HasValue)
+                System.Diagnostics.Process.Start(Properties.Resources.URLSpanshSystemSystemId + last_he.System.SystemAddress.Value.ToStringInvariant());
+        }
+
+        private void extButtonInaraStation_Click(object sender, EventArgs e)
+        {
+            if (last_he != null)
+            {
+                string uri = Properties.Resources.URLInaraStation + Uri.EscapeDataString(last_he.System.Name + "[" + last_he.WhereAmI + "]");
+                BaseUtils.BrowserInfo.LaunchBrowser(uri);
+            }
+        }
+
+        private void extButtonEDDBStation_Click(object sender, EventArgs e)
+        {
+            if (last_he != null && last_he.MarketID != null)
+                System.Diagnostics.Process.Start(Properties.Resources.URLEDDBStationMarketId + last_he.MarketID.ToStringInvariant());
+        }
+
+        private void extButtonSpanshStation_Click(object sender, EventArgs e)
+        {
+            if (last_he != null)
+            {
+                if (last_he.MarketID != null)
+                    System.Diagnostics.Process.Start(Properties.Resources.URLSpanshStationMarketId + last_he.MarketID.ToStringInvariant());
+                else if (last_he.FullBodyID.HasValue)
+                    System.Diagnostics.Process.Start(Properties.Resources.URLSpanshBodyId + last_he.FullBodyID.ToStringInvariant());
+            }
+        }
+
+        private void extButtonEDSY_Click(object sender, EventArgs e)
+        {
+            if (last_he?.ShipInformation != null)
+            {
+                var si = last_he.ShipInformation;
+
+                string loadoutjournalline = si.ToJSONLoadout();
+
+                //     File.WriteAllText(@"c:\code\loadoutout.txt", loadoutjournalline);
+
+                string uri = EDDConfig.Instance.EDDShipyardURL + "#/I=" + BaseUtils.HttpUriEncode.URIGZipBase64Escape(loadoutjournalline);
+
+                if (!BaseUtils.BrowserInfo.LaunchBrowser(uri))
+                {
+                    ExtendedControls.InfoForm info = new ExtendedControls.InfoForm();
+                    info.Info("Cannot launch browser, use this JSON for manual ED Shipyard import", FindForm().Icon, loadoutjournalline);
+                    info.ShowDialog(FindForm());
+                }
+            }
+        }
+
+        private void extButtonCoriolis_Click(object sender, EventArgs e)
+        {
+            if (last_he?.ShipInformation != null)
+            {
+                var si = last_he.ShipInformation;
+
+                string errstr;
+                string s = si.ToJSONCoriolis(out errstr);
+
+                if (errstr.Length > 0)
+                    ExtendedControls.MessageBoxTheme.Show(FindForm(), errstr + Environment.NewLine + "This is probably a new or powerplay module" + Environment.NewLine + "Report to EDD Team by Github giving the full text above", "Unknown Module Type");
+
+                string uri = EDDConfig.Instance.CoriolisURL + "data=" + BaseUtils.HttpUriEncode.URIGZipBase64Escape(s) + "&bn=" + Uri.EscapeDataString(si.Name);
+
+                if (!BaseUtils.BrowserInfo.LaunchBrowser(uri))
+                {
+                    ExtendedControls.InfoForm info = new ExtendedControls.InfoForm();
+                    info.Info("Cannot launch browser, use this JSON for manual Coriolis import", FindForm().Icon, s);
+                    info.ShowDialog(FindForm());
                 }
             }
         }
@@ -380,7 +518,7 @@ namespace EDDiscovery.UserControls
         {
             if (e.KeyCode == Keys.Enter)
             {
-                TargetHelpers.SetTargetSystem(this,discoveryform, textBoxTarget.Text);
+                TargetHelpers.SetTargetSystem(this, discoveryform, textBoxTarget.Text);
             }
         }
 
@@ -397,11 +535,11 @@ namespace EDDiscovery.UserControls
                 textBoxTarget.Select(textBoxTarget.Text.Length, textBoxTarget.Text.Length);
                 textBoxTargetDist.Text = "No Pos".T(EDTx.NoPos);
 
-                HistoryEntry cs = discoveryform.history.GetLastWithPosition;
+                HistoryEntry cs = discoveryform.history.GetLastWithPosition();
                 if (cs != null)
                     textBoxTargetDist.Text = cs.System.Distance(x, y, z).ToString("0.0");
 
-                textBoxTarget.SetTipDynamically(toolTip1, string.Format("Position is {0:0.00},{1:0.00},{2:0.00}".T(EDTx.UserControlSysInfo_Pos), x,y,z));
+                textBoxTarget.SetTipDynamically(toolTip1, string.Format("Position is {0:0.00},{1:0.00},{2:0.00}".T(EDTx.UserControlSysInfo_Pos), x, y, z));
             }
             else
             {
@@ -525,6 +663,20 @@ namespace EDDiscovery.UserControls
         {
             ToggleSelection(sender, BitSelMissions);
         }
+        private void displayStationButtonsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ToggleSelection(sender, BitSelStationButtons);
+        }
+
+        private void displayShipButtonsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ToggleSelection(sender, BitSelShipyardButtons);
+        }
+
+        private void displayStationFactionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ToggleSelection(sender, BitSelStationFaction);
+        }
 
         private void toolStripRemoveAll_Click(object sender, EventArgs e)
         {
@@ -550,15 +702,12 @@ namespace EDDiscovery.UserControls
         void UpdateViewOnSelection()
         {
             SuspendLayout();
-            int ver = 3;
 
             foreach (Control c in extPanelScroll.Controls)
             {
-                if ( !(c is ExtendedControls.ExtScrollBar))
+                if (!(c is ExtendedControls.ExtScrollBar))
                     c.Visible = false;
             }
-
-            int vspacing = (int)textBoxAllegiance.Height + textBoxAllegiance.Font.ScalePixels(4);
 
             //System.Diagnostics.Debug.WriteLine("Selection is " + sel);
 
@@ -573,22 +722,16 @@ namespace EDDiscovery.UserControls
 
             //System.Diagnostics.Debug.WriteLine("Sys Info first data {0} second lab {1} second data {2} col offset {3}", data1offset, lab2offset, data2offset, coloffset);
 
-            int maxvert = 0;
+            int ypos = 3;
 
-            for( int r = 0; r < Lines.Count; r++ )
+            for (int r = 0; r < Lines.Count; r++)
             {
+                int rowbottom = ypos;
                 Lines[r].YStart = -1;
 
-                for ( int c = 0; c < HorzPositions; c++ )
-                { 
-                    Point labpos = new Point(3 + c * coloffset, ver);
-                    Point datapos = new Point(labpos.X + data1offset, labpos.Y);
-                    Point labpos2 = new Point(labpos.X + lab2offset, labpos.Y);
-                    Point datapos2 = new Point(labpos.X + data2offset, labpos.Y);
-
-                   // System.Diagnostics.Debug.WriteLine("R{0}C{1} {2} {3} ( {4} {5} )", r,c, labpos, datapos, labpos2, datapos2);
-
-                    int bitno = Lines[r].Items[c]-1;    // stored +1
+                for (int c = 0; c < HorzPositions; c++)
+                {
+                    int bitno = Lines[r].Items[c] - 1;    // stored +1
 
                     if (bitno >= 0 && bitno < toolstriplist.Length)     // ensure within range, ignore any out of range, in case going backwards in versions
                     {
@@ -597,27 +740,35 @@ namespace EDDiscovery.UserControls
                         toolstriplist[bitno].Enabled = false;
                         toolstriplist[bitno].Checked = ison;
                         toolstriplist[bitno].Enabled = true;
-                       // System.Diagnostics.Debug.WriteLine("Toolstrip " + bitno + " set to " + ison);
+
+                        int itembottom = rowbottom;
 
                         if (ison)
                         {
-                            Lines[r].YStart = ver;
+                            Lines[r].YStart = ypos;
                             int si = r * HorzPositions + c;
+
+                            Point labpos = new Point(3 + c * coloffset, ypos);
+                            Point datapos = new Point(labpos.X + data1offset, labpos.Y);
+                            Point labpos2 = new Point(labpos.X + lab2offset, labpos.Y);
+                            Point datapos2 = new Point(labpos.X + data2offset, labpos.Y);
 
                             switch (bitno)
                             {
                                 case BitSelSystem:
-                                    this.SetPos(ref labpos, labelSysName, datapos, textBoxSystem, vspacing, si);
+                                    itembottom = this.SetPos(labpos, labelSysName, datapos, textBoxSystem, si);
                                     panelFD.Location = new Point(textBoxSystem.Right, textBoxSystem.Top);
                                     panelFD.Visible = true;
 
                                     if (!selEDSMonNextLine && (Selection & (1 << BitSelEDSM)) != 0)
                                     {
-                                        buttonEDSM.Location = new Point(textBoxSystem.Right + hspacing, datapos.Y);
-                                        buttonEDDB.Location = new Point(buttonEDSM.Right + hspacing, buttonEDSM.Top);
-                                        buttonRoss.Location = new Point(buttonEDDB.Right + hspacing, buttonEDSM.Top);
-                                        buttonEDSM.Visible = buttonEDDB.Visible = buttonRoss.Visible = true;
-                                        buttonEDSM.Tag = buttonEDDB.Tag = buttonRoss.Tag = si;
+                                        extButtonEDSMSystem.Location = new Point(panelFD.Right + hspacing, datapos.Y);
+                                        extButtonEDDBSystem.Location = new Point(extButtonEDSMSystem.Right + hspacing, extButtonEDSMSystem.Top);
+                                        extButtonInaraSystem.Location = new Point(extButtonEDDBSystem.Right + hspacing, extButtonEDSMSystem.Top);
+                                        extButtonSpanshSystem.Location = new Point(extButtonInaraSystem.Right + hspacing, extButtonEDSMSystem.Top);
+                                        extButtonEDSMSystem.Visible = extButtonEDDBSystem.Visible = extButtonInaraSystem.Visible = extButtonSpanshSystem.Visible = true;
+                                        extButtonEDSMSystem.Tag = extButtonEDDBSystem.Tag = extButtonInaraSystem.Tag = extButtonSpanshSystem.Tag = si;
+                                        itembottom = Math.Max(extButtonEDSMSystem.Bottom, itembottom);
                                     }
 
                                     break;
@@ -626,58 +777,82 @@ namespace EDDiscovery.UserControls
                                     if (selEDSMonNextLine)
                                     {
                                         labelOpen.Location = labpos;
-                                        buttonEDSM.Location = new Point(datapos.X, datapos.Y);
-                                        buttonEDDB.Location = new Point(buttonEDSM.Right + hspacing, buttonEDSM.Top);
-                                        buttonRoss.Location = new Point(buttonEDDB.Right + hspacing, buttonEDSM.Top);
-                                        labelOpen.Tag = buttonEDSM.Tag = buttonEDDB.Tag = buttonRoss.Tag = si;
-                                        labelOpen.Visible = buttonEDSM.Visible = buttonEDDB.Visible = buttonRoss.Visible = true;
-                                        labpos.Y += vspacing + 4;
+                                        extButtonEDSMSystem.Location = new Point(datapos.X, datapos.Y);
+                                        extButtonEDDBSystem.Location = new Point(extButtonEDSMSystem.Right + hspacing, extButtonEDSMSystem.Top);
+                                        extButtonInaraSystem.Location = new Point(extButtonEDDBSystem.Right + hspacing, extButtonEDSMSystem.Top);
+                                        extButtonSpanshSystem.Location = new Point(extButtonInaraSystem.Right + hspacing, extButtonEDSMSystem.Top);
+                                        labelOpen.Tag = extButtonEDSMSystem.Tag = extButtonEDDBSystem.Tag = extButtonInaraSystem.Tag = extButtonSpanshSystem.Tag = si;
+                                        extButtonEDSMSystem.Visible = extButtonEDDBSystem.Visible = extButtonInaraSystem.Visible = extButtonSpanshSystem.Visible = true;
+                                        labelOpen.Visible = true;
+                                        itembottom = extButtonEDSMSystem.Bottom;
                                     }
                                     break;
 
+                                case BitSelStationButtons:
+                                    labelOpenStation.Location = labpos;
+                                    extButtonEDDBStation.Location = new Point(datapos.X, datapos.Y);
+                                    extButtonInaraStation.Location = new Point(extButtonEDDBStation.Right + hspacing, extButtonEDDBStation.Top);
+                                    extButtonSpanshStation.Location = new Point(extButtonInaraStation.Right + hspacing, extButtonEDDBStation.Top);
+                                    labelOpenStation.Tag = extButtonEDDBStation.Tag = extButtonInaraStation.Tag = extButtonSpanshStation.Tag = si;
+                                    extButtonEDDBStation.Visible = extButtonInaraStation.Visible = extButtonSpanshStation.Visible = true;
+                                    labelOpenStation.Visible = true;
+                                    itembottom = extButtonEDDBStation.Bottom;
+                                    break;
+
+                                case BitSelShipyardButtons:
+                                    labelOpenShip.Location = labpos;
+                                    extButtonCoriolis.Location = new Point(datapos.X, datapos.Y);
+                                    extButtonEDSY.Location = new Point(extButtonCoriolis.Right + hspacing, extButtonCoriolis.Top);
+                                    labelOpenShip.Tag = extButtonEDSY.Tag = extButtonCoriolis.Tag = si;
+                                    extButtonEDSY.Visible = extButtonCoriolis.Visible = true;
+                                    labelOpenShip.Visible = true;
+                                    itembottom = extButtonCoriolis.Bottom;
+                                    break;
+
+
                                 case BitSelVisits:
-                                    this.SetPos(ref labpos, labelVisits, datapos, textBoxVisits, vspacing, si);
+                                    itembottom = this.SetPos(labpos, labelVisits, datapos, textBoxVisits, si);
                                     break;
 
                                 case BitSelBody:
-                                    this.SetPos(ref labpos, labelBodyName, datapos, textBoxBody, vspacing, si);
+                                    itembottom = this.SetPos(labpos, labelBodyName, datapos, textBoxBody, si);
                                     break;
 
                                 case BitSelPosition:
-                                    this.SetPos(ref labpos, labelPosition, datapos, textBoxPosition, vspacing, si);
+                                    itembottom = this.SetPos(labpos, labelPosition, datapos, textBoxPosition, si);
                                     break;
 
                                 case BitSelDistanceFrom:
-                                    this.SetPos(ref labpos, labelHomeDist, datapos, textBoxHomeDist, vspacing, si);
+                                    itembottom = this.SetPos(labpos, labelHomeDist, datapos, textBoxHomeDist, si);
                                     OffsetPos(labpos2, labelSolDist, datapos2, textBoxSolDist, si);
                                     break;
 
                                 case BitSelSystemState:
-                                    this.SetPos(ref labpos, labelState, datapos, textBoxState, vspacing - 4, si);
+                                    itembottom = this.SetPos(labpos, labelState, datapos, textBoxState, si);
                                     OffsetPos(labpos2, labelAllegiance, datapos2, textBoxAllegiance, si);
-                                    datapos.Y = labpos2.Y = datapos2.Y = labpos.Y;
-                                    this.SetPos(ref labpos, labelGov, datapos, textBoxGovernment, vspacing, si);
+                                    labpos.Y = datapos.Y = labpos2.Y = datapos2.Y = itembottom + 1;
+                                    itembottom = this.SetPos(labpos, labelGov, datapos, textBoxGovernment, si);
                                     OffsetPos(labpos2, labelEconomy, datapos2, textBoxEconomy, si);
                                     break;
 
                                 case BitSelNotes:
-                                    SetPos(ref labpos, labelNote, datapos, richTextBoxNote, richTextBoxNote.Height + 8, si);
+                                    itembottom = SetPos(labpos, labelNote, datapos, richTextBoxNote, si);
                                     break;
 
                                 case BitSelTarget:
-                                    this.SetPos(ref labpos, labelTarget, datapos, textBoxTarget, vspacing, si);
+                                    itembottom = this.SetPos(labpos, labelTarget, datapos, textBoxTarget, si);
                                     textBoxTargetDist.Location = new Point(textBoxTarget.Right + hspacing, datapos.Y);
-                                    buttonEDSMTarget.Location = new Point(textBoxTargetDist.Right + hspacing, datapos.Y);
-                                    textBoxTargetDist.Tag = buttonEDSMTarget.Tag = si;
-                                    textBoxTargetDist.Visible = buttonEDSMTarget.Visible = true;
+                                    extButtonEDSMTarget.Location = new Point(textBoxTargetDist.Right + hspacing, datapos.Y);
+                                    textBoxTargetDist.Tag = extButtonEDSMTarget.Tag = si;
+                                    textBoxTargetDist.Visible = extButtonEDSMTarget.Visible = true;
                                     break;
 
                                 case BitSelGameMode:
-                                    this.SetPos(ref labpos, labelGamemode, datapos, textBoxGameMode, vspacing, si);
+                                    itembottom = this.SetPos(labpos, labelGamemode, datapos, textBoxGameMode, si);
                                     break;
 
                                 case BitSelTravel:
-                                    this.SetPos(ref labpos, labelTravel, datapos, textBoxTravelDist, vspacing, si);
+                                    itembottom = this.SetPos(labpos, labelTravel, datapos, textBoxTravelDist, si);
                                     textBoxTravelTime.Location = new Point(textBoxTravelDist.Right + hspacing, datapos.Y);
                                     textBoxTravelJumps.Location = new Point(textBoxTravelTime.Right + hspacing, datapos.Y);
                                     textBoxTravelTime.Tag = textBoxTravelJumps.Tag = si;
@@ -686,49 +861,53 @@ namespace EDDiscovery.UserControls
                                     break;
 
                                 case BitSelCargo:
-                                    this.SetPos(ref labpos, labelCargo, datapos, textBoxCargo, vspacing, si);
+                                    itembottom = this.SetPos(labpos, labelCargo, datapos, textBoxCargo, si);
                                     break;
 
                                 case BitSelMats:
-                                    this.SetPos(ref labpos, labelMaterials, datapos, textBoxMaterials, vspacing, si);
+                                    itembottom = this.SetPos(labpos, labelMaterials, datapos, textBoxMaterials, si);
                                     break;
 
                                 case BitSelData:
-                                    this.SetPos(ref labpos, labelData, datapos, textBoxData, vspacing, si);
+                                    itembottom = this.SetPos(labpos, labelData, datapos, textBoxData, si);
                                     break;
 
                                 case BitSelShipInfo:
-                                    this.SetPos(ref labpos, labelShip, datapos, textBoxShip, vspacing, si);
+                                    itembottom = this.SetPos(labpos, labelShip, datapos, textBoxShip, si);
                                     break;
 
                                 case BitSelFuel:
-                                    this.SetPos(ref labpos, labelFuel, datapos, textBoxFuel, vspacing, si);
+                                    itembottom = this.SetPos(labpos, labelFuel, datapos, textBoxFuel, si);
                                     break;
 
                                 case BitSelCredits:
-                                    this.SetPos(ref labpos, labelCredits, datapos, textBoxCredits, vspacing, si);
+                                    itembottom = this.SetPos(labpos, labelCredits, datapos, textBoxCredits, si);
                                     break;
 
                                 case BitSelMissions:
-                                    this.SetPos(ref labpos, labelMissions, datapos, richTextBoxScrollMissions, richTextBoxScrollMissions.Height + 8, si);
+                                    itembottom = this.SetPos(labpos, labelMissions, datapos, richTextBoxScrollMissions, si);
                                     break;
 
                                 case BitSelJumpRange:
-                                    this.SetPos(ref labpos, labelJumpRange, datapos, textBoxJumpRange, vspacing, si);
+                                    itembottom = this.SetPos(labpos, labelJumpRange, datapos, textBoxJumpRange, si);
                                     break;
 
+                                case BitSelStationFaction:
+                                    itembottom = this.SetPos(labpos, labelStationFaction, datapos, extTextBoxStationFaction, si);
+                                    break;
                                 default:
                                     System.Diagnostics.Debug.WriteLine("Ignoring unknown type");
                                     break;
                             }
 
-                            Lines[r].YEnd = labpos.Y - 1;
-                            maxvert = Math.Max(labpos.Y, maxvert);        // update vertical
+                            rowbottom = Math.Max(itembottom + 4, rowbottom);        // update vertical, 
+                            Lines[r].YEnd = rowbottom - 1;
                         }
                     }
                 }
 
-                ver = maxvert;
+                //System.Diagnostics.Debug.WriteLine("{0} : Ypos {1}-{2}", r, Lines[r].YStart, Lines[r].YEnd);
+                ypos = rowbottom;
             }
 
             ResumeLayout();
@@ -744,44 +923,36 @@ namespace EDDiscovery.UserControls
         {
             Selection = BitSelDefault;
             Lines = new List<BaseUtils.LineStore>();
-            for (int i = 0; i < BitSelTotal; i++)
-                Lines.Add(new BaseUtils.LineStore() { Items = new int[HorzPositions] { i + 1, 0, 0, 0, 0, 0, 0, 0 } });
-
-            Lines[BitSelFuel].Items[1] = BitSelCargo + 1;
-            Lines[BitSelCargo].Items[0] = 0;
-            Lines[BitSelMats].Items[1] = BitSelData + 1;
-            Lines[BitSelData].Items[0] = 0;
-            Lines[BitSelVisits].Items[1] = BitSelCredits + 1;
-            Lines[BitSelCredits].Items[0] = 0;
-
-            BaseUtils.LineStore.CompressOrder(Lines);
+            for(int i = 0 ; i < resetorder.Length/2; i++ )
+                Lines.Add(new BaseUtils.LineStore() { Items = new int[HorzPositions] { resetorder[i,0]+1, resetorder[i,1]+1, 0, 0, 0, 0, 0, 0 } });
             //BaseUtils.LineStore.DumpOrder(Lines, "Reset");
         }
 
-        void SetPos(ref Point lp, Label lab, Point tp, ExtendedControls.ExtTextBox box, int vspacing , int i )
+        int SetPos(Point lp, Label lab, Point tp, ExtendedControls.ExtTextBox box, int i )
         {
             lab.Location = lp;
             box.Location = tp;
             box.Tag = lab.Tag = i;
             lab.Visible = box.Visible = true;
-            lp.Y += vspacing;
+            return Math.Max(lab.Bottom, box.Bottom);
         }
 
-        void SetPos(ref Point lp, Label lab, Point tp, ExtendedControls.ExtRichTextBox box, int vspacing , int i)
+        int SetPos(Point lp, Label lab, Point tp, ExtendedControls.ExtRichTextBox box, int i)
         {
             lab.Location = lp;
             box.Location = tp;
             box.Tag = lab.Tag = i;
             lab.Visible = box.Visible = true;
-            lp.Y += vspacing;
+            return Math.Max(lab.Bottom, box.Bottom);
         }
 
-        void OffsetPos(Point lp, Label lab, Point tp, ExtendedControls.ExtTextBox box , int i)
+        int OffsetPos(Point lp, Label lab, Point tp, ExtendedControls.ExtTextBox box , int i)
         {
             lab.Location = lp;
             box.Location = tp;
             box.Tag = lab.Tag = i;
             lab.Visible = box.Visible = true;
+            return Math.Max(lab.Bottom, box.Bottom);
         }
 
         #endregion
@@ -888,12 +1059,16 @@ namespace EDDiscovery.UserControls
 
                     int tocol = Math.Min(xpos / col2pos, HorzPositions - 1);
 
-                    System.Diagnostics.Debug.WriteLine("Move " + fromrow +":"+ fromcol+" -> " + torow +":" + tocol);
+                    System.Diagnostics.Debug.WriteLine("Move " + fromrow +":"+ fromcol+" -> " + torow +":" + tocol + " Y est " + movetoy);
 
-                    bool oneleftisnotshort = tocol > 0 && Lines[torow].Items[tocol - 1] > 0 && Array.IndexOf(SmallItems, Lines[torow].Items[tocol - 1] - 1) == -1;
+                    bool oneleftisnotshort = tocol > 0 && Lines[torow].Items[tocol - 1] > 0 && 
+                                            Lines[torow].Items[tocol - 1] != Lines[fromrow].Items[fromcol] &&
+                                            Array.IndexOf(SmallItems, Lines[torow].Items[tocol - 1] - 1) == -1;
+
                     bool onerightisnotblank = tocol < HorzPositions - 1 &&    // not last
                                             Array.IndexOf(SmallItems, Lines[fromrow].Items[fromcol]) == -1 && // one moving in is two columns
-                                            Lines[torow].Items[tocol + 1] > 0;      // and occupied
+                                            Lines[torow].Items[tocol + 1] > 0 &&        // one to the right is occupied
+                                            Lines[torow].Items[tocol + 1] != Lines[fromrow].Items[fromcol];      // and is not us..
 
                     if (Lines[torow].Items[tocol] > 0 || oneleftisnotshort || onerightisnotblank )      // occupied
                     {
@@ -945,12 +1120,17 @@ namespace EDDiscovery.UserControls
 
         #region Display control
 
+        private void Discoveryform_OnThemeChanged()
+        {
+            UpdateViewOnSelection();
+        }
+
         private void UserControlSysInfo_Resize(object sender, EventArgs e)
         {
             //  later we may resize to width if other column is not used, but not now
         }
 
-        public override Color ColorTransparency { get { return Color.Green; } }
+        public override bool SupportTransparency { get { return true; } }
         public override void SetTransparency(bool on, Color curcol)
         {
             BackColor = curcol;
@@ -989,6 +1169,6 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
-       
+
     }
 }

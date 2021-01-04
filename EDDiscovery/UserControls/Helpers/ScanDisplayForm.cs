@@ -58,7 +58,7 @@ namespace EDDiscovery.UserControls
                 sd.SetSize( selsize );
                 sd.Size = infosize;
 
-                StarScan.SystemNode data = await hl.starscan.FindSystemAsync(sys, sd.CheckEDSM);    // look up system async
+                StarScan.SystemNode data = await hl.StarScan.FindSystemAsync(sys, sd.CheckEDSM);    // look up system async
                     
                 if ( data != null )
                 {
@@ -85,7 +85,7 @@ namespace EDDiscovery.UserControls
                 f.ReturnResult(DialogResult.OK);
             };
 
-            f.InitCentred( parent, parent.Icon, title, null, null, asm , closeicon:true);
+            f.InitCentred(parent, new Size(1, 1), new Size(50000, 50000), parent.Icon, title, null, null, asm , closeicon:true);
 
             f.Show(parent);
         }

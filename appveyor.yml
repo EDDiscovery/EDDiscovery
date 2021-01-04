@@ -1,7 +1,8 @@
-version: 10.6.0.{build}
-image:
+version: 11.6.0.{build}
+image: 
   - Visual Studio 2017
   - Visual Studio 2019
+  - Ubuntu
 configuration: Release
 install:
   - git submodule update --init
@@ -9,8 +10,6 @@ before_build:
   - dotnet restore
 build:
   project: EDDiscovery.sln
-test_script:
-  - dotnet test EDDiscoveryTests\Tests.csproj
 for:
 -
   matrix:
@@ -19,10 +18,10 @@ for:
 
   after_build:
     - cmd: copy EDDiscovery\bin\Release\net461\EDDiscovery.Portable.zip EDDiscovery.Portable.vs2019.net461.zip
-    - cmd: copy EDDiscovery\bin\Release\netcoreapp3.0\EDDiscovery.Portable.zip EDDiscovery.Portable.vs2019.netcore30.zip
+    - cmd: copy EDDiscovery\bin\Release\netcoreapp3.1\EDDiscovery.Portable.zip EDDiscovery.Portable.vs2019.netcore31.zip
   artifacts:
     - path: EDDiscovery.Portable.vs2019.net461.zip
-    - path: EDDiscovery.Portable.vs2019.netcore30.zip
+    - path: EDDiscovery.Portable.vs2019.netcore31.zip
 -
   matrix:
     only:
@@ -32,5 +31,11 @@ for:
     - cmd: copy EDDiscovery\bin\Release\net461\EDDiscovery.Portable.zip EDDiscovery.Portable.zip
   artifacts:
     - path: EDDiscovery.Portable.zip
+-
+  matrix:
+    only:
+      - image: Ubuntu
+  build_script:
+    - msbuild /p:Configuration=Release EDDiscovery.sln /p:DefineConstants=NO_SYSTEM_SPEECH
 cache:
   - packages -> **\packages.config

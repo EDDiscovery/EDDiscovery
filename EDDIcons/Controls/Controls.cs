@@ -52,13 +52,11 @@ namespace EDDiscovery.Icons
         public static Image Main_Help_SafeModeHelp { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Main.Help.SafeModeHelp"); } }
         public static Image Main_Toolbar_EditAddons { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Main.Toolbar.EditAddons"); } }
         public static Image Main_Toolbar_ManageAddOns { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Main.Toolbar.ManageAddOns"); } }
-        public static Image Main_Toolbar_Open2DMap { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Main.Toolbar.Open2DMap"); } }
         public static Image Main_Toolbar_Open3DMap { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Main.Toolbar.Open3DMap"); } }
         public static Image Main_Toolbar_Popouts { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Main.Toolbar.Popouts"); } }
         public static Image Main_Toolbar_Refresh { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Main.Toolbar.Refresh"); } }
         public static Image Main_Toolbar_SyncEDSM { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Main.Toolbar.SyncEDSM"); } }
         public static Image Main_Tools_Exit { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Main.Tools.Exit"); } }
-        public static Image Main_Tools_Open2DMap { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Main.Tools.Open2DMap"); } }
         public static Image Main_Tools_Open3DMap { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Main.Tools.Open3DMap"); } }
         public static Image Main_Tools_Popouts_DisableTransparency { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Main.Tools.Popouts.DisableTransparency"); } }
         public static Image Main_Tools_Popouts_Menu { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Main.Tools.Popouts.Menu"); } }
@@ -241,6 +239,11 @@ namespace EDDiscovery.Icons
         #region EDDiscovery.UserControls.UserControlSysInfo
         public static Image firstdiscover { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.SysInfo.firstdiscover"); } }
         public static Image notfirstdiscover { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.SysInfo.notfirstdiscover"); } }
+        public static Image spansh { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.SysInfo.spansh"); } }
+        public static Image EDDB { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.SysInfo.EDDB"); } }
+        public static Image EDSM { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.SysInfo.EDSM"); } }
+        public static Image Inara { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.SysInfo.Inara"); } }
+        public static Image Ross { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.SysInfo.Ross"); } }
         #endregion
         #region TabStrip
         public static Image TabStrip_Popout { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.TabStrip.Popout"); } }
@@ -277,6 +280,10 @@ namespace EDDiscovery.Icons
         public static Image All { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.General.All"); } }
         public static Image None { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.General.None"); } }
         public static Image Dropdown { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.General.Dropdown"); } }
+        #endregion
+        #region Help
+        public static Image Help_Wiki { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Help.Wiki"); } }
+        public static Image Help_Video { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Help.Video"); } }
         #endregion
 
     }

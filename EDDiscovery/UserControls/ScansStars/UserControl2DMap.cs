@@ -25,12 +25,12 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace EDDiscovery
+namespace EDDiscovery.UserControls
 {
-    public partial class Form2DMap : Forms.DraggableFormPos
+    public partial class UserControl2DMap : UserControlCommonBase
     {
-        public List<Map2d> fgeimages;
-        private Map2d currentFGEImage;
+        public List<Map2d> images;
+        private Map2d currentimage;
         
         private DateTime startDate, endDate;
         public bool DisplayTestGrid = false;
@@ -41,17 +41,15 @@ namespace EDDiscovery
 
         List<HistoryEntry> syslist;
 
-        public Form2DMap(List<HistoryEntry> sl) 
+        public UserControl2DMap() 
         {
-            RestoreFormPositionRegKey = "Map2DForm";
-            syslist = sl;
             InitializeComponent();
         }
 
-        bool initdone = false;
-        private void Form2dLoad(object sender, EventArgs e)
+        public override void Init()
         {
-            initdone = false;
+            syslist = HistoryList.FilterByFSDCarrierJumpAndPosition(discoveryform.history.EntryOrder());
+
             pickerStart = new DateTimePicker();
             pickerStop = new DateTimePicker();
             host1 = new ToolStripControlHost(pickerStart);
@@ -64,60 +62,79 @@ namespace EDDiscovery
             this.pickerStop.ValueChanged += new System.EventHandler(this.dateTimePickerStop_ValueChanged);
 
             startDate = new DateTime(2010, 1, 1);
-            if ( !AddImages() )
-            {
-                ExtendedControls.MessageBoxTheme.Show(this, "No maps available".T(EDTx.Form2DMap_Nomapsavailable),"Warning".T(EDTx.Warning), MessageBoxButtons.OK,MessageBoxIcon.Exclamation);
-                Close();
-                return;
-            }
+
+            images = EDDiscovery.Icons.IconMaps.StandardMaps();
+            images.AddRange(Map2d.LoadFromFolder(EDDOptions.Instance.MapsAppDirectory()));
 
             toolStripComboExpo.Items.Clear();
 
-            foreach (Map2d img in fgeimages)
+            foreach (Map2d img in images)
             {
                 toolStripComboExpo.Items.Add(img.FileName);
             }
 
             toolStripComboBoxTime.Items.AddRange(new string[] {
-            "Distant Worlds Expedition",
-            "FGE Expedition",
             "Last Week".T(EDTx.Form2DMap_LastWeek),
             "Last Month".T(EDTx.Form2DMap_LastMonth),
             "Last Year".T(EDTx.Form2DMap_LastYear),
             "All".T(EDTx.Form2DMap_All),
             "Custom".T(EDTx.Form2DMap_Custom)});
 
-            toolStripComboExpo.SelectedIndex = 0;
-            toolStripComboBoxTime.SelectedIndex = 0;
-            initdone = true;
-            ShowSelectedImage();
-
+            toolStripComboExpo.SelectedIndex = 0;       // causes a display
+            toolStripComboBoxTime.SelectedIndex = 3;
+            
             imageViewer.BackColor = Color.FromArgb(5, 5, 5);
 
-            EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
-            bool winborder = theme.ApplyDialog(this);
-            statusStripCustom.Visible = panel_close.Visible = panel_minimize.Visible = !winborder;
-
             BaseUtils.Translator.Instance.Translate(this);
+
+            discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
         }
 
-        private void Form2dClosing(object sender, FormClosingEventArgs e)
+        private void Discoveryform_OnHistoryChange(HistoryList obj)
         {
-            if (imageViewer.Image != null)
-            {
-                imageViewer.Image.Dispose();
-            }
+            syslist = HistoryList.FilterByFSDCarrierJumpAndPosition(discoveryform.history.EntryOrder());
+            Display();
+        }
+
+        public override void Closing()
+        {
+            discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
+            imageViewer.Image?.Dispose();
             imageViewer.Image = null;
-            fgeimages = null;
+            foreach (var i in images)
+                i.Dispose();
+            images = null;
             starpositions = null;
         }
 
-        private bool AddImages()
+        private void Display()
         {
-            fgeimages = new List<Map2d>();
-            string datapath = EDDOptions.Instance.MapsAppDirectory();
-            fgeimages = Map2d.LoadImages(datapath);
-            return fgeimages.Count > 0;
+            string str = toolStripComboExpo.SelectedItem.ToString();
+
+            Map2d map = images.FirstOrDefault(i => i.FileName == str);
+
+            if (map != null)
+            {
+                try
+                {
+                    imageViewer.Image?.Dispose();
+                    imageViewer.Image = (Bitmap)map.Image.Clone();      // clone as we are going to draw on it.
+                    imageViewer.ZoomToFit();
+                    currentimage = map;
+                    if (toolStripButtonStars.Checked)
+                        DrawStars();
+
+                    DrawTravelHistory();
+                }
+                catch ( Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine("Loading 2dmap " + ex);
+                    imageViewer.Image = null;
+                }
+
+
+                imageViewer.Invalidate();
+            }
         }
 
         private void DrawTravelHistory()
@@ -171,29 +188,22 @@ namespace EDDiscovery
 
         private void DrawLine(Graphics gfx, Pen pen, ISystem sys1, ISystem sys2)
         {
-            gfx.DrawLine(pen, Transform2Screen(currentFGEImage.TransformCoordinate(new Point((int)sys1.X, (int)sys1.Z))), Transform2Screen(currentFGEImage.TransformCoordinate(new Point((int)sys2.X, (int)sys2.Z))));
-        }
-
-        private void DrawPoint(Graphics gfx, Pen pen, ISystem sys1, ISystem sys2)
-        {
-            Point point = Transform2Screen(currentFGEImage.TransformCoordinate(new Point((int)sys1.X, (int)sys1.Z)));
-            gfx.FillRectangle(pen.Brush, point.X, point.Y, 1, 1);
+            gfx.DrawLine(pen, Transform2Screen(currentimage.TransformCoordinate(new Point((int)sys1.X, (int)sys1.Z))), Transform2Screen(currentimage.TransformCoordinate(new Point((int)sys2.X, (int)sys2.Z))));
         }
 
         private void DrawPoint(Graphics gfx, Pen pen, double x, double z)
         {
-            Point point = Transform2Screen(currentFGEImage.TransformCoordinate(new Point((int)x, (int)z)));
+            Point point = Transform2Screen(currentimage.TransformCoordinate(new Point((int)x, (int)z)));
             gfx.FillRectangle(pen.Brush, point.X, point.Y, 1, 1);
         }
 
         private void TestGrid(Graphics gfx)
         {
             using (Pen pointPen = new Pen(Color.LawnGreen, 3))
-                for (int x = currentFGEImage.BottomLeft.X; x <= currentFGEImage.BottomRight.X; x += 1000)
-                    for (int z = currentFGEImage.BottomLeft.Y; z <= currentFGEImage.TopLeft.Y; z += 1000)
-                        gfx.DrawLine(pointPen, currentFGEImage.TransformCoordinate(new Point(x, z)), currentFGEImage.TransformCoordinate(new Point(x + 10, z)));
+                for (int x = currentimage.BottomLeft.X; x <= currentimage.BottomRight.X; x += 1000)
+                    for (int z = currentimage.BottomLeft.Y; z <= currentimage.TopLeft.Y; z += 1000)
+                        gfx.DrawLine(pointPen, currentimage.TransformCoordinate(new Point(x, z)), currentimage.TransformCoordinate(new Point(x + 10, z)));
         }
-
 
         private Point Transform2Screen(Point point)
         {
@@ -202,37 +212,14 @@ namespace EDDiscovery
 
         private void toolStripComboBoxExpo_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ShowSelectedImage();
+            Display();
         }
 
-        private void ShowSelectedImage()
-        {
-            string str = toolStripComboExpo.SelectedItem.ToString();
-
-            Map2d fgeimg = fgeimages.FirstOrDefault(i => i.FileName == str);
-
-            if (fgeimg != null && initdone)
-            {
-                imageViewer.Image?.Dispose();
-                //panel1.BackgroundImage = new Bitmap(fgeimg.FilePath);
-                imageViewer.Image = new Bitmap(fgeimg.FilePath);
-                imageViewer.ZoomToFit();
-                currentFGEImage = fgeimg;
-
-                if (toolStripButtonStars.Checked)
-                    DrawStars();
-
-                DrawTravelHistory();
-                imageViewer.Invalidate();
-            }
-        }
 
         private void toolStripComboBoxTime_SelectedIndexChanged(object sender, EventArgs e)
         {
             int nr = toolStripComboBoxTime.SelectedIndex;
             /*
-            Distant Worlds Expedition
-            FGE Expedition start
             Last Week
             Last Month
             Last Year
@@ -241,21 +228,17 @@ namespace EDDiscovery
 
             endDate = DateTime.Today.AddDays(1);
             if (nr == 0)
-                startDate = new DateTime(2016, 1, 14);
-            else if (nr == 1)
-                startDate = new DateTime(2015, 8, 1);
-            else if (nr == 2)
                 startDate = DateTime.Now.AddDays(-7);
-            else if (nr == 3)
+            else if (nr == 1)
                 startDate = DateTime.Now.AddMonths(-1);
-            else if (nr == 4)
+            else if (nr == 2)
                 startDate = DateTime.Now.AddYears(-1);
-            else if (nr == 5)
+            else if (nr == 3)
                 startDate = new DateTime(2010, 8, 1);
-            else if (nr == 6)  // Custom
+            else if (nr == 4)  // Custom
                 startDate = new DateTime(2010, 8, 1);
 
-            if (nr == 6)
+            if (nr == 4)
             {
                 host1.Visible = true;
                 host2.Visible = true;
@@ -269,7 +252,7 @@ namespace EDDiscovery
                 endDate = DateTime.Today.AddDays(1);
             }
             
-            ShowSelectedImage();
+            Display();
         }
 
         private void toolStripButtonZoomIn_Click(object sender, EventArgs e)
@@ -280,38 +263,18 @@ namespace EDDiscovery
         private void dateTimePickerStart_ValueChanged(object sender, EventArgs e)
         {
             startDate = pickerStart.Value;
-            ShowSelectedImage();
+            Display();
         }
 
         private void dateTimePickerStop_ValueChanged(object sender, EventArgs e)
         {
             endDate = pickerStop.Value;
-            ShowSelectedImage();
+            Display();
         }
 
         private void toolStripButtonStars_Click(object sender, EventArgs e)
         {
-            ShowSelectedImage();
-        }
-
-        private void panel_close_Click(object sender, EventArgs e)
-        {
-            Close();
-        }
-
-        private void panel_minimize_Click(object sender, EventArgs e)
-        {
-            this.WindowState = FormWindowState.Minimized;
-        }
-
-        private void panelTop_MouseDown(object sender, MouseEventArgs e)
-        {
-            OnCaptionMouseDown((Control)sender, e);
-        }
-
-        private void panelTop_MouseUp(object sender, MouseEventArgs e)
-        {
-            OnCaptionMouseUp((Control)sender, e);
+            Display();
         }
 
         private void toolStripButtonSave_Click(object sender, EventArgs e)

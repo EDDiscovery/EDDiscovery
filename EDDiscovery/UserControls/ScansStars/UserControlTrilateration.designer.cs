@@ -78,11 +78,7 @@ namespace EDDiscovery.UserControls
             this.splitContainerCustom2 = new System.Windows.Forms.SplitContainer();
             this.dataViewScroller_Distances = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.vScrollBarCustom1 = new ExtendedControls.ExtScrollBar();
-            this.dataGridViewDistances = new System.Windows.Forms.DataGridView();
-            this.ColumnSystem = new ExtendedControls.ExtDataGridViewColumnAutoComplete();
-            this.ColumnDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnCalculated = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewDistances = new BaseUtils.DataGridViewBaseEnhancements();
             this.richTextBox_History = new ExtendedControls.ExtRichTextBox();
             this.dataViewScroller_Wanted = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.vScrollBarCustom2 = new ExtendedControls.ExtScrollBar();
@@ -90,6 +86,10 @@ namespace EDDiscovery.UserControls
             this.Source = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumnClosestSystemsSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.ColumnSystem = new ExtendedControls.ExtDataGridViewColumnAutoComplete();
+            this.ColumnDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnCalculated = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.trilatContextMenu.SuspendLayout();
             this.wantedContextMenu.SuspendLayout();
             this.toolStrip.SuspendLayout();
@@ -420,6 +420,8 @@ namespace EDDiscovery.UserControls
             // 
             // dataGridViewDistances
             // 
+            this.dataGridViewDistances.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewDistances.ColumnHeaderMenuStrip = null;
             this.dataGridViewDistances.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewDistances.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ColumnSystem,
@@ -430,9 +432,12 @@ namespace EDDiscovery.UserControls
             this.dataGridViewDistances.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewDistances.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewDistances.Name = "dataGridViewDistances";
+            this.dataGridViewDistances.RowHeaderMenuStrip = null;
             this.dataGridViewDistances.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dataGridViewDistances.SingleRowSelect = true;
             this.dataGridViewDistances.Size = new System.Drawing.Size(572, 675);
             this.dataGridViewDistances.TabIndex = 0;
+            this.dataGridViewDistances.TopLeftHeaderMenuStrip = null;
             this.dataGridViewDistances.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewDistances_CellClick);
             this.dataGridViewDistances.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewDistances_CellEndEdit);
             this.dataGridViewDistances.CellLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewDistances_CellLeave);
@@ -440,38 +445,6 @@ namespace EDDiscovery.UserControls
             this.dataGridViewDistances.CurrentCellChanged += new System.EventHandler(this.dataGridViewDistances_CurrentCellChanged);
             this.dataGridViewDistances.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewDistances_SortCompare);
             this.dataGridViewDistances.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dataGridViewDistances_KeyDown);
-            // 
-            // ColumnSystem
-            // 
-            this.ColumnSystem.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.ColumnSystem.FillWeight = 250F;
-            this.ColumnSystem.HeaderText = "System";
-            this.ColumnSystem.MinimumWidth = 75;
-            this.ColumnSystem.Name = "ColumnSystem";
-            // 
-            // ColumnDistance
-            // 
-            this.ColumnDistance.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.ColumnDistance.HeaderText = "Distance";
-            this.ColumnDistance.MinimumWidth = 75;
-            this.ColumnDistance.Name = "ColumnDistance";
-            // 
-            // ColumnCalculated
-            // 
-            this.ColumnCalculated.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.ColumnCalculated.HeaderText = "Calculated";
-            this.ColumnCalculated.MinimumWidth = 75;
-            this.ColumnCalculated.Name = "ColumnCalculated";
-            this.ColumnCalculated.ReadOnly = true;
-            this.ColumnCalculated.Visible = false;
-            // 
-            // ColumnStatus
-            // 
-            this.ColumnStatus.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.ColumnStatus.HeaderText = "Status";
-            this.ColumnStatus.MinimumWidth = 75;
-            this.ColumnStatus.Name = "ColumnStatus";
-            this.ColumnStatus.ReadOnly = true;
             // 
             // richTextBox_History
             // 
@@ -482,9 +455,8 @@ namespace EDDiscovery.UserControls
             this.richTextBox_History.Location = new System.Drawing.Point(0, 0);
             this.richTextBox_History.Name = "richTextBox_History";
             this.richTextBox_History.ReadOnly = false;
-            this.richTextBox_History.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\nouicompat\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 " +
-    "Microsoft Sans Serif;}}\r\n{\\*\\generator Riched20 10.0.18362}\\viewkind4\\uc1 \r\n\\par" +
-    "d\\f0\\fs17\\par\r\n}\r\n";
+            this.richTextBox_History.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 Microsoft S" +
+    "ans Serif;}}\r\n\\viewkind4\\uc1\\pard\\f0\\fs17\\par\r\n}\r\n";
             this.richTextBox_History.ScrollBarArrowBorderColor = System.Drawing.Color.LightBlue;
             this.richTextBox_History.ScrollBarArrowButtonColor = System.Drawing.Color.LightGray;
             this.richTextBox_History.ScrollBarBackColor = System.Drawing.SystemColors.Control;
@@ -586,6 +558,31 @@ namespace EDDiscovery.UserControls
             this.dataGridViewTextBoxColumnClosestSystemsSystem.Name = "dataGridViewTextBoxColumnClosestSystemsSystem";
             this.dataGridViewTextBoxColumnClosestSystemsSystem.ReadOnly = true;
             // 
+            // ColumnSystem
+            // 
+            this.ColumnSystem.HeaderText = "System";
+            this.ColumnSystem.Name = "ColumnSystem";
+            // 
+            // ColumnDistance
+            // 
+            this.ColumnDistance.FillWeight = 50F;
+            this.ColumnDistance.HeaderText = "Distance";
+            this.ColumnDistance.Name = "ColumnDistance";
+            // 
+            // ColumnCalculated
+            // 
+            this.ColumnCalculated.FillWeight = 50F;
+            this.ColumnCalculated.HeaderText = "Calculated";
+            this.ColumnCalculated.Name = "ColumnCalculated";
+            this.ColumnCalculated.ReadOnly = true;
+            this.ColumnCalculated.Visible = false;
+            // 
+            // ColumnStatus
+            // 
+            this.ColumnStatus.HeaderText = "Status";
+            this.ColumnStatus.Name = "ColumnStatus";
+            this.ColumnStatus.ReadOnly = true;
+            // 
             // UserControlTrilateration
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -615,11 +612,7 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
-        protected System.Windows.Forms.DataGridView dataGridViewDistances;
-        private ExtendedControls.ExtDataGridViewColumnAutoComplete ColumnSystem;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnDistance;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnCalculated;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnStatus;
+        protected BaseUtils.DataGridViewBaseEnhancements dataGridViewDistances;
         private System.Windows.Forms.ContextMenuStrip trilatContextMenu;
         private System.Windows.Forms.ToolStripMenuItem addToWantedSystemsToolStripMenuItem;
         private System.Windows.Forms.ContextMenuStrip wantedContextMenu;
@@ -658,5 +651,9 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripMenuItem addAllSectorSystemsToolStripMenuItem;
         private System.Windows.Forms.ToolStripButton toolStripButtonSector;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private ExtDataGridViewColumnAutoComplete ColumnSystem;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnDistance;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnCalculated;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnStatus;
     }
 }

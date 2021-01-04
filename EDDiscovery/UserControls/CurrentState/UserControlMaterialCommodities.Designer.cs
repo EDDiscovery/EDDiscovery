@@ -46,7 +46,7 @@ namespace EDDiscovery.UserControls
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControlMaterialCommodities));
             this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
-            this.dataGridViewMC = new System.Windows.Forms.DataGridView();
+            this.dataGridViewMC = new BaseUtils.DataGridViewColumnHider();
             this.NameCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ShortName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Category = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -105,7 +105,6 @@ namespace EDDiscovery.UserControls
             this.dataGridViewMC.TabIndex = 1;
             this.dataGridViewMC.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewMC_CellDoubleClick);
             this.dataGridViewMC.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewMC_SortCompare);
-            this.dataGridViewMC.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridViewMC_MouseDown);
             // 
             // NameCol
             // 
@@ -155,7 +154,6 @@ namespace EDDiscovery.UserControls
             this.openRecipeInWindowToolStripMenuItem});
             this.contextMenuStrip.Name = "contextMenuStrip";
             this.contextMenuStrip.Size = new System.Drawing.Size(202, 26);
-            this.contextMenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Opening);
             // 
             // openRecipeInWindowToolStripMenuItem
             // 
@@ -376,7 +374,7 @@ namespace EDDiscovery.UserControls
         #endregion
 
         private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanel;
-        private System.Windows.Forms.DataGridView dataGridViewMC;
+        private BaseUtils.DataGridViewColumnHider dataGridViewMC;
         private ExtendedControls.ExtScrollBar vScrollBarCustomMC;
         private System.Windows.Forms.DataGridViewTextBoxColumn NameCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn ShortName;

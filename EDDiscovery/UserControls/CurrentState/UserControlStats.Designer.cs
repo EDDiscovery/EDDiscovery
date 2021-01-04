@@ -208,7 +208,6 @@ namespace EDDiscovery.UserControls
             this.extPanelDataGridViewScrollTravel.Controls.Add(this.dataGridViewTravel);
             this.extPanelDataGridViewScrollTravel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.extPanelDataGridViewScrollTravel.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.extPanelDataGridViewScrollTravel.LimitLargeChange = 2147483647;
             this.extPanelDataGridViewScrollTravel.Location = new System.Drawing.Point(0, 23);
             this.extPanelDataGridViewScrollTravel.Name = "extPanelDataGridViewScrollTravel";
             this.extPanelDataGridViewScrollTravel.Size = new System.Drawing.Size(703, 520);
@@ -286,7 +285,6 @@ namespace EDDiscovery.UserControls
             this.extPanelDataGridViewScrollScan.Controls.Add(this.extScrollBarScan);
             this.extPanelDataGridViewScrollScan.Dock = System.Windows.Forms.DockStyle.Fill;
             this.extPanelDataGridViewScrollScan.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.extPanelDataGridViewScrollScan.LimitLargeChange = 2147483647;
             this.extPanelDataGridViewScrollScan.Location = new System.Drawing.Point(0, 23);
             this.extPanelDataGridViewScrollScan.Name = "extPanelDataGridViewScrollScan";
             this.extPanelDataGridViewScrollScan.Size = new System.Drawing.Size(703, 520);
@@ -403,7 +401,6 @@ namespace EDDiscovery.UserControls
             this.extPanelDataGridViewScrollByShip.Controls.Add(this.extScrollBarByShip);
             this.extPanelDataGridViewScrollByShip.Dock = System.Windows.Forms.DockStyle.Fill;
             this.extPanelDataGridViewScrollByShip.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.extPanelDataGridViewScrollByShip.LimitLargeChange = 2147483647;
             this.extPanelDataGridViewScrollByShip.Location = new System.Drawing.Point(3, 3);
             this.extPanelDataGridViewScrollByShip.Name = "extPanelDataGridViewScrollByShip";
             this.extPanelDataGridViewScrollByShip.Size = new System.Drawing.Size(697, 537);
