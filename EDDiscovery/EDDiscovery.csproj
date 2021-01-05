@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk" InitialTargets="Version">
-  <Import Sdk="Microsoft.NET.Sdk.WindowsDesktop" Project="Sdk.props" Condition="'$(TargetFramework)' == 'netcoreapp3.1'" />
+  <Import Sdk="Microsoft.NET.Sdk.WindowsDesktop" Project="Sdk.props" Condition="'$(TargetFramework)' == 'netcoreapp3.1' or '$(TargetFramework)' == 'net5.0-windows'" />
   <PropertyGroup>
     <ProjectGuid>{6EE10D92-E3E4-44D9-8E6B-851801B0B510}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -16,7 +16,10 @@
   <PropertyGroup Condition="'$(OS)' == 'Windows_NT' and '$(NETCoreSdkVersion)' != '' and '$(NETCoreSdkVersion.Substring(0, 3))' == '3.1'">
     <TargetFrameworks>net461;netcoreapp3.1</TargetFrameworks>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
+  <PropertyGroup Condition="'$(OS)' == 'Windows_NT' and '$(NETCoreSdkVersion)' != '' and '$(NETCoreSdkVersion.Substring(0, 1))' == '5'">
+    <TargetFrameworks>net461;netcoreapp3.1;net5.0-windows</TargetFrameworks>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1' or '$(TargetFramework)' == 'net5.0-windows'">
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
@@ -28,13 +31,13 @@
     <DefineConstants>TRACE</DefineConstants>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
+  <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1' or '$(TargetFramework)' == 'net5.0-windows'">
     <DefineConstants>NO_SYSTEM_SPEECH</DefineConstants>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>Resources\edlogo_3mo_icon.ico</ApplicationIcon>
   </PropertyGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
+  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1' or '$(TargetFramework)' == 'net5.0-windows'">
     <Compile Remove="UserControls\ScansStars\UserControlLocalMap.cs" />
     <Compile Remove="UserControls\ScansStars\UserControlLocalMap.Designer.cs" />
     <EmbeddedResource Remove="UserControls\ScansStars\UserControlLocalMap.resx" />
@@ -311,5 +314,5 @@
     </ItemGroup>
     <WriteCodeFragment AssemblyAttributes="@(AssemblyAttribute)" Language="C#" OutputFile="Properties\ExtraVersion.cs" />
   </Target>
-  <Import Sdk="Microsoft.NET.Sdk.WindowsDesktop" Project="Sdk.targets" Condition="'$(TargetFramework)' == 'netcoreapp3.1'" />
+  <Import Sdk="Microsoft.NET.Sdk.WindowsDesktop" Project="Sdk.targets" Condition="'$(TargetFramework)' == 'netcoreapp3.1' or '$(TargetFramework)' == 'net5.0-windows'" />
 </Project>

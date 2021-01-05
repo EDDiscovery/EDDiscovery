@@ -564,7 +564,7 @@ namespace EDDiscovery.UserControls
                 }
                 else
                 {
-                    System.Threading.Thread.CurrentThread.Abort();
+                    Application.ExitThread();
                 }
             }
         }
