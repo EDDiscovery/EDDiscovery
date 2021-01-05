@@ -19,9 +19,11 @@ for:
   after_build:
     - cmd: copy EDDiscovery\bin\Release\net461\EDDiscovery.Portable.zip EDDiscovery.Portable.vs2019.net461.zip
     - cmd: copy EDDiscovery\bin\Release\netcoreapp3.1\EDDiscovery.Portable.zip EDDiscovery.Portable.vs2019.netcore31.zip
+    - cmd: copy EDDiscovery\bin\Release\net5.0-windows\EDDiscovery.Portable.zip EDDiscovery.Portable.vs2019.net50.zip
   artifacts:
     - path: EDDiscovery.Portable.vs2019.net461.zip
     - path: EDDiscovery.Portable.vs2019.netcore31.zip
+    - path: EDDiscovery.Portable.vs2019.net50.zip
 -
   matrix:
     only:
