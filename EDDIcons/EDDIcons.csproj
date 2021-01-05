@@ -885,8 +885,8 @@
     <EmbeddedResource Include="Bodies\Planets\Giant\GGWv24.png" />
     <EmbeddedResource Include="Bodies\Planets\Giant\GGWv25.png" />
     <EmbeddedResource Include="Bodies\Planets\Giant\GG3v13.png" />
-    <EmbeddedResource Include="Bodies\Planets\Giant\GGhv7.png" />
-    <EmbeddedResource Include="Bodies\Planets\Giant\GGhv8.png" />
+    <EmbeddedResource Include="Bodies\Planets\Giant\GGHv7.png" />
+    <EmbeddedResource Include="Bodies\Planets\Giant\GGHv8.png" />
     <EmbeddedResource Include="Bodies\Planets\Terrestrial\MRBv6.png" />
     <EmbeddedResource Include="Bodies\Planets\Terrestrial\MRBv7.png" />
     <EmbeddedResource Include="Bodies\Planets\Terrestrial\MRBv8.png" />
