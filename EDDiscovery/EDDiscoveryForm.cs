@@ -539,7 +539,8 @@ namespace EDDiscovery
                 datetimetimer.Tick += (sv, ev) => { DateTime gameutc = DateTime.UtcNow.AddYears(1286); labelGameDateTime.Text = gameutc.ToShortDateString() + " " + gameutc.ToShortTimeString(); };
                 datetimetimer.Start();
             }
-
+            if (EDDOptions.Instance.AutoOpen3DMap)
+                Open3DMap(PrimaryCursor.GetCurrentHistoryEntry);
             if (EDDOptions.Instance.MinimiseOnOpen)
                 WindowState = FormWindowState.Minimized;
             else if (EDDOptions.Instance.MaximiseOnOpen)
