@@ -551,6 +551,8 @@ namespace EDDiscovery
 
             periodicchecktimer.Start();
 
+            if (EDDOptions.Instance.AutoOpen3DMap)
+                Open3DMap(PrimaryCursor.GetCurrentHistoryEntry);
             if (EDDOptions.Instance.MinimiseOnOpen)
                 WindowState = FormWindowState.Minimized;
             else if (EDDOptions.Instance.MaximiseOnOpen)
