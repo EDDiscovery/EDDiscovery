@@ -42,7 +42,7 @@ namespace EDDiscovery.Actions
         public override bool ExecuteAction(ActionProgramRun ap)
         {
             string res;
-            if (ap.functions.ExpandString(UserData, out res) != BaseUtils.Functions.ExpandResult.Failed)
+            if (ap.Functions.ExpandString(UserData, out res) != BaseUtils.Functions.ExpandResult.Failed)
             {
                 StringParser sp = new StringParser(res);
 
@@ -184,7 +184,7 @@ namespace EDDiscovery.Actions
                                 ap.ReportError("Command and REGION are incompatible");
                             else if ( addstar )
                             {
-                                ISystem sys = (ap.actioncontroller as ActionController).DiscoveryForm.history.FindSystem(name);
+                                ISystem sys = (ap.ActionController as ActionController).DiscoveryForm.history.FindSystem(name);
 
                                 if (sys != null)
                                 {

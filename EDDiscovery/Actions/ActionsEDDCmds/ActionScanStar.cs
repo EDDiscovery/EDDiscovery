@@ -43,7 +43,7 @@ namespace EDDiscovery.Actions
         public override bool ExecuteAction(ActionProgramRun ap)
         {
             string res;
-            if (ap.functions.ExpandString(UserData, out res) != BaseUtils.Functions.ExpandResult.Failed)
+            if (ap.Functions.ExpandString(UserData, out res) != BaseUtils.Functions.ExpandResult.Failed)
             {
                 StringParser sp = new StringParser(res);
 
@@ -72,7 +72,7 @@ namespace EDDiscovery.Actions
 
                 if (cmdname != null)
                 {
-                    StarScan scan = (ap.actioncontroller as ActionController).HistoryList.StarScan;
+                    StarScan scan = (ap.ActionController as ActionController).HistoryList.StarScan;
                     ISystem sc = SystemCache.FindSystem(cmdname);
 
                     if (sc == null)
@@ -220,7 +220,7 @@ namespace EDDiscovery.Actions
         public override bool ExecuteAction(ActionProgramRun ap)
         {
             string res;
-            if (ap.functions.ExpandString(UserData, out res) != BaseUtils.Functions.ExpandResult.Failed)
+            if (ap.Functions.ExpandString(UserData, out res) != BaseUtils.Functions.ExpandResult.Failed)
             {
                 StringParser sp = new StringParser(res);
 
@@ -250,7 +250,7 @@ namespace EDDiscovery.Actions
                         BaseUtils.Variables vars = new BaseUtils.Variables();
                         ActionVars.SystemVars(vars, sc, prefix);
                         ap.Add(vars);
-                        ActionVars.SystemVarsFurtherInfo(ap, (ap.actioncontroller as ActionController).HistoryList, sc, prefix);
+                        ActionVars.SystemVarsFurtherInfo(ap, (ap.ActionController as ActionController).HistoryList, sc, prefix);
 
                         string options = sp.NextWord();
 
@@ -269,7 +269,7 @@ namespace EDDiscovery.Actions
                                 ret_prefix = prefix;
 
                                 computer.CalculateClosestSystems(sc,
-                                    (sys,list)=> (apr.actioncontroller as ActionController).DiscoveryForm.BeginInvoke(new Action(() => NewStarListComputed(sys, list))),
+                                    (sys,list)=> (apr.ActionController as ActionController).DiscoveryForm.BeginInvoke(new Action(() => NewStarListComputed(sys, list))),
                                     (mindist>0) ? (number-1) : number,          // adds an implicit 1 on for centre star
                                     mindist, maxdist, !cube);
 
@@ -299,7 +299,7 @@ namespace EDDiscovery.Actions
             {
                 string p = ret_prefix + (i++).ToStringInvariant() + "_";
                 ActionVars.SystemVars(apr.variables, s.Value, p);
-                ActionVars.SystemVarsFurtherInfo(apr, (apr.actioncontroller as ActionController).HistoryList, s.Value, p);
+                ActionVars.SystemVarsFurtherInfo(apr, (apr.ActionController as ActionController).HistoryList, s.Value, p);
                 apr[p + "Dist"] = Math.Sqrt(s.Key).ToStringInvariant("0.##");
             }
 

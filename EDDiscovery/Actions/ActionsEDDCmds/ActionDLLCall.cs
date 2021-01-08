@@ -57,7 +57,7 @@ namespace EDDiscovery.Actions
             {
                 List<string> exp;
 
-                if (ap.functions.ExpandStrings(preexpand, out exp) != Functions.ExpandResult.Failed && preexpand.Count>=2)
+                if (ap.Functions.ExpandStrings(preexpand, out exp) != Functions.ExpandResult.Failed && preexpand.Count>=2)
                 {
                     System.Diagnostics.Debug.WriteLine("dll call " + string.Join(",", preexpand));
 
@@ -69,11 +69,11 @@ namespace EDDiscovery.Actions
 
                         if ( jid.HasValue )
                         {
-                            HistoryEntry h = (ap.actioncontroller as ActionController).DiscoveryForm.history.GetByJID(jid.Value);
+                            HistoryEntry h = (ap.ActionController as ActionController).DiscoveryForm.history.GetByJID(jid.Value);
 
                             if ( h != null)
                             {
-                                Tuple<bool,bool> ret = (ap.actioncontroller as ActionController).DiscoveryForm.DLLManager.ActionJournalEntry(exp[0], EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(h));
+                                Tuple<bool,bool> ret = (ap.ActionController as ActionController).DiscoveryForm.DLLManager.ActionJournalEntry(exp[0], EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(h));
                                 if ( ret.Item1 == false )
                                     ap.ReportError("DLLCall cannot find DLL '" + exp[0] + "'");
                                 else if ( ret.Item2 == false )
@@ -89,7 +89,7 @@ namespace EDDiscovery.Actions
                     {
                         string[] paras = exp.GetRange(2, exp.Count - 2).ToArray();
 
-                        List<Tuple<bool, string, string>> res = (ap.actioncontroller as ActionController).DiscoveryForm.DLLManager.ActionCommand(exp[0], exp[1], paras);
+                        List<Tuple<bool, string, string>> res = (ap.ActionController as ActionController).DiscoveryForm.DLLManager.ActionCommand(exp[0], exp[1], paras);
 
                         ap["DLLCalled"] = res.Count.ToStringInvariant();
 

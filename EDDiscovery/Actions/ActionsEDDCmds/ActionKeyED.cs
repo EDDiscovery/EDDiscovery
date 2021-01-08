@@ -104,7 +104,7 @@ namespace EDDiscovery.Actions
 
         public override bool ExecuteAction(ActionProgramRun ap)
         {
-            ActionController ac = ap.actioncontroller as ActionController;
+            ActionController ac = ap.ActionController as ActionController;
             return ExecuteAction(ap, new AKP() { bindingsfile = ac.FrontierBindings }); //base
         }
 

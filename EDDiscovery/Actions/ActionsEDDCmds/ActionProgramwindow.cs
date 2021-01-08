@@ -42,7 +42,7 @@ namespace EDDiscovery.Actions
         public override bool ExecuteAction(ActionProgramRun ap)
         {
             string res;
-            if (ap.functions.ExpandString(UserData, out res) != BaseUtils.Functions.ExpandResult.Failed)
+            if (ap.Functions.ExpandString(UserData, out res) != BaseUtils.Functions.ExpandResult.Failed)
             {
                 BaseUtils.StringParser sp = new BaseUtils.StringParser(res);
 
@@ -56,23 +56,23 @@ namespace EDDiscovery.Actions
                 {
                     string tabname = sp.NextQuotedWord(lowercase: System.Globalization.CultureInfo.InvariantCulture, replaceescape:true);
 
-                    if (!(ap.actioncontroller as ActionController).DiscoveryForm.SelectTabPage(tabname))
+                    if (!(ap.ActionController as ActionController).DiscoveryForm.SelectTabPage(tabname))
                         ap.ReportError("Tab page name " + tabname + " not found");
                 }
                 else if (nextcmd.Equals("topmost"))
-                    (ap.actioncontroller as ActionController).DiscoveryForm.TopMost = true;
+                    (ap.ActionController as ActionController).DiscoveryForm.TopMost = true;
                 else if (nextcmd.Equals("normalz"))
-                    (ap.actioncontroller as ActionController).DiscoveryForm.TopMost = false;
+                    (ap.ActionController as ActionController).DiscoveryForm.TopMost = false;
                 else if (nextcmd.Equals("showintaskbar"))
-                    (ap.actioncontroller as ActionController).DiscoveryForm.ShowInTaskbar = true;
+                    (ap.ActionController as ActionController).DiscoveryForm.ShowInTaskbar = true;
                 else if (nextcmd.Equals("notshowintaskbar"))
-                    (ap.actioncontroller as ActionController).DiscoveryForm.ShowInTaskbar = false;
+                    (ap.ActionController as ActionController).DiscoveryForm.ShowInTaskbar = false;
                 else if (nextcmd.Equals("minimize"))
-                    (ap.actioncontroller as ActionController).DiscoveryForm.WindowState = FormWindowState.Minimized;
+                    (ap.ActionController as ActionController).DiscoveryForm.WindowState = FormWindowState.Minimized;
                 else if (nextcmd.Equals("normal"))
-                    (ap.actioncontroller as ActionController).DiscoveryForm.WindowState = FormWindowState.Normal;
+                    (ap.ActionController as ActionController).DiscoveryForm.WindowState = FormWindowState.Normal;
                 else if (nextcmd.Equals("maximize"))
-                    (ap.actioncontroller as ActionController).DiscoveryForm.WindowState = FormWindowState.Maximized;
+                    (ap.ActionController as ActionController).DiscoveryForm.WindowState = FormWindowState.Maximized;
                 else if (nextcmd.Equals("location"))
                 {
                     int? x = sp.NextWordComma().InvariantParseIntNull();
@@ -82,8 +82,8 @@ namespace EDDiscovery.Actions
 
                     if (x.HasValue && y.HasValue && w.HasValue && h.HasValue)
                     {
-                        (ap.actioncontroller as ActionController).DiscoveryForm.Location = new Point(x.Value, y.Value);
-                        (ap.actioncontroller as ActionController).DiscoveryForm.Size = new Size(w.Value, h.Value);
+                        (ap.ActionController as ActionController).DiscoveryForm.Location = new Point(x.Value, y.Value);
+                        (ap.ActionController as ActionController).DiscoveryForm.Size = new Size(w.Value, h.Value);
                     }
                     else
                         ap.ReportError("Location needs x,y,w,h in Popout");
@@ -94,7 +94,7 @@ namespace EDDiscovery.Actions
                     int? y = sp.NextWord().InvariantParseIntNull();
 
                     if (x.HasValue && y.HasValue)
-                        (ap.actioncontroller as ActionController).DiscoveryForm.Location = new Point(x.Value, y.Value);
+                        (ap.ActionController as ActionController).DiscoveryForm.Location = new Point(x.Value, y.Value);
                     else
                         ap.ReportError("Position needs x,y in Popout");
                 }
@@ -104,7 +104,7 @@ namespace EDDiscovery.Actions
                     int? h = sp.NextWord().InvariantParseIntNull();
 
                     if (w.HasValue && h.HasValue)
-                        (ap.actioncontroller as ActionController).DiscoveryForm.Size = new Size(w.Value, h.Value);
+                        (ap.ActionController as ActionController).DiscoveryForm.Size = new Size(w.Value, h.Value);
                     else
                         ap.ReportError("Size needs x,y,w,h in Popout");
                 }

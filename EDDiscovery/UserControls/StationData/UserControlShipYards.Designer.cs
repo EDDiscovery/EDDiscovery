@@ -131,10 +131,13 @@ namespace EDDiscovery.UserControls
             this.ColPrice});
             this.dataGridViewShips.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewShips.Name = "dataGridViewShips";
+            this.dataGridViewShips.RowHeaderMenuStrip = null;
             this.dataGridViewShips.RowHeadersVisible = false;
             this.dataGridViewShips.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewShips.Size = new System.Drawing.Size(787, 549);
+            this.dataGridViewShips.SingleRowSelect = true;
+            this.dataGridViewShips.Size = new System.Drawing.Size(784, 549);
             this.dataGridViewShips.TabIndex = 1;
+            this.dataGridViewShips.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewShips_SortCompare);
             // 
             // Col1
             // 
@@ -174,13 +177,13 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom1.HideScrollBar = false;
             this.vScrollBarCustom1.LargeChange = 0;
-            this.vScrollBarCustom1.Location = new System.Drawing.Point(787, 0);
+            this.vScrollBarCustom1.Location = new System.Drawing.Point(784, 0);
             this.vScrollBarCustom1.Maximum = -1;
             this.vScrollBarCustom1.Minimum = 0;
             this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom1.Name = "vScrollBarCustom1";
-            this.vScrollBarCustom1.Size = new System.Drawing.Size(13, 549);
+            this.vScrollBarCustom1.Size = new System.Drawing.Size(16, 549);
             this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom1.SmallChange = 1;
             this.vScrollBarCustom1.TabIndex = 0;
