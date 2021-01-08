@@ -13,19 +13,15 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using EDDiscovery.Controls;
+using EliteDangerousCore;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
 using System.Data;
+using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using EDDiscovery.Controls;
-using System.IO;
-using EliteDangerousCore;
-using EliteDangerousCore.DB;
 
 namespace EDDiscovery.UserControls
 {
@@ -183,7 +179,7 @@ namespace EDDiscovery.UserControls
             {
                 double distance = discoveryform.history.DistanceCurrentTo(i.Item1.StarSystem);
                 string dte = EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(i.Item1.Datetime).ToString();
-                object[] rowobj = { dte, i.Item1.Location, (distance > -1) ? (distance.ToString("N1") + "ly") : "Unknown".T(EDTx.Unknown), i.Item2.ShipPrice.ToString("N1") + "cr" };
+                object[] rowobj = { dte, i.Item1.Location, (distance > -1) ? (distance.ToString("N1") + "ly") : "Unknown".T(EDTx.Unknown), i.Item2.ShipPrice.ToString("N0") + "cr" };
                 dataGridViewShips.Rows.Add(rowobj);
             }
 
@@ -213,7 +209,7 @@ namespace EDDiscovery.UserControls
                         "/" + (shipprops[ShipModuleData.ShipPropID.Boost] as ShipModuleData.ShipInfoInt).Value.ToString();
                 }
 
-                object[] rowobj = { i.ShipType_Localised, col2, col3,i.ShipPrice.ToString("N1") + "cr" };
+                object[] rowobj = { i.ShipType_Localised, col2, col3,i.ShipPrice.ToString("N0") + "cr" };
 
                 dataGridViewShips.Rows.Add(rowobj);
             }
@@ -244,7 +240,7 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void dataGridView_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
+        private void dataGridViewShips_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {
             if (e.Column.Tag != null)
             {

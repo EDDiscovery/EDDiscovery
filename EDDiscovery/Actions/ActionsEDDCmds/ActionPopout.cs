@@ -43,7 +43,7 @@ namespace EDDiscovery.Actions
         public override bool ExecuteAction(ActionProgramRun ap)
         {
             string res;
-            if (ap.functions.ExpandString(UserData, out res) != BaseUtils.Functions.ExpandResult.Failed)
+            if (ap.Functions.ExpandString(UserData, out res) != BaseUtils.Functions.ExpandResult.Failed)
             {
                 StringParser sp = new StringParser(res);
                 string prefix = "P_";
@@ -63,7 +63,7 @@ namespace EDDiscovery.Actions
                     cmdname = sp.NextQuotedWord();
                 }
 
-                PopOutControl poc = (ap.actioncontroller as ActionController).DiscoveryForm.PopOuts;
+                PopOutControl poc = (ap.ActionController as ActionController).DiscoveryForm.PopOuts;
 
                 if (cmdname == null)
                 {

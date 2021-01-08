@@ -56,7 +56,7 @@ namespace EDDiscovery.Actions
             {
                 List<string> exp;
 
-                if (ap.functions.ExpandStrings(ctrl, out exp) != Functions.ExpandResult.Failed)
+                if (ap.Functions.ExpandStrings(ctrl, out exp) != Functions.ExpandResult.Failed)
                 {
                     string cmdname = exp[0].ToLowerInvariant();
                     string nextword = exp.Count >= 2 ? exp[1] : null;
@@ -70,26 +70,26 @@ namespace EDDiscovery.Actions
                     }
                     else if (cmdname.Equals("3dmap"))
                     {
-                        (ap.actioncontroller as ActionController).DiscoveryForm.Open3DMap(null);
+                        (ap.ActionController as ActionController).DiscoveryForm.Open3DMap(null);
                     }
                     else if (cmdname.Equals("2dmap"))
                     {
-                        (ap.actioncontroller as ActionController).DiscoveryForm.PopOuts.PopOut(PanelInformation.PanelIDs.Map2D);
+                        (ap.ActionController as ActionController).DiscoveryForm.PopOuts.PopOut(PanelInformation.PanelIDs.Map2D);
                     }
                     else if (cmdname.Equals("edsm"))
                     {
-                        ActionController ac = (ap.actioncontroller as ActionController);
+                        ActionController ac = (ap.ActionController as ActionController);
 
                         EliteDangerousCore.EDSM.EDSMClass edsm = new EliteDangerousCore.EDSM.EDSMClass();
 
                         if (edsm.ValidCredentials)
-                            EliteDangerousCore.EDSM.EDSMJournalSync.SendEDSMEvents(ap.actioncontroller.LogLine, ac.DiscoveryForm.history.EntryOrder());
+                            EliteDangerousCore.EDSM.EDSMJournalSync.SendEDSMEvents(ap.ActionController.LogLine, ac.DiscoveryForm.history.EntryOrder());
                         else
                             ap.ReportError("No valid EDSM Credentials");
                     }
                     else if (cmdname.Equals("refresh"))
                     {
-                        (ap.actioncontroller as ActionController).DiscoveryForm.RefreshHistoryAsync();
+                        (ap.ActionController as ActionController).DiscoveryForm.RefreshHistoryAsync();
                     }
                     else if (cmdname.Equals("url"))
                     {
@@ -102,52 +102,52 @@ namespace EDDiscovery.Actions
                     }
                     else if (cmdname.Equals("configurevoice"))
                     {
-                        (ap.actioncontroller as ActionController).ConfigureVoice(nextword ?? "Configure Voice Synthesis");
+                        (ap.ActionController as ActionController).ConfigureVoice(nextword ?? "Configure Voice Synthesis");
                     }
                     else if (cmdname.Equals("manageaddons"))
-                        (ap.actioncontroller as ActionController).ManageAddOns();
+                        (ap.ActionController as ActionController).ManageAddOns();
                     else if (cmdname.Equals("editaddons"))
-                        (ap.actioncontroller as ActionController).EditAddOns();
+                        (ap.ActionController as ActionController).EditAddOns();
                     else if (cmdname.Equals("editlastpack"))
-                        (ap.actioncontroller as ActionController).EditLastPack();
+                        (ap.ActionController as ActionController).EditLastPack();
                     else if (cmdname.Equals("editpack"))
                     {
                         if (nextword != null)
                         {
-                            if (!(ap.actioncontroller as ActionController).EditPack(nextword))
+                            if (!(ap.ActionController as ActionController).EditPack(nextword))
                                 ap.ReportError("Pack " + nextword + " not found");
                         }
                         else
                             ap.ReportError("EditPack requires a pack name");
                     }
                     else if (cmdname.Equals("editspeechtext"))
-                        (ap.actioncontroller as ActionController).EditSpeechText();
+                        (ap.ActionController as ActionController).EditSpeechText();
                     else if (cmdname.Equals("configurewave"))
-                        (ap.actioncontroller as ActionController).ConfigureWave(nextword ?? "Configure Wave Output");
+                        (ap.ActionController as ActionController).ConfigureWave(nextword ?? "Configure Wave Output");
                     else if (cmdname.Equals("enableeliteinput"))
-                        (ap.actioncontroller as ActionController).EliteInput(true, true);
+                        (ap.ActionController as ActionController).EliteInput(true, true);
                     else if (cmdname.Equals("enableeliteinputnoaxis"))
-                        (ap.actioncontroller as ActionController).EliteInput(true, false);
+                        (ap.ActionController as ActionController).EliteInput(true, false);
                     else if (cmdname.Equals("disableeliteinput"))
-                        (ap.actioncontroller as ActionController).EliteInput(false, false);
+                        (ap.ActionController as ActionController).EliteInput(false, false);
                     else if (cmdname.Equals("enablevoicerecognition"))
                     {
                         if (nextword != null)
                         {
-                            ap["VoiceRecognitionEnabled"] = ((ap.actioncontroller as ActionController).VoiceReconOn(nextword)).ToStringIntValue();
+                            ap["VoiceRecognitionEnabled"] = ((ap.ActionController as ActionController).VoiceReconOn(nextword)).ToStringIntValue();
                         }
                         else
                             ap.ReportError("EnableVoiceRecognition requires a culture");
                     }
                     else if (cmdname.Equals("disablevoicerecognition"))
-                        (ap.actioncontroller as ActionController).VoiceReconOff();
+                        (ap.ActionController as ActionController).VoiceReconOff();
                     else if (cmdname.Equals("beginvoicerecognition"))
-                        (ap.actioncontroller as ActionController).VoiceLoadEvents();
+                        (ap.ActionController as ActionController).VoiceLoadEvents();
                     else if (cmdname.Equals("voicerecognitionconfidencelevel"))
                     {
                         float? conf = nextword.InvariantParseFloatNull();
                         if (conf != null)
-                            (ap.actioncontroller as ActionController).VoiceReconConfidence(conf.Value);
+                            (ap.ActionController as ActionController).VoiceReconConfidence(conf.Value);
                         else
                             ap.ReportError("VoiceRecognitionConfidencelLevel requires a confidence value");
                     }
@@ -159,38 +159,38 @@ namespace EDDiscovery.Actions
                         int? endsilenceambigious = fifthword.InvariantParseIntNull(); // ambiguous timeout
 
                         if (babble != null && initialsilence != null && endsilence != null && endsilenceambigious != null)
-                            (ap.actioncontroller as ActionController).VoiceReconParameters(babble.Value, initialsilence.Value, endsilence.Value, endsilenceambigious.Value);
+                            (ap.ActionController as ActionController).VoiceReconParameters(babble.Value, initialsilence.Value, endsilence.Value, endsilenceambigious.Value);
                         else
                             ap.ReportError("VoiceRecognitionParameters requires four values");
                     }
                     else if (cmdname.Equals("voicerecognitionphrases"))
                     {
-                        ap["Phrases"] = (ap.actioncontroller as ActionController).VoicePhrases(Environment.NewLine);
+                        ap["Phrases"] = (ap.ActionController as ActionController).VoicePhrases(Environment.NewLine);
                     }
                     else if (cmdname.Equals("listeliteinput"))
                     {
-                        ap["EliteInput"] = (ap.actioncontroller as ActionController).EliteInputList();
-                        ap["EliteInputCheck"] = (ap.actioncontroller as ActionController).EliteInputCheck();
+                        ap["EliteInput"] = (ap.ActionController as ActionController).EliteInputList();
+                        ap["EliteInputCheck"] = (ap.ActionController as ActionController).EliteInputCheck();
                     }
                     else if (cmdname.Equals("voicenames"))
                     {
-                        ap["VoiceNames"] = (ap.actioncontroller as ActionController).SpeechSynthesizer.GetVoiceNames().QuoteStrings();
+                        ap["VoiceNames"] = (ap.ActionController as ActionController).SpeechSynthesizer.GetVoiceNames().QuoteStrings();
                     }
                     else if (cmdname.Equals("bindings"))
                     {
-                        ap["Bindings"] = (ap.actioncontroller as ActionController).FrontierBindings.ListBindings();
+                        ap["Bindings"] = (ap.ActionController as ActionController).FrontierBindings.ListBindings();
                     }
                     else if (cmdname.Equals("bindingvalues"))
                     {
-                        ap["BindingValues"] = (ap.actioncontroller as ActionController).FrontierBindings.ListValues();
+                        ap["BindingValues"] = (ap.ActionController as ActionController).FrontierBindings.ListValues();
                     }
                     else if (cmdname.Equals("actionfile"))
                     {
-                        ActionFile f = (ap.actioncontroller as ActionController).Get(nextword);
+                        ActionFile f = (ap.ActionController as ActionController).Get(nextword);
                         if ( f != null )
                         {
                             int i = 0;
-                            foreach( var x in f.actioneventlist.Enumerable )
+                            foreach( var x in f.EventList.Enumerable )
                             {
                                 ap["Events[" + i++ + "]"] = x.ToString(true);   // list hooked events
                                 ap["Events_" + x.eventname] = x.ToString(true);   // list hooked events
@@ -199,7 +199,7 @@ namespace EDDiscovery.Actions
                             i = 0;
                             foreach (string jname in Enum.GetNames(typeof(EliteDangerousCore.JournalTypeEnum)))
                             {
-                                List<Condition> cl = f.actioneventlist.GetConditionListByEventName(jname);
+                                List<Condition> cl = f.EventList.GetConditionListByEventName(jname);
 
                                 if (cl != null)
                                 {
@@ -220,7 +220,7 @@ namespace EDDiscovery.Actions
                             i = 0;
                             foreach (string iname in Enum.GetNames(typeof(EliteDangerousCore.UITypeEnum)))
                             {
-                                List<Condition> cl = f.actioneventlist.GetConditionListByEventName("UI" + iname);
+                                List<Condition> cl = f.EventList.GetConditionListByEventName("UI" + iname);
 
                                 if (cl != null)
                                 {
@@ -239,14 +239,14 @@ namespace EDDiscovery.Actions
                             }
 
                             i = 0;
-                            foreach (var x in f.installationvariables.NameEnumuerable)
-                                ap["Install[" + i++ + "]"] = x + "," + f.installationvariables[x];   // list hooked events
+                            foreach (var x in f.InstallationVariables.NameEnumuerable)
+                                ap["Install[" + i++ + "]"] = x + "," + f.InstallationVariables[x];   // list hooked events
 
                             i = 0;
-                            foreach (var x in f.filevariables.NameEnumuerable)
-                                ap["FileVar[" + i++ + "]"] = x + "," + f.filevariables[x];   // list hooked events
+                            foreach (var x in f.FileVariables.NameEnumuerable)
+                                ap["FileVar[" + i++ + "]"] = x + "," + f.FileVariables[x];   // list hooked events
 
-                            ap["Enabled"] = f.enabled.ToStringIntValue();
+                            ap["Enabled"] = f.Enabled.ToStringIntValue();
 
                         }
                         else
@@ -316,10 +316,10 @@ namespace EDDiscovery.Actions
                                     c["EventClass_EventTimeUTC"] = DateTime.UtcNow.ToStringUS();
                                     c["EventClass_EventTypeID"] = c["EventClass_EventTypeStr"] = f.TriggerName.Substring(2);
                                     c["EventClass_UIDisplayed"] = "0";
-                                    (ap.actioncontroller as ActionController).ActionRun(Actions.ActionEventEDList.onUIEvent, c);
+                                    (ap.ActionController as ActionController).ActionRun(Actions.ActionEventEDList.onUIEvent, c);
                                 }
 
-                                (ap.actioncontroller as ActionController).ActionRun(f, c, now: true);
+                                (ap.ActionController as ActionController).ActionRun(f, c, now: true);
                             }
                             else
                             {
@@ -336,7 +336,7 @@ namespace EDDiscovery.Actions
                                     else
                                     {
                                         EliteDangerousCore.HistoryEntry he = EliteDangerousCore.HistoryEntry.FromJournalEntry(je, null);
-                                        (ap.actioncontroller as ActionController).ActionRunOnEntry(he, Actions.ActionEventEDList.NewEntry(he), now: true);
+                                        (ap.ActionController as ActionController).ActionRunOnEntry(he, Actions.ActionEventEDList.NewEntry(he), now: true);
                                     }
                                 }
                                 catch

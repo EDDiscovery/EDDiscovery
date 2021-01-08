@@ -41,9 +41,9 @@ namespace EDDiscovery.Actions
         public override bool ExecuteAction(ActionProgramRun ap)
         {
             string res;
-            if (ap.functions.ExpandString(UserData, out res) != Functions.ExpandResult.Failed)
+            if (ap.Functions.ExpandString(UserData, out res) != Functions.ExpandResult.Failed)
             {
-                HistoryList hl = (ap.actioncontroller as ActionController).HistoryList;
+                HistoryList hl = (ap.ActionController as ActionController).HistoryList;
                 StringParser sp = new StringParser(res);
                 string prefix = "EC_";
 
@@ -70,7 +70,7 @@ namespace EDDiscovery.Actions
 
                     if (cmdname.Equals("thpos"))
                     {
-                        HistoryEntry he = (ap.actioncontroller as ActionController).DiscoveryForm.PrimaryCursor.GetCurrentHistoryEntry;
+                        HistoryEntry he = (ap.ActionController as ActionController).DiscoveryForm.PrimaryCursor.GetCurrentHistoryEntry;
 
                         if ( he == null )
                         {
@@ -178,7 +178,7 @@ namespace EDDiscovery.Actions
 
                         if (cmdname.Equals("action"))
                         {
-                            int count = (ap.actioncontroller as ActionController).ActionRunOnEntry(he, Actions.ActionEventEDList.EventCmd(he), now: true);
+                            int count = (ap.ActionController as ActionController).ActionRunOnEntry(he, Actions.ActionEventEDList.EventCmd(he), now: true);
                             ap[prefix + "Count"] = count.ToString(System.Globalization.CultureInfo.InvariantCulture);
                         }
                         else if (cmdname.Equals("edsm"))
@@ -234,7 +234,7 @@ namespace EDDiscovery.Actions
                             if (note != null && sp.IsEOL)
                             {
                                 he.SetJournalSystemNoteText(note, true, EDCommander.Current.SyncToEdsm);
-                                (ap.actioncontroller as ActionController).DiscoveryForm.NoteChanged(this, he, true);
+                                (ap.ActionController as ActionController).DiscoveryForm.NoteChanged(this, he, true);
                             }
                             else
                                 ap.ReportError("Missing note text or unquoted text in Event NOTE");

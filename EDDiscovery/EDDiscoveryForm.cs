@@ -62,7 +62,7 @@ namespace EDDiscovery
 
         public PopOutControl PopOuts;
 
-        Timer datetimetimer;
+        Timer periodicchecktimer;
 
         #endregion
 
@@ -532,13 +532,25 @@ namespace EDDiscovery
                 File.WriteAllText(EDDOptions.Instance.OutputEventHelp, s);
             }
 
-            if (!EDDOptions.Instance.DisableTimeDisplay)
+            periodicchecktimer = new Timer();                   // timer for periodic actions
+            periodicchecktimer.Interval = 1000;
+            periodicchecktimer.Tick += (sv, ev) =>
             {
-                datetimetimer = new Timer();
-                datetimetimer.Interval = 1000;
-                datetimetimer.Tick += (sv, ev) => { DateTime gameutc = DateTime.UtcNow.AddYears(1286); labelGameDateTime.Text = gameutc.ToShortDateString() + " " + gameutc.ToShortTimeString(); };
-                datetimetimer.Start();
-            }
+                if (!EDDOptions.Instance.DisableTimeDisplay)
+                {
+                    DateTime gameutc = DateTime.UtcNow.AddYears(1286);
+                    labelGameDateTime.Text = gameutc.ToShortDateString() + " " + gameutc.ToShortTimeString();
+                }
+
+                if (buttonReloadActions.Visible)
+                {
+                    if ( actioncontroller.CheckForActionFilesChange() ) // autoreload edited action files..
+                        buttonReloadActions_Click(null, null);
+                }
+            };
+
+            periodicchecktimer.Start();
+
             if (EDDOptions.Instance.AutoOpen3DMap)
                 Open3DMap(PrimaryCursor.GetCurrentHistoryEntry);
             if (EDDOptions.Instance.MinimiseOnOpen)

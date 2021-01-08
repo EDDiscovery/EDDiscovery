@@ -31,26 +31,26 @@ namespace EDDiscovery
 
         static private JToken defaulthelp = new JObject()
         {
-            ["Version"] = "1.2.0.0",
+            ["Version"] = "1.3.0.0",
             ["Panels"] = new JArray()
             {
-                new JObject() { ["panel"] = "Log", ["wiki"] = "/Using-the-EDDiscovery-Log-Panel", ["video"] = "" },
-                new JObject() { ["panel"] = "StarDistance", ["wiki"] = "/Using-the-Nearest-Stars-Panel", ["video"] = "" },
+                new JObject() { ["panel"] = "Log", ["wiki"] = "/Using-the-EDDiscovery-Log-Panel", ["video"] = "https://youtu.be/PwTbnFikBgA?t=625" },
+                new JObject() { ["panel"] = "StarDistance", ["wiki"] = "/Using-the-Nearest-Stars-Panel", ["video"] = "https://youtu.be/PwTbnFikBgA?t=590" },
                 new JObject() { ["panel"] = "Materials", ["wiki"] = "/Using-the-Materials-Panel", ["video"] = "" },
                 new JObject() { ["panel"] = "Commodities", ["wiki"] = "/Using-the-Commodities-Panel", ["video"] = "" },
                 new JObject() { ["panel"] = "Ledger", ["wiki"] = "/Using-the-Ledger-Panel", ["video"] = "" },
                 new JObject() { ["panel"] = "Journal", ["wiki"] = "/Using-the-Journal-Panel", ["video"] = "" },
-                new JObject() { ["panel"] = "TravelGrid", ["wiki"] = "/Using-the-History-Grid-Panel", ["video"] = "" },
+                new JObject() { ["panel"] = "TravelGrid", ["wiki"] = "/Using-the-History-Grid-Panel", ["video"] = "https://youtu.be/PwTbnFikBgA?t=56" },
                 new JObject() { ["panel"] = "ScreenShot", ["wiki"] = "/Using-the-Screenshot-Panel", ["video"] = "" },
                 new JObject() { ["panel"] = "Statistics", ["wiki"] = "/Using-the-Statistics-Panel", ["video"] = "" },
-                new JObject() { ["panel"] = "Scan", ["wiki"] = "/Using-the-Scan-Panel", ["video"] = "" },
+                new JObject() { ["panel"] = "Scan", ["wiki"] = "/Using-the-Scan-Panel", ["video"] = "https://youtu.be/PwTbnFikBgA?t=636" },
                 new JObject() { ["panel"] = "Modules", ["wiki"] = "/Using-the-Ships-Load-Out-Panel", ["video"] = "" },
                 new JObject() { ["panel"] = "Exploration", ["wiki"] = "/Using-the-Exploration-Panel", ["video"] = "" },
                 new JObject() { ["panel"] = "Synthesis", ["wiki"] = "/Using-the-Synthesis-Panel", ["video"] = "" },
                 new JObject() { ["panel"] = "Missions", ["wiki"] = "/Using-the-Missions-Panel", ["video"] = "" },
                 new JObject() { ["panel"] = "Engineering", ["wiki"] = "/Using-the-Engineering-panel", ["video"] = "" },
                 new JObject() { ["panel"] = "MarketData", ["wiki"] = "/Using-the-Market-Data-Panel", ["video"] = "" },
-                new JObject() { ["panel"] = "SystemInformation", ["wiki"] = "/Using-the-System-Information-Panel", ["video"] = "" },
+                new JObject() { ["panel"] = "SystemInformation", ["wiki"] = "/Using-the-System-Information-Panel", ["video"] = "https://youtu.be/PwTbnFikBgA?t=520" },
                 new JObject() { ["panel"] = "Spanel", ["wiki"] = "/Using-the-SPanel", ["video"] = "" },
                 new JObject() { ["panel"] = "Trippanel", ["wiki"] = "/Using-the-Trip-Panel", ["video"] = "" },
                 new JObject() { ["panel"] = "NotePanel", ["wiki"] = "/Using-the-Note-Panel", ["video"] = "" },
@@ -84,7 +84,7 @@ namespace EDDiscovery
                 new JObject() { ["panel"] = "MaterialTrader", ["wiki"] = "/Using-the-Material-Trader-Panel", ["video"] = "" },
                 new JObject() { ["panel"] = "Map2D", ["wiki"] = "/Using-the-2D-Map", ["video"] = "" },
                 new JObject() { ["panel"] = "MiningOverlay", ["wiki"] = "/Using-the-mining-panel", ["video"] = "" },
-                new JObject() { ["panel"] = "HistoryTab", ["wiki"] = "/Using-the-History-Tab", ["video"] = "" },
+                new JObject() { ["panel"] = "HistoryTab", ["wiki"] = "/Using-the-History-Tab", ["video"] = "https://youtu.be/PwTbnFikBgA" },
                 new JObject() { ["panel"] = "Factions", ["wiki"] = "/Using-the-Factions-Panel", ["video"] = "" },
             }
         };
@@ -150,7 +150,7 @@ namespace EDDiscovery
                 ConfigurableForm cfg = new ExtendedControls.ConfigurableForm();
                 cfg.AllowSpaceForScrollBar = false;
                 cfg.RightMargin = cfg.BottomMargin = 0;
-                cfg.ForceNoBorder = true;
+                cfg.ForceNoWindowsBorder = true;
                 cfg.AllowSpaceForCloseButton = true;
                 cfg.BorderMargin = 0;
 
