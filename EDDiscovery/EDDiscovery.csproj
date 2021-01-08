@@ -984,6 +984,7 @@
     <None Include="UserControls\translation-chinese-uc.tlp" />
     <None Include="UserControls\translation-deutsch-uc.tlp" />
     <None Include="UserControls\translation-example-uc.tlp" />
+    <None Include="UserControls\translation-francais-uc.tlp" />
     <None Include="UserControls\translation-italiano-uc.tlp" />
     <None Include="UserControls\translation-polski-uc.tlp" />
     <None Include="UserControls\translation-portugues-uc.tlp" />
