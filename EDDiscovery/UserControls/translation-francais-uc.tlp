@@ -446,7 +446,7 @@ SECTION UserControlSurveyor
 .isanammoniaworld: " is an ammonia world." => " est un mode d'amoniaque"
 .isanearthlikeworld: " is an earth like world." => " est un monde tellurique"
 .isawaterworld: " is a water world." => " est un monde aquatique"
-.isaterraformablewaterworld: " is a terraformable water world." => " est un mode aquatique terroformable"
+.isaterraformablewaterworld: " is a terraformable water world." => " est un mode aquatique terraformable"
 .isaterraformableplanet: " is a terraformable planet." => " est une planète terraformable"
 .Hasring: " Has ring." => " a des anneaux."
 .Has: " Has " => " a "
