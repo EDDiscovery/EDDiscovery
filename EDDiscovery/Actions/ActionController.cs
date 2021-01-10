@@ -141,6 +141,8 @@ namespace EDDiscovery.Actions
 
         public void ReLoad(bool completereload = true)        // COMPLETE reload..
         {
+            actionfiles?.CloseDown();
+
             if (completereload)
                 actionfiles = new ActionFileList();     // clear the list
 

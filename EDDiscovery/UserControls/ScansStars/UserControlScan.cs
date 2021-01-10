@@ -317,9 +317,9 @@ namespace EDDiscovery.UserControls
                 System.Diagnostics.Debug.WriteLine("control" + controlname);
 
                 if (controlname.Contains("Validity:False"))
-                    cf.SetEnabled("OK", false);
+                    cf.GetControl("OK").Enabled = false;
                 else if (controlname.Contains("Validity:True"))
-                    cf.SetEnabled("OK", true);
+                    cf.GetControl("OK").Enabled = true;
                 else if (controlname == "OK")
                 {
                     cf.ReturnResult(DialogResult.OK);
