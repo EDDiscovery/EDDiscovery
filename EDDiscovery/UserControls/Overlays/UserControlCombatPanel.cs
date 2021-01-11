@@ -28,12 +28,14 @@ namespace EDDiscovery.UserControls
         private string DbSave { get { return DBName("CombatPanel" ); } }
         private string DbColumnSave { get { return DBName("CombatPanel" ,  "DGVCol"); } }
 
-        private long total_kills = 0;
-        private long faction_kills = 0;
+        private long npc_total_kills = 0;
+        private long npc_faction_kills = 0;
         private long total_reward = 0;
         private long faction_reward = 0;
         private long balance = 0;
         private long total_crimes = 0;
+        private long pvp_kills = 0;
+        private long died = 0;
         private List<FilterEntry> savedfilterentries;
         private List<FilterEntry> displayedfilterentries;
 
@@ -258,7 +260,7 @@ namespace EDDiscovery.UserControls
             SortOrder sortorder = dataGridViewCombat.SortOrder != SortOrder.None ? dataGridViewCombat.SortOrder : SortOrder.Descending;
 
             dataGridViewCombat.Rows.Clear();
-            total_kills = faction_kills = total_reward = faction_reward = balance = total_crimes = 0;
+            npc_total_kills = npc_faction_kills = total_reward = faction_reward = balance = total_crimes = pvp_kills = died = 0;
 
             if ( current != null )
             {
@@ -391,13 +393,13 @@ namespace EDDiscovery.UserControls
                 rewardcol = c.TotalReward.ToString("N0");
 
                 total_reward += c.TotalReward;
-                total_kills++;
+                npc_total_kills++;
                 balance += c.TotalReward;
 
                 if (current.TargetFaction != null && current.TargetFaction.Equals(c.VictimFaction))
                 {
                     faction_reward += c.TotalReward;
-                    faction_kills++;
+                    npc_faction_kills++;
                 }
             }
             else if (he.EntryType == JournalTypeEnum.CommitCrime)
@@ -412,12 +414,12 @@ namespace EDDiscovery.UserControls
                 var c = he.journalEntry as EliteDangerousCore.JournalEvents.JournalFactionKillBond;
                 rewardcol = c.Reward.ToString("N0");
                 total_reward += c.Reward;
-                total_kills++;
+                npc_total_kills++;
                 balance += c.Reward;
                 if (current.TargetFaction != null && current.TargetFaction.Equals(c.VictimFaction))
                 {
                     faction_reward += c.Reward;
-                    faction_kills++;
+                    npc_faction_kills++;
                 }
             }
             else if (he.EntryType == JournalTypeEnum.CapShipBond)
@@ -425,12 +427,12 @@ namespace EDDiscovery.UserControls
                 var c = he.journalEntry as EliteDangerousCore.JournalEvents.JournalCapShipBond;
                 rewardcol = c.Reward.ToString("N0");
                 total_reward += c.Reward;
-                total_kills++;
+                npc_total_kills++;
                 balance += c.Reward;
                 if (current.TargetFaction != null && current.TargetFaction.Equals(c.VictimFaction))
                 {
                     faction_reward += c.Reward;
-                    faction_kills++;
+                    npc_faction_kills++;
                 }
             }
             else if (he.EntryType == JournalTypeEnum.Resurrect)
@@ -438,6 +440,14 @@ namespace EDDiscovery.UserControls
                 var c = he.journalEntry as EliteDangerousCore.JournalEvents.JournalResurrect;
                 rewardcol = (-c.Cost).ToString("N0");
                 balance -= c.Cost;
+            }
+            else if (he.EntryType == JournalTypeEnum.Died)
+            {
+                died++;
+            }
+            else if (he.EntryType == JournalTypeEnum.PVPKill)
+            {
+                pvp_kills++;
             }
             else if (jtelist.Contains(he.EntryType))
             {
@@ -451,16 +461,16 @@ namespace EDDiscovery.UserControls
         void SetLabels()
         {
             bool faction = current != null ? current.TargetFaction.Length > 0 : false;
-            labelTotalKills.Text = (total_kills>0) ? ("Kills:".T(EDTx.UserControlCombatPanel_Kills) + total_kills.ToString()) : "";
-            labelFactionKills.Text = faction ? ("Faction:".T(EDTx.UserControlCombatPanel_Faction) + faction_kills.ToString()) : "";
+            labelTotalKills.Text = (npc_total_kills>0 || pvp_kills>0) ? ("Kills:".T(EDTx.UserControlCombatPanel_Kills) + npc_total_kills.ToString() + "/" + pvp_kills.ToString()) : "";
+            labelFactionKills.Text = faction ? ("Faction:".T(EDTx.UserControlCombatPanel_Faction) + npc_faction_kills.ToString()) : "";
             labelFaction.Text = faction ? (current.TargetFaction) : "";
             labelTotalCrimes.Text = (total_crimes>0) ? ("Crimes:".T(EDTx.UserControlCombatPanel_Crimes) + total_crimes.ToString()) : "";
 
             labelCredits.Text = (discoveryform.history.GetLast != null) ? (discoveryform.history.GetLast.Credits.ToString("N0") + "cr") : "";
-            labelBalance.Text = (balance > 0 ) ? ("Bal:".T(EDTx.UserControlCombatPanel_Bal) + balance.ToString("N0") + "cr") : "";
-            labelFactionReward.Text = (faction && faction_reward != balance) ? (faction_reward.ToString("N0") + "cr") : "";
-            labelTotalReward.Text = (total_reward != balance) ? (total_reward.ToString("N0") + "cr") : "";
-
+            labelBalance.Text = (balance != 0 ) ? ("Bal:".T(EDTx.UserControlCombatPanel_Bal) + balance.ToString("N0") + "cr") : "";
+            labelFactionReward.Text = (faction && faction_reward != balance) ? ("+" + faction_reward.ToString("N0") + "cr") : "";
+            labelTotalReward.Text = (total_reward != balance) ? ("+" + total_reward.ToString("N0") + "cr") : "";
+            labelDied.Text = (died != 0) ? ("Died".T(EDTx.UserControlCombatPanel_labelDied) + ":" + died.ToString()) : "";
         }
 
         static JournalTypeEnum[] targetofflist = new JournalTypeEnum[]            // ones to display without any extra detail

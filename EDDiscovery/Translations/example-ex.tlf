@@ -257,6 +257,8 @@ SECTION EDDiscoveryForm
 .buttonExt3dmap: "3D" @
 .adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.fetchLogsAgainToolStripMenuItem: "Fetch Logs Again" @
 .adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.fetchStarDataAgainToolStripMenuItem: "Fetch Star Data Again" @
+.adminToolStripMenuItem.rebuildUserDBIndexesToolStripMenuItem: "Rebuild User DB Indexes" @
+.adminToolStripMenuItem.updateUnknownSystemCoordsWithDataFromSystemDBToolStripMenuItem: "Update systems with unknown co-ordinates" @
 
 .WSE: "Web server enabled" @
 .WSF: "Web server failed to start" @

@@ -823,7 +823,7 @@ SECTION UserControlSettings
 .checkBoxCustomEnableScreenshots: "Enable" => "Activer"
 .groupBoxCustomEDSM: "EDSM/EDDB Control" => "Contrôle d'EDSM/EDDB"
 .buttonExtEDSMConfigureArea: "Select Galaxy Sectors" => "Sélectionner les secteurs galactiques"
-.checkBoxCustomEDSMEDDBDownload: "Enable Star Data Download" => "Activer le téléchargement des données stellaires"
+.checkBoxCustomEDSMDownload: "Enable Star Data Download" => "Activer le téléchargement des données stellaires"
 .groupBoxPopOuts: "Window Options" => "Options de fenêtre"
 .checkBoxPanelSortOrder: "Panel List Sorted Alphanumerically" => "Liste des panneaux - Tri alphanum"
 .checkBoxKeepOnTop: "Keep on Top" => "Toujorus garder au premier plan"
@@ -850,7 +850,7 @@ SECTION UserControlSettings
 .buttonExtScreenshot.ToolTip: "Configure further screenshot options" => "Configurer plus d'options de capture d'écran"
 .checkBoxCustomEnableScreenshots.ToolTip: "Screen shot conversion on/off" => "Conversion de captures d'écran actif/inactif"
 .buttonExtEDSMConfigureArea.ToolTip: "Configure what parts of the galaxy is stored in the databases" => "Configurer quelles parties de la galaxie sont conservées dans la base de données"
-.checkBoxCustomEDSMEDDBDownload.ToolTip: "Click to enable downloading of stars from EDSM and system information from EDDB.  Will apply at next start." => "cliquer pour activer le téléchargement des étoiles depuis EDSM et les informations systèmes depuis EDDB. Sera actif au prochain démarrage d'EDD."
+.checkBoxCustomEDSMDownload.ToolTip: "Click to enable downloading of stars from EDSM and system information from EDDB.  Will apply at next start." => "cliquer pour activer le téléchargement des étoiles depuis EDSM et les informations systèmes depuis EDDB. Sera actif au prochain démarrage d'EDD."
 .checkBoxPanelSortOrder.ToolTip: "Panel lists sorted alphanumerically instead of ordered in groups. Note Requires Restart" => "Panneaux trié alphanumériquement plus qu'en groupes ordonnés. Ceci nécessite un redémarrage"
 .checkBoxKeepOnTop.ToolTip: "This window, and its children, top" => "Cette fenêtre et ses enfants, au premier plan"
 .checkBoxCustomResize.ToolTip: "Check to allow EDD to redraw the screen during main window resize. Only disable if its too slow" @

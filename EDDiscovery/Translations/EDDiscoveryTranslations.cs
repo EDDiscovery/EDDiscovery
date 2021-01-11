@@ -495,6 +495,7 @@ namespace EDDiscovery
         UserControlCombatPanel_Faction, // Faction:
         UserControlCombatPanel_Crimes, // Crimes:
         UserControlCombatPanel_Bal, // Bal:
+        UserControlCombatPanel_labelDied, // Died
         UserControlCombatPanel_NewCampaign, // New Campaign
         UserControlCombatPanel_SinceLastDock, // Since Last Dock
         UserControlCombatPanel_Name, // Name:

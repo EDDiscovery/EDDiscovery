@@ -823,7 +823,7 @@ SECTION UserControlSettings
 .checkBoxCustomEnableScreenshots: "Enable" @
 .groupBoxCustomEDSM: "EDSM/EDDB Control" @
 .buttonExtEDSMConfigureArea: "Select Galaxy Sectors" @
-.checkBoxCustomEDSMEDDBDownload: "Enable Star Data Download" @
+.checkBoxCustomEDSMDownload: "Enable Star Data Download" @
 .groupBoxPopOuts: "Window Options" @
 .checkBoxPanelSortOrder: "Panel List Sorted Alphanumerically" @
 .checkBoxKeepOnTop: "Keep on Top" @
@@ -850,7 +850,7 @@ SECTION UserControlSettings
 .buttonExtScreenshot.ToolTip: "Configure further screenshot options" @
 .checkBoxCustomEnableScreenshots.ToolTip: "Screen shot conversion on/off" @
 .buttonExtEDSMConfigureArea.ToolTip: "Configure what parts of the galaxy is stored in the databases" @
-.checkBoxCustomEDSMEDDBDownload.ToolTip: "Click to enable downloading of stars from EDSM and system information from EDDB.  Will apply at next start." @
+.checkBoxCustomEDSMDownload.ToolTip: "Click to enable downloading of stars from EDSM and system information from EDDB.  Will apply at next start." @
 .checkBoxPanelSortOrder.ToolTip: "Panel lists sorted alphanumerically instead of ordered in groups. Note Requires Restart" @
 .checkBoxKeepOnTop.ToolTip: "This window, and its children, top" @
 .checkBoxCustomResize.ToolTip: "Check to allow EDD to redraw the screen during main window resize. Only disable if its too slow" @
