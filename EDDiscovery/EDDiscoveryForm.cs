@@ -943,6 +943,14 @@ namespace EDDiscovery
 
                 bool goforit = !in_system_sync || ExtendedControls.MessageBoxTheme.Show("EDDiscovery is updating the EDSM databases\r\nPress OK to close now, Cancel to wait until update is complete".T(EDTx.EDDiscoveryForm_CloseWarning), "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK;
 
+                if ( goforit )
+                {
+                    if (tabControlMain.AllowClose() == false)
+                        goforit = false;
+                    else if (PopOuts.AllowClose() == false)
+                        goforit = false;
+                }
+
                 if (goforit)
                 {
                     ReportRefreshProgress(-1, "Closing, please wait!".T(EDTx.EDDiscoveryForm_Closing));
@@ -1679,8 +1687,14 @@ namespace EDDiscovery
             if (!checksavecur || EDDProfiles.Instance.Current.Id != id)
             {
                 System.Diagnostics.Debug.WriteLine(BaseUtils.AppTicks.TickCountLap("ProfT") + " *************************** CHANGE To profile " + id);
+
                 if (checksavecur)
                 {
+                    if (tabControlMain.AllowClose() == false)       // if we don't allow closing, we can't change profile
+                        return;
+                    else if (PopOuts.AllowClose() == false)
+                        return;
+
                     tabControlMain.CloseTabList();
                     PopOuts.SaveCurrentPopouts();
                 }

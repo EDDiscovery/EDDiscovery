@@ -13,7 +13,7 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-namespace EDDiscovery.Forms
+namespace EDDiscovery.UserControls
 {
     partial class UserControlForm
     {
@@ -286,7 +286,6 @@ namespace EDDiscovery.Forms
             this.Controls.Add(this.panelTop);
             this.Controls.Add(this.extPanelResizerTop);
             this.Name = "UserControlForm";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.UserControlForm_FormClosing);
             this.Shown += new System.EventHandler(this.UserControlForm_Shown);
             this.Layout += new System.Windows.Forms.LayoutEventHandler(this.UserControlForm_Layout);
             this.panelTop.ResumeLayout(false);

@@ -332,18 +332,18 @@ namespace EDDiscovery
 
     public class PopOutControl
     {
-        public Forms.UserControlFormList usercontrolsforms;
+        public UserControlFormList usercontrolsforms;
         EDDiscoveryForm discoveryform;
 
         public PopOutControl( EDDiscoveryForm ed )
         {
             discoveryform = ed;
-            usercontrolsforms = new Forms.UserControlFormList(discoveryform);
+            usercontrolsforms = new UserControlFormList(discoveryform);
         }
 
         public int Count { get { return usercontrolsforms.Count;  } }
-        public Forms.UserControlForm GetByWindowsRefName(string name) { return usercontrolsforms.GetByWindowsRefName(name); }
-        public Forms.UserControlForm this[int i] { get { return usercontrolsforms[i]; } }
+        public UserControlForm GetByWindowsRefName(string name) { return usercontrolsforms.GetByWindowsRefName(name); }
+        public UserControlForm this[int i] { get { return usercontrolsforms[i]; } }
 
         private static string PopOutSaveID(PanelInformation.PanelIDs p)
         {
@@ -406,7 +406,7 @@ namespace EDDiscovery
 
         public UserControlCommonBase PopOut(PanelInformation.PanelIDs selected)
         {
-            Forms.UserControlForm tcf = usercontrolsforms.NewForm();
+            UserControlForm tcf = usercontrolsforms.NewForm();
             tcf.Icon = Properties.Resources.edlogo_3mo_icon;
 
             UserControlCommonBase ctrl = PanelInformation.Create(selected);
@@ -437,6 +437,11 @@ namespace EDDiscovery
             }
 
             return ctrl;
+        }
+
+        public bool AllowClose()
+        {
+            return usercontrolsforms.AllowClose();
         }
     }
 }

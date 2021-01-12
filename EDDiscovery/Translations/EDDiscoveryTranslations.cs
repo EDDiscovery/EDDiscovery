@@ -27,6 +27,7 @@ namespace EDDiscovery
         Unknown, // Unknown
         Information, // Information
         NoPos, // No Pos
+        LoseAllChanges, // Lose all changes
 
         EDDiscoveryForm_TSF,
         EDDiscoveryForm_ConfirmSyncToEDSM, // You have disabled sync to EDSM for this commander.  Are you sure you want to send unsynced events to EDSM?

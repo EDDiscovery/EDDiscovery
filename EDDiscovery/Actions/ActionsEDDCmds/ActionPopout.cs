@@ -77,7 +77,7 @@ namespace EDDiscovery.Actions
                 }
                 else
                 {
-                    Forms.UserControlForm ucf = poc.GetByWindowsRefName(cmdname);
+                    UserControls.UserControlForm ucf = poc.GetByWindowsRefName(cmdname);
 
                     string nextcmd = sp.NextWordLCInvariant(" ");
 
@@ -109,9 +109,9 @@ namespace EDDiscovery.Actions
                         else if (nextcmd.Equals("on"))   // does nothing
                         { }
                         else if (nextcmd.Equals("transparent"))
-                            ucf.SetTransparency(Forms.UserControlForm.TransparencyMode.On);
+                            ucf.SetTransparency(UserControls.UserControlForm.TransparencyMode.On);
                         else if (nextcmd.Equals("opaque"))
-                            ucf.SetTransparency(Forms.UserControlForm.TransparencyMode.Off);
+                            ucf.SetTransparency(UserControls.UserControlForm.TransparencyMode.Off);
                         else if (nextcmd.Equals("title"))
                             ucf.SetShowInTaskBar(true);
                         else if (nextcmd.Equals("notitle"))

@@ -20,7 +20,7 @@ using System.Windows.Forms;
 namespace EDDiscovery.UserControls
 {
     public class UserControlCommonBase : UserControl
-    {       
+    {
         public const int DisplayNumberPrimaryTab = 0;               // tabs are 0, or 100+.  0 for the first, 100+ for repeats
         public const int DisplayNumberPopOuts = 1;                  // pop outs are 1-99.. of each specific type.
         public const int DisplayNumberStartExtraTabs = 100;         // extra tabs are assigned here
@@ -33,13 +33,13 @@ namespace EDDiscovery.UserControls
         { return 1050 + displaynumber * 100 + numopenedinside; }
 
         protected int DisplayNumberOfGrid(int numopenedinside)      // grid children are assigned this range..  allow range for splitters.
-        { return 1050 + (DisplayNumberStartExtraTabsMax+1) * 100 + displaynumber * 100 + numopenedinside; }
+        { return 1050 + (DisplayNumberStartExtraTabsMax + 1) * 100 + displaynumber * 100 + numopenedinside; }
 
         static public string DBName(int dno, string basename, string itemname = "")
-        { return EDDProfiles.Instance.UserControlsPrefix + basename + ((dno> 0) ? dno.ToString() : "") + itemname; }
+        { return EDDProfiles.Instance.UserControlsPrefix + basename + ((dno > 0) ? dno.ToString() : "") + itemname; }
 
         protected string DBName(string basename, string itemname = "")
-        { return DBName(displaynumber, basename, itemname);}
+        { return DBName(displaynumber, basename, itemname); }
 
         // Common parameters of a UCCB
 
@@ -65,13 +65,15 @@ namespace EDDiscovery.UserControls
         public virtual void SetCursor(IHistoryCursor cur) { uctg = cur; }       // cursor is set..  Most UCs don't need to implement this.
         public virtual void LoadLayout() { }        // then a chance to load a layout. cursor available
         public virtual void InitialDisplay() { }    // do the initial display
-        public virtual void Closing() { }           // DO NOT USE DIRECTLY - USE CLOSEDOWN()
+        public virtual void Closing() { }           // Panel is closing, save stuff. Note to users- DO NOT USE DIRECTLY - USE CLOSEDOWN()
 
         // end calling order.
 
         public virtual void ChangeCursorType(IHistoryCursor thc) { }     // implement if you call the uctg
 
         public virtual bool SupportTransparency { get { return false; } }  // override to say support transparency
+
+        public virtual bool AllowClose() { return true; }   
 
         // Close
 
@@ -95,29 +97,29 @@ namespace EDDiscovery.UserControls
         }
 
 
-        public bool IsFloatingWindow { get { return this.FindForm() is Forms.UserControlForm; } }   // ultimately its a floating window
+        public bool IsFloatingWindow { get { return this.FindForm() is UserControlForm; } }   // ultimately its a floating window
 
         public void SetControlText(string s)            // used to set heading text in either the form of the tabstrip
         {
             if (this.Parent is ExtendedControls.TabStrip)
                 ((ExtendedControls.TabStrip)(this.Parent)).SetControlText(s);
-            else if (this.Parent is Forms.UserControlForm)
-                ((Forms.UserControlForm)(this.Parent)).SetControlText(s);
+            else if (this.Parent is UserControlForm)
+                ((UserControlForm)(this.Parent)).SetControlText(s);
             else if (this.Parent is UserControlContainerResizable)
                 ((UserControlContainerResizable)(this.Parent)).SetControlText(s);
         }
 
         public bool IsControlTextVisible()
         {
-            if (this.Parent is Forms.UserControlForm)
-                return ((Forms.UserControlForm)(this.Parent)).IsControlTextVisible();
+            if (this.Parent is UserControlForm)
+                return ((UserControlForm)(this.Parent)).IsControlTextVisible();
             else
                 return true;    // else presume true
         }
 
         public bool HasControlTextArea()
         {
-            return (this.Parent is ExtendedControls.TabStrip) || (this.Parent is Forms.UserControlForm) || (this.Parent is UserControlContainerResizable);
+            return (this.Parent is ExtendedControls.TabStrip) || (this.Parent is UserControlForm) || (this.Parent is UserControlContainerResizable);
         }
 
         public virtual void onControlTextVisibilityChanged(bool newvalue)       // override to know
@@ -141,8 +143,8 @@ namespace EDDiscovery.UserControls
         {
             get
             {
-                if (this.Parent is Forms.UserControlForm)
-                    return ((Forms.UserControlForm)(this.Parent)).IsTransparent;
+                if (this.Parent is UserControlForm)
+                    return ((UserControlForm)(this.Parent)).IsTransparent;
                 else
                     return false;
             }
@@ -154,40 +156,40 @@ namespace EDDiscovery.UserControls
 
         public void RequestTemporaryMinimumSize(Size w)         // w is UC area
         { 
-            if (this.Parent is Forms.UserControlForm)
+            if (this.Parent is UserControlForm)
             {
                 ResizingNow = true;
-                ((Forms.UserControlForm)(this.Parent)).RequestTemporaryMinimiumSize(w);
+                ((UserControlForm)(this.Parent)).RequestTemporaryMinimiumSize(w);
                 ResizingNow = false;
             }
         }
 
         public void RequestTemporaryResizeExpand(Size w)        // by this area expand
         {
-            if (this.Parent is Forms.UserControlForm)
+            if (this.Parent is UserControlForm)
             {
                 ResizingNow = true;
-                ((Forms.UserControlForm)(this.Parent)).RequestTemporaryResizeExpand(w);
+                ((UserControlForm)(this.Parent)).RequestTemporaryResizeExpand(w);
                 ResizingNow = false;
             }
         }
 
         public void RequestTemporaryResize(Size w)              // w is the UC area
         {
-            if (this.Parent is Forms.UserControlForm)
+            if (this.Parent is UserControlForm)
             {
                 ResizingNow = true;
-                ((Forms.UserControlForm)(this.Parent)).RequestTemporaryResize(w);
+                ((UserControlForm)(this.Parent)).RequestTemporaryResize(w);
                 ResizingNow = false;
             }
         }
 
         public void RevertToNormalSize()                        // and to revert
         {
-            if (this.Parent is Forms.UserControlForm)
+            if (this.Parent is UserControlForm)
             {
                 ResizingNow = true;
-                ((Forms.UserControlForm)(this.Parent)).RevertToNormalSize();
+                ((UserControlForm)(this.Parent)).RevertToNormalSize();
                 ResizingNow = false;
             }
         }
@@ -195,7 +197,7 @@ namespace EDDiscovery.UserControls
         public bool IsInTemporaryResize                         // have we grown?
         { get
             {
-                return (this.Parent is Forms.UserControlForm) ? ((Forms.UserControlForm)(this.Parent)).IsTemporaryResized : false;
+                return (this.Parent is UserControlForm) ? ((UserControlForm)(this.Parent)).IsTemporaryResized : false;
             }
         }
 

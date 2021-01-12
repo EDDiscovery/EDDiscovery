@@ -118,6 +118,17 @@ namespace EDDiscovery
             //foreach (TabPage tp in tabControlMain.TabPages) System.Diagnostics.Debug.WriteLine("TP Size " + tp.Controls[0].DisplayRectangle);
         }
 
+        public bool AllowClose()                 // tabs are closing, does all tabs allow close
+        {
+            foreach (TabPage p in TabPages)      
+            {
+                UserControls.UserControlCommonBase uccb = p.Controls[0] as UserControls.UserControlCommonBase;
+                if (uccb.AllowClose() == false)
+                    return false;
+            }
+            return true;
+        }
+
         public void CloseTabList()
         {
             List<int> idlist = new List<int>();
@@ -128,7 +139,7 @@ namespace EDDiscovery
 
             UserControls.UserControlContainerSplitter primary = PrimaryTab;
 
-            foreach (TabPage p in TabPages)      // all main tabs, load/display
+            foreach (TabPage p in TabPages)      // all main tabs, close down
             {
                 UserControls.UserControlCommonBase uccb = p.Controls[0] as UserControls.UserControlCommonBase;
                 uccb.CloseDown();
@@ -190,8 +201,12 @@ namespace EDDiscovery
             {
                 TabPage page = TabPages[tabIndex];
                 UserControls.UserControlCommonBase uccb = page.Controls[0] as UserControls.UserControlCommonBase;
-                uccb.CloseDown();
-                page.Dispose();
+
+                if (uccb.AllowClose())              // it must allow a close to remove it
+                {
+                    uccb.CloseDown();
+                    page.Dispose();
+                }
             }
         }
 

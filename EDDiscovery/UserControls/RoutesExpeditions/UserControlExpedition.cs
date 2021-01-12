@@ -87,6 +87,25 @@ namespace EDDiscovery.UserControls
                 (uctg as IHistoryCursorNewStarList).OnNewStarList += OnNewStars;
         }
 
+        public override bool AllowClose()
+        {
+            var rt = new SavedRouteClass();
+            SaveGridIntoRoute(rt);
+
+            if (rt.Equals(currentroute))   // No changes have been made.
+                return true;
+
+            var result = ExtendedControls.MessageBoxTheme.Show(FindForm(), ("There are unsaved changes to the current route." + Environment.NewLine
+                + "Would you like to save the current route before proceeding?").T(EDTx.UserControlExpedition_Unsaved), "Warning".T(EDTx.Warning), MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
+
+            if (result == DialogResult.Yes)
+            {
+                return SaveCurrentRoute();      // only allow close if route ok
+            }
+
+            return true;
+        }
+
         public override void Closing()
         {
             DGVSaveColumnLayout(dataGridView, DbColumnSave);
@@ -955,7 +974,7 @@ namespace EDDiscovery.UserControls
             else
             {
 
-             //   here get scanner to complain
+                //   here get scanner to complain
 
                 var result = ExtendedControls.MessageBoxTheme.Show(FindForm(), ("There are unsaved changes to the current route." + Environment.NewLine
                     + "Would you like to save the current route before proceeding?").T(EDTx.UserControlExpedition_Unsaved), "Warning".T(EDTx.Warning), MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);

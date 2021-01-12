@@ -21,6 +21,7 @@ Information: "Information" @
 NoPos: "No Pos" @
 HideColumn: "Hide Column" @
 UnhideallColumns: "Unhide all Columns" @
+LoseAllChanges: "Confirm you want to lose all changes" @
 
 SECTION StartUp
 .DUPLOAD:"EDDiscovery is already running. Launch anyway?" => "Whoo there, Bessie. Your sure?"

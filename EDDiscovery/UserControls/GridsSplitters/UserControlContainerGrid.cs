@@ -130,6 +130,17 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        public override bool AllowClose()       // grid is closing, does the consistuent panels allow close?
+        {
+            foreach (UserControlContainerResizable r in uccrlist)   // save in uccr list
+            {
+                UserControlCommonBase uc = (UserControlCommonBase)r.control;
+                if (uc.AllowClose() == false)
+                    return false;
+            }
+            return true;
+        }
+
         public override void Closing()
         {
             //System.Diagnostics.Debug.WriteLine("Grid Saving to " + DbWindows);
@@ -221,17 +232,24 @@ namespace EDDiscovery.UserControls
             uccr.Size = size;
         }
 
-        public void ClosePanel(UserControlContainerResizable uccr)
+        public bool ClosePanel(UserControlContainerResizable uccr)
         {
             UserControlCommonBase uc = (UserControlCommonBase)uccr.control;
-            uc.CloseDown();
-            panelPlayfield.Controls.Remove(uccr);
-            uccrlist.Remove(uccr);
-            Invalidate();
-            uc.Dispose();
-            uccr.Dispose();
-            UpdateButtons();
-            AssignTHC();
+
+            if (uc.AllowClose())
+            {
+                uc.CloseDown();
+                panelPlayfield.Controls.Remove(uccr);
+                uccrlist.Remove(uccr);
+                Invalidate();
+                uc.Dispose();
+                uccr.Dispose();
+                UpdateButtons();
+                AssignTHC();
+                return true;
+            }
+            else
+                return false;
         }
 
         #endregion

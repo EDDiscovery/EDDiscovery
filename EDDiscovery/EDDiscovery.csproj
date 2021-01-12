@@ -476,10 +476,10 @@
     <Compile Include="Forms\RecordStep.Designer.cs">
       <DependentUpon>RecordStep.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\UserControlForm.cs">
+    <Compile Include="UserControls\Form\UserControlForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\UserControlForm.Designer.cs">
+    <Compile Include="UserControls\Form\UserControlForm.Designer.cs">
       <DependentUpon>UserControlForm.cs</DependentUpon>
     </Compile>
     <Compile Include="EDDConfig.cs" />
@@ -736,7 +736,7 @@
     <EmbeddedResource Include="Forms\SetNoteForm.resx">
       <DependentUpon>SetNoteForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\UserControlForm.resx">
+    <EmbeddedResource Include="UserControls\Form\UserControlForm.resx">
       <DependentUpon>UserControlForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\CurrentState\UserControlFactions.resx">
