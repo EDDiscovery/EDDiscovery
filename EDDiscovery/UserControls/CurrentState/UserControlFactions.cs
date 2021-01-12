@@ -347,23 +347,26 @@ namespace EDDiscovery.UserControls
                 }
             }
 
-            Stats mcs = null;
+            Dictionary<string,Stats.FactionInfo> factioninfo = null;
 
             if (startDateTime.Checked || endDateTime.Checked)                           // if we have a date range, can't rely on stats accumulated automatically
             {
+                Stats stats = new Stats();      // reprocess this list completely
+
                 foreach (var he in HistoryList.FilterByDateRange(discoveryform.history.EntryOrder(), startdateutc, enddateutc))
                 {
-                    mcs = Stats.Process(he.journalEntry, mcs, he.StationFaction);
+                    Stats.Process(he.journalEntry, stats, he.StationFaction);
                 }
+                factioninfo = stats.GetAtGeneration(uint.MaxValue); // pick the last generation in there.
             }
             else
             {
-                mcs = last_he?.Stats;
+                factioninfo = discoveryform.history.GetStatsAtGeneration(last_he?.Statistics ?? 0);
             }
 
-            if (mcs != null)
+            if (factioninfo != null)
             {
-                foreach (var fkvp in mcs.FactionInformation)
+                foreach (var fkvp in factioninfo)
                 {
                     if (!factionslist.TryGetValue(fkvp.Value.Faction, out FactionStatistics factionStats))
                     {
