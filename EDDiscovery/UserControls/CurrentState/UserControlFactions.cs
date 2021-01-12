@@ -357,7 +357,8 @@ namespace EDDiscovery.UserControls
                 {
                     Stats.Process(he.journalEntry, stats, he.StationFaction);
                 }
-                factioninfo = stats.GetAtGeneration(uint.MaxValue); // pick the last generation in there.
+
+                factioninfo = stats.GetLastEntries(); // pick the last generation in there.
             }
             else
             {
