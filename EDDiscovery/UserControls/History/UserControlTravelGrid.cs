@@ -745,65 +745,79 @@ namespace EDDiscovery.UserControls
         {
             if (dataGridViewTravel.LeftClickRowValid)                                                   // Click expands it..
             {
-                leftclickhe.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
-                DataGridViewRow row = dataGridViewTravel.Rows[dataGridViewTravel.LeftClickRow];
-
-                bool expanded = row.Cells[Columns.Information].Tag != null;
-
-                if (expanded) // put it back to original text
+                if (e.ColumnIndex == ColumnNote.Index)
                 {
-                    row.Cells[Columns.Information].Value = EventDescription;
-                    for (int i = 0; i < row.Cells.Count; i++)
-                        row.Cells[i].Style.WrapMode = DataGridViewTriState.NotSet;
-                    row.Cells[Columns.Information].Tag = null;
+                    using (Forms.SetNoteForm noteform = new Forms.SetNoteForm(leftclickhe, discoveryform))
+                    {
+                        if (noteform.ShowDialog(FindForm()) == DialogResult.OK)
+                        {
+                            leftclickhe.SetJournalSystemNoteText(noteform.NoteText, true, EDCommander.Current.SyncToEdsm);
+                            discoveryform.NoteChanged(this, leftclickhe, true);
+                        }
+                    }
                 }
                 else
                 {
-                    string infodetailed = EventDescription.AppendPrePad(EventDetailedInfo, Environment.NewLine);        // make up detailed line
-                    if (leftclickhe.journalEntry is EliteDangerousCore.JournalEvents.JournalLocOrJump)
-                    {
-                        string travelinfo = leftclickhe.TravelInfo();
-                        if (travelinfo != null)
-                            infodetailed = travelinfo + Environment.NewLine + infodetailed;
-                    }
+                    leftclickhe.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
+                    DataGridViewRow row = dataGridViewTravel.Rows[dataGridViewTravel.LeftClickRow];
 
-                    using (Graphics g = Parent.CreateGraphics())
+                    bool expanded = row.Cells[Columns.Information].Tag != null;
+
+                    if (expanded) // put it back to original text
                     {
-                        int maxh = 0;
+                        row.Cells[Columns.Information].Value = EventDescription;
                         for (int i = 0; i < row.Cells.Count; i++)
-                        {
-                            if (row.Cells[i].Value is string)
-                            {
-                                string s = i == Columns.Information ? infodetailed : (string)row.Cells[i].Value;
-                                int h = (int)(g.MeasureString(s, dataGridViewTravel.Font, dataGridViewTravel.Columns[i].Width - 4).Height + 2);
-                                maxh = Math.Max(maxh, h);
-                            }
-                        }
-
-                        if (maxh > dataGridViewTravel.Height * 3 / 4) // unreasonable amount of space to show it.
-                        {
-                            ExtendedControls.InfoForm info = new ExtendedControls.InfoForm();
-                            info.Info(EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(leftclickhe.EventTimeUTC) + ": " + leftclickhe.EventSummary,
-                                FindForm().Icon, infodetailed);
-                            info.Size = new Size(1200, 800);
-                            info.Show(FindForm());
-                        }
-                        else
-                        {
-                            row.Cells[Columns.Information].Value = infodetailed;
-
-                            if (!extCheckBoxWordWrap.Checked)
-                            {
-                                for (int i = 0; i < row.Cells.Count; i++)
-                                    row.Cells[i].Style.WrapMode = DataGridViewTriState.True;
-                            }
-                        }
-
-                        row.Cells[Columns.Information].Tag = true;      // mark expanded
+                            row.Cells[i].Style.WrapMode = DataGridViewTriState.NotSet;
+                        row.Cells[Columns.Information].Tag = null;
                     }
-                }
+                    else
+                    {
+                        string infodetailed = EventDescription.AppendPrePad(EventDetailedInfo, Environment.NewLine);        // make up detailed line
+                        if (leftclickhe.journalEntry is EliteDangerousCore.JournalEvents.JournalLocOrJump)
+                        {
+                            string travelinfo = leftclickhe.TravelInfo();
+                            if (travelinfo != null)
+                                infodetailed = travelinfo + Environment.NewLine + infodetailed;
+                        }
 
-                dataViewScrollerPanel.UpdateScroll();
+                        using (Graphics g = Parent.CreateGraphics())
+                        {
+                            int maxh = 0;
+                            for (int i = 0; i < row.Cells.Count; i++)
+                            {
+                                if (row.Cells[i].Value is string)
+                                {
+                                    string s = i == Columns.Information ? infodetailed : (string)row.Cells[i].Value;
+                                    int h = (int)(g.MeasureString(s, dataGridViewTravel.Font, dataGridViewTravel.Columns[i].Width - 4).Height + 2);
+                                    maxh = Math.Max(maxh, h);
+                                }
+                            }
+
+                            if (maxh > dataGridViewTravel.Height * 3 / 4) // unreasonable amount of space to show it.
+                            {
+                                ExtendedControls.InfoForm info = new ExtendedControls.InfoForm();
+                                info.Info(EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(leftclickhe.EventTimeUTC) + ": " + leftclickhe.EventSummary,
+                                    FindForm().Icon, infodetailed);
+                                info.Size = new Size(1200, 800);
+                                info.Show(FindForm());
+                            }
+                            else
+                            {
+                                row.Cells[Columns.Information].Value = infodetailed;
+
+                                if (!extCheckBoxWordWrap.Checked)
+                                {
+                                    for (int i = 0; i < row.Cells.Count; i++)
+                                        row.Cells[i].Style.WrapMode = DataGridViewTriState.True;
+                                }
+                            }
+
+                            row.Cells[Columns.Information].Tag = true;      // mark expanded
+                        }
+                    }
+
+                    dataViewScrollerPanel.UpdateScroll();
+                }
             }
         }
 
@@ -1133,9 +1147,9 @@ namespace EDDiscovery.UserControls
             {
                 if (noteform.ShowDialog(FindForm()) == DialogResult.OK)
                 {
-                    rightclickhe.SetJournalSystemNoteText(noteform.NoteText, true , EDCommander.Current.SyncToEdsm);
+                    rightclickhe.SetJournalSystemNoteText(noteform.NoteText, true, EDCommander.Current.SyncToEdsm);
 
-                    discoveryform.NoteChanged(this,rightclickhe, true);
+                    discoveryform.NoteChanged(this, rightclickhe, true);
                 }
             }
         }
