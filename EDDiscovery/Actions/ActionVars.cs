@@ -14,6 +14,7 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using System;
+using System.Collections.Generic;
 using BaseUtils;
 using EliteDangerousCore;
 
@@ -179,12 +180,12 @@ namespace EDDiscovery.Actions
         }
 
 
-        static public void MissionInformation(ActionLanguage.ActionProgramRun vars, MissionList ml, string prefix)
+        static public void MissionInformation(ActionLanguage.ActionProgramRun vars, List<MissionState> ml, string prefix)
         {
-            vars[prefix + "_MissionCount"] = ml.Missions.Count.ToStringInvariant();
+            vars[prefix + "_MissionCount"] = ml.Count.ToStringInvariant();
 
             int i = 0;
-            foreach (MissionState ms in ml.Missions.Values)
+            foreach (MissionState ms in ml)
             {
                 string mp = prefix + "Mission[" + i.ToStringInvariant() +"]_";
 

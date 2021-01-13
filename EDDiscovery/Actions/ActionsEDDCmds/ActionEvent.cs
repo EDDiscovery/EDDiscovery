@@ -214,7 +214,7 @@ namespace EDDiscovery.Actions
                         }
                         else if (cmdname.Equals("missions"))
                         {
-                            ActionVars.MissionInformation(ap, he.MissionList, prefix);
+                            ActionVars.MissionInformation(ap, hl.MissionListAccumulator.GetMissionList(he.MissionList), prefix);
                         }
                         else if (cmdname.Equals("setstartmarker"))
                         {

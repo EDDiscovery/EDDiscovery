@@ -13,11 +13,9 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using EDDiscovery.Controls;
 using EliteDangerousCore;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -118,7 +116,10 @@ namespace EDDiscovery.UserControls
             {
                 last_he = he;
                 Display();
-                NextExpiry = he?.MissionList?.GetAllCurrentMissions(he.EventTimeUTC).OrderBy(e => e.MissionEndTime).FirstOrDefault()?.MissionEndTime ?? DateTime.MaxValue;
+
+                // he can be null
+                var ml = hl.MissionListAccumulator.GetAllCurrentMissions(he?.MissionList ?? uint.MaxValue, he?.EventTimeUTC ?? DateTime.MaxValue);    // will always return an array
+                NextExpiry = ml.OrderBy(e => e.MissionEndTime).FirstOrDefault()?.MissionEndTime ?? DateTime.MaxValue;
             }
         }
 
@@ -131,12 +132,15 @@ namespace EDDiscovery.UserControls
         {
             last_he = he;
             Display();
-            NextExpiry = he?.MissionList?.GetAllCurrentMissions(he.EventTimeUTC).OrderBy(e => e.MissionEndTime).FirstOrDefault()?.MissionEndTime ?? DateTime.MaxValue;
+
+            // he can be null
+            var ml = hl.MissionListAccumulator.GetAllCurrentMissions(he?.MissionList ?? uint.MaxValue, he?.EventTimeUTC ?? DateTime.MaxValue);    // will always return an array
+            NextExpiry = ml.OrderBy(e => e.MissionEndTime).FirstOrDefault()?.MissionEndTime ?? DateTime.MaxValue;
         }
 
         private void Display()
         {
-            MissionList ml = last_he?.MissionList;
+            List<MissionState> ml = last_he != null ? discoveryform.history.MissionListAccumulator.GetMissionList(last_he.MissionList) : null;
 
             missionListCurrent.Clear();
             missionListPrevious.Clear();
@@ -145,7 +149,7 @@ namespace EDDiscovery.UserControls
             {
                 DateTime hetime = last_he.EventTimeUTC;
 
-                List<MissionState> mcurrent = ml.GetAllCurrentMissions(hetime);
+                List<MissionState> mcurrent = MissionListAccumulator.GetAllCurrentMissions(ml,hetime);
 
                 foreach (MissionState ms in mcurrent)
                 {
@@ -154,7 +158,7 @@ namespace EDDiscovery.UserControls
 
                 missionListCurrent.Finish();
 
-                List<MissionState> mprev = ml.GetAllExpiredMissions(hetime);
+                List<MissionState> mprev = MissionListAccumulator.GetAllExpiredMissions(ml,hetime);
 
                 var previousRows = new List<DataGridViewRow>(mprev.Count);
 

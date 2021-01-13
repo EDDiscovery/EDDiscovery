@@ -244,8 +244,8 @@ SECTION UserControlExploration
 .toolStripButtonNew: "New" @
 .toolStripButtonLoad: "Load" @
 .toolStripButtonSave: "Save" @
-.tsbAddSystems: "Add Systems" @
-.toolStripButtonImportFile: "Import Text File" @
+.toolStripButtonAddSystems: "Add Systems" @
+.toolStripButtonImportTextFile: "Import Text File" @
 .toolStripButtonExport: "Export" @
 .toolStripButtonClear: "Clear List" @
 .copyToolStripMenuItem: "Copy" @

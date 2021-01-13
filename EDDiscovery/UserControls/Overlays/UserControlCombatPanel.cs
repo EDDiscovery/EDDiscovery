@@ -102,7 +102,7 @@ namespace EDDiscovery.UserControls
                     Name += ":" + m.Mission.Target;
                 starttime = m.Mission.EventTimeUTC;
                 endtime = m.Mission.Expiry;                 // NOTE expiry time of mission, not used however to gate below, we use Mission
-                MissionKey = MissionList.Key(m.Mission);
+                MissionKey = MissionListAccumulator.Key(m.Mission);
                 TargetFaction = m.Mission.TargetFaction;
             }
 
@@ -279,9 +279,14 @@ namespace EDDiscovery.UserControls
                     hel = HistoryList.FilterByDateRangeLatestFirst(discoveryform.history.EntryOrder(), DateTime.UtcNow.Date, DateTime.UtcNow);
                 else if (current.Type == FilterEntry.EntryType.Mission)
                 {
-                    // look up the mission in the current data
-                    MissionState ml = current.MissionKey != null && discoveryform.history.GetLast.MissionList.Missions.ContainsKey(current.MissionKey) ? discoveryform.history.GetLast.MissionList.Missions[current.MissionKey] : null;
-                    hel = ml != null ? HistoryList.FilterByDateRangeLatestFirst(discoveryform.history.EntryOrder(), current.StartTimeUTC, ml.MissionEndTime) : new List<HistoryEntry>();
+                    hel = new List<HistoryEntry>();     // default empty
+                    if (current.MissionKey != null)
+                    {
+                        // look up the mission in the current data
+                        MissionState ms = discoveryform.history.MissionListAccumulator.GetMission(current.MissionKey);
+                        if ( ms != null )
+                            hel = HistoryList.FilterByDateRangeLatestFirst(discoveryform.history.EntryOrder(), current.StartTimeUTC, ms.MissionEndTime);
+                    }
                 }
                 else
                     hel = HistoryList.FilterByDateRangeLatestFirst(discoveryform.history.EntryOrder(), current.StartTimeUTC, current.EndTimeUTC);
@@ -313,8 +318,8 @@ namespace EDDiscovery.UserControls
                     tryadd = he.EventTimeUTC <= current.EndTimeUTC;
                 else if (current.Type == FilterEntry.EntryType.Mission) // mission is limited, lookup mission and check end time
                 {
-                    MissionState ml = current.MissionKey != null && he.MissionList.Missions.ContainsKey(current.MissionKey) ? he.MissionList.Missions[current.MissionKey] : null;
-                    tryadd = ml != null ? (he.EventTimeUTC <= ml.MissionEndTime) : false;
+                    MissionState ms = hel.MissionListAccumulator.GetMission(current.MissionKey ?? "-");
+                    tryadd = ms != null ? (he.EventTimeUTC <= ms.MissionEndTime) : false;
                 }
 
                 if (tryadd)
@@ -378,7 +383,7 @@ namespace EDDiscovery.UserControls
         {
             rewardcol = "";
 
-            MissionState ml = current.MissionKey != null && he.MissionList.Missions.ContainsKey(current.MissionKey) ? he.MissionList.Missions[current.MissionKey] : null;
+            MissionState ml = current.MissionKey != null ? discoveryform.history.MissionListAccumulator.GetMission(current.MissionKey) : null;
 
             if ( ml != null &&
                  ((he.EntryType == JournalTypeEnum.MissionAccepted && (he.journalEntry as EliteDangerousCore.JournalEvents.JournalMissionAccepted).MissionId == ml.Mission.MissionId)
@@ -512,11 +517,12 @@ namespace EDDiscovery.UserControls
 
             displayedfilterentries.AddRange(savedfilterentries);
 
-            var missionlist = discoveryform.history.GetLast?.MissionList.GetAllCombatMissionsLatestFirst();
+            var missions = discoveryform.history.MissionListAccumulator.GetAllMissions();
+            var combatmissions = MissionListAccumulator.GetAllCombatMissionsLatestFirst(missions);
 
-            if (missionlist != null )
+            if (combatmissions != null )
             {
-                foreach (var s in missionlist)
+                foreach (var s in combatmissions)
                 {
                     FilterEntry f = new FilterEntry(s);
                     displayedfilterentries.Add(f);

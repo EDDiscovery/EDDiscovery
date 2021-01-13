@@ -69,11 +69,14 @@ namespace EDDiscovery.Actions
 
                         if ( jid.HasValue )
                         {
-                            HistoryEntry h = (ap.ActionController as ActionController).DiscoveryForm.history.GetByJID(jid.Value);
+                            var ac = (ap.ActionController as ActionController);
+                            HistoryList hl = ac.DiscoveryForm.history;
+                            HistoryEntry h = ac.DiscoveryForm.history.GetByJID(jid.Value);
 
                             if ( h != null)
                             {
-                                Tuple<bool,bool> ret = (ap.ActionController as ActionController).DiscoveryForm.DLLManager.ActionJournalEntry(exp[0], EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(h));
+                                Tuple<bool,bool> ret = (ap.ActionController as ActionController).DiscoveryForm.DLLManager.
+                                        ActionJournalEntry(exp[0], EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(hl,h));
                                 if ( ret.Item1 == false )
                                     ap.ReportError("DLLCall cannot find DLL '" + exp[0] + "'");
                                 else if ( ret.Item2 == false )

@@ -595,7 +595,7 @@ namespace EDDiscovery
         public bool DLLRequestHistory(long index, bool isjid, out EDDDLLInterfaces.EDDDLLIF.JournalEntry f)
         {
             HistoryEntry he = isjid ? history.GetByJID(index) : history.GetByIndex((int)index);
-            f = EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(he);
+            f = EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(history,he);
             return he != null;
         }
 
@@ -777,11 +777,11 @@ namespace EDDiscovery
                     for (int i = lastfileh.Indexno - 1; i < history.Count; i++)      // play thru last history entries up to last file position for the DLLs, indicating stored
                     {
                         //System.Diagnostics.Debug.WriteLine("{0} : {1} {2}", i, history.EntryOrder[i].EventTimeUTC, history.EntryOrder[i].EventSummary);
-                        DLLManager.NewJournalEntry(EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(history[i], true), true);
+                        DLLManager.NewJournalEntry(EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(history, history[i]), true);
                     }
                 }
 
-                DLLManager.Refresh(EDCommander.Current.Name, EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(history.GetLast));
+                DLLManager.Refresh(EDCommander.Current.Name, EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(history, history.GetLast));
             }
 
             Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Refresh complete finished");
@@ -846,7 +846,7 @@ namespace EDDiscovery
                 EDDNSync.SendEDDNEvents(LogLine, he);
             }
 
-            DLLManager.NewJournalEntry(EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(he),false);
+            DLLManager.NewJournalEntry(EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(history, he), false);
 
             screenshotconverter.NewJournalEntry(he.journalEntry);       // tell the screenshotter.
 

@@ -293,7 +293,7 @@ namespace EDDiscovery.UserControls
 
                 extTextBoxStationFaction.Text = he.StationFaction ?? "";
 
-                List<MissionState> mcurrent = (from MissionState ms in he.MissionList.Missions.Values where ms.InProgressDateTime(last_he.EventTimeUTC) orderby ms.Mission.EventTimeUTC descending select ms).ToList();
+                List<MissionState> mcurrent = (from MissionState ms in hl.MissionListAccumulator.GetMissionList(he.MissionList) where ms.InProgressDateTime(last_he.EventTimeUTC) orderby ms.Mission.EventTimeUTC descending select ms).ToList();
 
                 if (mcurrent == null || mcurrent.Count == 0)
                     richTextBoxScrollMissions.Text = "No Missions".T(EDTx.UserControlSysInfo_NoMissions);

@@ -829,6 +829,7 @@ namespace EDDiscovery
         UserControlMaterialTrader_Receive, // Receive
 
         UserControlFactions_CapShipVictims, // Capital ship Victims: 
+        UserControlFactions_MissionsInProgress, // 
         UserControlFactions_CapShipAward, //  Capital ship Award: 
         UserControlFactions_FactionsPlural, // Factions
         UserControlFactions_MissionsFor, // Missions for
