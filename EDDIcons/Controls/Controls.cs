@@ -164,6 +164,8 @@ namespace EDDiscovery.Icons
         public static Image Scan_Bodies_Volcanism { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.Bodies.Volcanism"); } }
         public static Image Scan_Bodies_Signals { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.Bodies.Signals"); } }
         public static Image Scan_Bodies_Mapped { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.Bodies.Mapped"); } }
+        public static Image Scan_Bodies_MappedByOthers { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.Bodies.MappedByOthers"); } }
+        public static Image Scan_Bodies_DiscoveredByOthers { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.Bodies.DiscoveredByOthers"); } }
         public static Image Scan_Bodies_RingOnly { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.Bodies.RingOnly"); } }
         public static Image Scan_Bodies_RingGap { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.Bodies.RingGap"); } }
         public static Image Scan_Bodies_MaterialMore { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.Bodies.MaterialMore"); } }

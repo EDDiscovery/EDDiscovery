@@ -727,7 +727,7 @@ namespace EDDiscovery
 
 #endregion
 
-#region EDSM syncs code
+        #region EDSM syncs code
 
         private void edsmRefreshTimer_Tick(object sender, EventArgs e)
         {
@@ -741,9 +741,9 @@ namespace EDDiscovery
             Controller.AsyncPerformSync(true, true);
         }
 
-#endregion
+        #endregion
 
-#region Controller event handlers 
+        #region Controller event handlers 
 
         private void Controller_RefreshCommanders()
         {
@@ -993,7 +993,7 @@ namespace EDDiscovery
      
 #endregion
 
-#region Buttons, Mouse, Menus, NotifyIcon
+        #region Buttons, Mouse, Menus
 
         private void buttonReloadActions_Click(object sender, EventArgs e)
         {
@@ -1201,53 +1201,6 @@ namespace EDDiscovery
             }
         }
 
-        private void exportVistedStarsListToEliteDangerousToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            string exportfilename = null;
-            bool found = false;
-            string folder = EliteDangerousCore.VisitingStarsCacheFolder.GetVisitedStarsCacheDirectory();
-
-            if (folder != null)
-            {
-                exportfilename = Path.Combine(folder, "ImportStars.txt");
-                found = true;
-            }
-            else
-            {
-                SaveFileDialog dlg = new SaveFileDialog();
-
-                dlg.Filter = "ImportedStars export| *.txt";
-                dlg.Title = "Could not find VisitedStarsCache.dat file, choose file".T(EDTx.EDDiscoveryForm_VSLNF);
-                dlg.FileName = "ImportStars.txt";
-
-                if (dlg.ShowDialog(this) != DialogResult.OK)
-                    return;
-                exportfilename = dlg.FileName;
-            }
-
-            List<JournalEntry> scans = JournalEntry.GetByEventType(JournalTypeEnum.FSDJump, EDCommander.CurrentCmdrID, new DateTime(2014, 1, 1), DateTime.UtcNow);
-
-            var tscans = scans.ConvertAll<JournalFSDJump>(x => (JournalFSDJump)x);
-
-            try
-            {
-                using (StreamWriter writer = new StreamWriter(exportfilename, false))
-                {
-                    foreach (var system in tscans.Select(o => o.StarSystem).Distinct())
-                    {
-                        writer.WriteLine(system);
-                    }
-                }
-
-                ExtendedControls.MessageBoxTheme.Show(this, string.Format(("File {0} created." + Environment.NewLine + "{1}").T(EDTx.EDDiscoveryForm_VSLEXP),
-                    exportfilename, (found ? "Restart Elite Dangerous to have this file read into the galaxy map".T(EDTx.EDDiscoveryForm_VSLRestart) : "" )), "Warning".T(EDTx.Warning));
-            }
-            catch (IOException)
-            {
-                ExtendedControls.MessageBoxTheme.Show(this, string.Format("Error writing {0} export visited stars".T(EDTx.EDDiscoveryForm_VSLFileErr), exportfilename), "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
         public void Open3DMap(HistoryEntry he)
         {
             this.Cursor = Cursors.WaitCursor;
@@ -1327,6 +1280,9 @@ namespace EDDiscovery
             }
         }
 
+        #endregion
+
+        #region Notify
 
         private void notifyIcon1_DoubleClick(object sender, EventArgs e)
         {
@@ -1371,7 +1327,7 @@ namespace EDDiscovery
 
 #endregion
 
-#region "Caption" controls
+        #region "Caption" controls
 
         private void MouseDownCAPTION(object sender, MouseEventArgs e)
         {
@@ -1409,9 +1365,9 @@ namespace EDDiscovery
                 this.WindowState = FormWindowState.Minimized;
         }
 
-#endregion
+        #endregion
 
-#region Updators
+        #region Updators
 
         public void NewTargetSet(Object sender)
         {
@@ -1555,7 +1511,7 @@ namespace EDDiscovery
 
 #endregion
 
-#region Toolbar
+        #region Toolbar
 
         public void LoadCommandersListBox()
         {

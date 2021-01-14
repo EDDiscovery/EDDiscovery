@@ -134,9 +134,12 @@ namespace EDDiscovery.UserControls
                     nodelabels[1] = nodelabels[1].AppendPrePad(appendlabeltext, Environment.NewLine);
 
  //  nodelabels[1] = nodelabels[1].AppendPrePad("" + sn.ScanData?.BodyID, Environment.NewLine);
-
+ 
                     bool valuable = sc.EstimatedValue >= ValueLimit;
-                    int iconoverlays = ShowOverlays ? ((sc.Terraformable ? 1 : 0) + (sc.HasMeaningfulVolcanism ? 1 : 0) + (valuable ? 1 : 0) + (sc.Mapped ? 1 : 0) + (sn.Signals != null ? 1 : 0)) : 0;
+                    bool isdiscovered = sc.IsPreviouslyDiscovered && sc.IsPlanet;
+                    int iconoverlays = ShowOverlays ? ((sc.Terraformable ? 1 : 0) + (sc.HasMeaningfulVolcanism ? 1 : 0) + 
+                                        (valuable ? 1 : 0) + (sc.Mapped ? 1 : 0) + (isdiscovered ? 1 : 0) + (sc.IsPreviouslyMapped ? 1 : 0) +
+                                        (sn.Signals != null ? 1 : 0)) : 0;
 
                     //   if (sc.BodyName.Contains("4 b"))  iconoverlays = 0;
 
@@ -207,6 +210,18 @@ namespace EDDiscovery.UserControls
                             if (sc.Mapped)
                             {
                                 g.DrawImage(Icons.Controls.Scan_Bodies_Mapped, new Rectangle(0, pos, ovsize, ovsize));
+                                pos += ovsize + 1;
+                            }
+
+                            if (sc.IsPreviouslyMapped)
+                            {
+                                g.DrawImage(Icons.Controls.Scan_Bodies_MappedByOthers, new Rectangle(0, pos, ovsize, ovsize));
+                                pos += ovsize + 1;
+                            }
+
+                            if (isdiscovered)
+                            {
+                                g.DrawImage(Icons.Controls.Scan_Bodies_DiscoveredByOthers, new Rectangle(0, pos, ovsize, ovsize));
                                 pos += ovsize + 1;
                             }
 
