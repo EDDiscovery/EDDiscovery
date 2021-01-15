@@ -1035,9 +1035,9 @@ namespace EDDiscovery
             {
                 string cmdrfolder = cmdr.JournalDir;
                 if (cmdrfolder == null || cmdrfolder.Length < 1)
-                    cmdrfolder = EDJournalUIScanner.GetDefaultJournalDir();
+                    cmdrfolder = EDJournalUIScanner.GetDefaultJournalDir();     // may be null if not known on system
 
-                if (Directory.Exists(cmdrfolder))
+                if (cmdrfolder != null && Directory.Exists(cmdrfolder))
                 {
                     Process.Start(cmdrfolder);
                 }

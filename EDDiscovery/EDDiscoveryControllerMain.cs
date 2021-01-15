@@ -138,17 +138,17 @@ namespace EDDiscovery
             BaseUtils.LogClean.DeleteOldLogFiles(logpath, "*.hlog", 2, 256);        // Remove hlogs faster
             BaseUtils.LogClean.DeleteOldLogFiles(logpath, "*.log", 10, 256);        
 
-            if (!Debugger.IsAttached || EDDOptions.Instance.TraceLog != null)
+            if (!Debugger.IsAttached || EDDOptions.Instance.TraceLog != null)       // no debugger, or tracelog option set
             {
-                TraceLog.RedirectTrace(logpath, EDDOptions.Instance.TraceLog);
+                TraceLog.RedirectTrace(logpath, true, EDDOptions.Instance.TraceLog);
             }
 
-            if (!Debugger.IsAttached || EDDOptions.Instance.LogExceptions)
+            if (!Debugger.IsAttached || EDDOptions.Instance.LogExceptions)          // no debugger, or log exceptions set
             {
                 ExceptionCatcher.RedirectExceptions(Properties.Resources.URLProjectFeedback);
             }
 
-            if (EDDOptions.Instance.LogExceptions)
+            if (EDDOptions.Instance.LogExceptions)                                  
             {
                 FirstChanceExceptionCatcher.RegisterFirstChanceExceptionHandler();
             }
