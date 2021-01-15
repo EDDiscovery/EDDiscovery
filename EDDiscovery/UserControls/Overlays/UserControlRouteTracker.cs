@@ -258,7 +258,7 @@ namespace EDDiscovery.UserControls
             {
                 if (controlname != "Route")
                     f.ReturnResult(DialogResult.Cancel);
-                else
+                else if (controlname == "OK")
                     f.ReturnResult(DialogResult.OK);
             };
 
