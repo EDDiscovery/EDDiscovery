@@ -214,7 +214,7 @@ namespace EDDiscovery.UserControls
             {
                 List<MaterialCommodities> mcl = last_he.MaterialCommodity.Sort(false);
 
-                int fdrow = dataGridViewEngineering.FirstDisplayedScrollingRowIndex;      // remember where we were displaying
+                int fdrow = dataGridViewEngineering.SafeFirstDisplayedScrollingRowIndex();      // remember where we were displaying
 
                 var totals = MaterialCommoditiesRecipe.TotalList(mcl);                  // start with totals present
 

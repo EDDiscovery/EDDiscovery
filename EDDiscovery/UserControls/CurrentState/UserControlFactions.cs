@@ -285,7 +285,7 @@ namespace EDDiscovery.UserControls
         {
             DataGridViewColumn sortcol = dataGridViewFactions.SortedColumn != null ? dataGridViewFactions.SortedColumn : dataGridViewFactions.Columns[0];
             SortOrder sortorder = dataGridViewFactions.SortOrder != SortOrder.None ? dataGridViewFactions.SortOrder : SortOrder.Ascending;
-            string toprowfaction = dataGridViewFactions.FirstDisplayedScrollingRowIndex >= 0 ? (dataGridViewFactions.Rows[dataGridViewFactions.FirstDisplayedScrollingRowIndex].Tag as FactionStatistics).Name : "";
+            string toprowfaction = dataGridViewFactions.SafeFirstDisplayedScrollingRowIndex() >= 0 ? (dataGridViewFactions.Rows[dataGridViewFactions.SafeFirstDisplayedScrollingRowIndex()].Tag as FactionStatistics).Name : "";
 
             dataGridViewFactions.Rows.Clear();
 

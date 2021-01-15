@@ -197,7 +197,7 @@ namespace EDDiscovery.UserControls
             last_he = he;
 
             // only record first row if same system 
-            var firstdisplayedrow = (dataGridViewScangrid.RowCount > 0 && samesys) ? dataGridViewScangrid.FirstDisplayedScrollingRowIndex : -1;
+            var firstdisplayedrow = (dataGridViewScangrid.RowCount > 0 && samesys) ? dataGridViewScangrid.SafeFirstDisplayedScrollingRowIndex() : -1;
 
             dataGridViewScangrid.RowTemplate.MinimumHeight = Font.ScalePixels(64);        // based on icon size
             bodysize = dataGridViewScangrid.RowTemplate.MinimumHeight;

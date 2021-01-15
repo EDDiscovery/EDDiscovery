@@ -303,7 +303,7 @@ namespace EDDiscovery.UserControls
                 dataGridViewRoute.Rows.Add(rw);
                 if (!rw.Displayed)
                 {
-                    dataGridViewRoute.SafeFirstDisplayedScrollingRowIndex(dataGridViewRoute.FirstDisplayedScrollingRowIndex+1);
+                    dataGridViewRoute.SafeFirstDisplayedScrollingRowIndex(dataGridViewRoute.SafeFirstDisplayedScrollingRowIndex()+1);
                 }
             });
 

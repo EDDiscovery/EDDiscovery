@@ -151,7 +151,7 @@ namespace EDDiscovery.UserControls
 
             dataViewScrollerPanel.SuspendLayout();
 
-            int firstdisplayed = dataGridViewMarketData.FirstDisplayedScrollingRowIndex;
+            int firstdisplayed = dataGridViewMarketData.SafeFirstDisplayedScrollingRowIndex();
             string commodity = (dataGridViewMarketData.CurrentRow != null) ? (string)dataGridViewMarketData.CurrentRow.Cells[1].Value : null;
             int currentoffset = (dataGridViewMarketData.CurrentRow != null) ? Math.Max(0,dataGridViewMarketData.CurrentRow.Index - firstdisplayed) : 0;
             

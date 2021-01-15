@@ -147,7 +147,7 @@ namespace EDDiscovery.UserControls
         {
             DataGridViewColumn sortcolprev = dataGridViewModules.SortedColumn != null ? dataGridViewModules.SortedColumn : dataGridViewModules.Columns[0];
             SortOrder sortorderprev = dataGridViewModules.SortedColumn != null ? dataGridViewModules.SortOrder : SortOrder.Ascending;
-            int firstline = dataGridViewModules.FirstDisplayedScrollingRowIndex;
+            int firstline = dataGridViewModules.SafeFirstDisplayedScrollingRowIndex();
 
             dataGridViewModules.Rows.Clear();
 
