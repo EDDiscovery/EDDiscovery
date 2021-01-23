@@ -3,4 +3,4 @@
 #this works
 #msbuild /p:Configuration=Debug EDDiscovery.sln /p:DefineConstants=NO_SYSTEM_SPEECH%3BDEBUG%3BTRACE
 #or this
-msbuild /p:Configuration=Debug EDDiscovery.sln "/p:DefineConstants=\"NO_SYSTEM_SPEECH;DEBUG;TRACE\""
+msbuild /p:Configuration=Debug EDDiscovery.sln "/p:DefineConstants=\"NO_SYSTEM_SPEECH;MONO;DEBUG;TRACE\""
