@@ -42,7 +42,7 @@ namespace EDDiscovery.UserControls
                             Image notscanned,               // image if sn is not known
                             Point position,                 // position is normally left/middle, unless xiscentre is set.
                             bool xiscentre,
-                            out int ximagecentre,           // centre in x of image
+                            out Rectangle imagepos, 
                             Size size,                      // nominal size
                             DrawLevel drawtype,          // drawing..
                             Color? backwash = null,         // optional back wash on image 
@@ -51,7 +51,7 @@ namespace EDDiscovery.UserControls
         {
             string tip;
             Point endpoint = position;
-            ximagecentre = -1;
+            imagepos = Rectangle.Empty;
 
             JournalScan sc = sn.ScanData;
 
@@ -159,7 +159,8 @@ namespace EDDiscovery.UserControls
 
                     using (Graphics g = Graphics.FromImage(bmp))
                     {
-                        //backwash = Color.FromArgb(128, 40, 40, 40);
+        //  backwash = Color.FromArgb(128, 40, 40, 40); // debug
+
                         if (backwash.HasValue)
                         {
                             using (Brush b = new SolidBrush(backwash.Value))
@@ -271,8 +272,8 @@ namespace EDDiscovery.UserControls
                     //System.Diagnostics.Debug.WriteLine("Body " + sc.BodyName + " plot at "  + postoplot + " " + bmp.Size + " " + (postoplot.X+imageleft) + "," + (postoplot.Y-bmp.Height/2+imagetop));
 
 
-                    endpoint = CreateImageAndLabel(pc, bmp, postoplot, bmp.Size, out ximagecentre, nodelabels, tip);
-                    ximagecentre += iconwidtharea / 2;       // adjust for left icon width, since we have iconwidth + image..
+                    endpoint = CreateImageAndLabel(pc, bmp, postoplot, bmp.Size, out imagepos, nodelabels, tip);
+                    imagepos.X += iconwidtharea / 2;       // adjust return for left icon width, since we have iconwidth + image..  this moves the centre over this amount
 
                     if (sc.HasMaterials && ShowMaterials)
                     {
@@ -303,7 +304,7 @@ namespace EDDiscovery.UserControls
 
                 Size bmpsize = new Size(size.Width, planetsize.Height * nodeheightratio / noderatiodivider);
 
-                endpoint = CreateImageAndLabel(pc, Icons.Controls.Scan_Bodies_Belt, position, bmpsize, out ximagecentre, new string[] { sn.ownname.AppendPrePad(appendlabeltext, Environment.NewLine) }, tip, false);
+                endpoint = CreateImageAndLabel(pc, Icons.Controls.Scan_Bodies_Belt, position, bmpsize, out imagepos, new string[] { sn.ownname.AppendPrePad(appendlabeltext, Environment.NewLine) }, tip, false);
             }
             else
             {
@@ -315,7 +316,7 @@ namespace EDDiscovery.UserControls
                 string nodelabel = sn.customname ?? sn.ownname;
                 nodelabel = nodelabel.AppendPrePad(appendlabeltext,Environment.NewLine);
 
-                endpoint = CreateImageAndLabel(pc, notscanned, position, size, out ximagecentre, new string[] { nodelabel }, tip, false);
+                endpoint = CreateImageAndLabel(pc, notscanned, position, size, out imagepos, new string[] { nodelabel }, tip, false);
             }
 
             //    System.Diagnostics.Debug.WriteLine("Node " + sn.ownname + " " + position + " " + size + " -> "+ endpoint);
@@ -387,11 +388,96 @@ namespace EDDiscovery.UserControls
             return maximum;
         }
 
+        // Create a signals list
+        Point DrawSignals(List<ExtPictureBox.ImageElement> pc, Point leftmiddle , List<JournalFSSSignalDiscovered.FSSSignal> signals, int height, int shiftrightifreq)
+        {
+            const int max = 5;
+            int iconsize = height / max;
+            Bitmap bmp = new Bitmap(iconsize, height);
+
+            int[] count = new int[]     // in priority order
+            {
+                signals.Where(x => x.ClassOfSignal == JournalFSSSignalDiscovered.FSSSignal.Classification.Station).Count(),
+                signals.Where(x => x.ClassOfSignal == JournalFSSSignalDiscovered.FSSSignal.Classification.Carrier).Count(),
+                signals.Where(x => x.ClassOfSignal == JournalFSSSignalDiscovered.FSSSignal.Classification.Installation).Count(),
+                signals.Where(x => x.ClassOfSignal == JournalFSSSignalDiscovered.FSSSignal.Classification.NotableStellarPhenomena).Count(),
+                signals.Where(x => x.ClassOfSignal == JournalFSSSignalDiscovered.FSSSignal.Classification.ResourceExtraction).Count(),
+                signals.Where(x => x.ClassOfSignal == JournalFSSSignalDiscovered.FSSSignal.Classification.ConflictZone).Count(),
+                signals.Where(x => x.ClassOfSignal == JournalFSSSignalDiscovered.FSSSignal.Classification.USS).Count(),
+                0
+            };
+
+            count[7] = signals.Count - (from x in count select x).Sum();
+
+            int icons;
+            int knockout = 6;
+            while(true)
+            {
+                icons = (from x in count where x > 0 select 1).Sum();           // how many are set?
+                if (icons > max)        // too many
+                {
+                    count[7] = 1;               // okay set the generic signal one
+                    count[knockout--] = 0;      // and knock this out
+                }
+                else
+                    break;
+            }
+
+            Image[] images = new Image[]
+            {
+                Icons.Controls.Scan_Bodies_Stations,
+                Icons.Controls.Scan_Bodies_Carriers,
+                Icons.Controls.Scan_Bodies_Installations,
+                Icons.Controls.Scan_Bodies_NSP,
+                Icons.Controls.Scan_Bodies_RES,
+                Icons.Controls.Scan_Bodies_CZ,
+                Icons.Controls.Scan_Bodies_USS,
+                Icons.Controls.Scan_Bodies_Signals,
+            };
+
+            int vpos = height / 2 - iconsize * icons / 2;
+
+            using (Graphics g = Graphics.FromImage(bmp))
+            {
+            //    g.Clear(Color.FromArgb(20, 64, 64)); // debug
+                for (int i = 0; i < count.Length; i++)
+                {
+                    if (count[i] > 0)
+                    {
+                        g.DrawImage(images[i], new Rectangle(0, vpos, iconsize, iconsize));
+                        vpos += iconsize;
+                    }
+                }
+            }
+
+            var notexpired = signals.Where(x => !x.TimeRemaining.HasValue || x.ExpiryUTC >= DateTime.UtcNow).ToList();
+            notexpired.Sort(delegate (JournalFSSSignalDiscovered.FSSSignal l, JournalFSSSignalDiscovered.FSSSignal r) { return l.ClassOfSignal.CompareTo(r.ClassOfSignal); });
+            string tip = "";
+            foreach (var sig in notexpired )
+                tip = tip.AppendPrePad(sig.ToString(), Environment.NewLine);
+
+            var expired = signals.Where(x => x.TimeRemaining.HasValue && x.ExpiryUTC < DateTime.UtcNow).ToList();
+            if (expired.Count > 0)
+            {
+                expired.Sort(delegate (JournalFSSSignalDiscovered.FSSSignal l, JournalFSSSignalDiscovered.FSSSignal r) { return r.ExpiryUTC.CompareTo(l.ExpiryUTC); });
+                tip = tip.AppendPrePad("Expired:".T(EDTx.UserControlScan_Expired), Environment.NewLine + Environment.NewLine);
+                foreach (var sig in expired)
+                    tip = tip.AppendPrePad(sig.ToString(), Environment.NewLine);
+            }
+
+            if (icons > 4)
+                leftmiddle.X += shiftrightifreq;
+           
+
+            return CreateImageAndLabel(pc, bmp, leftmiddle, bmp.Size, out Rectangle xic, new string[] { "" }, tip, false);
+        }
+
 
         // plot at leftmiddle the image of size, return bot left accounting for label 
         // label can be null. returns ximagecentre of image
 
-        Point CreateImageAndLabel(List<ExtPictureBox.ImageElement> c, Image i, Point leftmiddle, Size size, out int ximagecentre, string[] labels, string ttext, bool imgowned = true)
+        Point CreateImageAndLabel(List<ExtPictureBox.ImageElement> c, Image i, Point leftmiddle, Size size, out Rectangle imageloc , 
+                                    string[] labels, string ttext, bool imgowned = true)
         {
             //System.Diagnostics.Debug.WriteLine("    " + label + " " + postopright + " size " + size + " hoff " + labelhoff + " laby " + (postopright.Y + size.Height + labelhoff));
 
@@ -448,7 +534,7 @@ namespace EDDiscovery.UserControls
 
             //System.Diagnostics.Debug.WriteLine(".. Max " + max);
 
-            ximagecentre = ie.Location.X + ie.Location.Width / 2;
+            imageloc = ie.Location;
 
             return max;
         }

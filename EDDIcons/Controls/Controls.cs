@@ -175,6 +175,13 @@ namespace EDDiscovery.Icons
         public static Image Scan_FetchEDSMBodies { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.FetchEDSMBodies"); } }
         public static Image Scan_ShowAllMaterials { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.ShowAllMaterials"); } }
         public static Image Scan_HideFullMaterials { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.HideFullMaterials"); } }
+        public static Image Scan_Bodies_CZ { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.Bodies.CZ"); } }
+        public static Image Scan_Bodies_Installations { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.Bodies.Installations"); } }
+        public static Image Scan_Bodies_NSP { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.Bodies.NSP"); } }
+        public static Image Scan_Bodies_RES { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.Bodies.RES"); } }
+        public static Image Scan_Bodies_Stations { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.Bodies.Stations"); } }
+        public static Image Scan_Bodies_Carriers { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.Bodies.Carriers"); } }
+        public static Image Scan_Bodies_USS { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.Bodies.USS"); } }
         public static Image Scan_ShowMoons { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.ShowMoons"); } }
         public static Image Scan_ShowOverlays { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.ShowOverlays"); } }
         public static Image Scan_ShowRareMaterials { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.ShowRareMaterials"); } }

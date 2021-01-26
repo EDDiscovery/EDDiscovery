@@ -659,6 +659,7 @@ namespace EDDiscovery
         UserControlScan_PlanetClass,
         UserControlScan_StarClass,
         UserControlScan_Distance,
+        UserControlScan_Expired,
 
         UserControlStarDistance_From, // From {0}
         UserControlStarDistance_NoEDSMSys, // System could not be found - has not been synched or EDSM is unavailable

@@ -150,7 +150,7 @@ namespace EDDiscovery.UserControls
             {
                 // new scan, new materials (for the count display), new SAA Signals all can cause display to change.
                 if (he.EntryType == JournalTypeEnum.Scan || he.journalEntry is IMaterialJournalEntry || he.journalEntry is JournalSAASignalsFound ||
-                    he.journalEntry is JournalFSSDiscoveryScan || 
+                    he.journalEntry is JournalFSSDiscoveryScan || he.journalEntry is JournalFSSSignalDiscovered ||
                                 last_he == null || last_he.System != he.System) //  or not presenting or diff sys
                 {
                     last_he = he;
@@ -218,11 +218,15 @@ namespace EDDiscovery.UserControls
                     {
                         control_text += " " + "Scan".T(EDTx.UserControlSurveyor_Scan) + " " + scanned.ToString() + (data.FSSTotalBodies != null ? (" / " + data.FSSTotalBodies.Value.ToString()) : "");
                     }
+
+                    int fsssignals = data.FSSSignalList.Count;
+                    if (fsssignals>0)
+                    {
+                        control_text += " " + " Signals " + fsssignals.ToString();
+                    }
                 }
                 else
                     control_text += " " + "No Scan".T(EDTx.NoScan);
-
-
             }
 
             panelStars.DrawSystem(data, showing_matcomds, discoveryform.history, (HasControlTextArea() && !displayfilters.Contains("sys")) ? null : control_text, bodyfilters);

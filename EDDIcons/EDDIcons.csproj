@@ -570,6 +570,13 @@
     <EmbeddedResource Include="Controls\SysInfo\notfirstdiscover.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Controls\Scan\Bodies\Carriers.png" />
+    <EmbeddedResource Include="Controls\Scan\Bodies\Installations.png" />
+    <EmbeddedResource Include="Controls\Scan\Bodies\RES.png" />
+    <EmbeddedResource Include="Controls\Scan\Bodies\CZ.png" />
+    <EmbeddedResource Include="Controls\Scan\Bodies\USS.png" />
+    <EmbeddedResource Include="Controls\Scan\Bodies\NSP.png" />
+    <EmbeddedResource Include="Controls\Scan\Bodies\Stations.png" />
     <EmbeddedResource Include="Controls\Scan\Bodies\DiscoveredByOthers.png" />
     <EmbeddedResource Include="Controls\Scan\Bodies\MappedByOthers.png" />
     <EmbeddedResource Include="Panels\Spansh.png" />
