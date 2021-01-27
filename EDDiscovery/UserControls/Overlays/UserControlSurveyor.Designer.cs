@@ -75,6 +75,7 @@ namespace EDDiscovery.UserControls
             this.centerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rightToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pictureBoxSurveyor = new ExtendedControls.ExtPictureBox();
+            this.selectFSSSignalsShownToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSurveyor)).BeginInit();
             this.SuspendLayout();
@@ -87,6 +88,7 @@ namespace EDDiscovery.UserControls
             this.showAllPlanetsToolStripMenuItem,
             this.showAllStarsToolStripMenuItem,
             this.showBeltClustersToolStripMenuItem,
+            this.selectFSSSignalsShownToolStripMenuItem,
             this.toolStripSeparator1,
             this.showMoreInformationToolStripMenuItem,
             this.hideAlreadyMappedBodiesToolStripMenuItem,
@@ -99,7 +101,7 @@ namespace EDDiscovery.UserControls
             this.wordWrapToolStripMenuItem,
             this.textAlignToolStripMenuItem});
             this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(226, 346);
+            this.contextMenuStrip.Size = new System.Drawing.Size(226, 368);
             // 
             // planetaryClassesToolStripMenuItem
             // 
@@ -117,7 +119,7 @@ namespace EDDiscovery.UserControls
             this.ammoniaWorldToolStripMenuItem.CheckOnClick = true;
             this.ammoniaWorldToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.ammoniaWorldToolStripMenuItem.Name = "ammoniaWorldToolStripMenuItem";
-            this.ammoniaWorldToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.ammoniaWorldToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
             this.ammoniaWorldToolStripMenuItem.Text = "Ammonia World";
             // 
             // earthlikeWorldToolStripMenuItem
@@ -126,7 +128,7 @@ namespace EDDiscovery.UserControls
             this.earthlikeWorldToolStripMenuItem.CheckOnClick = true;
             this.earthlikeWorldToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.earthlikeWorldToolStripMenuItem.Name = "earthlikeWorldToolStripMenuItem";
-            this.earthlikeWorldToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.earthlikeWorldToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
             this.earthlikeWorldToolStripMenuItem.Text = "Earthlike World";
             // 
             // waterWorldToolStripMenuItem
@@ -135,7 +137,7 @@ namespace EDDiscovery.UserControls
             this.waterWorldToolStripMenuItem.CheckOnClick = true;
             this.waterWorldToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.waterWorldToolStripMenuItem.Name = "waterWorldToolStripMenuItem";
-            this.waterWorldToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.waterWorldToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
             this.waterWorldToolStripMenuItem.Text = "Water World";
             // 
             // bodyFeaturesToolStripMenuItem
@@ -352,6 +354,13 @@ namespace EDDiscovery.UserControls
             this.pictureBoxSurveyor.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.pictureBoxSurveyor.TabIndex = 0;
             // 
+            // selectFSSSignalsShownToolStripMenuItem
+            // 
+            this.selectFSSSignalsShownToolStripMenuItem.Name = "selectFSSSignalsShownToolStripMenuItem";
+            this.selectFSSSignalsShownToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
+            this.selectFSSSignalsShownToolStripMenuItem.Text = "Select FSS Signals Shown";
+            this.selectFSSSignalsShownToolStripMenuItem.Click += new System.EventHandler(this.selectFSSSignalsShownToolStripMenuItem_Click);
+            // 
             // UserControlSurveyor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -399,5 +408,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripMenuItem wordWrapToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem landableToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem selectFSSSignalsShownToolStripMenuItem;
     }
 }

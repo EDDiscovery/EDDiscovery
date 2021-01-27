@@ -454,7 +454,7 @@ namespace EDDiscovery.UserControls
             notexpired.Sort(delegate (JournalFSSSignalDiscovered.FSSSignal l, JournalFSSSignalDiscovered.FSSSignal r) { return l.ClassOfSignal.CompareTo(r.ClassOfSignal); });
             string tip = "";
             foreach (var sig in notexpired )
-                tip = tip.AppendPrePad(sig.ToString(), Environment.NewLine);
+                tip = tip.AppendPrePad(sig.ToString(true), Environment.NewLine);
 
             var expired = signals.Where(x => x.TimeRemaining.HasValue && x.ExpiryUTC < DateTime.UtcNow).ToList();
             if (expired.Count > 0)
@@ -462,7 +462,7 @@ namespace EDDiscovery.UserControls
                 expired.Sort(delegate (JournalFSSSignalDiscovered.FSSSignal l, JournalFSSSignalDiscovered.FSSSignal r) { return r.ExpiryUTC.CompareTo(l.ExpiryUTC); });
                 tip = tip.AppendPrePad("Expired:".T(EDTx.UserControlScan_Expired), Environment.NewLine + Environment.NewLine);
                 foreach (var sig in expired)
-                    tip = tip.AppendPrePad(sig.ToString(), Environment.NewLine);
+                    tip = tip.AppendPrePad(sig.ToString(true), Environment.NewLine);
             }
 
             if (icons > 4)

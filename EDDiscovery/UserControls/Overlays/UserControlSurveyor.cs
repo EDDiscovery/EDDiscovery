@@ -16,9 +16,11 @@
 using EliteDangerousCore;
 using EliteDangerousCore.JournalEvents;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
 {
@@ -28,8 +30,9 @@ namespace EDDiscovery.UserControls
 
         private string DbSave => DBName("Surveyor");
 
-        System.Drawing.StringAlignment alignment = System.Drawing.StringAlignment.Near;
-        string titletext = "";
+        private System.Drawing.StringAlignment alignment = System.Drawing.StringAlignment.Near;
+        private string titletext = "";
+        private string fsssignalsdisplayed = "";
 
         const int lowRadiusLimit = 600 * 1000;
 
@@ -68,7 +71,9 @@ namespace EDDiscovery.UserControls
             showAllStarsToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "allstars", false);
             showBeltClustersToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "beltclusters", false);
             showMoreInformationToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "moreinfo", true);
-            wordWrapToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "wordwrap", false);            
+            wordWrapToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "wordwrap", false);
+
+            fsssignalsdisplayed = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbSave + "fsssignals", "");
 
             SetAlign((StringAlignment)EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(DbSave + "align", 0));
 
@@ -321,6 +326,41 @@ namespace EDDiscovery.UserControls
                                 frmt: frmt);
                             vpos += i.Location.Height;
                         }
+                    }
+
+                    if ( fsssignalsdisplayed.HasChars())
+                    {
+                        string siglist = "";
+                        string[] filter = fsssignalsdisplayed.Split(';');
+
+                        var sl = new List<JournalFSSSignalDiscovered.FSSSignal>(systemnode.FSSSignalList);
+                        sl.Sort(delegate (JournalFSSSignalDiscovered.FSSSignal l, JournalFSSSignalDiscovered.FSSSignal r) { return l.ClassOfSignal.CompareTo(r.ClassOfSignal); });
+
+                        foreach (var fsssig in sl)
+                        {
+                            if (filter.ComparisionContains(fsssig.SignalName.Alt("!~~"), StringComparison.InvariantCultureIgnoreCase) >= 0 ||
+                                filter.ComparisionContains(fsssig.SignalName_Localised.Alt("!~~"), StringComparison.InvariantCultureIgnoreCase) >= 0 ||
+                                filter.ComparisionContains(fsssig.SpawningState_Localised.Alt("!~~"), StringComparison.InvariantCultureIgnoreCase) >= 0 ||
+                                filter.ComparisionContains(fsssig.SpawningFaction_Localised.Alt("!~~"), StringComparison.InvariantCultureIgnoreCase) >= 0 ||
+                                filter.ComparisionContains(fsssig.USSTypeLocalised.Alt("!~~"), StringComparison.InvariantCultureIgnoreCase) >= 0 ||
+                                filter.ComparisionContains(fsssig.ClassOfSignal.ToString(), StringComparison.InvariantCultureIgnoreCase) >= 0 ||
+                                fsssignalsdisplayed.Equals("*"))
+                            {
+                                siglist = siglist.AppendPrePad(fsssig.ToString(true), Environment.NewLine);
+                            }
+                        }
+
+                        if (siglist.HasChars())
+                        {
+                            pictureBoxSurveyor.AddTextAutoSize(new Point(3, vpos),
+                                                            new Size(Math.Max(pictureBoxSurveyor.Width - 6, 24), 1000),
+                                                            siglist,
+                                                            Font,
+                                                            textcolour,
+                                                            backcolour,
+                                                            1.0F,
+                                                            frmt: frmt);
+                        }
 
                     }
                 }
@@ -394,8 +434,9 @@ namespace EDDiscovery.UserControls
             return information.ToString();
         }
 
-        
         #endregion
+
+        #region UI
 
         private void ammoniaWorldToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -549,6 +590,41 @@ namespace EDDiscovery.UserControls
         private void UserControlSurveyor_Resize(object sender, EventArgs e)
         {
             DrawSystem(last_sys);
-        }        
+        }
+
+        private void selectFSSSignalsShownToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ExtendedControls.ConfigurableForm f = new ExtendedControls.ConfigurableForm();
+
+            int width = 430;
+
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("Text", typeof(ExtendedControls.ExtTextBox), fsssignalsdisplayed, new Point(10, 40), new Size(width - 10 - 20, 110), "List Names to show") { textboxmultiline = true });
+
+            f.AddOK(new Point(width - 100, 180));
+            f.AddCancel(new Point(width - 200, 180));
+
+            f.Trigger += (dialogname, controlname, tag) =>
+            {
+                if (controlname == "OK")
+                {
+                    f.ReturnResult(DialogResult.OK);
+                }
+                else if (controlname == "Cancel" || controlname == "Close")
+                {
+                    f.ReturnResult(DialogResult.Cancel);
+                }
+            };
+
+            DialogResult res = f.ShowDialogCentred(this.FindForm(), this.FindForm().Icon, "List signals to display, semicolon seperated", closeicon: true);
+            if (res == DialogResult.OK)
+            {
+                fsssignalsdisplayed = f.Get("Text");
+                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbSave + "fsssignals", fsssignalsdisplayed);
+                DrawSystem(last_sys);
+            }
+
+        }
+
+        #endregion
     }
 }
