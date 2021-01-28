@@ -115,7 +115,7 @@ namespace EDDiscovery.UserControls
                 if (systemnode.starnodes.Values.Count == 0 && systemnode.FSSSignalList.Count > 0)  // if no stars, but signals..
                 {
                     Point maxpos = CreateImageAndLabel(starcontrols, JournalScan.GetStarImageNotScanned(), leftmiddle, StarSize, out Rectangle starpos, new string[] { "Main Star" }, "", false);
-                    DrawSignals(starcontrols, new Point(starpos.Right,leftmiddle.Y), systemnode.FSSSignalList, StarSize.Height * 6 / 4, 16);       // draw them, nothing else to follow
+                    DrawSignals(starcontrols, new Point(starpos.Right + moonspacerx, leftmiddle.Y), systemnode.FSSSignalList, StarSize.Height * 6 / 4, 16);       // draw them, nothing else to follow
                 }
 
                 bool drawnsignals = false;
@@ -139,7 +139,7 @@ namespace EDDiscovery.UserControls
                         if (!drawnsignals && systemnode.FSSSignalList.Count > 0)           // Draw signals, if not drawn
                         {
                             drawnsignals = true;
-                            Point maxsignalpos = DrawSignals(starcontrols, new Point(starimagepos.Right,leftmiddle.Y), systemnode.FSSSignalList, StarSize.Height * 6 / 4, 16);
+                            Point maxsignalpos = DrawSignals(starcontrols, new Point(starimagepos.Right + moonspacerx, leftmiddle.Y), systemnode.FSSSignalList, StarSize.Height * 6 / 4, 16);
                             maxitemspos = new Point(Math.Max(maxitemspos.X, maxsignalpos.X), Math.Max(maxitemspos.Y, maxsignalpos.Y));
                         }
 
