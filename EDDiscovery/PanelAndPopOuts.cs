@@ -317,7 +317,14 @@ namespace EDDiscovery
         public static UserControlCommonBase Create(PanelIDs p)  // can fail if P is crap
         {
             PanelInfo pi = GetPanelInfoByPanelID(p);
-            return pi != null ? (UserControls.UserControlCommonBase)Activator.CreateInstance(pi.PopoutType, null) : null;
+            if (pi != null)
+            {
+                var uccb = (UserControls.UserControlCommonBase)Activator.CreateInstance(pi.PopoutType, null);
+                uccb.panelid = p;
+                return uccb;
+            }
+
+            return null;
         }
 
         public static System.Windows.Forms.ToolStripMenuItem MakeToolStripMenuItem(PanelIDs p, System.EventHandler h)

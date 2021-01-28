@@ -43,9 +43,10 @@ namespace EDDiscovery.UserControls
 
         // Common parameters of a UCCB
 
-        public int displaynumber { get; protected set; }
-        public EDDiscoveryForm discoveryform { get; protected set; }
-        public IHistoryCursor uctg { get; protected set; }          // valid at loadlayout
+        public PanelInformation.PanelIDs panelid { get; set; }          // set on creation in PanelAndPopOuts, panel ID type
+        public int displaynumber { get; protected set; }                // set on Init
+        public EDDiscoveryForm discoveryform { get; protected set; }    // set on Init    
+        public IHistoryCursor uctg { get; protected set; }              // valid at loadlayout
         private bool IsClosed { get; set; }
 
         // in calling order..

@@ -55,12 +55,9 @@ namespace EDDiscovery.UserControls
             {
                 foreach (var n in windows)
                 {
-                    Type t = Type.GetType("EDDiscovery.UserControls." + n.Item1);
-                    if (t != null)
-                    {
-                        UserControlCommonBase uccb = (UserControlCommonBase)Activator.CreateInstance(t);
+                    UserControlCommonBase uccb = PanelInformation.Create(n.Item1);
+                    if ( uccb != null)
                         CreateInitPanel(uccb);
-                    }
                 }
             }
 
@@ -149,7 +146,7 @@ namespace EDDiscovery.UserControls
             {
                 UserControlCommonBase uc = (UserControlCommonBase)r.control;
 
-                s = s.AppendPrePad(uc.GetType().Name, ",");
+                s = s.AppendPrePad(((int)uc.panelid).ToStringInvariant(), ",");
                 p = p.AppendPrePad(r.Location.X + "," + r.Location.Y + "," + r.Size.Width + "," + r.Size.Height, ",");
                 
                 //System.Diagnostics.Debug.WriteLine("  Save " + uc.GetType().Name + " at " + r.Location + " sz " + r.Size);
@@ -425,7 +422,7 @@ namespace EDDiscovery.UserControls
 
         #region Saving
 
-        List<Tuple<string, Point, Size, int>> GetSavedSettings()
+        List<Tuple<PanelInformation.PanelIDs, Point, Size, int>> GetSavedSettings()
         {
             string[] names = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DBWindowNames, "").Split(',');
             int[] positions;
@@ -436,11 +433,27 @@ namespace EDDiscovery.UserControls
             if (pos.RestoreArrayFromString(out positions) && zo.RestoreArrayFromString(out zorder, 0, names.Length - 1) &&
                         names.Length == zorder.Length && positions.Length == 4 * names.Length)
             {
-                List<Tuple<string, Point, Size, int>> ret = new List<Tuple<string, Point, Size, int>>();
+                var ret = new List<Tuple<PanelInformation.PanelIDs, Point, Size, int>>();
                 for (int i = 0; i < names.Length; i++)
                 {
+                    PanelInformation.PanelIDs pid = PanelInformation.PanelIDs.Log;
+                    if (names[i].Contains("UserControl"))
+                    {
+                        Type t = Type.GetType("EDDiscovery.UserControls." + names[i]);      // previously saved by name, now we are going to save by id from now on for future use
+                        if (t == null)
+                            return null;
+
+                        var pi = PanelInformation.GetPanelInfoByType(t);            // look it up
+                        if (pi == null)
+                            return null;
+
+                        pid = pi.PopoutID;
+                    }
+                    else
+                        pid = (PanelInformation.PanelIDs)names[i].InvariantParseInt(0); // convert to panel ID, default is 0 (log)
+
                     int ppos = i * 4;
-                    ret.Add(new Tuple<string, Point, Size, int>(names[i], new Point(positions[ppos++], positions[ppos++]),
+                    ret.Add(new Tuple<PanelInformation.PanelIDs, Point, Size, int>(pid, new Point(positions[ppos++], positions[ppos++]),
                                     new Size(positions[ppos++], positions[ppos++]), zorder[i]));
                 }
                 return ret;
