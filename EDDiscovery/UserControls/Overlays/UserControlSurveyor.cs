@@ -391,13 +391,16 @@ namespace EDDiscovery.UserControls
             information.Append((js.HasMeaningfulVolcanism) ? @" Has ".T(EDTx.UserControlSurveyor_Has) + js.Volcanism + "." : null);
             information.Append((js.nRadius < lowRadiusLimit) ? @" Low Radius.".T(EDTx.UserControlSurveyor_LowRadius) : null);
             information.Append((sn.Signals != null) ? " Has Signals.".T(EDTx.UserControlSurveyor_Signals) : null);
-            information.Append((js.IsLandable) ? @" is landable.".T(EDTx.UserControlSurveyor_islandable) : null);            
+            information.Append((js.IsLandable) ? @" is landable.".T(EDTx.UserControlSurveyor_islandable) : null);
+
+            var ev = js.GetEstimatedValues();
+
             if (js.WasMapped == true && js.WasDiscovered == true)
             {
                 information.Append(" (Mapped & Discovered)".T(EDTx.UserControlSurveyor_MandD));
                 if (showValuesToolStripMenuItem.Checked)
                 {
-                    information.Append(' ').Append(js.EstimatedValueBase.ToString("N0")).Append(" cr");
+                    information.Append(' ').Append(ev.EstimatedValueBase.ToString("N0")).Append(" cr");
                 }
             }
             else if (js.WasMapped == true && js.WasDiscovered == false)
@@ -405,7 +408,7 @@ namespace EDDiscovery.UserControls
                 information.Append(" (Mapped)".T(EDTx.UserControlSurveyor_MP));
                 if (showValuesToolStripMenuItem.Checked)
                 {
-                    information.Append(' ').Append(js.EstimatedValueBase.ToString("N0")).Append(" cr");
+                    information.Append(' ').Append(ev.EstimatedValueBase.ToString("N0")).Append(" cr");
                 }
             }
             else if (js.WasDiscovered == true && js.WasMapped == false)
@@ -413,14 +416,14 @@ namespace EDDiscovery.UserControls
                 information.Append(" (Discovered)".T(EDTx.UserControlSurveyor_DIS));
                 if (showValuesToolStripMenuItem.Checked)
                 {
-                    information.Append(' ').Append(js.EstimatedValueFirstMappedEfficiently.ToString("N0")).Append(" cr");
+                    information.Append(' ').Append(ev.EstimatedValueFirstMappedEfficiently.ToString("N0")).Append(" cr");
                 }
             }
             else
             {      
                 if (showValuesToolStripMenuItem.Checked)
                 {
-                    information.Append(' ').Append((js.EstimatedValueFirstDiscoveredFirstMappedEfficiently > 0 ? js.EstimatedValueFirstDiscoveredFirstMappedEfficiently : js.EstimatedValueBase).ToString("N0")).Append(" cr");
+                    information.Append(' ').Append((ev.EstimatedValueFirstDiscoveredFirstMappedEfficiently > 0 ? ev.EstimatedValueFirstDiscoveredFirstMappedEfficiently : ev.EstimatedValueBase).ToString("N0")).Append(" cr");
                 }
             }
 
