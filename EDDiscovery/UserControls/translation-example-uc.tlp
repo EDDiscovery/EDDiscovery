@@ -985,8 +985,6 @@ SECTION UserControlSpanel
 .dontShowInformationWhenToolStripMenuItem.completelyHideThePanelToolStripMenuItem: "Completely hide the Panel" @
 .dontShowInformationWhenToolStripMenuItem.dontshowwhenInPanelToolStripMenuItem: ".. when in a Panel" @
 
-.Goldilocks: "Goldilocks, {0} ({1}-{2} AU),\n" @
-
 SECTION UserControlStarDistance
 
 .addToExplorationToolStripMenuItem: "Add To Exploration" @

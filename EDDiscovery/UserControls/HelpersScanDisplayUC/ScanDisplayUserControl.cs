@@ -162,8 +162,10 @@ namespace EDDiscovery.UserControls
 
                         StarScan.ScanNode lastbelt = belts.Count != 0 ? belts.Dequeue() : null;
 
-                        double habzonestartls = starnode.ScanData?.HabitableZoneInner ?? 0;
-                        double habzoneendls = starnode.ScanData?.HabitableZoneOuter ?? 0;
+                        EliteDangerousCore.JournalEvents.JournalScan.HabZones hz = starnode.ScanData?.GetHabZones();
+
+                        double habzonestartls = hz != null ? hz.HabitableZoneInner : 0;
+                        double habzoneendls = hz != null ? hz.HabitableZoneOuter : 0;
 
                         // process body and stars only
 

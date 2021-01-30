@@ -172,8 +172,9 @@ namespace EDDiscovery.Actions
                     ap[prefix + "_stellarmass"] = (sc.nStellarMass ?? 0).ToString("0.###");
                     ap[prefix + "_age"] = sc.nAge.ToNANNullSafeString("0.##");
                     ap[prefix + "_mag"] = sc.nAbsoluteMagnitude.ToNANNullSafeString("0");
-                    ap[prefix + "_habinner"] = sc.HabitableZoneInner.ToNANNullSafeString("0.##");
-                    ap[prefix + "_habouter"] = sc.HabitableZoneOuter.ToNANNullSafeString("0.##");
+                    EliteDangerousCore.JournalEvents.JournalScan.HabZones hz = sc.GetHabZones();
+                    ap[prefix + "_habinner"] = hz != null ? hz.HabitableZoneInner.ToString("0.##") : "";
+                    ap[prefix + "_habouter"] = hz != null ? hz.HabitableZoneOuter.ToString("0.##") : "";
                 }
                 else
                 {

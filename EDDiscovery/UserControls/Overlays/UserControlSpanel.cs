@@ -327,35 +327,38 @@ namespace EDDiscovery.UserControls
 
                                 if (showCircumstellarZonesToolStripMenuItem.Checked)
                                 {
-                                    res.AppendFormat("Goldilocks, {0} ({1}-{2} AU),\n".T(EDTx.UserControlSpanel_Goldilocks),
-                                                     js.GetHabZoneStringLs(),
-                                                     (js.HabitableZoneInner.Value / JournalScan.oneAU_LS).ToString("N2"),
-                                                     (js.HabitableZoneOuter.Value / JournalScan.oneAU_LS).ToString("N2"));
+                                    string hz = js.CircumstellarZonesString(false, JournalScan.CZPrint.CZHab);
+                                    res.AppendFormat(hz + Environment.NewLine);
                                 }
 
                                 if (showMetalRichPlanetsToolStripMenuItem.Checked)
                                 {
-                                    res.Append(js.MetalRichZoneString());
+                                    string hz = js.CircumstellarZonesString(false, JournalScan.CZPrint.CZMR);
+                                    res.AppendFormat(hz + Environment.NewLine);
                                 }
 
                                 if (showWaterWorldsToolStripMenuItem.Checked)
                                 {
-                                    res.Append(js.WaterWorldZoneString());
+                                    string hz = js.CircumstellarZonesString(false, JournalScan.CZPrint.CZWW);
+                                    res.AppendFormat(hz + Environment.NewLine);
                                 }
 
                                 if (showEarthLikeToolStripMenuItem.Checked)
                                 {
-                                    res.Append(js.EarthLikeZoneString());
+                                    string hz = js.CircumstellarZonesString(false, JournalScan.CZPrint.CZEL);
+                                    res.AppendFormat(hz + Environment.NewLine);
                                 }
 
                                 if (showAmmoniaWorldsToolStripMenuItem.Checked)
                                 {
-                                    res.Append(js.AmmoniaWorldZoneString());
+                                    string hz = js.CircumstellarZonesString(false, JournalScan.CZPrint.CZAW);
+                                    res.AppendFormat(hz + Environment.NewLine);
                                 }
 
                                 if (showIcyPlanetsToolStripMenuItem.Checked)
                                 {
-                                    res.Append(js.IcyPlanetsZoneString());
+                                    string hz = js.CircumstellarZonesString(false, JournalScan.CZPrint.CZIP);
+                                    res.AppendFormat(hz + Environment.NewLine);
                                 }
                             }
 

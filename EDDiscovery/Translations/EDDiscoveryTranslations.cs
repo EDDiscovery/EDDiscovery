@@ -549,7 +549,6 @@ namespace EDDiscovery
         UserControlMiningOverlay_dist,
         UserControlMiningOverlay_astpros,
 
-        UserControlSpanel_Goldilocks, // Goldilocks, {0} ({1}-{2} AU),
         UserControlSpanel_Target, // Target
         UserControlSpanel_TVE, // View system on EDSM
         UserControlSpanel_SPF, // Summary Panel: Filter out fields
