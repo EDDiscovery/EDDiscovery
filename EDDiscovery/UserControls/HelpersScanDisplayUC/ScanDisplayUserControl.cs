@@ -350,7 +350,7 @@ namespace EDDiscovery.UserControls
                     if (nonedsmscans || CheckEDSM)
                     {
                         Point mmax = DrawNode(pc, moonnode, curmats, hl, (moonnode.type == StarScan.ScanNodeType.barycentre) ? Icons.Controls.Scan_Bodies_Barycentre : JournalScan.GetMoonImageNotScanned(), moonposcentremid, true, out Rectangle moonimagepos, moonsize, DrawLevel.MoonLevel);
-                        int mooncentre = moonimagepos.X + moonimagepos.X / 2;
+                        int mooncentre = moonimagepos.X + moonimagepos.Width / 2;
 
                         maxtreepos = new Point(Math.Max(maxtreepos.X, mmax.X), Math.Max(maxtreepos.Y, mmax.Y));
 

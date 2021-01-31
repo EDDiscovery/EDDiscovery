@@ -266,14 +266,12 @@ namespace EDDiscovery.UserControls
                         }
                     }
 
-                    // for xcentre, center the image around position.X, not the bitmap, the icon width area is off to the left
-                    Point postoplot = xiscentre ? new Point(position.X - imagewidtharea / 2 - iconwidtharea, position.Y) : position;
+                    // need left middle, if xiscentre, translate to it
+                    Point postoplot = xiscentre ? new Point(position.X - bmp.Width/2, position.Y) : position; 
 
                     //System.Diagnostics.Debug.WriteLine("Body " + sc.BodyName + " plot at "  + postoplot + " " + bmp.Size + " " + (postoplot.X+imageleft) + "," + (postoplot.Y-bmp.Height/2+imagetop));
-
-
                     endpoint = CreateImageAndLabel(pc, bmp, postoplot, bmp.Size, out imagepos, nodelabels, tip);
-                    imagepos.X += iconwidtharea / 2;       // adjust return for left icon width, since we have iconwidth + image..  this moves the centre over this amount
+                    //System.Diagnostics.Debug.WriteLine("Draw {0} at {1} {2} out {3}", nodelabels[0], postoplot, bmp.Size, imagepos);
 
                     if (sc.HasMaterials && ShowMaterials)
                     {
@@ -532,9 +530,9 @@ namespace EDDiscovery.UserControls
             max = new Point(Math.Max(max.X, ie.Location.Right), Math.Max(max.Y, ie.Location.Bottom));
             c.Add(ie);
 
-            //System.Diagnostics.Debug.WriteLine(".. Max " + max);
+            imageloc = ie.Location;     // used to be ximagecentre = ie.Location.X+ie.Location.Width/2
 
-            imageloc = ie.Location;
+            //System.Diagnostics.Debug.WriteLine(".. Max " + max);
 
             return max;
         }
