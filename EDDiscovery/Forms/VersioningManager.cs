@@ -318,7 +318,10 @@ namespace EDDiscovery.Versions
                     {
                         string[] parts = vars[key].Split(';');
                         string o = Path.Combine(new string[] { appfolder, parts[1], parts[0] });
-                        filelist.Add(o);
+                        if ( File.Exists(o))
+                            filelist.Add(o);
+                        else
+                            System.Diagnostics.Debug.WriteLine("Missing action pack other file " + o);      // ignore it 
                     }
                 }
 
@@ -350,9 +353,9 @@ namespace EDDiscovery.Versions
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine("BUG BUG");
+                System.Diagnostics.Debug.WriteLine("Exception in VManager " + ex.Message + " " + ex.StackTrace);
             }
 
             return false;

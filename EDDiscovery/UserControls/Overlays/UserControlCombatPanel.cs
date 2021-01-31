@@ -348,7 +348,7 @@ namespace EDDiscovery.UserControls
             if (CreateEntry(he, out var rewardcol))
             {
                 var rw = dataGridViewCombat.RowTemplate.Clone() as DataGridViewRow;
-                he.journalEntry.FillInformation(out var eventDescription, out _);
+                he.FillInformation(out var eventDescription, out _);
 
                 rw.CreateCells(dataGridViewCombat, EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(he.EventTimeUTC),
                     he.EventSummary, eventDescription, rewardcol);
@@ -701,7 +701,7 @@ namespace EDDiscovery.UserControls
 
                 var leftclicksystem = (HistoryEntry)dataGridViewCombat.Rows[dataGridViewCombat.LeftClickRow].Tag;
 
-                leftclicksystem.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
+                leftclicksystem.FillInformation(out string EventDescription, out string EventDetailedInfo);
 
                 if (expanded) // put it back to original text
                 {

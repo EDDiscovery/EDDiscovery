@@ -360,7 +360,7 @@ namespace EDDiscovery.UserControls
 
             rw.Cells[1].Style.ForeColor = (he.System.HasCoordinate) ? Color.Empty : discoveryform.theme.UnknownSystemColor;
 
-            he.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
+            he.FillInformation(out string EventDescription, out string EventDetailedInfo);
 
             string tip = String.Join(Environment.NewLine, he.EventSummary, EventDescription, EventDetailedInfo);
 
@@ -907,7 +907,7 @@ namespace EDDiscovery.UserControls
                         HistoryEntry he = dataGridViewStarList.Rows[r].Tag as HistoryEntry;
                         DataGridViewRow rw = dataGridViewStarList.Rows[r];
 
-                        he.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
+                        he.FillInformation(out string EventDescription, out string EventDetailedInfo);
 
                         return new Object[] {
                             rw.Cells[0].Value,

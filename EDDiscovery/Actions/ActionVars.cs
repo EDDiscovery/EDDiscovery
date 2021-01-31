@@ -75,7 +75,7 @@ namespace EDDiscovery.Actions
 
                 vars[prefix + "Note"] = he.snc?.Note ?? "";
 
-                he.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
+                he.FillInformation(out string EventDescription, out string EventDetailedInfo);
                 vars[prefix + "EventDescription"] = EventDescription;
                 vars[prefix + "EventDetailedInfo"] = EventDetailedInfo;
 

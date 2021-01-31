@@ -290,7 +290,7 @@ namespace EDDiscovery.WebServer
                     JArray jent = new JArray();
                     jent.Add(he.journalEntry.GetIconPackPath);
                     jent.Add(he.journalEntry.EventTimeUTC);
-                    he.journalEntry.FillInformation(out string info, out string detailed);
+                    he.FillInformation(out string info, out string detailed);
                     string note = (he.snc != null) ? he.snc.Note : "";
                     jent.Add(he.EventSummary);
                     jent.Add(info);

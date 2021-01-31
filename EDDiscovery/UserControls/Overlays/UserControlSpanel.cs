@@ -404,7 +404,7 @@ namespace EDDiscovery.UserControls
             if (Config(Configuration.showIcon))
                 coldata.Add("`!!ICON!!");                // dummy place holder..
 
-            he.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
+            he.FillInformation(out string EventDescription, out string EventDetailedInfo);
 
             if (Config(Configuration.showDescription))
             {

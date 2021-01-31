@@ -449,7 +449,7 @@ namespace EDDiscovery.UserControls
             //string debugt = item.Journalid + "  " + item.System.id_edsm + " " + item.System.GetHashCode() + " "; // add on for debug purposes to a field below
 
             DateTime time = EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(item.EventTimeUTC);
-            item.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
+            item.FillInformation(out string EventDescription, out string EventDetailedInfo);
             string note = (item.snc != null) ? item.snc.Note : "";
 
             if (search.HasChars())
@@ -758,7 +758,7 @@ namespace EDDiscovery.UserControls
                 }
                 else
                 {
-                    leftclickhe.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
+                    leftclickhe.FillInformation(out string EventDescription, out string EventDetailedInfo);
                     DataGridViewRow row = dataGridViewTravel.Rows[dataGridViewTravel.LeftClickRow];
 
                     bool expanded = row.Cells[Columns.Information].Tag != null;
@@ -1467,7 +1467,7 @@ namespace EDDiscovery.UserControls
                     grd.GetLine += delegate (int r)
                     {
                         HistoryEntry he = (HistoryEntry)dataGridViewTravel.Rows[r].Tag;
-                        he.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
+                        he.FillInformation(out string EventDescription, out string EventDetailedInfo);
                         return new Object[] {
                             EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC),
                             he.EventSummary,
