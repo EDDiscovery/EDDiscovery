@@ -60,7 +60,6 @@ namespace EDDiscovery
             this.buttonExtManageAddOns = new ExtendedControls.ExtButton();
             this.buttonExtEditAddOns = new ExtendedControls.ExtButton();
             this.buttonExtPopOut = new ExtendedControls.ExtButton();
-            this.buttonExtEDSMSync = new ExtendedControls.ExtButton();
             this.buttonReloadActions = new ExtendedControls.ExtButton();
             this.contextMenuStripTabs = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.addTabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -325,23 +324,11 @@ namespace EDDiscovery
             this.buttonExtPopOut.UseVisualStyleBackColor = false;
             this.buttonExtPopOut.Click += new System.EventHandler(this.buttonExtPopOut_Click);
             // 
-            // buttonExtEDSMSync
-            // 
-            this.buttonExtEDSMSync.Image = global::EDDiscovery.Icons.Controls.Main_Toolbar_SyncEDSM;
-            this.buttonExtEDSMSync.Location = new System.Drawing.Point(430, 1);
-            this.buttonExtEDSMSync.Margin = new System.Windows.Forms.Padding(1, 1, 3, 1);
-            this.buttonExtEDSMSync.Name = "buttonExtEDSMSync";
-            this.buttonExtEDSMSync.Size = new System.Drawing.Size(24, 24);
-            this.buttonExtEDSMSync.TabIndex = 2;
-            this.toolTip.SetToolTip(this.buttonExtEDSMSync, "Send any unsynced logs to EDSM");
-            this.buttonExtEDSMSync.UseVisualStyleBackColor = true;
-            this.buttonExtEDSMSync.Click += new System.EventHandler(this.buttonExtEDSMSync_Click);
-            // 
             // buttonReloadActions
             // 
             this.buttonReloadActions.Image = global::EDDiscovery.Icons.Controls.Main_Toolbar_Refresh;
             this.buttonReloadActions.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.buttonReloadActions.Location = new System.Drawing.Point(458, 1);
+            this.buttonReloadActions.Location = new System.Drawing.Point(430, 1);
             this.buttonReloadActions.Margin = new System.Windows.Forms.Padding(1, 1, 3, 1);
             this.buttonReloadActions.Name = "buttonReloadActions";
             this.buttonReloadActions.Size = new System.Drawing.Size(65, 24);
@@ -425,7 +412,6 @@ namespace EDDiscovery
             this.flowToolBar.Controls.Add(this.buttonExtManageAddOns);
             this.flowToolBar.Controls.Add(this.buttonExtEditAddOns);
             this.flowToolBar.Controls.Add(this.buttonExtPopOut);
-            this.flowToolBar.Controls.Add(this.buttonExtEDSMSync);
             this.flowToolBar.Controls.Add(this.buttonReloadActions);
             this.flowToolBar.Controls.Add(this.extButtonDrawnHelp);
             this.flowToolBar.Location = new System.Drawing.Point(0, 0);
@@ -442,7 +428,7 @@ namespace EDDiscovery
             this.extButtonDrawnHelp.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.extButtonDrawnHelp.Image = null;
             this.extButtonDrawnHelp.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Text;
-            this.extButtonDrawnHelp.Location = new System.Drawing.Point(529, 3);
+            this.extButtonDrawnHelp.Location = new System.Drawing.Point(501, 3);
             this.extButtonDrawnHelp.MouseOverColor = System.Drawing.Color.White;
             this.extButtonDrawnHelp.MouseSelectedColor = System.Drawing.Color.Green;
             this.extButtonDrawnHelp.MouseSelectedColorEnable = true;
@@ -509,7 +495,7 @@ namespace EDDiscovery
             this.menuFlowPanel.Location = new System.Drawing.Point(0, 0);
             this.menuFlowPanel.Margin = new System.Windows.Forms.Padding(0);
             this.menuFlowPanel.Name = "menuFlowPanel";
-            this.menuFlowPanel.Size = new System.Drawing.Size(496, 24);
+            this.menuFlowPanel.Size = new System.Drawing.Size(376, 24);
             this.menuFlowPanel.TabIndex = 23;
             this.menuFlowPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MouseDownCAPTION);
             this.menuFlowPanel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MouseUpCAPTION);
@@ -526,9 +512,8 @@ namespace EDDiscovery
             this.mainMenu.Location = new System.Drawing.Point(0, 0);
             this.mainMenu.Name = "mainMenu";
             this.mainMenu.Padding = new System.Windows.Forms.Padding(0);
-            this.mainMenu.Size = new System.Drawing.Size(334, 24);
+            this.mainMenu.Size = new System.Drawing.Size(214, 24);
             this.mainMenu.TabIndex = 16;
-            this.mainMenu.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.mainMenu_ItemClicked);
             // 
             // toolsToolStripMenuItem
             // 
@@ -895,7 +880,7 @@ namespace EDDiscovery
             // 
             this.label_version.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label_version.AutoSize = true;
-            this.label_version.Location = new System.Drawing.Point(342, 6);
+            this.label_version.Location = new System.Drawing.Point(222, 6);
             this.label_version.Margin = new System.Windows.Forms.Padding(8, 1, 3, 0);
             this.label_version.Name = "label_version";
             this.label_version.Size = new System.Drawing.Size(43, 13);
@@ -909,7 +894,7 @@ namespace EDDiscovery
             // 
             this.labelInfoBoxTop.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.labelInfoBoxTop.AutoSize = true;
-            this.labelInfoBoxTop.Location = new System.Drawing.Point(396, 6);
+            this.labelInfoBoxTop.Location = new System.Drawing.Point(276, 6);
             this.labelInfoBoxTop.Margin = new System.Windows.Forms.Padding(8, 1, 3, 0);
             this.labelInfoBoxTop.Name = "labelInfoBoxTop";
             this.labelInfoBoxTop.Size = new System.Drawing.Size(43, 13);
@@ -922,7 +907,7 @@ namespace EDDiscovery
             // 
             this.labelGameDateTime.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.labelGameDateTime.AutoSize = true;
-            this.labelGameDateTime.Location = new System.Drawing.Point(450, 6);
+            this.labelGameDateTime.Location = new System.Drawing.Point(330, 6);
             this.labelGameDateTime.Margin = new System.Windows.Forms.Padding(8, 1, 3, 0);
             this.labelGameDateTime.Name = "labelGameDateTime";
             this.labelGameDateTime.Size = new System.Drawing.Size(43, 13);
@@ -1070,7 +1055,6 @@ namespace EDDiscovery
         private ExtendedControls.ExtComboBox comboBoxCommander;
         private ExtendedControls.ExtButton buttonExt3dmap;
         private ExtendedControls.ExtButton buttonExtRefresh;
-        private ExtendedControls.ExtButton buttonExtEDSMSync;
         private System.Windows.Forms.ToolTip toolTip;
         private ExtendedControls.ExtButton buttonExtEditAddOns;
         private ExtendedControls.ExtButton buttonExtManageAddOns;

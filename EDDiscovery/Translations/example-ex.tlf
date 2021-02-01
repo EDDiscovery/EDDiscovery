@@ -245,7 +245,7 @@ SECTION EDDiscoveryForm
 .VSLFileErr: "Error writing {0} export visited stars" @
 .InaraW: "Inara historic upload is disabled until 1 hour has elapsed from the last try to prevent server flooding" @
 .RH: "Refresh History." @
-.NoEDSMAPI: "Please ensure a commander is selected and it has a EDSM API key set" @
+.NoEDSMAPI: "No EDSM API key set" @
 .EDSMSyncE: "EDSM Sync failed: {0}" @
 .EP: "Edit Profiles" @
 .PL: "Profile {0} Loaded" @

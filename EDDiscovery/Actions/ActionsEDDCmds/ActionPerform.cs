@@ -83,7 +83,7 @@ namespace EDDiscovery.Actions
                         EliteDangerousCore.EDSM.EDSMClass edsm = new EliteDangerousCore.EDSM.EDSMClass();
 
                         if (edsm.ValidCredentials)
-                            EliteDangerousCore.EDSM.EDSMJournalSync.SendEDSMEvents(ap.ActionController.LogLine, ac.DiscoveryForm.history.EntryOrder());
+                            ac.DiscoveryForm.EDSMSend();
                         else
                             ap.ReportError("No valid EDSM Credentials");
                     }

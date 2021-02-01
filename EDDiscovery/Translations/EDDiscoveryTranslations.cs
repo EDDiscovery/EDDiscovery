@@ -71,7 +71,7 @@ namespace EDDiscovery
         EDDiscoveryForm_FillPos, // Are you sure to Rebuild Indexes? It may take a long time.
         EDDiscoveryForm_RemoveDLLPerms, // remove dll etc.
         EDDiscoveryForm_RH, // Refresh History.
-        EDDiscoveryForm_NoEDSMAPI, // Please ensure a commander is selected and it has a EDSM API key set
+        EDDiscoveryForm_NoEDSMAPI, // No EDSM API key set
         EDDiscoveryForm_EDSMSyncE, // EDSM Sync failed: {0}
         EDDiscoveryForm_EP, // Edit Profiles
         EDDiscoveryForm_PL, // Profile {0} Loaded

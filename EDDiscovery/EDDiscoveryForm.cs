@@ -323,6 +323,10 @@ namespace EDDiscovery
             if (EDDOptions.Instance.ActionButton)
                 buttonReloadActions.Visible = true;
 
+#if !DEBUG
+            sendUnsuncedEDDNEventsToolStripMenuItem.Visible = false;        // for testing only now
+#endif
+
             extButtonDrawnHelp.Text = "";
             extButtonDrawnHelp.Image = ExtendedControls.TabStrip.HelpIcon;
         }
@@ -631,9 +635,9 @@ namespace EDDiscovery
 
 
 
-        #endregion
+#endregion
 
-        #region Tabs - most code now in MajorTabControl.cs  (mostly) Only UI code left.
+#region Tabs - most code now in MajorTabControl.cs  (mostly) Only UI code left.
 
         public void AddTab(PanelInformation.PanelIDs id, int tabindex = 0) // negative means from the end.. -1 is one before end
         {
@@ -698,9 +702,9 @@ namespace EDDiscovery
             }
         }
 
-        #endregion
+#endregion
 
-        #region Themeing
+#region Themeing
 
         public void ApplyTheme(bool panelrefreshaswell = false)     // set true if your changing the theme
         {
@@ -727,7 +731,7 @@ namespace EDDiscovery
 
 #endregion
 
-        #region EDSM syncs code
+#region EDSM syncs code
 
         private void edsmRefreshTimer_Tick(object sender, EventArgs e)
         {
@@ -741,9 +745,9 @@ namespace EDDiscovery
             Controller.AsyncPerformSync(true, true);
         }
 
-        #endregion
+#endregion
 
-        #region Controller event handlers 
+#region Controller event handlers 
 
         private void Controller_RefreshCommanders()
         {
@@ -785,6 +789,13 @@ namespace EDDiscovery
             }
 
             Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Refresh complete finished");
+
+            if (EDCommander.Current.SyncToEdsm)        // no sync, no credentials, no action
+            {
+                EDSMClass edsm = new EDSMClass();
+                if (edsm.ValidCredentials)
+                    EDSMSend();
+            }
         }
 
         public void NewEntry( JournalEntry e)       // programatically do a new entry
@@ -826,9 +837,9 @@ namespace EDDiscovery
                 System.Diagnostics.Trace.WriteLine("Arrived at system: " + he.System.Name + " " + count + ":th visit.");
             }
 
-            if (EDCommander.Current.SyncToEdsm)
+            if (EDCommander.Current.SyncToEdsm && EDSMJournalSync.SendHE(he))           // send this one, if allowed.
             {
-                EDSMJournalSync.SendEDSMEvents(LogLine, new List<HistoryEntry>() { he });
+                EDSMJournalSync.SendEDSMEvents(LogLine, new List<HistoryEntry>() { he });       // send, if bad credentials, EDSM will moan alerting the user
             }
 
             if (EDCommander.Current.SyncToInara)
@@ -930,9 +941,9 @@ namespace EDDiscovery
             }
         }
 
-        #endregion
+#endregion
 
-        #region Closing
+#region Closing
 
         private void EDDiscoveryForm_FormClosing(object sender, FormClosingEventArgs e)     // when user asks for a close
         {
@@ -993,7 +1004,7 @@ namespace EDDiscovery
      
 #endregion
 
-        #region Buttons, Mouse, Menus
+#region Buttons, Mouse, Menus
 
         private void buttonReloadActions_Click(object sender, EventArgs e)
         {
@@ -1075,10 +1086,6 @@ namespace EDDiscovery
             Process.Start(Properties.Resources.URLProjectFeedback);
         }
 
-        /// <summary>
-        /// The settings panel check box for 'Use notification area icon' has changed.
-        /// </summary>
-        /// <param name="useNotifyIcon">Whether or not the setting is enabled.</param>
         internal void useNotifyIconChanged(bool useNotifyIcon)
         {
             notifyIcon1.Visible = useNotifyIcon;
@@ -1226,7 +1233,7 @@ namespace EDDiscovery
             this.Cursor = Cursors.Default;
         }
 
-        private void sendUnsyncedEDDNEventsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void sendUnsyncedEDDNEventsToolStripMenuItem_Click(object sender, EventArgs e)      //DEBUG ONLY
         {
             List<HistoryEntry> hlsyncunsyncedlist = HistoryList.FilterByScanNotEDDNSynced(Controller.history.EntryOrder());        // first entry is oldest
 
@@ -1280,9 +1287,9 @@ namespace EDDiscovery
             }
         }
 
-        #endregion
+#endregion
 
-        #region Notify
+#region Notify
 
         private void notifyIcon1_DoubleClick(object sender, EventArgs e)
         {
@@ -1327,7 +1334,7 @@ namespace EDDiscovery
 
 #endregion
 
-        #region "Caption" controls
+#region "Caption" controls
 
         private void MouseDownCAPTION(object sender, MouseEventArgs e)
         {
@@ -1365,9 +1372,9 @@ namespace EDDiscovery
                 this.WindowState = FormWindowState.Minimized;
         }
 
-        #endregion
+#endregion
 
-        #region Updators
+#region Updators
 
         public void NewTargetSet(Object sender)
         {
@@ -1387,9 +1394,9 @@ namespace EDDiscovery
                 OnNewCalculatedRoute(list);
         }
 
-        #endregion
+#endregion
 
-        #region Add Ons
+#region Add Ons
         public void manageAddOnsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             buttonExtManageAddOns_Click(sender,e);
@@ -1511,7 +1518,7 @@ namespace EDDiscovery
 
 #endregion
 
-        #region Toolbar
+#region Toolbar
 
         public void LoadCommandersListBox()
         {
@@ -1521,12 +1528,10 @@ namespace EDDiscovery
             if (history.CommanderId == -1)
             {
                 comboBoxCommander.SelectedIndex = 0;
-                buttonExtEDSMSync.Enabled = false;
             }
             else
             {
                 comboBoxCommander.SelectedItem = EDCommander.Current.Name;
-                buttonExtEDSMSync.Enabled = EDCommander.Current.SyncToEdsm | EDCommander.Current.SyncFromEdsm;
             }
 
             comboBoxCommander.Enabled = true;
@@ -1558,13 +1563,13 @@ namespace EDDiscovery
             RefreshHistoryAsync();
         }
 
-        private void SendUnsyncedJournalsToEDSM()
+        private void sendUnsyncedEDSMJournalsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             EDSMClass edsm = new EDSMClass();
 
             if (!edsm.ValidCredentials)
             {
-                ExtendedControls.MessageBoxTheme.Show(this, "Please ensure a commander is selected and it has a EDSM API key set".T(EDTx.EDDiscoveryForm_NoEDSMAPI));
+                ExtendedControls.MessageBoxTheme.Show(this, "No EDSM API key set".T(EDTx.EDDiscoveryForm_NoEDSMAPI));
                 return;
             }
 
@@ -1579,29 +1584,86 @@ namespace EDDiscovery
                 }
             }
 
-            try
-            {
-                EDSMJournalSync.SendEDSMEvents(l => LogLine(l), history.EntryOrder(), manual: true);
-            }
-            catch (Exception ex)
-            {
-                LogLine(string.Format("EDSM Sync failed: {0}".T(EDTx.EDDiscoveryForm_EDSMSyncE), ex.Message));
-            }
+            EDSMSend();
         }
 
-        private void buttonExtEDSMSync_Click(object sender, EventArgs e)
+        public void EDSMSend()
         {
-            SendUnsyncedJournalsToEDSM();
+            var helist = EDSMJournalSync.GetListToSend(history.EntryOrder());               // find out what to send..
+
+            if (helist.Count >= 500)
+            {
+                ExtendedControls.ConfigurableForm cf = new ExtendedControls.ConfigurableForm();
+
+                int width = 300;
+
+                DateTime lasthe = helist.Last().EventTimeUTC;
+
+                cf.Add(new ExtendedControls.ConfigurableForm.Entry("UC", typeof(Label),
+                            string.Format("There are {0} EDSM reports to send, this will take time and bandwidth, choose from the following what to do:", helist.Count),
+                             new Point(5, 30), new Size(width - 5 - 20, 70), null) { textboxmultiline = true });
+
+                cf.Add(new ExtendedControls.ConfigurableForm.Entry("All", typeof(ExtendedControls.ExtButton),
+                            "Send All",
+                             new Point(5, 100), new Size(width - 5 - 20, 24), null));
+
+                cf.Add(new ExtendedControls.ConfigurableForm.Entry("Today", typeof(ExtendedControls.ExtButton),
+                            "Send Last 24 Hours of Logs",
+                             new Point(5, 150), new Size(width - 5 - 20, 24), null));
+
+                cf.Add(new ExtendedControls.ConfigurableForm.Entry("Custom", typeof(ExtendedControls.ExtButton),
+                            "Send From",
+                             new Point(5, 200), new Size(80, 24), null));
+
+                cf.Add(new ExtendedControls.ConfigurableForm.Entry("Date", typeof(ExtendedControls.ExtDateTimePicker),
+                                            lasthe.AddDays(-28).ToStringZulu(),
+                                             new Point(100, 200), new Size(width - 100 - 20, 24), null));
+
+                cf.Add(new ExtendedControls.ConfigurableForm.Entry("None", typeof(ExtendedControls.ExtButton),
+                            "Send None",
+                             new Point(5, 250), new Size(width - 5 - 20, 24), null));
+
+                DateTime date= DateTime.UtcNow;
+
+                cf.Trigger += (dialogname, controlname, tag) =>
+                {
+                    if (controlname.Contains("All"))
+                    {
+                        date = new DateTime(1900, 1, 1);
+                        cf.ReturnResult(DialogResult.OK);
+                    }
+                    else if (controlname.Contains("Today"))
+                    {
+                        date = lasthe.AddDays(-1);
+                        cf.ReturnResult(DialogResult.OK);
+                    }
+                    else if (controlname.Contains("Custom"))
+                    {
+                        date = cf.GetDateTime("Date").Value.ToUniversalTime();
+                        cf.ReturnResult(DialogResult.OK);
+                    }
+                    else if (controlname.Contains("None"))
+                    {
+                        cf.ReturnResult(DialogResult.OK);
+                    }
+                };
+
+                cf.ShowDialogCentred(this.FindForm(), this.FindForm().Icon, "Large number of EDSM Entries");
+
+                var jes = helist.Where(x => x.EventTimeUTC <  date).Select(x => x.journalEntry).ToList();
+                JournalEntry.SetEdsmSyncList(jes);
+
+                helist = EDSMJournalSync.GetListToSend(history.EntryOrder());               // find out what to send..
+            }
+
+            if ( helist.Count > 0 )
+                EDSMJournalSync.SendEDSMEvents(l => LogLine(l), helist);
+
         }
 
-        private void sendUnsyncedEDSMJournalsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            SendUnsyncedJournalsToEDSM();
-        }
+#endregion
 
-        #endregion
-
-        #region Profiles
+#region Profiles
 
         private void UpdateProfileComboBox()
         {
@@ -1694,9 +1756,9 @@ namespace EDDiscovery
                 LogLine("Profile reports errors in triggers:".T(EDTx.EDDiscoveryForm_PE1) + errlist); 
         }
 
-        #endregion
+#endregion
 
-        #region PopOuts
+#region PopOuts
 
         ExtendedControls.ExtListBoxForm popoutdropdown;
 
@@ -1725,15 +1787,9 @@ namespace EDDiscovery
             tabControlMain.HelpOn(this,extButtonDrawnHelp.PointToScreen(new Point(0, extButtonDrawnHelp.Bottom)), tabControlMain.SelectedIndex);
         }
 
-        private void mainMenu_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
-        {
+#endregion
 
-        }
-
-
-        #endregion
-
-        #region webserver
+#region webserver
 
         public bool WebServerControl(bool start)        // false if an error occurs
         {
@@ -1781,7 +1837,7 @@ namespace EDDiscovery
             return true;
         }
 
-        #endregion
+#endregion
 
 
     }
