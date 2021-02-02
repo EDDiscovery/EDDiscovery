@@ -441,6 +441,7 @@ SECTION UserControlSurveyor
 .autoHideToolStripMenuItem: "Auto Hide" @
 .dontHideInFSSModeToolStripMenuItem: "Don\'t Hide in FSS Mode" @
 .showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem: "Show System Info Always" @
+.selectFSSSignalsShownToolStripMenuItem: "Select FSS Signals Shown" @
 .LowRadius: " Low Radius." @
 .Mapped: " (Mapped & Discovered)" @
 .Systemscancomplete: "System scan complete." @
