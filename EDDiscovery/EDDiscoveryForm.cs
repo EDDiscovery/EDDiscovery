@@ -837,7 +837,7 @@ namespace EDDiscovery
                 System.Diagnostics.Trace.WriteLine("Arrived at system: " + he.System.Name + " " + count + ":th visit.");
             }
 
-            if (EDCommander.Current.SyncToEdsm && EDSMJournalSync.SendHE(he))           // send this one, if allowed.
+            if (EDCommander.Current.SyncToEdsm && EDSMJournalSync.OkayToSend(he))           // send this one, if allowed.
             {
                 EDSMJournalSync.SendEDSMEvents(LogLine, new List<HistoryEntry>() { he });       // send, if bad credentials, EDSM will moan alerting the user
             }
@@ -1595,35 +1595,39 @@ namespace EDDiscovery
             {
                 ExtendedControls.ConfigurableForm cf = new ExtendedControls.ConfigurableForm();
 
-                int width = 300;
+                int width = 400;
 
                 DateTime lasthe = helist.Last().EventTimeUTC;
 
                 cf.Add(new ExtendedControls.ConfigurableForm.Entry("UC", typeof(Label),
-                            string.Format("There are {0} EDSM reports to send, this will take time and bandwidth, choose from the following what to do:", helist.Count),
-                             new Point(5, 30), new Size(width - 5 - 20, 70), null) { textboxmultiline = true });
+                            string.Format("There are {0} EDSM reports to send, this will take time and bandwidth, choose from the following what to do. Entries before this will be marked as sent.".T(EDTx.EDDiscoveryForm_SendEDSMCaption), helist.Count),
+                             new Point(5, 30), new Size(width - 5 - 20, 100), null) { textboxmultiline = true });
 
                 cf.Add(new ExtendedControls.ConfigurableForm.Entry("All", typeof(ExtendedControls.ExtButton),
-                            "Send All",
-                             new Point(5, 100), new Size(width - 5 - 20, 24), null));
+                            "Send All to EDSM".T(EDTx.EDDiscoveryForm_SendEDSMAll),
+                             new Point(5, 130), new Size(width - 5 - 20, 24), null));
 
                 cf.Add(new ExtendedControls.ConfigurableForm.Entry("Today", typeof(ExtendedControls.ExtButton),
-                            "Send Last 24 Hours of Logs",
-                             new Point(5, 150), new Size(width - 5 - 20, 24), null));
+                            "Send Last 24 Hours of entries to EDSM".T(EDTx.EDDiscoveryForm_SendEDSM24),
+                             new Point(5, 180), new Size(width - 5 - 20, 24), null));
 
                 cf.Add(new ExtendedControls.ConfigurableForm.Entry("Custom", typeof(ExtendedControls.ExtButton),
-                            "Send From",
-                             new Point(5, 200), new Size(80, 24), null));
+                            "Send From".T(EDTx.EDDiscoveryForm_SendEDSMFrom),
+                             new Point(5, 230), new Size(80, 24), null));
 
                 cf.Add(new ExtendedControls.ConfigurableForm.Entry("Date", typeof(ExtendedControls.ExtDateTimePicker),
                                             lasthe.AddDays(-28).ToStringZulu(),
-                                             new Point(100, 200), new Size(width - 100 - 20, 24), null));
+                                             new Point(100, 230), new Size(width - 100 - 20, 24), null));
 
                 cf.Add(new ExtendedControls.ConfigurableForm.Entry("None", typeof(ExtendedControls.ExtButton),
-                            "Send None",
-                             new Point(5, 250), new Size(width - 5 - 20, 24), null));
+                            "EDSM is up to date - send Nothing more".T(EDTx.EDDiscoveryForm_SendEDSMNone),
+                             new Point(5, 280), new Size(width - 5 - 20, 24), null));
 
-                DateTime date= DateTime.UtcNow;
+                cf.Add(new ExtendedControls.ConfigurableForm.Entry("Cancel", typeof(ExtendedControls.ExtButton),
+                            "I'll decide later, do nothing".T(EDTx.EDDiscoveryForm_SendEDSMCancel),
+                             new Point(5, 330), new Size(width - 5 - 20, 24), null));
+
+                DateTime date = DateTime.UtcNow;
 
                 cf.Trigger += (dialogname, controlname, tag) =>
                 {
@@ -1646,9 +1650,14 @@ namespace EDDiscovery
                     {
                         cf.ReturnResult(DialogResult.OK);
                     }
+                    else if (controlname.Contains("Cancel"))
+                    {
+                        cf.ReturnResult(DialogResult.Cancel);
+                    }
                 };
 
-                cf.ShowDialogCentred(this.FindForm(), this.FindForm().Icon, "Large number of EDSM Entries");
+                if (cf.ShowDialogCentred(this.FindForm(), this.FindForm().Icon, "Sending a large number of EDSM Entries".T(EDTx.EDDiscoveryForm_SendEDSMTitle)) == DialogResult.Cancel)
+                    return;
 
                 var jes = helist.Where(x => x.EventTimeUTC <  date).Select(x => x.journalEntry).ToList();
                 JournalEntry.SetEdsmSyncList(jes);

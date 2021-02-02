@@ -32,6 +32,13 @@ namespace EDDiscovery
         EDDiscoveryForm_TSF,
         EDDiscoveryForm_ConfirmSyncToEDSM, // You have disabled sync to EDSM for this commander.  Are you sure you want to send unsynced events to EDSM?
         EDDiscoveryForm_ConfirmSyncToEDSMCaption, // Confirm EDSM sync
+        EDDiscoveryForm_SendEDSMTitle,
+        EDDiscoveryForm_SendEDSMCaption,
+        EDDiscoveryForm_SendEDSMAll,
+        EDDiscoveryForm_SendEDSM24,
+        EDDiscoveryForm_SendEDSMFrom,
+        EDDiscoveryForm_SendEDSMNone,
+        EDDiscoveryForm_SendEDSMCancel,
         EDDiscoveryForm_RTABL, // Name:
         EDDiscoveryForm_RTABT, // Rename Tab
         EDDiscoveryForm_RTABTT, // Enter a new name for the tab

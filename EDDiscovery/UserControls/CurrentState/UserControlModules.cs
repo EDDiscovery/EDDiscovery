@@ -559,11 +559,7 @@ namespace EDDiscovery.UserControls
                 {
                     if ( ExtendedControls.MessageBoxTheme.Show(FindForm(), "Confirm sell of ship:".Tx(EDTx.EDDiscoveryForm_ConfirmSyncToEDSM) + Environment.NewLine + last_si.ShipNameIdentType , "Warning".T(EDTx.Warning), MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes ) 
                     {
-                        var je = new EliteDangerousCore.JournalEvents.JournalShipyardSell(DateTime.UtcNow);
-                        je.ShipTypeFD = last_si.ShipFD;
-                        je.SellShipId = last_si.ID;
-                        je.ShipPrice = 0;
-                        je.SetCommander(EDCommander.CurrentCmdrID);
+                        var je = new EliteDangerousCore.JournalEvents.JournalShipyardSell(DateTime.UtcNow, last_si.ShipFD, last_si.ID, 0, EDCommander.CurrentCmdrID);
                         var jo = je.Json();
                         je.Add(jo);
                         discoveryform.NewEntry(je);
