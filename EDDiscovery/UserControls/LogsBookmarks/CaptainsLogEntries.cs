@@ -375,10 +375,11 @@ namespace EDDiscovery.UserControls
 
         #region Interactions with other tabs
 
-        public void SelectDate(DateTime date, bool createnew)       // date is in real time (12/1/2019), not in game (3305) time, but has no kind (its just plain).
+        public void SelectDate(DateTime datestart, DateTime dateend, bool createnew)       // date is in real time (12/1/2019), not in game (3305) time, but has no kind (its just plain).
         {
             updateprogramatically = true;
-            dateTimePickerEndDate.Value = dateTimePickerStartDate.Value = EDDConfig.Instance.ConvertTimeToSelectedNoKind(date);
+            dateTimePickerStartDate.Value = EDDConfig.Instance.ConvertTimeToSelectedNoKind(datestart);
+            dateTimePickerEndDate.Value = EDDConfig.Instance.ConvertTimeToSelectedNoKind(dateend);
             dateTimePickerEndDate.Checked = dateTimePickerStartDate.Checked = true;
 
             updateprogramatically = false;
