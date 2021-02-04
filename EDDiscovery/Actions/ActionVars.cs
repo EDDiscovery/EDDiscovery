@@ -48,7 +48,7 @@ namespace EDDiscovery.Actions
                 vars[prefix + "ShipType"] = he.ShipType;
                 vars[prefix + "ShipTypeFD"] = he.ShipTypeFD;
                 vars[prefix + "ShipId"] = he.ShipId.ToString(ct);
-                vars[prefix + "IndexOf"] = he.Indexno.ToString(ct);
+                vars[prefix + "IndexOf"] = he.EntryNumber.ToString(ct);
 
                 vars[prefix + "Credits"] = he.Credits.ToString(ct);
 

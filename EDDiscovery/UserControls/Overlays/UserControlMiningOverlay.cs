@@ -147,7 +147,7 @@ namespace EDDiscovery.UserControls
                         limpetsleftdisplay = limpetsleft;
                         cargoleftdisplay = cargoleft;
                         incurrentplay = heabove == discoveryform.history.GetLast && !boundevents.Contains(heabove.EntryType);
-                        System.Diagnostics.Debug.WriteLine("Redisplay {0} current {1}", heabove.Indexno, incurrentplay);
+                        System.Diagnostics.Debug.WriteLine("Redisplay {0} current {1}", heabove.EntryNumber, incurrentplay);
                         Display();
 
                     }

@@ -86,7 +86,7 @@ namespace EDDiscovery.Actions
                     List<MaterialCommodities> list = mcl.Sort(commodities);
 
                     ap[prefix + "Count"] = list.Count.ToString(System.Globalization.CultureInfo.InvariantCulture);
-                    ap[prefix + "IndexOf"] = (ap.ActionController as ActionController).HistoryList.EntryOrder()[jidindex].Indexno.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                    ap[prefix + "IndexOf"] = (ap.ActionController as ActionController).HistoryList.EntryOrder()[jidindex].EntryNumber.ToString(System.Globalization.CultureInfo.InvariantCulture);
 
                     for ( int i = 0; i < list.Count; i++ )
                     {

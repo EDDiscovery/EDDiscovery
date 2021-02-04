@@ -762,7 +762,7 @@ namespace EDDiscovery.UserControls
                 AddTreeNode("@", "UTC", hestats.EventTimeUTC.ToString());
                 if (he != null)
                 {
-                    int rown = EDDConfig.Instance.OrderRowsInverted ? hestats.Indexno : (hl.Count - he.Indexno + 1);
+                    int rown = EDDConfig.Instance.OrderRowsInverted ? hestats.EntryNumber : (hl.Count - he.EntryNumber + 1);
                     AddTreeNode("@", "N", rown.ToString());
                 }
 

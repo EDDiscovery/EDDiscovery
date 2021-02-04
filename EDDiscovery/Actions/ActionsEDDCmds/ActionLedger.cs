@@ -103,7 +103,7 @@ namespace EDDiscovery.Actions
                     }
 
                     ap[prefix + "JID"] = jid.ToString(System.Globalization.CultureInfo.InvariantCulture);
-                    ap[prefix + "IndexOf"] = (ap.ActionController as ActionController).HistoryList.EntryOrder()[jidindex].Indexno.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                    ap[prefix + "IndexOf"] = (ap.ActionController as ActionController).HistoryList.EntryOrder()[jidindex].EntryNumber.ToString(System.Globalization.CultureInfo.InvariantCulture);
                     ap[prefix + "UTCTime"] = tx.utctime.ToStringUS();
                     ap[prefix + "EntryType"] = tx.jtype.ToString();
                     ap[prefix + "Notes"] = tx.notes;

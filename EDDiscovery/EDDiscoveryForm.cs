@@ -598,7 +598,7 @@ namespace EDDiscovery
 
         public bool DLLRequestHistory(long index, bool isjid, out EDDDLLInterfaces.EDDDLLIF.JournalEntry f)
         {
-            HistoryEntry he = isjid ? history.GetByJID(index) : history.GetByIndex((int)index);
+            HistoryEntry he = isjid ? history.GetByJID(index) : history.GetByEntryNo((int)index);
             f = EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(history,he);
             return he != null;
         }
@@ -778,7 +778,7 @@ namespace EDDiscovery
 
                 if (lastfileh != null)
                 {
-                    for (int i = lastfileh.Indexno - 1; i < history.Count; i++)      // play thru last history entries up to last file position for the DLLs, indicating stored
+                    for (int i = lastfileh.EntryNumber - 1; i < history.Count; i++)      // play thru last history entries up to last file position for the DLLs, indicating stored
                     {
                         //System.Diagnostics.Debug.WriteLine("{0} : {1} {2}", i, history.EntryOrder[i].EventTimeUTC, history.EntryOrder[i].EventSummary);
                         DLLManager.NewJournalEntry(EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(history, history[i]), true);

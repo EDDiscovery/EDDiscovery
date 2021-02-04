@@ -177,22 +177,22 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.Translate(toolTip1, this);
         }
 
-        public override void ChangeCursorType(IHistoryCursor thc)
-        {
-            uctg.OnTravelSelectionChanged -= Display;
-            uctg = thc;
-            uctg.OnTravelSelectionChanged += Display;
-            //System.Diagnostics.Debug.WriteLine("UCTG changed in sysinfo to " + uctg.GetHashCode());
-        }
-
         public override void LoadLayout()
         {
-            uctg.OnTravelSelectionChanged += Display;    // get this whenever current selection or refreshed..
+            uctg.OnTravelSelectionChanged += TravelSelChanged;
+        }
+
+        public override void ChangeCursorType(IHistoryCursor thc)
+        {
+            uctg.OnTravelSelectionChanged -= TravelSelChanged;
+            uctg = thc;
+            uctg.OnTravelSelectionChanged += TravelSelChanged;
+            //System.Diagnostics.Debug.WriteLine("UCTG changed in sysinfo to " + uctg.GetHashCode());
         }
 
         public override void Closing()
         {
-            uctg.OnTravelSelectionChanged -= Display;
+            uctg.OnTravelSelectionChanged -= TravelSelChanged;
             discoveryform.OnNewTarget -= RefreshTargetDisplay;
             discoveryform.OnNoteChanged -= OnNoteChanged;
             discoveryform.OnEDSMSyncComplete -= Discoveryform_OnEDSMSyncComplete;
@@ -214,7 +214,7 @@ namespace EDDiscovery.UserControls
         private void Discoveryform_OnEDSMSyncComplete(int count, string syslist)     // EDSM ~MAY~ have updated the last discovery flag, so redisplay
         {
             //System.Diagnostics.Debug.WriteLine("EDSM SYNC COMPLETED with " + count + " '" + syslist + "'");
-            Display(last_he, discoveryform.history);
+            Display(last_he, last_hl);
         }
 
         private void Discoveryform_OnNewUIEvent(UIEvent obj)
@@ -223,13 +223,16 @@ namespace EDDiscovery.UserControls
                 Display(last_he, discoveryform.history);
         }
 
+        private void TravelSelChanged(HistoryEntry he, HistoryList hl, bool sel)
+        {
+            Display(he, hl);
+        }
+
         bool neverdisplayed = true;
         HistoryEntry last_he = null;
+        HistoryList last_hl = null;
 
-        private void Display(HistoryEntry he, HistoryList hl) =>
-            Display(he, hl, true);
-
-        private void Display(HistoryEntry he, HistoryList hl, bool selectedEntry)
+        private void Display(HistoryEntry he, HistoryList hl)       // use he/hl not any global ones due to refresh sync timing between EDSM/Others
         {
             if (neverdisplayed)
             {
@@ -238,12 +241,13 @@ namespace EDDiscovery.UserControls
             }
 
             last_he = he;
+            last_hl = hl;
 
             if (last_he != null)
             {
                 SetControlText(he.System.Name);
 
-                HistoryEntry lastfsd = hl.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.FSDJump, he);
+                HistoryEntry lastfsd = last_hl.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.FSDJump, he);
 
                 textBoxSystem.Text = he.System.Name;
                 panelFD.BackgroundImage = (lastfsd != null && (lastfsd.journalEntry as EliteDangerousCore.JournalEvents.JournalFSDJump).EDSMFirstDiscover) ? EDDiscovery.Icons.Controls.firstdiscover : EDDiscovery.Icons.Controls.notfirstdiscover;
@@ -275,7 +279,7 @@ namespace EDDiscovery.UserControls
                     textBoxSolDist.Text = "";
                 }
 
-                int count = discoveryform.history.GetVisitsCount(he.System.Name);
+                int count = last_hl.GetVisitsCount(he.System.Name);
                 textBoxVisits.Text = count.ToString();
 
                 //                System.Diagnostics.Debug.WriteLine("UserControlSysInfo sys info {0} {1} {2}", he.System.Name, he.System.EDSMID, he.System.EDDBID);

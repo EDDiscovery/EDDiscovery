@@ -455,7 +455,7 @@ namespace EDDiscovery.UserControls
             if (search.HasChars())
             {
                 string timestr = time.ToString();
-                int rown = EDDConfig.Instance.OrderRowsInverted ? item.Indexno : (discoveryform.history.Count - item.Indexno + 1);
+                int rown = EDDConfig.Instance.OrderRowsInverted ? item.EntryNumber : (discoveryform.history.Count - item.EntryNumber + 1);
                 string entryrow = rown.ToStringInvariant();
                 bool matched = timestr.IndexOf(search, StringComparison.InvariantCultureIgnoreCase) >= 0 ||
                                 item.EventSummary.IndexOf(search, StringComparison.InvariantCultureIgnoreCase) >= 0 ||
@@ -657,7 +657,7 @@ namespace EDDiscovery.UserControls
             if (he == null)                                 // otherwise, ignore it and return.
                 return;
 
-            int rown = EDDConfig.Instance.OrderRowsInverted ? he.Indexno : (totalentries - he.Indexno + 1);
+            int rown = EDDConfig.Instance.OrderRowsInverted ? he.EntryNumber : (totalentries - he.EntryNumber + 1);
             string rowIdx = rown.ToString();
 
             var headerBounds = new Rectangle(e.RowBounds.Left, e.RowBounds.Top, grid.RowHeadersWidth, e.RowBounds.Height);
@@ -1202,11 +1202,11 @@ namespace EDDiscovery.UserControls
 
         private void gotoEntryNumberToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            int curi = rightclickhe != null ? (EDDConfig.Instance.OrderRowsInverted ? rightclickhe.Indexno : (discoveryform.history.Count - rightclickhe.Indexno + 1)) : 0;
+            int curi = rightclickhe != null ? (EDDConfig.Instance.OrderRowsInverted ? rightclickhe.EntryNumber : (discoveryform.history.Count - rightclickhe.EntryNumber + 1)) : 0;
             int selrow = dataGridViewTravel.JumpToDialog(this.FindForm(), curi, r =>
             {
                 HistoryEntry he = r.Tag as HistoryEntry;
-                return EDDConfig.Instance.OrderRowsInverted ? he.Indexno : (discoveryform.history.Count - he.Indexno + 1);
+                return EDDConfig.Instance.OrderRowsInverted ? he.EntryNumber : (discoveryform.history.Count - he.EntryNumber + 1);
             });
 
             if (selrow >= 0)
