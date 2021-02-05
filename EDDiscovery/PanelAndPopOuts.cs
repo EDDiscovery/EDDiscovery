@@ -79,6 +79,7 @@ namespace EDDiscovery
             Spansh,                 // 48
             EDDB,                   // 49
             Inara,                  // 50
+            Statistics2      
             // ****** ADD More here DO NOT REORDER *****
         };
 
@@ -101,6 +102,7 @@ namespace EDDiscovery
             { new PanelInfo( PanelIDs.Factions, typeof(UserControlFactions), "Factions", "Factions", "Faction rewards and trading tally") },
             { new PanelInfo( PanelIDs.Modules, typeof(UserControlModules), "Ships/Loadout", "Modules", "Ships and their loadouts plus stored modules") },
             { new PanelInfo( PanelIDs.Statistics, typeof(UserControlStats), "Statistics", "Stats", "Statistics Information") },
+   { new PanelInfo( PanelIDs.Statistics2, typeof(UserControlStatistics), "Statistics2", "Stats2", "Statistics2 Information") },
 
             { new PanelInfo( "Shipyard Data") },
             { new PanelInfo( PanelIDs.MarketData, typeof(UserControlMarketData), "Market Data", "MarketData", "Market data view, giving commodity price information where available" ) },

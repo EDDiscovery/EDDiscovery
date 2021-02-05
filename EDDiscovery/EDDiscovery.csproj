@@ -181,6 +181,12 @@
     <Compile Include="UserControls\CurrentState\UserControlFactions.Designer.cs">
       <DependentUpon>UserControlFactions.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\CurrentState\UserControlStatistics.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\CurrentState\UserControlStatistics.Designer.cs">
+      <DependentUpon>UserControlStatistics.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\EngineeringSynthesis\UserControlMaterialTrader.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -735,6 +741,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SetNoteForm.resx">
       <DependentUpon>SetNoteForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\CurrentState\UserControlStatistics.resx">
+      <DependentUpon>UserControlStatistics.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\Form\UserControlForm.resx">
       <DependentUpon>UserControlForm.cs</DependentUpon>
