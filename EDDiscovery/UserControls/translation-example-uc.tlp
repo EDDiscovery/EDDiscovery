@@ -708,6 +708,7 @@ SECTION UserControlRouteTracker
 
 SECTION UserControlScan
 
+.Expired: "Expired:" @
 .System: "System:" @
 .EnterSys: "Show System" @
 .VLMT: "Set Valuable Minimum" @

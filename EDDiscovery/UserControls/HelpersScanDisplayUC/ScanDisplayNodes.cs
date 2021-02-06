@@ -455,6 +455,7 @@ namespace EDDiscovery.UserControls
                 tip = tip.AppendPrePad(sig.ToString(true), Environment.NewLine);
 
             var expired = signals.Where(x => x.TimeRemaining.HasValue && x.ExpiryUTC < DateTime.UtcNow).ToList();
+
             if (expired.Count > 0)
             {
                 expired.Sort(delegate (JournalFSSSignalDiscovered.FSSSignal l, JournalFSSSignalDiscovered.FSSSignal r) { return r.ExpiryUTC.CompareTo(l.ExpiryUTC); });

@@ -333,10 +333,19 @@ namespace EDDiscovery.UserControls
                         string siglist = "";
                         string[] filter = fsssignalsdisplayed.Split(';');
 
-                        var sl = new List<JournalFSSSignalDiscovered.FSSSignal>(systemnode.FSSSignalList);
-                        sl.Sort(delegate (JournalFSSSignalDiscovered.FSSSignal l, JournalFSSSignalDiscovered.FSSSignal r) { return l.ClassOfSignal.CompareTo(r.ClassOfSignal); });
+                        // mirrors scandisplaynodes
+                        
+                        var notexpired = systemnode.FSSSignalList.Where(x => !x.TimeRemaining.HasValue || x.ExpiryUTC >= DateTime.UtcNow).ToList();
+                        notexpired.Sort(delegate (JournalFSSSignalDiscovered.FSSSignal l, JournalFSSSignalDiscovered.FSSSignal r) { return l.ClassOfSignal.CompareTo(r.ClassOfSignal); });
 
-                        foreach (var fsssig in sl)
+                        var expired = systemnode.FSSSignalList.Where(x => x.TimeRemaining.HasValue && x.ExpiryUTC < DateTime.UtcNow).ToList();
+                        expired.Sort(delegate (JournalFSSSignalDiscovered.FSSSignal l, JournalFSSSignalDiscovered.FSSSignal r) { return r.ExpiryUTC.CompareTo(l.ExpiryUTC); });
+
+                        int expiredpos = notexpired.Count;
+                        notexpired.AddRange(expired);
+
+                        int pos = 0;
+                        foreach (var fsssig in notexpired)
                         {
                             if (filter.ComparisionContains(fsssig.SignalName.Alt("!~~"), StringComparison.InvariantCultureIgnoreCase) >= 0 ||
                                 filter.ComparisionContains(fsssig.SignalName_Localised.Alt("!~~"), StringComparison.InvariantCultureIgnoreCase) >= 0 ||
@@ -346,6 +355,9 @@ namespace EDDiscovery.UserControls
                                 filter.ComparisionContains(fsssig.ClassOfSignal.ToString(), StringComparison.InvariantCultureIgnoreCase) >= 0 ||
                                 fsssignalsdisplayed.Equals("*"))
                             {
+                                if ( pos++ == expiredpos )
+                                    siglist = siglist.AppendPrePad("Expired:".T(EDTx.UserControlScan_Expired), Environment.NewLine + Environment.NewLine);
+
                                 siglist = siglist.AppendPrePad(fsssig.ToString(true), Environment.NewLine);
                             }
                         }
