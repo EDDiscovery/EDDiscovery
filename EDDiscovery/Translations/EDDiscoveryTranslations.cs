@@ -281,18 +281,15 @@ namespace EDDiscovery
         UserControlModules_MI, // Module Information
         UserControlModules_NOSI, // No ship information available
 
-        UserControlStats_tosystem, //  to system
-        UserControlStats_Visits, // Visits
-        UserControlStats_Type, // Type
-        UserControlStats_All, // All
-        UserControlStats_JumpsBeforeSystem, // Jumps Before System
         UserControlStats_TotalNoofjumps, // Total No of jumps:
+        UserControlStats_FSDjumps, // FSD jumps:
+        UserControlStats_Beltcluster, // Belt cluster
+
         UserControlStats_JumpHistory, // Jump History
         UserControlStats_24hc, // 24 Hours:
         UserControlStats_OneWeek, // , One Week:
         UserControlStats_30Days, // , 30 Days:
         UserControlStats_OneYear, // , One Year:
-        UserControlStats_FirstDiscoveries, // First Discoveries
         UserControlStats_MostNorth, // Most North
         UserControlStats_MostSouth, // Most South
         UserControlStats_MostEast, // Most East
@@ -300,25 +297,38 @@ namespace EDDiscovery
         UserControlStats_MostHighest, // Most Highest
         UserControlStats_MostLowest, // Most Lowest
         UserControlStats_MostVisited, // Most Visited
-        UserControlStats_24Hours, // 24 Hours
-        UserControlStats_Week, // Week
-        UserControlStats_Month, // Month
-        UserControlStats_Lastdock, // Last dock
+
         UserControlStats_Jumps, // Jumps
+        UserControlStats_TravelledLy, // Travelled Ly
         UserControlStats_PremiumBoost, // Premium Boost
         UserControlStats_StandardBoost, // Standard Boost
         UserControlStats_BasicBoost, // Basic Boost
         UserControlStats_JetConeBoost, // Jet Cone Boost
-        UserControlStats_Landed, // Landed
-        UserControlStats_HeatWarning, // Heat Warning
-        UserControlStats_Heatdamage, // Heat damage
-        UserControlStats_FuelScooped, // Fuel Scooped
-        UserControlStats_ScoopedTons, // Scooped Tons
         UserControlStats_Scans, // Scans
+        UserControlStats_Mapped, // Mapped
         UserControlStats_Scanvalue, // Scan value
-        UserControlStats_Docked, // Docked
-        UserControlStats_BodyType, // Body Type
+
+
+        UserControlStats_Lastdock, // Last dock
         UserControlStats_Trip, // Trip
+        UserControlStats_All, // All
+        UserControlStats_Type, // Type
+
+
+        UserControlStats_BankAccount, // Bank Account
+        UserControlStats_Combat, // Combat
+        UserControlStats_Crime, // Crime
+        UserControlStats_Smuggling, // Smuggling
+        UserControlStats_Trading, // Trading
+        UserControlStats_Mining, // Mining
+        UserControlStats_Exploration, // Exploration
+        UserControlStats_Passengers, // Passengers
+        UserControlStats_SearchandRescue, // Search and Rescue
+        UserControlStats_Crafting, // Crafting
+        UserControlStats_Crew, // Crew
+        UserControlStats_Multi, // Multi-crew
+        UserControlStats_MaterialsTrader, // Materials Trader
+
         UserControlStats_CurrentAssets, // Current Assets
         UserControlStats_SpentonShips, // Spent on Ships
         UserControlStats_SpentonOutfitting, // Spent on Outfitting
@@ -386,28 +396,19 @@ namespace EDDiscovery
         UserControlStats_FinesAccrued, // Fines Accrued
         UserControlStats_TradesCompleted, // Trades Completed
         UserControlStats_MaterialsTraded, // Materials Traded
+
         UserControlStats_TME, // {0} days {1} hours {1} minutes
         UserControlStats_Name, // Name
         UserControlStats_Ident, // Ident
-        UserControlStats_TravelledLy, // Travelled Ly
+
         UserControlStats_BodiesScanned, // Bodies Scanned
+        UserControlStats_Destroyed, // Destroyed
+
+        // used by faction panels now, not stats
         UserControlStats_GoodsBought, // Goods Bought
         UserControlStats_GoodsSold, // Goods Sold
-        UserControlStats_Destroyed, // Destroyed
-        UserControlStats_Mapped, // Mapped
-        UserControlStats_BankAccount, // Bank Account
-        UserControlStats_Combat, // Combat
-        UserControlStats_Crime, // Crime
-        UserControlStats_Smuggling, // Smuggling
-        UserControlStats_Trading, // Trading
-        UserControlStats_Mining, // Mining
-        UserControlStats_Exploration, // Exploration
-        UserControlStats_Passengers, // Passengers
-        UserControlStats_SearchandRescue, // Search and Rescue
-        UserControlStats_Crafting, // Crafting
-        UserControlStats_Crew, // Crew
-        UserControlStats_Multi, // Multi-crew
-        UserControlStats_MaterialsTrader, // Materials Trader
+
+
         UserControlShoppingList_NM, // Needed Mats
         UserControlShoppingList_FS, // Filling Shopping List would exceed capacity for:
         UserControlShoppingList_NoMat, // No materials currently required.

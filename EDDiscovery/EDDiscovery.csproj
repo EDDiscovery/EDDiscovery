@@ -349,12 +349,6 @@
     <Compile Include="UserControls\CurrentState\UserControlModules.Designer.cs">
       <DependentUpon>UserControlModules.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\CurrentState\UserControlStats.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\CurrentState\UserControlStats.Designer.cs">
-      <DependentUpon>UserControlStats.cs</DependentUpon>
-    </Compile>
     <Compile Include="UserControls\EngineeringSynthesis\UserControlEngineering.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -783,9 +777,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\CurrentState\UserControlModules.resx">
       <DependentUpon>UserControlModules.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\CurrentState\UserControlStats.resx">
-      <DependentUpon>UserControlStats.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\EngineeringSynthesis\UserControlEngineering.resx">
       <DependentUpon>UserControlEngineering.cs</DependentUpon>

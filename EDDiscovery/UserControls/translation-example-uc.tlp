@@ -1060,30 +1060,28 @@ SECTION UserControlStarList
 
 SECTION UserControlStats
 
-.tosystem: " to system " @
+.labelStart: "Start" @
+.labelEndDate: "To" @
 .tabControlCustomStats.tabPageGeneral: "General" @
 .tabControlCustomStats.tabPageGeneral.mostVisited: "Most Visited" @
 .tabControlCustomStats.tabPageGeneral.ItemName: "Item" @
 .tabControlCustomStats.tabPageGeneral.Information: "Information" @
 .tabControlCustomStats.tabPageTravel: "Travel" @
-.tabControlCustomStats.tabPageTravel.dataGridViewTextBoxColumn1: "Item" @
-.tabControlCustomStats.tabPageTravel.dataGridViewTextBoxColumn2: "Information" @
 .tabControlCustomStats.tabPageTravel.userControlStatsTimeTravel.labelTime: "Time" @
 .tabControlCustomStats.tabPageScan: "Scan" @
-.tabControlCustomStats.tabPageScan.ScanNotUsed: "Column1" @
 .tabControlCustomStats.tabPageScan.userControlStatsTimeScan.labelTime: "Time" @
 .tabControlCustomStats.tabPageGameStats: "In Game" @
-.Visits: "Visits" @
-.Type: "Type" @
-.All: "All" @
-.JumpsBeforeSystem: "Jumps Before System" @
+.tabControlCustomStats.tabPageByShip: "By Ship" @
+
 .TotalNoofjumps: "Total No of jumps: " @
+.FSDjumps: "FSD Jumps" @
+.Beltcluster: "Belt Cluster: " @
+
 .JumpHistory: "Jump History" @
 .24hc: "24 Hours: " @
 .OneWeek: ", One Week: " @
 .30Days: ", 30 Days: " @
 .OneYear: ", One Year: " @
-.FirstDiscoveries: "First Discoveries" @
 .MostNorth: "Most North" @
 .MostSouth: "Most South" @
 .MostEast: "Most East" @
@@ -1091,26 +1089,36 @@ SECTION UserControlStats
 .MostHighest: "Most Highest" @
 .MostLowest: "Most Lowest" @
 .MostVisited: "Most Visited" @
-.24Hours: "24 Hours" @
-.Week: "Week" @
-.Month: "Month" @
-.Lastdock: "Last dock" @
+
 .Jumps: "Jumps" @
-.TraveledLy: "Traveled Ly" @
+.TravelledLy: "Traveled Ly" @
 .PremiumBoost: "Premium Boost" @
 .StandardBoost: "Standard Boost" @
 .BasicBoost: "Basic Boost" @
 .JetConeBoost: "Jet Cone Boost" @
-.Landed: "Landed" @
-.HeatWarning: "Heat Warning" @
-.Heatdamage: "Heat damage" @
-.FuelScooped: "Fuel Scooped" @
-.ScoopedTons: "Scooped Tons" @
 .Scans: "Scans" @
+.Mapped: "Mapped" @
 .Scanvalue: "Scan value" @
-.Docked: "Docked" @
-.BodyType: "Body Type" @
+
+.Lastdock: "Last dock" @
 .Trip: "Trip" @
+.All: "All" @
+.Type: "Type" @
+
+.BankAccount: "Bank Account" @
+.Combat: "Combat" @
+.Crime: "Crime" @
+.Smuggling: "Smuggling" @
+.Trading: "Trading" @
+.Mining: "Mining" @
+.Exploration: "Exploration" @
+.Passengers: "Passengers" @
+.SearchandRescue: "Search and Rescue" @
+.Crafting: "Crafting" @
+.Crew: "Crew" @
+.Multi: "Multi-crew" @
+.MaterialsTrader: "Materials Trader" @
+
 .CurrentAssets: "Current Assets" @
 .SpentonShips: "Spent on Ships" @
 .SpentonOutfitting: "Spent on Outfitting" @
@@ -1178,33 +1186,17 @@ SECTION UserControlStats
 .FinesAccrued: "Fines Accrued" @
 .TradesCompleted: "Trades Completed" @
 .MaterialsTraded: "Materials Traded" @
+
 .TME: "{0} days {1} hours {1} minutes" @
 .Name: "Name" @
 .Ident: "Ident" @
-.TravelledLy: "Travelled Ly" @
+
 .BodiesScanned: "Bodies Scanned" @
+.Destroyed: "Destroyed" @
+
 .GoodsBought: "Goods Bought" @
 .GoodsSold: "Goods Sold" @
-.Destroyed: "Destroyed" @
-.Unknown: "Unknown" @
-.tabControlCustomStats.tabPageByShip: "By Ship" @
-.tabControlCustomStats.tabPageByShip.dataGridViewTextBoxColumn3: "Item" @
-.tabControlCustomStats.tabPageByShip.dataGridViewTextBoxColumn4: "Information" @
-.Mapped: "Mapped" @
 
-UserControlStats.BankAccount: "Bank Account" @
-UserControlStats.Combat: "Combat" @
-UserControlStats.Crime: "Crime" @
-UserControlStats.Smuggling: "Smuggling" @
-UserControlStats.Trading: "Trading" @
-UserControlStats.Mining: "Mining" @
-UserControlStats.Exploration: "Exploration" @
-UserControlStats.Passengers: "Passengers" @
-UserControlStats.SearchandRescue: "Search and Rescue" @
-UserControlStats.Crafting: "Crafting" @
-UserControlStats.Crew: "Crew" @
-UserControlStats.Multi: "Multi-crew" @
-UserControlStats.MaterialsTrader: "Materials Trader" @
 
 
 

@@ -28,7 +28,7 @@ using System.Windows.Forms.DataVisualization.Charting;
 
 namespace EDDiscovery.UserControls
 {
-    public partial class UserControlStatistics : UserControlCommonBase
+    public partial class UserControlStats : UserControlCommonBase
     {
         private string DbSelectedTabSave { get { return DBName("StatsSelectedTab"); } }
         private string DbStatsTreeStateSave { get { return DBName("StatsTreeExpanded"); } }
@@ -37,19 +37,25 @@ namespace EDDiscovery.UserControls
         private string DbEndDate { get { return DBName("StatsEndDate"); } }
         private string DbEndDateOn { get { return DBName("StatsEndDateChecked"); } }
 
-        private static Thread StatsThread;
-        private static bool Exit = false;
-        private static bool Running = false;
+        private string DbScanSummary { get { return DBName("Stats", "DGVColScanSummary"); } }
+        private string DbScanDWM { get { return DBName("Stats", "DGVColScanDWM"); } }
+        private string DbTravelSummary { get { return DBName("Stats", "DGVColTravelSummary"); } }
+        private string DbTravelDWM { get { return DBName("Stats", "DGVColTravelDWM"); } }
+        private string DbShip { get { return DBName("Stats", "DGVColShip"); } }
+
+        private Thread StatsThread;
+        private bool Exit = false;
+        private bool Running = false;
 
         private bool endchecked, startchecked;
 
         private Stats currentstats;
-        private Chart mostVisited { get; set; }
+        private Chart mostVisitedChart { get; set; }
         Queue<JournalEntry> entriesqueued = new Queue<JournalEntry>();     // we queue into here new entries, and dequeue in update.
 
         #region Init
 
-        public UserControlStatistics()
+        public UserControlStats()
         {
             InitializeComponent();
         }
@@ -58,6 +64,7 @@ namespace EDDiscovery.UserControls
         {
             tabControlCustomStats.SelectedIndex = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(DbSelectedTabSave, 0);
             userControlStatsTimeScan.EnableDisplayStarsPlanetSelector();
+            //BaseUtils.Translator.Instance.Translate(tabControlCustomStats);
             BaseUtils.Translator.Instance.Translate(this);
 
             try
@@ -79,7 +86,7 @@ namespace EDDiscovery.UserControls
                 chart.Text = "Most Visited";
                 chart.Visible = false;
                 this.panelGeneral.Controls.Add(chart);
-                this.mostVisited = chart;
+                this.mostVisitedChart = chart;
                 chart.EndInit();
             }
             catch (NotImplementedException)
@@ -101,10 +108,24 @@ namespace EDDiscovery.UserControls
             labelStatus.Text = "";
         }
 
+        public override void InitialDisplay()
+        {
+            if ( discoveryform.history.Count>0 )        // if we loaded a history, this is a new panel, so work
+                StartThread();
+        }
+
         public override void Closing()
         {
             StopThread();
             UserDatabase.Instance.PutSettingString(DbStatsTreeStateSave, GameStatTreeState());
+
+            if (dataGridViewScan.Columns.Count > 0)     // anything to save..
+                DGVSaveColumnLayout(dataGridViewScan, dataGridViewScan.Columns.Count <= 8 ? DbScanSummary : DbScanDWM);
+            if (dataGridViewTravel.Columns.Count > 0)
+                DGVSaveColumnLayout(dataGridViewTravel, dataGridViewTravel.Columns.Count <= 8 ? DbTravelSummary : DbTravelDWM);
+            if ( dataGridViewByShip.Columns.Count>0 )
+                DGVSaveColumnLayout(dataGridViewByShip, DbShip);
+
             discoveryform.OnRefreshCommanders -= Discoveryform_OnRefreshCommanders;
             discoveryform.OnNewEntry -= AddNewEntry;
         }
@@ -127,10 +148,10 @@ namespace EDDiscovery.UserControls
             var width = panelGeneral.Width - panelGeneral.ScrollBarWidth - dataGridViewGeneral.Left;
             dataGridViewGeneral.Width = width;
 
-            if (mostVisited != null)
+            if (mostVisitedChart != null)
             {
-                mostVisited.Width = width;
-                mostVisited.Top = dataGridViewGeneral.Bottom + 8;
+                mostVisitedChart.Width = width;
+                mostVisitedChart.Top = dataGridViewGeneral.Bottom + 8;
             }
             base.OnLayout(e);
         }
@@ -243,6 +264,8 @@ namespace EDDiscovery.UserControls
 
             public JournalStatistics laststats;
 
+            public int fsdcarrierjumps;
+
             public Stats()
             {
                 FSDJumps = new List<JumpInfo>();
@@ -250,6 +273,7 @@ namespace EDDiscovery.UserControls
                 ScanComplete = new List<ScanCompleteInfo>();
                 JetConeBoost = new List<JetConeBoostInfo>();
                 Ships = new Dictionary<string, ShipInfo>();
+                lastdocked = DateTime.UtcNow;
             }
         };
 
@@ -260,6 +284,8 @@ namespace EDDiscovery.UserControls
             Running = true;
             Exit = false;
             entriesqueued.Clear();      // clear the queue, any new entries will just be stored into entriesqueued and not displayed until the end
+
+            //System.Diagnostics.Debug.WriteLine("Kick off stats thread " + DBName(""));
 
             StatsThread = new System.Threading.Thread(new System.Threading.ThreadStart(StatisticsThread));
             StatsThread.Name = "Stats";
@@ -301,7 +327,7 @@ namespace EDDiscovery.UserControls
                 DateTime? start = dateTimePickerStartDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromSelected(dateTimePickerStartDate.Value) : default(DateTime?);
                 DateTime? end = dateTimePickerEndDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromSelected(dateTimePickerEndDate.Value.EndOfDay()) : default(DateTime?);
 
-                System.Diagnostics.Debug.WriteLine("Stats from {0} to {1}", start, end);
+                System.Diagnostics.Debug.WriteLine("Stats from {0} to {1} for {2}", start, end, DBName(""));
                 // read journal for cmdr with these events and pass thru NewJE.
                 JournalEntry.GetAll(cmdrid, ids: events, callback: NewJE, callbackobj: stats, startdateutc: start, enddateutc: end, chunksize: 100);
             }
@@ -313,7 +339,7 @@ namespace EDDiscovery.UserControls
         private bool NewJE(JournalEntry ev, Object obj)
         {
             Stats st = obj as Stats;
-            //System.Diagnostics.Debug.WriteLine("Stats JE {0} {1}", ev.EventTimeUTC, ev.EventTypeStr);
+          //  System.Diagnostics.Debug.WriteLine("{0} Stats JE {1} {2}", DBName("") , ev.EventTimeUTC, ev.EventTypeStr);
 
             switch (ev.EventTypeID)
             {
@@ -344,7 +370,12 @@ namespace EDDiscovery.UserControls
                         JournalFSDJump fsd = ev as JournalFSDJump;
                         if (fsd != null)
                         {
+                            st.fsdcarrierjumps++;
                             st.FSDJumps.Add(new Stats.JumpInfo() { utc = fsd.EventTimeUTC, jumpdist = fsd.JumpDist, boostvalue = fsd.BoostValue, shipid = st.currentshipid, bodyname = fsd.StarSystem });
+                        }
+                        else if ( ev.EventTypeID == JournalTypeEnum.CarrierJump)
+                        {
+                            st.fsdcarrierjumps++;
                         }
 
                         break;
@@ -470,7 +501,7 @@ namespace EDDiscovery.UserControls
         private void EndComputation(Stats s)            // foreground thread, end of thread computation
         {
             System.Diagnostics.Debug.Assert(Application.MessageLoop);
-            System.Diagnostics.Debug.WriteLine("Stats End Computation");
+            System.Diagnostics.Debug.WriteLine("Stats End Computation for " + DBName(""));
             currentstats = s;
             Running = false;        // now go into normal non running mode where add new entry updates it
             labelStatus.Text = "";
@@ -493,6 +524,7 @@ namespace EDDiscovery.UserControls
 
         private void Display()
         {
+            System.Diagnostics.Debug.WriteLine("Display for " + DBName("") + " " + (currentstats!=null));
             if (currentstats == null)       // double check
                 return;
 
@@ -521,64 +553,71 @@ namespace EDDiscovery.UserControls
 
         private void StatsGeneral(DateTime endtimelocal)
         {
-            DGVGeneral("Total No of jumps: ".T(EDTx.UserControlStats_TotalNoofjumps), currentstats.FSDJumps.Count().ToString());
+            DGVGeneral("Total No of jumps".T(EDTx.UserControlStats_TotalNoofjumps), currentstats.fsdcarrierjumps.ToString());
 
-            DateTime endtimeutc = endtimelocal.ToUniversalTime();
-
-            DGVGeneral("Jump History".T(EDTx.UserControlStats_JumpHistory),
-                                    "24 Hours: ".T(EDTx.UserControlStats_24hc) + currentstats.FSDJumps.Where(x => x.utc >= endtimeutc.AddHours(-24)).Count() +
-                                    ", One Week: ".T(EDTx.UserControlStats_OneWeek) + currentstats.FSDJumps.Where(x => x.utc >= endtimeutc.AddDays(-7)).Count() +
-                                    ", 30 Days: ".T(EDTx.UserControlStats_30Days) + currentstats.FSDJumps.Where(x => x.utc >= endtimeutc.AddDays(-30)).Count() +
-                                    ", One Year: ".T(EDTx.UserControlStats_OneYear) + currentstats.FSDJumps.Where(x => x.utc >= endtimeutc.AddDays(-365)).Count()
-                                    );
-
-            DGVGeneral("Most North".T(EDTx.UserControlStats_MostNorth), GetSystemDataString(currentstats.MostNorth));
-            DGVGeneral("Most South".T(EDTx.UserControlStats_MostSouth), GetSystemDataString(currentstats.MostSouth));
-            DGVGeneral("Most East".T(EDTx.UserControlStats_MostEast), GetSystemDataString(currentstats.MostEast));
-            DGVGeneral("Most West".T(EDTx.UserControlStats_MostWest), GetSystemDataString(currentstats.MostWest));
-            DGVGeneral("Most Highest".T(EDTx.UserControlStats_MostHighest), GetSystemDataString(currentstats.MostUp));
-            DGVGeneral("Most Lowest".T(EDTx.UserControlStats_MostLowest), GetSystemDataString(currentstats.MostDown));
-
-            if (mostVisited != null)        // chart exists
+            if (currentstats.FSDJumps.Count > 0)        // these will be null unless there are jumps
             {
-                var fsdbodies = currentstats.FSDJumps.GroupBy(x => x.bodyname).ToDictionary(x => x.Key, y => y.Count()).ToList();       // get KVP list of distinct bodies
-                fsdbodies.Sort(delegate (KeyValuePair<string, int> left, KeyValuePair<string, int> right) { return right.Value.CompareTo(left.Value); }); // and sort highest
+                DGVGeneral("FSD jumps".T(EDTx.UserControlStats_FSDjumps), currentstats.FSDJumps.Count.ToString());
 
-                mostVisited.Visible = true;
+                DateTime endtimeutc = endtimelocal.ToUniversalTime();
 
-                Color GridC = discoveryform.theme.GridBorderLines;
-                Color TextC = discoveryform.theme.GridCellText;
-                mostVisited.Titles.Clear();
-                mostVisited.Titles.Add(new Title("Most Visited".T(EDTx.UserControlStats_MostVisited), Docking.Top, discoveryform.theme.GetFont, TextC));
-                mostVisited.Series[0].Points.Clear();
+                DGVGeneral("FSD Jump History".T(EDTx.UserControlStats_JumpHistory),
+                                        "24 Hours: ".T(EDTx.UserControlStats_24hc) + currentstats.FSDJumps.Where(x => x.utc >= endtimeutc.AddHours(-24)).Count() +
+                                        ", One Week: ".T(EDTx.UserControlStats_OneWeek) + currentstats.FSDJumps.Where(x => x.utc >= endtimeutc.AddDays(-7)).Count() +
+                                        ", 30 Days: ".T(EDTx.UserControlStats_30Days) + currentstats.FSDJumps.Where(x => x.utc >= endtimeutc.AddDays(-30)).Count() +
+                                        ", One Year: ".T(EDTx.UserControlStats_OneYear) + currentstats.FSDJumps.Where(x => x.utc >= endtimeutc.AddDays(-365)).Count()
+                                        );
 
-                mostVisited.ChartAreas[0].AxisX.LabelStyle.ForeColor = TextC;
-                mostVisited.ChartAreas[0].AxisY.LabelStyle.ForeColor = TextC;
-                mostVisited.ChartAreas[0].AxisX.MajorGrid.LineColor = GridC;
-                mostVisited.ChartAreas[0].AxisX.MinorGrid.LineColor = GridC;
-                mostVisited.ChartAreas[0].AxisY.MajorGrid.LineColor = GridC;
-                mostVisited.ChartAreas[0].AxisY.MinorGrid.LineColor = GridC;
-                mostVisited.ChartAreas[0].BorderColor = GridC;
-                mostVisited.ChartAreas[0].BorderDashStyle = ChartDashStyle.Solid;
-                mostVisited.ChartAreas[0].BorderWidth = 2;
+                DGVGeneral("Most North".T(EDTx.UserControlStats_MostNorth), GetSystemDataString(currentstats.MostNorth));
+                DGVGeneral("Most South".T(EDTx.UserControlStats_MostSouth), GetSystemDataString(currentstats.MostSouth));
+                DGVGeneral("Most East".T(EDTx.UserControlStats_MostEast), GetSystemDataString(currentstats.MostEast));
+                DGVGeneral("Most West".T(EDTx.UserControlStats_MostWest), GetSystemDataString(currentstats.MostWest));
+                DGVGeneral("Most Highest".T(EDTx.UserControlStats_MostHighest), GetSystemDataString(currentstats.MostUp));
+                DGVGeneral("Most Lowest".T(EDTx.UserControlStats_MostLowest), GetSystemDataString(currentstats.MostDown));
 
-                mostVisited.ChartAreas[0].BackColor = Color.Transparent;
-                mostVisited.Series[0].Color = GridC;
-                mostVisited.BorderlineColor = Color.Transparent;
-
-                int i = 0;
-                foreach (var data in fsdbodies.Take(10))        // display 10
+                if (mostVisitedChart != null)        // chart exists
                 {
-                    mostVisited.Series[0].Points.Add(new DataPoint(i, data.Value));
-                    mostVisited.Series[0].Points[i].AxisLabel = data.Key;
-                    mostVisited.Series[0].Points[i].LabelForeColor = TextC;
-                    i++;
+                    mostVisitedChart.Visible = true;
+
+                    Color GridC = discoveryform.theme.GridBorderLines;
+                    Color TextC = discoveryform.theme.GridCellText;
+                    mostVisitedChart.Titles.Clear();
+                    mostVisitedChart.Titles.Add(new Title("Most Visited".T(EDTx.UserControlStats_MostVisited), Docking.Top, discoveryform.theme.GetFont, TextC));
+                    mostVisitedChart.Series[0].Points.Clear();
+
+                    mostVisitedChart.ChartAreas[0].AxisX.LabelStyle.ForeColor = TextC;
+                    mostVisitedChart.ChartAreas[0].AxisY.LabelStyle.ForeColor = TextC;
+                    mostVisitedChart.ChartAreas[0].AxisX.MajorGrid.LineColor = GridC;
+                    mostVisitedChart.ChartAreas[0].AxisX.MinorGrid.LineColor = GridC;
+                    mostVisitedChart.ChartAreas[0].AxisY.MajorGrid.LineColor = GridC;
+                    mostVisitedChart.ChartAreas[0].AxisY.MinorGrid.LineColor = GridC;
+                    mostVisitedChart.ChartAreas[0].BorderColor = GridC;
+                    mostVisitedChart.ChartAreas[0].BorderDashStyle = ChartDashStyle.Solid;
+                    mostVisitedChart.ChartAreas[0].BorderWidth = 2;
+
+                    mostVisitedChart.ChartAreas[0].BackColor = Color.Transparent;
+                    mostVisitedChart.Series[0].Color = GridC;
+                    mostVisitedChart.BorderlineColor = Color.Transparent;
+
+                    var fsdbodies = currentstats.FSDJumps.GroupBy(x => x.bodyname).ToDictionary(x => x.Key, y => y.Count()).ToList();       // get KVP list of distinct bodies
+                    fsdbodies.Sort(delegate (KeyValuePair<string, int> left, KeyValuePair<string, int> right) { return right.Value.CompareTo(left.Value); }); // and sort highest
+
+                    int i = 0;
+                    foreach (var data in fsdbodies.Take(10))        // display 10
+                    {
+                        mostVisitedChart.Series[0].Points.Add(new DataPoint(i, data.Value));
+                        mostVisitedChart.Series[0].Points[i].AxisLabel = data.Key;
+                        mostVisitedChart.Series[0].Points[i].LabelForeColor = TextC;
+                        i++;
+                    }
                 }
             }
-            else if (mostVisited != null)
+            else
             {
-                mostVisited.Visible = false;
+                if (mostVisitedChart != null)
+                    mostVisitedChart.Visible = false;
             }
+
 
             PerformLayout();
         }
@@ -623,10 +662,12 @@ namespace EDDiscovery.UserControls
                 int intervals = 6;
                 
                 var isTravelling = discoveryform.history.IsTravellingUTC(out var tripStartutc);
-                if (isTravelling && dateTimePickerEndDate.Checked && tripStartutc > endtimelocal.ToUniversalTime())            // if out of time, due to tripstart being after endtime
+
+                // if travelling, and we have a end date set, make sure the trip is before end
+                if (isTravelling && dateTimePickerEndDate.Checked && tripStartutc > endtimelocal.ToUniversalTime())            
                     isTravelling = false;
 
-                DateTime[] starttimeutc = SetupSummary(endtimelocal, isTravelling ? tripStartutc.ToLocalTime() : DateTime.Now, dataGridViewTravel);
+                DateTime[] starttimeutc = SetupSummary(endtimelocal, isTravelling ? tripStartutc.ToLocalTime() : DateTime.Now, dataGridViewTravel, DbTravelSummary);
 
                 var jumps = new string[intervals];
                 var distances = new string[intervals];
@@ -668,9 +709,9 @@ namespace EDDiscovery.UserControls
             }
             else // MAJOR
             {
-                int intervals = 10;
+                int intervals = 12;
 
-                DateTime[] timeintervalsutc = SetUpDaysMonths(endtimelocal, dataGridViewTravel, userControlStatsTimeTravel.TimeMode);
+                DateTime[] timeintervalsutc = SetUpDaysMonths(endtimelocal, dataGridViewTravel, userControlStatsTimeTravel.TimeMode, intervals, DbTravelDWM);
 
                 var jumps = new string[intervals];
                 var distances = new string[intervals];
@@ -731,11 +772,12 @@ namespace EDDiscovery.UserControls
         private void userControlStatsTimeTravel_TimeModeChanged(object sender, EventArgs e)
         {
             dataGridViewTravel.Rows.Clear();        // reset all
+            DGVSaveColumnLayout(dataGridViewTravel, dataGridViewTravel.Columns.Count <= 8 ? DbTravelSummary : DbTravelDWM);
             dataGridViewTravel.Columns.Clear();
             Display();
         }
 
-        private DateTime[] SetupSummary(DateTime endtimelocal, DateTime triptime, DataGridView view)
+        private DateTime[] SetupSummary(DateTime endtimelocal, DateTime triptime, DataGridView view, string dbname)
         {
             DateTime[] starttimelocal = new DateTime[6];
             starttimelocal[0] = endtimelocal.AddDays(-1).AddSeconds(1);
@@ -750,6 +792,8 @@ namespace EDDiscovery.UserControls
                 view.Columns.Add(new DataGridViewTextBoxColumn() { HeaderText = "Type".T(EDTx.UserControlStats_Type), Tag = "AlphaSort" });
                 for (int i = 0; i < starttimelocal.Length; i++)
                     view.Columns.Add(new DataGridViewTextBoxColumn());          // day
+
+                DGVLoadColumnLayout(view, dbname);
             }
 
             view.Columns[1].HeaderText = starttimelocal[0].ToShortDateString();
@@ -762,10 +806,8 @@ namespace EDDiscovery.UserControls
             return (from x in starttimelocal select x.ToUniversalTime()).ToArray();  // need it in UTC for the functions
         }
 
-        private DateTime[] SetUpDaysMonths(DateTime endtimelocal, DataGridView view, StatsTimeUserControl.TimeModeType timemode)
+        private DateTime[] SetUpDaysMonths(DateTime endtimelocal, DataGridView view, StatsTimeUserControl.TimeModeType timemode, int intervals, string dbname)
         {
-            int intervals = 10;
-
             if (view.Columns.Count == 0)
             {
                 var Col1 = new DataGridViewTextBoxColumn();
@@ -774,6 +816,8 @@ namespace EDDiscovery.UserControls
                 view.Columns.Add(Col1);
                 for (int i = 0; i < intervals; i++)
                     view.Columns.Add(new DataGridViewTextBoxColumn());          // day
+
+                DGVLoadColumnLayout(view, dbname);
             }
 
             DateTime[] timeintervalslocal = new DateTime[intervals + 1];
@@ -837,7 +881,7 @@ namespace EDDiscovery.UserControls
                 if (isTravelling && dateTimePickerEndDate.Checked && tripStartutc > endtimelocal.ToUniversalTime())            // if out of time, due to tripstart being after endtime
                     isTravelling = false;
 
-                DateTime[] starttimeutc = SetupSummary(endtimelocal, isTravelling ? tripStartutc.ToLocalTime() : DateTime.Now, dataGridViewScan);
+                DateTime[] starttimeutc = SetupSummary(endtimelocal, isTravelling ? tripStartutc.ToLocalTime() : DateTime.Now, dataGridViewScan, DbScanSummary);
 
                 scanlists = new List<Stats.ScanInfo>[intervals];
 
@@ -850,8 +894,8 @@ namespace EDDiscovery.UserControls
             }
             else
             {
-                intervals = 10;
-                DateTime[] timeintervalsutc = SetUpDaysMonths(endtimelocal, dataGridViewScan, userControlStatsTimeScan.TimeMode);
+                intervals = 12;
+                DateTime[] timeintervalsutc = SetUpDaysMonths(endtimelocal, dataGridViewScan, userControlStatsTimeScan.TimeMode, intervals, DbScanDWM);
 
                 scanlists = new List<Stats.ScanInfo>[intervals];
                 for (int ii = 0; ii < intervals; ii++)
@@ -900,7 +944,7 @@ namespace EDDiscovery.UserControls
 
                     }
 
-                    StatToDGV(dataGridViewScan, planettype == EDPlanet.Unknown_Body_Type ? "Belt Cluster" : Bodies.PlanetTypeName(planettype), strarr);
+                    StatToDGV(dataGridViewScan, planettype == EDPlanet.Unknown_Body_Type ? "Belt Cluster".T(EDTx.UserControlStats_Beltcluster) : Bodies.PlanetTypeName(planettype), strarr);
                 }
             }
 
@@ -923,6 +967,7 @@ namespace EDDiscovery.UserControls
         private void userControlStatsTimeScan_TimeModeChanged(object sender, EventArgs e)
         {
             dataGridViewScan.Rows.Clear();        // reset all
+            DGVSaveColumnLayout(dataGridViewScan, dataGridViewScan.Columns.Count <= 8 ? DbScanSummary : DbScanDWM);
             dataGridViewScan.Columns.Clear();
             Display();
         }
@@ -943,7 +988,7 @@ namespace EDDiscovery.UserControls
 
             JournalStatistics stats = currentstats.laststats;
 
-            if (stats != null)
+            if (stats != null) // may not have one
             {
                 AddTreeNode("@", "T", currentstats.laststats.EventTimeLocal.ToString());
 
@@ -1069,6 +1114,8 @@ namespace EDDiscovery.UserControls
                 if (collapseExpand[12] == 'Y')
                     node.Item1.Expand();
             }
+            else
+                treeViewStats.Nodes.Clear();
         }
 
         string SecondsToDHMString(int? seconds)
@@ -1123,31 +1170,13 @@ namespace EDDiscovery.UserControls
 
             if (dataGridViewByShip.Columns.Count == 0)
             {
-                var Col1 = new DataGridViewTextBoxColumn();
-                Col1.HeaderText = "Type".T(EDTx.UserControlStats_Type);
-                Col1.Tag = "AlphaSort";
-
-                var Col2 = new DataGridViewTextBoxColumn();
-                Col2.HeaderText = "Name".T(EDTx.UserControlStats_Name);
-                Col2.Tag = "AlphaSort";
-
-                var Col3 = new DataGridViewTextBoxColumn();
-                Col3.HeaderText = "Ident".T(EDTx.UserControlStats_Ident);
-                Col3.Tag = "AlphaSort";
-
-                var Col4 = new DataGridViewTextBoxColumn();
-                Col4.HeaderText = "Jumps".T(EDTx.UserControlStats_Jumps);
-
-                var Col5 = new DataGridViewTextBoxColumn();
-                Col5.HeaderText = "Travelled Ly".T(EDTx.UserControlStats_TravelledLy);
-
-                var Col6 = new DataGridViewTextBoxColumn();
-                Col6.HeaderText = "Bodies Scanned".T(EDTx.UserControlStats_BodiesScanned);
-
-                var Col7 = new DataGridViewTextBoxColumn();
-                Col7.HeaderText = "Destroyed".T(EDTx.UserControlStats_Destroyed);
-
-                dataGridViewByShip.Columns.AddRange(new DataGridViewColumn[] { Col1, Col2, Col3, Col4, Col5, Col6, Col7 });
+                dataGridViewByShip.Columns.Add(new DataGridViewTextBoxColumn() { HeaderText = "Type".T(EDTx.UserControlStats_Type), Tag = "AlphaSort" });
+                dataGridViewByShip.Columns.Add(new DataGridViewTextBoxColumn() { HeaderText = "Name".T(EDTx.UserControlStats_Name), Tag = "AlphaSort" });
+                dataGridViewByShip.Columns.Add(new DataGridViewTextBoxColumn() { HeaderText = "Ident".T(EDTx.UserControlStats_Ident), Tag = "AlphaSort" });
+                dataGridViewByShip.Columns.Add(new DataGridViewTextBoxColumn() { HeaderText = "Travelled Ly".T(EDTx.UserControlStats_TravelledLy) });
+                dataGridViewByShip.Columns.Add(new DataGridViewTextBoxColumn() { HeaderText = "Bodies Scanned".T(EDTx.UserControlStats_BodiesScanned) });
+                dataGridViewByShip.Columns.Add(new DataGridViewTextBoxColumn() { HeaderText = "Destroyed".T(EDTx.UserControlStats_Destroyed) });
+                DGVLoadColumnLayout(dataGridViewByShip, DbShip);
             }
 
             string[] strarr = new string[6];

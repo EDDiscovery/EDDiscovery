@@ -15,7 +15,7 @@
  */
 namespace EDDiscovery.UserControls
 {
-    partial class UserControlStatistics
+    partial class UserControlStats
     {
         /// <summary> 
         /// Required designer variable.
@@ -43,6 +43,7 @@ namespace EDDiscovery.UserControls
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             ExtendedControls.TabStyleSquare tabStyleSquare1 = new ExtendedControls.TabStyleSquare();
             this.dataGridViewGeneral = new System.Windows.Forms.DataGridView();
             this.ItemName = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -54,18 +55,18 @@ namespace EDDiscovery.UserControls
             this.tabPageTravel = new System.Windows.Forms.TabPage();
             this.extPanelDataGridViewScrollTravel = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.extScrollBarTravel = new ExtendedControls.ExtScrollBar();
-            this.dataGridViewTravel = new System.Windows.Forms.DataGridView();
+            this.dataGridViewTravel = new BaseUtils.DataGridViewColumnHider();
             this.userControlStatsTimeTravel = new EDDiscovery.UserControls.StatsTimeUserControl();
             this.tabPageScan = new System.Windows.Forms.TabPage();
             this.extPanelDataGridViewScrollScan = new ExtendedControls.ExtPanelDataGridViewScroll();
-            this.dataGridViewScan = new System.Windows.Forms.DataGridView();
+            this.dataGridViewScan = new BaseUtils.DataGridViewColumnHider();
             this.extScrollBarScan = new ExtendedControls.ExtScrollBar();
             this.userControlStatsTimeScan = new EDDiscovery.UserControls.StatsTimeUserControl();
             this.tabPageGameStats = new System.Windows.Forms.TabPage();
             this.treeViewStats = new ExtendedControls.Controls.ExtTreeView();
             this.tabPageByShip = new System.Windows.Forms.TabPage();
             this.extPanelDataGridViewScrollByShip = new ExtendedControls.ExtPanelDataGridViewScroll();
-            this.dataGridViewByShip = new System.Windows.Forms.DataGridView();
+            this.dataGridViewByShip = new BaseUtils.DataGridViewColumnHider();
             this.extScrollBarByShip = new ExtendedControls.ExtScrollBar();
             this.labelEndDate = new System.Windows.Forms.Label();
             this.dateTimePickerStartDate = new ExtendedControls.ExtDateTimePicker();
@@ -258,8 +259,10 @@ namespace EDDiscovery.UserControls
             this.dataGridViewTravel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewTravel.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewTravel.Name = "dataGridViewTravel";
+            this.dataGridViewTravel.RowHeaderMenuStrip = null;
             this.dataGridViewTravel.RowHeadersVisible = false;
             this.dataGridViewTravel.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dataGridViewTravel.SingleRowSelect = true;
             this.dataGridViewTravel.Size = new System.Drawing.Size(687, 488);
             this.dataGridViewTravel.TabIndex = 3;
             this.dataGridViewTravel.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewTravel_SortCompare);
@@ -308,8 +311,10 @@ namespace EDDiscovery.UserControls
             this.dataGridViewScan.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewScan.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewScan.Name = "dataGridViewScan";
+            this.dataGridViewScan.RowHeaderMenuStrip = null;
             this.dataGridViewScan.RowHeadersVisible = false;
             this.dataGridViewScan.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dataGridViewScan.SingleRowSelect = true;
             this.dataGridViewScan.Size = new System.Drawing.Size(687, 488);
             this.dataGridViewScan.TabIndex = 4;
             this.dataGridViewScan.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewScan_SortCompare);
@@ -425,8 +430,10 @@ namespace EDDiscovery.UserControls
             this.dataGridViewByShip.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewByShip.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewByShip.Name = "dataGridViewByShip";
+            this.dataGridViewByShip.RowHeaderMenuStrip = null;
             this.dataGridViewByShip.RowHeadersVisible = false;
             this.dataGridViewByShip.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dataGridViewByShip.SingleRowSelect = true;
             this.dataGridViewByShip.Size = new System.Drawing.Size(681, 505);
             this.dataGridViewByShip.TabIndex = 3;
             this.dataGridViewByShip.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewByShip_SortCompare);
@@ -462,7 +469,7 @@ namespace EDDiscovery.UserControls
             // labelEndDate
             // 
             this.labelEndDate.AutoSize = true;
-            this.labelEndDate.Location = new System.Drawing.Point(238, 7);
+            this.labelEndDate.Location = new System.Drawing.Point(243, 7);
             this.labelEndDate.Name = "labelEndDate";
             this.labelEndDate.Size = new System.Drawing.Size(20, 13);
             this.labelEndDate.TabIndex = 0;
@@ -475,7 +482,7 @@ namespace EDDiscovery.UserControls
             this.dateTimePickerStartDate.Checked = false;
             this.dateTimePickerStartDate.CustomFormat = "dd MMMM yyyy";
             this.dateTimePickerStartDate.Format = System.Windows.Forms.DateTimePickerFormat.Long;
-            this.dateTimePickerStartDate.Location = new System.Drawing.Point(51, 3);
+            this.dateTimePickerStartDate.Location = new System.Drawing.Point(56, 3);
             this.dateTimePickerStartDate.Name = "dateTimePickerStartDate";
             this.dateTimePickerStartDate.SelectedColor = System.Drawing.Color.Yellow;
             this.dateTimePickerStartDate.ShowCheckBox = true;
@@ -488,7 +495,7 @@ namespace EDDiscovery.UserControls
             // labelStatus
             // 
             this.labelStatus.AutoSize = true;
-            this.labelStatus.Location = new System.Drawing.Point(451, 7);
+            this.labelStatus.Location = new System.Drawing.Point(466, 7);
             this.labelStatus.Name = "labelStatus";
             this.labelStatus.Size = new System.Drawing.Size(43, 13);
             this.labelStatus.TabIndex = 0;
@@ -522,7 +529,7 @@ namespace EDDiscovery.UserControls
             this.dateTimePickerEndDate.Checked = false;
             this.dateTimePickerEndDate.CustomFormat = "dd MMMM yyyy";
             this.dateTimePickerEndDate.Format = System.Windows.Forms.DateTimePickerFormat.Long;
-            this.dateTimePickerEndDate.Location = new System.Drawing.Point(265, 3);
+            this.dateTimePickerEndDate.Location = new System.Drawing.Point(280, 3);
             this.dateTimePickerEndDate.Name = "dateTimePickerEndDate";
             this.dateTimePickerEndDate.SelectedColor = System.Drawing.Color.Yellow;
             this.dateTimePickerEndDate.ShowCheckBox = true;
@@ -535,19 +542,19 @@ namespace EDDiscovery.UserControls
             // labelStart
             // 
             this.labelStart.AutoSize = true;
-            this.labelStart.Location = new System.Drawing.Point(3, 9);
+            this.labelStart.Location = new System.Drawing.Point(3, 7);
             this.labelStart.Name = "labelStart";
             this.labelStart.Size = new System.Drawing.Size(29, 13);
             this.labelStart.TabIndex = 0;
             this.labelStart.Text = "Start";
             // 
-            // UserControlStatistics
+            // UserControlStats
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tabControlCustomStats);
             this.Controls.Add(this.extPanelRollUp);
-            this.Name = "UserControlStatistics";
+            this.Name = "UserControlStats";
             this.Size = new System.Drawing.Size(711, 569);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewGeneral)).EndInit();
             this.panelGeneral.ResumeLayout(false);
@@ -581,13 +588,13 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.TabPage tabPageTravel;
         private System.Windows.Forms.TabPage tabPageScan;
         private StatsTimeUserControl userControlStatsTimeTravel;
-        private System.Windows.Forms.DataGridView dataGridViewTravel;
+        private BaseUtils.DataGridViewColumnHider dataGridViewTravel;
         private StatsTimeUserControl userControlStatsTimeScan;
-        private System.Windows.Forms.DataGridView dataGridViewScan;
+        private BaseUtils.DataGridViewColumnHider dataGridViewScan;
         private System.Windows.Forms.TabPage tabPageGameStats;
         private ExtendedControls.Controls.ExtTreeView treeViewStats;
         private System.Windows.Forms.TabPage tabPageByShip;
-        private System.Windows.Forms.DataGridView dataGridViewByShip;
+        private BaseUtils.DataGridViewColumnHider dataGridViewByShip;
         private ExtendedControls.ExtPanelDataGridViewScroll extPanelDataGridViewScrollTravel;
         private ExtendedControls.ExtScrollBar extScrollBarTravel;
         private ExtendedControls.ExtPanelDataGridViewScroll extPanelDataGridViewScrollScan;
