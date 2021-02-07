@@ -1275,7 +1275,8 @@ namespace EDDiscovery
                     "Scan your history, and for systems without co-ordinates,\r\ntry and fill them in from your system database\r\nConfirm?".T(EDTx.EDDiscoveryForm_FillPos), 
                     "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
             {
-                history.FillInPositionsFSDJumps();
+                history.FillInPositionsFSDJumps(LogLine);
+                RefreshDisplays();
             }
         }
 

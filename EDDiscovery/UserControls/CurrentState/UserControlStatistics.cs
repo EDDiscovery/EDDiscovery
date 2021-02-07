@@ -482,6 +482,7 @@ namespace EDDiscovery.UserControls
                             if (!st.Ships.TryGetValue(st.currentshipid, out var cls))
                                 cls = new Stats.ShipInfo();
                             cls.died++;
+                            System.Diagnostics.Debug.WriteLine("Died {0} {1}", st.currentshipid, cls.died);
                             System.Diagnostics.Debug.Assert(st.currentshipid != null);
                             st.Ships[st.currentshipid] = cls;
                         }
@@ -1173,6 +1174,7 @@ namespace EDDiscovery.UserControls
                 dataGridViewByShip.Columns.Add(new DataGridViewTextBoxColumn() { HeaderText = "Type".T(EDTx.UserControlStats_Type), Tag = "AlphaSort" });
                 dataGridViewByShip.Columns.Add(new DataGridViewTextBoxColumn() { HeaderText = "Name".T(EDTx.UserControlStats_Name), Tag = "AlphaSort" });
                 dataGridViewByShip.Columns.Add(new DataGridViewTextBoxColumn() { HeaderText = "Ident".T(EDTx.UserControlStats_Ident), Tag = "AlphaSort" });
+                dataGridViewByShip.Columns.Add(new DataGridViewTextBoxColumn() { HeaderText = "Jumps".T(EDTx.UserControlStats_Jumps) });
                 dataGridViewByShip.Columns.Add(new DataGridViewTextBoxColumn() { HeaderText = "Travelled Ly".T(EDTx.UserControlStats_TravelledLy) });
                 dataGridViewByShip.Columns.Add(new DataGridViewTextBoxColumn() { HeaderText = "Bodies Scanned".T(EDTx.UserControlStats_BodiesScanned) });
                 dataGridViewByShip.Columns.Add(new DataGridViewTextBoxColumn() { HeaderText = "Destroyed".T(EDTx.UserControlStats_Destroyed) });
