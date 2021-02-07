@@ -256,7 +256,7 @@ namespace EDDiscovery
         {
             // check first and download items
 
-            StarScan.LoadBodyDesignationMap();
+            BodyDesignations.LoadBodyDesignationMap();
 
             Debug.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Check systems");
             ReportSyncProgress("");
