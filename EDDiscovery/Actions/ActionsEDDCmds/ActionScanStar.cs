@@ -160,6 +160,7 @@ namespace EDDiscovery.Actions
                 ap[prefix + "_isstar"] = sc.IsStar ? "1" : "0";
                 ap[prefix + "_edsmbody"] = sc.IsEDSMBody ? "1" : "0";
                 ap[prefix + "_bodyname"] = sc.BodyName;
+                ap[prefix + "_bodydesignation"] = sc.BodyDesignationOrName;
                 ap[prefix + "_orbitalperiod"] = sc.nOrbitalPeriod.ToNANNullSafeString("0.###");
                 ap[prefix + "_rotationperiod"] = sc.nRotationPeriod.ToNANNullSafeString("0.###");
                 ap[prefix + "_surfacetemperature"] = sc.nSurfaceTemperature.ToNANNullSafeString("0.###");

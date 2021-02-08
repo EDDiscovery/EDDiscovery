@@ -157,7 +157,7 @@ namespace EDDiscovery.Forms
             if (thisSystem != null)
             {
                 var lookup = await helist.StarScan.FindSystemAsync(thisSystem, true);
-                var landables = lookup?.Bodies?.Where(b => b.ScanData != null && b.ScanData.IsLandable)?.Select(b => b.fullname);
+                var landables = lookup?.Bodies?.Select(b => b.CustomNameOrOwnname );        // lets present all, even if not landable, as you may want a whole planet bookmark
 
                 if (landables != null)
                 {

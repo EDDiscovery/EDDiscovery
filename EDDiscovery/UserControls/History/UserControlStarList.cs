@@ -398,39 +398,40 @@ namespace EDDiscovery.UserControls
                         if (sn.ScanData != null && checkBoxBodyClasses.Checked)
                         {
                             JournalScan sc = sn.ScanData;
-                            string bodynameshort = sc.BodyName.ReplaceIfStartsWith(system.Name);
+                            string bodyname = sc.BodyDesignationOrName;
+                            string bodynameshort = bodyname.ReplaceIfStartsWith(system.Name);
 
                             if (sc.IsStar) // brief notification for special or uncommon celestial bodies, useful to traverse the history and search for that special body you discovered.
                             {
                                 // Sagittarius A* is a special body: is the centre of the Milky Way, and the only one which is classified as a Super Massive Black Hole. As far as we know...                                
                                 if (sc.StarTypeID == EDStar.SuperMassiveBlackHole)
-                                    bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a super massive black hole".T(EDTx.UserControlStarList_SMBH), sc.BodyName), prefix);
+                                    bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a super massive black hole".T(EDTx.UserControlStarList_SMBH), bodyname), prefix);
                                     
                                 // black holes
                                 if (sc.StarTypeID == EDStar.H)
-                                    bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a black hole".T(EDTx.UserControlStarList_BH), sc.BodyName), prefix);
+                                    bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a black hole".T(EDTx.UserControlStarList_BH), bodyname), prefix);
 
                                 // neutron stars
                                 if (sc.StarTypeID == EDStar.N)
-                                    bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a neutron star".T(EDTx.UserControlStarList_NS), sc.BodyName), prefix);
+                                    bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a neutron star".T(EDTx.UserControlStarList_NS), bodyname), prefix);
 
                                 // white dwarf (D, DA, DAB, DAO, DAZ, DAV, DB, DBZ, DBV, DO, DOV, DQ, DC, DCV, DX)
                                 string WhiteDwarf = "White Dwarf";
                                 if (sc.StarTypeText.Contains(WhiteDwarf))
-                                    bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a {1} white dwarf star".T(EDTx.UserControlStarList_WD), sc.BodyName, sc.StarTypeID), prefix);
+                                    bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a {1} white dwarf star".T(EDTx.UserControlStarList_WD), bodyname, sc.StarTypeID), prefix);
 
                                 // wolf rayet (W, WN, WNC, WC, WO)
                                 string WolfRayet = "Wolf-Rayet";
                                 if (sc.StarTypeText.Contains(WolfRayet))
-                                    bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a {1} wolf-rayet star".T(EDTx.UserControlStarList_WR), sc.BodyName, sc.StarTypeID), prefix);
+                                    bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a {1} wolf-rayet star".T(EDTx.UserControlStarList_WR), bodyname, sc.StarTypeID), prefix);
 
                                 // giants. It should recognize all classes of giants.
                                 if (sc.StarTypeText.Contains("Giant"))
-                                    bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a {1}".T(EDTx.UserControlStarList_OTHER), sc.BodyName, sc.StarTypeText), prefix);
+                                    bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a {1}".T(EDTx.UserControlStarList_OTHER), bodyname, sc.StarTypeText), prefix);
 
                                 // rogue planets - not sure if they really exists, but they are in the journal, so...
                                 if (sc.StarTypeID == EDStar.RoguePlanet)
-                                    bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a rogue planet".T(EDTx.UserControlStarList_RP), sc.BodyName), prefix);
+                                    bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a rogue planet".T(EDTx.UserControlStarList_RP), bodyname), prefix);
                             }
 
                             else
@@ -536,7 +537,7 @@ namespace EDDiscovery.UserControls
                                 if (premium != 0)
                                     jumpLevel.AppendPrePad(premium + "/" + Recipes.FindSynthesis("FSD", "Premium").Count + " Premium".T(EDTx.UserControlStarList_PFSD), ", ");
 
-                                jumponium = jumponium.AppendPrePad(Environment.NewLine + string.Format("{0} has {1} level elements.".T(EDTx.UserControlStarList_LE), sn.ScanData.BodyName ,jumpLevel));
+                                jumponium = jumponium.AppendPrePad(Environment.NewLine + string.Format("{0} has {1} level elements.".T(EDTx.UserControlStarList_LE), sn.ScanData.BodyDesignationOrName ,jumpLevel));
                             }
                         }
                     }

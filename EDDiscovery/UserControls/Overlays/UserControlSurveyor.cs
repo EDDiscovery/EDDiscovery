@@ -388,7 +388,7 @@ namespace EDDiscovery.UserControls
             if (js.Mapped)
                 information.Append("\u2713"); // let the cmdr see that this body is already mapped - this is a check
 
-            string bodyname = js.BodyName.ReplaceIfStartsWith(sys.Name);
+            string bodyname = js.BodyDesignationOrName.ReplaceIfStartsWith(sys.Name);
 
             // Name
             information.Append(bodyname);

@@ -68,7 +68,7 @@ namespace EDDiscovery.UserControls
                     string overlaytext = "";
                     var nodelabels = new string[2] { "", "" };
 
-                    nodelabels[0] = sn.customname ?? sn.ownname;
+                    nodelabels[0] = sn.CustomNameOrOwnname;
                     if (sc.IsEDSMBody)
                         nodelabels[0] = "_" + nodelabels[0];
 

@@ -250,7 +250,7 @@ namespace EDDiscovery.UserControls
 
                             var img = global::EDDiscovery.Icons.Controls.ScanGrid_Belt;
 
-                            dataGridViewScangrid.Rows.Add(new object[] { null, sn.ScanData.BodyName, bdClass, bdDist, bdDetails });
+                            dataGridViewScangrid.Rows.Add(new object[] { null, sn.ScanData.BodyDesignationOrName, bdClass, bdDist, bdDetails });
 
                             var cur = dataGridViewScangrid.Rows[dataGridViewScangrid.Rows.Count - 1];
 
@@ -491,7 +491,7 @@ namespace EDDiscovery.UserControls
                         // pick an image
                         var img = sn.ScanData.IsStar ? sn.ScanData.GetStarTypeImage() : sn.ScanData.GetPlanetClassImage();
 
-                        dataGridViewScangrid.Rows.Add(new object[] { null, sn.ScanData.BodyName, bdClass, bdDist, bdDetails });
+                        dataGridViewScangrid.Rows.Add(new object[] { null, sn.ScanData.BodyDesignationOrName, bdClass, bdDist, bdDetails });
 
                         var cur = dataGridViewScangrid.Rows[dataGridViewScangrid.Rows.Count - 1];
 
