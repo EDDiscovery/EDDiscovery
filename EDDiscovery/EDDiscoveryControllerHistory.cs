@@ -167,7 +167,7 @@ namespace EDDiscovery
                     }
                 }
 
-                hist = HistoryList.LoadHistory( (s) => ReportRefreshProgress(-1, string.Format("Processing log file {0}".T(EDTx.EDDiscoveryController_PLF), s)), 
+                hist = HistoryList.LoadHistory( (s) => ReportRefreshProgress(-1, s), 
                                                 args.CurrentCommander,
                                                 EDDConfig.Instance.FullHistoryLoadDayLimit, 
                                                 EDDConfig.Instance.EssentialEventTypes
