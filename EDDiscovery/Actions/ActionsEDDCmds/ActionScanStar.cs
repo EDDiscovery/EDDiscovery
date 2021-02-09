@@ -88,31 +88,31 @@ namespace EDDiscovery.Actions
                     if ( sn != null )
                     {
                         int starno = 1;
-                        ap[prefix + "Stars"] = sn.starnodes.Count.ToString(ct);
+                        ap[prefix + "Stars"] = sn.StarNodes.Count.ToString(ct);
 
-                        foreach (KeyValuePair<string, StarScan.ScanNode> scannode in sn.starnodes)
+                        foreach (KeyValuePair<string, StarScan.ScanNode> scannode in sn.StarNodes)
                         {
                             DumpInfo(ap, scannode, prefix + "Star_" + starno.ToString(ct) , "_Planets");
 
                             int pcount = 1;
 
-                            if (scannode.Value.children != null)
+                            if (scannode.Value.Children != null)
                             {
-                                foreach (KeyValuePair<string, StarScan.ScanNode> planetnodes in scannode.Value.children)
+                                foreach (KeyValuePair<string, StarScan.ScanNode> planetnodes in scannode.Value.Children)
                                 {
                                     DumpInfo(ap, planetnodes, prefix + "Planet_" + starno.ToString(ct) + "_" + pcount.ToString(ct) , "_Moons");
 
-                                    if (planetnodes.Value.children != null)
+                                    if (planetnodes.Value.Children != null)
                                     {
                                         int mcount = 1;
-                                        foreach (KeyValuePair<string, StarScan.ScanNode> moonnodes in planetnodes.Value.children)
+                                        foreach (KeyValuePair<string, StarScan.ScanNode> moonnodes in planetnodes.Value.Children)
                                         {
                                             DumpInfo(ap, moonnodes, prefix + "Moon_" + starno.ToString(ct) + "_" + pcount.ToString(ct) + "_" + mcount.ToString(ct) , "_Submoons");
 
-                                            if (moonnodes.Value.children != null)
+                                            if (moonnodes.Value.Children != null)
                                             {
                                                 int smcount = 1;
-                                                foreach (KeyValuePair<string, StarScan.ScanNode> submoonnodes in moonnodes.Value.children)
+                                                foreach (KeyValuePair<string, StarScan.ScanNode> submoonnodes in moonnodes.Value.Children)
                                                 {
                                                     DumpInfo(ap, submoonnodes, prefix + "SubMoon_" + starno.ToString(ct) + "_" + pcount.ToString(ct) + "_" + mcount.ToString(ct) + "_" + smcount.ToString(ct),null);
                                                     smcount++;
@@ -149,9 +149,9 @@ namespace EDDiscovery.Actions
             EliteDangerousCore.JournalEvents.JournalScan sc = scannode.Value.ScanData;
 
             ap[prefix] = scannode.Key;
-            ap[prefix + "_type"] = scannode.Value.type.ToString();
-            ap[prefix + "_assignedname"] = scannode.Value.ownname;
-            ap[prefix + "_assignedfullname"] = scannode.Value.fullname;
+            ap[prefix + "_type"] = scannode.Value.NodeType.ToString();
+            ap[prefix + "_assignedname"] = scannode.Value.OwnName;
+            ap[prefix + "_assignedfullname"] = scannode.Value.FullName;
             ap[prefix + "_data"] = (sc != null) ? "1" : "0";
             ap[prefix + "_signals"] = scannode.Value.Signals != null ? EliteDangerousCore.JournalEvents.JournalSAASignalsFound.SignalList(scannode.Value.Signals, 0, ",", true) : "";
 
@@ -196,8 +196,8 @@ namespace EDDiscovery.Actions
 
             if ( subname != null )
             {
-                int totalchildren = (scannode.Value.children != null) ? scannode.Value.children.Count : 0;
-                int totalbodies = (scannode.Value.children != null) ? (from x in scannode.Value.children where x.Value.type == StarScan.ScanNodeType.body select x).Count() : 0;
+                int totalchildren = (scannode.Value.Children != null) ? scannode.Value.Children.Count : 0;
+                int totalbodies = (scannode.Value.Children != null) ? (from x in scannode.Value.Children where x.Value.NodeType == StarScan.ScanNodeType.body select x).Count() : 0;
                 ap[prefix + subname] = totalchildren.ToStringInvariant();
                 ap[prefix + subname + "_Only"] = totalbodies.ToStringInvariant();       // we do this, because children can be other than bodies..
             }

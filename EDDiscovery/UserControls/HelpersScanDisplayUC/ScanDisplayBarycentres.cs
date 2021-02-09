@@ -43,16 +43,16 @@ namespace EDDiscovery.UserControls
 
         Tuple<Point, int, int> DisplayBarynode(StarScan.ScanNode sn, int level, Dictionary<StarScan.ScanNode, Point> nodecentres, List<StarScan.ScanNode> nodes, List<ExtPictureBox.ImageElement> pc, int imagesize, bool horz = false)
         {
-            if (sn.children == null)
+            if (sn.Children == null)
                 return new Tuple<Point, int, int>(Point.Empty, level, 0);
 
             var tojoin = new List<BaryPointInfo>();
 
             int orderpos = 0;   // this records the last planet order pos for use to pass back up the tree - helps in ordering
 
-            foreach (var c in sn.children)
+            foreach (var c in sn.Children)
             {
-                if (c.Value.type == StarScan.ScanNodeType.barycentre)       // if a barycentre, draw it
+                if (c.Value.NodeType == StarScan.ScanNodeType.barycentre)       // if a barycentre, draw it
                 {
                     var x = DisplayBarynode(c.Value, level + 1, nodecentres, nodes, pc, imagesize, horz);
                     //System.Diagnostics.Debug.WriteLine("                        ".Substring(0, level * 3) + level + " Draw bary " + c.Value.fullname + " " + x.Item1 + " " + level);

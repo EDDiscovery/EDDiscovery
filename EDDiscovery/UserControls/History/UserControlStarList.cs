@@ -378,7 +378,7 @@ namespace EDDiscovery.UserControls
 
             if (sysnode != null)
             {
-                if (sysnode.starnodes != null)
+                if (sysnode.StarNodes != null)
                 {
                     string st = sysnode.StarTypesFound();
                     if (st.HasChars())
@@ -440,7 +440,7 @@ namespace EDDiscovery.UserControls
                                 // Check if a non-star body is a moon or not. We want it to further refine our brief summary in the visited star list.
                                 // To avoid duplicates, we need to apply our filters before on the bodies recognized as a moon, than do the same for the other bodies that do not fulfill that criteria.
 
-                                if (sn.level >= 2 && sn.type == StarScan.ScanNodeType.body)
+                                if (sn.Level >= 2 && sn.NodeType == StarScan.ScanNodeType.body)
 
                                 // Tell us that that special body is a moon. After all, it can be quite an outstanding discovery...
                                 {

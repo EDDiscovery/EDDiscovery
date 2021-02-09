@@ -221,11 +221,11 @@ namespace EDDiscovery.UserControls
                 var bdDist = new StringBuilder();
                 var bdDetails = new StringBuilder();
                 
-                if (sn.type == StarScan.ScanNodeType.ring)
+                if (sn.NodeType == StarScan.ScanNodeType.ring)
                 {
                     // do nothing, by now
                 }
-                else if (sn.type == StarScan.ScanNodeType.beltcluster)
+                else if (sn.NodeType == StarScan.ScanNodeType.beltcluster)
                 {
                     if (showStructures && sn.ScanData?.BodyName != null)
                     {
@@ -354,11 +354,11 @@ namespace EDDiscovery.UserControls
                             planets++;
 
                             // tell us the distance from the arrivals in both AU and LS
-                            if (sn.level <= 1 && sn.type == StarScan.ScanNodeType.body)
+                            if (sn.Level <= 1 && sn.NodeType == StarScan.ScanNodeType.body)
                                 bdDist.AppendFormat("{0:0.00}AU ({1:0.0}ls)", sn.ScanData.DistanceFromArrivalLS / JournalScan.oneAU_LS, sn.ScanData.DistanceFromArrivalLS);
 
                             // ...or a moon?
-                            if (sn.level >= 2 && sn.type == StarScan.ScanNodeType.body)
+                            if (sn.Level >= 2 && sn.NodeType == StarScan.ScanNodeType.body)
                             {
                                 if (sn.ScanData.PlanetClass != null)
                                     moons++;
@@ -517,7 +517,7 @@ namespace EDDiscovery.UserControls
                 }
 
                 // set a meaningful title for the controller            
-                SetControlText(string.Format("Scan Summary for {0}: {1} stars; {2} planets ({3} terrestrial, {4} gas giants), {5} moons".T(EDTx.UserControlScanGrid_ScanSummaryfor), scannode.system.Name, stars, planets, terrestrial, gasgiants, moons));
+                SetControlText(string.Format("Scan Summary for {0}: {1} stars; {2} planets ({3} terrestrial, {4} gas giants), {5} moons".T(EDTx.UserControlScanGrid_ScanSummaryfor), scannode.System.Name, stars, planets, terrestrial, gasgiants, moons));
                 if (firstdisplayedrow >= 0 && firstdisplayedrow < dataGridViewScangrid.RowCount)
                     dataGridViewScangrid.SafeFirstDisplayedScrollingRowIndex(firstdisplayedrow);
 

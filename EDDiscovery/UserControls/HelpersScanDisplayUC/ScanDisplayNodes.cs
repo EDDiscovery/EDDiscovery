@@ -57,7 +57,7 @@ namespace EDDiscovery.UserControls
 
             if (sc != null && (!sc.IsEDSMBody || CheckEDSM))     // has a scan and its our scan, or we are showing EDSM
             {
-                if (sn.type != StarScan.ScanNodeType.ring)       // not rings
+                if (sn.NodeType != StarScan.ScanNodeType.ring)       // not rings
                 {
                     tip = sc.DisplayString(historicmatlist: curmats, currentmatlist: hl.GetLast?.MaterialCommodity);
                     if (sn.Signals != null)
@@ -281,16 +281,16 @@ namespace EDDiscovery.UserControls
                     }
                 }
             }
-            else if (sn.type == StarScan.ScanNodeType.belt)
+            else if (sn.NodeType == StarScan.ScanNodeType.belt)
             {
                 if (sn.BeltData != null)
                     tip = sn.BeltData.RingInformationMoons(true,"");
                 else
-                    tip = sn.ownname + Environment.NewLine + Environment.NewLine + "No scan data available".T(EDTx.ScanDisplayUserControl_NSD);
+                    tip = sn.OwnName + Environment.NewLine + Environment.NewLine + "No scan data available".T(EDTx.ScanDisplayUserControl_NSD);
 
-                if (sn.children != null && sn.children.Count != 0)
+                if (sn.Children != null && sn.Children.Count != 0)
                 {
-                    foreach (StarScan.ScanNode snc in sn.children.Values)
+                    foreach (StarScan.ScanNode snc in sn.Children.Values)
                     {
                         if (snc.ScanData != null)
                         {
@@ -302,16 +302,16 @@ namespace EDDiscovery.UserControls
 
                 Size bmpsize = new Size(size.Width, planetsize.Height * nodeheightratio / noderatiodivider);
 
-                endpoint = CreateImageAndLabel(pc, Icons.Controls.Scan_Bodies_Belt, position, bmpsize, out imagepos, new string[] { sn.ownname.AppendPrePad(appendlabeltext, Environment.NewLine) }, tip, false);
+                endpoint = CreateImageAndLabel(pc, Icons.Controls.Scan_Bodies_Belt, position, bmpsize, out imagepos, new string[] { sn.OwnName.AppendPrePad(appendlabeltext, Environment.NewLine) }, tip, false);
             }
             else
             {
-                if (sn.type == StarScan.ScanNodeType.barycentre)
-                    tip = string.Format("Barycentre of {0}".T(EDTx.ScanDisplayUserControl_BC), sn.ownname);
+                if (sn.NodeType == StarScan.ScanNodeType.barycentre)
+                    tip = string.Format("Barycentre of {0}".T(EDTx.ScanDisplayUserControl_BC), sn.OwnName);
                 else
-                    tip = sn.ownname + Environment.NewLine + Environment.NewLine + "No scan data available".T(EDTx.ScanDisplayUserControl_NSD);
+                    tip = sn.OwnName + Environment.NewLine + Environment.NewLine + "No scan data available".T(EDTx.ScanDisplayUserControl_NSD);
 
-                string nodelabel = sn.customname ?? sn.ownname;
+                string nodelabel = sn.CustomName ?? sn.OwnName;
                 nodelabel = nodelabel.AppendPrePad(appendlabeltext,Environment.NewLine);
 
                 endpoint = CreateImageAndLabel(pc, notscanned, position, size, out imagepos, new string[] { nodelabel }, tip, false);

@@ -321,9 +321,9 @@ namespace EDDiscovery.UserControls
 
                             StringBuilder res = new StringBuilder();
 
-                            if (sn != null && sn.starnodes.Count > 0 && sn.starnodes.Values[0].ScanData != null)
+                            if (sn != null && sn.StarNodes.Count > 0 && sn.StarNodes.Values[0].ScanData != null)
                             {
-                                JournalScan js = sn.starnodes.Values[0].ScanData;
+                                JournalScan js = sn.StarNodes.Values[0].ScanData;
 
                                 if (showCircumstellarZonesToolStripMenuItem.Checked)
                                 {
