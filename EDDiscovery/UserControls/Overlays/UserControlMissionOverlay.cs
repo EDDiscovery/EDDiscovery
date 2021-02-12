@@ -158,7 +158,7 @@ namespace EDDiscovery.UserControls
 
                 DateTime hetime = currentHE.EventTimeUTC;
 
-                List<MissionState> ml = discoveryform.history.MissionListAccumulator.GetAllMissions();
+                List<MissionState> ml = discoveryform.history.MissionListAccumulator.GetMissionList(currentHE.MissionList);
                 List<MissionState> mcurrent = MissionListAccumulator.GetAllCurrentMissions(ml,hetime);
 
                 int vpos = 4;

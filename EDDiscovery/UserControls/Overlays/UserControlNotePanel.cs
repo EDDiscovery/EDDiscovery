@@ -58,8 +58,8 @@ namespace EDDiscovery.UserControls
 
             displayfont = discoveryform.theme.GetFont;
 
-            discoveryform.OnHistoryChange += Display;
-            discoveryform.OnNewEntry += NewEntry;
+            discoveryform.OnHistoryChange += OnHistoryChange;
+            discoveryform.OnNoteChanged += OnNoteChange;
 
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
@@ -67,46 +67,27 @@ namespace EDDiscovery.UserControls
 
         public override void LoadLayout()
         {
-            uctg.OnTravelSelectionChanged += DisplaySelected;
+            uctg.OnTravelSelectionChanged += OnTravelChange;
         }
 
         public override void InitialDisplay()
         {
-            DisplaySelected(uctg.GetCurrentHistoryEntry, discoveryform.history);
+            OnHistoryChange(discoveryform.history);
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
         {
-            uctg.OnTravelSelectionChanged -= DisplaySelected;
+            uctg.OnTravelSelectionChanged -= OnTravelChange;
             uctg = thc;
-            uctg.OnTravelSelectionChanged += DisplaySelected;
-        }
-
-        private void DisplaySelected(HistoryEntry he, HistoryList hl) =>
-            DisplaySelected(he, hl, true);
-
-        private void DisplaySelected(HistoryEntry he, HistoryList hl, bool selectedEntry)
-        {
-            if (he != null && he.IsFSDCarrierJump )
-                Display(he);
-            else
-                Display(hl);
+            uctg.OnTravelSelectionChanged += OnTravelChange;
         }
 
         public override void Closing()
         {
-            discoveryform.OnHistoryChange -= Display;
-            discoveryform.OnNewEntry -= NewEntry;
-            uctg.OnTravelSelectionChanged -= DisplaySelected;
+            discoveryform.OnHistoryChange -= OnHistoryChange;
+            discoveryform.OnNoteChanged -= OnNoteChange;
+            uctg.OnTravelSelectionChanged -= OnTravelChange;
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(DbSave + "Config", (int)config);
-        }
-
-        public void NewEntry(HistoryEntry he, HistoryList hl)               // called when a new entry is made..
-        {
-            if (he != null && he.IsFSDCarrierJump)
-                Display(he);
-            else
-                Display(hl);
         }
 
         public override bool SupportTransparency { get { return true; } }
@@ -116,17 +97,19 @@ namespace EDDiscovery.UserControls
             Display(lastHE);
         }
 
-        private void Display( HistoryList hl)            // when user clicks around..  HE may be null here
+        private void OnTravelChange(HistoryEntry he, HistoryList hl, bool selectedEntry)
         {
-            Display(hl.GetLastFSDCarrierJump());
+            Display(he);
         }
 
-        void FlipConfig(Configuration item, bool ch, bool redisplay = false)
+        private void OnNoteChange(Object sender, HistoryEntry he, bool commit)
         {
-            if (ch)
-                config = (Configuration)((int)config | (int)item);
-            else
-                config = (Configuration)((int)config & ~(int)item);
+            Display(lastHE);
+        }
+
+        private void OnHistoryChange( HistoryList hl)            // when user clicks around..  HE may be null here
+        {
+            Display(hl.GetLast);
         }
 
         void Display(HistoryEntry he)
@@ -137,37 +120,45 @@ namespace EDDiscovery.UserControls
 
             if (he != null)
             {
-                Color textcolour = IsTransparent ? discoveryform.theme.SPanelColor : discoveryform.theme.LabelColor;
-                Color backcolour = IsTransparent ? Color.Transparent : this.BackColor;
+                HistoryEntry hefsd = discoveryform.history.GetLastHistoryEntry(x => x.IsFSDCarrierJump, he);
 
-                string botline = "";
-                if (Config(Configuration.showGMPNotes))
+                if (hefsd != null)
                 {
-                    var gmo = discoveryform.galacticMapping.Find(he.System.Name);
-                    if (gmo != null)
-                        botline = ("GMP: " + gmo.description).WordWrap(60) + Environment.NewLine;
-                }
+                    Color textcolour = IsTransparent ? discoveryform.theme.SPanelColor : discoveryform.theme.LabelColor;
+                    Color backcolour = IsTransparent ? Color.Transparent : this.BackColor;
 
-                if (Config(Configuration.showSystemNotes))
-                {
-                    if (he.snc != null)
-                        botline += (he.snc.Note).WordWrap(60) + Environment.NewLine;
-                }
+                    string botline = "";
 
-                pictureBox.AddTextAutoSize(
-                    new Point(0, 5),
-                    new Size(10000, 10000),
-                    botline,
-                    displayfont,
-                    textcolour,
-                    backcolour,
-                    1.0F);
+                    if (Config(Configuration.showSystemNotes))
+                    {
+                        for (int pos = hefsd.Index; pos < discoveryform.history.Count && (pos==hefsd.Index || !discoveryform.history[pos].IsFSDCarrierJump); pos++)
+                        {
+                            HistoryEntry cur = discoveryform.history[pos];
+                            if ( cur.SNC != null )
+                                botline += (cur.SNC.Note).WordWrap(60) + Environment.NewLine;
+                        }
+                    }
+
+                    if (Config(Configuration.showGMPNotes))
+                    {
+                        var gmo = discoveryform.galacticMapping.Find(hefsd.System.Name);
+                        if (gmo != null)
+                            botline = ("GMP: " + gmo.description).WordWrap(60) + Environment.NewLine;
+                    }
+
+                    pictureBox.AddTextAutoSize(
+                        new Point(0, 5),
+                        new Size(10000, 10000),
+                        botline,
+                        displayfont,
+                        textcolour,
+                        backcolour,
+                        1.0F);
+                }
             }
 
             pictureBox.Render();
         }
-
-  
 
         private void miSystemNotes_Click(object sender, EventArgs e)
         {
@@ -180,5 +171,15 @@ namespace EDDiscovery.UserControls
             FlipConfig(Configuration.showGMPNotes, ((ToolStripMenuItem)sender).Checked, true);
             Display(lastHE);
         }
+
+        void FlipConfig(Configuration item, bool ch, bool redisplay = false)
+        {
+            if (ch)
+                config = (Configuration)((int)config | (int)item);
+            else
+                config = (Configuration)((int)config & ~(int)item);
+        }
+
+
     }
 }

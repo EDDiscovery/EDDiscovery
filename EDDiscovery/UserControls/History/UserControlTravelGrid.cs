@@ -450,7 +450,7 @@ namespace EDDiscovery.UserControls
 
             DateTime time = EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(item.EventTimeUTC);
             item.FillInformation(out string EventDescription, out string EventDetailedInfo);
-            string note = (item.snc != null) ? item.snc.Note : "";
+            string note = (item.SNC != null) ? item.SNC.Note : "";
 
             if (search.HasChars())
             {
@@ -468,6 +468,7 @@ namespace EDDiscovery.UserControls
 
             var rw = dataGridViewTravel.RowTemplate.Clone() as DataGridViewRow;
 
+            //rw.CreateCells(dataGridViewTravel, time, "", item.Journalid + ":" + item.EventSummary, EventDescription, note);
             rw.CreateCells(dataGridViewTravel, time, "", item.EventSummary, EventDescription, note);
 
             rw.Tag = item;  //tag on row
@@ -612,7 +613,7 @@ namespace EDDiscovery.UserControls
 
             if (rowsbyjournalid.ContainsKey(he.Journalid) ) // if we can find the grid entry
             {
-                string s = (he.snc != null) ? he.snc.Note : "";     // snc may have gone null, so cope with it
+                string s = (he.SNC != null) ? he.SNC.Note : "";     // snc may have gone null, so cope with it
                 //System.Diagnostics.Debug.WriteLine("TG:Note changed " + s);
                 rowsbyjournalid[he.Journalid].Cells[Columns.Note].Value = s;
             }
@@ -1451,7 +1452,7 @@ namespace EDDiscovery.UserControls
                             fsd.FuelUsed,
                             fsd.FuelLevel,
                             fsd.BoostUsed,
-                            he.snc != null ? he.snc.Note : "",
+                            he.SNC != null ? he.SNC.Note : "",
                         };
 
                     };
@@ -1495,14 +1496,14 @@ namespace EDDiscovery.UserControls
                         grd.VerifyLine += delegate (int r)      // second hook to reject line
                         {
                             HistoryEntry he = (HistoryEntry)dataGridViewTravel.Rows[r].Tag;
-                            if (he.snc != null)
+                            if (he.SNC != null)
                             {
-                                if (sysnotecache.Contains(he.snc))
+                                if (sysnotecache.Contains(he.SNC))
                                     return false;
                                 else
                                 {
                                     if (frm.SelectedIndex == 3)
-                                        sysnotecache.Add(he.snc);
+                                        sysnotecache.Add(he.SNC);
                                     return true;
                                 }
                             }

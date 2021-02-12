@@ -507,7 +507,7 @@ namespace EDDiscovery.UserControls
                             {
                                 f.ReturnResult(DialogResult.Cancel);
                             }
-                            else
+                            else if ( controlname == "less" || controlname == "more" )
                             {
                                 if (controlname == "less")
                                 {
@@ -517,7 +517,7 @@ namespace EDDiscovery.UserControls
                                         currentreceive -= current.receive;
                                     }
                                 }
-                                else if (controlname == "more")
+                                else 
                                 {
                                     int newoffer = currentoffer + current.offer;
                                     if (newoffer <= currenttotal)

@@ -30,7 +30,7 @@ namespace EDDiscovery.Forms
             InitializeComponent();
             this.Owner = parent;
             this.HistoryEntry = he;
-            this.NoteText = he.snc?.Note;
+            this.NoteText = he.SNC?.Note;
             this.textBoxNote.Text = this.NoteText ?? "";
             this.labelTimestamp.Text = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC).ToString();
             this.labelSystem.Text = he.System.Name;

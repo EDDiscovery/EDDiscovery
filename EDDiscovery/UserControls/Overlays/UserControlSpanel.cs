@@ -57,7 +57,7 @@ namespace EDDiscovery.UserControls
         private int divideroriginalxpos = -1;
 
         EliteDangerousCore.UIEvents.UIGUIFocus.Focus uistate = EliteDangerousCore.UIEvents.UIGUIFocus.Focus.NoFocus;
-		
+
         class Configuration         // SO many now we need to prepare for a Long
         {
             public const long showInformation = 1;
@@ -420,7 +420,7 @@ namespace EDDiscovery.UserControls
 
             if (layoutorder == 0 && Config(Configuration.showNotes))
             {
-                coldata.Add((he.snc != null) ? he.snc.Note.Replace("\r\n", " ") : "");
+                coldata.Add((he.SNC != null) ? he.SNC.Note.Replace("\r\n", " ") : "");
             }
 
             bool showdistance = !Config(Configuration.showDistancesOnFSDJumpsOnly) || he.IsFSDCarrierJump;
@@ -437,7 +437,7 @@ namespace EDDiscovery.UserControls
 
             if (layoutorder > 0 && Config(Configuration.showNotes))
             {
-                coldata.Add((he.snc != null) ? he.snc.Note.Replace("\r\n", " ") : "");
+                coldata.Add((he.SNC != null) ? he.SNC.Note.Replace("\r\n", " ") : "");
             }
 
             if (layoutorder < 2 && Config(Configuration.showDistancePerStar))

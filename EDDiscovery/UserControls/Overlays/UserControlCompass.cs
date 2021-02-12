@@ -45,6 +45,7 @@ namespace EDDiscovery.UserControls
         bool externallyForcedBookmark = false;
         PlanetMarks.Location externalLocation;
         string externalLocationName;
+        EliteDangerousCore.UIEvents.UIGUIFocus.Focus uistate = EliteDangerousCore.UIEvents.UIGUIFocus.Focus.NoFocus;
 
         #region Init
 
@@ -112,6 +113,21 @@ namespace EDDiscovery.UserControls
             if (autoHideTargetCoords)
             {
                 flowLayoutPanelBookmarks.Visible = flowLayoutPanelTop.Visible = !on;
+            }
+
+            SetCompassVisibility(on);
+        }
+
+        private void SetCompassVisibility(bool transparent)
+        {
+            if (uistate != EliteDangerousCore.UIEvents.UIGUIFocus.Focus.NoFocus && transparent)
+            {
+                compassControl.Visible = false;
+                return;
+            }
+            else if (!compassControl.Visible)
+            {
+                compassControl.Visible = true;
             }
         }
 
@@ -205,7 +221,7 @@ namespace EDDiscovery.UserControls
         {
             EliteDangerousCore.UIEvents.UIPosition up = uievent as EliteDangerousCore.UIEvents.UIPosition;
 
-            if ( up != null )
+            if (up != null)
             {
                 if (up.Location.ValidPosition)
                 {
@@ -213,56 +229,72 @@ namespace EDDiscovery.UserControls
                     longitude = up.Location.Longitude;
                     altitude = up.Location.Altitude;
                     heading = up.Heading;
+                    DisplayCompass();
                 }
                 else
+                {
                     latitude = longitude = heading = altitude = null;
+                    DisplayCompass();
+                }
             }
 
-            DisplayCompass();
+            var gui = uievent as EliteDangerousCore.UIEvents.UIGUIFocus;
+
+            if ( gui != null )
+            {
+                uistate = gui.GUIFocus;
+                DisplayCompass();
+            }
         }
-        
+
+
         private void DisplayCompass()
         {
-            double? targetlat = numberBoxTargetLatitude.Value;
-            double? targetlong = numberBoxTargetLongitude.Value;
+            SetCompassVisibility(IsTransparent);
 
-            double? targetDistance = CalculateDistance(targetlat, targetlong);
-            double? targetSlope = CalculateGlideslope(targetDistance);
-
-            if ( targetDistance.HasValue)
+            if (compassControl.Visible)
             {
-                if (targetDistance.Value < 1000)
-                    compassControl.DistanceFormat = "{0:0.#}m";
-                else if (targetDistance.Value < 1000000)
+                double? targetlat = numberBoxTargetLatitude.Value;
+                double? targetlong = numberBoxTargetLongitude.Value;
+
+                double? targetDistance = CalculateDistance(targetlat, targetlong);
+                double? targetSlope = CalculateGlideslope(targetDistance);
+
+                if (targetDistance.HasValue)
                 {
-                    targetDistance = targetDistance.Value / 1000;
-                    compassControl.DistanceFormat = "{0:0.#}km";
+                    if (targetDistance.Value < 1000)
+                        compassControl.DistanceFormat = "{0:0.#}m";
+                    else if (targetDistance.Value < 1000000)
+                    {
+                        targetDistance = targetDistance.Value / 1000;
+                        compassControl.DistanceFormat = "{0:0.#}km";
+                    }
+                    else
+                    {
+                        targetDistance = targetDistance.Value / 1000000;
+                        compassControl.DistanceFormat = "{0:0.#}Mm";
+                    }
+                }
+
+                if (targetSlope.HasValue)
+                {
+                    compassControl.GlideSlope = targetSlope.Value;
                 }
                 else
                 {
-                    targetDistance = targetDistance.Value / 1000000;
-                    compassControl.DistanceFormat = "{0:0.#}Mm";
+                    compassControl.GlideSlope = double.NaN;
                 }
-            }
 
-            if (targetSlope.HasValue)
-            {
-                compassControl.GlideSlope = targetSlope.Value;
-            }
-            else
-            {
-                compassControl.GlideSlope = double.NaN;
-            }
+                double? targetBearing = CalculateBearing(targetlat, targetlong);
 
-            double? targetBearing = CalculateBearing(targetlat, targetlong);
-
-            try
-            {
-                compassControl.Set(heading.HasValue ? heading.Value : double.NaN,
-                                targetBearing.HasValue ? targetBearing.Value : double.NaN,
-                                targetDistance.HasValue ? targetDistance.Value : double.NaN, true);
+                try
+                {
+                    compassControl.Set(heading.HasValue ? heading.Value : double.NaN,
+                                    targetBearing.HasValue ? targetBearing.Value : double.NaN,
+                                    targetDistance.HasValue ? targetDistance.Value : double.NaN, true);
+                }
+                catch { }       // unlikely but Status.JSON could send duff values, trap out the exception on bad values
             }
-            catch { }       // unlikely but Status.JSON could send duff values, trap out the exception on bad values
         }
 
         private double? CalculateBearing(double? targetLat, double? targetLong)
@@ -387,7 +419,6 @@ namespace EDDiscovery.UserControls
 
 
         #endregion
-
 
         private void checkBoxHideTransparent_CheckedChanged(object sender, EventArgs e)
         {

@@ -84,6 +84,8 @@ namespace EDDiscovery.UserControls
             {
                 if (controlname == "OK")
                     f.ReturnResult(DialogResult.OK);
+                else if (controlname == "Close")
+                    f.ReturnResult(DialogResult.Cancel);
             };
 
             f.InitCentred( parent, parent.Icon, title, null, null, asm , closeicon:true);

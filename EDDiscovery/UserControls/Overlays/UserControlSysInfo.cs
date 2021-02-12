@@ -318,7 +318,7 @@ namespace EDDiscovery.UserControls
                     richTextBoxScrollMissions.Text = t;
                 }
 
-                SetNote(he.snc != null ? he.snc.Note : "");
+                SetNote(he.SNC != null ? he.SNC.Note : "");
                 textBoxGameMode.Text = he.GameModeGroup;
                 if (he.isTravelling)
                 {
@@ -989,7 +989,7 @@ namespace EDDiscovery.UserControls
             if ( !Object.ReferenceEquals(this,sender) )     // so, make sure this sys info is not sending it
             {
                 //System.Diagnostics.Debug.WriteLine("SI:On note changed: " + he.snc.Note);
-                SetNote(he.snc != null ? he.snc.Note : "");
+                SetNote(he.SNC != null ? he.SNC.Note : "");
             }
         }
 

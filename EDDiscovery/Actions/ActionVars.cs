@@ -73,7 +73,7 @@ namespace EDDiscovery.Actions
                 vars[prefix + "MarketId"] = he.MarketID.HasValue ? he.MarketID.ToStringInvariant() : "0";
                 vars[prefix + "StationFaction "] = he.StationFaction ?? "";
 
-                vars[prefix + "Note"] = he.snc?.Note ?? "";
+                vars[prefix + "Note"] = he.SNC?.Note ?? "";
 
                 he.FillInformation(out string EventDescription, out string EventDetailedInfo);
                 vars[prefix + "EventDescription"] = EventDescription;

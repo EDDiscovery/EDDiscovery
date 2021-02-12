@@ -252,13 +252,13 @@ namespace EDDiscovery.UserControls
             var routes = SavedRouteClass.GetAllSavedRoutes();
             var routenames = (from x in routes select x.Name).ToList();
             f.Add(new ExtendedControls.ConfigurableForm.Entry("Route", "", new Point(10, 40), new Size(400, 24), "Select route".T(EDTx.UserControlRouteTracker_Selectroute), routenames));
-            f.AddCancel(new Point(410 - 100, 80), "Press to Cancel".T(EDTx.UserControlRouteTracker_PresstoCancel));
+            f.AddCancel(new Point(410 - 80, 80), "Press to Cancel".T(EDTx.UserControlRouteTracker_PresstoCancel));
 
             f.Trigger += (dialogname, controlname, tag) =>
             {
-                if (controlname != "Route")
+                if (controlname == "Cancel" || controlname == "Close")
                     f.ReturnResult(DialogResult.Cancel);
-                else if (controlname == "OK")
+                else if (controlname == "Route")
                     f.ReturnResult(DialogResult.OK);
             };
 
@@ -267,7 +267,7 @@ namespace EDDiscovery.UserControls
                 string routename = f.Get("Route");
                 currentRoute = routes.Find(x => x.Name.Equals(routename));       // not going to be null, but consider the upset.
 
-                currentRoute.TestHarness(); // enable for debug
+                //currentRoute.TestHarness(); // enable for debug testing of route finding
 
                 if (currentRoute != null)
                     EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbSave + "SelectedRoute", currentRoute.Id.ToStringInvariant());        // write ID back

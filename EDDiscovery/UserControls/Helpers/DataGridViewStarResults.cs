@@ -75,7 +75,7 @@ namespace EDDiscovery.UserControls.Search
         private void Cms_Opening(object sender, System.ComponentModel.CancelEventArgs e)
         {
             rightclicktag = RightClickRowValid ? Rows[RightClickRow].Tag : null;
-            ContextMenuStrip.Items[3].Enabled = rightclicktag is HistoryEntry;
+            ContextMenuStrip.Items[3].Visible = rightclicktag is HistoryEntry;
         }
 
         private ISystem SysFrom(Object t)   // given tag, find the isystem

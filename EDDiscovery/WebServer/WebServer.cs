@@ -291,7 +291,7 @@ namespace EDDiscovery.WebServer
                     jent.Add(he.journalEntry.GetIconPackPath);
                     jent.Add(he.journalEntry.EventTimeUTC);
                     he.FillInformation(out string info, out string detailed);
-                    string note = (he.snc != null) ? he.snc.Note : "";
+                    string note = (he.SNC != null) ? he.SNC.Note : "";
                     jent.Add(he.EventSummary);
                     jent.Add(info);
                     jent.Add(note);
