@@ -452,7 +452,7 @@ namespace EDDiscovery
 
         public int GetPercentage(float dist)  
         {
-            if (dist < middistance)
+            if (dist < middistance || EDDOptions.Instance.DisableSparseMap)
                 return 100;
             else if (dist < fardistance)
                 return midpercentage;

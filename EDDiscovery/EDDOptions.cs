@@ -112,6 +112,7 @@ namespace EDDiscovery
                     case "nocheckrelease": CheckRelease = false; break;
                     case "nocheckgithub": CheckGithubFiles = false; break;
                     case "disablemerge": DisableMerge = true; break;
+                    case "disablesparsemap": DisableSparseMap = true; break;
                     case "edsmbeta":
                         EDSMClass.ServerAddress = "http://beta.edsm.net:8080/";
                         break;
@@ -214,6 +215,7 @@ namespace EDDiscovery
         public bool DisableTimeDisplay { get; set; }
         public bool DisableVersionDisplay { get; set; }
         public string OutputEventHelp { get; set; }
+        public bool DisableSparseMap { get; set; }
         
 
         public string SubAppDirectory(string subfolder)     // ensures its there.. name without \ slashes
