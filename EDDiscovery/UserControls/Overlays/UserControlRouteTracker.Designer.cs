@@ -52,6 +52,7 @@ namespace EDDiscovery.UserControls
             this.showDeviationFromRouteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.autoCopyWPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.autoSetTargetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showBookmarkNotesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
@@ -72,10 +73,11 @@ namespace EDDiscovery.UserControls
             this.showJumpsToolStripMenuItem,
             this.showWaypointCoordinatesToolStripMenuItem,
             this.showDeviationFromRouteToolStripMenuItem,
+            this.showBookmarkNotesToolStripMenuItem,
             this.autoCopyWPToolStripMenuItem,
             this.autoSetTargetToolStripMenuItem});
             this.contextMenuStrip.Name = "contextMenuStrip1";
-            this.contextMenuStrip.Size = new System.Drawing.Size(225, 158);
+            this.contextMenuStrip.Size = new System.Drawing.Size(225, 180);
             // 
             // setRouteToolStripMenuItem
             // 
@@ -133,6 +135,16 @@ namespace EDDiscovery.UserControls
             this.autoSetTargetToolStripMenuItem.Size = new System.Drawing.Size(224, 22);
             this.autoSetTargetToolStripMenuItem.Text = "Auto set target";
             // 
+            // showBookmarkNotesToolStripMenuItem
+            // 
+            this.showBookmarkNotesToolStripMenuItem.Checked = true;
+            this.showBookmarkNotesToolStripMenuItem.CheckOnClick = true;
+            this.showBookmarkNotesToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.showBookmarkNotesToolStripMenuItem.Name = "showBookmarkNotesToolStripMenuItem";
+            this.showBookmarkNotesToolStripMenuItem.Size = new System.Drawing.Size(224, 22);
+            this.showBookmarkNotesToolStripMenuItem.Text = "Show Bookmark Notes";
+            this.showBookmarkNotesToolStripMenuItem.Click += new System.EventHandler(this.showBookmarkNotesToolStripMenuItem_Click);
+            // 
             // UserControlRouteTracker
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -155,5 +167,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripMenuItem showJumpsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showWaypointCoordinatesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showDeviationFromRouteToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem showBookmarkNotesToolStripMenuItem;
     }
 }

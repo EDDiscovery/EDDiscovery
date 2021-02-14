@@ -69,6 +69,12 @@ namespace EDDiscovery.UserControls
             this.textBoxRouteName = new ExtendedControls.ExtTextBox();
             this.labelRouteName = new System.Windows.Forms.Label();
             this.dataGridView = new BaseUtils.DataGridViewColumnHider();
+            this.SystemName = new ExtendedControls.ExtDataGridViewColumnAutoComplete();
+            this.Distance = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Note = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnX = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnY = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnZ = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.contextMenuCopyPaste = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pasteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -82,12 +88,6 @@ namespace EDDiscovery.UserControls
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.extPanelDataGridViewScroll = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.extScrollBarDGV = new ExtendedControls.ExtScrollBar();
-            this.SystemName = new ExtendedControls.ExtDataGridViewColumnAutoComplete();
-            this.Distance = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Note = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnX = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnY = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnZ = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.toolStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.contextMenuCopyPaste.SuspendLayout();
@@ -325,7 +325,7 @@ namespace EDDiscovery.UserControls
             this.dateTimePickerEndDate.BorderColor = System.Drawing.Color.Transparent;
             this.dateTimePickerEndDate.BorderColorScaling = 0.5F;
             this.dateTimePickerEndDate.Checked = false;
-            this.dateTimePickerEndDate.CustomFormat = "dd MMMM yyyy";
+            this.dateTimePickerEndDate.CustomFormat = "dddd, d MMMM yyyy";
             this.dateTimePickerEndDate.Format = System.Windows.Forms.DateTimePickerFormat.Long;
             this.dateTimePickerEndDate.Location = new System.Drawing.Point(78, 58);
             this.dateTimePickerEndDate.Margin = new System.Windows.Forms.Padding(2, 2, 8, 2);
@@ -370,7 +370,7 @@ namespace EDDiscovery.UserControls
             this.dateTimePickerStartDate.BorderColor = System.Drawing.Color.Transparent;
             this.dateTimePickerStartDate.BorderColorScaling = 0.5F;
             this.dateTimePickerStartDate.Checked = false;
-            this.dateTimePickerStartDate.CustomFormat = "dd MMMM yyyy";
+            this.dateTimePickerStartDate.CustomFormat = "dddd, d MMMM yyyy";
             this.dateTimePickerStartDate.Format = System.Windows.Forms.DateTimePickerFormat.Long;
             this.dateTimePickerStartDate.Location = new System.Drawing.Point(78, 34);
             this.dateTimePickerStartDate.Margin = new System.Windows.Forms.Padding(2, 2, 8, 2);
@@ -428,7 +428,7 @@ namespace EDDiscovery.UserControls
             this.labelRouteName.TabIndex = 0;
             this.labelRouteName.Text = "Route Name:";
             // 
-            // dataGridViewRouteSystems
+            // dataGridView
             // 
             this.dataGridView.AllowDrop = true;
             this.dataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
@@ -444,7 +444,7 @@ namespace EDDiscovery.UserControls
             this.dataGridView.ContextMenuStrip = this.contextMenuCopyPaste;
             this.dataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView.Location = new System.Drawing.Point(0, 0);
-            this.dataGridView.Name = "dataGridViewRouteSystems";
+            this.dataGridView.Name = "dataGridView";
             this.dataGridView.RowHeaderMenuStrip = null;
             this.dataGridView.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridView.SingleRowSelect = true;
@@ -458,6 +458,44 @@ namespace EDDiscovery.UserControls
             this.dataGridView.DragOver += new System.Windows.Forms.DragEventHandler(this.dataGridViewRouteSystems_DragOver);
             this.dataGridView.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridViewRouteSystems_MouseDown);
             this.dataGridView.MouseMove += new System.Windows.Forms.MouseEventHandler(this.dataGridViewRouteSystems_MouseMove);
+            // 
+            // SystemName
+            // 
+            this.SystemName.HeaderText = "System Name";
+            this.SystemName.Name = "SystemName";
+            this.SystemName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            // 
+            // Distance
+            // 
+            this.Distance.FillWeight = 50F;
+            this.Distance.HeaderText = "Dist.";
+            this.Distance.Name = "Distance";
+            this.Distance.ReadOnly = true;
+            // 
+            // Note
+            // 
+            this.Note.FillWeight = 150F;
+            this.Note.HeaderText = "Note";
+            this.Note.Name = "Note";
+            this.Note.ReadOnly = true;
+            // 
+            // ColumnX
+            // 
+            this.ColumnX.FillWeight = 50F;
+            this.ColumnX.HeaderText = "X";
+            this.ColumnX.Name = "ColumnX";
+            // 
+            // ColumnY
+            // 
+            this.ColumnY.FillWeight = 50F;
+            this.ColumnY.HeaderText = "Y";
+            this.ColumnY.Name = "ColumnY";
+            // 
+            // ColumnZ
+            // 
+            this.ColumnZ.FillWeight = 50F;
+            this.ColumnZ.HeaderText = "Z";
+            this.ColumnZ.Name = "ColumnZ";
             // 
             // contextMenuCopyPaste
             // 
@@ -609,44 +647,6 @@ namespace EDDiscovery.UserControls
             this.extScrollBarDGV.ThumbDrawAngle = 0F;
             this.extScrollBarDGV.Value = 0;
             this.extScrollBarDGV.ValueLimited = 0;
-            // 
-            // SystemName
-            // 
-            this.SystemName.HeaderText = "System Name";
-            this.SystemName.Name = "SystemName";
-            this.SystemName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            // 
-            // Distance
-            // 
-            this.Distance.FillWeight = 50F;
-            this.Distance.HeaderText = "Dist.";
-            this.Distance.Name = "Distance";
-            this.Distance.ReadOnly = true;
-            // 
-            // Note
-            // 
-            this.Note.FillWeight = 150F;
-            this.Note.HeaderText = "Note";
-            this.Note.Name = "Note";
-            this.Note.ReadOnly = true;
-            // 
-            // ColumnX
-            // 
-            this.ColumnX.FillWeight = 50F;
-            this.ColumnX.HeaderText = "X";
-            this.ColumnX.Name = "ColumnX";
-            // 
-            // ColumnY
-            // 
-            this.ColumnY.FillWeight = 50F;
-            this.ColumnY.HeaderText = "Y";
-            this.ColumnY.Name = "ColumnY";
-            // 
-            // ColumnZ
-            // 
-            this.ColumnZ.FillWeight = 50F;
-            this.ColumnZ.HeaderText = "Z";
-            this.ColumnZ.Name = "ColumnZ";
             // 
             // UserControlExpedition
             // 
