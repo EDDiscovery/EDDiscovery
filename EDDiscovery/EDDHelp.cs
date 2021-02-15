@@ -31,7 +31,7 @@ namespace EDDiscovery
 
         static private JToken defaulthelp = new JObject()
         {
-            ["Version"] = "1.3.0.0",
+            ["Version"] = "1.4.0.0",
             ["Panels"] = new JArray()
             {
                 new JObject() { ["panel"] = "Log", ["wiki"] = "/Using-the-EDDiscovery-Log-Panel", ["video"] = "https://youtu.be/PwTbnFikBgA?t=625" },
@@ -65,7 +65,7 @@ namespace EDDiscovery
                 new JObject() { ["panel"] = "Trilateration", ["wiki"] = "/Using-the-Trilateration-Panel", ["video"] = "" },
                 new JObject() { ["panel"] = "Settings", ["wiki"] = "/Using-the-Settings-Panel", ["video"] = "/watch?v=v5g03mYdYAw" },
                 new JObject() { ["panel"] = "ScanGrid", ["wiki"] = "/Using-the-Scan-Grid", ["video"] = "" },
-                new JObject() { ["panel"] = "Compass", ["wiki"] = "/Using-the-Compass-Panel", ["video"] = "" },
+                new JObject() { ["panel"] = "Compass", ["wiki"] = "/Using-the-Compass-Panel", ["video"] = "https://youtu.be/7Kt8XYOetj4" },
                 new JObject() { ["panel"] = "LocalMap", ["wiki"] = "/Using-the-Map-Panel", ["video"] = "" },
                 new JObject() { ["panel"] = "Plot", ["wiki"] = "/Using-the-Plot-Panel", ["video"] = "" },
                 new JObject() { ["panel"] = "PanelSelector", ["wiki"] = "/Using-Panels", ["video"] = "" },
