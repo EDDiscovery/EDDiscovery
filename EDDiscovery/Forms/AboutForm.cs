@@ -41,9 +41,13 @@ namespace EDDiscovery.Forms
             SetTipAndTag(panelLogo, Resources.URLProjectWiki);
             SetTipAndTag(panelEDCD, Resources.URLEDCD);
 
+#if !MONO
             var x = Properties.Resources.EDD_License;
             textBoxLicense.Rtf = x;     // we use the RTB to convert from RTF to text, and double space the result. this makes the scroll bar work.
             textBoxLicense.Text = textBoxLicense.Text.LineTextInsersion("","\n","\n");
+#else
+            textBoxLicense.Text = Properties.Resources.EDD_Licence_Mono;
+#endif
 
             EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
             bool winborder = theme.ApplyDialog(this);

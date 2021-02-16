@@ -96,6 +96,17 @@ namespace EDDiscovery.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ELITE DANGEROUS DISCOVERY TERMS AND CONDITIONS - February 2021
+        ///1. This code is licensed under the Apache License Version 2.0, January 2004.  See below for the Apache license.
+        ///2. DOWNLOADING OF DATA FROM GITHUB.COM/EDDISCOVERY.  From this site, EDD automatically checks at start up for the following information: New releases, Updated Bookmarks, New Expeditions, New Exploration list files, Updated Maps, Notifications.  It automatically downloads to your APPDATA folder any new or updated files detected.  None [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string EDD_Licence_Mono {
+            get {
+                return ResourceManager.GetString("EDD_Licence_Mono", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {\rtf1\adeflang1025\ansi\ansicpg1252\uc1\adeff0\deff0\stshfdbch0\stshfloch31506\stshfhich31506\stshfbi31506\deflang2057\deflangfe2057\themelang2057\themelangfe0\themelangcs0{\fonttbl{\f0\fbidi \froman\fcharset0\fprq2{\*\panose 02020603050405020304}Times New Roman;}{\f34\fbidi \froman\fcharset0\fprq2{\*\panose 02040503050406030204}Cambria Math;}
         ///{\f37\fbidi \fswiss\fcharset0\fprq2{\*\panose 020f0502020204030204}Calibri;}{\flomajor\f31500\fbidi \froman\fcharset0\fprq2{\*\panose 02020603050405020304}Times New [rest of string was truncated]&quot;;.
         /// </summary>
