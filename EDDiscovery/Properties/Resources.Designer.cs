@@ -64,18 +64,20 @@ namespace EDDiscovery.Properties {
         ///   Looks up a localized string similar to Program Concept by:
         ///Cmdr Finwen  (Robert Wahlström)
         ///
+        ///Release Developer:
+        ///Robby
+        ///
         ///Developers for this release series:
-        ///Robby (Releaser)
-        ///Bravada Cadelanne, Iain Ross, Andrea Spada
+        ///Bravada Cadelanne
         ///
         ///Images Captured by:
         ///Spandino, Robby, Eahlstan, Ettanin, CompleteNOOB from Frontier Elite Dangerous Images (C) Frontier Developments PLC
         ///
         ///Languages Translations:
-        ///Kmizole, Potatossuaro, Zafford, Andrea Spada, Goscickiw, Nats-ji, Jay
+        ///Keath Milligan, Kmizole, Potatossuaro, Zafford, Andrea Spada, Goscickiw, Nats-ji, Jay
         ///
         ///Previous Contributors:
-        ///Carcher99, IGAU, EoD, Imathrowback, phwoelfel, Robosa, Daniel-finger, Phroggie, Finwen, Corbi [rest of string was truncated]&quot;;.
+        ///Iain Ross, Andrea Spada, Carcher99, IGAU, EoD, Imathrowback, phwoelfel, Robosa, Daniel-fing [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Credits {
             get {
@@ -351,15 +353,6 @@ namespace EDDiscovery.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://github.com/EDDiscovery/EDDiscovery/blob/master/LICENSE.md.
-        /// </summary>
-        internal static string URLProjectLicense {
-            get {
-                return ResourceManager.GetString("URLProjectLicense", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to https://www.youtube.com/channel/UC6CMbualdRleR47ocYPnokg/.
         /// </summary>
         internal static string URLProjectVideos {
@@ -383,6 +376,15 @@ namespace EDDiscovery.Properties {
         internal static string URLProjectWiki {
             get {
                 return ResourceManager.GetString("URLProjectWiki", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://www.youtube.com/embed/PwTbnFikBgA?start=0.
+        /// </summary>
+        internal static string URLRelease {
+            get {
+                return ResourceManager.GetString("URLRelease", resourceCulture);
             }
         }
         

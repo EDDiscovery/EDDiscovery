@@ -35,7 +35,7 @@ namespace EDDiscovery.Forms
             SetTipAndTag(linkLabelGitHub, Resources.URLProjectGithub);
             SetTipAndTag(linkLabelGitHubIssue, Resources.URLProjectFeedback);
             SetTipAndTag(linkLabelHelp, Resources.URLProjectWiki);
-            SetTipAndTag(linkLabelLicense, Resources.URLProjectLicense);
+            SetTipAndTag(linkLabelYouTube, Resources.URLProjectVideos);
             SetTipAndTag(panelLogo, Resources.URLProjectWiki);
             SetTipAndTag(panelEDCD, Resources.URLEDCD);
 
@@ -43,17 +43,22 @@ namespace EDDiscovery.Forms
             textBoxLicense.Rtf = x;     // we use the RTB to convert from RTF to text, and double space the result. this makes the scroll bar work.
             textBoxLicense.Text = textBoxLicense.Text.LineTextInsersion("","\n","\n");
 
-            System.Diagnostics.Debug.WriteLine("Theme AF");
             EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
             bool winborder = theme.ApplyDialog(this);
-            panel_close.Visible = !winborder;
+            paneltop.Visible = !winborder;
 
-            labelDevelopersEnum.Text = Properties.Resources.Credits;
+            extTextBoxDevs.Text = Properties.Resources.Credits;
+            webBrowser.Visible = false;
         }
 
-        private void AboutForm_Load(object sender, EventArgs e)
+        protected override void OnShown(EventArgs e)
         {
-            buttonOK.Select();
+            base.OnShown(e);
+            buttonOK.Focus();
+
+#if !MONO
+            webBrowser.Navigate(Properties.Resources.URLRelease);
+#endif
         }
 
         private void buttonOK_Click(object sender, EventArgs e)
@@ -79,6 +84,11 @@ namespace EDDiscovery.Forms
         private void panel_close_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private void webBrowser_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
+        {
+            webBrowser.Visible = true;
         }
     }
 }

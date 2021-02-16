@@ -145,9 +145,6 @@
   <data name="URLProjectGithub" xml:space="preserve">
     <value>https://github.com/EDDiscovery/EDDiscovery</value>
   </data>
-  <data name="URLProjectLicense" xml:space="preserve">
-    <value>https://github.com/EDDiscovery/EDDiscovery/blob/master/LICENSE.md</value>
-  </data>
   <data name="URLProjectWiki" xml:space="preserve">
     <value>https://github.com/EDDiscovery/EDDiscovery/wiki</value>
   </data>
@@ -222,5 +219,8 @@
   </data>
   <data name="URLProjectVideosRoot" xml:space="preserve">
     <value>https://www.youtube.com</value>
+  </data>
+  <data name="URLRelease" xml:space="preserve">
+    <value>https://www.youtube.com/embed/PwTbnFikBgA?start=0</value>
   </data>
 </root>

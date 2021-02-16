@@ -561,6 +561,17 @@ namespace EDDiscovery
                 WindowState = FormWindowState.Minimized;
             else if (EDDOptions.Instance.MaximiseOnOpen)
                 WindowState = FormWindowState.Maximized;
+
+            {
+                var lastaboutversion = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("AboutBoxLastVersionPresented", "0.0.0.0").VersionFromString();
+                var eddversion = EDDApplicationContext.AppVersion.VersionFromString();
+                lastaboutversion[3] = eddversion[3] = 0;        // ignore the last dot
+                if ( lastaboutversion.CompareVersion(eddversion)<0)
+                {
+                    EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("AboutBoxLastVersionPresented", EDDApplicationContext.AppVersion);
+                    AboutBox();
+                }
+            }
         }
 
         List<Notifications.Notification> popupnotificationlist = new List<Notifications.Notification>();
