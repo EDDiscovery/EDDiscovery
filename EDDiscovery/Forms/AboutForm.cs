@@ -97,9 +97,7 @@ namespace EDDiscovery.Forms
         {
             Control ctl = (Control)sender;
             if (ctl != null && ctl.Tag != null)
-                Process.Start((string)ctl.Tag);
-            else
-                BaseUtils.TraceLog.WriteLine($"AboutForm: Control and/or Tag is null: control {ctl?.Name ?? "(null)"}, tag {ctl?.Tag ?? "(null)"}.");   
+                BaseUtils.BrowserInfo.LaunchBrowser((string)ctl.Tag);
         }
 
         private void panel_close_Click(object sender, EventArgs e)

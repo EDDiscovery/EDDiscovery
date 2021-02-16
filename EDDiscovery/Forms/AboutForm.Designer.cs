@@ -71,12 +71,12 @@ namespace EDDiscovery.Forms
             this.panelOuter = new System.Windows.Forms.Panel();
             this.panelContent = new System.Windows.Forms.Panel();
             this.panelLeft = new System.Windows.Forms.Panel();
+            this.panelWebBrowser = new System.Windows.Forms.Panel();
             this.panelName = new System.Windows.Forms.Panel();
             this.panelRight = new System.Windows.Forms.Panel();
             this.panelDevs = new System.Windows.Forms.Panel();
             this.panelDevsSurround = new System.Windows.Forms.Panel();
             this.extTextBoxDevs = new ExtendedControls.ExtTextBox();
-            this.panelWebBrowser = new System.Windows.Forms.Panel();
             this.panelLinksBR.SuspendLayout();
             this.flowLayoutPanelLabels.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.panelLogo)).BeginInit();
@@ -156,8 +156,8 @@ namespace EDDiscovery.Forms
             this.flowLayoutPanelLabels.Controls.Add(this.labelLinks);
             this.flowLayoutPanelLabels.Controls.Add(this.linkLabelYouTube);
             this.flowLayoutPanelLabels.Controls.Add(this.linkLabelDeveloperChat);
-            this.flowLayoutPanelLabels.Controls.Add(this.linkLabelHelp);
             this.flowLayoutPanelLabels.Controls.Add(this.linkLabelGitHubIssue);
+            this.flowLayoutPanelLabels.Controls.Add(this.linkLabelHelp);
             this.flowLayoutPanelLabels.Controls.Add(this.linkLabelGitHub);
             this.flowLayoutPanelLabels.Controls.Add(this.linkLabelFDForum);
             this.flowLayoutPanelLabels.Controls.Add(this.linkLabelEliteDangerous);
@@ -185,6 +185,7 @@ namespace EDDiscovery.Forms
             // 
             this.linkLabelYouTube.AutoSize = true;
             this.linkLabelYouTube.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.linkLabelYouTube.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
             this.linkLabelYouTube.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.linkLabelYouTube.Location = new System.Drawing.Point(3, 23);
             this.linkLabelYouTube.Margin = new System.Windows.Forms.Padding(3);
@@ -199,6 +200,7 @@ namespace EDDiscovery.Forms
             // 
             this.linkLabelDeveloperChat.AutoSize = true;
             this.linkLabelDeveloperChat.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.linkLabelDeveloperChat.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
             this.linkLabelDeveloperChat.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.linkLabelDeveloperChat.Location = new System.Drawing.Point(3, 42);
             this.linkLabelDeveloperChat.Name = "linkLabelDeveloperChat";
@@ -212,8 +214,9 @@ namespace EDDiscovery.Forms
             // 
             this.linkLabelHelp.AutoSize = true;
             this.linkLabelHelp.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.linkLabelHelp.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
             this.linkLabelHelp.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.linkLabelHelp.Location = new System.Drawing.Point(3, 58);
+            this.linkLabelHelp.Location = new System.Drawing.Point(3, 80);
             this.linkLabelHelp.Name = "linkLabelHelp";
             this.linkLabelHelp.Size = new System.Drawing.Size(37, 16);
             this.linkLabelHelp.TabIndex = 7;
@@ -225,8 +228,9 @@ namespace EDDiscovery.Forms
             // 
             this.linkLabelGitHubIssue.AutoSize = true;
             this.linkLabelGitHubIssue.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.linkLabelGitHubIssue.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
             this.linkLabelGitHubIssue.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.linkLabelGitHubIssue.Location = new System.Drawing.Point(3, 77);
+            this.linkLabelGitHubIssue.Location = new System.Drawing.Point(3, 61);
             this.linkLabelGitHubIssue.Margin = new System.Windows.Forms.Padding(3);
             this.linkLabelGitHubIssue.Name = "linkLabelGitHubIssue";
             this.linkLabelGitHubIssue.Size = new System.Drawing.Size(114, 16);
@@ -239,6 +243,7 @@ namespace EDDiscovery.Forms
             // 
             this.linkLabelGitHub.AutoSize = true;
             this.linkLabelGitHub.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.linkLabelGitHub.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
             this.linkLabelGitHub.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.linkLabelGitHub.Location = new System.Drawing.Point(3, 99);
             this.linkLabelGitHub.Margin = new System.Windows.Forms.Padding(3);
@@ -253,6 +258,7 @@ namespace EDDiscovery.Forms
             // 
             this.linkLabelFDForum.AutoSize = true;
             this.linkLabelFDForum.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.linkLabelFDForum.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
             this.linkLabelFDForum.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.linkLabelFDForum.Location = new System.Drawing.Point(3, 121);
             this.linkLabelFDForum.Margin = new System.Windows.Forms.Padding(3);
@@ -267,6 +273,7 @@ namespace EDDiscovery.Forms
             // 
             this.linkLabelEliteDangerous.AutoSize = true;
             this.linkLabelEliteDangerous.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.linkLabelEliteDangerous.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
             this.linkLabelEliteDangerous.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.linkLabelEliteDangerous.Location = new System.Drawing.Point(3, 143);
             this.linkLabelEliteDangerous.Margin = new System.Windows.Forms.Padding(3);
@@ -281,6 +288,7 @@ namespace EDDiscovery.Forms
             // 
             this.linkLabelEDSM.AutoSize = true;
             this.linkLabelEDSM.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.linkLabelEDSM.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
             this.linkLabelEDSM.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.linkLabelEDSM.Location = new System.Drawing.Point(3, 165);
             this.linkLabelEDSM.Margin = new System.Windows.Forms.Padding(3);
@@ -295,6 +303,7 @@ namespace EDDiscovery.Forms
             // 
             this.linkLabelEDDB.AutoSize = true;
             this.linkLabelEDDB.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.linkLabelEDDB.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
             this.linkLabelEDDB.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.linkLabelEDDB.Location = new System.Drawing.Point(3, 187);
             this.linkLabelEDDB.Margin = new System.Windows.Forms.Padding(3);
@@ -428,6 +437,14 @@ namespace EDDiscovery.Forms
             this.panelLeft.Size = new System.Drawing.Size(695, 667);
             this.panelLeft.TabIndex = 2;
             // 
+            // panelWebBrowser
+            // 
+            this.panelWebBrowser.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelWebBrowser.Location = new System.Drawing.Point(0, 253);
+            this.panelWebBrowser.Name = "panelWebBrowser";
+            this.panelWebBrowser.Size = new System.Drawing.Size(695, 414);
+            this.panelWebBrowser.TabIndex = 2;
+            // 
             // panelName
             // 
             this.panelName.Controls.Add(this.panelLogo);
@@ -494,14 +511,6 @@ namespace EDDiscovery.Forms
             this.extTextBoxDevs.TabIndex = 4;
             this.extTextBoxDevs.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.extTextBoxDevs.WordWrap = true;
-            // 
-            // panelWebBrowser
-            // 
-            this.panelWebBrowser.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelWebBrowser.Location = new System.Drawing.Point(0, 253);
-            this.panelWebBrowser.Name = "panelWebBrowser";
-            this.panelWebBrowser.Size = new System.Drawing.Size(695, 414);
-            this.panelWebBrowser.TabIndex = 2;
             // 
             // AboutForm
             // 

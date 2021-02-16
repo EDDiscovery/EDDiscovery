@@ -1395,7 +1395,7 @@ namespace EDDiscovery
         private void viewOnEDSMToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (clickedurl != null && clickedurl.Length>0)
-                System.Diagnostics.Process.Start(clickedurl);
+                BaseUtils.BrowserInfo.LaunchBrowser(clickedurl);
         }
 
         private void labelClickedSystemCoords_Click(object sender, EventArgs e)

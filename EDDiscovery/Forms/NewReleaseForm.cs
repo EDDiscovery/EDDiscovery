@@ -75,22 +75,22 @@ namespace EDDiscovery.Forms
 
         private void buttonUrlOpen_Click(object sender, EventArgs e)
         {
-            Process.Start(release.HtmlURL);
+            BaseUtils.BrowserInfo.LaunchBrowser(release.HtmlURL);
         }
 
         private void buttonExeInstaller_Click(object sender, EventArgs e)
         {
-            Process.Start(release.ExeInstallerLink);
+            BaseUtils.BrowserInfo.LaunchBrowser(release.ExeInstallerLink);
         }
 
         private void buttonPortablezip_Click(object sender, EventArgs e)
         {
-            Process.Start(release.PortableInstallerLink);
+            BaseUtils.BrowserInfo.LaunchBrowser(release.PortableInstallerLink);
         }
 
         private void buttonMsiInstaller_Click(object sender, EventArgs e)
         {
-            Process.Start(release.MsiInstallerLink);
+            BaseUtils.BrowserInfo.LaunchBrowser(release.MsiInstallerLink);
         }
 
         private void btnClose_Click(object sender, EventArgs e)

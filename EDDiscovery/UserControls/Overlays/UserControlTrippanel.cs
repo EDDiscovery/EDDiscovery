@@ -287,7 +287,7 @@ namespace EDDiscovery.UserControls
                     string url = edsm.GetUrlToEDSMSystem(he.System.Name, he.System.EDSMID);
 
                     if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
-                        System.Diagnostics.Process.Start(url);
+                        BaseUtils.BrowserInfo.LaunchBrowser(url);
                     else
                         ExtendedControls.MessageBoxTheme.Show(FindForm(), string.Format("System {0} unknown to EDSM".T(EDTx.UserControlTrippanel_UKN), he.System.Name));
                 }

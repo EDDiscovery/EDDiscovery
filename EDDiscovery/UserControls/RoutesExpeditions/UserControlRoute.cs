@@ -494,7 +494,7 @@ namespace EDDiscovery.UserControls
             string url = edsm.GetUrlToEDSMSystem(sysname, edsmid);
 
             if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
-                Process.Start(url);
+                BaseUtils.BrowserInfo.LaunchBrowser(url);
             else
                 ExtendedControls.MessageBoxTheme.Show(FindForm(), "System unknown to EDSM");
         }
@@ -659,7 +659,7 @@ namespace EDDiscovery.UserControls
             string url = edsm.GetUrlToEDSMSystem(sysname, edsmid);
 
             if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
-                Process.Start(url);
+                BaseUtils.BrowserInfo.LaunchBrowser(url);
             else
                 ExtendedControls.MessageBoxTheme.Show(FindForm(), "System unknown to EDSM");
 

@@ -409,7 +409,7 @@ namespace EDDiscovery.UserControls
         {
             if (last_he != null)
             {
-                System.Diagnostics.Process.Start(Properties.Resources.URLEDDBSystemName + HttpUtility.UrlEncode(last_he.System.Name));
+                BaseUtils.BrowserInfo.LaunchBrowser(Properties.Resources.URLEDDBSystemName + HttpUtility.UrlEncode(last_he.System.Name));
             }
         }
 
@@ -427,7 +427,7 @@ namespace EDDiscovery.UserControls
                 string url = edsm.GetUrlToEDSMSystem(last_he.System.Name, id_edsm);
 
                 if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
-                    Process.Start(url);
+                    BaseUtils.BrowserInfo.LaunchBrowser(url);
                 else
                     ExtendedControls.MessageBoxTheme.Show(FindForm(), "System unknown to EDSM".T(EDTx.UserControlSysInfo_SysUnk));
             }
@@ -445,7 +445,7 @@ namespace EDDiscovery.UserControls
         private void extButtonSpanshSystem_Click(object sender, EventArgs e)
         {
             if (last_he != null && last_he.System.SystemAddress.HasValue)
-                System.Diagnostics.Process.Start(Properties.Resources.URLSpanshSystemSystemId + last_he.System.SystemAddress.Value.ToStringInvariant());
+                BaseUtils.BrowserInfo.LaunchBrowser(Properties.Resources.URLSpanshSystemSystemId + last_he.System.SystemAddress.Value.ToStringInvariant());
         }
 
         private void extButtonInaraStation_Click(object sender, EventArgs e)
@@ -460,7 +460,7 @@ namespace EDDiscovery.UserControls
         private void extButtonEDDBStation_Click(object sender, EventArgs e)
         {
             if (last_he != null && last_he.MarketID != null)
-                System.Diagnostics.Process.Start(Properties.Resources.URLEDDBStationMarketId + last_he.MarketID.ToStringInvariant());
+                BaseUtils.BrowserInfo.LaunchBrowser(Properties.Resources.URLEDDBStationMarketId + last_he.MarketID.ToStringInvariant());
         }
 
         private void extButtonSpanshStation_Click(object sender, EventArgs e)
@@ -468,9 +468,9 @@ namespace EDDiscovery.UserControls
             if (last_he != null)
             {
                 if (last_he.MarketID != null)
-                    System.Diagnostics.Process.Start(Properties.Resources.URLSpanshStationMarketId + last_he.MarketID.ToStringInvariant());
+                    BaseUtils.BrowserInfo.LaunchBrowser(Properties.Resources.URLSpanshStationMarketId + last_he.MarketID.ToStringInvariant());
                 else if (last_he.FullBodyID.HasValue)
-                    System.Diagnostics.Process.Start(Properties.Resources.URLSpanshBodyId + last_he.FullBodyID.ToStringInvariant());
+                    BaseUtils.BrowserInfo.LaunchBrowser(Properties.Resources.URLSpanshBodyId + last_he.FullBodyID.ToStringInvariant());
             }
         }
 
@@ -574,7 +574,7 @@ namespace EDDiscovery.UserControls
             string url = edsm.GetUrlToEDSMSystem(name, edsmid);
 
             if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
-                Process.Start(url);
+                BaseUtils.BrowserInfo.LaunchBrowser(url);
             else
                 ExtendedControls.MessageBoxTheme.Show(FindForm(), "System unknown to EDSM".T(EDTx.UserControlSysInfo_SysUnk));
 

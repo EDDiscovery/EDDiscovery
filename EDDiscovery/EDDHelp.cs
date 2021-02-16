@@ -173,14 +173,14 @@ namespace EDDiscovery
 
                 DialogResult res = cfg.ShowDialog(parent, pos, parent.Icon, "", closeicon: true);
                 if (res == DialogResult.OK)
-                    System.Diagnostics.Process.Start(wiki);
+                    BaseUtils.BrowserInfo.LaunchBrowser(wiki);
                 else if (res == DialogResult.Yes)
-                    System.Diagnostics.Process.Start(video);
+                    BaseUtils.BrowserInfo.LaunchBrowser(video);
             }
             else if (wiki.HasChars())
-                System.Diagnostics.Process.Start(wiki);
+                BaseUtils.BrowserInfo.LaunchBrowser(wiki);
             else if (video.HasChars())
-                System.Diagnostics.Process.Start(video);
+                BaseUtils.BrowserInfo.LaunchBrowser(video);
             else
                 MessageBox.Show("No help for " + name);
 

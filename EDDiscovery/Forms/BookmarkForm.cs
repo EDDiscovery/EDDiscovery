@@ -299,7 +299,7 @@ namespace EDDiscovery.Forms
         private void buttonEDSM_Click(object sender, EventArgs e)
         {
             if (edsmurl != null)
-                System.Diagnostics.Process.Start(edsmurl);
+                BaseUtils.BrowserInfo.LaunchBrowser(edsmurl);
         }
 
         private void panel1_MouseDown(object sender, MouseEventArgs e)

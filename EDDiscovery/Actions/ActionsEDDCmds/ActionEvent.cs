@@ -195,7 +195,7 @@ namespace EDDiscovery.Actions
                             ap[prefix + "URL"] = url;
 
                             if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
-                                System.Diagnostics.Process.Start(url);
+                                BaseUtils.BrowserInfo.LaunchBrowser(url);
                         }
                         else if (cmdname.Equals("ross"))
                         {
@@ -204,7 +204,7 @@ namespace EDDiscovery.Actions
                         else if (cmdname.Equals("eddb"))
                         {
                             string url = Properties.Resources.URLEDDBSystemName + System.Web.HttpUtility.UrlEncode(he.System.Name);
-                            System.Diagnostics.Process.Start(url);
+                            BaseUtils.BrowserInfo.LaunchBrowser(url);
                             ap[prefix + "URL"] = url;
                         }
                         else if (cmdname.Equals("info"))

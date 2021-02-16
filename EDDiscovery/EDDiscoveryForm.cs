@@ -1030,17 +1030,17 @@ namespace EDDiscovery
 
         private void frontierForumThreadToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Process.Start(Properties.Resources.URLProjectEDForumPost);
+            BaseUtils.BrowserInfo.LaunchBrowser(Properties.Resources.URLProjectEDForumPost);
         }
 
         private void wikiHelpToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Process.Start(Properties.Resources.URLProjectWiki);
+            BaseUtils.BrowserInfo.LaunchBrowser(Properties.Resources.URLProjectWiki);
         }
 
         private void viewHelpVideosToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Process.Start(Properties.Resources.URLProjectVideos);
+            BaseUtils.BrowserInfo.LaunchBrowser(Properties.Resources.URLProjectVideos);
         }
 
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1089,12 +1089,12 @@ namespace EDDiscovery
 
         private void gitHubToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Process.Start(Properties.Resources.URLProjectGithub);
+            BaseUtils.BrowserInfo.LaunchBrowser(Properties.Resources.URLProjectGithub);
         }
 
         private void reportIssueIdeasToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Process.Start(Properties.Resources.URLProjectFeedback);
+            BaseUtils.BrowserInfo.LaunchBrowser(Properties.Resources.URLProjectFeedback);
         }
 
         internal void useNotifyIconChanged(bool useNotifyIcon)
@@ -1122,7 +1122,7 @@ namespace EDDiscovery
 
         private void eDDiscoveryChatDiscordToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Process.Start(Properties.Resources.URLProjectDiscord);
+            BaseUtils.BrowserInfo.LaunchBrowser(Properties.Resources.URLProjectDiscord);
         }
 
         private void howToRunInSafeModeToResetVariousParametersToolStripMenuItem_Click(object sender, EventArgs e)

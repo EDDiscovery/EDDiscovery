@@ -95,7 +95,7 @@ namespace EDDiscovery.Actions
                     {
                         if (nextword != null && nextword.StartsWith("http:", StringComparison.InvariantCultureIgnoreCase) || nextword.StartsWith("https:", StringComparison.InvariantCultureIgnoreCase))        // security..
                         {
-                            System.Diagnostics.Process.Start(nextword);
+                            BaseUtils.BrowserInfo.LaunchBrowser(nextword);
                         }
                         else
                             ap.ReportError("Perform url must start with http");
