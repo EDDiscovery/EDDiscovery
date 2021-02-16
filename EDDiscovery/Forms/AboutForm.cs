@@ -22,6 +22,8 @@ namespace EDDiscovery.Forms
 {
     public partial class AboutForm : ExtendedControls.DraggableForm
     {
+        WebBrowser webbrowser;
+
         public AboutForm()
         {
             InitializeComponent();
@@ -48,8 +50,8 @@ namespace EDDiscovery.Forms
             paneltop.Visible = !winborder;
 
             extTextBoxDevs.Text = Properties.Resources.Credits;
-            webBrowser.Visible = false;
         }
+
 
         protected override void OnShown(EventArgs e)
         {
@@ -57,8 +59,23 @@ namespace EDDiscovery.Forms
             buttonOK.Focus();
 
 #if !MONO
-            webBrowser.Navigate(Properties.Resources.URLRelease);
+            webbrowser = new WebBrowser();
+            webbrowser.Dock = DockStyle.Fill;
+            webbrowser.Visible = false;
+            webbrowser.DocumentCompleted += Webbrowser_DocumentCompleted;
+            webbrowser.ScriptErrorsSuppressed = true;
+            panelWebBrowser.Controls.Add(webbrowser);
+            webbrowser.Navigate(Properties.Resources.URLRelease);
+#else
+            panelWebBrowser.Visible = false;
+            textBoxLicense.Dock = DockStyle.Fill;
+
 #endif
+        }
+
+        private void Webbrowser_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
+        {
+            webbrowser.Visible = true;
         }
 
         private void buttonOK_Click(object sender, EventArgs e)
@@ -84,11 +101,6 @@ namespace EDDiscovery.Forms
         private void panel_close_Click(object sender, EventArgs e)
         {
             Close();
-        }
-
-        private void webBrowser_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
-        {
-            webBrowser.Visible = true;
         }
     }
 }

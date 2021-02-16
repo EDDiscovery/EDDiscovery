@@ -54,9 +54,9 @@ namespace EDDiscovery.Forms
             this.linkLabelYouTube = new System.Windows.Forms.LinkLabel();
             this.linkLabelDeveloperChat = new System.Windows.Forms.LinkLabel();
             this.linkLabelHelp = new System.Windows.Forms.LinkLabel();
-            this.linkLabelFDForum = new System.Windows.Forms.LinkLabel();
             this.linkLabelGitHubIssue = new System.Windows.Forms.LinkLabel();
             this.linkLabelGitHub = new System.Windows.Forms.LinkLabel();
+            this.linkLabelFDForum = new System.Windows.Forms.LinkLabel();
             this.linkLabelEliteDangerous = new System.Windows.Forms.LinkLabel();
             this.linkLabelEDSM = new System.Windows.Forms.LinkLabel();
             this.linkLabelEDDB = new System.Windows.Forms.LinkLabel();
@@ -71,12 +71,12 @@ namespace EDDiscovery.Forms
             this.panelOuter = new System.Windows.Forms.Panel();
             this.panelContent = new System.Windows.Forms.Panel();
             this.panelLeft = new System.Windows.Forms.Panel();
-            this.webBrowser = new System.Windows.Forms.WebBrowser();
             this.panelName = new System.Windows.Forms.Panel();
             this.panelRight = new System.Windows.Forms.Panel();
             this.panelDevs = new System.Windows.Forms.Panel();
             this.panelDevsSurround = new System.Windows.Forms.Panel();
             this.extTextBoxDevs = new ExtendedControls.ExtTextBox();
+            this.panelWebBrowser = new System.Windows.Forms.Panel();
             this.panelLinksBR.SuspendLayout();
             this.flowLayoutPanelLabels.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.panelLogo)).BeginInit();
@@ -221,20 +221,6 @@ namespace EDDiscovery.Forms
             this.linkLabelHelp.Text = "Help";
             this.linkLabelHelp.Click += new System.EventHandler(this.link_Click);
             // 
-            // linkLabelFDForum
-            // 
-            this.linkLabelFDForum.AutoSize = true;
-            this.linkLabelFDForum.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.linkLabelFDForum.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.linkLabelFDForum.Location = new System.Drawing.Point(3, 121);
-            this.linkLabelFDForum.Margin = new System.Windows.Forms.Padding(3);
-            this.linkLabelFDForum.Name = "linkLabelFDForum";
-            this.linkLabelFDForum.Size = new System.Drawing.Size(94, 16);
-            this.linkLabelFDForum.TabIndex = 5;
-            this.linkLabelFDForum.TabStop = true;
-            this.linkLabelFDForum.Text = "Frontier Forum";
-            this.linkLabelFDForum.Click += new System.EventHandler(this.link_Click);
-            // 
             // linkLabelGitHubIssue
             // 
             this.linkLabelGitHubIssue.AutoSize = true;
@@ -262,6 +248,20 @@ namespace EDDiscovery.Forms
             this.linkLabelGitHub.TabStop = true;
             this.linkLabelGitHub.Text = "GitHub";
             this.linkLabelGitHub.Click += new System.EventHandler(this.link_Click);
+            // 
+            // linkLabelFDForum
+            // 
+            this.linkLabelFDForum.AutoSize = true;
+            this.linkLabelFDForum.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.linkLabelFDForum.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.linkLabelFDForum.Location = new System.Drawing.Point(3, 121);
+            this.linkLabelFDForum.Margin = new System.Windows.Forms.Padding(3);
+            this.linkLabelFDForum.Name = "linkLabelFDForum";
+            this.linkLabelFDForum.Size = new System.Drawing.Size(94, 16);
+            this.linkLabelFDForum.TabIndex = 5;
+            this.linkLabelFDForum.TabStop = true;
+            this.linkLabelFDForum.Text = "Frontier Forum";
+            this.linkLabelFDForum.Click += new System.EventHandler(this.link_Click);
             // 
             // linkLabelEliteDangerous
             // 
@@ -419,7 +419,7 @@ namespace EDDiscovery.Forms
             // 
             // panelLeft
             // 
-            this.panelLeft.Controls.Add(this.webBrowser);
+            this.panelLeft.Controls.Add(this.panelWebBrowser);
             this.panelLeft.Controls.Add(this.textBoxLicense);
             this.panelLeft.Controls.Add(this.panelName);
             this.panelLeft.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -427,17 +427,6 @@ namespace EDDiscovery.Forms
             this.panelLeft.Name = "panelLeft";
             this.panelLeft.Size = new System.Drawing.Size(695, 667);
             this.panelLeft.TabIndex = 2;
-            // 
-            // webBrowser
-            // 
-            this.webBrowser.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.webBrowser.Location = new System.Drawing.Point(0, 253);
-            this.webBrowser.MinimumSize = new System.Drawing.Size(20, 20);
-            this.webBrowser.Name = "webBrowser";
-            this.webBrowser.ScriptErrorsSuppressed = true;
-            this.webBrowser.Size = new System.Drawing.Size(695, 414);
-            this.webBrowser.TabIndex = 3;
-            this.webBrowser.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.webBrowser_DocumentCompleted);
             // 
             // panelName
             // 
@@ -506,6 +495,14 @@ namespace EDDiscovery.Forms
             this.extTextBoxDevs.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.extTextBoxDevs.WordWrap = true;
             // 
+            // panelWebBrowser
+            // 
+            this.panelWebBrowser.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelWebBrowser.Location = new System.Drawing.Point(0, 253);
+            this.panelWebBrowser.Name = "panelWebBrowser";
+            this.panelWebBrowser.Size = new System.Drawing.Size(695, 414);
+            this.panelWebBrowser.TabIndex = 2;
+            // 
             // AboutForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -565,7 +562,6 @@ namespace EDDiscovery.Forms
         private System.Windows.Forms.PictureBox panelEDCD;
         private System.Windows.Forms.Panel panelOuter;
         private System.Windows.Forms.Panel panelName;
-        private System.Windows.Forms.WebBrowser webBrowser;
         private System.Windows.Forms.Panel panelLeft;
         private System.Windows.Forms.Panel panelContent;
         private System.Windows.Forms.Panel panelRight;
@@ -574,5 +570,6 @@ namespace EDDiscovery.Forms
         private System.Windows.Forms.LinkLabel linkLabelYouTube;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanelLabels;
         private System.Windows.Forms.Panel panelDevsSurround;
+        private System.Windows.Forms.Panel panelWebBrowser;
     }
 }
