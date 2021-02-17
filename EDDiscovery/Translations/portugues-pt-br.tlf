@@ -165,7 +165,7 @@ SECTION EDDiscoveryForm
 .adminToolStripMenuItem.clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem: "Clear EDSM ID assigned to all records for current commander" => "Limpoa o ID EDSM ligado a todos os registros do comandante atual"
 .adminToolStripMenuItem.exportVistedStarsListToEliteDangerousToolStripMenuItem: "Export Visited Stars List to Elite Dangerous" => "Envia a lista dos Sistemas Visitados a Elite Dangerous"
 .adminToolStripMenuItem.read21AndFormerLogFilesToolStripMenuItem.load21ToolStripMenuItem: "Scan Netlogs" @
-.adminToolStripMenuItem.removeAllDLLPermissionsToolStripMenuItem: "Remove all DLL permissions" @
+.adminToolStripMenuItem.DLLPermissionsToolStripMenuItem: "DLL Permissions (applies after restart)" @
 .addOnsToolStripMenuItem: "&Add-Ons" => "&Componenti"
 .addOnsToolStripMenuItem.manageAddOnsToolStripMenuItem: "&Manage Add-Ons" => "&Gestão Componentes"
 .addOnsToolStripMenuItem.configureAddOnActionsToolStripMenuItem: "&Edit Add-On Action Files" => "&Modifica Componentes Action Files"

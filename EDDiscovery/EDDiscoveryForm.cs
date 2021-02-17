@@ -1291,12 +1291,11 @@ namespace EDDiscovery
             }
         }
 
-        private void removeAllDLLPermissionsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void DLLPermissions_Click(object sender, EventArgs e)
         {
-            if (ExtendedControls.MessageBoxTheme.Show(this, "Remove all DLL permissions, on next start, you will be asked per DLL if you wish to allow the DLL to run. Are you sure?".T(EDTx.EDDiscoveryForm_RemoveDLLPerms), "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
-            {
-                EDDConfig.Instance.DLLPermissions = "";
-            }
+            string n = EliteDangerousCore.DLL.EDDDLLManager.DLLPermissionManager(this, this.Icon, EDDConfig.Instance.DLLPermissions);
+            if (n != null)
+                EDDConfig.Instance.DLLPermissions = n;
         }
 
 #endregion

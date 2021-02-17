@@ -250,7 +250,8 @@ namespace EDDiscovery.UserControls
                     LogTextHighlight("Duplicate system entry is not allowed".T(EDTx.UserControlTrilateration_DUP) + Environment.NewLine);
                     this.BeginInvoke(new MethodInvoker(() =>
                     {
-                        if (!dataGridViewDistances.Rows[e.RowIndex].IsNewRow)
+                        // 2996 seen a race condition around this, row not in place, so protect
+                        if (e.RowIndex >= 0 && e.RowIndex < dataGridViewDistances.RowCount && !dataGridViewDistances.Rows[e.RowIndex].IsNewRow)
                             dataGridViewDistances.Rows.Remove(dataGridViewDistances.Rows[e.RowIndex]);
                     }));
                     return;
@@ -261,7 +262,8 @@ namespace EDDiscovery.UserControls
                 {
                     this.BeginInvoke(new MethodInvoker(() =>
                     {
-                        if (!dataGridViewDistances.Rows[e.RowIndex].IsNewRow)
+                        // protect as per 2996 
+                        if ( e.RowIndex>=0 && e.RowIndex<dataGridViewDistances.RowCount && !dataGridViewDistances.Rows[e.RowIndex].IsNewRow)
                             dataGridViewDistances.Rows.Remove(dataGridViewDistances.Rows[e.RowIndex]);
                     }));
                     return;
