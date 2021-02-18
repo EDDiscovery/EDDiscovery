@@ -44,7 +44,7 @@ namespace EDDiscovery
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            ExtendedControls.TabStyleSquare tabStyleSquare1 = new ExtendedControls.TabStyleSquare();
+            ExtendedControls.TabStyleSquare tabStyleSquare2 = new ExtendedControls.TabStyleSquare();
             this.edsmRefreshTimer = new System.Windows.Forms.Timer(this.components);
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.notifyIconContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -93,7 +93,7 @@ namespace EDDiscovery
             this.sendHistoricDataToInaraToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rebuildUserDBIndexesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rebuildSystemDBIndexesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.DLLPermissionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.removeAllDLLPermissionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.updateUnknownSystemCoordsWithDataFromSystemDBToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showLogfilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -199,7 +199,7 @@ namespace EDDiscovery
             this.tabControlMain.TabNotSelectedColor = System.Drawing.Color.Gray;
             this.tabControlMain.TabOpaque = 100F;
             this.tabControlMain.TabSelectedColor = System.Drawing.Color.LightGray;
-            this.tabControlMain.TabStyle = tabStyleSquare1;
+            this.tabControlMain.TabStyle = tabStyleSquare2;
             this.tabControlMain.TextNotSelectedColor = System.Drawing.SystemColors.ControlText;
             this.tabControlMain.TextSelectedColor = System.Drawing.SystemColors.ControlText;
             this.toolTip.SetToolTip(this.tabControlMain, "Right click to add/remove tabs, Left click drag to reorder");
@@ -585,7 +585,7 @@ namespace EDDiscovery
             this.sendHistoricDataToInaraToolStripMenuItem,
             this.rebuildUserDBIndexesToolStripMenuItem,
             this.rebuildSystemDBIndexesToolStripMenuItem,
-            this.DLLPermissionsToolStripMenuItem,
+            this.removeAllDLLPermissionsToolStripMenuItem,
             this.updateUnknownSystemCoordsWithDataFromSystemDBToolStripMenuItem,
             this.showLogfilesToolStripMenuItem,
             this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem,
@@ -667,13 +667,13 @@ namespace EDDiscovery
             this.rebuildSystemDBIndexesToolStripMenuItem.Text = "Rebuild System DB Indexes";
             this.rebuildSystemDBIndexesToolStripMenuItem.Click += new System.EventHandler(this.rebuildSystemDBIndexesToolStripMenuItem_Click);
             // 
-            // DLLPermissionsToolStripMenuItem
+            // removeAllDLLPermissionsToolStripMenuItem
             // 
-            this.DLLPermissionsToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.Main_Admin_ShowLogFiles;
-            this.DLLPermissionsToolStripMenuItem.Name = "DLLPermissionsToolStripMenuItem";
-            this.DLLPermissionsToolStripMenuItem.Size = new System.Drawing.Size(385, 22);
-            this.DLLPermissionsToolStripMenuItem.Text = "DLL permissions (applies after restart)";
-            this.DLLPermissionsToolStripMenuItem.Click += new System.EventHandler(this.DLLPermissions_Click);
+            this.removeAllDLLPermissionsToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.Main_Admin_ShowLogFiles;
+            this.removeAllDLLPermissionsToolStripMenuItem.Name = "removeAllDLLPermissionsToolStripMenuItem";
+            this.removeAllDLLPermissionsToolStripMenuItem.Size = new System.Drawing.Size(385, 22);
+            this.removeAllDLLPermissionsToolStripMenuItem.Text = "DLL Permissions (applies after restart)";
+            this.removeAllDLLPermissionsToolStripMenuItem.Click += new System.EventHandler(this.DLLPermissions_Click);
             // 
             // updateUnknownSystemCoordsWithDataFromSystemDBToolStripMenuItem
             // 
@@ -1115,7 +1115,7 @@ namespace EDDiscovery
         private System.Windows.Forms.ToolStripMenuItem rebuildSystemDBIndexesToolStripMenuItem;
         private ExtendedControls.ExtPanelResizer extPanelTopResizer;
         private System.Windows.Forms.Label labelGameDateTime;
-        private System.Windows.Forms.ToolStripMenuItem DLLPermissionsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem removeAllDLLPermissionsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem load21ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpTabToolStripMenuItem;
         private ExtendedControls.ExtButtonDrawn extButtonDrawnHelp;
