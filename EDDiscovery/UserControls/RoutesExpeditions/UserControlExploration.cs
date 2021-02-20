@@ -147,7 +147,7 @@ namespace EDDiscovery.UserControls
 
                 ISystem sys = (ISystem)dataGridViewExplore[0, rowindex].Tag;
                 if (sys == null)
-                    sys = discoveryform.history.FindSystem(sysname);
+                    sys = discoveryform.history.FindSystem(sysname, discoveryform.galacticMapping, true);
 
                 dataGridViewExplore[0, rowindex].Tag = sys;
                 dataGridViewExplore.Rows[rowindex].Cells[0].Style.ForeColor = (sys != null && sys.HasCoordinate) ? Color.Empty : discoveryform.theme.UnknownSystemColor;
@@ -320,7 +320,7 @@ namespace EDDiscovery.UserControls
                 {
                     ret.Item1.Name = ret.Item1.Name.Trim();
 
-                    ISystem sc = discoveryform.history.FindSystem(ret.Item1.Name);
+                    ISystem sc = discoveryform.history.FindSystem(ret.Item1.Name, discoveryform.galacticMapping, true);
                     if (sc == null)
                     {
                         sc = ret.Item1;
@@ -391,7 +391,7 @@ namespace EDDiscovery.UserControls
                 }
                 if (String.IsNullOrWhiteSpace(sysname))
                     continue;
-                ISystem sc = discoveryform.history.FindSystem(sysname.Trim());
+                ISystem sc = discoveryform.history.FindSystem(sysname.Trim(), discoveryform.galacticMapping, true);
                 if (sc == null)
                 {
                     sc = new SystemClass(sysname.Trim());
@@ -631,7 +631,7 @@ namespace EDDiscovery.UserControls
 
             if (obj == null)
                 return;
-            ISystem sc = discoveryform.history.FindSystem((string)obj);
+            ISystem sc = discoveryform.history.FindSystem((string)obj, discoveryform.galacticMapping, true);
             if (sc == null)
             {
                 ExtendedControls.MessageBoxTheme.Show(FindForm(), "Unknown system, system is without co-ordinates".T(EDTx.UserControlExploration_UnknownS), "Warning".T(EDTx.Warning), MessageBoxButtons.OK);
@@ -680,7 +680,7 @@ namespace EDDiscovery.UserControls
                 var row = dataGridViewExplore.Rows[e.RowIndex];
                 var cell = dataGridViewExplore[e.ColumnIndex, e.RowIndex];
 
-                if (sysname != "" && discoveryform.history.FindSystem(sysname) == null )
+                if (sysname != "" && discoveryform.history.FindSystem(sysname, discoveryform.galacticMapping, true) == null )
                 {
                     row.ErrorText = "System not known".T(EDTx.UserControlExploration_EDSMUnk);
                 }

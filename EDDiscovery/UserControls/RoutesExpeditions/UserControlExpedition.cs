@@ -200,14 +200,14 @@ namespace EDDiscovery.UserControls
 
                 if (sysname.HasChars())
                 {
-                    var sys = discoveryform.history.FindSystem(sysname);
+                    var sys = discoveryform.history.FindSystem(sysname, discoveryform.galacticMapping, true);      // use EDSM directly if required
 
                     dataGridView[1, rowindex].Value = "";
 
                     if (rowindex > 0 && dataGridView[0, rowindex - 1].Value != null && dataGridView[0, rowindex].Value != null)
                     {
                         string prevsysname = dataGridView[0, rowindex - 1].Value.ToString();
-                        var prevsys = discoveryform.history.FindSystem(prevsysname);
+                        var prevsys = discoveryform.history.FindSystem(prevsysname, discoveryform.galacticMapping, true);       // use EDSM directly
 
                         if ((sys?.HasCoordinate ?? false) && (prevsys?.HasCoordinate ?? false))
                         {
@@ -901,7 +901,7 @@ namespace EDDiscovery.UserControls
             if (obj == null)
                 return;
 
-            ISystem sc = discoveryform.history.FindSystem((string)obj);
+            ISystem sc = discoveryform.history.FindSystem((string)obj,discoveryform.galacticMapping, true);     // use EDSM directly if required
 
             if (sc == null)
             {
@@ -1034,7 +1034,7 @@ namespace EDDiscovery.UserControls
                 string sysname = e.FormattedValue.ToString();
                 var row = dataGridView.Rows[e.RowIndex];
 
-                if (sysname != "" && discoveryform.history.FindSystem(sysname) == null)
+                if (sysname != "" && discoveryform.history.FindSystem(sysname, discoveryform.galacticMapping, true) == null)
                 {
                     row.ErrorText = "System not known location".T(EDTx.UserControlExpedition_EDSMUnk);
                 }

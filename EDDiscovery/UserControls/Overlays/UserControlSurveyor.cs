@@ -139,7 +139,8 @@ namespace EDDiscovery.UserControls
         public override bool SupportTransparency { get { return true; } }
         public override void SetTransparency(bool on, Color curcol)
         {
-            pictureBoxSurveyor.BackColor = this.BackColor = curcol;
+            extPictureBoxScroll.ScrollBarEnabled = !on;     // turn off the scroll bar if its transparent
+            extPictureBoxScroll.BackColor =  pictureBoxSurveyor.BackColor = this.BackColor = curcol;
             DrawSystem(last_sys);   // need to redraw as we use backcolour
         }
 
@@ -223,7 +224,7 @@ namespace EDDiscovery.UserControls
                 {
                     var i = pictureBoxSurveyor.AddTextAutoSize(
                             new Point(3, vpos),
-                            new Size(Math.Max(pictureBoxSurveyor.Width - 6, 24), 1000),
+                            new Size(Math.Max(pictureBoxSurveyor.Width - 6, 24), 10000),
                             titletext,
                             Font,
                             textcolour,
@@ -258,7 +259,7 @@ namespace EDDiscovery.UserControls
                     {
                         var  i = pictureBoxSurveyor.AddTextAutoSize(
                             new Point(3, vpos),
-                            new Size(Math.Max(pictureBoxSurveyor.Width - 6, 24), 1000),
+                            new Size(Math.Max(pictureBoxSurveyor.Width - 6, 24), 10000),
                             infoline,
                             Font,
                             textcolour,
@@ -298,7 +299,7 @@ namespace EDDiscovery.UserControls
                                     {
                                         var i = pictureBoxSurveyor.AddTextAutoSize(
                                                 new Point(3, vpos),
-                                                new Size(Math.Max(pictureBoxSurveyor.Width - 6, 24), 1000),
+                                                new Size(Math.Max(pictureBoxSurveyor.Width - 6, 24), 10000),
                                                 InfoLine(last_sys, sn, sd),
                                                 Font,
                                                 textcolour,
@@ -317,7 +318,7 @@ namespace EDDiscovery.UserControls
                         {
                             var i = pictureBoxSurveyor.AddTextAutoSize(
                                 new Point(3, vpos),
-                                new Size(Math.Max(pictureBoxSurveyor.Width - 6, 24), 1000),
+                                new Size(Math.Max(pictureBoxSurveyor.Width - 6, 24), 10000),
                                 "^^ ~ " + value.ToString("N0") + " cr",
                                 Font,
                                 textcolour,
@@ -365,7 +366,7 @@ namespace EDDiscovery.UserControls
                         if (siglist.HasChars())
                         {
                             pictureBoxSurveyor.AddTextAutoSize(new Point(3, vpos),
-                                                            new Size(Math.Max(pictureBoxSurveyor.Width - 6, 24), 1000),
+                                                            new Size(Math.Max(pictureBoxSurveyor.Width - 6, 24), 10000),
                                                             siglist,
                                                             Font,
                                                             textcolour,
@@ -378,7 +379,7 @@ namespace EDDiscovery.UserControls
                 }
             }
 
-            pictureBoxSurveyor.Render();
+            extPictureBoxScroll.Render();
         }
 
         private string InfoLine(ISystem sys, StarScan.ScanNode sn, JournalScan js)

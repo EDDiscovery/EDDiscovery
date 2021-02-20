@@ -561,7 +561,7 @@ namespace EDDiscovery.UserControls
 
             if (TargetClass.GetTargetPosition(out name, out x, out y, out z))
             {
-                ISystem sc = this.discoveryform.history.FindSystem(TargetClass.GetNameWithoutPrefix(name), discoveryform.galacticMapping);
+                ISystem sc = this.discoveryform.history.FindSystem(TargetClass.GetNameWithoutPrefix(name), discoveryform.galacticMapping, true);
 
                 if (sc != null)
                 {

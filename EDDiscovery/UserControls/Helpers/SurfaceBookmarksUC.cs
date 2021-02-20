@@ -151,7 +151,7 @@ namespace EDDiscovery.Forms
 
         private async void UpdateComboBox(string systemName, HistoryList helist)
         {
-            ISystem thisSystem = helist.FindSystem(systemName);
+            ISystem thisSystem = helist.FindSystem(systemName, null ,false);        // not doing edsm lookup due to init
 
             BodyName.Items.Clear();
             if (thisSystem != null)

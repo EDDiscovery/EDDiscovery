@@ -173,7 +173,7 @@ namespace EDDiscovery.UserControls
 
             if (textBox_From.ReadOnly == false)          // if enabled, we are doing star names
             {
-                if (discoveryform.history.FindSystem(SystemNameOnly(textBox_From.Text), discoveryform.galacticMapping) == null)
+                if (discoveryform.history.FindSystem(SystemNameOnly(textBox_From.Text), discoveryform.galacticMapping, true) == null)       // check edsm directly
                     readytocalc = false;
             }
             else // check co-ords
@@ -183,7 +183,7 @@ namespace EDDiscovery.UserControls
             }
             if (textBox_To.ReadOnly == false)          // if enabled, we are doing star names
             {
-                if (discoveryform.history.FindSystem(SystemNameOnly(textBox_To.Text), discoveryform.galacticMapping) == null)
+                if (discoveryform.history.FindSystem(SystemNameOnly(textBox_To.Text), discoveryform.galacticMapping, true) == null)
                     readytocalc = false;
             }
             else // check co-ords
@@ -365,7 +365,7 @@ namespace EDDiscovery.UserControls
 
             if (textBox_From.ReadOnly == false)                // if entering system name..
             {
-                ISystem ds1 = discoveryform.history.FindSystem(SystemNameOnly(textBox_From.Text), discoveryform.galacticMapping);
+                ISystem ds1 = discoveryform.history.FindSystem(SystemNameOnly(textBox_From.Text), discoveryform.galacticMapping, true);
 
                 if (ds1 != null)
                 {
@@ -486,7 +486,7 @@ namespace EDDiscovery.UserControls
 
         private void buttonFromEDSM_Click(object sender, EventArgs e)
         {
-            ISystem ds1 = discoveryform.history.FindSystem(SystemNameOnly(textBox_From.Text), discoveryform.galacticMapping);
+            ISystem ds1 = discoveryform.history.FindSystem(SystemNameOnly(textBox_From.Text), discoveryform.galacticMapping, true);
             string sysname = ds1?.Name ?? SystemNameOnly(textBox_From.Text);
             long? edsmid = ds1?.EDSMID;
 
@@ -530,7 +530,7 @@ namespace EDDiscovery.UserControls
 
             if (textBox_To.ReadOnly == false)                // if entering system name..
             {
-                ISystem ds1 = discoveryform.history.FindSystem(SystemNameOnly(textBox_To.Text), discoveryform.galacticMapping);
+                ISystem ds1 = discoveryform.history.FindSystem(SystemNameOnly(textBox_To.Text), discoveryform.galacticMapping, true);
 
                 if (ds1 != null)
                 {
@@ -651,7 +651,7 @@ namespace EDDiscovery.UserControls
 
         private void buttonToEDSM_Click(object sender, EventArgs e)
         {
-            ISystem ds1 = discoveryform.history.FindSystem(SystemNameOnly(textBox_To.Text), discoveryform.galacticMapping);
+            ISystem ds1 = discoveryform.history.FindSystem(SystemNameOnly(textBox_To.Text), discoveryform.galacticMapping, true);
             string sysname = ds1?.Name ?? SystemNameOnly(textBox_To.Text);
             long? edsmid = ds1?.EDSMID;
 

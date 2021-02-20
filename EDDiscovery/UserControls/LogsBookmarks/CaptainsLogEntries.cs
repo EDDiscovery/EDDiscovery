@@ -541,7 +541,7 @@ namespace EDDiscovery.UserControls
 
             if (discoveryform.Map.Is3DMapsRunning)             // double check here! for paranoia.
             {
-                EliteDangerousCore.ISystem s = SystemCache.FindSystem(rightclickentry.SystemName);
+                EliteDangerousCore.ISystem s = discoveryform.history.FindSystem(rightclickentry.SystemName, discoveryform.galacticMapping, true);
 
                 if ( s != null && discoveryform.Map.MoveTo((float)s.X, (float)s.Y, (float)s.Z))
                     discoveryform.Map.Show();
@@ -561,7 +561,7 @@ namespace EDDiscovery.UserControls
 
         private void openAScanPanelViewToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ISystem sys = SystemCache.FindSystem(rightclickentry.SystemName);
+            ISystem sys = discoveryform.history.FindSystem(rightclickentry.SystemName, discoveryform.galacticMapping, true);
 
             if ( sys != null )
                 ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), sys, true, discoveryform.history);

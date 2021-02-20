@@ -631,7 +631,7 @@ namespace EDDiscovery.UserControls
 
                                     foreach (string system in currentExplorationSet.Systems)
                                     {
-                                        ISystem sys = SystemCache.FindSystem(system);
+                                        ISystem sys = discoveryform.history.FindSystem(system, discoveryform.galacticMapping, false);   // not doing EDSM lookups due to no.
                                         if (sys != null)
                                         {
                                             var jl = EDSMClass.GetBodiesList(sys);
@@ -775,7 +775,7 @@ namespace EDDiscovery.UserControls
                                         string name = scan.StarSystem ?? scan.BodyName;   // early scans did not have starsystem
                                         ISystem sys = null;
                                         if ( name.HasChars() )
-                                            sys = discoveryform.history.FindSystem(name);
+                                            sys = discoveryform.history.FindSystem(name, discoveryform.galacticMapping, false);       // not doing EDSM Due to no of lookups
 
                                         if (sys != null)
                                         {

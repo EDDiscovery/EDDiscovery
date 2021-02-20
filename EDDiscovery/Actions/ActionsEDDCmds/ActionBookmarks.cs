@@ -184,7 +184,8 @@ namespace EDDiscovery.Actions
                                 ap.ReportError("Command and REGION are incompatible");
                             else if ( addstar )
                             {
-                                ISystem sys = (ap.ActionController as ActionController).DiscoveryForm.history.FindSystem(name);
+                                var df = (ap.ActionController as ActionController).DiscoveryForm;
+                                ISystem sys = df.history.FindSystem(name,df.galacticMapping, true);
 
                                 if (sys != null)
                                 {
