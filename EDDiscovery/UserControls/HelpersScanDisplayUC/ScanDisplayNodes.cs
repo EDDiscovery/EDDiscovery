@@ -343,6 +343,7 @@ namespace EDDiscovery.UserControls
                 {
                     abv = mc.Shortname;
                     fillc = mc.Colour;
+                    //System.Diagnostics.Debug.WriteLine("Colour {0} {1}", fillc.ToString(), fillc.GetBrightness());
 
                     if (HideFullMaterials)                 // check full
                     {
@@ -365,7 +366,7 @@ namespace EDDiscovery.UserControls
 
                 Bitmap mat = BaseUtils.BitMapHelpers.ReplaceColourInBitmap((Bitmap)Icons.Controls.Scan_Bodies_Material, new System.Drawing.Imaging.ColorMap[] { colormap });
 
-                BaseUtils.BitMapHelpers.DrawTextCentreIntoBitmap(ref mat, abv, stdfont, Color.Black);
+                BaseUtils.BitMapHelpers.DrawTextCentreIntoBitmap(ref mat, abv, stdfont, fillc.GetBrightness() > 0.4f ?  Color.Black : Color.White);
 
                 ExtPictureBox.ImageElement ie = new ExtPictureBox.ImageElement(
                                 new Rectangle(matpos.X, matpos.Y, matsize.Width, matsize.Height), mat, tooltip + "\n\n" + "All " + matclicktext, tooltip);

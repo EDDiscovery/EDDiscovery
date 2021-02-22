@@ -64,7 +64,6 @@ namespace EDDiscovery.Forms
         public void NotedSystem(string name, string note, bool istarget)          // from target, a system with notes
         {
             this.Text = "System Information".T(EDTx.BookmarkForm_SI);
-            ISystem s = SystemCache.FindSystem(name);
             textBoxName.Text = name;
             textBoxName.ReturnPressed += (ctrl) => { return true; };
             textBoxTravelNote.Text = (note != null) ? note : "";
@@ -75,7 +74,8 @@ namespace EDDiscovery.Forms
             HideSurfaceBookmarks();
 
             var edsm = new EDSMClass();
-            edsmurl = edsm.GetUrlToEDSMSystem(s?.Name ?? name, s?.EDSMID);
+
+            edsmurl = edsm.GetUrlToSystem(name);
         }
 
 
@@ -102,18 +102,10 @@ namespace EDDiscovery.Forms
         {
             string note = "";
             string name;
-            long? edsmid = null;
 
             if (!bk.isRegion)
             {
-                ISystem s = SystemCache.FindSystem(bk.StarName);
-                if (s != null)    // paranoia
-                {
-                    InitialisePos(s);
-                    edsmid = s.EDSMID;
-                }
-                else
-                    InitialisePos(bk.x, bk.y, bk.z);
+                InitialisePos(bk.x, bk.y, bk.z);
 
                 SystemNoteClass sn = SystemNoteClass.GetNoteOnSystem(bk.StarName);
                 note = (sn != null) ? sn.Note : "";
@@ -149,7 +141,7 @@ namespace EDDiscovery.Forms
             else
             {
                 var edsm = new EDSMClass();
-                edsmurl = edsm.GetUrlToEDSMSystem(name, edsmid);
+                edsmurl = edsm.GetUrlToSystem(name);
                 SurfaceBookmarks.Init(bk.StarName, bk.PlanetaryMarks, helist);
             }
 
@@ -173,7 +165,7 @@ namespace EDDiscovery.Forms
             InitialisePos(system);
             buttonDelete.Hide();
             var edsm = new EDSMClass();
-            edsmurl = edsm.GetUrlToEDSMSystem(system.Name,system.EDSMID);
+            edsmurl = edsm.GetUrlToSystem(system.Name);
             SurfaceBookmarks.Init(system.Name, helist);
             buttonOK.Enabled = true;
         }
@@ -273,12 +265,12 @@ namespace EDDiscovery.Forms
         {
             if ( validatestarname )
             {
-                ISystem f = SystemCache.FindSystem(textBoxName.Text);
+                ISystem f = helist.FindSystem(textBoxName.Text,null,false);       // no edsm lookup, too slow to do interactively.
                 if (f != null && f.HasCoordinate)
                 {
                     InitialisePos(f);
                     var edsm = new EDSMClass();
-                    edsmurl = edsm.GetUrlToEDSMSystem(f.Name,f.EDSMID);
+                    edsmurl = edsm.GetUrlToSystem(f.Name);
                     SurfaceBookmarks.Init(f.Name, helist);
                 }
                 else

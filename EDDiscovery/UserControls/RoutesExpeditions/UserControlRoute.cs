@@ -91,9 +91,9 @@ namespace EDDiscovery.UserControls
                 : (int) SystemsDB.SystemsNearestMetric.IterativeNearestWaypoint;
 
             SeleteToCoords(tostate);
-            UpdateTo(true);
+            UpdateTo(true,false);
             SelectFromCoords(fromstate);
-            UpdateFrom(true);
+            UpdateFrom(true,false);
             comboBoxRoutingMetric.Enabled = true;
 
             BaseUtils.Translator.Instance.Translate(this);
@@ -144,8 +144,8 @@ namespace EDDiscovery.UserControls
         {
             if (hl != null && hl.Count > 0)
             {
-                UpdateTo(true);
-                UpdateFrom(true);
+                UpdateTo(true,true);
+                UpdateFrom(true,true);
             }
         }
 
@@ -359,13 +359,13 @@ namespace EDDiscovery.UserControls
             return worked;
         }
 
-        private void UpdateFrom(bool updatename)
+        private void UpdateFrom(bool updatename, bool checkedsm)
         {
             changesilence = true;
 
             if (textBox_From.ReadOnly == false)                // if entering system name..
             {
-                ISystem ds1 = discoveryform.history.FindSystem(SystemNameOnly(textBox_From.Text), discoveryform.galacticMapping, true);
+                ISystem ds1 = discoveryform.history.FindSystem(SystemNameOnly(textBox_From.Text), discoveryform.galacticMapping, checkedsm);
 
                 if (ds1 != null)
                 {
@@ -421,7 +421,7 @@ namespace EDDiscovery.UserControls
         void FromUpdateTick(object sender, EventArgs e)
         {
             fromupdatetimer.Stop();
-            UpdateFrom(false);
+            UpdateFrom(false,true);
         }
 
 
@@ -467,7 +467,7 @@ namespace EDDiscovery.UserControls
             {
                 SelectFromCoords(false);                              // enable system box
                 textBox_From.Text = uctg.GetCurrentHistoryEntry.System.Name;
-                UpdateFrom(false);
+                UpdateFrom(false,true);
             }
         }
 
@@ -480,22 +480,15 @@ namespace EDDiscovery.UserControls
             {
                 SelectFromCoords(false);                              // enable system box
                 textBox_From.Text = TargetClass.GetNameWithoutPrefix(name);
-                UpdateFrom(false);
+                UpdateFrom(false,true);
             }
         }
 
         private void buttonFromEDSM_Click(object sender, EventArgs e)
         {
-            ISystem ds1 = discoveryform.history.FindSystem(SystemNameOnly(textBox_From.Text), discoveryform.galacticMapping, true);
-            string sysname = ds1?.Name ?? SystemNameOnly(textBox_From.Text);
-            long? edsmid = ds1?.EDSMID;
-
+            string sysname = SystemNameOnly(textBox_From.Text);
             EDSMClass edsm = new EDSMClass();
-            string url = edsm.GetUrlToEDSMSystem(sysname, edsmid);
-
-            if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
-                BaseUtils.BrowserInfo.LaunchBrowser(url);
-            else
+            if (!edsm.ShowSystemInEDSM(sysname))
                 ExtendedControls.MessageBoxTheme.Show(FindForm(), "System unknown to EDSM");
         }
 
@@ -524,13 +517,13 @@ namespace EDDiscovery.UserControls
         }
 
 
-        private void UpdateTo(bool updatename)
+        private void UpdateTo(bool updatename, bool checkedsm)
         {
             changesilence = true;
 
             if (textBox_To.ReadOnly == false)                // if entering system name..
             {
-                ISystem ds1 = discoveryform.history.FindSystem(SystemNameOnly(textBox_To.Text), discoveryform.galacticMapping, true);
+                ISystem ds1 = discoveryform.history.FindSystem(SystemNameOnly(textBox_To.Text), discoveryform.galacticMapping, checkedsm);
 
                 if (ds1 != null)
                 {
@@ -586,7 +579,7 @@ namespace EDDiscovery.UserControls
         void ToUpdateTick(object sender, EventArgs e)
         {
             toupdatetimer.Stop();
-            UpdateTo(false);
+            UpdateTo(false,true);
         }
 
         private void textBox_To_Enter(object sender, EventArgs e)   // To has been tabbed/clicked..
@@ -632,7 +625,7 @@ namespace EDDiscovery.UserControls
             {
                 SeleteToCoords(false);                              // enable system box
                 textBox_To.Text = uctg.GetCurrentHistoryEntry.System.Name;
-                UpdateTo(false);
+                UpdateTo(false,true);
             }
         }
 
@@ -645,24 +638,16 @@ namespace EDDiscovery.UserControls
             {
                 SeleteToCoords(false);                              // enable system box
                 textBox_To.Text = TargetClass.GetNameWithoutPrefix(name);
-                UpdateTo(false);
+                UpdateTo(false,true);
             }
         }
 
         private void buttonToEDSM_Click(object sender, EventArgs e)
         {
-            ISystem ds1 = discoveryform.history.FindSystem(SystemNameOnly(textBox_To.Text), discoveryform.galacticMapping, true);
-            string sysname = ds1?.Name ?? SystemNameOnly(textBox_To.Text);
-            long? edsmid = ds1?.EDSMID;
-
+            string sysname = SystemNameOnly(textBox_To.Text);
             EDSMClass edsm = new EDSMClass();
-            string url = edsm.GetUrlToEDSMSystem(sysname, edsmid);
-
-            if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
-                BaseUtils.BrowserInfo.LaunchBrowser(url);
-            else
+            if (!edsm.ShowSystemInEDSM(sysname))
                 ExtendedControls.MessageBoxTheme.Show(FindForm(), "System unknown to EDSM");
-
         }
 
         #endregion
@@ -756,14 +741,7 @@ namespace EDDiscovery.UserControls
                     this.Cursor = Cursors.WaitCursor;
 
                     EliteDangerousCore.EDSM.EDSMClass edsm = new EDSMClass();
-                    long? id_edsm = sys.EDSMID;
-
-                    if (id_edsm <= 0)
-                    {
-                        id_edsm = null;
-                    }
-
-                    if (!edsm.ShowSystemInEDSM(sys.Name, id_edsm))
+                    if (!edsm.ShowSystemInEDSM(sys.Name))
                         ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable");
 
                     this.Cursor = Cursors.Default;

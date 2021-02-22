@@ -417,18 +417,9 @@ namespace EDDiscovery.UserControls
         {
             if (last_he != null)
             {
-                long? id_edsm = last_he.System.EDSMID;
-                if (id_edsm <= 0)
-                {
-                    id_edsm = null;
-                }
-
                 EDSMClass edsm = new EDSMClass();
-                string url = edsm.GetUrlToEDSMSystem(last_he.System.Name, id_edsm);
 
-                if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
-                    BaseUtils.BrowserInfo.LaunchBrowser(url);
-                else
+                if (!edsm.ShowSystemInEDSM(last_he.System.Name))        
                     ExtendedControls.MessageBoxTheme.Show(FindForm(), "System unknown to EDSM".T(EDTx.UserControlSysInfo_SysUnk));
             }
         }
@@ -555,29 +546,13 @@ namespace EDDiscovery.UserControls
 
         private void buttonEDSMTarget_Click(object sender, EventArgs e)
         {
-            string name;
-            long? edsmid = null;
-            double x, y, z;
-
-            if (TargetClass.GetTargetPosition(out name, out x, out y, out z))
+            TargetClass.GetTargetPosition(out string name, out double x, out double y, out double z);
+            if (name.HasChars())
             {
-                ISystem sc = this.discoveryform.history.FindSystem(TargetClass.GetNameWithoutPrefix(name), discoveryform.galacticMapping, true);
-
-                if (sc != null)
-                {
-                    name = sc.Name;
-                    edsmid = sc.EDSMID;
-                }
+                EDSMClass edsm = new EDSMClass();
+                if (!edsm.ShowSystemInEDSM(name))         // may pass back empty string if not known, this solves another exception
+                    ExtendedControls.MessageBoxTheme.Show(FindForm(), "System unknown to EDSM".T(EDTx.UserControlSysInfo_SysUnk));
             }
-
-            EDSMClass edsm = new EDSMClass();
-            string url = edsm.GetUrlToEDSMSystem(name, edsmid);
-
-            if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
-                BaseUtils.BrowserInfo.LaunchBrowser(url);
-            else
-                ExtendedControls.MessageBoxTheme.Show(FindForm(), "System unknown to EDSM".T(EDTx.UserControlSysInfo_SysUnk));
-
         }
 
         private void clickTextBox(object sender, EventArgs e)

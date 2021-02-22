@@ -183,14 +183,8 @@ namespace EDDiscovery.Actions
                         }
                         else if (cmdname.Equals("edsm"))
                         {
-                            long? id_edsm = he.System.EDSMID;
-                            if (id_edsm <= 0)
-                            {
-                                id_edsm = null;
-                            }
-
                             EliteDangerousCore.EDSM.EDSMClass edsm = new EliteDangerousCore.EDSM.EDSMClass();
-                            string url = edsm.GetUrlToEDSMSystem(he.System.Name, id_edsm);
+                            string url = edsm.GetUrlCheckSystemExists(he.System.Name);
 
                             ap[prefix + "URL"] = url;
 

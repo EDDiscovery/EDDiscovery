@@ -120,7 +120,7 @@ namespace EDDiscovery.UserControls
             if (source == "EDSM")
             {
                 EDSMClass edsm = new EDSMClass();
-                url = edsm.GetUrlToEDSMSystem(sys.Name, sys.EDSMID);
+                url = edsm.GetUrlToSystem(sys.Name);
                 defaulturl = EDSMClass.ServerAddress;
             }
             else if (source == "Spansh")

@@ -553,7 +553,7 @@ namespace EDDiscovery.UserControls
             this.Cursor = Cursors.WaitCursor;
             EliteDangerousCore.EDSM.EDSMClass edsm = new EDSMClass();
             
-            if (!edsm.ShowSystemInEDSM(rightclickentry.SystemName, null))
+            if (!edsm.ShowSystemInEDSM(rightclickentry.SystemName))
                 ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable".T(EDTx.CaptainsLogEntries_SysU));
 
             this.Cursor = Cursors.Default;

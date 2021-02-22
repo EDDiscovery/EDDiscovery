@@ -1100,14 +1100,7 @@ namespace EDDiscovery.UserControls
         {
             this.Cursor = Cursors.WaitCursor;
             EliteDangerousCore.EDSM.EDSMClass edsm = new EDSMClass();
-            long? id_edsm = rightclickhe.System?.EDSMID;
-
-            if (id_edsm <= 0)
-            {
-                id_edsm = null;
-            }
-
-            if (!edsm.ShowSystemInEDSM(rightclickhe.System.Name, id_edsm))
+            if (!edsm.ShowSystemInEDSM(rightclickhe.System.Name))
                 ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable".T(EDTx.UserControlTravelGrid_NotSynced));
 
             this.Cursor = Cursors.Default;

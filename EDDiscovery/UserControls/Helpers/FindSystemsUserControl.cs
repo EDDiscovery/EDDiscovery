@@ -134,18 +134,26 @@ namespace EDDiscovery.UserControls
                 // cube: use *1.412 (sqrt(2)) to reach out to far corner of cube
                 // cube: must get centre system, to know what co-ords it is..
 
+                List<Tuple<ISystem, double>> rlist = null;
+
                 if (!string.IsNullOrWhiteSpace(textBoxSystemName.Text))
                 {
-                    return edsm.GetSphereSystems(textBoxSystemName.Text, numberBoxMaxRadius.Value * (spherical ? 1.00 : 1.412), spherical ? numberBoxMinRadius.Value : 0);
+                    rlist = edsm.GetSphereSystems(textBoxSystemName.Text, numberBoxMaxRadius.Value * (spherical ? 1.00 : 1.412), spherical ? numberBoxMinRadius.Value : 0);
                 }
                 else if (numberBoxDoubleX.IsValid && numberBoxDoubleY.IsValid && numberBoxDoubleZ.IsValid)
                 {
-                    return edsm.GetSphereSystems(numberBoxDoubleX.Value, numberBoxDoubleY.Value, numberBoxDoubleZ.Value, numberBoxMaxRadius.Value * (spherical ? 1.00 : 1.412), spherical ? numberBoxMinRadius.Value : 0);
+                    rlist = edsm.GetSphereSystems(numberBoxDoubleX.Value, numberBoxDoubleY.Value, numberBoxDoubleZ.Value, numberBoxMaxRadius.Value * (spherical ? 1.00 : 1.412), spherical ? numberBoxMinRadius.Value : 0);
                 }
                 else
                 {
-                    return new List<Tuple<ISystem, double>>();
+                    rlist = new List<Tuple<ISystem, double>>();
                 }
+
+                if (rlist.Count > 0 && !SystemsDatabase.Instance.RebuildRunning)   // if db free for use, ensure they are all in the db
+                    SystemsDatabase.Instance.WithReadWrite(() => { SystemsDB.StoreSystems(rlist.Select(x => x.Item1).ToList()); });
+
+                return rlist;
+
             }).ContinueWith(task => this.Invoke(new Action(() =>
             {
                 List<Tuple<ISystem, double>> listsphere = task.Result;

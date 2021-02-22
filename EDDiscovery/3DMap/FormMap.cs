@@ -1608,7 +1608,7 @@ namespace EDDiscovery
                     name = clickedSystem.Name;
 
                     var edsm = new EDSMClass();
-                    clickedurl = edsm.GetUrlToEDSMSystem(name, clickedSystem.EDSMID);
+                    clickedurl = edsm.GetUrlToSystem(name);
                     viewOnEDSMToolStripMenuItem.Enabled = true;
 
                     try
@@ -2163,7 +2163,7 @@ namespace EDDiscovery
             if (checksystemdb)
             {
                 Cursor = Cursors.WaitCursor;
-                ISystem sys = SystemCache.FindSystem(name);
+                ISystem sys = discoveryForm.history.FindSystem(name, discoveryForm.galacticMapping, true);      // find system
                 Cursor = Cursors.Default;
                 return sys;
             }

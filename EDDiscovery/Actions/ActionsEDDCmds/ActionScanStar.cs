@@ -23,6 +23,7 @@ using ActionLanguage;
 using EliteDangerousCore.DB;
 using EliteDangerousCore;
 
+
 namespace EDDiscovery.Actions
 {
     class ActionScan : ActionBase
@@ -73,15 +74,8 @@ namespace EDDiscovery.Actions
                 if (cmdname != null)
                 {
                     StarScan scan = (ap.ActionController as ActionController).HistoryList.StarScan;
-                    ISystem sc = SystemCache.FindSystem(cmdname);
 
-                    if (sc == null)
-                    {
-                        sc = new SystemClass(cmdname);
-                        sc.EDSMID = 0;
-                    }
-
-                    StarScan.SystemNode sn = scan.FindSystemSynchronous(sc, edsm);
+                    StarScan.SystemNode sn = scan.FindSystemSynchronous(new SystemClass(cmdname), edsm);
 
                     System.Globalization.CultureInfo ct = System.Globalization.CultureInfo.InvariantCulture;
 
@@ -242,9 +236,18 @@ namespace EDDiscovery.Actions
                     cmdname = sp.NextQuotedWord();
                 }
 
+                bool edsm = false;
+                if (cmdname != null && cmdname.Equals("EDSM", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    edsm = true;
+                    cmdname = sp.NextQuotedWord();
+                }
+
                 if (cmdname != null)
                 {
-                    ISystem sc = SystemCache.FindSystem(cmdname);
+                    EDDiscoveryForm f = ((ActionController)ap.ActionController).DiscoveryForm;
+                    ISystem sc = f.history.FindSystem(cmdname, f.galacticMapping, edsm);        // find thru history, will include history entries
+
                     ap[prefix + "Found"] = sc != null ? "1" : "0";
 
                     if (sc != null)

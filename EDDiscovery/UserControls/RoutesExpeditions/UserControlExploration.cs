@@ -82,7 +82,7 @@ namespace EDDiscovery.UserControls
         public override bool AllowClose()
         {
             if (dirty)
-                return ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Confirm you want to lose all changes".T(EDTx.LoseAllChanges), "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK;
+                return ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Exploration - Confirm you want to lose all changes".T(EDTx.UserControlExploration_LoseAllChanges), "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK;
             return true;
         }
 
@@ -123,11 +123,15 @@ namespace EDDiscovery.UserControls
 
         private void UpdateSystemRows()
         {
+            Cursor = Cursors.WaitCursor;
+
             for (int i = 0; i < dataGridViewExplore.Rows.Count; i++)
             {
                 UpdateSystemRow(i);
                 dataGridViewExplore.Rows[i].HeaderCell.Value = (i + 1).ToString();
             }
+
+            Cursor = Cursors.Default;
         }
 
         private void UpdateSystemRow(int rowindex)
@@ -380,7 +384,7 @@ namespace EDDiscovery.UserControls
             }
 
             List<String> systems = new List<String>();
-            int countunknown = 0;
+
             foreach (String name in sysnames)
             {
                 String sysname = name;
@@ -389,16 +393,9 @@ namespace EDDiscovery.UserControls
                     String[] values = sysname.Split(',');
                     sysname = values[0];
                 }
-                if (String.IsNullOrWhiteSpace(sysname))
-                    continue;
-                ISystem sc = discoveryform.history.FindSystem(sysname.Trim(), discoveryform.galacticMapping, true);
-                if (sc == null)
-                {
-                    sc = new SystemClass(sysname.Trim());
-                    countunknown++;
-                }
-                systems.Add(sc.Name);
 
+                if (sysname.HasChars())
+                    systems.Add(sysname.Trim());
             }
 
             if (systems.Count == 0)
@@ -407,6 +404,8 @@ namespace EDDiscovery.UserControls
                     "The imported file contains no known system names".T(EDTx.UserControlExploration_NoSys), "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
+
+            SystemCache.UpdateDBWithSystems(systems);           // try and fill them in
 
             ClearExplorationSet();
 

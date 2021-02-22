@@ -224,7 +224,7 @@ SECTION UserControlExpedition
 .NoRouteExport: "There is no route to export " @
 .Export: "Export route" @
 .UnknownS: "Unknown system, system is without co-ordinates" @
-.Unsaved: "There are unsaved changes to the current route.\r\nWould you like to save the current route before proceeding?" @
+.Unsaved: "Expedition - There are unsaved changes to the current route.\r\nWould you like to save the current route before proceeding?" @
 .Specify: "Please specify a name for the route." @
 .Conflict: "The current route name conflicts with a well-known expedition.\r\nPlease specify a new name to save your changes." @
 .Overwrite: "Warning: route already exists. Would you like to overwrite it?" @
@@ -232,6 +232,7 @@ SECTION UserControlExpedition
 
 SECTION UserControlExploration
 
+.LoseAllChanges: "Exploration List, Confirm you want to lose all changes" @
 .ColumnSystemName: "System Name" @
 .ColumnDist: "Dist" @
 .ColumnX: "X" @

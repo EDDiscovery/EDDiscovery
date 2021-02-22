@@ -27,7 +27,6 @@ namespace EDDiscovery
         Unknown, // Unknown
         Information, // Information
         NoPos, // No Pos
-        LoseAllChanges, // Lose all changes
 
         EDDiscoveryForm_TSF,
         EDDiscoveryForm_ConfirmSyncToEDSM, // You have disabled sync to EDSM for this commander.  Are you sure you want to send unsynced events to EDSM?
@@ -593,7 +592,7 @@ namespace EDDiscovery
         UserControlTrippanel_UKN, // System {0} unknown to EDSM
         UserControlTrippanel_Left, // left
 
-        UserControlExpedition_Unsaved, // There are unsaved changes to the current route.
+        UserControlExpedition_Unsaved, // Expedition - There are unsaved changes to the current route.
         UserControlExpedition_Conflict, // The current route name conflicts with a well-known expedition.
         UserControlExpedition_Overwrite, // Warning: route already exists. Would you like to overwrite it?
         UserControlExpedition_EDSMUnk, // System not known to EDSM
@@ -608,6 +607,7 @@ namespace EDDiscovery
         UserControlExpedition_Delete, // Are you sure you want to delete this route?
         UserControlExpedition_SelRoute, // Select a route file
 
+        UserControlExploration_LoseAllChanges, // Exploration, Confirm you want to lose all changes
         UserControlExploration_Saved, // Saved to {0} Exploration Set
         UserControlExploration_SelectSet, // Select a exploration set file
         UserControlExploration_OpenE, // There was a problem opening file {0}

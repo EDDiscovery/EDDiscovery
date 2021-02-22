@@ -647,11 +647,7 @@ namespace EDDiscovery.UserControls
                 {
                     EliteDangerousCore.EDSM.EDSMClass edsm = new EliteDangerousCore.EDSM.EDSMClass();
 
-                    string url = edsm.GetUrlToEDSMSystem(he.System.Name, he.System.EDSMID);
-
-                    if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
-                        BaseUtils.BrowserInfo.LaunchBrowser(url);
-                    else
+                    if ( !edsm.ShowSystemInEDSM(he.System.Name))
                         ExtendedControls.MessageBoxTheme.Show(FindForm(), "System " + he.System.Name + " unknown to EDSM");
                 }
             }
