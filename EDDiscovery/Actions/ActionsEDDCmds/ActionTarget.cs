@@ -116,7 +116,7 @@ namespace EDDiscovery.Actions
                             }
                             else if (cmdname.Equals("GMO", StringComparison.InvariantCultureIgnoreCase))
                             {
-                                EliteDangerousCore.EDSM.GalacticMapObject gmo = discoveryform.galacticMapping.Find(name, true, true);
+                                EliteDangerousCore.EDSM.GalacticMapObject gmo = discoveryform.galacticMapping.Find(name, true);
 
                                 if (gmo != null)
                                 {

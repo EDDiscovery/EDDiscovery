@@ -65,6 +65,7 @@
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.showInEDSMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showScanToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.dataViewScrollerPanel1 = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.vScrollBarCustom1 = new ExtendedControls.ExtScrollBar();
@@ -76,7 +77,6 @@
             this.ZCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.WayPointDistCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.DeviationCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.showScanToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1.SuspendLayout();
             this.contextMenuStrip.SuspendLayout();
             this.dataViewScrollerPanel1.SuspendLayout();
@@ -244,7 +244,7 @@
             this.buttonExtTravelTo.Text = "History";
             this.toolTip.SetToolTip(this.buttonExtTravelTo, "Copy the entry in the main travel grid to end route entry");
             this.buttonExtTravelTo.UseVisualStyleBackColor = true;
-            this.buttonExtTravelTo.Click += new System.EventHandler(this.buttonExtTravelTo_Click);
+            this.buttonExtTravelTo.Click += new System.EventHandler(this.buttonToHistory_Click);
             // 
             // buttonExtTravelFrom
             // 
@@ -255,7 +255,7 @@
             this.buttonExtTravelFrom.Text = "History";
             this.toolTip.SetToolTip(this.buttonExtTravelFrom, "Copy the entry in the main travel grid to start route entry");
             this.buttonExtTravelFrom.UseVisualStyleBackColor = true;
-            this.buttonExtTravelFrom.Click += new System.EventHandler(this.buttonExtTravelFrom_Click);
+            this.buttonExtTravelFrom.Click += new System.EventHandler(this.buttonFromHistory_Click);
             // 
             // buttonExtTargetTo
             // 
@@ -266,7 +266,7 @@
             this.buttonExtTargetTo.Text = "Target";
             this.toolTip.SetToolTip(this.buttonExtTargetTo, "Copy the target system to end route entry");
             this.buttonExtTargetTo.UseVisualStyleBackColor = true;
-            this.buttonExtTargetTo.Click += new System.EventHandler(this.buttonTargetTo_Click);
+            this.buttonExtTargetTo.Click += new System.EventHandler(this.buttonToTarget_Click);
             // 
             // buttonToEDSM
             // 
@@ -299,7 +299,7 @@
             this.buttonTargetFrom.Text = "Target";
             this.toolTip.SetToolTip(this.buttonTargetFrom, "Copy the target system to start route entry");
             this.buttonTargetFrom.UseVisualStyleBackColor = true;
-            this.buttonTargetFrom.Click += new System.EventHandler(this.buttonTargetFrom_Click);
+            this.buttonTargetFrom.Click += new System.EventHandler(this.buttonFromTarget_Click);
             // 
             // cmd3DMap
             // 
@@ -336,13 +336,14 @@
             this.textBox_From.Location = new System.Drawing.Point(57, 5);
             this.textBox_From.Multiline = false;
             this.textBox_From.Name = "textBox_From";
-            this.textBox_From.ReadOnly = true;
+            this.textBox_From.ReadOnly = false;
             this.textBox_From.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.textBox_From.SelectionLength = 0;
             this.textBox_From.SelectionStart = 0;
             this.textBox_From.Size = new System.Drawing.Size(234, 20);
             this.textBox_From.TabIndex = 11;
             this.textBox_From.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBox_From.TextChangedEvent = "";
             this.toolTip.SetToolTip(this.textBox_From, "Select system to start the route");
             this.textBox_From.WordWrap = true;
             this.textBox_From.TextChanged += new System.EventHandler(this.textBox_From_TextChanged);
@@ -404,13 +405,14 @@
             this.textBox_To.Location = new System.Drawing.Point(342, 5);
             this.textBox_To.Multiline = false;
             this.textBox_To.Name = "textBox_To";
-            this.textBox_To.ReadOnly = true;
+            this.textBox_To.ReadOnly = false;
             this.textBox_To.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.textBox_To.SelectionLength = 0;
             this.textBox_To.SelectionStart = 0;
             this.textBox_To.Size = new System.Drawing.Size(234, 20);
             this.textBox_To.TabIndex = 21;
             this.textBox_To.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBox_To.TextChangedEvent = "";
             this.toolTip.SetToolTip(this.textBox_To, "Select the system to end in");
             this.textBox_To.WordWrap = true;
             this.textBox_To.TextChanged += new System.EventHandler(this.textBox_To_TextChanged);
@@ -489,7 +491,7 @@
             this.textBox_ToZ.Location = new System.Drawing.Point(498, 57);
             this.textBox_ToZ.Multiline = false;
             this.textBox_ToZ.Name = "textBox_ToZ";
-            this.textBox_ToZ.ReadOnly = true;
+            this.textBox_ToZ.ReadOnly = false;
             this.textBox_ToZ.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.textBox_ToZ.SelectionLength = 0;
             this.textBox_ToZ.SelectionStart = 0;
@@ -498,9 +500,9 @@
             this.textBox_ToZ.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.toolTip.SetToolTip(this.textBox_ToZ, "Z Co-ord");
             this.textBox_ToZ.WordWrap = true;
-            this.textBox_ToZ.TextChanged += new System.EventHandler(this.textBox_ToXYZ_TextChanged);
+            this.textBox_ToZ.TextChanged += new System.EventHandler(this.textBox_To_TextChanged);
             this.textBox_ToZ.Click += new System.EventHandler(this.textBox_Clicked);
-            this.textBox_ToZ.Enter += new System.EventHandler(this.textBox_ToXYZ_Enter);
+            this.textBox_ToZ.Enter += new System.EventHandler(this.textBox_To_Enter);
             // 
             // labelMaxJump
             // 
@@ -528,7 +530,7 @@
             this.textBox_ToY.Location = new System.Drawing.Point(420, 57);
             this.textBox_ToY.Multiline = false;
             this.textBox_ToY.Name = "textBox_ToY";
-            this.textBox_ToY.ReadOnly = true;
+            this.textBox_ToY.ReadOnly = false;
             this.textBox_ToY.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.textBox_ToY.SelectionLength = 0;
             this.textBox_ToY.SelectionStart = 0;
@@ -537,9 +539,9 @@
             this.textBox_ToY.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.toolTip.SetToolTip(this.textBox_ToY, "Y (Vertical) Co-ord");
             this.textBox_ToY.WordWrap = true;
-            this.textBox_ToY.TextChanged += new System.EventHandler(this.textBox_ToXYZ_TextChanged);
+            this.textBox_ToY.TextChanged += new System.EventHandler(this.textBox_To_TextChanged);
             this.textBox_ToY.Click += new System.EventHandler(this.textBox_Clicked);
-            this.textBox_ToY.Enter += new System.EventHandler(this.textBox_ToXYZ_Enter);
+            this.textBox_ToY.Enter += new System.EventHandler(this.textBox_To_Enter);
             // 
             // labelDistance
             // 
@@ -567,7 +569,7 @@
             this.textBox_ToX.Location = new System.Drawing.Point(342, 57);
             this.textBox_ToX.Multiline = false;
             this.textBox_ToX.Name = "textBox_ToX";
-            this.textBox_ToX.ReadOnly = true;
+            this.textBox_ToX.ReadOnly = false;
             this.textBox_ToX.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.textBox_ToX.SelectionLength = 0;
             this.textBox_ToX.SelectionStart = 0;
@@ -576,9 +578,9 @@
             this.textBox_ToX.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.toolTip.SetToolTip(this.textBox_ToX, "X Co-Ord");
             this.textBox_ToX.WordWrap = true;
-            this.textBox_ToX.TextChanged += new System.EventHandler(this.textBox_ToXYZ_TextChanged);
+            this.textBox_ToX.TextChanged += new System.EventHandler(this.textBox_To_TextChanged);
             this.textBox_ToX.Click += new System.EventHandler(this.textBox_Clicked);
-            this.textBox_ToX.Enter += new System.EventHandler(this.textBox_ToXYZ_Enter);
+            this.textBox_ToX.Enter += new System.EventHandler(this.textBox_To_Enter);
             // 
             // labelMetric
             // 
@@ -606,7 +608,7 @@
             this.textBox_FromZ.Location = new System.Drawing.Point(213, 57);
             this.textBox_FromZ.Multiline = false;
             this.textBox_FromZ.Name = "textBox_FromZ";
-            this.textBox_FromZ.ReadOnly = true;
+            this.textBox_FromZ.ReadOnly = false;
             this.textBox_FromZ.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.textBox_FromZ.SelectionLength = 0;
             this.textBox_FromZ.SelectionStart = 0;
@@ -615,9 +617,9 @@
             this.textBox_FromZ.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.toolTip.SetToolTip(this.textBox_FromZ, "Z Co-ord");
             this.textBox_FromZ.WordWrap = true;
-            this.textBox_FromZ.TextChanged += new System.EventHandler(this.textBox_FromXYZ_TextChanged);
+            this.textBox_FromZ.TextChanged += new System.EventHandler(this.textBox_From_TextChanged);
             this.textBox_FromZ.Click += new System.EventHandler(this.textBox_Clicked);
-            this.textBox_FromZ.Enter += new System.EventHandler(this.textBox_FromXYZ_Enter);
+            this.textBox_FromZ.Enter += new System.EventHandler(this.textBox_From_Enter);
             // 
             // button_Route
             // 
@@ -648,7 +650,7 @@
             this.textBox_FromY.Location = new System.Drawing.Point(135, 57);
             this.textBox_FromY.Multiline = false;
             this.textBox_FromY.Name = "textBox_FromY";
-            this.textBox_FromY.ReadOnly = true;
+            this.textBox_FromY.ReadOnly = false;
             this.textBox_FromY.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.textBox_FromY.SelectionLength = 0;
             this.textBox_FromY.SelectionStart = 0;
@@ -657,9 +659,9 @@
             this.textBox_FromY.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.toolTip.SetToolTip(this.textBox_FromY, "Y (Vertical) Co-ord");
             this.textBox_FromY.WordWrap = true;
-            this.textBox_FromY.TextChanged += new System.EventHandler(this.textBox_FromXYZ_TextChanged);
+            this.textBox_FromY.TextChanged += new System.EventHandler(this.textBox_From_TextChanged);
             this.textBox_FromY.Click += new System.EventHandler(this.textBox_Clicked);
-            this.textBox_FromY.Enter += new System.EventHandler(this.textBox_FromXYZ_Enter);
+            this.textBox_FromY.Enter += new System.EventHandler(this.textBox_From_Enter);
             // 
             // labelFrom
             // 
@@ -687,7 +689,7 @@
             this.textBox_FromX.Location = new System.Drawing.Point(57, 57);
             this.textBox_FromX.Multiline = false;
             this.textBox_FromX.Name = "textBox_FromX";
-            this.textBox_FromX.ReadOnly = true;
+            this.textBox_FromX.ReadOnly = false;
             this.textBox_FromX.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.textBox_FromX.SelectionLength = 0;
             this.textBox_FromX.SelectionStart = 0;
@@ -696,9 +698,9 @@
             this.textBox_FromX.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.toolTip.SetToolTip(this.textBox_FromX, "X Co-ord");
             this.textBox_FromX.WordWrap = true;
-            this.textBox_FromX.TextChanged += new System.EventHandler(this.textBox_FromXYZ_TextChanged);
+            this.textBox_FromX.TextChanged += new System.EventHandler(this.textBox_From_TextChanged);
             this.textBox_FromX.Click += new System.EventHandler(this.textBox_Clicked);
-            this.textBox_FromX.Enter += new System.EventHandler(this.textBox_FromXYZ_Enter);
+            this.textBox_FromX.Enter += new System.EventHandler(this.textBox_From_Enter);
             // 
             // contextMenuStrip
             // 
@@ -707,21 +709,28 @@
             this.copyToolStripMenuItem,
             this.showScanToolStripMenuItem});
             this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(181, 92);
+            this.contextMenuStrip.Size = new System.Drawing.Size(169, 70);
             // 
             // showInEDSMToolStripMenuItem
             // 
             this.showInEDSMToolStripMenuItem.Name = "showInEDSMToolStripMenuItem";
-            this.showInEDSMToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.showInEDSMToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
             this.showInEDSMToolStripMenuItem.Text = "Show in EDSM";
             this.showInEDSMToolStripMenuItem.Click += new System.EventHandler(this.showInEDSMToolStripMenuItem_Click);
             // 
             // copyToolStripMenuItem
             // 
             this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
-            this.copyToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.copyToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
             this.copyToolStripMenuItem.Text = "Copy";
             this.copyToolStripMenuItem.Click += new System.EventHandler(this.copyToolStripMenuItem_Click);
+            // 
+            // showScanToolStripMenuItem
+            // 
+            this.showScanToolStripMenuItem.Name = "showScanToolStripMenuItem";
+            this.showScanToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
+            this.showScanToolStripMenuItem.Text = "View Scan Display";
+            this.showScanToolStripMenuItem.Click += new System.EventHandler(this.showScanToolStripMenuItem_Click);
             // 
             // dataViewScrollerPanel1
             // 
@@ -783,6 +792,7 @@
             this.dataGridViewRoute.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewRoute.Name = "dataGridViewRoute";
             this.dataGridViewRoute.ReadOnly = true;
+            this.dataGridViewRoute.RowHeaderMenuStrip = null;
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
             dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -793,6 +803,7 @@
             this.dataGridViewRoute.RowHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridViewRoute.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             this.dataGridViewRoute.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dataGridViewRoute.SingleRowSelect = true;
             this.dataGridViewRoute.Size = new System.Drawing.Size(859, 566);
             this.dataGridViewRoute.TabIndex = 1;
             this.dataGridViewRoute.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewRoute_CellClick);
@@ -842,13 +853,6 @@
             this.DeviationCol.HeaderText = "Deviation";
             this.DeviationCol.Name = "DeviationCol";
             this.DeviationCol.ReadOnly = true;
-            // 
-            // showScanToolStripMenuItem
-            // 
-            this.showScanToolStripMenuItem.Name = "showScanToolStripMenuItem";
-            this.showScanToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.showScanToolStripMenuItem.Text = "View Scan Display";
-            this.showScanToolStripMenuItem.Click += new System.EventHandler(this.showScanToolStripMenuItem_Click);
             // 
             // UserControlRoute
             // 

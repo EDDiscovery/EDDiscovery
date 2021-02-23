@@ -185,7 +185,7 @@ namespace EDDiscovery._3DMap
         float gmoselonly = 0.75F;
         float gmoseltarget = 1.75F;
 
-        public List<IData3DCollection> AddGalMapRegionsToDataset(GalacticMapping galmap, bool colourregions)
+        public List<IData3DCollection> AddGalMapRegionsToDataset(GalacticMapping galmap, bool colourregions, int gmosel)
         {
             var polydataset = new PolygonCollection("regpolys", Color.White, 1f, OpenTK.Graphics.OpenGL.PrimitiveType.Triangles);      // ORDER AND NUMBER v.Important
             var outlinedataset = new PolygonCollection("reglines", Color.White, 1f , OpenTK.Graphics.OpenGL.PrimitiveType.LineLoop);   // DrawStars picks them out in a particular order
@@ -198,7 +198,9 @@ namespace EDDiscovery._3DMap
                 int cindex = 0;
                 foreach (GalacticMapObject gmo in galmap.galacticMapObjects)
                 {
-                    if (gmo.galMapType.Enabled && gmo.galMapType.Group == GalMapType.GalMapGroup.Regions )
+                    bool enabled = (gmosel & (1 << gmo.galMapType.Index)) != 0;         // if selected
+
+                    if (enabled && gmo.galMapType.Group == GalMapType.GalMapGroup.Regions )
                     {
                         string name = gmo.name;
 
@@ -279,7 +281,7 @@ namespace EDDiscovery._3DMap
             return _datasets;
         }
 
-        public List<IData3DCollection> AddGalMapObjectsToDataset(GalacticMapping galmap, Bitmap target, float widthly, float heightly, Vector3 rotation, bool namethem , Color textc)
+        public List<IData3DCollection> AddGalMapObjectsToDataset(GalacticMapping galmap, Bitmap target, float widthly, float heightly, Vector3 rotation, bool namethem , Color textc, int gmosel)
         {
             var datasetbks = Data3DCollection<TexturedQuadData>.Create("galobj", Color.White, 1f);
 
@@ -289,7 +291,8 @@ namespace EDDiscovery._3DMap
 
                 foreach (GalacticMapObject gmo in galmap.galacticMapObjects)
                 {
-                    if (gmo.galMapType.Enabled)
+                    bool enabled = (gmosel & (1 << gmo.galMapType.Index)) != 0;         // if selected
+                    if (enabled)
                     {
                         Bitmap touse = gmo.galMapType.Image as Bitmap;                        // under our control, so must have it
 
@@ -334,7 +337,8 @@ namespace EDDiscovery._3DMap
                     {
                         foreach (GalMapType t in galmap.galacticMapTypes)
                         {
-                            if (t.Enabled)
+                            bool enabled = (gmosel & (1 << t.Index)) != 0;         // if selected
+                            if (enabled)
                             {
                                 Bitmap bmp = null;
                                 TexturedQuadData nbasetex = null;
@@ -439,7 +443,8 @@ namespace EDDiscovery._3DMap
                     {
                         foreach (GalacticMapObject gmo in galmap.galacticMapObjects)
                         {
-                            if (gmo.galMapType.Enabled && gmo.points.Count > 0)
+                            bool enabled = (gmosel & (1 << gmo.galMapType.Index)) != 0;         // if selected
+                            if (enabled && gmo.points.Count > 0)
                             {
                                 Vector3 pd = gmo.points[0].Convert();
                                 Bitmap map = null;

@@ -365,6 +365,7 @@ namespace EDDiscovery.UserControls
             // 
             // extPictureBoxScroll
             // 
+            this.extPictureBoxScroll.ContextMenuStrip = this.contextMenuStrip;
             this.extPictureBoxScroll.Controls.Add(this.extScrollBar);
             this.extPictureBoxScroll.Controls.Add(this.pictureBoxSurveyor);
             this.extPictureBoxScroll.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -375,7 +376,7 @@ namespace EDDiscovery.UserControls
             this.extPictureBoxScroll.TabIndex = 1;
             this.extPictureBoxScroll.VerticalScrollBarDockRight = true;
             // 
-            // extScrollBar1
+            // extScrollBar
             // 
             this.extScrollBar.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.extScrollBar.ArrowButtonColor = System.Drawing.Color.LightGray;
@@ -391,7 +392,7 @@ namespace EDDiscovery.UserControls
             this.extScrollBar.Minimum = 0;
             this.extScrollBar.MouseOverButtonColor = System.Drawing.Color.Green;
             this.extScrollBar.MousePressedButtonColor = System.Drawing.Color.Red;
-            this.extScrollBar.Name = "extScrollBar1";
+            this.extScrollBar.Name = "extScrollBar";
             this.extScrollBar.Size = new System.Drawing.Size(16, 403);
             this.extScrollBar.SliderColor = System.Drawing.Color.DarkGray;
             this.extScrollBar.SmallChange = 16;

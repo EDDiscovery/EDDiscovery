@@ -105,7 +105,7 @@ namespace EDDiscovery.UserControls
                 else if (override_system == null && he.EntryType == JournalTypeEnum.StartJump)  // we ignore start jump if overriden      
                 {
                     JournalStartJump jsj = he.journalEntry as JournalStartJump;
-                    last_sys = new SystemClass(jsj.StarSystem);
+                    last_sys = new SystemClass(jsj.SystemAddress, jsj.StarSystem);
                     PresentSystem(last_sys);
                 }
             }

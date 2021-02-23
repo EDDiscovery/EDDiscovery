@@ -150,7 +150,7 @@ namespace EDDiscovery.UserControls
                 }
 
                 if (rlist.Count > 0 && !SystemsDatabase.Instance.RebuildRunning)   // if db free for use, ensure they are all in the db
-                    SystemsDatabase.Instance.WithReadWrite(() => { SystemsDB.StoreSystems(rlist.Select(x => x.Item1).ToList()); });
+                    SystemsDatabase.Instance.StoreSystems(rlist.Select(x => x.Item1).ToList());     // won't do anything if rebuilding
 
                 return rlist;
 

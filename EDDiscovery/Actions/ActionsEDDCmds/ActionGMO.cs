@@ -89,7 +89,7 @@ namespace EDDiscovery.Actions
                         {
                             if (cmdname.Equals("EXISTS", StringComparison.InvariantCultureIgnoreCase))
                             {
-                                EliteDangerousCore.EDSM.GalacticMapObject gmo = discoveryform.galacticMapping.Find(name, false, true);
+                                EliteDangerousCore.EDSM.GalacticMapObject gmo = discoveryform.galacticMapping.Find(name, false);
                                 ap[prefix + "Exists"] = (gmo != null).ToStringIntValue();
                                 if ( gmo != null )
                                     DumpGMO(ap, prefix, gmo);

@@ -156,7 +156,7 @@ namespace EDDiscovery.UserControls
                 else if (he.EntryType == JournalTypeEnum.StartJump)  // we ignore start jump if overriden      
                 {
                     JournalStartJump jsj = he.journalEntry as JournalStartJump;
-                    last_sys = new SystemClass(jsj.StarSystem);
+                    last_sys = new SystemClass(jsj.SystemAddress, jsj.StarSystem);       // important need system address as scan uses it for quick lookup
                     DrawSystem(last_sys, last_sys.Name);
                 }
                 else if (he.EntryType == JournalTypeEnum.FSSAllBodiesFound)
@@ -171,6 +171,7 @@ namespace EDDiscovery.UserControls
                 }
                 else if (he.EntryType == JournalTypeEnum.Scan)
                 {
+                    //System.Diagnostics.Debug.WriteLine("Scan got, sys " + he.System.Name + " " + last_sys.Name);
                     DrawSystem(last_sys);
                 }
             }
@@ -257,7 +258,8 @@ namespace EDDiscovery.UserControls
 
                     if (infoline.HasChars())
                     {
-                        var  i = pictureBoxSurveyor.AddTextAutoSize(
+                        //System.Diagnostics.Debug.WriteLine("Draw " + infoline);
+                        var i = pictureBoxSurveyor.AddTextAutoSize(
                             new Point(3, vpos),
                             new Size(Math.Max(pictureBoxSurveyor.Width - 6, 24), 10000),
                             infoline,
@@ -297,16 +299,17 @@ namespace EDDiscovery.UserControls
                                 {
                                     if (!sd.Mapped || hideAlreadyMappedBodiesToolStripMenuItem.Checked == false)      // if not mapped, or show mapped
                                     {
+                                        var il = InfoLine(last_sys, sn, sd);
+                                        //System.Diagnostics.Debug.WriteLine("Display " + il);
                                         var i = pictureBoxSurveyor.AddTextAutoSize(
                                                 new Point(3, vpos),
                                                 new Size(Math.Max(pictureBoxSurveyor.Width - 6, 24), 10000),
-                                                InfoLine(last_sys, sn, sd),
+                                                il,
                                                 Font,
                                                 textcolour,
                                                 backcolour,
                                                 1.0F,
                                                 frmt: frmt);
-
                                         vpos += i.Location.Height;
                                         value += sd.EstimatedValue;
                                     }
@@ -365,6 +368,7 @@ namespace EDDiscovery.UserControls
 
                         if (siglist.HasChars())
                         {
+                            //System.Diagnostics.Debug.WriteLine("Display " + siglist);
                             pictureBoxSurveyor.AddTextAutoSize(new Point(3, vpos),
                                                             new Size(Math.Max(pictureBoxSurveyor.Width - 6, 24), 10000),
                                                             siglist,

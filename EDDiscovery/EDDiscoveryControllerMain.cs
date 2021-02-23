@@ -281,23 +281,27 @@ namespace EDDiscovery
                 }
             }
 
+            string gmofile = Path.Combine(EliteConfigInstance.InstanceOptions.AppDataDirectory, "galacticmapping.json");
+
             if (!EDDOptions.Instance.NoSystemsLoad)
             {
                 // New Galmap load - it was not doing a refresh if EDSM sync kept on happening. Now has its own timer
 
                 DateTime galmaptime = SystemsDatabase.Instance.GetEDSMGalMapLast(); // Latest time from RW file.
 
-                if (DateTime.Now.Subtract(galmaptime).TotalDays > 14 || !galacticMapping.GalMapFilePresent())  // Over 14 days do a sync from EDSM for galmap
+                if (DateTime.Now.Subtract(galmaptime).TotalDays > 14 || !File.Exists(gmofile))  // Over 14 days do a sync from EDSM for galmap
                 {
                     LogLine("Get galactic mapping from EDSM.".T(EDTx.EDDiscoveryController_EDSM));
-                    if (galacticMapping.DownloadFromEDSM())
+                    if (galacticMapping.DownloadFromEDSM(gmofile))
                         SystemsDatabase.Instance.SetEDSMGalMapLast(DateTime.UtcNow);
                 }
 
                 Debug.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Check systems complete");
             }
 
-            galacticMapping.ParseData();                            // at this point, gal map data has been uploaded - get it into memory
+            if ( File.Exists(gmofile))
+                galacticMapping.Parse(gmofile);                            // at this point, gal map data has been uploaded - get it into memory
+
             SystemCache.AddToAutoCompleteList(galacticMapping.GetGMONames());
             SystemNoteClass.GetAllSystemNotes();
 
