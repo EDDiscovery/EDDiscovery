@@ -71,7 +71,7 @@ namespace EDDiscovery.Actions
                     EDCommander cmdr = EDCommander.GetCommander(name);
 
                     if (cmdr != null)
-                        cmdrid = cmdr.Nr;
+                        cmdrid = cmdr.Id;
                     else
                         ap.ReportError("Commander not found");
 
@@ -118,7 +118,7 @@ namespace EDDiscovery.Actions
 
         void DumpCMDR( ActionProgramRun ap, string prefix, EDCommander cmdr)
         {
-            ap[prefix + "Id"] = cmdr.Nr.ToStringInvariant();
+            ap[prefix + "Id"] = cmdr.Id.ToStringInvariant();
             ap[prefix + "Name"] = cmdr.Name;
             ap[prefix + "EDSMName"] = cmdr.EdsmName;
             ap[prefix + "EGOName"] = "";

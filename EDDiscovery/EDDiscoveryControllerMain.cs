@@ -256,7 +256,14 @@ namespace EDDiscovery
         {
             // check first and download items
 
-            BodyDesignations.LoadBodyDesignationMap();
+            string desigmapfile = Path.Combine(EDDOptions.Instance.AppDataDirectory, "bodydesignations.csv");
+
+            if (!File.Exists(desigmapfile))
+            {
+                desigmapfile = Path.Combine(Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), "bodydesignations.csv");
+            }
+
+            BodyDesignations.LoadBodyDesignationMap(desigmapfile);
 
             Debug.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Check systems");
             ReportSyncProgress("");
@@ -281,7 +288,7 @@ namespace EDDiscovery
                 }
             }
 
-            string gmofile = Path.Combine(EliteConfigInstance.InstanceOptions.AppDataDirectory, "galacticmapping.json");
+            string gmofile = Path.Combine(EDDOptions.Instance.AppDataDirectory, "galacticmapping.json");
 
             if (!EDDOptions.Instance.NoSystemsLoad)
             {
@@ -315,7 +322,7 @@ namespace EDDiscovery
                 {
                     EDCommander switchto = EDCommander.GetCommander(EDDOptions.Instance.Commander);
                     if (switchto != null)
-                        EDCommander.CurrentCmdrID = switchto.Nr;
+                        EDCommander.CurrentCmdrID = switchto.Id;
                 }
 
                 DoRefreshHistory(new RefreshWorkerArgs { CurrentCommander = EDCommander.CurrentCmdrID });       // kick the background refresh worker thread into action

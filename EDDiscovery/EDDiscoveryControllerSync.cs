@@ -123,15 +123,13 @@ namespace EDDiscovery
                             // Download new systems
                             try
                             {
-                                string edsmsystems = Path.Combine(EliteConfigInstance.InstanceOptions.AppDataDirectory, "edsmsystems.json.gz");
+                                string edsmsystems = Path.Combine(EDDOptions.Instance.AppDataDirectory, "edsmsystems.json.gz");
 
                                 ReportSyncProgress("Performing full download of System Data from EDSM");
 
-                                Debug.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Full system download using URL " + EliteConfigInstance.InstanceConfig.EDSMFullSystemsURL);
+                                Debug.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Full system download using URL " + EDDConfig.Instance.EDSMFullSystemsURL);
 
-                                bool success = BaseUtils.DownloadFile.HTTPDownloadFile(EliteConfigInstance.InstanceConfig.EDSMFullSystemsURL, edsmsystems, false, out bool newfile);
-
-                                //edsmsystems = Path.Combine(EliteConfigInstance.InstanceOptions.AppDataDirectory, "edsmtest.json");
+                                bool success = BaseUtils.DownloadFile.HTTPDownloadFile(EDDConfig.Instance.EDSMFullSystemsURL, edsmsystems, false, out bool newfile);
 
                                 syncstate.perform_edsm_fullsync = false;
 
@@ -164,7 +162,8 @@ namespace EDDiscovery
                             try
                             {
                                 EDSMClass edsm = new EDSMClass();
-                                string jsonhidden = edsm.GetHiddenSystems();
+                                string edsmhiddensystems = Path.Combine(EDDOptions.Instance.AppDataDirectory, "edsmhiddensystems.json");
+                                string jsonhidden = edsm.GetHiddenSystems(edsmhiddensystems);
 
                                 if (jsonhidden != null)
                                 {

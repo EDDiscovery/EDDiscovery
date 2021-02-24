@@ -90,6 +90,10 @@ namespace EDDiscovery
             {
                 OutputEventHelp = toeol ? ca.Rest() : ca.NextEmpty();
             }
+            else if (optname == "-defaultjournalfolder")
+            {
+                DefaultJournalFolder = toeol ? ca.Rest() : ca.NextEmpty();
+            }
             else if (optname.StartsWith("-"))
             {
                 string opt = optname.Substring(1);
@@ -214,6 +218,7 @@ namespace EDDiscovery
         public bool DisableTimeDisplay { get; set; }
         public bool DisableVersionDisplay { get; set; }
         public string OutputEventHelp { get; set; }
+        public string DefaultJournalFolder { get; set; }        // default is null, use computed value
         
 
         public string SubAppDirectory(string subfolder)     // ensures its there.. name without \ slashes

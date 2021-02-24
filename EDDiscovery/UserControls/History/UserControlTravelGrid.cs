@@ -1016,7 +1016,7 @@ namespace EDDiscovery.UserControls
             {
                 foreach (HistoryEntry sp in listsyspos)
                 {
-                    sp.journalEntry.UpdateCommanderID(movefrm.selectedCommander.Nr);
+                    sp.journalEntry.UpdateCommanderID(movefrm.selectedCommander.Id);
                 }
 
                 foreach (DataGridViewRow row in selectedRows)

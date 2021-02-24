@@ -71,7 +71,7 @@ namespace EDDiscovery.Actions
                     EDCommander cmdr = EDCommander.GetCommander(name);
 
                     if (cmdr != null)
-                        cmdrid = cmdr.Nr;
+                        cmdrid = cmdr.Id;
                     else
                         ap.ReportError("Commander not found");
 
