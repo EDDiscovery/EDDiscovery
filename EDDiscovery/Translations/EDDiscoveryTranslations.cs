@@ -538,6 +538,7 @@ namespace EDDiscovery
         UserControlRouteTracker_NoWay, // Route contains no waypoints
         UserControlRouteTracker_Unk, // Unknown location
         UserControlRouteTracker_NoCo, // No systems in route have known co-ords
+        UserControlRouteTracker_Note, // Note
 
         UserControlMiningOverlay_Limcargo,
         UserControlMiningOverlay_Proscoll,
