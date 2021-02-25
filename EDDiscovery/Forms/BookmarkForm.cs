@@ -181,6 +181,7 @@ namespace EDDiscovery.Forms
         {
             this.Text = "New System Bookmark".T(EDTx.BookmarkForm_NSB);
             textBoxName.Text = "Enter a system name...".T(EDTx.BookmarkForm_ESN);
+            textBoxName.ClearOnFirstChar = true;
             textBoxName.ReturnPressed += (ctrl) => { return true; };
             validatestarname = true;
             textBoxName.SetAutoCompletor(SystemCache.ReturnSystemAutoCompleteList,true);

@@ -65,6 +65,7 @@ namespace EDDiscovery.UserControls
 
             discoveryform.OnHistoryChange += Display;
             discoveryform.OnNewEntry += NewEntry;
+            GlobalBookMarkList.Instance.OnBookmarkChange += GlobalBookMarkList_OnBookmarkChange;
 
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
@@ -80,6 +81,7 @@ namespace EDDiscovery.UserControls
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "bookmarkNotes", showBookmarkNotesToolStripMenuItem.Checked);
             discoveryform.OnHistoryChange -= Display;
             discoveryform.OnNewEntry -= NewEntry;
+            GlobalBookMarkList.Instance.OnBookmarkChange -= GlobalBookMarkList_OnBookmarkChange;
         }
 
         #endregion
@@ -102,6 +104,12 @@ namespace EDDiscovery.UserControls
             currentHE = hl.GetLastFSDCarrierJump();
             Display();
         }
+
+        private void GlobalBookMarkList_OnBookmarkChange(BookmarkClass bk, bool deleted)
+        {
+            Display();
+        }
+
 
         private void Display()
         {
@@ -191,7 +199,8 @@ namespace EDDiscovery.UserControls
                     if (showBookmarkNotesToolStripMenuItem.Checked)
                     {
                         BookmarkClass bookmark = GlobalBookMarkList.Instance.FindBookmarkOnSystem(cursys.Name);
-                        note = String.Format("Note: {0}".T(EDTx.UserControlRouteTracker_Note), bookmark.Note);
+                        if (bookmark != null )
+                            note = String.Format("Note: {0}".T(EDTx.UserControlRouteTracker_Note), bookmark.Note);
                     }
 
                     //System.Diagnostics.Debug.WriteLine("T:" + topline + Environment.NewLine + "B:" + bottomline);

@@ -121,9 +121,6 @@
   <data name="maphelp3d" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\3dmaphelp.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="ImportHelp" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ImportHelp.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
   <data name="URLeddb" xml:space="preserve">
     <value>https://eddb.io/</value>
   </data>
@@ -220,8 +217,8 @@
   <data name="URLProjectVideosRoot" xml:space="preserve">
     <value>https://www.youtube.com</value>
   </data>
-  <data name="URLRelease" xml:space="preserve">
-    <value>https://www.youtube.com/embed/PwTbnFikBgA?start=0</value>
+  <data name="URLReleaseVideo" xml:space="preserve">
+    <value>https://www.youtube.com/embed/Scv9JiHZ10Y?autoplay=1</value>
   </data>
   <data name="EDD_Licence_Mono" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\EDD Licence Mono.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>

@@ -27,13 +27,14 @@ Controls.resx should show the icon and have:
     <value>..\sysinfo\firstdiscover.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 
+
 7. Update controls.cs to add on this:
 
         #region EDDiscovery.UserControls.UserControlSysInfo
         public static Image firstdiscover { get { return IconSet.GetIcon("Controls.SysInfo.firstdiscover"); } }
         #endregion
 
-Note the firstdiscovery name MUST MATCH incl case the resx name..  EVEN though it looks like it does need to,
+*** Note the firstdiscovery name MUST MATCH incl case the resx name..  EVEN though it looks like it does need to,
 it must, as the designer must be using some reflection to match the name with the resx file.
 This is a trap for young players!
 

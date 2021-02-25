@@ -52,6 +52,7 @@
             this.openInEDSMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.userControlSurfaceBookmarks = new EDDiscovery.Forms.SurfaceBookmarkUserControl();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.extButtonEditSystem = new ExtendedControls.ExtButton();
             this.topPanel = new System.Windows.Forms.FlowLayoutPanel();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
@@ -67,7 +68,7 @@
             // 
             this.buttonExtImport.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonExtImport.Image = global::EDDiscovery.Icons.Controls.ImportExcel;
-            this.buttonExtImport.Location = new System.Drawing.Point(349, 1);
+            this.buttonExtImport.Location = new System.Drawing.Point(385, 1);
             this.buttonExtImport.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonExtImport.Name = "buttonExtImport";
             this.buttonExtImport.Size = new System.Drawing.Size(28, 28);
@@ -80,7 +81,7 @@
             // 
             this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonExtExcel.Image = global::EDDiscovery.Icons.Controls.TravelGrid_ExportToExcel;
-            this.buttonExtExcel.Location = new System.Drawing.Point(313, 1);
+            this.buttonExtExcel.Location = new System.Drawing.Point(349, 1);
             this.buttonExtExcel.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonExtExcel.Name = "buttonExtExcel";
             this.buttonExtExcel.Size = new System.Drawing.Size(28, 28);
@@ -92,7 +93,7 @@
             // buttonDelete
             // 
             this.buttonDelete.Image = global::EDDiscovery.Icons.Controls.Bookmarks_Delete;
-            this.buttonDelete.Location = new System.Drawing.Point(277, 1);
+            this.buttonDelete.Location = new System.Drawing.Point(313, 1);
             this.buttonDelete.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonDelete.Name = "buttonDelete";
             this.buttonDelete.Size = new System.Drawing.Size(28, 28);
@@ -239,7 +240,9 @@
             this.dataGridViewBookMarks.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewBookMarks.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewBookMarks.Name = "dataGridViewBookMarks";
+            this.dataGridViewBookMarks.RowHeaderMenuStrip = null;
             this.dataGridViewBookMarks.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dataGridViewBookMarks.SingleRowSelect = true;
             this.dataGridViewBookMarks.Size = new System.Drawing.Size(660, 204);
             this.dataGridViewBookMarks.TabIndex = 4;
             this.dataGridViewBookMarks.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewBookMarks_CellDoubleClick);
@@ -315,6 +318,18 @@
             this.userControlSurfaceBookmarks.Size = new System.Drawing.Size(676, 205);
             this.userControlSurfaceBookmarks.TabIndex = 5;
             // 
+            // extButtonEditSystem
+            // 
+            this.extButtonEditSystem.Image = global::EDDiscovery.Icons.Controls.Bookmarks_EditSystem;
+            this.extButtonEditSystem.Location = new System.Drawing.Point(277, 1);
+            this.extButtonEditSystem.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.extButtonEditSystem.Name = "extButtonEditSystem";
+            this.extButtonEditSystem.Size = new System.Drawing.Size(28, 28);
+            this.extButtonEditSystem.TabIndex = 3;
+            this.toolTip.SetToolTip(this.extButtonEditSystem, "Edit Bookmark on current system");
+            this.extButtonEditSystem.UseVisualStyleBackColor = true;
+            this.extButtonEditSystem.Click += new System.EventHandler(this.extButtonEditSystem_Click);
+            // 
             // topPanel
             // 
             this.topPanel.AutoSize = true;
@@ -322,6 +337,7 @@
             this.topPanel.Controls.Add(this.textBoxFilter);
             this.topPanel.Controls.Add(this.buttonNew);
             this.topPanel.Controls.Add(this.buttonEdit);
+            this.topPanel.Controls.Add(this.extButtonEditSystem);
             this.topPanel.Controls.Add(this.buttonDelete);
             this.topPanel.Controls.Add(this.buttonExtExcel);
             this.topPanel.Controls.Add(this.buttonExtImport);
@@ -377,5 +393,6 @@
         private ExtendedControls.ExtButton buttonExtExcel;
         private ExtendedControls.ExtButton buttonExtImport;
         private System.Windows.Forms.FlowLayoutPanel topPanel;
+        private ExtendedControls.ExtButton extButtonEditSystem;
     }
 }

@@ -165,6 +165,15 @@ namespace EDDiscovery.UserControls
             Display();
         }
 
+        private void extButtonEditSystem_Click(object sender, EventArgs e)
+        {
+            updating = true;
+            UserControls.TargetHelpers.ShowBookmarkForm(this.FindForm(), discoveryform, discoveryform.history.GetLast?.System, null, false);
+            updating = false;
+            Display();
+        }
+
+
         private void dataGridViewBookMarks_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             buttonEdit_Click(sender, e);
@@ -535,9 +544,7 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void buttonField_Click(object sender, EventArgs e)
-        {
 
-        }
+
     }
 }

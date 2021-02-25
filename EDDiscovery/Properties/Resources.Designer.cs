@@ -64,8 +64,8 @@ namespace EDDiscovery.Properties {
         ///   Looks up a localized string similar to Program Concept by:
         ///Cmdr Finwen  (Robert Wahlström)
         ///
-        ///Release Developer:
-        ///Robby
+        ///Development, Release, Videos by:
+        ///Cmdr Robby
         ///
         ///Developers for this release series:
         ///Bravada Cadelanne
@@ -77,7 +77,7 @@ namespace EDDiscovery.Properties {
         ///Keath Milligan, Kmizole, Potatossuaro, Zafford, Andrea Spada, Goscickiw, Nats-ji, Jay
         ///
         ///Previous Contributors:
-        ///Iain Ross, Andrea Spada, Carcher99, IGAU, EoD, Imathrowback, phwoelfel, Robosa, Daniel-fing [rest of string was truncated]&quot;;.
+        ///Iain Ross, Andrea Spada, Carcher99, IGAU, EoD, Imathrowback, phwoelfel,  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Credits {
             get {
@@ -123,23 +123,6 @@ namespace EDDiscovery.Properties {
             get {
                 object obj = ResourceManager.GetObject("edlogo_3mo_icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to History Import Help
-        ///
-        ///Cmdr - select the commander to import the history against.
-        ///File - the Select button will open a file browser dialog to allow the source file to be selected.
-        ///Header? - check this box if your import file has a header row.
-        ///Delimiter - use the radio buttons to select &apos;Tab&apos; or &apos;Other&apos;, if &apos;Other&apos; then enter the delimiter character in the box.
-        ///
-        ///Arrival Date - the column in the file containing the date of arrival in a system.
-        ///Arrival Time - the column in the file containing the time of [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string ImportHelp {
-            get {
-                return ResourceManager.GetString("ImportHelp", resourceCulture);
             }
         }
         
@@ -391,11 +374,11 @@ namespace EDDiscovery.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://www.youtube.com/embed/PwTbnFikBgA?start=0.
+        ///   Looks up a localized string similar to https://www.youtube.com/embed/Scv9JiHZ10Y?autoplay=1.
         /// </summary>
-        internal static string URLRelease {
+        internal static string URLReleaseVideo {
             get {
-                return ResourceManager.GetString("URLRelease", resourceCulture);
+                return ResourceManager.GetString("URLReleaseVideo", resourceCulture);
             }
         }
         

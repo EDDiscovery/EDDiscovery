@@ -19,6 +19,7 @@ SECTION UserControlBookmarks
 .SysU: "System could not be found - has not been synched or EDSM is unavailable" @
 .buttonExtImport.ToolTip: "Import bookmarks to EDD from CSV file" @
 .buttonExtExcel.ToolTip: "Export bookmarks to CSV file" @
+.extButtonEditSystem.ToolTip: "Edit Bookmark on current system" @
 
 SECTION UserControlCombatPanel
 
@@ -229,6 +230,9 @@ SECTION UserControlExpedition
 .Conflict: "The current route name conflicts with a well-known expedition.\r\nPlease specify a new name to save your changes." @
 .Overwrite: "Warning: route already exists. Would you like to overwrite it?" @
 .EDSMUnk: "System not known to EDSM" @
+.ColumnX: "X" @
+.ColumnY: "Y" @
+.ColumnZ: "Z" @
 
 SECTION UserControlExploration
 
@@ -685,6 +689,9 @@ SECTION UserControlRoute
 
 SECTION UserControlRouteTracker
 
+.Note: "Note: {0}" @
+
+.showBookmarkNotesToolStripMenuItem: "Show Bookmark Notes" @
 .setRouteToolStripMenuItem: "Set route" @
 .showJumpsToolStripMenuItem: "Show Jumps To Go" @
 .showWaypointCoordinatesToolStripMenuItem: "Show Waypoint Coordinates" @

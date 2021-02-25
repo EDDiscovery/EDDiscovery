@@ -263,6 +263,7 @@ namespace EDDiscovery.Icons
         #endregion
         #region Bookmarks
         public static Image Bookmarks_Edit { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Bookmarks.Edit"); } }
+        public static Image Bookmarks_EditSystem { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Bookmarks.EditSystem"); } }
         public static Image Bookmarks_New { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Bookmarks.New"); } }
         public static Image Bookmarks_Delete { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Bookmarks.Delete"); } }
         public static Image ImportExcel { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Bookmarks.ImportExcel"); } }

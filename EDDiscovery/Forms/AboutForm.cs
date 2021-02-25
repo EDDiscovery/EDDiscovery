@@ -69,7 +69,7 @@ namespace EDDiscovery.Forms
             webbrowser.DocumentCompleted += Webbrowser_DocumentCompleted;
             webbrowser.ScriptErrorsSuppressed = true;
             panelWebBrowser.Controls.Add(webbrowser);
-            webbrowser.Navigate(Properties.Resources.URLRelease);
+            webbrowser.Navigate(Properties.Resources.URLReleaseVideo);
 #else
             panelWebBrowser.Visible = false;
             textBoxLicense.Dock = DockStyle.Fill;
