@@ -112,7 +112,7 @@ namespace EDDiscovery.UserControls
 
         private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)
         {
-            if (!object.ReferenceEquals(he.MissionList, last_he?.MissionList) || he.EventTimeUTC > NextExpiry)
+            if (he.MissionList != last_he?.MissionList || he.EventTimeUTC > NextExpiry)
             {
                 last_he = he;
                 Display();
