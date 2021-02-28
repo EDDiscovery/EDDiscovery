@@ -185,7 +185,7 @@ namespace EDDiscovery.UserControls
 
 #region View Implementation
 
-        private void UpdateTransparency()
+        public void UpdateTransparency()
         {
             //System.Diagnostics.Debug.WriteLine("UCF UpdateTrans+");
             curwindowsborder = (!IsTransparent && defwindowsborder);    // we have a border if not transparent and we have a def border

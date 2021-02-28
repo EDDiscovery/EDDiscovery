@@ -57,7 +57,7 @@ namespace EDDiscovery.UserControls
             this.toolStripButtonSave = new System.Windows.Forms.ToolStripButton();
             this.panelTop = new System.Windows.Forms.Panel();
             this.imageViewer = new ExtendedControls.ImageViewer();
-            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+            this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.panelOuter = new System.Windows.Forms.Panel();
             this.statusStripCustom = new ExtendedControls.ExtStatusStrip();
             this.toolStrip.SuspendLayout();
@@ -83,7 +83,7 @@ namespace EDDiscovery.UserControls
             this.toolStripButtonSave});
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
-            this.toolStrip.Size = new System.Drawing.Size(541, 29);
+            this.toolStrip.Size = new System.Drawing.Size(510, 29);
             this.toolStrip.TabIndex = 1;
             // 
             // toolStripComboExpo
@@ -214,9 +214,9 @@ namespace EDDiscovery.UserControls
             this.imageViewer.TabIndex = 0;
             this.imageViewer.ZoomIncrement = 10;
             // 
-            // saveFileDialog1
+            // saveFileDialog
             // 
-            this.saveFileDialog1.Filter = "PNG Image|*.png|Bitmap Image|*.bmp|JPEG Image|*.jpg";
+            this.saveFileDialog.Filter = "PNG Image|*.png|Bitmap Image|*.bmp|JPEG Image|*.jpg";
             // 
             // panelOuter
             // 
@@ -237,15 +237,14 @@ namespace EDDiscovery.UserControls
             this.statusStripCustom.Size = new System.Drawing.Size(984, 22);
             this.statusStripCustom.TabIndex = 32;
             // 
-            // Form2DMap
+            // UserControl2DMap
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(984, 762);
             this.Controls.Add(this.panelOuter);
             this.Controls.Add(this.statusStripCustom);
-            this.Name = "Form2DMap";
-            this.Text = "2D Map";
+            this.Name = "UserControl2DMap";
+            this.Size = new System.Drawing.Size(984, 762);
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
             this.panelTop.ResumeLayout(false);
@@ -265,7 +264,7 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripButton toolStripButtonZoomIn;
         private System.Windows.Forms.ToolStripButton toolStripButtonZoomOut;
         private System.Windows.Forms.ToolStripButton toolStripButtonZoomtoFit;
-        private System.Windows.Forms.SaveFileDialog saveFileDialog1;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog;
         private System.Windows.Forms.ToolStripButton toolStripButtonStars;
         private System.Windows.Forms.ToolStripButton toolStripButtonSave;
         private System.Windows.Forms.Panel panelOuter;

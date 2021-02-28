@@ -39,16 +39,25 @@ namespace EDDiscovery.UserControls
         ToolStripControlHost host1, host2;
         List<Point3D> starpositions = null;
 
-        List<HistoryEntry> syslist;
+        List<HistoryEntry> systemlist;
+        List<HistoryEntry> displayedlist;
+
+        ToolTip controltooltip = new ToolTip();
 
         public UserControl2DMap() 
         {
             InitializeComponent();
+            controltooltip.InitialDelay = 250;
+            controltooltip.AutoPopDelay = 30000;
+            controltooltip.ReshowDelay = 500;
+            controltooltip.IsBalloon = true;
+            imageViewer.MouseMove += ImageViewer_MouseMove;
+            imageViewer.MaxZoom = 800;
         }
 
         public override void Init()
         {
-            syslist = HistoryList.FilterByFSDCarrierJumpAndPosition(discoveryform.history.EntryOrder());
+            systemlist = HistoryList.FilterByFSDCarrierJumpAndPosition(discoveryform.history.EntryOrder());
 
             pickerStart = new DateTimePicker();
             pickerStop = new DateTimePicker();
@@ -88,17 +97,31 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.Translate(this);
 
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
+            discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
+        }
+
+        private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)
+        {
+            if (he.IsFSDCarrierJump)
+            {
+                systemlist = HistoryList.FilterByFSDCarrierJumpAndPosition(discoveryform.history.EntryOrder());
+                if (imageViewer.Image != null)      // make sure we have a image up, if so, just augment the travel history
+                    DrawTravelHistory();
+                else
+                    Display();                      // else do the whole thing
+            }
         }
 
         private void Discoveryform_OnHistoryChange(HistoryList obj)
         {
-            syslist = HistoryList.FilterByFSDCarrierJumpAndPosition(discoveryform.history.EntryOrder());
+            systemlist = HistoryList.FilterByFSDCarrierJumpAndPosition(discoveryform.history.EntryOrder());
             Display();
         }
 
         public override void Closing()
         {
             discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
+            discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
             imageViewer.Image?.Dispose();
             imageViewer.Image = null;
             foreach (var i in images)
@@ -143,23 +166,25 @@ namespace EDDiscovery.UserControls
 
             int currentcmdr = EDCommander.CurrentCmdrID;
 
-            List<HistoryEntry> jumps = (from systems in syslist where systems.System.HasCoordinate && systems.EventTimeUTC.ToLocalTime() > start && systems.EventTimeUTC.ToLocalTime() < endDate && systems.IsLocOrJump orderby systems.EventTimeUTC select systems).ToList();
+            displayedlist = (from systems in systemlist where systems.EventTimeUTC.ToLocalTime() > start && systems.EventTimeUTC.ToLocalTime() < endDate && systems.IsLocOrJump orderby systems.EventTimeUTC select systems).ToList();
+
+            //foreach (var j in displayedlist)  System.Diagnostics.Debug.WriteLine("Jump {0} {1},{2},{3}", j.System.Name, j.System.X, j.System.Y, j.System.Z);
 
             Color drawcolour = Color.Green;
 
             using (Graphics gfx = Graphics.FromImage(imageViewer.Image))
             {
-                for (int ii = 0; ii < jumps.Count-1; ii++)
+                for (int ii = 0; ii < displayedlist.Count-1; ii++)
                 {
-                    if (jumps[ii].journalEntry is IJournalJumpColor)
+                    if (displayedlist[ii].journalEntry is IJournalJumpColor)
                     {
-                        drawcolour = Color.FromArgb(((IJournalJumpColor)jumps[ii].journalEntry).MapColor);
+                        drawcolour = Color.FromArgb(((IJournalJumpColor)displayedlist[ii].journalEntry).MapColor);
                         if (drawcolour.GetBrightness() < 0.05)
                             drawcolour = Color.Red;
                     }
 
                     using (Pen pen = new Pen(drawcolour, 2))
-                        DrawLine(gfx, pen, jumps[ii].System, jumps[ii+1].System);
+                        DrawLine(gfx, pen, displayedlist[ii].System, displayedlist[ii+1].System);
                 }
 
                 if (DisplayTestGrid)
@@ -188,12 +213,14 @@ namespace EDDiscovery.UserControls
 
         private void DrawLine(Graphics gfx, Pen pen, ISystem sys1, ISystem sys2)
         {
-            gfx.DrawLine(pen, Transform2Screen(currentimage.TransformCoordinate(new Point((int)sys1.X, (int)sys1.Z))), Transform2Screen(currentimage.TransformCoordinate(new Point((int)sys2.X, (int)sys2.Z))));
+            var p1 = currentimage.TransformCoordinate(new PointF((float)sys1.X, (float)sys1.Z));
+            var p2 = currentimage.TransformCoordinate(new PointF((float)sys2.X, (float)sys2.Z));
+            gfx.DrawLine(pen, p1 , p2);
         }
 
         private void DrawPoint(Graphics gfx, Pen pen, double x, double z)
         {
-            Point point = Transform2Screen(currentimage.TransformCoordinate(new Point((int)x, (int)z)));
+            PointF point = currentimage.TransformCoordinate(new Point((int)x, (int)z));
             gfx.FillRectangle(pen.Brush, point.X, point.Y, 1, 1);
         }
 
@@ -205,9 +232,39 @@ namespace EDDiscovery.UserControls
                         gfx.DrawLine(pointPen, currentimage.TransformCoordinate(new Point(x, z)), currentimage.TransformCoordinate(new Point(x + 10, z)));
         }
 
-        private Point Transform2Screen(Point point)
+        private void ImageViewer_MouseMove(object sender, MouseEventArgs e)
         {
-            return point;
+            if (displayedlist != null && imageViewer.PositionFromMouse(e.Location, out Point pos))       // 0,0 is top left
+            {
+                PointF lypos = currentimage.TransformCoordinate(pos, false);
+               // System.Diagnostics.Debug.WriteLine("Point " + pos + " " + lypos);
+
+                const int lydistance = 50;      // from 90000ly/4096 pixes, 22 ly per pixel, allow a pixel error
+
+                HashSet<string> displayedit = new HashSet<string>();
+                string list = "";
+                foreach( var he in displayedlist)
+                {
+
+                    if (!displayedit.Contains(he.System.Name) && ObjectExtensionsNumbersBool.Length(lypos.X, lypos.Y,  he.System.X,he.System.Z) < lydistance)
+                    {
+                        list = list.AppendPrePad($"{he.System.Name} @ {he.System.X.ToString("N2")},{he.System.Y.ToString("N2")},{he.System.Z.ToString("N2")}", Environment.NewLine);
+                        displayedit.Add(he.System.Name);
+                       
+                        if ( displayedit.Count>10)      // too many, truncate, happens around sol
+                        {
+                            list += Environment.NewLine + "...";
+                            break;
+                        }
+                    }
+                }
+
+                if (list.HasChars())
+                    controltooltip.SetToolTip(imageViewer, list);
+                else
+                    controltooltip.Hide(imageViewer);
+
+            }
         }
 
         private void toolStripComboBoxExpo_SelectedIndexChanged(object sender, EventArgs e)
@@ -219,12 +276,6 @@ namespace EDDiscovery.UserControls
         private void toolStripComboBoxTime_SelectedIndexChanged(object sender, EventArgs e)
         {
             int nr = toolStripComboBoxTime.SelectedIndex;
-            /*
-            Last Week
-            Last Month
-            Last Year
-            All
-            */
 
             endDate = DateTime.Today.AddDays(1);
             if (nr == 0)
@@ -279,18 +330,18 @@ namespace EDDiscovery.UserControls
 
         private void toolStripButtonSave_Click(object sender, EventArgs e)
         {
-            if (saveFileDialog1.ShowDialog(this) == DialogResult.OK)
+            if (saveFileDialog.ShowDialog(this) == DialogResult.OK)
             {
-                switch (saveFileDialog1.FilterIndex)
+                switch (saveFileDialog.FilterIndex)
                 {
                     case 1:
-                        imageViewer.Image.Save(saveFileDialog1.FileName, System.Drawing.Imaging.ImageFormat.Png);
+                        imageViewer.Image.Save(saveFileDialog.FileName, System.Drawing.Imaging.ImageFormat.Png);
                         break;
                     case 2:
-                        imageViewer.Image.Save(saveFileDialog1.FileName, System.Drawing.Imaging.ImageFormat.Bmp);
+                        imageViewer.Image.Save(saveFileDialog.FileName, System.Drawing.Imaging.ImageFormat.Bmp);
                         break;
                     case 3:
-                        imageViewer.Image.Save(saveFileDialog1.FileName, System.Drawing.Imaging.ImageFormat.Jpeg);
+                        imageViewer.Image.Save(saveFileDialog.FileName, System.Drawing.Imaging.ImageFormat.Jpeg);
                         break;
                 }
             }

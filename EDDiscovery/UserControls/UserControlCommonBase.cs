@@ -151,6 +151,12 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        public void UpdateTransparency()
+        {
+            if (this.Parent is UserControlForm)
+                ((UserControlForm)(this.Parent)).UpdateTransparency();
+        }
+
         #region Resize
 
         public bool ResizingNow = false;                                            // FUNCTIONS to allow a form to grow temporarily.  Does not work when inside the panels

@@ -666,6 +666,7 @@ namespace EDDiscovery.UserControls
         private void whenTransparentUseSkinnyLookToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ToggleSelection(sender, BitSelSkinny);
+            UpdateTransparency();
         }
 
         void ToggleSelection(Object sender, int bit)
@@ -1112,12 +1113,12 @@ namespace EDDiscovery.UserControls
         public override bool SupportTransparency { get { return true; } }
         public override void SetTransparency(bool on, Color curcol)
         {
+            EDDTheme.Instance.ApplyStd(extPanelScroll);     // reset themeing
+
             BackColor = curcol;
             extPanelScroll.BackColor = curcol;
-            bool skinny = (Selection & (1 << BitSelSkinny)) != 0;
 
-            if ( !skinny )
-                EDDTheme.Instance.ApplyStd(extPanelScroll);
+            bool skinny = (Selection & (1 << BitSelSkinny)) != 0;
 
             foreach (Control c in extPanelScroll.Controls)
             {
@@ -1141,6 +1142,13 @@ namespace EDDiscovery.UserControls
                         tb.BorderStyle = BorderStyle.None;
                         tb.BorderColor = Color.Transparent;
                     }
+                }
+                else if ( c is ExtendedControls.ExtButton )
+                {
+                    var bt = c as ExtendedControls.ExtButton;
+                    if (on)
+                        bt.ButtonColorScaling = bt.ButtonDisabledScaling = 1.0f;
+                    bt.BackColor = curcol;
                 }
                 else
                     c.BackColor = curcol;
