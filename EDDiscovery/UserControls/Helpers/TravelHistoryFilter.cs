@@ -135,7 +135,7 @@ namespace EDDiscovery.UserControls
         {
             if (MaximumNumberOfItems.HasValue)
             {
-                return list.GetRange(0, MaximumNumberOfItems.Value);
+                return list.GetRange(0, Math.Min(MaximumNumberOfItems.Value, list.Count));
             }
             else if (MaximumDataAge.HasValue)
             {
