@@ -149,18 +149,17 @@ namespace EDDiscovery.UserControls
         {
             currentHE = he;
 
-            MissionList ml = currentHE?.MissionList;
-
             pictureBox.ClearImageList();
 
-            if ( ml != null )
+            if ( currentHE != null  )
             {
                 Color textcolour = IsTransparent ? discoveryform.theme.SPanelColor : discoveryform.theme.LabelColor;
                 Color backcolour = IsTransparent ? Color.Transparent : this.BackColor;
 
                 DateTime hetime = currentHE.EventTimeUTC;
 
-                List<MissionState> mcurrent = ml.GetAllCurrentMissions(hetime);
+                List<MissionState> ml = discoveryform.history.MissionListAccumulator.GetMissionList(currentHE.MissionList);
+                List<MissionState> mcurrent = MissionListAccumulator.GetAllCurrentMissions(ml,hetime);
 
                 int vpos = 4;
                 Font displayfont = discoveryform.theme.GetFont;

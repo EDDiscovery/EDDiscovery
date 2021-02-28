@@ -149,6 +149,13 @@ SECTION EDDiscoveryForm
 
 .ConfirmSyncToEDSM: "You have disabled sync to EDSM for this commander.  Are you sure you want to send unsynced events to EDSM?" @
 .ConfirmSyncToEDSMCaption: "Confirm EDSM sync" @
+.SendEDSMCaption: "There are {0} EDSM reports to send, this will take time and bandwidth, choose from the following what to do. Entries before this will be marked as sent." @
+.SendEDSMAll: "Send All to EDSM" @
+.SendEDSM24: "Send Last 24 Hours of entries to EDSM" @
+.SendEDSMFrom: "Send From" @
+.SendEDSMNone: "EDSM is up to date - send Nothing more" @
+.SendEDSMCancel: "I'll decide later, do nothing" @
+.SendEDSMTitle: "Sending a large number of EDSM Entries" @
 .toolsToolStripMenuItem: "&Tools" @
 .toolsToolStripMenuItem.settingsToolStripMenuItem: "Settings" @
 .toolsToolStripMenuItem.show2DMapsToolStripMenuItem: "Show &2D maps" @
@@ -172,7 +179,7 @@ SECTION EDDiscoveryForm
 .adminToolStripMenuItem.sendHistoricDataToInaraToolStripMenuItem: "Send to Inara historic data (previous ships, stored modules)" @
 .adminToolStripMenuItem.exportVistedStarsListToEliteDangerousToolStripMenuItem: "Export Visited Stars List to Elite Dangerous" @
 .adminToolStripMenuItem.read21AndFormerLogFilesToolStripMenuItem.load21ToolStripMenuItem: "Scan Netlogs" @
-.adminToolStripMenuItem.removeAllDLLPermissionsToolStripMenuItem: "Remove all DLL permissions" @
+.adminToolStripMenuItem.DLLPermissionsToolStripMenuItem: "DLL Permissions (applies after restart)" @
 .addOnsToolStripMenuItem: "&Add-Ons" @
 .addOnsToolStripMenuItem.manageAddOnsToolStripMenuItem: "&Manage Add-Ons" @
 .addOnsToolStripMenuItem.configureAddOnActionsToolStripMenuItem: "&Edit Add-On Action Files" @
@@ -244,7 +251,7 @@ SECTION EDDiscoveryForm
 .VSLFileErr: "Error writing {0} export visited stars" @
 .InaraW: "Inara historic upload is disabled until 1 hour has elapsed from the last try to prevent server flooding" @
 .RH: "Refresh History." @
-.NoEDSMAPI: "Please ensure a commander is selected and it has a EDSM API key set" @
+.NoEDSMAPI: "No EDSM API key set" @
 .EDSMSyncE: "EDSM Sync failed: {0}" @
 .EP: "Edit Profiles" @
 .PL: "Profile {0} Loaded" @
@@ -257,6 +264,8 @@ SECTION EDDiscoveryForm
 .buttonExt3dmap: "3D" @
 .adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.fetchLogsAgainToolStripMenuItem: "Fetch Logs Again" @
 .adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.fetchStarDataAgainToolStripMenuItem: "Fetch Star Data Again" @
+.adminToolStripMenuItem.rebuildUserDBIndexesToolStripMenuItem: "Rebuild User DB Indexes" @
+.adminToolStripMenuItem.updateUnknownSystemCoordsWithDataFromSystemDBToolStripMenuItem: "Update systems with unknown co-ordinates" @
 
 .WSE: "Web server enabled" @
 .WSF: "Web server failed to start" @

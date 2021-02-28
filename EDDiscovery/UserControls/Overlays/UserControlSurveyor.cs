@@ -16,9 +16,11 @@
 using EliteDangerousCore;
 using EliteDangerousCore.JournalEvents;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
 {
@@ -28,8 +30,9 @@ namespace EDDiscovery.UserControls
 
         private string DbSave => DBName("Surveyor");
 
-        System.Drawing.StringAlignment alignment = System.Drawing.StringAlignment.Near;
-        string titletext = "";
+        private System.Drawing.StringAlignment alignment = System.Drawing.StringAlignment.Near;
+        private string titletext = "";
+        private string fsssignalsdisplayed = "";
 
         const int lowRadiusLimit = 600 * 1000;
 
@@ -68,7 +71,9 @@ namespace EDDiscovery.UserControls
             showAllStarsToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "allstars", false);
             showBeltClustersToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "beltclusters", false);
             showMoreInformationToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "moreinfo", true);
-            wordWrapToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "wordwrap", false);            
+            wordWrapToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "wordwrap", false);
+
+            fsssignalsdisplayed = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbSave + "fsssignals", "");
 
             SetAlign((StringAlignment)EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(DbSave + "align", 0));
 
@@ -134,7 +139,8 @@ namespace EDDiscovery.UserControls
         public override bool SupportTransparency { get { return true; } }
         public override void SetTransparency(bool on, Color curcol)
         {
-            pictureBoxSurveyor.BackColor = this.BackColor = curcol;
+            extPictureBoxScroll.ScrollBarEnabled = !on;     // turn off the scroll bar if its transparent
+            extPictureBoxScroll.BackColor =  pictureBoxSurveyor.BackColor = this.BackColor = curcol;
             DrawSystem(last_sys);   // need to redraw as we use backcolour
         }
 
@@ -150,7 +156,7 @@ namespace EDDiscovery.UserControls
                 else if (he.EntryType == JournalTypeEnum.StartJump)  // we ignore start jump if overriden      
                 {
                     JournalStartJump jsj = he.journalEntry as JournalStartJump;
-                    last_sys = new SystemClass(jsj.StarSystem);
+                    last_sys = new SystemClass(jsj.SystemAddress, jsj.StarSystem);       // important need system address as scan uses it for quick lookup
                     DrawSystem(last_sys, last_sys.Name);
                 }
                 else if (he.EntryType == JournalTypeEnum.FSSAllBodiesFound)
@@ -165,6 +171,7 @@ namespace EDDiscovery.UserControls
                 }
                 else if (he.EntryType == JournalTypeEnum.Scan)
                 {
+                    //System.Diagnostics.Debug.WriteLine("Scan got, sys " + he.System.Name + " " + last_sys.Name);
                     DrawSystem(last_sys);
                 }
             }
@@ -218,7 +225,7 @@ namespace EDDiscovery.UserControls
                 {
                     var i = pictureBoxSurveyor.AddTextAutoSize(
                             new Point(3, vpos),
-                            new Size(Math.Max(pictureBoxSurveyor.Width - 6, 24), 1000),
+                            new Size(Math.Max(pictureBoxSurveyor.Width - 6, 24), 10000),
                             titletext,
                             Font,
                             textcolour,
@@ -251,9 +258,10 @@ namespace EDDiscovery.UserControls
 
                     if (infoline.HasChars())
                     {
-                        var  i = pictureBoxSurveyor.AddTextAutoSize(
+                        //System.Diagnostics.Debug.WriteLine("Draw " + infoline);
+                        var i = pictureBoxSurveyor.AddTextAutoSize(
                             new Point(3, vpos),
-                            new Size(Math.Max(pictureBoxSurveyor.Width - 6, 24), 1000),
+                            new Size(Math.Max(pictureBoxSurveyor.Width - 6, 24), 10000),
                             infoline,
                             Font,
                             textcolour,
@@ -291,16 +299,17 @@ namespace EDDiscovery.UserControls
                                 {
                                     if (!sd.Mapped || hideAlreadyMappedBodiesToolStripMenuItem.Checked == false)      // if not mapped, or show mapped
                                     {
+                                        var il = InfoLine(last_sys, sn, sd);
+                                        //System.Diagnostics.Debug.WriteLine("Display " + il);
                                         var i = pictureBoxSurveyor.AddTextAutoSize(
                                                 new Point(3, vpos),
-                                                new Size(Math.Max(pictureBoxSurveyor.Width - 6, 24), 1000),
-                                                InfoLine(last_sys, sn, sd),
+                                                new Size(Math.Max(pictureBoxSurveyor.Width - 6, 24), 10000),
+                                                il,
                                                 Font,
                                                 textcolour,
                                                 backcolour,
                                                 1.0F,
                                                 frmt: frmt);
-
                                         vpos += i.Location.Height;
                                         value += sd.EstimatedValue;
                                     }
@@ -312,7 +321,7 @@ namespace EDDiscovery.UserControls
                         {
                             var i = pictureBoxSurveyor.AddTextAutoSize(
                                 new Point(3, vpos),
-                                new Size(Math.Max(pictureBoxSurveyor.Width - 6, 24), 1000),
+                                new Size(Math.Max(pictureBoxSurveyor.Width - 6, 24), 10000),
                                 "^^ ~ " + value.ToString("N0") + " cr",
                                 Font,
                                 textcolour,
@@ -321,12 +330,60 @@ namespace EDDiscovery.UserControls
                                 frmt: frmt);
                             vpos += i.Location.Height;
                         }
+                    }
+
+                    if ( fsssignalsdisplayed.HasChars())
+                    {
+                        string siglist = "";
+                        string[] filter = fsssignalsdisplayed.Split(';');
+
+                        // mirrors scandisplaynodes
+                        
+                        var notexpired = systemnode.FSSSignalList.Where(x => !x.TimeRemaining.HasValue || x.ExpiryUTC >= DateTime.UtcNow).ToList();
+                        notexpired.Sort(delegate (JournalFSSSignalDiscovered.FSSSignal l, JournalFSSSignalDiscovered.FSSSignal r) { return l.ClassOfSignal.CompareTo(r.ClassOfSignal); });
+
+                        var expired = systemnode.FSSSignalList.Where(x => x.TimeRemaining.HasValue && x.ExpiryUTC < DateTime.UtcNow).ToList();
+                        expired.Sort(delegate (JournalFSSSignalDiscovered.FSSSignal l, JournalFSSSignalDiscovered.FSSSignal r) { return r.ExpiryUTC.CompareTo(l.ExpiryUTC); });
+
+                        int expiredpos = notexpired.Count;
+                        notexpired.AddRange(expired);
+
+                        int pos = 0;
+                        foreach (var fsssig in notexpired)
+                        {
+                            if (filter.ComparisionContains(fsssig.SignalName.Alt("!~~"), StringComparison.InvariantCultureIgnoreCase) >= 0 ||
+                                filter.ComparisionContains(fsssig.SignalName_Localised.Alt("!~~"), StringComparison.InvariantCultureIgnoreCase) >= 0 ||
+                                filter.ComparisionContains(fsssig.SpawningState_Localised.Alt("!~~"), StringComparison.InvariantCultureIgnoreCase) >= 0 ||
+                                filter.ComparisionContains(fsssig.SpawningFaction_Localised.Alt("!~~"), StringComparison.InvariantCultureIgnoreCase) >= 0 ||
+                                filter.ComparisionContains(fsssig.USSTypeLocalised.Alt("!~~"), StringComparison.InvariantCultureIgnoreCase) >= 0 ||
+                                filter.ComparisionContains(fsssig.ClassOfSignal.ToString(), StringComparison.InvariantCultureIgnoreCase) >= 0 ||
+                                fsssignalsdisplayed.Equals("*"))
+                            {
+                                if ( pos++ == expiredpos )
+                                    siglist = siglist.AppendPrePad("Expired:".T(EDTx.UserControlScan_Expired), Environment.NewLine + Environment.NewLine);
+
+                                siglist = siglist.AppendPrePad(fsssig.ToString(true), Environment.NewLine);
+                            }
+                        }
+
+                        if (siglist.HasChars())
+                        {
+                            //System.Diagnostics.Debug.WriteLine("Display " + siglist);
+                            pictureBoxSurveyor.AddTextAutoSize(new Point(3, vpos),
+                                                            new Size(Math.Max(pictureBoxSurveyor.Width - 6, 24), 10000),
+                                                            siglist,
+                                                            Font,
+                                                            textcolour,
+                                                            backcolour,
+                                                            1.0F,
+                                                            frmt: frmt);
+                        }
 
                     }
                 }
             }
 
-            pictureBoxSurveyor.Render();
+            extPictureBoxScroll.Render();
         }
 
         private string InfoLine(ISystem sys, StarScan.ScanNode sn, JournalScan js)
@@ -336,7 +393,7 @@ namespace EDDiscovery.UserControls
             if (js.Mapped)
                 information.Append("\u2713"); // let the cmdr see that this body is already mapped - this is a check
 
-            string bodyname = js.BodyName.ReplaceIfStartsWith(sys.Name);
+            string bodyname = js.BodyDesignationOrName.ReplaceIfStartsWith(sys.Name);
 
             // Name
             information.Append(bodyname);
@@ -351,13 +408,16 @@ namespace EDDiscovery.UserControls
             information.Append((js.HasMeaningfulVolcanism) ? @" Has ".T(EDTx.UserControlSurveyor_Has) + js.Volcanism + "." : null);
             information.Append((js.nRadius < lowRadiusLimit) ? @" Low Radius.".T(EDTx.UserControlSurveyor_LowRadius) : null);
             information.Append((sn.Signals != null) ? " Has Signals.".T(EDTx.UserControlSurveyor_Signals) : null);
-            information.Append((js.IsLandable) ? @" is landable.".T(EDTx.UserControlSurveyor_islandable) : null);            
+            information.Append((js.IsLandable) ? @" is landable.".T(EDTx.UserControlSurveyor_islandable) : null);
+
+            var ev = js.GetEstimatedValues();
+
             if (js.WasMapped == true && js.WasDiscovered == true)
             {
                 information.Append(" (Mapped & Discovered)".T(EDTx.UserControlSurveyor_MandD));
                 if (showValuesToolStripMenuItem.Checked)
                 {
-                    information.Append(' ').Append(js.EstimatedValueBase.ToString("N0")).Append(" cr");
+                    information.Append(' ').Append(ev.EstimatedValueBase.ToString("N0")).Append(" cr");
                 }
             }
             else if (js.WasMapped == true && js.WasDiscovered == false)
@@ -365,7 +425,7 @@ namespace EDDiscovery.UserControls
                 information.Append(" (Mapped)".T(EDTx.UserControlSurveyor_MP));
                 if (showValuesToolStripMenuItem.Checked)
                 {
-                    information.Append(' ').Append(js.EstimatedValueBase.ToString("N0")).Append(" cr");
+                    information.Append(' ').Append(ev.EstimatedValueBase.ToString("N0")).Append(" cr");
                 }
             }
             else if (js.WasDiscovered == true && js.WasMapped == false)
@@ -373,14 +433,14 @@ namespace EDDiscovery.UserControls
                 information.Append(" (Discovered)".T(EDTx.UserControlSurveyor_DIS));
                 if (showValuesToolStripMenuItem.Checked)
                 {
-                    information.Append(' ').Append(js.EstimatedValueFirstMappedEfficiently.ToString("N0")).Append(" cr");
+                    information.Append(' ').Append(ev.EstimatedValueFirstMappedEfficiently.ToString("N0")).Append(" cr");
                 }
             }
             else
             {      
                 if (showValuesToolStripMenuItem.Checked)
                 {
-                    information.Append(' ').Append((js.EstimatedValueFirstDiscoveredFirstMappedEfficiently > 0 ? js.EstimatedValueFirstDiscoveredFirstMappedEfficiently : js.EstimatedValueBase).ToString("N0")).Append(" cr");
+                    information.Append(' ').Append((ev.EstimatedValueFirstDiscoveredFirstMappedEfficiently > 0 ? ev.EstimatedValueFirstDiscoveredFirstMappedEfficiently : ev.EstimatedValueBase).ToString("N0")).Append(" cr");
                 }
             }
 
@@ -394,8 +454,9 @@ namespace EDDiscovery.UserControls
             return information.ToString();
         }
 
-        
         #endregion
+
+        #region UI
 
         private void ammoniaWorldToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -549,6 +610,41 @@ namespace EDDiscovery.UserControls
         private void UserControlSurveyor_Resize(object sender, EventArgs e)
         {
             DrawSystem(last_sys);
-        }        
+        }
+
+        private void selectFSSSignalsShownToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ExtendedControls.ConfigurableForm f = new ExtendedControls.ConfigurableForm();
+
+            int width = 430;
+
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("Text", typeof(ExtendedControls.ExtTextBox), fsssignalsdisplayed, new Point(10, 40), new Size(width - 10 - 20, 110), "List Names to show") { textboxmultiline = true });
+
+            f.AddOK(new Point(width - 100, 180));
+            f.AddCancel(new Point(width - 200, 180));
+
+            f.Trigger += (dialogname, controlname, tag) =>
+            {
+                if (controlname == "OK")
+                {
+                    f.ReturnResult(DialogResult.OK);
+                }
+                else if (controlname == "Cancel" || controlname == "Close")
+                {
+                    f.ReturnResult(DialogResult.Cancel);
+                }
+            };
+
+            DialogResult res = f.ShowDialogCentred(this.FindForm(), this.FindForm().Icon, "List signals to display, semicolon seperated", closeicon: true);
+            if (res == DialogResult.OK)
+            {
+                fsssignalsdisplayed = f.Get("Text");
+                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbSave + "fsssignals", fsssignalsdisplayed);
+                DrawSystem(last_sys);
+            }
+
+        }
+
+        #endregion
     }
 }

@@ -105,7 +105,7 @@ namespace EDDiscovery.UserControls
                 else if (override_system == null && he.EntryType == JournalTypeEnum.StartJump)  // we ignore start jump if overriden      
                 {
                     JournalStartJump jsj = he.journalEntry as JournalStartJump;
-                    last_sys = new SystemClass(jsj.StarSystem);
+                    last_sys = new SystemClass(jsj.SystemAddress, jsj.StarSystem);
                     PresentSystem(last_sys);
                 }
             }
@@ -120,7 +120,7 @@ namespace EDDiscovery.UserControls
             if (source == "EDSM")
             {
                 EDSMClass edsm = new EDSMClass();
-                url = edsm.GetUrlToEDSMSystem(sys.Name, sys.EDSMID);
+                url = edsm.GetUrlToSystem(sys.Name);
                 defaulturl = EDSMClass.ServerAddress;
             }
             else if (source == "Spansh")

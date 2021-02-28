@@ -244,8 +244,8 @@ SECTION UserControlExploration
 .toolStripButtonNew: "New" => "Nuovo"
 .toolStripButtonLoad: "Load" => "Carica"
 .toolStripButtonSave: "Save" => "Salva"
-.tsbAddSystems: "Add Systems" => "Aggiungi Systemi"
-.toolStripButtonImportFile: "Import Text File" => "Importa Documento di Testo"
+.toolStripButtonAddSystems: "Add Systems" => "Aggiungi Systemi"
+.toolStripButtonImportTextFile: "Import Text File" => "Importa Documento di Testo"
 .toolStripButtonExport: "Export" => "Esporta Documento di Testo"
 .toolStripButtonClear: "Clear List" => "Pulischi Lista"
 .copyToolStripMenuItem: "Copy" => "Copia"
@@ -823,7 +823,7 @@ SECTION UserControlSettings
 .checkBoxCustomEnableScreenshots: "Enable" => "Abilita conversione delle schermate di gioco"
 .groupBoxCustomEDSM: "EDSM/EDDB Control" => "EDSM/EDDB"
 .buttonExtEDSMConfigureArea: "Select Galaxy Sectors" => "Selezione Galassia"
-.checkBoxCustomEDSMEDDBDownload: "Enable Star Data Download" => "Abilita scarico di dati stellari"
+.checkBoxCustomEDSMDownload: "Enable Star Data Download" => "Abilita scarico di dati stellari"
 .groupBoxPopOuts: "Window Options" => "Opzioni della finestra"
 .checkBoxPanelSortOrder: "Panel List Sorted Alphanumerically" @
 .checkBoxKeepOnTop: "Keep on Top" => "Mantieni in cima"
@@ -850,7 +850,7 @@ SECTION UserControlSettings
 .buttonExtScreenshot.ToolTip: "Configure further screenshot options" => "Imposta ulteriori opzioni di schermata"
 .checkBoxCustomEnableScreenshots.ToolTip: "Screen shot conversion on/off" => "Abilita/disabilita conversione schermate"
 .buttonExtEDSMConfigureArea.ToolTip: "Configure what parts of the galaxy is stored in the databases" => "Scegli quali aree della Galassia avere sul banco di dati"
-.checkBoxCustomEDSMEDDBDownload.ToolTip: "Click to enable downloading of stars from EDSM and system information from EDDB.  Will apply at next start." => "Imposta per abilitare lo scarico dei dati stellari da EDSM e informazioni di sistema da EDDB"
+.checkBoxCustomEDSMDownload.ToolTip: "Click to enable downloading of stars from EDSM and system information from EDDB.  Will apply at next start." => "Imposta per abilitare lo scarico dei dati stellari da EDSM e informazioni di sistema da EDDB"
 .checkBoxPanelSortOrder.ToolTip: "Panel lists sorted alphanumerically instead of ordered in groups. Note Requires Restart" @
 .checkBoxKeepOnTop.ToolTip: "This window, and its children, top" => "La finestra principale e tutte le altra sempre in cima"
 .checkBoxCustomResize.ToolTip: "Check to allow EDD to redraw the screen during main window resize. Only disable if its too slow" @

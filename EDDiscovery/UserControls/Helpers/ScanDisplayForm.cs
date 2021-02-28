@@ -43,11 +43,11 @@ namespace EDDiscovery.UserControls
 
             if (he != null && (he.EntryType == JournalTypeEnum.Market || he.EntryType == JournalTypeEnum.EDDCommodityPrices))  // station data..
             {
-                JournalCommodityPricesBase jm = he.journalEntry as JournalCommodityPricesBase;
-                jm.FillInformation(out string info, out string detailed,1);
+                he.FillInformation(out string info, out string detailed);
 
                 f.Add(new ExtendedControls.ConfigurableForm.Entry("RTB", typeof(ExtendedControls.ExtRichTextBox), detailed, new Point(0, topmargin), infosize, null));
 
+                JournalCommodityPricesBase jm = he.journalEntry as JournalCommodityPricesBase;
                 title += ", " +"Station".T(EDTx.ScanDisplayForm_Station) + ": " + jm.Station;
             }
             else
@@ -82,7 +82,10 @@ namespace EDDiscovery.UserControls
 
             f.Trigger += (dialogname, controlname, ttag) =>
             {
-                f.ReturnResult(DialogResult.OK);
+                if (controlname == "OK")
+                    f.ReturnResult(DialogResult.OK);
+                else if (controlname == "Close")
+                    f.ReturnResult(DialogResult.Cancel);
             };
 
             f.InitCentred(parent, new Size(1, 1), new Size(50000, 50000), parent.Icon, title, null, null, asm , closeicon:true);

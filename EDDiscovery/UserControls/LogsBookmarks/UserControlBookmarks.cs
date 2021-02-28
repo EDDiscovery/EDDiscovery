@@ -165,6 +165,15 @@ namespace EDDiscovery.UserControls
             Display();
         }
 
+        private void extButtonEditSystem_Click(object sender, EventArgs e)
+        {
+            updating = true;
+            UserControls.TargetHelpers.ShowBookmarkForm(this.FindForm(), discoveryform, discoveryform.history.GetLast?.System, null, false);
+            updating = false;
+            Display();
+        }
+
+
         private void dataGridViewBookMarks_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             buttonEdit_Click(sender, e);
@@ -177,7 +186,7 @@ namespace EDDiscovery.UserControls
                 BookmarkClass bk = (BookmarkClass)currentedit.Tag;
 
                 SaveBackAnyChanges();
-                EliteDangerousCore.ISystem sys = bk.isStar ? SystemCache.FindSystem(bk.Name) : null;
+                EliteDangerousCore.ISystem sys = bk.isStar ? discoveryform.history.FindSystem(bk.Name, discoveryform.galacticMapping, true) : null;
 
                 updating = true;
                 UserControls.TargetHelpers.ShowBookmarkForm(this.FindForm(), discoveryform, sys, bk, false);
@@ -327,7 +336,7 @@ namespace EDDiscovery.UserControls
             this.Cursor = Cursors.WaitCursor;
             EliteDangerousCore.EDSM.EDSMClass edsm = new EDSMClass();
             
-            if (!edsm.ShowSystemInEDSM(rightclickbookmark.StarName, null))
+            if (!edsm.ShowSystemInEDSM(rightclickbookmark.StarName))
                 ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable".T(EDTx.UserControlBookmarks_SysU));
 
             this.Cursor = Cursors.Default;
@@ -535,9 +544,7 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void buttonField_Click(object sender, EventArgs e)
-        {
 
-        }
+
     }
 }

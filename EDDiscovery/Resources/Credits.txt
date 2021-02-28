@@ -1,15 +1,17 @@
 Program Concept by:
 Cmdr Finwen  (Robert Wahlström)
 
+Development, Release, Videos by:
+Cmdr Robby
+
 Developers for this release series:
-Robby (Releaser)
-Bravada Cadelanne, Keath Milligan
+Bravada Cadelanne, nullx27
 
 Images Captured by:
 Spandino, Robby, Eahlstan, Ettanin, CompleteNOOB from Frontier Elite Dangerous Images (C) Frontier Developments PLC
 
 Languages Translations:
-Kmizole, Potatossuaro, Zafford, Andrea Spada, Goscickiw, Nats-ji, Jay
+Keath Milligan, Kmizole, Potatossuaro, Zafford, Andrea Spada, Goscickiw, Nats-ji, Jay
 
 Previous Contributors:
 Iain Ross, Andrea Spada, Carcher99, IGAU, EoD, Imathrowback, phwoelfel, Robosa, Daniel-finger, Phroggie, Finwen, Corbin Moran, Myshka, Zed, Marlon Blake, Smacker, Jason Thorpe, Greg Malcolm,  Majkl578, MWerle..

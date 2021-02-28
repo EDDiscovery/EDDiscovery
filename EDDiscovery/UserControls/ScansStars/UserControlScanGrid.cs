@@ -197,7 +197,7 @@ namespace EDDiscovery.UserControls
             last_he = he;
 
             // only record first row if same system 
-            var firstdisplayedrow = (dataGridViewScangrid.RowCount > 0 && samesys) ? dataGridViewScangrid.FirstDisplayedScrollingRowIndex : -1;
+            var firstdisplayedrow = (dataGridViewScangrid.RowCount > 0 && samesys) ? dataGridViewScangrid.SafeFirstDisplayedScrollingRowIndex() : -1;
 
             dataGridViewScangrid.RowTemplate.MinimumHeight = Font.ScalePixels(64);        // based on icon size
             bodysize = dataGridViewScangrid.RowTemplate.MinimumHeight;
@@ -221,11 +221,11 @@ namespace EDDiscovery.UserControls
                 var bdDist = new StringBuilder();
                 var bdDetails = new StringBuilder();
                 
-                if (sn.type == StarScan.ScanNodeType.ring)
+                if (sn.NodeType == StarScan.ScanNodeType.ring)
                 {
                     // do nothing, by now
                 }
-                else if (sn.type == StarScan.ScanNodeType.beltcluster)
+                else if (sn.NodeType == StarScan.ScanNodeType.beltcluster)
                 {
                     if (showStructures && sn.ScanData?.BodyName != null)
                     {
@@ -250,7 +250,7 @@ namespace EDDiscovery.UserControls
 
                             var img = global::EDDiscovery.Icons.Controls.ScanGrid_Belt;
 
-                            dataGridViewScangrid.Rows.Add(new object[] { null, sn.ScanData.BodyName, bdClass, bdDist, bdDetails });
+                            dataGridViewScangrid.Rows.Add(new object[] { null, sn.ScanData.BodyDesignationOrName, bdClass, bdDist, bdDetails });
 
                             var cur = dataGridViewScangrid.Rows[dataGridViewScangrid.Rows.Count - 1];
 
@@ -305,31 +305,37 @@ namespace EDDiscovery.UserControls
                                 bdDetails.Append("Temperature".T(EDTx.UserControlScanGrid_Temperature)).Append(": ").Append((sn.ScanData.nSurfaceTemperature.Value)).Append("K.");
 
                             // habitable zone for stars - do not display for black holes.
-                            if (showStellarZones)
+                            if (showStellarZones && sn.ScanData.IsStar && sn.ScanData.StarTypeID != EDStar.H)
                             {
-                                if (showHabitable && sn.ScanData.HabitableZoneInner != null && sn.ScanData.HabitableZoneOuter != null && sn.ScanData.StarTypeID != EDStar.H)
+                                if (showHabitable )
                                 {
-                                    bdDetails.AppendFormat(Environment.NewLine + "Habitable Zone".T(EDTx.UserControlScanGrid_HabitableZone) + ": {0}-{1}AU ({2}). ", (sn.ScanData.HabitableZoneInner.Value / JournalScan.oneAU_LS).ToString("N2"), (sn.ScanData.HabitableZoneOuter.Value / JournalScan.oneAU_LS).ToString("N2"), sn.ScanData.GetHabZoneStringLs());
+                                    string hz = sn.ScanData.CircumstellarZonesString(false, JournalScan.CZPrint.CZHab);
+                                    bdDetails.AppendFormat(Environment.NewLine + hz);
                                 }
-                                if (showMetalRich && sn.ScanData.MetalRichZoneInner != null && sn.ScanData.MetalRichZoneOuter != null && sn.ScanData.StarTypeID != EDStar.H)
+                                if (showMetalRich )
                                 {
-                                    bdDetails.AppendFormat(Environment.NewLine + "Metal Rich bodies".T(EDTx.UserControlScanGrid_MetalRichbodies) + ": {0}-{1}AU ({2}). ", (sn.ScanData.MetalRichZoneInner.Value / JournalScan.oneAU_LS).ToString("N2"), (sn.ScanData.MetalRichZoneOuter.Value / JournalScan.oneAU_LS).ToString("N2"), sn.ScanData.GetMetalRichZoneStringLs());
+                                    string hz = sn.ScanData.CircumstellarZonesString(false, JournalScan.CZPrint.CZMR);
+                                    bdDetails.AppendFormat(Environment.NewLine + hz);
                                 }
-                                if (showWaterWorlds && sn.ScanData.WaterWrldZoneInner != null && sn.ScanData.WaterWrldZoneOuter != null && sn.ScanData.StarTypeID != EDStar.H)
+                                if (showWaterWorlds )
                                 {
-                                    bdDetails.AppendFormat(Environment.NewLine + "Water worlds".T(EDTx.UserControlScanGrid_Waterworlds) + ": {0}-{1}AU ({2}). ", (sn.ScanData.WaterWrldZoneInner.Value / JournalScan.oneAU_LS).ToString("N2"), (sn.ScanData.WaterWrldZoneOuter.Value / JournalScan.oneAU_LS).ToString("N2"), sn.ScanData.GetWaterWorldZoneStringLs());
+                                    string hz = sn.ScanData.CircumstellarZonesString(false, JournalScan.CZPrint.CZWW);
+                                    bdDetails.AppendFormat(Environment.NewLine + hz);
                                 }
-                                if (showEarthLike && sn.ScanData.EarthLikeZoneInner != null && sn.ScanData.EarthLikeZoneOuter != null && sn.ScanData.StarTypeID != EDStar.H)
+                                if (showEarthLike )
                                 {
-                                    bdDetails.AppendFormat(Environment.NewLine + "Earth likes planets".T(EDTx.UserControlScanGrid_Earthlikesplanets) + ": {0}-{1}AU ({2}). ", (sn.ScanData.EarthLikeZoneInner.Value / JournalScan.oneAU_LS).ToString("N2"), (sn.ScanData.EarthLikeZoneOuter.Value / JournalScan.oneAU_LS).ToString("N2"), sn.ScanData.GetEarthLikeZoneStringLs());
+                                    string hz = sn.ScanData.CircumstellarZonesString(false, JournalScan.CZPrint.CZEL);
+                                    bdDetails.AppendFormat(Environment.NewLine + hz);
                                 }
-                                if (showAmmonia && sn.ScanData.AmmonWrldZoneInner != null && sn.ScanData.AmmonWrldZoneOuter != null && sn.ScanData.StarTypeID != EDStar.H)
+                                if (showAmmonia )
                                 {
-                                    bdDetails.AppendFormat(Environment.NewLine + "Ammonia worlds".T(EDTx.UserControlScanGrid_Ammoniaworlds) + ": {0}-{1}AU ({2}). ", (sn.ScanData.AmmonWrldZoneInner.Value / JournalScan.oneAU_LS).ToString("N2"), (sn.ScanData.AmmonWrldZoneOuter.Value / JournalScan.oneAU_LS).ToString("N2"), sn.ScanData.GetAmmoniaWorldZoneStringLs());
+                                    string hz = sn.ScanData.CircumstellarZonesString(false, JournalScan.CZPrint.CZAW);
+                                    bdDetails.AppendFormat(Environment.NewLine + hz);
                                 }
-                                if (showIcyBodies && sn.ScanData.IcyPlanetZoneInner != null && sn.ScanData.IcyPlanetZoneOuter != null && sn.ScanData.StarTypeID != EDStar.H)
+                                if (showIcyBodies)
                                 {
-                                    bdDetails.AppendFormat(Environment.NewLine + "Habitable Zone".T(EDTx.UserControlScanGrid_HabitableZone) + ": {0}AU-{1} ({2}). ", (sn.ScanData.IcyPlanetZoneInner.Value / JournalScan.oneAU_LS).ToString("N2"), (sn.ScanData.IcyPlanetZoneOuter), sn.ScanData.GetIcyPlanetsZoneStringLs());
+                                    string hz = sn.ScanData.CircumstellarZonesString(false, JournalScan.CZPrint.CZIP);
+                                    bdDetails.AppendFormat(Environment.NewLine + hz);
                                 }
                             }
                         }
@@ -348,11 +354,11 @@ namespace EDDiscovery.UserControls
                             planets++;
 
                             // tell us the distance from the arrivals in both AU and LS
-                            if (sn.level <= 1 && sn.type == StarScan.ScanNodeType.body)
+                            if (sn.Level <= 1 && sn.NodeType == StarScan.ScanNodeType.body)
                                 bdDist.AppendFormat("{0:0.00}AU ({1:0.0}ls)", sn.ScanData.DistanceFromArrivalLS / JournalScan.oneAU_LS, sn.ScanData.DistanceFromArrivalLS);
 
                             // ...or a moon?
-                            if (sn.level >= 2 && sn.type == StarScan.ScanNodeType.body)
+                            if (sn.Level >= 2 && sn.NodeType == StarScan.ScanNodeType.body)
                             {
                                 if (sn.ScanData.PlanetClass != null)
                                     moons++;
@@ -485,7 +491,7 @@ namespace EDDiscovery.UserControls
                         // pick an image
                         var img = sn.ScanData.IsStar ? sn.ScanData.GetStarTypeImage() : sn.ScanData.GetPlanetClassImage();
 
-                        dataGridViewScangrid.Rows.Add(new object[] { null, sn.ScanData.BodyName, bdClass, bdDist, bdDetails });
+                        dataGridViewScangrid.Rows.Add(new object[] { null, sn.ScanData.BodyDesignationOrName, bdClass, bdDist, bdDetails });
 
                         var cur = dataGridViewScangrid.Rows[dataGridViewScangrid.Rows.Count - 1];
 
@@ -511,7 +517,7 @@ namespace EDDiscovery.UserControls
                 }
 
                 // set a meaningful title for the controller            
-                SetControlText(string.Format("Scan Summary for {0}: {1} stars; {2} planets ({3} terrestrial, {4} gas giants), {5} moons".T(EDTx.UserControlScanGrid_ScanSummaryfor), scannode.system.Name, stars, planets, terrestrial, gasgiants, moons));
+                SetControlText(string.Format("Scan Summary for {0}: {1} stars; {2} planets ({3} terrestrial, {4} gas giants), {5} moons".T(EDTx.UserControlScanGrid_ScanSummaryfor), scannode.System.Name, stars, planets, terrestrial, gasgiants, moons));
                 if (firstdisplayedrow >= 0 && firstdisplayedrow < dataGridViewScangrid.RowCount)
                     dataGridViewScangrid.SafeFirstDisplayedScrollingRowIndex(firstdisplayedrow);
 
@@ -639,13 +645,6 @@ namespace EDDiscovery.UserControls
                 dataGridViewScangrid.Rows[e.RowIndex].Cells[4].Value = dataGridViewScangrid.Rows[e.RowIndex].Cells[4].Tag;
                 dataGridViewScangrid.Rows[e.RowIndex].Cells[4].Tag = curdata;
             }
-        }
-
-        void dataGridViewScangrid_MouseClick(object sender, MouseEventArgs e)
-        {
-            contextMenuStrip.Visible |= e.Button == MouseButtons.Right;
-            contextMenuStrip.Top = MousePosition.Y;
-            contextMenuStrip.Left = MousePosition.X;
         }
 
         void circumstellarZoneToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)

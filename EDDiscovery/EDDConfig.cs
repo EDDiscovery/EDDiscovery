@@ -496,7 +496,7 @@ namespace EDDiscovery
                 fullhistoryloaddaylimit = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt("FullHistoryLoadDayLimit", 0);
                 language = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("DefaultLanguage", "Auto");
                 drawduringresize = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("DrawDuringResizeWindow", true);
-                sortpanelsalpha = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("PanelsSortedByName", false);
+                sortpanelsalpha = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("PanelsSortedByName", true);
                 essentialeventtype = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("EssentialEventType", "Default");
                 coriolisURL = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("CorolisURL", Properties.Resources.URLCoriolis);
                 eddshipyardURL = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("EDDShipyardURL", Properties.Resources.URLEDShipyard);

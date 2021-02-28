@@ -41,9 +41,9 @@ namespace EDDiscovery.Actions
         public override bool ExecuteAction(ActionProgramRun ap)
         {
             string res;
-            if (ap.functions.ExpandString(UserData, out res) != Functions.ExpandResult.Failed)
+            if (ap.Functions.ExpandString(UserData, out res) != Functions.ExpandResult.Failed)
             {
-                HistoryList hl = (ap.actioncontroller as ActionController).HistoryList;
+                HistoryList hl = (ap.ActionController as ActionController).HistoryList;
                 StringParser sp = new StringParser(res);
                 string prefix = "EC_";
 
@@ -70,7 +70,7 @@ namespace EDDiscovery.Actions
 
                     if (cmdname.Equals("thpos"))
                     {
-                        HistoryEntry he = (ap.actioncontroller as ActionController).DiscoveryForm.PrimaryCursor.GetCurrentHistoryEntry;
+                        HistoryEntry he = (ap.ActionController as ActionController).DiscoveryForm.PrimaryCursor.GetCurrentHistoryEntry;
 
                         if ( he == null )
                         {
@@ -178,24 +178,18 @@ namespace EDDiscovery.Actions
 
                         if (cmdname.Equals("action"))
                         {
-                            int count = (ap.actioncontroller as ActionController).ActionRunOnEntry(he, Actions.ActionEventEDList.EventCmd(he), now: true);
+                            int count = (ap.ActionController as ActionController).ActionRunOnEntry(he, Actions.ActionEventEDList.EventCmd(he), now: true);
                             ap[prefix + "Count"] = count.ToString(System.Globalization.CultureInfo.InvariantCulture);
                         }
                         else if (cmdname.Equals("edsm"))
                         {
-                            long? id_edsm = he.System.EDSMID;
-                            if (id_edsm <= 0)
-                            {
-                                id_edsm = null;
-                            }
-
                             EliteDangerousCore.EDSM.EDSMClass edsm = new EliteDangerousCore.EDSM.EDSMClass();
-                            string url = edsm.GetUrlToEDSMSystem(he.System.Name, id_edsm);
+                            string url = edsm.GetUrlCheckSystemExists(he.System.Name);
 
                             ap[prefix + "URL"] = url;
 
                             if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
-                                System.Diagnostics.Process.Start(url);
+                                BaseUtils.BrowserInfo.LaunchBrowser(url);
                         }
                         else if (cmdname.Equals("ross"))
                         {
@@ -204,7 +198,7 @@ namespace EDDiscovery.Actions
                         else if (cmdname.Equals("eddb"))
                         {
                             string url = Properties.Resources.URLEDDBSystemName + Uri.EscapeDataString(he.System.Name);
-                            System.Diagnostics.Process.Start(url);
+                            BaseUtils.BrowserInfo.LaunchBrowser(url);
                             ap[prefix + "URL"] = url;
                         }
                         else if (cmdname.Equals("info"))
@@ -214,7 +208,7 @@ namespace EDDiscovery.Actions
                         }
                         else if (cmdname.Equals("missions"))
                         {
-                            ActionVars.MissionInformation(ap, he.MissionList, prefix);
+                            ActionVars.MissionInformation(ap, hl.MissionListAccumulator.GetMissionList(he.MissionList), prefix);
                         }
                         else if (cmdname.Equals("setstartmarker"))
                         {
@@ -234,7 +228,7 @@ namespace EDDiscovery.Actions
                             if (note != null && sp.IsEOL)
                             {
                                 he.SetJournalSystemNoteText(note, true, EDCommander.Current.SyncToEdsm);
-                                (ap.actioncontroller as ActionController).DiscoveryForm.NoteChanged(this, he, true);
+                                (ap.ActionController as ActionController).DiscoveryForm.NoteChanged(this, he, true);
                             }
                             else
                                 ap.ReportError("Missing note text or unquoted text in Event NOTE");

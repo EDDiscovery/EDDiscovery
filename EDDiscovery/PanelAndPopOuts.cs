@@ -5,12 +5,12 @@
  * file except in compliance with the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
+ *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
@@ -31,7 +31,7 @@ namespace EDDiscovery
             Log = 0,                // BEWARE
             StarDistance,           // BEWARE       Current user selection is saved as an index, so re-ordering these is not allowed
             Materials,              // BEWARE
-            Commodities,            // 
+            Commodities,            //
             Ledger,                 // 4
             Journal,
             TravelGrid,
@@ -115,10 +115,13 @@ namespace EDDiscovery
 
             { new PanelInfo( "Scans and Stars") },
             { new PanelInfo( PanelIDs.Scan, typeof(UserControlScan), "Scan", "Scan", "Scan data on system", false ) },
+
+#if !MONO           // disabled due to error finding libgluezilla, and rob can't find a solution to it. freezes program
             { new PanelInfo( PanelIDs.EDSM, typeof(UserControlEDSM), "EDSM", "EDSM", "EDSM - Automatic web view of system") },
             { new PanelInfo( PanelIDs.Spansh, typeof(UserControlSpansh), "Spansh", "Spansh", "Spansh - Automatic web view of system") },
             { new PanelInfo( PanelIDs.EDDB, typeof(UserControlEDDB), "EDDB", "EDDB", "EDDB - Automatic web view of system") },
             { new PanelInfo( PanelIDs.Inara, typeof(UserControlInara), "Inara", "Inara", "Inara - Automatic web view of system") },
+#endif
             { new PanelInfo( PanelIDs.ScanGrid, typeof(UserControlScanGrid), "Scan Grid", "ScanGrid", "Scan data on system in a grid", transparent: false) },
             { new PanelInfo( PanelIDs.StarDistance, typeof(UserControlStarDistance), "Nearest Stars", "StarDistance","Nearest stars from current position") },
             { new PanelInfo( PanelIDs.EstimatedValues, typeof(UserControlEstimatedValues),"Estimated Values", "EstimatedValues", "Estimated Scan values of bodies in system", transparent: false) },
@@ -204,7 +207,7 @@ namespace EDDiscovery
                 }
             }
 
-            userselectablepanelseperatorlistgroup = separs.ToArray();      
+            userselectablepanelseperatorlistgroup = separs.ToArray();
             displayablepanels = (from x in paneldefinition where x.PopoutID != PanelIDs.GroupMarker select x).ToList(); //remove groups..
             userselectablepanellist = (from x in displayablepanels where x.Description.Length>0 select x).ToList(); //remove non selectables..
 
@@ -214,7 +217,7 @@ namespace EDDiscovery
         [System.Diagnostics.DebuggerDisplay("{PopoutID} {WindowTitle}")]
         public class PanelInfo      // can hold user selectable, group or non user selectable panels
         {
-            public PanelIDs PopoutID;       
+            public PanelIDs PopoutID;
             public Type PopoutType;
             public string WindowTitle;
             public string WindowRefName;
@@ -316,7 +319,14 @@ namespace EDDiscovery
         public static UserControlCommonBase Create(PanelIDs p)  // can fail if P is crap
         {
             PanelInfo pi = GetPanelInfoByPanelID(p);
-            return pi != null ? (UserControls.UserControlCommonBase)Activator.CreateInstance(pi.PopoutType, null) : null;
+            if (pi != null)
+            {
+                var uccb = (UserControls.UserControlCommonBase)Activator.CreateInstance(pi.PopoutType, null);
+                uccb.panelid = p;
+                return uccb;
+            }
+
+            return null;
         }
 
         public static System.Windows.Forms.ToolStripMenuItem MakeToolStripMenuItem(PanelIDs p, System.EventHandler h)
@@ -334,18 +344,18 @@ namespace EDDiscovery
 
     public class PopOutControl
     {
-        public Forms.UserControlFormList usercontrolsforms;
+        public UserControlFormList usercontrolsforms;
         EDDiscoveryForm discoveryform;
 
         public PopOutControl( EDDiscoveryForm ed )
         {
             discoveryform = ed;
-            usercontrolsforms = new Forms.UserControlFormList(discoveryform);
+            usercontrolsforms = new UserControlFormList(discoveryform);
         }
 
         public int Count { get { return usercontrolsforms.Count;  } }
-        public Forms.UserControlForm GetByWindowsRefName(string name) { return usercontrolsforms.GetByWindowsRefName(name); }
-        public Forms.UserControlForm this[int i] { get { return usercontrolsforms[i]; } }
+        public UserControlForm GetByWindowsRefName(string name) { return usercontrolsforms.GetByWindowsRefName(name); }
+        public UserControlForm this[int i] { get { return usercontrolsforms[i]; } }
 
         private static string PopOutSaveID(PanelInformation.PanelIDs p)
         {
@@ -408,7 +418,7 @@ namespace EDDiscovery
 
         public UserControlCommonBase PopOut(PanelInformation.PanelIDs selected)
         {
-            Forms.UserControlForm tcf = usercontrolsforms.NewForm();
+            UserControlForm tcf = usercontrolsforms.NewForm();
             tcf.Icon = Properties.Resources.edlogo_3mo_icon;
 
             UserControlCommonBase ctrl = PanelInformation.Create(selected);
@@ -439,6 +449,11 @@ namespace EDDiscovery
             }
 
             return ctrl;
+        }
+
+        public bool AllowClose()
+        {
+            return usercontrolsforms.AllowClose();
         }
     }
 }

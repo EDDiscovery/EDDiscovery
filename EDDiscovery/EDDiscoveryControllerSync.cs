@@ -63,13 +63,17 @@ namespace EDDiscovery
             }
         }
 
+        const int ForcedFullDownloadDays = 28;      // beyond this time, we force a full download
+        const int ForcedAliasDownloadDays = 7;      // beyond this time, we force an alias hidden system download
+        const int UpdateFetchHours = 6;             // for an update fetch, its these number of hours at a time (Feb 2021 moved to 6 due to EDSM new server)
+
         public void CheckForSync()      // called in background init
         {
             if (!EDDOptions.Instance.NoSystemsLoad && EDDConfig.Instance.EDSMDownload)        // if enabled
             {
                 DateTime edsmdatetime = SystemsDatabase.Instance.GetLastEDSMRecordTimeUTC();
 
-                if (DateTime.UtcNow.Subtract(edsmdatetime).TotalDays >= 28)   // 600k ish per 12hours.  So 33MB.  Much less than a full download which is (23/1/2018) 2400MB, or 600MB compressed
+                if (DateTime.UtcNow.Subtract(edsmdatetime).TotalDays >= ForcedFullDownloadDays)   
                 {
                     System.Diagnostics.Debug.WriteLine("EDSM Full system data download ordered, time since {0}", DateTime.UtcNow.Subtract(edsmdatetime).TotalDays);
                     syncstate.perform_edsm_fullsync = true;       // do a full sync.
@@ -77,7 +81,7 @@ namespace EDDiscovery
 
                 DateTime aliasdatetime = SystemsDatabase.Instance.GetLastAliasDownloadTime();
 
-                if (DateTime.UtcNow.Subtract(aliasdatetime).TotalDays > 6.5)     // Get this data once every week.
+                if (DateTime.UtcNow.Subtract(aliasdatetime).TotalDays >= ForcedAliasDownloadDays)     
                     syncstate.perform_edsm_alias_sync = true;
 
                 if (syncstate.perform_edsm_alias_sync || syncstate.perform_edsm_fullsync)
@@ -123,15 +127,13 @@ namespace EDDiscovery
                             // Download new systems
                             try
                             {
-                                string edsmsystems = Path.Combine(EliteConfigInstance.InstanceOptions.AppDataDirectory, "edsmsystems.json.gz");
+                                string edsmsystems = Path.Combine(EDDOptions.Instance.AppDataDirectory, "edsmsystems.json.gz");
 
                                 ReportSyncProgress("Performing full download of System Data from EDSM");
 
-                                Debug.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Full system download using URL " + EliteConfigInstance.InstanceConfig.EDSMFullSystemsURL);
+                                Debug.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Full system download using URL " + EDDConfig.Instance.EDSMFullSystemsURL);
 
-                                bool success = BaseUtils.DownloadFile.HTTPDownloadFile(EliteConfigInstance.InstanceConfig.EDSMFullSystemsURL, edsmsystems, false, out bool newfile);
-
-                                //edsmsystems = Path.Combine(EliteConfigInstance.InstanceOptions.AppDataDirectory, "edsmtest.json");
+                                bool success = BaseUtils.DownloadFile.HTTPDownloadFile(EDDConfig.Instance.EDSMFullSystemsURL, edsmsystems, false, out bool newfile);
 
                                 syncstate.perform_edsm_fullsync = false;
 
@@ -164,7 +166,8 @@ namespace EDDiscovery
                             try
                             {
                                 EDSMClass edsm = new EDSMClass();
-                                string jsonhidden = edsm.GetHiddenSystems();
+                                string edsmhiddensystems = Path.Combine(EDDOptions.Instance.AppDataDirectory, "edsmhiddensystems.json");
+                                string jsonhidden = edsm.GetHiddenSystems(edsmhiddensystems);
 
                                 if (jsonhidden != null)
                                 {
@@ -181,7 +184,7 @@ namespace EDDiscovery
                         }
                     }
 
-                    if (!PendingClose)
+                    if (!PendingClose)          // perform an update sync to get any new EDSM data
                     {
                         syncstate.edsm_updatesync_count = UpdateSync(grids, () => PendingClose, ReportSyncProgress);
                     }
@@ -223,23 +226,21 @@ namespace EDDiscovery
             Debug.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Perform sync completed");
         }
 
-        private static DateTime MinEDSMDate = new DateTime(2015, 1, 1);
-        private static DateTime ED21date = new DateTime(2016, 5, 26);
-        private static DateTime ED23date = new DateTime(2017, 4, 11);
-        private static DateTime ED30date = new DateTime(2018, 2, 27);
-
         public long UpdateSync(bool[] grididallow, Func<bool> PendingClose, Action<string> ReportProgress)
         {
             DateTime lastrecordtime = SystemsDatabase.Instance.GetLastEDSMRecordTimeUTC();
 
-            if (lastrecordtime < MinEDSMDate)
-                lastrecordtime = MinEDSMDate;
+            DateTime maximumupdatetimewindow = DateTime.UtcNow.AddDays(-ForcedFullDownloadDays);        // limit download to this amount of days
+            if (lastrecordtime < maximumupdatetimewindow)
+                lastrecordtime = maximumupdatetimewindow;               // this stops crazy situations where somehow we have a very old date but the full sync did not take care of it
 
             long updates = 0;
 
             double fetchmult = 1;
 
-            while (lastrecordtime < DateTime.UtcNow.Subtract(new TimeSpan(0, 30, 0)))     // stop at X mins before now, so we don't get in a condition
+            DateTime minimumfetchspan = DateTime.UtcNow.AddHours(-UpdateFetchHours / 2);        // we don't bother fetching if last record time is beyond this point
+
+            while (lastrecordtime < minimumfetchspan)                                   // stop at X mins before now, so we don't get in a condition
             {                                                                           // where we do a set, the time moves to just before now, 
                                                                                         // and we then do another set with minimum amount of hours
                 if (PendingClose())
@@ -250,21 +251,14 @@ namespace EDDiscovery
 
                 EDSMClass edsm = new EDSMClass();
 
-                double hourstofetch = 3;
-
-                if (lastrecordtime < ED21date.AddHours(-48))
-                    hourstofetch = 48;
-                else if (lastrecordtime < ED23date.AddHours(-12))
-                    hourstofetch = 12;
-                else if (lastrecordtime < ED30date.AddHours(-6))
-                    hourstofetch = 6;
+                double hourstofetch = UpdateFetchHours;        //EDSM new server feb 2021, more capable, 
 
                 DateTime enddate = lastrecordtime + TimeSpan.FromHours(hourstofetch * fetchmult);
                 if (enddate > DateTime.UtcNow)
                     enddate = DateTime.UtcNow;
 
                 LogLine($"Downloading systems from UTC {lastrecordtime.ToUniversalTime().ToString()} to {enddate.ToUniversalTime().ToString()}");
-                System.Diagnostics.Debug.WriteLine($"Downloading systems from UTC {lastrecordtime.ToUniversalTime().ToString()} to {enddate.ToUniversalTime().ToString()}");
+                System.Diagnostics.Debug.WriteLine($"Downloading systems from UTC {lastrecordtime.ToUniversalTime().ToString()} to {enddate.ToUniversalTime().ToString()} {hourstofetch}");
 
                 string json = null;
                 BaseUtils.ResponseData response;
@@ -334,9 +328,10 @@ namespace EDDiscovery
 
                 try
                 {
-                    ReportProgress($"EDSM star database update from UTC " + lastrecordtime.ToUniversalTime().ToString());
+                    ReportProgress($"EDSM star database update from UTC " + lastrecordtime.ToUniversalTime().ToString() );
 
                     updated = SystemsDB.ParseEDSMJSONString(json, grididallow, ref lastrecordtime, PendingClose, ReportProgress, "");
+
                     System.Diagnostics.Debug.WriteLine($".. Updated {updated} to {lastrecordtime.ToUniversalTime().ToString()}");
                     System.Diagnostics.Debug.WriteLine("Updated to time {0}", lastrecordtime.ToUniversalTime());
 

@@ -49,15 +49,15 @@ namespace EDDiscovery.Actions
             {
                 List<string> exp;
 
-                if (ap.functions.ExpandStrings(ctrl, out exp) != BaseUtils.Functions.ExpandResult.Failed)
+                if (ap.Functions.ExpandStrings(ctrl, out exp) != BaseUtils.Functions.ExpandResult.Failed)
                 {
                     if (exp.Count == 1)
                     {
-                        ap["MenuPresent"] = (ap.actioncontroller as ActionController).DiscoveryForm.IsMenuItemInstalled(exp[0]) ? "1" : "0";
+                        ap["MenuPresent"] = (ap.ActionController as ActionController).DiscoveryForm.IsMenuItemInstalled(exp[0]) ? "1" : "0";
                     }
                     else
                     {
-                        if (!(ap.actioncontroller as ActionController).DiscoveryForm.AddNewMenuItemToAddOns(exp[1], exp[2], (exp.Count >= 4) ? exp[3] : "None", exp[0], ap.actionfile.name))
+                        if (!(ap.ActionController as ActionController).DiscoveryForm.AddNewMenuItemToAddOns(exp[1], exp[2], (exp.Count >= 4) ? exp[3] : "None", exp[0], ap.ActionFile.Name))
                             ap.ReportError("MenuItem cannot add to menu, check menu");
                     }
                 }

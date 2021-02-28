@@ -64,18 +64,20 @@ namespace EDDiscovery.Properties {
         ///   Looks up a localized string similar to Program Concept by:
         ///Cmdr Finwen  (Robert Wahlström)
         ///
+        ///Development, Release, Videos by:
+        ///Cmdr Robby
+        ///
         ///Developers for this release series:
-        ///Robby (Releaser)
-        ///Bravada Cadelanne, Iain Ross, Andrea Spada
+        ///Bravada Cadelanne
         ///
         ///Images Captured by:
         ///Spandino, Robby, Eahlstan, Ettanin, CompleteNOOB from Frontier Elite Dangerous Images (C) Frontier Developments PLC
         ///
         ///Languages Translations:
-        ///Kmizole, Potatossuaro, Zafford, Andrea Spada, Goscickiw, Nats-ji, Jay
+        ///Keath Milligan, Kmizole, Potatossuaro, Zafford, Andrea Spada, Goscickiw, Nats-ji, Jay
         ///
         ///Previous Contributors:
-        ///Carcher99, IGAU, EoD, Imathrowback, phwoelfel, Robosa, Daniel-finger, Phroggie, Finwen, Corbi [rest of string was truncated]&quot;;.
+        ///Iain Ross, Andrea Spada, Carcher99, IGAU, EoD, Imathrowback, phwoelfel,  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Credits {
             get {
@@ -90,6 +92,17 @@ namespace EDDiscovery.Properties {
             get {
                 object obj = ResourceManager.GetObject("EDCD", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ELITE DANGEROUS DISCOVERY TERMS AND CONDITIONS - February 2021
+        ///1. This code is licensed under the Apache License Version 2.0, January 2004.  See below for the Apache license.
+        ///2. DOWNLOADING OF DATA FROM GITHUB.COM/EDDISCOVERY.  From this site, EDD automatically checks at start up for the following information: New releases, Updated Bookmarks, New Expeditions, New Exploration list files, Updated Maps, Notifications.  It automatically downloads to your APPDATA folder any new or updated files detected.  None [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string EDD_Licence_Mono {
+            get {
+                return ResourceManager.GetString("EDD_Licence_Mono", resourceCulture);
             }
         }
         
@@ -110,23 +123,6 @@ namespace EDDiscovery.Properties {
             get {
                 object obj = ResourceManager.GetObject("edlogo_3mo_icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to History Import Help
-        ///
-        ///Cmdr - select the commander to import the history against.
-        ///File - the Select button will open a file browser dialog to allow the source file to be selected.
-        ///Header? - check this box if your import file has a header row.
-        ///Delimiter - use the radio buttons to select &apos;Tab&apos; or &apos;Other&apos;, if &apos;Other&apos; then enter the delimiter character in the box.
-        ///
-        ///Arrival Date - the column in the file containing the date of arrival in a system.
-        ///Arrival Time - the column in the file containing the time of [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string ImportHelp {
-            get {
-                return ResourceManager.GetString("ImportHelp", resourceCulture);
             }
         }
         
@@ -391,15 +387,6 @@ namespace EDDiscovery.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://github.com/EDDiscovery/EDDiscovery/blob/master/LICENSE.md.
-        /// </summary>
-        internal static string URLProjectLicense {
-            get {
-                return ResourceManager.GetString("URLProjectLicense", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to https://www.youtube.com/channel/UC6CMbualdRleR47ocYPnokg/.
         /// </summary>
         internal static string URLProjectVideos {
@@ -423,6 +410,15 @@ namespace EDDiscovery.Properties {
         internal static string URLProjectWiki {
             get {
                 return ResourceManager.GetString("URLProjectWiki", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://www.youtube.com/embed/Scv9JiHZ10Y?autoplay=1.
+        /// </summary>
+        internal static string URLReleaseVideo {
+            get {
+                return ResourceManager.GetString("URLReleaseVideo", resourceCulture);
             }
         }
         

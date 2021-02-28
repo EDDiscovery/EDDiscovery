@@ -41,7 +41,7 @@ namespace EDDiscovery.Actions
         public override bool ExecuteAction(ActionProgramRun ap)
         {
             string res;
-            if (ap.functions.ExpandString(UserData, out res) != BaseUtils.Functions.ExpandResult.Failed)
+            if (ap.Functions.ExpandString(UserData, out res) != BaseUtils.Functions.ExpandResult.Failed)
             {
                 StringParser sp = new StringParser(res);
 
@@ -61,7 +61,7 @@ namespace EDDiscovery.Actions
                     cmdname = sp.NextWord();
                 }
 
-                EDDiscoveryForm discoveryform = (ap.actioncontroller as ActionController).DiscoveryForm;
+                EDDiscoveryForm discoveryform = (ap.ActionController as ActionController).DiscoveryForm;
 
                 if (cmdname != null )
                 {
@@ -116,7 +116,7 @@ namespace EDDiscovery.Actions
                             }
                             else if (cmdname.Equals("GMO", StringComparison.InvariantCultureIgnoreCase))
                             {
-                                EliteDangerousCore.EDSM.GalacticMapObject gmo = discoveryform.galacticMapping.Find(name, true, true);
+                                EliteDangerousCore.EDSM.GalacticMapObject gmo = discoveryform.galacticMapping.Find(name, true);
 
                                 if (gmo != null)
                                 {
@@ -130,7 +130,7 @@ namespace EDDiscovery.Actions
                             else if (cmdname.Equals("NOTE", StringComparison.InvariantCultureIgnoreCase))
                             {
                                 SystemNoteClass nc = SystemNoteClass.GetNoteOnSystem(name);        // has it got a note?
-                                ISystem sc = discoveryform.history.FindSystem(name);
+                                ISystem sc = discoveryform.history.FindSystem(name, discoveryform.galacticMapping, true);
 
                                 if ( sc != null && sc.HasCoordinate && nc != null )
                                 {

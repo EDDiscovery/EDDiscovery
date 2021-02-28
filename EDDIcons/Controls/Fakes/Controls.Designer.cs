@@ -93,6 +93,16 @@ namespace EDDiscovery.Icons {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap Bookmarks_EditSystem {
+            get {
+                object obj = ResourceManager.GetObject("Bookmarks_EditSystem", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap Bookmarks_New {
             get {
                 object obj = ResourceManager.GetObject("Bookmarks_New", resourceCulture);

@@ -32,7 +32,7 @@ namespace EDDiscovery.UserControls
             else
             {
                 string er;
-                List<HistoryEntry> ret = (from s in he where cond.CheckFilterTrue(s.journalEntry, new BaseUtils.Variables[] { othervars, new BaseUtils.Variables("Note", s.snc?.Note ?? "") }, out er, null) select s).ToList();
+                List<HistoryEntry> ret = (from s in he where cond.CheckFilterTrue(s.journalEntry, new BaseUtils.Variables[] { othervars, new BaseUtils.Variables("Note", s.SNC?.Note ?? "") }, out er, null) select s).ToList();
                 return ret;
             }
         }
@@ -41,7 +41,7 @@ namespace EDDiscovery.UserControls
         {
             string er;
             return cond.CheckFilterFalse(he.journalEntry, he.journalEntry.EventTypeStr,
-                new BaseUtils.Variables[] { othervars , new BaseUtils.Variables("Note", he.snc?.Note ?? "") }, out er, null);     // true it should be included
+                new BaseUtils.Variables[] { othervars , new BaseUtils.Variables("Note", he.SNC?.Note ?? "") }, out er, null);     // true it should be included
         }
 
         static public List<HistoryEntry> FilterHistory(List<HistoryEntry> he, BaseUtils.ConditionLists cond, BaseUtils.Variables othervars, out int count)    // filter in all entries
@@ -53,7 +53,7 @@ namespace EDDiscovery.UserControls
             {
                 string er;
                 List<HistoryEntry> ret = (from s in he where cond.CheckFilterFalse(s.journalEntry, s.journalEntry.EventTypeStr,
-                            new BaseUtils.Variables[] { othervars, new BaseUtils.Variables("Note", s.snc?.Note ?? "") }, 
+                            new BaseUtils.Variables[] { othervars, new BaseUtils.Variables("Note", s.SNC?.Note ?? "") }, 
                             out er, null) select s).ToList();
 
                 count = he.Count - ret.Count;

@@ -23,6 +23,7 @@ using ActionLanguage;
 using EliteDangerousCore.DB;
 using EliteDangerousCore;
 
+
 namespace EDDiscovery.Actions
 {
     class ActionScan : ActionBase
@@ -43,7 +44,7 @@ namespace EDDiscovery.Actions
         public override bool ExecuteAction(ActionProgramRun ap)
         {
             string res;
-            if (ap.functions.ExpandString(UserData, out res) != BaseUtils.Functions.ExpandResult.Failed)
+            if (ap.Functions.ExpandString(UserData, out res) != BaseUtils.Functions.ExpandResult.Failed)
             {
                 StringParser sp = new StringParser(res);
 
@@ -72,47 +73,40 @@ namespace EDDiscovery.Actions
 
                 if (cmdname != null)
                 {
-                    StarScan scan = (ap.actioncontroller as ActionController).HistoryList.StarScan;
-                    ISystem sc = SystemCache.FindSystem(cmdname);
+                    StarScan scan = (ap.ActionController as ActionController).HistoryList.StarScan;
 
-                    if (sc == null)
-                    {
-                        sc = new SystemClass(cmdname);
-                        sc.EDSMID = 0;
-                    }
-
-                    StarScan.SystemNode sn = scan.FindSystemSynchronous(sc, edsm);
+                    StarScan.SystemNode sn = scan.FindSystemSynchronous(new SystemClass(cmdname), edsm);
 
                     System.Globalization.CultureInfo ct = System.Globalization.CultureInfo.InvariantCulture;
 
                     if ( sn != null )
                     {
                         int starno = 1;
-                        ap[prefix + "Stars"] = sn.starnodes.Count.ToString(ct);
+                        ap[prefix + "Stars"] = sn.StarNodes.Count.ToString(ct);
 
-                        foreach (KeyValuePair<string, StarScan.ScanNode> scannode in sn.starnodes)
+                        foreach (KeyValuePair<string, StarScan.ScanNode> scannode in sn.StarNodes)
                         {
                             DumpInfo(ap, scannode, prefix + "Star_" + starno.ToString(ct) , "_Planets");
 
                             int pcount = 1;
 
-                            if (scannode.Value.children != null)
+                            if (scannode.Value.Children != null)
                             {
-                                foreach (KeyValuePair<string, StarScan.ScanNode> planetnodes in scannode.Value.children)
+                                foreach (KeyValuePair<string, StarScan.ScanNode> planetnodes in scannode.Value.Children)
                                 {
                                     DumpInfo(ap, planetnodes, prefix + "Planet_" + starno.ToString(ct) + "_" + pcount.ToString(ct) , "_Moons");
 
-                                    if (planetnodes.Value.children != null)
+                                    if (planetnodes.Value.Children != null)
                                     {
                                         int mcount = 1;
-                                        foreach (KeyValuePair<string, StarScan.ScanNode> moonnodes in planetnodes.Value.children)
+                                        foreach (KeyValuePair<string, StarScan.ScanNode> moonnodes in planetnodes.Value.Children)
                                         {
                                             DumpInfo(ap, moonnodes, prefix + "Moon_" + starno.ToString(ct) + "_" + pcount.ToString(ct) + "_" + mcount.ToString(ct) , "_Submoons");
 
-                                            if (moonnodes.Value.children != null)
+                                            if (moonnodes.Value.Children != null)
                                             {
                                                 int smcount = 1;
-                                                foreach (KeyValuePair<string, StarScan.ScanNode> submoonnodes in moonnodes.Value.children)
+                                                foreach (KeyValuePair<string, StarScan.ScanNode> submoonnodes in moonnodes.Value.Children)
                                                 {
                                                     DumpInfo(ap, submoonnodes, prefix + "SubMoon_" + starno.ToString(ct) + "_" + pcount.ToString(ct) + "_" + mcount.ToString(ct) + "_" + smcount.ToString(ct),null);
                                                     smcount++;
@@ -149,9 +143,9 @@ namespace EDDiscovery.Actions
             EliteDangerousCore.JournalEvents.JournalScan sc = scannode.Value.ScanData;
 
             ap[prefix] = scannode.Key;
-            ap[prefix + "_type"] = scannode.Value.type.ToString();
-            ap[prefix + "_assignedname"] = scannode.Value.ownname;
-            ap[prefix + "_assignedfullname"] = scannode.Value.fullname;
+            ap[prefix + "_type"] = scannode.Value.NodeType.ToString();
+            ap[prefix + "_assignedname"] = scannode.Value.OwnName;
+            ap[prefix + "_assignedfullname"] = scannode.Value.FullName;
             ap[prefix + "_data"] = (sc != null) ? "1" : "0";
             ap[prefix + "_signals"] = scannode.Value.Signals != null ? EliteDangerousCore.JournalEvents.JournalSAASignalsFound.SignalList(scannode.Value.Signals, 0, ",", true) : "";
 
@@ -160,6 +154,7 @@ namespace EDDiscovery.Actions
                 ap[prefix + "_isstar"] = sc.IsStar ? "1" : "0";
                 ap[prefix + "_edsmbody"] = sc.IsEDSMBody ? "1" : "0";
                 ap[prefix + "_bodyname"] = sc.BodyName;
+                ap[prefix + "_bodydesignation"] = sc.BodyDesignationOrName;
                 ap[prefix + "_orbitalperiod"] = sc.nOrbitalPeriod.ToNANNullSafeString("0.###");
                 ap[prefix + "_rotationperiod"] = sc.nRotationPeriod.ToNANNullSafeString("0.###");
                 ap[prefix + "_surfacetemperature"] = sc.nSurfaceTemperature.ToNANNullSafeString("0.###");
@@ -172,8 +167,9 @@ namespace EDDiscovery.Actions
                     ap[prefix + "_stellarmass"] = (sc.nStellarMass ?? 0).ToString("0.###");
                     ap[prefix + "_age"] = sc.nAge.ToNANNullSafeString("0.##");
                     ap[prefix + "_mag"] = sc.nAbsoluteMagnitude.ToNANNullSafeString("0");
-                    ap[prefix + "_habinner"] = sc.HabitableZoneInner.ToNANNullSafeString("0.##");
-                    ap[prefix + "_habouter"] = sc.HabitableZoneOuter.ToNANNullSafeString("0.##");
+                    EliteDangerousCore.JournalEvents.JournalScan.HabZones hz = sc.GetHabZones();
+                    ap[prefix + "_habinner"] = hz != null ? hz.HabitableZoneInner.ToString("0.##") : "";
+                    ap[prefix + "_habouter"] = hz != null ? hz.HabitableZoneOuter.ToString("0.##") : "";
                 }
                 else
                 {
@@ -194,8 +190,8 @@ namespace EDDiscovery.Actions
 
             if ( subname != null )
             {
-                int totalchildren = (scannode.Value.children != null) ? scannode.Value.children.Count : 0;
-                int totalbodies = (scannode.Value.children != null) ? (from x in scannode.Value.children where x.Value.type == StarScan.ScanNodeType.body select x).Count() : 0;
+                int totalchildren = (scannode.Value.Children != null) ? scannode.Value.Children.Count : 0;
+                int totalbodies = (scannode.Value.Children != null) ? (from x in scannode.Value.Children where x.Value.NodeType == StarScan.ScanNodeType.body select x).Count() : 0;
                 ap[prefix + subname] = totalchildren.ToStringInvariant();
                 ap[prefix + subname + "_Only"] = totalbodies.ToStringInvariant();       // we do this, because children can be other than bodies..
             }
@@ -220,7 +216,7 @@ namespace EDDiscovery.Actions
         public override bool ExecuteAction(ActionProgramRun ap)
         {
             string res;
-            if (ap.functions.ExpandString(UserData, out res) != BaseUtils.Functions.ExpandResult.Failed)
+            if (ap.Functions.ExpandString(UserData, out res) != BaseUtils.Functions.ExpandResult.Failed)
             {
                 StringParser sp = new StringParser(res);
 
@@ -240,9 +236,18 @@ namespace EDDiscovery.Actions
                     cmdname = sp.NextQuotedWord();
                 }
 
+                bool edsm = false;
+                if (cmdname != null && cmdname.Equals("EDSM", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    edsm = true;
+                    cmdname = sp.NextQuotedWord();
+                }
+
                 if (cmdname != null)
                 {
-                    ISystem sc = SystemCache.FindSystem(cmdname);
+                    EDDiscoveryForm f = ((ActionController)ap.ActionController).DiscoveryForm;
+                    ISystem sc = f.history.FindSystem(cmdname, f.galacticMapping, edsm);        // find thru history, will include history entries
+
                     ap[prefix + "Found"] = sc != null ? "1" : "0";
 
                     if (sc != null)
@@ -250,7 +255,7 @@ namespace EDDiscovery.Actions
                         BaseUtils.Variables vars = new BaseUtils.Variables();
                         ActionVars.SystemVars(vars, sc, prefix);
                         ap.Add(vars);
-                        ActionVars.SystemVarsFurtherInfo(ap, (ap.actioncontroller as ActionController).HistoryList, sc, prefix);
+                        ActionVars.SystemVarsFurtherInfo(ap, (ap.ActionController as ActionController).HistoryList, sc, prefix);
 
                         string options = sp.NextWord();
 
@@ -269,7 +274,7 @@ namespace EDDiscovery.Actions
                                 ret_prefix = prefix;
 
                                 computer.CalculateClosestSystems(sc,
-                                    (sys,list)=> (apr.actioncontroller as ActionController).DiscoveryForm.BeginInvoke(new Action(() => NewStarListComputed(sys, list))),
+                                    (sys,list)=> (apr.ActionController as ActionController).DiscoveryForm.BeginInvoke(new Action(() => NewStarListComputed(sys, list))),
                                     (mindist>0) ? (number-1) : number,          // adds an implicit 1 on for centre star
                                     mindist, maxdist, !cube);
 
@@ -299,7 +304,7 @@ namespace EDDiscovery.Actions
             {
                 string p = ret_prefix + (i++).ToStringInvariant() + "_";
                 ActionVars.SystemVars(apr.variables, s.Value, p);
-                ActionVars.SystemVarsFurtherInfo(apr, (apr.actioncontroller as ActionController).HistoryList, s.Value, p);
+                ActionVars.SystemVarsFurtherInfo(apr, (apr.ActionController as ActionController).HistoryList, s.Value, p);
                 apr[p + "Dist"] = Math.Sqrt(s.Key).ToStringInvariant("0.##");
             }
 

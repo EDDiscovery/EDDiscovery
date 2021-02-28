@@ -449,13 +449,13 @@ namespace EDDiscovery.UserControls
             //string debugt = item.Journalid + "  " + item.System.id_edsm + " " + item.System.GetHashCode() + " "; // add on for debug purposes to a field below
 
             DateTime time = EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(item.EventTimeUTC);
-            item.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
-            string note = (item.snc != null) ? item.snc.Note : "";
+            item.FillInformation(out string EventDescription, out string EventDetailedInfo);
+            string note = (item.SNC != null) ? item.SNC.Note : "";
 
             if (search.HasChars())
             {
                 string timestr = time.ToString();
-                int rown = EDDConfig.Instance.OrderRowsInverted ? item.Indexno : (discoveryform.history.Count - item.Indexno + 1);
+                int rown = EDDConfig.Instance.OrderRowsInverted ? item.EntryNumber : (discoveryform.history.Count - item.EntryNumber + 1);
                 string entryrow = rown.ToStringInvariant();
                 bool matched = timestr.IndexOf(search, StringComparison.InvariantCultureIgnoreCase) >= 0 ||
                                 item.EventSummary.IndexOf(search, StringComparison.InvariantCultureIgnoreCase) >= 0 ||
@@ -468,6 +468,7 @@ namespace EDDiscovery.UserControls
 
             var rw = dataGridViewTravel.RowTemplate.Clone() as DataGridViewRow;
 
+            //rw.CreateCells(dataGridViewTravel, time, "", item.Journalid + ":" + item.EventSummary, EventDescription, note);
             rw.CreateCells(dataGridViewTravel, time, "", item.EventSummary, EventDescription, note);
 
             rw.Tag = item;  //tag on row
@@ -612,7 +613,7 @@ namespace EDDiscovery.UserControls
 
             if (rowsbyjournalid.ContainsKey(he.Journalid) ) // if we can find the grid entry
             {
-                string s = (he.snc != null) ? he.snc.Note : "";     // snc may have gone null, so cope with it
+                string s = (he.SNC != null) ? he.SNC.Note : "";     // snc may have gone null, so cope with it
                 //System.Diagnostics.Debug.WriteLine("TG:Note changed " + s);
                 rowsbyjournalid[he.Journalid].Cells[Columns.Note].Value = s;
             }
@@ -657,7 +658,7 @@ namespace EDDiscovery.UserControls
             if (he == null)                                 // otherwise, ignore it and return.
                 return;
 
-            int rown = EDDConfig.Instance.OrderRowsInverted ? he.Indexno : (totalentries - he.Indexno + 1);
+            int rown = EDDConfig.Instance.OrderRowsInverted ? he.EntryNumber : (totalentries - he.EntryNumber + 1);
             string rowIdx = rown.ToString();
 
             var headerBounds = new Rectangle(e.RowBounds.Left, e.RowBounds.Top, grid.RowHeadersWidth, e.RowBounds.Height);
@@ -745,65 +746,79 @@ namespace EDDiscovery.UserControls
         {
             if (dataGridViewTravel.LeftClickRowValid)                                                   // Click expands it..
             {
-                leftclickhe.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
-                DataGridViewRow row = dataGridViewTravel.Rows[dataGridViewTravel.LeftClickRow];
-
-                bool expanded = row.Cells[Columns.Information].Tag != null;
-
-                if (expanded) // put it back to original text
+                if (e.ColumnIndex == ColumnNote.Index)
                 {
-                    row.Cells[Columns.Information].Value = EventDescription;
-                    for (int i = 0; i < row.Cells.Count; i++)
-                        row.Cells[i].Style.WrapMode = DataGridViewTriState.NotSet;
-                    row.Cells[Columns.Information].Tag = null;
+                    using (Forms.SetNoteForm noteform = new Forms.SetNoteForm(leftclickhe, discoveryform))
+                    {
+                        if (noteform.ShowDialog(FindForm()) == DialogResult.OK)
+                        {
+                            leftclickhe.SetJournalSystemNoteText(noteform.NoteText, true, EDCommander.Current.SyncToEdsm);
+                            discoveryform.NoteChanged(this, leftclickhe, true);
+                        }
+                    }
                 }
                 else
                 {
-                    string infodetailed = EventDescription.AppendPrePad(EventDetailedInfo, Environment.NewLine);        // make up detailed line
-                    if (leftclickhe.journalEntry is EliteDangerousCore.JournalEvents.JournalLocOrJump)
-                    {
-                        string travelinfo = leftclickhe.TravelInfo();
-                        if (travelinfo != null)
-                            infodetailed = travelinfo + Environment.NewLine + infodetailed;
-                    }
+                    leftclickhe.FillInformation(out string EventDescription, out string EventDetailedInfo);
+                    DataGridViewRow row = dataGridViewTravel.Rows[dataGridViewTravel.LeftClickRow];
 
-                    using (Graphics g = Parent.CreateGraphics())
+                    bool expanded = row.Cells[Columns.Information].Tag != null;
+
+                    if (expanded) // put it back to original text
                     {
-                        int maxh = 0;
+                        row.Cells[Columns.Information].Value = EventDescription;
                         for (int i = 0; i < row.Cells.Count; i++)
-                        {
-                            if (row.Cells[i].Value is string)
-                            {
-                                string s = i == Columns.Information ? infodetailed : (string)row.Cells[i].Value;
-                                int h = (int)(g.MeasureString(s, dataGridViewTravel.Font, dataGridViewTravel.Columns[i].Width - 4).Height + 2);
-                                maxh = Math.Max(maxh, h);
-                            }
-                        }
-
-                        if (maxh > dataGridViewTravel.Height * 3 / 4) // unreasonable amount of space to show it.
-                        {
-                            ExtendedControls.InfoForm info = new ExtendedControls.InfoForm();
-                            info.Info(EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(leftclickhe.EventTimeUTC) + ": " + leftclickhe.EventSummary,
-                                FindForm().Icon, infodetailed);
-                            info.Size = new Size(1200, 800);
-                            info.Show(FindForm());
-                        }
-                        else
-                        {
-                            row.Cells[Columns.Information].Value = infodetailed;
-
-                            if (!extCheckBoxWordWrap.Checked)
-                            {
-                                for (int i = 0; i < row.Cells.Count; i++)
-                                    row.Cells[i].Style.WrapMode = DataGridViewTriState.True;
-                            }
-                        }
-
-                        row.Cells[Columns.Information].Tag = true;      // mark expanded
+                            row.Cells[i].Style.WrapMode = DataGridViewTriState.NotSet;
+                        row.Cells[Columns.Information].Tag = null;
                     }
-                }
+                    else
+                    {
+                        string infodetailed = EventDescription.AppendPrePad(EventDetailedInfo, Environment.NewLine);        // make up detailed line
+                        if (leftclickhe.journalEntry is EliteDangerousCore.JournalEvents.JournalLocOrJump)
+                        {
+                            string travelinfo = leftclickhe.TravelInfo();
+                            if (travelinfo != null)
+                                infodetailed = travelinfo + Environment.NewLine + infodetailed;
+                        }
 
-                dataViewScrollerPanel.UpdateScroll();
+                        using (Graphics g = Parent.CreateGraphics())
+                        {
+                            int maxh = 0;
+                            for (int i = 0; i < row.Cells.Count; i++)
+                            {
+                                if (row.Cells[i].Value is string)
+                                {
+                                    string s = i == Columns.Information ? infodetailed : (string)row.Cells[i].Value;
+                                    int h = (int)(g.MeasureString(s, dataGridViewTravel.Font, dataGridViewTravel.Columns[i].Width - 4).Height + 2);
+                                    maxh = Math.Max(maxh, h);
+                                }
+                            }
+
+                            if (maxh > dataGridViewTravel.Height * 3 / 4) // unreasonable amount of space to show it.
+                            {
+                                ExtendedControls.InfoForm info = new ExtendedControls.InfoForm();
+                                info.Info(EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(leftclickhe.EventTimeUTC) + ": " + leftclickhe.EventSummary,
+                                    FindForm().Icon, infodetailed);
+                                info.Size = new Size(1200, 800);
+                                info.Show(FindForm());
+                            }
+                            else
+                            {
+                                row.Cells[Columns.Information].Value = infodetailed;
+
+                                if (!extCheckBoxWordWrap.Checked)
+                                {
+                                    for (int i = 0; i < row.Cells.Count; i++)
+                                        row.Cells[i].Style.WrapMode = DataGridViewTriState.True;
+                                }
+                            }
+
+                            row.Cells[Columns.Information].Tag = true;      // mark expanded
+                        }
+                    }
+
+                    dataViewScrollerPanel.UpdateScroll();
+                }
             }
         }
 
@@ -1001,7 +1016,7 @@ namespace EDDiscovery.UserControls
             {
                 foreach (HistoryEntry sp in listsyspos)
                 {
-                    sp.journalEntry.UpdateCommanderID(movefrm.selectedCommander.Nr);
+                    sp.journalEntry.UpdateCommanderID(movefrm.selectedCommander.Id);
                 }
 
                 foreach (DataGridViewRow row in selectedRows)
@@ -1085,14 +1100,7 @@ namespace EDDiscovery.UserControls
         {
             this.Cursor = Cursors.WaitCursor;
             EliteDangerousCore.EDSM.EDSMClass edsm = new EDSMClass();
-            long? id_edsm = rightclickhe.System?.EDSMID;
-
-            if (id_edsm <= 0)
-            {
-                id_edsm = null;
-            }
-
-            if (!edsm.ShowSystemInEDSM(rightclickhe.System.Name, id_edsm))
+            if (!edsm.ShowSystemInEDSM(rightclickhe.System.Name))
                 ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable".T(EDTx.UserControlTravelGrid_NotSynced));
 
             this.Cursor = Cursors.Default;
@@ -1133,9 +1141,9 @@ namespace EDDiscovery.UserControls
             {
                 if (noteform.ShowDialog(FindForm()) == DialogResult.OK)
                 {
-                    rightclickhe.SetJournalSystemNoteText(noteform.NoteText, true , EDCommander.Current.SyncToEdsm);
+                    rightclickhe.SetJournalSystemNoteText(noteform.NoteText, true, EDCommander.Current.SyncToEdsm);
 
-                    discoveryform.NoteChanged(this,rightclickhe, true);
+                    discoveryform.NoteChanged(this, rightclickhe, true);
                 }
             }
         }
@@ -1188,11 +1196,11 @@ namespace EDDiscovery.UserControls
 
         private void gotoEntryNumberToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            int curi = rightclickhe != null ? (EDDConfig.Instance.OrderRowsInverted ? rightclickhe.Indexno : (discoveryform.history.Count - rightclickhe.Indexno + 1)) : 0;
+            int curi = rightclickhe != null ? (EDDConfig.Instance.OrderRowsInverted ? rightclickhe.EntryNumber : (discoveryform.history.Count - rightclickhe.EntryNumber + 1)) : 0;
             int selrow = dataGridViewTravel.JumpToDialog(this.FindForm(), curi, r =>
             {
                 HistoryEntry he = r.Tag as HistoryEntry;
-                return EDDConfig.Instance.OrderRowsInverted ? he.Indexno : (discoveryform.history.Count - he.Indexno + 1);
+                return EDDConfig.Instance.OrderRowsInverted ? he.EntryNumber : (discoveryform.history.Count - he.EntryNumber + 1);
             });
 
             if (selrow >= 0)
@@ -1437,7 +1445,7 @@ namespace EDDiscovery.UserControls
                             fsd.FuelUsed,
                             fsd.FuelLevel,
                             fsd.BoostUsed,
-                            he.snc != null ? he.snc.Note : "",
+                            he.SNC != null ? he.SNC.Note : "",
                         };
 
                     };
@@ -1453,7 +1461,7 @@ namespace EDDiscovery.UserControls
                     grd.GetLine += delegate (int r)
                     {
                         HistoryEntry he = (HistoryEntry)dataGridViewTravel.Rows[r].Tag;
-                        he.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
+                        he.FillInformation(out string EventDescription, out string EventDetailedInfo);
                         return new Object[] {
                             EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC),
                             he.EventSummary,
@@ -1481,14 +1489,14 @@ namespace EDDiscovery.UserControls
                         grd.VerifyLine += delegate (int r)      // second hook to reject line
                         {
                             HistoryEntry he = (HistoryEntry)dataGridViewTravel.Rows[r].Tag;
-                            if (he.snc != null)
+                            if (he.SNC != null)
                             {
-                                if (sysnotecache.Contains(he.snc))
+                                if (sysnotecache.Contains(he.SNC))
                                     return false;
                                 else
                                 {
                                     if (frm.SelectedIndex == 3)
-                                        sysnotecache.Add(he.snc);
+                                        sysnotecache.Add(he.SNC);
                                     return true;
                                 }
                             }

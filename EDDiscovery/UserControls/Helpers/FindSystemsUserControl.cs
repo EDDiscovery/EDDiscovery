@@ -134,18 +134,26 @@ namespace EDDiscovery.UserControls
                 // cube: use *1.412 (sqrt(2)) to reach out to far corner of cube
                 // cube: must get centre system, to know what co-ords it is..
 
+                List<Tuple<ISystem, double>> rlist = null;
+
                 if (!string.IsNullOrWhiteSpace(textBoxSystemName.Text))
                 {
-                    return edsm.GetSphereSystems(textBoxSystemName.Text, numberBoxMaxRadius.Value * (spherical ? 1.00 : 1.412), spherical ? numberBoxMinRadius.Value : 0);
+                    rlist = edsm.GetSphereSystems(textBoxSystemName.Text, numberBoxMaxRadius.Value * (spherical ? 1.00 : 1.412), spherical ? numberBoxMinRadius.Value : 0);
                 }
                 else if (numberBoxDoubleX.IsValid && numberBoxDoubleY.IsValid && numberBoxDoubleZ.IsValid)
                 {
-                    return edsm.GetSphereSystems(numberBoxDoubleX.Value, numberBoxDoubleY.Value, numberBoxDoubleZ.Value, numberBoxMaxRadius.Value * (spherical ? 1.00 : 1.412), spherical ? numberBoxMinRadius.Value : 0);
+                    rlist = edsm.GetSphereSystems(numberBoxDoubleX.Value, numberBoxDoubleY.Value, numberBoxDoubleZ.Value, numberBoxMaxRadius.Value * (spherical ? 1.00 : 1.412), spherical ? numberBoxMinRadius.Value : 0);
                 }
                 else
                 {
-                    return new List<Tuple<ISystem, double>>();
+                    rlist = new List<Tuple<ISystem, double>>();
                 }
+
+                if (rlist.Count > 0 && !SystemsDatabase.Instance.RebuildRunning)   // if db free for use, ensure they are all in the db
+                    SystemsDatabase.Instance.StoreSystems(rlist.Select(x => x.Item1).ToList());     // won't do anything if rebuilding
+
+                return rlist;
+
             }).ContinueWith(task => this.Invoke(new Action(() =>
             {
                 List<Tuple<ISystem, double>> listsphere = task.Result;
@@ -203,7 +211,7 @@ namespace EDDiscovery.UserControls
 
         private void buttonExtVisitedClick(object sender, EventArgs e)
         {
-            ISystem sys = textBoxSystemName.Text.Length > 0 ? discoveryform.history.FindSystem(textBoxSystemName.Text, discoveryform.galacticMapping) : new SystemClass("Unknown", numberBoxDoubleX.Value, numberBoxDoubleY.Value, numberBoxDoubleZ.Value);     // find centre, i.e less 1 ly distance
+            ISystem sys = textBoxSystemName.Text.Length > 0 ? discoveryform.history.FindSystem(textBoxSystemName.Text, discoveryform.galacticMapping, true) : new SystemClass("Unknown", numberBoxDoubleX.Value, numberBoxDoubleY.Value, numberBoxDoubleZ.Value);     // find centre, i.e less 1 ly distance
 
             if (sys != null)
             {
@@ -217,7 +225,7 @@ namespace EDDiscovery.UserControls
 
         private void buttonExtDBClick(object sender, EventArgs e)
         {
-            ISystem sys = textBoxSystemName.Text.Length > 0 ? discoveryform.history.FindSystem(textBoxSystemName.Text, discoveryform.galacticMapping) : new SystemClass("Unknown", numberBoxDoubleX.Value, numberBoxDoubleY.Value, numberBoxDoubleZ.Value);     // find centre, i.e less 1 ly distance
+            ISystem sys = textBoxSystemName.Text.Length > 0 ? discoveryform.history.FindSystem(textBoxSystemName.Text, discoveryform.galacticMapping, true) : new SystemClass("Unknown", numberBoxDoubleX.Value, numberBoxDoubleY.Value, numberBoxDoubleZ.Value);     // find centre, i.e less 1 ly distance
 
             if (sys != null)
             {
@@ -259,7 +267,7 @@ namespace EDDiscovery.UserControls
 
         private void SetXYZ()
         {
-            ISystem sys = discoveryform.history.FindSystem(textBoxSystemName.Text, discoveryform.galacticMapping);
+            ISystem sys = discoveryform.history.FindSystem(textBoxSystemName.Text, discoveryform.galacticMapping, false);      // not doing edsm as done via INIT
 
             if (sys != null && sys.HasCoordinate)
             {

@@ -86,13 +86,13 @@ namespace EDDiscovery.UserControls
 
         // draw scannode (may be null), 
         // curmats may be null
-        public void DrawSystem(StarScan.SystemNode scannode, MaterialCommoditiesList curmats, HistoryList hl, string opttext = null, string[] filter=  null ) 
+        public void DrawSystem(StarScan.SystemNode systemnode, MaterialCommoditiesList curmats, HistoryList hl, string opttext = null, string[] filter=  null ) 
         {
             HideInfo();
 
             imagebox.ClearImageList();  // does not clear the image, render will do that
             
-            if (scannode != null)
+            if (systemnode != null)
             {
 
                 Point leftmiddle = new Point(leftmargin, topmargin + StarSize.Height * nodeheightratio / 2 / noderatiodivider);  // half down (h/2 * ratio)
@@ -112,7 +112,15 @@ namespace EDDiscovery.UserControls
 
                 Point maxitemspos = new Point(0, 0);
 
-                foreach (StarScan.ScanNode starnode in scannode.starnodes.Values)        // always has scan nodes
+                if (systemnode.StarNodes.Values.Count == 0 && systemnode.FSSSignalList.Count > 0)  // if no stars, but signals..
+                {
+                    Point maxpos = CreateImageAndLabel(starcontrols, JournalScan.GetStarImageNotScanned(), leftmiddle, StarSize, out Rectangle starpos, new string[] { "Main Star" }, "", false);
+                    DrawSignals(starcontrols, new Point(starpos.Right + moonspacerx, leftmiddle.Y), systemnode.FSSSignalList, StarSize.Height * 6 / 4, 16);       // draw them, nothing else to follow
+                }
+
+                bool drawnsignals = false;
+
+                foreach (StarScan.ScanNode starnode in systemnode.StarNodes.Values)        // always has scan nodes
                 {
                     if (filter != null && starnode.IsBodyInFilter(filter, true) == false)       // if filter active, but no body or children in filter
                     {
@@ -120,23 +128,32 @@ namespace EDDiscovery.UserControls
                         continue;
                     }
 
-                    // Draw star
+                    {  // Draw star
 
-                    Point maxstarpos = DrawNode(starcontrols, starnode, curmats, hl,
-                                (starnode.type == StarScan.ScanNodeType.barycentre) ? Icons.Controls.Scan_Bodies_Barycentre : JournalScan.GetStarImageNotScanned(),
-                                leftmiddle, false, out int unusedstarcentre, StarSize, DrawLevel.TopLevelStar);       // the last part nerfs the label down to the right position
+                        Point maxpos = DrawNode(starcontrols, starnode, curmats, hl,
+                                (starnode.NodeType == StarScan.ScanNodeType.barycentre) ? Icons.Controls.Scan_Bodies_Barycentre : JournalScan.GetStarImageNotScanned(),
+                                leftmiddle, false, out Rectangle starimagepos, StarSize, DrawLevel.TopLevelStar);       // the last part nerfs the label down to the right position
 
-                    maxitemspos = new Point(Math.Max(maxitemspos.X, maxstarpos.X), Math.Max(maxitemspos.Y, maxstarpos.Y));
+                        maxitemspos = new Point(Math.Max(maxitemspos.X, maxpos.X), Math.Max(maxitemspos.Y, maxpos.Y));
 
-                    if (starnode.children != null)
+                        if (!drawnsignals && systemnode.FSSSignalList.Count > 0)           // Draw signals, if not drawn
+                        {
+                            drawnsignals = true;
+                            Point maxsignalpos = DrawSignals(starcontrols, new Point(starimagepos.Right + moonspacerx, leftmiddle.Y), systemnode.FSSSignalList, StarSize.Height * 6 / 4, 16);
+                            maxitemspos = new Point(Math.Max(maxitemspos.X, maxsignalpos.X), Math.Max(maxitemspos.Y, maxsignalpos.Y));
+                        }
+
+                        leftmiddle = new Point(maxitemspos.X + starfirstplanetspacerx, leftmiddle.Y);       // move the cursor on to the right of the box, no spacing
+                    }
+
+                    if (starnode.Children != null)
                     {
-                        leftmiddle = new Point(maxitemspos.X + starfirstplanetspacerx, leftmiddle.Y);
                         Point firstcolumn = leftmiddle;
 
                         Queue<StarScan.ScanNode> belts;
                         if (starnode.ScanData != null && (!starnode.ScanData.IsEDSMBody || CheckEDSM))  // have scandata on star, and its not edsm or allowed edsm
                         {
-                            belts = new Queue<StarScan.ScanNode>(starnode.children.Values.Where(s => s.type == StarScan.ScanNodeType.belt));    // find belts in children of star
+                            belts = new Queue<StarScan.ScanNode>(starnode.Children.Values.Where(s => s.NodeType == StarScan.ScanNodeType.belt));    // find belts in children of star
                         }
                         else
                         {
@@ -145,12 +162,14 @@ namespace EDDiscovery.UserControls
 
                         StarScan.ScanNode lastbelt = belts.Count != 0 ? belts.Dequeue() : null;
 
-                        double habzonestartls = starnode.ScanData?.HabitableZoneInner ?? 0;
-                        double habzoneendls = starnode.ScanData?.HabitableZoneOuter ?? 0;
+                        EliteDangerousCore.JournalEvents.JournalScan.HabZones hz = starnode.ScanData?.GetHabZones();
+
+                        double habzonestartls = hz != null ? hz.HabitableZoneInner : 0;
+                        double habzoneendls = hz != null ? hz.HabitableZoneOuter : 0;
 
                         // process body and stars only
 
-                        List<StarScan.ScanNode> planetsinorder = starnode.children.Values.Where(s => s.type == StarScan.ScanNodeType.body || s.type == StarScan.ScanNodeType.star).ToList();
+                        List<StarScan.ScanNode> planetsinorder = starnode.Children.Values.Where(s => s.NodeType == StarScan.ScanNodeType.body || s.NodeType == StarScan.ScanNodeType.star).ToList();
                         var planetcentres = new Dictionary<StarScan.ScanNode, Point>();
 
                         for (int pn = 0; pn < planetsinorder.Count; pn++)
@@ -184,7 +203,7 @@ namespace EDDiscovery.UserControls
 
                                 appendlabel = appendlabel.AppendPrePad("" + lastbelt.ScanData?.BodyID, Environment.NewLine);
 
-                                Point maxbeltpos = DrawNode(starcontrols, lastbelt, curmats, hl, Icons.Controls.Scan_Bodies_Belt, leftmiddle,false,out int unusedbeltcentre, beltsize, DrawLevel.PlanetLevel, appendlabeltext:appendlabel);
+                                Point maxbeltpos = DrawNode(starcontrols, lastbelt, curmats, hl, Icons.Controls.Scan_Bodies_Belt, leftmiddle,false,out Rectangle unusedbeltcentre, beltsize, DrawLevel.PlanetLevel, appendlabeltext:appendlabel);
 
                                 leftmiddle = new Point(maxbeltpos.X + planetspacerx, leftmiddle.Y);
                                 lastbelt = belts.Count != 0 ? belts.Dequeue() : null;
@@ -252,7 +271,7 @@ namespace EDDiscovery.UserControls
 
                             appendlabel = appendlabel.AppendPrePad("" + lastbelt.ScanData?.BodyID, Environment.NewLine);
 
-                            Point maxbeltpos = DrawNode(starcontrols, lastbelt, curmats, hl, Icons.Controls.Scan_Bodies_Belt, leftmiddle, false, out int unusedbelt2centre, beltsize, DrawLevel.PlanetLevel, appendlabeltext: appendlabel);
+                            Point maxbeltpos = DrawNode(starcontrols, lastbelt, curmats, hl, Icons.Controls.Scan_Bodies_Belt, leftmiddle, false, out Rectangle unusedbelt2centre, beltsize, DrawLevel.PlanetLevel, appendlabeltext: appendlabel);
 
                             leftmiddle = new Point(maxbeltpos.X + planetspacerx, leftmiddle.Y);
                             lastbelt = belts.Count != 0 ? belts.Dequeue() : null;
@@ -269,7 +288,7 @@ namespace EDDiscovery.UserControls
 
                         List<ExtPictureBox.ImageElement> pcb = new List<ExtPictureBox.ImageElement>();
 
-                        foreach (var k in barynodes.children)   // for all barynodes.. display
+                        foreach (var k in barynodes.Children)   // for all barynodes.. display
                         {
                             DisplayBarynode(k.Value, 0, planetcentres, planetsinorder, pcb, planetsize.Height / 2);     // done after the reposition so true positions set up.
                         }
@@ -298,8 +317,8 @@ namespace EDDiscovery.UserControls
 
 
 
-    // return right bottom of area used from curpos
-    Point CreatePlanetTree(List<ExtPictureBox.ImageElement> pc, StarScan.ScanNode planetnode, MaterialCommoditiesList curmats, HistoryList hl, Point leftmiddle, 
+        // return right bottom of area used from curpos
+        Point CreatePlanetTree(List<ExtPictureBox.ImageElement> pc, StarScan.ScanNode planetnode, MaterialCommoditiesList curmats, HistoryList hl, Point leftmiddle, 
                                 string[] filter, bool habzone, out int planetcentre )
         {
             Color? backwash = null;
@@ -307,14 +326,16 @@ namespace EDDiscovery.UserControls
                 backwash = Color.FromArgb(64, 0, 128, 0);       // transparent in case we have a non black background
 
             Point maxtreepos = DrawNode(pc, planetnode, curmats, hl, 
-                                (planetnode.type == StarScan.ScanNodeType.barycentre) ? Icons.Controls.Scan_Bodies_Barycentre : JournalScan.GetPlanetImageNotScanned(),
-                                leftmiddle, false, out planetcentre, planetsize, DrawLevel.PlanetLevel, backwash: backwash);        // offset passes in the suggested offset, returns the centre offset
+                                (planetnode.NodeType == StarScan.ScanNodeType.barycentre) ? Icons.Controls.Scan_Bodies_Barycentre : JournalScan.GetPlanetImageNotScanned(),
+                                leftmiddle, false, out Rectangle planetpos, planetsize, DrawLevel.PlanetLevel, backwash: backwash);        // offset passes in the suggested offset, returns the centre offset
 
-            if (planetnode.children != null && ShowMoons)
+            planetcentre = planetpos.X + planetpos.Width / 2;
+
+            if (planetnode.Children != null && ShowMoons)
             {
                 Point moonposcentremid = new Point(planetcentre, maxtreepos.Y + moonspacery + moonsize.Height/2);    // moon pos, below planet, centre x coord
 
-                var moonnodes = planetnode.children.Values.Where(n => n.type != StarScan.ScanNodeType.barycentre).ToList();
+                var moonnodes = planetnode.Children.Values.Where(n => n.NodeType != StarScan.ScanNodeType.barycentre).ToList();
                 var mooncentres = new Dictionary<StarScan.ScanNode, Point>();
 
                 for ( int mn = 0; mn < moonnodes.Count; mn++)
@@ -328,16 +349,17 @@ namespace EDDiscovery.UserControls
 
                     if (nonedsmscans || CheckEDSM)
                     {
-                        Point mmax = DrawNode(pc, moonnode, curmats, hl, (moonnode.type == StarScan.ScanNodeType.barycentre) ? Icons.Controls.Scan_Bodies_Barycentre : JournalScan.GetMoonImageNotScanned(), moonposcentremid, true, out int mooncentre, moonsize, DrawLevel.MoonLevel);
+                        Point mmax = DrawNode(pc, moonnode, curmats, hl, (moonnode.NodeType == StarScan.ScanNodeType.barycentre) ? Icons.Controls.Scan_Bodies_Barycentre : JournalScan.GetMoonImageNotScanned(), moonposcentremid, true, out Rectangle moonimagepos, moonsize, DrawLevel.MoonLevel);
+                        int mooncentre = moonimagepos.X + moonimagepos.Width / 2;
 
                         maxtreepos = new Point(Math.Max(maxtreepos.X, mmax.X), Math.Max(maxtreepos.Y, mmax.Y));
 
-                        if (moonnode.children != null)
+                        if (moonnode.Children != null)
                         {
                             Point submoonpos = new Point(mmax.X + moonspacerx, moonposcentremid.Y);     // first its left mid
                             bool xiscentre = false;
 
-                            foreach (StarScan.ScanNode submoonnode in moonnode.children.Values)
+                            foreach (StarScan.ScanNode submoonnode in moonnode.Children.Values)
                             {
                                 if (filter != null && submoonnode.IsBodyInFilter(filter, true) == false)       // if filter active, but no body or children in filter
                                     continue;
@@ -346,12 +368,13 @@ namespace EDDiscovery.UserControls
 
                                 if (nonedsmsubmoonscans || CheckEDSM)
                                 {
-                                    Point sbmax = DrawNode(pc, submoonnode, curmats, hl, (moonnode.type == StarScan.ScanNodeType.barycentre) ? Icons.Controls.Scan_Bodies_Barycentre : JournalScan.GetMoonImageNotScanned(), submoonpos, xiscentre, out int xsubmooncentre, moonsize, DrawLevel.MoonLevel);
+                                    Point sbmax = DrawNode(pc, submoonnode, curmats, hl, (moonnode.NodeType == StarScan.ScanNodeType.barycentre) ? Icons.Controls.Scan_Bodies_Barycentre : JournalScan.GetMoonImageNotScanned(), submoonpos, xiscentre, out Rectangle submoonimagepos, moonsize, DrawLevel.MoonLevel);
 
                                     if (xiscentre)
                                         submoonpos = new Point(submoonpos.X, sbmax.Y + moonspacery + moonsize.Height / 2);
                                     else
                                     {
+                                        int xsubmooncentre = submoonimagepos.X + submoonimagepos.Width / 2;
                                         submoonpos = new Point(xsubmooncentre, sbmax.Y + moonspacery + moonsize.Height / 2);
                                         xiscentre = true;       // now go to centre placing
                                     }
@@ -373,7 +396,7 @@ namespace EDDiscovery.UserControls
                 //// now, taking the moon modes, create a barycentre tree with those inserted in 
                 var barynodes = StarScan.ScanNode.PopulateBarycentres(moonnodes);  // children always made, barynode tree
 
-                foreach (var k in barynodes.children)   // for all barynodes.. display
+                foreach (var k in barynodes.Children)   // for all barynodes.. display
                 {
                     DisplayBarynode(k.Value, 0, mooncentres, moonnodes, pc, moonsize.Width * 5 / 4, true);
                 }

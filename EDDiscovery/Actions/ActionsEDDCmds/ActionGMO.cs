@@ -39,7 +39,7 @@ namespace EDDiscovery.Actions
         public override bool ExecuteAction(ActionProgramRun ap)
         {
             string res;
-            if (ap.functions.ExpandString(UserData, out res) != BaseUtils.Functions.ExpandResult.Failed)
+            if (ap.Functions.ExpandString(UserData, out res) != BaseUtils.Functions.ExpandResult.Failed)
             {
                 StringParser sp = new StringParser(res);
 
@@ -61,7 +61,7 @@ namespace EDDiscovery.Actions
 
                 if (cmdname != null )
                 {
-                    EDDiscoveryForm discoveryform = (ap.actioncontroller as ActionController).DiscoveryForm;
+                    EDDiscoveryForm discoveryform = (ap.ActionController as ActionController).DiscoveryForm;
 
                     if (cmdname.Equals("LIST", StringComparison.InvariantCultureIgnoreCase))
                     {
@@ -89,7 +89,7 @@ namespace EDDiscovery.Actions
                         {
                             if (cmdname.Equals("EXISTS", StringComparison.InvariantCultureIgnoreCase))
                             {
-                                EliteDangerousCore.EDSM.GalacticMapObject gmo = discoveryform.galacticMapping.Find(name, false, true);
+                                EliteDangerousCore.EDSM.GalacticMapObject gmo = discoveryform.galacticMapping.Find(name, false);
                                 ap[prefix + "Exists"] = (gmo != null).ToStringIntValue();
                                 if ( gmo != null )
                                     DumpGMO(ap, prefix, gmo);

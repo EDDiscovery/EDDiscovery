@@ -87,6 +87,25 @@ namespace EDDiscovery.UserControls
                 (uctg as IHistoryCursorNewStarList).OnNewStarList += OnNewStars;
         }
 
+        public override bool AllowClose()
+        {
+            var rt = new SavedRouteClass();
+            SaveGridIntoRoute(rt);
+
+            if (rt.Equals(currentroute))   // No changes have been made.
+                return true;
+
+            var result = ExtendedControls.MessageBoxTheme.Show(FindForm(), ("Expedition - There are unsaved changes to the current route." + Environment.NewLine
+                + "Would you like to save the current route before proceeding?").T(EDTx.UserControlExpedition_Unsaved), "Warning".T(EDTx.Warning), MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
+
+            if (result == DialogResult.Yes)
+            {
+                return SaveCurrentRoute();      // only allow close if route ok
+            }
+
+            return true;
+        }
+
         public override void Closing()
         {
             DGVSaveColumnLayout(dataGridView, DbColumnSave);
@@ -169,6 +188,8 @@ namespace EDDiscovery.UserControls
 
         private void UpdateSystemRows()
         {
+            Cursor = Cursors.WaitCursor;
+
             for (int rowindex = 0; rowindex < dataGridView.Rows.Count; rowindex++)
             {
                 dataGridView[1, rowindex].ReadOnly = true;
@@ -177,24 +198,28 @@ namespace EDDiscovery.UserControls
                 dataGridView[4, rowindex].ReadOnly = true;
                 dataGridView[5, rowindex].ReadOnly = true;
 
-                string sysname = dataGridView[0, rowindex].Value.ToString();
+                string sysname = dataGridView[0, rowindex].Value as string;       // value may be null, so protect (2999)
 
                 if (sysname.HasChars())
                 {
-                    var sys = discoveryform.history.FindSystem(sysname);
+                    var sys = discoveryform.history.FindSystem(sysname, discoveryform.galacticMapping, true);      // use EDSM directly if required
 
                     dataGridView[1, rowindex].Value = "";
 
                     if (rowindex > 0 && dataGridView[0, rowindex - 1].Value != null && dataGridView[0, rowindex].Value != null)
                     {
-                        string prevsysname = dataGridView[0, rowindex - 1].Value.ToString();
-                        var prevsys = discoveryform.history.FindSystem(prevsysname);
+                        string prevsysname = dataGridView[0, rowindex - 1].Value as string;     // protect against null
 
-                        if ((sys?.HasCoordinate ?? false) && (prevsys?.HasCoordinate ?? false))
+                        if (prevsysname.HasChars())
                         {
-                            double dist = sys.Distance(prevsys);
-                            string strdist = dist >= 0 ? ((double)dist).ToString("0.00") : "";
-                            dataGridView[1, rowindex].Value = strdist;
+                            var prevsys = discoveryform.history.FindSystem(prevsysname, discoveryform.galacticMapping, true);       // use EDSM directly
+
+                            if ((sys?.HasCoordinate ?? false) && (prevsys?.HasCoordinate ?? false))
+                            {
+                                double dist = sys.Distance(prevsys);
+                                string strdist = dist >= 0 ? ((double)dist).ToString("0.00") : "";
+                                dataGridView[1, rowindex].Value = strdist;
+                            }
                         }
                     }
 
@@ -254,6 +279,8 @@ namespace EDDiscovery.UserControls
                     txtP2PDIstance.Text = distance.ToString("0.00") + "LY";
                 }
             }
+
+            Cursor = Cursors.Default;
         }
 
         private void dataGridViewRouteSystems_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
@@ -402,12 +429,15 @@ namespace EDDiscovery.UserControls
                     systems.Add(sysname);
                 }
             }
+
             if (systems.Count == 0)
             {
                 ExtendedControls.MessageBoxTheme.Show(FindForm(), "The imported file contains no known system names".T(EDTx.UserControlExpedition_Nonames),
                     "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
+
+            SystemCache.UpdateDBWithSystems(systems);           // try and fill them in
 
             ClearRoute();
             toolStripComboBoxRouteSelection.SelectedItem = null;
@@ -431,6 +461,9 @@ namespace EDDiscovery.UserControls
             {
                 dataGridView.Rows.Add(s.Name);
             }
+
+            // since it came from the route system, which uses the DB, no point trying to fill them in
+
             UpdateSystemRows();
         }
 
@@ -439,11 +472,17 @@ namespace EDDiscovery.UserControls
             var route = discoveryform.history.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.NavRoute)?.journalEntry as EliteDangerousCore.JournalEvents.JournalNavRoute;
             if (route != null)
             {
+                List<string> systems = new List<string>();
                 foreach (var s in route.Route)
                 {
                     if (s.StarSystem.HasChars())
+                    {
                         dataGridView.Rows.Add(s.StarSystem);
+                        systems.Add(s.StarSystem);
+                    }
                 }
+
+                SystemCache.UpdateDBWithSystems(systems);           // try and fill them in
 
                 UpdateSystemRows();
             }
@@ -882,7 +921,7 @@ namespace EDDiscovery.UserControls
             if (obj == null)
                 return;
 
-            ISystem sc = discoveryform.history.FindSystem((string)obj);
+            ISystem sc = discoveryform.history.FindSystem((string)obj,discoveryform.galacticMapping, true);     // use EDSM directly if required
 
             if (sc == null)
             {
@@ -955,9 +994,9 @@ namespace EDDiscovery.UserControls
             else
             {
 
-             //   here get scanner to complain
+                //   here get scanner to complain
 
-                var result = ExtendedControls.MessageBoxTheme.Show(FindForm(), ("There are unsaved changes to the current route." + Environment.NewLine
+                var result = ExtendedControls.MessageBoxTheme.Show(FindForm(), ("Expedition - There are unsaved changes to the current route." + Environment.NewLine
                     + "Would you like to save the current route before proceeding?").T(EDTx.UserControlExpedition_Unsaved), "Warning".T(EDTx.Warning), MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
                 switch (result)
                 {
@@ -980,7 +1019,7 @@ namespace EDDiscovery.UserControls
             route.Systems.Clear();
             route.Systems.AddRange(dataGridView.Rows.OfType<DataGridViewRow>()
                 .Where(r => r.Index < dataGridView.NewRowIndex && r.Cells[0].Value != null)
-                .Select(r => r.Cells[0].Value.ToString()));
+                .Select(r => r.Cells[0].Value as string));
 
             if (dateTimePickerStartDate.Checked)
             {
@@ -1010,12 +1049,12 @@ namespace EDDiscovery.UserControls
 
         private void dataGridViewRouteSystems_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
         {
-            if (e.ColumnIndex == 0)
+            if (e.ColumnIndex == 0 && e.RowIndex>=0 && e.RowIndex < dataGridView.RowCount)
             {
-                string sysname = e.FormattedValue.ToString();
+                string sysname = e.FormattedValue as string;
                 var row = dataGridView.Rows[e.RowIndex];
 
-                if (sysname != "" && discoveryform.history.FindSystem(sysname) == null)
+                if (sysname.HasChars() && discoveryform.history.FindSystem(sysname, discoveryform.galacticMapping, true) == null)
                 {
                     row.ErrorText = "System not known location".T(EDTx.UserControlExpedition_EDSMUnk);
                 }

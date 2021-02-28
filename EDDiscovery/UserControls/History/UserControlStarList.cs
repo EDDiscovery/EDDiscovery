@@ -360,7 +360,7 @@ namespace EDDiscovery.UserControls
 
             rw.Cells[1].Style.ForeColor = (he.System.HasCoordinate) ? Color.Empty : discoveryform.theme.UnknownSystemColor;
 
-            he.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
+            he.FillInformation(out string EventDescription, out string EventDetailedInfo);
 
             string tip = String.Join(Environment.NewLine, he.EventSummary, EventDescription, EventDetailedInfo);
 
@@ -378,7 +378,7 @@ namespace EDDiscovery.UserControls
 
             if (sysnode != null)
             {
-                if (sysnode.starnodes != null)
+                if (sysnode.StarNodes != null)
                 {
                     string st = sysnode.StarTypesFound();
                     if (st.HasChars())
@@ -398,39 +398,40 @@ namespace EDDiscovery.UserControls
                         if (sn.ScanData != null && checkBoxBodyClasses.Checked)
                         {
                             JournalScan sc = sn.ScanData;
-                            string bodynameshort = sc.BodyName.ReplaceIfStartsWith(system.Name);
+                            string bodyname = sc.BodyDesignationOrName;
+                            string bodynameshort = bodyname.ReplaceIfStartsWith(system.Name);
 
                             if (sc.IsStar) // brief notification for special or uncommon celestial bodies, useful to traverse the history and search for that special body you discovered.
                             {
                                 // Sagittarius A* is a special body: is the centre of the Milky Way, and the only one which is classified as a Super Massive Black Hole. As far as we know...                                
                                 if (sc.StarTypeID == EDStar.SuperMassiveBlackHole)
-                                    bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a super massive black hole".T(EDTx.UserControlStarList_SMBH), sc.BodyName), prefix);
+                                    bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a super massive black hole".T(EDTx.UserControlStarList_SMBH), bodyname), prefix);
                                     
                                 // black holes
                                 if (sc.StarTypeID == EDStar.H)
-                                    bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a black hole".T(EDTx.UserControlStarList_BH), sc.BodyName), prefix);
+                                    bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a black hole".T(EDTx.UserControlStarList_BH), bodyname), prefix);
 
                                 // neutron stars
                                 if (sc.StarTypeID == EDStar.N)
-                                    bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a neutron star".T(EDTx.UserControlStarList_NS), sc.BodyName), prefix);
+                                    bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a neutron star".T(EDTx.UserControlStarList_NS), bodyname), prefix);
 
                                 // white dwarf (D, DA, DAB, DAO, DAZ, DAV, DB, DBZ, DBV, DO, DOV, DQ, DC, DCV, DX)
                                 string WhiteDwarf = "White Dwarf";
                                 if (sc.StarTypeText.Contains(WhiteDwarf))
-                                    bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a {1} white dwarf star".T(EDTx.UserControlStarList_WD), sc.BodyName, sc.StarTypeID), prefix);
+                                    bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a {1} white dwarf star".T(EDTx.UserControlStarList_WD), bodyname, sc.StarTypeID), prefix);
 
                                 // wolf rayet (W, WN, WNC, WC, WO)
                                 string WolfRayet = "Wolf-Rayet";
                                 if (sc.StarTypeText.Contains(WolfRayet))
-                                    bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a {1} wolf-rayet star".T(EDTx.UserControlStarList_WR), sc.BodyName, sc.StarTypeID), prefix);
+                                    bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a {1} wolf-rayet star".T(EDTx.UserControlStarList_WR), bodyname, sc.StarTypeID), prefix);
 
                                 // giants. It should recognize all classes of giants.
                                 if (sc.StarTypeText.Contains("Giant"))
-                                    bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a {1}".T(EDTx.UserControlStarList_OTHER), sc.BodyName, sc.StarTypeText), prefix);
+                                    bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a {1}".T(EDTx.UserControlStarList_OTHER), bodyname, sc.StarTypeText), prefix);
 
                                 // rogue planets - not sure if they really exists, but they are in the journal, so...
                                 if (sc.StarTypeID == EDStar.RoguePlanet)
-                                    bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a rogue planet".T(EDTx.UserControlStarList_RP), sc.BodyName), prefix);
+                                    bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a rogue planet".T(EDTx.UserControlStarList_RP), bodyname), prefix);
                             }
 
                             else
@@ -439,7 +440,7 @@ namespace EDDiscovery.UserControls
                                 // Check if a non-star body is a moon or not. We want it to further refine our brief summary in the visited star list.
                                 // To avoid duplicates, we need to apply our filters before on the bodies recognized as a moon, than do the same for the other bodies that do not fulfill that criteria.
 
-                                if (sn.level >= 2 && sn.type == StarScan.ScanNodeType.body)
+                                if (sn.Level >= 2 && sn.NodeType == StarScan.ScanNodeType.body)
 
                                 // Tell us that that special body is a moon. After all, it can be quite an outstanding discovery...
                                 {
@@ -536,7 +537,7 @@ namespace EDDiscovery.UserControls
                                 if (premium != 0)
                                     jumpLevel.AppendPrePad(premium + "/" + Recipes.FindSynthesis("FSD", "Premium").Count + " Premium".T(EDTx.UserControlStarList_PFSD), ", ");
 
-                                jumponium = jumponium.AppendPrePad(Environment.NewLine + string.Format("{0} has {1} level elements.".T(EDTx.UserControlStarList_LE), sn.ScanData.BodyName ,jumpLevel));
+                                jumponium = jumponium.AppendPrePad(Environment.NewLine + string.Format("{0} has {1} level elements.".T(EDTx.UserControlStarList_LE), sn.ScanData.BodyDesignationOrName ,jumpLevel));
                             }
                         }
                     }
@@ -795,14 +796,8 @@ namespace EDDiscovery.UserControls
         {
             this.Cursor = Cursors.WaitCursor;
             EliteDangerousCore.EDSM.EDSMClass edsm = new EDSMClass();
-            long? id_edsm = rightclicksystem.System?.EDSMID;
 
-            if (id_edsm <= 0)
-            {
-                id_edsm = null;
-            }
-
-            if (!edsm.ShowSystemInEDSM(rightclicksystem.System.Name, id_edsm))
+            if (!edsm.ShowSystemInEDSM(rightclicksystem.System.Name))
                 ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable".T(EDTx.UserControlStarList_NoEDSM));
 
             this.Cursor = Cursors.Default;
@@ -907,7 +902,7 @@ namespace EDDiscovery.UserControls
                         HistoryEntry he = dataGridViewStarList.Rows[r].Tag as HistoryEntry;
                         DataGridViewRow rw = dataGridViewStarList.Rows[r];
 
-                        he.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
+                        he.FillInformation(out string EventDescription, out string EventDetailedInfo);
 
                         return new Object[] {
                             rw.Cells[0].Value,

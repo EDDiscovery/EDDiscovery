@@ -244,8 +244,8 @@ SECTION UserControlExploration
 .toolStripButtonNew: "New" => "Neu"
 .toolStripButtonLoad: "Load" => "Laden"
 .toolStripButtonSave: "Save" => "Speichern"
-.tsbAddSystems: "Add Systems" => "Systeme hinzufügen"
-.toolStripButtonImportFile: "Import Text File" => "Textdatei einlesen"
+.toolStripButtonAddSystems: "Add Systems" => "Systeme hinzufügen"
+.toolStripButtonImportTextFile: "Import Text File" => "Textdatei einlesen"
 .toolStripButtonExport: "Export" => "Textdatei exportieren"
 .toolStripButtonClear: "Clear List" => "Liste leeren"
 .copyToolStripMenuItem: "Copy" => "Kopieren"
@@ -823,7 +823,7 @@ SECTION UserControlSettings
 .checkBoxCustomEnableScreenshots: "Enable" => "Screenshot-Umwandlung erlauben"
 .groupBoxCustomEDSM: "EDSM/EDDB Control" => "EDSM/EDDB Kontrolle"
 .buttonExtEDSMConfigureArea: "Select Galaxy Sectors" => "Galaxie-Auswahl"
-.checkBoxCustomEDSMEDDBDownload: "Enable Star Data Download" => "Sterndatendownload erlauben"
+.checkBoxCustomEDSMDownload: "Enable Star Data Download" => "Sterndatendownload erlauben"
 .groupBoxPopOuts: "Window Options" => "Fenstereinstellungen"
 .checkBoxPanelSortOrder: "Panel List Sorted Alphanumerically" @
 .checkBoxKeepOnTop: "Keep on Top" => "Fenster oben halten"
@@ -850,7 +850,7 @@ SECTION UserControlSettings
 .buttonExtScreenshot.ToolTip: "Configure further screenshot options" => "Weitere Bildschirmphoto-Einstellungen anpassen"
 .checkBoxCustomEnableScreenshots.ToolTip: "Screen shot conversion on/off" => "Umwandlung von Bildschirmphotos ein-/ausschalten"
 .buttonExtEDSMConfigureArea.ToolTip: "Configure what parts of the galaxy is stored in the databases" => "Einstellen, welche Teile der Galaxis in der Datenbank gespeichert werden sollen"
-.checkBoxCustomEDSMEDDBDownload.ToolTip: "Click to enable downloading of stars from EDSM and system information from EDDB.  Will apply at next start." => "Klicken, um das Herunterladen von Sternen von EDSM und Systeminformationen von EDDB zu erlauben. Ab dem nächsten Start gültig."
+.checkBoxCustomEDSMDownload.ToolTip: "Click to enable downloading of stars from EDSM and system information from EDDB.  Will apply at next start." => "Klicken, um das Herunterladen von Sternen von EDSM und Systeminformationen von EDDB zu erlauben. Ab dem nächsten Start gültig."
 .checkBoxPanelSortOrder.ToolTip: "Panel lists sorted alphanumerically instead of ordered in groups. Note Requires Restart" @
 .checkBoxKeepOnTop.ToolTip: "This window, and its children, top" => "Dieses Fenster und seine Kinder, oben"
 .checkBoxCustomResize.ToolTip: "Check to allow EDD to redraw the screen during main window resize. Only disable if its too slow" => "Klicken, um EDD das Neuzeichnen der Fenster während der Grössenänderung des Hauptfensters zu erlauben. Nur ausschalten, wenn zu langsam"

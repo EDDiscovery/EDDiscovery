@@ -22,7 +22,7 @@ using System.Windows.Forms;
 using EliteDangerousCore.DB;
 using BaseUtils;
 
-namespace EDDiscovery.Forms
+namespace EDDiscovery.UserControls
 {
     public partial class UserControlForm : Forms.DraggableFormPos
     {
@@ -299,18 +299,25 @@ namespace EDDiscovery.Forms
             //System.Diagnostics.Debug.WriteLine("UCF Shown-");
         }
 
+        public bool AllowClose()
+        {
+            return UserControl?.AllowClose() ?? true;       // does the UCCB allow close?
+        }
+
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
+            if (UserControl?.AllowClose() ?? true)          // does the UCCB allow close?
+            {
+                IsLoaded = false;
+
+                UserControl?.CloseDown();                   // it may be null
+            }
+            else
+                e.Cancel = true;                            // cancel close
+
             base.OnFormClosing(e);
         }
 
-        private void UserControlForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            IsLoaded = false;
-
-            if (UserControl != null)
-                UserControl.CloseDown();
-        }
 
 #endregion
 
@@ -580,6 +587,16 @@ namespace EDDiscovery.Forms
             {
                 ucf.Close();        // don't change tabforms.. the FormCloseCallBack does this
             }
+        }
+
+        public bool AllowClose()
+        {
+            foreach( var f in tabforms )
+            {
+                if (!f.AllowClose())
+                    return false;
+            }
+            return true;
         }
 
     }

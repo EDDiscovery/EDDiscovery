@@ -90,6 +90,10 @@ namespace EDDiscovery
             {
                 OutputEventHelp = toeol ? ca.Rest() : ca.NextEmpty();
             }
+            else if (optname == "-defaultjournalfolder")
+            {
+                DefaultJournalFolder = toeol ? ca.Rest() : ca.NextEmpty();
+            }
             else if (optname.StartsWith("-"))
             {
                 string opt = optname.Substring(1);
@@ -140,6 +144,7 @@ namespace EDDiscovery
                     case "forcetls12": ForceTLS12 = true; break;
                     case "disabletimedisplay": DisableTimeDisplay = true; break;
                     case "disableversiondisplay": DisableVersionDisplay = true; break;
+                    case "autoopen3dmap": AutoOpen3DMap = true; break;
                     default:
                         System.Diagnostics.Debug.WriteLine($"Unrecognized option -{opt}");
                         break;
@@ -186,6 +191,7 @@ namespace EDDiscovery
         public bool NoSystemsLoad { get; private set; }
         public bool NoSound { get; private set; }
         public bool No3DMap { get; private set; }
+        public bool AutoOpen3DMap { get; private set; }
         public string TraceLog { get; private set; }        // null = auto file, or fixed name
         public bool LogExceptions { get; private set; }
         public bool DisableShowDebugInfoInTitle { get; private set; }
@@ -212,6 +218,8 @@ namespace EDDiscovery
         public bool DisableTimeDisplay { get; set; }
         public bool DisableVersionDisplay { get; set; }
         public string OutputEventHelp { get; set; }
+        public string DefaultJournalFolder { get; set; }        // default is null, use computed value
+        
 
         public string SubAppDirectory(string subfolder)     // ensures its there.. name without \ slashes
         {

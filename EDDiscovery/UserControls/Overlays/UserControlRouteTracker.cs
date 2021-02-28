@@ -54,6 +54,7 @@ namespace EDDiscovery.UserControls
             autoSetTargetToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "autoSetTarget", false);
             showWaypointCoordinatesToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "coords", true);
             showDeviationFromRouteToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "dev", true);
+            showBookmarkNotesToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "bookmarkNotes", true);
 
             string ids = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbSave + "SelectedRoute", "-1");        // for some reason, it was saved as a string.. so keep for backwards compat
             int? id = ids.InvariantParseIntNull();
@@ -64,6 +65,7 @@ namespace EDDiscovery.UserControls
 
             discoveryform.OnHistoryChange += Display;
             discoveryform.OnNewEntry += NewEntry;
+            GlobalBookMarkList.Instance.OnBookmarkChange += GlobalBookMarkList_OnBookmarkChange;
 
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
@@ -76,8 +78,10 @@ namespace EDDiscovery.UserControls
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "autoSetTarget", autoSetTargetToolStripMenuItem.Checked);
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "coords", showWaypointCoordinatesToolStripMenuItem.Checked);
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "dev", showDeviationFromRouteToolStripMenuItem.Checked);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "bookmarkNotes", showBookmarkNotesToolStripMenuItem.Checked);
             discoveryform.OnHistoryChange -= Display;
             discoveryform.OnNewEntry -= NewEntry;
+            GlobalBookMarkList.Instance.OnBookmarkChange -= GlobalBookMarkList_OnBookmarkChange;
         }
 
         #endregion
@@ -101,6 +105,12 @@ namespace EDDiscovery.UserControls
             Display();
         }
 
+        private void GlobalBookMarkList_OnBookmarkChange(BookmarkClass bk, bool deleted)
+        {
+            Display();
+        }
+
+
         private void Display()
         {
             if (currentHE == null)
@@ -117,17 +127,17 @@ namespace EDDiscovery.UserControls
         {
             if (currentRoute == null)
             {
-                DisplayText("Please set a route, by right clicking".T(EDTx.UserControlRouteTracker_NoRoute), "");
+                DisplayText("Please set a route, by right clicking".T(EDTx.UserControlRouteTracker_NoRoute), "", "");
                 return;
             }
 
             if (currentRoute.Systems.Count == 0)
             {
-                DisplayText(currentRoute.Name, "Route contains no waypoints".T(EDTx.UserControlRouteTracker_NoWay));
+                DisplayText(currentRoute.Name, "Route contains no waypoints".T(EDTx.UserControlRouteTracker_NoWay), "");
                 return;
             }
 
-            string topline = "", bottomline = "";
+            string topline = "", bottomline = "", note = "";
 
             if (!cursys.HasCoordinate)
             {
@@ -186,6 +196,13 @@ namespace EDDiscovery.UserControls
                             bottomline += String.Format(", Dev {0:N1}ly".T(EDTx.UserControlRouteTracker_Dev), closest.deviation);
                     }
 
+                    if (showBookmarkNotesToolStripMenuItem.Checked)
+                    {
+                        BookmarkClass bookmark = GlobalBookMarkList.Instance.FindBookmarkOnSystem(cursys.Name);
+                        if (bookmark != null )
+                            note = String.Format("Note: {0}".T(EDTx.UserControlRouteTracker_Note), bookmark.Note);
+                    }
+
                     //System.Diagnostics.Debug.WriteLine("T:" + topline + Environment.NewLine + "B:" + bottomline);
                     string name = closest.system.Name;
 
@@ -208,16 +225,17 @@ namespace EDDiscovery.UserControls
                 }
             }
 
-            DisplayText(topline, bottomline);
+            DisplayText(topline, bottomline, note);
         }
 
-        void DisplayText(String topline, String bottomLine)
+        void DisplayText(String topline, String bottomLine, String note)
         {
             pictureBox.ClearImageList();
             Color textcolour = IsTransparent ? discoveryform.theme.SPanelColor : discoveryform.theme.LabelColor;
             Color backcolour = IsTransparent ? Color.Transparent : this.BackColor;
             var ie = pictureBox.AddTextAutoSize(new Point(10, 5), new Size(10000, 100), topline == null ? "" : topline, displayfont, textcolour, backcolour, 1.0F);
-            pictureBox.AddTextAutoSize(new Point(10, ie.Location.Bottom + displayfont.ScalePixels(4)), new Size(10000, 100), bottomLine == null ? "" : bottomLine, displayfont, textcolour, backcolour, 1.0F);
+            var bt = pictureBox.AddTextAutoSize(new Point(10, ie.Location.Bottom + displayfont.ScalePixels(4)), new Size(10000, 100), bottomLine == null ? "" : bottomLine, displayfont, textcolour, backcolour, 1.0F);
+            pictureBox.AddTextAutoSize(new Point(10, bt.Location.Bottom + displayfont.ScalePixels(4)), new Size(10000, 100), note == null ? "" : note, displayfont, textcolour, backcolour, 1.0F);
             pictureBox.Render();
         }
 
@@ -245,6 +263,11 @@ namespace EDDiscovery.UserControls
             Display();
         }
 
+        private void showBookmarkNotesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Display();
+        }
+
         private void setRouteToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ExtendedControls.ConfigurableForm f = new ExtendedControls.ConfigurableForm();
@@ -252,13 +275,13 @@ namespace EDDiscovery.UserControls
             var routes = SavedRouteClass.GetAllSavedRoutes();
             var routenames = (from x in routes select x.Name).ToList();
             f.Add(new ExtendedControls.ConfigurableForm.Entry("Route", "", new Point(10, 40), new Size(400, 24), "Select route".T(EDTx.UserControlRouteTracker_Selectroute), routenames));
-            f.AddCancel(new Point(410 - 100, 80), "Press to Cancel".T(EDTx.UserControlRouteTracker_PresstoCancel));
+            f.AddCancel(new Point(410 - 80, 80), "Press to Cancel".T(EDTx.UserControlRouteTracker_PresstoCancel));
 
             f.Trigger += (dialogname, controlname, tag) =>
             {
-                if (controlname != "Route")
+                if (controlname == "Cancel" || controlname == "Close")
                     f.ReturnResult(DialogResult.Cancel);
-                else
+                else if (controlname == "Route")
                     f.ReturnResult(DialogResult.OK);
             };
 
@@ -267,7 +290,7 @@ namespace EDDiscovery.UserControls
                 string routename = f.Get("Route");
                 currentRoute = routes.Find(x => x.Name.Equals(routename));       // not going to be null, but consider the upset.
 
-                currentRoute.TestHarness(); // enable for debug
+                //currentRoute.TestHarness(); // enable for debug testing of route finding
 
                 if (currentRoute != null)
                     EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbSave + "SelectedRoute", currentRoute.Id.ToStringInvariant());        // write ID back
@@ -277,6 +300,5 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
-
     }
 }

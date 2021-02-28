@@ -121,9 +121,6 @@
   <data name="maphelp3d" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\3dmaphelp.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="ImportHelp" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ImportHelp.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
   <data name="URLeddb" xml:space="preserve">
     <value>https://eddb.io/</value>
   </data>
@@ -144,9 +141,6 @@
   </data>
   <data name="URLProjectGithub" xml:space="preserve">
     <value>https://github.com/EDDiscovery/EDDiscovery</value>
-  </data>
-  <data name="URLProjectLicense" xml:space="preserve">
-    <value>https://github.com/EDDiscovery/EDDiscovery/blob/master/LICENSE.md</value>
   </data>
   <data name="URLProjectWiki" xml:space="preserve">
     <value>https://github.com/EDDiscovery/EDDiscovery/wiki</value>
@@ -257,5 +251,11 @@ Not all keys are guaranteed active on all keyboards</value>
   </data>
   <data name="URLProjectVideosRoot" xml:space="preserve">
     <value>https://www.youtube.com</value>
+  </data>
+  <data name="URLReleaseVideo" xml:space="preserve">
+    <value>https://www.youtube.com/embed/Scv9JiHZ10Y?autoplay=1</value>
+  </data>
+  <data name="EDD_Licence_Mono" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\EDD Licence Mono.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
 </root>

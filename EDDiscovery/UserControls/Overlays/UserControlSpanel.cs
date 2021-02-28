@@ -57,7 +57,7 @@ namespace EDDiscovery.UserControls
         private int divideroriginalxpos = -1;
 
         EliteDangerousCore.UIEvents.UIGUIFocus.Focus uistate = EliteDangerousCore.UIEvents.UIGUIFocus.Focus.NoFocus;
-		
+
         class Configuration         // SO many now we need to prepare for a Long
         {
             public const long showInformation = 1;
@@ -321,41 +321,44 @@ namespace EDDiscovery.UserControls
 
                             StringBuilder res = new StringBuilder();
 
-                            if (sn != null && sn.starnodes.Count > 0 && sn.starnodes.Values[0].ScanData != null)
+                            if (sn != null && sn.StarNodes.Count > 0 && sn.StarNodes.Values[0].ScanData != null)
                             {
-                                JournalScan js = sn.starnodes.Values[0].ScanData;
+                                JournalScan js = sn.StarNodes.Values[0].ScanData;
 
                                 if (showCircumstellarZonesToolStripMenuItem.Checked)
                                 {
-                                    res.AppendFormat("Goldilocks, {0} ({1}-{2} AU),\n".T(EDTx.UserControlSpanel_Goldilocks),
-                                                     js.GetHabZoneStringLs(),
-                                                     (js.HabitableZoneInner.Value / JournalScan.oneAU_LS).ToString("N2"),
-                                                     (js.HabitableZoneOuter.Value / JournalScan.oneAU_LS).ToString("N2"));
+                                    string hz = js.CircumstellarZonesString(false, JournalScan.CZPrint.CZHab);
+                                    res.AppendFormat(hz + Environment.NewLine);
                                 }
 
                                 if (showMetalRichPlanetsToolStripMenuItem.Checked)
                                 {
-                                    res.Append(js.MetalRichZoneString());
+                                    string hz = js.CircumstellarZonesString(false, JournalScan.CZPrint.CZMR);
+                                    res.AppendFormat(hz + Environment.NewLine);
                                 }
 
                                 if (showWaterWorldsToolStripMenuItem.Checked)
                                 {
-                                    res.Append(js.WaterWorldZoneString());
+                                    string hz = js.CircumstellarZonesString(false, JournalScan.CZPrint.CZWW);
+                                    res.AppendFormat(hz + Environment.NewLine);
                                 }
 
                                 if (showEarthLikeToolStripMenuItem.Checked)
                                 {
-                                    res.Append(js.EarthLikeZoneString());
+                                    string hz = js.CircumstellarZonesString(false, JournalScan.CZPrint.CZEL);
+                                    res.AppendFormat(hz + Environment.NewLine);
                                 }
 
                                 if (showAmmoniaWorldsToolStripMenuItem.Checked)
                                 {
-                                    res.Append(js.AmmoniaWorldZoneString());
+                                    string hz = js.CircumstellarZonesString(false, JournalScan.CZPrint.CZAW);
+                                    res.AppendFormat(hz + Environment.NewLine);
                                 }
 
                                 if (showIcyPlanetsToolStripMenuItem.Checked)
                                 {
-                                    res.Append(js.IcyPlanetsZoneString());
+                                    string hz = js.CircumstellarZonesString(false, JournalScan.CZPrint.CZIP);
+                                    res.AppendFormat(hz + Environment.NewLine);
                                 }
                             }
 
@@ -401,7 +404,7 @@ namespace EDDiscovery.UserControls
             if (Config(Configuration.showIcon))
                 coldata.Add("`!!ICON!!");                // dummy place holder..
 
-            he.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
+            he.FillInformation(out string EventDescription, out string EventDetailedInfo);
 
             if (Config(Configuration.showDescription))
             {
@@ -417,7 +420,7 @@ namespace EDDiscovery.UserControls
 
             if (layoutorder == 0 && Config(Configuration.showNotes))
             {
-                coldata.Add((he.snc != null) ? he.snc.Note.Replace("\r\n", " ") : "");
+                coldata.Add((he.SNC != null) ? he.SNC.Note.Replace("\r\n", " ") : "");
             }
 
             bool showdistance = !Config(Configuration.showDistancesOnFSDJumpsOnly) || he.IsFSDCarrierJump;
@@ -434,7 +437,7 @@ namespace EDDiscovery.UserControls
 
             if (layoutorder > 0 && Config(Configuration.showNotes))
             {
-                coldata.Add((he.snc != null) ? he.snc.Note.Replace("\r\n", " ") : "");
+                coldata.Add((he.SNC != null) ? he.SNC.Note.Replace("\r\n", " ") : "");
             }
 
             if (layoutorder < 2 && Config(Configuration.showDistancePerStar))
@@ -644,11 +647,7 @@ namespace EDDiscovery.UserControls
                 {
                     EliteDangerousCore.EDSM.EDSMClass edsm = new EliteDangerousCore.EDSM.EDSMClass();
 
-                    string url = edsm.GetUrlToEDSMSystem(he.System.Name, he.System.EDSMID);
-
-                    if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
-                        System.Diagnostics.Process.Start(url);
-                    else
+                    if ( !edsm.ShowSystemInEDSM(he.System.Name))
                         ExtendedControls.MessageBoxTheme.Show(FindForm(), "System " + he.System.Name + " unknown to EDSM");
                 }
             }

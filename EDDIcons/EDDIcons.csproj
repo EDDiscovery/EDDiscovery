@@ -243,9 +243,6 @@
     <EmbeddedResource Include="Panels\SystemInformation.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Panels\Missions.png" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Journal\AfmuRepair.png" />
     <EmbeddedResource Include="Journal\EngineerContribution.png" />
     <EmbeddedResource Include="Journal\VehicleSwitch_Fighter.png" />
@@ -535,6 +532,28 @@
     <EmbeddedResource Include="Controls\SysInfo\notfirstdiscover.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Controls\Scan\Bodies\Carriers.png" />
+    <EmbeddedResource Include="Controls\Scan\Bodies\Installations.png" />
+    <EmbeddedResource Include="Controls\Scan\Bodies\RES.png" />
+    <EmbeddedResource Include="Controls\Scan\Bodies\CZ.png" />
+    <EmbeddedResource Include="Controls\Scan\Bodies\USS.png" />
+    <EmbeddedResource Include="Controls\Scan\Bodies\NSP.png" />
+    <EmbeddedResource Include="Controls\Scan\Bodies\Stations.png" />
+    <EmbeddedResource Include="Controls\Scan\Bodies\DiscoveredByOthers.png" />
+    <EmbeddedResource Include="Controls\Scan\Bodies\MappedByOthers.png" />
+    <EmbeddedResource Include="Panels\Spansh.png" />
+    <EmbeddedResource Include="Panels\Inara.PNG" />
+    <EmbeddedResource Include="Panels\EDDB.png" />
+    <EmbeddedResource Include="Panels\Missions.png" />
+    <EmbeddedResource Include="Panels\Factions.png" />
+    <EmbeddedResource Include="Panels\MiningOverlay.png" />
+    <EmbeddedResource Include="GalMap\Galaxy_L.jpg" />
+    <EmbeddedResource Include="GalMap\Galaxy_L_Grid.jpg" />
+    <EmbeddedResource Include="Controls\SysInfo\Ross.png" />
+    <EmbeddedResource Include="Controls\SysInfo\spansh.png" />
+    <EmbeddedResource Include="Controls\SysInfo\EDDB.png" />
+    <EmbeddedResource Include="Controls\SysInfo\EDSM.png" />
+    <EmbeddedResource Include="Controls\SysInfo\Inara.PNG" />
     <EmbeddedResource Include="Journal\CargoTransfer.png" />
     <EmbeddedResource Include="Journal\CarrierStats.png" />
     <EmbeddedResource Include="Journal\NavRoute.png" />
@@ -901,6 +920,11 @@
     <EmbeddedResource Include="Bodies\Planets\Giant\GGAv14.png" />
     <EmbeddedResource Include="Bodies\Planets\Giant\GGHv9.png" />
     <EmbeddedResource Include="Bodies\Planets\Terrestrial\MRBv14.png" />
+    <EmbeddedResource Include="Bodies\Planets\Giant\GG4v12.png" />
+    <EmbeddedResource Include="Bodies\Planets\Giant\GG4v13.png" />
+    <EmbeddedResource Include="Controls\Help\Wiki.png" />
+    <EmbeddedResource Include="Controls\Help\Video.png" />
+    <EmbeddedResource Include="Controls\Bookmarks\EditSystem.png" />
     <Content Include="Controls\readme.txt" />
     <EmbeddedResource Include="Panels\MissionOverlay.png" />
     <EmbeddedResource Include="Journal\CrimeVictim.png" />

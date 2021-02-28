@@ -28,12 +28,14 @@ namespace EDDiscovery.UserControls
         private string DbSave { get { return DBName("CombatPanel" ); } }
         private string DbColumnSave { get { return DBName("CombatPanel" ,  "DGVCol"); } }
 
-        private long total_kills = 0;
-        private long faction_kills = 0;
+        private long npc_total_kills = 0;
+        private long npc_faction_kills = 0;
         private long total_reward = 0;
         private long faction_reward = 0;
         private long balance = 0;
         private long total_crimes = 0;
+        private long pvp_kills = 0;
+        private long died = 0;
         private List<FilterEntry> savedfilterentries;
         private List<FilterEntry> displayedfilterentries;
 
@@ -100,7 +102,7 @@ namespace EDDiscovery.UserControls
                     Name += ":" + m.Mission.Target;
                 starttime = m.Mission.EventTimeUTC;
                 endtime = m.Mission.Expiry;                 // NOTE expiry time of mission, not used however to gate below, we use Mission
-                MissionKey = MissionList.Key(m.Mission);
+                MissionKey = MissionListAccumulator.Key(m.Mission);
                 TargetFaction = m.Mission.TargetFaction;
             }
 
@@ -258,7 +260,7 @@ namespace EDDiscovery.UserControls
             SortOrder sortorder = dataGridViewCombat.SortOrder != SortOrder.None ? dataGridViewCombat.SortOrder : SortOrder.Descending;
 
             dataGridViewCombat.Rows.Clear();
-            total_kills = faction_kills = total_reward = faction_reward = balance = total_crimes = 0;
+            npc_total_kills = npc_faction_kills = total_reward = faction_reward = balance = total_crimes = pvp_kills = died = 0;
 
             if ( current != null )
             {
@@ -277,9 +279,14 @@ namespace EDDiscovery.UserControls
                     hel = HistoryList.FilterByDateRangeLatestFirst(discoveryform.history.EntryOrder(), DateTime.UtcNow.Date, DateTime.UtcNow);
                 else if (current.Type == FilterEntry.EntryType.Mission)
                 {
-                    // look up the mission in the current data
-                    MissionState ml = current.MissionKey != null && discoveryform.history.GetLast.MissionList.Missions.ContainsKey(current.MissionKey) ? discoveryform.history.GetLast.MissionList.Missions[current.MissionKey] : null;
-                    hel = ml != null ? HistoryList.FilterByDateRangeLatestFirst(discoveryform.history.EntryOrder(), current.StartTimeUTC, ml.MissionEndTime) : new List<HistoryEntry>();
+                    hel = new List<HistoryEntry>();     // default empty
+                    if (current.MissionKey != null)
+                    {
+                        // look up the mission in the current data
+                        MissionState ms = discoveryform.history.MissionListAccumulator.GetMission(current.MissionKey);
+                        if ( ms != null )
+                            hel = HistoryList.FilterByDateRangeLatestFirst(discoveryform.history.EntryOrder(), current.StartTimeUTC, ms.MissionEndTime);
+                    }
                 }
                 else
                     hel = HistoryList.FilterByDateRangeLatestFirst(discoveryform.history.EntryOrder(), current.StartTimeUTC, current.EndTimeUTC);
@@ -311,8 +318,8 @@ namespace EDDiscovery.UserControls
                     tryadd = he.EventTimeUTC <= current.EndTimeUTC;
                 else if (current.Type == FilterEntry.EntryType.Mission) // mission is limited, lookup mission and check end time
                 {
-                    MissionState ml = current.MissionKey != null && he.MissionList.Missions.ContainsKey(current.MissionKey) ? he.MissionList.Missions[current.MissionKey] : null;
-                    tryadd = ml != null ? (he.EventTimeUTC <= ml.MissionEndTime) : false;
+                    MissionState ms = hel.MissionListAccumulator.GetMission(current.MissionKey ?? "-");
+                    tryadd = ms != null ? (he.EventTimeUTC <= ms.MissionEndTime) : false;
                 }
 
                 if (tryadd)
@@ -341,7 +348,7 @@ namespace EDDiscovery.UserControls
             if (CreateEntry(he, out var rewardcol))
             {
                 var rw = dataGridViewCombat.RowTemplate.Clone() as DataGridViewRow;
-                he.journalEntry.FillInformation(out var eventDescription, out _);
+                he.FillInformation(out var eventDescription, out _);
 
                 rw.CreateCells(dataGridViewCombat, EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(he.EventTimeUTC),
                     he.EventSummary, eventDescription, rewardcol);
@@ -376,7 +383,7 @@ namespace EDDiscovery.UserControls
         {
             rewardcol = "";
 
-            MissionState ml = current.MissionKey != null && he.MissionList.Missions.ContainsKey(current.MissionKey) ? he.MissionList.Missions[current.MissionKey] : null;
+            MissionState ml = current.MissionKey != null ? discoveryform.history.MissionListAccumulator.GetMission(current.MissionKey) : null;
 
             if ( ml != null &&
                  ((he.EntryType == JournalTypeEnum.MissionAccepted && (he.journalEntry as EliteDangerousCore.JournalEvents.JournalMissionAccepted).MissionId == ml.Mission.MissionId)
@@ -391,13 +398,13 @@ namespace EDDiscovery.UserControls
                 rewardcol = c.TotalReward.ToString("N0");
 
                 total_reward += c.TotalReward;
-                total_kills++;
+                npc_total_kills++;
                 balance += c.TotalReward;
 
                 if (current.TargetFaction != null && current.TargetFaction.Equals(c.VictimFaction))
                 {
                     faction_reward += c.TotalReward;
-                    faction_kills++;
+                    npc_faction_kills++;
                 }
             }
             else if (he.EntryType == JournalTypeEnum.CommitCrime)
@@ -412,12 +419,12 @@ namespace EDDiscovery.UserControls
                 var c = he.journalEntry as EliteDangerousCore.JournalEvents.JournalFactionKillBond;
                 rewardcol = c.Reward.ToString("N0");
                 total_reward += c.Reward;
-                total_kills++;
+                npc_total_kills++;
                 balance += c.Reward;
                 if (current.TargetFaction != null && current.TargetFaction.Equals(c.VictimFaction))
                 {
                     faction_reward += c.Reward;
-                    faction_kills++;
+                    npc_faction_kills++;
                 }
             }
             else if (he.EntryType == JournalTypeEnum.CapShipBond)
@@ -425,12 +432,12 @@ namespace EDDiscovery.UserControls
                 var c = he.journalEntry as EliteDangerousCore.JournalEvents.JournalCapShipBond;
                 rewardcol = c.Reward.ToString("N0");
                 total_reward += c.Reward;
-                total_kills++;
+                npc_total_kills++;
                 balance += c.Reward;
                 if (current.TargetFaction != null && current.TargetFaction.Equals(c.VictimFaction))
                 {
                     faction_reward += c.Reward;
-                    faction_kills++;
+                    npc_faction_kills++;
                 }
             }
             else if (he.EntryType == JournalTypeEnum.Resurrect)
@@ -438,6 +445,14 @@ namespace EDDiscovery.UserControls
                 var c = he.journalEntry as EliteDangerousCore.JournalEvents.JournalResurrect;
                 rewardcol = (-c.Cost).ToString("N0");
                 balance -= c.Cost;
+            }
+            else if (he.EntryType == JournalTypeEnum.Died)
+            {
+                died++;
+            }
+            else if (he.EntryType == JournalTypeEnum.PVPKill)
+            {
+                pvp_kills++;
             }
             else if (jtelist.Contains(he.EntryType))
             {
@@ -451,16 +466,16 @@ namespace EDDiscovery.UserControls
         void SetLabels()
         {
             bool faction = current != null ? current.TargetFaction.Length > 0 : false;
-            labelTotalKills.Text = (total_kills>0) ? ("Kills:".T(EDTx.UserControlCombatPanel_Kills) + total_kills.ToString()) : "";
-            labelFactionKills.Text = faction ? ("Faction:".T(EDTx.UserControlCombatPanel_Faction) + faction_kills.ToString()) : "";
+            labelTotalKills.Text = (npc_total_kills>0 || pvp_kills>0) ? ("Kills:".T(EDTx.UserControlCombatPanel_Kills) + npc_total_kills.ToString() + "/" + pvp_kills.ToString()) : "";
+            labelFactionKills.Text = faction ? ("Faction:".T(EDTx.UserControlCombatPanel_Faction) + npc_faction_kills.ToString()) : "";
             labelFaction.Text = faction ? (current.TargetFaction) : "";
             labelTotalCrimes.Text = (total_crimes>0) ? ("Crimes:".T(EDTx.UserControlCombatPanel_Crimes) + total_crimes.ToString()) : "";
 
             labelCredits.Text = (discoveryform.history.GetLast != null) ? (discoveryform.history.GetLast.Credits.ToString("N0") + "cr") : "";
-            labelBalance.Text = (balance > 0 ) ? ("Bal:".T(EDTx.UserControlCombatPanel_Bal) + balance.ToString("N0") + "cr") : "";
-            labelFactionReward.Text = (faction && faction_reward != balance) ? (faction_reward.ToString("N0") + "cr") : "";
-            labelTotalReward.Text = (total_reward != balance) ? (total_reward.ToString("N0") + "cr") : "";
-
+            labelBalance.Text = (balance != 0 ) ? ("Bal:".T(EDTx.UserControlCombatPanel_Bal) + balance.ToString("N0") + "cr") : "";
+            labelFactionReward.Text = (faction && faction_reward != balance) ? ("+" + faction_reward.ToString("N0") + "cr") : "";
+            labelTotalReward.Text = (total_reward != balance) ? ("+" + total_reward.ToString("N0") + "cr") : "";
+            labelDied.Text = (died != 0) ? ("Died".T(EDTx.UserControlCombatPanel_labelDied) + ":" + died.ToString()) : "";
         }
 
         static JournalTypeEnum[] targetofflist = new JournalTypeEnum[]            // ones to display without any extra detail
@@ -502,11 +517,12 @@ namespace EDDiscovery.UserControls
 
             displayedfilterentries.AddRange(savedfilterentries);
 
-            var missionlist = discoveryform.history.GetLast?.MissionList.GetAllCombatMissionsLatestFirst();
+            var missions = discoveryform.history.MissionListAccumulator.GetAllMissions();
+            var combatmissions = MissionListAccumulator.GetAllCombatMissionsLatestFirst(missions);
 
-            if (missionlist != null )
+            if (combatmissions != null )
             {
-                foreach (var s in missionlist)
+                foreach (var s in combatmissions)
                 {
                     FilterEntry f = new FilterEntry(s);
                     displayedfilterentries.Add(f);
@@ -685,7 +701,7 @@ namespace EDDiscovery.UserControls
 
                 var leftclicksystem = (HistoryEntry)dataGridViewCombat.Rows[dataGridViewCombat.LeftClickRow].Tag;
 
-                leftclicksystem.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
+                leftclicksystem.FillInformation(out string EventDescription, out string EventDetailedInfo);
 
                 if (expanded) // put it back to original text
                 {

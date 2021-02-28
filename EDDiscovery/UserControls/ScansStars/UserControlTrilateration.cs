@@ -177,7 +177,7 @@ namespace EDDiscovery.UserControls
                         return;
                     }
 
-                    var system = SystemCache.FindSystem(value);
+                    var system = discoveryform.history.FindSystem(value, discoveryform.galacticMapping, false);
                     var enteredSystems = GetEnteredSystems();
                     if (cell.Value != null)
                     {
@@ -250,7 +250,8 @@ namespace EDDiscovery.UserControls
                     LogTextHighlight("Duplicate system entry is not allowed".T(EDTx.UserControlTrilateration_DUP) + Environment.NewLine);
                     this.BeginInvoke(new MethodInvoker(() =>
                     {
-                        if (!dataGridViewDistances.Rows[e.RowIndex].IsNewRow)
+                        // 2996 seen a race condition around this, row not in place, so protect
+                        if (e.RowIndex >= 0 && e.RowIndex < dataGridViewDistances.RowCount && !dataGridViewDistances.Rows[e.RowIndex].IsNewRow)
                             dataGridViewDistances.Rows.Remove(dataGridViewDistances.Rows[e.RowIndex]);
                     }));
                     return;
@@ -261,7 +262,8 @@ namespace EDDiscovery.UserControls
                 {
                     this.BeginInvoke(new MethodInvoker(() =>
                     {
-                        if (!dataGridViewDistances.Rows[e.RowIndex].IsNewRow)
+                        // protect as per 2996 
+                        if ( e.RowIndex>=0 && e.RowIndex<dataGridViewDistances.RowCount && !dataGridViewDistances.Rows[e.RowIndex].IsNewRow)
                             dataGridViewDistances.Rows.Remove(dataGridViewDistances.Rows[e.RowIndex]);
                     }));
                     return;
@@ -540,7 +542,8 @@ namespace EDDiscovery.UserControls
             {
                 string sysName = cellVal.ToString();
                 EDSMClass edsm = new EDSMClass();
-                if (!edsm.ShowSystemInEDSM(sysName)) LogTextHighlight("System could not be found - has not been synched or EDSM is unavailable".T(EDTx.UserControlTrilateration_NoEDSM) + Environment.NewLine);
+                if (!edsm.ShowSystemInEDSM(sysName))
+                    LogTextHighlight("System could not be found - has not been synched or EDSM is unavailable".T(EDTx.UserControlTrilateration_NoEDSM) + Environment.NewLine);
             }
             this.Cursor = Cursors.Default;
         }
@@ -555,7 +558,8 @@ namespace EDDiscovery.UserControls
             this.Cursor = Cursors.WaitCursor;
             string sysName = selectedRows.First<DataGridViewRow>().Cells[1].Value.ToString();
             EDSMClass edsm = new EDSMClass();
-            if (!edsm.ShowSystemInEDSM(sysName)) LogTextHighlight("System could not be found - has not been synched or EDSM is unavailable".T(EDTx.UserControlTrilateration_NoEDSM) + Environment.NewLine);
+            if (!edsm.ShowSystemInEDSM(sysName))
+                LogTextHighlight("System could not be found - has not been synched or EDSM is unavailable".T(EDTx.UserControlTrilateration_NoEDSM) + Environment.NewLine);
 
             this.Cursor = Cursors.Default;
         }
@@ -571,7 +575,7 @@ namespace EDDiscovery.UserControls
                 sysName = r.Cells[1].Value.ToString();
                 if (r.Cells[0].Value.ToString() == "Local")
                 {
-                    var sys = SystemCache.FindSystem(sysName);
+                    var sys =discoveryform.history.FindSystem(sysName, discoveryform.galacticMapping, false);
                     if (sys == null)
                         edsmCheckNames.Add(sysName);
                     else
@@ -581,10 +585,10 @@ namespace EDDiscovery.UserControls
             if (edsmCheckNames.Count() > 0)
             {
                 EDSMClass edsm = new EDSMClass();
-                List<string> nowKnown = edsm.CheckForNewCoordinates(edsmCheckNames);
-                foreach (string s in nowKnown)
+                var nowKnown = edsm.GetSystems(edsmCheckNames);
+                foreach (var s in nowKnown)
                 {
-                    removeNames.Add(s);
+                    removeNames.Add(s.Name);
                 }
             }
             for (int i = dataGridViewClosestSystems.RowCount - 1; i >= 0; i--)
@@ -844,7 +848,7 @@ namespace EDDiscovery.UserControls
          * it creates a new System entity, otherwise logs it and returns null. */
         private ISystem getSystemForTrilateration(string systemName, bool fromEDSM)
         {
-            var system = SystemCache.FindSystem(systemName);
+            var system = discoveryform.history.FindSystem(systemName, discoveryform.galacticMapping, false);
 
             if (system == null)
             {
@@ -892,7 +896,7 @@ namespace EDDiscovery.UserControls
             {
                 foreach (WantedSystemClass sys in wanted)
                 {
-                    ISystem star = SystemCache.FindSystem(sys.system);
+                    ISystem star = discoveryform.history.FindSystem(sys.system, discoveryform.galacticMapping, false);
                     if (star == null)
                         star = new SystemClass(sys.system);
 
@@ -915,9 +919,9 @@ namespace EDDiscovery.UserControls
                 EDSMClass edsm = new EDSMClass();
                 pushed = edsm.GetPushedSystems();
 
-                foreach (String system in pushed)
+                foreach (var system in pushed)
                 {
-                    ISystem star = SystemCache.FindSystem(system);
+                    ISystem star = discoveryform.history.FindSystem(system, discoveryform.galacticMapping, false);
                     if (star == null)
                         star = new SystemClass(system);
 
@@ -967,7 +971,7 @@ namespace EDDiscovery.UserControls
 
                 foreach (string systemName in sector)
                 {
-                    ISystem star = SystemCache.FindSystem(systemName);
+                    ISystem star = discoveryform.history.FindSystem(systemName, discoveryform.galacticMapping, false);
                     if (star == null)
                         star = new SystemClass(systemName);
 
@@ -1025,7 +1029,7 @@ namespace EDDiscovery.UserControls
                 if (oldSystem != null && !oldSystem.HasCoordinate)
                 {
                     var value = systemCell.Value as string;
-                    var newSystem = SystemCache.FindSystem(value);
+                    var newSystem = discoveryform.history.FindSystem(value, discoveryform.galacticMapping, false);
                     if (newSystem != null && newSystem.HasCoordinate)
                     {
                         systemCell.Tag = newSystem;
@@ -1095,7 +1099,7 @@ namespace EDDiscovery.UserControls
 
                 wanted.Add(toAdd);
 
-                ISystem star = SystemCache.FindSystem(sysName);
+                ISystem star = discoveryform.history.FindSystem(sysName, discoveryform.galacticMapping, false); 
                 if (star == null)
                     star = new SystemClass(sysName);
 

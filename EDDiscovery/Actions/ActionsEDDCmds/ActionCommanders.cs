@@ -42,7 +42,7 @@ namespace EDDiscovery.Actions
         public override bool ExecuteAction(ActionProgramRun ap)
         {
             string res;
-            if (ap.functions.ExpandString(UserData, out res) != BaseUtils.Functions.ExpandResult.Failed)
+            if (ap.Functions.ExpandString(UserData, out res) != BaseUtils.Functions.ExpandResult.Failed)
             {
                 StringParser sp = new StringParser(res);
 
@@ -71,14 +71,14 @@ namespace EDDiscovery.Actions
                     EDCommander cmdr = EDCommander.GetCommander(name);
 
                     if (cmdr != null)
-                        cmdrid = cmdr.Nr;
+                        cmdrid = cmdr.Id;
                     else
                         ap.ReportError("Commander not found");
 
                     cmdname = sp.NextWord();
                 }
 
-                EDDiscoveryForm discoveryform = (ap.actioncontroller as ActionController).DiscoveryForm;
+                EDDiscoveryForm discoveryform = (ap.ActionController as ActionController).DiscoveryForm;
 
                 List<EDCommander> cmdrlist = EDCommander.GetCommanders();
 
@@ -118,7 +118,7 @@ namespace EDDiscovery.Actions
 
         void DumpCMDR( ActionProgramRun ap, string prefix, EDCommander cmdr)
         {
-            ap[prefix + "Id"] = cmdr.Nr.ToStringInvariant();
+            ap[prefix + "Id"] = cmdr.Id.ToStringInvariant();
             ap[prefix + "Name"] = cmdr.Name;
             ap[prefix + "EDSMName"] = cmdr.EdsmName;
             ap[prefix + "EGOName"] = "";

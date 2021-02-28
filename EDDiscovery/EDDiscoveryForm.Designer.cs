@@ -44,7 +44,7 @@ namespace EDDiscovery
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            ExtendedControls.TabStyleSquare tabStyleSquare1 = new ExtendedControls.TabStyleSquare();
+            ExtendedControls.TabStyleSquare tabStyleSquare2 = new ExtendedControls.TabStyleSquare();
             this.edsmRefreshTimer = new System.Windows.Forms.Timer(this.components);
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.notifyIconContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -60,7 +60,6 @@ namespace EDDiscovery
             this.buttonExtManageAddOns = new ExtendedControls.ExtButton();
             this.buttonExtEditAddOns = new ExtendedControls.ExtButton();
             this.buttonExtPopOut = new ExtendedControls.ExtButton();
-            this.buttonExtEDSMSync = new ExtendedControls.ExtButton();
             this.buttonReloadActions = new ExtendedControls.ExtButton();
             this.contextMenuStripTabs = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.addTabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -89,20 +88,19 @@ namespace EDDiscovery
             this.sendUnsyncedEDSMJournalsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fetchLogsAgainToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fetchStarDataAgainToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.rescanAllJournalFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sendUnsuncedEDDNEventsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sendHistoricDataToInaraToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.rebuildUserDBIndexesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.rebuildSystemDBIndexesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.DLLPermissionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.updateUnknownSystemCoordsWithDataFromSystemDBToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showLogfilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.deleteDuplicateFSDJumpEntriesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.read21AndFormerLogFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.load21ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.read21AndFormerLogFiles_forceReloadLogsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.rescanAllJournalFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.deleteDuplicateFSDJumpEntriesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.sendUnsuncedEDDNEventsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.sendHistoricDataToInaraToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.exportVistedStarsListToEliteDangerousToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.rebuildUserDBIndexesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.rebuildSystemDBIndexesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.removeAllDLLPermissionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.updateUnknownSystemCoordsWithDataFromSystemDBToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.showLogfilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addOnsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.manageAddOnsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.configureAddOnActionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -201,7 +199,7 @@ namespace EDDiscovery
             this.tabControlMain.TabNotSelectedColor = System.Drawing.Color.Gray;
             this.tabControlMain.TabOpaque = 100F;
             this.tabControlMain.TabSelectedColor = System.Drawing.Color.LightGray;
-            this.tabControlMain.TabStyle = tabStyleSquare1;
+            this.tabControlMain.TabStyle = tabStyleSquare2;
             this.tabControlMain.TextNotSelectedColor = System.Drawing.SystemColors.ControlText;
             this.tabControlMain.TextSelectedColor = System.Drawing.SystemColors.ControlText;
             this.toolTip.SetToolTip(this.tabControlMain, "Right click to add/remove tabs, Left click drag to reorder");
@@ -326,23 +324,11 @@ namespace EDDiscovery
             this.buttonExtPopOut.UseVisualStyleBackColor = false;
             this.buttonExtPopOut.Click += new System.EventHandler(this.buttonExtPopOut_Click);
             // 
-            // buttonExtEDSMSync
-            // 
-            this.buttonExtEDSMSync.Image = global::EDDiscovery.Icons.Controls.Main_Toolbar_SyncEDSM;
-            this.buttonExtEDSMSync.Location = new System.Drawing.Point(430, 1);
-            this.buttonExtEDSMSync.Margin = new System.Windows.Forms.Padding(1, 1, 3, 1);
-            this.buttonExtEDSMSync.Name = "buttonExtEDSMSync";
-            this.buttonExtEDSMSync.Size = new System.Drawing.Size(24, 24);
-            this.buttonExtEDSMSync.TabIndex = 2;
-            this.toolTip.SetToolTip(this.buttonExtEDSMSync, "Send any unsynced logs to EDSM");
-            this.buttonExtEDSMSync.UseVisualStyleBackColor = true;
-            this.buttonExtEDSMSync.Click += new System.EventHandler(this.buttonExtEDSMSync_Click);
-            // 
             // buttonReloadActions
             // 
             this.buttonReloadActions.Image = global::EDDiscovery.Icons.Controls.Main_Toolbar_Refresh;
             this.buttonReloadActions.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.buttonReloadActions.Location = new System.Drawing.Point(458, 1);
+            this.buttonReloadActions.Location = new System.Drawing.Point(430, 1);
             this.buttonReloadActions.Margin = new System.Windows.Forms.Padding(1, 1, 3, 1);
             this.buttonReloadActions.Name = "buttonReloadActions";
             this.buttonReloadActions.Size = new System.Drawing.Size(65, 24);
@@ -426,7 +412,6 @@ namespace EDDiscovery
             this.flowToolBar.Controls.Add(this.buttonExtManageAddOns);
             this.flowToolBar.Controls.Add(this.buttonExtEditAddOns);
             this.flowToolBar.Controls.Add(this.buttonExtPopOut);
-            this.flowToolBar.Controls.Add(this.buttonExtEDSMSync);
             this.flowToolBar.Controls.Add(this.buttonReloadActions);
             this.flowToolBar.Controls.Add(this.extButtonDrawnHelp);
             this.flowToolBar.Location = new System.Drawing.Point(0, 0);
@@ -443,7 +428,7 @@ namespace EDDiscovery
             this.extButtonDrawnHelp.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.extButtonDrawnHelp.Image = null;
             this.extButtonDrawnHelp.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Text;
-            this.extButtonDrawnHelp.Location = new System.Drawing.Point(529, 3);
+            this.extButtonDrawnHelp.Location = new System.Drawing.Point(501, 3);
             this.extButtonDrawnHelp.MouseOverColor = System.Drawing.Color.White;
             this.extButtonDrawnHelp.MouseSelectedColor = System.Drawing.Color.Green;
             this.extButtonDrawnHelp.MouseSelectedColorEnable = true;
@@ -510,7 +495,7 @@ namespace EDDiscovery
             this.menuFlowPanel.Location = new System.Drawing.Point(0, 0);
             this.menuFlowPanel.Margin = new System.Windows.Forms.Padding(0);
             this.menuFlowPanel.Name = "menuFlowPanel";
-            this.menuFlowPanel.Size = new System.Drawing.Size(496, 24);
+            this.menuFlowPanel.Size = new System.Drawing.Size(376, 24);
             this.menuFlowPanel.TabIndex = 23;
             this.menuFlowPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MouseDownCAPTION);
             this.menuFlowPanel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MouseUpCAPTION);
@@ -527,9 +512,8 @@ namespace EDDiscovery
             this.mainMenu.Location = new System.Drawing.Point(0, 0);
             this.mainMenu.Name = "mainMenu";
             this.mainMenu.Padding = new System.Windows.Forms.Padding(0);
-            this.mainMenu.Size = new System.Drawing.Size(334, 24);
+            this.mainMenu.Size = new System.Drawing.Size(214, 24);
             this.mainMenu.TabIndex = 16;
-            this.mainMenu.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.mainMenu_ItemClicked);
             // 
             // toolsToolStripMenuItem
             // 
@@ -599,10 +583,9 @@ namespace EDDiscovery
             this.rescanAllJournalFilesToolStripMenuItem,
             this.sendUnsuncedEDDNEventsToolStripMenuItem,
             this.sendHistoricDataToInaraToolStripMenuItem,
-            this.exportVistedStarsListToEliteDangerousToolStripMenuItem,
             this.rebuildUserDBIndexesToolStripMenuItem,
             this.rebuildSystemDBIndexesToolStripMenuItem,
-            this.removeAllDLLPermissionsToolStripMenuItem,
+            this.DLLPermissionsToolStripMenuItem,
             this.updateUnknownSystemCoordsWithDataFromSystemDBToolStripMenuItem,
             this.showLogfilesToolStripMenuItem,
             this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem,
@@ -644,38 +627,6 @@ namespace EDDiscovery
             this.fetchStarDataAgainToolStripMenuItem.Text = "Fetch Star Data Again";
             this.fetchStarDataAgainToolStripMenuItem.Click += new System.EventHandler(this.syncEDSMSystemsToolStripMenuItem_Click);
             // 
-            // dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem
-            // 
-            this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.Main_Admin_ResetHistory;
-            this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem.Name = "dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem";
-            this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem.Size = new System.Drawing.Size(385, 22);
-            this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem.Text = "Reset all history to current commander";
-            this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem.Click += new System.EventHandler(this.debugResetAllHistoryToFirstCommanderToolStripMenuItem_Click);
-            // 
-            // read21AndFormerLogFilesToolStripMenuItem
-            // 
-            this.read21AndFormerLogFilesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.load21ToolStripMenuItem,
-            this.read21AndFormerLogFiles_forceReloadLogsToolStripMenuItem});
-            this.read21AndFormerLogFilesToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.Main_Admin_ReadNetLogs;
-            this.read21AndFormerLogFilesToolStripMenuItem.Name = "read21AndFormerLogFilesToolStripMenuItem";
-            this.read21AndFormerLogFilesToolStripMenuItem.Size = new System.Drawing.Size(385, 22);
-            this.read21AndFormerLogFilesToolStripMenuItem.Text = "Read 2.1 and former log files";
-            // 
-            // load21ToolStripMenuItem
-            // 
-            this.load21ToolStripMenuItem.Name = "load21ToolStripMenuItem";
-            this.load21ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.load21ToolStripMenuItem.Text = "Scan Netlogs";
-            this.load21ToolStripMenuItem.Click += new System.EventHandler(this.read21AndFormerLogFilesToolStripMenuItem_Click);
-            // 
-            // read21AndFormerLogFiles_forceReloadLogsToolStripMenuItem
-            // 
-            this.read21AndFormerLogFiles_forceReloadLogsToolStripMenuItem.Name = "read21AndFormerLogFiles_forceReloadLogsToolStripMenuItem";
-            this.read21AndFormerLogFiles_forceReloadLogsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.read21AndFormerLogFiles_forceReloadLogsToolStripMenuItem.Text = "Force reload logs";
-            this.read21AndFormerLogFiles_forceReloadLogsToolStripMenuItem.Click += new System.EventHandler(this.read21AndFormerLogFiles_forceReloadLogsToolStripMenuItem_Click);
-            // 
             // rescanAllJournalFilesToolStripMenuItem
             // 
             this.rescanAllJournalFilesToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.Main_Admin_RescanJournals;
@@ -683,14 +634,6 @@ namespace EDDiscovery
             this.rescanAllJournalFilesToolStripMenuItem.Size = new System.Drawing.Size(385, 22);
             this.rescanAllJournalFilesToolStripMenuItem.Text = "Re-scan all journal files";
             this.rescanAllJournalFilesToolStripMenuItem.Click += new System.EventHandler(this.rescanAllJournalFilesToolStripMenuItem_Click);
-            // 
-            // deleteDuplicateFSDJumpEntriesToolStripMenuItem
-            // 
-            this.deleteDuplicateFSDJumpEntriesToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.Main_Admin_DeleteDupFSDJumps;
-            this.deleteDuplicateFSDJumpEntriesToolStripMenuItem.Name = "deleteDuplicateFSDJumpEntriesToolStripMenuItem";
-            this.deleteDuplicateFSDJumpEntriesToolStripMenuItem.Size = new System.Drawing.Size(385, 22);
-            this.deleteDuplicateFSDJumpEntriesToolStripMenuItem.Text = "Delete duplicate FSD Jump entries";
-            this.deleteDuplicateFSDJumpEntriesToolStripMenuItem.Click += new System.EventHandler(this.deleteDuplicateFSDJumpEntriesToolStripMenuItem_Click);
             // 
             // sendUnsuncedEDDNEventsToolStripMenuItem
             // 
@@ -708,14 +651,6 @@ namespace EDDiscovery
             this.sendHistoricDataToInaraToolStripMenuItem.Text = "Send to Inara historic data (previous ships, stored modules)";
             this.sendHistoricDataToInaraToolStripMenuItem.Click += new System.EventHandler(this.sendHistoricDataToInaraToolStripMenuItem_Click);
             // 
-            // exportVistedStarsListToEliteDangerousToolStripMenuItem
-            // 
-            this.exportVistedStarsListToEliteDangerousToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.Main_Admin_ExportVisitedStars;
-            this.exportVistedStarsListToEliteDangerousToolStripMenuItem.Name = "exportVistedStarsListToEliteDangerousToolStripMenuItem";
-            this.exportVistedStarsListToEliteDangerousToolStripMenuItem.Size = new System.Drawing.Size(385, 22);
-            this.exportVistedStarsListToEliteDangerousToolStripMenuItem.Text = "Export Visited Stars List to Elite Dangerous";
-            this.exportVistedStarsListToEliteDangerousToolStripMenuItem.Click += new System.EventHandler(this.exportVistedStarsListToEliteDangerousToolStripMenuItem_Click);
-            // 
             // rebuildUserDBIndexesToolStripMenuItem
             // 
             this.rebuildUserDBIndexesToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.Main_Admin_RescanJournals;
@@ -732,13 +667,13 @@ namespace EDDiscovery
             this.rebuildSystemDBIndexesToolStripMenuItem.Text = "Rebuild System DB Indexes";
             this.rebuildSystemDBIndexesToolStripMenuItem.Click += new System.EventHandler(this.rebuildSystemDBIndexesToolStripMenuItem_Click);
             // 
-            // removeAllDLLPermissionsToolStripMenuItem
+            // DLLPermissionsToolStripMenuItem
             // 
-            this.removeAllDLLPermissionsToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.Main_Admin_ShowLogFiles;
-            this.removeAllDLLPermissionsToolStripMenuItem.Name = "removeAllDLLPermissionsToolStripMenuItem";
-            this.removeAllDLLPermissionsToolStripMenuItem.Size = new System.Drawing.Size(385, 22);
-            this.removeAllDLLPermissionsToolStripMenuItem.Text = "Remove all DLL permissions";
-            this.removeAllDLLPermissionsToolStripMenuItem.Click += new System.EventHandler(this.removeAllDLLPermissionsToolStripMenuItem_Click);
+            this.DLLPermissionsToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.Main_Admin_ShowLogFiles;
+            this.DLLPermissionsToolStripMenuItem.Name = "DLLPermissionsToolStripMenuItem";
+            this.DLLPermissionsToolStripMenuItem.Size = new System.Drawing.Size(385, 22);
+            this.DLLPermissionsToolStripMenuItem.Text = "DLL Permissions (applies after restart)";
+            this.DLLPermissionsToolStripMenuItem.Click += new System.EventHandler(this.DLLPermissions_Click);
             // 
             // updateUnknownSystemCoordsWithDataFromSystemDBToolStripMenuItem
             // 
@@ -755,6 +690,46 @@ namespace EDDiscovery
             this.showLogfilesToolStripMenuItem.Size = new System.Drawing.Size(385, 22);
             this.showLogfilesToolStripMenuItem.Text = "Show journal files directory of current commander";
             this.showLogfilesToolStripMenuItem.Click += new System.EventHandler(this.showLogfilesToolStripMenuItem_Click);
+            // 
+            // dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem
+            // 
+            this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.Main_Admin_ResetHistory;
+            this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem.Name = "dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem";
+            this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem.Size = new System.Drawing.Size(385, 22);
+            this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem.Text = "Reset all history to current commander";
+            this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem.Click += new System.EventHandler(this.debugResetAllHistoryToFirstCommanderToolStripMenuItem_Click);
+            // 
+            // deleteDuplicateFSDJumpEntriesToolStripMenuItem
+            // 
+            this.deleteDuplicateFSDJumpEntriesToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.Main_Admin_DeleteDupFSDJumps;
+            this.deleteDuplicateFSDJumpEntriesToolStripMenuItem.Name = "deleteDuplicateFSDJumpEntriesToolStripMenuItem";
+            this.deleteDuplicateFSDJumpEntriesToolStripMenuItem.Size = new System.Drawing.Size(385, 22);
+            this.deleteDuplicateFSDJumpEntriesToolStripMenuItem.Text = "Delete duplicate FSD Jump entries";
+            this.deleteDuplicateFSDJumpEntriesToolStripMenuItem.Click += new System.EventHandler(this.deleteDuplicateFSDJumpEntriesToolStripMenuItem_Click);
+            // 
+            // read21AndFormerLogFilesToolStripMenuItem
+            // 
+            this.read21AndFormerLogFilesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.load21ToolStripMenuItem,
+            this.read21AndFormerLogFiles_forceReloadLogsToolStripMenuItem});
+            this.read21AndFormerLogFilesToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.Main_Admin_ReadNetLogs;
+            this.read21AndFormerLogFilesToolStripMenuItem.Name = "read21AndFormerLogFilesToolStripMenuItem";
+            this.read21AndFormerLogFilesToolStripMenuItem.Size = new System.Drawing.Size(385, 22);
+            this.read21AndFormerLogFilesToolStripMenuItem.Text = "Read 2.1 and former log files";
+            // 
+            // load21ToolStripMenuItem
+            // 
+            this.load21ToolStripMenuItem.Name = "load21ToolStripMenuItem";
+            this.load21ToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.load21ToolStripMenuItem.Text = "Scan Netlogs";
+            this.load21ToolStripMenuItem.Click += new System.EventHandler(this.read21AndFormerLogFilesToolStripMenuItem_Click);
+            // 
+            // read21AndFormerLogFiles_forceReloadLogsToolStripMenuItem
+            // 
+            this.read21AndFormerLogFiles_forceReloadLogsToolStripMenuItem.Name = "read21AndFormerLogFiles_forceReloadLogsToolStripMenuItem";
+            this.read21AndFormerLogFiles_forceReloadLogsToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.read21AndFormerLogFiles_forceReloadLogsToolStripMenuItem.Text = "Force reload logs";
+            this.read21AndFormerLogFiles_forceReloadLogsToolStripMenuItem.Click += new System.EventHandler(this.read21AndFormerLogFiles_forceReloadLogsToolStripMenuItem_Click);
             // 
             // addOnsToolStripMenuItem
             // 
@@ -905,7 +880,7 @@ namespace EDDiscovery
             // 
             this.label_version.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label_version.AutoSize = true;
-            this.label_version.Location = new System.Drawing.Point(342, 6);
+            this.label_version.Location = new System.Drawing.Point(222, 6);
             this.label_version.Margin = new System.Windows.Forms.Padding(8, 1, 3, 0);
             this.label_version.Name = "label_version";
             this.label_version.Size = new System.Drawing.Size(43, 13);
@@ -919,7 +894,7 @@ namespace EDDiscovery
             // 
             this.labelInfoBoxTop.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.labelInfoBoxTop.AutoSize = true;
-            this.labelInfoBoxTop.Location = new System.Drawing.Point(396, 6);
+            this.labelInfoBoxTop.Location = new System.Drawing.Point(276, 6);
             this.labelInfoBoxTop.Margin = new System.Windows.Forms.Padding(8, 1, 3, 0);
             this.labelInfoBoxTop.Name = "labelInfoBoxTop";
             this.labelInfoBoxTop.Size = new System.Drawing.Size(43, 13);
@@ -932,7 +907,7 @@ namespace EDDiscovery
             // 
             this.labelGameDateTime.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.labelGameDateTime.AutoSize = true;
-            this.labelGameDateTime.Location = new System.Drawing.Point(450, 6);
+            this.labelGameDateTime.Location = new System.Drawing.Point(330, 6);
             this.labelGameDateTime.Margin = new System.Windows.Forms.Padding(8, 1, 3, 0);
             this.labelGameDateTime.Name = "labelGameDateTime";
             this.labelGameDateTime.Size = new System.Drawing.Size(43, 13);
@@ -1080,7 +1055,6 @@ namespace EDDiscovery
         private ExtendedControls.ExtComboBox comboBoxCommander;
         private ExtendedControls.ExtButton buttonExt3dmap;
         private ExtendedControls.ExtButton buttonExtRefresh;
-        private ExtendedControls.ExtButton buttonExtEDSMSync;
         private System.Windows.Forms.ToolTip toolTip;
         private ExtendedControls.ExtButton buttonExtEditAddOns;
         private ExtendedControls.ExtButton buttonExtManageAddOns;
@@ -1116,7 +1090,6 @@ namespace EDDiscovery
         private System.Windows.Forms.ToolStripMenuItem deleteDuplicateFSDJumpEntriesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem sendUnsuncedEDDNEventsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem sendHistoricDataToInaraToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem exportVistedStarsListToEliteDangerousToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem addOnsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem manageAddOnsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem configureAddOnActionsToolStripMenuItem;
@@ -1142,7 +1115,7 @@ namespace EDDiscovery
         private System.Windows.Forms.ToolStripMenuItem rebuildSystemDBIndexesToolStripMenuItem;
         private ExtendedControls.ExtPanelResizer extPanelTopResizer;
         private System.Windows.Forms.Label labelGameDateTime;
-        private System.Windows.Forms.ToolStripMenuItem removeAllDLLPermissionsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem DLLPermissionsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem load21ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpTabToolStripMenuItem;
         private ExtendedControls.ExtButtonDrawn extButtonDrawnHelp;

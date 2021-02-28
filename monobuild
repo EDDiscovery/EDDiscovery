@@ -1,0 +1,6 @@
+#Stupid thing does not allow , or ; between constants without quoting
+#and if you define any constants the standard ones such as Debug/Trace do NOT appear (!)
+#this works
+#msbuild /p:Configuration=Debug EDDiscovery.sln /p:DefineConstants=NO_SYSTEM_SPEECH%3BDEBUG%3BTRACE
+#or this
+msbuild /p:Configuration=Debug EDDiscovery.sln "/p:DefineConstants=\"NO_SYSTEM_SPEECH;MONO;DEBUG;TRACE\""

@@ -41,6 +41,8 @@ namespace EDDiscovery.UserControls
         public DrawModeType DrawMode { get { return (checkBoxCustomText.Checked) ? DrawModeType.Text : DrawModeType.Graph; } }
         public bool StarPlanetMode { get { return checkBoxCustomStars.Checked; } }
 
+        public bool AllowCustomTime { get; set; } = true;
+
         public TimeModeType TimeMode
         {
             get
@@ -137,7 +139,8 @@ namespace EDDiscovery.UserControls
             comboBoxTimeMode.Items.Add("Day".T(EDTx.StatsTimeUserControl_Day));
             comboBoxTimeMode.Items.Add("Week".T(EDTx.StatsTimeUserControl_Week));
             comboBoxTimeMode.Items.Add("Month".T(EDTx.StatsTimeUserControl_Month));
-            comboBoxTimeMode.Items.Add("Custom".T(EDTx.StatsTimeUserControl_Custom));
+            if ( AllowCustomTime)
+                comboBoxTimeMode.Items.Add("Custom".T(EDTx.StatsTimeUserControl_Custom));
             comboBoxTimeMode.SelectedIndex = 0;
         }
 

@@ -60,6 +60,7 @@ namespace EDDiscovery.UserControls
             this.showAllPlanetsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showAllStarsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showBeltClustersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.selectFSSSignalsShownToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.showMoreInformationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hideAlreadyMappedBodiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -75,8 +76,11 @@ namespace EDDiscovery.UserControls
             this.centerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rightToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pictureBoxSurveyor = new ExtendedControls.ExtPictureBox();
+            this.extPictureBoxScroll = new ExtendedControls.ExtPictureBoxScroll();
+            this.extScrollBar = new ExtendedControls.ExtScrollBar();
             this.contextMenuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSurveyor)).BeginInit();
+            this.extPictureBoxScroll.SuspendLayout();
             this.SuspendLayout();
             // 
             // contextMenuStrip
@@ -87,6 +91,7 @@ namespace EDDiscovery.UserControls
             this.showAllPlanetsToolStripMenuItem,
             this.showAllStarsToolStripMenuItem,
             this.showBeltClustersToolStripMenuItem,
+            this.selectFSSSignalsShownToolStripMenuItem,
             this.toolStripSeparator1,
             this.showMoreInformationToolStripMenuItem,
             this.hideAlreadyMappedBodiesToolStripMenuItem,
@@ -117,7 +122,7 @@ namespace EDDiscovery.UserControls
             this.ammoniaWorldToolStripMenuItem.CheckOnClick = true;
             this.ammoniaWorldToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.ammoniaWorldToolStripMenuItem.Name = "ammoniaWorldToolStripMenuItem";
-            this.ammoniaWorldToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.ammoniaWorldToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
             this.ammoniaWorldToolStripMenuItem.Text = "Ammonia World";
             // 
             // earthlikeWorldToolStripMenuItem
@@ -126,7 +131,7 @@ namespace EDDiscovery.UserControls
             this.earthlikeWorldToolStripMenuItem.CheckOnClick = true;
             this.earthlikeWorldToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.earthlikeWorldToolStripMenuItem.Name = "earthlikeWorldToolStripMenuItem";
-            this.earthlikeWorldToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.earthlikeWorldToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
             this.earthlikeWorldToolStripMenuItem.Text = "Earthlike World";
             // 
             // waterWorldToolStripMenuItem
@@ -135,7 +140,7 @@ namespace EDDiscovery.UserControls
             this.waterWorldToolStripMenuItem.CheckOnClick = true;
             this.waterWorldToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.waterWorldToolStripMenuItem.Name = "waterWorldToolStripMenuItem";
-            this.waterWorldToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.waterWorldToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
             this.waterWorldToolStripMenuItem.Text = "Water World";
             // 
             // bodyFeaturesToolStripMenuItem
@@ -231,6 +236,13 @@ namespace EDDiscovery.UserControls
             this.showBeltClustersToolStripMenuItem.Name = "showBeltClustersToolStripMenuItem";
             this.showBeltClustersToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
             this.showBeltClustersToolStripMenuItem.Text = "Show Belt Clusters";
+            // 
+            // selectFSSSignalsShownToolStripMenuItem
+            // 
+            this.selectFSSSignalsShownToolStripMenuItem.Name = "selectFSSSignalsShownToolStripMenuItem";
+            this.selectFSSSignalsShownToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
+            this.selectFSSSignalsShownToolStripMenuItem.Text = "Select FSS Signals Shown";
+            this.selectFSSSignalsShownToolStripMenuItem.Click += new System.EventHandler(this.selectFSSSignalsShownToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
@@ -345,25 +357,67 @@ namespace EDDiscovery.UserControls
             // pictureBoxSurveyor
             // 
             this.pictureBoxSurveyor.ContextMenuStrip = this.contextMenuStrip;
-            this.pictureBoxSurveyor.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBoxSurveyor.Location = new System.Drawing.Point(0, 0);
             this.pictureBoxSurveyor.Name = "pictureBoxSurveyor";
-            this.pictureBoxSurveyor.Size = new System.Drawing.Size(478, 229);
+            this.pictureBoxSurveyor.Size = new System.Drawing.Size(705, 200);
             this.pictureBoxSurveyor.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.pictureBoxSurveyor.TabIndex = 0;
+            // 
+            // extPictureBoxScroll
+            // 
+            this.extPictureBoxScroll.ContextMenuStrip = this.contextMenuStrip;
+            this.extPictureBoxScroll.Controls.Add(this.extScrollBar);
+            this.extPictureBoxScroll.Controls.Add(this.pictureBoxSurveyor);
+            this.extPictureBoxScroll.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.extPictureBoxScroll.Location = new System.Drawing.Point(0, 0);
+            this.extPictureBoxScroll.Name = "extPictureBoxScroll";
+            this.extPictureBoxScroll.ScrollBarEnabled = true;
+            this.extPictureBoxScroll.Size = new System.Drawing.Size(721, 403);
+            this.extPictureBoxScroll.TabIndex = 1;
+            this.extPictureBoxScroll.VerticalScrollBarDockRight = true;
+            // 
+            // extScrollBar
+            // 
+            this.extScrollBar.ArrowBorderColor = System.Drawing.Color.LightBlue;
+            this.extScrollBar.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.extScrollBar.ArrowColorScaling = 0.5F;
+            this.extScrollBar.ArrowDownDrawAngle = 270F;
+            this.extScrollBar.ArrowUpDrawAngle = 90F;
+            this.extScrollBar.BorderColor = System.Drawing.Color.White;
+            this.extScrollBar.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.extScrollBar.HideScrollBar = true;
+            this.extScrollBar.LargeChange = 403;
+            this.extScrollBar.Location = new System.Drawing.Point(705, 0);
+            this.extScrollBar.Maximum = 199;
+            this.extScrollBar.Minimum = 0;
+            this.extScrollBar.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.extScrollBar.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.extScrollBar.Name = "extScrollBar";
+            this.extScrollBar.Size = new System.Drawing.Size(16, 403);
+            this.extScrollBar.SliderColor = System.Drawing.Color.DarkGray;
+            this.extScrollBar.SmallChange = 16;
+            this.extScrollBar.TabIndex = 1;
+            this.extScrollBar.Text = "extScrollBar1";
+            this.extScrollBar.ThumbBorderColor = System.Drawing.Color.Yellow;
+            this.extScrollBar.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.extScrollBar.ThumbColorScaling = 0.5F;
+            this.extScrollBar.ThumbDrawAngle = 0F;
+            this.extScrollBar.Value = 0;
+            this.extScrollBar.ValueLimited = 0;
             // 
             // UserControlSurveyor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.pictureBoxSurveyor);
+            this.Controls.Add(this.extPictureBoxScroll);
             this.Name = "UserControlSurveyor";
-            this.Size = new System.Drawing.Size(478, 229);
+            this.Size = new System.Drawing.Size(721, 403);
             this.Resize += new System.EventHandler(this.UserControlSurveyor_Resize);
             this.contextMenuStrip.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSurveyor)).EndInit();
+            this.extPictureBoxScroll.ResumeLayout(false);
+            this.extPictureBoxScroll.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -399,5 +453,8 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripMenuItem wordWrapToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem landableToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem selectFSSSignalsShownToolStripMenuItem;
+        private ExtendedControls.ExtPictureBoxScroll extPictureBoxScroll;
+        private ExtendedControls.ExtScrollBar extScrollBar;
     }
 }

@@ -134,6 +134,18 @@ namespace EDDiscovery.UserControls
                 tg.OnKeyDownInCell += Tg_OnKeyDownInCell;
         }
 
+        public override bool AllowClose()                  // splitter is closing, does the consistuent panels allow close?
+        {
+            bool closeok = true;
+            RunActionOnSplitterTree((p, c, uccb) =>        // check for close, uccb is set otherwise not called
+            {
+                if (uccb.AllowClose() == false)
+                    closeok = false;
+            });
+
+            return closeok;
+        }
+
         public override void Closing()
         {
             //System.Diagnostics.Debug.WriteLine("Closing splitter " + displaynumber);
@@ -220,6 +232,12 @@ namespace EDDiscovery.UserControls
                 tabstrip.Name = Name + "." + tagid.ToStringInvariant();
 
                 //System.Diagnostics.Debug.WriteLine("Make new tab control " + tabstrip.Name + " id "  + tagid + " of " + panelid );
+
+                tabstrip.AllowClose += (tab, index, ctrl) =>
+                {
+                    UserControlCommonBase uccb = ctrl as UserControlCommonBase;
+                    return uccb.AllowClose();
+                };
 
                 tabstrip.OnRemoving += (tab, ctrl) =>
                 {
@@ -413,16 +431,28 @@ namespace EDDiscovery.UserControls
             currentsplitter.Split(1, sc, MakeNode(GetFreeTag().ToStringInvariant()));
         }
 
+        private void Merge(int panel)       // Merge a panel, which involves closing one, so we need to check
+        {
+            SplitContainer insidesplitter = (SplitContainer)currentsplitter.Controls[panel].Controls[0];  // get that split container in the panel
+            ExtendedControls.TabStrip tabstrip = insidesplitter.Panel2.Controls[0] as ExtendedControls.TabStrip;    // it must contain a tabstrip
+
+            UserControlCommonBase discard = tabstrip.CurrentControl as UserControlCommonBase;      // we are discarding this UCCB, this can be null, as it may not contain one
+
+            if (discard?.AllowClose() ?? true)      // check if can close, if null, we can
+            {
+                currentsplitter.Merge(panel);
+                AssignTHC();        // because we may have removed the cursor
+            }
+        }
+
         private void toolStripMergePanel1_Click(object sender, EventArgs e)
         {
-            currentsplitter.Merge(0);
-            AssignTHC();        // because we may have removed the cursor
+            Merge(0);
         }
 
         private void toolStripMergePanel2_Click(object sender, EventArgs e)
         {
-            currentsplitter.Merge(1);
-            AssignTHC();        // because we may have removed the cursor
+            Merge(1);
         }
         
         private void toolStripMenuItem13_Click(object sender, EventArgs e)

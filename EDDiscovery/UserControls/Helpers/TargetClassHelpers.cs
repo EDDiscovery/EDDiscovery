@@ -52,7 +52,7 @@ namespace EDDiscovery.UserControls
                 return;
             }
 
-            ISystem sc = discoveryform.history.FindSystem(sn);
+            ISystem sc = discoveryform.history.FindSystem(sn, discoveryform.galacticMapping, true);
             string msgboxtext = null;
 
             if (sc != null && sc.HasCoordinate)
@@ -95,7 +95,7 @@ namespace EDDiscovery.UserControls
                 if (sn.Length > 2 && sn.Substring(0, 2).Equals("G:"))
                     sn = sn.Substring(2, sn.Length - 2);
 
-                GalacticMapObject gmo = discoveryform.galacticMapping.Find(sn, true, true);    // ignore if its off, find any part of string, find if disabled
+                GalacticMapObject gmo = discoveryform.galacticMapping.Find(sn, true);    // ignore if its off, find any part of string, find if disabled
 
                 if (gmo != null)
                 {

@@ -5,12 +5,12 @@
  * file except in compliance with the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
+ *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
@@ -25,8 +25,8 @@ namespace EDDiscovery
     {
         EDDiscoveryForm eddiscovery;
 
-        public UserControls.UserControlContainerSplitter PrimaryTab { get 
-            { 
+        public UserControls.UserControlContainerSplitter PrimaryTab { get
+            {
                 foreach (TabPage p in TabPages)      // all main tabs, load/display
                 {
                     if (p.Tag != null)
@@ -53,7 +53,7 @@ namespace EDDiscovery
                 int[] rawtabctrl;
                 majortabs.RestoreArrayFromString(out rawtabctrl);       // string is : selectedtab, [ <PanelID>, <displayno> ]..
 
-                panelids = rawtabctrl.Where((value, index) => index % 2 != 0).ToArray();          
+                panelids = rawtabctrl.Where((value, index) => index % 2 != 0).ToArray();
                 displaynumbers = rawtabctrl.Where((value, index) => index > 0 && index % 2 == 0).ToArray();
 
                 if (resettabs || panelids.Length == 0 || panelids.Length != displaynumbers.Length || !panelids.Contains(-1) || !panelids.Contains((int)PanelInformation.PanelIDs.PanelSelector))
@@ -106,7 +106,7 @@ namespace EDDiscovery
             foreach (TabPage p in TabPages)      // all main tabs, load/display
             {
                 // now a strange thing. tab Selected, cause its shown, gets resized (due to repoisition form). Other tabs dont.
-                // LoadLayout could fail due to an incorrect size that would break something (such as spitters).. 
+                // LoadLayout could fail due to an incorrect size that would break something (such as spitters)..
                 // so force size. tried perform layout to no avail
                 p.Size = TabPages[SelectedIndex].Size;
                 UserControls.UserControlCommonBase uccb = (UserControls.UserControlCommonBase)p.Controls[0];
@@ -116,6 +116,17 @@ namespace EDDiscovery
             }
 
             //foreach (TabPage tp in tabControlMain.TabPages) System.Diagnostics.Debug.WriteLine("TP Size " + tp.Controls[0].DisplayRectangle);
+        }
+
+        public bool AllowClose()                 // tabs are closing, does all tabs allow close
+        {
+            foreach (TabPage p in TabPages)
+            {
+                UserControls.UserControlCommonBase uccb = p.Controls[0] as UserControls.UserControlCommonBase;
+                if (uccb.AllowClose() == false)
+                    return false;
+            }
+            return true;
         }
 
         public void CloseTabList()
@@ -128,7 +139,7 @@ namespace EDDiscovery
 
             UserControls.UserControlContainerSplitter primary = PrimaryTab;
 
-            foreach (TabPage p in TabPages)      // all main tabs, load/display
+            foreach (TabPage p in TabPages)      // all main tabs, close down
             {
                 UserControls.UserControlCommonBase uccb = p.Controls[0] as UserControls.UserControlCommonBase;
                 uccb.CloseDown();
@@ -190,8 +201,12 @@ namespace EDDiscovery
             {
                 TabPage page = TabPages[tabIndex];
                 UserControls.UserControlCommonBase uccb = page.Controls[0] as UserControls.UserControlCommonBase;
-                uccb.CloseDown();
-                page.Dispose();
+
+                if (uccb.AllowClose())              // it must allow a close to remove it
+                {
+                    uccb.CloseDown();
+                    page.Dispose();
+                }
             }
         }
 
@@ -226,7 +241,7 @@ namespace EDDiscovery
         private TabPage CreateTab(PanelInformation.PanelIDs ptype, string name, int dn, int posindex)
         {
             // debug - create an example tab page
-            // keep for now 
+            // keep for now
             //TabPage page = new TabPage();
             //page.Location = new System.Drawing.Point(4, 22);    // copied from normal tab creation code
             //page.Padding = new System.Windows.Forms.Padding(3);
@@ -285,11 +300,14 @@ namespace EDDiscovery
             page.Controls.Add(uccb);
 
             TabPages.Insert(posindex, page);        // with inherit above, no font autoscale
-
+#if MONO
+            if ( SelectedIndex >= posindex)         // Mono does not automatically change SelectedIndex to +1 if you at or before it.  So it gets on the wrong tab. Fix it back
+                SelectedIndex = SelectedIndex+1;
+#endif
             //Init control after it is added to the form
             uccb.Init(eddiscovery, dn);    // start the uccb up
 
-            uccb.Scale(this.FindForm().CurrentAutoScaleFactor());       // scale and  
+            uccb.Scale(this.FindForm().CurrentAutoScaleFactor());       // scale and
             EDDTheme.Instance.ApplyStd(page);  // theme it.  Order as per the contract in UCCB
 
             return page;

@@ -43,7 +43,7 @@ namespace EDDiscovery.Actions
         public override bool ExecuteAction(ActionProgramRun ap)
         {
             string res;
-            if (ap.functions.ExpandString(UserData, out res) != BaseUtils.Functions.ExpandResult.Failed)
+            if (ap.Functions.ExpandString(UserData, out res) != BaseUtils.Functions.ExpandResult.Failed)
             {
                 StringParser sp = new StringParser(res);
                 string prefix = "P_";
@@ -63,7 +63,7 @@ namespace EDDiscovery.Actions
                     cmdname = sp.NextQuotedWord();
                 }
 
-                PopOutControl poc = (ap.actioncontroller as ActionController).DiscoveryForm.PopOuts;
+                PopOutControl poc = (ap.ActionController as ActionController).DiscoveryForm.PopOuts;
 
                 if (cmdname == null)
                 {
@@ -77,7 +77,7 @@ namespace EDDiscovery.Actions
                 }
                 else
                 {
-                    Forms.UserControlForm ucf = poc.GetByWindowsRefName(cmdname);
+                    UserControls.UserControlForm ucf = poc.GetByWindowsRefName(cmdname);
 
                     string nextcmd = sp.NextWordLCInvariant(" ");
 
@@ -109,9 +109,9 @@ namespace EDDiscovery.Actions
                         else if (nextcmd.Equals("on"))   // does nothing
                         { }
                         else if (nextcmd.Equals("transparent"))
-                            ucf.SetTransparency(Forms.UserControlForm.TransparencyMode.On);
+                            ucf.SetTransparency(UserControls.UserControlForm.TransparencyMode.On);
                         else if (nextcmd.Equals("opaque"))
-                            ucf.SetTransparency(Forms.UserControlForm.TransparencyMode.Off);
+                            ucf.SetTransparency(UserControls.UserControlForm.TransparencyMode.Off);
                         else if (nextcmd.Equals("title"))
                             ucf.SetShowInTaskBar(true);
                         else if (nextcmd.Equals("notitle"))

@@ -177,22 +177,22 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.Translate(toolTip1, this);
         }
 
-        public override void ChangeCursorType(IHistoryCursor thc)
-        {
-            uctg.OnTravelSelectionChanged -= Display;
-            uctg = thc;
-            uctg.OnTravelSelectionChanged += Display;
-            //System.Diagnostics.Debug.WriteLine("UCTG changed in sysinfo to " + uctg.GetHashCode());
-        }
-
         public override void LoadLayout()
         {
-            uctg.OnTravelSelectionChanged += Display;    // get this whenever current selection or refreshed..
+            uctg.OnTravelSelectionChanged += TravelSelChanged;
+        }
+
+        public override void ChangeCursorType(IHistoryCursor thc)
+        {
+            uctg.OnTravelSelectionChanged -= TravelSelChanged;
+            uctg = thc;
+            uctg.OnTravelSelectionChanged += TravelSelChanged;
+            //System.Diagnostics.Debug.WriteLine("UCTG changed in sysinfo to " + uctg.GetHashCode());
         }
 
         public override void Closing()
         {
-            uctg.OnTravelSelectionChanged -= Display;
+            uctg.OnTravelSelectionChanged -= TravelSelChanged;
             discoveryform.OnNewTarget -= RefreshTargetDisplay;
             discoveryform.OnNoteChanged -= OnNoteChanged;
             discoveryform.OnEDSMSyncComplete -= Discoveryform_OnEDSMSyncComplete;
@@ -214,7 +214,7 @@ namespace EDDiscovery.UserControls
         private void Discoveryform_OnEDSMSyncComplete(int count, string syslist)     // EDSM ~MAY~ have updated the last discovery flag, so redisplay
         {
             //System.Diagnostics.Debug.WriteLine("EDSM SYNC COMPLETED with " + count + " '" + syslist + "'");
-            Display(last_he, discoveryform.history);
+            Display(last_he, last_hl);
         }
 
         private void Discoveryform_OnNewUIEvent(UIEvent obj)
@@ -223,13 +223,16 @@ namespace EDDiscovery.UserControls
                 Display(last_he, discoveryform.history);
         }
 
+        private void TravelSelChanged(HistoryEntry he, HistoryList hl, bool sel)
+        {
+            Display(he, hl);
+        }
+
         bool neverdisplayed = true;
         HistoryEntry last_he = null;
+        HistoryList last_hl = null;
 
-        private void Display(HistoryEntry he, HistoryList hl) =>
-            Display(he, hl, true);
-
-        private void Display(HistoryEntry he, HistoryList hl, bool selectedEntry)
+        private void Display(HistoryEntry he, HistoryList hl)       // use he/hl not any global ones due to refresh sync timing between EDSM/Others
         {
             if (neverdisplayed)
             {
@@ -238,12 +241,13 @@ namespace EDDiscovery.UserControls
             }
 
             last_he = he;
+            last_hl = hl;
 
             if (last_he != null)
             {
                 SetControlText(he.System.Name);
 
-                HistoryEntry lastfsd = hl.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.FSDJump, he);
+                HistoryEntry lastfsd = last_hl.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.FSDJump, he);
 
                 textBoxSystem.Text = he.System.Name;
                 panelFD.BackgroundImage = (lastfsd != null && (lastfsd.journalEntry as EliteDangerousCore.JournalEvents.JournalFSDJump).EDSMFirstDiscover) ? EDDiscovery.Icons.Controls.firstdiscover : EDDiscovery.Icons.Controls.notfirstdiscover;
@@ -275,7 +279,7 @@ namespace EDDiscovery.UserControls
                     textBoxSolDist.Text = "";
                 }
 
-                int count = discoveryform.history.GetVisitsCount(he.System.Name);
+                int count = last_hl.GetVisitsCount(he.System.Name);
                 textBoxVisits.Text = count.ToString();
 
                 //                System.Diagnostics.Debug.WriteLine("UserControlSysInfo sys info {0} {1} {2}", he.System.Name, he.System.EDSMID, he.System.EDDBID);
@@ -293,7 +297,7 @@ namespace EDDiscovery.UserControls
 
                 extTextBoxStationFaction.Text = he.StationFaction ?? "";
 
-                List<MissionState> mcurrent = (from MissionState ms in he.MissionList.Missions.Values where ms.InProgressDateTime(last_he.EventTimeUTC) orderby ms.Mission.EventTimeUTC descending select ms).ToList();
+                List<MissionState> mcurrent = (from MissionState ms in hl.MissionListAccumulator.GetMissionList(he.MissionList) where ms.InProgressDateTime(last_he.EventTimeUTC) orderby ms.Mission.EventTimeUTC descending select ms).ToList();
 
                 if (mcurrent == null || mcurrent.Count == 0)
                     richTextBoxScrollMissions.Text = "No Missions".T(EDTx.UserControlSysInfo_NoMissions);
@@ -314,7 +318,7 @@ namespace EDDiscovery.UserControls
                     richTextBoxScrollMissions.Text = t;
                 }
 
-                SetNote(he.snc != null ? he.snc.Note : "");
+                SetNote(he.SNC != null ? he.SNC.Note : "");
                 textBoxGameMode.Text = he.GameModeGroup;
                 if (he.isTravelling)
                 {
@@ -405,7 +409,7 @@ namespace EDDiscovery.UserControls
         {
             if (last_he != null)
             {
-                System.Diagnostics.Process.Start(Properties.Resources.URLEDDBSystemName + Uri.EscapeDataString(last_he.System.Name));
+                BaseUtils.BrowserInfo.LaunchBrowser(Properties.Resources.URLEDDBSystemName + Uri.EscapeDataString(last_he.System.Name));
             }
         }
 
@@ -413,18 +417,9 @@ namespace EDDiscovery.UserControls
         {
             if (last_he != null)
             {
-                long? id_edsm = last_he.System.EDSMID;
-                if (id_edsm <= 0)
-                {
-                    id_edsm = null;
-                }
-
                 EDSMClass edsm = new EDSMClass();
-                string url = edsm.GetUrlToEDSMSystem(last_he.System.Name, id_edsm);
 
-                if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
-                    Process.Start(url);
-                else
+                if (!edsm.ShowSystemInEDSM(last_he.System.Name))        
                     ExtendedControls.MessageBoxTheme.Show(FindForm(), "System unknown to EDSM".T(EDTx.UserControlSysInfo_SysUnk));
             }
         }
@@ -441,7 +436,7 @@ namespace EDDiscovery.UserControls
         private void extButtonSpanshSystem_Click(object sender, EventArgs e)
         {
             if (last_he != null && last_he.System.SystemAddress.HasValue)
-                System.Diagnostics.Process.Start(Properties.Resources.URLSpanshSystemSystemId + last_he.System.SystemAddress.Value.ToStringInvariant());
+                BaseUtils.BrowserInfo.LaunchBrowser(Properties.Resources.URLSpanshSystemSystemId + last_he.System.SystemAddress.Value.ToStringInvariant());
         }
 
         private void extButtonInaraStation_Click(object sender, EventArgs e)
@@ -456,7 +451,7 @@ namespace EDDiscovery.UserControls
         private void extButtonEDDBStation_Click(object sender, EventArgs e)
         {
             if (last_he != null && last_he.MarketID != null)
-                System.Diagnostics.Process.Start(Properties.Resources.URLEDDBStationMarketId + last_he.MarketID.ToStringInvariant());
+                BaseUtils.BrowserInfo.LaunchBrowser(Properties.Resources.URLEDDBStationMarketId + last_he.MarketID.ToStringInvariant());
         }
 
         private void extButtonSpanshStation_Click(object sender, EventArgs e)
@@ -464,9 +459,9 @@ namespace EDDiscovery.UserControls
             if (last_he != null)
             {
                 if (last_he.MarketID != null)
-                    System.Diagnostics.Process.Start(Properties.Resources.URLSpanshStationMarketId + last_he.MarketID.ToStringInvariant());
+                    BaseUtils.BrowserInfo.LaunchBrowser(Properties.Resources.URLSpanshStationMarketId + last_he.MarketID.ToStringInvariant());
                 else if (last_he.FullBodyID.HasValue)
-                    System.Diagnostics.Process.Start(Properties.Resources.URLSpanshBodyId + last_he.FullBodyID.ToStringInvariant());
+                    BaseUtils.BrowserInfo.LaunchBrowser(Properties.Resources.URLSpanshBodyId + last_he.FullBodyID.ToStringInvariant());
             }
         }
 
@@ -551,29 +546,13 @@ namespace EDDiscovery.UserControls
 
         private void buttonEDSMTarget_Click(object sender, EventArgs e)
         {
-            string name;
-            long? edsmid = null;
-            double x, y, z;
-
-            if (TargetClass.GetTargetPosition(out name, out x, out y, out z))
+            TargetClass.GetTargetPosition(out string name, out double x, out double y, out double z);
+            if (name.HasChars())
             {
-                ISystem sc = this.discoveryform.history.FindSystem(TargetClass.GetNameWithoutPrefix(name), discoveryform.galacticMapping);
-
-                if (sc != null)
-                {
-                    name = sc.Name;
-                    edsmid = sc.EDSMID;
-                }
+                EDSMClass edsm = new EDSMClass();
+                if (!edsm.ShowSystemInEDSM(name))         // may pass back empty string if not known, this solves another exception
+                    ExtendedControls.MessageBoxTheme.Show(FindForm(), "System unknown to EDSM".T(EDTx.UserControlSysInfo_SysUnk));
             }
-
-            EDSMClass edsm = new EDSMClass();
-            string url = edsm.GetUrlToEDSMSystem(name, edsmid);
-
-            if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
-                Process.Start(url);
-            else
-                ExtendedControls.MessageBoxTheme.Show(FindForm(), "System unknown to EDSM".T(EDTx.UserControlSysInfo_SysUnk));
-
         }
 
         private void clickTextBox(object sender, EventArgs e)
@@ -985,7 +964,7 @@ namespace EDDiscovery.UserControls
             if ( !Object.ReferenceEquals(this,sender) )     // so, make sure this sys info is not sending it
             {
                 //System.Diagnostics.Debug.WriteLine("SI:On note changed: " + he.snc.Note);
-                SetNote(he.snc != null ? he.snc.Note : "");
+                SetNote(he.SNC != null ? he.SNC.Note : "");
             }
         }
 

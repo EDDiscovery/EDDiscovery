@@ -74,6 +74,7 @@ namespace EDDiscovery.UserControls
         {
             public string Name { get; }
             public int Missions { get; private set; }
+            public int MissionsInProgress {get; private set;}
             public int Influence { get; private set; }
             public int Reputation { get; private set; }
             public long Credits { get; private set; }
@@ -98,6 +99,11 @@ namespace EDDiscovery.UserControls
             public void AddMissions(int amount)
             {
                 Missions += amount;
+            }
+
+            public void AddMissionsInProgress(int amount)
+            {
+                MissionsInProgress += amount;
             }
 
             public void AddInfluence(int amount)
@@ -254,7 +260,10 @@ namespace EDDiscovery.UserControls
             {
                 last_he = he;
                 Display();
-                NextExpiry = he?.MissionList?.GetAllCurrentMissions(he.EventTimeUTC).OrderBy(e => e.MissionEndTime).FirstOrDefault()?.MissionEndTime ?? DateTime.MaxValue;
+
+                // he can be null
+                var ml = hl.MissionListAccumulator.GetAllCurrentMissions(he?.MissionList ?? uint.MaxValue, he?.EventTimeUTC ?? DateTime.MaxValue);    // will always return an array
+                NextExpiry = ml.OrderBy(e => e.MissionEndTime).FirstOrDefault()?.MissionEndTime ?? DateTime.MaxValue;
             }
         }
 
@@ -262,7 +271,10 @@ namespace EDDiscovery.UserControls
         {
             last_he = he;
             Display();
-            NextExpiry = he?.MissionList?.GetAllCurrentMissions(he.EventTimeUTC).OrderBy(e => e.MissionEndTime).FirstOrDefault()?.MissionEndTime ?? DateTime.MaxValue;
+
+            // he can be null
+            var ml = hl.MissionListAccumulator.GetAllCurrentMissions(he?.MissionList ?? uint.MaxValue, he?.EventTimeUTC ?? DateTime.MaxValue);    // will always return an array
+            NextExpiry = ml.OrderBy(e => e.MissionEndTime).FirstOrDefault()?.MissionEndTime ?? DateTime.MaxValue;
         }
 
         #endregion
@@ -273,11 +285,11 @@ namespace EDDiscovery.UserControls
         {
             DataGridViewColumn sortcol = dataGridViewFactions.SortedColumn != null ? dataGridViewFactions.SortedColumn : dataGridViewFactions.Columns[0];
             SortOrder sortorder = dataGridViewFactions.SortOrder != SortOrder.None ? dataGridViewFactions.SortOrder : SortOrder.Ascending;
-            string toprowfaction = dataGridViewFactions.FirstDisplayedScrollingRowIndex >= 0 ? (dataGridViewFactions.Rows[dataGridViewFactions.FirstDisplayedScrollingRowIndex].Tag as FactionStatistics).Name : "";
+            string toprowfaction = dataGridViewFactions.SafeFirstDisplayedScrollingRowIndex() >= 0 ? (dataGridViewFactions.Rows[dataGridViewFactions.SafeFirstDisplayedScrollingRowIndex()].Tag as FactionStatistics).Name : "";
 
             dataGridViewFactions.Rows.Clear();
 
-            MissionList ml = last_he?.MissionList;
+            List<MissionState> ml = discoveryform.history.MissionListAccumulator.GetMissionList(last_he?.MissionList ?? 0);
 
             DateTime startdateutc = startDateTime.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromSelected(startDateTime.Value) : new DateTime(1980, 1, 1);
             DateTime enddateutc = endDateTime.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromSelected(endDateTime.Value) : new DateTime(8999, 1, 1);
@@ -286,21 +298,26 @@ namespace EDDiscovery.UserControls
 
             if (ml != null)
             {
-                foreach (MissionState ms in ml.Missions.Values)
+                foreach (MissionState ms in ml)
                 {
-                    if (ms.State == MissionState.StateTypes.Completed && ms.Completed != null)
+                    bool withinstarttime = DateTime.Compare(ms.Mission.EventTimeUTC, startdateutc) >= 0 && DateTime.Compare(ms.Mission.EventTimeUTC, enddateutc) <= 0;
+                    bool withinexpirytime = ms.Mission.ExpiryValid && DateTime.Compare(ms.Mission.Expiry, startdateutc) >= 0 && DateTime.Compare(ms.Mission.Expiry, enddateutc) <= 0;
+                    bool withincompletetime = ms.Completed != null && DateTime.Compare(ms.Completed.EventTimeUTC, startdateutc) >= 0 && DateTime.Compare(ms.Completed.EventTimeUTC, enddateutc) <= 0;
+
+                    if ( withinstarttime || withincompletetime)
                     {
-                        if (DateTime.Compare(ms.Completed.EventTimeUTC, startdateutc) >= 0 &&
-                            DateTime.Compare(ms.Completed.EventTimeUTC, enddateutc) <= 0)
+                        var faction = ms.Mission.Faction;
+                        FactionStatistics factionStats;
+                        if (!factionslist.TryGetValue(faction, out factionStats))
                         {
-                            var faction = ms.Mission.Faction;
-                            FactionStatistics factionStats;
-                            if (!factionslist.TryGetValue(faction, out factionStats))
-                            {
-                                factionStats = new FactionStatistics(faction);
-                                factionslist.Add(faction, factionStats);
-                            }
-                            factionStats.AddMissions(1);
+                            factionStats = new FactionStatistics(faction);
+                            factionslist.Add(faction, factionStats);
+                        }
+
+                        if (ms.Completed != null)           // effects/rewards are dependent on completion
+                        {
+                            factionStats.AddMissions(1);        // 1 more mission, 
+
                             if (ms.Completed.FactionEffects != null)
                             {
                                 foreach (var fe in ms.Completed.FactionEffects)
@@ -343,27 +360,36 @@ namespace EDDiscovery.UserControls
                                 }
                             }
                         }
+                        else if ( withinexpirytime )
+                        {
+                            factionStats.AddMissionsInProgress(1);
+                        }
                     }
+
                 }
             }
 
-            Stats mcs = null;
+            Dictionary<string,Stats.FactionInfo> factioninfo = null;
 
             if (startDateTime.Checked || endDateTime.Checked)                           // if we have a date range, can't rely on stats accumulated automatically
             {
+                Stats stats = new Stats();      // reprocess this list completely
+
                 foreach (var he in HistoryList.FilterByDateRange(discoveryform.history.EntryOrder(), startdateutc, enddateutc))
                 {
-                    mcs = Stats.Process(he.journalEntry, mcs, he.StationFaction);
+                    stats.Process(he.journalEntry, he.StationFaction);
                 }
+
+                factioninfo = stats.GetLastEntries(); // pick the last generation in there.
             }
             else
             {
-                mcs = last_he?.Stats;
+                factioninfo = discoveryform.history.GetStatsAtGeneration(last_he?.Statistics ?? 0);
             }
 
-            if (mcs != null)
+            if (factioninfo != null)
             {
-                foreach (var fkvp in mcs.FactionInformation)
+                foreach (var fkvp in factioninfo)
                 {
                     if (!factionslist.TryGetValue(fkvp.Value.Faction, out FactionStatistics factionStats))
                     {
@@ -381,14 +407,18 @@ namespace EDDiscovery.UserControls
                 foreach (FactionStatistics fs in factionslist.Values)
                 {
                     var info = "";
+
+                    if (fs.MissionsInProgress > 0)
+                        info = info.AppendPrePad("Missions In Progress:".T(EDTx.UserControlFactions_MissionsInProgress) + " " + fs.MissionsInProgress , ", ");
+
                     foreach (var reward in fs.Rewards.Values)
                     {
                         info = info.AppendPrePad(reward.Count + " " + reward.Name, ", ");
                     }
 
-                    if (fs.FactionStats.CapShipAwardAsVictimFaction > 0)
+                    if (fs.FactionStats.CapShipAwardAsVictimFaction > 0 )
                         info = info.AppendPrePad("Capital ship Victims: ".T(EDTx.UserControlFactions_CapShipVictims) + fs.FactionStats.CapShipAwardAsVictimFaction, ", ");
-                    if (fs.FactionStats.CapShipAwardAsAwaringFaction > 0)
+                    if (fs.FactionStats.CapShipAwardAsAwaringFaction > 0 )
                         info = info.AppendPrePad("Capital ship Award: ".T(EDTx.UserControlFactions_CapShipAward) + fs.FactionStats.CapShipAwardAsAwaringFaction + ":" + fs.FactionStats.CapShipAwardAsAwaringFactionValue.ToString("N0") + "cr", ", ");
 
                     object[] rowobj = { fs.Name,
@@ -475,14 +505,14 @@ namespace EDDiscovery.UserControls
                 MissionListUserControl mluc = new MissionListUserControl();
 
                 mluc.Clear();
-                MissionList ml = last_he?.MissionList;
+                List<MissionState> ml = discoveryform.history.MissionListAccumulator.GetMissionList(last_he?.MissionList ?? 0);
 
                 DateTime startdateutc = startDateTime.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromSelected(startDateTime.Value) : new DateTime(1980, 1, 1);
                 DateTime enddateutc = endDateTime.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromSelected(endDateTime.Value) : new DateTime(8999, 1, 1);
 
                 if (ml != null)
                 {
-                    foreach (MissionState ms in ml.Missions.Values)
+                    foreach (MissionState ms in ml)
                     {
                         if (ms.State == MissionState.StateTypes.Completed && ms.Completed != null)
                         {

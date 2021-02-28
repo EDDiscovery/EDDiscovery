@@ -31,6 +31,13 @@ namespace EDDiscovery
         EDDiscoveryForm_TSF,
         EDDiscoveryForm_ConfirmSyncToEDSM, // You have disabled sync to EDSM for this commander.  Are you sure you want to send unsynced events to EDSM?
         EDDiscoveryForm_ConfirmSyncToEDSMCaption, // Confirm EDSM sync
+        EDDiscoveryForm_SendEDSMTitle,
+        EDDiscoveryForm_SendEDSMCaption,
+        EDDiscoveryForm_SendEDSMAll,
+        EDDiscoveryForm_SendEDSM24,
+        EDDiscoveryForm_SendEDSMFrom,
+        EDDiscoveryForm_SendEDSMNone,
+        EDDiscoveryForm_SendEDSMCancel,
         EDDiscoveryForm_RTABL, // Name:
         EDDiscoveryForm_RTABT, // Rename Tab
         EDDiscoveryForm_RTABTT, // Enter a new name for the tab
@@ -70,7 +77,7 @@ namespace EDDiscovery
         EDDiscoveryForm_FillPos, // Are you sure to Rebuild Indexes? It may take a long time.
         EDDiscoveryForm_RemoveDLLPerms, // remove dll etc.
         EDDiscoveryForm_RH, // Refresh History.
-        EDDiscoveryForm_NoEDSMAPI, // Please ensure a commander is selected and it has a EDSM API key set
+        EDDiscoveryForm_NoEDSMAPI, // No EDSM API key set
         EDDiscoveryForm_EDSMSyncE, // EDSM Sync failed: {0}
         EDDiscoveryForm_EP, // Edit Profiles
         EDDiscoveryForm_PL, // Profile {0} Loaded
@@ -273,18 +280,15 @@ namespace EDDiscovery
         UserControlModules_MI, // Module Information
         UserControlModules_NOSI, // No ship information available
 
-        UserControlStats_tosystem, //  to system
-        UserControlStats_Visits, // Visits
-        UserControlStats_Type, // Type
-        UserControlStats_All, // All
-        UserControlStats_JumpsBeforeSystem, // Jumps Before System
         UserControlStats_TotalNoofjumps, // Total No of jumps:
+        UserControlStats_FSDjumps, // FSD jumps:
+        UserControlStats_Beltcluster, // Belt cluster
+
         UserControlStats_JumpHistory, // Jump History
         UserControlStats_24hc, // 24 Hours:
         UserControlStats_OneWeek, // , One Week:
         UserControlStats_30Days, // , 30 Days:
         UserControlStats_OneYear, // , One Year:
-        UserControlStats_FirstDiscoveries, // First Discoveries
         UserControlStats_MostNorth, // Most North
         UserControlStats_MostSouth, // Most South
         UserControlStats_MostEast, // Most East
@@ -292,25 +296,38 @@ namespace EDDiscovery
         UserControlStats_MostHighest, // Most Highest
         UserControlStats_MostLowest, // Most Lowest
         UserControlStats_MostVisited, // Most Visited
-        UserControlStats_24Hours, // 24 Hours
-        UserControlStats_Week, // Week
-        UserControlStats_Month, // Month
-        UserControlStats_Lastdock, // Last dock
+
         UserControlStats_Jumps, // Jumps
+        UserControlStats_TravelledLy, // Travelled Ly
         UserControlStats_PremiumBoost, // Premium Boost
         UserControlStats_StandardBoost, // Standard Boost
         UserControlStats_BasicBoost, // Basic Boost
         UserControlStats_JetConeBoost, // Jet Cone Boost
-        UserControlStats_Landed, // Landed
-        UserControlStats_HeatWarning, // Heat Warning
-        UserControlStats_Heatdamage, // Heat damage
-        UserControlStats_FuelScooped, // Fuel Scooped
-        UserControlStats_ScoopedTons, // Scooped Tons
         UserControlStats_Scans, // Scans
+        UserControlStats_Mapped, // Mapped
         UserControlStats_Scanvalue, // Scan value
-        UserControlStats_Docked, // Docked
-        UserControlStats_BodyType, // Body Type
+
+
+        UserControlStats_Lastdock, // Last dock
         UserControlStats_Trip, // Trip
+        UserControlStats_All, // All
+        UserControlStats_Type, // Type
+
+
+        UserControlStats_BankAccount, // Bank Account
+        UserControlStats_Combat, // Combat
+        UserControlStats_Crime, // Crime
+        UserControlStats_Smuggling, // Smuggling
+        UserControlStats_Trading, // Trading
+        UserControlStats_Mining, // Mining
+        UserControlStats_Exploration, // Exploration
+        UserControlStats_Passengers, // Passengers
+        UserControlStats_SearchandRescue, // Search and Rescue
+        UserControlStats_Crafting, // Crafting
+        UserControlStats_Crew, // Crew
+        UserControlStats_Multi, // Multi-crew
+        UserControlStats_MaterialsTrader, // Materials Trader
+
         UserControlStats_CurrentAssets, // Current Assets
         UserControlStats_SpentonShips, // Spent on Ships
         UserControlStats_SpentonOutfitting, // Spent on Outfitting
@@ -378,28 +395,19 @@ namespace EDDiscovery
         UserControlStats_FinesAccrued, // Fines Accrued
         UserControlStats_TradesCompleted, // Trades Completed
         UserControlStats_MaterialsTraded, // Materials Traded
+
         UserControlStats_TME, // {0} days {1} hours {1} minutes
         UserControlStats_Name, // Name
         UserControlStats_Ident, // Ident
-        UserControlStats_TravelledLy, // Travelled Ly
+
         UserControlStats_BodiesScanned, // Bodies Scanned
+        UserControlStats_Destroyed, // Destroyed
+
+        // used by faction panels now, not stats
         UserControlStats_GoodsBought, // Goods Bought
         UserControlStats_GoodsSold, // Goods Sold
-        UserControlStats_Destroyed, // Destroyed
-        UserControlStats_Mapped, // Mapped
-        UserControlStats_BankAccount, // Bank Account
-        UserControlStats_Combat, // Combat
-        UserControlStats_Crime, // Crime
-        UserControlStats_Smuggling, // Smuggling
-        UserControlStats_Trading, // Trading
-        UserControlStats_Mining, // Mining
-        UserControlStats_Exploration, // Exploration
-        UserControlStats_Passengers, // Passengers
-        UserControlStats_SearchandRescue, // Search and Rescue
-        UserControlStats_Crafting, // Crafting
-        UserControlStats_Crew, // Crew
-        UserControlStats_Multi, // Multi-crew
-        UserControlStats_MaterialsTrader, // Materials Trader
+
+
         UserControlShoppingList_NM, // Needed Mats
         UserControlShoppingList_FS, // Filling Shopping List would exceed capacity for:
         UserControlShoppingList_NoMat, // No materials currently required.
@@ -495,6 +503,7 @@ namespace EDDiscovery
         UserControlCombatPanel_Faction, // Faction:
         UserControlCombatPanel_Crimes, // Crimes:
         UserControlCombatPanel_Bal, // Bal:
+        UserControlCombatPanel_labelDied, // Died
         UserControlCombatPanel_NewCampaign, // New Campaign
         UserControlCombatPanel_SinceLastDock, // Since Last Dock
         UserControlCombatPanel_Name, // Name:
@@ -529,6 +538,7 @@ namespace EDDiscovery
         UserControlRouteTracker_NoWay, // Route contains no waypoints
         UserControlRouteTracker_Unk, // Unknown location
         UserControlRouteTracker_NoCo, // No systems in route have known co-ords
+        UserControlRouteTracker_Note, // Note
 
         UserControlMiningOverlay_Limcargo,
         UserControlMiningOverlay_Proscoll,
@@ -547,7 +557,6 @@ namespace EDDiscovery
         UserControlMiningOverlay_dist,
         UserControlMiningOverlay_astpros,
 
-        UserControlSpanel_Goldilocks, // Goldilocks, {0} ({1}-{2} AU),
         UserControlSpanel_Target, // Target
         UserControlSpanel_TVE, // View system on EDSM
         UserControlSpanel_SPF, // Summary Panel: Filter out fields
@@ -584,7 +593,7 @@ namespace EDDiscovery
         UserControlTrippanel_UKN, // System {0} unknown to EDSM
         UserControlTrippanel_Left, // left
 
-        UserControlExpedition_Unsaved, // There are unsaved changes to the current route.
+        UserControlExpedition_Unsaved, // Expedition - There are unsaved changes to the current route.
         UserControlExpedition_Conflict, // The current route name conflicts with a well-known expedition.
         UserControlExpedition_Overwrite, // Warning: route already exists. Would you like to overwrite it?
         UserControlExpedition_EDSMUnk, // System not known to EDSM
@@ -599,6 +608,7 @@ namespace EDDiscovery
         UserControlExpedition_Delete, // Are you sure you want to delete this route?
         UserControlExpedition_SelRoute, // Select a route file
 
+        UserControlExploration_LoseAllChanges, // Exploration, Confirm you want to lose all changes
         UserControlExploration_Saved, // Saved to {0} Exploration Set
         UserControlExploration_SelectSet, // Select a exploration set file
         UserControlExploration_OpenE, // There was a problem opening file {0}
@@ -657,6 +667,7 @@ namespace EDDiscovery
         UserControlScan_PlanetClass,
         UserControlScan_StarClass,
         UserControlScan_Distance,
+        UserControlScan_Expired,
 
         UserControlStarDistance_From, // From {0}
         UserControlStarDistance_NoEDSMSys, // System could not be found - has not been synched or EDSM is unavailable
@@ -827,6 +838,7 @@ namespace EDDiscovery
         UserControlMaterialTrader_Receive, // Receive
 
         UserControlFactions_CapShipVictims, // Capital ship Victims: 
+        UserControlFactions_MissionsInProgress, // 
         UserControlFactions_CapShipAward, //  Capital ship Award: 
         UserControlFactions_FactionsPlural, // Factions
         UserControlFactions_MissionsFor, // Missions for

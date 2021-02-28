@@ -119,6 +119,8 @@ namespace EDDiscovery
         private OpenTK.GLControl glControl;
         private ExtendedControls.InfoForm helpDialog;
 
+        private int gmosel = 0;        // gmo bit mask
+
         #endregion
 
         #region External Interface
@@ -167,6 +169,8 @@ namespace EDDiscovery
             enableColoursToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("Map3DButtonColours", true);
             stargrids.ForceWhite = !enableColoursToolStripMenuItem.Checked;
 
+            gmosel = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt("GalObjectsEnable", int.MaxValue);
+
             stargrids.FillSystemListGrid(systemlist);     // to ensure its updated
             stargrids.Start();
 
@@ -176,20 +180,22 @@ namespace EDDiscovery
 
                 foreach (GalMapType tp in discoveryForm.galacticMapping.galacticMapTypes)
                 {
-                    if (tp.Group == GalMapType.GalMapGroup.Markers || tp.Group == GalMapType.GalMapGroup.Regions)       // only markers for now..
+                    if (tp.Group == GalMapType.GalMapGroup.Markers || tp.Group == GalMapType.GalMapGroup.Regions)       // only these
                     {
-                        toolStripDropDownButtonGalObjects.DropDownItems.Add(AddGalMapButton(tp.Description, tp, tp.Enabled));
+                        bool enabled = (gmosel & (1 << tp.Index)) != 0;
+                        toolStripDropDownButtonGalObjects.DropDownItems.Add(AddGalMapButton(tp.Description, tp.Index, enabled));
                         if (tp.Group == GalMapType.GalMapGroup.Regions)
                         {
-                            toolstripToggleRegionColouringButton = AddGalMapButton("Toggle Region Colouring", 2, EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("Map3DGMORegionColouring", true));
+                            // -2 turns off any action in click
+                            toolstripToggleRegionColouringButton = AddGalMapButton("Toggle Region Colouring", -2, EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("Map3DGMORegionColouring", true));
                             toolStripDropDownButtonGalObjects.DropDownItems.Add(toolstripToggleRegionColouringButton);
                         }
                     }
                 }
 
-                toolStripDropDownButtonGalObjects.DropDownItems.Add(AddGalMapButton("Toggle All", 0, null));
+                toolStripDropDownButtonGalObjects.DropDownItems.Add(AddGalMapButton("Toggle All", -1, null));
 
-                toolstripToggleNamingButton = AddGalMapButton("Toggle Star Naming", 1, EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("Map3DGMONaming", true));
+                toolstripToggleNamingButton = AddGalMapButton("Toggle Star Naming", -2, EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("Map3DGMONaming", true));
                 toolStripDropDownButtonGalObjects.DropDownItems.Add(toolstripToggleNamingButton);
             }
 
@@ -213,18 +219,19 @@ namespace EDDiscovery
 
         }
 
-        public ToolStripMenuItem AddGalMapButton( string name, Object tt, bool? checkedbut)
+        public ToolStripMenuItem AddGalMapButton( string name,int bitno, bool? checkedbut)
         {
             ToolStripMenuItem tsmi = new ToolStripMenuItem();
             tsmi.Text = name; 
             tsmi.Size = new Size(195, 22);
-            tsmi.Tag = tt;
+            tsmi.Tag = bitno;
             if (checkedbut.HasValue)
             {
                 tsmi.CheckState = CheckState.Checked;
                 tsmi.CheckOnClick = true;
                 tsmi.Checked = checkedbut.Value;
             }
+
             tsmi.Click += new System.EventHandler(this.showGalacticMapTypeMenuItem_Click);
             return tsmi;
         }
@@ -468,7 +475,7 @@ namespace EDDiscovery
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("Map3DPerspective", toolStripButtonPerspective.Checked);
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("Map3DGMONaming", toolstripToggleNamingButton.Checked);
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("Map3DGMORegionColouring", toolstripToggleRegionColouringButton.Checked);
-            discoveryForm.galacticMapping.SaveSettings();
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt("GalObjectsEnable", gmosel);
 
             stargrids.Stop();
 
@@ -1042,12 +1049,12 @@ namespace EDDiscovery
 
             DatasetBuilder builder3 = new DatasetBuilder();
             List<IData3DCollection> oldgalmaps = datasets_galmapobjects;
-            datasets_galmapobjects = builder3.AddGalMapObjectsToDataset(discoveryForm.galacticMapping, maptarget, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), lastcameranorm.Rotation, toolstripToggleNamingButton.Checked, enableColoursToolStripMenuItem.Checked ? Color.White : Color.Orange );
+            datasets_galmapobjects = builder3.AddGalMapObjectsToDataset(discoveryForm.galacticMapping, maptarget, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), lastcameranorm.Rotation, toolstripToggleNamingButton.Checked, enableColoursToolStripMenuItem.Checked ? Color.White : Color.Orange, gmosel );
             DeleteDataset(ref oldgalmaps);
 
             DatasetBuilder builder4 = new DatasetBuilder();
             List<IData3DCollection> oldgalreg = datasets_galmapregions;
-            datasets_galmapregions = builder4.AddGalMapRegionsToDataset(discoveryForm.galacticMapping, toolstripToggleRegionColouringButton.Checked);
+            datasets_galmapregions = builder4.AddGalMapRegionsToDataset(discoveryForm.galacticMapping, toolstripToggleRegionColouringButton.Checked, gmosel);
             DeleteDataset(ref oldgalreg);
 
             if (clickedGMO != null)              // if GMO marked.
@@ -1246,25 +1253,29 @@ namespace EDDiscovery
         {
             ToolStripMenuItem tmsi = (ToolStripMenuItem)sender;
 
-            if ( tmsi.Tag is int )
+            int bit = (int)tmsi.Tag;
+
+            if ( bit == -1 )    // all
             {
-                int v = (int)tmsi.Tag;
-                if ( v == 0 )
+                bool ison = false;
+                foreach (ToolStripMenuItem ti in toolStripDropDownButtonGalObjects.DropDownItems)
+                    ison |= (int)ti.Tag >= 0 && ti.Checked == true;
+
+                foreach (ToolStripMenuItem ti in toolStripDropDownButtonGalObjects.DropDownItems)
                 {
-                    discoveryForm.galacticMapping.ToggleEnable();
-                    
-                    foreach (ToolStripMenuItem ti in toolStripDropDownButtonGalObjects.DropDownItems)
+                    bit = (int)ti.Tag;
+                    if (bit >= 0)
                     {
-                        if (ti.Tag is GalMapType )
-                            ti.Checked = ((GalMapType)ti.Tag).Enabled;
+                        ti.Checked = !ison;
+                        gmosel = (gmosel & ~(1 << bit)) | (!ison ? (1 << bit) : 0);
                     }
                 }
             }
-            else
+            else if ( bit >= 0 )        // normal gal map object sel
             {
-                discoveryForm.galacticMapping.ToggleEnable((GalMapType)tmsi.Tag);
+                gmosel = (gmosel & ~(1 << bit)) | (tmsi.Checked ? (1 << bit) : 0);
             }
-
+            System.Diagnostics.Debug.WriteLine("GMO set " + gmosel.ToString("X8"));
             GenerateDataSetsBNG();
             RequestPaint();
         }
@@ -1395,7 +1406,7 @@ namespace EDDiscovery
         private void viewOnEDSMToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (clickedurl != null && clickedurl.Length>0)
-                System.Diagnostics.Process.Start(clickedurl);
+                BaseUtils.BrowserInfo.LaunchBrowser(clickedurl);
         }
 
         private void labelClickedSystemCoords_Click(object sender, EventArgs e)
@@ -1608,7 +1619,7 @@ namespace EDDiscovery
                     name = clickedSystem.Name;
 
                     var edsm = new EDSMClass();
-                    clickedurl = edsm.GetUrlToEDSMSystem(name, clickedSystem.EDSMID);
+                    clickedurl = edsm.GetUrlToSystem(name);
                     viewOnEDSMToolStripMenuItem.Enabled = true;
 
                     try
@@ -2049,7 +2060,9 @@ namespace EDDiscovery
             {
                 foreach (GalacticMapObject gmo in discoveryForm.galacticMapping.galacticMapObjects)
                 {
-                    if (gmo.galMapType.Enabled && gmo.galMapType.Group == GalMapType.GalMapGroup.Markers && gmo.points.Count > 0)             // if it is Enabled and has a co-ord, and is a marker type (routes/regions rejected)
+                    bool enabled = (gmosel & (1 << gmo.galMapType.Index)) != 0;         // if selected
+
+                    if (enabled && gmo.galMapType.Group == GalMapType.GalMapGroup.Markers && gmo.points.Count > 0)             // if it is Enabled and has a co-ord, and is a marker type (routes/regions rejected)
                     {
                         Vector3 pd = gmo.points[0].Convert();
 
@@ -2163,7 +2176,7 @@ namespace EDDiscovery
             if (checksystemdb)
             {
                 Cursor = Cursors.WaitCursor;
-                ISystem sys = SystemCache.FindSystem(name);
+                ISystem sys = discoveryForm.history.FindSystem(name, discoveryForm.galacticMapping, true);      // find system
                 Cursor = Cursors.Default;
                 return sys;
             }
@@ -2230,7 +2243,7 @@ namespace EDDiscovery
                 return sys.Name;
             }
 
-            gmo = discoveryForm.galacticMapping.Find(textboxFrom.Text, true, true);    // ignore if its off, find any part of string, find if disabled
+            gmo = discoveryForm.galacticMapping.Find(textboxFrom.Text, true);    // ignore if its off, find any part of string, find if disabled
 
             if (gmo != null)
             {

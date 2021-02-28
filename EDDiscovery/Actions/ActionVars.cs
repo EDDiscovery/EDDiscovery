@@ -14,6 +14,7 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using System;
+using System.Collections.Generic;
 using BaseUtils;
 using EliteDangerousCore;
 
@@ -47,7 +48,7 @@ namespace EDDiscovery.Actions
                 vars[prefix + "ShipType"] = he.ShipType;
                 vars[prefix + "ShipTypeFD"] = he.ShipTypeFD;
                 vars[prefix + "ShipId"] = he.ShipId.ToString(ct);
-                vars[prefix + "IndexOf"] = he.Indexno.ToString(ct);
+                vars[prefix + "IndexOf"] = he.EntryNumber.ToString(ct);
 
                 vars[prefix + "Credits"] = he.Credits.ToString(ct);
 
@@ -72,9 +73,9 @@ namespace EDDiscovery.Actions
                 vars[prefix + "MarketId"] = he.MarketID.HasValue ? he.MarketID.ToStringInvariant() : "0";
                 vars[prefix + "StationFaction "] = he.StationFaction ?? "";
 
-                vars[prefix + "Note"] = he.snc?.Note ?? "";
+                vars[prefix + "Note"] = he.SNC?.Note ?? "";
 
-                he.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
+                he.FillInformation(out string EventDescription, out string EventDetailedInfo);
                 vars[prefix + "EventDescription"] = EventDescription;
                 vars[prefix + "EventDetailedInfo"] = EventDetailedInfo;
 
@@ -179,12 +180,12 @@ namespace EDDiscovery.Actions
         }
 
 
-        static public void MissionInformation(ActionLanguage.ActionProgramRun vars, MissionList ml, string prefix)
+        static public void MissionInformation(ActionLanguage.ActionProgramRun vars, List<MissionState> ml, string prefix)
         {
-            vars[prefix + "_MissionCount"] = ml.Missions.Count.ToStringInvariant();
+            vars[prefix + "_MissionCount"] = ml.Count.ToStringInvariant();
 
             int i = 0;
-            foreach (MissionState ms in ml.Missions.Values)
+            foreach (MissionState ms in ml)
             {
                 string mp = prefix + "Mission[" + i.ToStringInvariant() +"]_";
 

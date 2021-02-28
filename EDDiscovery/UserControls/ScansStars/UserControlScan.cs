@@ -150,7 +150,7 @@ namespace EDDiscovery.UserControls
             {
                 // new scan, new materials (for the count display), new SAA Signals all can cause display to change.
                 if (he.EntryType == JournalTypeEnum.Scan || he.journalEntry is IMaterialJournalEntry || he.journalEntry is JournalSAASignalsFound ||
-                    he.journalEntry is JournalFSSDiscoveryScan || 
+                    he.journalEntry is JournalFSSDiscoveryScan || he.journalEntry is JournalFSSSignalDiscovered ||
                                 last_he == null || last_he.System != he.System) //  or not presenting or diff sys
                 {
                     last_he = he;
@@ -218,11 +218,15 @@ namespace EDDiscovery.UserControls
                     {
                         control_text += " " + "Scan".T(EDTx.UserControlSurveyor_Scan) + " " + scanned.ToString() + (data.FSSTotalBodies != null ? (" / " + data.FSSTotalBodies.Value.ToString()) : "");
                     }
+
+                    int fsssignals = data.FSSSignalList.Count;
+                    if (fsssignals>0)
+                    {
+                        control_text += " " + " Signals " + fsssignals.ToString();
+                    }
                 }
                 else
                     control_text += " " + "No Scan".T(EDTx.NoScan);
-
-
             }
 
             panelStars.DrawSystem(data, showing_matcomds, discoveryform.history, (HasControlTextArea() && !displayfilters.Contains("sys")) ? null : control_text, bodyfilters);
@@ -317,9 +321,9 @@ namespace EDDiscovery.UserControls
                 System.Diagnostics.Debug.WriteLine("control" + controlname);
 
                 if (controlname.Contains("Validity:False"))
-                    cf.SetEnabled("OK", false);
+                    cf.GetControl("OK").Enabled = false;
                 else if (controlname.Contains("Validity:True"))
-                    cf.SetEnabled("OK", true);
+                    cf.GetControl("OK").Enabled = true;
                 else if (controlname == "OK")
                 {
                     cf.ReturnResult(DialogResult.OK);
@@ -627,7 +631,7 @@ namespace EDDiscovery.UserControls
 
                                     foreach (string system in currentExplorationSet.Systems)
                                     {
-                                        ISystem sys = SystemCache.FindSystem(system);
+                                        ISystem sys = discoveryform.history.FindSystem(system, discoveryform.galacticMapping, false);   // not doing EDSM lookups due to no.
                                         if (sys != null)
                                         {
                                             var jl = EDSMClass.GetBodiesList(sys);
@@ -771,7 +775,7 @@ namespace EDDiscovery.UserControls
                                         string name = scan.StarSystem ?? scan.BodyName;   // early scans did not have starsystem
                                         ISystem sys = null;
                                         if ( name.HasChars() )
-                                            sys = discoveryform.history.FindSystem(name);
+                                            sys = discoveryform.history.FindSystem(name, discoveryform.galacticMapping, false);       // not doing EDSM Due to no of lookups
 
                                         if (sys != null)
                                         {

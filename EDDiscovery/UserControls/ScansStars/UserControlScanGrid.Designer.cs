@@ -52,8 +52,6 @@ namespace EDDiscovery.UserControls
             this.colClass = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colBriefing = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.vScrollBarCustom2 = new ExtendedControls.ExtScrollBar();
-            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.circumstellarZoneToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.habitableZoneToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -73,6 +71,8 @@ namespace EDDiscovery.UserControls
             this.classToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.distanceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.informationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.vScrollBarCustom2 = new ExtendedControls.ExtScrollBar();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.statusStripSummary = new ExtendedControls.ExtStatusStrip();
             this.toolStripStatusTotalValue = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusGreen = new System.Windows.Forms.ToolStripStatusLabel();
@@ -109,6 +109,7 @@ namespace EDDiscovery.UserControls
             this.colClass,
             this.colDistance,
             this.colBriefing});
+            this.dataGridViewScangrid.ContextMenuStrip = this.contextMenuStrip;
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
             dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -131,7 +132,6 @@ namespace EDDiscovery.UserControls
             this.dataGridViewScangrid.TabIndex = 23;
             this.dataGridViewScangrid.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewScangrid_CellDoubleClick);
             this.dataGridViewScangrid.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridViewScangrid_RowPostPaint);
-            this.dataGridViewScangrid.MouseClick += new System.Windows.Forms.MouseEventHandler(this.dataGridViewScangrid_MouseClick);
             // 
             // colImage
             // 
@@ -177,35 +177,6 @@ namespace EDDiscovery.UserControls
             this.colBriefing.Name = "colBriefing";
             this.colBriefing.ReadOnly = true;
             this.colBriefing.ToolTipText = "Body detailed information";
-            // 
-            // vScrollBarCustom2
-            // 
-            this.vScrollBarCustom2.ArrowBorderColor = System.Drawing.Color.LightBlue;
-            this.vScrollBarCustom2.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.vScrollBarCustom2.ArrowColorScaling = 0.5F;
-            this.vScrollBarCustom2.ArrowDownDrawAngle = 270F;
-            this.vScrollBarCustom2.ArrowUpDrawAngle = 90F;
-            this.vScrollBarCustom2.BorderColor = System.Drawing.Color.White;
-            this.vScrollBarCustom2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.vScrollBarCustom2.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.vScrollBarCustom2.HideScrollBar = true;
-            this.vScrollBarCustom2.LargeChange = 0;
-            this.vScrollBarCustom2.Location = new System.Drawing.Point(556, 0);
-            this.vScrollBarCustom2.Maximum = -1;
-            this.vScrollBarCustom2.Minimum = 0;
-            this.vScrollBarCustom2.MouseOverButtonColor = System.Drawing.Color.Green;
-            this.vScrollBarCustom2.MousePressedButtonColor = System.Drawing.Color.Red;
-            this.vScrollBarCustom2.Name = "vScrollBarCustom2";
-            this.vScrollBarCustom2.Size = new System.Drawing.Size(16, 550);
-            this.vScrollBarCustom2.SliderColor = System.Drawing.Color.DarkGray;
-            this.vScrollBarCustom2.SmallChange = 1;
-            this.vScrollBarCustom2.TabIndex = 24;
-            this.vScrollBarCustom2.ThumbBorderColor = System.Drawing.Color.Yellow;
-            this.vScrollBarCustom2.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.vScrollBarCustom2.ThumbColorScaling = 0.5F;
-            this.vScrollBarCustom2.ThumbDrawAngle = 0F;
-            this.vScrollBarCustom2.Value = -1;
-            this.vScrollBarCustom2.ValueLimited = -1;
             // 
             // contextMenuStrip
             // 
@@ -416,6 +387,35 @@ namespace EDDiscovery.UserControls
             this.informationToolStripMenuItem.Text = "Information";
             this.informationToolStripMenuItem.ToolTipText = "Toggle body information column visibility";
             this.informationToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.informationToolStripMenuItem_CheckStateChanged);
+            // 
+            // vScrollBarCustom2
+            // 
+            this.vScrollBarCustom2.ArrowBorderColor = System.Drawing.Color.LightBlue;
+            this.vScrollBarCustom2.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.vScrollBarCustom2.ArrowColorScaling = 0.5F;
+            this.vScrollBarCustom2.ArrowDownDrawAngle = 270F;
+            this.vScrollBarCustom2.ArrowUpDrawAngle = 90F;
+            this.vScrollBarCustom2.BorderColor = System.Drawing.Color.White;
+            this.vScrollBarCustom2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.vScrollBarCustom2.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.vScrollBarCustom2.HideScrollBar = true;
+            this.vScrollBarCustom2.LargeChange = 0;
+            this.vScrollBarCustom2.Location = new System.Drawing.Point(556, 0);
+            this.vScrollBarCustom2.Maximum = -1;
+            this.vScrollBarCustom2.Minimum = 0;
+            this.vScrollBarCustom2.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.vScrollBarCustom2.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.vScrollBarCustom2.Name = "vScrollBarCustom2";
+            this.vScrollBarCustom2.Size = new System.Drawing.Size(16, 550);
+            this.vScrollBarCustom2.SliderColor = System.Drawing.Color.DarkGray;
+            this.vScrollBarCustom2.SmallChange = 1;
+            this.vScrollBarCustom2.TabIndex = 24;
+            this.vScrollBarCustom2.ThumbBorderColor = System.Drawing.Color.Yellow;
+            this.vScrollBarCustom2.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.vScrollBarCustom2.ThumbColorScaling = 0.5F;
+            this.vScrollBarCustom2.ThumbDrawAngle = 0F;
+            this.vScrollBarCustom2.Value = -1;
+            this.vScrollBarCustom2.ValueLimited = -1;
             // 
             // statusStripSummary
             // 

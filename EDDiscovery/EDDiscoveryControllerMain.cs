@@ -143,17 +143,17 @@ namespace EDDiscovery
             BaseUtils.LogClean.DeleteOldLogFiles(logpath, "*.hlog", 2, 256);        // Remove hlogs faster
             BaseUtils.LogClean.DeleteOldLogFiles(logpath, "*.log", 10, 256);        
 
-            if (!Debugger.IsAttached || EDDOptions.Instance.TraceLog != null)
+            if (!Debugger.IsAttached || EDDOptions.Instance.TraceLog != null)       // no debugger, or tracelog option set
             {
-                TraceLog.RedirectTrace(logpath, EDDOptions.Instance.TraceLog);
+                TraceLog.RedirectTrace(logpath, true, EDDOptions.Instance.TraceLog);
             }
 
-            if (!Debugger.IsAttached || EDDOptions.Instance.LogExceptions)
+            if (!Debugger.IsAttached || EDDOptions.Instance.LogExceptions)          // no debugger, or log exceptions set
             {
                 ExceptionCatcher.RedirectExceptions(Properties.Resources.URLProjectFeedback, ShowException, h => System.Windows.Forms.Application.ThreadException += h);
             }
 
-            if (EDDOptions.Instance.LogExceptions)
+            if (EDDOptions.Instance.LogExceptions)                                  
             {
                 FirstChanceExceptionCatcher.RegisterFirstChanceExceptionHandler();
             }
@@ -260,7 +260,14 @@ namespace EDDiscovery
         {
             // check first and download items
 
-            StarScan.LoadBodyDesignationMap();
+            string desigmapfile = Path.Combine(EDDOptions.Instance.AppDataDirectory, "bodydesignations.csv");
+
+            if (!File.Exists(desigmapfile))
+            {
+                desigmapfile = Path.Combine(Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), "bodydesignations.csv");
+            }
+
+            BodyDesignations.LoadBodyDesignationMap(desigmapfile);
 
             Debug.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Check systems");
             ReportSyncProgress("");
@@ -285,23 +292,27 @@ namespace EDDiscovery
                 }
             }
 
+            string gmofile = Path.Combine(EDDOptions.Instance.AppDataDirectory, "galacticmapping.json");
+
             if (!EDDOptions.Instance.NoSystemsLoad)
             {
                 // New Galmap load - it was not doing a refresh if EDSM sync kept on happening. Now has its own timer
 
                 DateTime galmaptime = SystemsDatabase.Instance.GetEDSMGalMapLast(); // Latest time from RW file.
 
-                if (DateTime.Now.Subtract(galmaptime).TotalDays > 14 || !galacticMapping.GalMapFilePresent())  // Over 14 days do a sync from EDSM for galmap
+                if (DateTime.Now.Subtract(galmaptime).TotalDays > 14 || !File.Exists(gmofile))  // Over 14 days do a sync from EDSM for galmap
                 {
                     LogLine("Get galactic mapping from EDSM.".T(EDTx.EDDiscoveryController_EDSM));
-                    if (galacticMapping.DownloadFromEDSM())
+                    if (galacticMapping.DownloadFromEDSM(gmofile))
                         SystemsDatabase.Instance.SetEDSMGalMapLast(DateTime.UtcNow);
                 }
 
                 Debug.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Check systems complete");
             }
 
-            galacticMapping.ParseData();                            // at this point, gal map data has been uploaded - get it into memory
+            if ( File.Exists(gmofile))
+                galacticMapping.Parse(gmofile);                            // at this point, gal map data has been uploaded - get it into memory
+
             SystemCache.AddToAutoCompleteList(galacticMapping.GetGMONames());
             SystemNoteClass.GetAllSystemNotes();
 
@@ -315,7 +326,7 @@ namespace EDDiscovery
                 {
                     EDCommander switchto = EDCommander.GetCommander(EDDOptions.Instance.Commander);
                     if (switchto != null)
-                        EDCommander.CurrentCmdrID = switchto.Nr;
+                        EDCommander.CurrentCmdrID = switchto.Id;
                 }
 
                 DoRefreshHistory(new RefreshWorkerArgs { CurrentCommander = EDCommander.CurrentCmdrID });       // kick the background refresh worker thread into action

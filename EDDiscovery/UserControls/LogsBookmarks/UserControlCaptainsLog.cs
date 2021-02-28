@@ -14,15 +14,8 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
-using EDDiscovery.Forms;
-using EliteDangerousCore;
-using EliteDangerousCore.DB;
-using EliteDangerousCore.EDSM;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
 {
@@ -35,7 +28,8 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
-        DateTime? gotodate = null;
+        DateTime? gotodatestart = null;
+        DateTime? gotodateend = null;
         bool createnew = false;
 
         public override void Init()
@@ -63,19 +57,18 @@ namespace EDDiscovery.UserControls
                 {
                     (uccb as CaptainsLogDiary).ClickedonDate = (d,b) =>
                     {
-                        gotodate = d;
+                        gotodatestart = gotodateend = d;
                         createnew = b;
                         tabStrip.SelectedIndex = 1;
                     };
                 }
                 else if ( uccb is CaptainsLogEntries )
                 {
-                    if ( gotodate.HasValue )
+                    if ( gotodatestart.HasValue )
                     {
                         var clentries = uccb as CaptainsLogEntries;
-                        System.Diagnostics.Debug.WriteLine("Goto " + gotodate);
-                        clentries.SelectDate(gotodate.Value,createnew);
-                        gotodate = null;
+                        clentries.SelectDate(gotodatestart.Value,gotodateend.Value,createnew);
+                        gotodatestart = gotodateend = null;
                     }
                 }
             };
@@ -84,6 +77,18 @@ namespace EDDiscovery.UserControls
             {
                 UserControlCommonBase uccb = ctrl as UserControlCommonBase;
                 uccb.CloseDown();
+            };
+
+            tabStrip.OnControlTextClick += (tab) =>
+            {
+                CaptainsLogDiary cld = tabStrip.CurrentControl as CaptainsLogDiary;
+                if ( cld != null )
+                {
+                    gotodatestart = cld.CurrentMonth;
+                    gotodateend = new DateTime(cld.CurrentMonth.Year, cld.CurrentMonth.Month, DateTime.DaysInMonth(cld.CurrentMonth.Year, cld.CurrentMonth.Month));
+                    createnew = false;
+                    tabStrip.SelectedIndex = 1;
+                }
             };
         }
 

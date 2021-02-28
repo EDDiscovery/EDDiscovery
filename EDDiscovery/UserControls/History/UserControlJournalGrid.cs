@@ -323,14 +323,14 @@ namespace EDDiscovery.UserControls
         private DataGridViewRow CreateHistoryRow(HistoryEntry he, string search)
         {
             DateTime time = EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(he.EventTimeUTC);
-            he.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
+            he.FillInformation(out string EventDescription, out string EventDetailedInfo);
             string detail = EventDescription;
             detail = detail.AppendPrePad(EventDetailedInfo.LineLimit(15,Environment.NewLine + "..."), Environment.NewLine);
 
             if (search.HasChars())
             {
                 string timestr = time.ToString();
-                int rown = EDDConfig.Instance.OrderRowsInverted ? he.Indexno : (discoveryform.history.Count - he.Indexno + 1);
+                int rown = EDDConfig.Instance.OrderRowsInverted ? he.EntryNumber : (discoveryform.history.Count - he.EntryNumber + 1);
                 string entryrow = rown.ToStringInvariant();
                 bool matched = timestr.IndexOf(search, StringComparison.InvariantCultureIgnoreCase) >= 0 ||
                                 he.EventSummary.IndexOf(search, StringComparison.InvariantCultureIgnoreCase) >= 0 ||
@@ -440,7 +440,7 @@ namespace EDDiscovery.UserControls
             if (dataGridViewJournal.LeftClickRowValid)                                                   // Click expands it..
             {
                 ExtendedControls.InfoForm info = new ExtendedControls.InfoForm();
-                leftclicksystem.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
+                leftclicksystem.FillInformation(out string EventDescription, out string EventDetailedInfo);
                 string infodetailed = EventDescription.AppendPrePad(EventDetailedInfo, Environment.NewLine);
                 info.Info( (EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(leftclicksystem.EventTimeUTC)) + ": " + leftclicksystem.EventSummary,
                     FindForm().Icon, infodetailed);
@@ -475,14 +475,7 @@ namespace EDDiscovery.UserControls
         {
             this.Cursor = Cursors.WaitCursor;
             EDSMClass edsm = new EDSMClass();
-            long? id_edsm = rightclicksystem.System?.EDSMID;
-
-            if (id_edsm == 0)
-            {
-                id_edsm = null;
-            }
-
-            if (!edsm.ShowSystemInEDSM(rightclicksystem.System.Name, id_edsm))
+            if (!edsm.ShowSystemInEDSM(rightclicksystem.System.Name))
                 ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "System could not be found - has not been synched or EDSM is unavailable".T(EDTx.UserControlJournalGrid_NotSynced));
 
             this.Cursor = Cursors.Default;
@@ -560,11 +553,11 @@ namespace EDDiscovery.UserControls
 
         private void jumpToEntryToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            int curi = rightclicksystem != null ? (EDDConfig.Instance.OrderRowsInverted ? rightclicksystem.Indexno : (discoveryform.history.Count - rightclicksystem.Indexno + 1)) : 0;
+            int curi = rightclicksystem != null ? (EDDConfig.Instance.OrderRowsInverted ? rightclicksystem.EntryNumber : (discoveryform.history.Count - rightclicksystem.EntryNumber + 1)) : 0;
             int selrow = dataGridViewJournal.JumpToDialog(this.FindForm(), curi, r =>
             {
                 HistoryEntry he = r.Tag as HistoryEntry;
-                return EDDConfig.Instance.OrderRowsInverted ? he.Indexno : (discoveryform.history.Count - he.Indexno + 1);
+                return EDDConfig.Instance.OrderRowsInverted ? he.EntryNumber : (discoveryform.history.Count - he.EntryNumber + 1);
             });
 
             if (selrow >= 0)

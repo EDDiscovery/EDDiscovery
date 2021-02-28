@@ -375,10 +375,11 @@ namespace EDDiscovery.UserControls
 
         #region Interactions with other tabs
 
-        public void SelectDate(DateTime date, bool createnew)       // date is in real time (12/1/2019), not in game (3305) time, but has no kind (its just plain).
+        public void SelectDate(DateTime datestart, DateTime dateend, bool createnew)       // date is in real time (12/1/2019), not in game (3305) time, but has no kind (its just plain).
         {
             updateprogramatically = true;
-            dateTimePickerEndDate.Value = dateTimePickerStartDate.Value = EDDConfig.Instance.ConvertTimeToSelectedNoKind(date);
+            dateTimePickerStartDate.Value = EDDConfig.Instance.ConvertTimeToSelectedNoKind(datestart);
+            dateTimePickerEndDate.Value = EDDConfig.Instance.ConvertTimeToSelectedNoKind(dateend);
             dateTimePickerEndDate.Checked = dateTimePickerStartDate.Checked = true;
 
             updateprogramatically = false;
@@ -540,7 +541,7 @@ namespace EDDiscovery.UserControls
 
             if (discoveryform.Map.Is3DMapsRunning)             // double check here! for paranoia.
             {
-                EliteDangerousCore.ISystem s = SystemCache.FindSystem(rightclickentry.SystemName);
+                EliteDangerousCore.ISystem s = discoveryform.history.FindSystem(rightclickentry.SystemName, discoveryform.galacticMapping, true);
 
                 if ( s != null && discoveryform.Map.MoveTo((float)s.X, (float)s.Y, (float)s.Z))
                     discoveryform.Map.Show();
@@ -552,7 +553,7 @@ namespace EDDiscovery.UserControls
             this.Cursor = Cursors.WaitCursor;
             EliteDangerousCore.EDSM.EDSMClass edsm = new EDSMClass();
             
-            if (!edsm.ShowSystemInEDSM(rightclickentry.SystemName, null))
+            if (!edsm.ShowSystemInEDSM(rightclickentry.SystemName))
                 ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable".T(EDTx.CaptainsLogEntries_SysU));
 
             this.Cursor = Cursors.Default;
@@ -560,7 +561,7 @@ namespace EDDiscovery.UserControls
 
         private void openAScanPanelViewToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ISystem sys = SystemCache.FindSystem(rightclickentry.SystemName);
+            ISystem sys = discoveryform.history.FindSystem(rightclickentry.SystemName, discoveryform.galacticMapping, true);
 
             if ( sys != null )
                 ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), sys, true, discoveryform.history);

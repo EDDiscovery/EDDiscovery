@@ -151,11 +151,37 @@ namespace EDDiscovery
                     LogLine(string.Format("Removed {0} FSD entries".T(EDTx.EDDiscoveryForm_FSDRem), n));
                 }
 
-                hist = HistoryList.LoadHistory(journalmonitor,
-                    () => PendingClose,
-                    (p, s) => ReportRefreshProgress(p, string.Format("Processing log file {0}".T(EDTx.EDDiscoveryController_PLF), s)), args.NetLogPath,
-                    args.ForceNetLogReload, args.ForceJournalReload, args.CurrentCommander,
-                    EDDConfig.Instance.FullHistoryLoadDayLimit, EDDConfig.Instance.EssentialEventTypes);
+                if (args.CurrentCommander >= 0)             // if we have a real commander
+                {
+                    journalmonitor.SetupWatchers();         // monitors are stopped, set up watchers
+
+                    int forcereloadoflastn = args.ForceJournalReload ? int.MaxValue / 2 : 0;     // if forcing a reload, we indicate that by setting the reload count to a very high value, but not enough to cause int wrap
+
+                    journalmonitor.ParseJournalFilesOnWatchers((p, s) => ReportRefreshProgress(p, string.Format("Processing log file {0}".T(EDTx.EDDiscoveryController_PLF),s)), 
+                                                                         forcereloadoflastn);
+
+                    if (args.NetLogPath != null)            // see if net logs need reading for old times sake.
+                    {
+                        NetLogClass.ParseFiles(args.NetLogPath, out string errstr, EDCommander.Current.MapColour, () => PendingClose, (p, s) => ReportRefreshProgress(p, s), 
+                            args.ForceNetLogReload, currentcmdrid: args.CurrentCommander);
+                    }
+                }
+
+                hist = HistoryList.LoadHistory( (s) => ReportRefreshProgress(-1, s), 
+                                                args.CurrentCommander,
+                                                EDDConfig.Instance.FullHistoryLoadDayLimit, 
+                                                EDDConfig.Instance.EssentialEventTypes
+                                                 );
+
+                if (args.NetLogPath != null )
+                {
+                    ReportRefreshProgress(-1, "Netlog Updating System Positions");
+                    hist.FillInPositionsFSDJumps(LogLine);                         // if netlog reading, try and resolve systems..
+                }
+
+                EDCommander.Current.FID = hist.GetCommanderFID();                   // ensure FID is set.. the other place it gets changed is a read of LoadGame.
+
+                ReportRefreshProgress(-1, "Done");
 
                 Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Load history complete with " + hist.Count + " records");
             }

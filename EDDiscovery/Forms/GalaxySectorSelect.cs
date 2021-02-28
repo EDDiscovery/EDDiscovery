@@ -244,7 +244,8 @@ namespace EDDiscovery.Forms
 
             f.Trigger += (dialogname, controlname, tag) =>
             {
-                f.ReturnResult(DialogResult.OK);
+                if (controlname == "OK")
+                    f.ReturnResult(DialogResult.OK);
             };
             
             DialogResult res = f.ShowDialogCentred(parent, parent.Icon, "Select EDSM Galaxy Data".T(EDTx.GalaxySectorSelect_GALSELTitle));

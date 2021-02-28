@@ -17,7 +17,6 @@
 using BaseUtils.JSON;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
-using EliteDangerousCore.EDSM;
 using EliteDangerousCore.JournalEvents;
 using System;
 using System.Collections.Generic;
@@ -35,6 +34,7 @@ namespace EDDiscovery.UserControls
         private string DbColumnSave { get { return DBName("UserControlExploration",  "DGVCol"); } }
 
         private ExplorationSetClass currentexplorationset;
+        private bool dirty = false;
 
         public int JounalScan { get; private set; }
 
@@ -79,6 +79,13 @@ namespace EDDiscovery.UserControls
                 (uctg as IHistoryCursorNewStarList).OnNewStarList += OnNewStars;
         }
 
+        public override bool AllowClose()
+        {
+            if (dirty)
+                return ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Exploration - Confirm you want to lose all changes".T(EDTx.UserControlExploration_LoseAllChanges), "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK;
+            return true;
+        }
+
         public override void Closing()
         {
             DGVSaveColumnLayout(dataGridViewExplore, DbColumnSave);
@@ -116,11 +123,15 @@ namespace EDDiscovery.UserControls
 
         private void UpdateSystemRows()
         {
+            Cursor = Cursors.WaitCursor;
+
             for (int i = 0; i < dataGridViewExplore.Rows.Count; i++)
             {
                 UpdateSystemRow(i);
                 dataGridViewExplore.Rows[i].HeaderCell.Value = (i + 1).ToString();
             }
+
+            Cursor = Cursors.Default;
         }
 
         private void UpdateSystemRow(int rowindex)
@@ -140,7 +151,7 @@ namespace EDDiscovery.UserControls
 
                 ISystem sys = (ISystem)dataGridViewExplore[0, rowindex].Tag;
                 if (sys == null)
-                    sys = discoveryform.history.FindSystem(sysname);
+                    sys = discoveryform.history.FindSystem(sysname, discoveryform.galacticMapping, true);
 
                 dataGridViewExplore[0, rowindex].Tag = sys;
                 dataGridViewExplore.Rows[rowindex].Cells[0].Style.ForeColor = (sys != null && sys.HasCoordinate) ? Color.Empty : discoveryform.theme.UnknownSystemColor;
@@ -231,6 +242,18 @@ namespace EDDiscovery.UserControls
                 dataGridViewExplore.Rows.Add(sysname, "", "");
 
             UpdateSystemRows();
+            dirty = true;       // now changed
+        }
+
+        public void InsertRows(int insertIndex, params string[] sysnames)
+        {
+            foreach (var row in sysnames)
+            {
+                dataGridViewExplore.Rows.Insert(insertIndex, row, "", "", "", "", "", "", "", "");
+                insertIndex++;
+            }
+            UpdateSystemRows();
+            dirty = true;
         }
 
         #endregion
@@ -246,6 +269,7 @@ namespace EDDiscovery.UserControls
                 textBoxFileName.Text = file;
                 UpdateExplorationInfo(currentexplorationset);
                 ClearExplorationSet();
+                dirty = true;
             }
         }
 
@@ -263,6 +287,7 @@ namespace EDDiscovery.UserControls
                     dataGridViewExplore.Rows.Add(sysname, "", "");
 
                 UpdateSystemRows();
+                dirty = false;
             }
         }
 
@@ -277,10 +302,12 @@ namespace EDDiscovery.UserControls
                 if (file != null)
                     textBoxFileName.Text = file;
             }
-            else
+
+            if (!String.IsNullOrEmpty(textBoxFileName.Text))
             {
                 currentexplorationset.Save(textBoxFileName.Text);
                 ExtendedControls.MessageBoxTheme.Show(this.FindForm(), string.Format("Saved to {0} Exploration Set".T(EDTx.UserControlExploration_Saved), textBoxFileName.Text));
+                dirty = false;
             }
         }
 
@@ -297,7 +324,7 @@ namespace EDDiscovery.UserControls
                 {
                     ret.Item1.Name = ret.Item1.Name.Trim();
 
-                    ISystem sc = discoveryform.history.FindSystem(ret.Item1.Name);
+                    ISystem sc = discoveryform.history.FindSystem(ret.Item1.Name, discoveryform.galacticMapping, true);
                     if (sc == null)
                     {
                         sc = ret.Item1;
@@ -312,7 +339,7 @@ namespace EDDiscovery.UserControls
                         "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
                 else
-                    AddSystems(systems);
+                    AddSystems(systems);        // makes it dirty
 
                 f.ReturnResult(DialogResult.OK);
             };
@@ -357,7 +384,7 @@ namespace EDDiscovery.UserControls
             }
 
             List<String> systems = new List<String>();
-            int countunknown = 0;
+
             foreach (String name in sysnames)
             {
                 String sysname = name;
@@ -366,16 +393,9 @@ namespace EDDiscovery.UserControls
                     String[] values = sysname.Split(',');
                     sysname = values[0];
                 }
-                if (String.IsNullOrWhiteSpace(sysname))
-                    continue;
-                ISystem sc = discoveryform.history.FindSystem(sysname.Trim());
-                if (sc == null)
-                {
-                    sc = new SystemClass(sysname.Trim());
-                    countunknown++;
-                }
-                systems.Add(sc.Name);
 
+                if (sysname.HasChars())
+                    systems.Add(sysname.Trim());
             }
 
             if (systems.Count == 0)
@@ -385,9 +405,11 @@ namespace EDDiscovery.UserControls
                 return;
             }
 
+            SystemCache.UpdateDBWithSystems(systems);           // try and fill them in
+
             ClearExplorationSet();
 
-            AddSystems(systems);
+            AddSystems(systems);        // makes it dirty
         }
 
         private void toolStripButtonExport_Click(object sender, EventArgs e)
@@ -476,6 +498,7 @@ namespace EDDiscovery.UserControls
             if (ExtendedControls.MessageBoxTheme.Show(FindForm(), "Are you sure you want to clear the route list?".T(EDTx.UserControlExploration_Clear), "Warning".T(EDTx.Warning), MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 ClearExplorationSet();
+                dirty = true;
             }
         }
 
@@ -545,7 +568,8 @@ namespace EDDiscovery.UserControls
                 {
                     dataGridViewExplore.Rows.RemoveAt(index);
                 }
-                InsertRows(insertRow, rows);
+
+                InsertRows(insertRow, rows);    // makes it dirty
             }
         }
 
@@ -567,7 +591,7 @@ namespace EDDiscovery.UserControls
                 var rows = data.Replace("\r", "").Split('\n').Where(r => r != "").ToArray();
                 int[] selectedRows = dataGridViewExplore.SelectedCells.OfType<DataGridViewCell>().Select(c => c.RowIndex).OrderBy(v => v).Distinct().ToArray();
                 int insertRow = selectedRows.FirstOrDefault();
-                InsertRows(insertRow, rows);
+                InsertRows(insertRow, rows);        // makes it dirty
             }
         }
 
@@ -579,6 +603,7 @@ namespace EDDiscovery.UserControls
                 dataGridViewExplore.Rows.RemoveAt(index);
             }
             UpdateSystemRows();
+            dirty = true;
         }
 
         private void setTargetToolStripMenuItem_Click(object sender, EventArgs e)
@@ -605,7 +630,7 @@ namespace EDDiscovery.UserControls
 
             if (obj == null)
                 return;
-            ISystem sc = discoveryform.history.FindSystem((string)obj);
+            ISystem sc = discoveryform.history.FindSystem((string)obj, discoveryform.galacticMapping, true);
             if (sc == null)
             {
                 ExtendedControls.MessageBoxTheme.Show(FindForm(), "Unknown system, system is without co-ordinates".T(EDTx.UserControlExploration_UnknownS), "Warning".T(EDTx.Warning), MessageBoxButtons.OK);
@@ -626,16 +651,6 @@ namespace EDDiscovery.UserControls
             if (e.Column.Index >= 1 && e.Column.Index <= 6)
                 e.SortDataGridViewColumnNumeric();
 
-        }
-
-        public void InsertRows(int insertIndex, params string[] sysnames)
-        {
-            foreach (var row in sysnames)
-            {
-                dataGridViewExplore.Rows.Insert(insertIndex, row, "", "", "", "", "", "", "", "");
-                insertIndex++;
-            }
-            UpdateSystemRows();
         }
 
         private void UpdateExplorationInfo(ExplorationSetClass route)
@@ -664,7 +679,7 @@ namespace EDDiscovery.UserControls
                 var row = dataGridViewExplore.Rows[e.RowIndex];
                 var cell = dataGridViewExplore[e.ColumnIndex, e.RowIndex];
 
-                if (sysname != "" && discoveryform.history.FindSystem(sysname) == null )
+                if (sysname != "" && discoveryform.history.FindSystem(sysname, discoveryform.galacticMapping, true) == null )
                 {
                     row.ErrorText = "System not known".T(EDTx.UserControlExploration_EDSMUnk);
                 }
@@ -681,6 +696,7 @@ namespace EDDiscovery.UserControls
             {
                 UpdateSystemRow(e.RowIndex);
                 dataGridViewExplore.Rows[e.RowIndex].HeaderCell.Value = (e.RowIndex + 1).ToString();
+                dirty = true;
             }
         }
 

@@ -75,7 +75,7 @@ namespace EDDiscovery.UserControls.Search
         private void Cms_Opening(object sender, System.ComponentModel.CancelEventArgs e)
         {
             rightclicktag = RightClickRowValid ? Rows[RightClickRow].Tag : null;
-            ContextMenuStrip.Items[3].Enabled = rightclicktag is HistoryEntry;
+            ContextMenuStrip.Items[3].Visible = rightclicktag is HistoryEntry;
         }
 
         private ISystem SysFrom(Object t)   // given tag, find the isystem
@@ -92,14 +92,7 @@ namespace EDDiscovery.UserControls.Search
             {
                 this.Cursor = Cursors.WaitCursor;
                 EDSMClass edsm = new EDSMClass();
-                long? id_edsm = SysFrom(rightclicktag).EDSMID;
-
-                if (id_edsm == 0)
-                {
-                    id_edsm = null;
-                }
-
-                if (!edsm.ShowSystemInEDSM(SysFrom(rightclicktag).Name, id_edsm))
+                if (!edsm.ShowSystemInEDSM(SysFrom(rightclicktag).Name))
                     ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable");
 
                 this.Cursor = Cursors.Default;

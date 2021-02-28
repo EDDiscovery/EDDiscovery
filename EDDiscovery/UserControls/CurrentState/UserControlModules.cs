@@ -147,7 +147,7 @@ namespace EDDiscovery.UserControls
         {
             DataGridViewColumn sortcolprev = dataGridViewModules.SortedColumn != null ? dataGridViewModules.SortedColumn : dataGridViewModules.Columns[0];
             SortOrder sortorderprev = dataGridViewModules.SortedColumn != null ? dataGridViewModules.SortOrder : SortOrder.Ascending;
-            int firstline = dataGridViewModules.FirstDisplayedScrollingRowIndex;
+            int firstline = dataGridViewModules.SafeFirstDisplayedScrollingRowIndex();
 
             dataGridViewModules.Rows.Clear();
 
@@ -559,11 +559,7 @@ namespace EDDiscovery.UserControls
                 {
                     if ( ExtendedControls.MessageBoxTheme.Show(FindForm(), "Confirm sell of ship:".Tx(EDTx.EDDiscoveryForm_ConfirmSyncToEDSM) + Environment.NewLine + last_si.ShipNameIdentType , "Warning".T(EDTx.Warning), MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes ) 
                     {
-                        var je = new EliteDangerousCore.JournalEvents.JournalShipyardSell(DateTime.UtcNow);
-                        je.ShipTypeFD = last_si.ShipFD;
-                        je.SellShipId = last_si.ID;
-                        je.ShipPrice = 0;
-                        je.SetCommander(EDCommander.CurrentCmdrID);
+                        var je = new EliteDangerousCore.JournalEvents.JournalShipyardSell(DateTime.UtcNow, last_si.ShipFD, last_si.ID, 0, EDCommander.CurrentCmdrID);
                         var jo = je.Json();
                         je.Add(jo);
                         discoveryform.NewEntry(je);

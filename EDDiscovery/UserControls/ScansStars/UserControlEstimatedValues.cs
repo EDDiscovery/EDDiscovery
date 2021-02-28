@@ -112,7 +112,7 @@ namespace EDDiscovery.UserControls
 
             StarScan.SystemNode last_sn = await discoveryform.history.StarScan.FindSystemAsync(last_he.System, checkBoxEDSM.Checked);
 
-            SetControlText((last_sn == null) ? "No Scan".T(EDTx.NoScan) : string.Format("Estimated Scan Values for {0}".T(EDTx.UserControlEstimatedValues_SV), last_sn.system.Name));
+            SetControlText((last_sn == null) ? "No Scan".T(EDTx.NoScan) : string.Format("Estimated Scan Values for {0}".T(EDTx.UserControlEstimatedValues_SV), last_sn.System.Name));
 
             if (last_sn != null)
             {
@@ -121,7 +121,7 @@ namespace EDDiscovery.UserControls
                     if ( bodies.ScanData != null && bodies.ScanData.BodyName != null && (checkBoxEDSM.Checked || !bodies.ScanData.IsEDSMBody))     // if check edsm, or not edsm body, with scandata
                     {
                         string spclass = bodies.ScanData.IsStar ? bodies.ScanData.StarTypeText : bodies.ScanData.PlanetTypeText;
-                        dataGridViewEstimatedValues.Rows.Add(new object[] { bodies.ScanData.BodyName, spclass, bodies.ScanData.IsEDSMBody ? "EDSM" : "", (bodies.IsMapped ? Icons.Controls.Scan_Bodies_Mapped : null), (bodies.ScanData.WasMapped == true? Icons.Controls.Scan_Bodies_Mapped : null), (bodies.ScanData.WasDiscovered == true ? Icons.Controls.Scan_DisplaySystemAlways : null), bodies.ScanData.EstimatedValue });
+                        dataGridViewEstimatedValues.Rows.Add(new object[] { bodies.ScanData.BodyDesignationOrName, spclass, bodies.ScanData.IsEDSMBody ? "EDSM" : "", (bodies.IsMapped ? Icons.Controls.Scan_Bodies_Mapped : null), (bodies.ScanData.WasMapped == true? Icons.Controls.Scan_Bodies_Mapped : null), (bodies.ScanData.WasDiscovered == true ? Icons.Controls.Scan_DisplaySystemAlways : null), bodies.ScanData.EstimatedValue });
                     }
                 }
 
