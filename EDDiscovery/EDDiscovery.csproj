@@ -31,9 +31,6 @@
     <DefineConstants>TRACE</DefineConstants>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1' or '$(TargetFramework)' == 'net5.0-windows'">
-    <DefineConstants>NO_SYSTEM_SPEECH</DefineConstants>
-  </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>Resources\edlogo_3mo_icon.ico</ApplicationIcon>
   </PropertyGroup>
@@ -133,10 +130,8 @@
     <ProjectReference Include="..\EliteDangerousCore\EliteDangerous\EliteDangerous.csproj" />
     <ProjectReference Include="..\ExtendedControls\ExtendedControls\ExtendedControls.csproj" />
     <ProjectReference Include="..\ExtendedControls\ExtendedForms\ExtendedForms.csproj" />
-  </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'net461'">
-    <ProjectReference Include="..\BaseUtilities\Audio.CSCore\Audio.CSCore.csproj" />
     <ProjectReference Include="..\BaseUtilities\Audio.WindowsSpeech\Audio.WindowsSpeech.csproj" />
+    <ProjectReference Include="..\BaseUtilities\Audio.CSCore\Audio.CSCore.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">
