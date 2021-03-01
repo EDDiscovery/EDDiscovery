@@ -77,17 +77,6 @@ Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChang
 SelectDirBrowseLabel=To continue, click Next.
 ConfirmUninstall=Are you sure you want to completely remove %1 and all of its components? Note that all your user data is not removed by this uninstall and is still stored in your local app data
 
-[Registry]
-Root: "HKLM"; Subkey: "Software\Classes\eddiscovery"; ValueType: string; ValueData: "EDDiscovery URL Protocol"; Flags: uninsdeletekey
-Root: "HKLM"; Subkey: "Software\Classes\eddiscovery"; ValueType: string; ValueName: "URL Protocol"; Flags: uninsdeletekey
-Root: "HKLM"; Subkey: "Software\Classes\eddiscovery\Default Icon"; ValueType: string; ValueData: "C:\\Code\\Examples\\CAPI\\CAPI\\bin\\Debug\\CAPI.exe,0"; Flags: uninsdeletekey
-Root: "HKLM"; Subkey: "Software\Classes\eddiscovery\shell\open\command"; ValueType: string; ValueData: """C:\\Code\\Examples\\CAPI\\CAPI\\bin\\Debug\\CAPI.exe"" ""%1"""; Flags: uninsdeletekey
-Root: "HKLM"; Subkey: "Software\Classes\eddiscovery\shell\open\ddeexec"; ValueType: string; ValueData: "%1"; Flags: uninsdeletekey
-Root: "HKCU"; Subkey: "Software\Classes\eddiscovery"; ValueType: string; ValueData: "EDDiscovery URL Protocol"; Flags: uninsdeletekey
-Root: "HKCU"; Subkey: "Software\Classes\eddiscovery"; ValueType: string; ValueName: "URL Protocol"; Flags: uninsdeletekey
-Root: "HKCU"; Subkey: "Software\Classes\eddiscovery\Default Icon"; ValueType: string; ValueData: "C:\\Code\\Examples\\CAPI\\CAPI\\bin\\Debug\\CAPI.exe,0"; Flags: uninsdeletekey
-Root: "HKCU"; Subkey: "Software\Classes\eddiscovery\shell\open\command"; ValueType: string; ValueData: """C:\\Code\\Examples\\CAPI\\CAPI\\bin\\Debug\\CAPI.exe"" ""%1"""; Flags: uninsdeletekey
-Root: "HKCU"; Subkey: "Software\Classes\eddiscovery\shell\open\ddeexec"; ValueType: string; ValueData: "%1"; Flags: uninsdeletekey
 
 [Code]
 

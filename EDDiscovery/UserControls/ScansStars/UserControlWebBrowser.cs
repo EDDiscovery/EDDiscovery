@@ -234,17 +234,23 @@ namespace EDDiscovery.UserControls
 
         private void webBrowser_Navigating(object sender, WebBrowserNavigatingEventArgs e)
         {
-            if (!e.Url.AbsoluteUri.StartsWith("about:"))
+            string[] allowed = new string[] {               
+                "about:",
+                "https://www.google.com/recaptcha",     // these three is enough to allow Spansh to work
+                "https://consentcdn.cookiebot.com",
+                "https://auth.frontierstore.net"
+            };
+
+            // if not starting with the current url for the site, or not in whitelist..
+
+            if (!e.Url.Host.StartsWith(urlallowed) && allowed.StartsWith(e.Url.AbsoluteUri, StringComparison.InvariantCultureIgnoreCase) == -1)
             {
-                if (!e.Url.Host.StartsWith(urlallowed))
-                {
-                //    System.Diagnostics.Debug.WriteLine("Webbrowser Disallowed " + e.Url.Host + " : " + e.Url.AbsoluteUri);
-                    e.Cancel = true;
-                }
+                System.Diagnostics.Debug.WriteLine("Webbrowser Disallowed " + e.Url.Host + " : " + e.Url.AbsoluteUri);
+                e.Cancel = true;
             }
             else
             {
-               // System.Diagnostics.Debug.WriteLine("Webbrowser Allowed " + e.Url.Host + " : " + e.Url.AbsoluteUri);
+               System.Diagnostics.Debug.WriteLine("Webbrowser Allowed " + e.Url.Host + " : " + e.Url.AbsoluteUri);
             }
         }
 
