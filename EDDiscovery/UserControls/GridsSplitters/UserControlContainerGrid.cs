@@ -204,15 +204,15 @@ namespace EDDiscovery.UserControls
             uccr.BorderColor = discoveryform.theme.GridBorderLines;
             uccr.SelectedBorderColor = discoveryform.theme.TextBlockHighlightColor;
 
+            int numopenedinsidealready = uccrlist.Count(x => x.control.GetType().Equals(uccb.GetType()));    // how many others are there BEFORE add
+
             uccrlist.Add(uccr);
 
-            int numopenedinside = uccrlist.Count(x => x.GetType().Equals(uccb.GetType()));    // how many others are there?
-
-            int dnum = DisplayNumberOfGrid(numopenedinside);
+            int dnum = DisplayNumberOfGrid(numopenedinsidealready);      // will be at least 1 (si
 
             panelPlayfield.Controls.Add(uccr);
 
-            //System.Diagnostics.Trace.WriteLine("GD:Create " + uccb.GetType().Name + " " + dnum);
+            //System.Diagnostics.Trace.WriteLine("GD:Create " + uccb.GetType().Name + " " + dnum + " " + numopenedinsidealready);
             uccb.Init(discoveryform, dnum);
 
             return uccr;
