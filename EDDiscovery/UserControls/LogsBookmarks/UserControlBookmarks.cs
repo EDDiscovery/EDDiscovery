@@ -10,8 +10,6 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlBookmarks : UserControlCommonBase
     {
-        private string DbColumnSave { get { return DBName("UCBookmarks", "DGVCol"); } }
-
         DataGridViewRow currentedit = null;
         Timer searchtimer;
 
@@ -23,6 +21,8 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
+            DBBaseName = "UCBookmarks";
+
             searchtimer = new Timer() { Interval = 500 };
             searchtimer.Tick += Searchtimer_Tick;
             GlobalBookMarkList.Instance.OnBookmarkChange += BookmarksChanged;
@@ -34,12 +34,12 @@ namespace EDDiscovery.UserControls
 
         public override void LoadLayout()
         {
-            DGVLoadColumnLayout(dataGridViewBookMarks, DbColumnSave);
+            DGVLoadColumnLayout(dataGridViewBookMarks);
         }
 
         public override void Closing()
         {
-            DGVSaveColumnLayout(dataGridViewBookMarks, DbColumnSave);
+            DGVSaveColumnLayout(dataGridViewBookMarks);
 
             SaveBackAnyChanges();
 
@@ -446,7 +446,7 @@ namespace EDDiscovery.UserControls
         {
             OpenFileDialog dlg = new OpenFileDialog();
 
-            dlg.InitialDirectory = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("BookmarkFormImportExcelFolder", "c:\\");
+            dlg.InitialDirectory = GetSetting("ImportExcelFolder", "c:\\");
 
             if (!System.IO.Directory.Exists(dlg.InitialDirectory))
                 System.IO.Directory.CreateDirectory(dlg.InitialDirectory);
@@ -537,7 +537,7 @@ namespace EDDiscovery.UserControls
                         }
                     }
 
-                    EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("BookmarkFormImportExcelFolder", System.IO.Path.GetDirectoryName(path));
+                    PutSetting("ImportExcelFolder", System.IO.Path.GetDirectoryName(path));
                 }
                 else
                     ExtendedControls.MessageBoxTheme.Show(FindForm(), "Failed to read " + path, "Import Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);

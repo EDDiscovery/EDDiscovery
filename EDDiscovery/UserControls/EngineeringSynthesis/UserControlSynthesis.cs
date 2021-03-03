@@ -26,16 +26,13 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlSynthesis : UserControlCommonBase
     {
-        public string PrefixName = "Synthesis";
-
-        private string DbColumnSave { get { return (PrefixName + "Grid") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
-        private string DbWSave { get { return PrefixName + "Wanted" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DbOSave { get { return PrefixName + "Order" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DbRecipeFilterSave { get { return PrefixName + "RecipeFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DbLevelFilterSave { get { return PrefixName + "LevelFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DbMaterialFilterSave { get { return PrefixName + "MaterialFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DbHistoricMatsSave { get { return PrefixName + "HistoricMaterials" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DbWordWrap { get { return PrefixName + "WordWrap" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        private string dbWSave = "Wanted";
+        private string dbOSave = "Order";
+        private string dbRecipeFilterSave = "RecipeFilter";
+        private string dbLevelFilterSave = "LevelFilter";
+        private string dbMaterialFilterSave = "MaterialFilter";
+        private string dbHistoricMatsSave = "HistoricMaterials";
+        private string dbWordWrap = "WordWrap";
 
         int[] Order;        // order
         int[] Wanted;       // wanted, in order terms
@@ -56,6 +53,7 @@ namespace EDDiscovery.UserControls
 
         public UserControlSynthesis()
         {
+            DBBaseName = "Synthesis";
             InitializeComponent();
             var corner = dataGridViewSynthesis.TopLeftHeaderCell; // work around #1487
         }
@@ -63,18 +61,18 @@ namespace EDDiscovery.UserControls
         public override void Init()
         {
             dataGridViewSynthesis.MakeDoubleBuffered();
-            extCheckBoxWordWrap.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbWordWrap, false);
+            extCheckBoxWordWrap.Checked = GetSetting(dbWordWrap, false);
             UpdateWordWrap();
             extCheckBoxWordWrap.Click += extCheckBoxWordWrap_Click;
 
-            Order = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbOSave, "").RestoreArrayFromString(0, Recipes.SynthesisRecipes.Count);
+            Order = GetSetting(dbOSave, "").RestoreArrayFromString(0, Recipes.SynthesisRecipes.Count);
             if (Order.Max() >= Recipes.SynthesisRecipes.Count || Order.Min() < 0 || Order.Distinct().Count() != Recipes.SynthesisRecipes.Count)       // if not distinct..
             {
                 for (int i = 0; i < Order.Length; i++)          // reset
                     Order[i] = i;
             }
 
-            Wanted = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbWSave, "").RestoreArrayFromString(0, Recipes.SynthesisRecipes.Count);
+            Wanted = GetSetting(dbWSave, "").RestoreArrayFromString(0, Recipes.SynthesisRecipes.Count);
 
             var rcpes = Recipes.SynthesisRecipes.Select(r => r.Name).Distinct().ToList();
             rcpes.Sort();
@@ -107,7 +105,7 @@ namespace EDDiscovery.UserControls
                 }
             }
 
-            isHistoric = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbHistoricMatsSave, false);
+            isHistoric = GetSetting(dbHistoricMatsSave, false);
 
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
@@ -127,22 +125,22 @@ namespace EDDiscovery.UserControls
         {
             dataGridViewSynthesis.RowTemplate.MinimumHeight = Font.ScalePixels(26);
             uctg.OnTravelSelectionChanged += UCTGChanged;
-            DGVLoadColumnLayout(dataGridViewSynthesis, DbColumnSave);
+            DGVLoadColumnLayout(dataGridViewSynthesis);
             chkNotHistoric.Checked = !isHistoric;
             chkNotHistoric.Visible = !isEmbedded;
         }
 
         public override void Closing()
         {
-            DGVSaveColumnLayout(dataGridViewSynthesis, DbColumnSave);
+            DGVSaveColumnLayout(dataGridViewSynthesis);
 
             uctg.OnTravelSelectionChanged -= UCTGChanged;
             discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
             discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
 
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbOSave, Order.ToString(","));
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbWSave, Wanted.ToString(","));
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbHistoricMatsSave, isHistoric);
+            PutSetting(dbOSave, Order.ToString(","));
+            PutSetting(dbWSave, Wanted.ToString(","));
+            PutSetting(dbHistoricMatsSave, isHistoric);
         }
 
 
@@ -209,11 +207,11 @@ namespace EDDiscovery.UserControls
 
                 wantedList = new List<Tuple<Recipes.Recipe, int>>();
 
-                string recep = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbRecipeFilterSave, "All");
+                string recep = GetSetting(dbRecipeFilterSave, "All");
                 string[] recipeArray = recep.Split(';');
-                string levels = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbLevelFilterSave, "All");
+                string levels = GetSetting(dbLevelFilterSave, "All");
                 string[] lvlArray = (levels == "All" || levels == "None") ? new string[0] : levels.Split(';');
-                string materials = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbMaterialFilterSave, "All");
+                string materials = GetSetting(dbMaterialFilterSave, "All");
                 var matList = materials.Split(';');        // list of materials to show
 
                 for (int i = 0; i < Recipes.SynthesisRecipes.Count; i++)
@@ -311,7 +309,7 @@ namespace EDDiscovery.UserControls
 
         private void extCheckBoxWordWrap_Click(object sender, EventArgs e)
         {
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbWordWrap, extCheckBoxWordWrap.Checked);
+            PutSetting(dbWordWrap, extCheckBoxWordWrap.Checked);
             UpdateWordWrap();
         }
 
@@ -411,21 +409,21 @@ namespace EDDiscovery.UserControls
         private void buttonRecipeFilter_Click(object sender, EventArgs e)
         {
             Button b = sender as Button;
-            rfs.FilterButton(DbRecipeFilterSave, b,
+            rfs.FilterButton(FilterKeyName(dbRecipeFilterSave), b,
                              discoveryform.theme.TextBackColor, discoveryform.theme.TextBlockColor, this.FindForm());
         }
 
         private void buttonFilterLevel_Click(object sender, EventArgs e)
         {
             Button b = sender as Button;
-            lfs.FilterButton(DbLevelFilterSave, b,
+            lfs.FilterButton(FilterKeyName(dbLevelFilterSave), b,
                              discoveryform.theme.TextBackColor, discoveryform.theme.TextBlockColor, this.FindForm());
         }
 
         private void buttonMaterialFilter_Click(object sender, EventArgs e)
         {
             Button b = sender as Button;
-            mfs.FilterButton(DbMaterialFilterSave, b,
+            mfs.FilterButton(FilterKeyName(dbMaterialFilterSave), b,
                              discoveryform.theme.TextBackColor, discoveryform.theme.TextBlockColor, this.FindForm());
         }
 

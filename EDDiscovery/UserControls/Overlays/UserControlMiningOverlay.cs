@@ -26,9 +26,9 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlMiningOverlay :   UserControlCommonBase
     {
-        private string DBChart { get { return DBName("MiningOverlay", "ChartSel"); } }
-        private string DBZeroRefined { get { return DBName("MiningOverlay", "ZeroRefined"); } }
-        private string DBRolledUp { get { return DBName("MiningOverlay", "RolledUp"); } }
+        private string dbChart = "ChartSel";
+        private string dbZeroRefined = "ZeroRefined";
+        private string dbRolledUp = "RolledUp";
 
         #region Init
 
@@ -39,12 +39,14 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
+            DBBaseName = "MiningOverlay";
+
             UpdateComboBox(null);
             BaseUtils.Translator.Instance.Translate(this);
             buttonExtExcel.Enabled = false;
-            extCheckBoxZeroRefined.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DBZeroRefined, false);
+            extCheckBoxZeroRefined.Checked = GetSetting(dbZeroRefined, false);
             extCheckBoxZeroRefined.CheckedChanged += new System.EventHandler(this.extCheckBoxZeroRefined_CheckedChanged);
-            extPanelRollUp.PinState = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DBRolledUp, true);
+            extPanelRollUp.PinState = GetSetting(dbRolledUp, true);
 
             timetimer = new Timer();
             timetimer.Interval = 1000;
@@ -92,7 +94,7 @@ namespace EDDiscovery.UserControls
         {
             timetimer.Stop();
             uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DBRolledUp, extPanelRollUp.PinState);
+            PutSetting(dbRolledUp, extPanelRollUp.PinState);
         }
 
         private void Uctg_OnTravelSelectionChanged(HistoryEntry he, HistoryList hl, bool selectedEntry)
@@ -585,7 +587,7 @@ namespace EDDiscovery.UserControls
 
             if ( selectedchart == null )        // opening gambit, pick up saved pos
             {
-                selectedchart = extComboBoxChartOptions.SelectedIndex = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(DBChart, 0);
+                selectedchart = extComboBoxChartOptions.SelectedIndex = GetSetting(dbChart, 0);
             }
             else if (selectedchart is int)      // if on int, its one of the chartfixeditems
             {
@@ -600,7 +602,7 @@ namespace EDDiscovery.UserControls
                 }
                 else
                 {           // its not there, its been removed for some reason, go back to default state
-                    selectedchart = extComboBoxChartOptions.SelectedIndex = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(DBChart, 0);      // not found, for some reason, remove and go back to defauklt
+                    selectedchart = extComboBoxChartOptions.SelectedIndex = GetSetting(dbChart, 0);      // not found, for some reason, remove and go back to defauklt
                 }
             }
             
@@ -613,7 +615,7 @@ namespace EDDiscovery.UserControls
             if (extComboBoxChartOptions.SelectedIndex < chartfixeditems.Length)
             {
                 selectedchart = extComboBoxChartOptions.SelectedIndex;
-                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(DBChart, (int)selectedchart);
+                PutSetting(dbChart, (int)selectedchart);
             }
             else
                 selectedchart = extComboBoxChartOptions.Text;
@@ -623,7 +625,7 @@ namespace EDDiscovery.UserControls
 
         private void extCheckBoxZeroRefined_CheckedChanged(object sender, EventArgs e)
         {
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DBZeroRefined, extCheckBoxZeroRefined.Checked);
+            PutSetting(dbZeroRefined, extCheckBoxZeroRefined.Checked);
             Display();
         }
 

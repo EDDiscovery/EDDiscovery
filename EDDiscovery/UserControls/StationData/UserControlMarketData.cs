@@ -26,10 +26,9 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlMarketData : UserControlCommonBase
     {
-        private string DbColumnSave { get { return DBName("MarketDataGrid" ,  "DGVCol"); } }
-        private string DbBuyOnly { get { return DBName("MarketDataBuyOnly"); } }
-        private string DbSellOnly { get { return DBName("MarketDataSellOnly"); } }
-        private string DbAutoSwap { get { return DBName("MarketDataAutoSwap" ); } }
+        private string dbBuyOnly = "BuyOnly";
+        private string dbSellOnly = "SellOnly";
+        private string dbAutoSwap = "AutoSwap";
 
         #region Init
 
@@ -41,16 +40,18 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
+            DBBaseName = "MarketData";
+
             dataGridViewMarketData.MakeDoubleBuffered();
             dataGridViewMarketData.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
 
-            checkBoxBuyOnly.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbBuyOnly, false);
+            checkBoxBuyOnly.Checked = GetSetting(dbBuyOnly, false);
             this.checkBoxBuyOnly.CheckedChanged += new System.EventHandler(this.checkBoxBuyOnly_CheckedChanged);
 
-            checkBoxSellOnly.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSellOnly, false);
+            checkBoxSellOnly.Checked = GetSetting(dbSellOnly, false);
             this.checkBoxSellOnly.CheckedChanged += new System.EventHandler(this.checkBoxSellOnly_CheckedChanged);
 
-            checkBoxAutoSwap.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbAutoSwap, false);
+            checkBoxAutoSwap.Checked = GetSetting(dbAutoSwap, false);
 
             discoveryform.OnNewEntry += OnNewEntry;
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
@@ -69,16 +70,16 @@ namespace EDDiscovery.UserControls
         public override void LoadLayout()
         {
             dataGridViewMarketData.RowTemplate.MinimumHeight= Font.ScalePixels(26);
-            DGVLoadColumnLayout(dataGridViewMarketData, DbColumnSave);
+            DGVLoadColumnLayout(dataGridViewMarketData);
             uctg.OnTravelSelectionChanged += OnChanged;
         }
 
         public override void Closing()
         {
-            DGVSaveColumnLayout(dataGridViewMarketData, DbColumnSave);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbBuyOnly, checkBoxBuyOnly.Checked);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSellOnly, checkBoxSellOnly.Checked);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbAutoSwap, checkBoxAutoSwap.Checked);
+            DGVSaveColumnLayout(dataGridViewMarketData);
+            PutSetting(dbBuyOnly, checkBoxBuyOnly.Checked);
+            PutSetting(dbSellOnly, checkBoxSellOnly.Checked);
+            PutSetting(dbAutoSwap, checkBoxAutoSwap.Checked);
             discoveryform.OnNewEntry -= OnNewEntry;
             uctg.OnTravelSelectionChanged -= OnChanged;
             discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;

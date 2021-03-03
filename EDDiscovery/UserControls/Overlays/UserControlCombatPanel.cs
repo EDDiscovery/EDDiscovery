@@ -25,9 +25,6 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlCombatPanel : UserControlCommonBase
     {
-        private string DbSave { get { return DBName("CombatPanel" ); } }
-        private string DbColumnSave { get { return DBName("CombatPanel" ,  "DGVCol"); } }
-
         private long npc_total_kills = 0;
         private long npc_faction_kills = 0;
         private long total_reward = 0;
@@ -136,7 +133,9 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
-            string filter = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbSave + "Campaign", "");
+            DBBaseName = "CombatPanel";
+
+            string filter = GetSetting("Campaign", "");
             List<string> filtarray = BaseUtils.StringParser.ParseWordList(filter);
 
             dataGridViewCombat.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
@@ -157,7 +156,7 @@ namespace EDDiscovery.UserControls
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
 
-            checkBoxCustomGridOn.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "Gridshow", false);
+            checkBoxCustomGridOn.Checked = GetSetting("Gridshow", false);
             checkBoxCustomGridOn.Visible = IsFloatingWindow;
 
             transparentfont = EDDTheme.Instance.GetFont;
@@ -171,7 +170,7 @@ namespace EDDiscovery.UserControls
 
         public override void LoadLayout()
         {
-            DGVLoadColumnLayout(dataGridViewCombat, DbColumnSave);
+            DGVLoadColumnLayout(dataGridViewCombat);
             //DEBUG target with           uctg.OnTravelSelectionChanged += (he,hl,s) => SetTarget(he);
         }
 
@@ -193,7 +192,7 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
-            DGVSaveColumnLayout(dataGridViewCombat, DbColumnSave);
+            DGVSaveColumnLayout(dataGridViewCombat);
 
             discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
             discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
@@ -206,10 +205,10 @@ namespace EDDiscovery.UserControls
                                     f.StartTimeUTC.ToStringZulu() + "," + f.EndTimeUTC.ToStringZulu() + ",";
             }
 
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbSave + "Campaign", s);
+            PutSetting("Campaign", s);
 
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "Gridshow", checkBoxCustomGridOn.Checked);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbSave + "Selected", current?.UniqueID ?? "");
+            PutSetting("Gridshow", checkBoxCustomGridOn.Checked);
+            PutSetting("Selected", current?.UniqueID ?? "");
         }
 
         public override void SetTransparency(bool on, Color curbackcol)
@@ -572,7 +571,7 @@ namespace EDDiscovery.UserControls
 
         private void SelectInitial()
         {
-            string sel = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbSave + "Selected", "Since Last Dock");
+            string sel = GetSetting("Selected", "Since Last Dock");
 
             if (!sel.IsEmpty())
             {

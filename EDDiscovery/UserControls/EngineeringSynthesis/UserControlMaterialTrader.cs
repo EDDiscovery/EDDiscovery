@@ -25,14 +25,10 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlMaterialTrader : UserControlCommonBase
     {
-        const string PrefixName = "MaterialTrade";
-
-        private string DbColumnSave { get { return (PrefixName + "Grid") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
-        private string DbTraderType { get { return DBName(PrefixName, "TraderType"); } }
-        private string DbTrades { get { return DBName(PrefixName, "Trades"); } }
-        private string DbSplitter { get { return DBName(PrefixName, "Splitter"); } }
-        private string DbWordWrap { get { return DBName(PrefixName, "WrapText"); } }
-        private string DbLatest { get { return DBName(PrefixName, "Latest"); } }
+        private string dbTraderType = "TraderType";
+        private string dbTrades = "Trades";
+        private string dbSplitter = "Splitter";
+        private string dbLatest = "Latest";
 
         private Color orange = Color.FromArgb(255, 184, 85, 8);
 
@@ -85,6 +81,8 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
+            DBBaseName = "MaterialTrade";
+
             dataGridViewTrades.MakeDoubleBuffered();
             dataGridViewTrades.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
 
@@ -92,13 +90,13 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.Translate(toolTip, this);
 
             extComboBoxTraderType.Items.AddRange(new string[] { "Raw".T(EDTx.UserControlMaterialTrader_Raw), "Encoded".T(EDTx.UserControlMaterialTrader_Encoded), "Manufactured".T(EDTx.UserControlMaterialTrader_Manufactured) });
-            extComboBoxTraderType.SelectedIndex = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(DbTraderType, 0);
+            extComboBoxTraderType.SelectedIndex = GetSetting(dbTraderType, 0);
             extComboBoxTraderType.SelectedIndexChanged += ExtComboBoxTraderType_SelectedIndexChanged;
 
-            checkBoxCursorToTop.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbLatest, true);
+            checkBoxCursorToTop.Checked = GetSetting(dbLatest, true);
             checkBoxCursorToTop.CheckedChanged += CheckBoxCursorToTop_CheckedChanged;
 
-            string[] strades = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbTrades, "").Split(';');
+            string[] strades = GetSetting(dbTrades, "").Split(';');
             foreach (var t in strades)      // deserialise the trades and populate the trades list
             {
                 ElementTrade et = new ElementTrade();
@@ -106,7 +104,7 @@ namespace EDDiscovery.UserControls
                     trades.Add(et);
             }
 
-            splitContainer.SplitterDistance(EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble(DbSplitter, 0.75));
+            splitContainer.SplitterDistance(GetSetting(dbSplitter, 0.75));
 
             discoveryform.OnThemeChanged += Discoveryform_OnThemeChanged;
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
@@ -124,13 +122,13 @@ namespace EDDiscovery.UserControls
         {
             dataGridViewTrades.RowTemplate.MinimumHeight = Font.ScalePixels(26);
             uctg.OnTravelSelectionChanged += TravelSelectionChanged;
-            DGVLoadColumnLayout(dataGridViewTrades, DbColumnSave);
+            DGVLoadColumnLayout(dataGridViewTrades);
         }
 
         public override void Closing()
         {
-            DGVSaveColumnLayout(dataGridViewTrades, DbColumnSave);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble(DbSplitter, splitContainer.GetSplitterDistance());
+            DGVSaveColumnLayout(dataGridViewTrades);
+            PutSetting(dbSplitter, splitContainer.GetSplitterDistance());
             uctg.OnTravelSelectionChanged -= TravelSelectionChanged;
 
             discoveryform.OnThemeChanged -= Discoveryform_OnThemeChanged;
@@ -435,7 +433,7 @@ namespace EDDiscovery.UserControls
 
         private void ExtComboBoxTraderType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(DbTraderType, extComboBoxTraderType.SelectedIndex );
+            PutSetting(dbTraderType, extComboBoxTraderType.SelectedIndex );
             selected = null;
             DisplayTradeSelection();
         }
@@ -578,13 +576,13 @@ namespace EDDiscovery.UserControls
             foreach (var td in trades)
                 strades = strades.AppendPrePad(td.ToString(), ";");
 
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbTrades, strades);
+            PutSetting(dbTrades, strades);
         }
 
 
         private void CheckBoxCursorToTop_CheckedChanged(object sender, EventArgs e)
         {
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbLatest, checkBoxCursorToTop.Checked);
+            PutSetting(dbLatest, checkBoxCursorToTop.Checked);
             InitialDisplay();
         }
 

@@ -37,8 +37,6 @@ namespace EDDiscovery.UserControls
 
         private List<ISystem> latestplottedroute;
 
-        private string DbColumnSave { get { return DBName("UserControlExpedition","DGVCol"); } }
-
         #region Standard UC Interfaces
 
         public UserControlExpedition()
@@ -69,7 +67,7 @@ namespace EDDiscovery.UserControls
 
         public override void LoadLayout()
         {
-            DGVLoadColumnLayout(dataGridView, DbColumnSave);
+            DGVLoadColumnLayout(dataGridView);
 
             UpdateSavedRoutes();
             discoveryform.OnExpeditionsDownloaded += Discoveryform_OnExpeditionsDownloaded; // only from now on are we interested in a change
@@ -108,7 +106,7 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
-            DGVSaveColumnLayout(dataGridView, DbColumnSave);
+            DGVSaveColumnLayout(dataGridView);
 
             discoveryform.OnNewCalculatedRoute -= discoveryForm_OnNewCalculatedRoute;
             discoveryform.OnExpeditionsDownloaded -= Discoveryform_OnExpeditionsDownloaded;

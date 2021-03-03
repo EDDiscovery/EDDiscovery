@@ -177,11 +177,6 @@ namespace EDDiscovery.UserControls
             public void AddBondsRewardsValue(long a) { BondsRewardsValue = BondsRewardsValue??0 + a; }
         }
 
-        private string DbColumnSaveFactions { get { return DBName("FactionsPanel", "DGVCol"); } }
-        private string DbStartDate { get { return DBName("FactionsPanelStartDate"); } }
-        private string DbEndDate { get { return DBName("FactionsPanelEndDate"); } }
-        private string DbStartDateChecked { get { return DBName("FactionsPanelStartDateCheck"); } }
-        private string DbEndDateChecked { get { return DBName("FactionsPanelEndDateCheck"); } }
         private DateTime NextExpiry;
         private HistoryEntry last_he = null;
 
@@ -194,15 +189,17 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
+            DBBaseName = "FactionsPanel";
+
             dataGridViewFactions.MakeDoubleBuffered();
 
             for (int col = 1; col < dataGridViewFactions.ColumnCount - 1; col++)
                 dataGridViewFactions.Columns[col].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
 
-            startDateTime.Value = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDate(DbStartDate, DateTime.UtcNow);
-            startDateTime.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbStartDateChecked, false);
-            endDateTime.Value = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDate(DbEndDate, DateTime.UtcNow);
-            endDateTime.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbEndDateChecked, false);
+            startDateTime.Value = GetSetting("StartDate", DateTime.UtcNow);
+            startDateTime.Checked = GetSetting("StartDateChecked", false);
+            endDateTime.Value = GetSetting("EndDate", DateTime.UtcNow);
+            endDateTime.Checked = GetSetting("EndDateChecked", false);
             VerifyDates();
 
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
@@ -226,7 +223,7 @@ namespace EDDiscovery.UserControls
         public override void LoadLayout()
         {
             uctg.OnTravelSelectionChanged += Discoveryform_OnTravelSelectionChanged;
-            DGVLoadColumnLayout(dataGridViewFactions, DbColumnSaveFactions);
+            DGVLoadColumnLayout(dataGridViewFactions);
         }
 
         public override void InitialDisplay()
@@ -236,17 +233,16 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
-            DGVSaveColumnLayout(dataGridViewFactions, DbColumnSaveFactions);
+            DGVSaveColumnLayout(dataGridViewFactions);
 
             uctg.OnTravelSelectionChanged -= Discoveryform_OnTravelSelectionChanged;
             discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
             discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
 
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDate(DbStartDate, EDDiscoveryForm.EDDConfig.ConvertTimeToUTCFromSelected(startDateTime.Value));
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDate(DbEndDate, EDDiscoveryForm.EDDConfig.ConvertTimeToUTCFromSelected(endDateTime.Value));
-
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbStartDateChecked, startDateTime.Checked);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbEndDateChecked, endDateTime.Checked);
+            PutSetting("StartDate", EDDiscoveryForm.EDDConfig.ConvertTimeToUTCFromSelected(startDateTime.Value));
+            PutSetting("StartDateChecked", startDateTime.Checked);
+            PutSetting("EndDate", EDDiscoveryForm.EDDConfig.ConvertTimeToUTCFromSelected(endDateTime.Value));
+            PutSetting("EndDateChecked", endDateTime.Checked);
         }
 
         private void Discoveryform_OnHistoryChange(HistoryList obj)     // may have changed date system, this causes this
@@ -529,9 +525,7 @@ namespace EDDiscovery.UserControls
                     mluc.Finish();
                 }
 
-                string keyname = "UserControlFactionsShowMission";
-                mluc.dataGridView.LoadColumnSettings(keyname, (a) => EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(a, int.MinValue),
-                                                                          (b) => EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble(b, double.MinValue));
+                DGVLoadColumnLayout(mluc.dataGridView, "ShowMission");
 
                 f.Add(new ExtendedControls.ConfigurableForm.Entry(mluc, "Grid", "", new System.Drawing.Point(3, 30), new System.Drawing.Size(800, 400), null)
                 { anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom });
@@ -543,9 +537,7 @@ namespace EDDiscovery.UserControls
 
                 f.ShowDialogCentred(FindForm(), FindForm().Icon, "Missions for ".T(EDTx.UserControlFactions_MissionsFor) + fs.Name, closeicon: true);
 
-                mluc.dataGridView.SaveColumnSettings(keyname, (a, b) => EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(a, b),
-                                                 (c, d) => EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble(c, d));
-
+                DGVSaveColumnLayout(mluc.dataGridView, "ShowMission");
             }
         }
 
@@ -582,9 +574,7 @@ namespace EDDiscovery.UserControls
                 dgvpanel.DataGrid.Columns[2].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
                 dgvpanel.DataGrid.Columns[3].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
 
-                string keyname = "UserControlFactionsShowCommdsMats";
-                dgvpanel.DataGrid.LoadColumnSettings(keyname, (a) => EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(a, int.MinValue),
-                                                                          (b) => EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble(b, double.MinValue));
+                DGVLoadColumnLayout(dgvpanel.DataGrid, "ShowCommdsMats");
 
                 foreach (var he in FilterHistory((x) => x.journalEntry is IStatsJournalEntryMatCommod && x.StationFaction == fs.Name))
                 {
@@ -616,8 +606,7 @@ namespace EDDiscovery.UserControls
 
                 f.ShowDialogCentred(FindForm(), FindForm().Icon, "Materials/Commodities for ".T(EDTx.UserControlFactions_MaterialCommodsFor) + fs.Name, closeicon: true);
 
-                dgvpanel.DataGrid.SaveColumnSettings(keyname, (a, b) => EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(a, b),
-                                                 (c, d) => EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble(c, d));
+                DGVSaveColumnLayout(dgvpanel.DataGrid, "ShowCommdsMats");
 
             }
         }
@@ -638,10 +627,7 @@ namespace EDDiscovery.UserControls
                 dgvpanel.DataGrid.RowHeadersVisible = false;
                 dgvpanel.DataGrid.Columns[4].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
 
-                string keyname = "UserControlFactionsShowBonds";
-                dgvpanel.DataGrid.LoadColumnSettings(keyname, (a) => EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(a, int.MinValue),
-                                                                          (b) => EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble(b, double.MinValue));
-
+                DGVLoadColumnLayout(dgvpanel.DataGrid, "ShowBonds");
 
                 foreach (var he in FilterHistory((x) => x.journalEntry is IStatsJournalEntryBountyOrBond &&
                                                     (x.journalEntry as IStatsJournalEntryBountyOrBond).HasFaction(fs.Name)))
@@ -663,8 +649,7 @@ namespace EDDiscovery.UserControls
 
                 f.ShowDialogCentred(FindForm(), FindForm().Icon, "Bounties/Bonds for ".T(EDTx.UserControlFactions_BountiesBondsFor) + fs.Name, closeicon: true);
 
-                dgvpanel.DataGrid.SaveColumnSettings(keyname, (a, b) => EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(a, b),
-                                                 (c, d) => EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble(c, d));
+                DGVSaveColumnLayout(dgvpanel.DataGrid, "ShowBonds");
             }
         }
 
@@ -693,9 +678,7 @@ namespace EDDiscovery.UserControls
                 for (int col = 1; col < dgvpanel.DataGrid.ColumnCount - 1; col++)
                     dgvpanel.DataGrid.Columns[col].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
 
-                string keyname = "UserControlFactionsShowSystemDetail";
-                dgvpanel.DataGrid.LoadColumnSettings(keyname, (a) => EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(a, int.MinValue),
-                                                                          (b) => EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble(b, double.MinValue));
+                DGVLoadColumnLayout(dgvpanel.DataGrid, "ShowSystemDetail");
 
                 var systems = new List<SystemInfo>();
                 foreach (var si in fs.Systems.Values)
@@ -798,8 +781,7 @@ namespace EDDiscovery.UserControls
 
                 f.ShowDialogCentred(FindForm(), FindForm().Icon, "Systems Detail for ".T(EDTx.UserControlFactions_SystemsDetailFor) + fs.Name, closeicon: true);
 
-                dgvpanel.DataGrid.SaveColumnSettings(keyname, (a, b) => EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(a, b),
-                                                 (c, d) => EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble(c, d));
+                DGVSaveColumnLayout(dgvpanel.DataGrid, "ShowSystemDetail");
             }
         }
 

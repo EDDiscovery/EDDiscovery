@@ -27,8 +27,7 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlOutfitting : UserControlCommonBase
     {
-        private string DbColumnSave { get { return DBName("OutfittingGrid" ,  "DGVCol"); } }
-        private string DbYardSave { get { return DBName("OutfittingSelect" ); } }
+        private string dbYardSave = "Select";
 
         #region Init
 
@@ -40,6 +39,8 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
+            DBBaseName = "Outfitting";
+
             dataGridViewOutfitting.MakeDoubleBuffered();
             dataGridViewOutfitting.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
 
@@ -63,12 +64,12 @@ namespace EDDiscovery.UserControls
         {
             dataGridViewOutfitting.RowTemplate.MinimumHeight = Font.ScalePixels(26);
             uctg.OnTravelSelectionChanged += Display;
-            DGVLoadColumnLayout(dataGridViewOutfitting, DbColumnSave);
+            DGVLoadColumnLayout(dataGridViewOutfitting);
         }
 
         public override void Closing()
         {
-            DGVSaveColumnLayout(dataGridViewOutfitting, DbColumnSave);
+            DGVSaveColumnLayout(dataGridViewOutfitting);
             uctg.OnTravelSelectionChanged -= Display;
             discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
             discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
@@ -106,7 +107,7 @@ namespace EDDiscovery.UserControls
             comboBoxYards.Items.AddRange(list);
 
             if (cursel == "")
-                cursel = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbYardSave, "");
+                cursel = GetSetting(dbYardSave, "");
 
             if (cursel == "" || !comboBoxYards.Items.Contains(cursel))
                 cursel = the;
@@ -247,7 +248,7 @@ namespace EDDiscovery.UserControls
         {
             if (comboBoxYards.Enabled)
             {
-                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbYardSave, comboBoxYards.Text);
+                PutSetting(dbYardSave, comboBoxYards.Text);
                 Display();
             }
         }

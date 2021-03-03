@@ -33,9 +33,6 @@ namespace EDDiscovery.UserControls
             var corner = dataGridViewNearest.TopLeftHeaderCell; // work around #1487
         }
 
-        private string DbSave { get { return DBName("StarDistancePanel"); } }
-        private string DbColumnSave { get { return DBName("StarDistancePanel", "DGVCol"); } }
-
         private StarDistanceComputer computer = null;
         private HistoryEntry last_he = null;
 
@@ -47,14 +44,16 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
+            DBBaseName = "StarDistancePanel";
+
             computer = new StarDistanceComputer();
 
-            textMinRadius.ValueNoChange = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble(DbSave + "Min", defaultMinRadius);
-            textMaxRadius.ValueNoChange = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble(DbSave + "Max", defaultMaxRadius);
+            textMinRadius.ValueNoChange = GetSetting("Min", defaultMinRadius);
+            textMaxRadius.ValueNoChange = GetSetting("Max", defaultMaxRadius);
             textMinRadius.SetComparitor(textMaxRadius, -2);     // need to do this after values are set
             textMaxRadius.SetComparitor(textMinRadius, 2);
 
-            checkBoxCube.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "Behaviour", false);
+            checkBoxCube.Checked = GetSetting("Behaviour", false);
 
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
@@ -70,7 +69,7 @@ namespace EDDiscovery.UserControls
 
         public override void LoadLayout()
         {
-            DGVLoadColumnLayout(dataGridViewNearest, DbColumnSave);
+            DGVLoadColumnLayout(dataGridViewNearest);
 
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
             uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
@@ -78,13 +77,13 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
-            DGVSaveColumnLayout(dataGridViewNearest, DbColumnSave);
+            DGVSaveColumnLayout(dataGridViewNearest);
             discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
             uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
             computer.ShutDown();
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble(DbSave + "Min", textMinRadius.Value);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble(DbSave + "Max", textMaxRadius.Value);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "Behaviour", checkBoxCube.Checked);
+            PutSetting("Min", textMinRadius.Value);
+            PutSetting("Max", textMaxRadius.Value);
+            PutSetting("Behaviour", checkBoxCube.Checked);
 
         }
 

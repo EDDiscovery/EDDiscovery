@@ -28,7 +28,6 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlWebBrowser : UserControlCommonBase
     {
-        private string DbSave;
         private string source;
         private string urlallowed;
         ISystem last_sys = null;
@@ -46,9 +45,9 @@ namespace EDDiscovery.UserControls
         {
             this.source = source;
             this.urlallowed = urlallowed;
-            DbSave = DBName(source + "AutoView");
+            DBBaseName = source + "AutoView";
 
-            rollUpPanelTop.PinState = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "PinState", true);
+            rollUpPanelTop.PinState = GetSetting("PinState", true);
             rollUpPanelTop.SetToolTip(toolTip);
 
             string thisname = typeof(UserControlWebBrowser).Name; 
@@ -81,7 +80,7 @@ namespace EDDiscovery.UserControls
         public override void Closing()
         {
             isClosing = true;
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "PinState", rollUpPanelTop.PinState);
+            PutSetting("PinState", rollUpPanelTop.PinState);
             uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
         }
 

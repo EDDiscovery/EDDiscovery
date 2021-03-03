@@ -35,7 +35,7 @@ namespace EDDiscovery.UserControls
         public Action<DateTime,bool> ClickedonDate;
         public DateTime CurrentMonth { get; private set; }
 
-        private string DbDateSave { get { return DBName("CaptainsLogPanel", "DiaryMonth"); } }
+        private string dbDateSave = "DiaryMonth";
         private ExtendedControls.ExtButton[] daybuttons = new ExtendedControls.ExtButton[31];
         private Label[] daynameslabels = new Label[7];
         private bool layoutdone = false;
@@ -55,8 +55,10 @@ namespace EDDiscovery.UserControls
 
         public override void LoadLayout()
         {
+            DBBaseName = "CaptainsLogPanel";
+
             DateTime firstofmonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-            CurrentMonth = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDate(DbDateSave, firstofmonth);
+            CurrentMonth = GetSetting(dbDateSave, firstofmonth);
 
             string daynames = "Sun;Mon;Tue;Wed;Thu;Fri;Sat".T(EDTx.CaptainsLogDiary_Daysofweek);
             string[] daynamesplit = daynames.Split(';');
@@ -99,7 +101,7 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDate(DbDateSave, CurrentMonth);
+            PutSetting(dbDateSave, CurrentMonth);
             discoveryform.OnRefreshCommanders -= Discoveryform_OnRefreshCommanders;
             discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
         }

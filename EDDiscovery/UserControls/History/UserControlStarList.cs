@@ -54,11 +54,10 @@ namespace EDDiscovery.UserControls
             public const int SystemValue = 4;
         }
 
-        private string DbColumnSave { get { return DBName("StarListControl", "DGVCol"); } }
-        private string DbHistorySave { get { return DBName("StarListControlEDUIHistory"); } }
-        private string DbEDSM { get { return DBName("StarListControlEDSM"); } }
-        private string DbShowJumponium { get { return DBName("StarListControlJumponium"); } }
-        private string DbShowClasses { get { return DBName("StarListControlShowClasses"); } }
+        private string dbHistorySave = "EDUIHistory";
+        private string dbEDSM = "EDSM";
+        private string dbShowJumponium = "Jumponium";
+        private string dbShowClasses = "ShowClasses";
 
         private Dictionary<long, DataGridViewRow> rowsbyjournalid = new Dictionary<long, DataGridViewRow>();
         bool loadcomplete;
@@ -78,6 +77,8 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
+            DBBaseName = "StarListControl";
+
             checkBoxCursorToTop.Checked = true;
 
 
@@ -87,13 +88,13 @@ namespace EDDiscovery.UserControls
 
             dataGridViewStarList.Columns[2].ValueType = typeof(Int32);
 
-            checkBoxEDSM.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbEDSM, false);
+            checkBoxEDSM.Checked = GetSetting(dbEDSM, false);
             this.checkBoxEDSM.CheckedChanged += new System.EventHandler(this.checkBoxEDSM_CheckedChanged);
 
-            checkBoxBodyClasses.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbShowClasses, true);
+            checkBoxBodyClasses.Checked = GetSetting(dbShowClasses, true);
             this.checkBoxBodyClasses.CheckedChanged += new System.EventHandler(this.buttonBodyClasses_CheckedChanged);
 
-            checkBoxJumponium.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbShowJumponium, true);
+            checkBoxJumponium.Checked = GetSetting(dbShowJumponium, true);
             this.checkBoxJumponium.CheckedChanged += new System.EventHandler(this.buttonJumponium_CheckedChanged);
 
             discoveryform.OnHistoryChange += HistoryChanged;
@@ -110,13 +111,13 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
 
-            TravelHistoryFilter.InitaliseComboBox(comboBoxHistoryWindow, DbHistorySave, false);
+            TravelHistoryFilter.InitaliseComboBox(comboBoxHistoryWindow, FilterKeyName(dbHistorySave), false);
         }
 
         public override void LoadLayout()
         {
             dataGridViewStarList.RowTemplate.MinimumHeight = Math.Max(26, Font.ScalePixels(26));
-            DGVLoadColumnLayout(dataGridViewStarList, DbColumnSave);
+            DGVLoadColumnLayout(dataGridViewStarList);
         }
 
         public override void Closing()
@@ -124,7 +125,7 @@ namespace EDDiscovery.UserControls
             todo.Clear();
             todotimer.Stop();
             searchtimer.Stop();
-            DGVSaveColumnLayout(dataGridViewStarList, DbColumnSave);
+            DGVSaveColumnLayout(dataGridViewStarList);
             discoveryform.OnHistoryChange -= HistoryChanged;
             discoveryform.OnNewEntry -= AddNewEntry;
         }
@@ -693,7 +694,7 @@ namespace EDDiscovery.UserControls
 
         private void comboBoxHistoryWindow_SelectedIndexChanged(object sender, EventArgs e)
         {
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbHistorySave, comboBoxHistoryWindow.Text);
+            PutSetting(dbHistorySave, comboBoxHistoryWindow.Text);
             Display(false);
         }
 
@@ -841,18 +842,18 @@ namespace EDDiscovery.UserControls
 
             private void checkBoxEDSM_CheckedChanged(object sender, EventArgs e)
         {
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbEDSM, checkBoxEDSM.Checked);
+            PutSetting(dbEDSM, checkBoxEDSM.Checked);
         }
 
         private void buttonBodyClasses_CheckedChanged(object sender, EventArgs e)
         {
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbShowClasses, checkBoxBodyClasses.Checked);
+            PutSetting(dbShowClasses, checkBoxBodyClasses.Checked);
             Display(false);
         }
 
         private void buttonJumponium_CheckedChanged(object sender, EventArgs e)
         {
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbShowJumponium, checkBoxJumponium.Checked);
+            PutSetting(dbShowJumponium, checkBoxJumponium.Checked);
             Display(false);
         }
 

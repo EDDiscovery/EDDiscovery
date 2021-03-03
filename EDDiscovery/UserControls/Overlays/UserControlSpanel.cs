@@ -14,29 +14,26 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+using BaseUtils;
+using EliteDangerousCore;
+using EliteDangerousCore.DB;
+using EliteDangerousCore.JournalEvents;
 using EMK.LightGeometry;
 using ExtendedControls;
-using BaseUtils;
-using EliteDangerousCore.DB;
-using EliteDangerousCore;
-using EliteDangerousCore.JournalEvents;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
 {
     public partial class UserControlSpanel : UserControlCommonBase
     {
-        private string DbSave { get { return DBName("SPanel" ); } }
-        private string DbFilterSave { get { return DBName("SPanelEventFilter2" ); } }
-        private string DbFieldFilter { get { return DBName("SPanelFieldFilter" ); } }
+        private string dbFilterSave = "EventFilter2";
+        private string dbFieldFilter = "FieldFilter";
 
         FilterSelector cfs;
         private ConditionLists fieldfilter = new ConditionLists();
@@ -119,7 +116,9 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
-            config = (long)(EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(DbSave + "Config", (int)config)) | ((long)(EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(DbSave + "ConfigH", (int)(config >> 32))) << 32);
+            DBBaseName = "SPanel";
+
+            config = (long)(GetSetting("Config", (int)config)) | ((long)(GetSetting("ConfigH", (int)(config >> 32))) << 32);
             toolStripMenuItemTargetLine.Checked = Config(Configuration.showTargetLine);
             toolStripMenuItemTime.Checked = Config(Configuration.showTime);
             EDSMButtonToolStripMenuItem.Checked = Config(Configuration.showEDSMButton);
@@ -145,14 +144,14 @@ namespace EDDiscovery.UserControls
 
             SetSurfaceScanBehaviour(null);
             SetScanPosition(null);
-            SetLayoutOrder(EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(DbSave + "Layout", layoutorder),false);  // also resets the tab order
+            SetLayoutOrder(GetSetting("Layout", layoutorder),false);  // also resets the tab order
 
             scanhide.Tick += HideScanData;
 
             dividercheck.Tick += DividerCheck;
             dividercheck.Interval = 500;
 
-            string tabs = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbSave + "PanelTabs", "");
+            string tabs = GetSetting("PanelTabs", "");
 
             if (tabs.HasChars())
             {
@@ -170,11 +169,11 @@ namespace EDDiscovery.UserControls
 
             pictureBox.ContextMenuStrip = contextMenuStrip;
 
-            string filter = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbFieldFilter, "");
+            string filter = GetSetting(dbFieldFilter, "");
             if (filter.Length > 0)
                 fieldfilter.FromJSON(filter);        // load filter
 
-            cfs = new FilterSelector(DbFilterSave);
+            cfs = new FilterSelector(FilterKeyName(dbFilterSave));
             cfs.AddAllNone();
             cfs.AddJournalExtraOptions();
             cfs.AddJournalEntries();
@@ -205,11 +204,11 @@ namespace EDDiscovery.UserControls
             scanhide.Dispose();
             dividercheck.Dispose();
 
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(DbSave + "Config", (int)config);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(DbSave + "ConfigH", (int)(config>>32));
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(DbSave + "Layout", layoutorder);
+            PutSetting("Config", (int)config);
+            PutSetting("ConfigH", (int)(config>>32));
+            PutSetting("Layout", layoutorder);
             string s = string.Join<int>(",", columnpos);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbSave + "PanelTabs", s);
+            PutSetting("PanelTabs", s);
         }
 
         public override bool SupportTransparency { get { return true; } }
@@ -244,7 +243,7 @@ namespace EDDiscovery.UserControls
                 List<HistoryEntry> result = current_historylist.LatestFirst();      // Standard filtering
 
                 int ftotal;         // event filter
-                result = HistoryList.FilterByJournalEvent(result, EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbFilterSave, "All"), out ftotal);
+                result = HistoryList.FilterByJournalEvent(result, GetSetting(dbFilterSave, "All"), out ftotal);
                 result = FilterHelpers.FilterHistory(result, fieldfilter , discoveryform.Globals, out ftotal); // and the field filter..
 
                 RevertToNormalSize();                                           // ensure size is back to normal..
@@ -625,7 +624,7 @@ namespace EDDiscovery.UserControls
 
         public bool WouldAddEntry(HistoryEntry he)                  // do we filter? if its not in the journal event filter, or it is in the field filter
         {
-            return he.IsJournalEventInEventFilter(EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbFilterSave, "All")) && FilterHelpers.FilterHistory(he, fieldfilter , discoveryform.Globals);
+            return he.IsJournalEventInEventFilter(GetSetting(dbFilterSave, "All")) && FilterHelpers.FilterHistory(he, fieldfilter , discoveryform.Globals);
         }
 
 #endregion
@@ -1040,7 +1039,7 @@ namespace EDDiscovery.UserControls
             if (res != null)
             {
                 fieldfilter = res;
-                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbFieldFilter, fieldfilter.GetJSON());
+                PutSetting(dbFieldFilter, fieldfilter.GetJSON());
                 Display(current_historylist);
             }
         }

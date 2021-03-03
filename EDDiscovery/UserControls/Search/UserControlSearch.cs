@@ -22,7 +22,7 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlSearch : UserControlCommonBase
     {
-        private string DbSelectedSave { get { return DBName("UCSearch", "Tab"); } }
+        private string dbSelectedSave = "Tab";
 
         #region Init
 
@@ -33,6 +33,8 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
+            DBBaseName = "UCSearch";
+
             tabStrip.ImageList = new Image[] { EDDiscovery.Icons.Controls.SearchStars, EDDiscovery.Icons.Controls.SearchMaterials, EDDiscovery.Icons.Controls.SearchScan};
             tabStrip.TextList = new string[] { "Stars".T(EDTx.UserControlSearch_Stars), "Materials Commodities".T(EDTx.UserControlSearch_MaterialsCommodities), "Scans".T(EDTx.UserControlSearch_Scans) };
             tabStrip.TagList = new Type[] { typeof(SearchStars), typeof(SearchMaterialsCommodities), typeof(SearchScans)};
@@ -72,14 +74,14 @@ namespace EDDiscovery.UserControls
 
         public override void InitialDisplay()
         {
-            int seltab = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(DbSelectedSave, 0);
+            int seltab = GetSetting(dbSelectedSave, 0);
             seltab = seltab.Range(0, tabStrip.ImageList.Length - 1);
             tabStrip.SelectedIndex = seltab;
         }
 
         public override void Closing()
         {
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(DbSelectedSave, tabStrip.SelectedIndex);
+            PutSetting(dbSelectedSave, tabStrip.SelectedIndex);
             tabStrip.Close();
         }
 

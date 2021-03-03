@@ -27,11 +27,9 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlLedger : UserControlCommonBase
     {
-        FilterSelector cfs; 
-
-        private string DbFilterSave { get { return DBName("LedgerGridEventFilter2" ); } }
-        private string DbColumnSave { get { return DBName("LedgerGrid" ,  "DGVCol"); } }
-        private string DbHistorySave { get { return DBName("LedgerGridEDUIHistory" ); } }
+        private FilterSelector cfs;
+        private string dbFilter = "EventFilter2";
+        private string dbEDUIHistory = "EDUIHistory";
 
         #region Init
 
@@ -43,13 +41,15 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
+            DBBaseName = "LedgerGrid";
+
             dataGridViewLedger.MakeDoubleBuffered();
             dataGridViewLedger.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
 
             var jes = EliteDangerousCore.JournalEntry.GetNameImageOfEvents(new string[] { "Ledger" });
             string cashtype = string.Join(";", jes.Select(x=>x.Item1) ) + ";";
 
-            cfs = new FilterSelector(DbFilterSave);
+            cfs = new FilterSelector(FilterKeyName(dbFilter));
             cfs.AddAllNone();
             cfs.AddGroupOption(cashtype, "Cash Transactions".T(EDTx.UserControlLedger_CashTransactions),  JournalEntry.JournalTypeIcons[JournalTypeEnum.Bounty]);
             cfs.AddJournalEntries(new string[] { "Ledger", "LedgerNC" });
@@ -62,7 +62,7 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
 
-            TravelHistoryFilter.InitaliseComboBox(comboBoxHistoryWindow, DbHistorySave, incldockstartend: false);
+            TravelHistoryFilter.InitaliseComboBox(comboBoxHistoryWindow, FilterKeyName(dbEDUIHistory), incldockstartend: false);
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
@@ -73,12 +73,12 @@ namespace EDDiscovery.UserControls
         public override void LoadLayout()
         {
             dataGridViewLedger.RowTemplate.MinimumHeight = Font.ScalePixels(26);
-            DGVLoadColumnLayout(dataGridViewLedger, DbColumnSave);
+            DGVLoadColumnLayout(dataGridViewLedger);
         }
 
         public override void Closing()
         {
-            DGVSaveColumnLayout(dataGridViewLedger, DbColumnSave);
+            DGVSaveColumnLayout(dataGridViewLedger);
             discoveryform.OnHistoryChange -= Redisplay;
             discoveryform.OnNewEntry -= NewEntry;
         }
@@ -118,7 +118,7 @@ namespace EDDiscovery.UserControls
                 var filter = (TravelHistoryFilter)comboBoxHistoryWindow.SelectedItem ?? TravelHistoryFilter.NoFilter;
                 List<Ledger.Transaction> filteredlist = filter.Filter(mc.Transactions);
 
-                filteredlist = FilterByJournalEvent(filteredlist, EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbFilterSave, "All"));
+                filteredlist = FilterByJournalEvent(filteredlist, GetSetting(dbFilter, "All"));
 
                 if (filteredlist.Count > 0)
                 {
@@ -174,7 +174,7 @@ namespace EDDiscovery.UserControls
 
         private void comboBoxHistoryWindow_SelectedIndexChanged(object sender, EventArgs e)
         {
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbHistorySave, comboBoxHistoryWindow.Text);
+            PutSetting(FilterKeyName(dbEDUIHistory), comboBoxHistoryWindow.Text);
 
             if (current_mc != null)
             {

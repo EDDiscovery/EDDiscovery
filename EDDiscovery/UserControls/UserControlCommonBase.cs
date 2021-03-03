@@ -35,12 +35,6 @@ namespace EDDiscovery.UserControls
         protected int DisplayNumberOfGrid(int numopenedinside)      // grid children are assigned this range..  allow range for splitters.
         { return 1050 + (DisplayNumberStartExtraTabsMax + 1) * 100 + displaynumber * 100 + numopenedinside; }
 
-        static public string DBName(int dno, string basename, string itemname = "")
-        { return EDDProfiles.Instance.UserControlsPrefix + basename + ((dno > 0) ? dno.ToString() : "") + itemname; }
-
-        protected string DBName(string basename, string itemname = "")
-        { return DBName(displaynumber, basename, itemname); }
-
         // Common parameters of a UCCB
 
         public PanelInformation.PanelIDs panelid { get; set; }          // set on creation in PanelAndPopOuts, panel ID type
@@ -210,20 +204,62 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
-        #region DGV Column helpers - used to save/size the DGV of user controls dynamically. Note support for previous INT saving is now withdrawn.
+        #region Data base helpers
 
-        public void DGVLoadColumnLayout(DataGridView dgv, string root)
+        public string DBBaseName { get; set; } = null;          // constructor or init must set this to indicate DB Base name
+
+        // this makes up the name. This is the backwards compatible naming. We may change this in future.
+
+        static private string DBName(int dno, string basename, string itemname = "")
+        { return EDDProfiles.Instance.UserControlsPrefix + basename + ((dno > 0) ? dno.ToString() : "") + itemname; }
+
+        // get/put a setting - type needs to be bool, int, double, long, DateTime, string
+
+        protected T GetSetting<T>(string itemname, T defaultvalue)
         {
+            System.Diagnostics.Debug.Assert(DBBaseName != null);
+            string name = DBName(displaynumber, DBBaseName, itemname);
+            var res = EliteDangerousCore.DB.UserDatabase.Instance.GetSetting(name, defaultvalue);
+            //System.Diagnostics.Debug.WriteLine("Get DB Name " + name + ": " + res);
+            return res;
+        }
+
+        protected bool PutSetting<T>(string itemname, T value)
+        {
+            string name = DBName(displaynumber, DBBaseName, itemname);
+            //System.Diagnostics.Debug.WriteLine("Set DB Name " + name + ": " + value);
+            return EliteDangerousCore.DB.UserDatabase.Instance.PutSetting(name, value);
+        }
+
+        // to be used for filters which expect a DB name.  A single DB entry of this name
+
+        public string FilterKeyName(string itemname)
+        {
+            return DBName(displaynumber, DBBaseName, itemname);
+        }
+
+        // a group name which would have further text added for multiple items
+
+        public string GroupKeyName(string itemname)
+        {
+            return DBName(displaynumber, DBBaseName, itemname);
+        }
+
+        public void DGVLoadColumnLayout(DataGridView dgv, string auxname = "")
+        {
+            string root = DBName(displaynumber, DBBaseName + auxname, "DGVCol");
+            //System.Diagnostics.Debug.WriteLine("Get Column Name " + root);
             dgv.LoadColumnSettings(root, (a) => EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(a, int.MinValue),
                                         (b) => EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble(b, double.MinValue));
         }
 
-        public void DGVSaveColumnLayout(DataGridView dgv, string root)
+        public void DGVSaveColumnLayout(DataGridView dgv, string auxname = "")
         {
-            dgv.SaveColumnSettings(root, (a,b) => EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(a, b),
-                                        (c,d) => EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble(c,d));
+            string root = DBName(displaynumber, DBBaseName + auxname, "DGVCol");
+            //System.Diagnostics.Debug.WriteLine("Set Column Name " + root);
+            dgv.SaveColumnSettings(root, (a, b) => EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(a, b),
+                                        (c, d) => EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble(c, d));
         }
-
 
         #endregion
     }

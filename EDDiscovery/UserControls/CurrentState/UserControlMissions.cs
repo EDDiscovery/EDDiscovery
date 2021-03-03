@@ -24,13 +24,6 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlMissions : UserControlCommonBase
     {
-        private string DbColumnSaveCurrent { get { return DBName("MissionsGridCurrent" ,  "DGVCol"); } }
-        private string DbColumnSavePrevious { get { return DBName("MissionsGridPrevious" ,  "DGVCol"); } }
-        private string DbStartDate { get { return DBName("MissionsStartDate" ); } }
-        private string DbEndDate { get { return DBName("MissionsEndDate" ); } }
-        private string DbStartDateChecked { get { return DBName("MissionsStartDateCheck" ); } }
-        private string DbEndDateChecked { get { return DBName("MissionsEndDateCheck" ); } }
-        private string DbSplitter { get { return DBName("MissionsSplitter") ; } }
         private DateTime NextExpiry;
 
         #region Init
@@ -42,10 +35,12 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
-            missionListPrevious.SetDateTime(EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDate(DbStartDate, DateTime.UtcNow),
-                                            EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbStartDateChecked, false),
-                                            EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDate(DbEndDate, DateTime.UtcNow),
-                                            EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbEndDateChecked, false));
+            DBBaseName = "Missions";
+
+            missionListPrevious.SetDateTime(GetSetting("StartDate", DateTime.UtcNow),
+                                            GetSetting("StartDateChecked", false),
+                                            GetSetting("EndDate", DateTime.UtcNow),
+                                            GetSetting("EndDateChecked", false));
             
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
@@ -70,30 +65,30 @@ namespace EDDiscovery.UserControls
             missionListCurrent.SetMinimumHeight(Font.ScalePixels(26));
             missionListPrevious.SetMinimumHeight(Font.ScalePixels(26));
 
-            DGVLoadColumnLayout(missionListCurrent.dataGridView, DbColumnSaveCurrent);
-            DGVLoadColumnLayout(missionListPrevious.dataGridView, DbColumnSavePrevious);
+            DGVLoadColumnLayout(missionListCurrent.dataGridView, "Current");
+            DGVLoadColumnLayout(missionListPrevious.dataGridView, "Previous");
 
-            splitContainerMissions.SplitterDistance(EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble(DbSplitter, 0.4));
+            splitContainerMissions.SplitterDistance(GetSetting("Splitter", 0.4));
 
             missionListPrevious.DateTimeChanged = () => { Display(); };
         }
 
         public override void Closing()
         {
-            DGVSaveColumnLayout(missionListCurrent.dataGridView, DbColumnSaveCurrent);
-            DGVSaveColumnLayout(missionListPrevious.dataGridView, DbColumnSavePrevious);
+            DGVSaveColumnLayout(missionListCurrent.dataGridView, "Current");
+            DGVSaveColumnLayout(missionListPrevious.dataGridView, "Previous");
 
             uctg.OnTravelSelectionChanged -= Display;
             discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
             discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
 
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDate(DbStartDate, EDDiscoveryForm.EDDConfig.ConvertTimeToUTCFromSelected(missionListPrevious.customDateTimePickerStart.Value));
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDate(DbEndDate, EDDiscoveryForm.EDDConfig.ConvertTimeToUTCFromSelected(missionListPrevious.customDateTimePickerEnd.Value));
+            PutSetting("StartDate", EDDiscoveryForm.EDDConfig.ConvertTimeToUTCFromSelected(missionListPrevious.customDateTimePickerStart.Value));
+            PutSetting("EndDate", EDDiscoveryForm.EDDConfig.ConvertTimeToUTCFromSelected(missionListPrevious.customDateTimePickerEnd.Value));
 
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbStartDateChecked, missionListPrevious.customDateTimePickerStart.Checked);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbEndDateChecked, missionListPrevious.customDateTimePickerEnd.Checked);
+            PutSetting("StartDateChecked", missionListPrevious.customDateTimePickerStart.Checked);
+            PutSetting("EndDateChecked", missionListPrevious.customDateTimePickerEnd.Checked);
 
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble(DbSplitter, splitContainerMissions.GetSplitterDistance());
+            PutSetting("Splitter", splitContainerMissions.GetSplitterDistance());
         }
 
         #endregion

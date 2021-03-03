@@ -31,8 +31,8 @@ namespace EDDiscovery.UserControls
     {
         public bool IsNotesShowing { get { return richTextBoxNote.Visible; } }
 
-        private string DbSelection { get { return DBName("SystemInformationPanel", "Sel"); } }
-        private string DbOSave { get { return DBName("SystemInformationPanel", "Order"); } }
+        private string dbSelection = "Sel";
+        private string dbOSave = "Order";
 
         const int BitSelSystem = 0;
         const int BitSelEDSM = 1;
@@ -104,6 +104,8 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
+            DBBaseName = "SystemInformationPanel";
+
             textBoxTarget.SetAutoCompletor(SystemCache.ReturnSystemAutoCompleteList);
 
             // same order as Sel bits are defined in, one bit per selection item.
@@ -121,9 +123,9 @@ namespace EDDiscovery.UserControls
 
             Debug.Assert(toolstriplist.Length == BitSelTotal);
 
-            Selection = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(DbSelection, BitSelDefault);
+            Selection = GetSetting(dbSelection, BitSelDefault);
 
-            string rs = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbOSave, "-");
+            string rs = GetSetting(dbOSave, "-");
             if (rs == "-")
                 Reset();
             else
@@ -198,8 +200,8 @@ namespace EDDiscovery.UserControls
             discoveryform.OnEDSMSyncComplete -= Discoveryform_OnEDSMSyncComplete;
             discoveryform.OnNewUIEvent -= Discoveryform_OnNewUIEvent;
 
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbOSave, BaseUtils.LineStore.ToString(Lines));
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(DbSelection, Selection);
+            PutSetting(dbOSave, BaseUtils.LineStore.ToString(Lines));
+            PutSetting(dbSelection, Selection);
         }
 
         #endregion

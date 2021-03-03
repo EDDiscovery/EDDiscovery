@@ -31,10 +31,9 @@ namespace EDDiscovery.UserControls
 
     public partial class SearchMaterialsCommodities : UserControlCommonBase
     {
-        private string DbColumnSave { get { return DBName("UCSearchMC", "DGVCol"); } }
-        private string DbCM1 { get { return DBName("UCSearchMC", "CM1"); } }
-        private string DbCM2 { get { return DBName("UCSearchMC", "CM2"); } }
-        private string DbCMANDOR { get { return DBName("UCSearchMC", "CMANDOR"); } }
+        private string dbCM1 = "CM1";
+        private string dbCM2 = "CM2";
+        private string dbCMANDOR = "CMANDOR";
 
         private MaterialCommodityData[] itemlist;
         #region Init
@@ -47,6 +46,8 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
+            DBBaseName = "UCSearchMC";
+
             dataGridView.CheckEDSM = true;
             dataGridView.MakeDoubleBuffered();
             dataGridView.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
@@ -64,13 +65,13 @@ namespace EDDiscovery.UserControls
             var list = (from x in itemlist select x.Name + " (" + x.TranslatedCategory + ", " + x.TranslatedType + (x.Rarity ? ", Rare Commodity".T(EDTx.SearchMaterialsCommodities_RareCommodity):"") + ")");
 
             comboBoxCustomCM1.Items.AddRange(list);
-            comboBoxCustomCM1.SelectedIndex = Math.Min(EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(DbCM1, 0), list.Count() - 1);
+            comboBoxCustomCM1.SelectedIndex = Math.Min(GetSetting(dbCM1, 0), list.Count() - 1);
             comboBoxCustomCM2.Items.Add("----");
             comboBoxCustomCM2.Items.AddRange(list);
-            comboBoxCustomCM2.SelectedIndex = Math.Min(EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(DbCM2, 0), list.Count() - 1);
+            comboBoxCustomCM2.SelectedIndex = Math.Min(GetSetting(dbCM2, 0), list.Count() - 1);
 
             comboBoxCustomCMANDOR.Items.AddRange(new string[] { "AND".T(EDTx.SearchMaterialsCommodities_AND), "OR".T(EDTx.SearchMaterialsCommodities_OR) });
-            comboBoxCustomCMANDOR.SelectedIndex = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(DbCMANDOR, 0);
+            comboBoxCustomCMANDOR.SelectedIndex = GetSetting(dbCMANDOR, 0);
 
             dataGridView.GotoEntryClicked += (he) => { uctg.GotoPosByJID(he.Journalid); };
         }
@@ -82,15 +83,15 @@ namespace EDDiscovery.UserControls
 
         public override void LoadLayout()
         {
-            DGVLoadColumnLayout(dataGridView, DbColumnSave);
+            DGVLoadColumnLayout(dataGridView);
         }
 
         public override void Closing()
         {
-            DGVSaveColumnLayout(dataGridView, DbColumnSave);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(DbCM1, comboBoxCustomCM1.SelectedIndex);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(DbCM2, comboBoxCustomCM2.SelectedIndex);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(DbCMANDOR, comboBoxCustomCMANDOR.SelectedIndex);
+            DGVSaveColumnLayout(dataGridView);
+            PutSetting(dbCM1, comboBoxCustomCM1.SelectedIndex);
+            PutSetting(dbCM2, comboBoxCustomCM2.SelectedIndex);
+            PutSetting(dbCMANDOR, comboBoxCustomCMANDOR.SelectedIndex);
         }
 
         #endregion

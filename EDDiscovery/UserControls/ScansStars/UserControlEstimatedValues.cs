@@ -25,9 +25,6 @@ namespace EDDiscovery.UserControls
     {
         private HistoryEntry last_he = null;
 
-        private string DbEDSM { get { return DBName("EstimatedValueEDSM"); } }
-        private string DbColumnSaveFactions { get { return DBName("EstimatedValue", "DGVCol"); } }
-
         public UserControlEstimatedValues()
         {
             InitializeComponent();
@@ -36,12 +33,14 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
+            DBBaseName = "EstimatedValue";
+
             discoveryform.OnNewEntry += NewEntry;
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(toolTip,this);
             extPanelRollUp.SetToolTip(toolTip);
 
-            checkBoxEDSM.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbEDSM, false);
+            checkBoxEDSM.Checked = GetSetting("EDSM", false);
             checkBoxEDSM.CheckedChanged += CheckBoxEDSM_CheckedChanged;
 
             dataGridViewEstimatedValues.MakeDoubleBuffered();
@@ -54,7 +53,7 @@ namespace EDDiscovery.UserControls
         public override void LoadLayout()
         {
             uctg.OnTravelSelectionChanged += Display;
-            DGVLoadColumnLayout(dataGridViewEstimatedValues, DbColumnSaveFactions);
+            DGVLoadColumnLayout(dataGridViewEstimatedValues);
 
         }
 
@@ -67,7 +66,7 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
-            DGVSaveColumnLayout(dataGridViewEstimatedValues, DbColumnSaveFactions);
+            DGVSaveColumnLayout(dataGridViewEstimatedValues);
 
             uctg.OnTravelSelectionChanged -= Display;
             discoveryform.OnNewEntry -= NewEntry;
@@ -132,7 +131,7 @@ namespace EDDiscovery.UserControls
 
         private void CheckBoxEDSM_CheckedChanged(object sender, System.EventArgs e)
         {
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbEDSM, checkBoxEDSM.Checked);
+            PutSetting("EDSM", checkBoxEDSM.Checked);
             DrawSystem();
         }
 

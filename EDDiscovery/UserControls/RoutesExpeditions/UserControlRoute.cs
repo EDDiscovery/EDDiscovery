@@ -29,9 +29,6 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlRoute : UserControlCommonBase
     {
-        private string DbSave(string s) { return DBName("UCRoute" ,  "_" + s); }
-        private string DbColumnSave { get { return DBName("UCRoute", "DGVCol"); } }
-
         private List<ISystem> routeSystems; // only valid systems get passed back
         private bool changesilence;
 
@@ -56,6 +53,8 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
+            DBBaseName = "UCRoute";
+
             button_Route.Enabled = false;
             cmd3DMap.Enabled = false;
 
@@ -75,17 +74,17 @@ namespace EDDiscovery.UserControls
             textBox_From.SetAutoCompletor(SystemCache.ReturnSystemAdditionalListForAutoComplete, true);
             textBox_To.SetAutoCompletor(SystemCache.ReturnSystemAdditionalListForAutoComplete , true);
 
-            textBox_From.Text = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbSave("RouteFrom"), "");
-            textBox_To.Text = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbSave("RouteTo"), "");
-            textBox_Range.Value = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(DbSave("RouteRange"), 30);
-            textBox_FromX.Text = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbSave("RouteFromX"), "");
-            textBox_FromY.Text = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbSave("RouteFromY"), "");
-            textBox_FromZ.Text = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbSave("RouteFromZ"), "");
-            textBox_ToX.Text = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbSave("RouteToX"), "");
-            textBox_ToY.Text = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbSave("RouteToY"), "");
-            textBox_ToZ.Text = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbSave("RouteToZ"), "");
+            textBox_From.Text = GetSetting("_RouteFrom", "");
+            textBox_To.Text = GetSetting("_RouteTo", "");
+            textBox_Range.Value = GetSetting("_RouteRange", 30);
+            textBox_FromX.Text = GetSetting("_RouteFromX", "");
+            textBox_FromY.Text = GetSetting("_RouteFromY", "");
+            textBox_FromZ.Text = GetSetting("_RouteFromZ", "");
+            textBox_ToX.Text = GetSetting("_RouteToX", "");
+            textBox_ToY.Text = GetSetting("_RouteToY", "");
+            textBox_ToZ.Text = GetSetting("_RouteToZ", "");
 
-            int metricvalue = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(DbSave("RouteMetric"), 0);
+            int metricvalue = GetSetting("RouteMetric", 0);
             comboBoxRoutingMetric.SelectedIndex = Enum.IsDefined(typeof(SystemsDB.SystemsNearestMetric), metricvalue)
                 ? metricvalue
                 : (int) SystemsDB.SystemsNearestMetric.IterativeNearestWaypoint;
@@ -111,12 +110,12 @@ namespace EDDiscovery.UserControls
 
         public override void LoadLayout()
         {
-            DGVLoadColumnLayout(dataGridViewRoute, DbColumnSave);
+            DGVLoadColumnLayout(dataGridViewRoute);
         }
 
         public override void Closing()
         {
-            DGVSaveColumnLayout(dataGridViewRoute, DbColumnSave);
+            DGVSaveColumnLayout(dataGridViewRoute);
 
             if (routingthread != null && routingthread.IsAlive && plotter != null)
             {
@@ -127,16 +126,16 @@ namespace EDDiscovery.UserControls
 
             discoveryform.OnHistoryChange -= HistoryChanged;
 
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbSave("RouteFrom"), textBox_From.Text);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbSave("RouteTo"), textBox_To.Text);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(DbSave("RouteRange"), (int)textBox_Range.Value);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbSave("RouteFromX"), textBox_FromX.Text);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbSave("RouteFromY"), textBox_FromY.Text);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbSave("RouteFromZ"), textBox_FromZ.Text);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbSave("RouteToX"), textBox_ToX.Text);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbSave("RouteToY"), textBox_ToY.Text);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbSave("RouteToZ"), textBox_ToZ.Text);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(DbSave("RouteMetric"), comboBoxRoutingMetric.SelectedIndex);
+            PutSetting("_RouteFrom", textBox_From.Text);
+            PutSetting("_RouteTo", textBox_To.Text);
+            PutSetting("_RouteRange", (int)textBox_Range.Value);
+            PutSetting("_RouteFromX", textBox_FromX.Text);
+            PutSetting("_RouteFromY", textBox_FromY.Text);
+            PutSetting("_RouteFromZ", textBox_FromZ.Text);
+            PutSetting("_RouteToX", textBox_ToX.Text);
+            PutSetting("_RouteToY", textBox_ToY.Text);
+            PutSetting("_RouteToZ", textBox_ToZ.Text);
+            PutSetting("_RouteMetric", comboBoxRoutingMetric.SelectedIndex);
         }
 
         public void HistoryChanged(HistoryList hl)           // on History change, we now have history systems to look up, so make sure the To/From get a chance to update

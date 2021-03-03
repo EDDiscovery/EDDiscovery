@@ -30,8 +30,6 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlNotePanel : UserControlCommonBase
     {
-        private string DbSave { get { return DBName("NotePanel" ); } }
-
         HistoryEntry lastHE;
 
         private Font displayfont;
@@ -54,7 +52,9 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
-            config = (Configuration)EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(DbSave + "Config", (int)config);
+            DBBaseName = "NotePanel";
+
+            config = (Configuration)GetSetting("Config", (int)config);
 
             displayfont = discoveryform.theme.GetFont;
 
@@ -87,7 +87,7 @@ namespace EDDiscovery.UserControls
             discoveryform.OnHistoryChange -= OnHistoryChange;
             discoveryform.OnNoteChanged -= OnNoteChange;
             uctg.OnTravelSelectionChanged -= OnTravelChange;
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(DbSave + "Config", (int)config);
+            PutSetting("Config", (int)config);
         }
 
         public override bool SupportTransparency { get { return true; } }

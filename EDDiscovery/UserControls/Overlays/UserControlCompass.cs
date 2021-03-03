@@ -29,9 +29,9 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlCompass : UserControlCommonBase
     {
-        string DbLatSave { get { return DBName("CompassLatTarget" ); } }
-        string DbLongSave { get { return DBName("CompassLongTarget" ); } }
-        string DbHideSave { get { return DBName("CompassAutoHide" ); } }
+        string dbLatSave = "LatTarget";
+        string dbLongSave = "LongTarget";
+        string dbHideSave = "AutoHide";
 
         double? latitude = null;
         double? longitude = null;
@@ -56,12 +56,13 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
+            DBBaseName = "Compass";
             discoveryform.OnNewEntry += OnNewEntry;
             discoveryform.OnNewUIEvent += OnNewUIEvent;
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
-            numberBoxTargetLatitude.ValueNoChange = UserDatabase.Instance.GetSettingDouble(DbLatSave, 0);
-            numberBoxTargetLongitude.ValueNoChange = UserDatabase.Instance.GetSettingDouble(DbLongSave, 0);
-            autoHideTargetCoords = UserDatabase.Instance.GetSettingBool(DbHideSave, false);
+            numberBoxTargetLatitude.ValueNoChange = GetSetting(dbLatSave, 0);
+            numberBoxTargetLongitude.ValueNoChange = GetSetting(dbLongSave, 0);
+            autoHideTargetCoords = GetSetting(dbHideSave, false);
             checkBoxHideTransparent.Checked = autoHideTargetCoords;
             comboBoxBookmarks.Text = "";
             GlobalBookMarkList.Instance.OnBookmarkChange += GlobalBookMarkList_OnBookmarkChange;
@@ -77,9 +78,9 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
-            UserDatabase.Instance.PutSettingDouble(DbLatSave, numberBoxTargetLatitude.Value);
-            UserDatabase.Instance.PutSettingDouble(DbLongSave, numberBoxTargetLongitude.Value);
-            UserDatabase.Instance.PutSettingBool(DbHideSave, autoHideTargetCoords);
+            PutSetting(dbLatSave, numberBoxTargetLatitude.Value);
+            PutSetting(dbLongSave, numberBoxTargetLongitude.Value);
+            PutSetting(dbHideSave, autoHideTargetCoords);
             discoveryform.OnNewEntry -= OnNewEntry;
             discoveryform.OnNewUIEvent -= OnNewUIEvent;
             discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;

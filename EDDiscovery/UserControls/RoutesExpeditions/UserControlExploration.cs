@@ -31,8 +31,6 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlExploration :  UserControlCommonBase
     {
-        private string DbColumnSave { get { return DBName("UserControlExploration",  "DGVCol"); } }
-
         private ExplorationSetClass currentexplorationset;
         private bool dirty = false;
 
@@ -52,6 +50,8 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
+            DBBaseName = "UserControlExploration";
+
             currentexplorationset = new ExplorationSetClass();
             discoveryform.OnNewEntry += NewEntry;
             BaseUtils.Translator.Instance.Translate(this);
@@ -62,7 +62,7 @@ namespace EDDiscovery.UserControls
         public override void LoadLayout()
         {
             uctg.OnTravelSelectionChanged += Display;
-            DGVLoadColumnLayout(dataGridViewExplore, DbColumnSave);
+            DGVLoadColumnLayout(dataGridViewExplore);
 
             if (uctg is IHistoryCursorNewStarList)
                 (uctg as IHistoryCursorNewStarList).OnNewStarList += OnNewStars;
@@ -88,7 +88,7 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
-            DGVSaveColumnLayout(dataGridViewExplore, DbColumnSave);
+            DGVSaveColumnLayout(dataGridViewExplore);
             uctg.OnTravelSelectionChanged -= Display;
             discoveryform.OnNewEntry -= NewEntry;
             if (uctg is IHistoryCursorNewStarList)
@@ -355,9 +355,10 @@ namespace EDDiscovery.UserControls
                 }
             };
 
-            // usc.Font = EDDTheme.Instance.GetScaledFont(0.8f)
+            string subkeybname = GroupKeyName("Sys");     // save under our key, plus sys
+
             f.ShowDialogCentred(this.FindForm(), this.FindForm().Icon, "Add Systems".T(EDTx.UserControlExploration_AddSys),
-                                callback: () => {; usc.Init(0, "ExplorationFindSys", false, discoveryform); }, closeicon: true);
+                                callback: () => {; usc.Init(subkeybname, false, discoveryform); }, closeicon: true);
             usc.Closing();
         }
 

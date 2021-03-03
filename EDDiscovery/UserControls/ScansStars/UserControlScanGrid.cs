@@ -55,9 +55,6 @@ namespace EDDiscovery.UserControls
         int iconsize;   // computed icon and body sizes
         int bodysize;
 
-        private string DbColumnSave { get { return DBName("ScanGridPanel", "DGVCol"); } }
-        private string DbSave { get { return DBName("ScanGridPanel"); } }
-
         public UserControlScanGrid()
         {
             InitializeComponent();
@@ -72,6 +69,8 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
+            DBBaseName = "ScanGridPanel";
+
             discoveryform.OnNewEntry += NewEntry;
 
             BaseUtils.Translator.Instance.Translate(this);
@@ -79,28 +78,28 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
 
             // retrieve context menu entries check state from DB
-            circumstellarZoneToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "showStellarZones", true);
-            habitableZoneToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "showHabitable", true);
-            metalRichToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "showMetalRich", true);
-            waterWorldsToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "showWaterWorlds", true);
-            earthLikePlanetsToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "showEarthLike", true);
-            ammoniaWorldsToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "showAmmonia", true);
-            icyBodiesToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "showIcyBodies", true);
-            structuresToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "showStructures", true);
-            beltsToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "showBelts", true);
-            ringsToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "showRings", true);
-            materialsToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "showMaterials", true);
-            valuesToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "showValues", true);
-            nameToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "colName", true);
-            classToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "colClass", true);
-            distanceToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "colDistance", true);
-            informationToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "coldBriefing", true);
+            circumstellarZoneToolStripMenuItem.Checked = GetSetting( "showStellarZones", true);
+            habitableZoneToolStripMenuItem.Checked = GetSetting( "showHabitable", true);
+            metalRichToolStripMenuItem.Checked = GetSetting( "showMetalRich", true);
+            waterWorldsToolStripMenuItem.Checked = GetSetting( "showWaterWorlds", true);
+            earthLikePlanetsToolStripMenuItem.Checked = GetSetting( "showEarthLike", true);
+            ammoniaWorldsToolStripMenuItem.Checked = GetSetting( "showAmmonia", true);
+            icyBodiesToolStripMenuItem.Checked = GetSetting( "showIcyBodies", true);
+            structuresToolStripMenuItem.Checked = GetSetting( "showStructures", true);
+            beltsToolStripMenuItem.Checked = GetSetting( "showBelts", true);
+            ringsToolStripMenuItem.Checked = GetSetting( "showRings", true);
+            materialsToolStripMenuItem.Checked = GetSetting( "showMaterials", true);
+            valuesToolStripMenuItem.Checked = GetSetting( "showValues", true);
+            nameToolStripMenuItem.Checked = GetSetting( "colName", true);
+            classToolStripMenuItem.Checked = GetSetting( "colClass", true);
+            distanceToolStripMenuItem.Checked = GetSetting( "colDistance", true);
+            informationToolStripMenuItem.Checked = GetSetting( "coldBriefing", true);
         }
 
         public override void LoadLayout()
         {
             uctg.OnTravelSelectionChanged += Display;
-            DGVLoadColumnLayout(dataGridViewScangrid, DbColumnSave);
+            DGVLoadColumnLayout(dataGridViewScangrid);
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
@@ -112,7 +111,7 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
-            DGVSaveColumnLayout(dataGridViewScangrid, DbColumnSave);
+            DGVSaveColumnLayout(dataGridViewScangrid);
             uctg.OnTravelSelectionChanged -= Display;
             discoveryform.OnNewEntry -= NewEntry;
         }
@@ -650,112 +649,112 @@ namespace EDDiscovery.UserControls
         void circumstellarZoneToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
         {
             showStellarZones = circumstellarZoneToolStripMenuItem.Checked;
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "showStellarZones", showStellarZones);
+            GetSetting( "showStellarZones", showStellarZones);
             DrawSystem(last_he, true);
         }
 
         private void habitableZoneToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
         {
             showHabitable = habitableZoneToolStripMenuItem.Checked;
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "showHabitable", showHabitable);
+            GetSetting( "showHabitable", showHabitable);
             DrawSystem(last_he, true);
         }
 
         private void metallicRichToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
         {
             showMetalRich = metalRichToolStripMenuItem.Checked;
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "showMetalRich", showMetalRich);
+            GetSetting( "showMetalRich", showMetalRich);
             DrawSystem(last_he, true);
         }
 
         private void waterWorldsToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
         {
             showWaterWorlds = waterWorldsToolStripMenuItem.Checked;
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "showWaterWorlds", showWaterWorlds);
+            GetSetting( "showWaterWorlds", showWaterWorlds);
             DrawSystem(last_he, true);
         }
 
         private void earthLikePlanetsToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
         {
             showEarthLike = earthLikePlanetsToolStripMenuItem.Checked;
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "showEarthLike", showEarthLike);
+            GetSetting( "showEarthLike", showEarthLike);
             DrawSystem(last_he, true);
         }
 
         private void ammoniaWorldsToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
         {
             showAmmonia = ammoniaWorldsToolStripMenuItem.Checked;
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "showAmmonia", showAmmonia);
+            GetSetting( "showAmmonia", showAmmonia);
             DrawSystem(last_he, true);
         }
 
         private void icyBodiesToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
         {
             showIcyBodies = icyBodiesToolStripMenuItem.Checked;
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "showIcyBodies", showIcyBodies);
+            GetSetting( "showIcyBodies", showIcyBodies);
             DrawSystem(last_he, true);
         }
 
         private void structuresToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
         {
             showStructures = structuresToolStripMenuItem.Checked;
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "showStructures", showStructures);
+            GetSetting( "showStructures", showStructures);
             DrawSystem(last_he, true);
         }
 
         private void beltsToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
         {
             showBelts = beltsToolStripMenuItem.Checked;
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "showBelts", showBelts);
+            GetSetting( "showBelts", showBelts);
             DrawSystem(last_he, true);
         }
 
         private void ringsToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
         {
             showRings = ringsToolStripMenuItem.Checked;
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "showRings", showRings);
+            GetSetting( "showRings", showRings);
             DrawSystem(last_he, true);
         }
 
         private void materialsToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
         {
             showMaterials = materialsToolStripMenuItem.Checked;
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "showMaterials", showMaterials);
+            GetSetting( "showMaterials", showMaterials);
             DrawSystem(last_he, true);
         }
 
         private void valuesToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
         {
             showValues = valuesToolStripMenuItem.Checked;
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "showValues", showValues);
+            GetSetting( "showValues", showValues);
             DrawSystem(last_he, true);
         }
         
         private void nameToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
         {
             colName.Visible = nameToolStripMenuItem.Checked;
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "colName", colName.Visible);
+            GetSetting( "colName", colName.Visible);
             DrawSystem(last_he, true);
         }
 
         private void classToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
         {
             colClass.Visible = classToolStripMenuItem.Checked;
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "colClass", colClass.Visible);
+            GetSetting( "colClass", colClass.Visible);
             DrawSystem(last_he, true);
         }
 
         private void distanceToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
         {
             colDistance.Visible = distanceToolStripMenuItem.Checked;
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "colDistance", colDistance.Visible);
+            GetSetting( "colDistance", colDistance.Visible);
             DrawSystem(last_he, true);
         }
 
         private void informationToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
         {
             colBriefing.Visible = informationToolStripMenuItem.Checked;
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "colBriefing", colBriefing.Visible);
+            GetSetting( "colBriefing", colBriefing.Visible);
             DrawSystem(last_he, true);
         }
 

@@ -21,7 +21,7 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlCaptainsLog : UserControlCommonBase
     {
-        private string DbSelectedSave { get { return DBName("UCCaptainsLogTop", "Tab"); } }
+        private string dbSelectedSave = "Tab";
 
         public UserControlCaptainsLog()
         {
@@ -34,6 +34,8 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
+            DBBaseName = "CaptainsLog";
+
             tabStrip.ImageList = new Image[] { EDDiscovery.Icons.Controls.CaptainsLog_Diary, EDDiscovery.Icons.Controls.CaptainsLog_Entries};
             tabStrip.TextList = new string[] { "Diary".T(EDTx.UserControlCaptainsLog_Diary), "Entries".T(EDTx.UserControlCaptainsLog_Entries) };
             tabStrip.TagList = new Type[] { typeof(CaptainsLogDiary), typeof(CaptainsLogEntries) };
@@ -94,14 +96,14 @@ namespace EDDiscovery.UserControls
 
         public override void InitialDisplay()
         {
-            int seltab = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(DbSelectedSave, 0);
+            int seltab = GetSetting(dbSelectedSave, 0);
             seltab = seltab.Range(0, tabStrip.ImageList.Length - 1);
             tabStrip.SelectedIndex = seltab;
         }
 
         public override void Closing()
         {
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(DbSelectedSave, tabStrip.SelectedIndex);
+            PutSetting(dbSelectedSave, tabStrip.SelectedIndex);
             tabStrip.Close();
         }
     }

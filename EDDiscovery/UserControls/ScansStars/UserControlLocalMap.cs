@@ -14,21 +14,13 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
+using EliteDangerousCore;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Collections.Concurrent;
-using System.Threading;
-using EliteDangerousCore;
-using EliteDangerousCore.EDSM;
-using EliteDangerousCore.DB;
-using System.Diagnostics;
 
 
 namespace EDDiscovery.UserControls
@@ -36,8 +28,6 @@ namespace EDDiscovery.UserControls
     public partial class UserControlLocalMap : UserControlCommonBase
     {
         #region init
-
-        private string DbSave { get { return DBName("MapPanel" ); } }
 
         private StarDistanceComputer computer;
 
@@ -55,12 +45,14 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
+            DBBaseName = "MapPanel";
+
             computer = new StarDistanceComputer();
 
-            slideMaxItems.Value = maxitems = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(DbSave + "MapMaxItems", maxitems);
+            slideMaxItems.Value = maxitems = GetSetting("MapMaxItems", maxitems);
 
-            textMaxRadius.ValueNoChange = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble(DbSave + "MapMax", defaultMapMaxRadius);
-            textMinRadius.ValueNoChange = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble(DbSave + "MapMin", defaultMapMinRadius);
+            textMaxRadius.ValueNoChange = GetSetting("MapMax", defaultMapMaxRadius);
+            textMinRadius.ValueNoChange = GetSetting("MapMin", defaultMapMinRadius);
             textMinRadius.SetComparitor(textMaxRadius, -2);     // need to do this after values are set
             textMaxRadius.SetComparitor(textMinRadius, 2);
 
@@ -69,8 +61,8 @@ namespace EDDiscovery.UserControls
             slidetimer.Tick += Slidetimer_Tick;
 
             var style = chartMap.ChartAreas[0].Area3DStyle;
-            style.Rotation = Math.Min(180, Math.Max(-180, style.Rotation - (Convert.ToInt32(EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble(DbSave + "MapRotationX", xr)))));
-            style.Inclination = Math.Min(90, Math.Max(-90, style.Inclination + (Convert.ToInt32(EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble(DbSave + "MapRotationY", yr)))));
+            style.Rotation = Math.Min(180, Math.Max(-180, style.Rotation - (Convert.ToInt32(GetSetting("MapRotationX", xr)))));
+            style.Inclination = Math.Min(90, Math.Max(-90, style.Inclination + (Convert.ToInt32(GetSetting("MapRotationY", yr)))));
 
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
@@ -93,11 +85,11 @@ namespace EDDiscovery.UserControls
         {
             uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
             computer.ShutDown();
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble(DbSave + "MapMin", textMinRadius.Value);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble(DbSave + "MapMax", textMaxRadius.Value);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(DbSave + "MapMaxItems", maxitems);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble(DbSave + "MapRotationX", prevxr);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble(DbSave + "MapRotationY", prevyr);
+            PutSetting("MapMin", textMinRadius.Value);
+            PutSetting("MapMax", textMaxRadius.Value);
+            PutSetting("MapMaxItems", maxitems);
+            PutSetting("MapRotationX", prevxr);
+            PutSetting("MapRotationY", prevyr);
         }
 
         public override void InitialDisplay()
@@ -410,8 +402,8 @@ namespace EDDiscovery.UserControls
 
                 if (prevxr.ToString() != null || prevyr.ToString() != null)
                 {
-                    prevxr = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble(DbSave + "MapRotationX", xr);
-                    prevyr = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble(DbSave + "MapRotationY", yr);
+                    prevxr = GetSetting("MapRotationX", xr);
+                    prevyr = GetSetting("MapRotationY", yr);
 
                     Cursor.Position = new Point(Convert.ToInt32(prevxr), Convert.ToInt32(prevyr));
                 }
@@ -437,8 +429,8 @@ namespace EDDiscovery.UserControls
                 prevxr = Cursor.Position.X; // record the last mouse position
                 prevyr = Cursor.Position.Y; //       
 
-                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble(DbSave + "MapRotationX", prevxr);
-                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble(DbSave + "MapRotationY", prevyr);
+                PutSetting("MapRotationX", prevxr);
+                PutSetting("MapRotationY", prevyr);
 
                 CenterMouseOverControl(chartMap);
                 Cursor.Show(); // show the cursor                

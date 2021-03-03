@@ -26,10 +26,6 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlModules : UserControlCommonBase
     {
-        private string DbColumnSave { get { return DBName("ModulesGrid", "DGVCol"); } }
-        private string DbShipSave { get { return DBName("ModulesGridShipSelect"); } }
-        private string DbWordWrap { get { return DBName("ModulesGridWordWrap"); } }
-
         private string storedmoduletext;
         private string travelhistorytext;
         private string allmodulestext;
@@ -49,6 +45,8 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
+            DBBaseName = "ModulesGrid";
+
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
             storedmoduletext = "Stored Modules".T(EDTx.UserControlModules_StoredModules);
@@ -59,7 +57,7 @@ namespace EDDiscovery.UserControls
 
             buttonExtCoriolis.Visible = buttonExtEDShipyard.Visible = buttonExtConfigure.Visible = false;
 
-            extCheckBoxWordWrap.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbWordWrap, false);
+            extCheckBoxWordWrap.Checked = GetSetting("WordWrap", false);
             UpdateWordWrap();
             extCheckBoxWordWrap.Click += extCheckBoxWordWrap_Click;
 
@@ -82,12 +80,12 @@ namespace EDDiscovery.UserControls
         {
             dataGridViewModules.RowTemplate.MinimumHeight = Font.ScalePixels(26);
             uctg.OnTravelSelectionChanged += Display;
-            DGVLoadColumnLayout(dataGridViewModules, DbColumnSave);
+            DGVLoadColumnLayout(dataGridViewModules);
         }
 
         public override void Closing()
         {
-            DGVSaveColumnLayout(dataGridViewModules, DbColumnSave);
+            DGVSaveColumnLayout(dataGridViewModules);
             uctg.OnTravelSelectionChanged -= Display;
             discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
             discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
@@ -382,7 +380,7 @@ namespace EDDiscovery.UserControls
 
         private void extCheckBoxWordWrap_Click(object sender, EventArgs e)
         {
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbWordWrap, extCheckBoxWordWrap.Checked);
+            PutSetting("WordWrap", extCheckBoxWordWrap.Checked);
             UpdateWordWrap();
         }
 
@@ -420,7 +418,7 @@ namespace EDDiscovery.UserControls
             comboBoxShips.Items.AddRange(fightersrvs.Select(x => x.ShipNameIdentType).ToList());
 
             if (cursel == "")
-                cursel = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbShipSave, "");
+                cursel = GetSetting("ShipSelect", "");
 
             if (cursel == "" || !comboBoxShips.Items.Contains(cursel))
                 cursel = travelhistorytext;
@@ -434,7 +432,7 @@ namespace EDDiscovery.UserControls
         {
             if (comboBoxShips.Enabled)
             {
-                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbShipSave, comboBoxShips.Text);
+                PutSetting("ShipSelect", comboBoxShips.Text);
                 Display();
             }
         }

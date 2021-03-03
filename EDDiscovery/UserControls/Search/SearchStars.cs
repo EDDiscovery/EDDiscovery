@@ -28,8 +28,6 @@ namespace EDDiscovery.UserControls
 
     public partial class SearchStars : UserControlCommonBase
     {
-        private string DbColumnSave { get { return DBName("UCSearchStars", "DGVCol"); } }
-
         #region Init
 
         public SearchStars()
@@ -40,13 +38,15 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
+            DBBaseName = "UCSearchStars";
+
             dataGridView.CheckEDSM = true;
             dataGridView.MakeDoubleBuffered();
             dataGridView.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             dataGridView.RowTemplate.Height = Font.ScalePixels(26);
             dataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
 
-            findSystemsUserControl.Init(displaynumber, "SearchFindSys", true, discoveryform);
+            findSystemsUserControl.Init(GroupKeyName("SearchFindSys"), true, discoveryform);
             findSystemsUserControl.Excel += () => { dataGridView.Excel(3); };
             findSystemsUserControl.ReturnSystems += StarsFound;
 
@@ -64,12 +64,12 @@ namespace EDDiscovery.UserControls
 
         public override void LoadLayout()
         {
-            DGVLoadColumnLayout(dataGridView, DbColumnSave);
+            DGVLoadColumnLayout(dataGridView);
         }
 
         public override void Closing()
         {
-            DGVSaveColumnLayout(dataGridView, DbColumnSave);
+            DGVSaveColumnLayout(dataGridView);
             findSystemsUserControl.Closing();
         }
 

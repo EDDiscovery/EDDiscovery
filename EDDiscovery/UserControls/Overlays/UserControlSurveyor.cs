@@ -28,8 +28,6 @@ namespace EDDiscovery.UserControls
     {
         ISystem last_sys = null;
 
-        private string DbSave => DBName("Surveyor");
-
         private System.Drawing.StringAlignment alignment = System.Drawing.StringAlignment.Near;
         private string titletext = "";
         private string fsssignalsdisplayed = "";
@@ -47,35 +45,37 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
+            DBBaseName = "Surveyor";
+
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
             BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
 
             // set context menu checkboxes
-            showValuesToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "showValues", true);
-            ammoniaWorldToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "showAmmonia", true);
-            earthlikeWorldToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "showEarthlike", true);
-            waterWorldToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "showWaterWorld", true);
-            terraformableToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "showTerraformable", true);
-            hasVolcanismToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "showVolcanism", true);
-            landableToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "isLandable", true);
-            hasRingsToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "showRinged", true);
-            hideAlreadyMappedBodiesToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "hideMapped", true);
-            autoHideToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "autohide", false);
-            lowRadiusToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "lowradius", false);
-            checkEDSMForInformationToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "edsm", false);
-            showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "showsysinfo", true);
-            dontHideInFSSModeToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "donthidefssmode", true);
-            hasSignalsToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "signals", true);
-            showAllPlanetsToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "allplanets", false);
-            showAllStarsToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "allstars", false);
-            showBeltClustersToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "beltclusters", false);
-            showMoreInformationToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "moreinfo", true);
-            wordWrapToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "wordwrap", false);
+            showValuesToolStripMenuItem.Checked = GetSetting("showValues", true);
+            ammoniaWorldToolStripMenuItem.Checked = GetSetting("showAmmonia", true);
+            earthlikeWorldToolStripMenuItem.Checked = GetSetting("showEarthlike", true);
+            waterWorldToolStripMenuItem.Checked = GetSetting("showWaterWorld", true);
+            terraformableToolStripMenuItem.Checked = GetSetting("showTerraformable", true);
+            hasVolcanismToolStripMenuItem.Checked = GetSetting("showVolcanism", true);
+            landableToolStripMenuItem.Checked = GetSetting("isLandable", true);
+            hasRingsToolStripMenuItem.Checked = GetSetting("showRinged", true);
+            hideAlreadyMappedBodiesToolStripMenuItem.Checked = GetSetting("hideMapped", true);
+            autoHideToolStripMenuItem.Checked = GetSetting("autohide", false);
+            lowRadiusToolStripMenuItem.Checked = GetSetting("lowradius", false);
+            checkEDSMForInformationToolStripMenuItem.Checked = GetSetting("edsm", false);
+            showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem.Checked = GetSetting("showsysinfo", true);
+            dontHideInFSSModeToolStripMenuItem.Checked = GetSetting("donthidefssmode", true);
+            hasSignalsToolStripMenuItem.Checked = GetSetting("signals", true);
+            showAllPlanetsToolStripMenuItem.Checked = GetSetting("allplanets", false);
+            showAllStarsToolStripMenuItem.Checked = GetSetting("allstars", false);
+            showBeltClustersToolStripMenuItem.Checked = GetSetting("beltclusters", false);
+            showMoreInformationToolStripMenuItem.Checked = GetSetting("moreinfo", true);
+            wordWrapToolStripMenuItem.Checked = GetSetting("wordwrap", false);
 
-            fsssignalsdisplayed = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbSave + "fsssignals", "");
+            fsssignalsdisplayed = GetSetting("fsssignals", "");
 
-            SetAlign((StringAlignment)EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(DbSave + "align", 0));
+            SetAlign((StringAlignment)GetSetting("align", 0));
 
             // install the handlers AFTER setup otherwise you get lots of events
             this.landableToolStripMenuItem.Click += new System.EventHandler(this.landableToolStripMenuItem_Click);            
@@ -460,121 +460,121 @@ namespace EDDiscovery.UserControls
 
         private void ammoniaWorldToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "showAmmonia", ammoniaWorldToolStripMenuItem.Checked);
+            PutSetting("showAmmonia", ammoniaWorldToolStripMenuItem.Checked);
             DrawSystem(last_sys);
         }
 
         private void earthlikeWorldToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "showEarthlike", earthlikeWorldToolStripMenuItem.Checked);
+            PutSetting("showEarthlike", earthlikeWorldToolStripMenuItem.Checked);
             DrawSystem(last_sys);
         }
 
         private void waterWorldToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "showWaterWorld", waterWorldToolStripMenuItem.Checked);
+            PutSetting("showWaterWorld", waterWorldToolStripMenuItem.Checked);
             DrawSystem(last_sys);
         }
 
         private void terraformableToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "showTerraformable", terraformableToolStripMenuItem.Checked);
+            PutSetting("showTerraformable", terraformableToolStripMenuItem.Checked);
             DrawSystem(last_sys);
         }
 
         private void landableToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "isLandable", landableToolStripMenuItem.Checked);
+            PutSetting("isLandable", landableToolStripMenuItem.Checked);
             DrawSystem(last_sys);
         }
 
         private void hasVolcanismToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "showVolcanism", hasVolcanismToolStripMenuItem.Checked);
+            PutSetting("showVolcanism", hasVolcanismToolStripMenuItem.Checked);
             DrawSystem(last_sys);
         }
 
         private void hasRingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "showRinged", hasRingsToolStripMenuItem.Checked);
+            PutSetting("showRinged", hasRingsToolStripMenuItem.Checked);
             DrawSystem(last_sys);
         }
 
         private void hideAlreadyMappedBodiesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "hideMapped", hideAlreadyMappedBodiesToolStripMenuItem.Checked);
+            PutSetting("hideMapped", hideAlreadyMappedBodiesToolStripMenuItem.Checked);
             DrawSystem(last_sys);
         }
 
         private void autoHideToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "autohide", autoHideToolStripMenuItem.Checked);
+            PutSetting("autohide", autoHideToolStripMenuItem.Checked);
             DrawSystem(last_sys);
         }
 
         private void lowRadiusToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "lowradius", lowRadiusToolStripMenuItem.Checked);
+            PutSetting("lowradius", lowRadiusToolStripMenuItem.Checked);
             DrawSystem(last_sys);
         }
 
         private void checkEDSMForInformationToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "edsm", checkEDSMForInformationToolStripMenuItem.Checked);
+            PutSetting("edsm", checkEDSMForInformationToolStripMenuItem.Checked);
             DrawSystem(last_sys);
         }
 
         private void showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "showsysinfo", showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem.Checked);
+            PutSetting("showsysinfo", showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem.Checked);
             DrawSystem(last_sys);
         }
 
         private void dontHideInFSSModeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "donthidefssmode", dontHideInFSSModeToolStripMenuItem.Checked);
+            PutSetting("donthidefssmode", dontHideInFSSModeToolStripMenuItem.Checked);
             DrawSystem(last_sys);
         }
 
         private void hasSignalsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "signals", hasSignalsToolStripMenuItem.Checked);
+            PutSetting("signals", hasSignalsToolStripMenuItem.Checked);
             DrawSystem(last_sys);
         }
 
         private void showValuesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "showValues", showValuesToolStripMenuItem.Checked);
+            PutSetting("showValues", showValuesToolStripMenuItem.Checked);
             DrawSystem(last_sys);
         }
 
         private void showAllPlanetsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "allplanets", showAllPlanetsToolStripMenuItem.Checked);
+            PutSetting("allplanets", showAllPlanetsToolStripMenuItem.Checked);
             DrawSystem(last_sys);
         }
 
         private void showAllStarsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "allstars", showAllStarsToolStripMenuItem.Checked);
+            PutSetting("allstars", showAllStarsToolStripMenuItem.Checked);
             DrawSystem(last_sys);
         }
 
         private void showBeltClustersToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "beltclusters", showBeltClustersToolStripMenuItem.Checked);
+            PutSetting("beltclusters", showBeltClustersToolStripMenuItem.Checked);
             DrawSystem(last_sys);
         }
 
         private void showMoreInformationToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "moreinfo", showMoreInformationToolStripMenuItem.Checked);
+            PutSetting("moreinfo", showMoreInformationToolStripMenuItem.Checked);
             DrawSystem(last_sys);
         }
 
         private void wordWrapToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "wordwrap", wordWrapToolStripMenuItem.Checked);
+            PutSetting("wordwrap", wordWrapToolStripMenuItem.Checked);
             DrawSystem(last_sys);
         }
 
@@ -589,7 +589,7 @@ namespace EDDiscovery.UserControls
         private void SetAlign(StringAlignment al)
         {
             alignment = al;
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(DbSave + "align", (int)alignment);
+            PutSetting("align", (int)alignment);
             leftToolStripMenuItem.Checked = alignment == StringAlignment.Near;
             centerToolStripMenuItem.Checked = alignment == StringAlignment.Center;
             rightToolStripMenuItem.Checked = alignment == StringAlignment.Far;
@@ -639,7 +639,7 @@ namespace EDDiscovery.UserControls
             if (res == DialogResult.OK)
             {
                 fsssignalsdisplayed = f.Get("Text");
-                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbSave + "fsssignals", fsssignalsdisplayed);
+                PutSetting("fsssignals", fsssignalsdisplayed);
                 DrawSystem(last_sys);
             }
 

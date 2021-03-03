@@ -26,13 +26,13 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlMaterialCommodities : UserControlCommonBase
     {
+        public string dbWrapText = "WrapText";
+        public string dbFilter = "Filter2";
+        public string dbClearZero = "ClearZero";
+
         public bool materials = false;
 
         FilterSelector cfs;
-        private string DbColumnSave { get { return DBName((materials) ? "MaterialsGrid" : "CommoditiesGrid",  "DGVCol"); } }
-        private string DbFilterSave { get { return DBName((materials) ? "MaterialsGrid" : "CommoditiesGrid", "Filter2"); } }
-        private string DbClearZeroSave { get { return DBName((materials) ? "MaterialsGrid" : "CommoditiesGrid", "ClearZero"); } }
-        private string DbWordWrap { get { return DBName((materials) ? "MaterialsGrid" : "CommoditiesGrid", "WrapText"); } }
 
         MaterialCommoditiesList last_mcl;
 
@@ -46,15 +46,17 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
+            DBBaseName = materials ? "MaterialsGrid" : "CommoditiesGrid";
+
             dataGridViewMC.MakeDoubleBuffered();
-            extCheckBoxWordWrap.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbWordWrap, false);
+            extCheckBoxWordWrap.Checked = GetSetting(dbWrapText, false);
             UpdateWordWrap();
             extCheckBoxWordWrap.Click += extCheckBoxWordWrap_Click;
 
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
 
-            cfs = new FilterSelector(DbFilterSave);
+            cfs = new FilterSelector(FilterKeyName(dbFilter));
 
             MaterialCommodityData[] items;
             Tuple<MaterialCommodityData.ItemType, string>[] types;
@@ -108,7 +110,7 @@ namespace EDDiscovery.UserControls
             foreach (var x in items)
                 cfs.AddStandardOption(x.FDName,x.Name);
 
-            checkBoxShowZeros.Checked = !EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbClearZeroSave, true); // used to be clear zeros, now its show zeros, invert
+            checkBoxShowZeros.Checked = !GetSetting(dbClearZero, true); // used to be clear zeros, now its show zeros, invert
             checkBoxShowZeros.CheckedChanged += CheckBoxClear_CheckedChanged;
 
             cfs.SaveSettings += FilterChanged;
@@ -125,12 +127,12 @@ namespace EDDiscovery.UserControls
         {
             dataGridViewMC.RowTemplate.MinimumHeight = Font.ScalePixels(26);
             uctg.OnTravelSelectionChanged += CallBackDisplayWithCheck;
-            DGVLoadColumnLayout(dataGridViewMC, DbColumnSave);
+            DGVLoadColumnLayout(dataGridViewMC);
         }
 
         public override void Closing()
         {
-            DGVSaveColumnLayout(dataGridViewMC, DbColumnSave);
+            DGVSaveColumnLayout(dataGridViewMC);
 
             uctg.OnTravelSelectionChanged -= CallBackDisplayWithCheck;
         }
@@ -169,7 +171,7 @@ namespace EDDiscovery.UserControls
             
             //System.Diagnostics.Debug.WriteLine("Display mcl " + mcl.GetHashCode());
 
-            string filters = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbFilterSave, "All");
+            string filters = GetSetting(dbFilter, "All");
             //System.Diagnostics.Debug.WriteLine("Filter is " + filters);
             string[] filter = filters.SplitNoEmptyStartFinish(';');
             bool all = filter.Length > 0 && filter[0] == "All";
@@ -249,7 +251,7 @@ namespace EDDiscovery.UserControls
 
         private void extCheckBoxWordWrap_Click(object sender, EventArgs e)
         {
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbWordWrap, extCheckBoxWordWrap.Checked);
+            PutSetting(dbWrapText, extCheckBoxWordWrap.Checked);
             UpdateWordWrap();
         }
 
@@ -262,7 +264,7 @@ namespace EDDiscovery.UserControls
 
         private void CheckBoxClear_CheckedChanged(object sender, EventArgs e)
         {
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbClearZeroSave, !checkBoxShowZeros.Checked);    // negative because we changed button sense
+            PutSetting(dbClearZero, !checkBoxShowZeros.Checked);    // negative because we changed button sense
             Display(last_mcl);
         }
 

@@ -31,28 +31,26 @@ namespace EDDiscovery.UserControls
         public Action<List<Tuple<ISystem, double>>> ReturnSystems;      // return may be null
         public Action Excel;                                            // excel pressed
 
-        int displaynumber = 0;
-        string ucdbname;
+        string ucdbnamebase;
         EDDiscoveryForm discoveryform;
 
-        private string DbStar { get { return UserControlCommonBase.DBName(displaynumber, ucdbname, "Star"); } }
-        private string DbRadiusMax { get { return UserControlCommonBase.DBName(displaynumber, ucdbname, "RadiusMax"); } }
-        private string DbRadiusMin { get { return UserControlCommonBase.DBName(displaynumber, ucdbname, "RadiusMin"); } }
-        private string DbX { get { return UserControlCommonBase.DBName(displaynumber, ucdbname, "X"); } }
-        private string DbY { get { return UserControlCommonBase.DBName(displaynumber, ucdbname, "Y"); } }
-        private string DbZ { get { return UserControlCommonBase.DBName(displaynumber, ucdbname, "Z"); } }
-        private string DbCube { get { return UserControlCommonBase.DBName(displaynumber, ucdbname, "Cube"); } }
-        private string DbEVS { get { return UserControlCommonBase.DBName(displaynumber, ucdbname, "ExcludeVisitedSystems"); } }
+        private string DbStar { get { return ucdbnamebase+"Star"; } }
+        private string DbRadiusMax { get { return ucdbnamebase+"RadiusMax"; } }
+        private string DbRadiusMin { get { return ucdbnamebase+"RadiusMin"; } }
+        private string DbX { get { return ucdbnamebase+"X"; } }
+        private string DbY { get { return ucdbnamebase+"Y"; } }
+        private string DbZ { get { return ucdbnamebase+"Z"; } }
+        private string DbCube { get { return ucdbnamebase+"Cube"; } }
+        private string DbEVS { get { return ucdbnamebase+"ExcludeVisitedSystems"; } }
 
         public FindSystemsUserControl()
         {
             InitializeComponent();
         }
 
-        public void Init( int dn , string ucn, bool showexcel , EDDiscoveryForm disc)
+        public void Init( string dbnamebase, bool showexcel , EDDiscoveryForm disc)
         {
-            ucdbname = ucn;
-            displaynumber = dn;
+            ucdbnamebase = dbnamebase;
             discoveryform = disc;
             numberBoxMinRadius.Value = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble(DbRadiusMin, 0);
             numberBoxMaxRadius.Value = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble(DbRadiusMax, 20);

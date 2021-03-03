@@ -30,18 +30,18 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlStats : UserControlCommonBase
     {
-        private string DbSelectedTabSave { get { return DBName("StatsSelectedTab"); } }
-        private string DbStatsTreeStateSave { get { return DBName("StatsTreeExpanded"); } }
-        private string DbStartDate { get { return DBName("StatsStartDate"); } }
-        private string DbStartDateOn { get { return DBName("StatsStartDateChecked"); } }
-        private string DbEndDate { get { return DBName("StatsEndDate"); } }
-        private string DbEndDateOn { get { return DBName("StatsEndDateChecked"); } }
+        private string dbSelectedTabSave = "SelectedTab";
+        private string dbStartDate = "StartDate";
+        private string dbStartDateOn = "StartDateChecked";
+        private string dbEndDate = "EndDate";
+        private string dbEndDateOn = "EndDateChecked";
 
-        private string DbScanSummary { get { return DBName("Stats", "DGVColScanSummary"); } }
-        private string DbScanDWM { get { return DBName("Stats", "DGVColScanDWM"); } }
-        private string DbTravelSummary { get { return DBName("Stats", "DGVColTravelSummary"); } }
-        private string DbTravelDWM { get { return DBName("Stats", "DGVColTravelDWM"); } }
-        private string DbShip { get { return DBName("Stats", "DGVColShip"); } }
+        private string dbStatsTreeStateSave = "TreeExpanded";
+        private string dbScanSummary = "ScanSummary";
+        private string dbScanDWM = "ScanDWM";
+        private string dbTravelSummary = "TravelSummary";
+        private string dbTravelDWM = "TravelDWM";
+        private string dbShip = "Ship";
 
         private Thread StatsThread;
         private bool Exit = false;
@@ -62,9 +62,10 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
-            tabControlCustomStats.SelectedIndex = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(DbSelectedTabSave, 0);
+            DBBaseName = "Stats";
+
+            tabControlCustomStats.SelectedIndex = GetSetting(dbSelectedTabSave, 0);
             userControlStatsTimeScan.EnableDisplayStarsPlanetSelector();
-            //BaseUtils.Translator.Instance.Translate(tabControlCustomStats);
             BaseUtils.Translator.Instance.Translate(this);
 
             try
@@ -97,10 +98,10 @@ namespace EDDiscovery.UserControls
             discoveryform.OnRefreshCommanders += Discoveryform_OnRefreshCommanders;
             discoveryform.OnNewEntry += AddNewEntry;
 
-            dateTimePickerStartDate.Value = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDate(DbStartDate, new DateTime(2014, 12, 14));
-            startchecked = dateTimePickerStartDate.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbStartDateOn, false);
-            dateTimePickerEndDate.Value = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDate(DbEndDate, new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day));
-            endchecked = dateTimePickerEndDate.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbEndDateOn, false);
+            dateTimePickerStartDate.Value = GetSetting(dbStartDate, new DateTime(2014, 12, 14));
+            startchecked = dateTimePickerStartDate.Checked = GetSetting(dbStartDateOn, false);
+            dateTimePickerEndDate.Value = GetSetting(dbEndDate, new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day));
+            endchecked = dateTimePickerEndDate.Checked = GetSetting(dbEndDateOn, false);
 
             dateTimePickerStartDate.ValueChanged += DateTimePicker_ValueChangedStart;
             dateTimePickerEndDate.ValueChanged += DateTimePicker_ValueChangedEnd;
@@ -117,14 +118,14 @@ namespace EDDiscovery.UserControls
         public override void Closing()
         {
             StopThread();
-            UserDatabase.Instance.PutSettingString(DbStatsTreeStateSave, GameStatTreeState());
+            PutSetting(dbStatsTreeStateSave, GameStatTreeState());
 
             if (dataGridViewScan.Columns.Count > 0)     // anything to save..
-                DGVSaveColumnLayout(dataGridViewScan, dataGridViewScan.Columns.Count <= 8 ? DbScanSummary : DbScanDWM);
+                DGVSaveColumnLayout(dataGridViewScan, dataGridViewScan.Columns.Count <= 8 ? dbScanSummary : dbScanDWM);
             if (dataGridViewTravel.Columns.Count > 0)
-                DGVSaveColumnLayout(dataGridViewTravel, dataGridViewTravel.Columns.Count <= 8 ? DbTravelSummary : DbTravelDWM);
+                DGVSaveColumnLayout(dataGridViewTravel, dataGridViewTravel.Columns.Count <= 8 ? dbTravelSummary : dbTravelDWM);
             if ( dataGridViewByShip.Columns.Count>0 )
-                DGVSaveColumnLayout(dataGridViewByShip, DbShip);
+                DGVSaveColumnLayout(dataGridViewByShip, dbShip);
 
             discoveryform.OnRefreshCommanders -= Discoveryform_OnRefreshCommanders;
             discoveryform.OnNewEntry -= AddNewEntry;
@@ -158,7 +159,7 @@ namespace EDDiscovery.UserControls
 
         private void tabControlCustomStats_SelectedIndexChanged(object sender, EventArgs e)     // tab change.
         {
-            UserDatabase.Instance.PutSettingInt(DbSelectedTabSave, tabControlCustomStats.SelectedIndex);
+            PutSetting(dbSelectedTabSave, tabControlCustomStats.SelectedIndex);
             Display();
         }
 
@@ -172,8 +173,8 @@ namespace EDDiscovery.UserControls
             if (startchecked != dateTimePickerStartDate.Checked || dateTimePickerStartDate.Checked)     // if check changed, or date changed and its checked
                 StartThread();
             startchecked = dateTimePickerStartDate.Checked;
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDate(DbStartDate, dateTimePickerStartDate.Value);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbStartDateOn, dateTimePickerStartDate.Checked);
+            PutSetting(dbStartDate, dateTimePickerStartDate.Value);
+            PutSetting(dbStartDateOn, dateTimePickerStartDate.Checked);
         }
 
         private void DateTimePicker_ValueChangedEnd(object sender, EventArgs e)
@@ -181,8 +182,8 @@ namespace EDDiscovery.UserControls
             if (endchecked != dateTimePickerEndDate.Checked || dateTimePickerEndDate.Checked)
                 StartThread();
             endchecked = dateTimePickerEndDate.Checked;
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDate(DbEndDate, dateTimePickerEndDate.Value);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbEndDateOn, dateTimePickerEndDate.Checked);
+            PutSetting(dbEndDate, dateTimePickerEndDate.Value);
+            PutSetting(dbEndDateOn, dateTimePickerEndDate.Checked);
         }
 
         #endregion
@@ -327,7 +328,6 @@ namespace EDDiscovery.UserControls
                 DateTime? start = dateTimePickerStartDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromSelected(dateTimePickerStartDate.Value) : default(DateTime?);
                 DateTime? end = dateTimePickerEndDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromSelected(dateTimePickerEndDate.Value.EndOfDay()) : default(DateTime?);
 
-                System.Diagnostics.Debug.WriteLine("Stats from {0} to {1} for {2}", start, end, DBName(""));
                 // read journal for cmdr with these events and pass thru NewJE.
                 JournalEntry.GetAll(cmdrid, ids: events, callback: NewJE, callbackobj: stats, startdateutc: start, enddateutc: end, chunksize: 100);
             }
@@ -502,7 +502,6 @@ namespace EDDiscovery.UserControls
         private void EndComputation(Stats s)            // foreground thread, end of thread computation
         {
             System.Diagnostics.Debug.Assert(Application.MessageLoop);
-            System.Diagnostics.Debug.WriteLine("Stats End Computation for " + DBName(""));
             currentstats = s;
             Running = false;        // now go into normal non running mode where add new entry updates it
             labelStatus.Text = "";
@@ -525,7 +524,6 @@ namespace EDDiscovery.UserControls
 
         private void Display()
         {
-            System.Diagnostics.Debug.WriteLine("Display for " + DBName("") + " " + (currentstats!=null));
             if (currentstats == null)       // double check
                 return;
 
@@ -668,7 +666,7 @@ namespace EDDiscovery.UserControls
                 if (isTravelling && dateTimePickerEndDate.Checked && tripStartutc > endtimelocal.ToUniversalTime())            
                     isTravelling = false;
 
-                DateTime[] starttimeutc = SetupSummary(endtimelocal, isTravelling ? tripStartutc.ToLocalTime() : DateTime.Now, dataGridViewTravel, DbTravelSummary);
+                DateTime[] starttimeutc = SetupSummary(endtimelocal, isTravelling ? tripStartutc.ToLocalTime() : DateTime.Now, dataGridViewTravel, dbTravelSummary);
 
                 var jumps = new string[intervals];
                 var distances = new string[intervals];
@@ -712,7 +710,7 @@ namespace EDDiscovery.UserControls
             {
                 int intervals = 12;
 
-                DateTime[] timeintervalsutc = SetUpDaysMonths(endtimelocal, dataGridViewTravel, userControlStatsTimeTravel.TimeMode, intervals, DbTravelDWM);
+                DateTime[] timeintervalsutc = SetUpDaysMonths(endtimelocal, dataGridViewTravel, userControlStatsTimeTravel.TimeMode, intervals, dbTravelDWM);
 
                 var jumps = new string[intervals];
                 var distances = new string[intervals];
@@ -773,7 +771,7 @@ namespace EDDiscovery.UserControls
         private void userControlStatsTimeTravel_TimeModeChanged(object sender, EventArgs e)
         {
             dataGridViewTravel.Rows.Clear();        // reset all
-            DGVSaveColumnLayout(dataGridViewTravel, dataGridViewTravel.Columns.Count <= 8 ? DbTravelSummary : DbTravelDWM);
+            DGVSaveColumnLayout(dataGridViewTravel, dataGridViewTravel.Columns.Count <= 8 ? dbTravelSummary : dbTravelDWM);
             dataGridViewTravel.Columns.Clear();
             Display();
         }
@@ -882,7 +880,7 @@ namespace EDDiscovery.UserControls
                 if (isTravelling && dateTimePickerEndDate.Checked && tripStartutc > endtimelocal.ToUniversalTime())            // if out of time, due to tripstart being after endtime
                     isTravelling = false;
 
-                DateTime[] starttimeutc = SetupSummary(endtimelocal, isTravelling ? tripStartutc.ToLocalTime() : DateTime.Now, dataGridViewScan, DbScanSummary);
+                DateTime[] starttimeutc = SetupSummary(endtimelocal, isTravelling ? tripStartutc.ToLocalTime() : DateTime.Now, dataGridViewScan, dbScanSummary);
 
                 scanlists = new List<Stats.ScanInfo>[intervals];
 
@@ -896,7 +894,7 @@ namespace EDDiscovery.UserControls
             else
             {
                 intervals = 12;
-                DateTime[] timeintervalsutc = SetUpDaysMonths(endtimelocal, dataGridViewScan, userControlStatsTimeScan.TimeMode, intervals, DbScanDWM);
+                DateTime[] timeintervalsutc = SetUpDaysMonths(endtimelocal, dataGridViewScan, userControlStatsTimeScan.TimeMode, intervals, dbScanDWM);
 
                 scanlists = new List<Stats.ScanInfo>[intervals];
                 for (int ii = 0; ii < intervals; ii++)
@@ -968,7 +966,7 @@ namespace EDDiscovery.UserControls
         private void userControlStatsTimeScan_TimeModeChanged(object sender, EventArgs e)
         {
             dataGridViewScan.Rows.Clear();        // reset all
-            DGVSaveColumnLayout(dataGridViewScan, dataGridViewScan.Columns.Count <= 8 ? DbScanSummary : DbScanDWM);
+            DGVSaveColumnLayout(dataGridViewScan, dataGridViewScan.Columns.Count <= 8 ? dbScanSummary : dbScanDWM);
             dataGridViewScan.Columns.Clear();
             Display();
         }
@@ -982,7 +980,7 @@ namespace EDDiscovery.UserControls
             string collapseExpand = GameStatTreeState();
 
             if (string.IsNullOrEmpty(collapseExpand))
-                collapseExpand = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbStatsTreeStateSave, "YYYYYYYYYYYYY");
+                collapseExpand = GetSetting(dbStatsTreeStateSave, "YYYYYYYYYYYYY");
 
             if (collapseExpand.Length < 13)
                 collapseExpand += new string('Y', 13);
@@ -1148,7 +1146,7 @@ namespace EDDiscovery.UserControls
                     result += tn.IsExpanded ? "Y" : "N";
             }
             else
-                result = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbStatsTreeStateSave, "YYYYYYYYYYYYY");
+                result = GetSetting(dbStatsTreeStateSave, "YYYYYYYYYYYYY");
             return result;
         }
 #endregion
@@ -1178,7 +1176,7 @@ namespace EDDiscovery.UserControls
                 dataGridViewByShip.Columns.Add(new DataGridViewTextBoxColumn() { HeaderText = "Travelled Ly".T(EDTx.UserControlStats_TravelledLy) });
                 dataGridViewByShip.Columns.Add(new DataGridViewTextBoxColumn() { HeaderText = "Bodies Scanned".T(EDTx.UserControlStats_BodiesScanned) });
                 dataGridViewByShip.Columns.Add(new DataGridViewTextBoxColumn() { HeaderText = "Destroyed".T(EDTx.UserControlStats_Destroyed) });
-                DGVLoadColumnLayout(dataGridViewByShip, DbShip);
+                DGVLoadColumnLayout(dataGridViewByShip, dbShip);
             }
 
             string[] strarr = new string[6];

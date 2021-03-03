@@ -27,8 +27,6 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlTrippanel : UserControlCommonBase
     {
-        private string DbSave { get { return DBName("TripPanel" ); } }
-
         private HistoryEntry lastHE;
         private HistoryEntry lastFSD;
 
@@ -41,6 +39,8 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
+            DBBaseName = "TripPanel";
+
             displayfont = discoveryform.theme.GetFont;
 
             discoveryform.OnHistoryChange += Display;
@@ -48,28 +48,28 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNewTarget += NewTarget;
             discoveryform.OnEDSMSyncComplete += Discoveryform_OnEDSMSyncComplete;
 
-            showEDSMStartButtonsToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "showedsmbut", true);
+            showEDSMStartButtonsToolStripMenuItem.Checked = GetSetting("showedsmbut", true);
             showEDSMStartButtonsToolStripMenuItem.Click += Optionchanged_Click;
 
-            showFuelLevelToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "fuel", true);
+            showFuelLevelToolStripMenuItem.Checked = GetSetting("fuel", true);
             showFuelLevelToolStripMenuItem.Click += Optionchanged_Click;
 
-            showCurrentFSDRangeToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "Dcur", true);
+            showCurrentFSDRangeToolStripMenuItem.Checked = GetSetting("Dcur", true);
             showCurrentFSDRangeToolStripMenuItem.Click += Optionchanged_Click;
 
-            showAvgFSDRangeToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "Dmax", true);
+            showAvgFSDRangeToolStripMenuItem.Checked = GetSetting("Dmax", true);
             showAvgFSDRangeToolStripMenuItem.Click += Optionchanged_Click;
 
-            showMaxFSDRangeToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "Dfume", true);
+            showMaxFSDRangeToolStripMenuItem.Checked = GetSetting("Dfume", true);
             showMaxFSDRangeToolStripMenuItem.Click += Optionchanged_Click;
 
-            showFSDRangeToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "Drange", true);
+            showFSDRangeToolStripMenuItem.Checked = GetSetting("Drange", true);
             showFSDRangeToolStripMenuItem.Click += Optionchanged_Click;
 
-            showTargetToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "target", true);
+            showTargetToolStripMenuItem.Checked = GetSetting("target", true);
             showTargetToolStripMenuItem.Click += Optionchanged_Click;
 
-            showTravelledDistanceToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "travel", true);
+            showTravelledDistanceToolStripMenuItem.Checked = GetSetting("travel", true);
             showTravelledDistanceToolStripMenuItem.Click += Optionchanged_Click;
 
             BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
@@ -82,14 +82,14 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNewEntry -= NewEntry;
             discoveryform.OnNewTarget -= NewTarget;
             discoveryform.OnEDSMSyncComplete -= Discoveryform_OnEDSMSyncComplete;
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "showedsmbut", showEDSMStartButtonsToolStripMenuItem.Checked);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "fuel", showFuelLevelToolStripMenuItem.Checked);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "Dcur", showCurrentFSDRangeToolStripMenuItem.Checked);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "Dmax", showAvgFSDRangeToolStripMenuItem.Checked);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "Dfume", showMaxFSDRangeToolStripMenuItem.Checked);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "Drange", showFSDRangeToolStripMenuItem.Checked);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "target", showTargetToolStripMenuItem.Checked);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "travel", showTravelledDistanceToolStripMenuItem.Checked);
+            PutSetting("showedsmbut", showEDSMStartButtonsToolStripMenuItem.Checked);
+            PutSetting("fuel", showFuelLevelToolStripMenuItem.Checked);
+            PutSetting("Dcur", showCurrentFSDRangeToolStripMenuItem.Checked);
+            PutSetting("Dmax", showAvgFSDRangeToolStripMenuItem.Checked);
+            PutSetting("Dfume", showMaxFSDRangeToolStripMenuItem.Checked);
+            PutSetting("Drange", showFSDRangeToolStripMenuItem.Checked);
+            PutSetting("target", showTargetToolStripMenuItem.Checked);
+            PutSetting("travel", showTravelledDistanceToolStripMenuItem.Checked);
         }
 
         public override bool SupportTransparency { get { return true; } }

@@ -44,15 +44,15 @@ namespace EDDiscovery.UserControls
 
         private bool useHistoric = false;
 
-        private string DbShowInjectionsSave { get { return DBName("ShoppingListShowFSD"); } }
-        private string DbShowAllMatsLandedSave { get { return DBName("ShoppingListShowPlanetMats"); } }
-        private string DbHideFullMatsLandedSave { get { return DBName("ShoppingListHideFullMats"); } }
-        private string DbHighlightAvailableMats { get { return DBName("ShoppingListHighlightAvailable"); } }
-        private string DBShowSystemAvailability { get { return DBName("ShoppingListSystemAvailability"); } }
-        private string DBUseEDSMForSystemAvailability { get { return DBName("ShoppingListUseEDSM"); } }
-        private string DBTechBrokerFilterSave { get { return DBName("ShoppingListTechBrokerFilter"); } }
-        private string DBSpecialEffectsFilterSave { get { return DBName("ShoppingListSpecialEffectsFilter"); } }
-        private string DbToggleShoppingListPosition { get { return DBName("ShoppingListPositionToggle"); } }
+        private string dbShowInjectionsSave = "ShowFSD"; 
+        private string dbShowAllMatsLandedSave = "ShowPlanetMats";
+        private string dbHideFullMatsLandedSave = "HideFullMats";
+        private string dbHighlightAvailableMats = "HighlightAvailable";
+        private string dbShowSystemAvailability = "SystemAvailability";
+        private string dbUseEDSMForSystemAvailability = "UseEDSM";
+        private string dbTechBrokerFilterSave = "TechBrokerFilter";
+        private string dbSpecialEffectsFilterSave = "SpecialEffectsFilter";
+        private string dbToggleShoppingListPosition = "PositionToggle";
 
         #region Init
 
@@ -67,25 +67,27 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
+            DBBaseName = "ShoppingList";
+
             //Can use display number for it, because their names for db save are unique between engineering and synthesis.
             userControlEngineering.isEmbedded = true;
-            userControlEngineering.PrefixName = "SLEngineering";            // makes it unique to the SL
+            userControlEngineering.DBBaseName = "SLEngineering";            // makes it unique to the SL
             userControlEngineering.Init(discoveryform, displaynumber);
             useHistoric = userControlEngineering.isHistoric;
 
             userControlSynthesis.isEmbedded = true;
-            userControlSynthesis.PrefixName = "SLSynthesis";            // makes it unique to the SL
+            userControlSynthesis.DBBaseName = "SLSynthesis";            // makes it unique to the SL
             userControlSynthesis.Init(discoveryform, displaynumber);
 
             // so the way it works, if the panels ever re-display (for whatever reason) they tell us, and we redisplay
 
-            showMaxInjections = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbShowInjectionsSave, true);
-            showPlanetMats = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbShowAllMatsLandedSave, true);
-            hidePlanetMatsWithNoCapacity = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbHideFullMatsLandedSave, false);
-            showListAvailability = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbHighlightAvailableMats, true);
-            showSystemAvailability = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DBShowSystemAvailability, true);
-            useEDSMForSystemAvailability = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DBUseEDSMForSystemAvailability, false);
-            HorizonalSplitContainerPos = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbToggleShoppingListPosition, false);
+            showMaxInjections = GetSetting(dbShowInjectionsSave, true);
+            showPlanetMats = GetSetting(dbShowAllMatsLandedSave, true);
+            hidePlanetMatsWithNoCapacity = GetSetting(dbHideFullMatsLandedSave, false);
+            showListAvailability = GetSetting(dbHighlightAvailableMats, true);
+            showSystemAvailability = GetSetting(dbShowSystemAvailability, true);
+            useEDSMForSystemAvailability = GetSetting(dbUseEDSMForSystemAvailability, false);
+            HorizonalSplitContainerPos = GetSetting(dbToggleShoppingListPosition, false);
 
             pictureBoxList.ContextMenuStrip = contextMenuStrip;
 
@@ -115,13 +117,13 @@ namespace EDDiscovery.UserControls
         public override void Closing()
         {
             RevertToNormalSize();
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbShowInjectionsSave, showMaxInjections);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbShowAllMatsLandedSave, showPlanetMats);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbHideFullMatsLandedSave, hidePlanetMatsWithNoCapacity);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbHighlightAvailableMats, showListAvailability);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DBShowSystemAvailability, showSystemAvailability);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DBUseEDSMForSystemAvailability, useEDSMForSystemAvailability);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbToggleShoppingListPosition, HorizonalSplitContainerPos);
+            PutSetting(dbShowInjectionsSave, showMaxInjections);
+            PutSetting(dbShowAllMatsLandedSave, showPlanetMats);
+            PutSetting(dbHideFullMatsLandedSave, hidePlanetMatsWithNoCapacity);
+            PutSetting(dbHighlightAvailableMats, showListAvailability);
+            PutSetting(dbShowSystemAvailability, showSystemAvailability);
+            PutSetting(dbUseEDSMForSystemAvailability, useEDSMForSystemAvailability);
+            PutSetting(dbToggleShoppingListPosition, HorizonalSplitContainerPos);
             userControlEngineering.CloseDown();
             userControlSynthesis.CloseDown();
         }
@@ -187,7 +189,7 @@ namespace EDDiscovery.UserControls
                 Color backcolour = this.BackColor;
                 List<Tuple<Recipes.Recipe, int>> totalWanted = EngineeringWanted.Concat(SynthesisWanted).ToList();
 
-                string techBrokers = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DBTechBrokerFilterSave, "None");
+                string techBrokers = GetSetting(dbTechBrokerFilterSave, "None");
                 if (techBrokers != "None")
                 {
                     List<string> techBrokerList = techBrokers.Split(';').ToList<string>();
@@ -198,7 +200,7 @@ namespace EDDiscovery.UserControls
                     }
                 }
 
-                string specialeffects = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DBSpecialEffectsFilterSave, "None");
+                string specialeffects = GetSetting(dbSpecialEffectsFilterSave, "None");
                 if (specialeffects != "None")
                 {
                     List<string> seList = specialeffects.Split(';').ToList<string>();
@@ -402,7 +404,7 @@ namespace EDDiscovery.UserControls
         private void buttonTechBroker_Click(object sender, EventArgs e)
         {
             Button b = sender as Button;
-            techbrokerselection.FilterButton(DBTechBrokerFilterSave, b,
+            techbrokerselection.FilterButton(FilterKeyName(dbTechBrokerFilterSave), b,
                              discoveryform.theme.TextBackColor, discoveryform.theme.TextBlockColor, this.FindForm());
         }
 
@@ -414,7 +416,7 @@ namespace EDDiscovery.UserControls
         private void buttonSpecialEffects_Click(object sender, EventArgs e)
         {
             Button b = sender as Button;
-            specialeffectsselection.FilterButton(DBSpecialEffectsFilterSave, b,
+            specialeffectsselection.FilterButton(FilterKeyName(dbSpecialEffectsFilterSave), b,
                              discoveryform.theme.TextBackColor, discoveryform.theme.TextBlockColor, this.FindForm());
         }
 

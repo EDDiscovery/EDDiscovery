@@ -34,8 +34,6 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlScan : UserControlCommonBase
     {
-        private string DbSave { get { return DBName("ScanPanel"); } }
-
         HistoryEntry last_he = null;
 
         bool override_system = false;
@@ -58,19 +56,21 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
-            panelStars.CheckEDSM = checkBoxEDSM.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "EDSM", false);
+            DBBaseName = "ScanPanel";
+
+            panelStars.CheckEDSM = checkBoxEDSM.Checked = GetSetting("EDSM", false);
             this.checkBoxEDSM.CheckedChanged += new System.EventHandler(this.checkBoxEDSM_CheckedChanged);
 
-            bodyfilters = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbSave + "BodyFilters", "All").Split(';');
+            bodyfilters = GetSetting("BodyFilters", "All").Split(';');
 
-            displayfilters = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbSave + "DisplayFilters", "moons;icons;mats;allg;habzone;starclass;planetclass;dist;").Split(';');
+            displayfilters = GetSetting("DisplayFilters", "moons;icons;mats;allg;habzone;starclass;planetclass;dist;").Split(';');
             ApplyDisplayFilters();
 
-            panelStars.ValueLimit = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(DbSave + "ValueLimit", 50000);
+            panelStars.ValueLimit = GetSetting("ValueLimit", 50000);
 
-            rollUpPanelTop.PinState = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "PinState", true);
+            rollUpPanelTop.PinState = GetSetting("PinState", true);
 
-            int size = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(DbSave + "Size", 64);
+            int size = GetSetting("Size", 64);
             SetSizeImage(size);
 
             discoveryform.OnNewEntry += NewEntry;
@@ -107,7 +107,7 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "PinState", rollUpPanelTop.PinState );
+            PutSetting("PinState", rollUpPanelTop.PinState );
 
             uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
             discoveryform.OnNewEntry -= NewEntry;
@@ -298,7 +298,7 @@ namespace EDDiscovery.UserControls
 
         private void checkBoxEDSM_CheckedChanged(object sender, EventArgs e)
         {
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "EDSM", checkBoxEDSM.Checked);
+            PutSetting("EDSM", checkBoxEDSM.Checked);
             panelStars.CheckEDSM = checkBoxEDSM.Checked;
             DrawSystem();
         }
@@ -338,7 +338,7 @@ namespace EDDiscovery.UserControls
             {
                 long? value = cf.GetLong("UC");
                 panelStars.ValueLimit = (int)value.Value;
-                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(DbSave + "ValueLimit", panelStars.ValueLimit);
+                PutSetting("ValueLimit", panelStars.ValueLimit);
                 DrawSystem();
             }
         }
@@ -398,7 +398,7 @@ namespace EDDiscovery.UserControls
                 buttonSize.Image = global::EDDiscovery.Icons.Controls.Scan_SizeMinuscule;
 
             panelStars.SetSize(size);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(DbSave + "Size", size);
+            PutSetting("Size", size);
         }
 
 #endregion
@@ -421,7 +421,7 @@ namespace EDDiscovery.UserControls
             bodyfilter.SaveSettings = (s, o) => 
             {
                 bodyfilters = s.Split(';');
-                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbSave + "BodyFilters", string.Join(";", bodyfilters));
+                PutSetting("BodyFilters", string.Join(";", bodyfilters));
                 DrawSystem();
             };
 
@@ -448,7 +448,7 @@ namespace EDDiscovery.UserControls
             displayfilter.SaveSettings = (s, o) =>
             {
                 displayfilters = s.Split(';');
-                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbSave + "DisplayFilters", string.Join(";", displayfilters));
+                PutSetting("DisplayFilters", string.Join(";", displayfilters));
                 ApplyDisplayFilters();
                 DrawSystem();
             };

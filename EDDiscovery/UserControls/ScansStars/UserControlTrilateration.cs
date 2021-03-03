@@ -33,7 +33,6 @@ namespace EDDiscovery.UserControls
         private List<WantedSystemClass> wanted;
         private List<string> pushed;
         private List<string> sector;
-        private string DbSectorSave { get { return "TrilaterationSectorSystems" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
 
         private Thread EDSMSubmissionThread;
         private bool skipReadOnlyCells = false;
@@ -49,9 +48,11 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
+            DBBaseName = "Trilateration";
+
             ColumnSystem.AutoCompleteGenerator = SystemCache.ReturnSystemAutoCompleteList;
             FreezeTrilaterationUI();
-            toolStripButtonSector.Checked = UserDatabase.Instance.GetSettingBool(DbSectorSave, false);
+            toolStripButtonSector.Checked = GetSetting("Sectors", false);
             toolStripTextBoxSystem.Text = "Press Start New".T(EDTx.UserControlTrilateration_ToolStripText);
 
             BaseUtils.Translator.Instance.Translate(this);
@@ -69,7 +70,7 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
-            UserDatabase.Instance.PutSettingBool(DbSectorSave, toolStripButtonSector.Checked);
+            PutSetting("Sectors", toolStripButtonSector.Checked);
 
             if (uctg is IHistoryCursorNewStarList)
                 (uctg as IHistoryCursorNewStarList).OnNewStarList -= Discoveryform_OnNewStarsForTrilat;

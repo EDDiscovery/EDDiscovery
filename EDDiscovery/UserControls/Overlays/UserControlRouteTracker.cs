@@ -26,7 +26,6 @@ namespace EDDiscovery.UserControls
     public partial class UserControlRouteTracker :   UserControlCommonBase
     {
         private Font displayfont;
-        private string DbSave { get { return DBName("RouteTracker" ); } }
         private SavedRouteClass currentRoute;
         private  HistoryEntry currentHE;
         private string lastsystem;
@@ -47,16 +46,18 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
+            DBBaseName = "RouteTracker";
+
             displayfont = discoveryform.theme.GetFont;
 
-            showJumpsToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "showjumps", true);
-            autoCopyWPToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "autoCopyWP", false);
-            autoSetTargetToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "autoSetTarget", false);
-            showWaypointCoordinatesToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "coords", true);
-            showDeviationFromRouteToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "dev", true);
-            showBookmarkNotesToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbSave + "bookmarkNotes", true);
+            showJumpsToolStripMenuItem.Checked = GetSetting("showjumps", true);
+            autoCopyWPToolStripMenuItem.Checked = GetSetting("autoCopyWP", false);
+            autoSetTargetToolStripMenuItem.Checked = GetSetting("autoSetTarget", false);
+            showWaypointCoordinatesToolStripMenuItem.Checked = GetSetting("coords", true);
+            showDeviationFromRouteToolStripMenuItem.Checked = GetSetting("dev", true);
+            showBookmarkNotesToolStripMenuItem.Checked = GetSetting("bookmarkNotes", true);
 
-            string ids = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbSave + "SelectedRoute", "-1");        // for some reason, it was saved as a string.. so keep for backwards compat
+            string ids = GetSetting("SelectedRoute", "-1");        // for some reason, it was saved as a string.. so keep for backwards compat
             int? id = ids.InvariantParseIntNull();
             if ( id != null )
                 currentRoute = SavedRouteClass.GetAllSavedRoutes().Find(r => r.Id.Equals(id.Value));  // may be null
@@ -73,12 +74,12 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "showjumps", showJumpsToolStripMenuItem.Checked);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "autoCopyWP", autoCopyWPToolStripMenuItem.Checked);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "autoSetTarget", autoSetTargetToolStripMenuItem.Checked);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "coords", showWaypointCoordinatesToolStripMenuItem.Checked);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "dev", showDeviationFromRouteToolStripMenuItem.Checked);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbSave + "bookmarkNotes", showBookmarkNotesToolStripMenuItem.Checked);
+            PutSetting("showjumps", showJumpsToolStripMenuItem.Checked);
+            PutSetting("autoCopyWP", autoCopyWPToolStripMenuItem.Checked);
+            PutSetting("autoSetTarget", autoSetTargetToolStripMenuItem.Checked);
+            PutSetting("coords", showWaypointCoordinatesToolStripMenuItem.Checked);
+            PutSetting("dev", showDeviationFromRouteToolStripMenuItem.Checked);
+            PutSetting("bookmarkNotes", showBookmarkNotesToolStripMenuItem.Checked);
             discoveryform.OnHistoryChange -= Display;
             discoveryform.OnNewEntry -= NewEntry;
             GlobalBookMarkList.Instance.OnBookmarkChange -= GlobalBookMarkList_OnBookmarkChange;
@@ -293,7 +294,7 @@ namespace EDDiscovery.UserControls
                 //currentRoute.TestHarness(); // enable for debug testing of route finding
 
                 if (currentRoute != null)
-                    EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbSave + "SelectedRoute", currentRoute.Id.ToStringInvariant());        // write ID back
+                    PutSetting("SelectedRoute", currentRoute.Id.ToStringInvariant());        // write ID back
 
                 Display();
             }

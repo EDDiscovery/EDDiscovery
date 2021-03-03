@@ -30,11 +30,10 @@ namespace EDDiscovery.UserControls
 
     public partial class CaptainsLogEntries : UserControlCommonBase
     {
-        private string DbColumnSave { get { return DBName("CaptainsLogPanel", "DGVCol"); } }
-        private string DbStartDate { get { return DBName("CaptainsLogPanel", "SD"); } }
-        private string DbStartDateOn { get { return DBName("CaptainsLogPanel", "SDOn"); } }
-        private string DbEndDate { get { return DBName("CaptainsLogPanel", "ED"); } }
-        private string DbEndDateOn { get { return DBName("CaptainsLogPanel", "EDOn"); } }
+        private string dbStartDate = "SD";
+        private string dbStartDateOn = "SDOn";
+        private string dbEndDate = "ED";
+        private string dbEndDateOn = "EDOn";
 
         const int TagHeight = 24;
         const int TagSpacing = 26;
@@ -51,6 +50,8 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
+            DBBaseName = "CaptainsLogPanel";
+
             searchtimer = new Timer() { Interval = 500 };
             searchtimer.Tick += Searchtimer_Tick;
             GlobalCaptainsLogList.Instance.OnLogEntryChanged += LogChanged;
@@ -63,10 +64,10 @@ namespace EDDiscovery.UserControls
             dataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             dataGridView.DefaultCellStyle.Alignment = DataGridViewContentAlignment.TopLeft;
 
-            dateTimePickerStartDate.Value = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDate(DbStartDate, new DateTime(2014, 12, 14));
-            dateTimePickerStartDate.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbStartDateOn, false);
-            dateTimePickerEndDate.Value = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDate(DbEndDate, new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day));
-            dateTimePickerEndDate.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbEndDateOn, false);
+            dateTimePickerStartDate.Value = GetSetting(dbStartDate, new DateTime(2014, 12, 14));
+            dateTimePickerStartDate.Checked = GetSetting(dbStartDateOn, false);
+            dateTimePickerEndDate.Value = GetSetting(dbEndDate, new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day));
+            dateTimePickerEndDate.Checked = GetSetting(dbEndDateOn, false);
             VerifyDates();
 
             dateTimePickerStartDate.ValueChanged += (s, e) => { if (!updateprogramatically) Display(); };
@@ -79,17 +80,17 @@ namespace EDDiscovery.UserControls
 
         public override void LoadLayout()
         {
-            DGVLoadColumnLayout(dataGridView, DbColumnSave);
+            DGVLoadColumnLayout(dataGridView);
         }
 
         public override void Closing()
         {
-            DGVSaveColumnLayout(dataGridView, DbColumnSave);
+            DGVSaveColumnLayout(dataGridView);
 
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDate(DbStartDate, dateTimePickerStartDate.Value);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDate(DbEndDate, dateTimePickerEndDate.Value);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbStartDateOn, dateTimePickerStartDate.Checked);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbEndDateOn, dateTimePickerEndDate.Checked);
+            PutSetting(dbStartDate, dateTimePickerStartDate.Value);
+            PutSetting(dbEndDate, dateTimePickerEndDate.Value);
+            PutSetting(dbStartDateOn, dateTimePickerStartDate.Checked);
+            PutSetting(dbEndDateOn, dateTimePickerEndDate.Checked);
 
             searchtimer.Dispose();
             GlobalCaptainsLogList.Instance.OnLogEntryChanged -= LogChanged;

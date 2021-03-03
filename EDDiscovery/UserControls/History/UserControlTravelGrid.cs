@@ -72,13 +72,12 @@ namespace EDDiscovery.UserControls
 
         private int defaultRowHeight;
 
-        private string DbFilterSave { get { return DBName("TravelHistoryControlEventFilter2" ); } }
-        private string DbColumnSave { get { return DBName("TravelControl" ,  "DGVCol"); } }
-        private string DbHistorySave { get { return DBName("EDUIHistory" ); } }
-        private string DbFieldFilter { get { return DBName("TravelHistoryControlFieldFilter" ); } }
-        private string DbOutlines { get { return DBName("TravelHistoryOutlines"); } }
-        private string DbWordWrap { get { return DBName("TravelHistoryWordWrap"); } }
-        private string DbVisitedColour { get { return DBName("TravelHistoryVisitedColour"); } }
+        private string dbFilterSave = "EventFilter2";
+        private string dbHistorySave = "EDUIHistory";
+        private string dbFieldFilter = "FieldFilter";
+        private string dbOutlines = "Outlines";
+        private string dbWordWrap = "WordWrap";
+        private string dbVisitedColour = "VisitedColour";
 
         private HistoryList current_historylist;        // the last one set, for internal refresh purposes on sort
 
@@ -102,9 +101,11 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
+            DBBaseName = "TravelHistoryControl";
+
             //System.Diagnostics.Debug.WriteLine("Travel grid is " + this.GetHashCode());
 
-            cfs = new FilterSelector(DbFilterSave);
+            cfs = new FilterSelector(FilterKeyName(dbFilterSave));
             cfs.AddAllNone();
             cfs.AddJournalExtraOptions();
             cfs.AddJournalEntries();
@@ -114,7 +115,7 @@ namespace EDDiscovery.UserControls
 
             dataGridViewTravel.MakeDoubleBuffered();
 
-            string filter = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbFieldFilter, "");
+            string filter = GetSetting(dbFieldFilter, "");
             if (filter.Length > 0)
                 fieldfilter.FromJSON(filter);        // load filter
 #if !DEBUG
@@ -136,10 +137,10 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNewEntry += AddNewEntry;
             discoveryform.OnNoteChanged += OnNoteChanged;
 
-            this.showSystemVisitedForeColourToolStripMenuItem.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbVisitedColour, false);
+            this.showSystemVisitedForeColourToolStripMenuItem.Checked = GetSetting(dbVisitedColour, false);
             this.showSystemVisitedForeColourToolStripMenuItem.Click += new System.EventHandler(this.showSystemVisitedForeColourToolStripMenuItem_Click);
 
-            contextMenuStripOutlines.SetToolStripState(EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbOutlines, "rollUpOffToolStripMenuItem;"));
+            contextMenuStripOutlines.SetToolStripState(GetSetting(dbOutlines, "rollUpOffToolStripMenuItem;"));
             this.rollUpOffToolStripMenuItem.Click += new System.EventHandler(this.rolluplimitToolStripMenuItem_Click);
             this.rollUpAfterFirstToolStripMenuItem.Click += new System.EventHandler(this.rolluplimitToolStripMenuItem_Click);
             this.rollUpAfter5ToolStripMenuItem.Click += new System.EventHandler(this.rolluplimitToolStripMenuItem_Click);
@@ -147,7 +148,7 @@ namespace EDDiscovery.UserControls
             this.scanEventsOutliningOnOffToolStripMenuItem.Click += new System.EventHandler(this.toolStripOutliningToggle);
             extCheckBoxOutlines.Checked = outliningOnOffToolStripMenuItem.Checked;
 
-            extCheckBoxWordWrap.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbWordWrap, false);
+            extCheckBoxWordWrap.Checked = GetSetting(dbWordWrap, false);
             UpdateWordWrap();
             extCheckBoxWordWrap.Click += extCheckBoxWordWrap_Click;
 
@@ -156,7 +157,7 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.Translate(contextMenuStripOutlines, this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
 
-            TravelHistoryFilter.InitaliseComboBox(comboBoxHistoryWindow, DbHistorySave);
+            TravelHistoryFilter.InitaliseComboBox(comboBoxHistoryWindow, FilterKeyName(dbHistorySave));
 
             extButtonDrawnHelp.Text = "";
             extButtonDrawnHelp.Image = ExtendedControls.TabStrip.HelpIcon;
@@ -170,7 +171,7 @@ namespace EDDiscovery.UserControls
         public override void LoadLayout()
         {
             defaultRowHeight = dataGridViewTravel.RowTemplate.MinimumHeight = Math.Max(28, Font.ScalePixels(28));       // due to 24 bit icons
-            DGVLoadColumnLayout(dataGridViewTravel, DbColumnSave);
+            DGVLoadColumnLayout(dataGridViewTravel);
         }
 
         public override void Closing()
@@ -178,7 +179,7 @@ namespace EDDiscovery.UserControls
             todo.Clear();
             todotimer.Stop();
             searchtimer.Stop();
-            DGVSaveColumnLayout(dataGridViewTravel, DbColumnSave);
+            DGVSaveColumnLayout(dataGridViewTravel);
             discoveryform.OnHistoryChange -= HistoryChanged;
             discoveryform.OnNewEntry -= AddNewEntry;
             searchtimer.Dispose();
@@ -225,7 +226,7 @@ namespace EDDiscovery.UserControls
 
             //for (int i = 0; i < 10 && i < result.Count; i++)  System.Diagnostics.Debug.WriteLine("Hist {0} {1} {2}", result[i].EventTimeUTC, result[i].Indexno , result[i].EventSummary);
 
-            result = HistoryList.FilterByJournalEvent(result, EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbFilterSave, "All"), out ftotalevents);
+            result = HistoryList.FilterByJournalEvent(result, GetSetting(dbFilterSave, "All"), out ftotalevents);
 
             result = FilterHelpers.FilterHistory(result, fieldfilter, discoveryform.Globals, out ftotalfilters);
 
@@ -378,7 +379,7 @@ namespace EDDiscovery.UserControls
                 return;
             }
 
-            bool add = he.IsJournalEventInEventFilter(EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbFilterSave, "All"));
+            bool add = he.IsJournalEventInEventFilter(GetSetting(dbFilterSave, "All"));
 
             if (!add)                   // filtered out, update filter total and display
             {
@@ -554,7 +555,7 @@ namespace EDDiscovery.UserControls
 
         private void comboBoxHistoryWindow_SelectedIndexChanged(object sender, EventArgs e)
         {
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbHistorySave, comboBoxHistoryWindow.Text);
+            PutSetting(dbHistorySave, comboBoxHistoryWindow.Text);
 
             if (current_historylist != null)
             {
@@ -848,7 +849,7 @@ namespace EDDiscovery.UserControls
 
         private void toolStripOutliningToggle(object sender, EventArgs e)
         {
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbOutlines, contextMenuStripOutlines.GetToolStripState());
+            PutSetting(dbOutlines, contextMenuStripOutlines.GetToolStripState());
             extCheckBoxOutlines.Checked = outliningOnOffToolStripMenuItem.Checked;
             if (outliningOnOffToolStripMenuItem.Checked || sender == outliningOnOffToolStripMenuItem)
                 HistoryChanged(current_historylist, true);
@@ -860,7 +861,7 @@ namespace EDDiscovery.UserControls
             rollUpOffToolStripMenuItem.Checked = tmi == rollUpOffToolStripMenuItem;         // makes them work as radio buttons
             rollUpAfterFirstToolStripMenuItem.Checked = tmi == rollUpAfterFirstToolStripMenuItem;
             rollUpAfter5ToolStripMenuItem.Checked = tmi == rollUpAfter5ToolStripMenuItem;
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbOutlines, contextMenuStripOutlines.GetToolStripState());
+            PutSetting(dbOutlines, contextMenuStripOutlines.GetToolStripState());
             if (outliningOnOffToolStripMenuItem.Checked )
                 HistoryChanged(current_historylist, true);
         }
@@ -1253,7 +1254,7 @@ namespace EDDiscovery.UserControls
             if (res != null)
             {
                 fieldfilter = res;
-                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbFieldFilter, fieldfilter.GetJSON());
+                PutSetting(dbFieldFilter, fieldfilter.GetJSON());
                 HistoryChanged(current_historylist);
             }
         }
@@ -1264,7 +1265,7 @@ namespace EDDiscovery.UserControls
 
         private void extCheckBoxWordWrap_Click(object sender, EventArgs e)
         {
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbWordWrap, extCheckBoxWordWrap.Checked);
+            PutSetting(dbWordWrap, extCheckBoxWordWrap.Checked);
             UpdateWordWrap();
         }
 
@@ -1277,7 +1278,7 @@ namespace EDDiscovery.UserControls
 
         private void showSystemVisitedForeColourToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbVisitedColour, showSystemVisitedForeColourToolStripMenuItem.Checked);
+            PutSetting(dbVisitedColour, showSystemVisitedForeColourToolStripMenuItem.Checked);
             HistoryChanged(discoveryform.history);
         }
 

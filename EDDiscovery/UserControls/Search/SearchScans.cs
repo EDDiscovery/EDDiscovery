@@ -97,7 +97,7 @@ namespace EDDiscovery.UserControls
             private Queries()
             {
                 StandardSearches = Searches.Count();
-                string[] userqueries = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbUserQueries, "").Split(new char[] { splitmarker });
+                string[] userqueries = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbUserQueries, "").Split(new char[] { splitmarker }); // allowed use
 
                 for (int i = 0; i+1 < userqueries.Length; i += 2)
                     Searches.Add(new Tuple<string, string>(userqueries[i], userqueries[i + 1]));
@@ -111,7 +111,7 @@ namespace EDDiscovery.UserControls
                     userqueries += Searches[i].Item1 + splitmarker + Searches[i].Item2 + splitmarker;
                 }
 
-                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbUserQueries, userqueries);
+                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbUserQueries, userqueries); // allowed use
             }
 
             public void Update(string name, string expr)
@@ -132,9 +132,8 @@ namespace EDDiscovery.UserControls
 
         };
 
-        private string DbColumnSave { get { return DBName("UCSearchScans", "DGVCol"); } }
-        private string DbQuerySave { get { return DBName("UCSearchScans", "Query"); } }
-        private string DbSplitterSave { get { return DBName("UCSearchScans", "Splitter"); } }
+        private string dbQuerySave = "Query";
+        private string dbSplitterSave = "Splitter";
 
         #region Init
 
@@ -146,6 +145,8 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
+            DBBaseName = "UCSearchScans";
+
             dataGridView.CheckEDSM = false; // for this, only our data is shown
             dataGridView.MakeDoubleBuffered();
             dataGridView.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
@@ -160,7 +161,7 @@ namespace EDDiscovery.UserControls
             classnames.Add(new BaseUtils.TypeHelpers.PropertyNameInfo("EventTimeLocal", "Date Time in Local time", BaseUtils.ConditionEntry.MatchType.DateAfter));     // add on a few from the base class..
             classnames.Add(new BaseUtils.TypeHelpers.PropertyNameInfo("SyncedEDSM", "Synced to EDSM, 1 = yes, 0 = not", BaseUtils.ConditionEntry.MatchType.IsTrue));     // add on a few from the base class..
 
-            string query = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbQuerySave, "");
+            string query = GetSetting(dbQuerySave, "");
 
             conditionFilterUC.VariableNames = classnames;
             conditionFilterUC.InitConditionList(new BaseUtils.ConditionLists(query));   // will ignore if query is bad and return empty query
@@ -179,17 +180,17 @@ namespace EDDiscovery.UserControls
 
         public override void LoadLayout()
         {
-            DGVLoadColumnLayout(dataGridView, DbColumnSave);
-            splitContainer.SplitterDistance(EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble(DbSplitterSave, 0.2));
+            DGVLoadColumnLayout(dataGridView);
+            splitContainer.SplitterDistance(GetSetting(dbSplitterSave, 0.2));
         }
 
         public override void Closing()
         {
-            DGVSaveColumnLayout(dataGridView, DbColumnSave);
+            DGVSaveColumnLayout(dataGridView);
             conditionFilterUC.Check();      // checks, ignore string return errors, fills in Result
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbQuerySave, conditionFilterUC.Result.ToString());
+            PutSetting(dbQuerySave, conditionFilterUC.Result.ToString());
             Queries.Instance.Save();
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble(DbSplitterSave, splitContainer.GetSplitterDistance());
+            PutSetting(dbSplitterSave, splitContainer.GetSplitterDistance());
         }
 
         #endregion

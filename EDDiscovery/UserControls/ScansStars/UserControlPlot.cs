@@ -30,8 +30,6 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlPlot : UserControlCommonBase
     {
-        private string DbSave { get { return DBName("PlotPanel" ); } }
-
         private StarDistanceComputer computer;
 
         public UserControlPlot()
@@ -67,8 +65,10 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
-            textMinRadius.ValueNoChange = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble(DbSave + "PlotMin", 0);
-            textMaxRadius.ValueNoChange = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble(DbSave + "PlotMax", defaultmaximumradarradius);
+            DBBaseName = "PlotPanel";
+
+            textMinRadius.ValueNoChange = GetSetting("PlotMin", 0);
+            textMaxRadius.ValueNoChange = GetSetting("PlotMax", defaultmaximumradarradius);
             textMinRadius.SetComparitor(textMaxRadius, -2);     // need to do this after values are set
             textMaxRadius.SetComparitor(textMinRadius, 2);
 
@@ -79,7 +79,7 @@ namespace EDDiscovery.UserControls
             comboBoxView.Items.Add("Grid".T(EDTx.UserControlPlot_Grid));
             comboBoxView.Items.Add("Report".T(EDTx.UserControlPlot_Report));
 
-            var sel = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbSave + "PlotOrientation", "!!");
+            var sel = GetSetting("PlotOrientation", "!!");
             if (comboBoxView.Items.Contains(sel))
                 comboBoxView.SelectedItem = sel;
             else
@@ -112,9 +112,9 @@ namespace EDDiscovery.UserControls
         {
             uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
             computer.ShutDown();
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble(DbSave + "PlotMin", textMinRadius.Value);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble(DbSave + "PlotMax", textMaxRadius.Value);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbSave + "PlotOrientation", comboBoxView.SelectedItem.ToString());
+            PutSetting("PlotMin", textMinRadius.Value);
+            PutSetting("PlotMax", textMaxRadius.Value);
+            PutSetting("PlotOrientation", comboBoxView.SelectedItem.ToString());
         }
 
         public override void InitialDisplay()

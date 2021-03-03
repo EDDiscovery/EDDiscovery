@@ -33,19 +33,15 @@ namespace EDDiscovery.UserControls
 
         private List<string> levels = new List<string> { "1", "2", "3", "4", "5", "Experimental" };
 
-        public string PrefixName = "Engineering";
-
-        private string DbColumnSave { get { return (PrefixName + "Grid") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
-        private string DbWSave { get { return PrefixName + "Wanted" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DbOSave { get { return PrefixName + "Order" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DbSelSave { get { return PrefixName + "List" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DbEngFilterSave { get { return PrefixName + "GridControlEngineerFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DbModFilterSave { get { return PrefixName + "GridControlModuleFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DbLevelFilterSave { get { return PrefixName + "GridControlLevelFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DbUpgradeFilterSave { get { return PrefixName + "GridControlUpgradeFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DbMaterialFilterSave { get { return PrefixName + "GridControlMaterialFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DbHistoricMatsSave { get { return PrefixName + "GridHistoricMaterials" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DbWordWrap { get { return PrefixName + "WordWrap" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        private string dbWSave = "Wanted";
+        private string dbOSave = "Order";
+        private string dbEngFilterSave = "GridControlEngineerFilter";
+        private string dbModFilterSave = "GridControlModuleFilter";
+        private string dbLevelFilterSave = "GridControlLevelFilter";
+        private string dbUpgradeFilterSave = "GridControlUpgradeFilter";
+        private string dbMaterialFilterSave = "GridControlMaterialFilter";
+        private string dbHistoricMatsSave = "GridHistoricMaterials";
+        private string dbWordWrap = "WordWrap";
 
         int[] Order;        // order
         int[] Wanted;       // wanted, in order terms
@@ -60,6 +56,7 @@ namespace EDDiscovery.UserControls
 
         public UserControlEngineering()
         {
+            DBBaseName = "Engineering";
             InitializeComponent();
             var corner = dataGridViewEngineering.TopLeftHeaderCell; // work around #1487
         }
@@ -67,18 +64,18 @@ namespace EDDiscovery.UserControls
         public override void Init()
         {
             dataGridViewEngineering.MakeDoubleBuffered();
-            extCheckBoxWordWrap.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbWordWrap, false);
+            extCheckBoxWordWrap.Checked = GetSetting(dbWordWrap, false);
             UpdateWordWrap();
             extCheckBoxWordWrap.Click += extCheckBoxWordWrap_Click;
 
-            Order = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbOSave, "").RestoreArrayFromString(0, Recipes.EngineeringRecipes.Count);
+            Order = GetSetting(dbOSave, "").RestoreArrayFromString(0, Recipes.EngineeringRecipes.Count);
             if (Order.Max() >= Recipes.EngineeringRecipes.Count || Order.Min() < 0 || Order.Distinct().Count() != Recipes.EngineeringRecipes.Count)       // if not distinct..
             {
                 for (int i = 0; i < Order.Length; i++)          // reset
                     Order[i] = i;
             }
 
-            Wanted = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbWSave, "").RestoreArrayFromString(0, Recipes.EngineeringRecipes.Count);
+            Wanted = GetSetting(dbWSave, "").RestoreArrayFromString(0, Recipes.EngineeringRecipes.Count);
 
             List<string> engineers = Recipes.EngineeringRecipes.SelectMany(r => r.engineers).Distinct().ToList();
             engineers.Sort();
@@ -117,7 +114,7 @@ namespace EDDiscovery.UserControls
                 row.Visible = false;
             }
 
-            isHistoric = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbHistoricMatsSave, false);
+            isHistoric = GetSetting(dbHistoricMatsSave, false);
             
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
@@ -138,22 +135,22 @@ namespace EDDiscovery.UserControls
         {
             dataGridViewEngineering.RowTemplate.MinimumHeight = Font.ScalePixels(26);
             uctg.OnTravelSelectionChanged += UCTGChanged;
-            DGVLoadColumnLayout(dataGridViewEngineering, DbColumnSave);
+            DGVLoadColumnLayout(dataGridViewEngineering);
             chkNotHistoric.Checked = !isHistoric;       // upside down now
             chkNotHistoric.Visible = !isEmbedded;
         }
 
         public override void Closing()
         {
-            DGVSaveColumnLayout(dataGridViewEngineering, DbColumnSave);
+            DGVSaveColumnLayout(dataGridViewEngineering);
 
             uctg.OnTravelSelectionChanged -= UCTGChanged;
             discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
             discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
 
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbOSave, Order.ToString(","));
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbWSave, Wanted.ToString(","));
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbHistoricMatsSave, isHistoric);
+            PutSetting(dbOSave, Order.ToString(","));
+            PutSetting(dbWSave, Wanted.ToString(","));
+            PutSetting(dbHistoricMatsSave, isHistoric);
         }
 
 
@@ -220,15 +217,15 @@ namespace EDDiscovery.UserControls
 
                 wantedList = new List<Tuple<Recipes.Recipe, int>>();
 
-                string engineers = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbEngFilterSave, "All");
+                string engineers = GetSetting(dbEngFilterSave, "All");
                 List<string> engList = engineers.Split(';').ToList<string>();
-                string modules = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbModFilterSave, "All");
+                string modules = GetSetting(dbModFilterSave, "All");
                 List<string> modList = modules.Split(';').ToList<string>();
-                string levels = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbLevelFilterSave, "All");
+                string levels = GetSetting(dbLevelFilterSave, "All");
                 string[] lvlArray = (levels == "All" || levels == "None") ? new string[0] : levels.Split(';');
-                string upgrades = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbUpgradeFilterSave, "All");
+                string upgrades = GetSetting(dbUpgradeFilterSave, "All");
                 string[] upgArray = upgrades.Split(';');
-                string materials = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbMaterialFilterSave, "All");
+                string materials = GetSetting(dbMaterialFilterSave, "All");
                 var matList = materials.Split(';');        // list of materials to show
                 
                 for (int i = 0; i < Recipes.EngineeringRecipes.Count; i++)
@@ -332,7 +329,7 @@ namespace EDDiscovery.UserControls
 
         private void extCheckBoxWordWrap_Click(object sender, EventArgs e)
         {
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbWordWrap, extCheckBoxWordWrap.Checked);
+            PutSetting(dbWordWrap, extCheckBoxWordWrap.Checked);
             UpdateWordWrap();
         }
 
@@ -422,35 +419,35 @@ namespace EDDiscovery.UserControls
         private void buttonFilterModule_Click(object sender, EventArgs e)
         {
             Button b = sender as Button;
-            mfs.FilterButton(DbModFilterSave, b,
+            mfs.FilterButton(FilterKeyName(dbModFilterSave), b,
                              discoveryform.theme.TextBackColor, discoveryform.theme.TextBlockColor, this.FindForm());
         }
 
         private void buttonFilterEngineer_Click(object sender, EventArgs e)
         {
             Button b = sender as Button;
-            efs.FilterButton(DbEngFilterSave, b,
+            efs.FilterButton(FilterKeyName(dbEngFilterSave), b,
                              discoveryform.theme.TextBackColor, discoveryform.theme.TextBlockColor, this.FindForm());
         }
 
         private void buttonFilterLevel_Click(object sender, EventArgs e)
         {
             Button b = sender as Button;
-            lfs.FilterButton(DbLevelFilterSave, b,
+            lfs.FilterButton(FilterKeyName(dbLevelFilterSave), b,
                              discoveryform.theme.TextBackColor, discoveryform.theme.TextBlockColor, this.FindForm());
         }
 
         private void buttonFilterUpgrade_Click(object sender, EventArgs e)
         {
             Button b = sender as Button;
-            ufs.FilterButton(DbUpgradeFilterSave, b,
+            ufs.FilterButton(FilterKeyName(dbUpgradeFilterSave), b,
                              discoveryform.theme.TextBackColor, discoveryform.theme.TextBlockColor, this.FindForm());
         }
 
         private void buttonFilterMaterial_Click(object sender, EventArgs e)
         {
             Button b = sender as Button;
-            matfs.FilterButton(DbMaterialFilterSave, b,
+            matfs.FilterButton(FilterKeyName(dbMaterialFilterSave), b,
                              discoveryform.theme.TextBackColor, discoveryform.theme.TextBlockColor, this.FindForm());
         }
 

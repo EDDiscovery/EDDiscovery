@@ -35,7 +35,7 @@ namespace EDDiscovery.UserControls
     public partial class UserControlMissionOverlay :   UserControlCommonBase
     {
         private  HistoryEntry currentHE;
-        private string DBSelections { get { return DBName("MissionOverlay", "Sel"); } }
+        private string dbSelections = "Sel";
 
         [Flags]
         enum SelectionBits
@@ -69,9 +69,11 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
+            DBBaseName = "MissionOverlay";
+
             BaseUtils.Translator.Instance.Translate(this);
 
-            SelectionBits sel = (SelectionBits)EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(DBSelections, (int)SelectionBits.Default);
+            SelectionBits sel = (SelectionBits)GetSetting(dbSelections, (int)SelectionBits.Default);
 
             missionDescriptionToolStripMenuItem.Checked = (sel & SelectionBits.MissionName) != SelectionBits.None;
             startDateToolStripMenuItem.Checked = (sel & SelectionBits.StartDate) != SelectionBits.None;
@@ -215,11 +217,11 @@ namespace EDDiscovery.UserControls
             ToolStripMenuItem tsmi = sender as ToolStripMenuItem;
             SelectionBits sel = (SelectionBits)(tsmi.Tag);     // tag contains bit number
 
-            SelectionBits cur = (SelectionBits)EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(DBSelections, (int)SelectionBits.Default);
+            SelectionBits cur = (SelectionBits)GetSetting(dbSelections, (int)SelectionBits.Default);
             cur = (cur & ~sel);
             if ( tsmi.Checked )
                 cur |= sel;
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(DBSelections, (int)cur);
+            PutSetting(dbSelections, (int)cur);
 
             System.Diagnostics.Debug.WriteLine("Mission overal sel code " + cur);
             Display(currentHE);

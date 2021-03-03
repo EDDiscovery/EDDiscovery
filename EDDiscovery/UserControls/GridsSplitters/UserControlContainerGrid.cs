@@ -15,11 +15,10 @@
  */
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Data;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using EliteDangerousCore.DB;
 
 namespace EDDiscovery.UserControls
 {
@@ -30,9 +29,9 @@ namespace EDDiscovery.UserControls
 
         private List<UserControlContainerResizable> uccrlist = new List<UserControlContainerResizable>();
 
-        private string DBWindowNames { get { return DBName("GridControlWindows"); } }
-        private string DbPositionSize { get { return DBName("GridControlPositons"); } }
-        private string DbZOrder { get { return DBName("GridControlZOrder"); } }
+        private string dbWindowNames = "Windows";
+        private string dbPositionSize = "Positons";     //sic, leave
+        private string dbZOrder = "ZOrder";
 
         ExtendedControls.ExtListBoxForm popoutdropdown;
 
@@ -47,6 +46,8 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
+            DBBaseName = "GridControl";
+
             //System.Diagnostics.Debug.WriteLine("Grid Restore from " + DBWindowNames);
 
             var windows = GetSavedSettings();
@@ -154,8 +155,8 @@ namespace EDDiscovery.UserControls
                 uc.CloseDown();
             }
 
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DBWindowNames, s);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbPositionSize, p);
+            PutSetting(dbWindowNames, s);
+            PutSetting(dbPositionSize, p);
 
             string z = "";
 
@@ -169,7 +170,7 @@ namespace EDDiscovery.UserControls
                 }
             }
 
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbZOrder, z);
+            PutSetting(dbZOrder, z);
             //System.Diagnostics.Debug.WriteLine("---- END Grid Saving to " + DbWindows);
         }
 
@@ -424,11 +425,11 @@ namespace EDDiscovery.UserControls
 
         List<Tuple<PanelInformation.PanelIDs, Point, Size, int>> GetSavedSettings()
         {
-            string[] names = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DBWindowNames, "").Split(',');
+            string[] names = GetSetting(dbWindowNames, "").Split(',');
             int[] positions;
             int[] zorder;
-            string pos = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbPositionSize, "");
-            string zo = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbZOrder, "");
+            string pos = GetSetting(dbPositionSize, "");
+            string zo = GetSetting(dbZOrder, "");
 
             if (pos.RestoreArrayFromString(out positions) && zo.RestoreArrayFromString(out zorder, 0, names.Length - 1) &&
                         names.Length == zorder.Length && positions.Length == 4 * names.Length)

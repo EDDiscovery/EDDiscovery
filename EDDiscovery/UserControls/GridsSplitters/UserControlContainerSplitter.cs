@@ -57,7 +57,7 @@ namespace EDDiscovery.UserControls
             return found;
         }
 
-        public string DbWindows { get { return DBName("SplitterControlWindows" ); } }
+        public string dbWindows = "Windows";
 
         const int FixedPanelOffset = 1000;        // panel IDs, 1000+ are fixed windows, 0-999 are embedded in tab strips
         const int NoTabPanelSelected = -1;        // -1 is no tab selected
@@ -76,11 +76,13 @@ namespace EDDiscovery.UserControls
 
         public override void Init()     
         {
+            DBBaseName = "SplitterControl";
+        
             TabListSortAlpha = EDDConfig.Instance.SortPanelsByName;     // held constant, because we store in each tab splitter the implicit order, can't change it half way thru
 
             string defaultview = "H(0.50, U'0,-1', U'1,-1')";       // default is a splitter without any selected panels
 
-            string splitctrl = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbWindows, defaultview);
+            string splitctrl = GetSetting(dbWindows, defaultview);
 
             //System.Diagnostics.Debug.WriteLine("Init " + displaynumber + " " + splitctrl);
 
@@ -114,7 +116,7 @@ namespace EDDiscovery.UserControls
         {
             ucursor_history = uctg;                 // record base one
             ucursor_inuse = FindTHC() ?? ucursor_history; // if we have a THC, use it, else use the history one
-            string splitctrl = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbWindows, "");
+            string splitctrl = GetSetting(dbWindows, "");
 
             //System.Diagnostics.Debug.WriteLine("Layout loading " + displaynumber + " " + splitctrl);
             //panelPlayfield.Controls[0].DumpTree(0);
@@ -171,7 +173,7 @@ namespace EDDiscovery.UserControls
                 });
 
             //System.Diagnostics.Debug.WriteLine("Split save " + state);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbWindows, state);
+            PutSetting(dbWindows, state);
 
             (panelPlayfield.Controls[0] as SplitContainer).RunActionOnSplitterTree((p, c) =>        // runs on each split panel node exactly..
             {
