@@ -29,37 +29,37 @@ namespace EDDiscovery.UserControls
     public partial class FindSystemsUserControl : UserControl
     {
         public Action<List<Tuple<ISystem, double>>> ReturnSystems;      // return may be null
-        public Action Excel;                                            // excel pressed
 
-        string ucdbnamebase;
+        public Action Excel;                                            // excel pressed
+        UserControlCommonBase.DBSettingsSaver dbsaver;
         EDDiscoveryForm discoveryform;
 
-        private string DbStar { get { return ucdbnamebase+"Star"; } }
-        private string DbRadiusMax { get { return ucdbnamebase+"RadiusMax"; } }
-        private string DbRadiusMin { get { return ucdbnamebase+"RadiusMin"; } }
-        private string DbX { get { return ucdbnamebase+"X"; } }
-        private string DbY { get { return ucdbnamebase+"Y"; } }
-        private string DbZ { get { return ucdbnamebase+"Z"; } }
-        private string DbCube { get { return ucdbnamebase+"Cube"; } }
-        private string DbEVS { get { return ucdbnamebase+"ExcludeVisitedSystems"; } }
+        private string dbStar = "Star"; 
+        private string dbRadiusMax = "RadiusMax"; 
+        private string dbRadiusMin = "RadiusMin";
+        private string dbX = "X";
+        private string dbY = "Y";
+        private string dbZ = "Z";
+        private string dbCube = "Cube"; 
+        private string dbEVS = "ExcludeVisitedSystems"; 
 
         public FindSystemsUserControl()
         {
             InitializeComponent();
         }
 
-        public void Init( string dbnamebase, bool showexcel , EDDiscoveryForm disc)
+        public void Init(UserControlCommonBase.DBSettingsSaver db, bool showexcel , EDDiscoveryForm disc )
         {
-            ucdbnamebase = dbnamebase;
+            dbsaver = db;
             discoveryform = disc;
-            numberBoxMinRadius.Value = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble(DbRadiusMin, 0);
-            numberBoxMaxRadius.Value = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble(DbRadiusMax, 20);
-            textBoxSystemName.Text = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(DbStar, "");
-            numberBoxDoubleX.Value = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble(DbX, 0);
-            numberBoxDoubleY.Value = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble(DbY, 0);
-            numberBoxDoubleZ.Value = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble(DbZ, 0);
-            checkBoxCustomCube.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbCube, false);
-            extCheckBoxExcludeVisitedSystems.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DbEVS, false);
+            numberBoxMinRadius.Value = dbsaver.GetSetting(dbRadiusMin, 0.0);
+            numberBoxMaxRadius.Value = dbsaver.GetSetting(dbRadiusMax, 20.0);
+            textBoxSystemName.Text = dbsaver.GetSetting(dbStar, "");
+            numberBoxDoubleX.Value = dbsaver.GetSetting(dbX, 0.0);
+            numberBoxDoubleY.Value = dbsaver.GetSetting(dbY, 0.0);
+            numberBoxDoubleZ.Value = dbsaver.GetSetting(dbZ, 0.0);
+            checkBoxCustomCube.Checked = dbsaver.GetSetting(dbCube, false);
+            extCheckBoxExcludeVisitedSystems.Checked = dbsaver.GetSetting(dbEVS, false);
 
             if (textBoxSystemName.Text.Length > 0)
                 SetXYZ();
@@ -86,16 +86,16 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.Translate(this, new Control[] { labelX, labelY, labelZ });
         }
 
-        public void Closing()
+        public void Save()
         {
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble(DbRadiusMin, numberBoxMinRadius.Value);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble(DbRadiusMax, numberBoxMaxRadius.Value);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble(DbX, numberBoxDoubleX.Value);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble(DbY, numberBoxDoubleY.Value);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble(DbZ, numberBoxDoubleZ.Value);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(DbStar, textBoxSystemName.Text);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbCube, checkBoxCustomCube.Checked);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DbEVS, extCheckBoxExcludeVisitedSystems.Checked);
+            dbsaver.PutSetting(dbRadiusMin, numberBoxMinRadius.Value);
+            dbsaver.PutSetting(dbRadiusMax, numberBoxMaxRadius.Value);
+            dbsaver.PutSetting(dbX, numberBoxDoubleX.Value);
+            dbsaver.PutSetting(dbY, numberBoxDoubleY.Value);
+            dbsaver.PutSetting(dbZ, numberBoxDoubleZ.Value);
+            dbsaver.PutSetting(dbStar, textBoxSystemName.Text);
+            dbsaver.PutSetting(dbCube, checkBoxCustomCube.Checked);
+            dbsaver.PutSetting(dbEVS, extCheckBoxExcludeVisitedSystems.Checked);
         }
 
         private void buttonExtNamesClick(object sender, EventArgs e)

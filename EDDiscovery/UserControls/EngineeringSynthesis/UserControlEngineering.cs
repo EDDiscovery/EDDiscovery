@@ -80,24 +80,24 @@ namespace EDDiscovery.UserControls
             List<string> engineers = Recipes.EngineeringRecipes.SelectMany(r => r.engineers).Distinct().ToList();
             engineers.Sort();
             efs = new RecipeFilterSelector(engineers);
-            efs.Changed += FilterChanged;
+            efs.SaveSettings += (newvalue, e) => { PutSetting(dbEngFilterSave, newvalue); Display(); };
 
             lfs = new RecipeFilterSelector(levels);
-            lfs.Changed += FilterChanged;
+            lfs.SaveSettings += (newvalue, e) => { PutSetting(dbLevelFilterSave, newvalue); Display(); };
 
             List<string> modules = Recipes.EngineeringRecipes.SelectMany(r => r.modules).Distinct().ToList();
             modules.Sort();
             mfs = new RecipeFilterSelector(modules);
-            mfs.Changed += FilterChanged;
+            mfs.SaveSettings += (newvalue, e) => { PutSetting(dbModFilterSave, newvalue); Display(); };
 
             var upgrades = Recipes.EngineeringRecipes.Select(r => r.Name).Distinct().ToList();
             upgrades.Sort();
             ufs = new RecipeFilterSelector(upgrades);
-            ufs.Changed += FilterChanged;
+            ufs.SaveSettings += (newvalue, e) => { PutSetting(dbUpgradeFilterSave, newvalue); Display(); };
 
             List<string> matLongNames = Recipes.EngineeringRecipes.SelectMany(r => r.Ingredients).Select(x=>x.Name).Distinct().ToList();
             matfs = new RecipeFilterSelector(matLongNames);
-            matfs.Changed += FilterChanged;
+            matfs.SaveSettings += (newvalue, e) => { PutSetting(dbMaterialFilterSave, newvalue); Display(); };
 
             for (int i = 0; i < Recipes.EngineeringRecipes.Count; i++)         // pre-fill array.. preventing the crash on cell edit when you
             {
@@ -322,11 +322,6 @@ namespace EDDiscovery.UserControls
             Display();
         }
 
-        private void FilterChanged()
-        {
-            Display();
-        }
-
         private void extCheckBoxWordWrap_Click(object sender, EventArgs e)
         {
             PutSetting(dbWordWrap, extCheckBoxWordWrap.Checked);
@@ -419,36 +414,31 @@ namespace EDDiscovery.UserControls
         private void buttonFilterModule_Click(object sender, EventArgs e)
         {
             Button b = sender as Button;
-            mfs.FilterButton(FilterKeyName(dbModFilterSave), b,
-                             discoveryform.theme.TextBackColor, discoveryform.theme.TextBlockColor, this.FindForm());
+            mfs.Open(GetSetting(dbModFilterSave,"All"), b, this.FindForm());
         }
 
         private void buttonFilterEngineer_Click(object sender, EventArgs e)
         {
             Button b = sender as Button;
-            efs.FilterButton(FilterKeyName(dbEngFilterSave), b,
-                             discoveryform.theme.TextBackColor, discoveryform.theme.TextBlockColor, this.FindForm());
+            efs.Open(GetSetting(dbEngFilterSave,"All"), b, this.FindForm());
         }
 
         private void buttonFilterLevel_Click(object sender, EventArgs e)
         {
             Button b = sender as Button;
-            lfs.FilterButton(FilterKeyName(dbLevelFilterSave), b,
-                             discoveryform.theme.TextBackColor, discoveryform.theme.TextBlockColor, this.FindForm());
+            lfs.Open(GetSetting(dbLevelFilterSave,"All"), b, this.FindForm());
         }
 
         private void buttonFilterUpgrade_Click(object sender, EventArgs e)
         {
             Button b = sender as Button;
-            ufs.FilterButton(FilterKeyName(dbUpgradeFilterSave), b,
-                             discoveryform.theme.TextBackColor, discoveryform.theme.TextBlockColor, this.FindForm());
+            ufs.Open(GetSetting(dbUpgradeFilterSave,"All"), b, this.FindForm());
         }
 
         private void buttonFilterMaterial_Click(object sender, EventArgs e)
         {
             Button b = sender as Button;
-            matfs.FilterButton(FilterKeyName(dbMaterialFilterSave), b,
-                             discoveryform.theme.TextBackColor, discoveryform.theme.TextBlockColor, this.FindForm());
+            matfs.Open(GetSetting(dbMaterialFilterSave,"All"), b, this.FindForm());
         }
 
         private void buttonClear_Click(object sender, EventArgs e)

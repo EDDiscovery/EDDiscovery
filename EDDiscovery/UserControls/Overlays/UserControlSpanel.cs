@@ -32,10 +32,10 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlSpanel : UserControlCommonBase
     {
-        private string dbFilterSave = "EventFilter2";
+        private string dbFilter = "EventFilter2";
         private string dbFieldFilter = "FieldFilter";
 
-        FilterSelector cfs;
+        private FilterSelector cfs;
         private ConditionLists fieldfilter = new ConditionLists();
 
         private Timer scanhide = new Timer();
@@ -173,7 +173,7 @@ namespace EDDiscovery.UserControls
             if (filter.Length > 0)
                 fieldfilter.FromJSON(filter);        // load filter
 
-            cfs = new FilterSelector(FilterKeyName(dbFilterSave));
+            cfs = new FilterSelector();
             cfs.AddAllNone();
             cfs.AddJournalExtraOptions();
             cfs.AddJournalEntries();
@@ -243,7 +243,7 @@ namespace EDDiscovery.UserControls
                 List<HistoryEntry> result = current_historylist.LatestFirst();      // Standard filtering
 
                 int ftotal;         // event filter
-                result = HistoryList.FilterByJournalEvent(result, GetSetting(dbFilterSave, "All"), out ftotal);
+                result = HistoryList.FilterByJournalEvent(result, GetSetting(dbFilter, "All"), out ftotal);
                 result = FilterHelpers.FilterHistory(result, fieldfilter , discoveryform.Globals, out ftotal); // and the field filter..
 
                 RevertToNormalSize();                                           // ensure size is back to normal..
@@ -624,7 +624,7 @@ namespace EDDiscovery.UserControls
 
         public bool WouldAddEntry(HistoryEntry he)                  // do we filter? if its not in the journal event filter, or it is in the field filter
         {
-            return he.IsJournalEventInEventFilter(GetSetting(dbFilterSave, "All")) && FilterHelpers.FilterHistory(he, fieldfilter , discoveryform.Globals);
+            return he.IsJournalEventInEventFilter(GetSetting(dbFilter, "All")) && FilterHelpers.FilterHistory(he, fieldfilter , discoveryform.Globals);
         }
 
 #endregion
@@ -1024,13 +1024,17 @@ namespace EDDiscovery.UserControls
         private void configureEventFilterToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Point p = MousePosition;
-            cfs.Filter(contextMenuStrip, this.FindForm());
+            cfs.Open(GetSetting(dbFilter,"All"), contextMenuStrip, this.FindForm());
         }
 
-        private void EventFilterChanged(object sender, bool same, Object e)
+        private void EventFilterChanged(string newset, Object e)
         {
-            if (!same)
+            string filters = GetSetting(dbFilter, "All");
+            if (filters != newset)
+            {
+                PutSetting(dbFilter, newset);
                 Display(current_historylist);
+            }
         }
 
         private void configureFieldFilterToolStripMenuItem_Click(object sender, EventArgs e)

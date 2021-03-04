@@ -77,17 +77,17 @@ namespace EDDiscovery.UserControls
             var rcpes = Recipes.SynthesisRecipes.Select(r => r.Name).Distinct().ToList();
             rcpes.Sort();
             rfs = new RecipeFilterSelector(rcpes);
-            rfs.Changed += FilterChanged;
+            rfs.SaveSettings += (newvalue, e) => { PutSetting(dbRecipeFilterSave, newvalue); Display(); };
 
             var lvls = Recipes.SynthesisRecipes.Select(r => r.level).Distinct().ToList();
             lvls.Sort();
             lfs = new RecipeFilterSelector(lvls);
-            lfs.Changed += FilterChanged;
+            lfs.SaveSettings += (newvalue, e) => { PutSetting(dbLevelFilterSave, newvalue); Display(); };
 
             List<string> matLongNames = Recipes.SynthesisRecipes.SelectMany(r => r.Ingredients).Select(x=>x.Name).Distinct().ToList();
             matLongNames.Sort();
             mfs = new RecipeFilterSelector(matLongNames);
-            mfs.Changed += FilterChanged;
+            mfs.SaveSettings += (newvalue, e) => { PutSetting(dbMaterialFilterSave, newvalue); Display(); };
 
             for (int i = 0; i < Recipes.SynthesisRecipes.Count; i++)         // pre-fill array.. preventing the crash on cell edit when you
             {
@@ -302,11 +302,6 @@ namespace EDDiscovery.UserControls
             Display();
         }
 
-        private void FilterChanged()
-        {
-            Display();
-        }
-
         private void extCheckBoxWordWrap_Click(object sender, EventArgs e)
         {
             PutSetting(dbWordWrap, extCheckBoxWordWrap.Checked);
@@ -409,22 +404,19 @@ namespace EDDiscovery.UserControls
         private void buttonRecipeFilter_Click(object sender, EventArgs e)
         {
             Button b = sender as Button;
-            rfs.FilterButton(FilterKeyName(dbRecipeFilterSave), b,
-                             discoveryform.theme.TextBackColor, discoveryform.theme.TextBlockColor, this.FindForm());
+            rfs.Open(GetSetting(dbRecipeFilterSave, "All"), b, this.FindForm());
         }
 
         private void buttonFilterLevel_Click(object sender, EventArgs e)
         {
             Button b = sender as Button;
-            lfs.FilterButton(FilterKeyName(dbLevelFilterSave), b,
-                             discoveryform.theme.TextBackColor, discoveryform.theme.TextBlockColor, this.FindForm());
+            lfs.Open(GetSetting(dbLevelFilterSave, "All"), b, this.FindForm());
         }
 
         private void buttonMaterialFilter_Click(object sender, EventArgs e)
         {
             Button b = sender as Button;
-            mfs.FilterButton(FilterKeyName(dbMaterialFilterSave), b,
-                             discoveryform.theme.TextBackColor, discoveryform.theme.TextBlockColor, this.FindForm());
+            mfs.Open(GetSetting(dbMaterialFilterSave, "All"), b, this.FindForm());
         }
 
         private void chkHistoric_CheckedChanged(object sender, EventArgs e)

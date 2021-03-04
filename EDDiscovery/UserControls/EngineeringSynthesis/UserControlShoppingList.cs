@@ -96,11 +96,11 @@ namespace EDDiscovery.UserControls
 
             List<string> techBrokerList = Recipes.TechBrokerUnlocks.Select(r => r.Name).ToList();
             techbrokerselection = new RecipeFilterSelector(techBrokerList);
-            techbrokerselection.Changed += TechBrokerSelectionChanged;
+            techbrokerselection.SaveSettings += (newvalue, e) => { PutSetting(dbTechBrokerFilterSave, newvalue); Display(); };
 
             List<string> seList = Recipes.SpecialEffects.Select(r => r.Name).ToList();
             specialeffectsselection = new RecipeFilterSelector(seList);
-            specialeffectsselection.Changed += SpecialEffectsSelectionChanged;
+            specialeffectsselection.SaveSettings += (newvalue, e) => { PutSetting(dbSpecialEffectsFilterSave, newvalue); Display(); };
 
             BaseUtils.Translator.Instance.Translate(this, new Control[] { userControlSynthesis, userControlEngineering });
             BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
@@ -404,25 +404,13 @@ namespace EDDiscovery.UserControls
         private void buttonTechBroker_Click(object sender, EventArgs e)
         {
             Button b = sender as Button;
-            techbrokerselection.FilterButton(FilterKeyName(dbTechBrokerFilterSave), b,
-                             discoveryform.theme.TextBackColor, discoveryform.theme.TextBlockColor, this.FindForm());
-        }
-
-        private void TechBrokerSelectionChanged()
-        {
-            Display();
+            techbrokerselection.Open(GetSetting(dbTechBrokerFilterSave,"All"), b, this.FindForm());
         }
 
         private void buttonSpecialEffects_Click(object sender, EventArgs e)
         {
             Button b = sender as Button;
-            specialeffectsselection.FilterButton(FilterKeyName(dbSpecialEffectsFilterSave), b,
-                             discoveryform.theme.TextBackColor, discoveryform.theme.TextBlockColor, this.FindForm());
-        }
-
-        private void SpecialEffectsSelectionChanged()
-        {
-            Display();
+            specialeffectsselection.Open(GetSetting(dbSpecialEffectsFilterSave,"All"), b, this.FindForm());
         }
 
         private void onlyCapacityToolStripMenuItem_Click(object sender, EventArgs e)

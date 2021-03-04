@@ -111,7 +111,7 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
 
-            TravelHistoryFilter.InitaliseComboBox(comboBoxHistoryWindow, FilterKeyName(dbHistorySave), false);
+            TravelHistoryFilter.InitaliseComboBox(comboBoxHistoryWindow, GetSetting(dbHistorySave,""), false);
         }
 
         public override void LoadLayout()
@@ -690,7 +690,6 @@ namespace EDDiscovery.UserControls
                 }
             }
         }
-
 
         private void comboBoxHistoryWindow_SelectedIndexChanged(object sender, EventArgs e)
         {

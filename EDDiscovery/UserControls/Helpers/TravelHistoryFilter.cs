@@ -164,7 +164,7 @@ namespace EDDiscovery.UserControls
                 return txlist;
         }
 
-        public static void InitaliseComboBox( ExtendedControls.ExtComboBox cc , string dbname , bool incldockstartend = true )
+        public static void InitaliseComboBox( ExtendedControls.ExtComboBox cc , string last , bool incldockstartend = true )
         {
             cc.Enabled = false;
             cc.DisplayMember = nameof(TravelHistoryFilter.Label);
@@ -196,7 +196,6 @@ namespace EDDiscovery.UserControls
 
             cc.DataSource = el;
 
-            string last = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(dbname, "");
             int entry = el.FindIndex(x => x.Label == last);
             //System.Diagnostics.Debug.WriteLine(dbname + "=" + last + "=" + entry);
             cc.SelectedIndex = (entry >=0) ? entry: 0;

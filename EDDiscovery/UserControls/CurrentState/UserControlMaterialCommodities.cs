@@ -56,12 +56,11 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
 
-            cfs = new FilterSelector(FilterKeyName(dbFilter));
+            cfs = new FilterSelector();
+            cfs.AddAllNone();
 
             MaterialCommodityData[] items;
             Tuple<MaterialCommodityData.ItemType, string>[] types;
-
-            cfs.AddAllNone();
 
             if (materials)
             {
@@ -168,7 +167,7 @@ namespace EDDiscovery.UserControls
 
             if (mcl == null)
                 return;
-            
+
             //System.Diagnostics.Debug.WriteLine("Display mcl " + mcl.GetHashCode());
 
             string filters = GetSetting(dbFilter, "All");
@@ -240,13 +239,17 @@ namespace EDDiscovery.UserControls
         private void buttonFilter_Click(object sender, EventArgs e)
         {
             Button b = sender as Button;
-            cfs.Filter(b, this.FindForm());
+            cfs.Open(GetSetting(dbFilter,"All"), b, this.FindForm());
         }
 
-        private void FilterChanged(object sender, bool same, Object e)
+        private void FilterChanged(string newset, Object e)
         {
-            if (!same)
+            string filters = GetSetting(dbFilter, "All");
+            if ( filters != newset )
+            {
+                PutSetting(dbFilter, newset);
                 Display(last_mcl);
+            }
         }
 
         private void extCheckBoxWordWrap_Click(object sender, EventArgs e)

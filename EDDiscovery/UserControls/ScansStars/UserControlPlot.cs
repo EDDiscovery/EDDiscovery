@@ -67,7 +67,7 @@ namespace EDDiscovery.UserControls
         {
             DBBaseName = "PlotPanel";
 
-            textMinRadius.ValueNoChange = GetSetting("PlotMin", 0);
+            textMinRadius.ValueNoChange = GetSetting("PlotMin", 0.0);
             textMaxRadius.ValueNoChange = GetSetting("PlotMax", defaultmaximumradarradius);
             textMinRadius.SetComparitor(textMaxRadius, -2);     // need to do this after values are set
             textMaxRadius.SetComparitor(textMinRadius, 2);

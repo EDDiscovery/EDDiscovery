@@ -60,8 +60,8 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNewEntry += OnNewEntry;
             discoveryform.OnNewUIEvent += OnNewUIEvent;
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
-            numberBoxTargetLatitude.ValueNoChange = GetSetting(dbLatSave, 0);
-            numberBoxTargetLongitude.ValueNoChange = GetSetting(dbLongSave, 0);
+            numberBoxTargetLatitude.ValueNoChange = GetSetting(dbLatSave, 0.0);     // note need to explicity state its double
+            numberBoxTargetLongitude.ValueNoChange = GetSetting(dbLongSave, 0.0);
             autoHideTargetCoords = GetSetting(dbHideSave, false);
             checkBoxHideTransparent.Checked = autoHideTargetCoords;
             comboBoxBookmarks.Text = "";

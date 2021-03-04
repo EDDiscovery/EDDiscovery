@@ -29,7 +29,7 @@ namespace EDDiscovery.UserControls
     {
         private FilterSelector cfs;
         private string dbFilter = "EventFilter2";
-        private string dbEDUIHistory = "EDUIHistory";
+        private string dbHistorySave = "EDUIHistory";
 
         #region Init
 
@@ -49,7 +49,7 @@ namespace EDDiscovery.UserControls
             var jes = EliteDangerousCore.JournalEntry.GetNameImageOfEvents(new string[] { "Ledger" });
             string cashtype = string.Join(";", jes.Select(x=>x.Item1) ) + ";";
 
-            cfs = new FilterSelector(FilterKeyName(dbFilter));
+            cfs = new FilterSelector();
             cfs.AddAllNone();
             cfs.AddGroupOption(cashtype, "Cash Transactions".T(EDTx.UserControlLedger_CashTransactions),  JournalEntry.JournalTypeIcons[JournalTypeEnum.Bounty]);
             cfs.AddJournalEntries(new string[] { "Ledger", "LedgerNC" });
@@ -62,7 +62,7 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
 
-            TravelHistoryFilter.InitaliseComboBox(comboBoxHistoryWindow, FilterKeyName(dbEDUIHistory), incldockstartend: false);
+            TravelHistoryFilter.InitaliseComboBox(comboBoxHistoryWindow, GetSetting(dbHistorySave,""), incldockstartend: false);
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
@@ -169,12 +169,22 @@ namespace EDDiscovery.UserControls
         private void buttonFilter_Click(object sender, EventArgs e)
         {
             Button b = sender as Button;
-            cfs.Filter( b, this.FindForm());
+            cfs.Open( GetSetting(dbFilter,"All"), b, this.FindForm());
+        }
+
+        private void EventFilterChanged(string newset, Object e)
+        {
+            string filters = GetSetting(dbFilter, "All");
+            if (filters != newset)
+            {
+                PutSetting(dbFilter, newset);
+                Display(current_mc);
+            }
         }
 
         private void comboBoxHistoryWindow_SelectedIndexChanged(object sender, EventArgs e)
         {
-            PutSetting(FilterKeyName(dbEDUIHistory), comboBoxHistoryWindow.Text);
+            PutSetting(dbHistorySave, comboBoxHistoryWindow.Text);
 
             if (current_mc != null)
             {
@@ -185,12 +195,6 @@ namespace EDDiscovery.UserControls
         private void textBoxFilter_TextChanged(object sender, EventArgs e)
         {
             dataGridViewLedger.FilterGridView(textBoxFilter.Text);
-        }
-
-        private void EventFilterChanged(object sender, bool same, Object e)
-        {
-            if (!same)
-                Display(current_mc);
         }
 
         #region right clicks

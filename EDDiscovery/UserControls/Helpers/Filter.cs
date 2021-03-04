@@ -14,7 +14,6 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using EliteDangerousCore;
-using EliteDangerousCore.DB;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -28,21 +27,10 @@ namespace EDDiscovery.UserControls
 
     public class FilterSelector : ExtendedControls.CheckedIconListBoxFormGroup
     {
-        private string dbstring;
-
-        public new Action<string, bool, Object> SaveSettings;                       // Action on close, string is the settings, bool is true if same as before, object is sender
-
-        public FilterSelector(string db) : base()
+        public FilterSelector() : base()
         {
-            dbstring = db;
             CloseOnDeactivate = false;          // this one, we hide it on deactivate, to make it pop up quicker next time
             HideOnDeactivate = true;
-            base.SaveSettings += (settings,tag) =>                              // on save settings, perform store.
-            {
-                string org = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(dbstring,"All");
-                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(dbstring, settings);
-                this.SaveSettings?.Invoke(settings, settings.Equals(org), tag);
-            };
         }
 
         public void AddJournalExtraOptions()
@@ -95,7 +83,7 @@ namespace EDDiscovery.UserControls
 
         // use this to open the filter.
 
-        public void Filter(Control ctr, Form parent)
+        public void Open(string settings, Control ctr, Form parent)
         {
             if (this.Visible == true)
             {
@@ -103,8 +91,9 @@ namespace EDDiscovery.UserControls
             }
             else
             {
-                Show(EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(dbstring, "All"), ctr, parent);     // use the quick helper. 
+                Show(settings, ctr, parent);     // use the quick helper. 
             }
         }
     }
 }
+

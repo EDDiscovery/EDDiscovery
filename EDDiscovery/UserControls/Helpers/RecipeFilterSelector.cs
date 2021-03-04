@@ -24,42 +24,28 @@ namespace EDDiscovery.UserControls
 {
     // UI to help select recipes
 
-    public class RecipeFilterSelector
+    public class RecipeFilterSelector : ExtendedControls.CheckedIconListBoxFormGroup
     {
-        public Action Changed;
-
-        private List<string> options;
-
         public RecipeFilterSelector(List<string> opts)
         {
-            options = opts;
+            CloseOnDeactivate = false;          // this one, we hide it on deactivate, to make it pop up quicker next time
+            HideOnDeactivate = true;
+
+            AddAllNone();
+            foreach (var s in opts)
+                AddStandardOption(s, s);
         }
 
-        public void FilterButton(string db, Control ctr, Color back, Color fore, Form parent)
+        public void Open(string settings, Control ctr, Form parent)
         {
-            FilterButton(db, ctr, back, fore, parent, options);
-        }
-
-        ExtendedControls.CheckedIconListBoxFormGroup cc;
-
-        public void FilterButton(string db, Control ctr, Color back, Color fore, Form parent, List<string> list)
-        {
-            cc = new ExtendedControls.CheckedIconListBoxFormGroup();
-            cc.AddAllNone();
-
-            foreach (var s in list)
-                cc.AddStandardOption(s, s);
-
-            cc.SaveSettings += (s, o) =>
+            if (this.Visible == true)
             {
-                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(db, s);
-                Changed?.Invoke();
-            };
-
-            cc.Show(EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(db, "All"), ctr, parent);
+                Hide();
+            }
+            else
+            {
+                Show(settings, ctr, parent);     // use the quick helper. 
+            }
         }
-
     }
-
-
 }

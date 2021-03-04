@@ -46,7 +46,9 @@ namespace EDDiscovery.UserControls
             dataGridView.RowTemplate.Height = Font.ScalePixels(26);
             dataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
 
-            findSystemsUserControl.Init(GroupKeyName("SearchFindSys"), true, discoveryform);
+            DBSettingsSaver db = new DBSettingsSaver(this, "SearchFindSys");
+
+            findSystemsUserControl.Init(db, true, discoveryform);
             findSystemsUserControl.Excel += () => { dataGridView.Excel(3); };
             findSystemsUserControl.ReturnSystems += StarsFound;
 
@@ -70,7 +72,7 @@ namespace EDDiscovery.UserControls
         public override void Closing()
         {
             DGVSaveColumnLayout(dataGridView);
-            findSystemsUserControl.Closing();
+            findSystemsUserControl.Save();
         }
 
         #endregion

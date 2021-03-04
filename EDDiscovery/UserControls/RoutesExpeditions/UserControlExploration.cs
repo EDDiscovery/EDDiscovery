@@ -355,12 +355,17 @@ namespace EDDiscovery.UserControls
                 }
             };
 
-            string subkeybname = GroupKeyName("Sys");     // save under our key, plus sys
+            DBSettingsSaver db = new DBSettingsSaver(this, "Sys");
 
             f.ShowDialogCentred(this.FindForm(), this.FindForm().Icon, "Add Systems".T(EDTx.UserControlExploration_AddSys),
-                                callback: () => {; usc.Init(subkeybname, false, discoveryform); }, closeicon: true);
-            usc.Closing();
+                                callback: () => 
+                                {
+                                    usc.Init(db, false, discoveryform);
+                                }, 
+                                closeicon: true);
+            usc.Save();
         }
+
 
         private void toolStripButtonImportTextFile_Click(object sender, EventArgs e)
         {

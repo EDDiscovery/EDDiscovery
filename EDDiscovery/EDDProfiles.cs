@@ -95,6 +95,8 @@ namespace EDDiscovery
 
         public string UserControlsPrefix { get { return Current.Id == DefaultId ? "" : ("Profile_" + Current.Id + "_"); } }
 
+        public string UserControlsPrefixDB { get { return Current.Id == DefaultId ? "Default" : ("P" + Current.Id ); } }
+
         static public string ProfilePrefix(int id) { return "Profile_" + id + "_"; }
 
         public void LoadProfiles(string selectprofile)

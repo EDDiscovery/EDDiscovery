@@ -220,29 +220,16 @@ namespace EDDiscovery.UserControls
             System.Diagnostics.Debug.Assert(DBBaseName != null);
             string name = DBName(displaynumber, DBBaseName, itemname);
             var res = EliteDangerousCore.DB.UserDatabase.Instance.GetSetting(name, defaultvalue);
-            //System.Diagnostics.Debug.WriteLine("Get DB Name " + name + ": " + res);
+
+          //  System.Diagnostics.Debug.WriteLine("Get DB Name " + defaultvalue.GetType().Name + ": " + name + ": " + res);
             return res;
         }
 
         protected bool PutSetting<T>(string itemname, T value)
         {
             string name = DBName(displaynumber, DBBaseName, itemname);
-            //System.Diagnostics.Debug.WriteLine("Set DB Name " + name + ": " + value);
+           // System.Diagnostics.Debug.WriteLine("Set DB Name " + name + ": " + value);
             return EliteDangerousCore.DB.UserDatabase.Instance.PutSetting(name, value);
-        }
-
-        // to be used for filters which expect a DB name.  A single DB entry of this name
-
-        public string FilterKeyName(string itemname)
-        {
-            return DBName(displaynumber, DBBaseName, itemname);
-        }
-
-        // a group name which would have further text added for multiple items
-
-        public string GroupKeyName(string itemname)
-        {
-            return DBName(displaynumber, DBBaseName, itemname);
         }
 
         public void DGVLoadColumnLayout(DataGridView dgv, string auxname = "")
@@ -259,6 +246,27 @@ namespace EDDiscovery.UserControls
             //System.Diagnostics.Debug.WriteLine("Set Column Name " + root);
             dgv.SaveColumnSettings(root, (a, b) => EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(a, b),
                                         (c, d) => EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble(c, d));
+        }
+
+        public class DBSettingsSaver             // instance this class and you can pass the class to another class, allowing it to use your UCCB generic get/save
+        {                                        // with a defined extra itemname.  this seems the only way to pass generic delegates
+            public DBSettingsSaver(UserControlCommonBase b, string itemname)
+            {
+                root = itemname;
+                ba = b;
+            }
+            public T GetSetting<T>(string key, T defaultvalue)
+            {
+                return ba.GetSetting(root+key, defaultvalue);
+            }
+
+            public bool PutSetting<T>(string key, T value)
+            {
+                return ba.PutSetting(root+key, value);
+            }
+
+            private string root;
+            private UserControlCommonBase ba;
         }
 
         #endregion

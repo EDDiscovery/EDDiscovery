@@ -72,7 +72,7 @@ namespace EDDiscovery.UserControls
 
         private int defaultRowHeight;
 
-        private string dbFilterSave = "EventFilter2";
+        private string dbFilter = "EventFilter2";
         private string dbHistorySave = "EDUIHistory";
         private string dbFieldFilter = "FieldFilter";
         private string dbOutlines = "Outlines";
@@ -85,7 +85,7 @@ namespace EDDiscovery.UserControls
 
         private Dictionary<long, DataGridViewRow> rowsbyjournalid = new Dictionary<long, DataGridViewRow>();
 
-        FilterSelector cfs;
+        private FilterSelector cfs;
 
         Timer searchtimer;
         Timer todotimer;
@@ -105,7 +105,7 @@ namespace EDDiscovery.UserControls
 
             //System.Diagnostics.Debug.WriteLine("Travel grid is " + this.GetHashCode());
 
-            cfs = new FilterSelector(FilterKeyName(dbFilterSave));
+            cfs = new FilterSelector();
             cfs.AddAllNone();
             cfs.AddJournalExtraOptions();
             cfs.AddJournalEntries();
@@ -157,7 +157,7 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.Translate(contextMenuStripOutlines, this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
 
-            TravelHistoryFilter.InitaliseComboBox(comboBoxHistoryWindow, FilterKeyName(dbHistorySave));
+            TravelHistoryFilter.InitaliseComboBox(comboBoxHistoryWindow, GetSetting(dbHistorySave, ""));
 
             extButtonDrawnHelp.Text = "";
             extButtonDrawnHelp.Image = ExtendedControls.TabStrip.HelpIcon;
@@ -226,7 +226,7 @@ namespace EDDiscovery.UserControls
 
             //for (int i = 0; i < 10 && i < result.Count; i++)  System.Diagnostics.Debug.WriteLine("Hist {0} {1} {2}", result[i].EventTimeUTC, result[i].Indexno , result[i].EventSummary);
 
-            result = HistoryList.FilterByJournalEvent(result, GetSetting(dbFilterSave, "All"), out ftotalevents);
+            result = HistoryList.FilterByJournalEvent(result, GetSetting(dbFilter, "All"), out ftotalevents);
 
             result = FilterHelpers.FilterHistory(result, fieldfilter, discoveryform.Globals, out ftotalfilters);
 
@@ -379,7 +379,7 @@ namespace EDDiscovery.UserControls
                 return;
             }
 
-            bool add = he.IsJournalEventInEventFilter(GetSetting(dbFilterSave, "All"));
+            bool add = he.IsJournalEventInEventFilter(GetSetting(dbFilter, "All"));
 
             if (!add)                   // filtered out, update filter total and display
             {
@@ -1238,13 +1238,17 @@ namespace EDDiscovery.UserControls
         private void buttonFilter_Click(object sender, EventArgs e)
         {
             Button b = sender as Button;
-            cfs.Filter(b, this.FindForm());
+            cfs.Open(GetSetting(dbFilter, "All"), b, this.FindForm());
         }
 
-        private void EventFilterChanged(object sender, bool same, Object e)
+        private void EventFilterChanged(string newset, Object e)
         {
-            if (!same)
-                HistoryChanged(current_historylist,true);
+            string filters = GetSetting(dbFilter, "All");
+            if (filters != newset)
+            {
+                PutSetting(dbFilter, newset);
+                HistoryChanged(current_historylist, true);
+            }
         }
 
 

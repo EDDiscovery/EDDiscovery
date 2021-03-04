@@ -29,11 +29,11 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlJournalGrid : UserControlCommonBase, IHistoryCursor
     {
-        FilterSelector cfs;
+        private FilterSelector cfs;
         private BaseUtils.ConditionLists fieldfilter = new BaseUtils.ConditionLists();
         private Dictionary<long, DataGridViewRow> rowsbyjournalid = new Dictionary<long, DataGridViewRow>();
 
-        private string dbFilterSave = "EventFilter2";
+        private string dbFilter = "EventFilter2";
         private string dbHistorySave = "EDUIHistory";
         private string dbFieldFilter = "ControlFieldFilter";
 
@@ -76,7 +76,7 @@ namespace EDDiscovery.UserControls
             dataGridViewJournal.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             dataGridViewJournal.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
 
-            cfs = new FilterSelector(FilterKeyName(dbFilterSave));
+            cfs = new FilterSelector();
             cfs.AddAllNone();
             cfs.AddJournalExtraOptions();
             cfs.AddJournalEntries();
@@ -101,7 +101,7 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.Translate(historyContextMenu, this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
 
-            TravelHistoryFilter.InitaliseComboBox(comboBoxJournalWindow, FilterKeyName(dbHistorySave));
+            TravelHistoryFilter.InitaliseComboBox(comboBoxJournalWindow, GetSetting(dbHistorySave, ""));
         }
 
         public override void LoadLayout()
@@ -163,7 +163,7 @@ namespace EDDiscovery.UserControls
             List<HistoryEntry> result = filter.Filter(hl.EntryOrder());
             fdropdown = hl.Count - result.Count();
 
-            result = HistoryList.FilterByJournalEvent(result, GetSetting(dbFilterSave, "All"), out ftotalevents);
+            result = HistoryList.FilterByJournalEvent(result, GetSetting(dbFilter, "All"), out ftotalevents);
             result = FilterHelpers.FilterHistory(result, fieldfilter, discoveryform.Globals, out ftotalfilters);
 
             dataGridViewJournal.Rows.Clear();
@@ -262,7 +262,7 @@ namespace EDDiscovery.UserControls
                 return;
             }
 
-            bool add = he.IsJournalEventInEventFilter(GetSetting(dbFilterSave, "All"));
+            bool add = he.IsJournalEventInEventFilter(GetSetting(dbFilter, "All"));
 
             if (!add)
             {
@@ -366,13 +366,17 @@ namespace EDDiscovery.UserControls
         private void buttonFilter_Click(object sender, EventArgs e)
         {
             Button b = sender as Button;
-            cfs.Filter(b, this.FindForm());
+            cfs.Open(GetSetting(dbFilter,"All"), b, this.FindForm());
         }
 
-        private void EventFilterChanged(object sender, bool same, Object e)
+        private void EventFilterChanged(string newset, Object e)
         {
-            if (!same)
+            string filters = GetSetting(dbFilter, "All");
+            if (filters != newset)
+            {
+                PutSetting(dbFilter, newset);
                 Display(current_historylist);
+            }
         }
 
         private void textBoxFilter_TextChanged(object sender, EventArgs e)
