@@ -543,22 +543,17 @@ namespace EDDiscovery.UserControls
 
         #region Default
 
-        public static void CheckPrimarySplitterControlSettings(string defaultname )
+        public static void CheckPrimarySplitterControlSettings(bool reset )
         {
             string primarycontrolname = EDDProfiles.Instance.UserControlsPrefix + "SplitterControlWindows";                   // primary name for first splitter
 
             string splitctrl = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(primarycontrolname, "");
 
-            if (splitctrl == "" || !splitctrl.Contains("'0,1006'"))   // never set, or wiped, or does not have TG in it, reset.. if previous system had the IDs, use them, else use defaults
+            if (splitctrl == "" || !splitctrl.Contains("'0,1006'") || reset)   // never set, or wiped, or does not have TG in it or reset
             {
-                int enum_bottom = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(defaultname + "BottomTab", (int)(PanelInformation.PanelIDs.Scan));
-                int enum_bottomright = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(defaultname + "BottomRightTab", (int)(PanelInformation.PanelIDs.Log));
-                int enum_middleright = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(defaultname + "MiddleRightTab", (int)(PanelInformation.PanelIDs.StarDistance));
-                int enum_topright = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(defaultname + "TopRightTab", (int)(PanelInformation.PanelIDs.SystemInformation));
-
-                string ctrl = "V(0.75, H(0.6, U'0,1006',U'1," + enum_bottom.ToStringInvariant() + "')," +
-                                "H(0.5, U'2," + enum_topright.ToStringInvariant() + "', " +
-                                "H(0.25,U'3," + enum_middleright.ToStringInvariant() + "',U'4," + enum_bottomright + "')) )";
+                string ctrl = "V(0.75, H(0.6, U'0,1006',U'1,9')," +
+                                "H(0.5, U'2,16', " +
+                                "H(0.25,U'3,1',U'4,0')) )";
 
                 EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(primarycontrolname, ctrl);
             }
