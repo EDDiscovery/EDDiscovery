@@ -164,10 +164,83 @@ namespace EDDiscovery.UserControls
             dataGridViewCommanders.Update();
         }
 
+        // Install CAPI for EDD 
+        
+        Label capiStateLabel;
+        ExtendedControls.ExtButton capiButton;
+        EliteDangerousCore.Forms.CommanderForm cf;
+
+        private List<ExtendedControls.ExtGroupBox> AdditionalCmdrControls()
+        {
+            var gb = new List<ExtendedControls.ExtGroupBox>();
+
+            ExtendedControls.ExtGroupBox g1 = new ExtendedControls.ExtGroupBox() { Height = 60, Text = "Frontier CAPI" };
+            capiButton = new ExtendedControls.ExtButton() { Location = new System.Drawing.Point(210,23),
+                                    ClientSize = new System.Drawing.Size(80,20), Text = "Login"};
+            capiButton.Click += CapiButton_Click;
+
+            capiStateLabel = new Label() { Location = new System.Drawing.Point(4, 23)};
+            g1.Controls.Add(capiButton);
+            g1.Controls.Add(capiStateLabel);
+            gb.Add(g1);
+            return gb;
+        }
+
+        private void CapiButton_Click(object sender, EventArgs e)
+        {
+            if (cf.CommanderName.HasChars())    // good commander name..
+            {
+                if (discoveryform.FrontierCAPI.HasUserBeenLoggedIn(cf.CommanderName))       // if we are log in, logout
+                {
+                    discoveryform.FrontierCAPI.LogOut();
+                    SetCAPILabelState();
+                }
+                else
+                {
+                    discoveryform.FrontierCAPI.LogIn(cf.CommanderName);         // perform login, which does the auth procedure.
+                    capiButton.Enabled = false;
+                    capiStateLabel.Text = "Logging in";
+                }
+            }
+            else
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "No commander name", "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        void SetCAPILabelState()                                        
+        {
+            if (!discoveryform.FrontierCAPI.ClientIDAvailable)      // disable id no capiID
+            {
+                capiButton.Enabled = false;
+                capiStateLabel.Text = "Disabled";
+            }
+            else if (cf.CommanderName.HasChars() && discoveryform.FrontierCAPI.HasUserBeenLoggedIn(cf.CommanderName))   // if logged in..
+            {
+                capiButton.Enabled = true;
+                capiButton.Text = "Logout";
+                capiStateLabel.Text = "Logged In";
+            }
+            else
+            {                                                   // no cred, or logged out..
+                capiButton.Enabled = true;
+                capiStateLabel.Text = "Await Log in";
+            }
+        }
+
+        void CAPICallBack(CAPI.CompanionAPI.State s)            // call back from CAPI system saying state changed, update button/label
+        {
+            System.Diagnostics.Debug.WriteLine("Capi state " + s);
+            SetCAPILabelState();
+        }
+
+        // add dde handler
+        // callback to CAPICallback to authorized to change the state.
+
         private void buttonAddCommander_Click(object sender, EventArgs e)
         {
-            EliteDangerousCore.Forms.CommanderForm cf = new EliteDangerousCore.Forms.CommanderForm();
+            cf = new EliteDangerousCore.Forms.CommanderForm(AdditionalCmdrControls());
             cf.Init(true);
+            SetCAPILabelState();
+            discoveryform.FrontierCAPI.StatusChange += CAPICallBack;
 
             if (cf.ShowDialog(FindForm()) == DialogResult.OK)
             {
@@ -184,6 +257,8 @@ namespace EDDiscovery.UserControls
                 else
                     ExtendedControls.MessageBoxTheme.Show(FindForm(), "Commander name is not valid or duplicate".T(EDTx.UserControlSettings_AddC) , "Cannot create Commander".T(EDTx.UserControlSettings_AddT), MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             }
+
+            discoveryform.FrontierCAPI.StatusChange -= CAPICallBack;
         }
 
         private void dataGridViewCommanders_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
@@ -206,8 +281,10 @@ namespace EDDiscovery.UserControls
         { 
             EDCommander cmdr = dataGridViewCommanders.Rows[row].DataBoundItem as EDCommander;
 
-            EliteDangerousCore.Forms.CommanderForm cf = new EliteDangerousCore.Forms.CommanderForm();
+            cf = new EliteDangerousCore.Forms.CommanderForm(AdditionalCmdrControls());
             cf.Init(cmdr,false);
+            SetCAPILabelState();
+            discoveryform.FrontierCAPI.StatusChange += CAPICallBack;
 
             if (cf.ShowDialog(FindForm()) == DialogResult.OK)
             {
@@ -220,6 +297,8 @@ namespace EDDiscovery.UserControls
                 if ( forceupdate )                  // journal loc change forcing update
                     discoveryform.RefreshHistoryAsync();        // do a resync
             }
+
+            discoveryform.FrontierCAPI.StatusChange -= CAPICallBack;
         }
 
         private void btnDeleteCommander_Click(object sender, EventArgs e)

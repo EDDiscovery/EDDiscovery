@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" InitialTargets="Version" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" InitialTargets="Version;ClientID" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -173,7 +173,17 @@
   <ItemGroup>
     <Compile Include="Actions\ActionControllerKeys.cs" />
     <Compile Include="Actions\ActionControllerVoice.cs" />
+    <Compile Include="CapiClientID.cs" />
     <Compile Include="EDDHelp.cs" />
+    <Compile Include="EDDiscoveryFormProfiles.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EDDiscoveryFormHelpers.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EDDiscoveryFormJournalEvents.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Translations\EDDiscoveryTranslations.cs" />
     <Compile Include="UserControls\CurrentState\UserControlFactions.cs">
       <SubType>UserControl</SubType>
@@ -297,7 +307,9 @@
     <Compile Include="Properties\ExtraVersion.cs" />
     <Compile Include="UserControls\Helpers\Outliner.cs" />
     <Compile Include="UserControls\Helpers\ScanDisplayForm.cs" />
-    <Compile Include="UserControls\Helpers\RecipeFilterSelector.cs" />
+    <Compile Include="UserControls\Helpers\RecipeFilterSelector.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="UserControls\Helpers\TagsForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1051,6 +1063,10 @@
       <Project>{3d79de63-5eec-4f30-a879-fb4c6ba4b2dc}</Project>
       <Name>SQLLite</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CAPI\CAPI\CAPI.csproj">
+      <Project>{465c72d9-f10b-4cc6-a5dc-16ed65881655}</Project>
+      <Name>CAPI</Name>
+    </ProjectReference>
     <ProjectReference Include="..\EDDIcons\EDDIcons.csproj">
       <Project>{646f71be-f102-444e-9254-818e5a320ab8}</Project>
       <Name>EDDIcons</Name>
@@ -1216,5 +1232,18 @@
       </AssemblyAttribute>
     </ItemGroup>
     <WriteCodeFragment AssemblyAttributes="@(AssemblyAttribute)" Language="C#" OutputFile="Properties\ExtraVersion.cs" />
+  </Target>
+  <Target Name="ClientID" BeforeTargets="Build">
+    <PropertyGroup>
+      <LauncherCmd>
+using System%3B
+namespace CAPI
+{
+    public class CapiClientIdentity
+    { public static string id = "$(CAPIID)"%3B }
+}
+      </LauncherCmd>
+    </PropertyGroup>
+    <WriteLinesToFile File="CapiClientID.cs" Overwrite="true" Lines="$(LauncherCmd)" />
   </Target>
 </Project>

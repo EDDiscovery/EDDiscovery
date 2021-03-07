@@ -60,7 +60,6 @@ namespace EDDiscovery.UserControls
 
         Timer todotimer;
         Queue<Action> todo = new Queue<Action>();
-        bool loadcomplete;
 
         public UserControlJournalGrid()
         {
@@ -142,7 +141,6 @@ namespace EDDiscovery.UserControls
             if (hl == null)     // just for safety
                 return;
 
-            loadcomplete = false;
             this.Cursor = Cursors.WaitCursor;
             buttonExtExcel.Enabled = buttonFilter.Enabled = buttonField.Enabled = comboBoxJournalWindow.Enabled = false;
 
@@ -234,8 +232,6 @@ namespace EDDiscovery.UserControls
 
                 this.Cursor = Cursors.Default;
                 buttonExtExcel.Enabled = buttonFilter.Enabled = buttonField.Enabled = comboBoxJournalWindow.Enabled = true;
-
-                loadcomplete = true;
             });
 
             todotimer.Start();
@@ -256,7 +252,7 @@ namespace EDDiscovery.UserControls
 
         private void AddNewEntry(HistoryEntry he, HistoryList hl)               // add if in event filter, and not in field filter..
         {
-            if (!loadcomplete)
+            if (todotimer.Enabled)
             {
                 todo.Enqueue(() => AddNewEntry(he, hl));
                 return;
@@ -279,43 +275,29 @@ namespace EDDiscovery.UserControls
 
             if (add)
             {
-                var row = CreateHistoryRow(he, textBoxFilter.Text);
+                var row = CreateHistoryRow(he, textBoxFilter.Text);     // we might be filtered out by search
                 if (row != null)
                     dataGridViewJournal.Rows.Insert(0, row);
+                else
+                    add = false;
+            }
 
+            if (add)                                // its been added, we have at least 1 row visible, at row 0
+            { 
                 var filter = (TravelHistoryFilter)comboBoxJournalWindow.SelectedItem ?? TravelHistoryFilter.NoFilter;
 
-                if (filter.MaximumNumberOfItems != null)
+                if (filter.MaximumNumberOfItems != null)        // this one won't remove the latest one
                 {
-                    for (int r = dataGridViewJournal.Rows.Count - 1; r >= dataGridViewJournal.Rows.Count; r--)
+                    for (int r = dataGridViewJournal.Rows.Count - 1; r >= filter.MaximumNumberOfItems; r--)
                     {
                         dataGridViewJournal.Rows.RemoveAt(r);
                     }
                 }
 
-                if (filter.MaximumDataAge != null)
-                {
-                    for (int r = dataGridViewJournal.Rows.Count - 1; r > 0; r--)
-                    {
-                        var rhe = dataGridViewJournal.Rows[r].Tag as HistoryEntry;
-                        if (rhe != null && rhe.AgeOfEntry() > filter.MaximumDataAge)
-                        {
-                            dataGridViewJournal.Rows.RemoveAt(r);
-                        }
-                        else
-                        {
-                            break;
-                        }
-                    }
-                }
-
-                if (checkBoxCursorToTop.Checked && dataGridViewJournal.DisplayedRowCount(false) > 0)   // Move focus to new row
+                if (checkBoxCursorToTop.Checked) // Move focus to first row
                 {
                     dataGridViewJournal.ClearSelection();
-                    int rowno = dataGridViewJournal.Rows.GetFirstRow(DataGridViewElementStates.Visible);
-                    if (rowno != -1)
-                        dataGridViewJournal.SetCurrentAndSelectAllCellsOnRow(rowno);       // its the current cell which needs to be set, moves the row marker as well
-
+                    dataGridViewJournal.SetCurrentAndSelectAllCellsOnRow(0);       // its the current cell which needs to be set, moves the row marker as well
                     FireChangeSelection();
                 }
             }

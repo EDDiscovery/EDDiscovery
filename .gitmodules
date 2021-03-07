@@ -10,3 +10,6 @@
 [submodule "EliteDangerousCore"]
 	path = EliteDangerousCore
 	url = https://github.com/EDDiscovery/EliteDangerousCore.git
+[submodule "CAPI"]
+	path = CAPI
+	url = https://github.com/EDDiscovery/CAPI.git

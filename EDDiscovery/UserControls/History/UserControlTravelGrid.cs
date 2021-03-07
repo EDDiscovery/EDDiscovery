@@ -53,10 +53,6 @@ namespace EDDiscovery.UserControls
         public delegate void KeyDownInCell(int asciikeycode, int rowno, int colno, bool note);
         public event KeyDownInCell OnKeyDownInCell;   // After a change of selection
 
-        // for primary travel grid to chain stuff after display has been updated
-        public delegate void AddedNewEntry(HistoryEntry he, HistoryList hl, bool accepted);
-        public AddedNewEntry OnNewEntry;       // FIRED after discoveryform.onNewEntry->this.AddNewEntry completes
-
         #endregion
 
         #region Init
@@ -72,12 +68,12 @@ namespace EDDiscovery.UserControls
 
         private int defaultRowHeight;
 
-        private string dbFilter = "EventFilter2";
-        private string dbHistorySave = "EDUIHistory";
-        private string dbFieldFilter = "FieldFilter";
-        private string dbOutlines = "Outlines";
-        private string dbWordWrap = "WordWrap";
-        private string dbVisitedColour = "VisitedColour";
+        private const string dbFilter = "EventFilter2";                 // DB names
+        private const string dbHistorySave = "EDUIHistory";
+        private const string dbFieldFilter = "FieldFilter";
+        private const string dbOutlines = "Outlines";
+        private const string dbWordWrap = "WordWrap";
+        private const string dbVisitedColour = "VisitedColour";
 
         private HistoryList current_historylist;        // the last one set, for internal refresh purposes on sort
 
@@ -91,7 +87,6 @@ namespace EDDiscovery.UserControls
         Timer todotimer;
 
         private Queue<Action> todo = new Queue<Action>();
-        private bool loadcomplete = false;
 
         public UserControlTravelGrid()
         {
@@ -163,11 +158,6 @@ namespace EDDiscovery.UserControls
             extButtonDrawnHelp.Image = ExtendedControls.TabStrip.HelpIcon;
         }
 
-        private void ToolStripOutliningOn_CheckStateChanged(object sender, EventArgs e)
-        {
-            System.Diagnostics.Debug.WriteLine("outlining Change state");
-        }
-
         public override void LoadLayout()
         {
             defaultRowHeight = dataGridViewTravel.RowTemplate.MinimumHeight = Math.Max(28, Font.ScalePixels(28));       // due to 24 bit icons
@@ -202,8 +192,7 @@ namespace EDDiscovery.UserControls
         {
             if (hl == null)     // just for safety
                 return;
-
-            loadcomplete = false;
+                                        
             current_historylist = hl;
             this.Cursor = Cursors.WaitCursor;
 
@@ -334,14 +323,15 @@ namespace EDDiscovery.UserControls
                     }
                 }
 
-                System.Diagnostics.Debug.WriteLine(BaseUtils.AppTicks.TickCount + " TG TOTAL TIME " + swtotal.ElapsedMilliseconds);
+                System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCount + " TG TOTAL TIME " + swtotal.ElapsedMilliseconds);
 
                 UpdateToolTipsForFilter();
 
-                //System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCountLap(this) + " TG " + displaynumber + " Load Finish");
-
                 if (dataGridViewTravel.MoveToSelection(rowsbyjournalid, ref pos, true))
+                {
+                    System.Diagnostics.Trace.WriteLine(" Fire from load complete");
                     FireChangeSelection();
+                }
 
                 if (sortcol >= 0)
                 {
@@ -351,10 +341,10 @@ namespace EDDiscovery.UserControls
 
                 this.Cursor = Cursors.Default;
                 extCheckBoxOutlines.Enabled = extCheckBoxWordWrap.Enabled = buttonExtExcel.Enabled = buttonFilter.Enabled = buttonField.Enabled = comboBoxHistoryWindow.Enabled = true;
-                loadcomplete = true;
+                System.Diagnostics.Trace.WriteLine("**** Load complete");
             });
 
-            todotimer.Start();
+            todotimer.Start();          // indicate the timer is going to start.. 
         }
 
 
@@ -373,8 +363,9 @@ namespace EDDiscovery.UserControls
 
         private void AddNewEntry(HistoryEntry he, HistoryList hl)           // on new entry from discovery system
         {
-            if (!loadcomplete)
+            if (todotimer.Enabled)      // if we have the todotimer running.. we add to the queue.  better than the old loadcomplete, no race conditions
             {
+                System.Diagnostics.Trace.WriteLine("New entry, load not complete, queuing");
                 todo.Enqueue(() => AddNewEntry(he, hl));
                 return;
             }
@@ -396,50 +387,33 @@ namespace EDDiscovery.UserControls
 
             if (add)
             {
-                var row = CreateHistoryRow(he, textBoxFilter.Text);
+                var row = CreateHistoryRow(he, textBoxFilter.Text);     // may be dumped out by search
                 if (row != null)
                     dataGridViewTravel.Rows.Insert(0, row);
+                else
+                    add = false;
             }
 
-            if (OnNewEntry != null)
-                OnNewEntry(he, hl, add);
-
-            if (add)
+            if (add)            // its been added, we have at least 1 row visible, at row 0
             {
                 var filter = (TravelHistoryFilter)comboBoxHistoryWindow.SelectedItem ?? TravelHistoryFilter.NoFilter;
 
-                if (filter.MaximumNumberOfItems != null)
+                if (filter.MaximumNumberOfItems != null)            // this one won't remove the latest one
                 {
-                    for (int r = dataGridViewTravel.Rows.Count - 1; r >= dataGridViewTravel.Rows.Count; r--)
+                    for (int r = dataGridViewTravel.Rows.Count - 1; r >= filter.MaximumNumberOfItems; r--)
                     {
+                        System.Diagnostics.Debug.WriteLine("Removed as too much " + r);
                         dataGridViewTravel.Rows.RemoveAt(r);
                     }
                 }
 
-                if (filter.MaximumDataAge != null)
-                {
-                    for (int r = dataGridViewTravel.Rows.Count - 1; r > 0; r--)
-                    {
-                        var rhe = dataGridViewTravel.Rows[r].Tag as HistoryEntry;
-                        if (rhe != null && rhe.AgeOfEntry() > filter.MaximumDataAge)
-                        {
-                            dataGridViewTravel.Rows.RemoveAt(r);
-                        }
-                        else
-                        {
-                            break;
-                        }
-                    }
-                }
+                System.Diagnostics.Trace.WriteLine($"Cursor to top {checkBoxCursorToTop.Checked} DGV Displayed row count {dataGridViewTravel.DisplayedRowCount(false)}");
 
-                if (checkBoxCursorToTop.Checked && dataGridViewTravel.DisplayedRowCount(false) > 0)   // Move focus to new row
+                if (checkBoxCursorToTop.Checked)   // Move focus to first row
                 {
-                    //System.Diagnostics.Debug.WriteLine("Auto Sel");
+                    System.Diagnostics.Trace.WriteLine("Auto selected top row on new entry");
                     dataGridViewTravel.ClearSelection();
-                    int rowno = dataGridViewTravel.Rows.GetFirstRow(DataGridViewElementStates.Visible);
-                    if (rowno != -1)
-                        dataGridViewTravel.SetCurrentAndSelectAllCellsOnRow(rowno);       // its the current cell which needs to be set, moves the row marker as well
-
+                    dataGridViewTravel.SetCurrentAndSelectAllCellsOnRow(0);       // its the current cell which needs to be set, moves the row marker as well
                     FireChangeSelection();
                 }
             }
@@ -534,7 +508,7 @@ namespace EDDiscovery.UserControls
             {
                 int row = dataGridViewTravel.CurrentCell.RowIndex;
                 var he = dataGridViewTravel.Rows[row].Tag as HistoryEntry;
-              //  System.Diagnostics.Debug.WriteLine("TG Fire Change sel at " + row + " he " + he.System.Name + " " + dataGridViewTravel.CurrentCell.RowIndex + ":" + dataGridViewTravel.CurrentCell.ColumnIndex);
+                System.Diagnostics.Trace.WriteLine("************ TG Fire Change sel at " + row + " he " + he.EventTimeUTC + " " +  he.EventSummary + " " + he.System.Name + " " + dataGridViewTravel.CurrentCell.RowIndex + ":" + dataGridViewTravel.CurrentCell.ColumnIndex);
 
                 if ( OnTravelSelectionChanged != null )     // we do this manually, so we can time each reaction if required.
                 {
@@ -542,7 +516,7 @@ namespace EDDiscovery.UserControls
                     {
                         System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch(); sw.Start();
                         e.DynamicInvoke(he, current_historylist, true);
-                        if ( sw.ElapsedMilliseconds>=20)
+                        if ( sw.ElapsedMilliseconds>=0)
                             System.Diagnostics.Trace.WriteLine("TG FCS Method " + e.Method.DeclaringType + " took " + sw.ElapsedMilliseconds);
                     }
                 }
@@ -606,7 +580,7 @@ namespace EDDiscovery.UserControls
 
         private void OnNoteChanged(Object sender,HistoryEntry he, bool committed)
         {
-            if (!loadcomplete)
+            if (todotimer.Enabled)
             {
                 todo.Enqueue(() => OnNoteChanged(sender, he, committed));
                 return;
@@ -630,7 +604,7 @@ namespace EDDiscovery.UserControls
 
         private void Searchtimer_Tick(object sender, EventArgs e)
         {
-            if (!loadcomplete)
+            if (todotimer.Enabled)      // don't do it while we are loading
             {
                 return;
             }

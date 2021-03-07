@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2015 - 2017 EDDiscovery development team
+ * Copyright © 2015 - 2021 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -13,6 +13,7 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+
 using EDDiscovery.Forms;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
@@ -44,7 +45,11 @@ namespace EDDiscovery
 
         public WebServer.WebServer WebServer;
 
+        public CAPI.CompanionAPI FrontierCAPI;
+        public BaseUtils.DDE.DDEServer DDEServer;
+
         public Actions.ActionController ActionController { get { return actioncontroller; } }
+        public BaseUtils.Variables Globals { get { return actioncontroller.Globals; } }
 
         static public EDDConfig EDDConfig { get { return EDDConfig.Instance; } }
         public EDDTheme theme { get { return EDDTheme.Instance; } }
@@ -312,6 +317,9 @@ namespace EDDiscovery
 
             WebServer = new WebServer.WebServer(this);
 
+            FrontierCAPI = new CAPI.CompanionAPI(EDDOptions.Instance.CAPIDirectory(), CAPI.CapiClientIdentity.id, EDDApplicationContext.UserAgent, "eddiscovery");
+            DDEServer = new BaseUtils.DDE.DDEServer();          // will be started in shown
+        
             UpdateProfileComboBox();
             comboBoxCustomProfiles.SelectedIndexChanged += ComboBoxCustomProfiles_SelectedIndexChanged;
 
@@ -451,10 +459,44 @@ namespace EDDiscovery
 
             LogLine(string.Format("Profile {0} Loaded".T(EDTx.EDDiscoveryForm_PROFL), EDDProfiles.Instance.Current.Name));
 
+            // Bindings
+
             if (actioncontroller.FrontierBindings.FileLoaded != null)
                 LogLine(string.Format("Loaded Bindings {0}", actioncontroller.FrontierBindings.FileLoaded));
             else
                 LogLine("Frontier bindings did not load");
+
+            // CAPI URI callback
+
+            if (FrontierCAPI.ClientIDAvailable)     // if we have a clientid, we can do a login
+            {
+                string ddeservername = "edd-dde-server";
+                string appPath = System.Reflection.Assembly.GetEntryAssembly()?.Location;
+
+                // we go into the registry, rummage around, and poke the right entries to make the shell do a DDE callback on the System topic to this application
+                // and to the DDE server ddeservername
+                BaseUtils.DDE.DDEServer.RegisterURICallback(FrontierCAPI.URI, appPath, ddeservername);
+
+                bool ok = false;
+
+                // start the DDE server
+                if (DDEServer.Start(ddeservername))
+                {
+                    // register the system topic.  the callback will get a DDE handle, convert to string and vector to the FrontierCAPI URL callback handler
+
+                    if (DDEServer.AddTopic("System", (hurl)=>{ string url = BaseUtils.DDE.DDEServer.FromDdeStringHandle(hurl); FrontierCAPI.URLCallBack(url); } ))
+                    {
+                        if (DDEServer.Register())       // and register
+                        {
+                            ok = true;
+                        }
+                    }
+                }
+
+                LogLine(ok ? "CAPI Installed" : "CAPI Failed to register");
+            }
+
+            // Notifications
 
             Notifications.CheckForNewNotifications((notelist) =>
             {
@@ -494,11 +536,13 @@ namespace EDDiscovery
 
                     }
 
-                    PopUpNotification();
+                    ShowNotification();
 
                 }));
 
             });
+
+            // Now the installer
 
             Installer.CheckForNewInstallerAsync((rel) =>  // in thread
             {
@@ -507,7 +551,9 @@ namespace EDDiscovery
                 BeginInvoke(new Action(() => labelInfoBoxTop.Text = "New Release Available!".T(EDTx.EDDiscoveryForm_NRA)));
             });
 
-            // this.DebugSizePosition(toolTip); // Debug - theme all the tooltips to show info on control - useful
+            // DEBUG STUFF
+
+            //this.DebugSizePosition(toolTip); // Debug - theme all the tooltips to show info on control - useful
 
             if (EDDOptions.Instance.OutputEventHelp != null)        // help for events, going to have to do this frequently, so keep
             {
@@ -536,6 +582,8 @@ namespace EDDiscovery
                 File.WriteAllText(EDDOptions.Instance.OutputEventHelp, s);
             }
 
+            // Time Display
+
             periodicchecktimer = new Timer();                   // timer for periodic actions
             periodicchecktimer.Interval = 1000;
             periodicchecktimer.Tick += (sv, ev) =>
@@ -555,12 +603,16 @@ namespace EDDiscovery
 
             periodicchecktimer.Start();
 
+            // Options for automatic stuff
+
             if (EDDOptions.Instance.AutoOpen3DMap)
                 Open3DMap(PrimaryCursor.GetCurrentHistoryEntry);
             if (EDDOptions.Instance.MinimiseOnOpen)
                 WindowState = FormWindowState.Minimized;
             else if (EDDOptions.Instance.MaximiseOnOpen)
                 WindowState = FormWindowState.Maximized;
+
+            // About box automatic open to prompt them to acknowledge program
 
             {
                 var lastaboutversion = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("AboutBoxLastVersionPresented", "0.0.0.0").VersionFromString();
@@ -572,46 +624,6 @@ namespace EDDiscovery
                     AboutBox();
                 }
             }
-        }
-
-        List<Notifications.Notification> popupnotificationlist = new List<Notifications.Notification>();
-        void PopUpNotification()        // orgnanise pop ups one at a time..
-        {
-            if (popupnotificationlist.Count > 0)
-            {
-                Notifications.NotificationParas p = popupnotificationlist[0].Select(EDDConfig.Instance.Language);
-
-                Action<object> act = new Action<object>((o) =>      // on ack, update list of ack entries
-                {
-                    DateTime ackdate = (DateTime)o;
-                    System.Diagnostics.Debug.WriteLine("Ack to " + ackdate.ToStringZulu());
-                    EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("NotificationLastAckTime", EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("NotificationLastAckTime","") + ackdate.ToStringZulu());
-                });
-
-                ExtendedControls.InfoForm infoform = new ExtendedControls.InfoForm();
-                infoform.Info(p.Caption, this.Icon, p.Text, pointsize: popupnotificationlist[0].PointSize,
-                        acknowledgeaction: act,
-                        acknowledgedata: popupnotificationlist[0].StartUTC);
-
-                infoform.FormClosed += (s, e1) => { PopUpNotification(); };     // chain to next, one at a time..
-
-                popupnotificationlist.RemoveAt(0);
-                infoform.Show();
-            }
-        }
-
-        public bool DLLRunAction( string eventname, string paras )
-        {
-            System.Diagnostics.Debug.WriteLine("Run " + eventname + "(" + paras + ")");
-            actioncontroller.ActionRun(Actions.ActionEventEDList.DLLEvent(eventname),new BaseUtils.Variables(paras,BaseUtils.Variables.FromMode.MultiEntryComma));
-            return true;
-        }
-
-        public bool DLLRequestHistory(long index, bool isjid, out EDDDLLInterfaces.EDDDLLIF.JournalEntry f)
-        {
-            HistoryEntry he = isjid ? history.GetByJID(index) : history.GetByEntryNo((int)index);
-            f = EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(history,he);
-            return he != null;
         }
 
         private void EDDiscoveryForm_Resize(object sender, EventArgs e)
@@ -644,11 +656,9 @@ namespace EDDiscovery
 
         }
 
-
-
 #endregion
 
-#region Tabs - most code now in MajorTabControl.cs  (mostly) Only UI code left.
+        #region Tabs - most code now in MajorTabControl.cs  (mostly) Only UI code left.
 
         public void AddTab(PanelInformation.PanelIDs id, int tabindex = 0) // negative means from the end.. -1 is one before end
         {
@@ -713,248 +723,10 @@ namespace EDDiscovery
             }
         }
 
-#endregion
-
-#region Themeing
-
-        public void ApplyTheme(bool panelrefreshaswell = false)     // set true if your changing the theme
-        {
-            panel_close.Visible = !theme.WindowsFrame;
-            panel_minimize.Visible = !theme.WindowsFrame;
-            label_version.Visible = !theme.WindowsFrame && !EDDOptions.Instance.DisableVersionDisplay;
-
-            // note in no border mode, this is not visible on the title bar but it is in the taskbar..
-            this.Text = "EDDiscovery" + (EDDOptions.Instance.DisableVersionDisplay ? "" : " " + label_version.Text);            
-
-            theme.ApplyStd(this);
-
-            statusStrip.Font = contextMenuStripTabs.Font = this.Font;
-
-            this.Refresh();                                             // force thru refresh to make sure its repainted
-
-            //System.Diagnostics.Debug.WriteLine("Label version " + label_version.Location + " " + label_version.Size + " " + mainMenu.Size);
-
-            OnThemeChanged?.Invoke();
-
-            if ( panelrefreshaswell)
-                Controller.RefreshDisplays(); // needed to cause them to cope with theme change
-        }
-
-#endregion
-
-#region EDSM syncs code
-
-        private void edsmRefreshTimer_Tick(object sender, EventArgs e)
-        {
-            Controller.AsyncPerformSync();
-        }
-
-        public void ForceEDSMFullRefresh()
-        {
-            SystemsDatabase.Instance.ForceEDSMFullUpdate();
-            SystemsDatabase.Instance.ForceEDSMAliasFullUpdate();
-            Controller.AsyncPerformSync(true, true);
-        }
-
-#endregion
-
-#region Controller event handlers 
-
-        private void Controller_RefreshCommanders()
-        {
-            LoadCommandersListBox();             // in case a new commander has been detected
-        }
-
-        private void Controller_RefreshStarting()
-        {
-            RefreshButton(false);
-            actioncontroller.ActionRun(Actions.ActionEventEDList.onRefreshStart);
-        }
-
-        private void Controller_RefreshComplete()
-        {
-            Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Refresh complete");
-
-            RefreshButton(true);
-            actioncontroller.ActionRunOnRefresh();
-
-            if (EDCommander.Current.SyncToInara && history.GetLast != null)
-            {
-                EliteDangerousCore.Inara.InaraSync.Refresh(LogLine, history.GetLast, EDCommander.Current);
-            }
-
-            if (DLLManager.Count > 0)
-            {
-                HistoryEntry lastfileh = history.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.Fileheader);
-
-                if (lastfileh != null)
-                {
-                    for (int i = lastfileh.EntryNumber - 1; i < history.Count; i++)      // play thru last history entries up to last file position for the DLLs, indicating stored
-                    {
-                        //System.Diagnostics.Debug.WriteLine("{0} : {1} {2}", i, history.EntryOrder[i].EventTimeUTC, history.EntryOrder[i].EventSummary);
-                        DLLManager.NewJournalEntry(EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(history, history[i]), true);
-                    }
-                }
-
-                DLLManager.Refresh(EDCommander.Current.Name, EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(history, history.GetLast));
-            }
-
-            Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Refresh complete finished");
-
-            if (EDCommander.Current.SyncToEdsm)        // no sync, no credentials, no action
-            {
-                EDSMClass edsm = new EDSMClass();
-                if (edsm.ValidCredentials)
-                    EDSMSend();
-            }
-        }
-
-        public void NewEntry( JournalEntry e)       // programatically do a new entry
-        {
-            Controller.NewEntry(e);                 // push it thru as if the monitor watcher saw it
-        }
+        #endregion
 
 
-        private void Controller_NewEntrySecond(HistoryEntry he, HistoryList hl)         // called after all UI's have had their chance
-        {
-            BaseUtils.AppTicks.TickCountLapDelta("DFS", true);
-
-            actioncontroller.ActionRunOnEntry(he, Actions.ActionEventEDList.NewEntry(he));
-
-            var t1 = BaseUtils.AppTicks.TickCountLapDelta("DFS");
-            if (t1.Item2 >= 80)
-                System.Diagnostics.Trace.WriteLine("NE Second Actions slow " + t1.Item1);
-
-            // all notes committed
-            SystemNoteClass.CommitDirtyNotes((snc) => { if (EDCommander.Current.SyncToEdsm && snc.FSDEntry) EDSMClass.SendComments(snc.SystemName, snc.Note, 0, he.Commander); });
-
-            // HERE PERFORM CAPI.. DOCKED
-
-            var lastent = history.GetLast;
-            if (!object.ReferenceEquals(he, lastent))
-            {
-                LogLineHighlight(string.Format("Current history entry is not last in history - possible re-entrancy.\nAlert the EDDiscovery developers using either discord or Github (see help) and attach log file {0}", BaseUtils.TraceLog.LogFileName));
-                Trace.WriteLine($"Current history entry is not last in history");
-                Trace.WriteLine($"Current entry: {he.journalEntry?.GetJsonString()}");
-                Trace.WriteLine($"Last entry: {lastent.journalEntry?.GetJsonString()}");
-                Trace.WriteLine($"Stack Trace:");
-                Trace.WriteLine(new StackTrace(true).ToString());
-            }
-
-            if (he.IsFSDCarrierJump)
-            {
-                int count = history.GetVisitsCount(he.System.Name);
-                LogLine(string.Format("Arrived at system {0} Visit No. {1}".T(EDTx.EDDiscoveryForm_Arrived), he.System.Name, count));
-                System.Diagnostics.Trace.WriteLine("Arrived at system: " + he.System.Name + " " + count + ":th visit.");
-            }
-
-            if (EDCommander.Current.SyncToEdsm && EDSMJournalSync.OkayToSend(he))           // send this one, if allowed.
-            {
-                EDSMJournalSync.SendEDSMEvents(LogLine, new List<HistoryEntry>() { he });       // send, if bad credentials, EDSM will moan alerting the user
-            }
-
-            if (EDCommander.Current.SyncToInara)
-            {
-                EliteDangerousCore.Inara.InaraSync.NewEvent(LogLine, he);
-            }
-
-            if (EDCommander.Current.SyncToIGAU )
-            {
-                EliteDangerousCore.IGAU.IGAUSync.NewEvent(LogLine, he);
-            }
-
-            if (EDDNClass.IsEDDNMessage(he.EntryType,he.EventTimeUTC) && he.AgeOfEntry() < TimeSpan.FromDays(1.0) && EDCommander.Current.SyncToEddn == true)
-            {
-                EDDNSync.SendEDDNEvents(LogLine, he);
-            }
-
-            DLLManager.NewJournalEntry(EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(history, he), false);
-
-            screenshotconverter.NewJournalEntry(he.journalEntry);       // tell the screenshotter.
-
-            CheckActionProfile(he);
-        }
-
-        private void Controller_NewUIEvent(UIEvent uievent)
-        {
-            BaseUtils.Variables cv = new BaseUtils.Variables();
-
-            string prefix = "EventClass_";
-            cv.AddPropertiesFieldsOfClass(uievent, prefix, new Type[] { typeof(System.Drawing.Icon), typeof(System.Drawing.Image), typeof(System.Drawing.Bitmap), typeof(BaseUtils.JSON.JObject) }, 5);
-            cv[prefix + "UIDisplayed"] = "0";
-            actioncontroller.ActionRun(Actions.ActionEventEDList.onUIEvent, cv);
-            actioncontroller.ActionRun(Actions.ActionEventEDList.EliteUIEvent(uievent), cv);
-
-            if (!uievent.EventRefresh)      // don't send the refresh events thru the system..  see if profiles need changing
-            {
-                Actions.ActionVars.TriggerVars(cv, "UI" + uievent.EventTypeStr, "UIEvent");
-
-                int i = EDDProfiles.Instance.ActionOn(cv, out string errlist);
-                if (i >= 0)
-                    ChangeToProfileId(i, true);
-
-                if (errlist.HasChars())
-                    LogLine("Profile reports errors in triggers:".T(EDTx.EDDiscoveryForm_PE1) + errlist);
-
-                try
-                {
-                    if (DLLManager.Count > 0)       // if worth calling..
-                    {
-                        BaseUtils.JSON.JToken t = BaseUtils.JSON.JToken.FromObject(uievent, ignoreunserialisable: true, 
-                                                                                    ignored: new Type[] { typeof(Bitmap), typeof(Image) }, 
-                                                                                    maxrecursiondepth:3);
-                        string output = t?.ToString();
-                        if (output != null)
-                        {
-                          //  System.Diagnostics.Debug.WriteLine("DLL JSON UI String " + output);
-                            DLLManager.NewUIEvent(output);
-                        }
-                        else
-                            System.Diagnostics.Debug.WriteLine("JSON convert error from object in DLL");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    System.Diagnostics.Debug.WriteLine("Could not serialise " + uievent.EventTypeStr + " " + ex);
-                }
-
-            }
-        }
-
-        string syncprogressstring="",refreshprogressstring="";
-
-        private void ReportSyncProgress(int percentComplete, string message)
-        {
-            if (!Controller.PendingClose)
-            {
-                if (percentComplete >= 0)
-                {
-                    toolStripProgressBar1.Visible = true;
-                    toolStripProgressBar1.Value = percentComplete;
-                }
-                else
-                {
-                    toolStripProgressBar1.Visible = false;
-                }
-
-                syncprogressstring = message;
-                toolStripStatusLabel1.Text = ObjectExtensionsStrings.AppendPrePad(syncprogressstring, refreshprogressstring, " | ");
-            }
-        }
-
-        private void ReportRefreshProgress(int percentComplete, string message)      // percent not implemented for this
-        {
-            if (!Controller.PendingClose)
-            {
-                refreshprogressstring = message;
-                toolStripStatusLabel1.Text = ObjectExtensionsStrings.AppendPrePad(syncprogressstring, refreshprogressstring, " | ");
-                Update();       // nasty but it works - needed since we are doing UI work here and the UI thread will be blocked
-            }
-        }
-
-#endregion
-
-#region Closing
+        #region Closing
 
         private void EDDiscoveryForm_FormClosing(object sender, FormClosingEventArgs e)     // when user asks for a close
         {
@@ -1013,41 +785,38 @@ namespace EDDiscovery
             Application.Exit();
         }
      
-#endregion
-
-#region Buttons, Mouse, Menus
-
-        private void buttonReloadActions_Click(object sender, EventArgs e)
-        {
-            BaseUtils.Translator.Instance.LoadTranslation(EDDConfig.Instance.Language, CultureInfo.CurrentUICulture, 
-                    EDDOptions.Instance.TranslatorFolders(),
-                    EDDOptions.Instance.TranslatorDirectoryIncludeSearchUpDepth, EDDOptions.Instance.AppDataDirectory);
-            actioncontroller.ReLoad();
-            actioncontroller.CheckWarn();
-            actioncontroller.onStartup();
-         }
-
-
-        private void frontierForumThreadToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            BaseUtils.BrowserInfo.LaunchBrowser(Properties.Resources.URLProjectEDForumPost);
-        }
-
-        private void wikiHelpToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            BaseUtils.BrowserInfo.LaunchBrowser(Properties.Resources.URLProjectWiki);
-        }
-
-        private void viewHelpVideosToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            BaseUtils.BrowserInfo.LaunchBrowser(Properties.Resources.URLProjectVideos);
-        }
+        #endregion
+    
+        #region Tools Menu
 
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             tabControlMain.EnsureMajorTabIsPresent(PanelInformation.PanelIDs.Settings, true);
         }
 
+        private void show3DMapsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Open3DMap(PrimaryCursor.GetCurrentHistoryEntry);
+        }
+
+        private void showAllInTaskBarToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PopOuts.ShowAllPopOutsInTaskBar();
+        }
+
+        private void turnOffAllTransparencyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PopOuts.MakeAllPopoutsOpaque();
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        #endregion
+
+        #region Admin Menu
 
         private void showLogfilesToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1066,11 +835,6 @@ namespace EDDiscovery
             }
         }
 
-        private void show3DMapsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Open3DMap(PrimaryCursor.GetCurrentHistoryEntry);
-        }
-
         private void syncEDSMSystemsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (!EDDConfig.Instance.EDSMDownload)
@@ -1087,68 +851,6 @@ namespace EDDiscovery
             Controller.EdsmLogFetcher.ResetFetch();
         }
 
-        private void gitHubToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            BaseUtils.BrowserInfo.LaunchBrowser(Properties.Resources.URLProjectGithub);
-        }
-
-        private void reportIssueIdeasToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            BaseUtils.BrowserInfo.LaunchBrowser(Properties.Resources.URLProjectFeedback);
-        }
-
-        internal void useNotifyIconChanged(bool useNotifyIcon)
-        {
-            notifyIcon1.Visible = useNotifyIcon;
-            if (!useNotifyIcon && !Visible)
-                Show();
-        }
-
-        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Close();
-        }
-
-        public void AboutBox(Form parent = null)
-        {
-            AboutForm frm = new AboutForm();
-            frm.ShowDialog(parent ?? this);
-        }
-
-        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            AboutBox(this);
-        }
-
-        private void eDDiscoveryChatDiscordToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            BaseUtils.BrowserInfo.LaunchBrowser(Properties.Resources.URLProjectDiscord);
-        }
-
-        private void howToRunInSafeModeToResetVariousParametersToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ExtendedControls.MessageBoxTheme.Show(this, 
-                            ("To start in safe mode, exit the program, hold down the shift key" + Environment.NewLine +
-                            "and double click on the EDD program icon.  You will then be in the safe mode dialog." + Environment.NewLine +
-                            "You can reset various parameters and move the data bases to other locations.").T(EDTx.EDDiscoveryForm_SafeMode),
-                            "Information".T(EDTx.Information), MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-        }
-
-        private void showAllInTaskBarToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            PopOuts.ShowAllPopOutsInTaskBar();
-        }
-
-        private void turnOffAllTransparencyToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            PopOuts.MakeAllPopoutsOpaque();
-        }
-
-        private void paneleddiscovery_Click(object sender, EventArgs e)
-        {
-            AboutBox(this);
-        }
 
         private void read21AndFormerLogFilesToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1191,7 +893,6 @@ namespace EDDiscovery
             }
         }
 
-
         private void rescanAllJournalFilesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Controller.RefreshHistoryAsync(forcejournalreload: true);
@@ -1217,31 +918,6 @@ namespace EDDiscovery
             {
                 Controller.RefreshHistoryAsync(removedupfsdentries: true);
             }
-        }
-
-        public void Open3DMap(HistoryEntry he)
-        {
-            this.Cursor = Cursors.WaitCursor;
-
-            Map.Prepare(he?.System, EDCommander.Current.HomeSystemTextOrSol,
-                        EDCommander.Current.MapCentreOnSelection ? he?.System : EDCommander.Current.HomeSystemIOrSol,
-                        EDCommander.Current.MapZoom, Controller.history.FilterByTravel());
-            Map.Show();
-            this.Cursor = Cursors.Default;
-        }
-
-        public void Open3DMapOnSystem(ISystem centerSystem )
-        {
-            this.Cursor = Cursors.WaitCursor;
-
-            if (centerSystem == null || !centerSystem.HasCoordinate)
-                centerSystem = history.GetLastWithPosition().System;
-
-            Map.Prepare(centerSystem, EDCommander.Current.HomeSystemTextOrSol, centerSystem,
-                             EDCommander.Current.MapZoom, history.FilterByTravel());
-
-            Map.Show();
-            this.Cursor = Cursors.Default;
         }
 
         private void sendUnsyncedEDDNEventsToolStripMenuItem_Click(object sender, EventArgs e)      //DEBUG ONLY
@@ -1298,116 +974,10 @@ namespace EDDiscovery
                 EDDConfig.Instance.DLLPermissions = n;
         }
 
-#endregion
+        #endregion
 
-#region Notify
+        #region Add Ons Menu
 
-        private void notifyIcon1_DoubleClick(object sender, EventArgs e)
-        {
-            // Tray icon was double-clicked.
-            if (FormWindowState.Minimized == WindowState)
-            {
-                if (EDDConfig.MinimizeToNotifyIcon)
-                    Show();
-
-                if (FormIsMaximised)
-                    WindowState = FormWindowState.Maximized;
-                else
-                    WindowState = FormWindowState.Normal;
-            }
-            else
-                WindowState = FormWindowState.Minimized;
-        }
-
-        private void notifyIconMenu_Hide_Click(object sender, EventArgs e)
-        {       // horrible circular ref to this sub func then back up.. can't think of a fix for now.
-            TabPage t = tabControlMain.GetMajorTab(PanelInformation.PanelIDs.Settings);
-            if ( t != null )
-                (t.Controls[0] as UserControls.UserControlSettings).DisableNotifyIcon();
-        }
-
-        private void notifyIconMenu_Open_Click(object sender, EventArgs e)
-        {
-            // Tray icon 'Open EDDiscovery' menu item was clicked. Present the main window.
-            if (FormWindowState.Minimized == WindowState)
-            {
-                if (EDDConfig.UseNotifyIcon && EDDConfig.MinimizeToNotifyIcon)
-                    Show();
-
-                if (FormIsMaximised)
-                    WindowState = FormWindowState.Maximized;
-                else
-                    WindowState = FormWindowState.Normal;
-            }
-            else
-                Activate();
-        }
-
-#endregion
-
-#region "Caption" controls
-
-        private void MouseDownCAPTION(object sender, MouseEventArgs e)
-        {
-            OnCaptionMouseDown((Control)sender, e);
-        }
-
-        private void MouseUpCAPTION(object sender, MouseEventArgs e)
-        {
-            OnCaptionMouseUp((Control)sender, e);
-        }
-
-
-        private void labelversion_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left && newRelease != null)
-            {
-                using (NewReleaseForm frm = new NewReleaseForm(newRelease))
-                    frm.ShowDialog(this);
-            }
-            else
-            {
-                MouseDownCAPTION(sender, e);
-            }
-        }
-
-        private void panel_close_MouseClick(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-                Close();
-        }
-
-        private void panel_minimize_MouseClick(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-                this.WindowState = FormWindowState.Minimized;
-        }
-
-#endregion
-
-#region Updators
-
-        public void NewTargetSet(Object sender)
-        {
-            if (OnNewTarget != null)
-                OnNewTarget(sender);
-        }
-
-        public void NoteChanged(Object sender, HistoryEntry snc, bool committed)
-        {
-            if (OnNoteChanged != null)
-                OnNoteChanged(sender, snc,committed);
-        }
-
-        public void NewCalculatedRoute(List<ISystem> list)
-        {
-            if (OnNewCalculatedRoute != null)
-                OnNewCalculatedRoute(list);
-        }
-
-#endregion
-
-#region Add Ons
         public void manageAddOnsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             buttonExtManageAddOns_Click(sender,e);
@@ -1440,96 +1010,69 @@ namespace EDDiscovery
             actioncontroller.TerminateAll();
         }
 
-        public bool AddNewMenuItemToAddOns(string menu, string menutext, string icon , string menuname, string packname)
+        #endregion
+
+        #region Help Menu
+
+        private void frontierForumThreadToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ToolStripMenuItem parent;
-
-            menu = menu.ToLowerInvariant();
-            if (menu.Equals("add-ons"))
-                parent = addOnsToolStripMenuItem;
-            else if (menu.Equals("help"))
-                parent = helpToolStripMenuItem;
-            else if (menu.Equals("tools"))
-                parent = toolsToolStripMenuItem;
-            else if (menu.Equals("admin"))
-                parent = adminToolStripMenuItem;
-            else
-                return false;
-
-            Image img = BaseUtils.Icons.IconSet.GetIcon(icon);
-
-            var x = (from ToolStripItem p in parent.DropDownItems where p.Text.Equals(menutext) && p.Tag != null && p.Name.Equals(menuname) select p);
-
-            if (x.Count() == 0)           // double entries screened out of same menu text from same pack
-            {
-                ToolStripMenuItem it = new ToolStripMenuItem();
-                it.Text = menutext;
-                it.Name = menuname;
-                it.Tag = packname;
-                if (img != null)
-                    it.Image = img;
-                it.Size = new Size(313, 22);
-                it.Click += MenuTrigger_Click;
-                parent.DropDownItems.Add(it);
-            }
-
-            return true;
+            BaseUtils.BrowserInfo.LaunchBrowser(Properties.Resources.URLProjectEDForumPost);
         }
 
-        public bool IsMenuItemInstalled(string menuname)
+        private void wikiHelpToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            foreach( ToolStripMenuItem tsi in mainMenu.Items )
-            {
-                List<ToolStripItem> presentlist = (from ToolStripItem s in tsi.DropDownItems where s.Name.Equals(menuname) select s).ToList();
-                if (presentlist.Count() > 0)
-                    return true;
-            }
-
-            return false;
+            BaseUtils.BrowserInfo.LaunchBrowser(Properties.Resources.URLProjectWiki);
         }
 
-
-        public void RemoveMenuItemsFromAddOns(ToolStripMenuItem menu, string packname)
+        private void viewHelpVideosToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            List<ToolStripItem> removelist = (from ToolStripItem s in menu.DropDownItems where s.Tag != null && ((string)s.Tag).Equals(packname) select s).ToList();
-            foreach (ToolStripItem it in removelist)
-            {
-                menu.DropDownItems.Remove(it);
-                it.Dispose();
-            }
+            BaseUtils.BrowserInfo.LaunchBrowser(Properties.Resources.URLProjectVideos);
         }
 
-        public void RemoveMenuItemsFromAddOns(string packname)
+        private void gitHubToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            RemoveMenuItemsFromAddOns(addOnsToolStripMenuItem, packname);
-            RemoveMenuItemsFromAddOns(helpToolStripMenuItem, packname);
-            RemoveMenuItemsFromAddOns(toolsToolStripMenuItem, packname);
-            RemoveMenuItemsFromAddOns(adminToolStripMenuItem, packname);
+            BaseUtils.BrowserInfo.LaunchBrowser(Properties.Resources.URLProjectGithub);
         }
 
-        private void MenuTrigger_Click(object sender, EventArgs e)
+        private void reportIssueIdeasToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ToolStripMenuItem it = sender as ToolStripMenuItem;
-            BaseUtils.Variables vars = new BaseUtils.Variables(new string[]
-            {   "MenuName", it.Name,
-                "MenuText", it.Text,
-                "TopLevelMenuName" , it.OwnerItem.Name,
-            });
-
-            actioncontroller.ActionRun(Actions.ActionEventEDList.onMenuItem, null, vars);
+            BaseUtils.BrowserInfo.LaunchBrowser(Properties.Resources.URLProjectFeedback);
         }
 
-        public BaseUtils.Variables Globals { get { return actioncontroller.Globals; } }
+        public void AboutBox(Form parent = null)
+        {
+            AboutForm frm = new AboutForm();
+            frm.ShowDialog(parent ?? this);
+        }
 
-        public int ActionRunOnEntry(HistoryEntry he, ActionLanguage.ActionEvent av)
-        { return actioncontroller.ActionRunOnEntry(he, av); }
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AboutBox(this);
+        }
 
-        public int ActionRun(ActionLanguage.ActionEvent ev, HistoryEntry he = null, BaseUtils.Variables additionalvars = null, string flagstart = null, bool now = false)
-        { return actioncontroller.ActionRun(ev,he,additionalvars,flagstart,now); }
+        private void eddiscoveryChatDiscordToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            BaseUtils.BrowserInfo.LaunchBrowser(Properties.Resources.URLProjectDiscord);
+        }
 
-#endregion
+        private void howToRunInSafeModeToResetVariousParametersToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ExtendedControls.MessageBoxTheme.Show(this,
+                            ("To start in safe mode, exit the program, hold down the shift key" + Environment.NewLine +
+                            "and double click on the EDD program icon.  You will then be in the safe mode dialog." + Environment.NewLine +
+                            "You can reset various parameters and move the data bases to other locations.").T(EDTx.EDDiscoveryForm_SafeMode),
+                            "Information".T(EDTx.Information), MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-#region Toolbar
+        }
+
+        private void paneleddiscovery_Click(object sender, EventArgs e)
+        {
+            AboutBox(this);
+        }
+
+        #endregion
+        
+        #region Toolbar
 
         public void LoadCommandersListBox()
         {
@@ -1556,7 +1099,6 @@ namespace EDDiscovery
                 ChangeToCommander(itm[0].Id);
             }
         }
-
 
         private void buttonExt3dmap_Click(object sender, EventArgs e)
         {
@@ -1598,103 +1140,6 @@ namespace EDDiscovery
             EDSMSend();
         }
 
-        public void EDSMSend()
-        {
-            var helist = EDSMJournalSync.GetListToSend(history.EntryOrder());               // find out what to send..
-
-            if (helist.Count >= 500)
-            {
-                ExtendedControls.ConfigurableForm cf = new ExtendedControls.ConfigurableForm();
-
-                int width = 400;
-
-                DateTime lasthe = helist.Last().EventTimeUTC;
-
-                cf.Add(new ExtendedControls.ConfigurableForm.Entry("UC", typeof(Label),
-                            string.Format("There are {0} EDSM reports to send, this will take time and bandwidth, choose from the following what to do. Entries before this will be marked as sent.".T(EDTx.EDDiscoveryForm_SendEDSMCaption), helist.Count),
-                             new Point(5, 30), new Size(width - 5 - 20, 100), null) { textboxmultiline = true });
-
-                cf.Add(new ExtendedControls.ConfigurableForm.Entry("All", typeof(ExtendedControls.ExtButton),
-                            "Send All to EDSM".T(EDTx.EDDiscoveryForm_SendEDSMAll),
-                             new Point(5, 130), new Size(width - 5 - 20, 24), null));
-
-                cf.Add(new ExtendedControls.ConfigurableForm.Entry("Today", typeof(ExtendedControls.ExtButton),
-                            "Send Last 24 Hours of entries to EDSM".T(EDTx.EDDiscoveryForm_SendEDSM24),
-                             new Point(5, 180), new Size(width - 5 - 20, 24), null));
-
-                cf.Add(new ExtendedControls.ConfigurableForm.Entry("Custom", typeof(ExtendedControls.ExtButton),
-                            "Send From".T(EDTx.EDDiscoveryForm_SendEDSMFrom),
-                             new Point(5, 230), new Size(80, 24), null));
-
-                cf.Add(new ExtendedControls.ConfigurableForm.Entry("Date", typeof(ExtendedControls.ExtDateTimePicker),
-                                            lasthe.AddDays(-28).ToStringZulu(),
-                                             new Point(100, 230), new Size(width - 100 - 20, 24), null));
-
-                cf.Add(new ExtendedControls.ConfigurableForm.Entry("None", typeof(ExtendedControls.ExtButton),
-                            "EDSM is up to date - send Nothing more".T(EDTx.EDDiscoveryForm_SendEDSMNone),
-                             new Point(5, 280), new Size(width - 5 - 20, 24), null));
-
-                cf.Add(new ExtendedControls.ConfigurableForm.Entry("Cancel", typeof(ExtendedControls.ExtButton),
-                            "I'll decide later, do nothing".T(EDTx.EDDiscoveryForm_SendEDSMCancel),
-                             new Point(5, 330), new Size(width - 5 - 20, 24), null));
-
-                DateTime date = DateTime.UtcNow;
-
-                cf.Trigger += (dialogname, controlname, tag) =>
-                {
-                    if (controlname.Contains("All"))
-                    {
-                        date = new DateTime(1900, 1, 1);
-                        cf.ReturnResult(DialogResult.OK);
-                    }
-                    else if (controlname.Contains("Today"))
-                    {
-                        date = lasthe.AddDays(-1);
-                        cf.ReturnResult(DialogResult.OK);
-                    }
-                    else if (controlname.Contains("Custom"))
-                    {
-                        date = cf.GetDateTime("Date").Value.ToUniversalTime();
-                        cf.ReturnResult(DialogResult.OK);
-                    }
-                    else if (controlname.Contains("None"))
-                    {
-                        cf.ReturnResult(DialogResult.OK);
-                    }
-                    else if (controlname.Contains("Cancel"))
-                    {
-                        cf.ReturnResult(DialogResult.Cancel);
-                    }
-                };
-
-                if (cf.ShowDialogCentred(this.FindForm(), this.FindForm().Icon, "Sending a large number of EDSM Entries".T(EDTx.EDDiscoveryForm_SendEDSMTitle)) == DialogResult.Cancel)
-                    return;
-
-                var jes = helist.Where(x => x.EventTimeUTC <  date).Select(x => x.journalEntry).ToList();
-                JournalEntry.SetEdsmSyncList(jes);
-
-                helist = EDSMJournalSync.GetListToSend(history.EntryOrder());               // find out what to send..
-            }
-
-            if ( helist.Count > 0 )
-                EDSMJournalSync.SendEDSMEvents(l => LogLine(l), helist);
-
-        }
-
-#endregion
-
-#region Profiles
-
-        private void UpdateProfileComboBox()
-        {
-            comboBoxCustomProfiles.Enabled = false;                         // and update this box, making sure we don't renter
-            comboBoxCustomProfiles.Items.Clear();
-            comboBoxCustomProfiles.Items.AddRange(EDDProfiles.Instance.Names());
-            comboBoxCustomProfiles.Items.Add("Edit Profiles".T(EDTx.EDDiscoveryForm_EP));
-            comboBoxCustomProfiles.SelectedIndex = EDDProfiles.Instance.IndexOf(EDDProfiles.Instance.Current.Id);
-            comboBoxCustomProfiles.Enabled = true;
-        }
-
         private void ComboBoxCustomProfiles_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (comboBoxCustomProfiles.SelectedIndex >= 0 && comboBoxCustomProfiles.Enabled)
@@ -1719,66 +1164,6 @@ namespace EDDiscovery
                 }
             }
         }
-
-        private void ChangeToProfileId(int id, bool checksavecur)
-        {
-            if (!checksavecur || EDDProfiles.Instance.Current.Id != id)
-            {
-                System.Diagnostics.Debug.WriteLine(BaseUtils.AppTicks.TickCountLap("ProfT") + " *************************** CHANGE To profile " + id);
-
-                if (checksavecur)
-                {
-                    if (tabControlMain.AllowClose() == false)       // if we don't allow closing, we can't change profile
-                        return;
-                    else if (PopOuts.AllowClose() == false)
-                        return;
-
-                    tabControlMain.CloseTabList();
-                    PopOuts.SaveCurrentPopouts();
-                }
-
-                PopOuts.CloseAllPopouts();
-
-
-                comboBoxCustomProfiles.Enabled = false;                         // and update the selection box, making sure we don't trigger a change
-                comboBoxCustomProfiles.SelectedIndex = EDDProfiles.Instance.IndexOf(id);
-                comboBoxCustomProfiles.Enabled = true;
-
-                EDDProfiles.Instance.ChangeToId(id);
-
-                UserControls.UserControlContainerSplitter.CheckPrimarySplitterControlSettings(false); // use a nonsense name to make sure we just get the default set if we don't have a valid save
-
-                tabControlMain.TabPages.Clear();
-                tabControlMain.CreateTabs(this, EDDOptions.Instance.TabsReset, "0, -1,0, 26,0, 27,0, 29,0, 34,0");      // numbers from popouts, which are FIXED!
-                tabControlMain.LoadTabs();
-                ApplyTheme();
-
-                PopOuts.LoadSavedPopouts();
-
-                System.Diagnostics.Debug.WriteLine(BaseUtils.AppTicks.TickCountLap("ProfT") + " *************************** Finished Profile " + id);
-                LogLine(string.Format("Profile {0} Loaded".T(EDTx.EDDiscoveryForm_PL), EDDProfiles.Instance.Current.Name ));
-            }
-        }
-
-        public void CheckActionProfile(HistoryEntry he)
-        {
-            BaseUtils.Variables eventvars = new BaseUtils.Variables();
-            Actions.ActionVars.TriggerVars(eventvars, he.journalEntry.EventTypeStr, "JournalEvent");
-            Actions.ActionVars.HistoryEventVars(eventvars, he, "Event");     // if HE is null, ignored
-            Actions.ActionVars.ShipBasicInformation(eventvars, he?.ShipInformation, "Event");     // if He null, or si null, ignore
-            Actions.ActionVars.SystemVars(eventvars, he?.System, "Event");
-
-            int i = EDDProfiles.Instance.ActionOn(eventvars, out string errlist);
-            if (i >= 0)
-                ChangeToProfileId(i, true);
-
-            if (errlist.HasChars())
-                LogLine("Profile reports errors in triggers:".T(EDTx.EDDiscoveryForm_PE1) + errlist); 
-        }
-
-#endregion
-
-#region PopOuts
 
         ExtendedControls.ExtListBoxForm popoutdropdown;
 
@@ -1807,57 +1192,109 @@ namespace EDDiscovery
             tabControlMain.HelpOn(this,extButtonDrawnHelp.PointToScreen(new Point(0, extButtonDrawnHelp.Bottom)), tabControlMain.SelectedIndex);
         }
 
-#endregion
-
-#region webserver
-
-        public bool WebServerControl(bool start)        // false if an error occurs
+        private void buttonReloadActions_Click(object sender, EventArgs e)
         {
-            if (WebServer.Running)
-                WebServer.Stop();
+            BaseUtils.Translator.Instance.LoadTranslation(EDDConfig.Instance.Language, CultureInfo.CurrentUICulture, 
+                    EDDOptions.Instance.TranslatorFolders(),
+                    EDDOptions.Instance.TranslatorDirectoryIncludeSearchUpDepth, EDDOptions.Instance.AppDataDirectory);
+            actioncontroller.ReLoad();
+            actioncontroller.CheckWarn();
+            actioncontroller.onStartup();
+         }
 
-            if (start)
+
+        #endregion
+        
+        #region Other clicks - Captions etc
+
+        private void MouseDownCAPTION(object sender, MouseEventArgs e)
+        {
+            OnCaptionMouseDown((Control)sender, e);
+        }
+
+        private void MouseUpCAPTION(object sender, MouseEventArgs e)
+        {
+            OnCaptionMouseUp((Control)sender, e);
+        }
+
+        private void labelversion_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left && newRelease != null)
             {
-                WebServer.Port = EDDConfig.Instance.WebServerPort;
-
-                string servefrom;
-                bool valid;
-
-                if (EDDOptions.Instance.WebServerFolder != null)
-                {
-                    servefrom = EDDOptions.Instance.WebServerFolder;
-                    valid = Directory.Exists(servefrom);
-                }
-                else
-                {
-                    servefrom = Path.Combine(EDDOptions.ExeDirectory(), "eddwebsite.zip");
-                    valid = File.Exists(servefrom);
-                }
-
-                if (valid)
-                {
-                    System.Diagnostics.Debug.WriteLine("Serve from " + servefrom + " on port " + EDDConfig.Instance.WebServerPort);
-
-                    if (WebServer.Start(servefrom))   // may fail due to some security reasons
-                        Controller.LogLine("Web server enabled".T(EDTx.EDDiscoveryForm_WSE));
-                    else
-                    {
-                        Controller.LogLineHighlight("Web server failed to start".T(EDTx.EDDiscoveryForm_WSF));
-                        return false;
-                    }
-                }
-                else
-                    Controller.LogLineHighlight("Web server disabled due to incorrect folder or missing zip file".T(EDTx.EDDiscoveryForm_WSERR));
+                using (NewReleaseForm frm = new NewReleaseForm(newRelease))
+                    frm.ShowDialog(this);
             }
             else
             {
-                Controller.LogLine("*** Web server is disabled ***".T(EDTx.EDDiscoveryForm_WSD));
+                MouseDownCAPTION(sender, e);
             }
-
-            return true;
         }
 
-#endregion
+        private void panel_close_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+                Close();
+        }
+
+        private void panel_minimize_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+                this.WindowState = FormWindowState.Minimized;
+        }
+
+        #endregion
+
+        #region Notify Icons
+
+        private void notifyIcon1_DoubleClick(object sender, EventArgs e)
+        {
+            // Tray icon was double-clicked.
+            if (FormWindowState.Minimized == WindowState)
+            {
+                if (EDDConfig.MinimizeToNotifyIcon)
+                    Show();
+
+                if (FormIsMaximised)
+                    WindowState = FormWindowState.Maximized;
+                else
+                    WindowState = FormWindowState.Normal;
+            }
+            else
+                WindowState = FormWindowState.Minimized;
+        }
+
+        private void notifyIconMenu_Hide_Click(object sender, EventArgs e)
+        {       // horrible circular ref to this sub func then back up.. can't think of a fix for now.
+            TabPage t = tabControlMain.GetMajorTab(PanelInformation.PanelIDs.Settings);
+            if (t != null)
+                (t.Controls[0] as UserControls.UserControlSettings).DisableNotifyIcon();
+        }
+
+        private void notifyIconMenu_Open_Click(object sender, EventArgs e)
+        {
+            // Tray icon 'Open EDDiscovery' menu item was clicked. Present the main window.
+            if (FormWindowState.Minimized == WindowState)
+            {
+                if (EDDConfig.UseNotifyIcon && EDDConfig.MinimizeToNotifyIcon)
+                    Show();
+
+                if (FormIsMaximised)
+                    WindowState = FormWindowState.Maximized;
+                else
+                    WindowState = FormWindowState.Normal;
+            }
+            else
+                Activate();
+        }
+
+        internal void useNotifyIconChanged(bool useNotifyIcon)
+        {
+            notifyIcon1.Visible = useNotifyIcon;
+            if (!useNotifyIcon && !Visible)
+                Show();
+        }
+
+        #endregion
 
 
     }

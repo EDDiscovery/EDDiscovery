@@ -45,11 +45,6 @@ namespace EDDiscovery
         /// </summary>
         public static string UserAgent { get; } = $"{FriendlyName} v{AppVersion}";
 
-        /// <summary>
-        /// The main <see cref="EDDiscoveryForm"/> of this application. If this is <c>null</c>, then you probably
-        /// need to `<c>Application.Run(new EDDApplicationContext());</c>` and check back later, because it is
-        /// still being initialized and is not yet in a valid state.
-        /// </summary>
         public static bool RestartInSafeMode { get; set; } = false;
 
         #endregion

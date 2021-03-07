@@ -60,7 +60,6 @@ namespace EDDiscovery.UserControls
         private string dbShowClasses = "ShowClasses";
 
         private Dictionary<long, DataGridViewRow> rowsbyjournalid = new Dictionary<long, DataGridViewRow>();
-        bool loadcomplete;
 
         Timer searchtimer;
         Timer autoupdateedsm;
@@ -142,7 +141,7 @@ namespace EDDiscovery.UserControls
 
         private void AddNewEntry(HistoryEntry he, HistoryList hl)           // on new entry from discovery system
         {
-            if (!loadcomplete)      // if loading, add to queue..
+            if (todotimer.Enabled)      // if loading, add to queue..
             {
                 todo.Enqueue(new Action(() => AddNewEntry(he, hl)));
                 return;
@@ -168,14 +167,17 @@ namespace EDDiscovery.UserControls
 
                 if (he.IsFSDCarrierJump)                                      // jumped
                 {
-                    if (rowpresent != null)                                   // if its in the list, move to top and set visit count
+                    bool added = false;                                         // this means row 0 is visible and added
+
+                    if (rowpresent != null)                                     // if its in the list, move to top and set visit count
                     {
                         dataGridViewStarList.Rows.Remove(rowpresent);
                         rowpresent.Cells[2].Value = hl.Visits(he.System.Name);  // update count
                         dataGridViewStarList.Rows.Insert(0, rowpresent);        // move to top..
+                        added = true;
                     }
                     else
-                    {
+                    {                                                           // not in the list, add it
                         var visitlist = discoveryform.history.Visited.Values.ToList();
                         visitlist.Sort(delegate (HistoryEntry left, HistoryEntry right) { return right.EventTimeUTC.CompareTo(left.EventTimeUTC); });
                         var filter = (TravelHistoryFilter)comboBoxHistoryWindow.SelectedItem ?? TravelHistoryFilter.NoFilter;
@@ -186,18 +188,18 @@ namespace EDDiscovery.UserControls
                             string filtertext = textBoxFilter.Text;
                             var row = CreateHistoryRow(visitlist[0], filtertext);
                             if (row != null)    // text may have filtered it out
+                            {
                                 dataGridViewStarList.Rows.Insert(0, row);
+                                added = true;
+                            }
                         }
                     }
 
-                    if (checkBoxCursorToTop.Checked && dataGridViewStarList.DisplayedRowCount(false) > 0)   // Move focus to new row
+                    if (added && checkBoxCursorToTop.Checked)           // if we have a row 0
                     {
                         //System.Diagnostics.Debug.WriteLine("Auto Sel");
                         dataGridViewStarList.ClearSelection();
-                        int rowno = dataGridViewStarList.Rows.GetFirstRow(DataGridViewElementStates.Visible);
-                        if (rowno != -1)
-                            dataGridViewStarList.SetCurrentAndSelectAllCellsOnRow(rowno);       // its the current cell which needs to be set, moves the row marker as well
-
+                        dataGridViewStarList.SetCurrentAndSelectAllCellsOnRow(0);       // its the current cell which needs to be set, moves the row marker as well
                         FireChangeSelection();
                     }
                 }
@@ -216,11 +218,6 @@ namespace EDDiscovery.UserControls
 
         private void Todotimer_Tick(object sender, EventArgs e)
         {
-            ProcessTodo();
-        }
-
-        private void ProcessTodo()
-        {
             if (todo.Count != 0)
             {
                 var act = todo.Dequeue();
@@ -232,7 +229,6 @@ namespace EDDiscovery.UserControls
             }
         }
 
-
         #endregion
 
         #region Display
@@ -241,7 +237,6 @@ namespace EDDiscovery.UserControls
         {
             autoupdateedsm.Stop();
 
-            loadcomplete = false;
             this.Cursor = Cursors.WaitCursor;
 
             var pos = CurrentGridPosByIndex();
@@ -324,7 +319,6 @@ namespace EDDiscovery.UserControls
                 autoupdaterowoffset = autoupdaterowstart = 0;
                 autoupdateedsm.Start();
 
-                loadcomplete = true;
                 checkBoxJumponium.Enabled = checkBoxBodyClasses.Enabled = buttonExtExcel.Enabled = comboBoxHistoryWindow.Enabled = true;
                 this.Cursor = Cursors.Default;
             });

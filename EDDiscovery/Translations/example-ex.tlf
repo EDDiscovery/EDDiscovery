@@ -117,9 +117,9 @@ SECTION PopOutInfo
 .Settings.Title: "Settings" @
 .ScreenShot.Description: "Screen shot view" @
 .ScreenShot.Title: "Screen Shot" @
-.Grid.Description: "Grid (allows other panels to be placed in the it)" @
+.Grid.Description: "Grid (allows other panels to be placed in it)" @
 .Grid.Title: "Grid" @
-.SplitterControl.Description: "Splitter (allows other panels to be placed in the it)" @
+.SplitterControl.Description: "Splitter (allows other panels to be placed in it)" @
 .SplitterControl.Title: "Splitter" @
 .PanelSelector.Description: "" @
 .PanelSelector.Title: "+" @
