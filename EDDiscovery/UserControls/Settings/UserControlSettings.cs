@@ -222,6 +222,7 @@ namespace EDDiscovery.UserControls
             else
             {                                                   // no cred, or logged out..
                 capiButton.Enabled = true;
+                capiButton.Text = "Login";
                 capiStateLabel.Text = "Await Log in";
             }
         }

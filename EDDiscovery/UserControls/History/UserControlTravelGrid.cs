@@ -323,13 +323,10 @@ namespace EDDiscovery.UserControls
                     }
                 }
 
-                System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCount + " TG TOTAL TIME " + swtotal.ElapsedMilliseconds);
-
                 UpdateToolTipsForFilter();
 
                 if (dataGridViewTravel.MoveToSelection(rowsbyjournalid, ref pos, true))
                 {
-                    System.Diagnostics.Trace.WriteLine(" Fire from load complete");
                     FireChangeSelection();
                 }
 
@@ -341,7 +338,8 @@ namespace EDDiscovery.UserControls
 
                 this.Cursor = Cursors.Default;
                 extCheckBoxOutlines.Enabled = extCheckBoxWordWrap.Enabled = buttonExtExcel.Enabled = buttonFilter.Enabled = buttonField.Enabled = comboBoxHistoryWindow.Enabled = true;
-                System.Diagnostics.Trace.WriteLine("**** Load complete");
+
+                System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCount + " TG TOTAL TIME " + swtotal.ElapsedMilliseconds);
             });
 
             todotimer.Start();          // indicate the timer is going to start.. 
@@ -365,7 +363,7 @@ namespace EDDiscovery.UserControls
         {
             if (todotimer.Enabled)      // if we have the todotimer running.. we add to the queue.  better than the old loadcomplete, no race conditions
             {
-                System.Diagnostics.Trace.WriteLine("New entry, load not complete, queuing");
+                System.Diagnostics.Debug.WriteLine("TG New entry, load not complete, queuing");
                 todo.Enqueue(() => AddNewEntry(he, hl));
                 return;
             }
@@ -402,16 +400,14 @@ namespace EDDiscovery.UserControls
                 {
                     for (int r = dataGridViewTravel.Rows.Count - 1; r >= filter.MaximumNumberOfItems; r--)
                     {
-                        System.Diagnostics.Debug.WriteLine("Removed as too much " + r);
+                        System.Diagnostics.Debug.WriteLine("TG Removed as too much " + r);
                         dataGridViewTravel.Rows.RemoveAt(r);
                     }
                 }
 
-                System.Diagnostics.Trace.WriteLine($"Cursor to top {checkBoxCursorToTop.Checked} DGV Displayed row count {dataGridViewTravel.DisplayedRowCount(false)}");
-
                 if (checkBoxCursorToTop.Checked)   // Move focus to first row
                 {
-                    System.Diagnostics.Trace.WriteLine("Auto selected top row on new entry");
+                    System.Diagnostics.Trace.WriteLine("TG Auto selected top row on new entry");
                     dataGridViewTravel.ClearSelection();
                     dataGridViewTravel.SetCurrentAndSelectAllCellsOnRow(0);       // its the current cell which needs to be set, moves the row marker as well
                     FireChangeSelection();
@@ -516,7 +512,7 @@ namespace EDDiscovery.UserControls
                     {
                         System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch(); sw.Start();
                         e.DynamicInvoke(he, current_historylist, true);
-                        if ( sw.ElapsedMilliseconds>=0)
+                        if ( sw.ElapsedMilliseconds>=50)
                             System.Diagnostics.Trace.WriteLine("TG FCS Method " + e.Method.DeclaringType + " took " + sw.ElapsedMilliseconds);
                     }
                 }

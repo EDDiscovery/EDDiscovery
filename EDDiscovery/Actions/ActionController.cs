@@ -648,6 +648,18 @@ namespace EDDiscovery.Actions
 
         public string EliteInputList() { return inputdevices.ListDevices(); }
         public string EliteInputCheck() { return inputdevicesactions.CheckBindings(); }
+        public string EliteInputButtons()
+        {
+            string s = "";
+            foreach (var i in inputdevices)
+            {
+                var list = i.EventButtonNames();
+                var dlist = list.Select(x => i.Name() + ":" + x);
+                s = s.AppendPrePad(string.Join(",", dlist), ",");
+            }
+
+            return s;
+        }
 
         #endregion
 

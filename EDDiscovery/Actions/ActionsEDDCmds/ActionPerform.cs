@@ -64,22 +64,22 @@ namespace EDDiscovery.Actions
                     string fourthword = exp.Count >= 4 ? exp[3] : null;
                     string fifthword = exp.Count >= 5 ? exp[4] : null;
 
+                    var ac = ap.ActionController as ActionController;
+
                     if (cmdname == null)
                     {
                         ap.ReportError("Missing command in Perform");
                     }
                     else if (cmdname.Equals("3dmap"))
                     {
-                        (ap.ActionController as ActionController).DiscoveryForm.Open3DMap(null);
+                        ac.DiscoveryForm.Open3DMap(null);
                     }
                     else if (cmdname.Equals("2dmap"))
                     {
-                        (ap.ActionController as ActionController).DiscoveryForm.PopOuts.PopOut(PanelInformation.PanelIDs.Map2D);
+                        ac.DiscoveryForm.PopOuts.PopOut(PanelInformation.PanelIDs.Map2D);
                     }
                     else if (cmdname.Equals("edsm"))
                     {
-                        ActionController ac = (ap.ActionController as ActionController);
-
                         EliteDangerousCore.EDSM.EDSMClass edsm = new EliteDangerousCore.EDSM.EDSMClass();
 
                         if (edsm.ValidCredentials)
@@ -89,8 +89,60 @@ namespace EDDiscovery.Actions
                     }
                     else if (cmdname.Equals("refresh"))
                     {
-                        (ap.ActionController as ActionController).DiscoveryForm.RefreshHistoryAsync();
+                        ac.DiscoveryForm.RefreshHistoryAsync();
                     }
+
+                    else if (cmdname.Equals("configurevoice"))
+                    {
+                        ac.ConfigureVoice(nextword ?? "Configure Voice Synthesis");
+                    }
+                    else if (cmdname.Equals("configurewave"))
+                        ac.ConfigureWave(nextword ?? "Configure Wave Output");
+                    else if (cmdname.Equals("voicenames"))
+                    {
+                        ap["VoiceNames"] = ac.SpeechSynthesizer.GetVoiceNames().QuoteStrings();
+                    }
+
+                    else if (cmdname.Equals("manageaddons"))
+                        ac.ManageAddOns();
+                    else if (cmdname.Equals("editaddons"))
+                        ac.EditAddOns();
+                    else if (cmdname.Equals("editlastpack"))
+                        ac.EditLastPack();
+                    else if (cmdname.Equals("editpack"))
+                    {
+                        if (nextword != null)
+                        {
+                            if (!ac.EditPack(nextword))
+                                ap.ReportError("Pack " + nextword + " not found");
+                        }
+                        else
+                            ap.ReportError("EditPack requires a pack name");
+                    }
+                    else if (cmdname.Equals("editspeechtext"))
+                        ac.EditSpeechText();
+
+                    else if (cmdname.Equals("enableeliteinput"))
+                        ac.EliteInput(true, true);
+                    else if (cmdname.Equals("enableeliteinputnoaxis"))
+                        ac.EliteInput(true, false);
+                    else if (cmdname.Equals("disableeliteinput"))
+                        ac.EliteInput(false, false);
+                    else if (cmdname.Equals("listeliteinput"))
+                    {
+                        ap["EliteInput"] = ac.EliteInputList();
+                        ap["EliteInputCheck"] = ac.EliteInputCheck();
+                        ap["EliteInputButtons"] = ac.EliteInputButtons();
+                    }
+                    else if (cmdname.Equals("bindings"))
+                    {
+                        ap["Bindings"] = ac.FrontierBindings.ListBindings();
+                    }
+                    else if (cmdname.Equals("bindingvalues"))
+                    {
+                        ap["BindingValues"] = ac.FrontierBindings.ListValues();
+                    }
+
                     else if (cmdname.Equals("url"))
                     {
                         if (nextword != null && nextword.StartsWith("http:", StringComparison.InvariantCultureIgnoreCase) || nextword.StartsWith("https:", StringComparison.InvariantCultureIgnoreCase))        // security..
@@ -100,54 +152,46 @@ namespace EDDiscovery.Actions
                         else
                             ap.ReportError("Perform url must start with http");
                     }
-                    else if (cmdname.Equals("configurevoice"))
+                    else if (cmdname.Equals("datadownload"))
                     {
-                        (ap.ActionController as ActionController).ConfigureVoice(nextword ?? "Configure Voice Synthesis");
-                    }
-                    else if (cmdname.Equals("manageaddons"))
-                        (ap.ActionController as ActionController).ManageAddOns();
-                    else if (cmdname.Equals("editaddons"))
-                        (ap.ActionController as ActionController).EditAddOns();
-                    else if (cmdname.Equals("editlastpack"))
-                        (ap.ActionController as ActionController).EditLastPack();
-                    else if (cmdname.Equals("editpack"))
-                    {
-                        if (nextword != null)
+                        string gitfolder = nextword;
+                        string filewildcard = thirdword;
+                        string directory = fourthword;
+                        string optclean = fifthword;
+
+                        if (gitfolder != null && filewildcard != null && directory != null)
                         {
-                            if (!(ap.ActionController as ActionController).EditPack(nextword))
-                                ap.ReportError("Pack " + nextword + " not found");
+                            if (System.IO.Directory.Exists(directory))
+                            {
+                                BaseUtils.GitHubClass ghc = new BaseUtils.GitHubClass(EDDiscovery.Properties.Resources.URLGithubDataDownload);
+                                bool worked = ghc.Download(directory, gitfolder, filewildcard, optclean != null && optclean == "1");
+                                ap["Downloaded"] = worked.ToStringIntValue();
+                            }
+                            else
+                                ap.ReportError("Download folder " + directory + " does not exist");
                         }
                         else
-                            ap.ReportError("EditPack requires a pack name");
+                            ap.ReportError("Missing parameters in Perform Datadownload");
                     }
-                    else if (cmdname.Equals("editspeechtext"))
-                        (ap.ActionController as ActionController).EditSpeechText();
-                    else if (cmdname.Equals("configurewave"))
-                        (ap.ActionController as ActionController).ConfigureWave(nextword ?? "Configure Wave Output");
-                    else if (cmdname.Equals("enableeliteinput"))
-                        (ap.ActionController as ActionController).EliteInput(true, true);
-                    else if (cmdname.Equals("enableeliteinputnoaxis"))
-                        (ap.ActionController as ActionController).EliteInput(true, false);
-                    else if (cmdname.Equals("disableeliteinput"))
-                        (ap.ActionController as ActionController).EliteInput(false, false);
+
                     else if (cmdname.Equals("enablevoicerecognition"))
                     {
                         if (nextword != null)
                         {
-                            ap["VoiceRecognitionEnabled"] = ((ap.ActionController as ActionController).VoiceReconOn(nextword)).ToStringIntValue();
+                            ap["VoiceRecognitionEnabled"] = (ac.VoiceReconOn(nextword)).ToStringIntValue();
                         }
                         else
                             ap.ReportError("EnableVoiceRecognition requires a culture");
                     }
                     else if (cmdname.Equals("disablevoicerecognition"))
-                        (ap.ActionController as ActionController).VoiceReconOff();
+                        ac.VoiceReconOff();
                     else if (cmdname.Equals("beginvoicerecognition"))
-                        (ap.ActionController as ActionController).VoiceLoadEvents();
+                        ac.VoiceLoadEvents();
                     else if (cmdname.Equals("voicerecognitionconfidencelevel"))
                     {
                         float? conf = nextword.InvariantParseFloatNull();
                         if (conf != null)
-                            (ap.ActionController as ActionController).VoiceReconConfidence(conf.Value);
+                            ac.VoiceReconConfidence(conf.Value);
                         else
                             ap.ReportError("VoiceRecognitionConfidencelLevel requires a confidence value");
                     }
@@ -159,34 +203,22 @@ namespace EDDiscovery.Actions
                         int? endsilenceambigious = fifthword.InvariantParseIntNull(); // ambiguous timeout
 
                         if (babble != null && initialsilence != null && endsilence != null && endsilenceambigious != null)
-                            (ap.ActionController as ActionController).VoiceReconParameters(babble.Value, initialsilence.Value, endsilence.Value, endsilenceambigious.Value);
+                            ac.VoiceReconParameters(babble.Value, initialsilence.Value, endsilence.Value, endsilenceambigious.Value);
                         else
                             ap.ReportError("VoiceRecognitionParameters requires four values");
                     }
                     else if (cmdname.Equals("voicerecognitionphrases"))
                     {
-                        ap["Phrases"] = (ap.ActionController as ActionController).VoicePhrases(Environment.NewLine);
+                        ap["Phrases"] = ac.VoicePhrases(Environment.NewLine);
                     }
-                    else if (cmdname.Equals("listeliteinput"))
+                    else if (cmdname.Equals("voicerecognitionevent"))
                     {
-                        ap["EliteInput"] = (ap.ActionController as ActionController).EliteInputList();
-                        ap["EliteInputCheck"] = (ap.ActionController as ActionController).EliteInputCheck();
+                        ac.EnableVoiceReconEvent = nextword.InvariantParseInt(0) != 0;
                     }
-                    else if (cmdname.Equals("voicenames"))
-                    {
-                        ap["VoiceNames"] = (ap.ActionController as ActionController).SpeechSynthesizer.GetVoiceNames().QuoteStrings();
-                    }
-                    else if (cmdname.Equals("bindings"))
-                    {
-                        ap["Bindings"] = (ap.ActionController as ActionController).FrontierBindings.ListBindings();
-                    }
-                    else if (cmdname.Equals("bindingvalues"))
-                    {
-                        ap["BindingValues"] = (ap.ActionController as ActionController).FrontierBindings.ListValues();
-                    }
+
                     else if (cmdname.Equals("actionfile"))
                     {
-                        ActionFile f = (ap.ActionController as ActionController).Get(nextword);
+                        ActionFile f = ac.Get(nextword);
                         if ( f != null )
                         {
                             int i = 0;
@@ -252,28 +284,7 @@ namespace EDDiscovery.Actions
                         else
                             ap.ReportError("Action file " + nextword + " is not loaded");
                     }
-                    else if (cmdname.Equals("datadownload"))
-                    {
-                        string gitfolder = nextword;
-                        string filewildcard = thirdword;
-                        string directory = fourthword;
-                        string optclean = fifthword;
 
-                        if (gitfolder != null && filewildcard != null && directory != null)
-                        {
-                            if (System.IO.Directory.Exists(directory))
-                            {
-                                BaseUtils.GitHubClass ghc = new BaseUtils.GitHubClass(EDDiscovery.Properties.Resources.URLGithubDataDownload);
-                                bool worked = ghc.Download(directory, gitfolder, filewildcard, optclean != null && optclean == "1");
-                                ap["Downloaded"] = worked.ToStringIntValue();
-                            }
-                            else
-                                ap.ReportError("Download folder " + directory + " does not exist");
-                        }
-                        else
-                            ap.ReportError("Missing parameters in Perform Datadownload");
-
-                    }
                     else if (cmdname.Equals("generateevent"))
                     {
                         if (nextword != null)
@@ -316,10 +327,10 @@ namespace EDDiscovery.Actions
                                     c["EventClass_EventTimeUTC"] = DateTime.UtcNow.ToStringUS();
                                     c["EventClass_EventTypeID"] = c["EventClass_EventTypeStr"] = f.TriggerName.Substring(2);
                                     c["EventClass_UIDisplayed"] = "0";
-                                    (ap.ActionController as ActionController).ActionRun(Actions.ActionEventEDList.onUIEvent, c);
+                                    ac.ActionRun(Actions.ActionEventEDList.onUIEvent, c);
                                 }
 
-                                (ap.ActionController as ActionController).ActionRun(f, c, now: true);
+                                ac.ActionRun(f, c, now: true);
                             }
                             else
                             {
@@ -336,7 +347,7 @@ namespace EDDiscovery.Actions
                                     else
                                     {
                                         EliteDangerousCore.HistoryEntry he = EliteDangerousCore.HistoryEntry.FromJournalEntry(je, null);
-                                        (ap.ActionController as ActionController).ActionRunOnEntry(he, Actions.ActionEventEDList.NewEntry(he), now: true);
+                                        ac.ActionRunOnEntry(he, Actions.ActionEventEDList.NewEntry(he), now: true);
                                     }
                                 }
                                 catch

@@ -484,7 +484,7 @@ namespace EDDiscovery
                 {
                     // register the system topic.  the callback will get a DDE handle, convert to string and vector to the FrontierCAPI URL callback handler
 
-                    if (DDEServer.AddTopic("System", (hurl)=>{ string url = BaseUtils.DDE.DDEServer.FromDdeStringHandle(hurl); FrontierCAPI.URLCallBack(url); } ))
+                    if (DDEServer.AddTopic("System", (hurl) => { string url = BaseUtils.DDE.DDEServer.FromDdeStringHandle(hurl); FrontierCAPI.URLCallBack(url); }))
                     {
                         if (DDEServer.Register())       // and register
                         {
@@ -512,8 +512,8 @@ namespace EDDiscovery
                         Version vmax = n.VersionMax != null ? new Version(n.VersionMax) : null;
                         Version vmin = n.VersionMin != null ? new Version(n.VersionMin) : null;
 
-                        if (p != null && DateTime.UtcNow >= n.StartUTC && DateTime.UtcNow <= n.EndUTC && 
-                                ( vmax ==null || curver <= vmax) && ( vmin == null || curver >= vmin ) &&
+                        if (p != null && DateTime.UtcNow >= n.StartUTC && DateTime.UtcNow <= n.EndUTC &&
+                                (vmax == null || curver <= vmax) && (vmin == null || curver >= vmin) &&
                                 (n.actionpackpresent == null || actioncontroller.Get(n.actionpackpresent).Length > 0) &&
                                 (n.actionpackpresentenabled == null || actioncontroller.Get(n.actionpackpresentenabled, true).Length > 0) &&
                                 (n.actionpackpresentdisabled == null || actioncontroller.Get(n.actionpackpresentdisabled, false).Length > 0) &&
@@ -522,7 +522,7 @@ namespace EDDiscovery
                         {
                             if (n.EntryType == "Popup")
                             {
-                                if ( !acklist.Contains(n.StartUTC.ToStringZulu()) )
+                                if (!acklist.Contains(n.StartUTC.ToStringZulu()))
                                     popupnotificationlist.Add(n);
                             }
                             else if (n.EntryType == "Log")
@@ -596,7 +596,7 @@ namespace EDDiscovery
 
                 if (buttonReloadActions.Visible)
                 {
-                    if ( actioncontroller.CheckForActionFilesChange() ) // autoreload edited action files..
+                    if (actioncontroller.CheckForActionFilesChange()) // autoreload edited action files..
                         buttonReloadActions_Click(null, null);
                 }
             };
@@ -618,7 +618,7 @@ namespace EDDiscovery
                 var lastaboutversion = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("AboutBoxLastVersionPresented", "0.0.0.0").VersionFromString();
                 var eddversion = EDDApplicationContext.AppVersion.VersionFromString();
                 lastaboutversion[3] = eddversion[3] = 0;        // ignore the last dot
-                if ( lastaboutversion.CompareVersion(eddversion)<0)
+                if (lastaboutversion.CompareVersion(eddversion) < 0)
                 {
                     EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("AboutBoxLastVersionPresented", EDDApplicationContext.AppVersion);
                     AboutBox();

@@ -24,7 +24,10 @@ namespace EDDiscovery.Actions
     public partial class ActionController : ActionCoreController
     {
         public AudioExtensions.IVoiceRecognition VoiceRecognition { get { return voicerecon; } }
-        AudioExtensions.IVoiceRecognition voicerecon;
+
+        public bool EnableVoiceReconEvent { get; set; } = true;           // set to false to stop VoiceRecognition Events being generated
+
+        private AudioExtensions.IVoiceRecognition voicerecon;
 
         public bool VoiceReconOn(string culture = null)     // perform enableVR
         {
@@ -100,14 +103,20 @@ namespace EDDiscovery.Actions
 
         private void Voicerecon_SpeechRecognised(string text, float confidence)
         {
-            System.Diagnostics.Debug.WriteLine(Environment.TickCount % 10000 + " Recognised " + text + " " + confidence.ToStringInvariant("0.0"));
-            ActionRun(ActionEventEDList.onVoiceInput, new Variables(new string[] { "VoiceInput", text, "VoiceConfidence", (confidence * 100F).ToStringInvariant("0.00") }));
+            if (EnableVoiceReconEvent)
+            {
+                System.Diagnostics.Debug.WriteLine(Environment.TickCount % 10000 + " Recognised " + text + " " + confidence.ToStringInvariant("0.0"));
+                ActionRun(ActionEventEDList.onVoiceInput, new Variables(new string[] { "VoiceInput", text, "VoiceConfidence", (confidence * 100F).ToStringInvariant("0.00") }));
+            }
         }
 
         private void Voicerecon_SpeechNotRecognised(string text, float confidence)
         {
-            System.Diagnostics.Debug.WriteLine(Environment.TickCount % 10000 + " Failed recognition " + text + " " + confidence.ToStringInvariant("0.00"));
-            ActionRun(ActionEventEDList.onVoiceInputFailed, new Variables(new string[] { "VoiceInput", text, "VoiceConfidence", (confidence * 100F).ToStringInvariant("0.00") }));
+            if (EnableVoiceReconEvent)
+            {
+                System.Diagnostics.Debug.WriteLine(Environment.TickCount % 10000 + " Failed recognition " + text + " " + confidence.ToStringInvariant("0.00"));
+                ActionRun(ActionEventEDList.onVoiceInputFailed, new Variables(new string[] { "VoiceInput", text, "VoiceConfidence", (confidence * 100F).ToStringInvariant("0.00") }));
+            }
         }
 
     }
