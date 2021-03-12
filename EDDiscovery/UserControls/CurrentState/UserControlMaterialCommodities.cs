@@ -186,7 +186,7 @@ namespace EDDiscovery.UserControls
                 {
                     object[] rowobj;
 
-                    MaterialCommodities m = mcl.List.Find(x => x.Details.Name == mcd.Name);     // and we see if we actually have some at this time
+                    MaterialCommodities m = mcl.List.Find(x => string.Equals(x.Details.FDName, mcd.FDName, StringComparison.InvariantCultureIgnoreCase));     // and we see if we actually have some at this time
 
                     if (showzeros || (m != null && m.Count > 0))       // if display zero, or we have some..
                     {
