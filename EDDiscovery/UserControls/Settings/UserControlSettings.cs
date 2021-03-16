@@ -13,6 +13,7 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using CAPI;
 using EDDiscovery.Forms;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
@@ -165,7 +166,8 @@ namespace EDDiscovery.UserControls
         }
 
         // Install CAPI for EDD 
-        
+
+        bool capiloggedin;
         Label capiStateLabel;
         ExtendedControls.ExtButton capiButton;
         EliteDangerousCore.Forms.CommanderForm cf;
@@ -174,12 +176,12 @@ namespace EDDiscovery.UserControls
         {
             var gb = new List<ExtendedControls.ExtGroupBox>();
 
-            ExtendedControls.ExtGroupBox g1 = new ExtendedControls.ExtGroupBox() { Height = 60, Text = "Frontier CAPI" };
+            ExtendedControls.ExtGroupBox g1 = new ExtendedControls.ExtGroupBox() { Name = "CAPIGB" , Height = 60, Text = "Frontier CAPI" };
             capiButton = new ExtendedControls.ExtButton() { Location = new System.Drawing.Point(210,23),
-                                    ClientSize = new System.Drawing.Size(80,20), Text = "Login"};
+                                    ClientSize = new System.Drawing.Size(80,20), Name="CAPIButton"};
             capiButton.Click += CapiButton_Click;
 
-            capiStateLabel = new Label() { Location = new System.Drawing.Point(4, 23)};
+            capiStateLabel = new Label() { Location = new System.Drawing.Point(4, 23), Name ="CAPIStatus"};
             g1.Controls.Add(capiButton);
             g1.Controls.Add(capiStateLabel);
             gb.Add(g1);
@@ -192,14 +194,15 @@ namespace EDDiscovery.UserControls
             {
                 if (discoveryform.FrontierCAPI.HasUserBeenLoggedIn(cf.CommanderName))       // if we are log in, logout
                 {
-                    discoveryform.FrontierCAPI.LogOut();
+                    discoveryform.FrontierCAPI.LogOut(cf.CommanderName);
                     SetCAPILabelState();
                 }
                 else
                 {
                     discoveryform.FrontierCAPI.LogIn(cf.CommanderName);         // perform login, which does the auth procedure.
+                    capiloggedin = true;         // remember we did a logon
                     capiButton.Enabled = false;
-                    capiStateLabel.Text = "Logging in";
+                    capiStateLabel.Text = "Logging in".T(EDTx.CommanderForm_CAPILoggingin);
                 }
             }
             else
@@ -211,19 +214,19 @@ namespace EDDiscovery.UserControls
             if (!discoveryform.FrontierCAPI.ClientIDAvailable)      // disable id no capiID
             {
                 capiButton.Enabled = false;
-                capiStateLabel.Text = "Disabled";
+                capiStateLabel.Text = capiButton.Text = "Disabled".T(EDTx.CommanderForm_CAPIDisabled);
             }
             else if (cf.CommanderName.HasChars() && discoveryform.FrontierCAPI.HasUserBeenLoggedIn(cf.CommanderName))   // if logged in..
             {
                 capiButton.Enabled = true;
-                capiButton.Text = "Logout";
-                capiStateLabel.Text = "Logged In";
+                capiButton.Text = "Logout".T(EDTx.CommanderForm_CAPILogout);
+                capiStateLabel.Text = "Logged In".T(EDTx.CommanderForm_CAPILoggedin);
             }
             else
             {                                                   // no cred, or logged out..
                 capiButton.Enabled = true;
-                capiButton.Text = "Login";
-                capiStateLabel.Text = "Await Log in";
+                capiButton.Text = "Login".T(EDTx.CommanderForm_CAPILogin);
+                capiStateLabel.Text = "Await Log in".T(EDTx.CommanderForm_CAPIAwaitLogin);
             }
         }
 
@@ -240,8 +243,8 @@ namespace EDDiscovery.UserControls
         {
             cf = new EliteDangerousCore.Forms.CommanderForm(AdditionalCmdrControls());
             cf.Init(true);
-            SetCAPILabelState();
             discoveryform.FrontierCAPI.StatusChange += CAPICallBack;
+            SetCAPILabelState();
 
             if (cf.ShowDialog(FindForm()) == DialogResult.OK)
             {
@@ -249,7 +252,7 @@ namespace EDDiscovery.UserControls
                 {
                     EDCommander cmdr = new EDCommander();
                     cf.Update(cmdr);
-                    EDCommander.Create(cmdr);
+                    EDCommander.Add(cmdr);
                     UpdateCommandersListBox();
                     discoveryform.LoadCommandersListBox();
                     discoveryform.RefreshHistoryAsync();           // will do a new parse on commander list adding/removing scanners
@@ -286,16 +289,15 @@ namespace EDDiscovery.UserControls
             cf.Init(cmdr,false);
             SetCAPILabelState();
             discoveryform.FrontierCAPI.StatusChange += CAPICallBack;
+            capiloggedin = false;
 
             if (cf.ShowDialog(FindForm()) == DialogResult.OK)
             {
                 bool forceupdate = cf.Update(cmdr);
-                List<EDCommander> edcommanders = (List<EDCommander>)dataGridViewCommanders.DataSource;
-                discoveryform.LoadCommandersListBox();
-                EDCommander.Update(edcommanders, false);
+                cmdr.Update();
                 dataGridViewCommanders.Refresh();
 
-                if ( forceupdate )                  // journal loc change forcing update
+                if ( forceupdate || capiloggedin )              // either a critial journal item changed, or a capi was logged
                     discoveryform.RefreshHistoryAsync();        // do a resync
             }
 

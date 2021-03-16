@@ -453,53 +453,6 @@ AssignTravelLogSystemForm: "AssignTravelLogSystemForm" => "Impostar Registro de 
 .btnOK: "OK" @
 .label5: "System Coordinates" => "Coordanadas do Sistema"
 
-SECTION CommanderForm
-
-CommanderForm: "CommanderForm" => "Ficha"
-.buttonCancel: "Cancel" => "Cancela"
-.buttonOK: "OK" @
-.extGroupBoxCommanderInfo: "Other" => "Outros"
-.radioButtonHistorySelection: "History Grid Selection" => "Seleção da Grade do Histórico"
-.labelMapCol: "Default Map Color" => "Cor do mapa predefinido"
-.radioButtonCentreHome: "Home System" => "Sistema estelar de moradia"
-.HomeSys: "Home System:" => "Sistema estelar de moradia"
-.labelZoom: "Default Zoom" => "Zoom predefinido"
-.labelOpenOn: "Open Centred On" => "Abre centrado su"
-.groupBoxCustomIGAU: "Intergalactic Astronomical Union [IGAU]" => "Intergalactic Astronomical Union [IGAU]"
-.checkBoxIGAUSync: "Send Codex Entry Discovery Data to IGAU" => "Envia dados do Codex a IGAU"
-.groupBoxCustomInara: "Inara Information (optional)" => "Informações de Inara (opcional)"
-.labelINARAN: "Inara Name:" => "Nome su Inara:"
-.labelInaraAPI: "Inara API Key:" => "Chave API de Inara:"
-.checkBoxCustomInara: "Sync to Inara" => "Sincronizar com Inara"
-.groupBoxCustomEDDN: "EDDN" @
-.checkBoxCustomEDDNTo: "Send Event Information to EDDN" => "Envia informação sobre os eventos a EDDN"
-.groupBoxCustomEDSM: "EDSM Information (optional)" => "Informações"
-.checkBoxCustomEDSMFrom: "Sync From EDSM" => "Sincronizar da EDSM"
-.labelEDSMAPI: "EDSM API Key:" => "Chave API do EDSM:"
-.labelEDSMN: "EDSM Name:" => "Nome do EDSM:"
-.checkBoxCustomEDSMTo: "Sync to EDSM" => "Sincronizar com EDSM"
-.groupBoxCustomJournal: "Journal Related Information" => "Informações relacionadas ao Jornal"
-.labelCN: "Commander Name:" => "Nome do Comandante"
-.buttonExtBrowse: "Browse" => "Navegar"
-.labelJL: "Journal Location:" => "Localização do Jornal"
-.label_index: "Commander Configure" => "Configurar o comandante"
-.radioButtonHistorySelection.ToolTip: "Select history entry as opening location" => "Centra no registro do histórico selecionado"
-.textBoxDefaultZoom.ToolTip: "Set the zoom level of the map. 1 is normal" => "Seleziona o nível de zoom do mapa. 1 é o normal."
-.radioButtonCentreHome.ToolTip: "Select home system as opening location" => "Centra no sistema estelar de moradia"
-.panel_defaultmapcolor.ToolTip: "New travel entries get this colour on the map" => "Novos registros de viajem recebem essa cor no mapa"
-.checkBoxIGAUSync.ToolTip: "https://github.com/Elite-IGAU/publications/blob/master/IGAU_Codex.csv" @
-.textBoxBorderInaraName.ToolTip: "Give the user name for this commander on Inara" => "Definir o nome de usuário para este comandante sobre Inara"
-.checkBoxCustomInara.ToolTip: "Sync with Inara" => "Sincronizar com Inara"
-.textBoxBorderInaraAPIKey.ToolTip: "Enter the API key from the Inara Website\nGet an Inara API key from https://inara.cz" => "Insira a chave API de Inara\nObtém uma chave API em https://inara.cz"
-.checkBoxCustomEDDNTo.ToolTip: "Click to send journal information to EDDN. EDDN feeds tools such as EDDB, EDSM, Inara with data from commanders. All data is made anonymised" => "Pressiona pare enviar as informações do jornal a EDDN. EDDN alimenta ulteriores progetos (EDDB, EDSM, Inara, etc...) com dados sobre comandante. Todos os dados são anónimos!"
-.checkBoxCustomEDSMFrom.ToolTip: "Receive any FSD jumps from EDSM that are on their database but not in EDDiscovery" => "Receba todos os dados sobre saltos FSD da EDSM que estejam em seu banco dados mas não em EDDiscovery"
-.checkBoxCustomEDSMTo.ToolTip: "Send your travel and ship data to EDSM" => "Envia os teu histórico de viajem e de espaçonaves a EDSM"
-.textBoxBorderEDSMAPI.ToolTip: "Enter the API key from the EDSM Website\nGet an EDSM API key from https://www.edsm.net in \\"My account\\" menu" => "Insira a chave API de EDSM\nObtém uma chave API em https://www.edsm.net, no menu de usuário"
-.textBoxBorderEDSMName.ToolTip: "Give the name this commander is known as in EDSM" => "Insira o nome como este comandante é conhecido em EDSM"
-.buttonExtBrowse.ToolTip: "Browse to the the journal folder" => "Navega a localização do jornal"
-.textBoxBorderCmdr.ToolTip: "Enter commander name as used in Elite Dangerous" => "Insira o nome do comandante como é em Elite Dangerous"
-.textBoxBorderJournal.ToolTip: "Enter the journal location folder.  Normally leave this field blank only if you are using EDD on another computer than your play computer\nLeave override journal location blank to use the standard Frontier location for journals" => "Insira a localização do jornal. Geralmente, é suficiente deixar este campo em branco para usar a localização normal usada da Frontier"
-.LF: "Select folder where Journal*.log files are stored by Frontier in" => "Selecionar onde ficam os arquivos de Journal*.log criados da Frontier"
 
 SECTION ExportForm
 

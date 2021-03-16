@@ -39,6 +39,10 @@ namespace EDDiscovery
 
         public GalacticMapping galacticMapping { get; private set; }
 
+        public CAPI.CompanionAPI FrontierCAPI;
+        public BaseUtils.DDE.DDEServer DDEServer;
+
+
         #endregion
 
         #region Events
@@ -220,11 +224,42 @@ namespace EDDiscovery
             journalmonitor = new EDJournalUIScanner(InvokeAsyncOnUiThread);
             journalmonitor.OnNewJournalEntry += NewEntry;
             journalmonitor.OnNewUIEvent += NewUIEvent;
+
+            FrontierCAPI = new CAPI.CompanionAPI(EDDOptions.Instance.CAPIDirectory(), CAPI.CapiClientIdentity.id, EDDApplicationContext.UserAgent, "eddiscovery");
+            DDEServer = new BaseUtils.DDE.DDEServer();          // will be started in shown
         }
 
         public void PostInit_Shown()        // called by EDDForm during shown
         {
             EDDConfig.Instance.Update();    // lost in the midst of time why  
+
+            if (FrontierCAPI.ClientIDAvailable)     // if we have a clientid, we can do a login
+            {
+                string ddeservername = "edd-dde-server";
+                string appPath = System.Reflection.Assembly.GetEntryAssembly()?.Location;
+
+                // we go into the registry, rummage around, and poke the right entries to make the shell do a DDE callback on the System topic to this application
+                // and to the DDE server ddeservername
+                BaseUtils.DDE.DDEServer.RegisterURICallback(FrontierCAPI.URI, appPath, ddeservername);
+
+                bool ok = false;
+
+                // start the DDE server
+                if (DDEServer.Start(ddeservername))
+                {
+                    // register the system topic.  the callback will get a DDE handle, convert to string and vector to the FrontierCAPI URL callback handler
+
+                    if (DDEServer.AddTopic("System", (hurl) => { string url = BaseUtils.DDE.DDEServer.FromDdeStringHandle(hurl); FrontierCAPI.URLCallBack(url); }))
+                    {
+                        if (DDEServer.Register())       // and register
+                        {
+                            ok = true;
+                        }
+                    }
+                }
+
+                LogLine(ok ? "CAPI Installed" : "CAPI Failed to register");
+            }
 
             backgroundWorker = new Thread(BackgroundWorkerThread);
             backgroundWorker.IsBackground = true;

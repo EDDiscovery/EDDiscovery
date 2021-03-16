@@ -471,53 +471,6 @@ AssignTravelLogSystemForm: "AssignTravelLogSystemForm" @
 .btnOK: "OK" @
 .label5: "System Coordinates" @
 
-SECTION CommanderForm
-CommanderForm: "CommanderForm" @
-.buttonCancel: "Cancel" @
-.buttonOK: "OK" @
-.extGroupBoxCommanderInfo: "Other" @
-.radioButtonHistorySelection: "History Grid Selection" @
-.labelMapCol: "Default Map Color" @
-.radioButtonCentreHome: "Home System" @
-.HomeSys: "Home System:" @
-.labelZoom: "Default Zoom" @
-.labelOpenOn: "Open Centred On" @
-.groupBoxCustomIGAU: "Intergalactic Astronomical Union [IGAU]" @
-.checkBoxIGAUSync: "Send Codex Entry Discovery Data to IGAU" @
-.groupBoxCustomInara: "Inara Information (optional)" @
-.labelINARAN: "Inara Name:" @
-.labelInaraAPI: "Inara API Key:" @
-.checkBoxCustomInara: "Sync to Inara" @
-.groupBoxCustomEDDN: "EDDN" @
-.checkBoxCustomEDDNTo: "Send Event Information to EDDN" @
-.groupBoxCustomEDSM: "EDSM Information (optional)" @
-.checkBoxCustomEDSMFrom: "Sync From EDSM" @
-.labelEDSMAPI: "EDSM API Key:" @
-.labelEDSMN: "EDSM Name:" @
-.checkBoxCustomEDSMTo: "Sync to EDSM" @
-.groupBoxCustomJournal: "Journal Related Information" @
-.labelCN: "Commander Name:" @
-.buttonExtBrowse: "Browse" @
-.labelJL: "Journal Location:" @
-.label_index: "Commander Configure" @
-.radioButtonHistorySelection.ToolTip: "Select history entry as opening location" @
-.textBoxDefaultZoom.ToolTip: "Set the zoom level of the map. 1 is normal" @
-.radioButtonCentreHome.ToolTip: "Select home system as opening location" @
-.panel_defaultmapcolor.ToolTip: "New travel entries get this colour on the map" @
-.checkBoxIGAUSync.ToolTip: "https://github.com/Elite-IGAU/publications/blob/master/IGAU_Codex.csv" @
-.textBoxBorderInaraName.ToolTip: "Give the user name for this commander on Inara" @
-.checkBoxCustomInara.ToolTip: "Sync with Inara" @
-.textBoxBorderInaraAPIKey.ToolTip: "Enter the API key from the Inara Website\nGet an Inara API key from https://inara.cz" @
-.checkBoxCustomEDDNTo.ToolTip: "Click to send journal information to EDDN. EDDN feeds tools such as EDDB, EDSM, Inara with data from commanders. All data is made anonymised" @
-.checkBoxCustomEDSMFrom.ToolTip: "Receive any FSD jumps from EDSM that are on their database but not in EDDiscovery" @
-.checkBoxCustomEDSMTo.ToolTip: "Send your travel and ship data to EDSM" @
-.textBoxBorderEDSMAPI.ToolTip: "Enter the API key from the EDSM Website\nGet an EDSM API key from https://www.edsm.net in \"My account\" menu" @
-.textBoxBorderEDSMName.ToolTip: "Give the name this commander is known as in EDSM" @
-.buttonExtBrowse.ToolTip: "Browse to the the journal folder" @
-.textBoxBorderCmdr.ToolTip: "Enter commander name as used in Elite Dangerous" @
-.textBoxBorderJournal.ToolTip: "Enter the journal location folder.  Normally leave this field blank only if you are using EDD on another computer than your play computer\nLeave override journal location blank to use the standard Frontier location for journals" @
-.LF: "Select folder where Journal*.log files are stored by Frontier in" @
-
 
 SECTION ExportForm
 
@@ -704,9 +657,19 @@ SECTION ExtPanelRollUp
 .RUPPin: "Pin to stop this menu bar disappearing automatically" @
 .RUPMarker: "Click or hover over this to unroll the menu bar" @
 
+SECTION CommanderForm
+.CAPIGB: "Frontier CAPI" @
+.CAPILoggingin: "Logging in" @
+.CAPIDisabled: "Disabled" @
+.CAPILogout: "Logout" @
+.CAPILoggedin: "Logged in" @
+.CAPILogin: "Login" @
+.CAPIAwaitLogin: "Await Log in" @
+
 
 include translation-example-uc.tlp
 
 include translation-example-je.tlp
 
 include translation-example-ed.tlp
+

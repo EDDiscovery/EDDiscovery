@@ -16,8 +16,11 @@
 
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Threading;
+using BaseUtils.JSON;
 using EliteDangerousCore;
 
 namespace EDDiscovery
@@ -96,18 +99,20 @@ namespace EDDiscovery
 
             System.Diagnostics.Debug.WriteLine("Background history refresh worker thread refresh given permission, close " + PendingClose);
 
+            int capirefreshinterval = 10000;        // how often we check CAPI system.  This is not the poll interval.
+
             while (!PendingClose)
             {
-                int wh = WaitHandle.WaitAny(new WaitHandle[] { closeRequested, refreshRequested });     // wait for a second and subsequent refresh request.
+                int wh = WaitHandle.WaitAny(new WaitHandle[] { closeRequested, refreshRequested }, capirefreshinterval);     // wait for a second and subsequent refresh request.
 
-                System.Diagnostics.Debug.WriteLine("Background history refresh worker - kicked due to " + wh);
-
-                if (PendingClose) break;
+                if (PendingClose)
+                    break;
 
                 switch (wh)
                 {
                     case 0:  // Close Requested
                         break;
+
                     case 1:  // Refresh Requested
                         journalmonitor.StopMonitor();          // this is called by the foreground.  Ensure background is stopped.  Foreground must restart it.
                         EdsmLogFetcher.AsyncStop();
@@ -129,6 +134,23 @@ namespace EDDiscovery
                             readyForNewRefresh.Reset();
                             DoRefreshHistory(args);
                             WaitHandle.WaitAny(new WaitHandle[] { closeRequested, readyForNewRefresh }); // Wait to be ready for new refresh
+                        }
+                        break;
+
+                    case WaitHandle.WaitTimeout:
+                        if (EDCommander.Current.ConsoleCommander && FrontierCAPI.Active)
+                        {
+                            var retstate = FrontierCAPI.ManageJournalDownload(EDCommander.Current.ConsoleUploadHistory, EDDOptions.Instance.CAPIDirectory(), 
+                                            EDCommander.Current.Name, 
+                                            new TimeSpan(0,30,0),       // journal poll interval
+                                            28);    // and days back in time to look
+
+                            if (EDCommander.Current.ConsoleUploadHistory == null || !retstate.DeepEquals(EDCommander.Current.ConsoleUploadHistory))     // if changed
+                            {
+                                EDCommander.Current.ConsoleUploadHistory = retstate;
+                                EDCommander.Current.Update();
+                            }
+                                
                         }
                         break;
                 }
@@ -153,7 +175,15 @@ namespace EDDiscovery
 
                 if (args.CurrentCommander >= 0)             // if we have a real commander
                 {
-                    journalmonitor.SetupWatchers();         // monitors are stopped, set up watchers
+                    string stdfolder = EDDOptions.Instance.DefaultJournalFolder.HasChars() ? EDDOptions.Instance.DefaultJournalFolder :
+                                                                                EliteDangerousCore.FrontierFolder.FolderName();     // may be null
+                    string[] stdfolders =
+                    {
+                        stdfolder ?? ".",
+                        EDDOptions.Instance.CAPIDirectory()
+                    };
+
+                    journalmonitor.SetupWatchers(stdfolders);         // monitors are stopped, set up watchers
 
                     int forcereloadoflastn = args.ForceJournalReload ? int.MaxValue / 2 : 0;     // if forcing a reload, we indicate that by setting the reload count to a very high value, but not enough to cause int wrap
 
@@ -228,6 +258,20 @@ namespace EDDiscovery
 
                 OnRefreshComplete?.Invoke();                            // History is completed
 
+                FrontierCAPI.Disconnect();         // Disconnect capi from current user, but don't clear their credential file
+
+                // available, and not hidden commander, and we have logged in previously
+                if (FrontierCAPI.ClientIDAvailable && EDCommander.Current.Id >= 0 && FrontierCAPI.HasUserBeenLoggedIn(EDCommander.Current.Name))
+                {
+                    System.Threading.Tasks.Task.Run(() =>           // don't hold up the main thread, do it in a task, as its a HTTP operation
+                    {
+                        FrontierCAPI.LogIn(EDCommander.Current.Name);   // try and get to Active.  May cause a new frontier login
+
+                        if (FrontierCAPI.Active)     // if active, does not requires a new login
+                            LogLine("CAPI User Logged in");
+                    });
+                }
+
                 if (history.CommanderId >= 0)
                     EdsmLogFetcher.Start(EDCommander.Current);
 
@@ -242,5 +286,6 @@ namespace EDDiscovery
                 Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Refresh history complete");
             }
         }
+
     }
 }

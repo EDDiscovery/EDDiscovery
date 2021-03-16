@@ -453,53 +453,6 @@ AssignTravelLogSystemForm: "AssignTravelLogSystemForm" => "Назначить с
 .btnOK: "OK" @
 .label5: "System Coordinates" => "Координаты системы"
 
-SECTION CommanderForm
-
-CommanderForm: "CommanderForm" => "Командир"
-.buttonCancel: "Cancel" => "Отмена"
-.buttonOK: "OK" @
-.extGroupBoxCommanderInfo: "Other" @
-.radioButtonHistorySelection: "History Grid Selection" @
-.labelMapCol: "Default Map Color" @
-.radioButtonCentreHome: "Home System" @
-.HomeSys: "Home System:" @
-.labelZoom: "Default Zoom" @
-.labelOpenOn: "Open Centred On" @
-.groupBoxCustomIGAU: "Intergalactic Astronomical Union [IGAU]" @
-.checkBoxIGAUSync: "Send Codex Entry Discovery Data to IGAU" @
-.groupBoxCustomInara: "Inara Information (optional)" => "Inara (необязательно)"
-.labelINARAN: "Inara Name:" => "Имя пользователя Inara"
-.labelInaraAPI: "Inara API Key:" => "Api-ключ Inara"
-.checkBoxCustomInara: "Sync to Inara" => "Синхронизация с Inara"
-.groupBoxCustomEDDN: "EDDN" @
-.checkBoxCustomEDDNTo: "Send Event Information to EDDN" => "Отправлять информацию о событиях в EDDN"
-.groupBoxCustomEDSM: "EDSM Information (optional)" => "EDSM (необязательно)"
-.checkBoxCustomEDSMFrom: "Sync From EDSM" => "Входящая синхронизация из EDSM"
-.labelEDSMAPI: "EDSM API Key:" => "Api-ключ EDSM"
-.labelEDSMN: "EDSM Name:" => "Имя пользователя EDSM"
-.checkBoxCustomEDSMTo: "Sync to EDSM" => "Синхронизация с EDSM"
-.groupBoxCustomJournal: "Journal Related Information" => "Журнал"
-.labelCN: "Commander Name:" => "Имя командира"
-.buttonExtBrowse: "Browse" => "Обзор"
-.labelJL: "Journal Location:" => "Путь к файлам журнала"
-.label_index: "Commander Configure" => "Настройки командира"
-.radioButtonHistorySelection.ToolTip: "Select history entry as opening location" @
-.textBoxDefaultZoom.ToolTip: "Set the zoom level of the map. 1 is normal" @
-.radioButtonCentreHome.ToolTip: "Select home system as opening location" @
-.panel_defaultmapcolor.ToolTip: "New travel entries get this colour on the map" @
-.checkBoxIGAUSync.ToolTip: "https://github.com/Elite-IGAU/publications/blob/master/IGAU_Codex.csv" @
-.textBoxBorderInaraName.ToolTip: "Give the user name for this commander on Inara" => "Укажите имя пользователя Inara для этого командира"
-.checkBoxCustomInara.ToolTip: "Sync with Inara" => "Синхронизация с Inara"
-.textBoxBorderInaraAPIKey.ToolTip: "Enter the API key from the Inara Website\nGet an Inara API key from https://inara.cz" => "Укажите Api-ключ Inara\nЕго можно узнать на https://inara.cz"
-.checkBoxCustomEDDNTo.ToolTip: "Click to send journal information to EDDN. EDDN feeds tools such as EDDB, EDSM, Inara with data from commanders. All data is made anonymised" => "Нажмите, чтобы отправить информацию из журнала в EDDN. EDDN работает с такими приложениями, как EDDB, EDSM и Inara. Все данные анонимны"
-.checkBoxCustomEDSMFrom.ToolTip: "Receive any FSD jumps from EDSM that are on their database but not in EDDiscovery" => "Получать данные о FSD-прыжках, которые есть в EDSM, но нет в EDDiscovery"
-.checkBoxCustomEDSMTo.ToolTip: "Send your travel and ship data to EDSM" => "Отправить данные о полетах и кораблях в EDSM"
-.textBoxBorderEDSMAPI.ToolTip: "Enter the API key from the EDSM Website\nGet an EDSM API key from https://www.edsm.net in \\"My account\\" menu" => "Укажите Api-ключ EDSM\nЕго можно узнать на https://www.edsm.net в разделе «My account»"
-.textBoxBorderEDSMName.ToolTip: "Give the name this commander is known as in EDSM" => "Укажите имя этого командира в EDSM"
-.buttonExtBrowse.ToolTip: "Browse to the the journal folder" => "Выберите папку с файлами журнала"
-.textBoxBorderCmdr.ToolTip: "Enter commander name as used in Elite Dangerous" => "Введите имя командира, используемое в Elite Dangerous"
-.textBoxBorderJournal.ToolTip: "Enter the journal location folder.  Normally leave this field blank only if you are using EDD on another computer than your play computer\nLeave override journal location blank to use the standard Frontier location for journals" => "Выберите папку с файлами журнала. Обычно, если вы используете EDD на том же компьютере, на котором играете, это поле можно оставить пустым.\nВ этом случае будет использоваться папка журнала по умолчанию"
-.LF: "Select folder where Journal*.log files are stored by Frontier in" => "Выберите папку, в которой хранятся файлы журнала *.log Frontier"
 
 SECTION ExportForm
 

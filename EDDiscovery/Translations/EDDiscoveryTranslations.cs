@@ -862,6 +862,13 @@ namespace EDDiscovery
         UserControlFactions_BountiesPlural, // Bounties
         UserControlFactions_BondsPlural, // Bonds
         UserControlFactions_SystemsDetailFor, // Systems Detail for
+
+        CommanderForm_CAPILoggingin,
+        CommanderForm_CAPIDisabled,
+        CommanderForm_CAPILogout,
+        CommanderForm_CAPILoggedin,
+        CommanderForm_CAPILogin,
+        CommanderForm_CAPIAwaitLogin,
     }
 
     public static class EDTranslatorExtensions

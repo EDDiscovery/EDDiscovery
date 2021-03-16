@@ -509,8 +509,6 @@ namespace EDDiscovery
                 webserverport = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt("WebServerPort", 6502);
                 webserverenable = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("WebServerEnable", false);
                 dllpermissions = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("DLLAllowed", "");
-
-                EliteDangerousCore.EDCommander.Load(write);
             }
             catch (Exception ex)
             {

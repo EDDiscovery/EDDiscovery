@@ -66,20 +66,6 @@ namespace EDDiscovery
                 DLLManager.Refresh(EDCommander.Current.Name, EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(history, history.GetLast));
             }
 
-            FrontierCAPI.Disconnect();         // Disconnect capi from current user, but don't clear their credential file
-
-            // available, and not hidden commander, and we have logged in previously
-            if ( FrontierCAPI.ClientIDAvailable && EDCommander.Current.Id >= 0 && FrontierCAPI.HasUserBeenLoggedIn(EDCommander.Current.Name)) 
-            {
-                System.Threading.Tasks.Task.Run(() =>           // don't hold up the main thread, do it in a task, as its a HTTP operation
-                {
-                    if (FrontierCAPI.LogIn(EDCommander.Current.Name))      // try and get to Active.  May cause a new frontier login
-                    {
-                       LogLine(FrontierCAPI.Active ? "CAPI User Logged in" : "CAPI User requires new log in");
-                    }
-                });
-            }
-
             Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Refresh complete finished");
 
             if (EDCommander.Current.SyncToEdsm)        // no sync, no credentials, no action
@@ -89,6 +75,7 @@ namespace EDDiscovery
                     EDSMSend();
             }
         }
+
 
         public void NewEntry(JournalEntry e)       // programatically do a new entry
         {
@@ -152,47 +139,6 @@ namespace EDDiscovery
 
             CheckActionProfile(he);
 
-            // finally, CAPI, if docked, try and get commodity data, and if so, create a new EDD record
-            // placed here because it causes a new set of newentries to be called
-
-            if (he.EntryType == JournalTypeEnum.Docked && FrontierCAPI.Active)      
-            {
-                System.Threading.Tasks.Task.Run(() =>           // don't hold up the main thread, do it in a task, as its a HTTP operation
-                {
-                    var dockevt = he.journalEntry as EliteDangerousCore.JournalEvents.JournalDocked;
-
-                    string marketjson = FrontierCAPI.Market();
-
-                    CAPI.Market mk = new CAPI.Market(marketjson);
-                    if (mk.IsValid)
-                    {
-                        System.IO.File.WriteAllText(@"c:\code\market.json", marketjson);
-
-                        if (dockevt.StationName.Equals(mk.Name, StringComparison.InvariantCultureIgnoreCase))
-                        {
-                            System.Diagnostics.Debug.WriteLine($"CAPI got market {mk.Name}");
-
-                            var entry = new EliteDangerousCore.JournalEvents.JournalEDDCommodityPrices(he.EventTimeUTC.AddSeconds(1),
-                                            mk.ID, mk.Name, he.System.Name, EDCommander.CurrentCmdrID, mk.Commodities);
-
-                            var jo = entry.ToJSON();        // get json of it, and add it to the db
-                            entry.Add(jo);
-
-                            BeginInvoke((System.Windows.Forms.MethodInvoker)delegate
-                            {
-                                Debug.Assert(System.Windows.Forms.Application.MessageLoop);
-                                System.Diagnostics.Debug.WriteLine("CAPI fire new entry");
-                                NewEntry(entry);                // then push it thru. this will cause another set of calls to NewEntry First/Second
-                                                                // EDDN handler will pick up EDDCommodityPrices and send it.
-                            });
-                        }
-                        else
-                            System.Diagnostics.Trace.WriteLine($"CAPI disagree on market {dockevt.StationName} vs {mk.Name}");
-                    }
-                    else
-                        System.Diagnostics.Trace.WriteLine($"CAPI market invalid {marketjson}");
-                });
-            }
         }
 
         private void Controller_NewUIEvent(UIEvent uievent)

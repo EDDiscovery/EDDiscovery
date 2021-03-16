@@ -43,10 +43,9 @@ namespace EDDiscovery
         public EliteDangerousCore.DLL.EDDDLLManager DLLManager;
         public EDDDLLInterfaces.EDDDLLIF.EDDCallBacks DLLCallBacks;
 
-        public WebServer.WebServer WebServer;
+        public CAPI.CompanionAPI FrontierCAPI { get { return Controller.FrontierCAPI; } }
 
-        public CAPI.CompanionAPI FrontierCAPI;
-        public BaseUtils.DDE.DDEServer DDEServer;
+        public WebServer.WebServer WebServer;
 
         public Actions.ActionController ActionController { get { return actioncontroller; } }
         public BaseUtils.Variables Globals { get { return actioncontroller.Globals; } }
@@ -317,9 +316,6 @@ namespace EDDiscovery
 
             WebServer = new WebServer.WebServer(this);
 
-            FrontierCAPI = new CAPI.CompanionAPI(EDDOptions.Instance.CAPIDirectory(), CAPI.CapiClientIdentity.id, EDDApplicationContext.UserAgent, "eddiscovery");
-            DDEServer = new BaseUtils.DDE.DDEServer();          // will be started in shown
-        
             UpdateProfileComboBox();
             comboBoxCustomProfiles.SelectedIndexChanged += ComboBoxCustomProfiles_SelectedIndexChanged;
 
@@ -466,35 +462,6 @@ namespace EDDiscovery
             else
                 LogLine("Frontier bindings did not load");
 
-            // CAPI URI callback
-
-            if (FrontierCAPI.ClientIDAvailable)     // if we have a clientid, we can do a login
-            {
-                string ddeservername = "edd-dde-server";
-                string appPath = System.Reflection.Assembly.GetEntryAssembly()?.Location;
-
-                // we go into the registry, rummage around, and poke the right entries to make the shell do a DDE callback on the System topic to this application
-                // and to the DDE server ddeservername
-                BaseUtils.DDE.DDEServer.RegisterURICallback(FrontierCAPI.URI, appPath, ddeservername);
-
-                bool ok = false;
-
-                // start the DDE server
-                if (DDEServer.Start(ddeservername))
-                {
-                    // register the system topic.  the callback will get a DDE handle, convert to string and vector to the FrontierCAPI URL callback handler
-
-                    if (DDEServer.AddTopic("System", (hurl) => { string url = BaseUtils.DDE.DDEServer.FromDdeStringHandle(hurl); FrontierCAPI.URLCallBack(url); }))
-                    {
-                        if (DDEServer.Register())       // and register
-                        {
-                            ok = true;
-                        }
-                    }
-                }
-
-                LogLine(ok ? "CAPI Installed" : "CAPI Failed to register");
-            }
 
             // Notifications
 
@@ -824,11 +791,8 @@ namespace EDDiscovery
 
             if (cmdr != null)
             {
-                string cmdrfolder = cmdr.JournalDir;
-                if (cmdrfolder == null || cmdrfolder.Length < 1)
-                    cmdrfolder = EDJournalUIScanner.GetDefaultJournalDir();     // may be null if not known on system
-
-                if (cmdrfolder != null && Directory.Exists(cmdrfolder))
+                string cmdrfolder = cmdr.JournalDir.HasChars() ? cmdr.JournalDir : (EliteDangerousCore.FrontierFolder.FolderName() ?? ".");
+                if (Directory.Exists(cmdrfolder))
                 {
                     Process.Start(cmdrfolder);
                 }

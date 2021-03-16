@@ -453,53 +453,6 @@ AssignTravelLogSystemForm: "AssignTravelLogSystemForm" => "指向至新的星系
 .btnOK: "OK" => "确认"
 .label5: "System Coordinates" => "星系坐标"
 
-SECTION CommanderForm
-
-CommanderForm: "CommanderForm" => "指挥官配置"
-.buttonCancel: "Cancel" => "取消"
-.buttonOK: "OK" => "确认"
-.extGroupBoxCommanderInfo: "Other" @
-.radioButtonHistorySelection: "History Grid Selection" @
-.labelMapCol: "Default Map Color" @
-.radioButtonCentreHome: "Home System" @
-.HomeSys: "Home System:" @
-.labelZoom: "Default Zoom" @
-.labelOpenOn: "Open Centred On" @
-.groupBoxCustomIGAU: "Intergalactic Astronomical Union [IGAU]" @
-.checkBoxIGAUSync: "Send Codex Entry Discovery Data to IGAU" @
-.groupBoxCustomInara: "Inara Information (optional)" => "Inara 设置（可选）"
-.labelINARAN: "Inara Name:" => "Inara 用户名："
-.labelInaraAPI: "Inara API Key:" => "Inara API Key："
-.checkBoxCustomInara: "Sync to Inara" => "同步至 Inara"
-.groupBoxCustomEDDN: "EDDN" => "EDDN 设置"
-.checkBoxCustomEDDNTo: "Send Event Information to EDDN" => "向 EDDN 发送事件数据"
-.groupBoxCustomEDSM: "EDSM Information (optional)" => "EDSM 设置(可选)"
-.checkBoxCustomEDSMFrom: "Sync From EDSM" => "从 EDSM 同步"
-.labelEDSMAPI: "EDSM API Key:" => "EDSM API Key："
-.labelEDSMN: "EDSM Name:" => "EDSM 用户名："
-.checkBoxCustomEDSMTo: "Sync to EDSM" => "同步至 EDSM"
-.groupBoxCustomJournal: "Journal Related Information" => "游戏日志文件相关设置"
-.labelCN: "Commander Name:" => "指挥官名称："
-.buttonExtBrowse: "Browse" => "浏览"
-.labelJL: "Journal Location:" => "游戏日志文件路径："
-.label_index: "Commander Configure" => "指挥官配置"
-.radioButtonHistorySelection.ToolTip: "Select history entry as opening location" @
-.textBoxDefaultZoom.ToolTip: "Set the zoom level of the map. 1 is normal" @
-.radioButtonCentreHome.ToolTip: "Select home system as opening location" @
-.panel_defaultmapcolor.ToolTip: "New travel entries get this colour on the map" @
-.checkBoxIGAUSync.ToolTip: "https://github.com/Elite-IGAU/publications/blob/master/IGAU_Codex.csv" @
-.textBoxBorderInaraName.ToolTip: "Give the user name for this commander on Inara" => "输入此指挥官在 Inara 上对应的用户名"
-.checkBoxCustomInara.ToolTip: "Sync with Inara" => "与 Inara 同步"
-.textBoxBorderInaraAPIKey.ToolTip: "Enter the API key from the Inara Website\nGet an Inara API key from https://inara.cz" => "输入 Inara 网站的 API Key\n从 https://inara.cz 获取 API Key"
-.checkBoxCustomEDDNTo.ToolTip: "Click to send journal information to EDDN. EDDN feeds tools such as EDDB, EDSM, Inara with data from commanders. All data is made anonymised" => "勾选以将日志信息发送到EDDN。 EDDN使用从指挥官们那里收集到的信息向EDDB，EDSM，Inara等工具提供数据。 所有数据都是匿名的。"
-.checkBoxCustomEDSMFrom.ToolTip: "Receive any FSD jumps from EDSM that are on their database but not in EDDiscovery" => "从 EDSM 获取 EDDiscovery 上不存在的FSD跳跃信息。"
-.checkBoxCustomEDSMTo.ToolTip: "Send your travel and ship data to EDSM" => "向 EDSM 发送你的航行已经飞船数据。"
-.textBoxBorderEDSMAPI.ToolTip: "Enter the API key from the EDSM Website\nGet an EDSM API key from https://www.edsm.net in \\"My account\\" menu" => "输入 EDSM 网站的 API Key\n从  https://www.edsm.net/zh 获取 API Key"
-.textBoxBorderEDSMName.ToolTip: "Give the name this commander is known as in EDSM" => "输入此指挥官在 EDSM 上对应的用户名"
-.buttonExtBrowse.ToolTip: "Browse to the the journal folder" => "选择游戏日志所在的文件夹"
-.textBoxBorderCmdr.ToolTip: "Enter commander name as used in Elite Dangerous" => "输入游戏中的指挥官名称"
-.textBoxBorderJournal.ToolTip: "Enter the journal location folder.  Normally leave this field blank only if you are using EDD on another computer than your play computer\nLeave override journal location blank to use the standard Frontier location for journals" => "输入游戏日志所在的路径。通常这项可以留空白，除非你想加载的游戏日志不在默认位置。\n将这项留空白以使用默认游戏日志路径。"
-.LF: "Select folder where Journal*.log files are stored by Frontier in" => "选择Frontier存放游戏日志文件 *.log 所在的文件夹"
 
 SECTION ExportForm
 

@@ -453,53 +453,6 @@ AssignTravelLogSystemForm: "AssignTravelLogSystemForm" @
 .btnOK: "OK" @
 .label5: "System Coordinates" => "System Koordinaten"
 
-SECTION CommanderForm
-
-CommanderForm: "CommanderForm" @
-.buttonCancel: "Cancel" => "Abbrechen"
-.buttonOK: "OK" @
-.extGroupBoxCommanderInfo: "Other" @
-.radioButtonHistorySelection: "History Grid Selection" @
-.labelMapCol: "Default Map Color" @
-.radioButtonCentreHome: "Home System" @
-.HomeSys: "Home System:" @
-.labelZoom: "Default Zoom" @
-.labelOpenOn: "Open Centred On" @
-.groupBoxCustomIGAU: "Intergalactic Astronomical Union [IGAU]" @
-.checkBoxIGAUSync: "Send Codex Entry Discovery Data to IGAU" @
-.groupBoxCustomInara: "Inara Information (optional)" => "Inara-Information (optional)"
-.labelINARAN: "Inara Name:" => "Inara-Name"
-.labelInaraAPI: "Inara API Key:" => "Inara API-Schlüssel"
-.checkBoxCustomInara: "Sync to Inara" => "Zu Inara synchronisieren"
-.groupBoxCustomEDDN: "EDDN" @
-.checkBoxCustomEDDNTo: "Send Event Information to EDDN" => "Ereignisinformation an EDDN senden"
-.groupBoxCustomEDSM: "EDSM Information (optional)" @
-.checkBoxCustomEDSMFrom: "Sync From EDSM" => "Von EDSM synchronisieren"
-.labelEDSMAPI: "EDSM API Key:" => "EDSM API-Schlüssel"
-.labelEDSMN: "EDSM Name:" => "EDSM-Name:"
-.checkBoxCustomEDSMTo: "Sync to EDSM" => "Zu EDSM synchronisieren"
-.groupBoxCustomJournal: "Journal Related Information" => "Journalbezogene Informationen"
-.labelCN: "Commander Name:" => "Kommandanten-Name"
-.buttonExtBrowse: "Browse" => "Auswählen"
-.labelJL: "Journal Location:" => "Journal Ablage:"
-.label_index: "Commander Configure" => "Kommandanten konfigurieren"
-.radioButtonHistorySelection.ToolTip: "Select history entry as opening location" @
-.textBoxDefaultZoom.ToolTip: "Set the zoom level of the map. 1 is normal" @
-.radioButtonCentreHome.ToolTip: "Select home system as opening location" @
-.panel_defaultmapcolor.ToolTip: "New travel entries get this colour on the map" @
-.checkBoxIGAUSync.ToolTip: "https://github.com/Elite-IGAU/publications/blob/master/IGAU_Codex.csv" @
-.textBoxBorderInaraName.ToolTip: "Give the user name for this commander on Inara" => "Inara-Benutzername dieses Kommandanten angeben"
-.checkBoxCustomInara.ToolTip: "Sync with Inara" => "Mit Inara synchronisieren"
-.textBoxBorderInaraAPIKey.ToolTip: "Enter the API key from the Inara Website\nGet an Inara API key from https://inara.cz" => "API-Schlüssel von der Inara-Seite eingeben\nSie erhalten einen Inara API-Schlüssel auf https://inara.cz"
-.checkBoxCustomEDDNTo.ToolTip: "Click to send journal information to EDDN. EDDN feeds tools such as EDDB, EDSM, Inara with data from commanders. All data is made anonymised" => "Klicken, um Journal-Informationen an EDDN zu senden. EDDN beliefert Applikation wie EDDB, EDSM, und Inara mit Daten. Alle Daten sind anonymisiert"
-.checkBoxCustomEDSMFrom.ToolTip: "Receive any FSD jumps from EDSM that are on their database but not in EDDiscovery" => "Erhält alle FSA-Sprünge von EDSM die in dieser Datenbank aber nicht in EDDiscovery sind"
-.checkBoxCustomEDSMTo.ToolTip: "Send your travel and ship data to EDSM" => "Reise- und Schiffsdaten an EDSM schicken"
-.textBoxBorderEDSMAPI.ToolTip: "Enter the API key from the EDSM Website\nGet an EDSM API key from https://www.edsm.net in \\"My account\\" menu" @
-.textBoxBorderEDSMName.ToolTip: "Give the name this commander is known as in EDSM" => "Name des Kommandanten auf EDSM"
-.buttonExtBrowse.ToolTip: "Browse to the the journal folder" => "Journal-Verzeichnis auswählen"
-.textBoxBorderCmdr.ToolTip: "Enter commander name as used in Elite Dangerous" => "In Elite Dangerous benutzter Kommandanten-Name eingeben"
-.textBoxBorderJournal.ToolTip: "Enter the journal location folder.  Normally leave this field blank only if you are using EDD on another computer than your play computer\nLeave override journal location blank to use the standard Frontier location for journals" => "Journal-Verzeichnis auswählen. Normalerweise kann diese Feld leer bleiben, ausser wenn Sie EDD auf einem anderen Rechner verwenden als auf dem Rechner, den Sie zum Spielen benutzen\nWenn Sie dieses Feld freilassen, wird das Standard-Journal-Verzeichnis verwendet"
-.LF: "Select folder where Journal*.log files are stored by Frontier in" => "Wählen Sie das Verzeichnis, wo die Journal*.log Dateien von Frontier gespeichert werden"
 
 SECTION ExportForm
 
