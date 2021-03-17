@@ -108,6 +108,10 @@ namespace EDDiscovery.Actions
                 System.Diagnostics.Debug.WriteLine(Environment.TickCount % 10000 + " Recognised " + text + " " + confidence.ToStringInvariant("0.0"));
                 ActionRun(ActionEventEDList.onVoiceInput, new Variables(new string[] { "VoiceInput", text, "VoiceConfidence", (confidence * 100F).ToStringInvariant("0.00") }));
             }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine(Environment.TickCount % 10000 + " Ignored " + text + " " + confidence.ToStringInvariant("0.0"));
+            }
         }
 
         private void Voicerecon_SpeechNotRecognised(string text, float confidence)
@@ -117,6 +121,7 @@ namespace EDDiscovery.Actions
                 System.Diagnostics.Debug.WriteLine(Environment.TickCount % 10000 + " Failed recognition " + text + " " + confidence.ToStringInvariant("0.00"));
                 ActionRun(ActionEventEDList.onVoiceInputFailed, new Variables(new string[] { "VoiceInput", text, "VoiceConfidence", (confidence * 100F).ToStringInvariant("0.00") }));
             }
+
         }
 
     }

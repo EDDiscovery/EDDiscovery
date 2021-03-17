@@ -213,7 +213,23 @@ namespace EDDiscovery.Actions
                     }
                     else if (cmdname.Equals("voicerecognitionevent"))
                     {
-                        ac.EnableVoiceReconEvent = nextword.InvariantParseInt(0) != 0;
+                        System.Diagnostics.Debug.WriteLine("Voice recon " + nextword);
+                        if (nextword.Equals("toggle", StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            ac.EnableVoiceReconEvent = !ac.EnableVoiceReconEvent;
+                        }
+                        else if (nextword.Equals("status", StringComparison.InvariantCultureIgnoreCase))
+                        {
+                        }
+                        else if (int.TryParse(nextword, out int res))
+                        {
+                            ac.EnableVoiceReconEvent = res != 0;
+                        }
+                        else
+                            ap.ReportError("VoiceRecognitionEvent parameter invalid");
+
+                        ap["VoiceRecognitionEvent"] = ac.EnableVoiceReconEvent.ToStringIntValue();
+                        System.Diagnostics.Debug.WriteLine("Voice recon " + ap["VoiceRecognitionEvent"]);
                     }
 
                     else if (cmdname.Equals("actionfile"))
