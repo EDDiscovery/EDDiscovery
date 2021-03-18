@@ -525,12 +525,14 @@ namespace EDDiscovery
 
             if (EDDOptions.Instance.OutputEventHelp != null)        // help for events, going to have to do this frequently, so keep
             {
-                string s = "All Events" + Environment.NewLine;
+                string s = "All Journal Events" + Environment.NewLine;
                 var infoe = BaseUtils.TypeHelpers.GetPropertyFieldNames(typeof(JournalEntry), "EventClass_", fields: true);
                 foreach (var ix in infoe)
                 {
                     s += "    " + ix.Name + " " + ix.Help + Environment.NewLine;
                 }
+
+                s += Environment.NewLine;
 
                 foreach (var x in Enum.GetValues(typeof(JournalTypeEnum)))
                 {
@@ -538,12 +540,32 @@ namespace EDDiscovery
 
                     if (!(je is JournalUnknown))
                     {
-                        s += "Event " + x + Environment.NewLine;
+                        s += "Event: " + x + Environment.NewLine;
                         var info = BaseUtils.TypeHelpers.GetPropertyFieldNames(je.GetType(), "EventClass_", excludedeclaretype: typeof(JournalEntry), fields: true);
                         foreach (var ix in info)
                         {
                             s += "    " + ix.Name + " : " + ix.Help + Environment.NewLine;
                         }
+                    }
+                }
+
+                s += Environment.NewLine + "All UI Events" + Environment.NewLine;
+                var infoui = BaseUtils.TypeHelpers.GetPropertyFieldNames(typeof(UIEvent), "EventClass_", fields: true);
+                foreach (var ix in infoui)
+                {
+                    s += "    " + ix.Name + " " + ix.Help + Environment.NewLine;
+                }
+
+                s += Environment.NewLine;
+
+                foreach (var x in Enum.GetValues(typeof(UITypeEnum)))
+                {
+                    UIEvent ui = UIEvent.CreateEvent(x.ToString(), DateTime.UtcNow, false);
+                    s += "UIEvent: UI" + x + Environment.NewLine;
+                    var info = BaseUtils.TypeHelpers.GetPropertyFieldNames(ui.GetType(), "EventClass_", excludedeclaretype: typeof(UIEvent), fields: true);
+                    foreach (var ix in info)
+                    {
+                        s += "    " + ix.Name + " : " + ix.Help + Environment.NewLine;
                     }
                 }
 
