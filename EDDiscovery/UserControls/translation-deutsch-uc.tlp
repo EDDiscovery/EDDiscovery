@@ -178,6 +178,11 @@ SECTION UserControlEstimatedValues
 
 .BodyName: "Body Name" => "Name des Objektes"
 .EstValue: "Est Value" => "Geschätzter Wert"
+.EstBase: "Base Value" @
+.MappedValue: "Mapped" @
+.FirstDiscovered: "First Discovered" @
+.FirstMappedEff: "First Mapped" @
+.FirstDiscMapped: "First Discovered Mapped" @
 .BodyType: "Body Type" @
 .Mapped: "Mapped" @
 .WasMapped: "Already Mapped" @

@@ -178,6 +178,11 @@ SECTION UserControlEstimatedValues
 
 .BodyName: "Body Name" => "Nazwa Ciała Niebieskiego"
 .EstValue: "Est Value" => "Szac. Wartość"
+.EstBase: "Base Value" @
+.MappedValue: "Mapped" @
+.FirstDiscovered: "First Discovered" @
+.FirstMappedEff: "First Mapped" @
+.FirstDiscMapped: "First Discovered Mapped" @
 .BodyType: "Body Type" @
 .Mapped: "Mapped" @
 .WasMapped: "Already Mapped" @

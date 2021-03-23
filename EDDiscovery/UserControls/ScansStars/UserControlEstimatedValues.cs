@@ -119,8 +119,21 @@ namespace EDDiscovery.UserControls
                 {
                     if ( bodies.ScanData != null && bodies.ScanData.BodyName != null && (checkBoxEDSM.Checked || !bodies.ScanData.IsEDSMBody))     // if check edsm, or not edsm body, with scandata
                     {
+                        System.Diagnostics.Debug.WriteLine("Recalc for " + bodies.ScanData.BodyName);
+                        var ev = bodies.ScanData.RecalcEstimatedValues();
+
                         string spclass = bodies.ScanData.IsStar ? bodies.ScanData.StarTypeText : bodies.ScanData.PlanetTypeText;
-                        dataGridViewEstimatedValues.Rows.Add(new object[] { bodies.ScanData.BodyDesignationOrName, spclass, bodies.ScanData.IsEDSMBody ? "EDSM" : "", (bodies.IsMapped ? Icons.Controls.Scan_Bodies_Mapped : null), (bodies.ScanData.WasMapped == true? Icons.Controls.Scan_Bodies_Mapped : null), (bodies.ScanData.WasDiscovered == true ? Icons.Controls.Scan_DisplaySystemAlways : null), bodies.ScanData.EstimatedValue });
+                        dataGridViewEstimatedValues.Rows.Add(new object[] { bodies.ScanData.BodyDesignationOrName, spclass,
+                                        bodies.ScanData.IsEDSMBody ? "EDSM" : "",
+                                        (bodies.IsMapped ? Icons.Controls.Scan_Bodies_Mapped : null),
+                                        (bodies.ScanData.WasMapped == true? Icons.Controls.Scan_Bodies_Mapped : null),
+                                        (bodies.ScanData.WasDiscovered == true ? Icons.Controls.Scan_DisplaySystemAlways : null),
+                                        ev.EstimatedValueBase.ToString("N0"),
+                                        ev.EstimatedValueMapped>0 ? (ev.EstimatedValueMappedEfficiently.ToString("N0") + " / " + ev.EstimatedValueMapped.ToString("N0")) : "",
+                                        ev.EstimatedValueFirstDiscovered>0 ? ev.EstimatedValueFirstDiscovered.ToString("N0") : "",
+                                        ev.EstimatedValueFirstMappedEfficiently>0 ? (ev.EstimatedValueFirstMappedEfficiently.ToString("N0") + " / " + ev.EstimatedValueFirstMapped.ToString("N0")) : "",
+                                        ev.EstimatedValueFirstDiscoveredFirstMappedEfficiently> 0 ? (ev.EstimatedValueFirstDiscoveredFirstMappedEfficiently.ToString("N0") + " / " + ev.EstimatedValueFirstDiscoveredFirstMapped.ToString("N0")):"" ,
+                                        bodies.ScanData.EstimatedValue.ToString("N0") });
                     }
                 }
 
@@ -137,9 +150,10 @@ namespace EDDiscovery.UserControls
 
         private void dataGridViewEstimatedValues_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {
-            if (e.Column.Index == 6)
+            if (e.Column.Index >= 6)
                 e.SortDataGridViewColumnNumeric();
 
         }
-    }
+
+     }
 }

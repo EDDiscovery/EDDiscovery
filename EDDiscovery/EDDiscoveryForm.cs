@@ -525,11 +525,27 @@ namespace EDDiscovery
 
             if (EDDOptions.Instance.OutputEventHelp != null)        // help for events, going to have to do this frequently, so keep
             {
+                bool githuboutput = false;
+                string fn = EDDOptions.Instance.OutputEventHelp;
+                string colon = " : ";
+                string prefix = "    ";
+                int ll = 80;
+
+                if (EDDOptions.Instance.OutputEventHelp.StartsWith("G:"))
+                {
+                    githuboutput = true;
+                    fn = fn.Substring(2);
+                    colon = " | ";
+                    ll = int.MaxValue;
+                    prefix = "";
+                }
+
                 string s = "All Journal Events" + Environment.NewLine;
-                var infoe = BaseUtils.TypeHelpers.GetPropertyFieldNames(typeof(JournalEntry), "EventClass_", fields: true);
+
+                var infoe = BaseUtils.TypeHelpers.GetPropertyFieldNames(typeof(JournalEntry), "EventClass_", fields: true, linelen: ll);
                 foreach (var ix in infoe)
                 {
-                    s += "    " + ix.Name + " " + ix.Help + Environment.NewLine;
+                    s += prefix + ix.Name + colon + ix.Help + Environment.NewLine;
                 }
 
                 s += Environment.NewLine;
@@ -541,19 +557,19 @@ namespace EDDiscovery
                     if (!(je is JournalUnknown))
                     {
                         s += "Event: " + x + Environment.NewLine;
-                        var info = BaseUtils.TypeHelpers.GetPropertyFieldNames(je.GetType(), "EventClass_", excludedeclaretype: typeof(JournalEntry), fields: true);
+                        var info = BaseUtils.TypeHelpers.GetPropertyFieldNames(je.GetType(), "EventClass_", excludedeclaretype: typeof(JournalEntry), fields: true, linelen:ll);
                         foreach (var ix in info)
                         {
-                            s += "    " + ix.Name + " : " + ix.Help + Environment.NewLine;
+                            s += prefix + ix.Name + colon + ix.Help + Environment.NewLine;
                         }
                     }
                 }
 
                 s += Environment.NewLine + "All UI Events" + Environment.NewLine;
-                var infoui = BaseUtils.TypeHelpers.GetPropertyFieldNames(typeof(UIEvent), "EventClass_", fields: true);
+                var infoui = BaseUtils.TypeHelpers.GetPropertyFieldNames(typeof(UIEvent), "EventClass_", fields: true, linelen:ll);
                 foreach (var ix in infoui)
                 {
-                    s += "    " + ix.Name + " " + ix.Help + Environment.NewLine;
+                    s += prefix + ix.Name + colon + ix.Help + Environment.NewLine;
                 }
 
                 s += Environment.NewLine;
@@ -562,14 +578,14 @@ namespace EDDiscovery
                 {
                     UIEvent ui = UIEvent.CreateEvent(x.ToString(), DateTime.UtcNow, false);
                     s += "UIEvent: UI" + x + Environment.NewLine;
-                    var info = BaseUtils.TypeHelpers.GetPropertyFieldNames(ui.GetType(), "EventClass_", excludedeclaretype: typeof(UIEvent), fields: true);
+                    var info = BaseUtils.TypeHelpers.GetPropertyFieldNames(ui.GetType(), "EventClass_", excludedeclaretype: typeof(UIEvent), fields: true, linelen:ll);
                     foreach (var ix in info)
                     {
-                        s += "    " + ix.Name + " : " + ix.Help + Environment.NewLine;
+                        s += prefix+ ix.Name + colon + ix.Help + Environment.NewLine;
                     }
                 }
 
-                File.WriteAllText(EDDOptions.Instance.OutputEventHelp, s);
+                File.WriteAllText(fn, s);
             }
 
             // Time Display

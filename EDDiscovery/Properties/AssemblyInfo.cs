@@ -25,7 +25,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("EDDiscovery Team")]
 [assembly: AssemblyProduct("EDDiscovery")]
-[assembly: AssemblyCopyright("Copyright © EDD Team 2015-2020")]
+[assembly: AssemblyCopyright("Copyright © EDD Team 2015-2021")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -47,6 +47,6 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("11.10.500.0")]
+[assembly: AssemblyVersion("11.10.605.0")]
 
 

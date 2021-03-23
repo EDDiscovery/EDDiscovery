@@ -178,6 +178,11 @@ SECTION UserControlEstimatedValues
 
 .BodyName: "Body Name" => "星体名称"
 .EstValue: "Est Value" => "预计价值"
+.EstBase: "Base Value" @
+.MappedValue: "Mapped" @
+.FirstDiscovered: "First Discovered" @
+.FirstMappedEff: "First Mapped" @
+.FirstDiscMapped: "First Discovered Mapped" @
 .BodyType: "Body Type" @
 .Mapped: "Mapped" @
 .WasMapped: "Already Mapped" @

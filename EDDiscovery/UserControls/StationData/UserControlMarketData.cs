@@ -312,15 +312,21 @@ namespace EDDiscovery.UserControls
             comboboxentries.Clear();
 
             List<HistoryEntry> hlcpb = HistoryList.FilterByCommodityPricesBackwards(hl.EntryOrder());
+            JournalCommodityPricesBase last = null;
 
             foreach (HistoryEntry h in hlcpb)
             {
-                comboboxentries.Add(h);
-                string v = h.System.Name + ":" + h.WhereAmI + " " + "on".T(EDTx.on) + " " + EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(h.EventTimeUTC).ToString();
-                if (h.journalEntry is JournalEDDCommodityPrices)
-                    v += " (CAPI)";
-                comboBoxCustomFrom.Items.Add(v);
-                comboBoxCustomTo.Items.Add(v);
+                var j = (JournalCommodityPricesBase)h.journalEntry;
+                if (last == null || !j.Station.Equals(last.Station) || last.EventTimeUTC - j.EventTimeUTC >= new TimeSpan(0,15,0))
+                {
+                    comboboxentries.Add(h);
+                    string v = h.System.Name + ":" + h.WhereAmI + " " + "on".T(EDTx.on) + " " + EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(h.EventTimeUTC).ToString();
+                    if (h.journalEntry is JournalEDDCommodityPrices)
+                        v += " (CAPI)";
+                    comboBoxCustomFrom.Items.Add(v);
+                    comboBoxCustomTo.Items.Add(v);
+                    last = j;
+                }
             }
 
             comboBoxCustomFrom.Enabled = comboBoxCustomTo.Enabled = false;

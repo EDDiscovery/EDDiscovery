@@ -111,43 +111,62 @@ namespace EDDiscovery
 
                     // finally, CAPI, if docked, try and get commodity data, and if so, create a new EDD record.  Do not do this for console commanders
 
-                    if (he.EntryType == JournalTypeEnum.Docked && FrontierCAPI.Active && !EDCommander.Current.ConsoleCommander)
+                    if (he.EntryType == JournalTypeEnum.Docked)
                     {
-                        System.Threading.Tasks.Task.Run(() =>           // don't hold up the main thread, do it in a task, as its a HTTP operation
+                        if (FrontierCAPI.Active && !EDCommander.Current.ConsoleCommander)
                         {
-                            var dockevt = he.journalEntry as EliteDangerousCore.JournalEvents.JournalDocked;
+                            // don't hold up the main thread, do it in a task, as its a HTTP operation
+                            // and wait for the CAPI to recover by delaying for 15 s
 
-                            string marketjson = FrontierCAPI.Market();
-
-                            CAPI.Market mk = new CAPI.Market(marketjson);
-                            if (mk.IsValid)
+                            System.Threading.Tasks.Task.Delay(15000).ContinueWith((task) =>           
                             {
-                                //System.IO.File.WriteAllText(@"c:\code\market.json", marketjson);
+                                var dockevt = he.journalEntry as EliteDangerousCore.JournalEvents.JournalDocked;
 
-                                if (dockevt.StationName.Equals(mk.Name, StringComparison.InvariantCultureIgnoreCase))
+                                for (int tries = 0; tries < 3; tries++)
                                 {
-                                    System.Diagnostics.Debug.WriteLine($"CAPI got market {mk.Name}");
+                                    string marketjson = FrontierCAPI.Market();
 
-                                    var entry = new EliteDangerousCore.JournalEvents.JournalEDDCommodityPrices(he.EventTimeUTC.AddSeconds(1),
-                                                    mk.ID, mk.Name, he.System.Name, EDCommander.CurrentCmdrID, mk.Commodities);
-
-                                    var jo = entry.ToJSON();        // get json of it, and add it to the db
-                                    entry.Add(jo);
-
-                                    InvokeAsyncOnUiThread(()=>
+                                    CAPI.Market mk = new CAPI.Market(marketjson);
+                                    if (mk.IsValid)
                                     {
-                                        Debug.Assert(System.Windows.Forms.Application.MessageLoop);
-                                        System.Diagnostics.Debug.WriteLine("CAPI fire new entry");
-                                        NewEntry(entry);                // then push it thru. this will cause another set of calls to NewEntry First/Second
-                                                                        // EDDN handler will pick up EDDCommodityPrices and send it.
-                                    });
+                                        //System.IO.File.WriteAllText(@"c:\code\market.json", marketjson);
+
+                                        if (dockevt.StationName.Equals(mk.Name, StringComparison.InvariantCultureIgnoreCase))
+                                        {
+                                            System.Diagnostics.Trace.WriteLine($"CAPI got market {mk.Name}");
+
+                                            var entry = new EliteDangerousCore.JournalEvents.JournalEDDCommodityPrices(he.EventTimeUTC.AddSeconds(1),
+                                                            mk.ID, mk.Name, he.System.Name, EDCommander.CurrentCmdrID, mk.Commodities);
+
+                                            var jo = entry.ToJSON();        // get json of it, and add it to the db
+                                            entry.Add(jo);
+
+                                            InvokeAsyncOnUiThread(() =>
+                                            {
+                                                Debug.Assert(System.Windows.Forms.Application.MessageLoop);
+                                                System.Diagnostics.Debug.WriteLine("CAPI fire new entry");
+                                                NewEntry(entry);                // then push it thru. this will cause another set of calls to NewEntry First/Second
+                                                                                // EDDN handler will pick up EDDCommodityPrices and send it.
+                                            });
+
+                                            break;
+                                        }
+                                        else
+                                        {
+                                            LogLine("CAPI received incorrect information, retrying");
+                                            System.Diagnostics.Trace.WriteLine($"CAPI disagree on market {dockevt.StationName} vs {mk.Name}");
+                                        }
+                                    }
+                                    else
+                                    {
+                                        LogLine("CAPI market data invalid, retrying");
+                                        System.Diagnostics.Trace.WriteLine($"CAPI market invalid {marketjson}");
+                                    }
+
+                                    Thread.Sleep(10000);
                                 }
-                                else
-                                    System.Diagnostics.Trace.WriteLine($"CAPI disagree on market {dockevt.StationName} vs {mk.Name}");
-                            }
-                            else
-                                System.Diagnostics.Trace.WriteLine($"CAPI market invalid {marketjson}");
-                        });
+                            });
+                        }
                     }
 
 
