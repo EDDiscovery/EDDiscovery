@@ -177,7 +177,7 @@ namespace EDDiscovery.UserControls
             var gb = new List<ExtendedControls.ExtGroupBox>();
 
             ExtendedControls.ExtGroupBox g1 = new ExtendedControls.ExtGroupBox() { Name = "CAPIGB" , Height = 60, Text = "Frontier CAPI" };
-            capiButton = new ExtendedControls.ExtButton() { Location = new System.Drawing.Point(210,23),
+            capiButton = new ExtendedControls.ExtButton() { Location = new System.Drawing.Point(240,23),
                                     ClientSize = new System.Drawing.Size(80,20), Name="CAPIButton"};
             capiButton.Click += CapiButton_Click;
 

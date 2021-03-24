@@ -76,13 +76,14 @@ namespace EDDiscovery.UserControls
             this.sendUnsyncedScanToEDDNToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runActionsOnThisEntryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyJournalEntryToClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showSystemVisitedForeColourToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.writeEventInfoToLogDebugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runActionsAcrossSelectionToolSpeechStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runSelectionThroughInaraSystemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runEntryThroughProfileSystemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runSelectionThroughIGAUDebugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runSelectionThroughEDDNDebugNoSendToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.showSystemVisitedForeColourToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.runSelectionThroughEDAstroDebugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.extCheckBoxWordWrap = new ExtendedControls.ExtCheckBox();
             this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
@@ -307,7 +308,8 @@ namespace EDDiscovery.UserControls
             this.runSelectionThroughInaraSystemToolStripMenuItem,
             this.runEntryThroughProfileSystemToolStripMenuItem,
             this.runSelectionThroughIGAUDebugToolStripMenuItem,
-            this.runSelectionThroughEDDNDebugNoSendToolStripMenuItem});
+            this.runSelectionThroughEDDNDebugNoSendToolStripMenuItem,
+            this.runSelectionThroughEDAstroDebugToolStripMenuItem});
             this.historyContextMenu.Name = "historyContextMenu";
             this.historyContextMenu.Size = new System.Drawing.Size(388, 532);
             this.historyContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.historyContextMenu_Opening);
@@ -464,6 +466,15 @@ namespace EDDiscovery.UserControls
             this.copyJournalEntryToClipboardToolStripMenuItem.Text = "Copy journal entry to clipboard/Log";
             this.copyJournalEntryToClipboardToolStripMenuItem.Click += new System.EventHandler(this.copyJournalEntryToClipboardToolStripMenuItem_Click);
             // 
+            // showSystemVisitedForeColourToolStripMenuItem
+            // 
+            this.showSystemVisitedForeColourToolStripMenuItem.Checked = true;
+            this.showSystemVisitedForeColourToolStripMenuItem.CheckOnClick = true;
+            this.showSystemVisitedForeColourToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.showSystemVisitedForeColourToolStripMenuItem.Name = "showSystemVisitedForeColourToolStripMenuItem";
+            this.showSystemVisitedForeColourToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
+            this.showSystemVisitedForeColourToolStripMenuItem.Text = "Show lines in System Visited Fore Colour";
+            // 
             // writeEventInfoToLogDebugToolStripMenuItem
             // 
             this.writeEventInfoToLogDebugToolStripMenuItem.Name = "writeEventInfoToLogDebugToolStripMenuItem";
@@ -506,14 +517,12 @@ namespace EDDiscovery.UserControls
             this.runSelectionThroughEDDNDebugNoSendToolStripMenuItem.Text = "Run selection through EDDN no send (Debug)";
             this.runSelectionThroughEDDNDebugNoSendToolStripMenuItem.Click += new System.EventHandler(this.runSelectionThroughEDDNDebugNoSendToolStripMenuItem_Click);
             // 
-            // showSystemVisitedForeColourToolStripMenuItem
+            // runSelectionThroughEDAstroDebugToolStripMenuItem
             // 
-            this.showSystemVisitedForeColourToolStripMenuItem.Checked = true;
-            this.showSystemVisitedForeColourToolStripMenuItem.CheckOnClick = true;
-            this.showSystemVisitedForeColourToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.showSystemVisitedForeColourToolStripMenuItem.Name = "showSystemVisitedForeColourToolStripMenuItem";
-            this.showSystemVisitedForeColourToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
-            this.showSystemVisitedForeColourToolStripMenuItem.Text = "Show lines in System Visited Fore Colour";
+            this.runSelectionThroughEDAstroDebugToolStripMenuItem.Name = "runSelectionThroughEDAstroDebugToolStripMenuItem";
+            this.runSelectionThroughEDAstroDebugToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
+            this.runSelectionThroughEDAstroDebugToolStripMenuItem.Text = "Run selection through EDAstro (Debug)";
+            this.runSelectionThroughEDAstroDebugToolStripMenuItem.Click += new System.EventHandler(this.runSelectionThroughEDAstroDebugToolStripMenuItem_Click);
             // 
             // toolTip
             // 
@@ -852,5 +861,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripMenuItem runSelectionThroughEDDNDebugNoSendToolStripMenuItem;
         private ExtendedControls.ExtButtonDrawn extButtonDrawnHelp;
         private System.Windows.Forms.ToolStripMenuItem showSystemVisitedForeColourToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem runSelectionThroughEDAstroDebugToolStripMenuItem;
     }
 }

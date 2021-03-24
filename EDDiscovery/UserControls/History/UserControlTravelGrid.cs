@@ -113,14 +113,14 @@ namespace EDDiscovery.UserControls
             string filter = GetSetting(dbFieldFilter, "");
             if (filter.Length > 0)
                 fieldfilter.FromJSON(filter);        // load filter
-#if !DEBUG
-            writeEventInfoToLogDebugToolStripMenuItem.Visible = false;
-            runActionsAcrossSelectionToolSpeechStripMenuItem.Visible = false;
-            runSelectionThroughInaraSystemToolStripMenuItem.Visible = false;
-            runEntryThroughProfileSystemToolStripMenuItem.Visible = false;
-            runSelectionThroughIGAUDebugToolStripMenuItem.Visible = false;
-            runSelectionThroughEDDNDebugNoSendToolStripMenuItem.Visible = false;
-#endif
+
+            writeEventInfoToLogDebugToolStripMenuItem.Visible =
+            runActionsAcrossSelectionToolSpeechStripMenuItem.Visible =
+            runSelectionThroughInaraSystemToolStripMenuItem.Visible =
+            runEntryThroughProfileSystemToolStripMenuItem.Visible =
+            runSelectionThroughIGAUDebugToolStripMenuItem.Visible =
+            runSelectionThroughEDDNDebugNoSendToolStripMenuItem.Visible =
+            runSelectionThroughEDAstroDebugToolStripMenuItem.Visible = EDDOptions.Instance.EnableTGRightDebugClicks;
 
             searchtimer = new Timer() { Interval = 500 };
             searchtimer.Tick += Searchtimer_Tick;
@@ -1322,6 +1322,14 @@ namespace EDDiscovery.UserControls
         private void extButtonDrawnHelp_Click(object sender, EventArgs e)
         {
             EDDHelp.Help(this.FindForm(), extButtonDrawnHelp.PointToScreen(new Point(0,extButtonDrawnHelp.Bottom)),this);
+        }
+
+        private void runSelectionThroughEDAstroDebugToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (rightclickhe != null)
+            {
+                EliteDangerousCore.EDAstro.EDAstroSync.SendEDAstroEvents(new List<HistoryEntry>() { rightclickhe });
+            }
         }
 
         private void runActionsAcrossSelectionToolStripMenuItem_Click(object sender, EventArgs e)

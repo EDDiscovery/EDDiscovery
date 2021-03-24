@@ -525,7 +525,6 @@ namespace EDDiscovery
 
             if (EDDOptions.Instance.OutputEventHelp != null)        // help for events, going to have to do this frequently, so keep
             {
-                bool githuboutput = false;
                 string fn = EDDOptions.Instance.OutputEventHelp;
                 string colon = " : ";
                 string prefix = "    ";
@@ -533,7 +532,6 @@ namespace EDDiscovery
 
                 if (EDDOptions.Instance.OutputEventHelp.StartsWith("G:"))
                 {
-                    githuboutput = true;
                     fn = fn.Substring(2);
                     colon = " | ";
                     ll = int.MaxValue;

@@ -128,10 +128,17 @@ namespace EDDiscovery
                 EliteDangerousCore.IGAU.IGAUSync.NewEvent(LogLine, he);
             }
 
+            if (EDCommander.Current.SyncToEDAstro)
+            {
+                EliteDangerousCore.EDAstro.EDAstroSync.SendEDAstroEvents(new List<HistoryEntry>() { he });
+            }
+
             if (EDDNClass.IsEDDNMessage(he.EntryType) && he.AgeOfEntry() < TimeSpan.FromDays(1.0) && EDCommander.Current.SyncToEddn == true)
             {
                 EDDNSync.SendEDDNEvents(LogLine, he);
             }
+
+
 
             DLLManager.NewJournalEntry(EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(history, he), false);
 

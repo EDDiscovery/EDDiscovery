@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2018 EDDiscovery development team
+ * Copyright © 2018-2021 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -16,11 +16,9 @@
 
 using EliteDangerousCore.EDSM;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace EDDiscovery
 {
@@ -145,6 +143,7 @@ namespace EDDiscovery
                     case "disabletimedisplay": DisableTimeDisplay = true; break;
                     case "disableversiondisplay": DisableVersionDisplay = true; break;
                     case "autoopen3dmap": AutoOpen3DMap = true; break;
+                    case "enabletgrightclicks": EnableTGRightDebugClicks = true; break;
                     default:
                         System.Diagnostics.Debug.WriteLine($"Unrecognized option -{opt}");
                         break;
@@ -219,7 +218,7 @@ namespace EDDiscovery
         public bool DisableVersionDisplay { get; set; }
         public string OutputEventHelp { get; set; }
         public string DefaultJournalFolder { get; set; }        // default is null, use computed value
-        
+        public bool EnableTGRightDebugClicks { get; set; }
 
         public string SubAppDirectory(string subfolder)     // ensures its there.. name without \ slashes
         {
@@ -414,6 +413,8 @@ namespace EDDiscovery
 #if !DEBUG
             CheckGithubFiles = true;
             CheckRelease = true;
+#else
+            EnableTGRightDebugClicks = true;
 #endif
 
             ProcessConfigVariables();
