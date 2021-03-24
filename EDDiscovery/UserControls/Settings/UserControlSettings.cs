@@ -192,7 +192,7 @@ namespace EDDiscovery.UserControls
         {
             if (cf.CommanderName.HasChars())    // good commander name..
             {
-                if (discoveryform.FrontierCAPI.HasUserBeenLoggedIn(cf.CommanderName))       // if we are log in, logout
+                if (discoveryform.FrontierCAPI.GetUserState(cf.CommanderName) != CompanionAPI.UserState.NeverLoggedIn)       // if we have a login, then delete it
                 {
                     discoveryform.FrontierCAPI.LogOut(cf.CommanderName);
                     SetCAPILabelState();
@@ -216,7 +216,7 @@ namespace EDDiscovery.UserControls
                 capiButton.Enabled = false;
                 capiStateLabel.Text = capiButton.Text = "Disabled".T(EDTx.CommanderForm_CAPIDisabled);
             }
-            else if (cf.CommanderName.HasChars() && discoveryform.FrontierCAPI.HasUserBeenLoggedIn(cf.CommanderName))   // if logged in..
+            else if (cf.CommanderName.HasChars() && discoveryform.FrontierCAPI.GetUserState(cf.CommanderName) == CompanionAPI.UserState.HasLoggedInWithCredentials)   // if logged in..
             {
                 capiButton.Enabled = true;
                 capiButton.Text = "Logout".T(EDTx.CommanderForm_CAPILogout);

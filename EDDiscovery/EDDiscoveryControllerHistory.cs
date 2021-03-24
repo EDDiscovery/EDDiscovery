@@ -260,14 +260,14 @@ namespace EDDiscovery
 
                 FrontierCAPI.Disconnect();         // Disconnect capi from current user, but don't clear their credential file
 
-                // available, and not hidden commander, and we have logged in previously
-                if (FrontierCAPI.ClientIDAvailable && EDCommander.Current.Id >= 0 && FrontierCAPI.HasUserBeenLoggedIn(EDCommander.Current.Name))
+                // available, and not hidden commander, and we have logged in before
+                if (FrontierCAPI.ClientIDAvailable && EDCommander.Current.Id >= 0 && FrontierCAPI.GetUserState(EDCommander.Current.Name) != CAPI.CompanionAPI.UserState.NeverLoggedIn)
                 {
                     System.Threading.Tasks.Task.Run(() =>           // don't hold up the main thread, do it in a task, as its a HTTP operation
                     {
                         FrontierCAPI.LogIn(EDCommander.Current.Name);   // try and get to Active.  May cause a new frontier login
 
-                        if (FrontierCAPI.Active)     // if active, does not requires a new login
+                        if (FrontierCAPI.Active)     // if active, indicate
                             LogLine("CAPI User Logged in");
                     });
                 }
