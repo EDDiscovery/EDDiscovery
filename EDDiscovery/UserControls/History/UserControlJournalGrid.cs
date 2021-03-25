@@ -56,10 +56,11 @@ namespace EDDiscovery.UserControls
             public const int Text = 3;
         }
 
-        Timer searchtimer;
+        private Timer searchtimer;
 
-        Timer todotimer;
-        Queue<Action> todo = new Queue<Action>();
+        private Timer todotimer;
+        private Queue<Action> todo = new Queue<Action>();
+        private Queue<HistoryEntry> queuedadds = new Queue<HistoryEntry>();
 
         public UserControlJournalGrid()
         {
@@ -93,7 +94,7 @@ namespace EDDiscovery.UserControls
             todotimer = new Timer() { Interval = 10 };
             todotimer.Tick += Todotimer_Tick;
 
-            discoveryform.OnHistoryChange += Display;
+            discoveryform.OnHistoryChange += HistoryChanged;
             discoveryform.OnNewEntry += AddNewEntry;
 
             BaseUtils.Translator.Instance.Translate(this);
@@ -115,7 +116,7 @@ namespace EDDiscovery.UserControls
             todotimer.Stop();
             searchtimer.Stop();
             DGVSaveColumnLayout(dataGridViewJournal);
-            discoveryform.OnHistoryChange -= Display;
+            discoveryform.OnHistoryChange -= HistoryChanged;
             discoveryform.OnNewEntry -= AddNewEntry;
             searchtimer.Dispose();
         }
@@ -126,13 +127,14 @@ namespace EDDiscovery.UserControls
 
         public override void InitialDisplay()
         {
-            Display(discoveryform.history);
+            HistoryChanged(discoveryform.history);
         }
 
         int fdropdown, ftotalevents, ftotalfilters;     // filter totals
 
-        private void Display(HistoryList hl)
+        private void HistoryChanged(HistoryList hl)
         {
+            queuedadds.Clear();
             Display(hl, false);
         }
 
@@ -232,6 +234,12 @@ namespace EDDiscovery.UserControls
 
                 this.Cursor = Cursors.Default;
                 buttonExtExcel.Enabled = buttonFilter.Enabled = buttonField.Enabled = comboBoxJournalWindow.Enabled = true;
+
+                while (queuedadds.Count > 0)              // finally, dequeue any adds added
+                {
+                    System.Diagnostics.Debug.WriteLine("JG Dequeue paused adds");
+                    AddEntry(queuedadds.Dequeue());
+                }
             });
 
             todotimer.Start();
@@ -243,6 +251,7 @@ namespace EDDiscovery.UserControls
             {
                 var act = todo.Dequeue();
                 act();
+                //System.Threading.Thread.Sleep(3000);
             }
             else
             {
@@ -250,14 +259,20 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void AddNewEntry(HistoryEntry he, HistoryList hl)               // add if in event filter, and not in field filter..
+        private void AddNewEntry(HistoryEntry he, HistoryList hl)               // on new entry from discovery system
         {
-            if (todotimer.Enabled)
+            if (todotimer.Enabled)       // if we have the todotimer running.. we add to the queue.  better than the old loadcomplete, no race conditions
             {
-                todo.Enqueue(() => AddNewEntry(he, hl));
-                return;
+                queuedadds.Enqueue(he);
             }
+            else
+            {
+                AddEntry(he);
+            }
+        }
 
+        private void AddEntry(HistoryEntry he)
+        { 
             bool add = he.IsJournalEventInEventFilter(GetSetting(dbFilter, "All"));
 
             if (!add)
@@ -357,7 +372,7 @@ namespace EDDiscovery.UserControls
             if (filters != newset)
             {
                 PutSetting(dbFilter, newset);
-                Display(current_historylist);
+                HistoryChanged(current_historylist);
             }
         }
 
@@ -378,7 +393,7 @@ namespace EDDiscovery.UserControls
         private void comboBoxJournalWindow_SelectedIndexChanged(object sender, EventArgs e)
         {
             PutSetting(dbHistorySave, comboBoxJournalWindow.Text);
-            Display(current_historylist);
+            HistoryChanged(current_historylist);
         }
 
         private void buttonField_Click(object sender, EventArgs e)
@@ -388,7 +403,7 @@ namespace EDDiscovery.UserControls
             {
                 fieldfilter = res;
                 PutSetting(dbFieldFilter, fieldfilter.GetJSON());
-                Display(current_historylist);
+                HistoryChanged(current_historylist);
             }
         }
 

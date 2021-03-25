@@ -83,10 +83,11 @@ namespace EDDiscovery.UserControls
 
         private FilterSelector cfs;
 
-        Timer searchtimer;
-        Timer todotimer;
+        private Timer searchtimer;
 
+        private Timer todotimer;
         private Queue<Action> todo = new Queue<Action>();
+        private Queue<HistoryEntry> queuedadds = new Queue<HistoryEntry>();
 
         public UserControlTravelGrid()
         {
@@ -185,10 +186,11 @@ namespace EDDiscovery.UserControls
         int fdropdown, ftotalevents, ftotalfilters;     // filter totals
         public void HistoryChanged(HistoryList hl)           // on History change
         {
+            queuedadds.Clear();
             HistoryChanged(hl, false);
         }
 
-        public void HistoryChanged(HistoryList hl, bool disablesorting)           // on History change
+        public void HistoryChanged(HistoryList hl, bool disablesorting)
         {
             if (hl == null)     // just for safety
                 return;
@@ -340,6 +342,12 @@ namespace EDDiscovery.UserControls
                 extCheckBoxOutlines.Enabled = extCheckBoxWordWrap.Enabled = buttonExtExcel.Enabled = buttonFilter.Enabled = buttonField.Enabled = comboBoxHistoryWindow.Enabled = true;
 
                 System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCount + " TG TOTAL TIME " + swtotal.ElapsedMilliseconds);
+
+                while( queuedadds.Count>0)              // finally, dequeue any adds added
+                {
+                    System.Diagnostics.Debug.WriteLine("TG Dequeue paused adds");
+                    AddEntry(queuedadds.Dequeue());
+                }
             });
 
             todotimer.Start();          // indicate the timer is going to start.. 
@@ -363,11 +371,16 @@ namespace EDDiscovery.UserControls
         {
             if (todotimer.Enabled)      // if we have the todotimer running.. we add to the queue.  better than the old loadcomplete, no race conditions
             {
-                System.Diagnostics.Debug.WriteLine("TG New entry, load not complete, queuing");
-                todo.Enqueue(() => AddNewEntry(he, hl));
-                return;
+                queuedadds.Enqueue(he);
             }
+            else
+            {
+                AddEntry(he);
+            }
+        }
 
+        private void AddEntry(HistoryEntry he)      // from either a delayed queue or from addnewentry
+        { 
             bool add = he.IsJournalEventInEventFilter(GetSetting(dbFilter, "All"));
 
             if (!add)                   // filtered out, update filter total and display

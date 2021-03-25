@@ -259,6 +259,8 @@ namespace EDDiscovery
                 }
 
                 LogLine(ok ? "CAPI Installed" : "CAPI Failed to register");
+
+                FrontierCAPI.StatusChange += (s) => { LogLine("CAPI " + s.ToString().SplitCapsWord()); };
             }
 
             backgroundWorker = new Thread(BackgroundWorkerThread);

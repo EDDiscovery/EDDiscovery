@@ -61,12 +61,15 @@ namespace EDDiscovery.UserControls
 
         private Dictionary<long, DataGridViewRow> rowsbyjournalid = new Dictionary<long, DataGridViewRow>();
 
-        Timer searchtimer;
-        Timer autoupdateedsm;
-        Timer todotimer;
+        private Timer searchtimer;
+
+        private Timer autoupdateedsm;
         int autoupdaterowstart = 0;
         int autoupdaterowoffset = 0;
-        Queue<Action> todo = new Queue<Action>();
+
+        private Timer todotimer;
+        private Queue<Action> todo = new Queue<Action>();
+        private Queue<HistoryEntry> queuedadds = new Queue<HistoryEntry>();
 
         public UserControlStarList()
         {
@@ -136,17 +139,37 @@ namespace EDDiscovery.UserControls
 
         public void HistoryChanged(HistoryList hl)           // on History change
         {
+            queuedadds.Clear();
             Display(false);
+        }
+
+        private void Todotimer_Tick(object sender, EventArgs e)
+        {
+            if (todo.Count != 0)
+            {
+                var act = todo.Dequeue();
+                act();
+            }
+            else
+            {
+                todotimer.Stop();
+            }
         }
 
         private void AddNewEntry(HistoryEntry he, HistoryList hl)           // on new entry from discovery system
         {
             if (todotimer.Enabled)      // if loading, add to queue..
             {
-                todo.Enqueue(new Action(() => AddNewEntry(he, hl)));
-                return;
+                queuedadds.Enqueue(he);
             }
+            else
+            {
+                AddEntry(he);
+            }
+        }
 
+        private void AddEntry(HistoryEntry he)
+        { 
             bool scan = he.journalEntry is JournalScan || he.journalEntry is JournalFSSDiscoveryScan;
 
             if (he.IsFSDCarrierJump || scan)                                      // jumped or scan
@@ -172,7 +195,7 @@ namespace EDDiscovery.UserControls
                     if (rowpresent != null)                                     // if its in the list, move to top and set visit count
                     {
                         dataGridViewStarList.Rows.Remove(rowpresent);
-                        rowpresent.Cells[2].Value = hl.Visits(he.System.Name);  // update count
+                        rowpresent.Cells[2].Value = discoveryform.history.Visits(he.System.Name);  // update count
                         dataGridViewStarList.Rows.Insert(0, rowpresent);        // move to top..
                         added = true;
                     }
@@ -216,18 +239,6 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void Todotimer_Tick(object sender, EventArgs e)
-        {
-            if (todo.Count != 0)
-            {
-                var act = todo.Dequeue();
-                act();
-            }
-            else
-            {
-                todotimer.Stop();
-            }
-        }
 
         #endregion
 
@@ -315,12 +326,17 @@ namespace EDDiscovery.UserControls
                     dataGridViewStarList.Columns[sortcol].HeaderCell.SortGlyphDirection = sortorder;
                 }
 
-
                 autoupdaterowoffset = autoupdaterowstart = 0;
                 autoupdateedsm.Start();
 
                 checkBoxJumponium.Enabled = checkBoxBodyClasses.Enabled = buttonExtExcel.Enabled = comboBoxHistoryWindow.Enabled = true;
                 this.Cursor = Cursors.Default;
+
+                while (queuedadds.Count > 0)              // finally, dequeue any adds added
+                {
+                    System.Diagnostics.Debug.WriteLine("SL Dequeue paused adds");
+                    AddEntry(queuedadds.Dequeue());
+                }
             });
 
             todotimer.Start();

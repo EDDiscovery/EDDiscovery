@@ -269,6 +269,8 @@ namespace EDDiscovery
 
                         if (FrontierCAPI.Active)     // if active, indicate
                             LogLine("CAPI User Logged in");
+                        else
+                            LogLine("CAPI Require Log in");
                     });
                 }
 
