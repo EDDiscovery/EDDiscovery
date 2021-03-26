@@ -139,7 +139,6 @@ namespace EDDiscovery.UserControls
 
         public void HistoryChanged(HistoryList hl)           // on History change
         {
-            queuedadds.Clear();
             Display(false);
         }
 
@@ -290,6 +289,8 @@ namespace EDDiscovery.UserControls
             }
 
             todo.Clear();
+            queuedadds.Clear();
+            todotimer.Stop();
 
             string filtertext = textBoxFilter.Text;
 

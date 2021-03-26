@@ -291,7 +291,7 @@ namespace EDDiscovery.UserControls
             // 
             // buttonExtScreenshot
             // 
-            this.buttonExtScreenshot.Location = new System.Drawing.Point(157, 19);
+            this.buttonExtScreenshot.Location = new System.Drawing.Point(8, 48);
             this.buttonExtScreenshot.Name = "buttonExtScreenshot";
             this.buttonExtScreenshot.Size = new System.Drawing.Size(99, 23);
             this.buttonExtScreenshot.TabIndex = 10;

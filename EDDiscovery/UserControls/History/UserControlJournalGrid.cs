@@ -134,7 +134,6 @@ namespace EDDiscovery.UserControls
 
         private void HistoryChanged(HistoryList hl)
         {
-            queuedadds.Clear();
             Display(hl, false);
         }
 
@@ -183,6 +182,9 @@ namespace EDDiscovery.UserControls
             }
 
             todo.Clear();
+            queuedadds.Clear();
+            todotimer.Stop();
+
             string filtertext = textBoxFilter.Text;
 
             System.Diagnostics.Stopwatch swtotal = new System.Diagnostics.Stopwatch(); swtotal.Start();

@@ -275,48 +275,6 @@ SECTION EDDiscoveryController
 .EXPD: "Checking for new Expedition data" => "Vérification de nouvelles données d'expédition"
 .EXPL: "Checking for new Exploration data" => "Vérification de nouvelles données d'exploration"
 
-SECTION ScreenshotDirectoryWatcher
-
-.Scan: "Scanning for {0} screenshots in {1}" => "Analyse de {0} captures d'écran dans {1}"
-.NOF: "Folder specified for image conversion does not exist, check settings in the Screenshots tab" => "Le dossier spécifié pour la conversion d'image n'existe pas, vérifiez les paramètres dans l'onglet Captures d'écran."
-.Excp: "Error in executing image conversion, try another screenshot, check output path settings. (Exception " => "Erreur dans l'éxécution de la conversion d'image, essayez avec une autre capture d'écran, vérifiez le paramètre de dossier de sortie. (Exception)"
-
-SECTION ScreenShotImageConverter
-
-.FolderErr: "Cannot convert {0} into the same folder as they are stored into\r\nPick a different conversion folder or a different output format" => "Impossible de convertir {0} dans le même dossier que celui d'origine\r\nChoisissez un dossier de conversion différent ou un format de sortie différent"
-.CNV: "Converted {0} to {1}" => "Conversion de {0} vers {1}"
-.ERRF: "Unable to open screenshot '{0}': {1}" => "Impossible d'ouvrir la capture d'écran '{0}' : {1}"
-
-SECTION ScreenShotConfigureForm
-
-ScreenShotConfigureForm: "Screen Shot Configure" => "Configuration des captures d'écran"
-.buttonExtCancel: "Cancel" => "Annuler"
-.buttonExtOK: "OK" @
-.groupBoxCropSettings: "Crop Settings" => "Paramètres de rognage"
-.extGroupBox1: "Crop/Resize Settings" => "Paramètres de rognage/redimensionnement"
-.labelHeight: "Height" => "Hauteur"
-.labelWidth: "Width" => "Largeur"
-.labelLeft: "Left" => "Gauche"
-.labelTop: "Top" => "Haut"
-.checkBoxCropImage: "Crop Image" => "Rogner l'image"
-.labelFolder: "ED/Steam Screenshot folder" => "Dossier des captures d'écran ED/Steam"
-.buttonChangeScreenshotsFolder: "Browse" => "Parcourir"
-.labelSubfolder: "In Sub folder" => "Dans le sous dossier"
-.labelFileNameFormat: "In Filename format" => "Dans le format de nom de fichier"
-.labelStoreFolder: "Store Converted pictures" => "Stocker les images converties"
-.buttonEDChangeOutputFolder: "Browse" => "Parcourir"
-.labelScanFor: "Scan for" @
-.labelSaveAs: "Save as" => "Sauvegarder sous"
-.extCheckBoxRemoveOriginal: "Remove Original Elite Image" => "Supprimer la capture originale"
-.extCheckBoxKeepMasterConvertedImage: "Keep master converted image" => "Conserver la capture originale"
-.labelImage2: "Image 2" @
-.labelImage1: "Image 1" @
-.labelHeight2: "Height" => "Hauteur"
-.labelWidth2: "Width" => "Largeur"
-.labelLeft2: "Left" => "Gauche"
-.labelTop2: "Top" => "Haut"
-.labelCropResizeOptions: "Crop/Resize Options" => "Options de rognage/redimensionnnement"
-
 SECTION BookmarkForm
 
 BookmarkForm: "Create New Bookmark" => "Créer un nouveau marque-page"

@@ -5,13 +5,13 @@ Development, Release, Videos by:
 Cmdr Robby
 
 Developers for this release series:
-Bravada Cadelanne, nullx27
+Bravada Cadelanne, 
 
 Images Captured by:
 Spandino, Robby, Eahlstan, Ettanin, CompleteNOOB from Frontier Elite Dangerous Images (C) Frontier Developments PLC
 
 Languages Translations:
-Keath Milligan, Kmizole, Potatossuaro, Zafford, Andrea Spada, Goscickiw, Nats-ji, Jay
+Eahlstan, Keath Milligan, Kmizole, Potatossuaro, Zafford, Andrea Spada, Goscickiw, Nats-ji, Jay
 
 Previous Contributors:
-Iain Ross, Andrea Spada, Carcher99, IGAU, EoD, Imathrowback, phwoelfel, Robosa, Daniel-finger, Phroggie, Finwen, Corbin Moran, Myshka, Zed, Marlon Blake, Smacker, Jason Thorpe, Greg Malcolm,  Majkl578, MWerle..
+nullx27, Iain Ross, Andrea Spada, Carcher99, IGAU, EoD, Imathrowback, phwoelfel, Robosa, Daniel-finger, Phroggie, Finwen, Corbin Moran, Myshka, Zed, Marlon Blake, Smacker, Jason Thorpe, Greg Malcolm,  Majkl578, MWerle..

@@ -275,47 +275,6 @@ SECTION EDDiscoveryController
 .EXPD: "Checking for new Expedition data" => "检查新的远航数据中"
 .EXPL: "Checking for new Exploration data" => "检查新的探索数据中"
 
-SECTION ScreenshotDirectoryWatcher
-
-.Scan: "Scanning for {0} screenshots in {1}" => "当前正在监测位于{1}文件夹的{0}格式的截图"
-.NOF: "Folder specified for image conversion does not exist, check settings in the Screenshots tab" => "指定的图片格式转换文件夹不存在，请检查设置里的截图选项卡"
-.Excp: "Error in executing image conversion, try another screenshot, check output path settings. (Exception " => "执行图片格式转换时发生错误，请尝试其他的截图，检查输出路径的设置（例外"
-
-SECTION ScreenShotImageConverter
-
-.FolderErr: "Cannot convert {0} into the same folder as they are stored into\r\nPick a different conversion folder or a different output format" => "无法将{0}转换到其所在的文件夹\r\n选择一个不同的文件夹或者其他的输出格式"
-.CNV: "Converted {0} to {1}" => "已将{0}转换成{1}"
-.ERRF: "Unable to open screenshot '{0}': {1}" => "无法打开截图'{0}'：{1}"
-
-SECTION ScreenShotConfigureForm
-
-ScreenShotConfigureForm: "Screen Shot Configure" => "截图配置"
-.buttonExtCancel: "Cancel" => "取消"
-.buttonExtOK: "OK" => "确认"
-.groupBoxCropSettings: "Crop Settings" => "裁剪设置"
-.extGroupBox1: "Crop/Resize Settings" @
-.labelHeight: "Height" => "高度"
-.labelWidth: "Width" => "宽度"
-.labelLeft: "Left" => "左"
-.labelTop: "Top" => "上"
-.checkBoxCropImage: "Crop Image" => "裁剪图片"
-.labelFolder: "ED/Steam Screenshot folder" => "ED/Steam截图文件夹"
-.buttonChangeScreenshotsFolder: "Browse" => "浏览"
-.labelSubfolder: "In Sub folder" => "创建子文件夹"
-.labelFileNameFormat: "In Filename format" => "文件名格式"
-.labelStoreFolder: "Store Converted pictures" => "转换后储存位置"
-.buttonEDChangeOutputFolder: "Browse" => "浏览"
-.labelScanFor: "Scan for" => "原始格式"
-.labelSaveAs: "Save as" => "转换为"
-.extCheckBoxRemoveOriginal: "Remove Original Elite Image" @
-.extCheckBoxKeepMasterConvertedImage: "Keep master converted image" @
-.labelImage2: "Image 2" @
-.labelImage1: "Image 1" @
-.labelHeight2: "Height" @
-.labelWidth2: "Width" @
-.labelLeft2: "Left" @
-.labelTop2: "Top" @
-.labelCropResizeOptions: "Crop/Resize Options" @
 
 SECTION BookmarkForm
 

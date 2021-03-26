@@ -292,49 +292,6 @@ SECTION EDDiscoveryController
 .EXPD: "Checking for new Expedition data" @
 .EXPL: "Checking for new Exploration data" @
 
-SECTION ScreenshotDirectoryWatcher
-
-.Scan: "Scanning for {0} screenshots in {1}" @
-.NOF: "Folder specified for image conversion does not exist, check settings in the Screenshots tab" @
-.Excp: "Error in executing image conversion, try another screenshot, check output path settings. (Exception " @
-
-SECTION ScreenShotImageConverter
-
-.FolderErr: "Cannot convert {0} into the same folder as they are stored into\r\nPick a different conversion folder or a different output format" @
-.CNV: "Converted {0} to {1}" @
-.ERRF: "Unable to open screenshot '{0}': {1}" @
-
-SECTION ScreenShotConfigureForm
-
-ScreenShotConfigureForm: "Screen Shot Configure" @
-.buttonExtCancel: "Cancel" @
-.buttonExtOK: "OK" @
-.groupBoxCropSettings: "Crop Settings" @
-.extGroupBox1: "Crop/Resize Settings" @
-.labelHeight: "Height" @
-.labelWidth: "Width" @
-.labelLeft: "Left" @
-.labelTop: "Top" @
-.checkBoxCropImage: "Crop Image" @
-.labelFolder: "ED/Steam Screenshot folder" @
-.buttonChangeScreenshotsFolder: "Browse" @
-.labelSubfolder: "In Sub folder" @
-.labelFileNameFormat: "In Filename format" @
-.labelStoreFolder: "Store Converted pictures" @
-.buttonEDChangeOutputFolder: "Browse" @
-.labelScanFor: "Scan for" @
-.labelSaveAs: "Save as" @
-.extCheckBoxRemoveOriginal: "Remove Original Elite Image" @
-.extCheckBoxKeepMasterConvertedImage: "Keep master converted image" @
-.labelImage2: "Image 2" @
-.labelImage1: "Image 1" @
-.labelHeight2: "Height" @
-.labelWidth2: "Width" @
-.labelLeft2: "Left" @
-.labelTop2: "Top" @
-.labelCropResizeOptions: "Crop/Resize Options" @
-
-
 SECTION BookmarkForm
 
 BookmarkForm: "Create New Bookmark" @

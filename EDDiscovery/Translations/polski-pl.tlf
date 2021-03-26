@@ -275,47 +275,6 @@ SECTION EDDiscoveryController
 .EXPD: "Checking for new Expedition data" => "Sprawdzanie dostępności nowych danych Ekspedycji"
 .EXPL: "Checking for new Exploration data" => "Sprawdzanie dostępności nowych danych Eksploracji"
 
-SECTION ScreenshotDirectoryWatcher
-
-.Scan: "Scanning for {0} screenshots in {1}" => "Skanowanie zrzutów ekranu {0} w {1}"
-.NOF: "Folder specified for image conversion does not exist, check settings in the Screenshots tab" => "Folder przeznaczony na konwersję obrazów nie istnieje, sprawdź ustawienia w sekcji Zrzuty Ekranu"
-.Excp: "Error in executing image conversion, try another screenshot, check output path settings. (Exception " => "Błąd przetwarzania obrazu, sprawdź z innym zrzutem ekranu, sprawdź ustawienia ścieżki wyjściowej. (Wyjątek "
-
-SECTION ScreenShotImageConverter
-
-.FolderErr: "Cannot convert {0} into the same folder as they are stored into\r\nPick a different conversion folder or a different output format" => "Nie można przetworzyć {0} w tym samym folderze, w którym się znajduje\r\nWybierz inny folder konwersji lub inny format wyjściowy"
-.CNV: "Converted {0} to {1}" => "Przetworzono {0} na {1}"
-.ERRF: "Unable to open screenshot '{0}': {1}" => "Nie można otworzyć zrzutu ekranu '{0}': {1}"
-
-SECTION ScreenShotConfigureForm
-
-ScreenShotConfigureForm: "Screen Shot Configure" => "Konfiguracja Zrzutów Ekranu"
-.buttonExtCancel: "Cancel" => "Anuluj"
-.buttonExtOK: "OK" @
-.groupBoxCropSettings: "Crop Settings" => "Ustawienia Przycinania"
-.extGroupBox1: "Crop/Resize Settings" @
-.labelHeight: "Height" => "Wysokość"
-.labelWidth: "Width" => "Szerokość"
-.labelLeft: "Left" => "Lewa strona"
-.labelTop: "Top" => "Góra"
-.checkBoxCropImage: "Crop Image" => "Przytnij Obraz"
-.labelFolder: "ED/Steam Screenshot folder" => "Folder Zrzutów Ekranu ED/Steam"
-.buttonChangeScreenshotsFolder: "Browse" => "Przeglądaj"
-.labelSubfolder: "In Sub folder" => "W podfolderze"
-.labelFileNameFormat: "In Filename format" => "Format nazwy pliku"
-.labelStoreFolder: "Store Converted pictures" => "Folder Przetworzonych Obrazów"
-.buttonEDChangeOutputFolder: "Browse" => "Przeglądaj"
-.labelScanFor: "Scan for" => "Szukaj plików w formacie"
-.labelSaveAs: "Save as" => "Zapisz jako"
-.extCheckBoxRemoveOriginal: "Remove Original Elite Image" @
-.extCheckBoxKeepMasterConvertedImage: "Keep master converted image" @
-.labelImage2: "Image 2" @
-.labelImage1: "Image 1" @
-.labelHeight2: "Height" @
-.labelWidth2: "Width" @
-.labelLeft2: "Left" @
-.labelTop2: "Top" @
-.labelCropResizeOptions: "Crop/Resize Options" @
 
 SECTION BookmarkForm
 

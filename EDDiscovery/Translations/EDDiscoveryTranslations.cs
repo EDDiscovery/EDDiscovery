@@ -808,13 +808,6 @@ namespace EDDiscovery
         FilterSelector_Ship, // Ship
         FilterSelector_Mining, // Mining
 
-        ScreenshotDirectoryWatcher_Scan, // Scanning for {0} screenshots in {1}
-        ScreenshotDirectoryWatcher_NOF, // Folder specified for image conversion does not exist, check settings in the Screenshots tab
-        ScreenshotDirectoryWatcher_Excp, // Error in executing image conversion, try another screenshot, check output path settings. (Exception
-        ScreenShotImageConverter_FolderErr, // Cannot convert {0} into the same folder as they are stored into
-        ScreenShotImageConverter_CNV, // Converted {0} to {1}
-        ScreenShotImageConverter_ERRF, // Unable to open screenshot '{0}': {1}
-
         ScanDisplayForm_Sys, // System
         ScanDisplayForm_Station, // Station
 

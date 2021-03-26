@@ -186,7 +186,6 @@ namespace EDDiscovery.UserControls
         int fdropdown, ftotalevents, ftotalfilters;     // filter totals
         public void HistoryChanged(HistoryList hl)           // on History change
         {
-            queuedadds.Clear();
             HistoryChanged(hl, false);
         }
 
@@ -238,7 +237,10 @@ namespace EDDiscovery.UserControls
                 chunks.Add(chunk);
             }
 
-            todo.Clear();
+            todo.Clear();           // clear queue of things to do
+            queuedadds.Clear();     // and any adds.
+            todotimer.Stop();
+
             string filtertext = textBoxFilter.Text;
             List<DataGridViewRow> rows = new List<DataGridViewRow>();
 
