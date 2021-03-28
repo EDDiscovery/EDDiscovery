@@ -999,7 +999,7 @@ namespace EDDiscovery.UserControls
                 AddTreeNode(bank, "Spent on Repairs".T(EDTx.UserControlStats_SpentonRepairs), stats.BankAccount?.SpentOnRepairs.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
                 AddTreeNode(bank, "Spent on Fuel".T(EDTx.UserControlStats_SpentonFuel), stats.BankAccount?.SpentOnFuel.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
                 AddTreeNode(bank, "Spent on Munitions".T(EDTx.UserControlStats_SpentonMunitions), stats.BankAccount?.SpentOnAmmoConsumables.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                AddTreeNode(bank, "Insurance Claims".T(EDTx.UserControlStats_InsuranceClaims), stats.BankAccount?.InsuranceClaims.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
+                AddTreeNode(bank, "Insurance Claims".T(EDTx.UserControlStats_InsuranceClaims), stats.BankAccount?.InsuranceClaims.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
                 AddTreeNode(bank, "Total Claim Costs".T(EDTx.UserControlStats_TotalClaimCosts), stats.BankAccount?.SpentOnInsurance.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
                 if (collapseExpand[0] == 'Y')
                     node.Item1.Expand();
@@ -1056,6 +1056,7 @@ namespace EDDiscovery.UserControls
                 AddTreeNode(exploration, "Exploration Profits".T(EDTx.UserControlStats_ExplorationProfits), stats.Exploration?.ExplorationProfits.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
                 AddTreeNode(exploration, "Level 2 Scans".T(EDTx.UserControlStats_Level2Scans), stats.Exploration?.PlanetsScannedToLevel2.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
                 AddTreeNode(exploration, "Level 3 Scans".T(EDTx.UserControlStats_Level3Scans), stats.Exploration?.PlanetsScannedToLevel3.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddTreeNode(exploration, "Efficient Scans".T(EDTx.UserControlStats_EfficientScans), stats.Exploration?.EfficientScans.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
                 AddTreeNode(exploration, "Highest Payout".T(EDTx.UserControlStats_HighestPayout), stats.Exploration?.HighestPayout.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
                 AddTreeNode(exploration, "Total Hyperspace Distance".T(EDTx.UserControlStats_TotalHyperspaceDistance), stats.Exploration?.TotalHyperspaceDistance.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "ly");
                 AddTreeNode(exploration, "Total Hyperspace Jumps".T(EDTx.UserControlStats_TotalHyperspaceJumps), stats.Exploration?.TotalHyperspaceJumps.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
@@ -1067,7 +1068,9 @@ namespace EDDiscovery.UserControls
                 string passengers = "Passengers".T(EDTx.UserControlStats_Passengers);
                 node = AddTreeNode(passengers, "Total Bulk Passengers Delivered".T(EDTx.UserControlStats_TotalBulkPassengersDelivered), stats.PassengerMissions?.Bulk.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
                 AddTreeNode(passengers, "Total VIPs Delivered".T(EDTx.UserControlStats_TotalVIPsDelivered), stats.PassengerMissions?.VIP.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddTreeNode(passengers, "Accepted".T(EDTx.UserControlStats_Accepted), stats.PassengerMissions?.Accepted.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
                 AddTreeNode(passengers, "Delivered".T(EDTx.UserControlStats_Delivered), stats.PassengerMissions?.Delivered.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddTreeNode(passengers, "Disgruntled".T(EDTx.UserControlStats_Disgruntled), stats.PassengerMissions?.Disgruntled.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
                 AddTreeNode(passengers, "Ejected".T(EDTx.UserControlStats_Ejected), stats.PassengerMissions?.Ejected.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
                 if (collapseExpand[7] == 'Y')
                     node.Item1.Expand();
@@ -1110,6 +1113,13 @@ namespace EDDiscovery.UserControls
                 string mattrader = "Materials Trader".T(EDTx.UserControlStats_MaterialsTrader);
                 node = AddTreeNode(mattrader, "Trades Completed".T(EDTx.UserControlStats_TradesCompleted), stats.MaterialTraderStats?.TradesCompleted.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
                 AddTreeNode(mattrader, "Materials Traded".T(EDTx.UserControlStats_MaterialsTraded), stats.MaterialTraderStats?.MaterialsTraded.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddTreeNode(mattrader, "Encoded Materials Traded".T(EDTx.UserControlStats_EncodedMaterialsTraded), stats.MaterialTraderStats?.EncodedMaterialsTraded.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddTreeNode(mattrader, "Raw Materials Traded".T(EDTx.UserControlStats_RawMaterialsTraded), stats.MaterialTraderStats?.RawMaterialsTraded.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddTreeNode(mattrader, "Grade 1 Materials Traded".T(EDTx.UserControlStats_G1MaterialsTraded), stats.MaterialTraderStats?.Grade1MaterialsTraded.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddTreeNode(mattrader, "Grade 2 Materials Traded".T(EDTx.UserControlStats_G2MaterialsTraded), stats.MaterialTraderStats?.Grade2MaterialsTraded.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddTreeNode(mattrader, "Grade 3 Materials Traded".T(EDTx.UserControlStats_G3MaterialsTraded), stats.MaterialTraderStats?.Grade3MaterialsTraded.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddTreeNode(mattrader, "Grade 4 Materials Traded".T(EDTx.UserControlStats_G4MaterialsTraded), stats.MaterialTraderStats?.Grade4MaterialsTraded.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddTreeNode(mattrader, "Grade 5 Materials Traded".T(EDTx.UserControlStats_G5MaterialsTraded), stats.MaterialTraderStats?.Grade5MaterialsTraded.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
                 if (collapseExpand[12] == 'Y')
                     node.Item1.Expand();
             }

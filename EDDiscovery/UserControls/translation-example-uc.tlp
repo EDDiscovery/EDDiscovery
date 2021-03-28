@@ -1211,6 +1211,17 @@ SECTION UserControlStats
 .GoodsBought: "Goods Bought" @
 .GoodsSold: "Goods Sold" @
 
+.EfficientScans: "Efficient Scans" @
+.Accepted: "Accepted" @
+.Disgruntled: "Disgruntled" @
+.EncodedMaterialsTraded: "Encoded Materials Traded" @
+.RawMaterialsTraded: "Raw Materials Traded" @
+.G1MaterialsTraded: "Grade 1 Materials Traded" @
+.G2MaterialsTraded: "Grade 2 Materials Traded" @
+.G3MaterialsTraded: "Grade 3 Materials Traded" @
+.G4MaterialsTraded: "Grade 4 Materials Traded" @
+.G5MaterialsTraded: "Grade 5 Materials Traded" @
+
 
 
 

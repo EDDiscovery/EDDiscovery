@@ -365,6 +365,7 @@ namespace EDDiscovery
         UserControlStats_ExplorationProfits, // Exploration Profits
         UserControlStats_Level2Scans, // Level 2 Scans
         UserControlStats_Level3Scans, // Level 3 Scans
+        UserControlStats_EfficientScans, // 
         UserControlStats_HighestPayout, // Highest Payout
         UserControlStats_TotalHyperspaceDistance, // Total Hyperspace Distance
         UserControlStats_TotalHyperspaceJumps, // Total Hyperspace Jumps
@@ -372,6 +373,8 @@ namespace EDDiscovery
         UserControlStats_TimePlayed, // Time Played
         UserControlStats_TotalBulkPassengersDelivered, // Total Bulk Passengers Delivered
         UserControlStats_TotalVIPsDelivered, // Total VIPs Delivered
+        UserControlStats_Accepted,
+        UserControlStats_Disgruntled,
         UserControlStats_Delivered, // Delivered
         UserControlStats_Ejected, // Ejected
         UserControlStats_TotalItemsRescued, // Total Items Rescued
@@ -395,6 +398,13 @@ namespace EDDiscovery
         UserControlStats_FinesAccrued, // Fines Accrued
         UserControlStats_TradesCompleted, // Trades Completed
         UserControlStats_MaterialsTraded, // Materials Traded
+        UserControlStats_EncodedMaterialsTraded,
+        UserControlStats_RawMaterialsTraded,
+        UserControlStats_G1MaterialsTraded,
+        UserControlStats_G2MaterialsTraded,
+        UserControlStats_G3MaterialsTraded,
+        UserControlStats_G4MaterialsTraded,
+        UserControlStats_G5MaterialsTraded,
 
         UserControlStats_TME, // {0} days {1} hours {1} minutes
         UserControlStats_Name, // Name
