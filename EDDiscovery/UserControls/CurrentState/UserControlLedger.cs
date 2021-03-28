@@ -30,6 +30,7 @@ namespace EDDiscovery.UserControls
         private FilterSelector cfs;
         private string dbFilter = "EventFilter2";
         private string dbHistorySave = "EDUIHistory";
+        private int transactioncountatdisplay = 0;
 
         #region Init
 
@@ -87,31 +88,25 @@ namespace EDDiscovery.UserControls
 
         #region Display
 
-        Ledger current_mc;
-
         private void Redisplay(HistoryList hl)
         {
-            Display(hl.CashLedger);
-        }
-
-        private void NewEntry(HistoryEntry l, HistoryList hl)
-        {
-            Display(hl.CashLedger);
+            Display();
         }
 
         public override void InitialDisplay()
         {
-            Display(discoveryform.history.CashLedger);
+            Display();
         }
 
-        private void Display(Ledger mc)
+        private void Display()
         {
             DataGridViewColumn sortcol = dataGridViewLedger.SortedColumn != null ? dataGridViewLedger.SortedColumn : dataGridViewLedger.Columns[0];
             SortOrder sortorder = dataGridViewLedger.SortOrder != SortOrder.None ? dataGridViewLedger.SortOrder : SortOrder.Descending;
 
             dataGridViewLedger.Rows.Clear();
 
-            current_mc = mc;
+            var mc = discoveryform.history.CashLedger;
+            transactioncountatdisplay = 0;
             
             if (mc != null && mc.Transactions.Count > 0)
             {
@@ -126,8 +121,25 @@ namespace EDDiscovery.UserControls
                     for (int i = filteredlist.Count - 1; i >= 0; i--)
                     {
                         Ledger.Transaction tx = filteredlist[i];
+                        rowsToAdd.Add(CreateRow(tx));
+                    }
 
-                        object[] rowobj = { EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(tx.utctime) ,
+                    dataGridViewLedger.Rows.AddRange(rowsToAdd.ToArray());
+
+                    dataGridViewLedger.FilterGridView(textBoxFilter.Text);
+                }
+
+                transactioncountatdisplay = mc.Transactions.Count;
+            }
+
+            dataGridViewLedger.Columns[0].HeaderText = EDDiscoveryForm.EDDConfig.GetTimeTitle();
+            dataGridViewLedger.Sort(sortcol, (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
+            dataGridViewLedger.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
+        }
+
+        private DataGridViewRow CreateRow(Ledger.Transaction tx)
+        {
+            object[] rowobj = { EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(tx.utctime) ,
                                             tx.jtype.ToString().SplitCapsWord(),
                                             tx.notes,
                                             (tx.cashadjust>0) ? tx.cashadjust.ToString("N0") : "",
@@ -136,21 +148,48 @@ namespace EDDiscovery.UserControls
                                             (tx.profitperunit!=0) ? tx.profitperunit.ToString("N0") : ""
                                         };
 
-                        var row = dataGridViewLedger.RowTemplate.Clone() as DataGridViewRow;
-                        row.CreateCells(dataGridViewLedger, rowobj);
-                        row.Tag = tx.jid;
-                        rowsToAdd.Add(row);
+            var row = dataGridViewLedger.RowTemplate.Clone() as DataGridViewRow;
+            row.CreateCells(dataGridViewLedger, rowobj);
+            row.Tag = tx.jid;
+            return row;
+        }
+
+        private void NewEntry(HistoryEntry he, HistoryList hl)
+        {
+            while(transactioncountatdisplay < discoveryform.history.CashLedger.Transactions.Count)   // if new transaction
+            {
+                Ledger.Transaction tx = discoveryform.history.CashLedger.Transactions[transactioncountatdisplay];
+
+                string evstring = GetSetting(dbFilter, "All");
+
+                if ( evstring.Equals("All") || tx.IsJournalEventInEventFilter(evstring.Split(';')))     // if in filter..
+                {
+                    var row = CreateRow(tx);
+                    bool visible = false;
+
+                    if (textBoxFilter.Text.HasChars())      // if we are text filtering..
+                    {
+                        foreach (DataGridViewCell cell in row.Cells)
+                        {
+                            if (cell.Value != null)
+                            {
+                                if (cell.Value.ToString().IndexOf(textBoxFilter.Text, 0, StringComparison.CurrentCultureIgnoreCase) >= 0)
+                                {
+                                    visible = true;
+                                    break;
+                                }
+                            }
+                        }
                     }
+                    else
+                        visible = true;
 
-                    dataGridViewLedger.Rows.AddRange(rowsToAdd.ToArray());
-
-                    dataGridViewLedger.FilterGridView(textBoxFilter.Text);
+                    row.Visible = visible;                      // searching on this panel sets the visibility flag
+                    dataGridViewLedger.Rows.Insert(0, row);     // insert at top
                 }
-            }
 
-            dataGridViewLedger.Columns[0].HeaderText = EDDiscoveryForm.EDDConfig.GetTimeTitle();
-            dataGridViewLedger.Sort(sortcol, (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
-            dataGridViewLedger.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
+                transactioncountatdisplay++;
+            }
         }
 
         public List<Ledger.Transaction> FilterByJournalEvent(List<Ledger.Transaction> txlist, string eventstring)
@@ -178,18 +217,14 @@ namespace EDDiscovery.UserControls
             if (filters != newset)
             {
                 PutSetting(dbFilter, newset);
-                Display(current_mc);
+                Display();
             }
         }
 
         private void comboBoxHistoryWindow_SelectedIndexChanged(object sender, EventArgs e)
         {
             PutSetting(dbHistorySave, comboBoxHistoryWindow.Text);
-
-            if (current_mc != null)
-            {
-                Display(current_mc);
-            }
+            Display();
         }
 
         private void textBoxFilter_TextChanged(object sender, EventArgs e)
@@ -221,9 +256,12 @@ namespace EDDiscovery.UserControls
 
         private void buttonExtExcel_Click(object sender, EventArgs e)
         {
-            if (current_mc != null)
-            {
+            var current_mc = discoveryform.history.CashLedger;
+
+            if ( current_mc != null )
+            { 
                 Forms.ExportForm frm = new Forms.ExportForm();
+
                 frm.Init(new string[] { "Export Current View" }, disablestartendtime: true);
 
                 if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)
