@@ -1443,7 +1443,7 @@ SECTION UserControlTrilateration
 .ColumnStatus: "Status" @
 .Source: "Source" => "Źródło"
 .dataGridViewTextBoxColumnClosestSystemsSystem: "Wanted System" => "Pożądany Układ"
-.toolStrip: "<Press Start New>" @
+.toolStrip: "Press Start New" @
 .removeFromWantedSystemsToolStripMenuItem: "Remove from wanted systems" => "Usuń z pożądanych układów"
 .viewOnEDSMToolStripMenuItem1: "View on EDSM" => "Pokaż w EDSM"
 .deleteAllWithKnownPositionToolStripMenuItem: "Delete all with known position" => "Usuń wszystkie o znanej pozycji"
@@ -1458,7 +1458,7 @@ SECTION UserControlTrilateration
 .toolStripButtonRemoveAll: "toolStripButton1" => "Usuń Wszystkie"
 .toolStripButtonMap: "3d map" => "Mapa 3D"
 .toolStripLabelSystem: "From System:" => "Z Układu:"
-.toolStripTextBoxSystem: "<Press Start New>" @
+.toolStripTextBoxSystem: "Press Start New" @
 .toolStripLabel1: "Visited without coordinates:" => "Odwiedzone bez współrzędnych:"
 .toolStripAddFromHistory: "Add 20 oldest" => "Dodaj 20 najstarszych"
 .toolStripAddRecentHistory: "Add 20 newest" => "Dodaj 20 najnowszych"

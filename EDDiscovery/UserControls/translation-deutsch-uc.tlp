@@ -635,7 +635,6 @@ SECTION UserControlPlot
 .D1: "\r\n{0} distance {1:N2} Ly" => "\r\n{0} Entfernung {1:N2} Lj"
 .D2: "\r\n    Visits: {0}" => "\r\n    Besuche: {0}"
 .D3: "\r\n    Coordinates: X:{0:N2}, Y:{1:N2}, Z:{2:N2}\r\n" => "\r\n    Koordinaten: X:{0:N2}, Y:{1:N2}, Z:{2:N2}\r\n"
-.Nt: "\r\n    Notes: {0}\r\n" => "\r\n    Notizen: {0}\r\n"
 
 SECTION UserControlRoute
 
@@ -1463,7 +1462,7 @@ SECTION UserControlTrilateration
 .ColumnStatus: "Status" => "Status"
 .Source: "Source" => "Quelle"
 .dataGridViewTextBoxColumnClosestSystemsSystem: "Wanted System" => "Gesuchtes System"
-.toolStrip: "<Press Start New>" => "<Klicke neu starten>"
+.toolStrip: "Press Start New" => "Klicke neu starten"
 .removeFromWantedSystemsToolStripMenuItem: "Remove from wanted systems" => "Von gesuchten Systemen entfernen"
 .viewOnEDSMToolStripMenuItem1: "View on EDSM" => "Zeige auf EDSM"
 .deleteAllWithKnownPositionToolStripMenuItem: "Delete all with known position" => "Lösche alle mit bekannten Koordinaten"
@@ -1478,7 +1477,7 @@ SECTION UserControlTrilateration
 .toolStripButtonRemoveAll: "toolStripButton1" => "Alle entfernen"
 .toolStripButtonMap: "3d map" => "3D-Karte"
 .toolStripLabelSystem: "From System:" => "Von System:"
-.toolStripTextBoxSystem: "<Press Start New>" => "<Klicke neu starten>"
+.toolStripTextBoxSystem: "Press Start New" => "Klicke neu starten"
 .toolStripLabel1: "Visited without coordinates:" => "Besuchte ohne Koordinaten:"
 .toolStripAddFromHistory: "Add 20 oldest" => "20 älteste hinzufügen"
 .toolStripAddRecentHistory: "Add 20 newest" => "20 neueste hinzufügen"

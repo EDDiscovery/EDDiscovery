@@ -79,6 +79,10 @@ namespace EDDiscovery.UserControls
             this.dataViewScroller_Distances = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.vScrollBarCustom1 = new ExtendedControls.ExtScrollBar();
             this.dataGridViewDistances = new BaseUtils.DataGridViewBaseEnhancements();
+            this.ColumnSystem = new ExtendedControls.ExtDataGridViewColumnAutoComplete();
+            this.ColumnDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnCalculated = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.richTextBox_History = new ExtendedControls.ExtRichTextBox();
             this.dataViewScroller_Wanted = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.vScrollBarCustom2 = new ExtendedControls.ExtScrollBar();
@@ -86,10 +90,6 @@ namespace EDDiscovery.UserControls
             this.Source = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumnClosestSystemsSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.ColumnSystem = new ExtendedControls.ExtDataGridViewColumnAutoComplete();
-            this.ColumnDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnCalculated = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.trilatContextMenu.SuspendLayout();
             this.wantedContextMenu.SuspendLayout();
             this.toolStrip.SuspendLayout();
@@ -250,7 +250,7 @@ namespace EDDiscovery.UserControls
             this.toolStripButtonRemoveUnused.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonRemoveUnused.Name = "toolStripButtonRemoveUnused";
             this.toolStripButtonRemoveUnused.Size = new System.Drawing.Size(28, 29);
-            this.toolStripButtonRemoveUnused.Text = "toolStripButtonRemoveUnused";
+            this.toolStripButtonRemoveUnused.Text = "<code>";
             this.toolStripButtonRemoveUnused.ToolTipText = "Remove unused";
             this.toolStripButtonRemoveUnused.Click += new System.EventHandler(this.toolStripButtonRemoveUnused_Click);
             // 
@@ -262,7 +262,7 @@ namespace EDDiscovery.UserControls
             this.toolStripButtonRemoveAll.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonRemoveAll.Name = "toolStripButtonRemoveAll";
             this.toolStripButtonRemoveAll.Size = new System.Drawing.Size(28, 29);
-            this.toolStripButtonRemoveAll.Text = "toolStripButton1";
+            this.toolStripButtonRemoveAll.Text = "<code>";
             this.toolStripButtonRemoveAll.ToolTipText = "Remove all";
             this.toolStripButtonRemoveAll.Click += new System.EventHandler(this.toolStripButtonRemoveAll_Click);
             // 
@@ -274,7 +274,7 @@ namespace EDDiscovery.UserControls
             this.toolStripButtonMap.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonMap.Name = "toolStripButtonMap";
             this.toolStripButtonMap.Size = new System.Drawing.Size(28, 29);
-            this.toolStripButtonMap.Text = "3d map";
+            this.toolStripButtonMap.Text = "<code>";
             this.toolStripButtonMap.ToolTipText = "Show 3d map";
             this.toolStripButtonMap.Click += new System.EventHandler(this.toolStripButtonMap_Click);
             // 
@@ -446,6 +446,31 @@ namespace EDDiscovery.UserControls
             this.dataGridViewDistances.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewDistances_SortCompare);
             this.dataGridViewDistances.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dataGridViewDistances_KeyDown);
             // 
+            // ColumnSystem
+            // 
+            this.ColumnSystem.HeaderText = "System";
+            this.ColumnSystem.Name = "ColumnSystem";
+            // 
+            // ColumnDistance
+            // 
+            this.ColumnDistance.FillWeight = 50F;
+            this.ColumnDistance.HeaderText = "Distance";
+            this.ColumnDistance.Name = "ColumnDistance";
+            // 
+            // ColumnCalculated
+            // 
+            this.ColumnCalculated.FillWeight = 50F;
+            this.ColumnCalculated.HeaderText = "Calculated";
+            this.ColumnCalculated.Name = "ColumnCalculated";
+            this.ColumnCalculated.ReadOnly = true;
+            this.ColumnCalculated.Visible = false;
+            // 
+            // ColumnStatus
+            // 
+            this.ColumnStatus.HeaderText = "Status";
+            this.ColumnStatus.Name = "ColumnStatus";
+            this.ColumnStatus.ReadOnly = true;
+            // 
             // richTextBox_History
             // 
             this.richTextBox_History.BorderColor = System.Drawing.Color.Transparent;
@@ -557,31 +582,6 @@ namespace EDDiscovery.UserControls
             this.dataGridViewTextBoxColumnClosestSystemsSystem.MinimumWidth = 100;
             this.dataGridViewTextBoxColumnClosestSystemsSystem.Name = "dataGridViewTextBoxColumnClosestSystemsSystem";
             this.dataGridViewTextBoxColumnClosestSystemsSystem.ReadOnly = true;
-            // 
-            // ColumnSystem
-            // 
-            this.ColumnSystem.HeaderText = "System";
-            this.ColumnSystem.Name = "ColumnSystem";
-            // 
-            // ColumnDistance
-            // 
-            this.ColumnDistance.FillWeight = 50F;
-            this.ColumnDistance.HeaderText = "Distance";
-            this.ColumnDistance.Name = "ColumnDistance";
-            // 
-            // ColumnCalculated
-            // 
-            this.ColumnCalculated.FillWeight = 50F;
-            this.ColumnCalculated.HeaderText = "Calculated";
-            this.ColumnCalculated.Name = "ColumnCalculated";
-            this.ColumnCalculated.ReadOnly = true;
-            this.ColumnCalculated.Visible = false;
-            // 
-            // ColumnStatus
-            // 
-            this.ColumnStatus.HeaderText = "Status";
-            this.ColumnStatus.Name = "ColumnStatus";
-            this.ColumnStatus.ReadOnly = true;
             // 
             // UserControlTrilateration
             // 
