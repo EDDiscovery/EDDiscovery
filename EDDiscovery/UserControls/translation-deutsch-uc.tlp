@@ -112,7 +112,6 @@ SECTION SearchMaterialsCommodities
 .ColumnCurrentDistance: "Current Distance" => "Derzeitige Entfernung"
 .ColumnPosition: "Position" => "Position"
 
-
 SECTION SearchScans
 
 .Select: "Select" => "Wählen"
@@ -174,7 +173,7 @@ SECTION UserControlEngineering
 .buttonFilterEngineer.ToolTip: "Filter the table by engineer" => "Filtere die Tabelle nach Ingenieur"
 .buttonFilterModule.ToolTip: "Filter the table by module type" => "Filtere die Tabelle nach Modultyp"
 .panelButtons.ToolTip: "Left click and drag on grid to reorder" => "Linksklick und auf Gitter ziehen um neu zu ordnen"
-.chkNotHistoric.ToolTip: "When red, use the materials at the cursor to estimate, when green always use the latest materials." =>"Wenn 'rot' verwende die Materialien beim Zeiger zum Schätzen, wenn 'grün' verwende immer die letzten Materialien."
+.chkNotHistoric.ToolTip: "When red, use the materials at the cursor to estimate, when green always use the latest materials." => "Wenn 'rot' verwende die Materialien beim Zeiger zum Schätzen, wenn 'grün' verwende immer die letzten Materialien."
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" => "Aktiviere oder deaktiviere Abkürzungen"
 
 SECTION UserControlEstimatedValues
@@ -190,7 +189,6 @@ SECTION UserControlEstimatedValues
 .Mapped: "Mapped" => "Kartographiert"
 .WasMapped: "Already Mapped" => "Bereits kartographiert"
 .WasDiscovered: "Already Discovered" => "Bereits entdeckt"
-
 .SV: "Estimated Scan Values for {0}" => "Geschätzte Scanwerte für {0}"
 .EDSM: "EDSM" => "EDSM"
 .checkBoxEDSM.ToolTip: "Get and show information from EDSM" => "Hole und zeige Informationen von EDSM"
@@ -449,13 +447,13 @@ SECTION UserControlSurveyor
 .bodyFeaturesToolStripMenuItem.lowRadiusToolStripMenuItem: "Low Radius" => "niedriger Radius"
 .checkEDSMForInformationToolStripMenuItem: "Check EDSM for information" => "Prüfe EDSM auf Informationen"
 .autoHideToolStripMenuItem: "Auto Hide" => "Automatisch verstecken"
-.dontHideInFSSModeToolStripMenuItem: "Don\'t Hide in FSS Mode" => "Im FSS-Modus nicht verbergen"
+.dontHideInFSSModeToolStripMenuItem: "Don\\'t Hide in FSS Mode" => "Im FSS-Modus nicht verbergen"
 .showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem: "Show System Info Always" => "Systeminformation immer anzeigen"
 .selectFSSSignalsShownToolStripMenuItem: "Select FSS Signals Shown" => "Wähle anzuzeigende FSS-Signale"
 .LowRadius: " Low Radius." => " niedriger Radius"
 .Mapped: " (Mapped & Discovered)" => " (Kartographiert & erkundet)"
 .Systemscancomplete: "System scan complete." => "Systemscan komplett"
-.bodiesfound: " bodies found." =>" Körper gefunden."
+.bodiesfound: " bodies found." => " Körper gefunden."
 .Noscanreported: "No scan reported." => "Kein Scan gemeldet."
 .isanammoniaworld: " is an ammonia world." => " ist eine Ammoniakwelt"
 .isanearthlikeworld: " is an earth like world." => " ist eine erdähnliche Welt"
@@ -466,7 +464,6 @@ SECTION UserControlSurveyor
 .Has: " Has " => " hat "
 .Signals: " Has Signals." => " hat Signale."
 .islandable: " is landable." => " ist landbar."
-
 .planetaryClassesToolStripMenuItem: "Planetary Classes" => "Planetare Klassen"
 .planetaryClassesToolStripMenuItem.ammoniaWorldToolStripMenuItem: "Ammonia World" => "Ammoniakwelt"
 .planetaryClassesToolStripMenuItem.earthlikeWorldToolStripMenuItem: "Earthlike World" => "erdähnliche Welt"
@@ -480,7 +477,6 @@ SECTION UserControlSurveyor
 .textAlignToolStripMenuItem.leftToolStripMenuItem: "Left" => "Links"
 .textAlignToolStripMenuItem.centerToolStripMenuItem: "Center" => "Mitte"
 .textAlignToolStripMenuItem.rightToolStripMenuItem: "Right" => "Rechts"
-
 .bodyFeaturesToolStripMenuItem.hasSignalsToolStripMenuItem: "Has Signals" => "Hat Signale"
 .bodyFeaturesToolStripMenuItem.landableToolStripMenuItem: "Landable" => "landbar"
 .showAllPlanetsToolStripMenuItem: "Show All Planets" => "Zeige alle Planeten"
@@ -504,6 +500,7 @@ SECTION MissionListUserControl
 .labelTo: "to" => "bis"
 
 SECTION UserControlMissions
+
 .MPlural: " Missions" => "Missionen"
 .MSingular: " Mission" => "Mission"
 .Name: "Name" => "Name"
@@ -628,7 +625,7 @@ SECTION UserControlPlot
 .2d: "2D Plot of systems in range from {0} " => "2D-Plan von Systemen in Reichweite von {0} "
 .PTOP: "Plot around {0}, viewed from the top" => "Plane rund um {0}, von oben betrachtet"
 .PFRONT: "Plot around {0}, viewed from the front" => "Plane rund um {0}, von vorne betrachtet"
-.PSIDE: "Plot around {0}, viewed from the side" =>"Plane rund um {0}, seitlich betrachtet"
+.PSIDE: "Plot around {0}, viewed from the side" => "Plane rund um {0}, seitlich betrachtet"
 .SysAROUND: "Systems around {0}, from {1} to {2}, Ly: {3}" => "Systeme rund um {0}, von {1} nach {2}, Lj: {3}"
 .Vs: "\r\n    Visits: {0}" => "\r\n    Besuche: {0}"
 .Nt: "\r\n    Notes: {0}\r\n" => "\r\n    Notizen: {0}\r\n"
@@ -694,7 +691,6 @@ SECTION UserControlRoute
 SECTION UserControlRouteTracker
 
 .Note: "Note: {0}" => "Notiz: {0}"
-
 .showBookmarkNotesToolStripMenuItem: "Show Bookmark Notes" => "Zeige Lesezeichennotizen"
 .setRouteToolStripMenuItem: "Set route" => "Setze Route"
 .showJumpsToolStripMenuItem: "Show Jumps To Go" => "Zeige restliche Sprünge"
@@ -713,7 +709,7 @@ SECTION UserControlRouteTracker
 .TF: "To First WP " => "Zum ersten Wegpunkt"
 .LF: ", Left {0:N1}ly" => ", übrig {0:N1}Lj"
 .ToWP: "To WP {0} " => "Zum WP {0} "
-.Dev: ", Dev {0:N1}ly" =>", Abw {0:N1}Lj"
+.Dev: ", Dev {0:N1}ly" => ", Abw {0:N1}Lj"
 .Selectroute: "Select route" => "Wähle Route"
 .PresstoCancel: "Press to Cancel" => "Drücken um abzubrechen"
 .Enterroute: "Enter route" => "Route eingeben"
@@ -883,7 +879,7 @@ SECTION UserControlSettings
 .180daysold: ">180 days old" => "< 180 Tage alt"
 .270daysold: ">270 days old" => "< 270 Tage alt"
 .365daysold: "> 365 days old" => "< 365 Tage alt"
-.ESM: "Scans,Cargo,Missions,State,Jumps etc" =>  "Scans, Fracht, Missionen, Status, Sprünge, etc"
+.ESM: "Scans,Cargo,Missions,State,Jumps etc" => "Scans, Fracht, Missionen, Status, Sprünge, etc"
 .FS: "All entries for Statistics" => "Alle statistisch relevanten Einträge"
 .EJS: "Jumps and Scans" => "Sprünge und Scans"
 .EJ: "Jumps" => "Sprünge"
@@ -905,7 +901,7 @@ SECTION UserControlSettings
 .radioButtonCentreHome: "Home System" => "Heimatsystem"
 .labelOpenOn: "Open Centred On" => "Öffne zentriert auf"
 .labelHome: "Now in Commander Settings" => "Jetzt in Kommandanteneinstellungen"
-.Font: "The font used by this theme is not available on your system.\r\nThe font needed is \"{0}\".\r\nInstall this font to fully use this theme.\r\nEuro Caps font is freely available from www.edassets.org.\r\n\r\nWould you like to load this theme using a replacement font?" => "Die von diesem Thema verwendete Schriftart is t auf diesem System nicht verfügbar.\r\nDie benötigte Schriftart ist \"{0}\"\r\nInstalliere diese Schriftart um das Thema wie vorgesehen zu nutzen.\r\nDie Schriftart Euro Caps ist auf www.edassets.org frei verfügbar.\r\n\r\nWillst du diese Thema mit einer Ersatzschriftart laden?"
+.Font: "The font used by this theme is not available on your system.\r\nThe font needed is \\"{0}\\".\r\nInstall this font to fully use this theme.\r\nEuro Caps font is freely available from www.edassets.org.\r\n\r\nWould you like to load this theme using a replacement font?" => "Die von diesem Thema verwendete Schriftart is t auf diesem System nicht verfügbar.\r\nDie benötigte Schriftart ist \\"{0}\\"\r\nInstalliere diese Schriftart um das Thema wie vorgesehen zu nutzen.\r\nDie Schriftart Euro Caps ist auf www.edassets.org frei verfügbar.\r\n\r\nWillst du diese Thema mit einer Ersatzschriftart laden?"
 .Information: "Applies at next restart of ED Discovery" => "Angewendet nach dem nächsten Neustart von EDDiscovery"
 .AddC: "Commander name is not valid or duplicate" => "Komandantenname ist ungültig oder ein Duplikat"
 .AddT: "Cannot create Commander" => "Kann Kommandanten nicht erstellen"
@@ -933,6 +929,7 @@ SECTION UserControlShipYards
 .MS: "Mass/Speed" => "Masse/Geschwindigkeit"
 
 SECTION UserControlShoppingList
+
 .toggleListPositionToolStripMenuItem: "Toggle Shopping List Position" => "Einkaufslistenposition umschalten"
 .buttonSpecialEffects: "Special Effects" => "Spezialeffekte"
 .buttonTechBroker: "Tech Broker Unlocks" => "Technologie-Broker Freischaltungen"
@@ -961,7 +958,7 @@ SECTION UserControlSpanel
 .showInformationToolStripMenuItem: "Show Information" => "Zeige Information"
 .showNotesToolStripMenuItem: "Show Notes" => "Zeige Notizen"
 .showXYZToolStripMenuItem: "Show XYZ" => "Zeige XYZ"
-.showTargetToolStripMenuItem: "Show Target Distance per Star" =>"Zeige Zieldistanz pro Stern"
+.showTargetToolStripMenuItem: "Show Target Distance per Star" => "Zeige Zieldistanz pro Stern"
 .blackBoxAroundTextToolStripMenuItem: "Show black box around text" => "Zeige schwarze Box um Text"
 .showDistancesOnFSDJumpsOnlyToolStripMenuItem: "Show Distances/Coords on FSD Jumps Only" => "Zeige Entfernung/Koordinaten nur bei FSA-Sprüngen"
 .expandTextOverEmptyColumnsToolStripMenuItem: "Expand text over empty columns" => "Erweitere Text über leere Spalten"
@@ -1043,7 +1040,6 @@ SECTION UserControlStarList
 .Total: "Total" => "Gesamt"
 .Signals: "{0} has signals" => "{0} hat Signale"
 .Distance: " ({0} ls)" => " ({0} Ls)"
-
 .FV: "First visit {0}" => "Erster Besuch {0}"
 .CS: "{0} Star(s) {1}" => "{0} stern(e) {1}"
 .SMBH: "{0} is a super massive black hole" => "{0} ist ein supermassives schwarzes Loch"
@@ -1085,11 +1081,9 @@ SECTION UserControlStats
 .tabControlCustomStats.tabPageScan.userControlStatsTimeScan.labelTime: "Time" => "Zeit"
 .tabControlCustomStats.tabPageGameStats: "In Game" => "Im Spiel"
 .tabControlCustomStats.tabPageByShip: "By Ship" => "Pro Schiff"
-
 .TotalNoofjumps: "Total No of jumps: " => "Gesamtzahl der Sprünge"
 .FSDjumps: "FSD Jumps" => "FSA-Sprünge"
 .Beltcluster: "Belt Cluster: " => "Gürtelgruppen"
-
 .JumpHistory: "Jump History" => "Sprunghistorie"
 .24hc: "24 Hours: " => "24 Stunden: "
 .OneWeek: ", One Week: " => ", eine Woche: "
@@ -1102,7 +1096,6 @@ SECTION UserControlStats
 .MostHighest: "Most Highest" => "höchstes"
 .MostLowest: "Most Lowest" => "niedrigstes"
 .MostVisited: "Most Visited" => "meistbesuchtes"
-
 .Jumps: "Jumps" => "Sprünge"
 .TravelledLy: "Traveled Ly" => "Gereiste Lichtjahre"
 .PremiumBoost: "Premium Boost" => "Premiumboost"
@@ -1112,12 +1105,10 @@ SECTION UserControlStats
 .Scans: "Scans" => "Scans"
 .Mapped: "Mapped" => "Kartographiert"
 .Scanvalue: "Scan value" => "Scanwert"
-
 .Lastdock: "Last dock" => "Letztes Andocken"
 .Trip: "Trip" => "Reise"
 .All: "All" => "Alles"
 .Type: "Type" => "Art"
-
 .BankAccount: "Bank Account" => "Kontostand"
 .Combat: "Combat" => "Kampf"
 .Crime: "Crime" => "Verbrechen"
@@ -1131,7 +1122,6 @@ SECTION UserControlStats
 .Crew: "Crew" => "Crew"
 .Multi: "Multi-crew" => "Multicrew"
 .MaterialsTrader: "Materials Trader" => "Materialienhändler-Statistik"
-
 .CurrentAssets: "Current Assets" => "Aktueller Besitz"
 .SpentonShips: "Spent on Ships" => "In Schiffe investiert"
 .SpentonOutfitting: "Spent on Outfitting" => "In Ausrüstung investiert"
@@ -1174,7 +1164,7 @@ SECTION UserControlStats
 .TotalHyperspaceJumps: "Total Hyperspace Jumps" => "Hyperraumsprünge insgesamt"
 .FarthestFromStart: "Farthest From Start" => "Max. Distanz vom Startpunkt"
 .TimePlayed: "Time Played" => "Ungefähre Spielzeit"
-.TotalBulkPassengersDelivered: "Total Bulk Passengers Delivered" =>  "Insg. bef. Massentransport-Passagiere"
+.TotalBulkPassengersDelivered: "Total Bulk Passengers Delivered" => "Insg. bef. Massentransport-Passagiere"
 .TotalVIPsDelivered: "Total VIPs Delivered" => "Insgesamt beförderte VIP-Passagiere"
 .Delivered: "Delivered" => "Insgesamt befördert"
 .Ejected: "Ejected" => "Insgesamt rausgeworfen"
@@ -1199,20 +1189,16 @@ SECTION UserControlStats
 .FinesAccrued: "Fines Accrued" => "Gesammelte Strafen (gesamt)"
 .TradesCompleted: "Trades Completed" => "Angeschlossene Handel"
 .MaterialsTraded: "Materials Traded" => "Gehandelte Materialien"
-
 .TME: "{0} days {1} hours {1} minutes" => "{0} Tage {1} Stunden {1} Minuten"
 .Name: "Name" => "Name"
 .Ident: "Ident" => "Ident"
-
 .BodiesScanned: "Bodies Scanned" => "Körper gescannt"
 .Destroyed: "Destroyed" => "Zerstört"
-
 .GoodsBought: "Goods Bought" => "Handelswaren gekauft"
 .GoodsSold: "Goods Sold" => "Handelswaren verkauft"
-
 .EfficientScans: "Efficient Scans" => "Erhaltene Effizienzboni"
 .Accepted: "Accepted" => "Angenommen"
-.Disgruntled: "Disgruntled" "Verärgert"
+.Disgruntled: "Disgruntled" @
 .EncodedMaterialsTraded: "Encoded Materials Traded" => "Gehandelte verschlüsselte Materialien"
 .RawMaterialsTraded: "Raw Materials Traded" => "Gehandelte Materialien"
 .G1MaterialsTraded: "Grade 1 Materials Traded" => "Gehandelte Grad-1-Materialien"
@@ -1220,9 +1206,6 @@ SECTION UserControlStats
 .G3MaterialsTraded: "Grade 3 Materials Traded" => "Gehandelte Grad-3-Materialien"
 .G4MaterialsTraded: "Grade 4 Materials Traded" => "Gehandelte Grad-4-Materialien"
 .G5MaterialsTraded: "Grade 5 Materials Traded" => "Gehandelte Grad-5-Materialien"
-
-
-
 
 SECTION StatsTimeUserControl
 
@@ -1416,6 +1399,7 @@ SECTION UserControlTravelGrid
 .addToTrilaterationToolStripMenuItem.explorationPanelToolStripMenuItem: "Exploration Panel" => "Erkundungspaneel"
 .runSelectionThroughIGAUDebugToolStripMenuItem: "Run selection through IGAU (Debug)" => "Führe Auswahl durch IGAU aus (Debug)"
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" => "Aktiviere oder deaktiviere Abkürzungen"
+.runSelectionThroughEDAstroDebugToolStripMenuItem: "Run selection through EDAstro (Debug)" @
 
 SECTION UserControlCaptainsLog
 
@@ -1473,9 +1457,6 @@ SECTION UserControlTrilateration
 .pasteToolStripMenuItem: "Paste" => "Einfügen"
 .toolStripButtonSubmitDistances: "&Submit Distances" => "Entfernungen &Übermitteln"
 .toolStripButtonNew: "Start &new" => "&Neu Starten"
-.toolStripButtonRemoveUnused: "toolStripButtonRemoveUnused" => "Unbenutzte entfernen"
-.toolStripButtonRemoveAll: "toolStripButton1" => "Alle entfernen"
-.toolStripButtonMap: "3d map" => "3D-Karte"
 .toolStripLabelSystem: "From System:" => "Von System:"
 .toolStripTextBoxSystem: "Press Start New" => "Klicke neu starten"
 .toolStripLabel1: "Visited without coordinates:" => "Besuchte ohne Koordinaten:"
@@ -1558,6 +1539,7 @@ SECTION UserControlMiningOverlay
 .Limcargo: "Limpets left {0}, Cargo left {1}" => "Drohnen übrig {0}, Fracht übrig {1}"
 
 SECTION UserControlFactions
+
 .colFaction: "Faction" => "Fraktion"
 .colMissions: "Missions" => "Missionen"
 .colInfluence: "Inf +" => "Einfl. +"
@@ -1602,7 +1584,6 @@ SECTION UserControlFactions
 .CapShipVictims: "Capital ship Victims: " => "Großkampfschiff Opfer: "
 .CapShipAward: "Capital ship Award: " => "Großkampfschiff Belohnung: "
 
-
 SECTION ScanDisplayUserControl
 
 .NSD: "No scan data available" => "Keine Scandaten verfügbar"
@@ -1622,10 +1603,9 @@ SECTION TagsForm
 .buttonMore: "+" => "+"
 .buttonMore.ToolTip: "Add more tags" => "Mehr Marken hinzufügen"
 TagsForm: "Tags" => "Marken"
-TagsForm.TN: "Tag name" => "Markenname"
-TagsForm.SI: "Select image for this tag" => "Wähle Bild für diese Marke"
-TagsForm.DE: "Delete entry" => "Eintrag löschen"
-
+.TN: "Tag name" => "Markenname"
+.SI: "Select image for this tag" => "Wähle Bild für diese Marke"
+.DE: "Delete entry" => "Eintrag löschen"
 
 SECTION FilterSelector
 
@@ -1638,10 +1618,11 @@ SECTION FilterSelector
 .Ship: "Ship" => "Schiff"
 .Mining: "Mining" => "Abbau"
 
-
 SECTION UserControlCommonBase
 
 .Copyingtexttoclipboardfailed: "Copying text to clipboard failed" => "Kopieren von Text in Zwischenablage fehlgeschlagen"
 
-CSV.Helpers.OpenFailed: "Failed to open " => "Fehler beim Öffnen von "
-CSV.Helpers.WriteFailed: "Failed to write to " => "Fehler beim Schreiben von "
+SECTION CSV
+
+.Helpers.OpenFailed: "Failed to open " => "Fehler beim Öffnen von "
+.Helpers.WriteFailed: "Failed to write to " => "Fehler beim Schreiben von "

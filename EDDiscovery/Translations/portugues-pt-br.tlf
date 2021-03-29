@@ -118,9 +118,9 @@ SECTION PopOutInfo
 .Settings.Title: "Settings" => "Configurações"
 .ScreenShot.Description: "Screen shot view" => "Mostrar a Foto da Tela"
 .ScreenShot.Title: "Screen Shot" => "Foto da Tela"
-.Grid.Description: "Grid (allows other panels to be placed in the it)" => "Grade (possibilita inserir, posicionar e redimensionar painéis ao seu interior)"
+.Grid.Description: "Grid (allows other panels to be placed in it)" => "Grade (possibilita inserir, posicionar e redimensionar painéis ao seu interior)"
 .Grid.Title: "Grid" => "Grade"
-.SplitterControl.Description: "Splitter (allows other panels to be placed in the it)" => "Divisor (permite criar todo tipo de layout com os painéis em seu interno)"
+.SplitterControl.Description: "Splitter (allows other panels to be placed in it)" => "Divisor (permite criar todo tipo de layout com os painéis em seu interno)"
 .SplitterControl.Title: "Splitter" => "Divisor"
 .PanelSelector.Description: "" @
 .PanelSelector.Title: "+" @
@@ -136,11 +136,26 @@ SECTION PopOutInfo
 .MaterialTrader.Description: "Material Trader" => "Mercador de Materiais"
 .EDSM.Title: "EDSM" @
 .EDSM.Description: "Automatic web view of EDSM page on system" => "Visualização automática da página web EDSM no sistema"
+.Inara.Title: "Inara" @
+.Inara.Description: "Inara - Automatic web view of system" @
+.Factions.Title: "Factions" @
+.Factions.Description: "Faction rewards and trading tally" @
+.Spansh.Title: "Spansh" @
+.Spansh.Description: "Spansh - Automatic web view of system" @
+.EDDB.Title: "EDDB" @
+.EDDB.Description: "EDDB - Automatic web view of system" @
 
 SECTION EDDiscoveryForm
 
 .ConfirmSyncToEDSM: "You have disabled sync to EDSM for this commander.  Are you sure you want to send unsynced events to EDSM?" => "Você desabilitou a sc=incronia da EDSM para este comandante. Tem certeza de que quer enviar dados não sincronizados a EDSM?"
 .ConfirmSyncToEDSMCaption: "Confirm EDSM sync" => "Confirma sincronização da EDSM"
+.SendEDSMCaption: "There are {0} EDSM reports to send, this will take time and bandwidth, choose from the following what to do. Entries before this will be marked as sent." @
+.SendEDSMAll: "Send All to EDSM" @
+.SendEDSM24: "Send Last 24 Hours of entries to EDSM" @
+.SendEDSMFrom: "Send From" @
+.SendEDSMNone: "EDSM is up to date - send Nothing more" @
+.SendEDSMCancel: "I'll decide later, do nothing" @
+.SendEDSMTitle: "Sending a large number of EDSM Entries" @
 .toolsToolStripMenuItem: "&Tools" => "In&strumentos"
 .toolsToolStripMenuItem.settingsToolStripMenuItem: "Settings" => "Configuração"
 .toolsToolStripMenuItem.show2DMapsToolStripMenuItem: "Show &2D maps" => "Visualizar mapa &2D"
@@ -162,7 +177,6 @@ SECTION EDDiscoveryForm
 .adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem: "Synchronise with EDSM" => "Sincronizar com EDSM"
 .adminToolStripMenuItem.sendUnsuncedEDDNEventsToolStripMenuItem: "Send unsynced EDDN events" => "Envia eventos EDDN não sincronizados"
 .adminToolStripMenuItem.sendHistoricDataToInaraToolStripMenuItem: "Send to Inara historic data (previous ships, stored modules)" => "Envia a Inara dados históricos (espaçonaves anteriores, modulos armazenados)"
-.adminToolStripMenuItem.clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem: "Clear EDSM ID assigned to all records for current commander" => "Limpoa o ID EDSM ligado a todos os registros do comandante atual"
 .adminToolStripMenuItem.exportVistedStarsListToEliteDangerousToolStripMenuItem: "Export Visited Stars List to Elite Dangerous" => "Envia a lista dos Sistemas Visitados a Elite Dangerous"
 .adminToolStripMenuItem.read21AndFormerLogFilesToolStripMenuItem.load21ToolStripMenuItem: "Scan Netlogs" @
 .adminToolStripMenuItem.DLLPermissionsToolStripMenuItem: "DLL Permissions (applies after restart)" @
@@ -201,10 +215,11 @@ SECTION EDDiscoveryForm
 .RTABT: "Rename Tab" => "Removi Aba"
 .RTABTT: "Enter a new name for the tab" => "Renomina a aba"
 .ThemeW: "The theme stored has missing colors or other missing information\r\nCorrect the missing colors or other information manually using the Theme Editor in Settings" => "O tema selecionado não possui informação sobre certas cores o outras impostações importantes. Por favor, corija o tema."
-.DLLW: "The following application extension DLs have been found\r\nDo you wish it to be used?\r\n\r\n{0} \r\n" => "As seguintes estensões DLL foram encontradas\r\nQuer permití-las de serem usadas?\r\n{0} \r\nSe não quer que sejam usadas, remova as DLL da pasta DLL de EDDiscovery\r\no remove a action pack que introduz este DLL\r\no pressiona shift na partida do programa e selecionar l'opção Removi as Estensões DLL"
+.DLLW: "The following application extension DLL have been found\r\nDo you wish it to be used?\r\n\r\n{0} \r\n" => "As seguintes estensões DLL foram encontradas\r\nQuer permití-las de serem usadas?\r\n{0} \r\nSe não quer que sejam usadas, remova as DLL da pasta DLL de EDDiscovery\r\no remove a action pack que introduz este DLL\r\no pressiona shift na partida do programa e selecionar l'opção Removi as Estensões DLL"
 .DLLL: "DLLs loaded: {0}" => "DLLs caricate: {0}"
 .DLLF: "DLLs failed to load: {0}" => "Impossível carregar DLLs: {0}"
 .IndexW: "Are you sure to Rebuild Indexes? It may take a long time." @
+.FillPos: "Scan your history, and for systems without co-ordinates,\r\ntry and fill them in from your system database\r\nConfirm?" @
 .RemoveDLLPerms: "Remove all DLL permissions, on next start, you will be asked per DLL if you wish to allow the DLL to run. Are you sure?" @
 .PROFL: "Profile {0} Loaded" => "Perfil {0} carregado"
 .NI: "New EDDiscovery installer available: {0}" => "Novo setup de EDDiscovery disponível: {0}"
@@ -226,7 +241,6 @@ SECTION EDDiscoveryForm
 .SDSyncErr: "Synchronisation to databases is in operation or pending, please wait" => "Sincronização ao banco dados em andamento, por favor esperar"
 .EDSMQ: "This can take a considerable amount of time and bandwidth\r\nConfirm you want to do this?" => "Esta operação pode precisar de muito tempo e muita franquia de uso de dados.\r\nConfirma?"
 .SafeMode: "To start in safe mode, exit the program, hold down the shift key\r\nand double click on the EDD program icon.  You will then be in the safe mode dialog.\r\nYou can reset various parameters and move the data bases to other locations." => "Para entrar no modo seguro, sai de programa, presiona shift\r\ne clica sobre a icona de programa. Deste modo, vai abrir o painel de dialogo do modo seguro.\r\nLi puoi reimpostare vari parametri e muovere i banchi dados in altre cartelle o dischi."
-.ResetEDSMID: "Confirm you wish to reset the assigned EDSM ID\r\nto all the current commander history entries,\r\nand clear all the assigned EDSM IDs in all your notes for all commanders\r\n\r\nThis will not change your history, but when you next refresh,\r\nit will try and reassign EDSM systems to your history and notes.\r\nUse only if you think that the assignment of EDSM systems to entries is grossly wrong,or notes are going missing\r\n\r\nYou can manually change one EDSM assigned system by right clicking\r\non the travel history and selecting the option" => "Confirma que quer reimpostar os registros de EDSM\r\nem todos os registros atuais dos comandantes,\r\ne limpar todas as anotações impostadas aos registros EDSM IDs por todos os comandantes?\r\n\r\nIsso nõa mudará teu histórico de viajem, ma no proximo refresco,\r\nvai tentar reimpostar os sistemas EDSM ao teu histórico.\r\nUsar somente se acredita que as ligações de EDSM aos teus registres estejam decisamente errados, o as anotações estejam faltando\r\n\r\nPode tranquilamente impostar manualmente um registro EDSM pressionando com o botão direito\r\nsobre o histórico de viajem e escolhendo esta opção"
 .ResetCMDR: "Confirm you wish to reset all history entries to the current commander" => "Confirma que deseja reimpostar todos os registros do comandante atual"
 .NoRel: "No new release found" => "Nenhuma nova versão encontrada"
 .RevFSD: "Confirm you remove any duplicate FSD entries from the current commander" => "Confirmar a rimoção dos registros FSD duplicados ao comandante atual"
@@ -237,7 +251,7 @@ SECTION EDDiscoveryForm
 .VSLFileErr: "Error writing {0} export visited stars" => "Erro escrevendo {0} esportações dos sistemas visitados"
 .InaraW: "Inara historic upload is disabled until 1 hour has elapsed from the last try to prevent server flooding" => "O envio do histórico a Inara é desabilitado por uma ora a partir do ultimo envio para evitar problemas ao servidor"
 .RH: "Refresh History." => "Refrescar o Histórico"
-.NoEDSMAPI: "Please ensure a commander is selected and it has a EDSM API key set" => "Por favor, verificar que um comandante esteja selecionado e que tenha uma chave de API EDSM impostada"
+.NoEDSMAPI: "No EDSM API key set" => "Por favor, verificar que um comandante esteja selecionado e que tenha uma chave de API EDSM impostada"
 .EDSMSyncE: "EDSM Sync failed: {0}" => "Sincronização EDSM falhou: {0}"
 .EP: "Edit Profiles" => "Modificar Perfíis"
 .PL: "Profile {0} Loaded" => "Perfil {0} Caregado"
@@ -250,6 +264,8 @@ SECTION EDDiscoveryForm
 .buttonExt3dmap: "3D" => "3D"
 .adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.fetchLogsAgainToolStripMenuItem: "Fetch Logs Again" => "Recupera novamente os registros"
 .adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.fetchStarDataAgainToolStripMenuItem: "Fetch Star Data Again" => "Recupera novamente os registro di esploração"
+.adminToolStripMenuItem.rebuildUserDBIndexesToolStripMenuItem: "Rebuild User DB Indexes" @
+.adminToolStripMenuItem.updateUnknownSystemCoordsWithDataFromSystemDBToolStripMenuItem: "Update systems with unknown co-ordinates" @
 .WSE: "Web server enabled" => "Servidor Web ativado"
 .WSF: "Web server failed to start" => "O servidor web não pude ser iniciádo"
 .WSERR: "Web server disabled due to incorrect folder or missing zip file" => "Servidor web desativado"
@@ -410,7 +426,6 @@ AssignTravelLogSystemForm: "AssignTravelLogSystemForm" => "Impostar Registro de 
 .label4: "Travel Log Coordinates:" => "Coordenadas do Registro de Viajem"
 .btnOK: "OK" @
 .label5: "System Coordinates" => "Coordanadas do Sistema"
-
 
 SECTION ExportForm
 
@@ -597,6 +612,16 @@ SECTION ExtPanelRollUp
 
 .RUPPin: "Pin to stop this menu bar disappearing automatically" => "Fixar para evitar que essa barra de menu desapareça automaticamente"
 .RUPMarker: "Click or hover over this to unroll the menu bar" => "Clique ou passe o mouse sobre para abrir a barra de menu"
+
+SECTION CommanderForm
+
+.CAPIGB: "Frontier CAPI" @
+.CAPILoggingin: "Logging in" @
+.CAPIDisabled: "Disabled" @
+.CAPILogout: "Logout" @
+.CAPILoggedin: "Logged in" @
+.CAPILogin: "Login" @
+.CAPIAwaitLogin: "Await Log in" @
 
 include translation-portugues-uc.tlp
 

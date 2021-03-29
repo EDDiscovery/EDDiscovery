@@ -118,9 +118,9 @@ SECTION PopOutInfo
 .Settings.Title: "Settings" => "Настройки"
 .ScreenShot.Description: "Screen shot view" => "Просмотр скриншотов"
 .ScreenShot.Title: "Screen Shot" => "Скриншоты"
-.Grid.Description: "Grid (allows other panels to be placed in the it)" => "Сетка для размещения других панелей"
+.Grid.Description: "Grid (allows other panels to be placed in it)" => "Сетка для размещения других панелей"
 .Grid.Title: "Grid" => "Сетка"
-.SplitterControl.Description: "Splitter (allows other panels to be placed in the it)" => "Разделитель для размещения других панелей"
+.SplitterControl.Description: "Splitter (allows other panels to be placed in it)" => "Разделитель для размещения других панелей"
 .SplitterControl.Title: "Splitter" => "Разделитель"
 .PanelSelector.Description: "" @
 .PanelSelector.Title: "+" @
@@ -136,11 +136,26 @@ SECTION PopOutInfo
 .MaterialTrader.Description: "Material Trader" @
 .EDSM.Title: "EDSM" @
 .EDSM.Description: "Automatic web view of EDSM page on system" @
+.Inara.Title: "Inara" @
+.Inara.Description: "Inara - Automatic web view of system" @
+.Factions.Title: "Factions" @
+.Factions.Description: "Faction rewards and trading tally" @
+.Spansh.Title: "Spansh" @
+.Spansh.Description: "Spansh - Automatic web view of system" @
+.EDDB.Title: "EDDB" @
+.EDDB.Description: "EDDB - Automatic web view of system" @
 
 SECTION EDDiscoveryForm
 
 .ConfirmSyncToEDSM: "You have disabled sync to EDSM for this commander.  Are you sure you want to send unsynced events to EDSM?" => "У этого командира отключена синхронизация с EDSM. Вы действительно хотите отправить несинхронизированные события в EDSM?"
 .ConfirmSyncToEDSMCaption: "Confirm EDSM sync" => "Подтвердить синхронизацию с EDSM"
+.SendEDSMCaption: "There are {0} EDSM reports to send, this will take time and bandwidth, choose from the following what to do. Entries before this will be marked as sent." @
+.SendEDSMAll: "Send All to EDSM" @
+.SendEDSM24: "Send Last 24 Hours of entries to EDSM" @
+.SendEDSMFrom: "Send From" @
+.SendEDSMNone: "EDSM is up to date - send Nothing more" @
+.SendEDSMCancel: "I'll decide later, do nothing" @
+.SendEDSMTitle: "Sending a large number of EDSM Entries" @
 .toolsToolStripMenuItem: "&Tools" => "Инструменты"
 .toolsToolStripMenuItem.settingsToolStripMenuItem: "Settings" => "Настройки"
 .toolsToolStripMenuItem.show2DMapsToolStripMenuItem: "Show &2D maps" => "2D-карта"
@@ -162,7 +177,6 @@ SECTION EDDiscoveryForm
 .adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem: "Synchronise with EDSM" => "Синхронизация с EDSM"
 .adminToolStripMenuItem.sendUnsuncedEDDNEventsToolStripMenuItem: "Send unsynced EDDN events" => "Отправить несинхронизированные события в EDDN"
 .adminToolStripMenuItem.sendHistoricDataToInaraToolStripMenuItem: "Send to Inara historic data (previous ships, stored modules)" => "Отправить записи истории (предыдущие корабли, модули в хранилище) в Inara"
-.adminToolStripMenuItem.clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem: "Clear EDSM ID assigned to all records for current commander" => "Удалить EDSM ID для всех записей текущего командира"
 .adminToolStripMenuItem.exportVistedStarsListToEliteDangerousToolStripMenuItem: "Export Visited Stars List to Elite Dangerous" => "Экспорт посещенных систем в Elite Dangerous"
 .adminToolStripMenuItem.read21AndFormerLogFilesToolStripMenuItem.load21ToolStripMenuItem: "Scan Netlogs" @
 .adminToolStripMenuItem.DLLPermissionsToolStripMenuItem: "DLL Permissions (applies after restart)" @
@@ -201,10 +215,11 @@ SECTION EDDiscoveryForm
 .RTABT: "Rename Tab" => "Переименовать вкладку"
 .RTABTT: "Enter a new name for the tab" => "Новое имя вкладки"
 .ThemeW: "The theme stored has missing colors or other missing information\r\nCorrect the missing colors or other information manually using the Theme Editor in Settings" => "В сохраненной теме отсутствуют цвета или другая информация.\r\nИсправьте это вручную с помощью редактора тем в настройках"
-.DLLW: "The following application extension DLs have been found\r\nDo you wish it to be used?\r\n\r\n{0} \r\n" => "Найдены следующие dll дополнений\r\nВы хотите их использовать?\r\n{0} \r\nЕсли нет, удалите dll из папки DLL программы\r\\или удалите соответствующие action pack,\r\\или удерживайте клавишу shift при запуске программы и выберите опцию «Удалить все dll дополнений»"
+.DLLW: "The following application extension DLL have been found\r\nDo you wish it to be used?\r\n\r\n{0} \r\n" => "Найдены следующие dll дополнений\r\nВы хотите их использовать?\r\n{0} \r\nЕсли нет, удалите dll из папки DLL программы\r\\или удалите соответствующие action pack,\r\\или удерживайте клавишу shift при запуске программы и выберите опцию «Удалить все dll дополнений»"
 .DLLL: "DLLs loaded: {0}" => "Загруженные dll: {0}"
 .DLLF: "DLLs failed to load: {0}" => "Не удалось загрузить dll: {0}"
 .IndexW: "Are you sure to Rebuild Indexes? It may take a long time." @
+.FillPos: "Scan your history, and for systems without co-ordinates,\r\ntry and fill them in from your system database\r\nConfirm?" @
 .RemoveDLLPerms: "Remove all DLL permissions, on next start, you will be asked per DLL if you wish to allow the DLL to run. Are you sure?" @
 .PROFL: "Profile {0} Loaded" => "Профиль {0} загружен"
 .NI: "New EDDiscovery installer available: {0}" => "Доступна новая версия EDDiscovery: {0}"
@@ -226,7 +241,6 @@ SECTION EDDiscoveryForm
 .SDSyncErr: "Synchronisation to databases is in operation or pending, please wait" => "Идет синхронизация с базой данных, пожалуйста, подождите"
 .EDSMQ: "This can take a considerable amount of time and bandwidth\r\nConfirm you want to do this?" => "На это может уйти много времени и трафика\r\nВы действительно хотите это сделать?"
 .SafeMode: "To start in safe mode, exit the program, hold down the shift key\r\nand double click on the EDD program icon.  You will then be in the safe mode dialog.\r\nYou can reset various parameters and move the data bases to other locations." => "Для входа в безопасный режим запустите программу, удерживая клавишу shift.\r\nОткроется меню безопасного режима, в котором вы сможете сбросить различные\r\nпараметры или переместить базу в другое место."
-.ResetEDSMID: "Confirm you wish to reset the assigned EDSM ID\r\nto all the current commander history entries,\r\nand clear all the assigned EDSM IDs in all your notes for all commanders\r\n\r\nThis will not change your history, but when you next refresh,\r\nit will try and reassign EDSM systems to your history and notes.\r\nUse only if you think that the assignment of EDSM systems to entries is grossly wrong,or notes are going missing\r\n\r\nYou can manually change one EDSM assigned system by right clicking\r\non the travel history and selecting the option" => "Вы действительно хотите сбросить назначенный EDSM ID для всех записей истории текущего командира\r\nи удалить все назначенные EDSM ID во всех ваших примечаниях для всех командиров?\r\n\r\nСами записи истории не изменятся, но при следующей синхронизации программа попытается добавить EDSM\r\nсистемы ко всем записям истории и примечаниям. Это нужно только если вы считаете, что EDSM системы совсем\r\nнеправильно привязались к записям или что потерялись примечания.\r\n\r\nВы можете вручную удалить систему, назначенную EDSM, щелкнув правой кнопкой мыши в истории полетов\r\nи выбрав эту опцию."
 .ResetCMDR: "Confirm you wish to reset all history entries to the current commander" => "Вы действительно хотите сбросить все записи истории для текущего командира?"
 .NoRel: "No new release found" => "Новая версия программы не найдена"
 .RevFSD: "Confirm you remove any duplicate FSD entries from the current commander" => "Вы действительно хотите удалить все дубликаты FSD записей для текущего командира?"
@@ -237,7 +251,7 @@ SECTION EDDiscoveryForm
 .VSLFileErr: "Error writing {0} export visited stars" => "Ошибка записи файла экспорта посещенных систем {0}"
 .InaraW: "Inara historic upload is disabled until 1 hour has elapsed from the last try to prevent server flooding" => "Загрузка на Inara отключена на 1 час, чтобы предотвратить перегрузку сервера"
 .RH: "Refresh History." => "Обновить историю."
-.NoEDSMAPI: "Please ensure a commander is selected and it has a EDSM API key set" => "Убедитесь, что выбран командир и установлен EDSM API key"
+.NoEDSMAPI: "No EDSM API key set" => "Убедитесь, что выбран командир и установлен EDSM API key"
 .EDSMSyncE: "EDSM Sync failed: {0}" => "Синхронизация с EDSM не удалась: {0}"
 .EP: "Edit Profiles" => "Изменить профили"
 .PL: "Profile {0} Loaded" => "Профиль {0} загружен"
@@ -250,6 +264,8 @@ SECTION EDDiscoveryForm
 .buttonExt3dmap: "3D" @
 .adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.fetchLogsAgainToolStripMenuItem: "Fetch Logs Again" => "Еще раз получить логи"
 .adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.fetchStarDataAgainToolStripMenuItem: "Fetch Star Data Again" => "Еще раз получить данные о системах"
+.adminToolStripMenuItem.rebuildUserDBIndexesToolStripMenuItem: "Rebuild User DB Indexes" @
+.adminToolStripMenuItem.updateUnknownSystemCoordsWithDataFromSystemDBToolStripMenuItem: "Update systems with unknown co-ordinates" @
 .WSE: "Web server enabled" @
 .WSF: "Web server failed to start" @
 .WSERR: "Web server disabled due to incorrect folder or missing zip file" @
@@ -410,7 +426,6 @@ AssignTravelLogSystemForm: "AssignTravelLogSystemForm" => "Назначить с
 .label4: "Travel Log Coordinates:" => "Координаты в журнале полетов:"
 .btnOK: "OK" @
 .label5: "System Coordinates" => "Координаты системы"
-
 
 SECTION ExportForm
 
@@ -597,6 +612,16 @@ SECTION ExtPanelRollUp
 
 .RUPPin: "Pin to stop this menu bar disappearing automatically" @
 .RUPMarker: "Click or hover over this to unroll the menu bar" @
+
+SECTION CommanderForm
+
+.CAPIGB: "Frontier CAPI" @
+.CAPILoggingin: "Logging in" @
+.CAPIDisabled: "Disabled" @
+.CAPILogout: "Logout" @
+.CAPILoggedin: "Logged in" @
+.CAPILogin: "Login" @
+.CAPIAwaitLogin: "Await Log in" @
 
 include translation-russian-uc.tlp
 

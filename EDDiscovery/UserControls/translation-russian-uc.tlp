@@ -19,6 +19,7 @@ SECTION UserControlBookmarks
 .SysU: "System could not be found - has not been synched or EDSM is unavailable" => "Не удалось найти систему, нет синхронизации или доступа к EDSM"
 .buttonExtImport.ToolTip: "Import bookmarks to EDD from CSV file" => "Импорт закладок из csv-файла в EDD"
 .buttonExtExcel.ToolTip: "Export bookmarks to CSV file" => "Экспорт закладок в csv-файл"
+.extButtonEditSystem.ToolTip: "Edit Bookmark on current system" @
 
 SECTION UserControlCombatPanel
 
@@ -43,6 +44,7 @@ SECTION UserControlCombatPanel
 .labelTotalCrimes.ToolTip: "How many times you've been caught!" => "Сколько раз вас поймали"
 .labelFaction.ToolTip: "Target Faction" => "Целевая фракция"
 .labelTotalReward.ToolTip: "Total reward" => "Общая награда"
+.labelDied: "Died" @
 .labelFactionReward.ToolTip: "Reward associated with destroying the faction ships" => "Награда за уничтожение фракционных кораблей"
 .checkBoxCustomGridOn.ToolTip: "Show grid when in transparent mode" => "Показывать сетку в режиме прозрачности"
 .comboBoxCustomCampaign.ToolTip: "Select Campaign to view" => "Выберите кампанию для просмотра"
@@ -177,7 +179,7 @@ SECTION UserControlEngineering
 SECTION UserControlEstimatedValues
 
 .BodyName: "Body Name" => "Название тела"
-.EstValue: "Est Value" => "Примерная стоимость"
+.EstValue: "Current Value" => "Примерная стоимость"
 .EstBase: "Base Value" @
 .MappedValue: "Mapped" @
 .FirstDiscovered: "First Discovered" @
@@ -226,14 +228,18 @@ SECTION UserControlExpedition
 .NoRouteExport: "There is no route to export " => "Нет маршрута для экспорта"
 .Export: "Export route" => "Экспорт маршрута"
 .UnknownS: "Unknown system, system is without co-ordinates" => "Неизвестная система, у системы нет координат"
-.Unsaved: "There are unsaved changes to the current route.\r\nWould you like to save the current route before proceeding?" => "Изменения текущего маршрута не сохранены.\r\nСохранить маршрут перед продолжением?"
+.Unsaved: "Expedition - There are unsaved changes to the current route.\r\nWould you like to save the current route before proceeding?" => "Изменения текущего маршрута не сохранены.\r\nСохранить маршрут перед продолжением?"
 .Specify: "Please specify a name for the route." => "Введите название маршрута"
 .Conflict: "The current route name conflicts with a well-known expedition.\r\nPlease specify a new name to save your changes." => "Текущее название маршрута конфликтует с названием известной экспедиции\r\nВыберите другое имя."
 .Overwrite: "Warning: route already exists. Would you like to overwrite it?" => "Внимание: маршрут уже существует. Вы действительно хотите его перезаписать?"
 .EDSMUnk: "System not known to EDSM" => "Система неизвестна в EDSM"
+.ColumnX: "X" @
+.ColumnY: "Y" @
+.ColumnZ: "Z" @
 
 SECTION UserControlExploration
 
+.LoseAllChanges: "Exploration List, Confirm you want to lose all changes" @
 .ColumnSystemName: "System Name" => "Название системы"
 .ColumnDist: "Dist" => "Расстояние"
 .ColumnX: "X" @
@@ -443,6 +449,7 @@ SECTION UserControlSurveyor
 .autoHideToolStripMenuItem: "Auto Hide" @
 .dontHideInFSSModeToolStripMenuItem: "Don\\'t Hide in FSS Mode" @
 .showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem: "Show System Info Always" @
+.selectFSSSignalsShownToolStripMenuItem: "Select FSS Signals Shown" @
 .LowRadius: " Low Radius." @
 .Mapped: " (Mapped & Discovered)" @
 .Systemscancomplete: "System scan complete." => "Сканирование системы завершено"
@@ -625,7 +632,6 @@ SECTION UserControlPlot
 .D1: "\r\n{0} distance {1:N2} Ly" => "\r\n{0}, расстояние: {1:N2} св. л."
 .D2: "\r\n    Visits: {0}" => "\r\n    Посещений: {0}"
 .D3: "\r\n    Coordinates: X:{0:N2}, Y:{1:N2}, Z:{2:N2}\r\n" => "\r\n    Координаты: X:{0:N2}, Y:{1:N2}, Z:{2:N2}\r\n"
-.Nt": "\r\n    Notes: {0}\r\n" @
 
 SECTION UserControlRoute
 
@@ -684,6 +690,8 @@ SECTION UserControlRoute
 
 SECTION UserControlRouteTracker
 
+.Note: "Note: {0}" @
+.showBookmarkNotesToolStripMenuItem: "Show Bookmark Notes" @
 .setRouteToolStripMenuItem: "Set route" => "Выбрать маршрут"
 .showJumpsToolStripMenuItem: "Show Jumps To Go" => "Показать количество прыжков до цели"
 .showWaypointCoordinatesToolStripMenuItem: "Show Waypoint Coordinates" => "Показать координаты точки маршрута"
@@ -708,6 +716,7 @@ SECTION UserControlRouteTracker
 
 SECTION UserControlScan
 
+.Expired: "Expired:" @
 .System: "System:" => "Система:"
 .EnterSys: "Show System" => "Выбор системы"
 .VLMT: "Set Valuable Minimum" => "Выбор минимальной стоимости скана, кр."
@@ -892,7 +901,7 @@ SECTION UserControlSettings
 .radioButtonCentreHome: "Home System" => "дом. системе"
 .labelOpenOn: "Open Centred On" => "Центрировать на"
 .labelHome: "Now in Commander Settings" => "Дом. система"
-.Font: "The font used by this theme is not available on your system.\r\nThe font needed is \\"{0}\\".\r\nInstall this font to fully use this theme.\r\nEuro Caps font is freely available from www.edassets.org.\r\n\r\nWould you like to load this theme using a replacement font?" => "Шрифт \\"{0}\\", используемый этой темой, не установлен в вашей системе\r\nЧтобы тема отображалась, как задумано, пожалуйста, установите этот шрифт.\r\nШрифт 'Euro Caps' доступен бесплатно на сайте www.edassets.org\r\n\r\nХотите загрузить эту тему с измененным шрифтом?"
+.Font: "The font used by this theme is not available on your system.\r\nThe font needed is \\"{0}\\".\r\nInstall this font to fully use this theme.\r\nEuro Caps font is freely available from www.edassets.org.\r\n\r\nWould you like to load this theme using a replacement font?" @
 .Information: "Applies at next restart of ED Discovery" => "Изменения вступят в силу после перезапуска ED Discovery"
 .AddC: "Commander name is not valid or duplicate" => "Неправильное или дублирующееся имя командира"
 .AddT: "Cannot create Commander" => "Не удалось создать командира"
@@ -986,7 +995,6 @@ SECTION UserControlSpanel
 .showCircumstellarZonesToolStripMenuItem.showIcyPlanetsToolStripMenuItem: "Icy Planets" => "Ледяные планеты"
 .dontShowInformationWhenToolStripMenuItem.completelyHideThePanelToolStripMenuItem: "Completely hide the Panel" => "Полностью скрыть панель"
 .dontShowInformationWhenToolStripMenuItem.dontshowwhenInPanelToolStripMenuItem: ".. when in a Panel" => "...на панели"
-.Goldilocks: "Goldilocks, {0} ({1}-{2} AU),\n" => "зона Златовласки, {0} ({1}-{2} а. е.),\n"
 
 SECTION UserControlStarDistance
 
@@ -1061,30 +1069,26 @@ SECTION UserControlStarList
 
 SECTION UserControlStats
 
-.tosystem: " to system " @
+.labelStart: "Start" @
+.labelEndDate: "To" @
 .tabControlCustomStats.tabPageGeneral: "General" => "Общая"
 .tabControlCustomStats.tabPageGeneral.mostVisited: "Most Visited" => "Наиболее посещаемые"
 .tabControlCustomStats.tabPageGeneral.ItemName: "Item" => "Наименование"
 .tabControlCustomStats.tabPageGeneral.Information: "Information" => "Информация"
 .tabControlCustomStats.tabPageTravel: "Travel" => "Полеты"
-.tabControlCustomStats.tabPageTravel.dataGridViewTextBoxColumn1: "Item" => "Наименование"
-.tabControlCustomStats.tabPageTravel.dataGridViewTextBoxColumn2: "Information" => "Информация"
 .tabControlCustomStats.tabPageTravel.userControlStatsTimeTravel.labelTime: "Time" => "Время"
 .tabControlCustomStats.tabPageScan: "Scan" => "Сканы"
-.tabControlCustomStats.tabPageScan.ScanNotUsed: "Column1" => "Колонка 1"
 .tabControlCustomStats.tabPageScan.userControlStatsTimeScan.labelTime: "Time" => "Время"
 .tabControlCustomStats.tabPageGameStats: "In Game" => "По игре"
-.Visits: "Visits" => "Посещений"
-.Type: "Type" => "Тип"
-.All: "All" => "Всего"
-.JumpsBeforeSystem: "Jumps Before System" => "Прыжков до этой системы"
+.tabControlCustomStats.tabPageByShip: "By Ship" => "По кораблям"
 .TotalNoofjumps: "Total No of jumps: " => "Общее число прыжков"
+.FSDjumps: "FSD Jumps" @
+.Beltcluster: "Belt Cluster: " @
 .JumpHistory: "Jump History" => "Всего прыжков"
 .24hc: "24 Hours: " => "за 24 ч.: "
 .OneWeek: ", One Week: " => ", за неделю: "
 .30Days: ", 30 Days: " => ", за месяц: "
 .OneYear: ", One Year: " => ", за год: "
-.FirstDiscoveries: "First Discoveries" => "Открыто первым"
 .MostNorth: "Most North" => "Самая северная точка"
 .MostSouth: "Most South" => "Самая южная точка"
 .MostEast: "Most East" => "Самая восточная точка"
@@ -1092,26 +1096,32 @@ SECTION UserControlStats
 .MostHighest: "Most Highest" => "Самая высокая точка"
 .MostLowest: "Most Lowest" => "Самая низкая точка"
 .MostVisited: "Most Visited" => "Самые посещаемые системы"
-.24Hours: "24 Hours" => "За 24 ч."
-.Week: "Week" => "За неделю"
-.Month: "Month" => "За месяц"
-.Lastdock: "Last dock" => "С последней стыковки"
 .Jumps: "Jumps" => "Прыжков"
-.TraveledLy: "Traveled Ly" => "Всего св. л."
+.TravelledLy: "Traveled Ly" => "Пройдено св. л."
 .PremiumBoost: "Premium Boost" => "Премиум вбросов"
 .StandardBoost: "Standard Boost" => "Стандартных вбросов"
 .BasicBoost: "Basic Boost" => "Базовых вбросов"
 .JetConeBoost: "Jet Cone Boost" => "Перегрузок FSD (джет)"
-.Landed: "Landed" => "Посадок"
-.HeatWarning: "Heat Warning" => "Перегревов"
-.Heatdamage: "Heat damage" => "Повреждений от перегрева"
-.FuelScooped: "Fuel Scooped" => "Заправок от звезд"
-.ScoopedTons: "Scooped Tons" => "Собрано топлива (т)"
 .Scans: "Scans" => "Отсканировано"
+.Mapped: "Mapped" => "Картографировано"
 .Scanvalue: "Scan value" => "Стоимость сканов"
-.Docked: "Docked" => "Стыковок"
-.BodyType: "Body Type" => "Тип тела"
+.Lastdock: "Last dock" => "С последней стыковки"
 .Trip: "Trip" => "Полет"
+.All: "All" => "Всего"
+.Type: "Type" => "Тип"
+.BankAccount: "Bank Account" => "Баланс"
+.Combat: "Combat" => "Бои"
+.Crime: "Crime" => "Преступления"
+.Smuggling: "Smuggling" => "Контрабанда"
+.Trading: "Trading" => "Торговля"
+.Mining: "Mining" => "Добыча ресурсов"
+.Exploration: "Exploration" => "Исследование"
+.Passengers: "Passengers" => "Пассажиры"
+.SearchandRescue: "Search and Rescue" => "Спасательные операции"
+.Crafting: "Crafting" => "Изготовление"
+.Crew: "Crew" => "Экипаж"
+.Multi: "Multi-crew" @
+.MaterialsTrader: "Materials Trader" => "Торговля материалами"
 .CurrentAssets: "Current Assets" => "Текущие активы"
 .SpentonShips: "Spent on Ships" => "Затраты на корабли"
 .SpentonOutfitting: "Spent on Outfitting" => "Затраты на снаряжение"
@@ -1182,29 +1192,20 @@ SECTION UserControlStats
 .TME: "{0} days {1} hours {1} minutes" => "{0} дн. {1} ч. {2} мин."
 .Name: "Name" => "Название"
 .Ident: "Ident" => "Идентификатор"
-.TravelledLy: "Travelled Ly" => "Пройдено св. л."
 .BodiesScanned: "Bodies Scanned" => "Отсканировано тел"
+.Destroyed: "Destroyed" => "Разрушено"
 .GoodsBought: "Goods Bought" => "Куплено товаров"
 .GoodsSold: "Goods Sold" => "Продано товаров"
-.Destroyed: "Destroyed" => "Разрушено"
-.Unknown: "Unknown" => "Неизвестно"
-.tabControlCustomStats.tabPageByShip: "By Ship" => "По кораблям"
-.tabControlCustomStats.tabPageByShip.dataGridViewTextBoxColumn3: "Item" => "Наименование"
-.tabControlCustomStats.tabPageByShip.dataGridViewTextBoxColumn4: "Information" => "Информация"
-.Mapped: "Mapped" => "Картографировано"
-.BankAccount: "Bank Account" => "Баланс"
-.Combat: "Combat" => "Бои"
-.Crime: "Crime" => "Преступления"
-.Smuggling: "Smuggling" => "Контрабанда"
-.Trading: "Trading" => "Торговля"
-.Mining: "Mining" => "Добыча ресурсов"
-.Exploration: "Exploration" => "Исследование"
-.Passengers: "Passengers" => "Пассажиры"
-.SearchandRescue: "Search and Rescue" => "Спасательные операции"
-.Crafting: "Crafting" => "Изготовление"
-.Crew: "Crew" => "Экипаж"
-.Multi: "Multi-crew" @
-.MaterialsTrader: "Materials Trader" => "Торговля материалами"
+.EfficientScans: "Efficient Scans" @
+.Accepted: "Accepted" @
+.Disgruntled: "Disgruntled" @
+.EncodedMaterialsTraded: "Encoded Materials Traded" @
+.RawMaterialsTraded: "Raw Materials Traded" @
+.G1MaterialsTraded: "Grade 1 Materials Traded" @
+.G2MaterialsTraded: "Grade 2 Materials Traded" @
+.G3MaterialsTraded: "Grade 3 Materials Traded" @
+.G4MaterialsTraded: "Grade 4 Materials Traded" @
+.G5MaterialsTraded: "Grade 5 Materials Traded" @
 
 SECTION StatsTimeUserControl
 
@@ -1331,6 +1332,7 @@ SECTION UserControlContainerSplitter
 
 SECTION UserControlTravelGrid
 
+.showSystemVisitedForeColourToolStripMenuItem: "Show lines in System Visited Fore Colour" @
 .THF: "History: Filter out fields" => "История полетов: фильтры полей"
 .ColumnTime: "Time" => "Время"
 .Icon: "Event" => "Событие"
@@ -1397,6 +1399,7 @@ SECTION UserControlTravelGrid
 .addToTrilaterationToolStripMenuItem.explorationPanelToolStripMenuItem: "Exploration Panel" => "Панели исследований"
 .runSelectionThroughIGAUDebugToolStripMenuItem: "Run selection through IGAU (Debug)" @
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
+.runSelectionThroughEDAstroDebugToolStripMenuItem: "Run selection through EDAstro (Debug)" @
 
 SECTION UserControlCaptainsLog
 
@@ -1454,9 +1457,6 @@ SECTION UserControlTrilateration
 .pasteToolStripMenuItem: "Paste" => "Вставить"
 .toolStripButtonSubmitDistances: "&Submit Distances" => "Передать расстояние"
 .toolStripButtonNew: "Start &new" => "Начать новую"
-.toolStripButtonRemoveUnused: "toolStripButtonRemoveUnused" => "Удалить неиспользуемые записи"
-.toolStripButtonRemoveAll: "toolStripButton1" => "Удалить все записи"
-.toolStripButtonMap: "3d map" => "3D-карта"
 .toolStripLabelSystem: "From System:" => "Из системы:"
 .toolStripTextBoxSystem: "Press Start New" => "Нажмите «Начать новую»"
 .toolStripLabel1: "Visited without coordinates:" => "Посещено без координат:"
@@ -1580,6 +1580,9 @@ SECTION UserControlFactions
 .showCommoditymaterialTradesForFactionToolStripMenuItem: "Show commodity/material trades for faction" @
 .showBountiesAndBondsForFactionToolStripMenuItem: "Show bounties and bonds for faction" @
 .showFactionSystemDetailToolStripMenuItem: "Show system detail for faction" @
+.MissionsInProgress: "Missions In Progress:" @
+.CapShipVictims: "Capital ship Victims: " @
+.CapShipAward: "Capital ship Award: " @
 
 SECTION ScanDisplayUserControl
 
@@ -1613,6 +1616,7 @@ SECTION FilterSelector
 .Commodities: "Commodities" => "Товары"
 .Ledger: "Ledger" => "Финансы"
 .Ship: "Ship" => "Корабли"
+.Mining: "Mining" @
 
 SECTION UserControlCommonBase
 

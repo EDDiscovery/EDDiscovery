@@ -118,9 +118,9 @@ SECTION PopOutInfo
 .Settings.Title: "Settings" => "设置"
 .ScreenShot.Description: "Screen shot view" => "查看截图"
 .ScreenShot.Title: "Screen Shot" => "截图"
-.Grid.Description: "Grid (allows other panels to be placed in the it)" => "自定义布局 (可自定义显示的面板和位置)"
+.Grid.Description: "Grid (allows other panels to be placed in it)" => "自定义布局 (可自定义显示的面板和位置)"
 .Grid.Title: "Grid" => "自定义布局"
-.SplitterControl.Description: "Splitter (allows other panels to be placed in the it)" => "分屏布局 (可自定义想要分屏显示的面板，右击分隔栏可用更多选项)"
+.SplitterControl.Description: "Splitter (allows other panels to be placed in it)" => "分屏布局 (可自定义想要分屏显示的面板，右击分隔栏可用更多选项)"
 .SplitterControl.Title: "Splitter" => "分屏布局"
 .PanelSelector.Description: "" @
 .PanelSelector.Title: "+" @
@@ -136,11 +136,26 @@ SECTION PopOutInfo
 .MaterialTrader.Description: "Material Trader" @
 .EDSM.Title: "EDSM" @
 .EDSM.Description: "Automatic web view of EDSM page on system" @
+.Inara.Title: "Inara" @
+.Inara.Description: "Inara - Automatic web view of system" @
+.Factions.Title: "Factions" @
+.Factions.Description: "Faction rewards and trading tally" @
+.Spansh.Title: "Spansh" @
+.Spansh.Description: "Spansh - Automatic web view of system" @
+.EDDB.Title: "EDDB" @
+.EDDB.Description: "EDDB - Automatic web view of system" @
 
 SECTION EDDiscoveryForm
 
 .ConfirmSyncToEDSM: "You have disabled sync to EDSM for this commander.  Are you sure you want to send unsynced events to EDSM?" @
 .ConfirmSyncToEDSMCaption: "Confirm EDSM sync" @
+.SendEDSMCaption: "There are {0} EDSM reports to send, this will take time and bandwidth, choose from the following what to do. Entries before this will be marked as sent." @
+.SendEDSMAll: "Send All to EDSM" @
+.SendEDSM24: "Send Last 24 Hours of entries to EDSM" @
+.SendEDSMFrom: "Send From" @
+.SendEDSMNone: "EDSM is up to date - send Nothing more" @
+.SendEDSMCancel: "I'll decide later, do nothing" @
+.SendEDSMTitle: "Sending a large number of EDSM Entries" @
 .toolsToolStripMenuItem: "&Tools" => "工具(&T)"
 .toolsToolStripMenuItem.settingsToolStripMenuItem: "Settings" => "设置(&S)"
 .toolsToolStripMenuItem.show2DMapsToolStripMenuItem: "Show &2D maps" => "显示&2D星图"
@@ -162,7 +177,6 @@ SECTION EDDiscoveryForm
 .adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem: "Synchronise with EDSM" => "手动与EDSM同步获取星系数据"
 .adminToolStripMenuItem.sendUnsuncedEDDNEventsToolStripMenuItem: "Send unsynced EDDN events" => "发送未同步的EDDN事件"
 .adminToolStripMenuItem.sendHistoricDataToInaraToolStripMenuItem: "Send to Inara historic data (previous ships, stored modules)" => "向Inara发送历史数据（之前的飞船，储存的飞船模块）"
-.adminToolStripMenuItem.clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem: "Clear EDSM ID assigned to all records for current commander" => "清除当前指挥官的所有航行记录条目的EDSM ID"
 .adminToolStripMenuItem.exportVistedStarsListToEliteDangerousToolStripMenuItem: "Export Visited Stars List to Elite Dangerous" => "导出访问过的星系列表至游戏"
 .adminToolStripMenuItem.read21AndFormerLogFilesToolStripMenuItem.load21ToolStripMenuItem: "Scan Netlogs" @
 .adminToolStripMenuItem.DLLPermissionsToolStripMenuItem: "DLL Permissions (applies after restart)" @
@@ -201,10 +215,11 @@ SECTION EDDiscoveryForm
 .RTABT: "Rename Tab" => "重命名标签页"
 .RTABTT: "Enter a new name for the tab" => "请输入一个新的标题"
 .ThemeW: "The theme stored has missing colors or other missing information\r\nCorrect the missing colors or other information manually using the Theme Editor in Settings" => "储存的主题有缺失的颜色或者缺失的信息\r\n请从设置面板里手动修改缺失的颜色或其他信息。"
-.DLLW: "The following application extension DLs have been found\r\nDo you wish it to be used?\r\n\r\n{0} \r\n" => "已发现以下应用扩展DLL\r\n是否允许使用？\r\n{0} \r\n如果不允许使用的话，请把该DLL从EDDiscovery的DLL文件夹中删除\r\n或者卸载包含此DLL的插件包\r\n再不然可以按住Shift键的同时双击EDDiscovery的图标进入安全模式使用移除所有扩展DLL的选项。"
+.DLLW: "The following application extension DLL have been found\r\nDo you wish it to be used?\r\n\r\n{0} \r\n" => "已发现以下应用扩展DLL\r\n是否允许使用？\r\n{0} \r\n如果不允许使用的话，请把该DLL从EDDiscovery的DLL文件夹中删除\r\n或者卸载包含此DLL的插件包\r\n再不然可以按住Shift键的同时双击EDDiscovery的图标进入安全模式使用移除所有扩展DLL的选项。"
 .DLLL: "DLLs loaded: {0}" => "已加载DLL：{0}"
 .DLLF: "DLLs failed to load: {0}" => "DLL加载失败：{0}"
 .IndexW: "Are you sure to Rebuild Indexes? It may take a long time." @
+.FillPos: "Scan your history, and for systems without co-ordinates,\r\ntry and fill them in from your system database\r\nConfirm?" @
 .RemoveDLLPerms: "Remove all DLL permissions, on next start, you will be asked per DLL if you wish to allow the DLL to run. Are you sure?" @
 .PROFL: "Profile {0} Loaded" => "配置文件“{0}”已加载"
 .NI: "New EDDiscovery installer available: {0}" => "可更新至新版本：{0}"
@@ -226,7 +241,6 @@ SECTION EDDiscoveryForm
 .SDSyncErr: "Synchronisation to databases is in operation or pending, please wait" => "同步数据至数据库正在进行中或者即将开始，请稍等"
 .EDSMQ: "This can take a considerable amount of time and bandwidth\r\nConfirm you want to do this?" => "这个操作将花费很长时间并会占用很多宽带\r\n你确定要继续？"
 .SafeMode: "To start in safe mode, exit the program, hold down the shift key\r\nand double click on the EDD program icon.  You will then be in the safe mode dialog.\r\nYou can reset various parameters and move the data bases to other locations." => "如需进入安全模式的话，先退出该程序，按住Shift键并双击EDDiscovery的程序图标。\r\n这样你就会进入安全模式的对话框。\r\n在安全模式下你可以重置多种设置参数，以及移动数据库位置。"
-.ResetEDSMID: "Confirm you wish to reset the assigned EDSM ID\r\nto all the current commander history entries,\r\nand clear all the assigned EDSM IDs in all your notes for all commanders\r\n\r\nThis will not change your history, but when you next refresh,\r\nit will try and reassign EDSM systems to your history and notes.\r\nUse only if you think that the assignment of EDSM systems to entries is grossly wrong,or notes are going missing\r\n\r\nYou can manually change one EDSM assigned system by right clicking\r\non the travel history and selecting the option" => "确认你想要重置当前指挥官的所有航行记录条目的EDSM ID，\r\n和所有指挥官的所有笔记的EDSM ID吗？\r\n这个操作并不会更改你的航行记录，但是当你下次刷新航行记录时\r\nEDDiscovery将会重新把EDSM的星系与你的航行记录和笔记进行链接。\r\n仅在当你觉得EDSM星系分配发生大量错位或者笔记消失时使用。\r\n你可以手动编辑单条与EDSM链接的星系，右击FSD跳跃条目选择指定新的星系。"
 .ResetCMDR: "Confirm you wish to reset all history entries to the current commander" => "请确认你想要把所有航行记录移动到当前指挥官名下"
 .NoRel: "No new release found" => "已是最新版本"
 .RevFSD: "Confirm you remove any duplicate FSD entries from the current commander" => "请确认你想要移除当前指挥官名下重复的FSD跳跃记录"
@@ -237,7 +251,7 @@ SECTION EDDiscoveryForm
 .VSLFileErr: "Error writing {0} export visited stars" => "导出访问过的星系失败，无法写入文件 {0}"
 .InaraW: "Inara historic upload is disabled until 1 hour has elapsed from the last try to prevent server flooding" => "为防止服务器泛洪，Inara历史数据上传已被禁用直到与上次上传相间1个小时为止"
 .RH: "Refresh History." => "刷新航行记录。"
-.NoEDSMAPI: "Please ensure a commander is selected and it has a EDSM API key set" => "请确保你已选中一个指挥官并且设置了EDSM的API Key！"
+.NoEDSMAPI: "No EDSM API key set" => "请确保你已选中一个指挥官并且设置了EDSM的API Key！"
 .EDSMSyncE: "EDSM Sync failed: {0}" => "EDSM同步失败：{0}"
 .EP: "Edit Profiles" => "编辑配置文件"
 .PL: "Profile {0} Loaded" => "配置文件{0}已加载"
@@ -250,6 +264,8 @@ SECTION EDDiscoveryForm
 .buttonExt3dmap: "3D" @
 .adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.fetchLogsAgainToolStripMenuItem: "Fetch Logs Again" => "重新获取日志"
 .adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.fetchStarDataAgainToolStripMenuItem: "Fetch Star Data Again" => "重新获取星系数据"
+.adminToolStripMenuItem.rebuildUserDBIndexesToolStripMenuItem: "Rebuild User DB Indexes" @
+.adminToolStripMenuItem.updateUnknownSystemCoordsWithDataFromSystemDBToolStripMenuItem: "Update systems with unknown co-ordinates" @
 .WSE: "Web server enabled" @
 .WSF: "Web server failed to start" @
 .WSERR: "Web server disabled due to incorrect folder or missing zip file" @
@@ -274,7 +290,6 @@ SECTION EDDiscoveryController
 .Maps: "Checking for new EDDiscovery maps" => "检查新的EDDiscovery地图中"
 .EXPD: "Checking for new Expedition data" => "检查新的远航数据中"
 .EXPL: "Checking for new Exploration data" => "检查新的探索数据中"
-
 
 SECTION BookmarkForm
 
@@ -411,7 +426,6 @@ AssignTravelLogSystemForm: "AssignTravelLogSystemForm" => "指向至新的星系
 .label4: "Travel Log Coordinates:" => "航行纪录中的坐标："
 .btnOK: "OK" => "确认"
 .label5: "System Coordinates" => "星系坐标"
-
 
 SECTION ExportForm
 
@@ -598,6 +612,16 @@ SECTION ExtPanelRollUp
 
 .RUPPin: "Pin to stop this menu bar disappearing automatically" @
 .RUPMarker: "Click or hover over this to unroll the menu bar" @
+
+SECTION CommanderForm
+
+.CAPIGB: "Frontier CAPI" @
+.CAPILoggingin: "Logging in" @
+.CAPIDisabled: "Disabled" @
+.CAPILogout: "Logout" @
+.CAPILoggedin: "Logged in" @
+.CAPILogin: "Login" @
+.CAPIAwaitLogin: "Await Log in" @
 
 include translation-chinese-uc.tlp
 

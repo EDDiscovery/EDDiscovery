@@ -19,6 +19,7 @@ SECTION UserControlBookmarks
 .SysU: "System could not be found - has not been synched or EDSM is unavailable" => "无法找到该星系，该星系未被同步或者EDSM现在不可用。"
 .buttonExtImport.ToolTip: "Import bookmarks to EDD from CSV file" @
 .buttonExtExcel.ToolTip: "Export bookmarks to CSV file" @
+.extButtonEditSystem.ToolTip: "Edit Bookmark on current system" @
 
 SECTION UserControlCombatPanel
 
@@ -43,6 +44,7 @@ SECTION UserControlCombatPanel
 .labelTotalCrimes.ToolTip: "How many times you've been caught!" => "你被抓了几次？"
 .labelFaction.ToolTip: "Target Faction" => "目标派系"
 .labelTotalReward.ToolTip: "Total reward" => "总报酬"
+.labelDied: "Died" @
 .labelFactionReward.ToolTip: "Reward associated with destroying the faction ships" => "摧毁目标派系所得的报酬"
 .checkBoxCustomGridOn.ToolTip: "Show grid when in transparent mode" => "透明模式下显示网格"
 .comboBoxCustomCampaign.ToolTip: "Select Campaign to view" => "选择要浏览的战役"
@@ -177,7 +179,7 @@ SECTION UserControlEngineering
 SECTION UserControlEstimatedValues
 
 .BodyName: "Body Name" => "星体名称"
-.EstValue: "Est Value" => "预计价值"
+.EstValue: "Current Value" => "预计价值"
 .EstBase: "Base Value" @
 .MappedValue: "Mapped" @
 .FirstDiscovered: "First Discovered" @
@@ -226,14 +228,18 @@ SECTION UserControlExpedition
 .NoRouteExport: "There is no route to export " => "没有可导出的航线"
 .Export: "Export route" => "导出航线"
 .UnknownS: "Unknown system, system is without co-ordinates" => "未知星系，没有该星系的坐标"
-.Unsaved: "There are unsaved changes to the current route.\r\nWould you like to save the current route before proceeding?" => "有些变动还未保存。\r\n是否要先保存再继续？"
+.Unsaved: "Expedition - There are unsaved changes to the current route.\r\nWould you like to save the current route before proceeding?" => "有些变动还未保存。\r\n是否要先保存再继续？"
 .Specify: "Please specify a name for the route." => "请给这个航线添加一个名称"
 .Conflict: "The current route name conflicts with a well-known expedition.\r\nPlease specify a new name to save your changes." => "当前保存的航线名称与一个知名的航线名相冲突\r\n请选择另外一个名称以保存变动。"
 .Overwrite: "Warning: route already exists. Would you like to overwrite it?" => "警告：该航线名称已存在。是否要覆盖保存？"
 .EDSMUnk: "System not known to EDSM" => "该星系还未被收录到EDSM的数据库中"
+.ColumnX: "X" @
+.ColumnY: "Y" @
+.ColumnZ: "Z" @
 
 SECTION UserControlExploration
 
+.LoseAllChanges: "Exploration List, Confirm you want to lose all changes" @
 .ColumnSystemName: "System Name" => "星系名称"
 .ColumnDist: "Dist" => "距离(ly)"
 .ColumnX: "X" @
@@ -443,6 +449,7 @@ SECTION UserControlSurveyor
 .autoHideToolStripMenuItem: "Auto Hide" @
 .dontHideInFSSModeToolStripMenuItem: "Don\\'t Hide in FSS Mode" @
 .showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem: "Show System Info Always" @
+.selectFSSSignalsShownToolStripMenuItem: "Select FSS Signals Shown" @
 .LowRadius: " Low Radius." @
 .Mapped: " (Mapped & Discovered)" @
 .Systemscancomplete: "System scan complete." @
@@ -625,7 +632,6 @@ SECTION UserControlPlot
 .D1: "\r\n{0} distance {1:N2} Ly" => "\r\n{0}，距离{1:N2}ly"
 .D2: "\r\n    Visits: {0}" => "\r\n    访问次数：{0}次"
 .D3: "\r\n    Coordinates: X:{0:N2}, Y:{1:N2}, Z:{2:N2}\r\n" => "\r\n    坐标：X:{0:N2}, Y:{1:N2}, Z:{2:N2}\r\n"
-.Nt": "\r\n    Notes: {0}\r\n" @
 
 SECTION UserControlRoute
 
@@ -684,6 +690,8 @@ SECTION UserControlRoute
 
 SECTION UserControlRouteTracker
 
+.Note: "Note: {0}" @
+.showBookmarkNotesToolStripMenuItem: "Show Bookmark Notes" @
 .setRouteToolStripMenuItem: "Set route" => "设定航线"
 .showJumpsToolStripMenuItem: "Show Jumps To Go" => "显示所需的FSD跳跃次数"
 .showWaypointCoordinatesToolStripMenuItem: "Show Waypoint Coordinates" => "显示航点坐标"
@@ -708,6 +716,7 @@ SECTION UserControlRouteTracker
 
 SECTION UserControlScan
 
+.Expired: "Expired:" @
 .System: "System:" => "星系："
 .EnterSys: "Show System" => "显示星系"
 .VLMT: "Set Valuable Minimum" => "设定高价值星体的最低标准"
@@ -892,7 +901,7 @@ SECTION UserControlSettings
 .radioButtonCentreHome: "Home System" => "母星"
 .labelOpenOn: "Open Centred On" => "默认打开显示"
 .labelHome: "Now in Commander Settings" => "母星"
-.Font: "The font used by this theme is not available on your system.\r\nThe font needed is \\"{0}\\".\r\nInstall this font to fully use this theme.\r\nEuro Caps font is freely available from www.edassets.org.\r\n\r\nWould you like to load this theme using a replacement font?" => "这个主题使用的字体不存在于你的电脑上。\r\n所需要的字体是\\"{0}\\"。\r\n安装这个字体以完整体验这个主题。\r\nEuro Caps字体可以从www.edassets.org免费下载。\r\n\r你是否想用一个替代字体来加载这个主题？"
+.Font: "The font used by this theme is not available on your system.\r\nThe font needed is \\"{0}\\".\r\nInstall this font to fully use this theme.\r\nEuro Caps font is freely available from www.edassets.org.\r\n\r\nWould you like to load this theme using a replacement font?" @
 .Information: "Applies at next restart of ED Discovery" => "改变将在重启EDDiscovery后生效"
 .AddC: "Commander name is not valid or duplicate" => "指挥官的名字无效或者重复"
 .AddT: "Cannot create Commander" => "无法创建指挥官"
@@ -986,7 +995,6 @@ SECTION UserControlSpanel
 .showCircumstellarZonesToolStripMenuItem.showIcyPlanetsToolStripMenuItem: "Icy Planets" => "冰质行星 (Icy Bodies)"
 .dontShowInformationWhenToolStripMenuItem.completelyHideThePanelToolStripMenuItem: "Completely hide the Panel" => "完全隐藏面板"
 .dontShowInformationWhenToolStripMenuItem.dontshowwhenInPanelToolStripMenuItem: ".. when in a Panel" @
-.Goldilocks: "Goldilocks, {0} ({1}-{2} AU),\n" => "黄金领域：{0} ({1}-{2} AU)\n"
 
 SECTION UserControlStarDistance
 
@@ -1061,30 +1069,26 @@ SECTION UserControlStarList
 
 SECTION UserControlStats
 
-.tosystem: " to system " @
+.labelStart: "Start" @
+.labelEndDate: "To" @
 .tabControlCustomStats.tabPageGeneral: "General" => "概况"
 .tabControlCustomStats.tabPageGeneral.mostVisited: "Most Visited" => "最常访问的"
 .tabControlCustomStats.tabPageGeneral.ItemName: "Item" => "项目"
 .tabControlCustomStats.tabPageGeneral.Information: "Information" => "信息"
 .tabControlCustomStats.tabPageTravel: "Travel" => "航行"
-.tabControlCustomStats.tabPageTravel.dataGridViewTextBoxColumn1: "Item" => "项目"
-.tabControlCustomStats.tabPageTravel.dataGridViewTextBoxColumn2: "Information" => "信息"
 .tabControlCustomStats.tabPageTravel.userControlStatsTimeTravel.labelTime: "Time" => "时间"
 .tabControlCustomStats.tabPageScan: "Scan" => "扫描"
-.tabControlCustomStats.tabPageScan.ScanNotUsed: "Column1" => "@"
 .tabControlCustomStats.tabPageScan.userControlStatsTimeScan.labelTime: "Time" => "时间"
 .tabControlCustomStats.tabPageGameStats: "In Game" => "游戏记录"
-.Visits: "Visits" => "访问数"
-.Type: "Type" @
-.All: "All" @
-.JumpsBeforeSystem: "Jumps Before System" => "到达星系前的跳跃次数"
+.tabControlCustomStats.tabPageByShip: "By Ship" => "飞船"
 .TotalNoofjumps: "Total No of jumps: " => "总跳跃次数"
+.FSDjumps: "FSD Jumps" @
+.Beltcluster: "Belt Cluster: " @
 .JumpHistory: "Jump History" => "跳跃记录"
 .24hc: "24 Hours: " => "24小时内："
 .OneWeek: ", One Week: " => "，一周内："
 .30Days: ", 30 Days: " => "，30天内："
 .OneYear: ", One Year: " => "，一年内："
-.FirstDiscoveries: "First Discoveries" => "首次发现数"
 .MostNorth: "Most North" => "最北"
 .MostSouth: "Most South" => "最南"
 .MostEast: "Most East" => "最东"
@@ -1092,26 +1096,32 @@ SECTION UserControlStats
 .MostHighest: "Most Highest" => "最高"
 .MostLowest: "Most Lowest" => "最低"
 .MostVisited: "Most Visited" => "最常访问"
-.24Hours: "24 Hours" => "24小时"
-.Week: "Week" => "周"
-.Month: "Month" => "月"
-.Lastdock: "Last dock" => "自最近降落后"
 .Jumps: "Jumps" => "跳跃次数"
-.TraveledLy: "Traveled Ly" => "航行距离(ly)"
+.TravelledLy: "Traveled Ly" => "航行距离(ly)"
 .PremiumBoost: "Premium Boost" => "高级FSD助推剂"
 .StandardBoost: "Standard Boost" => "标准FSD助推剂"
 .BasicBoost: "Basic Boost" => "基础FSD助推剂"
 .JetConeBoost: "Jet Cone Boost" => "等离子喷流助推"
-.Landed: "Landed" => "着陆过的星球"
-.HeatWarning: "Heat Warning" => "高温警告"
-.Heatdamage: "Heat damage" => "高温损伤"
-.FuelScooped: "Fuel Scooped" => "燃料收集"
-.ScoopedTons: "Scooped Tons" => "收集量(t)"
 .Scans: "Scans" => "扫描数"
+.Mapped: "Mapped" @
 .Scanvalue: "Scan value" => "扫描价值"
-.Docked: "Docked" => "降落的空间站"
-.BodyType: "Body Type" => "星体类型"
+.Lastdock: "Last dock" => "自最近降落后"
 .Trip: "Trip" => "旅程"
+.All: "All" @
+.Type: "Type" @
+.BankAccount: "Bank Account" @
+.Combat: "Combat" @
+.Crime: "Crime" @
+.Smuggling: "Smuggling" @
+.Trading: "Trading" @
+.Mining: "Mining" @
+.Exploration: "Exploration" @
+.Passengers: "Passengers" @
+.SearchandRescue: "Search and Rescue" @
+.Crafting: "Crafting" @
+.Crew: "Crew" @
+.Multi: "Multi-crew" @
+.MaterialsTrader: "Materials Trader" @
 .CurrentAssets: "Current Assets" => "当前资产"
 .SpentonShips: "Spent on Ships" => "飞船花费"
 .SpentonOutfitting: "Spent on Outfitting" => "装备花费"
@@ -1182,29 +1192,20 @@ SECTION UserControlStats
 .TME: "{0} days {1} hours {1} minutes" => "{0}天{1}小时{2}分"
 .Name: "Name" => "飞船名"
 .Ident: "Ident" => "飞船牌号"
-.TravelledLy: "Travelled Ly" => "航行距离(ly)"
 .BodiesScanned: "Bodies Scanned" => "扫描的星体"
+.Destroyed: "Destroyed" => "被摧毁次数"
 .GoodsBought: "Goods Bought" => "收购的商品"
 .GoodsSold: "Goods Sold" => "出售的商品"
-.Destroyed: "Destroyed" => "被摧毁次数"
-.Unknown: "Unknown" => "未知"
-.tabControlCustomStats.tabPageByShip: "By Ship" => "飞船"
-.tabControlCustomStats.tabPageByShip.dataGridViewTextBoxColumn3: "Item" => "项目"
-.tabControlCustomStats.tabPageByShip.dataGridViewTextBoxColumn4: "Information" => "信息"
-.Mapped: "Mapped" @
-.BankAccount: "Bank Account" @
-.Combat: "Combat" @
-.Crime: "Crime" @
-.Smuggling: "Smuggling" @
-.Trading: "Trading" @
-.Mining: "Mining" @
-.Exploration: "Exploration" @
-.Passengers: "Passengers" @
-.SearchandRescue: "Search and Rescue" @
-.Crafting: "Crafting" @
-.Crew: "Crew" @
-.Multi: "Multi-crew" @
-.MaterialsTrader: "Materials Trader" @
+.EfficientScans: "Efficient Scans" @
+.Accepted: "Accepted" @
+.Disgruntled: "Disgruntled" @
+.EncodedMaterialsTraded: "Encoded Materials Traded" @
+.RawMaterialsTraded: "Raw Materials Traded" @
+.G1MaterialsTraded: "Grade 1 Materials Traded" @
+.G2MaterialsTraded: "Grade 2 Materials Traded" @
+.G3MaterialsTraded: "Grade 3 Materials Traded" @
+.G4MaterialsTraded: "Grade 4 Materials Traded" @
+.G5MaterialsTraded: "Grade 5 Materials Traded" @
 
 SECTION StatsTimeUserControl
 
@@ -1331,6 +1332,7 @@ SECTION UserControlContainerSplitter
 
 SECTION UserControlTravelGrid
 
+.showSystemVisitedForeColourToolStripMenuItem: "Show lines in System Visited Fore Colour" @
 .THF: "History: Filter out fields" @
 .ColumnTime: "Time" => "时间"
 .Icon: "Event" => "事件"
@@ -1397,6 +1399,7 @@ SECTION UserControlTravelGrid
 .addToTrilaterationToolStripMenuItem.explorationPanelToolStripMenuItem: "Exploration Panel" => "探索面板"
 .runSelectionThroughIGAUDebugToolStripMenuItem: "Run selection through IGAU (Debug)" @
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
+.runSelectionThroughEDAstroDebugToolStripMenuItem: "Run selection through EDAstro (Debug)" @
 
 SECTION UserControlCaptainsLog
 
@@ -1454,9 +1457,6 @@ SECTION UserControlTrilateration
 .pasteToolStripMenuItem: "Paste" => "粘贴"
 .toolStripButtonSubmitDistances: "&Submit Distances" => "提交距离(&S)"
 .toolStripButtonNew: "Start &new" => "新开始(&N)"
-.toolStripButtonRemoveUnused: "toolStripButtonRemoveUnused" @
-.toolStripButtonRemoveAll: "toolStripButton1" @
-.toolStripButtonMap: "3d map" => "3D星图"
 .toolStripLabelSystem: "From System:" => "自星系："
 .toolStripTextBoxSystem: "Press Start New" @
 .toolStripLabel1: "Visited without coordinates:" => "访问过但无坐标的星系："
@@ -1580,6 +1580,9 @@ SECTION UserControlFactions
 .showCommoditymaterialTradesForFactionToolStripMenuItem: "Show commodity/material trades for faction" @
 .showBountiesAndBondsForFactionToolStripMenuItem: "Show bounties and bonds for faction" @
 .showFactionSystemDetailToolStripMenuItem: "Show system detail for faction" @
+.MissionsInProgress: "Missions In Progress:" @
+.CapShipVictims: "Capital ship Victims: " @
+.CapShipAward: "Capital ship Award: " @
 
 SECTION ScanDisplayUserControl
 
@@ -1613,6 +1616,7 @@ SECTION FilterSelector
 .Commodities: "Commodities" @
 .Ledger: "Ledger" @
 .Ship: "Ship" @
+.Mining: "Mining" @
 
 SECTION UserControlCommonBase
 

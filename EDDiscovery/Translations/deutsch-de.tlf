@@ -23,21 +23,22 @@ HideColumn: "Hide Column" => "Verstecke Spalte"
 UnhideallColumns: "Unhide all Columns" => "Zeige alle Spalten"
 
 SECTION StartUp
-.DUPLOAD:"EDDiscovery is already running. Launch anyway?" =>  "EDDiscovery läuft bereits, trotzdem starten?"
+
+.DUPLOAD: "EDDiscovery is already running. Launch anyway?" => "EDDiscovery läuft bereits, trotzdem starten?"
 
 SECTION SafeModeForm
 
 SafeModeForm: "EDDiscovery Safe Mode" => "EDDiscovery abgesicherter Modus"
-SafeModeForm.buttonCancel: "Cancel" => "Abbrechen"
-SafeModeForm.buttonNormal: "Run" => "Starten"
-SafeModeForm.buttonDeleteSystemDB: "Delete/Rebuild System DB" => "System DB löschen/wiederaufbauen"
-SafeModeForm.buttonDbs: "Move Databases" => "Verschiebe Datenbank"
-SafeModeForm.buttonLang: "Reset Language to English" => "Reset Language to English"
-SafeModeForm.button1: "Remove all Action Packs" => "Alle Action Packs entfernen"
-SafeModeForm.buttonRemoveDLLs: "Remove all Extension DLLs" => "Alle Erweiterungs-DLLs entfernen"
-SafeModeForm.buttonResetTabs: "Reset Tabs, Remove PopOuts" => "Registerkarten zurücksetzen, externe Fenster entfernen"
-SafeModeForm.buttonPositions: "Reset Window Positions" => "Fensterpositionen zurücksetzen"
-SafeModeForm.buttonResetTheme: "Reset Theme" => "Thema zurücksetzen"
+.buttonCancel: "Cancel" => "Abbrechen"
+.buttonNormal: "Run" => "Starten"
+.buttonDeleteSystemDB: "Delete/Rebuild System DB" => "System DB löschen/wiederaufbauen"
+.buttonDbs: "Move Databases" => "Verschiebe Datenbank"
+.buttonLang: "Reset Language to English" => "Reset Language to English"
+.button1: "Remove all Action Packs" => "Alle Action Packs entfernen"
+.buttonRemoveDLLs: "Remove all Extension DLLs" => "Alle Erweiterungs-DLLs entfernen"
+.buttonResetTabs: "Reset Tabs, Remove PopOuts" => "Registerkarten zurücksetzen, externe Fenster entfernen"
+.buttonPositions: "Reset Window Positions" => "Fensterpositionen zurücksetzen"
+.buttonResetTheme: "Reset Theme" => "Thema zurücksetzen"
 
 SECTION PopOutInfo
 
@@ -104,8 +105,8 @@ SECTION PopOutInfo
 .SystemInformation.Description: "System Information" => "Systeminformation"
 .SystemInformation.Title: "System Information" => "Systeminformation"
 .Spanel.Description: "Summary panel overlay" => "Zusammenfassung der letzten Ereignisse"
-.Spanel.Title: "Summary Panel" => "Zusammenfassung" 
-.Trippanel.Description: "Trip computer overlay" => "Trip-Computer" 
+.Spanel.Title: "Summary Panel" => "Zusammenfassung"
+.Trippanel.Description: "Trip computer overlay" => "Trip-Computer"
 .Trippanel.Title: "Trip Computer" => "Trip-Computer"
 .NotePanel.Description: "System notes overlay" => "Systemnotizen"
 .NotePanel.Title: "Notes" => "Notizen"
@@ -121,7 +122,7 @@ SECTION PopOutInfo
 .Grid.Title: "Grid" => "Gitter"
 .SplitterControl.Description: "Splitter (allows other panels to be placed in it)" => "Splitter (zum Einfügen beliebiger Paneele)"
 .SplitterControl.Title: "Splitter" => "Splitter"
-.PanelSelector.Description: "" => ""
+.PanelSelector.Description: "" @
 .PanelSelector.Title: "+" => "+"
 .Search.Title: "Search" => "Suche"
 .Search.Description: "Search" => "Suche"
@@ -134,16 +135,15 @@ SECTION PopOutInfo
 .MaterialTrader.Title: "Material Trader" => "Materialhändler"
 .MaterialTrader.Description: "Material Trader" => "Berechnet welche Materialien bei Händlern getauscht werden können"
 .EDSM.Title: "EDSM" => "EDSM"
-.EDSM.Description: "Automatic web view of EDSM page on system" =>  "Zeigt das aktuelle System auf EDSM"
+.EDSM.Description: "Automatic web view of EDSM page on system" => "Zeigt das aktuelle System auf EDSM"
 .Inara.Title: "Inara" => "Inara"
 .Inara.Description: "Inara - Automatic web view of system" => "Zeigt das aktuelle System auf Inara"
 .Factions.Title: "Factions" => "Fraktionen"
 .Factions.Description: "Faction rewards and trading tally" => "Statistiken zu lokalen Gruppierungen"
-.Spansh.Title: "Spansh" => "Spansh" 
+.Spansh.Title: "Spansh" => "Spansh"
 .Spansh.Description: "Spansh - Automatic web view of system" => "Zeigt das aktuelle System auf Spansh"
 .EDDB.Title: "EDDB" => "EDDB"
 .EDDB.Description: "EDDB - Automatic web view of system" => "Zeigt das aktuelle System auf EDDB"
-
 
 SECTION EDDiscoveryForm
 
@@ -169,7 +169,7 @@ SECTION EDDiscoveryForm
 .adminToolStripMenuItem.showLogfilesToolStripMenuItem: "Show journal files directory of current commander" => "Zeige den Journalordner des derzeitigen Kommandanten"
 .adminToolStripMenuItem.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem: "Reset all history to current commander" => "Setze die gesamte Historie auf den derzeitigen Kommandanten zurück"
 .adminToolStripMenuItem.read21AndFormerLogFilesToolStripMenuItem: "Read 2.1 and former log files" => "Lies log-Dateien von 2.1 und früher"
-.adminToolStripMenuItem.read21AndFormerLogFilesToolStripMenuItem.read21AndFormerLogFiles_forceReloadLogsToolStripMenuItem: "Force reload logs" => "Erzwinge ein Neuladen aller Logs" 
+.adminToolStripMenuItem.read21AndFormerLogFilesToolStripMenuItem.read21AndFormerLogFiles_forceReloadLogsToolStripMenuItem: "Force reload logs" => "Erzwinge ein Neuladen aller Logs"
 .adminToolStripMenuItem.rescanAllJournalFilesToolStripMenuItem: "Re-scan all journal files" => "Alle Journaldateien erneut scannen"
 .adminToolStripMenuItem.deleteDuplicateFSDJumpEntriesToolStripMenuItem: "Delete duplicate FSD Jump entries" => "Lösche duplizierte FSA-Sprünge"
 .adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.sendUnsyncedEDSMJournalsToolStripMenuItem: "Send Unsynced Journals To EDSM" => "Sende nicht synchronisierte Ereignisse an EDSM"
@@ -181,14 +181,14 @@ SECTION EDDiscoveryForm
 .adminToolStripMenuItem.read21AndFormerLogFilesToolStripMenuItem.load21ToolStripMenuItem: "Scan Netlogs" => "Scanne Netlogs"
 .adminToolStripMenuItem.DLLPermissionsToolStripMenuItem: "DLL Permissions (applies after restart)" => "DLL-Berechtigungen (wirksam nach Neustart)"
 .addOnsToolStripMenuItem: "&Add-Ons" => "&Add-Ons"
-.addOnsToolStripMenuItem.manageAddOnsToolStripMenuItem: "&Manage Add-Ons" => "Add-Ons &verwalten" 
-.addOnsToolStripMenuItem.configureAddOnActionsToolStripMenuItem: "&Edit Add-On Action Files" => "Add-On Action-Dateien b&earbeiten" 
+.addOnsToolStripMenuItem.manageAddOnsToolStripMenuItem: "&Manage Add-Ons" => "Add-Ons &verwalten"
+.addOnsToolStripMenuItem.configureAddOnActionsToolStripMenuItem: "&Edit Add-On Action Files" => "Add-On Action-Dateien b&earbeiten"
 .addOnsToolStripMenuItem.editLastActionPackToolStripMenuItem: "Edit Last Action Pack" => "Letztes Action-Pack bearbeiten"
 .addOnsToolStripMenuItem.stopCurrentlyRunningActionProgramToolStripMenuItem: "&Stop currently running Action Program" => "&Stoppe das derzeit laufende Action-Programm"
 .helpTabToolStripMenuItem: "Help" => "Hilfe"
 .helpToolStripMenuItem: "&Help" => "&Hilfe"
 .helpToolStripMenuItem.aboutToolStripMenuItem: "&About" => "Ü&ber"
-.helpToolStripMenuItem.wikiHelpToolStripMenuItem: "&View Help" => "&Zeige Hilfe" 
+.helpToolStripMenuItem.wikiHelpToolStripMenuItem: "&View Help" => "&Zeige Hilfe"
 .helpToolStripMenuItem.viewHelpVideosToolStripMenuItem: "View Help Videos" => "Zeige Hilfevideos"
 .helpToolStripMenuItem.eDDiscoveryChatDiscordToolStripMenuItem: "&Discord - EDD Community Chat" => "&Discord - EDD-Communitychat"
 .helpToolStripMenuItem.frontierForumThreadToolStripMenuItem: "&Frontier Forum Thread" => "&Frontier Forenthread"
@@ -215,13 +215,13 @@ SECTION EDDiscoveryForm
 .RTABT: "Rename Tab" => "Registerkarte umbenennen"
 .RTABTT: "Enter a new name for the tab" => "Neuen Namen für Registerkarte eingeben"
 .ThemeW: "The theme stored has missing colors or other missing information\r\nCorrect the missing colors or other information manually using the Theme Editor in Settings" => "Dem gespeicherten Thema fehlen Farben oder andere Informationen\r\nKorrigiere dies indem du unter Einstellungen das aktuelle Thema bearbeitest."
-.DLLW: "The following application extension DLs have been found\r\nDo you wish it to be used?\r\n\r\n{0} \r\n" => "Die folgenden Anwendungs-DLLs wurden gefunden\r\nWillst du sie verwenden?\r\n\r\n{0} \r\n"
+.DLLW: "The following application extension DLL have been found\r\nDo you wish it to be used?\r\n\r\n{0} \r\n" => "Die folgenden Anwendungs-DLLs wurden gefunden\r\nWillst du sie verwenden?\r\n\r\n{0} \r\n"
 .DLLL: "DLLs loaded: {0}" => "DLLs geladen: {0}"
 .DLLF: "DLLs failed to load: {0}" => "Laden der DLLs fehlgeschlagen: {0}"
 .IndexW: "Are you sure to Rebuild Indexes? It may take a long time." => "Bist du sicher, dass die Indexes neu erstellt werden sollen? Dies kann lange dauern."
 .FillPos: "Scan your history, and for systems without co-ordinates,\r\ntry and fill them in from your system database\r\nConfirm?" => "Historie scannen und versuchen für alle Systeme mit unbekannten Koordinaten\r\ndiese aus der Systemdatenbank zu kopieren.\r\nBestätigen?"
 .RemoveDLLPerms: "Remove all DLL permissions, on next start, you will be asked per DLL if you wish to allow the DLL to run. Are you sure?" => "Alle DLL-Berechtigungen entfernen. Beim nächsten Start wirst du für jede DLL erneut um Erlaubnis gefragt. Bist du sicher?"
-.PROFL: "Profile {0} Loaded" => "Profil {0} geladen" 
+.PROFL: "Profile {0} Loaded" => "Profil {0} geladen"
 .NI: "New EDDiscovery installer available: {0}" => "Neues EDDiscovery-Setup verfügbar: {0}"
 .NRA: "New Release Available!" => "Neue Version verfügbar!"
 .CAPINA: "Companion API is disabled in commander settings" => "Companion-API in den Kommandanteneinstellungen deaktiviert"
@@ -229,35 +229,35 @@ SECTION EDDiscoveryForm
 .CAPIF: "Companion API failed: {0}" => "Companion-API fehlgeschlagen: {0}"
 .CAPIND: "CAPI not docked. Server API lagging!" => "CAPI nicht angedockt. Server API lagt!"
 .CAPISS: "CAPI profileSystemRequired is {0}, profile station is {1}" => "CAPI profileSystemRequired ist {0}, profile station ist {1}"
-.CAPISN: "CAPI profileStationRequired is {0}, profile station is {1}" => "CAPI profileStationRequired ist {0}, profile station ist {1} "
-.CAPIMN: "CAPI stationname {0}, market station is {1}" => "CAPI stationname {0}, market station ist {1} "
-.CAPIEX: "Companion API get failed:" => "Companion API get fehlgeschlagen:"
+.CAPISN: "CAPI profileStationRequired is {0}, profile station is {1} " => "CAPI profileStationRequired ist {0}, profile station ist {1} "
+.CAPIMN: "CAPI stationname {0}, market station is {1} " => "CAPI stationname {0}, market station ist {1} "
+.CAPIEX: "Companion API get failed: " => "Companion API get fehlgeschlagen:"
 .Arrived: "Arrived at system {0} Visit No. {1}" => "In System {0} angekommen. Besuch Nr. {1}"
 .PE1: "Profile reports errors in triggers:" => "Profil meldet Fehler in Triggern:"
 .EDDN: "Sent {0} event to EDDN ({1})" => "Ereignis {0} gesendet an EDDN ({1})"
 .EDDNEX: "EDDN: Send commodities prices failed: " => "EDDN: Warenpreise senden fehlgeschlagen"
 .Closing: "Closing, please wait!" => "Abschalten, bitte warten!"
-.SDDis: "Star Data download is disabled. Use Settings to reenable it" => "Sternendatendownload is deaktiviert. Gehe zu den Einstellungen um ihn zu aktivieren." 
+.SDDis: "Star Data download is disabled. Use Settings to reenable it" => "Sternendatendownload is deaktiviert. Gehe zu den Einstellungen um ihn zu aktivieren."
 .SDSyncErr: "Synchronisation to databases is in operation or pending, please wait" => "Datenbanksynchronisation ist im Laufen oder in der Warteschlange, bitte warten."
 .EDSMQ: "This can take a considerable amount of time and bandwidth\r\nConfirm you want to do this?" => "Dies kann erhebliche Zeit dauern und benötigt Bandbreite.\r\nBestätige, ob du das willst."
 .SafeMode: "To start in safe mode, exit the program, hold down the shift key\r\nand double click on the EDD program icon.  You will then be in the safe mode dialog.\r\nYou can reset various parameters and move the data bases to other locations." => "Um den abgesicherten Modus zu starten schließe das Programm.\r\nHalte die Shift-Taste gedrückt und klicke auf die EDDiscovery-Verknüpfung um neu zu starten.\r\nDu solltest dich nun im Menü des abgesicherten Modus befinden, wo du verschiedene Parameter zurücksetzen und die Datenbanken verschieben kannst."
 .ResetCMDR: "Confirm you wish to reset all history entries to the current commander" => "Bestätige, dass du die gesamte Historie auf den derzeitigen Kommandanten zurücksetzen willst."
 .NoRel: "No new release found" => "Keine neue Version gefunden."
-.RevFSD: "Confirm you remove any duplicate FSD entries from the current commander" => "Bestätige, dass du alle duplizierten FSA-Sprünge vom derzeitigen Kommandanten entfernen willst." 
+.RevFSD: "Confirm you remove any duplicate FSD entries from the current commander" => "Bestätige, dass du alle duplizierten FSA-Sprünge vom derzeitigen Kommandanten entfernen willst."
 .FSDRem: "Removed {0} FSD entries" => "{0} FSA-Einträge entfernt."
-.VSLNF: "Could not find VisitedStarsCache.dat file, choose file" => "Konnte VisitedStarsCache.dat-Datei nicht finden, wähle Datei:" 
+.VSLNF: "Could not find VisitedStarsCache.dat file, choose file" => "Konnte VisitedStarsCache.dat-Datei nicht finden, wähle Datei:"
 .VSLEXP: "File {0} created.\r\n{1}" => "Datei {0} erstellt.\r\n{1}"
-.VSLRestart: "Restart Elite Dangerous to have this file read into the galaxy map" => "Starte Elite Dangerous neu um diese Datei in die Galaxiekarte zu laden." 
+.VSLRestart: "Restart Elite Dangerous to have this file read into the galaxy map" => "Starte Elite Dangerous neu um diese Datei in die Galaxiekarte zu laden."
 .VSLFileErr: "Error writing {0} export visited stars" => "Fehler beim Schreiben {0} exportiere besuchte Sterne"
-.InaraW: "Inara historic upload is disabled until 1 hour has elapsed from the last try to prevent server flooding" => "Historische Inara-Uploads sind für einen Zeitraum von einer Stunde seit dem letzten Versuch gesperrt um den Server nicht zu fluten." 
-.RH: "Refresh History." => "Historie aktualisieren" 
+.InaraW: "Inara historic upload is disabled until 1 hour has elapsed from the last try to prevent server flooding" => "Historische Inara-Uploads sind für einen Zeitraum von einer Stunde seit dem letzten Versuch gesperrt um den Server nicht zu fluten."
+.RH: "Refresh History." => "Historie aktualisieren"
 .NoEDSMAPI: "No EDSM API key set" => "Kein EDSM-API-Schlüssel eingetragen"
 .EDSMSyncE: "EDSM Sync failed: {0}" => "EDSM-Synchronisation fehlgeschlagen: {0}"
 .EP: "Edit Profiles" => "Profile bearbeiten"
 .PL: "Profile {0} Loaded" => "Profil {0} geladen"
 .popOutPanelToolStripMenuItem: "Pop Out Panel.." => "Paneel als externes Fenster"
 .CloseWarning: "EDDiscovery is updating the EDSM and EDDB databases\r\nPress OK to close now, Cancel to wait until update is complete" => "EDDiscovery aktualisiert die EDSM-Datenbank.\r\nKlicke OK um jetzt zu schließen, Abbrechen um zu warten bis die Aktualisierung abgeschlossen ist."
-.notifyIconMenu_Open: "&Open EDDiscovery" => "&Öffne EDDiscovery" 
+.notifyIconMenu_Open: "&Open EDDiscovery" => "&Öffne EDDiscovery"
 .notifyIconMenu_Hide: "&Hide Tray Icon" => "&Verstecke Tray-Icon"
 .notifyIconMenu_Exit: "E&xit" => "B&eenden"
 .buttonExt2dmap: "2D" => "2D"
@@ -266,7 +266,6 @@ SECTION EDDiscoveryForm
 .adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.fetchStarDataAgainToolStripMenuItem: "Fetch Star Data Again" => "Sternendaten erneut abrufen"
 .adminToolStripMenuItem.rebuildUserDBIndexesToolStripMenuItem: "Rebuild User DB Indexes" => "User-DB-Indexes neu erstellen"
 .adminToolStripMenuItem.updateUnknownSystemCoordsWithDataFromSystemDBToolStripMenuItem: "Update systems with unknown co-ordinates" => "Systeme mit unbekannten Koordianten aktualisieren"
-
 .WSE: "Web server enabled" => "Webserver aktiviert"
 .WSF: "Web server failed to start" => "Webserver konnte nicht gestartet werden."
 .WSERR: "Web server disabled due to incorrect folder or missing zip file" => "Webserver wegen falschem Ordner oder fehlender ZIP-Datei deaktiviert."
@@ -277,9 +276,9 @@ SECTION EDDiscoveryController
 .CD: "Closing down, please wait.." => "Beenden, bitte warten..."
 .EDSM: "Get galactic mapping from EDSM." => "Erhalte GMP-Daten von EDSM"
 .LN: "Loaded Notes, Bookmarks and Galactic mapping." => "Notizen, Lesezeichen sowie GMP-Daten geladen."
-.EDMC: "EDDiscovery and EDMarketConnector should not both sync to EDDN. Stop EDMC or uncheck 'send to EDDN' in settings tab!" => "EDDiscovery und EDMarketConnector sollten nicht gleichzeitig Daten an EDDN senen. Beende EDMC oder wähle 'an EDDN senden' in den Einstellungen ab." 
-.RTH: "Reading travel history" => "Lese die Reisehistorie." 
-.SyncEDSM: "Please continue running ED Discovery until refresh is complete." => "Bitte verwende EDDiscovery weiter bis die Aktualisierung abgeschlossen ist." 
+.EDMC: "EDDiscovery and EDMarketConnector should not both sync to EDDN. Stop EDMC or uncheck 'send to EDDN' in settings tab!" => "EDDiscovery und EDMarketConnector sollten nicht gleichzeitig Daten an EDDN senen. Beende EDMC oder wähle 'an EDDN senden' in den Einstellungen ab."
+.RTH: "Reading travel history" => "Lese die Reisehistorie."
+.SyncEDSM: "Please continue running ED Discovery until refresh is complete." => "Bitte verwende EDDiscovery weiter bis die Aktualisierung abgeschlossen ist."
 .SyncOff: "Star Data download is disabled. Use Settings panel to reenable" => "Sternendatendownload ist deaktiviert. Verwende das Paneel 'Einstellungen' um ihn zu reaktivieren."
 .EDSMU: "EDSM systems update complete with {0} systems" => "EDSM-Systemupdate mit {0} Systemen beendet."
 .EDDBU: "EDDB systems update complete with {0} systems" => "EDDB-Systemupdate mit {0} Systemen beendet."
@@ -297,12 +296,12 @@ SECTION BookmarkForm
 BookmarkForm: "Create New Bookmark" => "Erstelle neues Lesezeichen"
 .buttonEDSM: "EDSM" => "EDSM"
 .labelName: "Name" => "Name"
-.checkBoxTarget: "Make Target" => "Erstelle Ziel" 
+.checkBoxTarget: "Make Target" => "Erstelle Ziel"
 .labelCo: "Co-ordinates" => "Koordinaten"
 .buttonDelete: "Delete" => "Löschen"
 .buttonCancel: "Cancel" => "Abbrechen"
 .buttonOK: "OK" => "OK"
-.labelBookmarkNotes: "Bookmark Notes" => "Lesezeichennotizen" 
+.labelBookmarkNotes: "Bookmark Notes" => "Lesezeichennotizen"
 .labelTravelNote: "Travel History Note" => "Notizen zur Reisehistorie"
 .labelTravelNoteEdit: "(Edit on Travel Screen)" => "(Am Reisebildschirm bearbeiten)"
 .labelTimeMade: "Time Made" => "Erstellt am"
@@ -324,18 +323,18 @@ SECTION SurfaceBookmarksForm
 .sendToCompassToolStripMenuItem: "Send to compass" => "Sende an Kompass"
 .BodyName: "Planetary Body" => "Planetarer Körper"
 .SurfaceName: "Name" => "Name"
-.SurfaceDesc: "Description" => "Beschreibung" 
+.SurfaceDesc: "Description" => "Beschreibung"
 .Latitude: "Latitude" => "Breitengrad"
 .Longitude: "Longitude" => "Längengrad"
 .Valid: "Saveable" => "Speicherbar"
-.deleteToolStripMenuItem: "Delete Row" => "Zeile löschen" 
+.deleteToolStripMenuItem: "Delete Row" => "Zeile löschen"
 .addPlanetManuallyToolStripMenuItem: "Manually Add Planet" => "Planet manuell hinzufügen"
 
 SECTION SurfaceBookmarkUserControl
 
 .Enter: "Enter a name" => "Gib einen Namen ein"
 .PL: "Planet:" => "Planet"
-.EPN: "Enter planet name" => "Planetennamen eingeben" 
+.EPN: "Enter planet name" => "Planetennamen eingeben"
 .PresstoAccept: "Press to Accept" => "Drücken um anzunehmen"
 .PresstoCancel: "Press to Cancel" => "Drücken um Abzubrechen"
 .MAP: "Manually Add Planet" => "Planet manuell hinzufügen"
@@ -355,7 +354,7 @@ SECTION FindSystemsUserControl
 .labelRadMax: "Max" => "Maximaler Radius"
 .labelRadMin: "Radius ly Min" => "Minimaler Radius"
 .labelFilter: "Star Name" => "Sternenname"
-.Cannotfindsystem: "Cannot find system " => "Kann System nicht finden" 
+.Cannotfindsystem: "Cannot find system " => "Kann System nicht finden"
 .EDSM: "EDSM did not return any data on {0}\nIt may be a galactic object that it does not know about" => "EDSM sendete keine Daten von {0} zurück\nEs könnte ein galaktisches Objekt sein das es nicht kennt."
 .buttonExtNames: "From DB Find Names" => "Finde Namen in der DB"
 .buttonExtEDSM: "From EDSM" => "Von EDSM"
@@ -383,14 +382,14 @@ SECTION TravelHistoryFilter
 .Quarter: "Quarter" => "Quartal"
 .HYear: "Half year" => "Halbjahr"
 .Year: "Year" => "Jahr"
-.LastN: "Last {0} entries" => "Letzte {0} Einträge" 
+.LastN: "Last {0} entries" => "Letzte {0} Einträge"
 .LDock: "Last dock" => "Letztes andocken"
 .StartEnd: "Start/End Flag" => "Start/Ende Markierung"
 
 SECTION AddOnManagerForm
 
 .buttonMore: "+" => "+"
-.buttonExtGlobals: "Globals" => "Globale" 
+.buttonExtGlobals: "Globals" => "Globale"
 .buttonOK: "OK" => "OK"
 .AddOnTitle: "Add-On Manager" => "Add-On Manager"
 .EditTitle: "Edit Add-Ons" => "Bearbeite Add-Ons"
@@ -402,7 +401,7 @@ SECTION AddOnManagerForm
 .Action: "Action" => "Aktion"
 .Delete: "Delete" => "Löschen"
 .Enabled: "Enabled" => "aktiv"
-.Newer: "Newer EDD required" => "Neueres EDD erforderlich" 
+.Newer: "Newer EDD required" => "Neueres EDD erforderlich"
 .Old: "Too old for EDD" => "Zu alt für EDD"
 .Locallymodified: "Locally modified" => "Lokal modifiziert"
 .UptoDate: "Up to Date" => "Auf dem neuesten Stand"
@@ -424,10 +423,9 @@ AssignTravelLogSystemForm: "AssignTravelLogSystemForm" => "AssignTravelLogSystem
 .label3: "New system name:" => "Neuer Systemname:"
 .btnFindSystem: "Find" => "Finde"
 .btnCancel: "Cancel" => "Abbrechen"
-.label4: "Travel Log Coordinates:" => "Reiselog Koordinaten:" 
+.label4: "Travel Log Coordinates:" => "Reiselog Koordinaten:"
 .btnOK: "OK" => "OK"
 .label5: "System Coordinates" => "Systemkoordinaten"
-
 
 SECTION ExportForm
 
@@ -455,13 +453,13 @@ SECTION Form2DMap
 SECTION UserControl2DMap
 
 UserControl2DMap: "2D Map" => "2D-Karte"
-.Nomapsavailable: "No maps available" => "Keine Karten verfügbar" 
+.Nomapsavailable: "No maps available" => "Keine Karten verfügbar"
 .toolStripButtonStars: "Stars" => "Sterne"
 .toolStripButtonSave: "Save" => "Speichern"
 
 SECTION GalaxySectorSelect
 
-GalaxySectorSelect: "GalaxySectorSelect" => "Galaxiesektor wählen" 
+GalaxySectorSelect: "GalaxySectorSelect" => "Galaxiesektor wählen"
 .buttonExtCancel: "Cancel" => "Abbrechen"
 .buttonExtSet: "Set" => "Festlegen"
 .labelSectorName: "Sector" => "Sektor"
@@ -470,7 +468,7 @@ GalaxySectorSelect: "GalaxySectorSelect" => "Galaxiesektor wählen"
 .All: "All" => "Alles"
 .None: "None" => "Keine"
 .Bubble: "Bubble" => "Blase"
-.ExtendedBubble: "Extended Bubble" => "Erweiterte Blase" 
+.ExtendedBubble: "Extended Bubble" => "Erweiterte Blase"
 .BC: "Bubble+Colonia" => "Blase+Colonia"
 .RD: "You have added new sectors!\r\nThis will require a complete re-download of the EDSM data\r\nConfirm you wish to do this?" => "Du hast neue Sektoren hinzugefügt!\r\nDies erfrordert einen kompletten Neudownload der EDSM-Daten\r\nBestätige ob du dies tun willst."
 .NoSync: "Synchronisation to star data disabled in settings.\r\nReenable to allow star data to be updated" => "Synchronisation der Sterndaten in den Eisntellungen deaktiviert.\r\nAktivieren um Update der Sterndaten zu erlauben."
@@ -495,7 +493,7 @@ SECTION NewReleaseForm
 NewReleaseForm: "EDDiscovery Release" => "EDDiscovery Veröffentlichung"
 .labelName: "Name" => "Name"
 .btnClose: "&Close" => "S&chließen"
-.buttonMsiInstaller: "&Msi Installer" => "&Msi-Installer" 
+.buttonMsiInstaller: "&Msi Installer" => "&Msi-Installer"
 .labelURL: "GitHub URL" => "GitHub URL"
 .labelDownload: "Download" => "Download"
 .buttonPortablezip: "&Portable Zip" => "&Portable Zip"
@@ -514,7 +512,7 @@ ProfileEditor: "ProfileEditor" => "Profileditor"
 .Custom: "Custom" => "Benutzerdefiniert"
 .Trigger: "Trigger" => "Auslöser"
 .Back: "Back" => "Zurück"
-.Startup: "Startup" => "Hochfahren" 
+.Startup: "Startup" => "Hochfahren"
 .TrigEdit: "Edit Profile {0} Trigger" => "Bearbeite Profil {0} Auslöser"
 .BackEdit: "Edit Profile {0} Back Trigger" => "Bearbeite Profil {0} Zurück Auslöser"
 .DeleteWarning: "Do you wish to delete profile {0}?\r\nThis will remove all the profile information and\r\nis not reversible!" => "Willt du Profil {0} löschen?\r\nDas wird alle Profilinformationen löschen\r\nund ist nicht umkehrbar."
@@ -528,12 +526,12 @@ RecordStep: "RecordStep" => "Schrittaufzeichnen"
 .checkBoxWaitForSlew: "Wait for slew" => "Warte auf Menge"
 .checkBoxChangeZoom: "Change Zoom" => "Ändere Zoom"
 .labelZoom: "Zoom" => "Zoom"
-.labelWait: "Wait for this time before action" => "Warte auf diese Zeit vor Aktion" 
+.labelWait: "Wait for this time before action" => "Warte auf diese Zeit vor Aktion"
 .checkBoxPan: "Change Dir" => "Ändere Richtung"
 .labelZoomTime: "Time to take to Zoom" => "Zeit um zu zoomen"
 .checkBoxPos: "Go To" => "Gehe zu"
 .labelMsgTime: "Message on screen time" => "Nachricht bei Bildschirmzeit"
-.checkBoxDisplayMessageWhenComplete: "Display Message with complete" => 
+.checkBoxDisplayMessageWhenComplete: "Display Message with complete" @
 .labelTimeChange: "Time to take to change pos" => "Zeit um Position zu wechseln"
 .checkBoxWaitComplete: "Wait for actions to complete" => "Warte auf Abschluss der Aktionen"
 .labelTimeDir: "Time to take to change direction" => "Zeit um Richtung zu ändern"
@@ -541,7 +539,7 @@ RecordStep: "RecordStep" => "Schrittaufzeichnen"
 .buttonCancel: "Cancel" => "Abbrechen"
 .labelMsg: "Message to display" => "Anzuzeigende Nachricht"
 .buttonOK: "OK" => "OK"
-.label_index: "Record Step" => "Aufnahmeschritt" 
+.label_index: "Record Step" => "Aufnahmeschritt"
 
 SECTION SetNoteForm
 
@@ -568,7 +566,7 @@ SECTION MessageBoxTheme
 SECTION DataGridViewDialogs
 
 .Jumpto: "Jump to:" => "Springe zu:"
-.EN: "Enter number to jump to or near to" => "Nummer eingeben zu der oder in deren Nähe gesprungen werden soll" 
+.EN: "Enter number to jump to or near to" => "Nummer eingeben zu der oder in deren Nähe gesprungen werden soll"
 .PresstoAccept: "Press to Accept" => "Drücken um anzunehmen"
 .PresstoCancel: "Press to Cancel" => "Drücken um abzubrechen"
 .VNV: "Value is not valid" => "Wert ist ungültig"
@@ -580,8 +578,8 @@ SECTION InfoForm
 
 SECTION KeyForm
 
-.PK: "Press Key" => "Drücke Taste" 
-KeyForm: "Define Key Sequence" => "Definiere Testensequenz" 
+.PK: "Press Key" => "Drücke Taste"
+KeyForm: "Define Key Sequence" => "Definiere Testensequenz"
 .radioButtonUp: "Up" => "Rauf"
 .radioButtonDown: "Down" => "Runter"
 .radioButtonPress: "Press" => "Drücken"
@@ -604,17 +602,19 @@ KeyForm: "Define Key Sequence" => "Definiere Testensequenz"
 SECTION UserControlForm
 
 .panel_minimize.ToolTip: "Minimise" => "Minimieren"
-.panel_ontop.ToolTip: "Toggle window on top of others" => "'Fenster zuoberst' umschalten" 
-.panel_close.ToolTip: "Close" => "Schließen"'
-.panel_taskbaricon.ToolTip: "Toggle show taskbar icon for this window" => "Wechsle 'zeige Taskleistensymbol für dieses Fenster'" 
+.panel_ontop.ToolTip: "Toggle window on top of others" => "'Fenster zuoberst' umschalten"
+.panel_close.ToolTip: "Close" => "Schließen"
+.panel_taskbaricon.ToolTip: "Toggle show taskbar icon for this window" => "Wechsle 'zeige Taskleistensymbol für dieses Fenster'"
 .panel_showtitle.ToolTip: "Toggle title visibility for this window when transparent" => "Wechsle 'Sichtbarkeit dieses Fenster wenn transparent'"
 .panel_transparent.ToolTip: "Toggle window transparency thru four settings\r\nOff - normal window\r\nOn (T) - transparent with controls active when mouse not inside window\r\nOn (Tc) - transparent with control active, to activate hold down the activate key\r\nOn (Tf) - fully transparent and inert, to activate hold down the activate key\r\n\r\nSee the settings page for configuring which key is the activate key.  \r\nMouse must be within the boundaries of the window and the key held down for\r\n500ms approx.\r\n\r\n\r\n" => "Wechsle Fenstertransparenz durch vier Einstellungen\r\nAus - normales Fenster\r\nEin (T) - transparent mit aktiver Steuerung während die Maus nicht im Fenster ist\r\nEin (Tc) - transparent mit aktiver Steuerung, zum Aktivieren Triggertaste drücken\r\nEin (Tf) - komplett transparent und inaktiv, zum aktivieren Triggertaste drücken\r\n\r\nBetrachte die Einstellungen um die Triggertaste zu sehen.\r\nDie Maus muss im Fenster sein und die Triggertaste für etwa\r\n500ms gedrückt werden.\r\n\r\n\r\n"
 
 SECTION ExtPanelRollUp
+
 .RUPPin: "Pin to stop this menu bar disappearing automatically" => "Anpinnen um das automatische verschwinden dieser Leiste abzuschalten."
 .RUPMarker: "Click or hover over this to unroll the menu bar" => "Klicke oder fahre über dies um die Menüleiste auszurollen."
 
 SECTION CommanderForm
+
 .CAPIGB: "Frontier CAPI" => "Frontier CAPI"
 .CAPILoggingin: "Logging in" => "Einloggen"
 .CAPIDisabled: "Disabled" => "Deaktiviert"
@@ -623,10 +623,8 @@ SECTION CommanderForm
 .CAPILogin: "Login" => "Login"
 .CAPIAwaitLogin: "Await Log in" => "Erwarte einloggen"
 
-
 include translation-deutsch-uc.tlp
 
 include translation-deutsch-je.tlp
 
 include translation-deutsch-ed.tlp
-

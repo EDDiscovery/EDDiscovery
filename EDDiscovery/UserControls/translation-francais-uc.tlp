@@ -19,6 +19,7 @@ SECTION UserControlBookmarks
 .SysU: "System could not be found - has not been synched or EDSM is unavailable" => "Système introuvable - il n'a pas été synchronisé ou EDSM est indisponible"
 .buttonExtImport.ToolTip: "Import bookmarks to EDD from CSV file" => "Importer des marque-pages vers EDD depuis un fichier CSV"
 .buttonExtExcel.ToolTip: "Export bookmarks to CSV file" => "Exporter des marque-pages vers un fichier CSV"
+.extButtonEditSystem.ToolTip: "Edit Bookmark on current system" @
 
 SECTION UserControlCombatPanel
 
@@ -43,6 +44,7 @@ SECTION UserControlCombatPanel
 .labelTotalCrimes.ToolTip: "How many times you've been caught!" => "Nombre de fois ou vous avez été pris !"
 .labelFaction.ToolTip: "Target Faction" => "Faction cible"
 .labelTotalReward.ToolTip: "Total reward" => "Récompense totale"
+.labelDied: "Died" @
 .labelFactionReward.ToolTip: "Reward associated with destroying the faction ships" => "Récompense associée à la destruction de vaisseau de faction"
 .checkBoxCustomGridOn.ToolTip: "Show grid when in transparent mode" => "Montrer la grille en mode transparent"
 .comboBoxCustomCampaign.ToolTip: "Select Campaign to view" => "Selectionner la campagne à afficher"
@@ -177,7 +179,7 @@ SECTION UserControlEngineering
 SECTION UserControlEstimatedValues
 
 .BodyName: "Body Name" => "Nom du corps"
-.EstValue: "Est Value" => "Valeur est."
+.EstValue: "Current Value" => "Valeur est."
 .EstBase: "Base Value" @
 .MappedValue: "Mapped" @
 .FirstDiscovered: "First Discovered" @
@@ -226,14 +228,18 @@ SECTION UserControlExpedition
 .NoRouteExport: "There is no route to export " => "Pas d'itinéraire à exporter"
 .Export: "Export route" => "Exporter itinéraire"
 .UnknownS: "Unknown system, system is without co-ordinates" => "Système inconnu, système sans coordonnées"
-.Unsaved: "There are unsaved changes to the current route.\r\nWould you like to save the current route before proceeding?" => "Il y a des changements non sauvegardés pour l'itinéraire en cours.\r\nVoulez vous sauvegarder l'itinéraire en cours avant de continuer ?"
+.Unsaved: "Expedition - There are unsaved changes to the current route.\r\nWould you like to save the current route before proceeding?" => "Il y a des changements non sauvegardés pour l'itinéraire en cours.\r\nVoulez vous sauvegarder l'itinéraire en cours avant de continuer ?"
 .Specify: "Please specify a name for the route." => "Indiquer un nom pour l'itinéraire"
 .Conflict: "The current route name conflicts with a well-known expedition.\r\nPlease specify a new name to save your changes." => "Le nom de l'itinéraire en cours est le même qu'une expédition connue.\r\nChoississez un autre nom pour sauvegarder les changements"
 .Overwrite: "Warning: route already exists. Would you like to overwrite it?" => "Attention: l'itinéraire existe déjà. Voulez vous l'écraser ?"
 .EDSMUnk: "System not known to EDSM" => "Système inconnu d'EDSM"
+.ColumnX: "X" @
+.ColumnY: "Y" @
+.ColumnZ: "Z" @
 
 SECTION UserControlExploration
 
+.LoseAllChanges: "Exploration List, Confirm you want to lose all changes" @
 .ColumnSystemName: "System Name" => "Nom du système"
 .ColumnDist: "Dist" @
 .ColumnX: "X" @
@@ -443,6 +449,7 @@ SECTION UserControlSurveyor
 .autoHideToolStripMenuItem: "Auto Hide" => "Masquer automatiquement"
 .dontHideInFSSModeToolStripMenuItem: "Don\\'t Hide in FSS Mode" => "Ne pas masquer en mode ACS"
 .showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem: "Show System Info Always" => "Toujours montrer les infos du système"
+.selectFSSSignalsShownToolStripMenuItem: "Select FSS Signals Shown" @
 .LowRadius: " Low Radius." @
 .Mapped: " (Mapped & Discovered)" => " (cartographiée & découverte)"
 .Systemscancomplete: "System scan complete." => "Scan du système terminé."
@@ -625,7 +632,6 @@ SECTION UserControlPlot
 .D1: "\r\n{0} distance {1:N2} Ly" => "\r\n{0} distance {1:N2} AL"
 .D2: "\r\n    Visits: {0}" => "\r\n    Visites: {0}"
 .D3: "\r\n    Coordinates: X:{0:N2}, Y:{1:N2}, Z:{2:N2}\r\n" => "\r\n    Coordonnées: X:{0:N2}, Y:{1:N2}, Z:{2:N2}\r\n"
-.Nt": "\r\n    Notes: {0}\r\n" @
 
 SECTION UserControlRoute
 
@@ -684,6 +690,8 @@ SECTION UserControlRoute
 
 SECTION UserControlRouteTracker
 
+.Note: "Note: {0}" @
+.showBookmarkNotesToolStripMenuItem: "Show Bookmark Notes" @
 .setRouteToolStripMenuItem: "Set route" => "Définir itinéraire"
 .showJumpsToolStripMenuItem: "Show Jumps To Go" => "Afficher les sauts restants"
 .showWaypointCoordinatesToolStripMenuItem: "Show Waypoint Coordinates" => "Afficher les coordonnées de point de passage"
@@ -708,6 +716,7 @@ SECTION UserControlRouteTracker
 
 SECTION UserControlScan
 
+.Expired: "Expired:" @
 .System: "System:" => "Système:"
 .EnterSys: "Show System" => "Afficher système"
 .VLMT: "Set Valuable Minimum" => "Définir le seuil de valeur"
@@ -892,7 +901,7 @@ SECTION UserControlSettings
 .radioButtonCentreHome: "Home System" => "Système de base"
 .labelOpenOn: "Open Centred On" => "Ouvrir centré sur"
 .labelHome: "Now in Commander Settings" @
-.Font: "The font used by this theme is not available on your system.\r\nThe font needed is \\"{0}\\".\r\nInstall this font to fully use this theme.\r\nEuro Caps font is freely available from www.edassets.org.\r\n\r\nWould you like to load this theme using a replacement font?" => "La police utilisée par ce thème n'est pas installé sur votre PC.\r\nLa police nécessaire est \\"{0}\\".\r\nInstaller cette police pour profiter pleinement de ce thème.\r\nLa police Euro Caps est disponible gratuitement sur www.edassets.org.\r\n\r\nVoulez vous charger ce thème en utilisant une police de remplacement ?"
+.Font: "The font used by this theme is not available on your system.\r\nThe font needed is \\"{0}\\".\r\nInstall this font to fully use this theme.\r\nEuro Caps font is freely available from www.edassets.org.\r\n\r\nWould you like to load this theme using a replacement font?" @
 .Information: "Applies at next restart of ED Discovery" => "S'applique au prochain démarrage d'EDD"
 .AddC: "Commander name is not valid or duplicate" => "Le nom de commandant est invalide ou en doublon"
 .AddT: "Cannot create Commander" => "Impossible de créer le commandant"
@@ -986,7 +995,6 @@ SECTION UserControlSpanel
 .showCircumstellarZonesToolStripMenuItem.showIcyPlanetsToolStripMenuItem: "Icy Planets" => "Planètes gelées"
 .dontShowInformationWhenToolStripMenuItem.completelyHideThePanelToolStripMenuItem: "Completely hide the Panel" => "Masquer complètement le panneau"
 .dontShowInformationWhenToolStripMenuItem.dontshowwhenInPanelToolStripMenuItem: ".. when in a Panel" => ".. dans le panneau"
-.Goldilocks: "Goldilocks, {0} ({1}-{2} AU),\n" @
 
 SECTION UserControlStarDistance
 
@@ -1061,30 +1069,26 @@ SECTION UserControlStarList
 
 SECTION UserControlStats
 
-.tosystem: " to system " => " vers le système "
+.labelStart: "Start" @
+.labelEndDate: "To" @
 .tabControlCustomStats.tabPageGeneral: "General" => "Général"
 .tabControlCustomStats.tabPageGeneral.mostVisited: "Most Visited" => "Le plus visité"
 .tabControlCustomStats.tabPageGeneral.ItemName: "Item" @
 .tabControlCustomStats.tabPageGeneral.Information: "Information" @
 .tabControlCustomStats.tabPageTravel: "Travel" => "Voyage"
-.tabControlCustomStats.tabPageTravel.dataGridViewTextBoxColumn1: "Item" @
-.tabControlCustomStats.tabPageTravel.dataGridViewTextBoxColumn2: "Information" @
 .tabControlCustomStats.tabPageTravel.userControlStatsTimeTravel.labelTime: "Time" => "Date"
 .tabControlCustomStats.tabPageScan: "Scan" @
-.tabControlCustomStats.tabPageScan.ScanNotUsed: "Column1" => "Colonne1"
 .tabControlCustomStats.tabPageScan.userControlStatsTimeScan.labelTime: "Time" => "Date"
 .tabControlCustomStats.tabPageGameStats: "In Game" => "En jeu"
-.Visits: "Visits" => "Visites"
-.Type: "Type" @
-.All: "All" => "Tout"
-.JumpsBeforeSystem: "Jumps Before System" => "Sauts avant le système"
+.tabControlCustomStats.tabPageByShip: "By Ship" => "Par vaiseau"
 .TotalNoofjumps: "Total No of jumps: " => "Nb total de sauts:"
+.FSDjumps: "FSD Jumps" @
+.Beltcluster: "Belt Cluster: " @
 .JumpHistory: "Jump History" => "Historique de sauts"
 .24hc: "24 Hours: " => "24 heures"
 .OneWeek: ", One Week: " => ", une semaine"
 .30Days: ", 30 Days: " => ", 30 jours"
 .OneYear: ", One Year: " => ", 1 an"
-.FirstDiscoveries: "First Discoveries" => "Première découvertes"
 .MostNorth: "Most North" => "Le plus au nord"
 .MostSouth: "Most South" => "Le plus au sud"
 .MostEast: "Most East" => "Le plus a l'est"
@@ -1092,26 +1096,32 @@ SECTION UserControlStats
 .MostHighest: "Most Highest" => "le plus éloigné"
 .MostLowest: "Most Lowest" => "le plus proche"
 .MostVisited: "Most Visited" => "le plus visité"
-.24Hours: "24 Hours" => "24 heures"
-.Week: "Week" => "Semaine"
-.Month: "Month" => "Mois"
-.Lastdock: "Last dock" => "Dernier appontage"
 .Jumps: "Jumps" => "Sauts"
-.TraveledLy: "Traveled Ly" => "al parcourues"
+.TravelledLy: "Traveled Ly" => "Al parcourues"
 .PremiumBoost: "Premium Boost" => "Boost Premium"
 .StandardBoost: "Standard Boost" => "Boost Standard"
 .BasicBoost: "Basic Boost" => "Boost basique"
 .JetConeBoost: "Jet Cone Boost" => "Boost par jet de matière"
-.Landed: "Landed" => "posé"
-.HeatWarning: "Heat Warning" => "Alerte thermique"
-.Heatdamage: "Heat damage" => "Dommage thermique"
-.FuelScooped: "Fuel Scooped" => "Carburant récupéré"
-.ScoopedTons: "Scooped Tons" => "Tonnes récupérées"
 .Scans: "Scans" @
+.Mapped: "Mapped" => "Cartographié"
 .Scanvalue: "Scan value" => "Valeur de scan"
-.Docked: "Docked" => "Apponté"
-.BodyType: "Body Type" => "Type de corps"
+.Lastdock: "Last dock" => "Dernier appontage"
 .Trip: "Trip" => "Voyage"
+.All: "All" => "Tout"
+.Type: "Type" @
+.BankAccount: "Bank Account" => "Compte en banque"
+.Combat: "Combat" @
+.Crime: "Crime" @
+.Smuggling: "Smuggling" => "contrebande"
+.Trading: "Trading" => "Commerce"
+.Mining: "Mining" => "Minage"
+.Exploration: "Exploration" @
+.Passengers: "Passengers" => "Passagers"
+.SearchandRescue: "Search and Rescue" => "Sauvetage"
+.Crafting: "Crafting" => "Fabrication"
+.Crew: "Crew" => "Équipage"
+.Multi: "Multi-crew" => "Multi-équipage"
+.MaterialsTrader: "Materials Trader" => "Commerçants de matériaux"
 .CurrentAssets: "Current Assets" => "Actifs courants"
 .SpentonShips: "Spent on Ships" => "Dépensé en vaisseaux"
 .SpentonOutfitting: "Spent on Outfitting" => "Dépensé en équipement"
@@ -1182,29 +1192,20 @@ SECTION UserControlStats
 .TME: "{0} days {1} hours {1} minutes" => "{0} jours {1} heures {1} minutes"
 .Name: "Name" => "Nom"
 .Ident: "Ident" @
-.TravelledLy: "Travelled Ly" => "Al parcourues"
 .BodiesScanned: "Bodies Scanned" => "Corps scannés"
+.Destroyed: "Destroyed" => "Détruit(e)s"
 .GoodsBought: "Goods Bought" => "Marchandises achetées"
 .GoodsSold: "Goods Sold" => "Marchandises vendues"
-.Destroyed: "Destroyed" => "Détruit(e)s"
-.Unknown: "Unknown" => "Inconnu"
-.tabControlCustomStats.tabPageByShip: "By Ship" => "Par vaiseau"
-.tabControlCustomStats.tabPageByShip.dataGridViewTextBoxColumn3: "Item" @
-.tabControlCustomStats.tabPageByShip.dataGridViewTextBoxColumn4: "Information" @
-.Mapped: "Mapped" => "Cartographié"
-.BankAccount: "Bank Account" => "Compte en banque"
-.Combat: "Combat" @
-.Crime: "Crime" @
-.Smuggling: "Smuggling" => "contrebande"
-.Trading: "Trading" => "Commerce"
-.Mining: "Mining" => "Minage"
-.Exploration: "Exploration" @
-.Passengers: "Passengers" => "Passagers"
-.SearchandRescue: "Search and Rescue" => "Sauvetage"
-.Crafting: "Crafting" => "Fabrication"
-.Crew: "Crew" => "Équipage"
-.Multi: "Multi-crew" => "Multi-équipage"
-.MaterialsTrader: "Materials Trader" => "Commerçants de matériaux"
+.EfficientScans: "Efficient Scans" @
+.Accepted: "Accepted" @
+.Disgruntled: "Disgruntled" @
+.EncodedMaterialsTraded: "Encoded Materials Traded" @
+.RawMaterialsTraded: "Raw Materials Traded" @
+.G1MaterialsTraded: "Grade 1 Materials Traded" @
+.G2MaterialsTraded: "Grade 2 Materials Traded" @
+.G3MaterialsTraded: "Grade 3 Materials Traded" @
+.G4MaterialsTraded: "Grade 4 Materials Traded" @
+.G5MaterialsTraded: "Grade 5 Materials Traded" @
 
 SECTION StatsTimeUserControl
 
@@ -1331,6 +1332,7 @@ SECTION UserControlContainerSplitter
 
 SECTION UserControlTravelGrid
 
+.showSystemVisitedForeColourToolStripMenuItem: "Show lines in System Visited Fore Colour" @
 .THF: "History: Filter out fields" => "Historique : Filtrer les champs"
 .ColumnTime: "Time" => "Heure"
 .Icon: "Event" => "Événement"
@@ -1397,6 +1399,7 @@ SECTION UserControlTravelGrid
 .addToTrilaterationToolStripMenuItem.explorationPanelToolStripMenuItem: "Exploration Panel" => "Panneau d'exploration"
 .runSelectionThroughIGAUDebugToolStripMenuItem: "Run selection through IGAU (Debug)" => "Éxécuter la selection via IGAU (Debug)"
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" => "Activer/Désactiver le retour à la ligne"
+.runSelectionThroughEDAstroDebugToolStripMenuItem: "Run selection through EDAstro (Debug)" @
 
 SECTION UserControlCaptainsLog
 
@@ -1454,9 +1457,6 @@ SECTION UserControlTrilateration
 .pasteToolStripMenuItem: "Paste" => "Coller"
 .toolStripButtonSubmitDistances: "&Submit Distances" => "&Soumettre les distances"
 .toolStripButtonNew: "Start &new" => "Démarrer &nouveau"
-.toolStripButtonRemoveUnused: "toolStripButtonRemoveUnused" @
-.toolStripButtonRemoveAll: "toolStripButton1" @
-.toolStripButtonMap: "3d map" => "Carte 3D"
 .toolStripLabelSystem: "From System:" => "Système d'origine:"
 .toolStripTextBoxSystem: "Press Start New" @
 .toolStripLabel1: "Visited without coordinates:" => "Visité sans coordonnées:"
@@ -1580,6 +1580,9 @@ SECTION UserControlFactions
 .showCommoditymaterialTradesForFactionToolStripMenuItem: "Show commodity/material trades for faction" @
 .showBountiesAndBondsForFactionToolStripMenuItem: "Show bounties and bonds for faction" @
 .showFactionSystemDetailToolStripMenuItem: "Show system detail for faction" @
+.MissionsInProgress: "Missions In Progress:" @
+.CapShipVictims: "Capital ship Victims: " @
+.CapShipAward: "Capital ship Award: " @
 
 SECTION ScanDisplayUserControl
 
@@ -1613,6 +1616,7 @@ SECTION FilterSelector
 .Commodities: "Commodities" => "Marchandises"
 .Ledger: "Ledger" => "Livre de compte"
 .Ship: "Ship" => "Vaisseau"
+.Mining: "Mining" @
 
 SECTION UserControlCommonBase
 
