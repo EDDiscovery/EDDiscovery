@@ -292,7 +292,6 @@ SECTION EDDiscoveryController
 .EXPD: "Checking for new Expedition data" => "Prüfe auf neue Expeditionsdaten"
 .EXPL: "Checking for new Exploration data" => "Prüfe auf neue Erkundungsdaten"
 
-
 SECTION BookmarkForm
 
 BookmarkForm: "Create New Bookmark" => "Erstelle neues Lesezeichen"
@@ -534,7 +533,7 @@ RecordStep: "RecordStep" => "Schrittaufzeichnen"
 .labelZoomTime: "Time to take to Zoom" => "Zeit um zu zoomen"
 .checkBoxPos: "Go To" => "Gehe zu"
 .labelMsgTime: "Message on screen time" => "Nachricht bei Bildschirmzeit"
-.checkBoxDisplayMessageWhenComplete: "Display Message with complete" => @
+.checkBoxDisplayMessageWhenComplete: "Display Message with complete" => 
 .labelTimeChange: "Time to take to change pos" => "Zeit um Position zu wechseln"
 .checkBoxWaitComplete: "Wait for actions to complete" => "Warte auf Abschluss der Aktionen"
 .labelTimeDir: "Time to take to change direction" => "Zeit um Richtung zu ändern"
@@ -605,10 +604,10 @@ KeyForm: "Define Key Sequence" => "Definiere Testensequenz"
 SECTION UserControlForm
 
 .panel_minimize.ToolTip: "Minimise" => "Minimieren"
-.panel_ontop.ToolTip: "Toggle window on top of others" => "Fixiere Fenster über anderen" 
-.panel_close.ToolTip: "Close" => "Schließen"
-.panel_taskbaricon.ToolTip: "Toggle show taskbar icon for this window" => "Wechsle zeige Taskbaricon für dieses Fenster" 
-.panel_showtitle.ToolTip: "Toggle title visibility for this window when transparent" => "Wechsle Sichtbarkeit dieses Fenster wenn transparent"
+.panel_ontop.ToolTip: "Toggle window on top of others" => "'Fenster zuoberst' umschalten" 
+.panel_close.ToolTip: "Close" => "Schließen"'
+.panel_taskbaricon.ToolTip: "Toggle show taskbar icon for this window" => "Wechsle 'zeige Taskleistensymbol für dieses Fenster'" 
+.panel_showtitle.ToolTip: "Toggle title visibility for this window when transparent" => "Wechsle 'Sichtbarkeit dieses Fenster wenn transparent'"
 .panel_transparent.ToolTip: "Toggle window transparency thru four settings\r\nOff - normal window\r\nOn (T) - transparent with controls active when mouse not inside window\r\nOn (Tc) - transparent with control active, to activate hold down the activate key\r\nOn (Tf) - fully transparent and inert, to activate hold down the activate key\r\n\r\nSee the settings page for configuring which key is the activate key.  \r\nMouse must be within the boundaries of the window and the key held down for\r\n500ms approx.\r\n\r\n\r\n" => "Wechsle Fenstertransparenz durch vier Einstellungen\r\nAus - normales Fenster\r\nEin (T) - transparent mit aktiver Steuerung während die Maus nicht im Fenster ist\r\nEin (Tc) - transparent mit aktiver Steuerung, zum Aktivieren Triggertaste drücken\r\nEin (Tf) - komplett transparent und inaktiv, zum aktivieren Triggertaste drücken\r\n\r\nBetrachte die Einstellungen um die Triggertaste zu sehen.\r\nDie Maus muss im Fenster sein und die Triggertaste für etwa\r\n500ms gedrückt werden.\r\n\r\n\r\n"
 
 SECTION ExtPanelRollUp
