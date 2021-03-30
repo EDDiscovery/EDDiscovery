@@ -807,8 +807,8 @@ namespace EDDiscovery.UserControls
                                     {
                                         writer.Write(csv.Format(scan.nTidalLock.HasValue ? scan.nTidalLock.Value : false));
                                         writer.Write(csv.Format((scan.TerraformState != null) ? scan.TerraformState : ""));
-                                        writer.Write(csv.Format((scan.PlanetClass != null) ? scan.PlanetClass : ""));
-                                        writer.Write(csv.Format((scan.Atmosphere != null) ? scan.Atmosphere : ""));
+                                        writer.Write(csv.Format(scan?.PlanetClass ??""));
+                                        writer.Write(csv.Format(scan?.Atmosphere ?? ""));
                                         writer.Write(csv.Format(scan.GetAtmosphereComponent("Iron")));
                                         writer.Write(csv.Format(scan.GetAtmosphereComponent("Silicates")));
                                         writer.Write(csv.Format(scan.GetAtmosphereComponent("SulphurDioxide")));

@@ -347,8 +347,8 @@ namespace EDDiscovery.UserControls
                                 bdClass.Append("Terraformable".T(EDTx.UserControlScanGrid_Terraformable)).Append(", ");
 
                             // is a planet?...
-                            if (sn.ScanData.PlanetClass != null)
-                                bdClass.Append(sn.ScanData.PlanetClass);
+                            if (sn.ScanData.PlanetTypeText.HasChars())
+                                bdClass.Append(sn.ScanData.PlanetTypeText);
 
                             planets++;
 
@@ -359,7 +359,7 @@ namespace EDDiscovery.UserControls
                             // ...or a moon?
                             if (sn.Level >= 2 && sn.NodeType == StarScan.ScanNodeType.body)
                             {
-                                if (sn.ScanData.PlanetClass != null)
+                                if (sn.ScanData.IsPlanet)
                                     moons++;
 
                                 bdClass.Append(" ").Append("Moon".T(EDTx.UserControlScanGrid_Moon));
@@ -369,7 +369,7 @@ namespace EDDiscovery.UserControls
                                     bdDist.AppendFormat("{0:0.0}ls ({1:0}km)", sn.ScanData.nSemiMajorAxis.Value / JournalScan.oneLS_m, sn.ScanData.nSemiMajorAxis.Value / 1000);
                             }
 
-                            if (sn.ScanData.PlanetClass != null && sn.ScanData.PlanetClass.Contains("Giant"))
+                            if (sn.ScanData.GasWorld)
                                 gasgiants++;
                             else
                                 terrestrial++;
