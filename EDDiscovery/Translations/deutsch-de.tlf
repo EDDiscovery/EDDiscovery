@@ -531,7 +531,7 @@ RecordStep: "RecordStep" => "Schrittaufzeichnen"
 .labelZoomTime: "Time to take to Zoom" => "Zeit um zu zoomen"
 .checkBoxPos: "Go To" => "Gehe zu"
 .labelMsgTime: "Message on screen time" => "Nachricht bei Bildschirmzeit"
-.checkBoxDisplayMessageWhenComplete: "Display Message with complete" @
+.checkBoxDisplayMessageWhenComplete: "Display Message with complete" => "Nach Abschluss Nachricht anzeigen"
 .labelTimeChange: "Time to take to change pos" => "Zeit um Position zu wechseln"
 .checkBoxWaitComplete: "Wait for actions to complete" => "Warte auf Abschluss der Aktionen"
 .labelTimeDir: "Time to take to change direction" => "Zeit um Richtung zu ändern"

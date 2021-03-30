@@ -1198,7 +1198,7 @@ SECTION UserControlStats
 .GoodsSold: "Goods Sold" => "Handelswaren verkauft"
 .EfficientScans: "Efficient Scans" => "Erhaltene Effizienzboni"
 .Accepted: "Accepted" => "Angenommen"
-.Disgruntled: "Disgruntled" @
+.Disgruntled: "Disgruntled" => "Verärgert"
 .EncodedMaterialsTraded: "Encoded Materials Traded" => "Gehandelte verschlüsselte Materialien"
 .RawMaterialsTraded: "Raw Materials Traded" => "Gehandelte Materialien"
 .G1MaterialsTraded: "Grade 1 Materials Traded" => "Gehandelte Grad-1-Materialien"
@@ -1399,7 +1399,7 @@ SECTION UserControlTravelGrid
 .addToTrilaterationToolStripMenuItem.explorationPanelToolStripMenuItem: "Exploration Panel" => "Erkundungspaneel"
 .runSelectionThroughIGAUDebugToolStripMenuItem: "Run selection through IGAU (Debug)" => "Führe Auswahl durch IGAU aus (Debug)"
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" => "Aktiviere oder deaktiviere Abkürzungen"
-.runSelectionThroughEDAstroDebugToolStripMenuItem: "Run selection through EDAstro (Debug)" @
+.runSelectionThroughEDAstroDebugToolStripMenuItem: "Run selection through EDAstro (Debug)" => "Führe Auswahl durch EDAstro aus (Debug)"
 
 SECTION UserControlCaptainsLog
 

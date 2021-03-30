@@ -7,6 +7,9 @@ Cmdr Robby
 Developers for this release series:
 Bravada Cadelanne, 
 
+Test Support
+Eahlstan, JDM12983
+
 Images Captured by:
 Spandino, Robby, Eahlstan, Ettanin, CompleteNOOB from Frontier Elite Dangerous Images (C) Frontier Developments PLC
 
