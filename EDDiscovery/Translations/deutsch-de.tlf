@@ -59,7 +59,7 @@ SECTION PopOutInfo
 .Missions.Description: "Mission list" => "Missionsliste"
 .Missions.Title: "Missions" => "Missionen"
 .Modules.Description: "Ships and their loadouts plus stored modules" => "Schiffe und ihre Ausrüstung plus gelagerte Module"
-.Modules.Title: "Ships/Loadout" => "Shiffe/Ausrüstung"
+.Modules.Title: "Ships/Loadout" => "Schiffe/Ausrüstung"
 .Statistics.Description: "Statistics Information" => "Statistische Informationen"
 .Statistics.Title: "Statistics" => "Statistiken"
 .MarketData.Description: "Market data view, giving commodity price information where available" => "Marktdatenansicht, zeigt Warenpreise sofern verfügbar"
