@@ -174,7 +174,7 @@ SECTION UserControlEngineering
 .buttonFilterModule.ToolTip: "Filter the table by module type" => "Filtere die Tabelle nach Modultyp"
 .panelButtons.ToolTip: "Left click and drag on grid to reorder" => "Linksklick und auf Gitter ziehen um neu zu ordnen"
 .chkNotHistoric.ToolTip: "When red, use the materials at the cursor to estimate, when green always use the latest materials." => "Wenn 'rot' verwende die Materialien beim Zeiger zum Schätzen, wenn 'grün' verwende immer die letzten Materialien."
-.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" => "Aktiviere oder deaktiviere Abkürzungen"
+.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" => "Aktiviere oder deaktiviere Zeilenumbruch"
 
 SECTION UserControlEstimatedValues
 
@@ -401,7 +401,7 @@ SECTION UserControlMaterials
 .checkBoxClear.ToolTip: "Remove zero items the time after they go to zero" => "Entferne Null-Einträge nachdem sie Null erreichen"
 .buttonFilter.ToolTip: "Filter out items" => "Einträge ausfiltern"
 .checkBoxShowZeros.ToolTip: "Green will show materials with zero counts, red means remove them" => "Grün zeigt Einträge auf Null, Rot filtert diese"
-.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" => "Aktiviere oder deaktiviere Abkürzungen"
+.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" => "Aktiviere oder deaktiviere Zeilenumbruch"
 
 SECTION UserControlMaterialCommodities
 
@@ -484,7 +484,7 @@ SECTION UserControlSurveyor
 .showBeltClustersToolStripMenuItem: "Show Belt Clusters" => "Zeige Gürtelgruppen"
 .showMoreInformationToolStripMenuItem: "Show More Information" => "Zeige mehr Informationen"
 .showValuesToolStripMenuItem: "Show values" => "Zeige Werte"
-.wordWrapToolStripMenuItem: "Word Wrap" => "Abkürzung"
+.wordWrapToolStripMenuItem: "Word Wrap" => "Zeilenumbruch"
 
 SECTION MissionListUserControl
 
@@ -565,7 +565,7 @@ SECTION UserControlModules
 .EDSURL: "Enter ED Shipyard URL" => "ED Shipyard URL eingeben"
 .CURL: "Enter Coriolis URL" => "Coriolis URL eingeben"
 .buttonExtExcel.ToolTip: "Send data on grid to excel" => "Sende Daten im Gitter an Excel"
-.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" => "Aktiviere oder deaktiviere Abkürzungen"
+.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" => "Aktiviere oder deaktiviere Zeilenumbruch"
 .AllModules: "All Modules" => "Alle Module"
 .ForceSell: "Force Sell" => "Verkaufen erzwingen"
 .NOSI: "No Ship Information available" => "Keine Schiffsinformationen verfügbar"
@@ -1238,7 +1238,7 @@ SECTION UserControlSynthesis
 .buttonClear.ToolTip: "Set all wanted values to zero" => "Setze alle Gesucht-Werte auf 0"
 .panelButtons.ToolTip: "Left click and drag on grid to reorder" => "Linksklick und auf Gitter ziehen um neu zu ordnen"
 .chkNotHistoric.ToolTip: "When red, use the materials at the cursor to estimate, when green always use the latest materials." => "Wenn rot, benutze Materialien beim Zeiger um zu schätzen, wenn grün verwende immer die letzten Materialien."
-.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" => "Aktiviere oder deaktiviere Abkürzungen"
+.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" => "Aktiviere oder deaktiviere Zeilenumbruch"
 
 SECTION UserControlSysInfo
 
@@ -1398,7 +1398,7 @@ SECTION UserControlTravelGrid
 .toolStripRollUpOlderOutlines.rollUpAfter5ToolStripMenuItem: "After 5" => "Nach 5"
 .addToTrilaterationToolStripMenuItem.explorationPanelToolStripMenuItem: "Exploration Panel" => "Erkundungspaneel"
 .runSelectionThroughIGAUDebugToolStripMenuItem: "Run selection through IGAU (Debug)" => "Führe Auswahl durch IGAU aus (Debug)"
-.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" => "Aktiviere oder deaktiviere Abkürzungen"
+.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" => "Aktiviere oder deaktiviere Zeilenumbruch"
 .runSelectionThroughEDAstroDebugToolStripMenuItem: "Run selection through EDAstro (Debug)" => "Führe Auswahl durch EDAstro aus (Debug)"
 
 SECTION UserControlCaptainsLog
