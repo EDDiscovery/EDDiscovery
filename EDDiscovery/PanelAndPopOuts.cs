@@ -270,7 +270,7 @@ namespace EDDiscovery
         static public PanelIDs[] GetUserSelectablePanelIDs(bool sortbyname)                // only user selected
         {
             if (sortbyname)
-                return (from x in userselectablepanellist orderby x.Description select x.PopoutID).ToArray();
+                return (from x in userselectablepanellist orderby x.WindowTitle select x.PopoutID).ToArray();
             else
                 return userselectablepanellist.Select(x => x.PopoutID).ToArray();
         }

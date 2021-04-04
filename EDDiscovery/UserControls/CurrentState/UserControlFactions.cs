@@ -356,7 +356,7 @@ namespace EDDiscovery.UserControls
                                 }
                             }
                         }
-                        else if ( withinexpirytime )
+                        else if ( withinexpirytime && ms.State == MissionState.StateTypes.InProgress)
                         {
                             factionStats.AddMissionsInProgress(1);
                         }
