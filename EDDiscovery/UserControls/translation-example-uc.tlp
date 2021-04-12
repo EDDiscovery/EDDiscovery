@@ -6,6 +6,7 @@ SECTION UserControlBookmarks
 .ColDescription: "Description" @
 .ColX: "X" @
 .ColY: "Y" @
+.ColY: "Y" @
 .ColZ: "Z" @
 .labelSearch: "Search" @
 .toolStripMenuItemGotoStar3dmap: "Goto in 3D Map" @
@@ -1209,6 +1210,7 @@ SECTION UserControlStats
 
 .GoodsBought: "Goods Bought" @
 .GoodsSold: "Goods Sold" @
+.GoodsProfit: "Profit" @
 
 .EfficientScans: "Efficient Scans" @
 .Accepted: "Accepted" @
@@ -1563,6 +1565,7 @@ SECTION UserControlFactions
 .colMissionCredits: "Mission Credits" @
 .CBought: "Commds +" @
 .CSold: "Commds -" @
+.CProfit: "Commds Profit" @
 .MBought: "Mats +" @
 .MSold: "Mats -" @
 .CrimeCommitted: "Crimes Committed" @

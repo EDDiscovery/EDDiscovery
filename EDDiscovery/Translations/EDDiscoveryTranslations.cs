@@ -416,6 +416,7 @@ namespace EDDiscovery
         // used by faction panels now, not stats
         UserControlStats_GoodsBought, // Goods Bought
         UserControlStats_GoodsSold, // Goods Sold
+        UserControlStats_GoodsProfit, // Goods Sold
 
 
         UserControlShoppingList_NM, // Needed Mats

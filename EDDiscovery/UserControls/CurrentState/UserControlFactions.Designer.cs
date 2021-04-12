@@ -50,6 +50,7 @@
             this.colMissionCredits = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CBought = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CSold = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CProfit = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.MBought = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.MSold = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CrimeCommitted = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -76,7 +77,7 @@
             this.datePanel.Controls.Add(this.labelValue);
             this.datePanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.datePanel.Location = new System.Drawing.Point(0, 0);
-            this.datePanel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.datePanel.Margin = new System.Windows.Forms.Padding(2);
             this.datePanel.Name = "datePanel";
             this.datePanel.Size = new System.Drawing.Size(853, 27);
             this.datePanel.TabIndex = 0;
@@ -99,7 +100,6 @@
             this.startDateTime.TextBackColor = System.Drawing.SystemColors.ControlLight;
             this.toolTip.SetToolTip(this.startDateTime, "Include from");
             this.startDateTime.Value = new System.DateTime(2017, 4, 7, 9, 2, 29, 549);
-            this.startDateTime.ValueChanged += new System.EventHandler(this.startDateTime_ValueChanged);
             // 
             // labelTo
             // 
@@ -129,7 +129,6 @@
             this.endDateTime.TextBackColor = System.Drawing.SystemColors.ControlLight;
             this.toolTip.SetToolTip(this.endDateTime, "Include to");
             this.endDateTime.Value = new System.DateTime(2017, 4, 7, 9, 2, 29, 549);
-            this.endDateTime.ValueChanged += new System.EventHandler(this.endDateTime_ValueChanged);
             // 
             // labelValue
             // 
@@ -187,7 +186,7 @@
             this.dataViewScrollerPanelFactions.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewScrollerPanelFactions.InternalMargin = new System.Windows.Forms.Padding(0);
             this.dataViewScrollerPanelFactions.Location = new System.Drawing.Point(0, 27);
-            this.dataViewScrollerPanelFactions.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.dataViewScrollerPanelFactions.Margin = new System.Windows.Forms.Padding(2);
             this.dataViewScrollerPanelFactions.Name = "dataViewScrollerPanelFactions";
             this.dataViewScrollerPanelFactions.Size = new System.Drawing.Size(853, 545);
             this.dataViewScrollerPanelFactions.TabIndex = 1;
@@ -205,7 +204,7 @@
             this.scrollBarFactions.HideScrollBar = false;
             this.scrollBarFactions.LargeChange = 0;
             this.scrollBarFactions.Location = new System.Drawing.Point(837, 0);
-            this.scrollBarFactions.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.scrollBarFactions.Margin = new System.Windows.Forms.Padding(2);
             this.scrollBarFactions.Maximum = -1;
             this.scrollBarFactions.Minimum = 0;
             this.scrollBarFactions.MouseOverButtonColor = System.Drawing.Color.Green;
@@ -237,6 +236,7 @@
             this.colMissionCredits,
             this.CBought,
             this.CSold,
+            this.CProfit,
             this.MBought,
             this.MSold,
             this.CrimeCommitted,
@@ -252,7 +252,7 @@
             this.dataGridViewFactions.ContextMenuStrip = this.contextMenuStrip;
             this.dataGridViewFactions.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewFactions.Location = new System.Drawing.Point(0, 0);
-            this.dataGridViewFactions.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.dataGridViewFactions.Margin = new System.Windows.Forms.Padding(2);
             this.dataGridViewFactions.Name = "dataGridViewFactions";
             this.dataGridViewFactions.RowHeaderMenuStrip = null;
             this.dataGridViewFactions.RowHeadersVisible = false;
@@ -266,7 +266,7 @@
             // 
             // colFaction
             // 
-            this.colFaction.FillWeight = 200F;
+            this.colFaction.FillWeight = 200.039F;
             this.colFaction.HeaderText = "Faction";
             this.colFaction.MinimumWidth = 8;
             this.colFaction.Name = "colFaction";
@@ -275,6 +275,7 @@
             // 
             // colMissions
             // 
+            this.colMissions.FillWeight = 100.0195F;
             this.colMissions.HeaderText = "Missions";
             this.colMissions.MinimumWidth = 8;
             this.colMissions.Name = "colMissions";
@@ -283,6 +284,7 @@
             // 
             // colInfluence
             // 
+            this.colInfluence.FillWeight = 100.0195F;
             this.colInfluence.HeaderText = "Inf +";
             this.colInfluence.MinimumWidth = 8;
             this.colInfluence.Name = "colInfluence";
@@ -291,6 +293,7 @@
             // 
             // colReputation
             // 
+            this.colReputation.FillWeight = 100.0195F;
             this.colReputation.HeaderText = "Rep +";
             this.colReputation.MinimumWidth = 8;
             this.colReputation.Name = "colReputation";
@@ -299,7 +302,7 @@
             // 
             // colMissionCredits
             // 
-            this.colMissionCredits.FillWeight = 130F;
+            this.colMissionCredits.FillWeight = 130.0254F;
             this.colMissionCredits.HeaderText = "Mission Credits";
             this.colMissionCredits.MinimumWidth = 8;
             this.colMissionCredits.Name = "colMissionCredits";
@@ -308,6 +311,7 @@
             // 
             // CBought
             // 
+            this.CBought.FillWeight = 100.0195F;
             this.CBought.HeaderText = "Commds +";
             this.CBought.MinimumWidth = 8;
             this.CBought.Name = "CBought";
@@ -316,13 +320,22 @@
             // 
             // CSold
             // 
+            this.CSold.FillWeight = 100.0195F;
             this.CSold.HeaderText = "Commds -";
             this.CSold.MinimumWidth = 8;
             this.CSold.Name = "CSold";
             this.CSold.ToolTipText = "Commodities Sold";
             // 
+            // CProfit
+            // 
+            this.CProfit.FillWeight = 99.59389F;
+            this.CProfit.HeaderText = "Commds Profit";
+            this.CProfit.MinimumWidth = 8;
+            this.CProfit.Name = "CProfit";
+            // 
             // MBought
             // 
+            this.MBought.FillWeight = 100.0195F;
             this.MBought.HeaderText = "Mats +";
             this.MBought.MinimumWidth = 8;
             this.MBought.Name = "MBought";
@@ -331,6 +344,7 @@
             // 
             // MSold
             // 
+            this.MSold.FillWeight = 100.0195F;
             this.MSold.HeaderText = "Mats -";
             this.MSold.MinimumWidth = 8;
             this.MSold.Name = "MSold";
@@ -339,6 +353,7 @@
             // 
             // CrimeCommitted
             // 
+            this.CrimeCommitted.FillWeight = 100.0195F;
             this.CrimeCommitted.HeaderText = "Crimes Committed";
             this.CrimeCommitted.MinimumWidth = 8;
             this.CrimeCommitted.Name = "CrimeCommitted";
@@ -346,6 +361,7 @@
             // 
             // BountyKills
             // 
+            this.BountyKills.FillWeight = 100.0195F;
             this.BountyKills.HeaderText = "Bounty Kills";
             this.BountyKills.MinimumWidth = 8;
             this.BountyKills.Name = "BountyKills";
@@ -354,6 +370,7 @@
             // 
             // BountyValue
             // 
+            this.BountyValue.FillWeight = 100.0195F;
             this.BountyValue.HeaderText = "Bounty Rewards";
             this.BountyValue.MinimumWidth = 8;
             this.BountyValue.Name = "BountyValue";
@@ -362,6 +379,7 @@
             // 
             // BountyRewardsValue
             // 
+            this.BountyRewardsValue.FillWeight = 100.0195F;
             this.BountyRewardsValue.HeaderText = "Bounty Rewards Value";
             this.BountyRewardsValue.MinimumWidth = 8;
             this.BountyRewardsValue.Name = "BountyRewardsValue";
@@ -370,6 +388,7 @@
             // 
             // Interdicted
             // 
+            this.Interdicted.FillWeight = 100.0195F;
             this.Interdicted.HeaderText = "Interdicted";
             this.Interdicted.MinimumWidth = 8;
             this.Interdicted.Name = "Interdicted";
@@ -378,6 +397,7 @@
             // 
             // Interdiction
             // 
+            this.Interdiction.FillWeight = 100.0195F;
             this.Interdiction.HeaderText = "Interdiction";
             this.Interdiction.MinimumWidth = 8;
             this.Interdiction.Name = "Interdiction";
@@ -386,6 +406,7 @@
             // 
             // KillBondVictim
             // 
+            this.KillBondVictim.FillWeight = 100.0195F;
             this.KillBondVictim.HeaderText = "Kill Bonds Victim";
             this.KillBondVictim.MinimumWidth = 8;
             this.KillBondVictim.Name = "KillBondVictim";
@@ -394,6 +415,7 @@
             // 
             // KillBondsAward
             // 
+            this.KillBondsAward.FillWeight = 100.0195F;
             this.KillBondsAward.HeaderText = "Kill Bonds Awarded";
             this.KillBondsAward.MinimumWidth = 8;
             this.KillBondsAward.Name = "KillBondsAward";
@@ -402,6 +424,7 @@
             // 
             // KillBondsValue
             // 
+            this.KillBondsValue.FillWeight = 100.0195F;
             this.KillBondsValue.HeaderText = "Kill Bonds Value";
             this.KillBondsValue.MinimumWidth = 8;
             this.KillBondsValue.Name = "KillBondsValue";
@@ -410,7 +433,7 @@
             // 
             // colInfo
             // 
-            this.colInfo.FillWeight = 150F;
+            this.colInfo.FillWeight = 150.0293F;
             this.colInfo.HeaderText = "Other Info";
             this.colInfo.MinimumWidth = 8;
             this.colInfo.Name = "colInfo";
@@ -424,7 +447,7 @@
             this.AutoSize = true;
             this.Controls.Add(this.dataViewScrollerPanelFactions);
             this.Controls.Add(this.datePanel);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "UserControlFactions";
             this.Size = new System.Drawing.Size(853, 572);
             this.datePanel.ResumeLayout(false);
@@ -459,6 +482,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colMissionCredits;
         private System.Windows.Forms.DataGridViewTextBoxColumn CBought;
         private System.Windows.Forms.DataGridViewTextBoxColumn CSold;
+        private System.Windows.Forms.DataGridViewTextBoxColumn CProfit;
         private System.Windows.Forms.DataGridViewTextBoxColumn MBought;
         private System.Windows.Forms.DataGridViewTextBoxColumn MSold;
         private System.Windows.Forms.DataGridViewTextBoxColumn CrimeCommitted;

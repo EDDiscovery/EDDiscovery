@@ -196,11 +196,14 @@ namespace EDDiscovery.UserControls
             for (int col = 1; col < dataGridViewFactions.ColumnCount - 1; col++)
                 dataGridViewFactions.Columns[col].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
 
-            startDateTime.Value = GetSetting("StartDate", DateTime.UtcNow);
+            startDateTime.Value = EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(GetSetting("StartDate", DateTime.UtcNow));
             startDateTime.Checked = GetSetting("StartDateChecked", false);
-            endDateTime.Value = GetSetting("EndDate", DateTime.UtcNow);
+            endDateTime.Value = EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(GetSetting("EndDate", DateTime.UtcNow));
             endDateTime.Checked = GetSetting("EndDateChecked", false);
             VerifyDates();
+
+            this.startDateTime.ValueChanged += new System.EventHandler(this.startDateTime_ValueChanged);        // now install the change handlers
+            this.endDateTime.ValueChanged += new System.EventHandler(this.endDateTime_ValueChanged);
 
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
@@ -419,7 +422,8 @@ namespace EDDiscovery.UserControls
 
                     object[] rowobj = { fs.Name,
                                         fs.Missions.ToString("N0"), fs.Influence.ToString("N0"), fs.Reputation.ToString("N0"), fs.Credits.ToString("N0"),
-                                        fs.FactionStats.BoughtCommodity.ToString("N0"), fs.FactionStats.SoldCommodity.ToString("N0"), fs.FactionStats.BoughtMaterial.ToString("N0"), fs.FactionStats.SoldMaterial.ToString("N0"),
+                                        fs.FactionStats.BoughtCommodity.ToString("N0"), fs.FactionStats.SoldCommodity.ToString("N0"),fs.FactionStats.ProfitCommodity.ToString("N0"),
+                                        fs.FactionStats.BoughtMaterial.ToString("N0"), fs.FactionStats.SoldMaterial.ToString("N0"),
                                         fs.FactionStats.CrimesAgainst.ToString("N0") ,
                                         fs.FactionStats.BountyKill.ToString("N0"), fs.FactionStats.BountyRewards.ToString("N0"), fs.FactionStats.BountyRewardsValue.ToString("N0"),
                                         fs.FactionStats.Interdicted.ToString("N0"), fs.FactionStats.Interdiction.ToString("N0"),
@@ -568,32 +572,40 @@ namespace EDDiscovery.UserControls
                 dgvpanel.DataGrid.CreateTextColumns("Date".T(EDTx.UserControlOutfitting_Date), 100, 5,
                                                     "Item".T(EDTx.UserControlFactions_Item), 150, 5,
                                                     "Bought".T(EDTx.UserControlStats_GoodsBought), 50, 5,
-                                                    "Sold".T(EDTx.UserControlStats_GoodsSold), 50, 5);
+                                                    "Sold".T(EDTx.UserControlStats_GoodsSold), 50, 5,
+                                                    "Profit".T(EDTx.UserControlStats_GoodsProfit), 50, 5);
+
                 dgvpanel.DataGrid.SortCompare += (s, ev) => { if (ev.Column.Index >= 2) ev.SortDataGridViewColumnNumeric(); };
                 dgvpanel.DataGrid.RowHeadersVisible = false;
                 dgvpanel.DataGrid.Columns[2].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
                 dgvpanel.DataGrid.Columns[3].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                dgvpanel.DataGrid.Columns[4].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
 
                 DGVLoadColumnLayout(dgvpanel.DataGrid, "ShowCommdsMats");
+
+                long profit = 0;
 
                 foreach (var he in FilterHistory((x) => x.journalEntry is IStatsJournalEntryMatCommod && x.StationFaction == fs.Name))
                 {
                     var items = (he.journalEntry as IStatsJournalEntryMatCommod).ItemsList;
                     foreach (var i in items)
                     {
-                        var m = EliteDangerousCore.MaterialCommodityData.GetByFDName(i.Item1);     // and we see if we actually have some at this time
-                        string name = m?.Name ?? i.Item1;
+                        var m = EliteDangerousCore.MaterialCommodityData.GetByFDName(i.FDName);     // and we see if we actually have some at this time
+                        string name = m?.Name ?? i.FDName;
 
-                        int bought = i.Item2 > 0 ? i.Item2 : 0;
-                        int sold = i.Item2 < 0 ? -i.Item2 : 0;
+                        int bought = i.Count > 0 ? i.Count : 0;
+                        int sold = i.Count < 0 ? -i.Count : 0;
 
                         object[] rowobj = { EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(he.EventTimeUTC),
                                             name,
                                             bought.ToString("N0"),
-                                            sold.ToString("N0") };
+                                            sold.ToString("N0"),
+                                            i.Profit.ToString("N0")};
                         var row = dgvpanel.DataGrid.RowTemplate.Clone() as DataGridViewRow;
                         row.CreateCells(dgvpanel.DataGrid, rowobj);
                         dgvpanel.DataGrid.Rows.Add(row);
+
+                        profit += i.Profit;
                     }
                 }
 
@@ -604,7 +616,10 @@ namespace EDDiscovery.UserControls
                 f.InstallStandardTriggers();
                 f.AllowResize = true;
 
-                f.ShowDialogCentred(FindForm(), FindForm().Icon, "Materials/Commodities for ".T(EDTx.UserControlFactions_MaterialCommodsFor) + fs.Name, closeicon: true);
+                string title = "Materials/Commodities for ".T(EDTx.UserControlFactions_MaterialCommodsFor) + fs.Name;
+                if (profit != 0)
+                    title += " (" + profit.ToString("N0") + "cr)";
+                f.ShowDialogCentred(FindForm(), FindForm().Icon, title  , closeicon: true);
 
                 DGVSaveColumnLayout(dgvpanel.DataGrid, "ShowCommdsMats");
 
@@ -716,24 +731,24 @@ namespace EDDiscovery.UserControls
                         {
                             if (he.journalEntry.EventTypeID == JournalTypeEnum.MaterialTrade)
                             {
-                                if (i.Item2 > 0)
+                                if (i.Count > 0)
                                 {
-                                    si.AddMaterialsBought(i.Item2);
+                                    si.AddMaterialsBought(i.Count);
                                 }
-                                else if (i.Item2 < 0)
+                                else if (i.Count < 0)
                                 {
-                                    si.AddMaterialsSold(i.Item2);
+                                    si.AddMaterialsSold(i.Count);
                                 }
                             }
                             else
                             {
-                                if (i.Item2 > 0)
+                                if (i.Count > 0)
                                 {
-                                    si.AddCommoditiesBought(i.Item2);
+                                    si.AddCommoditiesBought(i.Count);
                                 }
-                                else if (i.Item2 < 0)
+                                else if (i.Count < 0)
                                 {
-                                    si.AddCommoditiesSold(i.Item2);
+                                    si.AddCommoditiesSold(i.Count);
                                 }
                             }
                         }

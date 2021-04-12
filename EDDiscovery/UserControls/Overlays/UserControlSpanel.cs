@@ -846,6 +846,12 @@ namespace EDDiscovery.UserControls
 
         #region Config
 
+        Point initialopenposcm;
+        private void contextMenuStrip_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            initialopenposcm = MousePosition;
+        }
+
         private void showSystemInformationToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FlipConfig(Configuration.showSystemInformation, ((ToolStripMenuItem)sender).Checked, true);
@@ -1023,8 +1029,7 @@ namespace EDDiscovery.UserControls
 
         private void configureEventFilterToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Point p = MousePosition;
-            cfs.Open(GetSetting(dbFilter,"All"), contextMenuStrip, this.FindForm());
+            cfs.Open(GetSetting(dbFilter,"All"), initialopenposcm, this.FindForm());
         }
 
         private void EventFilterChanged(string newset, Object e)
@@ -1132,7 +1137,8 @@ namespace EDDiscovery.UserControls
                 Display(current_historylist);
             }
         }
-		
-		#endregion
-	}
+
+        #endregion
+
+    }
 }
