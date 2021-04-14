@@ -1210,7 +1210,7 @@ SECTION UserControlStats
 
 .GoodsBought: "Goods Bought" @
 .GoodsSold: "Goods Sold" @
-.GoodsProfit: "Profit" @
+.GoodsProfit: "Goods Profit" @
 
 .EfficientScans: "Efficient Scans" @
 .Accepted: "Accepted" @

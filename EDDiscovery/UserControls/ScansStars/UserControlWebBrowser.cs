@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2020 EDDiscovery development team
+ * Copyright © 2016 - 2021 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -30,7 +30,8 @@ namespace EDDiscovery.UserControls
     {
         private string source;
         private string urlallowed;
-        ISystem last_sys = null;
+        private ISystem last_sys_tracked = null;        // this tracks the travel grid selection always
+        private SystemClass override_system = null;     // if set, override to this system.. 
 
         #region Init
         public UserControlWebBrowser()
@@ -54,6 +55,11 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.Translate(this, thisname, null);          // lookup using the base name, not the derived name, so we don't have repeats
             BaseUtils.Translator.Instance.Translate(this, toolTip, thisname);
 
+            checkBoxAutoTrack.Checked = GetSetting("AutoTrack", true);
+            this.checkBoxAutoTrack.CheckedChanged += new System.EventHandler(this.checkBoxAutoTrack_CheckedChanged);
+
+            extCheckBoxStar.Visible = source != "Spansh";
+
             webBrowser.Visible = false; // hide ugly white until load
         }
 
@@ -71,8 +77,8 @@ namespace EDDiscovery.UserControls
 
         public override void InitialDisplay()
         {
-            last_sys = uctg.GetCurrentHistoryEntry?.System;
-            PresentSystem(last_sys);    // may be null
+            last_sys_tracked = uctg.GetCurrentHistoryEntry?.System;
+            PresentSystem(last_sys_tracked);    // may be null
         }
 
         bool isClosing = false;     // in case we are in a middle of a lookup
@@ -88,25 +94,40 @@ namespace EDDiscovery.UserControls
 
         #region Display
 
-        SystemClass override_system = null;
 
         private void Uctg_OnTravelSelectionChanged(HistoryEntry he, HistoryList hl, bool selectedEntry)
         {
-            if (he != null)
+            if (he != null) // paranoia
             {
-                if (last_sys == null || last_sys.Name != he.System.Name) // if new entry is scan, may be new data.. or not presenting or diff sys
-                {
-                    last_sys = he.System;       // even if overridden, we want to track system
+                // If not tracked last system, or name differs, its a new system..
 
-                    if (override_system == null)
-                        PresentSystem(last_sys);
-                }
-                else if (override_system == null && he.EntryType == JournalTypeEnum.StartJump)  // we ignore start jump if overriden      
+                bool nosys = last_sys_tracked == null;
+
+                if (nosys || last_sys_tracked.Name != he.System.Name) 
                 {
-                    JournalStartJump jsj = he.journalEntry as JournalStartJump;
-                    last_sys = new SystemClass(jsj.SystemAddress, jsj.StarSystem);
-                    PresentSystem(last_sys);
+                    last_sys_tracked = he.System;       // we want to track system always
+
+                    if (override_system == null && (checkBoxAutoTrack.Checked||nosys))        // if no overridden, and tracking (or no sys), present
+                        PresentSystem(last_sys_tracked);
                 }
+                else if (he.EntryType == JournalTypeEnum.StartJump)  // start jump prepresent system..
+                {
+                    if (override_system == null && checkBoxAutoTrack.Checked)       // if not overriding, and tracking, present
+                    {
+                        JournalStartJump jsj = he.journalEntry as JournalStartJump;
+                        last_sys_tracked = new SystemClass(jsj.SystemAddress, jsj.StarSystem);
+                        PresentSystem(last_sys_tracked);
+                    }
+                }
+            }
+        }
+
+        private void PresentSystem(ISystem sys)
+        {
+            SetControlText("No Entry");
+            if (sys != null)
+            {
+                new System.Threading.Thread(new System.Threading.ParameterizedThreadStart(LookUpThread)).Start(sys);
             }
         }
 
@@ -126,6 +147,9 @@ namespace EDDiscovery.UserControls
             {
                 if (sys.SystemAddress.HasValue)
                     url = Properties.Resources.URLSpanshSystemSystemId + sys.SystemAddress.Value.ToStringInvariant();
+                else
+                    url = "https://spansh.co.uk";
+
                 defaulturl = urlallowed;
             }
             else if (source == "EDDB")
@@ -139,7 +163,7 @@ namespace EDDiscovery.UserControls
                 defaulturl = urlallowed;
             }
 
-            System.Diagnostics.Debug.WriteLine("Url is " + last_sys.Name + "=" + url);
+            System.Diagnostics.Debug.WriteLine("Url is " + last_sys_tracked.Name + "=" + url);
 
             this.BeginInvoke((MethodInvoker)delegate
             {
@@ -159,18 +183,16 @@ namespace EDDiscovery.UserControls
            });
         }
 
-        void PresentSystem(ISystem sys)
-        {
-            SetControlText("No Entry");
-            if (sys != null)
-            {
-                new System.Threading.Thread(new System.Threading.ParameterizedThreadStart(LookUpThread)).Start(sys);
-            }
-        }
-
         #endregion
 
         #region User interaction
+
+        private void checkBoxAutoTrack_CheckedChanged(object sender, EventArgs e)
+        {
+            PutSetting("AutoTrack", checkBoxAutoTrack.Checked);
+            if (checkBoxAutoTrack.Checked && override_system == null)       // if tracking now, and not overridden, present last track
+                PresentSystem(last_sys_tracked);
+        }
 
         private void extCheckBoxStar_Click(object sender, EventArgs e)
         {
@@ -223,7 +245,7 @@ namespace EDDiscovery.UserControls
             else
             {
                 override_system = null;
-                PresentSystem(last_sys);
+                PresentSystem(last_sys_tracked);
                 extCheckBoxStar.Checked = false;
             }
         }

@@ -15,6 +15,7 @@
  */
 
 using EliteDangerousCore;
+using System.Collections.Generic;
 
 // class helps to decide row by row if visible and adds to outlining.
 public class Outlining
@@ -22,11 +23,12 @@ public class Outlining
     private int maingroup;
     private int maingroupcount;
     private int scanstartline;
-    ExtendedControls.ExtPanelDataGridViewScrollOutlining panel;
 
-    public Outlining(ExtendedControls.ExtPanelDataGridViewScrollOutlining panel)
+    // we accumulate a set of outlines then add at end
+    List<ExtendedControls.ExtPanelDataGridViewScrollOutlining.Outline> outlines = new List<ExtendedControls.ExtPanelDataGridViewScrollOutlining.Outline>();
+
+    public Outlining()
     {
-        this.panel = panel;
         maingroup = 0;
         maingroupcount = 0;
         scanstartline = -1;
@@ -44,7 +46,8 @@ public class Outlining
 
         if (he.EntryType == JournalTypeEnum.Fileheader)                 // main group boundary
         {
-            panel.Add(maingroup, rowindex, maingroupvisible, true);        // add it in, no update
+            outlines.Add(new ExtendedControls.ExtPanelDataGridViewScrollOutlining.Outline() { start = maingroup, end = rowindex, expanded = maingroupvisible });
+
             //System.Diagnostics.Debug.WriteLine("Fileheader Roll up" + maingroup + "-" + rowindex + " rolled " + maingroupvisible);
             maingroup = rowindex + 1;
             maingroupcount++;
@@ -61,7 +64,7 @@ public class Outlining
 
         if (scanrollup && scanstartline != -1 && !fsstype)        // scan roll up in operation but not scan
         {
-            panel.Add(scanstartline, rowindex, false, true);         // scans are rolled up
+            outlines.Add(new ExtendedControls.ExtPanelDataGridViewScrollOutlining.Outline() { start = scanstartline, end = rowindex, expanded = false });
             linevisible = maingroupvisible;                         // visible if main group was visible
             scanstartline = -1;
         }
@@ -69,17 +72,19 @@ public class Outlining
         return linevisible;
     }
 
-    public void ProcesslastLine(int rowindex, int rollupolder)
+    public void Finished(int rowindex, int rollupolder, ExtendedControls.ExtPanelDataGridViewScrollOutlining panel)
     {
         if (rowindex >= maingroup)
         {
             if (maingroupcount > 0)
             {
                 bool maingroupvisible = rollupolder == 0 || maingroupcount < rollupolder;
-                panel.Add(maingroup, rowindex, maingroupvisible, true);        // add a terminating group
-
+                outlines.Add(new ExtendedControls.ExtPanelDataGridViewScrollOutlining.Outline() { start = maingroup, end = rowindex, expanded = maingroupvisible });
             }
         }
+
+        panel.Add(outlines);
+
     }
 
 }

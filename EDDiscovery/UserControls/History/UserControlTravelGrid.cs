@@ -249,7 +249,7 @@ namespace EDDiscovery.UserControls
             int rollupolder = 0;
             if (filtertext.IsEmpty() && (sortcol < 0 || (sortcol == 0 && sortorder == SortOrder.Descending)) && outliningOnOffToolStripMenuItem.Checked)
             {
-                outlining = new Outlining(panelOutlining);
+                outlining = new Outlining();
                 rollupscans = scanEventsOutliningOnOffToolStripMenuItem.Checked;
                 rollupolder = rollUpOffToolStripMenuItem.Checked ? 0 : rollUpAfterFirstToolStripMenuItem.Checked ? 1 : 5;
             }
@@ -322,8 +322,7 @@ namespace EDDiscovery.UserControls
                     if (outlining != null)
                     {
                         dataGridViewTravel.Rows[dataGridViewTravel.Rows.Count - 1].Visible = true;
-                        outlining.ProcesslastLine(dataGridViewTravel.Rows.Count - 1, rollupolder);     // ensures we have a group at the end..
-                        panelOutlining.UpdateAfterAdd();
+                        outlining.Finished(dataGridViewTravel.Rows.Count - 1, rollupolder, panelOutlining);     // ensures we have a group at the end..
                     }
                 }
 
