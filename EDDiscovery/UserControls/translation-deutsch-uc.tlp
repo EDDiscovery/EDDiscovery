@@ -1196,6 +1196,7 @@ SECTION UserControlStats
 .Destroyed: "Destroyed" => "Zerstört"
 .GoodsBought: "Goods Bought" => "Handelswaren gekauft"
 .GoodsSold: "Goods Sold" => "Handelswaren verkauft"
+.GoodsProfit: "Goods Profit" => "Warenprofit"
 .EfficientScans: "Efficient Scans" => "Erhaltene Effizienzboni"
 .Accepted: "Accepted" => "Angenommen"
 .Disgruntled: "Disgruntled" => "Verärgert"
