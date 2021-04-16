@@ -993,6 +993,7 @@
     <None Include="Translations\polski-pl.tlf" />
     <None Include="Translations\portugues-pt-br.tlf" />
     <None Include="Translations\russian-ru.tlf" />
+    <None Include="Translations\spanish-es.tlf" />
     <None Include="UserControls\translation-chinese-uc.tlp" />
     <None Include="UserControls\translation-deutsch-uc.tlp" />
     <None Include="UserControls\translation-example-uc.tlp" />
@@ -1001,6 +1002,7 @@
     <None Include="UserControls\translation-polski-uc.tlp" />
     <None Include="UserControls\translation-portugues-uc.tlp" />
     <None Include="UserControls\translation-russian-uc.tlp" />
+    <None Include="UserControls\translation-spanish-uc.tlp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\EDDIcons\Controls\Fakes\Controls.resx">

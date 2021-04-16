@@ -50,6 +50,7 @@ namespace EDDiscovery.UserControls
             this.panelControls = new System.Windows.Forms.FlowLayoutPanel();
             this.extCheckBoxBack = new ExtendedControls.ExtCheckBox();
             this.webBrowser = new System.Windows.Forms.WebBrowser();
+            this.checkBoxAutoTrack = new ExtendedControls.ExtCheckBox();
             this.rollUpPanelTop.SuspendLayout();
             this.panelControls.SuspendLayout();
             this.SuspendLayout();
@@ -115,6 +116,7 @@ namespace EDDiscovery.UserControls
             this.panelControls.BackColor = System.Drawing.SystemColors.Control;
             this.panelControls.Controls.Add(this.extCheckBoxBack);
             this.panelControls.Controls.Add(this.extCheckBoxStar);
+            this.panelControls.Controls.Add(this.checkBoxAutoTrack);
             this.panelControls.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelControls.Location = new System.Drawing.Point(0, 0);
             this.panelControls.Name = "panelControls";
@@ -164,6 +166,36 @@ namespace EDDiscovery.UserControls
             this.webBrowser.Navigating += new System.Windows.Forms.WebBrowserNavigatingEventHandler(this.webBrowser_Navigating);
             this.webBrowser.NewWindow += new System.ComponentModel.CancelEventHandler(this.webBrowser_NewWindow);
             // 
+            // checkBoxAutoTrack
+            // 
+            this.checkBoxAutoTrack.Appearance = System.Windows.Forms.Appearance.Button;
+            this.checkBoxAutoTrack.BackColor = System.Drawing.SystemColors.Control;
+            this.checkBoxAutoTrack.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.checkBoxAutoTrack.CheckBoxColor = System.Drawing.Color.White;
+            this.checkBoxAutoTrack.CheckBoxDisabledScaling = 0.5F;
+            this.checkBoxAutoTrack.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxAutoTrack.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxAutoTrack.Cursor = System.Windows.Forms.Cursors.Default;
+            this.checkBoxAutoTrack.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.checkBoxAutoTrack.FlatAppearance.CheckedBackColor = System.Drawing.Color.Green;
+            this.checkBoxAutoTrack.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.checkBoxAutoTrack.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
+            this.checkBoxAutoTrack.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.checkBoxAutoTrack.Image = global::EDDiscovery.Icons.Controls.Exploration_ImportSphere;
+            this.checkBoxAutoTrack.ImageButtonDisabledScaling = 0.5F;
+            this.checkBoxAutoTrack.ImageIndeterminate = null;
+            this.checkBoxAutoTrack.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.checkBoxAutoTrack.ImageUnchecked = null;
+            this.checkBoxAutoTrack.Location = new System.Drawing.Point(72, 1);
+            this.checkBoxAutoTrack.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.checkBoxAutoTrack.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxAutoTrack.Name = "checkBoxAutoTrack";
+            this.checkBoxAutoTrack.Size = new System.Drawing.Size(28, 28);
+            this.checkBoxAutoTrack.TabIndex = 4;
+            this.checkBoxAutoTrack.TickBoxReductionRatio = 0.75F;
+            this.toolTip.SetToolTip(this.checkBoxAutoTrack, "Track system in history panel");
+            this.checkBoxAutoTrack.UseVisualStyleBackColor = false;
+            // 
             // UserControlWebBrowser
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -187,5 +219,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.FlowLayoutPanel panelControls;
         private System.Windows.Forms.WebBrowser webBrowser;
         private ExtendedControls.ExtCheckBox extCheckBoxBack;
+        private ExtendedControls.ExtCheckBox checkBoxAutoTrack;
     }
 }
