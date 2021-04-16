@@ -6,7 +6,6 @@ SECTION UserControlBookmarks
 .ColDescription: "Description" @
 .ColX: "X" @
 .ColY: "Y" @
-.ColY: "Y" @
 .ColZ: "Z" @
 .labelSearch: "Search" @
 .toolStripMenuItemGotoStar3dmap: "Goto in 3D Map" @
