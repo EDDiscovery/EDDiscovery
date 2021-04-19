@@ -60,9 +60,9 @@ namespace EDDiscovery.UserControls
             // 
             // missionListCurrent
             // 
+            this.missionListCurrent.Name = "missionListCurrent";
             this.missionListCurrent.Dock = System.Windows.Forms.DockStyle.Fill;
             this.missionListCurrent.Location = new System.Drawing.Point(0, 0);
-            this.missionListCurrent.Name = "missionListCurrent";
             this.missionListCurrent.Size = new System.Drawing.Size(800, 266);
             this.missionListCurrent.TabIndex = 1;
             // 

@@ -35,7 +35,6 @@ namespace EDDiscovery.UserControls
         public UserControlMarketData()
         {
             InitializeComponent();
-            var corner = dataGridViewMarketData.TopLeftHeaderCell; // work around #1487
         }
 
         public override void Init()

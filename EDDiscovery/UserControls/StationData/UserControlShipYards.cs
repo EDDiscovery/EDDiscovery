@@ -34,7 +34,6 @@ namespace EDDiscovery.UserControls
         public UserControlShipYards()
         {
             InitializeComponent();
-            var corner = dataGridViewShips.TopLeftHeaderCell; // work around #1487
         }
 
         public override void Init()

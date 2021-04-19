@@ -140,7 +140,6 @@ namespace EDDiscovery.UserControls
         public SearchScans()
         {
             InitializeComponent();
-            var corner = dataGridView.TopLeftHeaderCell; // work around #1487
         }
 
         public override void Init()

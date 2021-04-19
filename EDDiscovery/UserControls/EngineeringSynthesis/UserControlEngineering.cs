@@ -58,7 +58,6 @@ namespace EDDiscovery.UserControls
         {
             DBBaseName = "Engineering";
             InitializeComponent();
-            var corner = dataGridViewEngineering.TopLeftHeaderCell; // work around #1487
         }
 
         public override void Init()

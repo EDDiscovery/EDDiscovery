@@ -30,7 +30,6 @@ namespace EDDiscovery.UserControls.Helpers
         {
             InitializeComponent();
 
-            var corner = dataGridView.TopLeftHeaderCell; // work around #1487
             dataGridView.MakeDoubleBuffered();
             dataGridView.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             dataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx

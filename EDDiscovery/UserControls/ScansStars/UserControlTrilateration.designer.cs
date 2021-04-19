@@ -86,7 +86,7 @@ namespace EDDiscovery.UserControls
             this.richTextBox_History = new ExtendedControls.ExtRichTextBox();
             this.dataViewScroller_Wanted = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.vScrollBarCustom2 = new ExtendedControls.ExtScrollBar();
-            this.dataGridViewClosestSystems = new System.Windows.Forms.DataGridView();
+            this.dataGridViewClosestSystems = new BaseUtils.DataGridViewBaseEnhancements();
             this.Source = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumnClosestSystemsSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
@@ -619,7 +619,7 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripMenuItem removeFromWantedSystemsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem viewOnEDSMToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem viewOnEDSMToolStripMenuItem1;
-        private System.Windows.Forms.DataGridView dataGridViewClosestSystems;
+        private BaseUtils.DataGridViewBaseEnhancements dataGridViewClosestSystems;
         private System.Windows.Forms.DataGridViewTextBoxColumn Source;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumnClosestSystemsSystem;
         private System.Windows.Forms.SplitContainer splitContainerCustom1;

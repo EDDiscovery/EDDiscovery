@@ -28,7 +28,6 @@ namespace EDDiscovery.UserControls
         public UserControlEstimatedValues()
         {
             InitializeComponent();
-            var corner = dataGridViewEstimatedValues.TopLeftHeaderCell; // work around #1487
         }
 
         public override void Init()

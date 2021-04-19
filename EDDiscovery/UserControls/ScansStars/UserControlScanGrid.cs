@@ -58,7 +58,7 @@ namespace EDDiscovery.UserControls
         public UserControlScanGrid()
         {
             InitializeComponent();
-            var corner = dataGridViewScangrid.TopLeftHeaderCell; // work around #1487
+
             // this allows the row to grow to accomodate the text.. with a min height of 48px.
             dataGridViewScangrid.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             dataGridViewScangrid.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx

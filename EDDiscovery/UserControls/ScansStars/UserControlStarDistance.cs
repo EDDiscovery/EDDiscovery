@@ -30,7 +30,6 @@ namespace EDDiscovery.UserControls
         public UserControlStarDistance()
         {
             InitializeComponent();
-            var corner = dataGridViewNearest.TopLeftHeaderCell; // work around #1487
         }
 
         private StarDistanceComputer computer = null;

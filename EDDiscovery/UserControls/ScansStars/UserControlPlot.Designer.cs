@@ -70,7 +70,7 @@ namespace EDDiscovery.UserControls
             this.toolStripMenuItem35 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.dataGridList = new System.Windows.Forms.DataGridView();
+            this.dataGridList = new BaseUtils.DataGridViewBaseEnhancements();
             this.sysName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.sysX = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.sysY = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -492,7 +492,7 @@ namespace EDDiscovery.UserControls
         private ToolStripMenuItem toolStripMenuItem4;
         private ExtendedControls.ExtComboBox comboBoxView;
         private ToolTip toolTip;
-        private DataGridView dataGridList;
+        private BaseUtils.DataGridViewBaseEnhancements dataGridList;
         private DataGridViewTextBoxColumn sysName;
         private DataGridViewTextBoxColumn sysX;
         private DataGridViewTextBoxColumn sysY;
