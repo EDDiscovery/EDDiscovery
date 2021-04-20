@@ -186,7 +186,7 @@ namespace EDDiscovery.UserControls
                 labelVehicle.Visible = buttonExtCoriolis.Visible = buttonExtEDShipyard.Visible = buttonExtConfigure.Visible = false;
 
                 ShipInformationList shm = discoveryform.history.ShipInformationList;
-                var ownedships = (from x1 in shm.Ships where x1.Value.State == ShipInformation.ShipState.Owned && !ShipModuleData.IsSRVOrFighter(x1.Value.ShipFD) select x1.Value);
+                var ownedships = (from x1 in shm.Ships where x1.Value.State == ShipInformation.ShipState.Owned && ShipModuleData.IsShip(x1.Value.ShipFD) select x1.Value);
 
                 foreach( var si in ownedships )
                 {
@@ -403,8 +403,8 @@ namespace EDDiscovery.UserControls
             comboBoxShips.Items.Add(storedmoduletext);
             comboBoxShips.Items.Add(allmodulestext);
 
-            var ownedships = (from x1 in shm.Ships where x1.Value.State == ShipInformation.ShipState.Owned && !ShipModuleData.IsSRVOrFighter(x1.Value.ShipFD) select x1.Value);
-            var notownedships = (from x1 in shm.Ships where x1.Value.State != ShipInformation.ShipState.Owned && !ShipModuleData.IsSRVOrFighter(x1.Value.ShipFD) select x1.Value);
+            var ownedships = (from x1 in shm.Ships where x1.Value.State == ShipInformation.ShipState.Owned && ShipModuleData.IsShip(x1.Value.ShipFD) select x1.Value);
+            var notownedships = (from x1 in shm.Ships where x1.Value.State != ShipInformation.ShipState.Owned && ShipModuleData.IsShip(x1.Value.ShipFD) select x1.Value);
             var fightersrvs = (from x1 in shm.Ships where ShipModuleData.IsSRVOrFighter(x1.Value.ShipFD) select x1.Value);
 
             var now = (from x1 in ownedships where x1.StoredAtSystem == null select x1.ShipNameIdentType).ToList();
