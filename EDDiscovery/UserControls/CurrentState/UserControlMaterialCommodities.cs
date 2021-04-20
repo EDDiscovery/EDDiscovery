@@ -41,7 +41,6 @@ namespace EDDiscovery.UserControls
         public UserControlMaterialCommodities()
         {
             InitializeComponent();
-            var corner = dataGridViewMC.TopLeftHeaderCell; // work around #1487
         }
 
         public override void Init()
@@ -69,9 +68,9 @@ namespace EDDiscovery.UserControls
                 labelItems2.Text = "Mats".T(EDTx.UserControlMaterialCommodities_Mats);
 
                 items = MaterialCommodityData.GetMaterials(true);
-                types = MaterialCommodityData.GetTypes((x) => !x.IsCommodity, true);
+                types = MaterialCommodityData.GetTypes((x) => x.IsMaterial, true);
 
-                var cats = MaterialCommodityData.GetCategories((x) => !x.IsCommodity, true);
+                var cats = MaterialCommodityData.GetCategories((x) => x.IsMaterial, true);
 
                 foreach (var t in cats)
                 {

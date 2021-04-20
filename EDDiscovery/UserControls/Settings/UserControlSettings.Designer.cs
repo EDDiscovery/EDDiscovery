@@ -70,7 +70,7 @@ namespace EDDiscovery.UserControls
             this.extScrollBarSettings = new ExtendedControls.ExtScrollBar();
             this.groupBoxCommanders = new ExtendedControls.ExtGroupBox();
             this.dataViewScrollerCommanders = new ExtendedControls.ExtPanelDataGridViewScroll();
-            this.dataGridViewCommanders = new System.Windows.Forms.DataGridView();
+            this.dataGridViewCommanders = new BaseUtils.DataGridViewBaseEnhancements();
             this.ColumnCommander = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.EdsmName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.JournalDirCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -1020,7 +1020,7 @@ namespace EDDiscovery.UserControls
         #endregion
         private ExtendedControls.ExtGroupBox groupBoxCommanders;
         private ExtendedControls.ExtButton buttonAddCommander;
-        private System.Windows.Forms.DataGridView dataGridViewCommanders;
+        private BaseUtils.DataGridViewBaseEnhancements dataGridViewCommanders;
         private ExtendedControls.ExtComboBox comboBoxTheme;
         private System.Windows.Forms.ToolTip toolTip;
         private ExtendedControls.ExtButton buttonSaveTheme;

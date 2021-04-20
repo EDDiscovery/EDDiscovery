@@ -72,7 +72,6 @@ namespace EDDiscovery.UserControls
         public UserControlMaterialTrader()
         {
             InitializeComponent();
-            var corner = dataGridViewTrades.TopLeftHeaderCell; // work around #1487
 
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);

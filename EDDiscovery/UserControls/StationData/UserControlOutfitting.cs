@@ -34,9 +34,7 @@ namespace EDDiscovery.UserControls
         public UserControlOutfitting()
         {
             InitializeComponent();
-            var corner = dataGridViewOutfitting.TopLeftHeaderCell; // work around #1487
         }
-
         public override void Init()
         {
             DBBaseName = "Outfitting";

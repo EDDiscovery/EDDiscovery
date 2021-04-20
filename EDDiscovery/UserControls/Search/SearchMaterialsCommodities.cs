@@ -41,7 +41,6 @@ namespace EDDiscovery.UserControls
         public SearchMaterialsCommodities()
         {
             InitializeComponent();
-            var corner = dataGridView.TopLeftHeaderCell; // work around #1487
         }
 
         public override void Init()

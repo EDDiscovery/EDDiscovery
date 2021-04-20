@@ -45,7 +45,7 @@ namespace EDDiscovery.UserControls
         {
             this.components = new System.ComponentModel.Container();
             ExtendedControls.TabStyleSquare tabStyleSquare1 = new ExtendedControls.TabStyleSquare();
-            this.dataGridViewGeneral = new System.Windows.Forms.DataGridView();
+            this.dataGridViewGeneral = new BaseUtils.DataGridViewBaseEnhancements();
             this.ItemName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Information = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panelGeneral = new ExtendedControls.ExtPanelScroll();
@@ -96,16 +96,20 @@ namespace EDDiscovery.UserControls
             this.dataGridViewGeneral.AllowUserToAddRows = false;
             this.dataGridViewGeneral.AllowUserToDeleteRows = false;
             this.dataGridViewGeneral.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewGeneral.ColumnHeaderMenuStrip = null;
             this.dataGridViewGeneral.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewGeneral.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ItemName,
             this.Information});
             this.dataGridViewGeneral.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewGeneral.Name = "dataGridViewGeneral";
+            this.dataGridViewGeneral.RowHeaderMenuStrip = null;
             this.dataGridViewGeneral.RowHeadersVisible = false;
             this.dataGridViewGeneral.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dataGridViewGeneral.SingleRowSelect = true;
             this.dataGridViewGeneral.Size = new System.Drawing.Size(634, 190);
             this.dataGridViewGeneral.TabIndex = 2;
+            this.dataGridViewGeneral.TopLeftHeaderMenuStrip = null;
             // 
             // ItemName
             // 
@@ -580,7 +584,7 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
-        private System.Windows.Forms.DataGridView dataGridViewGeneral;
+        private BaseUtils.DataGridViewBaseEnhancements dataGridViewGeneral;
         private ExtendedControls.ExtPanelScroll panelGeneral;
         private ExtendedControls.ExtScrollBar vScrollBarGeneral;
         private ExtendedControls.ExtTabControl tabControlCustomStats;

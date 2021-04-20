@@ -41,7 +41,6 @@ namespace EDDiscovery.UserControls
         public UserControlExploration()
         {
             InitializeComponent();
-            var corner = dataGridViewExplore.TopLeftHeaderCell; // work around #1487
             dataGridViewExplore.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             dataGridViewExplore.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;
             ColumnSystemName.AutoCompleteGenerator = SystemCache.ReturnSystemAutoCompleteList;
