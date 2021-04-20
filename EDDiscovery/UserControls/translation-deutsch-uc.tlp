@@ -1409,7 +1409,7 @@ SECTION UserControlCaptainsLog
 
 SECTION CaptainsLogDiary
 
-.Daysofweek: "Sun;Mon;Tue;Wed;Thu;Fri;Sat" => "So;Mo,Di;Mi;Do;Fr;Sa"
+.Daysofweek: "Sun;Mon;Tue;Wed;Thu;Fri;Sat" => "So;Mo;Di;Mi;Do;Fr;Sa"
 .buttonLeft: "<" => "<"
 .buttonRight: ">" => ">"
 
