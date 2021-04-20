@@ -70,14 +70,17 @@ namespace EDDiscovery.Properties {
         ///Developers for this release series:
         ///Bravada Cadelanne
         ///
+        ///Test Support
+        ///Eahlstan, JDM12983
+        ///
         ///Images Captured by:
         ///Spandino, Robby, Eahlstan, Ettanin, CompleteNOOB from Frontier Elite Dangerous Images (C) Frontier Developments PLC
         ///
         ///Languages Translations:
-        ///Keath Milligan, Kmizole, Potatossuaro, Zafford, Andrea Spada, Goscickiw, Nats-ji, Jay
+        ///Eahlstan, Dr.Smile, Keath Milligan, Kmizole, Potatossuaro, Zafford, Andrea Spada, Goscickiw, Nats-ji, Jay
         ///
         ///Previous Contributors:
-        ///Iain Ross, Andrea Spada, Carcher99, IGAU, EoD, Imathrowback, phwoelfel,  [rest of string was truncated]&quot;;.
+        ///nullx27, Iain Ro [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Credits {
             get {
@@ -374,7 +377,7 @@ namespace EDDiscovery.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://www.youtube.com/embed/Scv9JiHZ10Y?autoplay=1.
+        ///   Looks up a localized string similar to https://www.youtube.com/embed/frG6lBAiLcg?autoplay=1.
         /// </summary>
         internal static string URLReleaseVideo {
             get {
