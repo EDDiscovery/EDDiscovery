@@ -158,7 +158,7 @@ SECTION UserControlEngineering
 .RecipeCol: "Recipe" => "Receta"
 .EngineersCol: "Engineers" => "Ingenieros"
 .chkHistoric: "Use Cursor Positon" => "Usar posición del cursor"
-.buttonClear: "Clear" => "Claro"
+.buttonClear: "Clear" => "Borrar"
 .buttonFilterMaterial: "Material" => "Material"
 .buttonFilterUpgrade: "Upgrade" => "Potenciar"
 .buttonFilterLevel: "Level" => "Nivel"
@@ -180,11 +180,11 @@ SECTION UserControlEstimatedValues
 
 .BodyName: "Body Name" => "Nombre del cuerpo"
 .EstValue: "Current Value" => "Valor estimado"
-.EstBase: "Base Value" @
-.MappedValue: "Mapped" @
-.FirstDiscovered: "First Discovered" @
-.FirstMappedEff: "First Mapped" @
-.FirstDiscMapped: "First Discovered Mapped" @
+.EstBase: "Base Value" => "Valor base"
+.MappedValue: "Mapped" => "Mapeado"
+.FirstDiscovered: "First Discovered" => "Descubierto por primera vez"
+.FirstMappedEff: "First Mapped" => "Primeros mapeados"
+.FirstDiscMapped: "First Discovered Mapped" => "Primer mapeado descubierto"
 .BodyType: "Body Type" => "Tipo de cuerpo"
 .Mapped: "Mapped" => "Asignado"
 .WasMapped: "Already Mapped" => "Ya asignado"
@@ -643,8 +643,8 @@ SECTION UserControlRoute
 .WayPointDistCol: "Dist. Waypoint" => "Dist. Waypoint"
 .DeviationCol: "Deviation" => "Desviación"
 .buttonExtExcel: "2" => "2"
-.buttonExtTravelTo: "History" => "Historia"
-.buttonExtTravelFrom: "History" => "Historia"
+.buttonExtTravelTo: "History" => "Historial"
+.buttonExtTravelFrom: "History" => "Historial"
 .buttonExtTargetTo: "Target" => "Objetivo"
 .buttonToEDSM: "EDSM" => "EDSM"
 .buttonFromEDSM: "EDSM" => "EDSM"
@@ -837,13 +837,13 @@ SECTION UserControlSettings
 .checkBoxCustomEnableScreenshots: "Enable" => "Permitir"
 .groupBoxCustomEDSM: "EDSM/EDDB Control" => "Control EDSM/EDDB"
 .buttonExtEDSMConfigureArea: "Select Galaxy Sectors" => "Seleccionar sectores de galaxias"
-.checkBoxCustomEDSMDownload: "Enable Star Data Download" => "Habilitar descarga de datos estrella"
+.checkBoxCustomEDSMDownload: "Enable Star Data Download" => "Habilitar descarga de datos de estrellas"
 .groupBoxPopOuts: "Window Options" => "Opciones de ventana"
 .checkBoxPanelSortOrder: "Panel List Sorted Alphanumerically" => "Lista de paneles ordenados alfanuméricamente"
-.checkBoxKeepOnTop: "Keep on Top" => "Mantenerse en la cima"
+.checkBoxKeepOnTop: "Keep on Top" => "Mantener en primer plano"
 .checkBoxCustomResize: "Redraw the screen during resizing" => "Redibujar la pantalla durante el cambio de tamaño"
 .checkBoxMinimizeToNotifyIcon: "Minimize to notification area icon" => "Minimizar al icono del área de notificación"
-.checkBoxUseNotifyIcon: "Show notification area icon" => "Mostrar icono de área de notificación"
+.checkBoxUseNotifyIcon: "Show notification area icon" => "Mostrar icono del área de notificación"
 .groupBoxCustomLanguage: "Language" => "Idioma"
 .groupBoxCustomSafeMode: "Advanced" => "Avanzado"
 .buttonExtSafeMode: "Restart in Safe Mode" => "Reiniciar en modo seguro"
@@ -883,7 +883,7 @@ SECTION UserControlSettings
 .FS: "All entries for Statistics" => "Todas las entradas para estadísticas"
 .EJS: "Jumps and Scans" => "Saltos y escaneos"
 .EJ: "Jumps" => "Saltos"
-.EN: "Nothing" => "Ninguna cosa"
+.EN: "Nothing" => "Ninguna"
 .WSQ: "Warning about webserver-  see english text" => "Advertencia sobre el servidor web: consulte el texto en inglés"
 .WSF: "Did not start - click OK to configure windows" => "No se inició: haga clic en Aceptar para configurar Windows"
 .CSM: "Confirm restart to safe mode" => "Confirmar reinicio en modo seguro"
@@ -910,8 +910,8 @@ SECTION UserControlSettings
 .RemoveSectors: "Remove Sectors" => "Eliminar sectores"
 .GalRemove: "Removing {0} Sector(s).\r\n\r\nThis will take a while (up to 30 mins dep on drive type and amount of sectors).\r\nYou may continue to use EDD while this operation takes place\r\nbut it may be slow to respond. Do not close down EDD until this window says\r\nthe process has finished\r\n\r\n" => "Eliminando {0} sector (s).\r\n\r\nEsto llevará un tiempo (hasta 30 minutos de dependencia del tipo de unidad y la cantidad de sectores).\r\nPuede continuar usando EDD mientras esta operación demora lugar\r\npero puede tardar en responder. No cierre EDD hasta que esta ventana diga\r\nel proceso ha finalizado\r\n\r\n "
 .GalFini: "Finished, Please close the window.\r\nIf you already have the 3dmap open, changes will not be reflected in that map until the next start of EDD\r\n" => "Finalizado, cierre la ventana.\r\nSi ya tiene abierto el mapa 3d, los cambios no se reflejarán en ese mapa hasta el próximo inicio de EDD\r\n"
-.GameTime: "Game Time" => "Tiempo de juego"
-.Local: "Local" => "Local"
+.GameTime: "Game Time" => "Horario del juego"
+.Local: "Local" => "Horario Local"
 .NoMap: "No map available!" => "¡No hay mapa disponible!"
 
 SECTION UserControlShipYards
@@ -967,7 +967,7 @@ SECTION UserControlSpanel
 .dontShowInformationWhenToolStripMenuItem.dontshowwhenInGalaxyPanelToolStripMenuItem: ".. when in Galaxy Panel" => ".. cuando en Galaxy Panel"
 .dontShowInformationWhenToolStripMenuItem.dontshowwhenInSystemMapPanelToolStripMenuItem: ".. when in System Map Panel" => "... en el Panel de mapa del sistema"
 .OrdertoolStripMenuItem: "Column Order.." => "Orden de columna ..."
-.OrdertoolStripMenuItem.orderDefaultToolStripMenuItem: "Default" => "Defecto"
+.OrdertoolStripMenuItem.orderDefaultToolStripMenuItem: "Default" => "Por Defecto"
 .OrdertoolStripMenuItem.orderNotesAfterXYZToolStripMenuItem: "Notes after XYZ" => "Notas después de XYZ"
 .OrdertoolStripMenuItem.orderTargetDistanceXYZNotesToolStripMenuItem: "Target Distance,XYZ,Notes" => "Distancia objetivo, XYZ, notas"
 .configureEventFilterToolStripMenuItem: "Configure Event Filter.." => "Configurar filtro de eventos ..."
@@ -1197,16 +1197,16 @@ SECTION UserControlStats
 .GoodsBought: "Goods Bought" => "Bienes comprados"
 .GoodsSold: "Goods Sold" => "Bienes vendidos"
 .GoodsProfit: "Goods Profit" => "Beneficio de bienes"
-.EfficientScans: "Efficient Scans" @
-.Accepted: "Accepted" @
-.Disgruntled: "Disgruntled" @
-.EncodedMaterialsTraded: "Encoded Materials Traded" @
-.RawMaterialsTraded: "Raw Materials Traded" @
-.G1MaterialsTraded: "Grade 1 Materials Traded" @
-.G2MaterialsTraded: "Grade 2 Materials Traded" @
-.G3MaterialsTraded: "Grade 3 Materials Traded" @
-.G4MaterialsTraded: "Grade 4 Materials Traded" @
-.G5MaterialsTraded: "Grade 5 Materials Traded" @
+.EfficientScans: "Efficient Scans" => "Escaneos eficientes"
+.Accepted: "Accepted" => "Accepted"
+.Disgruntled: "Disgruntled" => ""
+.EncodedMaterialsTraded: "Encoded Materials Traded" => "Descontento"
+.RawMaterialsTraded: "Raw Materials Traded" => "Materias primas comercializadas"
+.G1MaterialsTraded: "Grade 1 Materials Traded" => "Materiales de grado 1 comercializados"
+.G2MaterialsTraded: "Grade 2 Materials Traded" => "Materiales de grado 2 comercializados"
+.G3MaterialsTraded: "Grade 3 Materials Traded" => "Materiales de grado 3 comercializados"
+.G4MaterialsTraded: "Grade 4 Materials Traded" => "Materiales de grado 4 comercializados"
+.G5MaterialsTraded: "Grade 5 Materials Traded" => "Materiales de grado 5 comercializados"
 
 SECTION StatsTimeUserControl
 
@@ -1230,7 +1230,7 @@ SECTION UserControlSynthesis
 .buttonMaterialFilter: "Material" => "Material"
 .buttonFilterLevel: "Level" => "Nivel"
 .buttonRecipeFilter: "Synthesis" => "Síntesis"
-.buttonClear: "Clear" => "Claro"
+.buttonClear: "Clear" => "Borrar"
 .ToolTip: "Left click and drag on grid to reorder" => "Haga clic con el botón izquierdo y arrastre en la cuadrícula para reordenar"
 .chkHistoric.ToolTip: "When clicked on, use the materials at the cursor to estimate, when off always use the latest materials." => "Cuando haga clic en, use los materiales en el cursor para estimar, cuando esté apagado, use siempre los últimos materiales"
 .buttonMaterialFilter.ToolTip: "Filter the table by the material type" => "Filtrar la tabla por tipo de material"
@@ -1400,7 +1400,7 @@ SECTION UserControlTravelGrid
 .addToTrilaterationToolStripMenuItem.explorationPanelToolStripMenuItem: "Exploration Panel" => "Panel de exploración"
 .runSelectionThroughIGAUDebugToolStripMenuItem: "Run selection through IGAU (Debug)" => "Ejecutar la selección a través de IGAU (depuración)"
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" => "Habilitar o deshabilitar el ajuste de palabras"
-.runSelectionThroughEDAstroDebugToolStripMenuItem: "Run selection through EDAstro (Debug)" @
+.runSelectionThroughEDAstroDebugToolStripMenuItem: "Run selection through EDAstro (Debug)" => "Ejecutar la selección a través de EDAstro (Depurar)"
 
 SECTION UserControlCaptainsLog
 
@@ -1505,19 +1505,19 @@ SECTION UserControlMaterialTrader
 
 .UpgradeCol: "From" => "Desde"
 .LevelCol: "Use" => "Usar"
-.WantedCol: "Left" => "Izquierda"
+.WantedCol: "Left" => "Restante"
 .ModuleCol: "To" => "Para"
 .MaxCol: "Get" => "Obtener"
 .AvailableCol: "Total" => "Total"
-.buttonClear: "Clear" => "Claro"
+.buttonClear: "Clear" => "Borrar"
 .checkBoxCursorToTop.ToolTip: "When red, use the materials at the cursor to estimate, when green always use the latest materials." => "Cuando está en rojo, use los materiales en el cursor para estimar, cuando en verde use siempre los materiales más recientes"
 .buttonClear.ToolTip: "Set all wanted values to zero" => "Establecer todos los valores deseados en cero"
 .Offer: "Offer" => "Oferta"
 .Receive: "Receive" => "Recibir"
 .clearTradeToolStripMenuItem: "Clear Trade" => "Comercio claro"
-.Raw: "Raw" => "Crudo"
-.Encoded: "Encoded" => "Codificado"
-.Manufactured: "Manufactured" => "Fabricado"
+.Raw: "Raw" => "Elemento"
+.Encoded: "Encoded" => "Datos Codificados"
+.Manufactured: "Manufactured" => "Manufacturado"
 
 SECTION UserControlMiningOverlay
 
@@ -1548,9 +1548,9 @@ SECTION UserControlFactions
 .colMissionCredits: "Mission Credits" => "Créditos de misión"
 .CBought: "Commds +" => "Commds +"
 .CSold: "Commds -" => "Commds -"
-.CProfit: "Commds Profit" @
-.MBought: "Mats +" => "Alfombrillas +"
-.MSold: "Mats -" => "Alfombrillas -"
+.CProfit: "Commds Profit" => "Beneficio de Commds"
+.MBought: "Mats +" => "Materiales +"
+.MSold: "Mats -" => "Materiales -"
 .CrimeCommitted: "Crimes Committed" => "Crímenes cometidos"
 .BountyKills: "Bounty Kills" => "Bounty Kills"
 .BountyValue: "Bounty Rewards" => "Recompensas de recompensas"
