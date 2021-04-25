@@ -67,14 +67,28 @@ namespace EDDiscovery.Forms
             webbrowser.Dock = DockStyle.Fill;
             webbrowser.Visible = false;
             webbrowser.DocumentCompleted += Webbrowser_DocumentCompleted;
+            webbrowser.NewWindow += Webbrowser_NewWindow;
             webbrowser.ScriptErrorsSuppressed = true;
             panelWebBrowser.Controls.Add(webbrowser);
-            webbrowser.Navigate(Properties.Resources.URLReleaseVideo);
+            webbrowser.DocumentText =
+                "<html>" +
+                "<head><meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\"/></head>" +
+                "<body style=\"margin: 0\">" +
+                $"<iframe style=\"display: block; border: none; height: 100vh; width: 100vw\" src=\"{Properties.Resources.URLReleaseVideo}\" frameborder=\"0\" allow=\"autoplay; encrypted-media\" allowfullscreen></iframe>" +
+                "</body>" +
+                "</html>";
 #else
             panelWebBrowser.Visible = false;
             textBoxLicense.Dock = DockStyle.Fill;
 
 #endif
+        }
+
+        private void Webbrowser_NewWindow(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            e.Cancel = true;
+            // Guess that the Youtube button was clicked
+            BaseUtils.BrowserInfo.LaunchBrowser(Properties.Resources.URLReleaseVideo);
         }
 
         private void Webbrowser_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
