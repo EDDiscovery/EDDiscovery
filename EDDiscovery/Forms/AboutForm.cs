@@ -88,7 +88,17 @@ namespace EDDiscovery.Forms
         {
             e.Cancel = true;
             // Guess that the Youtube button was clicked
-            BaseUtils.BrowserInfo.LaunchBrowser(Properties.Resources.URLReleaseVideo);
+            if (Properties.Resources.URLReleaseVideo.StartsWith("https://www.youtube.com/embed/"))
+            {
+                var uri = new Uri(Properties.Resources.URLReleaseVideo);
+                var url = "https://www.youtube.com/watch?v=" + System.Linq.Enumerable.Last(uri.AbsolutePath.Split('/'));
+
+                BaseUtils.BrowserInfo.LaunchBrowser(url);
+            }
+            else
+            {
+                BaseUtils.BrowserInfo.LaunchBrowser(Properties.Resources.URLReleaseVideo);
+            }
         }
 
         private void Webbrowser_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
