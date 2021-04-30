@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2015 - 2017 EDDiscovery development team
+ * Copyright © 2015 - 2021 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -35,7 +35,7 @@ namespace EDDiscovery.UserControls
         private DateTime startDate, endDate;
         public bool DisplayTestGrid = false;
 
-        private DateTimePicker pickerStart, pickerStop;
+        private ExtendedControls.ExtDateTimePicker pickerStart, pickerStop;
         ToolStripControlHost host1, host2;
         List<Point3D> starpositions = null;
 
@@ -57,10 +57,14 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
+            BaseUtils.Translator.Instance.Translate(this);      // translate before we add anything else to the panel
+
             systemlist = HistoryList.FilterByFSDCarrierJumpAndPosition(discoveryform.history.EntryOrder());
 
-            pickerStart = new DateTimePicker();
-            pickerStop = new DateTimePicker();
+            pickerStart = new ExtendedControls.ExtDateTimePicker();
+            pickerStop = new ExtendedControls.ExtDateTimePicker();
+            pickerStart.Size = new Size(200, 20);
+            pickerStop.Size = new Size(200, 20);
             host1 = new ToolStripControlHost(pickerStart);
             toolStrip.Items.Add(host1);
             host2 = new ToolStripControlHost(pickerStop);
@@ -93,8 +97,6 @@ namespace EDDiscovery.UserControls
             toolStripComboBoxTime.SelectedIndex = 3;
             
             imageViewer.BackColor = Color.FromArgb(5, 5, 5);
-
-            BaseUtils.Translator.Instance.Translate(this);
 
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
