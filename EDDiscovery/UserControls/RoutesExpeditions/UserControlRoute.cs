@@ -36,15 +36,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.Timer toupdatetimer;
         private ManualResetEvent CloseRequested = new ManualResetEvent(false);
 
-        private static readonly string[] MetricNames = {        // synchronise with SystemsDB.SystemsNearestMetric, really should be translated, but there you go.
-            "Nearest to Waypoint",
-            "Minimum Deviation from Path",
-            "Nearest to Waypoint with dev<=100ly",
-            "Nearest to Waypoint with dev<=250ly",
-            "Nearest to Waypoint with dev<=500ly",
-            "Nearest to Waypoint + Deviation / 2",
-        };
-
         public UserControlRoute()
         {
             InitializeComponent();
@@ -64,6 +55,15 @@ namespace EDDiscovery.UserControls
             fromupdatetimer.Tick += FromUpdateTick;
             toupdatetimer.Interval = 500;
             toupdatetimer.Tick += ToUpdateTick;
+
+            string[] MetricNames = {        // synchronise with SystemsDB.SystemsNearestMetric, really should be translated, but there you go.
+                "Nearest to Waypoint".T(EDTx.UserControlRoute_M1),
+                "Minimum Deviation from Path".T(EDTx.UserControlRoute_M2),
+                "Nearest to Waypoint with dev<=100ly".T(EDTx.UserControlRoute_M3),
+                "Nearest to Waypoint with dev<=250ly".T(EDTx.UserControlRoute_M4),
+                "Nearest to Waypoint with dev<=500ly".T(EDTx.UserControlRoute_M5),
+                "Nearest to Waypoint + Deviation / 2".T(EDTx.UserControlRoute_M6),
+                };
 
             foreach (SystemsDB.SystemsNearestMetric values in Enum.GetValues(typeof(SystemsDB.SystemsNearestMetric)))
                 comboBoxRoutingMetric.Items.Insert((int)values, MetricNames[(int)values]);

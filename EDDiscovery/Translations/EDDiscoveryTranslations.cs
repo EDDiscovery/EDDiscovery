@@ -634,6 +634,12 @@ namespace EDDiscovery
 
         UserControlRoute_Confirm, // This will result in a large number ({0})) of jumps
         UserControlRoute_NoRoute, // No route set up, retry
+        UserControlRoute_M1, 
+        UserControlRoute_M2, 
+        UserControlRoute_M3, 
+        UserControlRoute_M4, 
+        UserControlRoute_M5, 
+        UserControlRoute_M6, 
 
         UserControlWebBrowser_EnterSys, // Show System
         UserControlWebBrowser_System, // System:

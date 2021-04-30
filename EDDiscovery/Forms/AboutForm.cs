@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2017 EDDiscovery development team
+ * Copyright © 2016 - 2021 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -13,10 +13,11 @@
  *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using System;
-using System.Diagnostics;
-using System.Windows.Forms;
+
 using EDDiscovery.Properties;
+using System;
+using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace EDDiscovery.Forms
 {
@@ -82,6 +83,12 @@ namespace EDDiscovery.Forms
             textBoxLicense.Dock = DockStyle.Fill;
 
 #endif
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            webbrowser.Stop();
+            base.OnClosing(e);
         }
 
         private void Webbrowser_NewWindow(object sender, System.ComponentModel.CancelEventArgs e)
