@@ -112,6 +112,7 @@ SECTION SearchMaterialsCommodities
 .ColumnCurrentDistance: "Current Distance" => "Derzeitige Entfernung"
 .ColumnPosition: "Position" => "Position"
 
+
 SECTION SearchScans
 
 .Select: "Select" => "Wählen"
@@ -189,6 +190,7 @@ SECTION UserControlEstimatedValues
 .Mapped: "Mapped" => "Kartographiert"
 .WasMapped: "Already Mapped" => "Bereits kartographiert"
 .WasDiscovered: "Already Discovered" => "Bereits entdeckt"
+
 .SV: "Estimated Scan Values for {0}" => "Geschätzte Scanwerte für {0}"
 .EDSM: "EDSM" => "EDSM"
 .checkBoxEDSM.ToolTip: "Get and show information from EDSM" => "Hole und zeige Informationen von EDSM"
@@ -464,6 +466,7 @@ SECTION UserControlSurveyor
 .Has: " Has " => " hat "
 .Signals: " Has Signals." => " hat Signale."
 .islandable: " is landable." => " ist landbar."
+
 .planetaryClassesToolStripMenuItem: "Planetary Classes" => "Planetare Klassen"
 .planetaryClassesToolStripMenuItem.ammoniaWorldToolStripMenuItem: "Ammonia World" => "Ammoniakwelt"
 .planetaryClassesToolStripMenuItem.earthlikeWorldToolStripMenuItem: "Earthlike World" => "erdähnliche Welt"
@@ -477,6 +480,7 @@ SECTION UserControlSurveyor
 .textAlignToolStripMenuItem.leftToolStripMenuItem: "Left" => "Links"
 .textAlignToolStripMenuItem.centerToolStripMenuItem: "Center" => "Mitte"
 .textAlignToolStripMenuItem.rightToolStripMenuItem: "Right" => "Rechts"
+
 .bodyFeaturesToolStripMenuItem.hasSignalsToolStripMenuItem: "Has Signals" => "Hat Signale"
 .bodyFeaturesToolStripMenuItem.landableToolStripMenuItem: "Landable" => "landbar"
 .showAllPlanetsToolStripMenuItem: "Show All Planets" => "Zeige alle Planeten"
@@ -500,7 +504,6 @@ SECTION MissionListUserControl
 .labelTo: "to" => "bis"
 
 SECTION UserControlMissions
-
 .MPlural: " Missions" => "Missionen"
 .MSingular: " Mission" => "Mission"
 .Name: "Name" => "Name"
@@ -687,6 +690,13 @@ SECTION UserControlRoute
 .checkBox_FsdBoost: "Use Boosts" => "Verwende Boosts"
 .checkBox_FsdBoost.ToolTip: "The route finder will try and use FSD injections in case a direct route could not" => "Der Routenfinder wird versuchen FSA-Einspeisungen zu verwenden für den Fall das ein normaler Sprung nicht ausreicht"
 .showScanToolStripMenuItem: "View Scan Display" => "Zeige Scananzeige"
+
+.M1: "Nearest to Waypoint" => "Nähester Wegpunkt"
+.M2: "Minimum Deviation from Path" => "Geringste Abweichung vom Pfad"
+.M3: "Nearest to Waypoint with dev<=100ly" => "Nähester Wegpunkt mit Abw.<=100Lj"
+.M4: "Nearest to Waypoint with dev<=250ly" => "Nähester Wegpunkt mit Abw.<=250Lj"
+.M5: "Nearest to Waypoint with dev<=500ly" => "Nähester Wegpunkt mit Abw.<=500Lj"
+.M6: "Nearest to Waypoint + Deviation / 2" => "Nähester Wegpunkt + Abweichung / 2"
 
 SECTION UserControlRouteTracker
 
