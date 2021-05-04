@@ -120,7 +120,7 @@ namespace EDDiscovery
 
             if (EDCommander.Current.SyncToInara)
             {
-                EliteDangerousCore.Inara.InaraSync.NewEvent(LogLine, he);
+                EliteDangerousCore.Inara.InaraSync.NewEvent(LogLine, hl, he);
             }
 
             if (EDCommander.Current.SyncToIGAU)

@@ -387,8 +387,11 @@ namespace EDDiscovery.WebServer
                 sysstate["Security"] = security;
                 response["EDDB"] = sysstate;
 
+                var mcl = hl.MaterialCommoditiesMicroResources.Get(he.MaterialCommodity);
+
+                int cargocount = MaterialCommoditiesMicroResourceList.CargoCount(mcl);
                 string shipname = "N/A", fuel = "N/A", range = "N/A", tanksize = "N/A";
-                string cargo = he.MaterialCommodity.CargoCount.ToStringInvariant();
+                string cargo = cargocount.ToStringInvariant();
 
                 ShipInformation si = he.ShipInformation;
                 if (si != null)
@@ -402,7 +405,7 @@ namespace EDDiscovery.WebServer
                     EliteDangerousCalculations.FSDSpec fsd = si.GetFSDSpec();
                     if (fsd != null)
                     {
-                        EliteDangerousCalculations.FSDSpec.JumpInfo ji = fsd.GetJumpInfo(he.MaterialCommodity.CargoCount,
+                        EliteDangerousCalculations.FSDSpec.JumpInfo ji = fsd.GetJumpInfo(cargocount,
                                                                     si.ModuleMass() + si.HullMass(), si.FuelLevel, si.FuelCapacity / 2);
                         range = ji.cursinglejump.ToString("N2") + "ly";
                     }
@@ -419,8 +422,9 @@ namespace EDDiscovery.WebServer
                 ship["Range"] = range;
                 ship["TankSize"] = tanksize;
                 ship["Cargo"] = cargo;
-                ship["Data"] =he.MaterialCommodity.DataCount.ToStringInvariant();
-                ship["Materials"] = he.MaterialCommodity.MaterialsCount.ToStringInvariant();
+                ship["Data"] = MaterialCommoditiesMicroResourceList.DataCount(mcl).ToStringInvariant();
+                ship["Materials"] = MaterialCommoditiesMicroResourceList.MaterialsCount(mcl).ToStringInvariant();
+                ship["MicroResources"] = MaterialCommoditiesMicroResourceList.MicroResourcesCount(mcl).ToStringInvariant();
                 response["Ship"] = ship;
 
                 JObject travel = new JObject();

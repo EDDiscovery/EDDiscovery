@@ -162,7 +162,7 @@ namespace EDDiscovery.UserControls
                     topline = String.Format("{0} {1} WPs, {2:N1}ly", currentRoute.Name,
                                     currentRoute.Systems.Count, routedistance);
 
-                    EliteDangerousCalculations.FSDSpec.JumpInfo ji = currentHE.GetJumpInfo();
+                    EliteDangerousCalculations.FSDSpec.JumpInfo ji = currentHE.GetJumpInfo(discoveryform.history.MaterialCommoditiesMicroResources.CargoCount(currentHE.MaterialCommodity));
                     string jumpmsg = "";
                     if (showJumpsToolStripMenuItem.Checked && ji != null )
                     {

@@ -183,7 +183,7 @@ namespace EDDiscovery
                         EDDOptions.Instance.CAPIDirectory()
                     };
 
-                    journalmonitor.SetupWatchers(stdfolders);         // monitors are stopped, set up watchers
+                    journalmonitor.SetupWatchers(stdfolders, EDDOptions.Instance.DefaultJournalMatchFilename);         // monitors are stopped, set up watchers
 
                     int forcereloadoflastn = args.ForceJournalReload ? int.MaxValue / 2 : 0;     // if forcing a reload, we indicate that by setting the reload count to a very high value, but not enough to cause int wrap
 

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2017 EDDiscovery development team
+ * Copyright © 2016 - 2021 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -30,11 +30,12 @@ namespace EDDiscovery.UserControls
         public string dbFilter = "Filter2";
         public string dbClearZero = "ClearZero";
 
-        public bool materials = false;
+        public enum PanelType { Materials, Commodities, MicroResources};
+        public PanelType PanelMode;
 
         FilterSelector cfs;
 
-        MaterialCommoditiesList last_mcl;
+        uint? last_mcl = null;
 
         #region Init
 
@@ -45,36 +46,56 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
-            DBBaseName = materials ? "MaterialsGrid" : "CommoditiesGrid";
+            DBBaseName = PanelMode == PanelType.Materials ? "MaterialsGrid" : PanelMode == PanelType.Commodities ? "CommoditiesGrid" : "MicroResourcesGrid";
 
             dataGridViewMC.MakeDoubleBuffered();
             extCheckBoxWordWrap.Checked = GetSetting(dbWrapText, false);
             UpdateWordWrap();
             extCheckBoxWordWrap.Click += extCheckBoxWordWrap_Click;
 
-            BaseUtils.Translator.Instance.Translate(this);
-            BaseUtils.Translator.Instance.Translate(toolTip, this);
+            BaseUtils.Translator.Instance.Translate(this, "UserControlMaterialCommodities", null);
+            BaseUtils.Translator.Instance.Translate(this, toolTip, "UserControlMaterialCommodities");
 
             cfs = new FilterSelector();
             cfs.AddAllNone();
 
-            MaterialCommodityData[] items;
-            Tuple<MaterialCommodityData.ItemType, string>[] types;
+            MaterialCommodityMicroResourceType[] items;
+            Tuple<MaterialCommodityMicroResourceType.ItemType, string>[] types;
 
-            if (materials)
+            Price.Tag = Number.Tag = "Num";     // these tell the sorter to do numeric sorting
+
+            if (PanelMode == PanelType.Materials)
             {
                 dataGridViewMC.Columns[5].HeaderText = "Recipes".T(EDTx.UserControlMaterialCommodities_Recipes);
                 labelItems1.Text = "Data".T(EDTx.UserControlMaterialCommodities_Data);
                 labelItems2.Text = "Mats".T(EDTx.UserControlMaterialCommodities_Mats);
 
-                items = MaterialCommodityData.GetMaterials(true);
-                types = MaterialCommodityData.GetTypes((x) => x.IsMaterial, true);
+                items = MaterialCommodityMicroResourceType.GetMaterials(true);
+                types = MaterialCommodityMicroResourceType.GetTypes((x) => x.IsMaterial, true);
 
-                var cats = MaterialCommodityData.GetCategories((x) => x.IsMaterial, true);
+                var cats = MaterialCommodityMicroResourceType.GetCategories((x) => x.IsMaterial, true);
 
                 foreach (var t in cats)
                 {
-                    string[] members = MaterialCommodityData.GetFDNameMembersOfCategory(t.Item1, true);
+                    string[] members = MaterialCommodityMicroResourceType.GetFDNameMembersOfCategory(t.Item1, true);
+                    cfs.AddGroupOption(String.Join(";", members) + ";", t.Item2);
+                }
+            }
+            else if (PanelMode == PanelType.MicroResources)
+            {
+                dataGridViewMC.Columns.Remove(Type);
+                dataGridViewMC.Columns.Remove(Price);
+                labelItems1.Text = "Total".T(EDTx.UserControlMaterialCommodities_Total);
+                textBoxItems2.Visible = labelItems2.Visible = false;
+
+                items = MaterialCommodityMicroResourceType.GetMicroResources(true);
+                types = MaterialCommodityMicroResourceType.GetTypes((x) => x.IsMicroResources, true);
+
+                var cats = MaterialCommodityMicroResourceType.GetCategories((x) => x.IsMicroResources, true);
+
+                foreach (var t in cats)
+                {
+                    string[] members = MaterialCommodityMicroResourceType.GetFDNameMembersOfCategory(t.Item1, true);
                     cfs.AddGroupOption(String.Join(";", members) + ";", t.Item2);
                 }
             }
@@ -92,16 +113,16 @@ namespace EDDiscovery.UserControls
                 textBoxItems2.Visible = labelItems2.Visible = false;
                 checkBoxShowZeros.Location = new Point(textBoxItems1.Right + 8, checkBoxShowZeros.Top);
 
-                items = MaterialCommodityData.GetCommodities(true);
-                types = MaterialCommodityData.GetTypes((x) => x.IsCommodity, true);
+                items = MaterialCommodityMicroResourceType.GetCommodities(true);
+                types = MaterialCommodityMicroResourceType.GetTypes((x) => x.IsCommodity, true);
 
-                MaterialCommodityData[] rare = items.Where(x => x.IsRareCommodity).ToArray();
+                MaterialCommodityMicroResourceType[] rare = items.Where(x => x.IsRareCommodity).ToArray();
                 cfs.AddGroupOption(String.Join(";", rare.Select(x => x.FDName).ToArray()) + ";", "Rare".T(EDTx.UserControlMaterialCommodities_Rare));
             }
 
             foreach (var t in types)
             {
-                string[] members = MaterialCommodityData.GetFDNameMembersOfType(t.Item1, true);
+                string[] members = MaterialCommodityMicroResourceType.GetFDNameMembersOfType(t.Item1, true);
                 cfs.AddGroupOption(String.Join(";", members) + ";", t.Item2);
             }
 
@@ -141,18 +162,17 @@ namespace EDDiscovery.UserControls
 
         public override void InitialDisplay()
         {
-            MaterialCommoditiesList mcl = uctg?.GetCurrentHistoryEntry?.MaterialCommodity;
-            Display(mcl);
+            Display(uctg?.GetCurrentHistoryEntry?.MaterialCommodity);
         }
 
         private void CallBackDisplayWithCheck(HistoryEntry he, HistoryList hl, bool selectedEntry)
         {
-            MaterialCommoditiesList mcl = he?.MaterialCommodity;
+            uint? mcl = he?.MaterialCommodity;
             if ( mcl != last_mcl )
                 Display(mcl);
         }
 
-        private void Display(MaterialCommoditiesList mcl)       // update display. mcl can be null
+        private void Display(uint? mcl)       // update display. mcl can be null
         {
             last_mcl = mcl;
 
@@ -177,22 +197,24 @@ namespace EDDiscovery.UserControls
 
             dataViewScrollerPanel.SuspendLayout();
 
-            MaterialCommodityData[] allitems = materials ? MaterialCommodityData.GetMaterials(true) : MaterialCommodityData.GetCommodities(true);
+            MaterialCommodityMicroResourceType[] allitems = PanelMode == PanelType.Materials ? MaterialCommodityMicroResourceType.GetMaterials(true) : PanelMode == PanelType.MicroResources ? MaterialCommodityMicroResourceType.GetMicroResources(true) : MaterialCommodityMicroResourceType.GetCommodities(true);
 
-            foreach ( MaterialCommodityData mcd in allitems)        // we go thru all items..
+            foreach ( MaterialCommodityMicroResourceType mcd in allitems)        // we go thru all items..
             {
                 if (all || filter.Contains(mcd.FDName) )      // and see if they are in the filter
                 {
                     object[] rowobj;
 
-                    MaterialCommodities m = mcl.List.Find(x => string.Equals(x.Details.FDName, mcd.FDName, StringComparison.InvariantCultureIgnoreCase));     // and we see if we actually have some at this time
+                    MaterialCommodityMicroResource m = discoveryform.history.MaterialCommoditiesMicroResources.Get(mcl.Value, mcd.FDName);      // at generation mcl, find fdname.
 
                     if (showzeros || (m != null && m.Count > 0))       // if display zero, or we have some..
                     {
-                        string s = Recipes.UsedInRecipesByFDName(mcd.FDName, Environment.NewLine);
+                        string s = "";
 
-                        if (materials)
+                        if (PanelMode == PanelType.Materials)
                         {
+                            s = Recipes.UsedInRecipesByFDName(mcd.FDName, Environment.NewLine);
+
                             int limit = mcd.MaterialLimit() ?? 0;
 
                             rowobj = new[] { mcd.Name, mcd.Shortname, mcd.TranslatedCategory,
@@ -200,8 +222,16 @@ namespace EDDiscovery.UserControls
                                                 m != null ? m.Count.ToString() : "0",  s
                             };
                         }
+                        else if (PanelMode == PanelType.MicroResources)
+                        {
+                            rowobj = new[] { mcd.Name, mcd.Shortname, mcd.TranslatedCategory,
+                                                m != null ? m.Count.ToString() : "0"
+                            };
+                        }
                         else
                         {
+                            s = Recipes.UsedInRecipesByFDName(mcd.FDName, Environment.NewLine);
+
                             rowobj = new[] { mcd.Name, mcd.TranslatedType,
                                                 m != null ? m.Count.ToString() : "0",
                                                 m != null ? m.Price.ToString("0.#") : "-", s
@@ -222,15 +252,23 @@ namespace EDDiscovery.UserControls
             if (firstline >= 0 && firstline < dataGridViewMC.RowCount)
                 dataGridViewMC.SafeFirstDisplayedScrollingRowIndex( firstline);
 
-            if (materials)
+            var mcllist = discoveryform.history.MaterialCommoditiesMicroResources.Get(mcl.Value);
+
+            if (PanelMode == PanelType.Materials)
             {
-                textBoxItems1.Text = mcl.DataCount.ToString();
-                textBoxItems2.Text = mcl.MaterialsCount.ToString();
+                textBoxItems1.Text = MaterialCommoditiesMicroResourceList.DataCount(mcllist).ToString();
+                textBoxItems2.Text = MaterialCommoditiesMicroResourceList.MaterialsCount(mcllist).ToString();
+            }
+            else if (PanelMode == PanelType.MicroResources)
+            {
+                textBoxItems1.Text = MaterialCommoditiesMicroResourceList.MicroResourcesCount(mcllist).ToString();
             }
             else
             {
-                textBoxItems1.Text = mcl.CargoCount.ToString();
+                textBoxItems1.Text = MaterialCommoditiesMicroResourceList.CargoCount(mcllist).ToString();
             }
+
+            textBoxItems1.Text = mcl.Value.ToString();
         }
 
         #endregion
@@ -272,10 +310,9 @@ namespace EDDiscovery.UserControls
 
         private void dataGridViewMC_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {
-            if ((materials && e.Column.Index == 4) || (!materials && (e.Column.Index == 3 || e.Column.Index ==2)))
-            {
+            object tag = e.Column.Tag;
+            if ( tag != null)
                 e.SortDataGridViewColumnNumeric();
-            }
         }
 
         private void dataGridViewMC_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
@@ -338,7 +375,7 @@ namespace EDDiscovery.UserControls
     {
         public UserControlMaterials()
         {
-            materials = true;
+            PanelMode = UserControlMaterialCommodities.PanelType.Materials;
         }
     }
 
@@ -346,7 +383,15 @@ namespace EDDiscovery.UserControls
     {
         public UserControlCommodities()
         {
-            materials = false;
+            PanelMode = UserControlMaterialCommodities.PanelType.Commodities;
+        }
+    }
+
+    public class UserControlMicroResources : UserControlMaterialCommodities
+    {
+        public UserControlMicroResources()
+        {
+            PanelMode = UserControlMaterialCommodities.PanelType.MicroResources;
         }
     }
 }

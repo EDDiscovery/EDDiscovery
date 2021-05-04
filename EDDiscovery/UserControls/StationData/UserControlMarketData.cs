@@ -191,10 +191,9 @@ namespace EDDiscovery.UserControls
                     //System.Diagnostics.Debug.WriteLine("Right " + eddmd_right.System.Name + " " + eddmd_right.WhereAmI);
                     list = CCommodities.Merge(list, ((JournalCommodityPricesBase)eddmd_right.journalEntry).Commodities);
                 }
-
-                List<MaterialCommodities> mclist = cargo.MaterialCommodity.Sort(true);      // stuff we have..  commodities only
-                List<MaterialCommodities> notfound = new List<MaterialCommodities>();
-                foreach (MaterialCommodities m in mclist)
+                List<MaterialCommodityMicroResource> mclist = discoveryform.history.MaterialCommoditiesMicroResources.GetCommoditiesSorted(cargo.MaterialCommodity);      // stuff we have..  commodities only
+                List<MaterialCommodityMicroResource> notfound = new List<MaterialCommodityMicroResource>();
+                foreach (MaterialCommodityMicroResource m in mclist)
                 {
                     int index = list.FindIndex(x => x.fdname.EqualsAlphaNumOnlyNoCase(m.Details.FDName));   // try and match, remove any spaces/_ and lower case it for matching
                     if (index >= 0)
@@ -211,7 +210,7 @@ namespace EDDiscovery.UserControls
                 {
                     if (sellonly ? c.buyPrice == 0 : (!buyonly || (c.buyPrice > 0 || c.ComparisionBuy)))
                     {
-                        MaterialCommodityData mc = MaterialCommodityData.GetByFDName(c.fdname);
+                        MaterialCommodityMicroResourceType mc = MaterialCommodityMicroResourceType.GetByFDName(c.fdname);
 
                         string name = mc?.Name ?? c.locName;
                         if (c.ComparisionRightOnly)
@@ -241,7 +240,7 @@ namespace EDDiscovery.UserControls
                     }
                 }
 
-                foreach (MaterialCommodities m in notfound)
+                foreach (MaterialCommodityMicroResource m in notfound)
                 {
                     if (m.Count > 0)
                     {

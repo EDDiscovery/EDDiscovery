@@ -99,7 +99,7 @@ namespace EDDiscovery.UserControls
             comboBoxYards.Items.Clear();
             comboBoxYards.Items.Add(the);
 
-            comboBoxYards.Items.AddRange(ShipModuleData.Instance.GetAllModTypes());
+            comboBoxYards.Items.AddRange(ItemData.Instance.GetAllModTypes());
 
             var list = (from x in ofl.GetFilteredList() select x.Ident()).ToList();
             comboBoxYards.Items.AddRange(list);
@@ -187,7 +187,7 @@ namespace EDDiscovery.UserControls
                 foreach (var item in yard.Item2)
                 {
                     string itemname = item.Name.StartsWith(item.ModType) ? item.Name.Mid(item.ModType.Length+1) : item.Name;
-                    ShipModuleData.ShipModule sm = ShipModuleData.Instance.GetItemProperties(item.FDName);
+                    ItemData.ShipModule sm = ItemData.Instance.GetShipModuleProperties(item.FDName);
                     itemname = itemname.AppendPrePad(sm.InfoMassPower(true), ", ");
 
                     object[] rowobj = { dte, yardname, itemname, (distance > -1) ? (distance.ToString("N1") + "ly") : "Unknown".T(EDTx.Unknown), item.BuyPrice.ToString("N1") + "cr" };
@@ -213,7 +213,7 @@ namespace EDDiscovery.UserControls
         {
             foreach (var i in yard.Items)
             {
-                ShipModuleData.ShipModule sm = ShipModuleData.Instance.GetItemProperties(i.FDName);
+                ItemData.ShipModule sm = ItemData.Instance.GetShipModuleProperties(i.FDName);
                 //string namepart = i.Name.Left("Class", StringComparison.InvariantCultureIgnoreCase, true), classpart = i.Name.Mid("Class", StringComparison.InvariantCultureIgnoreCase, false);
 
                 string info = sm.InfoMassPower(false);

@@ -199,10 +199,12 @@ namespace EDDiscovery.UserControls
 
             if (last_he != null)
             {
-                List<MaterialCommodities> mcl = last_he.MaterialCommodity.Sort(false);
+                var totalmcl = discoveryform.history.MaterialCommoditiesMicroResources.Get(last_he.MaterialCommodity);
+                var mclmats = discoveryform.history.MaterialCommoditiesMicroResources.GetMaterialsSorted(last_he.MaterialCommodity);      // mcl at this point
+
                 int fdrow = dataGridViewSynthesis.SafeFirstDisplayedScrollingRowIndex();      // remember where we were displaying
 
-                var totals = MaterialCommoditiesRecipe.TotalList(mcl);                  // start with totals present
+                var totals = MaterialCommoditiesRecipe.TotalList(mclmats);                  // start with totals present
 
                 wantedList = new List<Tuple<Recipes.Recipe, int>>();
 
@@ -216,7 +218,7 @@ namespace EDDiscovery.UserControls
                 for (int i = 0; i < Recipes.SynthesisRecipes.Count; i++)
                 {
                     int rno = (int)dataGridViewSynthesis.Rows[i].Tag;
-                    dataGridViewSynthesis.Rows[i].Cells[2].Value = MaterialCommoditiesRecipe.HowManyLeft(mcl, totals, Recipes.SynthesisRecipes[rno]).Item1.ToString();
+                    dataGridViewSynthesis.Rows[i].Cells[2].Value = MaterialCommoditiesRecipe.HowManyLeft(mclmats, totals, Recipes.SynthesisRecipes[rno]).Item1.ToString();
                     bool visible = true;
                 
                     if (recep != "All" || levels != "All" || materials != "All")
@@ -249,7 +251,7 @@ namespace EDDiscovery.UserControls
                     if (dataGridViewSynthesis.Rows[i].Visible)
                     {
                         Recipes.Recipe r = Recipes.SynthesisRecipes[rno];
-                        Tuple<int, int, string, string> res = MaterialCommoditiesRecipe.HowManyLeft(mcl, totals, r , Wanted[rno]);
+                        Tuple<int, int, string, string> res = MaterialCommoditiesRecipe.HowManyLeft(mclmats, totals, r , Wanted[rno]);
                         //System.Diagnostics.Debug.WriteLine("{0} Recipe {1} executed {2} {3} ", i, rno, Wanted[rno], res.Item2);
 
                         using (DataGridViewRow row = dataGridViewSynthesis.Rows[i])
@@ -258,7 +260,7 @@ namespace EDDiscovery.UserControls
                             row.Cells[4].Value = res.Item2.ToString();
                             row.Cells[5].Value = res.Item3;
                             row.Cells[5].ToolTipText = res.Item4;
-                            row.Cells[6].Value = r.IngredientsStringvsCurrent(last_he.MaterialCommodity);
+                            row.Cells[6].Value = r.IngredientsStringvsCurrent(totalmcl);
                             row.Cells[6].ToolTipText = r.IngredientsStringLong;
                         }
                     }
@@ -272,11 +274,12 @@ namespace EDDiscovery.UserControls
 
                 if (!isEmbedded)
                 {
-                    var shoppinglist = MaterialCommoditiesRecipe.GetShoppingList(wantedList, mcl);
+                    var shoppinglist = MaterialCommoditiesRecipe.GetShoppingList(wantedList, mclmats);
 
                     foreach (var c in shoppinglist)        // and add new..
                     {
-                        var cur = last_he.MaterialCommodity.Find(c.Item1.Details);    // may be null
+                        var cur = totalmcl.Find((x) => x.Details == c.Item1.Details);    // may be null
+
                         Object[] values = { c.Item1.Details.Name, c.Item1.Details.TranslatedCategory, (cur?.Count ?? 0).ToString(), c.Item2.ToString(), "", "", c.Item1.Details.Shortname };
                         int rn = dataGridViewSynthesis.Rows.Add(values);
                         dataGridViewSynthesis.Rows[rn].ReadOnly = true;     // disable editing wanted..

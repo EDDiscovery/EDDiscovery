@@ -137,8 +137,9 @@ namespace EDDiscovery.UserControls
 
                 if (newlist != null)        // only if no history would we get null, unlikely since he has been tested, but still..
                 {
-                    int limpetsleft = newheabove.MaterialCommodity.FindFDName("drones")?.Count ?? 0;
-                    int cargoleft = newheabove.ShipInformation.CargoCapacity() - newheabove.MaterialCommodity.CargoCount;
+                    int limpetsleft = discoveryform.history.MaterialCommoditiesMicroResources.Get(newheabove.MaterialCommodity,"drones")?.Count ?? 0;
+                    int cargo = MaterialCommoditiesMicroResourceList.CargoCount( discoveryform.history.MaterialCommoditiesMicroResources.Get(newheabove.MaterialCommodity));
+                    int cargoleft = newheabove.ShipInformation.CargoCapacity() - cargo;
 
                     // if no list, or diff no of items (due to new entry) or different start point, we reset and display, else we just quit as current is good
                     if (curlist == null || newlist.Count != curlist.Count || hebelow != newhebelow || limpetsleft != limpetsleftdisplay || cargoleft != cargoleftdisplay) 
@@ -190,7 +191,7 @@ namespace EDDiscovery.UserControls
                 {
                     mat = new MaterialsFound();
                     mat.matnamefd2 = fdname;
-                    mat.friendlyname = MaterialCommodityData.GetByFDName(fdname)?.Name ?? fdname;
+                    mat.friendlyname = MaterialCommodityMicroResourceType.GetByFDName(fdname)?.Name ?? fdname;
                     mat.prospectedamounts = new List<double>();
                     mat.content = new int[3];
                     list.Add(mat);
@@ -773,7 +774,7 @@ namespace EDDiscovery.UserControls
                             ret[0] = (r + 1).ToString("N0");
                             ret[1] = jp.EventTimeUTC.ToStringZulu();
                             ret[2] = jp.Content.ToString();
-                            ret[3] = MaterialCommodityData.GetByFDName(jp.MotherlodeMaterial)?.Name ?? jp.MotherlodeMaterial;
+                            ret[3] = MaterialCommodityMicroResourceType.GetByFDName(jp.MotherlodeMaterial)?.Name ?? jp.MotherlodeMaterial;
 
                             for (int m = 0; m < prosmat.Count; m++)
                             {

@@ -208,11 +208,12 @@ namespace EDDiscovery.UserControls
 
             if (last_he != null)
             {
-                List<MaterialCommodities> mcl = last_he.MaterialCommodity.Sort(false);
+                var totalmcl = discoveryform.history.MaterialCommoditiesMicroResources.Get(last_he.MaterialCommodity); 
+                var mclmats = discoveryform.history.MaterialCommoditiesMicroResources.GetMaterialsSorted(last_he.MaterialCommodity);      // mcl at this point
 
                 int fdrow = dataGridViewEngineering.SafeFirstDisplayedScrollingRowIndex();      // remember where we were displaying
 
-                var totals = MaterialCommoditiesRecipe.TotalList(mcl);                  // start with totals present
+                var totals = MaterialCommoditiesRecipe.TotalList(mclmats);                  // start with totals present
 
                 wantedList = new List<Tuple<Recipes.Recipe, int>>();
 
@@ -230,7 +231,7 @@ namespace EDDiscovery.UserControls
                 for (int i = 0; i < Recipes.EngineeringRecipes.Count; i++)
                 {
                     int rno = (int)dataGridViewEngineering.Rows[i].Tag;
-                    dataGridViewEngineering[MaxCol.Index, i].Value = MaterialCommoditiesRecipe.HowManyLeft(mcl, totals, Recipes.EngineeringRecipes[rno]).Item1.ToString();
+                    dataGridViewEngineering[MaxCol.Index, i].Value = MaterialCommoditiesRecipe.HowManyLeft(mclmats, totals, Recipes.EngineeringRecipes[rno]).Item1.ToString();
                     bool visible = true;
                     
                     if (!(engineers == "All" && modules == "All" && levels == "All" && upgrades == "All" && materials == "All"))
@@ -271,14 +272,14 @@ namespace EDDiscovery.UserControls
                     {
                         Recipes.Recipe r = Recipes.EngineeringRecipes[i];
 
-                        Tuple<int, int, string,string> res = MaterialCommoditiesRecipe.HowManyLeft(mcl, totals, Recipes.EngineeringRecipes[rno], Wanted[rno]);
+                        Tuple<int, int, string,string> res = MaterialCommoditiesRecipe.HowManyLeft(mclmats, totals, Recipes.EngineeringRecipes[rno], Wanted[rno]);
                         //System.Diagnostics.Debug.WriteLine("{0} Recipe {1} executed {2} {3} ", i, rno, Wanted[rno], res.Item2);
 
                         dataGridViewEngineering[WantedCol.Index, i].Value = Wanted[rno].ToString();
                         dataGridViewEngineering[AvailableCol.Index, i].Value = res.Item2.ToString();
                         dataGridViewEngineering[NotesCol.Index, i].Value = res.Item3;
                         dataGridViewEngineering[NotesCol.Index, i].ToolTipText = res.Item4;
-                        dataGridViewEngineering[RecipeCol.Index, i].Value = r.IngredientsStringvsCurrent(last_he.MaterialCommodity);
+                        dataGridViewEngineering[RecipeCol.Index, i].Value = r.IngredientsStringvsCurrent(totalmcl);
                         dataGridViewEngineering[RecipeCol.Index, i].ToolTipText = r.IngredientsStringLong;
                     }
                     if (Wanted[rno] > 0 && (visible || isEmbedded))      // embedded, need to 
@@ -289,13 +290,13 @@ namespace EDDiscovery.UserControls
 
                 if (!isEmbedded)
                 {
-                    var shoppinglist = MaterialCommoditiesRecipe.GetShoppingList(wantedList, mcl);
+                    var shoppinglist = MaterialCommoditiesRecipe.GetShoppingList(wantedList, mclmats);
 
                     dataGridViewEngineering.RowCount = Recipes.EngineeringRecipes.Count;         // truncate previous shopping list..
 
                     foreach (var c in shoppinglist)      // and add new..
                     {
-                        var cur = last_he.MaterialCommodity.Find(c.Item1.Details);    // may be null
+                        var cur = totalmcl.Find((x) => x.Details == c.Item1.Details);    // may be null
 
                         DataGridViewRow r = dataGridViewEngineering.RowTemplate.Clone() as DataGridViewRow;
                         r.CreateCells(dataGridViewEngineering, c.Item1.Details.Name, "", "", "", c.Item2.ToString(), (cur?.Count ?? 0).ToString(), "", c.Item1.Details.Shortname, "");

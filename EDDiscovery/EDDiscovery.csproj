@@ -209,6 +209,7 @@
     <Compile Include="UserControls\HelpersScanDisplayUC\ScanDisplayBarycentres.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="UserControls\Helpers\PaintEventColumn.cs" />
     <Compile Include="UserControls\Helpers\CSVHelpers.cs" />
     <Compile Include="UserControls\Helpers\MissionListUserControl.cs">
       <SubType>UserControl</SubType>

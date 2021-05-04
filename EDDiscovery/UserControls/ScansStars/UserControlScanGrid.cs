@@ -213,6 +213,9 @@ namespace EDDiscovery.UserControls
             var gasgiants = 0;
             var moons = 0;
 
+            List<MaterialCommodityMicroResource> historicmcl = discoveryform.history.MaterialCommoditiesMicroResources.Get(last_he.MaterialCommodity);
+            List<MaterialCommodityMicroResource> curmcl = discoveryform.history.MaterialCommoditiesMicroResources.GetLast();
+
             foreach (StarScan.ScanNode sn in all_nodes)
             {
                 // define strings to be populated
@@ -256,7 +259,7 @@ namespace EDDiscovery.UserControls
                             cur.Tag = img;
                             cur.Cells[0].Tag = null;
                             cur.Cells[4].Tag = cur.Cells[0].ToolTipText = cur.Cells[1].ToolTipText = cur.Cells[2].ToolTipText = cur.Cells[3].ToolTipText = cur.Cells[4].ToolTipText =
-                                        sn.ScanData.DisplayString(historicmatlist: last_he.MaterialCommodity, currentmatlist: discoveryform.history.GetLast?.MaterialCommodity);
+                                        sn.ScanData.DisplayString(0, historicmcl, curmcl);
                         }
                     }
                 }
@@ -428,7 +431,7 @@ namespace EDDiscovery.UserControls
                                 var ret = "";
                                 foreach (KeyValuePair<string, double> mat in sn.ScanData.Materials)
                                 {
-                                    var mc = MaterialCommodityData.GetByFDName(mat.Key);
+                                    var mc = MaterialCommodityMicroResourceType.GetByFDName(mat.Key);
                                     if (mc?.IsJumponium == true)
                                     {
                                         ret = ret.AppendPrePad(mc.Name, ", ");
@@ -498,7 +501,7 @@ namespace EDDiscovery.UserControls
 
                         cur.Cells[0].Tag = overlays;
                         cur.Cells[4].Tag = cur.Cells[0].ToolTipText = cur.Cells[1].ToolTipText = cur.Cells[2].ToolTipText = cur.Cells[3].ToolTipText = cur.Cells[4].ToolTipText =
-                                    sn.ScanData.DisplayString(historicmatlist: last_he.MaterialCommodity, currentmatlist: discoveryform.history.GetLast?.MaterialCommodity);
+                                    sn.ScanData.DisplayString(0, historicmcl, curmcl);
                     }
                 }
 

@@ -163,7 +163,7 @@ namespace EDDiscovery.UserControls
 
                 backcolour = IsTransparent ? Color.Transparent : this.BackColor;
 
-                EliteDangerousCalculations.FSDSpec.JumpInfo ji = he.GetJumpInfo();          // may be null
+                EliteDangerousCalculations.FSDSpec.JumpInfo ji = he.GetJumpInfo(discoveryform.history.MaterialCommoditiesMicroResources.CargoCount(he.MaterialCommodity));
 
                 string line = String.Format("{0} [{1}]", he.System.Name, discoveryform.history.GetVisitsCount(he.System.Name));
 

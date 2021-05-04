@@ -37,8 +37,8 @@ namespace EDDiscovery.UserControls
 
         Point DrawNode(List<ExtPictureBox.ImageElement> pc,
                             StarScan.ScanNode sn,
-                            MaterialCommoditiesList curmats,    // curmats may be null
-                            HistoryList hl,
+                            List<MaterialCommodityMicroResource> historicmats,    // curmats may be null
+                            List<MaterialCommodityMicroResource> curmats,    // curmats may be null
                             Image notscanned,               // image if sn is not known
                             Point position,                 // position is normally left/middle, unless xiscentre is set.
                             bool xiscentre,
@@ -59,7 +59,7 @@ namespace EDDiscovery.UserControls
             {
                 if (sn.NodeType != StarScan.ScanNodeType.ring)       // not rings
                 {
-                    tip = sc.DisplayString(historicmatlist: curmats, currentmatlist: hl.GetLast?.MaterialCommodity);
+                    tip = sc.DisplayString(0, historicmats, curmats);
                     if (sn.Signals != null)
                         tip += "\n" + "Signals".T(EDTx.ScanDisplayUserControl_Signals) + ":\n" + JournalSAASignalsFound.SignalList(sn.Signals, 4, "\n");
 
@@ -276,7 +276,7 @@ namespace EDDiscovery.UserControls
                     if (sc.HasMaterials && ShowMaterials)
                     {
                         Point matpos = new Point(endpoint.X + 4, position.Y);
-                        Point endmat = CreateMaterialNodes(pc, sc, curmats, hl, matpos, materialsize);
+                        Point endmat = CreateMaterialNodes(pc, sc, historicmats, curmats, matpos, materialsize);
                         endpoint = new Point(Math.Max(endpoint.X, endmat.X), Math.Max(endpoint.Y, endmat.Y)); // record new right point..
                     }
                 }
@@ -322,22 +322,23 @@ namespace EDDiscovery.UserControls
         }
 
         // curmats may be null
-        Point CreateMaterialNodes(List<ExtPictureBox.ImageElement> pc, JournalScan sn, MaterialCommoditiesList curmats, HistoryList hl, Point matpos, Size matsize)
+        Point CreateMaterialNodes(List<ExtPictureBox.ImageElement> pc, JournalScan sn, List<MaterialCommodityMicroResource> historicmats, List<MaterialCommodityMicroResource> curmats, 
+                                Point matpos, Size matsize)
         {
             Point startpos = matpos;
             Point maximum = matpos;
             int noperline = 0;
 
-            string matclicktext = sn.DisplayMaterials(2, curmats, hl.GetLast?.MaterialCommodity);
+            string matclicktext = sn.DisplayMaterials(2, historicmats, curmats );
 
             foreach (KeyValuePair<string, double> sd in sn.Materials)
             {
-                string tooltip = sn.DisplayMaterial(sd.Key, sd.Value, curmats, hl.GetLast?.MaterialCommodity);
+                string tooltip = sn.DisplayMaterial(sd.Key, sd.Value, historicmats, curmats);
 
                 Color fillc = Color.Yellow;
                 string abv = sd.Key.Substring(0, 1);
 
-                MaterialCommodityData mc = MaterialCommodityData.GetByFDName(sd.Key);
+                MaterialCommodityMicroResourceType mc = MaterialCommodityMicroResourceType.GetByFDName(sd.Key);
 
                 if (mc != null)
                 {
@@ -348,7 +349,7 @@ namespace EDDiscovery.UserControls
                     if (HideFullMaterials)                 // check full
                     {
                         int? limit = mc.MaterialLimit();
-                        MaterialCommodities matnow = curmats?.Find(mc);  // allow curmats = null
+                        MaterialCommodityMicroResource matnow = curmats?.Find(x=>x.Details == mc);  // allow curmats = null
 
                         // debug if (matnow != null && mc.shortname == "Fe")  matnow.count = 10000;
 

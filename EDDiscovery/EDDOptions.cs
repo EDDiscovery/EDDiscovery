@@ -92,6 +92,10 @@ namespace EDDiscovery
             {
                 DefaultJournalFolder = toeol ? ca.Rest() : ca.NextEmpty();
             }
+            else if (optname == "-journalfilematch")
+            {
+                DefaultJournalMatchFilename = toeol ? ca.Rest() : ca.NextEmpty();
+            }
             else if (optname.StartsWith("-"))
             {
                 string opt = optname.Substring(1);
@@ -218,6 +222,7 @@ namespace EDDiscovery
         public bool DisableVersionDisplay { get; set; }
         public string OutputEventHelp { get; set; }
         public string DefaultJournalFolder { get; set; }        // default is null, use computed value
+        public string DefaultJournalMatchFilename { get; set; }        // default is set
         public bool EnableTGRightDebugClicks { get; set; }
 
         public string SubAppDirectory(string subfolder)     // ensures its there.. name without \ slashes
@@ -416,6 +421,7 @@ namespace EDDiscovery
 #else
             EnableTGRightDebugClicks = true;
 #endif
+            DefaultJournalMatchFilename = "Journal*.log";
 
             ProcessConfigVariables();
 

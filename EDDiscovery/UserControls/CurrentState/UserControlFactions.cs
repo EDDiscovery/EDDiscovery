@@ -50,17 +50,17 @@ namespace EDDiscovery.UserControls
             public long SystemAddress { get; }
             public int Influence { get; private set; }
             public int Missions { get { return MissionsList.Count; } }
-            private List<int> MissionsList;
+            private List<ulong> MissionsList;
 
-            public SystemInfluence(long systemAddress, int influence, int missionId)
+            public SystemInfluence(long systemAddress, int influence, ulong missionId)
             {
                 this.SystemAddress = systemAddress;
                 this.Influence = influence;
-                this.MissionsList = new List<int>();
+                this.MissionsList = new List<ulong>();
                 this.MissionsList.Add(missionId);
             }
 
-            public void AddInfluence(int influence, int missionId)
+            public void AddInfluence(int influence, ulong missionId)
             {
                 this.Influence += influence;
                 if (!this.MissionsList.Contains(missionId))
@@ -137,7 +137,7 @@ namespace EDDiscovery.UserControls
                 reward.Add(amount);
             }
 
-            public void AddSystemInfluence(long systemAddress, int amount, int missionId)
+            public void AddSystemInfluence(long systemAddress, int amount, ulong missionId)
             {
                 SystemInfluence si;
                 if (!Systems.TryGetValue(systemAddress, out si))
@@ -590,7 +590,7 @@ namespace EDDiscovery.UserControls
                     var items = (he.journalEntry as IStatsJournalEntryMatCommod).ItemsList;
                     foreach (var i in items)
                     {
-                        var m = EliteDangerousCore.MaterialCommodityData.GetByFDName(i.FDName);     // and we see if we actually have some at this time
+                        var m = EliteDangerousCore.MaterialCommodityMicroResourceType.GetByFDName(i.FDName);     // and we see if we actually have some at this time
                         string name = m?.Name ?? i.FDName;
 
                         int bought = i.Count > 0 ? i.Count : 0;
