@@ -873,7 +873,7 @@ SECTION UserControlSettings
 .checkBoxCustomRemoveOriginals.ToolTip: "After conversion, remove originals" => "Nach der Konvertierung Originale entfernen"
 .buttonExtScreenshot.ToolTip: "Configure further screenshot options" => "Konfiguriere weitere Screenshotoptionen"
 .checkBoxCustomEnableScreenshots.ToolTip: "Screen shot conversion on/off" => "Screenshotkonvertiereung An/Aus"
-.buttonExtEDSMConfigureArea.ToolTip: "Configure what parts of the galaxy is stored in the databases" => "Konfiguriere welcher Teil der Galaxi in der Datenbank gespeichert wird"
+.buttonExtEDSMConfigureArea.ToolTip: "Configure what parts of the galaxy is stored in the databases" => "Konfiguriere welcher Teil der Galaxie in der Datenbank gespeichert wird"
 .checkBoxCustomEDSMDownload.ToolTip: "Click to enable downloading of stars from EDSM and system information from EDDB.  Will apply at next start." => "Klicken um den Download von Sternen von EDSM und Systeminformationen von EDDB zu aktivieren. Wird beim nächsten Start angewendet"
 .checkBoxPanelSortOrder.ToolTip: "Panel lists sorted alphanumerically instead of ordered in groups. Note Requires Restart" => "Paneellsite alphanumerisch anstatt in Gruppen sortiert. Erfordert Neustart."
 .checkBoxKeepOnTop.ToolTip: "This window, and its children, top" => "Dieses Fenster und seine Ableger zuoberst"
