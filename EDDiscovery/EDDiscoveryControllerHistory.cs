@@ -199,7 +199,7 @@ namespace EDDiscovery
 
                 hist = HistoryList.LoadHistory( (s) => ReportRefreshProgress(-1, s), 
                                                 args.CurrentCommander,
-                                                EDDConfig.Instance.FullHistoryLoadDayLimit, 
+                                                EDDOptions.Instance.HistoryLoadDayLimit > 0 ? EDDOptions.Instance.HistoryLoadDayLimit : EDDConfig.Instance.FullHistoryLoadDayLimit, 
                                                 EDDConfig.Instance.EssentialEventTypes
                                                  );
 

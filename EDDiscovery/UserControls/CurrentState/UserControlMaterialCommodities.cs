@@ -84,7 +84,8 @@ namespace EDDiscovery.UserControls
             else if (PanelMode == PanelType.MicroResources)
             {
                 dataGridViewMC.Columns.Remove(Type);
-                dataGridViewMC.Columns.Remove(Price);
+                Number.HeaderText = "Ship Locker".T(EDTx.TBD);
+                Price.HeaderText = "BackPack".T(EDTx.TBD);
                 labelItems1.Text = "Total".T(EDTx.UserControlMaterialCommodities_Total);
                 textBoxItems2.Visible = labelItems2.Visible = false;
 
@@ -225,7 +226,7 @@ namespace EDDiscovery.UserControls
                         else if (PanelMode == PanelType.MicroResources)
                         {
                             rowobj = new[] { mcd.Name, mcd.Shortname, mcd.TranslatedCategory,
-                                                m != null ? m.Count.ToString() : "0"
+                                                m != null ? m.Counts[0].ToString() : "0", m != null ? m.Counts[1].ToString() : "0"
                             };
                         }
                         else
@@ -268,7 +269,8 @@ namespace EDDiscovery.UserControls
                 textBoxItems1.Text = MaterialCommoditiesMicroResourceList.CargoCount(mcllist).ToString();
             }
 
-            textBoxItems1.Text = mcl.Value.ToString();
+            // TBD
+            textBoxItems1.Text = "DBG GEN" +  mcl.Value.ToString();
         }
 
         #endregion
