@@ -64,7 +64,7 @@ namespace EDDiscovery.UserControls
             string shiptype = string.Join(";", sle.Select(x => x.Item1)) + ";";
             AddGroupOption(shiptype, "Ship".T(EDTx.FilterSelector_Ship), JournalEntry.JournalTypeIcons[JournalTypeEnum.Shipyard]);
 
-            var suitle = EliteDangerousCore.JournalEntry.GetNameImageOfEvents(new string[] { "SuitInformation" });
+            var suitle = EliteDangerousCore.JournalEntry.GetNameImageOfEvents(new string[] { "SuitInformation", "LoadoutInformation", "WeaponInformation" });
             string suittype = string.Join(";", suitle.Select(x => x.Item1)) + ";";
             AddGroupOption(suittype, "Suits".T(EDTx.TBD), JournalEntry.JournalTypeIcons[JournalTypeEnum.BuySuit]);
 
