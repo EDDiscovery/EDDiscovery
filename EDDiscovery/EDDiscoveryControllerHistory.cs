@@ -263,6 +263,8 @@ namespace EDDiscovery
                 // available, and not hidden commander, and we have logged in before
                 if (FrontierCAPI.ClientIDAvailable && EDCommander.Current.Id >= 0 && FrontierCAPI.GetUserState(EDCommander.Current.Name) != CAPI.CompanionAPI.UserState.NeverLoggedIn)
                 {
+                    FrontierCAPI.GameIsBeta = EDCommander.Current.Name.StartsWith("[BETA]", StringComparison.InvariantCultureIgnoreCase);
+
                     System.Threading.Tasks.Task.Run(() =>           // don't hold up the main thread, do it in a task, as its a HTTP operation
                     {
                         FrontierCAPI.LogIn(EDCommander.Current.Name);   // try and get to Active.  May cause a new frontier login

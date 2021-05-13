@@ -691,6 +691,14 @@ SECTION UserControlRoute
 .checkBox_FsdBoost.ToolTip: "The route finder will try and use FSD injections in case a direct route could not" @
 .showScanToolStripMenuItem: "View Scan Display" @
 
+.M1: "Nearest to Waypoint" @
+.M2: "Minimum Deviation from Path" @
+.M3: "Nearest to Waypoint with dev<=100ly" @
+.M4: "Nearest to Waypoint with dev<=250ly" @
+.M5: "Nearest to Waypoint with dev<=500ly" @
+.M6: "Nearest to Waypoint + Deviation / 2" @
+
+
 SECTION UserControlRouteTracker
 
 .Note: "Note: {0}" @

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2017 EDDiscovery development team
+ * Copyright © 2016 - 2021 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -13,10 +13,11 @@
  *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using System;
-using System.Diagnostics;
-using System.Windows.Forms;
+
 using EDDiscovery.Properties;
+using System;
+using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace EDDiscovery.Forms
 {
@@ -67,14 +68,44 @@ namespace EDDiscovery.Forms
             webbrowser.Dock = DockStyle.Fill;
             webbrowser.Visible = false;
             webbrowser.DocumentCompleted += Webbrowser_DocumentCompleted;
+            webbrowser.NewWindow += Webbrowser_NewWindow;
             webbrowser.ScriptErrorsSuppressed = true;
             panelWebBrowser.Controls.Add(webbrowser);
-            webbrowser.Navigate(Properties.Resources.URLReleaseVideo);
+            webbrowser.DocumentText =
+                "<html>" +
+                "<head><meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\"/></head>" +
+                "<body style=\"margin: 0\">" +
+                $"<iframe style=\"display: block; border: none; height: 100vh; width: 100vw\" src=\"{Properties.Resources.URLReleaseVideo}\" frameborder=\"0\" allow=\"autoplay; encrypted-media\" allowfullscreen></iframe>" +
+                "</body>" +
+                "</html>";
 #else
             panelWebBrowser.Visible = false;
             textBoxLicense.Dock = DockStyle.Fill;
 
 #endif
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            webbrowser.Stop();
+            base.OnClosing(e);
+        }
+
+        private void Webbrowser_NewWindow(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            e.Cancel = true;
+            // Guess that the Youtube button was clicked
+            if (Properties.Resources.URLReleaseVideo.StartsWith("https://www.youtube.com/embed/"))
+            {
+                var uri = new Uri(Properties.Resources.URLReleaseVideo);
+                var url = "https://www.youtube.com/watch?v=" + System.Linq.Enumerable.Last(uri.AbsolutePath.Split('/'));
+
+                BaseUtils.BrowserInfo.LaunchBrowser(url);
+            }
+            else
+            {
+                BaseUtils.BrowserInfo.LaunchBrowser(Properties.Resources.URLReleaseVideo);
+            }
         }
 
         private void Webbrowser_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)

@@ -1178,8 +1178,8 @@
       <ZipFiles Include="$(OutDir)eddwebsite.zip" />
       <ZipFiles Include="$(MSBuildProjectDirectory)\Translations\*.tlf" />
       <ZipFiles Include="$(MSBuildProjectDirectory)\UserControls\*.tlp" />
-      <ZipFiles Include="$(MSBuildProjectDirectory)\..\EliteDangerous\EliteDangerous\*.tlp" />
-      <ZipFiles Include="$(MSBuildProjectDirectory)\..\EliteDangerous\JournalEvents\*.tlp" />
+      <ZipFiles Include="$(MSBuildProjectDirectory)\..\EliteDangerousCore\EliteDangerous\EliteDangerous\*.tlp" />
+      <ZipFiles Include="$(MSBuildProjectDirectory)\..\EliteDangerousCore\EliteDangerous\JournalEvents\*.tlp" />
       <ZipFiles Include="$(ProjectDir)App.Portable.config">
         <Name>EDDiscovery.exe.config</Name>
       </ZipFiles>

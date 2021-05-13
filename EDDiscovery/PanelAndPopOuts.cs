@@ -250,33 +250,24 @@ namespace EDDiscovery
         static public PanelInfo[] GetUserSelectablePanelInfo(bool sortbyname)       // only user selected
         {
             if (sortbyname)
-                return (from x in userselectablepanellist orderby x.Description select x).ToArray();
+                return (from x in userselectablepanellist orderby x.WindowTitle select x).ToArray();        // sort by window title.
             else
                 return userselectablepanellist.ToArray();
         }
 
         static public string[] GetUserSelectablePanelDescriptions(bool sortbyname)       // only user selected
         {
-            if (sortbyname)
-                return (from x in userselectablepanellist orderby x.Description select x.Description).ToArray();
-            else
-                return userselectablepanellist.Select(x => x.Description).ToArray();
+            return GetUserSelectablePanelInfo(sortbyname).Select(x => x.Description).ToArray();
         }
 
-        static public Image[] GetUserSelectablePanelImages(bool sortbyname )                // only user selected
+        static public Image[] GetUserSelectablePanelImages(bool sortbyname)                // only user selected
         {
-            if (sortbyname)
-                return (from x in userselectablepanellist orderby x.Description select x.TabIcon).ToArray();
-            else
-                return userselectablepanellist.Select(x => x.TabIcon).ToArray();
+            return GetUserSelectablePanelInfo(sortbyname).Select(x => x.TabIcon).ToArray();
         }
 
         static public PanelIDs[] GetUserSelectablePanelIDs(bool sortbyname)                // only user selected
         {
-            if (sortbyname)
-                return (from x in userselectablepanellist orderby x.WindowTitle select x.PopoutID).ToArray();
-            else
-                return userselectablepanellist.Select(x => x.PopoutID).ToArray();
+            return GetUserSelectablePanelInfo(sortbyname).Select(x => x.PopoutID).ToArray();
         }
 
         static public int[] GetUserSelectableSeperatorIndex(bool sortbyname)                // only user selected
