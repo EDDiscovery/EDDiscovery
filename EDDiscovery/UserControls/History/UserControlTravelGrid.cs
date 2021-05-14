@@ -465,7 +465,9 @@ namespace EDDiscovery.UserControls
                 string j = js.ToString().Replace(",\"", ", \"");
                 j = j.Left(1000);
 
-                string state = string.Format("{0}\r\n[{1},{2}]\r\n[{3},{4}]\r\nmc{5}/w{6}/s{7}/l{8}", item.TravelState, item.Status.BodyName, item.Status.BodyType, item.Status.StationName, item.Status.StationType,item.MaterialCommodity, item.Weapons,item.Suits, item.Loadouts);
+                string state = string.Format("{0}\r\n[{1},{2}]\r\n[{3},{4}]\r\nmc{5}/w{6}/s{7}/l{8}\r\nb{9}/h{10}/o{11}", item.TravelState, item.Status.BodyName, item.Status.BodyType, item.Status.StationName, 
+                                    item.Status.StationType,item.MaterialCommodity, item.Weapons,item.Suits, item.Loadouts , 
+                                    item.journalEntry.IsBeta, item.journalEntry.IsHorizons,item.journalEntry.IsOdyssey);
 
                 string eventname = item.journalEntry.EventTypeStr.SplitCapsWord() == item.EventSummary ? item.EventSummary : (item.journalEntry.EventTypeStr + Environment.NewLine + item.EventSummary);
 

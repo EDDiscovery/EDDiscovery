@@ -66,7 +66,7 @@ namespace EDDiscovery.Actions
             }
         }
 
-        void ActionConfigureKeys()
+        public void ActionConfigureKeys()
         {
             List<Tuple<string, ConditionEntry.MatchType>> ret = actionfiles.ReturnValuesOfSpecificConditions("KeyPress", new List<ConditionEntry.MatchType>() { ConditionEntry.MatchType.Equals, ConditionEntry.MatchType.IsOneOf });        // need these to decide
 

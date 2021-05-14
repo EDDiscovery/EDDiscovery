@@ -91,7 +91,7 @@ namespace EDDiscovery.Actions
                         int count = 1;
                         foreach (var cmdr in cmdrlist)       // only current commander ID considered
                         {
-                            if (cmdr.Name.WildCardMatch(wildcard))
+                            if (cmdr.Name.WildCardMatch(wildcard, true))
                             {
                                 DumpCMDR(ap, prefix + count++.ToStringInvariant() + "_", cmdr);
                             }

@@ -70,7 +70,7 @@ namespace EDDiscovery.Actions
                         int count = 1;
                         foreach( var g in discoveryform.galacticMapping.galacticMapObjects)
                         {
-                            if (g.name.WildCardMatch(wildcard))
+                            if (g.name.WildCardMatch(wildcard, true))
                             {
                                 string nprefix = prefix + (count++).ToStringInvariant() + "_";
                                 DumpGMO(ap, nprefix, g);

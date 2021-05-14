@@ -124,7 +124,7 @@ namespace EDDiscovery
 
                                 for (int tries = 0; tries < 3; tries++)
                                 {
-                                    FrontierCAPI.GameIsBeta = he.IsBetaMessage;
+                                    FrontierCAPI.GameIsBeta = he.journalEntry.IsBeta;
                                     string marketjson = FrontierCAPI.Market();
 
                                     CAPI.Market mk = new CAPI.Market(marketjson);

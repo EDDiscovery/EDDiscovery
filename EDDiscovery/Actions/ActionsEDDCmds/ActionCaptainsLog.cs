@@ -338,23 +338,23 @@ namespace EDDiscovery.Actions
 
         bool CheckSystemBody(CaptainsLogClass cl, string match)
         {
-            return cl.SystemName.WildCardMatch(match) || cl.BodyName.WildCardMatch(match);
+            return cl.SystemName.WildCardMatch(match, true) || cl.BodyName.WildCardMatch(match, true);
         }
         bool CheckSystem(CaptainsLogClass cl, string match)
         {
-            return cl.SystemName.WildCardMatch(match);
+            return cl.SystemName.WildCardMatch(match,true);
         }
         bool CheckBody(CaptainsLogClass cl, string match)
         {
-            return cl.BodyName.WildCardMatch(match);
+            return cl.BodyName.WildCardMatch(match,true);
         }
         bool CheckNote(CaptainsLogClass cl, string match)
         {
-            return cl.Note != null && cl.Note.WildCardMatch(match);
+            return cl.Note != null && cl.Note.WildCardMatch(match,true);
         }
         bool CheckTags(CaptainsLogClass cl, string match)
         {
-            return cl.Tags != null && cl.Tags.WildCardMatch(match);
+            return cl.Tags != null && cl.Tags.WildCardMatch(match,true);
         }
     }
 }
