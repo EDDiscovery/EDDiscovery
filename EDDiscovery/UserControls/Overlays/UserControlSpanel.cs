@@ -257,18 +257,16 @@ namespace EDDiscovery.UserControls
                 if (!drawnnootherstuff)                                         // and it may indicate its overwriting all stuff, which is fine
                 {
                     int rowpos = scanpostextoffset.Y;
-                    //int rowheight = Config(Configuration.showIcon) ? 26 : 20;
-                    //int habrowheight = Config(Configuration.showIcon) ? 26 : 20;
-
                     int rowmargin = displayfont.ScalePixels(4);
 
-					// Check if need to hide the UI
-                    if (Config(Configuration.showNothingWhenDocked) && (hl.IsCurrentlyDocked() || hl.IsCurrentlyLanded()))
+                    // Check if need to hide the UI
+                    var ts = hl.CurrentTravelState();
+
+                    if (Config(Configuration.showNothingWhenDocked) && (ts == HistoryEntryStatus.TravelStateType.Docked))
                     {
 						if (!Config(Configuration.showNoTitleWhenHidden))
 						{
-							AddColText(0, 0, rowpos, (hl.IsCurrentlyDocked()) ? "Docked" : "Landed",
-									   textcolour, backcolour, null);
+							AddColText(0, 0, rowpos, "<>",textcolour, backcolour, null);        // just show a marker
 						}
 					}
                     else if ( uistate != EliteDangerousCore.UIEvents.UIGUIFocus.Focus.NoFocus && Config(Configuration.showNothingWhenPanel))
@@ -826,7 +824,7 @@ namespace EDDiscovery.UserControls
         {
             if ( IsSurfaceScanOn )
             {
-                scantext = scan.DisplayString(historicmatlist: discoveryform.history.GetLast?.MaterialCommodity);
+                scantext = scan.DisplayString(0,historicmatlist: discoveryform.history.MaterialCommoditiesMicroResources.GetLast());
                 Display(current_historylist);
                 SetSurfaceScanBehaviour(null);  // set up timers etc.
             }

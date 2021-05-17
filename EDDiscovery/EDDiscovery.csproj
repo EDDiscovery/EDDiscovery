@@ -191,6 +191,12 @@
     <Compile Include="UserControls\CurrentState\UserControlFactions.Designer.cs">
       <DependentUpon>UserControlFactions.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\CurrentState\UserControlSuitsWeapons.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\CurrentState\UserControlSuitsWeapons.Designer.cs">
+      <DependentUpon>UserControlSuitsWeapons.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\CurrentState\UserControlStatistics.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -209,6 +215,7 @@
     <Compile Include="UserControls\HelpersScanDisplayUC\ScanDisplayBarycentres.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="UserControls\Helpers\PaintEventColumn.cs" />
     <Compile Include="UserControls\Helpers\CSVHelpers.cs" />
     <Compile Include="UserControls\Helpers\MissionListUserControl.cs">
       <SubType>UserControl</SubType>
@@ -747,6 +754,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SetNoteForm.resx">
       <DependentUpon>SetNoteForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\CurrentState\UserControlSuitsWeapons.resx">
+      <DependentUpon>UserControlSuitsWeapons.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\CurrentState\UserControlStatistics.resx">
       <DependentUpon>UserControlStatistics.cs</DependentUpon>

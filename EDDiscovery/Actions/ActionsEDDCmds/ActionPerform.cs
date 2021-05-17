@@ -231,23 +231,29 @@ namespace EDDiscovery.Actions
                         ap["VoiceRecognitionEvent"] = ac.EnableVoiceReconEvent.ToStringIntValue();
                         System.Diagnostics.Debug.WriteLine("Voice recon " + ap["VoiceRecognitionEvent"]);
                     }
-
+                    else if ( cmdname.Equals("loadkeys"))
+                    {
+                        ac.ActionConfigureKeys();
+                    }
                     else if (cmdname.Equals("actionfile"))
                     {
                         ActionFile f = ac.Get(nextword);
                         if ( f != null )
                         {
-                            int i = 0;
-                            foreach( var x in f.EventList.Enumerable )
+                            ap["Events_Count"] = f.InUseEventList.Count.ToStringInvariant();
+
+                            int i = 1;
+                            foreach( var x in f.InUseEventList.Enumerable )
                             {
                                 ap["Events[" + i++ + "]"] = x.ToString(true);   // list hooked events
-                                ap["Events_" + x.eventname] = x.ToString(true);   // list hooked events
+                                ap["Events_" + x.EventName] = x.ToString(true);   // list hooked events
                             }
 
-                            i = 0;
+                            ap["Journal_Count"] = Enum.GetNames(typeof(EliteDangerousCore.JournalTypeEnum)).Length.ToStringInvariant();
+                            i = 1;
                             foreach (string jname in Enum.GetNames(typeof(EliteDangerousCore.JournalTypeEnum)))
                             {
-                                List<Condition> cl = f.EventList.GetConditionListByEventName(jname);
+                                List<Condition> cl = f.InUseEventList.GetConditionListByEventName(jname);
 
                                 if (cl != null)
                                 {
@@ -255,7 +261,7 @@ namespace EDDiscovery.Actions
                                     foreach (var c in cl)
                                     {
                                         ap["JEvents[" + i++ + "]"] = c.ToString(true);
-                                        ap["JEvents_" + c.eventname + "_" + v++] = c.ToString(true);
+                                        ap["JEvents_" + c.EventName + "_" + v++] = c.ToString(true);
                                     }
                                 }
                                 else
@@ -265,10 +271,11 @@ namespace EDDiscovery.Actions
                                 }
                             }
 
-                            i = 0;
+                            ap["UI_Count"] = Enum.GetNames(typeof(EliteDangerousCore.UITypeEnum)).Length.ToStringInvariant();
+                            i = 1;
                             foreach (string iname in Enum.GetNames(typeof(EliteDangerousCore.UITypeEnum)))
                             {
-                                List<Condition> cl = f.EventList.GetConditionListByEventName("UI" + iname);
+                                List<Condition> cl = f.InUseEventList.GetConditionListByEventName("UI" + iname);
 
                                 if (cl != null)
                                 {
@@ -276,7 +283,7 @@ namespace EDDiscovery.Actions
                                     foreach (var c in cl)
                                     {
                                         ap["UIEvents[" + i++ + "]"] = c.ToString(true);
-                                        ap["UIEvents_" + c.eventname + "_" + v++] = c.ToString(true);
+                                        ap["UIEvents_" + c.EventName + "_" + v++] = c.ToString(true);
                                     }
                                 }
                                 else
@@ -286,11 +293,13 @@ namespace EDDiscovery.Actions
                                 }
                             }
 
-                            i = 0;
+                            ap["Install_Count"] = f.InstallationVariables.Count.ToStringInvariant();
+                            i = 1;
                             foreach (var x in f.InstallationVariables.NameEnumuerable)
                                 ap["Install[" + i++ + "]"] = x + "," + f.InstallationVariables[x];   // list hooked events
 
-                            i = 0;
+                            ap["FileVar_Count"] = f.FileVariables.Count.ToStringInvariant();
+                            i = 1;
                             foreach (var x in f.FileVariables.NameEnumuerable)
                                 ap["FileVar[" + i++ + "]"] = x + "," + f.FileVariables[x];   // list hooked events
 

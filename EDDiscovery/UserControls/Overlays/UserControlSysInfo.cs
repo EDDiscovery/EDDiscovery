@@ -333,14 +333,18 @@ namespace EDDiscovery.UserControls
                     textBoxTravelDist.Text = textBoxTravelTime.Text = textBoxTravelJumps.Text = "";
                 }
 
+                var mcl = hl.MaterialCommoditiesMicroResources.Get(he.MaterialCommodity);
+
+                int cargocount = MaterialCommoditiesMicroResourceList.CargoCount(mcl);
+
                 int cc = (he.ShipInformation) != null ? he.ShipInformation.CargoCapacity() : 0;
                 if (cc > 0)
-                    textBoxCargo.Text = he.MaterialCommodity.CargoCount.ToString() + "/" + cc.ToString();
+                    textBoxCargo.Text = cargocount.ToString() + "/" + cc.ToString();
                 else
-                    textBoxCargo.Text = he.MaterialCommodity.CargoCount.ToString();
+                    textBoxCargo.Text = cargocount.ToString();
 
-                textBoxMaterials.Text = he.MaterialCommodity.MaterialsCount.ToString();
-                textBoxData.Text = he.MaterialCommodity.DataCount.ToString();
+                textBoxMaterials.Text = MaterialCommoditiesMicroResourceList.MaterialsCount(mcl).ToString();
+                textBoxData.Text = MaterialCommoditiesMicroResourceList.DataCount(mcl).ToString();
                 textBoxCredits.Text = he.Credits.ToString("N0");
 
                 textBoxJumpRange.Text = "";
@@ -360,7 +364,7 @@ namespace EDDiscovery.UserControls
                     EliteDangerousCalculations.FSDSpec fsd = si.GetFSDSpec();
                     if (fsd != null)
                     {
-                        EliteDangerousCalculations.FSDSpec.JumpInfo ji = fsd.GetJumpInfo(he.MaterialCommodity.CargoCount,
+                        EliteDangerousCalculations.FSDSpec.JumpInfo ji = fsd.GetJumpInfo(cargocount,
                                                                     si.ModuleMass() + si.HullMass(), si.FuelLevel, si.FuelCapacity / 2);
 
                         //System.Diagnostics.Debug.WriteLine("Jump range " + si.FuelLevel + " " + si.FuelCapacity + " " + ji.cursinglejump);

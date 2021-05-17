@@ -34,9 +34,9 @@ namespace EDDiscovery.Actions
         public HistoryList HistoryList { get { return discoverycontroller.history; } }
         public EDDiscoveryForm DiscoveryForm { get { return discoveryform; } }
 
-        public ActionFile Get(string name, StringComparison c = StringComparison.InvariantCulture) { return actionfiles.Get(name, c); }     // get or return null
-        public ActionFile[] Get(string[] name, StringComparison c = StringComparison.InvariantCulture) { return actionfiles.Get(name, c); }
-        public ActionFile[] Get(string[] name, bool enabledstate, StringComparison c = StringComparison.InvariantCulture) { return actionfiles.Get(name, enabledstate, c); }
+        public ActionFile Get(string name, StringComparison c = StringComparison.InvariantCultureIgnoreCase) { return actionfiles.Get(name, c); }     // get or return null
+        public ActionFile[] Get(string[] name, StringComparison c = StringComparison.InvariantCultureIgnoreCase) { return actionfiles.Get(name, c); }
+        public ActionFile[] Get(string[] name, bool enabledstate, StringComparison c = StringComparison.InvariantCultureIgnoreCase) { return actionfiles.Get(name, enabledstate, c); }
 
         private string lasteditedpack;
 
@@ -232,10 +232,10 @@ namespace EDDiscovery.Actions
 
                 // make sure the voice condition is right.. if not, reset.
 
-                if (cd.eventname != Actions.ActionEventEDList.onVoiceInput.TriggerName || 
+                if (cd.EventName != Actions.ActionEventEDList.onVoiceInput.TriggerName || 
                         ( !cd.Is("VoiceInput", ConditionEntry.MatchType.MatchSemicolonList) && !cd.Is("VoiceInput", ConditionEntry.MatchType.MatchSemicolon)))
                 {
-                    cd.eventname = Actions.ActionEventEDList.onVoiceInput.TriggerName;
+                    cd.EventName = Actions.ActionEventEDList.onVoiceInput.TriggerName;
                     cd.Set(new ConditionEntry("VoiceInput", ConditionEntry.MatchType.MatchSemicolonList, "?"));     // Voiceinput being the variable set to the expression
                 }
 
@@ -270,23 +270,23 @@ namespace EDDiscovery.Actions
 
             if (cd.IsAlwaysTrue())
             {
-                if (cd.eventname == "onKeyPress")
+                if (cd.EventName == "onKeyPress")
                     cd.Set(new ConditionEntry("KeyPress", ConditionEntry.MatchType.Equals, "?"));
-                else if (cd.eventname == "onTimer")
+                else if (cd.EventName == "onTimer")
                     cd.Set(new ConditionEntry("TimerName", ConditionEntry.MatchType.Equals, "?"));
-                else if (cd.eventname == "onPopUp" || cd.eventname == "onPopDown")
+                else if (cd.EventName == "onPopUp" || cd.EventName == "onPopDown")
                     cd.Set(new ConditionEntry("PopOutName", ConditionEntry.MatchType.Equals, "?"));
-                else if (cd.eventname == "onTabChange")
+                else if (cd.EventName == "onTabChange")
                     cd.Set(new ConditionEntry("TabName", ConditionEntry.MatchType.Equals, "?"));
-                else if (cd.eventname == "onPanelChange")
+                else if (cd.EventName == "onPanelChange")
                     cd.Set(new ConditionEntry("PopOutName", ConditionEntry.MatchType.Equals, "?"));
-                else if (cd.eventname == "onEliteInput" || cd.eventname == "onEliteInputOff")
+                else if (cd.EventName == "onEliteInput" || cd.EventName == "onEliteInputOff")
                     cd.Set(new ConditionEntry("Binding", ConditionEntry.MatchType.Equals, "?"));
-                else if (cd.eventname == "onMenuItem")
+                else if (cd.EventName == "onMenuItem")
                     cd.Set(new ConditionEntry("MenuName", ConditionEntry.MatchType.Equals, "?"));
-                else if (cd.eventname == "onSayStarted" || cd.eventname == "onSayFinished" || cd.eventname == "onPlayStarted" || cd.eventname == "onPlayFinished")
+                else if (cd.EventName == "onSayStarted" || cd.EventName == "onSayFinished" || cd.EventName == "onPlayStarted" || cd.EventName == "onPlayFinished")
                     cd.Set(new ConditionEntry("EventName", ConditionEntry.MatchType.Equals, "?"));
-                else if (cd.eventname == "onVoiceInput")
+                else if (cd.EventName == "onVoiceInput")
                     cls = ActionProgram.ProgramConditionClass.KeySay;
             }
 

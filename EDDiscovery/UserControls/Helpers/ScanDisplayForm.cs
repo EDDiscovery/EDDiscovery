@@ -67,7 +67,7 @@ namespace EDDiscovery.UserControls
                 }
 
                 sd.BackColor = EDDTheme.Instance.Form;
-                sd.DrawSystem( data, null , hl);
+                sd.DrawSystem( data, null , hl.MaterialCommoditiesMicroResources.GetLast());
 
                 int wastedh = infosize.Height - sd.DisplayAreaUsed.Y - 10 - 40;
                 if (wastedh > 0)

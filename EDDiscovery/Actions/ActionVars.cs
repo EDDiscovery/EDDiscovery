@@ -58,7 +58,6 @@ namespace EDDiscovery.Actions
                 vars[prefix + "TravelledJumps"] = he.Travelledjumps.ToStringInvariant();
                 vars[prefix + "TravelledMissingJumps"] = he.TravelledMissingjump.ToStringInvariant();
                 vars[prefix + "MultiPlayer"] = he.MultiPlayer.ToStringIntValue();
-                vars[prefix + "ContainsRares"] = he.ContainsRares().ToStringIntValue();
                 vars[prefix + "EventSummary"] = he.EventSummary;
 
                 vars[prefix + "StartMarker"] = he.StartMarker.ToStringIntValue();
@@ -66,7 +65,9 @@ namespace EDDiscovery.Actions
                 vars[prefix + "EdsmSync"] = he.EdsmSync.ToStringIntValue();
                 vars[prefix + "EddnSync"] = he.EDDNSync.ToStringIntValue();
                 vars[prefix + "EgoSync"] = false.ToStringIntValue();        //removed due to no EGO
-                vars[prefix + "Beta"] = he.IsBetaMessage.ToStringIntValue();
+                vars[prefix + "Beta"] = he.journalEntry.IsBeta.ToStringIntValue();
+                vars[prefix + "Horizons"] = he.journalEntry.IsHorizons.ToStringIntValue();
+                vars[prefix + "Odyssey"] = he.journalEntry.IsOdyssey.ToStringIntValue();
                 vars[prefix + "GameMode"] = he.GameMode;
                 vars[prefix + "Group"] = he.Group;
                 vars[prefix + "Wanted"] = he.Wanted.ToStringIntValue();

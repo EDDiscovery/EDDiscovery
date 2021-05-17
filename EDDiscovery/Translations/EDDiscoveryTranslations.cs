@@ -879,6 +879,8 @@ namespace EDDiscovery
         CommanderForm_CAPILoggedin,
         CommanderForm_CAPILogin,
         CommanderForm_CAPIAwaitLogin,
+
+        TBD
     }
 
     public static class EDTranslatorExtensions

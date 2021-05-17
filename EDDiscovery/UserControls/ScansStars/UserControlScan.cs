@@ -39,7 +39,7 @@ namespace EDDiscovery.UserControls
         bool override_system = false;
 
         ISystem showing_system;                         // set from last_he or manually..
-        MaterialCommoditiesList showing_matcomds;
+        List<MaterialCommodityMicroResource> showing_matcomds;
 
         bool closing = false;           // set when closing, to prevent a resize, which you can get, causing a big redraw
 
@@ -180,7 +180,7 @@ namespace EDDiscovery.UserControls
             if (override_system)        // no change, last_he continues to track cursor for restore..
                 return;
 
-            showing_matcomds = he?.MaterialCommodity;
+            showing_matcomds = he != null ? discoveryform.history.MaterialCommoditiesMicroResources.Get(he.MaterialCommodity) : null;
             showing_system = he?.System;
             DrawSystem();
         }
@@ -229,7 +229,10 @@ namespace EDDiscovery.UserControls
                     control_text += " " + "No Scan".T(EDTx.NoScan);
             }
 
-            panelStars.DrawSystem(data, showing_matcomds, discoveryform.history, (HasControlTextArea() && !displayfilters.Contains("sys")) ? null : control_text, bodyfilters);
+            var curmats = discoveryform.history.MaterialCommoditiesMicroResources.GetLast();
+
+            panelStars.DrawSystem(data, showing_matcomds, curmats, (HasControlTextArea() && !displayfilters.Contains("sys")) ? null : control_text, bodyfilters);
+
             SetControlText(control_text);
         }
 

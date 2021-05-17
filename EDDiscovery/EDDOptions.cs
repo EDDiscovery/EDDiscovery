@@ -92,6 +92,21 @@ namespace EDDiscovery
             {
                 DefaultJournalFolder = toeol ? ca.Rest() : ca.NextEmpty();
             }
+            else if (optname == "-journalfilematch")
+            {
+                DefaultJournalMatchFilename = toeol ? ca.Rest() : ca.NextEmpty();
+            }
+            else if (optname == "-historyloaddaylimit")
+            {
+                string s = (toeol ? ca.Rest() : ca.NextEmpty());
+                if (DateTime.TryParse(s, out DateTime t))
+                {
+                    var delta = DateTime.UtcNow - t;
+                    HistoryLoadDayLimit = (int)((delta.TotalHours + 23.999) / 24);
+                }
+                else
+                    HistoryLoadDayLimit = s.InvariantParseInt(0);
+            }
             else if (optname.StartsWith("-"))
             {
                 string opt = optname.Substring(1);
@@ -218,7 +233,9 @@ namespace EDDiscovery
         public bool DisableVersionDisplay { get; set; }
         public string OutputEventHelp { get; set; }
         public string DefaultJournalFolder { get; set; }        // default is null, use computed value
+        public string DefaultJournalMatchFilename { get; set; }        // default is set
         public bool EnableTGRightDebugClicks { get; set; }
+        public int HistoryLoadDayLimit { get; set; }    // default zero not set
 
         public string SubAppDirectory(string subfolder)     // ensures its there.. name without \ slashes
         {
@@ -416,6 +433,7 @@ namespace EDDiscovery
 #else
             EnableTGRightDebugClicks = true;
 #endif
+            DefaultJournalMatchFilename = "Journal*.log";
 
             ProcessConfigVariables();
 

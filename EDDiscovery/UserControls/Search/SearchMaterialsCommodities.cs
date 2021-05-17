@@ -35,7 +35,7 @@ namespace EDDiscovery.UserControls
         private string dbCM2 = "CM2";
         private string dbCMANDOR = "CMANDOR";
 
-        private MaterialCommodityData[] itemlist;
+        private MaterialCommodityMicroResourceType[] itemlist;
         #region Init
 
         public SearchMaterialsCommodities()
@@ -58,7 +58,7 @@ namespace EDDiscovery.UserControls
 
             dataGridView.Init(discoveryform);
 
-            itemlist = MaterialCommodityData.GetAll();
+            itemlist = MaterialCommodityMicroResourceType.GetAll();
             Array.Sort(itemlist, (left, right) => left.Name.CompareTo(right.Name));
 
             var list = (from x in itemlist select x.Name + " (" + x.TranslatedCategory + ", " + x.TranslatedType + (x.Rarity ? ", Rare Commodity".T(EDTx.SearchMaterialsCommodities_RareCommodity):"") + ")");
@@ -111,7 +111,7 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        void Search(MaterialCommodityData cm, Dictionary<string, Tuple<HistoryEntry, string, double>> foundlist, 
+        void Search(MaterialCommodityMicroResourceType cm, Dictionary<string, Tuple<HistoryEntry, string, double>> foundlist, 
                                         string prefix = "")
         {
             ISystem cursystem = discoveryform.history.CurrentSystem();        // could be null

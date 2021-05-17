@@ -74,6 +74,7 @@ namespace EDDiscovery.UserControls
         private const string dbOutlines = "Outlines";
         private const string dbWordWrap = "WordWrap";
         private const string dbVisitedColour = "VisitedColour";
+        private const string dbDebugMode = "DebugMode";
 
         private HistoryList current_historylist;        // the last one set, for internal refresh purposes on sort
 
@@ -146,6 +147,9 @@ namespace EDDiscovery.UserControls
             extCheckBoxWordWrap.Checked = GetSetting(dbWordWrap, false);
             UpdateWordWrap();
             extCheckBoxWordWrap.Click += extCheckBoxWordWrap_Click;
+
+            travelGridInDebugModeToolStripMenuItem.Checked = GetSetting(dbDebugMode, false);
+            travelGridInDebugModeToolStripMenuItem.CheckedChanged += new System.EventHandler(this.travelGridInDebugModeToolStripMenuItem_CheckedChanged);
 
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(historyContextMenu, this);
@@ -264,11 +268,12 @@ namespace EDDiscovery.UserControls
                 var chunk = chunks[0];
 
                 swtotal.Start();
+                bool debugmode = travelGridInDebugModeToolStripMenuItem.Checked;
 
                 List<DataGridViewRow> rowstoadd = new List<DataGridViewRow>();
                 foreach (var item in chunk)
                 {
-                    var row = CreateHistoryRow(item, filtertext);
+                    var row = CreateHistoryRow(item, filtertext,debugmode);
 
                     if (row != null)
                     {
@@ -293,9 +298,10 @@ namespace EDDiscovery.UserControls
 
                     //System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch(); sw.Start();
 
+                    bool debugmode = travelGridInDebugModeToolStripMenuItem.Checked;
                     foreach (var item in chunk)
                     {
-                        var row = CreateHistoryRow(item, filtertext);
+                        var row = CreateHistoryRow(item, filtertext, debugmode);
                         if (row != null)
                         {
                             //row.Cells[2].Value = (lrowno++).ToString() + " " + item.Journalid + " " + (string)row.Cells[2].Value;
@@ -398,7 +404,7 @@ namespace EDDiscovery.UserControls
 
             if (add)
             {
-                var row = CreateHistoryRow(he, textBoxFilter.Text);     // may be dumped out by search
+                var row = CreateHistoryRow(he, textBoxFilter.Text, travelGridInDebugModeToolStripMenuItem.Checked);     // may be dumped out by search
                 if (row != null)
                     dataGridViewTravel.Rows.Insert(0, row);
                 else
@@ -428,7 +434,7 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private DataGridViewRow CreateHistoryRow(HistoryEntry item, string search)
+        private DataGridViewRow CreateHistoryRow(HistoryEntry item, string search, bool debugmode)
         {
             //string debugt = item.Journalid + "  " + item.System.id_edsm + " " + item.System.GetHashCode() + " "; // add on for debug purposes to a field below
 
@@ -452,8 +458,25 @@ namespace EDDiscovery.UserControls
 
             var rw = dataGridViewTravel.RowTemplate.Clone() as DataGridViewRow;
 
-            //rw.CreateCells(dataGridViewTravel, time, "", item.Journalid + ":" + item.EventSummary, EventDescription, note);
-            rw.CreateCells(dataGridViewTravel, time, "", item.EventSummary, EventDescription, note);
+            if (debugmode)
+            {
+                var js = item.journalEntry.GetJsonCloned();
+                js.Remove("event", "timestamp");
+                string j = js.ToString().Replace(",\"", ", \"");
+                j = j.Left(1000);
+
+                string state = string.Format("{0}\r\n[{1},{2}]\r\n[{3},{4}]\r\nmc{5}/w{6}/s{7}/l{8}\r\nb{9}/h{10}/o{11}", item.TravelState, item.Status.BodyName, item.Status.BodyType, item.Status.StationName, 
+                                    item.Status.StationType,item.MaterialCommodity, item.Weapons,item.Suits, item.Loadouts , 
+                                    item.journalEntry.IsBeta, item.journalEntry.IsHorizons,item.journalEntry.IsOdyssey);
+
+                string eventname = item.journalEntry.EventTypeStr.SplitCapsWord() == item.EventSummary ? item.EventSummary : (item.journalEntry.EventTypeStr + Environment.NewLine + item.EventSummary);
+
+                rw.CreateCells(dataGridViewTravel, time, state, eventname, EventDescription, j);
+            }
+            else
+            {
+                rw.CreateCells(dataGridViewTravel, time, "", item.EventSummary, EventDescription, note);
+            }
 
             rw.Tag = item;  //tag on row
 
@@ -628,92 +651,12 @@ namespace EDDiscovery.UserControls
         {
             DataGridView grid = sender as DataGridView;
 
-            PaintEventColumn(grid, e,
+            PaintHelpers.PaintEventColumn(grid, e,
                         discoveryform.history.Count, (HistoryEntry)dataGridViewTravel.Rows[e.RowIndex].Tag,
-                        Columns.Icon, true);
+                        travelGridInDebugModeToolStripMenuItem.Checked ? -1 : Columns.Icon, 
+                        true);
         }
 
-        public static void PaintEventColumn(DataGridView grid, DataGridViewRowPostPaintEventArgs e,
-                                             int totalentries, HistoryEntry he,
-                                             int iconcolumn,
-                                             bool showfsdmapcolour)
-        {
-            System.Diagnostics.Debug.Assert(he != null);    // Trip for debug builds if something is wrong,
-            if (he == null)                                 // otherwise, ignore it and return.
-                return;
-
-            int rown = EDDConfig.Instance.OrderRowsInverted ? he.EntryNumber : (totalentries - he.EntryNumber + 1);
-            string rowIdx = rown.ToString();
-
-            var headerBounds = new Rectangle(e.RowBounds.Left, e.RowBounds.Top, grid.RowHeadersWidth, e.RowBounds.Height);
-
-            using (var centerFormat = new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center })
-            {
-                e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-                using (Brush br = new SolidBrush(grid.RowHeadersDefaultCellStyle.ForeColor))
-                    e.Graphics.DrawString(rowIdx, grid.RowHeadersDefaultCellStyle.Font, br, headerBounds, centerFormat);
-            }
-
-            if (grid.Columns[iconcolumn].Visible)
-            {
-                int noicons = (he.IsFSDCarrierJump && showfsdmapcolour) ? 2 : 1;
-                if (he.StartMarker || he.StopMarker)
-                    noicons++;
-
-                BookmarkClass bk = null;
-                if (he.IsLocOrJump)
-                {
-                    bk = GlobalBookMarkList.Instance.FindBookmarkOnSystem(he.System.Name);
-                    if (bk != null)
-                        noicons++;
-                }
-
-                int padding = 4;
-                int size = 24;
-                int iconcolumnwidth = grid.Columns[iconcolumn].Width;
-
-                if (size * noicons > (iconcolumnwidth - 2))
-                    size = (iconcolumnwidth - 2) / noicons;
-
-                int iconhpos = grid.GetColumnPixelPosition(iconcolumn);
-
-                int hstart = (iconhpos + iconcolumnwidth / 2) - size / 2 * noicons - padding / 2 * (noicons - 1);
-
-                int top = (e.RowBounds.Top + e.RowBounds.Bottom) / 2 - size / 2;
-
-                e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
-
-                e.Graphics.DrawImage(he.journalEntry.Icon, new Rectangle(hstart, top, size, size));
-                hstart += size + padding;
-
-                if (he.journalEntry is IJournalJumpColor && showfsdmapcolour)
-                {
-                    Color c = Color.FromArgb(((IJournalJumpColor)he.journalEntry).MapColor);
-
-                    using (Brush b = new SolidBrush(c))
-                    {
-                        e.Graphics.FillEllipse(b, new Rectangle(hstart + 2, top + 2, size - 6, size - 6));
-                    }
-
-                    hstart += size + padding;
-                }
-
-                if (he.StartMarker)
-                {
-                    e.Graphics.DrawImage(Icons.Controls.TravelGrid_FlagStart, new Rectangle(hstart, top, size, size));
-                    hstart += size + padding;
-                }
-                else if (he.StopMarker)
-                {
-                    e.Graphics.DrawImage(Icons.Controls.TravelGrid_FlagStop, new Rectangle(hstart, top, size, size));
-                    hstart += size + padding;
-                }
-                if (bk != null)
-                {
-                    e.Graphics.DrawImage(Icons.Controls.Map3D_Bookmarks_Star, new Rectangle(hstart, top, size, size));
-                }
-            }
-        }
 
 #region Right/Left Clicks
 
@@ -1277,7 +1220,7 @@ namespace EDDiscovery.UserControls
         {
             if (rightclickhe != null)
             {
-                List<BaseUtils.JSON.JToken> list = EliteDangerousCore.Inara.InaraSync.NewEntryList(rightclickhe);
+                List<BaseUtils.JSON.JToken> list = EliteDangerousCore.Inara.InaraSync.NewEntryList(discoveryform.history,rightclickhe);
 
                 foreach (var j in list)
                 {
@@ -1343,6 +1286,12 @@ namespace EDDiscovery.UserControls
             {
                 EliteDangerousCore.EDAstro.EDAstroSync.SendEDAstroEvents(new List<HistoryEntry>() { rightclickhe });
             }
+        }
+
+        private void travelGridInDebugModeToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
+        {
+            PutSetting(dbDebugMode, travelGridInDebugModeToolStripMenuItem.Checked);
+            HistoryChanged(discoveryform.history);
         }
 
         private void runActionsAcrossSelectionToolStripMenuItem_Click(object sender, EventArgs e)

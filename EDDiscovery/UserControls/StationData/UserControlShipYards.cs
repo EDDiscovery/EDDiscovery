@@ -200,13 +200,13 @@ namespace EDDiscovery.UserControls
             foreach (ShipYard.ShipyardItem i in yard.Ships)
             {
                 string col2 = "Unknown".T(EDTx.Unknown), col3 = "";
-                Dictionary<ShipModuleData.ShipPropID, ShipModuleData.ShipInfo> shipprops = ShipModuleData.Instance.GetShipProperties(i.FDShipType);
+                Dictionary<ItemData.ShipPropID, ItemData.IModuleInfo> shipprops = ItemData.Instance.GetShipProperties(i.FDShipType);
                 if ( shipprops != null)
                 {
-                    col2 = (shipprops[ShipModuleData.ShipPropID.Manu] as ShipModuleData.ShipInfoString).Value;
-                    col3 = (shipprops[ShipModuleData.ShipPropID.HullMass] as ShipModuleData.ShipInfoDouble).Value.ToString("0.#t") +
-                        ", " + (shipprops[ShipModuleData.ShipPropID.Speed] as ShipModuleData.ShipInfoInt).Value.ToString() +
-                        "/" + (shipprops[ShipModuleData.ShipPropID.Boost] as ShipModuleData.ShipInfoInt).Value.ToString();
+                    col2 = (shipprops[ItemData.ShipPropID.Manu] as ItemData.ShipInfoString).Value;
+                    col3 = (shipprops[ItemData.ShipPropID.HullMass] as ItemData.ShipInfoDouble).Value.ToString("0.#t") +
+                        ", " + (shipprops[ItemData.ShipPropID.Speed] as ItemData.ShipInfoInt).Value.ToString() +
+                        "/" + (shipprops[ItemData.ShipPropID.Boost] as ItemData.ShipInfoInt).Value.ToString();
                 }
 
                 object[] rowobj = { i.ShipType_Localised, col2, col3,i.ShipPrice.ToString("N0") + "cr" };

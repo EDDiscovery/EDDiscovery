@@ -23,7 +23,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using static EliteDangerousCore.MaterialCommodityData;
+using static EliteDangerousCore.MaterialCommodityMicroResourceType;
 
 namespace EDDiscovery.UserControls
 {
@@ -181,7 +181,7 @@ namespace EDDiscovery.UserControls
 
             if (EngineeringWanted != null && SynthesisWanted != null && last_he != null)    // if we have all the ingredients (get it!)
             {
-                List<MaterialCommodities> mcl = last_he.MaterialCommodity.Sort(false);
+                List<MaterialCommodityMicroResource> mcl = discoveryform.history.MaterialCommoditiesMicroResources.GetMaterialsSorted(last_he.MaterialCommodity);
 
                 var totals = MaterialCommoditiesRecipe.TotalList(mcl);                  // start with totals present
 
@@ -251,11 +251,11 @@ namespace EDDiscovery.UserControls
                         wantedList.Append($"  {c.Item2} {c.Item1.Details.Name}{present}");
                         int? onHand = mcl.Where(m => m.Details.Shortname == c.Item1.Details.Shortname).FirstOrDefault()?.Count;
                         int totalReq = c.Item2 + (onHand.HasValue ? onHand.Value : 0);
-                        if ((c.Item1.Details.Type == MaterialCommodityData.ItemType.VeryCommon && totalReq > VeryCommonCap) ||
-                            (c.Item1.Details.Type == MaterialCommodityData.ItemType.Common && totalReq > CommonCap) ||
-                            (c.Item1.Details.Type == MaterialCommodityData.ItemType.Standard && totalReq > StandardCap) ||
-                            (c.Item1.Details.Type == MaterialCommodityData.ItemType.Rare && totalReq > RareCap) ||
-                            (c.Item1.Details.Type == MaterialCommodityData.ItemType.VeryRare && totalReq > VeryRareCap))
+                        if ((c.Item1.Details.Type == MaterialCommodityMicroResourceType.ItemType.VeryCommon && totalReq > VeryCommonCap) ||
+                            (c.Item1.Details.Type == MaterialCommodityMicroResourceType.ItemType.Common && totalReq > CommonCap) ||
+                            (c.Item1.Details.Type == MaterialCommodityMicroResourceType.ItemType.Standard && totalReq > StandardCap) ||
+                            (c.Item1.Details.Type == MaterialCommodityMicroResourceType.ItemType.Rare && totalReq > RareCap) ||
+                            (c.Item1.Details.Type == MaterialCommodityMicroResourceType.ItemType.VeryRare && totalReq > VeryRareCap))
                         {
                             capExceededMats.Add(c.Item1.Details.Name);
                         }
@@ -316,7 +316,7 @@ namespace EDDiscovery.UserControls
                     foreach (KeyValuePair<string, double> mat in sd.Materials)
                     {
                         int? onHand = mcl.Where(m => m.Details.FDName == mat.Key).FirstOrDefault()?.Count;
-                        MaterialCommodityData md = GetByFDName(mat.Key);
+                        MaterialCommodityMicroResourceType md = GetByFDName(mat.Key);
                         int max = md.MaterialLimit().Value;
                         if (!hidePlanetMatsWithNoCapacity || (onHand.HasValue ? onHand.Value : 0) < max)
                         {

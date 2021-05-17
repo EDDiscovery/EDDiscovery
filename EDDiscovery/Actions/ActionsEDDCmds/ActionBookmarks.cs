@@ -71,7 +71,7 @@ namespace EDDiscovery.Actions
                         int bcount = 1;
                         foreach (BookmarkClass b in GlobalBookMarkList.Instance.Bookmarks)
                         {
-                            if (b.Name.WildCardMatch(wildcard))
+                            if (b.Name.WildCardMatch(wildcard, true))
                             {
                                 string nprefix = prefix + bcount++.ToStringInvariant() + "_";
 

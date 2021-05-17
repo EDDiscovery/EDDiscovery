@@ -237,7 +237,7 @@ namespace EDDiscovery
 
             foreach (Profile p in ProfileList)
             {
-                bool? condres = p.TripCondition.CheckAll(vars, out string err, null, functions);     // may return null.. and will return errlist
+                bool? condres = p.TripCondition.CheckAll(vars, out string err, functions);     // may return null.. and will return errlist
 
                 if (err == null)
                 {
@@ -253,7 +253,7 @@ namespace EDDiscovery
                     errlist = errlist.AppendPrePad(err, ",");
             }
 
-            bool? backres = Current.BackCondition.CheckAll(vars, out string err2, null, functions);     // check the back condition on the current profile..
+            bool? backres = Current.BackCondition.CheckAll(vars, out string err2, functions);     // check the back condition on the current profile..
 
             if (err2 == null)
             {

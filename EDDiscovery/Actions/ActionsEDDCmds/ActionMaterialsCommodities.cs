@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2017 EDDiscovery development team
+ * Copyright © 2017-2021 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -74,19 +74,21 @@ namespace EDDiscovery.Actions
                         return true;
                     }
 
-                    int jidindex = (ap.ActionController as ActionController).HistoryList.EntryOrder().FindIndex(x => x.Journalid == jid);
+                    int index = (ap.ActionController as ActionController).HistoryList.EntryOrder().FindIndex(x => x.Journalid == jid);
 
-                    if (jidindex == -1)
+                    if (index == -1)
                     {
                         ap.ReportError("JID does not exist in Materials/Commodity");
                         return true;
                     }
 
-                    MaterialCommoditiesList mcl = (ap.ActionController as ActionController).HistoryList.EntryOrder()[jidindex].MaterialCommodity;
-                    List<MaterialCommodities> list = mcl.Sort(commodities);
+                    var hl = (ap.ActionController as ActionController).HistoryList;
+                    var he = hl[index];    
+
+                    List<MaterialCommodityMicroResource> list = hl.MaterialCommoditiesMicroResources.GetSorted(he.MaterialCommodity, commodities);
 
                     ap[prefix + "Count"] = list.Count.ToString(System.Globalization.CultureInfo.InvariantCulture);
-                    ap[prefix + "IndexOf"] = (ap.ActionController as ActionController).HistoryList.EntryOrder()[jidindex].EntryNumber.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                    ap[prefix + "IndexOf"] = (ap.ActionController as ActionController).HistoryList.EntryOrder()[index].EntryNumber.ToString(System.Globalization.CultureInfo.InvariantCulture);
 
                     for ( int i = 0; i < list.Count; i++ )
                     {

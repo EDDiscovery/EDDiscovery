@@ -32,17 +32,17 @@ namespace EDDiscovery.UserControls
 
         private Color orange = Color.FromArgb(255, 184, 85, 8);
 
-        private MaterialCommoditiesList last_mcl = null;
+        private uint? last_mcl = null;
 
         public class ElementTrade
         {
-            public MaterialCommodityData.MaterialGroupType type;    // for display purposes, group type
+            public MaterialCommodityMicroResourceType.MaterialGroupType type;    // for display purposes, group type
             public int level;                                       // and level
 
-            public MaterialCommodityData element;               // element of entry, or for trades, element received
+            public MaterialCommodityMicroResourceType element;               // element of entry, or for trades, element received
             public int offer;
             public int receive;
-            public MaterialCommodityData fromelement;           // only for trades, the element that offered up
+            public MaterialCommodityMicroResourceType fromelement;           // only for trades, the element that offered up
 
             public override string ToString()                   // serialise to string
             {
@@ -54,8 +54,8 @@ namespace EDDiscovery.UserControls
                 string[] parts = s.Split(',');
                 if (parts.Length == 4)
                 {
-                    fromelement = MaterialCommodityData.GetByFDName(parts[0]);
-                    element = MaterialCommodityData.GetByFDName(parts[1]);
+                    fromelement = MaterialCommodityMicroResourceType.GetByFDName(parts[0]);
+                    element = MaterialCommodityMicroResourceType.GetByFDName(parts[1]);
                     return fromelement != null && element != null && parts[2].InvariantParse(out offer) && parts[3].InvariantParse(out receive);
                 }
                 else
@@ -65,7 +65,7 @@ namespace EDDiscovery.UserControls
 
         ElementTrade selected = null;         // selected entry to trade to
 
-        List<ElementTrade> trades = new List<ElementTrade>();           // trades established.
+        List<ElementTrade> tradelist = new List<ElementTrade>();           // trades established.
 
         #region Init
 
@@ -100,7 +100,7 @@ namespace EDDiscovery.UserControls
             {
                 ElementTrade et = new ElementTrade();
                 if (et.FromString(t))
-                    trades.Add(et);
+                    tradelist.Add(et);
             }
 
             splitContainer.SplitterDistance(GetSetting(dbSplitter, 0.75));
@@ -184,26 +184,28 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void DisplayTradeSelection(MaterialCommodityData highlight = null)  // last_he and current_mcl can be null
+        private void DisplayTradeSelection(MaterialCommodityMicroResourceType highlight = null)  // last_he and current_mcl can be null
         {
             int sel = extComboBoxTraderType.SelectedIndex;
 
-            var mcl = new List<Tuple<MaterialCommodityData.MaterialGroupType, MaterialCommodityData[]>>();      // list of groups vs data
-            Dictionary<MaterialCommodityData.MaterialGroupType, string> mattxgroupnames = new Dictionary<MaterialCommodityData.MaterialGroupType, string>(); // translated names of groups
+            var mcl = new List<Tuple<MaterialCommodityMicroResourceType.MaterialGroupType, MaterialCommodityMicroResourceType[]>>();      // list of groups vs data
+            Dictionary<MaterialCommodityMicroResourceType.MaterialGroupType, string> mattxgroupnames = new Dictionary<MaterialCommodityMicroResourceType.MaterialGroupType, string>(); // translated names of groups
 
-            foreach ( var t in Enum.GetValues(typeof(MaterialCommodityData.MaterialGroupType)))     // relies on MCD being in order
+            foreach ( var t in Enum.GetValues(typeof(MaterialCommodityMicroResourceType.MaterialGroupType)))     // relies on MCD being in order
             {
-                var matgroup = (MaterialCommodityData.MaterialGroupType)t;
-                bool ok = (sel == 0 && matgroup >= MaterialCommodityData.MaterialGroupType.RawCategory1 && matgroup <= MaterialCommodityData.MaterialGroupType.RawCategory7);
-                ok |= (sel == 1 && matgroup >= MaterialCommodityData.MaterialGroupType.EncodedEmissionData && matgroup <= MaterialCommodityData.MaterialGroupType.EncodedFirmware);
-                ok |= (sel == 2 && matgroup >= MaterialCommodityData.MaterialGroupType.ManufacturedChemical);
+                var matgroup = (MaterialCommodityMicroResourceType.MaterialGroupType)t;
+                bool ok = (sel == 0 && matgroup >= MaterialCommodityMicroResourceType.MaterialGroupType.RawCategory1 && matgroup <= MaterialCommodityMicroResourceType.MaterialGroupType.RawCategory7);
+                ok |= (sel == 1 && matgroup >= MaterialCommodityMicroResourceType.MaterialGroupType.EncodedEmissionData && matgroup <= MaterialCommodityMicroResourceType.MaterialGroupType.EncodedFirmware);
+                ok |= (sel == 2 && matgroup >= MaterialCommodityMicroResourceType.MaterialGroupType.ManufacturedChemical);
                 if ( ok )
                 {
-                    var list = MaterialCommodityData.Get(x => x.MaterialGroup == matgroup);
-                    mcl.Add(new Tuple<MaterialCommodityData.MaterialGroupType, MaterialCommodityData[]>(matgroup,list));
+                    var list = MaterialCommodityMicroResourceType.Get(x => x.MaterialGroup == matgroup);
+                    mcl.Add(new Tuple<MaterialCommodityMicroResourceType.MaterialGroupType, MaterialCommodityMicroResourceType[]>(matgroup,list));
                     mattxgroupnames[matgroup] = list[0].TranslatedMaterialGroup;
                 }
             }
+
+            var curmcl = last_mcl != null ? discoveryform.history.MaterialCommoditiesMicroResources.Get(last_mcl.Value) : null;       // get mcl at last_mcl position. May be null if we don't have any list
 
             Font titlefont = EDDTheme.Instance.GetFont;
             Font badgefont = EDDTheme.Instance.GetScaledFont(16f / 12f, max:21);
@@ -216,7 +218,7 @@ namespace EDDiscovery.UserControls
             int vpos = 0;
             int maxhpos = 0;
 
-            foreach (var t in mcl)
+            foreach (var t in mcl)      // for each type of material/commd
             {
                 int hpos = 0;
                 int nextvpos = vpos;
@@ -255,11 +257,11 @@ namespace EDDiscovery.UserControls
                     int offer = 0, receive = 0;
                     string name = mat.Name;
 
-                    int mattotal = last_mcl == null ? int.MinValue : last_mcl.FindFDName(mat.FDName)?.Count ?? 0;    // find mcl in material list if there, and its count
+                    int mattotal = last_mcl == null ? int.MinValue : curmcl.Find(x=>x.Details.FDName == mat.FDName)?.Count ?? 0;    // find mcl in material list if there, and its count
 
                     if (mattotal >= 0)                                                  // if we have an he, adjust the totals by the trades
                     {
-                        foreach (var trade in trades)
+                        foreach (var trade in tradelist)
                         {
                             if (trade.fromelement.FDName == mat.FDName)
                                 mattotal -= trade.offer;                              // may go negative if over offered
@@ -379,13 +381,13 @@ namespace EDDiscovery.UserControls
         {
             dataGridViewTrades.Rows.Clear();
 
-            if (trades.Count > 0)
+            if (tradelist.Count > 0)
             {
-                MaterialCommoditiesList mcl = last_mcl;
+                List<MaterialCommodityMicroResource> mcl = discoveryform.history.MaterialCommoditiesMicroResources.Get(last_mcl.Value);
 
-                var totals = mcl == null ? null : MaterialCommoditiesRecipe.TotalList(mcl.List);                  // start with totals present, null if we don't have an mcl
+                var totals = mcl == null ? null : MaterialCommoditiesRecipe.TotalList(mcl);                  // start with totals present, null if we don't have an mcl
 
-                foreach (var trade in trades)
+                foreach (var trade in tradelist)
                 {
                     var rw = dataGridViewTrades.RowTemplate.Clone() as DataGridViewRow;
 
@@ -424,7 +426,7 @@ namespace EDDiscovery.UserControls
 
         private void buttonClear_Click(object sender, EventArgs e)
         {
-            trades.Clear();
+            tradelist.Clear();
             StoreTrades();
             DisplayTradeSelection();
             DisplayTradeList();
@@ -446,8 +448,9 @@ namespace EDDiscovery.UserControls
 
                 if (selected != null)
                 {
-                    int currenttotal = last_mcl.Find(current.element)?.Count ?? 0;   // current mat total. If not there, its zero
-                    foreach (var trade in trades)
+                    List<MaterialCommodityMicroResource> mcl = discoveryform.history.MaterialCommoditiesMicroResources.Get(last_mcl.Value);
+                    int currenttotal = mcl.Find(x=>x.Details==current.element)?.Count ?? 0;   // current mat total. If not there, its zero
+                    foreach (var trade in tradelist)
                     {
                         if (trade.fromelement.FDName == current.element.FDName)
                             currenttotal -= trade.offer;                              // may go negative if over offered
@@ -538,7 +541,7 @@ namespace EDDiscovery.UserControls
                         if (res == DialogResult.OK)
                         {
                             ElementTrade t = new ElementTrade() { element = selected.element, fromelement = current.element, offer = currentoffer, receive = currentreceive };
-                            trades.Add(t);
+                            tradelist.Add(t);
                             selected = null;
 
                             StoreTrades();
@@ -562,7 +565,7 @@ namespace EDDiscovery.UserControls
         {
             if (dataGridViewTrades.RightClickRowValid)
             {
-                trades.RemoveAt(dataGridViewTrades.RightClickRow);
+                tradelist.RemoveAt(dataGridViewTrades.RightClickRow);
                 StoreTrades();
                 DisplayTradeSelection();
                 DisplayTradeList();
@@ -572,7 +575,7 @@ namespace EDDiscovery.UserControls
         private void StoreTrades()
         {
             string strades = "";
-            foreach (var td in trades)
+            foreach (var td in tradelist)
                 strades = strades.AppendPrePad(td.ToString(), ";");
 
             PutSetting(dbTrades, strades);
