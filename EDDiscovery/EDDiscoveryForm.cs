@@ -622,6 +622,7 @@ namespace EDDiscovery
                 var lastaboutversion = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("AboutBoxLastVersionPresented", "0.0.0.0").VersionFromString();
                 var eddversion = EDDApplicationContext.AppVersion.VersionFromString();
                 lastaboutversion[3] = eddversion[3] = 0;        // ignore the last dot
+                lastaboutversion[2] = eddversion[2] = 0;        // ignore the second one
                 if (lastaboutversion.CompareVersion(eddversion) < 0)
                 {
                     EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("AboutBoxLastVersionPresented", EDDApplicationContext.AppVersion);

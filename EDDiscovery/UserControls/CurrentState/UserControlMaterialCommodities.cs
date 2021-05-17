@@ -269,8 +269,7 @@ namespace EDDiscovery.UserControls
                 textBoxItems1.Text = MaterialCommoditiesMicroResourceList.CargoCount(mcllist).ToString();
             }
 
-            // TBD
-            textBoxItems1.Text = "DBG GEN" +  mcl.Value.ToString();
+            // TBD  textBoxItems1.Text = "DBG GEN" +  mcl.Value.ToString();
         }
 
         #endregion

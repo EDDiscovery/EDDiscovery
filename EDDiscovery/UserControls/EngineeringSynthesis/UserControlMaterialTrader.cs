@@ -65,7 +65,7 @@ namespace EDDiscovery.UserControls
 
         ElementTrade selected = null;         // selected entry to trade to
 
-        List<ElementTrade> trades = new List<ElementTrade>();           // trades established.
+        List<ElementTrade> tradelist = new List<ElementTrade>();           // trades established.
 
         #region Init
 
@@ -100,7 +100,7 @@ namespace EDDiscovery.UserControls
             {
                 ElementTrade et = new ElementTrade();
                 if (et.FromString(t))
-                    trades.Add(et);
+                    tradelist.Add(et);
             }
 
             splitContainer.SplitterDistance(GetSetting(dbSplitter, 0.75));
@@ -205,7 +205,7 @@ namespace EDDiscovery.UserControls
                 }
             }
 
-            var curmcl = discoveryform.history.MaterialCommoditiesMicroResources.Get(last_mcl.Value);       // get mcl at last_mcl position
+            var curmcl = last_mcl != null ? discoveryform.history.MaterialCommoditiesMicroResources.Get(last_mcl.Value) : null;       // get mcl at last_mcl position. May be null if we don't have any list
 
             Font titlefont = EDDTheme.Instance.GetFont;
             Font badgefont = EDDTheme.Instance.GetScaledFont(16f / 12f, max:21);
@@ -261,7 +261,7 @@ namespace EDDiscovery.UserControls
 
                     if (mattotal >= 0)                                                  // if we have an he, adjust the totals by the trades
                     {
-                        foreach (var trade in trades)
+                        foreach (var trade in tradelist)
                         {
                             if (trade.fromelement.FDName == mat.FDName)
                                 mattotal -= trade.offer;                              // may go negative if over offered
@@ -381,13 +381,13 @@ namespace EDDiscovery.UserControls
         {
             dataGridViewTrades.Rows.Clear();
 
-            if (trades.Count > 0)
+            if (tradelist.Count > 0)
             {
                 List<MaterialCommodityMicroResource> mcl = discoveryform.history.MaterialCommoditiesMicroResources.Get(last_mcl.Value);
 
                 var totals = mcl == null ? null : MaterialCommoditiesRecipe.TotalList(mcl);                  // start with totals present, null if we don't have an mcl
 
-                foreach (var trade in trades)
+                foreach (var trade in tradelist)
                 {
                     var rw = dataGridViewTrades.RowTemplate.Clone() as DataGridViewRow;
 
@@ -426,7 +426,7 @@ namespace EDDiscovery.UserControls
 
         private void buttonClear_Click(object sender, EventArgs e)
         {
-            trades.Clear();
+            tradelist.Clear();
             StoreTrades();
             DisplayTradeSelection();
             DisplayTradeList();
@@ -450,7 +450,7 @@ namespace EDDiscovery.UserControls
                 {
                     List<MaterialCommodityMicroResource> mcl = discoveryform.history.MaterialCommoditiesMicroResources.Get(last_mcl.Value);
                     int currenttotal = mcl.Find(x=>x.Details==current.element)?.Count ?? 0;   // current mat total. If not there, its zero
-                    foreach (var trade in trades)
+                    foreach (var trade in tradelist)
                     {
                         if (trade.fromelement.FDName == current.element.FDName)
                             currenttotal -= trade.offer;                              // may go negative if over offered
@@ -541,7 +541,7 @@ namespace EDDiscovery.UserControls
                         if (res == DialogResult.OK)
                         {
                             ElementTrade t = new ElementTrade() { element = selected.element, fromelement = current.element, offer = currentoffer, receive = currentreceive };
-                            trades.Add(t);
+                            tradelist.Add(t);
                             selected = null;
 
                             StoreTrades();
@@ -565,7 +565,7 @@ namespace EDDiscovery.UserControls
         {
             if (dataGridViewTrades.RightClickRowValid)
             {
-                trades.RemoveAt(dataGridViewTrades.RightClickRow);
+                tradelist.RemoveAt(dataGridViewTrades.RightClickRow);
                 StoreTrades();
                 DisplayTradeSelection();
                 DisplayTradeList();
@@ -575,7 +575,7 @@ namespace EDDiscovery.UserControls
         private void StoreTrades()
         {
             string strades = "";
-            foreach (var td in trades)
+            foreach (var td in tradelist)
                 strades = strades.AppendPrePad(td.ToString(), ";");
 
             PutSetting(dbTrades, strades);
