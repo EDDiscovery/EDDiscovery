@@ -169,6 +169,8 @@ namespace EDDiscovery
                 typeof(ExtendedControls.ExtScrollBar),typeof(ExtendedControls.ExtStatusStrip),typeof(ExtendedControls.ExtRichTextBox),typeof(ExtendedControls.ExtTextBox),
                 typeof(ExtendedControls.ExtTextBoxAutoComplete),typeof(ExtendedControls.ExtDateTimePicker),typeof(ExtendedControls.ExtNumericUpDown) });
 
+            MaterialCommodityMicroResourceType.FillTable();     // lets statically fill the table way before anyone wants to access it
+
             Controller.Init();
             PanelInformation.Init();
 
