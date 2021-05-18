@@ -146,8 +146,11 @@ namespace EDDiscovery.UserControls
 
             if (last_suits >= 0)
             {
-                var suitlist = discoveryform.history.SuitList.Suits.Get(last_suits,x=>x.Sold==false); // get unsold suits
+                var suitlist = discoveryform.history.SuitList.Suits.Get(last_suits,x=>x.Sold==false && !SuitList.SpecialID(x.ID)); // get unsold suits and ignore special IDs
                 var fontscaled = EDDTheme.Instance.GetDialogScaledFont(0.8f);
+
+                var cursuit = discoveryform.history.SuitList.CurrentID(last_suits);                     // get current suit ID, or 0 if none
+                var curloadout = discoveryform.history.SuitLoadoutList.CurrentID(last_loadout);         // get current loadout ID, or 0 if none
 
                 foreach (var s in suitlist)
                 {
@@ -159,7 +162,7 @@ namespace EDDiscovery.UserControls
 
                     if (loadouts == null || loadouts.Count == 0)
                     {
-                        object[] rowobj = new object[] { stime, sname, sprice };
+                        object[] rowobj = new object[] { stime, sname + (cursuit == s.Value.ID ? "*" : ""), sprice };
                         dataGridViewSuits.Rows.Add(rowobj);
                         DataGridViewRow r = dataGridViewSuits.Rows[dataGridViewSuits.RowCount - 1];
                         r.Tag = s.Value;
@@ -174,7 +177,7 @@ namespace EDDiscovery.UserControls
                             var rw = dataGridViewSuits.RowTemplate.Clone() as DataGridViewRow;
                             rw.CreateCells(dataGridViewSuits,
                                                 stime,
-                                                sname,
+                                                sname + (cursuit == s.Value.ID && curloadout == l.Value.ID ? "*" : ""),
                                                 sprice,
                                                 l.Value.Name + "(" + ((l.Value.ID % 10000).ToString()) + ")",
                                                 l.Value.Modules.ContainsKey("primaryweapon1") ? l.Value.Modules["primaryweapon1"].FriendlyName : "",
