@@ -334,7 +334,7 @@ SECTION SurfaceBookmarksForm
 SECTION SurfaceBookmarkUserControl
 
 .Enter: "Enter a name" => "Gib einen Namen ein"
-.PL: "Planet: " => "Planet"
+.PL: "Planet: " => "Planet: "
 .EPN: "Enter planet name" => "Planetennamen eingeben"
 .PresstoAccept: "Press to Accept" => "Drücken um anzunehmen"
 .PresstoCancel: "Press to Cancel" => "Drücken um Abzubrechen"
@@ -477,7 +477,7 @@ GalaxySectorSelect: "GalaxySectorSelect" => "Galaxiesektor wählen"
 .Warning: "Warning" => "Warnung"
 .RS: "You have removed sectors!\r\nThis will require the DB to be cleaned of entries, which will take time\r\nConfirm you wish to do this?" => "Du hast Sektoren entfernt!\r\nDies erfordert, dass die Datenbank bereinigt wird, was Zeit kostet.\r\nBestätige ob du dies tun willst."
 .GALSELEX: "ED Discovery downloads star data from EDSM/EDDB which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed" => "EDDiscovery kann Sterndaten von EDSM/EDDB herunterladen um dir zusätzliche Daten zur Verfügung zu stellen. Wähle wieviele Daten du herunterladen möchtest. Je mehr  Teile der Galaxie du wählst umso mehr Speicherplatz wird benötigt."
-.Select: "Select: " => "Auswählen"
+.Select: "Select: " => "Auswählen: "
 .GALSELEN: "Select the data set" => "Wähle das Datenset"
 .PresstoAccept: "Press to Accept" => "Drücke um anzunehmen"
 .PresstoCancel: "Press to Cancel" => "Drücke um Abzubrechen"
