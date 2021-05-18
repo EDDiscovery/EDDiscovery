@@ -609,7 +609,7 @@ namespace EDDiscovery.UserControls
         public static void RemoveSectors(List<int> sectors, Action<string> inform)
         {
             inform("Removing Grids" + Environment.NewLine);
-            SystemsDB.RemoveGridSystems(sectors.ToArray(), inform);     // MUST do first as relies on system grid for info
+            SystemsDatabase.Instance.RemoveGridSystems(sectors.ToArray(), inform);   
             inform("Vacuum Database for size" + Environment.NewLine);
             SystemsDB.Vacuum();
         }
