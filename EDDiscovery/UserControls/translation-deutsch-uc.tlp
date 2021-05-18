@@ -1558,6 +1558,7 @@ SECTION UserControlFactions
 .colMissionCredits: "Mission Credits" => "Mission Credits"
 .CBought: "Commds +" => "Waren +"
 .CSold: "Commds -" => "Waren -"
+.CProfit: "Commds Profit" => "Warenprofit"
 .MBought: "Mats +" => "Mats +"
 .MSold: "Mats -" => "Mats -"
 .CrimeCommitted: "Crimes Committed" => "Verbrechen begangen"
