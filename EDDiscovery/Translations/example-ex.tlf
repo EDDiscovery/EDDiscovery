@@ -23,7 +23,7 @@ HideColumn: "Hide Column" @
 UnhideallColumns: "Unhide all Columns" @
 
 SECTION StartUp
-.DUPLOAD:"EDDiscovery is already running. Launch anyway?" => "Whoo there, Bessie. Your sure?"
+.DUPLOAD: "EDDiscovery is already running. Launch anyway?" => "Whoo there, Bessie. Your sure?"
 
 SECTION SafeModeForm
 
@@ -211,7 +211,7 @@ SECTION EDDiscoveryForm
 .removeTabToolStripMenuItem: "Remove Tab" @
 .renameTabToolStripMenuItem: "Rename Tab" @
 .TSF: "Tab setup failure: Primary tab or TG failed to load.\r\nThis is a abnormal condition - please problem to EDD Team on discord or github.\r\nTo try and clear it, hold down shift and then launch the program.\r\nClick on Reset tabs, then Run program, which may clear the problem." @
-.RTABL: "Name:" @
+.RTABL: "Name: " @
 .RTABT: "Rename Tab" @
 .RTABTT: "Enter a new name for the tab" @
 .ThemeW: "The theme stored has missing colors or other missing information\r\nCorrect the missing colors or other information manually using the Theme Editor in Settings" @
@@ -233,7 +233,7 @@ SECTION EDDiscoveryForm
 .CAPIMN: "CAPI stationname {0}, market station is {1} " @
 .CAPIEX: "Companion API get failed: " @
 .Arrived: "Arrived at system {0} Visit No. {1}" @
-.PE1: "Profile reports errors in triggers:" @
+.PE1: "Profile reports errors in triggers: " @
 .EDDN: "Sent {0} event to EDDN ({1})" @
 .EDDNEX: "EDDN: Send commodities prices failed: " @
 .Closing: "Closing, please wait!" @
@@ -334,7 +334,7 @@ SECTION SurfaceBookmarksForm
 SECTION SurfaceBookmarkUserControl
 
 .Enter: "Enter a name" @
-.PL: "Planet:" @
+.PL: "Planet: " @
 .EPN: "Enter planet name" @
 .PresstoAccept: "Press to Accept" @
 .PresstoCancel: "Press to Cancel" @
@@ -418,13 +418,13 @@ SECTION AddOnManagerForm
 SECTION AssignTravelLogSystemForm
 
 AssignTravelLogSystemForm: "AssignTravelLogSystemForm" @
-.label1: "Travel Log System Name:" @
-.label2: "Date Visited:" @
-.label6: "EDSM Link:" @
-.label3: "New system name:" @
+.label1: "Travel Log System Name: " @
+.label2: "Date Visited: " @
+.label6: "EDSM Link: " @
+.label3: "New system name: " @
 .btnFindSystem: "Find" @
 .btnCancel: "Cancel" @
-.label4: "Travel Log Coordinates:" @
+.label4: "Travel Log Coordinates: " @
 .btnOK: "OK" @
 .label5: "System Coordinates" @
 
@@ -477,7 +477,7 @@ GalaxySectorSelect: "GalaxySectorSelect" @
 .Warning: "Warning" @
 .RS: "You have removed sectors!\r\nThis will require the DB to be cleaned of entries, which will take time\r\nConfirm you wish to do this?" @
 .GALSELEX: "ED Discovery downloads star data from EDSM/EDDB which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed" @
-.Select: "Select:" @
+.Select: "Select: " @
 .GALSELEN: "Select the data set" @
 .PresstoAccept: "Press to Accept" @
 .PresstoCancel: "Press to Cancel" @
@@ -546,12 +546,12 @@ RecordStep: "RecordStep" @
 SECTION SetNoteForm
 
 SetNoteForm: "Set Note" @
-.labelTTimestamp: "Timestamp:" @
+.labelTTimestamp: "Timestamp: " @
 .buttonCancel: "Cancel" @
 .buttonSave: "Save" @
-.labelTSystem: "System:" @
-.labelTSummary: "Summary:" @
-.labelTDetails: "Details:" @
+.labelTSystem: "System: " @
+.labelTSummary: "Summary: " @
+.labelTDetails: "Details: " @
 .label_index: "Set Note" @
 
 SECTION MessageBoxTheme
@@ -567,7 +567,7 @@ SECTION MessageBoxTheme
 
 SECTION DataGridViewDialogs
 
-.Jumpto: "Jump to:" @
+.Jumpto: "Jump to: " @
 .EN: "Enter number to jump to or near to" @
 .PresstoAccept: "Press to Accept" @
 .PresstoCancel: "Press to Cancel" @

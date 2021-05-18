@@ -49,18 +49,18 @@ SECTION UserControlCombatPanel
 .checkBoxCustomGridOn.ToolTip: "Show grid when in transparent mode" => "Pokaż siatkę gdy przezroczyste"
 .comboBoxCustomCampaign.ToolTip: "Select Campaign to view" => "Zaznacz Kampanię do pokazania"
 .buttonExtEditCampaign.ToolTip: "Edit user defined campaign" => "Edytuj kampanię zdefiniowaną przez użytkownika"
-.Kills: "Kills:" => "Zabójstwa:"
-.Faction: "Faction:" => "Frakcja:"
-.Crimes: "Crimes:" => "Przestępstwa:"
-.Bal: "Bal:" => "Saldo:"
+.Kills: "Kills: " => "Zabójstwa: "
+.Faction: "Faction: " => "Frakcja: "
+.Crimes: "Crimes: " => "Przestępstwa: "
+.Bal: "Bal: " => "Saldo: "
 .NewCampaign: "New Campaign" => "Nowa Kampania"
 .SinceLastDock: "Since Last Dock" => "Od Ostatniego Dokowania"
-.Name: "Name:" => "Nazwa:"
+.Name: "Name: " => "Nazwa: "
 .C1: "Give name to campaign" => "Nazwij kampanię"
 .C2: "Optional faction to target" => "Opcjonalna frakcja-cel"
-.Start: "Start:" => "Rozpoczęcie:"
+.Start: "Start: " => "Rozpoczęcie: "
 .C3: "Select Start time" => "Wybierz czas rozpoczęcia"
-.End: "End:" => "Koniec:"
+.End: "End: " => "Koniec: "
 .C4: "Select Start time" => "Wybierz czas rozpoczęcia"
 .C5: "Press to Accept" => "Naciśnij żeby Zaakceptować"
 .C6: "Press to Cancel" => "Naciśnij aby Anulować"
@@ -86,7 +86,7 @@ SECTION UserControlCompass
 SECTION UserControlWebBrowser
 
 .extCheckBoxStar.ToolTip: "Select another system to view" @
-.System: "System:" @
+.System: "System: " @
 .EnterSys: "Show System" @
 
 SECTION UserControlSearch
@@ -115,8 +115,8 @@ SECTION SearchMaterialsCommodities
 SECTION SearchScans
 
 .Select: "Select" => "Zaznacz"
-.Name: "Name:" => "Nazwa:"
-.SN: "Enter Search Name:" => "Wprowadź Szukaną Nazwę:"
+.Name: "Name: " => "Nazwa: "
+.SN: "Enter Search Name: " => "Wprowadź Szukaną Nazwę: "
 .DEL: "Confirm deletion of" => "Potwierdź usunięcie"
 .DELNO: "Cannot delete this entry" => "Nie można usunąć tego wpisu"
 .CNV: "Condition is not valid" => "Warunek nie jest prawidłowy"
@@ -199,12 +199,12 @@ SECTION UserControlExpedition
 .SystemName: "System Name" => "Nazwa Układu"
 .Distance: "Dist." => "Odległość"
 .Note: "Note" => "Notatka"
-.labelCml: "Cml Distance:" => "Łącz. Dystans:"
-.labelP2P: "P2P Distance:" => "Dyst. P2P:"
+.labelCml: "Cml Distance: " => "Łącz. Dystans: "
+.labelP2P: "P2P Distance: " => "Dyst. P2P: "
 .buttonReverseRoute: "Reverse" => "Odwróć"
-.labelEndDate: "End Date:" => "Data Końca:"
-.labelDateStart: "Start Date:" => "Data Rozpocz.:"
-.labelRouteName: "Route Name:" => "Nazwa Trasy:"
+.labelEndDate: "End Date: " => "Data Końca: "
+.labelDateStart: "Start Date: " => "Data Rozpocz.: "
+.labelRouteName: "Route Name: " => "Nazwa Trasy: "
 .toolStripButtonNew: "New Route" => "Nowa Trasa"
 .toolStripButtonImportFile: "Import file" => "Importuj plik"
 .toolStripButtonImportRoute: "Import route" => "Importuj trasę"
@@ -250,8 +250,8 @@ SECTION UserControlExploration
 .ColumnPrimaryStar: "Stars" => "Gł. gwiazda"
 .ColumnInfo: "Info" => "Informacje"
 .ColumnNote: "Note" => "Notatka"
-.labelFilename: "Filename:" => "Nazwa pliku"
-.labelName: "Description:" => "Zest. Eksploracji:"
+.labelFilename: "Filename: " => "Nazwa pliku"
+.labelName: "Description: " => "Zest. Eksploracji: "
 .toolStripButtonNew: "New" => "Nowy"
 .toolStripButtonLoad: "Load" => "Wczytaj"
 .toolStripButtonSave: "Save" => "Zapisz"
@@ -549,7 +549,7 @@ SECTION UserControlModules
 .Storedat: "Stored at" => "Przechowane w"
 .CargoCapacity: "Cargo Capacity" => "Pojemność Ładowni"
 .InTransit: "In Transit" => "W Tranzycie"
-.FW: "Fuel Warning:" => "Uwaga - Paliwo:"
+.FW: "Fuel Warning: " => "Uwaga - Paliwo: "
 .TTF: "Enter fuel warning level in % (0 = off, 1-100%)" => "Wprowadź poziom ostrzeż. paliwa w % (0 - wył., 1-100%)"
 .PresstoAccept: "Press to Accept" => "Naciśnij aby Zaakceptować"
 .PresstoCancel: "Press to Cancel" => "Naciśnij aby Anulować"
@@ -716,8 +716,8 @@ SECTION UserControlRouteTracker
 
 SECTION UserControlScan
 
-.Expired: "Expired:" @
-.System: "System:" => "Układ:"
+.Expired: "Expired: " @
+.System: "System: " => "Układ: "
 .EnterSys: "Show System" => "Pokaż Układ"
 .VLMT: "Set Valuable Minimum" => "Ustaw Min. Wysoką Wartość"
 .extCheckBoxStar.ToolTip: "Select another system to view" => "Ustaw inny układ do wyświetlenia"
@@ -819,7 +819,7 @@ SECTION UserControlSettings
 .buttonSaveTheme: "Save Theme" => "Zapisz Motyw"
 .groupBoxCustomHistoryLoad: "History" => "Opcje Historii"
 .checkBoxOrderRowsInverted: "Number Rows Lastest Entry Highest" => "Kolejność Wierszy Od Najnowszego Wpisu"
-.labelTimeDisplay: "Time:" @
+.labelTimeDisplay: "Time: " @
 .extGroupBoxWebServer: "Web Server" @
 .labelPortNo: "Port" @
 .extButtonTestWeb: "Test" @
@@ -827,8 +827,8 @@ SECTION UserControlSettings
 .groupBoxInteraction: "Interaction" @
 .labelTKey: "Key to activate transparent windows" => "Przycisk aktywacji przezroczystych okien"
 .groupBoxMemory: "Memory" @
-.labelHistoryEssItems: "Essential entries:" => "Nezbędne Wpisy To"
-.labelHistorySel: "Entries to read:" => "Odczytuj Tylko Niezbędne Wpisy"
+.labelHistoryEssItems: "Essential entries: " => "Nezbędne Wpisy To"
+.labelHistorySel: "Entries to read: " => "Odczytuj Tylko Niezbędne Wpisy"
 .groupBoxCustomScreenShots: "Screenshots conversion" => "Zrzuty Ekranu"
 .checkBoxCustomCopyToClipboard: "Copy to clipboard" => "Kopiuj do schowka"
 .checkBoxCustomMarkHiRes: "Mark HiRes files" => "Oznacz pliki Wysokiej Rozdzielczości"
@@ -941,7 +941,7 @@ SECTION UserControlShoppingList
 .useEDSMDataInSystemAvailabilityToolStripMenuItem: "Use EDSM data in System Availability" => "Użyj danych z EDSM o dostępności materiałów w układzie"
 .useHistoricMaterialCountsToolStripMenuItem: "Use Historic Material Counts" => "Użyj historycznych ilości materiałów"
 .NM: "Needed Mats" => "Potrzebne Materiały"
-.FS: "Filling Shopping List would exceed capacity for:" => "Zapełnienie Listy Zakupów przekroczy pojemność magazynu w przypadku:"
+.FS: "Filling Shopping List would exceed capacity for: " => "Zapełnienie Listy Zakupów przekroczy pojemność magazynu w przypadku: "
 .NoMat: "No materials currently required." => "Obecnie nie potrzebujesz więcej materiałów."
 .FSD: "Max FSD Injections\r\n   {0} Basic\r\n   {1} Standard\r\n   {2} Premium" => "Maks. Wtrysków FSD:\r\n   {0} Podstawowych\r\n   {1} Standardowych\r\n   {2} Premium"
 .MO: "Materials on {0}" => "Materiały na {0}"
@@ -1415,7 +1415,7 @@ SECTION CaptainsLogDiary
 SECTION CaptainsLogEntries
 
 .DTF: "Bad/Out of Range Date Time format" => "Nieprawidłowy Format Daty/Czasu"
-.Note: "Note:" => "Notatka:"
+.Note: "Note: " => "Notatka: "
 .EnterNote: "Enter Note" => "Wprowadź Notatkę"
 .CFN: "Do you really want to delete {0} notes?\r\nConfirm or Cancel" => "Czy na pewno chcesz usunąć {0} notatki?\r\nPotwierdź lub Anuluj"
 .CF: "Do you really want to delete the note for {0}\r\nConfirm or Cancel" => "Czy na pewno chcesz usunąć notatkę dla {0}\r\nPotwierdź lub Anuluj"
@@ -1427,8 +1427,8 @@ SECTION CaptainsLogEntries
 .ColBodyName: "Body" => "Ciało"
 .ColNote: "Note" => "Notatka"
 .ColTags: "Tags" => "Tagi"
-.labelEndDate: "End Date:" => "Data Końca:"
-.labelDateStart: "Start Date:" => "Data Rozpoczęcia:"
+.labelEndDate: "End Date: " => "Data Końca: "
+.labelDateStart: "Start Date: " => "Data Rozpoczęcia: "
 .buttonTags.ToolTip: "Edit Tags" => "Edytuj Tagi"
 .buttonDelete.ToolTip: "Delete selected entries" => "Usuń zaznaczone wpisy"
 .buttonNew.ToolTip: "New Entry" => "Nowy Wpis"
@@ -1457,9 +1457,9 @@ SECTION UserControlTrilateration
 .pasteToolStripMenuItem: "Paste" => "Wklej"
 .toolStripButtonSubmitDistances: "&Submit Distances" => "Przekaż Odległości"
 .toolStripButtonNew: "Start &new" => "Rozpocznij &Nowe"
-.toolStripLabelSystem: "From System:" => "Z Układu:"
+.toolStripLabelSystem: "From System: " => "Z Układu: "
 .toolStripTextBoxSystem: "Press Start New" @
-.toolStripLabel1: "Visited without coordinates:" => "Odwiedzone bez współrzędnych:"
+.toolStripLabel1: "Visited without coordinates: " => "Odwiedzone bez współrzędnych: "
 .toolStripAddFromHistory: "Add 20 oldest" => "Dodaj 20 najstarszych"
 .toolStripAddRecentHistory: "Add 20 newest" => "Dodaj 20 najnowszych"
 .ToolStripText: "Press Start New" => "Naciśnij 'Rozpocznij Nowe'"
@@ -1580,7 +1580,7 @@ SECTION UserControlFactions
 .showCommoditymaterialTradesForFactionToolStripMenuItem: "Show commodity/material trades for faction" @
 .showBountiesAndBondsForFactionToolStripMenuItem: "Show bounties and bonds for faction" @
 .showFactionSystemDetailToolStripMenuItem: "Show system detail for faction" @
-.MissionsInProgress: "Missions In Progress:" @
+.MissionsInProgress: "Missions In Progress: " @
 .CapShipVictims: "Capital ship Victims: " @
 .CapShipAward: "Capital ship Award: " @
 

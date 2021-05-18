@@ -211,7 +211,7 @@ SECTION EDDiscoveryForm
 .removeTabToolStripMenuItem: "Remove Tab" => "移除标签页"
 .renameTabToolStripMenuItem: "Rename Tab" => "重命名标签页"
 .TSF: "Tab setup failure: Primary tab or TG failed to load.\r\nThis is a abnormal condition - please problem to EDD Team on discord or github.\r\nTo try and clear it, hold down shift and then launch the program.\r\nClick on Reset tabs, then Run program, which may clear the problem." => "标签页启动失败。\r\n这是异常状况，请通过Discord或者Github告知开发团队。\r\n你可以尝试按住Shift键的同时双击EDDiscovery的图标进入安全模式。\r\n选择重置标签页后，点击运行程序。这样也许会解决问题。"
-.RTABL: "Name:" => "标题"
+.RTABL: "Name: " => "标题"
 .RTABT: "Rename Tab" => "重命名标签页"
 .RTABTT: "Enter a new name for the tab" => "请输入一个新的标题"
 .ThemeW: "The theme stored has missing colors or other missing information\r\nCorrect the missing colors or other information manually using the Theme Editor in Settings" => "储存的主题有缺失的颜色或者缺失的信息\r\n请从设置面板里手动修改缺失的颜色或其他信息。"
@@ -233,7 +233,7 @@ SECTION EDDiscoveryForm
 .CAPIMN: "CAPI stationname {0}, market station is {1} " => "@"
 .CAPIEX: "Companion API get failed: " => "@"
 .Arrived: "Arrived at system {0} Visit No. {1}" => "到达{0}星系，第{1}次访问"
-.PE1: "Profile reports errors in triggers:" => "配置文件返回错误："
+.PE1: "Profile reports errors in triggers: " => "配置文件返回错误："
 .EDDN: "Sent {0} event to EDDN ({1})" => "向EDDN发送了事件:{0}({1})"
 .EDDNEX: "EDDN: Send commodities prices failed: " => "EDDN：发送商品价格失败："
 .Closing: "Closing, please wait!" => "关闭中，请稍等！"
@@ -333,7 +333,7 @@ SECTION SurfaceBookmarksForm
 SECTION SurfaceBookmarkUserControl
 
 .Enter: "Enter a name" => "输入一个名称"
-.PL: "Planet:" => "星体"
+.PL: "Planet: " => "星体"
 .EPN: "Enter planet name" => "输入星体名称"
 .PresstoAccept: "Press to Accept" => "点击以接受"
 .PresstoCancel: "Press to Cancel" => "点击以取消"
@@ -417,13 +417,13 @@ SECTION AddOnManagerForm
 SECTION AssignTravelLogSystemForm
 
 AssignTravelLogSystemForm: "AssignTravelLogSystemForm" => "指向至新的星系"
-.label1: "Travel Log System Name:" => "航行纪录中的星系名称："
-.label2: "Date Visited:" => "访问日期："
-.label6: "EDSM Link:" => "EDSM链接"
-.label3: "New system name:" => "新的星系名称："
+.label1: "Travel Log System Name: " => "航行纪录中的星系名称："
+.label2: "Date Visited: " => "访问日期："
+.label6: "EDSM Link: " => "EDSM链接"
+.label3: "New system name: " => "新的星系名称："
 .btnFindSystem: "Find" => "搜索"
 .btnCancel: "Cancel" => "取消"
-.label4: "Travel Log Coordinates:" => "航行纪录中的坐标："
+.label4: "Travel Log Coordinates: " => "航行纪录中的坐标："
 .btnOK: "OK" => "确认"
 .label5: "System Coordinates" => "星系坐标"
 
@@ -475,7 +475,7 @@ GalaxySectorSelect: "GalaxySectorSelect" => "选择想要下载的银河系星�
 .Warning: "Warning" => "警告"
 .RS: "You have removed sectors!\r\nThis will require the DB to be cleaned of entries, which will take time\r\nConfirm you wish to do this?" => "你移除了一些星域！\r\n这将会花上一段时间来从数据库里清除数据\r\n确认要继续吗？"
 .GALSELEX: "ED Discovery downloads star data from EDSM/EDDB which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed" => "EDDiscovery 会从 EDSM 和 EDDEB 下载数据来为你提供额外的信息。请选择你想要下载储存多少数据。你选择的星域越多就会占用越多的储存空间。"
-.Select: "Select:" => "选择："
+.Select: "Select: " => "选择："
 .GALSELEN: "Select the data set" => "选择数据集"
 .PresstoAccept: "Press to Accept" => "点击以接受"
 .PresstoCancel: "Press to Cancel" => "点击以取消"
@@ -544,12 +544,12 @@ RecordStep: "RecordStep" => "分段录制"
 SECTION SetNoteForm
 
 SetNoteForm: "Set Note" => "创建笔记"
-.labelTTimestamp: "Timestamp:" => "时间："
+.labelTTimestamp: "Timestamp: " => "时间："
 .buttonCancel: "Cancel" => "取消"
 .buttonSave: "Save" => "保存"
-.labelTSystem: "System:" => "星系："
-.labelTSummary: "Summary:" => "概要："
-.labelTDetails: "Details:" => "详情："
+.labelTSystem: "System: " => "星系："
+.labelTSummary: "Summary: " => "概要："
+.labelTDetails: "Details: " => "详情："
 .label_index: "Set Note" => "创建笔记"
 
 SECTION MessageBoxTheme
@@ -565,7 +565,7 @@ SECTION MessageBoxTheme
 
 SECTION DataGridViewDialogs
 
-.Jumpto: "Jump to:" => "跳至："
+.Jumpto: "Jump to: " => "跳至："
 .EN: "Enter number to jump to or near to" => "输入想要跳至的行"
 .PresstoAccept: "Press to Accept" => "点击以接受"
 .PresstoCancel: "Press to Cancel" => "点击以取消"

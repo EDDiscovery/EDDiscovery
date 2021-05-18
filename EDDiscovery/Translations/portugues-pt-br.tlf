@@ -211,7 +211,7 @@ SECTION EDDiscoveryForm
 .removeTabToolStripMenuItem: "Remove Tab" => "Remove aba"
 .renameTabToolStripMenuItem: "Rename Tab" => "Renomina aba"
 .TSF: "Tab setup failure: Primary tab or TG failed to load.\r\nThis is a abnormal condition - please problem to EDD Team on discord or github.\r\nTo try and clear it, hold down shift and then launch the program.\r\nClick on Reset tabs, then Run program, which may clear the problem." => "Problemas na configuração: aba principal o grupo de abas não pode ser iniciada.\r\nEsta é uma condição peculiar. Entra em contato com os desenvolvedores!"
-.RTABL: "Name:" => "Nome:"
+.RTABL: "Name: " => "Nome: "
 .RTABT: "Rename Tab" => "Removi Aba"
 .RTABTT: "Enter a new name for the tab" => "Renomina a aba"
 .ThemeW: "The theme stored has missing colors or other missing information\r\nCorrect the missing colors or other information manually using the Theme Editor in Settings" => "O tema selecionado não possui informação sobre certas cores o outras impostações importantes. Por favor, corija o tema."
@@ -233,9 +233,9 @@ SECTION EDDiscoveryForm
 .CAPIMN: "CAPI stationname {0}, market station is {1} " => "CAPI stationname {0}, o mercado na estação é {1}"
 .CAPIEX: "Companion API get failed: " => "API Companion continua a não funcionar: "
 .Arrived: "Arrived at system {0} Visit No. {1}" => "Arrivato al sistema {0} Visita de número {1}"
-.PE1: "Profile reports errors in triggers:" => "Erros no perfil reportados do trigger:"
+.PE1: "Profile reports errors in triggers: " => "Erros no perfil reportados do trigger: "
 .EDDN: "Sent {0} event to EDDN ({1})" => "Envia {0} eventos a EDDN ({1})"
-.EDDNEX: "EDDN: Send commodities prices failed: " => "EDDN:"
+.EDDNEX: "EDDN: Send commodities prices failed: " => "EDDN: "
 .Closing: "Closing, please wait!" => "Fechando, por favor esperar!"
 .SDDis: "Star Data download is disabled. Use Settings to reenable it" => "Baixa dos dados estelares desabilitada. Habilitar no ajuste principal"
 .SDSyncErr: "Synchronisation to databases is in operation or pending, please wait" => "Sincronização ao banco dados em andamento, por favor esperar"
@@ -333,7 +333,7 @@ SECTION SurfaceBookmarksForm
 SECTION SurfaceBookmarkUserControl
 
 .Enter: "Enter a name" => "Insira um nome"
-.PL: "Planet:" => "Planeta"
+.PL: "Planet: " => "Planeta"
 .EPN: "Enter planet name" => "Insira o nome do planeta"
 .PresstoAccept: "Press to Accept" => "Pressiona para aceitar"
 .PresstoCancel: "Press to Cancel" => "Pressiona para cancelar"
@@ -417,13 +417,13 @@ SECTION AddOnManagerForm
 SECTION AssignTravelLogSystemForm
 
 AssignTravelLogSystemForm: "AssignTravelLogSystemForm" => "Impostar Registro de Viagem"
-.label1: "Travel Log System Name:" => "Nome do Sistema noi Registro de Viajem"
-.label2: "Date Visited:" => "Data da Visita"
-.label6: "EDSM Link:" => "Link EDSM"
-.label3: "New system name:" => "Nome do novo sistema:"
+.label1: "Travel Log System Name: " => "Nome do Sistema noi Registro de Viajem"
+.label2: "Date Visited: " => "Data da Visita"
+.label6: "EDSM Link: " => "Link EDSM"
+.label3: "New system name: " => "Nome do novo sistema: "
 .btnFindSystem: "Find" => "Procura"
 .btnCancel: "Cancel" => "Cancela"
-.label4: "Travel Log Coordinates:" => "Coordenadas do Registro de Viajem"
+.label4: "Travel Log Coordinates: " => "Coordenadas do Registro de Viajem"
 .btnOK: "OK" @
 .label5: "System Coordinates" => "Coordanadas do Sistema"
 
@@ -475,7 +475,7 @@ GalaxySectorSelect: "GalaxySectorSelect" => "Seletor de Setores Galácticos"
 .Warning: "Warning" => "Attenção"
 .RS: "You have removed sectors!\r\nThis will require the DB to be cleaned of entries, which will take time\r\nConfirm you wish to do this?" => "Você removeu setores!\r\nIsto requer a limpeza de todos os registros, coisa que necessita de tempo. Confirma?"
 .GALSELEX: "ED Discovery downloads star data from EDSM/EDDB which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed" => "ED Discovery baixa dados estelares da EDSM/EDDB, dados usados para te oferecer dados adicionais. Seleciona quantos desses dados você quer baixar e armazenar. Quantos mais dados estelares você baixar, mas espaço no disco e mais memória RAM serão usados."
-.Select: "Select:" => "Seleciona"
+.Select: "Select: " => "Seleciona"
 .GALSELEN: "Select the data set" => "Escolhe o set de dados estelares"
 .PresstoAccept: "Press to Accept" => "Pressiona para aceitar"
 .PresstoCancel: "Press to Cancel" => "Pressiona para cancelar"
@@ -544,12 +544,12 @@ RecordStep: "RecordStep" => "Gravar passos"
 SECTION SetNoteForm
 
 SetNoteForm: "Set Note" => "Definir nota"
-.labelTTimestamp: "Timestamp:" => "Timestamp"
+.labelTTimestamp: "Timestamp: " => "Timestamp"
 .buttonCancel: "Cancel" => "Cancelar"
 .buttonSave: "Save" => "Salvar"
-.labelTSystem: "System:" => "Sistema:"
-.labelTSummary: "Summary:" => "Somário"
-.labelTDetails: "Details:" => "Detalhes"
+.labelTSystem: "System: " => "Sistema: "
+.labelTSummary: "Summary: " => "Somário"
+.labelTDetails: "Details: " => "Detalhes"
 .label_index: "Set Note" => "Definir nota"
 
 SECTION MessageBoxTheme
@@ -565,7 +565,7 @@ SECTION MessageBoxTheme
 
 SECTION DataGridViewDialogs
 
-.Jumpto: "Jump to:" => "Saltar a"
+.Jumpto: "Jump to: " => "Saltar a"
 .EN: "Enter number to jump to or near to" => "Informe o numero de saltos para à sua posição ou perto dela"
 .PresstoAccept: "Press to Accept" => "Pressione para Aceitar"
 .PresstoCancel: "Press to Cancel" => "Pressione para Cancelar"

@@ -211,7 +211,7 @@ SECTION EDDiscoveryForm
 .removeTabToolStripMenuItem: "Remove Tab" => "Удалить вкладку"
 .renameTabToolStripMenuItem: "Rename Tab" => "Переименовать вкладку"
 .TSF: "Tab setup failure: Primary tab or TG failed to load.\r\nThis is a abnormal condition - please problem to EDD Team on discord or github.\r\nTo try and clear it, hold down shift and then launch the program.\r\nClick on Reset tabs, then Run program, which may clear the problem." => "Установить вкладку не удалось: основная вкладка или TG не загрузились.\r\nТак быть не должно - пожалуйста, сообщите о проблеме команде EDD через Discord или Github.\r\nЧтобы избежать ошибки, перезапустите программу, удерживая клавишу shift,\r\nвыберите опцию Reset tabs и перезапустите программу еще раз."
-.RTABL: "Name:" => "Название"
+.RTABL: "Name: " => "Название"
 .RTABT: "Rename Tab" => "Переименовать вкладку"
 .RTABTT: "Enter a new name for the tab" => "Новое имя вкладки"
 .ThemeW: "The theme stored has missing colors or other missing information\r\nCorrect the missing colors or other information manually using the Theme Editor in Settings" => "В сохраненной теме отсутствуют цвета или другая информация.\r\nИсправьте это вручную с помощью редактора тем в настройках"
@@ -233,7 +233,7 @@ SECTION EDDiscoveryForm
 .CAPIMN: "CAPI stationname {0}, market station is {1} " => "CAPI stationname {0}, станция рынка {1}"
 .CAPIEX: "Companion API get failed: " => "Не удалось получить доступ к Companion API"
 .Arrived: "Arrived at system {0} Visit No. {1}" => "Прибытие в систему {0}, посещение {1}"
-.PE1: "Profile reports errors in triggers:" => "Профиль сообщает об ошибках в триггерах"
+.PE1: "Profile reports errors in triggers: " => "Профиль сообщает об ошибках в триггерах"
 .EDDN: "Sent {0} event to EDDN ({1})" => "Событие {0} отправлено в EDDN ({1})"
 .EDDNEX: "EDDN: Send commodities prices failed: " => "EDDN: передача цен на товары не удалась"
 .Closing: "Closing, please wait!" => "Завершаю работу"
@@ -333,7 +333,7 @@ SECTION SurfaceBookmarksForm
 SECTION SurfaceBookmarkUserControl
 
 .Enter: "Enter a name" => "Введите название"
-.PL: "Planet:" => "Планета:"
+.PL: "Planet: " => "Планета: "
 .EPN: "Enter planet name" => "Введите название планеты"
 .PresstoAccept: "Press to Accept" => "Нажмите для подтверждения"
 .PresstoCancel: "Press to Cancel" => "Нажмите для отмены"
@@ -417,13 +417,13 @@ SECTION AddOnManagerForm
 SECTION AssignTravelLogSystemForm
 
 AssignTravelLogSystemForm: "AssignTravelLogSystemForm" => "Назначить систему журнала полетов"
-.label1: "Travel Log System Name:" => "Название в журнале полетов:"
-.label2: "Date Visited:" => "Дата посещения:"
-.label6: "EDSM Link:" => "Ссылка на EDSM"
-.label3: "New system name:" => "Новое название системы:"
+.label1: "Travel Log System Name: " => "Название в журнале полетов: "
+.label2: "Date Visited: " => "Дата посещения: "
+.label6: "EDSM Link: " => "Ссылка на EDSM"
+.label3: "New system name: " => "Новое название системы: "
 .btnFindSystem: "Find" => "Найти"
 .btnCancel: "Cancel" => "Отмена"
-.label4: "Travel Log Coordinates:" => "Координаты в журнале полетов:"
+.label4: "Travel Log Coordinates: " => "Координаты в журнале полетов: "
 .btnOK: "OK" @
 .label5: "System Coordinates" => "Координаты системы"
 
@@ -475,7 +475,7 @@ GalaxySectorSelect: "GalaxySectorSelect" => "Выбор секторов Гал�
 .Warning: "Warning" => "Внимание"
 .RS: "You have removed sectors!\r\nThis will require the DB to be cleaned of entries, which will take time\r\nConfirm you wish to do this?" => "Вы удалили сектора!\r\nЭто потребует очистки БД, что займет время.\r\nВы действительно хотите это сделать?"
 .GALSELEX: "ED Discovery downloads star data from EDSM/EDDB which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed" => "Чтобы предоставить вам больше информации, ED Discovery может загрузить данные о системах из EDSM/EDDB. Выберите, сколько данных вы хотите загрузить. Чем большую часть Галактики вы выберете, тем больше места потребуется для хранения."
-.Select: "Select:" => "Выберите:"
+.Select: "Select: " => "Выберите: "
 .GALSELEN: "Select the data set" @
 .PresstoAccept: "Press to Accept" => "Нажмите для подтверждения"
 .PresstoCancel: "Press to Cancel" => "Нажмите для отмены"
@@ -544,12 +544,12 @@ RecordStep: "RecordStep" @
 SECTION SetNoteForm
 
 SetNoteForm: "Set Note" => "Создать примечание"
-.labelTTimestamp: "Timestamp:" => "Отметка времени:"
+.labelTTimestamp: "Timestamp: " => "Отметка времени: "
 .buttonCancel: "Cancel" => "Отмена"
 .buttonSave: "Save" => "Сохранить"
-.labelTSystem: "System:" => "Система:"
-.labelTSummary: "Summary:" => "Сводка:"
-.labelTDetails: "Details:" => "Подробности:"
+.labelTSystem: "System: " => "Система: "
+.labelTSummary: "Summary: " => "Сводка: "
+.labelTDetails: "Details: " => "Подробности: "
 .label_index: "Set Note" => "Создать примечание"
 
 SECTION MessageBoxTheme
@@ -565,7 +565,7 @@ SECTION MessageBoxTheme
 
 SECTION DataGridViewDialogs
 
-.Jumpto: "Jump to:" => "Номер записи:"
+.Jumpto: "Jump to: " => "Номер записи: "
 .EN: "Enter number to jump to or near to" => "Введите номер, к которому нужно перейти"
 .PresstoAccept: "Press to Accept" => "Нажмите для подтверждения"
 .PresstoCancel: "Press to Cancel" => "Нажмите для отмены"

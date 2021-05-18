@@ -211,7 +211,7 @@ SECTION EDDiscoveryForm
 .removeTabToolStripMenuItem: "Remove Tab" => "Supprimer l'onglet"
 .renameTabToolStripMenuItem: "Rename Tab" => "Renommer l'onglet"
 .TSF: "Tab setup failure: Primary tab or TG failed to load.\r\nThis is a abnormal condition - please problem to EDD Team on discord or github.\r\nTo try and clear it, hold down shift and then launch the program.\r\nClick on Reset tabs, then Run program, which may clear the problem." => "Erreur de création d'onglet \r\nCette erreur est anormale, rapportez le problème à l'équipe d'EDD sur discord ou github.\r\nPour essayer de récupérer, maintenir la touche MAJ et lancer le programme.\r\nCliquer sur RAZ Onglets, puis relancer le programme, ceci pourrait régler le probblème."
-.RTABL: "Name:" => "Nom:"
+.RTABL: "Name: " => "Nom: "
 .RTABT: "Rename Tab" => "Renommer Onglet"
 .RTABTT: "Enter a new name for the tab" => "Entrer un nouveau nom pour l'onglet"
 .ThemeW: "The theme stored has missing colors or other missing information\r\nCorrect the missing colors or other information manually using the Theme Editor in Settings" => "Il manque des couleurs ou d'autres informations pour le thème choisi.\r\nCorriger manuellement les éléments manquants en utilisant l'éditeur de thème dans Paramètres"
@@ -233,7 +233,7 @@ SECTION EDDiscoveryForm
 .CAPIMN: "CAPI stationname {0}, market station is {1} " @
 .CAPIEX: "Companion API get failed: " @
 .Arrived: "Arrived at system {0} Visit No. {1}" => "Arrivée dans le système {0} Visite No. {1}"
-.PE1: "Profile reports errors in triggers:" @
+.PE1: "Profile reports errors in triggers: " @
 .EDDN: "Sent {0} event to EDDN ({1})" => "Envoi de l'événement {0} à EDDN ({1})"
 .EDDNEX: "EDDN: Send commodities prices failed: " => "EDDN: échec de l'envoi des prix de marchandises"
 .Closing: "Closing, please wait!" => "Fermeture en cours, merci de patienter"
@@ -333,7 +333,7 @@ SECTION SurfaceBookmarksForm
 SECTION SurfaceBookmarkUserControl
 
 .Enter: "Enter a name" => "Entrer un nom"
-.PL: "Planet:" => "Planète"
+.PL: "Planet: " => "Planète"
 .EPN: "Enter planet name" => "Entrer le nom de la planète"
 .PresstoAccept: "Press to Accept" => "Appuyer pour accepter"
 .PresstoCancel: "Press to Cancel" => "Appuyer pour annuler"
@@ -417,13 +417,13 @@ SECTION AddOnManagerForm
 SECTION AssignTravelLogSystemForm
 
 AssignTravelLogSystemForm: "AssignTravelLogSystemForm" @
-.label1: "Travel Log System Name:" => "Nom du système dans le journal de voyage :"
-.label2: "Date Visited:" => "Date de la visite :"
-.label6: "EDSM Link:" => "Lien EDSM :"
-.label3: "New system name:" => "Nouveau nom du système :"
+.label1: "Travel Log System Name: " => "Nom du système dans le journal de voyage : "
+.label2: "Date Visited: " => "Date de la visite : "
+.label6: "EDSM Link: " => "Lien EDSM : "
+.label3: "New system name: " => "Nouveau nom du système : "
 .btnFindSystem: "Find" => "Trouver"
 .btnCancel: "Cancel" => "Annuler"
-.label4: "Travel Log Coordinates:" => "Coordonnées dans le journal de voyage"
+.label4: "Travel Log Coordinates: " => "Coordonnées dans le journal de voyage"
 .btnOK: "OK" @
 .label5: "System Coordinates" => "Coordonnées du système"
 
@@ -475,7 +475,7 @@ GalaxySectorSelect: "GalaxySectorSelect" @
 .Warning: "Warning" => "Attention"
 .RS: "You have removed sectors!\r\nThis will require the DB to be cleaned of entries, which will take time\r\nConfirm you wish to do this?" => "Vous avez supprimé des secteurs !\r\nCeci nécessite un nettoyage de la base de données, ce qui prend un certain temps.\r\nEtes vous sûr ?"
 .GALSELEX: "ED Discovery downloads star data from EDSM/EDDB which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed" => "ED Discovery télécharge les données stellaires depuis EDSM/EDDB pour vous permettre d'avoir des information supplémentaires. Selectionnez les données que vous voulez stocker : plus vous en selectionné, plus l'espace disque nécessaire sera important."
-.Select: "Select:" => "Choississez :"
+.Select: "Select: " => "Choississez : "
 .GALSELEN: "Select the data set" => "Choisissez le jeu de données"
 .PresstoAccept: "Press to Accept" => "Cliquer pour accepter"
 .PresstoCancel: "Press to Cancel" => "Cliquer pour annuler"
@@ -544,12 +544,12 @@ RecordStep: "RecordStep" @
 SECTION SetNoteForm
 
 SetNoteForm: "Set Note" => "Définir une note"
-.labelTTimestamp: "Timestamp:" @
+.labelTTimestamp: "Timestamp: " @
 .buttonCancel: "Cancel" => "Annuler"
 .buttonSave: "Save" => "Sauvegarder"
-.labelTSystem: "System:" => "Système :"
-.labelTSummary: "Summary:" => "Résumé :"
-.labelTDetails: "Details:" => "Détails :"
+.labelTSystem: "System: " => "Système : "
+.labelTSummary: "Summary: " => "Résumé : "
+.labelTDetails: "Details: " => "Détails : "
 .label_index: "Set Note" => "Définir note"
 
 SECTION MessageBoxTheme
@@ -565,7 +565,7 @@ SECTION MessageBoxTheme
 
 SECTION DataGridViewDialogs
 
-.Jumpto: "Jump to:" => "Sauter vers :"
+.Jumpto: "Jump to: " => "Sauter vers : "
 .EN: "Enter number to jump to or near to" => "Entrer un nombre de saut pour aller à ou à côté"
 .PresstoAccept: "Press to Accept" => "Cliquer pour accepter"
 .PresstoCancel: "Press to Cancel" => "Cliquer pour annuler"
