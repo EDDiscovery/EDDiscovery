@@ -225,7 +225,7 @@ namespace EDDiscovery.UserControls
                 Suit s = dataGridViewSuits.Rows[row].Tag as Suit;
                 System.Diagnostics.Debug.WriteLine("Force Sell Suit {0} {1} {2}", s.EventTime, s.FDName, s.FriendlyName);
 
-                if (ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Confirm selling of ".T(EDTx.TBD) + s.FriendlyName, "Delete".T(EDTx.Delete), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+                if (ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Confirm selling of ".T(EDTx.UserControlSuitsWeapons_Confirm) + s.FriendlyName, "Delete".T(EDTx.Delete), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
                 {
                     var je = new EliteDangerousCore.JournalEvents.JournalSellSuit(DateTime.UtcNow, s.ID, s.FDName, s.Name_Localised, 0, EDCommander.CurrentCmdrID);
                     var jo = je.Json();

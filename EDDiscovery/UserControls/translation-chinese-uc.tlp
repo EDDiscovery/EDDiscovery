@@ -386,22 +386,6 @@ SECTION UserControlMarketData
 .checkBoxSellOnly: "Sell Only" @
 .checkBoxSellOnly.ToolTip: "Show items you can sell only" @
 
-SECTION UserControlMaterials
-
-.labelNoItems: "No Items Found" => "未找到任何材料"
-.NameCol: "Name" => "名称"
-.ShortName: "Abv" => "简称"
-.Category: "Category" => "分类"
-.Type: "Type" => "种类"
-.Number: "Number" => "数量"
-.Price: "Avg. Price" => "平均价格"
-.checkBoxClear: "Remove zero items" => "隐藏数量为零的材料"
-.textBoxItems2.ToolTip: "Count of Items" => "材料数量"
-.textBoxItems1.ToolTip: "Count of Items" => "材料数量"
-.checkBoxClear.ToolTip: "Remove zero items the time after they go to zero" => "当材料数量变为零的时候自动移除"
-.buttonFilter.ToolTip: "Filter out items" @
-.checkBoxShowZeros.ToolTip: "Green will show materials with zero counts, red means remove them" @
-.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 
 SECTION UserControlMaterialCommodities
 
@@ -410,9 +394,6 @@ SECTION UserControlMaterialCommodities
 .Total: "Total" => "总量"
 .Rare: "Rare" @
 .Recipes: "Recipes" @
-
-SECTION UserControlCommodities
-
 .labelNoItems: "No Items Found" => "未找到任何商品"
 .NameCol: "Name" => "名称"
 .ShortName: "Abv" => "简称"
@@ -901,7 +882,7 @@ SECTION UserControlSettings
 .radioButtonCentreHome: "Home System" => "母星"
 .labelOpenOn: "Open Centred On" => "默认打开显示"
 .labelHome: "Now in Commander Settings" => "母星"
-.Font: "The font used by this theme is not available on your system.\r\nThe font needed is \\"{0}\\".\r\nInstall this font to fully use this theme.\r\nEuro Caps font is freely available from www.edassets.org.\r\n\r\nWould you like to load this theme using a replacement font?" @
+.Font: "The font used by this theme is not available on your system.\r\nThe font needed is \"{0}\".\r\nInstall this font to fully use this theme.\r\nEuro Caps font is freely available from www.edassets.org.\r\n\r\nWould you like to load this theme using a replacement font?" @
 .Information: "Applies at next restart of ED Discovery" => "改变将在重启EDDiscovery后生效"
 .AddC: "Commander name is not valid or duplicate" => "指挥官的名字无效或者重复"
 .AddT: "Cannot create Commander" => "无法创建指挥官"

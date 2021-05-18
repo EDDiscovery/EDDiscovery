@@ -54,7 +54,7 @@ namespace EDDiscovery.UserControls
 
             var mrle = EliteDangerousCore.JournalEntry.GetNameImageOfEvents(new string[] { "UpdateMicroResource" });
             string mrtype = string.Join(";", mrle.Select(x => x.Item1)) + ";";
-            AddGroupOption(mrtype, "Micro Resources".T(EDTx.TBD), JournalEntry.JournalTypeIcons[JournalTypeEnum.BuyMicroResources]);
+            AddGroupOption(mrtype, "Micro Resources".T(EDTx.FilterSelector_MicroResources), JournalEntry.JournalTypeIcons[JournalTypeEnum.BuyMicroResources]);
 
             var lle = EliteDangerousCore.JournalEntry.GetNameImageOfEvents(new string[] { "Ledger", "LedgerNC" });
             string legtype = string.Join(";", lle.Select(x => x.Item1)) + ";";
@@ -66,7 +66,7 @@ namespace EDDiscovery.UserControls
 
             var suitle = EliteDangerousCore.JournalEntry.GetNameImageOfEvents(new string[] { "SuitInformation", "LoadoutInformation", "WeaponInformation" });
             string suittype = string.Join(";", suitle.Select(x => x.Item1)) + ";";
-            AddGroupOption(suittype, "Suits".T(EDTx.TBD), JournalEntry.JournalTypeIcons[JournalTypeEnum.BuySuit]);
+            AddGroupOption(suittype, "Suits".T(EDTx.FilterSelector_Suits), JournalEntry.JournalTypeIcons[JournalTypeEnum.BuySuit]);
 
             AddGroupOption("MiningRefined;AsteroidCracked;ProspectedAsteroid;LaunchDrone","Mining".T(EDTx.FilterSelector_Mining), JournalEntry.JournalTypeIcons[JournalTypeEnum.MiningRefined]);
         }

@@ -388,23 +388,6 @@ SECTION UserControlMarketData
 .checkBoxSellOnly: "Sell Only" => "Solo vender"
 .checkBoxSellOnly.ToolTip: "Show items you can sell only" => "Mostrar artículos que solo puede vender"
 
-SECTION UserControlMaterials
-
-.labelNoItems: "No Items Found" => "No se encontraron artículos"
-.NameCol: "Name" => "Nombre"
-.ShortName: "Abv" => "Abv"
-.Category: "Category" => "Categoría"
-.Type: "Type" => "Tipo"
-.Number: "Number" => "Número"
-.Price: "Avg. Price" => "Precio medio"
-.checkBoxClear: "Remove zero items" => "Eliminar cero elementos"
-.textBoxItems2.ToolTip: "Count of Items" => "Recuento de elementos"
-.textBoxItems1.ToolTip: "Count of Items" => "Recuento de elementos"
-.checkBoxClear.ToolTip: "Remove zero items the time after they go to zero" => "Elimine cero elementos el tiempo después de que lleguen a cero"
-.buttonFilter.ToolTip: "Filter out items" => "Filtrar elementos"
-.checkBoxShowZeros.ToolTip: "Green will show materials with zero counts, red means remove them" => "El verde mostrará los materiales con cero conteos, el rojo significa eliminarlos"
-.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" => "Habilitar o deshabilitar el ajuste de palabras"
-
 SECTION UserControlMaterialCommodities
 
 .Data: "Data" => "Datos"
@@ -412,9 +395,6 @@ SECTION UserControlMaterialCommodities
 .Total: "Total" => "Total"
 .Rare: "Rare" => "Raro"
 .Recipes: "Recipes" => "Recetas"
-
-SECTION UserControlCommodities
-
 .labelNoItems: "No Items Found" => "No se encontraron artículos"
 .NameCol: "Name" => "Nombre"
 .ShortName: "Abv" => "Abv"
@@ -912,7 +892,7 @@ SECTION UserControlSettings
 .radioButtonCentreHome: "Home System" => "Sistema de inicio"
 .labelOpenOn: "Open Centred On" => "Abierto centrado en"
 .labelHome: "Now in Commander Settings" => "Ahora en la configuración de Commander"
-.Font: "The font used by this theme is not available on your system.\r\nThe font needed is \\"{0}\\".\r\nInstall this font to fully use this theme.\r\nEuro Caps font is freely available from www.edassets.org.\r\n\r\nWould you like to load this theme using a replacement font?" => "La fuente utilizada por este tema no está disponible en su sistema.\r\nLa fuente necesaria es \\" {0} \\ "
+.Font: "The font used by this theme is not available on your system.\r\nThe font needed is \"{0}\".\r\nInstall this font to fully use this theme.\r\nEuro Caps font is freely available from www.edassets.org.\r\n\r\nWould you like to load this theme using a replacement font?" => "La fuente utilizada por este tema no está disponible en su sistema.\r\nLa fuente necesaria es \" {0} \" "
 .Information: "Applies at next restart of ED Discovery" => "Se aplica en el próximo reinicio de ED Discovery"
 .AddC: "Commander name is not valid or duplicate" => "El nombre del comandante no es válido o está duplicado"
 .AddT: "Cannot create Commander" => "No se puede crear Commander"

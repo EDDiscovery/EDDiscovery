@@ -386,23 +386,6 @@ SECTION UserControlMarketData
 .checkBoxSellOnly: "Sell Only" @
 .checkBoxSellOnly.ToolTip: "Show items you can sell only" @
 
-SECTION UserControlMaterials
-
-.labelNoItems: "No Items Found" => "Nessun prodotto trovato"
-.NameCol: "Name" => "Nome"
-.ShortName: "Abv" @
-.Category: "Category" => "Categoria"
-.Type: "Type" => "Tipo"
-.Number: "Number" => "Numero"
-.Price: "Avg. Price" => "Prezzo medio"
-.checkBoxClear: "Remove zero items" => "Rimuovi prodotti assenti"
-.textBoxItems2.ToolTip: "Count of Items" => "Conteggio"
-.textBoxItems1.ToolTip: "Count of Items" => "Conteggio"
-.checkBoxClear.ToolTip: "Remove zero items the time after they go to zero" => "Rimuovi prodotti assenti solo la prossima volta"
-.buttonFilter.ToolTip: "Filter out items" @
-.checkBoxShowZeros.ToolTip: "Green will show materials with zero counts, red means remove them" @
-.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
-
 SECTION UserControlMaterialCommodities
 
 .Data: "Data" @
@@ -410,9 +393,6 @@ SECTION UserControlMaterialCommodities
 .Total: "Total" @
 .Rare: "Rare" @
 .Recipes: "Recipes" @
-
-SECTION UserControlCommodities
-
 .labelNoItems: "No Items Found" => "Nesusn prodotto trovato"
 .NameCol: "Name" => "Nome"
 .ShortName: "Abv" @
@@ -901,7 +881,7 @@ SECTION UserControlSettings
 .radioButtonCentreHome: "Home System" => "Sistema Preferito"
 .labelOpenOn: "Open Centred On" => "Apri centrata su"
 .labelHome: "Now in Commander Settings" => "Sistema Predefinito"
-.Font: "The font used by this theme is not available on your system.\r\nThe font needed is \\"{0}\\".\r\nInstall this font to fully use this theme.\r\nEuro Caps font is freely available from www.edassets.org.\r\n\r\nWould you like to load this theme using a replacement font?" @
+.Font: "The font used by this theme is not available on your system.\r\nThe font needed is \"{0}\".\r\nInstall this font to fully use this theme.\r\nEuro Caps font is freely available from www.edassets.org.\r\n\r\nWould you like to load this theme using a replacement font?" @
 .Information: "Applies at next restart of ED Discovery" => "Applica la prossimo avvio di EDDiscovery"
 .AddC: "Commander name is not valid or duplicate" @
 .AddT: "Cannot create Commander" @

@@ -217,6 +217,8 @@ namespace EDDiscovery
         UserControlMaterialCommodities_Total, // Data !! NOTE
         UserControlMaterialCommodities_Rare, // Rare !! NOTE
         UserControlMaterialCommodities_Recipes, // Recipes !! NOTE
+        UserControlMaterialCommodities_ShipLocker,
+        UserControlMaterialCommodities_BackPack,
 
         UserControlMissions_MPlural, //  Missions
         UserControlMissions_MSingular, //  Mission
@@ -596,6 +598,7 @@ namespace EDDiscovery
         UserControlSysInfo_SysUnk, // System unknown to EDSM
         UserControlSysInfo_Pos, // Position is {0:0.00},{1:0.00},{2:0.00}
         UserControlSysInfo_Target, // On 3D Map right click to make a bookmark, region mark or click on a notemark and then tick on Set Target, or type it here and hit enter
+        UserControlSysInfo_OnFoot, 
 
         UserControlTrippanel_jump, // jump
         UserControlTrippanel_jumps, // jumps
@@ -824,6 +827,8 @@ namespace EDDiscovery
         FilterSelector_Ledger, // Ledger
         FilterSelector_Ship, // Ship
         FilterSelector_Mining, // Mining
+        FilterSelector_MicroResources,
+        FilterSelector_Suits,
 
         ScanDisplayForm_Sys, // System
         ScanDisplayForm_Station, // Station
@@ -873,14 +878,14 @@ namespace EDDiscovery
         UserControlFactions_BondsPlural, // Bonds
         UserControlFactions_SystemsDetailFor, // Systems Detail for
 
+        UserControlSuitsWeapons_Confirm,
+
         CommanderForm_CAPILoggingin,
         CommanderForm_CAPIDisabled,
         CommanderForm_CAPILogout,
         CommanderForm_CAPILoggedin,
         CommanderForm_CAPILogin,
         CommanderForm_CAPIAwaitLogin,
-
-        TBD
     }
 
     public static class EDTranslatorExtensions

@@ -83,9 +83,10 @@ namespace EDDiscovery.UserControls
             }
             else if (PanelMode == PanelType.MicroResources)
             {
+                dataGridViewMC.ContextMenuStrip = null;
                 dataGridViewMC.Columns.Remove(Type);
-                Number.HeaderText = "Ship Locker".T(EDTx.TBD);
-                Price.HeaderText = "BackPack".T(EDTx.TBD);
+                Number.HeaderText = "Ship Locker".T(EDTx.UserControlMaterialCommodities_ShipLocker);
+                Price.HeaderText = "BackPack".T(EDTx.UserControlMaterialCommodities_BackPack);
                 labelItems1.Text = "Total".T(EDTx.UserControlMaterialCommodities_Total);
                 textBoxItems2.Visible = labelItems2.Visible = false;
 

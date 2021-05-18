@@ -386,23 +386,6 @@ SECTION UserControlMarketData
 .checkBoxSellOnly: "Sell Only" @
 .checkBoxSellOnly.ToolTip: "Show items you can sell only" @
 
-SECTION UserControlMaterials
-
-.labelNoItems: "No Items Found" => "Aucun matériau trouvé"
-.NameCol: "Name" => "Nom"
-.ShortName: "Abv" => "Abrev."
-.Category: "Category" => "Catégorie"
-.Type: "Type" @
-.Number: "Number" => "Qté."
-.Price: "Avg. Price" => "Prix moyen"
-.checkBoxClear: "Remove zero items" => "Masquer les matériaux à 0"
-.textBoxItems2.ToolTip: "Count of Items" => "Qté de matériaux"
-.textBoxItems1.ToolTip: "Count of Items" => "Qté de matériaux"
-.checkBoxClear.ToolTip: "Remove zero items the time after they go to zero" @
-.buttonFilter.ToolTip: "Filter out items" => "Exclure des matériaux"
-.checkBoxShowZeros.ToolTip: "Green will show materials with zero counts, red means remove them" @
-.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" => "Activer/Désactiver le retour à la ligne"
-
 SECTION UserControlMaterialCommodities
 
 .Data: "Data" => "Donnée"
@@ -410,9 +393,6 @@ SECTION UserControlMaterialCommodities
 .Total: "Total" @
 .Rare: "Rare" @
 .Recipes: "Recipes" => "Recettes"
-
-SECTION UserControlCommodities
-
 .labelNoItems: "No Items Found" => "Aucune marchandise trouvée"
 .NameCol: "Name" => "Nom"
 .ShortName: "Abv" => "Abrev."
@@ -901,7 +881,7 @@ SECTION UserControlSettings
 .radioButtonCentreHome: "Home System" => "Système de base"
 .labelOpenOn: "Open Centred On" => "Ouvrir centré sur"
 .labelHome: "Now in Commander Settings" @
-.Font: "The font used by this theme is not available on your system.\r\nThe font needed is \\"{0}\\".\r\nInstall this font to fully use this theme.\r\nEuro Caps font is freely available from www.edassets.org.\r\n\r\nWould you like to load this theme using a replacement font?" @
+.Font: "The font used by this theme is not available on your system.\r\nThe font needed is \"{0}\".\r\nInstall this font to fully use this theme.\r\nEuro Caps font is freely available from www.edassets.org.\r\n\r\nWould you like to load this theme using a replacement font?" @
 .Information: "Applies at next restart of ED Discovery" => "S'applique au prochain démarrage d'EDD"
 .AddC: "Commander name is not valid or duplicate" => "Le nom de commandant est invalide ou en doublon"
 .AddT: "Cannot create Commander" => "Impossible de créer le commandant"

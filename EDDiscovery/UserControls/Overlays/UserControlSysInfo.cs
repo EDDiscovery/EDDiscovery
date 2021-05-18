@@ -355,7 +355,7 @@ namespace EDDiscovery.UserControls
 
                 if (he.Status.OnFoot)
                 {
-                    labelShip.Text = "On Foot".T(EDTx.TBD);
+                    labelShip.Text = "On Foot".T(EDTx.UserControlSysInfo_OnFoot);
 
                     var cursuit = hl.SuitList.CurrentID(he.Suits);                     // get current suit ID, or 0 if none
                     if (cursuit != 0)
