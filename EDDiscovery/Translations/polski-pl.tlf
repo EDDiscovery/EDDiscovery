@@ -211,7 +211,7 @@ SECTION EDDiscoveryForm
 .removeTabToolStripMenuItem: "Remove Tab" => "Usuń Kartę"
 .renameTabToolStripMenuItem: "Rename Tab" => "Zmień nazwę Karty"
 .TSF: "Tab setup failure: Primary tab or TG failed to load.\r\nThis is a abnormal condition - please problem to EDD Team on discord or github.\r\nTo try and clear it, hold down shift and then launch the program.\r\nClick on Reset tabs, then Run program, which may clear the problem." => "Błąd ustawiania Kart: Nie udało się wczytać karty głównej lub TG.\r\nProszę zgłosić problem do Zespołu EDD na Discord lub GitHub.\r\nAby spróbować usunąć problem, uruchom EDDiscovery trzymając Shift.\r\nKliknij na 'Resetuj Karty', a następnie 'Uruchom program', co może naprawić problem."
-.RTABL: "Name:" => "Nazwa:"
+.RTABL: "Name: " => "Nazwa: "
 .RTABT: "Rename Tab" => "Zmień nazwę Karty"
 .RTABTT: "Enter a new name for the tab" => "Wprowadź nową nazwę dla tej karty"
 .ThemeW: "The theme stored has missing colors or other missing information\r\nCorrect the missing colors or other information manually using the Theme Editor in Settings" => "Zapisany motyw ma brakujące kolory lub inne brakujące informacje.\r\nPopraw brakujące kolory lub inne informacje ręcznie używając Edytora Motywów w Ustawieniach."
@@ -233,7 +233,7 @@ SECTION EDDiscoveryForm
 .CAPIMN: "CAPI stationname {0}, market station is {1} " => "CAPI stationname {0}, stacja rynku to {1} "
 .CAPIEX: "Companion API get failed: " => "Companion API get nie powiodło się: "
 .Arrived: "Arrived at system {0} Visit No. {1}" => "Przybyto do układu {0}, Wizyta nr {1}"
-.PE1: "Profile reports errors in triggers:" => "Profil zgłasza błędy w wyzwalaczach:"
+.PE1: "Profile reports errors in triggers: " => "Profil zgłasza błędy w wyzwalaczach: "
 .EDDN: "Sent {0} event to EDDN ({1})" => "Wysłano zdarzenie {0} do EDDN ({1})"
 .EDDNEX: "EDDN: Send commodities prices failed: " => "EDDN: Wysyłanie cen towarów nie powiodło się: "
 .Closing: "Closing, please wait!" => "Zamykanie, proszę czekać!"
@@ -333,7 +333,7 @@ SECTION SurfaceBookmarksForm
 SECTION SurfaceBookmarkUserControl
 
 .Enter: "Enter a name" => "Wprowadź nazwę"
-.PL: "Planet:" => "Planeta:"
+.PL: "Planet: " => "Planeta: "
 .EPN: "Enter planet name" => "Wprowadź nazwę planety"
 .PresstoAccept: "Press to Accept" => "Naciśnij aby Zaakceptować"
 .PresstoCancel: "Press to Cancel" => "Naciśnij aby Anulować"
@@ -417,13 +417,13 @@ SECTION AddOnManagerForm
 SECTION AssignTravelLogSystemForm
 
 AssignTravelLogSystemForm: "AssignTravelLogSystemForm" => "Przypisywanie Nowego Układu do Wpisu Dziennika"
-.label1: "Travel Log System Name:" => "Nazwa Układu w Dzienniku Podróży:"
-.label2: "Date Visited:" => "Data Wizyty:"
-.label6: "EDSM Link:" => "Link EDSM:"
-.label3: "New system name:" => "Nowa nazwa układu:"
+.label1: "Travel Log System Name: " => "Nazwa Układu w Dzienniku Podróży: "
+.label2: "Date Visited: " => "Data Wizyty: "
+.label6: "EDSM Link: " => "Link EDSM: "
+.label3: "New system name: " => "Nowa nazwa układu: "
 .btnFindSystem: "Find" => "Znajdź"
 .btnCancel: "Cancel" => "Anuluj"
-.label4: "Travel Log Coordinates:" => "Współrzędne w Dzienniku Podróży:"
+.label4: "Travel Log Coordinates: " => "Współrzędne w Dzienniku Podróży: "
 .btnOK: "OK" @
 .label5: "System Coordinates" => "Współrzędne Układu"
 
@@ -475,7 +475,7 @@ GalaxySectorSelect: "GalaxySectorSelect" => "Wybór Sektora Galaktyki"
 .Warning: "Warning" => "Uwaga"
 .RS: "You have removed sectors!\r\nThis will require the DB to be cleaned of entries, which will take time\r\nConfirm you wish to do this?" => "Usunąłeś sektory!\r\nTo wymaga wyczyszczenia wpisów z bazy danych, co może zająć dużo czasu\r\nCzy na pewno chcesz to zrobić?"
 .GALSELEX: "ED Discovery downloads star data from EDSM/EDDB which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed" => "EDDiscovery pobiera dane gwiazd z EDSM/EDDB, które dostarczają dodatkowych informacji. Zaznacz, ile danych chcesz przechowywać. Im więcej obszaru galaktyki zaznaczysz, tym więcej potrzeba pamięci do przechowywania danych."
-.Select: "Select:" => "Zaznacz:"
+.Select: "Select: " => "Zaznacz: "
 .GALSELEN: "Select the data set" => "Wprowadź numer, do którego albo w pobliże którego chcesz przejść"
 .PresstoAccept: "Press to Accept" => "Naciśnij aby Zaakceptować"
 .PresstoCancel: "Press to Cancel" => "Naciśnij aby Anulować"
@@ -544,12 +544,12 @@ RecordStep: "RecordStep" => "Nagraj Krok"
 SECTION SetNoteForm
 
 SetNoteForm: "Set Note" => "Ustaw Notatkę"
-.labelTTimestamp: "Timestamp:" => "Datownik:"
+.labelTTimestamp: "Timestamp: " => "Datownik: "
 .buttonCancel: "Cancel" => "Anuluj"
 .buttonSave: "Save" => "Zapisz"
-.labelTSystem: "System:" => "Układ:"
-.labelTSummary: "Summary:" => "Podsumowanie:"
-.labelTDetails: "Details:" => "Szczegóły:"
+.labelTSystem: "System: " => "Układ: "
+.labelTSummary: "Summary: " => "Podsumowanie: "
+.labelTDetails: "Details: " => "Szczegóły: "
 .label_index: "Set Note" => "Ustaw Notatkę"
 
 SECTION MessageBoxTheme
@@ -565,7 +565,7 @@ SECTION MessageBoxTheme
 
 SECTION DataGridViewDialogs
 
-.Jumpto: "Jump to:" => "Przejdź do:"
+.Jumpto: "Jump to: " => "Przejdź do: "
 .EN: "Enter number to jump to or near to" => "Wprowadź numer do którego chcesz przejść"
 .PresstoAccept: "Press to Accept" => "Naciśnij aby Zaakceptować"
 .PresstoCancel: "Press to Cancel" => "Naciśnij aby Anulować"

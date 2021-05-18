@@ -49,18 +49,18 @@ SECTION UserControlCombatPanel
 .checkBoxCustomGridOn.ToolTip: "Show grid when in transparent mode" => "透明模式下显示网格"
 .comboBoxCustomCampaign.ToolTip: "Select Campaign to view" => "选择要浏览的战役"
 .buttonExtEditCampaign.ToolTip: "Edit user defined campaign" => "编辑用户创建的战役"
-.Kills: "Kills:" => "杀敌数："
-.Faction: "Faction:" => "派系："
-.Crimes: "Crimes:" => "犯罪次数："
-.Bal: "Bal:" => "净收入："
+.Kills: "Kills: " => "杀敌数："
+.Faction: "Faction: " => "派系："
+.Crimes: "Crimes: " => "犯罪次数："
+.Bal: "Bal: " => "净收入："
 .NewCampaign: "New Campaign" => "新建战役"
 .SinceLastDock: "Since Last Dock" => "自最近降落后"
-.Name: "Name:" => "名称"
+.Name: "Name: " => "名称"
 .C1: "Give name to campaign" => "给战役输入名称"
 .C2: "Optional faction to target" => "目标派系（可选）"
-.Start: "Start:" => "开始："
+.Start: "Start: " => "开始："
 .C3: "Select Start time" => "选择开始时间"
-.End: "End:" => "结束："
+.End: "End: " => "结束："
 .C4: "Select Start time" => "选择结束时间"
 .C5: "Press to Accept" => "确认"
 .C6: "Press to Cancel" => "取消"
@@ -86,7 +86,7 @@ SECTION UserControlCompass
 SECTION UserControlWebBrowser
 
 .extCheckBoxStar.ToolTip: "Select another system to view" @
-.System: "System:" @
+.System: "System: " @
 .EnterSys: "Show System" @
 
 SECTION UserControlSearch
@@ -115,8 +115,8 @@ SECTION SearchMaterialsCommodities
 SECTION SearchScans
 
 .Select: "Select" => "请选择"
-.Name: "Name:" => "名称"
-.SN: "Enter Search Name:" => "输入搜索名称："
+.Name: "Name: " => "名称"
+.SN: "Enter Search Name: " => "输入搜索名称："
 .DEL: "Confirm deletion of" => "确认要删除"
 .DELNO: "Cannot delete this entry" => "无法删除此项"
 .CNV: "Condition is not valid" => "条件无效"
@@ -199,12 +199,12 @@ SECTION UserControlExpedition
 .SystemName: "System Name" => "星系名称"
 .Distance: "Dist." => "距离(ly)"
 .Note: "Note" => "笔记"
-.labelCml: "Cml Distance:" => "总距离："
-.labelP2P: "P2P Distance:" => "直线距离："
+.labelCml: "Cml Distance: " => "总距离："
+.labelP2P: "P2P Distance: " => "直线距离："
 .buttonReverseRoute: "Reverse" => "反转"
-.labelEndDate: "End Date:" => "结束日期："
-.labelDateStart: "Start Date:" => "开始日期："
-.labelRouteName: "Route Name:" => "航线名称："
+.labelEndDate: "End Date: " => "结束日期："
+.labelDateStart: "Start Date: " => "开始日期："
+.labelRouteName: "Route Name: " => "航线名称："
 .toolStripButtonNew: "New Route" => "新建航线"
 .toolStripButtonImportFile: "Import file" => "导入文件"
 .toolStripButtonImportRoute: "Import route" => "导入航线"
@@ -250,8 +250,8 @@ SECTION UserControlExploration
 .ColumnPrimaryStar: "Stars" => "主恒星"
 .ColumnInfo: "Info" => "信息"
 .ColumnNote: "Note" => "笔记"
-.labelFilename: "Filename:" => "文件名"
-.labelName: "Description:" => "探索组名称："
+.labelFilename: "Filename: " => "文件名"
+.labelName: "Description: " => "探索组名称："
 .toolStripButtonNew: "New" => "新建"
 .toolStripButtonLoad: "Load" => "加载"
 .toolStripButtonSave: "Save" => "保存"
@@ -530,7 +530,7 @@ SECTION UserControlModules
 .Storedat: "Stored at" => "存放在"
 .CargoCapacity: "Cargo Capacity" => "货舱大小"
 .InTransit: "In Transit" => "正在运送中"
-.FW: "Fuel Warning:" => "燃料警告："
+.FW: "Fuel Warning: " => "燃料警告："
 .TTF: "Enter fuel warning level in % (0 = off, 1-100%)" => "输入燃料警告的百分比（0为关闭，输入1-100%）"
 .PresstoAccept: "Press to Accept" => "确认"
 .PresstoCancel: "Press to Cancel" => "取消"
@@ -697,8 +697,8 @@ SECTION UserControlRouteTracker
 
 SECTION UserControlScan
 
-.Expired: "Expired:" @
-.System: "System:" => "星系："
+.Expired: "Expired: " @
+.System: "System: " => "星系："
 .EnterSys: "Show System" => "显示星系"
 .VLMT: "Set Valuable Minimum" => "设定高价值星体的最低标准"
 .extCheckBoxStar.ToolTip: "Select another system to view" => "选择查看另外一个星系"
@@ -800,7 +800,7 @@ SECTION UserControlSettings
 .buttonSaveTheme: "Save Theme" => "保存主题"
 .groupBoxCustomHistoryLoad: "History" => "航行记录选项"
 .checkBoxOrderRowsInverted: "Number Rows Lastest Entry Highest" => "按照升序方式对事件进行排序"
-.labelTimeDisplay: "Time:" @
+.labelTimeDisplay: "Time: " @
 .extGroupBoxWebServer: "Web Server" @
 .labelPortNo: "Port" @
 .extButtonTestWeb: "Test" @
@@ -808,8 +808,8 @@ SECTION UserControlSettings
 .groupBoxInteraction: "Interaction" @
 .labelTKey: "Key to activate transparent windows" => "激活窗口热键"
 .groupBoxMemory: "Memory" @
-.labelHistoryEssItems: "Essential entries:" => "重要条目为："
-.labelHistorySel: "Entries to read:" => "仅读取重要的条目"
+.labelHistoryEssItems: "Essential entries: " => "重要条目为："
+.labelHistorySel: "Entries to read: " => "仅读取重要的条目"
 .groupBoxCustomScreenShots: "Screenshots conversion" => "截图"
 .checkBoxCustomCopyToClipboard: "Copy to clipboard" => "复制到剪切板"
 .checkBoxCustomMarkHiRes: "Mark HiRes files" => "标记高清截图"
@@ -922,10 +922,10 @@ SECTION UserControlShoppingList
 .useEDSMDataInSystemAvailabilityToolStripMenuItem: "Use EDSM data in System Availability" => "使用EDSM数据来显示星系内的材料"
 .useHistoricMaterialCountsToolStripMenuItem: "Use Historic Material Counts" => "使用历史材料计数"
 .NM: "Needed Mats" => "需要的材料"
-.FS: "Filling Shopping List would exceed capacity for:" => "下面几项材料会超出材料容量："
+.FS: "Filling Shopping List would exceed capacity for: " => "下面几项材料会超出材料容量："
 .NoMat: "No materials currently required." => "当前不需要任何材料。"
 .FSD: "Max FSD Injections\r\n   {0} Basic\r\n   {1} Standard\r\n   {2} Premium" => "可合成FSD推进剂的最大次数：\r\n  {0} 次基础\r\n  {1} 次标准\r\n  {2} 次高级"
-.MO: "Materials on {0}" => "{0} 上的材料:"
+.MO: "Materials on {0}" => "{0} 上的材料: "
 
 SECTION UserControlSpanel
 
@@ -1396,7 +1396,7 @@ SECTION CaptainsLogDiary
 SECTION CaptainsLogEntries
 
 .DTF: "Bad/Out of Range Date Time format" @
-.Note: "Note:" @
+.Note: "Note: " @
 .EnterNote: "Enter Note" @
 .CFN: "Do you really want to delete {0} notes?\r\nConfirm or Cancel" @
 .CF: "Do you really want to delete the note for {0}\r\nConfirm or Cancel" @
@@ -1408,8 +1408,8 @@ SECTION CaptainsLogEntries
 .ColBodyName: "Body" @
 .ColNote: "Note" @
 .ColTags: "Tags" @
-.labelEndDate: "End Date:" @
-.labelDateStart: "Start Date:" @
+.labelEndDate: "End Date: " @
+.labelDateStart: "Start Date: " @
 .buttonTags.ToolTip: "Edit Tags" @
 .buttonDelete.ToolTip: "Delete selected entries" @
 .buttonNew.ToolTip: "New Entry" @
@@ -1438,9 +1438,9 @@ SECTION UserControlTrilateration
 .pasteToolStripMenuItem: "Paste" => "粘贴"
 .toolStripButtonSubmitDistances: "&Submit Distances" => "提交距离(&S)"
 .toolStripButtonNew: "Start &new" => "新开始(&N)"
-.toolStripLabelSystem: "From System:" => "自星系："
+.toolStripLabelSystem: "From System: " => "自星系："
 .toolStripTextBoxSystem: "Press Start New" @
-.toolStripLabel1: "Visited without coordinates:" => "访问过但无坐标的星系："
+.toolStripLabel1: "Visited without coordinates: " => "访问过但无坐标的星系："
 .toolStripAddFromHistory: "Add 20 oldest" => "添加20个最老的"
 .toolStripAddRecentHistory: "Add 20 newest" => "添加20个最新的"
 .ToolStripText: "Press Start New" => "点击“新开始”按钮"
@@ -1561,7 +1561,7 @@ SECTION UserControlFactions
 .showCommoditymaterialTradesForFactionToolStripMenuItem: "Show commodity/material trades for faction" @
 .showBountiesAndBondsForFactionToolStripMenuItem: "Show bounties and bonds for faction" @
 .showFactionSystemDetailToolStripMenuItem: "Show system detail for faction" @
-.MissionsInProgress: "Missions In Progress:" @
+.MissionsInProgress: "Missions In Progress: " @
 .CapShipVictims: "Capital ship Victims: " @
 .CapShipAward: "Capital ship Award: " @
 
