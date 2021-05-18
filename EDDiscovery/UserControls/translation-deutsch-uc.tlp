@@ -698,9 +698,11 @@ SECTION UserControlRoute
 .M5: "Nearest to Waypoint with dev<=500ly" => "Nähester Wegpunkt mit Abw.<=500Lj"
 .M6: "Nearest to Waypoint + Deviation / 2" => "Nähester Wegpunkt + Abweichung / 2"
 
+
 SECTION UserControlRouteTracker
 
 .Note: "Note: {0}" => "Notiz: {0}"
+
 .showBookmarkNotesToolStripMenuItem: "Show Bookmark Notes" => "Zeige Lesezeichennotizen"
 .setRouteToolStripMenuItem: "Set route" => "Setze Route"
 .showJumpsToolStripMenuItem: "Show Jumps To Go" => "Zeige restliche Sprünge"
@@ -1091,9 +1093,11 @@ SECTION UserControlStats
 .tabControlCustomStats.tabPageScan.userControlStatsTimeScan.labelTime: "Time" => "Zeit"
 .tabControlCustomStats.tabPageGameStats: "In Game" => "Im Spiel"
 .tabControlCustomStats.tabPageByShip: "By Ship" => "Pro Schiff"
+
 .TotalNoofjumps: "Total No of jumps: " => "Gesamtzahl der Sprünge"
 .FSDjumps: "FSD Jumps" => "FSA-Sprünge"
 .Beltcluster: "Belt Cluster: " => "Gürtelgruppen"
+
 .JumpHistory: "Jump History" => "Sprunghistorie"
 .24hc: "24 Hours: " => "24 Stunden: "
 .OneWeek: ", One Week: " => ", eine Woche: "
@@ -1106,6 +1110,7 @@ SECTION UserControlStats
 .MostHighest: "Most Highest" => "höchstes"
 .MostLowest: "Most Lowest" => "niedrigstes"
 .MostVisited: "Most Visited" => "meistbesuchtes"
+
 .Jumps: "Jumps" => "Sprünge"
 .TravelledLy: "Traveled Ly" => "Gereiste Lichtjahre"
 .PremiumBoost: "Premium Boost" => "Premiumboost"
@@ -1115,10 +1120,12 @@ SECTION UserControlStats
 .Scans: "Scans" => "Scans"
 .Mapped: "Mapped" => "Kartographiert"
 .Scanvalue: "Scan value" => "Scanwert"
+
 .Lastdock: "Last dock" => "Letztes Andocken"
 .Trip: "Trip" => "Reise"
 .All: "All" => "Alles"
 .Type: "Type" => "Art"
+
 .BankAccount: "Bank Account" => "Kontostand"
 .Combat: "Combat" => "Kampf"
 .Crime: "Crime" => "Verbrechen"
@@ -1131,7 +1138,8 @@ SECTION UserControlStats
 .Crafting: "Crafting" => "Herstellen"
 .Crew: "Crew" => "Crew"
 .Multi: "Multi-crew" => "Multicrew"
-.MaterialsTrader: "Materials Trader" => "Materialienhändler-Statistik"
+.MaterialsTrader: "Materials Trader" => "Materialienhändler"
+
 .CurrentAssets: "Current Assets" => "Aktueller Besitz"
 .SpentonShips: "Spent on Ships" => "In Schiffe investiert"
 .SpentonOutfitting: "Spent on Outfitting" => "In Ausrüstung investiert"
@@ -1199,14 +1207,18 @@ SECTION UserControlStats
 .FinesAccrued: "Fines Accrued" => "Gesammelte Strafen (gesamt)"
 .TradesCompleted: "Trades Completed" => "Angeschlossene Handel"
 .MaterialsTraded: "Materials Traded" => "Gehandelte Materialien"
+
 .TME: "{0} days {1} hours {1} minutes" => "{0} Tage {1} Stunden {1} Minuten"
 .Name: "Name" => "Name"
 .Ident: "Ident" => "Ident"
+
 .BodiesScanned: "Bodies Scanned" => "Körper gescannt"
 .Destroyed: "Destroyed" => "Zerstört"
+
 .GoodsBought: "Goods Bought" => "Handelswaren gekauft"
 .GoodsSold: "Goods Sold" => "Handelswaren verkauft"
 .GoodsProfit: "Goods Profit" => "Warenprofit"
+
 .EfficientScans: "Efficient Scans" => "Erhaltene Effizienzboni"
 .Accepted: "Accepted" => "Angenommen"
 .Disgruntled: "Disgruntled" => "Verärgert"
@@ -1217,6 +1229,9 @@ SECTION UserControlStats
 .G3MaterialsTraded: "Grade 3 Materials Traded" => "Gehandelte Grad-3-Materialien"
 .G4MaterialsTraded: "Grade 4 Materials Traded" => "Gehandelte Grad-4-Materialien"
 .G5MaterialsTraded: "Grade 5 Materials Traded" => "Gehandelte Grad-5-Materialien"
+
+
+
 
 SECTION StatsTimeUserControl
 
