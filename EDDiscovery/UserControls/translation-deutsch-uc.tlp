@@ -1,4 +1,4 @@
-
+﻿
 SECTION UserControlBookmarks
 
 .ColType: "Bookmark Type" => "Lesezeichentyp"
@@ -112,7 +112,6 @@ SECTION SearchMaterialsCommodities
 .ColumnCurrentDistance: "Current Distance" => "Derzeitige Entfernung"
 .ColumnPosition: "Position" => "Position"
 
-
 SECTION SearchScans
 
 .Select: "Select" => "Wählen"
@@ -190,7 +189,6 @@ SECTION UserControlEstimatedValues
 .Mapped: "Mapped" => "Kartographiert"
 .WasMapped: "Already Mapped" => "Bereits kartographiert"
 .WasDiscovered: "Already Discovered" => "Bereits entdeckt"
-
 .SV: "Estimated Scan Values for {0}" => "Geschätzte Scanwerte für {0}"
 .EDSM: "EDSM" => "EDSM"
 .checkBoxEDSM.ToolTip: "Get and show information from EDSM" => "Hole und zeige Informationen von EDSM"
@@ -388,9 +386,10 @@ SECTION UserControlMarketData
 .checkBoxSellOnly: "Sell Only" => "Nur verkaufen"
 .checkBoxSellOnly.ToolTip: "Show items you can sell only" => "Zeige nur Gegenstände die du verkaufen kannst"
 
-
 SECTION UserControlMaterialCommodities
 
+.ShipLocker: "Ship Locker" @
+.BackPack: "BackPack" @
 .Data: "Data" => "Daten"
 .Mats: "Mats" => "Mat."
 .Total: "Total" => "Gesamt"
@@ -447,7 +446,6 @@ SECTION UserControlSurveyor
 .Has: " Has " => " hat "
 .Signals: " Has Signals." => " hat Signale."
 .islandable: " is landable." => " ist landbar."
-
 .planetaryClassesToolStripMenuItem: "Planetary Classes" => "Planetare Klassen"
 .planetaryClassesToolStripMenuItem.ammoniaWorldToolStripMenuItem: "Ammonia World" => "Ammoniakwelt"
 .planetaryClassesToolStripMenuItem.earthlikeWorldToolStripMenuItem: "Earthlike World" => "erdähnliche Welt"
@@ -461,7 +459,6 @@ SECTION UserControlSurveyor
 .textAlignToolStripMenuItem.leftToolStripMenuItem: "Left" => "Links"
 .textAlignToolStripMenuItem.centerToolStripMenuItem: "Center" => "Mitte"
 .textAlignToolStripMenuItem.rightToolStripMenuItem: "Right" => "Rechts"
-
 .bodyFeaturesToolStripMenuItem.hasSignalsToolStripMenuItem: "Has Signals" => "Hat Signale"
 .bodyFeaturesToolStripMenuItem.landableToolStripMenuItem: "Landable" => "landbar"
 .showAllPlanetsToolStripMenuItem: "Show All Planets" => "Zeige alle Planeten"
@@ -485,6 +482,7 @@ SECTION MissionListUserControl
 .labelTo: "to" => "bis"
 
 SECTION UserControlMissions
+
 .MPlural: " Missions" => "Missionen"
 .MSingular: " Mission" => "Mission"
 .Name: "Name" => "Name"
@@ -671,7 +669,6 @@ SECTION UserControlRoute
 .checkBox_FsdBoost: "Use Boosts" => "Verwende Boosts"
 .checkBox_FsdBoost.ToolTip: "The route finder will try and use FSD injections in case a direct route could not" => "Der Routenfinder wird versuchen FSA-Einspeisungen zu verwenden für den Fall das ein normaler Sprung nicht ausreicht"
 .showScanToolStripMenuItem: "View Scan Display" => "Zeige Scananzeige"
-
 .M1: "Nearest to Waypoint" => "Nähester Wegpunkt"
 .M2: "Minimum Deviation from Path" => "Geringste Abweichung vom Pfad"
 .M3: "Nearest to Waypoint with dev<=100ly" => "Nähester Wegpunkt mit Abw.<=100Lj"
@@ -679,11 +676,9 @@ SECTION UserControlRoute
 .M5: "Nearest to Waypoint with dev<=500ly" => "Nähester Wegpunkt mit Abw.<=500Lj"
 .M6: "Nearest to Waypoint + Deviation / 2" => "Nähester Wegpunkt + Abweichung / 2"
 
-
 SECTION UserControlRouteTracker
 
 .Note: "Note: {0}" => "Notiz: {0}"
-
 .showBookmarkNotesToolStripMenuItem: "Show Bookmark Notes" => "Zeige Lesezeichennotizen"
 .setRouteToolStripMenuItem: "Set route" => "Setze Route"
 .showJumpsToolStripMenuItem: "Show Jumps To Go" => "Zeige restliche Sprünge"
@@ -1074,11 +1069,9 @@ SECTION UserControlStats
 .tabControlCustomStats.tabPageScan.userControlStatsTimeScan.labelTime: "Time" => "Zeit"
 .tabControlCustomStats.tabPageGameStats: "In Game" => "Im Spiel"
 .tabControlCustomStats.tabPageByShip: "By Ship" => "Pro Schiff"
-
 .TotalNoofjumps: "Total No of jumps: " => "Gesamtzahl der Sprünge"
 .FSDjumps: "FSD Jumps" => "FSA-Sprünge"
 .Beltcluster: "Belt Cluster: " => "Gürtelgruppen"
-
 .JumpHistory: "Jump History" => "Sprunghistorie"
 .24hc: "24 Hours: " => "24 Stunden: "
 .OneWeek: ", One Week: " => ", eine Woche: "
@@ -1091,7 +1084,6 @@ SECTION UserControlStats
 .MostHighest: "Most Highest" => "höchstes"
 .MostLowest: "Most Lowest" => "niedrigstes"
 .MostVisited: "Most Visited" => "meistbesuchtes"
-
 .Jumps: "Jumps" => "Sprünge"
 .TravelledLy: "Traveled Ly" => "Gereiste Lichtjahre"
 .PremiumBoost: "Premium Boost" => "Premiumboost"
@@ -1101,12 +1093,10 @@ SECTION UserControlStats
 .Scans: "Scans" => "Scans"
 .Mapped: "Mapped" => "Kartographiert"
 .Scanvalue: "Scan value" => "Scanwert"
-
 .Lastdock: "Last dock" => "Letztes Andocken"
 .Trip: "Trip" => "Reise"
 .All: "All" => "Alles"
 .Type: "Type" => "Art"
-
 .BankAccount: "Bank Account" => "Kontostand"
 .Combat: "Combat" => "Kampf"
 .Crime: "Crime" => "Verbrechen"
@@ -1120,7 +1110,6 @@ SECTION UserControlStats
 .Crew: "Crew" => "Crew"
 .Multi: "Multi-crew" => "Multicrew"
 .MaterialsTrader: "Materials Trader" => "Materialienhändler"
-
 .CurrentAssets: "Current Assets" => "Aktueller Besitz"
 .SpentonShips: "Spent on Ships" => "In Schiffe investiert"
 .SpentonOutfitting: "Spent on Outfitting" => "In Ausrüstung investiert"
@@ -1188,18 +1177,14 @@ SECTION UserControlStats
 .FinesAccrued: "Fines Accrued" => "Gesammelte Strafen (gesamt)"
 .TradesCompleted: "Trades Completed" => "Angeschlossene Handel"
 .MaterialsTraded: "Materials Traded" => "Gehandelte Materialien"
-
-.TME: "{0} days {1} hours {1} minutes" => "{0} Tage {1} Stunden {1} Minuten"
+.TME: "{0} days {1} hours {2} minutes" => "{0} Tage {1} Stunden {2} Minuten"
 .Name: "Name" => "Name"
 .Ident: "Ident" => "Ident"
-
 .BodiesScanned: "Bodies Scanned" => "Körper gescannt"
 .Destroyed: "Destroyed" => "Zerstört"
-
 .GoodsBought: "Goods Bought" => "Handelswaren gekauft"
 .GoodsSold: "Goods Sold" => "Handelswaren verkauft"
 .GoodsProfit: "Goods Profit" => "Warenprofit"
-
 .EfficientScans: "Efficient Scans" => "Erhaltene Effizienzboni"
 .Accepted: "Accepted" => "Angenommen"
 .Disgruntled: "Disgruntled" => "Verärgert"
@@ -1210,9 +1195,6 @@ SECTION UserControlStats
 .G3MaterialsTraded: "Grade 3 Materials Traded" => "Gehandelte Grad-3-Materialien"
 .G4MaterialsTraded: "Grade 4 Materials Traded" => "Gehandelte Grad-4-Materialien"
 .G5MaterialsTraded: "Grade 5 Materials Traded" => "Gehandelte Grad-5-Materialien"
-
-
-
 
 SECTION StatsTimeUserControl
 
@@ -1249,6 +1231,7 @@ SECTION UserControlSynthesis
 
 SECTION UserControlSysInfo
 
+.OnFoot: "On Foot" @
 .labelJumpRange: "Jump" => "Sprung"
 .toolStripJumpRange: "Display Jump Range" => "Zeige Sprungreichweite"
 .labelSysName: "System" => "System"
@@ -1339,6 +1322,7 @@ SECTION UserControlContainerSplitter
 
 SECTION UserControlTravelGrid
 
+.travelGridInDebugModeToolStripMenuItem: "Travel grid in Debug Mode" @
 .showSystemVisitedForeColourToolStripMenuItem: "Show lines in System Visited Fore Colour" => "Zeige Linien in 'besuchtes System'-Vordergrundfarbe"
 .THF: "History: Filter out fields" => "Historie: Felder ausfiltern"
 .ColumnTime: "Time" => "Zeit"
@@ -1625,6 +1609,8 @@ SECTION FilterSelector
 .Ledger: "Ledger" => "Kassabuch"
 .Ship: "Ship" => "Schiff"
 .Mining: "Mining" => "Abbau"
+.MicroResources: "Micro Resources" @
+.Suits: "Suits" @
 
 SECTION UserControlCommonBase
 
@@ -1634,3 +1620,17 @@ SECTION CSV
 
 .Helpers.OpenFailed: "Failed to open " => "Fehler beim Öffnen von "
 .Helpers.WriteFailed: "Failed to write to " => "Fehler beim Schreiben von "
+
+SECTION UserControlSuitsWeapons
+
+.CSTime: "Time" @
+.CSName: "Name" @
+.CSPrice: "Price" @
+.CSLoadout: "Loadout" @
+.CSPrimary1: "Primary 1" @
+.CSPrimary2: "Primary 2" @
+.CSSecondary: "Secondary" @
+.CWTime: "Time" @
+.CWName: "Name" @
+.CWPrice: "Price" @
+.CWDPS: "DPS" @

@@ -388,6 +388,8 @@ SECTION UserControlMarketData
 
 SECTION UserControlMaterialCommodities
 
+.ShipLocker: "Ship Locker" @
+.BackPack: "BackPack" @
 .Data: "Data" => "Dane"
 .Mats: "Mats" => "Materiały"
 .Total: "Total" => "Razem"
@@ -667,6 +669,12 @@ SECTION UserControlRoute
 .checkBox_FsdBoost: "Use Boosts" @
 .checkBox_FsdBoost.ToolTip: "The route finder will try and use FSD injections in case a direct route could not" @
 .showScanToolStripMenuItem: "View Scan Display" @
+.M1: "Nearest to Waypoint" @
+.M2: "Minimum Deviation from Path" @
+.M3: "Nearest to Waypoint with dev<=100ly" @
+.M4: "Nearest to Waypoint with dev<=250ly" @
+.M5: "Nearest to Waypoint with dev<=500ly" @
+.M6: "Nearest to Waypoint + Deviation / 2" @
 
 SECTION UserControlRouteTracker
 
@@ -688,7 +696,7 @@ SECTION UserControlRouteTracker
 .FL: "From Last WP " => "Od Ostatniego Pkt. Naw."
 .TF: "To First WP " => "Do Pierwszego Pkt. Naw."
 .LF: ", Left {0:N1}ly" => "Pozostało {0:N1} lat świetlnych"
-.ToWP: "To WP {0} " => "Do Pkt. Naw."
+.ToWP: "To WP {0} " => "Do Pkt. Naw. {0}"
 .Dev: ", Dev {0:N1}ly" => "Odst. {0:N1}LŚ"
 .Selectroute: "Select route" => "Wybierz trasę"
 .PresstoCancel: "Press to Cancel" => "Naciśnij aby Anulować"
@@ -1021,7 +1029,7 @@ SECTION UserControlStarList
 .Signals: "{0} has signals" @
 .Distance: " ({0} ls)" @
 .FV: "First visit {0}" => "Pierwsza wizyta {0}"
-.CS: "{0} Star(s) {1}" => "{0} Gwiazd(a/y)"
+.CS: "{0} Star(s) {1}" => "{0} Gwiazd(a/y) {1}"
 .SMBH: "{0} is a super massive black hole" => "{0} to supermasywna czarna dziura"
 .BH: "{0} is a black hole" => "{0} to czarna dziura"
 .NS: "{0} is a neutron star" => "{0} to gwiazda neutronowa"
@@ -1169,13 +1177,14 @@ SECTION UserControlStats
 .FinesAccrued: "Fines Accrued" => "Otrzymane Kary"
 .TradesCompleted: "Trades Completed" => "Ukończone Wymiany"
 .MaterialsTraded: "Materials Traded" => "Wymienione Materiały"
-.TME: "{0} days {1} hours {1} minutes" => "{0} dni, {1} godzin, {1} minut"
+.TME: "{0} days {1} hours {2} minutes" => "{0} dni, {1} godzin, {2} minut"
 .Name: "Name" => "Nazwa"
 .Ident: "Ident" => "ID statku"
 .BodiesScanned: "Bodies Scanned" => "Przeskanowano Ciał Niebieskich"
 .Destroyed: "Destroyed" => "Zniszczono"
 .GoodsBought: "Goods Bought" => "Kupiono Towarów"
 .GoodsSold: "Goods Sold" => "Sprzedano Towarów"
+.GoodsProfit: "Goods Profit" @
 .EfficientScans: "Efficient Scans" @
 .Accepted: "Accepted" @
 .Disgruntled: "Disgruntled" @
@@ -1222,6 +1231,7 @@ SECTION UserControlSynthesis
 
 SECTION UserControlSysInfo
 
+.OnFoot: "On Foot" @
 .labelJumpRange: "Jump" => "Skok"
 .toolStripJumpRange: "Display Jump Range" => "Wyświetl Zasięg Skoku"
 .labelSysName: "System" => "Układ"
@@ -1312,6 +1322,7 @@ SECTION UserControlContainerSplitter
 
 SECTION UserControlTravelGrid
 
+.travelGridInDebugModeToolStripMenuItem: "Travel grid in Debug Mode" @
 .showSystemVisitedForeColourToolStripMenuItem: "Show lines in System Visited Fore Colour" @
 .THF: "History: Filter out fields" @
 .ColumnTime: "Time" => "Czas"
@@ -1527,6 +1538,7 @@ SECTION UserControlFactions
 .colMissionCredits: "Mission Credits" @
 .CBought: "Commds +" @
 .CSold: "Commds -" @
+.CProfit: "Commds Profit" @
 .MBought: "Mats +" @
 .MSold: "Mats -" @
 .CrimeCommitted: "Crimes Committed" @
@@ -1597,6 +1609,8 @@ SECTION FilterSelector
 .Ledger: "Ledger" => "Rejestr"
 .Ship: "Ship" => "Statek"
 .Mining: "Mining" @
+.MicroResources: "Micro Resources" @
+.Suits: "Suits" @
 
 SECTION UserControlCommonBase
 
@@ -1606,3 +1620,17 @@ SECTION CSV
 
 .Helpers.OpenFailed: "Failed to open " @
 .Helpers.WriteFailed: "Failed to write to " @
+
+SECTION UserControlSuitsWeapons
+
+.CSTime: "Time" @
+.CSName: "Name" @
+.CSPrice: "Price" @
+.CSLoadout: "Loadout" @
+.CSPrimary1: "Primary 1" @
+.CSPrimary2: "Primary 2" @
+.CSSecondary: "Secondary" @
+.CWTime: "Time" @
+.CWName: "Name" @
+.CWPrice: "Price" @
+.CWDPS: "DPS" @

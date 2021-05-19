@@ -388,6 +388,8 @@ SECTION UserControlMarketData
 
 SECTION UserControlMaterialCommodities
 
+.ShipLocker: "Ship Locker" @
+.BackPack: "BackPack" @
 .Data: "Data" => "Donnée"
 .Mats: "Mats" => "Matériaux"
 .Total: "Total" @
@@ -667,6 +669,12 @@ SECTION UserControlRoute
 .checkBox_FsdBoost: "Use Boosts" => "Utilisation des injection"
 .checkBox_FsdBoost.ToolTip: "The route finder will try and use FSD injections in case a direct route could not" => "L'itinéraire essaiera d'utiliser des injection FSD au cas ou une route directe ne pourrait pas"
 .showScanToolStripMenuItem: "View Scan Display" => "Afficher visualisation du scan"
+.M1: "Nearest to Waypoint" @
+.M2: "Minimum Deviation from Path" @
+.M3: "Nearest to Waypoint with dev<=100ly" @
+.M4: "Nearest to Waypoint with dev<=250ly" @
+.M5: "Nearest to Waypoint with dev<=500ly" @
+.M6: "Nearest to Waypoint + Deviation / 2" @
 
 SECTION UserControlRouteTracker
 
@@ -1169,13 +1177,14 @@ SECTION UserControlStats
 .FinesAccrued: "Fines Accrued" => "Amendes accumulées"
 .TradesCompleted: "Trades Completed" => "Transactions commerciales realisées"
 .MaterialsTraded: "Materials Traded" => "Matériaux vendus"
-.TME: "{0} days {1} hours {1} minutes" => "{0} jours {1} heures {1} minutes"
+.TME: "{0} days {1} hours {2} minutes" => "{0} jours {1} heures {2} minutes"
 .Name: "Name" => "Nom"
 .Ident: "Ident" @
 .BodiesScanned: "Bodies Scanned" => "Corps scannés"
 .Destroyed: "Destroyed" => "Détruit(e)s"
 .GoodsBought: "Goods Bought" => "Marchandises achetées"
 .GoodsSold: "Goods Sold" => "Marchandises vendues"
+.GoodsProfit: "Goods Profit" @
 .EfficientScans: "Efficient Scans" @
 .Accepted: "Accepted" @
 .Disgruntled: "Disgruntled" @
@@ -1222,6 +1231,7 @@ SECTION UserControlSynthesis
 
 SECTION UserControlSysInfo
 
+.OnFoot: "On Foot" @
 .labelJumpRange: "Jump" => "Saut"
 .toolStripJumpRange: "Display Jump Range" => "Afficher la portée de saut"
 .labelSysName: "System" => "Système"
@@ -1312,6 +1322,7 @@ SECTION UserControlContainerSplitter
 
 SECTION UserControlTravelGrid
 
+.travelGridInDebugModeToolStripMenuItem: "Travel grid in Debug Mode" @
 .showSystemVisitedForeColourToolStripMenuItem: "Show lines in System Visited Fore Colour" @
 .THF: "History: Filter out fields" => "Historique : Filtrer les champs"
 .ColumnTime: "Time" => "Heure"
@@ -1527,6 +1538,7 @@ SECTION UserControlFactions
 .colMissionCredits: "Mission Credits" @
 .CBought: "Commds +" @
 .CSold: "Commds -" @
+.CProfit: "Commds Profit" @
 .MBought: "Mats +" @
 .MSold: "Mats -" @
 .CrimeCommitted: "Crimes Committed" @
@@ -1597,6 +1609,8 @@ SECTION FilterSelector
 .Ledger: "Ledger" => "Livre de compte"
 .Ship: "Ship" => "Vaisseau"
 .Mining: "Mining" @
+.MicroResources: "Micro Resources" @
+.Suits: "Suits" @
 
 SECTION UserControlCommonBase
 
@@ -1606,3 +1620,17 @@ SECTION CSV
 
 .Helpers.OpenFailed: "Failed to open " @
 .Helpers.WriteFailed: "Failed to write to " @
+
+SECTION UserControlSuitsWeapons
+
+.CSTime: "Time" @
+.CSName: "Name" @
+.CSPrice: "Price" @
+.CSLoadout: "Loadout" @
+.CSPrimary1: "Primary 1" @
+.CSPrimary2: "Primary 2" @
+.CSSecondary: "Secondary" @
+.CWTime: "Time" @
+.CWName: "Name" @
+.CWPrice: "Price" @
+.CWDPS: "DPS" @

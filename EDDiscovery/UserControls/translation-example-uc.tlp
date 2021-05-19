@@ -1190,7 +1190,7 @@ SECTION UserControlStats
 .TradesCompleted: "Trades Completed" @
 .MaterialsTraded: "Materials Traded" @
 
-.TME: "{0} days {1} hours {1} minutes" @
+.TME: "{0} days {1} hours {2} minutes" @
 .Name: "Name" @
 .Ident: "Ident" @
 

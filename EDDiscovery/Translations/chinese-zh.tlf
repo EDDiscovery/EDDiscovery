@@ -228,10 +228,10 @@ SECTION EDDiscoveryForm
 .CAPION: "Logged into Companion API" => "Companion API连接成功"
 .CAPIF: "Companion API failed: {0}" => "Companion API失败: {0}"
 .CAPIND: "CAPI not docked. Server API lagging!" => "Companion API未连接，服务器API卡顿中！"
-.CAPISS: "CAPI profileSystemRequired is {0}, profile station is {1}" => "@"
-.CAPISN: "CAPI profileStationRequired is {0}, profile station is {1} " => "@"
-.CAPIMN: "CAPI stationname {0}, market station is {1} " => "@"
-.CAPIEX: "Companion API get failed: " => "@"
+.CAPISS: "CAPI profileSystemRequired is {0}, profile station is {1}" @
+.CAPISN: "CAPI profileStationRequired is {0}, profile station is {1} " @
+.CAPIMN: "CAPI stationname {0}, market station is {1} " @
+.CAPIEX: "Companion API get failed: " @
 .Arrived: "Arrived at system {0} Visit No. {1}" => "到达{0}星系，第{1}次访问"
 .PE1: "Profile reports errors in triggers: " => "配置文件返回错误："
 .EDDN: "Sent {0} event to EDDN ({1})" => "向EDDN发送了事件:{0}({1})"
