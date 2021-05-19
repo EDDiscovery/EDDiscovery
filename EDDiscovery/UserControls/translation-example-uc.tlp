@@ -388,33 +388,15 @@ SECTION UserControlMarketData
 .checkBoxSellOnly: "Sell Only" @
 .checkBoxSellOnly.ToolTip: "Show items you can sell only" @
 
-SECTION UserControlMaterials
-
-.labelNoItems: "No Items Found" @
-.NameCol: "Name" @
-.ShortName: "Abv" @
-.Category: "Category" @
-.Type: "Type" @
-.Number: "Number" @
-.Price: "Avg. Price" @
-.checkBoxClear: "Remove zero items" @
-.textBoxItems2.ToolTip: "Count of Items" @
-.textBoxItems1.ToolTip: "Count of Items" @
-.checkBoxClear.ToolTip: "Remove zero items the time after they go to zero" @
-.buttonFilter.ToolTip: "Filter out items" @
-.checkBoxShowZeros.ToolTip: "Green will show materials with zero counts, red means remove them" @
-.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
-
 SECTION UserControlMaterialCommodities
 
+.ShipLocker: "Ship Locker" @
+.BackPack: "BackPack" @
 .Data: "Data" @
 .Mats: "Mats" @
 .Total: "Total" @
 .Rare: "Rare" @
 .Recipes: "Recipes" @
-
-SECTION UserControlCommodities
-
 .labelNoItems: "No Items Found" @
 .NameCol: "Name" @
 .ShortName: "Abv" @
@@ -1208,7 +1190,7 @@ SECTION UserControlStats
 .TradesCompleted: "Trades Completed" @
 .MaterialsTraded: "Materials Traded" @
 
-.TME: "{0} days {1} hours {1} minutes" @
+.TME: "{0} days {1} hours {2} minutes" @
 .Name: "Name" @
 .Ident: "Ident" @
 
@@ -1268,6 +1250,7 @@ SECTION UserControlSynthesis
 
 SECTION UserControlSysInfo
 
+.OnFoot: "On Foot" @
 .labelJumpRange: "Jump" @
 .toolStripJumpRange: "Display Jump Range" @
 .labelSysName: "System" @
@@ -1358,6 +1341,7 @@ SECTION UserControlContainerSplitter
 
 SECTION UserControlTravelGrid
 
+.travelGridInDebugModeToolStripMenuItem: "Travel grid in Debug Mode" @
 .showSystemVisitedForeColourToolStripMenuItem: "Show lines in System Visited Fore Colour" @
 .THF: "History: Filter out fields" @
 .ColumnTime: "Time" @
@@ -1645,7 +1629,8 @@ SECTION FilterSelector
 .Ledger: "Ledger" @
 .Ship: "Ship" @
 .Mining: "Mining" @
-
+.MicroResources: "Micro Resources" @
+.Suits: "Suits" @
 
 SECTION UserControlCommonBase
 
@@ -1653,3 +1638,16 @@ SECTION UserControlCommonBase
 
 CSV.Helpers.OpenFailed: "Failed to open " @
 CSV.Helpers.WriteFailed: "Failed to write to " @
+
+SECTION UserControlSuitsWeapons
+.CSTime: "Time" @
+.CSName: "Name" @
+.CSPrice: "Price" @
+.CSLoadout: "Loadout" @
+.CSPrimary1: "Primary 1" @
+.CSPrimary2: "Primary 2" @
+.CSSecondary: "Secondary" @
+.CWTime: "Time" @
+.CWName: "Name" @
+.CWPrice: "Price" @
+.CWDPS: "DPS" @

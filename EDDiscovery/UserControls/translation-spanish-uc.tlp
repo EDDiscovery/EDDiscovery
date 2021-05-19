@@ -112,7 +112,6 @@ SECTION SearchMaterialsCommodities
 .ColumnCurrentDistance: "Current Distance" => "Distancia actual"
 .ColumnPosition: "Position" => "Posición"
 
-
 SECTION SearchScans
 
 .Select: "Select" => "Seleccione"
@@ -191,7 +190,6 @@ SECTION UserControlEstimatedValues
 .WasMapped: "Already Mapped" => "Ya asignado"
 .WasDiscovered: "Already Discovered" => "Ya descubierto"
 .SV: "Estimated Scan Values for {0}" => "Valores de exploración estimados para {0}"
-
 .EDSM: "EDSM" => "EDSM"
 .checkBoxEDSM.ToolTip: "Get and show information from EDSM" => "Obtener y mostrar información de EDSM"
 
@@ -388,33 +386,15 @@ SECTION UserControlMarketData
 .checkBoxSellOnly: "Sell Only" => "Solo vender"
 .checkBoxSellOnly.ToolTip: "Show items you can sell only" => "Mostrar artículos que solo puede vender"
 
-SECTION UserControlMaterials
-
-.labelNoItems: "No Items Found" => "No se encontraron artículos"
-.NameCol: "Name" => "Nombre"
-.ShortName: "Abv" => "Abv"
-.Category: "Category" => "Categoría"
-.Type: "Type" => "Tipo"
-.Number: "Number" => "Número"
-.Price: "Avg. Price" => "Precio medio"
-.checkBoxClear: "Remove zero items" => "Eliminar cero elementos"
-.textBoxItems2.ToolTip: "Count of Items" => "Recuento de elementos"
-.textBoxItems1.ToolTip: "Count of Items" => "Recuento de elementos"
-.checkBoxClear.ToolTip: "Remove zero items the time after they go to zero" => "Elimine cero elementos el tiempo después de que lleguen a cero"
-.buttonFilter.ToolTip: "Filter out items" => "Filtrar elementos"
-.checkBoxShowZeros.ToolTip: "Green will show materials with zero counts, red means remove them" => "El verde mostrará los materiales con cero conteos, el rojo significa eliminarlos"
-.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" => "Habilitar o deshabilitar el ajuste de palabras"
-
 SECTION UserControlMaterialCommodities
 
+.ShipLocker: "Ship Locker" @
+.BackPack: "BackPack" @
 .Data: "Data" => "Datos"
 .Mats: "Mats" => "Materiales"
 .Total: "Total" => "Total"
 .Rare: "Rare" => "Raro"
 .Recipes: "Recipes" => "Recetas"
-
-SECTION UserControlCommodities
-
 .labelNoItems: "No Items Found" => "No se encontraron artículos"
 .NameCol: "Name" => "Nombre"
 .ShortName: "Abv" => "Abv"
@@ -466,7 +446,6 @@ SECTION UserControlSurveyor
 .Has: " Has " => " Tiene "
 .Signals: " Has Signals." => " Tiene señales"
 .islandable: " is landable." => " es aterrizable"
-
 .planetaryClassesToolStripMenuItem: "Planetary Classes" => "Clases planetarias"
 .planetaryClassesToolStripMenuItem.ammoniaWorldToolStripMenuItem: "Ammonia World" => "Ammonia World"
 .planetaryClassesToolStripMenuItem.earthlikeWorldToolStripMenuItem: "Earthlike World" => "Mundo parecido a la Tierra"
@@ -480,7 +459,6 @@ SECTION UserControlSurveyor
 .textAlignToolStripMenuItem.leftToolStripMenuItem: "Left" => "Izquierda"
 .textAlignToolStripMenuItem.centerToolStripMenuItem: "Center" => "Centro"
 .textAlignToolStripMenuItem.rightToolStripMenuItem: "Right" => "Derecha"
-
 .bodyFeaturesToolStripMenuItem.hasSignalsToolStripMenuItem: "Has Signals" => "Tiene señales"
 .bodyFeaturesToolStripMenuItem.landableToolStripMenuItem: "Landable" => "Aterrizable"
 .showAllPlanetsToolStripMenuItem: "Show All Planets" => "Mostrar todos los planetas"
@@ -504,6 +482,7 @@ SECTION MissionListUserControl
 .labelTo: "to" => "para"
 
 SECTION UserControlMissions
+
 .MPlural: " Missions" => " Misiones"
 .MSingular: " Mission" => " Misión"
 .Name: "Name" => "Nombre"
@@ -690,14 +669,12 @@ SECTION UserControlRoute
 .checkBox_FsdBoost: "Use Boosts" => "Usar potenciadores"
 .checkBox_FsdBoost.ToolTip: "The route finder will try and use FSD injections in case a direct route could not" => "El buscador de ruta intentará utilizar inyecciones de FSD en caso de que una ruta directa no pueda"
 .showScanToolStripMenuItem: "View Scan Display" => "Ver pantalla de escaneo"
-
 .M1: "Nearest to Waypoint" => "Más cercano a Marcador"
 .M2: "Minimum Deviation from Path" => "Desviación mínima de la ruta"
 .M3: "Nearest to Waypoint with dev<=100ly" => "Más cercano a Marcador con dev<=100ly"
 .M4: "Nearest to Waypoint with dev<=250ly" => "Más cercano a Marcador con dev<=250ly"
 .M5: "Nearest to Waypoint with dev<=500ly" => "Más cercano a Marcador con dev<=500ly"
 .M6: "Nearest to Waypoint + Deviation / 2" => "Más cercano a Marcador + Desviación / 2"
-
 
 SECTION UserControlRouteTracker
 
@@ -912,7 +889,7 @@ SECTION UserControlSettings
 .radioButtonCentreHome: "Home System" => "Sistema de inicio"
 .labelOpenOn: "Open Centred On" => "Abierto centrado en"
 .labelHome: "Now in Commander Settings" => "Ahora en la configuración de Commander"
-.Font: "The font used by this theme is not available on your system.\r\nThe font needed is \\"{0}\\".\r\nInstall this font to fully use this theme.\r\nEuro Caps font is freely available from www.edassets.org.\r\n\r\nWould you like to load this theme using a replacement font?" => "La fuente utilizada por este tema no está disponible en su sistema.\r\nLa fuente necesaria es \\" {0} \\ "
+.Font: "The font used by this theme is not available on your system.\r\nThe font needed is \"{0}\".\r\nInstall this font to fully use this theme.\r\nEuro Caps font is freely available from www.edassets.org.\r\n\r\nWould you like to load this theme using a replacement font?" => "La fuente utilizada por este tema no está disponible en su sistema.\r\nLa fuente necesaria es \" {0} \" "
 .Information: "Applies at next restart of ED Discovery" => "Se aplica en el próximo reinicio de ED Discovery"
 .AddC: "Commander name is not valid or duplicate" => "El nombre del comandante no es válido o está duplicado"
 .AddT: "Cannot create Commander" => "No se puede crear Commander"
@@ -1200,7 +1177,7 @@ SECTION UserControlStats
 .FinesAccrued: "Fines Accrued" => "Multas acumuladas"
 .TradesCompleted: "Trades Completed" => "Operaciones completadas"
 .MaterialsTraded: "Materials Traded" => "Materiales comercializados"
-.TME: "{0} days {1} hours {1} minutes" => "{0} días {1} horas {1} minutos"
+.TME: "{0} days {1} hours {2} minutes" => "{0} días {1} horas {2} minutos"
 .Name: "Name" => "Nombre"
 .Ident: "Ident" => "Ident"
 .BodiesScanned: "Bodies Scanned" => "Cuerpos escaneados"
@@ -1254,6 +1231,7 @@ SECTION UserControlSynthesis
 
 SECTION UserControlSysInfo
 
+.OnFoot: "On Foot" @
 .labelJumpRange: "Jump" => "Salto"
 .toolStripJumpRange: "Display Jump Range" => "Mostrar rango de salto"
 .labelSysName: "System" => "Sistema"
@@ -1344,6 +1322,7 @@ SECTION UserControlContainerSplitter
 
 SECTION UserControlTravelGrid
 
+.travelGridInDebugModeToolStripMenuItem: "Travel grid in Debug Mode" @
 .showSystemVisitedForeColourToolStripMenuItem: "Show lines in System Visited Fore Colour" => "Mostrar líneas en el sistema visitado en primer color"
 .THF: "History: Filter out fields" => "Historial: filtrar campos"
 .ColumnTime: "Time" => "Tiempo"
@@ -1630,6 +1609,8 @@ SECTION FilterSelector
 .Ledger: "Ledger" => "Libro mayor"
 .Ship: "Ship" => "Nave"
 .Mining: "Mining" => "Minería"
+.MicroResources: "Micro Resources" @
+.Suits: "Suits" @
 
 SECTION UserControlCommonBase
 
@@ -1639,3 +1620,17 @@ SECTION CSV
 
 .Helpers.OpenFailed: "Failed to open " => "Falló al abrir "
 .Helpers.WriteFailed: "Failed to write to " => "No se pudo escribir a "
+
+SECTION UserControlSuitsWeapons
+
+.CSTime: "Time" @
+.CSName: "Name" @
+.CSPrice: "Price" @
+.CSLoadout: "Loadout" @
+.CSPrimary1: "Primary 1" @
+.CSPrimary2: "Primary 2" @
+.CSSecondary: "Secondary" @
+.CWTime: "Time" @
+.CWName: "Name" @
+.CWPrice: "Price" @
+.CWDPS: "DPS" @

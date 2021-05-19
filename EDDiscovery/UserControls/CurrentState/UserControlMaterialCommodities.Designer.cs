@@ -99,8 +99,10 @@ namespace EDDiscovery.UserControls
             this.dataGridViewMC.ContextMenuStrip = this.contextMenuStrip;
             this.dataGridViewMC.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewMC.Name = "dataGridViewMC";
+            this.dataGridViewMC.RowHeaderMenuStrip = null;
             this.dataGridViewMC.RowHeadersVisible = false;
             this.dataGridViewMC.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dataGridViewMC.SingleRowSelect = true;
             this.dataGridViewMC.Size = new System.Drawing.Size(688, 534);
             this.dataGridViewMC.TabIndex = 1;
             this.dataGridViewMC.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewMC_CellDoubleClick);

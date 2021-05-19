@@ -59,7 +59,7 @@ namespace EDDiscovery.UserControls
         const int BitSelTotal = 22;
         const int BitSelDefault = ((1 << BitSelTotal) - 1) + (1 << BitSelEDSMButtonsNextLine);
 
-        int[,] resetorder = new int[,]          // default reset order
+        private int[,] resetorder = new int[,]          // default reset order
         {
             {BitSelSystem,-1},
             {BitSelPosition,-1},
@@ -89,6 +89,8 @@ namespace EDDiscovery.UserControls
 
         public const int HorzPositions = 8;
         const int hspacing = 2;
+
+        private string shiptexttranslation;         // text of ship: entry
 
         ToolStripMenuItem[] toolstriplist;          // ref to toolstrip items for each bit above. in same order as bits BitSel..
 
@@ -177,6 +179,8 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
             BaseUtils.Translator.Instance.Translate(toolTip1, this);
+
+            shiptexttranslation = labelShip.Text;
         }
 
         public override void LoadLayout()
@@ -349,34 +353,62 @@ namespace EDDiscovery.UserControls
 
                 textBoxJumpRange.Text = "";
 
-                if (he.ShipInformation != null)
+                if (he.Status.OnFoot)
                 {
-                    ShipInformation si = he.ShipInformation;
+                    labelShip.Text = "On Foot".T(EDTx.UserControlSysInfo_OnFoot);
 
-                    textBoxShip.Text = si.ShipFullInfo(cargo: false, fuel: false);
-                    if (si.FuelCapacity > 0 && si.FuelLevel > 0)
-                        textBoxFuel.Text = si.FuelLevel.ToString("0.#") + "/" + si.FuelCapacity.ToString("0.#");
-                    else if (si.FuelCapacity > 0)
-                        textBoxFuel.Text = si.FuelCapacity.ToString("0.#");
-                    else
-                        textBoxFuel.Text = "N/A".T(EDTx.UserControlSysInfo_NA);
-
-                    EliteDangerousCalculations.FSDSpec fsd = si.GetFSDSpec();
-                    if (fsd != null)
+                    var cursuit = hl.SuitList.CurrentID(he.Suits);                     // get current suit ID, or 0 if none
+                    if (cursuit != 0)
                     {
-                        EliteDangerousCalculations.FSDSpec.JumpInfo ji = fsd.GetJumpInfo(cargocount,
-                                                                    si.ModuleMass() + si.HullMass(), si.FuelLevel, si.FuelCapacity / 2);
+                        var suit = hl.SuitList.Suits.Get(cursuit, he.Suits);             // get current suit
+                        textBoxShip.Text = suit?.FriendlyName ?? "???";
+                        var curloadout = discoveryform.history.SuitLoadoutList.CurrentID(he.Loadouts);         // get current loadout ID, or 0 if none
 
-                        //System.Diagnostics.Debug.WriteLine("Jump range " + si.FuelLevel + " " + si.FuelCapacity + " " + ji.cursinglejump);
-                        textBoxJumpRange.Text = ji.cursinglejump.ToString("N2") + "ly";
+                        if ( curloadout != 0 )
+                        {
+                            var loadout = hl.SuitLoadoutList.Loadouts.Get(curloadout, he.Loadouts);
+                            textBoxShip.Text += ":" + (loadout?.Name ?? "???");
+                        }
                     }
+                    else
+                        textBoxShip.Text = "";
 
-                    extButtonCoriolis.Enabled = extButtonEDSY.Enabled = true;
+                    textBoxFuel.Text = "";
+                    extButtonCoriolis.Enabled = extButtonEDSY.Enabled = false;
                 }
                 else
                 {
-                    textBoxShip.Text = textBoxFuel.Text = "";
-                    extButtonCoriolis.Enabled = extButtonEDSY.Enabled = false;
+                    labelShip.Text = shiptexttranslation;       // back to ship
+
+                    if (he.ShipInformation != null)
+                    {
+                        ShipInformation si = he.ShipInformation;
+
+                        textBoxShip.Text = si.ShipFullInfo(cargo: false, fuel: false);
+                        if (si.FuelCapacity > 0 && si.FuelLevel > 0)
+                            textBoxFuel.Text = si.FuelLevel.ToString("0.#") + "/" + si.FuelCapacity.ToString("0.#");
+                        else if (si.FuelCapacity > 0)
+                            textBoxFuel.Text = si.FuelCapacity.ToString("0.#");
+                        else
+                            textBoxFuel.Text = "N/A".T(EDTx.UserControlSysInfo_NA);
+
+                        EliteDangerousCalculations.FSDSpec fsd = si.GetFSDSpec();
+                        if (fsd != null)
+                        {
+                            EliteDangerousCalculations.FSDSpec.JumpInfo ji = fsd.GetJumpInfo(cargocount,
+                                                                        si.ModuleMass() + si.HullMass(), si.FuelLevel, si.FuelCapacity / 2);
+
+                            //System.Diagnostics.Debug.WriteLine("Jump range " + si.FuelLevel + " " + si.FuelCapacity + " " + ji.cursinglejump);
+                            textBoxJumpRange.Text = ji.cursinglejump.ToString("N2") + "ly";
+                        }
+
+                        extButtonCoriolis.Enabled = extButtonEDSY.Enabled = true;
+                    }
+                    else
+                    {
+                        textBoxShip.Text = textBoxFuel.Text = "";
+                        extButtonCoriolis.Enabled = extButtonEDSY.Enabled = false;
+                    }
                 }
 
                 RefreshTargetDisplay(this);

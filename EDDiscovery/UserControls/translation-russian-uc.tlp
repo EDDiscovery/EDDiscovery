@@ -386,33 +386,15 @@ SECTION UserControlMarketData
 .checkBoxSellOnly: "Sell Only" @
 .checkBoxSellOnly.ToolTip: "Show items you can sell only" @
 
-SECTION UserControlMaterials
-
-.labelNoItems: "No Items Found" => "Нет данных"
-.NameCol: "Name" => "Название"
-.ShortName: "Abv" => "Сокращение"
-.Category: "Category" => "Категория"
-.Type: "Type" => "Тип"
-.Number: "Number" => "Количество"
-.Price: "Avg. Price" => "Средняя цена"
-.checkBoxClear: "Remove zero items" => "Скрыть отсутствующие"
-.textBoxItems2.ToolTip: "Count of Items" => "Количество предметов"
-.textBoxItems1.ToolTip: "Count of Items" => "Количество предметов"
-.checkBoxClear.ToolTip: "Remove zero items the time after they go to zero" => "Скрывать предметы, когда их количество упадет до 0"
-.buttonFilter.ToolTip: "Filter out items" => "Фильтровать"
-.checkBoxShowZeros.ToolTip: "Green will show materials with zero counts, red means remove them" @
-.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
-
 SECTION UserControlMaterialCommodities
 
+.ShipLocker: "Ship Locker" @
+.BackPack: "BackPack" @
 .Data: "Data" => "Данные"
 .Mats: "Mats" => "Мат-лы"
 .Total: "Total" => "Всего"
 .Rare: "Rare" => "Редкие товары"
 .Recipes: "Recipes" @
-
-SECTION UserControlCommodities
-
 .labelNoItems: "No Items Found" => "Нет данных"
 .NameCol: "Name" => "Название"
 .ShortName: "Abv" => "Сокращение"
@@ -687,6 +669,12 @@ SECTION UserControlRoute
 .checkBox_FsdBoost: "Use Boosts" @
 .checkBox_FsdBoost.ToolTip: "The route finder will try and use FSD injections in case a direct route could not" @
 .showScanToolStripMenuItem: "View Scan Display" @
+.M1: "Nearest to Waypoint" @
+.M2: "Minimum Deviation from Path" @
+.M3: "Nearest to Waypoint with dev<=100ly" @
+.M4: "Nearest to Waypoint with dev<=250ly" @
+.M5: "Nearest to Waypoint with dev<=500ly" @
+.M6: "Nearest to Waypoint + Deviation / 2" @
 
 SECTION UserControlRouteTracker
 
@@ -707,9 +695,9 @@ SECTION UserControlRouteTracker
 .NoFSD: " No Ship FSD Information" => "Нет информации о FSD"
 .FL: "From Last WP " => "От последней точки маршрута "
 .TF: "To First WP " => "До первой точки маршрута "
-.LF: ", Left {0:N1}ly" => "; осталось {0:N1} св. л."
+.LF: ", Left {0:N1}ly" => ", осталось {0:N1} св. л."
 .ToWP: "To WP {0} " => "До точки маршрута {0} "
-.Dev: ", Dev {0:N1}ly" => "; отклонение {0:N1} св. л."
+.Dev: ", Dev {0:N1}ly" => ", отклонение {0:N1} св. л."
 .Selectroute: "Select route" => "Выберите маршрут"
 .PresstoCancel: "Press to Cancel" => "Нажмите для отмены"
 .Enterroute: "Enter route" => "Выбор маршрута"
@@ -901,7 +889,7 @@ SECTION UserControlSettings
 .radioButtonCentreHome: "Home System" => "дом. системе"
 .labelOpenOn: "Open Centred On" => "Центрировать на"
 .labelHome: "Now in Commander Settings" => "Дом. система"
-.Font: "The font used by this theme is not available on your system.\r\nThe font needed is \\"{0}\\".\r\nInstall this font to fully use this theme.\r\nEuro Caps font is freely available from www.edassets.org.\r\n\r\nWould you like to load this theme using a replacement font?" @
+.Font: "The font used by this theme is not available on your system.\r\nThe font needed is \"{0}\".\r\nInstall this font to fully use this theme.\r\nEuro Caps font is freely available from www.edassets.org.\r\n\r\nWould you like to load this theme using a replacement font?" @
 .Information: "Applies at next restart of ED Discovery" => "Изменения вступят в силу после перезапуска ED Discovery"
 .AddC: "Commander name is not valid or duplicate" => "Неправильное или дублирующееся имя командира"
 .AddT: "Cannot create Commander" => "Не удалось создать командира"
@@ -1041,7 +1029,7 @@ SECTION UserControlStarList
 .Signals: "{0} has signals" @
 .Distance: " ({0} ls)" @
 .FV: "First visit {0}" => "Первое посещение {0}"
-.CS: "{0} Star(s) {1}" => "Число звезд: {0}"
+.CS: "{0} Star(s) {1}" => "Число звезд: {0} {1}"
 .SMBH: "{0} is a super massive black hole" => "{0} — сверхмассивная черная дыра"
 .BH: "{0} is a black hole" => "{0} — черная дыра"
 .NS: "{0} is a neutron star" => "{0} — нейтронная звезда"
@@ -1189,13 +1177,14 @@ SECTION UserControlStats
 .FinesAccrued: "Fines Accrued" => "Штрафов получено"
 .TradesCompleted: "Trades Completed" => "Сделок завершено"
 .MaterialsTraded: "Materials Traded" => "Обменяно материалов"
-.TME: "{0} days {1} hours {1} minutes" => "{0} дн. {1} ч. {2} мин."
+.TME: "{0} days {1} hours {2} minutes" => "{0} дн. {1} ч. {2} мин."
 .Name: "Name" => "Название"
 .Ident: "Ident" => "Идентификатор"
 .BodiesScanned: "Bodies Scanned" => "Отсканировано тел"
 .Destroyed: "Destroyed" => "Разрушено"
 .GoodsBought: "Goods Bought" => "Куплено товаров"
 .GoodsSold: "Goods Sold" => "Продано товаров"
+.GoodsProfit: "Goods Profit" @
 .EfficientScans: "Efficient Scans" @
 .Accepted: "Accepted" @
 .Disgruntled: "Disgruntled" @
@@ -1242,6 +1231,7 @@ SECTION UserControlSynthesis
 
 SECTION UserControlSysInfo
 
+.OnFoot: "On Foot" @
 .labelJumpRange: "Jump" => "Прыжок"
 .toolStripJumpRange: "Display Jump Range" => "Показать дальность прыжка"
 .labelSysName: "System" => "Система"
@@ -1332,6 +1322,7 @@ SECTION UserControlContainerSplitter
 
 SECTION UserControlTravelGrid
 
+.travelGridInDebugModeToolStripMenuItem: "Travel grid in Debug Mode" @
 .showSystemVisitedForeColourToolStripMenuItem: "Show lines in System Visited Fore Colour" @
 .THF: "History: Filter out fields" => "История полетов: фильтры полей"
 .ColumnTime: "Time" => "Время"
@@ -1547,6 +1538,7 @@ SECTION UserControlFactions
 .colMissionCredits: "Mission Credits" @
 .CBought: "Commds +" @
 .CSold: "Commds -" @
+.CProfit: "Commds Profit" @
 .MBought: "Mats +" @
 .MSold: "Mats -" @
 .CrimeCommitted: "Crimes Committed" @
@@ -1617,6 +1609,8 @@ SECTION FilterSelector
 .Ledger: "Ledger" => "Финансы"
 .Ship: "Ship" => "Корабли"
 .Mining: "Mining" @
+.MicroResources: "Micro Resources" @
+.Suits: "Suits" @
 
 SECTION UserControlCommonBase
 
@@ -1626,3 +1620,17 @@ SECTION CSV
 
 .Helpers.OpenFailed: "Failed to open " @
 .Helpers.WriteFailed: "Failed to write to " @
+
+SECTION UserControlSuitsWeapons
+
+.CSTime: "Time" @
+.CSName: "Name" @
+.CSPrice: "Price" @
+.CSLoadout: "Loadout" @
+.CSPrimary1: "Primary 1" @
+.CSPrimary2: "Primary 2" @
+.CSSecondary: "Secondary" @
+.CWTime: "Time" @
+.CWName: "Name" @
+.CWPrice: "Price" @
+.CWDPS: "DPS" @

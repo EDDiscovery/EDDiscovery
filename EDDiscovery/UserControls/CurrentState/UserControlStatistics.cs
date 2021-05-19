@@ -1133,7 +1133,7 @@ namespace EDDiscovery.UserControls
                 return "";
 
             TimeSpan time = TimeSpan.FromSeconds(seconds.Value);
-            return string.Format("{0} days {1} hours {1} minutes".T(EDTx.UserControlStats_TME), time.Days, time.Hours, time.Minutes);
+            return string.Format("{0} days {1} hours {2} minutes".T(EDTx.UserControlStats_TME), time.Days, time.Hours, time.Minutes);
         }
 
         Tuple<TreeNode, TreeNode> AddTreeNode(string parentname, string name, string value, string units = "")

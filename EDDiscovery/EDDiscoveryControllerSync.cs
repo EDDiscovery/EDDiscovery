@@ -88,7 +88,7 @@ namespace EDDiscovery
                 {
                     string databases = "EDSM";
 
-                    LogLine(string.Format("Full system data download from {0} required." + Environment.NewLine +
+                    LogLine(string.Format("System data download from {0} required." + Environment.NewLine +
                                     "This will take a while, please be patient." + Environment.NewLine +
                                     "Please continue running ED Discovery until refresh is complete.".T(EDTx.EDDiscoveryController_SyncEDSM), databases));
                 }
