@@ -202,14 +202,21 @@ namespace EDDiscovery.Actions
                 vars[mp + "Faction"] = ms.Mission.Faction;
                 vars[mp + "DestSystem"] = ms.Mission.DestinationSystem;
                 vars[mp + "DestStation"] = ms.Mission.DestinationStation;
-                vars[mp + "TargetFaction"] = ms.Mission.TargetFaction;
                 vars[mp + "Influence"] = ms.Mission.Influence;
                 vars[mp + "Reputation"] = ms.Mission.Reputation;
                 vars[mp + "Commodity"] = ms.Mission.CommodityLocalised.Alt(ms.Mission.FriendlyCommodity);
-                vars[mp + "Target"] = ms.Mission.TargetLocalised.Alt(ms.Mission.TargetFriendly);
-                vars[mp + "TargetLocalised"] = ms.Mission.TargetLocalised.Alt(ms.Mission.TargetLocalised);
-                vars[mp + "TargetType"] = ms.Mission.TargetTypeLocalised.Alt(ms.Mission.TargetTypeFriendly);
+
+                vars[mp + "TargetType"] = ms.Mission.TargetType;
+                vars[mp + "TargetTypeFriendly"] = ms.Mission.TargetTypeFriendly;
+                vars[mp + "TargetTypeLocalised"] = ms.Mission.TargetTypeLocalised;
+                vars[mp + "TargetFaction"] = ms.Mission.TargetFaction;
+                vars[mp + "Target"] = ms.Mission.Target;
+                vars[mp + "TargetFriendly"] = ms.Mission.TargetFriendly;
+                vars[mp + "TargetLocalised"] = ms.Mission.TargetLocalised;
+                vars[mp + "KillCount"] = ms.Mission.KillCount != null ? ms.Mission.KillCount.Value.ToStringInvariant() : "";
+
                 vars[mp + "Passengers"] = ms.Mission.PassengerCount.ToStringInvariant();
+
                 vars[mp + "Completed"] = (ms.Completed != null).ToStringIntValue();
                 if (ms.Completed != null)
                 {
