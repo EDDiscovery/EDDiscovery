@@ -42,7 +42,6 @@ namespace EDDiscovery
         public CAPI.CompanionAPI FrontierCAPI;
         public BaseUtils.DDE.DDEServer DDEServer;
 
-
         #endregion
 
         #region Events
@@ -157,14 +156,7 @@ namespace EDDiscovery
                 FirstChanceExceptionCatcher.RegisterFirstChanceExceptionHandler();
             }
 
-            if (EDDOptions.Instance.BackgroundPriority)
-            {
-                Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.Idle;
-            }
-            else if (EDDOptions.Instance.LowPriority)
-            {
-                Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.BelowNormal;
-            }
+            Process.GetCurrentProcess().PriorityClass = EDDOptions.Instance.ProcessPriorityClass;
 
             if (EDDOptions.Instance.ForceTLS12)
             {

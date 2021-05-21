@@ -360,13 +360,13 @@ namespace EDDiscovery.UserControls
                     var cursuit = hl.SuitList.CurrentID(he.Suits);                     // get current suit ID, or 0 if none
                     if (cursuit != 0)
                     {
-                        var suit = hl.SuitList.Suits.Get(cursuit, he.Suits);             // get current suit
+                        var suit = hl.SuitList.Suit(cursuit,he.Suits);                // get suit
                         textBoxShip.Text = suit?.FriendlyName ?? "???";
                         var curloadout = discoveryform.history.SuitLoadoutList.CurrentID(he.Loadouts);         // get current loadout ID, or 0 if none
 
                         if ( curloadout != 0 )
                         {
-                            var loadout = hl.SuitLoadoutList.Loadouts.Get(curloadout, he.Loadouts);
+                            var loadout = hl.SuitLoadoutList.Loadout(curloadout, he.Loadouts);
                             textBoxShip.Text += ":" + (loadout?.Name ?? "???");
                         }
                     }

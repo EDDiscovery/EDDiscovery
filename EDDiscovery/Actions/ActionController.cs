@@ -517,11 +517,12 @@ namespace EDDiscovery.Actions
             return ActionRun(ev, he, null, flagstart, now);
         }
 
-        public override int ActionRun(ActionEvent ev, Variables additionalvars = null,
-                                string flagstart = null, bool now = false)              // override base
+        public override int ActionRun(ActionEvent ev, Variables additionalvars = null, string flagstart = null, bool now = false)              // override base
         { return ActionRun(ev, null, additionalvars, flagstart, now); }
 
-        public int ActionRun(ActionEvent ev, HistoryEntry he = null, Variables additionalvars = null,
+        public int ActionRun(ActionEvent ev, 
+                                HistoryEntry he = null, 
+                                Variables additionalvars = null,
                                 string flagstart = null, bool now = false)       //set flagstart to be the first flag of the actiondata..
         {
             List<ActionFileList.MatchingSets> ale = actionfiles.GetMatchingConditions(ev.TriggerName, flagstart);      // look thru all actions, find matching ones

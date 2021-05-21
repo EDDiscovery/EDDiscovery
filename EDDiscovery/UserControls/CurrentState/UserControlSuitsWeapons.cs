@@ -80,7 +80,7 @@ namespace EDDiscovery.UserControls
 
         private void Display(HistoryEntry he, HistoryList hl, bool selectedEntry)
         {
-            System.Diagnostics.Debug.WriteLine("Display check");
+          //  System.Diagnostics.Debug.WriteLine("Display check");
             uint newweapon = he?.Weapons ?? 0;
             if (newweapon != last_weapons)
             {
@@ -104,9 +104,8 @@ namespace EDDiscovery.UserControls
             int firstline = dataGridViewWeapons.SafeFirstDisplayedScrollingRowIndex();
 
             dataGridViewWeapons.Rows.Clear();
-            System.Diagnostics.Debug.WriteLine("Clear Weapon grid");
+          //  System.Diagnostics.Debug.WriteLine("Clear Weapon grid");
             extPanelDataGridViewScrollWeapons.SuspendLayout();
-
 
             if (last_weapons >= 0)
             {
@@ -141,12 +140,12 @@ namespace EDDiscovery.UserControls
             int firstline = dataGridViewSuits.SafeFirstDisplayedScrollingRowIndex();
 
             dataGridViewSuits.Rows.Clear();
-            System.Diagnostics.Debug.WriteLine("Clear Suit grid");
+          //  System.Diagnostics.Debug.WriteLine("Clear Suit grid");
             extPanelDataGridViewScrollSuits.SuspendLayout();
 
             if (last_suits >= 0)
             {
-                var suitlist = discoveryform.history.SuitList.Suits.Get(last_suits,x=>x.Sold==false && !SuitList.SpecialID(x.ID)); // get unsold suits and ignore special IDs
+                var suitlist = discoveryform.history.SuitList.Suits(last_suits); 
                 var fontscaled = EDDTheme.Instance.GetDialogScaledFont(0.8f);
 
                 var cursuit = discoveryform.history.SuitList.CurrentID(last_suits);                     // get current suit ID, or 0 if none

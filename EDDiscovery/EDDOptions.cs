@@ -150,10 +150,11 @@ namespace EDDiscovery
                     case "resetlanguage": ResetLanguage = true; break;
                     case "tempdirindatadir": TempDirInDataDir = true; break;
                     case "notempdirindatadir": TempDirInDataDir = false; break;
-                    case "lowpriority": LowPriority = true; break;
-                    case "nolowpriority": LowPriority = false; break;
-                    case "backgroundpriority": BackgroundPriority = true; break;
-                    case "nobackgroundpriority": BackgroundPriority = false; break;
+                    case "lowpriority": ProcessPriorityClass = System.Diagnostics.ProcessPriorityClass.BelowNormal; break;
+                    case "backgroundpriority": ProcessPriorityClass = System.Diagnostics.ProcessPriorityClass.Idle; break;
+                    case "highpriority": ProcessPriorityClass = System.Diagnostics.ProcessPriorityClass.High; break;
+                    case "abovenormalpriority": ProcessPriorityClass = System.Diagnostics.ProcessPriorityClass.AboveNormal; break;
+                    case "realtimepriority": ProcessPriorityClass = System.Diagnostics.ProcessPriorityClass.RealTime; break;
                     case "forcetls12": ForceTLS12 = true; break;
                     case "disabletimedisplay": DisableTimeDisplay = true; break;
                     case "disableversiondisplay": DisableVersionDisplay = true; break;
@@ -227,7 +228,7 @@ namespace EDDiscovery
         public bool TempDirInDataDir { get; set; }
         public string WebServerFolder { get; set; }             // normally empty, so selects zip server
         public bool LowPriority { get; set; }
-        public bool BackgroundPriority { get; set; }
+        public System.Diagnostics.ProcessPriorityClass ProcessPriorityClass { get; set; } = System.Diagnostics.ProcessPriorityClass.Normal;
         public bool ForceTLS12 { get; set; }
         public bool DisableTimeDisplay { get; set; }
         public bool DisableVersionDisplay { get; set; }

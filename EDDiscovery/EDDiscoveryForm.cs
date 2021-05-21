@@ -284,7 +284,7 @@ namespace EDDiscovery
                 {
                     System.Diagnostics.Debug.Assert(Application.MessageLoop);
                     OnEDSMSyncComplete?.Invoke(count,list);
-                    ActionRun(Actions.ActionEventEDList.onEDSMSync, null, new BaseUtils.Variables(new string[] { "EventStarList", list, "EventCount", count.ToStringInvariant() }));
+                    ActionRun(Actions.ActionEventEDList.onEDSMSync, new BaseUtils.Variables(new string[] { "EventStarList", list, "EventCount", count.ToStringInvariant() }));
                 });
             };
 
@@ -294,7 +294,7 @@ namespace EDDiscovery
                 {
                     System.Diagnostics.Debug.Assert(Application.MessageLoop);
                     OnEDDNSyncComplete?.Invoke(count);
-                    ActionRun(Actions.ActionEventEDList.onEDDNSync, null, new BaseUtils.Variables(new string[] { "EventCount", count.ToStringInvariant() }));
+                    ActionRun(Actions.ActionEventEDList.onEDDNSync, new BaseUtils.Variables(new string[] { "EventCount", count.ToStringInvariant() }));
                 });
             };
 
@@ -304,7 +304,7 @@ namespace EDDiscovery
                 {
                     System.Diagnostics.Debug.Assert(Application.MessageLoop);
                     OnIGAUSyncComplete?.Invoke(count);
-                    ActionRun(Actions.ActionEventEDList.onIGAUSync, null, new BaseUtils.Variables(new string[] { "EventCount", count.ToStringInvariant() }));
+                    ActionRun(Actions.ActionEventEDList.onIGAUSync, new BaseUtils.Variables(new string[] { "EventCount", count.ToStringInvariant() }));
                 });
             };
 
@@ -400,7 +400,7 @@ namespace EDDiscovery
             tabControlMain.SelectedIndexChanged += (snd, ea) =>
             {
                 if (tabControlMain.SelectedIndex >= 0)   // may go to -1 on a clear all
-                    ActionRun(Actions.ActionEventEDList.onTabChange, null, new BaseUtils.Variables("TabName", tabControlMain.TabPages[tabControlMain.SelectedIndex].Text));
+                    ActionRun(Actions.ActionEventEDList.onTabChange, new BaseUtils.Variables("TabName", tabControlMain.TabPages[tabControlMain.SelectedIndex].Text));
             };
 
             // DLL loads

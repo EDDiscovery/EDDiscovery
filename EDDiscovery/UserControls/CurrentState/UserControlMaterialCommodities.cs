@@ -209,7 +209,7 @@ namespace EDDiscovery.UserControls
 
                     MaterialCommodityMicroResource m = discoveryform.history.MaterialCommoditiesMicroResources.Get(mcl.Value, mcd.FDName);      // at generation mcl, find fdname.
 
-                    if (showzeros || (m != null && m.Count > 0))       // if display zero, or we have some..
+                    if (showzeros || (m != null && m.NonZero))       // if display zero, or we have some..
                     {
                         string s = "";
 
