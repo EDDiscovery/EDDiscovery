@@ -34,8 +34,8 @@ namespace EDDiscovery.UserControls
         private string dbHistoricMatsSave = "HistoricMaterials";
         private string dbWordWrap = "WordWrap";
 
-        int[] Order;        // order
-        int[] Wanted;       // wanted, in order terms
+        int[] RowToRecipe;        // order
+        int[] WantedPerRecipe;       // wanted, in order terms
         internal bool isEmbedded = false;
         internal bool isHistoric = false;
 
@@ -64,14 +64,14 @@ namespace EDDiscovery.UserControls
             UpdateWordWrap();
             extCheckBoxWordWrap.Click += extCheckBoxWordWrap_Click;
 
-            Order = GetSetting(dbOSave, "").RestoreArrayFromString(0, Recipes.SynthesisRecipes.Count);
-            if (Order.Max() >= Recipes.SynthesisRecipes.Count || Order.Min() < 0 || Order.Distinct().Count() != Recipes.SynthesisRecipes.Count)       // if not distinct..
+            RowToRecipe = GetSetting(dbOSave, "").RestoreArrayFromString(0, Recipes.SynthesisRecipes.Count);
+            if (RowToRecipe.Max() >= Recipes.SynthesisRecipes.Count || RowToRecipe.Min() < 0 || RowToRecipe.Distinct().Count() != Recipes.SynthesisRecipes.Count)       // if not distinct..
             {
-                for (int i = 0; i < Order.Length; i++)          // reset
-                    Order[i] = i;
+                for (int i = 0; i < RowToRecipe.Length; i++)          // reset
+                    RowToRecipe[i] = i;
             }
 
-            Wanted = GetSetting(dbWSave, "").RestoreArrayFromString(0, Recipes.SynthesisRecipes.Count);
+            WantedPerRecipe = GetSetting(dbWSave, "").RestoreArrayFromString(0, Recipes.SynthesisRecipes.Count);
 
             var rcpes = Recipes.SynthesisRecipes.Select(r => r.Name).Distinct().ToList();
             rcpes.Sort();
@@ -88,10 +88,10 @@ namespace EDDiscovery.UserControls
             mfs = new RecipeFilterSelector(matLongNames);
             mfs.SaveSettings += (newvalue, e) => { PutSetting(dbMaterialFilterSave, newvalue); Display(); };
 
-            for (int i = 0; i < Recipes.SynthesisRecipes.Count; i++)         // pre-fill array.. preventing the crash on cell edit when you
+            for (int rowno = 0; rowno < Recipes.SynthesisRecipes.Count; rowno++)         // pre-fill array.. preventing the crash on cell edit when you
             {
-                int rno = Order[i];
-                Recipes.SynthesisRecipe r = Recipes.SynthesisRecipes[rno];
+                int recipeno = RowToRecipe[rowno];
+                Recipes.SynthesisRecipe r = Recipes.SynthesisRecipes[recipeno];
 
                 int rown = dataGridViewSynthesis.Rows.Add();
 
@@ -99,7 +99,7 @@ namespace EDDiscovery.UserControls
                 {
                     row.Cells[0].Value = r.Name; // debug rno + ":" + r.name;
                     row.Cells[1].Value = r.level;
-                    row.Tag = rno;
+                    row.Tag = recipeno;
                     row.Visible = false;
                 }
             }
@@ -137,8 +137,8 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
             discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
 
-            PutSetting(dbOSave, Order.ToString(","));
-            PutSetting(dbWSave, Wanted.ToString(","));
+            PutSetting(dbOSave, RowToRecipe.ToString(","));
+            PutSetting(dbWSave, WantedPerRecipe.ToString(","));
             PutSetting(dbHistoricMatsSave, isHistoric);
         }
 
@@ -251,12 +251,12 @@ namespace EDDiscovery.UserControls
                     if (dataGridViewSynthesis.Rows[i].Visible)
                     {
                         Recipes.Recipe r = Recipes.SynthesisRecipes[rno];
-                        Tuple<int, int, string, string> res = MaterialCommoditiesRecipe.HowManyLeft(mclmats, totals, r , Wanted[rno]);
+                        Tuple<int, int, string, string> res = MaterialCommoditiesRecipe.HowManyLeft(mclmats, totals, r , WantedPerRecipe[rno]);
                         //System.Diagnostics.Debug.WriteLine("{0} Recipe {1} executed {2} {3} ", i, rno, Wanted[rno], res.Item2);
 
                         using (DataGridViewRow row = dataGridViewSynthesis.Rows[i])
                         {
-                            row.Cells[3].Value = Wanted[rno].ToString();
+                            row.Cells[3].Value = WantedPerRecipe[rno].ToString();
                             row.Cells[4].Value = res.Item2.ToString();
                             row.Cells[5].Value = res.Item3;
                             row.Cells[5].ToolTipText = res.Item4;
@@ -264,9 +264,9 @@ namespace EDDiscovery.UserControls
                             row.Cells[6].ToolTipText = r.IngredientsStringLong;
                         }
                     }
-                    if (Wanted[rno] > 0 && (dataGridViewSynthesis.Rows[i].Visible || isEmbedded))
+                    if (WantedPerRecipe[rno] > 0 && (dataGridViewSynthesis.Rows[i].Visible || isEmbedded))
                     {
-                        wantedList.Add(new Tuple<Recipes.Recipe, int>(Recipes.SynthesisRecipes[rno], Wanted[rno]));
+                        wantedList.Add(new Tuple<Recipes.Recipe, int>(Recipes.SynthesisRecipes[rno], WantedPerRecipe[rno]));
                     }
                 }
 
@@ -328,12 +328,12 @@ namespace EDDiscovery.UserControls
                 if (e.ColumnIndex == 3)
                 {
                     //System.Diagnostics.Debug.WriteLine("Set wanted {0} to {1}", rno, iv);
-                    Wanted[rno] = iv;
+                    WantedPerRecipe[rno] = iv;
                     Display();
                 }
             }
             else
-                dataGridViewSynthesis.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = Wanted[rno].ToString();
+                dataGridViewSynthesis.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = WantedPerRecipe[rno].ToString();
         }
 
         private Rectangle moveMoveDragBox;
@@ -385,9 +385,12 @@ namespace EDDiscovery.UserControls
                 dataGridViewSynthesis.Rows.Insert(droprow, rowTo);
 
                 for (int i = 0; i < Recipes.SynthesisRecipes.Count; i++)
-                    Order[i] = (int)dataGridViewSynthesis.Rows[i].Tag;          // reset the order array
+                    RowToRecipe[i] = (int)dataGridViewSynthesis.Rows[i].Tag;          // reset the order array
 
-                //for (int i = 0; i < 10; i++)   System.Diagnostics.Debug.WriteLine(i.ToString() + "=" + Order[i]);
+                for (int i = 0; i < dataGridViewSynthesis.RowCount; i++)
+                    System.Diagnostics.Debug.WriteLine(i.ToString() + "=" + RowToRecipe[i] + " : "+ dataGridViewSynthesis.Rows[i].Tag);
+
+                //for (int i = 0; i < 10; i++)   
 
                 Display();
             }
@@ -398,7 +401,7 @@ namespace EDDiscovery.UserControls
             for (int i = 0; i < Recipes.SynthesisRecipes.Count; i++)
             {
                 int rno = (int)dataGridViewSynthesis.Rows[i].Tag;
-                Wanted[rno] = 0;
+                WantedPerRecipe[rno] = 0;
             }
             Display();
         }
