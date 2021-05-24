@@ -218,6 +218,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewSuits.SingleRowSelect = true;
             this.dataGridViewSuits.Size = new System.Drawing.Size(784, 266);
             this.dataGridViewSuits.TabIndex = 1;
+            this.dataGridViewSuits.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewSuits_SortCompare);
             // 
             // CSTime
             // 
@@ -266,12 +267,12 @@ namespace EDDiscovery.UserControls
             this.contextMenuStripSuits.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.forceSellShipToolStripMenuItem});
             this.contextMenuStripSuits.Name = "contextMenuStripSuits";
-            this.contextMenuStripSuits.Size = new System.Drawing.Size(181, 48);
+            this.contextMenuStripSuits.Size = new System.Drawing.Size(151, 26);
             // 
             // forceSellShipToolStripMenuItem
             // 
             this.forceSellShipToolStripMenuItem.Name = "forceSellShipToolStripMenuItem";
-            this.forceSellShipToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.forceSellShipToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
             this.forceSellShipToolStripMenuItem.Text = "Force Suit Sale";
             this.forceSellShipToolStripMenuItem.Click += new System.EventHandler(this.forceSellSuitToolStripMenuItem_Click);
             // 

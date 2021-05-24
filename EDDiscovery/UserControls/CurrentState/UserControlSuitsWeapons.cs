@@ -146,7 +146,6 @@ namespace EDDiscovery.UserControls
             if (last_suits >= 0)
             {
                 var suitlist = discoveryform.history.SuitList.Suits(last_suits); 
-                var fontscaled = EDDTheme.Instance.GetDialogScaledFont(0.8f);
 
                 var cursuit = discoveryform.history.SuitList.CurrentID(last_suits);                     // get current suit ID, or 0 if none
                 var curloadout = discoveryform.history.SuitLoadoutList.CurrentID(last_loadout);         // get current loadout ID, or 0 if none
@@ -191,8 +190,11 @@ namespace EDDiscovery.UserControls
 
                             if (i > 0)      // tried emptying the row and using tags to sort but it insists on putting empty cells at top/bottom
                             {
-                                r.Cells[0].Style.Alignment = r.Cells[1].Style.Alignment = r.Cells[2].Style.Alignment = DataGridViewContentAlignment.MiddleRight;
-                                r.Cells[0].Style.Font = r.Cells[1].Style.Font = r.Cells[2].Style.Font = fontscaled;
+                                for (int ci = 1; ci < 3; ci++)
+                                {
+                                    r.Cells[ci].Tag = r.Cells[ci].Value;
+                                    r.Cells[ci].Value = "";
+                                }
                             }
 
                             i++;
@@ -209,6 +211,17 @@ namespace EDDiscovery.UserControls
             dataGridViewSuits.Columns[sortcolprev.Index].HeaderCell.SortGlyphDirection = sortorderprev;
             if (firstline >= 0 && firstline < dataGridViewSuits.RowCount)
                 dataGridViewSuits.SafeFirstDisplayedScrollingRowIndex(firstline);
+        }
+
+        private void dataGridViewSuits_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
+        {
+            if (e.Column.Index == 0)
+                e.SortDataGridViewColumnDate(usetag: true);
+            else if (e.Column.Index == 2)
+                e.SortDataGridViewColumnNumeric(usetag: true);
+            else
+                e.SortDataGridViewColumnAlpha(usetag: true);
+
         }
 
 
@@ -236,6 +249,7 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
+
     }
 }
 

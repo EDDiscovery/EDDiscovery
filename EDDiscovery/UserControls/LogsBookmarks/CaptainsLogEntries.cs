@@ -212,7 +212,7 @@ namespace EDDiscovery.UserControls
             if (e.Column.Index == 0)
                 e.SortDataGridViewColumnDate();
             else if (e.Column.Index == 4)
-                e.SortDataGridViewColumnTagsAsStringsLists(dataGridView);
+                e.SortDataGridViewColumnTagsAsStringsLists(4);
         }
 
         #endregion
