@@ -96,6 +96,11 @@ namespace EDDiscovery
             {
                 DefaultJournalMatchFilename = toeol ? ca.Rest() : ca.NextEmpty();
             }
+            else if (optname == "-minjournaldateutc")
+            {
+                string s= toeol ? ca.Rest() : ca.NextEmpty();
+                MinJournalDateUTC = s.ParseDateTime(DateTime.MinValue, System.Globalization.CultureInfo.CurrentCulture);
+            }
             else if (optname == "-historyloaddaylimit")
             {
                 string s = (toeol ? ca.Rest() : ca.NextEmpty());
@@ -235,6 +240,7 @@ namespace EDDiscovery
         public string OutputEventHelp { get; set; }
         public string DefaultJournalFolder { get; set; }        // default is null, use computed value
         public string DefaultJournalMatchFilename { get; set; }        // default is set
+        public DateTime MinJournalDateUTC { get; set; }        // default is MinDate
         public bool EnableTGRightDebugClicks { get; set; }
         public int HistoryLoadDayLimit { get; set; }    // default zero not set
 

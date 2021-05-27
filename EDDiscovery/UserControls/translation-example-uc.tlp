@@ -1651,3 +1651,4 @@ SECTION UserControlSuitsWeapons
 .CWName: "Name" @
 .CWPrice: "Price" @
 .CWDPS: "DPS" @
+.CWClass: "Class" @

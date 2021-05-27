@@ -487,7 +487,8 @@ namespace EDDiscovery.WebServer
                 }
                 else
                 {
-                    response["ShipType"] = stat.ShipType.ToString();
+                    response["ShipType"] = stat.MajorMode.ToString();
+                    response["Mode"] = stat.Mode.ToString();
                     response["GUIFocus"] = stat.Focus.ToString();
 
                     JArray pips = new JArray();
@@ -539,6 +540,7 @@ namespace EDDiscovery.WebServer
                     response["FsdMassLocked"] = stat.Flags.Contains(UITypeEnum.FsdMassLocked);
                     response["FsdCharging"] = stat.Flags.Contains(UITypeEnum.FsdCharging);
                     response["FsdCooldown"] = stat.Flags.Contains(UITypeEnum.FsdCooldown);
+                    response["GlideMode"] = stat.Flags.Contains(UITypeEnum.GlideMode);
 
                     // both
 
@@ -550,6 +552,12 @@ namespace EDDiscovery.WebServer
                     response["BeingInterdicted"] = stat.Flags.Contains(UITypeEnum.BeingInterdicted);
                     response["HUDInAnalysisMode"] = stat.Flags.Contains(UITypeEnum.HUDInAnalysisMode);
                     response["NightVision"] = stat.Flags.Contains(UITypeEnum.NightVision);
+
+                    // on foot
+
+                    response["BreathableAtmosphere"] = stat.Flags.Contains(UITypeEnum.BreathableAtmosphere);
+                    // TBD More
+
 
                     // all
 

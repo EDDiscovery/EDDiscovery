@@ -542,7 +542,9 @@ namespace EDDiscovery
 
                 string s = "All Journal Events" + Environment.NewLine;
 
-                var infoe = BaseUtils.TypeHelpers.GetPropertyFieldNames(typeof(JournalEntry), "EventClass_", fields: true, linelen: ll);
+                var excllist = new Type[] { typeof(System.Drawing.Icon), typeof(System.Drawing.Image), typeof(System.Drawing.Bitmap), typeof(BaseUtils.JSON.JObject) };
+
+                var infoe = BaseUtils.TypeHelpers.GetPropertyFieldNames(typeof(JournalEntry), "EventClass_", fields: true, linelen: ll, propexcluded:excllist);
                 foreach (var ix in infoe)
                 {
                     s += prefix + ix.Name + colon + ix.Help + Environment.NewLine;
@@ -552,12 +554,13 @@ namespace EDDiscovery
 
                 foreach (var x in Enum.GetValues(typeof(JournalTypeEnum)))
                 {
+                    //var x = "CreateSuitLoadout";
                     JournalEntry je = JournalEntry.CreateJournalEntry(x.ToString(), DateTime.UtcNow);
 
                     if (!(je is JournalUnknown))
                     {
-                        s += "Event: " + x + Environment.NewLine;
-                        var info = BaseUtils.TypeHelpers.GetPropertyFieldNames(je.GetType(), "EventClass_", excludedeclaretype: typeof(JournalEntry), fields: true, linelen:ll);
+                        s += Environment.NewLine + "Event: " + x + Environment.NewLine;
+                        var info = BaseUtils.TypeHelpers.GetPropertyFieldNames(je.GetType(), "EventClass_", excludedeclaretype: typeof(JournalEntry), fields: true, linelen:ll, propexcluded: excllist);
                         foreach (var ix in info)
                         {
                             s += prefix + ix.Name + colon + ix.Help + Environment.NewLine;
@@ -565,8 +568,9 @@ namespace EDDiscovery
                     }
                 }
 
+                s += Environment.NewLine;
                 s += Environment.NewLine + "All UI Events" + Environment.NewLine;
-                var infoui = BaseUtils.TypeHelpers.GetPropertyFieldNames(typeof(UIEvent), "EventClass_", fields: true, linelen:ll);
+                var infoui = BaseUtils.TypeHelpers.GetPropertyFieldNames(typeof(UIEvent), "EventClass_", fields: true, linelen:ll, propexcluded: excllist);
                 foreach (var ix in infoui)
                 {
                     s += prefix + ix.Name + colon + ix.Help + Environment.NewLine;
@@ -577,8 +581,8 @@ namespace EDDiscovery
                 foreach (var x in Enum.GetValues(typeof(UITypeEnum)))
                 {
                     UIEvent ui = UIEvent.CreateEvent(x.ToString(), DateTime.UtcNow, false);
-                    s += "UIEvent: UI" + x + Environment.NewLine;
-                    var info = BaseUtils.TypeHelpers.GetPropertyFieldNames(ui.GetType(), "EventClass_", excludedeclaretype: typeof(UIEvent), fields: true, linelen:ll);
+                    s += Environment.NewLine + "UIEvent: UI" + x + Environment.NewLine;
+                    var info = BaseUtils.TypeHelpers.GetPropertyFieldNames(ui.GetType(), "EventClass_", excludedeclaretype: typeof(UIEvent), fields: true, linelen:ll, propexcluded: excllist);
                     foreach (var ix in info)
                     {
                         s += prefix+ ix.Name + colon + ix.Help + Environment.NewLine;
