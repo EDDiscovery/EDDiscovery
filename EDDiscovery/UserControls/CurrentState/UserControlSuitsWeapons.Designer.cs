@@ -76,6 +76,7 @@ namespace EDDiscovery.UserControls
             this.CWDamage = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CWRPS = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CWClipSize = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CWHopper = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CWRange = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panelPrev.SuspendLayout();
             this.extPanelDataGridViewScrollWeapons.SuspendLayout();
@@ -130,6 +131,7 @@ namespace EDDiscovery.UserControls
             this.CWDamage,
             this.CWRPS,
             this.CWClipSize,
+            this.CWHopper,
             this.CWRange});
             this.dataGridViewWeapons.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewWeapons.Name = "dataGridViewWeapons";
@@ -413,6 +415,12 @@ namespace EDDiscovery.UserControls
             this.CWClipSize.Name = "CWClipSize";
             this.CWClipSize.ReadOnly = true;
             // 
+            // CWHopper
+            // 
+            this.CWHopper.HeaderText = "Hopper Size";
+            this.CWHopper.Name = "CWHopper";
+            this.CWHopper.ReadOnly = true;
+            // 
             // CWRange
             // 
             this.CWRange.FillWeight = 50F;
@@ -475,6 +483,7 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn CWDamage;
         private System.Windows.Forms.DataGridViewTextBoxColumn CWRPS;
         private System.Windows.Forms.DataGridViewTextBoxColumn CWClipSize;
+        private System.Windows.Forms.DataGridViewTextBoxColumn CWHopper;
         private System.Windows.Forms.DataGridViewTextBoxColumn CWRange;
     }
 }

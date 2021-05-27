@@ -129,6 +129,7 @@ namespace EDDiscovery.UserControls
                                                weapondp != null ? weapondp.DPS.ToString("N1") : "",
                                                weapondp != null ? weapondp.RatePerSec.ToString("N1") : "",
                                                weapondp != null ? weapondp.ClipSize.ToString("N0") : "",
+                                               weapondp != null ? weapondp.HopperSize.ToString("N0") : "",
                                                weapondp != null ? weapondp.Range.ToString("N0") : ""
 
                     };
