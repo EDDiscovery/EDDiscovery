@@ -425,7 +425,7 @@ namespace EDDiscovery.UserControls
                 information.Append(" (Mapped)".T(EDTx.UserControlSurveyor_MP));
                 if (showValuesToolStripMenuItem.Checked)
                 {
-                    information.Append(' ').Append(ev.EstimatedValueBase.ToString("N0")).Append(" cr");
+                    information.Append(' ').Append(ev.EstimatedValueMappedEfficiently.ToString("N0")).Append(" cr");
                 }
             }
             else if (js.WasDiscovered == true && js.WasMapped == false)
