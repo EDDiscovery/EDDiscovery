@@ -1,0 +1,2 @@
+#Builds native x86 Mono executable for macOS Mojave and earlier Mac systems, to allow windows.forms to work properly. Doesn't work on Catalina or later
+msbuild /p:Configuration=Debug EDDiscovery.sln "/p:DefineConstants=\"NO_SYSTEM_SPEECH;MONO;DEBUG;TRACE\";Platform=x86;PlatformTarget=x86"
