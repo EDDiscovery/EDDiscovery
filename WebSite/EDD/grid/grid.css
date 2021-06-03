@@ -48,7 +48,7 @@ body
     background-color: #ffac28;
 }
 
-#StatusBox p
+#StatusBox p,#StatusOther
 {
     color: darkorange;
     line-height:0.1em;

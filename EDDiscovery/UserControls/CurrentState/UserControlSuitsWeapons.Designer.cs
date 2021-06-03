@@ -70,7 +70,7 @@ namespace EDDiscovery.UserControls
             this.CWMods = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CWPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CWPrimary = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.CWWClass = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CWWType = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CWDamageType = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CWFireMode = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CWDamage = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -125,7 +125,7 @@ namespace EDDiscovery.UserControls
             this.CWMods,
             this.CWPrice,
             this.CWPrimary,
-            this.CWWClass,
+            this.CWWType,
             this.CWDamageType,
             this.CWFireMode,
             this.CWDamage,
@@ -373,12 +373,12 @@ namespace EDDiscovery.UserControls
             this.CWPrimary.Name = "CWPrimary";
             this.CWPrimary.ReadOnly = true;
             // 
-            // CWWClass
+            // CWWType
             // 
-            this.CWWClass.FillWeight = 50F;
-            this.CWWClass.HeaderText = "Weapon Class";
-            this.CWWClass.Name = "CWWClass";
-            this.CWWClass.ReadOnly = true;
+            this.CWWType.FillWeight = 50F;
+            this.CWWType.HeaderText = "Weapon Type";
+            this.CWWType.Name = "CWWType";
+            this.CWWType.ReadOnly = true;
             // 
             // CWDamageType
             // 
@@ -477,7 +477,7 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn CWMods;
         private System.Windows.Forms.DataGridViewTextBoxColumn CWPrice;
         private System.Windows.Forms.DataGridViewTextBoxColumn CWPrimary;
-        private System.Windows.Forms.DataGridViewTextBoxColumn CWWClass;
+        private System.Windows.Forms.DataGridViewTextBoxColumn CWWType;
         private System.Windows.Forms.DataGridViewTextBoxColumn CWDamageType;
         private System.Windows.Forms.DataGridViewTextBoxColumn CWFireMode;
         private System.Windows.Forms.DataGridViewTextBoxColumn CWDamage;
