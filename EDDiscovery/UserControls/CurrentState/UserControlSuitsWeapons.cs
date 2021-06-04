@@ -80,7 +80,7 @@ namespace EDDiscovery.UserControls
 
         private void Display(HistoryEntry he, HistoryList hl, bool selectedEntry)
         {
-            System.Diagnostics.Debug.WriteLine("Display check");
+          //  System.Diagnostics.Debug.WriteLine("Display check");
             uint newweapon = he?.Weapons ?? 0;
             if (newweapon != last_weapons)
             {
@@ -99,14 +99,13 @@ namespace EDDiscovery.UserControls
 
         private void DisplayWeapons()
         {
-            DataGridViewColumn sortcolprev = dataGridViewWeapons.SortedColumn != null ? dataGridViewWeapons.SortedColumn : dataGridViewWeapons.Columns[0];
+            DataGridViewColumn sortcolprev = dataGridViewWeapons.SortedColumn != null ? dataGridViewWeapons.SortedColumn : dataGridViewWeapons.Columns[1];
             SortOrder sortorderprev = dataGridViewWeapons.SortedColumn != null ? dataGridViewWeapons.SortOrder : SortOrder.Ascending;
             int firstline = dataGridViewWeapons.SafeFirstDisplayedScrollingRowIndex();
 
             dataGridViewWeapons.Rows.Clear();
-            System.Diagnostics.Debug.WriteLine("Clear Weapon grid");
+          //  System.Diagnostics.Debug.WriteLine("Clear Weapon grid");
             extPanelDataGridViewScrollWeapons.SuspendLayout();
-
 
             if (last_weapons >= 0)
             {
@@ -114,11 +113,26 @@ namespace EDDiscovery.UserControls
 
                 foreach (var w in weaponlist)
                 {
-                    var weaponinfo = ItemData.GetWeapon(w.Value.FDName);
+                    var weaponinfo = ItemData.GetWeapon(w.Value.FDName);        // may be null
+                    var weapondp = weaponinfo?.GetStats(w.Value.Class);     // may be null
+
+                    string smods = w.Value.WeaponMods != null ? string.Join(", ", w.Value.WeaponMods) : "";
                     object[] rowobj = new object[] {  EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(w.Value.EventTime).ToString(),
-                                               (w.Value.ID%10000) + ":" + w.Value.FriendlyName,
+                                               w.Value.FriendlyName + ":" + (w.Value.ID%10000) ,
+                                               w.Value.Class,
+                                               smods,
                                                w.Value.Price.ToString("N0"),
-                                               weaponinfo !=null ? weaponinfo.DPS.ToString("N1") : ""};
+                                               weaponinfo !=null ? (weaponinfo.Primary?"Primary":"Secondary") : "",     // TBD
+                                               weaponinfo !=null ? weaponinfo.Class.ToString().SplitCapsWord() : "",
+                                               weaponinfo !=null ? weaponinfo.DamageType.ToString().SplitCapsWord() : "",
+                                               weaponinfo !=null ? weaponinfo.FireMode.ToString().SplitCapsWord() : "",
+                                               weapondp != null ? weapondp.DPS.ToString("N1") : "",
+                                               weapondp != null ? weapondp.RatePerSec.ToString("N1") : "",
+                                               weapondp != null ? weapondp.ClipSize.ToString("N0") : "",
+                                               weapondp != null ? weapondp.HopperSize.ToString("N0") : "",
+                                               weapondp != null ? weapondp.Range.ToString("N0") : ""
+
+                    };
                    // System.Diagnostics.Debug.WriteLine("Weapon row {0} {1}", w.Value.EventTime, w.Value.FriendlyName);
                     dataGridViewWeapons.Rows.Add(rowobj);
                 }
@@ -134,20 +148,27 @@ namespace EDDiscovery.UserControls
 
         }
 
+        private void dataGridViewWeapons_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
+        {
+            if (e.Column.Index == 0)
+                e.SortDataGridViewColumnDate();
+            else if (Array.IndexOf(new int[] {2,4,9,10,11,12},e.Column.Index)>=0)
+                e.SortDataGridViewColumnNumeric();
+        }
+
         private void DisplaySuits()
         {
-            DataGridViewColumn sortcolprev = dataGridViewSuits.SortedColumn != null ? dataGridViewSuits.SortedColumn : dataGridViewSuits.Columns[0];
+            DataGridViewColumn sortcolprev = dataGridViewSuits.SortedColumn != null ? dataGridViewSuits.SortedColumn : dataGridViewSuits.Columns[1];
             SortOrder sortorderprev = dataGridViewSuits.SortedColumn != null ? dataGridViewSuits.SortOrder : SortOrder.Ascending;
             int firstline = dataGridViewSuits.SafeFirstDisplayedScrollingRowIndex();
 
             dataGridViewSuits.Rows.Clear();
-            System.Diagnostics.Debug.WriteLine("Clear Suit grid");
+          //  System.Diagnostics.Debug.WriteLine("Clear Suit grid");
             extPanelDataGridViewScrollSuits.SuspendLayout();
 
             if (last_suits >= 0)
             {
-                var suitlist = discoveryform.history.SuitList.Suits.Get(last_suits,x=>x.Sold==false && !SuitList.SpecialID(x.ID)); // get unsold suits and ignore special IDs
-                var fontscaled = EDDTheme.Instance.GetDialogScaledFont(0.8f);
+                var suitlist = discoveryform.history.SuitList.Suits(last_suits); 
 
                 var cursuit = discoveryform.history.SuitList.CurrentID(last_suits);                     // get current suit ID, or 0 if none
                 var curloadout = discoveryform.history.SuitLoadoutList.CurrentID(last_loadout);         // get current loadout ID, or 0 if none
@@ -155,14 +176,15 @@ namespace EDDiscovery.UserControls
                 foreach (var s in suitlist)
                 {
                     string stime = EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(s.Value.EventTime).ToString();
-                    string sname =  s.Value.FriendlyName + "(" + (s.Value.ID % 10000) + ")";
+                    string sname = s.Value.FriendlyName + ":"+(s.Value.ID % 10000);
                     string sprice = s.Value.Price.ToString("N0");
+                    string smods = s.Value.SuitMods != null ? string.Join(", ", s.Value.SuitMods) : "";
 
                     var loadouts = discoveryform.history.SuitLoadoutList.GetLoadoutsForSuit(last_loadout, s.Value.ID);
 
                     if (loadouts == null || loadouts.Count == 0)
                     {
-                        object[] rowobj = new object[] { stime, sname + (cursuit == s.Value.ID ? "*" : ""), sprice };
+                        object[] rowobj = new object[] { stime, sname + (cursuit == s.Value.ID ? "*" : ""), smods, sprice };
                         dataGridViewSuits.Rows.Add(rowobj);
                         DataGridViewRow r = dataGridViewSuits.Rows[dataGridViewSuits.RowCount - 1];
                         r.Tag = s.Value;
@@ -178,11 +200,12 @@ namespace EDDiscovery.UserControls
                             rw.CreateCells(dataGridViewSuits,
                                                 stime,
                                                 sname + (cursuit == s.Value.ID && curloadout == l.Value.ID ? "*" : ""),
+                                                smods,
                                                 sprice,
                                                 l.Value.Name + "(" + ((l.Value.ID % 10000).ToString()) + ")",
-                                                l.Value.Modules.ContainsKey("primaryweapon1") ? l.Value.Modules["primaryweapon1"].FriendlyName : "",
-                                                l.Value.Modules.ContainsKey("primaryweapon2") ? l.Value.Modules["primaryweapon2"].FriendlyName : "",
-                                                l.Value.Modules.ContainsKey("secondaryweapon") ? l.Value.Modules["secondaryweapon"].FriendlyName : ""
+                                                l.Value.GetModuleDescription("primaryweapon1"),
+                                                l.Value.GetModuleDescription("primaryweapon2"),
+                                                l.Value.GetModuleDescription("secondaryweapon")
                                                 );
 
                             dataGridViewSuits.Rows.Add(rw);
@@ -192,8 +215,11 @@ namespace EDDiscovery.UserControls
 
                             if (i > 0)      // tried emptying the row and using tags to sort but it insists on putting empty cells at top/bottom
                             {
-                                r.Cells[0].Style.Alignment = r.Cells[1].Style.Alignment = r.Cells[2].Style.Alignment = DataGridViewContentAlignment.MiddleRight;
-                                r.Cells[0].Style.Font = r.Cells[1].Style.Font = r.Cells[2].Style.Font = fontscaled;
+                                for (int ci = 1; ci <= 3; ci++)
+                                {
+                                    r.Cells[ci].Tag = r.Cells[ci].Value;
+                                    r.Cells[ci].Value = "";
+                                }
                             }
 
                             i++;
@@ -210,6 +236,17 @@ namespace EDDiscovery.UserControls
             dataGridViewSuits.Columns[sortcolprev.Index].HeaderCell.SortGlyphDirection = sortorderprev;
             if (firstline >= 0 && firstline < dataGridViewSuits.RowCount)
                 dataGridViewSuits.SafeFirstDisplayedScrollingRowIndex(firstline);
+        }
+
+        private void dataGridViewSuits_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
+        {
+            if (e.Column.Index == 0)
+                e.SortDataGridViewColumnDate(usetag: true);
+            else if (e.Column.Index == 2)
+                e.SortDataGridViewColumnNumeric(usetag: true);
+            else
+                e.SortDataGridViewColumnAlpha(usetag: true);
+
         }
 
 
@@ -237,6 +274,7 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
+
     }
 }
 

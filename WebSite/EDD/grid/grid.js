@@ -33,12 +33,12 @@ function onClose(evt)
 
 function onMessage(evt)
 {
-    console.log("Web Response " + evt.data);
+    console.log("Grid: Web Response " + evt.data);
 	jdata = JSON.parse(evt.data);
 
     if (jdata.responsetype == "indicator" || jdata.responsetype == "indicatorpush")
     {
-        HandleIndicatorMessage(jdata, "Status", "Actions", null);
+        HandleIndicatorMessage(jdata, "Status", "Actions", "StatusOther");
     }
 }
 

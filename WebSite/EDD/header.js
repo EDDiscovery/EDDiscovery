@@ -35,9 +35,8 @@ function write_footer(buttons)
         }
     });
 
-    html += "<p>(C) Elite Dangerous Discovery Team 2019-2020</p > ";
-
-    html += "<p> <a href=\"https://github.com/EDDiscovery/EDDiscovery/wiki\"> Help </a></p>  </footer>";
+    html += "<p>(C) Robby & Elite Dangerous Discovery Team 2019-2021 : <a href=\"https://github.com/EDDiscovery/EDDiscovery/wiki\"> Help </a></p > ";
+    html += "</footer>";
     document.write(html);
 } 
 

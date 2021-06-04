@@ -47,16 +47,13 @@ namespace EDDiscovery.UserControls
             this.panelPrev = new System.Windows.Forms.Panel();
             this.extPanelDataGridViewScrollWeapons = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.dataGridViewWeapons = new BaseUtils.DataGridViewColumnHider();
-            this.CWTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.CWName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.CWPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.CWDPS = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.extScrollBar1 = new ExtendedControls.ExtScrollBar();
             this.panelCurrent = new System.Windows.Forms.Panel();
             this.extPanelDataGridViewScrollSuits = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.dataGridViewSuits = new BaseUtils.DataGridViewColumnHider();
             this.CSTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CSName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CSMods = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CSPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CSLoadout = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CSPrimary1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -67,6 +64,20 @@ namespace EDDiscovery.UserControls
             this.extScrollBar2 = new ExtendedControls.ExtScrollBar();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.splitContainerMissions = new System.Windows.Forms.SplitContainer();
+            this.CWTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CWName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CWClass = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CWMods = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CWPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CWPrimary = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CWWType = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CWDamageType = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CWFireMode = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CWDamage = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CWRPS = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CWClipSize = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CWHopper = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CWRange = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panelPrev.SuspendLayout();
             this.extPanelDataGridViewScrollWeapons.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewWeapons)).BeginInit();
@@ -110,40 +121,28 @@ namespace EDDiscovery.UserControls
             this.dataGridViewWeapons.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.CWTime,
             this.CWName,
+            this.CWClass,
+            this.CWMods,
             this.CWPrice,
-            this.CWDPS});
+            this.CWPrimary,
+            this.CWWType,
+            this.CWDamageType,
+            this.CWFireMode,
+            this.CWDamage,
+            this.CWRPS,
+            this.CWClipSize,
+            this.CWHopper,
+            this.CWRange});
             this.dataGridViewWeapons.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewWeapons.Name = "dataGridViewWeapons";
             this.dataGridViewWeapons.ReadOnly = true;
             this.dataGridViewWeapons.RowHeaderMenuStrip = null;
             this.dataGridViewWeapons.RowHeadersVisible = false;
+            this.dataGridViewWeapons.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewWeapons.SingleRowSelect = true;
             this.dataGridViewWeapons.Size = new System.Drawing.Size(784, 302);
             this.dataGridViewWeapons.TabIndex = 1;
-            // 
-            // CWTime
-            // 
-            this.CWTime.HeaderText = "Time";
-            this.CWTime.Name = "CWTime";
-            this.CWTime.ReadOnly = true;
-            // 
-            // CWName
-            // 
-            this.CWName.HeaderText = "Name";
-            this.CWName.Name = "CWName";
-            this.CWName.ReadOnly = true;
-            // 
-            // CWPrice
-            // 
-            this.CWPrice.HeaderText = "Price";
-            this.CWPrice.Name = "CWPrice";
-            this.CWPrice.ReadOnly = true;
-            // 
-            // CWDPS
-            // 
-            this.CWDPS.HeaderText = "DPS";
-            this.CWDPS.Name = "CWDPS";
-            this.CWDPS.ReadOnly = true;
+            this.dataGridViewWeapons.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewWeapons_SortCompare);
             // 
             // extScrollBar1
             // 
@@ -204,6 +203,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewSuits.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.CSTime,
             this.CSName,
+            this.CSMods,
             this.CSPrice,
             this.CSLoadout,
             this.CSPrimary1,
@@ -215,9 +215,11 @@ namespace EDDiscovery.UserControls
             this.dataGridViewSuits.ReadOnly = true;
             this.dataGridViewSuits.RowHeaderMenuStrip = null;
             this.dataGridViewSuits.RowHeadersVisible = false;
+            this.dataGridViewSuits.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewSuits.SingleRowSelect = true;
             this.dataGridViewSuits.Size = new System.Drawing.Size(784, 266);
             this.dataGridViewSuits.TabIndex = 1;
+            this.dataGridViewSuits.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewSuits_SortCompare);
             // 
             // CSTime
             // 
@@ -230,6 +232,12 @@ namespace EDDiscovery.UserControls
             this.CSName.HeaderText = "Name";
             this.CSName.Name = "CSName";
             this.CSName.ReadOnly = true;
+            // 
+            // CSMods
+            // 
+            this.CSMods.HeaderText = "Mods";
+            this.CSMods.Name = "CSMods";
+            this.CSMods.ReadOnly = true;
             // 
             // CSPrice
             // 
@@ -266,12 +274,12 @@ namespace EDDiscovery.UserControls
             this.contextMenuStripSuits.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.forceSellShipToolStripMenuItem});
             this.contextMenuStripSuits.Name = "contextMenuStripSuits";
-            this.contextMenuStripSuits.Size = new System.Drawing.Size(181, 48);
+            this.contextMenuStripSuits.Size = new System.Drawing.Size(151, 26);
             // 
             // forceSellShipToolStripMenuItem
             // 
             this.forceSellShipToolStripMenuItem.Name = "forceSellShipToolStripMenuItem";
-            this.forceSellShipToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.forceSellShipToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
             this.forceSellShipToolStripMenuItem.Text = "Force Suit Sale";
             this.forceSellShipToolStripMenuItem.Click += new System.EventHandler(this.forceSellSuitToolStripMenuItem_Click);
             // 
@@ -326,6 +334,100 @@ namespace EDDiscovery.UserControls
             this.splitContainerMissions.SplitterDistance = 266;
             this.splitContainerMissions.TabIndex = 3;
             // 
+            // CWTime
+            // 
+            this.CWTime.HeaderText = "Time";
+            this.CWTime.Name = "CWTime";
+            this.CWTime.ReadOnly = true;
+            // 
+            // CWName
+            // 
+            this.CWName.HeaderText = "Name";
+            this.CWName.Name = "CWName";
+            this.CWName.ReadOnly = true;
+            // 
+            // CWClass
+            // 
+            this.CWClass.FillWeight = 50F;
+            this.CWClass.HeaderText = "Class";
+            this.CWClass.Name = "CWClass";
+            this.CWClass.ReadOnly = true;
+            // 
+            // CWMods
+            // 
+            this.CWMods.HeaderText = "Mods";
+            this.CWMods.Name = "CWMods";
+            this.CWMods.ReadOnly = true;
+            // 
+            // CWPrice
+            // 
+            this.CWPrice.FillWeight = 50F;
+            this.CWPrice.HeaderText = "Price";
+            this.CWPrice.Name = "CWPrice";
+            this.CWPrice.ReadOnly = true;
+            // 
+            // CWPrimary
+            // 
+            this.CWPrimary.FillWeight = 50F;
+            this.CWPrimary.HeaderText = "Primary";
+            this.CWPrimary.Name = "CWPrimary";
+            this.CWPrimary.ReadOnly = true;
+            // 
+            // CWWType
+            // 
+            this.CWWType.FillWeight = 50F;
+            this.CWWType.HeaderText = "Weapon Type";
+            this.CWWType.Name = "CWWType";
+            this.CWWType.ReadOnly = true;
+            // 
+            // CWDamageType
+            // 
+            this.CWDamageType.FillWeight = 50F;
+            this.CWDamageType.HeaderText = "Damage Type";
+            this.CWDamageType.Name = "CWDamageType";
+            this.CWDamageType.ReadOnly = true;
+            // 
+            // CWFireMode
+            // 
+            this.CWFireMode.FillWeight = 50F;
+            this.CWFireMode.HeaderText = "Fire Mode";
+            this.CWFireMode.Name = "CWFireMode";
+            this.CWFireMode.ReadOnly = true;
+            // 
+            // CWDamage
+            // 
+            this.CWDamage.FillWeight = 50F;
+            this.CWDamage.HeaderText = "Damage";
+            this.CWDamage.Name = "CWDamage";
+            this.CWDamage.ReadOnly = true;
+            // 
+            // CWRPS
+            // 
+            this.CWRPS.FillWeight = 50F;
+            this.CWRPS.HeaderText = "Rate/Sec";
+            this.CWRPS.Name = "CWRPS";
+            this.CWRPS.ReadOnly = true;
+            // 
+            // CWClipSize
+            // 
+            this.CWClipSize.FillWeight = 50F;
+            this.CWClipSize.HeaderText = "Clip Size";
+            this.CWClipSize.Name = "CWClipSize";
+            this.CWClipSize.ReadOnly = true;
+            // 
+            // CWHopper
+            // 
+            this.CWHopper.HeaderText = "Hopper Size";
+            this.CWHopper.Name = "CWHopper";
+            this.CWHopper.ReadOnly = true;
+            // 
+            // CWRange
+            // 
+            this.CWRange.FillWeight = 50F;
+            this.CWRange.HeaderText = "Range m";
+            this.CWRange.Name = "CWRange";
+            this.CWRange.ReadOnly = true;
+            // 
             // UserControlSuitsWeapons
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -359,18 +461,29 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtPanelDataGridViewScroll extPanelDataGridViewScrollSuits;
         private BaseUtils.DataGridViewColumnHider dataGridViewSuits;
         private ExtendedControls.ExtScrollBar extScrollBar2;
-        private System.Windows.Forms.DataGridViewTextBoxColumn CWTime;
-        private System.Windows.Forms.DataGridViewTextBoxColumn CWName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn CWPrice;
-        private System.Windows.Forms.DataGridViewTextBoxColumn CWDPS;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStripSuits;
+        private System.Windows.Forms.ToolStripMenuItem forceSellShipToolStripMenuItem;
         private System.Windows.Forms.DataGridViewTextBoxColumn CSTime;
         private System.Windows.Forms.DataGridViewTextBoxColumn CSName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn CSMods;
         private System.Windows.Forms.DataGridViewTextBoxColumn CSPrice;
         private System.Windows.Forms.DataGridViewTextBoxColumn CSLoadout;
         private System.Windows.Forms.DataGridViewTextBoxColumn CSPrimary1;
         private System.Windows.Forms.DataGridViewTextBoxColumn CSPrimary2;
         private System.Windows.Forms.DataGridViewTextBoxColumn CSSecondary;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStripSuits;
-        private System.Windows.Forms.ToolStripMenuItem forceSellShipToolStripMenuItem;
+        private System.Windows.Forms.DataGridViewTextBoxColumn CWTime;
+        private System.Windows.Forms.DataGridViewTextBoxColumn CWName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn CWClass;
+        private System.Windows.Forms.DataGridViewTextBoxColumn CWMods;
+        private System.Windows.Forms.DataGridViewTextBoxColumn CWPrice;
+        private System.Windows.Forms.DataGridViewTextBoxColumn CWPrimary;
+        private System.Windows.Forms.DataGridViewTextBoxColumn CWWType;
+        private System.Windows.Forms.DataGridViewTextBoxColumn CWDamageType;
+        private System.Windows.Forms.DataGridViewTextBoxColumn CWFireMode;
+        private System.Windows.Forms.DataGridViewTextBoxColumn CWDamage;
+        private System.Windows.Forms.DataGridViewTextBoxColumn CWRPS;
+        private System.Windows.Forms.DataGridViewTextBoxColumn CWClipSize;
+        private System.Windows.Forms.DataGridViewTextBoxColumn CWHopper;
+        private System.Windows.Forms.DataGridViewTextBoxColumn CWRange;
     }
 }

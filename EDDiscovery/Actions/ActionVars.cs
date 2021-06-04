@@ -36,6 +36,7 @@ namespace EDDiscovery.Actions
             {
                 System.Globalization.CultureInfo ct = System.Globalization.CultureInfo.InvariantCulture;
 
+                vars[prefix + "CurrentMode"] = he.TravelState.ToString();
                 vars[prefix + "JID"] = he.Journalid.ToString(ct);
                 vars[prefix + "UTCTime"] = he.EventTimeUTC.ToStringUS();
                 vars[prefix + "LocalTime"] = he.EventTimeUTC.ToLocalTime().ToStringUS();

@@ -524,7 +524,7 @@ namespace EDDiscovery.UserControls
         {
             UserControlForm tcf = (UserControlForm)sender;
             tabforms.Remove(tcf);
-            discoveryform.ActionRun(Actions.ActionEventEDList.onPopDown, null, new BaseUtils.Variables(new string[] { "PopOutName", tcf.DBRefName.Substring(9), "PopOutTitle", tcf.WinTitle }));
+            discoveryform.ActionRun(Actions.ActionEventEDList.onPopDown, new BaseUtils.Variables(new string[] { "PopOutName", tcf.DBRefName.Substring(9), "PopOutTitle", tcf.WinTitle }));
         }
 
         public List<UserControlCommonBase> GetListOfControls(Type c)

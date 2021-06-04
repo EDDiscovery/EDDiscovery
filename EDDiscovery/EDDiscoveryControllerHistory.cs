@@ -183,11 +183,12 @@ namespace EDDiscovery
                         EDDOptions.Instance.CAPIDirectory()
                     };
 
-                    journalmonitor.SetupWatchers(stdfolders, EDDOptions.Instance.DefaultJournalMatchFilename);         // monitors are stopped, set up watchers
+                    journalmonitor.SetupWatchers(stdfolders, EDDOptions.Instance.DefaultJournalMatchFilename, EDDOptions.Instance.MinJournalDateUTC);         // monitors are stopped, set up watchers
 
                     int forcereloadoflastn = args.ForceJournalReload ? int.MaxValue / 2 : 0;     // if forcing a reload, we indicate that by setting the reload count to a very high value, but not enough to cause int wrap
 
                     journalmonitor.ParseJournalFilesOnWatchers((p, s) => ReportRefreshProgress(p, string.Format("Processing log file {0}".T(EDTx.EDDiscoveryController_PLF),s)), 
+                                                                         EDDOptions.Instance.MinJournalDateUTC,
                                                                          forcereloadoflastn);
 
                     if (args.NetLogPath != null)            // see if net logs need reading for old times sake.

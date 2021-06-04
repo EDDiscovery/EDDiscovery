@@ -178,7 +178,8 @@ namespace EDDiscovery.Actions
 
                         if (cmdname.Equals("action"))
                         {
-                            int count = (ap.ActionController as ActionController).ActionRunOnEntry(he, Actions.ActionEventEDList.EventCmd(he), now: true);
+                            var ctrl = (ap.ActionController as ActionController);
+                            int count = ctrl.ActionRunOnEntry(he, Actions.ActionEventEDList.EventCmd(he), now: true);
                             ap[prefix + "Count"] = count.ToString(System.Globalization.CultureInfo.InvariantCulture);
                         }
                         else if (cmdname.Equals("edsm"))

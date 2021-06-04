@@ -59,7 +59,7 @@ namespace EDDiscovery
             {
                 JournalEntry je = journalqueue.Dequeue();
 
-                if (!HistoryList.MergeEntries(prev, je))                // if not merged
+                if (!HistoryList.MergeOrDiscardEntries(prev, je))                // if not merged
                 {
                     if (prev != null)                       // no merge, so if we have a merge candidate on top, run actions on it.
                         ActionEntry(prev);

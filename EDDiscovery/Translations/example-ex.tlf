@@ -143,7 +143,10 @@ SECTION PopOutInfo
 .Spansh.Description: "Spansh - Automatic web view of system" @
 .EDDB.Title: "EDDB" @
 .EDDB.Description: "EDDB - Automatic web view of system" @
-
+.MicroResources.Title: "Micro Resources" @
+.MicroResources.Description: "Micro resource count" @
+.SuitsWeapons.Title: "Suits & Weapons" @
+.SuitsWeapons.Description: "Suits, Loadouts, Weapons" @
 
 SECTION EDDiscoveryForm
 

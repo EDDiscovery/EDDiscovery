@@ -193,7 +193,7 @@ namespace EDDiscovery.WebServer
         {
             public byte[] Response(string partialpath, HttpListenerRequest request)
             {
-                //System.Diagnostics.Debug.WriteLine("Serve icon " + partialpath);
+                System.Diagnostics.Debug.WriteLine("Serve icon " + partialpath);
 
                 if (partialpath.Contains(".png"))
                 {
@@ -210,7 +210,17 @@ namespace EDDiscovery.WebServer
                     else
                         img = BaseUtils.Icons.IconSet.GetIcon(nopng) as Bitmap;
 
-                    return img.ConvertTo(System.Drawing.Imaging.ImageFormat.Png);   // this converts to png and returns the raw PNG bytes..
+                    //try
+                    //{
+                        Bitmap bmpclone = img.Clone() as Bitmap;        
+                        var cnv = bmpclone.ConvertTo(System.Drawing.Imaging.ImageFormat.Png);   // this converts to png and returns the raw PNG bytes..
+                        return cnv;
+                    //}
+                    //catch (Exception ex)
+                    //{
+                        //System.Diagnostics.Debug.WriteLine("..Convert exception " + ex);
+                        //return null;
+                    //}
                 }
 
                 return null;
@@ -487,7 +497,8 @@ namespace EDDiscovery.WebServer
                 }
                 else
                 {
-                    response["ShipType"] = stat.ShipType.ToString();
+                    response["ShipType"] = stat.MajorMode.ToString();
+                    response["Mode"] = stat.Mode.ToString();
                     response["GUIFocus"] = stat.Focus.ToString();
 
                     JArray pips = new JArray();
@@ -534,13 +545,15 @@ namespace EDDiscovery.WebServer
                     response["SrvTurret"] = stat.Flags.Contains(UITypeEnum.SrvTurret);
                     response["SrvUnderShip"] = stat.Flags.Contains(UITypeEnum.SrvUnderShip);
                     response["SrvDriveAssist"] = stat.Flags.Contains(UITypeEnum.SrvDriveAssist);
+                    response["SrvHighBeam"] = stat.Flags.Contains(UITypeEnum.SrvHighBeam);
 
                     // main ship
                     response["FsdMassLocked"] = stat.Flags.Contains(UITypeEnum.FsdMassLocked);
                     response["FsdCharging"] = stat.Flags.Contains(UITypeEnum.FsdCharging);
                     response["FsdCooldown"] = stat.Flags.Contains(UITypeEnum.FsdCooldown);
+                    response["FsdJump"] = stat.Flags.Contains(UITypeEnum.FsdJump);
 
-                    // both
+                    // all ships
 
                     response["LowFuel"] = stat.Flags.Contains(UITypeEnum.LowFuel);
 
@@ -551,9 +564,25 @@ namespace EDDiscovery.WebServer
                     response["HUDInAnalysisMode"] = stat.Flags.Contains(UITypeEnum.HUDInAnalysisMode);
                     response["NightVision"] = stat.Flags.Contains(UITypeEnum.NightVision);
 
+                    response["GlideMode"] = stat.Flags.Contains(UITypeEnum.GlideMode);  // odyssey
+
                     // all
 
                     response["LegalState"] = stat.LegalState;
+                    response["BodyName"] = stat.BodyName;
+
+                    // Odyssey on foot
+                    response["AimDownSight"] = stat.Flags.Contains(UITypeEnum.AimDownSight);
+                    response["BreathableAtmosphere"] = stat.Flags.Contains(UITypeEnum.BreathableAtmosphere);
+
+                    response["Oxygen"] = stat.Oxygen;
+                    response["Gravity"] = stat.Gravity;
+                    response["Health"] = stat.Health;
+                    response["Temperature"] = stat.Temperature;
+                    response["TemperatureState"] = stat.TemperatureState.ToString();
+                    response["SelectedWeapon"] = stat.SelectedWeapon; ;
+                    response["SelectedWeaponLocalised"] = stat.SelectedWeapon_Localised;
+
                 }
 
                 return response;

@@ -295,7 +295,7 @@ namespace EDDiscovery
                 "TopLevelMenuName" , it.OwnerItem.Name,
             });
 
-            actioncontroller.ActionRun(Actions.ActionEventEDList.onMenuItem, null, vars);
+            actioncontroller.ActionRun(Actions.ActionEventEDList.onMenuItem, null,vars);
         }
 
 
@@ -306,8 +306,8 @@ namespace EDDiscovery
         public int ActionRunOnEntry(HistoryEntry he, ActionLanguage.ActionEvent av)
         { return actioncontroller.ActionRunOnEntry(he, av); }
 
-        public int ActionRun(ActionLanguage.ActionEvent ev, HistoryEntry he = null, BaseUtils.Variables additionalvars = null, string flagstart = null, bool now = false)
-        { return actioncontroller.ActionRun(ev, he, additionalvars, flagstart, now); }
+        public int ActionRun(ActionLanguage.ActionEvent ev, BaseUtils.Variables additionalvars = null, string flagstart = null, bool now = false)
+        { return actioncontroller.ActionRun(ev, null, additionalvars, flagstart, now); }
 
         #endregion
 

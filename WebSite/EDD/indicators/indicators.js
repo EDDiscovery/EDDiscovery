@@ -66,7 +66,7 @@ function HandleIndicatorMessage(jdata, statuselement, actionelement, statusother
 
     console.log("Indicators Mod" + JSON.stringify(jdata));
 
-    var newshiptype = jdata["ShipType"];
+    var newshiptype = jdata["ShipType"];                        // really its major mode from odyssey now, backwards compatible naming
     var newinwing = jdata["InWing"] != null && jdata["InWing"] == true;
     var newsupercruise = jdata["Supercruise"] != null && jdata["Supercruise"] == true;
     var newlanded = jdata["Landed"] != null && jdata["Landed"] == true;
@@ -74,7 +74,7 @@ function HandleIndicatorMessage(jdata, statuselement, actionelement, statusother
 
     if (newshiptype != currentshiptype || newinwing != currentinwing || newsupercruise != currentsupercruise || newlanded != currentlanded || newdocked != currentdocked)
     {
-        currentshiptype = newshiptype;       // SRV, MainShip, Fighter or None.
+        currentshiptype = newshiptype;       // SRV, MainShip, Fighter etc
         currentinwing = newinwing;
         currentsupercruise = newsupercruise;
         currentlanded = newlanded;
@@ -91,8 +91,9 @@ function HandleIndicatorMessage(jdata, statuselement, actionelement, statusother
 
         removeChildren(tstatusother);
 
-        if (jdata["LegalState"] != null)
-            tstatusother.appendChild(CreatePara("Legal State: " + jdata["LegalState"]));
+        if (jdata["BodyName"] != null && jdata["BodyName"] != "")
+            tstatusother.appendChild(CreatePara("Body Name: " + jdata["BodyName"]));
+
         if (jdata["Firegroup"] >= 0 && newshiptype == "MainShip")
             tstatusother.appendChild(CreatePara("Fire Group: " + "ABCDEFGHIJK"[jdata["Firegroup"]]));
         if (jdata["ValidPips"])
@@ -117,6 +118,14 @@ function HandleIndicatorMessage(jdata, statuselement, actionelement, statusother
 
         if (jdata["ValidPlanetRadius"])
             tstatusother.appendChild(CreatePara("Radius: " + jdata["PlanetRadius"] / 1000.0 + "km"));
+        if (jdata["Gravity"] > 0)
+            tstatusother.appendChild(CreatePara("Gravity: " + jdata["Gravity"] + "g"));
+        if (jdata["Temperature"] > 0)
+            tstatusother.appendChild(CreatePara("Temperature: " + jdata["Temperature"] + "K"));
+        if (jdata["SelectedWeapon"] != null && jdata["SelectedWeapon"] != "$humanoid_fists" )
+            tstatusother.appendChild(CreatePara("Weapon/Tool: " + jdata["SelectedWeaponLocalised"]));
+        if (jdata["LegalState"] != null)
+            tstatusother.appendChild(CreatePara("Legal State: " + jdata["LegalState"]));
     }
 
 }
@@ -199,6 +208,8 @@ function SetupIndicators(jdata,tstatus,tactions)
 
             CreateAction("GalaxyMapOpen"),
             CreateAction("SystemMapOpen"),
+            CreateActionButton("1", "FocusCommsPanel"),
+            CreateActionButton("1", "QuickCommsPanel"),
             CreateActionButton("Screenshot", "F10", true, "Screen Shot"),
 
             CreateAction("SilentRunning", "ToggleButtonUpInput", innormalspace,0,true, "Silent Running"),
@@ -240,22 +251,22 @@ function SetupIndicators(jdata,tstatus,tactions)
         ]
 
         var actionlist = [
-            CreateAction( "Lights", "ShipSpotLightToggle"),
-            CreateAction( "FlightAssist", "ToggleFlightAssist"),
-            CreateAction( "NightVision", "NightVisionToggle"),
-            CreateActionButton( "IncreaseSystemsPower"),
-            CreateActionButton( "IncreaseEnginesPower"),
-            CreateActionButton( "IncreaseWeaponsPower"),
-            CreateActionButton( "ResetPowerDistribution"),
+            CreateAction("Lights", "ShipSpotLightToggle"),
+            CreateAction("FlightAssist", "ToggleFlightAssist"),
+            CreateAction("NightVision", "NightVisionToggle"),
+            CreateActionButton("IncreaseSystemsPower"),
+            CreateActionButton("IncreaseEnginesPower"),
+            CreateActionButton("IncreaseWeaponsPower"),
+            CreateActionButton("ResetPowerDistribution"),
 
-            CreateActionButton( "OrderDefensiveBehaviour"),
-            CreateActionButton( "OrderAggressiveBehaviour"),
-            CreateActionButton( "OrderFocusTarget"),
-            CreateActionButton( "OrderHoldFire"),
-            CreateActionButton( "OrderHoldPosition"),
-            CreateActionButton( "OrderFollow"),
-            CreateActionButton( "OrderRequestDock"),
-            CreateActionButton( "OpenOrders"),
+            CreateActionButton("OrderDefensiveBehaviour"),
+            CreateActionButton("OrderAggressiveBehaviour"),
+            CreateActionButton("OrderFocusTarget"),
+            CreateActionButton("OrderHoldFire"),
+            CreateActionButton("OrderHoldPosition"),
+            CreateActionButton("OrderFollow"),
+            CreateActionButton("OrderRequestDock"),
+            CreateActionButton("OpenOrders"),
 
             CreateAction("GalaxyMapOpen"),
             CreateAction("SystemMapOpen"),
@@ -265,9 +276,48 @@ function SetupIndicators(jdata,tstatus,tactions)
         tstatus.appendChild(tablerowmultitdlist(statuslist));
         tactions.appendChild(tablerowmultitdlist(actionlist));
     }
+    else if (currentshiptype == "OnFoot")
+    {
+        var statuslist = [
+            CreateIndicator("ShieldsUp")
+        ]
+
+        var actionlist = [
+            CreateAction("Reload", "HumanoidReloadButton"),
+            CreateAction("SwitchWeapon", "HumanoidSwitchWeapon"),
+            CreateAction("1", "HumanoidSelectPrimaryWeaponButton"),
+            CreateAction("1", "HumanoidSelectSecondaryWeaponButton"),
+            CreateAction("1", "HumanoidSelectUtilityWeaponButton"),
+            CreateAction("1", "HumanoidSelectPreviousWeaponButton"),
+            CreateAction("1", "HumanoidSelectNextWeaponButton"),
+            CreateAction("1", "HumanoidHideWeaponButton"),
+            CreateAction("1", "HumanoidSelectNextGrenadeTypeButton"),
+            CreateAction("1", "HumanoidSelectPreviousGrenadeTypeButton"),
+            CreateAction("1", "HumanoidToggleFlashlightButton"),
+            CreateAction("ShieldsUp", "HumanoidToggleShieldsButton"),
+            CreateAction("1", "HumanoidSwitchToRechargeTool"),
+            CreateAction("1", "HumanoidSwitchToCompAnalyser"),
+            CreateAction("1", "HumanoidSwitchToSuitTool"),
+            CreateAction("1", "HumanoidToggleToolModeButton"),
+            CreateAction("1", "HumanoidToggleMissionHelpPanelButton"),
+            CreateAction("GalaxyMapOpen", "GalaxyMapOpen_Humanoid"),
+            CreateAction("SystemMapOpen", "SystemMapOpen_Humanoid"),
+            CreateAction("1", "FocusCommsPanel_Humanoid"),
+            CreateAction("1", "QuickCommsPanel_Humanoid"),
+            CreateAction("1", "HumanoidOpenAccessPanelButton"),
+            CreateAction("1", "HumanoidConflictContextualUIButton"),
+        ];
+
+        tstatus.appendChild(tablerowmultitdlist(statuslist));
+        tactions.appendChild(tablerowmultitdlist(actionlist));
+    }
+    else if (currentshiptype == "Multicrew")
+    {
+        tstatus.appendChild(CreatePara("Multicrew not supported yet"));
+    }
     else
     {
-        tstatus.appendChild(CreatePara("Elite not running"));
+        tstatus.appendChild(CreatePara("Elite not running/Unknown mode"));
     }
 }
 
