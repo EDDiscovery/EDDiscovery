@@ -31,8 +31,6 @@ for:
     only:
       - image: macos-mojave
   build_script:
-    - brew install mono
-    - brew install mono-libgdiplus
     - sh monobuildmac
 cache:
   - packages -> **\packages.config
