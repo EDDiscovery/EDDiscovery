@@ -24,6 +24,6 @@ for:
     only:
       - image: Ubuntu
   build_script:
-    - msbuild /p:Configuration=Release EDDiscovery.sln /p:DefineConstants=NO_SYSTEM_SPEECH
+    - msbuild /p:Configuration=Release EDDiscovery.sln '/p:DefineConstants="NO_SYSTEM_SPEECH;MONO"'
 cache:
   - packages -> **\packages.config
