@@ -2,6 +2,7 @@ version: 11.6.0.{build}
 image: 
   - Visual Studio 2017
   - Ubuntu
+  - macos-mojave
 configuration: Release
 install:
   - git submodule update --init
@@ -24,6 +25,14 @@ for:
     only:
       - image: Ubuntu
   build_script:
-    - msbuild /p:Configuration=Release EDDiscovery.sln '/p:DefineConstants="NO_SYSTEM_SPEECH;MONO"'
+    - sh monobuild
+-
+  matrix:
+    only:
+      - image: macos-mojave
+  build_script:
+    - brew install mono
+    - brew install mono-libgdiplus
+    - sh monobuildmac
 cache:
   - packages -> **\packages.config
