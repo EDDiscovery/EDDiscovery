@@ -59,6 +59,8 @@ namespace EDDiscovery.UserControls
             terraformableToolStripMenuItem.Checked = GetSetting("showTerraformable", true);
             hasVolcanismToolStripMenuItem.Checked = GetSetting("showVolcanism", true);
             landableToolStripMenuItem.Checked = GetSetting("isLandable", true);
+            landableWithAtmosphereToolStripMenuItem.Checked = GetSetting("isLandableWithAtmosphere", true);
+            landableWithVolcanismToolStripMenuItem.Checked = GetSetting("isLandableWithVolcanism", true);
             hasRingsToolStripMenuItem.Checked = GetSetting("showRinged", true);
             hideAlreadyMappedBodiesToolStripMenuItem.Checked = GetSetting("hideMapped", true);
             autoHideToolStripMenuItem.Checked = GetSetting("autohide", false);
@@ -78,7 +80,9 @@ namespace EDDiscovery.UserControls
             SetAlign((StringAlignment)GetSetting("align", 0));
 
             // install the handlers AFTER setup otherwise you get lots of events
-            this.landableToolStripMenuItem.Click += new System.EventHandler(this.landableToolStripMenuItem_Click);            
+            this.landableToolStripMenuItem.Click += new System.EventHandler(this.landableToolStripMenuItem_Click);
+            this.landableWithAtmosphereToolStripMenuItem.Click += new System.EventHandler(this.landableWithAtmosphereToolStripMenuItem_Click);
+            this.landableWithVolcanismToolStripMenuItem.Click += new System.EventHandler(this.landableWithVolcanismToolStripMenuItem_Click);
             this.ammoniaWorldToolStripMenuItem.Click += new System.EventHandler(this.ammoniaWorldToolStripMenuItem_Click);
             this.earthlikeWorldToolStripMenuItem.Click += new System.EventHandler(this.earthlikeWorldToolStripMenuItem_Click);
             this.waterWorldToolStripMenuItem.Click += new System.EventHandler(this.waterWorldToolStripMenuItem_Click);
@@ -285,6 +289,8 @@ namespace EDDiscovery.UserControls
 
                                 if  (                                    
                                     (sd.IsLandable && landableToolStripMenuItem.Checked) ||
+                                    (sd.IsLandable && sd.HasAtmosphericComposition && landableWithAtmosphereToolStripMenuItem.Checked) ||
+                                    (sd.IsLandable && sd.HasMeaningfulVolcanism && landableWithVolcanismToolStripMenuItem.Checked) ||
                                     (sd.AmmoniaWorld && ammoniaWorldToolStripMenuItem.Checked) ||
                                     (sd.Earthlike && earthlikeWorldToolStripMenuItem.Checked) ||
                                     (sd.WaterWorld && waterWorldToolStripMenuItem.Checked) ||
@@ -408,7 +414,8 @@ namespace EDDiscovery.UserControls
             information.Append((js.HasMeaningfulVolcanism) ? @" Has ".T(EDTx.UserControlSurveyor_Has) + js.Volcanism + "." : null);
             information.Append((js.nRadius < lowRadiusLimit) ? @" Low Radius.".T(EDTx.UserControlSurveyor_LowRadius) : null);
             information.Append((sn.Signals != null) ? " Has Signals.".T(EDTx.UserControlSurveyor_Signals) : null);
-            information.Append((js.IsLandable) ? @" is landable.".T(EDTx.UserControlSurveyor_islandable) : null);
+            information.Append((js.IsLandable && !js.HasAtmosphericComposition) ? @" is landable.".T(EDTx.UserControlSurveyor_islandable) : null);
+            information.Append((js.IsLandable && js.HasAtmosphericComposition) ? @" is landable and has atmosphere." : null);
 
             var ev = js.GetEstimatedValues();
 
@@ -487,7 +494,16 @@ namespace EDDiscovery.UserControls
             PutSetting("isLandable", landableToolStripMenuItem.Checked);
             DrawSystem(last_sys);
         }
-
+        private void landableWithAtmosphereToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PutSetting("isLandableWithAtmosphere", landableToolStripMenuItem.Checked);
+            DrawSystem(last_sys);
+        }
+        private void landableWithVolcanismToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PutSetting("isLandableWithVolcanism", landableToolStripMenuItem.Checked);
+            DrawSystem(last_sys);
+        }
         private void hasVolcanismToolStripMenuItem_Click(object sender, EventArgs e)
         {
             PutSetting("showVolcanism", hasVolcanismToolStripMenuItem.Checked);
@@ -646,5 +662,10 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
+
+        private void contextMenuStrip_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+
+        }
     }
 }

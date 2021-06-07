@@ -57,6 +57,8 @@ namespace EDDiscovery.UserControls
             this.lowRadiusToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hasSignalsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.landableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.landableWithAtmosphereToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.landableWithVolcanismToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showAllPlanetsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showAllStarsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showBeltClustersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -105,6 +107,7 @@ namespace EDDiscovery.UserControls
             this.textAlignToolStripMenuItem});
             this.contextMenuStrip.Name = "contextMenuStrip";
             this.contextMenuStrip.Size = new System.Drawing.Size(226, 346);
+            this.contextMenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Opening);
             // 
             // planetaryClassesToolStripMenuItem
             // 
@@ -151,7 +154,9 @@ namespace EDDiscovery.UserControls
             this.hasRingsToolStripMenuItem,
             this.lowRadiusToolStripMenuItem,
             this.hasSignalsToolStripMenuItem,
-            this.landableToolStripMenuItem});
+            this.landableToolStripMenuItem,
+            this.landableWithAtmosphereToolStripMenuItem,
+            this.landableWithVolcanismToolStripMenuItem});
             this.bodyFeaturesToolStripMenuItem.Name = "bodyFeaturesToolStripMenuItem";
             this.bodyFeaturesToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
             this.bodyFeaturesToolStripMenuItem.Text = "Body Features";
@@ -162,7 +167,7 @@ namespace EDDiscovery.UserControls
             this.terraformableToolStripMenuItem.CheckOnClick = true;
             this.terraformableToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.terraformableToolStripMenuItem.Name = "terraformableToolStripMenuItem";
-            this.terraformableToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
+            this.terraformableToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
             this.terraformableToolStripMenuItem.Text = "Terraformable";
             // 
             // hasVolcanismToolStripMenuItem
@@ -171,7 +176,7 @@ namespace EDDiscovery.UserControls
             this.hasVolcanismToolStripMenuItem.CheckOnClick = true;
             this.hasVolcanismToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.hasVolcanismToolStripMenuItem.Name = "hasVolcanismToolStripMenuItem";
-            this.hasVolcanismToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
+            this.hasVolcanismToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
             this.hasVolcanismToolStripMenuItem.Text = "Has Volcanism";
             // 
             // hasRingsToolStripMenuItem
@@ -180,7 +185,7 @@ namespace EDDiscovery.UserControls
             this.hasRingsToolStripMenuItem.CheckOnClick = true;
             this.hasRingsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.hasRingsToolStripMenuItem.Name = "hasRingsToolStripMenuItem";
-            this.hasRingsToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
+            this.hasRingsToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
             this.hasRingsToolStripMenuItem.Text = "Has Rings";
             // 
             // lowRadiusToolStripMenuItem
@@ -189,7 +194,7 @@ namespace EDDiscovery.UserControls
             this.lowRadiusToolStripMenuItem.CheckOnClick = true;
             this.lowRadiusToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.lowRadiusToolStripMenuItem.Name = "lowRadiusToolStripMenuItem";
-            this.lowRadiusToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
+            this.lowRadiusToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
             this.lowRadiusToolStripMenuItem.Text = "Low Radius";
             // 
             // hasSignalsToolStripMenuItem
@@ -198,7 +203,7 @@ namespace EDDiscovery.UserControls
             this.hasSignalsToolStripMenuItem.CheckOnClick = true;
             this.hasSignalsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.hasSignalsToolStripMenuItem.Name = "hasSignalsToolStripMenuItem";
-            this.hasSignalsToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
+            this.hasSignalsToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
             this.hasSignalsToolStripMenuItem.Text = "Has Signals";
             this.hasSignalsToolStripMenuItem.Click += new System.EventHandler(this.hasSignalsToolStripMenuItem_Click);
             // 
@@ -206,9 +211,29 @@ namespace EDDiscovery.UserControls
             // 
             this.landableToolStripMenuItem.CheckOnClick = true;
             this.landableToolStripMenuItem.Name = "landableToolStripMenuItem";
-            this.landableToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
+            this.landableToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
             this.landableToolStripMenuItem.Text = "Landable";
             this.landableToolStripMenuItem.Click += new System.EventHandler(this.landableToolStripMenuItem_Click);
+            // 
+            // landableWithAtmosphereToolStripMenuItem
+            // 
+            this.landableWithAtmosphereToolStripMenuItem.Checked = true;
+            this.landableWithAtmosphereToolStripMenuItem.CheckOnClick = true;
+            this.landableWithAtmosphereToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.landableWithAtmosphereToolStripMenuItem.Name = "landableWithAtmosphereToolStripMenuItem";
+            this.landableWithAtmosphereToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
+            this.landableWithAtmosphereToolStripMenuItem.Text = "Landable with atmosphere";
+            this.landableWithAtmosphereToolStripMenuItem.Click += new System.EventHandler(this.landableWithAtmosphereToolStripMenuItem_Click);
+            // 
+            // landableWithVolcanismToolStripMenuItem
+            // 
+            this.landableWithVolcanismToolStripMenuItem.Checked = true;
+            this.landableWithVolcanismToolStripMenuItem.CheckOnClick = true;
+            this.landableWithVolcanismToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.landableWithVolcanismToolStripMenuItem.Name = "landableWithVolcanismToolStripMenuItem";
+            this.landableWithVolcanismToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
+            this.landableWithVolcanismToolStripMenuItem.Text = "Landable with volcanism";
+            this.landableWithVolcanismToolStripMenuItem.Click += new System.EventHandler(this.landableWithVolcanismToolStripMenuItem_Click);
             // 
             // showAllPlanetsToolStripMenuItem
             // 
@@ -456,5 +481,7 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripMenuItem selectFSSSignalsShownToolStripMenuItem;
         private ExtendedControls.ExtPictureBoxScroll extPictureBoxScroll;
         private ExtendedControls.ExtScrollBar extScrollBar;
+        private System.Windows.Forms.ToolStripMenuItem landableWithAtmosphereToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem landableWithVolcanismToolStripMenuItem;
     }
 }
