@@ -133,9 +133,29 @@ namespace EDDiscovery.UserControls
 
                     nodelabels[1] = nodelabels[1].AppendPrePad(appendlabeltext, Environment.NewLine);
 
- //  nodelabels[1] = nodelabels[1].AppendPrePad("" + sn.ScanData?.BodyID, Environment.NewLine);
- 
-                    bool valuable = sc.EstimatedValue >= ValueLimit;
+                    //  nodelabels[1] = nodelabels[1].AppendPrePad("" + sn.ScanData?.BodyID, Environment.NewLine);
+                    
+                    var ev = sc.GetEstimatedValues();
+                    var PotValue = sc.EstimatedValue;
+
+                    if (sc.WasMapped == true && sc.WasDiscovered == true)
+                    {
+                         PotValue = ev.EstimatedValueMappedEfficiently;
+                    }
+                    else if (sc.WasMapped == true && sc.WasDiscovered == false)
+                    {
+                         PotValue = ev.EstimatedValueMappedEfficiently;
+                    }
+                    else if (sc.WasMapped == false && sc.WasDiscovered == true)
+                    {
+                         PotValue = ev.EstimatedValueFirstMappedEfficiently; 
+                    }
+                    else if (sc.WasMapped == false && sc.WasDiscovered == false)
+                    {
+                         PotValue = ev.EstimatedValueFirstDiscoveredFirstMappedEfficiently;
+                    }
+                    
+                    bool valuable = PotValue >= ValueLimit;
                     bool isdiscovered = sc.IsPreviouslyDiscovered && sc.IsPlanet;
                     int iconoverlays = ShowOverlays ? ((sc.Terraformable ? 1 : 0) + (sc.HasMeaningfulVolcanism ? 1 : 0) + 
                                         (valuable ? 1 : 0) + (sc.Mapped ? 1 : 0) + (isdiscovered ? 1 : 0) + (sc.IsPreviouslyMapped ? 1 : 0) +
