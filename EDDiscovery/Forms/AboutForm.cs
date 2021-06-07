@@ -87,7 +87,7 @@ namespace EDDiscovery.Forms
 
         protected override void OnClosing(CancelEventArgs e)
         {
-            webbrowser.Stop();
+            webbrowser?.Stop();
             base.OnClosing(e);
         }
 
