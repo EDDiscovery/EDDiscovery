@@ -133,7 +133,7 @@ namespace EDDiscovery.UserControls
 
                     nodelabels[1] = nodelabels[1].AppendPrePad(appendlabeltext, Environment.NewLine);
 
-                    //  nodelabels[1] = nodelabels[1].AppendPrePad("" + sn.ScanData?.BodyID, Environment.NewLine);
+//  nodelabels[1] = nodelabels[1].AppendPrePad("" + sn.ScanData?.BodyID, Environment.NewLine);
                     
                     var ev = sc.GetEstimatedValues();
                     var PotValue = sc.EstimatedValue;
