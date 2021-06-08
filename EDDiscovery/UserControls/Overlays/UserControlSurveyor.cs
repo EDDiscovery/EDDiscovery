@@ -663,9 +663,5 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
-        private void contextMenuStrip_Opening(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-
-        }
     }
 }
