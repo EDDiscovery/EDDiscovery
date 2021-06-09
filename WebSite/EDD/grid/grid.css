@@ -1,92 +1,73 @@
 
 /* Style the article section */
 
-body
-{
+body {
     background-color: black;
-}
-
-.wrapper
-{
-    clear: both;
-    width: 100%;
-}
-
-/* clear the contents after wrapper.. works better than clearing on next item */
-.wrapper::after
-{
-    content: "";
-    visibility: hidden;
-    height: 0;
-    display: block;
-    clear: both;
-}
-
-/* Common status and action box styling */
-
-#StatusBox, #ActionBox
-{
-    background-color: black;
-    margin-top: 0.5em;
-    width: 100%;
-}
-
-#ActionBox
-{
-    border: 2px solid #ffac28;
-}
-
-/* the p element can hold the name of the box, move it relative to give a inline label */
-
-#ActionBox p
-{
-    color: black;
-    position: relative;
-    top: -0.5em;
-    margin-left: 0.5em;
-    display: inline;
-    background-color: #ffac28;
-}
-
-#StatusBox p,#StatusOther
-{
     color: darkorange;
-    line-height:0.1em;
+    font-family: Arial,Helvetica,Sans-serif;
+    margin: 0px;
 }
 
-#ActionBox td
-{
-    display: inline; /* td's in action box are inline so flow around the areas */
-}
-#StatusBox td
-{
-    display: inline; /* td's in action box are inline so flow around the actionbox areas */
-}
-
-/* the img element is the button .. style it */
-
-#StatusBox img, #ActionBox img
-{
-    padding: 10px;
-    border: 2px solid darkorange;
-    border-radius: 8px;
+/* top level div is a flex. Important to lock page to vh so it does not scroll and occupies the whole page */
+.page {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 }
 
-#StatusBox img
-{
-    border-radius: 16px;
+/* first is headernav, third is footer */
+/* second part of three sections is a flex:1 */
+.middlesection {
+    width: 100%;
+    flex: 1;
+    clear: both;
+    overflow: hidden;
 }
 
-/* class assigned to say selected */
 
-.entryselected
-{
+/* Status and action boxes are constrained inside middlesection by width, which we set to 95% to prevent the page width scroll bar appearing for some reason */
+
+#StatusBox, #ActionBox {
+    margin-top: 1em;
+    width: 95%;
+    border: 1px solid #ffac28;
+}
+
+
+    /* td's in action box are inline so flow around the actionbox areas, expanding it vertically */
+
+    #ActionBox td, #StatusBox td {
+        display: inline;
+    }
+
+    /* set spacing of text in status box */
+    #StatusBox p {
+        line-height: 0.1em;
+    }
+
+    /* Style the buttons */
+    #StatusBox img, #ActionBox img {
+        padding: 10px;
+        border: 2px solid darkorange;
+        border-radius: 8px;
+    }
+
+    /* this moves the title text in action box to form a group type text overlay */
+
+    #ActionBox p {
+        color: black;
+        position: relative;
+        top: -0.5em;
+        margin-left: 0.5em;
+        display: inline;
+        background-color: #ffac28;
+    }
+
+/* class assigned to button when clicked to give a flash effect */
+
+.entryselected {
     background-color: green;
 }
 
-.tooltip .tooltiptext
-{
-    margin-left: -140px;
-    margin-top: 90px;
-    width: 200px;
-}

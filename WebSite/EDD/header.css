@@ -1,13 +1,15 @@
 
-header
-{
-    /*border: 3px solid green;*/
-    background-color: darkorange;
+/* there is nothing in the header, since the two bits below float */
+/* use the fixing the float mech to make the header expand to the size of the two floats, usign overflow:auto*/
+
+header {
     padding: 0px;
     margin: 0px;
-    overflow: hidden; /* this causes the header to assume the height of its children*/
+    background-color: rgb(40,40,40);
+    overflow: auto;
 }
 
+/* title */
 header h1:first-of-type
 {
     float: left;
@@ -20,13 +22,14 @@ header h1:first-of-type
     font-weight: normal;
 }
 
+/* fullscreenbutton and logo */
 header h1:last-of-type {
     float: right;
     margin: 2px;
 }
 
-header h1 input
-{
+/* fullscreen button */
+header h1 input {
     background-color: #ff9c08;
     margin: 0px 10px;
     border: 1px solid black;
@@ -35,14 +38,17 @@ header h1 input
     -ms-transform: translateY(-50%);
 }
 
-nav
-{
-    clear:both;
-    background: darkorange;
+/* Set up Nav styling */
+nav {
+    padding: 0px;
+    margin: 0px;
+    background-color: rgb(255,40,40);
 }
 
 nav ul
 {
+    /* div needs to be inline so it flows */
+    display:inline;
     margin: 0px 0px 0px 0px;
     padding: 0px;
     list-style-type: none;
@@ -50,9 +56,24 @@ nav ul
     width: 72em;
 }
 
+nav div
+{
+    /* div needs to be inline so it flows */
+    display:inline;
+    /* making it relative allows it to offset from the top of the nav bar and for the child to position absolutely inside the div */
+    position:relative;   
+    background-color:yellow;
+}
+
+nav div img
+{
+    margin-top:auto;
+    margin-bottom:auto;
+}
+
 nav ul li
 {
-    float: left;
+    display:inline-block;       /* block so we don't constrain height.  float:left also works */
     background-color: #ff9c08;
     margin: 0px 0px 0px 0px;
     border-top: 1px solid black;
@@ -62,10 +83,11 @@ nav ul li
     border-top-left-radius: 8px;
 }
 
-/* this style gets assigned to the highlighted tab classList and overrides the background-color.  Hover still works though */
+/* this style gets assigned to the highlighted tab classList and overrides the background-color.  Hover still works though #ffac28; */
+
 .tabhighlighted
 {
-    background-color: #ffac28;
+    background-color: #ffe028;
 }
 
 /* gets added as you hover */
@@ -77,23 +99,47 @@ nav ul li:hover
 
 nav ul li:first-child
 {
-    margin: 0px 0px 0px 0.5em;
+    margin: 0px 0px 0px 4px;
 }
-
 
 nav * a
 {
-    padding: 0.2em;
-    line-height: 2.1em;
+    padding: 0.5em;
+    line-height: 2em;
     text-decoration: none;
-    color: #000;
+    color: black;
 }
 
-footer
-{
-    background-color: darkorange;
-    clear: both;
-    font-size: 15pt;
+/* Footer formatting */
+
+footer {
+    padding: 0px;
+    margin: 5px 0px 0px 0px;
+    background-color: rgb(40,40,40);
 }
 
+footer button {
+    margin: 4px 20px 4px 4px;
+    border: 1px solid black;
+    border-radius: 8px;
+    background-color: #ff9c08;
+}
+
+/* Chrome only scrollbar fix */
+
+::-webkit-scrollbar {
+    width: auto;
+}
+
+::-webkit-scrollbar-track {
+    background: rgb(40,40,40);
+}
+
+::-webkit-scrollbar-thumb {
+    background: darkorange;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgb(255,160,0);
+}
 

@@ -29,7 +29,7 @@ body {
 /* this div holds the journal table, inside an article, and it has the scroll bar. You must set it to 100% height to override autoheight and get it to scroll 
     set the width to required % of the middlesection
 */
-.journaltable {
+.scantable {
     float: left;
     overflow-y: scroll;
     height: 100%;
@@ -55,11 +55,11 @@ article table td:nth-child(3) {
 }
 
 article table td:nth-child(4) {
-    width: 40%;
+    width: 15%;
 }
 
 article table td:nth-child(5) {
-    width: 20%;
+    width: 40%;
 }
 
 article table tr:nth-child(even) {
@@ -107,4 +107,19 @@ aside tr td:last-of-type {
     border-radius: 4px;
     color: #000;
     text-decoration: none;
+}
+
+.dropdownmenu {
+    display: none;
+    position: absolute;
+    top:24px;
+    left:0px;
+    width:100px;
+    /*    padding-top:100px;
+    padding-left:100px;
+    */
+    background-color: darkorange;
+    color: black;
+    padding: 2px 10px 2px 4px;
+    z-index: 1;
 }

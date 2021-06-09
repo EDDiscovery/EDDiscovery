@@ -14,7 +14,9 @@ function removeChildren(tab)
     }
 }
 
-function tablerow2tdjson(jdata, text, prop, prop2 = "")  // write a table row with two cells from jdata of properties
+// write a table row with two cells from jdata of properties
+
+function tablerow2tdjson(jdata, text, prop, prop2 = "")  
 {
     var td1 = document.createElement("td");
     var t1 = document.createTextNode(text);
@@ -32,14 +34,34 @@ function tablerow2tdjson(jdata, text, prop, prop2 = "")  // write a table row wi
     return tr;
 }
 
-function tabledata(child)  // wrap a child in a td.
+// write a table row with col1 being text, col2 being a list of html items
+function tablerow2tdtextitem(text, elements)  
+{
+    var td1 = document.createElement("td");
+    var t1 = document.createTextNode(text);
+    td1.appendChild(t1);
+
+    var td2 = document.createElement("td");
+
+    elements.forEach(function (htmlitem)
+    { if ( htmlitem!=null) td2.appendChild(htmlitem) });
+
+    var tr = document.createElement("tr");
+    tr.appendChild(td1);
+    tr.appendChild(td2);
+    return tr;
+}
+
+// wrap a child in a td.
+function tabledata(child)  
 {
     var td1 = document.createElement("td");
     td1.appendChild(child);
     return td1;
 }
 
-function tablerow2tdstring(text,value)  // write a table row from string
+// write a table row from string
+function tablerow2tdstring(text,value)  
 {
     var td1 = document.createElement("td");
     var t1 = document.createTextNode(text);
@@ -55,7 +77,8 @@ function tablerow2tdstring(text,value)  // write a table row from string
     return tr;
 }
 
-function tablerow2tdanchor(text,value,link)  // write a table row with a link
+// write a table row with a link
+function tablerow2tdanchor(text,value,link)  
 {
     var td1 = document.createElement("td");
     var t1 = document.createTextNode(text);
@@ -73,7 +96,8 @@ function tablerow2tdanchor(text,value,link)  // write a table row with a link
     return tr;
 }
 
-function tablerow1tdlist(elements, classname="", colspan = null) // single row containing multiple elements and assign a classname to them for styling
+// single row containing multiple elements and assign a classname to them for styling
+function tablerow1tdlist(elements, classname="", colspan = null) 
 {
     var tr = document.createElement("tr");
     var td = document.createElement("td");
@@ -95,7 +119,8 @@ function tablerow1tdlist(elements, classname="", colspan = null) // single row c
     return tr;
 }
 
-function tablerowmultitdlist(elements, classnames = null) // single col containing elements and assign a classname to them for styling
+// single col containing elements and assign a classname to them for styling
+function tablerowmultitdlist(elements, classnames = null) 
 {
     var tr = document.createElement("tr");
 

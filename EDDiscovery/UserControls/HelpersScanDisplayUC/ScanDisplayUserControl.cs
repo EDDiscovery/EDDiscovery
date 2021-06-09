@@ -94,6 +94,7 @@ namespace EDDiscovery.UserControls
             
             if (systemnode != null)
             {
+                var notscannedbitmap = (Bitmap)BaseUtils.Icons.IconSet.GetIcon("Bodies.Unknown");
 
                 Point leftmiddle = new Point(leftmargin, topmargin + StarSize.Height * nodeheightratio / 2 / noderatiodivider);  // half down (h/2 * ratio)
 
@@ -114,7 +115,7 @@ namespace EDDiscovery.UserControls
 
                 if (systemnode.StarNodes.Values.Count == 0 && systemnode.FSSSignalList.Count > 0)  // if no stars, but signals..
                 {
-                    Point maxpos = CreateImageAndLabel(starcontrols, JournalScan.GetStarImageNotScanned(), leftmiddle, StarSize, out Rectangle starpos, new string[] { "Main Star" }, "", false);
+                    Point maxpos = CreateImageAndLabel(starcontrols, notscannedbitmap, leftmiddle, StarSize, out Rectangle starpos, new string[] { "Main Star" }, "", false);
                     DrawSignals(starcontrols, new Point(starpos.Right + moonspacerx, leftmiddle.Y), systemnode.FSSSignalList, StarSize.Height * 6 / 4, 16);       // draw them, nothing else to follow
                 }
 
@@ -131,7 +132,7 @@ namespace EDDiscovery.UserControls
                     {  // Draw star
 
                         Point maxpos = DrawNode(starcontrols, starnode, historicmats, curmats,
-                                (starnode.NodeType == StarScan.ScanNodeType.barycentre) ? Icons.Controls.Scan_Bodies_Barycentre : JournalScan.GetStarImageNotScanned(),
+                                (starnode.NodeType == StarScan.ScanNodeType.barycentre) ? Icons.Controls.Scan_Bodies_Barycentre : notscannedbitmap,
                                 leftmiddle, false, out Rectangle starimagepos, StarSize, DrawLevel.TopLevelStar);       // the last part nerfs the label down to the right position
 
                         maxitemspos = new Point(Math.Max(maxitemspos.X, maxpos.X), Math.Max(maxitemspos.Y, maxpos.Y));

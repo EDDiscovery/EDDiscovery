@@ -1,23 +1,30 @@
 ﻿<!DOCTYPE html>
-
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
 <html>
 <head>
     <title>EDD</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="/header.css" rel="stylesheet" type="text/css">
-    <link href="status.css" rel="stylesheet" type="text/css">
+    <link href="scandata.css" rel="stylesheet" type="text/css">
     <link href="/tooltip.css" rel="stylesheet" type="text/css">
     <script src="/jslib/elements.js"></script>
     <script src="/jslib/http.js"></script>
     <script src="/jslib/tables.js"></script>
     <script src="/jslib/websockets.js"></script>
+    <script src="/jslib/screencontrol.js"></script>
     <script src="/jslib/strings.js"></script>
+    <script src="/jslib/menus.js"></script>
     <script src="/header.js"></script>
     <script src="/systemtable/systemtable.js"></script>
-    <script src="/indicators/indicators.js"></script>
-    <script src="/jslib/screencontrol.js"></script>
-    <script src="status.js"></script>
+    <script src="/scans/scans.js"></script>
+    <script src="scandata.js"></script>
+
+
 </head>
 <body onload="OnLoad()">
     <div class="page">
@@ -26,31 +33,31 @@
                 <script>write_header();</script>
             </header>
             <nav>
-                <script>write_nav(2);</script>
+                <script>write_nav(1);</script>
+                <div class="b1">
+                    <img id="menuicon_button" src="/Images/menu.png" alt="Tab Menu" onclick="menuclick()">
+                    <script>
+                        writemenu("menuicon_button", "menu", "dropdownmenu", [["one", true, menuchange, 0], ["two", null, menuchange, 1], ["three", false, menuchange, 2]]);
+                    </script>
+                </div>
             </nav>
-
         </div>
         <div class="middlesection">
-            <div class="leftside">
+            <div class="scantable" id="scanscroll">
                 <article>
-                    <table id="StarData"></table>
+                    <table id="scans"></table>
                 </article>
             </div>
-
             <aside>
-                <div id="StatusBox">
-                    <table id="Status"></table>
-                    <div id="StatusOther"></div>
-                </div>
-                <div id="ActionBox">
-                    <p>Actions</p>
-                    <table id="Actions"></table>
-                </div>
+                <table id="StarData"></table>
             </aside>
         </div>
         <div class="footer">
             <script>write_footer([]);</script>
         </div>
     </div>
+
+
 </body>
 </html>
+

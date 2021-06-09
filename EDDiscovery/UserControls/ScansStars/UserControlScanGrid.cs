@@ -349,33 +349,32 @@ namespace EDDiscovery.UserControls
                             if (sn.ScanData.Terraformable)
                                 bdClass.Append("Terraformable".T(EDTx.UserControlScanGrid_Terraformable)).Append(", ");
 
-                            // is a planet?...
-                            if (sn.ScanData.PlanetTypeText.HasChars())
+                            if (sn.NodeType == StarScan.ScanNodeType.body)      // Planet, not barycenter/belt
+                            {
                                 bdClass.Append(sn.ScanData.PlanetTypeText);
 
-                            planets++;
+                                if (sn.Level <= 1)      // top level planet
+                                {
+                                    planets++;
 
-                            // tell us the distance from the arrivals in both AU and LS
-                            if (sn.Level <= 1 && sn.NodeType == StarScan.ScanNodeType.body)
-                                bdDist.AppendFormat("{0:0.00}AU ({1:0.0}ls)", sn.ScanData.DistanceFromArrivalLS / JournalScan.oneAU_LS, sn.ScanData.DistanceFromArrivalLS);
+                                    if (sn.ScanData.GasWorld)
+                                        gasgiants++;
+                                    else
+                                        terrestrial++;
 
-                            // ...or a moon?
-                            if (sn.Level >= 2 && sn.NodeType == StarScan.ScanNodeType.body)
-                            {
-                                if (sn.ScanData.IsPlanet)
+                                    bdDist.AppendFormat("{0:0.00}AU ({1:0.0}ls)", sn.ScanData.DistanceFromArrivalLS / JournalScan.oneAU_LS, sn.ScanData.DistanceFromArrivalLS);
+                                }
+                                else
+                                {
                                     moons++;
 
-                                bdClass.Append(" ").Append("Moon".T(EDTx.UserControlScanGrid_Moon));
+                                    bdClass.Append(" ").Append("Moon".T(EDTx.UserControlScanGrid_Moon));
 
-                                // moon distances from center body are measured from in SemiMajorAxis
-                                if (sn.ScanData.nSemiMajorAxis.HasValue)
-                                    bdDist.AppendFormat("{0:0.0}ls ({1:0}km)", sn.ScanData.nSemiMajorAxis.Value / JournalScan.oneLS_m, sn.ScanData.nSemiMajorAxis.Value / 1000);
+                                    // moon distances from center body are measured from in SemiMajorAxis
+                                    if (sn.ScanData.nSemiMajorAxis.HasValue)
+                                        bdDist.AppendFormat("{0:0.0}ls ({1:0}km)", sn.ScanData.nSemiMajorAxis.Value / JournalScan.oneLS_m, sn.ScanData.nSemiMajorAxis.Value / 1000);
+                                }
                             }
-
-                            if (sn.ScanData.GasWorld)
-                                gasgiants++;
-                            else
-                                terrestrial++;
 
                             // Details
 
@@ -491,7 +490,8 @@ namespace EDDiscovery.UserControls
                         }
 
                         // pick an image
-                        var img = sn.ScanData.IsStar ? sn.ScanData.GetStarTypeImage() : sn.ScanData.GetPlanetClassImage();
+
+                        Bitmap img = (Bitmap)BaseUtils.Icons.IconSet.GetIcon(sn.ScanData.GetStarPlanetTypeImageName());
 
                         dataGridViewScangrid.Rows.Add(new object[] { null, sn.ScanData.BodyDesignationOrName, bdClass, bdDist, bdDetails });
 

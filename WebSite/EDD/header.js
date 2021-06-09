@@ -6,24 +6,28 @@
 
 function write_header()
 {
-    document.write("<header><h1> Elite Dangerous Discovery </h1> <h1> <input type=\"button\" value=\"fullscreen\" id=\"fullscreen_button\" /><img src=\"/Images/EdLogo600.png\" alt=\"EDD\" width=\"80\"> </h1> </header>");
+    document.write("<h1> Elite Dangerous Discovery </h1> <h1> <input type=\"button\" value=\"fullscreen\" id=\"fullscreen_button\" /><img src=\"/Images/EdLogo600.png\" alt=\"EDD\" width=\"80\"> </h1>");
     document.getElementById('fullscreen_button').onclick = toggle_fullscreen;
-
-//    document.write("<header><h1> Elite Dangerous Discovery </h1> <h1> <img src=\"/Images/EdLogo600.png\" alt=\"EDD\" width=\"80\"> </h1> </header>");
 }
 
-function write_nav()
+function write_nav(tab)
 {
-    document.write("<nav><ul> "+
+    document.write("<ul>");
+    document.write(
         "<li> <a href=\"/index.html\">History</a></li>" +
+        "<li> <a href=\"/scandata/scandata.html\">Scan</a></li>" +
         "<li> <a href=\"/status/status.html\">Status</a></li>" +
-        "<li> <a href=\"/grid/grid.html\">Grid</a></li>" +
-                   "</ul> </nav> ");
+        "<li> <a href=\"/grid/grid.html\">Grid</a></li>");
+    document.write("</ul>");
+
+    var ul = document.getElementsByTagName("nav")[0];
+    var lis = ul.getElementsByTagName("li");
+    lis[tab].classList.add("tabhighlighted");       // adding a class on, instead of just setting the style backcolor, allows hover to still work.
 }
 
 function write_footer(buttons)
 {
-    var html = "<footer>"
+    var html = "<footer><p>"
 
     var but = 1;
 
@@ -35,16 +39,9 @@ function write_footer(buttons)
         }
     });
 
-    html += "<p>(C) Robby & Elite Dangerous Discovery Team 2019-2021 : <a href=\"https://github.com/EDDiscovery/EDDiscovery/wiki\"> Help </a></p > ";
+    html += "<a href=\"https://github.com/EDDiscovery/EDDiscovery/wiki\"> Help </a></p > ";
     html += "</footer>";
     document.write(html);
 } 
-
-function highlight_nav_tab(tab)     // tab 0,1,2 etc.
-{
-    var ul = document.getElementsByTagName("nav")[0];
-    var lis = ul.getElementsByTagName("li");
-    lis[tab].classList.add("tabhighlighted");       // adding a class on, instead of just setting the style backcolor, allows hover to still work.
-}
 
 

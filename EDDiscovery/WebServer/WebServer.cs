@@ -44,13 +44,13 @@ namespace EDDiscovery.WebServer
     // Push responsetype = journalrefresh, fields as per journalrequest
     // Push responsetype = journalpush, fields as per journalrequest, insert at front, new rows
     //
-    // Query requesttype=status : fields entry
+    // Query requesttype=status : fields entry number
     //          responsetype = status, fields           : entry = -1 none, or entry number
     //                                                  : SystemData object containing records
     //                                                  : EDDB object
     //                                                  : Ship object
     //                                                  : Travel object
-    //                                                  : Bodyname, HomeDist, SolDist, GameMode, Credits, Commander 
+    //                                                  : Bodyname, HomeDist, SolDist, GameMode, Credits, Commander, Mode
     // Push responsetype = status, fields as above
     //
     // Query requesttype=indicator. No fields
@@ -59,7 +59,11 @@ namespace EDDiscovery.WebServer
     // Push responsetype = indicatorpush, fields as above
     //
     // Query requesttype= presskey, fields              : key = binding name
-
+    //          responsetype = status, 100 or 400.
+    //
+    // Query requesttype=scandata : fields entry number
+    //          responsetype = entry, fields..          : entry = -1 none, or entry number. See code for fields
+    //                                                  
 
     public class WebServer
     {
@@ -81,6 +85,7 @@ namespace EDDiscovery.WebServer
         JournalRequest journalsender;
         StatusRequest statussender;
         IndicatorRequest indicator;
+        ScanDataRequest scandata;
         PressKeyRequest presskey;
 
         EDDiscoveryForm discoveryform;
@@ -99,6 +104,7 @@ namespace EDDiscovery.WebServer
             iconnodes = new EDDIconNodes();
             httpdispatcher.AddPartialPathNode("/journalicons/", iconnodes);     // journal icons come from this dynamic source
             httpdispatcher.AddPartialPathNode("/statusicons/", iconnodes);     // status icons come from this dynamic source
+            httpdispatcher.AddPartialPathNode("/images/", iconnodes);           // give full eddicons path
 
             if (servefrom.Contains(".zip"))
             {
@@ -129,6 +135,9 @@ namespace EDDiscovery.WebServer
 
             indicator = new IndicatorRequest();
             jsondispatch.Add("indicator", indicator);   // indicator query
+
+            scandata = new ScanDataRequest(discoveryform);
+            jsondispatch.Add("scandata", scandata);   // indicator query
 
             presskey = new PressKeyRequest(discoveryform);
             jsondispatch.Add("presskey", presskey);   // and a key press
@@ -171,6 +180,7 @@ namespace EDDiscovery.WebServer
         {
             httpws.SendWebSockets(journalsender.Refresh(-1, 50), false); // refresh history
             httpws.SendWebSockets(statussender.Refresh(-1), false); // and status
+            httpws.SendWebSockets(scandata.Refresh(-1), false); // and scan data
         }
 
         private void Discoveryform_OnNewUIEvent(UIEvent obj)
@@ -378,10 +388,12 @@ namespace EDDiscovery.WebServer
 
                 JObject systemdata = new JObject();
                 systemdata["System"] = he.System.Name;
+                systemdata["SystemAddress"] = he.System.SystemAddress;
                 systemdata["PosX"] = he.System.X.ToStringInvariant("0.00");
                 systemdata["PosY"] = he.System.Y.ToStringInvariant("0.00");
                 systemdata["PosZ"] = he.System.Z.ToStringInvariant("0.00");
                 systemdata["EDSMID"] = he.System.EDSMID.ToStringInvariant();
+                systemdata["VisitCount"] = hl.GetVisitsCount(he.System.Name);
                 response["SystemData"] = systemdata;
 
                 // TBD.. if EDSMID = 0 , we may not have looked at it in the historywindow, do we want to do a lookup?
@@ -395,6 +407,7 @@ namespace EDDiscovery.WebServer
                 sysstate["Economy"] = economy;
                 sysstate["Faction"] = faction;
                 sysstate["Security"] = security;
+                sysstate["MarketID"] = he.MarketID;
                 response["EDDB"] = sysstate;
 
                 var mcl = hl.MaterialCommoditiesMicroResources.Get(he.MaterialCommodity);
@@ -464,6 +477,7 @@ namespace EDDiscovery.WebServer
                 response["GameMode"] = he.GameModeGroup;
                 response["Credits"] = he.Credits.ToStringInvariant();
                 response["Commander"] = EDCommander.Current.Name;
+                response["Mode"] = he.TravelState.ToString();
 
                 return response;
             }
@@ -586,6 +600,91 @@ namespace EDDiscovery.WebServer
                 }
 
                 return response;
+            }
+        }
+
+        public class ScanDataRequest : IJSONNode
+        {
+            private EDDiscoveryForm discoveryform;
+
+            public ScanDataRequest(EDDiscoveryForm f)
+            {
+                discoveryform = f;
+            }
+
+            public JToken Refresh(int entry)        // -1 mean latest
+            {
+                return MakeResponse(entry, "scandata");
+            }
+
+            public JToken Response(string key, JToken message, HttpListenerRequest request) // request indicator state
+            {
+                System.Diagnostics.Debug.WriteLine("scandata Request " + key + " Fields " + message.ToString());
+                int entry = message["entry"].Int(0);
+                return MakeResponse(entry, "scandata");
+            }
+
+            //EliteDangerousCore.UIEvents.UIOverallStatus status,
+            public JToken MakeResponse(int entry, string type)       // entry = -1 means latest
+            {
+                if (discoveryform.InvokeRequired)
+                {
+                    return (JToken)discoveryform.Invoke(new Func<JToken>(() => MakeResponse(entry, type)));
+                }
+                else
+                {
+                    JObject response = new JObject();
+                    response["responsetype"] = type;
+
+                    var hl = discoveryform.history;
+                    if (hl.Count == 0)
+                    {
+                        response["entry"] = -1;
+                    }
+                    else
+                    {
+                        if (entry < 0 || entry >= hl.Count)
+                            entry = hl.Count - 1;
+
+                        response["entry"] = entry;
+
+                        HistoryEntry he = hl[entry];
+
+                        var scannode = discoveryform.history.StarScan.FindSystemSynchronous(he.System,false);        // get data without EDSM - don't want a web lookup
+                        var bodylist = scannode?.Bodies.ToList();       // may be null
+
+                        response["Count"] = bodylist?.Count ?? 0;
+
+                        JArray jbodies = new JArray();
+                        foreach( var body in bodylist.EmptyIfNull())
+                        {
+                            JObject jo = new JObject()
+                            {
+                                ["NodeType"] = body.NodeType.ToString(),
+                                ["FullName"] = body.FullName,
+                                ["OwnName"] = body.OwnName,
+                                ["CustomName"] = body.CustomName,
+                                ["CustomNameOrOwnName"] = body.CustomNameOrOwnname,
+                                ["Level"] = body.Level,
+                                ["BodyID"] = body.BodyID,
+                            };
+
+                            JToken jdata = null;
+
+                            if ( body.ScanData != null )
+                            {
+                                jdata = JToken.FromObject(body.ScanData, true, null, 5, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.DeclaredOnly);
+                            }
+                            jo["Scan"] = jdata;
+
+                            jbodies.Add(jo);
+                        }
+
+                        response["Bodies"] = jbodies;
+                    }
+
+                    return response;
+                }
             }
         }
 

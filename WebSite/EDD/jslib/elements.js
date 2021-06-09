@@ -19,13 +19,18 @@ function CreateElement(type,text)
     return a2;
 }
 
-function CreateAnchor(text, link, newtab = false)
+function CreateAnchor(text, link, newtab = false, clsname = null)
 {
     var a2 = document.createElement("a");
     a2.href = link;
     if (newtab)
         a2.target = "_blank";
-    a2.appendChild(document.createTextNode(text));
+
+    var node = document.createTextNode(text)
+
+    a2.appendChild(node);
+    if (clsname != null)
+        a2.classList.add(clsname);
     return a2;
 }
 
@@ -80,4 +85,36 @@ function AppendParaToElement(message, elementname)
     pre.innerHTML = message;
     output2 = document.getElementById(elementname);
     output2.appendChild(pre);
+}
+
+function CreateInput(id, type, onclick, checked = null, tag = null)
+{
+    var pre = document.createElement("input");
+    pre.id = id;
+    pre.type = type;
+    pre.onclick = onclick;
+    pre.checked = checked;
+    pre.tag = tag;
+   // console.log("Input " + id + " " + type + " " + onclick  +" " + checked);
+    return pre;
+}
+
+function CreateLabel(id, forname, text, onclick = null, tag = null)
+{
+    var pre = document.createElement("label");
+    pre.id = id;
+    pre.htmlFor = forname;
+    pre.innerHTML = text;
+    pre.onclick = onclick;
+    pre.tag = tag;
+   // console.log("Label " + id + " for " + forname + " text " + text);
+    return pre;
+} 
+
+function CreateDiv(classname, id) 
+{
+    var pre = document.createElement("div");
+    pre.className = classname;
+    pre.id = id;
+    return pre;
 }

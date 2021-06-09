@@ -13,31 +13,39 @@
     <script src="/jslib/tables.js"></script>
     <script src="/jslib/websockets.js"></script>
     <script src="/jslib/screencontrol.js"></script>
+    <script src="/jslib/strings.js"></script>
     <script src="/header.js"></script>
     <script src="/systemtable/systemtable.js"></script>
     <script src="/indicators/indicators.js"></script>
     <script src="grid.js"></script>
 </head>
 <body onload="OnLoad()">
-    <script>write_header(); write_nav();</script>
+    <div class="page">
+        <div class="headernav">
+            <header>
+                <script>write_header();</script>
+            </header>
+            <nav>
+                <script>write_nav(3);</script>
+            </nav>
 
-    <div class="wrapper">
-        <article>
-            <div id="StatusBox">
-                <table id="Status"></table>
-            </div>
-
-            <div id="ActionBox">
-                <p>Actions</p>
-                <table id="Actions"></table>
-            </div>
-
-            <div id="StatusOther">
-            </div>
-        </article>
+        </div>
+        <div class="middlesection">
+            <article>
+                <div id="StatusBox">
+                    <table id="Status"></table>
+                </div>
+                <div id="ActionBox">
+                    <p>Actions</p>
+                    <table id="Actions"></table>
+                </div>
+                <div id="StatusOther">
+                </div>
+            </article>
+        </div>
+        <div class="footer">
+            <script>write_footer([]);</script>
+        </div>
     </div>
-
-    <script>write_footer([]);</script>
-
 </body>
 </html>

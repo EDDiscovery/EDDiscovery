@@ -16,8 +16,6 @@ function OnLoad()
     websocket.onerror = function (evt) { onError(evt) };
 
     indicatoriconsize = 64;
-    highlight_nav_tab(2);
-
 }
 
 function onOpen(evt)

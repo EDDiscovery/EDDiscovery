@@ -17,8 +17,9 @@ function OnLoad()
 
 function onOpen(evt)
 {
-    RequestJournal(-1, 50);
+
     RequestStatus(-1);
+    RequestScanData(-1);
 }
 
 function onClose(evt)
@@ -29,24 +30,15 @@ function onMessage(evt)
 {
 	jdata = JSON.parse(evt.data);
 
-    if (jdata.responsetype == "journalrequest") // we requested "journal", records requested back
+    if (jdata.responsetype == "status")    // we requested a status or status was pushed, update screen
     {
-       FillJournalTable(jdata, false)
+       // console.log("scandata status " + evt.data);
+        FillSystemTable(jdata);
     }
-    else if (jdata.responsetype == "journalpush")   // EDD sent a new journal record
+    else if (jdata.responsetype == "scandata")    // we requested a status or status was pushed, update screen
     {
-    //    FillJournalTable(jdata, true)
-    }
-    else if (jdata.responsetype == "journalrefresh") // EDD has changed the history, start again
-    {
-      //  console.log("Journal refresh " + evt.data);
-        ClearJournalTable();
-     //   FillJournalTable(jdata, false)
-    }
-    else if (jdata.responsetype == "status")    // we requested a status or status was pushed, update screen
-    {
-     //   console.log("status " + evt.data);
-        FillSystemTable(jdata)
+      //  console.log("scandata stars " + evt.data);
+        FillScanTable(jdata);
     }
 }
 
@@ -55,8 +47,14 @@ function onError(evt)
     console.log("Web Error " + evt.data);
 }
 
-function footerbutton1click()
+function menuclick()
 {
-    RequestMore(1000);
+    togglemenu("menu");
 }
 
+function menuchange(mouseevent)
+{
+    var ct = mouseevent.currentTarget;
+    console.log("MI " + ct.id + " tag " + ct.tag);
+    closemenu("menu");
+}
