@@ -109,17 +109,3 @@ aside tr td:last-of-type {
     text-decoration: none;
 }
 
-.dropdownmenu {
-    display: none;
-    position: absolute;
-    top:24px;
-    left:0px;
-    width:100px;
-    /*    padding-top:100px;
-    padding-left:100px;
-    */
-    background-color: darkorange;
-    color: black;
-    padding: 2px 10px 2px 4px;
-    z-index: 1;
-}

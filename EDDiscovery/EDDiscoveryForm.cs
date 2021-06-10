@@ -208,7 +208,7 @@ namespace EDDiscovery
             ApplyTheme();                       // we apply and scale (because its being applied to Form) before any tabs parts are setup.
 
             this.TopMost = EDDConfig.KeepOnTop;
-            notifyIcon1.Visible = EDDConfig.UseNotifyIcon;
+            notifyIconEDD.Visible = EDDConfig.UseNotifyIcon;
 
             // open all the major tabs except the built in ones
             Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Creating major tabs Now");        // STAGE 3 Tabs
@@ -786,7 +786,7 @@ namespace EDDiscovery
 
             PopOuts.SaveCurrentPopouts();
 
-            notifyIcon1.Visible = false;
+            notifyIconEDD.Visible = false;
 
             actioncontroller.CloseDown();
 
@@ -1297,7 +1297,7 @@ namespace EDDiscovery
 
         internal void useNotifyIconChanged(bool useNotifyIcon)
         {
-            notifyIcon1.Visible = useNotifyIcon;
+            notifyIconEDD.Visible = useNotifyIcon;
             if (!useNotifyIcon && !Visible)
                 Show();
         }

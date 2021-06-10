@@ -87,23 +87,34 @@ function AppendParaToElement(message, elementname)
     output2.appendChild(pre);
 }
 
-function CreateInput(id, type, onclick, checked = null, tag = null)
+function CreateInput(classname, id, type, onclick, checked = null, tag = null)
 {
     var pre = document.createElement("input");
-    pre.id = id;
+    if (classname != null)
+        pre.className = classname;
+    if (id != null)
+        pre.id = id;
     pre.type = type;
     pre.onclick = onclick;
-    pre.checked = checked;
+    if (checked == true)
+    {
+        console.log("Program " + id + " check on");
+        pre.checked = true;
+    }
     pre.tag = tag;
-   // console.log("Input " + id + " " + type + " " + onclick  +" " + checked);
+    console.log("Input " + id + " " + type + " checkedit " + checked +  " got " + pre.checked);
     return pre;
 }
 
-function CreateLabel(id, forname, text, onclick = null, tag = null)
+function CreateLabel(classname, id, forname, text, onclick = null, tag = null)
 {
     var pre = document.createElement("label");
-    pre.id = id;
-    pre.htmlFor = forname;
+    if (classname != null)
+        pre.className = classname;
+    if (id != null)
+        pre.id = id;
+    if ( forname != null )
+        pre.htmlFor = forname;
     pre.innerHTML = text;
     pre.onclick = onclick;
     pre.tag = tag;
@@ -111,10 +122,18 @@ function CreateLabel(id, forname, text, onclick = null, tag = null)
     return pre;
 } 
 
-function CreateDiv(classname, id) 
+function CreateDiv(classname = null, id = null) 
 {
     var pre = document.createElement("div");
-    pre.className = classname;
-    pre.id = id;
+    if ( classname != null )
+        pre.className = classname;
+    if ( id != null )
+        pre.id = id;
+    return pre;
+}
+
+function CreateBreak() 
+{
+    var pre = document.createElement("br");
     return pre;
 }

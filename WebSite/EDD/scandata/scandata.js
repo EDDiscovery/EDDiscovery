@@ -17,7 +17,6 @@ function OnLoad()
 
 function onOpen(evt)
 {
-
     RequestStatus(-1);
     RequestScanData(-1);
 }
@@ -25,6 +24,8 @@ function onOpen(evt)
 function onClose(evt)
 {
 }
+
+var lastscandata;       // keep last scan data
 
 function onMessage(evt)
 {
@@ -37,8 +38,8 @@ function onMessage(evt)
     }
     else if (jdata.responsetype == "scandata")    // we requested a status or status was pushed, update screen
     {
-      //  console.log("scandata stars " + evt.data);
-        FillScanTable(jdata);
+        lastscandata = jdata;
+        FillScan();
     }
 }
 
@@ -47,14 +48,21 @@ function onError(evt)
     console.log("Web Error " + evt.data);
 }
 
-function menuclick()
+function FillScan()
 {
-    togglemenu("menu");
+    var showmaterials = getmenuitemcheckstate("scanmenu", "materials");
+    var showvalue = getmenuitemcheckstate("scanmenu", "value");
+
+    //  console.log("scandata stars " + evt.data);
+    FillScanTable(lastscandata, showmaterials, showvalue);
 }
 
-function menuchange(mouseevent)
+function scanmenuchange(mouseevent)
 {
     var ct = mouseevent.currentTarget;
     console.log("MI " + ct.id + " tag " + ct.tag);
-    closemenu("menu");
+    if (ct.tag != null)
+        storestate(ct.tag, ct.checked);
+    closeallmenus();
+    FillScan();
 }

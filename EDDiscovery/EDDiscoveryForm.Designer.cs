@@ -44,9 +44,9 @@ namespace EDDiscovery
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            ExtendedControls.TabStyleSquare tabStyleSquare1 = new ExtendedControls.TabStyleSquare();
+            ExtendedControls.TabStyleSquare tabStyleSquare2 = new ExtendedControls.TabStyleSquare();
             this.edsmRefreshTimer = new System.Windows.Forms.Timer(this.components);
-            this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
+            this.notifyIconEDD = new System.Windows.Forms.NotifyIcon(this.components);
             this.notifyIconContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.notifyIconMenu_Open = new System.Windows.Forms.ToolStripMenuItem();
             this.notifyIconMenu_Hide = new System.Windows.Forms.ToolStripMenuItem();
@@ -70,9 +70,9 @@ namespace EDDiscovery
             this.panelToolBar = new ExtendedControls.ExtPanelRollUp();
             this.flowToolBar = new System.Windows.Forms.FlowLayoutPanel();
             this.extButtonDrawnHelp = new ExtendedControls.ExtButtonDrawn();
-            this.statusStrip = new ExtendedControls.ExtStatusStrip();
-            this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
-            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.statusStripEDD = new ExtendedControls.ExtStatusStrip();
+            this.toolStripProgressBarEDD = new System.Windows.Forms.ToolStripProgressBar();
+            this.toolStripStatusLabelEDD = new System.Windows.Forms.ToolStripStatusLabel();
             this.tableLayoutPanelTop = new System.Windows.Forms.TableLayoutPanel();
             this.menuFlowPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.mainMenu = new System.Windows.Forms.MenuStrip();
@@ -130,7 +130,7 @@ namespace EDDiscovery
             this.contextMenuStripTabs.SuspendLayout();
             this.panelToolBar.SuspendLayout();
             this.flowToolBar.SuspendLayout();
-            this.statusStrip.SuspendLayout();
+            this.statusStripEDD.SuspendLayout();
             this.tableLayoutPanelTop.SuspendLayout();
             this.menuFlowPanel.SuspendLayout();
             this.mainMenu.SuspendLayout();
@@ -142,12 +142,12 @@ namespace EDDiscovery
             this.edsmRefreshTimer.Interval = 3600000;
             this.edsmRefreshTimer.Tick += new System.EventHandler(this.edsmRefreshTimer_Tick);
             // 
-            // notifyIcon1
+            // notifyIconEDD
             // 
-            this.notifyIcon1.ContextMenuStrip = this.notifyIconContextMenuStrip;
-            this.notifyIcon1.Icon = global::EDDiscovery.Properties.Resources.edlogo_3mo_icon;
-            this.notifyIcon1.Text = "EDDiscovery";
-            this.notifyIcon1.DoubleClick += new System.EventHandler(this.notifyIcon1_DoubleClick);
+            this.notifyIconEDD.ContextMenuStrip = this.notifyIconContextMenuStrip;
+            this.notifyIconEDD.Icon = global::EDDiscovery.Properties.Resources.edlogo_3mo_icon;
+            this.notifyIconEDD.Text = "EDDiscovery";
+            this.notifyIconEDD.DoubleClick += new System.EventHandler(this.notifyIcon1_DoubleClick);
             // 
             // notifyIconContextMenuStrip
             // 
@@ -188,7 +188,7 @@ namespace EDDiscovery
             this.tabControlMain.Multiline = true;
             this.tabControlMain.Name = "tabControlMain";
             this.tabControlMain.SelectedIndex = 0;
-            this.tabControlMain.Size = new System.Drawing.Size(969, 641);
+            this.tabControlMain.Size = new System.Drawing.Size(960, 207);
             this.tabControlMain.TabColorScaling = 0.5F;
             this.tabControlMain.TabControlBorderBrightColor = System.Drawing.Color.LightGray;
             this.tabControlMain.TabControlBorderColor = System.Drawing.Color.DarkGray;
@@ -199,7 +199,7 @@ namespace EDDiscovery
             this.tabControlMain.TabNotSelectedColor = System.Drawing.Color.Gray;
             this.tabControlMain.TabOpaque = 100F;
             this.tabControlMain.TabSelectedColor = System.Drawing.Color.LightGray;
-            this.tabControlMain.TabStyle = tabStyleSquare1;
+            this.tabControlMain.TabStyle = tabStyleSquare2;
             this.tabControlMain.TextNotSelectedColor = System.Drawing.SystemColors.ControlText;
             this.tabControlMain.TextSelectedColor = System.Drawing.SystemColors.ControlText;
             this.toolTip.SetToolTip(this.tabControlMain, "Right click to add/remove tabs, Left click drag to reorder");
@@ -398,7 +398,7 @@ namespace EDDiscovery
             this.panelToolBar.RollUpDelay = 1000;
             this.panelToolBar.SecondHiddenMarkerWidth = 0;
             this.panelToolBar.ShowHiddenMarker = true;
-            this.panelToolBar.Size = new System.Drawing.Size(969, 30);
+            this.panelToolBar.Size = new System.Drawing.Size(960, 30);
             this.panelToolBar.TabIndex = 1;
             this.panelToolBar.UnrollHoverDelay = 1000;
             // 
@@ -443,28 +443,28 @@ namespace EDDiscovery
             this.extButtonDrawnHelp.UseMnemonic = true;
             this.extButtonDrawnHelp.Click += new System.EventHandler(this.extButtonDrawnHelp_Click);
             // 
-            // statusStrip
+            // statusStripEDD
             // 
-            this.statusStrip.AutoSize = false;
-            this.statusStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Visible;
-            this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripProgressBar1,
-            this.toolStripStatusLabel1});
-            this.statusStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
-            this.statusStrip.Location = new System.Drawing.Point(0, 699);
-            this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(969, 22);
-            this.statusStrip.TabIndex = 22;
+            this.statusStripEDD.AutoSize = false;
+            this.statusStripEDD.GripStyle = System.Windows.Forms.ToolStripGripStyle.Visible;
+            this.statusStripEDD.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripProgressBarEDD,
+            this.toolStripStatusLabelEDD});
+            this.statusStripEDD.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
+            this.statusStripEDD.Location = new System.Drawing.Point(0, 265);
+            this.statusStripEDD.Name = "statusStripEDD";
+            this.statusStripEDD.Size = new System.Drawing.Size(960, 22);
+            this.statusStripEDD.TabIndex = 22;
             // 
-            // toolStripProgressBar1
+            // toolStripProgressBarEDD
             // 
-            this.toolStripProgressBar1.Name = "toolStripProgressBar1";
-            this.toolStripProgressBar1.Size = new System.Drawing.Size(100, 16);
+            this.toolStripProgressBarEDD.Name = "toolStripProgressBarEDD";
+            this.toolStripProgressBarEDD.Size = new System.Drawing.Size(100, 16);
             // 
-            // toolStripStatusLabel1
+            // toolStripStatusLabelEDD
             // 
-            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(0, 17);
+            this.toolStripStatusLabelEDD.Name = "toolStripStatusLabelEDD";
+            this.toolStripStatusLabelEDD.Size = new System.Drawing.Size(0, 17);
             // 
             // tableLayoutPanelTop
             // 
@@ -480,7 +480,7 @@ namespace EDDiscovery
             this.tableLayoutPanelTop.RowCount = 1;
             this.tableLayoutPanelTop.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanelTop.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
-            this.tableLayoutPanelTop.Size = new System.Drawing.Size(969, 25);
+            this.tableLayoutPanelTop.Size = new System.Drawing.Size(960, 25);
             this.tableLayoutPanelTop.TabIndex = 23;
             this.tableLayoutPanelTop.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MouseDownCAPTION);
             this.tableLayoutPanelTop.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MouseUpCAPTION);
@@ -923,7 +923,7 @@ namespace EDDiscovery
             this.closeminimizeFlowPanel.Controls.Add(this.panel_eddiscovery);
             this.closeminimizeFlowPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.closeminimizeFlowPanel.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            this.closeminimizeFlowPanel.Location = new System.Drawing.Point(879, 0);
+            this.closeminimizeFlowPanel.Location = new System.Drawing.Point(870, 0);
             this.closeminimizeFlowPanel.Margin = new System.Windows.Forms.Padding(0);
             this.closeminimizeFlowPanel.Name = "closeminimizeFlowPanel";
             this.closeminimizeFlowPanel.Size = new System.Drawing.Size(90, 25);
@@ -997,19 +997,19 @@ namespace EDDiscovery
             this.extPanelTopResizer.Location = new System.Drawing.Point(0, 0);
             this.extPanelTopResizer.Movement = System.Windows.Forms.DockStyle.Top;
             this.extPanelTopResizer.Name = "extPanelTopResizer";
-            this.extPanelTopResizer.Size = new System.Drawing.Size(969, 3);
+            this.extPanelTopResizer.Size = new System.Drawing.Size(960, 3);
             this.extPanelTopResizer.TabIndex = 22;
             // 
             // EDDiscoveryForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(969, 721);
+            this.ClientSize = new System.Drawing.Size(960, 287);
             this.Controls.Add(this.tabControlMain);
             this.Controls.Add(this.panelToolBar);
             this.Controls.Add(this.tableLayoutPanelTop);
             this.Controls.Add(this.extPanelTopResizer);
-            this.Controls.Add(this.statusStrip);
+            this.Controls.Add(this.statusStripEDD);
             this.Icon = global::EDDiscovery.Properties.Resources.edlogo_3mo_icon;
             this.Name = "EDDiscoveryForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -1026,8 +1026,8 @@ namespace EDDiscovery
             this.panelToolBar.ResumeLayout(false);
             this.panelToolBar.PerformLayout();
             this.flowToolBar.ResumeLayout(false);
-            this.statusStrip.ResumeLayout(false);
-            this.statusStrip.PerformLayout();
+            this.statusStripEDD.ResumeLayout(false);
+            this.statusStripEDD.PerformLayout();
             this.tableLayoutPanelTop.ResumeLayout(false);
             this.tableLayoutPanelTop.PerformLayout();
             this.menuFlowPanel.ResumeLayout(false);
@@ -1042,11 +1042,11 @@ namespace EDDiscovery
 
         #endregion
         private ExtendedControls.ExtButton buttonReloadActions;
-        private ExtendedControls.ExtStatusStrip statusStrip;
-        private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar1;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+        private ExtendedControls.ExtStatusStrip statusStripEDD;
+        private System.Windows.Forms.ToolStripProgressBar toolStripProgressBarEDD;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelEDD;
         private System.Windows.Forms.Timer edsmRefreshTimer;
-        private System.Windows.Forms.NotifyIcon notifyIcon1;
+        private System.Windows.Forms.NotifyIcon notifyIconEDD;
         private System.Windows.Forms.ContextMenuStrip notifyIconContextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem notifyIconMenu_Exit;
         private System.Windows.Forms.ToolStripMenuItem notifyIconMenu_Hide;

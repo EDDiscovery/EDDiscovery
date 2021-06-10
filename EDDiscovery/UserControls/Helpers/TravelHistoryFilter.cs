@@ -92,6 +92,15 @@ namespace EDDiscovery.UserControls
             return new TravelHistoryFilter(TimeSpan.FromDays(365), "Year".T(EDTx.TravelHistoryFilter_Year));
         }
 
+        public static TravelHistoryFilter LastTwoYears()
+        {
+            return new TravelHistoryFilter(TimeSpan.FromDays(365*2), "2 " + "Year".T(EDTx.TravelHistoryFilter_Year));
+        }
+        public static TravelHistoryFilter LastThreeYears()
+        {
+            return new TravelHistoryFilter(TimeSpan.FromDays(365*3), "3 " + "Year".T(EDTx.TravelHistoryFilter_Year));
+        }
+
         public static TravelHistoryFilter Last(int number)
         {
             return new TravelHistoryFilter(number, string.Format("Last {0} entries".T(EDTx.TravelHistoryFilter_LastN), number));
@@ -182,6 +191,8 @@ namespace EDDiscovery.UserControls
                 TravelHistoryFilter.LastQuarter(),
                 TravelHistoryFilter.LastHalfYear(),
                 TravelHistoryFilter.LastYear(),
+                TravelHistoryFilter.LastTwoYears(),
+                TravelHistoryFilter.LastThreeYears(),
                 TravelHistoryFilter.Last(10),
                 TravelHistoryFilter.Last(20),
                 TravelHistoryFilter.Last(100),

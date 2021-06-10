@@ -15,7 +15,7 @@ function RequestScanData(entryno)
 
 
 
-function FillScanTable(jdata)
+function FillScanTable(jdata, showmaterials, showvalue)
 {
     var stable = document.getElementById("scans");
 
@@ -40,7 +40,9 @@ function FillScanTable(jdata)
 
             var bdclass = "";
             var bddist = "";
-            var bddetails = "";
+            var bddetails = new Array(2);
+            bddetails[0] = "";
+            bddetails[1] = "";
 
             if (sn.NodeType == "ring")
             {
@@ -49,9 +51,9 @@ function FillScanTable(jdata)
             {
                 bdclass = "Belt Cluster";
                 if (scandata.ScanType == "Detailed")
-                    bddetails = "Scanned";
+                    bddetails[0] = "Scanned";
                 else
-                    bddetails = "No scan data available";
+                    bddetails[0] = "No scan data available";
 
                 bddist = scandata.DistanceFromArrivalLS;
             }
@@ -64,11 +66,11 @@ function FillScanTable(jdata)
                     bddist = "Main";
 
                 if (scandata.nStellarMass != null)
-                    bddetails = Append(bddetails, "Mass: " + scandata.nStellarMass.toFixed(2));
+                    bddetails[0] = Append(bddetails[0], "Mass: " + scandata.nStellarMass.toFixed(2));
                 if (scandata.nRadius != null)
-                    bddetails = Append(bddetails, "Radius: " + (scandata.nRadius / oneSolRadius_m).toFixed(2));
+                    bddetails[0] = Append(bddetails[0], "Radius: " + (scandata.nRadius / oneSolRadius_m).toFixed(2));
                 if (scandata.nSurfaceTemperature != null)
-                    bddetails = Append(bddetails, "Temperature: " + scandata.nSurfaceTemperature.toFixed(0) + "K");
+                    bddetails[0] = Append(bddetails[0], "Temperature: " + scandata.nSurfaceTemperature.toFixed(0) + "K");
             }
             else if (scandata.IsPlanet)
             {
@@ -89,50 +91,61 @@ function FillScanTable(jdata)
                 }
 
                 if (scandata.nRadius != null)
-                    bddetails = Append(bddetails, "Radius: " + (scandata.nRadius / oneEarthRadius_m).toFixed(2));
+                    bddetails[0] = Append(bddetails[0], "Radius: " + (scandata.nRadius / oneEarthRadius_m).toFixed(2));
 
                 if (scandata.nSurfaceTemperature != null)
-                    bddetails = Append(bddetails, "Temperature: " + scandata.nSurfaceTemperature.toFixed(0) + "K");
+                    bddetails[0] = Append(bddetails[0], "Temperature: " + scandata.nSurfaceTemperature.toFixed(0) + "K");
 
                 if (scandata.Atmosphere != null && scandata.Atmosphere != "None")
                 {
-                    bddetails = Append(bddetails, "Atmosphere: " + scandata.Atmosphere);
+                    bddetails[0] = Append(bddetails[0], "Atmosphere: " + scandata.Atmosphere);
                     if (scandata.nSurfacePressure != null)
-                        bddetails = Append(bddetails, (scandata.nSurfacePressure / oneAtmosphere_Pa).toFixed(3) + "Pa.");
+                        bddetails[0] = Append(bddetails[0], (scandata.nSurfacePressure / oneAtmosphere_Pa).toFixed(3) + "Pa.");
                 }
 
                 if (scandata.IsLandable)
                 {
                     if (scandata.nSurfaceGravity != null)
-                        bddetails = Append(bddetails, "Landable: " + (scandata.nSurfaceGravity / oneGee_m_s2).toFixed(2) + "g");
+                        bddetails[0] = Append(bddetails[0], "Landable: " + (scandata.nSurfaceGravity / oneGee_m_s2).toFixed(2) + "g");
                     else
-                        bddetails = Append(bddetails, "Landable");
+                        bddetails[0] = Append(bddetails[0], "Landable");
                 }
 
                 if (scandata.Volcanism != null)
                 {
-                    bddetails = Append(bddetails, "Volcanism: " + scandata.Volcanism);
+                    bddetails[0] = Append(bddetails[0], "Volcanism: " + scandata.Volcanism);
                 }
 
                 if (scandata.Mapped)
                 {
-                    bddetails = Append(bddetails, "Mapped");
+                    bddetails[0] = Append(bddetails[0], "Mapped");
                 }
 
+                if (showmaterials && scandata.Materials != null )
+                {
+                    const keys = Object.keys(scandata.Materials);
+
+                    var t = "";
+                    keys.forEach((key, index) =>
+                    {
+                        console.log(`${key}: ${scandata.Materials[key]}`);
+                        t = Append(t, key, ', ');
+                    });
+
+                    if (t != "")
+                        bddetails[1] = Append(bddetails[1], "Mats:" + t);
+                }
             }
 
             if (bdclass != "")
             {
-                bddetails = Append(bddetails, "Value " + scandata.EstimatedValue);
+                if ( showvalue)
+                    bddetails[0] = Append(bddetails[0], "Value " + scandata.EstimatedValue);
 
                 var imagename = scandata.IsStar ? scandata.StarTypeImageName : scandata.PlanetClassImageName;
                 var image = CreateImage("/images/" + imagename + ".png", imagename, 48);
-                var t1 = document.createTextNode(scandata.BodyDesignationOrName);
-                var t2 = document.createTextNode(bdclass);
-                var t3 = document.createTextNode(bddist);
-                var t4 = document.createTextNode(bddetails);
 
-                stable.appendChild(tablerowmultitdlist([image, t1, t2, t3, t4]));
+                stable.appendChild(tablerowmultitdlist([image, scandata.BodyDesignationOrName, bdclass, bddist, bddetails]));
             }
         }
     }

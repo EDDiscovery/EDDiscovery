@@ -38,7 +38,7 @@ header h1 input {
     -ms-transform: translateY(-50%);
 }
 
-/* Set up Nav styling */
+/* ************************************************** Set up Nav styling */
 nav {
     padding: 0px;
     margin: 0px;
@@ -56,21 +56,6 @@ nav ul
     width: 72em;
 }
 
-nav div
-{
-    /* div needs to be inline so it flows */
-    display:inline;
-    /* making it relative allows it to offset from the top of the nav bar and for the child to position absolutely inside the div */
-    position:relative;   
-    background-color:yellow;
-}
-
-nav div img
-{
-    margin-top:auto;
-    margin-bottom:auto;
-}
-
 nav ul li
 {
     display:inline-block;       /* block so we don't constrain height.  float:left also works */
@@ -85,32 +70,64 @@ nav ul li
 
 /* this style gets assigned to the highlighted tab classList and overrides the background-color.  Hover still works though #ffac28; */
 
-.tabhighlighted
-{
+.tabhighlighted {
     background-color: #ffe028;
 }
 
 /* gets added as you hover */
 
-nav ul li:hover
-{
+nav ul li:hover {
     background-color: #ffbc48;
 }
 
-nav ul li:first-child
-{
+/* positioning of first tab */
+nav ul li:first-child {
     margin: 0px 0px 0px 4px;
 }
 
-nav * a
-{
+/* styling of each tab setting height */
+nav * a {
     padding: 0.5em;
     line-height: 2em;
     text-decoration: none;
     color: black;
 }
 
-/* Footer formatting */
+/* this class is assigned to the div holding both the menu button AND the menu */
+
+nav .menubutton {
+    /* div needs to be inline so it flows against the ul's */
+    display: inline;
+    /* making it relative allows it to offset from the top of the nav bar and for the child to position absolutely inside the div */
+    position: relative;
+}
+
+nav .menubutton img {
+    vertical-align: middle;
+    padding-left: 1em;
+}
+
+/* styling of the nav menu */
+.navmenu {
+    display: none;
+    position: absolute;
+    top: 24px;      /* relative positioning from nav div */
+    left: 0px;
+    min-width: 200px;       /* cannot yet get it to autofit */
+    background-color: darkorange;
+    color: black;
+    padding: 2px 10px 2px 4px;
+    z-index: 1;
+}
+
+/* styling of each menu line */
+.navmenu div
+{
+    display:inline-block;
+    min-height:1.5em;
+}
+
+/* ********************************************************** Footer formatting */
 
 footer {
     padding: 0px;

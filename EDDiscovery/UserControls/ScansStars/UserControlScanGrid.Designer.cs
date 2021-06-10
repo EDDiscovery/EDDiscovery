@@ -65,18 +65,12 @@ namespace EDDiscovery.UserControls
             this.ringsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.materialsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.valuesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.columnsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.nameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.classToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.distanceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.informationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.eDSMCheckToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.vScrollBarCustom2 = new ExtendedControls.ExtScrollBar();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.statusStripSummary = new ExtendedControls.ExtStatusStrip();
             this.toolStripStatusTotalValue = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusGreen = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
+            this.toolStripJumponiumProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.dataViewScrollerPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewScangrid)).BeginInit();
             this.contextMenuStrip.SuspendLayout();
@@ -91,7 +85,7 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel2.InternalMargin = new System.Windows.Forms.Padding(0);
             this.dataViewScrollerPanel2.Location = new System.Drawing.Point(0, 0);
             this.dataViewScrollerPanel2.Name = "dataViewScrollerPanel2";
-            this.dataViewScrollerPanel2.Size = new System.Drawing.Size(572, 550);
+            this.dataViewScrollerPanel2.Size = new System.Drawing.Size(572, 549);
             this.dataViewScrollerPanel2.TabIndex = 25;
             this.dataViewScrollerPanel2.VerticalScrollBarDockRight = true;
             // 
@@ -128,7 +122,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewScangrid.RowTemplate.ReadOnly = true;
             this.dataGridViewScangrid.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewScangrid.SingleRowSelect = true;
-            this.dataGridViewScangrid.Size = new System.Drawing.Size(556, 550);
+            this.dataGridViewScangrid.Size = new System.Drawing.Size(556, 549);
             this.dataGridViewScangrid.TabIndex = 23;
             this.dataGridViewScangrid.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewScangrid_CellDoubleClick);
             this.dataGridViewScangrid.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridViewScangrid_RowPostPaint);
@@ -185,16 +179,12 @@ namespace EDDiscovery.UserControls
             this.structuresToolStripMenuItem,
             this.materialsToolStripMenuItem,
             this.valuesToolStripMenuItem,
-            this.toolStripSeparator1,
-            this.columnsToolStripMenuItem});
+            this.eDSMCheckToolStripMenuItem});
             this.contextMenuStrip.Name = "contextMenuStrip1";
-            this.contextMenuStrip.Size = new System.Drawing.Size(180, 120);
+            this.contextMenuStrip.Size = new System.Drawing.Size(180, 114);
             // 
             // circumstellarZoneToolStripMenuItem
             // 
-            this.circumstellarZoneToolStripMenuItem.Checked = true;
-            this.circumstellarZoneToolStripMenuItem.CheckOnClick = true;
-            this.circumstellarZoneToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.circumstellarZoneToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.habitableZoneToolStripMenuItem,
             this.metalRichToolStripMenuItem,
@@ -205,7 +195,6 @@ namespace EDDiscovery.UserControls
             this.circumstellarZoneToolStripMenuItem.Name = "circumstellarZoneToolStripMenuItem";
             this.circumstellarZoneToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.circumstellarZoneToolStripMenuItem.Text = "Circumstellar Zones";
-            this.circumstellarZoneToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.circumstellarZoneToolStripMenuItem_CheckStateChanged);
             // 
             // habitableZoneToolStripMenuItem
             // 
@@ -275,16 +264,12 @@ namespace EDDiscovery.UserControls
             // 
             // structuresToolStripMenuItem
             // 
-            this.structuresToolStripMenuItem.Checked = true;
-            this.structuresToolStripMenuItem.CheckOnClick = true;
-            this.structuresToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.structuresToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.beltsToolStripMenuItem,
             this.ringsToolStripMenuItem});
             this.structuresToolStripMenuItem.Name = "structuresToolStripMenuItem";
             this.structuresToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.structuresToolStripMenuItem.Text = "Structures";
-            this.structuresToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.structuresToolStripMenuItem_CheckStateChanged);
             // 
             // beltsToolStripMenuItem
             // 
@@ -328,65 +313,15 @@ namespace EDDiscovery.UserControls
             this.valuesToolStripMenuItem.Text = "Values";
             this.valuesToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.valuesToolStripMenuItem_CheckStateChanged);
             // 
-            // toolStripSeparator1
+            // eDSMCheckToolStripMenuItem
             // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(176, 6);
-            // 
-            // columnsToolStripMenuItem
-            // 
-            this.columnsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.nameToolStripMenuItem,
-            this.classToolStripMenuItem,
-            this.distanceToolStripMenuItem,
-            this.informationToolStripMenuItem});
-            this.columnsToolStripMenuItem.Name = "columnsToolStripMenuItem";
-            this.columnsToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
-            this.columnsToolStripMenuItem.Text = "Columns";
-            // 
-            // nameToolStripMenuItem
-            // 
-            this.nameToolStripMenuItem.Checked = true;
-            this.nameToolStripMenuItem.CheckOnClick = true;
-            this.nameToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.nameToolStripMenuItem.Name = "nameToolStripMenuItem";
-            this.nameToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
-            this.nameToolStripMenuItem.Text = "Name";
-            this.nameToolStripMenuItem.ToolTipText = "Toggle body name column visibility";
-            this.nameToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.nameToolStripMenuItem_CheckStateChanged);
-            // 
-            // classToolStripMenuItem
-            // 
-            this.classToolStripMenuItem.Checked = true;
-            this.classToolStripMenuItem.CheckOnClick = true;
-            this.classToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.classToolStripMenuItem.Name = "classToolStripMenuItem";
-            this.classToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
-            this.classToolStripMenuItem.Text = "Class";
-            this.classToolStripMenuItem.ToolTipText = "Toggle body class column visibility";
-            this.classToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.classToolStripMenuItem_CheckStateChanged);
-            // 
-            // distanceToolStripMenuItem
-            // 
-            this.distanceToolStripMenuItem.Checked = true;
-            this.distanceToolStripMenuItem.CheckOnClick = true;
-            this.distanceToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.distanceToolStripMenuItem.Name = "distanceToolStripMenuItem";
-            this.distanceToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
-            this.distanceToolStripMenuItem.Text = "Distance";
-            this.distanceToolStripMenuItem.ToolTipText = "Toggle relative body distance column visibility";
-            this.distanceToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.distanceToolStripMenuItem_CheckStateChanged);
-            // 
-            // informationToolStripMenuItem
-            // 
-            this.informationToolStripMenuItem.Checked = true;
-            this.informationToolStripMenuItem.CheckOnClick = true;
-            this.informationToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.informationToolStripMenuItem.Name = "informationToolStripMenuItem";
-            this.informationToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
-            this.informationToolStripMenuItem.Text = "Information";
-            this.informationToolStripMenuItem.ToolTipText = "Toggle body information column visibility";
-            this.informationToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.informationToolStripMenuItem_CheckStateChanged);
+            this.eDSMCheckToolStripMenuItem.Checked = true;
+            this.eDSMCheckToolStripMenuItem.CheckOnClick = true;
+            this.eDSMCheckToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.eDSMCheckToolStripMenuItem.Name = "eDSMCheckToolStripMenuItem";
+            this.eDSMCheckToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.eDSMCheckToolStripMenuItem.Text = "EDSM Check";
+            this.eDSMCheckToolStripMenuItem.Click += new System.EventHandler(this.eDSMCheckToolStripMenuItem_Click);
             // 
             // vScrollBarCustom2
             // 
@@ -406,7 +341,7 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom2.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom2.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom2.Name = "vScrollBarCustom2";
-            this.vScrollBarCustom2.Size = new System.Drawing.Size(16, 550);
+            this.vScrollBarCustom2.Size = new System.Drawing.Size(16, 549);
             this.vScrollBarCustom2.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom2.SmallChange = 1;
             this.vScrollBarCustom2.TabIndex = 24;
@@ -421,41 +356,28 @@ namespace EDDiscovery.UserControls
             // 
             this.statusStripSummary.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusTotalValue,
-            this.toolStripStatusGreen,
-            this.toolStripProgressBar});
+            this.toolStripJumponiumProgressBar});
             this.statusStripSummary.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
-            this.statusStripSummary.Location = new System.Drawing.Point(0, 550);
+            this.statusStripSummary.Location = new System.Drawing.Point(0, 549);
             this.statusStripSummary.Name = "statusStripSummary";
-            this.statusStripSummary.Size = new System.Drawing.Size(572, 22);
+            this.statusStripSummary.ShowItemToolTips = true;
+            this.statusStripSummary.Size = new System.Drawing.Size(572, 23);
             this.statusStripSummary.SizingGrip = false;
             this.statusStripSummary.TabIndex = 27;
             // 
             // toolStripStatusTotalValue
             // 
             this.toolStripStatusTotalValue.Name = "toolStripStatusTotalValue";
-            this.toolStripStatusTotalValue.Size = new System.Drawing.Size(122, 17);
+            this.toolStripStatusTotalValue.Size = new System.Drawing.Size(122, 18);
             this.toolStripStatusTotalValue.Text = "Estimated scans value";
             // 
-            // toolStripStatusGreen
+            // toolStripJumponiumProgressBar
             // 
-            this.toolStripStatusGreen.BackColor = System.Drawing.Color.Green;
-            this.toolStripStatusGreen.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.toolStripStatusGreen.ForeColor = System.Drawing.Color.White;
-            this.toolStripStatusGreen.Margin = new System.Windows.Forms.Padding(20, 3, 0, 3);
-            this.toolStripStatusGreen.Name = "toolStripStatusGreen";
-            this.toolStripStatusGreen.Padding = new System.Windows.Forms.Padding(7, 0, 7, 0);
-            this.toolStripStatusGreen.Size = new System.Drawing.Size(116, 17);
-            this.toolStripStatusGreen.Text = "GREEN SYSTEM";
-            this.toolStripStatusGreen.Visible = false;
-            // 
-            // toolStripProgressBar
-            // 
-            this.toolStripProgressBar.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.toolStripProgressBar.Maximum = 8;
-            this.toolStripProgressBar.Name = "toolStripProgressBar";
-            this.toolStripProgressBar.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
-            this.toolStripProgressBar.Size = new System.Drawing.Size(100, 17);
-            this.toolStripProgressBar.Visible = false;
+            this.toolStripJumponiumProgressBar.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.toolStripJumponiumProgressBar.Maximum = 8;
+            this.toolStripJumponiumProgressBar.Name = "toolStripJumponiumProgressBar";
+            this.toolStripJumponiumProgressBar.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
+            this.toolStripJumponiumProgressBar.Size = new System.Drawing.Size(100, 17);
             // 
             // UserControlScanGrid
             // 
@@ -493,20 +415,14 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripMenuItem beltsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem ringsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem habitableZoneToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripMenuItem columnsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem nameToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem classToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem distanceToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem informationToolStripMenuItem;
         private ExtendedControls.ExtStatusStrip statusStripSummary;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusTotalValue;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusGreen;
-        private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar;
+        private System.Windows.Forms.ToolStripProgressBar toolStripJumponiumProgressBar;
         private System.Windows.Forms.DataGridViewTextBoxColumn colImage;
         private System.Windows.Forms.DataGridViewTextBoxColumn colName;
         private System.Windows.Forms.DataGridViewTextBoxColumn colClass;
         private System.Windows.Forms.DataGridViewTextBoxColumn colDistance;
         private System.Windows.Forms.DataGridViewTextBoxColumn colBriefing;
+        private System.Windows.Forms.ToolStripMenuItem eDSMCheckToolStripMenuItem;
     }
 }
