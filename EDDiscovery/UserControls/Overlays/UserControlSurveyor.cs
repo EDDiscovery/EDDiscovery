@@ -415,7 +415,7 @@ namespace EDDiscovery.UserControls
             information.Append((js.nRadius < lowRadiusLimit) ? @" Low Radius.".T(EDTx.UserControlSurveyor_LowRadius) : null);
             information.Append((sn.Signals != null) ? " Has Signals.".T(EDTx.UserControlSurveyor_Signals) : null);
             information.Append((js.IsLandable && !js.HasAtmosphericComposition) ? @" is landable.".T(EDTx.UserControlSurveyor_islandable) : null);
-            information.Append((js.IsLandable && js.HasAtmosphericComposition) ? @" is landable and has " + js.Atmosphere : null);
+            information.Append((js.IsLandable && js.HasAtmosphericComposition) ? @" is landable and has " + (js.Atmosphere??"Unknown") : null);
 
             var ev = js.GetEstimatedValues();
 
