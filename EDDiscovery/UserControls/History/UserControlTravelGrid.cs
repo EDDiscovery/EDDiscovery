@@ -489,11 +489,7 @@ namespace EDDiscovery.UserControls
             if ( tip.Length>2000)
                 tip = tip.Substring(0, 2000);
 
-            rw.Cells[0].ToolTipText = tip;
-            rw.Cells[1].ToolTipText = tip;
-            rw.Cells[2].ToolTipText = tip;
             rw.Cells[3].ToolTipText = tip;
-            rw.Cells[4].ToolTipText = tip;
 
             rowsbyjournalid[item.Journalid] = rw;
             return rw;

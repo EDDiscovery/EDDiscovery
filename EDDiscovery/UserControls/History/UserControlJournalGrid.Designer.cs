@@ -132,7 +132,10 @@ namespace EDDiscovery.UserControls
             this.dataGridViewJournal.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewJournal.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewJournal.Name = "dataGridViewJournal";
+            this.dataGridViewJournal.RowHeaderMenuStrip = null;
             this.dataGridViewJournal.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dataGridViewJournal.ShowCellToolTips = false;
+            this.dataGridViewJournal.SingleRowSelect = true;
             this.dataGridViewJournal.Size = new System.Drawing.Size(788, 686);
             this.dataGridViewJournal.TabIndex = 0;
             this.dataGridViewJournal.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewJournal_CellClick);

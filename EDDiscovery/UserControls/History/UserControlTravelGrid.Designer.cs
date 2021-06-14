@@ -537,9 +537,7 @@ namespace EDDiscovery.UserControls
             // 
             // toolTip
             // 
-            this.toolTip.AutoPopDelay = 30000;
-            this.toolTip.InitialDelay = 250;
-            this.toolTip.ReshowDelay = 100;
+            this.toolTip.AutomaticDelay = 1000;
             this.toolTip.ShowAlways = true;
             // 
             // extCheckBoxWordWrap

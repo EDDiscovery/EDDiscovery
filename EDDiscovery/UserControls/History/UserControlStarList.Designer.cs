@@ -63,6 +63,7 @@ namespace EDDiscovery.UserControls
             this.mapGotoStartoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewOnEDSMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setNoteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewScanDisplayToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.vScrollBarCustom = new ExtendedControls.ExtScrollBar();
@@ -73,7 +74,6 @@ namespace EDDiscovery.UserControls
             this.ColumnInformation = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.topPanel = new System.Windows.Forms.FlowLayoutPanel();
-            this.viewScanDisplayToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip.SuspendLayout();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewStarList)).BeginInit();
@@ -287,7 +287,7 @@ namespace EDDiscovery.UserControls
             this.setNoteToolStripMenuItem,
             this.viewScanDisplayToolStripMenuItem});
             this.contextMenuStrip.Name = "historyContextMenu";
-            this.contextMenuStrip.Size = new System.Drawing.Size(221, 136);
+            this.contextMenuStrip.Size = new System.Drawing.Size(221, 114);
             this.contextMenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.historyContextMenu_Opening);
             // 
             // removeSortingOfColumnsToolStripMenuItem
@@ -317,6 +317,13 @@ namespace EDDiscovery.UserControls
             this.setNoteToolStripMenuItem.Size = new System.Drawing.Size(220, 22);
             this.setNoteToolStripMenuItem.Text = "Set Note";
             this.setNoteToolStripMenuItem.Click += new System.EventHandler(this.setNoteToolStripMenuItem_Click);
+            // 
+            // viewScanDisplayToolStripMenuItem
+            // 
+            this.viewScanDisplayToolStripMenuItem.Name = "viewScanDisplayToolStripMenuItem";
+            this.viewScanDisplayToolStripMenuItem.Size = new System.Drawing.Size(220, 22);
+            this.viewScanDisplayToolStripMenuItem.Text = "View Scan Display";
+            this.viewScanDisplayToolStripMenuItem.Click += new System.EventHandler(this.viewScanDisplayToolStripMenuItem_Click);
             // 
             // toolTip
             // 
@@ -398,6 +405,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewStarList.DefaultCellStyle = dataGridViewCellStyle3;
             this.dataGridViewStarList.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewStarList.Name = "dataGridViewStarList";
+            this.dataGridViewStarList.RowHeaderMenuStrip = null;
             dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control;
             dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -408,6 +416,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewStarList.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
             this.dataGridViewStarList.RowHeadersWidth = 50;
             this.dataGridViewStarList.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dataGridViewStarList.SingleRowSelect = true;
             this.dataGridViewStarList.Size = new System.Drawing.Size(851, 580);
             this.dataGridViewStarList.TabIndex = 3;
             this.dataGridViewStarList.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewTravel_CellClick);
@@ -475,13 +484,6 @@ namespace EDDiscovery.UserControls
             this.topPanel.Name = "topPanel";
             this.topPanel.Size = new System.Drawing.Size(870, 30);
             this.topPanel.TabIndex = 38;
-            // 
-            // viewScanDisplayToolStripMenuItem
-            // 
-            this.viewScanDisplayToolStripMenuItem.Name = "viewScanDisplayToolStripMenuItem";
-            this.viewScanDisplayToolStripMenuItem.Size = new System.Drawing.Size(220, 22);
-            this.viewScanDisplayToolStripMenuItem.Text = "View Scan Display";
-            this.viewScanDisplayToolStripMenuItem.Click += new System.EventHandler(this.viewScanDisplayToolStripMenuItem_Click);
             // 
             // UserControlStarList
             // 
