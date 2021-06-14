@@ -834,6 +834,11 @@ namespace EDDiscovery.UserControls
             gotoEntryNumberToolStripMenuItem.Enabled = dataGridViewTravel.Rows.Count > 0;
             removeSortingOfColumnsToolStripMenuItem.Enabled = dataGridViewTravel.SortedColumn != null;
             gotoNextStartStopMarkerToolStripMenuItem.Enabled = (rightclickhe != null);
+
+            var invokelist = OnNewStarList?.GetInvocationList();
+            bothToolStripMenuItem.Enabled = wantedSystemsToolStripMenuItem.Enabled = trilaterationToolStripMenuItem.Enabled = invokelist != null && Array.Find(invokelist, x => x.Method.DeclaringType == typeof(UserControlTrilateration)) != null;
+            explorationPanelToolStripMenuItem.Enabled = invokelist != null && Array.Find(invokelist, x => x.Method.DeclaringType == typeof(UserControlExploration)) != null;
+            expeditionToolStripMenuItem.Enabled = invokelist != null && Array.Find(invokelist, x => x.Method.DeclaringType == typeof(UserControlExpedition)) != null;
         }
 
         private void removeSortingOfColumnsToolStripMenuItem_Click(object sender, EventArgs e)
