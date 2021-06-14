@@ -70,18 +70,12 @@ namespace EDDiscovery.UserControls
 
             UpdateSavedRoutes();
             discoveryform.OnExpeditionsDownloaded += Discoveryform_OnExpeditionsDownloaded; // only from now on are we interested in a change
-
-            if (uctg is IHistoryCursorNewStarList)
-                (uctg as IHistoryCursorNewStarList).OnNewStarList += OnNewStars;
+            discoveryform.OnNewStarList += OnNewStars;
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
         {
-            if (uctg is IHistoryCursorNewStarList)
-                (uctg as IHistoryCursorNewStarList).OnNewStarList -= OnNewStars;
             uctg = thc;
-            if (uctg is IHistoryCursorNewStarList)
-                (uctg as IHistoryCursorNewStarList).OnNewStarList += OnNewStars;
         }
 
         public override bool AllowClose()
@@ -111,9 +105,7 @@ namespace EDDiscovery.UserControls
             discoveryform.OnExpeditionsDownloaded -= Discoveryform_OnExpeditionsDownloaded;
             discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
             discoveryform.OnNoteChanged -= Discoveryform_OnNoteChanged;
-
-            if (uctg is IHistoryCursorNewStarList)
-                (uctg as IHistoryCursorNewStarList).OnNewStarList -= OnNewStars;
+            discoveryform.OnNewStarList -= OnNewStars;
         }
 
         private void Discoveryform_OnNoteChanged(object arg1, HistoryEntry arg2, bool arg3)

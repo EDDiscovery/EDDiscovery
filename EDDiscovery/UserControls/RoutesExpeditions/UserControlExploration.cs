@@ -62,20 +62,14 @@ namespace EDDiscovery.UserControls
         {
             uctg.OnTravelSelectionChanged += Display;
             DGVLoadColumnLayout(dataGridViewExplore);
-
-            if (uctg is IHistoryCursorNewStarList)
-                (uctg as IHistoryCursorNewStarList).OnNewStarList += OnNewStars;
+            discoveryform.OnNewStarList += OnNewStars;
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
         {
             uctg.OnTravelSelectionChanged -= Display;
-            if (uctg is IHistoryCursorNewStarList)
-                (uctg as IHistoryCursorNewStarList).OnNewStarList -= OnNewStars;
             uctg = thc;
             uctg.OnTravelSelectionChanged += Display;
-            if (uctg is IHistoryCursorNewStarList)
-                (uctg as IHistoryCursorNewStarList).OnNewStarList += OnNewStars;
         }
 
         public override bool AllowClose()
@@ -90,8 +84,7 @@ namespace EDDiscovery.UserControls
             DGVSaveColumnLayout(dataGridViewExplore);
             uctg.OnTravelSelectionChanged -= Display;
             discoveryform.OnNewEntry -= NewEntry;
-            if (uctg is IHistoryCursorNewStarList)
-                (uctg as IHistoryCursorNewStarList).OnNewStarList -= OnNewStars;
+            discoveryform.OnNewStarList -= OnNewStars;
         }
 
         public void NewEntry(HistoryEntry he, HistoryList hl)               // called when a new entry is made.. check to see if its a scan update

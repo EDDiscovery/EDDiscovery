@@ -62,27 +62,19 @@ namespace EDDiscovery.UserControls
 
         public override void LoadLayout()
         {
-            if (uctg is IHistoryCursorNewStarList)
-                (uctg as IHistoryCursorNewStarList).OnNewStarList += Discoveryform_OnNewStarsForTrilat;
+            discoveryform.OnNewStarList += Discoveryform_OnNewStarsForTrilat;
         }
 
         public override void Closing()
         {
             PutSetting("Sectors", toolStripButtonSector.Checked);
-
-            if (uctg is IHistoryCursorNewStarList)
-                (uctg as IHistoryCursorNewStarList).OnNewStarList -= Discoveryform_OnNewStarsForTrilat;
+            discoveryform.OnNewStarList -= Discoveryform_OnNewStarsForTrilat;
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
         {
-            if (uctg is IHistoryCursorNewStarList)
-                (uctg as IHistoryCursorNewStarList).OnNewStarList -= Discoveryform_OnNewStarsForTrilat;
             uctg = thc;
-            if (uctg is IHistoryCursorNewStarList)
-                (uctg as IHistoryCursorNewStarList).OnNewStarList += Discoveryform_OnNewStarsForTrilat;
         }
-
 
         #endregion
 

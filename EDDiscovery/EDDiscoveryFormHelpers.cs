@@ -14,6 +14,7 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
+using EDDiscovery.UserControls;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using EliteDangerousCore.EDSM;
@@ -46,6 +47,11 @@ namespace EDDiscovery
         {
             if (OnNewCalculatedRoute != null)
                 OnNewCalculatedRoute(list);
+        }
+
+        public void NewStarList(List<string> systems, OnNewStarsPushType pushtype)
+        {
+            OnNewStarList?.Invoke(systems, pushtype);
         }
 
         #endregion

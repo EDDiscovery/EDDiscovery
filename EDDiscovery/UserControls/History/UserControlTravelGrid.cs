@@ -1004,22 +1004,23 @@ namespace EDDiscovery.UserControls
             }
 
             if (dist)
-                FireNewStarList(systemnamelist, OnNewStarsPushType.TriSystems);
+                discoveryform.NewStarList(systemnamelist, OnNewStarsPushType.TriSystems);
 
             if (wanted)
-                FireNewStarList(systemnamelist, OnNewStarsPushType.TriWanted);
+                discoveryform.NewStarList(systemnamelist, OnNewStarsPushType.TriWanted);
 
             if (expedition)
-                FireNewStarList(systemnamelist, OnNewStarsPushType.Expedition);
+                discoveryform.NewStarList(systemnamelist, OnNewStarsPushType.Expedition);
 
             if (exploration)
-                FireNewStarList(systemnamelist, OnNewStarsPushType.Exploration);
+                discoveryform.NewStarList(systemnamelist, OnNewStarsPushType.Exploration);
 
             this.Cursor = Cursors.Default;
         }
 
         public void FireNewStarList(List<string> system, OnNewStarsPushType pushtype)
         {
+            discoveryform.NewStarList(system, pushtype);
             OnNewStarList?.Invoke(system, pushtype);
         }
 

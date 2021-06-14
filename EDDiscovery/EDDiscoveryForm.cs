@@ -15,6 +15,7 @@
  */
 
 using EDDiscovery.Forms;
+using EDDiscovery.UserControls;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using EliteDangerousCore.EDDN;
@@ -81,6 +82,7 @@ namespace EDDiscovery
                                                                         // theme has changed by settings, hook if you have some UI which needs refreshing due to it. 
         public event Action OnThemeChanged;                             // Note you won't get it on startup because theme is applied to form before tabs/panels are setup
         public event Action<string, Size> ScreenShotCaptured;           // screen shot has been captured
+        public event Action<List<string>, OnNewStarsPushType> OnNewStarList;  // Fired when pushing a list of systems
 
         #endregion
 

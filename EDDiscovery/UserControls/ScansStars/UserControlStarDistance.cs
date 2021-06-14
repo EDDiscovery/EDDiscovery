@@ -240,9 +240,7 @@ namespace EDDiscovery.UserControls
             List<string> syslist = new List<string>();
             foreach (DataGridViewRow r in selectedRows)
                 syslist.Add(r.Cells[0].Value.ToString());
-
-            if (uctg is IHistoryCursorNewStarList)
-                (uctg as IHistoryCursorNewStarList).FireNewStarList(syslist, pushtype);
+            discoveryform.NewStarList(syslist, pushtype);
         }
 
         private void viewOnEDSMToolStripMenuItem1_Click(object sender, EventArgs e)
