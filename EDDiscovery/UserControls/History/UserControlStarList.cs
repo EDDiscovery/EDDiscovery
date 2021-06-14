@@ -375,9 +375,7 @@ namespace EDDiscovery.UserControls
 
             string tip = String.Join(Environment.NewLine, he.EventSummary, EventDescription, EventDetailedInfo);
 
-            rw.Cells[0].ToolTipText = tip;
             rw.Cells[1].ToolTipText = tip;
-            rw.Cells[2].ToolTipText = tip;
             rw.Cells[3].ToolTipText = tip;
 
             return rw;

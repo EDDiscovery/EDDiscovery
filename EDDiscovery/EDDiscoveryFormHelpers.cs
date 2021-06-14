@@ -373,7 +373,7 @@ namespace EDDiscovery
 
             theme.ApplyStd(this);
 
-            statusStrip.Font = contextMenuStripTabs.Font = this.Font;
+            statusStripEDD.Font = contextMenuStripTabs.Font = this.Font;
 
             this.Refresh();                                             // force thru refresh to make sure its repainted
 
@@ -413,16 +413,16 @@ namespace EDDiscovery
             {
                 if (percentComplete >= 0)
                 {
-                    toolStripProgressBar1.Visible = true;
-                    toolStripProgressBar1.Value = percentComplete;
+                    toolStripProgressBarEDD.Visible = true;
+                    toolStripProgressBarEDD.Value = percentComplete;
                 }
                 else
                 {
-                    toolStripProgressBar1.Visible = false;
+                    toolStripProgressBarEDD.Visible = false;
                 }
 
                 syncprogressstring = message;
-                toolStripStatusLabel1.Text = ObjectExtensionsStrings.AppendPrePad(syncprogressstring, refreshprogressstring, " | ");
+                toolStripStatusLabelEDD.Text = ObjectExtensionsStrings.AppendPrePad(syncprogressstring, refreshprogressstring, " | ");
             }
         }
 
@@ -431,7 +431,7 @@ namespace EDDiscovery
             if (!Controller.PendingClose)
             {
                 refreshprogressstring = message;
-                toolStripStatusLabel1.Text = ObjectExtensionsStrings.AppendPrePad(syncprogressstring, refreshprogressstring, " | ");
+                toolStripStatusLabelEDD.Text = ObjectExtensionsStrings.AppendPrePad(syncprogressstring, refreshprogressstring, " | ");
                 Update();       // nasty but it works - needed since we are doing UI work here and the UI thread will be blocked
             }
         }

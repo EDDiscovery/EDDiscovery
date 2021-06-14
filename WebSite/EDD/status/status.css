@@ -1,83 +1,82 @@
 
 /* Style the article section */
 
-body
-{
+body {
     background-color: black;
+    color: darkorange;
+    font-family: Arial,Helvetica,Sans-serif;
+    margin: 0px;
 }
 
-.wrapper
-{
-    clear: both;
+/* top level div is a flex. Important to lock page to vh so it does not scroll and occupies the whole page */
+.page {
+    height: 100vh;
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 }
 
-/* clear the contents after wrapper.. works better than clearing on next item */
-.wrapper::after
-{
-    content: "";
-    visibility: hidden;
-    height: 0;
-    display: block;
+/* first is headernav, third is footer */
+/* second part of three sections is a flex:1 */
+.middlesection {
+    width: 100%;
+    flex: 1;
     clear: both;
+    overflow: hidden;
 }
 
-.wrapleft
-{
+/* this div holds the stardata table, inside an article */
+.leftside {
     float: left;
-    width: 100%;
+    overflow: hidden;
+    height: 100%;
+    width: 70%;
 }
 
-/* this holds the status table */
-
-article
-{
-    height: auto;
-    overflow: auto;
-    margin-right: 310px;
-    line-height:1em;
-}
-
-article table
-{
+article table {
     width: 100%;
     border-collapse: collapse;
 }
 
-article table tr
-{
-    background-color: #000000;
-    color: darkorange;
-}
 
+/* aside holds the statusbox and action box. Leave 1% for luck, large wide right margin */
 
-/* The aside holds the status indicators */
-
-aside
-{
+aside {
     float: Right;
-    width: 300px;
-    margin-left: -300px;
+    width: 25%;
+    margin-right: 4%;
 }
 
-/* Common status and action box styling */
+/* Status and action boxes are constrained inside aside by width, which we set to 95% to prevent the page width scroll bar appearing for some reason */
 
-#StatusBox, #ActionBox
-{
-    background-color: black;
-    margin-top: 0.5em;
-    width: 100%;
+#StatusBox, #ActionBox {
+    margin-top: 1em;
+    width: 95%;
+    border: 1px solid #ffac28;
 }
 
-#ActionBox
-{
-    border: 2px solid #ffac28;
+/* td's in action box are inline so flow around the actionbox areas, expanding it vertically */
+
+#ActionBox td, #StatusBox td {
+    display: inline; 
 }
 
-/* the p element can hold the name of the box, move it relative to give a inline label */
+/* set spacing of text in status box */
+#StatusBox p {
+    line-height: 0.1em;
+}
 
-#ActionBox p
-{
+/* Style the buttons */
+#StatusBox img, #ActionBox img {
+    padding: 10px;
+    border: 2px solid darkorange;
+    border-radius: 8px;
+}
+
+/* this moves the title text in action box to form a group type text overlay */
+
+#ActionBox p {
     color: black;
     position: relative;
     top: -0.5em;
@@ -86,59 +85,22 @@ aside
     background-color: #ffac28;
 }
 
-#StatusBox p
-{
-    color: darkorange;
-    line-height:0.1em;
-}
+/* class assigned to button when clicked to give a flash effect */
 
-#ActionBox td
-{
-    display: inline; /* td's in action box are inline so flow around the actionbox areas */
-}
-
-#StatusBox td
-{
-    display: inline; 
-}
-
-/* the img element is the button .. style it */
-
-#StatusBox img, #ActionBox img
-{
-    padding: 10px;
-    border: 2px solid darkorange;
-    border-radius: 8px;
-}
-
-#StatusBox img
-{
-    border-radius: 16px;
-}
-
-/* class assigned to say selected */
-
-.entryselected
-{
+.entryselected {
     background-color: green;
 }
 
-/* class to theme the status buttons */
-.edsmetcbuttons
-{
+
+/* EDSM Buttons on aside */
+.edsmetcbuttons {
     width: 6em;
     margin: 1px 0px 1px 10px;
     line-height: 1;
     background-color: orange;
     border: 1px solid darkorange;
+    border-radius: 4px;
     color: #000;
     text-decoration: none;
 }
 
-
-.tooltip .tooltiptext
-{
-    margin-left: -120px;
-    margin-top: 60px;
-    width:200px;
-}

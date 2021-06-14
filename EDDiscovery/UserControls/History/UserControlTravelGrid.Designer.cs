@@ -68,7 +68,7 @@ namespace EDDiscovery.UserControls
             this.trilaterationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.wantedSystemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bothToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.routeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.expeditionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.explorationPanelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.moveToAnotherCommanderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hideSystemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -385,7 +385,7 @@ namespace EDDiscovery.UserControls
             this.trilaterationToolStripMenuItem,
             this.wantedSystemsToolStripMenuItem,
             this.bothToolStripMenuItem,
-            this.routeToolStripMenuItem,
+            this.expeditionToolStripMenuItem,
             this.explorationPanelToolStripMenuItem});
             this.addToTrilaterationToolStripMenuItem.Name = "addToTrilaterationToolStripMenuItem";
             this.addToTrilaterationToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
@@ -412,12 +412,12 @@ namespace EDDiscovery.UserControls
             this.bothToolStripMenuItem.Text = "Both of the above";
             this.bothToolStripMenuItem.Click += new System.EventHandler(this.bothToolStripMenuItem_Click);
             // 
-            // routeToolStripMenuItem
+            // expeditionToolStripMenuItem
             // 
-            this.routeToolStripMenuItem.Name = "routeToolStripMenuItem";
-            this.routeToolStripMenuItem.Size = new System.Drawing.Size(275, 22);
-            this.routeToolStripMenuItem.Text = "Expedition Panel";
-            this.routeToolStripMenuItem.Click += new System.EventHandler(this.routeToolStripMenuItem_Click);
+            this.expeditionToolStripMenuItem.Name = "expeditionToolStripMenuItem";
+            this.expeditionToolStripMenuItem.Size = new System.Drawing.Size(275, 22);
+            this.expeditionToolStripMenuItem.Text = "Expedition Panel";
+            this.expeditionToolStripMenuItem.Click += new System.EventHandler(this.routeToolStripMenuItem_Click);
             // 
             // explorationPanelToolStripMenuItem
             // 
@@ -537,9 +537,7 @@ namespace EDDiscovery.UserControls
             // 
             // toolTip
             // 
-            this.toolTip.AutoPopDelay = 30000;
-            this.toolTip.InitialDelay = 250;
-            this.toolTip.ReshowDelay = 100;
+            this.toolTip.AutomaticDelay = 1000;
             this.toolTip.ShowAlways = true;
             // 
             // extCheckBoxWordWrap
@@ -831,7 +829,7 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripMenuItem trilaterationToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem wantedSystemsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem bothToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem routeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem expeditionToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem viewOnEDSMToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemStartStop;
         private System.Windows.Forms.ToolStripMenuItem removeJournalEntryToolStripMenuItem;

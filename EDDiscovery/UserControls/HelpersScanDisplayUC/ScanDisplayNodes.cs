@@ -63,7 +63,7 @@ namespace EDDiscovery.UserControls
                     if (sn.Signals != null)
                         tip += "\n" + "Signals".T(EDTx.ScanDisplayUserControl_Signals) + ":\n" + JournalSAASignalsFound.SignalList(sn.Signals, 4, "\n");
 
-                    Bitmap nodeimage = (Bitmap)(sc.IsStar ? sc.GetStarTypeImage() : sc.GetPlanetClassImage());
+                    Bitmap nodeimage = (Bitmap)BaseUtils.Icons.IconSet.GetIcon(sc.GetStarPlanetTypeImageName());
 
                     string overlaytext = "";
                     var nodelabels = new string[2] { "", "" };

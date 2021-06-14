@@ -6,7 +6,7 @@ function RequestStatus(entryno)
     console.log("Request status on " + entryno);
     var msg = {
         requesttype: "status",
-        entry: entryno,	// -1 means send me the latest journal entry first, followed by length others.  else its the journal index 
+        entry: entryno,	// -1 means send me the latest journal entry first
     };
 
     websocket.send(JSON.stringify(msg));
@@ -24,17 +24,32 @@ function FillSystemTable(jdata)
 
     if (entry >= 0)
     {
+        var s = SplitCapsWord(jdata.Mode);
+
         asidetable.appendChild(tablerow2tdjson(jdata, "Cmdr:", "Commander"));
+        asidetable.appendChild(tablerow2tdstring("Mode", s));
         asidetable.appendChild(tablerow2tdjson(jdata, "Star System:", "SystemData", "System"));
 
-        var edsm = jdata.SystemData.EDSMID > 0 ? CreateAnchor("EDSM", "https://www.edsm.net/system/id/" + jdata.SystemData.EDSMID + "/name/" + jdata.SystemData.System, true) : null;
-        var eddb = jdata.EDDB.EDDBID > 0 ? CreateAnchor("EDDB", "https://eddb.io/system/" + jdata.EDDB.EDDBID, true) : null;
-        var ross = jdata.EDDB.EDDBID > 0 ? CreateAnchor("ROSS", "https://ross.eddb.io/system/update/" + jdata.EDDB.EDDBID, true) : null;
+        var list = [CreateAnchor("EDSM", "https://www.edsm.net/system?systemName=" + encodeURI(jdata.SystemData.System), true, "edsmetcbuttons"),
+            CreateAnchor("EDDB", "https://eddb.io/system/name/" + encodeURI(jdata.SystemData.System), true, "edsmetcbuttons"),
+            CreateAnchor("Inara", "https://inara.cz/galaxy-starsystem/?search=" + encodeURI(jdata.SystemData.System), true, "edsmetcbuttons"),
+            CreateAnchor("Spansh", "https://spansh.co.uk/system/" + jdata.SystemData.SystemAddress, true, "edsmetcbuttons")
+        ];
 
-        asidetable.appendChild(tablerow1tdlist([edsm, eddb, ross], "edsmetcbuttons", 2));
+        asidetable.appendChild(tablerow2tdtextitem("", list));
+
+        asidetable.appendChild(tablerow2tdstring("Position:", jdata.SystemData.PosX + "," + jdata.SystemData.PosY + "," + jdata.SystemData.PosZ));
+        asidetable.appendChild(tablerow2tdjson(jdata, "Visits:", "SystemData", "VisitCount"));
 
         asidetable.appendChild(tablerow2tdjson(jdata, "Body Name:", "Bodyname"));
-        asidetable.appendChild(tablerow2tdstring("Position:", jdata.SystemData.PosX + "," + jdata.SystemData.PosY + "," + jdata.SystemData.PosZ));
+        if (jdata.EDDB.MarketID != null)
+        {
+            var list = [CreateAnchor("EDDB", "https://eddb.io/station/market-id/" + jdata.EDDB.MarketID, true, "edsmetcbuttons"),
+                CreateAnchor("Spansh", "https://spansh.co.uk/station/" + jdata.EDDB.MarketID, true, "edsmetcbuttons")];
+
+            asidetable.appendChild(tablerow2tdtextitem("", list));
+        }
+
         asidetable.appendChild(tablerow2tdstring("To","Sol: " + jdata["SolDist"] + " Home:" + jdata["HomeDist"]));
         asidetable.appendChild(tablerow2tdjson(jdata, "State", "EDDB", "State"));
         asidetable.appendChild(tablerow2tdjson(jdata, "Allegiance", "EDDB", "Allegiance"));
@@ -55,6 +70,8 @@ function FillSystemTable(jdata)
         }
         else
             asidetable.appendChild(tablerow2tdstring("Travel", "-"));
+
+        asidetable.appendChild(tablerow2tdjson(jdata, "Game Mode:", "GameMode"));
     }
 
 }

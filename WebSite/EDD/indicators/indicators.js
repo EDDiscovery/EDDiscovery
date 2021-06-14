@@ -339,7 +339,7 @@ function SetIndicatorState(jdata, tstatus)
                 {
                     if (z.nodeName == "IMG" && z.tag != null)
                     {
-                        console.log("Entry is " + z.nodeName + " " + z.tag);
+                        //console.log("Entry is " + z.nodeName + " " + z.tag);
 
                         var indicator = z.tag[0];
 

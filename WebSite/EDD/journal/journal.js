@@ -54,15 +54,15 @@ function ClickJournalItem(e)
     RequestStatus(e.target.tag);
 }
 
-function ArticleScrolled()      // called by article on scrolling
+function JournalScrolled()      // called by article on scrolling
 {
-    var article = document.getElementById("JArticle");
+    var journalscroll = document.getElementById("journalscroll");       // need to get by id to get the right thingy
+    console.log(journalscroll.scrollTop + " " + journalscroll.scrollHeight + journalscroll.clientHeight );
 
-    if (journalnextrow >= 0 && article.scrollTop + article.clientHeight >= article.scrollHeight - 10 )
+    if (journalnextrow >= 0 && journalscroll.scrollTop + journalscroll.clientHeight >= journalscroll.scrollHeight - 10 )
     {
         RequestJournal(journalnextrow, 50);
     }
-//    console.log(article.scrollTop + " " + article.scrollHeight + article.clientHeight + " " + article.innerHeight);
 }
 
 function RequestMore(count)

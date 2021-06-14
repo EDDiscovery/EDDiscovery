@@ -14,7 +14,9 @@ function removeChildren(tab)
     }
 }
 
-function tablerow2tdjson(jdata, text, prop, prop2 = "")  // write a table row with two cells from jdata of properties
+// write a table row with two cells from jdata of properties
+
+function tablerow2tdjson(jdata, text, prop, prop2 = "")  
 {
     var td1 = document.createElement("td");
     var t1 = document.createTextNode(text);
@@ -32,14 +34,34 @@ function tablerow2tdjson(jdata, text, prop, prop2 = "")  // write a table row wi
     return tr;
 }
 
-function tabledata(child)  // wrap a child in a td.
+// write a table row with col1 being text, col2 being a list of html items
+function tablerow2tdtextitem(text, elements)  
+{
+    var td1 = document.createElement("td");
+    var t1 = document.createTextNode(text);
+    td1.appendChild(t1);
+
+    var td2 = document.createElement("td");
+
+    elements.forEach(function (htmlitem)
+    { if ( htmlitem!=null) td2.appendChild(htmlitem) });
+
+    var tr = document.createElement("tr");
+    tr.appendChild(td1);
+    tr.appendChild(td2);
+    return tr;
+}
+
+// wrap a child in a td.
+function tabledata(child)  
 {
     var td1 = document.createElement("td");
     td1.appendChild(child);
     return td1;
 }
 
-function tablerow2tdstring(text,value)  // write a table row from string
+// write a table row from string
+function tablerow2tdstring(text,value)  
 {
     var td1 = document.createElement("td");
     var t1 = document.createTextNode(text);
@@ -55,7 +77,8 @@ function tablerow2tdstring(text,value)  // write a table row from string
     return tr;
 }
 
-function tablerow2tdanchor(text,value,link)  // write a table row with a link
+// write a table row with a link
+function tablerow2tdanchor(text,value,link)  
 {
     var td1 = document.createElement("td");
     var t1 = document.createTextNode(text);
@@ -73,33 +96,16 @@ function tablerow2tdanchor(text,value,link)  // write a table row with a link
     return tr;
 }
 
-function tablerow1tdlist(elements, classname="", colspan = null) // single row containing multiple elements and assign a classname to them for styling
-{
-    var tr = document.createElement("tr");
-    var td = document.createElement("td");
-    tr.appendChild(td);
-
-    elements.forEach( function(item) 
-    {
-        if (item != null)
-        {
-            if (classname !== "")
-                item.classList.add(classname);
-
-            td.appendChild(item);
-        }
-    });
-
-    if ( colspan !== null )
-        td.colSpan = colspan;
-    return tr;
-}
-
-function tablerowmultitdlist(elements, classnames = null) // single col containing elements and assign a classname to them for styling
+// single row containing multiple columns
+// elements are an array of items for each cell
+// items are either a single item or an array of items.
+// an item can be a string, or a node object. If strings, they are BR spaced from the above
+// optionally assign a classname to each column cell for styling
+function tablerowmultitdlist(elements, classnames = null)
 {
     var tr = document.createElement("tr");
 
-    for( var i = 0 ; i < elements.length; i++)
+    for (var i = 0; i < elements.length; i++)
     {
         if (elements[i] != null)
         {
@@ -111,12 +117,44 @@ function tablerowmultitdlist(elements, classnames = null) // single col containi
                 elements[i].classList.add(classnames[i]);
             }
 
-            td.appendChild(elements[i]);
+            var e = elements[i];
+
+            if (Array.isArray(e))
+            {
+                var doneone = false;
+
+                for (var j = 0; j < e.length; j++)
+                {
+                    if (typeof (e[j]) === 'string')
+                    {
+                        if (e[j] != "")
+                        {
+                            if (doneone)
+                                td.appendChild(document.createElement("br"));
+                            var te = document.createTextNode(e[j]);
+                            td.appendChild(te);
+                            doneone = true;
+                        }
+                    }
+                    else if (e[j] != null)
+                    {
+                        td.appendChild(e[j]);
+                        doneone = true;
+                    }
+                }
+            }
+            else
+            {
+                if (typeof (e) === 'string')
+                {
+                    var te = document.createTextNode(e);
+                    td.appendChild(te);
+                }
+                else
+                    td.appendChild(e);
+            } 
         }
     }
 
     return tr;
 }
-
-
-

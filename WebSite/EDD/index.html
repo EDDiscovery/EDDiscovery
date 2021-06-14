@@ -16,6 +16,7 @@ and open the template in the editor.
     <script src="jslib/tables.js"></script>
     <script src="jslib/websockets.js"></script>
     <script src="jslib/screencontrol.js"></script>
+    <script src="/jslib/strings.js"></script>
     <script src="header.js"></script>
     <script src="journal/journal.js"></script>
     <script src="/systemtable/systemtable.js"></script>
@@ -25,21 +26,29 @@ and open the template in the editor.
 
 </head>
 <body onload="OnLoad()">
-    <script>write_header(); write_nav();</script>
-
-    <div class="wrapper">
-        <div class="wrapleft">
-            <article id="JArticle" onscroll="ArticleScrolled()">
-                <table id="Journal"></table>
-            </article>
+    <div class="page">
+        <div class="headernav">
+            <header>
+                <script>write_header();</script>
+            </header>
+            <nav>
+                <script>write_nav(0);</script>
+            </nav>
         </div>
-
-        <aside>
-            <table id="StarData"></table>
-        </aside>
+        <div class="middlesection">
+            <div class="journaltable" id="journalscroll" onscroll="JournalScrolled()">
+                <article>
+                    <table id="Journal"></table>
+                </article>
+            </div>
+            <aside>
+                <table id="StarData"></table>
+            </aside>
+        </div>
+        <div class="footer">
+            <script>write_footer(["+1000"]);</script>
+        </div>
     </div>
-
-    <script>write_footer(["+1000"]);</script>
 
 
 </body>

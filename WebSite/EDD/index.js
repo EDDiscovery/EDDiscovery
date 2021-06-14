@@ -13,8 +13,6 @@ function OnLoad()
 	websocket.onclose = function (evt) { onClose(evt) };
 	websocket.onmessage = function (evt) { onMessage(evt) };
     websocket.onerror = function (evt) { onError(evt) };
-
-    highlight_nav_tab(0);
 }
 
 function onOpen(evt)
@@ -33,21 +31,21 @@ function onMessage(evt)
 
     if (jdata.responsetype == "journalrequest") // we requested "journal", records requested back
     {
-        FillJournalTable(jdata, false)
+       FillJournalTable(jdata, false)
     }
     else if (jdata.responsetype == "journalpush")   // EDD sent a new journal record
     {
-        FillJournalTable(jdata, true)
+    //    FillJournalTable(jdata, true)
     }
     else if (jdata.responsetype == "journalrefresh") // EDD has changed the history, start again
     {
-        console.log("Journal refresh " + evt.data);
+      //  console.log("Journal refresh " + evt.data);
         ClearJournalTable();
-        FillJournalTable(jdata, false)
+     //   FillJournalTable(jdata, false)
     }
     else if (jdata.responsetype == "status")    // we requested a status or status was pushed, update screen
     {
-        console.log("status " + evt.data);
+     //   console.log("status " + evt.data);
         FillSystemTable(jdata)
     }
 }

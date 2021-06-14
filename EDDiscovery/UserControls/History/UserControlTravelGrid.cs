@@ -489,11 +489,7 @@ namespace EDDiscovery.UserControls
             if ( tip.Length>2000)
                 tip = tip.Substring(0, 2000);
 
-            rw.Cells[0].ToolTipText = tip;
-            rw.Cells[1].ToolTipText = tip;
-            rw.Cells[2].ToolTipText = tip;
             rw.Cells[3].ToolTipText = tip;
-            rw.Cells[4].ToolTipText = tip;
 
             rowsbyjournalid[item.Journalid] = rw;
             return rw;
@@ -540,7 +536,7 @@ namespace EDDiscovery.UserControls
             {
                 int row = dataGridViewTravel.CurrentCell.RowIndex;
                 var he = dataGridViewTravel.Rows[row].Tag as HistoryEntry;
-                System.Diagnostics.Trace.WriteLine("************ TG Fire Change sel at " + row + " he " + he.EventTimeUTC + " " +  he.EventSummary + " " + he.System.Name + " " + dataGridViewTravel.CurrentCell.RowIndex + ":" + dataGridViewTravel.CurrentCell.ColumnIndex);
+                //System.Diagnostics.Trace.WriteLine("************ TG Fire Change sel at " + row + " he " + he.EventTimeUTC + " " +  he.EventSummary + " " + he.System.Name + " " + dataGridViewTravel.CurrentCell.RowIndex + ":" + dataGridViewTravel.CurrentCell.ColumnIndex);
 
                 if ( OnTravelSelectionChanged != null )     // we do this manually, so we can time each reaction if required.
                 {
@@ -838,6 +834,11 @@ namespace EDDiscovery.UserControls
             gotoEntryNumberToolStripMenuItem.Enabled = dataGridViewTravel.Rows.Count > 0;
             removeSortingOfColumnsToolStripMenuItem.Enabled = dataGridViewTravel.SortedColumn != null;
             gotoNextStartStopMarkerToolStripMenuItem.Enabled = (rightclickhe != null);
+
+            var invokelist = OnNewStarList?.GetInvocationList();
+            bothToolStripMenuItem.Enabled = wantedSystemsToolStripMenuItem.Enabled = trilaterationToolStripMenuItem.Enabled = invokelist != null && Array.Find(invokelist, x => x.Method.DeclaringType == typeof(UserControlTrilateration)) != null;
+            explorationPanelToolStripMenuItem.Enabled = invokelist != null && Array.Find(invokelist, x => x.Method.DeclaringType == typeof(UserControlExploration)) != null;
+            expeditionToolStripMenuItem.Enabled = invokelist != null && Array.Find(invokelist, x => x.Method.DeclaringType == typeof(UserControlExpedition)) != null;
         }
 
         private void removeSortingOfColumnsToolStripMenuItem_Click(object sender, EventArgs e)
