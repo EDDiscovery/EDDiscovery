@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright © 2016 - 2019 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
@@ -425,11 +425,11 @@ namespace EDDiscovery.UserControls
             information.Append((js.Terraformable && !js.WaterWorld && js.PlanetTypeID != EDPlanet.High_metal_content_body && js.PlanetTypeID != EDPlanet.Metal_rich_body) ? @" is a terraformable planet.".T(EDTx.UserControlSurveyor_isaterraformableplanet) : null);
             information.Append((js.HasRings) ? @" Has ring.".T(EDTx.UserControlSurveyor_Hasring) : null);
             information.Append((js.HasMeaningfulVolcanism) ? @" Has ".T(EDTx.UserControlSurveyor_Has) + js.Volcanism + "." : null);
-            information.Append((js.nEccentricity >= 0.95) ? @"Has a high eccentricity of " + js.nEccentricity??"Unknown" : null);                
+            information.Append((js.nEccentricity >= 0.95) ? @"Has a high eccentricity of " + (js.nEccentricity??"Unknown") : null);                
             information.Append((js.nRadius < lowRadiusLimit) ? @" Low Radius.".T(EDTx.UserControlSurveyor_LowRadius) : null);
             information.Append((sn.Signals != null) ? " Has Signals.".T(EDTx.UserControlSurveyor_Signals) : null);
             information.Append((js.IsLandable && !js.HasAtmosphericComposition) ? @" is landable.".T(EDTx.UserControlSurveyor_islandable) : null);
-            information.Append((js.IsLandable && js.HasAtmosphericComposition) ? @" is landable and has " + js.Atmosphere??"Unknown" : null);
+            information.Append((js.IsLandable && js.HasAtmosphericComposition) ? @" is landable and has " + (js.Atmosphere??"Unknown") : null);
 
             var ev = js.GetEstimatedValues();
 
