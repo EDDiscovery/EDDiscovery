@@ -62,6 +62,7 @@ namespace EDDiscovery.UserControls
             this.landableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.landableWithAtmosphereToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.landableWithVolcanismToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.landableAndLargeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showAllPlanetsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showAllStarsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showBeltClustersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -83,7 +84,6 @@ namespace EDDiscovery.UserControls
             this.pictureBoxSurveyor = new ExtendedControls.ExtPictureBox();
             this.extPictureBoxScroll = new ExtendedControls.ExtPictureBoxScroll();
             this.extScrollBar = new ExtendedControls.ExtScrollBar();
-            this.landableAndLargeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSurveyor)).BeginInit();
             this.extPictureBoxScroll.SuspendLayout();
@@ -226,7 +226,7 @@ namespace EDDiscovery.UserControls
             this.lowRadiusToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.lowRadiusToolStripMenuItem.Name = "lowRadiusToolStripMenuItem";
             this.lowRadiusToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
-            this.lowRadiusToolStripMenuItem.Text = "Low Radius";
+            this.lowRadiusToolStripMenuItem.Text = "Tiny body";
             // 
             // hasSignalsToolStripMenuItem
             // 
@@ -265,6 +265,14 @@ namespace EDDiscovery.UserControls
             this.landableWithVolcanismToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
             this.landableWithVolcanismToolStripMenuItem.Text = "Landable with volcanism";
             this.landableWithVolcanismToolStripMenuItem.Click += new System.EventHandler(this.landableWithVolcanismToolStripMenuItem_Click);
+            // 
+            // landableAndLargeToolStripMenuItem
+            // 
+            this.landableAndLargeToolStripMenuItem.CheckOnClick = true;
+            this.landableAndLargeToolStripMenuItem.Name = "landableAndLargeToolStripMenuItem";
+            this.landableAndLargeToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
+            this.landableAndLargeToolStripMenuItem.Text = "Landable and large";
+            this.landableAndLargeToolStripMenuItem.Click += new System.EventHandler(this.landableAndLargeToolStripMenuItem_Click);
             // 
             // showAllPlanetsToolStripMenuItem
             // 
@@ -460,14 +468,6 @@ namespace EDDiscovery.UserControls
             this.extScrollBar.ThumbDrawAngle = 0F;
             this.extScrollBar.Value = 0;
             this.extScrollBar.ValueLimited = 0;
-            // 
-            // landableAndLargeToolStripMenuItem
-            // 
-            this.landableAndLargeToolStripMenuItem.CheckOnClick = true;
-            this.landableAndLargeToolStripMenuItem.Name = "landableAndLargeToolStripMenuItem";
-            this.landableAndLargeToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
-            this.landableAndLargeToolStripMenuItem.Text = "Landable and large";
-            this.landableAndLargeToolStripMenuItem.Click += new System.EventHandler(this.landableAndLargeToolStripMenuItem_Click);
             // 
             // UserControlSurveyor
             // 

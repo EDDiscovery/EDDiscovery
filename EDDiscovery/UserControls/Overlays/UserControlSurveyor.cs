@@ -32,7 +32,9 @@ namespace EDDiscovery.UserControls
         private string titletext = "";
         private string fsssignalsdisplayed = "";
 
-        const int lowRadiusLimit = 600 * 1000;
+        const int lowRadiusLimit = 300 * 1000; // tiny body limit in km converted to m
+        const int largeRadiusLimit = 20000 * 1000; // large body limit in km converted to m
+        const double eccentricityLimit = 0.95; //orbital eccentricity limit
 
         EliteDangerousCore.UIEvents.UIGUIFocus.Focus uistate = EliteDangerousCore.UIEvents.UIGUIFocus.Focus.NoFocus;
 
@@ -299,7 +301,7 @@ namespace EDDiscovery.UserControls
                                     (sd.IsLandable && landableToolStripMenuItem.Checked) ||
                                     (sd.IsLandable && sd.HasAtmosphericComposition && landableWithAtmosphereToolStripMenuItem.Checked) ||
                                     (sd.IsLandable && sd.HasMeaningfulVolcanism && landableWithVolcanismToolStripMenuItem.Checked) ||
-                                    (sd.IsLandable && sd.nRadius >= 20000000 && landableAndLargeToolStripMenuItem.Checked) ||
+                                    (sd.IsLandable && sd.nRadius.HasValue && sd.nRadius >= largeRadiusLimit && landableAndLargeToolStripMenuItem.Checked) ||
                                     (sd.AmmoniaWorld && ammoniaWorldToolStripMenuItem.Checked) ||
                                     (sd.Earthlike && earthlikeWorldToolStripMenuItem.Checked) ||
                                     (sd.WaterWorld && waterWorldToolStripMenuItem.Checked) ||
@@ -307,7 +309,7 @@ namespace EDDiscovery.UserControls
                                     (sd.PlanetTypeID == EDPlanet.Metal_rich_body && metalToolStripMenuItem.Checked) ||
                                     (sd.HasRings && !sd.AmmoniaWorld && !sd.Earthlike && !sd.WaterWorld && hasRingsToolStripMenuItem.Checked) ||
                                     (sd.HasMeaningfulVolcanism && hasVolcanismToolStripMenuItem.Checked) ||
-                                    (sd.nEccentricity >= 0.95 && highEccentricityToolStripMenuItem.Checked) ||
+                                    (sd.nEccentricity.HasValue && sd.nEccentricity >= eccentricityLimit && highEccentricityToolStripMenuItem.Checked) ||
                                     (sd.Terraformable && terraformableToolStripMenuItem.Checked) ||
                                     (lowRadiusToolStripMenuItem.Checked && sd.nRadius.HasValue && sd.nRadius < lowRadiusLimit) ||
                                     (sn.Signals != null && hasSignalsToolStripMenuItem.Checked) ||
@@ -428,13 +430,13 @@ namespace EDDiscovery.UserControls
             information.Append((js.Terraformable && !js.WaterWorld && js.PlanetTypeID != EDPlanet.High_metal_content_body && js.PlanetTypeID != EDPlanet.Metal_rich_body) ? @" is a terraformable planet.".T(EDTx.UserControlSurveyor_isaterraformableplanet) : null);
             information.Append((js.HasRings) ? @" Has ring.".T(EDTx.UserControlSurveyor_Hasring) : null);
             information.Append((js.HasMeaningfulVolcanism) ? @" Has ".T(EDTx.UserControlSurveyor_Has) + js.Volcanism + "." : null);
-            information.Append((js.nEccentricity >= 0.95) ? @"Has an high eccentricity of ".T(EDTx.UserControlSurveyor_eccentricity) + js.nEccentricity + "." : null);                
-            information.Append((js.nRadius < lowRadiusLimit) ? @" Low Radius.".T(EDTx.UserControlSurveyor_LowRadius) : null);
+            information.Append((js.nEccentricity >= eccentricityLimit) ? @"Has an high eccentricity of ".T(EDTx.UserControlSurveyor_eccentricity) + js.nEccentricity + "." : null);                
+            information.Append((js.nRadius < lowRadiusLimit) ? @" is tiny.".T(EDTx.UserControlSurveyor_LowRadius) : null);
             information.Append((sn.Signals != null) ? " Has Signals.".T(EDTx.UserControlSurveyor_Signals) : null);
-            information.Append((js.IsLandable && !js.HasAtmosphericComposition && js.nRadius <= 20000000) ? @" Is landable.".T(EDTx.UserControlSurveyor_islandable) : null);
-            information.Append((js.IsLandable && js.HasAtmosphericComposition && js.nRadius <= 20000000) ? @" Is landable and has an ".T(EDTx.UserControlSurveyor_landableAtmo) + (js.Atmosphere??"Unknown") + "." : null);
-            information.Append((js.IsLandable && !js.HasAtmosphericComposition && js.nRadius >= 20000000) ? @" Is large and landable.".T(EDTx.UserControlSurveyor_islargelandable) : null);
-            information.Append((js.IsLandable && js.HasAtmosphericComposition && js.nRadius >= 20000000) ? @" Is large, landable and has an ".T(EDTx.UserControlSurveyor_largelandableAtmo) + (js.Atmosphere ?? "Unknown") + "." : null);
+            information.Append((js.IsLandable && !js.HasAtmosphericComposition && js.nRadius<= largeRadiusLimit) ? @" Is landable.".T(EDTx.UserControlSurveyor_islandable) : null);
+            information.Append((js.IsLandable && js.HasAtmosphericComposition && js.nRadius <= largeRadiusLimit) ? @" Is landable and has an ".T(EDTx.UserControlSurveyor_landableAtmo) + (js.Atmosphere??"Unknown") + "." : null);
+            information.Append((js.IsLandable && !js.HasAtmosphericComposition && js.nRadius >= largeRadiusLimit) ? @" Is large and landable.".T(EDTx.UserControlSurveyor_islargelandable) : null);
+            information.Append((js.IsLandable && js.HasAtmosphericComposition && js.nRadius >= largeRadiusLimit) ? @" Is large, landable and has an ".T(EDTx.UserControlSurveyor_largelandableAtmo) + (js.Atmosphere ?? "Unknown") + "." : null);
 
             var ev = js.GetEstimatedValues();
 
