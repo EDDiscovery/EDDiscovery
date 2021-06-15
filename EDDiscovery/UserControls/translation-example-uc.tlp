@@ -1595,12 +1595,6 @@ SECTION UserControlFactions
 .CapShipAward: "Capital ship Award: " @
 
 
-SECTION ScanDisplayUserControl
-
-.NSD: "No scan data available" @
-.BC: "Barycentre of {0}" @
-.Signals: "Signals" @
-
 SECTION ScanDisplayForm
 
 .Sys: "System" @

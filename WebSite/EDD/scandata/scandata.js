@@ -63,6 +63,6 @@ function scanmenuchange(mouseevent)
     console.log("MI " + ct.id + " tag " + ct.tag);
     if (ct.tag != null)
         storestate(ct.tag, ct.checked);
-    closeallmenus();
+    closemenus();
     FillScan();
 }

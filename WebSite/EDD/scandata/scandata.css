@@ -6,6 +6,7 @@ body {
     color: darkorange;
     font-family: Arial,Helvetica,Sans-serif;
     margin: 0px;
+    overflow: hidden;
 }
 
 /* top level div is a flex. Important to lock page to vh so it does not scroll and occupies the whole page  */
@@ -26,7 +27,7 @@ body {
     overflow:hidden;
 }
 
-/* this div holds the journal table, inside an article, and it has the scroll bar. You must set it to 100% height to override autoheight and get it to scroll 
+/* this div holds the grid table, inside an article, and it has the scroll bar. You must set it to 100% height to override autoheight and get it to scroll 
     set the width to required % of the middlesection
 */
 .scantable {
@@ -36,7 +37,7 @@ body {
     width: 70%;
 }
 
-/* style out the journal table */
+/* style out the scan grid table */
 
 article table {
     border-collapse: collapse;

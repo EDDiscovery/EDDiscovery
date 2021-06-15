@@ -15,7 +15,8 @@ function write_nav(tab)
     document.write("<ul>");
     document.write(
         "<li> <a href=\"/index.html\">History</a></li>" +
-        "<li> <a href=\"/scandata/scandata.html\">Scan</a></li>" +
+        "<li> <a href=\"/scandisplay/scandisplay.html\">Scan</a></li>" +
+        "<li> <a href=\"/scandata/scandata.html\">Scan Grid</a></li>" +
         "<li> <a href=\"/status/status.html\">Status</a></li>" +
         "<li> <a href=\"/grid/grid.html\">Grid</a></li>");
     document.write("</ul>");

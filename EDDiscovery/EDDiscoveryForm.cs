@@ -45,7 +45,7 @@ namespace EDDiscovery
 
         public CAPI.CompanionAPI FrontierCAPI { get { return Controller.FrontierCAPI; } }
 
-        public WebServer.WebServer WebServer;
+        public WebServer.EDDWebServer WebServer;
 
         public Actions.ActionController ActionController { get { return actioncontroller; } }
         public BaseUtils.Variables Globals { get { return actioncontroller.Globals; } }
@@ -316,7 +316,7 @@ namespace EDDiscovery
             DLLManager = new EliteDangerousCore.DLL.EDDDLLManager();
             DLLCallBacks = new EDDDLLInterfaces.EDDDLLIF.EDDCallBacks();
 
-            WebServer = new WebServer.WebServer(this);
+            WebServer = new WebServer.EDDWebServer(this);
 
             UpdateProfileComboBox();
             comboBoxCustomProfiles.SelectedIndexChanged += ComboBoxCustomProfiles_SelectedIndexChanged;

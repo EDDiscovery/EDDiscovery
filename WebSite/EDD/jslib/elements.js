@@ -34,12 +34,14 @@ function CreateAnchor(text, link, newtab = false, clsname = null)
     return a2;
 }
 
-function CreateImage(link,alt,width,callback = null, tagdata = null, tooltip = "fred")
+function CreateImage(link,alt,width = null,callback = null, tagdata = null, tooltip = null)
 {
     var a = document.createElement("img");
     a.src = link;
     a.alt = alt;
-    a.width = width;
+
+    if (width != null)
+        a.width = width;
 
     if (tagdata != null)
         a.tag = tagdata;
@@ -87,13 +89,15 @@ function AppendParaToElement(message, elementname)
     output2.appendChild(pre);
 }
 
-function CreateInput(classname, id, type, onclick, checked = null, tag = null)
+function CreateInput(classname, id, type, onclick, checked = null, tag = null, name = null)
 {
     var pre = document.createElement("input");
     if (classname != null)
         pre.className = classname;
     if (id != null)
         pre.id = id;
+    if (name != null)
+        pre.name = name;
     pre.type = type;
     pre.onclick = onclick;
     if (checked == true)

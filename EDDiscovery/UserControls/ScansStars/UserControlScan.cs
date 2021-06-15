@@ -58,7 +58,7 @@ namespace EDDiscovery.UserControls
         {
             DBBaseName = "ScanPanel";
 
-            panelStars.CheckEDSM = checkBoxEDSM.Checked = GetSetting("EDSM", false);
+            panelStars.SystemDisplay.ShowEDSMBodies = checkBoxEDSM.Checked = GetSetting("EDSM", false);
             this.checkBoxEDSM.CheckedChanged += new System.EventHandler(this.checkBoxEDSM_CheckedChanged);
 
             bodyfilters = GetSetting("BodyFilters", "All").Split(';');
@@ -66,7 +66,7 @@ namespace EDDiscovery.UserControls
             displayfilters = GetSetting("DisplayFilters", "moons;icons;mats;allg;habzone;starclass;planetclass;dist;").Split(';');
             ApplyDisplayFilters();
 
-            panelStars.ValueLimit = GetSetting("ValueLimit", 50000);
+            panelStars.SystemDisplay.ValueLimit = GetSetting("ValueLimit", 50000);
 
             rollUpPanelTop.PinState = GetSetting("PinState", true);
 
@@ -133,7 +133,7 @@ namespace EDDiscovery.UserControls
             {
                 int newspace = panelStars.WidthAvailable;
 
-                if (newspace < panelStars.DisplayAreaUsed.X || newspace > panelStars.DisplayAreaUsed.X +  panelStars.StarSize.Width)
+                if (newspace < panelStars.SystemDisplay.DisplayAreaUsed.X || newspace > panelStars.SystemDisplay.DisplayAreaUsed.X +  panelStars.SystemDisplay.StarSize.Width)
                 {
                     DrawSystem();
                 }
@@ -199,7 +199,7 @@ namespace EDDiscovery.UserControls
 #if PLAYTHRU
             StarScan.SystemNode data = showing_system != null ? await discoveryform.history.starscan.FindSystemAsync(showing_system, false, byname: true) : null;
 #else
-            StarScan.SystemNode data = showing_system != null ? await discoveryform.history.StarScan.FindSystemAsync(showing_system, panelStars.CheckEDSM) : null;
+            StarScan.SystemNode data = showing_system != null ? await discoveryform.history.StarScan.FindSystemAsync(showing_system, checkBoxEDSM.Checked) : null;
 #endif
             string control_text = "No System";
 
@@ -302,7 +302,7 @@ namespace EDDiscovery.UserControls
         private void checkBoxEDSM_CheckedChanged(object sender, EventArgs e)
         {
             PutSetting("EDSM", checkBoxEDSM.Checked);
-            panelStars.CheckEDSM = checkBoxEDSM.Checked;
+            panelStars.SystemDisplay.ShowEDSMBodies = checkBoxEDSM.Checked;
             DrawSystem();
         }
 
@@ -312,7 +312,7 @@ namespace EDDiscovery.UserControls
             int width = 300;
             int height = 100;
 
-            cf.Add(new ExtendedControls.ConfigurableForm.Entry("UC", typeof(ExtendedControls.NumberBoxLong), panelStars.ValueLimit.ToStringInvariant(),
+            cf.Add(new ExtendedControls.ConfigurableForm.Entry("UC", typeof(ExtendedControls.NumberBoxLong), panelStars.SystemDisplay.ValueLimit.ToStringInvariant(),
                                         new Point(5, 30), new Size(width - 5 - 20, 24), null)
             { numberboxlongminimum = 1, numberboxlongmaximum = 2000000000 });
 
@@ -340,8 +340,8 @@ namespace EDDiscovery.UserControls
             if (cf.ShowDialogCentred(this.FindForm(), this.FindForm().Icon,  "Set Valuable Minimum".T(EDTx.UserControlScan_VLMT)) == DialogResult.OK)
             {
                 long? value = cf.GetLong("UC");
-                panelStars.ValueLimit = (int)value.Value;
-                PutSetting("ValueLimit", panelStars.ValueLimit);
+                panelStars.SystemDisplay.ValueLimit = (int)value.Value;
+                PutSetting("ValueLimit", panelStars.SystemDisplay.ValueLimit);
                 DrawSystem();
             }
         }
@@ -400,7 +400,7 @@ namespace EDDiscovery.UserControls
             else
                 buttonSize.Image = global::EDDiscovery.Icons.Controls.Scan_SizeMinuscule;
 
-            panelStars.SetSize(size);
+            panelStars.SystemDisplay.SetSize(size);
             PutSetting("Size", size);
         }
 
@@ -462,16 +462,16 @@ namespace EDDiscovery.UserControls
         private void ApplyDisplayFilters()
         {
             bool all = displayfilters.Contains("All");
-            panelStars.ShowMoons = displayfilters.Contains("moons") || all;
-            panelStars.ShowOverlays = displayfilters.Contains("icons") || all;
-            panelStars.ShowMaterials = displayfilters.Contains("mats") || all;
-            panelStars.ShowOnlyMaterialsRare = displayfilters.Contains("rares") || all;
-            panelStars.HideFullMaterials = displayfilters.Contains("matfull") || all;
-            panelStars.ShowAllG = displayfilters.Contains("allg") || all;
-            panelStars.ShowHabZone = displayfilters.Contains("habzone") || all;
-            panelStars.ShowStarClasses = displayfilters.Contains("starclass") || all;
-            panelStars.ShowPlanetClasses = displayfilters.Contains("planetclass") || all;
-            panelStars.ShowDist = displayfilters.Contains("dist") || all;
+            panelStars.SystemDisplay.ShowMoons = displayfilters.Contains("moons") || all;
+            panelStars.SystemDisplay.ShowOverlays = displayfilters.Contains("icons") || all;
+            panelStars.SystemDisplay.ShowMaterials = displayfilters.Contains("mats") || all;
+            panelStars.SystemDisplay.ShowOnlyMaterialsRare = displayfilters.Contains("rares") || all;
+            panelStars.SystemDisplay.HideFullMaterials = displayfilters.Contains("matfull") || all;
+            panelStars.SystemDisplay.ShowAllG = displayfilters.Contains("allg") || all;
+            panelStars.SystemDisplay.ShowHabZone = displayfilters.Contains("habzone") || all;
+            panelStars.SystemDisplay.ShowStarClasses = displayfilters.Contains("starclass") || all;
+            panelStars.SystemDisplay.ShowPlanetClasses = displayfilters.Contains("planetclass") || all;
+            panelStars.SystemDisplay.ShowDist = displayfilters.Contains("dist") || all;
         }
 
 #region Export
