@@ -272,7 +272,7 @@ namespace EDDiscovery.WebServer
                 int entry = (request.QueryString["entry"] ?? "-1").InvariantParseInt(-1);
                 bool checkEDSM = (request.QueryString["EDSM"] ?? "false").InvariantParseBool(false);
 
-                StarScan.SystemNode sn = null;
+                Bitmap img = null;
 
                 var hl = discoveryform.history;
                 if (hl.Count > 0)
@@ -280,34 +280,42 @@ namespace EDDiscovery.WebServer
                     if (entry < 0 || entry >= hl.Count)
                         entry = hl.Count - 1;
 
-                    discoveryform.Invoke((MethodInvoker)delegate { sn = hl.StarScan.FindSystemSynchronous(hl.EntryOrder()[entry].System, checkEDSM); });
+                    discoveryform.Invoke((MethodInvoker)delegate
+                    {
+                        StarScan.SystemNode sn = hl.StarScan.FindSystemSynchronous(hl.EntryOrder()[entry].System, checkEDSM);
+
+                            if (sn != null)
+                            {
+                                int starsize = (request.QueryString["starsize"] ?? "48").InvariantParseInt(48);
+                                int width = (request.QueryString["width"] ?? "800").InvariantParseInt(800);
+                                SystemDisplay sd = new SystemDisplay();
+                                sd.ShowMoons = (request.QueryString["showmoons"] ?? "true").InvariantParseBool(true);
+                                sd.ShowOverlays = (request.QueryString["showbodyicons"] ?? "true").InvariantParseBool(true);
+                                sd.ShowMaterials = (request.QueryString["showmaterials"] ?? "true").InvariantParseBool(true);
+                                sd.ShowAllG = (request.QueryString["showgravity"] ?? "true").InvariantParseBool(true);
+                                sd.ShowHabZone = (request.QueryString["showhabzone"] ?? "true").InvariantParseBool(true);
+                                sd.ShowStarClasses = (request.QueryString["showstarclass"] ?? "true").InvariantParseBool(true);
+                                sd.ShowPlanetClasses = (request.QueryString["showplanetclass"] ?? "true").InvariantParseBool(true);
+                                sd.ShowDist = (request.QueryString["showdistance"] ?? "true").InvariantParseBool(true);
+                                sd.ShowEDSMBodies = checkEDSM;
+                                sd.SetSize(starsize);
+                                sd.Font = new Font("MS Sans Serif", 8.25f);
+                                sd.LargerFont = new Font("MS Sans Serif", 10f);
+                                sd.FontUnderlined = new Font("MS Sans Serif", 8.25f, FontStyle.Underline);
+                                ExtendedControls.ExtPictureBox imagebox = new ExtendedControls.ExtPictureBox();
+                                sd.DrawSystem(imagebox, width, sn, null, null);
+                                imagebox.Render();
+                                img = imagebox.Image.Clone() as Bitmap;
+                                imagebox.Dispose();
+                            }
+                        });
                 }
-
-                Bitmap img = BaseUtils.Icons.IconSet.GetIcon("fred") as Bitmap;
-
-                if (sn != null)
+                else
                 {
-                    int starsize = (request.QueryString["starsize"] ?? "48").InvariantParseInt(48);
-                    int width = (request.QueryString["width"] ?? "800").InvariantParseInt(800);
-                    SystemDisplay sd = new SystemDisplay();
-                    sd.ShowMoons = (request.QueryString["showmoons"] ?? "true").InvariantParseBool(true);
-                    sd.ShowOverlays = (request.QueryString["showbodyicons"] ?? "true").InvariantParseBool(true);
-                    sd.ShowMaterials = (request.QueryString["showmaterials"] ?? "true").InvariantParseBool(true);
-                    sd.ShowAllG = (request.QueryString["showgravity"] ?? "true").InvariantParseBool(true);
-                    sd.ShowHabZone = (request.QueryString["showhabzone"] ?? "true").InvariantParseBool(true);
-                    sd.ShowStarClasses = (request.QueryString["showstarclass"] ?? "true").InvariantParseBool(true);
-                    sd.ShowPlanetClasses = (request.QueryString["showplanetclass"] ?? "true").InvariantParseBool(true);
-                    sd.ShowDist = (request.QueryString["showdistance"] ?? "true").InvariantParseBool(true);
-                    sd.ShowEDSMBodies = checkEDSM;
-                    sd.SetSize(starsize);
-                    sd.Font = new Font("MS Sans Serif", 8.25f);
-                    sd.LargerFont = new Font("MS Sans Serif", 10f);
-                    sd.FontUnderlined = new Font("MS Sans Serif", 8.25f, FontStyle.Underline);
-                    ExtendedControls.ExtPictureBox imagebox = new ExtendedControls.ExtPictureBox();
-                    sd.DrawSystem(imagebox, width, sn, null, null);
-                    imagebox.Render();
-                    img = imagebox.Image.Clone() as Bitmap;
-                    imagebox.Dispose();
+                    discoveryform.Invoke((MethodInvoker)delegate
+                    {
+                        img = BaseUtils.Icons.IconSet.GetIcon("Bodies.Unknown") as Bitmap;
+                    });
                 }
 
                 Bitmap bmpclone = img.Clone() as Bitmap;

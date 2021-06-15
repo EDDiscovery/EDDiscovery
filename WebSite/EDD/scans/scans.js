@@ -4,7 +4,6 @@
 function RequestScanData(entryno)
 {
     console.log("Request scan data on " + entryno);
-    entryno = 16404;
     var msg = {
         requesttype: "scandata",
         entry: entryno,	// -1 means send me the latest journal entry first
@@ -20,6 +19,9 @@ function FillScanTable(jdata, showmaterials, showvalue)
     var stable = document.getElementById("scans");
 
     removeChildren(stable);
+
+    if (jdata.Bodies == undefined)
+        return;
 
     var oneLS_m = 299792458;
     var oneAU_m = 149597870700;
@@ -64,7 +66,7 @@ function FillScanTable(jdata, showmaterials, showvalue)
             {
                 bdclass = scandata.StarTypeText;
                 if (scandata.nSemiMajorAxis != null)
-                    bddist = (scandata.nSemiMajorAxis / oneAU_m).toFixed(2) + "AU (" + (scandata.nSemiMajorAxis / oneAU_LS).ToFixed(1) + "ls)";
+                    bddist = (scandata.nSemiMajorAxis / oneAU_m).toFixed(2) + "AU (" + (scandata.nSemiMajorAxis / oneAU_LS).toFixed(1) + "ls)";
                 else
                     bddist = "Main";
 
