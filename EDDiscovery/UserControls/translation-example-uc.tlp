@@ -447,7 +447,13 @@ SECTION UserControlSurveyor
 .Hasring: " Has ring." @
 .Has: " Has " @
 .Signals: " Has Signals." @
-.islandable: " is landable." @
+.islandable: " Is landable." @
+.HMC: " is a high metal content world." @
+.terraHMC: " is a terraformable high metal content world." @
+.MR: " is a metal-rich body." @
+.terraMR: " is a terraformable metal-rich body." @
+.landableAtmo: " Is landable and has an " @
+.eccentricity: "Has an high eccentricity of " @
 
 .planetaryClassesToolStripMenuItem: "Planetary Classes" @
 .planetaryClassesToolStripMenuItem.ammoniaWorldToolStripMenuItem: "Ammonia World" @

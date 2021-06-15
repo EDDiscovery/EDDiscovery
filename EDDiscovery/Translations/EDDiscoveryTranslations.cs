@@ -592,6 +592,12 @@ namespace EDDiscovery
         UserControlSurveyor_Hasring, //  Has ring.
         UserControlSurveyor_Has, //  Has
         UserControlSurveyor_Scan, //  Scan
+        UserControlSurveyor_HMC, // High metal content world
+        UserControlSurveyor_terraHMC, // terraformable high metal content world
+        UserControlSurveyor_MR, // metal-rich body
+        UserControlSurveyor_terraMR, // terraformable metal-rich body
+        UserControlSurveyor_landableAtmo, // landable with atmosphere
+        UserControlSurveyor_eccentricity, // high eccentricity
 
         UserControlSysInfo_NoMissions, // No Missions
         UserControlSysInfo_NA, // N/A
