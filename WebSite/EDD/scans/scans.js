@@ -43,6 +43,7 @@ function FillScanTable(jdata, showmaterials, showvalue)
             var bddetails = new Array(2);
             bddetails[0] = "";
             bddetails[1] = "";
+            var imagename = "";
 
             if (sn.NodeType == "ring")
             {
@@ -56,6 +57,8 @@ function FillScanTable(jdata, showmaterials, showvalue)
                     bddetails[0] = "No scan data available";
 
                 bddist = scandata.DistanceFromArrivalLS;
+
+                imagename = "Controls.Scan.Bodies.Belt";
             }
             else if (scandata.IsStar)
             {
@@ -71,6 +74,8 @@ function FillScanTable(jdata, showmaterials, showvalue)
                     bddetails[0] = Append(bddetails[0], "Radius: " + (scandata.nRadius / oneSolRadius_m).toFixed(2));
                 if (scandata.nSurfaceTemperature != null)
                     bddetails[0] = Append(bddetails[0], "Temperature: " + scandata.nSurfaceTemperature.toFixed(0) + "K");
+
+                imagename = scandata.StarTypeImageName;
             }
             else if (scandata.IsPlanet)
             {
@@ -135,6 +140,8 @@ function FillScanTable(jdata, showmaterials, showvalue)
                     if (t != "")
                         bddetails[1] = Append(bddetails[1], "Mats:" + t);
                 }
+
+                imagename = scandata.PlanetClassImageName;
             }
 
             if (bdclass != "")
@@ -142,7 +149,7 @@ function FillScanTable(jdata, showmaterials, showvalue)
                 if ( showvalue)
                     bddetails[0] = Append(bddetails[0], "Value " + scandata.EstimatedValue);
 
-                var imagename = scandata.IsStar ? scandata.StarTypeImageName : scandata.PlanetClassImageName;
+            //    console.log("Image name " + imagename);
                 var image = CreateImage("/images/" + imagename + ".png", imagename, 48);
 
                 stable.appendChild(tablerowmultitdlist([image, scandata.BodyDesignationOrName, bdclass, bddist, bddetails]));
