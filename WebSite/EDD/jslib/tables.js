@@ -145,13 +145,16 @@ function tablerowmultitdlist(elements, classnames = null)
             }
             else
             {
-                if (typeof (e) === 'string')
+                var tt = typeof (e);
+                if (typeof (e) === 'object')
+                {
+                    td.appendChild(e);
+                }
+                else
                 {
                     var te = document.createTextNode(e);
                     td.appendChild(te);
                 }
-                else
-                    td.appendChild(e);
             } 
         }
     }

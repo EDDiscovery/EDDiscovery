@@ -4,7 +4,6 @@
 function RequestScanData(entryno)
 {
     console.log("Request scan data on " + entryno);
-    entryno = 16404;
     var msg = {
         requesttype: "scandata",
         entry: entryno,	// -1 means send me the latest journal entry first
@@ -20,6 +19,9 @@ function FillScanTable(jdata, showmaterials, showvalue)
     var stable = document.getElementById("scans");
 
     removeChildren(stable);
+
+    if (jdata.Bodies == undefined)
+        return;
 
     var oneLS_m = 299792458;
     var oneAU_m = 149597870700;
@@ -43,6 +45,7 @@ function FillScanTable(jdata, showmaterials, showvalue)
             var bddetails = new Array(2);
             bddetails[0] = "";
             bddetails[1] = "";
+            var imagename = "";
 
             if (sn.NodeType == "ring")
             {
@@ -56,12 +59,14 @@ function FillScanTable(jdata, showmaterials, showvalue)
                     bddetails[0] = "No scan data available";
 
                 bddist = scandata.DistanceFromArrivalLS;
+
+                imagename = "Controls.Scan.Bodies.Belt";
             }
             else if (scandata.IsStar)
             {
                 bdclass = scandata.StarTypeText;
                 if (scandata.nSemiMajorAxis != null)
-                    bddist = (scandata.nSemiMajorAxis / oneAU_m).toFixed(2) + "AU (" + (scandata.nSemiMajorAxis / oneAU_LS).ToFixed(1) + "ls)";
+                    bddist = (scandata.nSemiMajorAxis / oneAU_m).toFixed(2) + "AU (" + (scandata.nSemiMajorAxis / oneAU_LS).toFixed(1) + "ls)";
                 else
                     bddist = "Main";
 
@@ -71,6 +76,8 @@ function FillScanTable(jdata, showmaterials, showvalue)
                     bddetails[0] = Append(bddetails[0], "Radius: " + (scandata.nRadius / oneSolRadius_m).toFixed(2));
                 if (scandata.nSurfaceTemperature != null)
                     bddetails[0] = Append(bddetails[0], "Temperature: " + scandata.nSurfaceTemperature.toFixed(0) + "K");
+
+                imagename = scandata.StarTypeImageName;
             }
             else if (scandata.IsPlanet)
             {
@@ -135,6 +142,8 @@ function FillScanTable(jdata, showmaterials, showvalue)
                     if (t != "")
                         bddetails[1] = Append(bddetails[1], "Mats:" + t);
                 }
+
+                imagename = scandata.PlanetClassImageName;
             }
 
             if (bdclass != "")
@@ -142,7 +151,7 @@ function FillScanTable(jdata, showmaterials, showvalue)
                 if ( showvalue)
                     bddetails[0] = Append(bddetails[0], "Value " + scandata.EstimatedValue);
 
-                var imagename = scandata.IsStar ? scandata.StarTypeImageName : scandata.PlanetClassImageName;
+            //    console.log("Image name " + imagename);
                 var image = CreateImage("/images/" + imagename + ".png", imagename, 48);
 
                 stable.appendChild(tablerowmultitdlist([image, scandata.BodyDesignationOrName, bdclass, bddist, bddetails]));
