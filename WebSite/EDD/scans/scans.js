@@ -66,7 +66,7 @@ function FillScanTable(jdata, showmaterials, showvalue)
             {
                 bdclass = scandata.StarTypeText;
                 if (scandata.nSemiMajorAxis != null)
-                    bddist = (scandata.nSemiMajorAxis / oneAU_m).toFixed(2) + "AU (" + (scandata.nSemiMajorAxis / oneAU_LS).toFixed(1) + "ls)";
+                    bddist = (scandata.nSemiMajorAxis / oneAU_m).toFixed(2) + "AU (" + (scandata.nSemiMajorAxis / oneLS_m).toFixed(1) + "ls)";
                 else
                     bddist = "Main";
 
