@@ -231,23 +231,11 @@ namespace EDDiscovery.UserControls
             // 
             // panelStars
             // 
-            this.panelStars.CheckEDSM = false;
             this.panelStars.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelStars.HideFullMaterials = false;
             this.panelStars.Location = new System.Drawing.Point(0, 30);
             this.panelStars.Name = "panelStars";
-            this.panelStars.ShowAllG = true;
-            this.panelStars.ShowDist = true;
-            this.panelStars.ShowHabZone = true;
-            this.panelStars.ShowMaterials = false;
-            this.panelStars.ShowMoons = false;
-            this.panelStars.ShowOnlyMaterialsRare = false;
-            this.panelStars.ShowOverlays = false;
-            this.panelStars.ShowPlanetClasses = true;
-            this.panelStars.ShowStarClasses = true;
             this.panelStars.Size = new System.Drawing.Size(748, 652);
             this.panelStars.TabIndex = 5;
-            this.panelStars.ValueLimit = 50000;
             
             // 
             // UserControlScan

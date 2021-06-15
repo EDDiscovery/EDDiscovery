@@ -1,22 +1,18 @@
 /* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
  */
 
 // make a menu, attached and displayed under button, with id menuname, class menuclass, and the menulist
 // menulist is in the format of an variable length array containing array elements
-// elements are: type (checkbox or null), id, text, function call, [checkbox default state]
-
+//
 // structure needed is:
-//              <div class="menubutton">
+//              <div class="menubutton" id="menubutton1">
 //                    <img id="menuicon_button" src="/Images/menu.png" alt="Tab Menu" onclick="togglemenu('firstmenu')">
 //                    <script>
-//                        writemenu("menuicon_button", "firstmenu", "navmenu", [["checkbox","e1","one", menuchange, false], [null,"e2","two", menuchange], ["checkbox","e3","three", menuchange, true]]);
+//                        writemenu("menubutton1", "firstmenu", "navmenu", [["checkbox","e1","one", menuchange, false], [null,"e2","two", menuchange], ["checkbox","e3","three", menuchange, true]]);
 //                    </script>
 //                </div>
 
-// menuclass (navmenu above) should be display none, absolute positioning, with top/left offset so it can be placed under the button
+// menubutton: display:inline, position:relative
 //.navmenu {
 //    display: none;
 //    position: absolute;
@@ -29,24 +25,22 @@
 //    z - index: 1;
 //}
 
-// menubutton itself can be styles as you see fit, but its needs to be position relative:
-//.menubutton {
-//    /* div needs to be inline so it flows against the ul's */
-//    display: inline;
-//    /* making it relative allows it to offset from the top of the nav bar and for the child to position absolutely inside the div */
-//    position: relative;
-//}
+// menu div: is called id=menunameid class=menuclass
+// writemenu menulist should be formatted as:
+//           ["checkbox", "moon", "Show Moons", scandisplaychange, true],           - tag contains storagekey 
+//           ["radio", "s16", "16", sizedisplaychange, "sizegroup", "s16"],         - item tag contains [storagekey (item[4]),value to set]. First entry needs to have the default value
+//           ["radio", "s32", "32", sizedisplaychange, "sizegroup"],
+//           ["submenu", "size", "Set Size", "submenusize"],
+//           ["normal", "click", "Click here", functocall],
+//
+//          each menu item is enclosed in a div of class = menuclass + "_item" id = menunameid + "_" + itemid + "_item"
+//          type            input id                                        input class                     id_label                        class_label             storage
+//          checkbox        menunameid+"_"+id+"_checkbox                    menuclass_checkbox              menunameid+"_"+id+"_label       menuclass_label         menunameid.id.checkboxstate
+//          radio           menunameid+"_"+id+"_radio                       menuclass_radio                 menunameid+"_"+id+"_label       menuclass_label         item[4] in entry
+//          normal                                                                                          menunameid+"_"+id+"_label       menuclass_label
+//          submenu                                                                                         menunameid+"_"+id+"_submenu     menuclass_submenu
 
-// writemenu names parts it makes as follows:
-//      menu div: is called menunameid with class menuclass
-//          each menu item is enclosed in a div of class = menuclass+"_item" id = itemid + "_item"
-//          the label of a checkbox is id + "_label"
-//          the menuclass of each label menuclass + "_label"
-//          the id of each input is menuclass + "_input"
-
-// checkbox states are looked up from localstorage using the menuclass.itemid.checkboxstate key
-
-function writemenu(buttonid, menunameid, menuclass, menulist)
+function writemenu(posid, menunameid, menuclass, menulist)
 {
     var div = CreateDiv(menuclass, menunameid);
     var storage = window.localStorage;
@@ -54,15 +48,16 @@ function writemenu(buttonid, menunameid, menuclass, menulist)
     menulist.forEach(function (item) 
     {
         var id = item[1];
+        var mid = menunameid + "_" + id;
 
-        var itemdiv = CreateDiv(menunameid + "_item",id + "_item");
+        var itemdiv = CreateDiv(menuclass + "_item",  mid + "_item");
 
-        if (item[0] == "checkbox")
+        if (item[0] == "checkbox" )
         {
             var storagekey = menunameid + "." + id + ".checkboxstate";
             var state = fetchstate(storagekey, item[4], true);
 
-            console.log("Storage " + storagekey + " state " + state);
+            console.log("Checkbox Storage " + storagekey + " state " + state);
 
             if (state == null)
             {
@@ -70,14 +65,33 @@ function writemenu(buttonid, menunameid, menuclass, menulist)
                 //console.log("default set " + id + " to " + state);
             }
 
-            var mi = CreateInput(menuclass + "_input", id, item[0], item[3], state, storagekey);
-            var lb = CreateLabel(menuclass + "_label", id + "_label", id, item[2]);
+            var mi = CreateInput(menuclass + "_checkbox", mid + "_checkbox", item[0], item[3], state, storagekey);
+            var lb = CreateLabel(menuclass + "_label", mid + "_label", mid + "_checkbox", item[2]);
             itemdiv.appendChild(mi);
             itemdiv.appendChild(lb);
         }
+        else if (item[0] == "radio")
+        {
+            var storagekey = menunameid + "." + item[4] + ".radiostate";        // first entry should have item[5], default state
+            var state = fetchstate(storagekey, item.length >= 6 ? item[5] : null, true);
+
+            console.log("Radio Storage " + storagekey + " state " + state);
+
+            var radiostate = state == id;
+            var mi = CreateInput(menuclass + "_radio", mid + "_radio", item[0], item[3], radiostate, [storagekey,id], item[4]);
+            var lb = CreateLabel(menuclass + "_label", mid + "_label", mid + "_radio", item[2]);
+            itemdiv.appendChild(mi);
+            itemdiv.appendChild(lb);
+        }
+        else if (item[0] == "submenu")
+        {
+            var lb = CreateLabel(menuclass + "_submenu", mid + "_submenu", null, item[2],opensubmenu, item[3]);
+            lb.style.padding = "0px 0px 0px 20px";
+            itemdiv.appendChild(lb);
+        } 
         else
         {
-            var lb = CreateLabel(menuclass + "_label", id, null, item[2], item[3]);
+            var lb = CreateLabel(menuclass + "_label", mid + "_label", null, item[2], item[3]);
             lb.style.padding = "0px 0px 0px 20px";
             itemdiv.appendChild(lb);
         }
@@ -85,10 +99,9 @@ function writemenu(buttonid, menunameid, menuclass, menulist)
         div.appendChild(CreateBreak());
     });
 
-    // grab the button, then grab the parent of the button, and append underneath it.  Don't append to button (as it will be inside button and constrained by it)
-    var buttonid = document.getElementById(buttonid);
-    var bp = buttonid.parentElement;
-    bp.append(div);
+    // attach after item used a position anchor
+    var posid = document.getElementById(posid);
+    posid.append(div);
 }
 
 function getmenuitemcheckstate(menuid, itemid)
@@ -99,49 +112,66 @@ function getmenuitemcheckstate(menuid, itemid)
     return state;
 }
 
-
-var menuopen = ""       // remember menu open
+var menusopen = []       // remember menu open, array for submenus
 
 function togglemenu(id)
 {
-    if (menuopen == id)
-        closemenu(id);
+    if (menusopen.length > 0)
+        closemenus();
     else
         openmenu(id);
 }
 
 function openmenu(id)
 {
-    if (menuopen != "" && menuopen != id)
-        closemenu(menuopen);
+    closemenus();
 
     var menu = document.getElementById(id);
     if (menu != null)
     {
         menu.style.display = "inline-block";
-        menuopen = id;
+        menusopen.push(id);
         console.log("Menu " + id + " open");
     }
     else
         console.log("ERROR: No such Menu " + id);
 }
 
-function closemenu(id)
+function closemenus()
 {
-    var menu = document.getElementById(id);
+    menusopen.forEach(function (x)
+    {
+        var menu = document.getElementById(x);
+        if (menu != null)
+        {
+            menu.style.display = "";
+            console.log("Close " + x);
+        }
+    });
 
+    menusopen = []
+}
+
+
+function opensubmenu(mouseevent)
+{
+    var ct = mouseevent.currentTarget;
+    var openingmenu = ct.parentNode.parentNode;
+    var submenu = ct.tag;
+    console.log("MI " + ct.id + " open " + submenu + " from menu " + openingmenu.id);
+
+    var menu = document.getElementById(submenu);
     if (menu != null)
     {
-        menu.style.display = "";
-        menuopen = "";
-        console.log("Menu " + id + " close");
+        var ctbounds = ct.getBoundingClientRect();        
+        var menubounds = openingmenu.getBoundingClientRect();
+        menu.style.display = "inline-block";
+        menu.style.left = menubounds.right + "px";
+        menu.style.top = ctbounds.top + "px";
+        menusopen.push(submenu);
+        console.log("SubMenu " + submenu + " open");
     }
     else
         console.log("ERROR: No such Menu " + id);
-}
+} 
 
-function closeallmenus()
-{
-    if (menuopen != "")
-        closemenu(menuopen);
-}

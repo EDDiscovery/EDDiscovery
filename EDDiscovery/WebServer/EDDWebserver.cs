@@ -65,7 +65,7 @@ namespace EDDiscovery.WebServer
     //          responsetype = entry, fields..          : entry = -1 none, or entry number. See code for fields
     //                                                  
 
-    public class WebServer
+    public class EDDWebServer
     {
         public Action<string> LogIt;
         public int Port { get { return port; } set { port = value; } }
@@ -80,6 +80,7 @@ namespace EDDiscovery.WebServer
         HTTPZipNode mainwebsitezipfiles;
 
         EDDIconNodes iconnodes;
+        EDDScanDisplay scandisplay;
         JSONDispatcher jsondispatch;
 
         JournalRequest journalsender;
@@ -90,7 +91,7 @@ namespace EDDiscovery.WebServer
 
         EDDiscoveryForm discoveryform;
 
-        public WebServer(EDDiscoveryForm frm)
+        public EDDWebServer(EDDiscoveryForm frm)
         {
             discoveryform = frm;
         }
@@ -105,6 +106,9 @@ namespace EDDiscovery.WebServer
             httpdispatcher.AddPartialPathNode("/journalicons/", iconnodes);     // journal icons come from this dynamic source
             httpdispatcher.AddPartialPathNode("/statusicons/", iconnodes);     // status icons come from this dynamic source
             httpdispatcher.AddPartialPathNode("/images/", iconnodes);           // give full eddicons path
+
+            scandisplay = new EDDScanDisplay(discoveryform);
+            httpdispatcher.AddPartialPathNode("/systemmap/", scandisplay);   // serve a display of this system
 
             if (servefrom.Contains(".zip"))
             {
@@ -191,17 +195,23 @@ namespace EDDiscovery.WebServer
             }
         }
 
-        private void Discoveryform_OnNewEntry(HistoryEntry arg1, HistoryList arg2)
+        private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)
         {
             httpws.SendWebSockets(journalsender.Push(), false); // refresh history
             httpws.SendWebSockets(statussender.Push(), false); // refresh status
+            if ( he.EntryType == JournalTypeEnum.Scan || he.EntryType == JournalTypeEnum.FSSSignalDiscovered || he.EntryType == JournalTypeEnum.SAASignalsFound ||
+                        he.EntryType == JournalTypeEnum.SAAScanComplete)
+            {
+                httpws.SendWebSockets(scandata.Push(), false); // refresh status
+                httpws.SendWebSockets(scandisplay.Notify(), false); // tell it its changed
+            }
         }
 
         // deal with the icon roots
 
         class EDDIconNodes : IHTTPNode
         {
-            public byte[] Response(string partialpath, HttpListenerRequest request)
+            public NodeResponse Response(string partialpath, HttpListenerRequest request)
             {
                 System.Diagnostics.Debug.WriteLine("Serve icon " + partialpath);
 
@@ -220,20 +230,89 @@ namespace EDDiscovery.WebServer
                     else
                         img = BaseUtils.Icons.IconSet.GetIcon(nopng) as Bitmap;
 
-                    //try
+                    //try       // debug only
                     //{
-                        Bitmap bmpclone = img.Clone() as Bitmap;        
-                        var cnv = bmpclone.ConvertTo(System.Drawing.Imaging.ImageFormat.Png);   // this converts to png and returns the raw PNG bytes..
-                        return cnv;
+                    Bitmap bmpclone = img.Clone() as Bitmap;
+                    var cnv = bmpclone.ConvertTo(System.Drawing.Imaging.ImageFormat.Png);   // this converts to png and returns the raw PNG bytes..
+                    return new NodeResponse(cnv, "image/png");
                     //}
                     //catch (Exception ex)
                     //{
-                        //System.Diagnostics.Debug.WriteLine("..Convert exception " + ex);
-                        //return null;
+                    //System.Diagnostics.Debug.WriteLine("..Convert exception " + ex);
+                    //return null;
                     //}
                 }
 
                 return null;
+            }
+        }
+
+        class EDDScanDisplay : IHTTPNode
+        {
+            private EDDiscoveryForm discoveryform;
+
+            public EDDScanDisplay(EDDiscoveryForm f)
+            {
+                discoveryform = f;
+            }
+
+            public JToken Notify()       // a full refresh of journal history
+            {
+                JObject response = new JObject();
+                response["responsetype"] = "systemmapchanged";
+                return response;
+            }
+
+            public NodeResponse Response(string partialpath, HttpListenerRequest request)
+            {
+                System.Diagnostics.Debug.WriteLine("Serve Scan Display " + partialpath);
+                foreach (var k in request.QueryString.AllKeys)
+                    System.Diagnostics.Debug.WriteLine("Key {0} = {1}", k, request.QueryString[k]);
+
+                int entry = (request.QueryString["entry"] ?? "-1").InvariantParseInt(-1);
+                bool checkEDSM = (request.QueryString["EDSM"] ?? "false").InvariantParseBool(false);
+
+                StarScan.SystemNode sn = null;
+
+                var hl = discoveryform.history;
+                if (hl.Count > 0)
+                {
+                    if (entry < 0 || entry >= hl.Count)
+                        entry = hl.Count - 1;
+
+                    discoveryform.Invoke((MethodInvoker)delegate { sn = hl.StarScan.FindSystemSynchronous(hl.EntryOrder()[entry].System, checkEDSM); });
+                }
+
+                Bitmap img = BaseUtils.Icons.IconSet.GetIcon("fred") as Bitmap;
+
+                if (sn != null)
+                {
+                    int starsize = (request.QueryString["starsize"] ?? "48").InvariantParseInt(48);
+                    int width = (request.QueryString["width"] ?? "800").InvariantParseInt(800);
+                    SystemDisplay sd = new SystemDisplay();
+                    sd.ShowMoons = (request.QueryString["showmoons"] ?? "true").InvariantParseBool(true);
+                    sd.ShowOverlays = (request.QueryString["showbodyicons"] ?? "true").InvariantParseBool(true);
+                    sd.ShowMaterials = (request.QueryString["showmaterials"] ?? "true").InvariantParseBool(true);
+                    sd.ShowAllG = (request.QueryString["showgravity"] ?? "true").InvariantParseBool(true);
+                    sd.ShowHabZone = (request.QueryString["showhabzone"] ?? "true").InvariantParseBool(true);
+                    sd.ShowStarClasses = (request.QueryString["showstarclass"] ?? "true").InvariantParseBool(true);
+                    sd.ShowPlanetClasses = (request.QueryString["showplanetclass"] ?? "true").InvariantParseBool(true);
+                    sd.ShowDist = (request.QueryString["showdistance"] ?? "true").InvariantParseBool(true);
+                    sd.ShowEDSMBodies = checkEDSM;
+                    sd.SetSize(starsize);
+                    sd.Font = new Font("MS Sans Serif", 8.25f);
+                    sd.LargerFont = new Font("MS Sans Serif", 10f);
+                    sd.FontUnderlined = new Font("MS Sans Serif", 8.25f, FontStyle.Underline);
+                    ExtendedControls.ExtPictureBox imagebox = new ExtendedControls.ExtPictureBox();
+                    sd.DrawSystem(imagebox, width, sn, null, null);
+                    imagebox.Render();
+                    img = imagebox.Image.Clone() as Bitmap;
+                    imagebox.Dispose();
+                }
+
+                Bitmap bmpclone = img.Clone() as Bitmap;
+                var cnv = bmpclone.ConvertTo(System.Drawing.Imaging.ImageFormat.Png);   // this converts to png and returns the raw PNG bytes..
+                return new NodeResponse(cnv, "image/png");
             }
         }
 
@@ -615,6 +694,11 @@ namespace EDDiscovery.WebServer
             public JToken Refresh(int entry)        // -1 mean latest
             {
                 return MakeResponse(entry, "scandata");
+            }
+
+            public JToken Push()                    // push latest entry
+            {
+                return MakeResponse(-1, "scandata");
             }
 
             public JToken Response(string key, JToken message, HttpListenerRequest request) // request indicator state

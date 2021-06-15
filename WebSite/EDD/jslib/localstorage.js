@@ -19,8 +19,11 @@ function fetchstate(id, defaultstate, writebackdefault = false)
     console.log("Fetch storage " + id + "= '" + state + "'");
     if (state == null)
     {
-        if (writebackdefault)
-            storestate(id, defaultstate);
+        if (defaultstate != null)
+        {
+            if (writebackdefault)
+                storestate(id, defaultstate);
+        }
         return defaultstate;
     }
     else

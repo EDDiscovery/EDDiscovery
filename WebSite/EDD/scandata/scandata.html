@@ -12,18 +12,18 @@ and open the template in the editor.
     <link href="/header.css" rel="stylesheet" type="text/css">
     <link href="scandata.css" rel="stylesheet" type="text/css">
     <link href="/tooltip.css" rel="stylesheet" type="text/css">
-    <script src="/jslib/elements.js"></script>
-    <script src="/jslib/http.js"></script>
-    <script src="/jslib/tables.js"></script>
-    <script src="/jslib/websockets.js"></script>
-    <script src="/jslib/screencontrol.js"></script>
-    <script src="/jslib/strings.js"></script>
-    <script src="/jslib/localstorage.js"></script>
-    <script src="/jslib/menus.js"></script>
-    <script src="/header.js"></script>
-    <script src="/systemtable/systemtable.js"></script>
-    <script src="/scans/scans.js"></script>
-    <script src="scandata.js"></script>
+    <script type="text/javascript" src="/jslib/elements.js"></script>
+    <script type="text/javascript" src="/jslib/http.js"></script>
+    <script type="text/javascript" src="/jslib/tables.js"></script>
+    <script type="text/javascript" src="/jslib/websockets.js"></script>
+    <script type="text/javascript" src="/jslib/screencontrol.js"></script>
+    <script type="text/javascript" src="/jslib/strings.js"></script>
+    <script type="text/javascript" src="/jslib/localstorage.js"></script>
+    <script type="text/javascript" src="/jslib/menus.js"></script>
+    <script type="text/javascript" src="/header.js"></script>
+    <script type="text/javascript" src="/systemtable/systemtable.js"></script>
+    <script type="text/javascript" src="/scans/scans.js"></script>
+    <script type="text/javascript" src="scandata.js"></script>
 
 
 </head>
@@ -34,11 +34,11 @@ and open the template in the editor.
                 <script>write_header();</script>
             </header>
             <nav>
-                <script>write_nav(1);</script>
-                <div class="menubutton">
-                    <img id="menuicon_button" src="/Images/menu.png" alt="Tab Menu" onclick="togglemenu('scanmenu')">
+                <script>write_nav(2);</script>
+                <div class="menubutton" id="menubutton1">
+                    <img id="menubutton" src="/Images/menu.png" alt="Tab Menu" onclick="togglemenu('scanmenu')">
                     <script>
-                        writemenu("menuicon_button", "scanmenu", "navmenu", [["checkbox","materials","Show materials", scanmenuchange, false], ["checkbox","value","Show Value", scanmenuchange, true]]);
+                        writemenu("menubutton1", "scanmenu", "navmenu", [["checkbox","materials","Show materials", scanmenuchange, false], ["checkbox","value","Show Value", scanmenuchange, true]]);
                     </script>
                 </div>
             </nav>

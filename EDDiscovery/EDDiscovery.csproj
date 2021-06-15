@@ -209,12 +209,6 @@
     <Compile Include="UserControls\EngineeringSynthesis\UserControlMaterialTrader.Designer.cs">
       <DependentUpon>UserControlMaterialTrader.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\HelpersScanDisplayUC\ScanDisplayNodes.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\HelpersScanDisplayUC\ScanDisplayBarycentres.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Include="UserControls\Helpers\PaintEventColumn.cs" />
     <Compile Include="UserControls\Helpers\CSVHelpers.cs" />
     <Compile Include="UserControls\Helpers\MissionListUserControl.cs">
@@ -229,7 +223,7 @@
     <Compile Include="UserControls\Overlays\UserControlMiningOverlay.Designer.cs">
       <DependentUpon>UserControlMiningOverlay.cs</DependentUpon>
     </Compile>
-    <Compile Include="WebServer\WebServer.cs" />
+    <Compile Include="WebServer\EDDWebserver.cs" />
     <None Include="..\EDDIcons\Controls\Fakes\Controls.Designer.cs">
       <Link>Icons\Controls.Designer.cs</Link>
       <AutoGen>True</AutoGen>

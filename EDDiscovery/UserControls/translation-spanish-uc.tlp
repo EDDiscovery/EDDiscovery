@@ -1576,12 +1576,6 @@ SECTION UserControlFactions
 .CapShipVictims: "Capital ship Victims: " => "Víctimas del Nave capital: "
 .CapShipAward: "Capital ship Award: " => "Premio a la nave capital: "
 
-SECTION ScanDisplayUserControl
-
-.NSD: "No scan data available" => "No hay datos de escaneo disponibles"
-.BC: "Barycentre of {0}" => "Baricentro de {0}"
-.Signals: "Signals" => "Señales"
-
 SECTION ScanDisplayForm
 
 .Sys: "System" => "Sistema"

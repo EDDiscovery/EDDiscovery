@@ -53,23 +53,23 @@ namespace EDDiscovery.UserControls
             else
             {      
                 sd = new ScanDisplayUserControl();
-                sd.CheckEDSM =checkedsm;
+                sd.SystemDisplay.ShowEDSMBodies =checkedsm;
                 int selsize = (int)(EDDTheme.Instance.GetFont.Height / 16.0f * 48.0f);
-                sd.SetSize( selsize );
+                sd.SystemDisplay.SetSize( selsize );
                 sd.Size = infosize;
 
-                StarScan.SystemNode data = await hl.StarScan.FindSystemAsync(sys, sd.CheckEDSM);    // look up system async
+                StarScan.SystemNode data = await hl.StarScan.FindSystemAsync(sys, checkedsm);    // look up system async
                     
                 if ( data != null )
                 {
-                    long value = data.ScanValue(sd.CheckEDSM);
+                    long value = data.ScanValue(checkedsm);
                     title += " ~ " + value.ToString("N0") + " cr";
                 }
 
                 sd.BackColor = EDDTheme.Instance.Form;
                 sd.DrawSystem( data, null , hl.MaterialCommoditiesMicroResources.GetLast());
 
-                int wastedh = infosize.Height - sd.DisplayAreaUsed.Y - 10 - 40;
+                int wastedh = infosize.Height - sd.SystemDisplay.DisplayAreaUsed.Y - 10 - 40;
                 if (wastedh > 0)
                     infosize.Height -= wastedh;
 
