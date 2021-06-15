@@ -64,6 +64,7 @@ namespace EDDiscovery.UserControls
             landableToolStripMenuItem.Checked = GetSetting("isLandable", true);
             landableWithAtmosphereToolStripMenuItem.Checked = GetSetting("isLandableWithAtmosphere", true);
             landableWithVolcanismToolStripMenuItem.Checked = GetSetting("isLandableWithVolcanism", true);
+            landableAndLargeToolStripMenuItem.Checked = GetSetting("largelandable", true);
             hasRingsToolStripMenuItem.Checked = GetSetting("showRinged", true);
             hideAlreadyMappedBodiesToolStripMenuItem.Checked = GetSetting("hideMapped", true);
             autoHideToolStripMenuItem.Checked = GetSetting("autohide", false);
@@ -86,6 +87,7 @@ namespace EDDiscovery.UserControls
             this.landableToolStripMenuItem.Click += new System.EventHandler(this.landableToolStripMenuItem_Click);
             this.landableWithAtmosphereToolStripMenuItem.Click += new System.EventHandler(this.landableWithAtmosphereToolStripMenuItem_Click);
             this.landableWithVolcanismToolStripMenuItem.Click += new System.EventHandler(this.landableWithVolcanismToolStripMenuItem_Click);
+            this.landableAndLargeToolStripMenuItem.Click += new System.EventHandler(this.landableAndLargeToolStripMenuItem_Click);
             this.ammoniaWorldToolStripMenuItem.Click += new System.EventHandler(this.ammoniaWorldToolStripMenuItem_Click);
             this.earthlikeWorldToolStripMenuItem.Click += new System.EventHandler(this.earthlikeWorldToolStripMenuItem_Click);
             this.waterWorldToolStripMenuItem.Click += new System.EventHandler(this.waterWorldToolStripMenuItem_Click);
@@ -297,6 +299,7 @@ namespace EDDiscovery.UserControls
                                     (sd.IsLandable && landableToolStripMenuItem.Checked) ||
                                     (sd.IsLandable && sd.HasAtmosphericComposition && landableWithAtmosphereToolStripMenuItem.Checked) ||
                                     (sd.IsLandable && sd.HasMeaningfulVolcanism && landableWithVolcanismToolStripMenuItem.Checked) ||
+                                    (sd.IsLandable && sd.nRadius >= 20000000 && landableAndLargeToolStripMenuItem.Checked) ||
                                     (sd.AmmoniaWorld && ammoniaWorldToolStripMenuItem.Checked) ||
                                     (sd.Earthlike && earthlikeWorldToolStripMenuItem.Checked) ||
                                     (sd.WaterWorld && waterWorldToolStripMenuItem.Checked) ||
@@ -428,8 +431,10 @@ namespace EDDiscovery.UserControls
             information.Append((js.nEccentricity >= 0.95) ? @"Has an high eccentricity of ".T(EDTx.UserControlSurveyor_eccentricity) + js.nEccentricity + "." : null);                
             information.Append((js.nRadius < lowRadiusLimit) ? @" Low Radius.".T(EDTx.UserControlSurveyor_LowRadius) : null);
             information.Append((sn.Signals != null) ? " Has Signals.".T(EDTx.UserControlSurveyor_Signals) : null);
-            information.Append((js.IsLandable && !js.HasAtmosphericComposition) ? @" Is landable.".T(EDTx.UserControlSurveyor_islandable) : null);
-            information.Append((js.IsLandable && js.HasAtmosphericComposition) ? @" Is landable and has an ".T(EDTx.UserControlSurveyor_landableAtmo) + (js.Atmosphere??"Unknown") + "." : null);
+            information.Append((js.IsLandable && !js.HasAtmosphericComposition && js.nRadius <= 20000000) ? @" Is landable.".T(EDTx.UserControlSurveyor_islandable) : null);
+            information.Append((js.IsLandable && js.HasAtmosphericComposition && js.nRadius <= 20000000) ? @" Is landable and has an ".T(EDTx.UserControlSurveyor_landableAtmo) + (js.Atmosphere??"Unknown") + "." : null);
+            information.Append((js.IsLandable && !js.HasAtmosphericComposition && js.nRadius >= 20000000) ? @" Is large and landable.".T(EDTx.UserControlSurveyor_islargelandable) : null);
+            information.Append((js.IsLandable && js.HasAtmosphericComposition && js.nRadius >= 20000000) ? @" Is large, landable and has an ".T(EDTx.UserControlSurveyor_largelandableAtmo) + (js.Atmosphere ?? "Unknown") + "." : null);
 
             var ev = js.GetEstimatedValues();
 
@@ -534,6 +539,12 @@ namespace EDDiscovery.UserControls
         private void landableWithVolcanismToolStripMenuItem_Click(object sender, EventArgs e)
         {
             PutSetting("isLandableWithVolcanism", landableToolStripMenuItem.Checked);
+            DrawSystem(last_sys);
+        }
+
+        private void landableAndLargeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PutSetting("largelandable", landableToolStripMenuItem.Checked);
             DrawSystem(last_sys);
         }
         private void hasVolcanismToolStripMenuItem_Click(object sender, EventArgs e)

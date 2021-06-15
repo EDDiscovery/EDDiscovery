@@ -598,6 +598,8 @@ namespace EDDiscovery
         UserControlSurveyor_terraMR, // terraformable metal-rich body
         UserControlSurveyor_landableAtmo, // landable with atmosphere
         UserControlSurveyor_eccentricity, // high eccentricity
+        UserControlSurveyor_islargelandable, // large landable
+        UserControlSurveyor_largelandableAtmo, // large atmospheric landable
 
         UserControlSysInfo_NoMissions, // No Missions
         UserControlSysInfo_NA, // N/A

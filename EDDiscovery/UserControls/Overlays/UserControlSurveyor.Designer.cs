@@ -56,6 +56,7 @@ namespace EDDiscovery.UserControls
             this.terraformableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hasVolcanismToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hasRingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.highEccentricityToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.lowRadiusToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hasSignalsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.landableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -82,7 +83,7 @@ namespace EDDiscovery.UserControls
             this.pictureBoxSurveyor = new ExtendedControls.ExtPictureBox();
             this.extPictureBoxScroll = new ExtendedControls.ExtPictureBoxScroll();
             this.extScrollBar = new ExtendedControls.ExtScrollBar();
-            this.highEccentricityToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.landableAndLargeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSurveyor)).BeginInit();
             this.extPictureBoxScroll.SuspendLayout();
@@ -109,7 +110,7 @@ namespace EDDiscovery.UserControls
             this.wordWrapToolStripMenuItem,
             this.textAlignToolStripMenuItem});
             this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(226, 346);
+            this.contextMenuStrip.Size = new System.Drawing.Size(226, 368);
             // 
             // planetaryClassesToolStripMenuItem
             // 
@@ -177,7 +178,8 @@ namespace EDDiscovery.UserControls
             this.hasSignalsToolStripMenuItem,
             this.landableToolStripMenuItem,
             this.landableWithAtmosphereToolStripMenuItem,
-            this.landableWithVolcanismToolStripMenuItem});
+            this.landableWithVolcanismToolStripMenuItem,
+            this.landableAndLargeToolStripMenuItem});
             this.bodyFeaturesToolStripMenuItem.Name = "bodyFeaturesToolStripMenuItem";
             this.bodyFeaturesToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
             this.bodyFeaturesToolStripMenuItem.Text = "Body Features";
@@ -208,6 +210,14 @@ namespace EDDiscovery.UserControls
             this.hasRingsToolStripMenuItem.Name = "hasRingsToolStripMenuItem";
             this.hasRingsToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
             this.hasRingsToolStripMenuItem.Text = "Has Rings";
+            // 
+            // highEccentricityToolStripMenuItem
+            // 
+            this.highEccentricityToolStripMenuItem.CheckOnClick = true;
+            this.highEccentricityToolStripMenuItem.Name = "highEccentricityToolStripMenuItem";
+            this.highEccentricityToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
+            this.highEccentricityToolStripMenuItem.Text = "High eccentricity";
+            this.highEccentricityToolStripMenuItem.Click += new System.EventHandler(this.highEccentricityToolStripMenuItem_Click);
             // 
             // lowRadiusToolStripMenuItem
             // 
@@ -451,13 +461,13 @@ namespace EDDiscovery.UserControls
             this.extScrollBar.Value = 0;
             this.extScrollBar.ValueLimited = 0;
             // 
-            // highEccentricityToolStripMenuItem
+            // landableAndLargeToolStripMenuItem
             // 
-            this.highEccentricityToolStripMenuItem.CheckOnClick = true;
-            this.highEccentricityToolStripMenuItem.Name = "highEccentricityToolStripMenuItem";
-            this.highEccentricityToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
-            this.highEccentricityToolStripMenuItem.Text = "High eccentricity";
-            this.highEccentricityToolStripMenuItem.Click += new System.EventHandler(this.highEccentricityToolStripMenuItem_Click);
+            this.landableAndLargeToolStripMenuItem.CheckOnClick = true;
+            this.landableAndLargeToolStripMenuItem.Name = "landableAndLargeToolStripMenuItem";
+            this.landableAndLargeToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
+            this.landableAndLargeToolStripMenuItem.Text = "Landable and large";
+            this.landableAndLargeToolStripMenuItem.Click += new System.EventHandler(this.landableAndLargeToolStripMenuItem_Click);
             // 
             // UserControlSurveyor
             // 
@@ -515,5 +525,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripMenuItem highMetalContentBodyToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem metalToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem highEccentricityToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem landableAndLargeToolStripMenuItem;
     }
 }
