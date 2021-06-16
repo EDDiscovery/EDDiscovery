@@ -434,7 +434,7 @@ SECTION UserControlSurveyor
 .dontHideInFSSModeToolStripMenuItem: "Don\'t Hide in FSS Mode" @
 .showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem: "Show System Info Always" @
 .selectFSSSignalsShownToolStripMenuItem: "Select FSS Signals Shown" @
-.LowRadius: " Low Radius." @
+.LowRadius: " is tiny." @
 .Mapped: " (Mapped & Discovered)" @
 .Systemscancomplete: "System scan complete." @
 .bodiesfound: " bodies found." @
@@ -447,7 +447,15 @@ SECTION UserControlSurveyor
 .Hasring: " Has ring." @
 .Has: " Has " @
 .Signals: " Has Signals." @
-.islandable: " is landable." @
+.HMC: " is a high metal content world." @
+.terraHMC: " is a terraformable high metal content world." @
+.MR: " is a metal-rich body." @
+.terraMR: " is a terraformable metal-rich body." @
+.islandable: " Is landable." @
+.landableAtmo: " Is landable and has an " @
+.islandable: " Is large and landable." @
+.landableAtmo: " Is large, landable and has an " @
+.eccentricity: "Has an high eccentricity of " @
 
 .planetaryClassesToolStripMenuItem: "Planetary Classes" @
 .planetaryClassesToolStripMenuItem.ammoniaWorldToolStripMenuItem: "Ammonia World" @
