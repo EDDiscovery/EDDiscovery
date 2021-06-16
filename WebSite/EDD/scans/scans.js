@@ -58,7 +58,7 @@ function FillScanTable(jdata, showmaterials, showvalue)
                 else
                     bddetails[0] = "No scan data available";
 
-                bddist = scandata.DistanceFromArrivalLS;
+                bddist = scandata.DistanceFromArrivalLS.toFixed(2) + "ls";
 
                 imagename = "Controls.Scan.Bodies.Belt";
             }
@@ -89,6 +89,7 @@ function FillScanTable(jdata, showmaterials, showvalue)
                 {
                     bdclass += " Moon";
 
+                    // tbd distance from arrival as well?
                     if (scandata.nSemiMajorAxis != null)
                         bddist = (scandata.nSemiMajorAxis / oneLS_m).toFixed(1) + "ls (" + (scandata.nSemiMajorAxis/1000).toFixed(0) + "km)";
                 }
