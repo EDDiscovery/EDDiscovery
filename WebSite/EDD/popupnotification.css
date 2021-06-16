@@ -1,0 +1,31 @@
+﻿
+/* popups should be styles with 
+    <div class="popupnotification" id="scanobjectnotification">
+    </div>
+
+    Note: not used here, but absolute won't work with margin:auto, so we set the width, then centre it with left, then margin it back by half the width
+    width: 80%;
+    left: 50%;
+    margin-left: -40%;
+*/
+
+.popupnotification {
+    position: absolute; /* Sit on top of the screen */
+    visibility: hidden; /* Hidden by default. Visible on click */
+    background: darkorange;
+    border-radius: 6px; /* Rounded borders */
+    padding: 8px; /* Padding */
+    color: black;
+    /* Add a z-index */
+    z-index: 1;
+
+    overflow: auto;
+    white-space: pre-wrap;
+    width:auto;
+    height:auto;
+    left:65%;
+    top:10%;
+    max-height:80%;
+    max-width:30%;
+}
+

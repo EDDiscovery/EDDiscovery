@@ -25,7 +25,7 @@ function onClose(evt)
 {
 }
 
-var lastscandata;       // keep last scan data
+var lastobjectlist = null;     // containing responsetype and objectlist[] (left,right,top,bottom,text)
 
 function onMessage(evt)
 {
@@ -40,6 +40,11 @@ function onMessage(evt)
     {
         console.log("system map changed " + evt.data);
         RequestImage(-1);
+    }
+    else if (jdata.responsetype == "scandisplayobjects")    // scan display changed, rerequest URL
+    {
+       // console.log("system objects" + evt.data);
+        lastobjectlist = jdata;
     }
 }
 
@@ -73,9 +78,12 @@ function RequestImage(entry)
 
     console.log("Request " + req);
 
-    var img = CreateImage(req, "Scan display");
-    //var img = CreateImage("/Images/EdLogo600.png", "EDLogo", 1200);
-    jimgdiv.appendChild(img);
+    lastobjectlist = null;      // indicate don't have a list now
+
+    var img = CreateImage(req, "Scan display", null, imageclick);
+    img.id = "scandisplayimage";
+
+    jimgdiv.appendChild(img);       // this causes a get to the server, which sends back an image and the object list
 }
 
 function scandisplaychange(mouseevent)
@@ -97,3 +105,25 @@ function sizedisplaychange(mouseevent)
     RequestImage(-1);
 }
 
+function imageclick(mouseevent)
+{
+    var ct = mouseevent.currentTarget;
+    console.log("Click image" + ct.id + " " + mouseevent.clientX + " " + mouseevent.clientY + " " + mouseevent.offsetX + " " + mouseevent.offsetY);
+
+    if (lastobjectlist != null)
+    {
+        var olist = lastobjectlist.objectlist;
+        olist.forEach(function (x)
+        {
+            if (mouseevent.offsetX >= x.left && mouseevent.offsetX <= x.right && mouseevent.offsetY >= x.top && mouseevent.offsetY <= x.bottom)
+            {
+                var jimgdiv = document.getElementById("scanbmp");
+                var neartop = mouseevent.offsetY < 3*jimgdiv.clientHeight / 4;
+              //  console.log("Object " + x.left + " " + x.top + " " + x.text);
+                var size = fetchnumber("submenusize.sizegroup.radiostate", "48");
+                ShowPopup("scanobjectnotification", CreatePara(x.text), null, null);
+            }
+        });
+
+    }
+}

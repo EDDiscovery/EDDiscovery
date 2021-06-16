@@ -1,7 +1,15 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/*
+ * Copyright 2021-2021 Robbyxp1 @ github.com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
+ * ANY KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
  */
 
 
@@ -34,6 +42,24 @@ function CreateAnchor(text, link, newtab = false, clsname = null)
     return a2;
 }
 
+// see tooltip.css. Tooltips activate on hover. they need a div with class tooltip, which is display:inline (so it does not interrupt the flow)
+// then they need a inner space, class tooltiptext, which, is normally hidden, position absolute,
+// and another class : .tooltip:hover .tooltiptext, which activates on hover, and overrides the visibilty. 
+// item is the thing your attaching the tooltip to.
+
+function CreateTooltip(item, tooltiptext)
+{
+    var div = document.createElement("div");
+    div.className = "tooltip";
+    div.appendChild(item);
+    var span = document.createElement("span");
+    span.className = "tooltiptext";
+    span.innerText = tooltiptext;
+    div.appendChild(span);
+    return div;
+}
+
+
 function CreateImage(link,alt,width = null,callback = null, tagdata = null, tooltip = null)
 {
     var a = document.createElement("img");
@@ -52,19 +78,7 @@ function CreateImage(link,alt,width = null,callback = null, tagdata = null, tool
     if (tooltip == null)
         return a;
     else
-    {
-        var div = document.createElement("div");
-        div.className = "tooltip";
-        div.appendChild(a);
-        var span = document.createElement("span");
-        span.className = "tooltiptext";
-        span.innerText = tooltip;
-        //span.appendChild(CreatePara(tooltip));
-        div.appendChild(span);
-        return div;
-    }
-    
-  //  console.log("Create image s:" + a.src + " t:" + a.tag );
+        return CreateTooltip(a,tooltip)
 }
 
 function CreateButton(text,handler)
