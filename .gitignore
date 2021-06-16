@@ -2,6 +2,7 @@ bin
 obj
 packages
 .vs
+*.csproj.user
 *.suo
 /logs
 /Installer/EDDiscovery-cache
@@ -23,4 +24,3 @@ Thumbs.db
 */Properties/ExtraVersion.cs
 /EDDiscovery/GlobalSuppressions.cs
 CapiClientID.cs
-*.csproj
