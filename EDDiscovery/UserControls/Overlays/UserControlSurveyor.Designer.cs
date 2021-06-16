@@ -50,15 +50,19 @@ namespace EDDiscovery.UserControls
             this.ammoniaWorldToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.earthlikeWorldToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.waterWorldToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.highMetalContentBodyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.metalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bodyFeaturesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.terraformableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hasVolcanismToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hasRingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.highEccentricityToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.lowRadiusToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hasSignalsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.landableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.landableWithAtmosphereToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.landableWithVolcanismToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.landableAndLargeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showAllPlanetsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showAllStarsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showBeltClustersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -106,14 +110,16 @@ namespace EDDiscovery.UserControls
             this.wordWrapToolStripMenuItem,
             this.textAlignToolStripMenuItem});
             this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(226, 346);
+            this.contextMenuStrip.Size = new System.Drawing.Size(226, 368);
             // 
             // planetaryClassesToolStripMenuItem
             // 
             this.planetaryClassesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ammoniaWorldToolStripMenuItem,
             this.earthlikeWorldToolStripMenuItem,
-            this.waterWorldToolStripMenuItem});
+            this.waterWorldToolStripMenuItem,
+            this.highMetalContentBodyToolStripMenuItem,
+            this.metalToolStripMenuItem});
             this.planetaryClassesToolStripMenuItem.Name = "planetaryClassesToolStripMenuItem";
             this.planetaryClassesToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
             this.planetaryClassesToolStripMenuItem.Text = "Planetary Classes";
@@ -124,7 +130,7 @@ namespace EDDiscovery.UserControls
             this.ammoniaWorldToolStripMenuItem.CheckOnClick = true;
             this.ammoniaWorldToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.ammoniaWorldToolStripMenuItem.Name = "ammoniaWorldToolStripMenuItem";
-            this.ammoniaWorldToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
+            this.ammoniaWorldToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
             this.ammoniaWorldToolStripMenuItem.Text = "Ammonia World";
             // 
             // earthlikeWorldToolStripMenuItem
@@ -133,7 +139,7 @@ namespace EDDiscovery.UserControls
             this.earthlikeWorldToolStripMenuItem.CheckOnClick = true;
             this.earthlikeWorldToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.earthlikeWorldToolStripMenuItem.Name = "earthlikeWorldToolStripMenuItem";
-            this.earthlikeWorldToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
+            this.earthlikeWorldToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
             this.earthlikeWorldToolStripMenuItem.Text = "Earthlike World";
             // 
             // waterWorldToolStripMenuItem
@@ -142,8 +148,24 @@ namespace EDDiscovery.UserControls
             this.waterWorldToolStripMenuItem.CheckOnClick = true;
             this.waterWorldToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.waterWorldToolStripMenuItem.Name = "waterWorldToolStripMenuItem";
-            this.waterWorldToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
+            this.waterWorldToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
             this.waterWorldToolStripMenuItem.Text = "Water World";
+            // 
+            // highMetalContentBodyToolStripMenuItem
+            // 
+            this.highMetalContentBodyToolStripMenuItem.CheckOnClick = true;
+            this.highMetalContentBodyToolStripMenuItem.Name = "highMetalContentBodyToolStripMenuItem";
+            this.highMetalContentBodyToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
+            this.highMetalContentBodyToolStripMenuItem.Text = "High metal content body";
+            this.highMetalContentBodyToolStripMenuItem.Click += new System.EventHandler(this.highMetalContentBodyToolStripMenuItem_Click);
+            // 
+            // metalToolStripMenuItem
+            // 
+            this.metalToolStripMenuItem.CheckOnClick = true;
+            this.metalToolStripMenuItem.Name = "metalToolStripMenuItem";
+            this.metalToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
+            this.metalToolStripMenuItem.Text = "Metal-rich body";
+            this.metalToolStripMenuItem.Click += new System.EventHandler(this.metalToolStripMenuItem_Click);
             // 
             // bodyFeaturesToolStripMenuItem
             // 
@@ -151,11 +173,13 @@ namespace EDDiscovery.UserControls
             this.terraformableToolStripMenuItem,
             this.hasVolcanismToolStripMenuItem,
             this.hasRingsToolStripMenuItem,
+            this.highEccentricityToolStripMenuItem,
             this.lowRadiusToolStripMenuItem,
             this.hasSignalsToolStripMenuItem,
             this.landableToolStripMenuItem,
             this.landableWithAtmosphereToolStripMenuItem,
-            this.landableWithVolcanismToolStripMenuItem});
+            this.landableWithVolcanismToolStripMenuItem,
+            this.landableAndLargeToolStripMenuItem});
             this.bodyFeaturesToolStripMenuItem.Name = "bodyFeaturesToolStripMenuItem";
             this.bodyFeaturesToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
             this.bodyFeaturesToolStripMenuItem.Text = "Body Features";
@@ -187,6 +211,14 @@ namespace EDDiscovery.UserControls
             this.hasRingsToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
             this.hasRingsToolStripMenuItem.Text = "Has Rings";
             // 
+            // highEccentricityToolStripMenuItem
+            // 
+            this.highEccentricityToolStripMenuItem.CheckOnClick = true;
+            this.highEccentricityToolStripMenuItem.Name = "highEccentricityToolStripMenuItem";
+            this.highEccentricityToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
+            this.highEccentricityToolStripMenuItem.Text = "High eccentricity";
+            this.highEccentricityToolStripMenuItem.Click += new System.EventHandler(this.highEccentricityToolStripMenuItem_Click);
+            // 
             // lowRadiusToolStripMenuItem
             // 
             this.lowRadiusToolStripMenuItem.Checked = true;
@@ -194,7 +226,7 @@ namespace EDDiscovery.UserControls
             this.lowRadiusToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.lowRadiusToolStripMenuItem.Name = "lowRadiusToolStripMenuItem";
             this.lowRadiusToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
-            this.lowRadiusToolStripMenuItem.Text = "Low Radius";
+            this.lowRadiusToolStripMenuItem.Text = "Tiny body";
             // 
             // hasSignalsToolStripMenuItem
             // 
@@ -233,6 +265,14 @@ namespace EDDiscovery.UserControls
             this.landableWithVolcanismToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
             this.landableWithVolcanismToolStripMenuItem.Text = "Landable with volcanism";
             this.landableWithVolcanismToolStripMenuItem.Click += new System.EventHandler(this.landableWithVolcanismToolStripMenuItem_Click);
+            // 
+            // landableAndLargeToolStripMenuItem
+            // 
+            this.landableAndLargeToolStripMenuItem.CheckOnClick = true;
+            this.landableAndLargeToolStripMenuItem.Name = "landableAndLargeToolStripMenuItem";
+            this.landableAndLargeToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
+            this.landableAndLargeToolStripMenuItem.Text = "Landable and large";
+            this.landableAndLargeToolStripMenuItem.Click += new System.EventHandler(this.landableAndLargeToolStripMenuItem_Click);
             // 
             // showAllPlanetsToolStripMenuItem
             // 
@@ -482,5 +522,9 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtScrollBar extScrollBar;
         private System.Windows.Forms.ToolStripMenuItem landableWithAtmosphereToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem landableWithVolcanismToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem highMetalContentBodyToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem metalToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem highEccentricityToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem landableAndLargeToolStripMenuItem;
     }
 }
