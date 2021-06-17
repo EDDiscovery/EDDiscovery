@@ -69,7 +69,7 @@ function WriteMenu(posid, menunameid, menuclass, menulist)
             var storagekey = menunameid + "." + id + ".checkboxstate";
             var state = FetchState(storagekey, item[4], true);
 
-            console.log("Checkbox Storage " + storagekey + " state " + state);
+            //console.log("Checkbox Storage " + storagekey + " state " + state);
 
             if (state == null)
             {
@@ -87,7 +87,7 @@ function WriteMenu(posid, menunameid, menuclass, menulist)
             var storagekey = menunameid + "." + item[4] + ".radiostate";        // first entry should have item[5], default state
             var state = FetchState(storagekey, item.length >= 6 ? item[5] : null, true);
 
-            console.log("Radio Storage " + storagekey + " state " + state);
+           // console.log("Radio Storage " + storagekey + " state " + state);
 
             var radiostate = state == id;
             var mi = CreateInput(menuclass + "_radio", mid + "_radio", item[0], item[3], radiostate, [storagekey,id], item[4]);

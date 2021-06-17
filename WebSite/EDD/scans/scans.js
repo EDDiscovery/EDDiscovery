@@ -138,7 +138,7 @@ function FillScanTable(jdata, showmaterials, showvalue)
                     var t = "";
                     keys.forEach((key, index) =>
                     {
-                        console.log(`${key}: ${scandata.Materials[key]}`);
+                       // console.log(`${key}: ${scandata.Materials[key]}`);
                         t = Append(t, key, ', ');
                     });
 

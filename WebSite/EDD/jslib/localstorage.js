@@ -17,14 +17,14 @@ function StoreState(id, state)
     var storage = window.localStorage;
     var jstate = JSON.stringify(state);
     storage.setItem(id, jstate);
-    console.log("Set storage " + id + "= '" + jstate + "'");
+  //  console.log("Set storage " + id + "= '" + jstate + "'");
 }
 
 function FetchState(id, defaultstate, writebackdefault = false)
 {
     var storage = window.localStorage;
     var state = storage.getItem(id);
-    console.log("Fetch storage " + id + "= '" + state + "'");
+  //  console.log("Fetch storage " + id + "= '" + state + "'");
     if (state == null)
     {
         if (defaultstate != null)

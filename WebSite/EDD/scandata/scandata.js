@@ -38,8 +38,14 @@ function onMessage(evt)
     }
     else if (jdata.responsetype == "scandata")    // we requested a status or status was pushed, update screen
     {
+        console.log("New scandata received");
         lastscandata = jdata;
         FillScan();
+    }
+    else if (jdata.responsetype == "scandatachanged")    // system notified scan data changed
+    {
+        console.log("scandata informed changed");
+        RequestScanData(-1);
     }
 }
 

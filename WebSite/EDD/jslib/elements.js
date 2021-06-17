@@ -116,11 +116,11 @@ function CreateInput(classname, id, type, onclick, checked = null, tag = null, n
     pre.onclick = onclick;
     if (checked == true)
     {
-        console.log("Program " + id + " check on");
+        //console.log("Program " + id + " check on");
         pre.checked = true;
     }
     pre.tag = tag;
-    console.log("Input " + id + " " + type + " checkedit " + checked +  " got " + pre.checked);
+    //console.log("Input " + id + " " + type + " checkedit " + checked +  " got " + pre.checked);
     return pre;
 }
 

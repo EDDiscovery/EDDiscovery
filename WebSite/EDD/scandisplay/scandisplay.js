@@ -33,17 +33,17 @@ function onMessage(evt)
 
     if (jdata.responsetype == "status")    // we requested a status or status was pushed, update screen
     {
-        // console.log("scandata status " + evt.data);
+        console.log("scandata status changed");
         FillSystemTable(jdata);
     }
     else if (jdata.responsetype == "systemmapchanged")    // scan display changed, rerequest URL
     {
-        console.log("system map changed " + evt.data);
+        console.log("Informed scan display changed");
         RequestImage(-1);
     }
     else if (jdata.responsetype == "scandisplayobjects")    // scan display changed, rerequest URL
     {
-       // console.log("system objects" + evt.data);
+        console.log("New scandisplay objects received");
         lastobjectlist = jdata;
     }
 }
@@ -56,7 +56,6 @@ function onError(evt)
 function RequestImage(entry)
 {
     var jimgdiv = document.getElementById("scanbmp");
-    RemoveChildren(jimgdiv);
 
     var showmoon = GetMenuItemCheckState("scandisplaymenu", "moon");
     var bodyicons = GetMenuItemCheckState("scandisplaymenu", "bodyicons");
@@ -76,14 +75,10 @@ function RequestImage(entry)
         "&showmaterials=" + showmaterials + "&showgravity=" + gvalue + "&showhabzone=" + habzone + "&showstarclass=" + starclass + "&showplanetclass=" + planetclass +
         "&showdistance=" + distance + "&EDSM=" + edsm;
 
-    console.log("Request " + req);
-
     lastobjectlist = null;      // indicate don't have a list now
-
-    var img = CreateImage(req, "Scan display", null, imageclick);
-    img.id = "scandisplayimage";
-
-    jimgdiv.appendChild(img);       // this causes a get to the server, which sends back an image and the object list
+    var img = jimgdiv.childNodes[0];
+    console.log("Reload image source" + req);
+    img.src = req;
 }
 
 function scandisplaychange(mouseevent)
