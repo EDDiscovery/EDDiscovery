@@ -12,7 +12,7 @@
  * governing permissions and limitations under the License.
  */
 
-function storestate(id, state)
+function StoreState(id, state)
 {
     var storage = window.localStorage;
     var jstate = JSON.stringify(state);
@@ -20,7 +20,7 @@ function storestate(id, state)
     console.log("Set storage " + id + "= '" + jstate + "'");
 }
 
-function fetchstate(id, defaultstate, writebackdefault = false)
+function FetchState(id, defaultstate, writebackdefault = false)
 {
     var storage = window.localStorage;
     var state = storage.getItem(id);
@@ -30,7 +30,7 @@ function fetchstate(id, defaultstate, writebackdefault = false)
         if (defaultstate != null)
         {
             if (writebackdefault)
-                storestate(id, defaultstate);
+                StoreState(id, defaultstate);
         }
         return defaultstate;
     }
@@ -38,9 +38,9 @@ function fetchstate(id, defaultstate, writebackdefault = false)
         return JSON.parse(state);
 }
 
-function fetchnumber(id, defaultstate, writebackdefault = false)
+function FetchNumber(id, defaultstate, writebackdefault = false)
 {
-    var ret = fetchstate(id, defaultstate, writebackdefault);
+    var ret = FetchState(id, defaultstate, writebackdefault);
     if (ret != null)
     {
         return parseInt(ret);

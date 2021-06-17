@@ -31,7 +31,7 @@ style:
 function ShowPopup(id, element,timetodisplayms = null, toppos = null)
 {
     var notification = document.getElementById(id);
-    removeChildren(notification);
+    RemoveChildren(notification);
     notification.appendChild(element);
 
     if (toppos != null)
@@ -53,7 +53,7 @@ function ShowPopup(id, element,timetodisplayms = null, toppos = null)
 function HidePopup(id)
 {
     var notification = document.getElementById("scanobjectnotification");
-    removeChildren(notification);
+    RemoveChildren(notification);
     notification.style.visibility = null;
 }
 

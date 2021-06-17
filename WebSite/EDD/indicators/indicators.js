@@ -89,7 +89,7 @@ function HandleIndicatorMessage(jdata, statuselement, actionelement, statusother
     {
         var tstatusother = document.getElementById(statusotherelement);
 
-        removeChildren(tstatusother);
+        RemoveChildren(tstatusother);
 
         if (jdata["BodyName"] != null && jdata["BodyName"] != "")
             tstatusother.appendChild(CreatePara("Body Name: " + jdata["BodyName"]));
@@ -132,8 +132,8 @@ function HandleIndicatorMessage(jdata, statuselement, actionelement, statusother
 
 function SetupIndicators(jdata,tstatus,tactions)
 {
-    removeChildren(tstatus);
-    removeChildren(tactions);
+    RemoveChildren(tstatus);
+    RemoveChildren(tactions);
 
     var innormalspace = !currentlanded && !currentdocked && !currentsupercruise;
     var notdockedlanded = !currentdocked && !currentlanded;
@@ -151,7 +151,7 @@ function SetupIndicators(jdata,tstatus,tactions)
             CreateIndicator("FsdCooldown", currentsupercruise || innormalspace)
         ];
 
-        tstatus.appendChild(tablerowmultitdlist(statuslist));
+        tstatus.appendChild(TableRowMultitdlist(statuslist));
 
         var actionlist = [
             CreateAction("LandingGear", "LandingGearToggle",innormalspace),     // reported..
@@ -215,7 +215,7 @@ function SetupIndicators(jdata,tstatus,tactions)
             CreateAction("SilentRunning", "ToggleButtonUpInput", innormalspace,0,true, "Silent Running"),
         ];
 
-        tactions.appendChild(tablerowmultitdlist(actionlist))
+        tactions.appendChild(TableRowMultitdlist(actionlist))
     }
     else if (currentshiptype == "SRV")
     {
@@ -241,8 +241,8 @@ function SetupIndicators(jdata,tstatus,tactions)
             CreateActionButton("Screenshot", "F10", true, "Screen Shot"),
         ];
 
-        tstatus.appendChild(tablerowmultitdlist(statuslist));
-        tactions.appendChild(tablerowmultitdlist(actionlist));
+        tstatus.appendChild(TableRowMultitdlist(statuslist));
+        tactions.appendChild(TableRowMultitdlist(actionlist));
     }
     else if (currentshiptype == "Fighter")
     {
@@ -273,8 +273,8 @@ function SetupIndicators(jdata,tstatus,tactions)
             CreateActionButton("Screenshot", "F10", true, "Screen Shot"),
         ];
 
-        tstatus.appendChild(tablerowmultitdlist(statuslist));
-        tactions.appendChild(tablerowmultitdlist(actionlist));
+        tstatus.appendChild(TableRowMultitdlist(statuslist));
+        tactions.appendChild(TableRowMultitdlist(actionlist));
     }
     else if (currentshiptype == "OnFoot")
     {
@@ -308,8 +308,8 @@ function SetupIndicators(jdata,tstatus,tactions)
             CreateAction("1", "HumanoidConflictContextualUIButton"),
         ];
 
-        tstatus.appendChild(tablerowmultitdlist(statuslist));
-        tactions.appendChild(tablerowmultitdlist(actionlist));
+        tstatus.appendChild(TableRowMultitdlist(statuslist));
+        tactions.appendChild(TableRowMultitdlist(actionlist));
     }
     else if (currentshiptype == "Multicrew")
     {

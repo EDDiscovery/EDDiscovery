@@ -329,7 +329,10 @@ namespace EDDiscovery.UserControls
 
                         // display non-stellar bodies radius in earth radiuses
                         if (sn.ScanData.nRadius.HasValue)
-                            bdDetails.Append("Radius".T(EDTx.UserControlScanGrid_Radius)).Append(": ").Append((sn.ScanData.nRadius.Value / JournalScan.oneEarthRadius_m).ToString("N2")).Append(", ");
+                        {
+                            bdDetails.Append("Radius".T(EDTx.UserControlScanGrid_Radius)).Append(": ").Append((sn.ScanData.nRadius.Value/1000.0).ToString("N0") + "km (").
+                                Append((sn.ScanData.nRadius.Value / JournalScan.oneEarthRadius_m).ToString("N2")).Append("ER), ");
+                        }
 
                         // show the temperature, both in K and C degrees
                         if (sn.ScanData.nSurfaceTemperature.HasValue)
@@ -359,7 +362,7 @@ namespace EDDiscovery.UserControls
                         }
 
                         // tell us that there is some volcanic activity
-                        if (sn.ScanData.Volcanism != null)
+                        if (sn.ScanData.Volcanism.HasChars())
                         {
                             bdDetails.Append(Environment.NewLine).Append("Geological activity".T(EDTx.UserControlScanGrid_Geologicalactivity)).Append(": ").Append(sn.ScanData.Volcanism).Append(". ");
                             overlays.volcanism = true;

@@ -18,9 +18,9 @@
 //
 // structure needed is:
 //              <div class="menubutton" id="menubutton1">
-//                    <img id="menuicon_button" src="/Images/menu.png" alt="Tab Menu" onclick="togglemenu('firstmenu')">
+//                    <img id="menuicon_button" src="/Images/menu.png" alt="Tab Menu" onclick="ToggleMenu('firstmenu')">
 //                    <script>
-//                        writemenu("menubutton1", "firstmenu", "navmenu", [["checkbox","e1","one", menuchange, false], [null,"e2","two", menuchange], ["checkbox","e3","three", menuchange, true]]);
+//                        WriteMenu("menubutton1", "firstmenu", "navmenu", [["checkbox","e1","one", menuchange, false], [null,"e2","two", menuchange], ["checkbox","e3","three", menuchange, true]]);
 //                    </script>
 //                </div>
 
@@ -38,7 +38,7 @@
 //}
 
 // menu div: is called id=menunameid class=menuclass
-// writemenu menulist should be formatted as:
+// WriteMenu menulist should be formatted as:
 //           ["checkbox", "moon", "Show Moons", scandisplaychange, true],           - tag contains storagekey 
 //           ["radio", "s16", "16", sizedisplaychange, "sizegroup", "s16"],         - item tag contains [storagekey (item[4]),value to set]. First entry needs to have the default value
 //           ["radio", "s32", "32", sizedisplaychange, "sizegroup"],
@@ -52,7 +52,7 @@
 //          normal                                                                                          menunameid+"_"+id+"_label       menuclass_label
 //          submenu                                                                                         menunameid+"_"+id+"_submenu     menuclass_submenu
 
-function writemenu(posid, menunameid, menuclass, menulist)
+function WriteMenu(posid, menunameid, menuclass, menulist)
 {
     var div = CreateDiv(menuclass, menunameid);
     var storage = window.localStorage;
@@ -67,7 +67,7 @@ function writemenu(posid, menunameid, menuclass, menulist)
         if (item[0] == "checkbox" )
         {
             var storagekey = menunameid + "." + id + ".checkboxstate";
-            var state = fetchstate(storagekey, item[4], true);
+            var state = FetchState(storagekey, item[4], true);
 
             console.log("Checkbox Storage " + storagekey + " state " + state);
 
@@ -85,7 +85,7 @@ function writemenu(posid, menunameid, menuclass, menulist)
         else if (item[0] == "radio")
         {
             var storagekey = menunameid + "." + item[4] + ".radiostate";        // first entry should have item[5], default state
-            var state = fetchstate(storagekey, item.length >= 6 ? item[5] : null, true);
+            var state = FetchState(storagekey, item.length >= 6 ? item[5] : null, true);
 
             console.log("Radio Storage " + storagekey + " state " + state);
 
@@ -97,7 +97,7 @@ function writemenu(posid, menunameid, menuclass, menulist)
         }
         else if (item[0] == "submenu")
         {
-            var lb = CreateLabel(menuclass + "_submenu", mid + "_submenu", null, item[2],opensubmenu, item[3]);
+            var lb = CreateLabel(menuclass + "_submenu", mid + "_submenu", null, item[2],OpenSubMenu, item[3]);
             lb.style.padding = "0px 0px 0px 20px";
             itemdiv.appendChild(lb);
         } 
@@ -116,7 +116,7 @@ function writemenu(posid, menunameid, menuclass, menulist)
     posid.append(div);
 }
 
-function getmenuitemcheckstate(menuid, itemid)
+function GetMenuItemCheckState(menuid, itemid)
 {
     var storagekey = menuid + "." + itemid + ".checkboxstate";
     var jstate = window.localStorage.getItem(storagekey);           // state is stored in JSON, when we parse, we get back a boolean
@@ -126,17 +126,17 @@ function getmenuitemcheckstate(menuid, itemid)
 
 var menusopen = []       // remember menu open, array for submenus
 
-function togglemenu(id)
+function ToggleMenu(id)
 {
     if (menusopen.length > 0)
-        closemenus();
+        CloseMenus();
     else
-        openmenu(id);
+        OpenMenu(id);
 }
 
-function openmenu(id)
+function OpenMenu(id)
 {
-    closemenus();
+    CloseMenus();
 
     var menu = document.getElementById(id);
     if (menu != null)
@@ -149,7 +149,7 @@ function openmenu(id)
         console.log("ERROR: No such Menu " + id);
 }
 
-function closemenus()
+function CloseMenus()
 {
     menusopen.forEach(function (x)
     {
@@ -165,7 +165,7 @@ function closemenus()
 }
 
 
-function opensubmenu(mouseevent)
+function OpenSubMenu(mouseevent)
 {
     var ct = mouseevent.currentTarget;
     var openingmenu = ct.parentNode.parentNode;

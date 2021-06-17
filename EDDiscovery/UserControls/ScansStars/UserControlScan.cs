@@ -824,7 +824,7 @@ namespace EDDiscovery.UserControls
                                         writer.Write(csv.Format(scan.GetAtmosphereComponent("Methane")));
                                         writer.Write(csv.Format(scan.GetAtmosphereComponent("Hydrogen")));
                                         writer.Write(csv.Format(scan.GetAtmosphereComponent("Helium")));
-                                        writer.Write(csv.Format((scan.Volcanism != null) ? scan.Volcanism : ""));
+                                        writer.Write(csv.Format(scan.Volcanism.HasChars() ? scan.Volcanism : ""));
                                         writer.Write(csv.Format(scan.nSurfaceGravity.HasValue ? scan.nSurfaceGravity.Value : 0));
                                         writer.Write(csv.Format(scan.nSurfacePressure.HasValue ? scan.nSurfacePressure.Value : 0));
                                         writer.Write(csv.Format(scan.nLandable.HasValue ? scan.nLandable.Value : false));
