@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright © 2016 - 2019 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
@@ -32,7 +32,9 @@ namespace EDDiscovery.UserControls
         private string titletext = "";
         private string fsssignalsdisplayed = "";
 
-        const int lowRadiusLimit = 600 * 1000;
+        const int lowRadiusLimit = 300 * 1000; // tiny body limit in km converted to m
+        const int largeRadiusLimit = 20000 * 1000; // large body limit in km converted to m
+        const double eccentricityLimit = 0.95; //orbital eccentricity limit
 
         EliteDangerousCore.UIEvents.UIGUIFocus.Focus uistate = EliteDangerousCore.UIEvents.UIGUIFocus.Focus.NoFocus;
 
@@ -56,11 +58,15 @@ namespace EDDiscovery.UserControls
             ammoniaWorldToolStripMenuItem.Checked = GetSetting("showAmmonia", true);
             earthlikeWorldToolStripMenuItem.Checked = GetSetting("showEarthlike", true);
             waterWorldToolStripMenuItem.Checked = GetSetting("showWaterWorld", true);
+            highMetalContentBodyToolStripMenuItem.Checked = GetSetting("showHMC", true);
+            metalToolStripMenuItem.Checked = GetSetting("showMR", true);
             terraformableToolStripMenuItem.Checked = GetSetting("showTerraformable", true);
             hasVolcanismToolStripMenuItem.Checked = GetSetting("showVolcanism", true);
+            highEccentricityToolStripMenuItem.Checked = GetSetting("showEccentricity", true);
             landableToolStripMenuItem.Checked = GetSetting("isLandable", true);
             landableWithAtmosphereToolStripMenuItem.Checked = GetSetting("isLandableWithAtmosphere", true);
             landableWithVolcanismToolStripMenuItem.Checked = GetSetting("isLandableWithVolcanism", true);
+            landableAndLargeToolStripMenuItem.Checked = GetSetting("largelandable", true);
             hasRingsToolStripMenuItem.Checked = GetSetting("showRinged", true);
             hideAlreadyMappedBodiesToolStripMenuItem.Checked = GetSetting("hideMapped", true);
             autoHideToolStripMenuItem.Checked = GetSetting("autohide", false);
@@ -83,11 +89,15 @@ namespace EDDiscovery.UserControls
             this.landableToolStripMenuItem.Click += new System.EventHandler(this.landableToolStripMenuItem_Click);
             this.landableWithAtmosphereToolStripMenuItem.Click += new System.EventHandler(this.landableWithAtmosphereToolStripMenuItem_Click);
             this.landableWithVolcanismToolStripMenuItem.Click += new System.EventHandler(this.landableWithVolcanismToolStripMenuItem_Click);
+            this.landableAndLargeToolStripMenuItem.Click += new System.EventHandler(this.landableAndLargeToolStripMenuItem_Click);
             this.ammoniaWorldToolStripMenuItem.Click += new System.EventHandler(this.ammoniaWorldToolStripMenuItem_Click);
             this.earthlikeWorldToolStripMenuItem.Click += new System.EventHandler(this.earthlikeWorldToolStripMenuItem_Click);
             this.waterWorldToolStripMenuItem.Click += new System.EventHandler(this.waterWorldToolStripMenuItem_Click);
+            this.highMetalContentBodyToolStripMenuItem.Click += new System.EventHandler(this.highMetalContentBodyToolStripMenuItem_Click);
+            this.metalToolStripMenuItem.Click += new System.EventHandler(this.metalToolStripMenuItem_Click);
             this.terraformableToolStripMenuItem.Click += new System.EventHandler(this.terraformableToolStripMenuItem_Click);
             this.hasVolcanismToolStripMenuItem.Click += new System.EventHandler(this.hasVolcanismToolStripMenuItem_Click);
+            this.highEccentricityToolStripMenuItem.Click += new System.EventHandler(this.highEccentricityToolStripMenuItem_Click);
             this.hasRingsToolStripMenuItem.Click += new System.EventHandler(this.hasRingsToolStripMenuItem_Click);
             this.lowRadiusToolStripMenuItem.Click += new System.EventHandler(this.lowRadiusToolStripMenuItem_Click);
             this.hideAlreadyMappedBodiesToolStripMenuItem.Click += new System.EventHandler(this.hideAlreadyMappedBodiesToolStripMenuItem_Click);
@@ -291,11 +301,15 @@ namespace EDDiscovery.UserControls
                                     (sd.IsLandable && landableToolStripMenuItem.Checked) ||
                                     (sd.IsLandable && sd.HasAtmosphericComposition && landableWithAtmosphereToolStripMenuItem.Checked) ||
                                     (sd.IsLandable && sd.HasMeaningfulVolcanism && landableWithVolcanismToolStripMenuItem.Checked) ||
+                                    (sd.IsLandable && sd.nRadius.HasValue && sd.nRadius >= largeRadiusLimit && landableAndLargeToolStripMenuItem.Checked) ||
                                     (sd.AmmoniaWorld && ammoniaWorldToolStripMenuItem.Checked) ||
                                     (sd.Earthlike && earthlikeWorldToolStripMenuItem.Checked) ||
                                     (sd.WaterWorld && waterWorldToolStripMenuItem.Checked) ||
+                                    (sd.PlanetTypeID == EDPlanet.High_metal_content_body && highMetalContentBodyToolStripMenuItem.Checked) ||
+                                    (sd.PlanetTypeID == EDPlanet.Metal_rich_body && metalToolStripMenuItem.Checked) ||
                                     (sd.HasRings && !sd.AmmoniaWorld && !sd.Earthlike && !sd.WaterWorld && hasRingsToolStripMenuItem.Checked) ||
                                     (sd.HasMeaningfulVolcanism && hasVolcanismToolStripMenuItem.Checked) ||
+                                    (sd.nEccentricity.HasValue && sd.nEccentricity >= eccentricityLimit && highEccentricityToolStripMenuItem.Checked) ||
                                     (sd.Terraformable && terraformableToolStripMenuItem.Checked) ||
                                     (lowRadiusToolStripMenuItem.Checked && sd.nRadius.HasValue && sd.nRadius < lowRadiusLimit) ||
                                     (sn.Signals != null && hasSignalsToolStripMenuItem.Checked) ||
@@ -409,13 +423,20 @@ namespace EDDiscovery.UserControls
             information.Append((js.Earthlike) ? @" is an earth like world.".T(EDTx.UserControlSurveyor_isanearthlikeworld) : null);
             information.Append((js.WaterWorld && !js.Terraformable) ? @" is a water world.".T(EDTx.UserControlSurveyor_isawaterworld) : null);
             information.Append((js.WaterWorld && js.Terraformable) ? @" is a terraformable water world.".T(EDTx.UserControlSurveyor_isaterraformablewaterworld) : null);
-            information.Append((js.Terraformable && !js.WaterWorld) ? @" is a terraformable planet.".T(EDTx.UserControlSurveyor_isaterraformableplanet) : null);
+            information.Append((js.PlanetTypeID == EDPlanet.High_metal_content_body && js.Terraformable) ? @" is a terraformable high metal content world.".T(EDTx.UserControlSurveyor_terraHMC) : null);
+            information.Append((js.PlanetTypeID == EDPlanet.High_metal_content_body && !js.Terraformable) ? @" is a high metal content world.".T(EDTx.UserControlSurveyor_HMC) : null);
+            information.Append((js.PlanetTypeID == EDPlanet.Metal_rich_body && js.Terraformable) ? @" is a terraformable metal-rich body.".T(EDTx.UserControlSurveyor_terraMR) : null);
+            information.Append((js.PlanetTypeID == EDPlanet.Metal_rich_body && !js.Terraformable) ? @" is a metal-rich body.".T(EDTx.UserControlSurveyor_MR) : null);
+            information.Append((js.Terraformable && !js.WaterWorld && js.PlanetTypeID != EDPlanet.High_metal_content_body && js.PlanetTypeID != EDPlanet.Metal_rich_body) ? @" is a terraformable planet.".T(EDTx.UserControlSurveyor_isaterraformableplanet) : null);
             information.Append((js.HasRings) ? @" Has ring.".T(EDTx.UserControlSurveyor_Hasring) : null);
             information.Append((js.HasMeaningfulVolcanism) ? @" Has ".T(EDTx.UserControlSurveyor_Has) + js.Volcanism + "." : null);
-            information.Append((js.nRadius < lowRadiusLimit) ? @" Low Radius.".T(EDTx.UserControlSurveyor_LowRadius) : null);
+            information.Append((js.nEccentricity >= eccentricityLimit) ? @"Has an high eccentricity of ".T(EDTx.UserControlSurveyor_eccentricity) + js.nEccentricity + "." : null);                
+            information.Append((js.nRadius < lowRadiusLimit) ? @" is tiny.".T(EDTx.UserControlSurveyor_LowRadius) : null);
             information.Append((sn.Signals != null) ? " Has Signals.".T(EDTx.UserControlSurveyor_Signals) : null);
-            information.Append((js.IsLandable && !js.HasAtmosphericComposition) ? @" is landable.".T(EDTx.UserControlSurveyor_islandable) : null);
-            information.Append((js.IsLandable && js.HasAtmosphericComposition) ? @" is landable and has " + (js.Atmosphere??"Unknown") : null);
+            information.Append((js.IsLandable && !js.HasAtmosphericComposition && js.nRadius<= largeRadiusLimit) ? @" Is landable.".T(EDTx.UserControlSurveyor_islandable) : null);
+            information.Append((js.IsLandable && js.HasAtmosphericComposition && js.nRadius <= largeRadiusLimit) ? @" Is landable and has an ".T(EDTx.UserControlSurveyor_landableAtmo) + (js.Atmosphere??"Unknown") + "." : null);
+            information.Append((js.IsLandable && !js.HasAtmosphericComposition && js.nRadius >= largeRadiusLimit) ? @" Is large and landable.".T(EDTx.UserControlSurveyor_islargelandable) : null);
+            information.Append((js.IsLandable && js.HasAtmosphericComposition && js.nRadius >= largeRadiusLimit) ? @" Is large, landable and has an ".T(EDTx.UserControlSurveyor_largelandableAtmo) + (js.Atmosphere ?? "Unknown") + "." : null);
 
             var ev = js.GetEstimatedValues();
 
@@ -483,9 +504,27 @@ namespace EDDiscovery.UserControls
             DrawSystem(last_sys);
         }
 
+        private void highMetalContentBodyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PutSetting("showHMC", highMetalContentBodyToolStripMenuItem.Checked);
+            DrawSystem(last_sys);
+        }
+
+        private void metalToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PutSetting("showMR", metalToolStripMenuItem.Checked);
+            DrawSystem(last_sys);
+        }
+
         private void terraformableToolStripMenuItem_Click(object sender, EventArgs e)
         {
             PutSetting("showTerraformable", terraformableToolStripMenuItem.Checked);
+            DrawSystem(last_sys);
+        }
+
+        private void highEccentricityToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PutSetting("showEccentricity", terraformableToolStripMenuItem.Checked);
             DrawSystem(last_sys);
         }
 
@@ -502,6 +541,12 @@ namespace EDDiscovery.UserControls
         private void landableWithVolcanismToolStripMenuItem_Click(object sender, EventArgs e)
         {
             PutSetting("isLandableWithVolcanism", landableToolStripMenuItem.Checked);
+            DrawSystem(last_sys);
+        }
+
+        private void landableAndLargeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PutSetting("largelandable", landableToolStripMenuItem.Checked);
             DrawSystem(last_sys);
         }
         private void hasVolcanismToolStripMenuItem_Click(object sender, EventArgs e)
@@ -660,6 +705,8 @@ namespace EDDiscovery.UserControls
             }
 
         }
+
+
 
         #endregion
 
