@@ -98,6 +98,8 @@ namespace EDDiscovery.UserControls
             this.comboBoxCustomLanguage = new ExtendedControls.ExtComboBox();
             this.groupBoxCustomSafeMode = new ExtendedControls.ExtGroupBox();
             this.labelSafeMode = new System.Windows.Forms.Label();
+            this.extGroupBoxDLLPerms = new ExtendedControls.ExtGroupBox();
+            this.extButtonDLLPerms = new ExtendedControls.ExtButton();
             this.extPanelScroll.SuspendLayout();
             this.groupBoxCommanders.SuspendLayout();
             this.dataViewScrollerCommanders.SuspendLayout();
@@ -113,6 +115,7 @@ namespace EDDiscovery.UserControls
             this.groupBoxPopOuts.SuspendLayout();
             this.groupBoxCustomLanguage.SuspendLayout();
             this.groupBoxCustomSafeMode.SuspendLayout();
+            this.extGroupBoxDLLPerms.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolTip
@@ -484,6 +487,7 @@ namespace EDDiscovery.UserControls
             this.extPanelScroll.Controls.Add(this.groupBoxCustomScreenShots);
             this.extPanelScroll.Controls.Add(this.groupBoxCustomEDSM);
             this.extPanelScroll.Controls.Add(this.groupBoxPopOuts);
+            this.extPanelScroll.Controls.Add(this.extGroupBoxDLLPerms);
             this.extPanelScroll.Controls.Add(this.groupBoxCustomLanguage);
             this.extPanelScroll.Controls.Add(this.groupBoxCustomSafeMode);
             this.extPanelScroll.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -506,7 +510,7 @@ namespace EDDiscovery.UserControls
             this.extScrollBarSettings.HideScrollBar = true;
             this.extScrollBarSettings.LargeChange = 10;
             this.extScrollBarSettings.Location = new System.Drawing.Point(965, 0);
-            this.extScrollBarSettings.Maximum = -5;
+            this.extScrollBarSettings.Maximum = -80;
             this.extScrollBarSettings.Minimum = 0;
             this.extScrollBarSettings.MouseOverButtonColor = System.Drawing.Color.Green;
             this.extScrollBarSettings.MousePressedButtonColor = System.Drawing.Color.Red;
@@ -519,8 +523,8 @@ namespace EDDiscovery.UserControls
             this.extScrollBarSettings.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.extScrollBarSettings.ThumbColorScaling = 0.5F;
             this.extScrollBarSettings.ThumbDrawAngle = 0F;
-            this.extScrollBarSettings.Value = -5;
-            this.extScrollBarSettings.ValueLimited = -5;
+            this.extScrollBarSettings.Value = -80;
+            this.extScrollBarSettings.ValueLimited = -80;
             // 
             // groupBoxCommanders
             // 
@@ -559,6 +563,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewCommanders.AllowUserToResizeRows = false;
             this.dataGridViewCommanders.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewCommanders.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
+            this.dataGridViewCommanders.ColumnHeaderMenuStrip = null;
             this.dataGridViewCommanders.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewCommanders.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ColumnCommander,
@@ -570,12 +575,15 @@ namespace EDDiscovery.UserControls
             this.dataGridViewCommanders.MultiSelect = false;
             this.dataGridViewCommanders.Name = "dataGridViewCommanders";
             this.dataGridViewCommanders.ReadOnly = true;
+            this.dataGridViewCommanders.RowHeaderMenuStrip = null;
             this.dataGridViewCommanders.RowHeadersVisible = false;
             this.dataGridViewCommanders.RowHeadersWidth = 20;
             this.dataGridViewCommanders.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewCommanders.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dataGridViewCommanders.SingleRowSelect = true;
             this.dataGridViewCommanders.Size = new System.Drawing.Size(940, 104);
             this.dataGridViewCommanders.TabIndex = 2;
+            this.dataGridViewCommanders.TopLeftHeaderMenuStrip = null;
             this.dataGridViewCommanders.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewCommanders_CellDoubleClick);
             // 
             // ColumnCommander
@@ -984,6 +992,31 @@ namespace EDDiscovery.UserControls
             this.labelSafeMode.Text = "Click this to perform special operations like to move system databases to another" +
     " drive, reset UI, and other maintenance tasks...\r\n\r\n";
             // 
+            // extGroupBoxDLLPerms
+            // 
+            this.extGroupBoxDLLPerms.BackColorScaling = 0.5F;
+            this.extGroupBoxDLLPerms.BorderColor = System.Drawing.Color.LightGray;
+            this.extGroupBoxDLLPerms.BorderColorScaling = 0.5F;
+            this.extGroupBoxDLLPerms.Controls.Add(this.extButtonDLLPerms);
+            this.extGroupBoxDLLPerms.Location = new System.Drawing.Point(290, 479);
+            this.extGroupBoxDLLPerms.Name = "extGroupBoxDLLPerms";
+            this.extGroupBoxDLLPerms.Size = new System.Drawing.Size(281, 52);
+            this.extGroupBoxDLLPerms.TabIndex = 21;
+            this.extGroupBoxDLLPerms.TabStop = false;
+            this.extGroupBoxDLLPerms.Text = "DLL Permissions";
+            this.extGroupBoxDLLPerms.TextPadding = 0;
+            this.extGroupBoxDLLPerms.TextStartPosition = -1;
+            // 
+            // extButtonDLLPerms
+            // 
+            this.extButtonDLLPerms.Location = new System.Drawing.Point(9, 17);
+            this.extButtonDLLPerms.Name = "extButtonDLLPerms";
+            this.extButtonDLLPerms.Size = new System.Drawing.Size(99, 23);
+            this.extButtonDLLPerms.TabIndex = 10;
+            this.extButtonDLLPerms.Text = "Configure";
+            this.extButtonDLLPerms.UseVisualStyleBackColor = true;
+            this.extButtonDLLPerms.Click += new System.EventHandler(this.extButtonDLLPerms_Click);
+            // 
             // UserControlSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1013,6 +1046,7 @@ namespace EDDiscovery.UserControls
             this.groupBoxPopOuts.PerformLayout();
             this.groupBoxCustomLanguage.ResumeLayout(false);
             this.groupBoxCustomSafeMode.ResumeLayout(false);
+            this.extGroupBoxDLLPerms.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -1071,5 +1105,7 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtGroupBox groupBoxInteraction;
         private ExtendedControls.ExtComboBox extComboBoxGameTime;
         private System.Windows.Forms.Label labelTimeDisplay;
+        private ExtendedControls.ExtGroupBox extGroupBoxDLLPerms;
+        private ExtendedControls.ExtButton extButtonDLLPerms;
     }
 }

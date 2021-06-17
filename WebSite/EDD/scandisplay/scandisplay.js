@@ -33,17 +33,17 @@ function onMessage(evt)
 
     if (jdata.responsetype == "status")    // we requested a status or status was pushed, update screen
     {
-        // console.log("scandata status " + evt.data);
+        console.log("scandata status changed");
         FillSystemTable(jdata);
     }
     else if (jdata.responsetype == "systemmapchanged")    // scan display changed, rerequest URL
     {
-        console.log("system map changed " + evt.data);
+        console.log("Informed scan display changed");
         RequestImage(-1);
     }
     else if (jdata.responsetype == "scandisplayobjects")    // scan display changed, rerequest URL
     {
-       // console.log("system objects" + evt.data);
+        console.log("New scandisplay objects received");
         lastobjectlist = jdata;
     }
 }
@@ -56,34 +56,30 @@ function onError(evt)
 function RequestImage(entry)
 {
     var jimgdiv = document.getElementById("scanbmp");
-    removeChildren(jimgdiv);
 
-    var showmoon = getmenuitemcheckstate("scandisplaymenu", "moon");
-    var bodyicons = getmenuitemcheckstate("scandisplaymenu", "bodyicons");
-    var showmaterials = getmenuitemcheckstate("scandisplaymenu", "materials");
-    var gvalue = getmenuitemcheckstate("scandisplaymenu", "gvalue");
-    var habzone = getmenuitemcheckstate("scandisplaymenu", "habzone");
-    var starclass = getmenuitemcheckstate("scandisplaymenu", "starclass");
-    var planetclass = getmenuitemcheckstate("scandisplaymenu", "planetclass");
-    var distance = getmenuitemcheckstate("scandisplaymenu", "distance");
-    var edsm = getmenuitemcheckstate("scandisplaymenu", "edsm");
+    var showmoon = GetMenuItemCheckState("scandisplaymenu", "moon");
+    var bodyicons = GetMenuItemCheckState("scandisplaymenu", "bodyicons");
+    var showmaterials = GetMenuItemCheckState("scandisplaymenu", "materials");
+    var gvalue = GetMenuItemCheckState("scandisplaymenu", "gvalue");
+    var habzone = GetMenuItemCheckState("scandisplaymenu", "habzone");
+    var starclass = GetMenuItemCheckState("scandisplaymenu", "starclass");
+    var planetclass = GetMenuItemCheckState("scandisplaymenu", "planetclass");
+    var distance = GetMenuItemCheckState("scandisplaymenu", "distance");
+    var edsm = GetMenuItemCheckState("scandisplaymenu", "edsm");
 
     var width = jimgdiv.clientWidth;
 
-    var size = fetchstate("submenusize.sizegroup.radiostate", "48");
+    var size = FetchState("submenusize.sizegroup.radiostate", "48");
 
     var req = "/systemmap/image.png?entry=" + entry + "&width=" + width + "&starsize=" + size + "&showmoons=" + showmoon + "&showbodyicons=" + bodyicons +
         "&showmaterials=" + showmaterials + "&showgravity=" + gvalue + "&showhabzone=" + habzone + "&showstarclass=" + starclass + "&showplanetclass=" + planetclass +
         "&showdistance=" + distance + "&EDSM=" + edsm;
 
-    console.log("Request " + req);
-
     lastobjectlist = null;      // indicate don't have a list now
-
-    var img = CreateImage(req, "Scan display", null, imageclick);
-    img.id = "scandisplayimage";
-
-    jimgdiv.appendChild(img);       // this causes a get to the server, which sends back an image and the object list
+    var img = jimgdiv.childNodes[0];
+    console.log("Reload image source" + req);
+    img.src = req;
+    img.onclick = imageclick;
 }
 
 function scandisplaychange(mouseevent)
@@ -91,8 +87,8 @@ function scandisplaychange(mouseevent)
     var ct = mouseevent.currentTarget;
     console.log("MI " + ct.id + " tag " + ct.tag);
     if (ct.tag != null)
-        storestate(ct.tag, ct.checked);
-    closemenus();
+        StoreState(ct.tag, ct.checked);
+    CloseMenus();
     RequestImage(-1);
 }
 
@@ -100,8 +96,8 @@ function sizedisplaychange(mouseevent)
 {
     var ct = mouseevent.currentTarget;
     console.log("Hit size" + ct.id + " store " + ct.tag[1] + " into " + ct.tag[0]);
-    storestate(ct.tag[0], ct.tag[1]);
-    closemenus();
+    StoreState(ct.tag[0], ct.tag[1]);
+    CloseMenus();
     RequestImage(-1);
 }
 
@@ -113,17 +109,23 @@ function imageclick(mouseevent)
     if (lastobjectlist != null)
     {
         var olist = lastobjectlist.objectlist;
-        olist.forEach(function (x)
+        var len = olist.length;
+
+        for (var i = 0; i < olist.length; i++)      //can't use a foreach, as you can't break them
         {
+            var x = olist[i];
+
             if (mouseevent.offsetX >= x.left && mouseevent.offsetX <= x.right && mouseevent.offsetY >= x.top && mouseevent.offsetY <= x.bottom)
             {
                 var jimgdiv = document.getElementById("scanbmp");
                 var neartop = mouseevent.offsetY < 3*jimgdiv.clientHeight / 4;
               //  console.log("Object " + x.left + " " + x.top + " " + x.text);
-                var size = fetchnumber("submenusize.sizegroup.radiostate", "48");
+                var size = FetchNumber("submenusize.sizegroup.radiostate", "48");
                 ShowPopup("scanobjectnotification", CreatePara(x.text), null, null);
+                return;
             }
-        });
-
+        }
     }
+
+    HidePopup("scanobjectnotification");
 }

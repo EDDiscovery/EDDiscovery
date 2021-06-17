@@ -61,9 +61,12 @@ namespace EDDiscovery.WebServer
     // Query requesttype= presskey, fields              : key = binding name
     //          responsetype = status, 100 or 400.
     //
-    // Query requesttype=scandata : fields entry number
-    //          responsetype = entry, fields..          : entry = -1 none, or entry number. See code for fields
-    //                                                  
+    // Query requesttype=scandata : fields entry number, edsm flag
+    //          responsetype = entry, objectlist..          : entry = -1 none, or entry number. See code for fields
+    // Push responsetype=scandatachanged                : indicate scan data has changed
+    //
+    // .png load of image from /systemmap/ folder - image name is not important, encoded query field /systemmap/map.png?entry=n&field=n& .. etc
+    // Push responsetype=systemmapchanged               : indicate scan system map has changed
 
     public class EDDWebServer
     {
@@ -185,7 +188,8 @@ namespace EDDiscovery.WebServer
         {
             httpws.SendWebSockets(journalsender.Refresh(-1, 50), false); // refresh history
             httpws.SendWebSockets(statussender.Refresh(-1), false); // and status
-            httpws.SendWebSockets(scandata.Refresh(-1), false); // and scan data
+            httpws.SendWebSockets(scandata.Notify(), false); // tell it its changed
+            httpws.SendWebSockets(scandisplay.Notify(), false); // tell it its changed
         }
 
         private void Discoveryform_OnNewUIEvent(UIEvent obj)
@@ -203,7 +207,7 @@ namespace EDDiscovery.WebServer
             if ( he.EntryType == JournalTypeEnum.Scan || he.EntryType == JournalTypeEnum.FSSSignalDiscovered || he.EntryType == JournalTypeEnum.SAASignalsFound ||
                         he.EntryType == JournalTypeEnum.SAAScanComplete)
             {
-                httpws.SendWebSockets(scandata.Push(), false); // refresh status
+                httpws.SendWebSockets(scandata.Notify(), false); // refresh status
                 httpws.SendWebSockets(scandisplay.Notify(), false); // tell it its changed
             }
         }
@@ -289,42 +293,43 @@ namespace EDDiscovery.WebServer
                     // seen instances of exceptions accessing icons in different threads.  so push up to discovery form. need to investigate.
                     discoveryform.Invoke((MethodInvoker)delegate
                     {
-                        StarScan.SystemNode sn = hl.StarScan.FindSystemSynchronous(hl.EntryOrder()[entry].System, checkEDSM);
+                    StarScan.SystemNode sn = hl.StarScan.FindSystemSynchronous(hl.EntryOrder()[entry].System, checkEDSM);
 
-                        if (sn != null)
+                    if (sn != null)
+                    {
+                        int starsize = (request.QueryString["starsize"] ?? "48").InvariantParseInt(48);
+                        int width = (request.QueryString["width"] ?? "800").InvariantParseInt(800);
+                        SystemDisplay sd = new SystemDisplay();
+                        sd.ShowMoons = (request.QueryString["showmoons"] ?? "true").InvariantParseBool(true);
+                        sd.ShowOverlays = (request.QueryString["showbodyicons"] ?? "true").InvariantParseBool(true);
+                        sd.ShowMaterials = (request.QueryString["showmaterials"] ?? "true").InvariantParseBool(true);
+                        sd.ShowAllG = (request.QueryString["showgravity"] ?? "true").InvariantParseBool(true);
+                        sd.ShowHabZone = (request.QueryString["showhabzone"] ?? "true").InvariantParseBool(true);
+                        sd.ShowStarClasses = (request.QueryString["showstarclass"] ?? "true").InvariantParseBool(true);
+                        sd.ShowPlanetClasses = (request.QueryString["showplanetclass"] ?? "true").InvariantParseBool(true);
+                        sd.ShowDist = (request.QueryString["showdistance"] ?? "true").InvariantParseBool(true);
+                        sd.ShowEDSMBodies = checkEDSM;
+                        sd.SetSize(starsize);
+                        sd.Font = new Font("MS Sans Serif", 8.25f);
+                        sd.LargerFont = new Font("MS Sans Serif", 10f);
+                        sd.FontUnderlined = new Font("MS Sans Serif", 8.25f, FontStyle.Underline);
+                        ExtendedControls.ExtPictureBox imagebox = new ExtendedControls.ExtPictureBox();
+                        sd.DrawSystem(imagebox, width, sn, null, null);
+                        imagebox.AddTextAutoSize(new Point(10, 10), new Size(1000,48), "Generated on " + DateTime.UtcNow.ToString(), new Font("MS Sans Serif", 8.25f), Color.Red, Color.Black, 0);
+                        imagebox.Render();
+
+                        foreach (var e in imagebox.Elements)
                         {
-                            int starsize = (request.QueryString["starsize"] ?? "48").InvariantParseInt(48);
-                            int width = (request.QueryString["width"] ?? "800").InvariantParseInt(800);
-                            SystemDisplay sd = new SystemDisplay();
-                            sd.ShowMoons = (request.QueryString["showmoons"] ?? "true").InvariantParseBool(true);
-                            sd.ShowOverlays = (request.QueryString["showbodyicons"] ?? "true").InvariantParseBool(true);
-                            sd.ShowMaterials = (request.QueryString["showmaterials"] ?? "true").InvariantParseBool(true);
-                            sd.ShowAllG = (request.QueryString["showgravity"] ?? "true").InvariantParseBool(true);
-                            sd.ShowHabZone = (request.QueryString["showhabzone"] ?? "true").InvariantParseBool(true);
-                            sd.ShowStarClasses = (request.QueryString["showstarclass"] ?? "true").InvariantParseBool(true);
-                            sd.ShowPlanetClasses = (request.QueryString["showplanetclass"] ?? "true").InvariantParseBool(true);
-                            sd.ShowDist = (request.QueryString["showdistance"] ?? "true").InvariantParseBool(true);
-                            sd.ShowEDSMBodies = checkEDSM;
-                            sd.SetSize(starsize);
-                            sd.Font = new Font("MS Sans Serif", 8.25f);
-                            sd.LargerFont = new Font("MS Sans Serif", 10f);
-                            sd.FontUnderlined = new Font("MS Sans Serif", 8.25f, FontStyle.Underline);
-                            ExtendedControls.ExtPictureBox imagebox = new ExtendedControls.ExtPictureBox();
-                            sd.DrawSystem(imagebox, width, sn, null, null);
-                            imagebox.Render();
-
-                            foreach (var e in imagebox.Elements)
+                            if (e.ToolTipText.HasChars())
                             {
-                                if (e.ToolTipText.HasChars())
-                                {
-                                    System.Diagnostics.Debug.WriteLine("{0} = {1}", e.Location, e.ToolTipText);
-                                    objectlist.Add(new JObject() { ["left"] = e.Position.X, ["top"] = e.Position.Y, ["right"] = e.Location.Right, ["bottom"] = e.Location.Bottom, ["text"] = e.ToolTipText });
-                                }
+                            //     System.Diagnostics.Debug.WriteLine("{0} = {1}", e.Location, e.ToolTipText);
+                                objectlist.Add(new JObject() { ["left"] = e.Position.X, ["top"] = e.Position.Y, ["right"] = e.Location.Right, ["bottom"] = e.Location.Bottom, ["text"] = e.ToolTipText });
                             }
+                        }
 
-                            img = imagebox.Image.Clone() as Bitmap;
-                            imagebox.Dispose();
-                            }
+                        img = imagebox.Image.Clone() as Bitmap;
+                        imagebox.Dispose();
+                        }
                     });
 
                 }
@@ -341,7 +346,9 @@ namespace EDDiscovery.WebServer
 
                 Bitmap bmpclone = img.Clone() as Bitmap;
                 var cnv = bmpclone.ConvertTo(System.Drawing.Imaging.ImageFormat.Png);   // this converts to png and returns the raw PNG bytes..
-                return new NodeResponse(cnv, "image/png");
+                WebHeaderCollection wc = new WebHeaderCollection();                     // indicate don't cache this, this is a temp image
+                wc[HttpRequestHeader.CacheControl] = "no-cache";
+                return new NodeResponse(cnv, "image/png", wc);
             }
         }
 
@@ -720,29 +727,32 @@ namespace EDDiscovery.WebServer
                 discoveryform = f;
             }
 
-            public JToken Refresh(int entry)        // -1 mean latest
+            public JToken Refresh(int entry, bool edsm)        // -1 mean latest
             {
-                return MakeResponse(entry, "scandata");
+                return MakeResponse(entry, "scandata",edsm);
             }
 
-            public JToken Push()                    // push latest entry
+            public JToken Notify()                    // indicate changed scan data
             {
-                return MakeResponse(-1, "scandata");
+                JObject response = new JObject();
+                response["responsetype"] = "scandatachanged";
+                return response;
             }
 
             public JToken Response(string key, JToken message, HttpListenerRequest request) // request indicator state
             {
-                System.Diagnostics.Debug.WriteLine("scandata Request " + key + " Fields " + message.ToString());
                 int entry = message["entry"].Int(0);
-                return MakeResponse(entry, "scandata");
+                bool edsm = message["edsm"].Bool(false);
+                System.Diagnostics.Debug.WriteLine("scandata Request " + key + " Entry" + entry + " EDSM " + edsm);
+                return MakeResponse(entry, "scandata",edsm);
             }
 
             //EliteDangerousCore.UIEvents.UIOverallStatus status,
-            public JToken MakeResponse(int entry, string type)       // entry = -1 means latest
+            public JToken MakeResponse(int entry, string type, bool edsm)       // entry = -1 means latest
             {
                 if (discoveryform.InvokeRequired)
                 {
-                    return (JToken)discoveryform.Invoke(new Func<JToken>(() => MakeResponse(entry, type)));
+                    return (JToken)discoveryform.Invoke(new Func<JToken>(() => MakeResponse(entry, type, edsm)));
                 }
                 else
                 {
@@ -763,7 +773,7 @@ namespace EDDiscovery.WebServer
 
                         HistoryEntry he = hl[entry];
 
-                        var scannode = discoveryform.history.StarScan.FindSystemSynchronous(he.System,false);        // get data without EDSM - don't want a web lookup
+                        var scannode = discoveryform.history.StarScan.FindSystemSynchronous(he.System,edsm);        // get data without EDSM - don't want a web lookup
                         var bodylist = scannode?.Bodies.ToList();       // may be null
 
                         response["Count"] = bodylist?.Count ?? 0;

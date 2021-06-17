@@ -36,9 +36,9 @@ and open the template in the editor.
             <nav>
                 <script>write_nav(2);</script>
                 <div class="menubutton" id="menubutton1">
-                    <img id="menubutton" src="/Images/menu.png" alt="Tab Menu" onclick="togglemenu('scanmenu')">
+                    <img id="menubutton" src="/Images/menu.png" alt="Tab Menu" onclick="ToggleMenu('scanmenu')">
                     <script>
-                        writemenu("menubutton1", "scanmenu", "navmenu", [["checkbox","materials","Show materials", scanmenuchange, false], ["checkbox","value","Show Value", scanmenuchange, true]]);
+                        WriteMenu("menubutton1", "scanmenu", "navmenu", [["checkbox","materials","Show materials", scanmenuchange, false], ["checkbox","value","Show Value", scanmenuchange, true]]);
                     </script>
                 </div>
             </nav>

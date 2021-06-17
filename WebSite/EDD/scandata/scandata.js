@@ -38,8 +38,14 @@ function onMessage(evt)
     }
     else if (jdata.responsetype == "scandata")    // we requested a status or status was pushed, update screen
     {
+        console.log("New scandata received");
         lastscandata = jdata;
         FillScan();
+    }
+    else if (jdata.responsetype == "scandatachanged")    // system notified scan data changed
+    {
+        console.log("scandata informed changed");
+        RequestScanData(-1);
     }
 }
 
@@ -50,8 +56,8 @@ function onError(evt)
 
 function FillScan()
 {
-    var showmaterials = getmenuitemcheckstate("scanmenu", "materials");
-    var showvalue = getmenuitemcheckstate("scanmenu", "value");
+    var showmaterials = GetMenuItemCheckState("scanmenu", "materials");
+    var showvalue = GetMenuItemCheckState("scanmenu", "value");
 
     //  console.log("scandata stars " + evt.data);
     FillScanTable(lastscandata, showmaterials, showvalue);
@@ -62,7 +68,7 @@ function scanmenuchange(mouseevent)
     var ct = mouseevent.currentTarget;
     console.log("MI " + ct.id + " tag " + ct.tag);
     if (ct.tag != null)
-        storestate(ct.tag, ct.checked);
-    closemenus();
+        StoreState(ct.tag, ct.checked);
+    CloseMenus();
     FillScan();
 }

@@ -733,6 +733,12 @@ namespace EDDiscovery.UserControls
             BaseUtils.BrowserInfo.LaunchBrowser("http://" + ipv4 + ":" + EDDConfig.Instance.WebServerPort.ToStringInvariant() + "/");
         }
 
+        private void extButtonDLLPerms_Click(object sender, EventArgs e)
+        {
+            string n = EliteDangerousCore.DLL.EDDDLLManager.DLLPermissionManager(this.FindForm(), this.FindForm().Icon, EDDConfig.Instance.DLLPermissions);
+            if (n != null)
+                EDDConfig.Instance.DLLPermissions = n;
+        }
     }
 }
 

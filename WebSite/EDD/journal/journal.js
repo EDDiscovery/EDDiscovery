@@ -5,7 +5,7 @@ var journalnextrow = -9999;     // meaning, no load
 function ClearJournalTable()
 {
     var jtable = document.getElementById("Journal");
-    removeChildren(jtable);
+    RemoveChildren(jtable);
 }
 
 function FillJournalTable(jdata, insert)
@@ -30,9 +30,9 @@ function FillJournalTable(jdata, insert)
             var t4 = document.createTextNode(obj[4]);
 
             if (insert)
-                jtable.insertBefore(tablerowmultitdlist([image, t1, t2, t3, t4]), jtable.firstChild);
+                jtable.insertBefore(TableRowMultitdlist([image, t1, t2, t3, t4]), jtable.firstChild);
             else
-                jtable.appendChild(tablerowmultitdlist([image, t1, t2, t3, t4]));
+                jtable.appendChild(TableRowMultitdlist([image, t1, t2, t3, t4]));
         }
 
         var nextrow = firstrow - rows.length;
@@ -43,7 +43,7 @@ function FillJournalTable(jdata, insert)
     }
     else
     {
-        jtable.appendChild(tablerowmultitdlist([document.createTextNode("No Data")]));
+        jtable.appendChild(TableRowMultitdlist([document.createTextNode("No Data")]));
         console.log("No data");
     }
 }

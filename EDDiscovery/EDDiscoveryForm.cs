@@ -310,7 +310,10 @@ namespace EDDiscovery
 
             Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Finish ED Init");
 
-            EliteDangerousCore.DLL.EDDDLLAssemblyFinder.AssemblyFindPath = EDDOptions.Instance.DLLAppDirectory();      // any needed assemblies from here
+            EliteDangerousCore.DLL.EDDDLLAssemblyFinder.AssemblyFindPaths.Add(EDDOptions.Instance.DLLAppDirectory());      // any needed assemblies from here
+            var dllexe = EDDOptions.Instance.DLLExeDirectory();     // and possibly from here, may not be present
+            if ( dllexe != null )
+                EliteDangerousCore.DLL.EDDDLLAssemblyFinder.AssemblyFindPaths.Add(dllexe);       
             AppDomain.CurrentDomain.AssemblyResolve += EliteDangerousCore.DLL.EDDDLLAssemblyFinder.AssemblyResolve;
 
             DLLManager = new EliteDangerousCore.DLL.EDDDLLManager();
@@ -417,7 +420,10 @@ namespace EDDiscovery
 
             string alloweddlls = EDDConfig.Instance.DLLPermissions;
 
-            Tuple<string, string, string> res = DLLManager.Load(EDDOptions.Instance.DLLAppDirectory(), verstring, options, DLLCallBacks, alloweddlls);
+            string[] dllpaths = new string[] { EDDOptions.Instance.DLLAppDirectory(), EDDOptions.Instance.DLLExeDirectory() };
+            bool[] autodisallow = new bool[] { false, true };
+            Tuple<string, string, string,string> res = DLLManager.Load(dllpaths, autodisallow,
+                                                                    verstring, options, DLLCallBacks, ref alloweddlls);
 
             if (res.Item3.HasChars())       // new DLLs
             {
@@ -442,19 +448,21 @@ namespace EDDiscovery
                     }
                 }
 
-                EDDConfig.Instance.DLLPermissions = alloweddlls;
-
                 if (changed)
                 {
                     DLLManager.UnLoad();
-                    res = DLLManager.Load(EDDOptions.Instance.DLLAppDirectory(), verstring, options, DLLCallBacks, alloweddlls);
+                    res = DLLManager.Load(dllpaths, autodisallow, verstring, options, DLLCallBacks, ref alloweddlls);
                 }
             }
 
-            if (res.Item1.HasChars())
+            EDDConfig.Instance.DLLPermissions = alloweddlls;
+
+            if (res.Item1.HasChars())   // ok
                 LogLine(string.Format("DLLs loaded: {0}".T(EDTx.EDDiscoveryForm_DLLL), res.Item1));
-            if (res.Item2.HasChars())
+            if (res.Item2.HasChars())   // failed
                 LogLineHighlight(string.Format("DLLs failed to load: {0}".T(EDTx.EDDiscoveryForm_DLLF), res.Item2));
+            if (res.Item4.HasChars())   // failed
+                LogLine(string.Format("DLLs disabled: {0}".T(EDTx.EDDiscoveryForm_DLLDIS), res.Item4));
 
             LogLine(string.Format("Profile {0} Loaded".T(EDTx.EDDiscoveryForm_PROFL), EDDProfiles.Instance.Current.Name));
 

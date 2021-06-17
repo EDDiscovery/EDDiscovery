@@ -7,7 +7,7 @@
 function write_header()
 {
     document.write("<h1> Elite Dangerous Discovery </h1> <h1> <input type=\"button\" value=\"fullscreen\" id=\"fullscreen_button\" /><img src=\"/Images/EdLogo600.png\" alt=\"EDD\" width=\"80\"> </h1>");
-    document.getElementById('fullscreen_button').onclick = toggle_fullscreen;
+    document.getElementById('fullscreen_button').onclick = ToggleFullscreen;
 }
 
 function write_nav(tab)

@@ -18,7 +18,7 @@ function FillScanTable(jdata, showmaterials, showvalue)
 {
     var stable = document.getElementById("scans");
 
-    removeChildren(stable);
+    RemoveChildren(stable);
 
     if (jdata.Bodies == undefined)
         return;
@@ -99,12 +99,14 @@ function FillScanTable(jdata, showmaterials, showvalue)
                 }
 
                 if (scandata.nRadius != null)
-                    bddetails[0] = Append(bddetails[0], "Radius: " + (scandata.nRadius / oneEarthRadius_m).toFixed(2));
+                {
+                    bddetails[0] = Append(bddetails[0], "Radius: " + (scandata.nRadius / 1000).toFixed(0) + "km (" + (scandata.nRadius / oneEarthRadius_m).toFixed(2) + "ER)");
+                }
 
                 if (scandata.nSurfaceTemperature != null)
                     bddetails[0] = Append(bddetails[0], "Temperature: " + scandata.nSurfaceTemperature.toFixed(0) + "K");
 
-                if (scandata.Atmosphere != null && scandata.Atmosphere != "None")
+                if (scandata.Atmosphere != null && scandata.Atmosphere.length>0 && scandata.Atmosphere != "None")
                 {
                     bddetails[0] = Append(bddetails[0], "Atmosphere: " + scandata.Atmosphere);
                     if (scandata.nSurfacePressure != null)
@@ -119,7 +121,7 @@ function FillScanTable(jdata, showmaterials, showvalue)
                         bddetails[0] = Append(bddetails[0], "Landable");
                 }
 
-                if (scandata.Volcanism != null)
+                if (scandata.Volcanism != null && scandata.Volcanism.length > 0 )
                 {
                     bddetails[0] = Append(bddetails[0], "Volcanism: " + scandata.Volcanism);
                 }
@@ -136,7 +138,7 @@ function FillScanTable(jdata, showmaterials, showvalue)
                     var t = "";
                     keys.forEach((key, index) =>
                     {
-                        console.log(`${key}: ${scandata.Materials[key]}`);
+                       // console.log(`${key}: ${scandata.Materials[key]}`);
                         t = Append(t, key, ', ');
                     });
 
@@ -155,7 +157,7 @@ function FillScanTable(jdata, showmaterials, showvalue)
             //    console.log("Image name " + imagename);
                 var image = CreateImage("/images/" + imagename + ".png", imagename, 48);
 
-                stable.appendChild(tablerowmultitdlist([image, scandata.BodyDesignationOrName, bdclass, bddist, bddetails]));
+                stable.appendChild(TableRowMultitdlist([image, scandata.BodyDesignationOrName, bdclass, bddist, bddetails]));
             }
         }
     }

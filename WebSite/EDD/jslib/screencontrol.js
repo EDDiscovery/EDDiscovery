@@ -13,23 +13,23 @@
  */
 
 
-function toggle_fullscreen(event)
+function ToggleFullscreen(event)
 {
     console.log(document.fullscreen)
     if (!document.fullscreen)
     {
-        open_fullscreen();
+        SetFullScreen();
     }
     else
     {
-        close_fullscreen();
+        SetNormalScreen();
     }
 }
 
 
 var elem = document.documentElement;
 
-function open_fullscreen()
+function SetFullScreen()
 {
     if (elem.requestFullscreen)
     {
@@ -46,7 +46,7 @@ function open_fullscreen()
     }
 }
 
-function close_fullscreen()
+function SetNormalScreen()
 {
     if (document.exitFullscreen)
     {
