@@ -252,6 +252,12 @@ namespace EDDiscovery
             return path;
         }
 
+        public string SubExeDirectory(string subfolder)     // may return null if not there
+        {
+            string path = Path.Combine(ExeDirectory(), subfolder);
+            return Directory.Exists(path) ? path : null;
+        }
+
         public string ExploreAppDirectory() { return SubAppDirectory("Exploration"); }
         public string NotificationsAppDirectory() { return NotificationFolderOverride ?? SubAppDirectory("Notifications"); }
         public string ExpeditionsAppDirectory() { return SubAppDirectory("Expeditions"); }
@@ -264,6 +270,7 @@ namespace EDDiscovery
         public string FlightsAppDirectory() { return SubAppDirectory("Flights"); }
         public string ThemeAppDirectory() { return SubAppDirectory("Theme"); }
         public string DLLAppDirectory() { return SubAppDirectory("DLL"); }
+        public string DLLExeDirectory() { return SubExeDirectory("DLL"); }
         public string HelpDirectory() { return SubAppDirectory("Help"); }
         public string CAPIDirectory() { return SubAppDirectory("CAPI"); }
         public string TranslatorDirectory() { return translationfolder; }

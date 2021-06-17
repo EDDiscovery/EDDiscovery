@@ -45,6 +45,7 @@ namespace EDDiscovery
         EDDiscoveryForm_DLLW, // The following application extension DLLs have been found
         EDDiscoveryForm_DLLL, // DLLs loaded: {0}
         EDDiscoveryForm_DLLF, // DLLs failed to load: {0}
+        EDDiscoveryForm_DLLDIS, // DLLs disabled: {0}
         EDDiscoveryForm_PROFL, // Profile {0} Loaded
         EDDiscoveryForm_NI, // New EDDiscovery installer available: {0}
         EDDiscoveryForm_NRA, // New Release Available!
