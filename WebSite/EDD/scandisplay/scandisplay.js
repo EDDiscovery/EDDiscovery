@@ -79,6 +79,7 @@ function RequestImage(entry)
     var img = jimgdiv.childNodes[0];
     console.log("Reload image source" + req);
     img.src = req;
+    img.onclick = imageclick;
 }
 
 function scandisplaychange(mouseevent)
