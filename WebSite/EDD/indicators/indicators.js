@@ -116,41 +116,54 @@ export function HandleIndicatorMessage(jdata, statuselement, actionelement, stat
 
         RemoveChildren(tstatusother);
 
+        var str = "";
+
         if (jdata["BodyName"] != null && jdata["BodyName"] != "")
-            tstatusother.appendChild(CreatePara("Body Name: " + jdata["BodyName"]));
+            str += "Body Name: " + jdata["BodyName"] + "\r\n";
 
         if (jdata["Firegroup"] >= 0 && newshiptype == "MainShip")
-            tstatusother.appendChild(CreatePara("Fire Group: " + "ABCDEFGHIJK"[jdata["Firegroup"]]));
+            str += "Fire Group: " + "ABCDEFGHIJK"[jdata["Firegroup"]] + "\r\n";
+
         if (jdata["ValidPips"])
         {
-            tstatusother.appendChild(CreatePara("Pips: " + "S:" + jdata["Pips"][0] + " E:" + jdata["Pips"][1] + " W:" + jdata["Pips"][2]));
+            str += "Pips: " + "S:" + jdata["Pips"][0] + " E:" + jdata["Pips"][1] + " W:" + jdata["Pips"][2] + "\r\n";
         }
+
         if (jdata["ValidPosition"])
         {
-            tstatusother.appendChild(CreatePara("Pos: " + jdata["Position"][0] + ", " + jdata["Position"][1]));
+            str += "Pos: " + jdata["Position"][0].toFixed(4) + ", " + jdata["Position"][1].toFixed(4);
+
             if (jdata["ValidAltitude"])
             {
                 var alt = jdata["Position"][2];
                 if (alt > 5000)
-                    tstatusother.appendChild(CreatePara("Alt: " + (alt / 1000.0) + "km"));
+                    str += " Alt: " + (alt / 1000.0).toFixed(1) + "km";
                 else
-                    tstatusother.appendChild(CreatePara("Alt: " + alt + "m"));
+                    str += " Alt: " + alt.toFixed(0) + "m";
             }
 
             if (jdata["ValidHeading"])
-                tstatusother.appendChild(CreatePara("Hdr: " + jdata["Position"][3]));
+                str += " Hdr: " + jdata["Position"][3].toFixed(0);
+
+            str += "\r\n";
         }
 
         if (jdata["ValidPlanetRadius"])
-            tstatusother.appendChild(CreatePara("Radius: " + jdata["PlanetRadius"] / 1000.0 + "km"));
-        if (jdata["Gravity"] > 0)
-            tstatusother.appendChild(CreatePara("Gravity: " + jdata["Gravity"] + "g"));
-        if (jdata["Temperature"] > 0)
-            tstatusother.appendChild(CreatePara("Temperature: " + jdata["Temperature"] + "K"));
-        if (jdata["SelectedWeapon"] != null && jdata["SelectedWeapon"] != "$humanoid_fists" )
-            tstatusother.appendChild(CreatePara("Weapon/Tool: " + jdata["SelectedWeaponLocalised"]));
+            str += "Radius: " + (jdata["PlanetRadius"] / 1000.0).toFixed(0) + "km\r\n";
+
+        if (jdata["Gravity"] > 0 && jdata["Temperature"] > 0)
+            str += "Gravity: " + jdata["Gravity"].toFixed(1) + "g, Temp: " + jdata["Temperature"] + "K\r\n";
+        else if (jdata["Gravity"] > 0 )
+            str += "Gravity: " + jdata["Gravity"].toFixed(1) + "g\r\n";
+        else if (jdata["Temperature"] > 0)
+            str += "Temperature: " + jdata["Temperature"] + "K\r\n";
+
+        if (jdata["SelectedWeapon"] != null && jdata["SelectedWeapon"] != "" && jdata["SelectedWeapon"] != "$humanoid_fists" )
+            str += "Weapon/Tool: " + jdata["SelectedWeaponLocalised"] + "\r\n";
         if (jdata["LegalState"] != null)
-            tstatusother.appendChild(CreatePara("Legal State: " + jdata["LegalState"]));
+            str += "Legal State: " + jdata["LegalState"] + "\r\n";
+
+        tstatusother.appendChild(CreatePara(str));
     }
 
 }
