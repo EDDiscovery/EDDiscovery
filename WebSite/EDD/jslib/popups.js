@@ -28,7 +28,9 @@ style:
 
 // show a pop up, optionally set notification to element as its contents.  If timetodisplayms = null, click closes it
 
-function ShowPopup(id, element = null,timetodisplayms = null, toppos = null)
+import { RemoveChildren } from "/jslib/elements.js"
+
+export function ShowPopup(id, element = null,timetodisplayms = null, toppos = null)
 {
     var notification = document.getElementById(id);
 
@@ -54,7 +56,7 @@ function ShowPopup(id, element = null,timetodisplayms = null, toppos = null)
     return notification;
 }
 
-function HidePopup(id)
+export function HidePopup(id)
 {
     var notification = document.getElementById("scanobjectnotification");
     RemoveChildren(notification);

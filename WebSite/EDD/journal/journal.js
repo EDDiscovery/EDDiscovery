@@ -1,14 +1,29 @@
-// journal requires a Jarticle Article and a Journal table.
+/*
+ * Copyright 2021-2021 Robbyxp1 @ github.com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
+ * ANY KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ */
+
+import { CreateImage, RemoveChildren } from "/jslib/elements.js"
+import { TableRowMultitdlist } from "/jslib/tables.js"
 
 var journalnextrow = -9999;     // meaning, no load
 
-function ClearJournalTable()
+export function ClearJournalTable()
 {
     var jtable = document.getElementById("Journal");
     RemoveChildren(jtable);
 }
 
-function FillJournalTable(jdata, insert)
+export function FillJournalTable(jdata, insert, clickrequest)
 {  
     var jtable = document.getElementById("Journal");
 
@@ -22,7 +37,7 @@ function FillJournalTable(jdata, insert)
             var rowno = firstrow - i;
 
             var obj = rows[i];
-            var image = CreateImage("journalicons/" + obj[0] + ".png", obj[1], 24, ClickJournalItem, firstrow - i);
+            var image = CreateImage("journalicons/" + obj[0] + ".png", obj[1], 24, clickrequest, firstrow - i);
             var t1 = document.createTextNode(obj[1]);
             var t2 = document.createTextNode(obj[2]);
             //var t3 = document.createTextNode(rowno + " " + obj[3]);
@@ -48,30 +63,24 @@ function FillJournalTable(jdata, insert)
     }
 }
 
-function ClickJournalItem(e)
+
+export function RequestMore(websocket, count)
 {
-    console.log("Clicked" + e.target.tag);
-    RequestStatus(e.target.tag);
+    if (journalnextrow >= 0)
+        RequestJournal(websocket, journalnextrow, count);
 }
 
-function JournalScrolled()      // called by article on scrolling
+export function JournalScrolled(websocket, journalscroll)
 {
-    var journalscroll = document.getElementById("journalscroll");       // need to get by id to get the right thingy
-    console.log(journalscroll.scrollTop + " " + journalscroll.scrollHeight + journalscroll.clientHeight );
+    console.log(journalscroll.scrollTop + " " + journalscroll.scrollHeight + journalscroll.clientHeight);
 
-    if (journalnextrow >= 0 && journalscroll.scrollTop + journalscroll.clientHeight >= journalscroll.scrollHeight - 10 )
+    if (journalnextrow >= 0 && journalscroll.scrollTop + journalscroll.clientHeight >= journalscroll.scrollHeight - 10)
     {
-        RequestJournal(journalnextrow, 50);
+        RequestJournal(websocket,journalnextrow, 50);
     }
 }
 
-function RequestMore(count)
-{
-    if (journalnextrow >= 0 )
-        RequestJournal(journalnextrow, count);
-}
-
-function RequestJournal(start, len)
+export function RequestJournal(websocket,start, len)
 {
     var msg = {
         requesttype: "journal",

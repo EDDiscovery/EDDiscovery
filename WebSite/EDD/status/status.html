@@ -9,28 +9,13 @@
     <link href="status.css" rel="stylesheet" type="text/css">
     <link href="/tooltip.css" rel="stylesheet" type="text/css">
     <link href="/popupnotification.css" rel="stylesheet" type="text/css">
-    <script type="text/javascript" src="/jslib/elements.js"></script>
-    <script type="text/javascript" src="/jslib/http.js"></script>
-    <script type="text/javascript" src="/jslib/tables.js"></script>
-    <script type="text/javascript" src="/jslib/websockets.js"></script>
-    <script type="text/javascript" src="/jslib/strings.js"></script>
-    <script type="text/javascript" src="/header.js"></script>
-    <script type="text/javascript" src="/jslib/popups.js"></script>
-    <script type="text/javascript" src="/systemtable/systemtable.js"></script>
-    <script type="text/javascript" src="/indicators/indicators.js"></script>
-    <script type="text/javascript" src="/jslib/screencontrol.js"></script>
-    <script type="text/javascript" src="status.js"></script>
+    <script type="module" src="status.js"></script>
 </head>
-<body onload="OnLoad()">
+<body>
     <div class="page">
         <div class="headernav">
-            <header>
-                <script>write_header();</script>
-            </header>
-            <nav>
-                <script>write_nav(3);</script>
-            </nav>
-
+            <header></header>
+            <nav></nav>
         </div>
         <div class="middlesection">
             <div class="leftside">
@@ -51,7 +36,7 @@
             </aside>
         </div>
         <div class="footer">
-            <script>write_footer([]);</script>
+            <footer></footer>
         </div>
     </div>
 

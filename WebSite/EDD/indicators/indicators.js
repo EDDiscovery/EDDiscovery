@@ -1,9 +1,25 @@
+/*
+ * Copyright 2021-2021 Robbyxp1 @ github.com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
+ * ANY KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ */
 
 // Indicators
 
-var indicatoriconsize = 32;     //crappy but effective - set icon size globally
+import { CreateImage, RemoveChildren, CreatePara } from "/jslib/elements.js"
+import { TableRowMultitdlist } from "/jslib/tables.js"
 
-function RequestIndicator()
+var indicatoriconsize = 32;     //crappy but effective - set icon size statically
+
+export function RequestIndicator()
 {
     console.log("Request indicators");
     var msg = {
@@ -13,7 +29,7 @@ function RequestIndicator()
     websocket.send(JSON.stringify(msg));
 }
 
-function CreateIndicator(itype, enableit = true, tooltip = null)
+function createIndicator(itype, enableit = true, tooltip = null)
 {
     if (enableit)
     {
@@ -26,7 +42,7 @@ function CreateIndicator(itype, enableit = true, tooltip = null)
         return null;
 }
 
-function CreateAction(name, bindingname = null, enableit = true, flashit = 0, confirmit = false, tooltip = null)
+function createAction(name, bindingname = null, enableit = true, flashit = 0, confirmit = false, tooltip = null)
 {
     if (enableit)
     {
@@ -43,9 +59,9 @@ function CreateAction(name, bindingname = null, enableit = true, flashit = 0, co
         return null;
 }
 
-function CreateActionButton(name, bindingname = null, enableit = true, tooltip = null)
+function createActionButton(name, bindingname = null, enableit = true, tooltip = null)
 {
-    return CreateAction(name, bindingname, enableit, 250, null, tooltip);
+    return createAction(name, bindingname, enableit, 250, null, tooltip);
 }
 
 var currentshiptype;
@@ -54,8 +70,17 @@ var currentsupercruise;
 var currentlanded;
 var currentdocked;
 
+var websocket;
+
+export function InitIndicator(websock,size)
+{
+    currentshiptype = "";
+    websocket = websock;
+    indicatoriconsize = size;
+}
+
 // names of elements
-function HandleIndicatorMessage(jdata, statuselement, actionelement, statusotherelement)
+export function HandleIndicatorMessage(jdata, statuselement, actionelement, statusotherelement)
 {
     var guifocus = jdata["GUIFocus"];
 
@@ -130,7 +155,7 @@ function HandleIndicatorMessage(jdata, statuselement, actionelement, statusother
 
 }
 
-function SetupIndicators(jdata,tstatus,tactions)
+export function SetupIndicators(jdata,tstatus,tactions)
 {
     RemoveChildren(tstatus);
     RemoveChildren(tactions);
@@ -143,76 +168,76 @@ function SetupIndicators(jdata,tstatus,tactions)
     if (currentshiptype == "MainShip")
     {
         var statuslist = [
-            CreateIndicator("Docked"), CreateIndicator("Landed"), CreateIndicator("ShieldsUp"),
-            CreateIndicator("InWing"), CreateIndicator("ScoopingFuel", currentsupercruise), 
-            CreateIndicator("LowFuel"), CreateIndicator("OverHeating"), CreateIndicator("IsInDanger", !currentdocked, "In Danger"),
-            CreateIndicator("BeingInterdicted", currentsupercruise), CreateIndicator("FsdCharging", notdockedlanded),
-            CreateIndicator("FsdMassLocked", innormalspace),
-            CreateIndicator("FsdCooldown", currentsupercruise || innormalspace)
+            createIndicator("Docked"), createIndicator("Landed"), createIndicator("ShieldsUp"),
+            createIndicator("InWing"), createIndicator("ScoopingFuel", currentsupercruise), 
+            createIndicator("LowFuel"), createIndicator("OverHeating"), createIndicator("IsInDanger", !currentdocked, "In Danger"),
+            createIndicator("BeingInterdicted", currentsupercruise), createIndicator("FsdCharging", notdockedlanded),
+            createIndicator("FsdMassLocked", innormalspace),
+            createIndicator("FsdCooldown", currentsupercruise || innormalspace)
         ];
 
         tstatus.appendChild(TableRowMultitdlist(statuslist));
 
         var actionlist = [
-            CreateAction("LandingGear", "LandingGearToggle",innormalspace),     // reported..
-            CreateAction("Lights", "ShipSpotLightToggle"),
-            CreateAction("FlightAssist", "ToggleFlightAssist", innormalspace),
-            CreateAction("HardpointsDeployed", "DeployHardpointToggle", notdockedlanded),
+            createAction("LandingGear", "LandingGearToggle",innormalspace),     // reported..
+            createAction("Lights", "ShipSpotLightToggle"),
+            createAction("FlightAssist", "ToggleFlightAssist", innormalspace),
+            createAction("HardpointsDeployed", "DeployHardpointToggle", notdockedlanded),
 
-            CreateAction("CargoScoopDeployed", "ToggleCargoScoop", innormalspace),
-            CreateAction("NightVision", "NightVisionToggle", innormalspace),
+            createAction("CargoScoopDeployed", "ToggleCargoScoop", innormalspace),
+            createAction("NightVision", "NightVisionToggle", innormalspace),
 
-            CreateAction("UseBoostJuice", null, innormalspace, 1500),    
-            CreateAction("ShieldCell", "UseShieldCell", innormalspace,1000),
-            CreateAction("Chaff", "FireChaffLauncher", innormalspace,1000),
-            CreateAction("HeatSink", "DeployHeatSink", innormalspace,1000),
-            CreateAction("ChargeECM", null, innormalspace, 1500),
+            createAction("UseBoostJuice", null, innormalspace, 1500),    
+            createAction("ShieldCell", "UseShieldCell", innormalspace,1000),
+            createAction("Chaff", "FireChaffLauncher", innormalspace,1000),
+            createAction("HeatSink", "DeployHeatSink", innormalspace,1000),
+            createAction("ChargeECM", null, innormalspace, 1500),
 
-            CreateAction("Supercruise", null, notdockedlanded),  // reported
-            CreateActionButton("HyperSuperCombination", null, notdockedlanded), // not reported
-            CreateActionButton("OrbitLinesToggle"),
+            createAction("Supercruise", null, notdockedlanded),  // reported
+            createActionButton("HyperSuperCombination", null, notdockedlanded), // not reported
+            createActionButton("OrbitLinesToggle"),
 
-            CreateActionButton("CyclePreviousTarget"),
-            CreateActionButton("CycleNextTarget"),
-            CreateActionButton("SelectHighestThreat", null, innormalspace),
-            CreateActionButton("CyclePreviousHostileTarget", null, innormalspace),
-            CreateActionButton("CycleNextHostileTarget", null, innormalspace),
+            createActionButton("CyclePreviousTarget"),
+            createActionButton("CycleNextTarget"),
+            createActionButton("SelectHighestThreat", null, innormalspace),
+            createActionButton("CyclePreviousHostileTarget", null, innormalspace),
+            createActionButton("CycleNextHostileTarget", null, innormalspace),
 
-            CreateActionButton("CyclePreviousSubsystem", null, innormalspace),
-            CreateActionButton("CycleNextSubsystem", null, innormalspace),
+            createActionButton("CyclePreviousSubsystem", null, innormalspace),
+            createActionButton("CycleNextSubsystem", null, innormalspace),
 
-            CreateActionButton("TargetWingman0", null, currentinwing),
-            CreateActionButton("TargetWingman1", null, currentinwing),
-            CreateActionButton("TargetWingman2", null, currentinwing),
-            CreateActionButton("SelectTargetsTarget", null, currentinwing),
-            CreateActionButton("WingNavLock", null, currentinwing),
+            createActionButton("TargetWingman0", null, currentinwing),
+            createActionButton("TargetWingman1", null, currentinwing),
+            createActionButton("TargetWingman2", null, currentinwing),
+            createActionButton("SelectTargetsTarget", null, currentinwing),
+            createActionButton("WingNavLock", null, currentinwing),
 
-            CreateActionButton("TargetNextRouteSystem",null,currentsupercruise ),
+            createActionButton("TargetNextRouteSystem",null,currentsupercruise ),
 
-            CreateActionButton("CycleFireGroupPrevious"),
-            CreateActionButton("CycleFireGroupNext"),
+            createActionButton("CycleFireGroupPrevious"),
+            createActionButton("CycleFireGroupNext"),
 
-            CreateActionButton("IncreaseSystemsPower", null, !currentdocked),
-            CreateActionButton("IncreaseEnginesPower", null, !currentdocked),
-            CreateActionButton("IncreaseWeaponsPower", null, !currentdocked),
-            CreateActionButton("ResetPowerDistribution", null, !currentdocked),
+            createActionButton("IncreaseSystemsPower", null, !currentdocked),
+            createActionButton("IncreaseEnginesPower", null, !currentdocked),
+            createActionButton("IncreaseWeaponsPower", null, !currentdocked),
+            createActionButton("ResetPowerDistribution", null, !currentdocked),
 
-            CreateActionButton("OrderDefensiveBehaviour", null, innormalspace),
-            CreateActionButton("OrderAggressiveBehaviour", null, innormalspace),
-            CreateActionButton("OrderFocusTarget", null, innormalspace),
-            CreateActionButton("OrderHoldFire", null, innormalspace),
-            CreateActionButton("OrderHoldPosition", null, innormalspace),
-            CreateActionButton("OrderFollow", null, innormalspace),
-            CreateActionButton("OrderRequestDock", null, innormalspace),
-            CreateActionButton("OpenOrders", null, innormalspace),
+            createActionButton("OrderDefensiveBehaviour", null, innormalspace),
+            createActionButton("OrderAggressiveBehaviour", null, innormalspace),
+            createActionButton("OrderFocusTarget", null, innormalspace),
+            createActionButton("OrderHoldFire", null, innormalspace),
+            createActionButton("OrderHoldPosition", null, innormalspace),
+            createActionButton("OrderFollow", null, innormalspace),
+            createActionButton("OrderRequestDock", null, innormalspace),
+            createActionButton("OpenOrders", null, innormalspace),
 
-            CreateAction("GalaxyMapOpen"),
-            CreateAction("SystemMapOpen"),
-            CreateActionButton("1", "FocusCommsPanel"),
-            CreateActionButton("1", "QuickCommsPanel"),
-            CreateActionButton("Screenshot", "F10", true, "Screen Shot"),
+            createAction("GalaxyMapOpen"),
+            createAction("SystemMapOpen"),
+            createActionButton("1", "FocusCommsPanel"),
+            createActionButton("1", "QuickCommsPanel"),
+            createActionButton("Screenshot", "F10", true, "Screen Shot"),
 
-            CreateAction("SilentRunning", "ToggleButtonUpInput", innormalspace,0,true, "Silent Running"),
+            createAction("SilentRunning", "ToggleButtonUpInput", innormalspace,0,true, "Silent Running"),
         ];
 
         tactions.appendChild(TableRowMultitdlist(actionlist))
@@ -220,25 +245,25 @@ function SetupIndicators(jdata,tstatus,tactions)
     else if (currentshiptype == "SRV")
     {
         var statuslist = [
-            CreateIndicator("SrvUnderShip"), CreateIndicator("LowFuel"), CreateIndicator("ShieldsUp")
+            createIndicator("SrvUnderShip"), createIndicator("LowFuel"), createIndicator("ShieldsUp")
         ];
 
         var actionlist = [
-            CreateAction( "SrvHandbrake", "AutoBreakBuggyButton"),
-            CreateAction( "SrvTurret", "ToggleBuggyTurretButton"),
-            CreateAction( "SrvDriveAssist", "ToggleDriveAssist"),
-            CreateAction( "Lights", "HeadlightsBuggyButton"),
+            createAction( "SrvHandbrake", "AutoBreakBuggyButton"),
+            createAction( "SrvTurret", "ToggleBuggyTurretButton"),
+            createAction( "SrvDriveAssist", "ToggleDriveAssist"),
+            createAction( "Lights", "HeadlightsBuggyButton"),
 
-            CreateActionButton("RecallDismissShip", "F10"),
+            createActionButton("RecallDismissShip", "F10"),
 
-            CreateActionButton( "IncreaseSystemsPower"),
-            CreateActionButton( "IncreaseEnginesPower"),
-            CreateActionButton( "IncreaseWeaponsPower"),
-            CreateActionButton( "ResetPowerDistribution"),
+            createActionButton( "IncreaseSystemsPower"),
+            createActionButton( "IncreaseEnginesPower"),
+            createActionButton( "IncreaseWeaponsPower"),
+            createActionButton( "ResetPowerDistribution"),
 
-            CreateAction("GalaxyMapOpen"),
-            CreateAction("SystemMapOpen"),
-            CreateActionButton("Screenshot", "F10", true, "Screen Shot"),
+            createAction("GalaxyMapOpen"),
+            createAction("SystemMapOpen"),
+            createActionButton("Screenshot", "F10", true, "Screen Shot"),
         ];
 
         tstatus.appendChild(TableRowMultitdlist(statuslist));
@@ -247,30 +272,30 @@ function SetupIndicators(jdata,tstatus,tactions)
     else if (currentshiptype == "Fighter")
     {
         var statuslist = [
-            CreateIndicator("ShieldsUp")
+            createIndicator("ShieldsUp")
         ]
 
         var actionlist = [
-            CreateAction("Lights", "ShipSpotLightToggle"),
-            CreateAction("FlightAssist", "ToggleFlightAssist"),
-            CreateAction("NightVision", "NightVisionToggle"),
-            CreateActionButton("IncreaseSystemsPower"),
-            CreateActionButton("IncreaseEnginesPower"),
-            CreateActionButton("IncreaseWeaponsPower"),
-            CreateActionButton("ResetPowerDistribution"),
+            createAction("Lights", "ShipSpotLightToggle"),
+            createAction("FlightAssist", "ToggleFlightAssist"),
+            createAction("NightVision", "NightVisionToggle"),
+            createActionButton("IncreaseSystemsPower"),
+            createActionButton("IncreaseEnginesPower"),
+            createActionButton("IncreaseWeaponsPower"),
+            createActionButton("ResetPowerDistribution"),
 
-            CreateActionButton("OrderDefensiveBehaviour"),
-            CreateActionButton("OrderAggressiveBehaviour"),
-            CreateActionButton("OrderFocusTarget"),
-            CreateActionButton("OrderHoldFire"),
-            CreateActionButton("OrderHoldPosition"),
-            CreateActionButton("OrderFollow"),
-            CreateActionButton("OrderRequestDock"),
-            CreateActionButton("OpenOrders"),
+            createActionButton("OrderDefensiveBehaviour"),
+            createActionButton("OrderAggressiveBehaviour"),
+            createActionButton("OrderFocusTarget"),
+            createActionButton("OrderHoldFire"),
+            createActionButton("OrderHoldPosition"),
+            createActionButton("OrderFollow"),
+            createActionButton("OrderRequestDock"),
+            createActionButton("OpenOrders"),
 
-            CreateAction("GalaxyMapOpen"),
-            CreateAction("SystemMapOpen"),
-            CreateActionButton("Screenshot", "F10", true, "Screen Shot"),
+            createAction("GalaxyMapOpen"),
+            createAction("SystemMapOpen"),
+            createActionButton("Screenshot", "F10", true, "Screen Shot"),
         ];
 
         tstatus.appendChild(TableRowMultitdlist(statuslist));
@@ -279,33 +304,33 @@ function SetupIndicators(jdata,tstatus,tactions)
     else if (currentshiptype == "OnFoot")
     {
         var statuslist = [
-            CreateIndicator("ShieldsUp")
+            createIndicator("ShieldsUp")
         ]
 
         var actionlist = [
-            CreateAction("Reload", "HumanoidReloadButton"),
-            CreateAction("SwitchWeapon", "HumanoidSwitchWeapon"),
-            CreateAction("1", "HumanoidSelectPrimaryWeaponButton"),
-            CreateAction("1", "HumanoidSelectSecondaryWeaponButton"),
-            CreateAction("1", "HumanoidSelectUtilityWeaponButton"),
-            CreateAction("1", "HumanoidSelectPreviousWeaponButton"),
-            CreateAction("1", "HumanoidSelectNextWeaponButton"),
-            CreateAction("1", "HumanoidHideWeaponButton"),
-            CreateAction("1", "HumanoidSelectNextGrenadeTypeButton"),
-            CreateAction("1", "HumanoidSelectPreviousGrenadeTypeButton"),
-            CreateAction("1", "HumanoidToggleFlashlightButton"),
-            CreateAction("ShieldsUp", "HumanoidToggleShieldsButton"),
-            CreateAction("1", "HumanoidSwitchToRechargeTool"),
-            CreateAction("1", "HumanoidSwitchToCompAnalyser"),
-            CreateAction("1", "HumanoidSwitchToSuitTool"),
-            CreateAction("1", "HumanoidToggleToolModeButton"),
-            CreateAction("1", "HumanoidToggleMissionHelpPanelButton"),
-            CreateAction("GalaxyMapOpen", "GalaxyMapOpen_Humanoid"),
-            CreateAction("SystemMapOpen", "SystemMapOpen_Humanoid"),
-            CreateAction("1", "FocusCommsPanel_Humanoid"),
-            CreateAction("1", "QuickCommsPanel_Humanoid"),
-            CreateAction("1", "HumanoidOpenAccessPanelButton"),
-            CreateAction("1", "HumanoidConflictContextualUIButton"),
+            createAction("Reload", "HumanoidReloadButton"),
+            createAction("SwitchWeapon", "HumanoidSwitchWeapon"),
+            createAction("1", "HumanoidSelectPrimaryWeaponButton"),
+            createAction("1", "HumanoidSelectSecondaryWeaponButton"),
+            createAction("1", "HumanoidSelectUtilityWeaponButton"),
+            createAction("1", "HumanoidSelectPreviousWeaponButton"),
+            createAction("1", "HumanoidSelectNextWeaponButton"),
+            createAction("1", "HumanoidHideWeaponButton"),
+            createAction("1", "HumanoidSelectNextGrenadeTypeButton"),
+            createAction("1", "HumanoidSelectPreviousGrenadeTypeButton"),
+            createAction("1", "HumanoidToggleFlashlightButton"),
+            createAction("ShieldsUp", "HumanoidToggleShieldsButton"),
+            createAction("1", "HumanoidSwitchToRechargeTool"),
+            createAction("1", "HumanoidSwitchToCompAnalyser"),
+            createAction("1", "HumanoidSwitchToSuitTool"),
+            createAction("1", "HumanoidToggleToolModeButton"),
+            createAction("1", "HumanoidToggleMissionHelpPanelButton"),
+            createAction("GalaxyMapOpen", "GalaxyMapOpen_Humanoid"),
+            createAction("SystemMapOpen", "SystemMapOpen_Humanoid"),
+            createAction("1", "FocusCommsPanel_Humanoid"),
+            createAction("1", "QuickCommsPanel_Humanoid"),
+            createAction("1", "HumanoidOpenAccessPanelButton"),
+            createAction("1", "HumanoidConflictContextualUIButton"),
         ];
 
         tstatus.appendChild(TableRowMultitdlist(statuslist));
@@ -321,7 +346,7 @@ function SetupIndicators(jdata,tstatus,tactions)
     }
 }
 
-function SetIndicatorState(jdata, tstatus)
+export function SetIndicatorState(jdata, tstatus)
 {
     //const keys = Object.keys(jdata);
     //if (keys.indexOf(z.tag) != -1)
@@ -364,7 +389,7 @@ function SetIndicatorState(jdata, tstatus)
 
 }
 
-function ClickActionItem(e)
+export function ClickActionItem(e)
 {
     if (e.target.tag[3])
     {

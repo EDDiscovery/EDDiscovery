@@ -12,7 +12,7 @@
  * governing permissions and limitations under the License.
  */
 
-function Get(yourUrl)
+export function Get(yourUrl)
 {
     var Httpreq = new XMLHttpRequest(); // a new request
     Httpreq.open("GET",yourUrl,false);
@@ -21,7 +21,7 @@ function Get(yourUrl)
 }
 
 // async.. this.responseText has the data
-function AsyncGet(yourURL,yourcallback)
+export function AsyncGet(yourURL,yourcallback)
 {
     var xhr = new XMLHttpRequest();
     xhr.callback = yourcallback;

@@ -52,7 +52,10 @@
 //          normal                                                                                          menunameid+"_"+id+"_label       menuclass_label
 //          submenu                                                                                         menunameid+"_"+id+"_submenu     menuclass_submenu
 
-function WriteMenu(posid, menunameid, menuclass, menulist)
+import { CreateDiv, CreateInput, CreateLabel, CreateBreak } from "/jslib/elements.js"
+import { FetchState } from "/jslib/localstorage.js"
+
+export function WriteMenu(appendto, menunameid, menuclass, menulist)
 {
     var div = CreateDiv(menuclass, menunameid);
     var storage = window.localStorage;
@@ -112,11 +115,10 @@ function WriteMenu(posid, menunameid, menuclass, menulist)
     });
 
     // attach after item used a position anchor
-    var posid = document.getElementById(posid);
-    posid.append(div);
+    appendto.append(div);
 }
 
-function GetMenuItemCheckState(menuid, itemid)
+export function GetMenuItemCheckState(menuid, itemid)
 {
     var storagekey = menuid + "." + itemid + ".checkboxstate";
     var jstate = window.localStorage.getItem(storagekey);           // state is stored in JSON, when we parse, we get back a boolean
@@ -126,7 +128,7 @@ function GetMenuItemCheckState(menuid, itemid)
 
 var menusopen = []       // remember menu open, array for submenus
 
-function ToggleMenu(id)
+export function ToggleMenu(id)
 {
     if (menusopen.length > 0)
         CloseMenus();
@@ -134,7 +136,7 @@ function ToggleMenu(id)
         OpenMenu(id);
 }
 
-function OpenMenu(id)
+export function OpenMenu(id)
 {
     CloseMenus();
 
@@ -149,7 +151,7 @@ function OpenMenu(id)
         console.log("ERROR: No such Menu " + id);
 }
 
-function CloseMenus()
+export function CloseMenus()
 {
     menusopen.forEach(function (x)
     {
@@ -165,7 +167,7 @@ function CloseMenus()
 }
 
 
-function OpenSubMenu(mouseevent)
+export function OpenSubMenu(mouseevent)
 {
     var ct = mouseevent.currentTarget;
     var openingmenu = ct.parentNode.parentNode;

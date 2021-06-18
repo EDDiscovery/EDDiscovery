@@ -15,12 +15,12 @@
 
 // String
 
-function SplitCapsWord(str)
+export function SplitCapsWord(str)
 {
     return str.replace(/([a-z])([A-Z])/g, '$1 $2');
 }
 
-function Append(str, text, append = ", ")
+export function Append(str, text, append = ", ")
 {
     if (str != "")
         return str + append + text;
