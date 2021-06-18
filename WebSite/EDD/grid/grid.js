@@ -27,7 +27,15 @@ function onOpen(evt)
 
 function onClose(evt)
 {
+    ShowPopup("lostconnection");
 }
+
+function onError(evt)
+{
+    console.log("Web Error " + evt.data);
+    ShowPopup("lostconnection");
+}
+
 
 function onMessage(evt)
 {
@@ -38,10 +46,5 @@ function onMessage(evt)
     {
         HandleIndicatorMessage(jdata, "Status", "Actions", "StatusOther");
     }
-}
-
-function onError(evt)
-{
-    console.log("Web Error " + evt.data);
 }
 

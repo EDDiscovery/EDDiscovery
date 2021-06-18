@@ -1,15 +1,11 @@
 ﻿
 /* popups should be styles with 
-    <div class="popupnotification" id="scanobjectnotification">
+    <div class="rightsidednotification" id="scanobjectnotification">
     </div>
 
-    Note: not used here, but absolute won't work with margin:auto, so we set the width, then centre it with left, then margin it back by half the width
-    width: 80%;
-    left: 50%;
-    margin-left: -40%;
 */
 
-.popupnotification {
+.rightsidednotification {
     position: absolute; /* Sit on top of the screen */
     visibility: hidden; /* Hidden by default. Visible on click */
     background: rgb(192,96,0);
@@ -28,5 +24,28 @@
     top: 10%;
     max-height: 80%;
     max-width: 30%;
+}
+
+.bottomnotification {
+    position: absolute; /* Sit on top of the screen */
+    visibility: hidden; /* Hidden by default. Visible on click */
+    background: rgb(192,96,0);
+    color: black;
+    border-style: solid;
+    border-width: 6px;
+    border-color: rgb(170,80,0);
+    border-radius: 6px;
+    padding: 4px;
+    z-index: 1;
+    overflow: auto;
+    white-space: pre-wrap;
+    text-align: center;
+    width: 60%;
+    left: 50%;
+    margin-left: -30%;
+    height: auto;
+    bottom: 30px;
+    max-height: 80%;
+    max-width: 80%;
 }
 

@@ -23,7 +23,15 @@ function onOpen(evt)
 
 function onClose(evt)
 {
+    ShowPopup("lostconnection");
 }
+
+function onError(evt)
+{
+    console.log("Web Error " + evt.data);
+    ShowPopup("lostconnection");
+}
+
 
 var lastscandata;       // keep last scan data
 
@@ -47,11 +55,6 @@ function onMessage(evt)
         console.log("scandata informed changed");
         RequestScanData(-1);
     }
-}
-
-function onError(evt)
-{
-    console.log("Web Error " + evt.data);
 }
 
 function FillScan()
