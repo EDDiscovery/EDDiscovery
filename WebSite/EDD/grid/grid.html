@@ -9,28 +9,13 @@
     <link href="grid.css" rel="stylesheet" type="text/css">
     <link href="/tooltip.css" rel="stylesheet" type="text/css">
     <link href="/popupnotification.css" rel="stylesheet" type="text/css">
-    <script type="text/javascript" src="/jslib/elements.js"></script>
-    <script type="text/javascript" src="/jslib/http.js"></script>
-    <script type="text/javascript" src="/jslib/tables.js"></script>
-    <script type="text/javascript" src="/jslib/websockets.js"></script>
-    <script type="text/javascript" src="/jslib/screencontrol.js"></script>
-    <script type="text/javascript" src="/jslib/strings.js"></script>
-    <script type="text/javascript" src="/jslib/popups.js"></script>
-    <script type="text/javascript" src="/header.js"></script>
-    <script type="text/javascript" src="/systemtable/systemtable.js"></script>
-    <script type="text/javascript" src="/indicators/indicators.js"></script>
-    <script type="text/javascript" src="grid.js"></script>
+    <script type="module" src="grid.js"></script>
 </head>
-<body onload="OnLoad()">
+<body>
     <div class="page">
         <div class="headernav">
-            <header>
-                <script>write_header();</script>
-            </header>
-            <nav>
-                <script>write_nav(4);</script>
-            </nav>
-
+            <header></header>
+            <nav> </nav>
         </div>
         <div class="middlesection">
             <article>
@@ -41,17 +26,16 @@
                     <p>Actions</p>
                     <table id="Actions"></table>
                 </div>
-                <div id="StatusOther">
-                </div>
+                <div id="StatusOther"></div>
             </article>
         </div>
         <div class="footer">
-            <script>write_footer([]);</script>
+            <footer></footer>
         </div>
     </div>
 
     <div class="bottomnotification" id="lostconnection">
-        <p>Lost connection to EDDiscovery. Run EDD and then hit refresh to restablish connection</p>
+        <p>Lost connection to EDDiscovery. Run EDD and then hit refresh to reestablish connection</p>
     </div>
 
 </body>

@@ -1,11 +1,50 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/*
+ * Copyright 2021-2021 Robbyxp1 @ github.com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
+ * ANY KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
  */
+
+import { WriteHeader, WriteNav, WriteFooter } from "/header.js"
+import { WSURIFromLocation } from "/jslib/websockets.js"
+import { ShowPopup } from "/jslib/popups.js"
+import { CreateDiv, CreateImage } from "/jslib/elements.js"
+import { RequestScanData, FillScanTable } from "/scans/scans.js"
+import { RequestStatus, FillSystemTable } from "/systemtable/systemtable.js"
+import { FetchState, StoreState } from "/jslib/localstorage.js"
+import { WriteMenu, ToggleMenu, GetMenuItemCheckState, CloseMenus } from "/jslib/menus.js"
+
+var websocket;
 
 function OnLoad()
 {
+    var header = document.getElementsByTagName("header");
+    WriteHeader(header[0]);
+    var nav = document.getElementsByTagName("nav");
+    WriteNav(nav[0], 2);
+
+    var div = CreateDiv("menubutton", "menubutton1");
+
+    div.appendChild(CreateImage("/Images/menu.png", "Menu", null, togglemenu, null, null, "menubutton"));
+
+    WriteMenu(div, "scanmenu", "navmenu", [
+        ["checkbox", "materials", "Show materials", scanmenuchange, false],
+        ["checkbox", "value", "Show Value", scanmenuchange, true],
+        ["checkbox", "EDSM", "Check EDSM", scanmenuchange, false]
+    ]);
+
+    nav[0].appendChild(div);
+
+    var footer = document.getElementsByTagName("footer");
+    WriteFooter(footer[0], null);
+
     var uri = WSURIFromLocation()
     console.log("WS URI:" + uri);
     websocket = new WebSocket(uri, "EDDJSON");
@@ -15,10 +54,13 @@ function OnLoad()
     websocket.onerror = function (evt) { onError(evt) };
 }
 
+document.body.onload = OnLoad;
+
 function onOpen(evt)
 {
-    RequestStatus(-1);
-    RequestScanData(-1);
+    RequestStatus(websocket,-1);
+    var edsm = GetMenuItemCheckState("scanmenu", "EDSM");
+    RequestScanData(websocket, -1, edsm);
 }
 
 function onClose(evt)
@@ -37,7 +79,7 @@ var lastscandata;       // keep last scan data
 
 function onMessage(evt)
 {
-	jdata = JSON.parse(evt.data);
+	var jdata = JSON.parse(evt.data);
 
     if (jdata.responsetype == "status")    // we requested a status or status was pushed, update screen
     {
@@ -61,9 +103,10 @@ function FillScan()
 {
     var showmaterials = GetMenuItemCheckState("scanmenu", "materials");
     var showvalue = GetMenuItemCheckState("scanmenu", "value");
+    var edsm = GetMenuItemCheckState("scanmenu", "EDSM");
 
     //  console.log("scandata stars " + evt.data);
-    FillScanTable(lastscandata, showmaterials, showvalue);
+    FillScanTable(lastscandata, showmaterials, showvalue, edsm);
 }
 
 function scanmenuchange(mouseevent)
@@ -74,4 +117,9 @@ function scanmenuchange(mouseevent)
         StoreState(ct.tag, ct.checked);
     CloseMenus();
     FillScan();
+}
+
+function togglemenu()
+{
+    ToggleMenu("scanmenu");
 }

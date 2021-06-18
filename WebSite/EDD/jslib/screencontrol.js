@@ -12,8 +12,7 @@
  * governing permissions and limitations under the License.
  */
 
-
-function ToggleFullscreen(event)
+export function ToggleFullscreen(event)
 {
     console.log(document.fullscreen)
     if (!document.fullscreen)
@@ -29,7 +28,7 @@ function ToggleFullscreen(event)
 
 var elem = document.documentElement;
 
-function SetFullScreen()
+export function SetFullScreen()
 {
     if (elem.requestFullscreen)
     {
@@ -46,7 +45,7 @@ function SetFullScreen()
     }
 }
 
-function SetNormalScreen()
+export function SetNormalScreen()
 {
     if (document.exitFullscreen)
     {

@@ -13,31 +13,17 @@ and open the template in the editor.
     <link href="index.css" rel="stylesheet" type="text/css">
     <link href="/tooltip.css" rel="stylesheet" type="text/css">
     <link href="/popupnotification.css" rel="stylesheet" type="text/css">
-    <script type="text/javascript" src="/jslib/elements.js"></script>
-    <script type="text/javascript" src="/jslib/http.js"></script>
-    <script type="text/javascript" src="/jslib/tables.js"></script>
-    <script type="text/javascript" src="/jslib/websockets.js"></script>
-    <script type="text/javascript" src="/jslib/screencontrol.js"></script>
-    <script type="text/javascript" src="/jslib/strings.js"></script>
-    <script type="text/javascript" src="/jslib/popups.js"></script>
-    <script type="text/javascript" src="header.js"></script>
-    <script type="text/javascript" src="/journal/journal.js"></script>
-    <script type="text/javascript" src="/systemtable/systemtable.js"></script>
-    <script type="text/javascript" src="index.js"></script>
+    <script type="module" src="index.js"></script>
 
 </head>
-<body onload="OnLoad()">
+<body>
     <div class="page">
         <div class="headernav">
-            <header>
-                <script>write_header();</script>
-            </header>
-            <nav>
-                <script>write_nav(0);</script>
-            </nav>
+            <header></header>
+            <nav></nav>
         </div>
         <div class="middlesection">
-            <div class="journaltable" id="journalscroll" onscroll="JournalScrolled()">
+            <div class="journaltable" id="journalscroll" >
                 <article>
                     <table id="Journal"></table>
                 </article>
@@ -47,12 +33,12 @@ and open the template in the editor.
             </aside>
         </div>
         <div class="footer">
-            <script>write_footer(["+1000"]);</script>
+            <footer></footer>
         </div>
     </div>
 
     <div class="bottomnotification" id="lostconnection">
-        <p>Lost connection to EDDiscovery. Run EDD and then hit refresh to restablish connection</p>
+        <p>Lost connection to EDDiscovery. Run EDD and then hit refresh to reestablish connection</p>
     </div>
 
 </body>

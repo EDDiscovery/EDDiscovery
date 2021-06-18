@@ -1,11 +1,38 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/*
+ * Copyright 2021-2021 Robbyxp1 @ github.com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
+ * ANY KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
  */
 
-function OnLoad()
+
+import { RequestJournal, FillJournalTable, ClearJournalTable, RequestMore, JournalScrolled } from "/journal/journal.js"
+import { RequestStatus, FillSystemTable } from "/systemtable/systemtable.js"
+import { WriteHeader, WriteNav, WriteFooter } from "/header.js"
+import { WSURIFromLocation } from "/jslib/websockets.js"
+import { ShowPopup } from "/jslib/popups.js"
+    
+var websocket;
+
+export function OnLoad()
 {
+    var header = document.getElementsByTagName("header");
+    WriteHeader(header[0]);
+    var nav = document.getElementsByTagName("nav");
+    WriteNav(nav[0],0);
+    var footer = document.getElementsByTagName("footer");
+    WriteFooter(footer[0],[["+1000",request1000more]]);
+
+    var js = document.getElementById("journalscroll");
+    js.onscroll = journalscrolled;
+
     var uri = WSURIFromLocation()
     console.log("WS URI:" + uri);
     websocket = new WebSocket(uri, "EDDJSON");
@@ -15,10 +42,12 @@ function OnLoad()
     websocket.onerror = function (evt) { onError(evt) };
 }
 
+document.body.onload = OnLoad;
+
 function onOpen(evt)
 {
-    RequestJournal(-1, 50);
-    RequestStatus(-1);
+    RequestJournal(websocket,-1, 50);
+    RequestStatus(websocket,-1);
 }
 
 function onClose(evt)
@@ -36,21 +65,21 @@ function onError(evt)
 
 function onMessage(evt)
 {
-	jdata = JSON.parse(evt.data);
+	var jdata = JSON.parse(evt.data);
 
     if (jdata.responsetype == "journalrequest") // we requested "journal", records requested back
     {
-       FillJournalTable(jdata, false)
+       FillJournalTable(jdata, false, clickrequest)
     }
     else if (jdata.responsetype == "journalpush")   // EDD sent a new journal record
     {
-        FillJournalTable(jdata, true)
+        FillJournalTable(jdata, true, clickrequest)
     }
     else if (jdata.responsetype == "journalrefresh") // EDD has changed the history, start again
     {
       //  console.log("Journal refresh " + evt.data);
         ClearJournalTable();
-        FillJournalTable(jdata, false)
+        FillJournalTable(jdata, false, clickrequest)
     }
     else if (jdata.responsetype == "status")    // we requested a status or status was pushed, update screen
     {
@@ -59,8 +88,20 @@ function onMessage(evt)
     }
 }
 
-function footerbutton1click()
+function request1000more()
 {
-    RequestMore(1000);
+    RequestMore(websocket,1000);
 }
 
+function clickrequest(e)
+{
+    console.log("Clicked" + e.target.tag);
+    RequestStatus(websocket, e.target.tag);
+}
+
+function journalscrolled(e)      // called by article on scrolling
+{
+    var journalscroll = e.currentTarget;
+    JournalScrolled(websocket, journalscroll);
+
+}

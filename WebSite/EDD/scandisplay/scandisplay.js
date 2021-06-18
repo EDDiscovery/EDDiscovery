@@ -1,11 +1,71 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/*
+ * Copyright 2021-2021 Robbyxp1 @ github.com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
+ * ANY KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
  */
+
+
+import { WriteHeader, WriteNav, WriteFooter } from "/header.js"
+import { RequestStatus, FillSystemTable } from "/systemtable/systemtable.js"
+import { CreateImage, CreatePara, CreateDiv } from "/jslib/elements.js"
+import { WriteMenu, ToggleMenu, GetMenuItemCheckState, CloseMenus } from "/jslib/menus.js"
+import { WSURIFromLocation } from "/jslib/websockets.js"
+import { FetchState, StoreState } from "/jslib/localstorage.js"
+import { ShowPopup, HidePopup } from "/jslib/popups.js"
+
+var websocket;
 
 function OnLoad()
 {
+    var header = document.getElementsByTagName("header");
+    WriteHeader(header[0]);
+    var nav = document.getElementsByTagName("nav");
+    WriteNav(nav[0], 1);
+
+    var div = CreateDiv("menubutton", "menubutton1");
+
+    div.appendChild(CreateImage("/Images/menu.png", "Menu", null, togglemenu, null, null, "menubutton"));
+
+    WriteMenu(div, "scandisplaymenu", "navmenu",
+        [
+            ["checkbox", "moon", "Show Moons", scandisplaychange, true],
+            ["checkbox", "bodyicons", "Show Body Icons", scandisplaychange, true],
+            ["checkbox", "materials", "Show Materials", scandisplaychange, true],
+            ["checkbox", "gvalue", "Show G on all planets", scandisplaychange, true],
+            ["checkbox", "habzone", "Show Habzones", scandisplaychange, true],
+            ["checkbox", "starclass", "Show classes of stars", scandisplaychange, true],
+            ["checkbox", "planetclass", "Show classes of planets", scandisplaychange, true],
+            ["checkbox", "distance", "Show distance of bodies", scandisplaychange, true],
+            ["checkbox", "edsm", "Check EDSM", scandisplaychange, false],
+            ["submenu", "size", "Set Size", "submenusize"],
+        ]);
+
+    nav[0].appendChild(div);
+
+    /* attach to mainbody, not div, because we need page absolute positioning */
+
+    WriteMenu(document.body, "submenusize", "navmenu",
+        [
+            ["radio", "16", "16", sizedisplaychange, "sizegroup", "48"],
+            ["radio", "32", "32", sizedisplaychange, "sizegroup"],
+            ["radio", "48", "48", sizedisplaychange, "sizegroup"],
+            ["radio", "64", "64", sizedisplaychange, "sizegroup"],
+            ["radio", "96", "96", sizedisplaychange, "sizegroup"],
+            ["radio", "128", "128", sizedisplaychange, "sizegroup"],
+            ["radio", "160", "160", sizedisplaychange, "sizegroup"],
+        ]);
+
+    var footer = document.getElementsByTagName("footer");
+    WriteFooter(footer[0], null);
+
     var uri = WSURIFromLocation()
     console.log("WS URI:" + uri);
     websocket = new WebSocket(uri, "EDDJSON");
@@ -15,9 +75,11 @@ function OnLoad()
     websocket.onerror = function (evt) { onError(evt) };
 }
 
+document.body.onload = OnLoad;
+
 function onOpen(evt)
 {
-    RequestStatus(-1);
+    RequestStatus(websocket, -1);
     RequestImage(-1);
 }
 
@@ -36,7 +98,7 @@ var lastobjectlist = null;     // containing responsetype and objectlist[] (left
 
 function onMessage(evt)
 {
-	jdata = JSON.parse(evt.data);
+	var jdata = JSON.parse(evt.data);
 
     if (jdata.responsetype == "status")    // we requested a status or status was pushed, update screen
     {
@@ -103,6 +165,12 @@ function sizedisplaychange(mouseevent)
     RequestImage(-1);
 }
 
+function togglemenu()
+{
+    ToggleMenu("scandisplaymenu");
+}
+
+
 function imageclick(mouseevent)
 {
     var ct = mouseevent.currentTarget;
@@ -122,7 +190,6 @@ function imageclick(mouseevent)
                 var jimgdiv = document.getElementById("scanbmp");
                 var neartop = mouseevent.offsetY < 3*jimgdiv.clientHeight / 4;
               //  console.log("Object " + x.left + " " + x.top + " " + x.text);
-                var size = FetchNumber("submenusize.sizegroup.radiostate", "48");
                 ShowPopup("scanobjectnotification", CreatePara(x.text), null, null);
                 return;
             }

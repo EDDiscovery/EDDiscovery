@@ -31,7 +31,7 @@ body {
     float: left;
     overflow: hidden;
     height: 100%;
-    width: 70%;
+    width: 48%;
 }
 
 article table {
@@ -44,8 +44,8 @@ article table {
 
 aside {
     float: Right;
-    width: 25%;
-    margin-right: 4%;
+    width: 46%;
+    margin-right: 5%;
 }
 
 /* Status and action boxes are constrained inside aside by width, which we set to 95% to prevent the page width scroll bar appearing for some reason */
@@ -85,6 +85,9 @@ aside {
     background-color: #ffac28;
 }
 
+#StatusOther p {
+    white-space: pre-wrap;
+}
 /* class assigned to button when clicked to give a flash effect */
 
 .entryselected {

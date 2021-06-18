@@ -12,9 +12,10 @@
  * governing permissions and limitations under the License.
  */
 
-function WSURIFromLocation()
+export function WSURIFromLocation()
 {
     var loc = window.location;
+    var new_uri;
 
     if (loc.protocol === "https:")
     {

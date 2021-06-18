@@ -13,64 +13,14 @@ and open the template in the editor.
     <link href="scandisplay.css" rel="stylesheet" type="text/css">
     <link href="/tooltip.css" rel="stylesheet" type="text/css">
     <link href="/popupnotification.css" rel="stylesheet" type="text/css">
-    <script type="text/javascript" src="/jslib/elements.js"></script>
-    <script type="text/javascript" src="/jslib/http.js"></script>
-    <script type="text/javascript" src="/jslib/tables.js"></script>
-    <script type="text/javascript" src="/jslib/websockets.js"></script>
-    <script type="text/javascript" src="/jslib/screencontrol.js"></script>
-    <script type="text/javascript" src="/jslib/strings.js"></script>
-    <script type="text/javascript" src="/jslib/localstorage.js"></script>
-    <script type="text/javascript" src="/jslib/menus.js"></script>
-    <script type="text/javascript" src="/jslib/popups.js"></script>
-    <script type="text/javascript" src="/header.js"></script>
-    <script type="text/javascript" src="/systemtable/systemtable.js"></script>
-    <script type="text/javascript" src="/scans/scans.js"></script>
-    <script type="text/javascript" src="scandisplay.js"></script>
-
+    <script type="module" src="scandisplay.js"></script>
 
 </head>
-<body onload="OnLoad()" id="mainbody">
+<body id="mainbody">
     <div class="page">
         <div class="headernav">
-            <header>
-                <script>write_header();</script>
-            </header>
-            <nav>
-                <script>write_nav(1);</script>
-                <div class="menubutton" id="menubutton1">
-                    <img id="menubutton" src="/Images/menu.png" alt="Tab Menu" onclick="ToggleMenu('scandisplaymenu')">
-                    <script>
-                        /* attach to menubutton1 div, so it appears below it */
-
-                        WriteMenu("menubutton1", "scandisplaymenu", "navmenu",
-                            [
-                                ["checkbox", "moon", "Show Moons", scandisplaychange, true],
-                                ["checkbox", "bodyicons", "Show Body Icons", scandisplaychange, true],
-                                ["checkbox", "materials", "Show Materials", scandisplaychange, true],
-                                ["checkbox", "gvalue", "Show G on all planets", scandisplaychange, true],
-                                ["checkbox", "habzone", "Show Habzones", scandisplaychange, true],
-                                ["checkbox", "starclass", "Show classes of stars", scandisplaychange, true],
-                                ["checkbox", "planetclass", "Show classes of planets", scandisplaychange, true],
-                                ["checkbox", "distance", "Show distance of bodies", scandisplaychange, true],
-                                ["checkbox", "edsm", "Check EDSM", scandisplaychange, false],
-                                ["submenu", "size", "Set Size", "submenusize"],
-                            ]);
-
-                        /* attach to mainbody, not div, because we need page absolute positioning */
-
-                        WriteMenu("mainbody", "submenusize", "navmenu",
-                            [
-                                ["radio", "16", "16", sizedisplaychange, "sizegroup", "48"],
-                                ["radio", "32", "32", sizedisplaychange, "sizegroup"],
-                                ["radio", "48", "48", sizedisplaychange, "sizegroup"],
-                                ["radio", "64", "64", sizedisplaychange, "sizegroup"],
-                                ["radio", "96", "96", sizedisplaychange, "sizegroup"],
-                                ["radio", "128", "128", sizedisplaychange, "sizegroup"],
-                                ["radio", "160", "160", sizedisplaychange, "sizegroup"],
-                            ]);
-                    </script>
-                </div>
-            </nav>
+            <header></header>
+            <nav></nav>
         </div>
         <div class="middlesection">
             <div class="scanimage" id="scanimagearea">
@@ -83,7 +33,7 @@ and open the template in the editor.
             </aside>
         </div>
         <div class="footer">
-            <script>write_footer([]);</script>
+            <footer></footer>
         </div>
     </div>
 
@@ -91,7 +41,7 @@ and open the template in the editor.
     </div>
 
     <div class="bottomnotification" id="lostconnection">
-        <p>Lost connection to EDDiscovery. Run EDD and then hit refresh to restablish connection</p>
+        <p>Lost connection to EDDiscovery. Run EDD and then hit refresh to reestablish connection</p>
     </div>
 
 

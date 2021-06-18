@@ -13,21 +13,21 @@
  */
 
 
-function CreatePara(text)
+export function CreatePara(text)
 {
     var a2 = document.createElement("p");
     a2.innerHTML = text;
     return a2;
 }
 
-function CreateElement(type,text)
+export function CreateElement(type,text)
 {
     var a2 = document.createElement(type);
     a2.innerHTML = text;
     return a2;
 }
 
-function CreateAnchor(text, link, newtab = false, clsname = null)
+export function CreateAnchor(text, link, newtab = false, clsname = null)
 {
     var a2 = document.createElement("a");
     a2.href = link;
@@ -47,7 +47,7 @@ function CreateAnchor(text, link, newtab = false, clsname = null)
 // and another class : .tooltip:hover .tooltiptext, which activates on hover, and overrides the visibilty. 
 // item is the thing your attaching the tooltip to.
 
-function CreateTooltip(item, tooltiptext)
+export function CreateTooltip(item, tooltiptext)
 {
     var div = document.createElement("div");
     div.className = "tooltip";
@@ -60,7 +60,7 @@ function CreateTooltip(item, tooltiptext)
 }
 
 
-function CreateImage(link,alt,width = null,callback = null, tagdata = null, tooltip = null)
+export function CreateImage(link,alt,width = null,callback = null, tagdata = null, tooltip = null, id = null)
 {
     var a = document.createElement("img");
     a.src = link;
@@ -72,8 +72,11 @@ function CreateImage(link,alt,width = null,callback = null, tagdata = null, tool
     if (tagdata != null)
         a.tag = tagdata;
 
-    if ( callback !== null )
+    if (callback !== null)
         a.onclick = callback;
+
+    if (id !== null)
+        a.id = id;
 
     if (tooltip == null)
         return a;
@@ -81,7 +84,7 @@ function CreateImage(link,alt,width = null,callback = null, tagdata = null, tool
         return CreateTooltip(a,tooltip)
 }
 
-function CreateButton(text,handler)
+export function CreateButton(text,handler)
 {
     var a = document.createElement("button");
     a.onclick = handler;
@@ -89,12 +92,12 @@ function CreateButton(text,handler)
     return a;
 }
 
-function InsertAfter(elem,entity)
+export function InsertAfter(elem,entity)
 {
     elem.parentNode.insertBefore( entity,elem.nextSibling)
 }
 
-function AppendParaToElement(message, elementname)
+export function AppendParaToElement(message, elementname)
 {
     var pre = document.createElement("p");
     pre.style.wordWrap = "break-word";
@@ -103,7 +106,7 @@ function AppendParaToElement(message, elementname)
     output2.appendChild(pre);
 }
 
-function CreateInput(classname, id, type, onclick, checked = null, tag = null, name = null)
+export function CreateInput(classname, id, type, onclick, checked = null, tag = null, name = null)
 {
     var pre = document.createElement("input");
     if (classname != null)
@@ -124,7 +127,7 @@ function CreateInput(classname, id, type, onclick, checked = null, tag = null, n
     return pre;
 }
 
-function CreateLabel(classname, id, forname, text, onclick = null, tag = null)
+export function CreateLabel(classname, id, forname, text, onclick = null, tag = null)
 {
     var pre = document.createElement("label");
     if (classname != null)
@@ -140,7 +143,7 @@ function CreateLabel(classname, id, forname, text, onclick = null, tag = null)
     return pre;
 } 
 
-function CreateDiv(classname = null, id = null) 
+export function CreateDiv(classname = null, id = null) 
 {
     var pre = document.createElement("div");
     if ( classname != null )
@@ -150,8 +153,17 @@ function CreateDiv(classname = null, id = null)
     return pre;
 }
 
-function CreateBreak() 
+export function CreateBreak() 
 {
     var pre = document.createElement("br");
     return pre;
 }
+
+export function RemoveChildren(tab)
+{
+    while (tab.hasChildNodes())
+    {
+        tab.removeChild(tab.firstChild);
+    }
+}
+

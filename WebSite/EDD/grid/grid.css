@@ -65,6 +65,9 @@ body {
         background-color: #ffac28;
     }
 
+#StatusOther p {
+    white-space: pre-wrap;
+}
 /* class assigned to button when clicked to give a flash effect */
 
 .entryselected {

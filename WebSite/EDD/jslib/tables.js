@@ -14,17 +14,9 @@
 
 // Tables
 
-function RemoveChildren(tab)
-{
-    while(tab.hasChildNodes())
-    {
-        tab.removeChild(tab.firstChild);
-    }
-}
-
 // write a table row with two cells from jdata of properties
 
-function TableRow2tdjson(jdata, text, prop, prop2 = "")  
+export function TableRow2tdjson(jdata, text, prop, prop2 = "")  
 {
     var td1 = document.createElement("td");
     var t1 = document.createTextNode(text);
@@ -43,7 +35,7 @@ function TableRow2tdjson(jdata, text, prop, prop2 = "")
 }
 
 // write a table row with col1 being text, col2 being a list of html items
-function TableRow2tdtextitem(text, elements)  
+export function TableRow2tdtextitem(text, elements)  
 {
     var td1 = document.createElement("td");
     var t1 = document.createTextNode(text);
@@ -61,7 +53,7 @@ function TableRow2tdtextitem(text, elements)
 }
 
 // wrap a child in a td.
-function TableData(child)  
+export function TableData(child)  
 {
     var td1 = document.createElement("td");
     td1.appendChild(child);
@@ -69,7 +61,7 @@ function TableData(child)
 }
 
 // write a table row from string
-function TableRow2tdstring(text,value)  
+export function TableRow2tdstring(text,value)  
 {
     var td1 = document.createElement("td");
     var t1 = document.createTextNode(text);
@@ -86,7 +78,7 @@ function TableRow2tdstring(text,value)
 }
 
 // write a table row with a link
-function TableRow2tdanchor(text,value,link)  
+export function TableRow2tdanchor(text,value,link)  
 {
     var td1 = document.createElement("td");
     var t1 = document.createTextNode(text);
@@ -109,7 +101,7 @@ function TableRow2tdanchor(text,value,link)
 // items are either a single item or an array of items.
 // an item can be a string, or a node object. If strings, they are BR spaced from the above
 // optionally assign a classname to each column cell for styling
-function TableRowMultitdlist(elements, classnames = null)
+export function TableRowMultitdlist(elements, classnames = null)
 {
     var tr = document.createElement("tr");
 
