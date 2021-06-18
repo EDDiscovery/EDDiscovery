@@ -311,7 +311,7 @@ namespace EDDiscovery.UserControls
                                     (sd.HasMeaningfulVolcanism && hasVolcanismToolStripMenuItem.Checked) ||
                                     (sd.nEccentricity.HasValue && sd.nEccentricity >= eccentricityLimit && highEccentricityToolStripMenuItem.Checked) ||
                                     (sd.Terraformable && terraformableToolStripMenuItem.Checked) ||
-                                    (lowRadiusToolStripMenuItem.Checked && sd.nRadius.HasValue && sd.nRadius < lowRadiusLimit) ||
+                                    (sd.IsPlanet && lowRadiusToolStripMenuItem.Checked && sd.nRadius.HasValue && sd.nRadius < lowRadiusLimit) ||
                                     (sn.Signals != null && hasSignalsToolStripMenuItem.Checked) ||
                                     (sd.IsStar && showAllStarsToolStripMenuItem.Checked) ||
                                     (sd.IsPlanet && showAllPlanetsToolStripMenuItem.Checked) ||
