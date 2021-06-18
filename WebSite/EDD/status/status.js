@@ -17,6 +17,9 @@ import { WriteHeader, WriteNav, WriteFooter } from "/header.js"
 import { RequestStatus, FillSystemTable } from "/systemtable/systemtable.js"
 import { WSURIFromLocation } from "/jslib/websockets.js"
 import { ShowPopup, HidePopup } from "/jslib/popups.js"
+import { WriteMenu, ToggleMenu, CloseMenus } from "/jslib/menus.js"
+import { FetchNumber, StoreState } from "/jslib/localstorage.js"
+import { CreateImage, CreatePara, CreateDiv } from "/jslib/elements.js"
 import { RequestIndicator, HandleIndicatorMessage, InitIndicator  } from "/indicators/indicators.js"
 
 var websocket;
@@ -27,6 +30,31 @@ function OnLoad()
     WriteHeader(header[0]);
     var nav = document.getElementsByTagName("nav");
     WriteNav(nav[0], 3);
+
+    var div = CreateDiv("menubutton", "menubutton1");
+
+    div.appendChild(CreateImage("/Images/menu.png", "Menu", null, togglemenu, null, null, "menubutton"));
+
+    WriteMenu(div, "statusmenu", "navmenu",
+        [
+            ["submenu", "size", "Set Size", "statussizemenu"],
+        ]);
+
+    nav[0].appendChild(div);
+
+    /* attach to mainbody, not div, because we need page absolute positioning */
+
+    WriteMenu(document.body, "statussizemenu", "navmenu",
+        [
+            ["radio", "16", "16", sizedisplaychange, "sizegroup", "48"],
+            ["radio", "32", "32", sizedisplaychange, "sizegroup"],
+            ["radio", "48", "48", sizedisplaychange, "sizegroup"],
+            ["radio", "64", "64", sizedisplaychange, "sizegroup"],
+            ["radio", "96", "96", sizedisplaychange, "sizegroup"],
+            ["radio", "128", "128", sizedisplaychange, "sizegroup"],
+            ["radio", "160", "160", sizedisplaychange, "sizegroup"],
+        ]);
+
     var footer = document.getElementsByTagName("footer");
     WriteFooter(footer[0], null);
 
@@ -43,7 +71,8 @@ document.body.onload = OnLoad;
 
 function onOpen(evt)
 {
-    InitIndicator(websocket, 32);
+    var size = FetchNumber("statussizemenu.sizegroup.radiostate", 32, true);
+    InitIndicator(websocket, size);
     RequestStatus(websocket,-1);
     RequestIndicator();
 }
@@ -74,4 +103,22 @@ function onMessage(evt)
         FillSystemTable(jdata);
     }
 }
+
+function togglemenu()
+{
+    ToggleMenu("statusmenu");
+}
+
+function sizedisplaychange(mouseevent)
+{
+    var ct = mouseevent.currentTarget;
+    console.log("Hit size" + ct.id + " store " + ct.tag[1] + " into " + ct.tag[0]);
+    StoreState(ct.tag[0], ct.tag[1]);
+    CloseMenus();
+    var size = FetchNumber("statussizemenu.sizegroup.radiostate", 64, true);
+    InitIndicator(websocket, size);
+    RequestIndicator(websocket);
+}
+
+
 

@@ -72,7 +72,7 @@ var currentdocked;
 
 var websocket;
 
-export function InitIndicator(websock,size)
+export function InitIndicator(websock, size)
 {
     currentshiptype = "";
     websocket = websock;
