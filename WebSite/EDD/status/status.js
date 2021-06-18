@@ -25,6 +25,14 @@ function onOpen(evt)
 
 function onClose(evt)
 {
+    console.log("Closed " + evt.data);
+    ShowPopup("lostconnection");
+}
+
+function onError(evt)
+{
+    console.log("Web Error " + evt.data);
+    ShowPopup("lostconnection");
 }
 
 function onMessage(evt)
@@ -40,10 +48,5 @@ function onMessage(evt)
     {
         FillSystemTable(jdata);
     }
-}
-
-function onError(evt)
-{
-    console.log("Web Error " + evt.data);
 }
 

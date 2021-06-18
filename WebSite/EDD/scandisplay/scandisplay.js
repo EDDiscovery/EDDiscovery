@@ -23,6 +23,13 @@ function onOpen(evt)
 
 function onClose(evt)
 {
+    ShowPopup("lostconnection");
+}
+
+function onError(evt)
+{
+    console.log("Web Error " + evt.data);
+    ShowPopup("lostconnection");
 }
 
 var lastobjectlist = null;     // containing responsetype and objectlist[] (left,right,top,bottom,text)
@@ -48,11 +55,6 @@ function onMessage(evt)
     }
 }
 
-function onError(evt)
-{
-    console.log("Web Error " + evt.data);
-}
-
 function RequestImage(entry)
 {
     var jimgdiv = document.getElementById("scanbmp");
@@ -73,7 +75,7 @@ function RequestImage(entry)
 
     var req = "/systemmap/image.png?entry=" + entry + "&width=" + width + "&starsize=" + size + "&showmoons=" + showmoon + "&showbodyicons=" + bodyicons +
         "&showmaterials=" + showmaterials + "&showgravity=" + gvalue + "&showhabzone=" + habzone + "&showstarclass=" + starclass + "&showplanetclass=" + planetclass +
-        "&showdistance=" + distance + "&EDSM=" + edsm;
+        "&showdistance=" + distance + "&EDSM=" + edsm + "&reqtime=" + new Date().getTime();
 
     lastobjectlist = null;      // indicate don't have a list now
     var img = jimgdiv.childNodes[0];

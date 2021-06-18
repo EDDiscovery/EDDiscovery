@@ -13,11 +13,11 @@
  */
 
 /* pop ups attached to body, with
-    <div class="popupnotification" id="scanobjectnotification">
+    <div class="rightsidednotification" id="scanobjectnotification">
     </div>
 
 style:
-.popupnotification {
+.rightsidednotification {
     position: absolute; 
     visibility: hidden; 
     left: 500px; 
@@ -26,13 +26,17 @@ style:
 }
 */
 
-// show a pop up, add element to it as its contents.  If timetodisplayms = null, click closes it
+// show a pop up, optionally set notification to element as its contents.  If timetodisplayms = null, click closes it
 
-function ShowPopup(id, element,timetodisplayms = null, toppos = null)
+function ShowPopup(id, element = null,timetodisplayms = null, toppos = null)
 {
     var notification = document.getElementById(id);
-    RemoveChildren(notification);
-    notification.appendChild(element);
+
+    if (element != null)
+    {
+        RemoveChildren(notification);
+        notification.appendChild(element);
+    }
 
     if (toppos != null)
     {

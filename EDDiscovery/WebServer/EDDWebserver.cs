@@ -273,8 +273,7 @@ namespace EDDiscovery.WebServer
             public NodeResponse Response(string partialpath, HttpListenerRequest request)
             {
                 System.Diagnostics.Debug.WriteLine("Serve Scan Display " + partialpath);
-                foreach (var k in request.QueryString.AllKeys)
-                    System.Diagnostics.Debug.WriteLine("Key {0} = {1}", k, request.QueryString[k]);
+                //foreach (var k in request.QueryString.AllKeys)   System.Diagnostics.Debug.WriteLine("Key {0} = {1}", k, request.QueryString[k]);
 
                 int entry = (request.QueryString["entry"] ?? "-1").InvariantParseInt(-1);
                 bool checkEDSM = (request.QueryString["EDSM"] ?? "false").InvariantParseBool(false);
@@ -347,7 +346,7 @@ namespace EDDiscovery.WebServer
                 Bitmap bmpclone = img.Clone() as Bitmap;
                 var cnv = bmpclone.ConvertTo(System.Drawing.Imaging.ImageFormat.Png);   // this converts to png and returns the raw PNG bytes..
                 WebHeaderCollection wc = new WebHeaderCollection();                     // indicate don't cache this, this is a temp image
-                wc[HttpRequestHeader.CacheControl] = "no-cache";
+                wc[HttpRequestHeader.CacheControl] = "no-store";
                 return new NodeResponse(cnv, "image/png", wc);
             }
         }
