@@ -95,7 +95,8 @@ function onMessage(evt)
     else if (jdata.responsetype == "scandatachanged")    // system notified scan data changed
     {
         console.log("scandata informed changed");
-        RequestScanData(-1);
+        var edsm = GetMenuItemCheckState("scanmenu", "EDSM");
+        RequestScanData(websocket,-1,edsm);
     }
 }
 
