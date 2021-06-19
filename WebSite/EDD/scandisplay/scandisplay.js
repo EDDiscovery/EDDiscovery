@@ -18,7 +18,7 @@ import { RequestStatus, FillSystemTable } from "/systemtable/systemtable.js"
 import { CreateImage, CreatePara, CreateDiv } from "/jslib/elements.js"
 import { WriteMenu, ToggleMenu, GetMenuItemCheckState, CloseMenus } from "/jslib/menus.js"
 import { WSURIFromLocation } from "/jslib/websockets.js"
-import { FetchState, StoreState } from "/jslib/localstorage.js"
+import { FetchState, StoreState, FetchNumber } from "/jslib/localstorage.js"
 import { ShowPopup, HidePopup } from "/jslib/popups.js"
 
 var websocket;
@@ -45,7 +45,8 @@ function OnLoad()
             ["checkbox", "planetclass", "Show classes of planets", scandisplaychange, true],
             ["checkbox", "distance", "Show distance of bodies", scandisplaychange, true],
             ["checkbox", "edsm", "Check EDSM", scandisplaychange, false],
-            ["submenu", "size", "Set Size", "submenusize"],
+            ["submenu", "size", "Set Size..", "submenusize"],
+            ["submenu", "statussize", "Set Star Display Size..", "submenustardisplaysize"],
         ]);
 
     nav[0].appendChild(div);
@@ -63,6 +64,13 @@ function OnLoad()
             ["radio", "160", "160", sizedisplaychange, "sizegroup"],
         ]);
 
+    WriteMenu(document.body, "submenustardisplaysize", "navmenu",
+        [
+            ["radio", "100", "Full Width", stardisplaysizedisplaychange, "stardisplaysizegroup", "70"],
+            ["radio", "70", "70%", stardisplaysizedisplaychange, "stardisplaysizegroup"],
+            ["radio", "50", "50%", stardisplaysizedisplaychange, "stardisplaysizegroup"],
+        ]);
+
     var footer = document.getElementsByTagName("footer");
     WriteFooter(footer[0], null);
 
@@ -73,6 +81,8 @@ function OnLoad()
 	websocket.onclose = function (evt) { onClose(evt) };
 	websocket.onmessage = function (evt) { onMessage(evt) };
     websocket.onerror = function (evt) { onError(evt) };
+
+    setDisplaySize();
 }
 
 document.body.onload = OnLoad;
@@ -165,6 +175,16 @@ function sizedisplaychange(mouseevent)
     RequestImage(-1);
 }
 
+function stardisplaysizedisplaychange(mouseevent)
+{
+    var ct = mouseevent.currentTarget;
+    console.log("Hit Star size" + ct.id + " store " + ct.tag[1] + " into " + ct.tag[0]);
+    StoreState(ct.tag[0], ct.tag[1]);
+    setDisplaySize();
+    CloseMenus();
+    RequestImage(-1);
+} 
+
 function togglemenu()
 {
     ToggleMenu("scandisplaymenu");
@@ -197,4 +217,15 @@ function imageclick(mouseevent)
     }
 
     HidePopup("scanobjectnotification");
+}
+
+function setDisplaySize()
+{
+    var stardisplaysize = FetchNumber("submenustardisplaysize.stardisplaysizegroup.radiostate", "70");
+
+    var leftside = document.getElementsByClassName("scanimage")[0];
+    var rightside = document.getElementsByTagName('aside')[0];
+    leftside.style.width = stardisplaysize + "%";
+    rightside.style.visibility = stardisplaysize != "100" ? "visible" : "hidden";
+    rightside.style.width = (100 - 4 - stardisplaysize) + "%";      // 4 comes from the .aside margin-right
 }

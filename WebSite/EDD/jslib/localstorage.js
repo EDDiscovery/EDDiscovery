@@ -48,3 +48,14 @@ export function FetchNumber(id, defaultstate, writebackdefault = false)
     else
         return null;
 }
+
+export function FetchBool(id, defaultstate, writebackdefault = false)
+{
+    var ret = FetchState(id, defaultstate, writebackdefault);
+    if (ret != null)
+    {
+        return ret == "1" || ret == "true" ? true : false;
+    }
+    else
+        return null;
+}

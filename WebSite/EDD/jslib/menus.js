@@ -166,6 +166,25 @@ export function CloseMenus()
     menusopen = []
 }
 
+export function CloseMenusBelow(id)
+{
+    var closebelow = false;
+    menusopen.forEach(function (x)
+    {
+        if (x == id)
+            closebelow = true;
+        else if (closebelow)
+        {
+            var menu = document.getElementById(x);
+            if (menu != null)
+            {
+                menu.style.display = "";
+                console.log("Close " + x);
+            }
+        }
+    });
+}
+
 
 export function OpenSubMenu(mouseevent)
 {
@@ -173,6 +192,8 @@ export function OpenSubMenu(mouseevent)
     var openingmenu = ct.parentNode.parentNode;
     var submenu = ct.tag;
     console.log("MI " + ct.id + " open " + submenu + " from menu " + openingmenu.id);
+
+    CloseMenusBelow(openingmenu.id);
 
     var menu = document.getElementById(submenu);
     if (menu != null)
