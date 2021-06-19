@@ -37,7 +37,8 @@ function OnLoad()
 
     WriteMenu(div, "statusmenu", "navmenu",
         [
-            ["submenu", "size", "Set Size", "statussizemenu"],
+            ["submenu", "size", "Set icon size", "statussizemenu"],
+            ["submenu", "statussize", "Set grid display size..", "submenustatusdisplaysize"],
         ]);
 
     nav[0].appendChild(div);
@@ -55,6 +56,19 @@ function OnLoad()
             ["radio", "160", "160", sizedisplaychange, "sizegroup"],
         ]);
 
+    WriteMenu(document.body, "submenustatusdisplaysize", "navmenu",
+        [
+            ["radio", "50", "50%", statusdisplaysizedisplaychange, "statusdisplaysizegroup","50"],  
+            ["radio", "40", "40%", statusdisplaysizedisplaychange, "statusdisplaysizegroup"],
+            ["radio", "35", "35%", statusdisplaysizedisplaychange, "statusdisplaysizegroup"],
+            ["radio", "30", "30%", statusdisplaysizedisplaychange, "statusdisplaysizegroup"],
+            ["radio", "25", "25%", statusdisplaysizedisplaychange, "statusdisplaysizegroup"],
+            ["radio", "20", "20%", statusdisplaysizedisplaychange, "statusdisplaysizegroup"],
+            ["radio", "15", "15%", statusdisplaysizedisplaychange, "statusdisplaysizegroup"],
+            ["radio", "10", "10%", statusdisplaysizedisplaychange, "statusdisplaysizegroup"],
+            ["radio", "0",  "Hidden", statusdisplaysizedisplaychange, "statusdisplaysizegroup"],
+        ]);
+
     var footer = document.getElementsByTagName("footer");
     WriteFooter(footer[0], null);
 
@@ -66,6 +80,8 @@ function OnLoad()
 	websocket.onclose = function (evt) { onClose(evt) };
 	websocket.onmessage = function (evt) { onMessage(evt) };
     websocket.onerror = function (evt) { onError(evt) };
+
+    setDisplaySize();
 }
 
 document.body.onload = OnLoad;
@@ -122,4 +138,24 @@ function sizedisplaychange(mouseevent)
 }
 
 
+
+function setDisplaySize()
+{
+    var stardisplaysize = FetchNumber("submenustatusdisplaysize.statusdisplaysizegroup.radiostate", "48");
+
+    var leftside = document.getElementsByClassName("leftside")[0];
+    var rightside = document.getElementsByTagName('aside')[0];
+    leftside.style.width = stardisplaysize + "%";
+    rightside.style.width = (100 - 6 - stardisplaysize) + "%";      // 6 comes from the .aside margin-right + 1
+    leftside.style.visibility = stardisplaysize != "0" ? "visible" : "hidden";
+}
+
+function statusdisplaysizedisplaychange(mouseevent)
+{
+    var ct = mouseevent.currentTarget;
+    console.log("Hit status size" + ct.id + " store " + ct.tag[1] + " into " + ct.tag[0]);
+    StoreState(ct.tag[0], ct.tag[1]);
+    setDisplaySize();
+    CloseMenus();
+}
 

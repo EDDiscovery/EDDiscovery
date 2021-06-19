@@ -15,9 +15,9 @@
 import { WriteHeader, WriteNav, WriteFooter } from "/header.js"
 import { WSURIFromLocation } from "/jslib/websockets.js"
 import { ShowPopup } from "/jslib/popups.js"
-import { CreateDiv, CreateImage } from "/jslib/elements.js"
 import { RequestScanData, FillScanTable } from "/scans/scans.js"
 import { RequestStatus, FillSystemTable } from "/systemtable/systemtable.js"
+import { CreateDiv, CreateImage } from "/jslib/elements.js"
 import { FetchNumber, StoreState } from "/jslib/localstorage.js"
 import { WriteMenu, ToggleMenu, GetMenuItemCheckState, CloseMenus } from "/jslib/menus.js"
 
@@ -38,7 +38,7 @@ function OnLoad()
         ["checkbox", "materials", "Show materials", scanmenuchange, false],
         ["checkbox", "value", "Show Value", scanmenuchange, true],
         ["checkbox", "EDSM", "Check EDSM", scanmenuchange, false],
-        ["submenu", "statussize", "Set grid display Size..", "submenugriddisplaysize"],
+        ["submenu", "statussize", "Set grid display size..", "submenugriddisplaysize"],
 
     ]);
 

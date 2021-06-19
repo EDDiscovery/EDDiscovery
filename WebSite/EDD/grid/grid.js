@@ -28,7 +28,7 @@ function OnLoad()
 
     WriteMenu(div, "gridmenu", "navmenu",
         [
-            ["submenu", "size", "Set Size", "gridsizemenu"],
+            ["submenu", "size", "Set icon size", "gridsizemenu"],
         ]);
 
     nav[0].appendChild(div);
