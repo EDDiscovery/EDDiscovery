@@ -45,8 +45,8 @@ function OnLoad()
             ["checkbox", "planetclass", "Show classes of planets", scandisplaychange, true],
             ["checkbox", "distance", "Show distance of bodies", scandisplaychange, true],
             ["checkbox", "edsm", "Check EDSM", scandisplaychange, false],
-            ["submenu", "size", "Set Size..", "submenusize"],
-            ["submenu", "statussize", "Set Star Display Size..", "submenustardisplaysize"],
+            ["submenu", "size", "Set body image Size..", "submenusize"],
+            ["submenu", "statussize", "Set star display Size..", "submenustardisplaysize"],
         ]);
 
     nav[0].appendChild(div);
@@ -67,7 +67,11 @@ function OnLoad()
     WriteMenu(document.body, "submenustardisplaysize", "navmenu",
         [
             ["radio", "100", "Full Width", stardisplaysizedisplaychange, "stardisplaysizegroup", "70"],
+            ["radio", "85", "85%", stardisplaysizedisplaychange, "stardisplaysizegroup"],
+            ["radio", "80", "80%", stardisplaysizedisplaychange, "stardisplaysizegroup"],
+            ["radio", "75", "75%", stardisplaysizedisplaychange, "stardisplaysizegroup"],
             ["radio", "70", "70%", stardisplaysizedisplaychange, "stardisplaysizegroup"],
+            ["radio", "60", "60%", stardisplaysizedisplaychange, "stardisplaysizegroup"],
             ["radio", "50", "50%", stardisplaysizedisplaychange, "stardisplaysizegroup"],
         ]);
 
@@ -83,6 +87,9 @@ function OnLoad()
     websocket.onerror = function (evt) { onError(evt) };
 
     setDisplaySize();
+
+    document.getElementById("scanimagearea").onclick = clickonscanbackground;           // a click on this is the same as the img, so handle it
+    document.getElementsByTagName('aside')[0].onclick = cancelmenupopup;                // a click here cancels the menu/popup
 }
 
 document.body.onload = OnLoad;
@@ -153,7 +160,6 @@ function RequestImage(entry)
     var img = jimgdiv.childNodes[0];
     console.log("Reload image source" + req);
     img.src = req;
-    img.onclick = imageclick;
 }
 
 function scandisplaychange(mouseevent)
@@ -187,12 +193,15 @@ function stardisplaysizedisplaychange(mouseevent)
 
 function togglemenu()
 {
+    HidePopup("scanobjectnotification");
     ToggleMenu("scandisplaymenu");
 }
 
 
-function imageclick(mouseevent)
+function clickonscanbackground(mouseevent)      // since image is on scanimage div its the same click offset
 {
+    CloseMenus();
+
     var ct = mouseevent.currentTarget;
     console.log("Click image" + ct.id + " " + mouseevent.clientX + " " + mouseevent.clientY + " " + mouseevent.offsetX + " " + mouseevent.offsetY);
 
@@ -208,14 +217,20 @@ function imageclick(mouseevent)
             if (mouseevent.offsetX >= x.left && mouseevent.offsetX <= x.right && mouseevent.offsetY >= x.top && mouseevent.offsetY <= x.bottom)
             {
                 var jimgdiv = document.getElementById("scanbmp");
-                var neartop = mouseevent.offsetY < 3*jimgdiv.clientHeight / 4;
-              //  console.log("Object " + x.left + " " + x.top + " " + x.text);
+                var neartop = mouseevent.offsetY < 3 * jimgdiv.clientHeight / 4;
+                //  console.log("Object " + x.left + " " + x.top + " " + x.text);
                 ShowPopup("scanobjectnotification", CreatePara(x.text), null, null);
                 return;
             }
         }
     }
 
+    HidePopup("scanobjectnotification");
+}
+
+function cancelmenupopup()
+{
+    CloseMenus();
     HidePopup("scanobjectnotification");
 }
 

@@ -18,7 +18,7 @@ import { ShowPopup } from "/jslib/popups.js"
 import { CreateDiv, CreateImage } from "/jslib/elements.js"
 import { RequestScanData, FillScanTable } from "/scans/scans.js"
 import { RequestStatus, FillSystemTable } from "/systemtable/systemtable.js"
-import { FetchState, StoreState } from "/jslib/localstorage.js"
+import { FetchNumber, StoreState } from "/jslib/localstorage.js"
 import { WriteMenu, ToggleMenu, GetMenuItemCheckState, CloseMenus } from "/jslib/menus.js"
 
 var websocket;
@@ -37,8 +37,21 @@ function OnLoad()
     WriteMenu(div, "scanmenu", "navmenu", [
         ["checkbox", "materials", "Show materials", scanmenuchange, false],
         ["checkbox", "value", "Show Value", scanmenuchange, true],
-        ["checkbox", "EDSM", "Check EDSM", scanmenuchange, false]
+        ["checkbox", "EDSM", "Check EDSM", scanmenuchange, false],
+        ["submenu", "statussize", "Set grid display Size..", "submenugriddisplaysize"],
+
     ]);
+
+    WriteMenu(document.body, "submenugriddisplaysize", "navmenu",
+        [
+            ["radio", "100", "Full Width", griddisplaysizedisplaychange, "griddisplaysizegroup", "70"],
+            ["radio", "85", "85%", griddisplaysizedisplaychange, "griddisplaysizegroup"],
+            ["radio", "80", "80%", griddisplaysizedisplaychange, "griddisplaysizegroup"],
+            ["radio", "75", "75%", griddisplaysizedisplaychange, "griddisplaysizegroup"],
+            ["radio", "70", "70%", griddisplaysizedisplaychange, "griddisplaysizegroup"],
+            ["radio", "60", "60%", griddisplaysizedisplaychange, "griddisplaysizegroup"],
+            ["radio", "50", "50%", griddisplaysizedisplaychange, "griddisplaysizegroup"],
+        ]);
 
     nav[0].appendChild(div);
 
@@ -52,6 +65,8 @@ function OnLoad()
 	websocket.onclose = function (evt) { onClose(evt) };
 	websocket.onmessage = function (evt) { onMessage(evt) };
     websocket.onerror = function (evt) { onError(evt) };
+
+    setDisplaySize();
 }
 
 document.body.onload = OnLoad;
@@ -124,3 +139,23 @@ function togglemenu()
 {
     ToggleMenu("scanmenu");
 }
+
+function setDisplaySize()
+{
+    var stardisplaysize = FetchNumber("submenugriddisplaysize.griddisplaysizegroup.radiostate", "70");
+
+    var leftside = document.getElementsByClassName("scantable")[0];
+    var rightside = document.getElementsByTagName('aside')[0];
+    leftside.style.width = stardisplaysize + "%";
+    rightside.style.visibility = stardisplaysize != "100" ? "visible" : "hidden";
+    rightside.style.width = (100 - 4 - stardisplaysize) + "%";      // 4 comes from the .aside margin-right
+}
+
+function griddisplaysizedisplaychange(mouseevent)
+{
+    var ct = mouseevent.currentTarget;
+    console.log("Hit grid size" + ct.id + " store " + ct.tag[1] + " into " + ct.tag[0]);
+    StoreState(ct.tag[0], ct.tag[1]);
+    setDisplaySize();
+    CloseMenus();
+} 

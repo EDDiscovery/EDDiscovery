@@ -84,6 +84,7 @@ aside {
     float: Right;
     width: 25%;
     margin-right: 4%;
+    height: 100%; /* force to fill */
 }
 
 aside table {
@@ -91,11 +92,13 @@ aside table {
 }
 
 aside tr td:first-of-type {
-    width: 40%;
+    width: 30%;
+    word-break: break-word;
 }
 
 aside tr td:last-of-type {
-    width: 60%;
+    width: 70%;
+    word-break: break-word;
 }
 
 /* EDSM Buttons on aside */
