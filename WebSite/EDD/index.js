@@ -18,6 +18,10 @@ import { RequestStatus, FillSystemTable } from "/systemtable/systemtable.js"
 import { WriteHeader, WriteNav, WriteFooter } from "/header.js"
 import { WSURIFromLocation } from "/jslib/websockets.js"
 import { ShowPopup } from "/jslib/popups.js"
+import { CreateDiv, CreateImage } from "/jslib/elements.js"
+import { FetchNumber, StoreState } from "/jslib/localstorage.js"
+import { WriteMenu, ToggleMenu, GetMenuItemCheckState, CloseMenus } from "/jslib/menus.js"
+
     
 var websocket;
 
@@ -26,7 +30,29 @@ export function OnLoad()
     var header = document.getElementsByTagName("header");
     WriteHeader(header[0]);
     var nav = document.getElementsByTagName("nav");
-    WriteNav(nav[0],0);
+    WriteNav(nav[0], 0);
+
+    var div = CreateDiv("menubutton", "menubutton1");
+
+    div.appendChild(CreateImage("/Images/menu.png", "Menu", null, togglemenu, null, null, "menubutton"));
+
+    WriteMenu(div, "journalmenu", "navmenu", [
+        ["submenu", "statussize", "Set grid display size..", "submenujournaldisplaysize"],
+    ]);
+
+    WriteMenu(document.body, "submenujournaldisplaysize", "navmenu",
+        [
+            ["radio", "100", "Full Width", journaldisplaysizedisplaychange, "journaldisplaysizegroup", "70"],
+            ["radio", "85", "85%", journaldisplaysizedisplaychange, "journaldisplaysizegroup"],
+            ["radio", "80", "80%", journaldisplaysizedisplaychange, "journaldisplaysizegroup"],
+            ["radio", "75", "75%", journaldisplaysizedisplaychange, "journaldisplaysizegroup"],
+            ["radio", "70", "70%", journaldisplaysizedisplaychange, "journaldisplaysizegroup"],
+            ["radio", "60", "60%", journaldisplaysizedisplaychange, "journaldisplaysizegroup"],
+            ["radio", "50", "50%", journaldisplaysizedisplaychange, "journaldisplaysizegroup"],
+        ]);
+
+    nav[0].appendChild(div);
+
     var footer = document.getElementsByTagName("footer");
     WriteFooter(footer[0],[["+1000",request1000more]]);
 
@@ -40,6 +66,8 @@ export function OnLoad()
 	websocket.onclose = function (evt) { onClose(evt) };
 	websocket.onmessage = function (evt) { onMessage(evt) };
     websocket.onerror = function (evt) { onError(evt) };
+
+    setDisplaySize();
 }
 
 document.body.onload = OnLoad;
@@ -105,3 +133,29 @@ function journalscrolled(e)      // called by article on scrolling
     JournalScrolled(websocket, journalscroll);
 
 }
+
+function togglemenu()
+{
+    ToggleMenu("journalmenu");
+}
+
+function setDisplaySize()
+{
+    var stardisplaysize = FetchNumber("submenujournaldisplaysize.journaldisplaysizegroup.radiostate", "70");
+
+    var leftside = document.getElementsByClassName("journaltable")[0];
+    var rightside = document.getElementsByTagName('aside')[0];
+    leftside.style.width = stardisplaysize + "%";
+    rightside.style.visibility = stardisplaysize != "100" ? "visible" : "hidden";
+    rightside.style.width = (100 - 4 - stardisplaysize) + "%";      // 4 comes from the .aside margin-right
+}
+
+function journaldisplaysizedisplaychange(mouseevent)
+{
+    var ct = mouseevent.currentTarget;
+    console.log("Hit journal size" + ct.id + " store " + ct.tag[1] + " into " + ct.tag[0]);
+    StoreState(ct.tag[0], ct.tag[1]);
+    setDisplaySize();
+    CloseMenus();
+} 
+

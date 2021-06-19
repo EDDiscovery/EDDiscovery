@@ -31,7 +31,7 @@ body {
     float: left;
     overflow: hidden;
     height: 100%;
-    width: 48%;
+    width: 50%;
 }
 
 article table {
@@ -39,13 +39,24 @@ article table {
     border-collapse: collapse;
 }
 
+article tr td:first-of-type {
+    width: 30%;
+    word-break: break-word;
+}
+
+article tr td:last-of-type {
+    width: 70%;
+    word-break: break-word;
+}
+
 
 /* aside holds the statusbox and action box. Leave 1% for luck, large wide right margin */
 
 aside {
     float: Right;
-    width: 46%;
+    width: 44%;
     margin-right: 5%;
+    height:100%;
 }
 
 /* Status and action boxes are constrained inside aside by width, which we set to 95% to prevent the page width scroll bar appearing for some reason */
