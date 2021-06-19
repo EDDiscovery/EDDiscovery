@@ -455,7 +455,7 @@ SECTION UserControlSurveyor
 .landableAtmo: " Is landable and has an " @
 .islandable: " Is large and landable." @
 .landableAtmo: " Is large, landable and has an " @
-.eccentricity: " Has an high eccentricity of " @
+.eccentricity: "Has an high eccentricity of " @
 
 .planetaryClassesToolStripMenuItem: "Planetary Classes" @
 .planetaryClassesToolStripMenuItem.ammoniaWorldToolStripMenuItem: "Ammonia World" @
