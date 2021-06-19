@@ -67,6 +67,7 @@ function OnLoad()
 	websocket.onmessage = function (evt) { onMessage(evt) };
     websocket.onerror = function (evt) { onError(evt) };
 }
+
 document.body.onload = OnLoad;
 
 function onOpen(evt)
