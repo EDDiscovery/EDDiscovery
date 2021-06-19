@@ -168,7 +168,7 @@ export function HandleIndicatorMessage(jdata, statuselement, actionelement, stat
 
 }
 
-export function SetupIndicators(jdata,tstatus,tactions)
+function SetupIndicators(jdata,tstatus,tactions)
 {
     RemoveChildren(tstatus);
     RemoveChildren(tactions);
@@ -359,7 +359,7 @@ export function SetupIndicators(jdata,tstatus,tactions)
     }
 }
 
-export function SetIndicatorState(jdata, tstatus)
+function SetIndicatorState(jdata, tstatus)
 {
     //const keys = Object.keys(jdata);
     //if (keys.indexOf(z.tag) != -1)
@@ -402,7 +402,7 @@ export function SetIndicatorState(jdata, tstatus)
 
 }
 
-export function ClickActionItem(e)
+function ClickActionItem(e)
 {
     if (e.target.tag[3])
     {
