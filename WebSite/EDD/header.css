@@ -98,13 +98,18 @@ nav * a {
 nav .menubutton {
     /* div needs to be inline so it flows against the ul's */
     display: inline;
-    /* making it relative allows it to offset from the top of the nav bar and for the child to position absolutely inside the div */
+    /* force it right a bit*/
+    margin-left: 10px;
+    /* allow children to position against it */
     position: relative;
 }
 
 nav .menubutton img {
     vertical-align: middle;
-    padding-left: 1em;
+}
+
+nav .menubutton img:hover {
+    background-color: #ffe028;
 }
 
 /* styling of the nav menu */
@@ -116,7 +121,6 @@ nav .menubutton img {
     min-width: 200px;       /* cannot yet get it to autofit */
     background-color: darkorange;
     color: black;
-    padding: 2px 10px 2px 4px;
     z-index: 1;
 }
 
@@ -124,14 +128,12 @@ nav .menubutton img {
 .navmenu div {
     display: inline-block;
     padding: 2px 0px 2px 2px;
-    width:100%;
+    width:100%;     /* makes it take up the whole width of div, important for hover */
 }
 
 .navmenu div:hover {
     background-color: #ffe028;
 }
-
-
 
 /* ********************************************************** Footer formatting */
 
