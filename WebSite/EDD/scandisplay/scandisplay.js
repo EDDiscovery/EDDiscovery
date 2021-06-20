@@ -46,7 +46,7 @@ function OnLoad()
             ["checkbox", "distance", "Show distance of bodies", scandisplaychange, true],
             ["checkbox", "edsm", "Check EDSM", scandisplaychange, false],
             ["submenu", "size", "Set body image size..", "submenusize"],
-            ["submenu", "statussize", "Set star display size..", "submenustardisplaysize"],
+            ["submenu", "statussize", "Set star display width..", "submenustardisplaysize"],
         ]);
 
     nav[0].appendChild(div);

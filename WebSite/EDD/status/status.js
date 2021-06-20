@@ -38,7 +38,7 @@ function OnLoad()
     WriteMenu(div, "statusmenu", "navmenu",
         [
             ["submenu", "size", "Set icon size", "statussizemenu"],
-            ["submenu", "statussize", "Set grid display size..", "submenustatusdisplaysize"],
+            ["submenu", "statussize", "Set grid display width..", "submenustatusdisplaysize"],
         ]);
 
     nav[0].appendChild(div);

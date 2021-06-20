@@ -12,15 +12,17 @@
  * governing permissions and limitations under the License.
  */
 
+import { CreateDiv, CreateInput, CreateLabel, CreateBreak } from "/jslib/elements.js"
+import { FetchState } from "/jslib/localstorage.js"
 
 // make a menu, attached and displayed under button, with id menuname, class menuclass, and the menulist
 // menulist is in the format of an variable length array containing array elements
 //
-// structure needed is:
-//              <div class="menubutton" id="menubutton1">
+// normal structure needed is:
+//              <div>
 //                    <img id="menuicon_button" src="/Images/menu.png" alt="Tab Menu" onclick="ToggleMenu('firstmenu')">
 //                    <script>
-//                        WriteMenu("menubutton1", "firstmenu", "navmenu", [["checkbox","e1","one", menuchange, false], [null,"e2","two", menuchange], ["checkbox","e3","three", menuchange, true]]);
+//                        WriteMenu(..)
 //                    </script>
 //                </div>
 
@@ -38,27 +40,34 @@
 //}
 
 // menu div: is called id=menunameid class=menuclass
-// WriteMenu menulist should be formatted as:
-//           ["checkbox", "moon", "Show Moons", scandisplaychange, true],           - tag contains storagekey 
-//           ["radio", "s16", "16", sizedisplaychange, "sizegroup", "s16"],         - item tag contains [storagekey (item[4]),value to set]. First entry needs to have the default value
-//           ["radio", "s32", "32", sizedisplaychange, "sizegroup"],
-//           ["submenu", "size", "Set Size", "submenusize"],
-//           ["normal", "click", "Click here", functocall],
-//
-//          each menu item is enclosed in a div of class = menuclass + "_item" id = menunameid + "_" + itemid + "_item"
-//          type            input id                                        input class                     id_label                        class_label             storage
-//          checkbox        menunameid+"_"+id+"_checkbox                    menuclass_checkbox              menunameid+"_"+id+"_label       menuclass_label         menunameid.id.checkboxstate
-//          radio           menunameid+"_"+id+"_radio                       menuclass_radio                 menunameid+"_"+id+"_label       menuclass_label         item[4] in entry
-//          normal                                                                                          menunameid+"_"+id+"_label       menuclass_label
-//          submenu                                                                                         menunameid+"_"+id+"_submenu     menuclass_submenu
-
-import { CreateDiv, CreateInput, CreateLabel, CreateBreak } from "/jslib/elements.js"
-import { FetchState } from "/jslib/localstorage.js"
+// appended to the element given in para 1
+// menulist contains an array of arrays. item[0] in the inner array denoted menu type
+//  ["checkbox", "moon", "Show Moons", scandisplaychange, true],           
+//      item[1] is menu item name, item[2] is text, item[3] is callback, item[4] is default state
+//      tag on menu menu contains storagekey = menunameid.itemname.checkboxstate
+//      input id = menunameid+"_"+itemname+"_checkbox"
+//      input class = menuclass + "_checkbox"
+//      label id = menunameid + "_" + id + "_label"
+//      label class = menuclass + "_label"
+//   ["radio", "s16", "16", sizedisplaychange, "sizegroup", "s16"],
+//      item[1] is menu item name, item[2] is text, item[3] is callback, item[4] is radio group, item[5] (only on first item) is default state
+//      tag on menu item contains [storagekey, value to set]. storagekey = menunameid.itemname.radiostate
+//      input id = menunameid+"_"+itemname+"_radio"
+//      input class = menuclass+"_radio"
+//      label id = menunameid + "_" + id + "_label"
+//      label class = menuclass + "_label"
+//    ["submenu", "size", "Set Size", "submenusize"],
+//      item[1] is menu item name, item[2] is text, item[3] is submenu name
+//      label id = menunameid + "_" + id + "_submenu"
+//      label class = menuclass + "_submenu"
+//    ["button", "click", "Click here", functocall],
+//      item[1] is menu item name, item[2] is text, item[3] is callback
+//      label id = menunameid + "_" + id + "_button"
+//      label class = menuclass + "_button"
 
 export function WriteMenu(appendto, menunameid, menuclass, menulist)
 {
     var div = CreateDiv(menuclass, menunameid);
-    var storage = window.localStorage;
 
     menulist.forEach(function (item) 
     {
@@ -67,10 +76,10 @@ export function WriteMenu(appendto, menunameid, menuclass, menulist)
 
         var itemdiv = CreateDiv(menuclass + "_item",  mid + "_item");
 
-        if (item[0] == "checkbox" )
+        if (item[0] == "checkbox")
         {
             var storagekey = menunameid + "." + id + ".checkboxstate";
-            var state = FetchState(storagekey, item[4], true);
+            var state = FetchState(storagekey, item[4], true);     // item[4] is bool
 
             //console.log("Checkbox Storage " + storagekey + " state " + state);
 
@@ -80,36 +89,41 @@ export function WriteMenu(appendto, menunameid, menuclass, menulist)
                 //console.log("default set " + id + " to " + state);
             }
 
-            var mi = CreateInput(menuclass + "_checkbox", mid + "_checkbox", item[0], item[3], state, storagekey);
-            var lb = CreateLabel(menuclass + "_label", mid + "_label", mid + "_checkbox", item[2]);
+            var mi = CreateInput(menuclass + "_checkbox", mid + "_checkbox", item[0], item[3], state, storagekey);      // item[0] is type, item[3] is callback
+            var lb = CreateLabel(menuclass + "_label", mid + "_label", mid + "_checkbox", item[2]);     // item[2] is text, hook via for to checkbox
             itemdiv.appendChild(mi);
             itemdiv.appendChild(lb);
         }
         else if (item[0] == "radio")
         {
-            var storagekey = menunameid + "." + item[4] + ".radiostate";        // first entry should have item[5], default state
+            var storagekey = menunameid + "." + item[4] + ".radiostate";        // first entry should have item[5], default state. item[4] is the group key name
             var state = FetchState(storagekey, item.length >= 6 ? item[5] : null, true);
 
-           // console.log("Radio Storage " + storagekey + " state " + state);
+            // console.log("Radio Storage " + storagekey + " state " + state);
 
             var radiostate = state == id;
-            var mi = CreateInput(menuclass + "_radio", mid + "_radio", item[0], item[3], radiostate, [storagekey,id], item[4]);
+            var mi = CreateInput(menuclass + "_radio", mid + "_radio", item[0], item[3], radiostate, [storagekey, id], item[4]);     // item[0] is type, item[3] is callback
             var lb = CreateLabel(menuclass + "_label", mid + "_label", mid + "_radio", item[2]);
             itemdiv.appendChild(mi);
             itemdiv.appendChild(lb);
         }
         else if (item[0] == "submenu")
         {
-            var lb = CreateLabel(menuclass + "_submenu", mid + "_submenu", null, item[2],OpenSubMenu, item[3]);
-            lb.style.padding = "0px 0px 0px 20px";
-            itemdiv.appendChild(lb);
-        } 
-        else
-        {
-            var lb = CreateLabel(menuclass + "_label", mid + "_label", null, item[2], item[3]);
+            var lb = CreateLabel(menuclass + "_submenu", mid + "_submenu", null, item[2], OpenSubMenu, item[3]);
             lb.style.padding = "0px 0px 0px 20px";
             itemdiv.appendChild(lb);
         }
+        else if (item[0] == "button")
+        {
+            var lb = CreateLabel(menuclass + "_button", mid + "_button", null, item[2], item[3]);
+            lb.style.padding = "0px 0px 0px 20px";
+            itemdiv.appendChild(lb);
+        }
+        else
+        {
+            console.assert(false);
+        }
+
         div.appendChild(itemdiv);
         div.appendChild(CreateBreak());
     });
@@ -118,6 +132,7 @@ export function WriteMenu(appendto, menunameid, menuclass, menulist)
     appendto.append(div);
 }
 
+// return bool with check state
 export function GetMenuItemCheckState(menuid, itemid)
 {
     var storagekey = menuid + "." + itemid + ".checkboxstate";

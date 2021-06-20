@@ -12,6 +12,8 @@
  * governing permissions and limitations under the License.
  */
 
+// store state (int, string, bool, double, etc) into storage as a JSON string
+
 export function StoreState(id, state)
 {
     var storage = window.localStorage;
@@ -19,6 +21,8 @@ export function StoreState(id, state)
     storage.setItem(id, jstate);
   //  console.log("Set storage " + id + "= '" + jstate + "'");
 }
+
+// return state (int, string, bool, double, etc) from storage stored as a JSON string. defaultstate and stored state should be the same type
 
 export function FetchState(id, defaultstate, writebackdefault = false)
 {
@@ -38,6 +42,8 @@ export function FetchState(id, defaultstate, writebackdefault = false)
         return JSON.parse(state);
 }
 
+// expect a string in storage, turn it back into a number
+
 export function FetchNumber(id, defaultstate, writebackdefault = false)
 {
     var ret = FetchState(id, defaultstate, writebackdefault);
@@ -49,13 +55,3 @@ export function FetchNumber(id, defaultstate, writebackdefault = false)
         return null;
 }
 
-export function FetchBool(id, defaultstate, writebackdefault = false)
-{
-    var ret = FetchState(id, defaultstate, writebackdefault);
-    if (ret != null)
-    {
-        return ret == "1" || ret == "true" ? true : false;
-    }
-    else
-        return null;
-}

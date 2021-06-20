@@ -37,7 +37,7 @@ export function OnLoad()
     div.appendChild(CreateImage("/Images/menu.png", "Menu", null, togglemenu, null, null, "menubutton"));
 
     WriteMenu(div, "journalmenu", "navmenu", [
-        ["submenu", "statussize", "Set grid display size..", "submenujournaldisplaysize"],
+        ["submenu", "statussize", "Set grid display width..", "submenujournaldisplaysize"],
     ]);
 
     WriteMenu(document.body, "submenujournaldisplaysize", "navmenu",

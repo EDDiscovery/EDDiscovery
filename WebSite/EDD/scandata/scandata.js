@@ -38,7 +38,7 @@ function OnLoad()
         ["checkbox", "materials", "Show materials", scanmenuchange, false],
         ["checkbox", "value", "Show Value", scanmenuchange, true],
         ["checkbox", "EDSM", "Check EDSM", scanmenuchange, false],
-        ["submenu", "statussize", "Set grid display size..", "submenugriddisplaysize"],
+        ["submenu", "statussize", "Set grid display width..", "submenugriddisplaysize"],
 
     ]);
 

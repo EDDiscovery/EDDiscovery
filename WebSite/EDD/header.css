@@ -121,11 +121,17 @@ nav .menubutton img {
 }
 
 /* styling of each menu line */
-.navmenu div
-{
-    display:inline-block;
-    min-height:1.5em;
+.navmenu div {
+    display: inline-block;
+    padding: 2px 0px 2px 2px;
+    width:100%;
 }
+
+.navmenu div:hover {
+    background-color: #ffe028;
+}
+
+
 
 /* ********************************************************** Footer formatting */
 
