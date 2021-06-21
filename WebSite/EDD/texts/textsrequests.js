@@ -30,14 +30,15 @@ export function RequestTexts(websocket, entry , length)
 export function FillTextsTable(jdata, insert, showinfo, shownfz)
 {
     var jtable = document.getElementById("Texts");
-    RemoveChildren(jtable);
+    if ( !insert )
+        RemoveChildren(jtable);
 
     var texts = jdata.entries;
     for (var i = 0; i < texts.length; i++)
     {
         var obj = texts[i];
 
-        if ((obj[1] != "Info" || showinfo) && (!obj[3].toUpperCase().includes("NO FIRE ZONE") || shownfz))
+        if ((obj[1].toUpperCase() != "INFO" || showinfo) && (!obj[3].toUpperCase().includes("NO FIRE ZONE") || shownfz))
         {
             if (insert)
                 jtable.insertBefore(TableRowMultitdlist(obj), jtable.firstChild);
