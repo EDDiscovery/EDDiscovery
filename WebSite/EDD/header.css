@@ -118,7 +118,6 @@ nav .menubutton img:hover {
     position: absolute;
     top: 24px;      /* relative positioning from nav div */
     left: 0px;
-    min-width: 200px;       /* cannot yet get it to autofit */
     background-color: darkorange;
     color: black;
     z-index: 1;
@@ -127,8 +126,9 @@ nav .menubutton img:hover {
 /* styling of each menu line */
 .navmenu div {
     display: inline-block;
-    padding: 2px 0px 2px 2px;
-    width:100%;     /* makes it take up the whole width of div, important for hover */
+    margin: 3px 10px 3px 0px;       /* this seems to work for hover */
+    width: 100%; /* makes it take up the whole width of div, important for hover */
+    white-space: nowrap; /* stop CSS trying to minize width, make it print it all on one line, so autowidth */
 }
 
 .navmenu div:hover {

@@ -91,6 +91,8 @@ namespace EDDiscovery.WebServer
         IndicatorRequest indicator;
         ScanDataRequest scandata;
         PressKeyRequest presskey;
+        MissionRequest missions;
+        TextsRequest texts;
 
         EDDiscoveryForm discoveryform;
 
@@ -145,10 +147,16 @@ namespace EDDiscovery.WebServer
             jsondispatch.Add("indicator", indicator);   // indicator query
 
             scandata = new ScanDataRequest(discoveryform);
-            jsondispatch.Add("scandata", scandata);   // indicator query
+            jsondispatch.Add("scandata", scandata);   // scan data 
 
             presskey = new PressKeyRequest(discoveryform);
             jsondispatch.Add("presskey", presskey);   // and a key press
+
+            missions = new MissionRequest(discoveryform);
+            jsondispatch.Add("missions", missions);   // mission list
+
+            texts = new TextsRequest(discoveryform);
+            jsondispatch.Add("texts", texts);   // mission list
 
             // add for protocol EDDJSON the responder.
 
@@ -190,6 +198,8 @@ namespace EDDiscovery.WebServer
             httpws.SendWebSockets(statussender.Refresh(-1), false); // and status
             httpws.SendWebSockets(scandata.Notify(), false); // tell it its changed
             httpws.SendWebSockets(scandisplay.Notify(), false); // tell it its changed
+            httpws.SendWebSockets(missions.Notify(), false); // tell it its changed
+            httpws.SendWebSockets(texts.Notify(), false); // tell it its changed
         }
 
         private void Discoveryform_OnNewUIEvent(UIEvent obj)
@@ -204,11 +214,20 @@ namespace EDDiscovery.WebServer
         {
             httpws.SendWebSockets(journalsender.Push(), false); // refresh history
             httpws.SendWebSockets(statussender.Push(), false); // refresh status
+
+            if (he.EntryType == JournalTypeEnum.ReceiveText || he.EntryType == JournalTypeEnum.SendText)
+                httpws.SendWebSockets(texts.Push(), false);
+
             if (he.EntryType == JournalTypeEnum.Scan || he.EntryType == JournalTypeEnum.FSSSignalDiscovered || he.EntryType == JournalTypeEnum.SAASignalsFound ||
                         he.EntryType == JournalTypeEnum.SAAScanComplete)
             {
                 httpws.SendWebSockets(scandata.Notify(), false); // refresh status
                 httpws.SendWebSockets(scandisplay.Notify(), false); // tell it its changed
+            }
+
+            if ( he.journalEntry is IMissions )
+            {
+                httpws.SendWebSockets(missions.Notify(), false); // tell it its changed
             }
         }
     }
