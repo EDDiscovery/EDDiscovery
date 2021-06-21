@@ -40,6 +40,7 @@ export function OnLoad()
         ["submenu", "statussize", "Set grid display width..", "submenutextsdisplaysize"],
         ["checkbox", "showinfo", "Show system info messages", textsmenuchange, true],
         ["checkbox", "shownfz", "Show no fire zone messages", textsmenuchange, true],
+     //   ["checkbox", "showec", "Show entering channel messages", textsmenuchange, true],
 
     ]);
 
@@ -119,7 +120,8 @@ function FillTable(jdata, insert)
 {
     var showinfo = GetMenuItemCheckState("textsmenu", "showinfo");
     var shownfz = GetMenuItemCheckState("textsmenu", "shownfz");
-    FillTextsTable(jdata, true, showinfo, shownfz);
+ //   var showec = GetMenuItemCheckState("textsmenu", "showec");
+    FillTextsTable(jdata, insert, showinfo, shownfz);
 }
 
 function togglemenu()
