@@ -446,7 +446,7 @@ SECTION UserControlSurveyor
 .Signals: " Has signals." @
 .eccentricity: " Has an high eccentricity of " @
 .isa " is a " @
-.hasan " Has an" @
+.Atmosphere " Atmosphere: " @
 .terraformable "terraformable " @
 .unknownAtmosphere "unknown atmosphere"
 

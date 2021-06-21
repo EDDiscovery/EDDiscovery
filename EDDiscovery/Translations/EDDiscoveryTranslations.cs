@@ -576,7 +576,7 @@ namespace EDDiscovery
         UserControlSpanel_SPF, // Summary Panel: Filter out fields
 
         UserControlSurveyor_isa, // is a(n)
-        UserControlSurveyor_hasan, // Has an
+        UserControlSurveyor_Atmosphere, // Atmosphere
         UserControlSurveyor_terraformable, // terraformable
         UserControlSurveyor_LowRadius, //  Low Radius.
         UserControlSurveyor_LargeRadius, //  Large Radius.
