@@ -100,8 +100,11 @@ export function TableRow2tdanchor(text,value,link)
 // elements are an array of items for each cell
 // items are either a single item or an array of items.
 // an item can be a string, or a node object. If strings, they are BR spaced from the above
-// optionally assign a classname to each column cell for styling
-export function TableRowMultitdlist(elements, classnames = null)
+
+// optionally if tdclassname == string, assign this style class to all td's.
+// optionally if tdclassname == array, assign each element in turn style class (can be shorter)
+
+export function TableRowMultitdlist(elements, tdclassnames = null)
 {
     var tr = document.createElement("tr");
 
@@ -112,9 +115,12 @@ export function TableRowMultitdlist(elements, classnames = null)
             var td = document.createElement("td");
             tr.appendChild(td);
 
-            if (classnames !== null)
+            if (tdclassnames != null)
             {
-                elements[i].classList.add(classnames[i]);
+                if (typeof (tdclassnames) == "string")
+                    td.classList.add(tdclassnames);
+                else if (i < tdclassnames.length)
+                    td.classList.add(tdclassnames[i]);
             }
 
             var e = elements[i];

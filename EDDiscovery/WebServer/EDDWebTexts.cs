@@ -18,43 +18,50 @@ using BaseUtils;
 using BaseUtils.JSON;
 using BaseUtils.WebServer;
 using EliteDangerousCore;
+using EliteDangerousCore.JournalEvents;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Net;
 
 namespace EDDiscovery.WebServer
 {
-    public class ScanDataRequest : IJSONNode
+    public class TextsRequest : IJSONNode
     {
         private EDDiscoveryForm discoveryform;
 
-        public ScanDataRequest(EDDiscoveryForm f)
+        public TextsRequest(EDDiscoveryForm f)
         {
             discoveryform = f;
         }
 
-        public JToken Notify()                    // indicate changed scan data
+        public JToken Notify()       // a full refresh of journal history
         {
             JObject response = new JObject();
-            response["responsetype"] = "scandatachanged";
+            response["responsetype"] = "textschanged";
             return response;
+        }
+
+        public JToken Push()       // a full refresh of journal history
+        {
+            return MakeResponse(-1, 1, "textspush");
         }
 
         public JToken Response(string key, JToken message, HttpListenerRequest request) // request indicator state
         {
             int entry = message["entry"].Int(0);
-            bool edsm = message["edsm"].Bool(false);
-            System.Diagnostics.Debug.WriteLine("scandata Request " + key + " Entry" + entry + " EDSM " + edsm);
-            return MakeResponse(entry, "scandata", edsm);
+            int length = message["length"].Int(0);
+            System.Diagnostics.Debug.WriteLine("texts Request " + key + " Entry " + entry  + " Length " + length);
+            return MakeResponse(entry, length, "texts");
         }
 
         //EliteDangerousCore.UIEvents.UIOverallStatus status,
-        public JToken MakeResponse(int entry, string type, bool edsm)       // entry = -1 means latest
+        public JToken MakeResponse(int entry, int length, string type)       // entry = -1 means latest
         {
             if (discoveryform.InvokeRequired)
             {
-                return (JToken)discoveryform.Invoke(new Func<JToken>(() => MakeResponse(entry, type, edsm)));
+                return (JToken)discoveryform.Invoke(new Func<JToken>(() => MakeResponse(entry, length, type)));
             }
             else
             {
@@ -73,39 +80,30 @@ namespace EDDiscovery.WebServer
 
                     response["entry"] = entry;
 
-                    HistoryEntry he = hl[entry];
+                    JArray cur = new JArray();
 
-                    var scannode = discoveryform.history.StarScan.FindSystemSynchronous(he.System, edsm);        // get data without EDSM - don't want a web lookup
-                    var bodylist = scannode?.Bodies.ToList();       // may be null
-
-                    response["Count"] = bodylist?.Count ?? 0;
-
-                    JArray jbodies = new JArray();
-                    foreach (var body in bodylist.EmptyIfNull())
+                    int count = 0;
+                    for( int l = entry; l >= 0 && count < length; l--)
                     {
-                        JObject jo = new JObject()
+                        var he = discoveryform.history.EntryOrder()[l];
+                        if ( he.EntryType == JournalTypeEnum.ReceiveText )
                         {
-                            ["NodeType"] = body.NodeType.ToString(),
-                            ["FullName"] = body.FullName,
-                            ["OwnName"] = body.OwnName,
-                            ["CustomName"] = body.CustomName,
-                            ["CustomNameOrOwnName"] = body.CustomNameOrOwnname,
-                            ["Level"] = body.Level,
-                            ["BodyID"] = body.BodyID,
-                        };
-
-                        JToken jdata = null;
-
-                        if (body.ScanData != null)
-                        {
-                            jdata = JToken.FromObject(body.ScanData, true, null, 5, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.DeclaredOnly);
+                            var rt = he.journalEntry as JournalReceiveText;
+                            cur.Add(new JArray() { EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(rt.EventTimeUTC).ToString(),
+                                                        rt.Channel, rt.FromLocalised.Alt(rt.From), rt.MessageLocalised });
+                            count++;
                         }
-                        jo["Scan"] = jdata;
-
-                        jbodies.Add(jo);
+                        else if ( he.EntryType == JournalTypeEnum.SendText)
+                        {
+                            var rt = he.journalEntry as JournalSendText;
+                            cur.Add(new JArray() { EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(rt.EventTimeUTC).ToString(),
+                                                        "Send Text", rt.To_Localised.Alt(rt.To), rt.Message });
+                            count++;
+                        }
                     }
 
-                    response["Bodies"] = jbodies;
+                    response["entries"] = cur;
+                    response["length"] = count;
                 }
 
                 return response;

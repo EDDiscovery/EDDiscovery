@@ -1,0 +1,118 @@
+
+/* Style the article section */
+
+body {
+    background-color: black;
+    color: darkorange;
+    font-family: Arial,Helvetica,Sans-serif;
+    margin: 0px;
+    overflow: hidden; /* crucial to stop a right scroll bar appearing even though the flex overflow hidden should stop it */
+}
+
+/* top level div is a flex. Important to lock page to vh so it does not scroll and occupies the whole page  */
+.page {
+    height:100vh;
+    width:100%;
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+}
+
+/* first is headernav, third is footer */
+/* second part of three sections is a flex:1 */
+.middlesection {
+    width: 100%;
+    flex: 1;
+    clear: both;
+    overflow:hidden;
+}
+
+/* this div holds the journal table, inside an article, and it has the scroll bar. You must set it to 100% height to override autoheight and get it to scroll 
+    set the width to required % of the middlesection
+*/
+.missiontable {
+    float: left;
+    overflow-y: scroll;
+    height: 100%;
+    width: 70%;
+}
+
+/* style out the journal table */
+
+article table {
+    border-collapse: collapse;
+}
+
+article table td:nth-child(1) {
+    width: auto;
+}
+
+article table td:nth-child(2) {
+    width: 20%;
+}
+
+article table td:nth-child(3) {
+    width: 20%;
+}
+
+article table td:nth-child(4) {
+    width: 40%;
+}
+
+article table td:nth-child(5) {
+    width: 20%;
+}
+
+article table tr:nth-child(even) {
+    background: #2b2b2b;
+}
+
+article table tr:nth-child(odd) {
+    background: #000000;
+}
+
+article table tr td {
+    border: 1px solid rgb(200,128,0);
+}
+
+.highlightentry {
+    color: rgb(255,192,65);
+}
+
+/* style the aside with status info */
+
+
+/* set the aside float and width, plus a nice margin on the right. this helps stop the pesky horz scroll bar occuring */
+
+aside {
+    float: Right;
+    width: 25%;
+    margin-right: 4%;
+    height:100%;
+}
+
+aside table {
+    border-collapse: collapse;
+}
+
+aside tr td:first-of-type {
+    width: 30%;
+    word-break: break-word;
+}
+
+aside tr td:last-of-type {
+    width: 70%;
+    word-break: break-word;
+}
+
+/* EDSM Buttons on aside */
+.edsmetcbuttons {
+    width: 6em;
+    margin: 1px 0px 1px 10px;
+    line-height: 1;
+    background-color: orange;
+    border: 1px solid darkorange;
+    border-radius: 4px;
+    color: #000;
+    text-decoration: none;
+}

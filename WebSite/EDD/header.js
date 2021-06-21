@@ -31,6 +31,8 @@ export function WriteNav(nav, tab)
         "<li> <a href=\"/scandata/scandata.html\">Scan Grid</a></li>" +
         "<li> <a href=\"/status/status.html\">Status</a></li>" +
         "<li> <a href=\"/grid/grid.html\">Grid</a></li>" +
+        "<li> <a href=\"/missions/missions.html\">Missions</a></li>" +
+        "<li> <a href=\"/texts/texts.html\">Texts</a></li>" +
         "</ul>";
         
     nav.insertAdjacentHTML("beforeend",html);

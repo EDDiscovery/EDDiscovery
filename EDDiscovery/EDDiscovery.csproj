@@ -223,8 +223,10 @@
     <Compile Include="UserControls\Overlays\UserControlMiningOverlay.Designer.cs">
       <DependentUpon>UserControlMiningOverlay.cs</DependentUpon>
     </Compile>
+    <Compile Include="WebServer\EDDWebTexts.cs" />
     <Compile Include="WebServer\EDDWebPresskey.cs" />
     <Compile Include="WebServer\EDDWebJournal.cs" />
+    <Compile Include="WebServer\EDDWebMissions.cs" />
     <Compile Include="WebServer\EDDWebScandata.cs" />
     <Compile Include="WebServer\EDDWebStatus.cs" />
     <Compile Include="WebServer\EDDWebIndicator.cs" />

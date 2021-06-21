@@ -15,7 +15,7 @@
 import { WriteHeader, WriteNav, WriteFooter } from "/header.js"
 import { WSURIFromLocation } from "/jslib/websockets.js"
 import { ShowPopup } from "/jslib/popups.js"
-import { RequestScanData, FillScanTable } from "/scans/scans.js"
+import { RequestScanData, FillScanTable } from "/scandata/scanrequests.js"
 import { RequestStatus, FillSystemTable } from "/systemtable/systemtable.js"
 import { CreateDiv, CreateImage } from "/jslib/elements.js"
 import { FetchNumber, StoreState } from "/jslib/localstorage.js"
