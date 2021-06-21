@@ -575,7 +575,11 @@ namespace EDDiscovery
         UserControlSpanel_TVE, // View system on EDSM
         UserControlSpanel_SPF, // Summary Panel: Filter out fields
 
+        UserControlSurveyor_isa, // is a(n)
+        UserControlSurveyor_hasan, // Has an
+        UserControlSurveyor_terraformable, // terraformable
         UserControlSurveyor_LowRadius, //  Low Radius.
+        UserControlSurveyor_LargeRadius, //  Large Radius.
         UserControlSurveyor_Signals, //  Has signals.
         UserControlSurveyor_Mapped, //  (Mapped & Discovered)
         UserControlSurveyor_Systemscancomplete, // System scan complete.
@@ -584,23 +588,12 @@ namespace EDDiscovery
         UserControlSurveyor_MandD, //  (Mapped & Discovered)
         UserControlSurveyor_MP, //  (Mapped)
         UserControlSurveyor_DIS, //  (Discovered)
-        UserControlSurveyor_isanammoniaworld, //  is an ammonia world.
-        UserControlSurveyor_isanearthlikeworld, //  is an earth like world.
-        UserControlSurveyor_isawaterworld, //  is a water world.
-        UserControlSurveyor_isaterraformablewaterworld, //  is a terraformable water world.
-        UserControlSurveyor_isaterraformableplanet, //  is a terraformable planet.
         UserControlSurveyor_islandable, // is landable
         UserControlSurveyor_Hasring, //  Has ring.
         UserControlSurveyor_Has, //  Has
         UserControlSurveyor_Scan, //  Scan
-        UserControlSurveyor_HMC, // High metal content world
-        UserControlSurveyor_terraHMC, // terraformable high metal content world
-        UserControlSurveyor_MR, // metal-rich body
-        UserControlSurveyor_terraMR, // terraformable metal-rich body
-        UserControlSurveyor_landableAtmo, // landable with atmosphere
         UserControlSurveyor_eccentricity, // high eccentricity
-        UserControlSurveyor_islargelandable, // large landable
-        UserControlSurveyor_largelandableAtmo, // large atmospheric landable
+        UserControlSurveyor_unknownAtmosphere, //unknown atmosphere
 
         UserControlSysInfo_NoMissions, // No Missions
         UserControlSysInfo_NA, // N/A

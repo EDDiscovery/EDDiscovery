@@ -416,27 +416,37 @@ namespace EDDiscovery.UserControls
             string bodyname = js.BodyDesignationOrName.ReplaceIfStartsWith(sys.Name);
 
             // Name
-            information.Append(bodyname);
+            information.Append((bodyname) + @" is a ".T(EDTx.UserControlSurveyor_isa));
 
             // Additional information
-            information.Append((js.AmmoniaWorld) ? @" is an ammonia world.".T(EDTx.UserControlSurveyor_isanammoniaworld) : null);
-            information.Append((js.Earthlike) ? @" is an earth like world.".T(EDTx.UserControlSurveyor_isanearthlikeworld) : null);
-            information.Append((js.WaterWorld && !js.Terraformable) ? @" is a water world.".T(EDTx.UserControlSurveyor_isawaterworld) : null);
-            information.Append((js.WaterWorld && js.Terraformable) ? @" is a terraformable water world.".T(EDTx.UserControlSurveyor_isaterraformablewaterworld) : null);
-            information.Append((js.PlanetTypeID == EDPlanet.High_metal_content_body && js.Terraformable) ? @" is a terraformable high metal content world.".T(EDTx.UserControlSurveyor_terraHMC) : null);
-            information.Append((js.PlanetTypeID == EDPlanet.High_metal_content_body && !js.Terraformable) ? @" is a high metal content world.".T(EDTx.UserControlSurveyor_HMC) : null);
-            information.Append((js.PlanetTypeID == EDPlanet.Metal_rich_body && js.Terraformable) ? @" is a terraformable metal-rich body.".T(EDTx.UserControlSurveyor_terraMR) : null);
-            information.Append((js.PlanetTypeID == EDPlanet.Metal_rich_body && !js.Terraformable) ? @" is a metal-rich body.".T(EDTx.UserControlSurveyor_MR) : null);
-            information.Append((js.Terraformable && !js.WaterWorld && js.PlanetTypeID != EDPlanet.High_metal_content_body && js.PlanetTypeID != EDPlanet.Metal_rich_body) ? @" is a terraformable planet.".T(EDTx.UserControlSurveyor_isaterraformableplanet) : null);
-            information.Append((js.HasRings) ? @" Has ring.".T(EDTx.UserControlSurveyor_Hasring) : null);
-            information.Append((js.HasMeaningfulVolcanism) ? @" Has ".T(EDTx.UserControlSurveyor_Has) + js.Volcanism + "." : null);
-            information.Append((js.nEccentricity >= eccentricityLimit) ? @" Has an high eccentricity of ".T(EDTx.UserControlSurveyor_eccentricity) + js.nEccentricity + "." : null);                
-            information.Append((js.nRadius < lowRadiusLimit) ? @" is tiny.".T(EDTx.UserControlSurveyor_LowRadius) : null);
-            information.Append((sn.Signals != null) ? " Has Signals.".T(EDTx.UserControlSurveyor_Signals) : null);
-            information.Append((js.IsLandable && !js.HasAtmosphericComposition && js.nRadius<= largeRadiusLimit) ? @" Is landable.".T(EDTx.UserControlSurveyor_islandable) : null);
-            information.Append((js.IsLandable && js.HasAtmosphericComposition && js.nRadius <= largeRadiusLimit) ? @" Is landable and has an ".T(EDTx.UserControlSurveyor_landableAtmo) + (js.Atmosphere??"Unknown") + "." : null);
-            information.Append((js.IsLandable && !js.HasAtmosphericComposition && js.nRadius >= largeRadiusLimit) ? @" Is large and landable.".T(EDTx.UserControlSurveyor_islargelandable) : null);
-            information.Append((js.IsLandable && js.HasAtmosphericComposition && js.nRadius >= largeRadiusLimit) ? @" Is large, landable and has an ".T(EDTx.UserControlSurveyor_largelandableAtmo) + (js.Atmosphere ?? "Unknown") + "." : null);
+            information.Append((js.Terraformable) ? @"terraformable ".T(EDTx.UserControlSurveyor_terraformable) : null);
+            information.Append((js.AmmoniaWorld) ? @"ammonia world".T(EliteDangerousCore.EDTx.EDPlanet_Ammoniaworld) + "." : null);
+            information.Append((js.Earthlike) ? @"earth like world".T(EliteDangerousCore.EDTx.EDPlanet_Earthlikebody) + "." : null);
+            information.Append((js.WaterWorld) ? @"water world".T(EliteDangerousCore.EDTx.EDPlanet_Waterworld) + "." : null);
+            information.Append((js.PlanetTypeID == EDPlanet.Metal_rich_body) ? @"metal-rich body".T(EliteDangerousCore.EDTx.EDPlanet_Metalrichbody) + "." : null);
+            information.Append((js.PlanetTypeID == EDPlanet.High_metal_content_body) ? @"high metal content world".T(EliteDangerousCore.EDTx.EDPlanet_Highmetalcontentbody) + "." : null);
+            information.Append((js.PlanetTypeID == EDPlanet.Rocky_body) ? @"rocky body".T(EliteDangerousCore.EDTx.EDPlanet_Rockybody) + "." : null);
+            information.Append((js.PlanetTypeID == EDPlanet.Icy_body) ? @"icy body".T(EliteDangerousCore.EDTx.EDPlanet_Icybody) + "." : null);
+            information.Append((js.PlanetTypeID == EDPlanet.Rocky_ice_body) ? @"rocky ice body".T(EliteDangerousCore.EDTx.EDPlanet_Rockyicebody) + "." : null);
+            information.Append((js.PlanetTypeID == EDPlanet.Water_giant) ? @"water giant".T(EliteDangerousCore.EDTx.EDPlanet_Watergiant) + "." : null);
+            information.Append((js.PlanetTypeID == EDPlanet.Water_giant_with_life) ? @"water giant with life".T(EliteDangerousCore.EDTx.EDPlanet_Watergiantwithlife) + "." : null);
+            information.Append((js.PlanetTypeID == EDPlanet.Gas_giant_with_water_based_life) ? @"gas giant with water based life".T(EliteDangerousCore.EDTx.EDPlanet_Gasgiantwithwaterbasedlife) + "." : null);
+            information.Append((js.PlanetTypeID == EDPlanet.Gas_giant_with_ammonia_based_life) ? @"gas giant with ammonia based life".T(EliteDangerousCore.EDTx.EDPlanet_Gasgiantwithammoniabasedlife) + "." : null);
+            information.Append((js.PlanetTypeID == EDPlanet.Sudarsky_class_I_gas_giant) ? "class I gas giant".T(EliteDangerousCore.EDTx.EDPlanet_SudarskyclassIgasgiant) + "." : null);
+            information.Append((js.PlanetTypeID == EDPlanet.Sudarsky_class_II_gas_giant) ? "class II gas giant".T(EliteDangerousCore.EDTx.EDPlanet_SudarskyclassIIgasgiant) + "." : null);
+            information.Append((js.PlanetTypeID == EDPlanet.Sudarsky_class_III_gas_giant) ? "class III gas giant".T(EliteDangerousCore.EDTx.EDPlanet_SudarskyclassIIIgasgiant) + "." : null);
+            information.Append((js.PlanetTypeID == EDPlanet.Sudarsky_class_IV_gas_giant) ? "class IV gas giant".T(EliteDangerousCore.EDTx.EDPlanet_SudarskyclassIVgasgiant) + "." : null);
+            information.Append((js.PlanetTypeID == EDPlanet.Sudarsky_class_V_gas_giant) ? "class V gas giant".T(EliteDangerousCore.EDTx.EDPlanet_SudarskyclassVgasgiant) + "." : null);
+            information.Append((js.PlanetTypeID == EDPlanet.Helium_rich_gas_giant) ? @"helium-rich gas giant".T(EliteDangerousCore.EDTx.EDPlanet_Heliumrichgasgiant) + "." : null);
+            information.Append((js.PlanetTypeID == EDPlanet.Helium_gas_giant) ? @"helium gas giant".T(EliteDangerousCore.EDTx.EDPlanet_Heliumgasgiant) + "." : null);
+            information.Append((js.nRadius < lowRadiusLimit) ? @" Is tiny.".T(EDTx.UserControlSurveyor_LowRadius) : null);
+            information.Append((js.nRadius > largeRadiusLimit) ? @" Is large.".T(EDTx.UserControlSurveyor_LargeRadius) : null);
+            information.Append((js.IsLandable) ? @" Is landable.".T(EDTx.UserControlSurveyor_islandable) : null);
+            information.Append((js.HasAtmosphericComposition) ? @" Has an ".T(EDTx.UserControlSurveyor_hasan) + (js.Atmosphere ?? "unknown Atmosphere".T(EDTx.UserControlSurveyor_unknownAtmosphere)) + "." : null);
+            information.Append((js.HasMeaningfulVolcanism) ? @" Has ".T(EDTx.UserControlSurveyor_Has) + js.Volcanism + "." : null);            
+            information.Append((sn.Signals != null) ? " Has signals.".T(EDTx.UserControlSurveyor_Signals) : null);
+            information.Append((js.HasRings) ? @" Is ringed.".T(EDTx.UserControlSurveyor_Hasring) : null);
+            information.Append((js.nEccentricity >= eccentricityLimit) ? @" Has an high eccentricity of ".T(EDTx.UserControlSurveyor_eccentricity) + js.nEccentricity + "." : null);
 
             var ev = js.GetEstimatedValues();
 
