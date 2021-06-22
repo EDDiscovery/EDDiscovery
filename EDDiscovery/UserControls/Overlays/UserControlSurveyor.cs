@@ -426,7 +426,8 @@ namespace EDDiscovery.UserControls
             information.Append((js.nRadius > largeRadiusLimit && js.IsPlanet) ? @" Is large.".T(EDTx.UserControlSurveyor_LargeRadius) : null);
             information.Append((js.IsLandable) ? @" Is landable.".T(EDTx.UserControlSurveyor_islandable) : null);
             information.Append((js.HasAtmosphericComposition && js.IsLandable) ? @" Atmosphere: ".T(EDTx.UserControlSurveyor_Atmosphere) + (js.Atmosphere ?? "unknown atmosphere".T(EDTx.UserControlSurveyor_unknownAtmosphere)) + "." : null);
-            information.Append((js.HasMeaningfulVolcanism && js.IsLandable) ? @" Has ".T(EDTx.UserControlSurveyor_Has) + js.Volcanism + "." : null);            
+            information.Append((js.HasMeaningfulVolcanism && js.IsLandable) ? @" Has ".T(EDTx.UserControlSurveyor_Has) + js.Volcanism + "." : null);
+            information.Append((js.HasMeaningfulVolcanism && hasVolcanismToolStripMenuItem.Checked && !js.IsLandable) ? @" Has ".T(EDTx.UserControlSurveyor_Has) + js.Volcanism + "." : null);
             information.Append((sn.Signals != null) ? " Has signals.".T(EDTx.UserControlSurveyor_Signals) : null);
             information.Append((js.HasRings) ? @" Is ringed.".T(EDTx.UserControlSurveyor_Hasring) : null);
             information.Append((js.nEccentricity >= eccentricityLimit) ? @" Has an high eccentricity of ".T(EDTx.UserControlSurveyor_eccentricity) + js.nEccentricity + "." : null);
