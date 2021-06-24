@@ -238,7 +238,7 @@ namespace EDDiscovery
 
                 if (hist != null)
                 {
-                    history.Copy(hist);
+                    history = hist;
 
                     OnRefreshCommanders?.Invoke();
 
