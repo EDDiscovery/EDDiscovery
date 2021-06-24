@@ -83,13 +83,13 @@ namespace EDDiscovery
             {
                 BaseUtils.AppTicks.TickCountLapDelta("CTNE", true);
 
-                HistoryEntry he = history.AddJournalEntryToHistory(je, h => LogLineHighlight(h));        // add a new one on top
+                var historyentries = history.AddJournalEntryToHistory(je, h => LogLineHighlight(h));        // add a new one on top, return a list of ones to process
 
                 var t1 = BaseUtils.AppTicks.TickCountLapDelta("CTNE");
                 if (t1.Item2 >= 20)
                     System.Diagnostics.Trace.WriteLine(" NE Add Journal slow " + t1.Item1);
 
-                if (he != null)     // may reject it 
+                foreach( var he in historyentries.EmptyIfNull())
                 {
                     if ( OnNewEntry != null)
                     {
