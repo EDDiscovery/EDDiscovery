@@ -118,7 +118,7 @@ namespace EDDiscovery.UserControls
 
                     string smods = w.Value.WeaponMods != null ? string.Join(", ", w.Value.WeaponMods) : "";
                     object[] rowobj = new object[] {  EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(w.Value.EventTime).ToString(),
-                                               w.Value.FriendlyName + ":" + (w.Value.ID%10000) ,
+                                               w.Value.FriendlyName, //+ ":" + (w.Value.ID%10000) ,
                                                w.Value.Class,
                                                smods,
                                                w.Value.Price.ToString("N0"),
@@ -176,7 +176,7 @@ namespace EDDiscovery.UserControls
                 foreach (var s in suitlist)
                 {
                     string stime = EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(s.Value.EventTime).ToString();
-                    string sname = s.Value.FriendlyName + ":"+(s.Value.ID % 10000);
+                    string sname = s.Value.FriendlyName; // + ":"+(s.Value.ID % 10000);
                     string sprice = s.Value.Price.ToString("N0");
                     string smods = s.Value.SuitMods != null ? string.Join(", ", s.Value.SuitMods) : "";
 
