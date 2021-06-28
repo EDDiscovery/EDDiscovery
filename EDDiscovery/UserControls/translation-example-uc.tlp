@@ -428,34 +428,27 @@ SECTION UserControlSurveyor
 .MandD: " (Mapped & Discovered)" @
 .MP: " (Mapped)" @
 .DIS: " (Discovered)" @
-.bodyFeaturesToolStripMenuItem.lowRadiusToolStripMenuItem: "Low Radius" @
+.bodyFeaturesToolStripMenuItem.lowRadiusToolStripMenuItem: "Tiny body" @
 .checkEDSMForInformationToolStripMenuItem: "Check EDSM for information" @
 .autoHideToolStripMenuItem: "Auto Hide" @
 .dontHideInFSSModeToolStripMenuItem: "Don\'t Hide in FSS Mode" @
 .showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem: "Show System Info Always" @
 .selectFSSSignalsShownToolStripMenuItem: "Select FSS Signals Shown" @
-.LowRadius: " is tiny." @
+.LowRadius: " Is tiny." @
+.LargeRadius: " Is large." @
 .Mapped: " (Mapped & Discovered)" @
 .Systemscancomplete: "System scan complete." @
 .bodiesfound: " bodies found." @
 .Noscanreported: "No scan reported." @
-.isanammoniaworld: " is an ammonia world." @
-.isanearthlikeworld: " is an earth like world." @
-.isawaterworld: " is a water world." @
-.isaterraformablewaterworld: " is a terraformable water world." @
-.isaterraformableplanet: " is a terraformable planet." @
 .Hasring: " Has ring." @
+.islandable " Is landable." @
 .Has: " Has " @
-.Signals: " Has Signals." @
-.HMC: " is a high metal content world." @
-.terraHMC: " is a terraformable high metal content world." @
-.MR: " is a metal-rich body." @
-.terraMR: " is a terraformable metal-rich body." @
-.islandable: " Is landable." @
-.landableAtmo: " Is landable and has an " @
-.islandable: " Is large and landable." @
-.landableAtmo: " Is large, landable and has an " @
+.Signals: " Has signals." @
 .eccentricity: " Has an high eccentricity of " @
+.isa " is a " @
+.Atmosphere " Atmosphere: " @
+.terraformable "terraformable " @
+.unknownAtmosphere "unknown atmosphere"
 
 .planetaryClassesToolStripMenuItem: "Planetary Classes" @
 .planetaryClassesToolStripMenuItem.ammoniaWorldToolStripMenuItem: "Ammonia World" @
