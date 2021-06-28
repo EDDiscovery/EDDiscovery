@@ -148,6 +148,7 @@ namespace EDDiscovery.UserControls
 
         public override void InitialDisplay()
         {
+            // last_mcl may be null if there is no history
             last_mcl = checkBoxCursorToTop.Checked ? discoveryform.history.GetLast?.MaterialCommodity : uctg.GetCurrentHistoryEntry?.MaterialCommodity;
             DisplayTradeSelection();
             DisplayTradeList();
@@ -381,9 +382,10 @@ namespace EDDiscovery.UserControls
         {
             dataGridViewTrades.Rows.Clear();
 
-            if (tradelist.Count > 0)
+            if (tradelist.Count > 0)        
             {
-                List<MaterialCommodityMicroResource> mcl = discoveryform.history.MaterialCommoditiesMicroResources.Get(last_mcl.Value);
+                // last_mcl can be null
+                List<MaterialCommodityMicroResource> mcl = last_mcl == null ? null : discoveryform.history.MaterialCommoditiesMicroResources.Get(last_mcl.Value);
 
                 var totals = mcl == null ? null : MaterialCommoditiesRecipe.TotalList(mcl);                  // start with totals present, null if we don't have an mcl
 
