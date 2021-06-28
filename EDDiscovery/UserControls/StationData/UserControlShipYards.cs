@@ -200,7 +200,7 @@ namespace EDDiscovery.UserControls
             foreach (ShipYard.ShipyardItem i in yard.Ships)
             {
                 string col2 = "Unknown".T(EDTx.Unknown), col3 = "";
-                Dictionary<ItemData.ShipPropID, ItemData.IModuleInfo> shipprops = ItemData.Instance.GetShipProperties(i.FDShipType);
+                Dictionary<ItemData.ShipPropID, ItemData.IModuleInfo> shipprops = ItemData.Instance.GetShipProperties(i.ShipType);
                 if ( shipprops != null)
                 {
                     col2 = (shipprops[ItemData.ShipPropID.Manu] as ItemData.ShipInfoString).Value;
