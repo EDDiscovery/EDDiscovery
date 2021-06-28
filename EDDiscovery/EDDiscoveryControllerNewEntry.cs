@@ -239,7 +239,7 @@ namespace EDDiscovery
 
                                 var shipyard = sh.GetShips();
 
-                                if ( shipyard?.Count > 0 && allowcobramkiv == true)
+                                if ( shipyard?.Count > 0 && allowcobramkiv.HasValue)
                                 {
                                     var list = shipyard.Select(x => new Tuple<long, string, long>(x.ID, x.Name.ToLower(), x.BaseValue)).ToArray();
                                     var shipyardevent = new EliteDangerousCore.JournalEvents.JournalShipyard(DateTime.UtcNow, station, system, sh.ID, list, EDCommander.CurrentCmdrID, allowcobramkiv.Value);
