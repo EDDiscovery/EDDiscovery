@@ -1216,6 +1216,11 @@ namespace EDDiscovery
             actioncontroller.ReLoad();
             actioncontroller.CheckWarn();
             actioncontroller.onStartup();
+
+            // keep for debug:
+
+            //if (FrontierCAPI.Active && !EDCommander.Current.ConsoleCommander)
+              //  Controller.DoCAPI(history.GetLast.Status.StationName, history.GetLast.System.Name, false, history.Shipyards.AllowCobraMkIV);
          }
 
 

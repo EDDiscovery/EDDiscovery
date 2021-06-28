@@ -17,6 +17,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using EliteDangerousCore;
 
@@ -108,68 +109,13 @@ namespace EDDiscovery
 
                     OnNewEntrySecond?.Invoke(he, history);      // secondary hook..
 
+                    // finally, CAPI, if docked, and CAPI is go for pc commander, do capi procedure
 
-                    // finally, CAPI, if docked, try and get commodity data, and if so, create a new EDD record.  Do not do this for console commanders
-
-                    if (he.EntryType == JournalTypeEnum.Docked)
+                    if (he.EntryType == JournalTypeEnum.Docked && FrontierCAPI.Active && !EDCommander.Current.ConsoleCommander)
                     {
-                        if (FrontierCAPI.Active && !EDCommander.Current.ConsoleCommander)
-                        {
-                            // don't hold up the main thread, do it in a task, as its a HTTP operation
-                            // and wait for the CAPI to recover by delaying for 15 s
-
-                            System.Threading.Tasks.Task.Delay(15000).ContinueWith((task) =>           
-                            {
-                                var dockevt = he.journalEntry as EliteDangerousCore.JournalEvents.JournalDocked;
-
-                                for (int tries = 0; tries < 3; tries++)
-                                {
-                                    FrontierCAPI.GameIsBeta = he.journalEntry.IsBeta;
-                                    string marketjson = FrontierCAPI.Market();
-
-                                    CAPI.Market mk = new CAPI.Market(marketjson);
-                                    if (mk.IsValid)
-                                    {
-                                        //System.IO.File.WriteAllText(@"c:\code\market.json", marketjson);
-
-                                        if (dockevt.StationName.Equals(mk.Name, StringComparison.InvariantCultureIgnoreCase))
-                                        {
-                                            System.Diagnostics.Trace.WriteLine($"CAPI got market {mk.Name}");
-
-                                            var entry = new EliteDangerousCore.JournalEvents.JournalEDDCommodityPrices(he.EventTimeUTC.AddSeconds(1),
-                                                            mk.ID, mk.Name, he.System.Name, EDCommander.CurrentCmdrID, mk.Commodities);
-
-                                            var jo = entry.ToJSON();        // get json of it, and add it to the db
-                                            entry.Add(jo);
-
-                                            InvokeAsyncOnUiThread(() =>
-                                            {
-                                                Debug.Assert(System.Windows.Forms.Application.MessageLoop);
-                                                System.Diagnostics.Debug.WriteLine("CAPI fire new entry");
-                                                NewEntry(entry);                // then push it thru. this will cause another set of calls to NewEntry First/Second
-                                                                                // EDDN handler will pick up EDDCommodityPrices and send it.
-                                            });
-
-                                            break;
-                                        }
-                                        else
-                                        {
-                                            LogLine("CAPI received incorrect information, retrying");
-                                            System.Diagnostics.Trace.WriteLine($"CAPI disagree on market {dockevt.StationName} vs {mk.Name}");
-                                        }
-                                    }
-                                    else
-                                    {
-                                        LogLine("CAPI market data invalid, retrying");
-                                        System.Diagnostics.Trace.WriteLine($"CAPI market invalid {marketjson}");
-                                    }
-
-                                    Thread.Sleep(10000);
-                                }
-                            });
-                        }
+                        var dockevt = he.journalEntry as EliteDangerousCore.JournalEvents.JournalDocked;
+                        DoCAPI(dockevt.StationName, he.System.Name, he.journalEntry.IsBeta, history.Shipyards.AllowCobraMkIV);
                     }
-
 
                     var t3 = BaseUtils.AppTicks.TickCountLapDelta("CTNE");
                     System.Diagnostics.Trace.WriteLine("NE END " + t3.Item1 + " " + (t3.Item3 > 99 ? "!!!!!!!!!!!!!" : ""));
@@ -212,5 +158,116 @@ namespace EDDiscovery
             if ( t.Item2 > 25 )
                 System.Diagnostics.Debug.WriteLine( t.Item1 + " Controller UI !!!");
         }
+
+        public void DoCAPI(string station, string system, bool beta , bool? allowcobramkiv)
+        {
+            // don't hold up the main thread, do it in a task, as its a HTTP operation
+
+            System.Threading.Tasks.Task.Run(() =>
+            {
+                bool donemarket = false, doneshipyard = false;
+
+                for (int tries = 3; tries >= 1 && (donemarket == false || doneshipyard == false); tries--)
+                {
+                    Thread.Sleep(10000);        // for the first go, give the CAPI servers a chance to update, for the next goes, spread out the requests
+
+                    FrontierCAPI.GameIsBeta = beta;
+
+                    if (!donemarket)
+                    {
+                        string marketjson = FrontierCAPI.Market();
+
+                        if ( marketjson != null )
+                        {
+                            System.IO.File.WriteAllText(@"c:\code\market.json", marketjson);
+
+                            CAPI.Market mk = new CAPI.Market(marketjson);
+                            if (mk.IsValid && station.Equals(mk.Name, StringComparison.InvariantCultureIgnoreCase))
+                            {
+                                System.Diagnostics.Trace.WriteLine($"CAPI got market {mk.Name}");
+
+                                var entry = new EliteDangerousCore.JournalEvents.JournalEDDCommodityPrices(DateTime.UtcNow,
+                                                mk.ID, mk.Name, system, EDCommander.CurrentCmdrID, mk.Commodities);
+
+                                var jo = entry.ToJSON();        // get json of it, and add it to the db
+                                entry.Add(jo);
+
+                                InvokeAsyncOnUiThread(() =>
+                                {
+                                    Debug.Assert(System.Windows.Forms.Application.MessageLoop);
+                                    NewEntry(entry);                // then push it thru. this will cause another set of calls to NewEntry First/Second
+                                                                    // EDDN handler will pick up EDDCommodityPrices and send it.
+                                });
+
+                                donemarket = true;
+                                Thread.Sleep(500);      // space the next check out a bit
+                            }
+                        }
+                    }
+
+                    if (!donemarket)
+                    {
+                        LogLine("CAPI failed to get market data" + (tries > 1 ? ", retrying" : ", give up"));
+                    }
+
+                    if (!doneshipyard)
+                    {
+                        string shipyardjson = FrontierCAPI.Shipyard();
+
+                        if (shipyardjson != null)
+                        {
+                            CAPI.Shipyard sh = new CAPI.Shipyard(shipyardjson);
+                            System.IO.File.WriteAllText(@"c:\code\shipyard.json", shipyardjson);
+                            if (sh.IsValid && station.Equals(sh.Name, StringComparison.InvariantCultureIgnoreCase))
+                            {
+                                System.Diagnostics.Trace.WriteLine($"CAPI got shipyard {sh.Name}");
+
+                                var modules = sh.GetModules();
+                                if ( modules?.Count > 0 )
+                                {
+                                    var list = modules.Select(x => new Tuple<long, string, long>(x.ID, x.Name.ToLower(), x.Cost)).ToArray();
+                                    var outfitting = new EliteDangerousCore.JournalEvents.JournalOutfitting(DateTime.UtcNow, station, system, sh.ID, list, EDCommander.CurrentCmdrID);
+
+                                    var jo = outfitting.ToJSON();        // get json of it, and add it to the db
+                                    outfitting.Add(jo);
+
+                                    InvokeAsyncOnUiThread(() =>
+                                    {
+                                        NewEntry(outfitting);                // then push it thru. this will cause another set of calls to NewEntry First/Second, then EDDN will send it
+                                    });
+                                }
+
+                                var shipyard = sh.GetShips();
+
+                                if ( shipyard?.Count > 0 && allowcobramkiv == true)
+                                {
+                                    var list = shipyard.Select(x => new Tuple<long, string, long>(x.ID, x.Name.ToLower(), x.BaseValue)).ToArray();
+                                    var shipyardevent = new EliteDangerousCore.JournalEvents.JournalShipyard(DateTime.UtcNow, station, system, sh.ID, list, EDCommander.CurrentCmdrID, allowcobramkiv.Value);
+
+                                    var jo = shipyardevent.ToJSON();        // get json of it, and add it to the db
+                                    shipyardevent.Add(jo);
+
+                                    InvokeAsyncOnUiThread(() =>
+                                    {
+                                        NewEntry(shipyardevent);                // then push it thru. this will cause another set of calls to NewEntry First/Second, then EDDN will send it
+                                    });
+                                }
+
+                                doneshipyard = true;
+                            }
+                        }
+                    }
+
+                    if (!doneshipyard)
+                    {
+                        LogLine("CAPI failed to get shipyard data" + (tries > 1 ? ", retrying" : ", give up"));
+                    }
+                }
+
+            });
+
+        }
+
+
     }
 }
