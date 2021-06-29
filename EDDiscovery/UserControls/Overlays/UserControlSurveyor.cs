@@ -310,7 +310,7 @@ namespace EDDiscovery.UserControls
                                     (sd.HasRings && !sd.AmmoniaWorld && !sd.Earthlike && !sd.WaterWorld && hasRingsToolStripMenuItem.Checked) ||
                                     (sd.HasMeaningfulVolcanism && hasVolcanismToolStripMenuItem.Checked) ||
                                     (sd.nEccentricity.HasValue && sd.nEccentricity >= eccentricityLimit && highEccentricityToolStripMenuItem.Checked) ||
-                                    (sd.Terraformable && terraformableToolStripMenuItem.Checked) ||
+                                    (sd.CanBeTerraformable && terraformableToolStripMenuItem.Checked) ||
                                     (sd.IsPlanet && lowRadiusToolStripMenuItem.Checked && sd.nRadius.HasValue && sd.nRadius < lowRadiusLimit) ||
                                     (sn.Signals != null && hasSignalsToolStripMenuItem.Checked) ||
                                     (sd.IsStar && showAllStarsToolStripMenuItem.Checked) ||
@@ -420,13 +420,13 @@ namespace EDDiscovery.UserControls
 
             // Additional information
             information.Append((js.IsStar) ? Bodies.StarName(js.StarTypeID) + "." : null);
-            information.Append((js.Terraformable) ? @"terraformable ".T(EDTx.UserControlSurveyor_terraformable) : null);
+            information.Append((js.CanBeTerraformable) ? @"terraformable ".T(EDTx.UserControlSurveyor_terraformable) : null);
             information.Append((js.IsPlanet) ? Bodies.PlanetTypeName(js.PlanetTypeID) + "." : null);
             information.Append((js.nRadius < lowRadiusLimit && js.IsPlanet) ? @" Is tiny.".T(EDTx.UserControlSurveyor_LowRadius) : null);
             information.Append((js.nRadius > largeRadiusLimit && js.IsPlanet) ? @" Is large.".T(EDTx.UserControlSurveyor_LargeRadius) : null);
             information.Append((js.IsLandable) ? @" Is landable.".T(EDTx.UserControlSurveyor_islandable) : null);
             information.Append((js.HasAtmosphericComposition && js.IsLandable) ? @" Atmosphere: ".T(EDTx.UserControlSurveyor_Atmosphere) + (js.Atmosphere ?? "unknown atmosphere".T(EDTx.UserControlSurveyor_unknownAtmosphere)) + "." : null);
-            information.Append((js.HasMeaningfulVolcanism && js.IsLandable ^ hasVolcanismToolStripMenuItem.Checked) ? @" Has ".T(EDTx.UserControlSurveyor_Has) + js.Volcanism + "." : null);
+            information.Append((js.HasMeaningfulVolcanism && js.IsLandable | hasVolcanismToolStripMenuItem.Checked) ? @" Has ".T(EDTx.UserControlSurveyor_Has) + js.Volcanism + "." : null);
             information.Append((sn.Signals != null) ? " Has signals.".T(EDTx.UserControlSurveyor_Signals) : null);
             information.Append((js.HasRings) ? @" Is ringed.".T(EDTx.UserControlSurveyor_Hasring) : null);
             information.Append((js.nEccentricity >= eccentricityLimit) ? @" Has an high eccentricity of ".T(EDTx.UserControlSurveyor_eccentricity) + js.nEccentricity + "." : null);
