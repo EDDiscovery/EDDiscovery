@@ -293,7 +293,7 @@ namespace EDDiscovery.UserControls
 
                         foreach (StarScan.ScanNode sn in all_nodes)
                         {
-                            if (sn.ScanData != null && sn.ScanData?.BodyName != null )
+                            if (sn.ScanData != null && sn.ScanData?.BodyName != null && (!sn.ScanData.IsEDSMBody || checkEDSMForInformationToolStripMenuItem.Checked))
                             {
                                 var sd = sn.ScanData;
 
