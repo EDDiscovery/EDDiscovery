@@ -570,6 +570,10 @@
     <EmbeddedResource Include="Controls\SysInfo\notfirstdiscover.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Journal\ObsoleteOrIcons.png" />
+    <EmbeddedResource Include="Journal\ScanOrganic.png" />
+    <EmbeddedResource Include="Journal\SellOrganicData.png" />
+    <EmbeddedResource Include="Journal\UseConsumable.png" />
     <EmbeddedResource Include="Journal\CancelDropship.png" />
     <EmbeddedResource Include="Journal\DropshipDeploy.png" />
     <EmbeddedResource Include="Journal\BookDropship.png" />
@@ -633,7 +637,7 @@
     <EmbeddedResource Include="Journal\NavRoute.png" />
     <EmbeddedResource Include="Journal\CarrierCancelDecommission.png" />
     <EmbeddedResource Include="Journal\CarrierModulePack.png" />
-    <EmbeddedResource Include="Journal\CarrierNameChanged.png" />
+    <EmbeddedResource Include="Journal\CarrierNameChange.png" />
     <EmbeddedResource Include="Journal\CarrierShipPack.png" />
     <EmbeddedResource Include="Journal\CarrierTradeOrder.png" />
     <EmbeddedResource Include="Journal\CarrierBankTransfer.png" />

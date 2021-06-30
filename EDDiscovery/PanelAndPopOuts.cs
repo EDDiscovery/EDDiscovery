@@ -212,8 +212,6 @@ namespace EDDiscovery
             userselectablepanelseperatorlistgroup = separs.ToArray();
             displayablepanels = (from x in paneldefinition where x.PopoutID != PanelIDs.GroupMarker select x).ToList(); //remove groups..
             userselectablepanellist = (from x in displayablepanels where x.Description.Length>0 select x).ToList(); //remove non selectables..
-
-            PanelTypeIcons = new BaseUtils.Icons.IconGroup<PanelIDs>("Panels");
         }
 
         [System.Diagnostics.DebuggerDisplay("{PopoutID} {WindowTitle}")]
