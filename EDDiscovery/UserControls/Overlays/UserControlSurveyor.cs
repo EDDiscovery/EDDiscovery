@@ -307,7 +307,7 @@ namespace EDDiscovery.UserControls
                                     (sd.WaterWorld && waterWorldToolStripMenuItem.Checked) ||
                                     (sd.PlanetTypeID == EDPlanet.High_metal_content_body && highMetalContentBodyToolStripMenuItem.Checked) ||
                                     (sd.PlanetTypeID == EDPlanet.Metal_rich_body && metalToolStripMenuItem.Checked) ||
-                                    (sd.HasRings && !sd.AmmoniaWorld && !sd.Earthlike && !sd.WaterWorld && hasRingsToolStripMenuItem.Checked) ||
+                                    (sd.HasRings && hasRingsToolStripMenuItem.Checked) ||
                                     (sd.HasMeaningfulVolcanism && hasVolcanismToolStripMenuItem.Checked) ||
                                     (sd.nEccentricity.HasValue && sd.nEccentricity >= eccentricityLimit && highEccentricityToolStripMenuItem.Checked) ||
                                     (sd.CanBeTerraformable && terraformableToolStripMenuItem.Checked) ||
