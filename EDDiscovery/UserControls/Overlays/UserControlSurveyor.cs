@@ -319,7 +319,7 @@ namespace EDDiscovery.UserControls
                                 {
                                     if (!sd.Mapped || hideAlreadyMappedBodiesToolStripMenuItem.Checked == false)      // if not mapped, or show mapped
                                     {
-                                        var il = InfoLine(last_sys, sn, sd);
+                                        var il = InfoLine(last_sys, sn, sd, hasVolcanismToolStripMenuItem.Checked, showValuesToolStripMenuItem.Checked, showMoreInformationToolStripMenuItem.Checked);
                                         //System.Diagnostics.Debug.WriteLine("Display " + il);
                                         var i = pictureBoxSurveyor.AddTextAutoSize(
                                                 new Point(3, vpos),
@@ -406,7 +406,7 @@ namespace EDDiscovery.UserControls
             extPictureBoxScroll.Render();
         }
 
-        private string InfoLine(ISystem sys, StarScan.ScanNode sn, JournalScan js)
+        static private string InfoLine(ISystem sys, StarScan.ScanNode sn, JournalScan js, bool volcanism, bool showvalues, bool shortinfo)
         {
             var information = new StringBuilder();
 
@@ -426,7 +426,7 @@ namespace EDDiscovery.UserControls
             information.Append((js.nRadius > largeRadiusLimit && js.IsPlanet) ? @" Is large.".T(EDTx.UserControlSurveyor_LargeRadius) : null);
             information.Append((js.IsLandable) ? @" Is landable.".T(EDTx.UserControlSurveyor_islandable) : null);
             information.Append((js.HasAtmosphericComposition && js.IsLandable) ? @" Atmosphere: ".T(EDTx.UserControlSurveyor_Atmosphere) + (js.Atmosphere ?? "unknown atmosphere".T(EDTx.UserControlSurveyor_unknownAtmosphere)) + "." : null);
-            information.Append((js.HasMeaningfulVolcanism && js.IsLandable | hasVolcanismToolStripMenuItem.Checked) ? @" Has ".T(EDTx.UserControlSurveyor_Has) + js.Volcanism + "." : null);
+            information.Append((js.HasMeaningfulVolcanism && js.IsLandable | volcanism) ? @" Has ".T(EDTx.UserControlSurveyor_Has) + js.Volcanism + "." : null);
             information.Append((sn.Signals != null) ? " Has signals.".T(EDTx.UserControlSurveyor_Signals) : null);
             information.Append((js.HasRings) ? @" Is ringed.".T(EDTx.UserControlSurveyor_Hasring) : null);
             information.Append((js.nEccentricity >= eccentricityLimit) ? @" Has an high eccentricity of ".T(EDTx.UserControlSurveyor_eccentricity) + js.nEccentricity + "." : null);
@@ -436,7 +436,7 @@ namespace EDDiscovery.UserControls
             if (js.WasMapped == true && js.WasDiscovered == true)
             {
                 information.Append(" (Mapped & Discovered)".T(EDTx.UserControlSurveyor_MandD));
-                if (showValuesToolStripMenuItem.Checked)
+                if (showvalues)
                 {
                     information.Append(' ').Append(ev.EstimatedValueMappedEfficiently.ToString("N0")).Append(" cr");
                 }
@@ -444,7 +444,7 @@ namespace EDDiscovery.UserControls
             else if (js.WasMapped == true && js.WasDiscovered == false)
             {
                 information.Append(" (Mapped)".T(EDTx.UserControlSurveyor_MP));
-                if (showValuesToolStripMenuItem.Checked)
+                if (showvalues)
                 {
                     information.Append(' ').Append(ev.EstimatedValueFirstMappedEfficiently.ToString("N0")).Append(" cr");
                 }
@@ -452,20 +452,20 @@ namespace EDDiscovery.UserControls
             else if (js.WasDiscovered == true && js.WasMapped == false)
             {
                 information.Append(" (Discovered)".T(EDTx.UserControlSurveyor_DIS));
-                if (showValuesToolStripMenuItem.Checked)
+                if (showvalues)
                 {
                     information.Append(' ').Append(ev.EstimatedValueFirstMappedEfficiently.ToString("N0")).Append(" cr");
                 }
             }
             else
             {      
-                if (showValuesToolStripMenuItem.Checked)
+                if (showvalues)
                 {
                     information.Append(' ').Append((ev.EstimatedValueFirstDiscoveredFirstMappedEfficiently > 0 ? ev.EstimatedValueFirstDiscoveredFirstMappedEfficiently : ev.EstimatedValueBase).ToString("N0")).Append(" cr");
                 }
             }
 
-            if (showMoreInformationToolStripMenuItem.Checked)
+            if (shortinfo)
             {
                 information.Append(' ').Append(js.ShortInformation());
             }
