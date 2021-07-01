@@ -570,6 +570,28 @@
     <EmbeddedResource Include="Controls\SysInfo\notfirstdiscover.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Highres\ConflictPanel.png" />
+    <EmbeddedResource Include="Highres\OpenAccessPanel.png" />
+    <EmbeddedResource Include="Highres\OnFootHelp.png" />
+    <EmbeddedResource Include="Highres\SelectToolMode.png" />
+    <EmbeddedResource Include="Highres\SelectTool.png" />
+    <EmbeddedResource Include="Highres\SelectComp.png" />
+    <EmbeddedResource Include="Highres\SelectRecharge.png" />
+    <EmbeddedResource Include="Highres\FlashLight.png" />
+    <EmbeddedResource Include="Highres\PreviousGrenade.png" />
+    <EmbeddedResource Include="Highres\NextGrenade.png" />
+    <EmbeddedResource Include="Highres\HideWeapon.png" />
+    <EmbeddedResource Include="Highres\NextWeapon.png" />
+    <EmbeddedResource Include="Highres\PreviousWeapon.png" />
+    <EmbeddedResource Include="Highres\SecondaryWeapon.png" />
+    <EmbeddedResource Include="Highres\SelectUtility.png" />
+    <EmbeddedResource Include="Highres\PrimaryWeapon.png" />
+    <EmbeddedResource Include="Highres\SwitchWeapon.png" />
+    <EmbeddedResource Include="Highres\Reload.png" />
+    <EmbeddedResource Include="Highres\FocusComms.png" />
+    <EmbeddedResource Include="Highres\QuickComms.png" />
+    <EmbeddedResource Include="Highres\Landed.png" />
+    <EmbeddedResource Include="Highres\Docked.png" />
     <EmbeddedResource Include="Journal\ObsoleteOrIcons.png" />
     <EmbeddedResource Include="Journal\ScanOrganic.png" />
     <EmbeddedResource Include="Journal\SellOrganicData.png" />
