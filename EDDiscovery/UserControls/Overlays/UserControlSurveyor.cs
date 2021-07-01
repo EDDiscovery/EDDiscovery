@@ -68,6 +68,7 @@ namespace EDDiscovery.UserControls
             landableWithVolcanismToolStripMenuItem.Checked = GetSetting("isLandableWithVolcanism", true);
             landableAndLargeToolStripMenuItem.Checked = GetSetting("largelandable", true);
             hasRingsToolStripMenuItem.Checked = GetSetting("showRinged", true);
+            showGravityToolStripMenuItem.Checked = GetSetting("showGravity", true);
             hideAlreadyMappedBodiesToolStripMenuItem.Checked = GetSetting("hideMapped", true);
             autoHideToolStripMenuItem.Checked = GetSetting("autohide", false);
             lowRadiusToolStripMenuItem.Checked = GetSetting("lowradius", false);
@@ -100,6 +101,7 @@ namespace EDDiscovery.UserControls
             this.highEccentricityToolStripMenuItem.Click += new System.EventHandler(this.highEccentricityToolStripMenuItem_Click);
             this.hasRingsToolStripMenuItem.Click += new System.EventHandler(this.hasRingsToolStripMenuItem_Click);
             this.lowRadiusToolStripMenuItem.Click += new System.EventHandler(this.lowRadiusToolStripMenuItem_Click);
+            this.showGravityToolStripMenuItem.Click += new System.EventHandler(this.showGravityToolStripMenuItem_Click);
             this.hideAlreadyMappedBodiesToolStripMenuItem.Click += new System.EventHandler(this.hideAlreadyMappedBodiesToolStripMenuItem_Click);
             this.leftToolStripMenuItem.Click += new System.EventHandler(this.leftToolStripMenuItem_Click);
             this.centerToolStripMenuItem.Click += new System.EventHandler(this.centerToolStripMenuItem_Click);
@@ -319,7 +321,7 @@ namespace EDDiscovery.UserControls
                                 {
                                     if (!sd.Mapped || hideAlreadyMappedBodiesToolStripMenuItem.Checked == false)      // if not mapped, or show mapped
                                     {
-                                        var il = InfoLine(last_sys, sn, sd, hasVolcanismToolStripMenuItem.Checked, showValuesToolStripMenuItem.Checked, showMoreInformationToolStripMenuItem.Checked);
+                                        var il = InfoLine(last_sys, sn, sd, hasVolcanismToolStripMenuItem.Checked, showValuesToolStripMenuItem.Checked, showMoreInformationToolStripMenuItem.Checked, showGravityToolStripMenuItem.Checked);
                                         //System.Diagnostics.Debug.WriteLine("Display " + il);
                                         var i = pictureBoxSurveyor.AddTextAutoSize(
                                                 new Point(3, vpos),
@@ -406,7 +408,7 @@ namespace EDDiscovery.UserControls
             extPictureBoxScroll.Render();
         }
 
-        static private string InfoLine(ISystem sys, StarScan.ScanNode sn, JournalScan js, bool volcanism, bool showvalues, bool shortinfo)
+        static private string InfoLine(ISystem sys, StarScan.ScanNode sn, JournalScan js, bool volcanism, bool showvalues, bool shortinfo, bool showGravity)
         {
             var information = new StringBuilder();
 
@@ -414,7 +416,7 @@ namespace EDDiscovery.UserControls
                 information.Append("\u2713"); // let the cmdr see that this body is already mapped - this is a check
 
             string bodyname = js.BodyDesignationOrName.ReplaceIfStartsWith(sys.Name);
-
+            
             // Name
             information.Append((bodyname) + @" is a ".T(EDTx.UserControlSurveyor_isa));
 
@@ -423,8 +425,9 @@ namespace EDDiscovery.UserControls
             information.Append((js.CanBeTerraformable) ? @"terraformable ".T(EDTx.UserControlSurveyor_terraformable) : null);
             information.Append((js.IsPlanet) ? Bodies.PlanetTypeName(js.PlanetTypeID) + "." : null);
             information.Append((js.nRadius < lowRadiusLimit && js.IsPlanet) ? @" Is tiny.".T(EDTx.UserControlSurveyor_LowRadius) : null);
-            information.Append((js.nRadius > largeRadiusLimit && js.IsPlanet) ? @" Is large.".T(EDTx.UserControlSurveyor_LargeRadius) : null);
+            information.Append((js.nRadius > largeRadiusLimit && js.IsPlanet && js.IsLandable) ? @" Is large.".T(EDTx.UserControlSurveyor_LargeRadius) : null);
             information.Append((js.IsLandable) ? @" Is landable.".T(EDTx.UserControlSurveyor_islandable) : null);
+            information.Append((js.IsLandable && showGravity && js.nSurfaceGravityG.HasValue) ? @" (" + Math.Round(js.nSurfaceGravityG.Value, 2, MidpointRounding.AwayFromZero) + "g)" : null);
             information.Append((js.HasAtmosphericComposition && js.IsLandable) ? @" Atmosphere: ".T(EDTx.UserControlSurveyor_Atmosphere) + (js.Atmosphere ?? "unknown atmosphere".T(EDTx.UserControlSurveyor_unknownAtmosphere)) + "." : null);
             information.Append((js.HasMeaningfulVolcanism && js.IsLandable | volcanism) ? @" Has ".T(EDTx.UserControlSurveyor_Has) + js.Volcanism + "." : null);
             information.Append((sn.Signals != null) ? " Has signals.".T(EDTx.UserControlSurveyor_Signals) : null);
@@ -572,6 +575,12 @@ namespace EDDiscovery.UserControls
             DrawSystem(last_sys);
         }
 
+        private void showGravityToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PutSetting("showGravity", showGravityToolStripMenuItem.Checked);
+            DrawSystem(last_sys);
+        }
+
         private void checkEDSMForInformationToolStripMenuItem_Click(object sender, EventArgs e)
         {
             PutSetting("edsm", checkEDSMForInformationToolStripMenuItem.Checked);
@@ -703,5 +712,6 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
+       
     }
 }

@@ -84,6 +84,7 @@ namespace EDDiscovery.UserControls
             this.pictureBoxSurveyor = new ExtendedControls.ExtPictureBox();
             this.extPictureBoxScroll = new ExtendedControls.ExtPictureBoxScroll();
             this.extScrollBar = new ExtendedControls.ExtScrollBar();
+            this.showGravityToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSurveyor)).BeginInit();
             this.extPictureBoxScroll.SuspendLayout();
@@ -99,6 +100,7 @@ namespace EDDiscovery.UserControls
             this.showBeltClustersToolStripMenuItem,
             this.selectFSSSignalsShownToolStripMenuItem,
             this.toolStripSeparator1,
+            this.showGravityToolStripMenuItem,
             this.showMoreInformationToolStripMenuItem,
             this.hideAlreadyMappedBodiesToolStripMenuItem,
             this.checkEDSMForInformationToolStripMenuItem,
@@ -110,7 +112,7 @@ namespace EDDiscovery.UserControls
             this.wordWrapToolStripMenuItem,
             this.textAlignToolStripMenuItem});
             this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(226, 368);
+            this.contextMenuStrip.Size = new System.Drawing.Size(226, 390);
             // 
             // planetaryClassesToolStripMenuItem
             // 
@@ -469,6 +471,15 @@ namespace EDDiscovery.UserControls
             this.extScrollBar.Value = 0;
             this.extScrollBar.ValueLimited = 0;
             // 
+            // showGravityToolStripMenuItem
+            // 
+            this.showGravityToolStripMenuItem.Checked = true;
+            this.showGravityToolStripMenuItem.CheckOnClick = true;
+            this.showGravityToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.showGravityToolStripMenuItem.Name = "showGravityToolStripMenuItem";
+            this.showGravityToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
+            this.showGravityToolStripMenuItem.Text = "Show gravity of landables";
+            // 
             // UserControlSurveyor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -526,5 +537,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripMenuItem metalToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem highEccentricityToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem landableAndLargeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem showGravityToolStripMenuItem;
     }
 }
