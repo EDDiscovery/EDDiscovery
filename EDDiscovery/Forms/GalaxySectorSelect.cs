@@ -236,8 +236,8 @@ namespace EDDiscovery.Forms
             f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "ED Discovery downloads star data from EDSM which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed".T(EDTx.GalaxySectorSelect_GALSELEX), 
                             new Point(10, 30), new Size(width-50, 70), ""));
             f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "Select:".T(EDTx.GalaxySectorSelect_Select), new Point(10, 100), new Size(130, 24), ""));
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("Entry", "All",
-                        new Point(140, 100), new Size(width-140-100, 24),
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("Entry", DefaultGalaxyOptions[2].Item1,
+                        new Point(140, 100), new Size(width - 140 - 100, 24),
                         "Select the data set".T(EDTx.GalaxySectorSelect_GALSELEN), list));
 
             f.AddOK(new Point(width - 40 - 80, 150), "Press to Accept".T(EDTx.GalaxySectorSelect_PresstoAccept));
