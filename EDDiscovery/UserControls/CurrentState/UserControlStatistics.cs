@@ -1009,7 +1009,7 @@ namespace EDDiscovery.UserControls
                 AddTreeNode(bank, "Weapons Owned".T(EDTx.UserControlStats_WeaponsOwned), stats.BankAccount?.WeaponsOwned.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
                 AddTreeNode(bank, "Spent on Premium Stock".T(EDTx.UserControlStats_SpentOnPremiumStock), stats.BankAccount?.SpentOnPremiumStock.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
                 AddTreeNode(bank, "Premium Stock Bought".T(EDTx.UserControlStats_PremiumStockBought), stats.BankAccount?.PremiumStockBought.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                if (collapseExpand[0] == 'Y')
+                if (collapseExpand[1] == 'Y')
                     node.Item1.Expand();
 
                 string combat = "Combat".T(EDTx.UserControlStats_Combat);
@@ -1036,7 +1036,7 @@ namespace EDDiscovery.UserControls
                 AddTreeNode(combat, "Settlements Conquered".T(EDTx.UserControlStats_SettlementConquered), stats.Combat?.SettlementConquered.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
                 AddTreeNode(combat, "Skimmers Killed on Foot".T(EDTx.UserControlStats_OnFootSkimmersKilled), stats.Combat?.OnFootSkimmersKilled.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
                 AddTreeNode(combat, "Scavengers Killed on Foot".T(EDTx.UserControlStats_OnFootScavsKilled), stats.Combat?.OnFootScavsKilled.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                if (collapseExpand[1] == 'Y')
+                if (collapseExpand[2] == 'Y')
                     node.Item1.Expand();
 
                 string crime = "Crime".T(EDTx.UserControlStats_Crime);
@@ -1063,7 +1063,7 @@ namespace EDDiscovery.UserControls
                 AddTreeNode(crime, "Total Turrets shut down".T(EDTx.UserControlStats_TurretsTotal), stats.Crime?.TurretsTotal.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
                 AddTreeNode(crime, "Stolen Items Value".T(EDTx.UserControlStats_ValueStolenStateChange), stats.Crime?.ValueStolenStateChange.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
                 AddTreeNode(crime, "ProfilesCloned".T(EDTx.UserControlStats_ProfilesCloned), stats.Crime?.ProfilesCloned.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                if (collapseExpand[2] == 'Y')
+                if (collapseExpand[3] == 'Y')
                     node.Item1.Expand();
 
                 string smuggling = "Smuggling".T(EDTx.UserControlStats_Smuggling);
@@ -1072,7 +1072,7 @@ namespace EDDiscovery.UserControls
                 AddTreeNode(smuggling, "Commodities Smuggled".T(EDTx.UserControlStats_CommoditiesSmuggled), stats.Smuggling?.ResourcesSmuggled.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
                 AddTreeNode(smuggling, "Average Profit".T(EDTx.UserControlStats_AverageProfit), stats.Smuggling?.AverageProfit.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
                 AddTreeNode(smuggling, "Highest Single Transaction".T(EDTx.UserControlStats_HighestSingleTransaction), stats.Smuggling?.HighestSingleTransaction.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                if (collapseExpand[3] == 'Y')
+                if (collapseExpand[4] == 'Y')
                     node.Item1.Expand();
 
                 string trading = "Trading".T(EDTx.UserControlStats_Trading);
@@ -1084,14 +1084,14 @@ namespace EDDiscovery.UserControls
                 AddTreeNode(trading, "Data Sold".T(EDTx.UserControlStats_DataSold), stats.Trading?.DataSold.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
                 AddTreeNode(trading, "Goods Sold".T(EDTx.UserControlStats_TradingGoodsSold), stats.Trading?.GoodsSold.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
                 AddTreeNode(trading, "Assets Sold".T(EDTx.UserControlStats_AssetsSold), stats.Trading?.AssetsSold.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                if (collapseExpand[4] == 'Y')
+                if (collapseExpand[5] == 'Y')
                     node.Item1.Expand();
 
                 string mining = "Mining".T(EDTx.UserControlStats_Mining);
                 node = AddTreeNode(mining, "Mining Profits".T(EDTx.UserControlStats_MiningProfits), stats.Mining?.MiningProfits.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
                 AddTreeNode(mining, "Materials Refined".T(EDTx.UserControlStats_MaterialsRefined), stats.Mining?.QuantityMined.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
                 AddTreeNode(mining, "Materials Collected".T(EDTx.UserControlStats_MaterialsCollected), stats.Mining?.MaterialsCollected.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                if (collapseExpand[5] == 'Y')
+                if (collapseExpand[6] == 'Y')
                     node.Item1.Expand();
 
                 string exploration = "Exploration".T(EDTx.UserControlStats_Exploration);
@@ -1111,7 +1111,7 @@ namespace EDDiscovery.UserControls
                 AddTreeNode(exploration, "First Footfalls".T(EDTx.UserControlStats_FirstFootfalls), stats.Exploration?.FirstFootfalls.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
                 AddTreeNode(exploration, "Planets walked on".T(EDTx.UserControlStats_PlanetFootfalls), stats.Exploration?.PlanetFootfalls.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
                 AddTreeNode(exploration, "Settlements docked at".T(EDTx.UserControlStats_SettlementsVisited), stats.Exploration?.SettlementsVisited.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                if (collapseExpand[6] == 'Y')
+                if (collapseExpand[7] == 'Y')
                     node.Item1.Expand();
 
                 string passengers = "Passengers".T(EDTx.UserControlStats_Passengers);
@@ -1121,7 +1121,7 @@ namespace EDDiscovery.UserControls
                 AddTreeNode(passengers, "Delivered".T(EDTx.UserControlStats_Delivered), stats.PassengerMissions?.Delivered.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
                 AddTreeNode(passengers, "Disgruntled".T(EDTx.UserControlStats_Disgruntled), stats.PassengerMissions?.Disgruntled.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
                 AddTreeNode(passengers, "Ejected".T(EDTx.UserControlStats_Ejected), stats.PassengerMissions?.Ejected.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                if (collapseExpand[7] == 'Y')
+                if (collapseExpand[8] == 'Y')
                     node.Item1.Expand();
 
                 string search = "Search and Rescue".T(EDTx.UserControlStats_SearchandRescue);
@@ -1136,7 +1136,7 @@ namespace EDDiscovery.UserControls
                 AddTreeNode(search, "Panels cut".T(EDTx.UserControlStats_PanelsOpened), stats.SearchAndRescue?.PanelsOpened.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
                 AddTreeNode(search, "Settlement Fires extinguished".T(EDTx.UserControlStats_SettlementsStateFireOut), stats.SearchAndRescue?.SettlementsStateFireOut.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
                 AddTreeNode(search, "Settlements rebooted".T(EDTx.UserControlStats_SettlementsStateReboot), stats.SearchAndRescue?.SettlementsStateReboot.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                if (collapseExpand[8] == 'Y')
+                if (collapseExpand[9] == 'Y')
                     node.Item1.Expand();
 
                 string craft = "Crafting".T(EDTx.UserControlStats_Crafting);
@@ -1155,7 +1155,7 @@ namespace EDDiscovery.UserControls
                 AddTreeNode(craft, "Weapons fully Upgraded".T(EDTx.UserControlStats_WeaponsUpgradedFull), stats.Crafting?.WeaponsUpgradedFull.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
                 AddTreeNode(craft, "Suits fully Modified".T(EDTx.UserControlStats_SuitModsAppliedFull), stats.Crafting?.SuitModsAppliedFull.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
                 AddTreeNode(craft, "Weapons fully Modified".T(EDTx.UserControlStats_WeaponModsAppliedFull), stats.Crafting?.WeaponModsAppliedFull.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                if (collapseExpand[9] == 'Y')
+                if (collapseExpand[10] == 'Y')
                     node.Item1.Expand();
 
                 string crew = "Crew".T(EDTx.UserControlStats_Crew);
@@ -1163,7 +1163,7 @@ namespace EDDiscovery.UserControls
                 AddTreeNode(crew, "Total Hired".T(EDTx.UserControlStats_TotalHired), stats.Crew?.Hired.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
                 AddTreeNode(crew, "Total Fired".T(EDTx.UserControlStats_TotalFired), stats.Crew?.Fired.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
                 AddTreeNode(crew, "Died in Line of Duty".T(EDTx.UserControlStats_DiedinLineofDuty), stats.Crew?.Died.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                if (collapseExpand[10] == 'Y')
+                if (collapseExpand[11] == 'Y')
                     node.Item1.Expand();
 
                 string multicrew = "Multi-crew".T(EDTx.UserControlStats_Multi);
@@ -1172,7 +1172,7 @@ namespace EDDiscovery.UserControls
                 AddTreeNode(multicrew, "Gunner Time".T(EDTx.UserControlStats_GunnerTime), SecondsToDHMString(stats.Multicrew?.GunnerTimeTotal));
                 AddTreeNode(multicrew, "Credits Made".T(EDTx.UserControlStats_CreditsMade), stats.Multicrew?.CreditsTotal.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
                 AddTreeNode(multicrew, "Fines Accrued".T(EDTx.UserControlStats_FinesAccrued), stats.Multicrew?.FinesTotal.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                if (collapseExpand[11] == 'Y')
+                if (collapseExpand[12] == 'Y')
                     node.Item1.Expand();
 
                 string mattrader = "Materials Trader".T(EDTx.UserControlStats_MaterialsTrader);
@@ -1185,7 +1185,7 @@ namespace EDDiscovery.UserControls
                 AddTreeNode(mattrader, "Grade 3 Materials Traded".T(EDTx.UserControlStats_G3MaterialsTraded), stats.MaterialTraderStats?.Grade3MaterialsTraded.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
                 AddTreeNode(mattrader, "Grade 4 Materials Traded".T(EDTx.UserControlStats_G4MaterialsTraded), stats.MaterialTraderStats?.Grade4MaterialsTraded.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
                 AddTreeNode(mattrader, "Grade 5 Materials Traded".T(EDTx.UserControlStats_G5MaterialsTraded), stats.MaterialTraderStats?.Grade5MaterialsTraded.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                if (collapseExpand[12] == 'Y')
+                if (collapseExpand[13] == 'Y')
                     node.Item1.Expand();
 
                 string CQC = "CQC".T(EDTx.UserControlStats_CQC);
@@ -1194,7 +1194,7 @@ namespace EDDiscovery.UserControls
                 AddTreeNode(CQC, "K/D Ratio".T(EDTx.UserControlStats_KDRatio), stats.CQC?.KD.ToString("N2", System.Globalization.CultureInfo.CurrentCulture));
                 AddTreeNode(CQC, "Kills".T(EDTx.UserControlStats_Kills), stats.CQC?.Kills.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
                 AddTreeNode(CQC, "Win/Loss".T(EDTx.UserControlStats_Win), stats.CQC?.WL.ToString("N2", System.Globalization.CultureInfo.CurrentCulture));
-                if (collapseExpand[13] == 'Y')
+                if (collapseExpand[14] == 'Y')
                     node.Item1.Expand();
 
                 string FLEETCARRIER = "Fleetcarrier".T(EDTx.UserControlStats_FLEETCARRIER);
@@ -1216,7 +1216,7 @@ namespace EDDiscovery.UserControls
                 AddTreeNode(FLEETCARRIER, "Total Ships Repaired".T(EDTx.UserControlStats_REPAIRSTOTAL), stats.FLEETCARRIER?.REPAIRSTOTAL.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
                 AddTreeNode(FLEETCARRIER, " Redemption Office Exchanges".T(EDTx.UserControlStats_VOUCHERSREDEEMED), stats.FLEETCARRIER?.VOUCHERSREDEEMED.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
                 AddTreeNode(FLEETCARRIER, " Redemption Office Payouts".T(EDTx.UserControlStats_VOUCHERSPROFIT), stats.FLEETCARRIER?.VOUCHERSPROFIT.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                if (collapseExpand[14] == 'Y')
+                if (collapseExpand[15] == 'Y')
                     node.Item1.Expand();
 
                 string Exobiology = "Exobiology".T(EDTx.UserControlStats_Exobiology);
@@ -1231,7 +1231,7 @@ namespace EDDiscovery.UserControls
                 AddTreeNode(Exobiology, "Planets with Organic Life".T(EDTx.UserControlStats_OrganicPlanets), stats.Exobiology?.OrganicPlanets.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
                 AddTreeNode(Exobiology, "Unique Genus Data Logged".T(EDTx.UserControlStats_OrganicGenus), stats.Exobiology?.OrganicGenus.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
                 AddTreeNode(Exobiology, "Unique Species Data Logged".T(EDTx.UserControlStats_OrganicSpecies), stats.Exobiology?.OrganicSpecies.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));                
-                if (collapseExpand[15] == 'Y')
+                if (collapseExpand[16] == 'Y')
                     node.Item1.Expand();
             }
             else
