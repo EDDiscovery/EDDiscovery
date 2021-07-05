@@ -194,7 +194,7 @@ namespace EDDiscovery
             BaseUtils.Icons.IconSet.Instance.AddAlias("Default", "Legacy.star");        // MUST be present
 
             msg.Invoke("Loading Configuration");
-            EDDConfig.Instance.Update(false);
+            EDDConfig.Instance.Update();
             EDDProfiles.Instance.LoadProfiles(EDDOptions.Instance.Profile);
 
             string path = EDDOptions.Instance.IconsPath ?? System.IO.Path.Combine(EDDOptions.Instance.IconsAppDirectory(), "*.zip");

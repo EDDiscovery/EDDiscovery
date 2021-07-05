@@ -479,7 +479,7 @@ namespace EDDiscovery
         #region Update at start
 
 
-        public void Update(bool write = true)     // call at start to populate above
+        public void Update()     // call at start to populate above
         {
             try
             {
