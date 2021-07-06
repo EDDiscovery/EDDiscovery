@@ -40,6 +40,9 @@ namespace EDDiscovery.WebServer
             JObject response = new JObject();
             response["responsetype"] = "presskey";
             response["status"] = "400";
+            int keydelay = message["keydelay"].Int(100);
+            int shiftdelay = message["shiftdelay"].Int(100);
+            int updelay = message["updelay"].Int(100);
 
             string keyname = (string)message["key"];
 
@@ -60,7 +63,7 @@ namespace EDDiscovery.WebServer
                     {
                         string keyseq = keys.GenerateSequence();
                         System.Diagnostics.Debug.WriteLine("Frontier " + keyname + "->" + keyseq + " to " + pname);
-                        string res = BaseUtils.EnhancedSendKeys.SendToProcess(keyseq, 100, 100, 100, pname);
+                        string res = BaseUtils.EnhancedSendKeys.SendToProcess(keyseq, keydelay, shiftdelay, updelay, pname);
                         response["status"] = res.HasChars() ? "100" : "400";
                     }
 
@@ -69,7 +72,7 @@ namespace EDDiscovery.WebServer
             }
             else
             {
-                string res = BaseUtils.EnhancedSendKeys.SendToProcess(keyname, 100, 100, 100, pname);
+                string res = BaseUtils.EnhancedSendKeys.SendToProcess(keyname, keydelay, shiftdelay, updelay, pname);
                 response["status"] = res.HasChars() ? "100" : "400";
             }
 

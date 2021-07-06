@@ -58,7 +58,7 @@ namespace EDDiscovery.WebServer
     //
     // Push responsetype = indicatorpush, fields as above
     //
-    // Query requesttype= presskey, fields              : key = binding name
+    // Query requesttype= presskey, fields              : key = binding name optional keydelay, shiftdelay, updelay
     //          responsetype = status, 100 or 400.
     //
     // Query requesttype=scandata : fields entry number, edsm flag

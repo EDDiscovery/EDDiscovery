@@ -570,6 +570,12 @@
     <EmbeddedResource Include="Controls\SysInfo\notfirstdiscover.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Highres\Battery.png" />
+    <EmbeddedResource Include="Highres\ClearAuthority.png" />
+    <EmbeddedResource Include="Highres\EMPGrenade.png" />
+    <EmbeddedResource Include="Highres\FRAGGrenade.png" />
+    <EmbeddedResource Include="Highres\HealthPack.png" />
+    <EmbeddedResource Include="Highres\ShieldGrenade.png" />
     <EmbeddedResource Include="Highres\ConflictPanel.png" />
     <EmbeddedResource Include="Highres\OpenAccessPanel.png" />
     <EmbeddedResource Include="Highres\OnFootHelp.png" />
