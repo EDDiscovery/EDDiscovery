@@ -138,6 +138,9 @@ namespace EDDiscovery.UserControls
             this.labelSolDist = new System.Windows.Forms.Label();
             this.labelHomeDist = new System.Windows.Forms.Label();
             this.textBoxHomeDist = new ExtendedControls.ExtTextBox();
+            this.extTextBoxMR = new ExtendedControls.ExtTextBox();
+            this.labelMR = new System.Windows.Forms.Label();
+            this.displayMicroresourcesCountToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip.SuspendLayout();
             this.extPanelScroll.SuspendLayout();
             this.SuspendLayout();
@@ -163,6 +166,7 @@ namespace EDDiscovery.UserControls
             this.toolStripCargo,
             this.toolStripDataCount,
             this.toolStripMaterialCounts,
+            this.displayMicroresourcesCountToolStripMenuItem,
             this.toolStripCredits,
             this.toolStripGameMode,
             this.toolStripTravel,
@@ -172,7 +176,7 @@ namespace EDDiscovery.UserControls
             this.toolStripReset,
             this.toolStripRemoveAll});
             this.contextMenuStrip.Name = "contextMenuStrip1";
-            this.contextMenuStrip.Size = new System.Drawing.Size(256, 576);
+            this.contextMenuStrip.Size = new System.Drawing.Size(256, 620);
             // 
             // toolStripSystem
             // 
@@ -536,6 +540,7 @@ namespace EDDiscovery.UserControls
             this.extPanelScroll.Controls.Add(this.labelShip);
             this.extPanelScroll.Controls.Add(this.labelMaterials);
             this.extPanelScroll.Controls.Add(this.labelVisits);
+            this.extPanelScroll.Controls.Add(this.labelMR);
             this.extPanelScroll.Controls.Add(this.labelData);
             this.extPanelScroll.Controls.Add(this.textBoxVisits);
             this.extPanelScroll.Controls.Add(this.labelFuel);
@@ -551,6 +556,7 @@ namespace EDDiscovery.UserControls
             this.extPanelScroll.Controls.Add(this.textBoxEconomy);
             this.extPanelScroll.Controls.Add(this.textBoxFuel);
             this.extPanelScroll.Controls.Add(this.labelEconomy);
+            this.extPanelScroll.Controls.Add(this.extTextBoxMR);
             this.extPanelScroll.Controls.Add(this.textBoxData);
             this.extPanelScroll.Controls.Add(this.textBoxGovernment);
             this.extPanelScroll.Controls.Add(this.textBoxMaterials);
@@ -1832,6 +1838,59 @@ namespace EDDiscovery.UserControls
             this.textBoxHomeDist.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
             this.textBoxHomeDist.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
             // 
+            // extTextBoxMR
+            // 
+            this.extTextBoxMR.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.extTextBoxMR.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.extTextBoxMR.BackErrorColor = System.Drawing.Color.Red;
+            this.extTextBoxMR.BorderColor = System.Drawing.Color.Transparent;
+            this.extTextBoxMR.BorderColorScaling = 0.5F;
+            this.extTextBoxMR.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.extTextBoxMR.ClearOnFirstChar = false;
+            this.extTextBoxMR.ControlBackground = System.Drawing.SystemColors.Control;
+            this.extTextBoxMR.EndButtonEnable = true;
+            this.extTextBoxMR.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("extTextBoxMR.EndButtonImage")));
+            this.extTextBoxMR.EndButtonVisible = false;
+            this.extTextBoxMR.InErrorCondition = false;
+            this.extTextBoxMR.Location = new System.Drawing.Point(52, 447);
+            this.extTextBoxMR.Multiline = false;
+            this.extTextBoxMR.Name = "extTextBoxMR";
+            this.extTextBoxMR.ReadOnly = true;
+            this.extTextBoxMR.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.extTextBoxMR.SelectionLength = 0;
+            this.extTextBoxMR.SelectionStart = 0;
+            this.extTextBoxMR.Size = new System.Drawing.Size(200, 20);
+            this.extTextBoxMR.TabIndex = 8;
+            this.extTextBoxMR.TabStop = false;
+            this.extTextBoxMR.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.extTextBoxMR.WordWrap = true;
+            this.extTextBoxMR.Click += new System.EventHandler(this.clickTextBox);
+            this.extTextBoxMR.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
+            this.extTextBoxMR.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
+            this.extTextBoxMR.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
+            // 
+            // labelMR
+            // 
+            this.labelMR.AutoSize = true;
+            this.labelMR.Location = new System.Drawing.Point(11, 447);
+            this.labelMR.Name = "labelMR";
+            this.labelMR.Size = new System.Drawing.Size(24, 13);
+            this.labelMR.TabIndex = 16;
+            this.labelMR.Text = "MR";
+            this.labelMR.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
+            this.labelMR.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
+            this.labelMR.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
+            // 
+            // displayMicroresourcesCountToolStripMenuItem
+            // 
+            this.displayMicroresourcesCountToolStripMenuItem.Checked = true;
+            this.displayMicroresourcesCountToolStripMenuItem.CheckOnClick = true;
+            this.displayMicroresourcesCountToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.displayMicroresourcesCountToolStripMenuItem.Name = "displayMicroresourcesCountToolStripMenuItem";
+            this.displayMicroresourcesCountToolStripMenuItem.Size = new System.Drawing.Size(255, 22);
+            this.displayMicroresourcesCountToolStripMenuItem.Text = "Display Microresources Count";
+            this.displayMicroresourcesCountToolStripMenuItem.Click += new System.EventHandler(this.displayMicroresourcesCountToolStripMenuItem_Click);
+            // 
             // UserControlSysInfo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1943,5 +2002,8 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtTextBox extTextBoxStationFaction;
         private System.Windows.Forms.Label labelStationFaction;
         private System.Windows.Forms.ToolStripMenuItem displayStationFactionToolStripMenuItem;
+        private System.Windows.Forms.Label labelMR;
+        private ExtendedControls.ExtTextBox extTextBoxMR;
+        private System.Windows.Forms.ToolStripMenuItem displayMicroresourcesCountToolStripMenuItem;
     }
 }

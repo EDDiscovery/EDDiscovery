@@ -56,7 +56,8 @@ namespace EDDiscovery.UserControls
         const int BitSelStationButtons = 19;
         const int BitSelShipyardButtons = 20;
         const int BitSelStationFaction = 21;
-        const int BitSelTotal = 22;
+        const int BitSelMR = 22;
+        const int BitSelTotal = 23;
         const int BitSelDefault = ((1 << BitSelTotal) - 1) + (1 << BitSelEDSMButtonsNextLine);
 
         private int[,] resetorder = new int[,]          // default reset order
@@ -76,6 +77,7 @@ namespace EDDiscovery.UserControls
             {BitSelTarget,-1},
             {BitSelFuel,BitSelCargo},
             {BitSelMats,BitSelData},
+            {BitSelMR, -1 },
             {BitSelGameMode,-1},
             {BitSelTravel,-1},
             {BitSelMissions,-1},
@@ -120,7 +122,8 @@ namespace EDDiscovery.UserControls
                 toolStripGameMode,toolStripTravel, toolStripMissionList,
                 toolStripJumpRange, displayStationButtonsToolStripMenuItem,
                 displayShipButtonsToolStripMenuItem,
-                displayStationFactionToolStripMenuItem,
+                displayStationFactionToolStripMenuItem,         // BitSelStationFaction
+                displayMicroresourcesCountToolStripMenuItem,    // BitSelMR
             };
 
             Debug.Assert(toolstriplist.Length == BitSelTotal);
@@ -158,6 +161,14 @@ namespace EDDiscovery.UserControls
                     else if (bit == BitSelStationFaction)
                     {
                         var p = BaseUtils.LineStore.FindValue(Lines, BitSelBody + 1);
+                        if (p != null)
+                            insertat = Lines.IndexOf(p) + 1;
+
+                        Selection |= (1 << bit);
+                    }
+                    else if (bit == BitSelMR)
+                    {
+                        var p = BaseUtils.LineStore.FindValue(Lines, BitSelData + 1);
                         if (p != null)
                             insertat = Lines.IndexOf(p) + 1;
 
@@ -338,8 +349,8 @@ namespace EDDiscovery.UserControls
                 }
 
                 var mcl = hl.MaterialCommoditiesMicroResources.Get(he.MaterialCommodity);
-
-                int cargocount = MaterialCommoditiesMicroResourceList.CargoCount(mcl);
+                var counts = MaterialCommoditiesMicroResourceList.Count(mcl,0);
+                int cargocount = counts[(int)MaterialCommodityMicroResourceType.CatType.Commodity];
 
                 int cc = (he.ShipInformation) != null ? he.ShipInformation.CargoCapacity() : 0;
                 if (cc > 0)
@@ -347,9 +358,13 @@ namespace EDDiscovery.UserControls
                 else
                     textBoxCargo.Text = cargocount.ToString();
 
-                textBoxMaterials.Text = MaterialCommoditiesMicroResourceList.MaterialsCount(mcl).ToString();
-                textBoxData.Text = MaterialCommoditiesMicroResourceList.DataCount(mcl).ToString();
+                textBoxMaterials.Text = (counts[(int)MaterialCommodityMicroResourceType.CatType.Raw]+ counts[(int)MaterialCommodityMicroResourceType.CatType.Manufactured]).ToString();
+                textBoxData.Text = counts[(int)MaterialCommodityMicroResourceType.CatType.Encoded].ToString();
                 textBoxCredits.Text = he.Credits.ToString("N0");
+                extTextBoxMR.Text = "C:" + counts[(int)MaterialCommodityMicroResourceType.CatType.Consumable].ToString() +
+                                    ", A:" + counts[(int)MaterialCommodityMicroResourceType.CatType.Component].ToString() +
+                                    ", G:" + counts[(int)MaterialCommodityMicroResourceType.CatType.Item].ToString() +
+                                    ", D:" + counts[(int)MaterialCommodityMicroResourceType.CatType.Data].ToString();
 
                 textBoxJumpRange.Text = "";
 
@@ -695,6 +710,11 @@ namespace EDDiscovery.UserControls
             ToggleSelection(sender, BitSelStationFaction);
         }
 
+        private void displayMicroresourcesCountToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ToggleSelection(sender, BitSelMR);
+        }
+
         private void toolStripRemoveAll_Click(object sender, EventArgs e)
         {
             Selection = (Selection | ((1 << BitSelTotal) - 1)) ^ ((1 << BitSelTotal) - 1);
@@ -913,6 +933,11 @@ namespace EDDiscovery.UserControls
                                 case BitSelStationFaction:
                                     itembottom = this.SetPos(labpos, labelStationFaction, datapos, extTextBoxStationFaction, si);
                                     break;
+
+                                case BitSelMR:
+                                    itembottom = this.SetPos(labpos, labelMR, datapos, extTextBoxMR, si);
+                                    break;
+
                                 default:
                                     System.Diagnostics.Debug.WriteLine("Ignoring unknown type");
                                     break;

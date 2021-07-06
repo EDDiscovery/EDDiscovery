@@ -255,19 +255,21 @@ namespace EDDiscovery.UserControls
                 dataGridViewMC.SafeFirstDisplayedScrollingRowIndex( firstline);
 
             var mcllist = discoveryform.history.MaterialCommoditiesMicroResources.Get(mcl.Value);
+            var counts = MaterialCommoditiesMicroResourceList.Count(mcllist);
 
             if (PanelMode == PanelType.Materials)
             {
-                textBoxItems1.Text = MaterialCommoditiesMicroResourceList.DataCount(mcllist).ToString();
-                textBoxItems2.Text = MaterialCommoditiesMicroResourceList.MaterialsCount(mcllist).ToString();
+                textBoxItems1.Text = counts[(int)MaterialCommodityMicroResourceType.CatType.Encoded].ToString();
+                textBoxItems2.Text = (counts[(int)MaterialCommodityMicroResourceType.CatType.Raw] + counts[(int)MaterialCommodityMicroResourceType.CatType.Manufactured]).ToString();
             }
             else if (PanelMode == PanelType.MicroResources)
             {
-                textBoxItems1.Text = MaterialCommoditiesMicroResourceList.MicroResourcesCount(mcllist).ToString();
+                textBoxItems1.Text = (counts[(int)MaterialCommodityMicroResourceType.CatType.Data] + counts[(int)MaterialCommodityMicroResourceType.CatType.Component] +
+                                       counts[(int)MaterialCommodityMicroResourceType.CatType.Item] + counts[(int)MaterialCommodityMicroResourceType.CatType.Consumable]).ToString();
             }
             else
             {
-                textBoxItems1.Text = MaterialCommoditiesMicroResourceList.CargoCount(mcllist).ToString();
+                textBoxItems1.Text = counts[(int)MaterialCommodityMicroResourceType.CatType.Commodity].ToString();
             }
 
             // TBD  textBoxItems1.Text = "DBG GEN" +  mcl.Value.ToString();

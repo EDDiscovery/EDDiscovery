@@ -18,6 +18,7 @@ using BaseUtils.JSON;
 using BaseUtils.WebServer;
 using EliteDangerousCore;
 using System;
+using System.Linq;
 using System.Net;
 
 namespace EDDiscovery.WebServer
@@ -111,7 +112,8 @@ namespace EDDiscovery.WebServer
 
             var mcl = hl.MaterialCommoditiesMicroResources.Get(he.MaterialCommodity);
 
-            int cargocount = MaterialCommoditiesMicroResourceList.CargoCount(mcl);
+            var counts = MaterialCommoditiesMicroResourceList.Count(mcl);
+            int cargocount = counts[(int)MaterialCommodityMicroResourceType.CatType.Commodity];
             string shipname = "N/A", fuel = "N/A", range = "N/A", tanksize = "N/A";
             string cargo = cargocount.ToStringInvariant();
 
@@ -144,9 +146,10 @@ namespace EDDiscovery.WebServer
             ship["Range"] = range;
             ship["TankSize"] = tanksize;
             ship["Cargo"] = cargo;
-            ship["Data"] = MaterialCommoditiesMicroResourceList.DataCount(mcl).ToStringInvariant();
-            ship["Materials"] = MaterialCommoditiesMicroResourceList.MaterialsCount(mcl).ToStringInvariant();
-            ship["MicroResources"] = MaterialCommoditiesMicroResourceList.MicroResourcesCount(mcl).ToStringInvariant();
+            ship["Data"] = counts[(int)MaterialCommodityMicroResourceType.CatType.Encoded].ToStringInvariant();
+            ship["Materials"] = (counts[(int)MaterialCommodityMicroResourceType.CatType.Raw] + counts[(int)MaterialCommodityMicroResourceType.CatType.Manufactured]).ToStringInvariant();
+            ship["MicroResources"] = (counts[(int)MaterialCommodityMicroResourceType.CatType.Data] + counts[(int)MaterialCommodityMicroResourceType.CatType.Component] +
+                                       counts[(int)MaterialCommodityMicroResourceType.CatType.Item] + counts[(int)MaterialCommodityMicroResourceType.CatType.Consumable]).ToStringInvariant();
             response["Ship"] = ship;
 
             JObject travel = new JObject();

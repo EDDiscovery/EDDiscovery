@@ -138,7 +138,7 @@ namespace EDDiscovery.UserControls
                 if (newlist != null)        // only if no history would we get null, unlikely since he has been tested, but still..
                 {
                     int limpetsleft = discoveryform.history.MaterialCommoditiesMicroResources.Get(newheabove.MaterialCommodity,"drones")?.Count ?? 0;
-                    int cargo = MaterialCommoditiesMicroResourceList.CargoCount( discoveryform.history.MaterialCommoditiesMicroResources.Get(newheabove.MaterialCommodity));
+                    int cargo = discoveryform.history.MaterialCommoditiesMicroResources.CargoCount(newheabove.MaterialCommodity);
                     int cargoleft = newheabove.ShipInformation.CargoCapacity() - cargo;
 
                     // if no list, or diff no of items (due to new entry) or different start point, we reset and display, else we just quit as current is good
