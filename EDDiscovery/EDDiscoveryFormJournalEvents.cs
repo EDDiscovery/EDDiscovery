@@ -82,6 +82,7 @@ namespace EDDiscovery
             Controller.NewEntry(e);                 // push it thru as if the monitor watcher saw it
         }
 
+         
         private void Controller_NewEntrySecond(HistoryEntry he, HistoryList hl)         // called after all UI's have had their chance
         {
             BaseUtils.AppTicks.TickCountLapDelta("DFS", true);
@@ -94,17 +95,6 @@ namespace EDDiscovery
 
             // all notes committed
             SystemNoteClass.CommitDirtyNotes((snc) => { if (EDCommander.Current.SyncToEdsm && snc.FSDEntry) EDSMClass.SendComments(snc.SystemName, snc.Note, 0, he.Commander); });
-
-            var lastent = history.GetLast;
-            if (!object.ReferenceEquals(he, lastent))
-            {
-                LogLineHighlight(string.Format("Current history entry is not last in history - possible re-entrancy.\nAlert the EDDiscovery developers using either discord or Github (see help) and attach log file {0}", BaseUtils.TraceLog.LogFileName));
-                Trace.WriteLine($"Current history entry is not last in history");
-                Trace.WriteLine($"Current entry: {he.journalEntry?.GetJsonString()}");
-                Trace.WriteLine($"Last entry: {lastent.journalEntry?.GetJsonString()}");
-                Trace.WriteLine($"Stack Trace:");
-                Trace.WriteLine(new StackTrace(true).ToString());
-            }
 
             if (he.IsFSDCarrierJump)
             {
