@@ -192,35 +192,31 @@ namespace EDDiscovery.UserControls
                     else
                     {
                         int i = 0;
+
                         foreach (var l in loadouts)
                         {
                             object[] rowobj = new object[] { };
 
                             var rw = dataGridViewSuits.RowTemplate.Clone() as DataGridViewRow;
                             rw.CreateCells(dataGridViewSuits,
-                                                stime,
-                                                sname + (cursuit == s.Value.ID && curloadout == l.Value.ID ? "*" : ""),
-                                                smods,
-                                                sprice,
+                                                stime,      //0
+                                                (i==0 ? sname : "") + (cursuit == s.Value.ID && curloadout == l.Value.ID ? " *" : ""),
+                                                (i==0 ? smods : ""),
+                                                (i==0 ? sprice : ""),
                                                 l.Value.Name + "(" + ((l.Value.ID % 10000).ToString()) + ")",
                                                 l.Value.GetModuleDescription("primaryweapon1"),
                                                 l.Value.GetModuleDescription("primaryweapon2"),
                                                 l.Value.GetModuleDescription("secondaryweapon")
                                                 );
 
+                            rw.Cells[1].Tag = sname;
+                            rw.Cells[2].Tag = smods;
+                            rw.Cells[3].Tag = sprice;
+
                             dataGridViewSuits.Rows.Add(rw);
 
                             DataGridViewRow r = dataGridViewSuits.Rows[dataGridViewSuits.RowCount - 1];
                             r.Tag = s.Value;
-
-                            if (i > 0)      // tried emptying the row and using tags to sort but it insists on putting empty cells at top/bottom
-                            {
-                                for (int ci = 1; ci <= 3; ci++)
-                                {
-                                    r.Cells[ci].Tag = r.Cells[ci].Value;
-                                    r.Cells[ci].Value = "";
-                                }
-                            }
 
                             i++;
                         }
@@ -241,11 +237,11 @@ namespace EDDiscovery.UserControls
         private void dataGridViewSuits_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {
             if (e.Column.Index == 0)
-                e.SortDataGridViewColumnDate(usetag: true);
+                e.SortDataGridViewColumnDate();
             else if (e.Column.Index == 2)
-                e.SortDataGridViewColumnNumeric(usetag: true);
+                e.SortDataGridViewColumnNumeric(usecelltag: true);
             else
-                e.SortDataGridViewColumnAlpha(usetag: true);
+                e.SortDataGridViewColumnAlpha(usecelltag: true);
 
         }
 

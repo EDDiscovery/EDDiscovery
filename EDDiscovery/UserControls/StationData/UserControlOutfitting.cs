@@ -150,7 +150,7 @@ namespace EDDiscovery.UserControls
             {
                 HistoryEntry lastshipyard = discoveryform.history.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.Outfitting, last_he);
                 if (lastshipyard != null)
-                    yard = (lastshipyard.journalEntry as EliteDangerousCore.JournalEvents.JournalOutfitting).ItemList;
+                    yard = (lastshipyard.journalEntry as EliteDangerousCore.JournalEvents.JournalOutfitting).YardInfo;
             }
             else
             {
