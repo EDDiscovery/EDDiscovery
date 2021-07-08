@@ -155,7 +155,7 @@ namespace EDDiscovery.UserControls
                 yard = discoveryform.history.Shipyards.GetFilteredList().Find(x => x.Ident().Equals(comboBoxYards.Text));
             }
 
-            if (yard != null && yard.Ships != null)
+            if (yard?.Ships != null)
             {
                 DisplayYard(yard);
             }

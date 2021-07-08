@@ -150,14 +150,14 @@ namespace EDDiscovery.UserControls
             {
                 HistoryEntry lastshipyard = discoveryform.history.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.Outfitting, last_he);
                 if (lastshipyard != null)
-                    yard = (lastshipyard.journalEntry as EliteDangerousCore.JournalEvents.JournalOutfitting).YardInfo;
+                    yard = (lastshipyard.journalEntry as EliteDangerousCore.JournalEvents.JournalOutfitting).YardInfo;      // this may pick up an empty yard..
             }
             else
             {
                 yard = discoveryform.history.Outfitting.GetFilteredList().Find(x => x.Ident().Equals(comboBoxYards.Text));
             }
 
-            if (yard != null)
+            if (yard?.Items != null ) // yard may be null, and its entries may be null
             {
                 DisplayYard(yard);
             }

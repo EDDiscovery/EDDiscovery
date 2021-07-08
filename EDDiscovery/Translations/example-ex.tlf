@@ -274,6 +274,7 @@ SECTION EDDiscoveryForm
 .WSF: "Web server failed to start" @
 .WSERR: "Web server disabled due to incorrect folder or missing zip file" @
 .WSD: "*** Web server is disabled ***" @
+.DLLDIS: "DLLs disabled: {0}" @
 
 SECTION EDDiscoveryController
 
