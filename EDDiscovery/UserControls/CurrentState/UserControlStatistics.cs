@@ -971,10 +971,10 @@ namespace EDDiscovery.UserControls
             Display();
         }
 
-#endregion
+        #endregion
 
-
-#region STATS IN GAME *************************************************************************************************************************
+ 
+        #region STATS IN GAME *************************************************************************************************************************
         void StatsGame()
         {
             string collapseExpand = GameStatTreeState();
@@ -989,273 +989,44 @@ namespace EDDiscovery.UserControls
 
             if (stats != null) // may not have one
             {
-                AddTreeNode("@", "T", currentstats.laststats.EventTimeLocal.ToString());
+                AddTreeList("@", new string[] { currentstats.laststats.EventTimeLocal.ToString() }, collapseExpand[0]);
 
+                AddTreeList("Bank Account".T(EDTx.UserControlStats_BankAccount), stats.BankAccount.Format("").Split(Environment.NewLine),collapseExpand[1]);
+                AddTreeList("Combat".T(EDTx.UserControlStats_Combat), stats.Combat.Format("").Split(Environment.NewLine), collapseExpand[2]);
+                AddTreeList("Crime".T(EDTx.UserControlStats_Crime), stats.Crime.Format("").Split(Environment.NewLine), collapseExpand[3]);
+                AddTreeList("Smuggling".T(EDTx.UserControlStats_Smuggling), stats.Smuggling.Format("").Split(Environment.NewLine),collapseExpand[4]);
 
-                string bank = "Bank Account".T(EDTx.UserControlStats_BankAccount);
-                var node = AddTreeNode(bank, "Current Assets".T(EDTx.UserControlStats_CurrentAssets), stats.BankAccount?.CurrentWealth.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                AddTreeNode(bank, "Spent on Ships".T(EDTx.UserControlStats_SpentonShips), stats.BankAccount?.SpentOnShips.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                AddTreeNode(bank, "Spent on Outfitting".T(EDTx.UserControlStats_SpentonOutfitting), stats.BankAccount?.SpentOnOutfitting.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                AddTreeNode(bank, "Spent on Repairs".T(EDTx.UserControlStats_SpentonRepairs), stats.BankAccount?.SpentOnRepairs.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                AddTreeNode(bank, "Spent on Fuel".T(EDTx.UserControlStats_SpentonFuel), stats.BankAccount?.SpentOnFuel.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                AddTreeNode(bank, "Spent on Munitions".T(EDTx.UserControlStats_SpentonMunitions), stats.BankAccount?.SpentOnAmmoConsumables.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                AddTreeNode(bank, "Insurance Claims".T(EDTx.UserControlStats_InsuranceClaims), stats.BankAccount?.InsuranceClaims.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(bank, "Total Claim Costs".T(EDTx.UserControlStats_TotalClaimCosts), stats.BankAccount?.SpentOnInsurance.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                AddTreeNode(bank, "Owned Ships".T(EDTx.UserControlStats_OwnedShipCount), stats.BankAccount?.OwnedShipCount.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(bank, "Spent on Suits".T(EDTx.UserControlStats_SpentOnSuits), stats.BankAccount?.SpentOnSuits.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                AddTreeNode(bank, "Spent on Weapons".T(EDTx.UserControlStats_SpentOnWeapons), stats.BankAccount?.SpentOnWeapons.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                AddTreeNode(bank, "Spent on Suit Consumables".T(EDTx.UserControlStats_SpentOnSuitConsumables), stats.BankAccount?.SpentOnSuitConsumables.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                AddTreeNode(bank, "Suits Owned".T(EDTx.UserControlStats_SuitsOwned), stats.BankAccount?.SuitsOwned.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(bank, "Weapons Owned".T(EDTx.UserControlStats_WeaponsOwned), stats.BankAccount?.WeaponsOwned.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(bank, "Spent on Premium Stock".T(EDTx.UserControlStats_SpentOnPremiumStock), stats.BankAccount?.SpentOnPremiumStock.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                AddTreeNode(bank, "Premium Stock Bought".T(EDTx.UserControlStats_PremiumStockBought), stats.BankAccount?.PremiumStockBought.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                if (collapseExpand[1] == 'Y')
-                    node.Item1.Expand();
+                AddTreeList("Trading".T(EDTx.UserControlStats_Trading), stats.Trading.Format("").Split(Environment.NewLine), collapseExpand[5]);
+                AddTreeList("Mining".T(EDTx.UserControlStats_Mining), stats.Mining.Format("").Split(Environment.NewLine),collapseExpand[6]);
+                AddTreeList("Exploration".T(EDTx.UserControlStats_Exploration), stats.Exploration.Format("").Split(Environment.NewLine),collapseExpand[7]);
+                AddTreeList("Passengers".T(EDTx.UserControlStats_Passengers), stats.PassengerMissions.Format("").Split(Environment.NewLine), collapseExpand[8]);
 
-                string combat = "Combat".T(EDTx.UserControlStats_Combat);
-                node = AddTreeNode(combat, "Bounties Claimed".T(EDTx.UserControlStats_BountiesClaimed), stats.Combat?.BountiesClaimed.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "");
-                AddTreeNode(combat, "Profit from Bounty Hunting".T(EDTx.UserControlStats_ProfitfromBountyHunting), stats.Combat?.BountyHuntingProfit.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                AddTreeNode(combat, "Combat Bonds".T(EDTx.UserControlStats_CombatBonds), stats.Combat?.CombatBonds.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(combat, "Profit from Combat Bonds".T(EDTx.UserControlStats_ProfitfromCombatBonds), stats.Combat?.CombatBondProfits.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                AddTreeNode(combat, "Assassinations".T(EDTx.UserControlStats_Assassinations), stats.Combat?.Assassinations.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(combat, "Profit from Assassination".T(EDTx.UserControlStats_ProfitfromAssassination), stats.Combat?.AssassinationProfits.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                AddTreeNode(combat, "Highest Single Reward".T(EDTx.UserControlStats_HighestSingleReward), stats.Combat?.HighestSingleReward.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                AddTreeNode(combat, "Skimmers Killed".T(EDTx.UserControlStats_SkimmersKilled), stats.Combat?.SkimmersKilled.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(combat, "Dropships Taken".T(EDTx.UserControlStats_DropshipsTaken), stats.Combat?.DropshipsTaken.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(combat, "Dropships Booked".T(EDTx.UserControlStats_DropshipsBooked), stats.Combat?.DropShipsBooked.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(combat, "Dropships Cancelled".T(EDTx.UserControlStats_DropshipsCancelled), stats.Combat?.DropshipsCancelled.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(combat, "High Intensity Conflict Zones fought".T(EDTx.UserControlStats_ConflictZoneHigh), stats.Combat?.ConflictZoneHigh.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(combat, "Medium Intensity Conflict Zones fought".T(EDTx.UserControlStats_ConflictZoneMedium), stats.Combat?.ConflictZoneMedium.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(combat, "Low Intensity Conflict Zones fought".T(EDTx.UserControlStats_ConflictZoneLow), stats.Combat?.ConflictZoneLow.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(combat, "Total Conflict Zones fought".T(EDTx.UserControlStats_ConflictZoneTotal), stats.Combat?.ConflictZoneTotal.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(combat, "High Intensity Conflict Zones won".T(EDTx.UserControlStats_ConflictZoneHighWins), stats.Combat?.ConflictZoneHighWins.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(combat, "Medium Intensity Conflict Zones won".T(EDTx.UserControlStats_ConflictZoneMediumWins), stats.Combat?.ConflictZoneMediumWins.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(combat, "Low Intensity Conflict Zones won".T(EDTx.UserControlStats_ConflictZoneLowWins), stats.Combat?.ConflictZoneLowWins.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(combat, "Total Conflict Zones won".T(EDTx.UserControlStats_ConflictZoneTotalWins), stats.Combat?.ConflictZoneTotalWins.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(combat, "Settlements Defended".T(EDTx.UserControlStats_SettlementDefended), stats.Combat?.SettlementDefended.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(combat, "Settlements Conquered".T(EDTx.UserControlStats_SettlementConquered), stats.Combat?.SettlementConquered.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(combat, "Skimmers Killed on Foot".T(EDTx.UserControlStats_OnFootSkimmersKilled), stats.Combat?.OnFootSkimmersKilled.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(combat, "Scavengers Killed on Foot".T(EDTx.UserControlStats_OnFootScavsKilled), stats.Combat?.OnFootScavsKilled.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                if (collapseExpand[2] == 'Y')
-                    node.Item1.Expand();
+                AddTreeList("Search and Rescue".T(EDTx.UserControlStats_SearchandRescue), stats.SearchAndRescue.Format("").Split(Environment.NewLine), collapseExpand[9]);
+                AddTreeList("Crafting".T(EDTx.UserControlStats_Crafting), stats.Crafting.Format("").Split(Environment.NewLine), collapseExpand[10]);
+                AddTreeList("Crew".T(EDTx.UserControlStats_Crew), stats.Crew.Format("").Split(Environment.NewLine), collapseExpand[11]);
+                AddTreeList("Multi-crew".T(EDTx.UserControlStats_Multi), stats.Multicrew.Format("").Split(Environment.NewLine), collapseExpand[12]);
 
-                string crime = "Crime".T(EDTx.UserControlStats_Crime);
-                node = AddTreeNode(crime, "Notoriety".T(EDTx.UserControlStats_Notoriety), stats.Crime?.Notoriety.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(crime, "Number of Fines".T(EDTx.UserControlStats_NumberofFines), stats.Crime?.Fines.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(crime, "Lifetime Fines Value".T(EDTx.UserControlStats_LifetimeFinesValue), stats.Crime?.TotalFines.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                AddTreeNode(crime, "Bounties Received".T(EDTx.UserControlStats_BountiesReceived), stats.Crime?.BountiesReceived.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(crime, "Lifetime Bounty Value".T(EDTx.UserControlStats_LifetimeBountyValue), stats.Crime?.TotalBounties.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                AddTreeNode(crime, "Highest Bounty Issued".T(EDTx.UserControlStats_HighestBountyIssued), stats.Crime?.HighestBounty.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                AddTreeNode(crime, "Malware Uploaded".T(EDTx.UserControlStats_MalwareUploaded), stats.Crime?.MalwareUploaded.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(crime, "Settlements shut down".T(EDTx.UserControlStats_SettlementsStateShutdown), stats.Crime?.SettlementsStateShutdown.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(crime, "Production Sabotaged".T(EDTx.UserControlStats_ProductionSabotage), stats.Crime?.ProductionSabotage.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(crime, "Production Thefts".T(EDTx.UserControlStats_ProductionTheft), stats.Crime?.ProductionTheft.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(crime, "Total Murders".T(EDTx.UserControlStats_TotalMurders), stats.Crime?.TotalMurders.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(crime, "Citizens Murdered".T(EDTx.UserControlStats_CitizensMurdered), stats.Crime?.CitizensMurdered.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(crime, "Omnipol Murdered".T(EDTx.UserControlStats_OmnipolMurdered), stats.Crime?.OmnipolMurdered.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(crime, "Guards Murdered".T(EDTx.UserControlStats_GuardsMurdered), stats.Crime?.GuardsMurdered.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(crime, "Data Stolen".T(EDTx.UserControlStats_DataStolen), stats.Crime?.DataStolen.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(crime, "Goods Stolen".T(EDTx.UserControlStats_GoodsStolen), stats.Crime?.GoodsStolen.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(crime, "Production Samples Stolen".T(EDTx.UserControlStats_SampleStolen), stats.Crime?.SampleStolen.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(crime, "Total Inventory Items Stolen".T(EDTx.UserControlStats_TotalStolen), stats.Crime?.TotalStolen.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(crime, "Turrets Destroyed".T(EDTx.UserControlStats_TurretsDestroyed), stats.Crime?.TurretsDestroyed.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(crime, "Turrets Overloaded".T(EDTx.UserControlStats_TurretsOverloaded), stats.Crime?.TurretsOverloaded.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(crime, "Total Turrets shut down".T(EDTx.UserControlStats_TurretsTotal), stats.Crime?.TurretsTotal.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(crime, "Stolen Items Value".T(EDTx.UserControlStats_ValueStolenStateChange), stats.Crime?.ValueStolenStateChange.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                AddTreeNode(crime, "ProfilesCloned".T(EDTx.UserControlStats_ProfilesCloned), stats.Crime?.ProfilesCloned.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                if (collapseExpand[3] == 'Y')
-                    node.Item1.Expand();
-
-                string smuggling = "Smuggling".T(EDTx.UserControlStats_Smuggling);
-                node = AddTreeNode(smuggling, "Black Market Network".T(EDTx.UserControlStats_BlackMarketNetwork), stats.Smuggling?.BlackMarketsTradedWith.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(smuggling, "Black Market Profits".T(EDTx.UserControlStats_BlackMarketProfits), stats.Smuggling?.BlackMarketsProfits.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                AddTreeNode(smuggling, "Commodities Smuggled".T(EDTx.UserControlStats_CommoditiesSmuggled), stats.Smuggling?.ResourcesSmuggled.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(smuggling, "Average Profit".T(EDTx.UserControlStats_AverageProfit), stats.Smuggling?.AverageProfit.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                AddTreeNode(smuggling, "Highest Single Transaction".T(EDTx.UserControlStats_HighestSingleTransaction), stats.Smuggling?.HighestSingleTransaction.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                if (collapseExpand[4] == 'Y')
-                    node.Item1.Expand();
-
-                string trading = "Trading".T(EDTx.UserControlStats_Trading);
-                node = AddTreeNode(trading, "Market Network".T(EDTx.UserControlStats_MarketNetwork), stats.Trading?.MarketsTradedWith.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(trading, "Market Profits".T(EDTx.UserControlStats_MarketProfits), stats.Trading?.MarketProfits.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                AddTreeNode(trading, "Commodities Traded".T(EDTx.UserControlStats_CommoditiesTraded), stats.Trading?.ResourcesTraded.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(trading, "Average Profit".T(EDTx.UserControlStats_AverageProfit), stats.Trading?.AverageProfit.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                AddTreeNode(trading, "Highest Single Transaction".T(EDTx.UserControlStats_HighestSingleTransaction), stats.Trading?.HighestSingleTransaction.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                AddTreeNode(trading, "Data Sold".T(EDTx.UserControlStats_DataSold), stats.Trading?.DataSold.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(trading, "Goods Sold".T(EDTx.UserControlStats_TradingGoodsSold), stats.Trading?.GoodsSold.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(trading, "Assets Sold".T(EDTx.UserControlStats_AssetsSold), stats.Trading?.AssetsSold.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                if (collapseExpand[5] == 'Y')
-                    node.Item1.Expand();
-
-                string mining = "Mining".T(EDTx.UserControlStats_Mining);
-                node = AddTreeNode(mining, "Mining Profits".T(EDTx.UserControlStats_MiningProfits), stats.Mining?.MiningProfits.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                AddTreeNode(mining, "Materials Refined".T(EDTx.UserControlStats_MaterialsRefined), stats.Mining?.QuantityMined.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(mining, "Materials Collected".T(EDTx.UserControlStats_MaterialsCollected), stats.Mining?.MaterialsCollected.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                if (collapseExpand[6] == 'Y')
-                    node.Item1.Expand();
-
-                string exploration = "Exploration".T(EDTx.UserControlStats_Exploration);
-                node = AddTreeNode(exploration, "Systems Visited".T(EDTx.UserControlStats_SystemsVisited), stats.Exploration?.SystemsVisited.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(exploration, "Exploration Profits".T(EDTx.UserControlStats_ExplorationProfits), stats.Exploration?.ExplorationProfits.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(exploration, "Level 2 Scans".T(EDTx.UserControlStats_Level2Scans), stats.Exploration?.PlanetsScannedToLevel2.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(exploration, "Level 3 Scans".T(EDTx.UserControlStats_Level3Scans), stats.Exploration?.PlanetsScannedToLevel3.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(exploration, "Efficient Scans".T(EDTx.UserControlStats_EfficientScans), stats.Exploration?.EfficientScans.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(exploration, "Highest Payout".T(EDTx.UserControlStats_HighestPayout), stats.Exploration?.HighestPayout.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                AddTreeNode(exploration, "Total Hyperspace Distance".T(EDTx.UserControlStats_TotalHyperspaceDistance), stats.Exploration?.TotalHyperspaceDistance.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "ly");
-                AddTreeNode(exploration, "Total Hyperspace Jumps".T(EDTx.UserControlStats_TotalHyperspaceJumps), stats.Exploration?.TotalHyperspaceJumps.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(exploration, "Farthest From Start".T(EDTx.UserControlStats_FarthestFromStart), stats.Exploration?.GreatestDistanceFromStart.ToString("N2", System.Globalization.CultureInfo.CurrentCulture), "ly");
-                AddTreeNode(exploration, "Time Played".T(EDTx.UserControlStats_TimePlayed), stats.Exploration?.TimePlayed.SecondsToWeeksDaysHoursMinutesSeconds());
-                AddTreeNode(exploration, "Shuttle Journeys".T(EDTx.UserControlStats_ShuttleJourneys), stats.Exploration?.ShuttleJourneys.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(exploration, "Shuttle Distance Travelled".T(EDTx.UserControlStats_ShuttleDistanceTravelled), stats.Exploration?.ShuttleDistanceTravelled.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "ly");
-                AddTreeNode(exploration, "Credits Spent on Shuttles".T(EDTx.UserControlStats_SpentOnShuttles), stats.Exploration?.SpentOnShuttles.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "cr");
-                AddTreeNode(exploration, "First Footfalls".T(EDTx.UserControlStats_FirstFootfalls), stats.Exploration?.FirstFootfalls.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(exploration, "Planets walked on".T(EDTx.UserControlStats_PlanetFootfalls), stats.Exploration?.PlanetFootfalls.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(exploration, "Settlements docked at".T(EDTx.UserControlStats_SettlementsVisited), stats.Exploration?.SettlementsVisited.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                if (collapseExpand[7] == 'Y')
-                    node.Item1.Expand();
-
-                string passengers = "Passengers".T(EDTx.UserControlStats_Passengers);
-                node = AddTreeNode(passengers, "Total Bulk Passengers Delivered".T(EDTx.UserControlStats_TotalBulkPassengersDelivered), stats.PassengerMissions?.Bulk.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(passengers, "Total VIPs Delivered".T(EDTx.UserControlStats_TotalVIPsDelivered), stats.PassengerMissions?.VIP.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(passengers, "Accepted".T(EDTx.UserControlStats_Accepted), stats.PassengerMissions?.Accepted.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(passengers, "Delivered".T(EDTx.UserControlStats_Delivered), stats.PassengerMissions?.Delivered.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(passengers, "Disgruntled".T(EDTx.UserControlStats_Disgruntled), stats.PassengerMissions?.Disgruntled.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(passengers, "Ejected".T(EDTx.UserControlStats_Ejected), stats.PassengerMissions?.Ejected.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                if (collapseExpand[8] == 'Y')
-                    node.Item1.Expand();
-
-                string search = "Search and Rescue".T(EDTx.UserControlStats_SearchandRescue);
-                node = AddTreeNode(search, "Total Items Rescued".T(EDTx.UserControlStats_TotalItemsRescued), stats.SearchAndRescue?.Traded.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(search, "Total Profit".T(EDTx.UserControlStats_TotalProfit), stats.SearchAndRescue?.Profit.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                AddTreeNode(search, "Total Rescue Transactions".T(EDTx.UserControlStats_TotalRescueTransactions), stats.SearchAndRescue?.Count.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(search, "Legal Salvage Value - Surface".T(EDTx.UserControlStats_SalvageLegalPOI), stats.SearchAndRescue?.SalvageLegalPOI.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                AddTreeNode(search, "Legal Salvage Value - Settlements".T(EDTx.UserControlStats_SalvageLegalSettlements), stats.SearchAndRescue?.SalvageLegalSettlements.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                AddTreeNode(search, "Illegal Salvage Value - Surface".T(EDTx.UserControlStats_SalvageIllegalPOI), stats.SearchAndRescue?.SalvageIllegalPOI.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                AddTreeNode(search, "Illegal Salvage Value - Settlements".T(EDTx.UserControlStats_SalvageIllegalSettlements), stats.SearchAndRescue?.SalvageIllegalSettlements.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                AddTreeNode(search, "Maglocks cut".T(EDTx.UserControlStats_MaglocksOpened), stats.SearchAndRescue?.MaglocksOpened.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(search, "Panels cut".T(EDTx.UserControlStats_PanelsOpened), stats.SearchAndRescue?.PanelsOpened.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(search, "Settlement Fires extinguished".T(EDTx.UserControlStats_SettlementsStateFireOut), stats.SearchAndRescue?.SettlementsStateFireOut.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(search, "Settlements rebooted".T(EDTx.UserControlStats_SettlementsStateReboot), stats.SearchAndRescue?.SettlementsStateReboot.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                if (collapseExpand[9] == 'Y')
-                    node.Item1.Expand();
-
-                string craft = "Crafting".T(EDTx.UserControlStats_Crafting);
-                node = AddTreeNode(craft, "Engineers Used".T(EDTx.UserControlStats_EngineersUsed), stats.Crafting?.CountOfUsedEngineers.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(craft, "Total Recipes Generated".T(EDTx.UserControlStats_TotalRecipesGenerated), stats.Crafting?.RecipesGenerated.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(craft, "Grade 1 Recipes Generated".T(EDTx.UserControlStats_Grade1RecipesGenerated), stats.Crafting?.RecipesGeneratedRank1.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(craft, "Grade 2 Recipes Generated".T(EDTx.UserControlStats_Grade2RecipesGenerated), stats.Crafting?.RecipesGeneratedRank2.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(craft, "Grade 3 Recipes Generated".T(EDTx.UserControlStats_Grade3RecipesGenerated), stats.Crafting?.RecipesGeneratedRank3.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(craft, "Grade 4 Recipes Generated".T(EDTx.UserControlStats_Grade4RecipesGenerated), stats.Crafting?.RecipesGeneratedRank4.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(craft, "Grade 5 Recipes Generated".T(EDTx.UserControlStats_Grade5RecipesGenerated), stats.Crafting?.RecipesGeneratedRank5.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(craft, "Suit Modifications Applied".T(EDTx.UserControlStats_SuitModsApplied), stats.Crafting?.SuitModsApplied.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(craft, "Weapon Modifications Applied".T(EDTx.UserControlStats_WeaponModsApplied), stats.Crafting?.WeaponModsApplied.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(craft, "Suit Upgrades Applied".T(EDTx.UserControlStats_SuitsUpgraded), stats.Crafting?.SuitsUpgraded.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(craft, "Weapon Upgrades Applied".T(EDTx.UserControlStats_WeaponsUpgraded), stats.Crafting?.WeaponsUpgraded.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(craft, "Suits fully Upgraded".T(EDTx.UserControlStats_SuitsUpgradedFull), stats.Crafting?.SuitsUpgradedFull.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(craft, "Weapons fully Upgraded".T(EDTx.UserControlStats_WeaponsUpgradedFull), stats.Crafting?.WeaponsUpgradedFull.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(craft, "Suits fully Modified".T(EDTx.UserControlStats_SuitModsAppliedFull), stats.Crafting?.SuitModsAppliedFull.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(craft, "Weapons fully Modified".T(EDTx.UserControlStats_WeaponModsAppliedFull), stats.Crafting?.WeaponModsAppliedFull.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                if (collapseExpand[10] == 'Y')
-                    node.Item1.Expand();
-
-                string crew = "Crew".T(EDTx.UserControlStats_Crew);
-                node = AddTreeNode(crew, "Total Wages".T(EDTx.UserControlStats_TotalWages), stats.Crew?.TotalWages.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                AddTreeNode(crew, "Total Hired".T(EDTx.UserControlStats_TotalHired), stats.Crew?.Hired.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(crew, "Total Fired".T(EDTx.UserControlStats_TotalFired), stats.Crew?.Fired.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(crew, "Died in Line of Duty".T(EDTx.UserControlStats_DiedinLineofDuty), stats.Crew?.Died.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                if (collapseExpand[11] == 'Y')
-                    node.Item1.Expand();
-
-                string multicrew = "Multi-crew".T(EDTx.UserControlStats_Multi);
-                node = AddTreeNode(multicrew, "Total Time".T(EDTx.UserControlStats_TotalTime), SecondsToDHMString(stats.Multicrew?.TimeTotal));
-                AddTreeNode(multicrew, "Fighter Time".T(EDTx.UserControlStats_FighterTime), SecondsToDHMString(stats.Multicrew?.FighterTimeTotal));
-                AddTreeNode(multicrew, "Gunner Time".T(EDTx.UserControlStats_GunnerTime), SecondsToDHMString(stats.Multicrew?.GunnerTimeTotal));
-                AddTreeNode(multicrew, "Credits Made".T(EDTx.UserControlStats_CreditsMade), stats.Multicrew?.CreditsTotal.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                AddTreeNode(multicrew, "Fines Accrued".T(EDTx.UserControlStats_FinesAccrued), stats.Multicrew?.FinesTotal.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                if (collapseExpand[12] == 'Y')
-                    node.Item1.Expand();
-
-                string mattrader = "Materials Trader".T(EDTx.UserControlStats_MaterialsTrader);
-                node = AddTreeNode(mattrader, "Material Trades Completed".T(EDTx.UserControlStats_TradesCompleted), stats.MaterialTraderStats?.TradesCompleted.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(mattrader, "Materials Traded".T(EDTx.UserControlStats_MaterialsTraded), stats.MaterialTraderStats?.MaterialsTraded.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(mattrader, "Encoded Materials Traded".T(EDTx.UserControlStats_EncodedMaterialsTraded), stats.MaterialTraderStats?.EncodedMaterialsTraded.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(mattrader, "Raw Materials Traded".T(EDTx.UserControlStats_RawMaterialsTraded), stats.MaterialTraderStats?.RawMaterialsTraded.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(mattrader, "Grade 1 Materials Traded".T(EDTx.UserControlStats_G1MaterialsTraded), stats.MaterialTraderStats?.Grade1MaterialsTraded.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(mattrader, "Grade 2 Materials Traded".T(EDTx.UserControlStats_G2MaterialsTraded), stats.MaterialTraderStats?.Grade2MaterialsTraded.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(mattrader, "Grade 3 Materials Traded".T(EDTx.UserControlStats_G3MaterialsTraded), stats.MaterialTraderStats?.Grade3MaterialsTraded.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(mattrader, "Grade 4 Materials Traded".T(EDTx.UserControlStats_G4MaterialsTraded), stats.MaterialTraderStats?.Grade4MaterialsTraded.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(mattrader, "Grade 5 Materials Traded".T(EDTx.UserControlStats_G5MaterialsTraded), stats.MaterialTraderStats?.Grade5MaterialsTraded.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                if (collapseExpand[13] == 'Y')
-                    node.Item1.Expand();
-
-                string CQC = "CQC".T(EDTx.UserControlStats_CQC);
-                node = AddTreeNode(CQC, "Profits from CQC".T(EDTx.UserControlStats_CreditsEarned), stats.CQC?.CreditsEarned.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                AddTreeNode(CQC, "Time Played".T(EDTx.UserControlStats_CQCTimePlayed), stats.CQC?.TimePlayed.SecondsToWeeksDaysHoursMinutesSeconds());
-                AddTreeNode(CQC, "K/D Ratio".T(EDTx.UserControlStats_KDRatio), stats.CQC?.KD.ToString("N2", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(CQC, "Kills".T(EDTx.UserControlStats_Kills), stats.CQC?.Kills.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(CQC, "Win/Loss".T(EDTx.UserControlStats_Win), stats.CQC?.WL.ToString("N2", System.Globalization.CultureInfo.CurrentCulture));
-                if (collapseExpand[14] == 'Y')
-                    node.Item1.Expand();
-
-                string FLEETCARRIER = "Fleetcarrier".T(EDTx.UserControlStats_FLEETCARRIER);
-                node = AddTreeNode(FLEETCARRIER, "Total Commodities Exported".T(EDTx.UserControlStats_EXPORTTOTAL), stats.FLEETCARRIER?.EXPORTTOTAL.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(FLEETCARRIER, "Total Commodities Imported".T(EDTx.UserControlStats_IMPORTTOTAL), stats.FLEETCARRIER?.IMPORTTOTAL.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(FLEETCARRIER, "Credits earned from Commodities".T(EDTx.UserControlStats_TRADEPROFITTOTAL), stats.FLEETCARRIER?.TRADEPROFITTOTAL.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                AddTreeNode(FLEETCARRIER, "Credits spent on Commodities".T(EDTx.UserControlStats_TRADESPENDTOTAL), stats.FLEETCARRIER?.TRADESPENDTOTAL.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                AddTreeNode(FLEETCARRIER, "Credits earned from Stolen Goods".T(EDTx.UserControlStats_STOLENPROFITTOTAL), stats.FLEETCARRIER?.STOLENPROFITTOTAL.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                AddTreeNode(FLEETCARRIER, "Credits spent on Stolen Goods".T(EDTx.UserControlStats_STOLENSPENDTOTAL), stats.FLEETCARRIER?.STOLENSPENDTOTAL.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                AddTreeNode(FLEETCARRIER, "Total Travel Distance".T(EDTx.UserControlStats_DISTANCETRAVELLED), stats.FLEETCARRIER?.DISTANCETRAVELLED.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "ly");
-                AddTreeNode(FLEETCARRIER, "Number of Carrier Jumps".T(EDTx.UserControlStats_TOTALJUMPS), stats.FLEETCARRIER?.TOTALJUMPS.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(FLEETCARRIER, "Total Ships Sold".T(EDTx.UserControlStats_SHIPYARDSOLD), stats.FLEETCARRIER?.SHIPYARDSOLD.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(FLEETCARRIER, "Credits earned from Shipyard".T(EDTx.UserControlStats_SHIPYARDPROFIT), stats.FLEETCARRIER?.SHIPYARDPROFIT.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                AddTreeNode(FLEETCARRIER, "Total Modules Sold".T(EDTx.UserControlStats_OUTFITTINGSOLD), stats.FLEETCARRIER?.OUTFITTINGSOLD.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(FLEETCARRIER, "Credits earned from Outfitting".T(EDTx.UserControlStats_OUTFITTINGPROFIT), stats.FLEETCARRIER?.OUTFITTINGPROFIT.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                AddTreeNode(FLEETCARRIER, "Total Ships Restocked".T(EDTx.UserControlStats_REARMTOTAL), stats.FLEETCARRIER?.REARMTOTAL.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(FLEETCARRIER, "Total Ships Refuelled".T(EDTx.UserControlStats_REFUELTOTAL), stats.FLEETCARRIER?.REFUELTOTAL.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(FLEETCARRIER, "Credits earned from Refuelling".T(EDTx.UserControlStats_REFUELPROFIT), stats.FLEETCARRIER?.REFUELPROFIT.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                AddTreeNode(FLEETCARRIER, "Total Ships Repaired".T(EDTx.UserControlStats_REPAIRSTOTAL), stats.FLEETCARRIER?.REPAIRSTOTAL.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(FLEETCARRIER, " Redemption Office Exchanges".T(EDTx.UserControlStats_VOUCHERSREDEEMED), stats.FLEETCARRIER?.VOUCHERSREDEEMED.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(FLEETCARRIER, " Redemption Office Payouts".T(EDTx.UserControlStats_VOUCHERSPROFIT), stats.FLEETCARRIER?.VOUCHERSPROFIT.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                if (collapseExpand[15] == 'Y')
-                    node.Item1.Expand();
-
-                string Exobiology = "Exobiology".T(EDTx.UserControlStats_Exobiology);
-                node = AddTreeNode(Exobiology, "Unique Genus Encountered".T(EDTx.UserControlStats_OrganicGenusEncountered), stats.Exobiology?.OrganicGenusEncountered.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(Exobiology, "Unique Species Encountered".T(EDTx.UserControlStats_OrganicSpeciesEncountered), stats.Exobiology?.OrganicSpeciesEncountered.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(Exobiology, "Unique Variants Encountered".T(EDTx.UserControlStats_OrganicVariantEncountered), stats.Exobiology?.OrganicVariantEncountered.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(Exobiology, "Profit from Organic Data".T(EDTx.UserControlStats_OrganicDataProfits), stats.Exobiology?.OrganicDataProfits.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                AddTreeNode(Exobiology, "Organic Data Registered".T(EDTx.UserControlStats_OrganicData), stats.Exobiology?.OrganicData.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(Exobiology, "Profit from First Logged".T(EDTx.UserControlStats_FirstLoggedProfits), stats.Exobiology?.FirstLoggedProfits.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                AddTreeNode(Exobiology, "First Logged".T(EDTx.UserControlStats_FirstLogged), stats.Exobiology?.FirstLogged.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(Exobiology, "Systems with Organic Life".T(EDTx.UserControlStats_OrganicSystems), stats.Exobiology?.OrganicSystems.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(Exobiology, "Planets with Organic Life".T(EDTx.UserControlStats_OrganicPlanets), stats.Exobiology?.OrganicPlanets.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(Exobiology, "Unique Genus Data Logged".T(EDTx.UserControlStats_OrganicGenus), stats.Exobiology?.OrganicGenus.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddTreeNode(Exobiology, "Unique Species Data Logged".T(EDTx.UserControlStats_OrganicSpecies), stats.Exobiology?.OrganicSpecies.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));                
-                if (collapseExpand[16] == 'Y')
-                    node.Item1.Expand();
+                AddTreeList("Materials Trader".T(EDTx.UserControlStats_MaterialsTrader), stats.MaterialTraderStats.Format("").Split(Environment.NewLine), collapseExpand[13]);
+                AddTreeList("CQC".T(EDTx.UserControlStats_CQC), stats.CQC.Format("").Split(Environment.NewLine), collapseExpand[14]);
+                AddTreeList("Fleetcarrier".T(EDTx.UserControlStats_FLEETCARRIER), stats.FLEETCARRIER.Format("").Split(Environment.NewLine), collapseExpand[15]);
+                AddTreeList("Exobiology".T(EDTx.UserControlStats_Exobiology), stats.Exobiology.Format("").Split(Environment.NewLine), collapseExpand[16]);
             }
             else
                 treeViewStats.Nodes.Clear();
         }
 
-        string SecondsToDHMString(int? seconds)
+        TreeNode AddTreeList(string parenttext, string[] children, char ce)
         {
-            if (!seconds.HasValue)
-                return "";
+            var pnode = treeViewStats.Nodes.Add(parenttext,parenttext);
+            foreach( var entry in children)
+            {
+                var child = pnode.Nodes.Add(entry, entry);
+            }
 
-            TimeSpan time = TimeSpan.FromSeconds(seconds.Value);
-            return string.Format("{0} days {1} hours {2} minutes".T(EDTx.UserControlStats_TME), time.Days, time.Hours, time.Minutes);
-        }
+            if (ce == 'Y')
+                pnode.Expand();
 
-        Tuple<TreeNode, TreeNode> AddTreeNode(string parentname, string name, string value, string units = "")
-        {
-            TreeNode[] parents = treeViewStats.Nodes.Find(parentname, false);
-            TreeNode parent = (parents.Length == 0) ? (treeViewStats.Nodes.Add(parentname, parentname)) : parents[0];
-
-            TreeNode[] childs = parent.Nodes.Find(name, false);
-            TreeNode child = (childs.Length == 0) ? (parent.Nodes.Add(name, "")) : childs[0];
-            child.Text = $"{name}:  {(String.IsNullOrEmpty(value) ? "0" : value)} {units}";
-            return new Tuple<TreeNode, TreeNode>(parent, child);
+            return pnode;
         }
 
         string GameStatTreeState()
@@ -1369,7 +1140,7 @@ namespace EDDiscovery.UserControls
         }
 
 
-        #endregion
+#endregion
     }
 
 }

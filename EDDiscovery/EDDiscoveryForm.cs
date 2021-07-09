@@ -1210,22 +1210,21 @@ namespace EDDiscovery
 
         private void buttonReloadActions_Click(object sender, EventArgs e)
         {
-            BaseUtils.Translator.Instance.LoadTranslation(EDDConfig.Instance.Language, CultureInfo.CurrentUICulture, 
-                    EDDOptions.Instance.TranslatorFolders(),
-                    EDDOptions.Instance.TranslatorDirectoryIncludeSearchUpDepth, EDDOptions.Instance.AppDataDirectory);
             actioncontroller.ReLoad();
             actioncontroller.CheckWarn();
             actioncontroller.onStartup();
 
             // keep for debug:
 
+            //var tx = BaseUtils.Translator.Instance.NotUsed();  foreach (var s in tx) System.Diagnostics.Debug.WriteLine(s); // turn on usetracker at top to use
+
             //if (FrontierCAPI.Active && !EDCommander.Current.ConsoleCommander)
-              //  Controller.DoCAPI(history.GetLast.Status.StationName, history.GetLast.System.Name, false, history.Shipyards.AllowCobraMkIV);
-         }
+            //  Controller.DoCAPI(history.GetLast.Status.StationName, history.GetLast.System.Name, false, history.Shipyards.AllowCobraMkIV);
+        }
 
 
         #endregion
-        
+
         #region Other clicks - Captions etc
 
         private void MouseDownCAPTION(object sender, MouseEventArgs e)

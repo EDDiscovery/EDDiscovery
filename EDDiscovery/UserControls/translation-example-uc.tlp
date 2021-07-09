@@ -1091,8 +1091,6 @@ SECTION UserControlStats
 
 .TotalNoofjumps: "Total No of jumps: " @
 .FSDjumps: "FSD Jumps" @
-.Beltcluster: "Belt Cluster: " @
-
 .JumpHistory: "Jump History" @
 .24hc: "24 Hours: " @
 .OneWeek: ", One Week: " @
@@ -1106,8 +1104,13 @@ SECTION UserControlStats
 .MostLowest: "Most Lowest" @
 .MostVisited: "Most Visited" @
 
+.Type: "Type" @
+.Name: "Name" @
+.Ident: "Ident" @
 .Jumps: "Jumps" @
 .TravelledLy: "Traveled Ly" @
+.BodiesScanned: "Bodies Scanned" @
+.Destroyed: "Destroyed" @
 .PremiumBoost: "Premium Boost" @
 .StandardBoost: "Standard Boost" @
 .BasicBoost: "Basic Boost" @
@@ -1116,10 +1119,11 @@ SECTION UserControlStats
 .Mapped: "Mapped" @
 .Scanvalue: "Scan value" @
 
+.Beltcluster: "Belt Cluster: " @
+
 .Lastdock: "Last dock" @
 .Trip: "Trip" @
 .All: "All" @
-.Type: "Type" @
 
 .BankAccount: "Bank Account" @
 .Combat: "Combat" @
@@ -1135,197 +1139,13 @@ SECTION UserControlStats
 .Multi: "Multi-crew" @
 .MaterialsTrader: "Materials Trader" @
 .FLEETCARRIER: "Fleetcarrier" @
-.Exobiology "Exobiology" @
-
-.CurrentAssets: "Current Assets" @
-.SpentonShips: "Spent on Ships" @
-.SpentonOutfitting: "Spent on Outfitting" @
-.SpentonRepairs: "Spent on Repairs" @
-.SpentonFuel: "Spent on Fuel" @
-.SpentonMunitions: "Spent on Munitions" @
-.InsuranceClaims: "Insurance Claims" @
-.TotalClaimCosts: "Total Claim Costs" @
-.OwnedShipCount: "Owned Ships" @
-.SpentOnSuits: "Spent on Suits" @
-.SpentOnWeapons: "Spent on Weapons"
-.SpentOnSuitConsumables: "Spent on Suit Consumables" @
-.SuitsOwned: "Suits Owned" @
-.WeaponsOwned: "Weapons Owned" @
-.SpentOnPremiumStock: "Spent on Premium Stock" @
-.PremiumStockBought: "Premium Stock Bought" @
-.BountiesClaimed: "Bounties Claimed" @
-.ProfitfromBountyHunting: "Profit from Bounty Hunting" @
-.CombatBonds: "Combat Bonds" @
-.ProfitfromCombatBonds: "Profit from Combat Bonds" @
-.Assassinations: "Assassinations" @
-.ProfitfromAssassination: "Profit from Assassination" @
-.HighestSingleReward: "Highest Single Reward" @
-.SkimmersKilled: "Skimmers Killed" @
-.DropshipsTaken: "Dropships Taken" @
-.DropshipsBooked: "Dropships Booked" @
-.DropshipsCancelled: "Dropships Cancelled" @
-.ConflictZoneHigh: "High Intensity Conflict Zones fought" @
-.ConflictZoneMedium: "Medium Intensity Conflict Zones fought" @
-.ConflictZoneLow: "Low Intensity Conflict Zones fought" @
-.ConflictZoneTotal: "Total Conflict Zones fought" @
-.ConflictZoneHighWins: "High Intensity Conflict Zones won" @
-.ConflictZoneMediumWins: "Medium Intensity ConflictZones won" @
-.ConflictZoneLowWins: "Low Intensity Conflict Zones won" @
-.ConflictZoneTotalWins: "Total Conflict Zones won" @
-.SettlementDefended: "Settlements Defended" @
-.SettlementConquered: "Settlements Conquered" @
-.OnFootSkimmersKilled: "Skimmers killed on Foot" @
-.OnFootScavsKilled: "Scavengers killed on Foot" @
-.Notoriety: "Notoriety" @
-.NumberofFines: "Number of Fines" @
-.LifetimeFinesValue: "Lifetime Fines Value" @
-.BountiesReceived: "Bounties Received" @
-.LifetimeBountyValue: "Lifetime Bounty Value" @
-.HighestBountyIssued: "Highest Bounty Issued" @
-.MalwareUploaded: "Malware Uploaded" @
-.SettlementsStateShutdown: "Settlements shut down" @
-.ProductionSabotage: "Production Sabotaged" @
-.ProductionTheft: "Production Thefts" @
-.TotalMurders: "Total Murders" @
-.CitizensMurdered: "Citizens Murdered" @
-.OmnipolMurdered: "Omnipol Murdered" @
-.GuardsMurdered: "Guards Murdered" @
-.DataStolen: "Data Stolen" @
-.GoodsStolen: "Goods Stolen" @
-.SampleStolen: "Production Samples Stolen" @
-.TotalStolen: "Total Inventory Items Stolen" @
-.TurretsDestroyed: "Turrets Destroyed" @
-.TurretsOverloaded: "Turrets Overloaded" @
-.TurretsTotal: "Total Turrets shut down" @
-.ValueStolenStateChange: "Stolen Items Value" @
-.ProfilesCloned: "ProfilesCloned" @
-.BlackMarketNetwork: "Black Market Network" @
-.BlackMarketProfits: "Black Market Profits" @
-.CommoditiesSmuggled: "Commodities Smuggled" @
-.AverageProfit: "Average Profit" @
-.HighestSingleTransaction: "Highest Single Transaction" @
-.DataSold: "Data Sold" @
-.TradingGoodsSold: "Goods Sold" @
-.AssetsSold: "Assets Sold" @
-.MarketNetwork: "Market Network" @
-.MarketProfits: "Market Profits" @
-.CommoditiesTraded: "Commodities Traded" @
-.MiningProfits: "Mining Profits" @
-.MaterialsRefined: "Materials Refined" @
-.MaterialsCollected: "Materials Collected" @
-.SystemsVisited: "Systems Visited" @
-.ExplorationProfits: "Exploration Profits" @
-.Level2Scans: "Level 2 Scans" @
-.Level3Scans: "Level 3 Scans" @
-.HighestPayout: "Highest Payout" @
-.TotalHyperspaceDistance: "Total Hyperspace Distance" @
-.TotalHyperspaceJumps: "Total Hyperspace Jumps" @
-.FarthestFromStart: "Farthest From Start" @
-.TimePlayed: "Time Played" @
-.ShuttleJourneys: "Shuttle Journeys" @
-.ShuttleDistanceTravelled: "Shuttle Distance Travelled" @
-.SpentOnShuttles: "Credits Spent on Shuttles" @
-.FirstFootfalls: "First Footfalls" @
-.PlanetFootfalls: "Planets walked on" @
-.SettlementsVisited: "Settlements docked at" @
-.TotalBulkPassengersDelivered: "Total Bulk Passengers Delivered" @
-.TotalVIPsDelivered: "Total VIPs Delivered" @
-.Delivered: "Delivered" @
-.Ejected: "Ejected" @
-.TotalItemsRescued: "Total Items Rescued" @
-.TotalProfit: "Total Profit" @
-.TotalRescueTransactions: "Total Rescue Transactions" @
-.SalvageLegalPOI: "Legal Salvage Value - Surface" @
-.SalvageLegalSettlements: "Legal Salvage Value - Settlements" @
-.SalvageIllegalPOI: "Illegal Salvage Value - Surface" @
-.SalvageIllegalSettlements: "Illegal Salvage Value - Settlements" @
-.MaglocksOpened: "Maglocks cut" @
-.PanelsOpened: "Panels cut" @
-.SettlementsStateFireOut: "Settlement Fires extinguished" @
-.SettlementsStateReboot: "Settlements rebooted" @
-.EngineersUsed: "Engineers Used" @
-.TotalRecipesGenerated: "Total Recipes Generated" @
-.Grade1RecipesGenerated: "Grade 1 Recipes Generated" @
-.Grade2RecipesGenerated: "Grade 2 Recipes Generated" @
-.Grade3RecipesGenerated: "Grade 3 Recipes Generated" @
-.Grade4RecipesGenerated: "Grade 4 Recipes Generated" @
-.Grade5RecipesGenerated: "Grade 5 Recipes Generated" @
-.SuitModsApplied: "Suit Modifications Applied" @
-.WeaponModsApplied: "Weapon Modifications Applied" @
-.SuitsUpgraded: "Suit Upgrades Applied" @
-.WeaponsUpgraded: "Weapon Upgrades Applied" @
-.SuitsUpgradedFull: "Suits fully Upgraded" @
-.WeaponsUpgradedFull: "Weapons fully Upgraded" @
-.SuitModsAppliedFull: "Suits fully Modified" @
-.WeaponModsAppliedFull: "Weapons fully Modified" @
-.TotalWages: "Total Wages" @
-.TotalHired: "Total Hired" @
-.TotalFired: "Total Fired" @
-.DiedinLineofDuty: "Died in Line of Duty" @
-.TotalTime: "Total Time" @
-.FighterTime: "Fighter Time" @
-.GunnerTime: "Gunner Time" @
-.CreditsMade: "Credits Made" @
-.FinesAccrued: "Fines Accrued" @
-.TradesCompleted: "Material Trades Completed" @
-.MaterialsTraded: "Materials Traded" @
-.G1MaterialsTraded: "Grade 1 Materials Traded" @
-.G2MaterialsTraded: "Grade 2 Materials Traded" @
-.G3MaterialsTraded: "Grade 3 Materials Traded" @
-.G4MaterialsTraded: "Grade 4 Materials Traded" @
-.G5MaterialsTraded: "Grade 5 Materials Traded" @
 .CQC: "CQC" @
-.CreditsEarned: "Profits from CQC" @"
-.CQCTimePlayed: "Time Played" @
-.KDRatio: "K/D Ratio" @
-.Kills: "Kills" @
-.Win: "Win/Loss" @
-.EXPORTTOTAL: "Total Commodities Exported" @"
-.IMPORTTOTAL: "Total Commodities Imported" @
-.TRADEPROFITTOTAL: "Credits earned from Commodities" @
-.TRADESPENDTOTAL: "Credits spent on Commodities" @
-.STOLENPROFITTOTAL: "Credits earned from Stolen Goods" @
-.STOLENSPENDTOTAL: "Credits spent on Stolen Goods" @
-.DISTANCETRAVELLED: "Total Travel Distance" @
-.TOTALJUMPS: "Number of Carrier Jumps" @
-.SHIPYARDSOLD: "Total Ships Sold" @
-.SHIPYARDPROFIT: "Credits earned from Shipyard" @
-.OUTFITTINGSOLD: "Total Modules Sold" @
-.OUTFITTINGPROFIT: "Credits earned from Outfitting" @
-.REARMTOTAL: "Total Ships Restocked" @
-.REFUELTOTAL: "Total Ships Refuelled" @
-.REFUELPROFIT: "Credits earned from Refuelling" @
-.REPAIRSTOTAL: "Total Ships Repaired" @
-.VOUCHERSREDEEMED: "Redemption Office Exchanges" @
-.VOUCHERSPROFIT: "Redemption Office Payouts" @
-.OrganicGenusEncountered: "Unique Genus Encountered" @
-.OrganicSpeciesEncountered: "Unique Species Encountered" @
-.OrganicVariantEncountered: "Unique Variants Encountered" @
-.OrganicDataProfits: "Profit from Organic Data" @
-.OrganicData: "Organic Data Registered" @
-.FirstLoggedProfits: "Profit from First Logged" @
-.FirstLogged: "First Logged" @
-.OrganicSystems: "Systems with Organic Life" @
-.OrganicPlanets: "Planets with Organic Life" @
-.OrganicGenus: "Unique Genus Data Logged" @
-.OrganicSpecies: "Unique Species Data Logged" @
+.Exobiology: "Exobiology" @
 
-.TME: "{0} days {1} hours {2} minutes" @
-.Name: "Name" @
-.Ident: "Ident" @
-
-.BodiesScanned: "Bodies Scanned" @
-.Destroyed: "Destroyed" @
-
+// used by faction panels now, kept here for backwards compat
 .GoodsBought: "Goods Bought" @
 .GoodsSold: "Goods Sold" @
 .GoodsProfit: "Goods Profit" @
-
-.EfficientScans: "Efficient Scans" @
-.Accepted: "Accepted" @
-.Disgruntled: "Disgruntled" @
-.EncodedMaterialsTraded: "Encoded Materials Traded" @
-.RawMaterialsTraded: "Raw Materials Traded" @
 
 SECTION StatsTimeUserControl
 
