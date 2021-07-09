@@ -159,10 +159,14 @@ namespace EDDiscovery
             if (EDDOptions.Instance.ResetLanguage)
                 EDDConfig.Instance.Language = "None";
 
-            BaseUtils.Translator.Instance.LoadTranslation(EDDOptions.Instance.SelectLanguage ?? EDDConfig.Instance.Language, 
+            string lang = EDDOptions.Instance.SelectLanguage ?? EDDConfig.Instance.Language;
+            bool found = BaseUtils.Translator.Instance.LoadTranslation(lang, 
                     CultureInfo.CurrentUICulture, 
                     EDDOptions.Instance.TranslatorFolders(),
                     EDDOptions.Instance.TranslatorDirectoryIncludeSearchUpDepth, EDDOptions.Instance.AppDataDirectory);
+
+            if (!found && !lang.Contains("Default", StringComparison.InvariantCultureIgnoreCase))
+                ExtendedControls.MessageBoxTheme.Show("Translation file disappeared - check your debugger -translationfolder settings!","Translation file");
 
             BaseUtils.Translator.Instance.AddExcludedControls(new Type[]
             {   typeof(ExtendedControls.ExtComboBox), typeof(ExtendedControls.NumberBoxDouble),typeof(ExtendedControls.NumberBoxFloat),typeof(ExtendedControls.NumberBoxLong),
