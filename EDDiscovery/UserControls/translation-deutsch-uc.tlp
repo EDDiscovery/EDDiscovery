@@ -388,8 +388,8 @@ SECTION UserControlMarketData
 
 SECTION UserControlMaterialCommodities
 
-.ShipLocker: "Ship Locker" @
-.BackPack: "BackPack" @
+.ShipLocker: "Ship Locker" => "Schiffsspind"
+.BackPack: "BackPack" => "Rucksack"
 .Data: "Data" => "Daten"
 .Mats: "Mats" => "Mat."
 .Total: "Total" => "Gesamt"
@@ -433,7 +433,7 @@ SECTION UserControlSurveyor
 .showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem: "Show System Info Always" => "Systeminformation immer anzeigen"
 .selectFSSSignalsShownToolStripMenuItem: "Select FSS Signals Shown" => "Wähle anzuzeigende FSS-Signale"
 .LowRadius: " Is tiny." => " niedriger Radius"
-.LargeRadius: " Is large." @
+.LargeRadius: " Is large." => " Ist groß."
 .Mapped: " (Mapped & Discovered)" => " (Kartographiert & erkundet)"
 .Systemscancomplete: "System scan complete." => "Systemscan komplett"
 .bodiesfound: " bodies found." => " Körper gefunden."
@@ -441,7 +441,7 @@ SECTION UserControlSurveyor
 .Hasring: " Has ring." => " hat Ringe."
 .Has: " Has " => " hat "
 .Signals: " Has signals." => " hat Signale."
-.eccentricity: " Has an high eccentricity of " @
+.eccentricity: " Has an high eccentricity of " => " Hat eine hohe Exzentrizität von "
 .planetaryClassesToolStripMenuItem: "Planetary Classes" => "Planetare Klassen"
 .planetaryClassesToolStripMenuItem.ammoniaWorldToolStripMenuItem: "Ammonia World" => "Ammoniakwelt"
 .planetaryClassesToolStripMenuItem.earthlikeWorldToolStripMenuItem: "Earthlike World" => "erdähnliche Welt"
@@ -463,15 +463,15 @@ SECTION UserControlSurveyor
 .showMoreInformationToolStripMenuItem: "Show More Information" => "Zeige mehr Informationen"
 .showValuesToolStripMenuItem: "Show values" => "Zeige Werte"
 .wordWrapToolStripMenuItem: "Word Wrap" => "Zeilenumbruch"
-.isa: " is a " @
+.isa: " is a " => " ist ein/e"
 .islandable: " Is landable." => " ist landbar."
-.planetaryClassesToolStripMenuItem.highMetalContentBodyToolStripMenuItem: "High metal content body" @
-.planetaryClassesToolStripMenuItem.metalToolStripMenuItem: "Metal-rich body" @
-.bodyFeaturesToolStripMenuItem.highEccentricityToolStripMenuItem: "High eccentricity" @
-.bodyFeaturesToolStripMenuItem.landableWithAtmosphereToolStripMenuItem: "Landable with atmosphere" @
-.bodyFeaturesToolStripMenuItem.landableWithVolcanismToolStripMenuItem: "Landable with volcanism" @
-.bodyFeaturesToolStripMenuItem.landableAndLargeToolStripMenuItem: "Landable and large" @
-.showGravityToolStripMenuItem: "Show gravity of landables" @
+.planetaryClassesToolStripMenuItem.highMetalContentBodyToolStripMenuItem: "High metal content body" => "Planet mit hochwertigen Metallen"
+.planetaryClassesToolStripMenuItem.metalToolStripMenuItem: "Metal-rich body" => "Metallreicher Planet"
+.bodyFeaturesToolStripMenuItem.highEccentricityToolStripMenuItem: "High eccentricity" => "Hohe Exzentrizität"
+.bodyFeaturesToolStripMenuItem.landableWithAtmosphereToolStripMenuItem: "Landable with atmosphere" => "Landbar mit Atmosphäre"
+.bodyFeaturesToolStripMenuItem.landableWithVolcanismToolStripMenuItem: "Landable with volcanism" => "Landbar mit Vulkanismus"
+.bodyFeaturesToolStripMenuItem.landableAndLargeToolStripMenuItem: "Landable and large" => "Landbar und groß"
+.showGravityToolStripMenuItem: "Show gravity of landables" => "Zeige Gravitation bei landbaren"
 
 SECTION MissionListUserControl
 
@@ -906,8 +906,8 @@ SECTION UserControlSettings
 .GameTime: "Game Time" => "Spielzeit"
 .Local: "Local" => "Lokal"
 .NoMap: "No map available!" => "Keine Karte verfügbar!"
-.extGroupBoxDLLPerms: "DLL Permissions" @
-.extButtonDLLPerms: "Configure" @
+.extGroupBoxDLLPerms: "DLL Permissions" => "DLL Bewilligungen"
+.extButtonDLLPerms: "Configure" => "Konfigurieren"
 
 SECTION UserControlShipYards
 
@@ -1121,9 +1121,9 @@ SECTION UserControlStats
 .Crew: "Crew" => "Crew"
 .Multi: "Multi-crew" => "Multicrew"
 .MaterialsTrader: "Materials Trader" => "Materialienhändler"
-.FLEETCARRIER: "Fleetcarrier" @
-.CQC: "CQC" @
-.Exobiology: "Exobiology" @
+.FLEETCARRIER: "Fleetcarrier" => "Carrier"
+.CQC: "CQC" => "CQC"
+.Exobiology: "Exobiology" => "Exobiologie"
 .GoodsBought: "Goods Bought" => "Handelswaren gekauft"
 .GoodsSold: "Goods Sold" => "Handelswaren verkauft"
 .GoodsProfit: "Goods Profit" => "Warenprofit"
@@ -1163,7 +1163,7 @@ SECTION UserControlSynthesis
 
 SECTION UserControlSysInfo
 
-.OnFoot: "On Foot" @
+.OnFoot: "On Foot" => "Zu Fuß"
 .labelJumpRange: "Jump" => "Sprung"
 .toolStripJumpRange: "Display Jump Range" => "Zeige Sprungreichweite"
 .labelSysName: "System" => "System"
@@ -1229,8 +1229,8 @@ SECTION UserControlSysInfo
 .displayShipButtonsToolStripMenuItem: "Display Ship Buttons" => "Zeige Schiffsknöpfe"
 .labelStationFaction: "Faction" => "Fraktion"
 .displayStationFactionToolStripMenuItem: "Display Station Faction" => "Zeige Stationsfraktion"
-.labelMR: "MR" @
-.displayMicroresourcesCountToolStripMenuItem: "Display Microresources Count" @
+.labelMR: "MR" => "MR"
+.displayMicroresourcesCountToolStripMenuItem: "Display Microresources Count" => "Zeige Anzahl der Mikroressourcen"
 
 SECTION UserControlContainerSplitter
 
@@ -1256,7 +1256,7 @@ SECTION UserControlContainerSplitter
 
 SECTION UserControlTravelGrid
 
-.travelGridInDebugModeToolStripMenuItem: "Travel grid in Debug Mode" @
+.travelGridInDebugModeToolStripMenuItem: "Travel grid in Debug Mode" => "Reisegitter im Debugmodus"
 .showSystemVisitedForeColourToolStripMenuItem: "Show lines in System Visited Fore Colour" => "Zeige Linien in 'besuchtes System'-Vordergrundfarbe"
 .THF: "History: Filter out fields" => "Historie: Felder ausfiltern"
 .ColumnTime: "Time" => "Zeit"
@@ -1325,7 +1325,7 @@ SECTION UserControlTravelGrid
 .runSelectionThroughIGAUDebugToolStripMenuItem: "Run selection through IGAU (Debug)" => "Führe Auswahl durch IGAU aus (Debug)"
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" => "Aktiviere oder deaktiviere Zeilenumbruch"
 .runSelectionThroughEDAstroDebugToolStripMenuItem: "Run selection through EDAstro (Debug)" => "Führe Auswahl durch EDAstro aus (Debug)"
-.addToTrilaterationToolStripMenuItem.expeditionToolStripMenuItem: "Expedition Panel" @
+.addToTrilaterationToolStripMenuItem.expeditionToolStripMenuItem: "Expedition Panel" => "Expeditionspanel"
 
 SECTION UserControlCaptainsLog
 
@@ -1538,8 +1538,8 @@ SECTION FilterSelector
 .Ledger: "Ledger" => "Kassabuch"
 .Ship: "Ship" => "Schiff"
 .Mining: "Mining" => "Abbau"
-.MicroResources: "Micro Resources" @
-.Suits: "Suits" @
+.MicroResources: "Micro Resources" => "Mikroressourcen"
+.Suits: "Suits" => "Anzüge"
 
 SECTION UserControlCommonBase
 
@@ -1552,25 +1552,25 @@ SECTION CSV
 
 SECTION UserControlSuitsWeapons
 
-.CSTime: "Time" @
-.CSName: "Name" @
-.CSMods: "Mods" @
-.CSPrice: "Price" @
-.CSLoadout: "Loadout" @
-.CSPrimary1: "Primary 1" @
-.CSPrimary2: "Primary 2" @
-.CSSecondary: "Secondary" @
-.CWTime: "Time" @
-.CWName: "Name" @
-.CWClass: "Class" @
-.CWMods: "Mods" @
-.CWPrice: "Price" @
-.CWPrimary: "Primary" @
-.CWWType: "Weapon Type" @
-.CWDamageType: "Damage Type" @
-.CWFireMode: "Fire Mode" @
-.CWDamage: "Damage" @
-.CWRPS: "Rate/Sec" @
-.CWClipSize: "Clip Size" @
-.CWHopper: "Hopper Size" @
-.CWRange: "Range m" @
+.CSTime: "Time" => "Zeit"
+.CSName: "Name" => "Name"
+.CSMods: "Mods" => "Mods"
+.CSPrice: "Price" => "Preis"
+.CSLoadout: "Loadout" => "Konfiguration"
+.CSPrimary1: "Primary 1" => "Primäre 1"
+.CSPrimary2: "Primary 2" => "Primäre 2"
+.CSSecondary: "Secondary" => "Sekundäre"
+.CWTime: "Time" => "Zeit"
+.CWName: "Name" => "Name"
+.CWClass: "Class" => "Klasse"
+.CWMods: "Mods" => "Mods"
+.CWPrice: "Price" => "Preis"
+.CWPrimary: "Primary" => "Primäre"
+.CWWType: "Weapon Type" => "Waffenart"
+.CWDamageType: "Damage Type" => "Schadensart"
+.CWFireMode: "Fire Mode" => "Feuermodus"
+.CWDamage: "Damage" => "Schaden"
+.CWRPS: "Rate/Sec" => "Rate/Sek"
+.CWClipSize: "Clip Size" => "Magazingröße"
+.CWHopper: "Hopper Size" => "Behältergröße"
+.CWRange: "Range m" => "Reichweite m"
