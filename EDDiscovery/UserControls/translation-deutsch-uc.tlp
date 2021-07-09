@@ -426,26 +426,22 @@ SECTION UserControlSurveyor
 .MandD: " (Mapped & Discovered)" => " (Kartographiert & erkundet)"
 .MP: " (Mapped)" => " (Kartographiert)"
 .DIS: " (Discovered)" => " (Erkundet)"
-.bodyFeaturesToolStripMenuItem.lowRadiusToolStripMenuItem: "Low Radius" => "niedriger Radius"
+.bodyFeaturesToolStripMenuItem.lowRadiusToolStripMenuItem: "Tiny body" => "niedriger Radius"
 .checkEDSMForInformationToolStripMenuItem: "Check EDSM for information" => "Prüfe EDSM auf Informationen"
 .autoHideToolStripMenuItem: "Auto Hide" => "Automatisch verstecken"
 .dontHideInFSSModeToolStripMenuItem: "Don\\'t Hide in FSS Mode" => "Im FSS-Modus nicht verbergen"
 .showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem: "Show System Info Always" => "Systeminformation immer anzeigen"
 .selectFSSSignalsShownToolStripMenuItem: "Select FSS Signals Shown" => "Wähle anzuzeigende FSS-Signale"
-.LowRadius: " Low Radius." => " niedriger Radius"
+.LowRadius: " Is tiny." => " niedriger Radius"
+.LargeRadius: " Is large." @
 .Mapped: " (Mapped & Discovered)" => " (Kartographiert & erkundet)"
 .Systemscancomplete: "System scan complete." => "Systemscan komplett"
 .bodiesfound: " bodies found." => " Körper gefunden."
 .Noscanreported: "No scan reported." => "Kein Scan gemeldet."
-.isanammoniaworld: " is an ammonia world." => " ist eine Ammoniakwelt"
-.isanearthlikeworld: " is an earth like world." => " ist eine erdähnliche Welt"
-.isawaterworld: " is a water world." => " ist eine Wasserwelt"
-.isaterraformablewaterworld: " is a terraformable water world." => " ist eine terraformierbare Wasserwelt"
-.isaterraformableplanet: " is a terraformable planet." => " ist ein terraformierbarer Planet."
 .Hasring: " Has ring." => " hat Ringe."
 .Has: " Has " => " hat "
-.Signals: " Has Signals." => " hat Signale."
-.islandable: " is landable." => " ist landbar."
+.Signals: " Has signals." => " hat Signale."
+.eccentricity: " Has an high eccentricity of " @
 .planetaryClassesToolStripMenuItem: "Planetary Classes" => "Planetare Klassen"
 .planetaryClassesToolStripMenuItem.ammoniaWorldToolStripMenuItem: "Ammonia World" => "Ammoniakwelt"
 .planetaryClassesToolStripMenuItem.earthlikeWorldToolStripMenuItem: "Earthlike World" => "erdähnliche Welt"
@@ -467,6 +463,15 @@ SECTION UserControlSurveyor
 .showMoreInformationToolStripMenuItem: "Show More Information" => "Zeige mehr Informationen"
 .showValuesToolStripMenuItem: "Show values" => "Zeige Werte"
 .wordWrapToolStripMenuItem: "Word Wrap" => "Zeilenumbruch"
+.isa: " is a " @
+.islandable: " Is landable." => " ist landbar."
+.planetaryClassesToolStripMenuItem.highMetalContentBodyToolStripMenuItem: "High metal content body" @
+.planetaryClassesToolStripMenuItem.metalToolStripMenuItem: "Metal-rich body" @
+.bodyFeaturesToolStripMenuItem.highEccentricityToolStripMenuItem: "High eccentricity" @
+.bodyFeaturesToolStripMenuItem.landableWithAtmosphereToolStripMenuItem: "Landable with atmosphere" @
+.bodyFeaturesToolStripMenuItem.landableWithVolcanismToolStripMenuItem: "Landable with volcanism" @
+.bodyFeaturesToolStripMenuItem.landableAndLargeToolStripMenuItem: "Landable and large" @
+.showGravityToolStripMenuItem: "Show gravity of landables" @
 
 SECTION MissionListUserControl
 
@@ -901,6 +906,8 @@ SECTION UserControlSettings
 .GameTime: "Game Time" => "Spielzeit"
 .Local: "Local" => "Lokal"
 .NoMap: "No map available!" => "Keine Karte verfügbar!"
+.extGroupBoxDLLPerms: "DLL Permissions" @
+.extButtonDLLPerms: "Configure" @
 
 SECTION UserControlShipYards
 
@@ -1071,7 +1078,6 @@ SECTION UserControlStats
 .tabControlCustomStats.tabPageByShip: "By Ship" => "Pro Schiff"
 .TotalNoofjumps: "Total No of jumps: " => "Gesamtzahl der Sprünge"
 .FSDjumps: "FSD Jumps" => "FSA-Sprünge"
-.Beltcluster: "Belt Cluster: " => "Gürtelgruppen"
 .JumpHistory: "Jump History" => "Sprunghistorie"
 .24hc: "24 Hours: " => "24 Stunden: "
 .OneWeek: ", One Week: " => ", eine Woche: "
@@ -1084,8 +1090,13 @@ SECTION UserControlStats
 .MostHighest: "Most Highest" => "höchstes"
 .MostLowest: "Most Lowest" => "niedrigstes"
 .MostVisited: "Most Visited" => "meistbesuchtes"
+.Type: "Type" => "Art"
+.Name: "Name" => "Name"
+.Ident: "Ident" => "Ident"
 .Jumps: "Jumps" => "Sprünge"
 .TravelledLy: "Traveled Ly" => "Gereiste Lichtjahre"
+.BodiesScanned: "Bodies Scanned" => "Körper gescannt"
+.Destroyed: "Destroyed" => "Zerstört"
 .PremiumBoost: "Premium Boost" => "Premiumboost"
 .StandardBoost: "Standard Boost" => "Standardboost"
 .BasicBoost: "Basic Boost" => "einfacher Boost"
@@ -1093,10 +1104,10 @@ SECTION UserControlStats
 .Scans: "Scans" => "Scans"
 .Mapped: "Mapped" => "Kartographiert"
 .Scanvalue: "Scan value" => "Scanwert"
+.Beltcluster: "Belt Cluster: " => "Gürtelgruppen"
 .Lastdock: "Last dock" => "Letztes Andocken"
 .Trip: "Trip" => "Reise"
 .All: "All" => "Alles"
-.Type: "Type" => "Art"
 .BankAccount: "Bank Account" => "Kontostand"
 .Combat: "Combat" => "Kampf"
 .Crime: "Crime" => "Verbrechen"
@@ -1110,91 +1121,12 @@ SECTION UserControlStats
 .Crew: "Crew" => "Crew"
 .Multi: "Multi-crew" => "Multicrew"
 .MaterialsTrader: "Materials Trader" => "Materialienhändler"
-.CurrentAssets: "Current Assets" => "Aktueller Besitz"
-.SpentonShips: "Spent on Ships" => "In Schiffe investiert"
-.SpentonOutfitting: "Spent on Outfitting" => "In Ausrüstung investiert"
-.SpentonRepairs: "Spent on Repairs" => "In Reparaturen investiert"
-.SpentonFuel: "Spent on Fuel" => "In Treibstoff investiert"
-.SpentonMunitions: "Spent on Munitions" => "In Munition investiert"
-.InsuranceClaims: "Insurance Claims" => "Versicherungserstattungen"
-.TotalClaimCosts: "Total Claim Costs" => "Erstattungen gesamt"
-.BountiesClaimed: "Bounties Claimed" => "erhaltene Kopfgelder"
-.ProfitfromBountyHunting: "Profit from Bounty Hunting" => "Einnahmen aus Kopfgeldern"
-.CombatBonds: "Combat Bonds" => "Kampfbelohnungen"
-.ProfitfromCombatBonds: "Profit from Combat Bonds" => "Einnahmen aus Kampfbelohnungen"
-.Assassinations: "Assassinations" => "Mordaufträge"
-.ProfitfromAssassination: "Profit from Assassination" => "Einnahmen aus Mordaufträgen"
-.HighestSingleReward: "Highest Single Reward" => "Höchste Einzelbelohnung"
-.SkimmersKilled: "Skimmers Killed" => "Ausgeschaltete OF-Drohnen"
-.Notoriety: "Notoriety" => "Berüchtigt"
-.NumberofFines: "Number of Fines" => "Verhängte Strafen"
-.LifetimeFinesValue: "Lifetime Fines Value" => "Wert d. lebenslangen Strafen"
-.BountiesReceived: "Bounties Received" => "Erhaltene/Verdiente Kopfgelder"
-.LifetimeBountyValue: "Lifetime Bounty Value" => "Wert d. lebenslangen Kopfgelder"
-.HighestBountyIssued: "Highest Bounty Issued" => "Höchstes verhängtes Kopfgeld"
-.BlackMarketNetwork: "Black Market Network" => "Schwarzmarkt-Kontakt"
-.BlackMarketProfits: "Black Market Profits" => "Schwarzmarkt-Einnahmen"
-.CommoditiesSmuggled: "Commodities Smuggled" => "Geschmuggelte Waren"
-.AverageProfit: "Average Profit" => "Durchschn. Einnahmen"
-.HighestSingleTransaction: "Highest Single Transaction" => "Höchste Einzeleinnahme"
-.MarketNetwork: "Market Network" => "Markt-Kontakt"
-.MarketProfits: "Market Profits" => "Handelseinnahmen"
-.CommoditiesTraded: "Commodities Traded" => "Gehandelte Waren"
-.MiningProfits: "Mining Profits" => "Einnahmen aus Abbau"
-.MaterialsRefined: "Materials Refined" => "Raffinierte Mineralien"
-.MaterialsCollected: "Materials Collected" => "Gesammelte Mineralien"
-.SystemsVisited: "Systems Visited" => "Besuchte Systeme"
-.ExplorationProfits: "Exploration Profits" => "Einnahmen aus Erkundungen"
-.Level2Scans: "Level 2 Scans" => "Detailscans Level 2"
-.Level3Scans: "Level 3 Scans" => "Detailscans Level 3"
-.HighestPayout: "Highest Payout" => "Höchste Auszahlung"
-.TotalHyperspaceDistance: "Total Hyperspace Distance" => "Hyperraumentfernung insgesamt"
-.TotalHyperspaceJumps: "Total Hyperspace Jumps" => "Hyperraumsprünge insgesamt"
-.FarthestFromStart: "Farthest From Start" => "Max. Distanz vom Startpunkt"
-.TimePlayed: "Time Played" => "Ungefähre Spielzeit"
-.TotalBulkPassengersDelivered: "Total Bulk Passengers Delivered" => "Insg. bef. Massentransport-Passagiere"
-.TotalVIPsDelivered: "Total VIPs Delivered" => "Insgesamt beförderte VIP-Passagiere"
-.Delivered: "Delivered" => "Insgesamt befördert"
-.Ejected: "Ejected" => "Insgesamt rausgeworfen"
-.TotalItemsRescued: "Total Items Rescued" => "Insgesamt gerettete Objekte"
-.TotalProfit: "Total Profit" => "Profit gesamt"
-.TotalRescueTransactions: "Total Rescue Transactions" => "Rettungstransaktionen gesamt"
-.EngineersUsed: "Engineers Used" => "anzahl genutzter Ingenieure"
-.TotalRecipesGenerated: "Total Recipes Generated" => "Anzahl generierter Upgrades"
-.Grade1RecipesGenerated: "Grade 1 Recipes Generated" => "Grad-1-Upgrades generiert"
-.Grade2RecipesGenerated: "Grade 2 Recipes Generated" => "Grad-2-Upgrades generiert"
-.Grade3RecipesGenerated: "Grade 3 Recipes Generated" => "Grad-3-Upgrades generiert"
-.Grade4RecipesGenerated: "Grade 4 Recipes Generated" => "Grad-4-Upgrades generiert"
-.Grade5RecipesGenerated: "Grade 5 Recipes Generated" => "Grad-5-Upgrades generiert"
-.TotalWages: "Total Wages" => "Durch Crew verdiente Credits"
-.TotalHired: "Total Hired" => "Crew eingestellt"
-.TotalFired: "Total Fired" => "Crew entlasse"
-.DiedinLineofDuty: "Died in Line of Duty" => "Crew verloren"
-.TotalTime: "Total Time" => "Zeit in Multicrew (gesamt)"
-.FighterTime: "Fighter Time" => "Zeit als Fightercon"
-.GunnerTime: "Gunner Time" => "Zeit als Kanonier"
-.CreditsMade: "Credits Made" => "Gesammelte Credits (gesamt)"
-.FinesAccrued: "Fines Accrued" => "Gesammelte Strafen (gesamt)"
-.TradesCompleted: "Trades Completed" => "Angeschlossene Handel"
-.MaterialsTraded: "Materials Traded" => "Gehandelte Materialien"
-.TME: "{0} days {1} hours {2} minutes" => "{0} Tage {1} Stunden {2} Minuten"
-.Name: "Name" => "Name"
-.Ident: "Ident" => "Ident"
-.BodiesScanned: "Bodies Scanned" => "Körper gescannt"
-.Destroyed: "Destroyed" => "Zerstört"
+.FLEETCARRIER: "Fleetcarrier" @
+.CQC: "CQC" @
+.Exobiology: "Exobiology" @
 .GoodsBought: "Goods Bought" => "Handelswaren gekauft"
 .GoodsSold: "Goods Sold" => "Handelswaren verkauft"
 .GoodsProfit: "Goods Profit" => "Warenprofit"
-.EfficientScans: "Efficient Scans" => "Erhaltene Effizienzboni"
-.Accepted: "Accepted" => "Angenommen"
-.Disgruntled: "Disgruntled" => "Verärgert"
-.EncodedMaterialsTraded: "Encoded Materials Traded" => "Gehandelte verschlüsselte Materialien"
-.RawMaterialsTraded: "Raw Materials Traded" => "Gehandelte Materialien"
-.G1MaterialsTraded: "Grade 1 Materials Traded" => "Gehandelte Grad-1-Materialien"
-.G2MaterialsTraded: "Grade 2 Materials Traded" => "Gehandelte Grad-2-Materialien"
-.G3MaterialsTraded: "Grade 3 Materials Traded" => "Gehandelte Grad-3-Materialien"
-.G4MaterialsTraded: "Grade 4 Materials Traded" => "Gehandelte Grad-4-Materialien"
-.G5MaterialsTraded: "Grade 5 Materials Traded" => "Gehandelte Grad-5-Materialien"
 
 SECTION StatsTimeUserControl
 
@@ -1297,6 +1229,8 @@ SECTION UserControlSysInfo
 .displayShipButtonsToolStripMenuItem: "Display Ship Buttons" => "Zeige Schiffsknöpfe"
 .labelStationFaction: "Faction" => "Fraktion"
 .displayStationFactionToolStripMenuItem: "Display Station Faction" => "Zeige Stationsfraktion"
+.labelMR: "MR" @
+.displayMicroresourcesCountToolStripMenuItem: "Display Microresources Count" @
 
 SECTION UserControlContainerSplitter
 
@@ -1391,6 +1325,7 @@ SECTION UserControlTravelGrid
 .runSelectionThroughIGAUDebugToolStripMenuItem: "Run selection through IGAU (Debug)" => "Führe Auswahl durch IGAU aus (Debug)"
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" => "Aktiviere oder deaktiviere Zeilenumbruch"
 .runSelectionThroughEDAstroDebugToolStripMenuItem: "Run selection through EDAstro (Debug)" => "Führe Auswahl durch EDAstro aus (Debug)"
+.addToTrilaterationToolStripMenuItem.expeditionToolStripMenuItem: "Expedition Panel" @
 
 SECTION UserControlCaptainsLog
 
@@ -1576,7 +1511,6 @@ SECTION UserControlFactions
 .CapShipVictims: "Capital ship Victims: " => "Großkampfschiff Opfer: "
 .CapShipAward: "Capital ship Award: " => "Großkampfschiff Belohnung: "
 
-
 SECTION ScanDisplayForm
 
 .Sys: "System" => "System"
@@ -1620,6 +1554,7 @@ SECTION UserControlSuitsWeapons
 
 .CSTime: "Time" @
 .CSName: "Name" @
+.CSMods: "Mods" @
 .CSPrice: "Price" @
 .CSLoadout: "Loadout" @
 .CSPrimary1: "Primary 1" @
@@ -1627,5 +1562,15 @@ SECTION UserControlSuitsWeapons
 .CSSecondary: "Secondary" @
 .CWTime: "Time" @
 .CWName: "Name" @
+.CWClass: "Class" @
+.CWMods: "Mods" @
 .CWPrice: "Price" @
-.CWDPS: "DPS" @
+.CWPrimary: "Primary" @
+.CWWType: "Weapon Type" @
+.CWDamageType: "Damage Type" @
+.CWFireMode: "Fire Mode" @
+.CWDamage: "Damage" @
+.CWRPS: "Rate/Sec" @
+.CWClipSize: "Clip Size" @
+.CWHopper: "Hopper Size" @
+.CWRange: "Range m" @

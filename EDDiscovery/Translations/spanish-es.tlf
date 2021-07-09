@@ -144,6 +144,10 @@ SECTION PopOutInfo
 .Spansh.Description: "Spansh - Automatic web view of system" => "Spansh - Vista web automática del sistema"
 .EDDB.Title: "EDDB" => "EDDB"
 .EDDB.Description: "EDDB - Automatic web view of system" => "EDDB - Vista web automática del sistema"
+.MicroResources.Title: "Micro Resources" @
+.MicroResources.Description: "Micro resource count" @
+.SuitsWeapons.Title: "Suits & Weapons" @
+.SuitsWeapons.Description: "Suits, Loadouts, Weapons" @
 
 SECTION EDDiscoveryForm
 
@@ -270,6 +274,7 @@ SECTION EDDiscoveryForm
 .WSF: "Web server failed to start" => "El servidor web no se pudo iniciar"
 .WSERR: "Web server disabled due to incorrect folder or missing zip file" => "Servidor web desactivado debido a una carpeta incorrecta o falta un archivo zip"
 .WSD: "*** Web server is disabled ***" => "*** El servidor web está deshabilitado ***"
+.DLLDIS: "DLLs disabled: {0}" @
 
 SECTION EDDiscoveryController
 

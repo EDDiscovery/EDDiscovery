@@ -426,26 +426,22 @@ SECTION UserControlSurveyor
 .MandD: " (Mapped & Discovered)" @
 .MP: " (Mapped)" @
 .DIS: " (Discovered)" @
-.bodyFeaturesToolStripMenuItem.lowRadiusToolStripMenuItem: "Low Radius" @
+.bodyFeaturesToolStripMenuItem.lowRadiusToolStripMenuItem: "Tiny body" @
 .checkEDSMForInformationToolStripMenuItem: "Check EDSM for information" @
 .autoHideToolStripMenuItem: "Auto Hide" @
 .dontHideInFSSModeToolStripMenuItem: "Don\\'t Hide in FSS Mode" @
 .showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem: "Show System Info Always" @
 .selectFSSSignalsShownToolStripMenuItem: "Select FSS Signals Shown" @
-.LowRadius: " Low Radius." @
+.LowRadius: " Is tiny." @
+.LargeRadius: " Is large." @
 .Mapped: " (Mapped & Discovered)" @
 .Systemscancomplete: "System scan complete." @
 .bodiesfound: " bodies found." @
 .Noscanreported: "No scan reported." @
-.isanammoniaworld: " is an ammonia world." @
-.isanearthlikeworld: " is an earth like world." @
-.isawaterworld: " is a water world." @
-.isaterraformablewaterworld: " is a terraformable water world." @
-.isaterraformableplanet: " is a terraformable planet." @
 .Hasring: " Has ring." @
 .Has: " Has " @
-.Signals: " Has Signals." @
-.islandable: " is landable." @
+.Signals: " Has signals." @
+.eccentricity: " Has an high eccentricity of " @
 .planetaryClassesToolStripMenuItem: "Planetary Classes" @
 .planetaryClassesToolStripMenuItem.ammoniaWorldToolStripMenuItem: "Ammonia World" @
 .planetaryClassesToolStripMenuItem.earthlikeWorldToolStripMenuItem: "Earthlike World" @
@@ -467,6 +463,15 @@ SECTION UserControlSurveyor
 .showMoreInformationToolStripMenuItem: "Show More Information" @
 .showValuesToolStripMenuItem: "Show values" @
 .wordWrapToolStripMenuItem: "Word Wrap" @
+.isa: " is a " @
+.islandable: " Is landable." @
+.planetaryClassesToolStripMenuItem.highMetalContentBodyToolStripMenuItem: "High metal content body" @
+.planetaryClassesToolStripMenuItem.metalToolStripMenuItem: "Metal-rich body" @
+.bodyFeaturesToolStripMenuItem.highEccentricityToolStripMenuItem: "High eccentricity" @
+.bodyFeaturesToolStripMenuItem.landableWithAtmosphereToolStripMenuItem: "Landable with atmosphere" @
+.bodyFeaturesToolStripMenuItem.landableWithVolcanismToolStripMenuItem: "Landable with volcanism" @
+.bodyFeaturesToolStripMenuItem.landableAndLargeToolStripMenuItem: "Landable and large" @
+.showGravityToolStripMenuItem: "Show gravity of landables" @
 
 SECTION MissionListUserControl
 
@@ -901,6 +906,8 @@ SECTION UserControlSettings
 .GameTime: "Game Time" @
 .Local: "Local" @
 .NoMap: "No map available!" @
+.extGroupBoxDLLPerms: "DLL Permissions" @
+.extButtonDLLPerms: "Configure" @
 
 SECTION UserControlShipYards
 
@@ -1071,7 +1078,6 @@ SECTION UserControlStats
 .tabControlCustomStats.tabPageByShip: "By Ship" @
 .TotalNoofjumps: "Total No of jumps: " @
 .FSDjumps: "FSD Jumps" @
-.Beltcluster: "Belt Cluster: " @
 .JumpHistory: "Jump History" @
 .24hc: "24 Hours: " @
 .OneWeek: ", One Week: " @
@@ -1084,8 +1090,13 @@ SECTION UserControlStats
 .MostHighest: "Most Highest" @
 .MostLowest: "Most Lowest" @
 .MostVisited: "Most Visited" @
+.Type: "Type" @
+.Name: "Name" @
+.Ident: "Ident" @
 .Jumps: "Jumps" @
 .TravelledLy: "Traveled Ly" @
+.BodiesScanned: "Bodies Scanned" @
+.Destroyed: "Destroyed" @
 .PremiumBoost: "Premium Boost" @
 .StandardBoost: "Standard Boost" @
 .BasicBoost: "Basic Boost" @
@@ -1093,10 +1104,10 @@ SECTION UserControlStats
 .Scans: "Scans" @
 .Mapped: "Mapped" @
 .Scanvalue: "Scan value" @
+.Beltcluster: "Belt Cluster: " @
 .Lastdock: "Last dock" @
 .Trip: "Trip" @
 .All: "All" @
-.Type: "Type" @
 .BankAccount: "Bank Account" @
 .Combat: "Combat" @
 .Crime: "Crime" @
@@ -1110,91 +1121,12 @@ SECTION UserControlStats
 .Crew: "Crew" @
 .Multi: "Multi-crew" @
 .MaterialsTrader: "Materials Trader" @
-.CurrentAssets: "Current Assets" @
-.SpentonShips: "Spent on Ships" @
-.SpentonOutfitting: "Spent on Outfitting" @
-.SpentonRepairs: "Spent on Repairs" @
-.SpentonFuel: "Spent on Fuel" @
-.SpentonMunitions: "Spent on Munitions" @
-.InsuranceClaims: "Insurance Claims" @
-.TotalClaimCosts: "Total Claim Costs" @
-.BountiesClaimed: "Bounties Claimed" @
-.ProfitfromBountyHunting: "Profit from Bounty Hunting" @
-.CombatBonds: "Combat Bonds" @
-.ProfitfromCombatBonds: "Profit from Combat Bonds" @
-.Assassinations: "Assassinations" @
-.ProfitfromAssassination: "Profit from Assassination" @
-.HighestSingleReward: "Highest Single Reward" @
-.SkimmersKilled: "Skimmers Killed" @
-.Notoriety: "Notoriety" @
-.NumberofFines: "Number of Fines" @
-.LifetimeFinesValue: "Lifetime Fines Value" @
-.BountiesReceived: "Bounties Received" @
-.LifetimeBountyValue: "Lifetime Bounty Value" @
-.HighestBountyIssued: "Highest Bounty Issued" @
-.BlackMarketNetwork: "Black Market Network" @
-.BlackMarketProfits: "Black Market Profits" @
-.CommoditiesSmuggled: "Commodities Smuggled" @
-.AverageProfit: "Average Profit" @
-.HighestSingleTransaction: "Highest Single Transaction" @
-.MarketNetwork: "Market Network" @
-.MarketProfits: "Market Profits" @
-.CommoditiesTraded: "Commodities Traded" @
-.MiningProfits: "Mining Profits" @
-.MaterialsRefined: "Materials Refined" @
-.MaterialsCollected: "Materials Collected" @
-.SystemsVisited: "Systems Visited" @
-.ExplorationProfits: "Exploration Profits" @
-.Level2Scans: "Level 2 Scans" @
-.Level3Scans: "Level 3 Scans" @
-.HighestPayout: "Highest Payout" @
-.TotalHyperspaceDistance: "Total Hyperspace Distance" @
-.TotalHyperspaceJumps: "Total Hyperspace Jumps" @
-.FarthestFromStart: "Farthest From Start" @
-.TimePlayed: "Time Played" @
-.TotalBulkPassengersDelivered: "Total Bulk Passengers Delivered" @
-.TotalVIPsDelivered: "Total VIPs Delivered" @
-.Delivered: "Delivered" @
-.Ejected: "Ejected" @
-.TotalItemsRescued: "Total Items Rescued" @
-.TotalProfit: "Total Profit" @
-.TotalRescueTransactions: "Total Rescue Transactions" @
-.EngineersUsed: "Engineers Used" @
-.TotalRecipesGenerated: "Total Recipes Generated" @
-.Grade1RecipesGenerated: "Grade 1 Recipes Generated" @
-.Grade2RecipesGenerated: "Grade 2 Recipes Generated" @
-.Grade3RecipesGenerated: "Grade 3 Recipes Generated" @
-.Grade4RecipesGenerated: "Grade 4 Recipes Generated" @
-.Grade5RecipesGenerated: "Grade 5 Recipes Generated" @
-.TotalWages: "Total Wages" @
-.TotalHired: "Total Hired" @
-.TotalFired: "Total Fired" @
-.DiedinLineofDuty: "Died in Line of Duty" @
-.TotalTime: "Total Time" @
-.FighterTime: "Fighter Time" @
-.GunnerTime: "Gunner Time" @
-.CreditsMade: "Credits Made" @
-.FinesAccrued: "Fines Accrued" @
-.TradesCompleted: "Trades Completed" @
-.MaterialsTraded: "Materials Traded" @
-.TME: "{0} days {1} hours {2} minutes" @
-.Name: "Name" @
-.Ident: "Ident" @
-.BodiesScanned: "Bodies Scanned" @
-.Destroyed: "Destroyed" @
+.FLEETCARRIER: "Fleetcarrier" @
+.CQC: "CQC" @
+.Exobiology: "Exobiology" @
 .GoodsBought: "Goods Bought" @
 .GoodsSold: "Goods Sold" @
 .GoodsProfit: "Goods Profit" @
-.EfficientScans: "Efficient Scans" @
-.Accepted: "Accepted" @
-.Disgruntled: "Disgruntled" @
-.EncodedMaterialsTraded: "Encoded Materials Traded" @
-.RawMaterialsTraded: "Raw Materials Traded" @
-.G1MaterialsTraded: "Grade 1 Materials Traded" @
-.G2MaterialsTraded: "Grade 2 Materials Traded" @
-.G3MaterialsTraded: "Grade 3 Materials Traded" @
-.G4MaterialsTraded: "Grade 4 Materials Traded" @
-.G5MaterialsTraded: "Grade 5 Materials Traded" @
 
 SECTION StatsTimeUserControl
 
@@ -1297,6 +1229,8 @@ SECTION UserControlSysInfo
 .displayShipButtonsToolStripMenuItem: "Display Ship Buttons" @
 .labelStationFaction: "Faction" @
 .displayStationFactionToolStripMenuItem: "Display Station Faction" @
+.labelMR: "MR" @
+.displayMicroresourcesCountToolStripMenuItem: "Display Microresources Count" @
 
 SECTION UserControlContainerSplitter
 
@@ -1391,6 +1325,7 @@ SECTION UserControlTravelGrid
 .runSelectionThroughIGAUDebugToolStripMenuItem: "Run selection through IGAU (Debug)" @
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 .runSelectionThroughEDAstroDebugToolStripMenuItem: "Run selection through EDAstro (Debug)" @
+.addToTrilaterationToolStripMenuItem.expeditionToolStripMenuItem: "Expedition Panel" @
 
 SECTION UserControlCaptainsLog
 
@@ -1619,6 +1554,7 @@ SECTION UserControlSuitsWeapons
 
 .CSTime: "Time" @
 .CSName: "Name" @
+.CSMods: "Mods" @
 .CSPrice: "Price" @
 .CSLoadout: "Loadout" @
 .CSPrimary1: "Primary 1" @
@@ -1626,5 +1562,15 @@ SECTION UserControlSuitsWeapons
 .CSSecondary: "Secondary" @
 .CWTime: "Time" @
 .CWName: "Name" @
+.CWClass: "Class" @
+.CWMods: "Mods" @
 .CWPrice: "Price" @
-.CWDPS: "DPS" @
+.CWPrimary: "Primary" @
+.CWWType: "Weapon Type" @
+.CWDamageType: "Damage Type" @
+.CWFireMode: "Fire Mode" @
+.CWDamage: "Damage" @
+.CWRPS: "Rate/Sec" @
+.CWClipSize: "Clip Size" @
+.CWHopper: "Hopper Size" @
+.CWRange: "Range m" @

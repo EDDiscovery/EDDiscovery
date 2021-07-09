@@ -426,26 +426,22 @@ SECTION UserControlSurveyor
 .MandD: " (Mapped & Discovered)" @
 .MP: " (Mapped)" @
 .DIS: " (Discovered)" @
-.bodyFeaturesToolStripMenuItem.lowRadiusToolStripMenuItem: "Low Radius" @
+.bodyFeaturesToolStripMenuItem.lowRadiusToolStripMenuItem: "Tiny body" @
 .checkEDSMForInformationToolStripMenuItem: "Check EDSM for information" @
 .autoHideToolStripMenuItem: "Auto Hide" @
 .dontHideInFSSModeToolStripMenuItem: "Don\\'t Hide in FSS Mode" @
 .showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem: "Show System Info Always" @
 .selectFSSSignalsShownToolStripMenuItem: "Select FSS Signals Shown" @
-.LowRadius: " Low Radius." @
+.LowRadius: " Is tiny." @
+.LargeRadius: " Is large." @
 .Mapped: " (Mapped & Discovered)" @
 .Systemscancomplete: "System scan complete." @
 .bodiesfound: " bodies found." @
 .Noscanreported: "No scan reported." @
-.isanammoniaworld: " is an ammonia world." @
-.isanearthlikeworld: " is an earth like world." @
-.isawaterworld: " is a water world." @
-.isaterraformablewaterworld: " is a terraformable water world." @
-.isaterraformableplanet: " is a terraformable planet." @
 .Hasring: " Has ring." @
 .Has: " Has " @
-.Signals: " Has Signals." @
-.islandable: " is landable." @
+.Signals: " Has signals." @
+.eccentricity: " Has an high eccentricity of " @
 .planetaryClassesToolStripMenuItem: "Planetary Classes" @
 .planetaryClassesToolStripMenuItem.ammoniaWorldToolStripMenuItem: "Ammonia World" @
 .planetaryClassesToolStripMenuItem.earthlikeWorldToolStripMenuItem: "Earthlike World" @
@@ -467,6 +463,15 @@ SECTION UserControlSurveyor
 .showMoreInformationToolStripMenuItem: "Show More Information" @
 .showValuesToolStripMenuItem: "Show values" @
 .wordWrapToolStripMenuItem: "Word Wrap" @
+.isa: " is a " @
+.islandable: " Is landable." @
+.planetaryClassesToolStripMenuItem.highMetalContentBodyToolStripMenuItem: "High metal content body" @
+.planetaryClassesToolStripMenuItem.metalToolStripMenuItem: "Metal-rich body" @
+.bodyFeaturesToolStripMenuItem.highEccentricityToolStripMenuItem: "High eccentricity" @
+.bodyFeaturesToolStripMenuItem.landableWithAtmosphereToolStripMenuItem: "Landable with atmosphere" @
+.bodyFeaturesToolStripMenuItem.landableWithVolcanismToolStripMenuItem: "Landable with volcanism" @
+.bodyFeaturesToolStripMenuItem.landableAndLargeToolStripMenuItem: "Landable and large" @
+.showGravityToolStripMenuItem: "Show gravity of landables" @
 
 SECTION MissionListUserControl
 
@@ -901,6 +906,8 @@ SECTION UserControlSettings
 .GameTime: "Game Time" @
 .Local: "Local" @
 .NoMap: "No map available!" @
+.extGroupBoxDLLPerms: "DLL Permissions" @
+.extButtonDLLPerms: "Configure" @
 
 SECTION UserControlShipYards
 
@@ -1071,7 +1078,6 @@ SECTION UserControlStats
 .tabControlCustomStats.tabPageByShip: "By Ship" => "飞船"
 .TotalNoofjumps: "Total No of jumps: " => "总跳跃次数"
 .FSDjumps: "FSD Jumps" @
-.Beltcluster: "Belt Cluster: " @
 .JumpHistory: "Jump History" => "跳跃记录"
 .24hc: "24 Hours: " => "24小时内："
 .OneWeek: ", One Week: " => "，一周内："
@@ -1084,8 +1090,13 @@ SECTION UserControlStats
 .MostHighest: "Most Highest" => "最高"
 .MostLowest: "Most Lowest" => "最低"
 .MostVisited: "Most Visited" => "最常访问"
+.Type: "Type" @
+.Name: "Name" => "飞船名"
+.Ident: "Ident" => "飞船牌号"
 .Jumps: "Jumps" => "跳跃次数"
 .TravelledLy: "Traveled Ly" => "航行距离(ly)"
+.BodiesScanned: "Bodies Scanned" => "扫描的星体"
+.Destroyed: "Destroyed" => "被摧毁次数"
 .PremiumBoost: "Premium Boost" => "高级FSD助推剂"
 .StandardBoost: "Standard Boost" => "标准FSD助推剂"
 .BasicBoost: "Basic Boost" => "基础FSD助推剂"
@@ -1093,10 +1104,10 @@ SECTION UserControlStats
 .Scans: "Scans" => "扫描数"
 .Mapped: "Mapped" @
 .Scanvalue: "Scan value" => "扫描价值"
+.Beltcluster: "Belt Cluster: " @
 .Lastdock: "Last dock" => "自最近降落后"
 .Trip: "Trip" => "旅程"
 .All: "All" @
-.Type: "Type" @
 .BankAccount: "Bank Account" @
 .Combat: "Combat" @
 .Crime: "Crime" @
@@ -1110,91 +1121,12 @@ SECTION UserControlStats
 .Crew: "Crew" @
 .Multi: "Multi-crew" @
 .MaterialsTrader: "Materials Trader" @
-.CurrentAssets: "Current Assets" => "当前资产"
-.SpentonShips: "Spent on Ships" => "飞船花费"
-.SpentonOutfitting: "Spent on Outfitting" => "装备花费"
-.SpentonRepairs: "Spent on Repairs" => "维修花费"
-.SpentonFuel: "Spent on Fuel" => "燃料花费"
-.SpentonMunitions: "Spent on Munitions" => "弹药花费"
-.InsuranceClaims: "Insurance Claims" => "保险理赔数"
-.TotalClaimCosts: "Total Claim Costs" => "理赔总花费"
-.BountiesClaimed: "Bounties Claimed" => "悬赏领取次数"
-.ProfitfromBountyHunting: "Profit from Bounty Hunting" => "悬赏收益"
-.CombatBonds: "Combat Bonds" => "战争债券领取次数"
-.ProfitfromCombatBonds: "Profit from Combat Bonds" => "战争债券收益"
-.Assassinations: "Assassinations" => "暗杀次数"
-.ProfitfromAssassination: "Profit from Assassination" => "暗杀收益"
-.HighestSingleReward: "Highest Single Reward" => "最高的单次赏金"
-.SkimmersKilled: "Skimmers Killed" => "无人机摧毁次数"
-.Notoriety: "Notoriety" => "恶名度"
-.NumberofFines: "Number of Fines" => "被罚款次数"
-.LifetimeFinesValue: "Lifetime Fines Value" => "生涯罚款金额"
-.BountiesReceived: "Bounties Received" => "被悬赏次数"
-.LifetimeBountyValue: "Lifetime Bounty Value" => "生涯悬赏金额"
-.HighestBountyIssued: "Highest Bounty Issued" => "被悬赏过的最高金额"
-.BlackMarketNetwork: "Black Market Network" => "访问过的黑市"
-.BlackMarketProfits: "Black Market Profits" => "黑市收益"
-.CommoditiesSmuggled: "Commodities Smuggled" => "走私商品数量"
-.AverageProfit: "Average Profit" => "每次平均收益"
-.HighestSingleTransaction: "Highest Single Transaction" => "最高单次收益"
-.MarketNetwork: "Market Network" => "访问过的市场"
-.MarketProfits: "Market Profits" => "贸易收益"
-.CommoditiesTraded: "Commodities Traded" => "交易商品数"
-.MiningProfits: "Mining Profits" => "采矿收益"
-.MaterialsRefined: "Materials Refined" => "矿物精炼数"
-.MaterialsCollected: "Materials Collected" => "矿石收集数"
-.SystemsVisited: "Systems Visited" => "访问过的星系"
-.ExplorationProfits: "Exploration Profits" => "探索收益"
-.Level2Scans: "Level 2 Scans" => "二级扫描数"
-.Level3Scans: "Level 3 Scans" => "三级扫描数"
-.HighestPayout: "Highest Payout" => "单星系最高收益"
-.TotalHyperspaceDistance: "Total Hyperspace Distance" => "总跳跃距离"
-.TotalHyperspaceJumps: "Total Hyperspace Jumps" => "总跳跃次数"
-.FarthestFromStart: "Farthest From Start" => "到达离起点最远的距离"
-.TimePlayed: "Time Played" => "总游戏时间"
-.TotalBulkPassengersDelivered: "Total Bulk Passengers Delivered" => "载送的普通乘客总数"
-.TotalVIPsDelivered: "Total VIPs Delivered" => "载送的VIP乘客总数"
-.Delivered: "Delivered" => "总载送乘客数"
-.Ejected: "Ejected" => "被丢掉的乘客数"
-.TotalItemsRescued: "Total Items Rescued" => "救援过的物品总数"
-.TotalProfit: "Total Profit" => "总收益"
-.TotalRescueTransactions: "Total Rescue Transactions" => "上交救援物品次数"
-.EngineersUsed: "Engineers Used" => "利用过的工程师数"
-.TotalRecipesGenerated: "Total Recipes Generated" => "配方生成的总次数"
-.Grade1RecipesGenerated: "Grade 1 Recipes Generated" => "一级配方生成次数"
-.Grade2RecipesGenerated: "Grade 2 Recipes Generated" => "二级配方生成次数"
-.Grade3RecipesGenerated: "Grade 3 Recipes Generated" => "三级配方生成次数"
-.Grade4RecipesGenerated: "Grade 4 Recipes Generated" => "四级配方生成次数"
-.Grade5RecipesGenerated: "Grade 5 Recipes Generated" => "五级配方生成次数"
-.TotalWages: "Total Wages" => "工资发放总数"
-.TotalHired: "Total Hired" => "雇佣船员数"
-.TotalFired: "Total Fired" => "解雇船员数"
-.DiedinLineofDuty: "Died in Line of Duty" => "阵亡船员数"
-.TotalTime: "Total Time" => "总时长"
-.FighterTime: "Fighter Time" => "舰载机时长"
-.GunnerTime: "Gunner Time" => "炮手时长"
-.CreditsMade: "Credits Made" => "收到的工资"
-.FinesAccrued: "Fines Accrued" => "收到的罚款"
-.TradesCompleted: "Trades Completed" => "完成的交易次数"
-.MaterialsTraded: "Materials Traded" => "交换的材料总数"
-.TME: "{0} days {1} hours {2} minutes" => "{0}天{1}小时{2}分"
-.Name: "Name" => "飞船名"
-.Ident: "Ident" => "飞船牌号"
-.BodiesScanned: "Bodies Scanned" => "扫描的星体"
-.Destroyed: "Destroyed" => "被摧毁次数"
+.FLEETCARRIER: "Fleetcarrier" @
+.CQC: "CQC" @
+.Exobiology: "Exobiology" @
 .GoodsBought: "Goods Bought" => "收购的商品"
 .GoodsSold: "Goods Sold" => "出售的商品"
 .GoodsProfit: "Goods Profit" @
-.EfficientScans: "Efficient Scans" @
-.Accepted: "Accepted" @
-.Disgruntled: "Disgruntled" @
-.EncodedMaterialsTraded: "Encoded Materials Traded" @
-.RawMaterialsTraded: "Raw Materials Traded" @
-.G1MaterialsTraded: "Grade 1 Materials Traded" @
-.G2MaterialsTraded: "Grade 2 Materials Traded" @
-.G3MaterialsTraded: "Grade 3 Materials Traded" @
-.G4MaterialsTraded: "Grade 4 Materials Traded" @
-.G5MaterialsTraded: "Grade 5 Materials Traded" @
 
 SECTION StatsTimeUserControl
 
@@ -1297,6 +1229,8 @@ SECTION UserControlSysInfo
 .displayShipButtonsToolStripMenuItem: "Display Ship Buttons" @
 .labelStationFaction: "Faction" @
 .displayStationFactionToolStripMenuItem: "Display Station Faction" @
+.labelMR: "MR" @
+.displayMicroresourcesCountToolStripMenuItem: "Display Microresources Count" @
 
 SECTION UserControlContainerSplitter
 
@@ -1391,6 +1325,7 @@ SECTION UserControlTravelGrid
 .runSelectionThroughIGAUDebugToolStripMenuItem: "Run selection through IGAU (Debug)" @
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 .runSelectionThroughEDAstroDebugToolStripMenuItem: "Run selection through EDAstro (Debug)" @
+.addToTrilaterationToolStripMenuItem.expeditionToolStripMenuItem: "Expedition Panel" @
 
 SECTION UserControlCaptainsLog
 
@@ -1576,12 +1511,6 @@ SECTION UserControlFactions
 .CapShipVictims: "Capital ship Victims: " @
 .CapShipAward: "Capital ship Award: " @
 
-SECTION ScanDisplayUserControl
-
-.NSD: "No scan data available" @
-.BC: "Barycentre of {0}" @
-.Signals: "Signals" @
-
 SECTION ScanDisplayForm
 
 .Sys: "System" @
@@ -1625,6 +1554,7 @@ SECTION UserControlSuitsWeapons
 
 .CSTime: "Time" @
 .CSName: "Name" @
+.CSMods: "Mods" @
 .CSPrice: "Price" @
 .CSLoadout: "Loadout" @
 .CSPrimary1: "Primary 1" @
@@ -1632,5 +1562,15 @@ SECTION UserControlSuitsWeapons
 .CSSecondary: "Secondary" @
 .CWTime: "Time" @
 .CWName: "Name" @
+.CWClass: "Class" @
+.CWMods: "Mods" @
 .CWPrice: "Price" @
-.CWDPS: "DPS" @
+.CWPrimary: "Primary" @
+.CWWType: "Weapon Type" @
+.CWDamageType: "Damage Type" @
+.CWFireMode: "Fire Mode" @
+.CWDamage: "Damage" @
+.CWRPS: "Rate/Sec" @
+.CWClipSize: "Clip Size" @
+.CWHopper: "Hopper Size" @
+.CWRange: "Range m" @
