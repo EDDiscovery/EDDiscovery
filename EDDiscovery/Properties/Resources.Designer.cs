@@ -68,7 +68,7 @@ namespace EDDiscovery.Properties {
         ///Cmdr Robby
         ///
         ///Developers for this release series:
-        ///Bravada Cadelanne
+        ///Eahlstan, Bravada Cadelanne
         ///
         ///Test Support
         ///Eahlstan, JDM12983
@@ -80,7 +80,7 @@ namespace EDDiscovery.Properties {
         ///Eahlstan, Dr.Smile, Keath Milligan, Kmizole, Potatossuaro, Zafford, Andrea Spada, Goscickiw, Nats-ji, Jay
         ///
         ///Previous Contributors:
-        ///nullx27, Iain Ro [rest of string was truncated]&quot;;.
+        ///nullx2 [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Credits {
             get {
@@ -377,7 +377,7 @@ namespace EDDiscovery.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://www.youtube.com/embed/frG6lBAiLcg?autoplay=1.
+        ///   Looks up a localized string similar to https://www.youtube.com/embed/GkOGB7WF1Lo.
         /// </summary>
         internal static string URLReleaseVideo {
             get {
