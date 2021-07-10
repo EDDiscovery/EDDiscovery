@@ -463,7 +463,7 @@ SECTION UserControlSurveyor
 .showMoreInformationToolStripMenuItem: "Show More Information" => "Zeige mehr Informationen"
 .showValuesToolStripMenuItem: "Show values" => "Zeige Werte"
 .wordWrapToolStripMenuItem: "Word Wrap" => "Zeilenumbruch"
-.isa: " is a " => " ist ein/e"
+.isa: " is a " => " ist ein/e "
 .islandable: " Is landable." => " ist landbar."
 .planetaryClassesToolStripMenuItem.highMetalContentBodyToolStripMenuItem: "High metal content body" => "Planet mit hochwertigen Metallen"
 .planetaryClassesToolStripMenuItem.metalToolStripMenuItem: "Metal-rich body" => "Metallreicher Planet"
