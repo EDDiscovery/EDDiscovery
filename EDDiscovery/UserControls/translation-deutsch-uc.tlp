@@ -464,7 +464,7 @@ SECTION UserControlSurveyor
 .showValuesToolStripMenuItem: "Show values" => "Zeige Werte"
 .wordWrapToolStripMenuItem: "Word Wrap" => "Zeilenumbruch"
 .isa: " is a " => " ist ein/e "
-.islandable: " Is landable." => " ist landbar."
+.islandable: " Is landable." => " Ist landbar."
 .planetaryClassesToolStripMenuItem.highMetalContentBodyToolStripMenuItem: "High metal content body" => "Planet mit hochwertigen Metallen"
 .planetaryClassesToolStripMenuItem.metalToolStripMenuItem: "Metal-rich body" => "Metallreicher Planet"
 .bodyFeaturesToolStripMenuItem.highEccentricityToolStripMenuItem: "High eccentricity" => "Hohe Exzentrizität"
