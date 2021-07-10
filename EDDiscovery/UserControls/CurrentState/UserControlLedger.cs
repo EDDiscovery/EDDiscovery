@@ -144,7 +144,8 @@ namespace EDDiscovery.UserControls
                                             (tx.cashadjust>0) ? tx.cashadjust.ToString("N0") : "",
                                             (tx.cashadjust<0) ? (-tx.cashadjust).ToString("N0") : "",
                                             tx.cash.ToString("N0"),
-                                            (tx.profitperunit!=0) ? tx.profitperunit.ToString("N0") : ""
+                                            (tx.profitperunit!=0) ? tx.profitperunit.ToString("N0") : "",
+                                            (tx.profit!=0) ? tx.profit.ToString("N0") : ""
                                         };
 
             var row = dataGridViewLedger.RowTemplate.Clone() as DataGridViewRow;
