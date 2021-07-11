@@ -49,9 +49,6 @@ namespace EDDiscovery.UserControls
             this.pictureBoxList = new ExtendedControls.ExtPictureBox();
             this.splitContainerRightHorz = new System.Windows.Forms.SplitContainer();
             this.userControlSynthesis = new EDDiscovery.UserControls.UserControlSynthesis();
-            this.panelSpecialButs = new System.Windows.Forms.FlowLayoutPanel();
-            this.buttonTechBroker = new ExtendedControls.ExtButton();
-            this.buttonSpecialEffects = new ExtendedControls.ExtButton();
             this.userControlEngineering = new EDDiscovery.UserControls.UserControlEngineering();
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.showMaxFSDInjectionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -71,7 +68,6 @@ namespace EDDiscovery.UserControls
             this.splitContainerRightHorz.Panel1.SuspendLayout();
             this.splitContainerRightHorz.Panel2.SuspendLayout();
             this.splitContainerRightHorz.SuspendLayout();
-            this.panelSpecialButs.SuspendLayout();
             this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -116,7 +112,6 @@ namespace EDDiscovery.UserControls
             // splitContainerRightHorz.Panel1
             // 
             this.splitContainerRightHorz.Panel1.Controls.Add(this.userControlSynthesis);
-            this.splitContainerRightHorz.Panel1.Controls.Add(this.panelSpecialButs);
             // 
             // splitContainerRightHorz.Panel2
             // 
@@ -127,51 +122,23 @@ namespace EDDiscovery.UserControls
             // 
             // userControlSynthesis
             // 
+            this.userControlSynthesis.DBBaseName = "Synthesis";
             this.userControlSynthesis.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.userControlSynthesis.Location = new System.Drawing.Point(0, 29);
+            this.userControlSynthesis.Location = new System.Drawing.Point(0, 0);
             this.userControlSynthesis.Name = "userControlSynthesis";
-            this.userControlSynthesis.Size = new System.Drawing.Size(1019, 205);
+            this.userControlSynthesis.panelid = EDDiscovery.PanelInformation.PanelIDs.Log;
+            this.userControlSynthesis.Size = new System.Drawing.Size(1019, 234);
             this.userControlSynthesis.TabIndex = 0;
-            // 
-            // panelSpecialButs
-            // 
-            this.panelSpecialButs.AutoSize = true;
-            this.panelSpecialButs.Controls.Add(this.buttonTechBroker);
-            this.panelSpecialButs.Controls.Add(this.buttonSpecialEffects);
-            this.panelSpecialButs.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelSpecialButs.Location = new System.Drawing.Point(0, 0);
-            this.panelSpecialButs.Name = "panelSpecialButs";
-            this.panelSpecialButs.Size = new System.Drawing.Size(1019, 29);
-            this.panelSpecialButs.TabIndex = 2;
-            // 
-            // buttonTechBroker
-            // 
-            this.buttonTechBroker.Location = new System.Drawing.Point(0, 3);
-            this.buttonTechBroker.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
-            this.buttonTechBroker.Name = "buttonTechBroker";
-            this.buttonTechBroker.Size = new System.Drawing.Size(150, 23);
-            this.buttonTechBroker.TabIndex = 1;
-            this.buttonTechBroker.Text = "Tech Broker Unlocks";
-            this.buttonTechBroker.UseVisualStyleBackColor = true;
-            this.buttonTechBroker.Click += new System.EventHandler(this.buttonTechBroker_Click);
-            // 
-            // buttonSpecialEffects
-            // 
-            this.buttonSpecialEffects.Location = new System.Drawing.Point(156, 3);
-            this.buttonSpecialEffects.Name = "buttonSpecialEffects";
-            this.buttonSpecialEffects.Size = new System.Drawing.Size(121, 23);
-            this.buttonSpecialEffects.TabIndex = 1;
-            this.buttonSpecialEffects.Text = "Special Effects";
-            this.buttonSpecialEffects.UseVisualStyleBackColor = true;
-            this.buttonSpecialEffects.Click += new System.EventHandler(this.buttonSpecialEffects_Click);
             // 
             // userControlEngineering
             // 
             this.userControlEngineering.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.userControlEngineering.DBBaseName = "Engineering";
             this.userControlEngineering.Location = new System.Drawing.Point(0, -1);
             this.userControlEngineering.Name = "userControlEngineering";
+            this.userControlEngineering.panelid = EDDiscovery.PanelInformation.PanelIDs.Log;
             this.userControlEngineering.Size = new System.Drawing.Size(1016, 386);
             this.userControlEngineering.TabIndex = 0;
             // 
@@ -268,11 +235,9 @@ namespace EDDiscovery.UserControls
             this.splitContainerVertical.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxList)).EndInit();
             this.splitContainerRightHorz.Panel1.ResumeLayout(false);
-            this.splitContainerRightHorz.Panel1.PerformLayout();
             this.splitContainerRightHorz.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerRightHorz)).EndInit();
             this.splitContainerRightHorz.ResumeLayout(false);
-            this.panelSpecialButs.ResumeLayout(false);
             this.contextMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -292,10 +257,7 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripMenuItem useHistoricMaterialCountsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showSystemAvailabilityOfMaterialsInShoppingListToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem useEDSMDataInSystemAvailabilityToolStripMenuItem;
-        private ExtendedControls.ExtButton buttonTechBroker;
         private System.Windows.Forms.ToolStripMenuItem onlyCapacityToolStripMenuItem;
-        private ExtendedControls.ExtButton buttonSpecialEffects;
-        private System.Windows.Forms.FlowLayoutPanel panelSpecialButs;
         private System.Windows.Forms.ToolStripMenuItem toggleListPositionToolStripMenuItem;
     }
 }

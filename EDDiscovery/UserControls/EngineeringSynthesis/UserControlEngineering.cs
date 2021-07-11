@@ -31,7 +31,7 @@ namespace EDDiscovery.UserControls
         RecipeFilterSelector lfs;
         RecipeFilterSelector matfs;
 
-        private List<string> levels = new List<string> { "1", "2", "3", "4", "5", "Experimental" };
+        private List<string> levels = new List<string> { "1", "2", "3", "4", "5", "NA"};
 
         private string dbWSave = "Wanted";
         private string dbOSave = "Order";

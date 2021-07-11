@@ -32,8 +32,6 @@ namespace EDDiscovery.UserControls
         private List<Tuple<Recipes.Recipe, int>> EngineeringWanted = new List<Tuple<Recipes.Recipe, int>>();
         private List<Tuple<Recipes.Recipe, int>> SynthesisWanted = new List<Tuple<Recipes.Recipe, int>>();
         private List<Recipes.Recipe> TechBrokerWanted = new List<Recipes.Recipe>();
-        private RecipeFilterSelector techbrokerselection;
-        private RecipeFilterSelector specialeffectsselection;
         private bool showMaxInjections;
         private bool showPlanetMats;
         private bool hidePlanetMatsWithNoCapacity;
@@ -93,14 +91,6 @@ namespace EDDiscovery.UserControls
 
             userControlSynthesis.OnDisplayComplete += Synthesis_OnWantedChange;
             userControlEngineering.OnDisplayComplete += Engineering_OnWantedChange;
-
-            List<string> techBrokerList = Recipes.TechBrokerUnlocks.Select(r => r.Name).ToList();
-            techbrokerselection = new RecipeFilterSelector(techBrokerList);
-            techbrokerselection.SaveSettings += (newvalue, e) => { PutSetting(dbTechBrokerFilterSave, newvalue); Display(); };
-
-            List<string> seList = Recipes.SpecialEffects.Select(r => r.Name).ToList();
-            specialeffectsselection = new RecipeFilterSelector(seList);
-            specialeffectsselection.SaveSettings += (newvalue, e) => { PutSetting(dbSpecialEffectsFilterSave, newvalue); Display(); };
 
             BaseUtils.Translator.Instance.Translate(this, new Control[] { userControlSynthesis, userControlEngineering });
             BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
@@ -188,28 +178,6 @@ namespace EDDiscovery.UserControls
                 Color textcolour = IsTransparent ? discoveryform.theme.SPanelColor : discoveryform.theme.LabelColor;
                 Color backcolour = this.BackColor;
                 List<Tuple<Recipes.Recipe, int>> totalWanted = EngineeringWanted.Concat(SynthesisWanted).ToList();
-
-                string techBrokers = GetSetting(dbTechBrokerFilterSave, "None");
-                if (techBrokers != "None")
-                {
-                    List<string> techBrokerList = techBrokers.Split(';').ToList<string>();
-                    foreach (Recipes.Recipe r in Recipes.TechBrokerUnlocks)
-                    {
-                        if (techBrokers == "All" || techBrokerList.Contains(r.Name))
-                            totalWanted.Add(new Tuple<Recipes.Recipe, int>(r, 1));
-                    }
-                }
-
-                string specialeffects = GetSetting(dbSpecialEffectsFilterSave, "None");
-                if (specialeffects != "None")
-                {
-                    List<string> seList = specialeffects.Split(';').ToList<string>();
-                    foreach (Recipes.Recipe r in Recipes.SpecialEffects)
-                    {
-                        if (specialeffects == "All" || specialeffects.Contains(r.Name))
-                            totalWanted.Add(new Tuple<Recipes.Recipe, int>(r, 1));
-                    }
-                }
 
                 var shoppinglist = MaterialCommoditiesRecipe.GetShoppingList(totalWanted, mcl);
 
@@ -357,8 +325,6 @@ namespace EDDiscovery.UserControls
             // if transparent, we don't show the eng/synth panels
             userControlEngineering.Visible = userControlSynthesis.Visible = !IsTransparent;
             userControlEngineering.Enabled = userControlSynthesis.Enabled = !IsTransparent;
-            buttonTechBroker.Visible = buttonSpecialEffects.Visible = !IsTransparent;
-
         }
 
         #endregion
@@ -399,18 +365,6 @@ namespace EDDiscovery.UserControls
         {
             useEDSMForSystemAvailability = ((ToolStripMenuItem)sender).Checked;
             Display();
-        }
-
-        private void buttonTechBroker_Click(object sender, EventArgs e)
-        {
-            Button b = sender as Button;
-            techbrokerselection.Open(GetSetting(dbTechBrokerFilterSave,"All"), b, this.FindForm());
-        }
-
-        private void buttonSpecialEffects_Click(object sender, EventArgs e)
-        {
-            Button b = sender as Button;
-            specialeffectsselection.Open(GetSetting(dbSpecialEffectsFilterSave,"All"), b, this.FindForm());
         }
 
         private void onlyCapacityToolStripMenuItem_Click(object sender, EventArgs e)
