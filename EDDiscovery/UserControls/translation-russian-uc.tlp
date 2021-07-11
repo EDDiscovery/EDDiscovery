@@ -330,6 +330,7 @@ SECTION UserControlLedger
 .CashTransactions: "Cash Transactions" => "Финансовые операции"
 .buttonExtExcel.ToolTip: "Send data on grid to excel" @
 .NOLG: "No Ledger available" @
+.TotalProfit: "Total Profit" @
 
 SECTION UserControlLocalMap
 

@@ -47,13 +47,6 @@ namespace EDDiscovery.UserControls
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControlLedger));
             this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.dataGridViewLedger = new BaseUtils.DataGridViewColumnHider();
-            this.TimeCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Type = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Notes = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Credits = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Debits = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Balance = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.NormProfit = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItemGotoItem = new System.Windows.Forms.ToolStripMenuItem();
             this.vScrollBarCustomMC = new ExtendedControls.ExtScrollBar();
@@ -63,8 +56,16 @@ namespace EDDiscovery.UserControls
             this.labelSearch = new System.Windows.Forms.Label();
             this.comboBoxHistoryWindow = new ExtendedControls.ExtComboBox();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.topPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.buttonExtExcel = new ExtendedControls.ExtButton();
+            this.topPanel = new System.Windows.Forms.FlowLayoutPanel();
+            this.TimeCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Type = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Notes = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Credits = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Debits = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Balance = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.NormProfit = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TotalProfit = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewLedger)).BeginInit();
             this.contextMenuStrip.SuspendLayout();
@@ -96,64 +97,18 @@ namespace EDDiscovery.UserControls
             this.Credits,
             this.Debits,
             this.Balance,
-            this.NormProfit});
+            this.NormProfit,
+            this.TotalProfit});
             this.dataGridViewLedger.ContextMenuStrip = this.contextMenuStrip;
             this.dataGridViewLedger.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewLedger.Name = "dataGridViewLedger";
+            this.dataGridViewLedger.RowHeaderMenuStrip = null;
             this.dataGridViewLedger.RowHeadersVisible = false;
             this.dataGridViewLedger.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dataGridViewLedger.SingleRowSelect = true;
             this.dataGridViewLedger.Size = new System.Drawing.Size(784, 542);
             this.dataGridViewLedger.TabIndex = 1;
             this.dataGridViewLedger.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewLedger_SortCompare);
-            // 
-            // TimeCol
-            // 
-            this.TimeCol.HeaderText = "Time";
-            this.TimeCol.MinimumWidth = 50;
-            this.TimeCol.Name = "TimeCol";
-            this.TimeCol.ReadOnly = true;
-            // 
-            // Type
-            // 
-            this.Type.HeaderText = "Type";
-            this.Type.MinimumWidth = 80;
-            this.Type.Name = "Type";
-            this.Type.ReadOnly = true;
-            // 
-            // Notes
-            // 
-            this.Notes.FillWeight = 200F;
-            this.Notes.HeaderText = "Notes";
-            this.Notes.MinimumWidth = 80;
-            this.Notes.Name = "Notes";
-            this.Notes.ReadOnly = true;
-            // 
-            // Credits
-            // 
-            this.Credits.HeaderText = "Credits";
-            this.Credits.MinimumWidth = 80;
-            this.Credits.Name = "Credits";
-            this.Credits.ReadOnly = true;
-            // 
-            // Debits
-            // 
-            this.Debits.HeaderText = "Debits";
-            this.Debits.MinimumWidth = 80;
-            this.Debits.Name = "Debits";
-            this.Debits.ReadOnly = true;
-            // 
-            // Balance
-            // 
-            this.Balance.HeaderText = "Balance";
-            this.Balance.MinimumWidth = 80;
-            this.Balance.Name = "Balance";
-            this.Balance.ReadOnly = true;
-            // 
-            // NormProfit
-            // 
-            this.NormProfit.HeaderText = "Profit Per Unit";
-            this.NormProfit.MinimumWidth = 20;
-            this.NormProfit.Name = "NormProfit";
             // 
             // contextMenuStrip
             // 
@@ -287,6 +242,19 @@ namespace EDDiscovery.UserControls
             // 
             this.toolTip.ShowAlways = true;
             // 
+            // buttonExtExcel
+            // 
+            this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonExtExcel.Image = global::EDDiscovery.Icons.Controls.JournalGrid_ExportToExcel;
+            this.buttonExtExcel.Location = new System.Drawing.Point(387, 1);
+            this.buttonExtExcel.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.buttonExtExcel.Name = "buttonExtExcel";
+            this.buttonExtExcel.Size = new System.Drawing.Size(28, 28);
+            this.buttonExtExcel.TabIndex = 32;
+            this.toolTip.SetToolTip(this.buttonExtExcel, "Send data on grid to excel");
+            this.buttonExtExcel.UseVisualStyleBackColor = true;
+            this.buttonExtExcel.Click += new System.EventHandler(this.buttonExtExcel_Click);
+            // 
             // topPanel
             // 
             this.topPanel.AutoSize = true;
@@ -302,18 +270,61 @@ namespace EDDiscovery.UserControls
             this.topPanel.Size = new System.Drawing.Size(800, 30);
             this.topPanel.TabIndex = 2;
             // 
-            // buttonExtExcel
+            // TimeCol
             // 
-            this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonExtExcel.Image = global::EDDiscovery.Icons.Controls.JournalGrid_ExportToExcel;
-            this.buttonExtExcel.Location = new System.Drawing.Point(387, 1);
-            this.buttonExtExcel.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.buttonExtExcel.Name = "buttonExtExcel";
-            this.buttonExtExcel.Size = new System.Drawing.Size(28, 28);
-            this.buttonExtExcel.TabIndex = 32;
-            this.toolTip.SetToolTip(this.buttonExtExcel, "Send data on grid to excel");
-            this.buttonExtExcel.UseVisualStyleBackColor = true;
-            this.buttonExtExcel.Click += new System.EventHandler(this.buttonExtExcel_Click);
+            this.TimeCol.HeaderText = "Time";
+            this.TimeCol.MinimumWidth = 50;
+            this.TimeCol.Name = "TimeCol";
+            this.TimeCol.ReadOnly = true;
+            // 
+            // Type
+            // 
+            this.Type.HeaderText = "Type";
+            this.Type.MinimumWidth = 80;
+            this.Type.Name = "Type";
+            this.Type.ReadOnly = true;
+            // 
+            // Notes
+            // 
+            this.Notes.FillWeight = 200F;
+            this.Notes.HeaderText = "Notes";
+            this.Notes.MinimumWidth = 80;
+            this.Notes.Name = "Notes";
+            this.Notes.ReadOnly = true;
+            // 
+            // Credits
+            // 
+            this.Credits.HeaderText = "Credits";
+            this.Credits.MinimumWidth = 80;
+            this.Credits.Name = "Credits";
+            this.Credits.ReadOnly = true;
+            // 
+            // Debits
+            // 
+            this.Debits.HeaderText = "Debits";
+            this.Debits.MinimumWidth = 80;
+            this.Debits.Name = "Debits";
+            this.Debits.ReadOnly = true;
+            // 
+            // Balance
+            // 
+            this.Balance.HeaderText = "Balance";
+            this.Balance.MinimumWidth = 80;
+            this.Balance.Name = "Balance";
+            this.Balance.ReadOnly = true;
+            // 
+            // NormProfit
+            // 
+            this.NormProfit.HeaderText = "Profit Per Unit";
+            this.NormProfit.MinimumWidth = 20;
+            this.NormProfit.Name = "NormProfit";
+            // 
+            // TotalProfit
+            // 
+            this.TotalProfit.HeaderText = "Total Profit";
+            this.TotalProfit.MinimumWidth = 80;
+            this.TotalProfit.Name = "TotalProfit";
+            this.TotalProfit.ReadOnly = true;
             // 
             // UserControlLedger
             // 
@@ -345,6 +356,9 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemGotoItem;
         private System.Windows.Forms.ToolTip toolTip;
+        private System.Windows.Forms.Label labelTime;
+        private System.Windows.Forms.FlowLayoutPanel topPanel;
+        private ExtendedControls.ExtButton buttonExtExcel;
         private System.Windows.Forms.DataGridViewTextBoxColumn TimeCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn Type;
         private System.Windows.Forms.DataGridViewTextBoxColumn Notes;
@@ -352,8 +366,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn Debits;
         private System.Windows.Forms.DataGridViewTextBoxColumn Balance;
         private System.Windows.Forms.DataGridViewTextBoxColumn NormProfit;
-        private System.Windows.Forms.Label labelTime;
-        private System.Windows.Forms.FlowLayoutPanel topPanel;
-        private ExtendedControls.ExtButton buttonExtExcel;
+        private System.Windows.Forms.DataGridViewTextBoxColumn TotalProfit;
     }
 }
