@@ -48,8 +48,6 @@ namespace EDDiscovery.UserControls
         private string dbHighlightAvailableMats = "HighlightAvailable";
         private string dbShowSystemAvailability = "SystemAvailability";
         private string dbUseEDSMForSystemAvailability = "UseEDSM";
-        private string dbTechBrokerFilterSave = "TechBrokerFilter";
-        private string dbSpecialEffectsFilterSave = "SpecialEffectsFilter";
         private string dbToggleShoppingListPosition = "PositionToggle";
 
         #region Init

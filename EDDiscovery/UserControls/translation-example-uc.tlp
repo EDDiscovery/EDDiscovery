@@ -1018,8 +1018,6 @@ SECTION UserControlStarList
 .setNoteToolStripMenuItem: "Set Note" @
 .checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" @
 .buttonExtExcel.ToolTip: "Send data on grid to excel" @
-.checkBoxJumponium.ToolTip: "Show/Hide presence of Jumponium Materials" @
-.checkBoxBodyClasses.ToolTip: "Show/Hide Special bodies classes" @
 .textBoxFilter.ToolTip: "Enter text to search in any fields for an item" @
 .checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM. Due to server constraints, you must click on a system to retreive data on it from EDSM." @
 .comboBoxTime.ToolTip: "Select the entries by age" @
@@ -1035,6 +1033,9 @@ SECTION UserControlStarList
 .PFSD: " Premium" @
 .LE: "{0} has {1} level elements." @
 .OB: "{0} Other bodies" @
+
+.JUMP: "Show/Hide presence of Jumponium Materials" @
+
 
 SECTION UserControlStats
 

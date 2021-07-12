@@ -45,14 +45,12 @@ namespace EDDiscovery.UserControls
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControlStarList));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
             this.checkBoxCursorToTop = new ExtendedControls.ExtCheckBox();
             this.buttonExtExcel = new ExtendedControls.ExtButton();
-            this.checkBoxJumponium = new ExtendedControls.ExtCheckBox();
-            this.checkBoxBodyClasses = new ExtendedControls.ExtCheckBox();
             this.textBoxFilter = new ExtendedControls.ExtTextBox();
             this.labelSearch = new System.Windows.Forms.Label();
             this.checkBoxEDSM = new ExtendedControls.ExtCheckBox();
@@ -74,6 +72,7 @@ namespace EDDiscovery.UserControls
             this.ColumnInformation = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.topPanel = new System.Windows.Forms.FlowLayoutPanel();
+            this.extButtonDisplayFilters = new ExtendedControls.ExtButton();
             this.contextMenuStrip.SuspendLayout();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewStarList)).BeginInit();
@@ -100,7 +99,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxCursorToTop.ImageIndeterminate = null;
             this.checkBoxCursorToTop.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxCursorToTop.ImageUnchecked = global::EDDiscovery.Icons.Controls.TravelGrid_CursorStill;
-            this.checkBoxCursorToTop.Location = new System.Drawing.Point(495, 1);
+            this.checkBoxCursorToTop.Location = new System.Drawing.Point(463, 1);
             this.checkBoxCursorToTop.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.checkBoxCursorToTop.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxCursorToTop.Name = "checkBoxCursorToTop";
@@ -115,7 +114,7 @@ namespace EDDiscovery.UserControls
             this.buttonExtExcel.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
             this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonExtExcel.Image = global::EDDiscovery.Icons.Controls.StarList_ExportToExcel;
-            this.buttonExtExcel.Location = new System.Drawing.Point(459, 1);
+            this.buttonExtExcel.Location = new System.Drawing.Point(427, 1);
             this.buttonExtExcel.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonExtExcel.Name = "buttonExtExcel";
             this.buttonExtExcel.Size = new System.Drawing.Size(28, 28);
@@ -123,56 +122,6 @@ namespace EDDiscovery.UserControls
             this.toolTip.SetToolTip(this.buttonExtExcel, "Send data on grid to excel");
             this.buttonExtExcel.UseVisualStyleBackColor = true;
             this.buttonExtExcel.Click += new System.EventHandler(this.buttonExtExcel_Click);
-            // 
-            // checkBoxJumponium
-            // 
-            this.checkBoxJumponium.Appearance = System.Windows.Forms.Appearance.Button;
-            this.checkBoxJumponium.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.checkBoxJumponium.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxJumponium.CheckBoxDisabledScaling = 0.5F;
-            this.checkBoxJumponium.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBoxJumponium.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxJumponium.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
-            this.checkBoxJumponium.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.checkBoxJumponium.Image = global::EDDiscovery.Icons.Controls.StarList_Jumponium;
-            this.checkBoxJumponium.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxJumponium.ImageIndeterminate = null;
-            this.checkBoxJumponium.ImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.checkBoxJumponium.ImageUnchecked = null;
-            this.checkBoxJumponium.Location = new System.Drawing.Point(423, 1);
-            this.checkBoxJumponium.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.checkBoxJumponium.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxJumponium.Name = "checkBoxJumponium";
-            this.checkBoxJumponium.Size = new System.Drawing.Size(28, 28);
-            this.checkBoxJumponium.TabIndex = 36;
-            this.checkBoxJumponium.TickBoxReductionRatio = 0.75F;
-            this.toolTip.SetToolTip(this.checkBoxJumponium, "Show/Hide presence of Jumponium Materials");
-            this.checkBoxJumponium.UseVisualStyleBackColor = true;
-            // 
-            // checkBoxBodyClasses
-            // 
-            this.checkBoxBodyClasses.Appearance = System.Windows.Forms.Appearance.Button;
-            this.checkBoxBodyClasses.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.checkBoxBodyClasses.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxBodyClasses.CheckBoxDisabledScaling = 0.5F;
-            this.checkBoxBodyClasses.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBoxBodyClasses.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxBodyClasses.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
-            this.checkBoxBodyClasses.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.checkBoxBodyClasses.Image = global::EDDiscovery.Icons.Controls.StarList_BodyClass;
-            this.checkBoxBodyClasses.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxBodyClasses.ImageIndeterminate = null;
-            this.checkBoxBodyClasses.ImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.checkBoxBodyClasses.ImageUnchecked = null;
-            this.checkBoxBodyClasses.Location = new System.Drawing.Point(387, 1);
-            this.checkBoxBodyClasses.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.checkBoxBodyClasses.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxBodyClasses.Name = "checkBoxBodyClasses";
-            this.checkBoxBodyClasses.Size = new System.Drawing.Size(28, 28);
-            this.checkBoxBodyClasses.TabIndex = 37;
-            this.checkBoxBodyClasses.TickBoxReductionRatio = 0.75F;
-            this.toolTip.SetToolTip(this.checkBoxBodyClasses, "Show/Hide Special bodies classes");
-            this.checkBoxBodyClasses.UseVisualStyleBackColor = true;
             // 
             // textBoxFilter
             // 
@@ -243,7 +192,7 @@ namespace EDDiscovery.UserControls
         "tem to retreive data on it from EDSM.");
             this.checkBoxEDSM.UseVisualStyleBackColor = false;
             // 
-            // comboBoxHistoryWindow
+            // comboBoxTime
             // 
             this.comboBoxTime.BorderColor = System.Drawing.Color.Red;
             this.comboBoxTime.ButtonColorScaling = 0.5F;
@@ -379,14 +328,14 @@ namespace EDDiscovery.UserControls
             this.dataGridViewStarList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.dataGridViewStarList.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewStarList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewStarList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
             this.dataGridViewStarList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewStarList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ColumnTime,
@@ -395,25 +344,25 @@ namespace EDDiscovery.UserControls
             this.ColumnInformation,
             this.Value});
             this.dataGridViewStarList.ContextMenuStrip = this.contextMenuStrip;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridViewStarList.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
+            dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridViewStarList.DefaultCellStyle = dataGridViewCellStyle8;
             this.dataGridViewStarList.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewStarList.Name = "dataGridViewStarList";
             this.dataGridViewStarList.RowHeaderMenuStrip = null;
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewStarList.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle10.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle10.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle10.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle10.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewStarList.RowHeadersDefaultCellStyle = dataGridViewCellStyle10;
             this.dataGridViewStarList.RowHeadersWidth = 50;
             this.dataGridViewStarList.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewStarList.SingleRowSelect = true;
@@ -445,8 +394,8 @@ namespace EDDiscovery.UserControls
             // 
             // ColumnVisits
             // 
-            dataGridViewCellStyle2.NullValue = null;
-            this.ColumnVisits.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle7.NullValue = null;
+            this.ColumnVisits.DefaultCellStyle = dataGridViewCellStyle7;
             this.ColumnVisits.FillWeight = 40F;
             this.ColumnVisits.HeaderText = "Visits";
             this.ColumnVisits.MinimumWidth = 50;
@@ -475,8 +424,7 @@ namespace EDDiscovery.UserControls
             this.topPanel.Controls.Add(this.checkBoxEDSM);
             this.topPanel.Controls.Add(this.labelSearch);
             this.topPanel.Controls.Add(this.textBoxFilter);
-            this.topPanel.Controls.Add(this.checkBoxBodyClasses);
-            this.topPanel.Controls.Add(this.checkBoxJumponium);
+            this.topPanel.Controls.Add(this.extButtonDisplayFilters);
             this.topPanel.Controls.Add(this.buttonExtExcel);
             this.topPanel.Controls.Add(this.checkBoxCursorToTop);
             this.topPanel.Dock = System.Windows.Forms.DockStyle.Top;
@@ -484,6 +432,19 @@ namespace EDDiscovery.UserControls
             this.topPanel.Name = "topPanel";
             this.topPanel.Size = new System.Drawing.Size(870, 30);
             this.topPanel.TabIndex = 38;
+            // 
+            // extButtonDisplayFilters
+            // 
+            this.extButtonDisplayFilters.BackColor = System.Drawing.SystemColors.Control;
+            this.extButtonDisplayFilters.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.extButtonDisplayFilters.Image = global::EDDiscovery.Icons.Controls.DisplayFilters;
+            this.extButtonDisplayFilters.Location = new System.Drawing.Point(395, 1);
+            this.extButtonDisplayFilters.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.extButtonDisplayFilters.Name = "extButtonDisplayFilters";
+            this.extButtonDisplayFilters.Size = new System.Drawing.Size(28, 28);
+            this.extButtonDisplayFilters.TabIndex = 31;
+            this.extButtonDisplayFilters.UseVisualStyleBackColor = false;
+            this.extButtonDisplayFilters.Click += new System.EventHandler(this.extButtonDisplayFilters_Click);
             // 
             // UserControlStarList
             // 
@@ -518,8 +479,6 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtButton buttonExtExcel;
         private System.Windows.Forms.ToolStripMenuItem setNoteToolStripMenuItem;
         private ExtendedControls.ExtCheckBox checkBoxEDSM;
-        private ExtendedControls.ExtCheckBox checkBoxJumponium;
-        private ExtendedControls.ExtCheckBox checkBoxBodyClasses;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnTime;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnSystem;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnVisits;
@@ -529,5 +488,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.FlowLayoutPanel topPanel;
         private System.Windows.Forms.DataGridViewTextBoxColumn Value;
         private System.Windows.Forms.ToolStripMenuItem viewScanDisplayToolStripMenuItem;
+        private ExtendedControls.ExtButton extButtonDisplayFilters;
     }
 }
