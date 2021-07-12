@@ -47,11 +47,26 @@ namespace EDDiscovery.Forms
             BaseUtils.Translator.Instance.Translate(this, new Control[] { labelTimestamp, labelSystem, labelSummary, labelDetails });
         }
 
-        private void buttonSave_Click(object sender, EventArgs e)
+        private void SaveNote()
         {
             this.NoteText = textBoxNote.Text.Trim();
             this.DialogResult = DialogResult.OK;
             this.Close();
+        }
+
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == (Keys.Control | Keys.Enter))
+            {
+                SaveNote();
+                return true;
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
+
+        private void buttonSave_Click(object sender, EventArgs e)
+        {
+            SaveNote();
         }
 
         private void buttonCancel_Click(object sender, EventArgs e)
