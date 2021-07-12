@@ -1018,37 +1018,17 @@ SECTION UserControlStarList
 .textBoxFilter.ToolTip: "Enter text to search in any fields for an item" => "Введите текст для поиска в любых полях"
 .checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM. Due to server constraints, you must click on a system to retreive data on it from EDSM." => "Показать/скрыть EDSM-данные о телах. Из-за ограничений сервера нужно нажать на систему, чтобы получить данные из EDSM."
 .comboBoxTime.ToolTip: "Select the entries by age" => "Выбор записей по времени"
-.Value: "Scan Value" @
 .viewScanDisplayToolStripMenuItem: "View Scan Display" @
+.Value: "Scan Value" @
 .Total: "Total" @
-.Signals: "{0} has signals" @
-.Distance: " ({0} ls)" @
-.FV: "First visit {0}" => "Первое посещение {0}"
 .CS: "{0} Star(s) {1}" => "Число звезд: {0} {1}"
-.SMBH: "{0} is a super massive black hole" => "{0} — сверхмассивная черная дыра"
-.BH: "{0} is a black hole" => "{0} — черная дыра"
-.NS: "{0} is a neutron star" => "{0} — нейтронная звезда"
-.WD: "{0} is a {1} white dwarf star" => "{0} — {1} белый карлик"
-.WR: "{0} is a {1} wolf-rayet star" => "{0} — {1} звезда Вольфа-Райе"
-.OTHER: "{0} is a {1}" => "{0} — {1}"
-.RP: "{0} is a rogue planet" => "{0} — планета-сирота"
-.ELM: "{0} is an earth like moon" => "{0} — землеподобная луна"
-.TWM: "{0} is a terraformable water moon" => "{0} — терраформируемая водная луна"
-.WM: "{0} is a water moon" => "{0} — водная луна"
-.TM: "{0} is a terraformable moon" => "{0} — терраформируемая луна"
-.AM: "{0} is an ammonia moon" => "{0} — аммиачная луна"
-.ELP: "{0} is an earth like planet" => "{0} — землеподобная планета"
-.TWW: "{0} is a terraformable water world" => "{0} — терраформируемая водная планета"
-.WW: "{0} is a water world" => "{0} — водная планета"
-.TP: "{0} is a terraformable planet" => "{0} — терраформируемая планета"
-.AW: "{0} is an ammonia world" => "{0} — аммиачная планета"
+.FSD: "This system has materials for FSD boost: " => "В этой системе есть материалы для вброса в FSD: "
+.NoEDSM: "System could not be found - has not been synched or EDSM is unavailable" => "Не удалось найти систему, нет синхронизации или доступа к EDSM"
 .BFSD: " Basic" => " базового"
 .SFSD: " Standard" => " стандартного"
 .PFSD: " Premium" => " премиум"
 .LE: "{0} has {1} level elements." => "На {0} есть элементы {1} уровня."
 .OB: "{0} Other bodies" => "число других небесных тел: {0}"
-.FSD: "This system has materials for FSD boost: " => "В этой системе есть материалы для вброса в FSD: "
-.NoEDSM: "System could not be found - has not been synched or EDSM is unavailable" => "Не удалось найти систему, нет синхронизации или доступа к EDSM"
 
 SECTION UserControlStats
 

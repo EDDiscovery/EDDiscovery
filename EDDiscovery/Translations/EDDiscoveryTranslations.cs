@@ -391,34 +391,35 @@ namespace EDDiscovery
         UserControlTravelGrid_Remove, // Confirm you wish to remove this entry
 
         UserControlStarList_Total, // Total
-        UserControlStarList_FV, // First visit {0}
         UserControlStarList_CS, // {0} Star(s)
-        UserControlStarList_SMBH, // {0} is a super massive black hole
-        UserControlStarList_BH, // {0} is a black hole
-        UserControlStarList_NS, // {0} is a neutron star
-        UserControlStarList_WD, // {0} is a {1} white dwarf star
-        UserControlStarList_WR, // {0} is a {1} wolf-rayet star
-        UserControlStarList_OTHER, // {0} is a {1}
-        UserControlStarList_RP, // {0} is a rogue planet
-        UserControlStarList_ELM, // {0} is an earth like moon
-        UserControlStarList_TWM, // {0} is a terraformable water moon
-        UserControlStarList_WM, // {0} is a water moon
-        UserControlStarList_TM, // {0} is a terraformable moon
-        UserControlStarList_AM, // {0} is an ammonia moon
-        UserControlStarList_ELP, // {0} is an earth like planet
-        UserControlStarList_TWW, // {0} is a terraformable water world
-        UserControlStarList_WW, // {0} is a water world
-        UserControlStarList_TP, // {0} is a terraformable planet
-        UserControlStarList_AW, // {0} is an ammonia world
+        UserControlStarList_FSD, // This system has materials for FSD boost:
+        UserControlStarList_NoEDSM, // System could not be found - has not been synched or EDSM is unavailable
         UserControlStarList_BFSD, //  Basic
         UserControlStarList_SFSD, //  Standard
         UserControlStarList_PFSD, //  Premium
         UserControlStarList_LE, // {0} has {1} level elements.
         UserControlStarList_OB, // {0} Other bodies
-        UserControlStarList_FSD, // This system has materials for FSD boost:
-        UserControlStarList_NoEDSM, // System could not be found - has not been synched or EDSM is unavailable
-        UserControlStarList_Signals, // {0} has signals
-        UserControlStarList_Distance, // {0} ls
+
+        //UserControlStarList_FV, // First visit {0}
+        //UserControlStarList_SMBH, // {0} is a super massive black hole
+        ////UserControlStarList_BH, // {0} is a black hole
+        //UserControlStarList_NS, // {0} is a neutron star
+        //UserControlStarList_WD, // {0} is a {1} white dwarf star
+        //UserControlStarList_WR, // {0} is a {1} wolf-rayet star
+        //UserControlStarList_OTHER, // {0} is a {1}
+        //UserControlStarList_RP, // {0} is a rogue planet
+        //UserControlStarList_ELM, // {0} is an earth like moon
+        //UserControlStarList_TWM, // {0} is a terraformable water moon
+        //UserControlStarList_WM, // {0} is a water moon
+        //UserControlStarList_TM, // {0} is a terraformable moon
+        //UserControlStarList_AM, // {0} is an ammonia moon
+        //UserControlStarList_ELP, // {0} is an earth like planet
+        //UserControlStarList_TWW, // {0} is a terraformable water world
+        //UserControlStarList_WW, // {0} is a water world
+        //UserControlStarList_TP, // {0} is a terraformable planet
+        //UserControlStarList_AW, // {0} is an ammonia world
+        //UserControlStarList_Signals, // {0} has signals
+        //UserControlStarList_Distance, // {0} ls
 
         UserControlCaptainsLog_Diary, // Diary
         UserControlCaptainsLog_Entries, // Entries

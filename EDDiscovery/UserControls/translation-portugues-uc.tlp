@@ -1018,37 +1018,17 @@ SECTION UserControlStarList
 .textBoxFilter.ToolTip: "Enter text to search in any fields for an item" @
 .checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM. Due to server constraints, you must click on a system to retreive data on it from EDSM." @
 .comboBoxTime.ToolTip: "Select the entries by age" @
-.Value: "Scan Value" @
 .viewScanDisplayToolStripMenuItem: "View Scan Display" @
+.Value: "Scan Value" @
 .Total: "Total" @
-.Signals: "{0} has signals" @
-.Distance: " ({0} ls)" @
-.FV: "First visit {0}" @
 .CS: "{0} Star(s) {1}" @
-.SMBH: "{0} is a super massive black hole" @
-.BH: "{0} is a black hole" @
-.NS: "{0} is a neutron star" @
-.WD: "{0} is a {1} white dwarf star" @
-.WR: "{0} is a {1} wolf-rayet star" @
-.OTHER: "{0} is a {1}" @
-.RP: "{0} is a rogue planet" @
-.ELM: "{0} is an earth like moon" @
-.TWM: "{0} is a terraformable water moon" @
-.WM: "{0} is a water moon" @
-.TM: "{0} is a terraformable moon" @
-.AM: "{0} is an ammonia moon" @
-.ELP: "{0} is an earth like planet" @
-.TWW: "{0} is a terraformable water world" @
-.WW: "{0} is a water world" @
-.TP: "{0} is a terraformable planet" @
-.AW: "{0} is an ammonia world" @
+.FSD: "This system has materials for FSD boost: " @
+.NoEDSM: "System could not be found - has not been synched or EDSM is unavailable" @
 .BFSD: " Basic" @
 .SFSD: " Standard" @
 .PFSD: " Premium" @
 .LE: "{0} has {1} level elements." @
 .OB: "{0} Other bodies" @
-.FSD: "This system has materials for FSD boost: " @
-.NoEDSM: "System could not be found - has not been synched or EDSM is unavailable" @
 
 SECTION UserControlStats
 

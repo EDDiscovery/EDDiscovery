@@ -378,139 +378,44 @@ namespace EDDiscovery.UserControls
             return rw;
         }
 
+        const int lowRadiusLimit = 300 * 1000; // tiny body limit in km converted to m
+        const int largeRadiusLimit = 20000 * 1000; // large body limit in km converted to m
+        const double eccentricityLimit = 0.95; //orbital eccentricity limit
+
         string Infoline(ISystem system, StarScan.SystemNode sysnode )
         {
             string infostr = "";
 
-            if (sysnode != null)
+            if (sysnode?.StarNodes != null)
             {
-                if (sysnode.StarNodes != null)
+                string st = sysnode.StarTypesFound();
+                int stars = sysnode.StarsScanned();
+                int total = sysnode.StarPlanetsScanned();
+
+                infostr = string.Format("{0} Star(s) {1}".T(EDTx.UserControlStarList_CS), stars, st);
+
+                if (total > stars)
                 {
-                    string st = sysnode.StarTypesFound();
-                    if (st.HasChars())
-                        st = " " + st;
-                    int stars = sysnode.StarsScanned();
-                    infostr = infostr.AppendPrePad(string.Format("{0} Star(s){1}".T(EDTx.UserControlStarList_CS), stars, st) , Environment.NewLine);
+                    infostr += " " + string.Format("{0} Other bodies".T(EDTx.UserControlStarList_OB), (total - stars).ToString());
+                }
 
-                    string extrainfo = "";
-                    string prefix = Environment.NewLine;
-                    string noprefix = "";
-                    string jumponium = "";
+                if (sysnode.FSSTotalBodies.HasValue && total < sysnode.FSSTotalBodies.Value)        // only show if you've not got them all
+                {
+                    infostr += ", " + "Total".T(EDTx.UserControlStarList_Total) + " " + sysnode.FSSTotalBodies.Value.ToString();
+                }
 
-                    foreach (StarScan.ScanNode sn in sysnode.Bodies)
+                string jumponium = "";
+
+                foreach (StarScan.ScanNode sn in sysnode.Bodies)
+                {
+                    if (sn.ScanData != null && checkBoxBodyClasses.Checked)
                     {
-                        string bodyinfo = "";
-
-                        if (sn.ScanData != null && checkBoxBodyClasses.Checked)
-                        {
-                            JournalScan sc = sn.ScanData;
-                            string bodyname = sc.BodyDesignationOrName;
-                            string bodynameshort = bodyname.ReplaceIfStartsWith(system.Name);
-
-                            if (sc.IsStar) // brief notification for special or uncommon celestial bodies, useful to traverse the history and search for that special body you discovered.
-                            {
-                                // Sagittarius A* is a special body: is the centre of the Milky Way, and the only one which is classified as a Super Massive Black Hole. As far as we know...                                
-                                if (sc.StarTypeID == EDStar.SuperMassiveBlackHole)
-                                    bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a super massive black hole".T(EDTx.UserControlStarList_SMBH), bodyname), prefix);
-                                    
-                                // black holes
-                                if (sc.StarTypeID == EDStar.H)
-                                    bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a black hole".T(EDTx.UserControlStarList_BH), bodyname), prefix);
-
-                                // neutron stars
-                                if (sc.StarTypeID == EDStar.N)
-                                    bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a neutron star".T(EDTx.UserControlStarList_NS), bodyname), prefix);
-
-                                // white dwarf (D, DA, DAB, DAO, DAZ, DAV, DB, DBZ, DBV, DO, DOV, DQ, DC, DCV, DX)
-                                string WhiteDwarf = "White Dwarf";
-                                if (sc.StarTypeText.Contains(WhiteDwarf))
-                                    bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a {1} white dwarf star".T(EDTx.UserControlStarList_WD), bodyname, sc.StarTypeID), prefix);
-
-                                // wolf rayet (W, WN, WNC, WC, WO)
-                                string WolfRayet = "Wolf-Rayet";
-                                if (sc.StarTypeText.Contains(WolfRayet))
-                                    bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a {1} wolf-rayet star".T(EDTx.UserControlStarList_WR), bodyname, sc.StarTypeID), prefix);
-
-                                // giants. It should recognize all classes of giants.
-                                if (sc.StarTypeText.Contains("Giant"))
-                                    bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a {1}".T(EDTx.UserControlStarList_OTHER), bodyname, sc.StarTypeText), prefix);
-
-                                // rogue planets - not sure if they really exists, but they are in the journal, so...
-                                if (sc.StarTypeID == EDStar.RoguePlanet)
-                                    bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a rogue planet".T(EDTx.UserControlStarList_RP), bodyname), prefix);
-                            }
-
-                            else
-
-                            {
-                                // Check if a non-star body is a moon or not. We want it to further refine our brief summary in the visited star list.
-                                // To avoid duplicates, we need to apply our filters before on the bodies recognized as a moon, than do the same for the other bodies that do not fulfill that criteria.
-
-                                if (sn.Level >= 2 && sn.NodeType == StarScan.ScanNodeType.body)
-
-                                // Tell us that that special body is a moon. After all, it can be quite an outstanding discovery...
-                                {
-                                    // Earth-like moon
-                                    if (sc.PlanetTypeID == EDPlanet.Earthlike_body)
-                                        bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is an earth like moon".T(EDTx.UserControlStarList_ELM), bodynameshort), prefix);
-
-                                    // Terraformable water moon
-                                    if (sc.Terraformable == true && sc.PlanetTypeID == EDPlanet.Water_world)
-                                        bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a terraformable water moon".T(EDTx.UserControlStarList_TWM), bodynameshort), prefix);
-                                    // Water moon
-                                    if (sc.Terraformable == false && sc.PlanetTypeID == EDPlanet.Water_world)
-                                        bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a water moon".T(EDTx.UserControlStarList_WM), bodynameshort), prefix);
-
-                                    // Terraformable moon
-                                    if (sc.Terraformable == true && sc.PlanetTypeID != EDPlanet.Water_world)
-                                        bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a terraformable moon".T(EDTx.UserControlStarList_TM), bodynameshort), prefix);
-
-                                    // Ammonia moon
-                                    if (sc.PlanetTypeID == EDPlanet.Ammonia_world)
-                                        bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is an ammonia moon".T(EDTx.UserControlStarList_AM), bodynameshort), prefix);
-                                }
-
-                                else
-
-                                // Do the same, for all planets
-                                {
-                                    // Earth Like planet
-                                    if (sc.PlanetTypeID == EDPlanet.Earthlike_body)
-                                        bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is an earth like planet".T(EDTx.UserControlStarList_ELP), bodynameshort), prefix);
-
-                                    // Terraformable water world
-                                    if (sc.PlanetTypeID == EDPlanet.Water_world && sc.Terraformable == true)
-                                        bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a terraformable water world".T(EDTx.UserControlStarList_TWW), bodynameshort), prefix);
-                                    // Water world
-                                    if (sc.PlanetTypeID == EDPlanet.Water_world && sc.Terraformable == false)
-                                        bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a water world".T(EDTx.UserControlStarList_WW), bodynameshort), prefix);
-
-                                    // Terraformable planet
-                                    if (sc.Terraformable == true && sc.PlanetTypeID != EDPlanet.Water_world)
-                                        bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a terraformable planet".T(EDTx.UserControlStarList_TP), bodynameshort), prefix);
-
-                                    // Ammonia world
-                                    if (sc.PlanetTypeID == EDPlanet.Ammonia_world)
-                                        bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is an ammonia world".T(EDTx.UserControlStarList_AW), bodynameshort), prefix);
-                                }
-
-                                if (sn.Signals != null)
-                                {
-                                    bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} has signals".T(EDTx.UserControlStarList_Signals), bodynameshort), prefix);
-                                }
-
-                                //Add Distance - Remember no newline
-                                if (bodyinfo != "")
-                                {
-                                    double distance = sc.DistanceFromArrivalLS;
-                                    bodyinfo = bodyinfo.AppendPrePad(string.Format(" ({0} ls)".T(EDTx.UserControlStarList_Distance), distance.ToString("n0")), noprefix);
-                                    extrainfo = extrainfo.AppendPrePad(bodyinfo, prefix);
-                                }
-                            }
-                        }
+                        JournalScan sc = sn.ScanData;
+                        string info = sc.SurveyorInfoLine(system, sn.Signals != null, true, true, true, true, lowRadiusLimit, largeRadiusLimit, eccentricityLimit);
+                        infostr = infostr.AppendPrePad(info, Environment.NewLine);
 
                         // Landable bodies with valuable materials, collect into jumponimum
-                        if (sn.ScanData != null && sn.ScanData.IsLandable == true && sn.ScanData.HasMaterials && checkBoxJumponium.Checked == true)
+                        if (sn.ScanData.IsLandable == true && sn.ScanData.HasMaterials )
                         {
                             int basic = 0;
                             int standard = 0;
@@ -543,39 +448,17 @@ namespace EDDiscovery.UserControls
                                 if (premium != 0)
                                     jumpLevel.AppendPrePad(premium + "/" + Recipes.FindSynthesis("FSD", "Premium").Count + " Premium".T(EDTx.UserControlStarList_PFSD), ", ");
 
-                                jumponium = jumponium.AppendPrePad(Environment.NewLine + string.Format("{0} has {1} level elements.".T(EDTx.UserControlStarList_LE), sn.ScanData.BodyDesignationOrName ,jumpLevel));
+                                jumponium = jumponium.AppendPrePad(Environment.NewLine + string.Format("{0} has {1} level elements.".T(EDTx.UserControlStarList_LE), sn.ScanData.BodyDesignationOrName, jumpLevel));
                             }
                         }
                     }
+                }
 
-                    int total = sysnode.StarPlanetsScanned();
-
-                    if (total > 0)
-                    {
-                        int totalwithoutstars = total - stars;
-
-                        if (totalwithoutstars > 0)
-                        {
-                            infostr = infostr.AppendPrePad(string.Format("{0} Other bodies".T(EDTx.UserControlStarList_OB), totalwithoutstars.ToString()), ", ");
-                        }
-
-                        if ( sysnode.FSSTotalBodies.HasValue && total < sysnode.FSSTotalBodies.Value )        // only show if you've not got them all
-                        {
-                            infostr += ", " + "Total".T(EDTx.UserControlStarList_Total) + " "+ sysnode.FSSTotalBodies.Value.ToString();
-                        }
-
-                        infostr = infostr.AppendPrePad(extrainfo, prefix);                                                
-                    }
-                    else
-                    {   // we need this to allow the panel to scan also through systems which has only stars
-                        infostr = infostr.AppendPrePad(extrainfo, prefix);
-                    }
-
-                    if (jumponium.HasChars() )
-                    {
-                        infostr = infostr.AppendPrePad(Environment.NewLine + Environment.NewLine + "This system has materials for FSD boost: ".T(EDTx.UserControlStarList_FSD));
-                        infostr = infostr.AppendPrePad(jumponium);
-                    }
+                if (jumponium.HasChars() )
+                {
+                    infostr = infostr.AppendPrePad("This system has materials for FSD boost: ".T(EDTx.UserControlStarList_FSD), Environment.NewLine);
+                    if ( checkBoxJumponium.Checked)
+                        infostr = infostr.AppendPrePad(jumponium, Environment.NewLine);
                 }
             }
 
@@ -936,3 +819,110 @@ namespace EDDiscovery.UserControls
 
     }
 }
+
+                            //string bodyname = sc.BodyDesignationOrName;
+                            //string bodynameshort = bodyname.ReplaceIfStartsWith(system.Name);
+
+                            //if (sc.IsStar) // brief notification for special or uncommon celestial bodies, useful to traverse the history and search for that special body you discovered.
+                            //{
+                            //    // Sagittarius A* is a special body: is the centre of the Milky Way, and the only one which is classified as a Super Massive Black Hole. As far as we know...                                
+                            //    if (sc.StarTypeID == EDStar.SuperMassiveBlackHole)
+                            //        bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a super massive black hole".T(EDTx.UserControlStarList_SMBH), bodyname), prefix);
+                                    
+                            //    // black holes
+                            //    if (sc.StarTypeID == EDStar.H)
+                            //        bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a black hole".T(EDTx.UserControlStarList_BH), bodyname), prefix);
+
+                            //    // neutron stars
+                            //    if (sc.StarTypeID == EDStar.N)
+                            //        bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a neutron star".T(EDTx.UserControlStarList_NS), bodyname), prefix);
+
+                            //    // white dwarf (D, DA, DAB, DAO, DAZ, DAV, DB, DBZ, DBV, DO, DOV, DQ, DC, DCV, DX)
+                            //    string WhiteDwarf = "White Dwarf";
+                            //    if (sc.StarTypeText.Contains(WhiteDwarf))
+                            //        bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a {1} white dwarf star".T(EDTx.UserControlStarList_WD), bodyname, sc.StarTypeID), prefix);
+
+                            //    // wolf rayet (W, WN, WNC, WC, WO)
+                            //    string WolfRayet = "Wolf-Rayet";
+                            //    if (sc.StarTypeText.Contains(WolfRayet))
+                            //        bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a {1} wolf-rayet star".T(EDTx.UserControlStarList_WR), bodyname, sc.StarTypeID), prefix);
+
+                            //    // giants. It should recognize all classes of giants.
+                            //    if (sc.StarTypeText.Contains("Giant"))
+                            //        bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a {1}".T(EDTx.UserControlStarList_OTHER), bodyname, sc.StarTypeText), prefix);
+
+                            //    // rogue planets - not sure if they really exists, but they are in the journal, so...
+                            //    if (sc.StarTypeID == EDStar.RoguePlanet)
+                            //        bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a rogue planet".T(EDTx.UserControlStarList_RP), bodyname), prefix);
+                            //}
+
+                            //else
+
+                            //{
+                            //    // Check if a non-star body is a moon or not. We want it to further refine our brief summary in the visited star list.
+                            //    // To avoid duplicates, we need to apply our filters before on the bodies recognized as a moon, than do the same for the other bodies that do not fulfill that criteria.
+
+                            //    if (sn.Level >= 2 && sn.NodeType == StarScan.ScanNodeType.body)
+
+                            //    // Tell us that that special body is a moon. After all, it can be quite an outstanding discovery...
+                            //    {
+                            //        // Earth-like moon
+                            //        if (sc.PlanetTypeID == EDPlanet.Earthlike_body)
+                            //            bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is an earth like moon".T(EDTx.UserControlStarList_ELM), bodynameshort), prefix);
+
+                            //        // Terraformable water moon
+                            //        if (sc.Terraformable == true && sc.PlanetTypeID == EDPlanet.Water_world)
+                            //            bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a terraformable water moon".T(EDTx.UserControlStarList_TWM), bodynameshort), prefix);
+                            //        // Water moon
+                            //        if (sc.Terraformable == false && sc.PlanetTypeID == EDPlanet.Water_world)
+                            //            bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a water moon".T(EDTx.UserControlStarList_WM), bodynameshort), prefix);
+
+                            //        // Terraformable moon
+                            //        if (sc.Terraformable == true && sc.PlanetTypeID != EDPlanet.Water_world)
+                            //            bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a terraformable moon".T(EDTx.UserControlStarList_TM), bodynameshort), prefix);
+
+                            //        // Ammonia moon
+                            //        if (sc.PlanetTypeID == EDPlanet.Ammonia_world)
+                            //            bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is an ammonia moon".T(EDTx.UserControlStarList_AM), bodynameshort), prefix);
+                            //    }
+
+                            //    else
+
+                            //    // Do the same, for all planets
+                            //    {
+                            //        // Earth Like planet
+                            //        if (sc.PlanetTypeID == EDPlanet.Earthlike_body)
+                            //            bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is an earth like planet".T(EDTx.UserControlStarList_ELP), bodynameshort), prefix);
+
+                            //        // Terraformable water world
+                            //        if (sc.PlanetTypeID == EDPlanet.Water_world && sc.Terraformable == true)
+                            //            bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a terraformable water world".T(EDTx.UserControlStarList_TWW), bodynameshort), prefix);
+                            //        // Water world
+                            //        if (sc.PlanetTypeID == EDPlanet.Water_world && sc.Terraformable == false)
+                            //            bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a water world".T(EDTx.UserControlStarList_WW), bodynameshort), prefix);
+
+                            //        // Terraformable planet
+                            //        if (sc.Terraformable == true && sc.PlanetTypeID != EDPlanet.Water_world)
+                            //            bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is a terraformable planet".T(EDTx.UserControlStarList_TP), bodynameshort), prefix);
+
+                            //        // Ammonia world
+                            //        if (sc.PlanetTypeID == EDPlanet.Ammonia_world)
+                            //            bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} is an ammonia world".T(EDTx.UserControlStarList_AW), bodynameshort), prefix);
+                            //    }
+
+                            //    if (sn.Signals != null)
+                            //    {
+                            //        bodyinfo = bodyinfo.AppendPrePad(string.Format("{0} has signals".T(EDTx.UserControlStarList_Signals), bodynameshort), prefix);
+                            //    }
+
+                            //    //Add Distance - Remember no newline
+                            //    if (bodyinfo != "")
+                            //    {
+                            //        double distance = sc.DistanceFromArrivalLS;
+                            //        bodyinfo = bodyinfo.AppendPrePad(string.Format(" ({0} ls)".T(EDTx.UserControlStarList_Distance), distance.ToString("n0")), noprefix);
+                            //        extrainfo = extrainfo.AppendPrePad(bodyinfo, prefix);
+                            //    }
+                            //}
+
+
+

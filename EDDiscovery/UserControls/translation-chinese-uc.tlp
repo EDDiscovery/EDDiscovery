@@ -1018,37 +1018,17 @@ SECTION UserControlStarList
 .textBoxFilter.ToolTip: "Enter text to search in any fields for an item" => "输入文本以搜索所有的域"
 .checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM. Due to server constraints, you must click on a system to retreive data on it from EDSM." => "显示/隐藏EDSM上的星体数据。为防止服务器瘫痪，只有当你选中一个星系时才会从ESDSM上获取数据。"
 .comboBoxTime.ToolTip: "Select the entries by age" => "安照时间顺序筛选条目"
-.Value: "Scan Value" @
 .viewScanDisplayToolStripMenuItem: "View Scan Display" @
+.Value: "Scan Value" @
 .Total: "Total" @
-.Signals: "{0} has signals" @
-.Distance: " ({0} ls)" @
-.FV: "First visit {0}" => "首次访问时间：{0}"
 .CS: "{0} Star(s) {1}" => "{0}个恒星 {1}"
-.SMBH: "{0} is a super massive black hole" => "{0} 是超大型的黑洞 (Super massive black hole)"
-.BH: "{0} is a black hole" => "{0} 是黑洞 (Black hole)"
-.NS: "{0} is a neutron star" => "{0} 是中子星 (Neutron star)"
-.WD: "{0} is a {1} white dwarf star" => "{0} 是{1}白矮星 (White dwarf star)"
-.WR: "{0} is a {1} wolf-rayet star" => "{0} 是{1}沃尔夫–拉叶星 (Wolf-Rayet star)"
-.OTHER: "{0} is a {1}" => "{0} 是{1}"
-.RP: "{0} is a rogue planet" => "{0} 是流浪行星 (Rogue planet)"
-.ELM: "{0} is an earth like moon" => "{0} 是类地卫星 (Earth like moon)"
-.TWM: "{0} is a terraformable water moon" => "{0} 是可地球化的水质卫星 (Terraformable water moon)"
-.WM: "{0} is a water moon" => "{0} 是水质卫星 (Water moon)"
-.TM: "{0} is a terraformable moon" => "{0} 是可地球化的卫星 (Terraformable moon)"
-.AM: "{0} is an ammonia moon" => "{0} 是氨质卫星 (Ammonia moon)"
-.ELP: "{0} is an earth like planet" => "{0} 是类地行星 (Earth like planet)"
-.TWW: "{0} is a terraformable water world" => "{0} 是可地球化的水质行星 (Terraformable water world)"
-.WW: "{0} is a water world" => "{0} 是水质行星 (Water world)"
-.TP: "{0} is a terraformable planet" => "{0} 是可地球化的行星 (Terraformable world)"
-.AW: "{0} is an ammonia world" => "{0} 是氨质行星 (Ammonia world)"
+.FSD: "This system has materials for FSD boost: " => "这个行星存在合成FSD助推剂用的材料："
+.NoEDSM: "System could not be found - has not been synched or EDSM is unavailable" => "无法找到该星系，该星系未被同步或者EDSM现在不可用。"
 .BFSD: " Basic" => " 种基础"
 .SFSD: " Standard" => " 种标准"
 .PFSD: " Premium" => " 种高级"
 .LE: "{0} has {1} level elements." => "{0} 上有 {1}的元素。"
 .OB: "{0} Other bodies" => "{0}个其他星体"
-.FSD: "This system has materials for FSD boost: " => "这个行星存在合成FSD助推剂用的材料："
-.NoEDSM: "System could not be found - has not been synched or EDSM is unavailable" => "无法找到该星系，该星系未被同步或者EDSM现在不可用。"
 
 SECTION UserControlStats
 

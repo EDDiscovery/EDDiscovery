@@ -1018,37 +1018,17 @@ SECTION UserControlStarList
 .textBoxFilter.ToolTip: "Enter text to search in any fields for an item" => "Wprowadź tekst, aby wyszukać we wszystkich polach"
 .checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM. Due to server constraints, you must click on a system to retreive data on it from EDSM." => "Pokaż/Ukryj dane ciał niebieskich z EDSM. Z powodu ograniczeń serwerów, musisz kliknąć układ aby pobrać informacje o nim z EDSM."
 .comboBoxTime.ToolTip: "Select the entries by age" => "Pokaż wpisy według wieku"
-.Value: "Scan Value" @
 .viewScanDisplayToolStripMenuItem: "View Scan Display" @
+.Value: "Scan Value" @
 .Total: "Total" @
-.Signals: "{0} has signals" @
-.Distance: " ({0} ls)" @
-.FV: "First visit {0}" => "Pierwsza wizyta {0}"
 .CS: "{0} Star(s) {1}" => "{0} Gwiazd(a/y) {1}"
-.SMBH: "{0} is a super massive black hole" => "{0} to supermasywna czarna dziura"
-.BH: "{0} is a black hole" => "{0} to czarna dziura"
-.NS: "{0} is a neutron star" => "{0} to gwiazda neutronowa"
-.WD: "{0} is a {1} white dwarf star" => "{0} to biały karzeł typu {1}"
-.WR: "{0} is a {1} wolf-rayet star" => "{0} to gwiazda Wolfa-Rayeta typu {1}"
-.OTHER: "{0} is a {1}" => "{0} to {1}"
-.RP: "{0} is a rogue planet" => "{0} to samotna planeta"
-.ELM: "{0} is an earth like moon" => "{0} to księżyc ziemiopodobny"
-.TWM: "{0} is a terraformable water moon" => "{0} to terraformowalny księżyc oceaniczny"
-.WM: "{0} is a water moon" => "{0} to księżyc oceaniczny"
-.TM: "{0} is a terraformable moon" => "{0} to terraformowalny księżyc"
-.AM: "{0} is an ammonia moon" => "{0} to księżyc amoniakowy"
-.ELP: "{0} is an earth like planet" => "{0} to planeta ziemiopodobna"
-.TWW: "{0} is a terraformable water world" => "{0} to terraformowalna planeta oceaniczna"
-.WW: "{0} is a water world" => "{0} to planeta oceaniczna"
-.TP: "{0} is a terraformable planet" => "{0} to terraformowalna planeta"
-.AW: "{0} is an ammonia world" => "{0} to planeta amoniakowa"
+.FSD: "This system has materials for FSD boost: " => "Ten układ zawiera materiały do doładowania FSD: "
+.NoEDSM: "System could not be found - has not been synched or EDSM is unavailable" => "Nie znaleziono układu - nie został zsynchronizowany lub EDSM jest niedostępne"
 .BFSD: " Basic" => " Podstawowy"
 .SFSD: " Standard" => " Standardowy"
 .PFSD: " Premium" => "Premium"
 .LE: "{0} has {1} level elements." => "{0} zawiera składniki - poziom {1}"
 .OB: "{0} Other bodies" => "{0} innych ciał niebieskich"
-.FSD: "This system has materials for FSD boost: " => "Ten układ zawiera materiały do doładowania FSD: "
-.NoEDSM: "System could not be found - has not been synched or EDSM is unavailable" => "Nie znaleziono układu - nie został zsynchronizowany lub EDSM jest niedostępne"
 
 SECTION UserControlStats
 

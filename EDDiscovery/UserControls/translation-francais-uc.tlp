@@ -1018,37 +1018,17 @@ SECTION UserControlStarList
 .textBoxFilter.ToolTip: "Enter text to search in any fields for an item" => "Saisir un texte à recherche dans tous les champs"
 .checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM. Due to server constraints, you must click on a system to retreive data on it from EDSM." => "Afficher/Masquer les données du corps provenant d'EDSM. En raison des contraintes serveur, vous devez cliquer sur un système pour récupérer les données de ce dernier depuis EDSM"
 .comboBoxTime.ToolTip: "Select the entries by age" => "Trier les entrées par âge"
-.Value: "Scan Value" => "Valeur de scan"
 .viewScanDisplayToolStripMenuItem: "View Scan Display" => "Afficher la vue scan"
+.Value: "Scan Value" => "Valeur de scan"
 .Total: "Total" @
-.Signals: "{0} has signals" => "{0} a des signaux"
-.Distance: " ({0} ls)" @
-.FV: "First visit {0}" => "Première visite {0}"
 .CS: "{0} Star(s) {1}" => "{0} étoile(s) {1}"
-.SMBH: "{0} is a super massive black hole" => "{0} est un trou noir supermassif"
-.BH: "{0} is a black hole" => "{0} est un trou noir"
-.NS: "{0} is a neutron star" => "{0} est une étoile à neutrons"
-.WD: "{0} is a {1} white dwarf star" => "{0} est une naine blanche {1}"
-.WR: "{0} is a {1} wolf-rayet star" => "{0} est une étoile Wolf-Rayet {1}"
-.OTHER: "{0} is a {1}" => "{0} est un(e) {1}"
-.RP: "{0} is a rogue planet" => "{0} est un objet libre de masse planétaire"
-.ELM: "{0} is an earth like moon" => "{0} est une lune tellurique"
-.TWM: "{0} is a terraformable water moon" => "{0} est une lune aquatique terraformable"
-.WM: "{0} is a water moon" => "{0} est une lune aquatique"
-.TM: "{0} is a terraformable moon" => "{0} est une lune terraformable"
-.AM: "{0} is an ammonia moon" => "{0} est une lune amoniaque"
-.ELP: "{0} is an earth like planet" => "{0} est une planète terraformable"
-.TWW: "{0} is a terraformable water world" => "{0} est un monde aquatique terraformable"
-.WW: "{0} is a water world" => "{0} est une monde aquatique"
-.TP: "{0} is a terraformable planet" => "{0} est une planète terroformable"
-.AW: "{0} is an ammonia world" => "{0} est un mode amoniaque"
+.FSD: "This system has materials for FSD boost: " => "Ce système contient les matériaux pour des boost FSD : "
+.NoEDSM: "System could not be found - has not been synched or EDSM is unavailable" => "Système introuvable - n'a pas été synchronisé ou EDSM est indisponible"
 .BFSD: " Basic" => "Basique"
 .SFSD: " Standard" @
 .PFSD: " Premium" @
 .LE: "{0} has {1} level elements." @
 .OB: "{0} Other bodies" => "{0} autres corps"
-.FSD: "This system has materials for FSD boost: " => "Ce système contient les matériaux pour des boost FSD : "
-.NoEDSM: "System could not be found - has not been synched or EDSM is unavailable" => "Système introuvable - n'a pas été synchronisé ou EDSM est indisponible"
 
 SECTION UserControlStats
 
