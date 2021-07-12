@@ -325,7 +325,7 @@ SECTION UserControlLedger
 .labelSearch: "Search" => "搜索"
 .buttonFilter.ToolTip: "Display entries matching this event type filter" => "显示匹配筛选事件类型的条目"
 .textBoxFilter.ToolTip: "Search to particular items" => "搜索特定的条目"
-.comboBoxHistoryWindow.ToolTip: "Select the entries by age" => "安照时间顺序筛选条目"
+.comboBoxTime.ToolTip: "Select the entries by age" => "安照时间顺序筛选条目"
 .toolStripMenuItemGotoItem: "Go to entry on grid" => "跳转到表格中的条目"
 .CashTransactions: "Cash Transactions" => "金融交易"
 .buttonExtExcel.ToolTip: "Send data on grid to excel" @
@@ -424,25 +424,14 @@ SECTION UserControlMissionOverlay
 SECTION UserControlSurveyor
 
 .Scan: "Scan" @
-.MandD: " (Mapped & Discovered)" @
-.MP: " (Mapped)" @
-.DIS: " (Discovered)" @
+.Systemscancomplete: "System scan complete." @
+.bodiesfound: " bodies found." @
 .bodyFeaturesToolStripMenuItem.lowRadiusToolStripMenuItem: "Tiny body" @
 .checkEDSMForInformationToolStripMenuItem: "Check EDSM for information" @
 .autoHideToolStripMenuItem: "Auto Hide" @
 .dontHideInFSSModeToolStripMenuItem: "Don\\'t Hide in FSS Mode" @
 .showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem: "Show System Info Always" @
 .selectFSSSignalsShownToolStripMenuItem: "Select FSS Signals Shown" @
-.LowRadius: " Is tiny." @
-.LargeRadius: " Is large." @
-.Mapped: " (Mapped & Discovered)" @
-.Systemscancomplete: "System scan complete." @
-.bodiesfound: " bodies found." @
-.Noscanreported: "No scan reported." @
-.Hasring: " Has ring." @
-.Has: " Has " @
-.Signals: " Has signals." @
-.eccentricity: " Has an high eccentricity of " @
 .planetaryClassesToolStripMenuItem: "Planetary Classes" @
 .planetaryClassesToolStripMenuItem.ammoniaWorldToolStripMenuItem: "Ammonia World" @
 .planetaryClassesToolStripMenuItem.earthlikeWorldToolStripMenuItem: "Earthlike World" @
@@ -464,8 +453,6 @@ SECTION UserControlSurveyor
 .showMoreInformationToolStripMenuItem: "Show More Information" @
 .showValuesToolStripMenuItem: "Show values" @
 .wordWrapToolStripMenuItem: "Word Wrap" @
-.isa: " is a " @
-.islandable: " Is landable." @
 .planetaryClassesToolStripMenuItem.highMetalContentBodyToolStripMenuItem: "High metal content body" @
 .planetaryClassesToolStripMenuItem.metalToolStripMenuItem: "Metal-rich body" @
 .bodyFeaturesToolStripMenuItem.highEccentricityToolStripMenuItem: "High eccentricity" @
@@ -1030,7 +1017,7 @@ SECTION UserControlStarList
 .checkBoxBodyClasses.ToolTip: "Show/Hide Special bodies classes" => "显示/隐藏特殊种类的星体（可地球化的行星等）"
 .textBoxFilter.ToolTip: "Enter text to search in any fields for an item" => "输入文本以搜索所有的域"
 .checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM. Due to server constraints, you must click on a system to retreive data on it from EDSM." => "显示/隐藏EDSM上的星体数据。为防止服务器瘫痪，只有当你选中一个星系时才会从ESDSM上获取数据。"
-.comboBoxHistoryWindow.ToolTip: "Select the entries by age" => "安照时间顺序筛选条目"
+.comboBoxTime.ToolTip: "Select the entries by age" => "安照时间顺序筛选条目"
 .Value: "Scan Value" @
 .viewScanDisplayToolStripMenuItem: "View Scan Display" @
 .Total: "Total" @
@@ -1315,7 +1302,7 @@ SECTION UserControlTravelGrid
 .buttonField.ToolTip: "Filter out entries matching the field selection" => "筛选匹配域选项的条目"
 .buttonFilter.ToolTip: "Filter out entries based on event type" => "根据事件类型筛选条目"
 .textBoxFilter.ToolTip: "Enter text to search in any fields for an item" => "输入文本以搜索所有的域"
-.comboBoxHistoryWindow.ToolTip: "Select the entries by age" => "安照时间顺序筛选条目"
+.comboBoxTime.ToolTip: "Select the entries by age" => "安照时间顺序筛选条目"
 .outliningOnOffToolStripMenuItem: "Outlining On" => "打开纲要模式"
 .scanEventsOutliningOnOffToolStripMenuItem: "Scan Events Outlining" => "收起扫描事件"
 .toolStripRollUpOlderOutlines: "Roll up older entries" => "收起旧的条目"

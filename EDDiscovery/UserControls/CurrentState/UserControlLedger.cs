@@ -62,7 +62,7 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
 
-            TravelHistoryFilter.InitaliseComboBox(comboBoxHistoryWindow, GetSetting(dbHistorySave,""), incldockstartend: false);
+            TravelHistoryFilter.InitaliseComboBox(comboBoxTime, GetSetting(dbHistorySave,""), incldockstartend: false);
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
@@ -109,7 +109,7 @@ namespace EDDiscovery.UserControls
             
             if (mc != null && mc.Transactions.Count > 0)
             {
-                var filter = (TravelHistoryFilter)comboBoxHistoryWindow.SelectedItem ?? TravelHistoryFilter.NoFilter;
+                var filter = (TravelHistoryFilter)comboBoxTime.SelectedItem ?? TravelHistoryFilter.NoFilter;
                 List<Ledger.Transaction> filteredlist = filter.Filter(mc.Transactions);
 
                 filteredlist = FilterByJournalEvent(filteredlist, GetSetting(dbFilter, "All"));
@@ -223,7 +223,7 @@ namespace EDDiscovery.UserControls
 
         private void comboBoxHistoryWindow_SelectedIndexChanged(object sender, EventArgs e)
         {
-            PutSetting(dbHistorySave, comboBoxHistoryWindow.Text);
+            PutSetting(dbHistorySave, comboBoxTime.Text);
             Display();
         }
 

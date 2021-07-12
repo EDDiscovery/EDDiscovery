@@ -47,17 +47,6 @@ namespace EDDiscovery.UserControls
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControlLedger));
             this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.dataGridViewLedger = new BaseUtils.DataGridViewColumnHider();
-            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.toolStripMenuItemGotoItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.vScrollBarCustomMC = new ExtendedControls.ExtScrollBar();
-            this.labelTime = new System.Windows.Forms.Label();
-            this.buttonFilter = new ExtendedControls.ExtButton();
-            this.textBoxFilter = new ExtendedControls.ExtTextBox();
-            this.labelSearch = new System.Windows.Forms.Label();
-            this.comboBoxHistoryWindow = new ExtendedControls.ExtComboBox();
-            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.buttonExtExcel = new ExtendedControls.ExtButton();
-            this.topPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.TimeCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Type = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Notes = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -66,6 +55,17 @@ namespace EDDiscovery.UserControls
             this.Balance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.NormProfit = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TotalProfit = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.toolStripMenuItemGotoItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.vScrollBarCustomMC = new ExtendedControls.ExtScrollBar();
+            this.labelTime = new System.Windows.Forms.Label();
+            this.buttonFilter = new ExtendedControls.ExtButton();
+            this.textBoxFilter = new ExtendedControls.ExtTextBox();
+            this.labelSearch = new System.Windows.Forms.Label();
+            this.comboBoxTime = new ExtendedControls.ExtComboBox();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.buttonExtExcel = new ExtendedControls.ExtButton();
+            this.topPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewLedger)).BeginInit();
             this.contextMenuStrip.SuspendLayout();
@@ -109,6 +109,62 @@ namespace EDDiscovery.UserControls
             this.dataGridViewLedger.Size = new System.Drawing.Size(784, 542);
             this.dataGridViewLedger.TabIndex = 1;
             this.dataGridViewLedger.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewLedger_SortCompare);
+            // 
+            // TimeCol
+            // 
+            this.TimeCol.HeaderText = "Time";
+            this.TimeCol.MinimumWidth = 50;
+            this.TimeCol.Name = "TimeCol";
+            this.TimeCol.ReadOnly = true;
+            // 
+            // Type
+            // 
+            this.Type.HeaderText = "Type";
+            this.Type.MinimumWidth = 80;
+            this.Type.Name = "Type";
+            this.Type.ReadOnly = true;
+            // 
+            // Notes
+            // 
+            this.Notes.FillWeight = 200F;
+            this.Notes.HeaderText = "Notes";
+            this.Notes.MinimumWidth = 80;
+            this.Notes.Name = "Notes";
+            this.Notes.ReadOnly = true;
+            // 
+            // Credits
+            // 
+            this.Credits.HeaderText = "Credits";
+            this.Credits.MinimumWidth = 80;
+            this.Credits.Name = "Credits";
+            this.Credits.ReadOnly = true;
+            // 
+            // Debits
+            // 
+            this.Debits.HeaderText = "Debits";
+            this.Debits.MinimumWidth = 80;
+            this.Debits.Name = "Debits";
+            this.Debits.ReadOnly = true;
+            // 
+            // Balance
+            // 
+            this.Balance.HeaderText = "Balance";
+            this.Balance.MinimumWidth = 80;
+            this.Balance.Name = "Balance";
+            this.Balance.ReadOnly = true;
+            // 
+            // NormProfit
+            // 
+            this.NormProfit.HeaderText = "Profit Per Unit";
+            this.NormProfit.MinimumWidth = 20;
+            this.NormProfit.Name = "NormProfit";
+            // 
+            // TotalProfit
+            // 
+            this.TotalProfit.HeaderText = "Total Profit";
+            this.TotalProfit.MinimumWidth = 80;
+            this.TotalProfit.Name = "TotalProfit";
+            this.TotalProfit.ReadOnly = true;
             // 
             // contextMenuStrip
             // 
@@ -213,30 +269,30 @@ namespace EDDiscovery.UserControls
             this.labelSearch.TabIndex = 24;
             this.labelSearch.Text = "Search";
             // 
-            // comboBoxHistoryWindow
+            // comboBoxTime
             // 
-            this.comboBoxHistoryWindow.BorderColor = System.Drawing.Color.Red;
-            this.comboBoxHistoryWindow.ButtonColorScaling = 0.5F;
-            this.comboBoxHistoryWindow.DataSource = null;
-            this.comboBoxHistoryWindow.DisableBackgroundDisabledShadingGradient = false;
-            this.comboBoxHistoryWindow.DisplayMember = "";
-            this.comboBoxHistoryWindow.DropDownBackgroundColor = System.Drawing.Color.Gray;
-            this.comboBoxHistoryWindow.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxHistoryWindow.Location = new System.Drawing.Point(38, 1);
-            this.comboBoxHistoryWindow.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.comboBoxHistoryWindow.MouseOverBackgroundColor = System.Drawing.Color.Silver;
-            this.comboBoxHistoryWindow.Name = "comboBoxHistoryWindow";
-            this.comboBoxHistoryWindow.ScrollBarButtonColor = System.Drawing.Color.LightGray;
-            this.comboBoxHistoryWindow.ScrollBarColor = System.Drawing.Color.LightGray;
-            this.comboBoxHistoryWindow.SelectedIndex = -1;
-            this.comboBoxHistoryWindow.SelectedItem = null;
-            this.comboBoxHistoryWindow.SelectedValue = null;
-            this.comboBoxHistoryWindow.Size = new System.Drawing.Size(100, 21);
-            this.comboBoxHistoryWindow.TabIndex = 0;
-            this.comboBoxHistoryWindow.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.toolTip.SetToolTip(this.comboBoxHistoryWindow, "Select the entries by age");
-            this.comboBoxHistoryWindow.ValueMember = "";
-            this.comboBoxHistoryWindow.SelectedIndexChanged += new System.EventHandler(this.comboBoxHistoryWindow_SelectedIndexChanged);
+            this.comboBoxTime.BorderColor = System.Drawing.Color.Red;
+            this.comboBoxTime.ButtonColorScaling = 0.5F;
+            this.comboBoxTime.DataSource = null;
+            this.comboBoxTime.DisableBackgroundDisabledShadingGradient = false;
+            this.comboBoxTime.DisplayMember = "";
+            this.comboBoxTime.DropDownBackgroundColor = System.Drawing.Color.Gray;
+            this.comboBoxTime.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.comboBoxTime.Location = new System.Drawing.Point(38, 1);
+            this.comboBoxTime.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.comboBoxTime.MouseOverBackgroundColor = System.Drawing.Color.Silver;
+            this.comboBoxTime.Name = "comboBoxTime";
+            this.comboBoxTime.ScrollBarButtonColor = System.Drawing.Color.LightGray;
+            this.comboBoxTime.ScrollBarColor = System.Drawing.Color.LightGray;
+            this.comboBoxTime.SelectedIndex = -1;
+            this.comboBoxTime.SelectedItem = null;
+            this.comboBoxTime.SelectedValue = null;
+            this.comboBoxTime.Size = new System.Drawing.Size(100, 21);
+            this.comboBoxTime.TabIndex = 0;
+            this.comboBoxTime.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.toolTip.SetToolTip(this.comboBoxTime, "Select the entries by age");
+            this.comboBoxTime.ValueMember = "";
+            this.comboBoxTime.SelectedIndexChanged += new System.EventHandler(this.comboBoxHistoryWindow_SelectedIndexChanged);
             // 
             // toolTip
             // 
@@ -259,7 +315,7 @@ namespace EDDiscovery.UserControls
             // 
             this.topPanel.AutoSize = true;
             this.topPanel.Controls.Add(this.labelTime);
-            this.topPanel.Controls.Add(this.comboBoxHistoryWindow);
+            this.topPanel.Controls.Add(this.comboBoxTime);
             this.topPanel.Controls.Add(this.labelSearch);
             this.topPanel.Controls.Add(this.textBoxFilter);
             this.topPanel.Controls.Add(this.buttonFilter);
@@ -269,62 +325,6 @@ namespace EDDiscovery.UserControls
             this.topPanel.Name = "topPanel";
             this.topPanel.Size = new System.Drawing.Size(800, 30);
             this.topPanel.TabIndex = 2;
-            // 
-            // TimeCol
-            // 
-            this.TimeCol.HeaderText = "Time";
-            this.TimeCol.MinimumWidth = 50;
-            this.TimeCol.Name = "TimeCol";
-            this.TimeCol.ReadOnly = true;
-            // 
-            // Type
-            // 
-            this.Type.HeaderText = "Type";
-            this.Type.MinimumWidth = 80;
-            this.Type.Name = "Type";
-            this.Type.ReadOnly = true;
-            // 
-            // Notes
-            // 
-            this.Notes.FillWeight = 200F;
-            this.Notes.HeaderText = "Notes";
-            this.Notes.MinimumWidth = 80;
-            this.Notes.Name = "Notes";
-            this.Notes.ReadOnly = true;
-            // 
-            // Credits
-            // 
-            this.Credits.HeaderText = "Credits";
-            this.Credits.MinimumWidth = 80;
-            this.Credits.Name = "Credits";
-            this.Credits.ReadOnly = true;
-            // 
-            // Debits
-            // 
-            this.Debits.HeaderText = "Debits";
-            this.Debits.MinimumWidth = 80;
-            this.Debits.Name = "Debits";
-            this.Debits.ReadOnly = true;
-            // 
-            // Balance
-            // 
-            this.Balance.HeaderText = "Balance";
-            this.Balance.MinimumWidth = 80;
-            this.Balance.Name = "Balance";
-            this.Balance.ReadOnly = true;
-            // 
-            // NormProfit
-            // 
-            this.NormProfit.HeaderText = "Profit Per Unit";
-            this.NormProfit.MinimumWidth = 20;
-            this.NormProfit.Name = "NormProfit";
-            // 
-            // TotalProfit
-            // 
-            this.TotalProfit.HeaderText = "Total Profit";
-            this.TotalProfit.MinimumWidth = 80;
-            this.TotalProfit.Name = "TotalProfit";
-            this.TotalProfit.ReadOnly = true;
             // 
             // UserControlLedger
             // 
@@ -350,7 +350,7 @@ namespace EDDiscovery.UserControls
         private BaseUtils.DataGridViewColumnHider dataGridViewLedger;
         private ExtendedControls.ExtScrollBar vScrollBarCustomMC;
         private ExtendedControls.ExtButton buttonFilter;
-        internal ExtendedControls.ExtComboBox comboBoxHistoryWindow;
+        internal ExtendedControls.ExtComboBox comboBoxTime;
         private System.Windows.Forms.Label labelSearch;
         private ExtendedControls.ExtTextBox textBoxFilter;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip;

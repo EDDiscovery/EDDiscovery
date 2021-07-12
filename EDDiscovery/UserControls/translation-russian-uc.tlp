@@ -325,7 +325,7 @@ SECTION UserControlLedger
 .labelSearch: "Search" => "Поиск"
 .buttonFilter.ToolTip: "Display entries matching this event type filter" => "Фильтровать записи по типу события"
 .textBoxFilter.ToolTip: "Search to particular items" => "Поиск определенного объекта"
-.comboBoxHistoryWindow.ToolTip: "Select the entries by age" => "Выбор записей по времени"
+.comboBoxTime.ToolTip: "Select the entries by age" => "Выбор записей по времени"
 .toolStripMenuItemGotoItem: "Go to entry on grid" => "Перейти к записи в таблице"
 .CashTransactions: "Cash Transactions" => "Финансовые операции"
 .buttonExtExcel.ToolTip: "Send data on grid to excel" @
@@ -424,25 +424,14 @@ SECTION UserControlMissionOverlay
 SECTION UserControlSurveyor
 
 .Scan: "Scan" @
-.MandD: " (Mapped & Discovered)" @
-.MP: " (Mapped)" @
-.DIS: " (Discovered)" @
+.Systemscancomplete: "System scan complete." => "Сканирование системы завершено"
+.bodiesfound: " bodies found." => " тел найдено."
 .bodyFeaturesToolStripMenuItem.lowRadiusToolStripMenuItem: "Tiny body" @
 .checkEDSMForInformationToolStripMenuItem: "Check EDSM for information" @
 .autoHideToolStripMenuItem: "Auto Hide" @
 .dontHideInFSSModeToolStripMenuItem: "Don\\'t Hide in FSS Mode" @
 .showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem: "Show System Info Always" @
 .selectFSSSignalsShownToolStripMenuItem: "Select FSS Signals Shown" @
-.LowRadius: " Is tiny." @
-.LargeRadius: " Is large." @
-.Mapped: " (Mapped & Discovered)" @
-.Systemscancomplete: "System scan complete." => "Сканирование системы завершено"
-.bodiesfound: " bodies found." => " тел найдено."
-.Noscanreported: "No scan reported." => "Нет результатов сканирования"
-.Hasring: " Has ring." => ", есть кольцо"
-.Has: " Has " => ", "
-.Signals: " Has signals." @
-.eccentricity: " Has an high eccentricity of " @
 .planetaryClassesToolStripMenuItem: "Planetary Classes" => "Классы планет"
 .planetaryClassesToolStripMenuItem.ammoniaWorldToolStripMenuItem: "Ammonia World" => "Аммиачные планеты"
 .planetaryClassesToolStripMenuItem.earthlikeWorldToolStripMenuItem: "Earthlike World" => "Землеподобные планеты"
@@ -464,8 +453,6 @@ SECTION UserControlSurveyor
 .showMoreInformationToolStripMenuItem: "Show More Information" @
 .showValuesToolStripMenuItem: "Show values" @
 .wordWrapToolStripMenuItem: "Word Wrap" @
-.isa: " is a " @
-.islandable: " Is landable." @
 .planetaryClassesToolStripMenuItem.highMetalContentBodyToolStripMenuItem: "High metal content body" @
 .planetaryClassesToolStripMenuItem.metalToolStripMenuItem: "Metal-rich body" @
 .bodyFeaturesToolStripMenuItem.highEccentricityToolStripMenuItem: "High eccentricity" @
@@ -1030,7 +1017,7 @@ SECTION UserControlStarList
 .checkBoxBodyClasses.ToolTip: "Show/Hide Special bodies classes" => "Показать/скрыть специальные классы небесных тел"
 .textBoxFilter.ToolTip: "Enter text to search in any fields for an item" => "Введите текст для поиска в любых полях"
 .checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM. Due to server constraints, you must click on a system to retreive data on it from EDSM." => "Показать/скрыть EDSM-данные о телах. Из-за ограничений сервера нужно нажать на систему, чтобы получить данные из EDSM."
-.comboBoxHistoryWindow.ToolTip: "Select the entries by age" => "Выбор записей по времени"
+.comboBoxTime.ToolTip: "Select the entries by age" => "Выбор записей по времени"
 .Value: "Scan Value" @
 .viewScanDisplayToolStripMenuItem: "View Scan Display" @
 .Total: "Total" @
@@ -1315,7 +1302,7 @@ SECTION UserControlTravelGrid
 .buttonField.ToolTip: "Filter out entries matching the field selection" => "Фильтровать записи в соответствии с указанными условиями"
 .buttonFilter.ToolTip: "Filter out entries based on event type" => "Фильтровать события по типу"
 .textBoxFilter.ToolTip: "Enter text to search in any fields for an item" => "Введите текст для поиска в любых полях"
-.comboBoxHistoryWindow.ToolTip: "Select the entries by age" => "Выбор записей по времени"
+.comboBoxTime.ToolTip: "Select the entries by age" => "Выбор записей по времени"
 .outliningOnOffToolStripMenuItem: "Outlining On" => "Включить группирование"
 .scanEventsOutliningOnOffToolStripMenuItem: "Scan Events Outlining" => "Группировать записи о сканировании"
 .toolStripRollUpOlderOutlines: "Roll up older entries" => "Свернуть старые записи"

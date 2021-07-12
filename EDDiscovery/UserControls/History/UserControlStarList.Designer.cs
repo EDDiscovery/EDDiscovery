@@ -255,7 +255,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxTime.Location = new System.Drawing.Point(38, 1);
             this.comboBoxTime.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.comboBoxTime.MouseOverBackgroundColor = System.Drawing.Color.Silver;
-            this.comboBoxTime.Name = "comboBoxHistoryWindow";
+            this.comboBoxTime.Name = "comboBoxTime";
             this.comboBoxTime.ScrollBarButtonColor = System.Drawing.Color.LightGray;
             this.comboBoxTime.ScrollBarColor = System.Drawing.Color.LightGray;
             this.comboBoxTime.SelectedIndex = -1;

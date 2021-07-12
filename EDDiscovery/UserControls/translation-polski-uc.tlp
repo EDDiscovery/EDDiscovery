@@ -325,7 +325,7 @@ SECTION UserControlLedger
 .labelSearch: "Search" => "Szukaj"
 .buttonFilter.ToolTip: "Display entries matching this event type filter" => "Wyświetl wpisy pasujące do tego filtra typu zdarzenia"
 .textBoxFilter.ToolTip: "Search to particular items" => "Szukaj konkretnych elementów"
-.comboBoxHistoryWindow.ToolTip: "Select the entries by age" => "Zaznacz wpisy według wieku"
+.comboBoxTime.ToolTip: "Select the entries by age" => "Zaznacz wpisy według wieku"
 .toolStripMenuItemGotoItem: "Go to entry on grid" => "Przejdź do wpisu w tabeli"
 .CashTransactions: "Cash Transactions" => "Transakcje Pieniężne"
 .buttonExtExcel.ToolTip: "Send data on grid to excel" @
@@ -424,25 +424,14 @@ SECTION UserControlMissionOverlay
 SECTION UserControlSurveyor
 
 .Scan: "Scan" @
-.MandD: " (Mapped & Discovered)" @
-.MP: " (Mapped)" @
-.DIS: " (Discovered)" @
+.Systemscancomplete: "System scan complete." => "Ukończono skan układu."
+.bodiesfound: " bodies found." => " znalezionych ciał niebieskich."
 .bodyFeaturesToolStripMenuItem.lowRadiusToolStripMenuItem: "Tiny body" @
 .checkEDSMForInformationToolStripMenuItem: "Check EDSM for information" @
 .autoHideToolStripMenuItem: "Auto Hide" @
 .dontHideInFSSModeToolStripMenuItem: "Don\\'t Hide in FSS Mode" @
 .showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem: "Show System Info Always" @
 .selectFSSSignalsShownToolStripMenuItem: "Select FSS Signals Shown" @
-.LowRadius: " Is tiny." @
-.LargeRadius: " Is large." @
-.Mapped: " (Mapped & Discovered)" @
-.Systemscancomplete: "System scan complete." => "Ukończono skan układu."
-.bodiesfound: " bodies found." => " znalezionych ciał niebieskich."
-.Noscanreported: "No scan reported." => "Brak skanu."
-.Hasring: " Has ring." => " Ma pierścień."
-.Has: " Has " => " Ma "
-.Signals: " Has signals." @
-.eccentricity: " Has an high eccentricity of " @
 .planetaryClassesToolStripMenuItem: "Planetary Classes" => "Klasy Planet"
 .planetaryClassesToolStripMenuItem.ammoniaWorldToolStripMenuItem: "Ammonia World" => "Planeta Amoniakowa"
 .planetaryClassesToolStripMenuItem.earthlikeWorldToolStripMenuItem: "Earthlike World" => "Planeta Ziemiopodobna"
@@ -464,8 +453,6 @@ SECTION UserControlSurveyor
 .showMoreInformationToolStripMenuItem: "Show More Information" @
 .showValuesToolStripMenuItem: "Show values" @
 .wordWrapToolStripMenuItem: "Word Wrap" @
-.isa: " is a " @
-.islandable: " Is landable." @
 .planetaryClassesToolStripMenuItem.highMetalContentBodyToolStripMenuItem: "High metal content body" @
 .planetaryClassesToolStripMenuItem.metalToolStripMenuItem: "Metal-rich body" @
 .bodyFeaturesToolStripMenuItem.highEccentricityToolStripMenuItem: "High eccentricity" @
@@ -1030,7 +1017,7 @@ SECTION UserControlStarList
 .checkBoxBodyClasses.ToolTip: "Show/Hide Special bodies classes" => "Pokaż/Ukryj klasy Specjalnych Ciał Niebieskich"
 .textBoxFilter.ToolTip: "Enter text to search in any fields for an item" => "Wprowadź tekst, aby wyszukać we wszystkich polach"
 .checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM. Due to server constraints, you must click on a system to retreive data on it from EDSM." => "Pokaż/Ukryj dane ciał niebieskich z EDSM. Z powodu ograniczeń serwerów, musisz kliknąć układ aby pobrać informacje o nim z EDSM."
-.comboBoxHistoryWindow.ToolTip: "Select the entries by age" => "Pokaż wpisy według wieku"
+.comboBoxTime.ToolTip: "Select the entries by age" => "Pokaż wpisy według wieku"
 .Value: "Scan Value" @
 .viewScanDisplayToolStripMenuItem: "View Scan Display" @
 .Total: "Total" @
@@ -1315,7 +1302,7 @@ SECTION UserControlTravelGrid
 .buttonField.ToolTip: "Filter out entries matching the field selection" => "Filtruj wpisy według wyboru pola"
 .buttonFilter.ToolTip: "Filter out entries based on event type" => "Filtruj wpisy według typu zdarzenia"
 .textBoxFilter.ToolTip: "Enter text to search in any fields for an item" => "Wprowadź tekst, aby wyszukać we wszystkich polach"
-.comboBoxHistoryWindow.ToolTip: "Select the entries by age" => "Sortuj wpisy według wieku"
+.comboBoxTime.ToolTip: "Select the entries by age" => "Sortuj wpisy według wieku"
 .outliningOnOffToolStripMenuItem: "Outlining On" => "Zwijanie Wł."
 .scanEventsOutliningOnOffToolStripMenuItem: "Scan Events Outlining" => "Zwijanie Zdarzeń Skanu"
 .toolStripRollUpOlderOutlines: "Roll up older entries" => "Zwijaj starsze wpisy"

@@ -325,7 +325,7 @@ SECTION UserControlLedger
 .labelSearch: "Search" => "Cerca"
 .buttonFilter.ToolTip: "Display entries matching this event type filter" => "Mostra i registri che combinano con l'evento filtrato"
 .textBoxFilter.ToolTip: "Search to particular items" => "Cerca un oggeto specifico"
-.comboBoxHistoryWindow.ToolTip: "Select the entries by age" => "Cerca i registri per et�"
+.comboBoxTime.ToolTip: "Select the entries by age" => "Cerca i registri per et�"
 .toolStripMenuItemGotoItem: "Go to entry on grid" => "Va al registro nella tabella"
 .CashTransactions: "Cash Transactions" @
 .buttonExtExcel.ToolTip: "Send data on grid to excel" @
@@ -424,25 +424,14 @@ SECTION UserControlMissionOverlay
 SECTION UserControlSurveyor
 
 .Scan: "Scan" @
-.MandD: " (Mapped & Discovered)" @
-.MP: " (Mapped)" @
-.DIS: " (Discovered)" @
+.Systemscancomplete: "System scan complete." @
+.bodiesfound: " bodies found." @
 .bodyFeaturesToolStripMenuItem.lowRadiusToolStripMenuItem: "Tiny body" @
 .checkEDSMForInformationToolStripMenuItem: "Check EDSM for information" @
 .autoHideToolStripMenuItem: "Auto Hide" @
 .dontHideInFSSModeToolStripMenuItem: "Don\\'t Hide in FSS Mode" @
 .showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem: "Show System Info Always" @
 .selectFSSSignalsShownToolStripMenuItem: "Select FSS Signals Shown" @
-.LowRadius: " Is tiny." @
-.LargeRadius: " Is large." @
-.Mapped: " (Mapped & Discovered)" @
-.Systemscancomplete: "System scan complete." @
-.bodiesfound: " bodies found." @
-.Noscanreported: "No scan reported." @
-.Hasring: " Has ring." @
-.Has: " Has " @
-.Signals: " Has signals." @
-.eccentricity: " Has an high eccentricity of " @
 .planetaryClassesToolStripMenuItem: "Planetary Classes" @
 .planetaryClassesToolStripMenuItem.ammoniaWorldToolStripMenuItem: "Ammonia World" @
 .planetaryClassesToolStripMenuItem.earthlikeWorldToolStripMenuItem: "Earthlike World" @
@@ -464,8 +453,6 @@ SECTION UserControlSurveyor
 .showMoreInformationToolStripMenuItem: "Show More Information" @
 .showValuesToolStripMenuItem: "Show values" @
 .wordWrapToolStripMenuItem: "Word Wrap" @
-.isa: " is a " @
-.islandable: " Is landable." @
 .planetaryClassesToolStripMenuItem.highMetalContentBodyToolStripMenuItem: "High metal content body" @
 .planetaryClassesToolStripMenuItem.metalToolStripMenuItem: "Metal-rich body" @
 .bodyFeaturesToolStripMenuItem.highEccentricityToolStripMenuItem: "High eccentricity" @
@@ -1030,7 +1017,7 @@ SECTION UserControlStarList
 .checkBoxBodyClasses.ToolTip: "Show/Hide Special bodies classes" @
 .textBoxFilter.ToolTip: "Enter text to search in any fields for an item" @
 .checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM. Due to server constraints, you must click on a system to retreive data on it from EDSM." @
-.comboBoxHistoryWindow.ToolTip: "Select the entries by age" @
+.comboBoxTime.ToolTip: "Select the entries by age" @
 .Value: "Scan Value" @
 .viewScanDisplayToolStripMenuItem: "View Scan Display" @
 .Total: "Total" @
@@ -1315,7 +1302,7 @@ SECTION UserControlTravelGrid
 .buttonField.ToolTip: "Filter out entries matching the field selection" @
 .buttonFilter.ToolTip: "Filter out entries based on event type" @
 .textBoxFilter.ToolTip: "Enter text to search in any fields for an item" @
-.comboBoxHistoryWindow.ToolTip: "Select the entries by age" @
+.comboBoxTime.ToolTip: "Select the entries by age" @
 .outliningOnOffToolStripMenuItem: "Outlining On" @
 .scanEventsOutliningOnOffToolStripMenuItem: "Scan Events Outlining" @
 .toolStripRollUpOlderOutlines: "Roll up older entries" @

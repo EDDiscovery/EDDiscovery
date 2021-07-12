@@ -325,7 +325,7 @@ SECTION UserControlLedger
 .labelSearch: "Search" => "Recherche"
 .buttonFilter.ToolTip: "Display entries matching this event type filter" => "Affiche les entrées qui correspondent à ce type d'événement"
 .textBoxFilter.ToolTip: "Search to particular items" => "Recherche d'entrée précise"
-.comboBoxHistoryWindow.ToolTip: "Select the entries by age" => "Filtre les entrées par ancienneté"
+.comboBoxTime.ToolTip: "Select the entries by age" => "Filtre les entrées par ancienneté"
 .toolStripMenuItemGotoItem: "Go to entry on grid" => "Aller à l'entrée dans le tableau"
 .CashTransactions: "Cash Transactions" => "Transaction d'argent"
 .buttonExtExcel.ToolTip: "Send data on grid to excel" => "Envoie les données de tableau dans Excel"
@@ -424,25 +424,14 @@ SECTION UserControlMissionOverlay
 SECTION UserControlSurveyor
 
 .Scan: "Scan" @
-.MandD: " (Mapped & Discovered)" => " (cartographiée & découverte)"
-.MP: " (Mapped)" => " (cartographiée)"
-.DIS: " (Discovered)" => " (découverte)"
+.Systemscancomplete: "System scan complete." => "Scan du système terminé."
+.bodiesfound: " bodies found." => " corps trouvés."
 .bodyFeaturesToolStripMenuItem.lowRadiusToolStripMenuItem: "Tiny body" @
 .checkEDSMForInformationToolStripMenuItem: "Check EDSM for information" => "Aller sur EDSM pour plus d'informations"
 .autoHideToolStripMenuItem: "Auto Hide" => "Masquer automatiquement"
 .dontHideInFSSModeToolStripMenuItem: "Don\\'t Hide in FSS Mode" => "Ne pas masquer en mode ACS"
 .showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem: "Show System Info Always" => "Toujours montrer les infos du système"
 .selectFSSSignalsShownToolStripMenuItem: "Select FSS Signals Shown" @
-.LowRadius: " Is tiny." @
-.LargeRadius: " Is large." @
-.Mapped: " (Mapped & Discovered)" => " (cartographiée & découverte)"
-.Systemscancomplete: "System scan complete." => "Scan du système terminé."
-.bodiesfound: " bodies found." => " corps trouvés."
-.Noscanreported: "No scan reported." => "Acun scan rapporté."
-.Hasring: " Has ring." => " a des anneaux."
-.Has: " Has " => " a "
-.Signals: " Has signals." => " a des signaux."
-.eccentricity: " Has an high eccentricity of " @
 .planetaryClassesToolStripMenuItem: "Planetary Classes" => "Classes planétaires"
 .planetaryClassesToolStripMenuItem.ammoniaWorldToolStripMenuItem: "Ammonia World" => "Monde d'amoniaque"
 .planetaryClassesToolStripMenuItem.earthlikeWorldToolStripMenuItem: "Earthlike World" => "Monde tellurique"
@@ -464,8 +453,6 @@ SECTION UserControlSurveyor
 .showMoreInformationToolStripMenuItem: "Show More Information" => "Afficher plus d'informations"
 .showValuesToolStripMenuItem: "Show values" => "Afficher les valeurs"
 .wordWrapToolStripMenuItem: "Word Wrap" => "Retour à la ligne"
-.isa: " is a " @
-.islandable: " Is landable." @
 .planetaryClassesToolStripMenuItem.highMetalContentBodyToolStripMenuItem: "High metal content body" @
 .planetaryClassesToolStripMenuItem.metalToolStripMenuItem: "Metal-rich body" @
 .bodyFeaturesToolStripMenuItem.highEccentricityToolStripMenuItem: "High eccentricity" @
@@ -1030,7 +1017,7 @@ SECTION UserControlStarList
 .checkBoxBodyClasses.ToolTip: "Show/Hide Special bodies classes" => "Afficher/Masquer les corps de classes spéciales"
 .textBoxFilter.ToolTip: "Enter text to search in any fields for an item" => "Saisir un texte à recherche dans tous les champs"
 .checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM. Due to server constraints, you must click on a system to retreive data on it from EDSM." => "Afficher/Masquer les données du corps provenant d'EDSM. En raison des contraintes serveur, vous devez cliquer sur un système pour récupérer les données de ce dernier depuis EDSM"
-.comboBoxHistoryWindow.ToolTip: "Select the entries by age" => "Trier les entrées par âge"
+.comboBoxTime.ToolTip: "Select the entries by age" => "Trier les entrées par âge"
 .Value: "Scan Value" => "Valeur de scan"
 .viewScanDisplayToolStripMenuItem: "View Scan Display" => "Afficher la vue scan"
 .Total: "Total" @
@@ -1315,7 +1302,7 @@ SECTION UserControlTravelGrid
 .buttonField.ToolTip: "Filter out entries matching the field selection" => "Filtrer les entrées qui correspondent au champs selectionné"
 .buttonFilter.ToolTip: "Filter out entries based on event type" => "Filtrer les entrées sur le stype d'événement"
 .textBoxFilter.ToolTip: "Enter text to search in any fields for an item" => "Saisir un texte à rechercher dans tous les champs"
-.comboBoxHistoryWindow.ToolTip: "Select the entries by age" => "Trier les entrées par age"
+.comboBoxTime.ToolTip: "Select the entries by age" => "Trier les entrées par age"
 .outliningOnOffToolStripMenuItem: "Outlining On" => "Contour activé"
 .scanEventsOutliningOnOffToolStripMenuItem: "Scan Events Outlining" @
 .toolStripRollUpOlderOutlines: "Roll up older entries" @

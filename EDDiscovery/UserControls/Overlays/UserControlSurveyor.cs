@@ -321,7 +321,9 @@ namespace EDDiscovery.UserControls
                                 {
                                     if (!sd.Mapped || hideAlreadyMappedBodiesToolStripMenuItem.Checked == false)      // if not mapped, or show mapped
                                     {
-                                        var il = InfoLine(last_sys, sn, sd, hasVolcanismToolStripMenuItem.Checked, showValuesToolStripMenuItem.Checked, showMoreInformationToolStripMenuItem.Checked, showGravityToolStripMenuItem.Checked);
+                                        var il = sd.SurveyorInfoLine(last_sys, sn.Signals != null, hasVolcanismToolStripMenuItem.Checked, showValuesToolStripMenuItem.Checked, 
+                                                                        showMoreInformationToolStripMenuItem.Checked, showGravityToolStripMenuItem.Checked, lowRadiusLimit, largeRadiusLimit, eccentricityLimit);
+
                                         //System.Diagnostics.Debug.WriteLine("Display " + il);
                                         var i = pictureBoxSurveyor.AddTextAutoSize(
                                                 new Point(3, vpos),
@@ -408,76 +410,7 @@ namespace EDDiscovery.UserControls
             extPictureBoxScroll.Render();
         }
 
-        static private string InfoLine(ISystem sys, StarScan.ScanNode sn, JournalScan js, bool volcanism, bool showvalues, bool shortinfo, bool showGravity)
-        {
-            var information = new StringBuilder();
-
-            if (js.Mapped)
-                information.Append("\u2713"); // let the cmdr see that this body is already mapped - this is a check
-
-            string bodyname = js.BodyDesignationOrName.ReplaceIfStartsWith(sys.Name);
-            
-            // Name
-            information.Append((bodyname) + @" is a ".T(EDTx.UserControlSurveyor_isa));
-
-            // Additional information
-            information.Append((js.IsStar) ? Bodies.StarName(js.StarTypeID) + "." : null);
-            information.Append((js.CanBeTerraformable) ? @"terraformable ".T(EDTx.UserControlSurveyor_terraformable) : null);
-            information.Append((js.IsPlanet) ? Bodies.PlanetTypeName(js.PlanetTypeID) + "." : null);
-            information.Append((js.nRadius < lowRadiusLimit && js.IsPlanet) ? @" Is tiny.".T(EDTx.UserControlSurveyor_LowRadius) : null);
-            information.Append((js.nRadius > largeRadiusLimit && js.IsPlanet && js.IsLandable) ? @" Is large.".T(EDTx.UserControlSurveyor_LargeRadius) : null);
-            information.Append((js.IsLandable) ? @" Is landable.".T(EDTx.UserControlSurveyor_islandable) : null);
-            information.Append((js.IsLandable && showGravity && js.nSurfaceGravityG.HasValue) ? @" (" + Math.Round(js.nSurfaceGravityG.Value, 2, MidpointRounding.AwayFromZero) + "g)" : null);
-            information.Append((js.HasAtmosphericComposition && js.IsLandable) ? @" Atmosphere: ".T(EDTx.UserControlSurveyor_Atmosphere) + (js.Atmosphere ?? "unknown atmosphere".T(EDTx.UserControlSurveyor_unknownAtmosphere)) + "." : null);
-            information.Append((js.HasMeaningfulVolcanism && js.IsLandable | volcanism) ? @" Has ".T(EDTx.UserControlSurveyor_Has) + js.Volcanism + "." : null);
-            information.Append((sn.Signals != null) ? " Has signals.".T(EDTx.UserControlSurveyor_Signals) : null);
-            information.Append((js.HasRings) ? @" Is ringed.".T(EDTx.UserControlSurveyor_Hasring) : null);
-            information.Append((js.nEccentricity >= eccentricityLimit) ? @" Has an high eccentricity of ".T(EDTx.UserControlSurveyor_eccentricity) + js.nEccentricity + "." : null);
-
-            var ev = js.GetEstimatedValues();
-
-            if (js.WasMapped == true && js.WasDiscovered == true)
-            {
-                information.Append(" (Mapped & Discovered)".T(EDTx.UserControlSurveyor_MandD));
-                if (showvalues)
-                {
-                    information.Append(' ').Append(ev.EstimatedValueMappedEfficiently.ToString("N0")).Append(" cr");
-                }
-            }
-            else if (js.WasMapped == true && js.WasDiscovered == false)
-            {
-                information.Append(" (Mapped)".T(EDTx.UserControlSurveyor_MP));
-                if (showvalues)
-                {
-                    information.Append(' ').Append(ev.EstimatedValueFirstMappedEfficiently.ToString("N0")).Append(" cr");
-                }
-            }
-            else if (js.WasDiscovered == true && js.WasMapped == false)
-            {
-                information.Append(" (Discovered)".T(EDTx.UserControlSurveyor_DIS));
-                if (showvalues)
-                {
-                    information.Append(' ').Append(ev.EstimatedValueFirstMappedEfficiently.ToString("N0")).Append(" cr");
-                }
-            }
-            else
-            {      
-                if (showvalues)
-                {
-                    information.Append(' ').Append((ev.EstimatedValueFirstDiscoveredFirstMappedEfficiently > 0 ? ev.EstimatedValueFirstDiscoveredFirstMappedEfficiently : ev.EstimatedValueBase).ToString("N0")).Append(" cr");
-                }
-            }
-
-            if (shortinfo)
-            {
-                information.Append(' ').Append(js.ShortInformation());
-            }
-            else
-                information.Append(' ').Append(js.DistanceFromArrivalText);
-
-            return information.ToString();
-        }
-
+ 
         #endregion
 
         #region UI

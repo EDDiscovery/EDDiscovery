@@ -499,25 +499,9 @@ namespace EDDiscovery
         UserControlSpanel_TVE, // View system on EDSM
         UserControlSpanel_SPF, // Summary Panel: Filter out fields
 
-        UserControlSurveyor_isa, // is a(n)
-        UserControlSurveyor_Atmosphere, // Atmosphere
-        UserControlSurveyor_terraformable, // terraformable
-        UserControlSurveyor_LowRadius, //  Low Radius.
-        UserControlSurveyor_LargeRadius, //  Large Radius.
-        UserControlSurveyor_Signals, //  Has signals.
-        UserControlSurveyor_Mapped, //  (Mapped & Discovered)
+        UserControlSurveyor_Scan, //  Scan
         UserControlSurveyor_Systemscancomplete, // System scan complete.
         UserControlSurveyor_bodiesfound, //  bodies found.
-        UserControlSurveyor_Noscanreported, // No scan reported.
-        UserControlSurveyor_MandD, //  (Mapped & Discovered)
-        UserControlSurveyor_MP, //  (Mapped)
-        UserControlSurveyor_DIS, //  (Discovered)
-        UserControlSurveyor_islandable, // is landable
-        UserControlSurveyor_Hasring, //  Has ring.
-        UserControlSurveyor_Has, //  Has
-        UserControlSurveyor_Scan, //  Scan
-        UserControlSurveyor_eccentricity, // high eccentricity
-        UserControlSurveyor_unknownAtmosphere, //unknown atmosphere
 
         UserControlSysInfo_NoMissions, // No Missions
         UserControlSysInfo_NA, // N/A
