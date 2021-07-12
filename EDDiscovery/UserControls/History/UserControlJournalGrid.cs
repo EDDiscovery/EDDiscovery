@@ -100,7 +100,7 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.Translate(historyContextMenu, this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
 
-            TravelHistoryFilter.InitaliseComboBox(comboBoxJournalWindow, GetSetting(dbHistorySave, ""));
+            TravelHistoryFilter.InitaliseComboBox(comboBoxTime, GetSetting(dbHistorySave, ""));
         }
 
         public override void LoadLayout()
@@ -138,11 +138,15 @@ namespace EDDiscovery.UserControls
 
         private void Display(HistoryList hl, bool disablesorting )
         {
+            todo.Clear();           // ensure in a quiet state
+            queuedadds.Clear();
+            todotimer.Stop();
+
             if (hl == null)     // just for safety
                 return;
 
-            this.Cursor = Cursors.WaitCursor;
-            buttonExtExcel.Enabled = buttonFilter.Enabled = buttonField.Enabled = comboBoxJournalWindow.Enabled = false;
+            this.dataGridViewJournal.Cursor = Cursors.WaitCursor;
+            buttonExtExcel.Enabled = buttonFilter.Enabled = buttonField.Enabled = false;
 
             current_historylist = hl;
 
@@ -156,7 +160,7 @@ namespace EDDiscovery.UserControls
                 sortcol = -1;
             }
 
-            var filter = (TravelHistoryFilter)comboBoxJournalWindow.SelectedItem ?? TravelHistoryFilter.NoFilter;
+            var filter = (TravelHistoryFilter)comboBoxTime.SelectedItem ?? TravelHistoryFilter.NoFilter;
 
             List<HistoryEntry> result = filter.Filter(hl.EntryOrder());
             fdropdown = hl.Count - result.Count();
@@ -179,10 +183,6 @@ namespace EDDiscovery.UserControls
                 result.CopyTo(i, chunk, 0, chunk.Length);
                 chunks.Add(chunk);
             }
-
-            todo.Clear();
-            queuedadds.Clear();
-            todotimer.Stop();
 
             string filtertext = textBoxFilter.Text;
 
@@ -233,8 +233,8 @@ namespace EDDiscovery.UserControls
                     dataGridViewJournal.Columns[sortcol].HeaderCell.SortGlyphDirection = sortorder;
                 }
 
-                this.Cursor = Cursors.Default;
-                buttonExtExcel.Enabled = buttonFilter.Enabled = buttonField.Enabled = comboBoxJournalWindow.Enabled = true;
+                this.dataGridViewJournal.Cursor = Cursors.Default;
+                buttonExtExcel.Enabled = buttonFilter.Enabled = buttonField.Enabled = true;
 
                 while (queuedadds.Count > 0)              // finally, dequeue any adds added
                 {
@@ -252,7 +252,6 @@ namespace EDDiscovery.UserControls
             {
                 var act = todo.Dequeue();
                 act();
-                //System.Threading.Thread.Sleep(3000);
             }
             else
             {
@@ -300,7 +299,7 @@ namespace EDDiscovery.UserControls
 
             if (add)                                // its been added, we have at least 1 row visible, at row 0
             { 
-                var filter = (TravelHistoryFilter)comboBoxJournalWindow.SelectedItem ?? TravelHistoryFilter.NoFilter;
+                var filter = (TravelHistoryFilter)comboBoxTime.SelectedItem ?? TravelHistoryFilter.NoFilter;
 
                 if (filter.MaximumNumberOfItems != null)        // this one won't remove the latest one
                 {
@@ -352,7 +351,7 @@ namespace EDDiscovery.UserControls
         private void UpdateToolTipsForFilter()
         {
             string ms = string.Format(" showing {0} original {1}".T(EDTx.UserControlJournalGrid_TT1), dataGridViewJournal.Rows.Count, current_historylist?.Count ?? 0);
-            comboBoxJournalWindow.SetTipDynamically(toolTip, fdropdown > 0 ? string.Format("Filtered {0}".T(EDTx.UserControlJournalGrid_TTFilt1), fdropdown + ms) : "Select the entries by age, ".T(EDTx.UserControlJournalGrid_TTSelAge) + ms);
+            comboBoxTime.SetTipDynamically(toolTip, fdropdown > 0 ? string.Format("Filtered {0}".T(EDTx.UserControlJournalGrid_TTFilt1), fdropdown + ms) : "Select the entries by age, ".T(EDTx.UserControlJournalGrid_TTSelAge) + ms);
             toolTip.SetToolTip(buttonFilter, (ftotalevents > 0) ? string.Format("Filtered {0}".T(EDTx.UserControlJournalGrid_TTFilt2), ftotalevents + ms) : "Filter out entries based on event type, ".T(EDTx.UserControlJournalGrid_TTEvent) + ms);
             toolTip.SetToolTip(buttonField, (ftotalfilters > 0) ? string.Format("Total filtered out {0}".T(EDTx.UserControlJournalGrid_TTFilt3), ftotalfilters + ms) : "Filter out entries matching the field selection, ".T(EDTx.UserControlJournalGrid_TTTotal) + ms);
         }
@@ -386,14 +385,12 @@ namespace EDDiscovery.UserControls
         private void Searchtimer_Tick(object sender, EventArgs e)
         {
             searchtimer.Stop();
-            this.Cursor = Cursors.WaitCursor;
             Display(current_historylist, false);
-            this.Cursor = Cursors.Default;
         }
 
         private void comboBoxJournalWindow_SelectedIndexChanged(object sender, EventArgs e)
         {
-            PutSetting(dbHistorySave, comboBoxJournalWindow.Text);
+            PutSetting(dbHistorySave, comboBoxTime.Text);
             HistoryChanged(current_historylist);
         }
 
@@ -459,12 +456,8 @@ namespace EDDiscovery.UserControls
 
         private void mapGotoStartoolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.Cursor = Cursors.WaitCursor;
-
             if (!discoveryform.Map.Is3DMapsRunning)            // if not running, click the 3dmap button
                 discoveryform.Open3DMap(null);
-
-            this.Cursor = Cursors.Default;
 
             if (discoveryform.Map.Is3DMapsRunning)             // double check here! for paranoia.
             {
@@ -476,12 +469,9 @@ namespace EDDiscovery.UserControls
 
         private void viewOnEDSMToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.Cursor = Cursors.WaitCursor;
             EDSMClass edsm = new EDSMClass();
             if (!edsm.ShowSystemInEDSM(rightclicksystem.System.Name))
                 ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "System could not be found - has not been synched or EDSM is unavailable".T(EDTx.UserControlJournalGrid_NotSynced));
-
-            this.Cursor = Cursors.Default;
         }
 
         private void toolStripMenuItemStartStop_Click(object sender, EventArgs e)
@@ -571,6 +561,14 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        private void dataGridViewJournal_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
+        {
+            if (e.Column.Index == 0)
+            {
+                e.SortDataGridViewColumnDate();
+            }
+        }
+
 
         #region Excel
 
@@ -654,14 +652,6 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
-
-        private void dataGridViewJournal_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
-        {
-            if (e.Column.Index == 0)
-            {
-                e.SortDataGridViewColumnDate();
-            }
-        }
 
     }
 }

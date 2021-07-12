@@ -38,7 +38,7 @@ namespace EDDiscovery.UserControls
         public HistoryEntry GetCurrentHistoryEntry { get { return dataGridViewTravel.CurrentCell != null ? dataGridViewTravel.Rows[dataGridViewTravel.CurrentCell.RowIndex].Tag as HistoryEntry : null; } }
 
         //horrible.. needs removing, used by export.
-        public TravelHistoryFilter GetHistoryFilter { get { return (TravelHistoryFilter)comboBoxHistoryWindow.SelectedItem ?? TravelHistoryFilter.NoFilter; } }
+        public TravelHistoryFilter GetHistoryFilter { get { return (TravelHistoryFilter)comboBoxTime.SelectedItem ?? TravelHistoryFilter.NoFilter; } }
 
         #endregion
 
@@ -156,7 +156,7 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.Translate(contextMenuStripOutlines, this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
 
-            TravelHistoryFilter.InitaliseComboBox(comboBoxHistoryWindow, GetSetting(dbHistorySave, ""));
+            TravelHistoryFilter.InitaliseComboBox(comboBoxTime, GetSetting(dbHistorySave, ""));
 
             extButtonDrawnHelp.Text = "";
             extButtonDrawnHelp.Image = ExtendedControls.TabStrip.HelpIcon;
@@ -194,13 +194,17 @@ namespace EDDiscovery.UserControls
 
         public void HistoryChanged(HistoryList hl, bool disablesorting)
         {
+            todo.Clear();           // clear queue of things to do
+            queuedadds.Clear();     // and any adds.
+            todotimer.Stop();       // ensure timer is off
+
             if (hl == null)     // just for safety
                 return;
                                         
             current_historylist = hl;
-            this.Cursor = Cursors.WaitCursor;
+            this.dataGridViewTravel.Cursor = Cursors.WaitCursor;
 
-            extCheckBoxOutlines.Enabled = extCheckBoxWordWrap.Enabled = buttonExtExcel.Enabled = buttonFilter.Enabled = buttonField.Enabled = comboBoxHistoryWindow.Enabled = false;
+            extCheckBoxOutlines.Enabled = extCheckBoxWordWrap.Enabled = buttonExtExcel.Enabled = buttonFilter.Enabled = buttonField.Enabled = false;
 
             Tuple<long, int> pos = CurrentGridPosByJID();
 
@@ -212,7 +216,7 @@ namespace EDDiscovery.UserControls
                 sortcol = -1;
             }
 
-            var filter = (TravelHistoryFilter)comboBoxHistoryWindow.SelectedItem ?? TravelHistoryFilter.NoFilter;
+            var filter = (TravelHistoryFilter)comboBoxTime.SelectedItem ?? TravelHistoryFilter.NoFilter;
 
             List<HistoryEntry> result = filter.Filter(hl.EntryOrder());
             fdropdown = hl.Count - result.Count();
@@ -239,10 +243,6 @@ namespace EDDiscovery.UserControls
                 result.CopyTo(i, chunk, 0, chunk.Length);
                 chunks.Add(chunk);
             }
-
-            todo.Clear();           // clear queue of things to do
-            queuedadds.Clear();     // and any adds.
-            todotimer.Stop();
 
             string filtertext = textBoxFilter.Text;
             List<DataGridViewRow> rows = new List<DataGridViewRow>();
@@ -344,8 +344,8 @@ namespace EDDiscovery.UserControls
                     dataGridViewTravel.Columns[sortcol].HeaderCell.SortGlyphDirection = sortorder;
                 }
 
-                this.Cursor = Cursors.Default;
-                extCheckBoxOutlines.Enabled = extCheckBoxWordWrap.Enabled = buttonExtExcel.Enabled = buttonFilter.Enabled = buttonField.Enabled = comboBoxHistoryWindow.Enabled = true;
+                this.dataGridViewTravel.Cursor = Cursors.Arrow;
+                extCheckBoxOutlines.Enabled = extCheckBoxWordWrap.Enabled = buttonExtExcel.Enabled = buttonFilter.Enabled = buttonField.Enabled = true;
 
                 System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCount + " TG TOTAL TIME " + swtotal.ElapsedMilliseconds);
 
@@ -413,7 +413,7 @@ namespace EDDiscovery.UserControls
 
             if (add)            // its been added, we have at least 1 row visible, at row 0
             {
-                var filter = (TravelHistoryFilter)comboBoxHistoryWindow.SelectedItem ?? TravelHistoryFilter.NoFilter;
+                var filter = (TravelHistoryFilter)comboBoxTime.SelectedItem ?? TravelHistoryFilter.NoFilter;
 
                 if (filter.MaximumNumberOfItems != null)            // this one won't remove the latest one
                 {
@@ -499,7 +499,7 @@ namespace EDDiscovery.UserControls
         private void UpdateToolTipsForFilter()
         {
             string ms = string.Format(" showing {0} original {1}".T(EDTx.UserControlTravelGrid_TT1), dataGridViewTravel.Rows.Count, current_historylist?.Count ?? 0);
-            comboBoxHistoryWindow.SetTipDynamically(toolTip, fdropdown > 0 ? string.Format("Filtered {0}".T(EDTx.UserControlTravelGrid_TTFilt1), fdropdown + ms) : "Select the entries by age, ".T(EDTx.UserControlTravelGrid_TTSelAge) + ms);
+            comboBoxTime.SetTipDynamically(toolTip, fdropdown > 0 ? string.Format("Filtered {0}".T(EDTx.UserControlTravelGrid_TTFilt1), fdropdown + ms) : "Select the entries by age, ".T(EDTx.UserControlTravelGrid_TTSelAge) + ms);
             toolTip.SetToolTip(buttonFilter, (ftotalevents > 0) ? string.Format("Filtered {0}".T(EDTx.UserControlTravelGrid_TTFilt2), ftotalevents + ms) : "Filter out entries based on event type, ".T(EDTx.UserControlTravelGrid_TTEvent) + ms);
             toolTip.SetToolTip(buttonField, (ftotalfilters > 0) ? string.Format("Total filtered out {0}".T(EDTx.UserControlTravelGrid_TTFilt3), ftotalfilters + ms) : "Filter out entries matching the field selection, ".T(EDTx.UserControlTravelGrid_TTTotal) + ms);
         }
@@ -557,12 +557,8 @@ namespace EDDiscovery.UserControls
 
         private void comboBoxHistoryWindow_SelectedIndexChanged(object sender, EventArgs e)
         {
-            PutSetting(dbHistorySave, comboBoxHistoryWindow.Text);
-
-            if (current_historylist != null)
-            {
-                HistoryChanged(current_historylist);        // fires lots of events
-            }
+            PutSetting(dbHistorySave, comboBoxTime.Text);
+            HistoryChanged(current_historylist);       
         }
 
         private void dataGridViewTravel_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -638,9 +634,7 @@ namespace EDDiscovery.UserControls
             }
 
             searchtimer.Stop();
-            this.Cursor = Cursors.WaitCursor;
             HistoryChanged(current_historylist);
-            this.Cursor = Cursors.Default;
         }
 
         private void dataGridViewTravel_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
@@ -871,8 +865,6 @@ namespace EDDiscovery.UserControls
 
             if (mapColorDialog.ShowDialog(FindForm()) == DialogResult.OK)
             {
-                this.Cursor = Cursors.WaitCursor;
-
                 foreach (DataGridViewRow r in selectedRows)
                 {
                     HistoryEntry sp = (HistoryEntry)r.Tag;
@@ -880,7 +872,6 @@ namespace EDDiscovery.UserControls
                     sp.journalEntry.UpdateMapColour(mapColorDialog.Color.ToArgb());
                 }
 
-                this.Cursor = Cursors.Default;
                 HistoryChanged(current_historylist);
             }
         }
@@ -890,8 +881,6 @@ namespace EDDiscovery.UserControls
             IEnumerable<DataGridViewRow> selectedRows = dataGridViewTravel.SelectedCells.Cast<DataGridViewCell>()
                 .Select(cell => cell.OwningRow)
                 .Distinct();
-
-            this.Cursor = Cursors.WaitCursor;
 
             foreach (DataGridViewRow r in selectedRows)
             {
@@ -914,8 +903,6 @@ namespace EDDiscovery.UserControls
                     dataGridViewTravel.Rows.Remove(row);
                 }
             }
-
-            this.Cursor = Cursors.Default;
         }
 
         private void moveToAnotherCommanderToolStripMenuItem_Click(object sender, EventArgs e)
@@ -926,7 +913,6 @@ namespace EDDiscovery.UserControls
 
             List<HistoryEntry> listsyspos = new List<HistoryEntry>();
 
-            this.Cursor = Cursors.WaitCursor;
             foreach (DataGridViewRow r in selectedRows)
             {
                 HistoryEntry sp = (HistoryEntry)r.Tag;
@@ -952,8 +938,6 @@ namespace EDDiscovery.UserControls
                     dataGridViewTravel.Rows.Remove(row);
                 }
             }
-
-            this.Cursor = Cursors.Default;
         }
 
         private void trilaterationToolStripMenuItem_Click(object sender, EventArgs e)
@@ -988,8 +972,6 @@ namespace EDDiscovery.UserControls
                                                                         .Distinct()
                                                                         .OrderBy(cell => cell.Index);
 
-            this.Cursor = Cursors.WaitCursor;
-
             List<string> systemnamelist = new List<string>();
 
             string lastname = "";
@@ -1015,8 +997,6 @@ namespace EDDiscovery.UserControls
 
             if (exploration)
                 FireNewStarList(systemnamelist, OnNewStarsPushType.Exploration);
-
-            this.Cursor = Cursors.Default;
         }
 
         public void FireNewStarList(List<string> system, OnNewStarsPushType pushtype)
@@ -1026,12 +1006,9 @@ namespace EDDiscovery.UserControls
 
         private void viewOnEDSMToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.Cursor = Cursors.WaitCursor;
             EliteDangerousCore.EDSM.EDSMClass edsm = new EDSMClass();
             if (!edsm.ShowSystemInEDSM(rightclickhe.System.Name))
                 ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable".T(EDTx.UserControlTravelGrid_NotSynced));
-
-            this.Cursor = Cursors.Default;
         }
 
         private void toolStripMenuItemStartStop_Click(object sender, EventArgs e)

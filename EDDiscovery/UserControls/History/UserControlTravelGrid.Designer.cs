@@ -52,7 +52,7 @@ namespace EDDiscovery.UserControls
             this.buttonFilter = new ExtendedControls.ExtButton();
             this.textBoxFilter = new ExtendedControls.ExtTextBox();
             this.labelSearch = new System.Windows.Forms.Label();
-            this.comboBoxHistoryWindow = new ExtendedControls.ExtComboBox();
+            this.comboBoxTime = new ExtendedControls.ExtComboBox();
             this.labelTime = new System.Windows.Forms.Label();
             this.historyContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.removeSortingOfColumnsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -249,30 +249,30 @@ namespace EDDiscovery.UserControls
             this.labelSearch.TabIndex = 24;
             this.labelSearch.Text = "Search";
             // 
-            // comboBoxHistoryWindow
+            // comboBoxTime
             // 
-            this.comboBoxHistoryWindow.BorderColor = System.Drawing.Color.Red;
-            this.comboBoxHistoryWindow.ButtonColorScaling = 0.5F;
-            this.comboBoxHistoryWindow.DataSource = null;
-            this.comboBoxHistoryWindow.DisableBackgroundDisabledShadingGradient = false;
-            this.comboBoxHistoryWindow.DisplayMember = "";
-            this.comboBoxHistoryWindow.DropDownBackgroundColor = System.Drawing.Color.Gray;
-            this.comboBoxHistoryWindow.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxHistoryWindow.Location = new System.Drawing.Point(38, 1);
-            this.comboBoxHistoryWindow.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.comboBoxHistoryWindow.MouseOverBackgroundColor = System.Drawing.Color.Silver;
-            this.comboBoxHistoryWindow.Name = "comboBoxHistoryWindow";
-            this.comboBoxHistoryWindow.ScrollBarButtonColor = System.Drawing.Color.LightGray;
-            this.comboBoxHistoryWindow.ScrollBarColor = System.Drawing.Color.LightGray;
-            this.comboBoxHistoryWindow.SelectedIndex = -1;
-            this.comboBoxHistoryWindow.SelectedItem = null;
-            this.comboBoxHistoryWindow.SelectedValue = null;
-            this.comboBoxHistoryWindow.Size = new System.Drawing.Size(100, 21);
-            this.comboBoxHistoryWindow.TabIndex = 0;
-            this.comboBoxHistoryWindow.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.toolTip.SetToolTip(this.comboBoxHistoryWindow, "Select the entries by age");
-            this.comboBoxHistoryWindow.ValueMember = "";
-            this.comboBoxHistoryWindow.SelectedIndexChanged += new System.EventHandler(this.comboBoxHistoryWindow_SelectedIndexChanged);
+            this.comboBoxTime.BorderColor = System.Drawing.Color.Red;
+            this.comboBoxTime.ButtonColorScaling = 0.5F;
+            this.comboBoxTime.DataSource = null;
+            this.comboBoxTime.DisableBackgroundDisabledShadingGradient = false;
+            this.comboBoxTime.DisplayMember = "";
+            this.comboBoxTime.DropDownBackgroundColor = System.Drawing.Color.Gray;
+            this.comboBoxTime.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.comboBoxTime.Location = new System.Drawing.Point(38, 1);
+            this.comboBoxTime.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.comboBoxTime.MouseOverBackgroundColor = System.Drawing.Color.Silver;
+            this.comboBoxTime.Name = "comboBoxTime";
+            this.comboBoxTime.ScrollBarButtonColor = System.Drawing.Color.LightGray;
+            this.comboBoxTime.ScrollBarColor = System.Drawing.Color.LightGray;
+            this.comboBoxTime.SelectedIndex = -1;
+            this.comboBoxTime.SelectedItem = null;
+            this.comboBoxTime.SelectedValue = null;
+            this.comboBoxTime.Size = new System.Drawing.Size(100, 21);
+            this.comboBoxTime.TabIndex = 0;
+            this.comboBoxTime.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.toolTip.SetToolTip(this.comboBoxTime, "Select the entries by age");
+            this.comboBoxTime.ValueMember = "";
+            this.comboBoxTime.SelectedIndexChanged += new System.EventHandler(this.comboBoxHistoryWindow_SelectedIndexChanged);
             // 
             // labelTime
             // 
@@ -754,7 +754,7 @@ namespace EDDiscovery.UserControls
             // 
             this.panelTop.AutoSize = true;
             this.panelTop.Controls.Add(this.labelTime);
-            this.panelTop.Controls.Add(this.comboBoxHistoryWindow);
+            this.panelTop.Controls.Add(this.comboBoxTime);
             this.panelTop.Controls.Add(this.labelSearch);
             this.panelTop.Controls.Add(this.textBoxFilter);
             this.panelTop.Controls.Add(this.buttonFilter);
@@ -815,7 +815,7 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtButton buttonFilter;
         private ExtendedControls.ExtTextBox textBoxFilter;
         private System.Windows.Forms.Label labelSearch;
-        internal ExtendedControls.ExtComboBox comboBoxHistoryWindow;
+        internal ExtendedControls.ExtComboBox comboBoxTime;
         private System.Windows.Forms.Label labelTime;
         private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanel;
         private ExtendedControls.ExtScrollBar vScrollBarCustom;

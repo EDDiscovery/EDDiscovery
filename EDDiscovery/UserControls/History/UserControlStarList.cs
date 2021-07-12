@@ -112,7 +112,7 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
 
-            TravelHistoryFilter.InitaliseComboBox(comboBoxHistoryWindow, GetSetting(dbHistorySave,""), false);
+            TravelHistoryFilter.InitaliseComboBox(comboBoxTime, GetSetting(dbHistorySave,""), false);
         }
 
         public override void LoadLayout()
@@ -201,7 +201,7 @@ namespace EDDiscovery.UserControls
                     {                                                           // not in the list, add it
                         var visitlist = discoveryform.history.Visited.Values.ToList();
                         visitlist.Sort(delegate (HistoryEntry left, HistoryEntry right) { return right.EventTimeUTC.CompareTo(left.EventTimeUTC); });
-                        var filter = (TravelHistoryFilter)comboBoxHistoryWindow.SelectedItem ?? TravelHistoryFilter.NoFilter;
+                        var filter = (TravelHistoryFilter)comboBoxTime.SelectedItem ?? TravelHistoryFilter.NoFilter;
                         visitlist = filter.FilterLatestFirst(visitlist);      // and filter
 
                         if (visitlist.Count > 0 && visitlist[0].System.Name == he.System.Name) // if the filtered result has our system in (which must be the first, since its newest), its inside the filter, add
@@ -242,11 +242,13 @@ namespace EDDiscovery.UserControls
 
         #region Display
 
-        public void Display(bool disablesorting)           // on History change
+        public void Display(bool disablesorting)        
         {
-            autoupdateedsm.Stop();
+            todo.Clear();               // clear queues and stop timer
+            queuedadds.Clear();
+            todotimer.Stop();
 
-            this.Cursor = Cursors.WaitCursor;
+            this.dataGridViewStarList.Cursor = Cursors.WaitCursor;
 
             var pos = CurrentGridPosByIndex();
 
@@ -261,17 +263,16 @@ namespace EDDiscovery.UserControls
             rowsbyjournalid.Clear();
             dataGridViewStarList.Rows.Clear();
 
-            checkBoxJumponium.Enabled = checkBoxBodyClasses.Enabled = buttonExtExcel.Enabled = comboBoxHistoryWindow.Enabled = false;
+            checkBoxJumponium.Enabled = checkBoxBodyClasses.Enabled = buttonExtExcel.Enabled = false;
 
             dataGridViewStarList.Columns[0].HeaderText = EDDiscoveryForm.EDDConfig.GetTimeTitle();
-
 
             var visitlist = discoveryform.history.Visited.Values.ToList();
 
             // sort is latest first
             visitlist.Sort(delegate (HistoryEntry left, HistoryEntry right) { return right.EventTimeUTC.CompareTo(left.EventTimeUTC); });
 
-            var filter = (TravelHistoryFilter)comboBoxHistoryWindow.SelectedItem ?? TravelHistoryFilter.NoFilter;
+            var filter = (TravelHistoryFilter)comboBoxTime.SelectedItem ?? TravelHistoryFilter.NoFilter;
             visitlist = filter.FilterLatestFirst(visitlist);      // and filter
 
             //foreach (var v in visitlist) System.Diagnostics.Debug.WriteLine("Visit {0} {1} {2}", v.EventTimeUTC, v.System.Name, v.Visits);
@@ -286,10 +287,6 @@ namespace EDDiscovery.UserControls
                 visitlist.CopyTo(i, syslistchunk, 0, totake);
                 syslistchunks.Add(syslistchunk);
             }
-
-            todo.Clear();
-            queuedadds.Clear();
-            todotimer.Stop();
 
             string filtertext = textBoxFilter.Text;
 
@@ -329,8 +326,8 @@ namespace EDDiscovery.UserControls
                 autoupdaterowoffset = autoupdaterowstart = 0;
                 autoupdateedsm.Start();
 
-                checkBoxJumponium.Enabled = checkBoxBodyClasses.Enabled = buttonExtExcel.Enabled = comboBoxHistoryWindow.Enabled = true;
-                this.Cursor = Cursors.Default;
+                checkBoxJumponium.Enabled = checkBoxBodyClasses.Enabled = buttonExtExcel.Enabled = true;
+                this.dataGridViewStarList.Cursor = Cursors.Arrow;
 
                 while (queuedadds.Count > 0)              // finally, dequeue any adds added
                 {
@@ -701,7 +698,7 @@ namespace EDDiscovery.UserControls
 
         private void comboBoxHistoryWindow_SelectedIndexChanged(object sender, EventArgs e)
         {
-            PutSetting(dbHistorySave, comboBoxHistoryWindow.Text);
+            PutSetting(dbHistorySave, comboBoxTime.Text);
             Display(false);
         }
 
@@ -756,9 +753,7 @@ namespace EDDiscovery.UserControls
         private void Searchtimer_Tick(object sender, EventArgs e)
         {
             searchtimer.Stop();
-            this.Cursor = Cursors.WaitCursor;
             Display(false);
-            this.Cursor = Cursors.Default;
         }
 
 
@@ -802,13 +797,10 @@ namespace EDDiscovery.UserControls
 
         private void viewOnEDSMToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.Cursor = Cursors.WaitCursor;
             EliteDangerousCore.EDSM.EDSMClass edsm = new EDSMClass();
 
             if (!edsm.ShowSystemInEDSM(rightclicksystem.System.Name))
                 ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable".T(EDTx.UserControlStarList_NoEDSM));
-
-            this.Cursor = Cursors.Default;
         }
 
         private void setNoteToolStripMenuItem_Click(object sender, EventArgs e)
