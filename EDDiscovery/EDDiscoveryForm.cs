@@ -165,7 +165,7 @@ namespace EDDiscovery
                     EDDOptions.Instance.TranslatorFolders(),
                     EDDOptions.Instance.TranslatorDirectoryIncludeSearchUpDepth, EDDOptions.Instance.AppDataDirectory);
 
-            if (!found && !lang.Contains("Default", StringComparison.InvariantCultureIgnoreCase))
+            if (!found && !lang.Contains("Default", StringComparison.InvariantCultureIgnoreCase) && !lang.Contains("Auto", StringComparison.InvariantCultureIgnoreCase))
                 ExtendedControls.MessageBoxTheme.Show("Translation file disappeared - check your debugger -translationfolder settings!","Translation file");
 
             BaseUtils.Translator.Instance.AddExcludedControls(new Type[]
