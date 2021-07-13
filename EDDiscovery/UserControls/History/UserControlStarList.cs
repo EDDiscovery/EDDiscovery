@@ -423,8 +423,12 @@ namespace EDDiscovery.UserControls
                             )
                         {
                             JournalScan sc = sn.ScanData;
+                            if ( showatmos && sc.IsLandable)
+                            {
+
+                            }
                             string info = sc.SurveyorInfoLine(system, sn.Signals != null && showsignals, showvol, showv, showsi, showg,
-                                                                showatmos, showrings,
+                                                                showatmos && sc.IsLandable, showrings,
                                                                 lowRadiusLimit, largeRadiusLimit, eccentricityLimit);
                             infostr = infostr.AppendPrePad(info, Environment.NewLine);
                         }
@@ -748,7 +752,7 @@ namespace EDDiscovery.UserControls
             displayfilter.AddStandardOption("values", "Show values".TxID("UserControlSurveyor.showValuesToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_ShowOverlays);
             displayfilter.AddStandardOption("shortinfo", "Show More Information".TxID("UserControlSurveyor.showMoreInformationToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_ShowOverlays);
             displayfilter.AddStandardOption("gravity", "Show gravity of landables".TxID("UserControlSurveyor.showGravityToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_ShowOverlays);
-            displayfilter.AddStandardOption("atmos", "Show atmospheres".TxID("UserControlSurveyor.showGravityToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_ShowOverlays);
+            displayfilter.AddStandardOption("atmos", "Show atmospheres of landables".TxID("UserControlSurveyor.showAtmosToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_ShowOverlays);
             displayfilter.AddStandardOption("rings", "Show rings".TxID("UserControlSurveyor.bodyFeaturesToolStripMenuItem.hasRingsToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_ShowOverlays);
             
             displayfilter.SaveSettings = (s, o) =>

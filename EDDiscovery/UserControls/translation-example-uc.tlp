@@ -455,7 +455,7 @@ SECTION UserControlSurveyor
 .showBeltClustersToolStripMenuItem: "Show Belt Clusters" @
 .showMoreInformationToolStripMenuItem: "Show More Information" @
 .showValuesToolStripMenuItem: "Show values" @
-.showAtmosToolStripMenuItem: "Show atmospheres" @
+.showAtmosToolStripMenuItem: "Show atmospheres of landables" @
 .wordWrapToolStripMenuItem: "Word Wrap" @
 .planetaryClassesToolStripMenuItem.highMetalContentBodyToolStripMenuItem: "High metal content body" @
 .planetaryClassesToolStripMenuItem.metalToolStripMenuItem: "Metal-rich body" @
