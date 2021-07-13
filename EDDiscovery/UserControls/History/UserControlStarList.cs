@@ -423,10 +423,6 @@ namespace EDDiscovery.UserControls
                             )
                         {
                             JournalScan sc = sn.ScanData;
-                            if ( showatmos && sc.IsLandable)
-                            {
-
-                            }
                             string info = sc.SurveyorInfoLine(system, sn.Signals != null && showsignals, showvol, showv, showsi, showg,
                                                                 showatmos && sc.IsLandable, showrings,
                                                                 lowRadiusLimit, largeRadiusLimit, eccentricityLimit);
