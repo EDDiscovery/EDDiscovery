@@ -465,6 +465,7 @@ SECTION UserControlSurveyor
 .bodyFeaturesToolStripMenuItem.landableAndLargeToolStripMenuItem: "Landable and large" @
 .showGravityToolStripMenuItem: "Show gravity of landables" @
 .bodyFeaturesToolStripMenuItem.showAtmosToolStripMenuItem: "Show atmosphere" @
+.showVolcanismToolStripMenuItem: "Show volcanism of landables" @
 
 SECTION MissionListUserControl
 

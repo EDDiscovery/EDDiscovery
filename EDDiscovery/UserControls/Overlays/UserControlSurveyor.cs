@@ -70,6 +70,7 @@ namespace EDDiscovery.UserControls
             showAtmosToolStripMenuItem.Checked = GetSetting("atmos", true);
             hasRingsToolStripMenuItem.Checked = GetSetting("showRinged", true);
             showGravityToolStripMenuItem.Checked = GetSetting("showGravity", true);
+            showVolcanismToolStripMenuItem.Checked = GetSetting("showVolcanism", true);
             hideAlreadyMappedBodiesToolStripMenuItem.Checked = GetSetting("hideMapped", true);
             autoHideToolStripMenuItem.Checked = GetSetting("autohide", false);
             lowRadiusToolStripMenuItem.Checked = GetSetting("lowradius", false);
@@ -117,6 +118,17 @@ namespace EDDiscovery.UserControls
             this.showBeltClustersToolStripMenuItem.Click += new System.EventHandler(this.showBeltClustersToolStripMenuItem_Click);
             this.showMoreInformationToolStripMenuItem.Click += new System.EventHandler(this.showMoreInformationToolStripMenuItem_Click);
             this.wordWrapToolStripMenuItem.Click += new System.EventHandler(this.wordWrapToolStripMenuItem_Click);
+            this.selectFSSSignalsShownToolStripMenuItem.Click += new System.EventHandler(this.selectFSSSignalsShownToolStripMenuItem_Click);
+            this.showVolcanismToolStripMenuItem.Click += new System.EventHandler(this.showVolcanismToolStripMenuItem_Click);
+            this.landableWithVolcanismToolStripMenuItem.Click += new System.EventHandler(this.landableWithVolcanismToolStripMenuItem_Click);
+            this.landableAndLargeToolStripMenuItem.Click += new System.EventHandler(this.landableAndLargeToolStripMenuItem_Click);
+            this.landableWithAtmosphereToolStripMenuItem.Click += new System.EventHandler(this.landableWithAtmosphereToolStripMenuItem_Click);
+            this.hasSignalsToolStripMenuItem.Click += new System.EventHandler(this.hasSignalsToolStripMenuItem_Click);
+            this.highMetalContentBodyToolStripMenuItem.Click += new System.EventHandler(this.highMetalContentBodyToolStripMenuItem_Click);
+            this.metalToolStripMenuItem.Click += new System.EventHandler(this.metalToolStripMenuItem_Click);
+            this.highEccentricityToolStripMenuItem.Click += new System.EventHandler(this.highEccentricityToolStripMenuItem_Click);
+            this.landableToolStripMenuItem.Click += new System.EventHandler(this.landableToolStripMenuItem_Click);
+
 
             discoveryform.OnNewUIEvent += Discoveryform_OnNewUIEvent;
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
@@ -324,7 +336,8 @@ namespace EDDiscovery.UserControls
                                     {
                                         var il = sd.SurveyorInfoLine(last_sys,
                                                                         sn.Signals != null,  // show signals if we have some
-                                                                        hasVolcanismToolStripMenuItem.Checked || (sd.IsLandable && landableWithVolcanismToolStripMenuItem.Checked), // either of these makes us need to show volcanic state
+                                                                        hasVolcanismToolStripMenuItem.Checked || (sd.IsLandable && landableWithVolcanismToolStripMenuItem.Checked)
+                                                                            || (sd.IsLandable && showVolcanismToolStripMenuItem.Checked), // any of these makes us need to show volcanic state
                                                                         showValuesToolStripMenuItem.Checked,        // show values
                                                                         showMoreInformationToolStripMenuItem.Checked,   // show extra info such as mass/radius
                                                                         showGravityToolStripMenuItem.Checked,       // show gravity select
@@ -507,6 +520,12 @@ namespace EDDiscovery.UserControls
         private void autoHideToolStripMenuItem_Click(object sender, EventArgs e)
         {
             PutSetting("autohide", autoHideToolStripMenuItem.Checked);
+            DrawSystem(last_sys);
+        }
+
+        private void showVolcanismToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PutSetting("volcanism", showVolcanismToolStripMenuItem.Checked);
             DrawSystem(last_sys);
         }
 
