@@ -89,46 +89,49 @@ namespace EDDiscovery.UserControls
             SetAlign((StringAlignment)GetSetting("align", 0));
 
             // install the handlers AFTER setup otherwise you get lots of events
-            this.landableToolStripMenuItem.Click += new System.EventHandler(this.landableToolStripMenuItem_Click);
-            this.landableWithAtmosphereToolStripMenuItem.Click += new System.EventHandler(this.landableWithAtmosphereToolStripMenuItem_Click);
-            this.landableWithVolcanismToolStripMenuItem.Click += new System.EventHandler(this.landableWithVolcanismToolStripMenuItem_Click);
-            this.landableAndLargeToolStripMenuItem.Click += new System.EventHandler(this.landableAndLargeToolStripMenuItem_Click);
+
+            // planetary classes
             this.ammoniaWorldToolStripMenuItem.Click += new System.EventHandler(this.ammoniaWorldToolStripMenuItem_Click);
             this.earthlikeWorldToolStripMenuItem.Click += new System.EventHandler(this.earthlikeWorldToolStripMenuItem_Click);
             this.waterWorldToolStripMenuItem.Click += new System.EventHandler(this.waterWorldToolStripMenuItem_Click);
             this.highMetalContentBodyToolStripMenuItem.Click += new System.EventHandler(this.highMetalContentBodyToolStripMenuItem_Click);
             this.metalToolStripMenuItem.Click += new System.EventHandler(this.metalToolStripMenuItem_Click);
+
+            // body features
             this.terraformableToolStripMenuItem.Click += new System.EventHandler(this.terraformableToolStripMenuItem_Click);
             this.hasVolcanismToolStripMenuItem.Click += new System.EventHandler(this.hasVolcanismToolStripMenuItem_Click);
-            this.highEccentricityToolStripMenuItem.Click += new System.EventHandler(this.highEccentricityToolStripMenuItem_Click);
             this.hasRingsToolStripMenuItem.Click += new System.EventHandler(this.hasRingsToolStripMenuItem_Click);
+            this.highEccentricityToolStripMenuItem.Click += new System.EventHandler(this.highEccentricityToolStripMenuItem_Click);
             this.lowRadiusToolStripMenuItem.Click += new System.EventHandler(this.lowRadiusToolStripMenuItem_Click);
-            this.showGravityToolStripMenuItem.Click += new System.EventHandler(this.showGravityToolStripMenuItem_Click);
-            this.hideAlreadyMappedBodiesToolStripMenuItem.Click += new System.EventHandler(this.hideAlreadyMappedBodiesToolStripMenuItem_Click);
-            this.leftToolStripMenuItem.Click += new System.EventHandler(this.leftToolStripMenuItem_Click);
-            this.centerToolStripMenuItem.Click += new System.EventHandler(this.centerToolStripMenuItem_Click);
-            this.rightToolStripMenuItem.Click += new System.EventHandler(this.rightToolStripMenuItem_Click);
-            this.autoHideToolStripMenuItem.Click += new System.EventHandler(this.autoHideToolStripMenuItem_Click);
-            this.checkEDSMForInformationToolStripMenuItem.Click += new System.EventHandler(this.checkEDSMForInformationToolStripMenuItem_Click);
-            this.showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem.Click += new System.EventHandler(this.showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem_Click);
-            this.dontHideInFSSModeToolStripMenuItem.Click += new System.EventHandler(this.dontHideInFSSModeToolStripMenuItem_Click);
-            this.showValuesToolStripMenuItem.Click += new System.EventHandler(this.showValuesToolStripMenuItem_Click);
+            this.hasSignalsToolStripMenuItem.Click += new System.EventHandler(this.hasSignalsToolStripMenuItem_Click);
+            this.landableToolStripMenuItem.Click += new System.EventHandler(this.landableToolStripMenuItem_Click);
+            this.landableWithAtmosphereToolStripMenuItem.Click += new System.EventHandler(this.landableWithAtmosphereToolStripMenuItem_Click);
+            this.landableAndLargeToolStripMenuItem.Click += new System.EventHandler(this.landableAndLargeToolStripMenuItem_Click);
+            this.landableWithVolcanismToolStripMenuItem.Click += new System.EventHandler(this.landableWithVolcanismToolStripMenuItem_Click);
+
+            // main menu
             this.showAllPlanetsToolStripMenuItem.Click += new System.EventHandler(this.showAllPlanetsToolStripMenuItem_Click);
             this.showAllStarsToolStripMenuItem.Click += new System.EventHandler(this.showAllStarsToolStripMenuItem_Click);
             this.showBeltClustersToolStripMenuItem.Click += new System.EventHandler(this.showBeltClustersToolStripMenuItem_Click);
-            this.showMoreInformationToolStripMenuItem.Click += new System.EventHandler(this.showMoreInformationToolStripMenuItem_Click);
-            this.wordWrapToolStripMenuItem.Click += new System.EventHandler(this.wordWrapToolStripMenuItem_Click);
-            this.selectFSSSignalsShownToolStripMenuItem.Click += new System.EventHandler(this.selectFSSSignalsShownToolStripMenuItem_Click);
+            this.showGravityToolStripMenuItem.Click += new System.EventHandler(this.showGravityToolStripMenuItem_Click);
+            this.showAtmosToolStripMenuItem.Click += new System.EventHandler(this.showAtmosToolStripMenuItem_Click);
             this.showVolcanismToolStripMenuItem.Click += new System.EventHandler(this.showVolcanismToolStripMenuItem_Click);
-            this.landableWithVolcanismToolStripMenuItem.Click += new System.EventHandler(this.landableWithVolcanismToolStripMenuItem_Click);
-            this.landableAndLargeToolStripMenuItem.Click += new System.EventHandler(this.landableAndLargeToolStripMenuItem_Click);
-            this.landableWithAtmosphereToolStripMenuItem.Click += new System.EventHandler(this.landableWithAtmosphereToolStripMenuItem_Click);
-            this.hasSignalsToolStripMenuItem.Click += new System.EventHandler(this.hasSignalsToolStripMenuItem_Click);
-            this.highMetalContentBodyToolStripMenuItem.Click += new System.EventHandler(this.highMetalContentBodyToolStripMenuItem_Click);
-            this.metalToolStripMenuItem.Click += new System.EventHandler(this.metalToolStripMenuItem_Click);
-            this.highEccentricityToolStripMenuItem.Click += new System.EventHandler(this.highEccentricityToolStripMenuItem_Click);
-            this.landableToolStripMenuItem.Click += new System.EventHandler(this.landableToolStripMenuItem_Click);
+            this.showValuesToolStripMenuItem.Click += new System.EventHandler(this.showValuesToolStripMenuItem_Click);
+            this.showMoreInformationToolStripMenuItem.Click += new System.EventHandler(this.showMoreInformationToolStripMenuItem_Click);
+            this.selectFSSSignalsShownToolStripMenuItem.Click += new System.EventHandler(this.selectFSSSignalsShownToolStripMenuItem_Click);
 
+            // bottom part
+            this.hideAlreadyMappedBodiesToolStripMenuItem.Click += new System.EventHandler(this.hideAlreadyMappedBodiesToolStripMenuItem_Click);
+            this.checkEDSMForInformationToolStripMenuItem.Click += new System.EventHandler(this.checkEDSMForInformationToolStripMenuItem_Click);
+            this.autoHideToolStripMenuItem.Click += new System.EventHandler(this.autoHideToolStripMenuItem_Click);
+            this.dontHideInFSSModeToolStripMenuItem.Click += new System.EventHandler(this.dontHideInFSSModeToolStripMenuItem_Click);
+            this.showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem.Click += new System.EventHandler(this.showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem_Click);
+
+            // word wrap align
+            this.wordWrapToolStripMenuItem.Click += new System.EventHandler(this.wordWrapToolStripMenuItem_Click);
+            this.leftToolStripMenuItem.Click += new System.EventHandler(this.leftToolStripMenuItem_Click);
+            this.centerToolStripMenuItem.Click += new System.EventHandler(this.centerToolStripMenuItem_Click);
+            this.rightToolStripMenuItem.Click += new System.EventHandler(this.rightToolStripMenuItem_Click);
 
             discoveryform.OnNewUIEvent += Discoveryform_OnNewUIEvent;
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
@@ -677,6 +680,5 @@ namespace EDDiscovery.UserControls
 
 
         #endregion
-
     }
 }

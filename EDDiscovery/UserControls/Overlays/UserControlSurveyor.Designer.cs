@@ -69,6 +69,7 @@ namespace EDDiscovery.UserControls
             this.showGravityToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showAtmosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showVolcanismToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showValuesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showMoreInformationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.selectFSSSignalsShownToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -77,7 +78,6 @@ namespace EDDiscovery.UserControls
             this.autoHideToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dontHideInFSSModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.showValuesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.wordWrapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.textAlignToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -332,6 +332,15 @@ namespace EDDiscovery.UserControls
             this.showVolcanismToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
             this.showVolcanismToolStripMenuItem.Text = "Show volcanism of landables";
             // 
+            // showValuesToolStripMenuItem
+            // 
+            this.showValuesToolStripMenuItem.Checked = true;
+            this.showValuesToolStripMenuItem.CheckOnClick = true;
+            this.showValuesToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.showValuesToolStripMenuItem.Name = "showValuesToolStripMenuItem";
+            this.showValuesToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
+            this.showValuesToolStripMenuItem.Text = "Show values";
+            // 
             // showMoreInformationToolStripMenuItem
             // 
             this.showMoreInformationToolStripMenuItem.Checked = true;
@@ -396,15 +405,6 @@ namespace EDDiscovery.UserControls
             this.showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem.Name = "showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem";
             this.showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
             this.showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem.Text = "Show System Info Always";
-            // 
-            // showValuesToolStripMenuItem
-            // 
-            this.showValuesToolStripMenuItem.Checked = true;
-            this.showValuesToolStripMenuItem.CheckOnClick = true;
-            this.showValuesToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.showValuesToolStripMenuItem.Name = "showValuesToolStripMenuItem";
-            this.showValuesToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
-            this.showValuesToolStripMenuItem.Text = "Show values";
             // 
             // toolStripSeparator2
             // 
