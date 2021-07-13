@@ -455,6 +455,7 @@ SECTION UserControlSurveyor
 .showBeltClustersToolStripMenuItem: "Show Belt Clusters" @
 .showMoreInformationToolStripMenuItem: "Show More Information" @
 .showValuesToolStripMenuItem: "Show values" @
+.showAtmosToolStripMenuItem: "Show atmospheres" @
 .wordWrapToolStripMenuItem: "Word Wrap" @
 .planetaryClassesToolStripMenuItem.highMetalContentBodyToolStripMenuItem: "High metal content body" @
 .planetaryClassesToolStripMenuItem.metalToolStripMenuItem: "Metal-rich body" @
@@ -463,6 +464,7 @@ SECTION UserControlSurveyor
 .bodyFeaturesToolStripMenuItem.landableWithVolcanismToolStripMenuItem: "Landable with volcanism" @
 .bodyFeaturesToolStripMenuItem.landableAndLargeToolStripMenuItem: "Landable and large" @
 .showGravityToolStripMenuItem: "Show gravity of landables" @
+.bodyFeaturesToolStripMenuItem.showAtmosToolStripMenuItem: "Show atmosphere" @
 
 SECTION MissionListUserControl
 

@@ -67,6 +67,7 @@ namespace EDDiscovery.UserControls
             landableWithAtmosphereToolStripMenuItem.Checked = GetSetting("isLandableWithAtmosphere", true);
             landableWithVolcanismToolStripMenuItem.Checked = GetSetting("isLandableWithVolcanism", true);
             landableAndLargeToolStripMenuItem.Checked = GetSetting("largelandable", true);
+            showAtmosToolStripMenuItem.Checked = GetSetting("atmos", true);
             hasRingsToolStripMenuItem.Checked = GetSetting("showRinged", true);
             showGravityToolStripMenuItem.Checked = GetSetting("showGravity", true);
             hideAlreadyMappedBodiesToolStripMenuItem.Checked = GetSetting("hideMapped", true);
@@ -321,8 +322,15 @@ namespace EDDiscovery.UserControls
                                 {
                                     if (!sd.Mapped || hideAlreadyMappedBodiesToolStripMenuItem.Checked == false)      // if not mapped, or show mapped
                                     {
-                                        var il = sd.SurveyorInfoLine(last_sys, sn.Signals != null, hasVolcanismToolStripMenuItem.Checked, showValuesToolStripMenuItem.Checked, 
-                                                                        showMoreInformationToolStripMenuItem.Checked, showGravityToolStripMenuItem.Checked, lowRadiusLimit, largeRadiusLimit, eccentricityLimit);
+                                        var il = sd.SurveyorInfoLine(last_sys, 
+                                                                        sn.Signals != null,  // show signals if we have some
+                                                                        hasVolcanismToolStripMenuItem.Checked || landableWithAtmosphereToolStripMenuItem.Checked, // either of these makes us need to show volcanic state
+                                                                        showValuesToolStripMenuItem.Checked,        // show values
+                                                                        showMoreInformationToolStripMenuItem.Checked,   // show extra info such as mass/radius
+                                                                        showGravityToolStripMenuItem.Checked,       // show gravity select
+                                                                        sd.IsLandable && showAtmosToolStripMenuItem.Checked, // show atmosphere if landable (surveyor shows this if landable)
+                                                                        hasRingsToolStripMenuItem.Checked,          // show rings
+                                                                        lowRadiusLimit, largeRadiusLimit, eccentricityLimit);
 
                                         //System.Diagnostics.Debug.WriteLine("Display " + il);
                                         var i = pictureBoxSurveyor.AddTextAutoSize(
@@ -574,7 +582,12 @@ namespace EDDiscovery.UserControls
             DrawSystem(last_sys);
         }
 
-        
+        private void showAtmosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PutSetting("atmos", showAtmosToolStripMenuItem.Checked);
+            DrawSystem(last_sys);
+        }
+
 
         private void leftToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -643,8 +656,8 @@ namespace EDDiscovery.UserControls
 
 
 
+
         #endregion
 
-       
     }
 }

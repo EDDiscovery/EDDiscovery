@@ -93,7 +93,7 @@ namespace EDDiscovery.UserControls
             checkBoxEDSM.Checked = GetSetting(dbEDSM, false);
             this.checkBoxEDSM.CheckedChanged += new System.EventHandler(this.checkBoxEDSM_CheckedChanged);
 
-            displayfilters = GetSetting(dbDisplayFilters+"k", "signals;volcanism;values;shortinfo;gravity;").Split(';');
+            displayfilters = GetSetting(dbDisplayFilters, "stars;planets;signals;volcanism;values;shortinfo;gravity;atmos;rings;").Split(';');
 
             discoveryform.OnHistoryChange += HistoryChanged;
             discoveryform.OnNewEntry += AddNewEntry;
@@ -406,17 +406,30 @@ namespace EDDiscovery.UserControls
                 bool showv = displayfilters.Contains("values");
                 bool showsi = displayfilters.Contains("shortinfo");
                 bool showg = displayfilters.Contains("gravity");
+                bool showatmos = displayfilters.Contains("atmos");
+                bool showrings = displayfilters.Contains("rings");
+                bool showbeltclusters = displayfilters.Contains("beltcluster");
+                bool showplanets = displayfilters.Contains("planets");
+                bool showstars = displayfilters.Contains("stars");
 
                 foreach (StarScan.ScanNode sn in sysnode.Bodies)
                 {
-                    if (sn.ScanData != null)
+                    if (sn?.ScanData != null )  // must have scan data..
                     {
-                        JournalScan sc = sn.ScanData;
-                        string info = sc.SurveyorInfoLine(system, sn.Signals != null && showsignals, showvol, showv, showsi, showg, lowRadiusLimit, largeRadiusLimit, eccentricityLimit);
-                        infostr = infostr.AppendPrePad(info, Environment.NewLine);
+                        if (
+                            (!sn.ScanData.IsBeltCluster || showbeltclusters) &&     // major selectors for line display
+                            (!sn.ScanData.IsPlanet || showplanets) &&
+                            (!sn.ScanData.IsStar || showstars)
+                            )
+                        {
+                            JournalScan sc = sn.ScanData;
+                            string info = sc.SurveyorInfoLine(system, sn.Signals != null && showsignals, showvol, showv, showsi, showg,
+                                                                showatmos, showrings,
+                                                                lowRadiusLimit, largeRadiusLimit, eccentricityLimit);
+                            infostr = infostr.AppendPrePad(info, Environment.NewLine);
+                        }
 
-                        // Landable bodies with valuable materials, collect into jumponimum
-                        if (sn.ScanData.IsLandable == true && sn.ScanData.HasMaterials )
+                        if (sn.ScanData.IsLandable == true && sn.ScanData.HasMaterials) // Landable bodies with valuable materials, collect into jumponimum
                         {
                             int basic = 0;
                             int standard = 0;
@@ -433,9 +446,6 @@ namespace EDDiscovery.UserControls
                                     premium++;
                             }
 
-                            // string MaterialsBrief = sn.ScanData.DisplayMaterials(4).ToString();
-                            //System.Diagnostics.Debug.WriteLine("{0} {1} {2} {3} {4}", sn.fullname , basic, standard, premium, MaterialsBrief);
-
                             if (basic > 0 || standard > 0 || premium > 0)
                             {
                                 int mats = basic + standard + premium;
@@ -449,7 +459,7 @@ namespace EDDiscovery.UserControls
                                 if (premium != 0)
                                     jumpLevel.AppendPrePad(premium + "/" + Recipes.FindSynthesis("FSD", "Premium").Count + " Premium".T(EDTx.UserControlStarList_PFSD), ", ");
 
-                                jumponium = jumponium.AppendPrePad(Environment.NewLine + string.Format("{0} has {1} level elements.".T(EDTx.UserControlStarList_LE), sn.ScanData.BodyDesignationOrName, jumpLevel));
+                                jumponium = jumponium.AppendPrePad(string.Format("{0} has {1} level elements.".T(EDTx.UserControlStarList_LE), sn.ScanData.BodyDesignationOrName, jumpLevel), Environment.NewLine);
                             }
                         }
                     }
@@ -457,7 +467,7 @@ namespace EDDiscovery.UserControls
 
                 if (jumponium.HasChars() )
                 {
-                    infostr = infostr.AppendPrePad("This system has materials for FSD boost: ".T(EDTx.UserControlStarList_FSD), Environment.NewLine);
+                    infostr = infostr.AppendPrePad("This system has materials for FSD boost".T(EDTx.UserControlStarList_FSD), Environment.NewLine);
                     if (showjumponium)
                         infostr = infostr.AppendPrePad(jumponium, Environment.NewLine);
                 }
@@ -729,13 +739,18 @@ namespace EDDiscovery.UserControls
             displayfilter.AllOrNoneBack = false;
 
             displayfilter.AddAllNone();
+            displayfilter.AddStandardOption("stars", "Show All Stars".TxID("UserControlSurveyor.showAllStarsToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_ShowOverlays);
+            displayfilter.AddStandardOption("planets", "Show All Planets".TxID("UserControlSurveyor.showAllPlanetsToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_ShowOverlays);
+            displayfilter.AddStandardOption("beltcluster", "Show belt clusters".TxID("UserControlSurveyor.showBeltClustersToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_ShowOverlays);
             displayfilter.AddStandardOption("jumponium", "Show/Hide presence of Jumponium Materials".T(EDTx.UserControlStarList_JUMP), global::EDDiscovery.Icons.Controls.Scan_ShowOverlays);
             displayfilter.AddStandardOption("signals", "Has Signals".TxID("UserControlSurveyor.bodyFeaturesToolStripMenuItem.hasSignalsToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_ShowOverlays);
             displayfilter.AddStandardOption("volcanism", "Has Volcanism".TxID("UserControlSurveyor.bodyFeaturesToolStripMenuItem.hasVolcanismToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_ShowOverlays);
             displayfilter.AddStandardOption("values", "Show values".TxID("UserControlSurveyor.showValuesToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_ShowOverlays);
             displayfilter.AddStandardOption("shortinfo", "Show More Information".TxID("UserControlSurveyor.showMoreInformationToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_ShowOverlays);
             displayfilter.AddStandardOption("gravity", "Show gravity of landables".TxID("UserControlSurveyor.showGravityToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_ShowOverlays);
-
+            displayfilter.AddStandardOption("atmos", "Show atmospheres".TxID("UserControlSurveyor.showGravityToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_ShowOverlays);
+            displayfilter.AddStandardOption("rings", "Show rings".TxID("UserControlSurveyor.bodyFeaturesToolStripMenuItem.hasRingsToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_ShowOverlays);
+            
             displayfilter.SaveSettings = (s, o) =>
             {
                 displayfilters = s.Split(';');
