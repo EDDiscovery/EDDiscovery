@@ -324,7 +324,7 @@ namespace EDDiscovery.UserControls
                                     {
                                         var il = sd.SurveyorInfoLine(last_sys, 
                                                                         sn.Signals != null,  // show signals if we have some
-                                                                        hasVolcanismToolStripMenuItem.Checked || landableWithAtmosphereToolStripMenuItem.Checked, // either of these makes us need to show volcanic state
+                                                                        hasVolcanismToolStripMenuItem.Checked || landableWithVolcanismToolStripMenuItem.Checked, // either of these makes us need to show volcanic state
                                                                         showValuesToolStripMenuItem.Checked,        // show values
                                                                         showMoreInformationToolStripMenuItem.Checked,   // show extra info such as mass/radius
                                                                         showGravityToolStripMenuItem.Checked,       // show gravity select
