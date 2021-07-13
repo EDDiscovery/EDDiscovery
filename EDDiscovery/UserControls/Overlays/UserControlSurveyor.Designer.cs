@@ -68,7 +68,6 @@ namespace EDDiscovery.UserControls
             this.showBeltClustersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.selectFSSSignalsShownToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.showGravityToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showMoreInformationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hideAlreadyMappedBodiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.checkEDSMForInformationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -85,6 +84,7 @@ namespace EDDiscovery.UserControls
             this.pictureBoxSurveyor = new ExtendedControls.ExtPictureBox();
             this.extPictureBoxScroll = new ExtendedControls.ExtPictureBoxScroll();
             this.extScrollBar = new ExtendedControls.ExtScrollBar();
+            this.showGravityToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showAtmosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSurveyor)).BeginInit();
@@ -101,8 +101,6 @@ namespace EDDiscovery.UserControls
             this.showBeltClustersToolStripMenuItem,
             this.selectFSSSignalsShownToolStripMenuItem,
             this.toolStripSeparator1,
-            this.showGravityToolStripMenuItem,
-            this.showAtmosToolStripMenuItem,
             this.showMoreInformationToolStripMenuItem,
             this.hideAlreadyMappedBodiesToolStripMenuItem,
             this.checkEDSMForInformationToolStripMenuItem,
@@ -114,7 +112,7 @@ namespace EDDiscovery.UserControls
             this.wordWrapToolStripMenuItem,
             this.textAlignToolStripMenuItem});
             this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(242, 412);
+            this.contextMenuStrip.Size = new System.Drawing.Size(226, 368);
             // 
             // planetaryClassesToolStripMenuItem
             // 
@@ -125,7 +123,7 @@ namespace EDDiscovery.UserControls
             this.highMetalContentBodyToolStripMenuItem,
             this.metalToolStripMenuItem});
             this.planetaryClassesToolStripMenuItem.Name = "planetaryClassesToolStripMenuItem";
-            this.planetaryClassesToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
+            this.planetaryClassesToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
             this.planetaryClassesToolStripMenuItem.Text = "Planetary Classes";
             // 
             // ammoniaWorldToolStripMenuItem
@@ -182,10 +180,12 @@ namespace EDDiscovery.UserControls
             this.hasSignalsToolStripMenuItem,
             this.landableToolStripMenuItem,
             this.landableWithAtmosphereToolStripMenuItem,
+            this.landableAndLargeToolStripMenuItem,
             this.landableWithVolcanismToolStripMenuItem,
-            this.landableAndLargeToolStripMenuItem});
+            this.showGravityToolStripMenuItem,
+            this.showAtmosToolStripMenuItem});
             this.bodyFeaturesToolStripMenuItem.Name = "bodyFeaturesToolStripMenuItem";
-            this.bodyFeaturesToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
+            this.bodyFeaturesToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
             this.bodyFeaturesToolStripMenuItem.Text = "Body Features";
             // 
             // terraformableToolStripMenuItem
@@ -194,7 +194,7 @@ namespace EDDiscovery.UserControls
             this.terraformableToolStripMenuItem.CheckOnClick = true;
             this.terraformableToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.terraformableToolStripMenuItem.Name = "terraformableToolStripMenuItem";
-            this.terraformableToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
+            this.terraformableToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
             this.terraformableToolStripMenuItem.Text = "Terraformable";
             // 
             // hasVolcanismToolStripMenuItem
@@ -203,7 +203,7 @@ namespace EDDiscovery.UserControls
             this.hasVolcanismToolStripMenuItem.CheckOnClick = true;
             this.hasVolcanismToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.hasVolcanismToolStripMenuItem.Name = "hasVolcanismToolStripMenuItem";
-            this.hasVolcanismToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
+            this.hasVolcanismToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
             this.hasVolcanismToolStripMenuItem.Text = "Has Volcanism";
             // 
             // hasRingsToolStripMenuItem
@@ -212,7 +212,7 @@ namespace EDDiscovery.UserControls
             this.hasRingsToolStripMenuItem.CheckOnClick = true;
             this.hasRingsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.hasRingsToolStripMenuItem.Name = "hasRingsToolStripMenuItem";
-            this.hasRingsToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
+            this.hasRingsToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
             this.hasRingsToolStripMenuItem.Text = "Has Rings";
             // 
             // highEccentricityToolStripMenuItem
@@ -221,7 +221,7 @@ namespace EDDiscovery.UserControls
             this.highEccentricityToolStripMenuItem.CheckOnClick = true;
             this.highEccentricityToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.highEccentricityToolStripMenuItem.Name = "highEccentricityToolStripMenuItem";
-            this.highEccentricityToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
+            this.highEccentricityToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
             this.highEccentricityToolStripMenuItem.Text = "High eccentricity";
             this.highEccentricityToolStripMenuItem.Click += new System.EventHandler(this.highEccentricityToolStripMenuItem_Click);
             // 
@@ -231,7 +231,7 @@ namespace EDDiscovery.UserControls
             this.lowRadiusToolStripMenuItem.CheckOnClick = true;
             this.lowRadiusToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.lowRadiusToolStripMenuItem.Name = "lowRadiusToolStripMenuItem";
-            this.lowRadiusToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
+            this.lowRadiusToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
             this.lowRadiusToolStripMenuItem.Text = "Tiny body";
             // 
             // hasSignalsToolStripMenuItem
@@ -240,7 +240,7 @@ namespace EDDiscovery.UserControls
             this.hasSignalsToolStripMenuItem.CheckOnClick = true;
             this.hasSignalsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.hasSignalsToolStripMenuItem.Name = "hasSignalsToolStripMenuItem";
-            this.hasSignalsToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
+            this.hasSignalsToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
             this.hasSignalsToolStripMenuItem.Text = "Has Signals";
             this.hasSignalsToolStripMenuItem.Click += new System.EventHandler(this.hasSignalsToolStripMenuItem_Click);
             // 
@@ -250,7 +250,7 @@ namespace EDDiscovery.UserControls
             this.landableToolStripMenuItem.CheckOnClick = true;
             this.landableToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.landableToolStripMenuItem.Name = "landableToolStripMenuItem";
-            this.landableToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
+            this.landableToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
             this.landableToolStripMenuItem.Text = "Landable";
             this.landableToolStripMenuItem.Click += new System.EventHandler(this.landableToolStripMenuItem_Click);
             // 
@@ -260,7 +260,7 @@ namespace EDDiscovery.UserControls
             this.landableWithAtmosphereToolStripMenuItem.CheckOnClick = true;
             this.landableWithAtmosphereToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.landableWithAtmosphereToolStripMenuItem.Name = "landableWithAtmosphereToolStripMenuItem";
-            this.landableWithAtmosphereToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
+            this.landableWithAtmosphereToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
             this.landableWithAtmosphereToolStripMenuItem.Text = "Landable with atmosphere";
             this.landableWithAtmosphereToolStripMenuItem.Click += new System.EventHandler(this.landableWithAtmosphereToolStripMenuItem_Click);
             // 
@@ -270,7 +270,7 @@ namespace EDDiscovery.UserControls
             this.landableWithVolcanismToolStripMenuItem.CheckOnClick = true;
             this.landableWithVolcanismToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.landableWithVolcanismToolStripMenuItem.Name = "landableWithVolcanismToolStripMenuItem";
-            this.landableWithVolcanismToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
+            this.landableWithVolcanismToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
             this.landableWithVolcanismToolStripMenuItem.Text = "Landable with volcanism";
             this.landableWithVolcanismToolStripMenuItem.Click += new System.EventHandler(this.landableWithVolcanismToolStripMenuItem_Click);
             // 
@@ -280,7 +280,7 @@ namespace EDDiscovery.UserControls
             this.landableAndLargeToolStripMenuItem.CheckOnClick = true;
             this.landableAndLargeToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.landableAndLargeToolStripMenuItem.Name = "landableAndLargeToolStripMenuItem";
-            this.landableAndLargeToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
+            this.landableAndLargeToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
             this.landableAndLargeToolStripMenuItem.Text = "Landable and large";
             this.landableAndLargeToolStripMenuItem.Click += new System.EventHandler(this.landableAndLargeToolStripMenuItem_Click);
             // 
@@ -290,7 +290,7 @@ namespace EDDiscovery.UserControls
             this.showAllPlanetsToolStripMenuItem.CheckOnClick = true;
             this.showAllPlanetsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.showAllPlanetsToolStripMenuItem.Name = "showAllPlanetsToolStripMenuItem";
-            this.showAllPlanetsToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
+            this.showAllPlanetsToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
             this.showAllPlanetsToolStripMenuItem.Text = "Show All Planets";
             // 
             // showAllStarsToolStripMenuItem
@@ -299,7 +299,7 @@ namespace EDDiscovery.UserControls
             this.showAllStarsToolStripMenuItem.CheckOnClick = true;
             this.showAllStarsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.showAllStarsToolStripMenuItem.Name = "showAllStarsToolStripMenuItem";
-            this.showAllStarsToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
+            this.showAllStarsToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
             this.showAllStarsToolStripMenuItem.Text = "Show All Stars";
             // 
             // showBeltClustersToolStripMenuItem
@@ -308,29 +308,20 @@ namespace EDDiscovery.UserControls
             this.showBeltClustersToolStripMenuItem.CheckOnClick = true;
             this.showBeltClustersToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.showBeltClustersToolStripMenuItem.Name = "showBeltClustersToolStripMenuItem";
-            this.showBeltClustersToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
+            this.showBeltClustersToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
             this.showBeltClustersToolStripMenuItem.Text = "Show Belt Clusters";
             // 
             // selectFSSSignalsShownToolStripMenuItem
             // 
             this.selectFSSSignalsShownToolStripMenuItem.Name = "selectFSSSignalsShownToolStripMenuItem";
-            this.selectFSSSignalsShownToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
+            this.selectFSSSignalsShownToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
             this.selectFSSSignalsShownToolStripMenuItem.Text = "Select FSS Signals Shown";
             this.selectFSSSignalsShownToolStripMenuItem.Click += new System.EventHandler(this.selectFSSSignalsShownToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(238, 6);
-            // 
-            // showGravityToolStripMenuItem
-            // 
-            this.showGravityToolStripMenuItem.Checked = true;
-            this.showGravityToolStripMenuItem.CheckOnClick = true;
-            this.showGravityToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.showGravityToolStripMenuItem.Name = "showGravityToolStripMenuItem";
-            this.showGravityToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
-            this.showGravityToolStripMenuItem.Text = "Show gravity of landables";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(222, 6);
             // 
             // showMoreInformationToolStripMenuItem
             // 
@@ -338,7 +329,7 @@ namespace EDDiscovery.UserControls
             this.showMoreInformationToolStripMenuItem.CheckOnClick = true;
             this.showMoreInformationToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.showMoreInformationToolStripMenuItem.Name = "showMoreInformationToolStripMenuItem";
-            this.showMoreInformationToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
+            this.showMoreInformationToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
             this.showMoreInformationToolStripMenuItem.Text = "Show More Information";
             // 
             // hideAlreadyMappedBodiesToolStripMenuItem
@@ -347,7 +338,7 @@ namespace EDDiscovery.UserControls
             this.hideAlreadyMappedBodiesToolStripMenuItem.CheckOnClick = true;
             this.hideAlreadyMappedBodiesToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.hideAlreadyMappedBodiesToolStripMenuItem.Name = "hideAlreadyMappedBodiesToolStripMenuItem";
-            this.hideAlreadyMappedBodiesToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
+            this.hideAlreadyMappedBodiesToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
             this.hideAlreadyMappedBodiesToolStripMenuItem.Text = "Hide already mapped bodies";
             // 
             // checkEDSMForInformationToolStripMenuItem
@@ -356,7 +347,7 @@ namespace EDDiscovery.UserControls
             this.checkEDSMForInformationToolStripMenuItem.CheckOnClick = true;
             this.checkEDSMForInformationToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkEDSMForInformationToolStripMenuItem.Name = "checkEDSMForInformationToolStripMenuItem";
-            this.checkEDSMForInformationToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
+            this.checkEDSMForInformationToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
             this.checkEDSMForInformationToolStripMenuItem.Text = "Check EDSM for information";
             // 
             // autoHideToolStripMenuItem
@@ -365,7 +356,7 @@ namespace EDDiscovery.UserControls
             this.autoHideToolStripMenuItem.CheckOnClick = true;
             this.autoHideToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.autoHideToolStripMenuItem.Name = "autoHideToolStripMenuItem";
-            this.autoHideToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
+            this.autoHideToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
             this.autoHideToolStripMenuItem.Text = "Auto Hide";
             // 
             // dontHideInFSSModeToolStripMenuItem
@@ -374,7 +365,7 @@ namespace EDDiscovery.UserControls
             this.dontHideInFSSModeToolStripMenuItem.CheckOnClick = true;
             this.dontHideInFSSModeToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.dontHideInFSSModeToolStripMenuItem.Name = "dontHideInFSSModeToolStripMenuItem";
-            this.dontHideInFSSModeToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
+            this.dontHideInFSSModeToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
             this.dontHideInFSSModeToolStripMenuItem.Text = "Don\'t Hide in FSS Mode";
             // 
             // showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem
@@ -383,7 +374,7 @@ namespace EDDiscovery.UserControls
             this.showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem.CheckOnClick = true;
             this.showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem.Name = "showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem";
-            this.showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
+            this.showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
             this.showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem.Text = "Show System Info Always";
             // 
             // showValuesToolStripMenuItem
@@ -392,13 +383,13 @@ namespace EDDiscovery.UserControls
             this.showValuesToolStripMenuItem.CheckOnClick = true;
             this.showValuesToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.showValuesToolStripMenuItem.Name = "showValuesToolStripMenuItem";
-            this.showValuesToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
+            this.showValuesToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
             this.showValuesToolStripMenuItem.Text = "Show values";
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(238, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(222, 6);
             // 
             // wordWrapToolStripMenuItem
             // 
@@ -406,7 +397,7 @@ namespace EDDiscovery.UserControls
             this.wordWrapToolStripMenuItem.CheckOnClick = true;
             this.wordWrapToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.wordWrapToolStripMenuItem.Name = "wordWrapToolStripMenuItem";
-            this.wordWrapToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
+            this.wordWrapToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
             this.wordWrapToolStripMenuItem.Text = "Word Wrap";
             // 
             // textAlignToolStripMenuItem
@@ -416,7 +407,7 @@ namespace EDDiscovery.UserControls
             this.centerToolStripMenuItem,
             this.rightToolStripMenuItem});
             this.textAlignToolStripMenuItem.Name = "textAlignToolStripMenuItem";
-            this.textAlignToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
+            this.textAlignToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
             this.textAlignToolStripMenuItem.Text = "Alignment";
             // 
             // leftToolStripMenuItem
@@ -487,6 +478,15 @@ namespace EDDiscovery.UserControls
             this.extScrollBar.ThumbDrawAngle = 0F;
             this.extScrollBar.Value = 0;
             this.extScrollBar.ValueLimited = 0;
+            // 
+            // showGravityToolStripMenuItem
+            // 
+            this.showGravityToolStripMenuItem.Checked = true;
+            this.showGravityToolStripMenuItem.CheckOnClick = true;
+            this.showGravityToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.showGravityToolStripMenuItem.Name = "showGravityToolStripMenuItem";
+            this.showGravityToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
+            this.showGravityToolStripMenuItem.Text = "Show gravity of landables";
             // 
             // showAtmosToolStripMenuItem
             // 
