@@ -1024,10 +1024,6 @@ SECTION UserControlStarList
 .CS: "{0} Star(s) {1}" => "{0}个恒星 {1}"
 .FSD: "This system has materials for FSD boost: " => "这个行星存在合成FSD助推剂用的材料："
 .NoEDSM: "System could not be found - has not been synched or EDSM is unavailable" => "无法找到该星系，该星系未被同步或者EDSM现在不可用。"
-.BFSD: " Basic" => " 种基础"
-.SFSD: " Standard" => " 种标准"
-.PFSD: " Premium" => " 种高级"
-.LE: "{0} has {1} level elements." => "{0} 上有 {1}的元素。"
 .OB: "{0} Other bodies" => "{0}个其他星体"
 
 SECTION UserControlStats

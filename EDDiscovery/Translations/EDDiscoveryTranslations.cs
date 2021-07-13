@@ -394,10 +394,6 @@ namespace EDDiscovery
         UserControlStarList_CS, // {0} Star(s)
         UserControlStarList_FSD, // This system has materials for FSD boost:
         UserControlStarList_NoEDSM, // System could not be found - has not been synched or EDSM is unavailable
-        UserControlStarList_BFSD, //  Basic
-        UserControlStarList_SFSD, //  Standard
-        UserControlStarList_PFSD, //  Premium
-        UserControlStarList_LE, // {0} has {1} level elements.
         UserControlStarList_OB, // {0} Other bodies
         UserControlStarList_JUMP,
 

@@ -422,46 +422,13 @@ namespace EDDiscovery.UserControls
                             (!sn.ScanData.IsStar || showstars)
                             )
                         {
-                            JournalScan sc = sn.ScanData;
-                            string info = sc.SurveyorInfoLine(system, sn.Signals != null && showsignals, showvol, showv, showsi, showg,
-                                                                showatmos && sc.IsLandable, showrings,
+                            string info = sn.ScanData.SurveyorInfoLine(system, sn.Signals != null && showsignals, showvol, showv, showsi, showg,
+                                                                showatmos && sn.ScanData.IsLandable, showrings,
                                                                 lowRadiusLimit, largeRadiusLimit, eccentricityLimit);
                             infostr = infostr.AppendPrePad(info, Environment.NewLine);
                         }
 
-                        if (sn.ScanData.IsLandable == true && sn.ScanData.HasMaterials) // Landable bodies with valuable materials, collect into jumponimum
-                        {
-                            int basic = 0;
-                            int standard = 0;
-                            int premium = 0;
-
-                            foreach (KeyValuePair<string, double> mat in sn.ScanData.Materials)
-                            {
-                                string usedin = Recipes.UsedInSythesisByFDName(mat.Key);
-                                if (usedin.Contains("FSD-Basic"))
-                                    basic++;
-                                if (usedin.Contains("FSD-Standard"))
-                                    standard++;
-                                if (usedin.Contains("FSD-Premium"))
-                                    premium++;
-                            }
-
-                            if (basic > 0 || standard > 0 || premium > 0)
-                            {
-                                int mats = basic + standard + premium;
-
-                                StringBuilder jumpLevel = new StringBuilder();
-
-                                if (basic != 0)
-                                    jumpLevel.AppendPrePad(basic + "/" + Recipes.FindSynthesis("FSD", "Basic").Count + " Basic".T(EDTx.UserControlStarList_BFSD), ", ");
-                                if (standard != 0)
-                                    jumpLevel.AppendPrePad(standard + "/" + Recipes.FindSynthesis("FSD", "Standard").Count + " Standard".T(EDTx.UserControlStarList_SFSD), ", ");
-                                if (premium != 0)
-                                    jumpLevel.AppendPrePad(premium + "/" + Recipes.FindSynthesis("FSD", "Premium").Count + " Premium".T(EDTx.UserControlStarList_PFSD), ", ");
-
-                                jumponium = jumponium.AppendPrePad(string.Format("{0} has {1} level elements.".T(EDTx.UserControlStarList_LE), sn.ScanData.BodyDesignationOrName, jumpLevel), Environment.NewLine);
-                            }
-                        }
+                        sn.ScanData.AccumulateJumponium(ref jumponium, sn.ScanData.BodyDesignationOrName);
                     }
                 }
 

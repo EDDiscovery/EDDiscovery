@@ -1024,10 +1024,6 @@ SECTION UserControlStarList
 .CS: "{0} Star(s) {1}" => "{0} étoile(s) {1}"
 .FSD: "This system has materials for FSD boost: " => "Ce système contient les matériaux pour des boost FSD : "
 .NoEDSM: "System could not be found - has not been synched or EDSM is unavailable" => "Système introuvable - n'a pas été synchronisé ou EDSM est indisponible"
-.BFSD: " Basic" => "Basique"
-.SFSD: " Standard" @
-.PFSD: " Premium" @
-.LE: "{0} has {1} level elements." @
 .OB: "{0} Other bodies" => "{0} autres corps"
 
 SECTION UserControlStats

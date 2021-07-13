@@ -1031,10 +1031,6 @@ SECTION UserControlStarList
 .CS: "{0} Star(s) {1}" @
 .FSD: "This system has materials for FSD boost: " @
 .NoEDSM: "System could not be found - has not been synched or EDSM is unavailable" @
-.BFSD: " Basic" @
-.SFSD: " Standard" @
-.PFSD: " Premium" @
-.LE: "{0} has {1} level elements." @
 .OB: "{0} Other bodies" @
 
 .JUMP: "Show/Hide presence of Jumponium Materials" @
