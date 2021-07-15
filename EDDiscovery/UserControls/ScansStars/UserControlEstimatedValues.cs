@@ -120,9 +120,13 @@ namespace EDDiscovery.UserControls
                     {
                         System.Diagnostics.Debug.WriteLine("Recalc for " + bodies.ScanData.BodyName);
                         var ev = bodies.ScanData.RecalcEstimatedValues();
+                        if (ev.EstimatedValueBase == 0)
+                            continue; // skip 0-value things
 
                         string spclass = bodies.ScanData.IsStar ? bodies.ScanData.StarTypeText : bodies.ScanData.PlanetTypeText;
-                        dataGridViewEstimatedValues.Rows.Add(new object[] { bodies.ScanData.BodyDesignationOrName, spclass,
+                        dataGridViewEstimatedValues.Rows.Add(new object[] {
+                                        GetBodySimpleName(bodies.ScanData.BodyDesignationOrName, last_he.System.Name),
+                                        spclass,
                                         bodies.ScanData.IsEDSMBody ? "EDSM" : "",
                                         (bodies.IsMapped ? Icons.Controls.Scan_Bodies_Mapped : null),
                                         (bodies.ScanData.WasMapped == true? Icons.Controls.Scan_Bodies_Mapped : null),
@@ -139,6 +143,21 @@ namespace EDDiscovery.UserControls
                 dataGridViewEstimatedValues.Sort(sortcol, (sortorder == SortOrder.Descending) ? System.ComponentModel.ListSortDirection.Descending : System.ComponentModel.ListSortDirection.Ascending);
                 dataGridViewEstimatedValues.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
             }
+        }
+
+        private const string SIMPLE_SINGLE_STAR_BODY_NAME = "Main Star"; // TODO: Is there an existing translation for this string (ie. from scan panel)?
+
+        /// <summary>
+        /// Shortens the given body name by stripping the current system name from it. 
+        /// </summary>
+        /// <param name="bodyName"></param>
+        /// <param name="systemName"></param>
+        /// <returns>The short body name. In the case of a sole/main star which has the same name as the system, a constant string is returned.</returns>
+        private string GetBodySimpleName(string bodyName, string systemName)
+        {
+            string bodySimpleName = bodyName.ReplaceIfStartsWith(systemName).Trim();
+            if (bodySimpleName.Equals(bodyName)) bodySimpleName = SIMPLE_SINGLE_STAR_BODY_NAME;
+            return bodySimpleName;
         }
 
         private void CheckBoxEDSM_CheckedChanged(object sender, System.EventArgs e)
