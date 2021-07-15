@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2020 EDDiscovery development team
+ * Copyright © 2016 - 2021 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -244,7 +244,7 @@ namespace EDDiscovery.UserControls
                 chunks.Add(chunk);
             }
 
-            string filtertext = textBoxFilter.Text;
+            string filtertext = textBoxSearch.Text;
             List<DataGridViewRow> rows = new List<DataGridViewRow>();
 
             Outlining outlining = null;     // only outline if in normal time decend more with no filter text
@@ -404,7 +404,7 @@ namespace EDDiscovery.UserControls
 
             if (add)
             {
-                var row = CreateHistoryRow(he, textBoxFilter.Text, travelGridInDebugModeToolStripMenuItem.Checked);     // may be dumped out by search
+                var row = CreateHistoryRow(he, textBoxSearch.Text, travelGridInDebugModeToolStripMenuItem.Checked);     // may be dumped out by search
                 if (row != null)
                     dataGridViewTravel.Rows.Insert(0, row);
                 else
@@ -619,7 +619,7 @@ namespace EDDiscovery.UserControls
         }
 
 
-        private void textBoxFilter_TextChanged(object sender, EventArgs e)
+        private void textBoxSearch_TextChanged(object sender, EventArgs e)
         {
             searchtimer.Stop();
             searchtimer.Start();
@@ -628,11 +628,6 @@ namespace EDDiscovery.UserControls
 
         private void Searchtimer_Tick(object sender, EventArgs e)
         {
-            if (todotimer.Enabled)      // don't do it while we are loading
-            {
-                return;
-            }
-
             searchtimer.Stop();
             HistoryChanged(current_historylist);
         }

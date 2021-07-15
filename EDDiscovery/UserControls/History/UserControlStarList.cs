@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2020 EDDiscovery development team
+ * Copyright © 2016 - 2021 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -203,7 +203,7 @@ namespace EDDiscovery.UserControls
 
                         if (visitlist.Count > 0 && visitlist[0].System.Name == he.System.Name) // if the filtered result has our system in (which must be the first, since its newest), its inside the filter, add
                         {
-                            string filtertext = textBoxFilter.Text;
+                            string filtertext = textBoxSearch.Text;
                             var row = CreateHistoryRow(visitlist[0], filtertext);
                             if (row != null)    // text may have filtered it out
                             {
@@ -283,7 +283,7 @@ namespace EDDiscovery.UserControls
                 syslistchunks.Add(syslistchunk);
             }
 
-            string filtertext = textBoxFilter.Text;
+            string filtertext = textBoxSearch.Text;
 
             //System.Diagnostics.Stopwatch swtotal = new System.Diagnostics.Stopwatch(); swtotal.Start();
 
@@ -605,7 +605,7 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void textBoxFilter_TextChanged(object sender, EventArgs e)
+        private void textBoxSearch_TextChanged(object sender, EventArgs e)
         {
             searchtimer.Stop();
             searchtimer.Start();

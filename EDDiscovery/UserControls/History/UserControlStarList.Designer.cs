@@ -51,7 +51,7 @@ namespace EDDiscovery.UserControls
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
             this.checkBoxCursorToTop = new ExtendedControls.ExtCheckBox();
             this.buttonExtExcel = new ExtendedControls.ExtButton();
-            this.textBoxFilter = new ExtendedControls.ExtTextBox();
+            this.textBoxSearch = new ExtendedControls.ExtTextBox();
             this.labelSearch = new System.Windows.Forms.Label();
             this.checkBoxEDSM = new ExtendedControls.ExtCheckBox();
             this.comboBoxTime = new ExtendedControls.ExtComboBox();
@@ -125,32 +125,32 @@ namespace EDDiscovery.UserControls
             // 
             // textBoxFilter
             // 
-            this.textBoxFilter.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.textBoxFilter.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
-            this.textBoxFilter.BackErrorColor = System.Drawing.Color.Red;
-            this.textBoxFilter.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxFilter.BorderColorScaling = 0.5F;
-            this.textBoxFilter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBoxFilter.ClearOnFirstChar = false;
-            this.textBoxFilter.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBoxFilter.EndButtonEnable = true;
-            this.textBoxFilter.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxFilter.EndButtonImage")));
-            this.textBoxFilter.EndButtonVisible = false;
-            this.textBoxFilter.InErrorCondition = false;
-            this.textBoxFilter.Location = new System.Drawing.Point(231, 1);
-            this.textBoxFilter.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.textBoxFilter.Multiline = false;
-            this.textBoxFilter.Name = "textBoxFilter";
-            this.textBoxFilter.ReadOnly = false;
-            this.textBoxFilter.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.textBoxFilter.SelectionLength = 0;
-            this.textBoxFilter.SelectionStart = 0;
-            this.textBoxFilter.Size = new System.Drawing.Size(148, 20);
-            this.textBoxFilter.TabIndex = 1;
-            this.textBoxFilter.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.toolTip.SetToolTip(this.textBoxFilter, "Enter text to search in any fields for an item");
-            this.textBoxFilter.WordWrap = true;
-            this.textBoxFilter.TextChanged += new System.EventHandler(this.textBoxFilter_TextChanged);
+            this.textBoxSearch.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.textBoxSearch.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxSearch.BackErrorColor = System.Drawing.Color.Red;
+            this.textBoxSearch.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxSearch.BorderColorScaling = 0.5F;
+            this.textBoxSearch.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxSearch.ClearOnFirstChar = false;
+            this.textBoxSearch.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxSearch.EndButtonEnable = true;
+            this.textBoxSearch.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxFilter.EndButtonImage")));
+            this.textBoxSearch.EndButtonVisible = false;
+            this.textBoxSearch.InErrorCondition = false;
+            this.textBoxSearch.Location = new System.Drawing.Point(231, 1);
+            this.textBoxSearch.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.textBoxSearch.Multiline = false;
+            this.textBoxSearch.Name = "textBoxFilter";
+            this.textBoxSearch.ReadOnly = false;
+            this.textBoxSearch.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBoxSearch.SelectionLength = 0;
+            this.textBoxSearch.SelectionStart = 0;
+            this.textBoxSearch.Size = new System.Drawing.Size(148, 20);
+            this.textBoxSearch.TabIndex = 1;
+            this.textBoxSearch.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.toolTip.SetToolTip(this.textBoxSearch, "Enter text to search in any fields for an item");
+            this.textBoxSearch.WordWrap = true;
+            this.textBoxSearch.TextChanged += new System.EventHandler(this.textBoxSearch_TextChanged);
             // 
             // labelSearch
             // 
@@ -423,7 +423,7 @@ namespace EDDiscovery.UserControls
             this.topPanel.Controls.Add(this.comboBoxTime);
             this.topPanel.Controls.Add(this.checkBoxEDSM);
             this.topPanel.Controls.Add(this.labelSearch);
-            this.topPanel.Controls.Add(this.textBoxFilter);
+            this.topPanel.Controls.Add(this.textBoxSearch);
             this.topPanel.Controls.Add(this.extButtonDisplayFilters);
             this.topPanel.Controls.Add(this.buttonExtExcel);
             this.topPanel.Controls.Add(this.checkBoxCursorToTop);
@@ -465,7 +465,7 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
-        private ExtendedControls.ExtTextBox textBoxFilter;
+        private ExtendedControls.ExtTextBox textBoxSearch;
         private System.Windows.Forms.Label labelSearch;
         internal ExtendedControls.ExtComboBox comboBoxTime;
         private System.Windows.Forms.Label labelTime;

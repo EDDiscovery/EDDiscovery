@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2020 EDDiscovery development team
+ * Copyright © 2016 - 2021 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -184,7 +184,7 @@ namespace EDDiscovery.UserControls
                 chunks.Add(chunk);
             }
 
-            string filtertext = textBoxFilter.Text;
+            string filtertext = textBoxSearch.Text;
 
             System.Diagnostics.Stopwatch swtotal = new System.Diagnostics.Stopwatch(); swtotal.Start();
 
@@ -290,7 +290,7 @@ namespace EDDiscovery.UserControls
 
             if (add)
             {
-                var row = CreateHistoryRow(he, textBoxFilter.Text);     // we might be filtered out by search
+                var row = CreateHistoryRow(he, textBoxSearch.Text);     // we might be filtered out by search
                 if (row != null)
                     dataGridViewJournal.Rows.Insert(0, row);
                 else
@@ -376,7 +376,7 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void textBoxFilter_TextChanged(object sender, EventArgs e)
+        private void textBoxSearch_TextChanged(object sender, EventArgs e)
         {
             searchtimer.Stop();
             searchtimer.Start();

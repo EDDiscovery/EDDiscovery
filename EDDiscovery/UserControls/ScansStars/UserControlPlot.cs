@@ -14,6 +14,7 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
+using BaseUtils;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using OxyPlot;

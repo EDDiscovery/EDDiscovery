@@ -16,6 +16,7 @@
 
 using EDDiscovery.Controls;
 using EliteDangerousCore;
+using System;
 using System.ComponentModel;
 using System.Windows.Forms;
 
@@ -24,6 +25,7 @@ namespace EDDiscovery.UserControls
     public partial class UserControlEstimatedValues : UserControlCommonBase
     {
         private HistoryEntry last_he = null;
+        const string dbShowZero = "ShowZeros";
 
         public UserControlEstimatedValues()
         {
@@ -47,6 +49,8 @@ namespace EDDiscovery.UserControls
             dataGridViewEstimatedValues.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
             dataGridViewEstimatedValues.DefaultCellStyle.Padding = new System.Windows.Forms.Padding(0, 1, 0, 1);
 
+            checkBoxShowZeros.Checked = GetSetting(dbShowZero, false); 
+            checkBoxShowZeros.CheckedChanged += CheckBoxShowZeros_CheckedChanged;
         }
 
         public override void LoadLayout()
@@ -120,7 +124,7 @@ namespace EDDiscovery.UserControls
                     {
                         System.Diagnostics.Debug.WriteLine("Recalc for " + bodies.ScanData.BodyName);
                         var ev = bodies.ScanData.RecalcEstimatedValues();
-                        if (ev.EstimatedValueBase == 0)
+                        if ( !checkBoxShowZeros.Checked && ev.EstimatedValueBase == 0)
                             continue; // skip 0-value things
 
                         string spclass = bodies.ScanData.IsStar ? bodies.ScanData.StarTypeText : bodies.ScanData.PlanetTypeText;
@@ -145,24 +149,20 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private const string SIMPLE_SINGLE_STAR_BODY_NAME = "Main Star"; // TODO: Is there an existing translation for this string (ie. from scan panel)?
-
-        /// <summary>
-        /// Shortens the given body name by stripping the current system name from it. 
-        /// </summary>
-        /// <param name="bodyName"></param>
-        /// <param name="systemName"></param>
-        /// <returns>The short body name. In the case of a sole/main star which has the same name as the system, a constant string is returned.</returns>
         private string GetBodySimpleName(string bodyName, string systemName)
         {
-            string bodySimpleName = bodyName.ReplaceIfStartsWith(systemName).Trim();
-            if (bodySimpleName.Equals(bodyName)) bodySimpleName = SIMPLE_SINGLE_STAR_BODY_NAME;
-            return bodySimpleName;
+            return bodyName.ReplaceIfStartsWith(systemName,musthaveextra:true).Trim();
         }
 
         private void CheckBoxEDSM_CheckedChanged(object sender, System.EventArgs e)
         {
             PutSetting("EDSM", checkBoxEDSM.Checked);
+            DrawSystem();
+        }
+
+        private void CheckBoxShowZeros_CheckedChanged(object sender, EventArgs e)
+        {
+            PutSetting(dbShowZero, checkBoxShowZeros.Checked);    // negative because we changed button sense
             DrawSystem();
         }
 

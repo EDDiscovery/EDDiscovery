@@ -50,10 +50,6 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel2 = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.vScrollBarCustom2 = new ExtendedControls.ExtScrollBar();
             this.dataGridViewEstimatedValues = new BaseUtils.DataGridViewColumnHider();
-            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
-            this.checkBoxEDSM = new ExtendedControls.ExtCheckBox();
-            this.extPanelRollUp = new ExtendedControls.ExtPanelRollUp();
-            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.BodyName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.BodyType = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.EDSM = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -66,6 +62,11 @@ namespace EDDiscovery.UserControls
             this.FirstMappedEff = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.FirstDiscMapped = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.EstValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.checkBoxEDSM = new ExtendedControls.ExtCheckBox();
+            this.checkBoxShowZeros = new ExtendedControls.ExtCheckBox();
+            this.extPanelRollUp = new ExtendedControls.ExtPanelRollUp();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.dataViewScrollerPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewEstimatedValues)).BeginInit();
             this.flowLayoutPanel1.SuspendLayout();
@@ -143,68 +144,6 @@ namespace EDDiscovery.UserControls
             this.dataGridViewEstimatedValues.Size = new System.Drawing.Size(556, 542);
             this.dataGridViewEstimatedValues.TabIndex = 23;
             this.dataGridViewEstimatedValues.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewEstimatedValues_SortCompare);
-            // 
-            // flowLayoutPanel1
-            // 
-            this.flowLayoutPanel1.AutoSize = true;
-            this.flowLayoutPanel1.Controls.Add(this.checkBoxEDSM);
-            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(572, 30);
-            this.flowLayoutPanel1.TabIndex = 5;
-            // 
-            // checkBoxEDSM
-            // 
-            this.checkBoxEDSM.Appearance = System.Windows.Forms.Appearance.Button;
-            this.checkBoxEDSM.BackColor = System.Drawing.SystemColors.Control;
-            this.checkBoxEDSM.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.checkBoxEDSM.CheckBoxColor = System.Drawing.Color.White;
-            this.checkBoxEDSM.CheckBoxDisabledScaling = 0.5F;
-            this.checkBoxEDSM.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBoxEDSM.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxEDSM.Cursor = System.Windows.Forms.Cursors.Default;
-            this.checkBoxEDSM.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.checkBoxEDSM.FlatAppearance.CheckedBackColor = System.Drawing.Color.Green;
-            this.checkBoxEDSM.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.checkBoxEDSM.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
-            this.checkBoxEDSM.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.checkBoxEDSM.Image = global::EDDiscovery.Icons.Controls.Scan_FetchEDSMBodies;
-            this.checkBoxEDSM.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxEDSM.ImageIndeterminate = null;
-            this.checkBoxEDSM.ImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.checkBoxEDSM.ImageUnchecked = null;
-            this.checkBoxEDSM.Location = new System.Drawing.Point(8, 1);
-            this.checkBoxEDSM.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
-            this.checkBoxEDSM.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxEDSM.Name = "checkBoxEDSM";
-            this.checkBoxEDSM.Size = new System.Drawing.Size(28, 28);
-            this.checkBoxEDSM.TabIndex = 4;
-            this.checkBoxEDSM.TickBoxReductionRatio = 0.75F;
-            this.toolTip.SetToolTip(this.checkBoxEDSM, "Get and show information from EDSM");
-            this.checkBoxEDSM.UseVisualStyleBackColor = false;
-            // 
-            // extPanelRollUp
-            // 
-            this.extPanelRollUp.AutoSize = true;
-            this.extPanelRollUp.Controls.Add(this.flowLayoutPanel1);
-            this.extPanelRollUp.Dock = System.Windows.Forms.DockStyle.Top;
-            this.extPanelRollUp.HiddenMarkerWidth = 400;
-            this.extPanelRollUp.Location = new System.Drawing.Point(0, 0);
-            this.extPanelRollUp.Name = "extPanelRollUp";
-            this.extPanelRollUp.PinState = true;
-            this.extPanelRollUp.RolledUpHeight = 5;
-            this.extPanelRollUp.RollUpAnimationTime = 500;
-            this.extPanelRollUp.RollUpDelay = 1000;
-            this.extPanelRollUp.SecondHiddenMarkerWidth = 0;
-            this.extPanelRollUp.ShowHiddenMarker = true;
-            this.extPanelRollUp.Size = new System.Drawing.Size(572, 30);
-            this.extPanelRollUp.TabIndex = 25;
-            this.extPanelRollUp.UnrollHoverDelay = 1000;
-            // 
-            // toolTip
-            // 
-            this.toolTip.ShowAlways = true;
             // 
             // BodyName
             // 
@@ -288,6 +227,91 @@ namespace EDDiscovery.UserControls
             this.EstValue.MinimumWidth = 50;
             this.EstValue.Name = "EstValue";
             // 
+            // flowLayoutPanel1
+            // 
+            this.flowLayoutPanel1.AutoSize = true;
+            this.flowLayoutPanel1.Controls.Add(this.checkBoxEDSM);
+            this.flowLayoutPanel1.Controls.Add(this.checkBoxShowZeros);
+            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(572, 30);
+            this.flowLayoutPanel1.TabIndex = 5;
+            // 
+            // checkBoxEDSM
+            // 
+            this.checkBoxEDSM.Appearance = System.Windows.Forms.Appearance.Button;
+            this.checkBoxEDSM.BackColor = System.Drawing.SystemColors.Control;
+            this.checkBoxEDSM.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.checkBoxEDSM.CheckBoxColor = System.Drawing.Color.White;
+            this.checkBoxEDSM.CheckBoxDisabledScaling = 0.5F;
+            this.checkBoxEDSM.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxEDSM.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxEDSM.Cursor = System.Windows.Forms.Cursors.Default;
+            this.checkBoxEDSM.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.checkBoxEDSM.FlatAppearance.CheckedBackColor = System.Drawing.Color.Green;
+            this.checkBoxEDSM.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.checkBoxEDSM.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
+            this.checkBoxEDSM.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.checkBoxEDSM.Image = global::EDDiscovery.Icons.Controls.Scan_FetchEDSMBodies;
+            this.checkBoxEDSM.ImageButtonDisabledScaling = 0.5F;
+            this.checkBoxEDSM.ImageIndeterminate = null;
+            this.checkBoxEDSM.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.checkBoxEDSM.ImageUnchecked = null;
+            this.checkBoxEDSM.Location = new System.Drawing.Point(8, 1);
+            this.checkBoxEDSM.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.checkBoxEDSM.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxEDSM.Name = "checkBoxEDSM";
+            this.checkBoxEDSM.Size = new System.Drawing.Size(28, 28);
+            this.checkBoxEDSM.TabIndex = 4;
+            this.checkBoxEDSM.TickBoxReductionRatio = 0.75F;
+            this.toolTip.SetToolTip(this.checkBoxEDSM, "Get and show information from EDSM");
+            this.checkBoxEDSM.UseVisualStyleBackColor = false;
+            // 
+            // checkBoxShowZeros
+            // 
+            this.checkBoxShowZeros.Appearance = System.Windows.Forms.Appearance.Button;
+            this.checkBoxShowZeros.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxShowZeros.CheckBoxDisabledScaling = 0.5F;
+            this.checkBoxShowZeros.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxShowZeros.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxShowZeros.Image = global::EDDiscovery.Icons.Controls.matshowzeros;
+            this.checkBoxShowZeros.ImageButtonDisabledScaling = 0.5F;
+            this.checkBoxShowZeros.ImageIndeterminate = null;
+            this.checkBoxShowZeros.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.checkBoxShowZeros.ImageUnchecked = global::EDDiscovery.Icons.Controls.matnozeros;
+            this.checkBoxShowZeros.Location = new System.Drawing.Point(40, 1);
+            this.checkBoxShowZeros.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.checkBoxShowZeros.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxShowZeros.Name = "checkBoxShowZeros";
+            this.checkBoxShowZeros.Size = new System.Drawing.Size(28, 28);
+            this.checkBoxShowZeros.TabIndex = 5;
+            this.checkBoxShowZeros.TickBoxReductionRatio = 0.75F;
+            this.toolTip.SetToolTip(this.checkBoxShowZeros, "Green will show materials with zero counts, red means remove them");
+            this.checkBoxShowZeros.UseVisualStyleBackColor = true;
+            // 
+            // extPanelRollUp
+            // 
+            this.extPanelRollUp.AutoSize = true;
+            this.extPanelRollUp.Controls.Add(this.flowLayoutPanel1);
+            this.extPanelRollUp.Dock = System.Windows.Forms.DockStyle.Top;
+            this.extPanelRollUp.HiddenMarkerWidth = 400;
+            this.extPanelRollUp.Location = new System.Drawing.Point(0, 0);
+            this.extPanelRollUp.Name = "extPanelRollUp";
+            this.extPanelRollUp.PinState = true;
+            this.extPanelRollUp.RolledUpHeight = 5;
+            this.extPanelRollUp.RollUpAnimationTime = 500;
+            this.extPanelRollUp.RollUpDelay = 1000;
+            this.extPanelRollUp.SecondHiddenMarkerWidth = 0;
+            this.extPanelRollUp.ShowHiddenMarker = true;
+            this.extPanelRollUp.Size = new System.Drawing.Size(572, 30);
+            this.extPanelRollUp.TabIndex = 25;
+            this.extPanelRollUp.UnrollHoverDelay = 1000;
+            // 
+            // toolTip
+            // 
+            this.toolTip.ShowAlways = true;
+            // 
             // UserControlEstimatedValues
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -326,5 +350,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn FirstMappedEff;
         private System.Windows.Forms.DataGridViewTextBoxColumn FirstDiscMapped;
         private System.Windows.Forms.DataGridViewTextBoxColumn EstValue;
+        private ExtendedControls.ExtCheckBox checkBoxShowZeros;
     }
 }
