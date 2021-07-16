@@ -312,7 +312,7 @@ namespace EDDiscovery
                 });
             };
 
-            Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Finish ED Init");
+            Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " DLL setup");
 
             EliteDangerousCore.DLL.EDDDLLAssemblyFinder.AssemblyFindPaths.Add(EDDOptions.Instance.DLLAppDirectory());      // any needed assemblies from here
             var dllexe = EDDOptions.Instance.DLLExeDirectory();     // and possibly from here, may not be present
@@ -342,14 +342,19 @@ namespace EDDiscovery
 
             extButtonDrawnHelp.Text = "";
             extButtonDrawnHelp.Image = ExtendedControls.TabStrip.HelpIcon;
+
+            Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Finish ED Init");
+
         }
 
         // OnLoad is called the first time the form is shown, before OnShown or OnActivated are called
 
         private void EDDiscoveryForm_Load(object sender, EventArgs e)
         {
+            Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Load");
             if (!EDDOptions.Instance.NoTabs)        // load the tabs so when shown is done they are there..
                 tabControlMain.LoadTabs();
+            Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Load Complete");
         }
 
         // OnShown is called once
@@ -402,6 +407,7 @@ namespace EDDiscovery
                 ScreenShotCaptured?.Invoke(outfile, imagesize);         // tell others screen shot is captured
             };
 
+            Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Web");
             WebServerControl(EDDConfig.Instance.WebServerEnable);
 
             tabControlMain.SelectedIndexChanged += (snd, ea) =>
@@ -423,6 +429,8 @@ namespace EDDiscovery
                                             };
 
             string alloweddlls = EDDConfig.Instance.DLLPermissions;
+
+            Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Load DLL");
 
             string[] dllpaths = new string[] { EDDOptions.Instance.DLLAppDirectory(), EDDOptions.Instance.DLLExeDirectory() };
             bool[] autodisallow = new bool[] { false, true };
@@ -455,6 +463,7 @@ namespace EDDiscovery
                 if (changed)
                 {
                     DLLManager.UnLoad();
+                    Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Reload DLL");
                     res = DLLManager.Load(dllpaths, autodisallow, verstring, options, DLLCallBacks, ref alloweddlls);
                 }
             }
@@ -471,12 +480,14 @@ namespace EDDiscovery
             LogLine(string.Format("Profile {0} Loaded".T(EDTx.EDDiscoveryForm_PROFL), EDDProfiles.Instance.Current.Name));
 
             // Bindings
+            Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Bindings");
 
             if (actioncontroller.FrontierBindings.FileLoaded != null)
                 LogLine(string.Format("Loaded Bindings {0}", actioncontroller.FrontierBindings.FileLoaded));
             else
                 LogLine("Frontier bindings did not load");
 
+            Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Notifications");
 
             // Notifications
 
@@ -526,6 +537,7 @@ namespace EDDiscovery
 
             // Now the installer
 
+            Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Installer");
             Installer.CheckForNewInstallerAsync((rel) =>  // in thread
             {
                 newRelease = rel;
@@ -647,6 +659,8 @@ namespace EDDiscovery
                     AboutBox();
                 }
             }
+
+            Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " End shown");
         }
 
         private void EDDiscoveryForm_Resize(object sender, EventArgs e)
