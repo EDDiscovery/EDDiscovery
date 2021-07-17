@@ -70,7 +70,7 @@ namespace EDDiscovery.UserControls
             showAtmosToolStripMenuItem.Checked = GetSetting("atmos", true);
             hasRingsToolStripMenuItem.Checked = GetSetting("showRinged", true);
             showGravityToolStripMenuItem.Checked = GetSetting("showGravity", true);
-            showVolcanismToolStripMenuItem.Checked = GetSetting("showVolcanism", true);
+            showVolcanismToolStripMenuItem.Checked = GetSetting("volcanism", true);
             hideAlreadyMappedBodiesToolStripMenuItem.Checked = GetSetting("hideMapped", true);
             autoHideToolStripMenuItem.Checked = GetSetting("autohide", false);
             lowRadiusToolStripMenuItem.Checked = GetSetting("lowradius", false);
