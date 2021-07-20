@@ -436,11 +436,17 @@ namespace EDDiscovery.UserControls
         private void Merge(int panel)       // Merge a panel, which involves closing one, so we need to check
         {
             SplitContainer insidesplitter = (SplitContainer)currentsplitter.Controls[panel].Controls[0];  // get that split container in the panel
-            ExtendedControls.TabStrip tabstrip = insidesplitter.Panel2.Controls[0] as ExtendedControls.TabStrip;    // it must contain a tabstrip
 
-            UserControlCommonBase discard = tabstrip.CurrentControl as UserControlCommonBase;      // we are discarding this UCCB, this can be null, as it may not contain one
+            UserControlCommonBase uccb = insidesplitter.Panel2.Controls[0] as UserControlCommonBase;        // the panel may an embedded direct uccb.. 
+            if ( uccb == null )
+            {
+                ExtendedControls.TabStrip tabstrip = insidesplitter.Panel2.Controls[0] as ExtendedControls.TabStrip;    // it may contain a tabstrip...
+                if (tabstrip != null)
+                    uccb = tabstrip.CurrentControl as UserControlCommonBase;    // if its a tabstrip, it may contain a UCCB, or it may be empty..
+                                                                                // if its not a uccb, its a split container, so null is fine
+            }
 
-            if (discard?.AllowClose() ?? true)      // check if can close, if null, we can
+            if (uccb?.AllowClose() ?? true)      // check if can close, if null, we can
             {
                 currentsplitter.Merge(panel);
                 AssignTHC();        // because we may have removed the cursor
