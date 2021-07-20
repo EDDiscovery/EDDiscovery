@@ -112,6 +112,7 @@ SECTION SearchMaterialsCommodities
 .ColumnCurrentDistance: "Current Distance" => "Derzeitige Entfernung"
 .ColumnPosition: "Position" => "Position"
 
+
 SECTION SearchScans
 
 .Select: "Select" => "Wählen"
@@ -189,6 +190,7 @@ SECTION UserControlEstimatedValues
 .Mapped: "Mapped" => "Kartographiert"
 .WasMapped: "Already Mapped" => "Bereits kartographiert"
 .WasDiscovered: "Already Discovered" => "Bereits entdeckt"
+
 .SV: "Estimated Scan Values for {0}" => "Geschätzte Scanwerte für {0}"
 .EDSM: "EDSM" => "EDSM"
 .checkBoxEDSM.ToolTip: "Get and show information from EDSM" => "Hole und zeige Informationen von EDSM"
@@ -426,6 +428,7 @@ SECTION UserControlSurveyor
 .Scan: "Scan" => "Scan"
 .Systemscancomplete: "System scan complete." => "Systemscan komplett"
 .bodiesfound: " bodies found." => " Körper gefunden."
+
 .bodyFeaturesToolStripMenuItem.lowRadiusToolStripMenuItem: "Tiny body" => "niedriger Radius"
 .checkEDSMForInformationToolStripMenuItem: "Check EDSM for information" => "Prüfe EDSM auf Informationen"
 .autoHideToolStripMenuItem: "Auto Hide" => "Automatisch verstecken"
@@ -452,6 +455,7 @@ SECTION UserControlSurveyor
 .showBeltClustersToolStripMenuItem: "Show Belt Clusters" => "Zeige Gürtelgruppen"
 .showMoreInformationToolStripMenuItem: "Show More Information" => "Zeige mehr Informationen"
 .showValuesToolStripMenuItem: "Show values" => "Zeige Werte"
+.showAtmosToolStripMenuItem: "Show atmospheres of landables" => "Zeige Atmosphäre bei landbaren"
 .wordWrapToolStripMenuItem: "Word Wrap" => "Zeilenumbruch"
 .planetaryClassesToolStripMenuItem.highMetalContentBodyToolStripMenuItem: "High metal content body" => "Planet mit hochwertigen Metallen"
 .planetaryClassesToolStripMenuItem.metalToolStripMenuItem: "Metal-rich body" => "Metallreicher Planet"
@@ -460,6 +464,8 @@ SECTION UserControlSurveyor
 .bodyFeaturesToolStripMenuItem.landableWithVolcanismToolStripMenuItem: "Landable with volcanism" => "Landbar mit Vulkanismus"
 .bodyFeaturesToolStripMenuItem.landableAndLargeToolStripMenuItem: "Landable and large" => "Landbar und groß"
 .showGravityToolStripMenuItem: "Show gravity of landables" => "Zeige Gravitation bei landbaren"
+.bodyFeaturesToolStripMenuItem.showAtmosToolStripMenuItem: "Show atmosphere" => "Zeige Atmosphäre"
+.showVolcanismToolStripMenuItem: "Show volcanism of landables" => "Zeige Vulkanismus bei landbaren"
 
 SECTION MissionListUserControl
 
