@@ -87,6 +87,8 @@ namespace EDDiscovery.UserControls
             this.pictureBoxSurveyor = new ExtendedControls.ExtPictureBox();
             this.extPictureBoxScroll = new ExtendedControls.ExtPictureBoxScroll();
             this.extScrollBar = new ExtendedControls.ExtScrollBar();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.contextMenuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSurveyor)).BeginInit();
             this.extPictureBoxScroll.SuspendLayout();
@@ -95,19 +97,21 @@ namespace EDDiscovery.UserControls
             // contextMenuStrip
             // 
             this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.showAllPlanetsToolStripMenuItem,
             this.planetaryClassesToolStripMenuItem,
             this.bodyFeaturesToolStripMenuItem,
-            this.showAllPlanetsToolStripMenuItem,
             this.showAllStarsToolStripMenuItem,
             this.showBeltClustersToolStripMenuItem,
+            this.toolStripSeparator3,
             this.showGravityToolStripMenuItem,
             this.showAtmosToolStripMenuItem,
             this.showVolcanismToolStripMenuItem,
+            this.toolStripSeparator4,
             this.showValuesToolStripMenuItem,
             this.showMoreInformationToolStripMenuItem,
             this.selectFSSSignalsShownToolStripMenuItem,
-            this.toolStripSeparator1,
             this.hideAlreadyMappedBodiesToolStripMenuItem,
+            this.toolStripSeparator1,
             this.checkEDSMForInformationToolStripMenuItem,
             this.autoHideToolStripMenuItem,
             this.dontHideInFSSModeToolStripMenuItem,
@@ -116,7 +120,7 @@ namespace EDDiscovery.UserControls
             this.wordWrapToolStripMenuItem,
             this.textAlignToolStripMenuItem});
             this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(242, 434);
+            this.contextMenuStrip.Size = new System.Drawing.Size(242, 446);
             // 
             // planetaryClassesToolStripMenuItem
             // 
@@ -499,6 +503,16 @@ namespace EDDiscovery.UserControls
             this.extScrollBar.Value = 0;
             this.extScrollBar.ValueLimited = 0;
             // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(238, 6);
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(238, 6);
+            // 
             // UserControlSurveyor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -559,5 +573,7 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripMenuItem showAtmosToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showGravityToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showVolcanismToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
     }
 }
