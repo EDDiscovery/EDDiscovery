@@ -119,10 +119,6 @@ namespace EDDiscovery
         AddOnManagerForm_Modwarn, // Modified locally, do you wish to overwrite the changes
         AddOnManagerForm_Failed, // Add-on failed to update. Check files for read only status
         AddOnManagerForm_DeleteWarn, // Do you really want to delete {0}
-        AddOnManagerForm_WillBeDeleted,
-        AddOnManagerForm_ToBeDeleted,
-        AddOnManagerForm_Needstobedeleted,
-
 
         AddOnManagerForm_Type, // Type
         AddOnManagerForm_Name, // Name
