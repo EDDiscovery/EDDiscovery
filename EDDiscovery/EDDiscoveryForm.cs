@@ -281,30 +281,34 @@ namespace EDDiscovery
 
             List<string> alloweddllslist = EDDConfig.Instance.DLLPermissions.Split(",").ToList();
 
-            JObject tobedeleted = JObject.Parse(EDDConfig.DeleteAtRunList);
-            if ( tobedeleted != null )
             {
-                foreach( var o in tobedeleted)
+                FileInfo[] allFiles = Directory.EnumerateFiles(EDDOptions.Instance.TempMoveDirectory(), "*.txt", SearchOption.TopDirectoryOnly).Select(f => new FileInfo(f)).OrderBy(p => p.Name).ToArray();
+
+                foreach (FileInfo f in allFiles)
                 {
-                    JArray ja = o.Value.Array();
-                    foreach( var f in ja)
+                    string cmd = BaseUtils.FileHelpers.TryReadAllTextFromFile(f.FullName);
+                    if ( cmd != null )
                     {
-                        string file = f.StrNull();
-                        if (file != null && file.Contains(EDDOptions.Instance.AppDataDirectory))        // can only delete from app data folder for sanity
+                        if (cmd.StartsWith("Delete:"))
                         {
-                            System.Diagnostics.Debug.WriteLine($"Action pack Delete {file}");
-                            BaseUtils.FileHelpers.DeleteFileNoError(file);
-                            int i = alloweddllslist.ContainsIn(file, StringComparison.InvariantCultureIgnoreCase);
+                            string d = cmd.Substring(7);
+                            int i = alloweddllslist.ContainsIn(d, StringComparison.InvariantCultureIgnoreCase);
                             if (i >= 0)
                                 alloweddllslist.RemoveAt(i);
+                            EDDConfig.Instance.DLLPermissions = String.Join(",", alloweddllslist);
+                            BaseUtils.FileHelpers.DeleteFileNoError(d);
                         }
+                        else if (cmd.StartsWith("Copy:"))
+                        {
+                            string s = cmd.Substring(5, cmd.IndexOf(":To:",5) - 5);
+                            string d = cmd.Substring(cmd.IndexOf(":To:") + 4);
+                            if (!BaseUtils.FileHelpers.TryCopy(s, d, true))
+                                System.Diagnostics.Debug.WriteLine("Can't copy over on startup" + d);
+                            BaseUtils.FileHelpers.DeleteFileNoError(s);
+                        }
+                        BaseUtils.FileHelpers.DeleteFileNoError(f.FullName);
                     }
                 }
-
-                EDDConfig.DeleteAtRunList = "{}";
-
-                if( tobedeleted.Count>0)
-                    EDDConfig.Instance.DLLPermissions = String.Join(",", alloweddllslist);
             }
 
             actioncontroller = new Actions.ActionController(this, Controller, this.Icon, new Type[] { typeof(FormMap) });

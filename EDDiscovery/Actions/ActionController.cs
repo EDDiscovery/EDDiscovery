@@ -376,10 +376,6 @@ namespace EDDiscovery.Actions
             using (AddOnManagerForm dmf = new AddOnManagerForm())
             {
                 dmf.Init(manage, this.Icon);
-                string delatrun = EDDConfig.Instance.DeleteAtRunList;
-                var jo = JToken.Parse(delatrun).Object();
-                if (jo != null)
-                    dmf.deletedlist = jo;
 
                 dmf.EditActionFile += Dmf_OnEditActionFile;     // only used when manage = false
                 dmf.EditGlobals += Dmf_OnEditGlobals;
@@ -387,8 +383,6 @@ namespace EDDiscovery.Actions
                 dmf.CheckActionLoaded += Dmf_checkActionLoaded;
 
                 dmf.ShowDialog(discoveryform);
-
-                EDDConfig.Instance.DeleteAtRunList = dmf.deletedlist.ToString();
 
                 if (dmf.changelist.Count > 0)
                 {

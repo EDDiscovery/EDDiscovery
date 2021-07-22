@@ -28,7 +28,6 @@ namespace EDDiscovery.Forms
     public partial class AddOnManagerForm : ExtendedControls.DraggableForm
     {
         public Dictionary<string,string> changelist = new Dictionary<string,string>();      //+ enabled/installed, - deleted/disabled
-        public JObject deletedlist = new JObject();     // in JSON format
 
         class Group
         {
@@ -146,13 +145,12 @@ namespace EDDiscovery.Forms
 
         static public void ReadLocalFiles(VersioningManager mgr, bool othertypes)
         {
-            string[] notdeletable = new string[] { ".DLL" };
-            mgr.ReadLocalFiles(EDDOptions.Instance.AppDataDirectory, "Actions", "*.act", "Action File",notdeletable);
+            mgr.ReadLocalFiles(EDDOptions.Instance.AppDataDirectory, "Actions", "*.act", "Action File");
 
             if (othertypes)
             {
-                mgr.ReadLocalFiles(EDDOptions.Instance.AppDataDirectory, "Flights", "*.vid", "Video File",notdeletable);
-                mgr.ReadLocalFiles(EDDOptions.Instance.AppDataDirectory, "AddonFiles", "*.inf", "Other Files",notdeletable);
+                mgr.ReadLocalFiles(EDDOptions.Instance.AppDataDirectory, "Flights", "*.vid", "Video File");
+                mgr.ReadLocalFiles(EDDOptions.Instance.AppDataDirectory, "AddonFiles", "*.inf", "Other Files");
             }
         }
 
@@ -202,8 +200,6 @@ namespace EDDiscovery.Forms
 
             foreach ( VersioningManager.DownloadItem di in mgr.DownloadItems )
             {
-                bool deletedalready = deletedlist.Contains(di.itemname);
-
                 Group g = new Group();
                 g.di = di;
                 g.panel = new Panel();
@@ -249,9 +245,7 @@ namespace EDDiscovery.Forms
                 {
                     bool isversion = false;
                     string text;
-                    if (deletedalready)
-                        text = "To be Deleted".T(EDTx.AddOnManagerForm_ToBeDeleted);    
-                    else if (di.state == VersioningManager.ItemState.EDOutOfDate)
+                    if (di.state == VersioningManager.ItemState.EDOutOfDate)
                         text = "Newer EDD required".T(EDTx.AddOnManagerForm_Newer);
                     else if (di.state == VersioningManager.ItemState.EDTooOld)
                         text = "Too old for EDD".T(EDTx.AddOnManagerForm_Old);
@@ -276,7 +270,7 @@ namespace EDDiscovery.Forms
                     g.actionlabel.Text = text;
                     g.panel.Controls.Add(g.actionlabel);
 
-                    if (isversion && !deletedalready)        
+                    if (isversion)        
                     {
                         g.actionbutton = new ExtendedControls.ExtButton();
                         g.actionbutton.Location = new Point(tabs[5], labelheightmargin - 4);      // 8 spacing, allow 8*4 to indent
@@ -293,7 +287,7 @@ namespace EDDiscovery.Forms
 
                     if (loaded)     // may not be loaded IF its got an error.
                     {
-                        if (!di.localnoteditable && !deletedalready)
+                        if (!di.localnoteditable )
                         {
                             g.actionbutton = new ExtendedControls.ExtButton();
                             g.actionbutton.Location = new Point(tabs[5], labelheightmargin - 4);      // 8 spacing, allow 8*4 to indent
@@ -306,31 +300,28 @@ namespace EDDiscovery.Forms
                     }
                 }
 
-                if (!deletedalready)
+                if (di.HasLocalCopy)
                 {
-                    if (di.HasLocalCopy)
-                    {
-                        g.deletebutton = new ExtendedControls.ExtButton();
-                        g.deletebutton.Location = new Point(tabs[6], labelheightmargin - 4);      // 8 spacing, allow 8*4 to indent
-                        g.deletebutton.Size = new Size(24, 24);
-                        g.deletebutton.Text = "X";
-                        g.deletebutton.Click += Deletebutton_Click;
-                        g.deletebutton.Tag = g;
-                        g.panel.Controls.Add(g.deletebutton);
-                    }
+                    g.deletebutton = new ExtendedControls.ExtButton();
+                    g.deletebutton.Location = new Point(tabs[6], labelheightmargin - 4);      // 8 spacing, allow 8*4 to indent
+                    g.deletebutton.Size = new Size(24, 24);
+                    g.deletebutton.Text = "X";
+                    g.deletebutton.Click += Deletebutton_Click;
+                    g.deletebutton.Tag = g;
+                    g.panel.Controls.Add(g.deletebutton);
+                }
 
-                    if (di.localenable.HasValue)
-                    {
-                        g.enabled = new ExtendedControls.ExtCheckBox();
-                        g.enabled.Location = new Point(tabs[7], labelheightmargin - 4);
-                        g.enabled.Size = new Size(tabs[8] - tabs[7], 24);
-                        g.enabled.Text = "";
-                        g.enabled.Checked = di.localenable.Value;
-                        g.enabled.Click += Enabled_Click;
-                        g.enabled.Tag = g;
-                        g.enabled.Enabled = !di.localnotdisableable;
-                        g.panel.Controls.Add(g.enabled);
-                    }
+                if (di.localenable.HasValue)
+                {
+                    g.enabled = new ExtendedControls.ExtCheckBox();
+                    g.enabled.Location = new Point(tabs[7], labelheightmargin - 4);
+                    g.enabled.Size = new Size(tabs[8] - tabs[7], 24);
+                    g.enabled.Text = "";
+                    g.enabled.Checked = di.localenable.Value;
+                    g.enabled.Click += Enabled_Click;
+                    g.enabled.Tag = g;
+                    g.enabled.Enabled = !di.localnotdisableable;
+                    g.panel.Controls.Add(g.enabled);
                 }
 
                 g.panel.Location= new Point(panelleftmargin, vpos);
@@ -419,20 +410,13 @@ namespace EDDiscovery.Forms
             ExtendedControls.ExtButton cb = sender as ExtendedControls.ExtButton;
             Group g = cb.Tag as Group;
 
-            if ( g.di.localnotdirectlydeletable)
-            {
-                ExtendedControls.MessageBoxTheme.Show(this, "This pack needs to be deleted first\r\nClick first to delete the pack, then exit EDD and rerun, then install the new version".T(EDTx.AddOnManagerForm_Needstobedeleted), 
-                                        "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
             if (g.di.localmodified)
             {
                 if (ExtendedControls.MessageBoxTheme.Show(this, "Modified locally, do you wish to overwrite the changes".T(EDTx.AddOnManagerForm_Modwarn), "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.Cancel)
                     return;
             }
 
-            if (mgr.InstallFiles(g.di, EDDOptions.Instance.AppDataDirectory))
+            if (mgr.InstallFiles(g.di, EDDOptions.Instance.AppDataDirectory, EDDOptions.Instance.TempMoveDirectory()))
             {
                 changelist[g.di.itemname] = "+";
                 ExtendedControls.MessageBoxTheme.Show(this, "Add-on updated");
@@ -457,21 +441,8 @@ namespace EDDiscovery.Forms
 
             if (ExtendedControls.MessageBoxTheme.Show(this, string.Format("Do you really want to delete {0}".T(EDTx.AddOnManagerForm_DeleteWarn), g.di.itemname), "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
             {
-                if (g.di.localnotdirectlydeletable)
-                {
-                    JArray ja = new JArray();
-                    ja.Add(g.di.localfilename);
-                    ja.Add(Path.Combine(g.di.localpath,g.di.itemname + ".sha"));
-                    ja.AddRange(g.di.localadditionalfiles.Select(x=>JToken.CreateToken(x)));
-                    deletedlist[g.di.itemname] = ja;
-                    g.deletebutton.Enabled = false;
-                    ExtendedControls.MessageBoxTheme.Show(this, "Will be deleted at next run of program".T(EDTx.AddOnManagerForm_WillBeDeleted), "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
-                else
-                {
-                    VersioningManager.DeleteInstall(g.di, EDDOptions.Instance.AppDataDirectory);
-                    changelist[g.di.itemname] = "-";
-                }
+                VersioningManager.DeleteInstall(g.di, EDDOptions.Instance.AppDataDirectory, EDDOptions.Instance.TempMoveDirectory());
+                changelist[g.di.itemname] = "-";
                 ReadyToDisplay();
             }
         }

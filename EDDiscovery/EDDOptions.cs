@@ -273,6 +273,7 @@ namespace EDDiscovery
         public string DLLExeDirectory() { return SubExeDirectory("DLL"); }
         public string HelpDirectory() { return SubAppDirectory("Help"); }
         public string CAPIDirectory() { return SubAppDirectory("CAPI"); }
+        public string TempMoveDirectory() { return SubAppDirectory("MoveFolder"); }
         public string TranslatorDirectory() { return translationfolder; }
         public int TranslatorDirectoryIncludeSearchUpDepth { get; private set; }
         static public string ExeDirectory() { return System.AppDomain.CurrentDomain.BaseDirectory;  }

@@ -59,8 +59,6 @@ namespace EDDiscovery.Versions
             public bool? localenable;           // null, or set if local has variables and a Enable flag
             public bool localnoteditable;       // set if NotEditable variable is true
             public bool localnotdisableable;    // set if NotDisablable variable is true
-            public List<string> localadditionalfiles = new List<string>();
-            public bool localnotdirectlydeletable;      // set if additional files contains a file not deletable
             public ItemState state;
 
             public string itemname;
@@ -73,7 +71,7 @@ namespace EDDiscovery.Versions
         {
         }
 
-        public void ReadLocalFiles(string appfolder, string subfolder, string filename , string defaultitemtype, string[] notdeletableext)       // DONE FIRST
+        public void ReadLocalFiles(string appfolder, string subfolder, string filename , string defaultitemtype)       // DONE FIRST
         {
             string installfolder = System.IO.Path.Combine(appfolder, subfolder);
             if (!System.IO.Directory.Exists(installfolder))
@@ -126,9 +124,6 @@ namespace EDDiscovery.Versions
                             {
                                 string[] parts = it.localvars[key].Split(';');
                                 string o = Path.Combine(new string[] { appfolder, parts[1], parts[0] });
-                                it.localadditionalfiles.Add(o);
-                                if (notdeletableext.ContainsIn(Path.GetExtension(o), StringComparison.InvariantCultureIgnoreCase)>=0)
-                                    it.localnotdirectlydeletable = true;
                             }
                         }
                     }
@@ -243,7 +238,7 @@ namespace EDDiscovery.Versions
             return false;
         }
 
-        public bool InstallFiles(DownloadItem item, string appfolder)
+        public bool InstallFiles(DownloadItem item, string appfolder, string tempmovefolder)
         {
             try
             {
@@ -265,65 +260,68 @@ namespace EDDiscovery.Versions
                             {
                                 string folder = Path.Combine(appfolder, entry[1]);
                                 if (!Directory.Exists(folder))      // ensure the folder exists
-                                    Directory.CreateDirectory(folder);
+                                    BaseUtils.FileHelpers.CreateDirectoryNoError(folder);
                                 string outfile = Path.Combine(folder, entry[0]);
                                 string source = Path.Combine(tempfolder, entry[0]);
                                 System.Diagnostics.Debug.WriteLine("Downloaded and installed " + outfile);
-                                File.Copy(source, outfile, true);
+
+                                if (!BaseUtils.FileHelpers.TryCopy(source, outfile, true))  // if failed to copy, try it on next restart
+                                {
+                                    string s = Path.Combine(tempmovefolder, entry[0]);
+                                    if (BaseUtils.FileHelpers.TryCopy(source, s, true))
+                                    {
+                                        File.WriteAllText(Path.Combine(tempmovefolder, entry[0] + ".txt"), "Copy:" + s + ":To:" + outfile);        // can't delete, tell EDD to delete this next time
+                                    }
+                                }
                             }
                         }
                     }
-                    else
-                        return false;
-                }
 
-                foreach (string key in item.downloadedvars.NameEnumuerable)  // these first, they are not the controller files
-                {
-                    if (key.StartsWith("DisableOther"))
+                    foreach (string key in item.downloadedvars.NameEnumuerable)  // these first, they are not the controller files
                     {
-                        DownloadItem other = DownloadItems.Find(x => x.itemname.Equals(item.downloadedvars[key]));
+                        if (key.StartsWith("DisableOther"))
+                        {
+                            DownloadItem other = DownloadItems.Find(x => x.itemname.Equals(item.downloadedvars[key]));
 
-                        if (other != null && other.localfilename != null)
-                            SetEnableFlag(other, false, appfolder); // don't worry if it fails..
+                            if (other != null && other.localfilename != null)
+                                SetEnableFlag(other, false, appfolder); // don't worry if it fails..
+                        }
                     }
+
+                    File.Copy(item.downloadedfilename, item.localfilename, true);
+
+                    WriteOrCheckSHAFile(item, item.downloadedvars, appfolder, true);
+
+                    return true;
                 }
-
-                File.Copy(item.downloadedfilename, item.localfilename, true);
-
-                WriteOrCheckSHAFile(item, item.downloadedvars, appfolder, true);
-
-                return true;
             }
-            catch
+            catch (Exception ex)
             {
-                return false;
+                System.Diagnostics.Debug.WriteLine("Exception " + ex);
             }
+
+            return false;
         }
-
     
-        static public bool DeleteInstall(DownloadItem item, string appfolder)
+        static public bool DeleteInstall(DownloadItem item, string appfolder, string tempmovefolder)
         {
-            try
+            foreach (string key in item.localvars.NameEnumuerable)  // these first, they are not the controller files
             {
-                foreach (string key in item.localvars.NameEnumuerable)  // these first, they are not the controller files
+                if (key.StartsWith("OtherFile"))
                 {
-                    if (key.StartsWith("OtherFile"))
+                    string[] parts = item.localvars[key].Split(';');
+                    string o = Path.Combine(new string[] { appfolder, parts[1], parts[0] });
+                    if ( !BaseUtils.FileHelpers.DeleteFileNoError(o) )      // if failed to delete, do it on next restart
                     {
-                        string[] parts = item.localvars[key].Split(';');
-                        string o = Path.Combine(new string[] { appfolder, parts[1], parts[0] });
-                        File.Delete(o);
+                        File.WriteAllText(Path.Combine(tempmovefolder, parts[0] + ".txt"), "Delete:" + o);        // can't delete, tell EDD to delete this next time
                     }
                 }
+            }
 
-                File.Delete(item.localfilename);
-                string shafile = Path.Combine(item.localpath, item.itemname + ".sha");
-                File.Delete(shafile);
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+            BaseUtils.FileHelpers.DeleteFileNoError(item.localfilename);
+            string shafile = Path.Combine(item.localpath, item.itemname + ".sha");
+            BaseUtils.FileHelpers.DeleteFileNoError(shafile);
+            return true;
         }
 
         // true for write, for read its true if the same..
