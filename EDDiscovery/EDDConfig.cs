@@ -68,6 +68,7 @@ namespace EDDiscovery
         private bool webserverenable = false;
         private string dllpermissions = "";
         Dictionary<string, Image> captainslogtaglist;
+        private string deleteatrun = "";
 
         /// <summary>
         /// Controls whether or not a system notification area (systray) icon will be shown.
@@ -474,6 +475,19 @@ namespace EDDiscovery
             }
         }
 
+        public string DeleteAtRunList
+        {
+            get
+            {
+                return deleteatrun;
+            }
+            set
+            {
+                deleteatrun = value;
+                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("DeleteAtRunList", value);
+            }
+        }
+
         #endregion
 
         #region Update at start
@@ -500,7 +514,6 @@ namespace EDDiscovery
                 essentialeventtype = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("EssentialEventType", "Default");
                 coriolisURL = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("CorolisURL", Properties.Resources.URLCoriolis);
                 eddshipyardURL = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("EDDShipyardURL", Properties.Resources.URLEDShipyard);
-
                 if (eddshipyardURL == "http://www.edshipyard.com/")     // 30/jul/19 changed address
                     EDDShipyardURL = "http://edsy.org/";
 
@@ -509,6 +522,7 @@ namespace EDDiscovery
                 webserverport = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt("WebServerPort", 6502);
                 webserverenable = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("WebServerEnable", false);
                 dllpermissions = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("DLLAllowed", "");
+                deleteatrun = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("DeleteAtRunList", "");
             }
             catch (Exception ex)
             {

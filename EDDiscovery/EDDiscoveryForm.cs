@@ -14,6 +14,7 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
+using BaseUtils.JSON;
 using EDDiscovery.Forms;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
@@ -179,7 +180,6 @@ namespace EDDiscovery
             PanelInformation.Init();
 
             // Some components require the controller to be initialized
-            // obsolete remove IconSet.SetPanelImageListGetter(PanelInformation.GetPanelImages);
             InitializeComponent();
 
             screenshotconverter = new EliteDangerousCore.ScreenShots.ScreenShotConverter();
@@ -276,6 +276,26 @@ namespace EDDiscovery
             helpTabToolStripMenuItem.Click += (s, e) => { tabControlMain.HelpOn(this,contextMenuStripTabs.PointToScreen(new Point(0,0)), tabControlMain.LastTabClicked); };
 
             msg.Invoke("Loading Action Packs");         // STAGE 4 Action packs
+
+            JObject tobedeleted = JObject.Parse(EDDConfig.DeleteAtRunList);
+            if ( tobedeleted != null )
+            {
+                foreach( var o in tobedeleted)
+                {
+                    JArray ja = o.Value.Array();
+                    foreach( var f in ja)
+                    {
+                        string file = f.StrNull();
+                        if (file != null && file.Contains(EDDOptions.Instance.AppDataDirectory))        // can only delete from app data folder for sanity
+                        {
+                            System.Diagnostics.Debug.WriteLine($"Action pack Delete {file}");
+                            BaseUtils.FileHelpers.DeleteFileNoError(file);
+                        }
+                    }
+                }
+
+                EDDConfig.DeleteAtRunList = "{}";
+            }
 
             actioncontroller = new Actions.ActionController(this, Controller, this.Icon, new Type[] { typeof(FormMap) });
             actioncontroller.ReLoad();          // load system up here
@@ -415,6 +435,7 @@ namespace EDDiscovery
                 if (tabControlMain.SelectedIndex >= 0)   // may go to -1 on a clear all
                     ActionRun(Actions.ActionEventEDList.onTabChange, new BaseUtils.Variables("TabName", tabControlMain.TabPages[tabControlMain.SelectedIndex].Text));
             };
+
 
             // DLL loads
 

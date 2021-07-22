@@ -55,9 +55,12 @@ namespace EDDiscovery.Versions
             public string localpath;            // always set
             public int[] localversion;          // may be null if file does not have version
             public bool localmodified;          // if local file exists, sha comparison
-            public Variables localvars;    //  null, or set if local has variables
-            public bool? localenable;       // null, or set if local has variables and a Enable flag
-
+            public Variables localvars;         //  null, or set if local has variables
+            public bool? localenable;           // null, or set if local has variables and a Enable flag
+            public bool localnoteditable;       // set if NotEditable variable is true
+            public bool localnotdisableable;    // set if NotDisablable variable is true
+            public List<string> localadditionalfiles = new List<string>();
+            public bool localnotdirectlydeletable;      // set if additional files contains a file not deletable
             public ItemState state;
 
             public string itemname;
@@ -70,7 +73,7 @@ namespace EDDiscovery.Versions
         {
         }
 
-        public void ReadLocalFiles(string appfolder, string subfolder, string filename , string defaultitemtype)       // DONE FIRST
+        public void ReadLocalFiles(string appfolder, string subfolder, string filename , string defaultitemtype, string[] notdeletableext)       // DONE FIRST
         {
             string installfolder = System.IO.Path.Combine(appfolder, subfolder);
             if (!System.IO.Directory.Exists(installfolder))
@@ -110,6 +113,24 @@ namespace EDDiscovery.Versions
 
                         if (it.localvars.Exists("ItemType"))
                             it.itemtype = it.localvars["ItemType"];     // allow file to override name
+
+                        if (it.localvars.Equals("NotEditable","True"))
+                            it.localnoteditable = true;
+
+                        if (it.localvars.Equals("NotDisableable","True"))
+                            it.localnotdisableable = true;
+
+                        foreach (string key in it.localvars.NameEnumuerable)  // these first, they are not the controller files
+                        {
+                            if (key.StartsWith("OtherFile"))
+                            {
+                                string[] parts = it.localvars[key].Split(';');
+                                string o = Path.Combine(new string[] { appfolder, parts[1], parts[0] });
+                                it.localadditionalfiles.Add(o);
+                                if (notdeletableext.ContainsIn(Path.GetExtension(o), StringComparison.InvariantCultureIgnoreCase)>=0)
+                                    it.localnotdirectlydeletable = true;
+                            }
+                        }
                     }
 
                     DownloadItems.Add(it);
@@ -279,6 +300,7 @@ namespace EDDiscovery.Versions
             }
         }
 
+    
         static public bool DeleteInstall(DownloadItem item, string appfolder)
         {
             try
