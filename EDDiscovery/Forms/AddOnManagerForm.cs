@@ -402,7 +402,11 @@ namespace EDDiscovery.Forms
             ExtendedControls.ExtCheckBox cb = sender as ExtendedControls.ExtCheckBox;
             Group g = cb.Tag as Group;
             VersioningManager.SetEnableFlag(g.di, cb.Checked, EDDOptions.Instance.AppDataDirectory);
-            changelist[g.di.itemname] = cb.Checked ? "+" : "-";
+
+            if (g.di.localenable == cb.Checked)
+                changelist.Remove(g.di.itemname);
+            else
+                changelist[g.di.itemname] = cb.Checked ? "+" : "-";
         }
 
         private void Actionbutton_Click(object sender, EventArgs e)
@@ -418,7 +422,7 @@ namespace EDDiscovery.Forms
 
             if (mgr.InstallFiles(g.di, EDDOptions.Instance.AppDataDirectory, EDDOptions.Instance.TempMoveDirectory()))
             {
-                changelist[g.di.itemname] = "+";
+                changelist[g.di.itemname] = g.di.localfound ? "++" : "+";
                 ExtendedControls.MessageBoxTheme.Show(this, "Add-on updated");
                 ReadyToDisplay();
             }

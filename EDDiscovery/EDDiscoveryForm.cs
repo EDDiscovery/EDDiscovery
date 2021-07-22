@@ -14,7 +14,6 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
-using BaseUtils.JSON;
 using EDDiscovery.Forms;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
@@ -277,11 +276,11 @@ namespace EDDiscovery
 
             msg.Invoke("Loading Action Packs");         // STAGE 4 Action packs
 
-            // first delete any outstanding files, adjust the dll perms list if ness.
-
-            List<string> alloweddllslist = EDDConfig.Instance.DLLPermissions.Split(",").ToList();
+            // Finish up any installing/deleting which failed during the upgrade process because the files were in use
 
             {
+                List<string> alloweddllslist = EDDConfig.Instance.DLLPermissions.Split(",").ToList();
+
                 FileInfo[] allFiles = Directory.EnumerateFiles(EDDOptions.Instance.TempMoveDirectory(), "*.txt", SearchOption.TopDirectoryOnly).Select(f => new FileInfo(f)).OrderBy(p => p.Name).ToArray();
 
                 foreach (FileInfo f in allFiles)
@@ -309,10 +308,11 @@ namespace EDDiscovery
                         BaseUtils.FileHelpers.DeleteFileNoError(f.FullName);
                     }
                 }
+
+                actioncontroller = new Actions.ActionController(this, Controller, this.Icon, new Type[] { typeof(FormMap) });
+                actioncontroller.ReLoad();          // load system up here
             }
 
-            actioncontroller = new Actions.ActionController(this, Controller, this.Icon, new Type[] { typeof(FormMap) });
-            actioncontroller.ReLoad();          // load system up here
 
             // Stage 5 Misc
 

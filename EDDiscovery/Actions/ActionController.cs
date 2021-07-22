@@ -393,19 +393,24 @@ namespace EDDiscovery.Actions
                     ReLoad(false);      // reload from disk, new ones if required, refresh old ones and keep the vars
                     CheckWarn();
 
-                    string changes = "";
+                    string changes = "", updates="", removes="";
                     foreach (KeyValuePair<string, string> kv in dmf.changelist)
                     {
-                        if (kv.Value.Equals("+"))
+                        if (kv.Value.Contains("+"))
                         {
                             changes += kv.Key + ";";
+                            if (kv.Value.Contains("++"))
+                                updates += kv.Key + ";";
                         }
 
                         if (kv.Value.Equals("-"))
+                        {
                             discoveryform.RemoveMenuItemsFromAddOns(kv.Key);
+                            removes += kv.Key + ";";
+                        }
                     }
 
-                    ActionRun(ActionEventEDList.onInstall, null, new Variables("InstallList", changes));
+                    ActionRun(ActionEventEDList.onInstall, null, new Variables(new string[] { "InstallList", changes, "UpdateList", updates, "RemoveList",removes }));
 
                     ActionConfigureKeys();
 
