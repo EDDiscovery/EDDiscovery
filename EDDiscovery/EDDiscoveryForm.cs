@@ -277,6 +277,10 @@ namespace EDDiscovery
 
             msg.Invoke("Loading Action Packs");         // STAGE 4 Action packs
 
+            // first delete any outstanding files, adjust the dll perms list if ness.
+
+            List<string> alloweddllslist = EDDConfig.Instance.DLLPermissions.Split(",").ToList();
+
             JObject tobedeleted = JObject.Parse(EDDConfig.DeleteAtRunList);
             if ( tobedeleted != null )
             {
@@ -290,11 +294,17 @@ namespace EDDiscovery
                         {
                             System.Diagnostics.Debug.WriteLine($"Action pack Delete {file}");
                             BaseUtils.FileHelpers.DeleteFileNoError(file);
+                            int i = alloweddllslist.ContainsIn(file, StringComparison.InvariantCultureIgnoreCase);
+                            if (i >= 0)
+                                alloweddllslist.RemoveAt(i);
                         }
                     }
                 }
 
                 EDDConfig.DeleteAtRunList = "{}";
+
+                if( tobedeleted.Count>0)
+                    EDDConfig.Instance.DLLPermissions = String.Join(",", alloweddllslist);
             }
 
             actioncontroller = new Actions.ActionController(this, Controller, this.Icon, new Type[] { typeof(FormMap) });
