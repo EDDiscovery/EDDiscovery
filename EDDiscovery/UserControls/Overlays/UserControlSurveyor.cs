@@ -337,7 +337,7 @@ namespace EDDiscovery.UserControls
                                 {
                                     if (!sd.Mapped || hideAlreadyMappedBodiesToolStripMenuItem.Checked == false)      // if not mapped, or show mapped
                                     {
-                                        var il = sd.SurveyorInfoLine(last_sys,
+                                        var il = sd.SurveyorInfoLine(sys,
                                                                         sn.Signals != null,  // show signals if we have some
                                                                         hasVolcanismToolStripMenuItem.Checked || (sd.IsLandable && landableWithVolcanismToolStripMenuItem.Checked)
                                                                             || (sd.IsLandable && showVolcanismToolStripMenuItem.Checked), // any of these makes us need to show volcanic state
