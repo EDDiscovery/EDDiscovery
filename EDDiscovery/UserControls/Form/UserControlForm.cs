@@ -215,9 +215,12 @@ namespace EDDiscovery.UserControls
             UserControl.SetTransparency(showtransparent, togo);
             PerformLayout();
 
-            // if in transparent click thru, we set transparent style.. else clear it.
-            BaseUtils.Win32.UnsafeNativeMethods.ChangeWindowLong(this.Handle, BaseUtils.Win32.UnsafeNativeMethods.GWL.ExStyle,
-                                WS_EX.TRANSPARENT, showtransparent && TransparentMode == TransparencyMode.OnFullyTransparent ? WS_EX.TRANSPARENT : 0);
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+            {
+                // if in transparent click thru, we set transparent style.. else clear it.
+                BaseUtils.Win32.UnsafeNativeMethods.ChangeWindowLong(this.Handle, BaseUtils.Win32.UnsafeNativeMethods.GWL.ExStyle,
+                                    WS_EX.TRANSPARENT, showtransparent && TransparentMode == TransparencyMode.OnFullyTransparent ? WS_EX.TRANSPARENT : 0);
+            }
 
             if (showtransparent || inpanelshow)     // timer needed if transparent, or if in panel show
                 timer.Start();
