@@ -1034,6 +1034,7 @@ SECTION UserControlStarList
 .OB: "{0} Other bodies" @
 
 .JUMP: "Show/Hide presence of Jumponium Materials" @
+.valueables: "Show valueable bodies" @
 
 
 SECTION UserControlStats

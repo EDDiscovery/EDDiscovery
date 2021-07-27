@@ -396,6 +396,7 @@ namespace EDDiscovery
         UserControlStarList_NoEDSM, // System could not be found - has not been synched or EDSM is unavailable
         UserControlStarList_OB, // {0} Other bodies
         UserControlStarList_JUMP,
+        UserControlStarList_valueables,
 
         UserControlCaptainsLog_Diary, // Diary
         UserControlCaptainsLog_Entries, // Entries
