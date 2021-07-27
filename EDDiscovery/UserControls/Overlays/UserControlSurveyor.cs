@@ -185,23 +185,23 @@ namespace EDDiscovery.UserControls
                     last_sys = he.System;
                     DrawSystem(last_sys, last_sys.Name);
                 }
-                else if (he.EntryType == JournalTypeEnum.StartJump)  // we ignore start jump if overriden      
+                else if (he.EntryType == JournalTypeEnum.StartJump)         // so we can pre-present
                 {
                     JournalStartJump jsj = he.journalEntry as JournalStartJump;
                     last_sys = new SystemClass(jsj.SystemAddress, jsj.StarSystem);       // important need system address as scan uses it for quick lookup
                     DrawSystem(last_sys, last_sys.Name);
                 }
-                else if (he.EntryType == JournalTypeEnum.FSSAllBodiesFound)
+                else if (he.EntryType == JournalTypeEnum.FSSAllBodiesFound)     // since we present body counts
                 {
                     DrawSystem(last_sys, last_sys.Name + " " + "System scan complete.".T(EDTx.UserControlSurveyor_Systemscancomplete));
                 }
-                else if (he.EntryType == JournalTypeEnum.FSSDiscoveryScan)
+                else if (he.EntryType == JournalTypeEnum.FSSDiscoveryScan)      // since we present body counts
                 {
                     var je = he.journalEntry as JournalFSSDiscoveryScan;
                     var bodies_found = je.BodyCount;
                     DrawSystem( last_sys, last_sys.Name + " " + bodies_found + " bodies found.".T(EDTx.UserControlSurveyor_bodiesfound));
                 }
-                else if (he.EntryType == JournalTypeEnum.Scan)
+                else if (he.EntryType == JournalTypeEnum.Scan || he.EntryType == JournalTypeEnum.SAASignalsFound )      // a new scan, or signals found (since we present signals)
                 {
                     //System.Diagnostics.Debug.WriteLine("Scan got, sys " + he.System.Name + " " + last_sys.Name);
                     DrawSystem(last_sys);
