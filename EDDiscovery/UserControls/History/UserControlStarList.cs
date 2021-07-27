@@ -400,7 +400,13 @@ namespace EDDiscovery.UserControls
 
                 string jumponium = "";
 
-                bool showjumponium = displayfilters.Contains("jumponium");
+                // selectors for showing something
+                bool showplanets = displayfilters.Contains("planets");
+                bool showstars = displayfilters.Contains("stars");
+                bool showvalueables = displayfilters.Contains("valueables");
+                bool showbeltclusters = displayfilters.Contains("beltcluster");
+
+                // selectors for what to print
                 bool showsignals = displayfilters.Contains("signals");
                 bool showvol = displayfilters.Contains("volcanism");
                 bool showv = displayfilters.Contains("values");
@@ -408,19 +414,17 @@ namespace EDDiscovery.UserControls
                 bool showg = displayfilters.Contains("gravity");
                 bool showatmos = displayfilters.Contains("atmos");
                 bool showrings = displayfilters.Contains("rings");
-                bool showbeltclusters = displayfilters.Contains("beltcluster");
-                bool showplanets = displayfilters.Contains("planets");
-                bool showstars = displayfilters.Contains("stars");
-                bool showvalueables = displayfilters.Contains("valueables");
+
+                bool showjumponium = displayfilters.Contains("jumponium");
 
                 foreach (StarScan.ScanNode sn in sysnode.Bodies)
                 {
                     if (sn?.ScanData != null )  // must have scan data..
                     {
                         if (
-                            (!sn.ScanData.IsBeltCluster || showbeltclusters) &&     // major selectors for line display
-                            (!sn.ScanData.IsPlanet || showplanets) &&
-                            (!sn.ScanData.IsStar || showstars) ||
+                            (sn.ScanData.IsBeltCluster && showbeltclusters) ||     // major selectors for line display
+                            (sn.ScanData.IsPlanet && showplanets) ||
+                            (sn.ScanData.IsStar && showstars) ||
                             (showvalueables && (sn.ScanData.AmmoniaWorld || sn.ScanData.CanBeTerraformable || sn.ScanData.WaterWorld || sn.ScanData.Earthlike))
                             )
                         {
@@ -711,8 +715,8 @@ namespace EDDiscovery.UserControls
             displayfilter.AddStandardOption("stars", "Show All Stars".TxID("UserControlSurveyor.showAllStarsToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_ShowOverlays);
             displayfilter.AddStandardOption("planets", "Show All Planets".TxID("UserControlSurveyor.showAllPlanetsToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_ShowOverlays);
             displayfilter.AddStandardOption("beltcluster", "Show belt clusters".TxID("UserControlSurveyor.showBeltClustersToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_ShowOverlays);
-            displayfilter.AddStandardOption("jumponium", "Show/Hide presence of Jumponium Materials".T(EDTx.UserControlStarList_JUMP), global::EDDiscovery.Icons.Controls.Scan_ShowOverlays);
             displayfilter.AddStandardOption("valueables", "Show valueable bodies".T(EDTx.UserControlStarList_valueables), global::EDDiscovery.Icons.Controls.Scan_ShowOverlays);
+            displayfilter.AddStandardOption("jumponium", "Show/Hide presence of Jumponium Materials".T(EDTx.UserControlStarList_JUMP), global::EDDiscovery.Icons.Controls.Scan_ShowOverlays);
             displayfilter.AddStandardOption("signals", "Has Signals".TxID("UserControlSurveyor.bodyFeaturesToolStripMenuItem.hasSignalsToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_ShowOverlays);
             displayfilter.AddStandardOption("volcanism", "Has Volcanism".TxID("UserControlSurveyor.bodyFeaturesToolStripMenuItem.hasVolcanismToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_ShowOverlays);
             displayfilter.AddStandardOption("values", "Show values".TxID("UserControlSurveyor.showValuesToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_ShowOverlays);
