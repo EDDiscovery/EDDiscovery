@@ -93,7 +93,7 @@ namespace EDDiscovery.UserControls
             checkBoxEDSM.Checked = GetSetting(dbEDSM, false);
             this.checkBoxEDSM.CheckedChanged += new System.EventHandler(this.checkBoxEDSM_CheckedChanged);
 
-            displayfilters = GetSetting(dbDisplayFilters, "stars;planets;signals;volcanism;values;shortinfo;gravity;atmos;rings;").Split(';');
+            displayfilters = GetSetting(dbDisplayFilters, "stars;planets;signals;volcanism;values;shortinfo;gravity;atmos;rings;valueables;").Split(';');
 
             discoveryform.OnHistoryChange += HistoryChanged;
             discoveryform.OnNewEntry += AddNewEntry;
@@ -411,6 +411,7 @@ namespace EDDiscovery.UserControls
                 bool showbeltclusters = displayfilters.Contains("beltcluster");
                 bool showplanets = displayfilters.Contains("planets");
                 bool showstars = displayfilters.Contains("stars");
+                bool showvalueables = displayfilters.Contains("valueables");
 
                 foreach (StarScan.ScanNode sn in sysnode.Bodies)
                 {
@@ -419,7 +420,8 @@ namespace EDDiscovery.UserControls
                         if (
                             (!sn.ScanData.IsBeltCluster || showbeltclusters) &&     // major selectors for line display
                             (!sn.ScanData.IsPlanet || showplanets) &&
-                            (!sn.ScanData.IsStar || showstars)
+                            (!sn.ScanData.IsStar || showstars) ||
+                            (showvalueables && (sn.ScanData.AmmoniaWorld || sn.ScanData.CanBeTerraformable || sn.ScanData.WaterWorld || sn.ScanData.Earthlike))
                             )
                         {
                             string info = sn.ScanData.SurveyorInfoLine(system, sn.Signals != null && showsignals, showvol, showv, showsi, showg,
@@ -710,6 +712,7 @@ namespace EDDiscovery.UserControls
             displayfilter.AddStandardOption("planets", "Show All Planets".TxID("UserControlSurveyor.showAllPlanetsToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_ShowOverlays);
             displayfilter.AddStandardOption("beltcluster", "Show belt clusters".TxID("UserControlSurveyor.showBeltClustersToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_ShowOverlays);
             displayfilter.AddStandardOption("jumponium", "Show/Hide presence of Jumponium Materials".T(EDTx.UserControlStarList_JUMP), global::EDDiscovery.Icons.Controls.Scan_ShowOverlays);
+            displayfilter.AddStandardOption("valueables", "Show valueable bodies".T(EDTx.UserControlStarList_valueables), global::EDDiscovery.Icons.Controls.Scan_ShowOverlays);
             displayfilter.AddStandardOption("signals", "Has Signals".TxID("UserControlSurveyor.bodyFeaturesToolStripMenuItem.hasSignalsToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_ShowOverlays);
             displayfilter.AddStandardOption("volcanism", "Has Volcanism".TxID("UserControlSurveyor.bodyFeaturesToolStripMenuItem.hasVolcanismToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_ShowOverlays);
             displayfilter.AddStandardOption("values", "Show values".TxID("UserControlSurveyor.showValuesToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_ShowOverlays);
