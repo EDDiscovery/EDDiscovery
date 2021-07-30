@@ -86,6 +86,8 @@ namespace EDDiscovery
                 new JObject() { ["panel"] = "MiningOverlay", ["wiki"] = "/Using-the-mining-panel", ["video"] = "" },
                 new JObject() { ["panel"] = "HistoryTab", ["wiki"] = "/Using-the-History-Tab", ["video"] = "https://youtu.be/PwTbnFikBgA" },
                 new JObject() { ["panel"] = "Factions", ["wiki"] = "/Using-the-Factions-Panel", ["video"] = "" },
+                new JObject() { ["panel"] = "SuitsWeapons", ["wiki"] = "/Using-the-Suits-and-Weapons-Panel", ["video"] = "" },
+                new JObject() { ["panel"] = "MicroResources", ["wiki"] = "/Using-the-Micro-Resources-Panel", ["video"] = "" },
             }
         };
 
@@ -153,6 +155,7 @@ namespace EDDiscovery
                 cfg.ForceNoWindowsBorder = true;
                 cfg.AllowSpaceForCloseButton = true;
                 cfg.BorderMargin = 0;
+                cfg.ExtraMarginRightBottom = new Size(0, 0);
 
                 ExtButton wikibutton = new ExtButton();
                 wikibutton.Image = global::EDDiscovery.Icons.Controls.Help_Wiki;
