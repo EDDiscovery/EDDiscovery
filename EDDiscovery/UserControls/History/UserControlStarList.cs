@@ -165,7 +165,7 @@ namespace EDDiscovery.UserControls
 
         private void AddEntry(HistoryEntry he)
         { 
-            bool scan = he.journalEntry is JournalScan || he.journalEntry is JournalFSSDiscoveryScan;
+            bool scan = he.journalEntry is IStarScan;                           // is this a scan node
 
             if (he.IsFSDCarrierJump || scan)                                      // jumped or scan
             {

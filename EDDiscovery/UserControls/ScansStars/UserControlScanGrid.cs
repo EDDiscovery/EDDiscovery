@@ -95,7 +95,7 @@ namespace EDDiscovery.UserControls
 
         private void NewEntry(HistoryEntry he, HistoryList hl)
         {
-            DrawSystem(he, he.EntryType == JournalTypeEnum.Scan);
+            DrawSystem(he, he.journalEntry is IStarScan ); // not IBodyNameAndID because all that can do is add an empty scan node, and we do not present info if no scan data
         }
 
         private void Display(HistoryEntry he, HistoryList hl, bool selectedEntry)

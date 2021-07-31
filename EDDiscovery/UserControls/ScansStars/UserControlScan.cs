@@ -148,10 +148,8 @@ namespace EDDiscovery.UserControls
         {
             if (he != null)
             {
-                // new scan, new materials (for the count display), new SAA Signals all can cause display to change.
-                if (he.EntryType == JournalTypeEnum.Scan || he.journalEntry is IMaterialJournalEntry || he.journalEntry is JournalSAASignalsFound ||
-                    he.journalEntry is JournalFSSDiscoveryScan || he.journalEntry is JournalFSSSignalDiscovered ||
-                                last_he == null || last_he.System != he.System) //  or not presenting or diff sys
+                // Star scan type, or material entry type, or a bodyname/id entry, or not set, or not same system
+                if ( he.journalEntry is IStarScan || he.journalEntry is IMaterialJournalEntry || he.journalEntry is IBodyNameAndID || last_he == null || last_he.System != he.System) 
                 {
                     last_he = he;
                     DrawSystem(last_he);

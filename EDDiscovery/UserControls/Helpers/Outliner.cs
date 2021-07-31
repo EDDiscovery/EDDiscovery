@@ -36,9 +36,7 @@ public class Outlining
 
     public bool Process(HistoryEntry he, int rowindex, bool scanrollup, int rollupolder)
     {
-        bool fsstype = he.EntryType == JournalTypeEnum.CodexEntry || he.EntryType == JournalTypeEnum.Scan || he.EntryType == JournalTypeEnum.FSSDiscoveryScan
-                        || he.EntryType == JournalTypeEnum.FSSAllBodiesFound || he.EntryType == JournalTypeEnum.FSSSignalDiscovered ||
-                        he.EntryType == JournalTypeEnum.SAAScanComplete || he.EntryType == JournalTypeEnum.FuelScoop;
+        bool fsstype = he.journalEntry is IStarScan || he.EntryType == JournalTypeEnum.FuelScoop;
 
         bool maingroupvisible = rollupolder == 0 || maingroupcount < rollupolder;       // first calc if main group is rolled up
 
