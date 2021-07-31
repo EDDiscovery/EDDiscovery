@@ -94,9 +94,9 @@ namespace EDDiscovery.UserControls
                 (uctg as IHistoryCursorNewStarList).OnNewStarList -= OnNewStars;
         }
 
-        public void NewEntry(HistoryEntry he, HistoryList hl)               // called when a new entry is made.. check to see if its a scan update
+        public void NewEntry(HistoryEntry he, HistoryList hl)               // called when a new entry is made.. check to see if its a scan update or a jump
         {
-            if (he.EntryType == JournalTypeEnum.Scan || he.IsFSDCarrierJump || he.EntryType == JournalTypeEnum.FSSDiscoveryScan )
+            if (he.journalEntry is IStarScan || he.IsFSDCarrierJump )
                 UpdateSystemRows();
         }
 

@@ -201,7 +201,7 @@ namespace EDDiscovery.UserControls
                     var bodies_found = je.BodyCount;
                     DrawSystem( last_sys, last_sys.Name + " " + bodies_found + " bodies found.".T(EDTx.UserControlSurveyor_bodiesfound));
                 }
-                else if (he.EntryType == JournalTypeEnum.Scan || he.EntryType == JournalTypeEnum.SAASignalsFound )      // a new scan, or signals found (since we present signals)
+                else if (he.journalEntry is IStarScan )      // an entry to a scan node
                 {
                     //System.Diagnostics.Debug.WriteLine("Scan got, sys " + he.System.Name + " " + last_sys.Name);
                     DrawSystem(last_sys);
