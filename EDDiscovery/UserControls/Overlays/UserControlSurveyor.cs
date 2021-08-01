@@ -106,8 +106,8 @@ namespace EDDiscovery.UserControls
             this.highEccentricityToolStripMenuItem.Click += new System.EventHandler(this.highEccentricityToolStripMenuItem_Click);
             this.lowRadiusToolStripMenuItem.Click += new System.EventHandler(this.lowRadiusToolStripMenuItem_Click);
             this.hasSignalsToolStripMenuItem.Click += new System.EventHandler(this.hasSignalsToolStripMenuItem_Click);
-            this.hasGeologicalSignalsToolStripMenuItem.Click += new System.EventHandler(this.hasSignalsToolStripMenuItem_Click);
-            this.hasBiologicalSignalsToolStripMenuItem.Click += new System.EventHandler(this.hasSignalsToolStripMenuItem_Click);
+            this.hasGeologicalSignalsToolStripMenuItem.Click += new System.EventHandler(this.hasGeologicalSignalsToolStripMenuItem_Click);
+            this.hasBiologicalSignalsToolStripMenuItem.Click += new System.EventHandler(this.hasBiologicalSignalsToolStripMenuItem_Click);
             this.landableToolStripMenuItem.Click += new System.EventHandler(this.landableToolStripMenuItem_Click);
             this.landableWithAtmosphereToolStripMenuItem.Click += new System.EventHandler(this.landableWithAtmosphereToolStripMenuItem_Click);
             this.landableAndLargeToolStripMenuItem.Click += new System.EventHandler(this.landableAndLargeToolStripMenuItem_Click);
@@ -319,24 +319,13 @@ namespace EDDiscovery.UserControls
                                 
                             {
                                 var sd = sn.ScanData;
-                                
-                                bool GeoSignal = false;
-                                bool BioSignal = false;
-                                if (sn.Signals != null)
-                                {
-                                    foreach (var y in sn.Signals)
-                                    {
-                                        if (y.Type.Contains("$SAA_SignalType_Geological;"))
-                                        {
-                                            GeoSignal = true;
-                                        }
-                                        else if (y.Type.Contains("$SAA_SignalType_Biological;"))
-                                        {
-                                            BioSignal = true;
-                                        }
-                                        else { }
-                                    }
-                                }
+                                                                
+                                bool GeoSignal = (sn.Signals?.Find(x => x.Type.Contains("$SAA_SignalType_Geological;")) != null);
+                                bool BioSignal = (sn.Signals?.Find(x => x.Type.Contains("$SAA_SignalType_Biological;")) != null);
+                                bool ThargoidSignal = (sn.Signals?.Find(x => x.Type.Contains("$SAA_SignalType_Thargoid;")) != null);
+                                bool GuardianSignal = (sn.Signals?.Find(x => x.Type.Contains("$SAA_SignalType_Guardian;")) != null);
+                                bool HumanSignal = (sn.Signals?.Find(x => x.Type.Contains("$SAA_SignalType_Human;")) != null);
+                                bool OtherSignal = (sn.Signals?.Find(x => x.Type.Contains("$SAA_SignalType_Other;")) != null);
 
                                 if  (                                   
                                     (sd.IsLandable && landableToolStripMenuItem.Checked) ||
@@ -363,9 +352,13 @@ namespace EDDiscovery.UserControls
                                     if (!sd.Mapped || hideAlreadyMappedBodiesToolStripMenuItem.Checked == false)      // if not mapped, or show mapped
                                     {
                                         var il = sd.SurveyorInfoLine(sys,
-                                                                        sn.Signals != null && hasSignalsToolStripMenuItem.Checked && !GeoSignal && !BioSignal,  // show signals if we have some and filter for all signals is checked
+                                                                        sn.Signals != null && hasSignalsToolStripMenuItem.Checked && !GeoSignal && !BioSignal && !ThargoidSignal && !GuardianSignal && !HumanSignal && !OtherSignal,  // show signals if we have some andthe all signals filter is checked
                                                                         GeoSignal && (hasSignalsToolStripMenuItem.Checked || hasGeologicalSignalsToolStripMenuItem.Checked || hasBiologicalSignalsToolStripMenuItem.Checked), // show geological signals if there are any and any signal filter is checked (as there are bios that need geos to appear)
                                                                         BioSignal && (hasSignalsToolStripMenuItem.Checked || hasBiologicalSignalsToolStripMenuItem.Checked), // show biological signals if there are any and the all signal filter or the bio signal filter is checked
+                                                                        ThargoidSignal && hasSignalsToolStripMenuItem.Checked, // show thargoid signals if there are any and the all signals filter is checked
+                                                                        GuardianSignal && hasSignalsToolStripMenuItem.Checked, // show guardian signals if there are any and the all signals filter is checked
+                                                                        HumanSignal && hasSignalsToolStripMenuItem.Checked, // show human signals if there are any and the all signals filter is checked
+                                                                        OtherSignal && hasSignalsToolStripMenuItem.Checked, // show other signals if there are any and the all signals filter is checked
                                                                         hasVolcanismToolStripMenuItem.Checked || (sd.IsLandable && landableWithVolcanismToolStripMenuItem.Checked)
                                                                             || (sd.IsLandable && showVolcanismToolStripMenuItem.Checked), // any of these makes us need to show volcanic state
                                                                         showValuesToolStripMenuItem.Checked,        // show values
@@ -504,7 +497,7 @@ namespace EDDiscovery.UserControls
 
         private void highEccentricityToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            PutSetting("showEccentricity", terraformableToolStripMenuItem.Checked);
+            PutSetting("showEccentricity", highEccentricityToolStripMenuItem.Checked);
             DrawSystem(last_sys);
         }
 
@@ -515,18 +508,18 @@ namespace EDDiscovery.UserControls
         }
         private void landableWithAtmosphereToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            PutSetting("isLandableWithAtmosphere", landableToolStripMenuItem.Checked);
+            PutSetting("isLandableWithAtmosphere", landableWithAtmosphereToolStripMenuItem.Checked);
             DrawSystem(last_sys);
         }
         private void landableWithVolcanismToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            PutSetting("isLandableWithVolcanism", landableToolStripMenuItem.Checked);
+            PutSetting("isLandableWithVolcanism", landableWithVolcanismToolStripMenuItem.Checked);
             DrawSystem(last_sys);
         }
 
         private void landableAndLargeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            PutSetting("largelandable", landableToolStripMenuItem.Checked);
+            PutSetting("largelandable", landableAndLargeToolStripMenuItem.Checked);
             DrawSystem(last_sys);
         }
         private void hasVolcanismToolStripMenuItem_Click(object sender, EventArgs e)
@@ -597,12 +590,12 @@ namespace EDDiscovery.UserControls
 
         private void hasBiologicalSignalsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            PutSetting("BioSignals", hasSignalsToolStripMenuItem.Checked);
+            PutSetting("BioSignals", hasBiologicalSignalsToolStripMenuItem.Checked);
             DrawSystem(last_sys);
         }
         private void hasGeologicalSignalsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            PutSetting("GeoSignals", hasSignalsToolStripMenuItem.Checked);
+            PutSetting("GeoSignals", hasGeologicalSignalsToolStripMenuItem.Checked);
             DrawSystem(last_sys);
         }
         private void showValuesToolStripMenuItem_Click(object sender, EventArgs e)
