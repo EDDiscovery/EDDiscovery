@@ -78,6 +78,8 @@ namespace EDDiscovery.UserControls
             showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem.Checked = GetSetting("showsysinfo", true);
             dontHideInFSSModeToolStripMenuItem.Checked = GetSetting("donthidefssmode", true);
             hasSignalsToolStripMenuItem.Checked = GetSetting("signals", true);
+            hasGeologicalSignalsToolStripMenuItem.Checked = GetSetting("GeoSignals", true);
+            hasBiologicalSignalsToolStripMenuItem.Checked = GetSetting("BioSignals", true);
             showAllPlanetsToolStripMenuItem.Checked = GetSetting("allplanets", false);
             showAllStarsToolStripMenuItem.Checked = GetSetting("allstars", false);
             showBeltClustersToolStripMenuItem.Checked = GetSetting("beltclusters", false);
@@ -104,6 +106,8 @@ namespace EDDiscovery.UserControls
             this.highEccentricityToolStripMenuItem.Click += new System.EventHandler(this.highEccentricityToolStripMenuItem_Click);
             this.lowRadiusToolStripMenuItem.Click += new System.EventHandler(this.lowRadiusToolStripMenuItem_Click);
             this.hasSignalsToolStripMenuItem.Click += new System.EventHandler(this.hasSignalsToolStripMenuItem_Click);
+            this.hasGeologicalSignalsToolStripMenuItem.Click += new System.EventHandler(this.hasSignalsToolStripMenuItem_Click);
+            this.hasBiologicalSignalsToolStripMenuItem.Click += new System.EventHandler(this.hasSignalsToolStripMenuItem_Click);
             this.landableToolStripMenuItem.Click += new System.EventHandler(this.landableToolStripMenuItem_Click);
             this.landableWithAtmosphereToolStripMenuItem.Click += new System.EventHandler(this.landableWithAtmosphereToolStripMenuItem_Click);
             this.landableAndLargeToolStripMenuItem.Click += new System.EventHandler(this.landableAndLargeToolStripMenuItem_Click);
@@ -308,14 +312,33 @@ namespace EDDiscovery.UserControls
                     if (all_nodes != null)
                     {
                         value = 0;
-
+                        
                         foreach (StarScan.ScanNode sn in all_nodes)
                         {
                             if (sn.ScanData != null && sn.ScanData?.BodyName != null && (!sn.ScanData.IsEDSMBody || checkEDSMForInformationToolStripMenuItem.Checked))
+                                
                             {
                                 var sd = sn.ScanData;
+                                
+                                bool GeoSignal = false;
+                                bool BioSignal = false;
+                                if (sn.Signals != null)
+                                {
+                                    foreach (var y in sn.Signals)
+                                    {
+                                        if (y.Type.Contains("$SAA_SignalType_Geological;"))
+                                        {
+                                            GeoSignal = true;
+                                        }
+                                        else if (y.Type.Contains("$SAA_SignalType_Biological;"))
+                                        {
+                                            BioSignal = true;
+                                        }
+                                        else { }
+                                    }
+                                }
 
-                                if  (                                    
+                                if  (                                   
                                     (sd.IsLandable && landableToolStripMenuItem.Checked) ||
                                     (sd.IsLandable && sd.HasAtmosphericComposition && landableWithAtmosphereToolStripMenuItem.Checked) ||
                                     (sd.IsLandable && sd.HasMeaningfulVolcanism && landableWithVolcanismToolStripMenuItem.Checked) ||
@@ -331,6 +354,8 @@ namespace EDDiscovery.UserControls
                                     (sd.CanBeTerraformable && terraformableToolStripMenuItem.Checked) ||
                                     (sd.IsPlanet && lowRadiusToolStripMenuItem.Checked && sd.nRadius.HasValue && sd.nRadius < lowRadiusLimit) ||
                                     (sn.Signals != null && hasSignalsToolStripMenuItem.Checked) ||
+                                    (GeoSignal && hasGeologicalSignalsToolStripMenuItem.Checked) ||
+                                    (BioSignal && hasBiologicalSignalsToolStripMenuItem.Checked) ||
                                     (sd.IsStar && showAllStarsToolStripMenuItem.Checked) ||
                                     (sd.IsPlanet && showAllPlanetsToolStripMenuItem.Checked) ||
                                     (sd.IsBeltCluster && showBeltClustersToolStripMenuItem.Checked))
@@ -338,7 +363,9 @@ namespace EDDiscovery.UserControls
                                     if (!sd.Mapped || hideAlreadyMappedBodiesToolStripMenuItem.Checked == false)      // if not mapped, or show mapped
                                     {
                                         var il = sd.SurveyorInfoLine(sys,
-                                                                        sn.Signals != null,  // show signals if we have some
+                                                                        sn.Signals != null && hasSignalsToolStripMenuItem.Checked && !GeoSignal && !BioSignal,  // show signals if we have some and filter for all signals is checked
+                                                                        GeoSignal && (hasSignalsToolStripMenuItem.Checked || hasGeologicalSignalsToolStripMenuItem.Checked || hasBiologicalSignalsToolStripMenuItem.Checked), // show geological signals if there are any and any signal filter is checked
+                                                                        BioSignal && (hasSignalsToolStripMenuItem.Checked || hasGeologicalSignalsToolStripMenuItem.Checked || hasBiologicalSignalsToolStripMenuItem.Checked), // show biological signals if there are any and any signal filter is checked
                                                                         hasVolcanismToolStripMenuItem.Checked || (sd.IsLandable && landableWithVolcanismToolStripMenuItem.Checked)
                                                                             || (sd.IsLandable && showVolcanismToolStripMenuItem.Checked), // any of these makes us need to show volcanic state
                                                                         showValuesToolStripMenuItem.Checked,        // show values
@@ -568,6 +595,16 @@ namespace EDDiscovery.UserControls
             DrawSystem(last_sys);
         }
 
+        private void hasBiologicalSignalsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PutSetting("BioSignals", hasSignalsToolStripMenuItem.Checked);
+            DrawSystem(last_sys);
+        }
+        private void hasGeologicalSignalsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PutSetting("GeoSignals", hasSignalsToolStripMenuItem.Checked);
+            DrawSystem(last_sys);
+        }
         private void showValuesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             PutSetting("showValues", showValuesToolStripMenuItem.Checked);
@@ -679,6 +716,9 @@ namespace EDDiscovery.UserControls
 
 
 
+
         #endregion
+
+        
     }
 }

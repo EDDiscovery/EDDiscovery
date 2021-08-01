@@ -416,6 +416,8 @@ namespace EDDiscovery.UserControls
                 bool showrings = displayfilters.Contains("rings");
 
                 bool showjumponium = displayfilters.Contains("jumponium");
+                bool hasgeosignals = false;
+                bool hasbiosignals = false;
 
                 foreach (StarScan.ScanNode sn in sysnode.Bodies)
                 {
@@ -428,7 +430,7 @@ namespace EDDiscovery.UserControls
                             (showvalueables && (sn.ScanData.AmmoniaWorld || sn.ScanData.CanBeTerraformable || sn.ScanData.WaterWorld || sn.ScanData.Earthlike))
                             )
                         {
-                            string info = sn.ScanData.SurveyorInfoLine(system, sn.Signals != null && showsignals, showvol, showv, showsi, showg,
+                            string info = sn.ScanData.SurveyorInfoLine(system, sn.Signals != null && showsignals, hasgeosignals, hasbiosignals, showvol, showv, showsi, showg,
                                                                 showatmos && sn.ScanData.IsLandable, showrings,
                                                                 lowRadiusLimit, largeRadiusLimit, eccentricityLimit);
                             infostr = infostr.AppendPrePad(info, Environment.NewLine);
