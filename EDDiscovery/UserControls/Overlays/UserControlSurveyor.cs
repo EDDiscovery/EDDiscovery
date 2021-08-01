@@ -364,7 +364,7 @@ namespace EDDiscovery.UserControls
                                     {
                                         var il = sd.SurveyorInfoLine(sys,
                                                                         sn.Signals != null && hasSignalsToolStripMenuItem.Checked && !GeoSignal && !BioSignal,  // show signals if we have some and filter for all signals is checked
-                                                                        GeoSignal && (hasSignalsToolStripMenuItem.Checked || hasGeologicalSignalsToolStripMenuItem.Checked || hasBiologicalSignalsToolStripMenuItem.Checked), // show biological signals if there are any and any signal filter is checked (as there are bios that need geos to appear)
+                                                                        GeoSignal && (hasSignalsToolStripMenuItem.Checked || hasGeologicalSignalsToolStripMenuItem.Checked || hasBiologicalSignalsToolStripMenuItem.Checked), // show geological signals if there are any and any signal filter is checked (as there are bios that need geos to appear)
                                                                         BioSignal && (hasSignalsToolStripMenuItem.Checked || hasBiologicalSignalsToolStripMenuItem.Checked), // show biological signals if there are any and the all signal filter or the bio signal filter is checked
                                                                         hasVolcanismToolStripMenuItem.Checked || (sd.IsLandable && landableWithVolcanismToolStripMenuItem.Checked)
                                                                             || (sd.IsLandable && showVolcanismToolStripMenuItem.Checked), // any of these makes us need to show volcanic state
