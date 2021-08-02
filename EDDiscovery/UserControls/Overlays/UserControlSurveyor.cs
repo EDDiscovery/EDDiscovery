@@ -326,7 +326,7 @@ namespace EDDiscovery.UserControls
                                 bool hasguardiansignals = sn.Signals?.Find(x => x.IsGuardian) != null;
                                 bool hashumansignals = sn.Signals?.Find(x => x.IsHuman) != null;
                                 bool hasothersignals = sn.Signals?.Find(x => x.IsOther) != null;
-                                bool hasminingsignals = sn.Signals?.Find(x => x.IsUncatagorised) != null;
+                                bool hasminingsignals = sn.Signals?.Find(x => x.IsUncategorised) != null;
 
                                 if  (                                   
                                     (sd.IsLandable && landableToolStripMenuItem.Checked) ||

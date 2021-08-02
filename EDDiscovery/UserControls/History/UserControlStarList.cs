@@ -427,7 +427,7 @@ namespace EDDiscovery.UserControls
                         bool hasguardiansignals = sn.Signals?.Find(x => x.IsGuardian) != null && showsignals;
                         bool hashumansignals = sn.Signals?.Find(x => x.IsHuman) != null && showsignals;
                         bool hasothersignals = sn.Signals?.Find(x => x.IsOther) != null && showsignals;
-                        bool hasminingsignals = sn.Signals?.Find(x => x.IsUncatagorised) != null && showsignals;
+                        bool hasminingsignals = sn.Signals?.Find(x => x.IsUncategorised) != null && showsignals;
 
                         if (
                             (sn.ScanData.IsBeltCluster && showbeltclusters) ||     // major selectors for line display
