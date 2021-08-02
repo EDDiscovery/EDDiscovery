@@ -46,6 +46,7 @@ namespace EDDiscovery.UserControls
             this.components = new System.ComponentModel.Container();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.showAllPlanetsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.planetaryClassesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ammoniaWorldToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.earthlikeWorldToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -63,17 +64,18 @@ namespace EDDiscovery.UserControls
             this.landableWithAtmosphereToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.landableAndLargeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.landableWithVolcanismToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.showAllPlanetsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showAllStarsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showBeltClustersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.showGravityToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showAtmosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showVolcanismToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.showValuesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showMoreInformationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.selectFSSSignalsShownToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.hideAlreadyMappedBodiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.checkEDSMForInformationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.autoHideToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dontHideInFSSModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -87,8 +89,8 @@ namespace EDDiscovery.UserControls
             this.pictureBoxSurveyor = new ExtendedControls.ExtPictureBox();
             this.extPictureBoxScroll = new ExtendedControls.ExtPictureBoxScroll();
             this.extScrollBar = new ExtendedControls.ExtScrollBar();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.hasBiologicalSignalsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.hasGeologicalSignalsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSurveyor)).BeginInit();
             this.extPictureBoxScroll.SuspendLayout();
@@ -121,6 +123,15 @@ namespace EDDiscovery.UserControls
             this.textAlignToolStripMenuItem});
             this.contextMenuStrip.Name = "contextMenuStrip";
             this.contextMenuStrip.Size = new System.Drawing.Size(242, 446);
+            // 
+            // showAllPlanetsToolStripMenuItem
+            // 
+            this.showAllPlanetsToolStripMenuItem.Checked = true;
+            this.showAllPlanetsToolStripMenuItem.CheckOnClick = true;
+            this.showAllPlanetsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.showAllPlanetsToolStripMenuItem.Name = "showAllPlanetsToolStripMenuItem";
+            this.showAllPlanetsToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
+            this.showAllPlanetsToolStripMenuItem.Text = "Show All Planets";
             // 
             // planetaryClassesToolStripMenuItem
             // 
@@ -184,6 +195,8 @@ namespace EDDiscovery.UserControls
             this.highEccentricityToolStripMenuItem,
             this.lowRadiusToolStripMenuItem,
             this.hasSignalsToolStripMenuItem,
+            this.hasBiologicalSignalsToolStripMenuItem,
+            this.hasGeologicalSignalsToolStripMenuItem,
             this.landableToolStripMenuItem,
             this.landableWithAtmosphereToolStripMenuItem,
             this.landableAndLargeToolStripMenuItem,
@@ -282,15 +295,6 @@ namespace EDDiscovery.UserControls
             this.landableWithVolcanismToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
             this.landableWithVolcanismToolStripMenuItem.Text = "Landable with volcanism";
             // 
-            // showAllPlanetsToolStripMenuItem
-            // 
-            this.showAllPlanetsToolStripMenuItem.Checked = true;
-            this.showAllPlanetsToolStripMenuItem.CheckOnClick = true;
-            this.showAllPlanetsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.showAllPlanetsToolStripMenuItem.Name = "showAllPlanetsToolStripMenuItem";
-            this.showAllPlanetsToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
-            this.showAllPlanetsToolStripMenuItem.Text = "Show All Planets";
-            // 
             // showAllStarsToolStripMenuItem
             // 
             this.showAllStarsToolStripMenuItem.Checked = true;
@@ -308,6 +312,11 @@ namespace EDDiscovery.UserControls
             this.showBeltClustersToolStripMenuItem.Name = "showBeltClustersToolStripMenuItem";
             this.showBeltClustersToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
             this.showBeltClustersToolStripMenuItem.Text = "Show Belt Clusters";
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(238, 6);
             // 
             // showGravityToolStripMenuItem
             // 
@@ -336,6 +345,11 @@ namespace EDDiscovery.UserControls
             this.showVolcanismToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
             this.showVolcanismToolStripMenuItem.Text = "Show volcanism of landables";
             // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(238, 6);
+            // 
             // showValuesToolStripMenuItem
             // 
             this.showValuesToolStripMenuItem.Checked = true;
@@ -360,11 +374,6 @@ namespace EDDiscovery.UserControls
             this.selectFSSSignalsShownToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
             this.selectFSSSignalsShownToolStripMenuItem.Text = "Select FSS Signals Shown";
             // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(238, 6);
-            // 
             // hideAlreadyMappedBodiesToolStripMenuItem
             // 
             this.hideAlreadyMappedBodiesToolStripMenuItem.Checked = true;
@@ -373,6 +382,11 @@ namespace EDDiscovery.UserControls
             this.hideAlreadyMappedBodiesToolStripMenuItem.Name = "hideAlreadyMappedBodiesToolStripMenuItem";
             this.hideAlreadyMappedBodiesToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
             this.hideAlreadyMappedBodiesToolStripMenuItem.Text = "Hide already mapped bodies";
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(238, 6);
             // 
             // checkEDSMForInformationToolStripMenuItem
             // 
@@ -503,15 +517,21 @@ namespace EDDiscovery.UserControls
             this.extScrollBar.Value = 0;
             this.extScrollBar.ValueLimited = 0;
             // 
-            // toolStripSeparator3
+            // hasBiologicalSignalsToolStripMenuItem
             // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(238, 6);
+            this.hasBiologicalSignalsToolStripMenuItem.CheckOnClick = true;
+            this.hasBiologicalSignalsToolStripMenuItem.Name = "hasBiologicalSignalsToolStripMenuItem";
+            this.hasBiologicalSignalsToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
+            this.hasBiologicalSignalsToolStripMenuItem.Text = "Has biological Signals";
+            this.hasBiologicalSignalsToolStripMenuItem.Click += new System.EventHandler(this.hasBiologicalSignalsToolStripMenuItem_Click);
             // 
-            // toolStripSeparator4
+            // hasGeologicalSignalsToolStripMenuItem
             // 
-            this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(238, 6);
+            this.hasGeologicalSignalsToolStripMenuItem.CheckOnClick = true;
+            this.hasGeologicalSignalsToolStripMenuItem.Name = "hasGeologicalSignalsToolStripMenuItem";
+            this.hasGeologicalSignalsToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
+            this.hasGeologicalSignalsToolStripMenuItem.Text = "Has geological Signals";
+            this.hasGeologicalSignalsToolStripMenuItem.Click += new System.EventHandler(this.hasGeologicalSignalsToolStripMenuItem_Click);
             // 
             // UserControlSurveyor
             // 
@@ -575,5 +595,7 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripMenuItem showVolcanismToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+        private System.Windows.Forms.ToolStripMenuItem hasBiologicalSignalsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem hasGeologicalSignalsToolStripMenuItem;
     }
 }

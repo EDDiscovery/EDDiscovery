@@ -415,12 +415,20 @@ namespace EDDiscovery.UserControls
                 bool showatmos = displayfilters.Contains("atmos");
                 bool showrings = displayfilters.Contains("rings");
 
-                bool showjumponium = displayfilters.Contains("jumponium");
+                bool showjumponium = displayfilters.Contains("jumponium");                
 
                 foreach (StarScan.ScanNode sn in sysnode.Bodies)
                 {
                     if (sn?.ScanData != null )  // must have scan data..
                     {
+                        bool hasgeosignals = ((sn.Signals?.Find(x => x.Type.Contains("$SAA_SignalType_Geological;")) != null) && showsignals);
+                        bool hasbiosignals = ((sn.Signals?.Find(x => x.Type.Contains("$SAA_SignalType_Biological;")) != null) && showsignals);
+                        bool hasthargoidsignals = ((sn.Signals?.Find(x => x.Type.Contains("$SAA_SignalType_Thargoid;")) != null) && showsignals);
+                        bool hasguardiansignals = ((sn.Signals?.Find(x => x.Type.Contains("$SAA_SignalType_Guardian;")) != null) && showsignals);
+                        bool hashumansignals = ((sn.Signals?.Find(x => x.Type.Contains("$SAA_SignalType_Human;")) != null) && showsignals);
+                        bool hasothersignals = ((sn.Signals?.Find(x => x.Type.Contains("$SAA_SignalType_Other;")) != null) && showsignals);
+                        bool hasminingsignals = (showsignals && !hasgeosignals && !hasbiosignals && !hasthargoidsignals && !hasguardiansignals && !hashumansignals && !hasothersignals);
+
                         if (
                             (sn.ScanData.IsBeltCluster && showbeltclusters) ||     // major selectors for line display
                             (sn.ScanData.IsPlanet && showplanets) ||
@@ -428,7 +436,7 @@ namespace EDDiscovery.UserControls
                             (showvalueables && (sn.ScanData.AmmoniaWorld || sn.ScanData.CanBeTerraformable || sn.ScanData.WaterWorld || sn.ScanData.Earthlike))
                             )
                         {
-                            string info = sn.ScanData.SurveyorInfoLine(system, sn.Signals != null && showsignals, showvol, showv, showsi, showg,
+                            string info = sn.ScanData.SurveyorInfoLine(system, sn.Signals != null && hasminingsignals, hasgeosignals, hasbiosignals, hasthargoidsignals, hasguardiansignals, hashumansignals, hasothersignals, showvol, showv, showsi, showg,
                                                                 showatmos && sn.ScanData.IsLandable, showrings,
                                                                 lowRadiusLimit, largeRadiusLimit, eccentricityLimit);
                             infostr = infostr.AppendPrePad(info, Environment.NewLine);
