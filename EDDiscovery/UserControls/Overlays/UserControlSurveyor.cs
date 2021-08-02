@@ -319,13 +319,14 @@ namespace EDDiscovery.UserControls
                                 
                             {
                                 var sd = sn.ScanData;
-                                                                
-                                bool GeoSignal = (sn.Signals?.Find(x => x.Type.Contains("$SAA_SignalType_Geological;")) != null);
-                                bool BioSignal = (sn.Signals?.Find(x => x.Type.Contains("$SAA_SignalType_Biological;")) != null);
-                                bool ThargoidSignal = (sn.Signals?.Find(x => x.Type.Contains("$SAA_SignalType_Thargoid;")) != null);
-                                bool GuardianSignal = (sn.Signals?.Find(x => x.Type.Contains("$SAA_SignalType_Guardian;")) != null);
-                                bool HumanSignal = (sn.Signals?.Find(x => x.Type.Contains("$SAA_SignalType_Human;")) != null);
-                                bool OtherSignal = (sn.Signals?.Find(x => x.Type.Contains("$SAA_SignalType_Other;")) != null);
+
+                                bool hasgeosignals = sn.Signals?.Find(x => x.IsGeo) != null;
+                                bool hasbiosignals = sn.Signals?.Find(x => x.IsBio) != null;
+                                bool hasthargoidsignals = sn.Signals?.Find(x => x.IsThargoid) != null;
+                                bool hasguardiansignals = sn.Signals?.Find(x => x.IsGuardian) != null;
+                                bool hashumansignals = sn.Signals?.Find(x => x.IsHuman) != null;
+                                bool hasothersignals = sn.Signals?.Find(x => x.IsOther) != null;
+                                bool hasminingsignals = sn.Signals?.Find(x => x.IsUncatagorised) != null;
 
                                 if  (                                   
                                     (sd.IsLandable && landableToolStripMenuItem.Checked) ||
@@ -343,8 +344,8 @@ namespace EDDiscovery.UserControls
                                     (sd.CanBeTerraformable && terraformableToolStripMenuItem.Checked) ||
                                     (sd.IsPlanet && lowRadiusToolStripMenuItem.Checked && sd.nRadius.HasValue && sd.nRadius < lowRadiusLimit) ||
                                     (sn.Signals != null && hasSignalsToolStripMenuItem.Checked) ||
-                                    (GeoSignal && hasGeologicalSignalsToolStripMenuItem.Checked) ||
-                                    (BioSignal && hasBiologicalSignalsToolStripMenuItem.Checked) ||
+                                    (hasgeosignals && hasGeologicalSignalsToolStripMenuItem.Checked) ||
+                                    (hasbiosignals && hasBiologicalSignalsToolStripMenuItem.Checked) ||
                                     (sd.IsStar && showAllStarsToolStripMenuItem.Checked) ||
                                     (sd.IsPlanet && showAllPlanetsToolStripMenuItem.Checked) ||
                                     (sd.IsBeltCluster && showBeltClustersToolStripMenuItem.Checked))
@@ -352,21 +353,21 @@ namespace EDDiscovery.UserControls
                                     if (!sd.Mapped || hideAlreadyMappedBodiesToolStripMenuItem.Checked == false)      // if not mapped, or show mapped
                                     {
                                         var il = sd.SurveyorInfoLine(sys,
-                                                                        sn.Signals != null && hasSignalsToolStripMenuItem.Checked && !GeoSignal && !BioSignal && !ThargoidSignal && !GuardianSignal && !HumanSignal && !OtherSignal,  // show signals if we have some andthe all signals filter is checked
-                                                                        GeoSignal && (hasSignalsToolStripMenuItem.Checked || hasGeologicalSignalsToolStripMenuItem.Checked || hasBiologicalSignalsToolStripMenuItem.Checked), // show geological signals if there are any and any signal filter is checked (as there are bios that need geos to appear)
-                                                                        BioSignal && (hasSignalsToolStripMenuItem.Checked || hasBiologicalSignalsToolStripMenuItem.Checked), // show biological signals if there are any and the all signal filter or the bio signal filter is checked
-                                                                        ThargoidSignal && hasSignalsToolStripMenuItem.Checked, // show thargoid signals if there are any and the all signals filter is checked
-                                                                        GuardianSignal && hasSignalsToolStripMenuItem.Checked, // show guardian signals if there are any and the all signals filter is checked
-                                                                        HumanSignal && hasSignalsToolStripMenuItem.Checked, // show human signals if there are any and the all signals filter is checked
-                                                                        OtherSignal && hasSignalsToolStripMenuItem.Checked, // show other signals if there are any and the all signals filter is checked
-                                                                        hasVolcanismToolStripMenuItem.Checked || (sd.IsLandable && landableWithVolcanismToolStripMenuItem.Checked)
-                                                                            || (sd.IsLandable && showVolcanismToolStripMenuItem.Checked), // any of these makes us need to show volcanic state
-                                                                        showValuesToolStripMenuItem.Checked,        // show values
-                                                                        showMoreInformationToolStripMenuItem.Checked,   // show extra info such as mass/radius
-                                                                        showGravityToolStripMenuItem.Checked,       // show gravity select
-                                                                        sd.IsLandable && showAtmosToolStripMenuItem.Checked, // show atmosphere if landable (surveyor shows this if landable)
-                                                                        hasRingsToolStripMenuItem.Checked,          // show rings
-                                                                        lowRadiusLimit, largeRadiusLimit, eccentricityLimit);
+                                            hasminingsignals && hasSignalsToolStripMenuItem.Checked,  // show signals if we have some andthe all signals filter is checked
+                                            hasgeosignals && (hasSignalsToolStripMenuItem.Checked || hasGeologicalSignalsToolStripMenuItem.Checked || hasBiologicalSignalsToolStripMenuItem.Checked), // show geological signals if there are any and any signal filter is checked (as there are bios that need geos to appear)
+                                            hasbiosignals && (hasSignalsToolStripMenuItem.Checked || hasBiologicalSignalsToolStripMenuItem.Checked), // show biological signals if there are any and the all signal filter or the bio signal filter is checked
+                                            hasthargoidsignals && hasSignalsToolStripMenuItem.Checked, // show thargoid signals if there are any and the all signals filter is checked
+                                            hasguardiansignals && hasSignalsToolStripMenuItem.Checked, // show guardian signals if there are any and the all signals filter is checked
+                                            hashumansignals && hasSignalsToolStripMenuItem.Checked, // show human signals if there are any and the all signals filter is checked
+                                            hasothersignals && hasSignalsToolStripMenuItem.Checked, // show other signals if there are any and the all signals filter is checked
+                                            hasVolcanismToolStripMenuItem.Checked || (sd.IsLandable && landableWithVolcanismToolStripMenuItem.Checked)
+                                                || (sd.IsLandable && showVolcanismToolStripMenuItem.Checked), // any of these makes us need to show volcanic state
+                                            showValuesToolStripMenuItem.Checked,        // show values
+                                            showMoreInformationToolStripMenuItem.Checked,   // show extra info such as mass/radius
+                                            showGravityToolStripMenuItem.Checked,       // show gravity select
+                                            sd.IsLandable && showAtmosToolStripMenuItem.Checked, // show atmosphere if landable (surveyor shows this if landable)
+                                            hasRingsToolStripMenuItem.Checked,          // show rings
+                                            lowRadiusLimit, largeRadiusLimit, eccentricityLimit);
 
                                         //System.Diagnostics.Debug.WriteLine("Display " + il);
                                         var i = pictureBoxSurveyor.AddTextAutoSize(

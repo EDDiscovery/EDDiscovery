@@ -60,6 +60,8 @@ namespace EDDiscovery.UserControls
             this.highEccentricityToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.lowRadiusToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hasSignalsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.hasBiologicalSignalsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.hasGeologicalSignalsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.landableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.landableWithAtmosphereToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.landableAndLargeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -89,8 +91,6 @@ namespace EDDiscovery.UserControls
             this.pictureBoxSurveyor = new ExtendedControls.ExtPictureBox();
             this.extPictureBoxScroll = new ExtendedControls.ExtPictureBoxScroll();
             this.extScrollBar = new ExtendedControls.ExtScrollBar();
-            this.hasBiologicalSignalsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.hasGeologicalSignalsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSurveyor)).BeginInit();
             this.extPictureBoxScroll.SuspendLayout();
@@ -258,6 +258,26 @@ namespace EDDiscovery.UserControls
             this.hasSignalsToolStripMenuItem.Name = "hasSignalsToolStripMenuItem";
             this.hasSignalsToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
             this.hasSignalsToolStripMenuItem.Text = "Has Signals";
+            // 
+            // hasBiologicalSignalsToolStripMenuItem
+            // 
+            this.hasBiologicalSignalsToolStripMenuItem.Checked = true;
+            this.hasBiologicalSignalsToolStripMenuItem.CheckOnClick = true;
+            this.hasBiologicalSignalsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.hasBiologicalSignalsToolStripMenuItem.Name = "hasBiologicalSignalsToolStripMenuItem";
+            this.hasBiologicalSignalsToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
+            this.hasBiologicalSignalsToolStripMenuItem.Text = "Has biological Signals";
+            this.hasBiologicalSignalsToolStripMenuItem.Click += new System.EventHandler(this.hasBiologicalSignalsToolStripMenuItem_Click);
+            // 
+            // hasGeologicalSignalsToolStripMenuItem
+            // 
+            this.hasGeologicalSignalsToolStripMenuItem.Checked = true;
+            this.hasGeologicalSignalsToolStripMenuItem.CheckOnClick = true;
+            this.hasGeologicalSignalsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.hasGeologicalSignalsToolStripMenuItem.Name = "hasGeologicalSignalsToolStripMenuItem";
+            this.hasGeologicalSignalsToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
+            this.hasGeologicalSignalsToolStripMenuItem.Text = "Has geological Signals";
+            this.hasGeologicalSignalsToolStripMenuItem.Click += new System.EventHandler(this.hasGeologicalSignalsToolStripMenuItem_Click);
             // 
             // landableToolStripMenuItem
             // 
@@ -516,22 +536,6 @@ namespace EDDiscovery.UserControls
             this.extScrollBar.ThumbDrawAngle = 0F;
             this.extScrollBar.Value = 0;
             this.extScrollBar.ValueLimited = 0;
-            // 
-            // hasBiologicalSignalsToolStripMenuItem
-            // 
-            this.hasBiologicalSignalsToolStripMenuItem.CheckOnClick = true;
-            this.hasBiologicalSignalsToolStripMenuItem.Name = "hasBiologicalSignalsToolStripMenuItem";
-            this.hasBiologicalSignalsToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
-            this.hasBiologicalSignalsToolStripMenuItem.Text = "Has biological Signals";
-            this.hasBiologicalSignalsToolStripMenuItem.Click += new System.EventHandler(this.hasBiologicalSignalsToolStripMenuItem_Click);
-            // 
-            // hasGeologicalSignalsToolStripMenuItem
-            // 
-            this.hasGeologicalSignalsToolStripMenuItem.CheckOnClick = true;
-            this.hasGeologicalSignalsToolStripMenuItem.Name = "hasGeologicalSignalsToolStripMenuItem";
-            this.hasGeologicalSignalsToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
-            this.hasGeologicalSignalsToolStripMenuItem.Text = "Has geological Signals";
-            this.hasGeologicalSignalsToolStripMenuItem.Click += new System.EventHandler(this.hasGeologicalSignalsToolStripMenuItem_Click);
             // 
             // UserControlSurveyor
             // 
