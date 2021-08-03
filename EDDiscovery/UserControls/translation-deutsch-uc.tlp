@@ -791,7 +791,7 @@ SECTION UserControlScanGrid
 .toolStripStatusGreen: "GREEN SYSTEM" => "GRÜNES SYSTEM"
 .GS: "This is a green system, as it has all existing jumponium materials available!" => "Dies ist ein grünes System, denn in ihm sind alle verschiedenen Sprungmaterialien vorhanden"
 .JS: " jumponium materials found in system." => " Sprungmaterialien im System gefunden."
-.eDSMCheckToolStripMenuItem: "EDSM Check" @
+.eDSMCheckToolStripMenuItem: "EDSM Check" => "EDSM Check"
 
 SECTION UserControlSettings
 
