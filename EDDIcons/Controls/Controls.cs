@@ -174,6 +174,7 @@ namespace EDDiscovery.Icons
         public static Image Scan_ExportToExcel { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.ExportToExcel"); } }
         public static Image Scan_FetchEDSMBodies { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.FetchEDSMBodies"); } }
         public static Image Scan_ShowAllMaterials { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.ShowAllMaterials"); } }
+        public static Image Scan_FSD { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.FSD"); } }
         public static Image Scan_HideFullMaterials { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.HideFullMaterials"); } }
         public static Image Scan_Bodies_CZ { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.Bodies.CZ"); } }
         public static Image Scan_Bodies_Installations { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.Bodies.Installations"); } }

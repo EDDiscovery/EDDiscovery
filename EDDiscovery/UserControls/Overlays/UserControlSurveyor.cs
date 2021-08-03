@@ -322,11 +322,6 @@ namespace EDDiscovery.UserControls
 
                                 bool hasgeosignals = sn.Signals?.Find(x => x.IsGeo) != null;
                                 bool hasbiosignals = sn.Signals?.Find(x => x.IsBio) != null;
-                                bool hasthargoidsignals = sn.Signals?.Find(x => x.IsThargoid) != null;
-                                bool hasguardiansignals = sn.Signals?.Find(x => x.IsGuardian) != null;
-                                bool hashumansignals = sn.Signals?.Find(x => x.IsHuman) != null;
-                                bool hasothersignals = sn.Signals?.Find(x => x.IsOther) != null;
-                                bool hasminingsignals = sn.Signals?.Find(x => x.IsUncategorised) != null;
 
                                 if  (                                   
                                     (sd.IsLandable && landableToolStripMenuItem.Checked) ||
@@ -352,6 +347,12 @@ namespace EDDiscovery.UserControls
                                 {
                                     if (!sd.Mapped || hideAlreadyMappedBodiesToolStripMenuItem.Checked == false)      // if not mapped, or show mapped
                                     {
+                                        bool hasthargoidsignals = sn.Signals?.Find(x => x.IsThargoid) != null;
+                                        bool hasguardiansignals = sn.Signals?.Find(x => x.IsGuardian) != null;
+                                        bool hashumansignals = sn.Signals?.Find(x => x.IsHuman) != null;
+                                        bool hasothersignals = sn.Signals?.Find(x => x.IsOther) != null;
+                                        bool hasminingsignals = sn.Signals?.Find(x => x.IsUncategorised) != null;
+
                                         var il = sd.SurveyorInfoLine(sys,
                                             hasminingsignals && hasSignalsToolStripMenuItem.Checked,  // show signals if we have some andthe all signals filter is checked
                                             hasgeosignals && (hasSignalsToolStripMenuItem.Checked || hasGeologicalSignalsToolStripMenuItem.Checked || hasBiologicalSignalsToolStripMenuItem.Checked), // show geological signals if there are any and any signal filter is checked (as there are bios that need geos to appear)
@@ -360,6 +361,7 @@ namespace EDDiscovery.UserControls
                                             hasguardiansignals && hasSignalsToolStripMenuItem.Checked, // show guardian signals if there are any and the all signals filter is checked
                                             hashumansignals && hasSignalsToolStripMenuItem.Checked, // show human signals if there are any and the all signals filter is checked
                                             hasothersignals && hasSignalsToolStripMenuItem.Checked, // show other signals if there are any and the all signals filter is checked
+                                            false,      // so this is the surveyor, we don't want to bother with showing if its got organics, since you have to scan them
                                             hasVolcanismToolStripMenuItem.Checked || (sd.IsLandable && landableWithVolcanismToolStripMenuItem.Checked)
                                                 || (sd.IsLandable && showVolcanismToolStripMenuItem.Checked), // any of these makes us need to show volcanic state
                                             showValuesToolStripMenuItem.Checked,        // show values

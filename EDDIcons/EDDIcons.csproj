@@ -570,6 +570,7 @@
     <EmbeddedResource Include="Controls\SysInfo\notfirstdiscover.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Controls\Scan\FSD.png" />
     <EmbeddedResource Include="Highres\Battery.png" />
     <EmbeddedResource Include="Highres\ClearAuthority.png" />
     <EmbeddedResource Include="Highres\EMPGrenade.png" />

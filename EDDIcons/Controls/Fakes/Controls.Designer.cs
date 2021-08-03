@@ -1553,6 +1553,16 @@ namespace EDDiscovery.Icons {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap Scan_FSD {
+            get {
+                object obj = ResourceManager.GetObject("Scan_FSD", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap Scan_HideFullMaterials {
             get {
                 object obj = ResourceManager.GetObject("Scan_HideFullMaterials", resourceCulture);

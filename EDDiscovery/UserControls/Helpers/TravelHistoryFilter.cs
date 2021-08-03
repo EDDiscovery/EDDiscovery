@@ -150,7 +150,7 @@ namespace EDDiscovery.UserControls
             {
                 var oldestData = DateTime.UtcNow.Subtract(MaximumDataAge.Value);
                 int index = list.FindIndex(x => x.EventTimeUTC < oldestData);       // find first entry with date younger than oldest data
-                return index >= 0 ? list.GetRange(0, index) : new List<HistoryEntry>();
+                return index >= 0 ? list.GetRange(0, index) : list;                 // if not found one, they are all younger than the time, so its all, else its a range
             }
             else
             {

@@ -397,6 +397,7 @@ namespace EDDiscovery
         UserControlStarList_OB, // {0} Other bodies
         UserControlStarList_JUMP,
         UserControlStarList_valueables,
+        UserControlStarList_scanorganics,
 
         UserControlCaptainsLog_Diary, // Diary
         UserControlCaptainsLog_Entries, // Entries

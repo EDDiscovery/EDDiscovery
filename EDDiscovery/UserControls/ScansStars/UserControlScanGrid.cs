@@ -373,6 +373,12 @@ namespace EDDiscovery.UserControls
                             bdDetails.Append(Environment.NewLine).Append("Surface mapped".T(EDTx.UserControlScanGrid_Surfacemapped)).Append(". ");
                             overlays.mapped = true;
                         }
+
+                        if ( sn.Organics != null )
+                        {
+                            string ol = JournalScanOrganic.OrganicList(sn.Organics);
+                            bdDetails.Append(Environment.NewLine).Append(ol);
+                        }
                             
                         // materials                        
                         if (sn.ScanData.HasMaterials )

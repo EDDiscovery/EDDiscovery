@@ -93,7 +93,7 @@ namespace EDDiscovery.UserControls
             checkBoxEDSM.Checked = GetSetting(dbEDSM, false);
             this.checkBoxEDSM.CheckedChanged += new System.EventHandler(this.checkBoxEDSM_CheckedChanged);
 
-            displayfilters = GetSetting(dbDisplayFilters, "stars;planets;signals;volcanism;values;shortinfo;gravity;atmos;rings;valueables;").Split(';');
+            displayfilters = GetSetting(dbDisplayFilters, "stars;planets;signals;volcanism;values;shortinfo;gravity;atmos;rings;valueables;organics").Split(';');
 
             discoveryform.OnHistoryChange += HistoryChanged;
             discoveryform.OnNewEntry += AddNewEntry;
@@ -398,6 +398,15 @@ namespace EDDiscovery.UserControls
                     infostr += ", " + "Total".T(EDTx.UserControlStarList_Total) + " " + sysnode.FSSTotalBodies.Value.ToString();
                 }
 
+                if ( sysnode.CodexEntryList.Count>0)
+                {
+                    foreach( var c in sysnode.CodexEntryList)
+                    {
+                        infostr = infostr.AppendPrePad(c.Info(), Environment.NewLine);
+                    }
+                }
+
+
                 string jumponium = "";
 
                 // selectors for showing something
@@ -414,6 +423,7 @@ namespace EDDiscovery.UserControls
                 bool showg = displayfilters.Contains("gravity");
                 bool showatmos = displayfilters.Contains("atmos");
                 bool showrings = displayfilters.Contains("rings");
+                bool showorganics = displayfilters.Contains("organics");
 
                 bool showjumponium = displayfilters.Contains("jumponium");                
 
@@ -421,23 +431,31 @@ namespace EDDiscovery.UserControls
                 {
                     if (sn?.ScanData != null )  // must have scan data..
                     {
-                        bool hasgeosignals = sn.Signals?.Find(x => x.IsGeo) != null && showsignals;
-                        bool hasbiosignals = sn.Signals?.Find(x => x.IsBio) != null && showsignals;
-                        bool hasthargoidsignals = sn.Signals?.Find(x => x.IsThargoid) != null && showsignals;
-                        bool hasguardiansignals = sn.Signals?.Find(x => x.IsGuardian) != null && showsignals;
-                        bool hashumansignals = sn.Signals?.Find(x => x.IsHuman) != null && showsignals;
-                        bool hasothersignals = sn.Signals?.Find(x => x.IsOther) != null && showsignals;
-                        bool hasminingsignals = sn.Signals?.Find(x => x.IsUncategorised) != null && showsignals;
-
-                        if (
+                         if (
                             (sn.ScanData.IsBeltCluster && showbeltclusters) ||     // major selectors for line display
                             (sn.ScanData.IsPlanet && showplanets) ||
                             (sn.ScanData.IsStar && showstars) ||
                             (showvalueables && (sn.ScanData.AmmoniaWorld || sn.ScanData.CanBeTerraformable || sn.ScanData.WaterWorld || sn.ScanData.Earthlike))
                             )
                         {
+                            bool hasgeosignals = sn.Signals?.Find(x => x.IsGeo) != null && showsignals;
+                            bool hasbiosignals = sn.Signals?.Find(x => x.IsBio) != null && showsignals;
+                            bool hasthargoidsignals = sn.Signals?.Find(x => x.IsThargoid) != null && showsignals;
+                            bool hasguardiansignals = sn.Signals?.Find(x => x.IsGuardian) != null && showsignals;
+                            bool hashumansignals = sn.Signals?.Find(x => x.IsHuman) != null && showsignals;
+                            bool hasothersignals = sn.Signals?.Find(x => x.IsOther) != null && showsignals;
+                            bool hasminingsignals = sn.Signals?.Find(x => x.IsUncategorised) != null && showsignals;
+                            bool hasscanorganics = sn.Organics != null && showorganics;
+
+                            if ( hasscanorganics )
+                            {
+
+                            }
+                                
+
                             string info = sn.ScanData.SurveyorInfoLine(system, 
                                                                 hasminingsignals, hasgeosignals, hasbiosignals, hasthargoidsignals, hasguardiansignals, hashumansignals, hasothersignals, 
+                                                                hasscanorganics,
                                                                 showvol, showv, showsi, showg,
                                                                 showatmos && sn.ScanData.IsLandable, showrings,
                                                                 lowRadiusLimit, largeRadiusLimit, eccentricityLimit);
@@ -722,19 +740,20 @@ namespace EDDiscovery.UserControls
             displayfilter.AllOrNoneBack = false;
 
             displayfilter.AddAllNone();
-            displayfilter.AddStandardOption("stars", "Show All Stars".TxID("UserControlSurveyor.showAllStarsToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_ShowOverlays);
-            displayfilter.AddStandardOption("planets", "Show All Planets".TxID("UserControlSurveyor.showAllPlanetsToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_ShowOverlays);
-            displayfilter.AddStandardOption("beltcluster", "Show belt clusters".TxID("UserControlSurveyor.showBeltClustersToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_ShowOverlays);
-            displayfilter.AddStandardOption("valueables", "Show valueable bodies".T(EDTx.UserControlStarList_valueables), global::EDDiscovery.Icons.Controls.Scan_ShowOverlays);
-            displayfilter.AddStandardOption("jumponium", "Show/Hide presence of Jumponium Materials".T(EDTx.UserControlStarList_JUMP), global::EDDiscovery.Icons.Controls.Scan_ShowOverlays);
-            displayfilter.AddStandardOption("signals", "Has Signals".TxID("UserControlSurveyor.bodyFeaturesToolStripMenuItem.hasSignalsToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_ShowOverlays);
-            displayfilter.AddStandardOption("volcanism", "Has Volcanism".TxID("UserControlSurveyor.bodyFeaturesToolStripMenuItem.hasVolcanismToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_ShowOverlays);
-            displayfilter.AddStandardOption("values", "Show values".TxID("UserControlSurveyor.showValuesToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_ShowOverlays);
-            displayfilter.AddStandardOption("shortinfo", "Show More Information".TxID("UserControlSurveyor.showMoreInformationToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_ShowOverlays);
-            displayfilter.AddStandardOption("gravity", "Show gravity of landables".TxID("UserControlSurveyor.showGravityToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_ShowOverlays);
-            displayfilter.AddStandardOption("atmos", "Show atmospheres of landables".TxID("UserControlSurveyor.showAtmosToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_ShowOverlays);
-            displayfilter.AddStandardOption("rings", "Show rings".TxID("UserControlSurveyor.bodyFeaturesToolStripMenuItem.hasRingsToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_ShowOverlays);
-            
+            displayfilter.AddStandardOption("stars", "Show All Stars".TxID("UserControlSurveyor.showAllStarsToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Star);
+            displayfilter.AddStandardOption("planets", "Show All Planets".TxID("UserControlSurveyor.showAllPlanetsToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_ShowMoons);
+            displayfilter.AddStandardOption("beltcluster", "Show belt clusters".TxID("UserControlSurveyor.showBeltClustersToolStripMenuItem"), global::EDDiscovery.Icons.Controls.ScanGrid_Belt);
+            displayfilter.AddStandardOption("valueables", "Show valueable bodies".T(EDTx.UserControlStarList_valueables), global::EDDiscovery.Icons.Controls.Scan_Bodies_HighValue);
+            displayfilter.AddStandardOption("jumponium", "Show/Hide presence of Jumponium Materials".T(EDTx.UserControlStarList_JUMP), global::EDDiscovery.Icons.Controls.Scan_FSD);
+            displayfilter.AddStandardOption("signals", "Has Signals".TxID("UserControlSurveyor.bodyFeaturesToolStripMenuItem.hasSignalsToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Bodies_Signals);
+            displayfilter.AddStandardOption("volcanism", "Has Volcanism".TxID("UserControlSurveyor.bodyFeaturesToolStripMenuItem.hasVolcanismToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Bodies_Volcanism);
+            displayfilter.AddStandardOption("values", "Show values".TxID("UserControlSurveyor.showValuesToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Bodies_HighValue);
+            displayfilter.AddStandardOption("shortinfo", "Show More Information".TxID("UserControlSurveyor.showMoreInformationToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Bodies_Landable);
+            displayfilter.AddStandardOption("gravity", "Show gravity of landables".TxID("UserControlSurveyor.showGravityToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Bodies_Landable);
+            displayfilter.AddStandardOption("atmos", "Show atmospheres of landables".TxID("UserControlSurveyor.showAtmosToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Bodies_Landable);
+            displayfilter.AddStandardOption("rings", "Show rings".TxID("UserControlSurveyor.bodyFeaturesToolStripMenuItem.hasRingsToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Bodies_RingOnly);
+            displayfilter.AddStandardOption("organics", "Show organic scans".T(EDTx.UserControlStarList_scanorganics), global::EDDiscovery.Icons.Controls.Scan_Bodies_NSP);
+            displayfilter.ImageSize = new Size(24, 24);
             displayfilter.SaveSettings = (s, o) =>
             {
                 displayfilters = s.Split(';');
