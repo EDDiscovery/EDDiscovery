@@ -436,6 +436,8 @@ SECTION UserControlSurveyor
 .planetaryClassesToolStripMenuItem.ammoniaWorldToolStripMenuItem: "Ammonia World" => "Monde d'amoniaque"
 .planetaryClassesToolStripMenuItem.earthlikeWorldToolStripMenuItem: "Earthlike World" => "Monde tellurique"
 .planetaryClassesToolStripMenuItem.waterWorldToolStripMenuItem: "Water World" => "Monde aquatique"
+.highMetalContentBodyToolStripMenuItem: "High-metal content World" @
+.metalToolStripMenuItem: "Metal-rich Body" @
 .bodyFeaturesToolStripMenuItem: "Body Features" => "Caractéristiques du corps"
 .bodyFeaturesToolStripMenuItem.terraformableToolStripMenuItem: "Terraformable" @
 .bodyFeaturesToolStripMenuItem.hasVolcanismToolStripMenuItem: "Has Volcanism" => "a du volcanisme"
@@ -446,12 +448,15 @@ SECTION UserControlSurveyor
 .textAlignToolStripMenuItem.centerToolStripMenuItem: "Center" => "Centre"
 .textAlignToolStripMenuItem.rightToolStripMenuItem: "Right" => "Droite"
 .bodyFeaturesToolStripMenuItem.hasSignalsToolStripMenuItem: "Has Signals" => "a des signaux"
+.bodyFeaturesToolStripMenuItem.hasGeologicalSignalsToolStripMenuItem: "Has Geological Signals" @
+.bodyFeaturesToolStripMenuItem.hasBiologicalSignalsToolStripMenuItem: "Has Biological Signals" @
 .bodyFeaturesToolStripMenuItem.landableToolStripMenuItem: "Landable" @
 .showAllPlanetsToolStripMenuItem: "Show All Planets" => "Affiche toutes les planètes"
 .showAllStarsToolStripMenuItem: "Show All Stars" => "Affiche toutes les étoiles"
 .showBeltClustersToolStripMenuItem: "Show Belt Clusters" => "Affiche les ceintures d'astéroides"
 .showMoreInformationToolStripMenuItem: "Show More Information" => "Afficher plus d'informations"
 .showValuesToolStripMenuItem: "Show values" => "Afficher les valeurs"
+.showAtmosToolStripMenuItem: "Show atmospheres of landables" @
 .wordWrapToolStripMenuItem: "Word Wrap" => "Retour à la ligne"
 .planetaryClassesToolStripMenuItem.highMetalContentBodyToolStripMenuItem: "High metal content body" @
 .planetaryClassesToolStripMenuItem.metalToolStripMenuItem: "Metal-rich body" @
@@ -460,6 +465,8 @@ SECTION UserControlSurveyor
 .bodyFeaturesToolStripMenuItem.landableWithVolcanismToolStripMenuItem: "Landable with volcanism" @
 .bodyFeaturesToolStripMenuItem.landableAndLargeToolStripMenuItem: "Landable and large" @
 .showGravityToolStripMenuItem: "Show gravity of landables" @
+.bodyFeaturesToolStripMenuItem.showAtmosToolStripMenuItem: "Show atmosphere" @
+.showVolcanismToolStripMenuItem: "Show volcanism of landables" @
 
 SECTION MissionListUserControl
 
@@ -784,6 +791,7 @@ SECTION UserControlScanGrid
 .toolStripStatusGreen: "GREEN SYSTEM" => "SYSTÈME VERT"
 .GS: "This is a green system, as it has all existing jumponium materials available!" @
 .JS: " jumponium materials found in system." @
+.eDSMCheckToolStripMenuItem: "EDSM Check" @
 
 SECTION UserControlSettings
 
@@ -1013,8 +1021,6 @@ SECTION UserControlStarList
 .setNoteToolStripMenuItem: "Set Note" => "Définir une note"
 .checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" => "Déplacer automatiquement le curseur sur la dernier entrée quand elle arrive"
 .buttonExtExcel.ToolTip: "Send data on grid to excel" => "Envoi des données dans Excel"
-.checkBoxJumponium.ToolTip: "Show/Hide presence of Jumponium Materials" @
-.checkBoxBodyClasses.ToolTip: "Show/Hide Special bodies classes" => "Afficher/Masquer les corps de classes spéciales"
 .textBoxFilter.ToolTip: "Enter text to search in any fields for an item" => "Saisir un texte à recherche dans tous les champs"
 .checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM. Due to server constraints, you must click on a system to retreive data on it from EDSM." => "Afficher/Masquer les données du corps provenant d'EDSM. En raison des contraintes serveur, vous devez cliquer sur un système pour récupérer les données de ce dernier depuis EDSM"
 .comboBoxTime.ToolTip: "Select the entries by age" => "Trier les entrées par âge"
@@ -1025,6 +1031,8 @@ SECTION UserControlStarList
 .FSD: "This system has materials for FSD boost: " => "Ce système contient les matériaux pour des boost FSD : "
 .NoEDSM: "System could not be found - has not been synched or EDSM is unavailable" => "Système introuvable - n'a pas été synchronisé ou EDSM est indisponible"
 .OB: "{0} Other bodies" => "{0} autres corps"
+.JUMP: "Show/Hide presence of Jumponium Materials" @
+.valueables: "Show valueable bodies" @
 
 SECTION UserControlStats
 

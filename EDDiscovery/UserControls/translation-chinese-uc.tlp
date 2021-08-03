@@ -436,6 +436,8 @@ SECTION UserControlSurveyor
 .planetaryClassesToolStripMenuItem.ammoniaWorldToolStripMenuItem: "Ammonia World" @
 .planetaryClassesToolStripMenuItem.earthlikeWorldToolStripMenuItem: "Earthlike World" @
 .planetaryClassesToolStripMenuItem.waterWorldToolStripMenuItem: "Water World" @
+.highMetalContentBodyToolStripMenuItem: "High-metal content World" @
+.metalToolStripMenuItem: "Metal-rich Body" @
 .bodyFeaturesToolStripMenuItem: "Body Features" @
 .bodyFeaturesToolStripMenuItem.terraformableToolStripMenuItem: "Terraformable" @
 .bodyFeaturesToolStripMenuItem.hasVolcanismToolStripMenuItem: "Has Volcanism" @
@@ -446,12 +448,15 @@ SECTION UserControlSurveyor
 .textAlignToolStripMenuItem.centerToolStripMenuItem: "Center" @
 .textAlignToolStripMenuItem.rightToolStripMenuItem: "Right" @
 .bodyFeaturesToolStripMenuItem.hasSignalsToolStripMenuItem: "Has Signals" @
+.bodyFeaturesToolStripMenuItem.hasGeologicalSignalsToolStripMenuItem: "Has Geological Signals" @
+.bodyFeaturesToolStripMenuItem.hasBiologicalSignalsToolStripMenuItem: "Has Biological Signals" @
 .bodyFeaturesToolStripMenuItem.landableToolStripMenuItem: "Landable" @
 .showAllPlanetsToolStripMenuItem: "Show All Planets" @
 .showAllStarsToolStripMenuItem: "Show All Stars" @
 .showBeltClustersToolStripMenuItem: "Show Belt Clusters" @
 .showMoreInformationToolStripMenuItem: "Show More Information" @
 .showValuesToolStripMenuItem: "Show values" @
+.showAtmosToolStripMenuItem: "Show atmospheres of landables" @
 .wordWrapToolStripMenuItem: "Word Wrap" @
 .planetaryClassesToolStripMenuItem.highMetalContentBodyToolStripMenuItem: "High metal content body" @
 .planetaryClassesToolStripMenuItem.metalToolStripMenuItem: "Metal-rich body" @
@@ -460,6 +465,8 @@ SECTION UserControlSurveyor
 .bodyFeaturesToolStripMenuItem.landableWithVolcanismToolStripMenuItem: "Landable with volcanism" @
 .bodyFeaturesToolStripMenuItem.landableAndLargeToolStripMenuItem: "Landable and large" @
 .showGravityToolStripMenuItem: "Show gravity of landables" @
+.bodyFeaturesToolStripMenuItem.showAtmosToolStripMenuItem: "Show atmosphere" @
+.showVolcanismToolStripMenuItem: "Show volcanism of landables" @
 
 SECTION MissionListUserControl
 
@@ -784,6 +791,7 @@ SECTION UserControlScanGrid
 .toolStripStatusGreen: "GREEN SYSTEM" => "绿色行星"
 .GS: "This is a green system, as it has all existing jumponium materials available!" @
 .JS: " jumponium materials found in system." @
+.eDSMCheckToolStripMenuItem: "EDSM Check" @
 
 SECTION UserControlSettings
 
@@ -1013,8 +1021,6 @@ SECTION UserControlStarList
 .setNoteToolStripMenuItem: "Set Note" => "添加笔记"
 .checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" @
 .buttonExtExcel.ToolTip: "Send data on grid to excel" => "把表格中的数据导出到Excel中"
-.checkBoxJumponium.ToolTip: "Show/Hide presence of Jumponium Materials" => "显示/隐藏合成FSD助推剂用的材料"
-.checkBoxBodyClasses.ToolTip: "Show/Hide Special bodies classes" => "显示/隐藏特殊种类的星体（可地球化的行星等）"
 .textBoxFilter.ToolTip: "Enter text to search in any fields for an item" => "输入文本以搜索所有的域"
 .checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM. Due to server constraints, you must click on a system to retreive data on it from EDSM." => "显示/隐藏EDSM上的星体数据。为防止服务器瘫痪，只有当你选中一个星系时才会从ESDSM上获取数据。"
 .comboBoxTime.ToolTip: "Select the entries by age" => "安照时间顺序筛选条目"
@@ -1025,6 +1031,8 @@ SECTION UserControlStarList
 .FSD: "This system has materials for FSD boost: " => "这个行星存在合成FSD助推剂用的材料："
 .NoEDSM: "System could not be found - has not been synched or EDSM is unavailable" => "无法找到该星系，该星系未被同步或者EDSM现在不可用。"
 .OB: "{0} Other bodies" => "{0}个其他星体"
+.JUMP: "Show/Hide presence of Jumponium Materials" @
+.valueables: "Show valueable bodies" @
 
 SECTION UserControlStats
 

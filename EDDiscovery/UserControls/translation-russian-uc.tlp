@@ -436,6 +436,8 @@ SECTION UserControlSurveyor
 .planetaryClassesToolStripMenuItem.ammoniaWorldToolStripMenuItem: "Ammonia World" => "Аммиачные планеты"
 .planetaryClassesToolStripMenuItem.earthlikeWorldToolStripMenuItem: "Earthlike World" => "Землеподобные планеты"
 .planetaryClassesToolStripMenuItem.waterWorldToolStripMenuItem: "Water World" => "Водные планеты"
+.highMetalContentBodyToolStripMenuItem: "High-metal content World" @
+.metalToolStripMenuItem: "Metal-rich Body" @
 .bodyFeaturesToolStripMenuItem: "Body Features" => "Особенности планет"
 .bodyFeaturesToolStripMenuItem.terraformableToolStripMenuItem: "Terraformable" => "Терраформируемые"
 .bodyFeaturesToolStripMenuItem.hasVolcanismToolStripMenuItem: "Has Volcanism" => "С вулканизмом"
@@ -446,12 +448,15 @@ SECTION UserControlSurveyor
 .textAlignToolStripMenuItem.centerToolStripMenuItem: "Center" => "По центру"
 .textAlignToolStripMenuItem.rightToolStripMenuItem: "Right" => "По правому краю"
 .bodyFeaturesToolStripMenuItem.hasSignalsToolStripMenuItem: "Has Signals" @
+.bodyFeaturesToolStripMenuItem.hasGeologicalSignalsToolStripMenuItem: "Has Geological Signals" @
+.bodyFeaturesToolStripMenuItem.hasBiologicalSignalsToolStripMenuItem: "Has Biological Signals" @
 .bodyFeaturesToolStripMenuItem.landableToolStripMenuItem: "Landable" @
 .showAllPlanetsToolStripMenuItem: "Show All Planets" @
 .showAllStarsToolStripMenuItem: "Show All Stars" @
 .showBeltClustersToolStripMenuItem: "Show Belt Clusters" @
 .showMoreInformationToolStripMenuItem: "Show More Information" @
 .showValuesToolStripMenuItem: "Show values" @
+.showAtmosToolStripMenuItem: "Show atmospheres of landables" @
 .wordWrapToolStripMenuItem: "Word Wrap" @
 .planetaryClassesToolStripMenuItem.highMetalContentBodyToolStripMenuItem: "High metal content body" @
 .planetaryClassesToolStripMenuItem.metalToolStripMenuItem: "Metal-rich body" @
@@ -460,6 +465,8 @@ SECTION UserControlSurveyor
 .bodyFeaturesToolStripMenuItem.landableWithVolcanismToolStripMenuItem: "Landable with volcanism" @
 .bodyFeaturesToolStripMenuItem.landableAndLargeToolStripMenuItem: "Landable and large" @
 .showGravityToolStripMenuItem: "Show gravity of landables" @
+.bodyFeaturesToolStripMenuItem.showAtmosToolStripMenuItem: "Show atmosphere" @
+.showVolcanismToolStripMenuItem: "Show volcanism of landables" @
 
 SECTION MissionListUserControl
 
@@ -784,6 +791,7 @@ SECTION UserControlScanGrid
 .toolStripStatusGreen: "GREEN SYSTEM" @
 .GS: "This is a green system, as it has all existing jumponium materials available!" @
 .JS: " jumponium materials found in system." @
+.eDSMCheckToolStripMenuItem: "EDSM Check" @
 
 SECTION UserControlSettings
 
@@ -1013,8 +1021,6 @@ SECTION UserControlStarList
 .setNoteToolStripMenuItem: "Set Note" => "Добавить примечание"
 .checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" => "При появлении новой записи курсор автоматически перемещается наверх"
 .buttonExtExcel.ToolTip: "Send data on grid to excel" => "Передать данные в Excel"
-.checkBoxJumponium.ToolTip: "Show/Hide presence of Jumponium Materials" => "Показать/скрыть наличие материалов для вброса в FSD"
-.checkBoxBodyClasses.ToolTip: "Show/Hide Special bodies classes" => "Показать/скрыть специальные классы небесных тел"
 .textBoxFilter.ToolTip: "Enter text to search in any fields for an item" => "Введите текст для поиска в любых полях"
 .checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM. Due to server constraints, you must click on a system to retreive data on it from EDSM." => "Показать/скрыть EDSM-данные о телах. Из-за ограничений сервера нужно нажать на систему, чтобы получить данные из EDSM."
 .comboBoxTime.ToolTip: "Select the entries by age" => "Выбор записей по времени"
@@ -1025,6 +1031,8 @@ SECTION UserControlStarList
 .FSD: "This system has materials for FSD boost: " => "В этой системе есть материалы для вброса в FSD: "
 .NoEDSM: "System could not be found - has not been synched or EDSM is unavailable" => "Не удалось найти систему, нет синхронизации или доступа к EDSM"
 .OB: "{0} Other bodies" => "число других небесных тел: {0}"
+.JUMP: "Show/Hide presence of Jumponium Materials" @
+.valueables: "Show valueable bodies" @
 
 SECTION UserControlStats
 

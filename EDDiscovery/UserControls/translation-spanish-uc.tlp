@@ -436,6 +436,8 @@ SECTION UserControlSurveyor
 .planetaryClassesToolStripMenuItem.ammoniaWorldToolStripMenuItem: "Ammonia World" => "Ammonia World"
 .planetaryClassesToolStripMenuItem.earthlikeWorldToolStripMenuItem: "Earthlike World" => "Mundo parecido a la Tierra"
 .planetaryClassesToolStripMenuItem.waterWorldToolStripMenuItem: "Water World" => "Mundo acuático"
+.highMetalContentBodyToolStripMenuItem: "High-metal content World" @
+.metalToolStripMenuItem: "Metal-rich Body" @
 .bodyFeaturesToolStripMenuItem: "Body Features" => "Características corporales"
 .bodyFeaturesToolStripMenuItem.terraformableToolStripMenuItem: "Terraformable" => "Terraformable"
 .bodyFeaturesToolStripMenuItem.hasVolcanismToolStripMenuItem: "Has Volcanism" => "Tiene vulcanismo"
@@ -446,12 +448,15 @@ SECTION UserControlSurveyor
 .textAlignToolStripMenuItem.centerToolStripMenuItem: "Center" => "Centro"
 .textAlignToolStripMenuItem.rightToolStripMenuItem: "Right" => "Derecha"
 .bodyFeaturesToolStripMenuItem.hasSignalsToolStripMenuItem: "Has Signals" => "Tiene señales"
+.bodyFeaturesToolStripMenuItem.hasGeologicalSignalsToolStripMenuItem: "Has Geological Signals" @
+.bodyFeaturesToolStripMenuItem.hasBiologicalSignalsToolStripMenuItem: "Has Biological Signals" @
 .bodyFeaturesToolStripMenuItem.landableToolStripMenuItem: "Landable" => "Aterrizable"
 .showAllPlanetsToolStripMenuItem: "Show All Planets" => "Mostrar todos los planetas"
 .showAllStarsToolStripMenuItem: "Show All Stars" => "Mostrar todas las estrellas"
 .showBeltClustersToolStripMenuItem: "Show Belt Clusters" => "Mostrar grupos de cinturones"
 .showMoreInformationToolStripMenuItem: "Show More Information" => "Mostrar más información"
 .showValuesToolStripMenuItem: "Show values" => "Mostrar valores"
+.showAtmosToolStripMenuItem: "Show atmospheres of landables" @
 .wordWrapToolStripMenuItem: "Word Wrap" => "Ajuste de línea"
 .planetaryClassesToolStripMenuItem.highMetalContentBodyToolStripMenuItem: "High metal content body" @
 .planetaryClassesToolStripMenuItem.metalToolStripMenuItem: "Metal-rich body" @
@@ -460,6 +465,8 @@ SECTION UserControlSurveyor
 .bodyFeaturesToolStripMenuItem.landableWithVolcanismToolStripMenuItem: "Landable with volcanism" @
 .bodyFeaturesToolStripMenuItem.landableAndLargeToolStripMenuItem: "Landable and large" @
 .showGravityToolStripMenuItem: "Show gravity of landables" @
+.bodyFeaturesToolStripMenuItem.showAtmosToolStripMenuItem: "Show atmosphere" @
+.showVolcanismToolStripMenuItem: "Show volcanism of landables" @
 
 SECTION MissionListUserControl
 
@@ -784,6 +791,7 @@ SECTION UserControlScanGrid
 .toolStripStatusGreen: "GREEN SYSTEM" => "SISTEMA VERDE"
 .GS: "This is a green system, as it has all existing jumponium materials available!" => "¡Este es un sistema ecológico, ya que tiene disponibles todos los materiales Jumponium existentes!"
 .JS: " jumponium materials found in system." => " materiales de jumponium encontrados en el sistema"
+.eDSMCheckToolStripMenuItem: "EDSM Check" @
 
 SECTION UserControlSettings
 
@@ -1013,8 +1021,6 @@ SECTION UserControlStarList
 .setNoteToolStripMenuItem: "Set Note" => "Establecer nota"
 .checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" => "Mueva automáticamente el cursor a la última entrada cuando llegue"
 .buttonExtExcel.ToolTip: "Send data on grid to excel" => "Enviar datos en la cuadrícula para sobresalir"
-.checkBoxJumponium.ToolTip: "Show/Hide presence of Jumponium Materials" => "Mostrar/Ocultar la presencia de materiales Jumponium"
-.checkBoxBodyClasses.ToolTip: "Show/Hide Special bodies classes" => "Mostrar/Ocultar clases de cuerpos especiales"
 .textBoxFilter.ToolTip: "Enter text to search in any fields for an item" => "Introduzca texto para buscar un elemento en cualquier campo"
 .checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM. Due to server constraints, you must click on a system to retreive data on it from EDSM." => "Mostrar/Ocultar datos del cuerpo de EDSM. Debido a las limitaciones del servidor, debe hacer clic en un sistema para recuperar los datos de EDSM"
 .comboBoxTime.ToolTip: "Select the entries by age" => "Seleccione las entradas por edad"
@@ -1025,6 +1031,8 @@ SECTION UserControlStarList
 .FSD: "This system has materials for FSD boost: " => "Este sistema tiene materiales para FSD boost: "
 .NoEDSM: "System could not be found - has not been synched or EDSM is unavailable" => "No se pudo encontrar el sistema - no se ha sincronizado o EDSM no está disponible"
 .OB: "{0} Other bodies" => "{0} Otros cuerpos"
+.JUMP: "Show/Hide presence of Jumponium Materials" @
+.valueables: "Show valueable bodies" @
 
 SECTION UserControlStats
 

@@ -112,7 +112,6 @@ SECTION SearchMaterialsCommodities
 .ColumnCurrentDistance: "Current Distance" => "Derzeitige Entfernung"
 .ColumnPosition: "Position" => "Position"
 
-
 SECTION SearchScans
 
 .Select: "Select" => "Wählen"
@@ -190,7 +189,6 @@ SECTION UserControlEstimatedValues
 .Mapped: "Mapped" => "Kartographiert"
 .WasMapped: "Already Mapped" => "Bereits kartographiert"
 .WasDiscovered: "Already Discovered" => "Bereits entdeckt"
-
 .SV: "Estimated Scan Values for {0}" => "Geschätzte Scanwerte für {0}"
 .EDSM: "EDSM" => "EDSM"
 .checkBoxEDSM.ToolTip: "Get and show information from EDSM" => "Hole und zeige Informationen von EDSM"
@@ -428,7 +426,6 @@ SECTION UserControlSurveyor
 .Scan: "Scan" => "Scan"
 .Systemscancomplete: "System scan complete." => "Systemscan komplett"
 .bodiesfound: " bodies found." => " Körper gefunden."
-
 .bodyFeaturesToolStripMenuItem.lowRadiusToolStripMenuItem: "Tiny body" => "niedriger Radius"
 .checkEDSMForInformationToolStripMenuItem: "Check EDSM for information" => "Prüfe EDSM auf Informationen"
 .autoHideToolStripMenuItem: "Auto Hide" => "Automatisch verstecken"
@@ -439,7 +436,7 @@ SECTION UserControlSurveyor
 .planetaryClassesToolStripMenuItem.ammoniaWorldToolStripMenuItem: "Ammonia World" => "Ammoniakwelt"
 .planetaryClassesToolStripMenuItem.earthlikeWorldToolStripMenuItem: "Earthlike World" => "erdähnliche Welt"
 .planetaryClassesToolStripMenuItem.waterWorldToolStripMenuItem: "Water World" => "Wasserwelt"
-.highMetalContentBodyToolStripMenuItem: "High metal content World" => "Planet mit hochwertigen Metallen"
+.highMetalContentBodyToolStripMenuItem: "High-metal content World" => "Planet mit hochwertigen Metallen"
 .metalToolStripMenuItem: "Metal-rich Body" => "Metallreicher Planet"
 .bodyFeaturesToolStripMenuItem: "Body Features" => "Körpermerkmale"
 .bodyFeaturesToolStripMenuItem.terraformableToolStripMenuItem: "Terraformable" => "Terraformierbar"
@@ -794,6 +791,7 @@ SECTION UserControlScanGrid
 .toolStripStatusGreen: "GREEN SYSTEM" => "GRÜNES SYSTEM"
 .GS: "This is a green system, as it has all existing jumponium materials available!" => "Dies ist ein grünes System, denn in ihm sind alle verschiedenen Sprungmaterialien vorhanden"
 .JS: " jumponium materials found in system." => " Sprungmaterialien im System gefunden."
+.eDSMCheckToolStripMenuItem: "EDSM Check" @
 
 SECTION UserControlSettings
 
@@ -1023,8 +1021,6 @@ SECTION UserControlStarList
 .setNoteToolStripMenuItem: "Set Note" => "Setze Notiz"
 .checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" => "Zeiger automatisch zum neuesten Eintrag bewegen sobald dieser eintrifft"
 .buttonExtExcel.ToolTip: "Send data on grid to excel" => "Sende Daten im Gitter an Excel"
-.checkBoxJumponium.ToolTip: "Show/Hide presence of Jumponium Materials" => "Zeige/Verbirg die Präsenz von Sprungmaterialien"
-.checkBoxBodyClasses.ToolTip: "Show/Hide Special bodies classes" => "Zeige/Verbirg spezielle Körperklassen"
 .textBoxFilter.ToolTip: "Enter text to search in any fields for an item" => "Text eingeben um in allen Feldern nach Einträgen zu suchen"
 .checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM. Due to server constraints, you must click on a system to retreive data on it from EDSM." => "Zeige/Verbirg Körperdaten von EDSM. Durch Serverbeschränkungen ist es nötig auf das System zu klicken um Daten von EDSM abzurufen."
 .comboBoxTime.ToolTip: "Select the entries by age" => "Wähle die Einträge nach Alter"
@@ -1035,7 +1031,6 @@ SECTION UserControlStarList
 .FSD: "This system has materials for FSD boost: " => "Dieses System hat Materialien für FSA-Einspeisung: "
 .NoEDSM: "System could not be found - has not been synched or EDSM is unavailable" => "System konnte nicht gefunden werden - wurde nicht synchronisiert oder EDSM ist nicht verfügbar"
 .OB: "{0} Other bodies" => "{0} andere Körper"
-
 .JUMP: "Show/Hide presence of Jumponium Materials" => "Zeige/Verbirg die Präsenz von Sprungmaterialien"
 .valueables: "Show valueable bodies" => "Zeige wertvolle Körper"
 
