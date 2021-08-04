@@ -29,58 +29,58 @@ namespace EDDiscovery
             GroupMarker = -1,
 
             Log = 0,                // BEWARE
-            StarDistance,           // BEWARE       Current user selection is saved as an index, so re-ordering these is not allowed
-            Materials,              // BEWARE
-            Commodities,            //
-            Ledger,                 // 4
-            Journal,
-            TravelGrid,
-            ScreenShot,
-            Statistics,             // 8
-            Scan,
-            Modules,
-            Exploration,
-            Synthesis,              // 12
-            Missions,
-            Engineering,
-            MarketData,
-            SystemInformation,      // 16
-            Spanel,
-            Trippanel,
-            NotePanel,
-            RouteTracker,           // 20
-            Grid,
-            StarList,
-            EstimatedValues,
-            Search,                 // 24 (was EDSM)
-            ShoppingList,
-            Route,
-            Expedition,             // 27
-            Trilateration,          // 28
-            Settings,               // 29
-            ScanGrid,               // 30
-            Compass,                // 31
-            LocalMap,               // 32
-            Plot,                   // 33
-            PanelSelector,          // 34
-            BookmarkManager,        // 35
-            CombatPanel,            // 36
-            ShipYardPanel,          // 37
-            OutfittingPanel,        // 38 Just for Iain i'm keeping this numbering going ;-)
-            SplitterControl,        // 39
-            MissionOverlay,         // 40
-            CaptainsLog,            // 41 Actually its important for debugging purposes so you can recognised the ID as its stored by ID in the DB
-            Surveyor,               // 42
-            EDSM,                   // 43
-            MaterialTrader,         // 44
-            Map2D,                  // 45
-            MiningOverlay,          // 46
-            Factions,               // 47
-            Spansh,                 // 48
-            EDDB,                   // 49
-            Inara,                  // 50
-            MicroResources,         // 51
-            SuitsWeapons,           // 52
+            StarDistance=1,           // BEWARE       Current user selection is saved as an index, so re-ordering these is not allowed
+            Materials=2,              // BEWARE
+            Commodities=3,            //
+            Ledger=4,                 // 4
+            Journal=5,
+            TravelGrid=6,
+            ScreenShot=7,
+            Statistics=8,             // 8
+            Scan=9,
+            Modules=10,
+            Exploration=11,
+            Synthesis=12,              // 12
+            Missions=13,
+            Engineering=14,
+            MarketData=15,
+            SystemInformation=16,      // 16
+            Spanel=17,
+            Trippanel=18,
+            NotePanel=19,
+            RouteTracker=20,           // 20
+            Grid=21,
+            StarList=22,
+            EstimatedValues=23,
+            Search=24,                 // 24 (was EDSM)
+            ShoppingList=25,
+            Route=26,
+            Expedition=27,             // 27
+            Trilateration=28,          // 28
+            Settings=29,               // 29
+            ScanGrid=30,               // 30
+            Compass=31,                // 31
+            LocalMap=32,               // 32
+            Plot=33,                   // 33
+            PanelSelector=34,          // 34
+            BookmarkManager=35,        // 35
+            CombatPanel=36,            // 36
+            ShipYardPanel=37,          // 37
+            OutfittingPanel=38,        // 38 Just for Iain i'm keeping this numbering going ;-)
+            SplitterControl=39,        // 39
+            MissionOverlay=40,         // 40
+            CaptainsLog=41,            // 41 Actually its important for debugging purposes so you can recognised the ID as its stored by ID in the DB
+            Surveyor=42,               // 42
+            EDSM=43,                   // 43
+            MaterialTrader=44,         // 44
+            Map2D=45,                  // 45
+            MiningOverlay=46,          // 46
+            Factions=47,               // 47
+            Spansh=48,                 // 48
+            EDDB=49,                   // 49
+            Inara=50,                  // 50
+            MicroResources=51,         // 51
+            SuitsWeapons=52,           // 52
             // ****** ADD More here DO NOT REORDER *****
         };
 
