@@ -276,24 +276,24 @@ namespace EDDiscovery.Versions
                             }
                         }
                     }
-
-                    foreach (string key in item.downloadedvars.NameEnumuerable)  // these first, they are not the controller files
-                    {
-                        if (key.StartsWith("DisableOther"))
-                        {
-                            DownloadItem other = DownloadItems.Find(x => x.itemname.Equals(item.downloadedvars[key]));
-
-                            if (other != null && other.localfilename != null)
-                                SetEnableFlag(other, false, appfolder); // don't worry if it fails..
-                        }
-                    }
-
-                    File.Copy(item.downloadedfilename, item.localfilename, true);
-
-                    WriteOrCheckSHAFile(item, item.downloadedvars, appfolder, true);
-
-                    return true;
                 }
+
+                foreach (string key in item.downloadedvars.NameEnumuerable)  // these first, they are not the controller files
+                {
+                    if (key.StartsWith("DisableOther"))
+                    {
+                        DownloadItem other = DownloadItems.Find(x => x.itemname.Equals(item.downloadedvars[key]));
+
+                        if (other != null && other.localfilename != null)
+                            SetEnableFlag(other, false, appfolder); // don't worry if it fails..
+                    }
+                }
+
+                File.Copy(item.downloadedfilename, item.localfilename, true);
+
+                WriteOrCheckSHAFile(item, item.downloadedvars, appfolder, true);
+
+                return true;
             }
             catch (Exception ex)
             {

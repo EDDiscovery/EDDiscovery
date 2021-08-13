@@ -127,7 +127,6 @@ namespace EDDiscovery.Forms
                 BaseUtils.GitHubClass ghc = new BaseUtils.GitHubClass(EDDiscovery.Properties.Resources.URLGithubDataDownload);
                 System.Diagnostics.Debug.WriteLine("Checking github");
                  ghc.Download(downloadactfolder, "ActionFiles/V1", "*.act");
-                 ghc.Download(downloadflightfolder, "VideoFiles/V1", "*.vid");
                  ghc.Download(downloadaddonfolder, "AddonFiles/V1", "*.inf");
 #if DEBUG
                  ghc.Download(downloadactdebugfolder, "ActionFiles/Debug", "*.act");
@@ -149,7 +148,6 @@ namespace EDDiscovery.Forms
 
             if (othertypes)
             {
-                mgr.ReadLocalFiles(EDDOptions.Instance.AppDataDirectory, "Flights", "*.vid", "Video File");
                 mgr.ReadLocalFiles(EDDOptions.Instance.AppDataDirectory, "AddonFiles", "*.inf", "Other Files");
             }
         }
@@ -168,7 +166,6 @@ namespace EDDiscovery.Forms
             if (managedownloadmode)
             {
                 mgr.ReadInstallFiles(EDDiscovery.Properties.Resources.URLGithubDataDownload, "ActionFiles/V1", downloadactfolder, EDDOptions.Instance.AppDataDirectory, "*.act", edversion, "Action File");
-                mgr.ReadInstallFiles(EDDiscovery.Properties.Resources.URLGithubDataDownload, "VideoFiles/V1", downloadflightfolder, EDDOptions.Instance.AppDataDirectory, "*.vid", edversion, "Video File");
                 mgr.ReadInstallFiles(EDDiscovery.Properties.Resources.URLGithubDataDownload, "AddonFiles/V1", downloadaddonfolder, EDDOptions.Instance.AppDataDirectory, "*.inf", edversion, "Other File");
 #if DEBUG
                 mgr.ReadInstallFiles(EDDiscovery.Properties.Resources.URLGithubDataDownload, "ActionFiles/Debug", downloadactdebugfolder, EDDOptions.Instance.AppDataDirectory, "*.act", edversion, "Action File");
