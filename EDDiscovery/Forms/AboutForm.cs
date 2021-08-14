@@ -42,13 +42,16 @@ namespace EDDiscovery.Forms
             SetTipAndTag(panelLogo, Resources.URLProjectWiki);
             SetTipAndTag(panelEDCD, Resources.URLEDCD);
 
-#if !MONO
-            var x = Properties.Resources.EDD_License;
-            textBoxLicense.Rtf = x;     // we use the RTB to convert from RTF to text, and double space the result. this makes the scroll bar work.
-            textBoxLicense.Text = textBoxLicense.Text.LineTextInsersion("","\n","\n");
-#else
-            textBoxLicense.Text = Properties.Resources.EDD_Licence_Mono;
-#endif
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+            {
+                var x = Properties.Resources.EDD_License;
+                textBoxLicense.Rtf = x;     // we use the RTB to convert from RTF to text, and double space the result. this makes the scroll bar work.
+                textBoxLicense.Text = textBoxLicense.Text.LineTextInsersion("", "\n", "\n");
+            }
+            else
+            {
+                textBoxLicense.Text = Properties.Resources.EDD_Licence_Mono;
+            }
 
             EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
             bool winborder = theme.ApplyDialog(this);
@@ -57,13 +60,8 @@ namespace EDDiscovery.Forms
             extTextBoxDevs.Text = Properties.Resources.Credits;
         }
 
-
-        protected override void OnShown(EventArgs e)
+        private void InitBrowser()
         {
-            base.OnShown(e);
-            buttonOK.Focus();
-
-#if !MONO
             webbrowser = new WebBrowser();
             webbrowser.Dock = DockStyle.Fill;
             webbrowser.Visible = false;
@@ -78,11 +76,22 @@ namespace EDDiscovery.Forms
                 $"<iframe style=\"display: block; border: none; height: 100vh; width: 100vw\" src=\"{Properties.Resources.URLReleaseVideo}\" frameborder=\"0\" allow=\"autoplay; encrypted-media\" allowfullscreen></iframe>" +
                 "</body>" +
                 "</html>";
-#else
-            panelWebBrowser.Visible = false;
-            textBoxLicense.Dock = DockStyle.Fill;
+        }
 
-#endif
+        protected override void OnShown(EventArgs e)
+        {
+            base.OnShown(e);
+            buttonOK.Focus();
+
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+            {
+                InitBrowser();
+            }
+            else
+            {
+                panelWebBrowser.Visible = false;
+                textBoxLicense.Dock = DockStyle.Fill;
+            }
         }
 
         protected override void OnClosing(CancelEventArgs e)
