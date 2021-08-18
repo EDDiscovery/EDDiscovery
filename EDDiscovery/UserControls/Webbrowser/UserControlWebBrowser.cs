@@ -264,7 +264,7 @@ namespace EDDiscovery.UserControls
 
             // if not starting with the current url for the site, or not in whitelist..
 
-            if (!e.Url.Host.StartsWith(urlallowed) && allowed.StartsWith(e.Url.AbsoluteUri, StringComparison.InvariantCultureIgnoreCase) == -1)
+            if (!e.Url.Host.StartsWith(urlallowed, StringComparison.InvariantCultureIgnoreCase) && allowed.StartsWith(e.Url.AbsoluteUri, StringComparison.InvariantCultureIgnoreCase) == -1)
             {
                 System.Diagnostics.Debug.WriteLine("Webbrowser Disallowed " + e.Url.Host + " : " + e.Url.AbsoluteUri);
                 e.Cancel = true;
