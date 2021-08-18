@@ -120,12 +120,10 @@ namespace EDDiscovery
             { new PanelInfo( "Scans and Stars") },
             { new PanelInfo( PanelIDs.Scan, typeof(UserControlScan), "Scan", "Scan", "Scan data on system", false ) },
 
-#if !MONO           // disabled due to error finding libgluezilla, and rob can't find a solution to it. freezes program
             { new PanelInfo( PanelIDs.EDSM, typeof(UserControlEDSM), "EDSM", "EDSM", "EDSM - Automatic web view of system") },
             { new PanelInfo( PanelIDs.Spansh, typeof(UserControlSpansh), "Spansh", "Spansh", "Spansh - Automatic web view of system") },
             { new PanelInfo( PanelIDs.EDDB, typeof(UserControlEDDB), "EDDB", "EDDB", "EDDB - Automatic web view of system") },
             { new PanelInfo( PanelIDs.Inara, typeof(UserControlInara), "Inara", "Inara", "Inara - Automatic web view of system") },
-#endif
             { new PanelInfo( PanelIDs.ScanGrid, typeof(UserControlScanGrid), "Scan Grid", "ScanGrid", "Scan data on system in a grid", transparent: false) },
             { new PanelInfo( PanelIDs.StarDistance, typeof(UserControlStarDistance), "Nearest Stars", "StarDistance","Nearest stars from current position") },
             { new PanelInfo( PanelIDs.EstimatedValues, typeof(UserControlEstimatedValues),"Estimated Values", "EstimatedValues", "Estimated Scan values of bodies in system", transparent: false) },
@@ -174,6 +172,10 @@ namespace EDDiscovery
 
         private static HashSet<PanelIDs> WindowsOnlyPanels = new HashSet<PanelIDs>(new[] {
             PanelIDs.LocalMap, // Depends on System.Windows.Forms.DataVizualization.Charting, not implemented in Mono
+            PanelIDs.EDSM, // disabled due to error finding libgluezilla, and rob can't find a solution to it. freezes program
+            PanelIDs.Spansh, // disabled due to error finding libgluezilla, and rob can't find a solution to it. freezes program
+            PanelIDs.EDDB, // disabled due to error finding libgluezilla, and rob can't find a solution to it. freezes program
+            PanelIDs.Inara, // disabled due to error finding libgluezilla, and rob can't find a solution to it. freezes program
         });
 
         static private List<PanelInfo> displayablepanels;   // filled by Init - all panels that can be displayed

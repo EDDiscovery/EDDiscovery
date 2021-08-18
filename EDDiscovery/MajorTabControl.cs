@@ -300,10 +300,12 @@ namespace EDDiscovery
             page.Controls.Add(uccb);
 
             TabPages.Insert(posindex, page);        // with inherit above, no font autoscale
-#if MONO
-            if ( SelectedIndex >= posindex)         // Mono does not automatically change SelectedIndex to +1 if you at or before it.  So it gets on the wrong tab. Fix it back
-                SelectedIndex = SelectedIndex+1;
-#endif
+
+            if (Environment.OSVersion.Platform != PlatformID.Win32NT && SelectedIndex >= posindex)
+            {
+                // Mono does not automatically change SelectedIndex to +1 if you at or before it.  So it gets on the wrong tab. Fix it back
+                SelectedIndex = SelectedIndex + 1;
+            }
             //Init control after it is added to the form
             uccb.Init(eddiscovery, dn);    // start the uccb up
 
