@@ -19,6 +19,7 @@ using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Linq;
 
 namespace EDDiscovery.UserControls
 {
@@ -116,7 +117,7 @@ namespace EDDiscovery.UserControls
                     var weaponinfo = ItemData.GetWeapon(w.Value.FDName);        // may be null
                     var weapondp = weaponinfo?.GetStats(w.Value.Class);     // may be null
 
-                    string smods = w.Value.WeaponMods != null ? string.Join(", ", w.Value.WeaponMods) : "";
+                    string smods = w.Value.WeaponMods != null ? string.Join(", ", w.Value.WeaponMods.Select(x=>Recipes.GetBetterNameForEngineeringRecipe(x))) : "";
                     object[] rowobj = new object[] {  EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(w.Value.EventTime).ToString(),
                                                w.Value.FriendlyName, //+ ":" + (w.Value.ID%10000) ,
                                                w.Value.Class,
@@ -178,7 +179,7 @@ namespace EDDiscovery.UserControls
                     string stime = EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(s.Value.EventTime).ToString();
                     string sname = s.Value.FriendlyName; // + ":"+(s.Value.ID % 10000);
                     string sprice = s.Value.Price.ToString("N0");
-                    string smods = s.Value.SuitMods != null ? string.Join(", ", s.Value.SuitMods) : "";
+                    string smods = s.Value.SuitMods != null ? string.Join(", ", s.Value.SuitMods.Select(x=> Recipes.GetBetterNameForEngineeringRecipe(x))) : "";
 
                     var loadouts = discoveryform.history.SuitLoadoutList.GetLoadoutsForSuit(last_loadout, s.Value.ID);
 
