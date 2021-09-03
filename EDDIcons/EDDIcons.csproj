@@ -570,6 +570,9 @@
     <EmbeddedResource Include="Controls\SysInfo\notfirstdiscover.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Journal\FSSBodySignals.png" />
+    <EmbeddedResource Include="Journal\Resupply.png" />
+    <EmbeddedResource Include="Journal\ModuleBuyAndStore.png" />
     <EmbeddedResource Include="Controls\Scan\FSD.png" />
     <EmbeddedResource Include="Highres\Battery.png" />
     <EmbeddedResource Include="Highres\ClearAuthority.png" />
