@@ -191,7 +191,8 @@ namespace EDDiscovery.UserControls
         {
             if (cf.CommanderName.HasChars())    // good commander name..
             {
-                if (discoveryform.FrontierCAPI.GetUserState(cf.CommanderName) != CompanionAPI.UserState.NeverLoggedIn)       // if we have a login, then delete it
+                // if we have a login, and it has credentials, delete them
+                if (discoveryform.FrontierCAPI.GetUserState(cf.CommanderName) == CompanionAPI.UserState.HasLoggedInWithCredentials) 
                 {
                     discoveryform.FrontierCAPI.LogOut(cf.CommanderName);
                     SetCAPILabelState();

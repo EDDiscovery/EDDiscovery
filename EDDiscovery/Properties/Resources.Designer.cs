@@ -68,7 +68,7 @@ namespace EDDiscovery.Properties {
         ///Cmdr Robby
         ///
         ///Developers for this release series:
-        ///Eahlstan, Bravada Cadelanne
+        ///Eahlstan, Fredjk-gh, Bravada Cadelanne
         ///
         ///Test Support
         ///Eahlstan, JDM12983
@@ -79,8 +79,7 @@ namespace EDDiscovery.Properties {
         ///Languages Translations:
         ///Eahlstan, Dr.Smile, Keath Milligan, Kmizole, Potatossuaro, Zafford, Andrea Spada, Goscickiw, Nats-ji, Jay
         ///
-        ///Previous Contributors:
-        ///nullx2 [rest of string was truncated]&quot;;.
+        ///Previous Contributo [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Credits {
             get {
