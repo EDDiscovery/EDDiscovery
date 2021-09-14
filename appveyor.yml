@@ -1,20 +1,20 @@
 version: 11.6.0.{build}
 image: 
-  - Visual Studio 2017
+  - Visual Studio 2019
   - Ubuntu
 configuration: Release
 install:
   - git submodule update --init
-before_build:
-  - nuget restore
 for:
 -
   matrix:
     only:
-      - image: Visual Studio 2017
+      - image: Visual Studio 2019
 
   build:
     project: EDDiscovery.sln
+  before_build:
+    - nuget restore
   after_build:
     - cmd: copy EDDiscovery\bin\Release\EDDiscovery.Portable.zip EDDiscovery.Portable.zip
   artifacts:
@@ -23,6 +23,9 @@ for:
   matrix:
     only:
       - image: Ubuntu
+  before_build:
+    - echo '<?xml version="1.0" encoding="utf-8"?><configuration><packageSources><add key="nuget.org" value="https://api.nuget.org/v3/index.json" protocolVersion="3" /></packageSources></configuration>' >~/.config/NuGet/NuGet.Config
+    - nuget restore
   build_script:
     - msbuild /p:Configuration=Release EDDiscovery.sln /p:DefineConstants=NO_SYSTEM_SPEECH
 cache:
