@@ -217,6 +217,12 @@
     <Compile Include="UserControls\Overlays\UserControlMiningOverlay.Designer.cs">
       <DependentUpon>UserControlMiningOverlay.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\3DMap\UserControl3DMap.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\3DMap\UserControl3DMap.Designer.cs">
+      <DependentUpon>UserControl3DMap.cs</DependentUpon>
+    </Compile>
     <Compile Include="WebServer\EDDWebTexts.cs" />
     <Compile Include="WebServer\EDDWebPresskey.cs" />
     <Compile Include="WebServer\EDDWebJournal.cs" />
@@ -856,6 +862,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\LogsBookmarks\UserControlBookmarks.resx">
       <DependentUpon>UserControlBookmarks.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\3DMap\UserControl3DMap.resx">
+      <DependentUpon>UserControl3DMap.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\Webbrowser\UserControlWebBrowser.resx">
       <DependentUpon>UserControlWebBrowser.cs</DependentUpon>

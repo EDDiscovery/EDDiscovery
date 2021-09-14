@@ -28,60 +28,61 @@ namespace EDDiscovery
         {
             GroupMarker = -1,
 
-            Log = 0,                // BEWARE
-            StarDistance=1,           // BEWARE       Current user selection is saved as an index, so re-ordering these is not allowed
+            Log = 0,                  // BEWARE
+            StarDistance=1,           // BEWARE       Current user selection is saved as an numeric index, so re-numbering these is not allowed
             Materials=2,              // BEWARE
-            Commodities=3,            //
-            Ledger=4,                 // 4
+            Commodities=3,            
+            Ledger=4,                 
             Journal=5,
             TravelGrid=6,
             ScreenShot=7,
-            Statistics=8,             // 8
+            Statistics=8,             
             Scan=9,
             Modules=10,
             Exploration=11,
-            Synthesis=12,              // 12
+            Synthesis=12,             
             Missions=13,
             Engineering=14,
             MarketData=15,
-            SystemInformation=16,      // 16
+            SystemInformation=16,      
             Spanel=17,
             Trippanel=18,
             NotePanel=19,
-            RouteTracker=20,           // 20
+            RouteTracker=20,           
             Grid=21,
             StarList=22,
             EstimatedValues=23,
-            Search=24,                 // 24 (was EDSM)
+            Search=24,                 // was EDSM
             ShoppingList=25,
             Route=26,
-            Expedition=27,             // 27
-            Trilateration=28,          // 28
-            Settings=29,               // 29
-            ScanGrid=30,               // 30
-            Compass=31,                // 31
-            Removed_LocalMap=32,       // 32 from 14.0+
-            Removed_Plot=33,           // 33 from 14.0+
-            PanelSelector=34,          // 34
-            BookmarkManager=35,        // 35
-            CombatPanel=36,            // 36
-            ShipYardPanel=37,          // 37
-            OutfittingPanel=38,        // 38 Just for Iain i'm keeping this numbering going ;-)
-            SplitterControl=39,        // 39
-            MissionOverlay=40,         // 40
-            CaptainsLog=41,            // 41 Actually its important for debugging purposes so you can recognised the ID as its stored by ID in the DB
-            Surveyor=42,               // 42
-            EDSM=43,                   // 43
-            MaterialTrader=44,         // 44
-            Map2D=45,                  // 45
-            MiningOverlay=46,          // 46
-            Factions=47,               // 47
-            Spansh=48,                 // 48
-            EDDB=49,                   // 49
-            Inara=50,                  // 50
-            MicroResources=51,         // 51
-            SuitsWeapons=52,           // 52
-            // ****** ADD More here DO NOT REORDER *****
+            Expedition=27,             
+            Trilateration=28,          
+            Settings=29,               
+            ScanGrid=30,               
+            Compass=31,                
+            Removed_LocalMap=32,       // from 14.0+
+            Removed_Plot=33,           // from 14.0+
+            PanelSelector=34,          
+            BookmarkManager=35,        
+            CombatPanel=36,            
+            ShipYardPanel=37,          
+            OutfittingPanel=38,        
+            SplitterControl=39,        
+            MissionOverlay=40,         
+            CaptainsLog=41,           
+            Surveyor=42,              
+            EDSM=43,                  
+            MaterialTrader=44,        
+            Map2D=45,                 
+            MiningOverlay=46,         
+            Factions=47,              
+            Spansh=48,                
+            EDDB=49,                  
+            Inara=50,                 
+            MicroResources=51,        
+            SuitsWeapons=52,          
+            Map3D=53,                 
+            // ****** ADD More here DO NOT RENUMBER *****
         };
 
         // This is the order they are presented to the user if not using alpha sort..   you can shuffle them to your hearts content
@@ -130,6 +131,7 @@ namespace EDDiscovery
             { new PanelInfo( PanelIDs.Search, typeof(UserControlSearch), "Search", "SearchFinder", "Search") },
             { new PanelInfo( PanelIDs.Trilateration, typeof(UserControlTrilateration) ,"Trilateration", "Trilateration", "Trilateration of stars with unknown positions") },
             { new PanelInfo( PanelIDs.Map2D, typeof(UserControl2DMap) ,"2D Map", "map2d", "2D Map of galaxy") },
+            { new PanelInfo( PanelIDs.Map3D, typeof(UserControl3DMap) ,"3D Map", "map3d", "3D Map of galaxy") },
 
             { new PanelInfo( "Bookmarks and Logs") },
             { new PanelInfo( PanelIDs.BookmarkManager, typeof(UserControlBookmarks), "Bookmarks", "Bookmarks", "Bookmarks on systems and planets", transparent:false)},
