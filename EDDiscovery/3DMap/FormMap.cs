@@ -219,6 +219,11 @@ namespace EDDiscovery
 
         }
 
+        public void GotoZoom(float z)
+        {
+            zoom.GoTo(z);
+        }
+
         public ToolStripMenuItem AddGalMapButton( string name,int bitno, bool? checkedbut)
         {
             ToolStripMenuItem tsmi = new ToolStripMenuItem();

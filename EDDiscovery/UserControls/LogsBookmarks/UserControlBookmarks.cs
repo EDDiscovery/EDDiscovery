@@ -321,14 +321,7 @@ namespace EDDiscovery.UserControls
 
         private void toolStripMenuItemGotoStar3dmap_Click(object sender, EventArgs e)
         {
-            if (!discoveryform.Map.Is3DMapsRunning)            // if not running, click the 3dmap button
-                discoveryform.Open3DMap(null);
-
-            if (discoveryform.Map.Is3DMapsRunning)             // double check here! for paranoia.
-            {
-                if (discoveryform.Map.MoveTo((float)rightclickbookmark.x, (float)rightclickbookmark.y, (float)rightclickbookmark.z))
-                    discoveryform.Map.Show();
-            }
+            discoveryform.Open3DMap(new EliteDangerousCore.SystemClass("Unknown", rightclickbookmark.x, rightclickbookmark.y, rightclickbookmark.z));
         }
 
         private void openInEDSMToolStripMenuItem_Click(object sender, EventArgs e)

@@ -528,17 +528,14 @@ namespace EDDiscovery.UserControls
 
         private void cmd3DMap_Click(object sender, EventArgs e)
         {
-            var map = discoveryform.Map;
-
             if (routeSystems != null && routeSystems.Any())
             {
                 float dist;
                 if (!float.TryParse(textBox_Distance.Text, out dist))       // in case text is crap
                     dist = 30;
 
-                map.Prepare(routeSystems.First(), EDCommander.Current.HomeSystemTextOrSol, routeSystems.First(), 400 / dist, discoveryform.history.FilterByTravel());
-                map.SetPlanned(routeSystems);
-                map.Show();
+                discoveryform.Open3DMap(routeSystems.First(), routeSystems, 400 / dist);
+
             }
             else
             {

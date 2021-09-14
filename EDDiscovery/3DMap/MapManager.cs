@@ -44,19 +44,9 @@ namespace EDDiscovery._3DMap
             _formMap?.Prepare(historysel, homesys, centersys, zoom, visited);
         }
 
-        public void Prepare(ISystem historysel, ISystem homesys, ISystem centersys, float zoom, List<HistoryEntry> visited)
-        {
-            _formMap?.Prepare(historysel, homesys, centersys, zoom, visited);
-        }
-
         public void SetPlanned(List<ISystem> plannedr)
         {
             _formMap?.SetPlannedRoute(plannedr);
-        }
-
-        public void UpdateHistorySystem(ISystem historysel)
-        {
-            _formMap?.UpdateHistorySystem(historysel);
         }
 
         public bool MoveToSystem(ISystem system)
@@ -64,11 +54,11 @@ namespace EDDiscovery._3DMap
             return _formMap?.SetCenterSystemTo(system) ?? true;
         }
 
-        public bool MoveTo(float x, float y, float z)
+        public void SetZoom(float z)
         {
-            return _formMap?.MoveTo(x, y, z) ?? true;
-        }
+            _formMap?.GotoZoom(z);
 
+        }
         public void Show()
         {
             if (_formMap != null)

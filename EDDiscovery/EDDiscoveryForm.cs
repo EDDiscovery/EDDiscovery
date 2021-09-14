@@ -58,7 +58,7 @@ namespace EDDiscovery
 
         public EliteDangerousCore.ScreenShots.ScreenShotConverter screenshotconverter;
 
-        public EDDiscovery._3DMap.MapManager Map { get; private set; }
+        private EDDiscovery._3DMap.MapManager Map;
 
         private bool in_system_sync = false;        // between start/end sync of databases
 
@@ -675,7 +675,7 @@ namespace EDDiscovery
             // Options for automatic stuff
 
             if (EDDOptions.Instance.AutoOpen3DMap)
-                Open3DMap(PrimaryCursor.GetCurrentHistoryEntry);
+                Open3DMap(PrimaryCursor.GetCurrentHistoryEntry?.System);
             if (EDDOptions.Instance.MinimiseOnOpen)
                 WindowState = FormWindowState.Minimized;
             else if (EDDOptions.Instance.MaximiseOnOpen)
@@ -866,9 +866,9 @@ namespace EDDiscovery
             tabControlMain.EnsureMajorTabIsPresent(PanelInformation.PanelIDs.Settings, true);
         }
 
-        private void show3DMapsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void showold3DMapsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Open3DMap(PrimaryCursor.GetCurrentHistoryEntry);
+            OpenOld3DMap();
         }
 
         private void showAllInTaskBarToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1167,11 +1167,6 @@ namespace EDDiscovery
                 var itm = (from EDCommander c in EDCommander.GetListInclHidden() where c.Name.Equals(comboBoxCommander.Text) select c).ToList();
                 ChangeToCommander(itm[0].Id);
             }
-        }
-
-        private void buttonExt3dmap_Click(object sender, EventArgs e)
-        {
-            Open3DMap(PrimaryCursor.GetCurrentHistoryEntry);
         }
 
         public void RefreshButton(bool state)

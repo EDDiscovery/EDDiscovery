@@ -190,30 +190,42 @@ namespace EDDiscovery
         #endregion
 
         #region 3dmap
-
-        public void Open3DMap(HistoryEntry he)
+        public void OpenOld3DMap()     // Old map open
         {
-            this.Cursor = Cursors.WaitCursor;
-
-            Map.Prepare(he?.System, EDCommander.Current.HomeSystemTextOrSol,
-                        EDCommander.Current.MapCentreOnSelection ? he?.System : EDCommander.Current.HomeSystemIOrSol,
-                        EDCommander.Current.MapZoom, Controller.history.FilterByTravel());
-            Map.Show();
-            this.Cursor = Cursors.Default;
+            Open3DMap();
         }
 
-        public void Open3DMapOnSystem(ISystem centerSystem)
+        public void Open3DMap()         // Current map - open at last position or configured position
         {
-            this.Cursor = Cursors.WaitCursor;
+            if (!Map.Is3DMapsRunning)            // if not running, click the 3dmap button
+            {
+                this.Cursor = Cursors.WaitCursor;
 
-            if (centerSystem == null || !centerSystem.HasCoordinate)
-                centerSystem = history.GetLastWithPosition().System;
+                ISystem last = PrimaryCursor.GetCurrentHistoryEntry?.System;
 
-            Map.Prepare(centerSystem, EDCommander.Current.HomeSystemTextOrSol, centerSystem,
-                             EDCommander.Current.MapZoom, history.FilterByTravel());
+                Map.Prepare(last, EDCommander.Current.HomeSystemTextOrSol,
+                            EDCommander.Current.MapCentreOnSelection ? last : EDCommander.Current.HomeSystemIOrSol,
+                            EDCommander.Current.MapZoom, Controller.history.FilterByTravel());
+                Map.Show();
+                this.Cursor = Cursors.Default;
+            }
+        }
 
+        public void Open3DMap(ISystem centerSystem, List<ISystem> route = null, float? zoom = null)     // current-map open/goto this system. system may be null. Optionally set a route
+        {
+            Open3DMap();
+
+            if (route!=null)
+                Map.SetPlanned(route);
+
+            if (zoom != null)
+                Map.SetZoom(zoom.Value);
+
+            if ( centerSystem != null )
+            {
+                Map.MoveToSystem(centerSystem);
+            }
             Map.Show();
-            this.Cursor = Cursors.Default;
         }
 
         #endregion

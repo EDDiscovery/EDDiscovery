@@ -72,7 +72,7 @@ namespace EDDiscovery.Actions
                     }
                     else if (cmdname.Equals("3dmap"))
                     {
-                        ac.DiscoveryForm.Open3DMap(null);
+                        ac.DiscoveryForm.Open3DMap();
                     }
                     else if (cmdname.Equals("2dmap"))
                     {

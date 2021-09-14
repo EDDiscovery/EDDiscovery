@@ -467,7 +467,7 @@ namespace EDDiscovery.UserControls
         private void toolStripButtonImportNavRoute_Click(object sender, EventArgs e)
         {
             var route = discoveryform.history.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.NavRoute)?.journalEntry as EliteDangerousCore.JournalEvents.JournalNavRoute;
-            if (route != null)
+            if (route?.Route != null)
             {
                 List<string> systems = new List<string>();
                 foreach (var s in route.Route)
@@ -654,7 +654,6 @@ namespace EDDiscovery.UserControls
 
         private void toolStripButtonShowOn3DMap_Click(object sender, EventArgs e)
         {
-            var map = discoveryform.Map;
             var route = dataGridView.Rows.OfType<DataGridViewRow>()
                 .Where(r => r.Index < dataGridView.NewRowIndex && r.Cells[0].Tag != null)
                 .Select(s => s.Cells[0].Tag as ISystem)
@@ -662,12 +661,7 @@ namespace EDDiscovery.UserControls
 
             if (route.Count >= 2)
             {
-                this.Cursor = Cursors.WaitCursor;
-                map.Prepare(route[0], EDCommander.Current.HomeSystemTextOrSol, route[0], 400 / CalculateRouteMaxDistFromOrigin(route), discoveryform.history.FilterByTravel());
-                map.SetPlanned(route);
-                map.MoveToSystem(route[0]);
-                map.Show();
-                this.Cursor = Cursors.Default;
+                discoveryform.Open3DMap(route[0], route, 400 / CalculateRouteMaxDistFromOrigin(route));
             }
             else
             {

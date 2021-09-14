@@ -56,7 +56,6 @@ namespace EDDiscovery
             this.comboBoxCommander = new ExtendedControls.ExtComboBox();
             this.buttonExtRefresh = new ExtendedControls.ExtButton();
             this.comboBoxCustomProfiles = new ExtendedControls.ExtComboBox();
-            this.buttonExt3dmap = new ExtendedControls.ExtButton();
             this.buttonExtManageAddOns = new ExtendedControls.ExtButton();
             this.buttonExtEditAddOns = new ExtendedControls.ExtButton();
             this.buttonExtPopOut = new ExtendedControls.ExtButton();
@@ -269,27 +268,11 @@ namespace EDDiscovery
             this.toolTip.SetToolTip(this.comboBoxCustomProfiles, "Use to select new profile or edit profile settings");
             this.comboBoxCustomProfiles.ValueMember = "";
             // 
-            // buttonExt3dmap
-            // 
-            this.buttonExt3dmap.BackColor = System.Drawing.Color.Transparent;
-            this.buttonExt3dmap.Image = global::EDDiscovery.Icons.Controls.Main_Toolbar_Open3DMap;
-            this.buttonExt3dmap.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.buttonExt3dmap.Location = new System.Drawing.Point(286, 1);
-            this.buttonExt3dmap.Margin = new System.Windows.Forms.Padding(1, 1, 3, 1);
-            this.buttonExt3dmap.Name = "buttonExt3dmap";
-            this.buttonExt3dmap.Size = new System.Drawing.Size(56, 24);
-            this.buttonExt3dmap.TabIndex = 2;
-            this.buttonExt3dmap.Text = "3D";
-            this.buttonExt3dmap.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.toolTip.SetToolTip(this.buttonExt3dmap, "Open the 3D Map");
-            this.buttonExt3dmap.UseVisualStyleBackColor = false;
-            this.buttonExt3dmap.Click += new System.EventHandler(this.buttonExt3dmap_Click);
-            // 
             // buttonExtManageAddOns
             // 
             this.buttonExtManageAddOns.BackColor = System.Drawing.Color.Transparent;
             this.buttonExtManageAddOns.Image = global::EDDiscovery.Icons.Controls.Main_Toolbar_ManageAddOns;
-            this.buttonExtManageAddOns.Location = new System.Drawing.Point(346, 1);
+            this.buttonExtManageAddOns.Location = new System.Drawing.Point(286, 1);
             this.buttonExtManageAddOns.Margin = new System.Windows.Forms.Padding(1, 1, 3, 1);
             this.buttonExtManageAddOns.Name = "buttonExtManageAddOns";
             this.buttonExtManageAddOns.Size = new System.Drawing.Size(24, 24);
@@ -302,7 +285,7 @@ namespace EDDiscovery
             // 
             this.buttonExtEditAddOns.BackColor = System.Drawing.Color.Transparent;
             this.buttonExtEditAddOns.Image = global::EDDiscovery.Icons.Controls.Main_Toolbar_EditAddons;
-            this.buttonExtEditAddOns.Location = new System.Drawing.Point(374, 1);
+            this.buttonExtEditAddOns.Location = new System.Drawing.Point(314, 1);
             this.buttonExtEditAddOns.Margin = new System.Windows.Forms.Padding(1, 1, 3, 1);
             this.buttonExtEditAddOns.Name = "buttonExtEditAddOns";
             this.buttonExtEditAddOns.Size = new System.Drawing.Size(24, 24);
@@ -315,7 +298,7 @@ namespace EDDiscovery
             // 
             this.buttonExtPopOut.BackColor = System.Drawing.Color.Transparent;
             this.buttonExtPopOut.Image = global::EDDiscovery.Icons.Controls.Main_Toolbar_Popouts;
-            this.buttonExtPopOut.Location = new System.Drawing.Point(402, 1);
+            this.buttonExtPopOut.Location = new System.Drawing.Point(342, 1);
             this.buttonExtPopOut.Margin = new System.Windows.Forms.Padding(1, 1, 3, 1);
             this.buttonExtPopOut.Name = "buttonExtPopOut";
             this.buttonExtPopOut.Size = new System.Drawing.Size(24, 24);
@@ -328,7 +311,7 @@ namespace EDDiscovery
             // 
             this.buttonReloadActions.Image = global::EDDiscovery.Icons.Controls.Main_Toolbar_Refresh;
             this.buttonReloadActions.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.buttonReloadActions.Location = new System.Drawing.Point(430, 1);
+            this.buttonReloadActions.Location = new System.Drawing.Point(370, 1);
             this.buttonReloadActions.Margin = new System.Windows.Forms.Padding(1, 1, 3, 1);
             this.buttonReloadActions.Name = "buttonReloadActions";
             this.buttonReloadActions.Size = new System.Drawing.Size(65, 24);
@@ -408,7 +391,6 @@ namespace EDDiscovery
             this.flowToolBar.Controls.Add(this.comboBoxCommander);
             this.flowToolBar.Controls.Add(this.buttonExtRefresh);
             this.flowToolBar.Controls.Add(this.comboBoxCustomProfiles);
-            this.flowToolBar.Controls.Add(this.buttonExt3dmap);
             this.flowToolBar.Controls.Add(this.buttonExtManageAddOns);
             this.flowToolBar.Controls.Add(this.buttonExtEditAddOns);
             this.flowToolBar.Controls.Add(this.buttonExtPopOut);
@@ -428,7 +410,7 @@ namespace EDDiscovery
             this.extButtonDrawnHelp.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.extButtonDrawnHelp.Image = null;
             this.extButtonDrawnHelp.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Text;
-            this.extButtonDrawnHelp.Location = new System.Drawing.Point(501, 3);
+            this.extButtonDrawnHelp.Location = new System.Drawing.Point(441, 3);
             this.extButtonDrawnHelp.MouseOverColor = System.Drawing.Color.White;
             this.extButtonDrawnHelp.MouseSelectedColor = System.Drawing.Color.Green;
             this.extButtonDrawnHelp.MouseSelectedColorEnable = true;
@@ -530,7 +512,7 @@ namespace EDDiscovery
             // 
             this.settingsToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.Main_Tools_Settings;
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(245, 22);
             this.settingsToolStripMenuItem.Text = "Settings";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
@@ -538,9 +520,9 @@ namespace EDDiscovery
             // 
             this.show3DMapsToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.Main_Tools_Open3DMap;
             this.show3DMapsToolStripMenuItem.Name = "show3DMapsToolStripMenuItem";
-            this.show3DMapsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.show3DMapsToolStripMenuItem.Text = "Show &3D maps";
-            this.show3DMapsToolStripMenuItem.Click += new System.EventHandler(this.show3DMapsToolStripMenuItem_Click);
+            this.show3DMapsToolStripMenuItem.Size = new System.Drawing.Size(245, 22);
+            this.show3DMapsToolStripMenuItem.Text = "Show old &3D maps (depreciated)";
+            this.show3DMapsToolStripMenuItem.Click += new System.EventHandler(this.showold3DMapsToolStripMenuItem_Click);
             // 
             // showAllPopoutsInTaskBarToolStripMenuItem
             // 
@@ -549,7 +531,7 @@ namespace EDDiscovery
             this.turnOffAllTransparencyToolStripMenuItem});
             this.showAllPopoutsInTaskBarToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.Main_Tools_Popouts_Menu;
             this.showAllPopoutsInTaskBarToolStripMenuItem.Name = "showAllPopoutsInTaskBarToolStripMenuItem";
-            this.showAllPopoutsInTaskBarToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.showAllPopoutsInTaskBarToolStripMenuItem.Size = new System.Drawing.Size(245, 22);
             this.showAllPopoutsInTaskBarToolStripMenuItem.Text = "&Pop-outs";
             // 
             // showAllInTaskBarToolStripMenuItem
@@ -572,7 +554,7 @@ namespace EDDiscovery
             // 
             this.exitToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.Main_Tools_Exit;
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(245, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -1053,7 +1035,6 @@ namespace EDDiscovery
         private System.Windows.Forms.ToolStripMenuItem notifyIconMenu_Open;
         private ExtendedControls.ExtPanelRollUp panelToolBar;
         private ExtendedControls.ExtComboBox comboBoxCommander;
-        private ExtendedControls.ExtButton buttonExt3dmap;
         private ExtendedControls.ExtButton buttonExtRefresh;
         private System.Windows.Forms.ToolTip toolTip;
         private ExtendedControls.ExtButton buttonExtEditAddOns;

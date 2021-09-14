@@ -837,14 +837,7 @@ namespace EDDiscovery.UserControls
 
         private void mapGotoStartoolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (!discoveryform.Map.Is3DMapsRunning)            // if not running, click the 3dmap button
-                discoveryform.Open3DMap(GetCurrentHistoryEntry);
-
-            if (discoveryform.Map.Is3DMapsRunning)             // double check here! for paranoia.
-            {
-                if (discoveryform.Map.MoveToSystem(rightclickhe.System))
-                    discoveryform.Map.Show();
-            }
+            discoveryform.Open3DMap(rightclickhe?.System);
         }
 
         private void starMapColourToolStripMenuItem_Click(object sender, EventArgs e)

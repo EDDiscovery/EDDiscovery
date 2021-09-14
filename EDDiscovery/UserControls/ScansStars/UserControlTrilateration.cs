@@ -384,7 +384,7 @@ namespace EDDiscovery.UserControls
 
         private void toolStripButtonMap_Click(object sender, EventArgs e)
         {
-            discoveryform.Open3DMapOnSystem(targetsystem);
+            discoveryform.Open3DMap(targetsystem);
         }
 
         private bool Query(string msg)

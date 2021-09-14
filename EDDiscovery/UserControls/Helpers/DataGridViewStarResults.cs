@@ -103,18 +103,7 @@ namespace EDDiscovery.UserControls.Search
         {
             if (rightclicktag != null)
             {
-                this.Cursor = Cursors.WaitCursor;
-
-                if (!discoveryform.Map.Is3DMapsRunning)            // if not running, click the 3dmap button
-                    discoveryform.Open3DMap(null);
-
-                this.Cursor = Cursors.Default;
-
-                if (discoveryform.Map.Is3DMapsRunning)             // double check here! for paranoia.
-                {
-                    if (discoveryform.Map.MoveToSystem(SysFrom(rightclicktag)))
-                        discoveryform.Map.Show();
-                }
+                discoveryform.Open3DMap(SysFrom(rightclicktag));
             }
         }
 
