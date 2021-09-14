@@ -138,12 +138,6 @@
     <Reference Include="OpenTK.GLControl, Version=3.0.1.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
       <HintPath>..\packages\OpenTK.GLControl.3.0.1\lib\net20\OpenTK.GLControl.dll</HintPath>
     </Reference>
-    <Reference Include="OxyPlot, Version=1.0.0.0, Culture=neutral, PublicKeyToken=638079a8f0bd61e9, processorArchitecture=MSIL">
-      <HintPath>..\packages\OxyPlot.Core.1.0.0\lib\net45\OxyPlot.dll</HintPath>
-    </Reference>
-    <Reference Include="OxyPlot.WindowsForms, Version=1.0.0.0, Culture=neutral, PublicKeyToken=245eacd6b5d2d338, processorArchitecture=MSIL">
-      <HintPath>..\packages\OxyPlot.WindowsForms.1.0.0\lib\net45\OxyPlot.WindowsForms.dll</HintPath>
-    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
@@ -650,18 +644,6 @@
     <Compile Include="UserControls\ScansStars\UserControlEstimatedValues.Designer.cs">
       <DependentUpon>UserControlEstimatedValues.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\ScansStars\UserControlLocalMap.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\ScansStars\UserControlLocalMap.Designer.cs">
-      <DependentUpon>UserControlLocalMap.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\ScansStars\UserControlPlot.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\ScansStars\UserControlPlot.Designer.cs">
-      <DependentUpon>UserControlPlot.cs</DependentUpon>
-    </Compile>
     <Compile Include="UserControls\ScansStars\UserControlScan.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -892,12 +874,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\ScansStars\UserControlEstimatedValues.resx">
       <DependentUpon>UserControlEstimatedValues.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\ScansStars\UserControlLocalMap.resx">
-      <DependentUpon>UserControlLocalMap.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\ScansStars\UserControlPlot.resx">
-      <DependentUpon>UserControlPlot.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\ScansStars\UserControlScan.resx">
       <DependentUpon>UserControlScan.cs</DependentUpon>

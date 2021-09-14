@@ -60,8 +60,8 @@ namespace EDDiscovery
             Settings=29,               // 29
             ScanGrid=30,               // 30
             Compass=31,                // 31
-            LocalMap=32,               // 32
-            Plot=33,                   // 33
+            Removed_LocalMap=32,       // 32 from 14.0+
+            Removed_Plot=33,           // 33 from 14.0+
             PanelSelector=34,          // 34
             BookmarkManager=35,        // 35
             CombatPanel=36,            // 36
@@ -127,8 +127,6 @@ namespace EDDiscovery
             { new PanelInfo( PanelIDs.ScanGrid, typeof(UserControlScanGrid), "Scan Grid", "ScanGrid", "Scan data on system in a grid", transparent: false) },
             { new PanelInfo( PanelIDs.StarDistance, typeof(UserControlStarDistance), "Nearest Stars", "StarDistance","Nearest stars from current position") },
             { new PanelInfo( PanelIDs.EstimatedValues, typeof(UserControlEstimatedValues),"Estimated Values", "EstimatedValues", "Estimated Scan values of bodies in system", transparent: false) },
-            { new PanelInfo( PanelIDs.LocalMap, typeof(UserControlLocalMap), "Map 3D Local Systems", "LocalMap", "Map in 3D of local systems", transparent: false) },
-            { new PanelInfo( PanelIDs.Plot, typeof(UserControlPlot), "Map 2D Local Systems", "Plot", "Map in 2D of local systems", transparent: false) },
             { new PanelInfo( PanelIDs.Search, typeof(UserControlSearch), "Search", "SearchFinder", "Search") },
             { new PanelInfo( PanelIDs.Trilateration, typeof(UserControlTrilateration) ,"Trilateration", "Trilateration", "Trilateration of stars with unknown positions") },
             { new PanelInfo( PanelIDs.Map2D, typeof(UserControl2DMap) ,"2D Map", "map2d", "2D Map of galaxy") },
@@ -171,7 +169,6 @@ namespace EDDiscovery
         };
 
         private static HashSet<PanelIDs> WindowsOnlyPanels = new HashSet<PanelIDs>(new[] {
-            PanelIDs.LocalMap, // Depends on System.Windows.Forms.DataVizualization.Charting, not implemented in Mono
             PanelIDs.EDSM, // disabled due to error finding libgluezilla, and rob can't find a solution to it. freezes program
             PanelIDs.Spansh, // disabled due to error finding libgluezilla, and rob can't find a solution to it. freezes program
             PanelIDs.EDDB, // disabled due to error finding libgluezilla, and rob can't find a solution to it. freezes program
