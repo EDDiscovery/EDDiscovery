@@ -336,7 +336,7 @@ namespace EDDiscovery
             }
 
             if ( File.Exists(gmofile))
-                galacticMapping.Parse(gmofile);                            // at this point, gal map data has been uploaded - get it into memory
+                galacticMapping.ParseFile(gmofile);                            // at this point, gal map data has been uploaded - get it into memory
 
             SystemCache.AddToAutoCompleteList(galacticMapping.GetGMONames());
             SystemNoteClass.GetAllSystemNotes();

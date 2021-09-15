@@ -60,8 +60,6 @@ namespace EDDiscovery
             Settings=29,               
             ScanGrid=30,               
             Compass=31,                
-            Removed_LocalMap=32,       // from 14.0+
-            Removed_Plot=33,           // from 14.0+
             PanelSelector=34,          
             BookmarkManager=35,        
             CombatPanel=36,            

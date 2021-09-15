@@ -453,9 +453,6 @@
     <EmbeddedResource Include="Panels\Compass.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Panels\Plot.png" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Journal\DiscoveryScan.png" />
   </ItemGroup>
   <ItemGroup>
@@ -546,7 +543,6 @@
     <EmbeddedResource Include="Controls\Bookmarks\Edit.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Panels\LocalMap.png" />
     <EmbeddedResource Include="Journal\CargoDepot.png" />
   </ItemGroup>
   <ItemGroup>
@@ -570,6 +566,10 @@
     <EmbeddedResource Include="Controls\SysInfo\notfirstdiscover.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="GalMap\OrganicPOI.png" />
+    <EmbeddedResource Include="Panels\Map3D.png" />
+    <EmbeddedResource Include="GalMap\GeyserPOI.png" />
+    <EmbeddedResource Include="GalMap\Regional.png" />
     <EmbeddedResource Include="Journal\FSSBodySignals.png" />
     <EmbeddedResource Include="Journal\Resupply.png" />
     <EmbeddedResource Include="Journal\ModuleBuyAndStore.png" />

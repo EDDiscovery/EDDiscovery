@@ -332,6 +332,7 @@ namespace EDDiscovery
             // 
             this.glControlContainer.SuspendLayout();
             this.glControl = new GLControl();
+            glControl.MakeCurrent();
             this.glControl.Dock = DockStyle.Fill;
             this.glControl.BackColor = System.Drawing.Color.Black;
             this.glControl.Name = "glControl";
@@ -351,6 +352,8 @@ namespace EDDiscovery
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
+
+            glControl.MakeCurrent();
 
             glControl.KeyDown += FormMap_KeyDown;
             glControl.KeyUp += FormMap_KeyUp;
@@ -395,6 +398,7 @@ namespace EDDiscovery
         protected override void OnShown(EventArgs e)
         {
             base.OnShown(e);
+            glControl.MakeCurrent();
 
             int helpno = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt("Map3DShownHelp", 0);                 // force up help, to make sure they know it exists
 
@@ -427,6 +431,8 @@ namespace EDDiscovery
         protected override void OnResize(EventArgs e)           // resizes changes glcontrol width/height, so needs a new viewport
         {
             base.OnResize(e);
+            if ( glControl!=null)
+                glControl.MakeCurrent();
 
             if (_allowresizematrixchange)
             {
@@ -438,6 +444,7 @@ namespace EDDiscovery
         protected override void OnActivated(EventArgs e)
         {
             base.OnActivated(e);
+            glControl.MakeCurrent();
 
             isActivated = true;
             StartSystemTimer();                     // in case Close, then open, only get activated
@@ -448,6 +455,7 @@ namespace EDDiscovery
         protected override void OnDeactivate(EventArgs e)
         {
             base.OnDeactivate(e);
+            glControl.MakeCurrent();
 
             isActivated = false;
             VideoMessage();
@@ -456,6 +464,7 @@ namespace EDDiscovery
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             base.OnFormClosing(e);
+            glControl.MakeCurrent();
 
             Trace.WriteLine($"{Environment.TickCount} Close form");
 
@@ -540,6 +549,8 @@ namespace EDDiscovery
         {
             if (!Visible)
                 return;
+
+            glControl.MakeCurrent();
 
             long elapsed = systemtickinterval.ElapsedMilliseconds;         // stopwatch provides precision timing on last paint time.
             int msticks = (int)(elapsed - lastsystemtickinterval);
