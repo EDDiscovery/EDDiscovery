@@ -566,6 +566,19 @@
     <EmbeddedResource Include="Controls\SysInfo\notfirstdiscover.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="GalMap\EliteMovement.png" />
+    <EmbeddedResource Include="GalMap\lensflare_white2.png" />
+    <EmbeddedResource Include="GalMap\Perspective.png" />
+    <EmbeddedResource Include="GalMap\ShowGalaxy.png" />
+    <EmbeddedResource Include="GalMap\StarDots.png" />
+    <EmbeddedResource Include="GalMap\hamburgermenu.png" />
+    <EmbeddedResource Include="GalMap\2d.png" />
+    <EmbeddedResource Include="GalMap\3d.png" />
+    <EmbeddedResource Include="GalMap\GoBackward.png" />
+    <EmbeddedResource Include="GalMap\GoForward.png" />
+    <EmbeddedResource Include="GalMap\GoToHomeSystem.png" />
+    <EmbeddedResource Include="GalMap\StarFlare2.png" />
+    <EmbeddedResource Include="GalMap\Galaxy_L180.jpg" />
     <EmbeddedResource Include="GalMap\OrganicPOI.png" />
     <EmbeddedResource Include="Panels\Map3D.png" />
     <EmbeddedResource Include="GalMap\GeyserPOI.png" />
