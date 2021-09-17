@@ -483,8 +483,8 @@ SECTION MissionListUserControl
 
 SECTION UserControlMissions
 
-.MPlural: " Missions" => "Missionen"
-.MSingular: " Mission" => "Mission"
+.MPlural: " Missions" => " Missionen"
+.MSingular: " Mission" => " Mission"
 .Name: "Name" => "Name"
 .Value: "Value (cr):\n{0:N0}" => "Wert (Cr):\n{0:N0}"
 .ValueN: "Value (cr)" => "Wert (Cr)"
