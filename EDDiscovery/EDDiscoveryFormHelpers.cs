@@ -205,7 +205,7 @@ namespace EDDiscovery
 
                 old3DMap.Prepare(last, EDCommander.Current.HomeSystemTextOrSol,
                             EDCommander.Current.MapCentreOnSelection ? last : EDCommander.Current.HomeSystemIOrSol,
-                            EDCommander.Current.MapZoom, Controller.history.FilterByTravel());
+                            EDCommander.Current.MapZoom, Controller.history.FilterByTravelTime(null,null));
                 old3DMap.Show();
                 this.Cursor = Cursors.Default;
             }

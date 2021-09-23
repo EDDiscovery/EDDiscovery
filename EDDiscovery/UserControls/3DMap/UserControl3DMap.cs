@@ -25,6 +25,7 @@ namespace EDDiscovery.UserControls
         private GLWinFormControl glwfc;
         private Timer systemtimer = new Timer();
         private Map map;
+        private MapSaverImpl mapsave;
 
         public UserControl3DMap() 
         {
@@ -33,6 +34,8 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
+            DBBaseName = "3dMapPanel_";
+
             BaseUtils.Translator.Instance.Translate(this);      // translate before we add anything else to the panel
 
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
@@ -40,6 +43,8 @@ namespace EDDiscovery.UserControls
 
             glwfc = new GLOFC.WinForm.GLWinFormControl(panelOuter);
             glwfc.EnsureCurrentPaintResize = true;      // set, ensures context is set up for internal code on paint and any Paints chained to it
+
+            mapsave = new MapSaverImpl(this);
         }
 
         public override void LoadLayout()
@@ -50,7 +55,8 @@ namespace EDDiscovery.UserControls
 
             // load setup restore settings of map
             map = new Map();
-            map.Start(glwfc,discoveryform.galacticMapping, discoveryform.eliteRegions);
+            map.Start(glwfc,discoveryform.galacticMapping, discoveryform.eliteRegions, discoveryform.history);
+            map.LoadState(mapsave);
 
             // start clock
             systemtimer.Interval = 50;
@@ -67,13 +73,14 @@ namespace EDDiscovery.UserControls
             systemtimer.Stop();
 
             glwfc.EnsureCurrentContext();           // must make sure current context before we call all the dispose functions
+            map.SaveState(mapsave);
             map.Dispose();
         }
 
-       // Context is not set, but should not be needed to be set unless the keyboard/mouse stuff does some GL commands
         private void SystemTick(object sender, EventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine($"3dmap {displaynumber} tick");
+            glwfc.EnsureCurrentContext();           // ensure the context, work may be done in the timers to the GL.
+            //System.Diagnostics.Debug.WriteLine($"3dmap {displaynumber} tick");
             GLOFC.Timers.Timer.ProcessTimers();
             map.Systick();
         }
@@ -89,6 +96,24 @@ namespace EDDiscovery.UserControls
         {
         }
 
+        class MapSaverImpl : MapSaver
+        {
+            public MapSaverImpl(UserControl3DMap n)
+            {
+                uc3d = n;
+            }
+
+            UserControl3DMap uc3d;
+            public T GetSetting<T>(string id, T defaultvalue)
+            {
+                return uc3d.GetSetting(id,defaultvalue);
+            }
+
+            public void PutSetting<T>(string id, T value)
+            {
+                uc3d.PutSetting(id, value);
+            }
+        }
 
     }
 }

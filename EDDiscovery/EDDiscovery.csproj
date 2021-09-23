@@ -189,6 +189,7 @@
     <Compile Include="UserControls\3DMap\ShaderGalaxy.cs" />
     <Compile Include="UserControls\3DMap\ShaderGrid.cs" />
     <Compile Include="UserControls\3DMap\ShaderStarDots.cs" />
+    <Compile Include="UserControls\3DMap\TravelPath.cs" />
     <Compile Include="UserControls\CurrentState\UserControlFactions.cs">
       <SubType>UserControl</SubType>
     </Compile>

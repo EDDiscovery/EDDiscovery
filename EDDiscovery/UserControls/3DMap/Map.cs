@@ -12,6 +12,7 @@
  * governing permissions and limitations under the License.
  */
 
+using EliteDangerousCore;
 using EliteDangerousCore.EDSM;
 using GLOFC;
 using GLOFC.Controller;
@@ -54,7 +55,7 @@ namespace EDDiscovery.UserControls.Map3D
         private GLRenderableItem gridrenderable;
         private DynamicGridVertexShader gridvertshader;
 
-        //private TravelPath travelpath;
+        private TravelPath travelpath;
         private MapMenu galaxymenu;
 
         public GalacticMapping edsmmapping;
@@ -94,7 +95,7 @@ namespace EDDiscovery.UserControls.Map3D
 
         #region Initialise
 
-        public void Start(GLOFC.WinForm.GLWinFormControl glwfc, GalacticMapping edsmmapping, GalacticMapping eliteregions)
+        public void Start(GLOFC.WinForm.GLWinFormControl glwfc, GalacticMapping edsmmapping, GalacticMapping eliteregions, HistoryList hl)
         {
             this.glwfc = glwfc;
             this.edsmmapping = edsmmapping;
@@ -338,39 +339,15 @@ namespace EDDiscovery.UserControls.Map3D
                 rObjects.Add(items.Shader("DYNGRIDBitmap"), "DYNGRIDBitmapRENDER", GLRenderableItem.CreateNullVertex(OpenTK.Graphics.OpenGL4.PrimitiveType.TriangleStrip, rl, drawcount: 4, instancecount: 9));
             }
 
-#if false
-
             float sunsize = 2.0f;
             if ((ctrlo & 128) != 0)
             {
-                Random rnd = new Random(52);
-                List<HistoryEntry> pos = new List<HistoryEntry>();
-                DateTime start = new DateTime(2020, 1, 1);
-                Color[] colors = new Color[] { Color.Red, Color.Green, Color.Blue, Color.White, Color.Black, Color.Purple, Color.Yellow };
-                for (int j = 0; j <= 200; j++)
-                {
-                    Color jc = colors[j % colors.Length];
-                    int i = j * 10;
-                    string name = "Kyli Flyuae AA-B h" + j.ToString();
-                    if (i < 30000)
-                        pos.Add(new HistoryEntry(start, name, i + rnd.Next(50), rnd.Next(50), i, jc));
-                    else if (i < 60000)
-                        pos.Add(new HistoryEntry(start, name, 60000 - i + rnd.Next(50), rnd.Next(50), i, jc));
-                    else if (i < 90000)
-                        pos.Add(new HistoryEntry(start, name, -(i - 60000) + rnd.Next(50), rnd.Next(50), 120000 - i, jc));
-                    else
-                        pos.Add(new HistoryEntry(start, name, -30000 + (i - 90000) + rnd.Next(50), rnd.Next(50), -i + 120000, jc));
+               // tested to 50k stars
 
-                    start = start.AddDays(1);
-                }
-
-                // tested to 50k stars
-
-                travelpath = new TravelPath(1000);
-                travelpath.Create(items, rObjects, pos, sunsize, 0.8f, findstarblock, true);
-                travelpath.SetSystem(0);
+                //travelpath = new TravelPath(1000, sunsize, 0.8f, findstarblock, true);
+                //travelpath.CreatePath(items, rObjects, hl);
+                //travelpath.SetSystem(0);
             }
-#endif
 
             if ((ctrlo & 256) != 0)
             {
@@ -595,6 +572,7 @@ namespace EDDiscovery.UserControls.Map3D
 
         #region Display
 
+        // Context is set.
         public void Systick()
         {
             gl3dcontroller.HandleKeyboardSlews(true, OtherKeys);
@@ -607,6 +585,7 @@ namespace EDDiscovery.UserControls.Map3D
         float lasteyedistance = 100000000;
         int lastgridwidth;
 
+        // Context is set.
         private void Controller3DDraw(Controller3D c3d, ulong time)
         {
             long t1 = hptimer.ElapsedTicks;

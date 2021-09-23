@@ -1,6 +1,20 @@
 ﻿using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
+/*
+ * Copyright 2019-2021 Robbyxp1 @ github.com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
+ * ANY KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ */
+
 using GLOFC;
 using GLOFC.GL4;
 using System;
@@ -9,27 +23,12 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EliteDangerousCore;
 
-namespace TestOpenTk
+namespace EDDiscovery.UserControls.Map3D
 {
-    class SystemClass
-    {
-        public double X, Y, Z;
-        public string Name;
-        public bool HasCoordinate { get { return !double.IsNaN(X); } }
-    }
-
-    class HistoryEntry
-    {
-        public HistoryEntry(DateTime utc, string n, double x, double y, double z, Color pos) { EventTimeUTC = utc; System = new SystemClass() { Name = n, X = x, Y = y, Z = z }; JumpColor = pos; }
-        public SystemClass System;
-        public DateTime EventTimeUTC;
-        public Color JumpColor;
-    }
-
     class TravelPath
     {
-        public List<HistoryEntry> Unfilteredlist { get { return unfilteredlist; } }
         public List<HistoryEntry> CurrentList { get { return currentfilteredlist; } }       // whats being displayed
         public bool Enable { get { return tapeshader.Enable; } set { tapeshader.Enable = textrenderer.Enable = value; } }
         public int MaxStars { get; }
@@ -38,70 +37,52 @@ namespace TestOpenTk
         public bool TravelPathStartDateEnable { get; set; } = false;
         public bool TravelPathEndDateEnable { get; set; } = false;
 
-        public TravelPath(int maxstars)
-        {
-            MaxStars = maxstars;
-        }
+        private List<HistoryEntry> currentfilteredlist;
+        //private List<HistoryEntry> unfilteredlist;
 
-        // tested to 50K+ stars, tested updating a single one
-
-        public void Create(GLItemsList items, GLRenderProgramSortedList rObjects, List<HistoryEntry> incomingsys, float sunsize, float tapesize, int bufferfindbinding, bool depthtest)
+        public TravelPath(int maxstars, float sunsize, float tapesize, int bufferfindbinding, bool depthtest)
         {
+            this.MaxStars = maxstars;
             this.sunsize = sunsize;
             this.tapesize = tapesize;
             this.depthtest = depthtest;
-
-            unfilteredlist = incomingsys;
-
-            IntCreatePath(items, rObjects, bufferfindbinding);
+            this.bufferfindbinding = bufferfindbinding;
         }
 
-        public void Refresh()
-        {
-            IntCreatePath(null, null, -1);  // refilters
-        }
-
-        public void AddSystem(HistoryEntry he)
-        {
-            unfilteredlist.Add(he);
-            Refresh();
-        }
-
-
-        private void IntCreatePath(GLItemsList items, GLRenderProgramSortedList rObjects, int bufferfindbinding)
+        // tested to 50K+ stars
+        public void CreatePath(GLItemsList items, GLRenderProgramSortedList rObjects, HistoryList hl)
         {
             HistoryEntry lastone = lastpos != -1 && lastpos < currentfilteredlist.Count ? currentfilteredlist[lastpos] : null;  // see if lastpos is there, and store it
 
-            if (TravelPathEndDateEnable || TravelPathStartDateEnable)
-            {
-                currentfilteredlist = unfilteredlist.Where(x => (!TravelPathStartDateEnable || x.EventTimeUTC >= TravelPathStartDate) && (!TravelPathEndDateEnable || x.EventTimeUTC <= TravelPathEndDate)).ToList();
-                if (currentfilteredlist.Count > MaxStars)
-                    currentfilteredlist = currentfilteredlist.Skip(currentfilteredlist.Count - MaxStars).ToList();
-            }
-            else
-            {
-                if (unfilteredlist.Count > MaxStars)
-                    currentfilteredlist = unfilteredlist.Skip(currentfilteredlist.Count - MaxStars).ToList();
-                else
-                    currentfilteredlist = unfilteredlist;
-            }
+            // create current filter list..
+            currentfilteredlist = hl.FilterByTravelTime(TravelPathStartDateEnable ? TravelPathStartDate : default(DateTime?), TravelPathEndDateEnable ? TravelPathEndDate : default(DateTime?));
 
-                // do date filter on currentfilteredlist
+            if (currentfilteredlist.Count > MaxStars)
+                currentfilteredlist = currentfilteredlist.Skip(currentfilteredlist.Count - MaxStars).ToList();
 
             lastpos = lastone == null ? -1 : currentfilteredlist.IndexOf(lastone);        // may be -1, may have been removed
 
+            CreatePathInt(items, rObjects);
+        }
+
+        // currentfilteredlist set, go..
+        private void CreatePathInt(GLItemsList items, GLRenderProgramSortedList rObjects)
+        { 
             var positionsv4 = currentfilteredlist.Select(x => new Vector4((float)x.System.X, (float)x.System.Y, (float)x.System.Z, 0)).ToArray();
-            var colours = currentfilteredlist.Select(x => x.JumpColor).ToArray();
+            var color = new Color[positionsv4.Length];
+
+            for (int i = 0; i < positionsv4.Length; i++)        // if we are on a jump colour entry, then pick up its colour, otherwise use the last, unless its at the beginning
+                color[i] = (currentfilteredlist[i] is IJournalJumpColor) ? (currentfilteredlist[i] as IJournalJumpColor).MapColorARGB : (i > 0 ? color[i - 1] : Color.Green);
             float seglen = tapesize * 10;
 
             // a tape is a set of points (item1) and indexes to select them (item2), so we need an element index in the renderer to use.
-            var tape = GLTapeObjectFactory.CreateTape(positionsv4, colours, tapesize, seglen, 0F.Radians(), margin: sunsize * 1.2f);
+            var tape = GLTapeObjectFactory.CreateTape(positionsv4, color, tapesize, seglen, 0F.Radians(), margin: sunsize * 1.2f);
 
             if (ritape == null) // first time..
             {
                 // first the tape
 
-                var tapetex = new GLTexture2D(Properties.Resources.chevron, internalformat:OpenTK.Graphics.OpenGL4.SizedInternalFormat.Rgba8);        // tape image
+                var tapetex = new GLTexture2D(BaseUtils.Icons.IconSet.Instance.Get("GalMap.chevron") as Bitmap, internalformat:OpenTK.Graphics.OpenGL4.SizedInternalFormat.Rgba8);        // tape image
                 items.Add(tapetex);
                 tapetex.SetSamplerMode(OpenTK.Graphics.OpenGL4.TextureWrapMode.Repeat, OpenTK.Graphics.OpenGL4.TextureWrapMode.Repeat);
 
@@ -284,12 +265,11 @@ namespace TestOpenTk
         private GLShaderPipeline findshader;        // finder
         private GLRenderableItem rifind;
 
-        private List<HistoryEntry> currentfilteredlist;
-        private List<HistoryEntry> unfilteredlist;
         private int lastpos = -1;       // -1 no system, in currentfilteredlist
 
         private float sunsize;
         private float tapesize;
+        private int bufferfindbinding;
 
         private bool depthtest;
     }

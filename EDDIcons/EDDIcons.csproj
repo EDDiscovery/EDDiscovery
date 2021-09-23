@@ -553,6 +553,7 @@
     <EmbeddedResource Include="Controls\SysInfo\notfirstdiscover.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="GalMap\chevron.png" />
     <EmbeddedResource Include="GalMap\EliteMovement.png" />
     <EmbeddedResource Include="GalMap\lensflare_white2.png" />
     <EmbeddedResource Include="GalMap\Perspective.png" />
