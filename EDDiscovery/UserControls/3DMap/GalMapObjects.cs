@@ -208,7 +208,7 @@ namespace EDDiscovery.UserControls.Map3D
             geo.SetScreenCoords(viewportloc, viewportsize);
 
             GLStatics.Check();
-            rifind.Execute(findshader, state, discard:true); // execute, discard
+            rifind.Execute(findshader, state); // execute, discard
 
             var res = geo.GetResult();
             if (res != null)

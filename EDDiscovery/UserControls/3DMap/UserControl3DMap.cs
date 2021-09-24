@@ -94,6 +94,7 @@ namespace EDDiscovery.UserControls
 
         private void Discoveryform_OnHistoryChange(HistoryList obj)
         {
+            map.UpdateTravelPath(discoveryform.history);
         }
 
         class MapSaverImpl : MapSaver

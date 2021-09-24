@@ -59,7 +59,6 @@ namespace EDDiscovery.UserControls.Map3D
         private MapMenu galaxymenu;
 
         public GalacticMapping edsmmapping;
-        private GalacticMapping elitemapping;
 
         private GalMapObjects galmapobjects;
         private GalMapRegions edsmgalmapregions;
@@ -70,7 +69,7 @@ namespace EDDiscovery.UserControls.Map3D
 
         private GLContextMenu rightclickmenu;
 
-        private GLBuffer debugbuffer;
+        //private GLBuffer debugbuffer;
 
         // global buffer blocks used
         private const int volumenticuniformblock = 2;
@@ -99,7 +98,6 @@ namespace EDDiscovery.UserControls.Map3D
         {
             this.glwfc = glwfc;
             this.edsmmapping = edsmmapping;
-            this.elitemapping = eliteregions;
 
             hptimer.Start();
 
@@ -342,11 +340,9 @@ namespace EDDiscovery.UserControls.Map3D
             float sunsize = 2.0f;
             if ((ctrlo & 128) != 0)
             {
-               // tested to 50k stars
-
-                //travelpath = new TravelPath(1000, sunsize, 0.8f, findstarblock, true);
-                //travelpath.CreatePath(items, rObjects, hl);
-                //travelpath.SetSystem(0);
+                travelpath = new TravelPath(50000, sunsize, 0.8f, findstarblock, true, items, rObjects );
+                travelpath.CreatePath(hl);
+                travelpath.SetSystem(0);
             }
 
             if ((ctrlo & 256) != 0)
@@ -398,7 +394,6 @@ namespace EDDiscovery.UserControls.Map3D
                         }
                     }
                 );
-
             }
 
             // Matrix calc holding transform info
@@ -432,8 +427,8 @@ namespace EDDiscovery.UserControls.Map3D
                 return (float)ms * v;
             };
 
-            // hook gl3dcontroller to display control - its the slave. Do not register mouse UI, we will deal with that.
-            gl3dcontroller.Start(matrixcalc, displaycontrol, new Vector3(0, 0, 0), new Vector3(140.75f, 0, 0), 0.5F, false, true);
+            // hook gl3dcontroller to display control - its the slave. Do not register mouse UI, we will deal with that and feed any events thru we want
+            gl3dcontroller.Start(matrixcalc, displaycontrol, new Vector3(0, 0, 0), new Vector3(140.75f, 0, 0), 0.5F, registermouseui:false, registerkeyui:true);
 
             if (displaycontrol != null)
             {
@@ -446,7 +441,7 @@ namespace EDDiscovery.UserControls.Map3D
                 };
             }
 
-            displaycontrol.MouseClick += MouseClickOnMap;
+            displaycontrol.MouseClick += MouseClickOnMap;       // grab mouse UI
             displaycontrol.MouseUp += MouseUpOnMap;
             displaycontrol.MouseDown += MouseDownOnMap;
             displaycontrol.MouseMove += MouseMoveOnMap;
@@ -463,7 +458,7 @@ namespace EDDiscovery.UserControls.Map3D
                 System.Diagnostics.Debug.Assert(Application.MessageLoop);       // must be in UI thread
                 var glist = edsmmapping.galacticMapObjects.Where(x => s.Length < 3 ? x.name.StartsWith(s, StringComparison.InvariantCultureIgnoreCase) : x.name.Contains(s, StringComparison.InvariantCultureIgnoreCase)).Select(x => x).ToList();
                 List<string> list = glist.Select(x => x.name).ToList();
-            ////    list.AddRange(travelpath.CurrentList.Where(x => s.Length < 3 ? x.System.Name.StartsWith(s, StringComparison.InvariantCultureIgnoreCase) : x.System.Name.Contains(s, StringComparison.InvariantCultureIgnoreCase)).Select(x => x.System.Name));
+                list.AddRange(travelpath.CurrentList.Where(x => s.Length < 3 ? x.System.Name.StartsWith(s, StringComparison.InvariantCultureIgnoreCase) : x.System.Name.Contains(s, StringComparison.InvariantCultureIgnoreCase)).Select(x => x.System.Name));
                 list.Sort();
                 return list;
             };
@@ -480,14 +475,14 @@ namespace EDDiscovery.UserControls.Map3D
                 }
                 else
                 {
-                    //var he = travelpath.CurrentList.Find(x => x.System.Name.Equals(tbac.Text, StringComparison.InvariantCultureIgnoreCase));
-                    //if (he != null)
-                    //{
-                    //    System.Diagnostics.Debug.WriteLine("Move to sys " + he.System.Name);
-                    //    gl3dcontroller.SlewToPosition(new Vector3((float)he.System.X, (float)he.System.Y, (float)he.System.Z), -1);
-                    //}
-                    //else
-                    //    tbac.InErrorCondition = true;
+                    var he = travelpath.CurrentList.Find(x => x.System.Name.Equals(tbac.Text, StringComparison.InvariantCultureIgnoreCase));
+                    if (he != null)
+                    {
+                        System.Diagnostics.Debug.WriteLine("Move to sys " + he.System.Name);
+                        gl3dcontroller.SlewToPosition(new Vector3((float)he.System.X, (float)he.System.Y, (float)he.System.Z), -1);
+                    }
+                    else
+                        tbac.InErrorCondition = true;
                 }
             };
 
@@ -520,18 +515,23 @@ namespace EDDiscovery.UserControls.Map3D
             //}
         }
 
+        public void UpdateTravelPath(HistoryList hl )
+        {
+            travelpath.CreatePath(hl);
+        }
+
         public void LoadState(MapSaver defaults)
         {
             GalaxyDisplay = defaults.GetSetting("GD", true);
             StarDotsDisplay = defaults.GetSetting("SDD", true);
 
-            //TravelPathDisplay = defaults.GetSetting("TPD", true);
-            //TravelPathStartDate = defaults.GetSetting("TPSD", new DateTime(2014, 12, 16));
-            //TravelPathStartDateEnable = defaults.GetSetting("TPSDE", false);
-            //TravelPathEndDate = defaults.GetSetting("TPED", DateTime.UtcNow.AddMonths(1));
-            //TravelPathEndDateEnable = defaults.GetSetting("TPEDE", false);
-            //if (TravelPathStartDateEnable || TravelPathEndDateEnable)
-            //    travelpath.Refresh();       // and refresh it if we set the data
+            TravelPathDisplay = defaults.GetSetting("TPD", true);
+            TravelPathStartDate = defaults.GetSetting("TPSD", new DateTime(2014, 12, 16));
+            TravelPathStartDateEnable = defaults.GetSetting("TPSDE", false);
+            TravelPathEndDate = defaults.GetSetting("TPED", DateTime.UtcNow.AddMonths(1));
+            TravelPathEndDateEnable = defaults.GetSetting("TPEDE", false);
+            if (TravelPathStartDateEnable || TravelPathEndDateEnable)
+                travelpath.Refresh();       // and refresh it if we set the data
 
             GalObjectDisplay = defaults.GetSetting("GALOD", true);
             SetAllGalObjectTypeEnables(defaults.GetSetting("GALOBJLIST", ""));
@@ -551,11 +551,11 @@ namespace EDDiscovery.UserControls.Map3D
         {
             defaults.PutSetting("GD", GalaxyDisplay);
             defaults.PutSetting("SDD", StarDotsDisplay);
-            //defaults.PutSetting("TPD", TravelPathDisplay);
-            //defaults.PutSetting("TPSD", TravelPathStartDate);
-            //defaults.PutSetting("TPSDE", TravelPathStartDateEnable);
-            //defaults.PutSetting("TPED", TravelPathEndDate);
-            //defaults.PutSetting("TPEDE", TravelPathEndDateEnable);
+            defaults.PutSetting("TPD", TravelPathDisplay);
+            defaults.PutSetting("TPSD", TravelPathStartDate);
+            defaults.PutSetting("TPSDE", TravelPathStartDateEnable);
+            defaults.PutSetting("TPED", TravelPathEndDate);
+            defaults.PutSetting("TPEDE", TravelPathEndDateEnable);
             defaults.PutSetting("GALOD", GalObjectDisplay);
             defaults.PutSetting("GALOBJLIST", GetAllGalObjectTypeEnables());
             defaults.PutSetting("ERe", EDSMRegionsEnable);
@@ -590,7 +590,7 @@ namespace EDDiscovery.UserControls.Map3D
         {
             long t1 = hptimer.ElapsedTicks;
             //TBD
-            GL.Finish();      // use GL finish to ensure last frame is done - if we are operating above sys tick rate, this will be small time. If we are rendering too much, it will stall
+            //GL.Finish();      // use GL finish to ensure last frame is done - if we are operating above sys tick rate, this will be small time. If we are rendering too much, it will stall
             long t2 = hptimer.ElapsedTicks;
 
             GLMatrixCalcUniformBlock mcb = ((GLMatrixCalcUniformBlock)items.UB("MCUB"));
@@ -628,8 +628,8 @@ namespace EDDiscovery.UserControls.Map3D
 
             //long t3 = hptimer.ElapsedTicks;
 
-            //if (travelpath != null)
-            //    travelpath.Update(time, gl3dcontroller.MatrixCalc.EyeDistance);
+            if (travelpath != null)
+                travelpath.Update(time, gl3dcontroller.MatrixCalc.EyeDistance);
 
             if (galmapobjects != null)
                 galmapobjects.Update(time, gl3dcontroller.MatrixCalc.EyeDistance);
@@ -676,12 +676,12 @@ namespace EDDiscovery.UserControls.Map3D
 
             long t5 = hptimer.ElapsedTicks;
 
-            if (debugbuffer != null)
-            {
-                GLMemoryBarrier.All();
-                Vector4[] debugout = debugbuffer.ReadVector4s(0, 4);
-                System.Diagnostics.Debug.WriteLine("{0},{1},{2},{3}", debugout[0], debugout[1], debugout[2], debugout[3]);
-            }
+            //if (debugbuffer != null)
+            //{
+            //    GLMemoryBarrier.All();
+            //    Vector4[] debugout = debugbuffer.ReadVector4s(0, 4);
+            //    System.Diagnostics.Debug.WriteLine("{0},{1},{2},{3}", debugout[0], debugout[1], debugout[2], debugout[3]);
+            //}
 
             long t = hptimer.ElapsedMilliseconds;
             long diff = t - lastms;
@@ -714,13 +714,13 @@ namespace EDDiscovery.UserControls.Map3D
 
         public bool GalaxyDisplay { get { return galaxyshader?.Enable ?? false; } set { galaxyshader.Enable = value; glwfc.Invalidate(); } }
         public bool StarDotsDisplay { get { return stardots?.Enable ?? false; } set { stardots.Enable = value; glwfc.Invalidate(); } }
-        //public bool TravelPathDisplay { get { return travelpath?.Enable ?? false; } set { travelpath.Enable = value; glwfc.Invalidate(); } }
+        public bool TravelPathDisplay { get { return travelpath?.Enable ?? false; } set { travelpath.Enable = value; glwfc.Invalidate(); } }
 
-        //public void TravelPathRefresh() { travelpath.Refresh(); }   // travelpath.Refresh() manually after these have changed
-        //public DateTime TravelPathStartDate { get { return travelpath?.TravelPathStartDate ?? DateTime.MinValue; } set { if (travelpath.TravelPathStartDate != value) { travelpath.TravelPathStartDate = value; } } }
-        //public bool TravelPathStartDateEnable { get { return travelpath?.TravelPathStartDateEnable ?? false; } set { if (travelpath.TravelPathStartDateEnable != value) { travelpath.TravelPathStartDateEnable = value; } } }
-        //public DateTime TravelPathEndDate { get { return travelpath?.TravelPathEndDate ?? DateTime.MinValue; } set { if (travelpath.TravelPathEndDate != value) { travelpath.TravelPathEndDate = value; } } }
-        //public bool TravelPathEndDateEnable { get { return travelpath?.TravelPathEndDateEnable ?? false; } set { if (travelpath.TravelPathEndDateEnable != value) { travelpath.TravelPathEndDateEnable = value; } } }
+        public void TravelPathRefresh() { travelpath.Refresh(); }   // travelpath.Refresh() manually after these have changed
+        public DateTime TravelPathStartDate { get { return travelpath?.TravelPathStartDate ?? DateTime.MinValue; } set { if (travelpath.TravelPathStartDate != value) { travelpath.TravelPathStartDate = value; } } }
+        public bool TravelPathStartDateEnable { get { return travelpath?.TravelPathStartDateEnable ?? false; } set { if (travelpath.TravelPathStartDateEnable != value) { travelpath.TravelPathStartDateEnable = value; } } }
+        public DateTime TravelPathEndDate { get { return travelpath?.TravelPathEndDate ?? DateTime.MinValue; } set { if (travelpath.TravelPathEndDate != value) { travelpath.TravelPathEndDate = value; } } }
+        public bool TravelPathEndDateEnable { get { return travelpath?.TravelPathEndDateEnable ?? false; } set { if (travelpath.TravelPathEndDateEnable != value) { travelpath.TravelPathEndDateEnable = value; } } }
 
         public bool GalObjectDisplay { get { return galmapobjects?.Enable ?? false; } set { galmapobjects.Enable = value; glwfc.Invalidate(); } }
         public void SetGalObjectTypeEnable(string id, bool state) { galmapobjects.SetGalObjectTypeEnable(id, state); glwfc.Invalidate(); }
@@ -738,12 +738,12 @@ namespace EDDiscovery.UserControls.Map3D
 
         public void GoToTravelSystem(int dir)      //0 = home, 1 = next, -1 = prev
         {
-            //var he = dir == 0 ? travelpath.CurrentSystem : (dir < 0 ? travelpath.PrevSystem() : travelpath.NextSystem());
-            //if (he != null)
-            //{
-            //    gl3dcontroller.SlewToPosition(new Vector3((float)he.System.X, (float)he.System.Y, (float)he.System.Z), -1);
-            //    SetEntryText(he.System.Name);
-            //}
+            var he = dir == 0 ? travelpath.CurrentSystem : (dir < 0 ? travelpath.PrevSystem() : travelpath.NextSystem());
+            if (he != null)
+            {
+                gl3dcontroller.SlewToPosition(new Vector3((float)he.System.X, (float)he.System.Y, (float)he.System.Z), -1);
+                SetEntryText(he.System.Name);
+            }
         }
 
         #endregion
@@ -759,9 +759,9 @@ namespace EDDiscovery.UserControls.Map3D
 
         private Object FindObjectOnMap(Point vierpowerloc)
         {
-            //var sys = travelpath?.FindSystem(vierpowerloc, glwfc.RenderState, matrixcalc.ViewPort.Size) ?? null;
-            //if (sys != null)
-            //    return sys;
+            var sys = travelpath?.FindSystem(vierpowerloc, glwfc.RenderState, matrixcalc.ViewPort.Size) ?? null;
+            if (sys != null)
+                return sys;
             var gmo = galmapobjects?.FindPOI(vierpowerloc, glwfc.RenderState, matrixcalc.ViewPort.Size) ?? null;
             if (gmo != null)
                 return gmo;
@@ -814,24 +814,28 @@ namespace EDDiscovery.UserControls.Map3D
 
         private void MouseClickOnMap(Object s, GLMouseEventArgs e)
         {
-            //  System.Diagnostics.Debug.WriteLine("map click");
-            Object item = FindObjectOnMap(e.ViewportLocation);
-
-            if (item != null)
+            int distmovedsq = gl3dcontroller.MouseMovedSq(e.WindowLocation);        //3dcontroller is monitoring mouse movements
+            if (distmovedsq < 4)
             {
-                if (e.Button == GLMouseEventArgs.MouseButtons.Left)
+                //  System.Diagnostics.Debug.WriteLine("map click");
+                Object item = FindObjectOnMap(e.ViewportLocation);
+
+                if (item != null)
                 {
-            //        if (item is HistoryEntry)
-            //            travelpath.SetSystem(item as HistoryEntry);
-                    var nl = NameLocationDescription(item);
-                    System.Diagnostics.Debug.WriteLine("Click on and slew to " + nl.Item1);
-                    SetEntryText(nl.Item1);
-                    gl3dcontroller.SlewToPosition(nl.Item2, -1);
-                }
-                else if (e.Button == GLMouseEventArgs.MouseButtons.Right)
-                {
-                    rightclickmenu.Tag = item;
-                    rightclickmenu.Show(displaycontrol, e.Location);
+                    if (e.Button == GLMouseEventArgs.MouseButtons.Left)
+                    {
+                        if (item is HistoryEntry)
+                            travelpath.SetSystem(item as HistoryEntry);
+                        var nl = NameLocationDescription(item);
+                        System.Diagnostics.Debug.WriteLine("Click on and slew to " + nl.Item1);
+                        SetEntryText(nl.Item1);
+                        gl3dcontroller.SlewToPosition(nl.Item2, -1);
+                    }
+                    else if (e.Button == GLMouseEventArgs.MouseButtons.Right)
+                    {
+                        rightclickmenu.Tag = item;
+                        rightclickmenu.Show(displaycontrol, e.Location);
+                    }
                 }
             }
         }
