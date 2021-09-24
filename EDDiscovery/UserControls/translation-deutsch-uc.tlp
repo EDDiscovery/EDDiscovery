@@ -272,7 +272,7 @@ SECTION UserControlExploration
 .NoRoute: "There is no route to export" => "Es gibt keine zu exportierende Route"
 .Export: "Export route" => "Exportiere Route"
 .ErrorW: "Error exporting route. Is file {0} open?" => "Fehler beim Exportieren. Ist Datei {0} geöffnet?"
-.Clear: "Are you sure you want to clear the route list?" => "Bist du sciher, dass du die Routenliste leeren willst?"
+.Clear: "Are you sure you want to clear the route list?" => "Bist du sicher, dass du die Routenliste leeren willst?"
 .AddSys: "Add Systems" => "Systeme hinzufügen"
 .EDSMUnk: "System not known to EDSM" => "System ist EDSM nicht bekannt"
 .UnknownS: "Unknown system, system is without co-ordinates" => " Unbekanntes System, System ohne Koordinaten"
@@ -483,8 +483,8 @@ SECTION MissionListUserControl
 
 SECTION UserControlMissions
 
-.MPlural: " Missions" => "Missionen"
-.MSingular: " Mission" => "Mission"
+.MPlural: " Missions" => " Missionen"
+.MSingular: " Mission" => " Mission"
 .Name: "Name" => "Name"
 .Value: "Value (cr):\n{0:N0}" => "Wert (Cr):\n{0:N0}"
 .ValueN: "Value (cr)" => "Wert (Cr)"
