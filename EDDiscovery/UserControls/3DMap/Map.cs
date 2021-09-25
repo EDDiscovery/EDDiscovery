@@ -859,10 +859,10 @@ namespace EDDiscovery.UserControls.Map3D
             {
                 StarDotsDisplay = !StarDotsDisplay;
             }
-            //if (kb.HasBeenPressed(Keys.F7, GLOFC.Controller.KeyboardMonitor.ShiftState.None))
-            //{
-            //    TravelPathDisplay = !TravelPathDisplay;
-            //}
+            if (kb.HasBeenPressed(Keys.F7, GLOFC.Controller.KeyboardMonitor.ShiftState.None))
+            {
+                TravelPathDisplay = !TravelPathDisplay;
+            }
             if (kb.HasBeenPressed(Keys.F8, GLOFC.Controller.KeyboardMonitor.ShiftState.None))
             {
                 GalObjectDisplay = !GalObjectDisplay;
