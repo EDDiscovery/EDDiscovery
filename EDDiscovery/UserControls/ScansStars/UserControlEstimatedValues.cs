@@ -26,6 +26,14 @@ namespace EDDiscovery.UserControls
     {
         private HistoryEntry last_he = null;
         const string dbShowZero = "ShowZeros";
+        private static readonly System.Drawing.Image nullimg = EmptyImage();
+
+        private static System.Drawing.Image EmptyImage()
+        {
+            var img = new System.Drawing.Bitmap(1, 1, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            img.MakeTransparent();
+            return img;
+        }
 
         public UserControlEstimatedValues()
         {
@@ -132,9 +140,9 @@ namespace EDDiscovery.UserControls
                                         GetBodySimpleName(bodies.ScanData.BodyDesignationOrName, last_he.System.Name),
                                         spclass,
                                         bodies.ScanData.IsEDSMBody ? "EDSM" : "",
-                                        (bodies.IsMapped ? Icons.Controls.Scan_Bodies_Mapped : null),
-                                        (bodies.ScanData.WasMapped == true? Icons.Controls.Scan_Bodies_Mapped : null),
-                                        (bodies.ScanData.WasDiscovered == true ? Icons.Controls.Scan_DisplaySystemAlways : null),
+                                        (bodies.IsMapped ? Icons.Controls.Scan_Bodies_Mapped : nullimg),
+                                        (bodies.ScanData.WasMapped == true? Icons.Controls.Scan_Bodies_Mapped : nullimg),
+                                        (bodies.ScanData.WasDiscovered == true ? Icons.Controls.Scan_DisplaySystemAlways : nullimg),
                                         ev.EstimatedValueBase.ToString("N0"),
                                         ev.EstimatedValueMapped>0 ? (ev.EstimatedValueMappedEfficiently.ToString("N0") + " / " + ev.EstimatedValueMapped.ToString("N0")) : "",
                                         ev.EstimatedValueFirstDiscovered>0 ? ev.EstimatedValueFirstDiscovered.ToString("N0") : "",
@@ -166,11 +174,20 @@ namespace EDDiscovery.UserControls
             DrawSystem();
         }
 
+        private void SortImageColumn(DataGridViewSortCompareEventArgs e)
+        {
+            bool cv1 = !object.ReferenceEquals(e.CellValue1, nullimg);
+            bool cv2 = !object.ReferenceEquals(e.CellValue2, nullimg);
+            e.SortResult = cv1.CompareTo(cv2);
+            e.Handled = true;
+        }
+
         private void dataGridViewEstimatedValues_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {
             if (e.Column.Index >= 6)
                 e.SortDataGridViewColumnNumeric();
-
+            else if (e.Column.Index >= 3)
+                SortImageColumn(e);
         }
 
      }
