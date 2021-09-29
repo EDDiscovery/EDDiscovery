@@ -158,31 +158,31 @@ namespace EDDiscovery.UserControls.Map3D
                 tpgb.ForeColor = Color.Orange;
                 pform.Add(tpgb);
 
-                //GLCheckBox buttp = new GLCheckBox("TravelPath", new Rectangle(leftmargin, 0, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.StarDots") as Bitmap, null);
-                //buttp.ToolTipText = "Show travel path";
-                //buttp.Checked = map.TravelPathDisplay;
-                //buttp.CheckChanged += (e1) => { map.TravelPathDisplay = buttp.Checked; };
-                //tpgb.Add(buttp);
+                GLCheckBox buttp = new GLCheckBox("TravelPath", new Rectangle(leftmargin, 0, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.StarDots") as Bitmap, null);
+                buttp.ToolTipText = "Show travel path";
+                buttp.Checked = map.TravelPathDisplay;
+                buttp.CheckChanged += (e1) => { map.TravelPathDisplay = buttp.Checked; };
+                tpgb.Add(buttp);
 
-                //GLDateTimePicker dtps = new GLDateTimePicker("TPStart", new Rectangle(50, 0, 250, 30), DateTime.Now);
-                //dtps.Font = new Font("Ms Sans Serif", 8.25f);
-                //dtps.ShowCheckBox = dtps.ShowCalendar = true;
-                //dtps.Value = map.TravelPathStartDate;
-                //dtps.Checked = map.TravelPathStartDateEnable;
-                //dtps.ValueChanged += (e1) => { map.TravelPathStartDate = dtps.Value; map.TravelPathRefresh(); };
-                //dtps.CheckChanged += (e1) => { map.TravelPathStartDateEnable = dtps.Checked; map.TravelPathRefresh(); };
-                //dtps.ShowUpDown = true;
-                //tpgb.Add(dtps);
+                GLDateTimePicker dtps = new GLDateTimePicker("TPStart", new Rectangle(50, 0, 250, 30), System.DateTime.Now);
+                dtps.Font = new Font("Ms Sans Serif", 8.25f);
+                dtps.ShowCheckBox = dtps.ShowCalendar = true;
+                dtps.Value = map.TravelPathStartDate;
+                dtps.Checked = map.TravelPathStartDateEnable;
+                dtps.ValueChanged += (e1) => { map.TravelPathStartDate = dtps.Value; map.TravelPathRefresh(); };
+                dtps.CheckChanged += (e1) => { map.TravelPathStartDateEnable = dtps.Checked; map.TravelPathRefresh(); };
+                dtps.ShowUpDown = true;
+                tpgb.Add(dtps);
 
-                //GLDateTimePicker dtpe = new GLDateTimePicker("TPEnd", new Rectangle(320, 0, 250, 30), DateTime.Now);
-                //dtpe.Font = new Font("Ms Sans Serif", 8.25f);
-                //dtpe.ShowCheckBox = dtps.ShowCalendar = true;
-                //dtpe.Value = map.TravelPathEndDate;
-                //dtpe.Checked = map.TravelPathEndDateEnable;
-                //dtpe.ValueChanged += (e1) => { map.TravelPathEndDate = dtpe.Value; map.TravelPathRefresh(); };
-                //dtpe.CheckChanged += (e1) => { map.TravelPathEndDateEnable = dtpe.Checked; map.TravelPathRefresh(); };
-                //dtpe.ShowUpDown = true;
-                //tpgb.Add(dtpe);
+                GLDateTimePicker dtpe = new GLDateTimePicker("TPEnd", new Rectangle(320, 0, 250, 30), System.DateTime.Now);
+                dtpe.Font = new Font("Ms Sans Serif", 8.25f);
+                dtpe.ShowCheckBox = dtps.ShowCalendar = true;
+                dtpe.Value = map.TravelPathEndDate;
+                dtpe.Checked = map.TravelPathEndDateEnable;
+                dtpe.ValueChanged += (e1) => { map.TravelPathEndDate = dtpe.Value; map.TravelPathRefresh(); };
+                dtpe.CheckChanged += (e1) => { map.TravelPathEndDateEnable = dtpe.Checked; map.TravelPathRefresh(); };
+                dtpe.ShowUpDown = true;
+                tpgb.Add(dtpe);
 
 
                 vpos += tpgb.Height + ypad;
@@ -338,6 +338,12 @@ namespace EDDiscovery.UserControls.Map3D
 
                 var colormap1 = new System.Drawing.Imaging.ColorMap();
                 cb.SetDrawnBitmapUnchecked(new System.Drawing.Imaging.ColorMap[] { colormap1 }, colorMatrixElements);
+            }
+            else
+            {
+                var but = s as GLButton;
+                if (but != null)
+                    but.ForeColor = Color.DarkOrange;
             }
         }
 

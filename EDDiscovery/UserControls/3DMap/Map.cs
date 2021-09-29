@@ -65,7 +65,7 @@ namespace EDDiscovery.UserControls.Map3D
         private GalMapRegions elitemapregions;
         
         private GalaxyStarDots stardots;
-        //private GalaxyStars galaxystars;
+        private GalaxyStars galaxystars;
 
         private GLContextMenu rightclickmenu;
 
@@ -85,8 +85,8 @@ namespace EDDiscovery.UserControls.Map3D
 
         public void Dispose()
         {
-          //  if (galaxystars != null)
-            //    galaxystars.Stop();
+            if (galaxystars != null)
+                galaxystars.Stop();
             items.Dispose();
         }
 
@@ -351,13 +351,12 @@ namespace EDDiscovery.UserControls.Map3D
                 galmapobjects.CreateObjects(items, rObjects, edsmmapping, findgeomapblock, true);
             }
 
-            //if ((ctrlo & 512) != 0)
-            //{
-            //    galaxystars = new GalaxyStars(items, rObjects, sunsize, findgalaxystars);
-            //    //Vector3 pos = new Vector3(50, 0, 0);
-            //    //  galaxystars.Request9Box(pos);
+            if ((ctrlo & 512) != 0)
+            {
+                galaxystars = new GalaxyStars(items, rObjects, sunsize, findgalaxystars);
 
-            //}
+            }
+
             if ((ctrlo & 1024) != 0)
             {
                 rightclickmenu = new GLContextMenu("RightClickMenu",
@@ -486,8 +485,8 @@ namespace EDDiscovery.UserControls.Map3D
                 }
             };
 
-            //if (galaxystars != null)
-              //  galaxystars.Start();
+            if (galaxystars != null)
+                galaxystars.Start();
 
             //if (false)        // enable for debug buffer
             //{
@@ -634,11 +633,13 @@ namespace EDDiscovery.UserControls.Map3D
             if (galmapobjects != null)
                 galmapobjects.Update(time, gl3dcontroller.MatrixCalc.EyeDistance);
 
-            //if (galaxystars != null)
-            //    galaxystars.Update(time, gl3dcontroller.MatrixCalc.EyeDistance);
+            if (galaxystars != null)
+            {
+                if (gl3dcontroller.MatrixCalc.EyeDistance < 400)
+                    galaxystars.Request9BoxConditional(gl3dcontroller.PosCamera.Lookat);
 
-            //if (galaxystars != null && gl3dcontroller.MatrixCalc.EyeDistance < 400)
-            //    galaxystars.Request9BoxConditional(gl3dcontroller.PosCamera.Lookat);
+                galaxystars.Update(time, gl3dcontroller.MatrixCalc.EyeDistance);
+            }
 
             long t4 = hptimer.ElapsedTicks;
 
@@ -775,10 +776,20 @@ namespace EDDiscovery.UserControls.Map3D
             var gmo = obj as GalacticMapObject;
             if (he != null)
             {
+                string info = $"{he.System.Name} @ {he.System.X:#.##},{he.System.Y:#.##},{he.System.Z:#.##}";
+
+                foreach ( var e in travelpath.CurrentList)
+                {
+                    if ( e.System.Name.Equals(he.System.Name))
+                    {
+                        var t = EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(e.EventTimeUTC);
+                        info = info.AppendPrePad($"@" + t.ToString(), Environment.NewLine);
+                    }
+                }
 
                 return new Tuple<string, Vector3, string>(he.System.Name,
                                                           new Vector3((float)he.System.X, (float)he.System.Y, (float)he.System.Z),
-                                                          $"{he.System.Name} @ {he.System.X:#.##},{he.System.Y:#.##},{he.System.Z:#.##}");
+                                                          info );
             }
             else if (gmo != null)
             {
