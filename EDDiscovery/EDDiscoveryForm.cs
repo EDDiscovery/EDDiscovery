@@ -377,6 +377,9 @@ namespace EDDiscovery
             extButtonDrawnHelp.Text = "";
             extButtonDrawnHelp.Image = ExtendedControls.TabStrip.HelpIcon;
 
+            if ( Environment.OSVersion.Platform != PlatformID.Win32NT )
+                tabControlMain.AllowDragReorder = false;
+
             Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Finish ED Init");
 
         }
