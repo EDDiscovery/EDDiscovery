@@ -165,9 +165,15 @@ namespace EDDiscovery
 
             Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Initializing database");
 
-            UserDatabase.Instance.Start("UserDB");
+            UserDatabase.Instance.Name = "UserDB";
+            UserDatabase.Instance.MinThreads = UserDatabase.Instance.MaxThreads = 2;        // set at 2 threads max/min
+            UserDatabase.Instance.MultiThreaded = true;     // starts up the threads
+
             SystemsDatabase.Instance.Name = "SystemDB";
-            SystemsDatabase.Instance.MultiThreaded = true;
+            SystemsDatabase.Instance.MinThreads = 2;
+            SystemsDatabase.Instance.MaxThreads = 8;
+            SystemsDatabase.Instance.MultiThreaded = true;  // starts up the threads
+            
             UserDatabase.Instance.Initialize();
             SystemsDatabase.Instance.Initialize();
 
