@@ -166,7 +166,8 @@ namespace EDDiscovery
             Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Initializing database");
 
             UserDatabase.Instance.Start("UserDB");
-            SystemsDatabase.Instance.Start("SystemDB");
+            SystemsDatabase.Instance.Name = "SystemDB";
+            SystemsDatabase.Instance.MultiThreaded = true;
             UserDatabase.Instance.Initialize();
             SystemsDatabase.Instance.Initialize();
 
@@ -355,10 +356,8 @@ namespace EDDiscovery
             {
                 if (!EDDOptions.Instance.NoSystemsLoad)
                 {
-                    SystemsDatabase.Instance.WithReadWrite(() => DoPerformSync());        // this is done after the initial history load..
+                    DoPerformSync();        // this is done after the initial history load..
                 }
-
-                SystemsDatabase.Instance.SetReadOnly();
 
                 while (!PendingClose)
                 {
@@ -372,7 +371,7 @@ namespace EDDiscovery
                     if (wh == 1)
                     {
                         if (!EDDOptions.Instance.NoSystemsLoad && EDDConfig.Instance.EDSMDownload)      // if no system off, and EDSM download on
-                            SystemsDatabase.Instance.WithReadWrite(() => DoPerformSync());
+                            DoPerformSync();
                     }
                 }
             }
