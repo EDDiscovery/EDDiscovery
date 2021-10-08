@@ -31,6 +31,13 @@ namespace EDDiscovery.UserControls.Map3D
         public DateTime TravelPathEndDate { get; set; } = DateTime.UtcNow.AddMonths(1);
         public bool TravelPathStartDateEnable { get; set; } = false;
         public bool TravelPathEndDateEnable { get; set; } = false;
+        public Font Font { get; set; } = new Font("Arial", 8.5f);
+        public Color ForeText { get; set; } = Color.White;
+        public Color BackText { get; set; } = Color.Transparent;
+        public Vector3 LabelSize { get; set; } = new Vector3(5, 0, 0);
+        public Vector3 LabelOffset { get; set; } = new Vector3(0, -1, 0);
+        public Size BitMapSize { get; set; } = new Size(128, 32);
+
 
         private List<HistoryEntry> currentfilteredlist;
         private HistoryList lasthl;
@@ -87,7 +94,7 @@ namespace EDDiscovery.UserControls.Map3D
             rifind = GLRenderableItem.CreateVector4Vector4(items, OpenTK.Graphics.OpenGL4.PrimitiveType.Triangles, GLRenderState.Tri(), shape, starposbuf, ic: 0, seconddivisor: 1);
 
             // Sun names, handled by textrenderer
-            textrenderer = new GLBitmaps("bm-travelmap", rObjects, new Size(128, 40), depthtest: depthtest, cullface: false);
+            textrenderer = new GLBitmaps("bm-travelmap", rObjects, BitMapSize, depthtest: depthtest, cullface: false);
             items.Add(textrenderer);
         }
 
@@ -151,7 +158,6 @@ namespace EDDiscovery.UserControls.Map3D
             textrenderer.CurrentGeneration++;                                   // setup for next generation
             textrenderer.RemoveGeneration(textrenderer.CurrentGeneration - 1, hashset); // and remove all of the previous one which are not in hashset.
 
-            Font fnt = new Font("Arial", 8.5F);
             using (StringFormat fmt = new StringFormat())
             {
                 fmt.Alignment = StringAlignment.Center;
@@ -159,13 +165,11 @@ namespace EDDiscovery.UserControls.Map3D
                 {
                     if (textrenderer.Exist(isys) == false)                   // if does not exist already, need a new label
                     {
-                        textrenderer.Add(isys, isys.System.Name, fnt, Color.White, Color.Transparent, new Vector3((float)isys.System.X, (float)isys.System.Y - 5, (float)isys.System.Z),
-                                new Vector3(20, 0, 0), new Vector3(0, 0, 0), fmt: fmt, rotatetoviewer: true, rotateelevation: false, alphafadescalar: -200, alphafadepos: 300);
+                        textrenderer.Add(isys, isys.System.Name, Font, ForeText, BackText, new Vector3((float)isys.System.X+LabelOffset.X, (float)isys.System.Y + LabelOffset.Y, (float)isys.System.Z+LabelOffset.Z),
+                                LabelSize, new Vector3(0, 0, 0), fmt: fmt, rotatetoviewer: true, rotateelevation: false, alphafadescalar: -200, alphafadepos: 300);
                     }
                 }
             }
-
-            fnt.Dispose();
         }
 
         public void Update(ulong time, float eyedistance)
@@ -175,10 +179,13 @@ namespace EDDiscovery.UserControls.Map3D
             float fract = (float)time / rotperiodms;
             float angle = (float)(2 * Math.PI * fract);
             sunvertex.ModelTranslation = Matrix4.CreateRotationY(-angle);
+
+            const int pathperiodms = 10000;
+
             float scale = Math.Max(1, Math.Min(4, eyedistance / 5000));
             //System.Diagnostics.Debug.WriteLine("Scale {0}", scale);
             sunvertex.ModelTranslation *= Matrix4.CreateScale(scale);           // scale them a little with distance to pick them out better
-            tapefrag.TexOffset = new Vector2(-(float)(time % 2000) / 2000, 0);
+            tapefrag.TexOffset = new Vector2(-(float)(time % pathperiodms) / pathperiodms, 0);
         }
 
         public HistoryEntry FindSystem(Point viewportloc, GLRenderState state, Size viewportsize)

@@ -337,7 +337,7 @@ namespace EDDiscovery.UserControls.Map3D
                 rObjects.Add(items.Shader("DYNGRIDBitmap"), "DYNGRIDBitmapRENDER", GLRenderableItem.CreateNullVertex(OpenTK.Graphics.OpenGL4.PrimitiveType.TriangleStrip, rl, drawcount: 4, instancecount: 9));
             }
 
-            float sunsize = 2.0f;
+            float sunsize = 1.0f;
             if ((ctrlo & 128) != 0)
             {
                 travelpath = new TravelPath(50000, sunsize, 0.8f, findstarblock, true, items, rObjects );

@@ -12,6 +12,8 @@
  * governing permissions and limitations under the License.
  */
 
+using EliteDangerousCore;
+using EliteDangerousCore.DB;
 using GLOFC;
 using GLOFC.GL4;
 using OpenTK;
@@ -26,11 +28,14 @@ namespace EDDiscovery.UserControls.Map3D
     class GalaxyStars
     {
         public Vector3 CurrentPos { get; set; } = new Vector3(-1000000, -1000000, -1000000);
-        public Font Font { get; set; } = new Font("Ms Sans Serif", 14f);
-        public Color ForeText { get; set; } = Color.White;
-        public Color BackText { get; set; } = Color.Red;
+        public Font Font { get; set; } = new Font("Arial", 8.5f);
+        public Color ForeText { get; set; } = Color.FromArgb(255,220,220,220);
+        public Color BackText { get; set; } = Color.Transparent;
+        public Vector3 LabelSize { get; set; } = new Vector3(5, 0, 5f/4f);
+        public Vector3 LabelOffset { get; set; } = new Vector3(0, -1, 0);
+        public Size BitMapSize { get; set; } = new Size(128, 32);
 
-        private const int MaxObjectsAllowed = 10000;
+        private const int MaxObjectsAllowed = 100000;
         private const int MaxObjectsMargin = 1000;
         private const int SectorSize = 100;
         private const int MaxGeneratedThreads = 40;
@@ -64,7 +69,7 @@ namespace EDDiscovery.UserControls.Map3D
 
             slset = new GLSetOfObjectsWithLabels("SLSet", rObjects, texunitspergroup, 100, 10,
                                                             sunshader, shapebuf, shape.Length, starrc, OpenTK.Graphics.OpenGL4.PrimitiveType.Triangles,
-                                                            textshader, new Size(128, 32), textrc, SizedInternalFormat.Rgba8);
+                                                            textshader, BitMapSize, textrc, SizedInternalFormat.Rgba8);
 
             items.Add(slset);
         }
@@ -90,12 +95,10 @@ namespace EDDiscovery.UserControls.Map3D
 
         public void Request9BoxConditional(Vector3 newpos)
         {
-            if ((CurrentPos - newpos).Length >= SectorSize && generatedsectors.Count < MaxGeneratedThreads )
-            {
-                //if (CurrentPos.Z < -100000)
-                //    CurrentPos = newpos;
-                //newpos = new Vector3(CurrentPos.X, CurrentPos.Y, CurrentPos.Z + 300);
+            // if out of pos, not too many threads, and rebuild is not running
 
+            if ((CurrentPos - newpos).Length >= SectorSize && generatedsectors.Count < MaxGeneratedThreads && SystemsDatabase.Instance.RebuildRunning == false )
+            {
                 Request9x3Box(newpos);
             }
         }
@@ -124,7 +127,7 @@ namespace EDDiscovery.UserControls.Map3D
         // send the request to the requestor using a blocking queue
         private void Request(Vector3 pos)
         {
-            int mm = 100000;
+            int mm = 100000 + SectorSize/2;
             pos.X = (int)(pos.X + mm) / SectorSize * SectorSize - mm;
             pos.Y = (int)(pos.Y + mm) / SectorSize * SectorSize - mm;
             pos.Z = (int)(pos.Z + mm) / SectorSize * SectorSize - mm;
@@ -132,20 +135,9 @@ namespace EDDiscovery.UserControls.Map3D
             if (!slset.TagsToBlocks.ContainsKey(pos))
             {
                 slset.ReserveTag(pos);      // important, stops repeated adds in the situation where it takes a while to add to set
-                
-                // use normally
+
+              //  System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 100000} {pos} request");
                 requestedsectors.Add(new Sector(pos));
-
-                //// Debug only
-                //while (cleanbitmaps.TryDequeue(out Sector sectoclean))
-                //{
-                //    // System.Diagnostics.Debug.WriteLine($"Clean bitmap for {sectoclean.pos}");
-                //    BitMapHelpers.Dispose(sectoclean.bitmaps);
-                //    sectoclean.bitmaps = null;
-                //}
-                //FillSectorThread(new Sector(pos));
-
-                //  System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 100000} {pos} request");
             }
             else
             {
@@ -173,7 +165,7 @@ namespace EDDiscovery.UserControls.Map3D
                             sectoclean.bitmaps = null;
                         }
 
-                        // System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 100000} {sector.pos} requestor accepts");
+                        System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 100000} {sector.pos} requestor accepts");
 
                         Thread p = new Thread(FillSectorThread);
                         p.Start(sector);
@@ -198,24 +190,36 @@ namespace EDDiscovery.UserControls.Map3D
           //  System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 100000} {d.pos} {tno} start");
             Thread.Sleep(10);
 
-            Vector4[] array = new Vector4[100];
-            string[] text = new string[array.Length];
-            Random rnd = new Random((int)(d.pos.X * d.pos.Y) + 1);
-            for (int i = 0; i < array.Length; i++)
-            {
-                array[i] = new Vector4(d.pos.X + rnd.Next(SectorSize), d.pos.Y + rnd.Next(SectorSize), d.pos.Z + rnd.Next(SectorSize), 0);
-                text[i] = $"({d.pos.X},{d.pos.Y},{d.pos.Z})-{i}";
-            }
+            // note d.text/d.positions may be much longer than d.systems
+            d.systems = SystemsDB.GetSystemList(d.pos.X, d.pos.Y, d.pos.Z, SectorSize, ref d.text, ref d.positions, FromIntXYZScalar);
 
-            d.stars = array;       
-            d.text = text;
-            d.bitmaps = BitMapHelpers.DrawTextIntoFixedSizeBitmaps(slset.LabelSize, text, Font, System.Drawing.Text.TextRenderingHint.ClearTypeGridFit, ForeText, BackText, 0.5f);
-            d.textpos = GLPLVertexShaderQuadTextureWithMatrixTranslation.CreateMatrices(array, new Vector3(0, -2f, 0), new Vector3(2f, 0, 0.4f), new Vector3(-90F.Radians(), 0, 0), true, false);
+            if (d.systems > 0)      // may get nothing, so don't do this if so
+            {
+                // note only draw d.systems
+                using (StringFormat fmt = new StringFormat())
+                {
+                    fmt.Alignment = StringAlignment.Center;
+
+                    d.bitmaps = BitMapHelpers.DrawTextIntoFixedSizeBitmaps(slset.LabelSize, d.text, Font, System.Drawing.Text.TextRenderingHint.ClearTypeGridFit,
+                                            ForeText, BackText, 0.5f, frmt: fmt, length: d.systems);
+                }
+
+                d.textpos = GLPLVertexShaderQuadTextureWithMatrixTranslation.CreateMatrices(d.positions, LabelOffset,  //offset
+                                                                            LabelSize, //size
+                                                                            new Vector3(0, 0, 0), // rot (unused due to below)
+                                                                            true, false, // rotate, no elevation
+                                                                            length: d.systems    // limit length
+                                                                            );
+            }
 
             generatedsectors.Enqueue(d);       // d has been filled
             //System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 100000} {d.pos} {tno} end");
 
             Interlocked.Add(ref subthreadsrunning, -1);
+        }
+        private Vector4 FromIntXYZScalar(int x, int y, int z)
+        {
+            return new Vector4((float)x / SystemClass.XYZScalar, (float)y / SystemClass.XYZScalar, (float)z / SystemClass.XYZScalar, 0);
         }
 
         ulong timelastadded = 0;
@@ -227,13 +231,20 @@ namespace EDDiscovery.UserControls.Map3D
             {
                 if (generatedsectors.Count > 0)
                 {
-                    int max = 5;
+                    int max = 2;
                     while (generatedsectors.TryDequeue(out Sector d) && max-- > 0)      // limit fill rate..
                     {
-                        System.Diagnostics.Debug.WriteLine($"Add to set {d.pos}");
-                        slset.Add(d.pos, d.text, d.stars, d.textpos, d.bitmaps);
-                        System.Diagnostics.Debug.WriteLine($"..add complete {d.pos} {slset.Objects}" );
-                        cleanbitmaps.Enqueue(d);            // ask for cleaning of these bitmaps
+                      //  System.Diagnostics.Debug.WriteLine($"Add to set {d.pos} number {d.systems}");
+                        if (d.systems > 0)      // may return zero
+                        { 
+                            slset.Add(d.pos, d.text, d.positions, d.textpos, d.bitmaps, 0, d.systems);
+                            cleanbitmaps.Enqueue(d);            // ask for cleaning of these bitmaps
+                        }
+
+                        d.positions = null;     // don't need these
+                        d.textpos = null;           // and these are not needed
+
+                        //System.Diagnostics.Debug.WriteLine($"..add complete {d.pos} {slset.Objects}" );
                         timelastadded = time;
                     }
                 }
@@ -267,7 +278,8 @@ namespace EDDiscovery.UserControls.Map3D
             public Sector(Vector3 pos) { this.pos = pos; }
 
             // generated by thread, passed to update, bitmaps pushed to cleanbitmaps and deleted by requestor
-            public Vector4[] stars;
+            public int systems;
+            public Vector4[] positions;
             public string[] text;
             public Matrix4[] textpos;
             public Bitmap[] bitmaps;
