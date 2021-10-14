@@ -32,15 +32,16 @@ namespace EDDiscovery.UserControls.Map3D
         public Color ForeText { get; set; } = Color.FromArgb(255,220,220,220);
         public Color BackText { get; set; } = Color.Transparent;
         public Vector3 LabelSize { get; set; } = new Vector3(5, 0, 5f/4f);
-        public Vector3 LabelOffset { get; set; } = new Vector3(0, -1, 0);
+        public Vector3 LabelOffset { get; set; } = new Vector3(0, -1.2f, 0);
         public Size BitMapSize { get; set; } = new Size(128, 32);
+        public bool Enable { get { return sunshader.Enable; } set { sunshader.Enable = textshader.Enable = value; } }
+        public int MaxObjectsAllowed { get; set; } = 100000;
 
-        private const int MaxObjectsAllowed = 100000;
         private const int MaxObjectsMargin = 1000;
         private const int SectorSize = 100;
-        private const int MaxGeneratedThreads = 40;
+        private const int MaxRequests = 27*2;
 
-        public GalaxyStars(GLItemsList items, GLRenderProgramSortedList rObjects, float sunsize, int findbufferfindbinding)
+        public GalaxyStars(GLItemsList items, GLRenderProgramSortedList rObjects, float sunsize, int findbufferbinding)
         {
             sunvertex = new GLPLVertexShaderModelCoordWithWorldTranslationCommonModelTranslation(new Color[] { Color.FromArgb(255, 220, 220, 10), Color.FromArgb(255, 0,0,0) } );
             items.Add(sunvertex);
@@ -62,7 +63,7 @@ namespace EDDiscovery.UserControls.Map3D
             textrc.ClipDistanceEnable = 1;  // we are going to cull primitives which are deleted
 
             int texunitspergroup = 16;
-            var textshader = new GLShaderPipeline(new GLPLVertexShaderQuadTextureWithMatrixTranslation(), new GLPLFragmentShaderTexture2DIndexedMulti(0, 0, true, texunitspergroup));
+            textshader = new GLShaderPipeline(new GLPLVertexShaderQuadTextureWithMatrixTranslation(), new GLPLFragmentShaderTexture2DIndexedMulti(0, 0, true, texunitspergroup));
             //textshader.StartAction += (s, w) => { Monitor.Enter(slset); System.Diagnostics.Debug.WriteLine("Begin render text"); };
             //textshader.FinishAction += (s, w) => { System.Diagnostics.Debug.WriteLine("End render text"); Monitor.Exit(slset); };
             items.Add(textshader);
@@ -72,6 +73,9 @@ namespace EDDiscovery.UserControls.Map3D
                                                             textshader, BitMapSize, textrc, SizedInternalFormat.Rgba8);
 
             items.Add(slset);
+
+            findshader = items.NewShaderPipeline(null, sunvertex, null, null, new GLPLGeoShaderFindTriangles(findbufferbinding, 16), null, null, null);
+            items.Add(findshader);
         }
 
         public void Start()
@@ -97,7 +101,7 @@ namespace EDDiscovery.UserControls.Map3D
         {
             // if out of pos, not too many threads, and rebuild is not running
 
-            if ((CurrentPos - newpos).Length >= SectorSize && generatedsectors.Count < MaxGeneratedThreads && SystemsDatabase.Instance.RebuildRunning == false )
+            if ((CurrentPos - newpos).Length >= SectorSize && requestedsectors.Count < MaxRequests && SystemsDatabase.Instance.RebuildRunning == false )
             {
                 Request9x3Box(newpos);
             }
@@ -106,7 +110,7 @@ namespace EDDiscovery.UserControls.Map3D
         public void Request9x3Box(Vector3 pos)
         {
             CurrentPos = pos;
-            //System.Diagnostics.Debug.WriteLine($"Request 9 box ${pos}");
+            System.Diagnostics.Debug.WriteLine($"Request 9 box ${pos}");
 
             for (int i = 0; i <= 2; i++)
             {
@@ -121,7 +125,7 @@ namespace EDDiscovery.UserControls.Map3D
                 Request(new Vector3(pos.X - SectorSize, pos.Y + y, pos.Z + SectorSize));
                 Request(new Vector3(pos.X - SectorSize, pos.Y + y, pos.Z - SectorSize));
             }
-            //System.Diagnostics.Debug.WriteLine($"End 9 box");
+            System.Diagnostics.Debug.WriteLine($"End 9 box");
         }
 
         // send the request to the requestor using a blocking queue
@@ -136,7 +140,7 @@ namespace EDDiscovery.UserControls.Map3D
             {
                 slset.ReserveTag(pos);      // important, stops repeated adds in the situation where it takes a while to add to set
 
-              //  System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 100000} {pos} request");
+                //System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 100000} {pos} request");
                 requestedsectors.Add(new Sector(pos));
             }
             else
@@ -187,9 +191,8 @@ namespace EDDiscovery.UserControls.Map3D
             int tno = Interlocked.Add(ref subthreadsrunning, 1);      // count subthreads, on shutdown, we need to wait until they all complete
             Sector d = (Sector)seco;
 
-          //  System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 100000} {d.pos} {tno} start");
-            Thread.Sleep(10);
-
+            //System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 100000} {d.pos} {tno} start");
+            
             // note d.text/d.positions may be much longer than d.systems
             d.systems = SystemsDB.GetSystemList(d.pos.X, d.pos.Y, d.pos.Z, SectorSize, ref d.text, ref d.positions, FromIntXYZScalar);
 
@@ -213,7 +216,7 @@ namespace EDDiscovery.UserControls.Map3D
             }
 
             generatedsectors.Enqueue(d);       // d has been filled
-            //System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 100000} {d.pos} {tno} end");
+            //System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 100000} {d.pos} {tno} {d.systems} end");
 
             Interlocked.Add(ref subthreadsrunning, -1);
         }
@@ -232,9 +235,9 @@ namespace EDDiscovery.UserControls.Map3D
                 if (generatedsectors.Count > 0)
                 {
                     int max = 2;
-                    while (generatedsectors.TryDequeue(out Sector d) && max-- > 0)      // limit fill rate..
+                    while (max-- > 0 && generatedsectors.TryDequeue(out Sector d) )      // limit fill rate.. (max first)
                     {
-                      //  System.Diagnostics.Debug.WriteLine($"Add to set {d.pos} number {d.systems}");
+                        System.Diagnostics.Debug.WriteLine($"Add {d.pos} number {d.systems} total {slset.Objects}");
                         if (d.systems > 0)      // may return zero
                         { 
                             slset.Add(d.pos, d.text, d.positions, d.textpos, d.bitmaps, 0, d.systems);
@@ -265,12 +268,36 @@ namespace EDDiscovery.UserControls.Map3D
             sunvertex.ModelTranslation *= Matrix4.CreateScale(scale);           // scale them a little with distance to pick them out better
         }
 
+        // returns name only, and z - if not found z = Max value, null
+        public SystemClass Find(Point loc, GLRenderState rs, Size viewportsize, out float z)
+        {
+            z = float.MaxValue;
+
+            if (Enable)
+            {
+                var find = slset.FindBlock(findshader, rs, loc, viewportsize);      // return block tag, index, z
+                if (find != null)
+                {
+                    z = find.Item5;
+                    var userdata = slset.UserData[find.Item1[0].tag] as string[];
+                    System.Diagnostics.Debug.WriteLine($"SLSet {find.Item2} {find.Item3} {find.Item4} {find.Item5} {userdata[find.Item2]}");
+                    return new SystemClass() { Name = userdata[find.Item4] };       // without position note
+                }
+            }
+
+            return null;
+        }
+
+
 
         private GLSetOfObjectsWithLabels slset; // main class holding drawing
 
         private GLShaderPipeline sunshader;     // sun drawer
+        private GLShaderPipeline textshader;     // text shader
         private GLPLVertexShaderModelCoordWithWorldTranslationCommonModelTranslation sunvertex;
         private GLBuffer shapebuf;
+
+        private GLShaderPipeline findshader;    // find shader for lookups
 
         private class Sector
         {

@@ -29,6 +29,7 @@ namespace EDDiscovery.UserControls.Map3D
         }
 
         public bool Enable { get { return objectshader.Enable; } set { textrenderer.Enable = objectshader.Enable = value; } }
+        public Font Font { get; set; } = new Font("Arial", 8.5f);
 
         public void SetGalObjectTypeEnable(string id, bool state) { State[id] = state; UpdateEnables(); }
         public bool GetGalObjectTypeEnable(string id) { return !State.ContainsKey(id) || State[id] == true; }
@@ -122,50 +123,47 @@ namespace EDDiscovery.UserControls.Map3D
 
             // now make the text up for all the objects above
 
-            using (Font fnt = new Font("Arial", 8.5F))
+            using (StringFormat fmt = new StringFormat())
             {
-                using (StringFormat fmt = new StringFormat())
+                fmt.Alignment = StringAlignment.Center;
+
+                var renderablegalmapobjects = galmap.RenderableMapObjects; // list of enabled entries
+
+                List<Vector3> posset = new List<Vector3>();
+
+                float offscale = objsize * (0.5f + (float)textrenderer.BitmapSize.Height / (float)textrenderer.BitmapSize.Width / 2);       // this is the nominal centre of the text bitmap, offset in Y to the object
+
+                for (int i = 0; i < renderablegalmapobjects.Length; i++)
                 {
-                    fmt.Alignment = StringAlignment.Center;
+                    var o = renderablegalmapobjects[i];
+                    float offset = -offscale;
 
-                    var renderablegalmapobjects = galmap.RenderableMapObjects; // list of enabled entries
-
-                    List<Vector3> posset = new List<Vector3>();
-
-                    float offscale = objsize * (0.5f + (float)textrenderer.BitmapSize.Height / (float)textrenderer.BitmapSize.Width / 2);       // this is the nominal centre of the text bitmap, offset in Y to the object
-
-                    for (int i = 0; i < renderablegalmapobjects.Length; i++)
+                    for (int j = 0; j < i; j++)     // look up previous ones and see if we labeled it before
                     {
-                        var o = renderablegalmapobjects[i];
-                        float offset = -offscale;
+                        var d1 = new Vector3(o.points[0].X, o.points[0].Y + offset, o.points[0].Z);
+                        var d2 = posset[j];     // where it was placed.
+                        var diff = d1 - d2;
 
-                        for (int j = 0; j < i; j++)     // look up previous ones and see if we labeled it before
+                        if (diff.Length < offscale)        // close
                         {
-                            var d1 = new Vector3(o.points[0].X, o.points[0].Y + offset, o.points[0].Z);
-                            var d2 = posset[j];     // where it was placed.
-                            var diff = d1 - d2;
-
-                            if (diff.Length < offscale)        // close
-                            {
-                                if (offset > 0)         // if offset is positive, flip below and increase again
-                                    offset = -offset - offscale;
-                                else
-                                    offset *= -1;       // flip over top
-                                                        // System.Diagnostics.Debug.WriteLine($"close {renderablegalmapobjects[i].name} {d1} to {renderablegalmapobjects[j].name} {d2} {diff} select {offset}");
-                            }
+                            if (offset > 0)         // if offset is positive, flip below and increase again
+                                offset = -offset - offscale;
+                            else
+                                offset *= -1;       // flip over top
+                                                    // System.Diagnostics.Debug.WriteLine($"close {renderablegalmapobjects[i].name} {d1} to {renderablegalmapobjects[j].name} {d2} {diff} select {offset}");
                         }
-
-                        Vector3 pos = new Vector3(o.points[0].X, o.points[0].Y + offset, o.points[0].Z);
-                        posset.Add(pos);
-                        //System.Diagnostics.Debug.WriteLine($"{renderablegalmapobjects[i].name} at {pos} {offset}");
-
-                        textrenderer.Add(o.id, o.name, fnt,
-                            Color.White, Color.FromArgb(0, 255, 0, 255),
-                            pos,
-                            new Vector3(objsize, 0, 0), new Vector3(0, 0, 0), fmt: fmt, rotatetoviewer: dorotate, rotateelevation: doelevation,
-                            alphafadescalar: -100, alphafadepos: 500); // fade in, alpha = 0 at >500, 1 at 400
-
                     }
+
+                    Vector3 pos = new Vector3(o.points[0].X, o.points[0].Y + offset, o.points[0].Z);
+                    posset.Add(pos);
+                    //System.Diagnostics.Debug.WriteLine($"{renderablegalmapobjects[i].name} at {pos} {offset}");
+
+                    textrenderer.Add(o.id, o.name, Font,
+                        Color.White, Color.FromArgb(0, 255, 0, 255),
+                        pos,
+                        new Vector3(objsize, 0, 0), new Vector3(0, 0, 0), fmt: fmt, rotatetoviewer: dorotate, rotateelevation: doelevation,
+                        alphafadescalar: -100, alphafadepos: 500); // fade in, alpha = 0 at >500, 1 at 400
+
                 }
             }
 
@@ -198,26 +196,40 @@ namespace EDDiscovery.UserControls.Map3D
             ridisplay.InstanceCount = rifind.InstanceCount = mwpos;
         }
 
+        // returns GMO, and z - if not found z = Max value, null
 
-        public GalacticMapObject FindPOI(Point viewportloc, GLRenderState state, Size viewportsize)
+        public GalacticMapObject FindPOI(Point viewportloc, GLRenderState state, Size viewportsize, out float z)
         {
-            if (!objectshader.Enable)
-                return null;
+            z = float.MaxValue;
 
-            var geo = findshader.GetShader<GLPLGeoShaderFindTriangles>(OpenTK.Graphics.OpenGL4.ShaderType.GeometryShader);
-            geo.SetScreenCoords(viewportloc, viewportsize);
-
-            GLStatics.Check();
-            rifind.Execute(findshader, state); // execute, discard
-
-            var res = geo.GetResult();
-            if (res != null)
+            if (Enable)
             {
-//                for (int i = 0; i < res.Length; i++) System.Diagnostics.Debug.WriteLine(i + " = " + res[i]);
+                var geo = findshader.GetShader<GLPLGeoShaderFindTriangles>(OpenTK.Graphics.OpenGL4.ShaderType.GeometryShader);
+                geo.SetScreenCoords(viewportloc, viewportsize);
 
-                int instance = (int)res[0].Y;
-                // tbd wrong! not a one to one mapping
-                return galmap.RenderableMapObjects[indextoentry[instance]];       //TBD
+                GLStatics.Check();
+                rifind.Execute(findshader, state); // execute, discard
+
+                var res = geo.GetResult();
+                if (res != null)
+                {
+                    var renderablegalmapobjects = galmap.RenderableMapObjects; // list of displayable entries
+                    int index = 0;
+
+                    foreach (var o in renderablegalmapobjects)
+                    {
+                        bool en = GetGalObjectTypeEnable(o.galMapType.Typeid);      // we need to account for ones not enabled, since we rewrite the model buffer list on each enable
+                        if (en)
+                        {
+                            if (index == (int)res[0].Y)
+                            {
+                                z = res[0].Z;
+                                return o;
+                            }
+                            index++;
+                        }
+                    }
+                }
             }
 
             return null;

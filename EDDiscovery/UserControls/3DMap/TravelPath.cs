@@ -35,7 +35,7 @@ namespace EDDiscovery.UserControls.Map3D
         public Color ForeText { get; set; } = Color.White;
         public Color BackText { get; set; } = Color.Transparent;
         public Vector3 LabelSize { get; set; } = new Vector3(5, 0, 0);
-        public Vector3 LabelOffset { get; set; } = new Vector3(0, -1, 0);
+        public Vector3 LabelOffset { get; set; } = new Vector3(0, -1.2f, 0);
         public Size BitMapSize { get; set; } = new Size(128, 32);
 
 
@@ -188,18 +188,25 @@ namespace EDDiscovery.UserControls.Map3D
             tapefrag.TexOffset = new Vector2(-(float)(time % pathperiodms) / pathperiodms, 0);
         }
 
-        public HistoryEntry FindSystem(Point viewportloc, GLRenderState state, Size viewportsize)
+        // returns HE, and z - if not found z = Max value, null
+        public HistoryEntry FindSystem(Point viewportloc, GLRenderState state, Size viewportsize, out float z)
         {
-            var geo = findshader.GetShader<GLPLGeoShaderFindTriangles>(OpenTK.Graphics.OpenGL4.ShaderType.GeometryShader);
-            geo.SetScreenCoords(viewportloc, viewportsize);
+            z = float.MaxValue;
 
-            rifind.Execute(findshader, state); // execute, discard
-
-            var res = geo.GetResult();
-            if (res != null)
+            if (Enable)
             {
-                //for (int i = 0; i < res.Length; i++) System.Diagnostics.Debug.WriteLine(i + " = " + res[i]);
-                return currentfilteredlist[(int)res[0].Y];
+                var geo = findshader.GetShader<GLPLGeoShaderFindTriangles>(OpenTK.Graphics.OpenGL4.ShaderType.GeometryShader);
+                geo.SetScreenCoords(viewportloc, viewportsize);
+
+                rifind.Execute(findshader, state); // execute, discard
+
+                var res = geo.GetResult();
+                if (res != null)
+                {
+                    //for (int i = 0; i < res.Length; i++) System.Diagnostics.Debug.WriteLine(i + " = " + res[i]);
+                    z = res[0].Z;
+                    return currentfilteredlist[(int)res[0].Y];
+                }
             }
 
             return null;
@@ -217,16 +224,15 @@ namespace EDDiscovery.UserControls.Map3D
                 lastpos = -1;
             return lastpos != -1;
         }
-
-        public bool SetSystem(int i)
+        public bool SetSystem(string s)
         {
-            if (currentfilteredlist != null && i >= 0 && i < currentfilteredlist.Count)
+            if (currentfilteredlist != null && s.HasChars())
             {
-                lastpos = i;
-                return true;
+                lastpos = currentfilteredlist.FindLastIndex(x=>x.System.Name.Equals(s,StringComparison.InvariantCultureIgnoreCase)); 
             }
             else
-                return false;
+                lastpos = -1;
+            return lastpos != -1;
         }
 
         public HistoryEntry NextSystem()

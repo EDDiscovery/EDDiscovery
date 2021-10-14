@@ -13,6 +13,7 @@
  */
 
 using GLOFC.GL4.Controls;
+using System.Collections.Generic;
 using System.Drawing;
 
 namespace EDDiscovery.UserControls.Map3D
@@ -103,6 +104,7 @@ namespace EDDiscovery.UserControls.Map3D
             // provide opening animation
             pform.ScaleWindow = new SizeF(0.0f, 0.0f);
             pform.Animators.Add(new AnimateScale(map.ElapsedTimems + 10, map.ElapsedTimems + 400, new SizeF(1, 1)));
+            pform.Font = new Font("Arial", 8.25f);
 
             // and closing animation
             pform.FormClosing += (f,e) => { 
@@ -143,11 +145,32 @@ namespace EDDiscovery.UserControls.Map3D
                 butgal.CheckChanged += (e1) => { map.GalaxyDisplay = butgal.Checked; };
                 pform.Add(butgal);
 
-                GLCheckBox butsd = new GLCheckBox("StarDots", new Rectangle(200, vpos, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.StarDots") as Bitmap, null);
+                GLCheckBox butgrid = new GLCheckBox("GridLines", new Rectangle(200, vpos, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.Grid") as Bitmap, null);
+                butgrid.ToolTipText = "Show grid";
+                butgrid.Checked = map.Grid;
+                butgrid.CheckChanged += (e1) => { map.Grid = butgrid.Checked; };
+                pform.Add(butgrid);
+
+                GLCheckBox butsd = new GLCheckBox("StarDots", new Rectangle(250, vpos, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.StarDots") as Bitmap, null);
                 butsd.ToolTipText = "Show star field";
-                butsd.Checked = map.StarDotsDisplay;
-                butsd.CheckChanged += (e1) => { map.StarDotsDisplay = butsd.Checked; };
+                butsd.Checked = map.StarDotsSpritesDisplay;
+                butsd.CheckChanged += (e1) => { map.StarDotsSpritesDisplay = butsd.Checked; };
                 pform.Add(butsd);
+
+                GLCheckBox butgalstars = new GLCheckBox("GalaxyStars", new Rectangle(300, vpos, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.GalaxyStars") as Bitmap, null);
+                butgalstars.ToolTipText = "Show stars when zoomed in";
+                butgalstars.Checked = map.GalaxyStars;
+                butgalstars.CheckChanged += (e1) => { map.GalaxyStars = butgalstars.Checked; };
+                pform.Add(butgalstars);
+
+                GLComboBox cbstars = new GLComboBox("GalaxyStarsNumber", new Rectangle(350, vpos, 100, iconsize));
+                cbstars.ToolTipText = "Control how many stars are shown when zoomes in";
+                cbstars.Items = new List<string>() { "Stars-Ultra", "Stars-High", "Stars-Medium", "Stars-Low" };
+                var list = new List<int>() { 750000, 500000, 250000, 100000 };
+                int itemno = list.IndexOf(map.GalaxyStarsMaxObjects); // may be -1
+                cbstars.SelectedIndex = itemno >= 0 ? itemno : 1;       // high default
+                cbstars.SelectedIndexChanged += (e1) => { map.GalaxyStarsMaxObjects = list[cbstars.SelectedIndex]; };
+                pform.Add(cbstars);
 
                 vpos += butgal.Height + ypad;
             }
@@ -158,14 +181,13 @@ namespace EDDiscovery.UserControls.Map3D
                 tpgb.ForeColor = Color.Orange;
                 pform.Add(tpgb);
 
-                GLCheckBox buttp = new GLCheckBox("TravelPath", new Rectangle(leftmargin, 0, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.StarDots") as Bitmap, null);
+                GLCheckBox buttp = new GLCheckBox("TravelPath", new Rectangle(leftmargin, 0, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.TravelPath") as Bitmap, null);
                 buttp.ToolTipText = "Show travel path";
                 buttp.Checked = map.TravelPathDisplay;
                 buttp.CheckChanged += (e1) => { map.TravelPathDisplay = buttp.Checked; };
                 tpgb.Add(buttp);
 
                 GLDateTimePicker dtps = new GLDateTimePicker("TPStart", new Rectangle(50, 0, 250, 30), System.DateTime.Now);
-                dtps.Font = new Font("Ms Sans Serif", 8.25f);
                 dtps.ShowCheckBox = dtps.ShowCalendar = true;
                 dtps.Value = map.TravelPathStartDate;
                 dtps.Checked = map.TravelPathStartDateEnable;
@@ -175,7 +197,6 @@ namespace EDDiscovery.UserControls.Map3D
                 tpgb.Add(dtps);
 
                 GLDateTimePicker dtpe = new GLDateTimePicker("TPEnd", new Rectangle(320, 0, 250, 30), System.DateTime.Now);
-                dtpe.Font = new Font("Ms Sans Serif", 8.25f);
                 dtpe.ShowCheckBox = dtps.ShowCalendar = true;
                 dtpe.Value = map.TravelPathEndDate;
                 dtpe.Checked = map.TravelPathEndDateEnable;
@@ -198,6 +219,7 @@ namespace EDDiscovery.UserControls.Map3D
                 galfp.FlowPadding = new Padding(2, 2, 2, 2);
                 galfp.BackColor = pform.BackColor;
                 galgb.Add(galfp);
+                vpos += galgb.Height + ypad;
 
                 for (int i = map.edsmmapping.RenderableMapTypes.Length - 1; i >= 0; i--)
                 {
@@ -218,8 +240,6 @@ namespace EDDiscovery.UserControls.Map3D
                 butgonoff.Checked = map.GalObjectDisplay;
                 butgonoff.CheckChanged += (e1) => { map.GalObjectDisplay = !map.GalObjectDisplay; };
                 galfp.Add(butgonoff);
-
-                vpos += galgb.Height + ypad;
             }
 
             { // EDSM regions
@@ -236,21 +256,21 @@ namespace EDDiscovery.UserControls.Map3D
                 butedre.UserCanOnlyCheck = true;
                 edsmregionsgb.Add(butedre);
 
-                GLCheckBox buted2 = new GLCheckBox("EDSMR2", new Rectangle(50, 0, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.ShowGalaxy") as Bitmap, null);
+                GLCheckBox buted2 = new GLCheckBox("EDSMR2", new Rectangle(50, 0, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.RegionOutlines") as Bitmap, null);
                 buted2.Checked = map.EDSMRegionsOutlineEnable;
                 buted2.Enabled = map.EDSMRegionsEnable;
                 buted2.ToolTipText = "Enable Region Outlines";
                 buted2.CheckChanged += (e1) => { map.EDSMRegionsOutlineEnable = !map.EDSMRegionsOutlineEnable; };
                 edsmregionsgb.Add(buted2);
 
-                GLCheckBox buted3 = new GLCheckBox("EDSMR3", new Rectangle(100, 0, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.ShowGalaxy") as Bitmap, null);
+                GLCheckBox buted3 = new GLCheckBox("EDSMR3", new Rectangle(100, 0, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.RegionShading") as Bitmap, null);
                 buted3.Checked = map.EDSMRegionsShadingEnable;
                 buted3.Enabled = map.EDSMRegionsEnable;
                 buted3.ToolTipText = "Enable Region Shading";
                 buted3.CheckChanged += (e1) => { map.EDSMRegionsShadingEnable = !map.EDSMRegionsShadingEnable; };
                 edsmregionsgb.Add(buted3);
 
-                GLCheckBox buted4 = new GLCheckBox("EDSMR4", new Rectangle(150, 0, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.ShowGalaxy") as Bitmap, null);
+                GLCheckBox buted4 = new GLCheckBox("EDSMR4", new Rectangle(150, 0, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.RegionNames") as Bitmap, null);
                 buted4.Checked = map.EDSMRegionsTextEnable;
                 buted4.Enabled = map.EDSMRegionsEnable;
                 buted4.ToolTipText = "Enable Region Naming";
@@ -272,21 +292,21 @@ namespace EDDiscovery.UserControls.Map3D
                 butelre.UserCanOnlyCheck = true;
                 eliteregionsgb.Add(butelre);
 
-                GLCheckBox butel2 = new GLCheckBox("ELITER2", new Rectangle(50, 0, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.ShowGalaxy") as Bitmap, null);
+                GLCheckBox butel2 = new GLCheckBox("ELITER2", new Rectangle(50, 0, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.RegionOutlines") as Bitmap, null);
                 butel2.Checked = map.EliteRegionsOutlineEnable;
                 butel2.Enabled = map.EliteRegionsEnable;
                 butel2.ToolTipText = "Enable Region Outlines";
                 butel2.CheckChanged += (e1) => { map.EliteRegionsOutlineEnable = !map.EliteRegionsOutlineEnable; };
                 eliteregionsgb.Add(butel2);
 
-                GLCheckBox butel3 = new GLCheckBox("ELITER3", new Rectangle(100, 0, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.ShowGalaxy") as Bitmap, null);
+                GLCheckBox butel3 = new GLCheckBox("ELITER3", new Rectangle(100, 0, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.RegionShading") as Bitmap, null);
                 butel3.Checked = map.EliteRegionsShadingEnable;
                 butel3.Enabled = map.EliteRegionsEnable;
                 butel3.ToolTipText = "Enable Region Shading";
                 butel3.CheckChanged += (e1) => { map.EliteRegionsShadingEnable = !map.EliteRegionsShadingEnable; };
                 eliteregionsgb.Add(butel3);
 
-                GLCheckBox butel4 = new GLCheckBox("ELITER4", new Rectangle(150, 0, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.ShowGalaxy") as Bitmap, null);
+                GLCheckBox butel4 = new GLCheckBox("ELITER4", new Rectangle(150, 0, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.RegionNames") as Bitmap, null);
                 butel4.Checked = map.EliteRegionsTextEnable;
                 butel4.Enabled = map.EliteRegionsEnable;
                 butel4.ToolTipText = "Enable Region Naming";
@@ -313,6 +333,8 @@ namespace EDDiscovery.UserControls.Map3D
 
                 butelre.CheckChanged += butedre.CheckChanged;
             }
+
+            pform.ClientHeight = vpos;
 
             map.displaycontrol.Add(pform);
         }

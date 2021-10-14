@@ -55,7 +55,7 @@ namespace EDDiscovery.UserControls
 
             // load setup restore settings of map
             map = new Map();
-            map.Start(glwfc,discoveryform.galacticMapping, discoveryform.eliteRegions, discoveryform.history);
+            map.Start(glwfc,discoveryform.galacticMapping, discoveryform.eliteRegions, this);
             map.LoadState(mapsave);
 
             // start clock
@@ -75,6 +75,11 @@ namespace EDDiscovery.UserControls
             glwfc.EnsureCurrentContext();           // must make sure current context before we call all the dispose functions
             map.SaveState(mapsave);
             map.Dispose();
+        }
+
+        public void ShowSystem(ISystem s)
+        {
+            ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), s, true, discoveryform.history);
         }
 
         private void SystemTick(object sender, EventArgs e)
