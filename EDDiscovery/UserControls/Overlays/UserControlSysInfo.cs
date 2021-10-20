@@ -352,7 +352,7 @@ namespace EDDiscovery.UserControls
                 var counts = MaterialCommoditiesMicroResourceList.Count(mcl,0);
                 int cargocount = counts[(int)MaterialCommodityMicroResourceType.CatType.Commodity];
 
-                int cc = (he.ShipInformation) != null ? he.ShipInformation.CargoCapacity() : 0;
+                int cc = he.ShipInformation?.CargoCapacity() ?? 0;// so if we don't have a ShipInformation, use 0
                 if (cc > 0)
                     textBoxCargo.Text = cargocount.ToString() + "/" + cc.ToString();
                 else

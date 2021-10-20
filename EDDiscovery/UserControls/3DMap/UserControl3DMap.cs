@@ -79,7 +79,7 @@ namespace EDDiscovery.UserControls
 
         public void ShowSystem(ISystem s)
         {
-            ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), s, true, discoveryform.history);
+            ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), s, true, discoveryform.history, 0.8f, System.Drawing.Color.Purple);
         }
 
         private void SystemTick(object sender, EventArgs e)

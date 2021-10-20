@@ -24,7 +24,8 @@ namespace EDDiscovery.UserControls
 {
     public static class ScanDisplayForm
     {
-        public static async void ShowScanOrMarketForm(Form parent, Object tag, bool checkedsm, HistoryList hl)     // tag can be a Isystem or an He.. output depends on it.
+        // tag can be a Isystem or an He.. output depends on it.
+        public static async void ShowScanOrMarketForm(Form parent, Object tag, bool checkedsm, HistoryList hl, float opacity = 1, Color? keycolour = null)     
         {
             if (tag == null)
                 return;
@@ -54,7 +55,7 @@ namespace EDDiscovery.UserControls
             {      
                 sd = new ScanDisplayUserControl();
                 sd.SystemDisplay.ShowEDSMBodies =checkedsm;
-                int selsize = (int)(EDDTheme.Instance.GetFont.Height / 16.0f * 48.0f);
+                int selsize = (int)(EDDTheme.Instance.GetFont.Height / 10.0f * 48.0f);
                 sd.SystemDisplay.SetSize( selsize );
                 sd.Size = infosize;
 
@@ -89,6 +90,13 @@ namespace EDDiscovery.UserControls
             };
 
             f.InitCentred( parent, parent.Icon, title, null, null, asm , closeicon:true);
+
+            if (opacity < 1)
+            {
+                f.Opacity = opacity;
+                f.BackColor = keycolour.Value;
+                f.TransparencyKey = keycolour.Value;
+            }
 
             f.Show(parent);
         }

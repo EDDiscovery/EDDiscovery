@@ -288,7 +288,7 @@ namespace EDDiscovery.UserControls.Map3D
             float sunsize = 1.0f;
             if ((ctrlo & 128) != 0)
             {
-                travelpath = new TravelPath(50000, sunsize, 0.8f, findstarblock, true, items, rObjects );
+                travelpath = new TravelPath(50000, sunsize, 0.4f, findstarblock, true, items, rObjects );
                 travelpath.CreatePath(parent.discoveryform.history);
                 travelpath.SetSystem(parent.discoveryform.history.LastSystem);
             }

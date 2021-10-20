@@ -149,7 +149,8 @@ namespace EDDiscovery
             if (uifuel != null && history != null)
             {
                 history.ShipInformationList.UIFuel(uifuel);             // update the SI global value
-                history.GetLast?.UpdateShipInformation(history.ShipInformationList.CurrentShip);    // and make the last entry have this updated info.
+                if (history.ShipInformationList.CurrentShip != null )   // just to be paranoid
+                    history.GetLast?.UpdateShipInformation(history.ShipInformationList.CurrentShip);    // and make the last entry have this updated info.
             }
 
             OnNewUIEvent?.Invoke(u);

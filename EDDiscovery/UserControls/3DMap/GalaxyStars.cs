@@ -39,7 +39,8 @@ namespace EDDiscovery.UserControls.Map3D
 
         private const int MaxObjectsMargin = 1000;
         private const int SectorSize = 100;
-        private const int MaxRequests = 27*2;
+        private const int MaxRequests = 27 * 2;
+        private const int MaxSubthreads = 16;
 
         public GalaxyStars(GLItemsList items, GLRenderProgramSortedList rObjects, float sunsize, int findbufferbinding)
         {
@@ -171,8 +172,13 @@ namespace EDDiscovery.UserControls.Map3D
 
                         System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 100000} {sector.pos} requestor accepts");
 
+                        Interlocked.Add(ref subthreadsrunning, 1);      // committed to run, and count subthreads
+
                         Thread p = new Thread(FillSectorThread);
                         p.Start(sector);
+
+                        while (subthreadsrunning >= MaxSubthreads)      // pause the take if we have too much work going on
+                            Thread.Sleep(100);
 
                     } while (requestedsectors.TryTake(out sector));     // until empty..
 
@@ -188,7 +194,6 @@ namespace EDDiscovery.UserControls.Map3D
         // in a thread, look up the sector 
         private void FillSectorThread(Object seco)
         {
-            int tno = Interlocked.Add(ref subthreadsrunning, 1);      // count subthreads, on shutdown, we need to wait until they all complete
             Sector d = (Sector)seco;
 
             //System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 100000} {d.pos} {tno} start");
