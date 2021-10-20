@@ -322,7 +322,7 @@ namespace EDDiscovery.UserControls.Map3D
                     {
                         MouseClick = (s1, e1) => {
                             var nl = NameLocationDescription(rightclickmenu.Tag);
-                            gl3dcontroller.SlewToPositionZoom(nl.Item2, 100, -1);
+                            gl3dcontroller.SlewToPositionZoom(nl.Item2, 300, -1);
                         }
                     },
                     new GLMenuItem("RCMGoto", "Goto Position")
@@ -382,6 +382,7 @@ namespace EDDiscovery.UserControls.Map3D
             // 3d controller
 
             gl3dcontroller = new Controller3D();
+            gl3dcontroller.PosCamera.ZoomMax = 600;     // gives 5ly
             gl3dcontroller.ZoomDistance = 3000F / lyscale;
             gl3dcontroller.PosCamera.ZoomMin = 0.1f;
             gl3dcontroller.PosCamera.ZoomScaling = 1.1f;
@@ -403,7 +404,7 @@ namespace EDDiscovery.UserControls.Map3D
                 displaycontrol.Paint += (o, ts) =>        // subscribing after start means we paint over the scene, letting transparency work
                 {
                     // MCUB set up by Controller3DDraw which did the work first
-                    galaxymenu.UpdateCoords(gl3dcontroller.MatrixCalc);
+                    galaxymenu.UpdateCoords(gl3dcontroller);
                     displaycontrol.Animate(glwfc.ElapsedTimems);
                     displaycontrol.Render(glwfc.RenderState, ts);
                 };
@@ -460,8 +461,11 @@ namespace EDDiscovery.UserControls.Map3D
 
         public void UpdateTravelPath(HistoryList hl )
         {
-            travelpath.CreatePath(hl);
-            travelpath.SetSystem(hl.LastSystem);
+            if (travelpath != null)
+            {
+                travelpath.CreatePath(hl);
+                travelpath.SetSystem(hl.LastSystem);
+            }
         }
 
         #endregion
@@ -498,7 +502,7 @@ namespace EDDiscovery.UserControls.Map3D
                     lasteyedistance = gl3dcontroller.MatrixCalc.EyeDistance;
                 }
 
-                vertshader.SetUniforms(gl3dcontroller.MatrixCalc.TargetPosition, lastgridwidth, gridrenderable.InstanceCount);
+                vertshader.SetUniforms(gl3dcontroller.MatrixCalc.LookAt, lastgridwidth, gridrenderable.InstanceCount);
     
                 // set the coords fader
 
@@ -526,7 +530,7 @@ namespace EDDiscovery.UserControls.Map3D
             if (galaxystars != null && galaxystars.Enable)
             {
                 if (gl3dcontroller.MatrixCalc.EyeDistance < 400)
-                    galaxystars.Request9BoxConditional(gl3dcontroller.PosCamera.Lookat);
+                    galaxystars.Request9BoxConditional(gl3dcontroller.PosCamera.LookAt);
 
                 galaxystars.Update(time, gl3dcontroller.MatrixCalc.EyeDistance);
             }
@@ -557,7 +561,7 @@ namespace EDDiscovery.UserControls.Map3D
         public void SetGalObjectTypeEnable(string id, bool state) { galmapobjects.SetGalObjectTypeEnable(id, state); glwfc.Invalidate(); }
         public bool GetGalObjectTypeEnable(string id) { return galmapobjects?.GetGalObjectTypeEnable(id) ?? false; }
         public void SetAllGalObjectTypeEnables(string set) { galmapobjects.SetAllEnables(set); glwfc.Invalidate(); }
-        public string GetAllGalObjectTypeEnables() { return galmapobjects.GetAllEnables(); }
+        public string GetAllGalObjectTypeEnables() { return galmapobjects?.GetAllEnables() ?? ""; }
         public bool EDSMRegionsEnable { get { return edsmgalmapregions?.Enable ?? false; } set { edsmgalmapregions.Enable = value; glwfc.Invalidate(); } }
         public bool EDSMRegionsOutlineEnable { get { return edsmgalmapregions?.Outlines ?? false; } set { edsmgalmapregions.Outlines = value; glwfc.Invalidate(); } }
         public bool EDSMRegionsShadingEnable { get { return edsmgalmapregions?.Regions ?? false; } set { edsmgalmapregions.Regions = value; glwfc.Invalidate(); } }
@@ -575,6 +579,12 @@ namespace EDDiscovery.UserControls.Map3D
                 gl3dcontroller.SlewToPosition(new Vector3((float)he.System.X, (float)he.System.Y, (float)he.System.Z), -1);
                 SetEntryText(he.System.Name);
             }
+        }
+
+        public void ViewGalaxy()
+        {
+            gl3dcontroller.PosCamera.CameraRotation = 0;
+            gl3dcontroller.PosCamera.GoToZoomPan(new Vector3(0, 0, 0), new Vector2(140.75f, 0), 0.5f,3);
         }
 
         #endregion
@@ -610,6 +620,8 @@ namespace EDDiscovery.UserControls.Map3D
             Grid = defaults.GetSetting("GRIDS", true);
             GalaxyStars = defaults.GetSetting("GALSTARS", true);
             GalaxyStarsMaxObjects = defaults.GetSetting("GALSTARSOBJ", 500000);
+
+            gl3dcontroller.SetPositionCamera(defaults.GetSetting("POSCAMERA", ""));     // go thru gl3dcontroller to set default position, so we reset the model matrix
         }
 
         public void SaveState(MapSaver defaults)
@@ -634,6 +646,7 @@ namespace EDDiscovery.UserControls.Map3D
             defaults.PutSetting("GRIDS", Grid);
             defaults.PutSetting("GALSTARS", GalaxyStars);
             defaults.PutSetting("GALSTARSOBJ", GalaxyStarsMaxObjects);
+            defaults.PutSetting("POSCAMERA", gl3dcontroller.PosCamera.StringPositionCamera);
         }
 
         private void SetEntryText(string text)
@@ -645,9 +658,10 @@ namespace EDDiscovery.UserControls.Map3D
 
         private Object FindObjectOnMap(Point loc)
         {
-            var he = travelpath.FindSystem(loc, glwfc.RenderState, matrixcalc.ViewPort.Size, out float tz);     //z are maxvalue if not found
-            var gmo = galmapobjects.FindPOI(loc, glwfc.RenderState, matrixcalc.ViewPort.Size, out float gz);
-            var sys = galaxystars.Find(loc, glwfc.RenderState, matrixcalc.ViewPort.Size, out float sz);
+            float tz = float.MinValue, gz = float.MinValue, sz = float.MinValue;
+            var he = travelpath?.FindSystem(loc, glwfc.RenderState, matrixcalc.ViewPort.Size, out tz);     //z are maxvalue if not found
+            var gmo = galmapobjects?.FindPOI(loc, glwfc.RenderState, matrixcalc.ViewPort.Size, out gz);
+            var sys = galaxystars?.Find(loc, glwfc.RenderState, matrixcalc.ViewPort.Size, out sz);
 
             if (gmo != null && gz < sz && gz < tz)      // got gmo, and closer than the other two
                 return gmo;

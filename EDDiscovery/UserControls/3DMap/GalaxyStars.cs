@@ -33,7 +33,7 @@ namespace EDDiscovery.UserControls.Map3D
         public Color BackText { get; set; } = Color.Transparent;
         public Vector3 LabelSize { get; set; } = new Vector3(5, 0, 5f/4f);
         public Vector3 LabelOffset { get; set; } = new Vector3(0, -1.2f, 0);
-        public Size BitMapSize { get; set; } = new Size(128, 32);
+        public Size BitMapSize { get; set; } = new Size(96, 32);
         public bool Enable { get { return sunshader.Enable; } set { sunshader.Enable = textshader.Enable = value; } }
         public int MaxObjectsAllowed { get; set; } = 100000;
 
@@ -111,7 +111,7 @@ namespace EDDiscovery.UserControls.Map3D
         public void Request9x3Box(Vector3 pos)
         {
             CurrentPos = pos;
-            System.Diagnostics.Debug.WriteLine($"Request 9 box ${pos}");
+            //System.Diagnostics.Debug.WriteLine($"Request 9 box ${pos}");
 
             for (int i = 0; i <= 2; i++)
             {
@@ -126,7 +126,7 @@ namespace EDDiscovery.UserControls.Map3D
                 Request(new Vector3(pos.X - SectorSize, pos.Y + y, pos.Z + SectorSize));
                 Request(new Vector3(pos.X - SectorSize, pos.Y + y, pos.Z - SectorSize));
             }
-            System.Diagnostics.Debug.WriteLine($"End 9 box");
+            //System.Diagnostics.Debug.WriteLine($"End 9 box");
         }
 
         // send the request to the requestor using a blocking queue
@@ -163,14 +163,18 @@ namespace EDDiscovery.UserControls.Map3D
                     do
                     {
                         // reduce memory use first by bitmap cleaning 
-                        while (cleanbitmaps.TryDequeue(out Sector sectoclean))
+
+                        lock (cleanbitmaps)     // foreground also does this if required
                         {
-                            // System.Diagnostics.Debug.WriteLine($"Clean bitmap for {sectoclean.pos}");
-                            BitMapHelpers.Dispose(sectoclean.bitmaps);
-                            sectoclean.bitmaps = null;
+                            while (cleanbitmaps.TryDequeue(out Sector sectoclean))
+                            {
+                                //System.Diagnostics.Debug.WriteLine($"Clean bitmap for {sectoclean.pos}");
+                                BitMapHelpers.Dispose(sectoclean.bitmaps);
+                                sectoclean.bitmaps = null;
+                            }
                         }
 
-                        System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 100000} {sector.pos} requestor accepts");
+                        //System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 100000} {sector.pos} requestor accepts");
 
                         Interlocked.Add(ref subthreadsrunning, 1);      // committed to run, and count subthreads
 
@@ -230,19 +234,20 @@ namespace EDDiscovery.UserControls.Map3D
             return new Vector4((float)x / SystemClass.XYZScalar, (float)y / SystemClass.XYZScalar, (float)z / SystemClass.XYZScalar, 0);
         }
 
-        ulong timelastadded = 0;
+        ulong timelastchecked = 0;
+        ulong timelastbitmapcheck = 0;
 
         // foreground, called on each frame, allows update of shader and queuing of new objects
         public void Update(ulong time, float eyedistance)
         {
-            if (time - timelastadded > 50)
+            if (time - timelastchecked > 50)
             {
                 if (generatedsectors.Count > 0)
                 {
                     int max = 2;
                     while (max-- > 0 && generatedsectors.TryDequeue(out Sector d) )      // limit fill rate.. (max first)
                     {
-                        System.Diagnostics.Debug.WriteLine($"Add {d.pos} number {d.systems} total {slset.Objects}");
+                       // System.Diagnostics.Debug.WriteLine($"Add {d.pos} number {d.systems} total {slset.Objects}");
                         if (d.systems > 0)      // may return zero
                         { 
                             slset.Add(d.pos, d.text, d.positions, d.textpos, d.bitmaps, 0, d.systems);
@@ -253,7 +258,6 @@ namespace EDDiscovery.UserControls.Map3D
                         d.textpos = null;           // and these are not needed
 
                         //System.Diagnostics.Debug.WriteLine($"..add complete {d.pos} {slset.Objects}" );
-                        timelastadded = time;
                     }
                 }
 
@@ -261,6 +265,22 @@ namespace EDDiscovery.UserControls.Map3D
                 {
                     slset.RemoveUntil(MaxObjectsAllowed-MaxObjectsMargin);
                 }
+                timelastchecked = time;
+            }
+
+            if ( time - timelastbitmapcheck > 60000)    // only do this infrequently
+            {
+                lock (cleanbitmaps)     // foreground also does this if required
+                {
+                    while (cleanbitmaps.TryDequeue(out Sector sectoclean))
+                    {
+                        //System.Diagnostics.Debug.WriteLine($"Foreground Clean bitmap for {sectoclean.pos}");
+                        BitMapHelpers.Dispose(sectoclean.bitmaps);
+                        sectoclean.bitmaps = null;
+                    }
+                }
+
+                timelastbitmapcheck = time;
             }
 
             const int rotperiodms = 10000;

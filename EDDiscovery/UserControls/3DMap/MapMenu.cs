@@ -52,7 +52,12 @@ namespace EDDiscovery.UserControls.Map3D
             map.displaycontrol.Add(tpforward);
             tpforward.MouseClick = (o, e1) => { g.GoToTravelSystem(1); };
 
-            GLTextBoxAutoComplete tptextbox = new GLTextBoxAutoComplete(EntryTextName, new Rectangle(170, 10, 300, iconsize), "");
+            GLImage tpgalview = new GLImage("MSTPGalaxy", new Rectangle(170, 10, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.ShowGalaxy") as Bitmap);
+            tpgalview.ToolTipText = "View Galaxy";
+            map.displaycontrol.Add(tpgalview);
+            tpgalview.MouseClick = (o, e1) => { g.ViewGalaxy(); };
+
+            GLTextBoxAutoComplete tptextbox = new GLTextBoxAutoComplete(EntryTextName, new Rectangle(210, 10, 300, iconsize), "");
             tptextbox.TextAlign = ContentAlignment.MiddleLeft;
             tptextbox.BackColor = Color.FromArgb(96,50,50,50);
             tptextbox.BorderColor = Color.Gray;
@@ -339,11 +344,12 @@ namespace EDDiscovery.UserControls.Map3D
             map.displaycontrol.Add(pform);
         }
 
-        public void UpdateCoords(GLOFC.GLMatrixCalc c)
+        public void UpdateCoords(GLOFC.Controller.Controller3D pc)
         {
-            status.Text = c.TargetPosition.X.ToStringInvariant("N1") + " ," + c.TargetPosition.Y.ToStringInvariant("N1") + " ,"
-                         + c.TargetPosition.Z.ToStringInvariant("N1") + " Dist " + c.EyeDistance.ToStringInvariant("N1") + " Eye " +
-                         c.EyePosition.X.ToStringInvariant("N1") + " ," + c.EyePosition.Y.ToStringInvariant("N1") + " ," + c.EyePosition.Z.ToStringInvariant("N1");
+            status.Text = pc.PosCamera.LookAt.X.ToStringInvariant("N1") + " ," + pc.PosCamera.LookAt.Y.ToStringInvariant("N1") + " ,"
+                         + pc.PosCamera.LookAt.Z.ToStringInvariant("N1") + " Dist " + pc.PosCamera.EyeDistance.ToStringInvariant("N1") + " Eye " +
+                         pc.PosCamera.EyePosition.X.ToStringInvariant("N1") + " ," + pc.PosCamera.EyePosition.Y.ToStringInvariant("N1") + " ," + pc.PosCamera.EyePosition.Z.ToStringInvariant("N1");
+                         //+ " ! " + pc.PosCamera.CameraDirection + " R " + pc.PosCamera.CameraRotation;
         }
 
         static void Theme(GLBaseControl s)      // run on each control during add, theme it
