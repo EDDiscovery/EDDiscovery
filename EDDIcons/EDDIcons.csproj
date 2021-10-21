@@ -578,6 +578,7 @@
     <EmbeddedResource Include="Panels\Map3D.png" />
     <EmbeddedResource Include="GalMap\GeyserPOI.png" />
     <EmbeddedResource Include="GalMap\Regional.png" />
+    <EmbeddedResource Include="Journal\ScanBaryCentre.png" />
     <EmbeddedResource Include="Journal\FSSBodySignals.png" />
     <EmbeddedResource Include="Journal\Resupply.png" />
     <EmbeddedResource Include="Journal\ModuleBuyAndStore.png" />

@@ -177,11 +177,8 @@ namespace EDDiscovery
                 {
                     string stdfolder = EDDOptions.Instance.DefaultJournalFolder.HasChars() ? EDDOptions.Instance.DefaultJournalFolder :
                                                                                 EliteDangerousCore.FrontierFolder.FolderName();     // may be null
-                    string[] stdfolders =
-                    {
-                        stdfolder ?? ".",
-                        EDDOptions.Instance.CAPIDirectory()
-                    };
+
+                    string[] stdfolders = stdfolder != null ? new string[] { stdfolder, EDDOptions.Instance.CAPIDirectory() } : new string[] { EDDOptions.Instance.CAPIDirectory() };
 
                     journalmonitor.SetupWatchers(stdfolders, EDDOptions.Instance.DefaultJournalMatchFilename, EDDOptions.Instance.MinJournalDateUTC);         // monitors are stopped, set up watchers
 
