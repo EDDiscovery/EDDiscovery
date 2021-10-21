@@ -559,7 +559,6 @@
     <EmbeddedResource Include="GalMap\RegionNames.png" />
     <EmbeddedResource Include="GalMap\RegionOutlines.png" />
     <EmbeddedResource Include="GalMap\RegionShading.png" />
-    <EmbeddedResource Include="Journal\ScanBaryCentre.png" />
     <EmbeddedResource Include="GalMap\chevron.png" />
     <EmbeddedResource Include="GalMap\EliteMovement.png" />
     <EmbeddedResource Include="GalMap\lensflare_white2.png" />
