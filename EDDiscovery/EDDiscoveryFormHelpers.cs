@@ -197,16 +197,16 @@ namespace EDDiscovery
 
         public void Open3DMap()         // Current map - open at last position or configured position
         {
-            if (!Map.Is3DMapsRunning)            // if not running, click the 3dmap button
+            if (!old3DMap.Is3DMapsRunning)            // if not running, click the 3dmap button
             {
                 this.Cursor = Cursors.WaitCursor;
 
                 ISystem last = PrimaryCursor.GetCurrentHistoryEntry?.System;
 
-                Map.Prepare(last, EDCommander.Current.HomeSystemTextOrSol,
+                old3DMap.Prepare(last, EDCommander.Current.HomeSystemTextOrSol,
                             EDCommander.Current.MapCentreOnSelection ? last : EDCommander.Current.HomeSystemIOrSol,
-                            EDCommander.Current.MapZoom, Controller.history.FilterByTravel());
-                Map.Show();
+                            EDCommander.Current.MapZoom, Controller.history.FilterByTravelTime(null,null));
+                old3DMap.Show();
                 this.Cursor = Cursors.Default;
             }
         }
@@ -216,16 +216,16 @@ namespace EDDiscovery
             Open3DMap();
 
             if (route!=null)
-                Map.SetPlanned(route);
+                old3DMap.SetPlanned(route);
 
             if (zoom != null)
-                Map.SetZoom(zoom.Value);
+                old3DMap.SetZoom(zoom.Value);
 
             if ( centerSystem != null )
             {
-                Map.MoveToSystem(centerSystem);
+                old3DMap.MoveToSystem(centerSystem);
             }
-            Map.Show();
+            old3DMap.Show();
         }
 
         #endregion

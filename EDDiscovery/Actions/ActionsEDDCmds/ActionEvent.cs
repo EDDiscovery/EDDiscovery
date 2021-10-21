@@ -205,7 +205,7 @@ namespace EDDiscovery.Actions
                         else if (cmdname.Equals("info"))
                         {
                             ActionVars.SystemVarsFurtherInfo(ap, hl, he.System, prefix);
-                            ActionVars.ShipModuleInformation(ap, he.ShipInformation, prefix);
+                            ActionVars.ShipModuleInformation(ap, he.ShipInformation, prefix);       // protected against SI being null
                         }
                         else if (cmdname.Equals("missions"))
                         {
@@ -253,7 +253,7 @@ namespace EDDiscovery.Actions
                 {
                     Variables values = new Variables();
                     ActionVars.HistoryEventVars(values, hl[pos], prefix);
-                    ActionVars.ShipBasicInformation(values, hl[pos].ShipInformation, prefix);
+                    ActionVars.ShipBasicInformation(values, hl[pos].ShipInformation, prefix);   // protected against SI being null
                     ActionVars.SystemVars(values, hl[pos].System, prefix);
                     ap.Add(values);
                 }

@@ -32,14 +32,11 @@ namespace EDDiscovery.Icons
         public static Image Main_Addons_StopCurrentAction { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Main.Addons.StopCurrentAction"); } }
         public static Image Main_Admin_ClearEDSMIDs { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Main.Admin.ClearEDSMIDs"); } }
         public static Image Main_Admin_DeleteDupFSDJumps { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Main.Admin.DeleteDupFSDJumps"); } }
-        public static Image Main_Admin_EDDBSystemsSync { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Main.Admin.EDDBSystemsSync"); } }
         public static Image Main_Admin_EDSMSystemsSync { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Main.Admin.EDSMSystemsSync"); } }
-        public static Image Main_Admin_ExportVisitedStars { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Main.Admin.ExportVisitedStars"); } }
         public static Image Main_Admin_ReadNetLogs { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Main.Admin.ReadNetLogs"); } }
         public static Image Main_Admin_RescanJournals { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Main.Admin.RescanJournals"); } }
         public static Image Main_Admin_ResetHistory { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Main.Admin.ResetHistory"); } }
         public static Image Main_Admin_SendUnsyncedEDDN { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Main.Admin.SendUnsyncedEDDN"); } }
-        public static Image Main_Admin_SendUnsyncedEGO { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Main.Admin.SendUnsyncedEGO"); } }
         public static Image SendInara { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Main.Admin.SendInara"); } }
         public static Image Main_Admin_ShowLogFiles { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Main.Admin.ShowLogFiles"); } }
         public static Image Main_Help_About { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Main.Help.About"); } }
@@ -47,15 +44,12 @@ namespace EDDiscovery.Icons
         public static Image Main_Help_DiscordChat { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Main.Help.DiscordChat"); } }
         public static Image Main_Help_FrontierForumThread { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Main.Help.FrontierForumThread"); } }
         public static Image Main_Help_Github { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Main.Help.Github"); } }
-        public static Image Main_Help_Help { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Main.Help.Help"); } }
         public static Image Main_Help_ReportIssue { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Main.Help.ReportIssue"); } }
         public static Image Main_Help_SafeModeHelp { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Main.Help.SafeModeHelp"); } }
         public static Image Main_Toolbar_EditAddons { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Main.Toolbar.EditAddons"); } }
         public static Image Main_Toolbar_ManageAddOns { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Main.Toolbar.ManageAddOns"); } }
-        public static Image Main_Toolbar_Open3DMap { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Main.Toolbar.Open3DMap"); } }
         public static Image Main_Toolbar_Popouts { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Main.Toolbar.Popouts"); } }
         public static Image Main_Toolbar_Refresh { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Main.Toolbar.Refresh"); } }
-        public static Image Main_Toolbar_SyncEDSM { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Main.Toolbar.SyncEDSM"); } }
         public static Image Main_Tools_Exit { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Main.Tools.Exit"); } }
         public static Image Main_Tools_Open3DMap { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Main.Tools.Open3DMap"); } }
         public static Image Main_Tools_Popouts_DisableTransparency { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Main.Tools.Popouts.DisableTransparency"); } }
@@ -83,7 +77,6 @@ namespace EDDiscovery.Icons
         public static Image Map3D_EliteMovement { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Map3D.EliteMovement"); } }
         public static Image Map3D_Filter_Menu { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Map3D.Filter.Menu"); } }
         public static Image Map3D_Filter_ShowAllStars { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Map3D.Filter.ShowAllStars"); } }
-        public static Image Map3D_Filter_ShowPopSystems { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Map3D.Filter.ShowPopSystems"); } }
         public static Image Map3D_FilterDate { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Map3D.FilterDate"); } }
         public static Image Map3D_GalObjects { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Map3D.GalObjects"); } }
         public static Image Map3D_Grid_Coords { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Map3D.Grid.Coords"); } }
@@ -156,33 +149,19 @@ namespace EDDiscovery.Icons
         public static Image Route_ExportToExcel { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Route.ExportToExcel"); } }
         #endregion
         #region EDDiscovery.UserControls.UserControlScan
-        public static Image Scan_Bodies_Barycentre { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.Bodies.Barycentre"); } }
-        public static Image Scan_Bodies_Belt { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.Bodies.Belt"); } }
         public static Image Scan_Bodies_Landable { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.Bodies.Landable"); } }
         public static Image Scan_Bodies_HighValue { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.Bodies.HighValue"); } }
-        public static Image Scan_Bodies_Terraformable { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.Bodies.Terraformable"); } }
         public static Image Scan_Bodies_Volcanism { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.Bodies.Volcanism"); } }
         public static Image Scan_Bodies_Signals { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.Bodies.Signals"); } }
         public static Image Scan_Bodies_Mapped { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.Bodies.Mapped"); } }
-        public static Image Scan_Bodies_MappedByOthers { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.Bodies.MappedByOthers"); } }
-        public static Image Scan_Bodies_DiscoveredByOthers { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.Bodies.DiscoveredByOthers"); } }
         public static Image Scan_Bodies_RingOnly { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.Bodies.RingOnly"); } }
-        public static Image Scan_Bodies_RingGap { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.Bodies.RingGap"); } }
-        public static Image Scan_Bodies_MaterialMore { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.Bodies.MaterialMore"); } }
-        public static Image Scan_Bodies_Material { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.Bodies.Material"); } }
         public static Image Scan_DisplaySystemAlways { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.DisplaySystemAlways"); } }
         public static Image Scan_ExportToExcel { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.ExportToExcel"); } }
         public static Image Scan_FetchEDSMBodies { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.FetchEDSMBodies"); } }
         public static Image Scan_ShowAllMaterials { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.ShowAllMaterials"); } }
         public static Image Scan_FSD { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.FSD"); } }
         public static Image Scan_HideFullMaterials { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.HideFullMaterials"); } }
-        public static Image Scan_Bodies_CZ { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.Bodies.CZ"); } }
-        public static Image Scan_Bodies_Installations { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.Bodies.Installations"); } }
         public static Image Scan_Bodies_NSP { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.Bodies.NSP"); } }
-        public static Image Scan_Bodies_RES { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.Bodies.RES"); } }
-        public static Image Scan_Bodies_Stations { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.Bodies.Stations"); } }
-        public static Image Scan_Bodies_Carriers { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.Bodies.Carriers"); } }
-        public static Image Scan_Bodies_USS { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.Bodies.USS"); } }
         public static Image Scan_ShowMoons { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.ShowMoons"); } }
         public static Image Scan_ShowOverlays { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.ShowOverlays"); } }
         public static Image Scan_ShowRareMaterials { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.ShowRareMaterials"); } }
@@ -211,8 +190,6 @@ namespace EDDiscovery.Icons
         #endregion
         #region EDDiscovery.UserControls.UserControlStarList
         public static Image StarList_EDSM { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.StarList.EDSM"); } }
-        public static Image StarList_BodyClass { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.StarList.BodyClasses"); } }
-        public static Image StarList_Jumponium { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.StarList.Jumponium"); } }
         public static Image StarList_ExportToExcel { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.StarList.ExportToExcel"); } }
         #endregion
         #region EDDiscovery.UserControls.UserControlStatsTime
@@ -252,7 +229,6 @@ namespace EDDiscovery.Icons
         public static Image EDDB { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.SysInfo.EDDB"); } }
         public static Image EDSM { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.SysInfo.EDSM"); } }
         public static Image Inara { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.SysInfo.Inara"); } }
-        public static Image Ross { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.SysInfo.Ross"); } }
         #endregion
         #region TabStrip
         public static Image TabStrip_Popout { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.TabStrip.Popout"); } }
@@ -284,10 +260,6 @@ namespace EDDiscovery.Icons
         #region Mat Commds
         public static Image matnozeros { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.MatCommds.matnozeros"); } }
         public static Image matshowzeros { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.MatCommds.matshowzeros"); } }
-        #endregion
-        #region General
-        public static Image All { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.General.All"); } }
-        public static Image None { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.General.None"); } }
         #endregion
         #region Help
         public static Image Help_Wiki { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Help.Wiki"); } }

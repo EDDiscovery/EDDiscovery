@@ -311,7 +311,6 @@
     <EmbeddedResource Include="Controls\Map3D\Stars\ShowNames.png" />
     <EmbeddedResource Include="Controls\Map3D\Bookmarks\ShowNotemarks.png" />
     <EmbeddedResource Include="Controls\Map3D\Filter\ShowAllStars.png" />
-    <EmbeddedResource Include="Controls\Map3D\Filter\ShowPopSystems.png" />
     <EmbeddedResource Include="Controls\Map3D\Recorder\Clear.png" />
     <EmbeddedResource Include="Controls\Map3D\Navigation\GoForwardOnJump.png" />
     <EmbeddedResource Include="Controls\Map3D\Grid\Coords.png" />
@@ -358,7 +357,6 @@
     <EmbeddedResource Include="Controls\Main\Addons\ManageAddOns.png" />
     <EmbeddedResource Include="Controls\Main\Addons\StopCurrentAction.png" />
     <EmbeddedResource Include="Controls\Main\Admin\DeleteDupFSDJumps.png" />
-    <EmbeddedResource Include="Controls\Main\Admin\EDDBSystemsSync.png" />
     <EmbeddedResource Include="Controls\Main\Admin\ClearEDSMIDs.png" />
     <EmbeddedResource Include="Controls\Main\Admin\SendUnsyncedEDDN.png" />
     <EmbeddedResource Include="Controls\Main\Admin\EDSMSystemsSync.png" />
@@ -366,11 +364,8 @@
     <EmbeddedResource Include="Controls\Main\Admin\RescanJournals.png" />
     <EmbeddedResource Include="Controls\Main\Admin\ShowLogFiles.png" />
     <EmbeddedResource Include="Controls\Main\Admin\ReadNetLogs.png" />
-    <EmbeddedResource Include="Controls\Main\Admin\ExportVisitedStars.png" />
     <EmbeddedResource Include="Controls\Main\Admin\ResetHistory.png" />
-    <EmbeddedResource Include="Controls\Main\Toolbar\SyncEDSM.png" />
     <EmbeddedResource Include="Panels\Map2D.png" />
-    <EmbeddedResource Include="Controls\Main\Toolbar\Open3DMap.png" />
     <EmbeddedResource Include="Controls\Main\Toolbar\EditAddons.png" />
     <EmbeddedResource Include="Controls\Main\Toolbar\ManageAddOns.png" />
     <EmbeddedResource Include="Controls\Main\Toolbar\Popouts.png" />
@@ -381,7 +376,6 @@
     <EmbeddedResource Include="Controls\Main\Help\Github.png" />
     <EmbeddedResource Include="Controls\Main\Help\SafeModeHelp.png" />
     <EmbeddedResource Include="Controls\Main\Help\ReportIssue.png" />
-    <EmbeddedResource Include="Controls\Main\Help\Help.png" />
     <EmbeddedResource Include="Controls\Main\Help\About.png" />
     <EmbeddedResource Include="Controls\Main\Tools\Exit.png" />
     <EmbeddedResource Include="Controls\Main\Tools\Popouts\Menu.png" />
@@ -447,13 +441,7 @@
     <EmbeddedResource Include="Controls\Modules\ShowOnCoriolis.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Controls\Main\Admin\SendUnsyncedEGO.png" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Panels\Compass.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Panels\Plot.png" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Journal\DiscoveryScan.png" />
@@ -537,16 +525,11 @@
     <EmbeddedResource Include="Panels\BookmarkManager.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Controls\StarList\BodyClasses.png" />
-    <EmbeddedResource Include="Controls\StarList\Jumponium.png" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Controls\Bookmarks\Delete.png" />
     <EmbeddedResource Include="Controls\Bookmarks\New.png" />
     <EmbeddedResource Include="Controls\Bookmarks\Edit.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Panels\LocalMap.png" />
     <EmbeddedResource Include="Journal\CargoDepot.png" />
   </ItemGroup>
   <ItemGroup>
@@ -570,6 +553,30 @@
     <EmbeddedResource Include="Controls\SysInfo\notfirstdiscover.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="GalMap\TravelPath.png" />
+    <EmbeddedResource Include="GalMap\GalaxyStars.png" />
+    <EmbeddedResource Include="GalMap\Grid.png" />
+    <EmbeddedResource Include="GalMap\RegionNames.png" />
+    <EmbeddedResource Include="GalMap\RegionOutlines.png" />
+    <EmbeddedResource Include="GalMap\RegionShading.png" />
+    <EmbeddedResource Include="GalMap\chevron.png" />
+    <EmbeddedResource Include="GalMap\EliteMovement.png" />
+    <EmbeddedResource Include="GalMap\lensflare_white2.png" />
+    <EmbeddedResource Include="GalMap\Perspective.png" />
+    <EmbeddedResource Include="GalMap\ShowGalaxy.png" />
+    <EmbeddedResource Include="GalMap\StarDots.png" />
+    <EmbeddedResource Include="GalMap\hamburgermenu.png" />
+    <EmbeddedResource Include="GalMap\2d.png" />
+    <EmbeddedResource Include="GalMap\3d.png" />
+    <EmbeddedResource Include="GalMap\GoBackward.png" />
+    <EmbeddedResource Include="GalMap\GoForward.png" />
+    <EmbeddedResource Include="GalMap\GoToHomeSystem.png" />
+    <EmbeddedResource Include="GalMap\StarFlare2.png" />
+    <EmbeddedResource Include="GalMap\Galaxy_L180.jpg" />
+    <EmbeddedResource Include="GalMap\OrganicPOI.png" />
+    <EmbeddedResource Include="Panels\Map3D.png" />
+    <EmbeddedResource Include="GalMap\GeyserPOI.png" />
+    <EmbeddedResource Include="GalMap\Regional.png" />
     <EmbeddedResource Include="Journal\ScanBaryCentre.png" />
     <EmbeddedResource Include="Journal\FSSBodySignals.png" />
     <EmbeddedResource Include="Journal\Resupply.png" />
@@ -660,7 +667,6 @@
     <EmbeddedResource Include="Panels\MiningOverlay.png" />
     <EmbeddedResource Include="GalMap\Galaxy_L.jpg" />
     <EmbeddedResource Include="GalMap\Galaxy_L_Grid.jpg" />
-    <EmbeddedResource Include="Controls\SysInfo\Ross.png" />
     <EmbeddedResource Include="Controls\SysInfo\spansh.png" />
     <EmbeddedResource Include="Controls\SysInfo\EDDB.png" />
     <EmbeddedResource Include="Controls\SysInfo\EDSM.png" />
@@ -779,8 +785,6 @@
     <EmbeddedResource Include="Controls\CaptainsLog\Tags.png" />
     <EmbeddedResource Include="Controls\CaptainsLog\Diary.png" />
     <EmbeddedResource Include="Controls\CaptainsLog\Entries.png" />
-    <EmbeddedResource Include="Controls\General\All.png" />
-    <EmbeddedResource Include="Controls\General\None.png" />
     <EmbeddedResource Include="Controls\MaterialTrader\petal1.png" />
     <EmbeddedResource Include="Controls\MaterialTrader\petal2.png" />
     <EmbeddedResource Include="Controls\MaterialTrader\petal3.png" />

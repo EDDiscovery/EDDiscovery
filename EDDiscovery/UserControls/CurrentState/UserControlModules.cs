@@ -107,7 +107,9 @@ namespace EDDiscovery.UserControls
 
         private void Discoveryform_OnNewUIEvent(UIEvent obj)
         {
-            if (obj is EliteDangerousCore.UIEvents.UIFuel && last_si != null && discoveryform.history.GetLast != null ) // fuel UI update the SI information globally, and we have a ship, and we have a last entry
+            // fuel UI update the SI information globally, and we have a ship, and we have a last entry, and we have ship information
+
+            if (obj is EliteDangerousCore.UIEvents.UIFuel && last_si != null && discoveryform.history.GetLast?.ShipInformation != null ) // protect against ship information or he being null
             {
                 if (last_si.ShipNameIdentType == discoveryform.history.GetLast.ShipInformation.ShipNameIdentType ) // and we are pointing at the same ship, use name since the last_si may be an old one if fuel keeps on updating it.
                 {
@@ -219,7 +221,7 @@ namespace EDDiscovery.UserControls
             }
             else if (comboBoxShips.Text == travelhistorytext || comboBoxShips.Text.Length == 0)  // second is due to the order History gets called vs this on start
             {
-                if (last_he != null && last_he.ShipInformation != null)
+                if (last_he?.ShipInformation != null)
                 {
                     DisplayShip(last_he.ShipInformation);
                 }
@@ -442,7 +444,7 @@ namespace EDDiscovery.UserControls
 
             if (comboBoxShips.Text == travelhistorytext || comboBoxShips.Text.Length == 0)  // second is due to the order History gets called vs this on start
             {
-                if (last_he != null && last_he.ShipInformation != null)
+                if (last_he?.ShipInformation != null)
                     si = last_he.ShipInformation;
             }
             else
@@ -484,7 +486,7 @@ namespace EDDiscovery.UserControls
 
             if (comboBoxShips.Text == travelhistorytext || comboBoxShips.Text.Length == 0)  // second is due to the order History gets called vs this on start
             {
-                if (last_he != null && last_he.ShipInformation != null)
+                if (last_he?.ShipInformation != null)
                     si = last_he.ShipInformation;
             }
             else

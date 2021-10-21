@@ -37,8 +37,6 @@ namespace EDDiscovery
 
         public bool PendingClose { get; private set; }                      // we want to close boys!      set once, then we close
 
-        public GalacticMapping galacticMapping { get; private set; }
-
         public CAPI.CompanionAPI FrontierCAPI;
         public BaseUtils.DDE.DDEServer DDEServer;
 
@@ -167,8 +165,15 @@ namespace EDDiscovery
 
             Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Initializing database");
 
-            UserDatabase.Instance.Start("UserDB");
-            SystemsDatabase.Instance.Start("SystemDB");
+            UserDatabase.Instance.Name = "UserDB";
+            UserDatabase.Instance.MinThreads = UserDatabase.Instance.MaxThreads = 2;        // set at 2 threads max/min
+            UserDatabase.Instance.MultiThreaded = true;     // starts up the threads
+
+            SystemsDatabase.Instance.Name = "SystemDB";
+            SystemsDatabase.Instance.MinThreads = 2;
+            SystemsDatabase.Instance.MaxThreads = 8;
+            SystemsDatabase.Instance.MultiThreaded = true;  // starts up the threads
+            
             UserDatabase.Instance.Initialize();
             SystemsDatabase.Instance.Initialize();
 
@@ -207,8 +212,6 @@ namespace EDDiscovery
             {
                 LogLineHighlight($"Log Writer Exception: {ex}");
             };
-
-            galacticMapping = new GalacticMapping();
 
             EdsmLogFetcher = new EDSMLogFetcher(LogLine);
             EdsmLogFetcher.OnDownloadedSystems += () => RefreshHistoryAsync();
@@ -317,28 +320,19 @@ namespace EDDiscovery
                 }
             }
 
+            // if we have a gmo file, but its out of date, refresh it for next time, do it in background thread since not critical.
             string gmofile = Path.Combine(EDDOptions.Instance.AppDataDirectory, "galacticmapping.json");
 
-            if (!EDDOptions.Instance.NoSystemsLoad)
+            if (!EDDOptions.Instance.NoSystemsLoad && File.Exists(gmofile) && DateTime.UtcNow.Subtract(SystemsDatabase.Instance.GetEDSMGalMapLast()).TotalDays > 14 )
             {
-                // New Galmap load - it was not doing a refresh if EDSM sync kept on happening. Now has its own timer
+                LogLine("Get galactic mapping from EDSM.".T(EDTx.EDDiscoveryController_EDSM));
+                if (EDSMClass.DownloadGMOFileFromEDSM(gmofile))
+                    SystemsDatabase.Instance.SetEDSMGalMapLast(DateTime.UtcNow);
 
-                DateTime galmaptime = SystemsDatabase.Instance.GetEDSMGalMapLast(); // Latest time from RW file.
-
-                if (DateTime.Now.Subtract(galmaptime).TotalDays > 14 || !File.Exists(gmofile))  // Over 14 days do a sync from EDSM for galmap
-                {
-                    LogLine("Get galactic mapping from EDSM.".T(EDTx.EDDiscoveryController_EDSM));
-                    if (galacticMapping.DownloadFromEDSM(gmofile))
-                        SystemsDatabase.Instance.SetEDSMGalMapLast(DateTime.UtcNow);
-                }
-
-                Debug.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Check systems complete");
             }
 
-            if ( File.Exists(gmofile))
-                galacticMapping.Parse(gmofile);                            // at this point, gal map data has been uploaded - get it into memory
+            Debug.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Check systems complete");
 
-            SystemCache.AddToAutoCompleteList(galacticMapping.GetGMONames());
             SystemNoteClass.GetAllSystemNotes();
 
             LogLine("Loaded Notes, Bookmarks and Galactic mapping.".T(EDTx.EDDiscoveryController_LN));
@@ -368,10 +362,8 @@ namespace EDDiscovery
             {
                 if (!EDDOptions.Instance.NoSystemsLoad)
                 {
-                    SystemsDatabase.Instance.WithReadWrite(() => DoPerformSync());        // this is done after the initial history load..
+                    DoPerformSync();        // this is done after the initial history load..
                 }
-
-                SystemsDatabase.Instance.SetReadOnly();
 
                 while (!PendingClose)
                 {
@@ -385,7 +377,7 @@ namespace EDDiscovery
                     if (wh == 1)
                     {
                         if (!EDDOptions.Instance.NoSystemsLoad && EDDConfig.Instance.EDSMDownload)      // if no system off, and EDSM download on
-                            SystemsDatabase.Instance.WithReadWrite(() => DoPerformSync());
+                            DoPerformSync();
                     }
                 }
             }

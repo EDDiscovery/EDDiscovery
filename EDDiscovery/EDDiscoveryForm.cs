@@ -58,7 +58,7 @@ namespace EDDiscovery
 
         public EliteDangerousCore.ScreenShots.ScreenShotConverter screenshotconverter;
 
-        private EDDiscovery._3DMap.MapManager Map;
+        private EDDiscovery._3DMap.MapManager old3DMap;
 
         private bool in_system_sync = false;        // between start/end sync of databases
 
@@ -89,7 +89,8 @@ namespace EDDiscovery
         public HistoryList history { get { return Controller.history; } }
         public string LogText { get { return Controller.LogText; } }
         public bool PendingClose { get { return Controller.PendingClose; } }
-        public GalacticMapping galacticMapping { get { return Controller.galacticMapping; } }
+        public GalacticMapping galacticMapping { get; private set; }
+        public GalacticMapping eliteRegions { get; private set; }
         #endregion
 
         #region Events - see the EDDiscoveryControl for meaning and context
@@ -183,7 +184,7 @@ namespace EDDiscovery
 
             screenshotconverter = new EliteDangerousCore.ScreenShots.ScreenShotConverter();
             PopOuts = new PopOutControl(this);
-            Map = new EDDiscovery._3DMap.MapManager(this);
+            old3DMap = new EDDiscovery._3DMap.MapManager(this);
 
             Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Load popouts, themes, init controls");        // STAGE 2 themeing the main interface (not the tab pages)
             msg.Invoke("Applying Themes");
@@ -359,6 +360,31 @@ namespace EDDiscovery
 
             WebServer = new WebServer.EDDWebServer(this);
 
+            string gmofile = Path.Combine(EDDOptions.Instance.AppDataDirectory, "galacticmapping.json");
+
+            if (!EDDOptions.Instance.NoSystemsLoad && !File.Exists(gmofile))        // if allowed to load, and no gmo file, fetch immediately
+            {
+                LogLine("Get galactic mapping from EDSM.".T(EDTx.EDDiscoveryController_EDSM));
+                if (EDSMClass.DownloadGMOFileFromEDSM(gmofile))
+                    SystemsDatabase.Instance.SetEDSMGalMapLast(DateTime.UtcNow);
+            }
+
+            {
+                galacticMapping = new GalacticMapping();
+                if (File.Exists(gmofile))
+                    galacticMapping.ParseFile(gmofile);                            // at this point, gal map data has been uploaded - get it into memory
+            }
+
+            {
+                eliteRegions = new GalacticMapping();
+                var text = System.Text.Encoding.UTF8.GetString(Properties.Resources.EliteGalacticRegions);
+                eliteRegions.ParseJson(text);                            // at this point, gal map data has been uploaded - get it into memory
+            }
+
+            SystemCache.AddToAutoCompleteList(galacticMapping.GetGMONames());
+
+
+
             UpdateProfileComboBox();
             comboBoxCustomProfiles.SelectedIndexChanged += ComboBoxCustomProfiles_SelectedIndexChanged;
 
@@ -399,7 +425,7 @@ namespace EDDiscovery
         {
             Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " EDF shown");
 
-            Controller.PostInit_Shown();        // form is up, controller is released
+            Controller.PostInit_Shown();        // form is up, controller is released, create controller background thread
 
             if (EDDConfig.Instance.EDSMGridIDs == "Not Set")        // initial state
             {
