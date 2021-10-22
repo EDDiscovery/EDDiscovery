@@ -43,8 +43,9 @@ namespace EDDiscovery.UserControls.Map3D
         public enum Parts
         {
             Galaxy = 1, GalObjects = 2, Regions = 4, Grid = 8, StarDots = 32, TravelPath = 64, EDSMStars = 128, RightClick = 256,
-            SearchBox = 2048, GalaxyResetPos = 4096, PerspectiveChange = 8192, YHoldButton = 16384,
-                            All = -1
+            SearchBox = 2048, GalaxyResetPos = 4096, PerspectiveChange = 8192, YHoldButton = 16384, AllowAutoEDSMStarsUpdate = 32768,
+            PrepopulateEDSMLocalArea = 65536,
+            All = -1
         }
 
         private Parts parts;
@@ -309,6 +310,7 @@ namespace EDDiscovery.UserControls.Map3D
             if ((parts & Parts.EDSMStars) != 0)
             {
                 galaxystars = new GalaxyStars(items, rObjects, sunsize, findgalaxystars);
+                UpdateLocalArea(parent.discoveryform.history);
             }
 
             if ((parts & Parts.RightClick ) != 0)
@@ -467,7 +469,7 @@ namespace EDDiscovery.UserControls.Map3D
                 galaxystars.Start();
         }
 
-        public void UpdateTravelPath(HistoryList hl )
+        public void UpdateNewHistoryEntry(HistoryList hl )   // new history entry
         {
             if (travelpath != null)
             {
@@ -476,6 +478,20 @@ namespace EDDiscovery.UserControls.Map3D
             }
         }
 
+        public void UpdateHistory(HistoryList hl)       // full history refresh
+        {
+            UpdateNewHistoryEntry(hl);
+            UpdateLocalArea(hl);
+        }
+        
+        public void UpdateLocalArea(HistoryList hl)
+        {
+            HistoryEntry he = hl.GetLast;       // may be null
+            if (he != null && he.System.HasCoordinate && (parts & Parts.PrepopulateEDSMLocalArea) != 0)
+            {
+                galaxystars.Request9x3Box(new Vector3((float)he.System.X, (float)he.System.Y, (float)he.System.Z));
+            }
+        }
         #endregion
 
         #region Display
@@ -537,13 +553,13 @@ namespace EDDiscovery.UserControls.Map3D
 
             if (galaxystars != null && galaxystars.Enable)
             {
-                if (gl3dcontroller.MatrixCalc.EyeDistance < 400)
-                    galaxystars.Request9BoxConditional(gl3dcontroller.PosCamera.LookAt);
+                if ( (parts & Parts.AllowAutoEDSMStarsUpdate) != 0 && gl3dcontroller.MatrixCalc.EyeDistance < 400)         // if auto update, and eyedistance close, see if local stars needed
+                    galaxystars.Request9x3BoxConditional(gl3dcontroller.PosCamera.LookAt);
 
                 galaxystars.Update(time, gl3dcontroller.MatrixCalc.EyeDistance);
             }
 
-            rObjects.Render(glwfc.RenderState, gl3dcontroller.MatrixCalc, verbose: true);
+            rObjects.Render(glwfc.RenderState, gl3dcontroller.MatrixCalc, verbose: false);
 
             GL.Flush(); // ensure everything is in the grapghics pipeline
         }

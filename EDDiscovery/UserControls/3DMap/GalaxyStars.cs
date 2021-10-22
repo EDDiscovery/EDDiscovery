@@ -98,7 +98,7 @@ namespace EDDiscovery.UserControls.Map3D
             System.Diagnostics.Debug.WriteLine("Stopped on gal stars");
         }
 
-        public void Request9BoxConditional(Vector3 newpos)
+        public void Request9x3BoxConditional(Vector3 newpos)
         {
             // if out of pos, not too many threads, and rebuild is not running
 

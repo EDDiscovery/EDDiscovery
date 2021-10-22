@@ -56,7 +56,7 @@ namespace EDDiscovery.UserControls
             // load setup restore settings of map
             map = new Map();
             map.Start(glwfc, discoveryform.galacticMapping, discoveryform.eliteRegions, this, 
-                Map.Parts.Grid | Map.Parts.TravelPath | Map.Parts.EDSMStars | Map.Parts.SearchBox);
+                Map.Parts.Grid | Map.Parts.TravelPath | Map.Parts.EDSMStars | Map.Parts.SearchBox | Map.Parts.RightClick | Map.Parts.PrepopulateEDSMLocalArea);
 
             map.LoadState(mapsave,true);
 
@@ -90,13 +90,13 @@ namespace EDDiscovery.UserControls
         {
             if (he.IsFSDCarrierJump)
             {
-                map.UpdateTravelPath(discoveryform.history);
+                map.UpdateNewHistoryEntry(discoveryform.history);
             }
         }
 
         private void Discoveryform_OnHistoryChange(HistoryList obj)
         {
-            map.UpdateTravelPath(discoveryform.history);
+            map.UpdateHistory(discoveryform.history);
         }
     }
 }

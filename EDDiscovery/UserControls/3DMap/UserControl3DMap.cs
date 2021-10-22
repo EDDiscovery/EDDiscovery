@@ -95,13 +95,13 @@ namespace EDDiscovery.UserControls
         {
             if (he.IsFSDCarrierJump)
             {
-                map.UpdateTravelPath(discoveryform.history);
+                map.UpdateNewHistoryEntry(discoveryform.history);
             }
         }
 
         private void Discoveryform_OnHistoryChange(HistoryList obj)
         {
-            map.UpdateTravelPath(discoveryform.history);
+            map.UpdateHistory(discoveryform.history);
         }
 
         public class MapSaverImpl : MapSaver
