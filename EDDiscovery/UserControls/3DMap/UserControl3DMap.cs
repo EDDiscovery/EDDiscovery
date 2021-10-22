@@ -57,9 +57,6 @@ namespace EDDiscovery.UserControls
             map = new Map();
             map.Start(glwfc, discoveryform.galacticMapping, discoveryform.eliteRegions, this, 
                 Map.Parts.All);
-//                Map.Parts.Galaxy | Map.Parts.Grid | Map.Parts.Regions | Map.Parts.GalObjects  | Map.Parts.StarDots | Map.Parts.TravelPath | Map.Parts.EDSMStars
-  //              | Map.Parts.SearchBox  | Map.Parts.GalaxyResetPos | Map.Parts.YHoldButton | Map.Parts.PerspectiveChange
-    //            );
             map.LoadState(mapsave,true);
 
             // start clock
@@ -77,7 +74,7 @@ namespace EDDiscovery.UserControls
             systemtimer.Stop();
 
             glwfc.EnsureCurrentContext();           // must make sure current context before we call all the dispose functions
-            //map.SaveState(mapsave);
+            map.SaveState(mapsave);
             map.Dispose();
         }
 
