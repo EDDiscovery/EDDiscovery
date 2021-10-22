@@ -28,12 +28,12 @@ namespace EDDiscovery.UserControls.Map3D
             CompileLink(OpenTK.Graphics.OpenGL4.ShaderType.VertexShader, vcode(), new object[] { "color", c });
         }
 
-        public int ComputeGridSize(float eyedistance, out int gridwidth)
+        public int ComputeGridSize(float y, float eyedistance, out int gridwidth)
         {
             int lines = 21;
             gridwidth = 10000;
 
-            if (eyedistance >= 10000)
+            if (eyedistance >= 10000 || y < -yclamp || y >= yclamp)     // addition, to stop the grid going silly at high y with the clamp, go to max size when at stupid Ys
             {
             }
             else if (eyedistance >= 1000)

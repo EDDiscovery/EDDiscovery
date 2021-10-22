@@ -215,7 +215,7 @@ namespace EDDiscovery.UserControls
 
         // get/put a setting - type needs to be bool, int, double, long, DateTime, string
 
-        protected T GetSetting<T>(string itemname, T defaultvalue)
+        public T GetSetting<T>(string itemname, T defaultvalue)
         {
             System.Diagnostics.Debug.Assert(DBBaseName != null);
             string name = DBName(displaynumber, DBBaseName, itemname);
@@ -225,7 +225,7 @@ namespace EDDiscovery.UserControls
             return res;
         }
 
-        protected bool PutSetting<T>(string itemname, T value)
+        public bool PutSetting<T>(string itemname, T value)
         {
             string name = DBName(displaynumber, DBBaseName, itemname);
            // System.Diagnostics.Debug.WriteLine("Set DB Name " + name + ": " + value);

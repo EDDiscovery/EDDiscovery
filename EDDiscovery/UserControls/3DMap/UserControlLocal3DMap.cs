@@ -20,21 +20,21 @@ using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
 {
-    public partial class UserControl3DMap : UserControlCommonBase
+    public partial class UserControlLocal3DMap : UserControlCommonBase
     {
         private GLWinFormControl glwfc;
         private Timer systemtimer = new Timer();
         private Map map;
-        private MapSaverImpl mapsave;
+        private UserControl3DMap.MapSaverImpl mapsave;
 
-        public UserControl3DMap() 
+        public UserControlLocal3DMap() 
         {
             InitializeComponent();
         }
 
         public override void Init()
         {
-            DBBaseName = "3dMapPanel_";
+            DBBaseName = "Local3DMapPanel_";
 
             BaseUtils.Translator.Instance.Translate(this);      // translate before we add anything else to the panel
 
@@ -44,7 +44,7 @@ namespace EDDiscovery.UserControls
             glwfc = new GLOFC.WinForm.GLWinFormControl(panelOuter);
             glwfc.EnsureCurrentPaintResize = true;      // set, ensures context is set up for internal code on paint and any Paints chained to it
 
-            mapsave = new MapSaverImpl(this);
+            mapsave = new UserControl3DMap.MapSaverImpl(this);
         }
 
         public override void LoadLayout()
@@ -56,10 +56,8 @@ namespace EDDiscovery.UserControls
             // load setup restore settings of map
             map = new Map();
             map.Start(glwfc, discoveryform.galacticMapping, discoveryform.eliteRegions, this, 
-                Map.Parts.All);
-//                Map.Parts.Galaxy | Map.Parts.Grid | Map.Parts.Regions | Map.Parts.GalObjects  | Map.Parts.StarDots | Map.Parts.TravelPath | Map.Parts.EDSMStars
-  //              | Map.Parts.SearchBox  | Map.Parts.GalaxyResetPos | Map.Parts.YHoldButton | Map.Parts.PerspectiveChange
-    //            );
+                Map.Parts.Grid | Map.Parts.TravelPath | Map.Parts.EDSMStars | Map.Parts.SearchBox);
+
             map.LoadState(mapsave,true);
 
             // start clock
@@ -71,7 +69,7 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
-            System.Diagnostics.Debug.WriteLine($"3dmap {displaynumber} stop");
+            System.Diagnostics.Debug.WriteLine($"local 3dmap {displaynumber} stop");
             discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
             discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
             systemtimer.Stop();
@@ -81,15 +79,9 @@ namespace EDDiscovery.UserControls
             map.Dispose();
         }
 
-        public void ShowSystem(ISystem s)
-        {
-            ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), s, true, discoveryform.history, 0.8f, System.Drawing.Color.Purple);
-        }
-
         private void SystemTick(object sender, EventArgs e)
         {
             glwfc.EnsureCurrentContext();           // ensure the context, work may be done in the timers to the GL.
-            //System.Diagnostics.Debug.WriteLine($"3dmap {displaynumber} tick");
             GLOFC.Timers.Timer.ProcessTimers();
             map.Systick();
         }
@@ -106,25 +98,5 @@ namespace EDDiscovery.UserControls
         {
             map.UpdateTravelPath(discoveryform.history);
         }
-
-        public class MapSaverImpl : MapSaver
-        {
-            public MapSaverImpl(UserControlCommonBase n)
-            {
-                uc3d = n;
-            }
-
-            UserControlCommonBase uc3d;
-            public T GetSetting<T>(string id, T defaultvalue)
-            {
-                return uc3d.GetSetting(id,defaultvalue);
-            }
-
-            public void PutSetting<T>(string id, T value)
-            {
-                uc3d.PutSetting(id, value);
-            }
-        }
-
     }
 }

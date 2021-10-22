@@ -23,10 +23,9 @@ namespace EDDiscovery.UserControls.Map3D
         private Map map;
         private GLLabel status;
         private const int iconsize = 32;
+        public GLTextBoxAutoComplete EntryTextBox { get; private set; }
 
-        public const string EntryTextName = "MSEntryText";
-
-        public MapMenu(Map g)
+        public MapMenu(Map g, Map.Parts parts)
         {
             map = g;
 
@@ -35,34 +34,49 @@ namespace EDDiscovery.UserControls.Map3D
             GLImage menuimage = new GLImage("MSMainMenu", new Rectangle(10, 10, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.hamburgermenu") as Bitmap);
             menuimage.ToolTipText = "Open configuration menu";
             map.displaycontrol.Add(menuimage);
-            menuimage.MouseClick = (o, e1) => { ShowMenu(); };
+            menuimage.MouseClick = (o, e1) => { ShowMenu(parts); };
 
-            GLImage tpback = new GLImage("MSTPBack", new Rectangle(50, 10, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.GoBackward") as Bitmap);
-            tpback.ToolTipText = "Go back one system";
-            map.displaycontrol.Add(tpback);
-            tpback.MouseClick = (o, e1) => { g.GoToTravelSystem(-1); };
+            int hpos = 50;
+            if ((parts & Map.Parts.TravelPath) != 0)
+            {
+                GLImage tpback = new GLImage("MSTPBack", new Rectangle(hpos, 10, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.GoBackward") as Bitmap);
+                tpback.ToolTipText = "Go back one system";
+                map.displaycontrol.Add(tpback);
+                tpback.MouseClick = (o, e1) => { g.GoToTravelSystem(-1); };
+                hpos += iconsize + 8;
 
-            GLImage tphome = new GLImage("MSTPHome", new Rectangle(90, 10, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.GoToHomeSystem") as Bitmap);
-            tphome.ToolTipText = "Go to current home system";
-            map.displaycontrol.Add(tphome);
-            tphome.MouseClick = (o, e1) => { g.GoToTravelSystem(0); };
+                GLImage tphome = new GLImage("MSTPHome", new Rectangle(hpos, 10, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.GoToHomeSystem") as Bitmap);
+                tphome.ToolTipText = "Go to current home system";
+                map.displaycontrol.Add(tphome);
+                tphome.MouseClick = (o, e1) => { g.GoToTravelSystem(0); };
+                hpos += iconsize + 8;
 
-            GLImage tpforward = new GLImage("MSTPForward", new Rectangle(130, 10, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.GoForward") as Bitmap);
-            tpforward.ToolTipText = "Go forward one system";
-            map.displaycontrol.Add(tpforward);
-            tpforward.MouseClick = (o, e1) => { g.GoToTravelSystem(1); };
+                GLImage tpforward = new GLImage("MSTPForward", new Rectangle(hpos, 10, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.GoForward") as Bitmap);
+                tpforward.ToolTipText = "Go forward one system";
+                map.displaycontrol.Add(tpforward);
+                tpforward.MouseClick = (o, e1) => { g.GoToTravelSystem(1); };
+                hpos += iconsize + 8;
+            }
 
-            GLImage tpgalview = new GLImage("MSTPGalaxy", new Rectangle(170, 10, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.ShowGalaxy") as Bitmap);
-            tpgalview.ToolTipText = "View Galaxy";
-            map.displaycontrol.Add(tpgalview);
-            tpgalview.MouseClick = (o, e1) => { g.ViewGalaxy(); };
+            if ((parts & Map.Parts.GalaxyResetPos) != 0)
+            {
+                GLImage tpgalview = new GLImage("MSTPGalaxy", new Rectangle(hpos, 10, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.ShowGalaxy") as Bitmap);
+                tpgalview.ToolTipText = "View Galaxy";
+                map.displaycontrol.Add(tpgalview);
+                tpgalview.MouseClick = (o, e1) => { g.ViewGalaxy(); };
+                hpos += iconsize + 8;
+            }
 
-            GLTextBoxAutoComplete tptextbox = new GLTextBoxAutoComplete(EntryTextName, new Rectangle(210, 10, 300, iconsize), "");
-            tptextbox.TextAlign = ContentAlignment.MiddleLeft;
-            tptextbox.BackColor = Color.FromArgb(96,50,50,50);
-            tptextbox.BorderColor = Color.Gray;
-            tptextbox.BorderWidth = 1;
-            map.displaycontrol.Add(tptextbox);
+            if ((parts & Map.Parts.SearchBox) != 0)
+            {
+                EntryTextBox = new GLTextBoxAutoComplete("MSTPEntryText", new Rectangle(hpos, 10, 300, iconsize), "");
+                EntryTextBox.TextAlign = ContentAlignment.MiddleLeft;
+                EntryTextBox.BackColor = Color.FromArgb(96, 50, 50, 50);
+                EntryTextBox.BorderColor = Color.Gray;
+                EntryTextBox.BorderWidth = 1;
+                map.displaycontrol.Add(EntryTextBox);
+                hpos += EntryTextBox.Width + 8;
+            }
 
             GLToolTip maintooltip = new GLToolTip("MTT",Color.FromArgb(180,50,50,50));
             maintooltip.ForeColor = Color.Orange;
@@ -91,7 +105,7 @@ namespace EDDiscovery.UserControls.Map3D
 
         // on menu button..
 
-        public void ShowMenu()
+        public void ShowMenu(Map.Parts parts)
         {
             map.displaycontrol.ApplyToControlOfName("InfoBoxForm*", (c) => { ((GLForm)c).Close(); });      // close any info box forms
             map.displaycontrol.ApplyToControlOfName("MS*", (c) => { c.Visible = false; });      // hide the visiblity of the on screen controls
@@ -119,77 +133,115 @@ namespace EDDiscovery.UserControls.Map3D
                 pform.Animators.Add(ani); 
             };
 
+            int hpad = 8;
+
             {   // top buttons
-                GLPanel p3d2d = new GLPanel("3d2d", new Rectangle(leftmargin, vpos, 80, iconsize), Color.Transparent);
+                int hpos = 0;
 
-                GLCheckBox but3d = new GLCheckBox("3d", new Rectangle(0, 0, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.3d") as Bitmap, null);
-                but3d.Checked = map.gl3dcontroller.MatrixCalc.InPerspectiveMode;
-                but3d.ToolTipText = "3D View";
-                but3d.GroupRadioButton = true;
-                but3d.MouseClick += (e1, e2) => { map.gl3dcontroller.ChangePerspectiveMode(true); };
-                p3d2d.Add(but3d);
+                if ((parts & Map.Parts.PerspectiveChange) != 0)
+                {
+                    GLPanel p3d2d = new GLPanel("3d2d", new Rectangle(leftmargin, vpos, 80, iconsize), Color.Transparent);
 
-                GLCheckBox but2d = new GLCheckBox("2d", new Rectangle(50, 0, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.2d") as Bitmap, null);
-                but2d.Checked = !map.gl3dcontroller.MatrixCalc.InPerspectiveMode;
-                but2d.ToolTipText = "2D View";
-                but2d.GroupRadioButton = true;
-                but2d.MouseClick += (e1, e2) => { map.gl3dcontroller.ChangePerspectiveMode(false); };
-                p3d2d.Add(but2d);
+                    GLCheckBox but3d = new GLCheckBox("3d", new Rectangle(hpos, 0, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.3d") as Bitmap, null);
+                    but3d.Checked = map.gl3dcontroller.MatrixCalc.InPerspectiveMode;
+                    but3d.ToolTipText = "3D View";
+                    but3d.GroupRadioButton = true;
+                    but3d.MouseClick += (e1, e2) => { map.gl3dcontroller.ChangePerspectiveMode(true); };
+                    p3d2d.Add(but3d);
+                    hpos += but3d.Width + hpad;
 
-                pform.Add(p3d2d);
+                    GLCheckBox but2d = new GLCheckBox("2d", new Rectangle(hpos, 0, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.2d") as Bitmap, null);
+                    but2d.Checked = !map.gl3dcontroller.MatrixCalc.InPerspectiveMode;
+                    but2d.ToolTipText = "2D View";
+                    but2d.GroupRadioButton = true;
+                    but2d.MouseClick += (e1, e2) => { map.gl3dcontroller.ChangePerspectiveMode(false); };
+                    p3d2d.Add(but2d);
+                    hpos += but2d.Width + hpad;
 
-                GLCheckBox butelite = new GLCheckBox("Elite", new Rectangle(100, vpos, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.EliteMovement") as Bitmap, null);
-                butelite.ToolTipText = "Select elite movement (on Y plain)";
-                butelite.Checked = map.gl3dcontroller.YHoldMovement;
-                butelite.CheckChanged += (e1) => { map.gl3dcontroller.YHoldMovement = butelite.Checked; };
-                pform.Add(butelite);
+                    pform.Add(p3d2d);
+                }
 
-                GLCheckBox butgal = new GLCheckBox("Galaxy", new Rectangle(150, vpos, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.ShowGalaxy") as Bitmap, null);
-                butgal.ToolTipText = "Show galaxy image";
-                butgal.Checked = map.GalaxyDisplay;
-                butgal.CheckChanged += (e1) => { map.GalaxyDisplay = butgal.Checked; };
-                pform.Add(butgal);
+                if ((parts & Map.Parts.YHoldButton) != 0)
+                {
+                    GLCheckBox butelite = new GLCheckBox("Elite", new Rectangle(hpos, vpos, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.EliteMovement") as Bitmap, null);
+                    butelite.ToolTipText = "Select elite movement (on Y plain)";
+                    butelite.Checked = map.gl3dcontroller.YHoldMovement;
+                    butelite.CheckChanged += (e1) => { map.gl3dcontroller.YHoldMovement = butelite.Checked; };
+                    pform.Add(butelite);
+                    hpos += butelite.Width + hpad;
+                }
 
-                GLCheckBox butgrid = new GLCheckBox("GridLines", new Rectangle(200, vpos, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.Grid") as Bitmap, null);
-                butgrid.ToolTipText = "Show grid";
-                butgrid.Checked = map.Grid;
-                butgrid.CheckChanged += (e1) => { map.Grid = butgrid.Checked; };
-                pform.Add(butgrid);
+                if ((parts & Map.Parts.Galaxy) != 0)
+                {
+                    GLCheckBox butgal = new GLCheckBox("Galaxy", new Rectangle(hpos, vpos, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.ShowGalaxy") as Bitmap, null);
+                    butgal.ToolTipText = "Show galaxy image";
+                    butgal.Checked = map.GalaxyDisplay;
+                    butgal.CheckChanged += (e1) => { map.GalaxyDisplay = butgal.Checked; };
+                    pform.Add(butgal);
+                    hpos += butgal.Width + hpad;
+                }
 
-                GLCheckBox butsd = new GLCheckBox("StarDots", new Rectangle(250, vpos, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.StarDots") as Bitmap, null);
-                butsd.ToolTipText = "Show star field";
-                butsd.Checked = map.StarDotsSpritesDisplay;
-                butsd.CheckChanged += (e1) => { map.StarDotsSpritesDisplay = butsd.Checked; };
-                pform.Add(butsd);
+                if ((parts & Map.Parts.Grid) != 0)
+                {
+                    GLCheckBox butgrid = new GLCheckBox("GridLines", new Rectangle(hpos, vpos, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.Grid") as Bitmap, null);
+                    butgrid.ToolTipText = "Show grid";
+                    butgrid.Checked = map.Grid;
+                    butgrid.CheckChanged += (e1) => { map.Grid = butgrid.Checked; };
+                    pform.Add(butgrid);
+                    hpos += butgrid.Width + hpad;
+                }
 
-                GLCheckBox butgalstars = new GLCheckBox("GalaxyStars", new Rectangle(300, vpos, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.GalaxyStars") as Bitmap, null);
-                butgalstars.ToolTipText = "Show stars when zoomed in";
-                butgalstars.Checked = map.GalaxyStars;
-                butgalstars.CheckChanged += (e1) => { map.GalaxyStars = butgalstars.Checked; };
-                pform.Add(butgalstars);
+                if ((parts & Map.Parts.StarDots) != 0)
+                {
+                    GLCheckBox butsd = new GLCheckBox("StarDots", new Rectangle(hpos, vpos, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.StarDots") as Bitmap, null);
+                    butsd.ToolTipText = "Show star field";
+                    butsd.Checked = map.StarDotsSpritesDisplay;
+                    butsd.CheckChanged += (e1) => { map.StarDotsSpritesDisplay = butsd.Checked; };
+                    pform.Add(butsd);
+                    hpos += butsd.Width + hpad;
+                }
 
-                GLComboBox cbstars = new GLComboBox("GalaxyStarsNumber", new Rectangle(350, vpos, 100, iconsize));
-                cbstars.ToolTipText = "Control how many stars are shown when zoomes in";
-                cbstars.Items = new List<string>() { "Stars-Ultra", "Stars-High", "Stars-Medium", "Stars-Low" };
-                var list = new List<int>() { 750000, 500000, 250000, 100000 };
-                int itemno = list.IndexOf(map.GalaxyStarsMaxObjects); // may be -1
-                cbstars.SelectedIndex = itemno >= 0 ? itemno : 1;       // high default
-                cbstars.SelectedIndexChanged += (e1) => { map.GalaxyStarsMaxObjects = list[cbstars.SelectedIndex]; };
-                pform.Add(cbstars);
+                if ((parts & Map.Parts.EDSMStars) != 0)
+                {
+                    GLCheckBox butgalstars = new GLCheckBox("GalaxyStars", new Rectangle(hpos, vpos, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.GalaxyStars") as Bitmap, null);
+                    butgalstars.ToolTipText = "Show stars when zoomed in";
+                    butgalstars.Checked = map.GalaxyStars;
+                    butgalstars.CheckChanged += (e1) => { map.GalaxyStars = butgalstars.Checked; };
+                    pform.Add(butgalstars);
+                    hpos += butgalstars.Width + hpad;
 
-                vpos += butgal.Height + ypad;
+                    GLComboBox cbstars = new GLComboBox("GalaxyStarsNumber", new Rectangle(hpos, vpos, 100, iconsize));
+                    cbstars.ToolTipText = "Control how many stars are shown when zoomes in";
+                    cbstars.Items = new List<string>() { "Stars-Ultra", "Stars-High", "Stars-Medium", "Stars-Low" };
+                    var list = new List<int>() { 750000, 500000, 250000, 100000 };
+                    int itemno = list.IndexOf(map.GalaxyStarsMaxObjects); // may be -1
+                    if (itemno < 0)
+                    {
+                        itemno = 2;
+                        map.GalaxyStarsMaxObjects = list[itemno];
+                    }
+
+                    cbstars.SelectedIndex = itemno;       // high default
+                    cbstars.SelectedIndexChanged += (e1) => { map.GalaxyStarsMaxObjects = list[cbstars.SelectedIndex]; };
+                    pform.Add(cbstars);
+                    hpos += cbstars.Width + hpad;
+                }
+
+                vpos += iconsize + ypad;
             }
 
+
+            if ((parts & Map.Parts.TravelPath) != 0)
             {
                 GLGroupBox tpgb = new GLGroupBox("TravelPathGB", "Travel Path", new Rectangle(leftmargin, vpos, pform.ClientWidth - leftmargin * 2, iconsize *2));
                 tpgb.BackColor = pform.BackColor;
                 tpgb.ForeColor = Color.Orange;
                 pform.Add(tpgb);
 
-                GLCheckBox buttp = new GLCheckBox("TravelPath", new Rectangle(leftmargin, 0, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.TravelPath") as Bitmap, null);
+                GLCheckBox buttp = new GLCheckBox("TravelPathTape", new Rectangle(leftmargin, 0, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.TravelPath") as Bitmap, null);
                 buttp.ToolTipText = "Show travel path";
-                buttp.Checked = map.TravelPathDisplay;
-                buttp.CheckChanged += (e1) => { map.TravelPathDisplay = buttp.Checked; };
+                buttp.Checked = map.TravelPathTapeDisplay;
+                buttp.CheckChanged += (e1) => { map.TravelPathTapeDisplay = buttp.Checked; };
                 tpgb.Add(buttp);
 
                 GLDateTimePicker dtps = new GLDateTimePicker("TPStart", new Rectangle(50, 0, 250, 30), System.DateTime.Now);
@@ -210,11 +262,11 @@ namespace EDDiscovery.UserControls.Map3D
                 dtpe.ShowUpDown = true;
                 tpgb.Add(dtpe);
 
-
                 vpos += tpgb.Height + ypad;
             }
 
-            { // Galaxy objects
+            if ((parts & Map.Parts.GalObjects) != 0)
+            {
                 GLGroupBox galgb = new GLGroupBox("GalGB", "Galaxy Objects", new Rectangle(leftmargin, vpos, pform.ClientWidth - leftmargin * 2, 50));
                 galgb.ClientHeight = (iconsize + 4) * 2;
                 galgb.BackColor = pform.BackColor;
@@ -247,7 +299,11 @@ namespace EDDiscovery.UserControls.Map3D
                 galfp.Add(butgonoff);
             }
 
-            { // EDSM regions
+
+            if ((parts & Map.Parts.Regions) != 0)
+            {
+                // EDSM regions
+
                 GLGroupBox edsmregionsgb = new GLGroupBox("EDSMR", "EDSM Regions", new Rectangle(leftmargin, vpos, pform.ClientWidth - leftmargin * 2, 50));
                 edsmregionsgb.ClientHeight = iconsize + 8;
                 edsmregionsgb.BackColor = pform.BackColor;

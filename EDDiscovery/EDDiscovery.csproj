@@ -191,6 +191,12 @@
     <Compile Include="UserControls\3DMap\ShaderGrid.cs" />
     <Compile Include="UserControls\3DMap\ShaderStarDots.cs" />
     <Compile Include="UserControls\3DMap\TravelPath.cs" />
+    <Compile Include="UserControls\3DMap\UserControlLocal3DMap.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\3DMap\UserControlLocal3DMap.Designer.cs">
+      <DependentUpon>UserControlLocal3DMap.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\CurrentState\UserControlFactions.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -757,6 +763,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SetNoteForm.resx">
       <DependentUpon>SetNoteForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\3DMap\UserControlLocal3DMap.resx">
+      <DependentUpon>UserControlLocal3DMap.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\CurrentState\UserControlSuitsWeapons.resx">
       <DependentUpon>UserControlSuitsWeapons.cs</DependentUpon>

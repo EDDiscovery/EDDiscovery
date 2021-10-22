@@ -78,8 +78,9 @@ namespace EDDiscovery
             EDDB=49,                  
             Inara=50,                 
             MicroResources=51,        
-            SuitsWeapons=52,          
-            Map3D=53,                 
+            SuitsWeapons=52,
+            Map3D = 53,
+            LocalMap3D = 54,
             // ****** ADD More here DO NOT RENUMBER *****
         };
 
@@ -130,6 +131,7 @@ namespace EDDiscovery
             { new PanelInfo( PanelIDs.Trilateration, typeof(UserControlTrilateration) ,"Trilateration", "Trilateration", "Trilateration of stars with unknown positions") },
             { new PanelInfo( PanelIDs.Map2D, typeof(UserControl2DMap) ,"2D Map", "map2d", "2D Map of galaxy") },
             { new PanelInfo( PanelIDs.Map3D, typeof(UserControl3DMap) ,"3D Map", "map3d", "3D Map of galaxy") },
+            { new PanelInfo( PanelIDs.LocalMap3D, typeof(UserControlLocal3DMap) ,"Local 3D Map", "localmap3d", "Local 3D Map of systems near you") },
 
             { new PanelInfo( "Bookmarks and Logs") },
             { new PanelInfo( PanelIDs.BookmarkManager, typeof(UserControlBookmarks), "Bookmarks", "Bookmarks", "Bookmarks on systems and planets", transparent:false)},

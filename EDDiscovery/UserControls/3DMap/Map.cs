@@ -40,6 +40,14 @@ namespace EDDiscovery.UserControls.Map3D
         public GLMatrixCalc matrixcalc;
         public Controller3D gl3dcontroller;
         public GLControlDisplay displaycontrol;
+        public enum Parts
+        {
+            Galaxy = 1, GalObjects = 2, Regions = 4, Grid = 8, StarDots = 32, TravelPath = 64, EDSMStars = 128, RightClick = 256,
+            SearchBox = 2048, GalaxyResetPos = 4096, PerspectiveChange = 8192, YHoldButton = 16384,
+                            All = -1
+        }
+
+        private Parts parts;
 
         private GLOFC.WinForm.GLWinFormControl glwfc;
 
@@ -95,8 +103,9 @@ namespace EDDiscovery.UserControls.Map3D
 
         #region Initialise
 
-        public void Start(GLOFC.WinForm.GLWinFormControl glwfc, GalacticMapping edsmmapping, GalacticMapping eliteregions, UserControl3DMap parent)
+        public void Start(GLOFC.WinForm.GLWinFormControl glwfc, GalacticMapping edsmmapping, GalacticMapping eliteregions, UserControlCommonBase parent, Parts parts)
         {
+            this.parts = parts;
             this.glwfc = glwfc;
             this.edsmmapping = edsmmapping;
 
@@ -109,9 +118,7 @@ namespace EDDiscovery.UserControls.Map3D
             int lyscale = 1;
             int front = -20000 / lyscale, back = front + 90000 / lyscale, left = -45000 / lyscale, right = left + 90000 / lyscale, vsize = 2000 / lyscale;
 
-            int ctrlo = -1;
-
-            if ((ctrlo & 1) != 0) // galaxy
+            if ((parts & Parts.Galaxy ) != 0) // galaxy
             {
                 volumetricboundingbox = new Vector4[]
                     {
@@ -165,7 +172,7 @@ namespace EDDiscovery.UserControls.Map3D
                 rObjects.Add(galaxyshader, "galshader", galaxyrenderable);
             }
 
-            if ((ctrlo & 2) != 0)
+            if ((parts & Parts.Regions) != 0)
             {
                 var corr = new GalMapRegions.ManualCorrections[] {          // nerf the centeroid position slightly
                     new GalMapRegions.ManualCorrections("The Galactic Aphelion", y: -2000 ),
@@ -179,14 +186,14 @@ namespace EDDiscovery.UserControls.Map3D
                 edsmgalmapregions.CreateObjects("edsmregions", items, rObjects, edsmmapping, 8000, corr: corr);
             }
 
-            if ((ctrlo & 4) != 0)
+            if ((parts & Parts.Regions) != 0)
             {
                 elitemapregions = new GalMapRegions();
                 elitemapregions.CreateObjects("eliteregions", items, rObjects, eliteregions, 8000);
                 EliteRegionsEnable = false;
             }
 
-            if ((ctrlo & 8) != 0)
+            if ((parts & Parts.StarDots) != 0)
             {
                 int gran = 8;
                 Bitmap heat = galaxybitmap.Function(galaxybitmap.Width / gran, galaxybitmap.Height / gran, mode: BitMapHelpers.BitmapFunction.HeatMap);
@@ -245,7 +252,7 @@ namespace EDDiscovery.UserControls.Map3D
 
             rObjects.Add(new GLOperationClearDepthBuffer()); // clear depth buffer and now use full depth testing on the rest
 
-            if ((ctrlo & 16) != 0)
+            if ((parts & Parts.StarDots) != 0)
             {
                 Bitmap starflare = BaseUtils.Icons.IconSet.Instance.Get("GalMap.StarFlare2") as Bitmap;
                 items.Add(new GLTexture2D(starflare, SizedInternalFormat.Rgba8), "lensflare");
@@ -256,7 +263,7 @@ namespace EDDiscovery.UserControls.Map3D
                 rObjects.Add(starsprites, "starsprites", GLRenderableItem.CreateVector4Color4(items, OpenTK.Graphics.OpenGL4.PrimitiveType.Points, rps, p, new Color4[] { Color.White }));
             }
 
-            if ((ctrlo & 32) != 0)
+            if ((parts & Parts.Grid) != 0)
             {
                 var gridvertshader = new DynamicGridVertexShader(Color.Cyan);
                 items.Add(gridvertshader, "PLGRIDVertShader");
@@ -270,7 +277,7 @@ namespace EDDiscovery.UserControls.Map3D
                 rObjects.Add(gridshader, "DYNGRIDRENDER", gridrenderable);
             }
 
-            if ((ctrlo & 64) != 0)
+            if ((parts & Parts.Grid) != 0)
             {
                 var gridtextlabelsvertshader = new DynamicGridCoordVertexShader();
                 items.Add(gridtextlabelsvertshader, "PLGRIDBitmapVertShader");
@@ -286,26 +293,25 @@ namespace EDDiscovery.UserControls.Map3D
             }
 
             float sunsize = 1.0f;
-            if ((ctrlo & 128) != 0)
+            if ((parts & Parts.TravelPath) != 0)
             {
                 travelpath = new TravelPath(50000, sunsize, 0.4f, findstarblock, true, items, rObjects );
                 travelpath.CreatePath(parent.discoveryform.history);
                 travelpath.SetSystem(parent.discoveryform.history.LastSystem);
             }
 
-            if ((ctrlo & 256) != 0)
+            if ((parts & Parts.GalObjects) != 0)
             {
                 galmapobjects = new GalMapObjects();
                 galmapobjects.CreateObjects(items, rObjects, edsmmapping, findgeomapblock, true);
             }
 
-            if ((ctrlo & 512) != 0)
+            if ((parts & Parts.EDSMStars) != 0)
             {
                 galaxystars = new GalaxyStars(items, rObjects, sunsize, findgalaxystars);
-
             }
 
-            if ((ctrlo & 1024) != 0)
+            if ((parts & Parts.RightClick ) != 0)
             {
                 rightclickmenu = new GLContextMenu("RightClickMenu",
                     new GLMenuItem("RCMInfo", "Information")
@@ -344,7 +350,7 @@ namespace EDDiscovery.UserControls.Map3D
                     {
                         MouseClick = (s1, e1) => {
                             ISystem s = rightclickmenu.Tag is HistoryEntry ? ((HistoryEntry)rightclickmenu.Tag).System : (ISystem)rightclickmenu.Tag;
-                            parent.ShowSystem(s);
+                            ScanDisplayForm.ShowScanOrMarketForm(parent.FindForm(), s, true, parent.discoveryform.history, 0.8f, System.Drawing.Color.Purple);
                         }
                     },
                     new GLMenuItem("RCMViewEDSM", "View on EDSM")
@@ -416,44 +422,46 @@ namespace EDDiscovery.UserControls.Map3D
             displaycontrol.MouseMove += MouseMoveOnMap;
             displaycontrol.MouseWheel += MouseWheelOnMap;
 
-            galaxymenu = new MapMenu(this);
+            galaxymenu = new MapMenu(this,parts);
 
             // Autocomplete text box at top for searching
 
-            GLTextBoxAutoComplete tbac = ((GLTextBoxAutoComplete)displaycontrol[MapMenu.EntryTextName]);
-
-            tbac.PerformAutoCompleteInUIThread = (s, a) =>
+            GLTextBoxAutoComplete tbac = galaxymenu.EntryTextBox;
+            if (tbac != null)
             {
-                System.Diagnostics.Debug.Assert(Application.MessageLoop);       // must be in UI thread
-                var glist = edsmmapping.galacticMapObjects.Where(x => s.Length < 3 ? x.name.StartsWith(s, StringComparison.InvariantCultureIgnoreCase) : x.name.Contains(s, StringComparison.InvariantCultureIgnoreCase)).Select(x => x).ToList();
-                List<string> list = glist.Select(x => x.name).ToList();
-                list.AddRange(travelpath.CurrentList.Where(x => s.Length < 3 ? x.System.Name.StartsWith(s, StringComparison.InvariantCultureIgnoreCase) : x.System.Name.Contains(s, StringComparison.InvariantCultureIgnoreCase)).Select(x => x.System.Name));
-                list.Sort();
-                return list;
-            };
+                tbac.PerformAutoCompleteInUIThread = (s, a) =>
+                {
+                    System.Diagnostics.Debug.Assert(Application.MessageLoop);       // must be in UI thread
+                    var glist = edsmmapping.galacticMapObjects.Where(x => s.Length < 3 ? x.name.StartsWith(s, StringComparison.InvariantCultureIgnoreCase) : x.name.Contains(s, StringComparison.InvariantCultureIgnoreCase)).Select(x => x).ToList();
+                    List<string> list = glist.Select(x => x.name).ToList();
+                    list.AddRange(travelpath.CurrentList.Where(x => s.Length < 3 ? x.System.Name.StartsWith(s, StringComparison.InvariantCultureIgnoreCase) : x.System.Name.Contains(s, StringComparison.InvariantCultureIgnoreCase)).Select(x => x.System.Name));
+                    list.Sort();
+                    return list;
+                };
 
-            tbac.SelectedEntry = (a) =>     // in UI thread
-            {
-                System.Diagnostics.Debug.Assert(Application.MessageLoop);       // must be in UI thread
-                System.Diagnostics.Debug.WriteLine("Selected " + tbac.Text);
-                var gmo = edsmmapping.galacticMapObjects.Find(x => x.name.Equals(tbac.Text, StringComparison.InvariantCultureIgnoreCase));
-                if (gmo != null)
+                tbac.SelectedEntry = (a) =>     // in UI thread
                 {
-                    System.Diagnostics.Debug.WriteLine("Move to gmo " + gmo.points[0]);
-                    gl3dcontroller.SlewToPosition(new Vector3((float)gmo.points[0].X, (float)gmo.points[0].Y, (float)gmo.points[0].Z), -1);
-                }
-                else
-                {
-                    var he = travelpath.CurrentList.Find(x => x.System.Name.Equals(tbac.Text, StringComparison.InvariantCultureIgnoreCase));
-                    if (he != null)
+                    System.Diagnostics.Debug.Assert(Application.MessageLoop);       // must be in UI thread
+                    System.Diagnostics.Debug.WriteLine("Selected " + tbac.Text);
+                    var gmo = edsmmapping.galacticMapObjects.Find(x => x.name.Equals(tbac.Text, StringComparison.InvariantCultureIgnoreCase));
+                    if (gmo != null)
                     {
-                        System.Diagnostics.Debug.WriteLine("Move to sys " + he.System.Name);
-                        gl3dcontroller.SlewToPosition(new Vector3((float)he.System.X, (float)he.System.Y, (float)he.System.Z), -1);
+                        System.Diagnostics.Debug.WriteLine("Move to gmo " + gmo.points[0]);
+                        gl3dcontroller.SlewToPosition(new Vector3((float)gmo.points[0].X, (float)gmo.points[0].Y, (float)gmo.points[0].Z), -1);
                     }
                     else
-                        tbac.InErrorCondition = true;
-                }
-            };
+                    {
+                        var he = travelpath.CurrentList.Find(x => x.System.Name.Equals(tbac.Text, StringComparison.InvariantCultureIgnoreCase));
+                        if (he != null)
+                        {
+                            System.Diagnostics.Debug.WriteLine("Move to sys " + he.System.Name);
+                            gl3dcontroller.SlewToPosition(new Vector3((float)he.System.X, (float)he.System.Y, (float)he.System.Z), -1);
+                        }
+                        else
+                            tbac.InErrorCondition = true;
+                    }
+                };
+            }
 
             if (galaxystars != null)
                 galaxystars.Start();
@@ -496,9 +504,9 @@ namespace EDDiscovery.UserControls.Map3D
                 // set the dynamic grid properties
 
                 var vertshader = gridshader.GetShader<DynamicGridVertexShader>(ShaderType.VertexShader);
-                if (Math.Abs(lasteyedistance - gl3dcontroller.MatrixCalc.EyeDistance) > 10)     // a little histerisis, set the vertical shader grid size
+                //remove for now if (Math.Abs(lasteyedistance - gl3dcontroller.MatrixCalc.EyeDistance) > 10)     // a little histerisis, set the vertical shader grid size
                 {
-                    gridrenderable.InstanceCount = vertshader.ComputeGridSize(gl3dcontroller.MatrixCalc.EyeDistance, out lastgridwidth);
+                    gridrenderable.InstanceCount = vertshader.ComputeGridSize(gl3dcontroller.MatrixCalc.LookAt.Y, gl3dcontroller.MatrixCalc.EyeDistance, out lastgridwidth);
                     lasteyedistance = gl3dcontroller.MatrixCalc.EyeDistance;
                 }
 
@@ -521,7 +529,7 @@ namespace EDDiscovery.UserControls.Map3D
                 galaxyshader.SetDistance(gl3dcontroller.MatrixCalc.InPerspectiveMode ? c3d.MatrixCalc.EyeDistance : -1f);
             }
 
-            if (travelpath != null && travelpath.Enable)
+            if (travelpath != null)
                 travelpath.Update(time, gl3dcontroller.MatrixCalc.EyeDistance);
 
             if (galmapobjects != null && galmapobjects.Enable)
@@ -535,7 +543,7 @@ namespace EDDiscovery.UserControls.Map3D
                 galaxystars.Update(time, gl3dcontroller.MatrixCalc.EyeDistance);
             }
 
-            rObjects.Render(glwfc.RenderState, gl3dcontroller.MatrixCalc, verbose: false);
+            rObjects.Render(glwfc.RenderState, gl3dcontroller.MatrixCalc, verbose: true);
 
             GL.Flush(); // ensure everything is in the grapghics pipeline
         }
@@ -544,32 +552,32 @@ namespace EDDiscovery.UserControls.Map3D
 
 #region Turn on/off, move, etc.
 
-        public bool GalaxyDisplay { get { return galaxyshader?.Enable ?? false; } set { galaxyshader.Enable = value; glwfc.Invalidate(); } }
-        public bool StarDotsSpritesDisplay { get { return stardots?.Enable ?? false; } set { stardots.Enable = starsprites.Enable = value; glwfc.Invalidate(); } }
-        public bool TravelPathDisplay { get { return travelpath?.Enable ?? false; } set { travelpath.Enable = value; glwfc.Invalidate(); } }
-        public bool GalaxyStars { get { return galaxystars?.Enable ?? false; } set { galaxystars.Enable = value; glwfc.Invalidate(); } }
-        public int GalaxyStarsMaxObjects { get { return galaxystars?.MaxObjectsAllowed ?? 0; } set { galaxystars.MaxObjectsAllowed = value; } }
-        public bool Grid { get { return gridshader?.Enable ?? false; } set { gridshader.Enable = gridtextshader.Enable = value; glwfc.Invalidate(); } }
+        public bool GalaxyDisplay { get { return galaxyshader?.Enable ?? false; } set { if ( galaxyshader!=null) galaxyshader.Enable = value; glwfc.Invalidate(); } }
+        public bool StarDotsSpritesDisplay { get { return stardots?.Enable ?? false; } set { if ( stardots!=null) stardots.Enable = starsprites.Enable = value; glwfc.Invalidate(); } }
+        public bool GalaxyStars { get { return galaxystars?.Enable ?? false; } set { if (galaxystars != null)  galaxystars.Enable = value; glwfc.Invalidate(); } }
+        public int GalaxyStarsMaxObjects { get { return galaxystars?.MaxObjectsAllowed ?? 100000; } set { if ( galaxystars != null && value >= 10000) galaxystars.MaxObjectsAllowed = value; } }  // screen out stupid numbers (may have got itself saved with that due to debugging)
+        public bool Grid { get { return gridshader?.Enable ?? false; } set { if (gridshader != null)  gridshader.Enable = gridtextshader.Enable = value; glwfc.Invalidate(); } }
 
-        public void TravelPathRefresh() { travelpath.Refresh(); }   // travelpath.Refresh() manually after these have changed
-        public DateTime TravelPathStartDate { get { return travelpath?.TravelPathStartDate ?? DateTime.MinValue; } set { if (travelpath.TravelPathStartDate != value) { travelpath.TravelPathStartDate = value; } } }
-        public bool TravelPathStartDateEnable { get { return travelpath?.TravelPathStartDateEnable ?? false; } set { if (travelpath.TravelPathStartDateEnable != value) { travelpath.TravelPathStartDateEnable = value; } } }
-        public DateTime TravelPathEndDate { get { return travelpath?.TravelPathEndDate ?? DateTime.MinValue; } set { if (travelpath.TravelPathEndDate != value) { travelpath.TravelPathEndDate = value; } } }
-        public bool TravelPathEndDateEnable { get { return travelpath?.TravelPathEndDateEnable ?? false; } set { if (travelpath.TravelPathEndDateEnable != value) { travelpath.TravelPathEndDateEnable = value; } } }
+        public bool TravelPathTapeDisplay { get { return travelpath?.EnableTape ?? false; } set { if (travelpath != null) travelpath.EnableTape = value; glwfc.Invalidate(); } }
+        public void TravelPathRefresh() { if ( travelpath != null ) travelpath.Refresh(); }   // travelpath.Refresh() manually after these have changed
+        public DateTime TravelPathStartDate { get { return travelpath?.TravelPathStartDate ?? DateTime.MinValue; } set { if (travelpath != null && travelpath.TravelPathStartDate != value) { travelpath.TravelPathStartDate = value; } } }
+        public bool TravelPathStartDateEnable { get { return travelpath?.TravelPathStartDateEnable ?? false; } set { if (travelpath != null && travelpath.TravelPathStartDateEnable != value) { travelpath.TravelPathStartDateEnable = value; } } }
+        public DateTime TravelPathEndDate { get { return travelpath?.TravelPathEndDate ?? DateTime.MinValue; } set { if (travelpath != null && travelpath.TravelPathEndDate != value) { travelpath.TravelPathEndDate = value; } } }
+        public bool TravelPathEndDateEnable { get { return travelpath?.TravelPathEndDateEnable ?? false; } set { if (travelpath != null && travelpath.TravelPathEndDateEnable != value) { travelpath.TravelPathEndDateEnable = value; } } }
 
-        public bool GalObjectDisplay { get { return galmapobjects?.Enable ?? false; } set { galmapobjects.Enable = value; glwfc.Invalidate(); } }
-        public void SetGalObjectTypeEnable(string id, bool state) { galmapobjects.SetGalObjectTypeEnable(id, state); glwfc.Invalidate(); }
+        public bool GalObjectDisplay { get { return galmapobjects?.Enable ?? false; } set { if (galmapobjects!=null) galmapobjects.Enable = value; glwfc.Invalidate(); } }
+        public void SetGalObjectTypeEnable(string id, bool state) { if (galmapobjects != null) galmapobjects.SetGalObjectTypeEnable(id, state); glwfc.Invalidate(); }
         public bool GetGalObjectTypeEnable(string id) { return galmapobjects?.GetGalObjectTypeEnable(id) ?? false; }
-        public void SetAllGalObjectTypeEnables(string set) { galmapobjects.SetAllEnables(set); glwfc.Invalidate(); }
+        public void SetAllGalObjectTypeEnables(string set) { if (galmapobjects != null) galmapobjects.SetAllEnables(set); glwfc.Invalidate(); }
         public string GetAllGalObjectTypeEnables() { return galmapobjects?.GetAllEnables() ?? ""; }
-        public bool EDSMRegionsEnable { get { return edsmgalmapregions?.Enable ?? false; } set { edsmgalmapregions.Enable = value; glwfc.Invalidate(); } }
-        public bool EDSMRegionsOutlineEnable { get { return edsmgalmapregions?.Outlines ?? false; } set { edsmgalmapregions.Outlines = value; glwfc.Invalidate(); } }
-        public bool EDSMRegionsShadingEnable { get { return edsmgalmapregions?.Regions ?? false; } set { edsmgalmapregions.Regions = value; glwfc.Invalidate(); } }
-        public bool EDSMRegionsTextEnable { get { return edsmgalmapregions?.Text ?? false; } set { edsmgalmapregions.Text = value; glwfc.Invalidate(); } }
-        public bool EliteRegionsEnable { get { return elitemapregions?.Enable ?? false; } set { elitemapregions.Enable = value; glwfc.Invalidate(); } }
-        public bool EliteRegionsOutlineEnable { get { return elitemapregions?.Outlines ?? false; } set { elitemapregions.Outlines = value; glwfc.Invalidate(); } }
-        public bool EliteRegionsShadingEnable { get { return elitemapregions?.Regions ?? false; } set { elitemapregions.Regions = value; glwfc.Invalidate(); } }
-        public bool EliteRegionsTextEnable { get { return elitemapregions?.Text ?? false; } set { elitemapregions.Text = value; glwfc.Invalidate(); } }
+        public bool EDSMRegionsEnable { get { return edsmgalmapregions?.Enable ?? false; } set { if (edsmgalmapregions != null) edsmgalmapregions .Enable = value; glwfc.Invalidate(); } }
+        public bool EDSMRegionsOutlineEnable { get { return edsmgalmapregions?.Outlines ?? false; } set { if (edsmgalmapregions != null) edsmgalmapregions.Outlines = value; glwfc.Invalidate(); } }
+        public bool EDSMRegionsShadingEnable { get { return edsmgalmapregions?.Regions ?? false; } set { if ( edsmgalmapregions != null ) edsmgalmapregions.Regions = value; glwfc.Invalidate(); } }
+        public bool EDSMRegionsTextEnable { get { return edsmgalmapregions?.Text ?? false; } set { if (edsmgalmapregions != null) edsmgalmapregions.Text = value; glwfc.Invalidate(); } }
+        public bool EliteRegionsEnable { get { return elitemapregions?.Enable ?? false; } set { if (elitemapregions != null) elitemapregions.Enable = value; glwfc.Invalidate(); } }
+        public bool EliteRegionsOutlineEnable { get { return elitemapregions?.Outlines ?? false; } set { if (elitemapregions != null) elitemapregions.Outlines = value; glwfc.Invalidate(); } }
+        public bool EliteRegionsShadingEnable { get { return elitemapregions?.Regions ?? false; } set { if (elitemapregions != null) elitemapregions.Regions = value; glwfc.Invalidate(); } }
+        public bool EliteRegionsTextEnable { get { return elitemapregions?.Text ?? false; } set { if (elitemapregions != null) elitemapregions.Text = value; glwfc.Invalidate(); } }
 
         public void GoToTravelSystem(int dir)      //0 = home, 1 = next, -1 = prev
         {
@@ -591,12 +599,12 @@ namespace EDDiscovery.UserControls.Map3D
 
         #region Helpers
 
-        public void LoadState(MapSaver defaults)
+        public void LoadState(MapSaver defaults, bool restorepos)
         {
             GalaxyDisplay = defaults.GetSetting("GD", true);
             StarDotsSpritesDisplay = defaults.GetSetting("SDD", true);
 
-            TravelPathDisplay = defaults.GetSetting("TPD", true);
+            TravelPathTapeDisplay = defaults.GetSetting("TPD", true);
             TravelPathStartDate = defaults.GetSetting("TPSD", new DateTime(2014, 12, 16));
             TravelPathStartDateEnable = defaults.GetSetting("TPSDE", false);
             TravelPathEndDate = defaults.GetSetting("TPED", DateTime.UtcNow.AddMonths(1));
@@ -621,14 +629,15 @@ namespace EDDiscovery.UserControls.Map3D
             GalaxyStars = defaults.GetSetting("GALSTARS", true);
             GalaxyStarsMaxObjects = defaults.GetSetting("GALSTARSOBJ", 500000);
 
-            gl3dcontroller.SetPositionCamera(defaults.GetSetting("POSCAMERA", ""));     // go thru gl3dcontroller to set default position, so we reset the model matrix
+            if (restorepos )
+                gl3dcontroller.SetPositionCamera(defaults.GetSetting("POSCAMERA", ""));     // go thru gl3dcontroller to set default position, so we reset the model matrix
         }
 
         public void SaveState(MapSaver defaults)
         {
             defaults.PutSetting("GD", GalaxyDisplay);
             defaults.PutSetting("SDD", StarDotsSpritesDisplay);
-            defaults.PutSetting("TPD", TravelPathDisplay);
+            defaults.PutSetting("TPD", TravelPathTapeDisplay);
             defaults.PutSetting("TPSD", TravelPathStartDate);
             defaults.PutSetting("TPSDE", TravelPathStartDateEnable);
             defaults.PutSetting("TPED", TravelPathEndDate);
@@ -651,8 +660,11 @@ namespace EDDiscovery.UserControls.Map3D
 
         private void SetEntryText(string text)
         {
-            ((GLTextBoxAutoComplete)displaycontrol[MapMenu.EntryTextName]).Text = text;
-            ((GLTextBoxAutoComplete)displaycontrol[MapMenu.EntryTextName]).CancelAutoComplete();
+            if (galaxymenu.EntryTextBox != null)
+            {
+                galaxymenu.EntryTextBox.Text = text;
+                galaxymenu.EntryTextBox.CancelAutoComplete();
+            }
             displaycontrol.SetFocus();
         }
 
@@ -778,12 +790,12 @@ namespace EDDiscovery.UserControls.Map3D
             // See OFC PositionCamera for keys used
             // F keys are reserved for KeyPresses action pack
 
-            if (kb.HasBeenPressed(Keys.P, GLOFC.Controller.KeyboardMonitor.ShiftState.None))
+            if ((parts & Parts.PerspectiveChange) != 0 && kb.HasBeenPressed(Keys.P, GLOFC.Controller.KeyboardMonitor.ShiftState.None))
             {
                 gl3dcontroller.ChangePerspectiveMode(!gl3dcontroller.MatrixCalc.InPerspectiveMode);
             }
 
-            if (kb.HasBeenPressed(Keys.O, KeyboardMonitor.ShiftState.None))
+            if ((parts & Parts.YHoldButton) != 0 && kb.HasBeenPressed(Keys.O, KeyboardMonitor.ShiftState.None))
             {
                 gl3dcontroller.PosCamera.YHoldMovement = !gl3dcontroller.PosCamera.YHoldMovement;
             }
@@ -802,7 +814,7 @@ namespace EDDiscovery.UserControls.Map3D
             }
             if (kb.HasBeenPressed(Keys.D4, GLOFC.Controller.KeyboardMonitor.ShiftState.None))
             {
-                TravelPathDisplay = !TravelPathDisplay;
+                TravelPathTapeDisplay = !TravelPathTapeDisplay;
             }
             if (kb.HasBeenPressed(Keys.D5, GLOFC.Controller.KeyboardMonitor.ShiftState.None))
             {

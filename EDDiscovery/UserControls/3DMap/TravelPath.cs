@@ -25,7 +25,9 @@ namespace EDDiscovery.UserControls.Map3D
     class TravelPath
     {
         public List<HistoryEntry> CurrentList { get { return currentfilteredlist; } }       // whats being displayed
-        public bool Enable { get { return tapeshader.Enable; } set { tapeshader.Enable = textrenderer.Enable = value; } }
+        public bool EnableTape { get { return tapeshader.Enable; } set { tapeshader.Enable = value; } }
+        public bool EnableText { get { return textrenderer.Enable; } set { textrenderer.Enable = value; } }
+        public bool EnableStars { get { return sunshader.Enable; } set { sunshader.Enable = value; } }
         public int MaxStars { get; }
         public DateTime TravelPathStartDate { get; set; } = new DateTime(2014, 12, 14);
         public DateTime TravelPathEndDate { get; set; } = DateTime.UtcNow.AddMonths(1);
@@ -193,7 +195,7 @@ namespace EDDiscovery.UserControls.Map3D
         {
             z = float.MaxValue;
 
-            if (Enable)
+            if (EnableStars)
             {
                 var geo = findshader.GetShader<GLPLGeoShaderFindTriangles>(OpenTK.Graphics.OpenGL4.ShaderType.GeometryShader);
                 geo.SetScreenCoords(viewportloc, viewportsize);
@@ -237,7 +239,7 @@ namespace EDDiscovery.UserControls.Map3D
 
         public HistoryEntry NextSystem()
         {
-            if (currentfilteredlist == null)
+            if (currentfilteredlist == null || currentfilteredlist.Count == 0)
                 return null;
 
             if (lastpos == -1)
@@ -250,7 +252,7 @@ namespace EDDiscovery.UserControls.Map3D
 
         public HistoryEntry PrevSystem()
         {
-            if (currentfilteredlist == null)
+            if (currentfilteredlist == null || currentfilteredlist.Count == 0)
                 return null;
 
             if (lastpos == -1)
