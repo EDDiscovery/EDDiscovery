@@ -1208,7 +1208,7 @@ namespace EDDiscovery.UserControls
                 EliteDangerousCore.Inara.InaraClass inara = new EliteDangerousCore.Inara.InaraClass(EDCommander.Current);
                 string str = inara.ToJSONString(list);
                 discoveryform.LogLine(str);
-                System.IO.File.WriteAllText(@"c:\code\inaraentry.json", str);
+                //System.IO.File.WriteAllText(@"c:\code\inaraentry.json", str);
 
                 if (list.Count > 0)
                 {
