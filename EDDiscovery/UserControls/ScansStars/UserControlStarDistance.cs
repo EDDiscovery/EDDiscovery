@@ -78,7 +78,10 @@ namespace EDDiscovery.UserControls
         {
             DGVSaveColumnLayout(dataGridViewNearest);
             discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
-            uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
+            if (uctg != null)
+            {
+                uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
+            }
             computer.ShutDown();
             PutSetting("Min", textMinRadius.Value);
             PutSetting("Max", textMaxRadius.Value);

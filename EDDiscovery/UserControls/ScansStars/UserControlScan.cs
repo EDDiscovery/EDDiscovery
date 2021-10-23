@@ -107,11 +107,14 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
+            closing = true;
             PutSetting("PinState", rollUpPanelTop.PinState );
 
-            uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
+            if (uctg != null)
+            {
+                uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
+            }
             discoveryform.OnNewEntry -= NewEntry;
-            closing = true;
         }
 
         #endregion

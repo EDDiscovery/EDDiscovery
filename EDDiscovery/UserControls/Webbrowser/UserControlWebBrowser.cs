@@ -87,7 +87,10 @@ namespace EDDiscovery.UserControls
         {
             isClosing = true;
             PutSetting("PinState", rollUpPanelTop.PinState);
-            uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
+            if (uctg != null)
+            {
+                uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
+            }
         }
 
         #endregion

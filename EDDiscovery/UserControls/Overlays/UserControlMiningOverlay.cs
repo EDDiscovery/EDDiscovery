@@ -93,7 +93,10 @@ namespace EDDiscovery.UserControls
         public override void Closing()
         {
             timetimer.Stop();
-            uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
+            if (uctg != null)
+            {
+                uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
+            }
             PutSetting(dbRolledUp, extPanelRollUp.PinState);
         }
 

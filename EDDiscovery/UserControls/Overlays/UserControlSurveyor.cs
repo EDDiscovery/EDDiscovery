@@ -167,7 +167,10 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
-            uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
+            if (uctg != null)
+            {
+                uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
+            }
             discoveryform.OnNewUIEvent -= Discoveryform_OnNewUIEvent;
             discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
         }
