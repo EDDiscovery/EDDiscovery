@@ -436,7 +436,7 @@ namespace EDDiscovery.UserControls.Map3D
                     System.Diagnostics.Debug.Assert(Application.MessageLoop);       // must be in UI thread
                     var glist = edsmmapping.galacticMapObjects.Where(x => s.Length < 3 ? x.name.StartsWith(s, StringComparison.InvariantCultureIgnoreCase) : x.name.Contains(s, StringComparison.InvariantCultureIgnoreCase)).Select(x => x).ToList();
                     List<string> list = glist.Select(x => x.name).ToList();
-                    list.AddRange(travelpath.CurrentList.Where(x => s.Length < 3 ? x.System.Name.StartsWith(s, StringComparison.InvariantCultureIgnoreCase) : x.System.Name.Contains(s, StringComparison.InvariantCultureIgnoreCase)).Select(x => x.System.Name));
+                    list.AddRange(travelpath.CurrentListSystem.Where(x => s.Length < 3 ? x.Name.StartsWith(s, StringComparison.InvariantCultureIgnoreCase) : x.Name.Contains(s, StringComparison.InvariantCultureIgnoreCase)).Select(x => x.Name));
                     list.Sort();
                     return list;
                 };
@@ -453,11 +453,11 @@ namespace EDDiscovery.UserControls.Map3D
                     }
                     else
                     {
-                        var he = travelpath.CurrentList.Find(x => x.System.Name.Equals(tbac.Text, StringComparison.InvariantCultureIgnoreCase));
-                        if (he != null)
+                        var isys = travelpath.CurrentListSystem.Find(x => x.Name.Equals(tbac.Text, StringComparison.InvariantCultureIgnoreCase));
+                        if (isys != null)
                         {
-                            System.Diagnostics.Debug.WriteLine("Move to sys " + he.System.Name);
-                            gl3dcontroller.SlewToPosition(new Vector3((float)he.System.X, (float)he.System.Y, (float)he.System.Z), -1);
+                            System.Diagnostics.Debug.WriteLine("Move to sys " + isys.Name);
+                            gl3dcontroller.SlewToPosition(new Vector3((float)isys.X, (float)isys.Y, (float)isys.Z), -1);
                         }
                         else
                             tbac.InErrorCondition = true;
@@ -597,12 +597,18 @@ namespace EDDiscovery.UserControls.Map3D
 
         public void GoToTravelSystem(int dir)      //0 = home, 1 = next, -1 = prev
         {
-            var he = dir == 0 ? travelpath.CurrentSystem : (dir < 0 ? travelpath.PrevSystem() : travelpath.NextSystem());
-            if (he != null)
+            var isys = dir == 0 ? travelpath.CurrentSystem : (dir < 0 ? travelpath.PrevSystem() : travelpath.NextSystem());
+            if (isys != null)
             {
-                gl3dcontroller.SlewToPosition(new Vector3((float)he.System.X, (float)he.System.Y, (float)he.System.Z), -1);
-                SetEntryText(he.System.Name);
+                gl3dcontroller.SlewToPosition(new Vector3((float)isys.X, (float)isys.Y, (float)isys.Z), -1);
+                SetEntryText(isys.Name);
             }
+        }
+
+        public void GoToSystem(ISystem isys, float lydist = 50f)
+        {
+            gl3dcontroller.SlewToPositionZoom(new Vector3((float)isys.X, (float)isys.Y, (float)isys.Z), gl3dcontroller.ZoomDistance / lydist, -1);
+            SetEntryText(isys.Name);
         }
 
         public void ViewGalaxy()
@@ -687,7 +693,7 @@ namespace EDDiscovery.UserControls.Map3D
         private Object FindObjectOnMap(Point loc)
         {
             float tz = float.MinValue, gz = float.MinValue, sz = float.MinValue;
-            var he = travelpath?.FindSystem(loc, glwfc.RenderState, matrixcalc.ViewPort.Size, out tz);     //z are maxvalue if not found
+            var he = travelpath?.FindSystem(loc, glwfc.RenderState, matrixcalc.ViewPort.Size, out tz);     //z are maxvalue if not found, will return an HE since travelpath is made with it
             var gmo = galmapobjects?.FindPOI(loc, glwfc.RenderState, matrixcalc.ViewPort.Size, out gz);
             var sys = galaxystars?.Find(loc, glwfc.RenderState, matrixcalc.ViewPort.Size, out sz);
 
@@ -714,7 +720,7 @@ namespace EDDiscovery.UserControls.Map3D
             {
                 string info = $"Visited on:";
 
-                foreach ( var e in travelpath.CurrentList)
+                foreach ( var e in travelpath.CurrentListHE)
                 {
                     if ( e.System.Name.Equals(he.System.Name))
                     {
@@ -778,7 +784,7 @@ namespace EDDiscovery.UserControls.Map3D
                     if (e.Button == GLMouseEventArgs.MouseButtons.Left)
                     {
                         if (item is HistoryEntry)
-                            travelpath.SetSystem(item as HistoryEntry);
+                            travelpath.SetSystem((item as HistoryEntry).System);
                         var nl = NameLocationDescription(item);
                         System.Diagnostics.Debug.WriteLine("Click on and slew to " + nl.Item1);
                         SetEntryText(nl.Item1);

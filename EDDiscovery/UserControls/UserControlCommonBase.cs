@@ -151,6 +151,12 @@ namespace EDDiscovery.UserControls
                 ((UserControlForm)(this.Parent)).UpdateTransparency();
         }
 
+        public virtual UserControlCommonBase Find( Type t)      // find a UCCB of type T - this simple case just compares, overriden in splitter/grid
+        {
+            //System.Diagnostics.Debug.WriteLine($"UCCB Find of {t.Name} on {this.GetType().Name}");
+            return this.GetType() == t ? this : null;
+        }
+
         #region Resize
 
         public bool ResizingNow = false;                                            // FUNCTIONS to allow a form to grow temporarily.  Does not work when inside the panels

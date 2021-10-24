@@ -190,6 +190,20 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        public override UserControlCommonBase Find(Type t)              // find UCCB of this type in
+        {
+            foreach( var x in uccrlist)
+            {
+                if ( x.control != null )
+                {
+                    var f = ((UserControlCommonBase)x.control).Find(t);     // need to use find on it, since it may be embedded the same
+                    if (f != null)
+                        return f;
+                }
+            }
+            return null;
+        }
+
         #endregion
 
         #region Panel control

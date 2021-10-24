@@ -534,7 +534,7 @@ namespace EDDiscovery.UserControls
                 if (!float.TryParse(textBox_Distance.Text, out dist))       // in case text is crap
                     dist = 30;
 
-                discoveryform.Open3DMap(routeSystems.First(), routeSystems, 400 / dist);
+                discoveryform.Open3DMap(routeSystems.First(), routeSystems);
 
             }
             else

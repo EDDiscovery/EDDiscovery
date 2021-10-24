@@ -24,7 +24,13 @@ namespace EDDiscovery.UserControls.Map3D
 {
     class TravelPath
     {
-        public List<HistoryEntry> CurrentList { get { return currentfilteredlist; } }       // whats being displayed
+        public List<ISystem> CurrentListSystem { get { return currentfilteredlistsys; } }       // always
+        public List<HistoryEntry> CurrentListHE { get { return currentfilteredlisthe; } }      // if created with HEs
+        public HistoryEntry CurrentSystemHE { get { return currentfilteredlisthe != null && CurrentPos != -1 ? currentfilteredlisthe[CurrentPos] : null; } }
+        public ISystem CurrentSystem { get { return currentfilteredlistsys != null && CurrentPos != -1 ? currentfilteredlistsys[CurrentPos] : null; } }
+
+        public int CurrentPos { get; private set; } = -1;                                         // -1 no system, else index
+
         public bool EnableTape { get { return tapeshader.Enable; } set { tapeshader.Enable = value; } }
         public bool EnableText { get { return textrenderer.Enable; } set { textrenderer.Enable = value; } }
         public bool EnableStars { get { return sunshader.Enable; } set { sunshader.Enable = value; } }
@@ -40,9 +46,6 @@ namespace EDDiscovery.UserControls.Map3D
         public Vector3 LabelOffset { get; set; } = new Vector3(0, -1.2f, 0);
         public Size BitMapSize { get; set; } = new Size(128, 32);
 
-
-        private List<HistoryEntry> currentfilteredlist;
-        private HistoryList lasthl;
 
         public TravelPath(int maxstars, float sunsize, float tapesize, int bufferfindbinding, bool depthtest, GLItemsList items, GLRenderProgramSortedList rObjects)
         {
@@ -104,17 +107,32 @@ namespace EDDiscovery.UserControls.Map3D
         public void CreatePath(HistoryList hl)
         {
             lasthl = hl;
-            HistoryEntry lastone = lastpos != -1 && lastpos < currentfilteredlist.Count ? currentfilteredlist[lastpos] : null;  // see if lastpos is there, and store it
+            ISystem lastone = CurrentPos != -1 && CurrentPos < currentfilteredlistsys.Count ? currentfilteredlistsys[CurrentPos] : null;  // see if lastpos is there, and store it
 
             // create current filter list..
-            currentfilteredlist = hl.FilterByTravelTime(TravelPathStartDateEnable ? TravelPathStartDate : default(DateTime?), TravelPathEndDateEnable ? TravelPathEndDate : default(DateTime?));
+            currentfilteredlisthe = hl.FilterByTravelTime(TravelPathStartDateEnable ? TravelPathStartDate : default(DateTime?), TravelPathEndDateEnable ? TravelPathEndDate : default(DateTime?));
 
-            if (currentfilteredlist.Count > MaxStars)
-                currentfilteredlist = currentfilteredlist.Skip(currentfilteredlist.Count - MaxStars).ToList();
+            if (currentfilteredlisthe.Count > MaxStars)
+                currentfilteredlisthe = currentfilteredlisthe.Skip(currentfilteredlisthe.Count - MaxStars).ToList();
 
-            lastpos = lastone == null ? -1 : currentfilteredlist.IndexOf(lastone);        // may be -1, may have been removed
+            currentfilteredlistsys = currentfilteredlisthe.Select(x => (ISystem)x.System).ToList();
+
+            CurrentPos = lastone == null ? -1 : currentfilteredlistsys.IndexOf(lastone);        // may be -1, may have been removed
 
             CreatePathInt();
+        }
+        public void CreatePath(List<ISystem> syslist, Color tapecolour)
+        {
+            lasthl = null;
+            ISystem lastone = CurrentPos != -1 && CurrentPos < currentfilteredlistsys.Count ? currentfilteredlistsys[CurrentPos] : null;  // see if lastpos is there, and store it
+
+            // create current filter list..
+            currentfilteredlisthe = null;
+            currentfilteredlistsys = syslist;
+
+            CurrentPos = lastone == null ? -1 : currentfilteredlistsys.IndexOf(lastone);        // may be -1, may have been removed
+
+            CreatePathInt(tapecolour);
         }
 
         public void Refresh()           // must have drawn
@@ -124,18 +142,26 @@ namespace EDDiscovery.UserControls.Map3D
         }
 
         // currentfilteredlist set, go..
-        private void CreatePathInt()
-        { 
-            var positionsv4 = currentfilteredlist.Select(x => new Vector4((float)x.System.X, (float)x.System.Y, (float)x.System.Z, 0)).ToArray();
-            var color = new Color[positionsv4.Length];
+        private void CreatePathInt(Color? tapepathdefault = null)
+        {
+            Vector4[] positionsv4 = currentfilteredlistsys.Select(x => new Vector4((float)x.X, (float)x.Y, (float)x.Z, 0)).ToArray();
+            Color[] color = new Color[currentfilteredlistsys.Count];
 
-            for (int i = 0; i < positionsv4.Length; i++)        // if we are on a jump colour entry, then pick up its colour, otherwise use the last, unless its at the beginning
+            if (currentfilteredlisthe != null)
             {
-                var je = currentfilteredlist[i].journalEntry as IJournalJumpColor;
-                if ( je != null )
-                    color[i] = je.MapColorARGB;
-                else
-                    color[i] = i > 0 ? color[i - 1] : Color.Green;
+                for (int i = 0; i < positionsv4.Length; i++)        // if we are on a jump colour entry, then pick up its colour, otherwise use the last, unless its at the beginning
+                {
+                    var je = currentfilteredlisthe[i].journalEntry as IJournalJumpColor;
+                    if (je != null)
+                        color[i] = je.MapColorARGB;
+                    else
+                        color[i] = i > 0 ? color[i - 1] : Color.Green;
+                }
+            }
+            else
+            {
+                for (int i = 0; i < positionsv4.Length; i++)        // for an ISystem path, we use the default color
+                    color[i] = tapepathdefault.Value;
             }
 
             float seglen = tapesize * 10;
@@ -156,18 +182,18 @@ namespace EDDiscovery.UserControls.Map3D
 
             // name bitmaps
 
-            HashSet<object> hashset = new HashSet<object>(currentfilteredlist);            // so it can find it quickly
+            HashSet<object> hashset = new HashSet<object>(currentfilteredlistsys);            // so it can find it quickly
             textrenderer.CurrentGeneration++;                                   // setup for next generation
             textrenderer.RemoveGeneration(textrenderer.CurrentGeneration - 1, hashset); // and remove all of the previous one which are not in hashset.
 
             using (StringFormat fmt = new StringFormat())
             {
                 fmt.Alignment = StringAlignment.Center;
-                foreach (var isys in currentfilteredlist)
+                foreach (var isys in currentfilteredlistsys)
                 {
                     if (textrenderer.Exist(isys) == false)                   // if does not exist already, need a new label
                     {
-                        textrenderer.Add(isys, isys.System.Name, Font, ForeText, BackText, new Vector3((float)isys.System.X+LabelOffset.X, (float)isys.System.Y + LabelOffset.Y, (float)isys.System.Z+LabelOffset.Z),
+                        textrenderer.Add(isys, isys.Name, Font, ForeText, BackText, new Vector3((float)isys.X+LabelOffset.X, (float)isys.Y + LabelOffset.Y, (float)isys.Z+LabelOffset.Z),
                                 LabelSize, new Vector3(0, 0, 0), fmt: fmt, rotatetoviewer: true, rotateelevation: false, alphafadescalar: -200, alphafadepos: 300);
                     }
                 }
@@ -191,7 +217,7 @@ namespace EDDiscovery.UserControls.Map3D
         }
 
         // returns HE, and z - if not found z = Max value, null
-        public HistoryEntry FindSystem(Point viewportloc, GLRenderState state, Size viewportsize, out float z)
+        public Object FindSystem(Point viewportloc, GLRenderState state, Size viewportsize, out float z)
         {
             z = float.MaxValue;
 
@@ -207,61 +233,67 @@ namespace EDDiscovery.UserControls.Map3D
                 {
                     //for (int i = 0; i < res.Length; i++) System.Diagnostics.Debug.WriteLine(i + " = " + res[i]);
                     z = res[0].Z;
-                    return currentfilteredlist[(int)res[0].Y];
+                    if (currentfilteredlisthe != null)
+                        return currentfilteredlisthe[(int)res[0].Y];
+                    else
+                        return currentfilteredlistsys[(int)res[0].Y];
                 }
             }
 
             return null;
         }
 
-        public HistoryEntry CurrentSystem { get { return currentfilteredlist!=null && lastpos != -1 ? currentfilteredlist[lastpos] : null; } }
-
-        public bool SetSystem(HistoryEntry s)
+        public bool SetSystem(ISystem s)
         {
-            if (currentfilteredlist != null)
+            if (currentfilteredlistsys != null)
             {
-                lastpos = currentfilteredlist.IndexOf(s); // -1 if not in list, hence no system
+                CurrentPos = currentfilteredlistsys.IndexOf(s); // -1 if not in list, hence no system
             }
             else
-                lastpos = -1;
-            return lastpos != -1;
+                CurrentPos = -1;
+            return CurrentPos != -1;
         }
+
         public bool SetSystem(string s)
         {
-            if (currentfilteredlist != null && s.HasChars())
+            if (currentfilteredlistsys != null && s.HasChars())
             {
-                lastpos = currentfilteredlist.FindLastIndex(x=>x.System.Name.Equals(s,StringComparison.InvariantCultureIgnoreCase)); 
+                CurrentPos = currentfilteredlistsys.FindLastIndex(x=>x.Name.Equals(s,StringComparison.InvariantCultureIgnoreCase)); 
             }
             else
-                lastpos = -1;
-            return lastpos != -1;
+                CurrentPos = -1;
+            return CurrentPos != -1;
         }
 
-        public HistoryEntry NextSystem()
+        public ISystem NextSystem()
         {
-            if (currentfilteredlist == null || currentfilteredlist.Count == 0)
+            if (currentfilteredlistsys == null || currentfilteredlistsys.Count == 0)
                 return null;
 
-            if (lastpos == -1)
-                lastpos = 0;
-            else if (lastpos < currentfilteredlist.Count - 1)
-                lastpos++;
+            if (CurrentPos == -1)
+                CurrentPos = 0;
+            else if (CurrentPos < currentfilteredlistsys.Count - 1)
+                CurrentPos++;
 
-            return currentfilteredlist[lastpos];
+            return currentfilteredlistsys[CurrentPos];
         }
 
-        public HistoryEntry PrevSystem()
+        public ISystem PrevSystem()
         {
-            if (currentfilteredlist == null || currentfilteredlist.Count == 0)
+            if (currentfilteredlistsys == null || currentfilteredlistsys.Count == 0)
                 return null;
 
-            if (lastpos == -1)
-                lastpos = currentfilteredlist.Count - 1;
-            else if (lastpos > 0)
-                lastpos--;
+            if (CurrentPos == -1)
+                CurrentPos = currentfilteredlistsys.Count - 1;
+            else if (CurrentPos > 0)
+                CurrentPos--;
 
-            return currentfilteredlist[lastpos];
+            return currentfilteredlistsys[CurrentPos];
         }
+
+        private List<ISystem> currentfilteredlistsys;
+        private List<HistoryEntry> currentfilteredlisthe;
+        private HistoryList lasthl;
 
         private GLShaderPipeline tapeshader;
         private GLPLFragmentShaderTextureTriStripColorReplace tapefrag;
@@ -277,8 +309,6 @@ namespace EDDiscovery.UserControls.Map3D
 
         private GLShaderPipeline findshader;        // finder
         private GLRenderableItem rifind;
-
-        private int lastpos = -1;       // -1 no system, in currentfilteredlist
 
         private float tapesize;
         private float sunsize;

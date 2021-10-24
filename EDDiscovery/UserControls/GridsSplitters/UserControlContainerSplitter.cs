@@ -186,9 +186,17 @@ namespace EDDiscovery.UserControls
             });
         }
 
+        public override UserControlCommonBase Find(Type t)              // find UCCB of this type in
+        {
+            UserControlCommonBase found = null;
+
+            RunActionOnSplitterTree( (sp,c,uccb)=> { var f = uccb.Find(t); if (found == null && f != null) found = f; });       // run this action on all UCCB in splitter
+            return found;
+        }
+
         private void RunActionOnSplitterTree(Action<SplitterPanel, Control, UserControlCommonBase> action)
         {
-            (panelPlayfield.Controls[0] as SplitContainer).RunActionOnSplitterTree((p, c) =>        // runs on each split panel node exactly..
+            (panelPlayfield.Controls[0] as SplitContainer).RunActionOnSplitterTree((p, c) =>        // runs on each split panel node exactly, does not run if splitter is empty.
             {
                 UserControlCommonBase uccb = ((c is ExtendedControls.TabStrip) ? ((c as ExtendedControls.TabStrip).CurrentControl) : c) as UserControlCommonBase;
                 if (uccb != null)     // tab strip may not have a control set..

@@ -515,6 +515,18 @@ namespace EDDiscovery.UserControls
             return null;
         }
 
+        // find UCCB of type t
+        public UserControlForm FindUCCB(Type t)
+        {
+            foreach (UserControlForm u in tabforms)     
+            {
+                if (u.UserControl != null && u.UserControl.GetType() == t)
+                    return u;
+            }
+
+            return null;
+        }
+
         public UserControlForm NewForm()                // a new form is needed
         {
             UserControlForm tcf = new UserControlForm();

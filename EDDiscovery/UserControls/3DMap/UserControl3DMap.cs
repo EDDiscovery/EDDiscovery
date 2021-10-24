@@ -16,6 +16,7 @@ using EDDiscovery.UserControls.Map3D;
 using EliteDangerousCore;
 using GLOFC.WinForm;
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
@@ -78,9 +79,12 @@ namespace EDDiscovery.UserControls
             map.Dispose();
         }
 
-        public void ShowSystem(ISystem s)
+        public void SetRoute(List<ISystem> sys)
         {
-            ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), s, true, discoveryform.history, 0.8f, System.Drawing.Color.Purple);
+        }
+        public void GotoSystem(ISystem sys, float distancely = 50)
+        {
+            map.GoToSystem(sys, distancely);
         }
 
         private void SystemTick(object sender, EventArgs e)

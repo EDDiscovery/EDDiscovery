@@ -661,7 +661,7 @@ namespace EDDiscovery.UserControls
 
             if (route.Count >= 2)
             {
-                discoveryform.Open3DMap(route[0], route, 400 / CalculateRouteMaxDistFromOrigin(route));
+                discoveryform.Open3DMap(route[0], route);
             }
             else
             {

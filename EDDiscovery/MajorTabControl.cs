@@ -216,12 +216,13 @@ namespace EDDiscovery
             return (from TabPage x in TabPages where x.Controls[0].GetType() == t select x).FirstOrDefault();
         }
 
-        public TabPage EnsureMajorTabIsPresent(PanelInformation.PanelIDs ptype, bool selectit)
+        // placed it at the end of the tab line, but before the +
+        public TabPage EnsureMajorTabIsPresent(PanelInformation.PanelIDs ptype, bool selectit)  
         {
             TabPage page = GetMajorTab(ptype);
             if (page == null)
             {
-                page = CreateTab(ptype, null, -1, TabCount);
+                page = CreateTab(ptype, null, -1, TabCount>0 ? TabCount-1 : 0);
                 UserControls.UserControlCommonBase uccb = page.Controls[0] as UserControls.UserControlCommonBase;
                 uccb.SetCursor(PrimaryTab.GetTravelGrid);
                 uccb.LoadLayout();
@@ -234,27 +235,24 @@ namespace EDDiscovery
             return page;
         }
 
+        // find first tab containing UCCB type t.
+        public Tuple<TabPage, UserControls.UserControlCommonBase> Find(Type t)
+        {
+            foreach ( TabPage tp in TabPages)
+            {
+                var f = ((UserControls.UserControlCommonBase)tp.Controls[0]).Find(t);
+                if (f != null)
+                    return new Tuple<TabPage, UserControls.UserControlCommonBase>(tp, f);
+            }
+            return null;
+        }
+
         #region Implementation
 
         // MAY return null!
 
         private TabPage CreateTab(PanelInformation.PanelIDs ptype, string name, int dn, int posindex)
         {
-            // debug - create an example tab page
-            // keep for now
-            //TabPage page = new TabPage();
-            //page.Location = new System.Drawing.Point(4, 22);    // copied from normal tab creation code
-            //page.Padding = new System.Windows.Forms.Padding(3);
-            //UserControl uc = new UserControl();
-            //uc.Dock = DockStyle.Fill;
-            //uc.AutoScaleMode = AutoScaleMode.Inherit;
-            //page.Controls.Add(uc);
-            //ExtendedControls.TabStrip ts = new ExtendedControls.TabStrip();
-            //ts.Dock = DockStyle.Fill;
-            //uc.Controls.Add(ts);
-            //TabPages.Insert(posindex, page);
-
-
             UserControls.UserControlCommonBase uccb = PanelInformation.Create(ptype);   // must create, since its a ptype.
             if (uccb == null)       // if ptype is crap, it returns null.. catch
                 return null;

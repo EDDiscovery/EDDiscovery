@@ -347,6 +347,8 @@ namespace EDDiscovery
 
         public int Count { get { return usercontrolsforms.Count;  } }
         public UserControlForm GetByWindowsRefName(string name) { return usercontrolsforms.GetByWindowsRefName(name); }
+
+        public UserControlForm FindUCCB(Type t) { return usercontrolsforms.FindUCCB(t); }
         public UserControlForm this[int i] { get { return usercontrolsforms[i]; } }
 
         private static string PopOutSaveID(PanelInformation.PanelIDs p)

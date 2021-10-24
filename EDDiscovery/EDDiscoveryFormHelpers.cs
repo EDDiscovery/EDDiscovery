@@ -192,11 +192,6 @@ namespace EDDiscovery
         #region 3dmap
         public void OpenOld3DMap()     // Old map open
         {
-            Open3DMap();
-        }
-
-        public void Open3DMap()         // Current map - open at last position or configured position
-        {
             if (!old3DMap.Is3DMapsRunning)            // if not running, click the 3dmap button
             {
                 this.Cursor = Cursors.WaitCursor;
@@ -205,27 +200,46 @@ namespace EDDiscovery
 
                 old3DMap.Prepare(last, EDCommander.Current.HomeSystemTextOrSol,
                             EDCommander.Current.MapCentreOnSelection ? last : EDCommander.Current.HomeSystemIOrSol,
-                            EDCommander.Current.MapZoom, Controller.history.FilterByTravelTime(null,null));
+                            EDCommander.Current.MapZoom, Controller.history.FilterByTravelTime(null, null));
                 old3DMap.Show();
                 this.Cursor = Cursors.Default;
             }
         }
 
-        public void Open3DMap(ISystem centerSystem, List<ISystem> route = null, float? zoom = null)     // current-map open/goto this system. system may be null. Optionally set a route
+        public UserControls.UserControl3DMap Open3DMap()         // Current map - open at last position or configured position
         {
-            Open3DMap();
+            var t3dmap = typeof(UserControls.UserControl3DMap);
 
-            if (route!=null)
-                old3DMap.SetPlanned(route);
+            UserControls.UserControlCommonBase uccb = null;
 
-            if (zoom != null)
-                old3DMap.SetZoom(zoom.Value);
+            var tabfind3dmap = tabControlMain.Find(t3dmap);
 
-            if ( centerSystem != null )
+            if ( tabfind3dmap != null )
             {
-                old3DMap.MoveToSystem(centerSystem);
+                tabControlMain.SelectTab(tabfind3dmap.Item1);       // goto tab
+                uccb = tabfind3dmap.Item2;
             }
-            old3DMap.Show();
+            else
+            { 
+                var findpopoutform = PopOuts.FindUCCB(t3dmap);
+                if (findpopoutform != null)
+                    uccb = findpopoutform.UserControl;
+            }
+
+            if (uccb == null )      // none found, make one, on major tab
+            {
+                var tp = tabControlMain.EnsureMajorTabIsPresent(PanelInformation.PanelIDs.Map3D, true);
+                uccb = (UserControls.UserControlCommonBase)tp.Controls[0];
+            }
+
+            return (UserControls.UserControl3DMap)uccb;
+        }
+
+        public void Open3DMap(ISystem system, List<ISystem> route = null)     // current-map open/goto this system. system may be null. Optionally set a route
+        {
+            var map3d = Open3DMap();
+            map3d.SetRoute(route);
+            map3d.GotoSystem(system);
         }
 
         #endregion
