@@ -547,6 +547,7 @@ namespace EDDiscovery.UserControls.Map3D
         public int GalaxyStarsMaxObjects { get { return galaxystars?.MaxObjectsAllowed ?? 100000; } set { if ( galaxystars != null && value >= 10000) galaxystars.MaxObjectsAllowed = value; } }  // screen out stupid numbers (may have got itself saved with that due to debugging)
         public bool Grid { get { return gridshader?.Enable ?? false; } set { if (gridshader != null)  gridshader.Enable = gridtextshader.Enable = value; glwfc.Invalidate(); } }
 
+        public bool NavRouteDisplay { get { return navroute?.EnableTape ?? false; } set { if (navroute != null) navroute.EnableTape = navroute.EnableStars = navroute.EnableText = value; glwfc.Invalidate(); } }
         public bool TravelPathTapeDisplay { get { return travelpath?.EnableTape ?? false; } set { if (travelpath != null) travelpath.EnableTape = value; glwfc.Invalidate(); } }
         public void TravelPathRefresh() { if ( travelpath != null ) travelpath.Refresh(); }   // travelpath.Refresh() manually after these have changed
         public DateTime TravelPathStartDate { get { return travelpath?.TravelPathStartDate ?? DateTime.MinValue; } set { if (travelpath != null && travelpath.TravelPathStartDate != value) { travelpath.TravelPathStartDate = value; } } }
@@ -604,7 +605,7 @@ namespace EDDiscovery.UserControls.Map3D
         {
             GalaxyDisplay = defaults.GetSetting("GD", true);
             StarDotsSpritesDisplay = defaults.GetSetting("SDD", true);
-
+            NavRouteDisplay = defaults.GetSetting("NRD", true);
             TravelPathTapeDisplay = defaults.GetSetting("TPD", true);
             TravelPathStartDate = defaults.GetSetting("TPSD", new DateTime(2014, 12, 16));
             TravelPathStartDateEnable = defaults.GetSetting("TPSDE", false);
@@ -639,6 +640,7 @@ namespace EDDiscovery.UserControls.Map3D
             defaults.PutSetting("GD", GalaxyDisplay);
             defaults.PutSetting("SDD", StarDotsSpritesDisplay);
             defaults.PutSetting("TPD", TravelPathTapeDisplay);
+            defaults.PutSetting("NRD", NavRouteDisplay);
             defaults.PutSetting("TPSD", TravelPathStartDate);
             defaults.PutSetting("TPSDE", TravelPathStartDateEnable);
             defaults.PutSetting("TPED", TravelPathEndDate);

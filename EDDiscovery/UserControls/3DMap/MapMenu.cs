@@ -201,6 +201,16 @@ namespace EDDiscovery.UserControls.Map3D
                     hpos += butsd.Width + hpad;
                 }
 
+                if ((parts & Map.Parts.NavRoute) != 0)
+                {
+                    GLCheckBox butnr = new GLCheckBox("NavRoute", new Rectangle(hpos, vpos, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.NavRoute") as Bitmap, null);
+                    butnr.ToolTipText = "Show nav route";
+                    butnr.Checked = map.StarDotsSpritesDisplay;
+                    butnr.CheckChanged += (e1) => { map.NavRouteDisplay = butnr.Checked; };
+                    pform.Add(butnr);
+                    hpos += butnr.Width + hpad;
+                }
+
                 if ((parts & Map.Parts.EDSMStars) != 0)
                 {
                     GLCheckBox butgalstars = new GLCheckBox("GalaxyStars", new Rectangle(hpos, vpos, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.GalaxyStars") as Bitmap, null);
