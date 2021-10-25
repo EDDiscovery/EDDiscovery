@@ -205,7 +205,7 @@ namespace EDDiscovery.UserControls.Map3D
                 {
                     GLCheckBox butnr = new GLCheckBox("NavRoute", new Rectangle(hpos, vpos, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.NavRoute") as Bitmap, null);
                     butnr.ToolTipText = "Show nav route";
-                    butnr.Checked = map.StarDotsSpritesDisplay;
+                    butnr.Checked = map.NavRouteDisplay;
                     butnr.CheckChanged += (e1) => { map.NavRouteDisplay = butnr.Checked; };
                     pform.Add(butnr);
                     hpos += butnr.Width + hpad;
