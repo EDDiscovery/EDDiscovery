@@ -90,7 +90,7 @@ namespace EDDiscovery.UserControls
         {
             if (he.IsFSDCarrierJump)
             {
-                map.UpdateNewHistoryEntry(discoveryform.history);
+                map.UpdateTravelPath(discoveryform.history);
             }
         }
 

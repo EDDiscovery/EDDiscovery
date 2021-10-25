@@ -40,11 +40,27 @@ namespace EDDiscovery.UserControls.Map3D
         public GLMatrixCalc matrixcalc;
         public Controller3D gl3dcontroller;
         public GLControlDisplay displaycontrol;
-        public enum Parts
+
+        public enum Parts       // select whats displayed
         {
-            Galaxy = 1, GalObjects = 2, Regions = 4, Grid = 8, StarDots = 32, TravelPath = 64, EDSMStars = 128, RightClick = 256,
-            SearchBox = 2048, GalaxyResetPos = 4096, PerspectiveChange = 8192, YHoldButton = 16384, AllowAutoEDSMStarsUpdate = 32768,
-            PrepopulateEDSMLocalArea = 65536,
+            Galaxy = (1<<0), 
+            GalObjects = (1<<1), 
+            Regions = (1<<2), 
+            Grid = (1<<3), 
+            StarDots = (1<<4), 
+            TravelPath = (1<<5), 
+            EDSMStars = (1<<6), 
+            NavRoute = (1<<7),
+            Route = (1<<8),
+            
+            RightClick = (1<<16),
+            SearchBox = (1<<17),
+            GalaxyResetPos = (1<<18), 
+            PerspectiveChange = (1<<19), 
+            YHoldButton = (1<<20), 
+            AllowAutoEDSMStarsUpdate = (1<<21),
+            PrepopulateEDSMLocalArea = (1<<22),
+
             All = -1
         }
 
@@ -65,7 +81,8 @@ namespace EDDiscovery.UserControls.Map3D
         private GLRenderableItem gridrenderable;
 
         private TravelPath travelpath;
-        private MapMenu galaxymenu;
+        private TravelPath routepath;
+        private TravelPath navroute;
 
         public GalacticMapping edsmmapping;
 
@@ -79,13 +96,13 @@ namespace EDDiscovery.UserControls.Map3D
 
         private GLContextMenu rightclickmenu;
 
+        private MapMenu galaxymenu;
+
         //private GLBuffer debugbuffer;
 
         // global buffer blocks used
         private const int volumenticuniformblock = 2;
-        private const int findstarblock = 3;
-        private const int findgeomapblock = 4;
-        private const int findgalaxystars = 5;
+        private const int findblock = 3;
 
         private System.Diagnostics.Stopwatch hptimer = new System.Diagnostics.Stopwatch();
 
@@ -293,24 +310,38 @@ namespace EDDiscovery.UserControls.Map3D
                 rObjects.Add(gridtextshader, "DYNGRIDBitmapRENDER", GLRenderableItem.CreateNullVertex(OpenTK.Graphics.OpenGL4.PrimitiveType.TriangleStrip, rl, drawcount: 4, instancecount: 9));
             }
 
+            GLStorageBlock findresults = new GLStorageBlock(findblock);
+            items.Add(findresults);
+
             float sunsize = 1.0f;
             if ((parts & Parts.TravelPath) != 0)
             {
-                travelpath = new TravelPath(50000, sunsize, 0.4f, findstarblock, true, items, rObjects );
+                travelpath = new TravelPath("TP",50000, sunsize, 0.4f, findresults, true, items, rObjects);
                 travelpath.CreatePath(parent.discoveryform.history);
                 travelpath.SetSystem(parent.discoveryform.history.LastSystem);
+            }
+
+            if ((parts & Parts.Route) != 0)
+            {
+                routepath = new TravelPath("Route", 10000, sunsize, 0.4f, findresults, true, items, rObjects);
+            }
+
+            if ((parts & Parts.NavRoute) != 0)
+            {
+                navroute = new TravelPath("NavRoute", 10000, sunsize, 0.4f, findresults, true, items, rObjects);
+                UpdateNavRoute(parent.discoveryform.history);
             }
 
             if ((parts & Parts.GalObjects) != 0)
             {
                 galmapobjects = new GalMapObjects();
-                galmapobjects.CreateObjects(items, rObjects, edsmmapping, findgeomapblock, true);
+                galmapobjects.CreateObjects(items, rObjects, edsmmapping, findresults, true);
             }
 
             if ((parts & Parts.EDSMStars) != 0)
             {
-                galaxystars = new GalaxyStars(items, rObjects, sunsize, findgalaxystars);
-                UpdateLocalArea(parent.discoveryform.history);
+                galaxystars = new GalaxyStars(items, rObjects, sunsize, findresults);
+                UpdateEDSMStarsLocalArea(parent.discoveryform.history);
             }
 
             if ((parts & Parts.RightClick ) != 0)
@@ -469,7 +500,14 @@ namespace EDDiscovery.UserControls.Map3D
                 galaxystars.Start();
         }
 
-        public void UpdateNewHistoryEntry(HistoryList hl )   // new history entry
+        public void UpdateHistory(HistoryList hl)       // full history refresh
+        {
+            UpdateTravelPath(hl);
+            UpdateEDSMStarsLocalArea(hl);
+            UpdateNavRoute(hl);
+        }
+
+        public void UpdateTravelPath(HistoryList hl )   // new history entry
         {
             if (travelpath != null)
             {
@@ -478,13 +516,20 @@ namespace EDDiscovery.UserControls.Map3D
             }
         }
 
-        public void UpdateHistory(HistoryList hl)       // full history refresh
+        public void UpdateNavRoute(HistoryList hl)
         {
-            UpdateNewHistoryEntry(hl);
-            UpdateLocalArea(hl);
+            if (navroute != null)
+            {
+                var route = hl.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.NavRoute)?.journalEntry as EliteDangerousCore.JournalEvents.JournalNavRoute;
+                if (route?.Route != null) // If a navroute with a valid route..
+                {
+                    var syslist = route.Route.Select(x => new SystemClass(x.StarSystem, x.StarPos.X, x.StarPos.Y, x.StarPos.Z)).Cast<ISystem>().ToList();
+                    navroute.CreatePath(syslist, Color.Purple);
+                }
+            }
         }
-        
-        public void UpdateLocalArea(HistoryList hl)
+
+        public void UpdateEDSMStarsLocalArea(HistoryList hl)
         {
             HistoryEntry he = hl.GetLast;       // may be null
             if (he != null && he.System.HasCoordinate && (parts & Parts.PrepopulateEDSMLocalArea) != 0)
@@ -492,78 +537,6 @@ namespace EDDiscovery.UserControls.Map3D
                 galaxystars.Request9x3Box(new Vector3((float)he.System.X, (float)he.System.Y, (float)he.System.Z));
             }
         }
-        #endregion
-
-        #region Display
-
-        // Context is set.
-        public void Systick()
-        {
-            gl3dcontroller.HandleKeyboardSlews(true, OtherKeys);
-            gl3dcontroller.RecalcMatrixIfMoved();
-            glwfc.Invalidate();
-        }
-
-        float lasteyedistance = 100000000;
-        int lastgridwidth = 100;
-
-        // Context is set.
-        private void Controller3DDraw(Controller3D c3d, ulong time)
-        {
-            GLMatrixCalcUniformBlock mcb = ((GLMatrixCalcUniformBlock)items.UB("MCUB"));
-            mcb.SetText(gl3dcontroller.MatrixCalc);        // set the matrix unform block to the controller 3d matrix calc.
-
-            // set up the grid shader size
-
-            if (gridshader != null && gridshader.Enable)
-            {
-                // set the dynamic grid properties
-
-                var vertshader = gridshader.GetShader<DynamicGridVertexShader>(ShaderType.VertexShader);
-                //remove for now if (Math.Abs(lasteyedistance - gl3dcontroller.MatrixCalc.EyeDistance) > 10)     // a little histerisis, set the vertical shader grid size
-                {
-                    gridrenderable.InstanceCount = vertshader.ComputeGridSize(gl3dcontroller.MatrixCalc.LookAt.Y, gl3dcontroller.MatrixCalc.EyeDistance, out lastgridwidth);
-                    lasteyedistance = gl3dcontroller.MatrixCalc.EyeDistance;
-                }
-
-                vertshader.SetUniforms(gl3dcontroller.MatrixCalc.LookAt, lastgridwidth, gridrenderable.InstanceCount);
-    
-                // set the coords fader
-
-                float coordfade = lastgridwidth == 10000 ? (0.7f - (c3d.MatrixCalc.EyeDistance / 20000).Clamp(0.0f, 0.7f)) : 0.7f;
-                Color coordscol = Color.FromArgb(coordfade < 0.05 ? 0 : 150, Color.Cyan);
-                var tvshader = gridtextshader.GetShader<DynamicGridCoordVertexShader>(ShaderType.VertexShader);
-                tvshader.ComputeUniforms(lastgridwidth, gl3dcontroller.MatrixCalc, gl3dcontroller.PosCamera.CameraDirection, coordscol, Color.Transparent);
-            }
-
-            //// set the galaxy volumetric block
-
-            if (galaxyrenderable != null && galaxyshader.Enable)
-            {
-                galaxyrenderable.InstanceCount = volumetricblock.Set(gl3dcontroller.MatrixCalc, volumetricboundingbox, gl3dcontroller.MatrixCalc.InPerspectiveMode ? 50.0f : 0);        // set up the volumentric uniform
-                //System.Diagnostics.Debug.WriteLine("GI {0}", galaxyrendererable.InstanceCount);
-                galaxyshader.SetDistance(gl3dcontroller.MatrixCalc.InPerspectiveMode ? c3d.MatrixCalc.EyeDistance : -1f);
-            }
-
-            if (travelpath != null)
-                travelpath.Update(time, gl3dcontroller.MatrixCalc.EyeDistance);
-
-            if (galmapobjects != null && galmapobjects.Enable)
-                galmapobjects.Update(time, gl3dcontroller.MatrixCalc.EyeDistance);
-
-            if (galaxystars != null && galaxystars.Enable)
-            {
-                if ( (parts & Parts.AllowAutoEDSMStarsUpdate) != 0 && gl3dcontroller.MatrixCalc.EyeDistance < 400)         // if auto update, and eyedistance close, see if local stars needed
-                    galaxystars.Request9x3BoxConditional(gl3dcontroller.PosCamera.LookAt);
-
-                galaxystars.Update(time, gl3dcontroller.MatrixCalc.EyeDistance);
-            }
-
-            rObjects.Render(glwfc.RenderState, gl3dcontroller.MatrixCalc, verbose: false);
-
-            GL.Flush(); // ensure everything is in the grapghics pipeline
-        }
-
         #endregion
 
 #region Turn on/off, move, etc.
@@ -616,6 +589,12 @@ namespace EDDiscovery.UserControls.Map3D
             gl3dcontroller.PosCamera.CameraRotation = 0;
             gl3dcontroller.PosCamera.GoToZoomPan(new Vector3(0, 0, 0), new Vector2(140.75f, 0), 0.5f,3);
         }
+
+        public void SetRoute(List<ISystem> syslist)
+        {
+            if ( routepath != null )
+                routepath.CreatePath(syslist, Color.Green);
+       }
 
         #endregion
 
@@ -692,14 +671,17 @@ namespace EDDiscovery.UserControls.Map3D
 
         private Object FindObjectOnMap(Point loc)
         {
-            float tz = float.MinValue, gz = float.MinValue, sz = float.MinValue;
+            float tz = float.MaxValue, gz = float.MaxValue, sz = float.MaxValue, rp = float.MaxValue, nr = float.MaxValue;
+
             var he = travelpath?.FindSystem(loc, glwfc.RenderState, matrixcalc.ViewPort.Size, out tz);     //z are maxvalue if not found, will return an HE since travelpath is made with it
             var gmo = galmapobjects?.FindPOI(loc, glwfc.RenderState, matrixcalc.ViewPort.Size, out gz);
             var sys = galaxystars?.Find(loc, glwfc.RenderState, matrixcalc.ViewPort.Size, out sz);
+            var rte = routepath?.FindSystem(loc, glwfc.RenderState, matrixcalc.ViewPort.Size, out rp);    
+            var nav = navroute?.FindSystem(loc, glwfc.RenderState, matrixcalc.ViewPort.Size, out nr);     
 
-            if (gmo != null && gz < sz && gz < tz)      // got gmo, and closer than the other two
+            if (gmo != null && gz < sz && gz < tz && gz < rp && gz < nr)      // got gmo, and closer than the others
                 return gmo;
-            if (he != null )                            // he is prefered over sys since it has more data associated with it
+            if (he != null )                            // he is prefered over others since it has more data associated with it
                 return he;
             if (sys != null)
             {
@@ -707,6 +689,11 @@ namespace EDDiscovery.UserControls.Map3D
                 if (s != null)                          // must normally be found, so return
                     return s;
             }
+            if (rte != null)
+                return rte;
+            if (nav != null)
+                return nav;
+
             return null;
         }
 
@@ -743,7 +730,7 @@ namespace EDDiscovery.UserControls.Map3D
             {
                 return new Tuple<string, Vector3, string>(sys.Name,
                                                             new Vector3((float)sys.X, (float)sys.Y, (float)sys.Z), 
-                                                            $"EDSM Star");
+                                                            $"Star");       // TBD distance from home, etc
             }
             else
             {
@@ -752,9 +739,85 @@ namespace EDDiscovery.UserControls.Map3D
         }
 
 
-#endregion
+        #endregion
 
-#region UI
+        #region Display
+
+        // Context is set.
+        public void Systick()
+        {
+            gl3dcontroller.HandleKeyboardSlews(true, OtherKeys);
+            gl3dcontroller.RecalcMatrixIfMoved();
+            glwfc.Invalidate();
+        }
+
+        float lasteyedistance = 100000000;
+        int lastgridwidth = 100;
+
+        // Context is set.
+        private void Controller3DDraw(Controller3D c3d, ulong time)
+        {
+            GLMatrixCalcUniformBlock mcb = ((GLMatrixCalcUniformBlock)items.UB("MCUB"));
+            mcb.SetText(gl3dcontroller.MatrixCalc);        // set the matrix unform block to the controller 3d matrix calc.
+
+            // set up the grid shader size
+
+            if (gridshader != null && gridshader.Enable)
+            {
+                // set the dynamic grid properties
+
+                var vertshader = gridshader.GetShader<DynamicGridVertexShader>(ShaderType.VertexShader);
+                //remove for now if (Math.Abs(lasteyedistance - gl3dcontroller.MatrixCalc.EyeDistance) > 10)     // a little histerisis, set the vertical shader grid size
+                {
+                    gridrenderable.InstanceCount = vertshader.ComputeGridSize(gl3dcontroller.MatrixCalc.LookAt.Y, gl3dcontroller.MatrixCalc.EyeDistance, out lastgridwidth);
+                    lasteyedistance = gl3dcontroller.MatrixCalc.EyeDistance;
+                }
+
+                vertshader.SetUniforms(gl3dcontroller.MatrixCalc.LookAt, lastgridwidth, gridrenderable.InstanceCount);
+
+                // set the coords fader
+
+                float coordfade = lastgridwidth == 10000 ? (0.7f - (c3d.MatrixCalc.EyeDistance / 20000).Clamp(0.0f, 0.7f)) : 0.7f;
+                Color coordscol = Color.FromArgb(coordfade < 0.05 ? 0 : 150, Color.Cyan);
+                var tvshader = gridtextshader.GetShader<DynamicGridCoordVertexShader>(ShaderType.VertexShader);
+                tvshader.ComputeUniforms(lastgridwidth, gl3dcontroller.MatrixCalc, gl3dcontroller.PosCamera.CameraDirection, coordscol, Color.Transparent);
+            }
+
+            //// set the galaxy volumetric block
+
+            if (galaxyrenderable != null && galaxyshader.Enable)
+            {
+                galaxyrenderable.InstanceCount = volumetricblock.Set(gl3dcontroller.MatrixCalc, volumetricboundingbox, gl3dcontroller.MatrixCalc.InPerspectiveMode ? 50.0f : 0);        // set up the volumentric uniform
+                //System.Diagnostics.Debug.WriteLine("GI {0}", galaxyrendererable.InstanceCount);
+                galaxyshader.SetDistance(gl3dcontroller.MatrixCalc.InPerspectiveMode ? c3d.MatrixCalc.EyeDistance : -1f);
+            }
+
+            if (travelpath != null)
+                travelpath.Update(time, gl3dcontroller.MatrixCalc.EyeDistance);
+            if (routepath != null)
+                routepath.Update(time, gl3dcontroller.MatrixCalc.EyeDistance);
+            if (navroute != null)
+                navroute.Update(time, gl3dcontroller.MatrixCalc.EyeDistance);
+
+            if (galmapobjects != null && galmapobjects.Enable)
+                galmapobjects.Update(time, gl3dcontroller.MatrixCalc.EyeDistance);
+
+            if (galaxystars != null && galaxystars.Enable)
+            {
+                if ((parts & Parts.AllowAutoEDSMStarsUpdate) != 0 && gl3dcontroller.MatrixCalc.EyeDistance < 400)         // if auto update, and eyedistance close, see if local stars needed
+                    galaxystars.Request9x3BoxConditional(gl3dcontroller.PosCamera.LookAt);
+
+                galaxystars.Update(time, gl3dcontroller.MatrixCalc.EyeDistance);
+            }
+
+            rObjects.Render(glwfc.RenderState, gl3dcontroller.MatrixCalc, verbose: false);
+
+            GL.Flush(); // ensure everything is in the grapghics pipeline
+        }
+
+        #endregion
+
+        #region UI
 
         private void MouseDownOnMap(Object s, GLMouseEventArgs e)
         {

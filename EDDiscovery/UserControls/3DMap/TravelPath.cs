@@ -47,7 +47,7 @@ namespace EDDiscovery.UserControls.Map3D
         public Size BitMapSize { get; set; } = new Size(128, 32);
 
 
-        public TravelPath(int maxstars, float sunsize, float tapesize, int bufferfindbinding, bool depthtest, GLItemsList items, GLRenderProgramSortedList rObjects)
+        public TravelPath(string name, int maxstars, float sunsize, float tapesize, GLStorageBlock bufferfindresults, bool depthtest, GLItemsList items, GLRenderProgramSortedList rObjects)
         {
             this.MaxStars = maxstars;
             this.tapesize = tapesize;
@@ -73,7 +73,7 @@ namespace EDDiscovery.UserControls.Map3D
 
             ritape.ElementBuffer = items.NewBuffer();       // empty buffer for element index for now
 
-            rObjects.Add(tapeshader, "travelpath-tape", ritape);   // add render to object list
+            rObjects.Add(tapeshader, name + "-tape", ritape);   // add render to object list
 
             // now the stars
 
@@ -90,16 +90,16 @@ namespace EDDiscovery.UserControls.Map3D
             rt.DepthTest = depthtest;
             rt.DepthClamp = true;
             renderersun = GLRenderableItem.CreateVector4Vector4(items, OpenTK.Graphics.OpenGL4.PrimitiveType.Triangles, rt, shape, starposbuf, 0, null, 0, 1);
-            rObjects.Add(sunshader, "travelpath-suns", renderersun);
+            rObjects.Add(sunshader, name + "-suns", renderersun);
 
             // find compute
 
-            findshader = items.NewShaderPipeline(null, sunvertex, null, null, new GLPLGeoShaderFindTriangles(bufferfindbinding, 16), null, null, null);
+            findshader = items.NewShaderPipeline(null, sunvertex, null, null, new GLPLGeoShaderFindTriangles(bufferfindresults, 16), null, null, null);
             items.Add(findshader);
             rifind = GLRenderableItem.CreateVector4Vector4(items, OpenTK.Graphics.OpenGL4.PrimitiveType.Triangles, GLRenderState.Tri(), shape, starposbuf, ic: 0, seconddivisor: 1);
 
             // Sun names, handled by textrenderer
-            textrenderer = new GLBitmaps("bm-travelmap", rObjects, BitMapSize, depthtest: depthtest, cullface: false);
+            textrenderer = new GLBitmaps( name + "-text", rObjects, BitMapSize, depthtest: depthtest, cullface: false);
             items.Add(textrenderer);
         }
 
@@ -202,18 +202,21 @@ namespace EDDiscovery.UserControls.Map3D
 
         public void Update(ulong time, float eyedistance)
         {
-            const int rotperiodms = 20000;
-            time = time % rotperiodms;
-            float fract = (float)time / rotperiodms;
-            float angle = (float)(2 * Math.PI * fract);
-            sunvertex.ModelTranslation = Matrix4.CreateRotationY(-angle);
+            if ((currentfilteredlistsys?.Count ?? 0) > 0)
+            {
+                const int rotperiodms = 20000;
+                time = time % rotperiodms;
+                float fract = (float)time / rotperiodms;
+                float angle = (float)(2 * Math.PI * fract);
+                sunvertex.ModelTranslation = Matrix4.CreateRotationY(-angle);
 
-            const int pathperiodms = 10000;
+                const int pathperiodms = 10000;
 
-            float scale = Math.Max(1, Math.Min(4, eyedistance / 5000));
-            //System.Diagnostics.Debug.WriteLine("Scale {0}", scale);
-            sunvertex.ModelTranslation *= Matrix4.CreateScale(scale);           // scale them a little with distance to pick them out better
-            tapefrag.TexOffset = new Vector2(-(float)(time % pathperiodms) / pathperiodms, 0);
+                float scale = Math.Max(1, Math.Min(4, eyedistance / 5000));
+                //System.Diagnostics.Debug.WriteLine("Scale {0}", scale);
+                sunvertex.ModelTranslation *= Matrix4.CreateScale(scale);           // scale them a little with distance to pick them out better
+                tapefrag.TexOffset = new Vector2(-(float)(time % pathperiodms) / pathperiodms, 0);
+            }
         }
 
         // returns HE, and z - if not found z = Max value, null
@@ -221,7 +224,7 @@ namespace EDDiscovery.UserControls.Map3D
         {
             z = float.MaxValue;
 
-            if (EnableStars)
+            if (EnableStars && (currentfilteredlistsys?.Count ?? 0) > 0)
             {
                 var geo = findshader.GetShader<GLPLGeoShaderFindTriangles>(OpenTK.Graphics.OpenGL4.ShaderType.GeometryShader);
                 geo.SetScreenCoords(viewportloc, viewportsize);

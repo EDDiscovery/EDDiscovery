@@ -42,7 +42,7 @@ namespace EDDiscovery.UserControls.Map3D
         private const int MaxRequests = 27 * 2;
         private const int MaxSubthreads = 16;
 
-        public GalaxyStars(GLItemsList items, GLRenderProgramSortedList rObjects, float sunsize, int findbufferbinding)
+        public GalaxyStars(GLItemsList items, GLRenderProgramSortedList rObjects, float sunsize, GLStorageBlock findbufferresults)
         {
             sunvertex = new GLPLVertexShaderModelCoordWithWorldTranslationCommonModelTranslation(new Color[] { Color.FromArgb(255, 220, 220, 10), Color.FromArgb(255, 0,0,0) } );
             items.Add(sunvertex);
@@ -75,7 +75,7 @@ namespace EDDiscovery.UserControls.Map3D
 
             items.Add(slset);
 
-            findshader = items.NewShaderPipeline(null, sunvertex, null, null, new GLPLGeoShaderFindTriangles(findbufferbinding, 16), null, null, null);
+            findshader = items.NewShaderPipeline(null, sunvertex, null, null, new GLPLGeoShaderFindTriangles(findbufferresults, 16), null, null, null);
             items.Add(findshader);
         }
 

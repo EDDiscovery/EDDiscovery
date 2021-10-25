@@ -54,7 +54,7 @@ namespace EDDiscovery.UserControls.Map3D
             return s;
         }
 
-        public void CreateObjects(GLItemsList items, GLRenderProgramSortedList rObjects, GalacticMapping galmap, int bufferfindbinding, bool depthtest)
+        public void CreateObjects(GLItemsList items, GLRenderProgramSortedList rObjects, GalacticMapping galmap, GLStorageBlock findbufferresults, bool depthtest)
         {
             this.galmap = galmap;
 
@@ -105,10 +105,7 @@ namespace EDDiscovery.UserControls.Map3D
 
             // add a find shader to look them up
 
-            var geofind = new GLPLGeoShaderFindTriangles(bufferfindbinding, 16);        // pass thru normal vert/tcs/tes then to geoshader for results
-            items.Add(geofind);
-
-            findshader = items.NewShaderPipeline(null, vert, tcs, tes, new GLPLGeoShaderFindTriangles(bufferfindbinding, 16), null, null, null);
+            findshader = items.NewShaderPipeline(null, vert, tcs, tes, new GLPLGeoShaderFindTriangles(findbufferresults, 16), null, null, null);
 
             // hook to modelworldbuffer, at modelpos and worldpos.  UpdateEnables will fill in instance count
             rifind = GLRenderableItem.CreateVector4Vector4(items, OpenTK.Graphics.OpenGL4.PrimitiveType.Patches, GLRenderState.Patches(4), modelworldbuffer, modelpos, ridisplay.DrawCount,

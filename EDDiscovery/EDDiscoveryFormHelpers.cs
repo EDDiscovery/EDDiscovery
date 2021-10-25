@@ -194,15 +194,12 @@ namespace EDDiscovery
         {
             if (!old3DMap.Is3DMapsRunning)            // if not running, click the 3dmap button
             {
-                this.Cursor = Cursors.WaitCursor;
-
                 ISystem last = PrimaryCursor.GetCurrentHistoryEntry?.System;
 
                 old3DMap.Prepare(last, EDCommander.Current.HomeSystemTextOrSol,
-                            EDCommander.Current.MapCentreOnSelection ? last : EDCommander.Current.HomeSystemIOrSol,
-                            EDCommander.Current.MapZoom, Controller.history.FilterByTravelTime(null, null));
+                            EDCommander.Current.HomeSystemIOrSol,
+                            1, Controller.history.FilterByTravelTime(null, null));
                 old3DMap.Show();
-                this.Cursor = Cursors.Default;
             }
         }
 

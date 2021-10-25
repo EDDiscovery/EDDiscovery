@@ -79,8 +79,9 @@ namespace EDDiscovery.UserControls
             map.Dispose();
         }
 
-        public void SetRoute(List<ISystem> sys)
+        public void SetRoute(List<ISystem> syslist)
         {
+            map.SetRoute(syslist);
         }
         public void GotoSystem(ISystem sys, float distancely = 50)
         {
@@ -99,7 +100,11 @@ namespace EDDiscovery.UserControls
         {
             if (he.IsFSDCarrierJump)
             {
-                map.UpdateNewHistoryEntry(discoveryform.history);
+                map.UpdateTravelPath(discoveryform.history);
+            }
+            else if ( he.journalEntry.EventTypeID == JournalTypeEnum.NavRoute)
+            {
+                map.UpdateNavRoute(discoveryform.history);
             }
         }
 
