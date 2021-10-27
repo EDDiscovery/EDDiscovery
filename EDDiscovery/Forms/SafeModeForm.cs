@@ -141,7 +141,7 @@ namespace EDDiscovery.Forms
                         try
                         {
                             string localtime = DateTime.Now.ToString("yyyy-MM-dd.HH-mm-ss");
-                            string topath = Path.Combine(folderDialog.SelectedPath, "EDDUser." + localtime + ".sql");
+                            string topath = Path.Combine(folderDialog.SelectedPath, "EDDUser." + localtime + ".sqlite");
                             File.Copy(opt.UserDatabasePath, topath);
                             MessageBox.Show(this, "Backup made to " + topath, "EDDiscovery", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
