@@ -59,7 +59,7 @@ Source: "*.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "*.pdb"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "eddwebsite.zip"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "..\..\Translations\*.tlf"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "..\..\UserControls\*.tlp"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "..\..\UserControls\Translations\*.tlp"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "..\..\..\EliteDangerousCore\EliteDangerous\EliteDangerous\*.tlp"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "..\..\..\Installer\ExtraFiles\EUROCAPS.TTF"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "..\..\..\EliteDangerousCore\EliteDangerous\JournalEvents\*.tlp"; DestDir: "{app}"; Flags: ignoreversion;
