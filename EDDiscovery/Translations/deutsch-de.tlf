@@ -29,16 +29,18 @@ SECTION StartUp
 SECTION SafeModeForm
 
 SafeModeForm: "EDDiscovery Safe Mode" => "EDDiscovery abgesicherter Modus"
-.buttonCancel: "Cancel" => "Abbrechen"
-.buttonNormal: "Run" => "Starten"
-.buttonDeleteSystemDB: "Delete/Rebuild System DB" => "System DB löschen/wiederaufbauen"
 .buttonDbs: "Move Databases" => "Verschiebe Datenbank"
-.buttonLang: "Reset Language to English" => "Reset Language to English"
-.button1: "Remove all Action Packs" => "Alle Action Packs entfernen"
-.buttonRemoveDLLs: "Remove all Extension DLLs" => "Alle Erweiterungs-DLLs entfernen"
-.buttonResetTabs: "Reset Tabs, Remove PopOuts" => "Registerkarten zurücksetzen, externe Fenster entfernen"
+.buttonRun: "Run" => "Starten"
 .buttonPositions: "Reset Window Positions" => "Fensterpositionen zurücksetzen"
 .buttonResetTheme: "Reset Theme" => "Thema zurücksetzen"
+.buttonCancel: "Cancel" => "Abbrechen"
+.buttonDeleteSystemDB: "Delete/Rebuild System DB" => "System DB löschen/wiederaufbauen"
+.buttonResetTabs: "Reset Tabs, Remove PopOuts" => "Registerkarten zurücksetzen, externe Fenster entfernen"
+.buttonRemoveDLLs: "Remove all Extension DLLs" => "Alle Erweiterungs-DLLs entfernen"
+.buttonActionPacks: "Remove all Action Packs" => "Alle Action-Packs entfernen"
+.buttonLang: "Reset Language to English" => "Reset Language to English"
+.buttonResetDBLoc: "Reset DB Location" => "Datenbankort zurücksetzen"
+.buttonBackup: "Backup Database" => "Datenbank sichern"
 
 SECTION PopOutInfo
 

@@ -28,16 +28,18 @@ SECTION StartUp
 SECTION SafeModeForm
 
 SafeModeForm: "EDDiscovery Safe Mode" @
-SafeModeForm.buttonCancel: "Cancel" @
-SafeModeForm.buttonNormal: "Run" @
-SafeModeForm.buttonDeleteSystemDB: "Delete/Rebuild System DB" @
-SafeModeForm.buttonDbs: "Move Databases" @
-SafeModeForm.buttonLang: "Reset Language to English" @
-SafeModeForm.button1: "Remove all Action Packs" @
-SafeModeForm.buttonRemoveDLLs: "Remove all Extension DLLs" @
-SafeModeForm.buttonResetTabs: "Reset Tabs, Remove PopOuts" @
-SafeModeForm.buttonPositions: "Reset Window Positions" @
-SafeModeForm.buttonResetTheme: "Reset Theme" @
+.buttonDbs: "Move Databases" @
+.buttonRun: "Run" @
+.buttonPositions: "Reset Window Positions" @
+.buttonResetTheme: "Reset Theme" @
+.buttonCancel: "Cancel" @
+.buttonDeleteSystemDB: "Delete/Rebuild System DB" @
+.buttonResetTabs: "Reset Tabs, Remove PopOuts" @
+.buttonRemoveDLLs: "Remove all Extension DLLs" @
+.buttonActionPacks: "Remove all Action Packs" @
+.buttonLang: "Reset Language to English" @
+.buttonResetDBLoc: "Reset DB Location" @
+.buttonBackup: "Backup Database" @
 
 SECTION PopOutInfo
 
