@@ -132,6 +132,19 @@
     <NoWin32Manifest>true</NoWin32Manifest>
   </PropertyGroup>
   <ItemGroup>
+	<None Include="..\EDDIcons\Controls\Fakes\Controls.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+	  <Link>Controls.resx</Link>
+      <LastGenOutput>Controls.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+      <CustomToolNamespace>EDDiscovery.Icons</CustomToolNamespace>
+    </None>
+    <None Include="..\EDDIcons\Controls\Fakes\Controls.Designer.cs">
+      <AutoGen>True</AutoGen>
+	  <Link>Controls.Designer.cs</Link>
+      <DependentUpon>Controls.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </None>
     <Reference Include="GLOFC, Version=0.5.5.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\RJKJSoft.GLOFC.0.5.5\lib\net48\GLOFC.dll</HintPath>
     </Reference>
@@ -251,12 +264,6 @@
     <Compile Include="WebServer\EDDWebScanDisplay.cs" />
     <Compile Include="WebServer\EDDWebIcons.cs" />
     <Compile Include="WebServer\EDDWebServer.cs" />
-    <None Include="..\EDDIcons\Controls\Fakes\Controls.Designer.cs">
-      <Link>Icons\Controls.Designer.cs</Link>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Controls.resx</DependentUpon>
-    </None>
     <Compile Include="Actions\ActionsEDDCmds\ActionCommanders.cs" />
     <Compile Include="Actions\ActionsEDDCmds\ActionCaptainsLog.cs" />
     <Compile Include="Actions\ActionsEDDCmds\ActionGMO.cs" />
@@ -989,7 +996,7 @@
       <DependentUpon>MoveToCommander.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
@@ -1023,14 +1030,6 @@
     <None Include="UserControls\translation-portugues-uc.tlp" />
     <None Include="UserControls\translation-russian-uc.tlp" />
     <None Include="UserControls\translation-spanish-uc.tlp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\EDDIcons\Controls\Fakes\Controls.resx">
-      <Link>Icons\Controls.resx</Link>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <CustomToolNamespace>EDDiscovery.Icons</CustomToolNamespace>
-      <LastGenOutput>Controls.Designer.cs</LastGenOutput>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

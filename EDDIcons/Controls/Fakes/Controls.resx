@@ -184,14 +184,8 @@
   <data name="Main_Admin_DeleteDupFSDJumps" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Main\Admin\DeleteDupFSDJumps.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Main_Admin_EDDBSystemsSync" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Main\Admin\EDDBSystemsSync.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="Main_Admin_EDSMSystemsSync" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Main\Admin\EDSMSystemsSync.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Main_Admin_ExportVisitedStars" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Main\Admin\ExportVisitedStars.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Main_Admin_ReadNetLogs" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Main\Admin\ReadNetLogs.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -204,9 +198,6 @@
   </data>
   <data name="Main_Admin_SendUnsyncedEDDN" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Main\Admin\SendUnsyncedEDDN.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Main_Admin_SendUnsyncedEGO" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Main\Admin\SendUnsyncedEGO.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Main_Admin_ShowLogFiles" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Main\Admin\ShowLogFiles.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -226,9 +217,6 @@
   <data name="Main_Help_Github" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Main\Help\Github.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Main_Help_Help" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Main\Help\Help.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="Main_Help_ReportIssue" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Main\Help\ReportIssue.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -241,17 +229,11 @@
   <data name="Main_Toolbar_ManageAddOns" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Main\Toolbar\ManageAddOns.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Main_Toolbar_Open3DMap" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Main\Toolbar\Open3DMap.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="Main_Toolbar_Popouts" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Main\Toolbar\Popouts.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Main_Toolbar_Refresh" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Main\Toolbar\Refresh.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Main_Toolbar_SyncEDSM" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Main\Toolbar\SyncEDSM.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Main_Tools_Exit" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Main\Tools\Exit.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -318,9 +300,6 @@
   </data>
   <data name="Map3D_Filter_ShowAllStars" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Map3D\Filter\ShowAllStars.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Map3D_Filter_ShowPopSystems" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Map3D\Filter\ShowPopSystems.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Map3D_FilterDate" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Map3D\FilterDate.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -538,12 +517,6 @@
   <data name="StarList_EDSM" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\StarList\EDSM.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="StarList_Jumponium" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\StarList\Jumponium.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="StarList_BodyClass" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\StarList\BodyClasses.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="StarList_ExportToExcel" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\StarList\ExportToExcel.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -690,9 +663,6 @@
   </data>
   <data name="spansh" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\SysInfo\spansh.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Ross" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\SysInfo\Ross.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Help_Video" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\help\video.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

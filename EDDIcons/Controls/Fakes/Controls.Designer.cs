@@ -19,7 +19,7 @@ namespace EDDiscovery.Icons {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Controls {
@@ -39,7 +39,7 @@ namespace EDDiscovery.Icons {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("EDDiscovery.Icons.Controls", typeof(Controls).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("EDDiscovery.Controls", typeof(Controls).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -453,29 +453,9 @@ namespace EDDiscovery.Icons {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Main_Admin_EDDBSystemsSync {
-            get {
-                object obj = ResourceManager.GetObject("Main_Admin_EDDBSystemsSync", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         public static System.Drawing.Bitmap Main_Admin_EDSMSystemsSync {
             get {
                 object obj = ResourceManager.GetObject("Main_Admin_EDSMSystemsSync", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Main_Admin_ExportVisitedStars {
-            get {
-                object obj = ResourceManager.GetObject("Main_Admin_ExportVisitedStars", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -516,16 +496,6 @@ namespace EDDiscovery.Icons {
         public static System.Drawing.Bitmap Main_Admin_SendUnsyncedEDDN {
             get {
                 object obj = ResourceManager.GetObject("Main_Admin_SendUnsyncedEDDN", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Main_Admin_SendUnsyncedEGO {
-            get {
-                object obj = ResourceManager.GetObject("Main_Admin_SendUnsyncedEGO", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -593,16 +563,6 @@ namespace EDDiscovery.Icons {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Main_Help_Help {
-            get {
-                object obj = ResourceManager.GetObject("Main_Help_Help", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         public static System.Drawing.Bitmap Main_Help_ReportIssue {
             get {
                 object obj = ResourceManager.GetObject("Main_Help_ReportIssue", resourceCulture);
@@ -643,16 +603,6 @@ namespace EDDiscovery.Icons {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Main_Toolbar_Open3DMap {
-            get {
-                object obj = ResourceManager.GetObject("Main_Toolbar_Open3DMap", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         public static System.Drawing.Bitmap Main_Toolbar_Popouts {
             get {
                 object obj = ResourceManager.GetObject("Main_Toolbar_Popouts", resourceCulture);
@@ -666,16 +616,6 @@ namespace EDDiscovery.Icons {
         public static System.Drawing.Bitmap Main_Toolbar_Refresh {
             get {
                 object obj = ResourceManager.GetObject("Main_Toolbar_Refresh", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Main_Toolbar_SyncEDSM {
-            get {
-                object obj = ResourceManager.GetObject("Main_Toolbar_SyncEDSM", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -896,16 +836,6 @@ namespace EDDiscovery.Icons {
         public static System.Drawing.Bitmap Map3D_Filter_ShowAllStars {
             get {
                 object obj = ResourceManager.GetObject("Map3D_Filter_ShowAllStars", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Map3D_Filter_ShowPopSystems {
-            get {
-                object obj = ResourceManager.GetObject("Map3D_Filter_ShowPopSystems", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1403,16 +1333,6 @@ namespace EDDiscovery.Icons {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Ross {
-            get {
-                object obj = ResourceManager.GetObject("Ross", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         public static System.Drawing.Bitmap Route_ExportToExcel {
             get {
                 object obj = ResourceManager.GetObject("Route_ExportToExcel", resourceCulture);
@@ -1763,16 +1683,6 @@ namespace EDDiscovery.Icons {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap StarList_BodyClass {
-            get {
-                object obj = ResourceManager.GetObject("StarList_BodyClass", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         public static System.Drawing.Bitmap StarList_EDSM {
             get {
                 object obj = ResourceManager.GetObject("StarList_EDSM", resourceCulture);
@@ -1786,16 +1696,6 @@ namespace EDDiscovery.Icons {
         public static System.Drawing.Bitmap StarList_ExportToExcel {
             get {
                 object obj = ResourceManager.GetObject("StarList_ExportToExcel", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap StarList_Jumponium {
-            get {
-                object obj = ResourceManager.GetObject("StarList_Jumponium", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
