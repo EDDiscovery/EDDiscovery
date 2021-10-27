@@ -99,8 +99,8 @@ namespace EDDiscovery.UserControls
 
                 if (gmo != null)
                 {
-                    TargetClass.SetTargetGMO("G:" + gmo.name, gmo.id, gmo.points[0].X, gmo.points[0].Y, gmo.points[0].Z);
-                    msgboxtext = "Target set on galaxy object " + gmo.name;
+                    TargetClass.SetTargetGMO("G:" + gmo.Name, gmo.ID, gmo.Points[0].X, gmo.Points[0].Y, gmo.Points[0].Z);
+                    msgboxtext = "Target set on galaxy object " + gmo.Name;
                 }
                 else
                 {

@@ -68,9 +68,9 @@ namespace EDDiscovery.Actions
                         string wildcard = sp.NextQuotedWord() ?? "*";
 
                         int count = 1;
-                        foreach( var g in discoveryform.galacticMapping.galacticMapObjects)
+                        foreach( var g in discoveryform.galacticMapping.GalacticMapObjects)
                         {
-                            if (g.name.WildCardMatch(wildcard, true))
+                            if (g.Name.WildCardMatch(wildcard, true))
                             {
                                 string nprefix = prefix + (count++).ToStringInvariant() + "_";
                                 DumpGMO(ap, nprefix, g);
@@ -78,7 +78,7 @@ namespace EDDiscovery.Actions
                         }
 
                         ap[prefix + "MatchCount"] = (count - 1).ToStringInvariant();
-                        ap[prefix + "TotalCount"] = discoveryform.galacticMapping.galacticMapObjects.Count.ToStringInvariant();
+                        ap[prefix + "TotalCount"] = discoveryform.galacticMapping.GalacticMapObjects.Count.ToStringInvariant();
 
                     }
                     else
@@ -114,21 +114,21 @@ namespace EDDiscovery.Actions
 
         void DumpGMO(ActionProgramRun ap, string nprefix, EliteDangerousCore.EDSM.GalacticMapObject g)
         {
-            ap[nprefix + "Name"] = g.name;
-            ap[nprefix + "Type"] = g.type;
-            ap[nprefix + "Search"] = g.galMapSearch;
-            ap[nprefix + "MapURL"] = g.galMapUrl;
-            ap[nprefix + "Description"] = g.description;
-            ap[nprefix + "Group"] = g.galMapType.Group.ToString();
+            ap[nprefix + "Name"] = g.Name;
+            ap[nprefix + "Type"] = g.Type;
+            ap[nprefix + "Search"] = g.GalMapSearch;
+            ap[nprefix + "MapURL"] = g.GalMapUrl;
+            ap[nprefix + "Description"] = g.Description;
+            ap[nprefix + "Group"] = g.GalMapType.Group.ToString();
 
-            if (g.points != null)
+            if (g.Points != null)
             {
-                for (int i = 0; i < g.points.Count; i++)
+                for (int i = 0; i < g.Points.Count; i++)
                 {
                     string p = nprefix + "Vertex_" + (i + 1).ToStringInvariant() + "_";
-                    ap[p + "X"] = g.points[i].X.ToStringInvariant("0.##");
-                    ap[p + "Y"] = g.points[i].Y.ToStringInvariant("0.##");
-                    ap[p + "Z"] = g.points[i].Z.ToStringInvariant("0.##");
+                    ap[p + "X"] = g.Points[i].X.ToStringInvariant("0.##");
+                    ap[p + "Y"] = g.Points[i].Y.ToStringInvariant("0.##");
+                    ap[p + "Z"] = g.Points[i].Z.ToStringInvariant("0.##");
                 }
             }
         }

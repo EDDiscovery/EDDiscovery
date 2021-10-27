@@ -120,7 +120,7 @@
             // 
             // buttonTags
             // 
-            this.buttonTags.Image = ((System.Drawing.Image)(resources.GetObject("buttonTags.Image")));
+            this.buttonTags.Image = global::EDDiscovery.Icons.Controls.CaptainsLog_Tags;
             this.buttonTags.Location = new System.Drawing.Point(277, 1);
             this.buttonTags.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonTags.Name = "buttonTags";
@@ -132,7 +132,7 @@
             // 
             // buttonDelete
             // 
-            this.buttonDelete.Image = ((System.Drawing.Image)(resources.GetObject("buttonDelete.Image")));
+            this.buttonDelete.Image = global::EDDiscovery.Icons.Controls.CaptainsLog_Delete;
             this.buttonDelete.Location = new System.Drawing.Point(241, 1);
             this.buttonDelete.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonDelete.Name = "buttonDelete";
@@ -144,7 +144,7 @@
             // 
             // buttonNew
             // 
-            this.buttonNew.Image = ((System.Drawing.Image)(resources.GetObject("buttonNew.Image")));
+            this.buttonNew.Image = global::EDDiscovery.Icons.Controls.CaptainsLog_New;
             this.buttonNew.Location = new System.Drawing.Point(205, 1);
             this.buttonNew.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonNew.Name = "buttonNew";
@@ -336,7 +336,7 @@
             // 
             // extButtonExcel
             // 
-            this.extButtonExcel.Image = ((System.Drawing.Image)(resources.GetObject("extButtonExcel.Image")));
+            this.extButtonExcel.Image = global::EDDiscovery.Icons.Controls.Scan_ExportToExcel;
             this.extButtonExcel.Location = new System.Drawing.Point(313, 1);
             this.extButtonExcel.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.extButtonExcel.Name = "extButtonExcel";

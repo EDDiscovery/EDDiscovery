@@ -176,15 +176,13 @@ namespace EDDiscovery
 
             if (toolStripDropDownButtonGalObjects.DropDownItems.Count == 0)
             {
-                Debug.Assert(discoveryForm.galacticMapping.galacticMapTypes != null);
-
-                foreach (GalMapType tp in discoveryForm.galacticMapping.galacticMapTypes)
+                foreach (GalMapType tp in GalMapType.GalTypes)
                 {
-                    if (tp.Group == GalMapType.GalMapGroup.Markers || tp.Group == GalMapType.GalMapGroup.Regions)       // only these
+                    if (tp.Group == GalMapType.GroupType.Markers || tp.Group == GalMapType.GroupType.Regions)       // only these
                     {
                         bool enabled = (gmosel & (1 << tp.Index)) != 0;
                         toolStripDropDownButtonGalObjects.DropDownItems.Add(AddGalMapButton(tp.Description, tp.Index, enabled));
-                        if (tp.Group == GalMapType.GalMapGroup.Regions)
+                        if (tp.Group == GalMapType.GroupType.Regions)
                         {
                             // -2 turns off any action in click
                             toolstripToggleRegionColouringButton = AddGalMapButton("Toggle Region Colouring", -2, EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("Map3DGMORegionColouring", true));
@@ -1658,11 +1656,11 @@ namespace EDDiscovery
                 }
                 else if (gmo != null)
                 {
-                    clickedposition = new Vector3((float)gmo.points[0].X, (float)gmo.points[0].Y, (float)gmo.points[0].Z);
+                    clickedposition = new Vector3((float)gmo.Points[0].X, (float)gmo.Points[0].Y, (float)gmo.Points[0].Z);
 
-                    name = gmo.name;
+                    name = gmo.Name;
 
-                    clickedurl = gmo.galMapUrl;
+                    clickedurl = gmo.GalMapUrl;
                     viewOnEDSMToolStripMenuItem.Enabled = true;
                 }
 
@@ -1698,17 +1696,17 @@ namespace EDDiscovery
 
                     BookmarkForm frm = new BookmarkForm(discoveryForm.history);
 
-                    frm.Name = gmo.name;
-                    frm.InitialisePos(gmo.points[0].X, gmo.points[0].Y, gmo.points[0].Z);
-                    frm.GMO(gmo.name, gmo.description, targetid == gmo.id, gmo.galMapUrl);
+                    frm.Name = gmo.Name;
+                    frm.InitialisePos(gmo.Points[0].X, gmo.Points[0].Y, gmo.Points[0].Z);
+                    frm.GMO(gmo.Name, gmo.Description, targetid == gmo.ID, gmo.GalMapUrl);
                     DialogResult res = frm.ShowDialog(this);
 
                     if (res == DialogResult.OK)
                     {
-                        if ((frm.IsTarget && targetid != gmo.id) || (!frm.IsTarget && targetid == gmo.id)) // changed..
+                        if ((frm.IsTarget && targetid != gmo.ID) || (!frm.IsTarget && targetid == gmo.ID)) // changed..
                         {
                             if (frm.IsTarget)
-                                TargetClass.SetTargetGMO("G:" + gmo.name, gmo.id, gmo.points[0].X, gmo.points[0].Y, gmo.points[0].Z);
+                                TargetClass.SetTargetGMO("G:" + gmo.Name, gmo.ID, gmo.Points[0].X, gmo.Points[0].Y, gmo.Points[0].Z);
                             else
                                 TargetClass.ClearTarget();
 
@@ -1841,8 +1839,8 @@ namespace EDDiscovery
             }
             else if ( gmo != null )
             {
-                pos = new Vector3d(gmo.points[0].X, gmo.points[0].Y, gmo.points[0].Z);
-                info = gmo.name + Environment.NewLine + gmo.galMapType.Description + Environment.NewLine + gmo.description.WordWrap(60) + Environment.NewLine +
+                pos = new Vector3d(gmo.Points[0].X, gmo.Points[0].Y, gmo.Points[0].Z);
+                info = gmo.Name + Environment.NewLine + gmo.GalMapType.Description + Environment.NewLine + gmo.Description.WordWrap(60) + Environment.NewLine +
                     string.Format("x:{0} y:{1} z:{2}", pos.X.ToString("0.00"), pos.Y.ToString("0.00"), pos.Z.ToString("0.00"));
                 sysname = "<<Never match string! to make the comparison fail";
             }
@@ -1875,8 +1873,8 @@ namespace EDDiscovery
 
                 if (clickedGMO != null && clickedGMO != gmo )
                 {
-                    double dist = ((new Vector3d(clickedGMO.points[0].X, clickedGMO.points[0].Y, clickedGMO.points[0].Z)) - pos).Length;
-                    info += Environment.NewLine + "Distance from " + clickedGMO.name + ": " + dist.ToString("0.0");
+                    double dist = ((new Vector3d(clickedGMO.Points[0].X, clickedGMO.Points[0].Y, clickedGMO.Points[0].Z)) - pos).Length;
+                    info += Environment.NewLine + "Distance from " + clickedGMO.Name + ": " + dist.ToString("0.0");
                 }
 
                 SystemNoteClass sn = SystemNoteClass.GetNoteOnSystem(sysname);   // may be null
@@ -2074,13 +2072,13 @@ namespace EDDiscovery
 
             if (discoveryForm.galacticMapping != null && discoveryForm.galacticMapping.Loaded)
             {
-                foreach (GalacticMapObject gmo in discoveryForm.galacticMapping.galacticMapObjects)
+                foreach (GalacticMapObject gmo in discoveryForm.galacticMapping.GalacticMapObjects)
                 {
-                    bool enabled = (gmosel & (1 << gmo.galMapType.Index)) != 0;         // if selected
+                    bool enabled = (gmosel & (1 << gmo.GalMapType.Index)) != 0;         // if selected
 
-                    if (enabled && gmo.galMapType.Group == GalMapType.GalMapGroup.Markers && gmo.points.Count > 0)             // if it is Enabled and has a co-ord, and is a marker type (routes/regions rejected)
+                    if (enabled && gmo.GalMapType.Group == GalMapType.GroupType.Markers && gmo.Points.Count > 0)             // if it is Enabled and has a co-ord, and is a marker type (routes/regions rejected)
                     {
-                        Vector3 pd = gmo.points[0].Convert();
+                        Vector3 pd = gmo.Points[0].Convert();
 
                         Matrix4 area = new Matrix4(
                             new Vector4(rotvert[0].X + pd.X, rotvert[0].Y + pd.Y, rotvert[0].Z + pd.Z, 1),    // top left
@@ -2263,10 +2261,10 @@ namespace EDDiscovery
 
             if (gmo != null)
             {
-                if (gmo.points.Count > 0)
+                if (gmo.Points.Count > 0)
                 {
-                    loc = gmo.points[0].Convert();
-                    return gmo.name;
+                    loc = gmo.Points[0].Convert();
+                    return gmo.Name;
                 }
                 else
                     gmo = null;

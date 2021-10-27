@@ -344,51 +344,57 @@ namespace EDDiscovery.UserControls.Map3D
                 UpdateEDSMStarsLocalArea(parent.discoveryform.history);
             }
 
-            if ((parts & Parts.RightClick ) != 0)
+            if ((parts & Parts.RightClick) != 0)
             {
                 rightclickmenu = new GLContextMenu("RightClickMenu",
                     new GLMenuItem("RCMInfo", "Information")
                     {
-                        MouseClick = (s, e) => {
-                            var nl = NameLocationDescription(rightclickmenu.Tag);
+                        MouseClick = (s, e) =>
+                        {
+                            var nl = NameLocationDescription(rightclickmenu.Tag, parent.discoveryform.history.GetLast);
                             System.Diagnostics.Debug.WriteLine($"Info {nl.Item1} {nl.Item2}");
                             // logical name is important as menu uses it to close down
                             GLMessageBox msg = new GLMessageBox("InfoBoxForm-1", displaycontrol, e.WindowLocation, null,
-                                    nl.Item3, $"{nl.Item1} @ {nl.Item2.X:0.##},{nl.Item2.Y:0.##},{nl.Item2.Z:0.##}", GLMessageBox.MessageBoxButtons.OK, null, Color.FromArgb(220, 60, 60, 70), Color.DarkOrange);
+                                    nl.Item3, $"{nl.Item1}", GLMessageBox.MessageBoxButtons.OK, null, Color.FromArgb(220, 60, 60, 70), Color.DarkOrange);
                         }
                     },
                     new GLMenuItem("RCMZoomIn", "Goto Zoom In")
                     {
-                        MouseClick = (s1, e1) => {
-                            var nl = NameLocationDescription(rightclickmenu.Tag);
+                        MouseClick = (s1, e1) =>
+                        {
+                            var nl = NameLocationDescription(rightclickmenu.Tag, parent.discoveryform.history.GetLast);
                             gl3dcontroller.SlewToPositionZoom(nl.Item2, 300, -1);
                         }
                     },
                     new GLMenuItem("RCMGoto", "Goto Position")
                     {
-                        MouseClick = (s1, e1) => {
-                            var nl = NameLocationDescription(rightclickmenu.Tag);
+                        MouseClick = (s1, e1) =>
+                        {
+                            var nl = NameLocationDescription(rightclickmenu.Tag, parent.discoveryform.history.GetLast);
                             System.Diagnostics.Debug.WriteLine($"Goto {nl.Item1} {nl.Item2}");
                             gl3dcontroller.SlewToPosition(nl.Item2, -1);
                         }
                     },
                     new GLMenuItem("RCMLookAt", "Look At")
                     {
-                        MouseClick = (s1, e1) => {
-                            var nl = NameLocationDescription(rightclickmenu.Tag);
+                        MouseClick = (s1, e1) =>
+                        {
+                            var nl = NameLocationDescription(rightclickmenu.Tag,null);
                             gl3dcontroller.PanTo(nl.Item2, -1);
                         }
                     },
                     new GLMenuItem("RCMViewStarDisplay", "Display system")
                     {
-                        MouseClick = (s1, e1) => {
+                        MouseClick = (s1, e1) =>
+                        {
                             ISystem s = rightclickmenu.Tag is HistoryEntry ? ((HistoryEntry)rightclickmenu.Tag).System : (ISystem)rightclickmenu.Tag;
                             ScanDisplayForm.ShowScanOrMarketForm(parent.FindForm(), s, true, parent.discoveryform.history, 0.8f, System.Drawing.Color.Purple);
                         }
                     },
                     new GLMenuItem("RCMViewEDSM", "View on EDSM")
                     {
-                        MouseClick = (s1, e1) => {
+                        MouseClick = (s1, e1) =>
+                        {
                             ISystem s = rightclickmenu.Tag is HistoryEntry ? ((HistoryEntry)rightclickmenu.Tag).System : (ISystem)rightclickmenu.Tag;
 
                             EDSMClass edsm = new EDSMClass();
@@ -398,7 +404,8 @@ namespace EDDiscovery.UserControls.Map3D
                     }
                 );
 
-                rightclickmenu.Opening += (ms) => {
+                rightclickmenu.Opening += (ms) =>
+                {
                     ms["RCMViewStarDisplay"].Enabled = ms["RCMViewEDSM"].Enabled = rightclickmenu.Tag is ISystem || rightclickmenu.Tag is HistoryEntry;
                 };
             }
@@ -431,7 +438,7 @@ namespace EDDiscovery.UserControls.Map3D
             {
                 double eyedistr = Math.Pow(eyedist, 1.0);
                 float v = (float)Math.Max(eyedistr / 2000, 0);
-                //System.Diagnostics.Debug.WriteLine("Speed " + eyedistr + " "+ v);
+               // System.Diagnostics.Debug.WriteLine("Speed " + eyedistr + " "+ v);
                 return (float)ms * v;
             };
 
@@ -462,30 +469,56 @@ namespace EDDiscovery.UserControls.Map3D
             GLTextBoxAutoComplete tbac = galaxymenu.EntryTextBox;
             if (tbac != null)
             {
-                tbac.PerformAutoCompleteInUIThread = (s, a) =>
+                tbac.PerformAutoCompleteInThread = (s, obj, set) =>       // in the autocomplete thread, so EDSM lookup
                 {
-                    System.Diagnostics.Debug.Assert(Application.MessageLoop);       // must be in UI thread
-                    var glist = edsmmapping.galacticMapObjects.Where(x => s.Length < 3 ? x.name.StartsWith(s, StringComparison.InvariantCultureIgnoreCase) : x.name.Contains(s, StringComparison.InvariantCultureIgnoreCase)).Select(x => x).ToList();
-                    List<string> list = glist.Select(x => x.name).ToList();
-                    list.AddRange(travelpath.CurrentListSystem.Where(x => s.Length < 3 ? x.Name.StartsWith(s, StringComparison.InvariantCultureIgnoreCase) : x.Name.Contains(s, StringComparison.InvariantCultureIgnoreCase)).Select(x => x.Name));
-                    list.Sort();
-                    return list;
+                    System.Diagnostics.Debug.WriteLine($"Autocomplete look up EDSM systems on {s}");
+                    EliteDangerousCore.DB.SystemCache.ReturnSystemAutoCompleteList(s, obj, set);      // perform the system cache autocomplete
+
+                    // these, are static, so it will be safe to pick up in the thread
+                    var glist = edsmmapping.GalacticMapObjects.Where(x => s.Length < 3 ? x.Name.StartsWith(s, StringComparison.InvariantCultureIgnoreCase) : x.Name.Contains(s, StringComparison.InvariantCultureIgnoreCase)).Select(x => x).ToList();
+                    List<string> list = glist.Select(x => x.Name).ToList();
+                    foreach (var l in list)
+                        set.Add(l);
+                };
+
+                tbac.PerformAutoCompleteInUIThread = (s, obj, set) =>    // complete autocomplete in UI thread, for parts declared in UI, run second
+                {
+                    System.Diagnostics.Debug.Assert(Application.MessageLoop);
+                    System.Diagnostics.Debug.WriteLine($"Autocomplete look up GMO/Travel systems on {s}");
+
+                    List<string> list = new List<string>();
+                    if (travelpath?.CurrentListSystem != null)
+                        list.AddRange(travelpath.CurrentListSystem.Where(x => s.Length < 3 ? x.Name.StartsWith(s, StringComparison.InvariantCultureIgnoreCase) : x.Name.Contains(s, StringComparison.InvariantCultureIgnoreCase)).Select(x => x.Name));
+                    if (routepath?.CurrentListSystem != null)
+                        list.AddRange(routepath.CurrentListSystem.Where(x => s.Length < 3 ? x.Name.StartsWith(s, StringComparison.InvariantCultureIgnoreCase) : x.Name.Contains(s, StringComparison.InvariantCultureIgnoreCase)).Select(x => x.Name));
+                    if (navroute?.CurrentListSystem != null)
+                        list.AddRange(navroute.CurrentListSystem.Where(x => s.Length < 3 ? x.Name.StartsWith(s, StringComparison.InvariantCultureIgnoreCase) : x.Name.Contains(s, StringComparison.InvariantCultureIgnoreCase)).Select(x => x.Name));
+
+                    foreach (var x in list)
+                        set.Add(x);
                 };
 
                 tbac.SelectedEntry = (a) =>     // in UI thread
                 {
                     System.Diagnostics.Debug.Assert(Application.MessageLoop);       // must be in UI thread
                     System.Diagnostics.Debug.WriteLine("Selected " + tbac.Text);
-                    var gmo = edsmmapping.galacticMapObjects.Find(x => x.name.Equals(tbac.Text, StringComparison.InvariantCultureIgnoreCase));
+                    var gmo = edsmmapping?.GalacticMapObjects.Find(x => x.Name.Equals(tbac.Text, StringComparison.InvariantCultureIgnoreCase));
                     if (gmo != null)
                     {
-                        System.Diagnostics.Debug.WriteLine("Move to gmo " + gmo.points[0]);
-                        gl3dcontroller.SlewToPosition(new Vector3((float)gmo.points[0].X, (float)gmo.points[0].Y, (float)gmo.points[0].Z), -1);
+                        System.Diagnostics.Debug.WriteLine("Move to gmo " + gmo.Points[0]);
+                        gl3dcontroller.SlewToPosition(new Vector3((float)gmo.Points[0].X, (float)gmo.Points[0].Y, (float)gmo.Points[0].Z), -1);
                     }
                     else
                     {
-                        var isys = travelpath.CurrentListSystem.Find(x => x.Name.Equals(tbac.Text, StringComparison.InvariantCultureIgnoreCase));
-                        if (isys != null)
+                        var isys = travelpath?.CurrentListSystem?.Find(x => x.Name.Equals(tbac.Text, StringComparison.InvariantCultureIgnoreCase));
+                        if (isys == null)
+                            isys = routepath?.CurrentListSystem?.Find(x => x.Name.Equals(tbac.Text, StringComparison.InvariantCultureIgnoreCase));
+                        if (isys == null)
+                            isys = navroute?.CurrentListSystem?.Find(x => x.Name.Equals(tbac.Text, StringComparison.InvariantCultureIgnoreCase));
+                        if (isys == null)
+                            isys = EliteDangerousCore.DB.SystemCache.FindSystem(tbac.Text);     // final chance, the system DB
+
+                        if ( isys != null )
                         {
                             System.Diagnostics.Debug.WriteLine("Move to sys " + isys.Name);
                             gl3dcontroller.SlewToPosition(new Vector3((float)isys.X, (float)isys.Y, (float)isys.Z), -1);
@@ -532,7 +565,7 @@ namespace EDDiscovery.UserControls.Map3D
         public void UpdateEDSMStarsLocalArea(HistoryList hl)
         {
             HistoryEntry he = hl.GetLast;       // may be null
-            if (he != null && he.System.HasCoordinate && (parts & Parts.PrepopulateEDSMLocalArea) != 0)
+            if (galaxystars != null && he != null && he.System.HasCoordinate && (parts & Parts.PrepopulateEDSMLocalArea) != 0)
             {
                 galaxystars.Request9x3Box(new Vector3((float)he.System.X, (float)he.System.Y, (float)he.System.Z));
             }
@@ -700,44 +733,53 @@ namespace EDDiscovery.UserControls.Map3D
         }
 
         // from obj, return info about it, its name, location, and description
-        private Tuple<string, Vector3, string> NameLocationDescription(Object obj)       
+        // give current he for information purposes
+        private Tuple<string, Vector3, string> NameLocationDescription(Object obj, HistoryEntry curpos)       
         {
-            var he = obj as EliteDangerousCore.HistoryEntry;
+            var he = obj as HistoryEntry;
             var gmo = obj as GalacticMapObject;
             var sys = obj as ISystem;
+
+            string name = he != null ? he.System.Name : gmo != null ? gmo.Name : sys.Name;
+
+            Vector3 pos = he != null ? new Vector3((float)he.System.X, (float)he.System.Y, (float)he.System.Z) :
+                            gmo != null ? new Vector3((float)gmo.Points[0].X, (float)gmo.Points[0].Y, (float)gmo.Points[0].Z) :
+                                new Vector3((float)sys.X, (float)sys.Y, (float)sys.Z);
+
+            string info = "";
+
+            if (curpos != null)
+            {
+                double dist = curpos.System.Distance(pos.X, pos.Y, pos.Z);
+                if ( dist>0)
+                    info += $"Distance {dist:N1} ly";
+            }
+
+            info = info.AppendPrePad($"Position {pos.X:0.#}, {pos.Y:0.#}, {pos.Z:0.#}" + Environment.NewLine, Environment.NewLine);
+
             if (he != null)
             {
-                string info = $"Visited on:";
+                info = info.AppendPrePad("Visited on:",Environment.NewLine);
 
-                foreach ( var e in travelpath.CurrentListHE)
+                foreach (var e in travelpath.CurrentListHE)
                 {
-                    if ( e.System.Name.Equals(he.System.Name))
+                    if (e.System.Name.Equals(he.System.Name))
                     {
                         var t = EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(e.EventTimeUTC);
                         info = info.AppendPrePad($"@" + t.ToString(), Environment.NewLine);
                     }
                 }
-
-                return new Tuple<string, Vector3, string>(he.System.Name,
-                                                          new Vector3((float)he.System.X, (float)he.System.Y, (float)he.System.Z),
-                                                          info );
             }
             else if (gmo != null)
             {
-                return new Tuple<string, Vector3, string>(gmo.name,
-                                                          new Vector3((float)gmo.points[0].X, (float)gmo.points[0].Y, (float)gmo.points[0].Z),
-                                                          gmo.description);
-            }
-            else if (sys != null)
-            {
-                return new Tuple<string, Vector3, string>(sys.Name,
-                                                            new Vector3((float)sys.X, (float)sys.Y, (float)sys.Z), 
-                                                            $"Star");       // TBD distance from home, etc
+                info = info.AppendPrePad(gmo.Description,Environment.NewLine);
             }
             else
             {
-                return null;
+
             }
+
+            return new Tuple<string, Vector3, string>(name, pos, info);
         }
 
 
@@ -850,7 +892,7 @@ namespace EDDiscovery.UserControls.Map3D
                     {
                         if (item is HistoryEntry)
                             travelpath.SetSystem((item as HistoryEntry).System);
-                        var nl = NameLocationDescription(item);
+                        var nl = NameLocationDescription(item,null);
                         System.Diagnostics.Debug.WriteLine("Click on and slew to " + nl.Item1);
                         SetEntryText(nl.Item1);
                         gl3dcontroller.SlewToPosition(nl.Item2, -1);

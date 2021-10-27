@@ -72,6 +72,7 @@ namespace EDDiscovery.UserControls.Map3D
             tapepointbuf = items.LastBuffer();  // keep buffer for refill
 
             ritape.ElementBuffer = items.NewBuffer();       // empty buffer for element index for now
+            ritape.Visible = false;     // until its filled, not visible (important, we don't want render to execute unless its been fully set up below)
 
             rObjects.Add(tapeshader, name + "-tape", ritape);   // add render to object list
 
@@ -79,6 +80,7 @@ namespace EDDiscovery.UserControls.Map3D
 
             starposbuf = items.NewBuffer();         // where we hold the vertexes for the suns, used by renderer and by finder
 
+            // the colour index of the stars is selected by the w parameter of the world position vertexes. 
             sunvertex = new GLPLVertexShaderModelCoordWithWorldTranslationCommonModelTranslation(new Color[] { Color.Yellow, Color.FromArgb(255, 230, 230, 1) });
             items.Add(sunvertex);
             sunshader = new GLShaderPipeline(sunvertex, new GLPLStarSurfaceFragmentShader());
@@ -90,6 +92,8 @@ namespace EDDiscovery.UserControls.Map3D
             rt.DepthTest = depthtest;
             rt.DepthClamp = true;
             renderersun = GLRenderableItem.CreateVector4Vector4(items, OpenTK.Graphics.OpenGL4.PrimitiveType.Triangles, rt, shape, starposbuf, 0, null, 0, 1);
+            renderersun.Visible = false;            // until its filled, not visible
+
             rObjects.Add(sunshader, name + "-suns", renderersun);
 
             // find compute
@@ -144,6 +148,8 @@ namespace EDDiscovery.UserControls.Map3D
         // currentfilteredlist set, go..
         private void CreatePathInt(Color? tapepathdefault = null)
         {
+            // Note W here selects the colour index of the stars, 0 = first, 1 = second etc
+
             Vector4[] positionsv4 = currentfilteredlistsys.Select(x => new Vector4((float)x.X, (float)x.Y, (float)x.Z, 0)).ToArray();
             Color[] color = new Color[currentfilteredlistsys.Count];
 
@@ -173,10 +179,11 @@ namespace EDDiscovery.UserControls.Map3D
             ritape.RenderState.PrimitiveRestart = GL4Statics.DrawElementsRestartValue(tape.Item3);        // IMPORTANT missing bit Robert, must set the primitive restart value to the new tape size
 
             ritape.CreateElementIndex(ritape.ElementBuffer, tape.Item2.ToArray(), tape.Item3);       // update the element buffer
-            ritape.Visible = tape.Item1.Count > 0;
+            ritape.Visible = tape.Item1.Count > 0;      // only visible if positions..
 
             starposbuf.AllocateFill(positionsv4);       // and update the star position buffers so find and sun renderer works
             renderersun.InstanceCount = positionsv4.Length; // update the number of suns to draw.
+            renderersun.Visible = positionsv4.Length > 0;       // only visible if positions..
 
             rifind.InstanceCount = positionsv4.Length;  // update the find list
 

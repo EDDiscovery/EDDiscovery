@@ -37,9 +37,9 @@ namespace EDDiscovery.UserControls.Map3D
         {
             string[] ss = settings.Split(',');
             int i = 0;
-            foreach (var o in galmap.RenderableMapTypes)
+            foreach (var o in GalMapType.VisibleTypes)
             {
-                State[o.Typeid] = i >= ss.Length || !ss[i].Equals("-");              // on if we don't have enough, or on if its not -
+                State[o.TypeName] = i >= ss.Length || !ss[i].Equals("-");              // on if we don't have enough, or on if its not -
                 i++;
             }
             UpdateEnables();
@@ -47,12 +47,14 @@ namespace EDDiscovery.UserControls.Map3D
         public string GetAllEnables()
         {
             string s = "";
-            foreach (var o in galmap.RenderableMapTypes)
+            foreach (var o in GalMapType.VisibleTypes)
             {
-                s += GetGalObjectTypeEnable(o.Typeid) ? "+," : "-,";
+                s += GetGalObjectTypeEnable(o.TypeName) ? "+," : "-,";
             }
             return s;
         }
+
+        public static IReadOnlyDictionary<GalMapType.VisibleObjectsType, Image> GalMapTypeIcons { get; } = new BaseUtils.Icons.IconGroup<GalMapType.VisibleObjectsType>("GalMap");
 
         public void CreateObjects(GLItemsList items, GLRenderProgramSortedList rObjects, GalacticMapping galmap, GLStorageBlock findbufferresults, bool depthtest)
         {
@@ -60,7 +62,7 @@ namespace EDDiscovery.UserControls.Map3D
 
             // first gets the images and make a 2d array texture for them
 
-            Bitmap[] images = galmap.RenderableMapTypes.Select(x => x.Image as Bitmap).ToArray();
+            Bitmap[] images = GalMapType.VisibleTypes.Select(x => GalMapTypeIcons[x.VisibleType.Value] as Bitmap).ToArray();
             // 256 is defined normal size
             var objtex = new GLTexture2DArray(images, mipmaplevel: 1, genmipmaplevel: 3, bmpsize: new Size(256, 256), internalformat: OpenTK.Graphics.OpenGL4.SizedInternalFormat.Rgba8, alignment: ContentAlignment.BottomCenter);
             IGLTexture texarray = items.Add(objtex, "GalObjTex");
@@ -94,7 +96,7 @@ namespace EDDiscovery.UserControls.Map3D
 
             ridisplay = GLRenderableItem.CreateVector4Vector4(items, OpenTK.Graphics.OpenGL4.PrimitiveType.Patches, rt,
                                 GLShapeObjectFactory.CreateQuad2(objsize, objsize),         // quad2 4 vertexts
-                                new Vector4[galmap.RenderableMapObjects.Length],        // world positions
+                                new Vector4[galmap.VisibleMapObjects.Length],        // world positions
                                 ic: 0, seconddivisor: 1);
 
             modelworldbuffer = items.LastBuffer();
@@ -124,7 +126,7 @@ namespace EDDiscovery.UserControls.Map3D
             {
                 fmt.Alignment = StringAlignment.Center;
 
-                var renderablegalmapobjects = galmap.RenderableMapObjects; // list of enabled entries
+                var renderablegalmapobjects = galmap.VisibleMapObjects; // list of enabled entries
 
                 List<Vector3> posset = new List<Vector3>();
 
@@ -137,7 +139,7 @@ namespace EDDiscovery.UserControls.Map3D
 
                     for (int j = 0; j < i; j++)     // look up previous ones and see if we labeled it before
                     {
-                        var d1 = new Vector3(o.points[0].X, o.points[0].Y + offset, o.points[0].Z);
+                        var d1 = new Vector3(o.Points[0].X, o.Points[0].Y + offset, o.Points[0].Z);
                         var d2 = posset[j];     // where it was placed.
                         var diff = d1 - d2;
 
@@ -151,11 +153,11 @@ namespace EDDiscovery.UserControls.Map3D
                         }
                     }
 
-                    Vector3 pos = new Vector3(o.points[0].X, o.points[0].Y + offset, o.points[0].Z);
+                    Vector3 pos = new Vector3(o.Points[0].X, o.Points[0].Y + offset, o.Points[0].Z);
                     posset.Add(pos);
                     //System.Diagnostics.Debug.WriteLine($"{renderablegalmapobjects[i].name} at {pos} {offset}");
 
-                    textrenderer.Add(o.id, o.name, Font,
+                    textrenderer.Add(o.ID, o.Name, Font,
                         Color.White, Color.FromArgb(0, 255, 0, 255),
                         pos,
                         new Vector3(objsize, 0, 0), new Vector3(0, 0, 0), fmt: fmt, rotatetoviewer: dorotate, rotateelevation: doelevation,
@@ -171,20 +173,22 @@ namespace EDDiscovery.UserControls.Map3D
         {
             modelworldbuffer.StartWrite(worldpos);                  // overwrite world positions
 
-            var renderablegalmapobjects = galmap.RenderableMapObjects; // list of displayable entries
+            var renderablegalmapobjects = galmap.VisibleMapObjects; // list of displayable entries
             indextoentry = new int[renderablegalmapobjects.Length];
             int mwpos = 0,entry=0;
 
             foreach (var o in renderablegalmapobjects)
             {
-                bool en = GetGalObjectTypeEnable(o.galMapType.Typeid);
+                bool en = GetGalObjectTypeEnable(o.GalMapType.TypeName);
+               // System.Diagnostics.Debug.WriteLine($"{o.Name} {o.GalMapType.TypeName} {en}");
+
                 if (en)
                 {
-                    modelworldbuffer.Write(new Vector4(o.points[0].X, o.points[0].Y, o.points[0].Z, o.galMapType.Index + (!o.galMapType.Animate ? 65536 : 0)));
+                    modelworldbuffer.Write(new Vector4(o.Points[0].X, o.Points[0].Y, o.Points[0].Z, o.GalMapType.Index + (!Animate(o.GalMapType.VisibleType.Value) ? 65536 : 0)));
                     indextoentry[mwpos++] = entry;
                 }
 
-                textrenderer.SetVisiblityRotation(o.id, en, dorotate, doelevation);
+                textrenderer.SetVisiblityRotation(o.ID, en, dorotate, doelevation);
                 entry++;
             }
 
@@ -210,12 +214,12 @@ namespace EDDiscovery.UserControls.Map3D
                 var res = geo.GetResult();
                 if (res != null)
                 {
-                    var renderablegalmapobjects = galmap.RenderableMapObjects; // list of displayable entries
+                    var renderablegalmapobjects = galmap.VisibleMapObjects; // list of displayable entries
                     int index = 0;
 
                     foreach (var o in renderablegalmapobjects)
                     {
-                        bool en = GetGalObjectTypeEnable(o.galMapType.Typeid);      // we need to account for ones not enabled, since we rewrite the model buffer list on each enable
+                        bool en = GetGalObjectTypeEnable(o.GalMapType.TypeName);      // we need to account for ones not enabled, since we rewrite the model buffer list on each enable
                         if (en)
                         {
                             if (index == (int)res[0].Y)
@@ -239,6 +243,16 @@ namespace EDDiscovery.UserControls.Map3D
             float fract = (float)time / rotperiodms;
      //       System.Diagnostics.Debug.WriteLine("Time " + time + "Phase " + fract);
             tes.Phase = fract;
+        }
+
+        private bool Animate(GalMapType.VisibleObjectsType e)
+        {
+            GalMapType.VisibleObjectsType[] list = { GalMapType.VisibleObjectsType.nebula, GalMapType.VisibleObjectsType.planetaryNebula,
+                                                GalMapType.VisibleObjectsType.stellarRemnant, GalMapType.VisibleObjectsType.blackHole,
+                                                GalMapType.VisibleObjectsType.pulsar, GalMapType.VisibleObjectsType.starCluster,
+                                                GalMapType.VisibleObjectsType.cometaryBody,GalMapType.VisibleObjectsType.MarxNebula,
+            };
+            return list.Contains(e);
         }
 
         private GLPLTesselationEvaluateSinewave tes;

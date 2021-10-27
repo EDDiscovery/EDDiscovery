@@ -372,13 +372,14 @@ namespace EDDiscovery
             {
                 galacticMapping = new GalacticMapping();
                 if (File.Exists(gmofile))
-                    galacticMapping.ParseFile(gmofile);                            // at this point, gal map data has been uploaded - get it into memory
+                    galacticMapping.ParseEDSMFile(gmofile);                            // at this point, gal map data has been uploaded - get it into memory
+                galacticMapping.LoadMarxObjects();
             }
 
             {
                 eliteRegions = new GalacticMapping();
                 var text = System.Text.Encoding.UTF8.GetString(Properties.Resources.EliteGalacticRegions);
-                eliteRegions.ParseJson(text);                            // at this point, gal map data has been uploaded - get it into memory
+                eliteRegions.ParseEDSMJson(text);                            // at this point, gal map data has been uploaded - get it into memory
             }
 
             SystemCache.AddToAutoCompleteList(galacticMapping.GetGMONames());

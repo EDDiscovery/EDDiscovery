@@ -218,8 +218,8 @@ namespace EDDiscovery.UserControls
                     note = note.AppendPrePad(bkmark.Note, "; ");
 
                 var gmo = discoveryform.galacticMapping.Find(sysname);
-                if (gmo != null && !string.IsNullOrWhiteSpace(gmo.description))
-                    note = note.AppendPrePad(gmo.description, "; ");
+                if (gmo != null && !string.IsNullOrWhiteSpace(gmo.Description))
+                    note = note.AppendPrePad(gmo.Description, "; ");
 
                 dataGridViewExplore[idxNote, rowindex].Value = note;
 

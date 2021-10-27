@@ -120,7 +120,7 @@ namespace EDDiscovery.Actions
 
                                 if (gmo != null)
                                 {
-                                    TargetClass.SetTargetGMO("G:" + gmo.name, gmo.id, gmo.points[0].X, gmo.points[0].Y, gmo.points[0].Z);
+                                    TargetClass.SetTargetGMO("G:" + gmo.Name, gmo.ID, gmo.Points[0].X, gmo.Points[0].Y, gmo.Points[0].Z);
                                     discoveryform.NewTargetSet(this);
                                 }
 

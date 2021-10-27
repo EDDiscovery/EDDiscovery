@@ -143,7 +143,7 @@ namespace EDDiscovery.UserControls
                     {
                         var gmo = discoveryform.galacticMapping.Find(hefsd.System.Name);
                         if (gmo != null)
-                            botline = ("GMP: " + gmo.description).WordWrap(60) + Environment.NewLine;
+                            botline = ("GMP: " + gmo.Description).WordWrap(60) + Environment.NewLine;
                     }
 
                     pictureBox.AddTextAutoSize(
