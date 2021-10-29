@@ -32,6 +32,8 @@ namespace EDDiscovery.UserControls.Map3D
 
             // names of MS* are on screen items hidden during main menu presentation
 
+            System.Diagnostics.Debug.WriteLine($"UI culture { System.Globalization.CultureInfo.CurrentUICulture.Name}");
+
             GLImage menuimage = new GLImage("MSMainMenu", new Rectangle(10, 10, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.hamburgermenu") as Bitmap);
             menuimage.ToolTipText = "Open configuration menu";
             map.displaycontrol.Add(menuimage);
@@ -115,7 +117,7 @@ namespace EDDiscovery.UserControls.Map3D
             int vpos = 10;
             int ypad = 10;
 
-            GLForm pform = new GLForm("Galmenu", "Configure Map", new Rectangle(10, 10, 600, 600));
+            GLForm pform = new GLForm("Galmenu", "Configure Map", new Rectangle(10, 10, 500, 600));
             pform.BackColor = Color.FromArgb(220, 60, 60, 70);
             pform.ForeColor = Color.Orange;
             pform.FormClosed = (frm) => { map.displaycontrol.ApplyToControlOfName("MS*", (c) => { c.Visible = true; }); };
@@ -123,13 +125,13 @@ namespace EDDiscovery.UserControls.Map3D
 
             // provide opening animation
             pform.ScaleWindow = new SizeF(0.0f, 0.0f);
-            pform.Animators.Add(new AnimateScale(map.ElapsedTimems + 10, map.ElapsedTimems + 400, new SizeF(1, 1)));
-            pform.Font = new Font("Arial", 8.25f);
+            pform.Animators.Add(new AnimateScale(10, 400, true, new SizeF(1, 1)));
+            pform.Font = new Font("Arial", 10f);
 
             // and closing animation
             pform.FormClosing += (f,e) => { 
                 e.Handled = true;       // stop close
-                var ani = new AnimateScale(map.ElapsedTimems + 10, map.ElapsedTimems + 400, new SizeF(0, 0));       // add a close animation
+                var ani = new AnimateScale(10, 400, true, new SizeF(0, 0));       // add a close animation
                 ani.FinishAction += (a, c, t) => { pform.ForceClose(); };   // when its complete, force close
                 pform.Animators.Add(ani); 
             };
@@ -216,10 +218,17 @@ namespace EDDiscovery.UserControls.Map3D
                 {
                     GLCheckBox butgalstars = new GLCheckBox("GalaxyStars", new Rectangle(hpos, vpos, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.GalaxyStars") as Bitmap, null);
                     butgalstars.ToolTipText = "Show stars when zoomed in";
-                    butgalstars.Checked = map.GalaxyStars;
-                    butgalstars.CheckChanged += (e1) => { map.GalaxyStars = butgalstars.Checked; };
+                    butgalstars.Checked = (map.GalaxyStars & 1) != 0;
+                    butgalstars.CheckChanged += (e1) => { map.GalaxyStars ^= 1; };
                     pform.Add(butgalstars);
                     hpos += butgalstars.Width + hpad;
+
+                    GLCheckBox butgalstarstext = new GLCheckBox("GalaxyStarsText", new Rectangle(hpos, vpos, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.GalaxyStarsText") as Bitmap, null);
+                    butgalstarstext.ToolTipText = "Show names of stars when zoomed in";
+                    butgalstarstext.Checked = (map.GalaxyStars & 2) != 0;
+                    butgalstarstext.CheckChanged += (e1) => { map.GalaxyStars ^= 2; };
+                    pform.Add(butgalstarstext);
+                    hpos += butgalstarstext.Width + hpad;
 
                     GLComboBox cbstars = new GLComboBox("GalaxyStarsNumber", new Rectangle(hpos, vpos, 100, iconsize));
                     cbstars.ToolTipText = "Control how many stars are shown when zoomes in";
@@ -244,7 +253,7 @@ namespace EDDiscovery.UserControls.Map3D
 
             if ((parts & Map.Parts.TravelPath) != 0)
             {
-                GLGroupBox tpgb = new GLGroupBox("TravelPathGB", "Travel Path", new Rectangle(leftmargin, vpos, pform.ClientWidth - leftmargin * 2, iconsize *2));
+                GLGroupBox tpgb = new GLGroupBox("TravelPathGB", "Travel Path", new Rectangle(leftmargin, vpos, pform.ClientWidth - leftmargin * 2, iconsize *3));
                 tpgb.BackColor = pform.BackColor;
                 tpgb.ForeColor = Color.Orange;
                 pform.Add(tpgb);
@@ -255,22 +264,28 @@ namespace EDDiscovery.UserControls.Map3D
                 buttp.CheckChanged += (e1) => { map.TravelPathTapeDisplay = buttp.Checked; };
                 tpgb.Add(buttp);
 
-                GLDateTimePicker dtps = new GLDateTimePicker("TPStart", new Rectangle(50, 0, 250, 30), System.DateTime.Now);
+                GLDateTimePicker dtps = new GLDateTimePicker("TPStart", new Rectangle(50, 0, 350, 30), System.DateTime.Now);
+                dtps.SuspendLayout();
+                dtps.AutoSize = true;
                 dtps.ShowCheckBox = dtps.ShowCalendar = true;
                 dtps.Value = map.TravelPathStartDate;
                 dtps.Checked = map.TravelPathStartDateEnable;
                 dtps.ValueChanged += (e1) => { map.TravelPathStartDate = dtps.Value; map.TravelPathRefresh(); };
                 dtps.CheckChanged += (e1) => { map.TravelPathStartDateEnable = dtps.Checked; map.TravelPathRefresh(); };
                 dtps.ShowUpDown = true;
+                dtps.ResumeLayout();
                 tpgb.Add(dtps);
 
-                GLDateTimePicker dtpe = new GLDateTimePicker("TPEnd", new Rectangle(320, 0, 250, 30), System.DateTime.Now);
+                GLDateTimePicker dtpe = new GLDateTimePicker("TPEnd", new Rectangle(50, 34, 350, 30), System.DateTime.Now);
+                dtpe.SuspendLayout();
+                dtpe.AutoSize = true;
                 dtpe.ShowCheckBox = dtps.ShowCalendar = true;
                 dtpe.Value = map.TravelPathEndDate;
                 dtpe.Checked = map.TravelPathEndDateEnable;
                 dtpe.ValueChanged += (e1) => { map.TravelPathEndDate = dtpe.Value; map.TravelPathRefresh(); };
                 dtpe.CheckChanged += (e1) => { map.TravelPathEndDateEnable = dtpe.Checked; map.TravelPathRefresh(); };
                 dtpe.ShowUpDown = true;
+                dtpe.ResumeLayout();
                 tpgb.Add(dtpe);
 
                 vpos += tpgb.Height + ypad;

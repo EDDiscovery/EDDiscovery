@@ -704,8 +704,6 @@ namespace EDDiscovery
 
             // Options for automatic stuff
 
-            if (EDDOptions.Instance.AutoOpen3DMap)
-                Open3DMap(PrimaryCursor.GetCurrentHistoryEntry?.System);
             if (EDDOptions.Instance.MinimiseOnOpen)
                 WindowState = FormWindowState.Minimized;
             else if (EDDOptions.Instance.MaximiseOnOpen)

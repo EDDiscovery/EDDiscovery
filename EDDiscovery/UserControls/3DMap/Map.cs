@@ -313,22 +313,23 @@ namespace EDDiscovery.UserControls.Map3D
             GLStorageBlock findresults = new GLStorageBlock(findblock);
             items.Add(findresults);
 
-            float sunsize = 1.0f;
+            float sunsize = 0.5f;
+            float tapesize = 0.25f;
             if ((parts & Parts.TravelPath) != 0)
             {
-                travelpath = new TravelPath("TP",50000, sunsize, 0.4f, findresults, true, items, rObjects);
+                travelpath = new TravelPath("TP",50000, sunsize, tapesize, findresults, true, items, rObjects);
                 travelpath.CreatePath(parent.discoveryform.history);
                 travelpath.SetSystem(parent.discoveryform.history.LastSystem);
             }
 
             if ((parts & Parts.Route) != 0)
             {
-                routepath = new TravelPath("Route", 10000, sunsize, 0.4f, findresults, true, items, rObjects);
+                routepath = new TravelPath("Route", 10000, sunsize,tapesize, findresults, true, items, rObjects);
             }
 
             if ((parts & Parts.NavRoute) != 0)
             {
-                navroute = new TravelPath("NavRoute", 10000, sunsize, 0.4f, findresults, true, items, rObjects);
+                navroute = new TravelPath("NavRoute", 10000, sunsize, tapesize, findresults, true, items, rObjects);
                 UpdateNavRoute(parent.discoveryform.history);
             }
 
@@ -576,7 +577,7 @@ namespace EDDiscovery.UserControls.Map3D
 
         public bool GalaxyDisplay { get { return galaxyshader?.Enable ?? false; } set { if ( galaxyshader!=null) galaxyshader.Enable = value; glwfc.Invalidate(); } }
         public bool StarDotsSpritesDisplay { get { return stardots?.Enable ?? false; } set { if ( stardots!=null) stardots.Enable = starsprites.Enable = value; glwfc.Invalidate(); } }
-        public bool GalaxyStars { get { return galaxystars?.Enable ?? false; } set { if (galaxystars != null)  galaxystars.Enable = value; glwfc.Invalidate(); } }
+        public int GalaxyStars { get { return galaxystars?.EnableMode ?? 0; } set { if (galaxystars != null) galaxystars.EnableMode = value; glwfc.Invalidate(); } }
         public int GalaxyStarsMaxObjects { get { return galaxystars?.MaxObjectsAllowed ?? 100000; } set { if ( galaxystars != null && value >= 10000) galaxystars.MaxObjectsAllowed = value; } }  // screen out stupid numbers (may have got itself saved with that due to debugging)
         public bool Grid { get { return gridshader?.Enable ?? false; } set { if (gridshader != null)  gridshader.Enable = gridtextshader.Enable = value; glwfc.Invalidate(); } }
 
@@ -661,7 +662,7 @@ namespace EDDiscovery.UserControls.Map3D
             EliteRegionsTextEnable = defaults.GetSetting("ELte", true);
 
             Grid = defaults.GetSetting("GRIDS", true);
-            GalaxyStars = defaults.GetSetting("GALSTARS", true);
+            GalaxyStars = defaults.GetSetting("GALSTARS", 3);
             GalaxyStarsMaxObjects = defaults.GetSetting("GALSTARSOBJ", 500000);
 
             if (restorepos )
@@ -846,7 +847,7 @@ namespace EDDiscovery.UserControls.Map3D
             if (galmapobjects != null && galmapobjects.Enable)
                 galmapobjects.Update(time, gl3dcontroller.MatrixCalc.EyeDistance);
 
-            if (galaxystars != null && galaxystars.Enable)
+            if (galaxystars != null && galaxystars.EnableMode > 0)
             {
                 if ((parts & Parts.AllowAutoEDSMStarsUpdate) != 0 && gl3dcontroller.MatrixCalc.EyeDistance < 400)         // if auto update, and eyedistance close, see if local stars needed
                     galaxystars.Request9x3BoxConditional(gl3dcontroller.PosCamera.LookAt);
@@ -951,7 +952,7 @@ namespace EDDiscovery.UserControls.Map3D
             }
             if (kb.HasBeenPressed(Keys.D6, GLOFC.Controller.KeyboardMonitor.ShiftState.None))
             {
-                GalaxyStars = !GalaxyStars;
+                GalaxyStars = GalaxyStars >= 0 ? 0 : 3;
             }
             if (kb.HasBeenPressed(Keys.D7, GLOFC.Controller.KeyboardMonitor.ShiftState.None))
             {

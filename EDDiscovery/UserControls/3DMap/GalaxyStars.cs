@@ -34,9 +34,11 @@ namespace EDDiscovery.UserControls.Map3D
         public Vector3 LabelSize { get; set; } = new Vector3(5, 0, 5f/4f);
         public Vector3 LabelOffset { get; set; } = new Vector3(0, -1.2f, 0);
         public Size BitMapSize { get; set; } = new Size(96, 32);
-        public bool Enable { get { return sunshader.Enable; } set { sunshader.Enable = textshader.Enable = value; } }
+        // 0 = off, bit 0= stars, bit1 = labels
+        public int EnableMode { get { return enablemode; } set { enablemode = value; sunshader.Enable = (enablemode & 1) != 0; textshader.Enable = enablemode==3; } }
         public int MaxObjectsAllowed { get; set; } = 100000;
 
+        private int enablemode = 3;
         private const int MaxObjectsMargin = 1000;
         private const int SectorSize = 100;
         private const int MaxRequests = 27 * 2;
@@ -44,7 +46,8 @@ namespace EDDiscovery.UserControls.Map3D
 
         public GalaxyStars(GLItemsList items, GLRenderProgramSortedList rObjects, float sunsize, GLStorageBlock findbufferresults)
         {
-            sunvertex = new GLPLVertexShaderModelCoordWithWorldTranslationCommonModelTranslation(new Color[] { Color.FromArgb(255, 220, 220, 10), Color.FromArgb(255, 0,0,0) } );
+            sunvertex = new GLPLVertexShaderModelCoordWithWorldTranslationCommonModelTranslation(new Color[] { Color.FromArgb(255, 220, 220, 10), Color.FromArgb(255, 0,0,0) },
+                 autoscale: 30, autoscalemin: 1, autoscalemax: 2, useeyedistance:false);
             items.Add(sunvertex);
             sunshader = new GLShaderPipeline(sunvertex, new GLPLStarSurfaceFragmentShader());
             //sunshader.StartAction += (s, w) => { Monitor.Enter(slset); System.Diagnostics.Debug.WriteLine("Begin render suns"); };
@@ -247,7 +250,7 @@ namespace EDDiscovery.UserControls.Map3D
                     int max = 2;
                     while (max-- > 0 && generatedsectors.TryDequeue(out Sector d) )      // limit fill rate.. (max first)
                     {
-                        System.Diagnostics.Debug.WriteLine($"Add {d.pos} number {d.systems} total {slset.Objects}");
+                        //System.Diagnostics.Debug.WriteLine($"Add {d.pos} number {d.systems} total {slset.Objects}");
                         if (d.systems > 0)      // may return zero
                         { 
                             slset.Add(d.pos, d.text, d.positions, d.textpos, d.bitmaps, 0, d.systems);
@@ -298,7 +301,7 @@ namespace EDDiscovery.UserControls.Map3D
         {
             z = float.MaxValue;
 
-            if (Enable)
+            if (sunshader.Enable)
             {
                 var find = slset.FindBlock(findshader, rs, loc, viewportsize);      // return block tag, index, z
                 if (find != null)

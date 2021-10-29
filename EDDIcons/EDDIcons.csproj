@@ -553,6 +553,7 @@
     <EmbeddedResource Include="Controls\SysInfo\notfirstdiscover.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="GalMap\GalaxyStarsText.png" />
     <EmbeddedResource Include="GalMap\MarxNebula.png" />
     <EmbeddedResource Include="GalMap\NavRoute.png" />
     <EmbeddedResource Include="GalMap\TravelPath.png" />

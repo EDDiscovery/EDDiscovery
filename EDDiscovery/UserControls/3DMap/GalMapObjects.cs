@@ -67,15 +67,19 @@ namespace EDDiscovery.UserControls.Map3D
             var objtex = new GLTexture2DArray(images, mipmaplevel: 1, genmipmaplevel: 3, bmpsize: new Size(256, 256), internalformat: OpenTK.Graphics.OpenGL4.SizedInternalFormat.Rgba8, alignment: ContentAlignment.BottomCenter);
             IGLTexture texarray = items.Add(objtex, "GalObjTex");
 
+            const float objsize = 1.0f;        // size of object on screen
+            const float wavesize = 0.1f;
+            Size textbitmapsize = new Size(128, 40);
+            Vector3 labelsize = new Vector3(2, 0, 2.0f * textbitmapsize.Height / textbitmapsize.Width);   // size of text
+
             // now build the shaders
 
             const int texbindingpoint = 1;
             var vert = new GLPLVertexScaleLookat(rotate: dorotate, rotateelevation: doelevation, commontransform: false,       // a look at vertex shader
-                                                        autoscale: 500, autoscalemin: 1f, autoscalemax: 20f); // below 500, 1f, above 500, scale up to 20x
-            var tcs = new GLPLTesselationControl(2f);
-            tes = new GLPLTesselationEvaluateSinewave(0.2f, 1f);         // this uses the world position from the vertex scaler to position the image, w controls image + animation (b16)
+                                                        autoscale: 30, autoscalemin: 1f, autoscalemax: 30f, useeyedistance:false); // below 500, 1f, above 500, scale up to 20x
+            var tcs = new GLPLTesselationControl(10f);  // number of intermediate points
+            tes = new GLPLTesselationEvaluateSinewave(wavesize, 1f);         // 0.2f in size, 1 wave across the object
             var frag = new GLPLFragmentShaderTexture2DDiscard(texbindingpoint);       // binding - takes image pos from tes. imagepos < 0 means discard
-
             objectshader = new GLShaderPipeline(vert, tcs, tes, null, frag);
             items.Add(objectshader);
 
@@ -92,7 +96,6 @@ namespace EDDiscovery.UserControls.Map3D
             // create a quad and all entries of the renderable map objects, zero at this point, with a zero instance count. UpdateEnables will fill it in later
             // but we need to give it the maximum buffer length at this point
 
-            const float objsize = 10.0f;        // size of object on screen
 
             ridisplay = GLRenderableItem.CreateVector4Vector4(items, OpenTK.Graphics.OpenGL4.PrimitiveType.Patches, rt,
                                 GLShapeObjectFactory.CreateQuad2(objsize, objsize),         // quad2 4 vertexts
@@ -117,7 +120,7 @@ namespace EDDiscovery.UserControls.Map3D
 
             // Text renderer for the labels
 
-            textrenderer = new GLBitmaps("bm-galmapobjects", rObjects, new Size(128, 40), depthtest: depthtest, cullface: false, textureformat: OpenTK.Graphics.OpenGL4.SizedInternalFormat.Rgba8);
+            textrenderer = new GLBitmaps("bm-galmapobjects", rObjects, textbitmapsize, depthtest: depthtest, cullface: false, textureformat: OpenTK.Graphics.OpenGL4.SizedInternalFormat.Rgba8);
             items.Add(textrenderer);
 
             // now make the text up for all the objects above
@@ -130,11 +133,12 @@ namespace EDDiscovery.UserControls.Map3D
 
                 List<Vector3> posset = new List<Vector3>();
 
-                float offscale = objsize * (0.5f + (float)textrenderer.BitmapSize.Height / (float)textrenderer.BitmapSize.Width / 2);       // this is the nominal centre of the text bitmap, offset in Y to the object
+                float offscale = objsize/2 + labelsize.Z / 2 + wavesize;       // this is the nominal centre of the text bitmap, offset in Y to the object
 
                 for (int i = 0; i < renderablegalmapobjects.Length; i++)
                 {
                     var o = renderablegalmapobjects[i];
+
                     float offset = -offscale;
 
                     for (int j = 0; j < i; j++)     // look up previous ones and see if we labeled it before
@@ -160,7 +164,7 @@ namespace EDDiscovery.UserControls.Map3D
                     textrenderer.Add(o.ID, o.Name, Font,
                         Color.White, Color.FromArgb(0, 255, 0, 255),
                         pos,
-                        new Vector3(objsize, 0, 0), new Vector3(0, 0, 0), fmt: fmt, rotatetoviewer: dorotate, rotateelevation: doelevation,
+                        labelsize, new Vector3(0, 0, 0), fmt: fmt, rotatetoviewer: dorotate, rotateelevation: doelevation,
                         alphafadescalar: -100, alphafadepos: 500); // fade in, alpha = 0 at >500, 1 at 400
 
                 }
@@ -241,7 +245,7 @@ namespace EDDiscovery.UserControls.Map3D
             const int rotperiodms = 5000;
             time = time % rotperiodms;
             float fract = (float)time / rotperiodms;
-     //       System.Diagnostics.Debug.WriteLine("Time " + time + "Phase " + fract);
+            //System.Diagnostics.Debug.WriteLine("Time " + time + "Phase " + fract);
             tes.Phase = fract;
         }
 

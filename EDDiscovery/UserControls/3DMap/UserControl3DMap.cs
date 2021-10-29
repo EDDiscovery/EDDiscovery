@@ -64,7 +64,6 @@ namespace EDDiscovery.UserControls
             systemtimer.Interval = 50;
             systemtimer.Tick += new EventHandler(SystemTick);
             systemtimer.Start();
-
         }
 
         public override void Closing()

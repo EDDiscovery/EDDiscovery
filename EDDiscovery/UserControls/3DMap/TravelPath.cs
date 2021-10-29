@@ -81,7 +81,9 @@ namespace EDDiscovery.UserControls.Map3D
             starposbuf = items.NewBuffer();         // where we hold the vertexes for the suns, used by renderer and by finder
 
             // the colour index of the stars is selected by the w parameter of the world position vertexes. 
-            sunvertex = new GLPLVertexShaderModelCoordWithWorldTranslationCommonModelTranslation(new Color[] { Color.Yellow, Color.FromArgb(255, 230, 230, 1) });
+            // we autoscale to make them bigger at greater distances from eye
+            sunvertex = new GLPLVertexShaderModelCoordWithWorldTranslationCommonModelTranslation(new Color[] { Color.Yellow, Color.FromArgb(255, 230, 230, 1) }, 
+                                    autoscale:30, autoscalemin:1,autoscalemax:2, useeyedistance: false);
             items.Add(sunvertex);
             sunshader = new GLShaderPipeline(sunvertex, new GLPLStarSurfaceFragmentShader());
             items.Add(sunshader);
