@@ -214,46 +214,53 @@ namespace EDDiscovery.UserControls.Map3D
                     hpos += butnr.Width + hpad;
                 }
 
-                if ((parts & Map.Parts.EDSMStars) != 0)
-                {
-                    GLCheckBox butgalstars = new GLCheckBox("GalaxyStars", new Rectangle(hpos, vpos, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.GalaxyStars") as Bitmap, null);
-                    butgalstars.ToolTipText = "Show stars when zoomed in";
-                    butgalstars.Checked = (map.GalaxyStars & 1) != 0;
-                    butgalstars.CheckChanged += (e1) => { map.GalaxyStars ^= 1; };
-                    pform.Add(butgalstars);
-                    hpos += butgalstars.Width + hpad;
-
-                    GLCheckBox butgalstarstext = new GLCheckBox("GalaxyStarsText", new Rectangle(hpos, vpos, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.GalaxyStarsText") as Bitmap, null);
-                    butgalstarstext.ToolTipText = "Show names of stars when zoomed in";
-                    butgalstarstext.Checked = (map.GalaxyStars & 2) != 0;
-                    butgalstarstext.CheckChanged += (e1) => { map.GalaxyStars ^= 2; };
-                    pform.Add(butgalstarstext);
-                    hpos += butgalstarstext.Width + hpad;
-
-                    GLComboBox cbstars = new GLComboBox("GalaxyStarsNumber", new Rectangle(hpos, vpos, 100, iconsize));
-                    cbstars.ToolTipText = "Control how many stars are shown when zoomes in";
-                    cbstars.Items = new List<string>() { "Stars-Ultra", "Stars-High", "Stars-Medium", "Stars-Low" };
-                    var list = new List<int>() { 750000, 500000, 250000, 100000 };
-                    int itemno = list.IndexOf(map.GalaxyStarsMaxObjects); // may be -1
-                    if (itemno < 0)
-                    {
-                        itemno = 2;
-                        map.GalaxyStarsMaxObjects = list[itemno];
-                    }
-
-                    cbstars.SelectedIndex = itemno;       // high default
-                    cbstars.SelectedIndexChanged += (e1) => { map.GalaxyStarsMaxObjects = list[cbstars.SelectedIndex]; };
-                    pform.Add(cbstars);
-                    hpos += cbstars.Width + hpad;
-                }
-
                 vpos += iconsize + ypad;
             }
 
+            if ((parts & Map.Parts.EDSMStars) != 0)
+            {
+                GLGroupBox tpgb = new GLGroupBox("GalaxyStarsGB", "Galaxy Stars", new Rectangle(leftmargin, vpos, pform.ClientWidth - leftmargin * 2, iconsize * 2));
+                tpgb.BackColor = pform.BackColor;
+                tpgb.ForeColor = Color.Orange;
+                pform.Add(tpgb);
+
+                int hpos = leftmargin;
+
+                GLCheckBox butgalstars = new GLCheckBox("GalaxyStars", new Rectangle(hpos, 0, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.GalaxyStars") as Bitmap, null);
+                butgalstars.ToolTipText = "Show stars when zoomed in";
+                butgalstars.Checked = (map.GalaxyStars & 1) != 0;
+                butgalstars.CheckChanged += (e1) => { map.GalaxyStars ^= 1; };
+                tpgb.Add(butgalstars);
+                hpos += butgalstars.Width + hpad;
+
+                GLCheckBox butgalstarstext = new GLCheckBox("GalaxyStarsText", new Rectangle(hpos, 0, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.GalaxyStarsText") as Bitmap, null);
+                butgalstarstext.ToolTipText = "Show names of stars when zoomed in";
+                butgalstarstext.Checked = (map.GalaxyStars & 2) != 0;
+                butgalstarstext.CheckChanged += (e1) => { map.GalaxyStars ^= 2; };
+                tpgb.Add(butgalstarstext);
+                hpos += butgalstarstext.Width + hpad;
+
+                GLComboBox cbstars = new GLComboBox("GalaxyStarsNumber", new Rectangle(hpos, 0, 100, iconsize));
+                cbstars.ToolTipText = "Control how many stars are shown when zoomes in";
+                cbstars.Items = new List<string>() { "Stars-Ultra", "Stars-High", "Stars-Medium", "Stars-Low" };
+                var list = new List<int>() { 750000, 500000, 250000, 100000 };
+                int itemno = list.IndexOf(map.GalaxyStarsMaxObjects); // may be -1
+                if (itemno < 0)
+                {
+                    itemno = 2;
+                    map.GalaxyStarsMaxObjects = list[itemno];
+                }
+
+                cbstars.SelectedIndex = itemno;       // high default
+                cbstars.SelectedIndexChanged += (e1) => { map.GalaxyStarsMaxObjects = list[cbstars.SelectedIndex]; };
+                tpgb.Add(cbstars);
+
+                vpos += tpgb.Height + ypad;
+            }
 
             if ((parts & Map.Parts.TravelPath) != 0)
             {
-                GLGroupBox tpgb = new GLGroupBox("TravelPathGB", "Travel Path", new Rectangle(leftmargin, vpos, pform.ClientWidth - leftmargin * 2, iconsize *3));
+                GLGroupBox tpgb = new GLGroupBox("TravelPathGB", "Travel Path", new Rectangle(leftmargin, vpos, pform.ClientWidth - leftmargin * 2, iconsize * 3));
                 tpgb.BackColor = pform.BackColor;
                 tpgb.ForeColor = Color.Orange;
                 pform.Add(tpgb);
@@ -275,6 +282,12 @@ namespace EDDiscovery.UserControls.Map3D
                 dtps.ShowUpDown = true;
                 dtps.ResumeLayout();
                 tpgb.Add(dtps);
+
+                GLCheckBox buttptext = new GLCheckBox("TravelPathText", new Rectangle(leftmargin, 34, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.GalaxyStarsText") as Bitmap, null);
+                buttptext.ToolTipText = "Show names of stars when zoomed in";
+                buttptext.Checked = map.TravelPathTextDisplay;
+                buttptext.CheckChanged += (e1) => { map.TravelPathTextDisplay = !map.TravelPathTextDisplay; };
+                tpgb.Add(buttptext);
 
                 GLDateTimePicker dtpe = new GLDateTimePicker("TPEnd", new Rectangle(50, 34, 350, 30), System.DateTime.Now);
                 dtpe.SuspendLayout();
