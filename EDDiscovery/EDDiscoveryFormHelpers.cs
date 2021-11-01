@@ -198,7 +198,7 @@ namespace EDDiscovery
 
                 old3DMap.Prepare(last, EDCommander.Current.HomeSystemTextOrSol,
                             EDCommander.Current.HomeSystemIOrSol,
-                            1, Controller.history.FilterByTravelTime(null, null));
+                            1, Controller.history.FilterByTravelTime(null, null, true));
                 old3DMap.Show();
             }
         }
