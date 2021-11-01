@@ -63,7 +63,7 @@ namespace EDDiscovery.UserControls.Map3D
             AutoEDSMStarsUpdate = (1 << 28),
             PrepopulateEDSMLocalArea = (1 << 29),
 
-            Map3D = 0x10ffffff,
+            Map3D = 1,//0x10ffffff,
         }
 
         private Parts parts;
@@ -698,7 +698,7 @@ namespace EDDiscovery.UserControls.Map3D
             TravelPathStartDateEnable = defaults.GetSetting("TPSDE", false);
             TravelPathEndDate = defaults.GetSetting("TPED", DateTime.UtcNow.AddMonths(1));
             TravelPathEndDateEnable = defaults.GetSetting("TPEDE", false);
-            if (TravelPathStartDateEnable || TravelPathEndDateEnable)
+            if ((TravelPathStartDateEnable || TravelPathEndDateEnable) && travelpath!=null)
                 travelpath.Refresh();       // and refresh it if we set the data
 
             GalObjectDisplay = defaults.GetSetting("GALOD", true);
