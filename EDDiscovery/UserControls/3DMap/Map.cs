@@ -58,10 +58,12 @@ namespace EDDiscovery.UserControls.Map3D
             GalaxyResetPos = (1 << 18),
             PerspectiveChange = (1 << 19),
             YHoldButton = (1 << 20),
-            AllowAutoEDSMStarsUpdate = (1 << 21),
-            PrepopulateEDSMLocalArea = (1 << 22),
+            LimitSelector = (1<<21),
 
-            Map3D = 0x7fffffff - (1 << 22),
+            AutoEDSMStarsUpdate = (1 << 28),
+            PrepopulateEDSMLocalArea = (1 << 29),
+
+            Map3D = 0x10ffffff,
         }
 
         private Parts parts;
@@ -357,6 +359,9 @@ namespace EDDiscovery.UserControls.Map3D
                 //}
 
                 galaxystars.Create(items, rObjects, galaxysunsize, findresults);
+
+                if ((parts & Parts.LimitSelector) == 0)     // no limit selector, means unlimited stars
+                    galaxystars.UseObjectLimit = false;
             }
 
             if ((parts & Parts.RightClick) != 0)
@@ -612,7 +617,7 @@ namespace EDDiscovery.UserControls.Map3D
         public bool GalaxyDisplay { get { return galaxyshader?.Enable ?? true; } set { if (galaxyshader != null) galaxyshader.Enable = value; glwfc.Invalidate(); } }
         public bool StarDotsSpritesDisplay { get { return stardots?.Enable ?? true; } set { if (stardots != null) stardots.Enable = starsprites.Enable = value; glwfc.Invalidate(); } }
         public int GalaxyStars { get { return galaxystars?.EnableMode ?? 0; } set { if (galaxystars != null) galaxystars.EnableMode = value; glwfc.Invalidate(); } }
-        public int GalaxyStarsMaxObjects { get { return galaxystars?.MaxObjectsAllowed ?? 100000; } set { if (galaxystars != null && value >= 10000) galaxystars.MaxObjectsAllowed = value; } }  // screen out stupid numbers (may have got itself saved with that due to debugging)
+        public int GalaxyStarsMaxObjects { get { return galaxystars?.MaxObjectsAllowed ?? 100000; } set { if (galaxystars != null ) galaxystars.MaxObjectsAllowed = value; } } 
         public bool Grid { get { return gridshader?.Enable ?? true; } set { if (gridshader != null) gridshader.Enable = gridtextshader.Enable = value; glwfc.Invalidate(); } }
 
         public bool NavRouteDisplay { get { return navroute?.EnableTape ?? true; } set { if (navroute != null) navroute.EnableTape = navroute.EnableStars = navroute.EnableText = value; glwfc.Invalidate(); } }
@@ -901,7 +906,7 @@ namespace EDDiscovery.UserControls.Map3D
                 {
                     // if auto update, and eyedistance close, and db is okay, try it
 
-                    if ((parts & Parts.AllowAutoEDSMStarsUpdate) != 0 && gl3dcontroller.MatrixCalc.EyeDistance < 400 &&
+                    if ((parts & Parts.AutoEDSMStarsUpdate) != 0 && gl3dcontroller.MatrixCalc.EyeDistance < 400 &&
                                     EliteDangerousCore.DB.SystemsDatabase.Instance.RebuildRunning == false)
                     {
                         galaxystars.Request9x3BoxConditional(gl3dcontroller.PosCamera.LookAt);

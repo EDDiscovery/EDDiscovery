@@ -37,6 +37,7 @@ namespace EDDiscovery.UserControls.Map3D
         // 0 = off, bit 0= stars, bit1 = labels
         public int EnableMode { get { return enablemode; } set { enablemode = value; sunshader.Enable = (enablemode & 1) != 0; textshader.Enable = enablemode==3; } }
         public int MaxObjectsAllowed { get; set; } = 100000;
+        public bool UseObjectLimit { get; set; } = true;
         public bool DBActive { get { return subthreadsrunning > 0; ; } }
         public bool ShowDistance { get; set; } = false;     // at the moment, can't use it, due to clashing with travel path stars
 
@@ -283,7 +284,7 @@ namespace EDDiscovery.UserControls.Map3D
                     }
                 }
 
-                if ( slset.Objects > MaxObjectsAllowed )
+                if ( UseObjectLimit && slset.Objects > MaxObjectsAllowed )       // if set, and active
                 {
                     slset.RemoveUntil(MaxObjectsAllowed-MaxObjectsMargin);
                 }

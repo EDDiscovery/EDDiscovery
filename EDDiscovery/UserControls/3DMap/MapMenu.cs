@@ -142,7 +142,8 @@ namespace EDDiscovery.UserControls.Map3D
             // and closing animation
             pform.FormClosing += (f,e) => {
                 var nb = ((GLNumberBoxLong)pform["LYDist"]);
-                 map.LocalAreaSize = (int)nb.Value;
+                if ( nb != null)
+                    map.LocalAreaSize = (int)nb.Value;
                 e.Handled = true;       // stop close
                 var ani = new AnimateScale(10, 400, true, new SizeF(0, 0));       // add a close animation
                 ani.FinishAction += (a, c, t) => { pform.ForceClose(); };   // when its complete, force close
@@ -232,7 +233,7 @@ namespace EDDiscovery.UserControls.Map3D
             {
                 GLNumberBoxLong nblong = new GLNumberBoxLong("LYDist", new Rectangle(leftmargin, vpos, 150, iconsize), map.LocalAreaSize);
                 nblong.Minimum = 1;
-                nblong.Maximum = 1000;
+                nblong.Maximum = 500;
                 nblong.ToolTipText = "Set distance in ly of the box around the current star to show";
                 pform.Add(nblong);
                 vpos += iconsize + ypad;
@@ -261,20 +262,23 @@ namespace EDDiscovery.UserControls.Map3D
                 tpgb.Add(butgalstarstext);
                 hpos += butgalstarstext.Width + hpad;
 
-                GLComboBox cbstars = new GLComboBox("GalaxyStarsNumber", new Rectangle(hpos, 0, 100, iconsize));
-                cbstars.ToolTipText = "Control how many stars are shown when zoomes in";
-                cbstars.Items = new List<string>() { "Stars-Ultra", "Stars-High", "Stars-Medium", "Stars-Low" };
-                var list = new List<int>() { 750000, 500000, 250000, 100000 };
-                int itemno = list.IndexOf(map.GalaxyStarsMaxObjects); // may be -1
-                if (itemno < 0)
+                if ((parts & Map.Parts.LimitSelector) != 0)
                 {
-                    itemno = 2;
-                    map.GalaxyStarsMaxObjects = list[itemno];
-                }
+                    GLComboBox cbstars = new GLComboBox("GalaxyStarsNumber", new Rectangle(hpos, 0, 100, iconsize));
+                    cbstars.ToolTipText = "Control how many stars are shown when zoomes in";
+                    cbstars.Items = new List<string>() { "Stars-Ultra", "Stars-High", "Stars-Medium", "Stars-Low" };
+                    var list = new List<int>() { 750000, 500000, 250000, 100000 };
+                    int itemno = list.IndexOf(map.GalaxyStarsMaxObjects); // may be -1
+                    if (itemno < 0)
+                    {
+                        itemno = 2;
+                        map.GalaxyStarsMaxObjects = list[itemno];
+                    }
 
-                cbstars.SelectedIndex = itemno;       // high default
-                cbstars.SelectedIndexChanged += (e1) => { map.GalaxyStarsMaxObjects = list[cbstars.SelectedIndex]; };
-                tpgb.Add(cbstars);
+                    cbstars.SelectedIndex = itemno;       // high default
+                    cbstars.SelectedIndexChanged += (e1) => { map.GalaxyStarsMaxObjects = list[cbstars.SelectedIndex]; };
+                    tpgb.Add(cbstars);
+                }
 
                 vpos += tpgb.Height + ypad;
             }
