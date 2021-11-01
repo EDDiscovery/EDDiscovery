@@ -28,26 +28,25 @@ namespace EDDiscovery.UserControls.Map3D
         public List<HistoryEntry> CurrentListHE { get { return currentfilteredlisthe; } }      // if created with HEs
         public HistoryEntry CurrentSystemHE { get { return currentfilteredlisthe != null && CurrentPos != -1 ? currentfilteredlisthe[CurrentPos] : null; } }
         public ISystem CurrentSystem { get { return currentfilteredlistsys != null && CurrentPos != -1 ? currentfilteredlistsys[CurrentPos] : null; } }
-
+        public ISystem LastSystem {  get { return currentfilteredlistsys.LastOrDefault(); } }
         public int CurrentPos { get; private set; } = -1;                                         // -1 no system, else index
 
         public bool EnableTape { get { return tapeshader.Enable; } set { tapeshader.Enable = value; } }
         public bool EnableText { get { return textrenderer.Enable; } set { textrenderer.Enable = value; } }
         public bool EnableStars { get { return sunshader.Enable; } set { sunshader.Enable = value; } }
-        public int MaxStars { get; }
+        public int MaxStars { get; private set; }
         public DateTime TravelPathStartDate { get; set; } = new DateTime(2014, 12, 14);
         public DateTime TravelPathEndDate { get; set; } = DateTime.UtcNow.AddMonths(1);
         public bool TravelPathStartDateEnable { get; set; } = false;
         public bool TravelPathEndDateEnable { get; set; } = false;
         public Font Font { get; set; } = new Font("Arial", 8.5f);
+        public Size BitMapSize { get; set; } = new Size(96, 30);
         public Color ForeText { get; set; } = Color.White;
         public Color BackText { get; set; } = Color.Transparent;
-        public Vector3 LabelSize { get; set; } = new Vector3(5, 0, 0);
+        public Vector3 LabelSize { get; set; } = new Vector3(5, 0, 5f/4f);
         public Vector3 LabelOffset { get; set; } = new Vector3(0, -1.2f, 0);
-        public Size BitMapSize { get; set; } = new Size(128, 32);
 
-
-        public TravelPath(string name, int maxstars, float sunsize, float tapesize, GLStorageBlock bufferfindresults, bool depthtest, GLItemsList items, GLRenderProgramSortedList rObjects)
+        public void Create(string name, int maxstars, float sunsize, float tapesize, GLStorageBlock bufferfindresults, bool depthtest, GLItemsList items, GLRenderProgramSortedList rObjects)
         {
             this.MaxStars = maxstars;
             this.tapesize = tapesize;
@@ -84,7 +83,6 @@ namespace EDDiscovery.UserControls.Map3D
             // we autoscale to make them bigger at greater distances from eye
             sunvertex = new GLPLVertexShaderModelCoordWithWorldTranslationCommonModelTranslation(new Color[] { Color.Yellow, Color.FromArgb(255, 230, 230, 1) }, 
                                     autoscale:30, autoscalemin:1,autoscalemax:2, useeyedistance: false);
-            items.Add(sunvertex);
             sunshader = new GLShaderPipeline(sunvertex, new GLPLStarSurfaceFragmentShader());
             items.Add(sunshader);
 
@@ -100,8 +98,8 @@ namespace EDDiscovery.UserControls.Map3D
 
             // find compute
 
-            findshader = items.NewShaderPipeline(null, sunvertex, null, null, new GLPLGeoShaderFindTriangles(bufferfindresults, 16), null, null, null);
-            items.Add(findshader);
+            var geofind = new GLPLGeoShaderFindTriangles(bufferfindresults, 16);
+            findshader = items.NewShaderPipeline(null, sunvertex, null, null, geofind, null, null, null);
             rifind = GLRenderableItem.CreateVector4Vector4(items, OpenTK.Graphics.OpenGL4.PrimitiveType.Triangles, GLRenderState.Tri(), shape, starposbuf, ic: 0, seconddivisor: 1);
 
             // Sun names, handled by textrenderer

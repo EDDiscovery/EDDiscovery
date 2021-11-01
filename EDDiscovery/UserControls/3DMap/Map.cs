@@ -37,35 +37,36 @@ namespace EDDiscovery.UserControls.Map3D
 
     public class Map
     {
-        public GLMatrixCalc matrixcalc;
         public Controller3D gl3dcontroller;
         public GLControlDisplay displaycontrol;
-
         public enum Parts       // select whats displayed
         {
-            Galaxy = (1<<0), 
-            GalObjects = (1<<1), 
-            Regions = (1<<2), 
-            Grid = (1<<3), 
-            StarDots = (1<<4), 
-            TravelPath = (1<<5), 
-            EDSMStars = (1<<6), 
-            NavRoute = (1<<7),
-            Route = (1<<8),
-            
-            RightClick = (1<<16),
-            SearchBox = (1<<17),
-            GalaxyResetPos = (1<<18), 
-            PerspectiveChange = (1<<19), 
-            YHoldButton = (1<<20), 
-            AllowAutoEDSMStarsUpdate = (1<<21),
-            PrepopulateEDSMLocalArea = (1<<22),
+            None = 0,
+            Galaxy = (1 << 0),
+            GalObjects = (1 << 1),
+            Regions = (1 << 2),
+            Grid = (1 << 3),
+            StarDots = (1 << 4),
+            TravelPath = (1 << 5),
+            EDSMStars = (1 << 6),
+            NavRoute = (1 << 7),
+            Route = (1 << 8),
 
-            All = -1
+            Menu = (1<<15),
+            RightClick = (1 << 16),
+            SearchBox = (1 << 17),
+            GalaxyResetPos = (1 << 18),
+            PerspectiveChange = (1 << 19),
+            YHoldButton = (1 << 20),
+            AllowAutoEDSMStarsUpdate = (1 << 21),
+            PrepopulateEDSMLocalArea = (1 << 22),
+
+            Map3D = 0x7fffffff - (1 << 22),
         }
 
         private Parts parts;
 
+        private GLMatrixCalc matrixcalc;
         private GLOFC.WinForm.GLWinFormControl glwfc;
 
         private GLRenderProgramSortedList rObjects = new GLRenderProgramSortedList();
@@ -89,7 +90,7 @@ namespace EDDiscovery.UserControls.Map3D
         private GalMapObjects galmapobjects;
         private GalMapRegions edsmgalmapregions;
         private GalMapRegions elitemapregions;
-        
+
         private GalaxyStarDots stardots;
         private GLPointSpriteShader starsprites;
         private GalaxyStars galaxystars;
@@ -98,13 +99,14 @@ namespace EDDiscovery.UserControls.Map3D
 
         private MapMenu galaxymenu;
 
-        //private GLBuffer debugbuffer;
-
         // global buffer blocks used
         private const int volumenticuniformblock = 2;
         private const int findblock = 3;
 
         private System.Diagnostics.Stopwatch hptimer = new System.Diagnostics.Stopwatch();
+
+        private int localareasize = 50;
+        private HistoryList localhl;
 
         public Map()
         {
@@ -115,6 +117,8 @@ namespace EDDiscovery.UserControls.Map3D
             if (galaxystars != null)
                 galaxystars.Stop();
             items.Dispose();
+            
+           // GLStatics.VerifyAllDeallocated(); // enable during debugging only - will except if multiple windows are open
         }
 
         public ulong ElapsedTimems { get { return glwfc.ElapsedTimems; } }
@@ -123,6 +127,8 @@ namespace EDDiscovery.UserControls.Map3D
 
         public void Start(GLOFC.WinForm.GLWinFormControl glwfc, GalacticMapping edsmmapping, GalacticMapping eliteregions, UserControlCommonBase parent, Parts parts)
         {
+           // parts = (Parts)511;
+
             this.parts = parts;
             this.glwfc = glwfc;
             this.edsmmapping = edsmmapping;
@@ -136,7 +142,7 @@ namespace EDDiscovery.UserControls.Map3D
             int lyscale = 1;
             int front = -20000 / lyscale, back = front + 90000 / lyscale, left = -45000 / lyscale, right = left + 90000 / lyscale, vsize = 2000 / lyscale;
 
-            if ((parts & Parts.Galaxy ) != 0) // galaxy
+            if ((parts & Parts.Galaxy) != 0) // galaxy
             {
                 volumetricboundingbox = new Vector4[]
                     {
@@ -165,6 +171,7 @@ namespace EDDiscovery.UserControls.Map3D
                 ComputeShaderNoise3D csn = new ComputeShaderNoise3D(noise3d.Width, noise3d.Height, noise3d.Depth, 128 * sc, 16 * sc, 128 * sc, gnoisetexbinding);       // must be a multiple of localgroupsize in csn
                 csn.StartAction += (A, m) => { noise3d.BindImage(gnoisetexbinding); };
                 csn.Run();      // compute noise
+                csn.Dispose();  // and finish with it
 
                 GLTexture1D gaussiantex = new GLTexture1D(1024, OpenTK.Graphics.OpenGL4.SizedInternalFormat.R32f); // red channel only
                 items.Add(gaussiantex, "Gaussian");
@@ -174,6 +181,7 @@ namespace EDDiscovery.UserControls.Map3D
                 ComputeShaderGaussian gsn = new ComputeShaderGaussian(gaussiantex.Width, 2.0f, 2.0f, 1.4f, gdisttexbinding);
                 gsn.StartAction += (A, m) => { gaussiantex.BindImage(gdisttexbinding); };
                 gsn.Run();      // compute noise
+                gsn.Dispose();
 
                 GL.MemoryBarrier(MemoryBarrierFlags.AllBarrierBits);
 
@@ -219,7 +227,7 @@ namespace EDDiscovery.UserControls.Map3D
 
                 Random rnd = new Random(23);
 
-                GLBuffer buf = new GLBuffer(16 * 350000);     // since RND is fixed, should get the same number every time.
+                GLBuffer buf = items.NewBuffer(16 * 350000, false);     // since RND is fixed, should get the same number every time.
                 buf.StartWrite(0); // get a ptr to the whole schebang
 
                 int xcw = (right - left) / heat.Width;
@@ -284,9 +292,7 @@ namespace EDDiscovery.UserControls.Map3D
             if ((parts & Parts.Grid) != 0)
             {
                 var gridvertshader = new DynamicGridVertexShader(Color.Cyan);
-                items.Add(gridvertshader, "PLGRIDVertShader");
                 var gridfragshader = new GLPLFragmentShaderVSColor();
-                items.Add(gridfragshader, "PLGRIDFragShader");
                 gridshader = new GLShaderPipeline(gridvertshader, gridfragshader);
                 items.Add(gridshader, "DYNGRID");
 
@@ -298,9 +304,7 @@ namespace EDDiscovery.UserControls.Map3D
             if ((parts & Parts.Grid) != 0)
             {
                 var gridtextlabelsvertshader = new DynamicGridCoordVertexShader();
-                items.Add(gridtextlabelsvertshader, "PLGRIDBitmapVertShader");
                 var gridtextfragshader = new GLPLFragmentShaderTexture2DIndexed(0);
-                items.Add(gridtextfragshader, "PLGRIDBitmapFragShader");
                 gridtextshader = new GLShaderPipeline(gridtextlabelsvertshader, gridtextfragshader);
                 items.Add(gridtextshader, "DYNGRIDBitmap");
 
@@ -310,26 +314,29 @@ namespace EDDiscovery.UserControls.Map3D
                 rObjects.Add(gridtextshader, "DYNGRIDBitmapRENDER", GLRenderableItem.CreateNullVertex(OpenTK.Graphics.OpenGL4.PrimitiveType.TriangleStrip, rl, drawcount: 4, instancecount: 9));
             }
 
-            GLStorageBlock findresults = new GLStorageBlock(findblock);
-            items.Add(findresults);
+            GLStorageBlock findresults = items.NewStorageBlock(findblock);
 
-            float sunsize = 0.5f;
+            float galaxysunsize = 0.5f;
+            float travelsunsize = 0.52f;        // slightly bigger hides the double painting
             float tapesize = 0.25f;
             if ((parts & Parts.TravelPath) != 0)
             {
-                travelpath = new TravelPath("TP",50000, sunsize, tapesize, findresults, true, items, rObjects);
+                travelpath = new TravelPath();
+                travelpath.Create("TP", 50000, travelsunsize, tapesize, findresults, true, items, rObjects);
                 travelpath.CreatePath(parent.discoveryform.history);
                 travelpath.SetSystem(parent.discoveryform.history.LastSystem);
             }
 
             if ((parts & Parts.Route) != 0)
             {
-                routepath = new TravelPath("Route", 10000, sunsize,tapesize, findresults, true, items, rObjects);
+                routepath = new TravelPath();
+                routepath.Create("Route", 10000, travelsunsize, tapesize, findresults, true, items, rObjects);
             }
 
             if ((parts & Parts.NavRoute) != 0)
             {
-                navroute = new TravelPath("NavRoute", 10000, sunsize, tapesize, findresults, true, items, rObjects);
+                navroute = new TravelPath();
+                navroute.Create("NavRoute", 10000, travelsunsize, tapesize, findresults, true, items, rObjects);
                 UpdateNavRoute(parent.discoveryform.history);
             }
 
@@ -341,8 +348,15 @@ namespace EDDiscovery.UserControls.Map3D
 
             if ((parts & Parts.EDSMStars) != 0)
             {
-                galaxystars = new GalaxyStars(items, rObjects, sunsize, findresults);
-                UpdateEDSMStarsLocalArea(parent.discoveryform.history);
+                galaxystars = new GalaxyStars();
+
+                //if ((parts & Parts.PrepopulateEDSMLocalArea) != 0)        // decided show distance is a bad idea, but we keep the code in case i change my mind
+                //{
+                //    galaxystars.ShowDistance = true;
+                //    galaxystars.BitMapSize = new Size(galaxystars.BitMapSize.Width, galaxystars.BitMapSize.Height * 2);     // more v height for ly text
+                //}
+
+                galaxystars.Create(items, rObjects, galaxysunsize, findresults);
             }
 
             if ((parts & Parts.RightClick) != 0)
@@ -380,7 +394,7 @@ namespace EDDiscovery.UserControls.Map3D
                     {
                         MouseClick = (s1, e1) =>
                         {
-                            var nl = NameLocationDescription(rightclickmenu.Tag,null);
+                            var nl = NameLocationDescription(rightclickmenu.Tag, null);
                             gl3dcontroller.PanTo(nl.Item2, -1);
                         }
                     },
@@ -439,19 +453,19 @@ namespace EDDiscovery.UserControls.Map3D
             {
                 double eyedistr = Math.Pow(eyedist, 1.0);
                 float v = (float)Math.Max(eyedistr / 2000, 0);
-               // System.Diagnostics.Debug.WriteLine("Speed " + eyedistr + " "+ v);
+                // System.Diagnostics.Debug.WriteLine("Speed " + eyedistr + " "+ v);
                 return (float)ms * v;
             };
 
             // hook gl3dcontroller to display control - its the slave. Do not register mouse UI, we will deal with that and feed any events thru we want
-            gl3dcontroller.Start(matrixcalc, displaycontrol, new Vector3(0, 0, 0), new Vector3(140.75f, 0, 0), 0.5F, registermouseui:false, registerkeyui:true);
+            gl3dcontroller.Start(matrixcalc, displaycontrol, new Vector3(0, 0, 0), new Vector3(140.75f, 0, 0), 0.5F, registermouseui: false, registerkeyui: true);
 
             if (displaycontrol != null)
             {
                 displaycontrol.Paint += (o, ts) =>        // subscribing after start means we paint over the scene, letting transparency work
                 {
                     // MCUB set up by Controller3DDraw which did the work first
-                    galaxymenu.UpdateCoords(gl3dcontroller);
+                    galaxymenu?.UpdateCoords(gl3dcontroller);
                     displaycontrol.Animate(glwfc.ElapsedTimems);
                     displaycontrol.Render(glwfc.RenderState, ts);
                 };
@@ -463,11 +477,12 @@ namespace EDDiscovery.UserControls.Map3D
             displaycontrol.MouseMove += MouseMoveOnMap;
             displaycontrol.MouseWheel += MouseWheelOnMap;
 
-            galaxymenu = new MapMenu(this,parts);
+            if ((parts & Parts.Menu) != 0)
+               galaxymenu = new MapMenu(this, parts);
 
             // Autocomplete text box at top for searching
 
-            GLTextBoxAutoComplete tbac = galaxymenu.EntryTextBox;
+            GLTextBoxAutoComplete tbac = galaxymenu?.EntryTextBox;
             if (tbac != null)
             {
                 tbac.PerformAutoCompleteInThread = (s, obj, set) =>       // in the autocomplete thread, so EDSM lookup
@@ -519,7 +534,7 @@ namespace EDDiscovery.UserControls.Map3D
                         if (isys == null)
                             isys = EliteDangerousCore.DB.SystemCache.FindSystem(tbac.Text);     // final chance, the system DB
 
-                        if ( isys != null )
+                        if (isys != null)
                         {
                             System.Diagnostics.Debug.WriteLine("Move to sys " + isys.Name);
                             gl3dcontroller.SlewToPosition(new Vector3((float)isys.X, (float)isys.Y, (float)isys.Z), -1);
@@ -537,17 +552,20 @@ namespace EDDiscovery.UserControls.Map3D
         public void UpdateHistory(HistoryList hl)       // full history refresh
         {
             UpdateTravelPath(hl);
-            UpdateEDSMStarsLocalArea(hl);
             UpdateNavRoute(hl);
         }
 
-        public void UpdateTravelPath(HistoryList hl )   // new history entry
+        public void UpdateTravelPath(HistoryList hl)   // new history entry
         {
             if (travelpath != null)
             {
                 travelpath.CreatePath(hl);
                 travelpath.SetSystem(hl.LastSystem);
             }
+
+            // TBD CHeck jumping moves local stars
+
+            CheckRefreshLocalArea(hl);  // also see if local stars need updating
         }
 
         public void UpdateNavRoute(HistoryList hl)
@@ -565,48 +583,76 @@ namespace EDDiscovery.UserControls.Map3D
 
         public void UpdateEDSMStarsLocalArea(HistoryList hl)
         {
+            galaxystars.Clear();        // this will force a reset
+            CheckRefreshLocalArea(hl);      
+        }
+
+        public void CheckRefreshLocalArea(HistoryList hl)
+        { 
+            localhl = hl;       // need to keep for refresh purposes
             HistoryEntry he = hl.GetLast;       // may be null
-            if (galaxystars != null && he != null && he.System.HasCoordinate && (parts & Parts.PrepopulateEDSMLocalArea) != 0)
+            // basic check we are operating in this mode
+            if (galaxystars != null && he != null && he.System.HasCoordinate && (parts & Parts.PrepopulateEDSMLocalArea) != 0 )
             {
-                galaxystars.Request9x3Box(new Vector3((float)he.System.X, (float)he.System.Y, (float)he.System.Z));
+                var hepos = new Vector3((float)he.System.X, (float)he.System.Y, (float)he.System.Z);
+
+                if ((galaxystars.CurrentPos - hepos).Length >= LocalAreaSize / 4)       // if current pos too far away, go for it
+                {
+                    galaxystars.Clear();
+                    int size = LocalAreaSize;
+                    galaxystars.RequestBox(hepos, size);
+                }
             }
         }
+
         #endregion
 
-#region Turn on/off, move, etc.
+        #region Turn on/off, move, etc.
 
-        public bool GalaxyDisplay { get { return galaxyshader?.Enable ?? false; } set { if ( galaxyshader!=null) galaxyshader.Enable = value; glwfc.Invalidate(); } }
-        public bool StarDotsSpritesDisplay { get { return stardots?.Enable ?? false; } set { if ( stardots!=null) stardots.Enable = starsprites.Enable = value; glwfc.Invalidate(); } }
+        public bool GalaxyDisplay { get { return galaxyshader?.Enable ?? true; } set { if (galaxyshader != null) galaxyshader.Enable = value; glwfc.Invalidate(); } }
+        public bool StarDotsSpritesDisplay { get { return stardots?.Enable ?? true; } set { if (stardots != null) stardots.Enable = starsprites.Enable = value; glwfc.Invalidate(); } }
         public int GalaxyStars { get { return galaxystars?.EnableMode ?? 0; } set { if (galaxystars != null) galaxystars.EnableMode = value; glwfc.Invalidate(); } }
-        public int GalaxyStarsMaxObjects { get { return galaxystars?.MaxObjectsAllowed ?? 100000; } set { if ( galaxystars != null && value >= 10000) galaxystars.MaxObjectsAllowed = value; } }  // screen out stupid numbers (may have got itself saved with that due to debugging)
-        public bool Grid { get { return gridshader?.Enable ?? false; } set { if (gridshader != null)  gridshader.Enable = gridtextshader.Enable = value; glwfc.Invalidate(); } }
+        public int GalaxyStarsMaxObjects { get { return galaxystars?.MaxObjectsAllowed ?? 100000; } set { if (galaxystars != null && value >= 10000) galaxystars.MaxObjectsAllowed = value; } }  // screen out stupid numbers (may have got itself saved with that due to debugging)
+        public bool Grid { get { return gridshader?.Enable ?? true; } set { if (gridshader != null) gridshader.Enable = gridtextshader.Enable = value; glwfc.Invalidate(); } }
 
-        public bool NavRouteDisplay { get { return navroute?.EnableTape ?? false; } set { if (navroute != null) navroute.EnableTape = navroute.EnableStars = navroute.EnableText = value; glwfc.Invalidate(); } }
-        public bool TravelPathTapeDisplay { get { return travelpath?.EnableTape ?? false; } set { if (travelpath != null) travelpath.EnableTape = value; glwfc.Invalidate(); } }
-        public bool TravelPathTextDisplay { get { return travelpath?.EnableText ?? false; } set { if (travelpath != null) travelpath.EnableText = value; glwfc.Invalidate(); } }
-        public void TravelPathRefresh() { if ( travelpath != null ) travelpath.Refresh(); }   // travelpath.Refresh() manually after these have changed
+        public bool NavRouteDisplay { get { return navroute?.EnableTape ?? true; } set { if (navroute != null) navroute.EnableTape = navroute.EnableStars = navroute.EnableText = value; glwfc.Invalidate(); } }
+        public bool TravelPathTapeDisplay { get { return travelpath?.EnableTape ?? true; } set { if (travelpath != null) travelpath.EnableTape = value; glwfc.Invalidate(); } }
+        public bool TravelPathTextDisplay { get { return travelpath?.EnableText ?? true; } set { if (travelpath != null) travelpath.EnableText = value; glwfc.Invalidate(); } }
+        public void TravelPathRefresh() { if (travelpath != null) travelpath.Refresh(); }   // travelpath.Refresh() manually after these have changed
         public DateTime TravelPathStartDate { get { return travelpath?.TravelPathStartDate ?? DateTime.MinValue; } set { if (travelpath != null && travelpath.TravelPathStartDate != value) { travelpath.TravelPathStartDate = value; } } }
-        public bool TravelPathStartDateEnable { get { return travelpath?.TravelPathStartDateEnable ?? false; } set { if (travelpath != null && travelpath.TravelPathStartDateEnable != value) { travelpath.TravelPathStartDateEnable = value; } } }
+        public bool TravelPathStartDateEnable { get { return travelpath?.TravelPathStartDateEnable ?? true; } set { if (travelpath != null && travelpath.TravelPathStartDateEnable != value) { travelpath.TravelPathStartDateEnable = value; } } }
         public DateTime TravelPathEndDate { get { return travelpath?.TravelPathEndDate ?? DateTime.MinValue; } set { if (travelpath != null && travelpath.TravelPathEndDate != value) { travelpath.TravelPathEndDate = value; } } }
-        public bool TravelPathEndDateEnable { get { return travelpath?.TravelPathEndDateEnable ?? false; } set { if (travelpath != null && travelpath.TravelPathEndDateEnable != value) { travelpath.TravelPathEndDateEnable = value; } } }
+        public bool TravelPathEndDateEnable { get { return travelpath?.TravelPathEndDateEnable ?? true; } set { if (travelpath != null && travelpath.TravelPathEndDateEnable != value) { travelpath.TravelPathEndDateEnable = value; } } }
 
-        public bool GalObjectDisplay { get { return galmapobjects?.Enable ?? false; } set { if (galmapobjects!=null) galmapobjects.Enable = value; glwfc.Invalidate(); } }
+        public bool GalObjectDisplay { get { return galmapobjects?.Enable ?? true; } set { if (galmapobjects != null) galmapobjects.Enable = value; glwfc.Invalidate(); } }
         public void SetGalObjectTypeEnable(string id, bool state) { if (galmapobjects != null) galmapobjects.SetGalObjectTypeEnable(id, state); glwfc.Invalidate(); }
-        public bool GetGalObjectTypeEnable(string id) { return galmapobjects?.GetGalObjectTypeEnable(id) ?? false; }
+        public bool GetGalObjectTypeEnable(string id) { return galmapobjects?.GetGalObjectTypeEnable(id) ?? true; }
         public void SetAllGalObjectTypeEnables(string set) { if (galmapobjects != null) galmapobjects.SetAllEnables(set); glwfc.Invalidate(); }
         public string GetAllGalObjectTypeEnables() { return galmapobjects?.GetAllEnables() ?? ""; }
-        public bool EDSMRegionsEnable { get { return edsmgalmapregions?.Enable ?? false; } set { if (edsmgalmapregions != null) edsmgalmapregions .Enable = value; glwfc.Invalidate(); } }
-        public bool EDSMRegionsOutlineEnable { get { return edsmgalmapregions?.Outlines ?? false; } set { if (edsmgalmapregions != null) edsmgalmapregions.Outlines = value; glwfc.Invalidate(); } }
-        public bool EDSMRegionsShadingEnable { get { return edsmgalmapregions?.Regions ?? false; } set { if ( edsmgalmapregions != null ) edsmgalmapregions.Regions = value; glwfc.Invalidate(); } }
-        public bool EDSMRegionsTextEnable { get { return edsmgalmapregions?.Text ?? false; } set { if (edsmgalmapregions != null) edsmgalmapregions.Text = value; glwfc.Invalidate(); } }
-        public bool EliteRegionsEnable { get { return elitemapregions?.Enable ?? false; } set { if (elitemapregions != null) elitemapregions.Enable = value; glwfc.Invalidate(); } }
-        public bool EliteRegionsOutlineEnable { get { return elitemapregions?.Outlines ?? false; } set { if (elitemapregions != null) elitemapregions.Outlines = value; glwfc.Invalidate(); } }
+        public bool EDSMRegionsEnable { get { return edsmgalmapregions?.Enable ?? false; } set { if (edsmgalmapregions != null) edsmgalmapregions.Enable = value; glwfc.Invalidate(); } }
+        public bool EDSMRegionsOutlineEnable { get { return edsmgalmapregions?.Outlines ?? true; } set { if (edsmgalmapregions != null) edsmgalmapregions.Outlines = value; glwfc.Invalidate(); } }
+        public bool EDSMRegionsShadingEnable { get { return edsmgalmapregions?.Regions ?? false; } set { if (edsmgalmapregions != null) edsmgalmapregions.Regions = value; glwfc.Invalidate(); } }
+        public bool EDSMRegionsTextEnable { get { return edsmgalmapregions?.Text ?? true; } set { if (edsmgalmapregions != null) edsmgalmapregions.Text = value; glwfc.Invalidate(); } }
+        public bool EliteRegionsEnable { get { return elitemapregions?.Enable ?? true; } set { if (elitemapregions != null) elitemapregions.Enable = value; glwfc.Invalidate(); } }
+        public bool EliteRegionsOutlineEnable { get { return elitemapregions?.Outlines ?? true; } set { if (elitemapregions != null) elitemapregions.Outlines = value; glwfc.Invalidate(); } }
         public bool EliteRegionsShadingEnable { get { return elitemapregions?.Regions ?? false; } set { if (elitemapregions != null) elitemapregions.Regions = value; glwfc.Invalidate(); } }
-        public bool EliteRegionsTextEnable { get { return elitemapregions?.Text ?? false; } set { if (elitemapregions != null) elitemapregions.Text = value; glwfc.Invalidate(); } }
+        public bool EliteRegionsTextEnable { get { return elitemapregions?.Text ?? true; } set { if (elitemapregions != null) elitemapregions.Text = value; glwfc.Invalidate(); } }
 
-        public void GoToTravelSystem(int dir)      //0 = home, 1 = next, -1 = prev
+        public int LocalAreaSize { get { return localareasize; } set { if ( value != localareasize ) { localareasize = value; if (localhl != null) UpdateEDSMStarsLocalArea(localhl); } } }
+
+        public void GoToTravelSystem(int dir)      //0 = current, 1 = next, -1 = prev
         {
             var isys = dir == 0 ? travelpath.CurrentSystem : (dir < 0 ? travelpath.PrevSystem() : travelpath.NextSystem());
+            if (isys != null)
+            {
+                gl3dcontroller.SlewToPosition(new Vector3((float)isys.X, (float)isys.Y, (float)isys.Z), -1);
+                SetEntryText(isys.Name);
+            }
+        }
+
+        public void GoToLastSystem()
+        {
+            var isys = travelpath?.LastSystem;
             if (isys != null)
             {
                 gl3dcontroller.SlewToPosition(new Vector3((float)isys.X, (float)isys.Y, (float)isys.Z), -1);
@@ -667,6 +713,8 @@ namespace EDDiscovery.UserControls.Map3D
             GalaxyStars = defaults.GetSetting("GALSTARS", 3);
             GalaxyStarsMaxObjects = defaults.GetSetting("GALSTARSOBJ", 500000);
 
+            LocalAreaSize = defaults.GetSetting("LOCALAREALY", 50);
+
             if (restorepos )
                 gl3dcontroller.SetPositionCamera(defaults.GetSetting("POSCAMERA", ""));     // go thru gl3dcontroller to set default position, so we reset the model matrix
         }
@@ -695,6 +743,7 @@ namespace EDDiscovery.UserControls.Map3D
             defaults.PutSetting("GRIDS", Grid);
             defaults.PutSetting("GALSTARS", GalaxyStars);
             defaults.PutSetting("GALSTARSOBJ", GalaxyStarsMaxObjects);
+            defaults.PutSetting("LOCALAREALY", LocalAreaSize);
             defaults.PutSetting("POSCAMERA", gl3dcontroller.PosCamera.StringPositionCamera);
         }
 
@@ -799,7 +848,6 @@ namespace EDDiscovery.UserControls.Map3D
             glwfc.Invalidate();
         }
 
-        float lasteyedistance = 100000000;
         int lastgridwidth = 100;
 
         // Context is set.
@@ -815,11 +863,8 @@ namespace EDDiscovery.UserControls.Map3D
                 // set the dynamic grid properties
 
                 var vertshader = gridshader.GetShader<DynamicGridVertexShader>(ShaderType.VertexShader);
-                //remove for now if (Math.Abs(lasteyedistance - gl3dcontroller.MatrixCalc.EyeDistance) > 10)     // a little histerisis, set the vertical shader grid size
-                {
-                    gridrenderable.InstanceCount = vertshader.ComputeGridSize(gl3dcontroller.MatrixCalc.LookAt.Y, gl3dcontroller.MatrixCalc.EyeDistance, out lastgridwidth);
-                    lasteyedistance = gl3dcontroller.MatrixCalc.EyeDistance;
-                }
+
+                gridrenderable.InstanceCount = vertshader.ComputeGridSize(gl3dcontroller.MatrixCalc.LookAt.Y, gl3dcontroller.MatrixCalc.EyeDistance, out lastgridwidth);
 
                 vertshader.SetUniforms(gl3dcontroller.MatrixCalc.LookAt, lastgridwidth, gridrenderable.InstanceCount);
 
@@ -850,12 +895,24 @@ namespace EDDiscovery.UserControls.Map3D
             if (galmapobjects != null && galmapobjects.Enable)
                 galmapobjects.Update(time, gl3dcontroller.MatrixCalc.EyeDistance);
 
-            if (galaxystars != null && galaxystars.EnableMode > 0)
+            if (galaxystars != null)
             {
-                if ((parts & Parts.AllowAutoEDSMStarsUpdate) != 0 && gl3dcontroller.MatrixCalc.EyeDistance < 400)         // if auto update, and eyedistance close, see if local stars needed
-                    galaxystars.Request9x3BoxConditional(gl3dcontroller.PosCamera.LookAt);
+                if (galaxystars.EnableMode > 0)      // enable mode must be on to show something
+                {
+                    // if auto update, and eyedistance close, and db is okay, try it
 
-                galaxystars.Update(time, gl3dcontroller.MatrixCalc.EyeDistance);
+                    if ((parts & Parts.AllowAutoEDSMStarsUpdate) != 0 && gl3dcontroller.MatrixCalc.EyeDistance < 400 &&
+                                    EliteDangerousCore.DB.SystemsDatabase.Instance.RebuildRunning == false)
+                    {
+                        galaxystars.Request9x3BoxConditional(gl3dcontroller.PosCamera.LookAt);
+                    }
+
+                    galaxystars.Update(time, gl3dcontroller.MatrixCalc.EyeDistance);
+                }
+
+                if ( galaxymenu != null )
+                    galaxymenu.DBStatus.Visible = galaxystars.DBActive;     // always indicate DB Active status
+
             }
 
             rObjects.Render(glwfc.RenderState, gl3dcontroller.MatrixCalc, verbose: false);

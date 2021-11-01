@@ -52,11 +52,11 @@ namespace EDDiscovery.Actions
                 {
                     ap.ReportError("Missing command in ProgramWindow");
                 }
-                else if (nextcmd.Equals("tab"))
+                else if (nextcmd.Equals("tab") || nextcmd.Equals("opentab") || nextcmd.Equals("closetab"))
                 {
-                    string tabname = sp.NextQuotedWord(lowercase: System.Globalization.CultureInfo.InvariantCulture, replaceescape:true);
+                    string tabname = sp.NextQuotedWord(lowercase: System.Globalization.CultureInfo.InvariantCulture, replaceescape: true);
 
-                    if (!(ap.ActionController as ActionController).DiscoveryForm.SelectTabPage(tabname))
+                    if (!(ap.ActionController as ActionController).DiscoveryForm.SelectTabPage(tabname, nextcmd.Equals("opentab"), nextcmd.Equals("closetab")))
                         ap.ReportError("Tab page name " + tabname + " not found");
                 }
                 else if (nextcmd.Equals("topmost"))

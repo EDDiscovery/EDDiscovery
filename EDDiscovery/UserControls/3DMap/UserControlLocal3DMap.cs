@@ -40,6 +40,7 @@ namespace EDDiscovery.UserControls
 
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
+            discoveryform.OnSyncComplete += Discoveryform_OnSyncComplete;
 
             glwfc = new GLOFC.WinForm.GLWinFormControl(panelOuter);
             glwfc.EnsureCurrentPaintResize = true;      // set, ensures context is set up for internal code on paint and any Paints chained to it
@@ -56,15 +57,23 @@ namespace EDDiscovery.UserControls
             // load setup restore settings of map
             map = new Map();
             map.Start(glwfc, discoveryform.galacticMapping, discoveryform.eliteRegions, this, 
-                Map.Parts.Grid | Map.Parts.TravelPath | Map.Parts.EDSMStars | Map.Parts.SearchBox | Map.Parts.RightClick | Map.Parts.PrepopulateEDSMLocalArea);
+                  Map.Parts.None
+                | Map.Parts.Grid | Map.Parts.TravelPath | Map.Parts.NavRoute  // works
+                | Map.Parts.EDSMStars
+                | Map.Parts.PrepopulateEDSMLocalArea            // works to here, stable
+                | Map.Parts.Menu        // stable
+                | Map.Parts.SearchBox | Map.Parts.RightClick // stable
+                | Map.Parts.YHoldButton | Map.Parts.GalaxyResetPos //
+                );
 
             map.LoadState(mapsave,true);
+
+            map.UpdateEDSMStarsLocalArea(discoveryform.history);    // now try and ask for a populated update after loading the settings
 
             // start clock
             systemtimer.Interval = 50;
             systemtimer.Tick += new EventHandler(SystemTick);
             systemtimer.Start();
-
         }
 
         public override void Closing()
@@ -72,15 +81,21 @@ namespace EDDiscovery.UserControls
             System.Diagnostics.Debug.WriteLine($"local 3dmap {displaynumber} stop");
             discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
             discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
+            discoveryform.OnSyncComplete -= Discoveryform_OnSyncComplete;
             systemtimer.Stop();
 
             glwfc.EnsureCurrentContext();           // must make sure current context before we call all the dispose functions
-            //map.SaveState(mapsave);
+            map.SaveState(mapsave);
             map.Dispose();
+
+            glwfc.Dispose();
+            glwfc = null;
         }
 
         private void SystemTick(object sender, EventArgs e)
         {
+            System.Diagnostics.Debug.Assert(systemtimer.Enabled);
+
             glwfc.EnsureCurrentContext();           // ensure the context, work may be done in the timers to the GL.
             GLOFC.Timers.Timer.ProcessTimers();
             map.Systick();
@@ -91,6 +106,19 @@ namespace EDDiscovery.UserControls
             if (he.IsFSDCarrierJump)
             {
                 map.UpdateTravelPath(discoveryform.history);
+            }
+            else if (he.journalEntry.EventTypeID == JournalTypeEnum.NavRoute)
+            {
+                map.UpdateNavRoute(discoveryform.history);
+            }
+
+        }
+
+        private void Discoveryform_OnSyncComplete(long full, long update)
+        {
+            if (full + update > 0)      // only if something changes do we refresh
+            {
+                map.UpdateEDSMStarsLocalArea(discoveryform.history);
             }
         }
 

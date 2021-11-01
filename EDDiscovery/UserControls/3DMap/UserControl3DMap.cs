@@ -57,7 +57,7 @@ namespace EDDiscovery.UserControls
             // load setup restore settings of map
             map = new Map();
             map.Start(glwfc, discoveryform.galacticMapping, discoveryform.eliteRegions, this, 
-                Map.Parts.All);
+                Map.Parts.Map3D);
             map.LoadState(mapsave,true);
 
             // start clock
@@ -76,6 +76,9 @@ namespace EDDiscovery.UserControls
             glwfc.EnsureCurrentContext();           // must make sure current context before we call all the dispose functions
             map.SaveState(mapsave);
             map.Dispose();
+
+            glwfc.Dispose();
+            glwfc = null;
         }
 
         public void SetRoute(List<ISystem> syslist)

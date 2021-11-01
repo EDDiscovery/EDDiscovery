@@ -199,14 +199,18 @@ namespace EDDiscovery
         {
             if (tabIndex >= 0 && tabIndex < TabPages.Count)
             {
-                TabPage page = TabPages[tabIndex];
-                UserControls.UserControlCommonBase uccb = page.Controls[0] as UserControls.UserControlCommonBase;
+                RemoveTab(TabPages[tabIndex]);
+            }
+        }
 
-                if (uccb.AllowClose())              // it must allow a close to remove it
-                {
-                    uccb.CloseDown();
-                    page.Dispose();
-                }
+        public void RemoveTab(TabPage page)         // from right click menu
+        {
+            UserControls.UserControlCommonBase uccb = page.Controls[0] as UserControls.UserControlCommonBase;
+
+            if (uccb.AllowClose())              // it must allow a close to remove it
+            {
+                uccb.CloseDown();
+                page.Dispose();
             }
         }
 

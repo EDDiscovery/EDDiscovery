@@ -77,7 +77,7 @@ namespace EDDiscovery
         // During SYNC events
 
         public event Action OnSyncStarting;                                 // UI. EDSM sync starting
-        public event Action OnSyncComplete;                                 // UI. SYNC has completed
+        public event Action<long,long> OnSyncComplete;                      // UI. SYNC has completed, full count, update count
         public event Action<int, string> OnReportSyncProgress;              // UI. SYNC progress reporter
 
         // Due to background taskc completing async to the rest

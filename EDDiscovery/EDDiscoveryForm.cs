@@ -101,6 +101,7 @@ namespace EDDiscovery
         public event Action<string, Color> OnNewLogEntry { add { Controller.OnNewLogEntry += value; } remove { Controller.OnNewLogEntry -= value; } }
         public event Action OnRefreshCommanders { add { Controller.OnRefreshCommanders += value; } remove { Controller.OnRefreshCommanders -= value; } }
         public event Action<bool> OnExpeditionsDownloaded { add { Controller.OnExpeditionsDownloaded += value; } remove { Controller.OnExpeditionsDownloaded -= value; } }
+        public event Action<long,long> OnSyncComplete { add { Controller.OnSyncComplete += value; } remove { Controller.OnSyncComplete -= value; } }
 
         #endregion
 
@@ -144,7 +145,7 @@ namespace EDDiscovery
             Controller.OnReportRefreshProgress += ReportRefreshProgress;
 
             Controller.OnSyncStarting += () => { edsmRefreshTimer.Enabled = false; in_system_sync = true; };
-            Controller.OnSyncComplete += () => { edsmRefreshTimer.Enabled = true; in_system_sync = false; };
+            Controller.OnSyncComplete += (c1,c2) => { edsmRefreshTimer.Enabled = true; in_system_sync = false; };
             Controller.OnReportSyncProgress += ReportSyncProgress;
 
             Controller.OnNewEntrySecond += Controller_NewEntrySecond;       // called after UI updates themselves with NewEntry
@@ -765,9 +766,43 @@ namespace EDDiscovery
             tabControlMain.AddTab(id, tabindex);
         }
 
-        public bool SelectTabPage(string name)
+        public bool SelectTabPage(string name, bool openit, bool closeit)
         {
-            return tabControlMain.SelectTabPage(name);
+            PanelInformation.PanelIDs? id = PanelInformation.GetPanelIDByWindowsRefName(name);
+
+            if (id == null)     // if a name, perform a name select
+            {
+                TabPage p = tabControlMain.FindTabPageByName(name);
+                if (p != null)
+                {
+                    if (closeit)
+                        tabControlMain.RemoveTab(p);
+                    else
+                        tabControlMain.SelectTab(p);
+                    return true;
+                }
+            }
+            else
+            {
+                TabPage p = tabControlMain.GetMajorTab(id.Value);
+                if (p == null)
+                {
+                    if (openit)
+                    {
+                        tabControlMain.EnsureMajorTabIsPresent(id.Value, true);
+                        return true;
+                    }
+                }
+                else
+                {
+                    if (closeit)
+                        tabControlMain.RemoveTab(p);
+                    else
+                        tabControlMain.SelectTab(p);
+                    return true;
+                }
+            }
+            return false;
         }
 
         private void panelTabControlBack_MouseDown(object sender, MouseEventArgs e)     // click on the empty space of the tabs.. backed up by the panel

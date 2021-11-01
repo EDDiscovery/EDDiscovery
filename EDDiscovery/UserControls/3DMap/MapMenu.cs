@@ -25,6 +25,7 @@ namespace EDDiscovery.UserControls.Map3D
         private GLLabel status;
         private const int iconsize = 32;
         public GLTextBoxAutoComplete EntryTextBox { get; private set; }
+        public GLImage DBStatus { get; private set; }
 
         public MapMenu(Map g, Map.Parts parts)
         {
@@ -32,64 +33,73 @@ namespace EDDiscovery.UserControls.Map3D
 
             // names of MS* are on screen items hidden during main menu presentation
 
-            System.Diagnostics.Debug.WriteLine($"UI culture { System.Globalization.CultureInfo.CurrentUICulture.Name}");
+            int leftmargin = 4;
+            int vpos = 4;
+            int hpad = 8;
+            int hpos = leftmargin;
 
-            GLImage menuimage = new GLImage("MSMainMenu", new Rectangle(10, 10, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.hamburgermenu") as Bitmap);
+            GLImage menuimage = new GLImage("MSMainMenu", new Rectangle(hpos, vpos, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.hamburgermenu") as Bitmap);
             menuimage.ToolTipText = "Open configuration menu";
             map.displaycontrol.Add(menuimage);
             menuimage.MouseClick = (o, e1) => { ShowMenu(parts); };
-
-            int hpos = 50;
+            hpos += menuimage.Width + hpad;
+            
             if ((parts & Map.Parts.TravelPath) != 0)
             {
-                GLImage tpback = new GLImage("MSTPBack", new Rectangle(hpos, 10, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.GoBackward") as Bitmap);
+                GLImage tpback = new GLImage("MSTPBack", new Rectangle(hpos, vpos, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.GoBackward") as Bitmap);
                 tpback.ToolTipText = "Go back one system";
                 map.displaycontrol.Add(tpback);
                 tpback.MouseClick = (o, e1) => { g.GoToTravelSystem(-1); };
-                hpos += iconsize + 8;
+                hpos += iconsize + hpad;
 
-                GLImage tphome = new GLImage("MSTPHome", new Rectangle(hpos, 10, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.GoToHomeSystem") as Bitmap);
+                GLImage tphome = new GLImage("MSTPHome", new Rectangle(hpos, vpos, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.GoToHomeSystem") as Bitmap);
                 tphome.ToolTipText = "Go to current home system";
                 map.displaycontrol.Add(tphome);
-                tphome.MouseClick = (o, e1) => { g.GoToTravelSystem(0); };
-                hpos += iconsize + 8;
+                tphome.MouseClick = (o, e1) => { g.GoToLastSystem(); };
+                hpos += iconsize + hpad;
 
-                GLImage tpforward = new GLImage("MSTPForward", new Rectangle(hpos, 10, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.GoForward") as Bitmap);
+                GLImage tpforward = new GLImage("MSTPForward", new Rectangle(hpos, vpos, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.GoForward") as Bitmap);
                 tpforward.ToolTipText = "Go forward one system";
                 map.displaycontrol.Add(tpforward);
                 tpforward.MouseClick = (o, e1) => { g.GoToTravelSystem(1); };
-                hpos += iconsize + 8;
+                hpos += iconsize + hpad;
             }
 
             if ((parts & Map.Parts.GalaxyResetPos) != 0)
             {
-                GLImage tpgalview = new GLImage("MSTPGalaxy", new Rectangle(hpos, 10, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.ShowGalaxy") as Bitmap);
+                GLImage tpgalview = new GLImage("MSTPGalaxy", new Rectangle(hpos, vpos, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.ShowGalaxy") as Bitmap);
                 tpgalview.ToolTipText = "View Galaxy";
                 map.displaycontrol.Add(tpgalview);
                 tpgalview.MouseClick = (o, e1) => { g.ViewGalaxy(); };
-                hpos += iconsize + 8;
+                hpos += iconsize + hpad;
             }
 
             if ((parts & Map.Parts.SearchBox) != 0)
             {
-                EntryTextBox = new GLTextBoxAutoComplete("MSTPEntryText", new Rectangle(hpos, 10, 300, iconsize), "");
+                EntryTextBox = new GLTextBoxAutoComplete("MSTPEntryText", new Rectangle(hpos, vpos, 300, iconsize), "");
                 EntryTextBox.TextAlign = ContentAlignment.MiddleLeft;
                 EntryTextBox.BackColor = Color.FromArgb(96, 50, 50, 50);
                 EntryTextBox.BorderColor = Color.Gray;
                 EntryTextBox.BorderWidth = 1;
                 map.displaycontrol.Add(EntryTextBox);
-                hpos += EntryTextBox.Width + 8;
+                hpos += EntryTextBox.Width + hpad;
             }
 
-            GLToolTip maintooltip = new GLToolTip("MTT",Color.FromArgb(180,50,50,50));
-            maintooltip.ForeColor = Color.Orange;
-            map.displaycontrol.Add(maintooltip);
+            DBStatus = new GLImage("MSDB", new Rectangle(hpos,vpos, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.db") as Bitmap);
+            DBStatus.Dock = DockingType.BottomRight;
+            DBStatus.ToolTipText = "Reading from DB";
+            DBStatus.Visible = false;
+            map.displaycontrol.Add(DBStatus);
 
-            status = new GLLabel("Status", new Rectangle(10, 500, 600, 24), "x");
+            status = new GLLabel("Status", new Rectangle(leftmargin, 500, 600, 24), "x");
             status.Dock = DockingType.BottomLeft;
             status.ForeColor = Color.Orange;
             status.BackColor = Color.FromArgb(50, 50, 50, 50);
             map.displaycontrol.Add(status);
+
+            GLToolTip maintooltip = new GLToolTip("MTT", Color.FromArgb(180, 50, 50, 50));
+            maintooltip.ForeColor = Color.Orange;
+            map.displaycontrol.Add(maintooltip);
 
             GLBaseControl.Themer = Theme;
 
@@ -115,6 +125,7 @@ namespace EDDiscovery.UserControls.Map3D
 
             int leftmargin = 4;
             int vpos = 10;
+            int hpad = 8;
             int ypad = 10;
 
             GLForm pform = new GLForm("Galmenu", "Configure Map", new Rectangle(10, 10, 500, 600));
@@ -129,14 +140,14 @@ namespace EDDiscovery.UserControls.Map3D
             pform.Font = new Font("Arial", 10f);
 
             // and closing animation
-            pform.FormClosing += (f,e) => { 
+            pform.FormClosing += (f,e) => {
+                var nb = ((GLNumberBoxLong)pform["LYDist"]);
+                 map.LocalAreaSize = (int)nb.Value;
                 e.Handled = true;       // stop close
                 var ani = new AnimateScale(10, 400, true, new SizeF(0, 0));       // add a close animation
                 ani.FinishAction += (a, c, t) => { pform.ForceClose(); };   // when its complete, force close
                 pform.Animators.Add(ani); 
             };
-
-            int hpad = 8;
 
             {   // top buttons
                 int hpos = 0;
@@ -214,6 +225,16 @@ namespace EDDiscovery.UserControls.Map3D
                     hpos += butnr.Width + hpad;
                 }
 
+                vpos += iconsize + ypad;
+            }
+
+            if ((parts & Map.Parts.PrepopulateEDSMLocalArea) != 0)
+            {
+                GLNumberBoxLong nblong = new GLNumberBoxLong("LYDist", new Rectangle(leftmargin, vpos, 150, iconsize), map.LocalAreaSize);
+                nblong.Minimum = 1;
+                nblong.Maximum = 1000;
+                nblong.ToolTipText = "Set distance in ly of the box around the current star to show";
+                pform.Add(nblong);
                 vpos += iconsize + ypad;
             }
 

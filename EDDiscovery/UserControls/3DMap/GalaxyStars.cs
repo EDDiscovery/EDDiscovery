@@ -29,32 +29,24 @@ namespace EDDiscovery.UserControls.Map3D
     {
         public Vector3 CurrentPos { get; set; } = new Vector3(-1000000, -1000000, -1000000);
         public Font Font { get; set; } = new Font("Arial", 8.5f);
+        public Size BitMapSize { get; set; } = new Size(96, 30);        // 30 is enough for two lines at 8.5f
         public Color ForeText { get; set; } = Color.FromArgb(255,220,220,220);
         public Color BackText { get; set; } = Color.Transparent;
         public Vector3 LabelSize { get; set; } = new Vector3(5, 0, 5f/4f);
         public Vector3 LabelOffset { get; set; } = new Vector3(0, -1.2f, 0);
-        public Size BitMapSize { get; set; } = new Size(96, 32);
         // 0 = off, bit 0= stars, bit1 = labels
         public int EnableMode { get { return enablemode; } set { enablemode = value; sunshader.Enable = (enablemode & 1) != 0; textshader.Enable = enablemode==3; } }
         public int MaxObjectsAllowed { get; set; } = 100000;
+        public bool DBActive { get { return subthreadsrunning > 0; ; } }
+        public bool ShowDistance { get; set; } = false;     // at the moment, can't use it, due to clashing with travel path stars
 
-        private int enablemode = 3;
-        private const int MaxObjectsMargin = 1000;
-        private const int SectorSize = 100;
-        private const int MaxRequests = 27 * 2;
-        private const int MaxSubthreads = 16;
-
-        public GalaxyStars(GLItemsList items, GLRenderProgramSortedList rObjects, float sunsize, GLStorageBlock findbufferresults)
+        public void Create(GLItemsList items, GLRenderProgramSortedList rObjects, float sunsize, GLStorageBlock findbufferresults)
         {
             sunvertex = new GLPLVertexShaderModelCoordWithWorldTranslationCommonModelTranslation(new Color[] { Color.FromArgb(255, 220, 220, 10), Color.FromArgb(255, 0,0,0) },
                  autoscale: 30, autoscalemin: 1, autoscalemax: 2, useeyedistance:false);
-            items.Add(sunvertex);
-            sunshader = new GLShaderPipeline(sunvertex, new GLPLStarSurfaceFragmentShader());
-            //sunshader.StartAction += (s, w) => { Monitor.Enter(slset); System.Diagnostics.Debug.WriteLine("Begin render suns"); };
-            //sunshader.FinishAction += (s, w) => { System.Diagnostics.Debug.WriteLine("End render suns"); Monitor.Exit(slset); };
-            items.Add(sunshader);
-            shapebuf = new GLBuffer();
-            items.Add(shapebuf);
+            sunshader = items.NewShaderPipeline(null, sunvertex, new GLPLStarSurfaceFragmentShader());
+
+            shapebuf = items.NewBuffer(false);
             var shape = GLSphereObjectFactory.CreateSphereFromTriangles(2, sunsize);
             shapebuf.AllocateFill(shape);
 
@@ -67,10 +59,7 @@ namespace EDDiscovery.UserControls.Map3D
             textrc.ClipDistanceEnable = 1;  // we are going to cull primitives which are deleted
 
             int texunitspergroup = 16;
-            textshader = new GLShaderPipeline(new GLPLVertexShaderQuadTextureWithMatrixTranslation(), new GLPLFragmentShaderTexture2DIndexedMulti(0, 0, true, texunitspergroup));
-            //textshader.StartAction += (s, w) => { Monitor.Enter(slset); System.Diagnostics.Debug.WriteLine("Begin render text"); };
-            //textshader.FinishAction += (s, w) => { System.Diagnostics.Debug.WriteLine("End render text"); Monitor.Exit(slset); };
-            items.Add(textshader);
+            textshader = items.NewShaderPipeline(null, new GLPLVertexShaderQuadTextureWithMatrixTranslation(), new GLPLFragmentShaderTexture2DIndexedMulti(0, 0, true, texunitspergroup));
 
             slset = new GLSetOfObjectsWithLabels("SLSet", rObjects, texunitspergroup, 100, 10,
                                                             sunshader, shapebuf, shape.Length, starrc, OpenTK.Graphics.OpenGL4.PrimitiveType.Triangles,
@@ -78,8 +67,8 @@ namespace EDDiscovery.UserControls.Map3D
 
             items.Add(slset);
 
-            findshader = items.NewShaderPipeline(null, sunvertex, null, null, new GLPLGeoShaderFindTriangles(findbufferresults, 16), null, null, null);
-            items.Add(findshader);
+            var geofind = new GLPLGeoShaderFindTriangles(findbufferresults, 16);
+            findshader = items.NewShaderPipeline(null, sunvertex, null, null, geofind, null, null, null);
         }
 
         public void Start()
@@ -99,13 +88,19 @@ namespace EDDiscovery.UserControls.Map3D
                 Thread.Sleep(100);
             }
             System.Diagnostics.Debug.WriteLine("Stopped on gal stars");
+
+            while (cleanbitmaps.TryDequeue(out Sector sectoclean))
+            {
+                System.Diagnostics.Debug.WriteLine($"Final Clean bitmap for {sectoclean.pos}");
+                BitMapHelpers.Dispose(sectoclean.bitmaps);
+                sectoclean.bitmaps = null;
+            }
         }
 
         public void Request9x3BoxConditional(Vector3 newpos)
         {
-            // if out of pos, not too many threads, and rebuild is not running
-
-            if ((CurrentPos - newpos).Length >= SectorSize && requestedsectors.Count < MaxRequests && SystemsDatabase.Instance.RebuildRunning == false )
+            // if out of pos, not too many requestes, and rebuild is not running
+            if ((CurrentPos - newpos).Length >= SectorSize && requestedsectors.Count < MaxRequests )
             {
                 Request9x3Box(newpos);
             }
@@ -119,23 +114,23 @@ namespace EDDiscovery.UserControls.Map3D
             for (int i = 0; i <= 2; i++)
             {
                 int y = i == 0 ? 0 : i == 1 ? SectorSize : -SectorSize;
-                Request(new Vector3(pos.X , pos.Y + y, pos.Z));
-                Request(new Vector3(pos.X + SectorSize, pos.Y + y, pos.Z));
-                Request(new Vector3(pos.X - SectorSize, pos.Y + y, pos.Z));
-                Request(new Vector3(pos.X, pos.Y+y, pos.Z + SectorSize));
-                Request(new Vector3(pos.X, pos.Y + y, pos.Z - SectorSize));
-                Request(new Vector3(pos.X + SectorSize, pos.Y + y, pos.Z + SectorSize));
-                Request(new Vector3(pos.X + SectorSize, pos.Y + y, pos.Z - SectorSize));
-                Request(new Vector3(pos.X - SectorSize, pos.Y + y, pos.Z + SectorSize));
-                Request(new Vector3(pos.X - SectorSize, pos.Y + y, pos.Z - SectorSize));
+                RequestBox(new Vector3(pos.X , pos.Y + y, pos.Z));
+                RequestBox(new Vector3(pos.X + SectorSize, pos.Y + y, pos.Z));
+                RequestBox(new Vector3(pos.X - SectorSize, pos.Y + y, pos.Z));
+                RequestBox(new Vector3(pos.X, pos.Y+y, pos.Z + SectorSize));
+                RequestBox(new Vector3(pos.X, pos.Y + y, pos.Z - SectorSize));
+                RequestBox(new Vector3(pos.X + SectorSize, pos.Y + y, pos.Z + SectorSize));
+                RequestBox(new Vector3(pos.X + SectorSize, pos.Y + y, pos.Z - SectorSize));
+                RequestBox(new Vector3(pos.X - SectorSize, pos.Y + y, pos.Z + SectorSize));
+                RequestBox(new Vector3(pos.X - SectorSize, pos.Y + y, pos.Z - SectorSize));
             }
             //System.Diagnostics.Debug.WriteLine($"End 9 box");
         }
 
-        // send the request to the requestor using a blocking queue
-        private void Request(Vector3 pos)
+        // request a box around pos (nominalised to sectorsize) and if not already requested, send the request to the requestor using a blocking queue
+        public void RequestBox(Vector3 pos)
         {
-            int mm = 100000 + SectorSize/2;
+            int mm = 100000 + SectorSize / 2;
             pos.X = (int)(pos.X + mm) / SectorSize * SectorSize - mm;
             pos.Y = (int)(pos.Y + mm) / SectorSize * SectorSize - mm;
             pos.Z = (int)(pos.Z + mm) / SectorSize * SectorSize - mm;
@@ -145,12 +140,26 @@ namespace EDDiscovery.UserControls.Map3D
                 slset.ReserveTag(pos);      // important, stops repeated adds in the situation where it takes a while to add to set
 
                 //System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 100000} {pos} request");
-                requestedsectors.Add(new Sector(pos));
+                requestedsectors.Add(new Sector(pos, SectorSize));
             }
             else
             {
                 //System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 100000} {pos} request rejected");
             }
+        }
+        public void RequestBox(Vector3 pos, int size)   // pos is the centre
+        {
+            slset.ReserveTag(pos);      // unconditional reserve of this tag
+            CurrentPos = pos;
+            //System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 100000} {pos} request");
+            requestedsectors.Add(new Sector(new Vector3(pos.X-size/2,pos.Y-size/2,pos.Z-size/2), size));
+        }
+
+        // clear all objects
+        public void Clear()
+        {
+            slset.RemoveUntil(0);
+            CurrentPos = new Vector3(-1000000, -1000000, -1000000);     //reset pos
         }
 
         // do this in a thread, as adding threads is computationally expensive so we don't want to do it in the foreground
@@ -204,9 +213,23 @@ namespace EDDiscovery.UserControls.Map3D
             Sector d = (Sector)seco;
 
             //System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 100000} {d.pos} {tno} start");
-            
+
             // note d.text/d.positions may be much longer than d.systems
-            d.systems = SystemsDB.GetSystemList(d.pos.X, d.pos.Y, d.pos.Z, SectorSize, ref d.text, ref d.positions, FromIntXYZScalar);
+
+            if (ShowDistance)
+            {
+                Vector4 pos = new Vector4(d.pos.X+d.searchsize/2, d.pos.Y+d.searchsize/2, d.pos.Z+d.searchsize/2, 0);       // from centre of box
+
+                d.systems = SystemsDB.GetSystemList(d.pos.X, d.pos.Y, d.pos.Z, d.searchsize, ref d.text, ref d.positions,
+                    (x, y, z) => { return new Vector4((float)x / SystemClass.XYZScalar, (float)y / SystemClass.XYZScalar, (float)z / SystemClass.XYZScalar, 0); },
+                    (v, s) => { var dist = (pos - v).Length; return s + $" @ {dist:0.#}ly"; });
+            }
+            else
+            {
+                d.systems = SystemsDB.GetSystemList(d.pos.X, d.pos.Y, d.pos.Z, d.searchsize, ref d.text, ref d.positions,
+                                        (x, y, z) => { return new Vector4((float)x / SystemClass.XYZScalar, (float)y / SystemClass.XYZScalar, (float)z / SystemClass.XYZScalar, 0); },
+                                        null);
+            }
 
             if (d.systems > 0)      // may get nothing, so don't do this if so
             {
@@ -231,10 +254,6 @@ namespace EDDiscovery.UserControls.Map3D
             //System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 100000} {d.pos} {tno} {d.systems} end");
 
             Interlocked.Add(ref subthreadsrunning, -1);
-        }
-        private Vector4 FromIntXYZScalar(int x, int y, int z)
-        {
-            return new Vector4((float)x / SystemClass.XYZScalar, (float)y / SystemClass.XYZScalar, (float)z / SystemClass.XYZScalar, 0);
         }
 
         ulong timelastchecked = 0;
@@ -309,7 +328,12 @@ namespace EDDiscovery.UserControls.Map3D
                     z = find.Item5;
                     var userdata = slset.UserData[find.Item1[0].tag] as string[];
                     System.Diagnostics.Debug.WriteLine($"SLSet {find.Item2} {find.Item3} {find.Item4} {find.Item5} {userdata[find.Item2]}");
-                    return new SystemClass() { Name = userdata[find.Item4] };       // without position note
+
+                    string name = userdata[find.Item4];
+                    int atsign = name.IndexOf(" @");        // remove any information denoted by space @
+                    if (atsign>=0)
+                        name = name.Substring(0, atsign);
+                    return new SystemClass() { Name = name };       // without position note
                 }
             }
 
@@ -329,8 +353,9 @@ namespace EDDiscovery.UserControls.Map3D
 
         private class Sector
         {
-            public Vector3 pos;
-            public Sector(Vector3 pos) { this.pos = pos; }
+            public Vector3 pos;             // position
+            public int searchsize;          // and size.. nominally SectorSize, but for local map its the search size
+            public Sector(Vector3 pos, int size) { this.pos = pos; searchsize = size; }
 
             // generated by thread, passed to update, bitmaps pushed to cleanbitmaps and deleted by requestor
             public int systems;
@@ -352,6 +377,12 @@ namespace EDDiscovery.UserControls.Map3D
         private Thread requestorthread;
         private CancellationTokenSource stop =  new CancellationTokenSource();
         private int subthreadsrunning = 0;
+
+        private int enablemode = 3;
+        private const int MaxObjectsMargin = 1000;
+        private const int SectorSize = 100;
+        private const int MaxRequests = 27 * 2;
+        private const int MaxSubthreads = 16;
     }
 
 }

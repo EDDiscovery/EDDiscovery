@@ -211,13 +211,15 @@ namespace EDDiscovery
             if (syncstate.edsm_fullsync_count > 0 || syncstate.edsm_updatesync_count > 0)
                 LogLine(string.Format("EDSM systems update complete with {0} systems".T(EDTx.EDDiscoveryController_EDSMU), syncstate.edsm_fullsync_count + syncstate.edsm_updatesync_count));
 
-            if (syncstate.edsm_fullsync_count > 0 )   // if we have done a resync, or a major update sync (arb no)
-            {
-                LogLine("Refresh due to updating EDSM system data".T(EDTx.EDDiscoveryController_Refresh));
-                RefreshHistoryAsync();
-            }
+            // since we don't assign EDSM IDs to journal entries any more, this is pointless.. removing 
 
-            OnSyncComplete?.Invoke();
+            //if (syncstate.edsm_fullsync_count > 0 )   // if we have done a resync, or a major update sync (arb no)
+            //{
+            //    LogLine("Refresh due to updating EDSM system data".T(EDTx.EDDiscoveryController_Refresh));
+            //    RefreshHistoryAsync();
+            //}
+
+            OnSyncComplete?.Invoke(syncstate.edsm_fullsync_count, syncstate.edsm_updatesync_count);
 
             ReportSyncProgress("");
 

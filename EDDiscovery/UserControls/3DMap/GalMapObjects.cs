@@ -110,7 +110,8 @@ namespace EDDiscovery.UserControls.Map3D
 
             // add a find shader to look them up
 
-            findshader = items.NewShaderPipeline(null, vert, tcs, tes, new GLPLGeoShaderFindTriangles(findbufferresults, 16), null, null, null);
+            var geofind = new GLPLGeoShaderFindTriangles(findbufferresults, 16);        // pass thru normal vert/tcs/tes then to geoshader for results
+            findshader = items.NewShaderPipeline(null, vert, tcs, tes, geofind, null, null, null);
 
             // hook to modelworldbuffer, at modelpos and worldpos.  UpdateEnables will fill in instance count
             rifind = GLRenderableItem.CreateVector4Vector4(items, OpenTK.Graphics.OpenGL4.PrimitiveType.Patches, GLRenderState.Patches(4), modelworldbuffer, modelpos, ridisplay.DrawCount,
