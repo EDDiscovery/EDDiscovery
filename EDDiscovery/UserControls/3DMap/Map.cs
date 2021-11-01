@@ -63,7 +63,7 @@ namespace EDDiscovery.UserControls.Map3D
             AutoEDSMStarsUpdate = (1 << 28),
             PrepopulateEDSMLocalArea = (1 << 29),
 
-            Map3D = 1,//0x10ffffff,
+            Map3D = 0x10ffffff,
         }
 
         private Parts parts;
