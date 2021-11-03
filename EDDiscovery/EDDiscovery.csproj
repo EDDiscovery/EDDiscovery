@@ -145,8 +145,8 @@
       <DependentUpon>Controls.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </None>
-    <Reference Include="GLOFC, Version=0.6.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\RJKJSoft.GLOFC.0.6.1\lib\net48\GLOFC.dll</HintPath>
+    <Reference Include="GLOFC, Version=0.6.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RJKJSoft.GLOFC.0.6.2\lib\net48\GLOFC.dll</HintPath>
     </Reference>
     <Reference Include="OpenTK, Version=3.3.2.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
       <HintPath>..\packages\OpenTK.3.3.2\lib\net20\OpenTK.dll</HintPath>

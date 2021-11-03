@@ -58,17 +58,18 @@ namespace EDDiscovery.UserControls
             map = new Map();
             map.Start(glwfc, discoveryform.galacticMapping, discoveryform.eliteRegions, this, 
                   Map.Parts.None
-                | Map.Parts.Grid | Map.Parts.TravelPath | Map.Parts.NavRoute  // works
+                | Map.Parts.Galaxy
+                | Map.Parts.Grid | Map.Parts.TravelPath | Map.Parts.NavRoute  
                 | Map.Parts.EDSMStars
-                | Map.Parts.PrepopulateEDSMLocalArea            // works to here, stable
-                | Map.Parts.Menu        // stable
-                | Map.Parts.SearchBox | Map.Parts.RightClick // stable
-                | Map.Parts.YHoldButton | Map.Parts.GalaxyResetPos //
+                | Map.Parts.PrepopulateEDSMLocalArea            
+                | Map.Parts.Menu        
+                | Map.Parts.SearchBox | Map.Parts.RightClick 
+                | Map.Parts.YHoldButton | Map.Parts.GalaxyResetPos 
                 );
 
-            map.LoadState(mapsave,true);
+            map.LoadState(mapsave,true,200000);
 
-            map.UpdateEDSMStarsLocalArea(discoveryform.history);    // now try and ask for a populated update after loading the settings
+            map.UpdateEDSMStarsLocalArea();    // now try and ask for a populated update after loading the settings
 
             // start clock
             systemtimer.Interval = 50;
@@ -105,11 +106,11 @@ namespace EDDiscovery.UserControls
         {
             if (he.IsFSDCarrierJump)
             {
-                map.UpdateTravelPath(discoveryform.history);
+                map.UpdateTravelPath();
             }
             else if (he.journalEntry.EventTypeID == JournalTypeEnum.NavRoute)
             {
-                map.UpdateNavRoute(discoveryform.history);
+                map.UpdateNavRoute();
             }
 
         }
@@ -118,13 +119,15 @@ namespace EDDiscovery.UserControls
         {
             if (full + update > 0)      // only if something changes do we refresh
             {
-                map.UpdateEDSMStarsLocalArea(discoveryform.history);
+                map.UpdateEDSMStarsLocalArea();
             }
         }
 
         private void Discoveryform_OnHistoryChange(HistoryList obj)
         {
-            map.UpdateHistory(discoveryform.history);
+            map.UpdateEDSMStarsLocalArea();
+            map.UpdateTravelPath();
+            map.UpdateNavRoute();
         }
     }
 }

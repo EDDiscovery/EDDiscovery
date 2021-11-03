@@ -58,7 +58,7 @@ namespace EDDiscovery.UserControls
             map = new Map();
             map.Start(glwfc, discoveryform.galacticMapping, discoveryform.eliteRegions, this, 
                 Map.Parts.Map3D);
-            map.LoadState(mapsave,true);
+            map.LoadState(mapsave,true,0);
 
             // start clock
             systemtimer.Interval = 50;
@@ -102,17 +102,18 @@ namespace EDDiscovery.UserControls
         {
             if (he.IsFSDCarrierJump)
             {
-                map.UpdateTravelPath(discoveryform.history);
+                map.UpdateTravelPath();
             }
             else if ( he.journalEntry.EventTypeID == JournalTypeEnum.NavRoute)
             {
-                map.UpdateNavRoute(discoveryform.history);
+                map.UpdateNavRoute();
             }
         }
 
         private void Discoveryform_OnHistoryChange(HistoryList obj)
         {
-            map.UpdateHistory(discoveryform.history);
+            map.UpdateTravelPath();
+            map.UpdateNavRoute();
         }
 
         public class MapSaverImpl : MapSaver

@@ -88,7 +88,8 @@ void main(void)
 
         public void SetFader(float eyedist)
         {
-            float fade = (eyedist<0) ? -1 : eyedist > 100 ? 1.0f : eyedist/100f;
+            float dist = 3000f;
+            float fade = (eyedist<0) ? -1 : eyedist > dist ? 1.0f : eyedist/dist;
            // System.Diagnostics.Debug.WriteLine("Fade out " + fade);
             GL.ProgramUniform1(this.Id, 10, fade);
         }

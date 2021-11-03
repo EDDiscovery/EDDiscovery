@@ -27,6 +27,7 @@ namespace EDDiscovery.UserControls.Map3D
 {
     class GalaxyStars
     {
+        private Vector3 InvalidPos = new Vector3(-1000000, -1000000, -1000000);
         public Vector3 CurrentPos { get; set; } = new Vector3(-1000000, -1000000, -1000000);
         public Font Font { get; set; } = new Font("Arial", 8.5f);
         public Size BitMapSize { get; set; } = new Size(96, 30);        // 30 is enough for two lines at 8.5f
@@ -37,9 +38,9 @@ namespace EDDiscovery.UserControls.Map3D
         // 0 = off, bit 0= stars, bit1 = labels
         public int EnableMode { get { return enablemode; } set { enablemode = value; sunshader.Enable = (enablemode & 1) != 0; textshader.Enable = enablemode==3; } }
         public int MaxObjectsAllowed { get; set; } = 100000;
-        public bool UseObjectLimit { get; set; } = true;
         public bool DBActive { get { return subthreadsrunning > 0; ; } }
         public bool ShowDistance { get; set; } = false;     // at the moment, can't use it, due to clashing with travel path stars
+        public int SectorSize { get; set; } = 100;
 
         public void Create(GLItemsList items, GLRenderProgramSortedList rObjects, float sunsize, GLStorageBlock findbufferresults)
         {
@@ -98,18 +99,20 @@ namespace EDDiscovery.UserControls.Map3D
             }
         }
 
-        public void Request9x3BoxConditional(Vector3 newpos)
+        // using CurrentPosition as the conditional
+        public void Request9x3BoxConditional(Vector3 newpos)        
         {
             // if out of pos, not too many requestes, and rebuild is not running
             if ((CurrentPos - newpos).Length >= SectorSize && requestedsectors.Count < MaxRequests )
             {
                 Request9x3Box(newpos);
+                CurrentPos = newpos;
             }
         }
 
+        // request a 9x3 box
         public void Request9x3Box(Vector3 pos)
         {
-            CurrentPos = pos;
             //System.Diagnostics.Debug.WriteLine($"Request 9 box ${pos}");
 
             for (int i = 0; i <= 2; i++)
@@ -138,29 +141,44 @@ namespace EDDiscovery.UserControls.Map3D
 
             if (!slset.TagsToBlocks.ContainsKey(pos))
             {
-                slset.ReserveTag(pos);      // important, stops repeated adds in the situation where it takes a while to add to set
-
+                var sec = new Sector(pos, SectorSize);
+                slset.ReserveTag(sec.pos);      // important, stops repeated adds in the situation where it takes a while to add to set
                 //System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 100000} {pos} request");
-                requestedsectors.Add(new Sector(pos, SectorSize));
+                requestedsectors.Add(sec);
             }
             else
             {
                 //System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 100000} {pos} request rejected");
             }
         }
-        public void RequestBox(Vector3 pos, int size)   // pos is the centre
+
+        private float previousboxaroundsize;
+        public void RequestBoxAround(Vector3 pos, int size)   // pos is the centre
         {
-            slset.ReserveTag(pos);      // unconditional reserve of this tag
             CurrentPos = pos;
-            //System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 100000} {pos} request");
-            requestedsectors.Add(new Sector(new Vector3(pos.X-size/2,pos.Y-size/2,pos.Z-size/2), size));
+            previousboxaroundsize = size;
+            var sec = new Sector(new Vector3(pos.X - size / 2, pos.Y - size / 2, pos.Z - size / 2), size);
+            slset.ReserveTag(sec.pos);      // unconditional reserve of this tag
+            //System.Diagnostics.Debug.WriteLine($"Galaxy: {sec.pos} request");
+            requestedsectors.Add(sec);
+        }
+        public void ClearBoxAround()        // clear the box around
+        {
+            var sec = new Vector3(CurrentPos.X - previousboxaroundsize / 2, CurrentPos.Y - previousboxaroundsize / 2, CurrentPos.Z - previousboxaroundsize / 2);
+            slset.Remove(sec);
+            CurrentPos = InvalidPos;
+        }
+
+        public void Clear(Vector3 pos)
+        {
+            slset.Remove(pos);
         }
 
         // clear all objects
         public void Clear()
         {
-            slset.RemoveUntil(0);
-            CurrentPos = new Vector3(-1000000, -1000000, -1000000);     //reset pos
+            slset.Clear();      // note this clears the current painted objects, if there are some flying, it won't clear those
+            CurrentPos = InvalidPos;
         }
 
         // do this in a thread, as adding threads is computationally expensive so we don't want to do it in the foreground
@@ -187,7 +205,7 @@ namespace EDDiscovery.UserControls.Map3D
                             }
                         }
 
-                        //System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 100000} {sector.pos} requestor accepts");
+                        System.Diagnostics.Debug.WriteLine($"Galaxy: {sector.pos} requestor accepts");
 
                         Interlocked.Add(ref subthreadsrunning, 1);      // committed to run, and count subthreads
 
@@ -213,42 +231,45 @@ namespace EDDiscovery.UserControls.Map3D
         {
             Sector d = (Sector)seco;
 
-            //System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 100000} {d.pos} {tno} start");
+            System.Diagnostics.Debug.WriteLine($"Galaxy: Thread start for {d.pos}");
 
             // note d.text/d.positions may be much longer than d.systems
 
-            if (ShowDistance)
+            if (d.searchsize > 0)           // if not a clear..
             {
-                Vector4 pos = new Vector4(d.pos.X+d.searchsize/2, d.pos.Y+d.searchsize/2, d.pos.Z+d.searchsize/2, 0);       // from centre of box
-
-                d.systems = SystemsDB.GetSystemList(d.pos.X, d.pos.Y, d.pos.Z, d.searchsize, ref d.text, ref d.positions,
-                    (x, y, z) => { return new Vector4((float)x / SystemClass.XYZScalar, (float)y / SystemClass.XYZScalar, (float)z / SystemClass.XYZScalar, 0); },
-                    (v, s) => { var dist = (pos - v).Length; return s + $" @ {dist:0.#}ly"; });
-            }
-            else
-            {
-                d.systems = SystemsDB.GetSystemList(d.pos.X, d.pos.Y, d.pos.Z, d.searchsize, ref d.text, ref d.positions,
-                                        (x, y, z) => { return new Vector4((float)x / SystemClass.XYZScalar, (float)y / SystemClass.XYZScalar, (float)z / SystemClass.XYZScalar, 0); },
-                                        null);
-            }
-
-            if (d.systems > 0)      // may get nothing, so don't do this if so
-            {
-                // note only draw d.systems
-                using (StringFormat fmt = new StringFormat())
+                if (ShowDistance)
                 {
-                    fmt.Alignment = StringAlignment.Center;
+                    Vector4 pos = new Vector4(d.pos.X + d.searchsize / 2, d.pos.Y + d.searchsize / 2, d.pos.Z + d.searchsize / 2, 0);       // from centre of box
 
-                    d.bitmaps = BitMapHelpers.DrawTextIntoFixedSizeBitmaps(slset.LabelSize, d.text, Font, System.Drawing.Text.TextRenderingHint.ClearTypeGridFit,
-                                            ForeText, BackText, 0.5f, frmt: fmt, length: d.systems);
+                    d.systems = SystemsDB.GetSystemList(d.pos.X, d.pos.Y, d.pos.Z, d.searchsize, ref d.text, ref d.positions,
+                        (x, y, z) => { return new Vector4((float)x / SystemClass.XYZScalar, (float)y / SystemClass.XYZScalar, (float)z / SystemClass.XYZScalar, 0); },
+                        (v, s) => { var dist = (pos - v).Length; return s + $" @ {dist:0.#}ly"; });
+                }
+                else
+                {
+                    d.systems = SystemsDB.GetSystemList(d.pos.X, d.pos.Y, d.pos.Z, d.searchsize, ref d.text, ref d.positions,
+                                            (x, y, z) => { return new Vector4((float)x / SystemClass.XYZScalar, (float)y / SystemClass.XYZScalar, (float)z / SystemClass.XYZScalar, 0); },
+                                            null);
                 }
 
-                d.textpos = GLPLVertexShaderQuadTextureWithMatrixTranslation.CreateMatrices(d.positions, LabelOffset,  //offset
-                                                                            LabelSize, //size
-                                                                            new Vector3(0, 0, 0), // rot (unused due to below)
-                                                                            true, false, // rotate, no elevation
-                                                                            length: d.systems    // limit length
-                                                                            );
+                if (d.systems > 0)      // may get nothing, so don't do this if so
+                {
+                    // note only draw d.systems
+                    using (StringFormat fmt = new StringFormat())
+                    {
+                        fmt.Alignment = StringAlignment.Center;
+
+                        d.bitmaps = BitMapHelpers.DrawTextIntoFixedSizeBitmaps(slset.LabelSize, d.text, Font, System.Drawing.Text.TextRenderingHint.ClearTypeGridFit,
+                                                ForeText, BackText, 0.5f, frmt: fmt, length: d.systems);
+                    }
+
+                    d.textpos = GLPLVertexShaderQuadTextureWithMatrixTranslation.CreateMatrices(d.positions, LabelOffset,  //offset
+                                                                                LabelSize, //size
+                                                                                new Vector3(0, 0, 0), // rot (unused due to below)
+                                                                                true, false, // rotate, no elevation
+                                                                                length: d.systems    // limit length
+                                                                                );
+                }
             }
 
             generatedsectors.Enqueue(d);       // d has been filled
@@ -270,9 +291,10 @@ namespace EDDiscovery.UserControls.Map3D
                     int max = 2;
                     while (max-- > 0 && generatedsectors.TryDequeue(out Sector d) )      // limit fill rate.. (max first)
                     {
-                        //System.Diagnostics.Debug.WriteLine($"Add {d.pos} number {d.systems} total {slset.Objects}");
+                        System.Diagnostics.Debug.WriteLine($"Galaxy: Add {d.pos} number {d.systems} total {slset.Objects}");
                         if (d.systems > 0)      // may return zero
-                        { 
+                        {
+                            System.Diagnostics.Debug.Assert(slset.TagsToBlocks.ContainsKey(d.pos));
                             slset.Add(d.pos, d.text, d.positions, d.textpos, d.bitmaps, 0, d.systems);
                             cleanbitmaps.Enqueue(d);            // ask for cleaning of these bitmaps
                         }
@@ -280,14 +302,15 @@ namespace EDDiscovery.UserControls.Map3D
                         d.positions = null;     // don't need these
                         d.textpos = null;           // and these are not needed
 
+                        if (slset.Objects > MaxObjectsAllowed)       // if set, and active
+                        {
+                            slset.RemoveUntil(MaxObjectsAllowed - MaxObjectsMargin);
+                        }
+
                         //System.Diagnostics.Debug.WriteLine($"..add complete {d.pos} {slset.Objects}" );
                     }
                 }
 
-                if ( UseObjectLimit && slset.Objects > MaxObjectsAllowed )       // if set, and active
-                {
-                    slset.RemoveUntil(MaxObjectsAllowed-MaxObjectsMargin);
-                }
                 timelastchecked = time;
             }
 
@@ -381,7 +404,6 @@ namespace EDDiscovery.UserControls.Map3D
 
         private int enablemode = 3;
         private const int MaxObjectsMargin = 1000;
-        private const int SectorSize = 100;
         private const int MaxRequests = 27 * 2;
         private const int MaxSubthreads = 16;
     }

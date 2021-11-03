@@ -53,9 +53,9 @@ namespace EDDiscovery.UserControls.Map3D
                 hpos += iconsize + hpad;
 
                 GLImage tphome = new GLImage("MSTPHome", new Rectangle(hpos, vpos, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.GoToHomeSystem") as Bitmap);
-                tphome.ToolTipText = "Go to current home system";
+                tphome.ToolTipText = "Go to current system";
                 map.displaycontrol.Add(tphome);
-                tphome.MouseClick = (o, e1) => { g.GoToLastSystem(); };
+                tphome.MouseClick = (o, e1) => { g.GoToCurrentSystem(); };
                 hpos += iconsize + hpad;
 
                 GLImage tpforward = new GLImage("MSTPForward", new Rectangle(hpos, vpos, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.GoForward") as Bitmap);
@@ -83,6 +83,15 @@ namespace EDDiscovery.UserControls.Map3D
                 EntryTextBox.BorderWidth = 1;
                 map.displaycontrol.Add(EntryTextBox);
                 hpos += EntryTextBox.Width + hpad;
+            }
+
+            if ((parts & Map.Parts.PrepopulateEDSMLocalArea) != 0)
+            {
+                GLImage butpopstars = new GLImage("MSPopulate", new Rectangle(hpos, vpos, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.ShowMoreStars") as Bitmap);
+                butpopstars.ToolTipText = "Load star box at current look location";
+                butpopstars.MouseClick = (o, e1) => { g.AddMoreStarsAtLookat(); };
+                map.displaycontrol.Add(butpopstars);
+                hpos += butpopstars.Width + hpad;
             }
 
             DBStatus = new GLImage("MSDB", new Rectangle(hpos,vpos, iconsize, iconsize), BaseUtils.Icons.IconSet.Instance.Get("GalMap.db") as Bitmap);
@@ -141,7 +150,7 @@ namespace EDDiscovery.UserControls.Map3D
 
             // and closing animation
             pform.FormClosing += (f,e) => {
-                var nb = ((GLNumberBoxLong)pform["LYDist"]);
+                var nb = ((GLNumberBoxLong)pform["GalaxyStarsGB"]?["LYDist"]);;
                 if ( nb != null)
                     map.LocalAreaSize = (int)nb.Value;
                 e.Handled = true;       // stop close
@@ -229,15 +238,6 @@ namespace EDDiscovery.UserControls.Map3D
                 vpos += iconsize + ypad;
             }
 
-            if ((parts & Map.Parts.PrepopulateEDSMLocalArea) != 0)
-            {
-                GLNumberBoxLong nblong = new GLNumberBoxLong("LYDist", new Rectangle(leftmargin, vpos, 150, iconsize), map.LocalAreaSize);
-                nblong.Minimum = 1;
-                nblong.Maximum = 500;
-                nblong.ToolTipText = "Set distance in ly of the box around the current star to show";
-                pform.Add(nblong);
-                vpos += iconsize + ypad;
-            }
 
             if ((parts & Map.Parts.EDSMStars) != 0)
             {
@@ -261,6 +261,21 @@ namespace EDDiscovery.UserControls.Map3D
                 butgalstarstext.CheckChanged += (e1) => { map.GalaxyStars ^= 2; };
                 tpgb.Add(butgalstarstext);
                 hpos += butgalstarstext.Width + hpad;
+
+                if ((parts & Map.Parts.PrepopulateEDSMLocalArea) != 0)
+                {
+                    GLNumberBoxLong nblong = new GLNumberBoxLong("LYDist", new Rectangle(hpos, 0, 50, iconsize), map.LocalAreaSize);
+                    nblong.Minimum = 1;
+                    nblong.Maximum = 500;
+                    nblong.ToolTipText = "Set distance in ly of the box around the current star to show";
+                    tpgb.Add(nblong);
+                    hpos += nblong.Width + hpad;
+
+                    GLLabel lylab = new GLLabel("LYLab", new Rectangle(hpos, 0, 30, iconsize), "Ly");
+                    lylab.ForeColor = Color.DarkOrange;
+                    tpgb.Add(lylab);
+                    hpos += lylab.Width + hpad;
+                }
 
                 if ((parts & Map.Parts.LimitSelector) != 0)
                 {

@@ -108,7 +108,7 @@ namespace EDDiscovery.UserControls.Map3D
         private System.Diagnostics.Stopwatch hptimer = new System.Diagnostics.Stopwatch();
 
         private int localareasize = 50;
-        private HistoryList localhl;
+        private UserControlCommonBase parent;
 
         public Map()
         {
@@ -129,6 +129,7 @@ namespace EDDiscovery.UserControls.Map3D
 
         public void Start(GLOFC.WinForm.GLWinFormControl glwfc, GalacticMapping edsmmapping, GalacticMapping eliteregions, UserControlCommonBase parent, Parts parts)
         {
+            this.parent = parent;
            // parts = (Parts)511;
 
             this.parts = parts;
@@ -339,7 +340,7 @@ namespace EDDiscovery.UserControls.Map3D
             {
                 navroute = new TravelPath();
                 navroute.Create("NavRoute", 10000, travelsunsize, tapesize, findresults, true, items, rObjects);
-                UpdateNavRoute(parent.discoveryform.history);
+                UpdateNavRoute();
             }
 
             if ((parts & Parts.GalObjects) != 0)
@@ -352,16 +353,14 @@ namespace EDDiscovery.UserControls.Map3D
             {
                 galaxystars = new GalaxyStars();
 
-                //if ((parts & Parts.PrepopulateEDSMLocalArea) != 0)        // decided show distance is a bad idea, but we keep the code in case i change my mind
-                //{
-                //    galaxystars.ShowDistance = true;
-                //    galaxystars.BitMapSize = new Size(galaxystars.BitMapSize.Width, galaxystars.BitMapSize.Height * 2);     // more v height for ly text
-                //}
+                if ((parts & Parts.PrepopulateEDSMLocalArea) != 0)        
+                {
+                    galaxystars.SectorSize = 20;
+                    //    galaxystars.ShowDistance = true;// decided show distance is a bad idea, but we keep the code in case i change my mind
+                    //    galaxystars.BitMapSize = new Size(galaxystars.BitMapSize.Width, galaxystars.BitMapSize.Height * 2);     // more v height for ly text
+                }
 
                 galaxystars.Create(items, rObjects, galaxysunsize, findresults);
-
-                if ((parts & Parts.LimitSelector) == 0)     // no limit selector, means unlimited stars
-                    galaxystars.UseObjectLimit = false;
             }
 
             if ((parts & Parts.RightClick) != 0)
@@ -524,10 +523,12 @@ namespace EDDiscovery.UserControls.Map3D
                     System.Diagnostics.Debug.Assert(Application.MessageLoop);       // must be in UI thread
                     System.Diagnostics.Debug.WriteLine("Selected " + tbac.Text);
                     var gmo = edsmmapping?.GalacticMapObjects.Find(x => x.Name.Equals(tbac.Text, StringComparison.InvariantCultureIgnoreCase));
+
+                    Vector3? pos = null;
                     if (gmo != null)
                     {
                         System.Diagnostics.Debug.WriteLine("Move to gmo " + gmo.Points[0]);
-                        gl3dcontroller.SlewToPosition(new Vector3((float)gmo.Points[0].X, (float)gmo.Points[0].Y, (float)gmo.Points[0].Z), -1);
+                        pos = new Vector3((float)gmo.Points[0].X, (float)gmo.Points[0].Y, (float)gmo.Points[0].Z);
                     }
                     else
                     {
@@ -542,10 +543,20 @@ namespace EDDiscovery.UserControls.Map3D
                         if (isys != null)
                         {
                             System.Diagnostics.Debug.WriteLine("Move to sys " + isys.Name);
-                            gl3dcontroller.SlewToPosition(new Vector3((float)isys.X, (float)isys.Y, (float)isys.Z), -1);
+                            pos = new Vector3((float)isys.X, (float)isys.Y, (float)isys.Z);
                         }
                         else
                             tbac.InErrorCondition = true;
+                    }
+
+                    if ( pos != null )
+                    {
+                        gl3dcontroller.SlewToPosition(pos.Value, -1);
+
+                        if ((parts & Parts.PrepopulateEDSMLocalArea) != 0)
+                        {
+                            galaxystars.Request9x3Box(pos.Value);
+                        }
                     }
                 };
             }
@@ -554,30 +565,22 @@ namespace EDDiscovery.UserControls.Map3D
                 galaxystars.Start();
         }
 
-        public void UpdateHistory(HistoryList hl)       // full history refresh
-        {
-            UpdateTravelPath(hl);
-            UpdateNavRoute(hl);
-        }
-
-        public void UpdateTravelPath(HistoryList hl)   // new history entry
+        public void UpdateTravelPath()   // new history entry
         {
             if (travelpath != null)
             {
-                travelpath.CreatePath(hl);
-                travelpath.SetSystem(hl.LastSystem);
+                travelpath.CreatePath(parent.discoveryform.history);
+                travelpath.SetSystem(parent.discoveryform.history.LastSystem);
             }
 
-            // TBD CHeck jumping moves local stars
-
-            CheckRefreshLocalArea(hl);  // also see if local stars need updating
+            CheckRefreshLocalArea();  // also see if local stars need updating
         }
 
-        public void UpdateNavRoute(HistoryList hl)
+        public void UpdateNavRoute()
         {
             if (navroute != null)
             {
-                var route = hl.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.NavRoute)?.journalEntry as EliteDangerousCore.JournalEvents.JournalNavRoute;
+                var route = parent.discoveryform.history.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.NavRoute)?.journalEntry as EliteDangerousCore.JournalEvents.JournalNavRoute;
                 if (route?.Route != null) // If a navroute with a valid route..
                 {
                     var syslist = route.Route.Select(x => new SystemClass(x.StarSystem, x.StarPos.X, x.StarPos.Y, x.StarPos.Z)).Cast<ISystem>().ToList();
@@ -586,16 +589,15 @@ namespace EDDiscovery.UserControls.Map3D
             }
         }
 
-        public void UpdateEDSMStarsLocalArea(HistoryList hl)
+        public void UpdateEDSMStarsLocalArea()
         {
-            galaxystars.Clear();        // this will force a reset
-            CheckRefreshLocalArea(hl);      
+            galaxystars.ClearBoxAround();
+            CheckRefreshLocalArea();      
         }
 
-        public void CheckRefreshLocalArea(HistoryList hl)
-        { 
-            localhl = hl;       // need to keep for refresh purposes
-            HistoryEntry he = hl.GetLast;       // may be null
+        public void CheckRefreshLocalArea()
+        {
+            HistoryEntry he = parent.discoveryform.history.GetLast;       // may be null
             // basic check we are operating in this mode
             if (galaxystars != null && he != null && he.System.HasCoordinate && (parts & Parts.PrepopulateEDSMLocalArea) != 0 )
             {
@@ -603,11 +605,15 @@ namespace EDDiscovery.UserControls.Map3D
 
                 if ((galaxystars.CurrentPos - hepos).Length >= LocalAreaSize / 4)       // if current pos too far away, go for it
                 {
-                    galaxystars.Clear();
-                    int size = LocalAreaSize;
-                    galaxystars.RequestBox(hepos, size);
+                    galaxystars.ClearBoxAround();
+                    galaxystars.RequestBoxAround(hepos, LocalAreaSize);      // this sets CurrentPos
                 }
             }
+        }
+
+        public void AddMoreStarsAtLookat()
+        {
+            galaxystars.Request9x3Box(gl3dcontroller.PosCamera.LookAt);
         }
 
         #endregion
@@ -624,9 +630,9 @@ namespace EDDiscovery.UserControls.Map3D
         public bool TravelPathTapeDisplay { get { return travelpath?.EnableTape ?? true; } set { if (travelpath != null) travelpath.EnableTape = value; glwfc.Invalidate(); } }
         public bool TravelPathTextDisplay { get { return travelpath?.EnableText ?? true; } set { if (travelpath != null) travelpath.EnableText = value; glwfc.Invalidate(); } }
         public void TravelPathRefresh() { if (travelpath != null) travelpath.Refresh(); }   // travelpath.Refresh() manually after these have changed
-        public DateTime TravelPathStartDate { get { return travelpath?.TravelPathStartDate ?? DateTime.MinValue; } set { if (travelpath != null && travelpath.TravelPathStartDate != value) { travelpath.TravelPathStartDate = value; } } }
+        public DateTime TravelPathStartDate { get { return travelpath?.TravelPathStartDate ?? new DateTime(2014,12,14); } set { if (travelpath != null && travelpath.TravelPathStartDate != value) { travelpath.TravelPathStartDate = value; } } }
         public bool TravelPathStartDateEnable { get { return travelpath?.TravelPathStartDateEnable ?? true; } set { if (travelpath != null && travelpath.TravelPathStartDateEnable != value) { travelpath.TravelPathStartDateEnable = value; } } }
-        public DateTime TravelPathEndDate { get { return travelpath?.TravelPathEndDate ?? DateTime.MinValue; } set { if (travelpath != null && travelpath.TravelPathEndDate != value) { travelpath.TravelPathEndDate = value; } } }
+        public DateTime TravelPathEndDate { get { return travelpath?.TravelPathEndDate ?? new DateTime(2040,1,1); } set { if (travelpath != null && travelpath.TravelPathEndDate != value) { travelpath.TravelPathEndDate = value; } } }
         public bool TravelPathEndDateEnable { get { return travelpath?.TravelPathEndDateEnable ?? true; } set { if (travelpath != null && travelpath.TravelPathEndDateEnable != value) { travelpath.TravelPathEndDateEnable = value; } } }
 
         public bool GalObjectDisplay { get { return galmapobjects?.Enable ?? true; } set { if (galmapobjects != null) galmapobjects.Enable = value; glwfc.Invalidate(); } }
@@ -643,7 +649,7 @@ namespace EDDiscovery.UserControls.Map3D
         public bool EliteRegionsShadingEnable { get { return elitemapregions?.Regions ?? false; } set { if (elitemapregions != null) elitemapregions.Regions = value; glwfc.Invalidate(); } }
         public bool EliteRegionsTextEnable { get { return elitemapregions?.Text ?? true; } set { if (elitemapregions != null) elitemapregions.Text = value; glwfc.Invalidate(); } }
 
-        public int LocalAreaSize { get { return localareasize; } set { if ( value != localareasize ) { localareasize = value; if (localhl != null) UpdateEDSMStarsLocalArea(localhl); } } }
+        public int LocalAreaSize { get { return localareasize; } set { if ( value != localareasize ) { localareasize = value; UpdateEDSMStarsLocalArea(); } } }
 
         public void GoToTravelSystem(int dir)      //0 = current, 1 = next, -1 = prev
         {
@@ -655,13 +661,12 @@ namespace EDDiscovery.UserControls.Map3D
             }
         }
 
-        public void GoToLastSystem()
+        public void GoToCurrentSystem(float lydist = 50f)
         {
-            var isys = travelpath?.LastSystem;
-            if (isys != null)
+            HistoryEntry he = parent.discoveryform.history.GetLast;       // may be null
+            if (he != null)
             {
-                gl3dcontroller.SlewToPosition(new Vector3((float)isys.X, (float)isys.Y, (float)isys.Z), -1);
-                SetEntryText(isys.Name);
+                GoToSystem(he.System, lydist);
             }
         }
 
@@ -687,7 +692,7 @@ namespace EDDiscovery.UserControls.Map3D
 
         #region Helpers
 
-        public void LoadState(MapSaver defaults, bool restorepos)
+        public void LoadState(MapSaver defaults, bool restorepos, int loadlimit)
         {
             GalaxyDisplay = defaults.GetSetting("GD", true);
             StarDotsSpritesDisplay = defaults.GetSetting("SDD", true);
@@ -715,13 +720,15 @@ namespace EDDiscovery.UserControls.Map3D
             EliteRegionsTextEnable = defaults.GetSetting("ELte", true);
 
             Grid = defaults.GetSetting("GRIDS", true);
-            GalaxyStars = defaults.GetSetting("GALSTARS", 3);
-            GalaxyStarsMaxObjects = defaults.GetSetting("GALSTARSOBJ", 500000);
 
+            GalaxyStars = defaults.GetSetting("GALSTARS", 3);
+            GalaxyStarsMaxObjects = (loadlimit==0) ? defaults.GetSetting("GALSTARSOBJ", 500000) : loadlimit;
             LocalAreaSize = defaults.GetSetting("LOCALAREALY", 50);
 
             if (restorepos )
                 gl3dcontroller.SetPositionCamera(defaults.GetSetting("POSCAMERA", ""));     // go thru gl3dcontroller to set default position, so we reset the model matrix
+
+
         }
 
         public void SaveState(MapSaver defaults)
