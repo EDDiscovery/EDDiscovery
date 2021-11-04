@@ -863,16 +863,17 @@ namespace EDDiscovery
 
         #region Closing
 
-        private void EDDiscoveryForm_FormClosing(object sender, FormClosingEventArgs e)     // when user asks for a close
+        public bool disallowclose = true;
+        protected override void OnFormClosing(FormClosingEventArgs e)
         {
-            edsmRefreshTimer.Enabled = false;
-            if (!Controller.PendingClose)       // only allow 1 close attempt..
-            {
-                e.Cancel = true;
+            e.Cancel = disallowclose;
+            System.Diagnostics.Debug.WriteLine($"Form closing called {Controller.PendingClose} {disallowclose}");
 
+            if (!Controller.PendingClose)       // if not shutting down..
+            {
                 bool goforit = !in_system_sync || ExtendedControls.MessageBoxTheme.Show("EDDiscovery is updating the EDSM databases\r\nPress OK to close now, Cancel to wait until update is complete".T(EDTx.EDDiscoveryForm_CloseWarning), "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK;
 
-                if ( goforit )
+                if (goforit)
                 {
                     if (tabControlMain.AllowClose() == false)
                         goforit = false;
@@ -882,11 +883,14 @@ namespace EDDiscovery
 
                 if (goforit)
                 {
+                    edsmRefreshTimer.Enabled = false;
                     ReportRefreshProgress(-1, "Closing, please wait!".T(EDTx.EDDiscoveryForm_Closing));
                     actioncontroller.ActionRun(Actions.ActionEventEDList.onShutdown);
                     Controller.Shutdown();
                 }
             }
+
+            base.OnFormClosing(e);
         }
 
         private void Controller_FinalClose()        // run in UI, when controller finishes close
@@ -916,6 +920,7 @@ namespace EDDiscovery
 
             DLLManager.UnLoad();
 
+            disallowclose = false;
             Close();
             Application.Exit();
         }

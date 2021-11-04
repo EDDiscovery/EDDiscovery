@@ -996,7 +996,6 @@ namespace EDDiscovery
             this.Name = "EDDiscoveryForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "EDDiscovery";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.EDDiscoveryForm_FormClosing);
             this.Load += new System.EventHandler(this.EDDiscoveryForm_Load);
             this.Shown += new System.EventHandler(this.EDDiscoveryForm_Shown);
             this.ResizeBegin += new System.EventHandler(this.EDDiscoveryForm_ResizeBegin);

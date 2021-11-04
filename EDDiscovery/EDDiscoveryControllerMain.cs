@@ -348,7 +348,7 @@ namespace EDDiscovery
                         EDCommander.CurrentCmdrID = switchto.Id;
                 }
 
-                DoRefreshHistory(new RefreshWorkerArgs { CurrentCommander = EDCommander.CurrentCmdrID });       // kick the background refresh worker thread into action
+                DoRefreshHistory(new RefreshWorkerArgs { CurrentCommander = EDCommander.CurrentCmdrID });      // load history the first time in this thread
             }
 
             CheckForSync();     // see if any EDSM sync is needed - this just sets some variables up
@@ -387,7 +387,7 @@ namespace EDDiscovery
 
             backgroundRefreshWorker.Join();     // this should terminate due to closeRequested..
 
-            System.Diagnostics.Debug.WriteLine("BW Refresh joined");
+            System.Diagnostics.Debug.WriteLine("BW Refresh joined closing down background worker");
 
             // Now we have been ordered to close down, so go thru the process
 
@@ -395,7 +395,7 @@ namespace EDDiscovery
 
             InvokeAsyncOnUiThread(() =>
             {
-                System.Diagnostics.Debug.WriteLine("Final close");
+                System.Diagnostics.Debug.WriteLine("Call Final close");
                 OnFinalClose?.Invoke();
             });
         }

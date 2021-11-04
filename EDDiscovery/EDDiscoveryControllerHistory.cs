@@ -195,7 +195,7 @@ namespace EDDiscovery
                     }
                 }
 
-                hist = HistoryList.LoadHistory( (s) => ReportRefreshProgress(-1, s), 
+                hist = HistoryList.LoadHistory( (s) => ReportRefreshProgress(-1, s), ()=>PendingClose,
                                                 args.CurrentCommander,
                                                 EDDOptions.Instance.HistoryLoadDayLimit > 0 ? EDDOptions.Instance.HistoryLoadDayLimit : EDDConfig.Instance.FullHistoryLoadDayLimit, 
                                                 EDDConfig.Instance.EssentialEventTypes
