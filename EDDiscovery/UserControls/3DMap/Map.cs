@@ -138,7 +138,7 @@ namespace EDDiscovery.UserControls.Map3D
 
             hptimer.Start();
 
-            Bitmap galaxybitmap = BaseUtils.Icons.IconSet.Instance.Get("GalMap.Galaxy_L180") as Bitmap;
+            Bitmap galaxybitmap = BaseUtils.Icons.IconSet.GetBitmap("GalMap.Galaxy_L180");
 
             items.Add(new GLMatrixCalcUniformBlock(), "MCUB");     // create a matrix uniform block 
 
@@ -283,7 +283,7 @@ namespace EDDiscovery.UserControls.Map3D
 
             if ((parts & Parts.StarDots) != 0)
             {
-                Bitmap starflare = BaseUtils.Icons.IconSet.Instance.Get("GalMap.StarFlare2") as Bitmap;
+                Bitmap starflare = BaseUtils.Icons.IconSet.GetBitmap("GalMap.StarFlare2");
                 items.Add(new GLTexture2D(starflare, SizedInternalFormat.Rgba8), "lensflare");
                 starsprites = new GLPointSpriteShader(items.Tex("lensflare"), 64, 40);
                 items.Add(starsprites, "PS");

@@ -54,7 +54,7 @@ namespace EDDiscovery.UserControls.Map3D
 
             // first the tape
 
-            var tapetex = new GLTexture2D(BaseUtils.Icons.IconSet.Instance.Get("GalMap.chevron") as Bitmap, internalformat: OpenTK.Graphics.OpenGL4.SizedInternalFormat.Rgba8);        // tape image
+            var tapetex = new GLTexture2D(BaseUtils.Icons.IconSet.GetBitmap("GalMap.chevron"), internalformat: OpenTK.Graphics.OpenGL4.SizedInternalFormat.Rgba8);        // tape image
             items.Add(tapetex);
             tapetex.SetSamplerMode(OpenTK.Graphics.OpenGL4.TextureWrapMode.Repeat, OpenTK.Graphics.OpenGL4.TextureWrapMode.Repeat);
 
