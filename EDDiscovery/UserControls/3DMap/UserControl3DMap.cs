@@ -60,6 +60,8 @@ namespace EDDiscovery.UserControls
                 Map.Parts.Map3D);
             map.LoadState(mapsave,true,0);
 
+            map.AddSystemsToExpedition = (list) => { if (uctg is IHistoryCursorNewStarList) (uctg as IHistoryCursorNewStarList).FireNewStarList(list, OnNewStarsPushType.Expedition); };
+
             // start clock
             systemtimer.Interval = 50;
             systemtimer.Tick += new EventHandler(SystemTick);

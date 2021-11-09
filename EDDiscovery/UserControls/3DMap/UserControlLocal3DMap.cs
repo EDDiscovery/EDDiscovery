@@ -71,6 +71,8 @@ namespace EDDiscovery.UserControls
 
             map.UpdateEDSMStarsLocalArea();    // now try and ask for a populated update after loading the settings
 
+            map.AddSystemsToExpedition = (list) => { if (uctg is IHistoryCursorNewStarList) (uctg as IHistoryCursorNewStarList).FireNewStarList(list, OnNewStarsPushType.Expedition); };
+
             // start clock
             systemtimer.Interval = 50;
             systemtimer.Tick += new EventHandler(SystemTick);

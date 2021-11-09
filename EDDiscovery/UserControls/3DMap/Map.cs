@@ -66,6 +66,8 @@ namespace EDDiscovery.UserControls.Map3D
             Map3D = 0x10ffffff,
         }
 
+        public Action<List<string>> AddSystemsToExpedition;
+
         private Parts parts;
 
         private GLMatrixCalc matrixcalc;
@@ -420,12 +422,20 @@ namespace EDDiscovery.UserControls.Map3D
                             if (!edsm.ShowSystemInEDSM(s.Name))
                                 ExtendedControls.MessageBoxTheme.Show(parent.FindForm(), "System could not be found - has not been synched or EDSM is unavailable");
                         }
+                    },
+                    new GLMenuItem("RCMAddExpedition", "Add to expedition")
+                    {
+                        MouseClick = (s1, e1) =>
+                        {
+                            ISystem s = rightclickmenu.Tag is HistoryEntry ? ((HistoryEntry)rightclickmenu.Tag).System : (ISystem)rightclickmenu.Tag;
+                            AddSystemsToExpedition?.Invoke(new List<string>() { s.Name });      // use call back to pass back up
+                        }
                     }
                 );
 
                 rightclickmenu.Opening += (ms) =>
                 {
-                    ms["RCMViewStarDisplay"].Enabled = ms["RCMViewEDSM"].Enabled = rightclickmenu.Tag is ISystem || rightclickmenu.Tag is HistoryEntry;
+                    ms["RCMAddExpedition"].Enabled = ms["RCMViewStarDisplay"].Enabled = ms["RCMViewEDSM"].Enabled = rightclickmenu.Tag is ISystem || rightclickmenu.Tag is HistoryEntry;
                 };
             }
 
