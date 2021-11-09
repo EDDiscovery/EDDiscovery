@@ -385,7 +385,7 @@ namespace EDDiscovery
 
             SystemCache.AddToAutoCompleteList(galacticMapping.GetGMONames());
 
-
+            Bodies.Prepopulate();           
 
             UpdateProfileComboBox();
             comboBoxCustomProfiles.SelectedIndexChanged += ComboBoxCustomProfiles_SelectedIndexChanged;

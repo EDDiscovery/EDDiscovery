@@ -30,9 +30,9 @@
         {
             this.panelBottom = new System.Windows.Forms.Panel();
             this.buttonCancel = new ExtendedControls.ExtButton();
+            this.buttonExport = new ExtendedControls.ExtButton();
             this.labelCVSSep = new System.Windows.Forms.Label();
             this.radioButtonSemiColon = new ExtendedControls.ExtRadioButton();
-            this.buttonExport = new ExtendedControls.ExtButton();
             this.radioButtonComma = new ExtendedControls.ExtRadioButton();
             this.checkBoxIncludeHeader = new ExtendedControls.ExtCheckBox();
             this.checkBoxCustomAutoOpen = new ExtendedControls.ExtCheckBox();
@@ -46,33 +46,32 @@
             this.labelUTCStart = new System.Windows.Forms.Label();
             this.panelTop = new System.Windows.Forms.Panel();
             this.flowLayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
-            this.panelDate = new System.Windows.Forms.Panel();
             this.panelCombo = new System.Windows.Forms.Panel();
+            this.panelDate = new System.Windows.Forms.Panel();
+            this.panelIncludeOpen = new System.Windows.Forms.Panel();
+            this.panelCSV = new System.Windows.Forms.Panel();
             this.panelBottom.SuspendLayout();
             this.panelTop.SuspendLayout();
             this.flowLayoutPanel.SuspendLayout();
-            this.panelDate.SuspendLayout();
             this.panelCombo.SuspendLayout();
+            this.panelDate.SuspendLayout();
+            this.panelIncludeOpen.SuspendLayout();
+            this.panelCSV.SuspendLayout();
             this.SuspendLayout();
             // 
             // panelBottom
             // 
             this.panelBottom.Controls.Add(this.buttonCancel);
-            this.panelBottom.Controls.Add(this.labelCVSSep);
-            this.panelBottom.Controls.Add(this.radioButtonSemiColon);
             this.panelBottom.Controls.Add(this.buttonExport);
-            this.panelBottom.Controls.Add(this.radioButtonComma);
-            this.panelBottom.Controls.Add(this.checkBoxIncludeHeader);
-            this.panelBottom.Controls.Add(this.checkBoxCustomAutoOpen);
-            this.panelBottom.Location = new System.Drawing.Point(3, 132);
+            this.panelBottom.Location = new System.Drawing.Point(3, 238);
             this.panelBottom.Name = "panelBottom";
-            this.panelBottom.Size = new System.Drawing.Size(359, 154);
+            this.panelBottom.Size = new System.Drawing.Size(359, 39);
             this.panelBottom.TabIndex = 0;
             // 
             // buttonCancel
             // 
             this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonCancel.Location = new System.Drawing.Point(141, 126);
+            this.buttonCancel.Location = new System.Drawing.Point(141, 11);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(100, 23);
             this.buttonCancel.TabIndex = 5;
@@ -80,10 +79,21 @@
             this.buttonCancel.UseVisualStyleBackColor = true;
             this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
             // 
+            // buttonExport
+            // 
+            this.buttonExport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonExport.Location = new System.Drawing.Point(247, 11);
+            this.buttonExport.Name = "buttonExport";
+            this.buttonExport.Size = new System.Drawing.Size(100, 23);
+            this.buttonExport.TabIndex = 5;
+            this.buttonExport.Text = "Export";
+            this.buttonExport.UseVisualStyleBackColor = true;
+            this.buttonExport.Click += new System.EventHandler(this.buttonExport_Click);
+            // 
             // labelCVSSep
             // 
             this.labelCVSSep.AutoSize = true;
-            this.labelCVSSep.Location = new System.Drawing.Point(9, 65);
+            this.labelCVSSep.Location = new System.Drawing.Point(5, 15);
             this.labelCVSSep.Name = "labelCVSSep";
             this.labelCVSSep.Size = new System.Drawing.Size(77, 13);
             this.labelCVSSep.TabIndex = 2;
@@ -92,7 +102,7 @@
             // radioButtonSemiColon
             // 
             this.radioButtonSemiColon.AutoSize = true;
-            this.radioButtonSemiColon.Location = new System.Drawing.Point(184, 86);
+            this.radioButtonSemiColon.Location = new System.Drawing.Point(180, 36);
             this.radioButtonSemiColon.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.radioButtonSemiColon.Name = "radioButtonSemiColon";
             this.radioButtonSemiColon.RadioButtonColor = System.Drawing.Color.Gray;
@@ -105,21 +115,10 @@
             this.radioButtonSemiColon.Text = "Semicolon";
             this.radioButtonSemiColon.UseVisualStyleBackColor = true;
             // 
-            // buttonExport
-            // 
-            this.buttonExport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonExport.Location = new System.Drawing.Point(247, 126);
-            this.buttonExport.Name = "buttonExport";
-            this.buttonExport.Size = new System.Drawing.Size(100, 23);
-            this.buttonExport.TabIndex = 5;
-            this.buttonExport.Text = "Export";
-            this.buttonExport.UseVisualStyleBackColor = true;
-            this.buttonExport.Click += new System.EventHandler(this.buttonExport_Click);
-            // 
             // radioButtonComma
             // 
             this.radioButtonComma.AutoSize = true;
-            this.radioButtonComma.Location = new System.Drawing.Point(184, 63);
+            this.radioButtonComma.Location = new System.Drawing.Point(180, 13);
             this.radioButtonComma.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.radioButtonComma.Name = "radioButtonComma";
             this.radioButtonComma.RadioButtonColor = System.Drawing.Color.Gray;
@@ -143,7 +142,7 @@
             this.checkBoxIncludeHeader.ImageIndeterminate = null;
             this.checkBoxIncludeHeader.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxIncludeHeader.ImageUnchecked = null;
-            this.checkBoxIncludeHeader.Location = new System.Drawing.Point(12, 14);
+            this.checkBoxIncludeHeader.Location = new System.Drawing.Point(8, 3);
             this.checkBoxIncludeHeader.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxIncludeHeader.Name = "checkBoxIncludeHeader";
             this.checkBoxIncludeHeader.Size = new System.Drawing.Size(99, 17);
@@ -163,7 +162,7 @@
             this.checkBoxCustomAutoOpen.ImageIndeterminate = null;
             this.checkBoxCustomAutoOpen.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxCustomAutoOpen.ImageUnchecked = null;
-            this.checkBoxCustomAutoOpen.Location = new System.Drawing.Point(12, 37);
+            this.checkBoxCustomAutoOpen.Location = new System.Drawing.Point(180, 3);
             this.checkBoxCustomAutoOpen.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxCustomAutoOpen.Name = "checkBoxCustomAutoOpen";
             this.checkBoxCustomAutoOpen.Size = new System.Drawing.Size(52, 17);
@@ -319,6 +318,8 @@
             this.flowLayoutPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.flowLayoutPanel.Controls.Add(this.panelCombo);
             this.flowLayoutPanel.Controls.Add(this.panelDate);
+            this.flowLayoutPanel.Controls.Add(this.panelIncludeOpen);
+            this.flowLayoutPanel.Controls.Add(this.panelCSV);
             this.flowLayoutPanel.Controls.Add(this.panelBottom);
             this.flowLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanel.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
@@ -326,6 +327,14 @@
             this.flowLayoutPanel.Name = "flowLayoutPanel";
             this.flowLayoutPanel.Size = new System.Drawing.Size(375, 792);
             this.flowLayoutPanel.TabIndex = 6;
+            // 
+            // panelCombo
+            // 
+            this.panelCombo.Controls.Add(this.comboBoxCustomExportType);
+            this.panelCombo.Location = new System.Drawing.Point(3, 3);
+            this.panelCombo.Name = "panelCombo";
+            this.panelCombo.Size = new System.Drawing.Size(359, 34);
+            this.panelCombo.TabIndex = 7;
             // 
             // panelDate
             // 
@@ -338,15 +347,26 @@
             this.panelDate.Size = new System.Drawing.Size(359, 83);
             this.panelDate.TabIndex = 5;
             // 
-            // panelCombo
+            // panelIncludeOpen
             // 
-            this.panelCombo.Controls.Add(this.comboBoxCustomExportType);
-            this.panelCombo.Location = new System.Drawing.Point(3, 3);
-            this.panelCombo.Name = "panelCombo";
-            this.panelCombo.Size = new System.Drawing.Size(359, 34);
-            this.panelCombo.TabIndex = 7;
+            this.panelIncludeOpen.Controls.Add(this.checkBoxIncludeHeader);
+            this.panelIncludeOpen.Controls.Add(this.checkBoxCustomAutoOpen);
+            this.panelIncludeOpen.Location = new System.Drawing.Point(3, 132);
+            this.panelIncludeOpen.Name = "panelIncludeOpen";
+            this.panelIncludeOpen.Size = new System.Drawing.Size(359, 31);
+            this.panelIncludeOpen.TabIndex = 8;
             // 
-            // ExportForm
+            // panelCSV
+            // 
+            this.panelCSV.Controls.Add(this.labelCVSSep);
+            this.panelCSV.Controls.Add(this.radioButtonComma);
+            this.panelCSV.Controls.Add(this.radioButtonSemiColon);
+            this.panelCSV.Location = new System.Drawing.Point(3, 169);
+            this.panelCSV.Name = "panelCSV";
+            this.panelCSV.Size = new System.Drawing.Size(359, 63);
+            this.panelCSV.TabIndex = 9;
+            // 
+            // ExportImportForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -354,17 +374,20 @@
             this.Controls.Add(this.flowLayoutPanel);
             this.Controls.Add(this.panelTop);
             this.Icon = global::EDDiscovery.Properties.Resources.edlogo_3mo_icon;
-            this.Name = "ExportForm";
+            this.Name = "ExportImportForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "ExportForm";
+            this.Text = "Export";
             this.panelBottom.ResumeLayout(false);
-            this.panelBottom.PerformLayout();
             this.panelTop.ResumeLayout(false);
             this.panelTop.PerformLayout();
             this.flowLayoutPanel.ResumeLayout(false);
+            this.panelCombo.ResumeLayout(false);
             this.panelDate.ResumeLayout(false);
             this.panelDate.PerformLayout();
-            this.panelCombo.ResumeLayout(false);
+            this.panelIncludeOpen.ResumeLayout(false);
+            this.panelIncludeOpen.PerformLayout();
+            this.panelCSV.ResumeLayout(false);
+            this.panelCSV.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -391,5 +414,7 @@
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel;
         private System.Windows.Forms.Panel panelCombo;
         private System.Windows.Forms.Panel panelDate;
+        private System.Windows.Forms.Panel panelIncludeOpen;
+        private System.Windows.Forms.Panel panelCSV;
     }
 }

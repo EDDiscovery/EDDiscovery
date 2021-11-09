@@ -233,6 +233,16 @@ namespace EDDiscovery.Icons {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap Expedition_ImportSphere {
+            get {
+                object obj = ResourceManager.GetObject("Expedition_ImportSphere", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap Expedition_New {
             get {
                 object obj = ResourceManager.GetObject("Expedition_New", resourceCulture);

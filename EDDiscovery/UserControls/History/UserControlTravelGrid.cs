@@ -826,7 +826,6 @@ namespace EDDiscovery.UserControls
 
             var invokelist = OnNewStarList?.GetInvocationList();
             bothToolStripMenuItem.Enabled = wantedSystemsToolStripMenuItem.Enabled = trilaterationToolStripMenuItem.Enabled = invokelist != null && Array.Find(invokelist, x => x.Method.DeclaringType == typeof(UserControlTrilateration)) != null;
-            explorationPanelToolStripMenuItem.Enabled = invokelist != null && Array.Find(invokelist, x => x.Method.DeclaringType == typeof(UserControlExploration)) != null;
             expeditionToolStripMenuItem.Enabled = invokelist != null && Array.Find(invokelist, x => x.Method.DeclaringType == typeof(UserControlExpedition)) != null;
         }
 
@@ -948,11 +947,6 @@ namespace EDDiscovery.UserControls
             AddSystemToOthers(expedition:true);
         }
 
-        private void explorationPanelToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            AddSystemToOthers(exploration:true);
-        }
-
         private void AddSystemToOthers(bool dist = false, bool wanted = false, bool expedition = false, bool exploration = false)
         {
             IEnumerable<DataGridViewRow> selectedRows = dataGridViewTravel.SelectedCells.Cast<DataGridViewCell>()
@@ -983,8 +977,6 @@ namespace EDDiscovery.UserControls
             if (expedition)
                 FireNewStarList(systemnamelist, OnNewStarsPushType.Expedition);
 
-            if (exploration)
-                FireNewStarList(systemnamelist, OnNewStarsPushType.Exploration);
         }
 
         public void FireNewStarList(List<string> system, OnNewStarsPushType pushtype)

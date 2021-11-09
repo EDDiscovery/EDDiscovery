@@ -123,6 +123,7 @@ namespace EDDiscovery.Icons
         public static Image Expedition_Delete { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Expedition.Delete"); } }
         public static Image Expedition_Export { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Expedition.Export"); } }
         public static Image Expedition_ImportFile { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Expedition.ImportFile"); } }
+        public static Image Expedition_ImportSphere { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Expedition.ImportSphere"); } }
         public static Image Expedition_ImportRoute { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Expedition.ImportRoute"); } }
         public static Image Expedition_New { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Expedition.New"); } }
         public static Image Expedition_Save { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Expedition.Save"); } }
@@ -133,6 +134,7 @@ namespace EDDiscovery.Icons
         public static Image Exploration_Export { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Exploration.Export"); } }
         public static Image Exploration_ImportFile { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Exploration.ImportFile"); } }
         public static Image Exploration_ImportSphere { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Exploration.ImportSphere"); } }
+        public static Image Exploration_ImportSystems { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Exploration.ImportSphere"); } }
         public static Image Exploration_Load { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Exploration.Load"); } }
         public static Image Exploration_New { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Exploration.New"); } }
         public static Image Exploration_Save { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Exploration.Save"); } }

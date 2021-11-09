@@ -195,6 +195,25 @@ SECTION UserControlEstimatedValues
 
 SECTION UserControlExpedition
 
+.CurDist: "Cur. Dist" @
+.Visits: "Visits" => "访问次数"
+.Scans: "Scans" => "扫描"
+.Stars: "Stars" => "主恒星"
+.Info: "Info" => "信息"
+
+.extButtonLoadRoute.ToolTip:"Load" => "加载"
+.extButtonNew.ToolTip: "New Route" => "新建航线"
+.extButtonSave.ToolTip: "Save Route" => "保存航线"
+.extButtonDelete.ToolTip: "Delete Route" => "删除航线"
+.extButtonImportFile.ToolTip: "Import file" => "导入文件"
+.extButtonImportRoute.ToolTip: "Import route" => "导入航线"
+.extButtonImportNavRoute.ToolTip: "Import last Nav Route" @
+.buttonExtExport.ToolTip: "Export" => "导出"
+.extButtonShow3DMap.ToolTip: "Show on 3D Map" => "在3D星图中显示"
+.extButtonAddSystems.ToolTip: "Add Systems" => "添加星系"
+.AddSys: "Add Systems" @
+
+
 .toolStripButtonImportNavRoute: "Import Nav route" @
 .SystemName: "System Name" => "星系名称"
 .Distance: "Dist." => "距离(ly)"
@@ -205,13 +224,6 @@ SECTION UserControlExpedition
 .labelEndDate: "End Date: " => "结束日期："
 .labelDateStart: "Start Date: " => "开始日期："
 .labelRouteName: "Route Name: " => "航线名称："
-.toolStripButtonNew: "New Route" => "新建航线"
-.toolStripButtonImportFile: "Import file" => "导入文件"
-.toolStripButtonImportRoute: "Import route" => "导入航线"
-.toolStripButtonSave: "Save Route" => "保存航线"
-.toolStripButtonExport: "Export" => "导出"
-.toolStripButtonDelete: "Delete Route" => "删除航线"
-.toolStripButtonShowOn3DMap: "Show on 3D Map" => "在3D星图中显示"
 .copyToolStripMenuItem: "Copy" => "复制"
 .pasteToolStripMenuItem: "Paste" => "粘贴"
 .insertCopiedToolStripMenuItem: "Insert Copied Rows" => "插入复制的行"
@@ -237,46 +249,7 @@ SECTION UserControlExpedition
 .ColumnY: "Y" @
 .ColumnZ: "Z" @
 
-SECTION UserControlExploration
 
-.LoseAllChanges: "Exploration List, Confirm you want to lose all changes" @
-.ColumnSystemName: "System Name" => "星系名称"
-.ColumnDist: "Dist" => "距离(ly)"
-.ColumnX: "X" @
-.ColumnY: "Y" @
-.ColumnZ: "Z" @
-.ColumnVisits: "Visits" => "访问次数"
-.ColumnScans: "Scans" => "扫描"
-.ColumnPrimaryStar: "Stars" => "主恒星"
-.ColumnInfo: "Info" => "信息"
-.ColumnNote: "Note" => "笔记"
-.labelFilename: "Filename: " => "文件名"
-.labelName: "Description: " => "探索组名称："
-.toolStripButtonNew: "New" => "新建"
-.toolStripButtonLoad: "Load" => "加载"
-.toolStripButtonSave: "Save" => "保存"
-.toolStripButtonAddSystems: "Add Systems" => "添加星系"
-.toolStripButtonImportTextFile: "Import Text File" => "导入文本文件"
-.toolStripButtonExport: "Export" => "导出文本文件"
-.toolStripButtonClear: "Clear List" => "清空列表"
-.copyToolStripMenuItem: "Copy" => "复制"
-.pasteToolStripMenuItem: "Paste" => "粘贴"
-.insertCopiedToolStripMenuItem: "Insert Copied Rows" => "插入复制的行"
-.deleteRowsToolStripMenuItem: "Delete Rows" => "删除行"
-.setTargetToolStripMenuItem: "Set Target" => "设定目标"
-.editBookmarkToolStripMenuItem: "Edit bookmark" => "编辑标签"
-.Saved: "Saved to {0} Exploration Set" => "保存至探索组{0}"
-.SelectSet: "Select a exploration set file" => "选择一个探索组文件"
-.OpenE: "There was a problem opening file {0}" => "打开文件{0}时发生错误"
-.NoSys: "The imported file contains no known system names" => "导入的文件中不包含任何已知的星系名称"
-.NoRoute: "There is no route to export" => "没有可导出的航线"
-.Export: "Export route" => "导出航线"
-.ErrorW: "Error exporting route. Is file {0} open?" => "导出航线失败。请检查文件{0}是不是已在别的程序中打开。"
-.Clear: "Are you sure you want to clear the route list?" => "你确定要清空航线列表吗？"
-.AddSys: "Add Systems" => "添加星系"
-.EDSMUnk: "System not known to EDSM" => "该星系还未被收录到EDSM的数据库中"
-.UnknownS: "Unknown system, system is without co-ordinates" => "未知星系，没有该星系的坐标"
-.Bodies: "Bodies" @
 
 SECTION UserControlJournalGrid
 

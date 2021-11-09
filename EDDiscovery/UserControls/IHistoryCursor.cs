@@ -30,7 +30,7 @@ namespace EDDiscovery.UserControls
         HistoryEntry GetCurrentHistoryEntry { get; }                // whats your current entry, null if not
     }
 
-    public enum OnNewStarsPushType { TriWanted, TriSystems, Expedition, Exploration };
+    public enum OnNewStarsPushType { TriWanted, TriSystems, Expedition };
     public delegate void OnNewStarsSubPanelsHandler(System.Collections.Generic.List<string> syslist, OnNewStarsPushType pushtype);
 
     public interface IHistoryCursorNewStarList : IHistoryCursor     // some cursors add these extra functions on

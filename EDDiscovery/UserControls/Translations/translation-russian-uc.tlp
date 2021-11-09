@@ -195,6 +195,28 @@ SECTION UserControlEstimatedValues
 
 SECTION UserControlExpedition
 
+// new stuff
+
+.CurDist: "C. Расстояние" @
+.Visits: "Visits" => "Посещений"
+.Scans: "Scans" => "Отсканировано"
+.Bodies: "Bodies" @
+.Stars: "Stars" => "Главная звезда"
+.Info: "Info" => "Информация"
+
+.extButtonLoadRoute.ToolTip: "Load" => "Загрузить"
+.extButtonNew.ToolTip: "New Route" => "Новый маршрут"
+.extButtonSave.ToolTip: "Save Route" => "Сохранить маршрут"
+.extButtonDelete.ToolTip: "Delete Route" => "Удалить маршрут"
+.extButtonImportFile.ToolTip: "Import file" => "Импорт из файла"
+.extButtonImportRoute.ToolTip: "Import route" => "Импорт маршрута"
+.extButtonImportNavRoute.ToolTip: "Import route" => "Импорт Nav маршрута"
+.buttonExtExport.ToolTip:  "Export" => "Экспорт"
+.extButtonShow3DMap.ToolTip: "Show on 3D Map" => "Показать на 3D-карте"
+.extButtonAddSystems.ToolTip: "Add Systems" => "Добавить системы"
+.AddSys: "Add Systems" => "Добавить системы"
+
+
 .toolStripButtonImportNavRoute: "Import Nav route" @
 .SystemName: "System Name" => "Название системы"
 .Distance: "Dist." => "Расстояние"
@@ -236,47 +258,6 @@ SECTION UserControlExpedition
 .ColumnX: "X" @
 .ColumnY: "Y" @
 .ColumnZ: "Z" @
-
-SECTION UserControlExploration
-
-.LoseAllChanges: "Exploration List, Confirm you want to lose all changes" @
-.ColumnSystemName: "System Name" => "Название системы"
-.ColumnDist: "Dist" => "Расстояние"
-.ColumnX: "X" @
-.ColumnY: "Y" @
-.ColumnZ: "Z" @
-.ColumnVisits: "Visits" => "Посещений"
-.ColumnScans: "Scans" => "Отсканировано"
-.ColumnPrimaryStar: "Stars" => "Главная звезда"
-.ColumnInfo: "Info" => "Информация"
-.ColumnNote: "Note" => "Примечание"
-.labelFilename: "Filename: " => "Имя файла"
-.labelName: "Description: " => "Имя списка"
-.toolStripButtonNew: "New" => "Новый"
-.toolStripButtonLoad: "Load" => "Загрузить"
-.toolStripButtonSave: "Save" => "Сохранить"
-.toolStripButtonAddSystems: "Add Systems" => "Добавить системы"
-.toolStripButtonImportTextFile: "Import Text File" => "Импорт из txt"
-.toolStripButtonExport: "Export" => "Экспорт в txt"
-.toolStripButtonClear: "Clear List" => "Очистить список"
-.copyToolStripMenuItem: "Copy" => "Копировать"
-.pasteToolStripMenuItem: "Paste" => "Вставить"
-.insertCopiedToolStripMenuItem: "Insert Copied Rows" => "Вставить скопированные строки"
-.deleteRowsToolStripMenuItem: "Delete Rows" => "Удалить строки"
-.setTargetToolStripMenuItem: "Set Target" => "Выбрать целью"
-.editBookmarkToolStripMenuItem: "Edit bookmark" => "Изменить закладку"
-.Saved: "Saved to {0} Exploration Set" => "Сохранено в списке систем {0}"
-.SelectSet: "Select a exploration set file" => "Выберите файл со списком систем"
-.OpenE: "There was a problem opening file {0}" => "Ошибка при чтении файла {0}"
-.NoSys: "The imported file contains no known system names" => "Файл не содержит известных систем"
-.NoRoute: "There is no route to export" => "Нет систем для экспорта"
-.Export: "Export route" => "Экспорт систем"
-.ErrorW: "Error exporting route. Is file {0} open?" => "Ошибка при экспорте систем. Файл {0} открыт?"
-.Clear: "Are you sure you want to clear the route list?" => "Вы действительно хотите очистить список систем?"
-.AddSys: "Add Systems" => "Добавить системы"
-.EDSMUnk: "System not known to EDSM" => "Система неизвестна в EDSM"
-.UnknownS: "Unknown system, system is without co-ordinates" => "Неизвестная система, у системы нет координат"
-.Bodies: "Bodies" @
 
 SECTION UserControlJournalGrid
 

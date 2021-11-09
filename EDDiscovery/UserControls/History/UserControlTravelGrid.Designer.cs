@@ -69,7 +69,6 @@ namespace EDDiscovery.UserControls
             this.wantedSystemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bothToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.expeditionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.explorationPanelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.moveToAnotherCommanderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hideSystemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.removeJournalEntryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -210,7 +209,7 @@ namespace EDDiscovery.UserControls
             this.buttonFilter.UseVisualStyleBackColor = true;
             this.buttonFilter.Click += new System.EventHandler(this.buttonFilter_Click);
             // 
-            // textBoxFilter
+            // textBoxSearch
             // 
             this.textBoxSearch.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
             this.textBoxSearch.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
@@ -221,13 +220,13 @@ namespace EDDiscovery.UserControls
             this.textBoxSearch.ClearOnFirstChar = false;
             this.textBoxSearch.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxSearch.EndButtonEnable = true;
-            this.textBoxSearch.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxFilter.EndButtonImage")));
+            this.textBoxSearch.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxSearch.EndButtonImage")));
             this.textBoxSearch.EndButtonVisible = false;
             this.textBoxSearch.InErrorCondition = false;
             this.textBoxSearch.Location = new System.Drawing.Point(195, 1);
             this.textBoxSearch.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.textBoxSearch.Multiline = false;
-            this.textBoxSearch.Name = "textBoxFilter";
+            this.textBoxSearch.Name = "textBoxSearch";
             this.textBoxSearch.ReadOnly = false;
             this.textBoxSearch.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.textBoxSearch.SelectionLength = 0;
@@ -313,7 +312,7 @@ namespace EDDiscovery.UserControls
             this.showSystemVisitedForeColourToolStripMenuItem,
             this.travelGridInDebugModeToolStripMenuItem});
             this.historyContextMenu.Name = "historyContextMenu";
-            this.historyContextMenu.Size = new System.Drawing.Size(388, 554);
+            this.historyContextMenu.Size = new System.Drawing.Size(388, 576);
             this.historyContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.historyContextMenu_Opening);
             // 
             // removeSortingOfColumnsToolStripMenuItem
@@ -385,8 +384,7 @@ namespace EDDiscovery.UserControls
             this.trilaterationToolStripMenuItem,
             this.wantedSystemsToolStripMenuItem,
             this.bothToolStripMenuItem,
-            this.expeditionToolStripMenuItem,
-            this.explorationPanelToolStripMenuItem});
+            this.expeditionToolStripMenuItem});
             this.addToTrilaterationToolStripMenuItem.Name = "addToTrilaterationToolStripMenuItem";
             this.addToTrilaterationToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
             this.addToTrilaterationToolStripMenuItem.Text = "Add to ...";
@@ -418,13 +416,6 @@ namespace EDDiscovery.UserControls
             this.expeditionToolStripMenuItem.Size = new System.Drawing.Size(275, 22);
             this.expeditionToolStripMenuItem.Text = "Expedition Panel";
             this.expeditionToolStripMenuItem.Click += new System.EventHandler(this.routeToolStripMenuItem_Click);
-            // 
-            // explorationPanelToolStripMenuItem
-            // 
-            this.explorationPanelToolStripMenuItem.Name = "explorationPanelToolStripMenuItem";
-            this.explorationPanelToolStripMenuItem.Size = new System.Drawing.Size(275, 22);
-            this.explorationPanelToolStripMenuItem.Text = "Exploration Panel";
-            this.explorationPanelToolStripMenuItem.Click += new System.EventHandler(this.explorationPanelToolStripMenuItem_Click);
             // 
             // moveToAnotherCommanderToolStripMenuItem
             // 
@@ -853,7 +844,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripMenuItem gotoEntryNumberToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem gotoNextStartStopMarkerToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem runEntryThroughProfileSystemToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem explorationPanelToolStripMenuItem;
         private ExtendedControls.ExtPanelDataGridViewScrollOutlining panelOutlining;
         private ExtendedControls.ExtCheckBox checkBoxCursorToTop;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripOutlines;

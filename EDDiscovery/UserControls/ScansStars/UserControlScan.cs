@@ -622,17 +622,23 @@ namespace EDDiscovery.UserControls
                             }
                             else
                             {
-                                ExplorationSetClass currentExplorationSet = new ExplorationSetClass();
+                                OpenFileDialog dlg = new OpenFileDialog();
+                                dlg.InitialDirectory = EDDOptions.Instance.ExpeditionsAppDirectory();
+                                dlg.DefaultExt = "json";
+                                dlg.AddExtension = true;
+                                dlg.Filter = "Explore file| *.json";
 
-                                string file = currentExplorationSet.DialogLoad(FindForm());
-
-                                if (file != null)
+                                if (dlg.ShowDialog(FindForm()) == DialogResult.OK)
                                 {
+                                    var data = UserControlExpedition.ReadJSON(dlg.FileName);
+                                    if (data == null)
+                                        return;
+
                                     scans = new List<JournalScan>();
 
-                                    foreach (string system in currentExplorationSet.Systems)
+                                    foreach (string system in data.Item2)
                                     {
-                                        ISystem sys = discoveryform.history.FindSystem(system, discoveryform.galacticMapping, false);   // not doing EDSM lookups due to no.
+                                        ISystem sys = discoveryform.history.FindSystem(system, discoveryform.galacticMapping, true);   
                                         if (sys != null)
                                         {
                                             var jl = EDSMClass.GetBodiesList(sys);
@@ -642,8 +648,6 @@ namespace EDDiscovery.UserControls
                                         }
                                     }
                                 }
-                                else
-                                    return;
                             }
 
                             bool ShowStars = frm.SelectedIndex < 2 || frm.SelectedIndex == 3;

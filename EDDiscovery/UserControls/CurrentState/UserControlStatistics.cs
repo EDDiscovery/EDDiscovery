@@ -329,16 +329,18 @@ namespace EDDiscovery.UserControls
                 DateTime? end = dateTimePickerEndDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromSelected(dateTimePickerEndDate.Value.EndOfDay()) : default(DateTime?);
 
                 // read journal for cmdr with these events and pass thru NewJE.
-                JournalEntry.GetAll(cmdrid, ids: events, callback: NewJE, callbackobj: stats, startdateutc: start, enddateutc: end, chunksize: 100);
+                var jlist = JournalEntry.GetAll(cmdrid, ids: events, startdateutc: start, enddateutc: end);
+
+                foreach (var e in jlist)        // fire through stats
+                    NewJE(e, stats);
             }
 
             if (Exit == false)     // if not forced stop, call end compuation.. else just exit without completion
                 BeginInvoke((MethodInvoker)(() => { EndComputation(stats); }));
         }
 
-        private bool NewJE(JournalEntry ev, Object obj)
+        private bool NewJE(JournalEntry ev, Stats st)
         {
-            Stats st = obj as Stats;
           //  System.Diagnostics.Debug.WriteLine("{0} Stats JE {1} {2}", DBName("") , ev.EventTimeUTC, ev.EventTypeStr);
 
             switch (ev.EventTypeID)

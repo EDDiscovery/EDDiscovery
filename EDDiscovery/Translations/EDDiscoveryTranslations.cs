@@ -148,6 +148,10 @@ namespace EDDiscovery
 
         ExportForm_ECH, // Export current History view to {0}
         ExportForm_JF, // Journal File
+        ExportForm_ImportTitle,
+        ExportForm_ImportButton,
+        ExportForm_ImportData,
+
 
         Form2DMap_Nomapsavailable, // No maps available
 
@@ -504,12 +508,9 @@ namespace EDDiscovery
         UserControlExpedition_UnknownS, // Unknown system, system is without co-ordinates
         UserControlExpedition_Createroute, // Please create a route on a route panel
         UserControlExpedition_NoRouteExport, // There is no route to export
-        UserControlExpedition_Export, // Export route
-        UserControlExpedition_FileE, // There was an error reading file
-        UserControlExpedition_Nonames, // The imported file contains no known system names
         UserControlExpedition_NoRoute, // No route set up. Please add at least two systems.
         UserControlExpedition_Delete, // Are you sure you want to delete this route?
-        UserControlExpedition_SelRoute, // Select a route file
+        UserControlExpedition_AddSys, 
 
         UserControlExploration_LoseAllChanges, // Exploration, Confirm you want to lose all changes
         UserControlExploration_Saved, // Saved to {0} Exploration Set

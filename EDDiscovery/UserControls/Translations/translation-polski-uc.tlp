@@ -195,6 +195,28 @@ SECTION UserControlEstimatedValues
 
 SECTION UserControlExpedition
 
+// new stuff
+
+.CurDist: "C.Odległość" @
+.Visits: "Visits" => "Wizyty"
+.Scans: "Scans" => "Skany"
+.Bodies: "Bodies" @
+.Stars: "Stars" => "Gł. gwiazda"
+.Info: "Info" => "Informacje"
+
+.extButtonLoadRoute.ToolTip: "Load" => "Wczytaj"
+.extButtonNew.ToolTip: "New Route" => "Nowa Trasa"
+.extButtonSave.ToolTip: "Save Route" => "Zapisz Trasę"
+.extButtonDelete.ToolTip: "Delete Expedition" @
+.extButtonImportFile.ToolTip: "Import file" => "Importuj plik"
+.extButtonImportRoute.ToolTip: "Import route" => "Importuj trasę"
+.extButtonImportNavRoute.ToolTip: "Import Nav route" => "Importuj Nav trasę"
+.buttonExtExport.ToolTip: "Export" => "Eksportuj"
+.extButtonShow3DMap.ToolTip: "Show on 3D Map" => "Pokaż na mapie 3D"
+.extButtonAddSystems.ToolTip: "Add Systems" => "Dodaj Układy"
+.AddSys: "Add Systems" => "Dodaj Układy"
+
+
 .toolStripButtonImportNavRoute: "Import Nav route" @
 .SystemName: "System Name" => "Nazwa Układu"
 .Distance: "Dist." => "Odległość"
@@ -237,46 +259,6 @@ SECTION UserControlExpedition
 .ColumnY: "Y" @
 .ColumnZ: "Z" @
 
-SECTION UserControlExploration
-
-.LoseAllChanges: "Exploration List, Confirm you want to lose all changes" @
-.ColumnSystemName: "System Name" => "Nazwa Układu"
-.ColumnDist: "Dist" => "Odległość"
-.ColumnX: "X" @
-.ColumnY: "Y" @
-.ColumnZ: "Z" @
-.ColumnVisits: "Visits" => "Wizyty"
-.ColumnScans: "Scans" => "Skany"
-.ColumnPrimaryStar: "Stars" => "Gł. gwiazda"
-.ColumnInfo: "Info" => "Informacje"
-.ColumnNote: "Note" => "Notatka"
-.labelFilename: "Filename: " => "Nazwa pliku"
-.labelName: "Description: " => "Zest. Eksploracji: "
-.toolStripButtonNew: "New" => "Nowy"
-.toolStripButtonLoad: "Load" => "Wczytaj"
-.toolStripButtonSave: "Save" => "Zapisz"
-.toolStripButtonAddSystems: "Add Systems" => "Dodaj Układy"
-.toolStripButtonImportTextFile: "Import Text File" => "Importuj Plik Tekstowy"
-.toolStripButtonExport: "Export" => "Eksportuj Plik Tekstowy"
-.toolStripButtonClear: "Clear List" => "Wyczyść Listę"
-.copyToolStripMenuItem: "Copy" => "Kopiuj"
-.pasteToolStripMenuItem: "Paste" => "Wklej"
-.insertCopiedToolStripMenuItem: "Insert Copied Rows" => "Wstaw Skopiowane Wiersze"
-.deleteRowsToolStripMenuItem: "Delete Rows" => "Usuń Wiersze"
-.setTargetToolStripMenuItem: "Set Target" => "Ustaw Cel"
-.editBookmarkToolStripMenuItem: "Edit bookmark" => "Edytuj zakładkę"
-.Saved: "Saved to {0} Exploration Set" => "Zapisano do Zestawu Eksploracji {0}"
-.SelectSet: "Select a exploration set file" => "Wybierz plik zestawu eksploracji"
-.OpenE: "There was a problem opening file {0}" => "Wystąpił problem przy otwieraniu pliku {0}"
-.NoSys: "The imported file contains no known system names" => "Zaimportowany plik nie zawiera żadnych znanych nazw układów"
-.NoRoute: "There is no route to export" => "Brak trasy do wyeksportowania"
-.Export: "Export route" => "Eksportuj trasę"
-.ErrorW: "Error exporting route. Is file {0} open?" => "Błąd eksportu trasy. Czy plik {0} jest otwarty?"
-.Clear: "Are you sure you want to clear the route list?" => "Czy na pewno chcesz wyczyścić listę trasy?"
-.AddSys: "Add Systems" => "Dodaj Układy"
-.EDSMUnk: "System not known to EDSM" => "Układ nie jest znany w EDSM"
-.UnknownS: "Unknown system, system is without co-ordinates" => "Nieznany Układ, układ nie posiada współrzędnych"
-.Bodies: "Bodies" @
 
 SECTION UserControlJournalGrid
 

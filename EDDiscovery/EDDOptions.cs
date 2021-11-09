@@ -256,7 +256,6 @@ namespace EDDiscovery
             return Directory.Exists(path) ? path : null;
         }
 
-        public string ExploreAppDirectory() { return SubAppDirectory("Exploration"); }
         public string NotificationsAppDirectory() { return NotificationFolderOverride ?? SubAppDirectory("Notifications"); }
         public string ExpeditionsAppDirectory() { return SubAppDirectory("Expeditions"); }
         public string ActionsAppDirectory() { return SubAppDirectory("Actions"); }

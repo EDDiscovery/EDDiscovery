@@ -83,7 +83,6 @@ namespace EDDiscovery
         // Due to background taskc completing async to the rest
 
         public event Action<bool> OnExpeditionsDownloaded;                  // UI, true if changed entries
-        public event Action OnExplorationDownloaded;                        // UI
         public event Action OnHelpDownloaded;                               // UI
 
         #endregion
@@ -310,9 +309,6 @@ namespace EDDiscovery
                     // Expedition data
                     DownloadExpeditions(() => PendingClose);
 
-                    // and Exploration data
-                    DownloadExploration(() => PendingClose);
-
                     // and Help files
                     DownloadHelp(() => PendingClose);
 
@@ -470,29 +466,6 @@ namespace EDDiscovery
                         {
                             bool changed = SavedRouteClass.UpdateDBFromExpeditionFiles(expeditiondir);
                             InvokeAsyncOnUiThread(() => { OnExpeditionsDownloaded?.Invoke(changed); });
-                        }
-                    }
-                }
-            });
-        }
-
-        public void DownloadExploration(Func<bool> cancelRequested)
-        {
-            LogLine("Checking for new Exploration data".T(EDTx.EDDiscoveryController_EXPL));
-
-            Task.Factory.StartNew(() =>
-            {
-                string explorationdir = EDDOptions.Instance.ExploreAppDirectory();
-
-                BaseUtils.GitHubClass github = new BaseUtils.GitHubClass(EDDiscovery.Properties.Resources.URLGithubDataDownload, LogLine);
-                var files = github.ReadDirectory("Exploration");
-                if (files != null)        // may be empty, unlikely, but
-                {
-                    if (github.DownloadFiles(files, explorationdir))
-                    {
-                        if (!cancelRequested())
-                        {
-                            InvokeAsyncOnUiThread(() => { OnExplorationDownloaded?.Invoke(); });
                         }
                     }
                 }

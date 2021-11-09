@@ -195,6 +195,25 @@ SECTION UserControlEstimatedValues
 
 SECTION UserControlExpedition
 
+.CurDist: "Cur. Dist" @
+.Visits: "Visits" => "Visites"
+.Scans: "Scans" @
+.Stars: "Stars" => "Étoiles"
+.Bodies: "Bodies" => "Corps"
+.Info: "Info" @
+
+.extButtonLoadRoute.ToolTip: "Load" => "Charger"
+.extButtonNew.ToolTip:  "New Route" => "Nouvel itinéraire"
+.extButtonSave.ToolTip:  "Save Route" => "Sauvegarder itinéraire"
+.extButtonDelete.ToolTip: "Delete Route" => "Supprimer itinéraire"
+.extButtonImportFile.ToolTip: "Import file" => "Importer fichier"
+.extButtonImportRoute.ToolTip: "Import route" => "Importer itinéraire"
+.extButtonImportNavRoute.ToolTip: "Import route" => "Importer Nav itinéraire"
+.buttonExtExport.ToolTip: "Export" => "Exporter"
+.extButtonShow3DMap.ToolTip: "Show on 3D Map" => "Afficher l'itinéraire sur la carte 3D"
+.extButtonAddSystems.ToolTip: "Add Systems" => "Ajouter systèmes"
+.AddSys: "Add Systems" @
+
 .toolStripButtonImportNavRoute: "Import Nav route" @
 .SystemName: "System Name" => "Nom du système"
 .Distance: "Dist." @
@@ -237,46 +256,6 @@ SECTION UserControlExpedition
 .ColumnY: "Y" @
 .ColumnZ: "Z" @
 
-SECTION UserControlExploration
-
-.LoseAllChanges: "Exploration List, Confirm you want to lose all changes" @
-.ColumnSystemName: "System Name" => "Nom du système"
-.ColumnDist: "Dist" @
-.ColumnX: "X" @
-.ColumnY: "Y" @
-.ColumnZ: "Z" @
-.ColumnVisits: "Visits" => "Visites"
-.ColumnScans: "Scans" @
-.ColumnPrimaryStar: "Stars" => "Étoiles"
-.ColumnInfo: "Info" @
-.ColumnNote: "Note" @
-.labelFilename: "Filename: " => "Nom de fichier: "
-.labelName: "Description: " @
-.toolStripButtonNew: "New" => "Nouveau"
-.toolStripButtonLoad: "Load" => "Charger"
-.toolStripButtonSave: "Save" => "Sauvegarder"
-.toolStripButtonAddSystems: "Add Systems" => "Ajouter systèmes"
-.toolStripButtonImportTextFile: "Import Text File" => "Importer fichier texte"
-.toolStripButtonExport: "Export" => "Exporter"
-.toolStripButtonClear: "Clear List" => "Vider la liste"
-.copyToolStripMenuItem: "Copy" => "Copier"
-.pasteToolStripMenuItem: "Paste" => "Coller"
-.insertCopiedToolStripMenuItem: "Insert Copied Rows" => "Insérer les lignes copiées"
-.deleteRowsToolStripMenuItem: "Delete Rows" => "Supprimer les lignes"
-.setTargetToolStripMenuItem: "Set Target" => "Définir cible"
-.editBookmarkToolStripMenuItem: "Edit bookmark" => "Modifier marque-page"
-.Saved: "Saved to {0} Exploration Set" => "Sauvegarder vers le set d'exploration {0}"
-.SelectSet: "Select a exploration set file" => "Selectionner un set d'exploration"
-.OpenE: "There was a problem opening file {0}" => "Problème à l'ouverture du fichier {0}"
-.NoSys: "The imported file contains no known system names" => "Le fichier importé ne contient aucun système connu"
-.NoRoute: "There is no route to export" => "Pas d'itinéraire à exporter"
-.Export: "Export route" => "Exporter l'itinéraire"
-.ErrorW: "Error exporting route. Is file {0} open?" => "Erreur à l'export de l'itinéraire. Est ce que le fichier {0} est ouvert ?"
-.Clear: "Are you sure you want to clear the route list?" => "Etes vous sûr de vouloir vider la liste d'itinéraires ?"
-.AddSys: "Add Systems" => "Ajouter des systèmes"
-.EDSMUnk: "System not known to EDSM" => "Système inconnu d'EDSM"
-.UnknownS: "Unknown system, system is without co-ordinates" => "Système inconnu, système sans coordonnées"
-.Bodies: "Bodies" => "Corps"
 
 SECTION UserControlJournalGrid
 

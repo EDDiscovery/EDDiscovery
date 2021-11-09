@@ -195,6 +195,27 @@ SECTION UserControlEstimatedValues
 
 SECTION UserControlExpedition
 
+// new stuff
+
+.CurDist: "Cur. Dist" @
+.Visits: "Visits" @
+.Scans: "Scans" @
+.Bodies: "Bodies" @
+.Stars: "Stars" @
+.Info: "Info" @
+
+.extButtonLoadRoute.ToolTip: "Load Route" @
+.extButtonNew.ToolTip: "New Expedition" @
+.extButtonSave.ToolTip: "Save Expedition" @
+.extButtonDelete.ToolTip: "Delete Expedition" @
+.extButtonImportFile.ToolTip: "Import File" @
+.extButtonImportRoute.ToolTip: "Import from Route Panel" @
+.extButtonImportNavRoute.ToolTip: "Import last Nav Route" @
+.buttonExtExport.ToolTip: "Export to File" @
+.extButtonShow3DMap.ToolTip: "Show expedition on 3D Map" @
+.extButtonAddSystems.ToolTip: "Import Systems from EDSM/DB" @
+.AddSys: "Add Systems" @
+
 .toolStripButtonImportNavRoute: "Import Nav route" @
 .SystemName: "System Name" @
 .Distance: "Dist." @
@@ -237,46 +258,6 @@ SECTION UserControlExpedition
 .ColumnY: "Y" @
 .ColumnZ: "Z" @
 
-SECTION UserControlExploration
-
-.LoseAllChanges: "Exploration List, Confirm you want to lose all changes" @
-.ColumnSystemName: "System Name" @
-.ColumnDist: "Dist" @
-.ColumnX: "X" @
-.ColumnY: "Y" @
-.ColumnZ: "Z" @
-.ColumnVisits: "Visits" @
-.ColumnScans: "Scans" @
-.ColumnPrimaryStar: "Stars" @
-.ColumnInfo: "Info" @
-.ColumnNote: "Note" @
-.labelFilename: "Filename: " @
-.labelName: "Description: " @
-.toolStripButtonNew: "New" @
-.toolStripButtonLoad: "Load" @
-.toolStripButtonSave: "Save" @
-.toolStripButtonAddSystems: "Add Systems" @
-.toolStripButtonImportTextFile: "Import Text File" @
-.toolStripButtonExport: "Export" @
-.toolStripButtonClear: "Clear List" @
-.copyToolStripMenuItem: "Copy" @
-.pasteToolStripMenuItem: "Paste" @
-.insertCopiedToolStripMenuItem: "Insert Copied Rows" @
-.deleteRowsToolStripMenuItem: "Delete Rows" @
-.setTargetToolStripMenuItem: "Set Target" @
-.editBookmarkToolStripMenuItem: "Edit bookmark" @
-.Saved: "Saved to {0} Exploration Set" @
-.SelectSet: "Select a exploration set file" @
-.OpenE: "There was a problem opening file {0}" @
-.NoSys: "The imported file contains no known system names" @
-.NoRoute: "There is no route to export" @
-.Export: "Export route" @
-.ErrorW: "Error exporting route. Is file {0} open?" @
-.Clear: "Are you sure you want to clear the route list?" @
-.AddSys: "Add Systems" @
-.EDSMUnk: "System not known to EDSM" @
-.UnknownS: "Unknown system, system is without co-ordinates" @
-.Bodies: "Bodies" @
 
 SECTION UserControlJournalGrid
 

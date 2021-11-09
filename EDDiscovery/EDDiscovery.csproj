@@ -612,12 +612,6 @@
     <Compile Include="UserControls\RoutesExpeditions\UserControlExpedition.Designer.cs">
       <DependentUpon>UserControlExpedition.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\RoutesExpeditions\UserControlExploration.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\RoutesExpeditions\UserControlExploration.Designer.cs">
-      <DependentUpon>UserControlExploration.cs</DependentUpon>
-    </Compile>
     <Compile Include="UserControls\RoutesExpeditions\UserControlRoute.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -878,9 +872,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\RoutesExpeditions\UserControlExpedition.resx">
       <DependentUpon>UserControlExpedition.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\RoutesExpeditions\UserControlExploration.resx">
-      <DependentUpon>UserControlExploration.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\RoutesExpeditions\UserControlRoute.resx">
       <DependentUpon>UserControlRoute.cs</DependentUpon>

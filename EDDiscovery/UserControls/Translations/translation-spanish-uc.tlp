@@ -195,6 +195,26 @@ SECTION UserControlEstimatedValues
 
 SECTION UserControlExpedition
 
+.CurDist: "C. Dist" @
+.Visits: "Visits" => "Visitas"
+.Scans: "Scans" => "Escaneos"
+.Bodies: "Bodies" => "Cuerpos"
+.Stars: "Stars" => "Estrellas"
+.Info: "Info" => "Información"
+
+.extButtonLoadRoute.ToolTip:  "Load" => "Carga"
+.extButtonNew.ToolTip: "New Route" => "Nueva ruta"
+.extButtonSave.ToolTip: "Save Route" => "Guardar ruta"
+.extButtonDelete.ToolTip: "Delete Route" => "Eliminar ruta"
+.extButtonImportFile.ToolTip: "Import file" => "Importar archivo"
+.extButtonImportRoute.ToolTip: "Import route" => "Importar ruta"
+.extButtonImportNavRoute.ToolTip: "Import route" => "Importar Nav ruta"
+.buttonExtExport.ToolTip: "Export" => "Exportar"
+.extButtonShow3DMap.ToolTip: "Show on 3D Map" => "Mostrar en mapa 3D"
+.extButtonAddSystems.ToolTip: "Add Systems" => "Agregar sistemas"
+.AddSys: "Add Systems" => "Agregar sistemas"
+
+
 .toolStripButtonImportNavRoute: "Import Nav route" => "Importar ruta de navegación"
 .SystemName: "System Name" => "Nombre del sistema"
 .Distance: "Dist." => "Dist."
@@ -276,7 +296,6 @@ SECTION UserControlExploration
 .AddSys: "Add Systems" => "Agregar sistemas"
 .EDSMUnk: "System not known to EDSM" => "Sistema no conocido por EDSM"
 .UnknownS: "Unknown system, system is without co-ordinates" => "Sistema desconocido, el sistema no tiene coordenadas"
-.Bodies: "Bodies" => "Cuerpos"
 
 SECTION UserControlJournalGrid
 

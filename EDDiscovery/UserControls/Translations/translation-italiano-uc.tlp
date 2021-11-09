@@ -195,6 +195,25 @@ SECTION UserControlEstimatedValues
 
 SECTION UserControlExpedition
 
+.CurDist: "Cur. Dist" @
+.Visits: "Visits" => "Visite"
+.Scans: "Scans" => "Scansioni"
+.Bodies: "Bodies" @
+.Stars: "Stars" => "Stella Principale"
+.Info: "Info" @
+
+.extButtonLoadRoute.ToolTip: "Load" => "Carica"
+.extButtonNew.ToolTip: "New Route" => "Nuovo Itinerario"
+.extButtonSave.ToolTip: "Save Route" => "Salva Itinerario"
+.extButtonDelete.ToolTip: "Delete Route" => "Elimina Itinerario"
+.extButtonImportFile.ToolTip: "Import file" => "Importa documento"
+.extButtonImportRoute.ToolTip: "Import route" => "Importa itinerario"
+.extButtonImportNavRoute.ToolTip: "Import route" => "Importa Nav itinerario"
+.buttonExtExport.ToolTip: "Export" => "Esporta"
+.extButtonShow3DMap.ToolTip: "Show on 3D Map" => "Mostra sulla mappa 3D"
+.extButtonAddSystems.ToolTip: "Add Systems" => "Aggiungi Systemi"
+.AddSys: "Add Systems" => "Aggiungi Systemi"
+
 .toolStripButtonImportNavRoute: "Import Nav route" @
 .SystemName: "System Name" => "Nome del Sistema"
 .Distance: "Dist." @
@@ -237,46 +256,6 @@ SECTION UserControlExpedition
 .ColumnY: "Y" @
 .ColumnZ: "Z" @
 
-SECTION UserControlExploration
-
-.LoseAllChanges: "Exploration List, Confirm you want to lose all changes" @
-.ColumnSystemName: "System Name" => "Nome del Sistema"
-.ColumnDist: "Dist" @
-.ColumnX: "X" @
-.ColumnY: "Y" @
-.ColumnZ: "Z" @
-.ColumnVisits: "Visits" => "Visite"
-.ColumnScans: "Scans" => "Scansioni"
-.ColumnPrimaryStar: "Stars" => "Stella Principale"
-.ColumnInfo: "Info" @
-.ColumnNote: "Note" @
-.labelFilename: "Filename: " => "Nome doumento"
-.labelName: "Description: " => "Set di Esplorazione: "
-.toolStripButtonNew: "New" => "Nuovo"
-.toolStripButtonLoad: "Load" => "Carica"
-.toolStripButtonSave: "Save" => "Salva"
-.toolStripButtonAddSystems: "Add Systems" => "Aggiungi Systemi"
-.toolStripButtonImportTextFile: "Import Text File" => "Importa Documento di Testo"
-.toolStripButtonExport: "Export" => "Esporta Documento di Testo"
-.toolStripButtonClear: "Clear List" => "Pulischi Lista"
-.copyToolStripMenuItem: "Copy" => "Copia"
-.pasteToolStripMenuItem: "Paste" => "Incolla"
-.insertCopiedToolStripMenuItem: "Insert Copied Rows" => "Inserisci linee copiate"
-.deleteRowsToolStripMenuItem: "Delete Rows" => "Elimina linee"
-.setTargetToolStripMenuItem: "Set Target" => "Definisci obiettivo"
-.editBookmarkToolStripMenuItem: "Edit bookmark" => "Modifica bookmark"
-.Saved: "Saved to {0} Exploration Set" @
-.SelectSet: "Select a exploration set file" @
-.OpenE: "There was a problem opening file {0}" @
-.NoSys: "The imported file contains no known system names" @
-.NoRoute: "There is no route to export" @
-.Export: "Export route" @
-.ErrorW: "Error exporting route. Is file {0} open?" @
-.Clear: "Are you sure you want to clear the route list?" @
-.AddSys: "Add Systems" @
-.EDSMUnk: "System not known to EDSM" @
-.UnknownS: "Unknown system, system is without co-ordinates" @
-.Bodies: "Bodies" @
 
 SECTION UserControlJournalGrid
 

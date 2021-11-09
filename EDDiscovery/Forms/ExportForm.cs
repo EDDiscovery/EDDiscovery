@@ -29,6 +29,8 @@ namespace EDDiscovery.Forms
         public bool IncludeHeader { get { return checkBoxIncludeHeader.Checked; } }
         public string Path { get; private set; }
 
+        public bool Import { get; private set; }
+
         private string[] outputextension;
 
         public ExportForm()
@@ -36,12 +38,12 @@ namespace EDDiscovery.Forms
             InitializeComponent();
         }
 
-        public void Init(string[] exportlist, bool disablestartendtime = false, string[] outputext = null)
+        public void Init(string[] selectionlist, bool disablestartendtime = false, string[] outputext = null, bool disableopeninclude = false, bool import = false)
         {
             outputextension = outputext;
 
-            if ( exportlist != null )
-                comboBoxCustomExportType.Items.AddRange(exportlist);
+            if ( selectionlist != null )
+                comboBoxCustomExportType.Items.AddRange(selectionlist);
 
             customDateTimePickerFrom.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(new DateTime(2014, 11, 22, 0, 0, 0, DateTimeKind.Utc)); //Gamma start
             customDateTimePickerTo.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, 23, 59, 59));
@@ -51,10 +53,11 @@ namespace EDDiscovery.Forms
             else
                 radioButtonSemiColon.Checked = true;
 
-            checkBoxIncludeHeader.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("ExportFormIncludeHeader", true);
+            checkBoxIncludeHeader.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("FormIncludeHeader", true);
             checkBoxCustomAutoOpen.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("ExportFormOpenExcel", true);
 
             comboBoxCustomExportType.SelectedIndex = 0;
+
 
             EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
             bool winborder = theme.ApplyDialog(this);
@@ -66,7 +69,19 @@ namespace EDDiscovery.Forms
             if (disablestartendtime)                // disable if required
                 panelDate.Visible = false;
 
+            if (disableopeninclude)
+                panelIncludeOpen.Visible = false;
+
             BaseUtils.Translator.Instance.Translate(this);
+
+            Import = import;
+            if (import)
+            {
+                this.Text = "Import data".T(EDTx.ExportForm_ImportTitle);
+                buttonExport.Text = "Import".T(EDTx.ExportForm_ImportButton);
+            }
+
+            label_index.Text = this.Text;
         }
 
         protected override void OnLoad(EventArgs e)
@@ -87,26 +102,47 @@ namespace EDDiscovery.Forms
 
         private void buttonExport_Click(object sender, EventArgs e)
         {
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("ExportFormIncludeHeader", checkBoxIncludeHeader.Checked);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("ExportFormOpenExcel", checkBoxCustomAutoOpen.Checked);
-
             SelectedIndex = comboBoxCustomExportType.SelectedIndex;
 
-            SaveFileDialog dlg = new SaveFileDialog();
-
-            dlg.Filter = outputextension != null ? outputextension[SelectedIndex] : "CSV export| *.csv";
-            dlg.Title = string.Format("Export current data {0}".T(EDTx.ExportForm_ECH), dlg.Filter);
-
-            if (dlg.ShowDialog(this) == DialogResult.OK)
+            if (Import)
             {
-                Path = dlg.FileName;
-                DialogResult = DialogResult.OK;
-                Close();
+                OpenFileDialog dlg = new OpenFileDialog();
+                dlg.Filter = outputextension != null ? outputextension[SelectedIndex] : "CSV import| *.csv";
+                dlg.Title = string.Format("Import data {0}".T(EDTx.ExportForm_ImportData), dlg.Filter);
+
+                if (dlg.ShowDialog(this) == DialogResult.OK)
+                {
+                    Path = dlg.FileName;
+                    DialogResult = DialogResult.OK;
+                    Close();
+                }
+                else
+                {
+                    DialogResult = DialogResult.Cancel;
+                    Close();
+                }
             }
             else
             {
-                DialogResult = DialogResult.Cancel;
-                Close();
+                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("ExportFormIncludeHeader", checkBoxIncludeHeader.Checked);
+                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("ExportFormOpenExcel", checkBoxCustomAutoOpen.Checked);
+
+                SaveFileDialog dlg = new SaveFileDialog();
+
+                dlg.Filter = outputextension != null ? outputextension[SelectedIndex] : "CSV export| *.csv";
+                dlg.Title = string.Format("Export current data {0}".T(EDTx.ExportForm_ECH), dlg.Filter);
+
+                if (dlg.ShowDialog(this) == DialogResult.OK)
+                {
+                    Path = dlg.FileName;
+                    DialogResult = DialogResult.OK;
+                    Close();
+                }
+                else
+                {
+                    DialogResult = DialogResult.Cancel;
+                    Close();
+                }
             }
         }
 
@@ -128,18 +164,6 @@ namespace EDDiscovery.Forms
         private void panel_minimize_Click(object sender, EventArgs e)
         {
             this.WindowState = FormWindowState.Minimized;
-        }
-
-        private void checkBoxRawJournal_CheckedChanged(object sender, EventArgs e)
-        {
-            ExtendedControls.ExtCheckBox control = (ExtendedControls.ExtCheckBox)sender;
-            if (control.Checked && control.Visible)
-            {
-                checkBoxIncludeHeader.Checked = false;
-                checkBoxIncludeHeader.Enabled = false;
-            }
-            else
-                checkBoxIncludeHeader.Enabled = true;
         }
 
         private void panelTop_MouseDown(object sender, MouseEventArgs e)

@@ -39,7 +39,7 @@ namespace EDDiscovery
             Statistics=8,             
             Scan=9,
             Modules=10,
-            Exploration=11,
+                                        // Exploration removed
             Synthesis=12,             
             Missions=13,
             Engineering=14,
@@ -143,7 +143,6 @@ namespace EDDiscovery
             { new PanelInfo( "Routes and Expeditions") },
             { new PanelInfo( PanelIDs.Route, typeof(UserControlRoute), "Route Finder", "RouteFinder", "Route Finder from stored star data") },
             { new PanelInfo( PanelIDs.Expedition, typeof(UserControlExpedition), "Expedition", "Expedition", "Expedition Planner, make up a expedition route") },
-            { new PanelInfo( PanelIDs.Exploration, typeof(UserControlExploration), "Exploration", "Exploration", "Exploration Planner, make a list of the stars to explore") },
 
             { new PanelInfo( "Overlay Panels") },
             { new PanelInfo( PanelIDs.SystemInformation, typeof(UserControlSysInfo), "System Information", "SystemInfo", "System Information" , transparent:false ) },

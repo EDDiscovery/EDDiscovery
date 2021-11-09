@@ -101,8 +101,6 @@ SECTION PopOutInfo
 .Route.Title: "Route Finder" @
 .Expedition.Description: "Expedition Planner, make up a expedition route" @
 .Expedition.Title: "Expedition" @
-.Exploration.Description: "Exploration Planner, make a list of the stars to explore" @
-.Exploration.Title: "Exploration" @
 .SystemInformation.Description: "System Information" @
 .SystemInformation.Title: "System Information" @
 .Spanel.Description: "Summary panel overlay" @
@@ -149,6 +147,10 @@ SECTION PopOutInfo
 .MicroResources.Description: "Micro resource count" @
 .SuitsWeapons.Title: "Suits & Weapons" @
 .SuitsWeapons.Description: "Suits, Loadouts, Weapons" @
+.Map3D.Title: "3D Map" @
+.Map3D.Description: "3D Map of galaxy" @
+.LocalMap3D.Title: "Local 3D Map" @
+.LocalMap3D.Description: "Local 3D Map of systems near you" @
 
 SECTION EDDiscoveryForm
 
@@ -296,7 +298,6 @@ SECTION EDDiscoveryController
 .HRC: "History refresh complete." @
 .Maps: "Checking for new EDDiscovery maps" @
 .EXPD: "Checking for new Expedition data" @
-.EXPL: "Checking for new Exploration data" @
 
 SECTION BookmarkForm
 
@@ -437,7 +438,7 @@ AssignTravelLogSystemForm: "AssignTravelLogSystemForm" @
 
 SECTION ExportForm
 
-ExportForm: "ExportForm" @
+ExportForm: "Export Data" @
 .checkBoxRawJournal: "Export Journals" @
 .buttonCancel: "Cancel" @
 .labelCVSSep: "CSV Separator" @
@@ -446,9 +447,11 @@ ExportForm: "ExportForm" @
 .radioButtonComma: "Comma" @
 .checkBoxIncludeHeader: "Include Header" @
 .checkBoxCustomAutoOpen: "Open" @
-.label_index: "Export" @
 .ECH: "Export current data {0}" @
 .JF: "Journal file" @
+.ImportTitle: "Import Data" @
+.ImportButton: "Import" @
+.ImportData: "Import data {0}" @
 
 SECTION Form2DMap
 

@@ -219,11 +219,6 @@ namespace EDDiscovery.UserControls
             AddTo(OnNewStarsPushType.TriSystems);
         }
 
-        private void addToExplorationToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            AddTo(OnNewStarsPushType.Exploration);
-        }
-
         private void addToExpeditionToolStripMenuItem_Click(object sender, EventArgs e)
         {
             AddTo(OnNewStarsPushType.Expedition);
