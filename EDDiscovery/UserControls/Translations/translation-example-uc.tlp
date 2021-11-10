@@ -216,6 +216,9 @@ SECTION UserControlExpedition
 .buttonExtExport.ToolTip: "Export to File" @
 .extButtonShow3DMap.ToolTip: "Show expedition on 3D Map" @
 .extButtonAddSystems.ToolTip: "Import Systems from EDSM/DB" @
+.extButtonDisplayFilters.ToolTip: "Select filters on Info" @
+.checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM." @
+
 .AddSys: "Add Systems" @
 
 // old stuff
@@ -1001,6 +1004,8 @@ SECTION UserControlStarList
 .comboBoxTime.ToolTip: "Select the entries by age" @
 .viewScanDisplayToolStripMenuItem: "View Scan Display" @
 .Value: "Scan Value" @
+.textBoxSearch.ToolTip: "Enter text to search in any fields for an item" @
+
 
 .Total: "Total" @
 .CS: "{0} Star(s) {1}" @
@@ -1010,6 +1015,8 @@ SECTION UserControlStarList
 
 .JUMP: "Show/Hide presence of Jumponium Materials" @
 .valueables: "Show valueable bodies" @
+.scanorganics: "Show organic scans" @
+
 
 
 SECTION UserControlStats
@@ -1213,6 +1220,7 @@ SECTION UserControlContainerSplitter
 
 SECTION UserControlTravelGrid
 
+.textBoxSearch.ToolTip: "Enter text to search in any fields for an item" @
 .travelGridInDebugModeToolStripMenuItem: "Travel grid in Debug Mode" @
 .showSystemVisitedForeColourToolStripMenuItem: "Show lines in System Visited Fore Colour" @
 .THF: "History: Filter out fields" @

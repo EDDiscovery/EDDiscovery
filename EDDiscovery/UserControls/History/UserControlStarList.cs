@@ -61,6 +61,10 @@ namespace EDDiscovery.UserControls
 
         private string[] displayfilters;        // display filters
 
+        const int lowRadiusLimit = 300 * 1000; // tiny body limit in km converted to m
+        const int largeRadiusLimit = 20000 * 1000; // large body limit in km converted to m
+        const double eccentricityLimit = 0.95; //orbital eccentricity limit
+
         private Dictionary<long, DataGridViewRow> rowsbyjournalid = new Dictionary<long, DataGridViewRow>();
 
         private Timer searchtimer;
@@ -371,10 +375,6 @@ namespace EDDiscovery.UserControls
 
             return rw;
         }
-
-        const int lowRadiusLimit = 300 * 1000; // tiny body limit in km converted to m
-        const int largeRadiusLimit = 20000 * 1000; // large body limit in km converted to m
-        const double eccentricityLimit = 0.95; //orbital eccentricity limit
 
         string Infoline(ISystem system, StarScan.SystemNode sysnode )
         {

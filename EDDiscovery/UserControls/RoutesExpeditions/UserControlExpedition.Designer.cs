@@ -59,6 +59,18 @@ namespace EDDiscovery.UserControls
             this.textBoxRouteName = new ExtendedControls.ExtTextBox();
             this.labelRouteName = new System.Windows.Forms.Label();
             this.dataGridView = new BaseUtils.DataGridViewColumnHider();
+            this.SystemName = new ExtendedControls.ExtDataGridViewColumnAutoComplete();
+            this.Distance = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Note = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnX = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnY = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnZ = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CurDist = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Visits = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Scans = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Bodies = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Stars = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Info = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.contextMenuCopyPaste = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pasteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -82,19 +94,9 @@ namespace EDDiscovery.UserControls
             this.extButtonAddSystems = new ExtendedControls.ExtButton();
             this.buttonExtExport = new ExtendedControls.ExtButton();
             this.extButtonShow3DMap = new ExtendedControls.ExtButton();
+            this.extButtonDisplayFilters = new ExtendedControls.ExtButton();
+            this.checkBoxEDSM = new ExtendedControls.ExtCheckBox();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.SystemName = new ExtendedControls.ExtDataGridViewColumnAutoComplete();
-            this.Distance = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Note = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnX = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnY = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnZ = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.CurDist = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Visits = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Scans = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Bodies = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Stars = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Info = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.contextMenuCopyPaste.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -351,6 +353,80 @@ namespace EDDiscovery.UserControls
             this.dataGridView.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridViewRouteSystems_MouseDown);
             this.dataGridView.MouseMove += new System.Windows.Forms.MouseEventHandler(this.dataGridViewRouteSystems_MouseMove);
             // 
+            // SystemName
+            // 
+            this.SystemName.FillWeight = 50F;
+            this.SystemName.HeaderText = "System Name";
+            this.SystemName.Name = "SystemName";
+            this.SystemName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            // 
+            // Distance
+            // 
+            this.Distance.FillWeight = 25F;
+            this.Distance.HeaderText = "Dist.";
+            this.Distance.Name = "Distance";
+            this.Distance.ReadOnly = true;
+            // 
+            // Note
+            // 
+            this.Note.HeaderText = "Note";
+            this.Note.Name = "Note";
+            this.Note.ReadOnly = true;
+            // 
+            // ColumnX
+            // 
+            this.ColumnX.FillWeight = 25F;
+            this.ColumnX.HeaderText = "X";
+            this.ColumnX.Name = "ColumnX";
+            // 
+            // ColumnY
+            // 
+            this.ColumnY.FillWeight = 25F;
+            this.ColumnY.HeaderText = "Y";
+            this.ColumnY.Name = "ColumnY";
+            // 
+            // ColumnZ
+            // 
+            this.ColumnZ.FillWeight = 25F;
+            this.ColumnZ.HeaderText = "Z";
+            this.ColumnZ.Name = "ColumnZ";
+            // 
+            // CurDist
+            // 
+            this.CurDist.FillWeight = 25F;
+            this.CurDist.HeaderText = "Cur. Dist";
+            this.CurDist.Name = "CurDist";
+            // 
+            // Visits
+            // 
+            this.Visits.FillWeight = 25F;
+            this.Visits.HeaderText = "Visits";
+            this.Visits.Name = "Visits";
+            // 
+            // Scans
+            // 
+            this.Scans.FillWeight = 25F;
+            this.Scans.HeaderText = "Scans";
+            this.Scans.Name = "Scans";
+            // 
+            // Bodies
+            // 
+            this.Bodies.FillWeight = 25F;
+            this.Bodies.HeaderText = "Bodies";
+            this.Bodies.Name = "Bodies";
+            // 
+            // Stars
+            // 
+            this.Stars.FillWeight = 25F;
+            this.Stars.HeaderText = "Stars";
+            this.Stars.Name = "Stars";
+            // 
+            // Info
+            // 
+            this.Info.FillWeight = 150F;
+            this.Info.HeaderText = "Info";
+            this.Info.Name = "Info";
+            // 
             // contextMenuCopyPaste
             // 
             this.contextMenuCopyPaste.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -521,6 +597,8 @@ namespace EDDiscovery.UserControls
             this.panelControls.Controls.Add(this.extButtonAddSystems);
             this.panelControls.Controls.Add(this.buttonExtExport);
             this.panelControls.Controls.Add(this.extButtonShow3DMap);
+            this.panelControls.Controls.Add(this.extButtonDisplayFilters);
+            this.panelControls.Controls.Add(this.checkBoxEDSM);
             this.panelControls.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelControls.Location = new System.Drawing.Point(0, 0);
             this.panelControls.Name = "panelControls";
@@ -667,79 +745,48 @@ namespace EDDiscovery.UserControls
             this.extButtonShow3DMap.UseVisualStyleBackColor = false;
             this.extButtonShow3DMap.Click += new System.EventHandler(this.extButtonShow3DMap_Click);
             // 
-            // SystemName
+            // extButtonDisplayFilters
             // 
-            this.SystemName.FillWeight = 50F;
-            this.SystemName.HeaderText = "System Name";
-            this.SystemName.Name = "SystemName";
-            this.SystemName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.extButtonDisplayFilters.BackColor = System.Drawing.SystemColors.Control;
+            this.extButtonDisplayFilters.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.extButtonDisplayFilters.Image = global::EDDiscovery.Icons.Controls.DisplayFilters;
+            this.extButtonDisplayFilters.Location = new System.Drawing.Point(408, 1);
+            this.extButtonDisplayFilters.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.extButtonDisplayFilters.Name = "extButtonDisplayFilters";
+            this.extButtonDisplayFilters.Size = new System.Drawing.Size(28, 28);
+            this.extButtonDisplayFilters.TabIndex = 32;
+            this.toolTip.SetToolTip(this.extButtonDisplayFilters, "Select filters on Info");
+            this.extButtonDisplayFilters.UseVisualStyleBackColor = false;
+            this.extButtonDisplayFilters.Click += new System.EventHandler(this.extButtonDisplayFilters_Click);
             // 
-            // Distance
+            // checkBoxEDSM
             // 
-            this.Distance.FillWeight = 25F;
-            this.Distance.HeaderText = "Dist.";
-            this.Distance.Name = "Distance";
-            this.Distance.ReadOnly = true;
-            // 
-            // Note
-            // 
-            this.Note.HeaderText = "Note";
-            this.Note.Name = "Note";
-            this.Note.ReadOnly = true;
-            // 
-            // ColumnX
-            // 
-            this.ColumnX.FillWeight = 25F;
-            this.ColumnX.HeaderText = "X";
-            this.ColumnX.Name = "ColumnX";
-            // 
-            // ColumnY
-            // 
-            this.ColumnY.FillWeight = 25F;
-            this.ColumnY.HeaderText = "Y";
-            this.ColumnY.Name = "ColumnY";
-            // 
-            // ColumnZ
-            // 
-            this.ColumnZ.FillWeight = 25F;
-            this.ColumnZ.HeaderText = "Z";
-            this.ColumnZ.Name = "ColumnZ";
-            // 
-            // CurDist
-            // 
-            this.CurDist.FillWeight = 25F;
-            this.CurDist.HeaderText = "Cur. Dist";
-            this.CurDist.Name = "CurDist";
-            // 
-            // Visits
-            // 
-            this.Visits.FillWeight = 25F;
-            this.Visits.HeaderText = "Visits";
-            this.Visits.Name = "Visits";
-            // 
-            // Scans
-            // 
-            this.Scans.FillWeight = 25F;
-            this.Scans.HeaderText = "Scans";
-            this.Scans.Name = "Scans";
-            // 
-            // Bodies
-            // 
-            this.Bodies.FillWeight = 25F;
-            this.Bodies.HeaderText = "Bodies";
-            this.Bodies.Name = "Bodies";
-            // 
-            // Stars
-            // 
-            this.Stars.FillWeight = 25F;
-            this.Stars.HeaderText = "Stars";
-            this.Stars.Name = "Stars";
-            // 
-            // Info
-            // 
-            this.Info.FillWeight = 150F;
-            this.Info.HeaderText = "Info";
-            this.Info.Name = "Info";
+            this.checkBoxEDSM.Appearance = System.Windows.Forms.Appearance.Button;
+            this.checkBoxEDSM.BackColor = System.Drawing.Color.Transparent;
+            this.checkBoxEDSM.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.checkBoxEDSM.CheckBoxColor = System.Drawing.Color.White;
+            this.checkBoxEDSM.CheckBoxDisabledScaling = 0.5F;
+            this.checkBoxEDSM.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxEDSM.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxEDSM.Cursor = System.Windows.Forms.Cursors.Default;
+            this.checkBoxEDSM.FlatAppearance.CheckedBackColor = System.Drawing.Color.Green;
+            this.checkBoxEDSM.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.checkBoxEDSM.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
+            this.checkBoxEDSM.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.checkBoxEDSM.Image = global::EDDiscovery.Icons.Controls.StarList_EDSM;
+            this.checkBoxEDSM.ImageButtonDisabledScaling = 0.5F;
+            this.checkBoxEDSM.ImageIndeterminate = null;
+            this.checkBoxEDSM.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.checkBoxEDSM.ImageUnchecked = null;
+            this.checkBoxEDSM.Location = new System.Drawing.Point(440, 1);
+            this.checkBoxEDSM.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.checkBoxEDSM.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxEDSM.Name = "checkBoxEDSM";
+            this.checkBoxEDSM.Size = new System.Drawing.Size(28, 28);
+            this.checkBoxEDSM.TabIndex = 33;
+            this.checkBoxEDSM.TickBoxReductionRatio = 0.75F;
+            this.toolTip.SetToolTip(this.checkBoxEDSM, "Show/Hide Body data from EDSM.");
+            this.checkBoxEDSM.UseVisualStyleBackColor = false;
             // 
             // UserControlExpedition
             // 
@@ -814,5 +861,7 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn Bodies;
         private System.Windows.Forms.DataGridViewTextBoxColumn Stars;
         private System.Windows.Forms.DataGridViewTextBoxColumn Info;
+        private ExtendedControls.ExtButton extButtonDisplayFilters;
+        private ExtendedControls.ExtCheckBox checkBoxEDSM;
     }
 }

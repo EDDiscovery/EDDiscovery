@@ -34,6 +34,15 @@ namespace EDDiscovery.UserControls
         private SavedRouteClass loadedroute;           // this current route, null until created
         private List<ISystem> latestplottedroute;
 
+        private string[] displayfilters;        // display filters
+        private string dbDisplayFilters = "DisplayFilters";
+
+        private string dbEDSM = "EDSM";
+
+        const int lowRadiusLimit = 300 * 1000; // tiny body limit in km converted to m
+        const int largeRadiusLimit = 20000 * 1000; // large body limit in km converted to m
+        const double eccentricityLimit = 0.95; //orbital eccentricity limit
+
         #region Standard UC Interfaces
 
         public UserControlExpedition()
@@ -55,6 +64,11 @@ namespace EDDiscovery.UserControls
 
             dataGridView.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             dataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;
+
+            displayfilters = GetSetting(dbDisplayFilters, "stars;planets;signals;volcanism;values;shortinfo;gravity;atmos;rings;valueables;organics").Split(';');
+
+            checkBoxEDSM.Checked = GetSetting(dbEDSM, false);
+            this.checkBoxEDSM.CheckedChanged += new System.EventHandler(this.checkBoxEDSM_CheckedChanged);
 
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
@@ -172,8 +186,24 @@ namespace EDDiscovery.UserControls
             Cursor = Cursors.WaitCursor;
 
             ISystem currentSystem = discoveryform.history.CurrentSystem(); // may be null
-
             ISystem prevsys = null;
+
+            bool showplanets = displayfilters.Contains("planets");
+            bool showstars = displayfilters.Contains("stars");
+            bool showvalueables = displayfilters.Contains("valueables");
+            bool showbeltclusters = displayfilters.Contains("beltcluster");
+
+            // selectors for what to print
+            bool showsignals = displayfilters.Contains("signals");
+            bool showvol = displayfilters.Contains("volcanism");
+            bool showv = displayfilters.Contains("values");
+            bool showsi = displayfilters.Contains("shortinfo");
+            bool showg = displayfilters.Contains("gravity");
+            bool showatmos = displayfilters.Contains("atmos");
+            bool showrings = displayfilters.Contains("rings");
+            bool showorganics = displayfilters.Contains("organics");
+
+            bool showjumponium = displayfilters.Contains("jumponium");
 
             for (int rowindex = 0; rowindex < dataGridView.Rows.Count; rowindex++)
             {
@@ -202,7 +232,7 @@ namespace EDDiscovery.UserControls
 
                 // find in history, and the DB, and EDSM, the system..
 
-                var sys = discoveryform.history.FindSystem(sysname, discoveryform.galacticMapping, true);
+                var sys = discoveryform.history.FindSystem(sysname, discoveryform.galacticMapping, checkBoxEDSM.Checked);
 
                 dataGridView[0, rowindex].Tag = sys;
                 dataGridView.Rows[rowindex].Cells[0].Style.ForeColor = (sys != null && sys.HasCoordinate) ? Color.Empty : discoveryform.theme.UnknownSystemColor;
@@ -231,7 +261,7 @@ namespace EDDiscovery.UserControls
 
                     dataGridView[Visits.Index, rowindex].Value = discoveryform.history.Visits(sysname).ToString("0");
 
-                    StarScan.SystemNode sysnode = discoveryform.history.StarScan.FindSystemSynchronous(sys, false);
+                    StarScan.SystemNode sysnode = discoveryform.history.StarScan.FindSystemSynchronous(sys, checkBoxEDSM.Checked);
 
                     if (sysnode != null)
                     {
@@ -244,11 +274,24 @@ namespace EDDiscovery.UserControls
                         string info = "";
                         foreach (var sn in sysnode.Bodies)
                         {
-                            string bs = sn.SurveyorInfoLine(sys, showsignals:true, showorganics:true, 
-                                        showvolcanism: true, showvalues: true, shortinfo: true, showGravity: true, showAtmos: true, showRings: true,
-                                        lowRadiusLimit: 300 * 1000, largeRadiusLimit: 20000 * 1000, eccentricityLimit: 0.95);
+                            if (sn?.ScanData != null)  // must have scan data..
+                            {
+                                if (
+                                   (sn.ScanData.IsBeltCluster && showbeltclusters) ||     // major selectors for line display
+                                   (sn.ScanData.IsPlanet && showplanets) ||
+                                   (sn.ScanData.IsStar && showstars) ||
+                                   (showvalueables && (sn.ScanData.AmmoniaWorld || sn.ScanData.CanBeTerraformable || sn.ScanData.WaterWorld || sn.ScanData.Earthlike))
+                                   )
+                                {
+                                    string bs = sn.SurveyorInfoLine(sys, showsignals, showorganics,
+                                                                showvol, showv, showsi, showg,
+                                                                showatmos && sn.ScanData.IsLandable, showrings,
+                                                                lowRadiusLimit, largeRadiusLimit, eccentricityLimit);
 
-                            info = info.AppendPrePad(bs, Environment.NewLine);
+                                    info = info.AppendPrePad(bs, Environment.NewLine);
+                                }
+                            }
+
                         }
 
                         dataGridView[Info.Index, rowindex].Value = info.Trim();
@@ -719,6 +762,42 @@ namespace EDDiscovery.UserControls
                                 closeicon: true);
             usc.Save();
 
+        }
+
+        private void extButtonDisplayFilters_Click(object sender, EventArgs e)
+        {
+            ExtendedControls.CheckedIconListBoxFormGroup displayfilter = new CheckedIconListBoxFormGroup();
+            displayfilter.AllOrNoneBack = false;
+
+            displayfilter.AddAllNone();
+            displayfilter.AddStandardOption("stars", "Show All Stars".TxID("UserControlSurveyor.showAllStarsToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Star);
+            displayfilter.AddStandardOption("planets", "Show All Planets".TxID("UserControlSurveyor.showAllPlanetsToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_ShowMoons);
+            displayfilter.AddStandardOption("beltcluster", "Show belt clusters".TxID("UserControlSurveyor.showBeltClustersToolStripMenuItem"), global::EDDiscovery.Icons.Controls.ScanGrid_Belt);
+            displayfilter.AddStandardOption("valueables", "Show valueable bodies".T(EDTx.UserControlStarList_valueables), global::EDDiscovery.Icons.Controls.Scan_Bodies_HighValue);
+            displayfilter.AddStandardOption("jumponium", "Show/Hide presence of Jumponium Materials".T(EDTx.UserControlStarList_JUMP), global::EDDiscovery.Icons.Controls.Scan_FSD);
+            displayfilter.AddStandardOption("signals", "Has Signals".TxID("UserControlSurveyor.bodyFeaturesToolStripMenuItem.hasSignalsToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Bodies_Signals);
+            displayfilter.AddStandardOption("volcanism", "Has Volcanism".TxID("UserControlSurveyor.bodyFeaturesToolStripMenuItem.hasVolcanismToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Bodies_Volcanism);
+            displayfilter.AddStandardOption("values", "Show values".TxID("UserControlSurveyor.showValuesToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Bodies_HighValue);
+            displayfilter.AddStandardOption("shortinfo", "Show More Information".TxID("UserControlSurveyor.showMoreInformationToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Bodies_Landable);
+            displayfilter.AddStandardOption("gravity", "Show gravity of landables".TxID("UserControlSurveyor.showGravityToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Bodies_Landable);
+            displayfilter.AddStandardOption("atmos", "Show atmospheres of landables".TxID("UserControlSurveyor.showAtmosToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Bodies_Landable);
+            displayfilter.AddStandardOption("rings", "Show rings".TxID("UserControlSurveyor.bodyFeaturesToolStripMenuItem.hasRingsToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Bodies_RingOnly);
+            displayfilter.AddStandardOption("organics", "Show organic scans".T(EDTx.UserControlStarList_scanorganics), global::EDDiscovery.Icons.Controls.Scan_Bodies_NSP);
+            displayfilter.ImageSize = new Size(24, 24);
+            displayfilter.SaveSettings = (s, o) =>
+            {
+                displayfilters = s.Split(';');
+                PutSetting(dbDisplayFilters, string.Join(";", displayfilters));
+                UpdateSystemRows();
+            };
+
+            displayfilter.Show(string.Join(";", displayfilters), extButtonDisplayFilters, this.FindForm());
+        }
+
+        private void checkBoxEDSM_CheckedChanged(object sender, EventArgs e)
+        {
+            PutSetting(dbEDSM, checkBoxEDSM.Checked);
+            UpdateSystemRows();
         }
 
         private void buttonReverseRoute_Click(object sender, EventArgs e)
