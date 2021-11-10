@@ -59,18 +59,6 @@ namespace EDDiscovery.UserControls
             this.textBoxRouteName = new ExtendedControls.ExtTextBox();
             this.labelRouteName = new System.Windows.Forms.Label();
             this.dataGridView = new BaseUtils.DataGridViewColumnHider();
-            this.SystemName = new ExtendedControls.ExtDataGridViewColumnAutoComplete();
-            this.Distance = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Note = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnX = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnY = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnZ = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.CurDist = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Visits = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Scans = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Bodies = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Stars = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Info = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.contextMenuCopyPaste = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pasteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -95,6 +83,18 @@ namespace EDDiscovery.UserControls
             this.buttonExtExport = new ExtendedControls.ExtButton();
             this.extButtonShow3DMap = new ExtendedControls.ExtButton();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.SystemName = new ExtendedControls.ExtDataGridViewColumnAutoComplete();
+            this.Distance = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Note = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnX = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnY = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnZ = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CurDist = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Visits = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Scans = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Bodies = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Stars = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Info = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.contextMenuCopyPaste.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -350,79 +350,6 @@ namespace EDDiscovery.UserControls
             this.dataGridView.DragOver += new System.Windows.Forms.DragEventHandler(this.dataGridViewRouteSystems_DragOver);
             this.dataGridView.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridViewRouteSystems_MouseDown);
             this.dataGridView.MouseMove += new System.Windows.Forms.MouseEventHandler(this.dataGridViewRouteSystems_MouseMove);
-            // 
-            // SystemName
-            // 
-            this.SystemName.HeaderText = "System Name";
-            this.SystemName.Name = "SystemName";
-            this.SystemName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            // 
-            // Distance
-            // 
-            this.Distance.FillWeight = 50F;
-            this.Distance.HeaderText = "Dist.";
-            this.Distance.Name = "Distance";
-            this.Distance.ReadOnly = true;
-            // 
-            // Note
-            // 
-            this.Note.FillWeight = 150F;
-            this.Note.HeaderText = "Note";
-            this.Note.Name = "Note";
-            this.Note.ReadOnly = true;
-            // 
-            // ColumnX
-            // 
-            this.ColumnX.FillWeight = 50F;
-            this.ColumnX.HeaderText = "X";
-            this.ColumnX.Name = "ColumnX";
-            // 
-            // ColumnY
-            // 
-            this.ColumnY.FillWeight = 50F;
-            this.ColumnY.HeaderText = "Y";
-            this.ColumnY.Name = "ColumnY";
-            // 
-            // ColumnZ
-            // 
-            this.ColumnZ.FillWeight = 50F;
-            this.ColumnZ.HeaderText = "Z";
-            this.ColumnZ.Name = "ColumnZ";
-            // 
-            // CurDist
-            // 
-            this.CurDist.HeaderText = "Cur. Dist";
-            this.CurDist.Name = "CurDist";
-            // 
-            // Visits
-            // 
-            this.Visits.FillWeight = 50F;
-            this.Visits.HeaderText = "Visits";
-            this.Visits.Name = "Visits";
-            // 
-            // Scans
-            // 
-            this.Scans.FillWeight = 50F;
-            this.Scans.HeaderText = "Scans";
-            this.Scans.Name = "Scans";
-            // 
-            // Bodies
-            // 
-            this.Bodies.FillWeight = 50F;
-            this.Bodies.HeaderText = "Bodies";
-            this.Bodies.Name = "Bodies";
-            // 
-            // Stars
-            // 
-            this.Stars.FillWeight = 50F;
-            this.Stars.HeaderText = "Stars";
-            this.Stars.Name = "Stars";
-            // 
-            // Info
-            // 
-            this.Info.FillWeight = 50F;
-            this.Info.HeaderText = "Info";
-            this.Info.Name = "Info";
             // 
             // contextMenuCopyPaste
             // 
@@ -740,6 +667,80 @@ namespace EDDiscovery.UserControls
             this.extButtonShow3DMap.UseVisualStyleBackColor = false;
             this.extButtonShow3DMap.Click += new System.EventHandler(this.extButtonShow3DMap_Click);
             // 
+            // SystemName
+            // 
+            this.SystemName.FillWeight = 50F;
+            this.SystemName.HeaderText = "System Name";
+            this.SystemName.Name = "SystemName";
+            this.SystemName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            // 
+            // Distance
+            // 
+            this.Distance.FillWeight = 25F;
+            this.Distance.HeaderText = "Dist.";
+            this.Distance.Name = "Distance";
+            this.Distance.ReadOnly = true;
+            // 
+            // Note
+            // 
+            this.Note.HeaderText = "Note";
+            this.Note.Name = "Note";
+            this.Note.ReadOnly = true;
+            // 
+            // ColumnX
+            // 
+            this.ColumnX.FillWeight = 25F;
+            this.ColumnX.HeaderText = "X";
+            this.ColumnX.Name = "ColumnX";
+            // 
+            // ColumnY
+            // 
+            this.ColumnY.FillWeight = 25F;
+            this.ColumnY.HeaderText = "Y";
+            this.ColumnY.Name = "ColumnY";
+            // 
+            // ColumnZ
+            // 
+            this.ColumnZ.FillWeight = 25F;
+            this.ColumnZ.HeaderText = "Z";
+            this.ColumnZ.Name = "ColumnZ";
+            // 
+            // CurDist
+            // 
+            this.CurDist.FillWeight = 25F;
+            this.CurDist.HeaderText = "Cur. Dist";
+            this.CurDist.Name = "CurDist";
+            // 
+            // Visits
+            // 
+            this.Visits.FillWeight = 25F;
+            this.Visits.HeaderText = "Visits";
+            this.Visits.Name = "Visits";
+            // 
+            // Scans
+            // 
+            this.Scans.FillWeight = 25F;
+            this.Scans.HeaderText = "Scans";
+            this.Scans.Name = "Scans";
+            // 
+            // Bodies
+            // 
+            this.Bodies.FillWeight = 25F;
+            this.Bodies.HeaderText = "Bodies";
+            this.Bodies.Name = "Bodies";
+            // 
+            // Stars
+            // 
+            this.Stars.FillWeight = 25F;
+            this.Stars.HeaderText = "Stars";
+            this.Stars.Name = "Stars";
+            // 
+            // Info
+            // 
+            this.Info.FillWeight = 150F;
+            this.Info.HeaderText = "Info";
+            this.Info.Name = "Info";
+            // 
             // UserControlExpedition
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -799,6 +800,8 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtButton extButtonShow3DMap;
         private ExtendedControls.ExtButton extButtonLoadRoute;
         private ExtendedControls.ExtButton extButtonSave;
+        private System.Windows.Forms.ToolTip toolTip;
+        private ExtendedControls.ExtButton extButtonAddSystems;
         private ExtendedControls.ExtDataGridViewColumnAutoComplete SystemName;
         private System.Windows.Forms.DataGridViewTextBoxColumn Distance;
         private System.Windows.Forms.DataGridViewTextBoxColumn Note;
@@ -811,7 +814,5 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn Bodies;
         private System.Windows.Forms.DataGridViewTextBoxColumn Stars;
         private System.Windows.Forms.DataGridViewTextBoxColumn Info;
-        private System.Windows.Forms.ToolTip toolTip;
-        private ExtendedControls.ExtButton extButtonAddSystems;
     }
 }

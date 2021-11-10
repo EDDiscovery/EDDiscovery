@@ -438,24 +438,7 @@ namespace EDDiscovery.UserControls
                             (showvalueables && (sn.ScanData.AmmoniaWorld || sn.ScanData.CanBeTerraformable || sn.ScanData.WaterWorld || sn.ScanData.Earthlike))
                             )
                         {
-                            bool hasgeosignals = sn.Signals?.Find(x => x.IsGeo) != null && showsignals;
-                            bool hasbiosignals = sn.Signals?.Find(x => x.IsBio) != null && showsignals;
-                            bool hasthargoidsignals = sn.Signals?.Find(x => x.IsThargoid) != null && showsignals;
-                            bool hasguardiansignals = sn.Signals?.Find(x => x.IsGuardian) != null && showsignals;
-                            bool hashumansignals = sn.Signals?.Find(x => x.IsHuman) != null && showsignals;
-                            bool hasothersignals = sn.Signals?.Find(x => x.IsOther) != null && showsignals;
-                            bool hasminingsignals = sn.Signals?.Find(x => x.IsUncategorised) != null && showsignals;
-                            bool hasscanorganics = sn.Organics != null && showorganics;
-
-                            if ( hasscanorganics )
-                            {
-
-                            }
-                                
-
-                            string info = sn.ScanData.SurveyorInfoLine(system, 
-                                                                hasminingsignals, hasgeosignals, hasbiosignals, hasthargoidsignals, hasguardiansignals, hashumansignals, hasothersignals, 
-                                                                hasscanorganics,
+                            string info = sn.SurveyorInfoLine(system, showsignals, showorganics, 
                                                                 showvol, showv, showsi, showg,
                                                                 showatmos && sn.ScanData.IsLandable, showrings,
                                                                 lowRadiusLimit, largeRadiusLimit, eccentricityLimit);

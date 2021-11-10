@@ -51,6 +51,7 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNewCalculatedRoute += discoveryForm_OnNewCalculatedRoute;
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
             discoveryform.OnNoteChanged += Discoveryform_OnNoteChanged;
+            discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
 
             dataGridView.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             dataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;
@@ -62,7 +63,7 @@ namespace EDDiscovery.UserControls
 
         public override void LoadLayout()
         {
-            DGVLoadColumnLayout(dataGridView);
+          //  DGVLoadColumnLayout(dataGridView);
 
             if (uctg is IHistoryCursorNewStarList)
                 (uctg as IHistoryCursorNewStarList).OnNewStarList += OnNewStars;
@@ -90,6 +91,7 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNewCalculatedRoute -= discoveryForm_OnNewCalculatedRoute;
             discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
             discoveryform.OnNoteChanged -= Discoveryform_OnNoteChanged;
+            discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
 
             if (uctg is IHistoryCursorNewStarList)
                 (uctg as IHistoryCursorNewStarList).OnNewStarList -= OnNewStars;
@@ -104,7 +106,13 @@ namespace EDDiscovery.UserControls
         {
             UpdateSystemRows();
         }
-        
+
+        private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)
+        {
+            if (he.journalEntry is IStarScan || he.IsFSDCarrierJump || he.journalEntry is IBodyNameAndID)
+                UpdateSystemRows();
+        }
+
         private void discoveryForm_OnNewCalculatedRoute(List<ISystem> obj) // called when a new route is calculated
         {
             latestplottedroute = obj;
@@ -165,122 +173,90 @@ namespace EDDiscovery.UserControls
 
             ISystem currentSystem = discoveryform.history.CurrentSystem(); // may be null
 
+            ISystem prevsys = null;
+
             for (int rowindex = 0; rowindex < dataGridView.Rows.Count; rowindex++)
             {
-                dataGridView[1, rowindex].ReadOnly = true;
-                dataGridView[2, rowindex].ReadOnly = true;
-                dataGridView[3, rowindex].ReadOnly = true;
-                dataGridView[4, rowindex].ReadOnly = true;
-                dataGridView[5, rowindex].ReadOnly = true;
-
                 string sysname = dataGridView[0, rowindex].Value as string;       // value may be null, so protect (2999)
 
-                if (sysname.HasChars())
+                if (!sysname.HasChars())
                 {
-                    // find in history, and the DB, and EDSM, the system..
+                    prevsys = null;
+                    continue;
+                }
 
-                    var sys = discoveryform.history.FindSystem(sysname, discoveryform.galacticMapping, true);      
+                string note = "";
+                SystemNoteClass sysnote = SystemNoteClass.GetNoteOnSystem(sysname);
+                if (sysnote != null && !string.IsNullOrWhiteSpace(sysnote.Note))
+                    note = sysnote.Note;
 
-                    dataGridView[1, rowindex].Value = "";
+                BookmarkClass bkmark = GlobalBookMarkList.Instance.FindBookmarkOnSystem(sysname);
+                if (bkmark != null && !string.IsNullOrWhiteSpace(bkmark.Note))
+                    note = note.AppendPrePad(bkmark.Note, "; ");
 
-                    if (rowindex > 0 && dataGridView[0, rowindex - 1].Value != null && dataGridView[0, rowindex].Value != null)
+                var gmo = discoveryform.galacticMapping.Find(sysname);
+                if (gmo != null && !string.IsNullOrWhiteSpace(gmo.Description))
+                    note = note.AppendPrePad(gmo.Description, "; ");
+
+                dataGridView[Note.Index, rowindex].Value = note;
+
+                // find in history, and the DB, and EDSM, the system..
+
+                var sys = discoveryform.history.FindSystem(sysname, discoveryform.galacticMapping, true);
+
+                dataGridView[0, rowindex].Tag = sys;
+                dataGridView.Rows[rowindex].Cells[0].Style.ForeColor = (sys != null && sys.HasCoordinate) ? Color.Empty : discoveryform.theme.UnknownSystemColor;
+
+                string dist = "";
+                if ((sys?.HasCoordinate ?? false) && (prevsys?.HasCoordinate ?? false))
+                {
+                    dist = sys.Distance(prevsys).ToString("0.#");
+                }
+
+                prevsys = sys;
+
+                dataGridView[Distance.Index, rowindex].Value = dist;
+
+                if (sys != null && sys.HasCoordinate)
+                {
+                    dataGridView[ColumnX.Index, rowindex].Value = sys.X.ToString("0.#");
+                    dataGridView[ColumnY.Index, rowindex].Value = sys.Y.ToString("0.#");
+                    dataGridView[ColumnZ.Index, rowindex].Value = sys.Z.ToString("0.#");
+                    dataGridView.Rows[rowindex].ErrorText = "";
+
+                    if (currentSystem?.HasCoordinate ?? false)
                     {
-                        string prevsysname = dataGridView[0, rowindex - 1].Value as string;     // protect against null
-
-                        if (prevsysname.HasChars())
-                        {
-                            var prevsys = discoveryform.history.FindSystem(prevsysname, discoveryform.galacticMapping, true);       // use EDSM directly
-
-                            if ((sys?.HasCoordinate ?? false) && (prevsys?.HasCoordinate ?? false))
-                            {
-                                double dist = sys.Distance(prevsys);
-                                string strdist = dist >= 0 ? ((double)dist).ToString("0.00") : "";
-                                dataGridView[1, rowindex].Value = strdist;
-                            }
-                        }
+                        dataGridView[CurDist.Index, rowindex].Value = sys.Distance(currentSystem).ToString("0.#");
                     }
 
-                    dataGridView[0, rowindex].Tag = sys;
-                    dataGridView.Rows[rowindex].Cells[0].Style.ForeColor = (sys != null && sys.HasCoordinate) ? Color.Empty : discoveryform.theme.UnknownSystemColor;
+                    dataGridView[Visits.Index, rowindex].Value = discoveryform.history.Visits(sysname).ToString("0");
 
-                    string note = "";
-                    SystemNoteClass sn = SystemNoteClass.GetNoteOnSystem(sysname);
-                    if (sn != null && !string.IsNullOrWhiteSpace(sn.Note))
-                        note = sn.Note;
+                    StarScan.SystemNode sysnode = discoveryform.history.StarScan.FindSystemSynchronous(sys, false);
 
-                    BookmarkClass bkmark = GlobalBookMarkList.Instance.FindBookmarkOnSystem(sysname);
-                    if (bkmark != null && !string.IsNullOrWhiteSpace(bkmark.Note))
-                        note = note.AppendPrePad(bkmark.Note, "; ");
-
-                    var gmo = discoveryform.galacticMapping.Find(sysname);
-                    if (gmo != null && !string.IsNullOrWhiteSpace(gmo.Description))
-                        note = note.AppendPrePad(gmo.Description, "; ");
-
-                    dataGridView[2, rowindex].Value = note;
-
-                    if (sys != null && sys.HasCoordinate)
+                    if (sysnode != null)
                     {
-                        dataGridView[3, rowindex].Value = sys.X.ToString("0.0.#");
-                        dataGridView[4, rowindex].Value = sys.Y.ToString("0.0.#");
-                        dataGridView[5, rowindex].Value = sys.Z.ToString("0.0.#");
-                        dataGridView.Rows[rowindex].ErrorText = "";
+                        dataGridView[Scans.Index, rowindex].Value = sysnode.StarPlanetsScanned().ToString("0");
+                        if (sysnode.FSSTotalBodies.HasValue)
+                            dataGridView[Bodies.Index, rowindex].Value = sysnode.FSSTotalBodies.Value.ToString("0");
 
-                        if (currentSystem?.HasCoordinate ?? false)
+                        dataGridView[Stars.Index, rowindex].Value = sysnode.StarTypesFound(false);
+
+                        string info = "";
+                        foreach (var sn in sysnode.Bodies)
                         {
-                            double dist = sys.Distance(currentSystem);
-                            string strdist = dist >= 0 ? ((double)dist).ToString("0.00") : "";
-                            dataGridView[6, rowindex].Value = strdist;
+                            string bs = sn.SurveyorInfoLine(sys, showsignals:true, showorganics:true, 
+                                        showvolcanism: true, showvalues: true, shortinfo: true, showGravity: true, showAtmos: true, showRings: true,
+                                        lowRadiusLimit: 300 * 1000, largeRadiusLimit: 20000 * 1000, eccentricityLimit: 0.95);
+
+                            info = info.AppendPrePad(bs, Environment.NewLine);
                         }
 
-                        StarScan.SystemNode sysnode = discoveryform.history.StarScan.FindSystemSynchronous(sys, false);
-
-                        if (sysnode != null)
-                        {
-                            dataGridView[8, rowindex].Value = sysnode.StarPlanetsScanned().ToString();
-                            if (sysnode.FSSTotalBodies.HasValue)
-                                dataGridView[9, rowindex].Value = sysnode.FSSTotalBodies.Value.ToString();
-
-                            dataGridView[10, rowindex].Value = sysnode.StarTypesFound(false);
-
-                            string info = "";
-                            foreach (var scan in sysnode.Bodies)
-                            {
-                                EliteDangerousCore.JournalEvents.JournalScan sd = scan.ScanData;
-                                if (sd != null)
-                                {
-                                    if (sd.IsStar)
-                                    {
-                                        if (sd.StarTypeID == EDStar.AeBe)
-                                            info = info + " " + "AeBe";
-                                        if (sd.StarTypeID == EDStar.N)
-                                            info = info + " " + "NS";
-                                        if (sd.StarTypeID == EDStar.H)
-                                            info = info + " " + "BH";
-                                    }
-                                    else
-                                    {
-                                        if (sd.PlanetTypeID == EDPlanet.Earthlike_body)
-                                        {
-                                            info = info + " " + (sd.Terraformable ? "T-ELW" : "ELW");
-                                        }
-                                        else if (sd.PlanetTypeID == EDPlanet.Water_world)
-                                            info = info + " " + (sd.Terraformable ? "T-WW" : "WW");
-                                        else if (sd.PlanetTypeID == EDPlanet.High_metal_content_body && sd.Terraformable)
-                                            info = info + " " + "T-HMC";
-                                    }
-                                }
-                            }
-
-                            dataGridView[11, rowindex].Value = info.Trim();
-                        }
-
+                        dataGridView[Info.Index, rowindex].Value = info.Trim();
                     }
-                    else
-                        dataGridView.Rows[rowindex].ErrorText = "System not known location".T(EDTx.UserControlExpedition_EDSMUnk);
-
-
 
                 }
+                else
+                    dataGridView.Rows[rowindex].ErrorText = "System not known location".T(EDTx.UserControlExpedition_EDSMUnk);
             }
 
             txtCmlDistance.Text = txtP2PDIstance.Text = "";
