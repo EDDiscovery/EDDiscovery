@@ -29,7 +29,7 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlJournalGrid : UserControlCommonBase, IHistoryCursor
     {
-        private FilterSelector cfs;
+        private JournalFilterSelector cfs;
         private BaseUtils.ConditionLists fieldfilter = new BaseUtils.ConditionLists();
         private Dictionary<long, DataGridViewRow> rowsbyjournalid = new Dictionary<long, DataGridViewRow>();
 
@@ -75,7 +75,7 @@ namespace EDDiscovery.UserControls
             dataGridViewJournal.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             dataGridViewJournal.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
 
-            cfs = new FilterSelector();
+            cfs = new JournalFilterSelector();
             cfs.AddAllNone();
             cfs.AddJournalExtraOptions();
             cfs.AddJournalEntries();
@@ -166,7 +166,7 @@ namespace EDDiscovery.UserControls
             fdropdown = hl.Count - result.Count();
 
             result = HistoryList.FilterByJournalEvent(result, GetSetting(dbFilter, "All"), out ftotalevents);
-            result = FilterHelpers.FilterHistory(result, fieldfilter, discoveryform.Globals, out ftotalfilters);
+            result = HistoryFilterHelpers.FilterHistory(result, fieldfilter, discoveryform.Globals, out ftotalfilters);
 
             dataGridViewJournal.Rows.Clear();
             rowsbyjournalid.Clear();
@@ -281,7 +281,7 @@ namespace EDDiscovery.UserControls
                 UpdateToolTipsForFilter();
             }
 
-            if (add && !FilterHelpers.FilterHistory(he, fieldfilter, discoveryform.Globals))
+            if (add && !HistoryFilterHelpers.FilterHistory(he, fieldfilter, discoveryform.Globals))
             {
                 add = false;
                 ftotalfilters++;
@@ -396,7 +396,7 @@ namespace EDDiscovery.UserControls
 
         private void buttonField_Click(object sender, EventArgs e)
         {
-            BaseUtils.ConditionLists res = FilterHelpers.ShowDialog(FindForm(), fieldfilter, discoveryform, "Journal: Filter out fields".T(EDTx.UserControlJournalGrid_JHF));
+            BaseUtils.ConditionLists res = HistoryFilterHelpers.ShowDialog(FindForm(), fieldfilter, discoveryform, "Journal: Filter out fields".T(EDTx.UserControlJournalGrid_JHF));
             if ( res != null )
             {
                 fieldfilter = res;

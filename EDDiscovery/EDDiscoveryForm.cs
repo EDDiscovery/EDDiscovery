@@ -427,17 +427,18 @@ namespace EDDiscovery
         {
             Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " EDF shown");
 
-            Controller.PostInit_Shown();        // form is up, controller is released, create controller background thread
-
             if (EDDConfig.Instance.EDSMGridIDs == "Not Set")        // initial state
             {
                 EDDConfig.Instance.EDSMDownload = false;        // this stops the download working in the controller thread
                 var ressel = GalaxySectorSelect.SelectGalaxyMenu(this);
-                EDDConfig.Instance.EDSMDownload = ressel.Item1 != "None";
+                EDDConfig.Instance.EDSMDownload = ressel.Item2 != "None";
                 EDDConfig.Instance.EDSMGridIDs = ressel.Item2;
                 if (EDDConfig.Instance.EDSMDownload)
                     Controller.AsyncPerformSync(edsmfullsync: true, edsm_alias_sync: true);      // order another go.
             }
+
+            Controller.PostInit_Shown();        // form is up, controller is released, create controller background thread
+
 
             if (EDDOptions.Instance.NoWindowReposition == false)
                 PopOuts.LoadSavedPopouts();  //moved from initial load so we don't open these before we can draw them properly

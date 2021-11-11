@@ -33,7 +33,7 @@ namespace EDDiscovery.UserControls
         public enum PanelType { Materials, Commodities, MicroResources};
         public PanelType PanelMode;
 
-        FilterSelector cfs;
+        JournalFilterSelector cfs;
 
         uint? last_mcl = null;
 
@@ -56,7 +56,7 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.Translate(this, "UserControlMaterialCommodities", null);
             BaseUtils.Translator.Instance.Translate(this, toolTip, "UserControlMaterialCommodities");
 
-            cfs = new FilterSelector();
+            cfs = new JournalFilterSelector();
             cfs.AddAllNone();
 
             MaterialCommodityMicroResourceType[] items;

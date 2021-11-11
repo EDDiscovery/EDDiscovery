@@ -35,7 +35,7 @@ namespace EDDiscovery.UserControls
         private string dbFilter = "EventFilter2";
         private string dbFieldFilter = "FieldFilter";
 
-        private FilterSelector cfs;
+        private JournalFilterSelector cfs;
         private ConditionLists fieldfilter = new ConditionLists();
 
         private Timer scanhide = new Timer();
@@ -173,7 +173,7 @@ namespace EDDiscovery.UserControls
             if (filter.Length > 0)
                 fieldfilter.FromJSON(filter);        // load filter
 
-            cfs = new FilterSelector();
+            cfs = new JournalFilterSelector();
             cfs.AddAllNone();
             cfs.AddJournalExtraOptions();
             cfs.AddJournalEntries();
@@ -244,7 +244,7 @@ namespace EDDiscovery.UserControls
 
                 int ftotal;         // event filter
                 result = HistoryList.FilterByJournalEvent(result, GetSetting(dbFilter, "All"), out ftotal);
-                result = FilterHelpers.FilterHistory(result, fieldfilter , discoveryform.Globals, out ftotal); // and the field filter..
+                result = HistoryFilterHelpers.FilterHistory(result, fieldfilter , discoveryform.Globals, out ftotal); // and the field filter..
 
                 RevertToNormalSize();                                           // ensure size is back to normal..
                 scanpostextoffset = new Point(0, 0);                            // left/ top used by scan display
@@ -622,7 +622,7 @@ namespace EDDiscovery.UserControls
 
         public bool WouldAddEntry(HistoryEntry he)                  // do we filter? if its not in the journal event filter, or it is in the field filter
         {
-            return he.IsJournalEventInEventFilter(GetSetting(dbFilter, "All")) && FilterHelpers.FilterHistory(he, fieldfilter , discoveryform.Globals);
+            return he.IsJournalEventInEventFilter(GetSetting(dbFilter, "All")) && HistoryFilterHelpers.FilterHistory(he, fieldfilter , discoveryform.Globals);
         }
 
 #endregion
@@ -1042,7 +1042,7 @@ namespace EDDiscovery.UserControls
 
         private void configureFieldFilterToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            BaseUtils.ConditionLists res = FilterHelpers.ShowDialog(FindForm(), fieldfilter, discoveryform, "Summary Panel: Filter out fields".T(EDTx.UserControlSpanel_SPF));
+            BaseUtils.ConditionLists res = HistoryFilterHelpers.ShowDialog(FindForm(), fieldfilter, discoveryform, "Summary Panel: Filter out fields".T(EDTx.UserControlSpanel_SPF));
             if (res != null)
             {
                 fieldfilter = res;

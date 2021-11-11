@@ -27,7 +27,7 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlLedger : UserControlCommonBase
     {
-        private FilterSelector cfs;
+        private JournalFilterSelector cfs;
         private string dbFilter = "EventFilter2";
         private string dbHistorySave = "EDUIHistory";
         private int transactioncountatdisplay = 0;
@@ -49,7 +49,7 @@ namespace EDDiscovery.UserControls
             var jes = EliteDangerousCore.JournalEntry.GetNameImageOfEvents(new string[] { "Ledger" });
             string cashtype = string.Join(";", jes.Select(x=>x.Item1) ) + ";";
 
-            cfs = new FilterSelector();
+            cfs = new JournalFilterSelector();
             cfs.AddAllNone();
             cfs.AddGroupOption(cashtype, "Cash Transactions".T(EDTx.UserControlLedger_CashTransactions),  JournalEntry.JournalTypeIcons[JournalTypeEnum.Bounty]);
             cfs.AddJournalEntries(new string[] { "Ledger", "LedgerNC" });

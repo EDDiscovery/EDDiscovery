@@ -351,7 +351,7 @@
     <Compile Include="UserControls\Helpers\TagsForm.Designer.cs">
       <DependentUpon>TagsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\Helpers\Filter.cs">
+    <Compile Include="UserControls\Helpers\JournalFilterSelector.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UserControls\LogsBookmarks\CaptainsLogDiary.cs">
@@ -474,7 +474,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\Helpers\FilterHelpers.cs" />
+    <Compile Include="UserControls\Helpers\HistoryFilterHelpers.cs" />
     <Compile Include="UserControls\Helpers\TargetClassHelpers.cs" />
     <Compile Include="EDDApplicationContext.cs" />
     <Compile Include="EDDiscoveryControllerMain.cs" />
@@ -675,10 +675,10 @@
     <Compile Include="UserControls\ScansStars\UserControlScan.Designer.cs">
       <DependentUpon>UserControlScan.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\HelpersScanDisplayUC\ScanDisplayUserControl.cs">
+    <Compile Include="UserControls\Helpers\ScanDisplayUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\HelpersScanDisplayUC\ScanDisplayUserControl.Designer.cs">
+    <Compile Include="UserControls\Helpers\ScanDisplayUserControl.Designer.cs">
       <DependentUpon>ScanDisplayUserControl.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\ScansStars\UserControlScanGrid.cs">
@@ -906,7 +906,7 @@
     <EmbeddedResource Include="UserControls\ScansStars\UserControlScan.resx">
       <DependentUpon>UserControlScan.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\HelpersScanDisplayUC\ScanDisplayUserControl.resx">
+    <EmbeddedResource Include="UserControls\Helpers\ScanDisplayUserControl.resx">
       <DependentUpon>ScanDisplayUserControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\ScansStars\UserControlScanGrid.resx">

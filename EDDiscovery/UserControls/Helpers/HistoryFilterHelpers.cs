@@ -23,7 +23,7 @@ using System.Threading.Tasks;
 
 namespace EDDiscovery.UserControls
 {
-    static public class FilterHelpers
+    static public class HistoryFilterHelpers
     {
         static public List<HistoryEntry> CheckFilterTrue(List<HistoryEntry> he, BaseUtils.ConditionLists cond, BaseUtils.Variables othervars)    // conditions match for item to stay
         {

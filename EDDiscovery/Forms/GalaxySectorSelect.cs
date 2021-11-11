@@ -51,12 +51,12 @@ namespace EDDiscovery.Forms
         public List<int> AllRemoveSectors;          // For remove, all sectors not wanted
         public List<int> Removed;                   // For remove, new sectors not wanted
 
-        private static List<Tuple<string, string>> DefaultGalaxyOptions = new List<Tuple<string, string>>()
+        private static List<Tuple<string, string>> DefaultGalaxyOptions = new List<Tuple<string, string>>()     // translated name, command
         {
-            new Tuple<string,string>("Custom".T(EDTx.GalaxySectorSelect_Custom),""),
+            new Tuple<string,string>("Custom".T(EDTx.GalaxySectorSelect_Custom),"Custom"),
             new Tuple<string,string>("Reset".T(EDTx.GalaxySectorSelect_Reset),"Reset"),
             new Tuple<string,string>("All".T(EDTx.GalaxySectorSelect_All),"All"),
-            new Tuple<string,string>("None".T(EDTx.GalaxySectorSelect_None),""),
+            new Tuple<string,string>("None".T(EDTx.GalaxySectorSelect_None),"None"),
             new Tuple<string, string>("Bubble".T(EDTx.GalaxySectorSelect_Bubble),"810"),
             new Tuple<string, string>("Extended Bubble".T(EDTx.GalaxySectorSelect_ExtendedBubble),"608,609,610,611,612,708,709,710,711,712,808,809,810,811,812,908,909,910,911,912,1008,1009,1010,1011,1012"),
             new Tuple<string, string>("Bubble+Colonia".T(EDTx.GalaxySectorSelect_BC),"608,609,610,611,612,708,709,710,711,712,808,809,810,811,812,908,909,910,911,912,1008,1009,1010,1011,1012,1108,1109,1110,1207,1208,1209,1306,1307,1308,1405,1406,1407,1504,1505,1603,1604,1703"),
@@ -230,7 +230,7 @@ namespace EDDiscovery.Forms
         {
             ExtendedControls.ConfigurableForm f = new ExtendedControls.ConfigurableForm();
 
-            var list = DefaultGalaxyOptions.Where(x => x.Item1 != "Custom" && x.Item1 != "Reset").Select(x => x.Item1).ToList();
+            var list = DefaultGalaxyOptions.Where(x => x.Item2 != "Custom" && x.Item2 != "Reset").Select(x => x.Item1).ToList();
 
             int width = 500;
             f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "ED Discovery downloads star data from EDSM which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed".T(EDTx.GalaxySectorSelect_GALSELEX), 

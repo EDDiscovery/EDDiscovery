@@ -25,9 +25,9 @@ namespace EDDiscovery.UserControls
 {
     // Extends the filter form to know how to save back to DB.  and to add some standard option lists in
 
-    public class FilterSelector : ExtendedControls.CheckedIconListBoxFormGroup
+    public class JournalFilterSelector : ExtendedControls.CheckedIconListBoxFormGroup
     {
-        public FilterSelector() : base()
+        public JournalFilterSelector() : base()
         {
             CloseOnDeactivate = false;          // this one, we hide it on deactivate, to make it pop up quicker next time
             HideOnDeactivate = true;
@@ -35,7 +35,7 @@ namespace EDDiscovery.UserControls
 
         public void AddJournalExtraOptions()
         {
-            AddGroupOption("ApproachBody;Docked;FSDJump;CarrierJump;Location;Undocked;", "Travel".T(EDTx.FilterSelector_Travel), JournalEntry.JournalTypeIcons[JournalTypeEnum.FSDJump]);
+            AddGroupOption("ApproachBody;Docked;FSDJump;CarrierJump;Location;Undocked;NavRoute", "Travel".T(EDTx.FilterSelector_Travel), JournalEntry.JournalTypeIcons[JournalTypeEnum.FSDJump]);
 
             AddGroupOption("Scan;Scan Auto;Scan Basic;Scan Nav;NavBeaconScan;SAAScanComplete;FSSAllBodiesFound;FSSSignalDiscovered;FSSDiscoveryScan;DiscoveryScan;SAASignalsFound;FSSBodySignals", "Scan".T(EDTx.FilterSelector_Scan), JournalEntry.JournalTypeIcons[JournalTypeEnum.Scan]);
 

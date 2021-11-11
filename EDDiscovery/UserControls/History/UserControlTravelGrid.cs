@@ -82,7 +82,7 @@ namespace EDDiscovery.UserControls
 
         private Dictionary<long, DataGridViewRow> rowsbyjournalid = new Dictionary<long, DataGridViewRow>();
 
-        private FilterSelector cfs;
+        private JournalFilterSelector cfs;
 
         private Timer searchtimer;
 
@@ -101,7 +101,7 @@ namespace EDDiscovery.UserControls
 
             //System.Diagnostics.Debug.WriteLine("Travel grid is " + this.GetHashCode());
 
-            cfs = new FilterSelector();
+            cfs = new JournalFilterSelector();
             cfs.AddAllNone();
             cfs.AddJournalExtraOptions();
             cfs.AddJournalEntries();
@@ -225,7 +225,7 @@ namespace EDDiscovery.UserControls
 
             result = HistoryList.FilterByJournalEvent(result, GetSetting(dbFilter, "All"), out ftotalevents);
 
-            result = FilterHelpers.FilterHistory(result, fieldfilter, discoveryform.Globals, out ftotalfilters);
+            result = HistoryFilterHelpers.FilterHistory(result, fieldfilter, discoveryform.Globals, out ftotalfilters);
 
             panelOutlining.Clear();
             dataGridViewTravel.Rows.Clear();
@@ -395,7 +395,7 @@ namespace EDDiscovery.UserControls
                 UpdateToolTipsForFilter();
             }
 
-            if (add && !FilterHelpers.FilterHistory(he, fieldfilter, discoveryform.Globals))
+            if (add && !HistoryFilterHelpers.FilterHistory(he, fieldfilter, discoveryform.Globals))
             {
                 add = false;
                 ftotalfilters++;
@@ -1138,7 +1138,7 @@ namespace EDDiscovery.UserControls
 
         private void buttonField_Click(object sender, EventArgs e)
         {
-            BaseUtils.ConditionLists res = FilterHelpers.ShowDialog(FindForm(), fieldfilter, discoveryform, "History: Filter out fields".T(EDTx.UserControlTravelGrid_THF));
+            BaseUtils.ConditionLists res = HistoryFilterHelpers.ShowDialog(FindForm(), fieldfilter, discoveryform, "History: Filter out fields".T(EDTx.UserControlTravelGrid_THF));
             if (res != null)
             {
                 fieldfilter = res;
