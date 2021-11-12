@@ -537,7 +537,7 @@ namespace EDDiscovery.UserControls
 
         private void toolStripMenuItemGotoStar3dmap_Click(object sender, EventArgs e)
         {
-            EliteDangerousCore.ISystem s = discoveryform.history.FindSystem(rightclickentry.SystemName, discoveryform.galacticMapping, true);
+            EliteDangerousCore.ISystem s = SystemCache.FindSystem(rightclickentry.SystemName, discoveryform.galacticMapping, true);
             discoveryform.Open3DMap(s);
         }
 
@@ -554,7 +554,7 @@ namespace EDDiscovery.UserControls
 
         private void openAScanPanelViewToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ISystem sys = discoveryform.history.FindSystem(rightclickentry.SystemName, discoveryform.galacticMapping, true);
+            ISystem sys = SystemCache.FindSystem(rightclickentry.SystemName, discoveryform.galacticMapping, true);
 
             if ( sys != null )
                 ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), sys, true, discoveryform.history);

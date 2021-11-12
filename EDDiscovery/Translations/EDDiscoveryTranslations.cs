@@ -504,6 +504,8 @@ namespace EDDiscovery
         UserControlExpedition_Conflict, // The current route name conflicts with a well-known expedition.
         UserControlExpedition_Overwrite, // Warning: route already exists. Would you like to overwrite it?
         UserControlExpedition_EDSMUnk, // System not known to EDSM
+        UserControlExpedition_UnkSystem, 
+        UserControlExpedition_NoScanInfo,
         UserControlExpedition_Specify, // Please specify a name for the route.
         UserControlExpedition_UnknownS, // Unknown system, system is without co-ordinates
         UserControlExpedition_Createroute, // Please create a route on a route panel

@@ -278,7 +278,7 @@ namespace EDDiscovery.UserControls
                 {
                     string infoline = "";
 
-                    int scanned = systemnode.StarPlanetsScanned();
+                    int scanned = checkEDSMForInformationToolStripMenuItem.Checked ? systemnode.StarPlanetsScanned() : systemnode.StarPlanetsScannednonEDSM();
 
                     if (!checkEDSMForInformationToolStripMenuItem.Checked)
                     {

@@ -130,7 +130,7 @@ namespace EDDiscovery.Actions
                             else if (cmdname.Equals("NOTE", StringComparison.InvariantCultureIgnoreCase))
                             {
                                 SystemNoteClass nc = SystemNoteClass.GetNoteOnSystem(name);        // has it got a note?
-                                ISystem sc = discoveryform.history.FindSystem(name, discoveryform.galacticMapping, true);
+                                ISystem sc = SystemCache.FindSystem(name, discoveryform.galacticMapping, true);
 
                                 if ( sc != null && sc.HasCoordinate && nc != null )
                                 {

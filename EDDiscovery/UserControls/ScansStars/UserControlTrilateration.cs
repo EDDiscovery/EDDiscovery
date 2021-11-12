@@ -176,7 +176,7 @@ namespace EDDiscovery.UserControls
                         return;
                     }
 
-                    var system = discoveryform.history.FindSystem(value, discoveryform.galacticMapping, false);
+                    var system = SystemCache.FindSystem(value, discoveryform.galacticMapping, false);
                     var enteredSystems = GetEnteredSystems();
                     if (cell.Value != null)
                     {
@@ -574,7 +574,7 @@ namespace EDDiscovery.UserControls
                 sysName = r.Cells[1].Value.ToString();
                 if (r.Cells[0].Value.ToString() == "Local")
                 {
-                    var sys =discoveryform.history.FindSystem(sysName, discoveryform.galacticMapping, false);
+                    var sys = SystemCache.FindSystem(sysName, discoveryform.galacticMapping, false);
                     if (sys == null)
                         edsmCheckNames.Add(sysName);
                     else
@@ -847,7 +847,7 @@ namespace EDDiscovery.UserControls
          * it creates a new System entity, otherwise logs it and returns null. */
         private ISystem getSystemForTrilateration(string systemName, bool fromEDSM)
         {
-            var system = discoveryform.history.FindSystem(systemName, discoveryform.galacticMapping, false);
+            var system = SystemCache.FindSystem(systemName, discoveryform.galacticMapping, false);
 
             if (system == null)
             {
@@ -895,7 +895,7 @@ namespace EDDiscovery.UserControls
             {
                 foreach (WantedSystemClass sys in wanted)
                 {
-                    ISystem star = discoveryform.history.FindSystem(sys.system, discoveryform.galacticMapping, false);
+                    ISystem star = SystemCache.FindSystem(sys.system, discoveryform.galacticMapping, false);
                     if (star == null)
                         star = new SystemClass(sys.system);
 
@@ -920,7 +920,7 @@ namespace EDDiscovery.UserControls
 
                 foreach (var system in pushed)
                 {
-                    ISystem star = discoveryform.history.FindSystem(system, discoveryform.galacticMapping, false);
+                    ISystem star = SystemCache.FindSystem(system, discoveryform.galacticMapping, false);
                     if (star == null)
                         star = new SystemClass(system);
 
@@ -970,7 +970,7 @@ namespace EDDiscovery.UserControls
 
                 foreach (string systemName in sector)
                 {
-                    ISystem star = discoveryform.history.FindSystem(systemName, discoveryform.galacticMapping, false);
+                    ISystem star = SystemCache.FindSystem(systemName, discoveryform.galacticMapping, false);
                     if (star == null)
                         star = new SystemClass(systemName);
 
@@ -1028,7 +1028,7 @@ namespace EDDiscovery.UserControls
                 if (oldSystem != null && !oldSystem.HasCoordinate)
                 {
                     var value = systemCell.Value as string;
-                    var newSystem = discoveryform.history.FindSystem(value, discoveryform.galacticMapping, false);
+                    var newSystem = SystemCache.FindSystem(value, discoveryform.galacticMapping, false);
                     if (newSystem != null && newSystem.HasCoordinate)
                     {
                         systemCell.Tag = newSystem;
@@ -1098,7 +1098,7 @@ namespace EDDiscovery.UserControls
 
                 wanted.Add(toAdd);
 
-                ISystem star = discoveryform.history.FindSystem(sysName, discoveryform.galacticMapping, false); 
+                ISystem star = SystemCache.FindSystem(sysName, discoveryform.galacticMapping, false); 
                 if (star == null)
                     star = new SystemClass(sysName);
 
