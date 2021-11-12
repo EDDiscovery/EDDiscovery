@@ -211,7 +211,7 @@ namespace EDDiscovery.UserControls
 
             if (sender == textBox_From)
             {
-                ISystem ds1 = discoveryform.history.FindSystem(SystemNameOnly(textBox_From.Text), discoveryform.galacticMapping, true);     // if we have a name, find it
+               ISystem ds1 = SystemCache.FindSystem(SystemNameOnly(textBox_From.Text), discoveryform.galacticMapping, true);     // if we have a name, find it
                 if (ds1 != null)
                 {
                     textBox_FromName.Text = ds1.Name;
@@ -330,7 +330,7 @@ namespace EDDiscovery.UserControls
 
             if (sender == textBox_To)
             {
-                ISystem ds1 = discoveryform.history.FindSystem(SystemNameOnly(textBox_To.Text), discoveryform.galacticMapping, true);
+                ISystem ds1 = SystemCache.FindSystem(SystemNameOnly(textBox_To.Text), discoveryform.galacticMapping, true);
                 if (ds1 != null)
                 {
                     textBox_ToName.Text = ds1.Name;

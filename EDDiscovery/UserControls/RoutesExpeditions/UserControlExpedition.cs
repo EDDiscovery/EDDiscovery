@@ -72,7 +72,7 @@ namespace EDDiscovery.UserControls
             checkBoxEDSM.Checked = GetSetting(dbEDSM, false);
             this.checkBoxEDSM.CheckedChanged += new System.EventHandler(this.checkBoxEDSM_CheckedChanged);
 
-            autoupdateedsm = new Timer() { Interval = 2000 };
+            autoupdateedsm = new Timer() { Interval = 1000 };
             autoupdateedsm.Tick += Autoupdateedsm_Tick;
             autoupdateedsm.Start();     // something to display..
 
@@ -241,17 +241,14 @@ namespace EDDiscovery.UserControls
             bool showrings = displayfilters.Contains("rings");
             bool showorganics = displayfilters.Contains("organics");
 
-            ISystem prevlinesys = null;
-
             for (int rowindex = rowstart; rowindex <= Math.Min(rowendinc, dataGridView.Rows.Count-1); rowindex++)
             {
-                string sysname = dataGridView[0, rowindex].Value as string;       // value may be null, so protect (2999)
+                DataGridViewRow row = dataGridView.Rows[rowindex];
+
+                string sysname = row.Cells[0].Value as string;       // value may be null, so protect (2999)
 
                 if (!sysname.HasChars())
-                {
-                    prevlinesys = null;
                     continue;
-                }
 
                 string note = "";
                 SystemNoteClass sysnote = SystemNoteClass.GetNoteOnSystem(sysname);
@@ -266,47 +263,46 @@ namespace EDDiscovery.UserControls
                 if (gmo != null && !string.IsNullOrWhiteSpace(gmo.Description))
                     note = note.AppendPrePad(gmo.Description, "; ");
 
-                dataGridView[Note.Index, rowindex].Value = note;
+                row.Cells[Note.Index].Value = note;
 
                 // find in history, and the DB, and EDSM, the system..
 
-                var sys = discoveryform.history.FindSystem(sysname, discoveryform.galacticMapping, edsmcheck );
-                dataGridView.Rows[rowindex].Tag = sys;
-                dataGridView.Rows[rowindex].Cells[0].Style.ForeColor = (sys != null && sys.HasCoordinate) ? Color.Empty : discoveryform.theme.UnknownSystemColor;
+                var sys = SystemCache.FindSystem(sysname, discoveryform.galacticMapping, edsmcheck );
+                row.Tag = sys;
+                row.Cells[0].Style.ForeColor = (sys?.HasCoordinate ?? false) ? Color.Empty : discoveryform.theme.UnknownSystemColor;
 
-                string dist = "";
-                if ((sys?.HasCoordinate ?? false) && (prevlinesys?.HasCoordinate ?? false))
+                row.Cells[Visits.Index].Value = discoveryform.history.Visits(sysname).ToString("0");
+
+                if ( sys == null )
                 {
-                    dist = sys.Distance(prevlinesys).ToString("0.#");
+                    row.Cells[Distance.Index].Value =
+                    row.Cells[ColumnX.Index].Value =
+                    row.Cells[ColumnY.Index].Value =
+                    row.Cells[ColumnZ.Index].Value =
+                    row.Cells[CurDist.Index].Value =
+                    row.Cells[Scans.Index].Value =
+                    row.Cells[Bodies.Index].Value =
+                    row.Cells[Stars.Index].Value = "";
+                    row.Cells[Info.Index].Value = "System not known".T(EDTx.UserControlExpedition_EDSMUnk);
                 }
-
-                prevlinesys = sys;
-
-                dataGridView[Distance.Index, rowindex].Value = dist;
-
-                if (sys != null && sys.HasCoordinate)
+                else 
                 {
-                    dataGridView[ColumnX.Index, rowindex].Value = sys.X.ToString("0.#");
-                    dataGridView[ColumnY.Index, rowindex].Value = sys.Y.ToString("0.#");
-                    dataGridView[ColumnZ.Index, rowindex].Value = sys.Z.ToString("0.#");
-                    dataGridView.Rows[rowindex].ErrorText = "";
+                    ISystem prevlinesys = rowindex > 0 ? dataGridView.Rows[rowindex - 1].Tag as ISystem : null;
+                    row.Cells[Distance.Index].Value = (prevlinesys?.HasCoordinate ?? false) ? sys.Distance(prevlinesys).ToString("0.#") : "";
 
-                    if (currentSystem?.HasCoordinate ?? false)
-                    {
-                        dataGridView[CurDist.Index, rowindex].Value = sys.Distance(currentSystem).ToString("0.#");
-                    }
+                    row.Cells[ColumnX.Index].Value = sys.X.ToString("0.#");
+                    row.Cells[ColumnY.Index].Value = sys.Y.ToString("0.#");
+                    row.Cells[ColumnZ.Index].Value = sys.Z.ToString("0.#");
 
-                    dataGridView[Visits.Index, rowindex].Value = discoveryform.history.Visits(sysname).ToString("0");
+                    row.Cells[CurDist.Index].Value = (currentSystem?.HasCoordinate ?? false) ? sys.Distance(currentSystem).ToString("0.#") : "";
 
                     StarScan.SystemNode sysnode = discoveryform.history.StarScan.FindSystemSynchronous(sys, edsmcheck);
 
                     if (sysnode != null)
                     {
-                        dataGridView[Scans.Index, rowindex].Value = sysnode.StarPlanetsScanned().ToString("0");
-                        if (sysnode.FSSTotalBodies.HasValue)
-                            dataGridView[Bodies.Index, rowindex].Value = sysnode.FSSTotalBodies.Value.ToString("0");
-
-                        dataGridView[Stars.Index, rowindex].Value = sysnode.StarTypesFound(false);
+                        row.Cells[Scans.Index].Value = sysnode.StarPlanetsScanned().ToString("0");
+                        row.Cells[Bodies.Index].Value = sysnode.FSSTotalBodies.HasValue ? sysnode.FSSTotalBodies.Value.ToString("0") : "";
+                        row.Cells[Stars.Index].Value = sysnode.StarTypesFound(false);
 
                         string info = "";
                         foreach (var sn in sysnode.Bodies)
@@ -331,12 +327,14 @@ namespace EDDiscovery.UserControls
 
                         }
 
-                        dataGridView[Info.Index, rowindex].Value = info.Trim();
+                        row.Cells[Info.Index].Value = info.Trim();
                     }
-
+                    else
+                    {
+                        // cells[0].tag holds if we have checked EDSM for position..
+                        row.Cells[Info.Index].Value = row.Cells[0].Tag != null ? "System not known to EDSM".T(EDTx.UserControlExpedition_EDSMUnk) : "No local scan info".T(EDTx.UserControlExpedition_NoScanInfo);
+                    }
                 }
-                else
-                    dataGridView.Rows[rowindex].ErrorText = "System not known location".T(EDTx.UserControlExpedition_EDSMUnk);
             }
 
             ISystem firstsys = null;
@@ -379,12 +377,16 @@ namespace EDDiscovery.UserControls
                 var row = dataGridView.Rows[rowindex];
                 if (row.Cells[0].Value != null && ((string)row.Cells[0].Value).HasChars() && row.Cells[0].Tag == null)
                 {
+                    row.Cells[0].Tag = true;            // mark as checked
+
                     var sys = row.Tag as ISystem;
 
                     if (sys == null)      // no system , look up system and bodies
                     {
                         System.Diagnostics.Debug.WriteLine($"Expedition - Don't know about {dataGridView[0, rowindex].Value}");
                         UpdateSystemRows(rowindex, rowindex, true);
+                        if ( row.Tag == null )
+                            System.Diagnostics.Debug.WriteLine($"Expedition - EDSM does not know about {dataGridView[0, rowindex].Value}");
                     }
                     else if (!discoveryform.history.StarScan.HasWebLookupOccurred(sys))     // we have a system, did we check the bodies?
                     {
@@ -392,7 +394,6 @@ namespace EDDiscovery.UserControls
                         UpdateSystemRows(rowindex, rowindex, true);
                     }
 
-                    row.Cells[0].Tag = true;            // mark as checked
                     break;
                 }
             }
@@ -673,8 +674,6 @@ namespace EDDiscovery.UserControls
                         systems.Add(s.StarSystem);
                     }
                 }
-
-                SystemCache.UpdateDBWithSystems(systems);           // try and fill DB with them - which means the rest of the system now knows the name/location
 
                 UpdateSystemRows();
             }
@@ -1059,7 +1058,7 @@ namespace EDDiscovery.UserControls
             if (obj == null)
                 return;
 
-            ISystem sc = discoveryform.history.FindSystem((string)obj,discoveryform.galacticMapping, true);     // use EDSM directly if required
+            ISystem sc = SystemCache.FindSystem((string)obj,discoveryform.galacticMapping, true);     // use EDSM directly if required
 
             if (sc == null)
             {
@@ -1080,18 +1079,7 @@ namespace EDDiscovery.UserControls
         {
             if (e.ColumnIndex == 0 && e.RowIndex>=0 && e.RowIndex < dataGridView.RowCount)
             {
-                string sysname = e.FormattedValue as string;
                 var row = dataGridView.Rows[e.RowIndex];
-
-                if (sysname.HasChars() && discoveryform.history.FindSystem(sysname, discoveryform.galacticMapping, true) == null)
-                {
-                    row.ErrorText = "System not known location".T(EDTx.UserControlExpedition_EDSMUnk);
-                }
-                else
-                {
-                    row.ErrorText = "";
-                }
-
                 row.Cells[0].Tag = null;        // reset the EDSM check
             }
         }

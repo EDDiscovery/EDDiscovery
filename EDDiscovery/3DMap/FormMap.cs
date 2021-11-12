@@ -2190,7 +2190,7 @@ namespace EDDiscovery
             if (checksystemdb)
             {
                 Cursor = Cursors.WaitCursor;
-                ISystem sys = discoveryForm.history.FindSystem(name, discoveryForm.galacticMapping, true);      // find system
+                ISystem sys = SystemCache.FindSystem(name, discoveryForm.galacticMapping, true);      // find system
                 Cursor = Cursors.Default;
                 return sys;
             }

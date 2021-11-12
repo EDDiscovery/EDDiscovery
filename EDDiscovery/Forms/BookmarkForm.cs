@@ -266,7 +266,7 @@ namespace EDDiscovery.Forms
         {
             if ( validatestarname )
             {
-                ISystem f = helist.FindSystem(textBoxName.Text,null,false);       // no edsm lookup, too slow to do interactively.
+                ISystem f = SystemCache.FindSystem(textBoxName.Text,null,false);       // no edsm lookup, too slow to do interactively.
                 if (f != null && f.HasCoordinate)
                 {
                     InitialisePos(f);

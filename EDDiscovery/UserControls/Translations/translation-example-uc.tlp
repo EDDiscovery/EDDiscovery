@@ -249,6 +249,8 @@ SECTION UserControlExpedition
 .Conflict: "The current route name conflicts with a well-known expedition.\r\nPlease specify a new name to save your changes." @
 .Overwrite: "Warning: route already exists. Would you like to overwrite it?" @
 .EDSMUnk: "System not known to EDSM" @
+.NoScanInfo : "No local scan info" @
+.UnkSystem: "Unknown System" @
 
 .ColumnX: "X" @
 .ColumnY: "Y" @

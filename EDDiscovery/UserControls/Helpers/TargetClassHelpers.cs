@@ -52,7 +52,7 @@ namespace EDDiscovery.UserControls
                 return;
             }
 
-            ISystem sc = discoveryform.history.FindSystem(sn, discoveryform.galacticMapping, true);
+            ISystem sc = SystemCache.FindSystem(sn, discoveryform.galacticMapping, true);
             string msgboxtext = null;
 
             if (sc != null && sc.HasCoordinate)
