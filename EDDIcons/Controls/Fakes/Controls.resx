@@ -142,26 +142,8 @@
   <data name="Expedition_ShowOnMap" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Expedition\ShowOnMap.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Exploration_Delete" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Exploration\Delete.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Exploration_Export" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Exploration\Export.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Exploration_ImportFile" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Exploration\ImportFile.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="Exploration_ImportSphere" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Exploration\ImportSphere.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Exploration_Load" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Exploration\Load.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Exploration_New" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Exploration\New.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Exploration_Save" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Exploration\Save.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="JournalGrid_ExportToExcel" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\JournalGrid\ExportToExcel.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -678,5 +660,17 @@
   </data>
   <data name="Expedition_ImportSphere" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Expedition\ImportSphere.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FSSBodySignals" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\journal\fssbodysignals.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="AlignCentre" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\surveyor\aligncentre.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="AlignLeft" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\surveyor\alignleft.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="AlignRight" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\surveyor\alignright.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

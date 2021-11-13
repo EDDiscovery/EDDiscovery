@@ -36,6 +36,8 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.Timer toupdatetimer;
         private ManualResetEvent CloseRequested = new ManualResetEvent(false);
 
+        private string dbEDSM = "EDSM";
+
         public UserControlRoute()
         {
             InitializeComponent();
@@ -94,6 +96,9 @@ namespace EDDiscovery.UserControls
             changesilence = false;
 
             comboBoxRoutingMetric.Enabled = true;
+
+            checkBoxEDSM.Checked = GetSetting(dbEDSM, false);
+            this.checkBoxEDSM.CheckedChanged += new System.EventHandler(this.checkBoxEDSM_CheckedChanged);
 
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
@@ -445,6 +450,7 @@ namespace EDDiscovery.UserControls
                 plotter.ToSystem = !textBox_ToName.Text.Contains("@") && textBox_To.Text.HasChars() ? textBox_To.Text : "END POINT";
                 plotter.RouteMethod = (SystemsDB.SystemsNearestMetric) comboBoxRoutingMetric.SelectedIndex;
                 plotter.UseFsdBoost = checkBox_FsdBoost.Checked;
+                plotter.EDSM = checkBoxEDSM.Checked;
 
                 int PossibleJumps = (int)(Point3D.DistanceBetween(plotter.Coordsfrom, plotter.Coordsto) / plotter.MaxRange);
 
@@ -544,6 +550,7 @@ namespace EDDiscovery.UserControls
             }
         }
 
+
         private void comboBoxRoutingMetric_SelectedIndexChanged(object sender, EventArgs e)
         {
             button_Route.Enabled = IsValid();
@@ -611,15 +618,14 @@ namespace EDDiscovery.UserControls
             }
         }
 
-
+        private void checkBoxEDSM_CheckedChanged(object sender, EventArgs e)
+        {
+            PutSetting(dbEDSM, checkBoxEDSM.Checked);
+        }
 
         #endregion
 
-
-
-
         #region Excel
-
         private void buttonExtExcel_Click(object sender, EventArgs e)
         {
             if ( dataGridViewRoute.Rows.Count == 0)
@@ -680,8 +686,5 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
-
-
-        
     }
 }

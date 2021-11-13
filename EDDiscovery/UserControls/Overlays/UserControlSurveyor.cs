@@ -15,6 +15,7 @@
  */
 using EliteDangerousCore;
 using EliteDangerousCore.JournalEvents;
+using ExtendedControls;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -51,91 +52,16 @@ namespace EDDiscovery.UserControls
 
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
-            BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
 
-            // set context menu checkboxes
-            showValuesToolStripMenuItem.Checked = GetSetting("showValues", true);
-            ammoniaWorldToolStripMenuItem.Checked = GetSetting("showAmmonia", true);
-            earthlikeWorldToolStripMenuItem.Checked = GetSetting("showEarthlike", true);
-            waterWorldToolStripMenuItem.Checked = GetSetting("showWaterWorld", true);
-            highMetalContentBodyToolStripMenuItem.Checked = GetSetting("showHMC", true);
-            metalToolStripMenuItem.Checked = GetSetting("showMR", true);
-            terraformableToolStripMenuItem.Checked = GetSetting("showTerraformable", true);
-            hasVolcanismToolStripMenuItem.Checked = GetSetting("showVolcanism", true);
-            highEccentricityToolStripMenuItem.Checked = GetSetting("showEccentricity", true);
-            landableToolStripMenuItem.Checked = GetSetting("isLandable", true);
-            landableWithAtmosphereToolStripMenuItem.Checked = GetSetting("isLandableWithAtmosphere", true);
-            landableWithVolcanismToolStripMenuItem.Checked = GetSetting("isLandableWithVolcanism", true);
-            landableAndLargeToolStripMenuItem.Checked = GetSetting("largelandable", true);
-            showAtmosToolStripMenuItem.Checked = GetSetting("atmos", true);
-            hasRingsToolStripMenuItem.Checked = GetSetting("showRinged", true);
-            showGravityToolStripMenuItem.Checked = GetSetting("showGravity", true);
-            showVolcanismToolStripMenuItem.Checked = GetSetting("volcanism", true);
-            hideAlreadyMappedBodiesToolStripMenuItem.Checked = GetSetting("hideMapped", true);
-            autoHideToolStripMenuItem.Checked = GetSetting("autohide", false);
-            lowRadiusToolStripMenuItem.Checked = GetSetting("lowradius", false);
-            checkEDSMForInformationToolStripMenuItem.Checked = GetSetting("edsm", false);
-            showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem.Checked = GetSetting("showsysinfo", true);
-            dontHideInFSSModeToolStripMenuItem.Checked = GetSetting("donthidefssmode", true);
-            hasSignalsToolStripMenuItem.Checked = GetSetting("signals", true);
-            hasGeologicalSignalsToolStripMenuItem.Checked = GetSetting("GeoSignals", true);
-            hasBiologicalSignalsToolStripMenuItem.Checked = GetSetting("BioSignals", true);
-            showAllPlanetsToolStripMenuItem.Checked = GetSetting("allplanets", false);
-            showAllStarsToolStripMenuItem.Checked = GetSetting("allstars", false);
-            showBeltClustersToolStripMenuItem.Checked = GetSetting("beltclusters", false);
-            showMoreInformationToolStripMenuItem.Checked = GetSetting("moreinfo", true);
-            wordWrapToolStripMenuItem.Checked = GetSetting("wordwrap", false);
+            checkBoxEDSM.Checked = GetSetting("edsm", false);
+            checkBoxEDSM.Click += new System.EventHandler(this.checkBoxEDSM_Clicked);
+
+            PopulateCtrlList();
+
+            extCheckBoxWordWrap.Checked = GetSetting("wordwrap", false);
+            extCheckBoxWordWrap.Click += wordWrapToolStripMenuItem_Click;
 
             fsssignalsdisplayed = GetSetting("fsssignals", "");
-
-            SetAlign((StringAlignment)GetSetting("align", 0));
-
-            // install the handlers AFTER setup otherwise you get lots of events
-
-            // planetary classes
-            this.ammoniaWorldToolStripMenuItem.Click += new System.EventHandler(this.ammoniaWorldToolStripMenuItem_Click);
-            this.earthlikeWorldToolStripMenuItem.Click += new System.EventHandler(this.earthlikeWorldToolStripMenuItem_Click);
-            this.waterWorldToolStripMenuItem.Click += new System.EventHandler(this.waterWorldToolStripMenuItem_Click);
-            this.highMetalContentBodyToolStripMenuItem.Click += new System.EventHandler(this.highMetalContentBodyToolStripMenuItem_Click);
-            this.metalToolStripMenuItem.Click += new System.EventHandler(this.metalToolStripMenuItem_Click);
-
-            // body features
-            this.terraformableToolStripMenuItem.Click += new System.EventHandler(this.terraformableToolStripMenuItem_Click);
-            this.hasVolcanismToolStripMenuItem.Click += new System.EventHandler(this.hasVolcanismToolStripMenuItem_Click);
-            this.hasRingsToolStripMenuItem.Click += new System.EventHandler(this.hasRingsToolStripMenuItem_Click);
-            this.highEccentricityToolStripMenuItem.Click += new System.EventHandler(this.highEccentricityToolStripMenuItem_Click);
-            this.lowRadiusToolStripMenuItem.Click += new System.EventHandler(this.lowRadiusToolStripMenuItem_Click);
-            this.hasSignalsToolStripMenuItem.Click += new System.EventHandler(this.hasSignalsToolStripMenuItem_Click);
-            this.hasGeologicalSignalsToolStripMenuItem.Click += new System.EventHandler(this.hasGeologicalSignalsToolStripMenuItem_Click);
-            this.hasBiologicalSignalsToolStripMenuItem.Click += new System.EventHandler(this.hasBiologicalSignalsToolStripMenuItem_Click);
-            this.landableToolStripMenuItem.Click += new System.EventHandler(this.landableToolStripMenuItem_Click);
-            this.landableWithAtmosphereToolStripMenuItem.Click += new System.EventHandler(this.landableWithAtmosphereToolStripMenuItem_Click);
-            this.landableAndLargeToolStripMenuItem.Click += new System.EventHandler(this.landableAndLargeToolStripMenuItem_Click);
-            this.landableWithVolcanismToolStripMenuItem.Click += new System.EventHandler(this.landableWithVolcanismToolStripMenuItem_Click);
-
-            // main menu
-            this.showAllPlanetsToolStripMenuItem.Click += new System.EventHandler(this.showAllPlanetsToolStripMenuItem_Click);
-            this.showAllStarsToolStripMenuItem.Click += new System.EventHandler(this.showAllStarsToolStripMenuItem_Click);
-            this.showBeltClustersToolStripMenuItem.Click += new System.EventHandler(this.showBeltClustersToolStripMenuItem_Click);
-            this.showGravityToolStripMenuItem.Click += new System.EventHandler(this.showGravityToolStripMenuItem_Click);
-            this.showAtmosToolStripMenuItem.Click += new System.EventHandler(this.showAtmosToolStripMenuItem_Click);
-            this.showVolcanismToolStripMenuItem.Click += new System.EventHandler(this.showVolcanismToolStripMenuItem_Click);
-            this.showValuesToolStripMenuItem.Click += new System.EventHandler(this.showValuesToolStripMenuItem_Click);
-            this.showMoreInformationToolStripMenuItem.Click += new System.EventHandler(this.showMoreInformationToolStripMenuItem_Click);
-            this.selectFSSSignalsShownToolStripMenuItem.Click += new System.EventHandler(this.selectFSSSignalsShownToolStripMenuItem_Click);
-
-            // bottom part
-            this.hideAlreadyMappedBodiesToolStripMenuItem.Click += new System.EventHandler(this.hideAlreadyMappedBodiesToolStripMenuItem_Click);
-            this.checkEDSMForInformationToolStripMenuItem.Click += new System.EventHandler(this.checkEDSMForInformationToolStripMenuItem_Click);
-            this.autoHideToolStripMenuItem.Click += new System.EventHandler(this.autoHideToolStripMenuItem_Click);
-            this.dontHideInFSSModeToolStripMenuItem.Click += new System.EventHandler(this.dontHideInFSSModeToolStripMenuItem_Click);
-            this.showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem.Click += new System.EventHandler(this.showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem_Click);
-
-            // word wrap align
-            this.wordWrapToolStripMenuItem.Click += new System.EventHandler(this.wordWrapToolStripMenuItem_Click);
-            this.leftToolStripMenuItem.Click += new System.EventHandler(this.leftToolStripMenuItem_Click);
-            this.centerToolStripMenuItem.Click += new System.EventHandler(this.centerToolStripMenuItem_Click);
-            this.rightToolStripMenuItem.Click += new System.EventHandler(this.rightToolStripMenuItem_Click);
 
             discoveryform.OnNewUIEvent += Discoveryform_OnNewUIEvent;
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
@@ -177,6 +103,7 @@ namespace EDDiscovery.UserControls
         {
             extPictureBoxScroll.ScrollBarEnabled = !on;     // turn off the scroll bar if its transparent
             extPictureBoxScroll.BackColor =  pictureBoxSurveyor.BackColor = this.BackColor = curcol;
+            rollUpPanelTop.Visible = !on;
             DrawSystem(last_sys);   // need to redraw as we use backcolour
         }
 
@@ -236,7 +163,6 @@ namespace EDDiscovery.UserControls
         #endregion
 
         #region Main
-
         async private void DrawSystem(ISystem sys, string tt = null)
         {
             if ( tt != null )
@@ -248,16 +174,16 @@ namespace EDDiscovery.UserControls
             pictureBoxSurveyor.ClearImageList();
 
             // if system, and we are in no focus or don't care
-            if (sys != null && ( uistate == EliteDangerousCore.UIEvents.UIGUIFocus.Focus.NoFocus || !autoHideToolStripMenuItem.Checked 
-                                || ( uistate == EliteDangerousCore.UIEvents.UIGUIFocus.Focus.FSSMode && dontHideInFSSModeToolStripMenuItem.Checked) ) )
+            if (sys != null && ( uistate == EliteDangerousCore.UIEvents.UIGUIFocus.Focus.NoFocus || !IsSet(CtrlList.autohide)
+                                || ( uistate == EliteDangerousCore.UIEvents.UIGUIFocus.Focus.FSSMode && IsSet(CtrlList.donthidefssmode)) ) )
             {
                 int vpos = 0;
-                StringFormat frmt = new StringFormat(wordWrapToolStripMenuItem.Checked ? 0: StringFormatFlags.NoWrap);
+                StringFormat frmt = new StringFormat(extCheckBoxWordWrap.Checked ? 0: StringFormatFlags.NoWrap);
                 frmt.Alignment = alignment;
                 var textcolour = IsTransparent ? discoveryform.theme.SPanelColor : discoveryform.theme.LabelColor;
                 var backcolour = IsTransparent ? Color.Transparent : this.BackColor;
 
-                if (!IsControlTextVisible() && showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem.Checked)
+                if (!IsControlTextVisible() && IsSet(CtrlList.showsysinfo))
                 {
                     var i = pictureBoxSurveyor.AddTextAutoSize(
                             new Point(3, vpos),
@@ -272,13 +198,13 @@ namespace EDDiscovery.UserControls
                     vpos += i.Location.Height;
                 }
 
-                StarScan.SystemNode systemnode = await discoveryform.history.StarScan.FindSystemAsync(sys, checkEDSMForInformationToolStripMenuItem.Checked);        // get data with EDSM
+                StarScan.SystemNode systemnode = await discoveryform.history.StarScan.FindSystemAsync(sys, checkBoxEDSM.Checked);        // get data with EDSM
 
                 if (systemnode != null)     // no data, clear display, clear any last_he so samesys is false next time
                 {
                     string infoline = "";
 
-                    int scanned = checkEDSMForInformationToolStripMenuItem.Checked ? systemnode.StarPlanetsScanned() : systemnode.StarPlanetsScannednonEDSM();
+                    int scanned = checkBoxEDSM.Checked ? systemnode.StarPlanetsScanned() : systemnode.StarPlanetsScannednonEDSM();
 
                     if (!checkEDSMForInformationToolStripMenuItem.Checked)
                     {
@@ -292,7 +218,7 @@ namespace EDDiscovery.UserControls
 
                     long value = systemnode.ScanValue(false);
 
-                    if ( value > 0  && showValuesToolStripMenuItem.Checked )
+                    if ( value > 0 && IsSet(CtrlList.showValues))
                     {
                         infoline = infoline.AppendPrePad("~ " + value.ToString("N0") + " cr", "; ");
                     }
@@ -316,11 +242,15 @@ namespace EDDiscovery.UserControls
 
                     if (all_nodes != null)
                     {
+                        bool sigchecked = IsSet(CtrlList.signals);
+                        bool biosignalschecked = IsSet(CtrlList.BioSignals);
+                        bool geosignalschecked = IsSet(CtrlList.GeoSignals);
+
                         value = 0;
                         
                         foreach (StarScan.ScanNode sn in all_nodes)
                         {
-                            if (sn.ScanData != null && sn.ScanData?.BodyName != null && (!sn.ScanData.IsEDSMBody || checkEDSMForInformationToolStripMenuItem.Checked))
+                            if (sn.ScanData != null && sn.ScanData?.BodyName != null && (!sn.ScanData.IsEDSMBody || checkBoxEDSM.Checked))
                                 
                             {
                                 var sd = sn.ScanData;
@@ -328,29 +258,30 @@ namespace EDDiscovery.UserControls
                                 bool hasgeosignals = sn.Signals?.Find(x => x.IsGeo) != null;
                                 bool hasbiosignals = sn.Signals?.Find(x => x.IsBio) != null;
 
-                                if  (                                   
-                                    (sd.IsLandable && landableToolStripMenuItem.Checked) ||
-                                    (sd.IsLandable && sd.HasAtmosphericComposition && landableWithAtmosphereToolStripMenuItem.Checked) ||
-                                    (sd.IsLandable && sd.HasMeaningfulVolcanism && landableWithVolcanismToolStripMenuItem.Checked) ||
-                                    (sd.IsLandable && sd.nRadius.HasValue && sd.nRadius >= largeRadiusLimit && landableAndLargeToolStripMenuItem.Checked) ||
-                                    (sd.AmmoniaWorld && ammoniaWorldToolStripMenuItem.Checked) ||
-                                    (sd.Earthlike && earthlikeWorldToolStripMenuItem.Checked) ||
-                                    (sd.WaterWorld && waterWorldToolStripMenuItem.Checked) ||
-                                    (sd.PlanetTypeID == EDPlanet.High_metal_content_body && highMetalContentBodyToolStripMenuItem.Checked) ||
-                                    (sd.PlanetTypeID == EDPlanet.Metal_rich_body && metalToolStripMenuItem.Checked) ||
-                                    (sd.HasRings && hasRingsToolStripMenuItem.Checked) ||
-                                    (sd.HasMeaningfulVolcanism && hasVolcanismToolStripMenuItem.Checked) ||
-                                    (sd.nEccentricity.HasValue && sd.nEccentricity >= eccentricityLimit && highEccentricityToolStripMenuItem.Checked) ||
-                                    (sd.CanBeTerraformable && terraformableToolStripMenuItem.Checked) ||
-                                    (sd.IsPlanet && lowRadiusToolStripMenuItem.Checked && sd.nRadius.HasValue && sd.nRadius < lowRadiusLimit) ||
-                                    (sn.Signals != null && hasSignalsToolStripMenuItem.Checked) ||
-                                    (hasgeosignals && hasGeologicalSignalsToolStripMenuItem.Checked) ||
-                                    (hasbiosignals && hasBiologicalSignalsToolStripMenuItem.Checked) ||
-                                    (sd.IsStar && showAllStarsToolStripMenuItem.Checked) ||
-                                    (sd.IsPlanet && showAllPlanetsToolStripMenuItem.Checked) ||
-                                    (sd.IsBeltCluster && showBeltClustersToolStripMenuItem.Checked))
+
+                                if (                                   
+                                    (sd.IsLandable && IsSet(CtrlList.isLandable)) ||
+                                    (sd.IsLandable && sd.HasAtmosphericComposition && IsSet(CtrlList.isLandableWithAtmosphere)) ||
+                                    (sd.IsLandable && sd.HasMeaningfulVolcanism && IsSet(CtrlList.isLandableWithVolcanism)) ||
+                                    (sd.IsLandable && sd.nRadius.HasValue && sd.nRadius >= largeRadiusLimit && IsSet(CtrlList.largelandable)) ||
+                                    (sd.AmmoniaWorld && IsSet(CtrlList.showAmmonia)) ||
+                                    (sd.Earthlike && IsSet(CtrlList.showEarthlike)) ||
+                                    (sd.WaterWorld && IsSet(CtrlList.showWaterWorld)) ||
+                                    (sd.PlanetTypeID == EDPlanet.High_metal_content_body && IsSet(CtrlList.showHMC)) ||
+                                    (sd.PlanetTypeID == EDPlanet.Metal_rich_body && IsSet(CtrlList.showMR)) ||
+                                    (sd.HasRings && IsSet(CtrlList.showRinged)) ||
+                                    (sd.HasMeaningfulVolcanism && IsSet(CtrlList.showVolcanism)) ||
+                                    (sd.nEccentricity.HasValue && sd.nEccentricity >= eccentricityLimit && IsSet(CtrlList.showEccentricity)) ||
+                                    (sd.CanBeTerraformable && IsSet(CtrlList.showTerraformable)) ||
+                                    (sd.IsPlanet && IsSet(CtrlList.lowradius) && sd.nRadius.HasValue && sd.nRadius < lowRadiusLimit) ||
+                                    (sn.Signals != null && sigchecked) ||
+                                    (hasgeosignals && geosignalschecked) ||
+                                    (hasbiosignals && geosignalschecked) ||
+                                    (sd.IsStar && IsSet(CtrlList.allstars)) ||
+                                    (sd.IsPlanet && IsSet(CtrlList.allplanets)) ||
+                                    (sd.IsBeltCluster && IsSet(CtrlList.beltclusters)))
                                 {
-                                    if (!sd.Mapped || hideAlreadyMappedBodiesToolStripMenuItem.Checked == false)      // if not mapped, or show mapped
+                                    if (!sd.Mapped || IsSet(CtrlList.hideMapped) == false)      // if not mapped, or show mapped
                                     {
                                         bool hasthargoidsignals = sn.Signals?.Find(x => x.IsThargoid) != null;
                                         bool hasguardiansignals = sn.Signals?.Find(x => x.IsGuardian) != null;
@@ -358,22 +289,23 @@ namespace EDDiscovery.UserControls
                                         bool hasothersignals = sn.Signals?.Find(x => x.IsOther) != null;
                                         bool hasminingsignals = sn.Signals?.Find(x => x.IsUncategorised) != null;
 
+
                                         var il = sd.SurveyorInfoLine(sys,
-                                            hasminingsignals && hasSignalsToolStripMenuItem.Checked,  // show signals if we have some andthe all signals filter is checked
-                                            hasgeosignals && (hasSignalsToolStripMenuItem.Checked || hasGeologicalSignalsToolStripMenuItem.Checked || hasBiologicalSignalsToolStripMenuItem.Checked), // show geological signals if there are any and any signal filter is checked (as there are bios that need geos to appear)
-                                            hasbiosignals && (hasSignalsToolStripMenuItem.Checked || hasBiologicalSignalsToolStripMenuItem.Checked), // show biological signals if there are any and the all signal filter or the bio signal filter is checked
-                                            hasthargoidsignals && hasSignalsToolStripMenuItem.Checked, // show thargoid signals if there are any and the all signals filter is checked
-                                            hasguardiansignals && hasSignalsToolStripMenuItem.Checked, // show guardian signals if there are any and the all signals filter is checked
-                                            hashumansignals && hasSignalsToolStripMenuItem.Checked, // show human signals if there are any and the all signals filter is checked
-                                            hasothersignals && hasSignalsToolStripMenuItem.Checked, // show other signals if there are any and the all signals filter is checked
+                                            hasminingsignals && sigchecked,  // show signals if we have some andthe all signals filter is checked
+                                            hasgeosignals && (sigchecked || geosignalschecked || biosignalschecked), // show geological signals if there are any and any signal filter is checked (as there are bios that need geos to appear)
+                                            hasbiosignals && (sigchecked || biosignalschecked), // show biological signals if there are any and the all signal filter or the bio signal filter is checked
+                                            hasthargoidsignals && sigchecked, // show thargoid signals if there are any and the all signals filter is checked
+                                            hasguardiansignals && sigchecked, // show guardian signals if there are any and the all signals filter is checked
+                                            hashumansignals && sigchecked, // show human signals if there are any and the all signals filter is checked
+                                            hasothersignals && sigchecked, // show other signals if there are any and the all signals filter is checked
                                             false,      // so this is the surveyor, we don't want to bother with showing if its got organics, since you have to scan them
-                                            hasVolcanismToolStripMenuItem.Checked || (sd.IsLandable && landableWithVolcanismToolStripMenuItem.Checked)
-                                                || (sd.IsLandable && showVolcanismToolStripMenuItem.Checked), // any of these makes us need to show volcanic state
-                                            showValuesToolStripMenuItem.Checked,        // show values
-                                            showMoreInformationToolStripMenuItem.Checked,   // show extra info such as mass/radius
-                                            showGravityToolStripMenuItem.Checked,       // show gravity select
-                                            sd.IsLandable && showAtmosToolStripMenuItem.Checked, // show atmosphere if landable (surveyor shows this if landable)
-                                            hasRingsToolStripMenuItem.Checked,          // show rings
+                                            IsSet(CtrlList.showVolcanism) || (sd.IsLandable && IsSet(CtrlList.isLandableWithVolcanism))
+                                                || (sd.IsLandable && IsSet(CtrlList.volcanism)), // any of these makes us need to show volcanic state
+                                            IsSet(CtrlList.showValues),        // show values
+                                            IsSet(CtrlList.moreinfo),   // show extra info such as mass/radius
+                                            IsSet(CtrlList.showGravity),       // show gravity select
+                                            sd.IsLandable && IsSet(CtrlList.atmos), // show atmosphere if landable (surveyor shows this if landable)
+                                            IsSet(CtrlList.showRinged),          // show rings
                                             lowRadiusLimit, largeRadiusLimit, eccentricityLimit);
 
                                         //System.Diagnostics.Debug.WriteLine("Display " + il);
@@ -393,7 +325,7 @@ namespace EDDiscovery.UserControls
                             }
                         }
 
-                        if (value > 0 && showValuesToolStripMenuItem.Checked )
+                        if (value > 0 && IsSet(CtrlList.showValues))
                         {
                             var i = pictureBoxSurveyor.AddTextAutoSize(
                                 new Point(3, vpos),
@@ -462,226 +394,28 @@ namespace EDDiscovery.UserControls
             extPictureBoxScroll.Render();
         }
 
- 
-        #endregion
-
-        #region UI
-
-        private void ammoniaWorldToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            PutSetting("showAmmonia", ammoniaWorldToolStripMenuItem.Checked);
-            DrawSystem(last_sys);
-        }
-
-        private void earthlikeWorldToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            PutSetting("showEarthlike", earthlikeWorldToolStripMenuItem.Checked);
-            DrawSystem(last_sys);
-        }
-
-        private void waterWorldToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            PutSetting("showWaterWorld", waterWorldToolStripMenuItem.Checked);
-            DrawSystem(last_sys);
-        }
-
-        private void highMetalContentBodyToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            PutSetting("showHMC", highMetalContentBodyToolStripMenuItem.Checked);
-            DrawSystem(last_sys);
-        }
-
-        private void metalToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            PutSetting("showMR", metalToolStripMenuItem.Checked);
-            DrawSystem(last_sys);
-        }
-
-        private void terraformableToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            PutSetting("showTerraformable", terraformableToolStripMenuItem.Checked);
-            DrawSystem(last_sys);
-        }
-
-        private void highEccentricityToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            PutSetting("showEccentricity", highEccentricityToolStripMenuItem.Checked);
-            DrawSystem(last_sys);
-        }
-
-        private void landableToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            PutSetting("isLandable", landableToolStripMenuItem.Checked);
-            DrawSystem(last_sys);
-        }
-        private void landableWithAtmosphereToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            PutSetting("isLandableWithAtmosphere", landableWithAtmosphereToolStripMenuItem.Checked);
-            DrawSystem(last_sys);
-        }
-        private void landableWithVolcanismToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            PutSetting("isLandableWithVolcanism", landableWithVolcanismToolStripMenuItem.Checked);
-            DrawSystem(last_sys);
-        }
-
-        private void landableAndLargeToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            PutSetting("largelandable", landableAndLargeToolStripMenuItem.Checked);
-            DrawSystem(last_sys);
-        }
-        private void hasVolcanismToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            PutSetting("showVolcanism", hasVolcanismToolStripMenuItem.Checked);
-            DrawSystem(last_sys);
-        }
-
-        private void hasRingsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            PutSetting("showRinged", hasRingsToolStripMenuItem.Checked);
-            DrawSystem(last_sys);
-        }
-
-        private void hideAlreadyMappedBodiesToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            PutSetting("hideMapped", hideAlreadyMappedBodiesToolStripMenuItem.Checked);
-            DrawSystem(last_sys);
-        }
-
-        private void autoHideToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            PutSetting("autohide", autoHideToolStripMenuItem.Checked);
-            DrawSystem(last_sys);
-        }
-
-        private void showVolcanismToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            PutSetting("volcanism", showVolcanismToolStripMenuItem.Checked);
-            DrawSystem(last_sys);
-        }
-
-        private void lowRadiusToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            PutSetting("lowradius", lowRadiusToolStripMenuItem.Checked);
-            DrawSystem(last_sys);
-        }
-
-        private void showGravityToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            PutSetting("showGravity", showGravityToolStripMenuItem.Checked);
-            DrawSystem(last_sys);
-        }
-
-        private void checkEDSMForInformationToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            PutSetting("edsm", checkEDSMForInformationToolStripMenuItem.Checked);
-            DrawSystem(last_sys);
-        }
-
-        private void showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            PutSetting("showsysinfo", showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem.Checked);
-            DrawSystem(last_sys);
-        }
-
-        private void dontHideInFSSModeToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            PutSetting("donthidefssmode", dontHideInFSSModeToolStripMenuItem.Checked);
-            DrawSystem(last_sys);
-        }
-
-        private void hasSignalsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            PutSetting("signals", hasSignalsToolStripMenuItem.Checked);
-            DrawSystem(last_sys);
-        }
-
-        private void hasBiologicalSignalsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            PutSetting("BioSignals", hasBiologicalSignalsToolStripMenuItem.Checked);
-            DrawSystem(last_sys);
-        }
-        private void hasGeologicalSignalsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            PutSetting("GeoSignals", hasGeologicalSignalsToolStripMenuItem.Checked);
-            DrawSystem(last_sys);
-        }
-        private void showValuesToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            PutSetting("showValues", showValuesToolStripMenuItem.Checked);
-            DrawSystem(last_sys);
-        }
-
-        private void showAllPlanetsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            PutSetting("allplanets", showAllPlanetsToolStripMenuItem.Checked);
-            DrawSystem(last_sys);
-        }
-
-        private void showAllStarsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            PutSetting("allstars", showAllStarsToolStripMenuItem.Checked);
-            DrawSystem(last_sys);
-        }
-
-        private void showBeltClustersToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            PutSetting("beltclusters", showBeltClustersToolStripMenuItem.Checked);
-            DrawSystem(last_sys);
-        }
-
-        private void showMoreInformationToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            PutSetting("moreinfo", showMoreInformationToolStripMenuItem.Checked);
-            DrawSystem(last_sys);
-        }
-
-        private void wordWrapToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            PutSetting("wordwrap", wordWrapToolStripMenuItem.Checked);
-            DrawSystem(last_sys);
-        }
-
-        private void showAtmosToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            PutSetting("atmos", showAtmosToolStripMenuItem.Checked);
-            DrawSystem(last_sys);
-        }
-
-
-        private void leftToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            SetAlign(StringAlignment.Near);
-            DrawSystem(last_sys);
-        }
-
-        private void SetAlign(StringAlignment al)
-        {
-            alignment = al;
-            PutSetting("align", (int)alignment);
-            leftToolStripMenuItem.Checked = alignment == StringAlignment.Near;
-            centerToolStripMenuItem.Checked = alignment == StringAlignment.Center;
-            rightToolStripMenuItem.Checked = alignment == StringAlignment.Far;
-        }
-
-        private void centerToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            SetAlign(StringAlignment.Center);
-            DrawSystem(last_sys);
-        }
-
-        private void rightToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            SetAlign(StringAlignment.Far);
-            DrawSystem(last_sys);
-        }
-
         private void UserControlSurveyor_Resize(object sender, EventArgs e)
         {
             DrawSystem(last_sys);
         }
 
-        private void selectFSSSignalsShownToolStripMenuItem_Click(object sender, EventArgs e)
+        #endregion
+
+        #region UI
+
+        private void checkBoxEDSM_Clicked(object sender, EventArgs e)
+        {
+            PutSetting("edsm", checkBoxEDSM.Checked);
+            DrawSystem(last_sys);
+        }
+
+        private void wordWrapToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PutSetting("wordwrap", extCheckBoxWordWrap.Checked);
+            DrawSystem(last_sys);
+        }
+
+        private void extButtonFSS_Click(object sender, EventArgs e)
         {
             ExtendedControls.ConfigurableForm f = new ExtendedControls.ConfigurableForm();
 
@@ -711,15 +445,153 @@ namespace EDDiscovery.UserControls
                 PutSetting("fsssignals", fsssignalsdisplayed);
                 DrawSystem(last_sys);
             }
-
         }
-
-
-
-
 
         #endregion
 
-        
+        #region UI for Ctrl items
+
+        private enum CtrlList
+        {
+            allplanets, showAmmonia, showEarthlike, showWaterWorld, showHMC, showMR,
+            showTerraformable, showVolcanism, showRinged, showEccentricity, lowradius,
+            signals, GeoSignals, BioSignals, isLandable, isLandableWithAtmosphere,
+            largelandable, isLandableWithVolcanism,
+            // 18
+            allstars, beltclusters,
+            // 20
+            showValues, moreinfo, showGravity, atmos, volcanism, autohide, donthidefssmode,hideMapped,showsysinfo,
+            // 29
+            alignleft,aligncenter,alignright
+        };
+
+        private bool[] ctrlset; // holds current state of each control above
+
+        private bool IsSet(CtrlList v)
+        {
+            return ctrlset[(int)v];
+        }
+
+        // from DB, set up ctrlset, and set the defaults
+        private void PopulateCtrlList()
+        {
+            ctrlset = new bool[Enum.GetNames(typeof(CtrlList)).Length];
+            foreach (CtrlList e in Enum.GetValues(typeof(CtrlList)))
+            {
+                bool def = (e != CtrlList.alignright && e != CtrlList.aligncenter && e != CtrlList.autohide && e != CtrlList.lowradius
+                    && e != CtrlList.allplanets && e != CtrlList.allstars && e != CtrlList.beltclusters);
+                var v = GetSetting(e.ToString(), def);
+                //System.Diagnostics.Debug.WriteLine($"Surveyor {e.ToString()} = {v}");
+                ctrlset[(int)e] = v; 
+            }
+
+            alignment = ctrlset[(int)CtrlList.alignright] ? StringAlignment.Far : ctrlset[(int)CtrlList.aligncenter] ? StringAlignment.Center : StringAlignment.Near;
+        }
+
+        private string CtrlStateAsString()      // returns all controls in one string, note Show below does not care about the extras
+        {
+            string s = "";
+            foreach (CtrlList v in Enum.GetValues(typeof(CtrlList)))
+            {
+                if (ctrlset[(int)v])
+                    s += v.ToString() + ";";
+            }
+
+            return s;
+        }
+
+        private void extButtonPlanets_Click(object sender, EventArgs e)
+        {
+            ExtendedControls.CheckedIconListBoxFormGroup displayfilter = new CheckedIconListBoxFormGroup();
+
+            displayfilter.AddAllNone();
+            displayfilter.AddStandardOption(CtrlList.allplanets.ToString(), "Show All Planets".TxID("UserControlSurveyor.showAllPlanetsToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Star);
+            displayfilter.AddStandardOption(CtrlList.showAmmonia.ToString(), "Ammonia World".TxID("UserControlSurveyor.planetaryClassesToolStripMenuItem.ammoniaWorldToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Star);
+            displayfilter.AddStandardOption(CtrlList.showEarthlike.ToString(), "Earthlike World".TxID("UserControlSurveyor.planetaryClassesToolStripMenuItem.earthlikeWorldToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Star);
+            displayfilter.AddStandardOption(CtrlList.showWaterWorld.ToString(), "Water World".TxID("UserControlSurveyor.planetaryClassesToolStripMenuItem.waterWorldToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Star);
+            displayfilter.AddStandardOption(CtrlList.showHMC.ToString(), "High metal content body".TxID("UserControlSurveyor.planetaryClassesToolStripMenuItem.highMetalContentBodyToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Star);
+            displayfilter.AddStandardOption(CtrlList.showMR.ToString(), "Metal-rich body".TxID("UserControlSurveyor.planetaryClassesToolStripMenuItem.metalToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Star);
+            displayfilter.AddStandardOption(CtrlList.showTerraformable.ToString(), "Terraformable".TxID("UserControlSurveyor.bodyFeaturesToolStripMenuItem.terraformableToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Star);
+            displayfilter.AddStandardOption(CtrlList.showVolcanism.ToString(), "Has volcanism".TxID("UserControlSurveyor.bodyFeaturesToolStripMenuItem.hasVolcanismToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Star);
+            displayfilter.AddStandardOption(CtrlList.showRinged.ToString(), "Has Rings".TxID("UserControlSurveyor.bodyFeaturesToolStripMenuItem.hasRingsToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Star);
+            displayfilter.AddStandardOption(CtrlList.showEccentricity.ToString(), "High eccentricity".TxID("UserControlSurveyor.bodyFeaturesToolStripMenuItem.highEccentricityToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Star);
+            displayfilter.AddStandardOption(CtrlList.lowradius.ToString(), "Tiny body".TxID("UserControlSurveyor.bodyFeaturesToolStripMenuItem.lowRadiusToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Star);
+            displayfilter.AddStandardOption(CtrlList.signals.ToString(), "Has Signals".TxID("UserControlSurveyor.bodyFeaturesToolStripMenuItem.hasSignalsToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Star);
+            displayfilter.AddStandardOption(CtrlList.GeoSignals.ToString(), "Has geological signals".TxID("UserControlSurveyor.bodyFeaturesToolStripMenuItem.hasGeologicalSignalsToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Star);
+            displayfilter.AddStandardOption(CtrlList.BioSignals.ToString(), "Has biological signals".TxID("UserControlSurveyor.bodyFeaturesToolStripMenuItem.hasBiologicalSignalsToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Star);
+            displayfilter.AddStandardOption(CtrlList.isLandable.ToString(), "Landable".TxID("UserControlSurveyor.bodyFeaturesToolStripMenuItem.landableToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Star);
+            displayfilter.AddStandardOption(CtrlList.isLandableWithAtmosphere.ToString(), "Landable with atmosphere".TxID("UserControlSurveyor.bodyFeaturesToolStripMenuItem.landableWithAtmosphereToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Star);
+            displayfilter.AddStandardOption(CtrlList.largelandable.ToString(), "Landable and large".TxID("UserControlSurveyor.bodyFeaturesToolStripMenuItem.landableAndLargeToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Star);
+            displayfilter.AddStandardOption(CtrlList.isLandableWithVolcanism.ToString(), "Landable with volcanism".TxID("UserControlSurveyor.bodyFeaturesToolStripMenuItem.landableWithVolcanismToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Star);
+
+            string[] planetctrllist = Enum.GetNames(typeof(CtrlList)).RangeSubset((int)CtrlList.allplanets, 18);
+            CommonCtrl(displayfilter, planetctrllist,extButtonPlanets);
+
+        }
+
+        private void extButtonStars_Click(object sender, EventArgs e)
+        {
+            ExtendedControls.CheckedIconListBoxFormGroup displayfilter = new CheckedIconListBoxFormGroup();
+
+            displayfilter.AddAllNone();
+            displayfilter.AddStandardOption(CtrlList.allstars.ToString(), "Show All Stars".TxID("UserControlSurveyor.showAllStarsToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Star);
+            displayfilter.AddStandardOption(CtrlList.beltclusters.ToString(), "Show Belt Clusters".TxID("UserControlSurveyor.showBeltClustersToolStripMenuItem"), global::EDDiscovery.Icons.Controls.ScanGrid_Belt);
+
+            string[] starctrllist = Enum.GetNames(typeof(CtrlList)).RangeSubset((int)CtrlList.allstars, 2);
+            CommonCtrl(displayfilter, starctrllist, extButtonStars);
+        }
+
+        private void extButtonShowControl_Click(object sender, EventArgs e)
+        {
+            ExtendedControls.CheckedIconListBoxFormGroup displayfilter = new CheckedIconListBoxFormGroup();
+
+            displayfilter.AddAllNone();
+            displayfilter.AddStandardOption(CtrlList.showValues.ToString(), "Show values".TxID("UserControlSurveyor.showValuesToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Star);
+            displayfilter.AddStandardOption(CtrlList.moreinfo.ToString(), "Show more information".TxID("UserControlSurveyor.showMoreInformationToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Star);
+            displayfilter.AddStandardOption(CtrlList.showGravity.ToString(), "Show gravity of landables".TxID("UserControlSurveyor.showGravityToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Star);
+            displayfilter.AddStandardOption(CtrlList.atmos.ToString(), "Show atmosphere of landables".TxID("UserControlSurveyor.showAtmosToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Star);
+            displayfilter.AddStandardOption(CtrlList.volcanism.ToString(), "Show volcanism of landables".TxID("UserControlSurveyor.showVolcanismToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Star);
+            displayfilter.AddStandardOption(CtrlList.autohide.ToString(), "Auto Hide".TxID("UserControlSurveyor.autoHideToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Star);
+            displayfilter.AddStandardOption(CtrlList.donthidefssmode.ToString(), "Don't hide in FSS Mode".TxID("UserControlSurveyor.dontHideInFSSModeToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Star);
+            displayfilter.AddStandardOption(CtrlList.hideMapped.ToString(), "Hide already mapped bodies".TxID("UserControlSurveyor.hideAlreadyMappedBodiesToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Star);
+            displayfilter.AddStandardOption(CtrlList.showsysinfo.ToString(), "Show System Info Always".TxID("UserControlSurveyor.showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Star);
+
+            string[] showctrllist = Enum.GetNames(typeof(CtrlList)).RangeSubset((int)CtrlList.showValues, 9);
+            CommonCtrl(displayfilter, showctrllist, extButtonShowControl);
+        }
+
+        #endregion
+
+        private void extButtonAlignment_Click(object sender, EventArgs e)
+        {
+            ExtendedControls.CheckedIconListBoxFormGroup displayfilter = new CheckedIconListBoxFormGroup();
+
+            string lt = CtrlList.alignleft.ToString();
+            string ct = CtrlList.aligncenter.ToString();
+            string rt = CtrlList.alignright.ToString();
+
+            displayfilter.AddStandardOption(lt, "Alignment Left".TxID("UserControlSurveyor.textAlignToolStripMenuItem.leftToolStripMenuItem"), global::EDDiscovery.Icons.Controls.AlignLeft, exclusivetags: ct + ";" + rt, disableuncheck: true);
+            displayfilter.AddStandardOption(ct, "Alignment Center".TxID("UserControlSurveyor.textAlignToolStripMenuItem.centerToolStripMenuItem"), global::EDDiscovery.Icons.Controls.AlignCentre, exclusivetags: lt + ";" + rt, disableuncheck: true);
+            displayfilter.AddStandardOption(rt, "Alignment Right".TxID("UserControlSurveyor.textAlignToolStripMenuItem.rightToolStripMenuItem"), global::EDDiscovery.Icons.Controls.AlignRight, exclusivetags: lt + ";" + ct, disableuncheck: true);
+
+            string[] showctrllist = Enum.GetNames(typeof(CtrlList)).RangeSubset((int)CtrlList.alignleft, 3);
+            CommonCtrl(displayfilter,showctrllist, extButtonAlignment);
+        }
+
+        private void CommonCtrl(ExtendedControls.CheckedIconListBoxFormGroup displayfilter, string[] list, Control under)
+        {
+            displayfilter.AllOrNoneBack = false;
+            displayfilter.ImageSize = new Size(24, 24);
+            displayfilter.ScreenMargin = new Size(0, 0);
+
+            displayfilter.SaveSettings = (s, o) =>
+            {
+                PutBoolSettingsFromString(s, list);
+                PopulateCtrlList();
+                DrawSystem(last_sys);
+            };
+
+            displayfilter.Show(CtrlStateAsString(), under, this.FindForm());
+        }
     }
 }

@@ -345,13 +345,7 @@
     <EmbeddedResource Include="Controls\Expedition\Delete.png" />
     <EmbeddedResource Include="Controls\Expedition\Save.png" />
     <EmbeddedResource Include="Controls\Expedition\Export.png" />
-    <EmbeddedResource Include="Controls\Exploration\Delete.png" />
-    <EmbeddedResource Include="Controls\Exploration\Export.png" />
-    <EmbeddedResource Include="Controls\Exploration\ImportFile.png" />
     <EmbeddedResource Include="Controls\Exploration\ImportSphere.png" />
-    <EmbeddedResource Include="Controls\Exploration\Load.png" />
-    <EmbeddedResource Include="Controls\Exploration\New.png" />
-    <EmbeddedResource Include="Controls\Exploration\Save.png" />
     <EmbeddedResource Include="Controls\JournalGrid\ExportToExcel.png" />
     <EmbeddedResource Include="Controls\Main\Addons\EditLastActionPack.png" />
     <EmbeddedResource Include="Controls\Main\Addons\ManageAddOns.png" />
@@ -553,6 +547,9 @@
     <EmbeddedResource Include="Controls\SysInfo\notfirstdiscover.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Controls\Surveyor\AlignCentre.png" />
+    <EmbeddedResource Include="Controls\Surveyor\AlignLeft.png" />
+    <EmbeddedResource Include="Controls\Surveyor\AlignRight.png" />
     <EmbeddedResource Include="Panels\LocalMap3D.png" />
     <EmbeddedResource Include="GalMap\ShowMoreStars.png" />
     <EmbeddedResource Include="GalMap\db.png" />
