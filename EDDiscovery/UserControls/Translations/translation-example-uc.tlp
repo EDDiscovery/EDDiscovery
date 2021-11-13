@@ -405,47 +405,52 @@ SECTION UserControlSurveyor
 .Systemscancomplete: "System scan complete." @
 .bodiesfound: " bodies found." @
 
-.bodyFeaturesToolStripMenuItem.lowRadiusToolStripMenuItem: "Tiny body" @
-.checkEDSMForInformationToolStripMenuItem: "Check EDSM for information" @
-.autoHideToolStripMenuItem: "Auto Hide" @
-.dontHideInFSSModeToolStripMenuItem: "Don\'t Hide in FSS Mode" @
-.showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem: "Show System Info Always" @
-.selectFSSSignalsShownToolStripMenuItem: "Select FSS Signals Shown" @
-.planetaryClassesToolStripMenuItem: "Planetary Classes" @
+//.checkEDSMForInformationToolStripMenuItem: "Check EDSM for information" @
+//.selectFSSSignalsShownToolStripMenuItem: "Select FSS Signals Shown" @
+//.wordWrapToolStripMenuItem: "Word Wrap" @
+//.highMetalContentBodyToolStripMenuItem: "High-metal content World" @
+//.bodyFeaturesToolStripMenuItem.showAtmosToolStripMenuItem: "Show atmosphere" @
+
+.textAlignToolStripMenuItem.leftToolStripMenuItem: "Alignment Left" @
+.textAlignToolStripMenuItem.centerToolStripMenuItem: "Alignment Center" @
+.textAlignToolStripMenuItem.rightToolStripMenuItem: "Alignment Right" @
+
+
+
+.showAllPlanetsToolStripMenuItem: "Show All Planets" @
 .planetaryClassesToolStripMenuItem.ammoniaWorldToolStripMenuItem: "Ammonia World" @
 .planetaryClassesToolStripMenuItem.earthlikeWorldToolStripMenuItem: "Earthlike World" @
 .planetaryClassesToolStripMenuItem.waterWorldToolStripMenuItem: "Water World" @
-.highMetalContentBodyToolStripMenuItem: "High-metal content World" @
-.metalToolStripMenuItem: "Metal-rich Body" @
-.bodyFeaturesToolStripMenuItem: "Body Features" @
+.planetaryClassesToolStripMenuItem.highMetalContentBodyToolStripMenuItem: "High metal content body" @
+.planetaryClassesToolStripMenuItem.metalToolStripMenuItem: "Metal-rich body" @
 .bodyFeaturesToolStripMenuItem.terraformableToolStripMenuItem: "Terraformable" @
 .bodyFeaturesToolStripMenuItem.hasVolcanismToolStripMenuItem: "Has Volcanism" @
 .bodyFeaturesToolStripMenuItem.hasRingsToolStripMenuItem: "Has Rings" @
-.hideAlreadyMappedBodiesToolStripMenuItem: "Hide already mapped bodies" @
-.textAlignToolStripMenuItem: "Alignment" @
-.textAlignToolStripMenuItem.leftToolStripMenuItem: "Left" @
-.textAlignToolStripMenuItem.centerToolStripMenuItem: "Center" @
-.textAlignToolStripMenuItem.rightToolStripMenuItem: "Right" @
+.bodyFeaturesToolStripMenuItem.highEccentricityToolStripMenuItem: "High eccentricity" @
+.bodyFeaturesToolStripMenuItem.lowRadiusToolStripMenuItem: "Tiny body" @
 .bodyFeaturesToolStripMenuItem.hasSignalsToolStripMenuItem: "Has Signals" @
 .bodyFeaturesToolStripMenuItem.hasGeologicalSignalsToolStripMenuItem: "Has Geological Signals" @
 .bodyFeaturesToolStripMenuItem.hasBiologicalSignalsToolStripMenuItem: "Has Biological Signals" @
 .bodyFeaturesToolStripMenuItem.landableToolStripMenuItem: "Landable" @
-.showAllPlanetsToolStripMenuItem: "Show All Planets" @
+.bodyFeaturesToolStripMenuItem.landableWithAtmosphereToolStripMenuItem: "Landable with atmosphere" @
+.bodyFeaturesToolStripMenuItem.landableAndLargeToolStripMenuItem: "Landable and large" @
+.bodyFeaturesToolStripMenuItem.landableWithVolcanismToolStripMenuItem: "Landable with volcanism" @
+
 .showAllStarsToolStripMenuItem: "Show All Stars" @
 .showBeltClustersToolStripMenuItem: "Show Belt Clusters" @
-.showMoreInformationToolStripMenuItem: "Show More Information" @
+
 .showValuesToolStripMenuItem: "Show values" @
-.showAtmosToolStripMenuItem: "Show atmospheres of landables" @
-.wordWrapToolStripMenuItem: "Word Wrap" @
-.planetaryClassesToolStripMenuItem.highMetalContentBodyToolStripMenuItem: "High metal content body" @
-.planetaryClassesToolStripMenuItem.metalToolStripMenuItem: "Metal-rich body" @
-.bodyFeaturesToolStripMenuItem.highEccentricityToolStripMenuItem: "High eccentricity" @
-.bodyFeaturesToolStripMenuItem.landableWithAtmosphereToolStripMenuItem: "Landable with atmosphere" @
-.bodyFeaturesToolStripMenuItem.landableWithVolcanismToolStripMenuItem: "Landable with volcanism" @
-.bodyFeaturesToolStripMenuItem.landableAndLargeToolStripMenuItem: "Landable and large" @
+.showMoreInformationToolStripMenuItem: "Show More Information" @
 .showGravityToolStripMenuItem: "Show gravity of landables" @
-.bodyFeaturesToolStripMenuItem.showAtmosToolStripMenuItem: "Show atmosphere" @
+.showAtmosToolStripMenuItem: "Show atmospheres of landables" @
 .showVolcanismToolStripMenuItem: "Show volcanism of landables" @
+.autoHideToolStripMenuItem: "Auto Hide" @
+.dontHideInFSSModeToolStripMenuItem: "Don\'t Hide in FSS Mode" @
+.hideAlreadyMappedBodiesToolStripMenuItem: "Hide already mapped bodies" @
+.showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem: "Show System Info Always" @
+
+
+
 
 SECTION MissionListUserControl
 

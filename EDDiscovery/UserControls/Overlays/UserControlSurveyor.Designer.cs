@@ -45,466 +45,134 @@ namespace EDDiscovery.UserControls
         {
             this.components = new System.ComponentModel.Container();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.showAllPlanetsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.planetaryClassesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.ammoniaWorldToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.earthlikeWorldToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.waterWorldToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.highMetalContentBodyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.metalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.bodyFeaturesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.terraformableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.hasVolcanismToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.hasRingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.highEccentricityToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.lowRadiusToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.hasSignalsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.hasBiologicalSignalsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.hasGeologicalSignalsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.landableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.landableWithAtmosphereToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.landableAndLargeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.landableWithVolcanismToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.showAllStarsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.showBeltClustersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.showGravityToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.showAtmosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.showVolcanismToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
-            this.showValuesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.showMoreInformationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.selectFSSSignalsShownToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.hideAlreadyMappedBodiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.checkEDSMForInformationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.autoHideToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.dontHideInFSSModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.wordWrapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.textAlignToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.leftToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.centerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.rightToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.pictureBoxSurveyor = new ExtendedControls.ExtPictureBox();
+            this.extButtonPlanets = new ExtendedControls.ExtButton();
+            this.extButtonStars = new ExtendedControls.ExtButton();
+            this.extButtonShowControl = new ExtendedControls.ExtButton();
+            this.checkBoxEDSM = new ExtendedControls.ExtCheckBox();
+            this.extCheckBoxWordWrap = new ExtendedControls.ExtCheckBox();
             this.extPictureBoxScroll = new ExtendedControls.ExtPictureBoxScroll();
             this.extScrollBar = new ExtendedControls.ExtScrollBar();
-            this.contextMenuStrip.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSurveyor)).BeginInit();
+            this.pictureBoxSurveyor = new ExtendedControls.ExtPictureBox();
+            this.rollUpPanelTop = new ExtendedControls.ExtPanelRollUp();
+            this.panelControls = new System.Windows.Forms.FlowLayoutPanel();
+            this.extButtonAlignment = new ExtendedControls.ExtButton();
+            this.extButtonFSS = new ExtendedControls.ExtButton();
             this.extPictureBoxScroll.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSurveyor)).BeginInit();
+            this.rollUpPanelTop.SuspendLayout();
+            this.panelControls.SuspendLayout();
             this.SuspendLayout();
             // 
-            // contextMenuStrip
-            // 
-            this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.showAllPlanetsToolStripMenuItem,
-            this.planetaryClassesToolStripMenuItem,
-            this.bodyFeaturesToolStripMenuItem,
-            this.showAllStarsToolStripMenuItem,
-            this.showBeltClustersToolStripMenuItem,
-            this.toolStripSeparator3,
-            this.showGravityToolStripMenuItem,
-            this.showAtmosToolStripMenuItem,
-            this.showVolcanismToolStripMenuItem,
-            this.toolStripSeparator4,
-            this.showValuesToolStripMenuItem,
-            this.showMoreInformationToolStripMenuItem,
-            this.selectFSSSignalsShownToolStripMenuItem,
-            this.hideAlreadyMappedBodiesToolStripMenuItem,
-            this.toolStripSeparator1,
-            this.checkEDSMForInformationToolStripMenuItem,
-            this.autoHideToolStripMenuItem,
-            this.dontHideInFSSModeToolStripMenuItem,
-            this.showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem,
-            this.toolStripSeparator2,
-            this.wordWrapToolStripMenuItem,
-            this.textAlignToolStripMenuItem});
-            this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(242, 446);
-            // 
-            // showAllPlanetsToolStripMenuItem
-            // 
-            this.showAllPlanetsToolStripMenuItem.Checked = true;
-            this.showAllPlanetsToolStripMenuItem.CheckOnClick = true;
-            this.showAllPlanetsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.showAllPlanetsToolStripMenuItem.Name = "showAllPlanetsToolStripMenuItem";
-            this.showAllPlanetsToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
-            this.showAllPlanetsToolStripMenuItem.Text = "Show All Planets";
-            // 
-            // planetaryClassesToolStripMenuItem
-            // 
-            this.planetaryClassesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ammoniaWorldToolStripMenuItem,
-            this.earthlikeWorldToolStripMenuItem,
-            this.waterWorldToolStripMenuItem,
-            this.highMetalContentBodyToolStripMenuItem,
-            this.metalToolStripMenuItem});
-            this.planetaryClassesToolStripMenuItem.Name = "planetaryClassesToolStripMenuItem";
-            this.planetaryClassesToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
-            this.planetaryClassesToolStripMenuItem.Text = "Planetary Classes";
-            // 
-            // ammoniaWorldToolStripMenuItem
-            // 
-            this.ammoniaWorldToolStripMenuItem.Checked = true;
-            this.ammoniaWorldToolStripMenuItem.CheckOnClick = true;
-            this.ammoniaWorldToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.ammoniaWorldToolStripMenuItem.Name = "ammoniaWorldToolStripMenuItem";
-            this.ammoniaWorldToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
-            this.ammoniaWorldToolStripMenuItem.Text = "Ammonia World";
-            // 
-            // earthlikeWorldToolStripMenuItem
-            // 
-            this.earthlikeWorldToolStripMenuItem.Checked = true;
-            this.earthlikeWorldToolStripMenuItem.CheckOnClick = true;
-            this.earthlikeWorldToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.earthlikeWorldToolStripMenuItem.Name = "earthlikeWorldToolStripMenuItem";
-            this.earthlikeWorldToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
-            this.earthlikeWorldToolStripMenuItem.Text = "Earthlike World";
-            // 
-            // waterWorldToolStripMenuItem
-            // 
-            this.waterWorldToolStripMenuItem.Checked = true;
-            this.waterWorldToolStripMenuItem.CheckOnClick = true;
-            this.waterWorldToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.waterWorldToolStripMenuItem.Name = "waterWorldToolStripMenuItem";
-            this.waterWorldToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
-            this.waterWorldToolStripMenuItem.Text = "Water World";
-            // 
-            // highMetalContentBodyToolStripMenuItem
-            // 
-            this.highMetalContentBodyToolStripMenuItem.CheckOnClick = true;
-            this.highMetalContentBodyToolStripMenuItem.Name = "highMetalContentBodyToolStripMenuItem";
-            this.highMetalContentBodyToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
-            this.highMetalContentBodyToolStripMenuItem.Text = "High metal content body";
-            // 
-            // metalToolStripMenuItem
-            // 
-            this.metalToolStripMenuItem.CheckOnClick = true;
-            this.metalToolStripMenuItem.Name = "metalToolStripMenuItem";
-            this.metalToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
-            this.metalToolStripMenuItem.Text = "Metal-rich body";
-            // 
-            // bodyFeaturesToolStripMenuItem
-            // 
-            this.bodyFeaturesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.terraformableToolStripMenuItem,
-            this.hasVolcanismToolStripMenuItem,
-            this.hasRingsToolStripMenuItem,
-            this.highEccentricityToolStripMenuItem,
-            this.lowRadiusToolStripMenuItem,
-            this.hasSignalsToolStripMenuItem,
-            this.hasBiologicalSignalsToolStripMenuItem,
-            this.hasGeologicalSignalsToolStripMenuItem,
-            this.landableToolStripMenuItem,
-            this.landableWithAtmosphereToolStripMenuItem,
-            this.landableAndLargeToolStripMenuItem,
-            this.landableWithVolcanismToolStripMenuItem});
-            this.bodyFeaturesToolStripMenuItem.Name = "bodyFeaturesToolStripMenuItem";
-            this.bodyFeaturesToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
-            this.bodyFeaturesToolStripMenuItem.Text = "Body Features";
-            // 
-            // terraformableToolStripMenuItem
-            // 
-            this.terraformableToolStripMenuItem.Checked = true;
-            this.terraformableToolStripMenuItem.CheckOnClick = true;
-            this.terraformableToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.terraformableToolStripMenuItem.Name = "terraformableToolStripMenuItem";
-            this.terraformableToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
-            this.terraformableToolStripMenuItem.Text = "Terraformable";
-            // 
-            // hasVolcanismToolStripMenuItem
-            // 
-            this.hasVolcanismToolStripMenuItem.Checked = true;
-            this.hasVolcanismToolStripMenuItem.CheckOnClick = true;
-            this.hasVolcanismToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.hasVolcanismToolStripMenuItem.Name = "hasVolcanismToolStripMenuItem";
-            this.hasVolcanismToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
-            this.hasVolcanismToolStripMenuItem.Text = "Has Volcanism";
-            // 
-            // hasRingsToolStripMenuItem
-            // 
-            this.hasRingsToolStripMenuItem.Checked = true;
-            this.hasRingsToolStripMenuItem.CheckOnClick = true;
-            this.hasRingsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.hasRingsToolStripMenuItem.Name = "hasRingsToolStripMenuItem";
-            this.hasRingsToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
-            this.hasRingsToolStripMenuItem.Text = "Has Rings";
-            // 
-            // highEccentricityToolStripMenuItem
-            // 
-            this.highEccentricityToolStripMenuItem.Checked = true;
-            this.highEccentricityToolStripMenuItem.CheckOnClick = true;
-            this.highEccentricityToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.highEccentricityToolStripMenuItem.Name = "highEccentricityToolStripMenuItem";
-            this.highEccentricityToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
-            this.highEccentricityToolStripMenuItem.Text = "High eccentricity";
-            // 
-            // lowRadiusToolStripMenuItem
-            // 
-            this.lowRadiusToolStripMenuItem.Checked = true;
-            this.lowRadiusToolStripMenuItem.CheckOnClick = true;
-            this.lowRadiusToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.lowRadiusToolStripMenuItem.Name = "lowRadiusToolStripMenuItem";
-            this.lowRadiusToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
-            this.lowRadiusToolStripMenuItem.Text = "Tiny body";
-            // 
-            // hasSignalsToolStripMenuItem
-            // 
-            this.hasSignalsToolStripMenuItem.Checked = true;
-            this.hasSignalsToolStripMenuItem.CheckOnClick = true;
-            this.hasSignalsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.hasSignalsToolStripMenuItem.Name = "hasSignalsToolStripMenuItem";
-            this.hasSignalsToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
-            this.hasSignalsToolStripMenuItem.Text = "Has Signals";
-            // 
-            // hasBiologicalSignalsToolStripMenuItem
-            // 
-            this.hasBiologicalSignalsToolStripMenuItem.Checked = true;
-            this.hasBiologicalSignalsToolStripMenuItem.CheckOnClick = true;
-            this.hasBiologicalSignalsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.hasBiologicalSignalsToolStripMenuItem.Name = "hasBiologicalSignalsToolStripMenuItem";
-            this.hasBiologicalSignalsToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
-            this.hasBiologicalSignalsToolStripMenuItem.Text = "Has biological Signals";
-            this.hasBiologicalSignalsToolStripMenuItem.Click += new System.EventHandler(this.hasBiologicalSignalsToolStripMenuItem_Click);
-            // 
-            // hasGeologicalSignalsToolStripMenuItem
-            // 
-            this.hasGeologicalSignalsToolStripMenuItem.Checked = true;
-            this.hasGeologicalSignalsToolStripMenuItem.CheckOnClick = true;
-            this.hasGeologicalSignalsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.hasGeologicalSignalsToolStripMenuItem.Name = "hasGeologicalSignalsToolStripMenuItem";
-            this.hasGeologicalSignalsToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
-            this.hasGeologicalSignalsToolStripMenuItem.Text = "Has geological Signals";
-            this.hasGeologicalSignalsToolStripMenuItem.Click += new System.EventHandler(this.hasGeologicalSignalsToolStripMenuItem_Click);
-            // 
-            // landableToolStripMenuItem
-            // 
-            this.landableToolStripMenuItem.Checked = true;
-            this.landableToolStripMenuItem.CheckOnClick = true;
-            this.landableToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.landableToolStripMenuItem.Name = "landableToolStripMenuItem";
-            this.landableToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
-            this.landableToolStripMenuItem.Text = "Landable";
-            // 
-            // landableWithAtmosphereToolStripMenuItem
-            // 
-            this.landableWithAtmosphereToolStripMenuItem.Checked = true;
-            this.landableWithAtmosphereToolStripMenuItem.CheckOnClick = true;
-            this.landableWithAtmosphereToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.landableWithAtmosphereToolStripMenuItem.Name = "landableWithAtmosphereToolStripMenuItem";
-            this.landableWithAtmosphereToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
-            this.landableWithAtmosphereToolStripMenuItem.Text = "Landable with atmosphere";
-            // 
-            // landableAndLargeToolStripMenuItem
-            // 
-            this.landableAndLargeToolStripMenuItem.Checked = true;
-            this.landableAndLargeToolStripMenuItem.CheckOnClick = true;
-            this.landableAndLargeToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.landableAndLargeToolStripMenuItem.Name = "landableAndLargeToolStripMenuItem";
-            this.landableAndLargeToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
-            this.landableAndLargeToolStripMenuItem.Text = "Landable and large";
-            // 
-            // landableWithVolcanismToolStripMenuItem
-            // 
-            this.landableWithVolcanismToolStripMenuItem.Checked = true;
-            this.landableWithVolcanismToolStripMenuItem.CheckOnClick = true;
-            this.landableWithVolcanismToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.landableWithVolcanismToolStripMenuItem.Name = "landableWithVolcanismToolStripMenuItem";
-            this.landableWithVolcanismToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
-            this.landableWithVolcanismToolStripMenuItem.Text = "Landable with volcanism";
-            // 
-            // showAllStarsToolStripMenuItem
-            // 
-            this.showAllStarsToolStripMenuItem.Checked = true;
-            this.showAllStarsToolStripMenuItem.CheckOnClick = true;
-            this.showAllStarsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.showAllStarsToolStripMenuItem.Name = "showAllStarsToolStripMenuItem";
-            this.showAllStarsToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
-            this.showAllStarsToolStripMenuItem.Text = "Show All Stars";
-            // 
-            // showBeltClustersToolStripMenuItem
-            // 
-            this.showBeltClustersToolStripMenuItem.Checked = true;
-            this.showBeltClustersToolStripMenuItem.CheckOnClick = true;
-            this.showBeltClustersToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.showBeltClustersToolStripMenuItem.Name = "showBeltClustersToolStripMenuItem";
-            this.showBeltClustersToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
-            this.showBeltClustersToolStripMenuItem.Text = "Show Belt Clusters";
-            // 
-            // toolStripSeparator3
-            // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(238, 6);
-            // 
-            // showGravityToolStripMenuItem
-            // 
-            this.showGravityToolStripMenuItem.Checked = true;
-            this.showGravityToolStripMenuItem.CheckOnClick = true;
-            this.showGravityToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.showGravityToolStripMenuItem.Name = "showGravityToolStripMenuItem";
-            this.showGravityToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
-            this.showGravityToolStripMenuItem.Text = "Show gravity of landables";
-            // 
-            // showAtmosToolStripMenuItem
-            // 
-            this.showAtmosToolStripMenuItem.Checked = true;
-            this.showAtmosToolStripMenuItem.CheckOnClick = true;
-            this.showAtmosToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.showAtmosToolStripMenuItem.Name = "showAtmosToolStripMenuItem";
-            this.showAtmosToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
-            this.showAtmosToolStripMenuItem.Text = "Show atmospheres of landables";
-            // 
-            // showVolcanismToolStripMenuItem
-            // 
-            this.showVolcanismToolStripMenuItem.Checked = true;
-            this.showVolcanismToolStripMenuItem.CheckOnClick = true;
-            this.showVolcanismToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.showVolcanismToolStripMenuItem.Name = "showVolcanismToolStripMenuItem";
-            this.showVolcanismToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
-            this.showVolcanismToolStripMenuItem.Text = "Show volcanism of landables";
-            // 
-            // toolStripSeparator4
-            // 
-            this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(238, 6);
-            // 
-            // showValuesToolStripMenuItem
-            // 
-            this.showValuesToolStripMenuItem.Checked = true;
-            this.showValuesToolStripMenuItem.CheckOnClick = true;
-            this.showValuesToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.showValuesToolStripMenuItem.Name = "showValuesToolStripMenuItem";
-            this.showValuesToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
-            this.showValuesToolStripMenuItem.Text = "Show values";
-            // 
-            // showMoreInformationToolStripMenuItem
-            // 
-            this.showMoreInformationToolStripMenuItem.Checked = true;
-            this.showMoreInformationToolStripMenuItem.CheckOnClick = true;
-            this.showMoreInformationToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.showMoreInformationToolStripMenuItem.Name = "showMoreInformationToolStripMenuItem";
-            this.showMoreInformationToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
-            this.showMoreInformationToolStripMenuItem.Text = "Show More Information";
-            // 
-            // selectFSSSignalsShownToolStripMenuItem
-            // 
-            this.selectFSSSignalsShownToolStripMenuItem.Name = "selectFSSSignalsShownToolStripMenuItem";
-            this.selectFSSSignalsShownToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
-            this.selectFSSSignalsShownToolStripMenuItem.Text = "Select FSS Signals Shown";
-            // 
-            // hideAlreadyMappedBodiesToolStripMenuItem
-            // 
-            this.hideAlreadyMappedBodiesToolStripMenuItem.Checked = true;
-            this.hideAlreadyMappedBodiesToolStripMenuItem.CheckOnClick = true;
-            this.hideAlreadyMappedBodiesToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.hideAlreadyMappedBodiesToolStripMenuItem.Name = "hideAlreadyMappedBodiesToolStripMenuItem";
-            this.hideAlreadyMappedBodiesToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
-            this.hideAlreadyMappedBodiesToolStripMenuItem.Text = "Hide already mapped bodies";
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(238, 6);
-            // 
-            // checkEDSMForInformationToolStripMenuItem
-            // 
-            this.checkEDSMForInformationToolStripMenuItem.Checked = true;
-            this.checkEDSMForInformationToolStripMenuItem.CheckOnClick = true;
-            this.checkEDSMForInformationToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkEDSMForInformationToolStripMenuItem.Name = "checkEDSMForInformationToolStripMenuItem";
-            this.checkEDSMForInformationToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
-            this.checkEDSMForInformationToolStripMenuItem.Text = "Check EDSM for information";
-            // 
-            // autoHideToolStripMenuItem
-            // 
-            this.autoHideToolStripMenuItem.Checked = true;
-            this.autoHideToolStripMenuItem.CheckOnClick = true;
-            this.autoHideToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.autoHideToolStripMenuItem.Name = "autoHideToolStripMenuItem";
-            this.autoHideToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
-            this.autoHideToolStripMenuItem.Text = "Auto Hide";
-            // 
-            // dontHideInFSSModeToolStripMenuItem
-            // 
-            this.dontHideInFSSModeToolStripMenuItem.Checked = true;
-            this.dontHideInFSSModeToolStripMenuItem.CheckOnClick = true;
-            this.dontHideInFSSModeToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.dontHideInFSSModeToolStripMenuItem.Name = "dontHideInFSSModeToolStripMenuItem";
-            this.dontHideInFSSModeToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
-            this.dontHideInFSSModeToolStripMenuItem.Text = "Don\'t Hide in FSS Mode";
-            // 
-            // showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem
-            // 
-            this.showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem.Checked = true;
-            this.showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem.CheckOnClick = true;
-            this.showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem.Name = "showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem";
-            this.showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
-            this.showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem.Text = "Show System Info Always";
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(238, 6);
-            // 
-            // wordWrapToolStripMenuItem
-            // 
-            this.wordWrapToolStripMenuItem.Checked = true;
-            this.wordWrapToolStripMenuItem.CheckOnClick = true;
-            this.wordWrapToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.wordWrapToolStripMenuItem.Name = "wordWrapToolStripMenuItem";
-            this.wordWrapToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
-            this.wordWrapToolStripMenuItem.Text = "Word Wrap";
-            // 
-            // textAlignToolStripMenuItem
-            // 
-            this.textAlignToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.leftToolStripMenuItem,
-            this.centerToolStripMenuItem,
-            this.rightToolStripMenuItem});
-            this.textAlignToolStripMenuItem.Name = "textAlignToolStripMenuItem";
-            this.textAlignToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
-            this.textAlignToolStripMenuItem.Text = "Alignment";
-            // 
-            // leftToolStripMenuItem
-            // 
-            this.leftToolStripMenuItem.Name = "leftToolStripMenuItem";
-            this.leftToolStripMenuItem.Size = new System.Drawing.Size(109, 22);
-            this.leftToolStripMenuItem.Text = "Left";
-            // 
-            // centerToolStripMenuItem
-            // 
-            this.centerToolStripMenuItem.Name = "centerToolStripMenuItem";
-            this.centerToolStripMenuItem.Size = new System.Drawing.Size(109, 22);
-            this.centerToolStripMenuItem.Text = "Center";
-            // 
-            // rightToolStripMenuItem
-            // 
-            this.rightToolStripMenuItem.Name = "rightToolStripMenuItem";
-            this.rightToolStripMenuItem.Size = new System.Drawing.Size(109, 22);
-            this.rightToolStripMenuItem.Text = "Right";
-            // 
-            // pictureBoxSurveyor
-            // 
-            this.pictureBoxSurveyor.ContextMenuStrip = this.contextMenuStrip;
-            this.pictureBoxSurveyor.Location = new System.Drawing.Point(0, 0);
-            this.pictureBoxSurveyor.Name = "pictureBoxSurveyor";
-            this.pictureBoxSurveyor.Size = new System.Drawing.Size(705, 200);
-            this.pictureBoxSurveyor.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-            this.pictureBoxSurveyor.TabIndex = 0;
+            // extButtonPlanets
+            // 
+            this.extButtonPlanets.BackColor = System.Drawing.SystemColors.Control;
+            this.extButtonPlanets.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.extButtonPlanets.Image = global::EDDiscovery.Icons.Controls.Scan_SizeLarge;
+            this.extButtonPlanets.Location = new System.Drawing.Point(8, 1);
+            this.extButtonPlanets.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.extButtonPlanets.Name = "extButtonPlanets";
+            this.extButtonPlanets.Size = new System.Drawing.Size(28, 28);
+            this.extButtonPlanets.TabIndex = 30;
+            this.toolTip.SetToolTip(this.extButtonPlanets, "Load Route");
+            this.extButtonPlanets.UseVisualStyleBackColor = false;
+            this.extButtonPlanets.Click += new System.EventHandler(this.extButtonPlanets_Click);
+            // 
+            // extButtonStars
+            // 
+            this.extButtonStars.BackColor = System.Drawing.SystemColors.Control;
+            this.extButtonStars.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.extButtonStars.Image = global::EDDiscovery.Icons.Controls.Scan_Star;
+            this.extButtonStars.Location = new System.Drawing.Point(48, 1);
+            this.extButtonStars.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.extButtonStars.Name = "extButtonStars";
+            this.extButtonStars.Size = new System.Drawing.Size(28, 28);
+            this.extButtonStars.TabIndex = 29;
+            this.toolTip.SetToolTip(this.extButtonStars, "New Expedition");
+            this.extButtonStars.UseVisualStyleBackColor = false;
+            this.extButtonStars.Click += new System.EventHandler(this.extButtonStars_Click);
+            // 
+            // extButtonShowControl
+            // 
+            this.extButtonShowControl.BackColor = System.Drawing.SystemColors.Control;
+            this.extButtonShowControl.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.extButtonShowControl.Image = global::EDDiscovery.Icons.Controls.DisplayFilters;
+            this.extButtonShowControl.Location = new System.Drawing.Point(88, 1);
+            this.extButtonShowControl.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.extButtonShowControl.Name = "extButtonShowControl";
+            this.extButtonShowControl.Size = new System.Drawing.Size(28, 28);
+            this.extButtonShowControl.TabIndex = 29;
+            this.toolTip.SetToolTip(this.extButtonShowControl, "Save Expedition");
+            this.extButtonShowControl.UseVisualStyleBackColor = false;
+            this.extButtonShowControl.Click += new System.EventHandler(this.extButtonShowControl_Click);
+            // 
+            // checkBoxEDSM
+            // 
+            this.checkBoxEDSM.Appearance = System.Windows.Forms.Appearance.Button;
+            this.checkBoxEDSM.BackColor = System.Drawing.Color.Transparent;
+            this.checkBoxEDSM.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.checkBoxEDSM.CheckBoxColor = System.Drawing.Color.White;
+            this.checkBoxEDSM.CheckBoxDisabledScaling = 0.5F;
+            this.checkBoxEDSM.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxEDSM.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxEDSM.Cursor = System.Windows.Forms.Cursors.Default;
+            this.checkBoxEDSM.FlatAppearance.CheckedBackColor = System.Drawing.Color.Green;
+            this.checkBoxEDSM.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.checkBoxEDSM.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
+            this.checkBoxEDSM.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.checkBoxEDSM.Image = global::EDDiscovery.Icons.Controls.StarList_EDSM;
+            this.checkBoxEDSM.ImageButtonDisabledScaling = 0.5F;
+            this.checkBoxEDSM.ImageIndeterminate = null;
+            this.checkBoxEDSM.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.checkBoxEDSM.ImageUnchecked = null;
+            this.checkBoxEDSM.Location = new System.Drawing.Point(208, 1);
+            this.checkBoxEDSM.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.checkBoxEDSM.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxEDSM.Name = "checkBoxEDSM";
+            this.checkBoxEDSM.Size = new System.Drawing.Size(28, 28);
+            this.checkBoxEDSM.TabIndex = 33;
+            this.checkBoxEDSM.TickBoxReductionRatio = 0.75F;
+            this.toolTip.SetToolTip(this.checkBoxEDSM, "Show/Hide Body data from EDSM.");
+            this.checkBoxEDSM.UseVisualStyleBackColor = false;
+            // 
+            // extCheckBoxWordWrap
+            // 
+            this.extCheckBoxWordWrap.Appearance = System.Windows.Forms.Appearance.Button;
+            this.extCheckBoxWordWrap.BackColor = System.Drawing.Color.Transparent;
+            this.extCheckBoxWordWrap.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.extCheckBoxWordWrap.CheckBoxColor = System.Drawing.Color.White;
+            this.extCheckBoxWordWrap.CheckBoxDisabledScaling = 0.5F;
+            this.extCheckBoxWordWrap.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.extCheckBoxWordWrap.CheckColor = System.Drawing.Color.DarkBlue;
+            this.extCheckBoxWordWrap.Cursor = System.Windows.Forms.Cursors.Default;
+            this.extCheckBoxWordWrap.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.extCheckBoxWordWrap.FlatAppearance.CheckedBackColor = System.Drawing.Color.Green;
+            this.extCheckBoxWordWrap.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.extCheckBoxWordWrap.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
+            this.extCheckBoxWordWrap.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.extCheckBoxWordWrap.Image = global::EDDiscovery.Icons.Controls.WordWrapOn;
+            this.extCheckBoxWordWrap.ImageButtonDisabledScaling = 0.5F;
+            this.extCheckBoxWordWrap.ImageIndeterminate = null;
+            this.extCheckBoxWordWrap.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.extCheckBoxWordWrap.ImageUnchecked = global::EDDiscovery.Icons.Controls.WordWrapOff;
+            this.extCheckBoxWordWrap.Location = new System.Drawing.Point(248, 1);
+            this.extCheckBoxWordWrap.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.extCheckBoxWordWrap.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.extCheckBoxWordWrap.Name = "extCheckBoxWordWrap";
+            this.extCheckBoxWordWrap.Size = new System.Drawing.Size(28, 28);
+            this.extCheckBoxWordWrap.TabIndex = 34;
+            this.extCheckBoxWordWrap.TickBoxReductionRatio = 0.75F;
+            this.toolTip.SetToolTip(this.extCheckBoxWordWrap, "Enable or disable word wrap");
+            this.extCheckBoxWordWrap.UseVisualStyleBackColor = false;
             // 
             // extPictureBoxScroll
             // 
-            this.extPictureBoxScroll.ContextMenuStrip = this.contextMenuStrip;
             this.extPictureBoxScroll.Controls.Add(this.extScrollBar);
             this.extPictureBoxScroll.Controls.Add(this.pictureBoxSurveyor);
             this.extPictureBoxScroll.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.extPictureBoxScroll.Location = new System.Drawing.Point(0, 0);
+            this.extPictureBoxScroll.Location = new System.Drawing.Point(0, 30);
             this.extPictureBoxScroll.Name = "extPictureBoxScroll";
             this.extPictureBoxScroll.ScrollBarEnabled = true;
-            this.extPictureBoxScroll.Size = new System.Drawing.Size(721, 403);
+            this.extPictureBoxScroll.Size = new System.Drawing.Size(721, 373);
             this.extPictureBoxScroll.TabIndex = 1;
             this.extPictureBoxScroll.VerticalScrollBarDockRight = true;
             // 
@@ -518,14 +186,14 @@ namespace EDDiscovery.UserControls
             this.extScrollBar.BorderColor = System.Drawing.Color.White;
             this.extScrollBar.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.extScrollBar.HideScrollBar = true;
-            this.extScrollBar.LargeChange = 403;
+            this.extScrollBar.LargeChange = 373;
             this.extScrollBar.Location = new System.Drawing.Point(705, 0);
             this.extScrollBar.Maximum = 199;
             this.extScrollBar.Minimum = 0;
             this.extScrollBar.MouseOverButtonColor = System.Drawing.Color.Green;
             this.extScrollBar.MousePressedButtonColor = System.Drawing.Color.Red;
             this.extScrollBar.Name = "extScrollBar";
-            this.extScrollBar.Size = new System.Drawing.Size(16, 403);
+            this.extScrollBar.Size = new System.Drawing.Size(16, 373);
             this.extScrollBar.SliderColor = System.Drawing.Color.DarkGray;
             this.extScrollBar.SmallChange = 16;
             this.extScrollBar.TabIndex = 1;
@@ -537,69 +205,108 @@ namespace EDDiscovery.UserControls
             this.extScrollBar.Value = 0;
             this.extScrollBar.ValueLimited = 0;
             // 
+            // pictureBoxSurveyor
+            // 
+            this.pictureBoxSurveyor.Location = new System.Drawing.Point(0, 0);
+            this.pictureBoxSurveyor.Name = "pictureBoxSurveyor";
+            this.pictureBoxSurveyor.Size = new System.Drawing.Size(705, 200);
+            this.pictureBoxSurveyor.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.pictureBoxSurveyor.TabIndex = 0;
+            // 
+            // rollUpPanelTop
+            // 
+            this.rollUpPanelTop.AutoSize = true;
+            this.rollUpPanelTop.Controls.Add(this.panelControls);
+            this.rollUpPanelTop.Dock = System.Windows.Forms.DockStyle.Top;
+            this.rollUpPanelTop.HiddenMarkerWidth = 400;
+            this.rollUpPanelTop.Location = new System.Drawing.Point(0, 0);
+            this.rollUpPanelTop.Name = "rollUpPanelTop";
+            this.rollUpPanelTop.PinState = true;
+            this.rollUpPanelTop.RolledUpHeight = 5;
+            this.rollUpPanelTop.RollUpAnimationTime = 500;
+            this.rollUpPanelTop.RollUpDelay = 1000;
+            this.rollUpPanelTop.SecondHiddenMarkerWidth = 0;
+            this.rollUpPanelTop.ShowHiddenMarker = true;
+            this.rollUpPanelTop.Size = new System.Drawing.Size(721, 30);
+            this.rollUpPanelTop.TabIndex = 15;
+            this.rollUpPanelTop.UnrollHoverDelay = 1000;
+            // 
+            // panelControls
+            // 
+            this.panelControls.AutoSize = true;
+            this.panelControls.BackColor = System.Drawing.SystemColors.Control;
+            this.panelControls.Controls.Add(this.extButtonPlanets);
+            this.panelControls.Controls.Add(this.extButtonStars);
+            this.panelControls.Controls.Add(this.extButtonShowControl);
+            this.panelControls.Controls.Add(this.extButtonAlignment);
+            this.panelControls.Controls.Add(this.extButtonFSS);
+            this.panelControls.Controls.Add(this.checkBoxEDSM);
+            this.panelControls.Controls.Add(this.extCheckBoxWordWrap);
+            this.panelControls.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelControls.Location = new System.Drawing.Point(0, 0);
+            this.panelControls.Name = "panelControls";
+            this.panelControls.Size = new System.Drawing.Size(721, 30);
+            this.panelControls.TabIndex = 32;
+            // 
+            // extButtonAlignment
+            // 
+            this.extButtonAlignment.BackColor = System.Drawing.SystemColors.Control;
+            this.extButtonAlignment.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.extButtonAlignment.Image = global::EDDiscovery.Icons.Controls.AlignCentre;
+            this.extButtonAlignment.Location = new System.Drawing.Point(128, 1);
+            this.extButtonAlignment.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.extButtonAlignment.Name = "extButtonAlignment";
+            this.extButtonAlignment.Size = new System.Drawing.Size(28, 28);
+            this.extButtonAlignment.TabIndex = 29;
+            this.extButtonAlignment.UseVisualStyleBackColor = false;
+            this.extButtonAlignment.Click += new System.EventHandler(this.extButtonAlignment_Click);
+            // 
+            // extButtonFSS
+            // 
+            this.extButtonFSS.BackColor = System.Drawing.SystemColors.Control;
+            this.extButtonFSS.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.extButtonFSS.Image = global::EDDiscovery.Icons.Controls.FSSBodySignals;
+            this.extButtonFSS.Location = new System.Drawing.Point(168, 1);
+            this.extButtonFSS.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.extButtonFSS.Name = "extButtonFSS";
+            this.extButtonFSS.Size = new System.Drawing.Size(28, 28);
+            this.extButtonFSS.TabIndex = 29;
+            this.extButtonFSS.UseVisualStyleBackColor = false;
+            this.extButtonFSS.Click += new System.EventHandler(this.extButtonFSS_Click);
+            // 
             // UserControlSurveyor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.extPictureBoxScroll);
+            this.Controls.Add(this.rollUpPanelTop);
             this.Name = "UserControlSurveyor";
             this.Size = new System.Drawing.Size(721, 403);
             this.Resize += new System.EventHandler(this.UserControlSurveyor_Resize);
-            this.contextMenuStrip.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSurveyor)).EndInit();
             this.extPictureBoxScroll.ResumeLayout(false);
             this.extPictureBoxScroll.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSurveyor)).EndInit();
+            this.rollUpPanelTop.ResumeLayout(false);
+            this.rollUpPanelTop.PerformLayout();
+            this.panelControls.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
         private System.Windows.Forms.ToolTip toolTip;
         private ExtendedControls.ExtPictureBox pictureBoxSurveyor;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
-        private System.Windows.Forms.ToolStripMenuItem planetaryClassesToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem ammoniaWorldToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem earthlikeWorldToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem waterWorldToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem bodyFeaturesToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem terraformableToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem hasVolcanismToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem hasRingsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripMenuItem hideAlreadyMappedBodiesToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem textAlignToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem leftToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem centerToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem rightToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem lowRadiusToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem autoHideToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem checkEDSMForInformationToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem dontHideInFSSModeToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem hasSignalsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem showValuesToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem showAllPlanetsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem showAllStarsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem showBeltClustersToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem showMoreInformationToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem wordWrapToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private System.Windows.Forms.ToolStripMenuItem landableToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem selectFSSSignalsShownToolStripMenuItem;
         private ExtendedControls.ExtPictureBoxScroll extPictureBoxScroll;
         private ExtendedControls.ExtScrollBar extScrollBar;
-        private System.Windows.Forms.ToolStripMenuItem landableWithAtmosphereToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem landableWithVolcanismToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem highMetalContentBodyToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem metalToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem highEccentricityToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem landableAndLargeToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem showAtmosToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem showGravityToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem showVolcanismToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
-        private System.Windows.Forms.ToolStripMenuItem hasBiologicalSignalsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem hasGeologicalSignalsToolStripMenuItem;
+        private ExtendedControls.ExtPanelRollUp rollUpPanelTop;
+        private System.Windows.Forms.FlowLayoutPanel panelControls;
+        private ExtendedControls.ExtButton extButtonPlanets;
+        private ExtendedControls.ExtButton extButtonStars;
+        private ExtendedControls.ExtButton extButtonShowControl;
+        private ExtendedControls.ExtCheckBox checkBoxEDSM;
+        private ExtendedControls.ExtCheckBox extCheckBoxWordWrap;
+        private ExtendedControls.ExtButton extButtonFSS;
+        private ExtendedControls.ExtButton extButtonAlignment;
     }
 }

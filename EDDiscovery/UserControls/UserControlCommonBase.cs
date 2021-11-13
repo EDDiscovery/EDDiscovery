@@ -238,6 +238,28 @@ namespace EDDiscovery.UserControls
             return EliteDangerousCore.DB.UserDatabase.Instance.PutSetting(name, value);
         }
 
+        public string GetBoolSettingsAsString(params string[] paras)      // make up a bool semicolon control string from items
+        {
+            string s = "";
+            foreach (var p in paras)
+            {
+                if (GetSetting(p, false))
+                    s = s.AppendPrePad(p, ";");
+            }
+            return s;
+        }
+        public void PutBoolSettingsFromString(string res, params string[] paras)    // given a set of semicolon ; parameter names, update them
+        {
+            string[] set = res.Split(";");
+            foreach (var p in paras)
+            {
+                bool v = Array.IndexOf(set, p) >= 0;
+              //  System.Diagnostics.Debug.WriteLine($"UCCB Write {p} with {v}");
+                PutSetting(p, v);
+            }
+        }
+
+
         public void DGVLoadColumnLayout(DataGridView dgv, string auxname = "")
         {
             string root = DBName(displaynumber, DBBaseName + auxname, "DGVCol");

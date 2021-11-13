@@ -130,14 +130,7 @@ namespace EDDiscovery.Icons
         public static Image Expedition_ShowOnMap { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Expedition.ShowOnMap"); } }
         #endregion
         #region EDDiscovery.UserControls.UserControlExploration
-        public static Image Exploration_Delete { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Exploration.Delete"); } }
-        public static Image Exploration_Export { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Exploration.Export"); } }
-        public static Image Exploration_ImportFile { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Exploration.ImportFile"); } }
         public static Image Exploration_ImportSphere { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Exploration.ImportSphere"); } }
-        public static Image Exploration_ImportSystems { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Exploration.ImportSphere"); } }
-        public static Image Exploration_Load { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Exploration.Load"); } }
-        public static Image Exploration_New { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Exploration.New"); } }
-        public static Image Exploration_Save { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Exploration.Save"); } }
         #endregion
         #region EDDiscovery.UserControls.UserControlJournalGrid
         public static Image JournalGrid_ExportToExcel { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.JournalGrid.ExportToExcel"); } }
@@ -268,5 +261,16 @@ namespace EDDiscovery.Icons
         public static Image Help_Video { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Help.Video"); } }
         #endregion
 
+        #region Journal
+        public static Image FSSBodySignals { get { return BaseUtils.Icons.IconSet.GetIcon("Journal.FSSBodySignals"); } }
+
+        #endregion
+
+        #region Surveyor
+        public static Image AlignCentre { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Surveyor.AlignCentre"); } }
+        public static Image AlignLeft { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Surveyor.AlignLeft"); } }
+        public static Image AlignRight { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Surveyor.AlignRight"); } }
+
+        #endregion
     }
 }
