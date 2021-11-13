@@ -206,11 +206,6 @@ namespace EDDiscovery.UserControls
 
                     int scanned = checkBoxEDSM.Checked ? systemnode.StarPlanetsScanned() : systemnode.StarPlanetsScannednonEDSM();
 
-                    if (!checkEDSMForInformationToolStripMenuItem.Checked)
-                    {
-                        scanned = systemnode.StarPlanetsScannednonEDSM();
-                    }
-
                     if (scanned > 0)
                     {
                         infoline = "Scan".T(EDTx.UserControlSurveyor_Scan) + " " + scanned.ToString() + (systemnode.FSSTotalBodies != null ? (" / " + systemnode.FSSTotalBodies.Value.ToString()) : "");
