@@ -271,7 +271,7 @@ namespace EDDiscovery.UserControls
                                     (sd.IsPlanet && IsSet(CtrlList.lowradius) && sd.nRadius.HasValue && sd.nRadius < lowRadiusLimit) ||
                                     (sn.Signals != null && sigchecked) ||
                                     (hasgeosignals && geosignalschecked) ||
-                                    (hasbiosignals && geosignalschecked) ||
+                                    (hasbiosignals && biosignalschecked) ||
                                     (sd.IsStar && IsSet(CtrlList.allstars)) ||
                                     (sd.IsPlanet && IsSet(CtrlList.allplanets)) ||
                                     (sd.IsBeltCluster && IsSet(CtrlList.beltclusters)))
