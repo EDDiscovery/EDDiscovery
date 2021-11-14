@@ -14,13 +14,13 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using EliteDangerousCore;
+using EliteDangerousCore.DB;
 using EliteDangerousCore.JournalEvents;
 using ExtendedControls;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
@@ -39,19 +39,22 @@ namespace EDDiscovery.UserControls
 
         EliteDangerousCore.UIEvents.UIGUIFocus.Focus uistate = EliteDangerousCore.UIEvents.UIGUIFocus.Focus.NoFocus;
 
+        private SavedRouteClass currentRoute = null;
+        const string NavRouteName = "Last NavRoute";
+        private string lastsystem;
+        private EliteDangerousCalculations.FSDSpec.JumpInfo shipfsdinfo;
+
         public UserControlSurveyor()
         {
             InitializeComponent();
+            DBBaseName = "Surveyor";
         }
 
         #region Overrides
 
         public override void Init()
         {
-            DBBaseName = "Surveyor";
-
-            BaseUtils.Translator.Instance.Translate(this);
-            BaseUtils.Translator.Instance.Translate(toolTip, this);
+            // not needed yet BaseUtils.Translator.Instance.Translate(this);
 
             checkBoxEDSM.Checked = GetSetting("edsm", false);
             checkBoxEDSM.Click += new System.EventHandler(this.checkBoxEDSM_Clicked);
@@ -65,6 +68,11 @@ namespace EDDiscovery.UserControls
 
             discoveryform.OnNewUIEvent += Discoveryform_OnNewUIEvent;
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
+            discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
+            GlobalBookMarkList.Instance.OnBookmarkChange += GlobalBookMarkList_OnBookmarkChange;
+
+            LoadRoute(GetSetting("route", ""));
+            routecontrolsettings = GetSetting("routecontrol", "showJumps;showwaypoints");
         }
 
         public override void LoadLayout()
@@ -85,32 +93,56 @@ namespace EDDiscovery.UserControls
             DrawSystem(last_sys, last_sys?.Name);    // may be null
         }
 
-        private void Discoveryform_OnHistoryChange(HistoryList hl)
-        {
-            last_sys = hl.GetLast?.System;      // may be null
-            DrawSystem(last_sys, last_sys?.Name);    // may be null
-        }
-
         public override void Closing()
         {
             uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
             discoveryform.OnNewUIEvent -= Discoveryform_OnNewUIEvent;
             discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
+            discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
+            GlobalBookMarkList.Instance.OnBookmarkChange -= GlobalBookMarkList_OnBookmarkChange;
         }
 
         public override bool SupportTransparency { get { return true; } }
         public override void SetTransparency(bool on, Color curcol)
         {
             extPictureBoxScroll.ScrollBarEnabled = !on;     // turn off the scroll bar if its transparent
-            extPictureBoxScroll.BackColor =  pictureBoxSurveyor.BackColor = this.BackColor = curcol;
+            extPictureBoxScroll.BackColor = pictureBoxSurveyor.BackColor = this.BackColor = curcol;
             rollUpPanelTop.Visible = !on;
             DrawSystem(last_sys);   // need to redraw as we use backcolour
+        }
+
+        private void Discoveryform_OnHistoryChange(HistoryList hl)
+        {
+            last_sys = hl.GetLast?.System;      // may be null
+
+            if (currentRoute != null && currentRoute.Name == NavRouteName)      // history has changed, force an update to route if navroute selected
+                LoadRoute(NavRouteName);
+
+            DrawSystem(last_sys, last_sys?.Name);    // may be null
+
+            // debug t.Interval = 200; t.Tick += (s, e) => { var sys = currentRoute.PosAlongRoute(percent, 0); DrawSystem(sys, sys.Name); percent += 0.5; }; t.Start();  // debug to make it play thru.. leave
+        }
+        //double percent = -10; Timer t = new Timer();// play thru harness
+
+        private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)
+        {
+            // received a new navroute, and we have navroute selected, reload
+            if (he.EntryType == JournalTypeEnum.NavRoute && currentRoute != null && currentRoute.Name == NavRouteName)
+                LoadRoute(NavRouteName);
+        }
+
+        private void GlobalBookMarkList_OnBookmarkChange(BookmarkClass bk, bool deleted)
+        {
+            DrawSystem(last_sys);
         }
 
         private void Uctg_OnTravelSelectionChanged(HistoryEntry he, HistoryList hl, bool selectedEntry)
         {
             if (he != null)
             {
+                // something has changed and just blindly for now recalc the fsd info
+                shipfsdinfo = he.GetJumpInfo(discoveryform.history.MaterialCommoditiesMicroResources.CargoCount(he.MaterialCommodity));
+
                 if (last_sys == null || last_sys.Name != he.System.Name) // if new entry is scan, may be new data.. or not presenting or diff sys
                 {
                     last_sys = he.System;
@@ -130,9 +162,9 @@ namespace EDDiscovery.UserControls
                 {
                     var je = he.journalEntry as JournalFSSDiscoveryScan;
                     var bodies_found = je.BodyCount;
-                    DrawSystem( last_sys, last_sys.Name + " " + bodies_found + " bodies found.".T(EDTx.UserControlSurveyor_bodiesfound));
+                    DrawSystem(last_sys, last_sys.Name + " " + bodies_found + " bodies found.".T(EDTx.UserControlSurveyor_bodiesfound));
                 }
-                else if (he.journalEntry is IStarScan )      // an entry to a scan node
+                else if (he.journalEntry is IStarScan)      // an entry to a scan node
                 {
                     //System.Diagnostics.Debug.WriteLine("Scan got, sys " + he.System.Name + " " + last_sys.Name);
                     DrawSystem(last_sys);
@@ -165,7 +197,7 @@ namespace EDDiscovery.UserControls
         #region Main
         async private void DrawSystem(ISystem sys, string tt = null)
         {
-            if ( tt != null )
+            if (tt != null)
             {
                 titletext = tt;
                 SetControlText(tt);
@@ -174,21 +206,128 @@ namespace EDDiscovery.UserControls
             pictureBoxSurveyor.ClearImageList();
 
             // if system, and we are in no focus or don't care
-            if (sys != null && ( uistate == EliteDangerousCore.UIEvents.UIGUIFocus.Focus.NoFocus || !IsSet(CtrlList.autohide)
-                                || ( uistate == EliteDangerousCore.UIEvents.UIGUIFocus.Focus.FSSMode && IsSet(CtrlList.donthidefssmode)) ) )
+            if (sys != null && (uistate == EliteDangerousCore.UIEvents.UIGUIFocus.Focus.NoFocus || !IsSet(CtrlList.autohide)
+                                || (uistate == EliteDangerousCore.UIEvents.UIGUIFocus.Focus.FSSMode && IsSet(CtrlList.donthidefssmode))))
             {
                 int vpos = 0;
-                StringFormat frmt = new StringFormat(extCheckBoxWordWrap.Checked ? 0: StringFormatFlags.NoWrap);
+                StringFormat frmt = new StringFormat(extCheckBoxWordWrap.Checked ? 0 : StringFormatFlags.NoWrap);
                 frmt.Alignment = alignment;
                 var textcolour = IsTransparent ? discoveryform.theme.SPanelColor : discoveryform.theme.LabelColor;
                 var backcolour = IsTransparent ? Color.Transparent : this.BackColor;
 
-                if (!IsControlTextVisible() && IsSet(CtrlList.showsysinfo))
+                if (IsSet(CtrlList.showsysinfo))       //!IsControlTextVisible()
                 {
                     var i = pictureBoxSurveyor.AddTextAutoSize(
                             new Point(3, vpos),
                             new Size(Math.Max(pictureBoxSurveyor.Width - 6, 24), 10000),
                             titletext,
+                            Font,
+                            textcolour,
+                            backcolour,
+                            1.0F,
+                            frmt: frmt);
+
+                    vpos += i.Location.Height;
+                }
+
+                if (currentRoute != null)
+                {
+                    string topline = "", bottomline = "", note = "";
+
+                    if (currentRoute.Systems.Count == 0)
+                    {
+                        topline = "Route contains no waypoints".T(EDTx.UserControlRouteTracker_NoWay);
+                    }
+                    else if (!sys.HasCoordinate)
+                    {
+                        topline = "Unknown location".T(EDTx.UserControlRouteTracker_Unk);
+                    }
+                    else
+                    {
+                        SavedRouteClass.ClosestInfo closest = currentRoute.ClosestTo(sys);
+                        System.Diagnostics.Debug.WriteLine($"");
+
+                        if (closest == null)  // if null, no systems found.. uh oh
+                        {
+                            topline = "No systems in route have known co-ords".T(EDTx.UserControlRouteTracker_NoCo);
+                        }
+                        else
+                        {
+                            double routedistance = currentRoute.CumulativeDistance();
+                            double distleft = closest.disttowaypoint + (closest.deviation < 0 ? 0 : closest.cumulativewpdist);
+
+                            topline = String.Format("{0} {1} WPs, {2:N1}ly", currentRoute.Name,
+                                            currentRoute.Systems.Count, routedistance);
+
+                            string jumpmsg = "";
+                            if (IsSet(RouteControl.showJumps))
+                            {
+                                if (shipfsdinfo != null)
+                                {
+                                    int jumps = (int)Math.Ceiling(routedistance / shipfsdinfo.avgsinglejump);
+                                    if (jumps > 0)
+                                        topline += ", " + jumps.ToString() + " " + ((jumps == 1) ? "jump".T(EDTx.UserControlRouteTracker_J1) : "jumps".T(EDTx.UserControlRouteTracker_JS));
+
+                                    jumps = (int)Math.Ceiling(closest.disttowaypoint / shipfsdinfo.avgsinglejump);
+
+                                    if (jumps > 0)
+                                        jumpmsg = ", " + jumps.ToString() + " " + ((jumps == 1) ? "jump".T(EDTx.UserControlRouteTracker_J1) : "jumps".T(EDTx.UserControlRouteTracker_JS));
+                                }
+                                else
+                                    jumpmsg = " No Ship FSD Information".T(EDTx.UserControlRouteTracker_NoFSD);
+                            }
+
+                            string wpposmsg = closest.system.Name;
+                            if (IsSet(RouteControl.showwaypoints))
+                                wpposmsg += String.Format(" @{0:N1},{1:N1},{2:N1}", closest.system.X, closest.system.Y, closest.system.Z);
+                            wpposmsg += String.Format(" {0:N1}ly", closest.disttowaypoint);
+
+                            if (closest.deviation < 0)        // if not on path
+                            {
+                                bottomline += closest.cumulativewpdist == 0 ? "From Last WP ".T(EDTx.UserControlRouteTracker_FL) : "To First WP ".T(EDTx.UserControlRouteTracker_TF);
+                                bottomline += wpposmsg + jumpmsg;
+                            }
+                            else
+                            {
+                                topline += String.Format(", Left {0:N1}ly".T(EDTx.UserControlRouteTracker_LF), distleft);
+                                bottomline += String.Format("To WP {0} ".T(EDTx.UserControlRouteTracker_ToWP), closest.waypoint + 1);
+                                bottomline += wpposmsg + jumpmsg;
+                                if (IsSet(RouteControl.showdeviation))
+                                    bottomline += String.Format(", Dev {0:N1}ly".T(EDTx.UserControlRouteTracker_Dev), closest.deviation);
+                            }
+
+                            if (IsSet(RouteControl.showbookmarks))
+                            {
+                                BookmarkClass bookmark = GlobalBookMarkList.Instance.FindBookmarkOnSystem(sys.Name);
+                                if (bookmark != null)
+                                    note = String.Format("Note: {0}".T(EDTx.UserControlRouteTracker_Note), bookmark.Note);
+                            }
+
+                            string name = closest.system.Name;
+
+                            if (lastsystem == null || name.CompareTo(lastsystem) != 0)
+                            {
+                                if (IsSet(RouteControl.autocopy))
+                                    SetClipboardText(name);
+
+                                if (IsSet(RouteControl.settarget))
+                                {
+                                    string targetName;
+                                    double x, y, z;
+                                    TargetClass.GetTargetPosition(out targetName, out x, out y, out z);
+                                    if (name.CompareTo(targetName) != 0)
+                                        TargetHelpers.SetTargetSystem(this, discoveryform, name, false);
+                                }
+
+                                lastsystem = name;
+                            }
+                        }
+                    }
+
+                    var i = pictureBoxSurveyor.AddTextAutoSize(
+                            new Point(3, vpos),
+                            new Size(Math.Max(pictureBoxSurveyor.Width - 6, 24), 10000),
+                            topline.AppendPrePad(bottomline, Environment.NewLine).AppendPrePad(note, Environment.NewLine),
                             Font,
                             textcolour,
                             backcolour,
@@ -213,7 +352,7 @@ namespace EDDiscovery.UserControls
 
                     long value = systemnode.ScanValue(false);
 
-                    if ( value > 0 && IsSet(CtrlList.showValues))
+                    if (value > 0 && IsSet(CtrlList.showValues))
                     {
                         infoline = infoline.AppendPrePad("~ " + value.ToString("N0") + " cr", "; ");
                     }
@@ -242,11 +381,11 @@ namespace EDDiscovery.UserControls
                         bool geosignalschecked = IsSet(CtrlList.GeoSignals);
 
                         value = 0;
-                        
+
                         foreach (StarScan.ScanNode sn in all_nodes)
                         {
                             if (sn.ScanData != null && sn.ScanData?.BodyName != null && (!sn.ScanData.IsEDSMBody || checkBoxEDSM.Checked))
-                                
+
                             {
                                 var sd = sn.ScanData;
 
@@ -254,7 +393,7 @@ namespace EDDiscovery.UserControls
                                 bool hasbiosignals = sn.Signals?.Find(x => x.IsBio) != null;
 
 
-                                if (                                   
+                                if (
                                     (sd.IsLandable && IsSet(CtrlList.isLandable)) ||
                                     (sd.IsLandable && sd.HasAtmosphericComposition && IsSet(CtrlList.isLandableWithAtmosphere)) ||
                                     (sd.IsLandable && sd.HasMeaningfulVolcanism && IsSet(CtrlList.isLandableWithVolcanism)) ||
@@ -335,13 +474,13 @@ namespace EDDiscovery.UserControls
                         }
                     }
 
-                    if ( fsssignalsdisplayed.HasChars())
+                    if (fsssignalsdisplayed.HasChars())
                     {
                         string siglist = "";
                         string[] filter = fsssignalsdisplayed.Split(';');
 
                         // mirrors scandisplaynodes
-                        
+
                         var notexpired = systemnode.FSSSignalList.Where(x => !x.TimeRemaining.HasValue || x.ExpiryUTC >= DateTime.UtcNow).ToList();
                         notexpired.Sort(delegate (JournalFSSSignalDiscovered.FSSSignal l, JournalFSSSignalDiscovered.FSSSignal r) { return l.ClassOfSignal.CompareTo(r.ClassOfSignal); });
 
@@ -362,7 +501,7 @@ namespace EDDiscovery.UserControls
                                 filter.ComparisionContains(fsssig.ClassOfSignal.ToString(), StringComparison.InvariantCultureIgnoreCase) >= 0 ||
                                 fsssignalsdisplayed.Equals("*"))
                             {
-                                if ( pos++ == expiredpos )
+                                if (pos++ == expiredpos)
                                     siglist = siglist.AppendPrePad("Expired:".T(EDTx.UserControlScan_Expired), Environment.NewLine + Environment.NewLine);
 
                                 siglist = siglist.AppendPrePad(fsssig.ToString(true), Environment.NewLine);
@@ -446,7 +585,7 @@ namespace EDDiscovery.UserControls
 
         #region UI for Ctrl items
 
-        private enum CtrlList
+        protected enum CtrlList
         {
             allplanets, showAmmonia, showEarthlike, showWaterWorld, showHMC, showMR,
             showTerraformable, showVolcanism, showRinged, showEccentricity, lowradius,
@@ -455,9 +594,9 @@ namespace EDDiscovery.UserControls
             // 18
             allstars, beltclusters,
             // 20
-            showValues, moreinfo, showGravity, atmos, volcanism, autohide, donthidefssmode,hideMapped,showsysinfo,
+            showValues, moreinfo, showGravity, atmos, volcanism, autohide, donthidefssmode, hideMapped, showsysinfo,
             // 29
-            alignleft,aligncenter,alignright
+            alignleft, aligncenter, alignright
         };
 
         private bool[] ctrlset; // holds current state of each control above
@@ -473,14 +612,20 @@ namespace EDDiscovery.UserControls
             ctrlset = new bool[Enum.GetNames(typeof(CtrlList)).Length];
             foreach (CtrlList e in Enum.GetValues(typeof(CtrlList)))
             {
-                bool def = (e != CtrlList.alignright && e != CtrlList.aligncenter && e != CtrlList.autohide && e != CtrlList.lowradius
-                    && e != CtrlList.allplanets && e != CtrlList.allstars && e != CtrlList.beltclusters);
+                bool def = DefaultSetting(e);
                 var v = GetSetting(e.ToString(), def);
                 //System.Diagnostics.Debug.WriteLine($"Surveyor {e.ToString()} = {v}");
-                ctrlset[(int)e] = v; 
+                ctrlset[(int)e] = v;
             }
 
             alignment = ctrlset[(int)CtrlList.alignright] ? StringAlignment.Far : ctrlset[(int)CtrlList.aligncenter] ? StringAlignment.Center : StringAlignment.Near;
+        }
+
+        protected virtual bool DefaultSetting(CtrlList e)
+        {
+            bool def = (e != CtrlList.alignright && e != CtrlList.aligncenter && e != CtrlList.autohide && e != CtrlList.lowradius
+                && e != CtrlList.allplanets && e != CtrlList.allstars && e != CtrlList.beltclusters);
+            return def;
         }
 
         private string CtrlStateAsString()      // returns all controls in one string, note Show below does not care about the extras
@@ -520,7 +665,7 @@ namespace EDDiscovery.UserControls
             displayfilter.AddStandardOption(CtrlList.isLandableWithVolcanism.ToString(), "Landable with volcanism".TxID("UserControlSurveyor.bodyFeaturesToolStripMenuItem.landableWithVolcanismToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Star);
 
             string[] planetctrllist = Enum.GetNames(typeof(CtrlList)).RangeSubset((int)CtrlList.allplanets, 18);
-            CommonCtrl(displayfilter, planetctrllist,extButtonPlanets);
+            CommonCtrl(displayfilter, planetctrllist, extButtonPlanets);
 
         }
 
@@ -570,7 +715,7 @@ namespace EDDiscovery.UserControls
             displayfilter.AddStandardOption(rt, "Alignment Right".TxID("UserControlSurveyor.textAlignToolStripMenuItem.rightToolStripMenuItem"), global::EDDiscovery.Icons.Controls.AlignRight, exclusivetags: lt + ";" + ct, disableuncheck: true);
 
             string[] showctrllist = Enum.GetNames(typeof(CtrlList)).RangeSubset((int)CtrlList.alignleft, 3);
-            CommonCtrl(displayfilter,showctrllist, extButtonAlignment);
+            CommonCtrl(displayfilter, showctrllist, extButtonAlignment);
         }
 
         private void CommonCtrl(ExtendedControls.CheckedIconListBoxFormGroup displayfilter, string[] list, Control under)
@@ -587,6 +732,131 @@ namespace EDDiscovery.UserControls
             };
 
             displayfilter.Show(CtrlStateAsString(), under, this.FindForm());
+        }
+
+
+        #region Route control
+
+        ExtendedControls.ExtListBoxForm dropdown;
+        private void extButtonSetRoute_Click(object sender, EventArgs e)
+        {
+            ExtendedControls.ExtButton but = sender as ExtendedControls.ExtButton;
+
+            dropdown = new ExtendedControls.ExtListBoxForm("", true);
+
+            var savedroutes = SavedRouteClass.GetAllSavedRoutes();
+
+            dropdown.FitImagesToItemHeight = true;
+            dropdown.Items = savedroutes.Select(x => x.Name).ToList();
+            dropdown.Items.Insert(0, "Off"); // TBD translate
+            dropdown.Items.Insert(1, "Nav Route"); // TBD translate
+            dropdown.FlatStyle = FlatStyle.Popup;
+            dropdown.PositionBelow(sender as Control);
+            dropdown.SelectedIndexChanged += (s, ea) =>
+            {
+                if (dropdown.SelectedIndex == 0)    // off
+                {
+                    LoadRoute("");
+                }
+                else if (dropdown.SelectedIndex == 1)      // navroute
+                {
+                    LoadRoute(NavRouteName);
+                }
+                else
+                {
+                    string name = savedroutes[dropdown.SelectedIndex - 2].Name;
+                    LoadRoute(name);
+                }
+
+                DrawSystem(last_sys);
+            };
+
+            EDDTheme.Instance.ApplyDialog(dropdown, true);
+            dropdown.Show(this.FindForm());
+        }
+
+        private void LoadRoute(string name)
+        {
+            PutSetting("route", name);      // store back the current name 
+
+            currentRoute = null;
+            if (name.HasChars())
+            {
+                if (name.Equals(NavRouteName))
+                {
+                    var route = discoveryform.history.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.NavRoute)?.journalEntry as EliteDangerousCore.JournalEvents.JournalNavRoute;
+                    if (route?.Route != null)
+                    {
+                        var systems = route.Route.Where(x => x.StarSystem.HasChars()).Select(y => y.StarSystem).ToArray();
+                        currentRoute = new SavedRouteClass(NavRouteName, systems);
+                    }
+                    else
+                        currentRoute = new SavedRouteClass(NavRouteName, new string[] { });     // no known systems yet
+                }
+                else
+                {
+                    var savedroutes = SavedRouteClass.GetAllSavedRoutes();      // load routes
+                    currentRoute = savedroutes.Find(x => x.Name == name);       // pick, if not found, will be null
+                }
+            }
+        }
+
+        private string routecontrolsettings;
+
+        enum RouteControl
+        {
+            showJumps,
+            showwaypoints,
+            showdeviation,
+            showbookmarks,
+            autocopy,
+            settarget,
+        };
+
+        private bool IsSet(RouteControl c)
+        {
+            return routecontrolsettings.Contains(c.ToString());
+        }
+        private void extButtonControlRoute_Click(object sender, EventArgs e)
+        {
+            ExtendedControls.CheckedIconListBoxFormGroup displayfilter = new CheckedIconListBoxFormGroup();
+
+            displayfilter.AddAllNone();
+            displayfilter.AddStandardOption(RouteControl.showJumps.ToString(), "Show Jumps To Go".TxID("UserControlRouteTracker.showJumpsToolStripMenuItem"), global::EDDiscovery.Icons.Controls.AlignLeft);
+            displayfilter.AddStandardOption(RouteControl.showwaypoints.ToString(), "Show Waypoint Coordinates".TxID("UserControlRouteTracker.showWaypointCoordinatesToolStripMenuItem"), global::EDDiscovery.Icons.Controls.AlignCentre);
+            displayfilter.AddStandardOption(RouteControl.showdeviation.ToString(), "Show Deviation from route".TxID("UserControlRouteTracker.showDeviationFromRouteToolStripMenuItem"), global::EDDiscovery.Icons.Controls.AlignRight);
+            displayfilter.AddStandardOption(RouteControl.showbookmarks.ToString(), "Show Bookmark Notes".TxID("UserControlRouteTracker.showBookmarkNotesToolStripMenuItem"), global::EDDiscovery.Icons.Controls.AlignRight);
+            displayfilter.AddStandardOption(RouteControl.autocopy.ToString(), "Auto copy waypoint".TxID("UserControlRouteTracker.autoCopyWPToolStripMenuItem"), global::EDDiscovery.Icons.Controls.AlignRight);
+            displayfilter.AddStandardOption(RouteControl.settarget.ToString(), "Auto set target".TxID("UserControlRouteTracker.autoSetTargetToolStripMenuItem"), global::EDDiscovery.Icons.Controls.AlignRight);
+
+            displayfilter.AllOrNoneBack = false;
+            displayfilter.ImageSize = new Size(24, 24);
+            displayfilter.ScreenMargin = new Size(0, 0);
+
+            displayfilter.SaveSettings = (s, o) =>
+            {
+                routecontrolsettings = s;
+                PutSetting("routecontrol", s);
+                DrawSystem(last_sys);
+            };
+
+            displayfilter.Show(routecontrolsettings, (Control)sender, this.FindForm());
+        }
+
+        #endregion
+    }
+
+    public class UserControlRouteTracker : UserControlSurveyor
+    {
+        public UserControlRouteTracker() : base()
+        {
+            DBBaseName = "RouteTracker";
+        }
+
+        protected override bool DefaultSetting(CtrlList e)
+        {
+            bool def = (e == CtrlList.alignleft);
+            return def;
         }
     }
 }

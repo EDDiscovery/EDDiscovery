@@ -559,7 +559,6 @@ namespace EDDiscovery.UserControls
             dropdown = new ExtendedControls.ExtListBoxForm("", true);
 
             var savedroutes = SavedRouteClass.GetAllSavedRoutes();
-            foreach( var x in savedroutes )
 
             dropdown.FitImagesToItemHeight = true;
             dropdown.Items = savedroutes.Select(x => x.Name).ToList();
@@ -665,13 +664,11 @@ namespace EDDiscovery.UserControls
             var route = discoveryform.history.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.NavRoute)?.journalEntry as EliteDangerousCore.JournalEvents.JournalNavRoute;
             if (route?.Route != null)
             {
-                List<string> systems = new List<string>();
                 foreach (var s in route.Route)
                 {
                     if (s.StarSystem.HasChars())
                     {
                         dataGridView.Rows.Add(s.StarSystem);
-                        systems.Add(s.StarSystem);
                     }
                 }
 
