@@ -663,30 +663,24 @@ SECTION UserControlRoute
 
 SECTION UserControlRouteTracker
 
-.Note: "Note: {0}" @
-
-.showBookmarkNotesToolStripMenuItem: "Show Bookmark Notes" @
-.setRouteToolStripMenuItem: "Set route" @
 .showJumpsToolStripMenuItem: "Show Jumps To Go" @
 .showWaypointCoordinatesToolStripMenuItem: "Show Waypoint Coordinates" @
 .showDeviationFromRouteToolStripMenuItem: "Show Deviation from route" @
+.showBookmarkNotesToolStripMenuItem: "Show Bookmark Notes" @
 .autoCopyWPToolStripMenuItem: "Auto copy waypoint" @
 .autoSetTargetToolStripMenuItem: "Auto set target" @
-.NoRoute: "Please set a route, by right clicking" @
 .NoWay: "Route contains no waypoints" @
 .Unk: "Unknown location" @
 .NoCo: "No systems in route have known co-ords" @
-.J1: "jump" @
-.JS: "jumps" @
-.NoFSD: " No Ship FSD Information" @
 .FL: "From Last WP " @
 .TF: "To First WP " @
 .LF: ", Left {0:N1}ly" @
 .ToWP: "To WP {0} " @
+.Note: "Note: {0}" @
+.J1: "jump" @
+.JS: "jumps" @
+.NoFSD: " No Ship FSD Information" @
 .Dev: ", Dev {0:N1}ly" @
-.Selectroute: "Select route" @
-.PresstoCancel: "Press to Cancel" @
-.Enterroute: "Enter route" @
 
 SECTION UserControlScan
 

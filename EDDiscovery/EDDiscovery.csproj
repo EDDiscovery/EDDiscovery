@@ -576,12 +576,6 @@
     <Compile Include="UserControls\Overlays\UserControlMissionOverlay.Designer.cs">
       <DependentUpon>UserControlMissionOverlay.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\Overlays\UserControlRouteTracker.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\Overlays\UserControlRouteTracker.Designer.cs">
-      <DependentUpon>UserControlRouteTracker.cs</DependentUpon>
-    </Compile>
     <Compile Include="UserControls\Overlays\UserControlSpanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -854,9 +848,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\Overlays\UserControlMissionOverlay.resx">
       <DependentUpon>UserControlMissionOverlay.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\Overlays\UserControlRouteTracker.resx">
-      <DependentUpon>UserControlRouteTracker.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\Overlays\UserControlSpanel.resx">
       <DependentUpon>UserControlSpanel.cs</DependentUpon>
