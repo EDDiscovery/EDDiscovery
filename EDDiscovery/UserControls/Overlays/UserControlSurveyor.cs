@@ -134,6 +134,7 @@ namespace EDDiscovery.UserControls
             if (he.EntryType == JournalTypeEnum.NavRoute && currentRoute != null && currentRoute.Id == -1)
             {
                 LoadRoute(NavRouteNameLabel);
+                last_sys = hl.GetLast?.System;      // may be null
                 DrawSystem(last_sys);
             }
         }
@@ -155,15 +156,15 @@ namespace EDDiscovery.UserControls
                     last_sys = he.System;
                     DrawSystem(last_sys, last_sys.Name);
                 }
-                else if (he.EntryType == JournalTypeEnum.StartJump)         // so we can pre-present
-                {
-                    JournalStartJump jsj = he.journalEntry as JournalStartJump;
-                    if (jsj.IsHyperspace)
-                    {
-                        last_sys = new SystemClass(jsj.SystemAddress, jsj.StarSystem);       // important need system address as scan uses it for quick lookup
-                        DrawSystem(last_sys, last_sys.Name);
-                    }
-                }
+                //else if (he.EntryType == JournalTypeEnum.StartJump)         // so we can pre-present
+                //{
+                //    JournalStartJump jsj = he.journalEntry as JournalStartJump;
+                //    if (jsj.IsHyperspace)
+                //    {
+                //        last_sys = new SystemClass(jsj.SystemAddress, jsj.StarSystem);       // important need system address as scan uses it for quick lookup
+                //        DrawSystem(last_sys, last_sys.Name);
+                //    }
+                //}
                 else if (he.EntryType == JournalTypeEnum.FSSAllBodiesFound)     // since we present body counts
                 {
                     DrawSystem(last_sys, last_sys.Name + " " + "System scan complete.".T(EDTx.UserControlSurveyor_Systemscancomplete));
