@@ -118,6 +118,8 @@ namespace EDDiscovery.UserControls
         {
             last_sys = hl.GetLast?.System;      // may be null
 
+            System.Diagnostics.Debug.WriteLine($"Surveyor History Load {currentRoute?.Name} {currentRoute?.Id} {currentRoute?.Systems.Count}");
+
             if (currentRoute != null && currentRoute.Id == -1)      // history has changed, force an update to route if navroute selected. navroutes are the only ones with Id=-1
                 LoadRoute(NavRouteNameLabel);
 
@@ -827,9 +829,14 @@ namespace EDDiscovery.UserControls
                     {
                         var systems = route.Route.Where(x => x.StarSystem.HasChars()).Select(y => y.StarSystem).ToArray();
                         currentRoute = new SavedRouteClass(translatednavroutename, systems);      // with an ID of -1 note
+                        System.Diagnostics.Debug.WriteLine($"Loaded Nav route with {systems.Length}");
                     }
                     else
+                    {
                         currentRoute = new SavedRouteClass(translatednavroutename, new string[] { });     // no known systems yet, but make a navroute so we have it selected
+                        System.Diagnostics.Debug.WriteLine($"No route available, loaded empty Nav route");
+
+                    }
                 }
                 else
                 {
