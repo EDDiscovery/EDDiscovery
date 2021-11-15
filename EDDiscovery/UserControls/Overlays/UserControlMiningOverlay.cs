@@ -544,7 +544,7 @@ namespace EDDiscovery.UserControls
             using (StringFormat frmt = new StringFormat())
             {
                 var lab = new ExtendedControls.ExtPictureBox.ImageElement();
-                lab.TextAutosize(timeie.Position, timeie.Size, TimeText(false), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+                lab.TextAutoSize(timeie.Position, timeie.Size, TimeText(false), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
                 pictureBox.RemoveItem(timeie, backcolour);
                 pictureBox.AddItem(lab);
                 timeie = lab;

@@ -675,7 +675,7 @@ SECTION UserControlRouteTracker
 .FL: "From Last WP " @
 .TF: "To First WP " @
 .LF: ", Left {0:N1}ly" @
-.ToWP: "To WP {0} " @
+.ToWP: "To WP {0}" @
 .Note: "Note: {0}" @
 .J1: "jump" @
 .JS: "jumps" @

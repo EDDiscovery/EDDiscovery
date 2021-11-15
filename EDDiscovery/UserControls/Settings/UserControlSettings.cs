@@ -169,6 +169,7 @@ namespace EDDiscovery.UserControls
         bool capiloggedin;
         Label capiStateLabel;
         ExtendedControls.ExtButton capiButton;
+        ExtendedControls.ExtButton capiclearloginButton;
         EliteDangerousCore.Forms.CommanderForm cf;
 
         private List<ExtendedControls.ExtGroupBox> AdditionalCmdrControls()
@@ -178,13 +179,22 @@ namespace EDDiscovery.UserControls
             ExtendedControls.ExtGroupBox g1 = new ExtendedControls.ExtGroupBox() { Name = "CAPIGB" , Height = 60, Text = "Frontier CAPI" };
             capiButton = new ExtendedControls.ExtButton() { Location = new System.Drawing.Point(240,23),
                                     ClientSize = new System.Drawing.Size(80,20), Name="CAPIButton"};
-            capiButton.Click += CapiButton_Click;
+            capiclearloginButton = new ExtendedControls.ExtButton() { Location = new System.Drawing.Point(340, 23),
+                ClientSize = new System.Drawing.Size(80, 20), Name = "ClearCAPIButton", Text = "Clear" };
+            capiclearloginButton.Click += clearLoginButton_Click;
 
             capiStateLabel = new Label() { Location = new System.Drawing.Point(4, 23), Name ="CAPIStatus"};
             g1.Controls.Add(capiButton);
+            g1.Controls.Add(capiclearloginButton);
             g1.Controls.Add(capiStateLabel);
             gb.Add(g1);
             return gb;
+        }
+
+        private void clearLoginButton_Click(object sender, EventArgs e)
+        {
+            discoveryform.FrontierCAPI.LogOut(cf.CommanderName);        // force logout and deletion of .cred
+            capiclearloginButton.Visible = false;
         }
 
         private void CapiButton_Click(object sender, EventArgs e)
@@ -213,17 +223,20 @@ namespace EDDiscovery.UserControls
         {
             if (!discoveryform.FrontierCAPI.ClientIDAvailable)      // disable id no capiID
             {
+                capiclearloginButton.Visible = false;
                 capiButton.Enabled = false;
                 capiStateLabel.Text = capiButton.Text = "Disabled".T(EDTx.CommanderForm_CAPIDisabled);
             }
             else if (cf.CommanderName.HasChars() && discoveryform.FrontierCAPI.GetUserState(cf.CommanderName) == CompanionAPI.UserState.HasLoggedInWithCredentials)   // if logged in..
             {
+                capiclearloginButton.Visible = false;
                 capiButton.Enabled = true;
                 capiButton.Text = "Logout".T(EDTx.CommanderForm_CAPILogout);
                 capiStateLabel.Text = "Logged In".T(EDTx.CommanderForm_CAPILoggedin);
             }
             else
             {                                                   // no cred, or logged out..
+                capiclearloginButton.Visible = discoveryform.FrontierCAPI.GetUserState(cf.CommanderName) != CompanionAPI.UserState.NeverLoggedIn;
                 capiButton.Enabled = true;
                 capiButton.Text = "Login".T(EDTx.CommanderForm_CAPILogin);
                 capiStateLabel.Text = "Await Log in".T(EDTx.CommanderForm_CAPIAwaitLogin);

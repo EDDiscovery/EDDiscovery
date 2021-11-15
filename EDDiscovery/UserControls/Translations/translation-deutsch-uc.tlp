@@ -666,7 +666,7 @@ SECTION UserControlRouteTracker
 .FL: "From Last WP " => "Vom letzen Wegpunkt"
 .TF: "To First WP " => "Zum ersten Wegpunkt"
 .LF: ", Left {0:N1}ly" => ", übrig {0:N1}Lj"
-.ToWP: "To WP {0} " => "Zum WP {0} "
+.ToWP: "To WP {0}" => "Zum WP {0}"
 .Dev: ", Dev {0:N1}ly" => ", Abw {0:N1}Lj"
 .Selectroute: "Select route" => "Wähle Route"
 .PresstoCancel: "Press to Cancel" => "Drücken um abzubrechen"
