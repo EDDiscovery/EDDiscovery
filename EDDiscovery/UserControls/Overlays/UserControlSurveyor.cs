@@ -132,7 +132,10 @@ namespace EDDiscovery.UserControls
         {
             // received a new navroute, and we have navroute selected, reload
             if (he.EntryType == JournalTypeEnum.NavRoute && currentRoute != null && currentRoute.Id == -1)
+            {
                 LoadRoute(NavRouteNameLabel);
+                DrawSystem(last_sys);
+            }
         }
 
         private void GlobalBookMarkList_OnBookmarkChange(BookmarkClass bk, bool deleted)
@@ -155,8 +158,11 @@ namespace EDDiscovery.UserControls
                 else if (he.EntryType == JournalTypeEnum.StartJump)         // so we can pre-present
                 {
                     JournalStartJump jsj = he.journalEntry as JournalStartJump;
-                    last_sys = new SystemClass(jsj.SystemAddress, jsj.StarSystem);       // important need system address as scan uses it for quick lookup
-                    DrawSystem(last_sys, last_sys.Name);
+                    if (jsj.IsHyperspace)
+                    {
+                        last_sys = new SystemClass(jsj.SystemAddress, jsj.StarSystem);       // important need system address as scan uses it for quick lookup
+                        DrawSystem(last_sys, last_sys.Name);
+                    }
                 }
                 else if (he.EntryType == JournalTypeEnum.FSSAllBodiesFound)     // since we present body counts
                 {
@@ -209,6 +215,8 @@ namespace EDDiscovery.UserControls
 
             var picelements = new List<ExtPictureBox.ImageElement>();       // accumulate picture elements in here and render under lock due to async below.
 
+            System.Diagnostics.Debug.WriteLine($"Surveyor Draw {sys?.Name} {sys?.HasCoordinate}");
+
             // if system, and we are in no focus or don't care
             if (sys != null && (uistate == EliteDangerousCore.UIEvents.UIGUIFocus.Focus.NoFocus || !IsSet(CtrlList.autohide)
                                 || (uistate == EliteDangerousCore.UIEvents.UIGUIFocus.Focus.FSSMode && IsSet(CtrlList.donthidefssmode))))
@@ -257,7 +265,7 @@ namespace EDDiscovery.UserControls
 
                             System.Diagnostics.Debug.WriteLine($"Surveyor: {closest.lastsystem?.Name}->{closest.nextsystem?.Name} {closest.waypoint} distance to {closest.disttowaypoint} dev {closest.deviation} cuml after wp {closest.cumulativewpdist} inc wp {distleft} route {routedistance}");
 
-                            lastroutetext = String.Format("{0} {1} WPs, {2:N1}ly", currentRoute.Name, currentRoute.Systems.Count, routedistance);
+                            lastroutetext = $"{currentRoute.Name} {currentRoute.Systems.Count} WPs, {routedistance:N1}ly -> {closest.finalsystem.Name}";
 
                             string jumpmsg = "";
                             if (IsSet(RouteControl.showJumps))
@@ -271,7 +279,7 @@ namespace EDDiscovery.UserControls
 
                                     jumps = (int)Math.Ceiling(closest.disttowaypoint / shipfsdinfo.avgsinglejump);
 
-                                    if (jumps > 0)
+                                    if (jumps > 1 && currentRoute.Id != -1) // if more than 1 jump, and not nav route
                                         jumpmsg = ", " + jumps.ToString() + " " + ((jumps == 1) ? "jump".T(EDTx.UserControlRouteTracker_J1) : "jumps".T(EDTx.UserControlRouteTracker_JS));
                                 }
                                 else
