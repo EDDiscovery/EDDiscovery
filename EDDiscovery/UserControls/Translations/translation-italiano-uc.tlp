@@ -675,7 +675,7 @@ SECTION UserControlRouteTracker
 .FL: "From Last WP " @
 .TF: "To First WP " @
 .LF: ", Left {0:N1}ly" @
-.ToWP: "To WP {0} " @
+.ToWP: "To WP {0}" @
 .Dev: ", Dev {0:N1}ly" @
 .Selectroute: "Select route" @
 .PresstoCancel: "Press to Cancel" @

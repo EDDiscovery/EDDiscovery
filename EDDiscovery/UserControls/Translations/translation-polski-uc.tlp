@@ -678,7 +678,7 @@ SECTION UserControlRouteTracker
 .FL: "From Last WP " => "Od Ostatniego Pkt. Naw."
 .TF: "To First WP " => "Do Pierwszego Pkt. Naw."
 .LF: ", Left {0:N1}ly" => "Pozostało {0:N1} lat świetlnych"
-.ToWP: "To WP {0} " => "Do Pkt. Naw. {0}"
+.ToWP: "To WP {0}" => "Do Pkt. Naw. {0}"
 .Dev: ", Dev {0:N1}ly" => "Odst. {0:N1}LŚ"
 .Selectroute: "Select route" => "Wybierz trasę"
 .PresstoCancel: "Press to Cancel" => "Naciśnij aby Anulować"

@@ -40,9 +40,11 @@ namespace EDDiscovery.UserControls
         EliteDangerousCore.UIEvents.UIGUIFocus.Focus uistate = EliteDangerousCore.UIEvents.UIGUIFocus.Focus.NoFocus;
 
         private SavedRouteClass currentRoute = null;
-        const string NavRouteName = "Last NavRoute";
         private string lastsystem;
         private EliteDangerousCalculations.FSDSpec.JumpInfo shipfsdinfo;
+        const string NavRouteNameLabel = "!*NavRoute";
+        private string lastroutetext = "";      // cached so we can represent it even if we pass a sys into drawsystem with no coord
+        private string translatednavroutename = "";
 
         public UserControlSurveyor()
         {
@@ -70,6 +72,8 @@ namespace EDDiscovery.UserControls
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
             GlobalBookMarkList.Instance.OnBookmarkChange += GlobalBookMarkList_OnBookmarkChange;
+
+            translatednavroutename = "TX Nav Route"; //TBD
 
             LoadRoute(GetSetting("route", ""));
             routecontrolsettings = GetSetting("routecontrol", "showJumps;showwaypoints");
@@ -108,27 +112,27 @@ namespace EDDiscovery.UserControls
             extPictureBoxScroll.ScrollBarEnabled = !on;     // turn off the scroll bar if its transparent
             extPictureBoxScroll.BackColor = pictureBoxSurveyor.BackColor = this.BackColor = curcol;
             rollUpPanelTop.Visible = !on;
-            DrawSystem(last_sys);   // need to redraw as we use backcolour
         }
 
         private void Discoveryform_OnHistoryChange(HistoryList hl)
         {
             last_sys = hl.GetLast?.System;      // may be null
 
-            if (currentRoute != null && currentRoute.Name == NavRouteName)      // history has changed, force an update to route if navroute selected
-                LoadRoute(NavRouteName);
+            if (currentRoute != null && currentRoute.Id == -1)      // history has changed, force an update to route if navroute selected. navroutes are the only ones with Id=-1
+                LoadRoute(NavRouteNameLabel);
 
             DrawSystem(last_sys, last_sys?.Name);    // may be null
 
-            // debug t.Interval = 200; t.Tick += (s, e) => { var sys = currentRoute.PosAlongRoute(percent, 0); DrawSystem(sys, sys.Name); percent += 0.5; }; t.Start();  // debug to make it play thru.. leave
+            //t.Interval = 200; t.Tick += (s, e) => { var sys = currentRoute.PosAlongRoute(percent, 0); DrawSystem(sys, sys.Name); percent += 0.5; }; t.Start();  // debug to make it play thru.. leave
+          //  t.Interval = 2000; t.Tick += (s, e) => { if (sysno < currentRoute.Systems.Count ){ var sys = currentRoute.KnownSystemList()[sysno++]; DrawSystem(sys.Item1, sys.Item1.Name); } }; t.Start();  // debug to make it play thru.. leave
         }
-        //double percent = -10; Timer t = new Timer();// play thru harness
+        int sysno = 0; double percent = -10; Timer t = new Timer();// play thru harness
 
         private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)
         {
             // received a new navroute, and we have navroute selected, reload
-            if (he.EntryType == JournalTypeEnum.NavRoute && currentRoute != null && currentRoute.Name == NavRouteName)
-                LoadRoute(NavRouteName);
+            if (he.EntryType == JournalTypeEnum.NavRoute && currentRoute != null && currentRoute.Id == -1)
+                LoadRoute(NavRouteNameLabel);
         }
 
         private void GlobalBookMarkList_OnBookmarkChange(BookmarkClass bk, bool deleted)
@@ -203,7 +207,7 @@ namespace EDDiscovery.UserControls
                 SetControlText(tt);
             }
 
-            pictureBoxSurveyor.ClearImageList();
+            var picelements = new List<ExtPictureBox.ImageElement>();       // accumulate picture elements in here and render under lock due to async below.
 
             // if system, and we are in no focus or don't care
             if (sys != null && (uistate == EliteDangerousCore.UIEvents.UIGUIFocus.Focus.NoFocus || !IsSet(CtrlList.autohide)
@@ -215,9 +219,10 @@ namespace EDDiscovery.UserControls
                 var textcolour = IsTransparent ? discoveryform.theme.SPanelColor : discoveryform.theme.LabelColor;
                 var backcolour = IsTransparent ? Color.Transparent : this.BackColor;
 
-                if (IsSet(CtrlList.showsysinfo))       //!IsControlTextVisible()
+                if (IsSet(CtrlList.showsysinfo))     
                 {
-                    var i = pictureBoxSurveyor.AddTextAutoSize(
+                    var i = new ExtPictureBox.ImageElement();
+                    i.TextAutoSize(                  
                             new Point(3, vpos),
                             new Size(Math.Max(pictureBoxSurveyor.Width - 6, 24), 10000),
                             titletext,
@@ -226,47 +231,43 @@ namespace EDDiscovery.UserControls
                             backcolour,
                             1.0F,
                             frmt: frmt);
+                    picelements.Add(i);
 
                     vpos += i.Location.Height;
                 }
 
-                if (currentRoute != null)
+                if (currentRoute != null && sys.HasCoordinate)      // if we have a route and a coord, we can work out the next route text
                 {
-                    string topline = "", bottomline = "", note = "";
-
                     if (currentRoute.Systems.Count == 0)
                     {
-                        topline = "Route contains no waypoints".T(EDTx.UserControlRouteTracker_NoWay);
-                    }
-                    else if (!sys.HasCoordinate)
-                    {
-                        topline = "Unknown location".T(EDTx.UserControlRouteTracker_Unk);
+                        lastroutetext = "Route contains no waypoints".T(EDTx.UserControlRouteTracker_NoWay);
                     }
                     else
                     {
                         SavedRouteClass.ClosestInfo closest = currentRoute.ClosestTo(sys);
-                        System.Diagnostics.Debug.WriteLine($"");
-
-                        if (closest == null)  // if null, no systems found.. uh oh
+                        if (closest == null )  // if null, no systems found.. uh oh
                         {
-                            topline = "No systems in route have known co-ords".T(EDTx.UserControlRouteTracker_NoCo);
+                            lastroutetext = "No systems in route have known co-ords".T(EDTx.UserControlRouteTracker_NoCo);
                         }
                         else
                         {
-                            double routedistance = currentRoute.CumulativeDistance();
+                            double routedistance = currentRoute.CumulativeDistance();       // total distance
+
                             double distleft = closest.disttowaypoint + (closest.deviation < 0 ? 0 : closest.cumulativewpdist);
 
-                            topline = String.Format("{0} {1} WPs, {2:N1}ly", currentRoute.Name,
-                                            currentRoute.Systems.Count, routedistance);
+                            System.Diagnostics.Debug.WriteLine($"Surveyor: {closest.lastsystem?.Name}->{closest.nextsystem?.Name} {closest.waypoint} distance to {closest.disttowaypoint} dev {closest.deviation} cuml after wp {closest.cumulativewpdist} inc wp {distleft} route {routedistance}");
+
+                            lastroutetext = String.Format("{0} {1} WPs, {2:N1}ly", currentRoute.Name, currentRoute.Systems.Count, routedistance);
 
                             string jumpmsg = "";
                             if (IsSet(RouteControl.showJumps))
                             {
                                 if (shipfsdinfo != null)
                                 {
-                                    int jumps = (int)Math.Ceiling(routedistance / shipfsdinfo.avgsinglejump);
+                                    // navroutes are precomputed, so the total jump count is from it. Else do it by distance
+                                    int jumps = currentRoute.Id != -1 ? (int)Math.Ceiling(routedistance / shipfsdinfo.avgsinglejump) : currentRoute.Systems.Count-1;
                                     if (jumps > 0)
-                                        topline += ", " + jumps.ToString() + " " + ((jumps == 1) ? "jump".T(EDTx.UserControlRouteTracker_J1) : "jumps".T(EDTx.UserControlRouteTracker_JS));
+                                        lastroutetext += ", " + jumps.ToString() + " " + ((jumps == 1) ? "jump".T(EDTx.UserControlRouteTracker_J1) : "jumps".T(EDTx.UserControlRouteTracker_JS));
 
                                     jumps = (int)Math.Ceiling(closest.disttowaypoint / shipfsdinfo.avgsinglejump);
 
@@ -277,33 +278,41 @@ namespace EDDiscovery.UserControls
                                     jumpmsg = " No Ship FSD Information".T(EDTx.UserControlRouteTracker_NoFSD);
                             }
 
-                            string wpposmsg = closest.system.Name;
+                            string wpposmsg = "";
                             if (IsSet(RouteControl.showwaypoints))
-                                wpposmsg += String.Format(" @{0:N1},{1:N1},{2:N1}", closest.system.X, closest.system.Y, closest.system.Z);
-                            wpposmsg += String.Format(" {0:N1}ly", closest.disttowaypoint);
+                                wpposmsg = String.Format(" @{0:N1},{1:N1},{2:N1}", closest.nextsystem.X, closest.nextsystem.Y, closest.nextsystem.Z);
 
                             if (closest.deviation < 0)        // if not on path
                             {
-                                bottomline += closest.cumulativewpdist == 0 ? "From Last WP ".T(EDTx.UserControlRouteTracker_FL) : "To First WP ".T(EDTx.UserControlRouteTracker_TF);
-                                bottomline += wpposmsg + jumpmsg;
+                                lastroutetext += Environment.NewLine;
+                                lastroutetext += closest.cumulativewpdist == 0 ? "From Last WP ".T(EDTx.UserControlRouteTracker_FL) : "To First WP ".T(EDTx.UserControlRouteTracker_TF);
+                                lastroutetext += $" >> {closest.disttowaypoint:N1}ly >> " + closest.nextsystem.Name + wpposmsg + jumpmsg;
                             }
                             else
                             {
-                                topline += String.Format(", Left {0:N1}ly".T(EDTx.UserControlRouteTracker_LF), distleft);
-                                bottomline += String.Format("To WP {0} ".T(EDTx.UserControlRouteTracker_ToWP), closest.waypoint + 1);
-                                bottomline += wpposmsg + jumpmsg;
+                                lastroutetext += String.Format(", Left {0:N1}ly".T(EDTx.UserControlRouteTracker_LF), distleft) + Environment.NewLine;
+                                if ( distleft == 0)
+                                    lastroutetext += $"{closest.nextsystem.Name}";
+                                else
+                                    lastroutetext += $"{closest.lastsystem?.Name} >> {closest.disttowaypoint:N1}ly >> {closest.nextsystem.Name}";
+                                lastroutetext += " " + String.Format("To WP {0}".T(EDTx.UserControlRouteTracker_ToWP), closest.waypoint + 1);
+                                lastroutetext += wpposmsg + jumpmsg;
+
                                 if (IsSet(RouteControl.showdeviation))
-                                    bottomline += String.Format(", Dev {0:N1}ly".T(EDTx.UserControlRouteTracker_Dev), closest.deviation);
+                                    lastroutetext += String.Format(", Dev {0:N1}ly".T(EDTx.UserControlRouteTracker_Dev), closest.deviation);
                             }
+
+                            System.Diagnostics.Debug.WriteLine(lastroutetext);
+                            System.Diagnostics.Debug.WriteLine("---");
 
                             if (IsSet(RouteControl.showbookmarks))
                             {
                                 BookmarkClass bookmark = GlobalBookMarkList.Instance.FindBookmarkOnSystem(sys.Name);
                                 if (bookmark != null)
-                                    note = String.Format("Note: {0}".T(EDTx.UserControlRouteTracker_Note), bookmark.Note);
+                                    lastroutetext += Environment.NewLine + String.Format("Note: {0}".T(EDTx.UserControlRouteTracker_Note), bookmark.Note);
                             }
 
-                            string name = closest.system.Name;
+                            string name = closest.nextsystem.Name;
 
                             if (lastsystem == null || name.CompareTo(lastsystem) != 0)
                             {
@@ -323,16 +332,21 @@ namespace EDDiscovery.UserControls
                             }
                         }
                     }
+                }
 
-                    var i = pictureBoxSurveyor.AddTextAutoSize(
+                if ( lastroutetext.HasChars() )     // if we have last route text, display it
+                {
+                    var i = new ExtPictureBox.ImageElement();
+                    i.TextAutoSize(
                             new Point(3, vpos),
                             new Size(Math.Max(pictureBoxSurveyor.Width - 6, 24), 10000),
-                            topline.AppendPrePad(bottomline, Environment.NewLine).AppendPrePad(note, Environment.NewLine),
+                            lastroutetext,
                             Font,
                             textcolour,
                             backcolour,
                             1.0F,
                             frmt: frmt);
+                    picelements.Add(i);
 
                     vpos += i.Location.Height;
                 }
@@ -360,7 +374,8 @@ namespace EDDiscovery.UserControls
                     if (infoline.HasChars())
                     {
                         //System.Diagnostics.Debug.WriteLine("Draw " + infoline);
-                        var i = pictureBoxSurveyor.AddTextAutoSize(
+                        var i = new ExtPictureBox.ImageElement();
+                        i.TextAutoSize(
                             new Point(3, vpos),
                             new Size(Math.Max(pictureBoxSurveyor.Width - 6, 24), 10000),
                             infoline,
@@ -369,6 +384,7 @@ namespace EDDiscovery.UserControls
                             backcolour,
                             1.0F,
                             frmt: frmt);
+                        picelements.Add(i);
                         vpos += i.Location.Height;
                     }
 
@@ -443,7 +459,8 @@ namespace EDDiscovery.UserControls
                                             lowRadiusLimit, largeRadiusLimit, eccentricityLimit);
 
                                         //System.Diagnostics.Debug.WriteLine("Display " + il);
-                                        var i = pictureBoxSurveyor.AddTextAutoSize(
+                                        var i = new ExtPictureBox.ImageElement();
+                                        i.TextAutoSize(
                                                 new Point(3, vpos),
                                                 new Size(Math.Max(pictureBoxSurveyor.Width - 6, 24), 10000),
                                                 il,
@@ -452,6 +469,7 @@ namespace EDDiscovery.UserControls
                                                 backcolour,
                                                 1.0F,
                                                 frmt: frmt);
+                                        picelements.Add(i);
                                         vpos += i.Location.Height;
                                         value += sd.EstimatedValue;
                                     }
@@ -461,7 +479,8 @@ namespace EDDiscovery.UserControls
 
                         if (value > 0 && IsSet(CtrlList.showValues))
                         {
-                            var i = pictureBoxSurveyor.AddTextAutoSize(
+                            var i = new ExtPictureBox.ImageElement();
+                            i.TextAutoSize(
                                 new Point(3, vpos),
                                 new Size(Math.Max(pictureBoxSurveyor.Width - 6, 24), 10000),
                                 "^^ ~ " + value.ToString("N0") + " cr",
@@ -470,6 +489,7 @@ namespace EDDiscovery.UserControls
                                 backcolour,
                                 1.0F,
                                 frmt: frmt);
+                            picelements.Add(i);
                             vpos += i.Location.Height;
                         }
                     }
@@ -511,7 +531,8 @@ namespace EDDiscovery.UserControls
                         if (siglist.HasChars())
                         {
                             //System.Diagnostics.Debug.WriteLine("Display " + siglist);
-                            pictureBoxSurveyor.AddTextAutoSize(new Point(3, vpos),
+                            var i = new ExtPictureBox.ImageElement();
+                            i.TextAutoSize(new Point(3, vpos),
                                                             new Size(Math.Max(pictureBoxSurveyor.Width - 6, 24), 10000),
                                                             siglist,
                                                             Font,
@@ -519,13 +540,19 @@ namespace EDDiscovery.UserControls
                                                             backcolour,
                                                             1.0F,
                                                             frmt: frmt);
+                            picelements.Add(i);
                         }
 
                     }
                 }
             }
 
-            extPictureBoxScroll.Render();
+            lock( extPictureBoxScroll)      // because of the async call above, we may be running two of these at the same time. So, we lock and then add/update/render
+            {
+                pictureBoxSurveyor.ClearImageList();
+                pictureBoxSurveyor.AddRange(picelements);
+                extPictureBoxScroll.Render();
+            }
         }
 
         private void UserControlSurveyor_Resize(object sender, EventArgs e)
@@ -749,7 +776,7 @@ namespace EDDiscovery.UserControls
             dropdown.FitImagesToItemHeight = true;
             dropdown.Items = savedroutes.Select(x => x.Name).ToList();
             dropdown.Items.Insert(0, "Off"); // TBD translate
-            dropdown.Items.Insert(1, "Nav Route"); // TBD translate
+            dropdown.Items.Insert(1, translatednavroutename ); // TBD translate
             dropdown.FlatStyle = FlatStyle.Popup;
             dropdown.PositionBelow(sender as Control);
             dropdown.SelectedIndexChanged += (s, ea) =>
@@ -760,7 +787,7 @@ namespace EDDiscovery.UserControls
                 }
                 else if (dropdown.SelectedIndex == 1)      // navroute
                 {
-                    LoadRoute(NavRouteName);
+                    LoadRoute(NavRouteNameLabel);
                 }
                 else
                 {
@@ -780,18 +807,20 @@ namespace EDDiscovery.UserControls
             PutSetting("route", name);      // store back the current name 
 
             currentRoute = null;
+            lastroutetext = null;       // reset the route text stored due to start jump not having coords
+
             if (name.HasChars())
             {
-                if (name.Equals(NavRouteName))
+                if (name.Equals(NavRouteNameLabel))
                 {
                     var route = discoveryform.history.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.NavRoute)?.journalEntry as EliteDangerousCore.JournalEvents.JournalNavRoute;
                     if (route?.Route != null)
                     {
                         var systems = route.Route.Where(x => x.StarSystem.HasChars()).Select(y => y.StarSystem).ToArray();
-                        currentRoute = new SavedRouteClass(NavRouteName, systems);
+                        currentRoute = new SavedRouteClass(translatednavroutename, systems);      // with an ID of -1 note
                     }
                     else
-                        currentRoute = new SavedRouteClass(NavRouteName, new string[] { });     // no known systems yet
+                        currentRoute = new SavedRouteClass(translatednavroutename, new string[] { });     // no known systems yet, but make a navroute so we have it selected
                 }
                 else
                 {

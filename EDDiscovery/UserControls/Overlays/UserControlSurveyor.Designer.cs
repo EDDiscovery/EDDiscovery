@@ -211,6 +211,7 @@ namespace EDDiscovery.UserControls
             // rollUpPanelTop
             // 
             this.rollUpPanelTop.AutoSize = true;
+            this.rollUpPanelTop.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.rollUpPanelTop.Controls.Add(this.panelControls);
             this.rollUpPanelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.rollUpPanelTop.HiddenMarkerWidth = 400;
@@ -229,6 +230,7 @@ namespace EDDiscovery.UserControls
             // panelControls
             // 
             this.panelControls.AutoSize = true;
+            this.panelControls.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.panelControls.BackColor = System.Drawing.SystemColors.Control;
             this.panelControls.Controls.Add(this.extButtonPlanets);
             this.panelControls.Controls.Add(this.extButtonStars);

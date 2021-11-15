@@ -669,7 +669,7 @@ SECTION UserControlRouteTracker
 .FL: "From Last WP " => "自上一个航点："
 .TF: "To First WP " => "至下一个航点："
 .LF: ", Left {0:N1}ly" => "，剩余 {0:N1}Lj"
-.ToWP: "To WP {0} " => "至航点 {0} "
+.ToWP: "To WP {0}" => "至航点 {0}"
 .Dev: ", Dev {0:N1}ly" => ", 偏航 {0:N1}ly"
 .Selectroute: "Select route" => "设定航线"
 .PresstoCancel: "Press to Cancel" => "取消"
