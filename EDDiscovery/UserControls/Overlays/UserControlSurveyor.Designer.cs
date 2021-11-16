@@ -210,8 +210,10 @@ namespace EDDiscovery.UserControls
             // 
             // rollUpPanelTop
             // 
-            this.rollUpPanelTop.AutoSize = true;
+            this.rollUpPanelTop.AutoHeight = true;
+            this.rollUpPanelTop.AutoHeightWidthDisable = false;
             this.rollUpPanelTop.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.rollUpPanelTop.AutoWidth = false;
             this.rollUpPanelTop.Controls.Add(this.panelControls);
             this.rollUpPanelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.rollUpPanelTop.HiddenMarkerWidth = 400;
@@ -241,7 +243,7 @@ namespace EDDiscovery.UserControls
             this.panelControls.Controls.Add(this.extCheckBoxWordWrap);
             this.panelControls.Controls.Add(this.extButtonSetRoute);
             this.panelControls.Controls.Add(this.extButtonControlRoute);
-            this.panelControls.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelControls.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelControls.Location = new System.Drawing.Point(0, 0);
             this.panelControls.Name = "panelControls";
             this.panelControls.Size = new System.Drawing.Size(721, 30);
@@ -315,7 +317,6 @@ namespace EDDiscovery.UserControls
             this.rollUpPanelTop.PerformLayout();
             this.panelControls.ResumeLayout(false);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
