@@ -277,7 +277,7 @@ namespace EDDiscovery.UserControls
             // 
             this.extButtonSetRoute.BackColor = System.Drawing.SystemColors.Control;
             this.extButtonSetRoute.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.extButtonSetRoute.Image = global::EDDiscovery.Icons.Controls.AlignCentre;
+            this.extButtonSetRoute.Image = global::EDDiscovery.Icons.Controls.Route;
             this.extButtonSetRoute.Location = new System.Drawing.Point(288, 1);
             this.extButtonSetRoute.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
             this.extButtonSetRoute.Name = "extButtonSetRoute";
@@ -290,7 +290,7 @@ namespace EDDiscovery.UserControls
             // 
             this.extButtonControlRoute.BackColor = System.Drawing.SystemColors.Control;
             this.extButtonControlRoute.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.extButtonControlRoute.Image = global::EDDiscovery.Icons.Controls.AlignCentre;
+            this.extButtonControlRoute.Image = global::EDDiscovery.Icons.Controls.RouteConfig;
             this.extButtonControlRoute.Location = new System.Drawing.Point(328, 1);
             this.extButtonControlRoute.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
             this.extButtonControlRoute.Name = "extButtonControlRoute";

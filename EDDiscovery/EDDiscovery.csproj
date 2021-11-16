@@ -594,12 +594,6 @@
     <Compile Include="UserControls\Overlays\UserControlSysInfo.Designer.cs">
       <DependentUpon>UserControlSysInfo.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\Overlays\UserControlTrippanel.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\Overlays\UserControlTrippanel.Designer.cs">
-      <DependentUpon>UserControlTrippanel.cs</DependentUpon>
-    </Compile>
     <Compile Include="UserControls\RoutesExpeditions\UserControlExpedition.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -857,9 +851,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\Overlays\UserControlSysInfo.resx">
       <DependentUpon>UserControlSysInfo.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\Overlays\UserControlTrippanel.resx">
-      <DependentUpon>UserControlTrippanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\RoutesExpeditions\UserControlExpedition.resx">
       <DependentUpon>UserControlExpedition.cs</DependentUpon>
