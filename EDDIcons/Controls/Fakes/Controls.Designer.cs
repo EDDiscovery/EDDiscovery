@@ -203,6 +203,16 @@ namespace EDDiscovery.Icons {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap Eccentric {
+            get {
+                object obj = ResourceManager.GetObject("Eccentric", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap EDDB {
             get {
                 object obj = ResourceManager.GetObject("EDDB", resourceCulture);
@@ -386,6 +396,16 @@ namespace EDDiscovery.Icons {
         public static System.Drawing.Bitmap JournalGrid_ExportToExcel {
             get {
                 object obj = ResourceManager.GetObject("JournalGrid_ExportToExcel", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap LandablePlanet {
+            get {
+                object obj = ResourceManager.GetObject("LandablePlanet", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -146,6 +146,7 @@ namespace EDDiscovery.Icons
         #endregion
         #region EDDiscovery.UserControls.UserControlScan
         public static Image Scan_Bodies_Landable { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.Bodies.Landable"); } }
+        public static Image Scan_Bodies_LandablePlanet { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.Bodies.LandablePlanet"); } }
         public static Image Scan_Bodies_HighValue { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.Bodies.HighValue"); } }
         public static Image Scan_Bodies_Volcanism { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.Bodies.Volcanism"); } }
         public static Image Scan_Bodies_Signals { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Scan.Bodies.Signals"); } }
@@ -273,6 +274,7 @@ namespace EDDiscovery.Icons
         public static Image AlignRight { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Surveyor.AlignRight"); } }
         public static Image Route { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Surveyor.Route"); } }
         public static Image RouteConfig { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Surveyor.RouteConfig"); } }
+        public static Image Eccentric { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Surveyor.Eccentric"); } }
 
         #endregion
     }

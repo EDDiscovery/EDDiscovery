@@ -547,6 +547,8 @@
     <EmbeddedResource Include="Controls\SysInfo\notfirstdiscover.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Controls\Scan\Bodies\LandablePlanet.png" />
+    <EmbeddedResource Include="Controls\Surveyor\Eccentric.png" />
     <EmbeddedResource Include="Controls\Surveyor\RouteConfig.png" />
     <EmbeddedResource Include="Controls\Surveyor\Route.png" />
     <EmbeddedResource Include="Controls\Surveyor\AlignCentre.png" />

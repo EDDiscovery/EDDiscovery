@@ -684,23 +684,23 @@ namespace EDDiscovery.UserControls
 
             displayfilter.AddAllNone();
             displayfilter.AddStandardOption(CtrlList.allplanets.ToString(), "Show All Planets".TxID("UserControlSurveyor.showAllPlanetsToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Star);
-            displayfilter.AddStandardOption(CtrlList.showAmmonia.ToString(), "Ammonia World".TxID("UserControlSurveyor.planetaryClassesToolStripMenuItem.ammoniaWorldToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Star);
-            displayfilter.AddStandardOption(CtrlList.showEarthlike.ToString(), "Earthlike World".TxID("UserControlSurveyor.planetaryClassesToolStripMenuItem.earthlikeWorldToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Star);
-            displayfilter.AddStandardOption(CtrlList.showWaterWorld.ToString(), "Water World".TxID("UserControlSurveyor.planetaryClassesToolStripMenuItem.waterWorldToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Star);
-            displayfilter.AddStandardOption(CtrlList.showHMC.ToString(), "High metal content body".TxID("UserControlSurveyor.planetaryClassesToolStripMenuItem.highMetalContentBodyToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Star);
-            displayfilter.AddStandardOption(CtrlList.showMR.ToString(), "Metal-rich body".TxID("UserControlSurveyor.planetaryClassesToolStripMenuItem.metalToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Star);
-            displayfilter.AddStandardOption(CtrlList.showTerraformable.ToString(), "Terraformable".TxID("UserControlSurveyor.bodyFeaturesToolStripMenuItem.terraformableToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Star);
-            displayfilter.AddStandardOption(CtrlList.showVolcanism.ToString(), "Has volcanism".TxID("UserControlSurveyor.bodyFeaturesToolStripMenuItem.hasVolcanismToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Star);
-            displayfilter.AddStandardOption(CtrlList.showRinged.ToString(), "Has Rings".TxID("UserControlSurveyor.bodyFeaturesToolStripMenuItem.hasRingsToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Star);
-            displayfilter.AddStandardOption(CtrlList.showEccentricity.ToString(), "High eccentricity".TxID("UserControlSurveyor.bodyFeaturesToolStripMenuItem.highEccentricityToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Star);
-            displayfilter.AddStandardOption(CtrlList.lowradius.ToString(), "Tiny body".TxID("UserControlSurveyor.bodyFeaturesToolStripMenuItem.lowRadiusToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Star);
-            displayfilter.AddStandardOption(CtrlList.signals.ToString(), "Has Signals".TxID("UserControlSurveyor.bodyFeaturesToolStripMenuItem.hasSignalsToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Star);
-            displayfilter.AddStandardOption(CtrlList.GeoSignals.ToString(), "Has geological signals".TxID("UserControlSurveyor.bodyFeaturesToolStripMenuItem.hasGeologicalSignalsToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Star);
-            displayfilter.AddStandardOption(CtrlList.BioSignals.ToString(), "Has biological signals".TxID("UserControlSurveyor.bodyFeaturesToolStripMenuItem.hasBiologicalSignalsToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Star);
-            displayfilter.AddStandardOption(CtrlList.isLandable.ToString(), "Landable".TxID("UserControlSurveyor.bodyFeaturesToolStripMenuItem.landableToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Star);
-            displayfilter.AddStandardOption(CtrlList.isLandableWithAtmosphere.ToString(), "Landable with atmosphere".TxID("UserControlSurveyor.bodyFeaturesToolStripMenuItem.landableWithAtmosphereToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Star);
-            displayfilter.AddStandardOption(CtrlList.largelandable.ToString(), "Landable and large".TxID("UserControlSurveyor.bodyFeaturesToolStripMenuItem.landableAndLargeToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Star);
-            displayfilter.AddStandardOption(CtrlList.isLandableWithVolcanism.ToString(), "Landable with volcanism".TxID("UserControlSurveyor.bodyFeaturesToolStripMenuItem.landableWithVolcanismToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Star);
+            displayfilter.AddStandardOption(CtrlList.showAmmonia.ToString(), "Ammonia World".TxID("UserControlSurveyor.planetaryClassesToolStripMenuItem.ammoniaWorldToolStripMenuItem"), BaseUtils.Icons.IconSet.GetIcon("Bodies.Planets.Terrestrial.AMWv1"));
+            displayfilter.AddStandardOption(CtrlList.showEarthlike.ToString(), "Earthlike World".TxID("UserControlSurveyor.planetaryClassesToolStripMenuItem.earthlikeWorldToolStripMenuItem"), BaseUtils.Icons.IconSet.GetIcon("Bodies.Planets.Terrestrial.ELWv5"));
+            displayfilter.AddStandardOption(CtrlList.showWaterWorld.ToString(), "Water World".TxID("UserControlSurveyor.planetaryClassesToolStripMenuItem.waterWorldToolStripMenuItem"), BaseUtils.Icons.IconSet.GetIcon("Bodies.Planets.Terrestrial.WTRv7"));
+            displayfilter.AddStandardOption(CtrlList.showHMC.ToString(), "High metal content body".TxID("UserControlSurveyor.planetaryClassesToolStripMenuItem.highMetalContentBodyToolStripMenuItem"), BaseUtils.Icons.IconSet.GetIcon("Bodies.Planets.Terrestrial.HMCv3"));
+            displayfilter.AddStandardOption(CtrlList.showMR.ToString(), "Metal-rich body".TxID("UserControlSurveyor.planetaryClassesToolStripMenuItem.metalToolStripMenuItem"), BaseUtils.Icons.IconSet.GetIcon("Bodies.Planets.Terrestrial.MRBv5"));
+            displayfilter.AddStandardOption(CtrlList.showTerraformable.ToString(), "Terraformable".TxID("UserControlSurveyor.bodyFeaturesToolStripMenuItem.terraformableToolStripMenuItem"), BaseUtils.Icons.IconSet.GetIcon("Bodies.Planets.Terrestrial.ELWv5"));
+            displayfilter.AddStandardOption(CtrlList.showVolcanism.ToString(), "Has volcanism".TxID("UserControlSurveyor.bodyFeaturesToolStripMenuItem.hasVolcanismToolStripMenuItem"), BaseUtils.Icons.IconSet.GetIcon("Bodies.Planets.Terrestrial.HMCv37"));
+            displayfilter.AddStandardOption(CtrlList.showRinged.ToString(), "Has Rings".TxID("UserControlSurveyor.bodyFeaturesToolStripMenuItem.hasRingsToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Bodies_RingOnly);
+            displayfilter.AddStandardOption(CtrlList.showEccentricity.ToString(), "High eccentricity".TxID("UserControlSurveyor.bodyFeaturesToolStripMenuItem.highEccentricityToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Eccentric);
+            displayfilter.AddStandardOption(CtrlList.lowradius.ToString(), "Tiny body".TxID("UserControlSurveyor.bodyFeaturesToolStripMenuItem.lowRadiusToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_SizeSmall);
+            displayfilter.AddStandardOption(CtrlList.signals.ToString(), "Has Signals".TxID("UserControlSurveyor.bodyFeaturesToolStripMenuItem.hasSignalsToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Bodies_Signals);
+            displayfilter.AddStandardOption(CtrlList.GeoSignals.ToString(), "Has geological signals".TxID("UserControlSurveyor.bodyFeaturesToolStripMenuItem.hasGeologicalSignalsToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Bodies_Signals);
+            displayfilter.AddStandardOption(CtrlList.BioSignals.ToString(), "Has biological signals".TxID("UserControlSurveyor.bodyFeaturesToolStripMenuItem.hasBiologicalSignalsToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Bodies_Signals);
+            displayfilter.AddStandardOption(CtrlList.isLandable.ToString(), "Landable".TxID("UserControlSurveyor.bodyFeaturesToolStripMenuItem.landableToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Bodies_LandablePlanet);
+            displayfilter.AddStandardOption(CtrlList.isLandableWithAtmosphere.ToString(), "Landable with atmosphere".TxID("UserControlSurveyor.bodyFeaturesToolStripMenuItem.landableWithAtmosphereToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Bodies_LandablePlanet);
+            displayfilter.AddStandardOption(CtrlList.largelandable.ToString(), "Landable and large".TxID("UserControlSurveyor.bodyFeaturesToolStripMenuItem.landableAndLargeToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Bodies_LandablePlanet);
+            displayfilter.AddStandardOption(CtrlList.isLandableWithVolcanism.ToString(), "Landable with volcanism".TxID("UserControlSurveyor.bodyFeaturesToolStripMenuItem.landableWithVolcanismToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Bodies_LandablePlanet);
 
             string[] planetctrllist = Enum.GetNames(typeof(CtrlList)).RangeSubset((int)CtrlList.allplanets, 18);
             CommonCtrl(displayfilter, planetctrllist, extButtonPlanets);
@@ -724,15 +724,15 @@ namespace EDDiscovery.UserControls
             ExtendedControls.CheckedIconListBoxFormGroup displayfilter = new CheckedIconListBoxFormGroup();
 
             displayfilter.AddAllNone();
-            displayfilter.AddStandardOption(CtrlList.showValues.ToString(), "Show values".TxID("UserControlSurveyor.showValuesToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Star);
-            displayfilter.AddStandardOption(CtrlList.moreinfo.ToString(), "Show more information".TxID("UserControlSurveyor.showMoreInformationToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Star);
-            displayfilter.AddStandardOption(CtrlList.showGravity.ToString(), "Show gravity of landables".TxID("UserControlSurveyor.showGravityToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Star);
-            displayfilter.AddStandardOption(CtrlList.atmos.ToString(), "Show atmosphere of landables".TxID("UserControlSurveyor.showAtmosToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Star);
-            displayfilter.AddStandardOption(CtrlList.volcanism.ToString(), "Show volcanism of landables".TxID("UserControlSurveyor.showVolcanismToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Star);
-            displayfilter.AddStandardOption(CtrlList.autohide.ToString(), "Auto Hide".TxID("UserControlSurveyor.autoHideToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Star);
-            displayfilter.AddStandardOption(CtrlList.donthidefssmode.ToString(), "Don't hide in FSS Mode".TxID("UserControlSurveyor.dontHideInFSSModeToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Star);
-            displayfilter.AddStandardOption(CtrlList.hideMapped.ToString(), "Hide already mapped bodies".TxID("UserControlSurveyor.hideAlreadyMappedBodiesToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Star);
-            displayfilter.AddStandardOption(CtrlList.showsysinfo.ToString(), "Show System Info Always".TxID("UserControlSurveyor.showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Star);
+            displayfilter.AddStandardOption(CtrlList.showValues.ToString(), "Show values".TxID("UserControlSurveyor.showValuesToolStripMenuItem"));
+            displayfilter.AddStandardOption(CtrlList.moreinfo.ToString(), "Show more information".TxID("UserControlSurveyor.showMoreInformationToolStripMenuItem"));
+            displayfilter.AddStandardOption(CtrlList.showGravity.ToString(), "Show gravity of landables".TxID("UserControlSurveyor.showGravityToolStripMenuItem"));
+            displayfilter.AddStandardOption(CtrlList.atmos.ToString(), "Show atmosphere of landables".TxID("UserControlSurveyor.showAtmosToolStripMenuItem"));
+            displayfilter.AddStandardOption(CtrlList.volcanism.ToString(), "Show volcanism of landables".TxID("UserControlSurveyor.showVolcanismToolStripMenuItem"));
+            displayfilter.AddStandardOption(CtrlList.autohide.ToString(), "Auto Hide".TxID("UserControlSurveyor.autoHideToolStripMenuItem"));
+            displayfilter.AddStandardOption(CtrlList.donthidefssmode.ToString(), "Don't hide in FSS Mode".TxID("UserControlSurveyor.dontHideInFSSModeToolStripMenuItem"));
+            displayfilter.AddStandardOption(CtrlList.hideMapped.ToString(), "Hide already mapped bodies".TxID("UserControlSurveyor.hideAlreadyMappedBodiesToolStripMenuItem"));
+            displayfilter.AddStandardOption(CtrlList.showsysinfo.ToString(), "Show System Info Always".TxID("UserControlSurveyor.showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem"));
 
             string[] showctrllist = Enum.GetNames(typeof(CtrlList)).RangeSubset((int)CtrlList.showValues, 9);
             CommonCtrl(displayfilter, showctrllist, extButtonShowControl);
@@ -867,12 +867,12 @@ namespace EDDiscovery.UserControls
             ExtendedControls.CheckedIconListBoxFormGroup displayfilter = new CheckedIconListBoxFormGroup();
 
             displayfilter.AddAllNone();
-            displayfilter.AddStandardOption(RouteControl.showJumps.ToString(), "Show Jumps To Go".TxID("UserControlRouteTracker.showJumpsToolStripMenuItem"), global::EDDiscovery.Icons.Controls.AlignLeft);
-            displayfilter.AddStandardOption(RouteControl.showwaypoints.ToString(), "Show Waypoint Coordinates".TxID("UserControlRouteTracker.showWaypointCoordinatesToolStripMenuItem"), global::EDDiscovery.Icons.Controls.AlignCentre);
-            displayfilter.AddStandardOption(RouteControl.showdeviation.ToString(), "Show Deviation from route".TxID("UserControlRouteTracker.showDeviationFromRouteToolStripMenuItem"), global::EDDiscovery.Icons.Controls.AlignRight);
-            displayfilter.AddStandardOption(RouteControl.showbookmarks.ToString(), "Show Bookmark Notes".TxID("UserControlRouteTracker.showBookmarkNotesToolStripMenuItem"), global::EDDiscovery.Icons.Controls.AlignRight);
-            displayfilter.AddStandardOption(RouteControl.autocopy.ToString(), "Auto copy waypoint".TxID("UserControlRouteTracker.autoCopyWPToolStripMenuItem"), global::EDDiscovery.Icons.Controls.AlignRight);
-            displayfilter.AddStandardOption(RouteControl.settarget.ToString(), "Auto set target".TxID("UserControlRouteTracker.autoSetTargetToolStripMenuItem"), global::EDDiscovery.Icons.Controls.AlignRight);
+            displayfilter.AddStandardOption(RouteControl.showJumps.ToString(), "Show Jumps To Go".TxID("UserControlRouteTracker.showJumpsToolStripMenuItem"));
+            displayfilter.AddStandardOption(RouteControl.showwaypoints.ToString(), "Show Waypoint Coordinates".TxID("UserControlRouteTracker.showWaypointCoordinatesToolStripMenuItem"));
+            displayfilter.AddStandardOption(RouteControl.showdeviation.ToString(), "Show Deviation from route".TxID("UserControlRouteTracker.showDeviationFromRouteToolStripMenuItem"));
+            displayfilter.AddStandardOption(RouteControl.showbookmarks.ToString(), "Show Bookmark Notes".TxID("UserControlRouteTracker.showBookmarkNotesToolStripMenuItem"));
+            displayfilter.AddStandardOption(RouteControl.autocopy.ToString(), "Auto copy waypoint".TxID("UserControlRouteTracker.autoCopyWPToolStripMenuItem"));
+            displayfilter.AddStandardOption(RouteControl.settarget.ToString(), "Auto set target".TxID("UserControlRouteTracker.autoSetTargetToolStripMenuItem"));
 
             displayfilter.AllOrNoneBack = false;
             displayfilter.ImageSize = new Size(24, 24);
