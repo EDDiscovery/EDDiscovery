@@ -125,6 +125,7 @@ namespace EDDiscovery.Icons
         public static Image Expedition_ImportFile { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Expedition.ImportFile"); } }
         public static Image Expedition_ImportSphere { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Expedition.ImportSphere"); } }
         public static Image Expedition_ImportRoute { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Expedition.ImportRoute"); } }
+        public static Image Expedition_ImportNavRoute { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Expedition.ImportNavRoute"); } }
         public static Image Expedition_New { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Expedition.New"); } }
         public static Image Expedition_Save { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Expedition.Save"); } }
         public static Image Expedition_ShowOnMap { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Expedition.ShowOnMap"); } }
@@ -270,6 +271,8 @@ namespace EDDiscovery.Icons
         public static Image AlignCentre { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Surveyor.AlignCentre"); } }
         public static Image AlignLeft { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Surveyor.AlignLeft"); } }
         public static Image AlignRight { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Surveyor.AlignRight"); } }
+        public static Image Route { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Surveyor.Route"); } }
+        public static Image RouteConfig { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Surveyor.RouteConfig"); } }
 
         #endregion
     }

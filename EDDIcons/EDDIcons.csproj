@@ -547,6 +547,8 @@
     <EmbeddedResource Include="Controls\SysInfo\notfirstdiscover.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Controls\Surveyor\RouteConfig.png" />
+    <EmbeddedResource Include="Controls\Surveyor\Route.png" />
     <EmbeddedResource Include="Controls\Surveyor\AlignCentre.png" />
     <EmbeddedResource Include="Controls\Surveyor\AlignLeft.png" />
     <EmbeddedResource Include="Controls\Surveyor\AlignRight.png" />
@@ -1044,6 +1046,7 @@
     <EmbeddedResource Include="Controls\Help\Video.png" />
     <EmbeddedResource Include="Controls\Bookmarks\EditSystem.png" />
     <EmbeddedResource Include="Controls\Expedition\ImportSphere.png" />
+    <EmbeddedResource Include="Controls\Expedition\ImportNavRoute.png" />
     <Content Include="Controls\readme.txt" />
     <EmbeddedResource Include="Panels\MissionOverlay.png" />
     <EmbeddedResource Include="Journal\CrimeVictim.png" />

@@ -693,7 +693,7 @@ namespace EDDiscovery.UserControls
             // 
             this.extButtonImportNavRoute.BackColor = System.Drawing.SystemColors.Control;
             this.extButtonImportNavRoute.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.extButtonImportNavRoute.Image = global::EDDiscovery.Icons.Controls.Expedition_ImportRoute;
+            this.extButtonImportNavRoute.Image = global::EDDiscovery.Icons.Controls.Expedition_ImportNavRoute;
             this.extButtonImportNavRoute.Location = new System.Drawing.Point(248, 1);
             this.extButtonImportNavRoute.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
             this.extButtonImportNavRoute.Name = "extButtonImportNavRoute";

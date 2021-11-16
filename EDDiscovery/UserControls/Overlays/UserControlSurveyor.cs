@@ -161,7 +161,7 @@ namespace EDDiscovery.UserControls
                 else if (he.EntryType == JournalTypeEnum.StartJump)         // so we can pre-present
                 {
                     JournalStartJump jsj = he.journalEntry as JournalStartJump;
-                    if (jsj.IsHyperspace)
+                    if (jsj.IsHyperspace)       // needs to be a hyperspace one, not supercruise
                     {
                         last_sys = new SystemClass(jsj.SystemAddress, jsj.StarSystem);       // important need system address as scan uses it for quick lookup
                         DrawSystem(last_sys, last_sys.Name);
