@@ -485,6 +485,8 @@ namespace EDDiscovery
         UserControlSurveyor_Scan, //  Scan
         UserControlSurveyor_Systemscancomplete, // System scan complete.
         UserControlSurveyor_bodiesfound, //  bodies found.
+        UserControlSurveyor_fuel, //  bodies found.
+        UserControlSurveyor_navroute, //  bodies found.
 
         UserControlSysInfo_NoMissions, // No Missions
         UserControlSysInfo_NA, // N/A

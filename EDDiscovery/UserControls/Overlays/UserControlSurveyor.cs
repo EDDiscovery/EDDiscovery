@@ -1,5 +1,5 @@
 /*
- * Copyright © 2016 - 2019 EDDiscovery development team
+ * Copyright © 2016 - 2021 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -16,6 +16,7 @@
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using EliteDangerousCore.JournalEvents;
+using EMK.LightGeometry;
 using ExtendedControls;
 using System;
 using System.Collections.Generic;
@@ -41,8 +42,9 @@ namespace EDDiscovery.UserControls
 
         private SavedRouteClass currentRoute = null;
         private string lastsystem;
-        private EliteDangerousCalculations.FSDSpec.JumpInfo shipfsdinfo;
-        const string NavRouteNameLabel = "!*NavRoute";
+        private EliteDangerousCalculations.FSDSpec.JumpInfo shipfsdinfo;        // last values of fsd info
+        private ShipInformation shipinfo;   // and last ship info
+        const string NavRouteNameLabel = "!*NavRoute";      // special label to identify a save of using the nav route - not user presented
         private string lastroutetext = "";      // cached so we can represent it even if we pass a sys into drawsystem with no coord
         private string translatednavroutename = "";
 
@@ -71,13 +73,15 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNewUIEvent += Discoveryform_OnNewUIEvent;
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
+            discoveryform.OnNewTarget += Discoveryform_OnNewTarget;
             GlobalBookMarkList.Instance.OnBookmarkChange += GlobalBookMarkList_OnBookmarkChange;
 
-            translatednavroutename = "TX Nav Route"; //TBD
+            translatednavroutename = "Nav Route".T(EDTx.UserControlSurveyor_navroute); 
 
             LoadRoute(GetSetting("route", ""));
             routecontrolsettings = GetSetting("routecontrol", "showJumps;showwaypoints");
         }
+
 
         public override void LoadLayout()
         {
@@ -103,6 +107,7 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNewUIEvent -= Discoveryform_OnNewUIEvent;
             discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
             discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
+            discoveryform.OnNewTarget -= Discoveryform_OnNewTarget;
             GlobalBookMarkList.Instance.OnBookmarkChange -= GlobalBookMarkList_OnBookmarkChange;
         }
 
@@ -117,6 +122,8 @@ namespace EDDiscovery.UserControls
         private void Discoveryform_OnHistoryChange(HistoryList hl)
         {
             last_sys = hl.GetLast?.System;      // may be null
+            shipfsdinfo = hl.GetLast?.GetJumpInfo(discoveryform.history.MaterialCommoditiesMicroResources.CargoCount(hl.GetLast.MaterialCommodity));
+            shipinfo = hl.GetLast?.ShipInformation;
 
             System.Diagnostics.Debug.WriteLine($"Surveyor History Load {currentRoute?.Name} {currentRoute?.Id} {currentRoute?.Systems.Count}");
 
@@ -128,7 +135,7 @@ namespace EDDiscovery.UserControls
             //t.Interval = 200; t.Tick += (s, e) => { var sys = currentRoute.PosAlongRoute(percent, 0); DrawSystem(sys, sys.Name); percent += 0.5; }; t.Start();  // debug to make it play thru.. leave
           //  t.Interval = 2000; t.Tick += (s, e) => { if (sysno < currentRoute.Systems.Count ){ var sys = currentRoute.KnownSystemList()[sysno++]; DrawSystem(sys.Item1, sys.Item1.Name); } }; t.Start();  // debug to make it play thru.. leave
         }
-        int sysno = 0; double percent = -10; Timer t = new Timer();// play thru harness
+        //int sysno = 0; double percent = -10; Timer t = new Timer();// play thru harness
 
         private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)
         {
@@ -141,6 +148,10 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        private void Discoveryform_OnNewTarget(object obj)
+        {
+            DrawSystem(last_sys);
+        }
         private void GlobalBookMarkList_OnBookmarkChange(BookmarkClass bk, bool deleted)
         {
             DrawSystem(last_sys);
@@ -152,6 +163,7 @@ namespace EDDiscovery.UserControls
             {
                 // something has changed and just blindly for now recalc the fsd info
                 shipfsdinfo = he.GetJumpInfo(discoveryform.history.MaterialCommoditiesMicroResources.CargoCount(he.MaterialCommodity));
+                shipinfo = he.ShipInformation;
 
                 if (last_sys == null || last_sys.Name != he.System.Name || !last_sys.HasCoordinate) // If not got a system, or different name, or last does not have co-ord (StartJump)
                 {
@@ -177,7 +189,7 @@ namespace EDDiscovery.UserControls
                     var bodies_found = je.BodyCount;
                     DrawSystem(last_sys, last_sys.Name + " " + bodies_found + " bodies found.".T(EDTx.UserControlSurveyor_bodiesfound));
                 }
-                else if (he.journalEntry is IStarScan)      // an entry to a scan node
+                else if (he.journalEntry is IStarScan || he.EntryType == JournalTypeEnum.FuelScoop)      // an entry to a scan node
                 {
                     //System.Diagnostics.Debug.WriteLine("Scan got, sys " + he.System.Name + " " + last_sys.Name);
                     DrawSystem(last_sys);
@@ -343,6 +355,46 @@ namespace EDDiscovery.UserControls
                             }
                         }
                     }
+
+                    if ( IsSet(RouteControl.showtarget))
+                    {
+                        if (TargetClass.GetTargetPosition(out string name, out Point3D tpos))
+                        {
+                            double dist = last_sys.Distance(tpos.X, tpos.Y, tpos.Z);
+
+                            string jumpstr = "";
+                            if (shipfsdinfo != null)
+                            {
+                                int jumps = (int)Math.Ceiling(dist / shipfsdinfo.avgsinglejump);
+                                if (jumps > 0)
+                                    jumpstr = jumps.ToString() + " " + ((jumps == 1) ? "jump".T(EDTx.UserControlRouteTracker_J1) : "jumps".T(EDTx.UserControlRouteTracker_JS));
+                            }
+
+                            lastroutetext = lastroutetext.AppendPrePad($"T-> {name} {dist:N1}ly {jumpstr}", Environment.NewLine);
+                        }
+                    }
+                }
+
+                if ( IsSet(RouteControl.showfuel) && shipinfo != null)
+                {
+                    double fuel = shipinfo.FuelLevel;
+                    double tanksize = shipinfo.FuelCapacity;
+                    double warninglevelpercent = shipinfo.FuelWarningPercent;
+
+                    string addtext = $"{fuel:N1}/{tanksize:N1}t";
+
+                    if (warninglevelpercent > 0 && fuel < tanksize * warninglevelpercent / 100.0)
+                    {
+                        addtext += $" < {warninglevelpercent:N1}%";
+                    }
+
+                    if (shipfsdinfo != null)
+                    {
+                        addtext += string.Format(" " +"Avg {0:N1}ly Fume {1:N1}ly Range {2:N1}ly".T(EDTx.UserControlSurveyor_fuel), shipfsdinfo.avgsinglejump, shipfsdinfo.curfumessinglejump, shipfsdinfo.maxjumprange);               
+                    }
+
+                    lastroutetext = lastroutetext.AppendPrePad(addtext, Environment.NewLine);
+
                 }
 
                 if ( lastroutetext.HasChars() )     // if we have last route text, display it
@@ -683,7 +735,7 @@ namespace EDDiscovery.UserControls
             ExtendedControls.CheckedIconListBoxFormGroup displayfilter = new CheckedIconListBoxFormGroup();
 
             displayfilter.AddAllNone();
-            displayfilter.AddStandardOption(CtrlList.allplanets.ToString(), "Show All Planets".TxID("UserControlSurveyor.showAllPlanetsToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Star);
+            displayfilter.AddStandardOption(CtrlList.allplanets.ToString(), "Show All Planets".TxID("UserControlSurveyor.showAllPlanetsToolStripMenuItem"), BaseUtils.Icons.IconSet.GetIcon("Bodies.Planets.Terrestrial.HMCv10"));
             displayfilter.AddStandardOption(CtrlList.showAmmonia.ToString(), "Ammonia World".TxID("UserControlSurveyor.planetaryClassesToolStripMenuItem.ammoniaWorldToolStripMenuItem"), BaseUtils.Icons.IconSet.GetIcon("Bodies.Planets.Terrestrial.AMWv1"));
             displayfilter.AddStandardOption(CtrlList.showEarthlike.ToString(), "Earthlike World".TxID("UserControlSurveyor.planetaryClassesToolStripMenuItem.earthlikeWorldToolStripMenuItem"), BaseUtils.Icons.IconSet.GetIcon("Bodies.Planets.Terrestrial.ELWv5"));
             displayfilter.AddStandardOption(CtrlList.showWaterWorld.ToString(), "Water World".TxID("UserControlSurveyor.planetaryClassesToolStripMenuItem.waterWorldToolStripMenuItem"), BaseUtils.Icons.IconSet.GetIcon("Bodies.Planets.Terrestrial.WTRv7"));
@@ -856,6 +908,8 @@ namespace EDDiscovery.UserControls
             showbookmarks,
             autocopy,
             settarget,
+            showtarget,
+            showfuel,
         };
 
         private bool IsSet(RouteControl c)
@@ -873,6 +927,8 @@ namespace EDDiscovery.UserControls
             displayfilter.AddStandardOption(RouteControl.showbookmarks.ToString(), "Show Bookmark Notes".TxID("UserControlRouteTracker.showBookmarkNotesToolStripMenuItem"));
             displayfilter.AddStandardOption(RouteControl.autocopy.ToString(), "Auto copy waypoint".TxID("UserControlRouteTracker.autoCopyWPToolStripMenuItem"));
             displayfilter.AddStandardOption(RouteControl.settarget.ToString(), "Auto set target".TxID("UserControlRouteTracker.autoSetTargetToolStripMenuItem"));
+            displayfilter.AddStandardOption(RouteControl.showtarget.ToString(), "Show Target Information".TxID("UserControlRouteTracker.showtargetinfo"));
+            displayfilter.AddStandardOption(RouteControl.showfuel.ToString(), "Show Fuel Information".TxID("UserControlRouteTracker.showfuelinfo"));
 
             displayfilter.AllOrNoneBack = false;
             displayfilter.ImageSize = new Size(24, 24);

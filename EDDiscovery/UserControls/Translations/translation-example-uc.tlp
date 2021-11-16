@@ -405,17 +405,9 @@ SECTION UserControlSurveyor
 .Systemscancomplete: "System scan complete." @
 .bodiesfound: " bodies found." @
 
-//.checkEDSMForInformationToolStripMenuItem: "Check EDSM for information" @
-//.selectFSSSignalsShownToolStripMenuItem: "Select FSS Signals Shown" @
-//.wordWrapToolStripMenuItem: "Word Wrap" @
-//.highMetalContentBodyToolStripMenuItem: "High-metal content World" @
-//.bodyFeaturesToolStripMenuItem.showAtmosToolStripMenuItem: "Show atmosphere" @
-
 .textAlignToolStripMenuItem.leftToolStripMenuItem: "Alignment Left" @
 .textAlignToolStripMenuItem.centerToolStripMenuItem: "Alignment Center" @
 .textAlignToolStripMenuItem.rightToolStripMenuItem: "Alignment Right" @
-
-
 
 .showAllPlanetsToolStripMenuItem: "Show All Planets" @
 .planetaryClassesToolStripMenuItem.ammoniaWorldToolStripMenuItem: "Ammonia World" @
@@ -449,7 +441,8 @@ SECTION UserControlSurveyor
 .hideAlreadyMappedBodiesToolStripMenuItem: "Hide already mapped bodies" @
 .showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem: "Show System Info Always" @
 
-
+.navroute: "TX Nav Route" @
+.fuel: "Avg {0:N1}ly Fume {1:N1}ly Range {2:N1}ly" @
 
 
 SECTION MissionListUserControl
@@ -669,18 +662,21 @@ SECTION UserControlRouteTracker
 .showBookmarkNotesToolStripMenuItem: "Show Bookmark Notes" @
 .autoCopyWPToolStripMenuItem: "Auto copy waypoint" @
 .autoSetTargetToolStripMenuItem: "Auto set target" @
-.NoWay: "Route contains no waypoints" @
-.Unk: "Unknown location" @
+.showtargetinfo: "Show Target Information" @
+.showfuelinfo: "Show Fuel Information" @
+
+.NoFSD: " No Ship FSD Information" @
+.J1: "jump" @
+.JS: "jumps" @
 .NoCo: "No systems in route have known co-ords" @
+.NoWay: "Route contains no waypoints" @
 .FL: "From Last WP " @
 .TF: "To First WP " @
 .LF: ", Left {0:N1}ly" @
 .ToWP: "To WP {0}" @
 .Note: "Note: {0}" @
-.J1: "jump" @
-.JS: "jumps" @
-.NoFSD: " No Ship FSD Information" @
 .Dev: ", Dev {0:N1}ly" @
+
 
 SECTION UserControlScan
 
@@ -1374,22 +1370,6 @@ SECTION UserControlTrilateration
 .NoSector: "No systems with unknown coordinates were found for the current sector." @
 .SectorCount: "{0} systems with unknown coordinates found in {1} sector." @
 
-SECTION UserControlTrippanel
-
-.showEDSMStartButtonsToolStripMenuItem: "Show EDSM/Start Buttons" @
-.showTargetToolStripMenuItem: "Show Target" @
-.showTravelledDistanceToolStripMenuItem: "Show Travelled Distance" @
-.showFuelLevelToolStripMenuItem: "Show Fuel Level" @
-.showCurrentFSDRangeToolStripMenuItem: "Show Current FSD Range" @
-.showAvgFSDRangeToolStripMenuItem: "Show Avg FSD Range" @
-.showMaxFSDRangeToolStripMenuItem: "Show Max FSD Range" @
-.showFSDRangeToolStripMenuItem: "Show FSD Range" @
-.jump: "jump" @
-.jumps: "jumps" @
-.NoT: " -> Target not set" @
-.FDEDSM: "Shows if EDSM indicates your it's first discoverer" @
-.UKN: "System {0} unknown to EDSM" @
-.Left: "Left" @
 
 SECTION UserControlMaterialTrader
 
