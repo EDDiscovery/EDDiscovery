@@ -437,103 +437,111 @@ namespace EDDiscovery.UserControls
 
         private void buttonExtImport_Click(object sender, EventArgs e)
         {
-            OpenFileDialog dlg = new OpenFileDialog();
+            var frm = new Forms.ExportForm();
+            
+            frm.Init(new string[] { "CSV" }, disablestartendtime: true, outputext: new string[] { "CSV|*.csv" },
+                                        disableopeninclude: true, import: true);
 
-            dlg.InitialDirectory = GetSetting("ImportExcelFolder", "c:\\");
-
-            if (!System.IO.Directory.Exists(dlg.InitialDirectory))
-                System.IO.Directory.CreateDirectory(dlg.InitialDirectory);
-
-            dlg.DefaultExt = "csv";
-            dlg.AddExtension = true;
-            dlg.Filter = "CVS Files (*.csv)|*.csv|All files (*.*)|*.*";
-
-            if (dlg.ShowDialog(this) == DialogResult.OK)
+            if (frm.ShowDialog(FindForm()) == DialogResult.OK)
             {
-                string path = dlg.FileName;
+                OpenFileDialog dlg = new OpenFileDialog();
 
-                BaseUtils.CSVFile csv = new BaseUtils.CSVFile();
+                dlg.InitialDirectory = GetSetting("ImportExcelFolder", "c:\\");
 
-                if ( csv.Read(path, System.IO.FileShare.ReadWrite))
+                if (!System.IO.Directory.Exists(dlg.InitialDirectory))
+                    System.IO.Directory.CreateDirectory(dlg.InitialDirectory);
+
+                dlg.DefaultExt = "csv";
+                dlg.AddExtension = true;
+                dlg.Filter = "CVS Files (*.csv)|*.csv|All files (*.*)|*.*";
+
+                if (dlg.ShowDialog(this) == DialogResult.OK)
                 {
-                    List<BaseUtils.CSVFile.Row> rows = csv.RowsExcludingHeaderRow;
+                    string path = dlg.FileName;
 
-                    BookmarkClass currentbk = null;
+                    BaseUtils.CSVFile csv = new BaseUtils.CSVFile();
 
-                    var Regexyyyyddmm = new System.Text.RegularExpressions.Regex(@"\d\d\d\d-\d\d-\d\d", System.Text.RegularExpressions.RegexOptions.Compiled | System.Text.RegularExpressions.RegexOptions.Singleline);
-
-                    foreach ( var r in rows)
+                    if (csv.Read(path, System.IO.FileShare.ReadWrite, frm.Comma))
                     {
-                        string type = r[0];
-                        string date = r[1];
+                        List<BaseUtils.CSVFile.Row> rows = csv.RowsExcludingHeaderRow;
 
-                        if (type.HasChars() && date.HasChars())
+                        BookmarkClass currentbk = null;
+
+                        var Regexyyyyddmm = new System.Text.RegularExpressions.Regex(@"\d\d\d\d-\d\d-\d\d", System.Text.RegularExpressions.RegexOptions.Compiled | System.Text.RegularExpressions.RegexOptions.Singleline);
+
+                        foreach (var r in rows)
                         {
-                            bool region = type?.Equals("Region", StringComparison.InvariantCultureIgnoreCase) ?? false;
+                            string type = r[0];
+                            string date = r[1];
 
-                            DateTime timeutc = DateTime.MinValue;
-
-                            bool isyyyy = Regexyyyyddmm.IsMatch(date);      // excel, after getting our output in, converts the damn thing to local dates.. this distinguishes it.
-
-                            bool success = isyyyy ? DateTime.TryParse(date, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AssumeUniversal, out timeutc) :
-                                                                                    DateTime.TryParse(date, System.Globalization.CultureInfo.CurrentCulture, System.Globalization.DateTimeStyles.AssumeUniversal, out timeutc);
-
-                            if (success)
+                            if (type.HasChars() && date.HasChars())
                             {
-                                timeutc = EDDConfig.Instance.ConvertTimeToUTCFromSelected(timeutc);     // assume import is in selected time base, convert
+                                bool region = type?.Equals("Region", StringComparison.InvariantCultureIgnoreCase) ?? false;
 
-                                string name = r[2];
-                                string note = r[3];
-                                double? x = r[4].InvariantParseDoubleNull();
-                                double? y = r[5].InvariantParseDoubleNull();
-                                double? z = r[6].InvariantParseDoubleNull();
+                                DateTime timeutc = DateTime.MinValue;
 
-                                if (x != null && y != null && z != null)
+                                bool isyyyy = Regexyyyyddmm.IsMatch(date);      // excel, after getting our output in, converts the damn thing to local dates.. this distinguishes it.
+
+                                bool success = isyyyy ? DateTime.TryParse(date, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AssumeUniversal, out timeutc) :
+                                                                                        DateTime.TryParse(date, System.Globalization.CultureInfo.CurrentCulture, System.Globalization.DateTimeStyles.AssumeUniversal, out timeutc);
+
+                                if (success)
                                 {
-                                    System.Diagnostics.Debug.WriteLine("Bookmark {0} {1} {2} {3} ({4},{5},{6}", type, timeutc.ToStringZulu(), name, note, x, y, z);
+                                    timeutc = EDDConfig.Instance.ConvertTimeToUTCFromSelected(timeutc);     // assume import is in selected time base, convert
 
-                                    currentbk = GlobalBookMarkList.Instance.FindBookmark(name, region);
+                                    string name = r[2];
+                                    string note = r[3];
+                                    double? x = r[4].InvariantParseDoubleNull();
+                                    double? y = r[5].InvariantParseDoubleNull();
+                                    double? z = r[6].InvariantParseDoubleNull();
 
-                                    if (currentbk != null)
+                                    if (x != null && y != null && z != null)
                                     {
-                                        GlobalBookMarkList.Instance.AddOrUpdateBookmark(currentbk, !region, name, x.Value, y.Value, z.Value, timeutc, note, currentbk.PlanetaryMarks);
+                                        System.Diagnostics.Debug.WriteLine("Bookmark {0} {1} {2} {3} ({4},{5},{6}", type, timeutc.ToStringZulu(), name, note, x, y, z);
+
+                                        currentbk = GlobalBookMarkList.Instance.FindBookmark(name, region);
+
+                                        if (currentbk != null)
+                                        {
+                                            GlobalBookMarkList.Instance.AddOrUpdateBookmark(currentbk, !region, name, x.Value, y.Value, z.Value, timeutc, note, currentbk.PlanetaryMarks);
+                                        }
+                                        else
+                                            currentbk = GlobalBookMarkList.Instance.AddOrUpdateBookmark(null, !region, name, x.Value, y.Value, z.Value, timeutc, note, null);
                                     }
                                     else
-                                        currentbk = GlobalBookMarkList.Instance.AddOrUpdateBookmark(null, !region, name, x.Value, y.Value, z.Value, timeutc, note, null);
+                                    {
+                                        System.Diagnostics.Debug.WriteLine("Not a system with valid coords {0} {1}", r[0], r[1]);
+                                    }
                                 }
                                 else
+                                    System.Diagnostics.Debug.WriteLine("Rejected due to date {0} {1}", r[0], r[1]);
+                            }
+
+                            string planet = r[7];
+
+                            if (planet.HasChars() && currentbk != null)
+                            {
+                                string locname = r[8];
+                                string comment = r[9];
+                                double? latitude = r[10].InvariantParseDoubleNull();
+                                double? longitude = r[11].InvariantParseDoubleNull();
+
+                                if (!locname.HasChars() && latitude == null && longitude == null) // whole planet bookmark
                                 {
-                                    System.Diagnostics.Debug.WriteLine("Not a system with valid coords {0} {1}", r[0], r[1]);
+                                    currentbk.AddOrUpdatePlanetBookmark(planet, comment);
+                                }
+                                else if (locname.HasChars() && latitude.HasValue && longitude.HasValue)
+                                {
+                                    currentbk.AddOrUpdateLocation(planet, locname, comment, latitude.Value, longitude.Value);
                                 }
                             }
-                            else
-                                System.Diagnostics.Debug.WriteLine("Rejected due to date {0} {1}", r[0], r[1]);
                         }
 
-                        string planet = r[7];
-
-                        if (planet.HasChars() && currentbk != null)
-                        {
-                            string locname = r[8];
-                            string comment = r[9];
-                            double? latitude = r[10].InvariantParseDoubleNull();
-                            double? longitude = r[11].InvariantParseDoubleNull();
-
-                            if (!locname.HasChars() && latitude == null && longitude == null) // whole planet bookmark
-                            {
-                                currentbk.AddOrUpdatePlanetBookmark(planet, comment);
-                            }
-                            else if (locname.HasChars() && latitude.HasValue && longitude.HasValue)
-                            {
-                                currentbk.AddOrUpdateLocation(planet, locname, comment, latitude.Value, longitude.Value);
-                            }
-                        }
+                        PutSetting("ImportExcelFolder", System.IO.Path.GetDirectoryName(path));
                     }
-
-                    PutSetting("ImportExcelFolder", System.IO.Path.GetDirectoryName(path));
+                    else
+                        ExtendedControls.MessageBoxTheme.Show(FindForm(), "Failed to read " + path, "Import Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
-                else
-                    ExtendedControls.MessageBoxTheme.Show(FindForm(), "Failed to read " + path, "Import Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
         }
 
