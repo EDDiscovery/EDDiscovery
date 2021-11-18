@@ -761,7 +761,7 @@ namespace EDDiscovery.UserControls
         private void buttonExtExcel_Click(object sender, EventArgs e)
         {
             Forms.ExportForm frm = new Forms.ExportForm();
-            frm.Init(new string[] { "Export Current View" });
+            frm.Init(false, new string[] { "Export Current View" });
 
             if (frm.ShowDialog(FindForm()) == DialogResult.OK)
             {

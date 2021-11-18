@@ -29,6 +29,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using BaseUtils;
+using System.IO;
 
 namespace EDDiscovery.UserControls
 {
@@ -477,13 +478,18 @@ namespace EDDiscovery.UserControls
         private void buttonExtExcel_Click(object sender, EventArgs e)
         {
             Forms.ExportForm frm = new Forms.ExportForm();
-            frm.Init(new string[] { "All",
+            frm.Init(false,new string[] { "All",
                                     "Stars only",
                                     "Planets only", //2
                                     "Exploration List Stars", //3
                                     "Exploration List Planets", //4
                                     "Ring Scans", //5
-                                        });
+                                    "JSON Orbital Parameters", // 6
+                                    },
+                    outputext: new string[] { "CSV|*.csv", "CSV|*.csv", "CSV|*.csv", "CSV|*.csv", "CSV|*.csv", "CSV|*.csv", "JSON|*.json|All|*.*" },
+                    showflags: new Forms.ExportForm.ShowFlags[] { Forms.ExportForm.ShowFlags.None,Forms.ExportForm.ShowFlags.None,Forms.ExportForm.ShowFlags.None,
+                    Forms.ExportForm.ShowFlags.None,Forms.ExportForm.ShowFlags.None,Forms.ExportForm.ShowFlags.None,Forms.ExportForm.ShowFlags.DTCVSOI }
+            );
 
             if (frm.ShowDialog(FindForm()) == DialogResult.OK)
             {
@@ -608,6 +614,17 @@ namespace EDDiscovery.UserControls
                         };
 
                         grd.WriteGrid(frm.Path, frm.AutoOpen, FindForm());
+                    }
+                    else if ( frm.SelectedIndex == 6)
+                    {
+                        var sysnode = discoveryform.history.StarScan.FindSystemSynchronous(showing_system, false);
+                        var nodes = sysnode.OrderedSystemTree();
+                        if ( nodes != null )
+                        {
+                            StarScan.ScanNode.DumpTree(nodes, "Top", 0);
+                            BaseUtils.JSON.JObject jobj = StarScan.ScanNode.DumpOrbitElements(nodes);
+                            File.WriteAllText(frm.Path, jobj.ToString(true)); // failure will be picked up below
+                        }
                     }
                     else
                     { 

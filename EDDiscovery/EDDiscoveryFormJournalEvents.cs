@@ -74,24 +74,6 @@ namespace EDDiscovery
                 if (edsm.ValidCredentials)
                     EDSMSend();
             }
-
-            //{
-            //    string sys = "Wepiae HG-O d6-4207"; // top level bary
-            //    var sysnode = history.StarScan.FindSystemSynchronous(new SystemClass(sys), false);
-            //    var nodes = sysnode.PopulateTree();
-            //    StarScan.ScanNode.DumpTree(nodes, "Top", 0);
-            //}
-
-            //{
-            //    string sys = "Wepiae HG-O d6-4136";     // top level star
-            //    var sysnode = history.StarScan.FindSystemSynchronous(new SystemClass(sys), false);
-            //    var nodes = sysnode.PopulateTree();
-            //    StarScan.ScanNode.DumpTree(nodes, "Top",0);
-            //    BaseUtils.JSON.JObject jobj = StarScan.ScanNode.DumpOrbitElements(nodes);
-            //    System.Diagnostics.Debug.WriteLine($"{jobj.ToString(true)}");
-            //}
-
-
         }
 
 

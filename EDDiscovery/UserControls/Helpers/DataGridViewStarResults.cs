@@ -140,7 +140,7 @@ namespace EDDiscovery.UserControls.Search
             }
 
             Forms.ExportForm frm = new Forms.ExportForm();
-            frm.Init(new string[] { "Export Current View" }, disablestartendtime: true);
+            frm.Init(false, new string[] { "Export Current View" }, showflags: new Forms.ExportForm.ShowFlags[] { Forms.ExportForm.ShowFlags.DisableDateTime });
 
             if (frm.ShowDialog(FindForm()) == DialogResult.OK)
             {

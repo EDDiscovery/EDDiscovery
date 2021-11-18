@@ -38,7 +38,7 @@
             this.checkBoxCustomAutoOpen = new ExtendedControls.ExtCheckBox();
             this.customDateTimePickerFrom = new ExtendedControls.ExtDateTimePicker();
             this.customDateTimePickerTo = new ExtendedControls.ExtDateTimePicker();
-            this.comboBoxCustomExportType = new ExtendedControls.ExtComboBox();
+            this.comboBoxSelectedType = new ExtendedControls.ExtComboBox();
             this.panel_close = new ExtendedControls.ExtButtonDrawn();
             this.panel_minimize = new ExtendedControls.ExtButtonDrawn();
             this.label_index = new System.Windows.Forms.Label();
@@ -207,25 +207,25 @@
             // 
             // comboBoxCustomExportType
             // 
-            this.comboBoxCustomExportType.BorderColor = System.Drawing.Color.White;
-            this.comboBoxCustomExportType.ButtonColorScaling = 0.5F;
-            this.comboBoxCustomExportType.DataSource = null;
-            this.comboBoxCustomExportType.DisableBackgroundDisabledShadingGradient = false;
-            this.comboBoxCustomExportType.DisplayMember = "";
-            this.comboBoxCustomExportType.DropDownBackgroundColor = System.Drawing.Color.Gray;
-            this.comboBoxCustomExportType.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxCustomExportType.Location = new System.Drawing.Point(3, 3);
-            this.comboBoxCustomExportType.MouseOverBackgroundColor = System.Drawing.Color.Silver;
-            this.comboBoxCustomExportType.Name = "comboBoxCustomExportType";
-            this.comboBoxCustomExportType.ScrollBarButtonColor = System.Drawing.Color.LightGray;
-            this.comboBoxCustomExportType.ScrollBarColor = System.Drawing.Color.LightGray;
-            this.comboBoxCustomExportType.SelectedIndex = -1;
-            this.comboBoxCustomExportType.SelectedItem = null;
-            this.comboBoxCustomExportType.SelectedValue = null;
-            this.comboBoxCustomExportType.Size = new System.Drawing.Size(270, 21);
-            this.comboBoxCustomExportType.TabIndex = 4;
-            this.comboBoxCustomExportType.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.comboBoxCustomExportType.ValueMember = "";
+            this.comboBoxSelectedType.BorderColor = System.Drawing.Color.White;
+            this.comboBoxSelectedType.ButtonColorScaling = 0.5F;
+            this.comboBoxSelectedType.DataSource = null;
+            this.comboBoxSelectedType.DisableBackgroundDisabledShadingGradient = false;
+            this.comboBoxSelectedType.DisplayMember = "";
+            this.comboBoxSelectedType.DropDownBackgroundColor = System.Drawing.Color.Gray;
+            this.comboBoxSelectedType.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.comboBoxSelectedType.Location = new System.Drawing.Point(3, 3);
+            this.comboBoxSelectedType.MouseOverBackgroundColor = System.Drawing.Color.Silver;
+            this.comboBoxSelectedType.Name = "comboBoxCustomExportType";
+            this.comboBoxSelectedType.ScrollBarButtonColor = System.Drawing.Color.LightGray;
+            this.comboBoxSelectedType.ScrollBarColor = System.Drawing.Color.LightGray;
+            this.comboBoxSelectedType.SelectedIndex = -1;
+            this.comboBoxSelectedType.SelectedItem = null;
+            this.comboBoxSelectedType.SelectedValue = null;
+            this.comboBoxSelectedType.Size = new System.Drawing.Size(270, 21);
+            this.comboBoxSelectedType.TabIndex = 4;
+            this.comboBoxSelectedType.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.comboBoxSelectedType.ValueMember = "";
             // 
             // panel_close
             // 
@@ -330,7 +330,7 @@
             // 
             // panelCombo
             // 
-            this.panelCombo.Controls.Add(this.comboBoxCustomExportType);
+            this.panelCombo.Controls.Add(this.comboBoxSelectedType);
             this.panelCombo.Location = new System.Drawing.Point(3, 3);
             this.panelCombo.Name = "panelCombo";
             this.panelCombo.Size = new System.Drawing.Size(359, 34);
@@ -401,7 +401,7 @@
         private ExtendedControls.ExtCheckBox checkBoxIncludeHeader;
         private ExtendedControls.ExtDateTimePicker customDateTimePickerFrom;
         private ExtendedControls.ExtDateTimePicker customDateTimePickerTo;
-        private ExtendedControls.ExtComboBox comboBoxCustomExportType;
+        private ExtendedControls.ExtComboBox comboBoxSelectedType;
         private ExtendedControls.ExtButton buttonCancel;
         private ExtendedControls.ExtButtonDrawn panel_close;
         private ExtendedControls.ExtButtonDrawn panel_minimize;

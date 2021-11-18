@@ -567,7 +567,9 @@ namespace EDDiscovery.UserControls
         private void buttonExtExcel_Click(object sender, EventArgs e)
         {
             Forms.ExportForm frm = new Forms.ExportForm();
-            frm.Init(new string[] { "Export Current View", "Export as Journals" }, outputext: new string[] { "CSV export| *.csv", "Journal Export|*.log" });
+            frm.Init(false, new string[] { "Export Current View", "Export as Journals" },
+                new string[] { "CSV export| *.csv", "Journal Export|*.log" },
+                new Forms.ExportForm.ShowFlags[] { Forms.ExportForm.ShowFlags.None, Forms.ExportForm.ShowFlags.DisableCVS });
 
             if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)
             {

@@ -31,19 +31,36 @@ namespace EDDiscovery.Forms
 
         public bool Import { get; private set; }
 
-        private string[] outputextension;
+        private string[] fileextensions;
+        private ShowFlags[] showflags;
 
         public ExportForm()
         {
             InitializeComponent();
         }
 
-        public void Init(string[] selectionlist, bool disablestartendtime = false, string[] outputext = null, bool disableopeninclude = false, bool import = false)
-        {
-            outputextension = outputext;
+        [Flags]
+        public enum ShowFlags
+        { 
+            DisableDateTime = 1,
+            DisableCVS = 2,
+            DisableOpenInclude = 4,
+            DTCVSOI = 7,
+            DTOI = 5,
+            None = 0,
+        }
 
-            if ( selectionlist != null )
-                comboBoxCustomExportType.Items.AddRange(selectionlist);
+        public void Init(bool import, string[] selectionlist, string[] outputext = null, ShowFlags[] showflags = null)
+        {
+            this.fileextensions = outputext;
+            this.showflags = showflags;
+
+            comboBoxSelectedType.Items.AddRange(selectionlist);
+            comboBoxSelectedType.SelectedIndex = 0;
+            comboBoxSelectedType.SelectedIndexChanged += ComboBoxSelectedType_SelectedIndexChanged;
+
+            if (comboBoxSelectedType.Items.Count < 2)       // disable if no selection
+                panelCombo.Visible = false;
 
             customDateTimePickerFrom.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(new DateTime(2014, 11, 22, 0, 0, 0, DateTimeKind.Utc)); //Gamma start
             customDateTimePickerTo.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, 23, 59, 59));
@@ -56,21 +73,11 @@ namespace EDDiscovery.Forms
             checkBoxIncludeHeader.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("FormIncludeHeader", true);
             checkBoxCustomAutoOpen.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("ExportFormOpenExcel", true);
 
-            comboBoxCustomExportType.SelectedIndex = 0;
-
-
             EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
             bool winborder = theme.ApplyDialog(this);
             panelTop.Visible = !winborder;
 
-            if (comboBoxCustomExportType.Items.Count < 2)       // disable if no selection
-                panelCombo.Visible = false;
-
-            if (disablestartendtime)                // disable if required
-                panelDate.Visible = false;
-
-            if (disableopeninclude)
-                panelIncludeOpen.Visible = false;
+            SetVisibility();
 
             BaseUtils.Translator.Instance.Translate(this);
 
@@ -82,6 +89,21 @@ namespace EDDiscovery.Forms
             }
 
             label_index.Text = this.Text;
+        }
+
+        private void ComboBoxSelectedType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SetVisibility();
+        }
+
+        private void SetVisibility()
+        {
+            if ( showflags != null)
+            {
+                panelDate.Visible = (showflags[comboBoxSelectedType.SelectedIndex] & ShowFlags.DisableDateTime) == 0;
+                panelIncludeOpen.Visible = (showflags[comboBoxSelectedType.SelectedIndex] & ShowFlags.DisableOpenInclude) == 0;
+                panelCSV.Visible = (showflags[comboBoxSelectedType.SelectedIndex] & ShowFlags.DisableCVS) == 0;
+            }
         }
 
         protected override void OnLoad(EventArgs e)
@@ -102,12 +124,12 @@ namespace EDDiscovery.Forms
 
         private void buttonExport_Click(object sender, EventArgs e)
         {
-            SelectedIndex = comboBoxCustomExportType.SelectedIndex;
+            SelectedIndex = comboBoxSelectedType.SelectedIndex;
 
             if (Import)
             {
                 OpenFileDialog dlg = new OpenFileDialog();
-                dlg.Filter = outputextension != null ? outputextension[SelectedIndex] : "CSV import| *.csv";
+                dlg.Filter = fileextensions != null ? fileextensions[SelectedIndex] : "CSV import| *.csv";
                 dlg.Title = string.Format("Import data {0}".T(EDTx.ExportForm_ImportData), dlg.Filter);
 
                 if (dlg.ShowDialog(this) == DialogResult.OK)
@@ -129,7 +151,7 @@ namespace EDDiscovery.Forms
 
                 SaveFileDialog dlg = new SaveFileDialog();
 
-                dlg.Filter = outputextension != null ? outputextension[SelectedIndex] : "CSV export| *.csv";
+                dlg.Filter = fileextensions != null ? fileextensions[SelectedIndex] : "CSV export| *.csv";
                 dlg.Title = string.Format("Export current data {0}".T(EDTx.ExportForm_ECH), dlg.Filter);
 
                 if (dlg.ShowDialog(this) == DialogResult.OK)

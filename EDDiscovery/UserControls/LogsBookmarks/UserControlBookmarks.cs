@@ -346,7 +346,7 @@ namespace EDDiscovery.UserControls
             }
 
             Forms.ExportForm frm = new Forms.ExportForm();
-            frm.Init(new string[] { "Export Current View" }, disablestartendtime: true);
+            frm.Init(false, new string[] { "Export Current View" }, showflags: new Forms.ExportForm.ShowFlags[] { Forms.ExportForm.ShowFlags.DisableDateTime });
 
             if (frm.ShowDialog(FindForm()) == DialogResult.OK)
             {
@@ -438,9 +438,10 @@ namespace EDDiscovery.UserControls
         private void buttonExtImport_Click(object sender, EventArgs e)
         {
             var frm = new Forms.ExportForm();
-            
-            frm.Init(new string[] { "CSV" }, disablestartendtime: true, outputext: new string[] { "CSV|*.csv" },
-                                        disableopeninclude: true, import: true);
+
+            frm.Init(true, new string[] { "CSV"},
+                 new string[] { "CSV|*.csv" },
+                 new Forms.ExportForm.ShowFlags[] { Forms.ExportForm.ShowFlags.DTOI });
 
             if (frm.ShowDialog(FindForm()) == DialogResult.OK)
             {
