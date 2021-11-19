@@ -106,16 +106,6 @@ namespace EDDiscovery.Forms
             }
         }
 
-        protected override void OnLoad(EventArgs e)
-        {
-            PerformLayout();
-            // calculate height of window from panel sizes after layout
-            int flowbot = flowLayoutPanel.Top + panelBottom.Bottom + panelBottom.Margin.Bottom + flowLayoutPanel.Margin.Bottom;
-            Height = Bounds.Height - ClientRectangle.Height + flowbot;
-
-            base.OnLoad(e);
-        }
-
         private void buttonCancel_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;
