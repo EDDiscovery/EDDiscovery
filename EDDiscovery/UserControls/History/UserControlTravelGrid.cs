@@ -1301,7 +1301,7 @@ namespace EDDiscovery.UserControls
         private void buttonExtExcel_Click(object sender, EventArgs e)
         {
             Forms.ExportForm frm = new Forms.ExportForm();
-            frm.Init(new string[] { "View", "FSD Jumps only", "With Notes only" , "With Notes, no repeat"  });
+            frm.Init(false, new string[] { "View", "FSD Jumps only", "With Notes only", "With Notes, no repeat" });
 
             if (frm.ShowDialog(FindForm()) == DialogResult.OK)
             {

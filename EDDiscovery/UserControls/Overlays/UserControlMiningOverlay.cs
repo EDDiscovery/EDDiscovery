@@ -638,7 +638,7 @@ namespace EDDiscovery.UserControls
         private void buttonExtExcel_Click(object sender, EventArgs e)
         {
             Forms.ExportForm frm = new Forms.ExportForm();
-            frm.Init(new string[] { "All" }, disablestartendtime: true);
+            frm.Init(false, new string[] { "All" }, showflags: new Forms.ExportForm.ShowFlags[] { Forms.ExportForm.ShowFlags.DisableDateTime });
 
             if (frm.ShowDialog(FindForm()) == DialogResult.OK)
             {

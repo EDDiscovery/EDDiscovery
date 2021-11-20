@@ -623,7 +623,7 @@ namespace EDDiscovery.UserControls
             if (dataGridViewModules.RowCount>0)
             {
                 Forms.ExportForm frm = new Forms.ExportForm();
-                frm.Init(new string[] { "Export Current View" }, disablestartendtime: true);
+                frm.Init(false, new string[] { "Export Current View" }, showflags: new Forms.ExportForm.ShowFlags[] { Forms.ExportForm.ShowFlags.DisableDateTime });
 
                 if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)
                 {

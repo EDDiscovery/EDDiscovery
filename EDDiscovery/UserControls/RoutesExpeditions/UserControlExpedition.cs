@@ -609,8 +609,9 @@ namespace EDDiscovery.UserControls
         private void extButtonImport_Click(object sender, EventArgs e)
         {
             var frm = new Forms.ExportForm();
-            frm.Init(new string[] { "CSV", "CSV No Header Line", "Text File", "JSON"}, disablestartendtime: true, outputext: new string[] { "CSV|*.csv", "CSV|*.csv", "Text |*.txt|All|*.*", "JSON|*.json|All|*.*" },
-                                        disableopeninclude:true, import:true);
+            frm.Init(true, new string[] { "CSV", "CSV No Header Line", "Text File", "JSON" },
+                new string[] { "CSV|*.csv", "CSV|*.csv", "Text |*.txt|All|*.*", "JSON|*.json|All|*.*" },
+                new Forms.ExportForm.ShowFlags[] { Forms.ExportForm.ShowFlags.DTOI, Forms.ExportForm.ShowFlags.DTOI, Forms.ExportForm.ShowFlags.DTCVSOI, Forms.ExportForm.ShowFlags.DTCVSOI });
 
             if (frm.ShowDialog(FindForm()) == DialogResult.OK)
             {
@@ -686,8 +687,10 @@ namespace EDDiscovery.UserControls
                 return;
             }
 
-            var frm = new Forms.ExportForm(); 
-            frm.Init(new string[] { "Grid", "System Name Only", "JSON" }, disablestartendtime: true, outputext: new string[] { "CSV export|*.csv", "Text File|*.txt|CSV export|*.csv", "JSON|*.json"});
+            var frm = new Forms.ExportForm();
+            frm.Init(false, new string[] { "Grid", "System Name Only", "JSON" },
+                            new string[] { "CSV export|*.csv", "Text File|*.txt|CSV export|*.csv", "JSON|*.json" },
+                            new Forms.ExportForm.ShowFlags[] { Forms.ExportForm.ShowFlags.DisableDateTime, Forms.ExportForm.ShowFlags.DisableDateTime, Forms.ExportForm.ShowFlags.DTCVSOI });
 
             if (frm.ShowDialog(FindForm()) == DialogResult.OK)
             {

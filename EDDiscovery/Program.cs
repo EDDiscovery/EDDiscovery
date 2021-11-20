@@ -54,10 +54,6 @@ namespace EDDiscovery
                     {
                         Application.Run(new EDDApplicationContext());
                     }
-
-                    /* Could not lock the app-global mutex, which means another copy of the App is running.
-                     * TODO: show a dialog and/or bring the current instance's window to the foreground.
-                     */
                 }
                 catch (ThreadAbortException)
                 {
