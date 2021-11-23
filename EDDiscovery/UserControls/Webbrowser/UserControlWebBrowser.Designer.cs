@@ -46,11 +46,12 @@ namespace EDDiscovery.UserControls
             this.components = new System.ComponentModel.Container();
             this.extCheckBoxStar = new ExtendedControls.ExtCheckBox();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.checkBoxAutoTrack = new ExtendedControls.ExtCheckBox();
             this.rollUpPanelTop = new ExtendedControls.ExtPanelRollUp();
             this.panelControls = new System.Windows.Forms.FlowLayoutPanel();
             this.extCheckBoxBack = new ExtendedControls.ExtCheckBox();
+            this.extCheckBoxAllowedList = new ExtendedControls.ExtCheckBox();
             this.webBrowser = new System.Windows.Forms.WebBrowser();
-            this.checkBoxAutoTrack = new ExtendedControls.ExtCheckBox();
             this.rollUpPanelTop.SuspendLayout();
             this.panelControls.SuspendLayout();
             this.SuspendLayout();
@@ -92,6 +93,36 @@ namespace EDDiscovery.UserControls
             this.toolTip.InitialDelay = 250;
             this.toolTip.ReshowDelay = 100;
             // 
+            // checkBoxAutoTrack
+            // 
+            this.checkBoxAutoTrack.Appearance = System.Windows.Forms.Appearance.Button;
+            this.checkBoxAutoTrack.BackColor = System.Drawing.SystemColors.Control;
+            this.checkBoxAutoTrack.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.checkBoxAutoTrack.CheckBoxColor = System.Drawing.Color.White;
+            this.checkBoxAutoTrack.CheckBoxDisabledScaling = 0.5F;
+            this.checkBoxAutoTrack.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxAutoTrack.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxAutoTrack.Cursor = System.Windows.Forms.Cursors.Default;
+            this.checkBoxAutoTrack.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.checkBoxAutoTrack.FlatAppearance.CheckedBackColor = System.Drawing.Color.Green;
+            this.checkBoxAutoTrack.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.checkBoxAutoTrack.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
+            this.checkBoxAutoTrack.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.checkBoxAutoTrack.Image = global::EDDiscovery.Icons.Controls.Exploration_ImportSphere;
+            this.checkBoxAutoTrack.ImageButtonDisabledScaling = 0.5F;
+            this.checkBoxAutoTrack.ImageIndeterminate = null;
+            this.checkBoxAutoTrack.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.checkBoxAutoTrack.ImageUnchecked = null;
+            this.checkBoxAutoTrack.Location = new System.Drawing.Point(72, 1);
+            this.checkBoxAutoTrack.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.checkBoxAutoTrack.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxAutoTrack.Name = "checkBoxAutoTrack";
+            this.checkBoxAutoTrack.Size = new System.Drawing.Size(28, 28);
+            this.checkBoxAutoTrack.TabIndex = 4;
+            this.checkBoxAutoTrack.TickBoxReductionRatio = 0.75F;
+            this.toolTip.SetToolTip(this.checkBoxAutoTrack, "Track system in history panel");
+            this.checkBoxAutoTrack.UseVisualStyleBackColor = false;
+            // 
             // rollUpPanelTop
             // 
             this.rollUpPanelTop.AutoSize = true;
@@ -117,6 +148,7 @@ namespace EDDiscovery.UserControls
             this.panelControls.Controls.Add(this.extCheckBoxBack);
             this.panelControls.Controls.Add(this.extCheckBoxStar);
             this.panelControls.Controls.Add(this.checkBoxAutoTrack);
+            this.panelControls.Controls.Add(this.extCheckBoxAllowedList);
             this.panelControls.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelControls.Location = new System.Drawing.Point(0, 0);
             this.panelControls.Name = "panelControls";
@@ -150,8 +182,40 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxBack.Size = new System.Drawing.Size(28, 28);
             this.extCheckBoxBack.TabIndex = 2;
             this.extCheckBoxBack.TickBoxReductionRatio = 0.75F;
+            this.toolTip.SetToolTip(this.extCheckBoxBack, "Back");
             this.extCheckBoxBack.UseVisualStyleBackColor = false;
             this.extCheckBoxBack.Click += new System.EventHandler(this.extCheckBoxClickBack);
+            // 
+            // extCheckBoxAllowedList
+            // 
+            this.extCheckBoxAllowedList.Appearance = System.Windows.Forms.Appearance.Button;
+            this.extCheckBoxAllowedList.BackColor = System.Drawing.SystemColors.Control;
+            this.extCheckBoxAllowedList.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.extCheckBoxAllowedList.CheckBoxColor = System.Drawing.Color.White;
+            this.extCheckBoxAllowedList.CheckBoxDisabledScaling = 0.5F;
+            this.extCheckBoxAllowedList.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.extCheckBoxAllowedList.CheckColor = System.Drawing.Color.DarkBlue;
+            this.extCheckBoxAllowedList.Cursor = System.Windows.Forms.Cursors.Default;
+            this.extCheckBoxAllowedList.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.extCheckBoxAllowedList.FlatAppearance.CheckedBackColor = System.Drawing.Color.Green;
+            this.extCheckBoxAllowedList.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.extCheckBoxAllowedList.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
+            this.extCheckBoxAllowedList.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.extCheckBoxAllowedList.Image = global::EDDiscovery.Icons.Controls.DisplayFilters;
+            this.extCheckBoxAllowedList.ImageButtonDisabledScaling = 0.5F;
+            this.extCheckBoxAllowedList.ImageIndeterminate = null;
+            this.extCheckBoxAllowedList.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.extCheckBoxAllowedList.ImageUnchecked = null;
+            this.extCheckBoxAllowedList.Location = new System.Drawing.Point(112, 1);
+            this.extCheckBoxAllowedList.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.extCheckBoxAllowedList.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.extCheckBoxAllowedList.Name = "extCheckBoxAllowedList";
+            this.extCheckBoxAllowedList.Size = new System.Drawing.Size(28, 28);
+            this.extCheckBoxAllowedList.TabIndex = 4;
+            this.extCheckBoxAllowedList.TickBoxReductionRatio = 0.75F;
+            this.toolTip.SetToolTip(this.extCheckBoxAllowedList, "URLs");
+            this.extCheckBoxAllowedList.UseVisualStyleBackColor = false;
+            this.extCheckBoxAllowedList.Click += new System.EventHandler(this.extCheckBoxAllowedList_Click);
             // 
             // webBrowser
             // 
@@ -165,36 +229,6 @@ namespace EDDiscovery.UserControls
             this.webBrowser.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.webBrowser_DocumentCompleted);
             this.webBrowser.Navigating += new System.Windows.Forms.WebBrowserNavigatingEventHandler(this.webBrowser_Navigating);
             this.webBrowser.NewWindow += new System.ComponentModel.CancelEventHandler(this.webBrowser_NewWindow);
-            // 
-            // checkBoxAutoTrack
-            // 
-            this.checkBoxAutoTrack.Appearance = System.Windows.Forms.Appearance.Button;
-            this.checkBoxAutoTrack.BackColor = System.Drawing.SystemColors.Control;
-            this.checkBoxAutoTrack.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.checkBoxAutoTrack.CheckBoxColor = System.Drawing.Color.White;
-            this.checkBoxAutoTrack.CheckBoxDisabledScaling = 0.5F;
-            this.checkBoxAutoTrack.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBoxAutoTrack.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxAutoTrack.Cursor = System.Windows.Forms.Cursors.Default;
-            this.checkBoxAutoTrack.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.checkBoxAutoTrack.FlatAppearance.CheckedBackColor = System.Drawing.Color.Green;
-            this.checkBoxAutoTrack.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.checkBoxAutoTrack.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
-            this.checkBoxAutoTrack.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.checkBoxAutoTrack.Image = global::EDDiscovery.Icons.Controls.Exploration_ImportSphere;
-            this.checkBoxAutoTrack.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxAutoTrack.ImageIndeterminate = null;
-            this.checkBoxAutoTrack.ImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.checkBoxAutoTrack.ImageUnchecked = null;
-            this.checkBoxAutoTrack.Location = new System.Drawing.Point(72, 1);
-            this.checkBoxAutoTrack.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
-            this.checkBoxAutoTrack.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxAutoTrack.Name = "checkBoxAutoTrack";
-            this.checkBoxAutoTrack.Size = new System.Drawing.Size(28, 28);
-            this.checkBoxAutoTrack.TabIndex = 4;
-            this.checkBoxAutoTrack.TickBoxReductionRatio = 0.75F;
-            this.toolTip.SetToolTip(this.checkBoxAutoTrack, "Track system in history panel");
-            this.checkBoxAutoTrack.UseVisualStyleBackColor = false;
             // 
             // UserControlWebBrowser
             // 
@@ -220,5 +254,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.WebBrowser webBrowser;
         private ExtendedControls.ExtCheckBox extCheckBoxBack;
         private ExtendedControls.ExtCheckBox checkBoxAutoTrack;
+        private ExtendedControls.ExtCheckBox extCheckBoxAllowedList;
     }
 }
