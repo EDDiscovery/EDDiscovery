@@ -40,6 +40,7 @@ namespace EDDiscovery.UserControls
                 "https://auth.frontierstore.net" + Environment.NewLine +
                 "https://googleads.g.doubleclick.net" + Environment.NewLine;
 
+        private string userurllist;
 
         #region Init
         public UserControlWebBrowser()
@@ -50,7 +51,7 @@ namespace EDDiscovery.UserControls
             BaseUtils.BrowserInfo.FixIECompatibility(System.Diagnostics.Process.GetCurrentProcess().ProcessName + ".exe");
         }
 
-        public void Init(string source,string urlallowed)
+        public void Init(string source, string urlallowed)
         {
             this.source = source;
             this.urlallowed = urlallowed;
@@ -59,7 +60,7 @@ namespace EDDiscovery.UserControls
             rollUpPanelTop.PinState = GetSetting("PinState", true);
             rollUpPanelTop.SetToolTip(toolTip);
 
-            string thisname = typeof(UserControlWebBrowser).Name; 
+            string thisname = typeof(UserControlWebBrowser).Name;
             BaseUtils.Translator.Instance.Translate(this, thisname, null);          // lookup using the base name, not the derived name, so we don't have repeats
             BaseUtils.Translator.Instance.Translate(this, toolTip, thisname);
 
@@ -67,6 +68,8 @@ namespace EDDiscovery.UserControls
             this.checkBoxAutoTrack.CheckedChanged += new System.EventHandler(this.checkBoxAutoTrack_CheckedChanged);
 
             extCheckBoxStar.Visible = source != "Spansh";
+
+            userurllist = GetSetting("Allowed", "");
 
             webBrowser.Visible = false; // hide ugly white until load
         }
@@ -111,11 +114,11 @@ namespace EDDiscovery.UserControls
 
                 bool nosys = last_sys_tracked == null;
 
-                if (nosys || last_sys_tracked.Name != he.System.Name) 
+                if (nosys || last_sys_tracked.Name != he.System.Name)
                 {
                     last_sys_tracked = he.System;       // we want to track system always
 
-                    if (override_system == null && (checkBoxAutoTrack.Checked||nosys))        // if no overridden, and tracking (or no sys), present
+                    if (override_system == null && (checkBoxAutoTrack.Checked || nosys))        // if no overridden, and tracking (or no sys), present
                         PresentSystem(last_sys_tracked);
                 }
                 else if (he.EntryType == JournalTypeEnum.StartJump)  // start jump prepresent system..
@@ -175,20 +178,20 @@ namespace EDDiscovery.UserControls
 
             this.BeginInvoke((MethodInvoker)delegate
             {
-               if (!isClosing)
-               {
-                   if (url.HasChars())
-                   {
-                       SetControlText("Data on " + sys.Name);
-                       webBrowser.Navigate(url);
-                   }
-                   else
-                   {
-                       SetControlText("No Data on " + sys.Name);
-                       webBrowser.Navigate(defaulturl);
-                   }
-               }
-           });
+                if (!isClosing)
+                {
+                    if (url.HasChars())
+                    {
+                        SetControlText("Data on " + sys.Name);
+                        webBrowser.Navigate(url);
+                    }
+                    else
+                    {
+                        SetControlText("No Data on " + sys.Name);
+                        webBrowser.Navigate(defaulturl);
+                    }
+                }
+            });
         }
 
         #endregion
@@ -265,13 +268,12 @@ namespace EDDiscovery.UserControls
         {
             // if not starting with the current url for the site, or not in whitelist..
 
-            string userlist = GetSetting("Allowed", "");
-            string[] userlistsplit = userlist.HasChars() ? userlist.Split(Environment.NewLine) : new string[0];
+            string[] userlistsplit = userurllist.HasChars() ? userurllist.Split(Environment.NewLine) : new string[0];
             bool all = Array.IndexOf(userlistsplit, "*") >= 0;
             string[] defaultlistsplit = defaultallowed.Split(Environment.NewLine);
 
             // if not in these
-            if (  !all &&
+            if (!all &&
                   !e.Url.Host.StartsWith(urlallowed, StringComparison.InvariantCultureIgnoreCase) &&
                   userlistsplit.StartsWith(e.Url.AbsoluteUri, StringComparison.InvariantCultureIgnoreCase) == -1 &&
                   defaultlistsplit.StartsWith(e.Url.AbsoluteUri, StringComparison.InvariantCultureIgnoreCase) == -1
@@ -282,7 +284,7 @@ namespace EDDiscovery.UserControls
             }
             else
             {
-               System.Diagnostics.Debug.WriteLine("Webbrowser Allowed " + e.Url.Host + " : " + e.Url.AbsoluteUri);
+                System.Diagnostics.Debug.WriteLine("Webbrowser Allowed " + e.Url.Host + " : " + e.Url.AbsoluteUri);
             }
         }
 
@@ -325,8 +327,8 @@ namespace EDDiscovery.UserControls
             DialogResult res = f.ShowDialogCentred(this.FindForm(), this.FindForm().Icon, "URLs", closeicon: true);
             if (res == DialogResult.OK)
             {
-                deflist = f.Get("Text");
-                PutSetting("Allowed", deflist);
+                userurllist = f.Get("Text");
+                PutSetting("Allowed", userurllist);
                 PresentSystem(last_sys_tracked);
             }
         }
