@@ -265,14 +265,17 @@ namespace EDDiscovery.UserControls
         {
             // if not starting with the current url for the site, or not in whitelist..
 
-            string deflist = GetSetting("Allowed", defaultallowed);
-            string[] deflistsplit = deflist.Split(Environment.NewLine);
-            bool all = Array.IndexOf(deflistsplit, "*") >= 0;
+            string userlist = GetSetting("Allowed", "");
+            string[] userlistsplit = userlist.HasChars() ? userlist.Split(Environment.NewLine) : new string[0];
+            bool all = Array.IndexOf(userlistsplit, "*") >= 0;
+            string[] defaultlistsplit = defaultallowed.Split(Environment.NewLine);
 
             // if not in these
             if (  !all &&
-                  !e.Url.Host.StartsWith(urlallowed, StringComparison.InvariantCultureIgnoreCase) &&            
-                  deflistsplit.StartsWith(e.Url.AbsoluteUri, StringComparison.InvariantCultureIgnoreCase) == -1)
+                  !e.Url.Host.StartsWith(urlallowed, StringComparison.InvariantCultureIgnoreCase) &&
+                  userlistsplit.StartsWith(e.Url.AbsoluteUri, StringComparison.InvariantCultureIgnoreCase) == -1 &&
+                  defaultlistsplit.StartsWith(e.Url.AbsoluteUri, StringComparison.InvariantCultureIgnoreCase) == -1
+                  )
             {
                 System.Diagnostics.Debug.WriteLine("Webbrowser Disallowed " + e.Url.Host + " : " + e.Url.AbsoluteUri);
                 e.Cancel = true;
