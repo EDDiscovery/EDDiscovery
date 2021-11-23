@@ -33,6 +33,14 @@ namespace EDDiscovery.UserControls
         private ISystem last_sys_tracked = null;        // this tracks the travel grid selection always
         private SystemClass override_system = null;     // if set, override to this system.. 
 
+        private string defaultallowed =
+                "about:" + Environment.NewLine +
+                "https://www.google.com/recaptcha" + Environment.NewLine +
+                "https://consentcdn.cookiebot.com" + Environment.NewLine +
+                "https://auth.frontierstore.net" + Environment.NewLine +
+                "https://googleads.g.doubleclick.net" + Environment.NewLine;
+
+
         #region Init
         public UserControlWebBrowser()
         {
@@ -255,16 +263,16 @@ namespace EDDiscovery.UserControls
 
         private void webBrowser_Navigating(object sender, WebBrowserNavigatingEventArgs e)
         {
-            string[] allowed = new string[] {               
-                "about:",
-                "https://www.google.com/recaptcha",     // these three is enough to allow Spansh to work
-                "https://consentcdn.cookiebot.com",
-                "https://auth.frontierstore.net"
-            };
-
             // if not starting with the current url for the site, or not in whitelist..
 
-            if (!e.Url.Host.StartsWith(urlallowed, StringComparison.InvariantCultureIgnoreCase) && allowed.StartsWith(e.Url.AbsoluteUri, StringComparison.InvariantCultureIgnoreCase) == -1)
+            string deflist = GetSetting("Allowed", defaultallowed);
+            string[] deflistsplit = deflist.Split(Environment.NewLine);
+            bool all = Array.IndexOf(deflistsplit, "*") >= 0;
+
+            // if not in these
+            if (  !all &&
+                  !e.Url.Host.StartsWith(urlallowed, StringComparison.InvariantCultureIgnoreCase) &&            
+                  deflistsplit.StartsWith(e.Url.AbsoluteUri, StringComparison.InvariantCultureIgnoreCase) == -1)
             {
                 System.Diagnostics.Debug.WriteLine("Webbrowser Disallowed " + e.Url.Host + " : " + e.Url.AbsoluteUri);
                 e.Cancel = true;
@@ -288,6 +296,36 @@ namespace EDDiscovery.UserControls
         private void webBrowser_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
             webBrowser.Visible = true;
+        }
+
+        private void extCheckBoxAllowedList_Click(object sender, EventArgs e)
+        {
+            ExtendedControls.ConfigurableForm f = new ExtendedControls.ConfigurableForm();
+
+            int width = 430;
+
+            string deflist = GetSetting("Allowed", defaultallowed);
+
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("Text", typeof(ExtendedControls.ExtTextBox), deflist, new Point(10, 40), new Size(width - 10 - 20, 110), "URLs") { textboxmultiline = true });
+
+            f.AddOK(new Point(width - 100, 180));
+            f.AddCancel(new Point(width - 200, 180));
+
+            f.Trigger += (dialogname, controlname, xtag) =>
+            {
+                if (controlname == "OK")
+                    f.ReturnResult(DialogResult.OK);
+                else if (controlname == "Close" || controlname == "Escape" || controlname == "Cancel")
+                    f.ReturnResult(DialogResult.Cancel);
+            };
+
+            DialogResult res = f.ShowDialogCentred(this.FindForm(), this.FindForm().Icon, "URLs", closeicon: true);
+            if (res == DialogResult.OK)
+            {
+                deflist = f.Get("Text");
+                PutSetting("Allowed", deflist);
+                PresentSystem(last_sys_tracked);
+            }
         }
     }
 
