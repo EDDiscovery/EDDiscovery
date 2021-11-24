@@ -33,6 +33,15 @@ namespace EDDiscovery.UserControls
         private ISystem last_sys_tracked = null;        // this tracks the travel grid selection always
         private SystemClass override_system = null;     // if set, override to this system.. 
 
+        private string defaultallowed =
+                "about:" + Environment.NewLine +
+                "https://www.google.com/recaptcha" + Environment.NewLine +
+                "https://consentcdn.cookiebot.com" + Environment.NewLine +
+                "https://auth.frontierstore.net" + Environment.NewLine +
+                "https://googleads.g.doubleclick.net" + Environment.NewLine;
+        
+        private string userurllist;
+
         #region Init
         public UserControlWebBrowser()
         {
@@ -42,7 +51,7 @@ namespace EDDiscovery.UserControls
             BaseUtils.BrowserInfo.FixIECompatibility(System.Diagnostics.Process.GetCurrentProcess().ProcessName + ".exe");
         }
 
-        public void Init(string source,string urlallowed)
+        public void Init(string source, string urlallowed)
         {
             this.source = source;
             this.urlallowed = urlallowed;
@@ -51,7 +60,7 @@ namespace EDDiscovery.UserControls
             rollUpPanelTop.PinState = GetSetting("PinState", true);
             rollUpPanelTop.SetToolTip(toolTip);
 
-            string thisname = typeof(UserControlWebBrowser).Name; 
+            string thisname = typeof(UserControlWebBrowser).Name;
             BaseUtils.Translator.Instance.Translate(this, thisname, null);          // lookup using the base name, not the derived name, so we don't have repeats
             BaseUtils.Translator.Instance.Translate(this, toolTip, thisname);
 
@@ -59,6 +68,8 @@ namespace EDDiscovery.UserControls
             this.checkBoxAutoTrack.CheckedChanged += new System.EventHandler(this.checkBoxAutoTrack_CheckedChanged);
 
             extCheckBoxStar.Visible = source != "Spansh";
+
+            userurllist = GetSetting("Allowed", "");
 
             webBrowser.Visible = false; // hide ugly white until load
         }
@@ -103,11 +114,11 @@ namespace EDDiscovery.UserControls
 
                 bool nosys = last_sys_tracked == null;
 
-                if (nosys || last_sys_tracked.Name != he.System.Name) 
+                if (nosys || last_sys_tracked.Name != he.System.Name)
                 {
                     last_sys_tracked = he.System;       // we want to track system always
 
-                    if (override_system == null && (checkBoxAutoTrack.Checked||nosys))        // if no overridden, and tracking (or no sys), present
+                    if (override_system == null && (checkBoxAutoTrack.Checked || nosys))        // if no overridden, and tracking (or no sys), present
                         PresentSystem(last_sys_tracked);
                 }
                 else if (he.EntryType == JournalTypeEnum.StartJump)  // start jump prepresent system..
@@ -167,20 +178,20 @@ namespace EDDiscovery.UserControls
 
             this.BeginInvoke((MethodInvoker)delegate
             {
-               if (!isClosing)
-               {
-                   if (url.HasChars())
-                   {
-                       SetControlText("Data on " + sys.Name);
-                       webBrowser.Navigate(url);
-                   }
-                   else
-                   {
-                       SetControlText("No Data on " + sys.Name);
-                       webBrowser.Navigate(defaulturl);
-                   }
-               }
-           });
+                if (!isClosing)
+                {
+                    if (url.HasChars())
+                    {
+                        SetControlText("Data on " + sys.Name);
+                        webBrowser.Navigate(url);
+                    }
+                    else
+                    {
+                        SetControlText("No Data on " + sys.Name);
+                        webBrowser.Navigate(defaulturl);
+                    }
+                }
+            });
         }
 
         #endregion
@@ -255,23 +266,25 @@ namespace EDDiscovery.UserControls
 
         private void webBrowser_Navigating(object sender, WebBrowserNavigatingEventArgs e)
         {
-            string[] allowed = new string[] {               
-                "about:",
-                "https://www.google.com/recaptcha",     // these three is enough to allow Spansh to work
-                "https://consentcdn.cookiebot.com",
-                "https://auth.frontierstore.net"
-            };
-
             // if not starting with the current url for the site, or not in whitelist..
 
-            if (!e.Url.Host.StartsWith(urlallowed, StringComparison.InvariantCultureIgnoreCase) && allowed.StartsWith(e.Url.AbsoluteUri, StringComparison.InvariantCultureIgnoreCase) == -1)
+            string[] userlistsplit = userurllist.HasChars() ? userurllist.Split(Environment.NewLine) : new string[0];
+            bool all = Array.IndexOf(userlistsplit, "*") >= 0;
+            string[] defaultlistsplit = defaultallowed.Split(Environment.NewLine);
+
+            // if not in these
+            if (!all &&
+                  !e.Url.Host.StartsWith(urlallowed, StringComparison.InvariantCultureIgnoreCase) &&
+                  userlistsplit.StartsWith(e.Url.AbsoluteUri, StringComparison.InvariantCultureIgnoreCase) == -1 &&
+                  defaultlistsplit.StartsWith(e.Url.AbsoluteUri, StringComparison.InvariantCultureIgnoreCase) == -1
+                  )
             {
                 System.Diagnostics.Debug.WriteLine("Webbrowser Disallowed " + e.Url.Host + " : " + e.Url.AbsoluteUri);
                 e.Cancel = true;
             }
             else
             {
-               System.Diagnostics.Debug.WriteLine("Webbrowser Allowed " + e.Url.Host + " : " + e.Url.AbsoluteUri);
+                System.Diagnostics.Debug.WriteLine("Webbrowser Allowed " + e.Url.Host + " : " + e.Url.AbsoluteUri);
             }
         }
 
@@ -288,6 +301,36 @@ namespace EDDiscovery.UserControls
         private void webBrowser_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
             webBrowser.Visible = true;
+        }
+
+        private void extCheckBoxAllowedList_Click(object sender, EventArgs e)
+        {
+            ExtendedControls.ConfigurableForm f = new ExtendedControls.ConfigurableForm();
+
+            int width = 430;
+
+            string deflist = GetSetting("Allowed", defaultallowed);
+
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("Text", typeof(ExtendedControls.ExtTextBox), deflist, new Point(10, 40), new Size(width - 10 - 20, 110), "URLs") { textboxmultiline = true });
+
+            f.AddOK(new Point(width - 100, 180));
+            f.AddCancel(new Point(width - 200, 180));
+
+            f.Trigger += (dialogname, controlname, xtag) =>
+            {
+                if (controlname == "OK")
+                    f.ReturnResult(DialogResult.OK);
+                else if (controlname == "Close" || controlname == "Escape" || controlname == "Cancel")
+                    f.ReturnResult(DialogResult.Cancel);
+            };
+
+            DialogResult res = f.ShowDialogCentred(this.FindForm(), this.FindForm().Icon, "URLs", closeicon: true);
+            if (res == DialogResult.OK)
+            {
+                userurllist = f.Get("Text");
+                PutSetting("Allowed", userurllist);
+                PresentSystem(last_sys_tracked);
+            }
         }
     }
 

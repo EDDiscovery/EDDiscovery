@@ -26,8 +26,8 @@ namespace EDDiscovery.Actions
         {
             vars["TriggerName"] = trigname;       // Program gets eventname which triggered it.. (onRefresh, LoadGame..)
             vars["TriggerType"] = triggertype;       // type (onRefresh, or OnNew, or ProgramTrigger for all others)
-            vars["TriggerLocalTime"] = DateTime.Now.ToStringUS();  // time it was started, US format, to match JSON.
-            vars["TriggerUTCTime"] = DateTime.UtcNow.ToStringUS();  // time it was started, US format, to match JSON.
+            vars["TriggerLocalTime"] = DateTime.Now.ToStringUSInvariant();  // time it was started, US format, to match JSON.
+            vars["TriggerUTCTime"] = DateTime.UtcNow.ToStringUSInvariant();  // time it was started, US format, to match JSON.
         }
 
         static public void HistoryEventVars(Variables vars, HistoryEntry he, string prefix)
@@ -38,9 +38,9 @@ namespace EDDiscovery.Actions
 
                 vars[prefix + "CurrentMode"] = he.TravelState.ToString();
                 vars[prefix + "JID"] = he.Journalid.ToString(ct);
-                vars[prefix + "UTCTime"] = he.EventTimeUTC.ToStringUS();
-                vars[prefix + "LocalTime"] = he.EventTimeUTC.ToLocalTime().ToStringUS();
-                vars[prefix + "GameTime"] = he.EventTimeUTC.AddYears(1286).ToStringUS();
+                vars[prefix + "UTCTime"] = he.EventTimeUTC.ToStringUSInvariant();
+                vars[prefix + "LocalTime"] = he.EventTimeUTC.ToLocalTime().ToStringUSInvariant();
+                vars[prefix + "GameTime"] = he.EventTimeUTC.AddYears(1286).ToStringUSInvariant();
                 vars[prefix + "DockedState"] = he.IsDocked.ToStringIntValue();
                 vars[prefix + "LandedState"] = he.IsLanded.ToStringIntValue();
                 vars[prefix + "Hyperspace"] = he.IsInHyperSpace.ToStringIntValue();
@@ -194,10 +194,10 @@ namespace EDDiscovery.Actions
                 vars[mp + "Name"] = ms.Mission.Name;
                 vars[mp + "NameLocalised"] = ms.Mission.LocalisedName;
                 vars[mp + "ID"] = ms.Mission.MissionId.ToStringInvariant();
-                vars[mp + "UTC"] = ms.Mission.EventTimeUTC.ToStringUS();
-                vars[mp + "Local"] = ms.Mission.EventTimeLocal.ToStringUS();
-                vars[mp + "ExpiryUTC"] = ms.Mission.Expiry.ToStringUS();
-                vars[mp + "ExpiryLocal"] = ms.Mission.Expiry.ToLocalTime().ToStringUS();
+                vars[mp + "UTC"] = ms.Mission.EventTimeUTC.ToStringUSInvariant();
+                vars[mp + "Local"] = ms.Mission.EventTimeLocal.ToStringUSInvariant();
+                vars[mp + "ExpiryUTC"] = ms.Mission.Expiry.ToStringUSInvariant();
+                vars[mp + "ExpiryLocal"] = ms.Mission.Expiry.ToLocalTime().ToStringUSInvariant();
                 vars[mp + "System"] = ms.OriginatingSystem;
                 vars[mp + "Station"] = ms.OriginatingStation;
                 vars[mp + "Faction"] = ms.Mission.Faction;

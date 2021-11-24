@@ -32,6 +32,7 @@ namespace EDDiscovery.Forms
         public bool Import { get; private set; }
 
         private string[] fileextensions;
+        private string[] suggestedfilenames;
         private ShowFlags[] showflags;
 
         public ExportForm()
@@ -50,10 +51,11 @@ namespace EDDiscovery.Forms
             None = 0,
         }
 
-        public void Init(bool import, string[] selectionlist, string[] outputext = null, ShowFlags[] showflags = null)
+        public void Init(bool import, string[] selectionlist, string[] outputext = null, ShowFlags[] showflags = null, string[] suggestedfilenames= null)
         {
             this.fileextensions = outputext;
             this.showflags = showflags;
+            this.suggestedfilenames = suggestedfilenames;
 
             comboBoxSelectedType.Items.AddRange(selectionlist);
             comboBoxSelectedType.SelectedIndex = 0;
@@ -143,6 +145,8 @@ namespace EDDiscovery.Forms
 
                 dlg.Filter = fileextensions != null ? fileextensions[SelectedIndex] : "CSV export| *.csv";
                 dlg.Title = string.Format("Export current data {0}".T(EDTx.ExportForm_ECH), dlg.Filter);
+                if (suggestedfilenames != null)
+                    dlg.FileName = suggestedfilenames[SelectedIndex];
 
                 if (dlg.ShowDialog(this) == DialogResult.OK)
                 {

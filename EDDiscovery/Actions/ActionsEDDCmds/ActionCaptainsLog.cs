@@ -328,8 +328,8 @@ namespace EDDiscovery.Actions
         void DumpCL( ActionProgramRun ap, string prefix, CaptainsLogClass cl)
         {
             ap[prefix + "Id"] = cl.ID.ToStringInvariant();
-            ap[prefix + "TimeUTC"] = cl.TimeUTC.ToStringUS();
-            ap[prefix + "TimeLocal"] = cl.TimeUTC.ToLocalTime().ToStringUS();
+            ap[prefix + "TimeUTC"] = cl.TimeUTC.ToStringUSInvariant();
+            ap[prefix + "TimeLocal"] = cl.TimeUTC.ToLocalTime().ToStringUSInvariant();
             ap[prefix + "SystemName"] = cl.SystemName ?? "";
             ap[prefix + "BodyName"] = cl.BodyName ?? "";
             ap[prefix + "Note"] = cl.Note ?? "";

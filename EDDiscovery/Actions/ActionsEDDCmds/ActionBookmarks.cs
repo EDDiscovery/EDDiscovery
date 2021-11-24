@@ -80,7 +80,7 @@ namespace EDDiscovery.Actions
                                 ap[nprefix + "x"] = b.x.ToStringInvariant();
                                 ap[nprefix + "y"] = b.y.ToStringInvariant();
                                 ap[nprefix + "z"] = b.z.ToStringInvariant();
-                                ap[nprefix + "time"] = b.TimeUTC.ToStringUS(); // US Date format
+                                ap[nprefix + "time"] = b.TimeUTC.ToStringUSInvariant(); // US Date format
                                 ap[nprefix + "note"] = b.Note;
 
                                 if ( b.PlanetaryMarks != null )
