@@ -488,7 +488,9 @@ namespace EDDiscovery.UserControls
                                     },
                     outputext: new string[] { "CSV|*.csv", "CSV|*.csv", "CSV|*.csv", "CSV|*.csv", "CSV|*.csv", "CSV|*.csv", "JSON|*.json|All|*.*" },
                     showflags: new Forms.ExportForm.ShowFlags[] { Forms.ExportForm.ShowFlags.None,Forms.ExportForm.ShowFlags.None,Forms.ExportForm.ShowFlags.None,
-                    Forms.ExportForm.ShowFlags.None,Forms.ExportForm.ShowFlags.None,Forms.ExportForm.ShowFlags.None,Forms.ExportForm.ShowFlags.DTCVSOI }
+                    Forms.ExportForm.ShowFlags.None,Forms.ExportForm.ShowFlags.None,Forms.ExportForm.ShowFlags.None,Forms.ExportForm.ShowFlags.DTCVSOI },
+                    suggestedfilenames:new string[] {"StarsPlanets","Stars","Planets","Stars","Plantes","Rings",last_he?.System.Name??""}
+                    
             );
 
             if (frm.ShowDialog(FindForm()) == DialogResult.OK)

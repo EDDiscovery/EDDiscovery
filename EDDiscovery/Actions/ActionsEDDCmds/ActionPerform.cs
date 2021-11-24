@@ -349,7 +349,7 @@ namespace EDDiscovery.Actions
                                 
                                 if (f.TriggerName.StartsWith("UI") || f.TriggerName.Equals("onEliteUIEvent"))
                                 {
-                                    c["EventClass_EventTimeUTC"] = DateTime.UtcNow.ToStringUS();
+                                    c["EventClass_EventTimeUTC"] = DateTime.UtcNow.ToStringUSInvariant();
                                     c["EventClass_EventTypeID"] = c["EventClass_EventTypeStr"] = f.TriggerName.Substring(2);
                                     c["EventClass_UIDisplayed"] = "0";
                                     ac.ActionRun(Actions.ActionEventEDList.onUIEvent, c);
