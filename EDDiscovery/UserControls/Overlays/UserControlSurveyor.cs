@@ -125,9 +125,8 @@ namespace EDDiscovery.UserControls
             shipfsdinfo = hl.GetLast?.GetJumpInfo(discoveryform.history.MaterialCommoditiesMicroResources.CargoCount(hl.GetLast.MaterialCommodity));
             shipinfo = hl.GetLast?.ShipInformation;
 
-            System.Diagnostics.Debug.WriteLine($"Surveyor History Load {currentRoute?.Name} {currentRoute?.Id} {currentRoute?.Systems.Count}");
-
             LoadRoute(GetSetting("route", ""));     // reload the route, may have locations now
+            System.Diagnostics.Debug.WriteLine($"Surveyor History Load {currentRoute?.Name} {currentRoute?.Id} systems {currentRoute?.Systems.Count}");
 
             DrawSystem(last_sys, last_sys?.Name);    // may be null
 
@@ -260,6 +259,7 @@ namespace EDDiscovery.UserControls
 
                 if (currentRoute != null && sys.HasCoordinate)      // if we have a route and a coord, we can work out the next route text
                 {
+                    System.Diagnostics.Debug.WriteLine($"Current route set, sys has coord, route is {currentRoute.Systems.Count} {currentRoute.Id}");
                     if (currentRoute.Systems.Count == 0)
                     {
                         lastroutetext = "Route contains no waypoints".T(EDTx.UserControlRouteTracker_NoWay);
@@ -895,6 +895,10 @@ namespace EDDiscovery.UserControls
                     currentRoute = savedroutes.Find(x => x.Name == name);       // pick, if not found, will be null
                     System.Diagnostics.Debug.WriteLine($"Loaded route with {currentRoute?.Systems.Count}");
                 }
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine($"No route wanted {name}");
             }
         }
 
