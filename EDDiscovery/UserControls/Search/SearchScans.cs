@@ -135,6 +135,7 @@ namespace EDDiscovery.UserControls
         private string dbQuerySave = "Query";
         private string dbSplitterSave = "Splitter";
 
+
         #region Init
 
         public SearchScans()
@@ -170,6 +171,7 @@ namespace EDDiscovery.UserControls
             comboBoxSearches.Items.AddRange(Queries.Instance.Searches.Select(x => x.Item1));
             comboBoxSearches.Text = "Select".T(EDTx.SearchScans_Select);
             comboBoxSearches.SelectedIndexChanged += ComboBoxSearches_SelectedIndexChanged;
+
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
@@ -243,7 +245,8 @@ namespace EDDiscovery.UserControls
 
         }
 
-        private void buttonFind_Click(object sender, EventArgs e)
+
+        private async void buttonFind_Click(object sender, EventArgs e)
         {
             BaseUtils.ConditionLists cond = Valid();
             if (cond != null)
@@ -256,43 +259,63 @@ namespace EDDiscovery.UserControls
 
                 ISystem cursystem = discoveryform.history.CurrentSystem();        // could be null
 
-                foreach ( var he in discoveryform.history.FilterByScan())
+                var varusedincondition = cond.VariablesUsed();      // what variables are in use, so we don't enumerate the lots.
+
+                var helist = discoveryform.history.FilterByScan();
+
+                var sw = new System.Diagnostics.Stopwatch(); sw.Start();
+
+                var results = await Find(helist, cond, varusedincondition, cursystem);
+
+                foreach( var r in results)
                 {
-                    JournalScan js = he.journalEntry as JournalScan;
-
-                    BaseUtils.Variables scandata = new BaseUtils.Variables();
-                    scandata.AddPropertiesFieldsOfClass(js, "", new Type[] { typeof(System.Drawing.Icon), typeof(System.Drawing.Image), typeof(System.Drawing.Bitmap), typeof(BaseUtils.JSON.JObject) }, 5);
-
-                    bool? res = cond.CheckAll(scandata, out string errlist, out BaseUtils.ConditionLists.ErrorClass errclass );  // need function handler..
-
-                    if ( res.HasValue && res.Value == true )
-                    {
-                        ISystem sys = he.System;
-                        string sep = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberGroupSeparator + " ";
-                        object[] rowobj = {
-                                            EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC).ToString(),
-                                            js.BodyName,
-                                            js.DisplayString(0),
-                                            (cursystem != null ? cursystem.Distance(sys).ToString("0.#") : ""),
-                                            sys.X.ToString("0.#") + sep + sys.Y.ToString("0.#") + sep + sys.Z.ToString("0.#")
-                                           };
-
-                        dataGridView.Rows.Add(rowobj);
-                        dataGridView.Rows[dataGridView.Rows.Count - 1].Tag = sys;
-                    }
-
-                    if ( errclass == BaseUtils.ConditionLists.ErrorClass.LeftSideVarUndefined || errclass == BaseUtils.ConditionLists.ErrorClass.RightSideBadFormat )
-                    {
-                        ExtendedControls.MessageBoxTheme.Show(errlist, "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        break;
-                    }
+                    dataGridView.Rows.Add(r.Item2);
+                    dataGridView.Rows[dataGridView.Rows.Count - 1].Tag = r.Item1;
                 }
 
+                System.Diagnostics.Debug.Write($"Search took {sw.ElapsedMilliseconds}");
                 dataGridView.Sort(sortcol, (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
                 dataGridView.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
                 this.Cursor = Cursors.Default;
             }
 
+        }
+
+        // Async task to find results given cond in helist, using only vars specified.
+
+        private System.Threading.Tasks.Task<List<Tuple<ISystem,object[]>>> Find(List<HistoryEntry> helist, BaseUtils.ConditionLists cond, HashSet<string> varsusedincondition, ISystem cursystem)
+        {
+            return System.Threading.Tasks.Task.Run(() =>
+            {
+                List<Tuple<ISystem,object[]>> rows = new List<Tuple<ISystem,object[]>>();
+                foreach (var he in helist)
+                {
+                    JournalScan js = he.journalEntry as JournalScan;
+
+                    BaseUtils.Variables scandata = new BaseUtils.Variables();
+                    scandata.AddPropertiesFieldsOfClass(js, "",
+                            new Type[] { typeof(System.Drawing.Icon), typeof(System.Drawing.Image), typeof(System.Drawing.Bitmap), typeof(BaseUtils.JSON.JObject) }, 5,
+                            varsusedincondition);
+
+                    bool? res = cond.CheckAll(scandata, out string errlist, out BaseUtils.ConditionLists.ErrorClass errclass);  // need function handler..
+
+                    if (res.HasValue && res.Value == true)
+                    {
+                        ISystem sys = he.System;
+                        string sep = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberGroupSeparator + " ";
+                        object[] rowobj = {
+                                                EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC).ToString(),
+                                                js.BodyName,
+                                                js.DisplayString(0),
+                                                (cursystem != null ? cursystem.Distance(sys).ToString("0.#") : ""),
+                                                sys.X.ToString("0.#") + sep + sys.Y.ToString("0.#") + sep + sys.Z.ToString("0.#")
+                                               };
+                        rows.Add(new Tuple<ISystem,object[]>(sys,rowobj));
+                    }
+                }
+
+                return rows;
+            });
         }
 
         private BaseUtils.ConditionLists Valid()
