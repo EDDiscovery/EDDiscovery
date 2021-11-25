@@ -17,6 +17,7 @@ using BaseUtils;
 using BaseUtils.JSON;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
+using EliteDangerousCore.JournalEvents;
 using ExtendedControls;
 using System;
 using System.Collections.Generic;
@@ -688,13 +689,43 @@ namespace EDDiscovery.UserControls
             }
 
             var frm = new Forms.ExportForm();
-            frm.Init(false, new string[] { "Grid", "System Name Only", "JSON" },
-                            new string[] { "CSV export|*.csv", "Text File|*.txt|CSV export|*.csv", "JSON|*.json" },
-                            new Forms.ExportForm.ShowFlags[] { Forms.ExportForm.ShowFlags.DisableDateTime, Forms.ExportForm.ShowFlags.DisableDateTime, Forms.ExportForm.ShowFlags.DTCVSOI });
+            frm.Init(false, new string[] { "Grid", "System Name Only", "JSON", "EDSM System Information" },
+                            new string[] { "CSV export|*.csv", "Text File|*.txt|CSV export|*.csv", "JSON|*.json", "CSV export|*.csv" },
+                            new Forms.ExportForm.ShowFlags[] { Forms.ExportForm.ShowFlags.DisableDateTime, Forms.ExportForm.ShowFlags.DisableDateTime, Forms.ExportForm.ShowFlags.DTCVSOI, Forms.ExportForm.ShowFlags.DisableDateTime },
+                            new string[] { "ExpeditionGrid", "SystemList", "Systems", "EDSMData" }
+                            );
 
             if (frm.ShowDialog(FindForm()) == DialogResult.OK)
             {
-                if (frm.SelectedIndex == 2)
+                if ( frm.SelectedIndex == 3 )           // EDSM System list
+                {
+                    List<JournalScan> scans = new List<JournalScan>();
+
+                    foreach ( var system in rt.Systems)
+                    {
+                        ISystem sys = SystemCache.FindSystem(system, discoveryform.galacticMapping, true);
+                        if (sys != null)
+                        {
+                            var jl = EliteDangerousCore.EDSM.EDSMClass.GetBodiesList(sys);
+                            List<JournalScan> sysscans = jl.Item1;
+                            if (sysscans != null)
+                                scans.AddRange(sysscans);
+                        }
+                    }
+
+                    if ( CSVHelpers.OutputScanCSV(scans,frm.Path,frm.Comma,true,true,true,false,true))
+                    {
+                        try
+                        {
+                            if (frm.AutoOpen)
+                                System.Diagnostics.Process.Start(frm.Path);
+                        }
+                        catch { }
+                    }
+                    else
+                        CSVHelpers.WriteFailed(this.FindForm(), frm.Path);
+                }
+                else if (frm.SelectedIndex == 2)        // JSON
                 {
                     List<string> systems = new List<string>();
                     foreach (DataGridViewRow row in dataGridView.Rows)
@@ -706,7 +737,7 @@ namespace EDDiscovery.UserControls
                     }
 
                     if ( !WriteJSON(frm.Path, textBoxRouteName.Text, systems))
-                        CVSHelpers.WriteFailed(this.FindForm(), frm.Path);
+                        CSVHelpers.WriteFailed(this.FindForm(), frm.Path);
                 }
                 else
                 {

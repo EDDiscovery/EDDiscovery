@@ -61,9 +61,6 @@ namespace EDDiscovery.Forms
             comboBoxSelectedType.SelectedIndex = 0;
             comboBoxSelectedType.SelectedIndexChanged += ComboBoxSelectedType_SelectedIndexChanged;
 
-            if (comboBoxSelectedType.Items.Count < 2)       // disable if no selection
-                panelCombo.Visible = false;
-
             customDateTimePickerFrom.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(new DateTime(2014, 11, 22, 0, 0, 0, DateTimeKind.Utc)); //Gamma start
             customDateTimePickerTo.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, 23, 59, 59));
 
