@@ -76,7 +76,7 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNewTarget += Discoveryform_OnNewTarget;
             GlobalBookMarkList.Instance.OnBookmarkChange += GlobalBookMarkList_OnBookmarkChange;
 
-            translatednavroutename = "Nav Route".T(EDTx.UserControlSurveyor_navroute); 
+            translatednavroutename = "Nav Route".T(EDTx.UserControlSurveyor_navroute);
 
             LoadRoute(GetSetting("route", ""));
             routecontrolsettings = GetSetting("routecontrol", "showJumps;showwaypoints");
@@ -127,8 +127,7 @@ namespace EDDiscovery.UserControls
 
             System.Diagnostics.Debug.WriteLine($"Surveyor History Load {currentRoute?.Name} {currentRoute?.Id} {currentRoute?.Systems.Count}");
 
-            if (currentRoute != null && currentRoute.Id == -1)      // history has changed, force an update to route if navroute selected. navroutes are the only ones with Id=-1
-                LoadRoute(NavRouteNameLabel);
+            LoadRoute(GetSetting("route", ""));     // reload the route, may have locations now
 
             DrawSystem(last_sys, last_sys?.Name);    // may be null
 
@@ -894,6 +893,7 @@ namespace EDDiscovery.UserControls
                 {
                     var savedroutes = SavedRouteClass.GetAllSavedRoutes();      // load routes
                     currentRoute = savedroutes.Find(x => x.Name == name);       // pick, if not found, will be null
+                    System.Diagnostics.Debug.WriteLine($"Loaded route with {currentRoute?.Systems.Count}");
                 }
             }
         }
