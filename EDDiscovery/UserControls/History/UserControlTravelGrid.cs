@@ -37,9 +37,6 @@ namespace EDDiscovery.UserControls
         //ucct interface
         public HistoryEntry GetCurrentHistoryEntry { get { return dataGridViewTravel.CurrentCell != null ? dataGridViewTravel.Rows[dataGridViewTravel.CurrentCell.RowIndex].Tag as HistoryEntry : null; } }
 
-        //horrible.. needs removing, used by export.
-        public TravelHistoryFilter GetHistoryFilter { get { return (TravelHistoryFilter)comboBoxTime.SelectedItem ?? TravelHistoryFilter.NoFilter; } }
-
         #endregion
 
         #region Events
@@ -65,8 +62,6 @@ namespace EDDiscovery.UserControls
             public const int Information = 3;
             public const int Note = 4;
         }
-
-        private int defaultRowHeight;
 
         private const string dbFilter = "EventFilter2";                 // DB names
         private const string dbHistorySave = "EDUIHistory";
@@ -164,7 +159,6 @@ namespace EDDiscovery.UserControls
 
         public override void LoadLayout()
         {
-            defaultRowHeight = dataGridViewTravel.RowTemplate.MinimumHeight = Math.Max(28, Font.ScalePixels(28));       // due to 24 bit icons
             DGVLoadColumnLayout(dataGridViewTravel);
         }
 
@@ -1296,131 +1290,6 @@ namespace EDDiscovery.UserControls
 
 #endregion
 
-#region Excel
-
-        private void buttonExtExcel_Click(object sender, EventArgs e)
-        {
-            Forms.ExportForm frm = new Forms.ExportForm();
-            frm.Init(false, new string[] { "View", "FSD Jumps only", "With Notes only", "With Notes, no repeat" });
-
-            if (frm.ShowDialog(FindForm()) == DialogResult.OK)
-            {
-                BaseUtils.CSVWriteGrid grd = new BaseUtils.CSVWriteGrid();
-                grd.SetCSVDelimiter(frm.Comma);
-
-                List<SystemNoteClass> sysnotecache = new List<SystemNoteClass>();
-                string[] colh = null;
-
-                grd.GetLineStatus += delegate (int r)
-                {
-                    if (r < dataGridViewTravel.Rows.Count)
-                    {
-                        HistoryEntry he = (HistoryEntry)dataGridViewTravel.Rows[r].Tag;
-                        return (dataGridViewTravel.Rows[r].Visible &&
-                                he.EventTimeUTC.CompareTo(frm.StartTimeUTC) >= 0 &&
-                                he.EventTimeUTC.CompareTo(frm.EndTimeUTC) <= 0) ? BaseUtils.CSVWriteGrid.LineStatus.OK : BaseUtils.CSVWriteGrid.LineStatus.Skip;
-                    }
-                    else
-                        return BaseUtils.CSVWriteGrid.LineStatus.EOF;
-                };
-
-                if (frm.SelectedIndex == 1)     // export fsd jumps
-                {
-                    colh = new string[] { "Time", "Name", "X", "Y", "Z", "Distance", "Fuel Used", "Fuel Left", "Boost", "Note" };
-
-                    grd.VerifyLine += delegate (int r)      // addition qualifier for FSD jump
-                    {
-                        HistoryEntry he = (HistoryEntry)dataGridViewTravel.Rows[r].Tag;
-                        return he.EntryType == JournalTypeEnum.FSDJump;
-                    };
-
-                    grd.GetLine += delegate (int r)
-                    {
-                        HistoryEntry he = (HistoryEntry)dataGridViewTravel.Rows[r].Tag;
-                        EliteDangerousCore.JournalEvents.JournalFSDJump fsd = he.journalEntry as EliteDangerousCore.JournalEvents.JournalFSDJump;
-
-                        return new Object[] {
-                            EDDConfig.Instance.ConvertTimeToSelectedFromUTC(fsd.EventTimeUTC),
-                            fsd.StarSystem,
-                            fsd.StarPos.X,
-                            fsd.StarPos.Y,
-                            fsd.StarPos.Z,
-                            fsd.JumpDist,
-                            fsd.FuelUsed,
-                            fsd.FuelLevel,
-                            fsd.BoostUsed,
-                            he.SNC != null ? he.SNC.Note : "",
-                        };
-
-                    };
-                }
-                else
-                {
-                    colh = new string[] { "Time", "Event", "System", "Body",            //0
-                                          "Ship", "Summary", "Description", "Detailed Info",        //4
-                                          "Note", "Travel Dist", "Travel Time", "Travel Jumps",     //8
-                                          "Travelled MisJumps" , "X", "Y","Z" ,     //12
-                                          "JID", "EDSMID"};             //16
-
-                    grd.GetLine += delegate (int r)
-                    {
-                        HistoryEntry he = (HistoryEntry)dataGridViewTravel.Rows[r].Tag;
-                        he.FillInformation(out string EventDescription, out string EventDetailedInfo);
-                        return new Object[] {
-                            EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC),
-                            he.EventSummary,
-                            (he.System != null) ? he.System.Name : "Unknown",    // paranoia
-                            he.WhereAmI,
-                            he.ShipInformation != null ? he.ShipInformation.Name : "Unknown",
-                            he.EventSummary,
-                            EventDescription,
-                            EventDetailedInfo,
-                            dataGridViewTravel.Rows[r].Cells[4].Value,
-                            he.isTravelling ? he.TravelledDistance.ToString("0.0") : "",
-                            he.isTravelling ? he.TravelledSeconds.ToString() : "",
-                            he.isTravelling ? he.Travelledjumps.ToString() : "",
-                            he.isTravelling ? he.TravelledMissingjump.ToString() : "",
-                            he.System.X,
-                            he.System.Y,
-                            he.System.Z,
-                            he.Journalid,
-                            he.System.EDSMID,
-                        };
-                    };
-
-                    if (frm.SelectedIndex == 2 || frm.SelectedIndex == 3)     // export notes
-                    {
-                        grd.VerifyLine += delegate (int r)      // second hook to reject line
-                        {
-                            HistoryEntry he = (HistoryEntry)dataGridViewTravel.Rows[r].Tag;
-                            if (he.SNC != null)
-                            {
-                                if (sysnotecache.Contains(he.SNC))
-                                    return false;
-                                else
-                                {
-                                    if (frm.SelectedIndex == 3)
-                                        sysnotecache.Add(he.SNC);
-                                    return true;
-                                }
-                            }
-                            else
-                                return false;
-                        };
-                    }
-                }
-
-                grd.GetHeader += delegate (int c)
-                {
-                    return (c < colh.Length && frm.IncludeHeader) ? colh[c] : null;
-                };
-
-                grd.WriteGrid(frm.Path, frm.AutoOpen, FindForm());
-            }
-
-        }
-
-        #endregion
     }
 }
 

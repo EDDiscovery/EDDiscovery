@@ -242,6 +242,9 @@
     <Compile Include="UserControls\Helpers\MissionListUserControl.Designer.cs">
       <DependentUpon>MissionListUserControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\History\UserControlTravelGrid2.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="UserControls\Overlays\UserControlMiningOverlay.cs">
       <SubType>UserControl</SubType>
     </Compile>
