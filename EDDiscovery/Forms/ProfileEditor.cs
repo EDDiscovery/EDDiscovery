@@ -84,9 +84,6 @@ namespace EDDiscovery.Forms
             ResumeLayout();
         }
 
-        int textheightmargin = 3;
-        int panelleftmargin = 3;
-
         private void AddProfile(int id, string name, ConditionLists tripcondition , ConditionLists backcondition , bool poweron)
         {
             Group g = new Group();
@@ -99,14 +96,16 @@ namespace EDDiscovery.Forms
             g.panel.BorderStyle = BorderStyle.FixedSingle;
             g.panel.Tag = g;
 
+            const int vpos = 3;
+
             g.name = new ExtendedControls.ExtRichTextBox();
-            g.name.Location = new Point(4, textheightmargin);      // 8 spacing, allow 8*4 to indent
+            g.name.Location = new Point(4, vpos);      // 8 spacing, allow 8*4 to indent
             g.name.Size = new Size(200, 24);
             g.name.Text = name;
             g.panel.Controls.Add(g.name);
 
             g.stdtrigger = new ExtendedControls.ExtComboBox();
-            g.stdtrigger.Location = new Point(210, textheightmargin);      // 8 spacing, allow 8*4 to indent
+            g.stdtrigger.Location = new Point(210, vpos);      // 8 spacing, allow 8*4 to indent
             g.stdtrigger.Size = new Size(200, 24);
             g.stdtrigger.Items.Add("Custom".T(EDTx.ProfileEditor_Custom));
             g.stdtrigger.Items.AddRange(EDDProfiles.StandardTriggers.Select((p1) => p1.Name));
@@ -116,7 +115,7 @@ namespace EDDiscovery.Forms
             g.panel.Controls.Add(g.stdtrigger);
 
             g.edittriggerbutton = new ExtendedControls.ExtButton();
-            g.edittriggerbutton.Location = new Point(420, textheightmargin);
+            g.edittriggerbutton.Location = new Point(420, vpos);
             g.edittriggerbutton.Size = new Size(100, 24);
             g.edittriggerbutton.Text = "Trigger".T(EDTx.ProfileEditor_Trigger);
             g.edittriggerbutton.Tag = g;
@@ -124,7 +123,7 @@ namespace EDDiscovery.Forms
             g.panel.Controls.Add(g.edittriggerbutton);
 
             g.editbacktriggerbutton = new ExtendedControls.ExtButton();
-            g.editbacktriggerbutton.Location = new Point(530, textheightmargin);
+            g.editbacktriggerbutton.Location = new Point(530, vpos);
             g.editbacktriggerbutton.Size = new Size(100, 24);
             g.editbacktriggerbutton.Text = "Back".T(EDTx.ProfileEditor_Back);
             g.editbacktriggerbutton.Tag = g;
@@ -132,8 +131,8 @@ namespace EDDiscovery.Forms
             g.panel.Controls.Add(g.editbacktriggerbutton);
 
             g.chkbox = new ExtendedControls.ExtCheckBox();
-            g.chkbox.Location = new Point(640, textheightmargin);
-            g.chkbox.Size = new Size(150, 24);
+            g.chkbox.Location = new Point(640, vpos);
+            g.chkbox.Size = new Size(100, 24);
             g.chkbox.Text = "Default".T(EDTx.ProfileEditor_Default);
             g.chkbox.Tag = g;
             g.chkbox.Checked = poweron;
@@ -141,7 +140,7 @@ namespace EDDiscovery.Forms
             g.panel.Controls.Add(g.chkbox);
 
             g.deletebutton = new ExtendedControls.ExtButton();
-            g.deletebutton.Location = new Point(panelVScrollMain.Width-60, textheightmargin);
+            g.deletebutton.Location = new Point(740, vpos);
             g.deletebutton.Size = new Size(24, 24);
             g.deletebutton.Text = "X";
             g.deletebutton.Tag = g;
@@ -161,12 +160,14 @@ namespace EDDiscovery.Forms
         private void PositionPanels()
         {
             int vpos = 4;
-            int panelwidth = Math.Max(panelVScrollMain.Width - panelVScrollMain.ScrollBarWidth, 10) - panelleftmargin * 2;
+
+            int panelleftmargin = Font.ScalePixels(4);
+            int pad = Font.ScalePixels(8);
 
             foreach (Group g in groups)
             {
                 g.panel.Location = new Point(panelleftmargin, vpos);
-                g.panel.Size = g.panel.FindMaxSubControlArea(2, textheightmargin);
+                g.panel.Size = g.panel.FindMaxSubControlArea(pad,pad);
                 g.deletebutton.Visible = g.Id != EDDProfiles.DefaultId;
                 vpos += g.panel.Height + Font.ScalePixels(4);
             }

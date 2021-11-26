@@ -44,6 +44,7 @@ namespace EDDiscovery.UserControls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            EliteDangerousCore.SystemDisplay systemDisplay1 = new EliteDangerousCore.SystemDisplay();
             this.extCheckBoxStar = new ExtendedControls.ExtCheckBox();
             this.checkBoxEDSM = new ExtendedControls.ExtCheckBox();
             this.buttonSize = new ExtendedControls.ExtButton();
@@ -158,7 +159,7 @@ namespace EDDiscovery.UserControls
             this.buttonExtExcel.Name = "buttonExtExcel";
             this.buttonExtExcel.Size = new System.Drawing.Size(28, 28);
             this.buttonExtExcel.TabIndex = 29;
-            this.toolTip.SetToolTip(this.buttonExtExcel, "Send data on grid to excel");
+            this.toolTip.SetToolTip(this.buttonExtExcel, "Export");
             this.buttonExtExcel.UseVisualStyleBackColor = false;
             this.buttonExtExcel.Click += new System.EventHandler(this.buttonExtExcel_Click);
             // 
@@ -170,7 +171,10 @@ namespace EDDiscovery.UserControls
             // 
             // rollUpPanelTop
             // 
+            this.rollUpPanelTop.AutoHeight = false;
+            this.rollUpPanelTop.AutoHeightWidthDisable = false;
             this.rollUpPanelTop.AutoSize = true;
+            this.rollUpPanelTop.AutoWidth = false;
             this.rollUpPanelTop.Controls.Add(this.panelControls);
             this.rollUpPanelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.rollUpPanelTop.HiddenMarkerWidth = 400;
@@ -213,6 +217,7 @@ namespace EDDiscovery.UserControls
             this.extButtonFilter.Name = "extButtonFilter";
             this.extButtonFilter.Size = new System.Drawing.Size(28, 28);
             this.extButtonFilter.TabIndex = 29;
+            this.toolTip.SetToolTip(this.extButtonFilter, "Filter Bodies");
             this.extButtonFilter.UseVisualStyleBackColor = false;
             this.extButtonFilter.Click += new System.EventHandler(this.extButtonFilter_Click);
             // 
@@ -226,6 +231,7 @@ namespace EDDiscovery.UserControls
             this.extButtonDisplayFilters.Name = "extButtonDisplayFilters";
             this.extButtonDisplayFilters.Size = new System.Drawing.Size(28, 28);
             this.extButtonDisplayFilters.TabIndex = 29;
+            this.toolTip.SetToolTip(this.extButtonDisplayFilters, "Settings");
             this.extButtonDisplayFilters.UseVisualStyleBackColor = false;
             this.extButtonDisplayFilters.Click += new System.EventHandler(this.extButtonDisplayFilters_Click);
             // 
@@ -235,8 +241,25 @@ namespace EDDiscovery.UserControls
             this.panelStars.Location = new System.Drawing.Point(0, 30);
             this.panelStars.Name = "panelStars";
             this.panelStars.Size = new System.Drawing.Size(748, 652);
+            systemDisplay1.BackColor = System.Drawing.Color.Black;
+            systemDisplay1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            systemDisplay1.FontUnderlined = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline);
+            systemDisplay1.HideFullMaterials = false;
+            systemDisplay1.LabelColor = System.Drawing.Color.DarkOrange;
+            systemDisplay1.LargerFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            systemDisplay1.ShowAllG = true;
+            systemDisplay1.ShowDist = true;
+            systemDisplay1.ShowEDSMBodies = false;
+            systemDisplay1.ShowHabZone = true;
+            systemDisplay1.ShowMaterials = true;
+            systemDisplay1.ShowMoons = true;
+            systemDisplay1.ShowOnlyMaterialsRare = false;
+            systemDisplay1.ShowOverlays = true;
+            systemDisplay1.ShowPlanetClasses = true;
+            systemDisplay1.ShowStarClasses = true;
+            systemDisplay1.ValueLimit = 50000;
+            this.panelStars.SystemDisplay = systemDisplay1;
             this.panelStars.TabIndex = 5;
-            
             // 
             // UserControlScan
             // 

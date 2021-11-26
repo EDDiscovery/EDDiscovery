@@ -126,7 +126,7 @@ namespace EDDiscovery.UserControls
             shipinfo = hl.GetLast?.ShipInformation;
 
             LoadRoute(GetSetting("route", ""));     // reload the route, may have locations now
-            System.Diagnostics.Debug.WriteLine($"Surveyor History Load {currentRoute?.Name} {currentRoute?.Id} systems {currentRoute?.Systems.Count}");
+            System.Diagnostics.Debug.WriteLine($"Surveyor {displaynumber}  History Load '{currentRoute?.Name}' {currentRoute?.Id} systems {currentRoute?.Systems.Count} lastsys '{last_sys?.Name}'");
 
             DrawSystem(last_sys, last_sys?.Name);    // may be null
 
@@ -140,6 +140,7 @@ namespace EDDiscovery.UserControls
             // received a new navroute, and we have navroute selected, reload
             if (he.EntryType == JournalTypeEnum.NavRoute && currentRoute != null && currentRoute.Id == -1)
             {
+                System.Diagnostics.Debug.WriteLine("Surveyor {displaynumber} new entry, load nav route");
                 LoadRoute(NavRouteNameLabel);
                 last_sys = hl.GetLast?.System;      // may be null, make sure its set.
                 DrawSystem(last_sys);
@@ -228,22 +229,24 @@ namespace EDDiscovery.UserControls
 
             var picelements = new List<ExtPictureBox.ImageElement>();       // accumulate picture elements in here and render under lock due to async below.
 
-            System.Diagnostics.Debug.WriteLine($"Surveyor Draw {sys?.Name} {sys?.HasCoordinate}");
+            System.Diagnostics.Debug.WriteLine($"Surveyor {displaynumber} Draw {sys?.Name} {sys?.HasCoordinate}");
 
             // if system, and we are in no focus or don't care
             if (sys != null && (uistate == EliteDangerousCore.UIEvents.UIGUIFocus.Focus.NoFocus || !IsSet(CtrlList.autohide)
                                 || (uistate == EliteDangerousCore.UIEvents.UIGUIFocus.Focus.FSSMode && IsSet(CtrlList.donthidefssmode))))
             {
+                System.Diagnostics.Debug.WriteLine($"Surveyor {displaynumber} Go for draw");
+
                 int vpos = 0;
                 StringFormat frmt = new StringFormat(extCheckBoxWordWrap.Checked ? 0 : StringFormatFlags.NoWrap);
                 frmt.Alignment = alignment;
                 var textcolour = IsTransparent ? discoveryform.theme.SPanelColor : discoveryform.theme.LabelColor;
                 var backcolour = IsTransparent ? Color.Transparent : this.BackColor;
 
-                if (IsSet(CtrlList.showsysinfo))     
+                if (IsSet(CtrlList.showsysinfo))
                 {
                     var i = new ExtPictureBox.ImageElement();
-                    i.TextAutoSize(                  
+                    i.TextAutoSize(
                             new Point(3, vpos),
                             new Size(Math.Max(pictureBoxSurveyor.Width - 6, 24), 10000),
                             titletext,
@@ -259,7 +262,7 @@ namespace EDDiscovery.UserControls
 
                 if (currentRoute != null && sys.HasCoordinate)      // if we have a route and a coord, we can work out the next route text
                 {
-                    System.Diagnostics.Debug.WriteLine($"Current route set, sys has coord, route is {currentRoute.Systems.Count} {currentRoute.Id}");
+                    System.Diagnostics.Debug.WriteLine($"Surveyor {displaynumber} Current route set, sys has coord, route is {currentRoute.Systems.Count} {currentRoute.Id}");
                     if (currentRoute.Systems.Count == 0)
                     {
                         lastroutetext = "Route contains no waypoints".T(EDTx.UserControlRouteTracker_NoWay);
@@ -267,7 +270,7 @@ namespace EDDiscovery.UserControls
                     else
                     {
                         SavedRouteClass.ClosestInfo closest = currentRoute.ClosestTo(sys);
-                        if (closest == null )  // if null, no systems found.. uh oh
+                        if (closest == null)  // if null, no systems found.. uh oh
                         {
                             lastroutetext = "No systems in route have known co-ords".T(EDTx.UserControlRouteTracker_NoCo);
                         }
@@ -287,7 +290,7 @@ namespace EDDiscovery.UserControls
                                 if (shipfsdinfo != null)
                                 {
                                     // navroutes are precomputed, so the total jump count is from it. Else do it by distance
-                                    int jumps = currentRoute.Id != -1 ? (int)Math.Ceiling(routedistance / shipfsdinfo.avgsinglejump) : currentRoute.Systems.Count-1;
+                                    int jumps = currentRoute.Id != -1 ? (int)Math.Ceiling(routedistance / shipfsdinfo.avgsinglejump) : currentRoute.Systems.Count - 1;
                                     if (jumps > 0)
                                         lastroutetext += ", " + jumps.ToString() + " " + ((jumps == 1) ? "jump".T(EDTx.UserControlRouteTracker_J1) : "jumps".T(EDTx.UserControlRouteTracker_JS));
 
@@ -313,7 +316,7 @@ namespace EDDiscovery.UserControls
                             else
                             {
                                 lastroutetext += String.Format(", Left {0:N1}ly".T(EDTx.UserControlRouteTracker_LF), distleft) + Environment.NewLine;
-                                if ( distleft == 0)
+                                if (distleft == 0)
                                     lastroutetext += $"{closest.nextsystem.Name}";
                                 else
                                     lastroutetext += $"{closest.lastsystem?.Name} >> {closest.disttowaypoint:N1}ly >> {closest.nextsystem.Name}";
@@ -355,7 +358,7 @@ namespace EDDiscovery.UserControls
                         }
                     }
 
-                    if ( IsSet(RouteControl.showtarget))
+                    if (IsSet(RouteControl.showtarget))
                     {
                         if (TargetClass.GetTargetPosition(out string name, out Point3D tpos))
                         {
@@ -373,8 +376,12 @@ namespace EDDiscovery.UserControls
                         }
                     }
                 }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine($"Surveyor {displaynumber} can't do route '{currentRoute?.Name}' {sys.HasCoordinate}");
+                }
 
-                if ( IsSet(RouteControl.showfuel) && shipinfo != null)
+                if (IsSet(RouteControl.showfuel) && shipinfo != null)
                 {
                     double fuel = shipinfo.FuelLevel;
                     double tanksize = shipinfo.FuelCapacity;
@@ -389,14 +396,16 @@ namespace EDDiscovery.UserControls
 
                     if (shipfsdinfo != null)
                     {
-                        addtext += string.Format(" " +"Avg {0:N1}ly Fume {1:N1}ly Range {2:N1}ly".T(EDTx.UserControlSurveyor_fuel), shipfsdinfo.avgsinglejump, shipfsdinfo.curfumessinglejump, shipfsdinfo.maxjumprange);               
+                        addtext += string.Format(" " + "Avg {0:N1}ly Fume {1:N1}ly Range {2:N1}ly".T(EDTx.UserControlSurveyor_fuel), shipfsdinfo.avgsinglejump, shipfsdinfo.curfumessinglejump, shipfsdinfo.maxjumprange);
                     }
 
                     lastroutetext = lastroutetext.AppendPrePad(addtext, Environment.NewLine);
 
                 }
 
-                if ( lastroutetext.HasChars() )     // if we have last route text, display it
+                System.Diagnostics.Debug.WriteLine($"Surveyor {displaynumber} last route text '{lastroutetext}'");
+
+                if (lastroutetext.HasChars())     // if we have last route text, display it
                 {
                     var i = new ExtPictureBox.ImageElement();
                     i.TextAutoSize(
@@ -608,12 +617,17 @@ namespace EDDiscovery.UserControls
                     }
                 }
             }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine($"Surveyor ${displaynumber} display disabled");
+            }
 
-            lock( extPictureBoxScroll)      // because of the async call above, we may be running two of these at the same time. So, we lock and then add/update/render
+            lock ( extPictureBoxScroll)      // because of the async call above, we may be running two of these at the same time. So, we lock and then add/update/render
             {
                 pictureBoxSurveyor.ClearImageList();
                 pictureBoxSurveyor.AddRange(picelements);
                 extPictureBoxScroll.Render();
+                Refresh();
             }
         }
 
@@ -836,9 +850,10 @@ namespace EDDiscovery.UserControls
             var savedroutes = SavedRouteClass.GetAllSavedRoutes();
 
             dropdown.FitImagesToItemHeight = true;
-            dropdown.Items = savedroutes.Select(x => x.Name).ToList();
-            dropdown.Items.Insert(0, "Off"); // TBD translate
-            dropdown.Items.Insert(1, translatednavroutename ); // TBD translate
+            var list = savedroutes.Select(x => x.Name).ToList();
+            list.Insert(0, "Off".T(EDTx.Off));
+            list.Insert(1, translatednavroutename);
+            dropdown.Items = list;
             dropdown.FlatStyle = FlatStyle.Popup;
             dropdown.PositionBelow(sender as Control);
             dropdown.SelectedIndexChanged += (s, ea) =>
@@ -866,7 +881,10 @@ namespace EDDiscovery.UserControls
 
         private void LoadRoute(string name)
         {
+            System.Diagnostics.Debug.WriteLine($"Surveyor {displaynumber} Order load of route '{name}'");
             PutSetting("route", name);      // store back the current name 
+
+            System.Diagnostics.Debug.WriteLine($"Surveyor {displaynumber} In DB its now '{GetSetting("route","???")}'");
 
             currentRoute = null;
             lastroutetext = null;       // reset the route text stored due to start jump not having coords
@@ -880,12 +898,12 @@ namespace EDDiscovery.UserControls
                     {
                         var systems = route.Route.Where(x => x.StarSystem.HasChars()).Select(y => y.StarSystem).ToArray();
                         currentRoute = new SavedRouteClass(translatednavroutename, systems);      // with an ID of -1 note
-                        System.Diagnostics.Debug.WriteLine($"Loaded Nav route with {systems.Length}");
+                        System.Diagnostics.Debug.WriteLine($"Surveyor {displaynumber} Loaded Nav route with {systems.Length}");
                     }
                     else
                     {
                         currentRoute = new SavedRouteClass(translatednavroutename, new string[] { });     // no known systems yet, but make a navroute so we have it selected
-                        System.Diagnostics.Debug.WriteLine($"No route available, loaded empty Nav route");
+                        System.Diagnostics.Debug.WriteLine($"Surveyor {displaynumber} No route available, loaded empty Nav route");
 
                     }
                 }
@@ -893,12 +911,12 @@ namespace EDDiscovery.UserControls
                 {
                     var savedroutes = SavedRouteClass.GetAllSavedRoutes();      // load routes
                     currentRoute = savedroutes.Find(x => x.Name == name);       // pick, if not found, will be null
-                    System.Diagnostics.Debug.WriteLine($"Loaded route with {currentRoute?.Systems.Count}");
+                    System.Diagnostics.Debug.WriteLine($"Surveyor {displaynumber} Loaded route with {currentRoute?.Systems.Count}");
                 }
             }
             else
             {
-                System.Diagnostics.Debug.WriteLine($"No route wanted {name}");
+                System.Diagnostics.Debug.WriteLine($"Surveyor {displaynumber} No route wanted '{name}'");
             }
         }
 
