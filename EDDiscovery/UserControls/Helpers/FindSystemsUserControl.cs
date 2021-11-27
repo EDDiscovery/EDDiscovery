@@ -102,7 +102,7 @@ namespace EDDiscovery.UserControls
         {
             Cursor = Cursors.WaitCursor;
 
-            Task taskEDSM = Task<List<ISystem>>.Factory.StartNew(() =>
+            Task taskEDSM = Task<HashSet<ISystem>>.Factory.StartNew(() =>
             {
                 return SystemCache.FindSystemWildcard(textBoxSystemName.Text);
 

@@ -45,6 +45,7 @@ namespace EDDiscovery.UserControls
         const double eccentricityLimit = 0.95; //orbital eccentricity limit
 
         private Timer autoupdateedsm;
+        private bool closing = false;
 
         #region Standard UC Interfaces
 
@@ -107,6 +108,7 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
+            closing = true;
             autoupdateedsm.Stop();
 
             DGVSaveColumnLayout(dataGridView);
@@ -219,9 +221,10 @@ namespace EDDiscovery.UserControls
             txtP2PDIstance.Text = "";
         }
 
+        // this is an async function - which needs very special handling
         // scan rows indicated and fill in other columns
         // normal to do this with edsmcheck off, the auto edsm routing calls it with on
-        private void UpdateSystemRows(int rowstart = 0, int rowendinc = int.MaxValue, bool edsmcheck = false)
+        private async void UpdateSystemRows(int rowstart = 0, int rowendinc = int.MaxValue, bool edsmcheck = false)
         {
             Cursor = Cursors.WaitCursor;
 
@@ -268,8 +271,17 @@ namespace EDDiscovery.UserControls
 
                 // find in history, and the DB, and EDSM, the system..
 
-                var sys = SystemCache.FindSystem(sysname, discoveryform.galacticMapping, edsmcheck );
-                row.Tag = sys;
+                row.Cells[0].Tag = edsmcheck;       // if been looked up via EDSM, do first before async lookup as it will return immediately due to await
+
+                System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 10000} Looking up async for {sysname} EDSM {edsmcheck}");
+                var sys = await SystemCache.FindSystemAsync(sysname, discoveryform.galacticMapping, edsmcheck );
+                System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 10000} Continuing for {sysname} EDSM {edsmcheck} found {sys?.Name}");
+
+                if (closing)        // because its async, the await returns with void, and then this is called back, and we may be closing.
+                    return;
+
+                row.Tag = sys;      // store tag
+
                 row.Cells[0].Style.ForeColor = (sys?.HasCoordinate ?? false) ? Color.Empty : discoveryform.theme.UnknownSystemColor;
 
                 row.Cells[Visits.Index].Value = discoveryform.history.Visits(sysname).ToString("0");
@@ -297,7 +309,10 @@ namespace EDDiscovery.UserControls
 
                     row.Cells[CurDist.Index].Value = (currentSystem?.HasCoordinate ?? false) ? sys.Distance(currentSystem).ToString("0.#") : "";
 
-                    StarScan.SystemNode sysnode = discoveryform.history.StarScan.FindSystemSynchronous(sys, edsmcheck);
+                    StarScan.SystemNode sysnode = await discoveryform.history.StarScan.FindSystemAsync(sys, edsmcheck);
+
+                    if (closing)        // because its async, may be called during closedown. stop this
+                        return;
 
                     if (sysnode != null)
                     {
@@ -333,7 +348,7 @@ namespace EDDiscovery.UserControls
                     else
                     {
                         // cells[0].tag holds if we have checked EDSM for position..
-                        row.Cells[Info.Index].Value = row.Cells[0].Tag != null ? "System not known to EDSM".T(EDTx.UserControlExpedition_EDSMUnk) : "No local scan info".T(EDTx.UserControlExpedition_NoScanInfo);
+                        row.Cells[Info.Index].Value = (bool)row.Cells[0].Tag == true ? "System not known to EDSM".T(EDTx.UserControlExpedition_EDSMUnk) : "No local scan info".T(EDTx.UserControlExpedition_NoScanInfo);
                     }
                 }
             }
@@ -376,22 +391,21 @@ namespace EDDiscovery.UserControls
             for (int rowindex = 0; rowindex < dataGridView.Rows.Count; rowindex++)  // scan all rows for distance total
             {
                 var row = dataGridView.Rows[rowindex];
-                if (row.Cells[0].Value != null && ((string)row.Cells[0].Value).HasChars() && row.Cells[0].Tag == null)
+
+                if ((row.Cells[0].Tag== null || (bool)row.Cells[0].Tag == false ) && ((string)row.Cells[0].Value).HasChars() )  // if cells[0] indicating EDSM lookup is false, and name
                 {
                     row.Cells[0].Tag = true;            // mark as checked
 
-                    var sys = row.Tag as ISystem;
+                    var sys = row.Tag as ISystem;    
 
                     if (sys == null)      // no system , look up system and bodies
                     {
-                        System.Diagnostics.Debug.WriteLine($"Expedition - Don't know about {dataGridView[0, rowindex].Value}");
+                        System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 10000} Expedition - EDSM lookup on {dataGridView[0, rowindex].Value}");
                         UpdateSystemRows(rowindex, rowindex, true);
-                        if ( row.Tag == null )
-                            System.Diagnostics.Debug.WriteLine($"Expedition - EDSM does not know about {dataGridView[0, rowindex].Value}");
                     }
                     else if (!discoveryform.history.StarScan.HasWebLookupOccurred(sys))     // we have a system, did we check the bodies?
                     {
-                        System.Diagnostics.Debug.WriteLine($"Expedition - Don't know about bodies of {dataGridView[0, rowindex].Value}");
+                        System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 10000} Expedition - Have system, check bodies on {dataGridView[0, rowindex].Value}");
                         UpdateSystemRows(rowindex, rowindex, true);
                     }
 
@@ -1111,7 +1125,7 @@ namespace EDDiscovery.UserControls
             if (e.ColumnIndex == 0 && e.RowIndex>=0 && e.RowIndex < dataGridView.RowCount)
             {
                 var row = dataGridView.Rows[e.RowIndex];
-                row.Cells[0].Tag = null;        // reset the EDSM check
+                row.Cells[0].Tag = row.Tag = null;        // clear system lookup
             }
         }
 
