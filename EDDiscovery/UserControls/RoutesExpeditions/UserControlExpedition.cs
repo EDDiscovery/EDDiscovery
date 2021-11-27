@@ -271,7 +271,8 @@ namespace EDDiscovery.UserControls
 
                 // find in history, and the DB, and EDSM, the system..
 
-                row.Cells[0].Tag = edsmcheck;       // if been looked up via EDSM, do first before async lookup as it will return immediately due to await
+                if ( edsmcheck )    // mark if edsm checked, so we don't do it again
+                    row.Cells[0].Tag = edsmcheck;       // if been looked up via EDSM, do first before async lookup as it will return immediately due to await
 
                 System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 10000} Looking up async for {sysname} EDSM {edsmcheck}");
                 var sys = await SystemCache.FindSystemAsync(sysname, discoveryform.galacticMapping, edsmcheck );
@@ -347,8 +348,7 @@ namespace EDDiscovery.UserControls
                     }
                     else
                     {
-                        // cells[0].tag holds if we have checked EDSM for position..
-                        row.Cells[Info.Index].Value = (bool)row.Cells[0].Tag == true ? "System not known to EDSM".T(EDTx.UserControlExpedition_EDSMUnk) : "No local scan info".T(EDTx.UserControlExpedition_NoScanInfo);
+                        row.Cells[Info.Index].Value = edsmcheck ? "System not known to EDSM".T(EDTx.UserControlExpedition_EDSMUnk) : "No local scan info".T(EDTx.UserControlExpedition_NoScanInfo);
                     }
                 }
             }
@@ -392,10 +392,8 @@ namespace EDDiscovery.UserControls
             {
                 var row = dataGridView.Rows[rowindex];
 
-                if ((row.Cells[0].Tag== null || (bool)row.Cells[0].Tag == false ) && ((string)row.Cells[0].Value).HasChars() )  // if cells[0] indicating EDSM lookup is false, and name
+                if (row.Cells[0].Tag== null && ((string)row.Cells[0].Value).HasChars() )  // if cells[0] indicating EDSM lookup is null, and name, do edsm check
                 {
-                    row.Cells[0].Tag = true;            // mark as checked
-
                     var sys = row.Tag as ISystem;    
 
                     if (sys == null)      // no system , look up system and bodies
@@ -1120,26 +1118,24 @@ namespace EDDiscovery.UserControls
 
         #region Validation
 
-        private void dataGridViewRouteSystems_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
-        {
-            if (e.ColumnIndex == 0 && e.RowIndex>=0 && e.RowIndex < dataGridView.RowCount)
-            {
-                var row = dataGridView.Rows[e.RowIndex];
-                row.Cells[0].Tag = row.Tag = null;        // clear system lookup
-            }
-        }
-
         private void dataGridViewRouteSystems_CellValidated(object sender, DataGridViewCellEventArgs e)
         {
             if (e.ColumnIndex == 0)
             {
-                UpdateSystemRows();
+                var row = dataGridView.Rows[e.RowIndex];
+                var cellvalue = row.Cells[0].Value as string;
+                if ( cellvalue.HasChars() && (row.Tag == null || !((ISystem)row.Tag).Name.Equals(cellvalue, StringComparison.InvariantCultureIgnoreCase)))
+                {
+                    System.Diagnostics.Debug.WriteLine("Expedition- Invalidate tag as text has changed");
+                    row.Cells[0].Tag = row.Tag = null;        // clear system lookup
+                    UpdateSystemRows(e.RowIndex, e.RowIndex);
+                }
             }
         }
 
         private void dataGridViewRouteSystems_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {
-            if (e.Column.Index == 1 || e.Column.Index >= 3)
+            if (e.Column.Index >= 1 && e.Column.Index <= 8)
                 e.SortDataGridViewColumnNumeric();
 
         }
