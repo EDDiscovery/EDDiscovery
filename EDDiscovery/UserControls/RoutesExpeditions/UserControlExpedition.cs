@@ -275,6 +275,7 @@ namespace EDDiscovery.UserControls
                     row.Cells[0].Tag = edsmcheck;       // if been looked up via EDSM, do first before async lookup as it will return immediately due to await
 
                 System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 10000} Looking up async for {sysname} EDSM {edsmcheck}");
+               //  edsmcheck = false; // debug
                 var sys = await SystemCache.FindSystemAsync(sysname, discoveryform.galacticMapping, edsmcheck );
                 System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 10000} Continuing for {sysname} EDSM {edsmcheck} found {sys?.Name}");
 
@@ -348,7 +349,7 @@ namespace EDDiscovery.UserControls
                     }
                     else
                     {
-                        row.Cells[Info.Index].Value = edsmcheck ? "System not known to EDSM".T(EDTx.UserControlExpedition_EDSMUnk) : "No local scan info".T(EDTx.UserControlExpedition_NoScanInfo);
+                        row.Cells[Info.Index].Value = row.Cells[0].Tag != null ? "System not known to EDSM".T(EDTx.UserControlExpedition_EDSMUnk) : "No local scan info".T(EDTx.UserControlExpedition_NoScanInfo);
                     }
                 }
             }
