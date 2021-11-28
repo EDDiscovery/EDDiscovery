@@ -275,8 +275,8 @@ namespace EDDiscovery.UserControls
                     row.Cells[0].Tag = edsmcheck;       // if been looked up via EDSM, do first before async lookup as it will return immediately due to await
 
                 System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 10000} Looking up async for {sysname} EDSM {edsmcheck}");
-               //  edsmcheck = false; // debug
-                var sys = await SystemCache.FindSystemAsync(sysname, discoveryform.galacticMapping, edsmcheck );
+                var lookup = edsmcheck;     // here so you can turn it off for speed
+                var sys = await SystemCache.FindSystemAsync(sysname, discoveryform.galacticMapping, lookup);
                 System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 10000} Continuing for {sysname} EDSM {edsmcheck} found {sys?.Name}");
 
                 if (closing)        // because its async, the await returns with void, and then this is called back, and we may be closing.
@@ -311,7 +311,7 @@ namespace EDDiscovery.UserControls
 
                     row.Cells[CurDist.Index].Value = (currentSystem?.HasCoordinate ?? false) ? sys.Distance(currentSystem).ToString("0.#") : "";
 
-                    StarScan.SystemNode sysnode = await discoveryform.history.StarScan.FindSystemAsync(sys, edsmcheck);
+                    StarScan.SystemNode sysnode = await discoveryform.history.StarScan.FindSystemAsync(sys, lookup);
 
                     if (closing)        // because its async, may be called during closedown. stop this
                         return;
@@ -392,22 +392,14 @@ namespace EDDiscovery.UserControls
             for (int rowindex = 0; rowindex < dataGridView.Rows.Count; rowindex++)  // scan all rows for distance total
             {
                 var row = dataGridView.Rows[rowindex];
+                var name = row.Cells[0].Value as string;
 
-                if (row.Cells[0].Tag== null && ((string)row.Cells[0].Value).HasChars() )  // if cells[0] indicating EDSM lookup is null, and name, do edsm check
+                if (row.Cells[0].Tag== null && name.HasChars() )  // if cells[0] indicating EDSM lookup is null, and name, do edsm check
                 {
-                    var sys = row.Tag as ISystem;    
+                    var sys = row.Tag as ISystem;
 
-                    if (sys == null)      // no system , look up system and bodies
-                    {
-                        System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 10000} Expedition - EDSM lookup on {dataGridView[0, rowindex].Value}");
-                        UpdateSystemRows(rowindex, rowindex, true);
-                    }
-                    else if (!discoveryform.history.StarScan.HasWebLookupOccurred(sys))     // we have a system, did we check the bodies?
-                    {
-                        System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 10000} Expedition - Have system, check bodies on {dataGridView[0, rowindex].Value}");
-                        UpdateSystemRows(rowindex, rowindex, true);
-                    }
-
+                    System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 10000} Expedition - EDSM lookup on {rowindex} {dataGridView[0, rowindex].Value}");
+                    UpdateSystemRows(rowindex, rowindex, true);
                     break;
                 }
             }
