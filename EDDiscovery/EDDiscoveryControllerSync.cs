@@ -105,9 +105,6 @@ namespace EDDiscovery
 
             resyncEDSMRequestedFlag = 1;     // sync is happening, stop any async requests..
 
-            // check for 102, if so, upgrade it..
-            SystemsDatabase.Instance.UpgradeSystemTableFrom102TypeDB(() => PendingClose, ReportSyncProgress, syncstate.perform_edsm_fullsync);
-
             if (EDDConfig.Instance.EDSMDownload)      // if no system off, and EDSM download on
             {
                 Debug.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Perform System Data Download from EDSM");

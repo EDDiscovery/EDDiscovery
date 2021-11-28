@@ -392,14 +392,14 @@ namespace EDDiscovery.UserControls
             for (int rowindex = 0; rowindex < dataGridView.Rows.Count; rowindex++)  // scan all rows for distance total
             {
                 var row = dataGridView.Rows[rowindex];
+                var name = row.Cells[0].Value as string;
 
-                if (row.Cells[0].Tag== null && ((string)row.Cells[0].Value).HasChars() )  // if cells[0] indicating EDSM lookup is null, and name, do edsm check
+                if (row.Cells[0].Tag== null && name.HasChars() )  // if cells[0] indicating EDSM lookup is null, and name, do edsm check
                 {
                     var sys = row.Tag as ISystem;
 
                     System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 10000} Expedition - EDSM lookup on {rowindex} {dataGridView[0, rowindex].Value}");
                     UpdateSystemRows(rowindex, rowindex, true);
-
                     break;
                 }
             }

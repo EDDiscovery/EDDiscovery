@@ -559,16 +559,16 @@ namespace EDDiscovery.UserControls
                     autoupdaterowoffset++;
 
                     HistoryEntry he = rw.Tag as HistoryEntry;
-                    
-                    if (!discoveryform.history.StarScan.HasWebLookupOccurred(he.System))        // if we have done a lookup, we can skip this one quickly
+                        
+                    if (!EDSMClass.HasBodyLookupOccurred(he.System.Name))       // this tells us if a body lookup has occurred
                     {
-                        //System.Diagnostics.Debug.WriteLine("EDSM Update row" + row);
+                        System.Diagnostics.Debug.WriteLine("StarList EDSM Update row" + row);
                         CheckEDSM(rw);
                         break;
                     }
                     else
                     {
-                        //System.Diagnostics.Debug.WriteLine("Skip row as already checked " + row);
+                        System.Diagnostics.Debug.WriteLine("StarList Skip row as already checked " + row);
                     }
                 }
             }
