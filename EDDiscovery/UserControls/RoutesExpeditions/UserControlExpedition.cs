@@ -349,7 +349,7 @@ namespace EDDiscovery.UserControls
                     }
                     else
                     {
-                        row.Cells[Info.Index].Value = row.Cells[0].Tag != null ? "System not known to EDSM".T(EDTx.UserControlExpedition_EDSMUnk) : "No local scan info".T(EDTx.UserControlExpedition_NoScanInfo);
+                        row.Cells[Info.Index].Value = row.Cells[0].Tag != null ? "No Body information found on EDSM".T(EDTx.UserControlExpedition_EDSMUnk) : "No local scan info".T(EDTx.UserControlExpedition_NoScanInfo);
                     }
                 }
             }

@@ -275,6 +275,7 @@ namespace EDDiscovery.Icons
         public static Image Route { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Surveyor.Route"); } }
         public static Image RouteConfig { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Surveyor.RouteConfig"); } }
         public static Image Eccentric { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Surveyor.Eccentric"); } }
+        public static Image Font { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Surveyor.Font"); } }
 
         #endregion
     }
