@@ -325,7 +325,7 @@ namespace EDDiscovery.UserControls
                                     lastroutetext += $"{closest.nextsystem.Name}";
                                 else
                                     lastroutetext += $"{closest.lastsystem?.Name} >> {closest.disttowaypoint:N1}ly >> {closest.nextsystem.Name}";
-                                lastroutetext += " " + String.Format("To WP {0}".T(EDTx.UserControlRouteTracker_ToWP), closest.waypoint + 1);
+                                lastroutetext += " " + String.Format("(WP {0})".T(EDTx.UserControlRouteTracker_ToWP), closest.waypoint + 1);
                                 lastroutetext += wpposmsg + jumpmsg;
 
                                 if (IsSet(RouteControl.showdeviation))

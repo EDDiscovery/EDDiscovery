@@ -452,7 +452,7 @@ namespace EDDiscovery
         UserControlRouteTracker_JS, // jumps
         UserControlRouteTracker_FL, // From Last WP
         UserControlRouteTracker_LF, // , Left {0:N1}ly
-        UserControlRouteTracker_ToWP, // To WP {0}
+        UserControlRouteTracker_ToWP, // (WP {0})
         UserControlRouteTracker_NoFSD, //  No Ship FSD Information
         UserControlRouteTracker_Dev, // , Dev {0:N1}ly
         UserControlRouteTracker_NoRoute, // Please set a route, by right clicking
