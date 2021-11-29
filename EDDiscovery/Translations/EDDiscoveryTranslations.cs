@@ -505,7 +505,7 @@ namespace EDDiscovery
         UserControlExpedition_Unsaved, // Expedition - There are unsaved changes to the current route.
         UserControlExpedition_Conflict, // The current route name conflicts with a well-known expedition.
         UserControlExpedition_Overwrite, // Warning: route already exists. Would you like to overwrite it?
-        UserControlExpedition_EDSMUnk, // System not known to EDSM
+        UserControlExpedition_EDSMUnk,
         UserControlExpedition_UnkSystem, 
         UserControlExpedition_NoScanInfo,
         UserControlExpedition_Specify, // Please specify a name for the route.

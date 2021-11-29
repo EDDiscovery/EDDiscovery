@@ -30,7 +30,7 @@ namespace EDDiscovery.UserControls
     {
         ISystem last_sys = null;
 
-        private System.Drawing.StringAlignment alignment = System.Drawing.StringAlignment.Near;
+        private StringAlignment alignment = StringAlignment.Near;
         private string titletext = "";
         private string fsssignalsdisplayed = "";
 
@@ -48,18 +48,18 @@ namespace EDDiscovery.UserControls
         private string lastroutetext = "";      // cached so we can represent it even if we pass a sys into drawsystem with no coord
         private string translatednavroutename = "";
 
+        private Font displayfont;
+
+        #region Initialisation
+
         public UserControlSurveyor()
         {
             InitializeComponent();
             DBBaseName = "Surveyor";
         }
 
-        #region Overrides
-
         public override void Init()
         {
-            // not needed yet BaseUtils.Translator.Instance.Translate(this);
-
             checkBoxEDSM.Checked = GetSetting("edsm", false);
             checkBoxEDSM.Click += new System.EventHandler(this.checkBoxEDSM_Clicked);
 
@@ -76,7 +76,12 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNewTarget += Discoveryform_OnNewTarget;
             GlobalBookMarkList.Instance.OnBookmarkChange += GlobalBookMarkList_OnBookmarkChange;
 
+            BaseUtils.Translator.Instance.Translate(toolTip, this);
+
             translatednavroutename = "Nav Route".T(EDTx.UserControlSurveyor_navroute);
+
+            displayfont = FontHelpers.GetFont(GetSetting("font", ""), discoveryform.theme.GetFont);
+            System.Diagnostics.Debug.WriteLine($"Surveyor font {FontHelpers.GetFontSettingString(displayfont)}");
 
             LoadRoute(GetSetting("route", ""));
             routecontrolsettings = GetSetting("routecontrol", "showJumps;showwaypoints");
@@ -250,7 +255,7 @@ namespace EDDiscovery.UserControls
                             new Point(3, vpos),
                             new Size(Math.Max(pictureBoxSurveyor.Width - 6, 24), 10000),
                             titletext,
-                            Font,
+                            displayfont,
                             textcolour,
                             backcolour,
                             1.0F,
@@ -412,7 +417,7 @@ namespace EDDiscovery.UserControls
                             new Point(3, vpos),
                             new Size(Math.Max(pictureBoxSurveyor.Width - 6, 24), 10000),
                             lastroutetext,
-                            Font,
+                            displayfont,
                             textcolour,
                             backcolour,
                             1.0F,
@@ -450,7 +455,7 @@ namespace EDDiscovery.UserControls
                             new Point(3, vpos),
                             new Size(Math.Max(pictureBoxSurveyor.Width - 6, 24), 10000),
                             infoline,
-                            Font,
+                            displayfont,
                             textcolour,
                             backcolour,
                             1.0F,
@@ -535,7 +540,7 @@ namespace EDDiscovery.UserControls
                                                 new Point(3, vpos),
                                                 new Size(Math.Max(pictureBoxSurveyor.Width - 6, 24), 10000),
                                                 il,
-                                                Font,
+                                                displayfont,
                                                 textcolour,
                                                 backcolour,
                                                 1.0F,
@@ -555,7 +560,7 @@ namespace EDDiscovery.UserControls
                                 new Point(3, vpos),
                                 new Size(Math.Max(pictureBoxSurveyor.Width - 6, 24), 10000),
                                 "^^ ~ " + value.ToString("N0") + " cr",
-                                Font,
+                                displayfont,
                                 textcolour,
                                 backcolour,
                                 1.0F,
@@ -606,7 +611,7 @@ namespace EDDiscovery.UserControls
                             i.TextAutoSize(new Point(3, vpos),
                                                             new Size(Math.Max(pictureBoxSurveyor.Width - 6, 24), 10000),
                                                             siglist,
-                                                            Font,
+                                                            displayfont,
                                                             textcolour,
                                                             backcolour,
                                                             1.0F,
@@ -837,6 +842,16 @@ namespace EDDiscovery.UserControls
             displayfilter.Show(CtrlStateAsString(), under, this.FindForm());
         }
 
+        private void extButtonFont_Click(object sender, EventArgs e)
+        {
+            Font f = FontHelpers.FontSelection(this.FindForm(), displayfont);
+            string setting = FontHelpers.GetFontSettingString(f);
+            System.Diagnostics.Debug.WriteLine($"Surveyor Font selected {setting}");
+            PutSetting("font", setting);
+            displayfont = f != null ? f : discoveryform.theme.GetFont;
+            DrawSystem(last_sys);
+        }
+
 
         #region Route control
 
@@ -967,6 +982,7 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
+
     }
 
     public class UserControlRouteTracker : UserControlSurveyor
