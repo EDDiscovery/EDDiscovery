@@ -670,7 +670,7 @@ namespace EDDiscovery.UserControls
 
         private void extButtonImportNavRoute_Click(object sender, EventArgs e)
         {
-            var navroutes = discoveryform.history.LatestFirst().Where(x => x.EntryType == JournalTypeEnum.NavRoute && (x.journalEntry as JournalNavRoute).Route != null).Take(10).ToList();
+            var navroutes = discoveryform.history.LatestFirst().Where(x => x.EntryType == JournalTypeEnum.NavRoute && (x.journalEntry as JournalNavRoute).Route != null).Take(20).ToList();
 
             if (navroutes.Count > 0)
             {
@@ -678,8 +678,10 @@ namespace EDDiscovery.UserControls
 
                 for (int i = 0; i < navroutes.Count; i++)
                 {
-                    navroutefilter.AddStandardOption(i.ToStringInvariant(), navroutes[i].EventTimeUTC.ToLocalTime().ToStringYearFirst());
+                    var jroute = navroutes[i].journalEntry as JournalNavRoute;
+                    navroutefilter.AddStandardOption(i.ToStringInvariant(), navroutes[i].EventTimeUTC.ToLocalTime().ToStringYearFirst() + " " + jroute.Route[0].StarSystem);
                 }
+
                 navroutefilter.SaveSettings = (s, o) =>
                 {
                     int? i = s.Replace(";", "").InvariantParseIntNull();
@@ -702,20 +704,6 @@ namespace EDDiscovery.UserControls
                 navroutefilter.Show("", extButtonImportNavRoute, this.FindForm());
             }
 
-
-            //var route = discoveryform.history.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.NavRoute)?.journalEntry as EliteDangerousCore.JournalEvents.JournalNavRoute;
-            //if (route?.Route != null)
-            //{
-            //    foreach (var s in route.Route)
-            //    {
-            //        if (s.StarSystem.HasChars())
-            //        {
-            //            dataGridView.Rows.Add(s.StarSystem);
-            //        }
-            //    }
-
-            //    UpdateSystemRows();
-            //}
         }
 
         private void buttonExtExport_Click(object sender, EventArgs e)
