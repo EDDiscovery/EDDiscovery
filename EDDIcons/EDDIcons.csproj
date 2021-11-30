@@ -1038,6 +1038,7 @@
     <EmbeddedResource Include="Controls\EditSystem.png" />
     <EmbeddedResource Include="Controls\ImportSphere.png" />
     <EmbeddedResource Include="Controls\ImportNavRoute.png" />
+    <EmbeddedResource Include="Controls\ImportNavRouteLatest.png" />
     <Content Include="Controls\readme.txt" />
     <EmbeddedResource Include="Panels\MissionOverlay.png" />
     <EmbeddedResource Include="Journal\CrimeVictim.png" />

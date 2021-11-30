@@ -703,8 +703,25 @@ namespace EDDiscovery.UserControls
                 navroutefilter.CloseOnChange = true;
                 navroutefilter.Show("", extButtonImportNavRoute, this.FindForm());
             }
-
         }
+
+        private void extButtonNavLatest_Click(object sender, EventArgs e)
+        {
+            var route = discoveryform.history.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.NavRoute)?.journalEntry as EliteDangerousCore.JournalEvents.JournalNavRoute;
+            if (route?.Route != null)
+            {
+                foreach (var s in route.Route)
+                {
+                    if (s.StarSystem.HasChars())
+                    {
+                        dataGridView.Rows.Add(s.StarSystem);
+                    }
+                }
+
+                UpdateSystemRows();
+            }
+        }
+
 
         private void buttonExtExport_Click(object sender, EventArgs e)
         {

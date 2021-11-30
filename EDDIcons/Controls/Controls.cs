@@ -121,6 +121,7 @@ namespace EDDiscovery.Icons
         public static Image ImportSphere { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.ImportSphere"); } }
         public static Image ImportRoute { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.ImportRoute"); } }
         public static Image ImportNavRoute { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.ImportNavRoute"); } }
+        public static Image ImportNavRouteLatest { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.ImportNavRouteLatest"); } }
         public static Image ClearRoute { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.ClearRoute"); } }
         public static Image Save { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Save"); } }
         public static Image ShowOnMap { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.ShowOnMap"); } }

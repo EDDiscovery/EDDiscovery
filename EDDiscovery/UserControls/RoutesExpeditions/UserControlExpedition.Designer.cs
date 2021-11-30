@@ -97,6 +97,7 @@ namespace EDDiscovery.UserControls
             this.extButtonShow3DMap = new ExtendedControls.ExtButton();
             this.extButtonDisplayFilters = new ExtendedControls.ExtButton();
             this.checkBoxEDSM = new ExtendedControls.ExtCheckBox();
+            this.extButtonNavRouteLatest = new ExtendedControls.ExtButton();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.contextMenuCopyPaste.SuspendLayout();
@@ -604,6 +605,7 @@ namespace EDDiscovery.UserControls
             this.panelControls.Controls.Add(this.extButtonImportFile);
             this.panelControls.Controls.Add(this.extButtonImportRoute);
             this.panelControls.Controls.Add(this.extButtonImportNavRoute);
+            this.panelControls.Controls.Add(this.extButtonNavRouteLatest);
             this.panelControls.Controls.Add(this.extButtonAddSystems);
             this.panelControls.Controls.Add(this.buttonExtExport);
             this.panelControls.Controls.Add(this.extButtonShow3DMap);
@@ -718,7 +720,7 @@ namespace EDDiscovery.UserControls
             this.extButtonAddSystems.BackColor = System.Drawing.SystemColors.Control;
             this.extButtonAddSystems.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.extButtonAddSystems.Image = global::EDDiscovery.Icons.Controls.ImportSphere;
-            this.extButtonAddSystems.Location = new System.Drawing.Point(288, 1);
+            this.extButtonAddSystems.Location = new System.Drawing.Point(328, 1);
             this.extButtonAddSystems.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
             this.extButtonAddSystems.Name = "extButtonAddSystems";
             this.extButtonAddSystems.Size = new System.Drawing.Size(28, 28);
@@ -732,7 +734,7 @@ namespace EDDiscovery.UserControls
             this.buttonExtExport.BackColor = System.Drawing.SystemColors.Control;
             this.buttonExtExport.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonExtExport.Image = global::EDDiscovery.Icons.Controls.ExportToExcel;
-            this.buttonExtExport.Location = new System.Drawing.Point(328, 1);
+            this.buttonExtExport.Location = new System.Drawing.Point(368, 1);
             this.buttonExtExport.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
             this.buttonExtExport.Name = "buttonExtExport";
             this.buttonExtExport.Size = new System.Drawing.Size(28, 28);
@@ -746,7 +748,7 @@ namespace EDDiscovery.UserControls
             this.extButtonShow3DMap.BackColor = System.Drawing.SystemColors.Control;
             this.extButtonShow3DMap.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.extButtonShow3DMap.Image = global::EDDiscovery.Icons.Controls.ShowOnMap;
-            this.extButtonShow3DMap.Location = new System.Drawing.Point(368, 1);
+            this.extButtonShow3DMap.Location = new System.Drawing.Point(408, 1);
             this.extButtonShow3DMap.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
             this.extButtonShow3DMap.Name = "extButtonShow3DMap";
             this.extButtonShow3DMap.Size = new System.Drawing.Size(28, 28);
@@ -760,7 +762,7 @@ namespace EDDiscovery.UserControls
             this.extButtonDisplayFilters.BackColor = System.Drawing.SystemColors.Control;
             this.extButtonDisplayFilters.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.extButtonDisplayFilters.Image = global::EDDiscovery.Icons.Controls.DisplayFilters;
-            this.extButtonDisplayFilters.Location = new System.Drawing.Point(408, 1);
+            this.extButtonDisplayFilters.Location = new System.Drawing.Point(448, 1);
             this.extButtonDisplayFilters.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
             this.extButtonDisplayFilters.Name = "extButtonDisplayFilters";
             this.extButtonDisplayFilters.Size = new System.Drawing.Size(28, 28);
@@ -788,7 +790,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxEDSM.ImageIndeterminate = null;
             this.checkBoxEDSM.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxEDSM.ImageUnchecked = null;
-            this.checkBoxEDSM.Location = new System.Drawing.Point(440, 1);
+            this.checkBoxEDSM.Location = new System.Drawing.Point(480, 1);
             this.checkBoxEDSM.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.checkBoxEDSM.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxEDSM.Name = "checkBoxEDSM";
@@ -797,6 +799,19 @@ namespace EDDiscovery.UserControls
             this.checkBoxEDSM.TickBoxReductionRatio = 0.75F;
             this.toolTip.SetToolTip(this.checkBoxEDSM, "Show/Hide Body data from EDSM.");
             this.checkBoxEDSM.UseVisualStyleBackColor = false;
+            // 
+            // extButtonNavRouteLatest
+            // 
+            this.extButtonNavRouteLatest.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.extButtonNavRouteLatest.Image = global::EDDiscovery.Icons.Controls.ImportNavRouteLatest;
+            this.extButtonNavRouteLatest.Location = new System.Drawing.Point(288, 1);
+            this.extButtonNavRouteLatest.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.extButtonNavRouteLatest.Name = "extButtonNavRouteLatest";
+            this.extButtonNavRouteLatest.Size = new System.Drawing.Size(28, 28);
+            this.extButtonNavRouteLatest.TabIndex = 34;
+            this.toolTip.SetToolTip(this.extButtonNavRouteLatest, "Import Latest Nav Route");
+            this.extButtonNavRouteLatest.UseVisualStyleBackColor = true;
+            this.extButtonNavRouteLatest.Click += new System.EventHandler(this.extButtonNavLatest_Click);
             // 
             // UserControlExpedition
             // 
@@ -874,5 +889,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn KnownBodies;
         private System.Windows.Forms.DataGridViewTextBoxColumn Stars;
         private System.Windows.Forms.DataGridViewTextBoxColumn Info;
+        private ExtendedControls.ExtButton extButtonNavRouteLatest;
     }
 }
