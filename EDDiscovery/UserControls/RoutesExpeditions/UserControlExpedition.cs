@@ -670,19 +670,52 @@ namespace EDDiscovery.UserControls
 
         private void extButtonImportNavRoute_Click(object sender, EventArgs e)
         {
-            var route = discoveryform.history.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.NavRoute)?.journalEntry as EliteDangerousCore.JournalEvents.JournalNavRoute;
-            if (route?.Route != null)
-            {
-                foreach (var s in route.Route)
-                {
-                    if (s.StarSystem.HasChars())
-                    {
-                        dataGridView.Rows.Add(s.StarSystem);
-                    }
-                }
+            var navroutes = discoveryform.history.LatestFirst().Where(x => x.EntryType == JournalTypeEnum.NavRoute && (x.journalEntry as JournalNavRoute).Route != null).Take(10).ToList();
 
-                UpdateSystemRows();
+            if (navroutes.Count > 0)
+            {
+                ExtendedControls.CheckedIconListBoxFormGroup navroutefilter = new CheckedIconListBoxFormGroup();
+
+                for (int i = 0; i < navroutes.Count; i++)
+                {
+                    navroutefilter.AddStandardOption(i.ToStringInvariant(), navroutes[i].EventTimeUTC.ToLocalTime().ToStringYearFirst());
+                }
+                navroutefilter.SaveSettings = (s, o) =>
+                {
+                    int? i = s.Replace(";", "").InvariantParseIntNull();
+                    if ( i != null )
+                    {
+                        var jroute = navroutes[i.Value].journalEntry as JournalNavRoute;
+
+                        foreach (var sys in jroute.Route)
+                        {
+                            if (sys.StarSystem.HasChars())
+                            {
+                                dataGridView.Rows.Add(sys.StarSystem);
+                            }
+                        }
+
+                        UpdateSystemRows();
+                    }
+                };
+                navroutefilter.CloseOnChange = true;
+                navroutefilter.Show("", extButtonImportNavRoute, this.FindForm());
             }
+
+
+            //var route = discoveryform.history.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.NavRoute)?.journalEntry as EliteDangerousCore.JournalEvents.JournalNavRoute;
+            //if (route?.Route != null)
+            //{
+            //    foreach (var s in route.Route)
+            //    {
+            //        if (s.StarSystem.HasChars())
+            //        {
+            //            dataGridView.Rows.Add(s.StarSystem);
+            //        }
+            //    }
+
+            //    UpdateSystemRows();
+            //}
         }
 
         private void buttonExtExport_Click(object sender, EventArgs e)
