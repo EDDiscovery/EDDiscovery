@@ -68,7 +68,8 @@ namespace EDDiscovery.UserControls
             this.CurDist = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Visits = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Scans = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Bodies = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.FSSBodies = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.KnownBodies = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Stars = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Info = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.contextMenuCopyPaste = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -332,7 +333,8 @@ namespace EDDiscovery.UserControls
             this.CurDist,
             this.Visits,
             this.Scans,
-            this.Bodies,
+            this.FSSBodies,
+            this.KnownBodies,
             this.Stars,
             this.Info});
             this.dataGridView.ContextMenuStrip = this.contextMenuCopyPaste;
@@ -408,11 +410,17 @@ namespace EDDiscovery.UserControls
             this.Scans.HeaderText = "Scans";
             this.Scans.Name = "Scans";
             // 
-            // Bodies
+            // FSSBodies
             // 
-            this.Bodies.FillWeight = 25F;
-            this.Bodies.HeaderText = "Bodies";
-            this.Bodies.Name = "Bodies";
+            this.FSSBodies.FillWeight = 25F;
+            this.FSSBodies.HeaderText = "FSS Bodies";
+            this.FSSBodies.Name = "FSSBodies";
+            // 
+            // KnownBodies
+            // 
+            this.KnownBodies.FillWeight = 25F;
+            this.KnownBodies.HeaderText = "Known Bodies";
+            this.KnownBodies.Name = "KnownBodies";
             // 
             // Stars
             // 
@@ -851,6 +859,8 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtButton extButtonSave;
         private System.Windows.Forms.ToolTip toolTip;
         private ExtendedControls.ExtButton extButtonAddSystems;
+        private ExtendedControls.ExtButton extButtonDisplayFilters;
+        private ExtendedControls.ExtCheckBox checkBoxEDSM;
         private ExtendedControls.ExtDataGridViewColumnAutoComplete SystemName;
         private System.Windows.Forms.DataGridViewTextBoxColumn Distance;
         private System.Windows.Forms.DataGridViewTextBoxColumn Note;
@@ -860,10 +870,9 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn CurDist;
         private System.Windows.Forms.DataGridViewTextBoxColumn Visits;
         private System.Windows.Forms.DataGridViewTextBoxColumn Scans;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Bodies;
+        private System.Windows.Forms.DataGridViewTextBoxColumn FSSBodies;
+        private System.Windows.Forms.DataGridViewTextBoxColumn KnownBodies;
         private System.Windows.Forms.DataGridViewTextBoxColumn Stars;
         private System.Windows.Forms.DataGridViewTextBoxColumn Info;
-        private ExtendedControls.ExtButton extButtonDisplayFilters;
-        private ExtendedControls.ExtCheckBox checkBoxEDSM;
     }
 }

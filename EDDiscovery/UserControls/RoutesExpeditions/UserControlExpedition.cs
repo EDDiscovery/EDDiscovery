@@ -296,7 +296,8 @@ namespace EDDiscovery.UserControls
                     row.Cells[ColumnZ.Index].Value =
                     row.Cells[CurDist.Index].Value =
                     row.Cells[Scans.Index].Value =
-                    row.Cells[Bodies.Index].Value =
+                    row.Cells[FSSBodies.Index].Value =
+                    row.Cells[KnownBodies.Index].Value =
                     row.Cells[Stars.Index].Value = "";
                     row.Cells[Info.Index].Value = "System not known".T(EDTx.UserControlExpedition_EDSMUnk);
                 }
@@ -318,8 +319,9 @@ namespace EDDiscovery.UserControls
 
                     if (sysnode != null)
                     {
-                        row.Cells[Scans.Index].Value = sysnode.StarPlanetsScanned().ToString("0");
-                        row.Cells[Bodies.Index].Value = sysnode.FSSTotalBodies.HasValue ? sysnode.FSSTotalBodies.Value.ToString("0") : "";
+                        row.Cells[Scans.Index].Value = sysnode.StarPlanetsScannednonEDSM().ToString("0");
+                        row.Cells[FSSBodies.Index].Value = sysnode.FSSTotalBodies.HasValue ? sysnode.FSSTotalBodies.Value.ToString("0") : "";
+                        row.Cells[KnownBodies.Index].Value = sysnode.StarPlanetsScanned().ToString("0");
                         row.Cells[Stars.Index].Value = sysnode.StarTypesFound(false);
 
                         string info = "";
