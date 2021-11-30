@@ -566,7 +566,10 @@ namespace EDDiscovery.UserControls
             // 
             // rollUpPanelTop
             // 
+            this.rollUpPanelTop.AutoHeight = false;
+            this.rollUpPanelTop.AutoHeightWidthDisable = false;
             this.rollUpPanelTop.AutoSize = true;
+            this.rollUpPanelTop.AutoWidth = false;
             this.rollUpPanelTop.Controls.Add(this.panelControls);
             this.rollUpPanelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.rollUpPanelTop.HiddenMarkerWidth = 400;
@@ -692,7 +695,7 @@ namespace EDDiscovery.UserControls
             // 
             this.extButtonImportNavRoute.BackColor = System.Drawing.SystemColors.Control;
             this.extButtonImportNavRoute.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.extButtonImportNavRoute.Image = global::EDDiscovery.Icons.Controls.Expedition_ImportNavRoute;
+            this.extButtonImportNavRoute.Image = global::EDDiscovery.Icons.Controls.ImportNavRoute;
             this.extButtonImportNavRoute.Location = new System.Drawing.Point(248, 1);
             this.extButtonImportNavRoute.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
             this.extButtonImportNavRoute.Name = "extButtonImportNavRoute";

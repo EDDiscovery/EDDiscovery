@@ -125,7 +125,7 @@ namespace EDDiscovery.Icons
         public static Image Expedition_ImportFile { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Expedition.ImportFile"); } }
         public static Image Expedition_ImportSphere { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Expedition.ImportSphere"); } }
         public static Image Expedition_ImportRoute { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Expedition.ImportRoute"); } }
-        public static Image Expedition_ImportNavRoute { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Expedition.ImportNavRoute"); } }
+        public static Image ImportNavRoute { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Expedition.ImportNavRoute"); } }
         public static Image Expedition_New { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Expedition.New"); } }
         public static Image Expedition_Save { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Expedition.Save"); } }
         public static Image Expedition_ShowOnMap { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Expedition.ShowOnMap"); } }
