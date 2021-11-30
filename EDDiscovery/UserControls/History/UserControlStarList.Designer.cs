@@ -94,11 +94,11 @@ namespace EDDiscovery.UserControls
             this.checkBoxCursorToTop.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
             this.checkBoxCursorToTop.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
             this.checkBoxCursorToTop.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.checkBoxCursorToTop.Image = global::EDDiscovery.Icons.Controls.TravelGrid_CursorToTop;
+            this.checkBoxCursorToTop.Image = global::EDDiscovery.Icons.Controls.CursorToTop;
             this.checkBoxCursorToTop.ImageButtonDisabledScaling = 0.5F;
             this.checkBoxCursorToTop.ImageIndeterminate = null;
             this.checkBoxCursorToTop.ImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.checkBoxCursorToTop.ImageUnchecked = global::EDDiscovery.Icons.Controls.TravelGrid_CursorStill;
+            this.checkBoxCursorToTop.ImageUnchecked = global::EDDiscovery.Icons.Controls.CursorStill;
             this.checkBoxCursorToTop.Location = new System.Drawing.Point(463, 1);
             this.checkBoxCursorToTop.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.checkBoxCursorToTop.MouseOverColor = System.Drawing.Color.CornflowerBlue;
@@ -113,7 +113,7 @@ namespace EDDiscovery.UserControls
             // 
             this.buttonExtExcel.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
             this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonExtExcel.Image = global::EDDiscovery.Icons.Controls.StarList_ExportToExcel;
+            this.buttonExtExcel.Image = global::EDDiscovery.Icons.Controls.ExportToExcel;
             this.buttonExtExcel.Location = new System.Drawing.Point(427, 1);
             this.buttonExtExcel.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonExtExcel.Name = "buttonExtExcel";
@@ -176,7 +176,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxEDSM.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
             this.checkBoxEDSM.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
             this.checkBoxEDSM.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.checkBoxEDSM.Image = global::EDDiscovery.Icons.Controls.StarList_EDSM;
+            this.checkBoxEDSM.Image = global::EDDiscovery.Icons.Controls.EDSM;
             this.checkBoxEDSM.ImageButtonDisabledScaling = 0.5F;
             this.checkBoxEDSM.ImageIndeterminate = null;
             this.checkBoxEDSM.ImageLayout = System.Windows.Forms.ImageLayout.Center;

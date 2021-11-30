@@ -220,7 +220,7 @@ namespace EDDiscovery.UserControls
             // 
             // buttonFilter
             // 
-            this.buttonFilter.Image = global::EDDiscovery.Icons.Controls.TravelGrid_EventFilter;
+            this.buttonFilter.Image = global::EDDiscovery.Icons.Controls.EventFilter;
             this.buttonFilter.Location = new System.Drawing.Point(351, 1);
             this.buttonFilter.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonFilter.Name = "buttonFilter";
@@ -301,7 +301,7 @@ namespace EDDiscovery.UserControls
             // buttonExtExcel
             // 
             this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonExtExcel.Image = global::EDDiscovery.Icons.Controls.JournalGrid_ExportToExcel;
+            this.buttonExtExcel.Image = global::EDDiscovery.Icons.Controls.ExportToExcel;
             this.buttonExtExcel.Location = new System.Drawing.Point(387, 1);
             this.buttonExtExcel.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonExtExcel.Name = "buttonExtExcel";

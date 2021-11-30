@@ -880,7 +880,7 @@ namespace EDDiscovery.UserControls
             displayfilter.AddAllNone();
             displayfilter.AddStandardOption("stars", "Show All Stars".TxID("UserControlSurveyor.showAllStarsToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Star);
             displayfilter.AddStandardOption("planets", "Show All Planets".TxID("UserControlSurveyor.showAllPlanetsToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_ShowMoons);
-            displayfilter.AddStandardOption("beltcluster", "Show belt clusters".TxID("UserControlSurveyor.showBeltClustersToolStripMenuItem"), global::EDDiscovery.Icons.Controls.ScanGrid_Belt);
+            displayfilter.AddStandardOption("beltcluster", "Show belt clusters".TxID("UserControlSurveyor.showBeltClustersToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Belt);
             displayfilter.AddStandardOption("valueables", "Show valueable bodies".T(EDTx.UserControlStarList_valueables), global::EDDiscovery.Icons.Controls.Scan_Bodies_HighValue);
             displayfilter.AddStandardOption("signals", "Has Signals".TxID("UserControlSurveyor.bodyFeaturesToolStripMenuItem.hasSignalsToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Bodies_Signals);
             displayfilter.AddStandardOption("volcanism", "Has Volcanism".TxID("UserControlSurveyor.bodyFeaturesToolStripMenuItem.hasVolcanismToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Bodies_Volcanism);

@@ -484,7 +484,7 @@ namespace EDDiscovery.UserControls
             this.dateTimePickerStartDate.BorderColor = System.Drawing.Color.Transparent;
             this.dateTimePickerStartDate.BorderColorScaling = 0.5F;
             this.dateTimePickerStartDate.Checked = false;
-            this.dateTimePickerStartDate.CustomFormat = "dddd, d. MMMM yyyy";
+            this.dateTimePickerStartDate.CustomFormat = "dd MMMM yyyy";
             this.dateTimePickerStartDate.Format = System.Windows.Forms.DateTimePickerFormat.Long;
             this.dateTimePickerStartDate.Location = new System.Drawing.Point(56, 3);
             this.dateTimePickerStartDate.Name = "dateTimePickerStartDate";
@@ -507,6 +507,9 @@ namespace EDDiscovery.UserControls
             // 
             // extPanelRollUp
             // 
+            this.extPanelRollUp.AutoHeight = false;
+            this.extPanelRollUp.AutoHeightWidthDisable = false;
+            this.extPanelRollUp.AutoWidth = false;
             this.extPanelRollUp.Controls.Add(this.labelStatus);
             this.extPanelRollUp.Controls.Add(this.dateTimePickerEndDate);
             this.extPanelRollUp.Controls.Add(this.dateTimePickerStartDate);
@@ -531,7 +534,7 @@ namespace EDDiscovery.UserControls
             this.dateTimePickerEndDate.BorderColor = System.Drawing.Color.Transparent;
             this.dateTimePickerEndDate.BorderColorScaling = 0.5F;
             this.dateTimePickerEndDate.Checked = false;
-            this.dateTimePickerEndDate.CustomFormat = "dddd, d. MMMM yyyy";
+            this.dateTimePickerEndDate.CustomFormat = "dd MMMM yyyy";
             this.dateTimePickerEndDate.Format = System.Windows.Forms.DateTimePickerFormat.Long;
             this.dateTimePickerEndDate.Location = new System.Drawing.Point(354, 3);
             this.dateTimePickerEndDate.Name = "dateTimePickerEndDate";

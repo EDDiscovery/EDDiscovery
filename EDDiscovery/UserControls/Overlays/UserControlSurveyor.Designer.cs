@@ -122,7 +122,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxEDSM.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
             this.checkBoxEDSM.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
             this.checkBoxEDSM.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.checkBoxEDSM.Image = global::EDDiscovery.Icons.Controls.StarList_EDSM;
+            this.checkBoxEDSM.Image = global::EDDiscovery.Icons.Controls.EDSM;
             this.checkBoxEDSM.ImageButtonDisabledScaling = 0.5F;
             this.checkBoxEDSM.ImageIndeterminate = null;
             this.checkBoxEDSM.ImageLayout = System.Windows.Forms.ImageLayout.Center;

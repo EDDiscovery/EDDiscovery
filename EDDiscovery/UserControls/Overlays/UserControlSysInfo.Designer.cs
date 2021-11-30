@@ -889,7 +889,7 @@ namespace EDDiscovery.UserControls
             // extButtonCoriolis
             // 
             this.extButtonCoriolis.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.extButtonCoriolis.Image = global::EDDiscovery.Icons.Controls.Modules_ShowOnCoriolis;
+            this.extButtonCoriolis.Image = global::EDDiscovery.Icons.Controls.Coriolis;
             this.extButtonCoriolis.Location = new System.Drawing.Point(52, 392);
             this.extButtonCoriolis.Name = "extButtonCoriolis";
             this.extButtonCoriolis.Padding = new System.Windows.Forms.Padding(2);
@@ -958,7 +958,7 @@ namespace EDDiscovery.UserControls
             // 
             this.extButtonEDSY.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.extButtonEDSY.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.extButtonEDSY.Image = global::EDDiscovery.Icons.Controls.Modules_EDShipYard;
+            this.extButtonEDSY.Image = global::EDDiscovery.Icons.Controls.EDShipYard;
             this.extButtonEDSY.Location = new System.Drawing.Point(102, 393);
             this.extButtonEDSY.Name = "extButtonEDSY";
             this.extButtonEDSY.Padding = new System.Windows.Forms.Padding(2);

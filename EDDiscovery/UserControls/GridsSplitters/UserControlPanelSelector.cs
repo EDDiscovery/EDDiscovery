@@ -117,7 +117,7 @@ namespace EDDiscovery.UserControls
                             EDDTheme.Instance.TextBlockColor.GetBrightness() < 0.1 ? Color.AntiqueWhite : EDDTheme.Instance.TextBlockColor,
                             Color.Transparent,
                             pi.TabIcon, iconsize,
-                            new Image[] { EDDiscovery.Icons.Controls.TabStrip_Popout, EDDiscovery.Icons.Controls.Selector_AddTab }, iconsize,
+                            new Image[] { EDDiscovery.Icons.Controls.Popout, EDDiscovery.Icons.Controls.Selector_AddTab }, iconsize,
                             padbetween,
                             ButtonPress);
                 cb.SuspendLayout();

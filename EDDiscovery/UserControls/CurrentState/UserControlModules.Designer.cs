@@ -200,7 +200,7 @@ namespace EDDiscovery.UserControls
             // buttonExtConfigure
             // 
             this.buttonExtConfigure.BackColor = System.Drawing.Color.Transparent;
-            this.buttonExtConfigure.Image = global::EDDiscovery.Icons.Controls.Modules_Configure;
+            this.buttonExtConfigure.Image = global::EDDiscovery.Icons.Controls.Spaceship;
             this.buttonExtConfigure.Location = new System.Drawing.Point(332, 1);
             this.buttonExtConfigure.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonExtConfigure.Name = "buttonExtConfigure";
@@ -213,7 +213,7 @@ namespace EDDiscovery.UserControls
             // buttonExtEDShipyard
             // 
             this.buttonExtEDShipyard.BackColor = System.Drawing.Color.Transparent;
-            this.buttonExtEDShipyard.Image = global::EDDiscovery.Icons.Controls.Modules_EDShipYard;
+            this.buttonExtEDShipyard.Image = global::EDDiscovery.Icons.Controls.EDShipYard;
             this.buttonExtEDShipyard.Location = new System.Drawing.Point(300, 1);
             this.buttonExtEDShipyard.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonExtEDShipyard.Name = "buttonExtEDShipyard";
@@ -227,7 +227,7 @@ namespace EDDiscovery.UserControls
             // buttonExtCoriolis
             // 
             this.buttonExtCoriolis.BackColor = System.Drawing.Color.Transparent;
-            this.buttonExtCoriolis.Image = global::EDDiscovery.Icons.Controls.Modules_ShowOnCoriolis;
+            this.buttonExtCoriolis.Image = global::EDDiscovery.Icons.Controls.Coriolis;
             this.buttonExtCoriolis.Location = new System.Drawing.Point(268, 1);
             this.buttonExtCoriolis.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonExtCoriolis.Name = "buttonExtCoriolis";
@@ -290,7 +290,7 @@ namespace EDDiscovery.UserControls
             // buttonExtExcel
             // 
             this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonExtExcel.Image = global::EDDiscovery.Icons.Controls.JournalGrid_ExportToExcel;
+            this.buttonExtExcel.Image = global::EDDiscovery.Icons.Controls.ExportToExcel;
             this.buttonExtExcel.Location = new System.Drawing.Point(364, 1);
             this.buttonExtExcel.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonExtExcel.Name = "buttonExtExcel";

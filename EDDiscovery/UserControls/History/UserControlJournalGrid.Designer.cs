@@ -262,11 +262,11 @@ namespace EDDiscovery.UserControls
             this.checkBoxCursorToTop.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
             this.checkBoxCursorToTop.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
             this.checkBoxCursorToTop.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.checkBoxCursorToTop.Image = global::EDDiscovery.Icons.Controls.TravelGrid_CursorToTop;
+            this.checkBoxCursorToTop.Image = global::EDDiscovery.Icons.Controls.CursorToTop;
             this.checkBoxCursorToTop.ImageButtonDisabledScaling = 0.5F;
             this.checkBoxCursorToTop.ImageIndeterminate = null;
             this.checkBoxCursorToTop.ImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.checkBoxCursorToTop.ImageUnchecked = global::EDDiscovery.Icons.Controls.TravelGrid_CursorStill;
+            this.checkBoxCursorToTop.ImageUnchecked = global::EDDiscovery.Icons.Controls.CursorStill;
             this.checkBoxCursorToTop.Location = new System.Drawing.Point(459, 1);
             this.checkBoxCursorToTop.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.checkBoxCursorToTop.MouseOverColor = System.Drawing.Color.CornflowerBlue;
@@ -280,7 +280,7 @@ namespace EDDiscovery.UserControls
             // buttonExtExcel
             // 
             this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonExtExcel.Image = global::EDDiscovery.Icons.Controls.JournalGrid_ExportToExcel;
+            this.buttonExtExcel.Image = global::EDDiscovery.Icons.Controls.ExportToExcel;
             this.buttonExtExcel.Location = new System.Drawing.Point(423, 1);
             this.buttonExtExcel.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonExtExcel.Name = "buttonExtExcel";
@@ -292,7 +292,7 @@ namespace EDDiscovery.UserControls
             // 
             // buttonField
             // 
-            this.buttonField.Image = global::EDDiscovery.Icons.Controls.TravelGrid_FieldFilter;
+            this.buttonField.Image = global::EDDiscovery.Icons.Controls.FieldFilter;
             this.buttonField.ImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.buttonField.Location = new System.Drawing.Point(387, 1);
             this.buttonField.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
@@ -302,7 +302,7 @@ namespace EDDiscovery.UserControls
             this.buttonField.UseVisualStyleBackColor = true;
             this.buttonField.Click += new System.EventHandler(this.buttonField_Click);
             // 
-            // textBoxFilter
+            // textBoxSearch
             // 
             this.textBoxSearch.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
             this.textBoxSearch.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
@@ -313,13 +313,13 @@ namespace EDDiscovery.UserControls
             this.textBoxSearch.ClearOnFirstChar = false;
             this.textBoxSearch.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxSearch.EndButtonEnable = true;
-            this.textBoxSearch.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxFilter.EndButtonImage")));
+            this.textBoxSearch.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxSearch.EndButtonImage")));
             this.textBoxSearch.EndButtonVisible = false;
             this.textBoxSearch.InErrorCondition = false;
             this.textBoxSearch.Location = new System.Drawing.Point(195, 1);
             this.textBoxSearch.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.textBoxSearch.Multiline = false;
-            this.textBoxSearch.Name = "textBoxFilter";
+            this.textBoxSearch.Name = "textBoxSearch";
             this.textBoxSearch.ReadOnly = false;
             this.textBoxSearch.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.textBoxSearch.SelectionLength = 0;
@@ -343,7 +343,7 @@ namespace EDDiscovery.UserControls
             // 
             // buttonFilter
             // 
-            this.buttonFilter.Image = global::EDDiscovery.Icons.Controls.TravelGrid_EventFilter;
+            this.buttonFilter.Image = global::EDDiscovery.Icons.Controls.EventFilter;
             this.buttonFilter.Location = new System.Drawing.Point(351, 1);
             this.buttonFilter.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonFilter.Name = "buttonFilter";
@@ -353,7 +353,7 @@ namespace EDDiscovery.UserControls
             this.buttonFilter.UseVisualStyleBackColor = true;
             this.buttonFilter.Click += new System.EventHandler(this.buttonFilter_Click);
             // 
-            // comboBoxJournalWindow
+            // comboBoxTime
             // 
             this.comboBoxTime.BorderColor = System.Drawing.Color.Red;
             this.comboBoxTime.ButtonColorScaling = 0.5F;
@@ -365,7 +365,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxTime.Location = new System.Drawing.Point(38, 1);
             this.comboBoxTime.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.comboBoxTime.MouseOverBackgroundColor = System.Drawing.Color.Silver;
-            this.comboBoxTime.Name = "comboBoxJournalWindow";
+            this.comboBoxTime.Name = "comboBoxTime";
             this.comboBoxTime.ScrollBarButtonColor = System.Drawing.Color.LightGray;
             this.comboBoxTime.ScrollBarColor = System.Drawing.Color.LightGray;
             this.comboBoxTime.SelectedIndex = -1;

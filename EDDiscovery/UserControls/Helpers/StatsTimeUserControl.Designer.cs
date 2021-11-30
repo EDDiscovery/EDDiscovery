@@ -106,7 +106,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxCustomStars.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxCustomStars.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxCustomStars.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.checkBoxCustomStars.Image = global::EDDiscovery.Icons.Controls.StatsTime_Stars;
+            this.checkBoxCustomStars.Image = global::EDDiscovery.Icons.Controls.Stars;
             this.checkBoxCustomStars.ImageButtonDisabledScaling = 0.5F;
             this.checkBoxCustomStars.ImageIndeterminate = null;
             this.checkBoxCustomStars.ImageLayout = System.Windows.Forms.ImageLayout.Center;
@@ -133,7 +133,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxCustomPlanets.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.checkBoxCustomPlanets.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Red;
             this.checkBoxCustomPlanets.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.checkBoxCustomPlanets.Image = global::EDDiscovery.Icons.Controls.StatsTime_Planets;
+            this.checkBoxCustomPlanets.Image = global::EDDiscovery.Icons.Controls.Planets;
             this.checkBoxCustomPlanets.ImageButtonDisabledScaling = 0.5F;
             this.checkBoxCustomPlanets.ImageIndeterminate = null;
             this.checkBoxCustomPlanets.ImageLayout = System.Windows.Forms.ImageLayout.Center;
@@ -156,7 +156,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxCustomGraph.CheckBoxDisabledScaling = 0.5F;
             this.checkBoxCustomGraph.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxCustomGraph.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxCustomGraph.Image = global::EDDiscovery.Icons.Controls.StatsTime_Graph;
+            this.checkBoxCustomGraph.Image = global::EDDiscovery.Icons.Controls.Graph;
             this.checkBoxCustomGraph.ImageButtonDisabledScaling = 0.5F;
             this.checkBoxCustomGraph.ImageIndeterminate = null;
             this.checkBoxCustomGraph.ImageLayout = System.Windows.Forms.ImageLayout.Center;
@@ -179,7 +179,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxCustomText.CheckBoxDisabledScaling = 0.5F;
             this.checkBoxCustomText.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxCustomText.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxCustomText.Image = global::EDDiscovery.Icons.Controls.StatsTime_Text;
+            this.checkBoxCustomText.Image = global::EDDiscovery.Icons.Controls.Text;
             this.checkBoxCustomText.ImageButtonDisabledScaling = 0.5F;
             this.checkBoxCustomText.ImageIndeterminate = null;
             this.checkBoxCustomText.ImageLayout = System.Windows.Forms.ImageLayout.Center;

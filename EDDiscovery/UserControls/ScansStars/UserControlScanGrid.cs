@@ -203,7 +203,7 @@ namespace EDDiscovery.UserControls
                             bdDist.AppendFormat("{0:0.00}AU ({1:0.0}ls)", sn.ScanData.DistanceFromArrivalLS / JournalScan.oneAU_LS, sn.ScanData.DistanceFromArrivalLS);
                         }
 
-                        var img = global::EDDiscovery.Icons.Controls.ScanGrid_Belt;
+                        var img = global::EDDiscovery.Icons.Controls.Belt;
 
                         dataGridViewScangrid.Rows.Add(new object[] { null, sn.ScanData.BodyDesignationOrName, bdClass, bdDist, bdDetails });
 

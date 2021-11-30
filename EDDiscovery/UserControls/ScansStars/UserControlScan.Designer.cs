@@ -211,7 +211,7 @@ namespace EDDiscovery.UserControls
             // 
             this.extButtonFilter.BackColor = System.Drawing.SystemColors.Control;
             this.extButtonFilter.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.extButtonFilter.Image = global::EDDiscovery.Icons.Controls.TravelGrid_EventFilter;
+            this.extButtonFilter.Image = global::EDDiscovery.Icons.Controls.EventFilter;
             this.extButtonFilter.Location = new System.Drawing.Point(40, 1);
             this.extButtonFilter.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
             this.extButtonFilter.Name = "extButtonFilter";

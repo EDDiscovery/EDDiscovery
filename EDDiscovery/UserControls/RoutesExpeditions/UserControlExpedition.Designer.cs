@@ -633,7 +633,7 @@ namespace EDDiscovery.UserControls
             // 
             this.extButtonNew.BackColor = System.Drawing.SystemColors.Control;
             this.extButtonNew.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.extButtonNew.Image = global::EDDiscovery.Icons.Controls.Expedition_New;
+            this.extButtonNew.Image = global::EDDiscovery.Icons.Controls.ClearRoute;
             this.extButtonNew.Location = new System.Drawing.Point(48, 1);
             this.extButtonNew.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
             this.extButtonNew.Name = "extButtonNew";
@@ -647,7 +647,7 @@ namespace EDDiscovery.UserControls
             // 
             this.extButtonSave.BackColor = System.Drawing.SystemColors.Control;
             this.extButtonSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.extButtonSave.Image = global::EDDiscovery.Icons.Controls.Expedition_Save;
+            this.extButtonSave.Image = global::EDDiscovery.Icons.Controls.Save;
             this.extButtonSave.Location = new System.Drawing.Point(88, 1);
             this.extButtonSave.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
             this.extButtonSave.Name = "extButtonSave";
@@ -661,7 +661,7 @@ namespace EDDiscovery.UserControls
             // 
             this.extButtonDelete.BackColor = System.Drawing.SystemColors.Control;
             this.extButtonDelete.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.extButtonDelete.Image = global::EDDiscovery.Icons.Controls.Expedition_Delete;
+            this.extButtonDelete.Image = global::EDDiscovery.Icons.Controls.Delete;
             this.extButtonDelete.Location = new System.Drawing.Point(128, 1);
             this.extButtonDelete.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
             this.extButtonDelete.Name = "extButtonDelete";
@@ -675,7 +675,7 @@ namespace EDDiscovery.UserControls
             // 
             this.extButtonImportFile.BackColor = System.Drawing.SystemColors.Control;
             this.extButtonImportFile.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.extButtonImportFile.Image = global::EDDiscovery.Icons.Controls.Expedition_ImportFile;
+            this.extButtonImportFile.Image = global::EDDiscovery.Icons.Controls.ImportFile;
             this.extButtonImportFile.Location = new System.Drawing.Point(168, 1);
             this.extButtonImportFile.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
             this.extButtonImportFile.Name = "extButtonImportFile";
@@ -689,7 +689,7 @@ namespace EDDiscovery.UserControls
             // 
             this.extButtonImportRoute.BackColor = System.Drawing.SystemColors.Control;
             this.extButtonImportRoute.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.extButtonImportRoute.Image = global::EDDiscovery.Icons.Controls.Expedition_ImportRoute;
+            this.extButtonImportRoute.Image = global::EDDiscovery.Icons.Controls.ImportRoute;
             this.extButtonImportRoute.Location = new System.Drawing.Point(208, 1);
             this.extButtonImportRoute.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
             this.extButtonImportRoute.Name = "extButtonImportRoute";
@@ -703,7 +703,7 @@ namespace EDDiscovery.UserControls
             // 
             this.extButtonImportNavRoute.BackColor = System.Drawing.SystemColors.Control;
             this.extButtonImportNavRoute.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.extButtonImportNavRoute.Image = global::EDDiscovery.Icons.Controls.ImportNavRoute;
+            this.extButtonImportNavRoute.Image = ((System.Drawing.Image)(resources.GetObject("extButtonImportNavRoute.Image")));
             this.extButtonImportNavRoute.Location = new System.Drawing.Point(248, 1);
             this.extButtonImportNavRoute.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
             this.extButtonImportNavRoute.Name = "extButtonImportNavRoute";
@@ -717,7 +717,7 @@ namespace EDDiscovery.UserControls
             // 
             this.extButtonAddSystems.BackColor = System.Drawing.SystemColors.Control;
             this.extButtonAddSystems.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.extButtonAddSystems.Image = global::EDDiscovery.Icons.Controls.Expedition_ImportSphere;
+            this.extButtonAddSystems.Image = global::EDDiscovery.Icons.Controls.ImportSphere;
             this.extButtonAddSystems.Location = new System.Drawing.Point(288, 1);
             this.extButtonAddSystems.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
             this.extButtonAddSystems.Name = "extButtonAddSystems";
@@ -731,7 +731,7 @@ namespace EDDiscovery.UserControls
             // 
             this.buttonExtExport.BackColor = System.Drawing.SystemColors.Control;
             this.buttonExtExport.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonExtExport.Image = global::EDDiscovery.Icons.Controls.TravelGrid_ExportToExcel;
+            this.buttonExtExport.Image = global::EDDiscovery.Icons.Controls.ExportToExcel;
             this.buttonExtExport.Location = new System.Drawing.Point(328, 1);
             this.buttonExtExport.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
             this.buttonExtExport.Name = "buttonExtExport";
@@ -745,7 +745,7 @@ namespace EDDiscovery.UserControls
             // 
             this.extButtonShow3DMap.BackColor = System.Drawing.SystemColors.Control;
             this.extButtonShow3DMap.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.extButtonShow3DMap.Image = global::EDDiscovery.Icons.Controls.Expedition_ShowOnMap;
+            this.extButtonShow3DMap.Image = global::EDDiscovery.Icons.Controls.ShowOnMap;
             this.extButtonShow3DMap.Location = new System.Drawing.Point(368, 1);
             this.extButtonShow3DMap.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
             this.extButtonShow3DMap.Name = "extButtonShow3DMap";
@@ -783,7 +783,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxEDSM.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
             this.checkBoxEDSM.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
             this.checkBoxEDSM.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.checkBoxEDSM.Image = global::EDDiscovery.Icons.Controls.StarList_EDSM;
+            this.checkBoxEDSM.Image = global::EDDiscovery.Icons.Controls.EDSM;
             this.checkBoxEDSM.ImageButtonDisabledScaling = 0.5F;
             this.checkBoxEDSM.ImageIndeterminate = null;
             this.checkBoxEDSM.ImageLayout = System.Windows.Forms.ImageLayout.Center;

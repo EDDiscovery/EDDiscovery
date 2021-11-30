@@ -275,11 +275,11 @@ namespace EDDiscovery.UserControls
             this.checkBoxShowZeros.CheckBoxDisabledScaling = 0.5F;
             this.checkBoxShowZeros.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxShowZeros.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxShowZeros.Image = global::EDDiscovery.Icons.Controls.matshowzeros;
+            this.checkBoxShowZeros.Image = global::EDDiscovery.Icons.Controls.greenzero;
             this.checkBoxShowZeros.ImageButtonDisabledScaling = 0.5F;
             this.checkBoxShowZeros.ImageIndeterminate = null;
             this.checkBoxShowZeros.ImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.checkBoxShowZeros.ImageUnchecked = global::EDDiscovery.Icons.Controls.matnozeros;
+            this.checkBoxShowZeros.ImageUnchecked = global::EDDiscovery.Icons.Controls.redzero;
             this.checkBoxShowZeros.Location = new System.Drawing.Point(40, 1);
             this.checkBoxShowZeros.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.checkBoxShowZeros.MouseOverColor = System.Drawing.Color.CornflowerBlue;
@@ -292,7 +292,10 @@ namespace EDDiscovery.UserControls
             // 
             // extPanelRollUp
             // 
+            this.extPanelRollUp.AutoHeight = false;
+            this.extPanelRollUp.AutoHeightWidthDisable = false;
             this.extPanelRollUp.AutoSize = true;
+            this.extPanelRollUp.AutoWidth = false;
             this.extPanelRollUp.Controls.Add(this.flowLayoutPanel1);
             this.extPanelRollUp.Dock = System.Windows.Forms.DockStyle.Top;
             this.extPanelRollUp.HiddenMarkerWidth = 400;

@@ -67,7 +67,7 @@
             this.dateTimePickerEndDate.BorderColor = System.Drawing.Color.Transparent;
             this.dateTimePickerEndDate.BorderColorScaling = 0.5F;
             this.dateTimePickerEndDate.Checked = false;
-            this.dateTimePickerEndDate.CustomFormat = "dddd, d. MMMM yyyy";
+            this.dateTimePickerEndDate.CustomFormat = "dd MMMM yyyy";
             this.dateTimePickerEndDate.Format = System.Windows.Forms.DateTimePickerFormat.Long;
             this.dateTimePickerEndDate.Location = new System.Drawing.Point(387, 1);
             this.dateTimePickerEndDate.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
@@ -95,7 +95,7 @@
             this.dateTimePickerStartDate.BorderColor = System.Drawing.Color.Transparent;
             this.dateTimePickerStartDate.BorderColorScaling = 0.5F;
             this.dateTimePickerStartDate.Checked = false;
-            this.dateTimePickerStartDate.CustomFormat = "dddd, d. MMMM yyyy";
+            this.dateTimePickerStartDate.CustomFormat = "dd MMMM yyyy";
             this.dateTimePickerStartDate.Format = System.Windows.Forms.DateTimePickerFormat.Long;
             this.dateTimePickerStartDate.Location = new System.Drawing.Point(66, 1);
             this.dateTimePickerStartDate.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
@@ -120,7 +120,7 @@
             // 
             // buttonTags
             // 
-            this.buttonTags.Image = global::EDDiscovery.Icons.Controls.CaptainsLog_Tags;
+            this.buttonTags.Image = global::EDDiscovery.Icons.Controls.Tags;
             this.buttonTags.Location = new System.Drawing.Point(277, 1);
             this.buttonTags.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonTags.Name = "buttonTags";
@@ -132,7 +132,7 @@
             // 
             // buttonDelete
             // 
-            this.buttonDelete.Image = global::EDDiscovery.Icons.Controls.CaptainsLog_Delete;
+            this.buttonDelete.Image = global::EDDiscovery.Icons.Controls.Delete;
             this.buttonDelete.Location = new System.Drawing.Point(241, 1);
             this.buttonDelete.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonDelete.Name = "buttonDelete";
@@ -144,7 +144,7 @@
             // 
             // buttonNew
             // 
-            this.buttonNew.Image = global::EDDiscovery.Icons.Controls.CaptainsLog_New;
+            this.buttonNew.Image = global::EDDiscovery.Icons.Controls.NewPage;
             this.buttonNew.Location = new System.Drawing.Point(205, 1);
             this.buttonNew.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonNew.Name = "buttonNew";

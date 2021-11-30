@@ -108,7 +108,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxAutoTrack.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
             this.checkBoxAutoTrack.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
             this.checkBoxAutoTrack.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.checkBoxAutoTrack.Image = global::EDDiscovery.Icons.Controls.Exploration_ImportSphere;
+            this.checkBoxAutoTrack.Image = global::EDDiscovery.Icons.Controls.ImportSphere;
             this.checkBoxAutoTrack.ImageButtonDisabledScaling = 0.5F;
             this.checkBoxAutoTrack.ImageIndeterminate = null;
             this.checkBoxAutoTrack.ImageLayout = System.Windows.Forms.ImageLayout.Center;

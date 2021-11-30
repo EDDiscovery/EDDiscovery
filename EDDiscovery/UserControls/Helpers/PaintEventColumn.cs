@@ -90,12 +90,12 @@ namespace EDDiscovery.UserControls
 
                 if (he.StartMarker)
                 {
-                    e.Graphics.DrawImage(Icons.Controls.TravelGrid_FlagStart, new Rectangle(hstart, top, size, size));
+                    e.Graphics.DrawImage(Icons.Controls.FlagStart, new Rectangle(hstart, top, size, size));
                     hstart += size + padding;
                 }
                 else if (he.StopMarker)
                 {
-                    e.Graphics.DrawImage(Icons.Controls.TravelGrid_FlagStop, new Rectangle(hstart, top, size, size));
+                    e.Graphics.DrawImage(Icons.Controls.FlagStop, new Rectangle(hstart, top, size, size));
                     hstart += size + padding;
                 }
                 if (bk != null)

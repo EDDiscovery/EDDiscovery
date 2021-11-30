@@ -783,7 +783,7 @@ namespace EDDiscovery.UserControls
 
             displayfilter.AddAllNone();
             displayfilter.AddStandardOption(CtrlList.allstars.ToString(), "Show All Stars".TxID("UserControlSurveyor.showAllStarsToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Star);
-            displayfilter.AddStandardOption(CtrlList.beltclusters.ToString(), "Show Belt Clusters".TxID("UserControlSurveyor.showBeltClustersToolStripMenuItem"), global::EDDiscovery.Icons.Controls.ScanGrid_Belt);
+            displayfilter.AddStandardOption(CtrlList.beltclusters.ToString(), "Show Belt Clusters".TxID("UserControlSurveyor.showBeltClustersToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Belt);
 
             string[] starctrllist = Enum.GetNames(typeof(CtrlList)).RangeSubset((int)CtrlList.allstars, 2);
             CommonCtrl(displayfilter, starctrllist, extButtonStars);

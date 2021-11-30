@@ -202,11 +202,11 @@ namespace EDDiscovery.UserControls
             this.chkNotHistoric.CheckBoxDisabledScaling = 0.5F;
             this.chkNotHistoric.CheckBoxInnerColor = System.Drawing.Color.White;
             this.chkNotHistoric.CheckColor = System.Drawing.Color.DarkBlue;
-            this.chkNotHistoric.Image = global::EDDiscovery.Icons.Controls.TravelGrid_CursorToTop;
+            this.chkNotHistoric.Image = global::EDDiscovery.Icons.Controls.CursorToTop;
             this.chkNotHistoric.ImageButtonDisabledScaling = 0.5F;
             this.chkNotHistoric.ImageIndeterminate = null;
             this.chkNotHistoric.ImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.chkNotHistoric.ImageUnchecked = global::EDDiscovery.Icons.Controls.TravelGrid_CursorStill;
+            this.chkNotHistoric.ImageUnchecked = global::EDDiscovery.Icons.Controls.CursorStill;
             this.chkNotHistoric.Location = new System.Drawing.Point(352, 1);
             this.chkNotHistoric.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.chkNotHistoric.MouseOverColor = System.Drawing.Color.CornflowerBlue;

@@ -118,36 +118,6 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="ImportExcel" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Bookmarks\ImportExcel.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Expedition_Delete" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Expedition\Delete.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Expedition_Export" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Expedition\Export.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Expedition_ImportFile" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Expedition\ImportFile.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Expedition_ImportRoute" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Expedition\ImportRoute.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Expedition_New" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Expedition\New.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Expedition_Save" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Expedition\Save.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Expedition_ShowOnMap" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Expedition\ShowOnMap.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Exploration_ImportSphere" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Exploration\ImportSphere.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="JournalGrid_ExportToExcel" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\JournalGrid\ExportToExcel.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="Main_Addons_ConfigureAddOnActions" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Main\Addons\ConfigureAddOnActions.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -234,21 +204,6 @@
   </data>
   <data name="Main_Tools_Settings" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Main\Tools\Settings.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Map2D_Save" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Map2D\Save.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Map2D_ShowAllStars" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Map2D\ShowAllStars.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Map2D_ZoomIn" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Map2D\ZoomIn.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Map2D_ZoomOut" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Map2D\ZoomOut.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Map2D_ZoomToFit" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Map2D\ZoomToFit.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Map3D_Bookmarks_AddRegionBookmark" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Map3D\Bookmarks\AddRegionBookmark.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -406,24 +361,6 @@
   <data name="Map3D_YellowDot" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Map3D\YellowDot.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Modules_ShowOnCoriolis" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Modules\ShowOnCoriolis.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Modules_EDShipYard" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Modules\EDShipYard.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Modules_Configure" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Modules\Configure.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="RollUpPanel_PinDown" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\RollUpPanel\PinDown.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="RollUpPanel_PinUp" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\RollUpPanel\PinUp.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Route_ExportToExcel" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Route\ExportToExcel.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="Scan_Bodies_Barycentre" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Scan\Bodies\Barycentre.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -496,48 +433,6 @@
   <data name="SPanel_ResizeColumn" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\SPanel\ResizeColumn.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="StarList_EDSM" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\StarList\EDSM.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="StarList_ExportToExcel" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\StarList\ExportToExcel.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="StatsTime_Graph" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\StatsTime\Graph.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="StatsTime_Planets" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\StatsTime\Planets.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="StatsTime_Stars" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\StatsTime\Stars.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="StatsTime_Text" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\StatsTime\Text.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="TravelGrid_ExportToExcel" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\TravelGrid\ExportToExcel.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="TravelGrid_FlagStart" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\TravelGrid\FlagStart.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="TravelGrid_FlagStop" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\TravelGrid\FlagStop.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Trilateration_RemoveAll" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Trilateration\RemoveAll.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Trilateration_RemoveUnused" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Trilateration\RemoveUnused.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Trilateration_ShowOnMap" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Trilateration\ShowOnMap.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Trilateration_StartNew" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Trilateration\StartNew.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Trilateration_SubmitDistances" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Trilateration\SubmitDistances.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="UCContainer_Panels" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\UCContainer\Panels.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -547,74 +442,17 @@
   <data name="UCContainer_Tile" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\UCContainer\Tile.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Bookmarks_Edit" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Bookmarks\Edit.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Bookmarks_New" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Bookmarks\New.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Bookmarks_Delete" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Bookmarks\Delete.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="firstdiscover" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\SysInfo\firstdiscover.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="notfirstdiscover" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\SysInfo\notfirstdiscover.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="CaptainsLog_Delete" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\CaptainsLog\Delete.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="CaptainsLog_New" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\CaptainsLog\New.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="CaptainsLog_Tags" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\CaptainsLog\Tags.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="CaptainsLog_Diary" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\CaptainsLog\Diary.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="CaptainsLog_Entries" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\CaptainsLog\Entries.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="TravelGrid_CursorToTop" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\TravelGrid\CursorToTop.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="TravelGrid_EventFilter" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\TravelGrid\EventFilter.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="TravelGrid_FieldFilter" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\TravelGrid\FieldFilter.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="TravelGrid_Outlines" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\TravelGrid\Outlines.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="Scan_Star" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Scan\Star.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Scan_DisplaySystemAlways" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Scan\DisplaySystemAlways.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="TravelGrid_CursorStill" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\TravelGrid\CursorStill.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="backbutton" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Scan\backbutton.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="WordWrapOff" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\travelgrid\wordwrapoff.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="WordWrapOn" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\travelgrid\wordwrapon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="SendInara" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Main\Admin\SendInara.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="matnozeros" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\MatCommds\matnozeros.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="matshowzeros" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\MatCommds\matshowzeros.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="DisplayFilters" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Scan\DisplayFilters.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -634,61 +472,199 @@
   <data name="ShowStarClasses" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Scan\ShowStarClasses.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="EDDB" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\SysInfo\EDDB.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="EDSM" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\SysInfo\EDSM.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Inara" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\SysInfo\Inara.PNG;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="spansh" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\SysInfo\spansh.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Help_Video" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\help\video.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Help_Wiki" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\help\wiki.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Bookmarks_EditSystem" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Bookmarks\EditSystem.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="Scan_FSD" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\scan\fsd.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Expedition_ImportSphere" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Expedition\ImportSphere.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="FSSBodySignals" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\..\journal\fssbodysignals.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="AlignCentre" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\surveyor\aligncentre.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="AlignLeft" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\surveyor\alignleft.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="AlignRight" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\surveyor\alignright.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ImportNavRoute" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\expedition\importnavroute.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Route" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\surveyor\route.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="RouteConfig" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\surveyor\routeconfig.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Eccentric" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\surveyor\eccentric.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="LandablePlanet" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\scan\bodies\landableplanet.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Delete" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\delete.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Edit" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\edit.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="EditSystem" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\editsystem.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ImportExcel" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\importexcel.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="New" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\new.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ClearRoute" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\clearroute.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Diary" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\diary.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Entries" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\entries.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Export" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\export.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ExportToExcel" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\exporttoexcel.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ImportFile" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\importfile.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ImportNavRoute" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\importnavroute.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ImportRoute" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\importroute.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ImportSphere" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\importsphere.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="NewPage" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\newpage.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Save" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\save.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ShowOnMap" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\showonmap.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Tags" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\tags.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Video" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\video.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Wiki" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\wiki.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Cross" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\cross.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="CursorStill" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\cursorstill.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="CursorToTop" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\cursortotop.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="EventFilter" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\eventfilter.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FieldFilter" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\fieldfilter.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FlagStart" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\flagstart.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FlagStop" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\flagstop.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Globe" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\globe.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Outlines" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\outlines.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SubmitDistances" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\submitdistances.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="WordWrapOff" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\wordwrapoff.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="WordWrapOn" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\wordwrapon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="greenzero" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\greenzero.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="redzero" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\redzero.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Belt" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\belt.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Coriolis" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\coriolis.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="EDShipYard" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\edshipyard.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Spaceship" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\spaceship.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Star" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\star.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ZoomIn" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\zoomin.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ZoomOut" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\zoomout.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ZoomToFit" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\zoomtofit.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="AlignCentre" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\aligncentre.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="AlignLeft" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\alignleft.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="AlignRight" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\alignright.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Eccentric" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\eccentric.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="EDDB" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\eddb.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="EDSM" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\edsm.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="firstdiscover" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\firstdiscover.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Font" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Surveyor\Font.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>..\font.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Graph" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\graph.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Inara" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\inara.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="notfirstdiscover" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\notfirstdiscover.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Planets" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\planets.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Route" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\route.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="RouteConfig" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\routeconfig.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Scan" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\scan.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SearchMaterials" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\searchmaterials.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SearchStars" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\searchstars.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="spansh" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\spansh.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Stars" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\stars.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Text" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\text.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

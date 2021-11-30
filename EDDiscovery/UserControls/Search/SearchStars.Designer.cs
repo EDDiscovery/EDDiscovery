@@ -112,8 +112,10 @@ namespace EDDiscovery.UserControls
             this.dataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView.Location = new System.Drawing.Point(0, 0);
             this.dataGridView.Name = "dataGridView";
+            this.dataGridView.RowHeaderMenuStrip = null;
             this.dataGridView.RowHeadersVisible = false;
             this.dataGridView.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dataGridView.SingleRowSelect = true;
             this.dataGridView.Size = new System.Drawing.Size(788, 602);
             this.dataGridView.TabIndex = 0;
             this.dataGridView.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridView_SortCompare);
