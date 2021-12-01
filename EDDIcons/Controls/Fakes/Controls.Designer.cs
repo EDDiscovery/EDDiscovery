@@ -123,6 +123,26 @@ namespace EDDiscovery.Icons {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap ColumnOrder {
+            get {
+                object obj = ResourceManager.GetObject("ColumnOrder", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap Columns {
+            get {
+                object obj = ResourceManager.GetObject("Columns", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap Coriolis {
             get {
                 object obj = ResourceManager.GetObject("Coriolis", resourceCulture);
@@ -1626,6 +1646,16 @@ namespace EDDiscovery.Icons {
         public static System.Drawing.Bitmap Scan_Star {
             get {
                 object obj = ResourceManager.GetObject("Scan_Star", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap ScanPosition {
+            get {
+                object obj = ResourceManager.GetObject("ScanPosition", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

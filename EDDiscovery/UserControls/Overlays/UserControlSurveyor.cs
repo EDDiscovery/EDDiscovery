@@ -85,6 +85,8 @@ namespace EDDiscovery.UserControls
 
             LoadRoute(GetSetting("route", ""));
             routecontrolsettings = GetSetting("routecontrol", "showJumps;showwaypoints");
+
+            rollUpPanelTop.PinState = GetSetting("PinState", true);
         }
 
 
@@ -108,6 +110,7 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
+            PutSetting("PinState", rollUpPanelTop.PinState);
             uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
             discoveryform.OnNewUIEvent -= Discoveryform_OnNewUIEvent;
             discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
@@ -680,7 +683,7 @@ namespace EDDiscovery.UserControls
                 }
             };
 
-            DialogResult res = f.ShowDialogCentred(this.FindForm(), this.FindForm().Icon, "List signals to display, semicolon seperated", closeicon: true);
+            DialogResult res = f.ShowDialogCentred(this.FindForm(), this.FindForm().Icon, "List signals to display, semicolon seperated".T(EDTx.UserControlSurveyor_fsssignals), closeicon: true);
             if (res == DialogResult.OK)
             {
                 fsssignalsdisplayed = f.Get("Text");
@@ -821,7 +824,7 @@ namespace EDDiscovery.UserControls
             displayfilter.AddStandardOption(lt, "Alignment Left".TxID("UserControlSurveyor.textAlignToolStripMenuItem.leftToolStripMenuItem"), global::EDDiscovery.Icons.Controls.AlignLeft, exclusivetags: ct + ";" + rt, disableuncheck: true);
             displayfilter.AddStandardOption(ct, "Alignment Center".TxID("UserControlSurveyor.textAlignToolStripMenuItem.centerToolStripMenuItem"), global::EDDiscovery.Icons.Controls.AlignCentre, exclusivetags: lt + ";" + rt, disableuncheck: true);
             displayfilter.AddStandardOption(rt, "Alignment Right".TxID("UserControlSurveyor.textAlignToolStripMenuItem.rightToolStripMenuItem"), global::EDDiscovery.Icons.Controls.AlignRight, exclusivetags: lt + ";" + ct, disableuncheck: true);
-
+            displayfilter.CloseOnChange = true;
             string[] showctrllist = Enum.GetNames(typeof(CtrlList)).RangeSubset((int)CtrlList.alignleft, 3);
             CommonCtrl(displayfilter, showctrllist, extButtonAlignment);
         }

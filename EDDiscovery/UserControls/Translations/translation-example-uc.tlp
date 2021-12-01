@@ -202,7 +202,8 @@ SECTION UserControlExpedition
 .CurDist: "Cur. Dist" @
 .Visits: "Visits" @
 .Scans: "Scans" @
-.Bodies: "Bodies" @
+.FSSBodies: "FSS Bodies" @
+.KnownBodies: "Known Bodies" @
 .Stars: "Stars" @
 .Info: "Info" @
 
@@ -212,7 +213,8 @@ SECTION UserControlExpedition
 .extButtonDelete.ToolTip: "Delete Expedition" @
 .extButtonImportFile.ToolTip: "Import File" @
 .extButtonImportRoute.ToolTip: "Import from Route Panel" @
-.extButtonImportNavRoute.ToolTip: "Import last Nav Route" @
+.extButtonImportNavRoute.ToolTip: "Import a Nav Route" @
+.extButtonNavRouteLatest.ToolTip: "Import Latest Nav Route" @
 .buttonExtExport.ToolTip: "Export to File" @
 .extButtonShow3DMap.ToolTip: "Show expedition on 3D Map" @
 .extButtonAddSystems.ToolTip: "Import Systems from EDSM/DB" @
@@ -239,6 +241,7 @@ SECTION UserControlExpedition
 .deleteRowsToolStripMenuItem: "Delete Rows" @
 .setTargetToolStripMenuItem: "Set Target" @
 .editBookmarkToolStripMenuItem: "Edit bookmark" @
+
 .NoRoute: "No route set up. Please add at least two systems." @
 .Delete: "Are you sure you want to delete this route?" @
 .Createroute: "Please create a route on a route panel" @
@@ -441,9 +444,22 @@ SECTION UserControlSurveyor
 .hideAlreadyMappedBodiesToolStripMenuItem: "Hide already mapped bodies" @
 .showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem: "Show System Info Always" @
 
+.extButtonNavRouteLatest.ToolTip: "Import Latest Nav Route" @
+.extButtonPlanets.ToolTip: "Planet Filter" @
+.extButtonStars.ToolTip: "Star Filter" @
+.extButtonShowControl.ToolTip: "Display Settings" @
+.extButtonAlignment.ToolTip: "Alignment" @
+.extButtonFont.ToolTip: "Font" @
+.extButtonFSS.ToolTip: "FSS Signal Selection" @
+.checkBoxEDSM.ToolTip: "EDSM lookup toggle" @
+.extCheckBoxWordWrap.ToolTip: "Word Wrap" @
+.extButtonSetRoute.ToolTip: "Select route to follow" @
+.extButtonControlRoute.ToolTip: "Route Settings" @
+
+
 .navroute: "TX Nav Route" @
 .fuel: "Avg {0:N1}ly Fume {1:N1}ly Range {2:N1}ly" @
-
+.fsssignals: "List signals to display, semicolon seperated" @
 
 SECTION MissionListUserControl
 
@@ -916,8 +932,10 @@ SECTION UserControlShoppingList
 SECTION UserControlSpanel
 
 .showSystemInformationToolStripMenuItem: "Show System Information" @
-.showHabitationMinimumAndMaximumDistanceToolStripMenuItem: "Show Habitation Minimum and Maximum Distance" @
 .toolStripMenuItemTargetLine: "Show Target Line" @
+.blackBoxAroundTextToolStripMenuItem: "Show black box around text" @
+.expandTextOverEmptyColumnsToolStripMenuItem: "Expand text over empty columns" @
+
 .EDSMButtonToolStripMenuItem: "EDSM Button" @
 .toolStripMenuItemTime: "Show Time" @
 .iconToolStripMenuItem: "Show Event Icon" @
@@ -926,42 +944,50 @@ SECTION UserControlSpanel
 .showNotesToolStripMenuItem: "Show Notes" @
 .showXYZToolStripMenuItem: "Show XYZ" @
 .showTargetToolStripMenuItem: "Show Target Distance per Star" @
-.blackBoxAroundTextToolStripMenuItem: "Show black box around text" @
 .showDistancesOnFSDJumpsOnlyToolStripMenuItem: "Show Distances/Coords on FSD Jumps Only" @
-.expandTextOverEmptyColumnsToolStripMenuItem: "Expand text over empty columns" @
-.dontShowInformationWhenToolStripMenuItem: "Don't show information when.." @
-.dontShowInformationWhenToolStripMenuItem.showNothingWhenDockedtoolStripMenuItem: ".. when docked or landed" @
-.dontShowInformationWhenToolStripMenuItem.dontshowwhenInGalaxyPanelToolStripMenuItem: ".. when in Galaxy Panel" @
-.dontShowInformationWhenToolStripMenuItem.dontshowwhenInSystemMapPanelToolStripMenuItem: ".. when in System Map Panel" @
-.OrdertoolStripMenuItem: "Column Order.." @
-.OrdertoolStripMenuItem.orderDefaultToolStripMenuItem: "Default" @
-.OrdertoolStripMenuItem.orderNotesAfterXYZToolStripMenuItem: "Notes after XYZ" @
-.OrdertoolStripMenuItem.orderTargetDistanceXYZNotesToolStripMenuItem: "Target Distance,XYZ,Notes" @
-.configureEventFilterToolStripMenuItem: "Configure Event Filter.." @
-.configureFieldFilterToolStripMenuItem: "Configure Field Filter.." @
-.surfaceScanDetailsToolStripMenuItem: "Configure Scan Display.." @
-.surfaceScanDetailsToolStripMenuItem.scanNoToolStripMenuItem: "Do Not Show" @
-.surfaceScanDetailsToolStripMenuItem.scan15sToolStripMenuItem: "Show for 15s" @
-.surfaceScanDetailsToolStripMenuItem.scan30sToolStripMenuItem: "Show for 30s" @
-.surfaceScanDetailsToolStripMenuItem.scan60sToolStripMenuItem: "Show for 60s" @
-.surfaceScanDetailsToolStripMenuItem.scanUntilNextToolStripMenuItem: "Show until next scan" @
-.showInPositionToolStripMenuItem: "Set Scan Position.." @
-.showInPositionToolStripMenuItem.scanRightMenuItem: "To right" @
-.showInPositionToolStripMenuItem.scanLeftMenuItem: "To left" @
-.showInPositionToolStripMenuItem.scanAboveMenuItem: "Above" @
-.showInPositionToolStripMenuItem.scanBelowMenuItem: "Below" @
-.showInPositionToolStripMenuItem.scanOnTopMenuItem: "On top" @
-.Target: "Target" @
-.TVE: "View system on EDSM" @
-.SPF: "Summary Panel: Filter out fields" @
-.showCircumstellarZonesToolStripMenuItem: "Show Circumstellar Zones" @
+
+.showCircumstellarZonesToolStripMenuItem: "Show Habitable Zone" @
 .showCircumstellarZonesToolStripMenuItem.showMetalRichPlanetsToolStripMenuItem: "Metal Rich Planets" @
 .showCircumstellarZonesToolStripMenuItem.showWaterWorldsToolStripMenuItem: "Water Worlds" @
 .showCircumstellarZonesToolStripMenuItem.showEarthLikeToolStripMenuItem: "Earth Like" @
 .showCircumstellarZonesToolStripMenuItem.showAmmoniaWorldsToolStripMenuItem: "Ammonia Worlds" @
 .showCircumstellarZonesToolStripMenuItem.showIcyPlanetsToolStripMenuItem: "Icy Planets" @
-.dontShowInformationWhenToolStripMenuItem.completelyHideThePanelToolStripMenuItem: "Completely hide the Panel" @
-.dontShowInformationWhenToolStripMenuItem.dontshowwhenInPanelToolStripMenuItem: ".. when in a Panel" @
+
+.OrdertoolStripMenuItem.orderDefaultToolStripMenuItem: "Default" @
+.OrdertoolStripMenuItem.orderNotesAfterXYZToolStripMenuItem: "Notes after XYZ" @
+.OrdertoolStripMenuItem.orderTargetDistanceXYZNotesToolStripMenuItem: "Target Distance,XYZ,Notes" @
+
+.surfaceScanDetailsToolStripMenuItem.scanNoToolStripMenuItem: "Do Not Show" @
+.surfaceScanDetailsToolStripMenuItem.scan15sToolStripMenuItem: "Show for 15s" @
+.surfaceScanDetailsToolStripMenuItem.scan30sToolStripMenuItem: "Show for 30s" @
+.surfaceScanDetailsToolStripMenuItem.scan60sToolStripMenuItem: "Show for 60s" @
+.surfaceScanDetailsToolStripMenuItem.scanUntilNextToolStripMenuItem: "Show until next scan" @
+
+.showInPositionToolStripMenuItem.scanRightMenuItem: "To right" @
+.showInPositionToolStripMenuItem.scanLeftMenuItem: "To left" @
+.showInPositionToolStripMenuItem.scanAboveMenuItem: "Above" @
+.showInPositionToolStripMenuItem.scanBelowMenuItem: "Below" @
+.showInPositionToolStripMenuItem.scanOnTopMenuItem: "On top" @
+
+.dontShowInformationWhenToolStripMenuItem: "Don't show information when" @
+.dontShowInformationWhenToolStripMenuItem.showNothingWhenDockedtoolStripMenuItem: "docked or landed" @
+.dontShowInformationWhenToolStripMenuItem.dontshowwhenInGalaxyPanelToolStripMenuItem: "when in a panel" @
+.dontShowInformationWhenToolStripMenuItem.hideTitleToolStripMenuItem: "Hide the title when hidden" @
+
+.extButtonShowControl.ToolTip: "Configure overall settings" @
+.extButtonColumns.ToolTip: "Configure columns shown" @
+.extButtonColumnOrder.ToolTip: "Configure column order" @
+.extButtonHabZones.ToolTip: "Configure hab zone information" @
+.buttonFilter.ToolTip: "Select what journal events to show" @
+.buttonField.ToolTip: "Filter out events" @
+.extButtonScanShow.ToolTip: "Configure scan display" @
+.extButtoScanPos.ToolTip: "Set position of scan display" @
+.extButtonFont.ToolTip: "Font" @
+
+.Target: "Target" @
+.TVE: "View system on EDSM" @
+.SPF: "Summary Panel: Filter out fields" @
+
 
 SECTION UserControlStarDistance
 

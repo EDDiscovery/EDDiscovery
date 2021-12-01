@@ -487,6 +487,7 @@ namespace EDDiscovery
         UserControlSurveyor_bodiesfound, //  bodies found.
         UserControlSurveyor_fuel, //  bodies found.
         UserControlSurveyor_navroute, //  bodies found.
+        UserControlSurveyor_fsssignals,
 
         UserControlSysInfo_NoMissions, // No Missions
         UserControlSysInfo_NA, // N/A

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2017 EDDiscovery development team
+ * Copyright © 2016 - 2021 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -52,62 +52,71 @@ namespace EDDiscovery.UserControls
         private ExtButton[] dividers;
         private int dividercapture = -2;        //-2 not shown, -1 shown, >=0 captured
         private int divideroriginalxpos = -1;
+        private bool Config(long c) { return (config & c) != 0; }
+        private bool IsSurfaceScanOn { get { return Config(Configuration.showScan15s) || Config(Configuration.showScan30s) || Config(Configuration.showScan60s) || Config(Configuration.showScanIndefinite); } }
 
-        EliteDangerousCore.UIEvents.UIGUIFocus.Focus uistate = EliteDangerousCore.UIEvents.UIGUIFocus.Focus.NoFocus;
+        private int layoutorder = 0;
 
-        class Configuration         // SO many now we need to prepare for a Long
+        private EliteDangerousCore.UIEvents.UIGUIFocus.Focus uistate = EliteDangerousCore.UIEvents.UIGUIFocus.Focus.NoFocus;
+
+        class Configuration         
         {
-            public const long showInformation = 1;
-            public const long showEDSMButton = 2;
-            public const long showTime = 4;
-            public const long showDescription = 8;
-            public const long showNotes = 16;
-            public const long showXYZ = 32;
-            public const long showDistancePerStar = 64;
-            public const long showIcon = 128;
+            // general controls (note numbers are historical in the order they were first added)
 
-            public const long showaffectsTabs = showInformation | showEDSMButton | showTime | showDescription | showNotes | showXYZ | showDistancePerStar | showIcon;
-
-            public const long showDistancesOnFSDJumpsOnly = 1024;
+            public const long showSystemInformation = 1L << 32;
             public const long showTargetLine = 2048;
             public const long showBlackBoxAroundText = 4096;
             public const long showExpandOverColumns = 8192;
             public const long showNothingWhenDocked = 16384;
+            public const long showNothingWhenPanel = 1L << 34;
+            public const long showNoTitleWhenHidden = 1L << 36;
 
+            // column control
+
+            public const long showEDSMButton = 2;
+            public const long showTime = 4;
+            public const long showIcon = 128;
+            public const long showDescription = 8;
+            public const long showInformation = 1;
+            public const long showNotes = 16;
+            public const long showXYZ = 32;
+            public const long showDistancePerStar = 64;
+            public const long showDistancesOnFSDJumpsOnly = 1024;
+
+            // zone info
+
+            public const long showHabInformation = 1L << 33;
+            public const long showMetalRichZone = 1L << 40;
+            public const long showWaterWrldZone = 1L << 41;
+            public const long showEarthLikeZone = 1L << 42;
+            public const long showAmmonWrldZone = 1L << 43;
+            public const long showIcyPlanetZone = 1L << 44;
+
+            // scan show control
+
+            public const long showScanOff = 0;                    
             public const long showScan15s = 32768;
             public const long showScan30s = 65536;
             public const long showScan60s = 131072;
             public const long showScanIndefinite = 262144;
-            public const long showScanOff = 0;                    // this is not saved; but is a flag for the function to turn it off
 
+            // scan position control
             public const long showScanRight = 524288;
             public const long showScanLeft = 1048576;
             public const long showScanOnTop = 2097152;
             public const long showScanBelow = 4194304;
             public const long showScanAbove = 8388608;
-
-            public const long showSystemInformation = 1L << 32;
-            public const long showHabInformation = 1L << 33;
-            public const long showNothingWhenPanel = 1L << 34;
-			public const long showNoTitleWhenHidden = 1L << 36;
-			public const long showMetalRichZone = 1L << 40;
-			public const long showWaterWrldZone = 1L << 41;
-			public const long showEarthLikeZone = 1L << 42;
-			public const long showAmmonWrldZone = 1L << 43;
-			public const long showIcyPlanetZone = 1L << 44;
 		}
 
-        long config = Configuration.showTargetLine | Configuration.showEDSMButton | Configuration.showIcon | 
+        private long config = Configuration.showTargetLine | Configuration.showEDSMButton | Configuration.showIcon | 
                                                 Configuration.showTime | Configuration.showDescription |
                                                Configuration.showInformation | Configuration.showNotes | 
                                                 Configuration.showXYZ | Configuration.showDistancePerStar |
                                                Configuration.showScan15s | Configuration.showSystemInformation |
                                                Configuration.showScanRight;
 
-        bool Config(long c) { return (config & c) != 0; }
-        bool IsSurfaceScanOn { get { return Config(Configuration.showScan15s) || Config(Configuration.showScan30s) || Config(Configuration.showScan60s) || Config(Configuration.showScanIndefinite); } }
 
-        int layoutorder = 0;
+        #region Initialisation
 
         public UserControlSpanel()
         {
@@ -119,31 +128,9 @@ namespace EDDiscovery.UserControls
             DBBaseName = "SPanel";
 
             config = (long)(GetSetting("Config", (int)config)) | ((long)(GetSetting("ConfigH", (int)(config >> 32))) << 32);
-            toolStripMenuItemTargetLine.Checked = Config(Configuration.showTargetLine);
-            toolStripMenuItemTime.Checked = Config(Configuration.showTime);
-            EDSMButtonToolStripMenuItem.Checked = Config(Configuration.showEDSMButton);
-            iconToolStripMenuItem.Checked = Config(Configuration.showIcon);
-            showTargetToolStripMenuItem.Checked = Config(Configuration.showDistancePerStar);
-            showNotesToolStripMenuItem.Checked = Config(Configuration.showNotes);
-            showXYZToolStripMenuItem.Checked = Config(Configuration.showXYZ);
-            showDescriptionToolStripMenuItem.Checked = Config(Configuration.showDescription);
-            showInformationToolStripMenuItem.Checked = Config(Configuration.showInformation);
-            blackBoxAroundTextToolStripMenuItem.Checked = Config(Configuration.showBlackBoxAroundText);
-            showDistancesOnFSDJumpsOnlyToolStripMenuItem.Checked = Config(Configuration.showDistancesOnFSDJumpsOnly);
-            expandTextOverEmptyColumnsToolStripMenuItem.Checked = Config(Configuration.showExpandOverColumns);
-            showNothingWhenDockedtoolStripMenuItem.Checked = Config(Configuration.showNothingWhenDocked);
-            showSystemInformationToolStripMenuItem.Checked = Config(Configuration.showSystemInformation);
-            showCircumstellarZonesToolStripMenuItem.Checked = Config(Configuration.showHabInformation);
-			showMetalRichPlanetsToolStripMenuItem.Checked = Config(Configuration.showMetalRichZone);
-			showWaterWorldsToolStripMenuItem.Checked = Config(Configuration.showWaterWrldZone);
-			showEarthLikeToolStripMenuItem.Checked = Config(Configuration.showEarthLikeZone);
-			showAmmoniaWorldsToolStripMenuItem.Checked = Config(Configuration.showAmmonWrldZone);
-			showIcyPlanetsToolStripMenuItem.Checked = Config(Configuration.showIcyPlanetZone);
-            dontshowwhenInPanelToolStripMenuItem.Checked = Config(Configuration.showNothingWhenPanel);
-			completelyHideThePanelToolStripMenuItem.Checked = Config(Configuration.showNoTitleWhenHidden);
+            System.Diagnostics.Debug.WriteLine($"spanel config start {config}");
 
-            SetSurfaceScanBehaviour(null);
-            SetScanPosition(null);
+            SetSurfaceScanBehaviour();
             SetLayoutOrder(GetSetting("Layout", layoutorder),false);  // also resets the tab order
 
             scanhide.Tick += HideScanData;
@@ -165,9 +152,8 @@ namespace EDDiscovery.UserControls
                 catch { }
             }
 
-            displayfont = discoveryform.theme.GetFont;
-
-            pictureBox.ContextMenuStrip = contextMenuStrip;
+            displayfont = FontHelpers.GetFont(GetSetting("font", ""), discoveryform.theme.GetFont);
+            System.Diagnostics.Debug.WriteLine($"Spanel font {FontHelpers.GetFontSettingString(displayfont)}");
 
             string filter = GetSetting(dbFieldFilter, "");
             if (filter.Length > 0)
@@ -186,8 +172,11 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNewTarget += NewTarget;
             discoveryform.OnNewUIEvent += OnNewUIEvent;
 
-            BaseUtils.Translator.Instance.Translate(this);
-            BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
+            BaseUtils.Translator.Instance.Translate(toolTip, this);
+
+            rollUpPanelTop.PinState = GetSetting("PinState", true);
+            
+            // scantext = "kwkwkwkw\r\nwkwkwkwk\r\nwjqjqjw ro"; // for debug
         }
 
         public override void Closing()
@@ -204,6 +193,7 @@ namespace EDDiscovery.UserControls
             scanhide.Dispose();
             dividercheck.Dispose();
 
+            PutSetting("PinState", rollUpPanelTop.PinState);
             PutSetting("Config", (int)config);
             PutSetting("ConfigH", (int)(config>>32));
             PutSetting("Layout", layoutorder);
@@ -215,6 +205,7 @@ namespace EDDiscovery.UserControls
         public override void SetTransparency(bool on, Color curcol)
         {
             pictureBox.BackColor = this.BackColor = curcol;
+            rollUpPanelTop.Visible = !on;
             Display(current_historylist);
         }
 
@@ -224,6 +215,7 @@ namespace EDDiscovery.UserControls
                 Display(current_historylist);
         }
 
+        #endregion
 
         #region Display
 
@@ -310,7 +302,10 @@ namespace EDDiscovery.UserControls
                             rowpos = rowmargin + AddColText(0, 0, rowpos, str, textcolour, backcolour, null , firstdiscovery ? EDDiscovery.Icons.Controls.firstdiscover : null, "Shows if EDSM indicates your it's first discoverer").Location.Bottom;
                         }
 
-                        if (Config(Configuration.showHabInformation) && last != null)
+                        var zoneson = Config(Configuration.showHabInformation | Configuration.showMetalRichZone | Configuration.showWaterWrldZone |
+                                              Configuration.showEarthLikeZone | Configuration.showAmmonWrldZone | Configuration.showIcyPlanetZone);
+
+                        if (zoneson && last != null)
                         {
                             StarScan scan = hl.StarScan;
 
@@ -322,37 +317,37 @@ namespace EDDiscovery.UserControls
                             {
                                 JournalScan js = sn.StarNodes.Values[0].ScanData;
 
-                                if (showCircumstellarZonesToolStripMenuItem.Checked)
+                                if (Config(Configuration.showHabInformation))
                                 {
                                     string hz = js.CircumstellarZonesString(false, JournalScan.CZPrint.CZHab);
                                     res.AppendFormat(hz + Environment.NewLine);
                                 }
 
-                                if (showMetalRichPlanetsToolStripMenuItem.Checked)
+                                if (Config(Configuration.showMetalRichZone))
                                 {
                                     string hz = js.CircumstellarZonesString(false, JournalScan.CZPrint.CZMR);
                                     res.AppendFormat(hz + Environment.NewLine);
                                 }
 
-                                if (showWaterWorldsToolStripMenuItem.Checked)
+                                if (Config(Configuration.showWaterWrldZone))
                                 {
                                     string hz = js.CircumstellarZonesString(false, JournalScan.CZPrint.CZWW);
                                     res.AppendFormat(hz + Environment.NewLine);
                                 }
 
-                                if (showEarthLikeToolStripMenuItem.Checked)
+                                if (Config(Configuration.showEarthLikeZone))
                                 {
                                     string hz = js.CircumstellarZonesString(false, JournalScan.CZPrint.CZEL);
                                     res.AppendFormat(hz + Environment.NewLine);
                                 }
 
-                                if (showAmmoniaWorldsToolStripMenuItem.Checked)
+                                if (Config(Configuration.showAmmonWrldZone))
                                 {
                                     string hz = js.CircumstellarZonesString(false, JournalScan.CZPrint.CZAW);
                                     res.AppendFormat(hz + Environment.NewLine);
                                 }
 
-                                if (showIcyPlanetsToolStripMenuItem.Checked)
+                                if (Config(Configuration.showIcyPlanetZone))
                                 {
                                     string hz = js.CircumstellarZonesString(false, JournalScan.CZPrint.CZIP);
                                     res.AppendFormat(hz + Environment.NewLine);
@@ -395,6 +390,8 @@ namespace EDDiscovery.UserControls
             int initialrowpos = rowpos;
             int maxrowpos = rowpos;
 
+            bool showiffsdorconfigall = !Config(Configuration.showDistancesOnFSDJumpsOnly) || he.IsFSDCarrierJump;  // if this is off, or its a carrier jump
+
             if (Config(Configuration.showTime))
                 coldata.Add(EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(he.EventTimeUTC).ToString("HH:mm.ss"));
 
@@ -420,16 +417,15 @@ namespace EDDiscovery.UserControls
                 coldata.Add((he.SNC != null) ? he.SNC.Note.Replace("\r\n", " ") : "");
             }
 
-            bool showdistance = !Config(Configuration.showDistancesOnFSDJumpsOnly) || he.IsFSDCarrierJump;
 
             if (layoutorder == 2 && Config(Configuration.showDistancePerStar))
-                coldata.Add(showdistance ? DistToStar(he, tpos) : "");
+                coldata.Add(showiffsdorconfigall ? DistToStar(he, tpos) : "");
 
             if (Config(Configuration.showXYZ))
             {
-                coldata.Add((he.System.HasCoordinate && showdistance) ? he.System.X.ToString("0.00") : "");
-                coldata.Add((he.System.HasCoordinate && showdistance) ? he.System.Y.ToString("0.00") : "");
-                coldata.Add((he.System.HasCoordinate && showdistance) ? he.System.Z.ToString("0.00") : "");
+                coldata.Add((he.System.HasCoordinate && showiffsdorconfigall) ? he.System.X.ToString("0.00") : "");
+                coldata.Add((he.System.HasCoordinate && showiffsdorconfigall) ? he.System.Y.ToString("0.00") : "");
+                coldata.Add((he.System.HasCoordinate && showiffsdorconfigall) ? he.System.Z.ToString("0.00") : "");
             }
 
             if (layoutorder > 0 && Config(Configuration.showNotes))
@@ -438,19 +434,24 @@ namespace EDDiscovery.UserControls
             }
 
             if (layoutorder < 2 && Config(Configuration.showDistancePerStar))
-                coldata.Add(showdistance ? DistToStar(he, tpos) : "");
+                coldata.Add(showiffsdorconfigall ? DistToStar(he, tpos) : "");
 
             int colnum = 0;
 
             ExtendedControls.ExtPictureBox.ImageElement edsm = null;
 
-            if (Config(Configuration.showEDSMButton))
+            if (Config(Configuration.showEDSMButton) )
             {
-                Color backtext = (backcolour.IsFullyTransparent()) ? Color.Black : backcolour;
+                if (showiffsdorconfigall)
+                {
+                    Color backtext = (backcolour.IsFullyTransparent()) ? Color.Black : backcolour;
 
-                edsm = pictureBox.AddTextAutoSize(new Point(scanpostextoffset.X + columnpos[colnum++], rowpos), new Size(200, 200),
+                    edsm = pictureBox.AddTextAutoSize(new Point(scanpostextoffset.X + columnpos[colnum], rowpos), new Size(200, 200),
                                             "EDSM", displayfont, backtext, textcolour, 0.5F, he, "View system on EDSM".T(EDTx.UserControlSpanel_TVE));
-                edsm.SetAlternateImage(BaseUtils.BitMapHelpers.DrawTextIntoAutoSizedBitmap("EDSM", new Size(200,200), displayfont, backtext, textcolour.Multiply(1.2F), 0.5F), edsm.Location, true);
+                    edsm.SetAlternateImage(BaseUtils.BitMapHelpers.DrawTextIntoAutoSizedBitmap("EDSM", new Size(200, 200), displayfont, backtext, textcolour.Multiply(1.2F), 0.5F), edsm.Location, true);
+                }
+
+                colnum++;
             }
 
             string tooltip = he.EventSummary + Environment.NewLine + EventDescription + Environment.NewLine + EventDetailedInfo;
@@ -504,7 +505,7 @@ namespace EDDiscovery.UserControls
                         scanpostextoffset = new Point(4 + scanimg.Image.Width + 4, 0);
                         RequestTemporaryMinimumSize(new Size(scanimg.Image.Width + 8, scanimg.Image.Height + 4));
                     }
-                    else if (Config(Configuration.showScanAbove))
+                    else if (Config(Configuration.showScanAbove))     // if above, NOT transparent (can't do on top)
                     {
                         ExtPictureBox.ImageElement scanimg = pictureBox.AddTextAutoSize(new Point(4, 0), maxscansize, scantext, displayfont, textcolour, backcolour, 1.0F, "SCAN");
                         scanpostextoffset = new Point(0, scanimg.Image.Height + 4);
@@ -513,18 +514,9 @@ namespace EDDiscovery.UserControls
                     else if (Config(Configuration.showScanOnTop))
                     {
                         ExtPictureBox.ImageElement scanimg = pictureBox.AddTextAutoSize(new Point(4, 0), maxscansize, scantext, displayfont, textcolour, backcolour, 1.0F, "SCAN");
-#if false
 
-                        using (Graphics gr = Graphics.FromImage(scanimg.img))
-                        {
-                            using (Pen p1 = new Pen(Color.Red, 1.0F))
-                            {
-                                for (int i = 0; i < 1000; i += 50)
-                                    gr.DrawLine(p1, new Point(0, i), new Point(100, i));
-                            }
-                        }
-#endif
-                        RequestTemporaryResize(new Size(scanimg.Image.Width + 8, scanimg.Image.Height + 4 ));        // match exactly to use minimum space
+                        if ( IsTransparent )        // if transparent, the roll up panel is not visible, we can set the whole size to the text
+                            RequestTemporaryResize(new Size(scanimg.Image.Width + 8, scanimg.Image.Height + 4 ));        // match exactly to use minimum space
                         return true;
                     }
                 }
@@ -737,12 +729,18 @@ namespace EDDiscovery.UserControls
                 ShowDividers(false);
         }
 
+        private void panelControls_MouseEnter(object sender, EventArgs e)
+        {
+            if (dividercapture == -1)
+                ShowDividers(false);
+        }
+
         private void ShowDividers(bool show)
         {
             foreach (ExtButton p in dividers)
                 p.Visible = false;
 
-            //System.Diagnostics.Debug.WriteLine("Dividers " + show);
+           // System.Diagnostics.Debug.WriteLine($"Dividers {show}");
             if (show)
             {
                 dividercapture = -1;
@@ -750,7 +748,7 @@ namespace EDDiscovery.UserControls
                 for (int i = 1; i < columnpos.Count; i++)              // bring up the number of dividers needed
                 {
                     ExtButton b = dividers[i - 1];
-                    b.Location = new Point(scanpostextoffset.X + columnpos[i] - b.Width/2, 0);
+                    b.Location = new Point(scanpostextoffset.X + columnpos[i] - b.Width/2, pictureBox.Top);
                     b.ButtonColorScaling = 1.0F;
                     if (b.FlatStyle == FlatStyle.System)            // System can't do bitmaps.. we need standard.
                         b.FlatStyle = FlatStyle.Standard;
@@ -826,7 +824,7 @@ namespace EDDiscovery.UserControls
             {
                 scantext = scan.DisplayString(0,historicmatlist: discoveryform.history.MaterialCommoditiesMicroResources.GetLast());
                 Display(current_historylist);
-                SetSurfaceScanBehaviour(null);  // set up timers etc.
+                SetSurfaceScanBehaviour();  // set up timers etc.
             }
         }
 
@@ -844,190 +842,129 @@ namespace EDDiscovery.UserControls
 
         #region Config
 
-        Point initialopenposcm;
-        private void contextMenuStrip_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        void SetLayoutOrder(int n , bool refresh = false)
         {
-            initialopenposcm = MousePosition;
+            layoutorder = n;
+            ResetTabList();
+
+            if (refresh)
+            {
+                ShowDividers(false);
+                Display(current_historylist);
+            }
         }
 
-        private void showSystemInformationToolStripMenuItem_Click(object sender, EventArgs e)
+        private void SetSurfaceScanBehaviour()    
         {
-            FlipConfig(Configuration.showSystemInformation, ((ToolStripMenuItem)sender).Checked, true);
+            scanhide.Stop();
+
+            if (Config(Configuration.showScan15s)) 
+                scanhide.Interval = 15000;
+            else if (Config(Configuration.showScan30s)) 
+                scanhide.Interval = 30000;
+            else if (Config(Configuration.showScan60s)) 
+                scanhide.Interval = 60000;
+            else 
+                scanhide.Interval = int.MaxValue;  // i know its not infinite, but are we going to be having it open this long, and it saves code !
+
+            if (!IsSurfaceScanOn)
+                HideScanData(null, null);
+            else if ( scantext != null )
+                scanhide.Start();
         }
 
-        private void showHabitationMinimumAndMaximumDistanceToolStripMenuItem_Click(object sender, EventArgs e)
+        #endregion
+
+        #region Toolbar UI
+
+        private void extButtonShowControl_Click(object sender, EventArgs e)
         {
-            FlipConfig(Configuration.showHabInformation, ((ToolStripMenuItem)sender).Checked, true);
+            ExtendedControls.CheckedIconListBoxFormGroup displayfilter = new CheckedIconListBoxFormGroup();
+
+            displayfilter.AddAllNone();
+            displayfilter.AddStandardOption(Configuration.showSystemInformation, "Show System Information".TxID("UserControlSpanel.showSystemInformationToolStripMenuItem"));
+            displayfilter.AddStandardOption(Configuration.showTargetLine, "Show Target Line".TxID("UserControlSpanel.toolStripMenuItemTargetLine"));
+            displayfilter.AddStandardOption(Configuration.showBlackBoxAroundText, "Show black box around text".TxID("UserControlSpanel.blackBoxAroundTextToolStripMenuItem"));
+            displayfilter.AddStandardOption(Configuration.showExpandOverColumns, "Expand text over empty columns".TxID("UserControlSpanel.expandTextOverEmptyColumnsToolStripMenuItem"));
+
+            string dontshow = "Don't show information when".TxID("UserControlSpanel.dontShowInformationWhenToolStripMenuItem") + " ";
+            displayfilter.AddStandardOption(Configuration.showNothingWhenDocked, dontshow + "docked or landed".TxID("UserControlSpanel.dontShowInformationWhenToolStripMenuItem.showNothingWhenDockedtoolStripMenuItem"));
+            displayfilter.AddStandardOption(Configuration.showNothingWhenPanel, dontshow + "when in a panel".TxID("UserControlSpanel.dontShowInformationWhenToolStripMenuItem.dontshowwhenInGalaxyPanelToolStripMenuItem"));
+            displayfilter.AddStandardOption(Configuration.showNoTitleWhenHidden, "Hide the title when hidden".TxID("UserControlSpanel.dontShowInformationWhenToolStripMenuItem.hideTitleToolStripMenuItem"));
+
+            CommonCtrl(displayfilter,extButtonShowControl);
         }
 
-		private void showMetalRichPlanetsToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			FlipConfig(Configuration.showMetalRichZone, ((ToolStripMenuItem)sender).Checked, true);
-		}
-
-		private void showWaterWorldsToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			FlipConfig(Configuration.showWaterWrldZone, ((ToolStripMenuItem)sender).Checked, true);
-		}
-
-		private void showEarthLikeToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			FlipConfig(Configuration.showEarthLikeZone, ((ToolStripMenuItem)sender).Checked, true);
-		}
-
-		private void showAmmoniaWorldsToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			FlipConfig(Configuration.showAmmonWrldZone, ((ToolStripMenuItem)sender).Checked, true);
-		}
-
-		private void showIcyPlanetsToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			FlipConfig(Configuration.showIcyPlanetZone, ((ToolStripMenuItem)sender).Checked, true);
-		}
-
-        private void toolStripMenuItemTargetLine_Click(object sender, EventArgs e)
+        private void extButtonColumns_Click(object sender, EventArgs e)
         {
-            FlipConfig(Configuration.showTargetLine, ((ToolStripMenuItem)sender).Checked, true);
+            ExtendedControls.CheckedIconListBoxFormGroup displayfilter = new CheckedIconListBoxFormGroup();
+            displayfilter.AddAllNone();
+            displayfilter.AddStandardOption(Configuration.showEDSMButton, "Show EDSM Button".TxID("UserControlSpanel.EDSMButtonToolStripMenuItem"));
+            displayfilter.AddStandardOption(Configuration.showTime, "Show Time".TxID("UserControlSpanel.toolStripMenuItemTime"));
+            displayfilter.AddStandardOption(Configuration.showIcon, "Show Event Icon".TxID("UserControlSpanel.iconToolStripMenuItem"));
+            displayfilter.AddStandardOption(Configuration.showDescription, "Show Description".TxID("UserControlSpanel.showDescriptionToolStripMenuItem"));
+            displayfilter.AddStandardOption(Configuration.showInformation, "Show Information".TxID("UserControlSpanel.showInformationToolStripMenuItem"));
+            displayfilter.AddStandardOption(Configuration.showNotes, "Show Notes".TxID("UserControlSpanel.showNotesToolStripMenuItem"));
+            displayfilter.AddStandardOption(Configuration.showXYZ, "Show XYZ".TxID("UserControlSpanel.showXYZToolStripMenuItem"));
+            displayfilter.AddStandardOption(Configuration.showDistancePerStar, "Show Target Distance per Star".TxID("UserControlSpanel.showTargetToolStripMenuItem"));
+            displayfilter.AddStandardOption(Configuration.showDistancesOnFSDJumpsOnly, "Show Distances/Coords on FSD Jumps Only".TxID("UserControlSpanel.showDistancesOnFSDJumpsOnlyToolStripMenuItem"));
+            CommonCtrl(displayfilter,extButtonColumns);
         }
 
-        private void EDSMButtonToolStripMenuItem_Click(object sender, EventArgs e)
+        private void extButtonHabZones_Click(object sender, EventArgs e)
         {
-            FlipConfig(Configuration.showEDSMButton, ((ToolStripMenuItem)sender).Checked, true);
+            ExtendedControls.CheckedIconListBoxFormGroup displayfilter = new CheckedIconListBoxFormGroup();
+            displayfilter.AddAllNone();
+            displayfilter.AddStandardOption(Configuration.showHabInformation, "Show Habitation Zone".TxID("UserControlSpanel.showCircumstellarZonesToolStripMenuItem"));
+            displayfilter.AddStandardOption(Configuration.showMetalRichZone, "Show Metal Rich Planet Zone".TxID("UserControlSpanel.showCircumstellarZonesToolStripMenuItem.showMetalRichPlanetsToolStripMenuItem"));
+            displayfilter.AddStandardOption(Configuration.showWaterWrldZone, "Show Water World Zone".TxID("UserControlSpanel.showCircumstellarZonesToolStripMenuItem.showWaterWorldsToolStripMenuItem"));
+            displayfilter.AddStandardOption(Configuration.showEarthLikeZone, "Show Earth Like Zone".TxID("UserControlSpanel.showCircumstellarZonesToolStripMenuItem.showEarthLikeToolStripMenuItem"));
+            displayfilter.AddStandardOption(Configuration.showAmmonWrldZone, "Show Ammonia Worlds Zone".TxID("UserControlSpanel.showCircumstellarZonesToolStripMenuItem.showAmmoniaWorldsToolStripMenuItem"));
+            displayfilter.AddStandardOption(Configuration.showIcyPlanetZone, "Show Icy Planets Zone".TxID("UserControlSpanel.showCircumstellarZonesToolStripMenuItem.showIcyPlanetsToolStripMenuItem"));
+            CommonCtrl(displayfilter,extButtonHabZones);
         }
 
-        private void iconToolStripMenuItem_Click(object sender, EventArgs e)
+        private void CommonCtrl(CheckedIconListBoxFormGroup displayfilter, Control button)
         {
-            FlipConfig(Configuration.showIcon, ((ToolStripMenuItem)sender).Checked, true);
+            displayfilter.AllOrNoneBack = false;
+            displayfilter.ScreenMargin = new Size(0, 0);
+
+            displayfilter.SaveSettings = (s, o) =>
+            {
+                long v = CheckedIconListBoxFormGroup.SettingsStringToLong(s);
+                config = (config & ~displayfilter.LongConfigurationValue) | v;
+                System.Diagnostics.Debug.WriteLine($"Spanel config back is {v:X}, result {config:X}");
+                ResetTabList();
+                ShowDividers(false);
+                Display(current_historylist);
+            };
+
+            System.Diagnostics.Debug.WriteLine($"Spanel config in {config:X}");
+            displayfilter.Show(config & displayfilter.LongConfigurationValue, button, this.FindForm());
+
         }
 
-        private void toolStripMenuItemTime_Click(object sender, EventArgs e)
+        private void extButtonColumnOrder_Click(object sender, EventArgs e)
         {
-            FlipConfig(Configuration.showTime, ((ToolStripMenuItem)sender).Checked, true);
+            ExtendedControls.CheckedIconListBoxFormGroup displayfilter = new CheckedIconListBoxFormGroup();
+            displayfilter.AddStandardOption(0, "Default".TxID("UserControlSpanel.OrdertoolStripMenuItem.orderDefaultToolStripMenuItem"), null, "All", true);
+            displayfilter.AddStandardOption(1, "Notes after XYZ".TxID("UserControlSpanel.OrdertoolStripMenuItem.orderNotesAfterXYZToolStripMenuItem"), null, "All", true);
+            displayfilter.AddStandardOption(2, "Target Distance, XYZ, Notes".TxID("UserControlSpanel.OrdertoolStripMenuItem.orderTargetDistanceXYZNotesToolStripMenuItem"), null, "All", true);
+            displayfilter.AllOrNoneBack = false;
+            displayfilter.CloseOnChange = true;
+            displayfilter.ScreenMargin = new Size(0, 0);
+            displayfilter.SaveSettings = (s, o) =>
+            {
+                var lr = s.Replace(";", "").InvariantParseInt(0);
+                SetLayoutOrder(lr,true);
+            };
+
+            displayfilter.Show(layoutorder.ToStringInvariant(), extButtonColumnOrder, this.FindForm());
         }
 
-        private void showDescriptionToolStripMenuItem_Click(object sender, EventArgs e)
+        private void buttonFilter_Click(object sender, EventArgs e)
         {
-            FlipConfig(Configuration.showDescription, ((ToolStripMenuItem)sender).Checked, true);
-        }
-
-        private void showInformationToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            FlipConfig(Configuration.showInformation, ((ToolStripMenuItem)sender).Checked, true);
-        }
-
-        private void showNotesToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            FlipConfig(Configuration.showNotes, ((ToolStripMenuItem)sender).Checked, true);
-        }
-
-        private void showXYZToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            FlipConfig(Configuration.showXYZ, ((ToolStripMenuItem)sender).Checked, true);
-        }
-
-        private void showTargetToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            FlipConfig(Configuration.showDistancePerStar, ((ToolStripMenuItem)sender).Checked, true);
-        }
-
-        private void blackBoxAroundTextToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            FlipConfig(Configuration.showBlackBoxAroundText, ((ToolStripMenuItem)sender).Checked, true);
-        }
-
-        private void showDistancesOnFSDJumpsOnlyToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            FlipConfig(Configuration.showDistancesOnFSDJumpsOnly, ((ToolStripMenuItem)sender).Checked, true);
-        }
-
-        private void showNothingWhenDockedtoolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            FlipConfig(Configuration.showNothingWhenDocked, ((ToolStripMenuItem)sender).Checked, true);
-        }
-        private void dontshowwhenInGalaxyPanelToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            FlipConfig(Configuration.showNothingWhenPanel, ((ToolStripMenuItem)sender).Checked, true);
-        }
-
-		private void completelyHideThePanelToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			FlipConfig(Configuration.showNoTitleWhenHidden, ((ToolStripMenuItem)sender).Checked, true);
-		}
-
-        private void expandTextOverEmptyColumnsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            FlipConfig(Configuration.showExpandOverColumns, ((ToolStripMenuItem)sender).Checked, true);
-        }
-
-        private void defaultToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            SetLayoutOrder(0, true);
-        }
-
-        private void notesAfterXYZToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            SetLayoutOrder(1, true);
-        }
-
-        private void targetDistanceXYZNotesToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            SetLayoutOrder(2, true);
-        }
-
-
-        private void scanNoToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            SetSurfaceScanBehaviour(Configuration.showScanOff);
-        }
-
-        private void scan15sToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            SetSurfaceScanBehaviour(Configuration.showScan15s);
-        }
-
-        private void scan30sToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            SetSurfaceScanBehaviour(Configuration.showScan30s);
-        }
-
-        private void scan60sToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            SetSurfaceScanBehaviour(Configuration.showScan60s);
-        }
-
-        private void scanUntilNextToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            SetSurfaceScanBehaviour(Configuration.showScanIndefinite);
-        }
-		
-        private void scanRightMenuItem_Click(object sender, EventArgs e)
-        {
-            SetScanPosition(Configuration.showScanRight);
-        }
-
-        private void scanLeftMenuItem_Click(object sender, EventArgs e)
-        {
-            SetScanPosition(Configuration.showScanLeft);
-        }
-
-        private void scanAboveMenuItem_Click(object sender, EventArgs e)
-        {
-            SetScanPosition(Configuration.showScanAbove);
-        }
-
-        private void scanBelowMenuItem_Click(object sender, EventArgs e)
-        {
-            SetScanPosition(Configuration.showScanBelow);
-        }
-
-        private void scanOnTopMenuItem_Click(object sender, EventArgs e)
-        {
-            SetScanPosition(Configuration.showScanOnTop);
-        }
-
-        private void configureEventFilterToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            cfs.Open(GetSetting(dbFilter,"All"), initialopenposcm, this.FindForm());
+            cfs.Open(GetSetting(dbFilter, "All"), buttonFilter, this.FindForm());
         }
 
         private void EventFilterChanged(string newset, Object e)
@@ -1040,7 +977,7 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void configureFieldFilterToolStripMenuItem_Click(object sender, EventArgs e)
+        private void buttonField_Click(object sender, EventArgs e)
         {
             BaseUtils.ConditionLists res = HistoryFilterHelpers.ShowDialog(FindForm(), fieldfilter, discoveryform, "Summary Panel: Filter out fields".T(EDTx.UserControlSpanel_SPF));
             if (res != null)
@@ -1051,89 +988,60 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        void FlipConfig(long item, bool ch , bool redisplay = false)
+        private void extButtonScanShow_Click(object sender, EventArgs e)
         {
-            if (ch)
-                config |= item;
-            else
-                config &= ~item;
-
-            if ((item & Configuration.showaffectsTabs)!=0)
+            ExtendedControls.CheckedIconListBoxFormGroup displayfilter = new CheckedIconListBoxFormGroup();
+            displayfilter.AddStandardOption(Configuration.showScanOff, "Do not show".TxID("UserControlSpanel.surfaceScanDetailsToolStripMenuItem.scanNoToolStripMenuItem"), null, "All", true);
+            displayfilter.AddStandardOption(Configuration.showScan15s, "Show for 15s".TxID("UserControlSpanel.surfaceScanDetailsToolStripMenuItem.scan15sToolStripMenuItem"), null, "All", true);
+            displayfilter.AddStandardOption(Configuration.showScan30s, "Show for 30s".TxID("UserControlSpanel.surfaceScanDetailsToolStripMenuItem.scan30sToolStripMenuItem"), null, "All", true);
+            displayfilter.AddStandardOption(Configuration.showScan60s, "Show for 60s".TxID("UserControlSpanel.surfaceScanDetailsToolStripMenuItem.scan60sToolStripMenuItem"), null, "All", true);
+            displayfilter.AddStandardOption(Configuration.showScanIndefinite, "Show until next scan".TxID("UserControlSpanel.surfaceScanDetailsToolStripMenuItem.scanUntilNextToolStripMenuItem"), null, "All", true);
+            displayfilter.AllOrNoneBack = false;
+            displayfilter.CloseOnChange = true;
+            displayfilter.ScreenMargin = new Size(0, 0);
+            displayfilter.SaveSettings = (s, o) =>
             {
-                ResetTabList();
-                ShowDividers(false);
-            }
+                long v = CheckedIconListBoxFormGroup.SettingsStringToLong(s);
+                config = (config & ~displayfilter.LongConfigurationValue) | v;
+                SetSurfaceScanBehaviour();
+            };
 
-            if (redisplay)
-                Display(current_historylist);
+            displayfilter.Show(config & displayfilter.LongConfigurationValue , extButtonScanShow, this.FindForm(), null, 0);
+
         }
 
-        void SetLayoutOrder(int n , bool refresh = false)
+        private void extButtoScanPos_Click(object sender, EventArgs e)
         {
-            layoutorder = n;
-            orderDefaultToolStripMenuItem.Checked = layoutorder == 0;
-            orderNotesAfterXYZToolStripMenuItem.Checked = layoutorder == 1;
-            orderTargetDistanceXYZNotesToolStripMenuItem.Checked = layoutorder == 2;
-
-            ResetTabList();
-
-            if (refresh)
+            ExtendedControls.CheckedIconListBoxFormGroup displayfilter = new CheckedIconListBoxFormGroup();
+            displayfilter.AddStandardOption(Configuration.showScanRight, "Scan right".TxID("UserControlSpanel.showInPositionToolStripMenuItem.scanRightMenuItem"), null, "All", true);
+            displayfilter.AddStandardOption(Configuration.showScanLeft, "Scan left".TxID("UserControlSpanel.showInPositionToolStripMenuItem.scanLeftMenuItem"), null, "All", true);
+            displayfilter.AddStandardOption(Configuration.showScanAbove, "Scan above".TxID("UserControlSpanel.showInPositionToolStripMenuItem.scanAboveMenuItem"), null, "All", true);
+            displayfilter.AddStandardOption(Configuration.showScanBelow, "Scan below".TxID("UserControlSpanel.showInPositionToolStripMenuItem.scanBelowMenuItem"), null, "All", true);
+            displayfilter.AddStandardOption(Configuration.showScanOnTop, "Scan on top".TxID("UserControlSpanel.showInPositionToolStripMenuItem.scanOnTopMenuItem"), null, "All", true);
+            displayfilter.AllOrNoneBack = false;
+            displayfilter.CloseOnChange = true;
+            displayfilter.ScreenMargin = new Size(0, 0);
+            displayfilter.SaveSettings = (s, o) =>
             {
-                ShowDividers(false);
-                Display(current_historylist);
-            }
+                long v = CheckedIconListBoxFormGroup.SettingsStringToLong(s);
+                config = (config & ~displayfilter.LongConfigurationValue) | v;
+                if (scantext != null)
+                {
+                    Display(current_historylist);
+                }
+            };
+
+            displayfilter.Show(config & displayfilter.LongConfigurationValue, extButtoScanPos, this.FindForm(), null, 0);
         }
 
-        private void SetSurfaceScanBehaviour(long? itemClicked)    // pass in a 
+        private void extButtonFont_Click(object sender, EventArgs e)
         {
-            if (itemClicked.HasValue)
-            {
-                FlipConfig(Configuration.showScan15s, itemClicked == Configuration.showScan15s);
-                FlipConfig(Configuration.showScan30s, itemClicked == Configuration.showScan30s);
-                FlipConfig(Configuration.showScan60s, itemClicked == Configuration.showScan60s);
-                FlipConfig(Configuration.showScanIndefinite, itemClicked == Configuration.showScanIndefinite);
-            }
-
-            scanNoToolStripMenuItem.Checked = !IsSurfaceScanOn;
-            scan15sToolStripMenuItem.Checked = Config(Configuration.showScan15s);
-            scan30sToolStripMenuItem.Checked = Config(Configuration.showScan30s);
-            scan60sToolStripMenuItem.Checked = Config(Configuration.showScan60s);
-            scanUntilNextToolStripMenuItem.Checked = Config(Configuration.showScanIndefinite);
-
-            scanhide.Stop();
-
-            if (Config(Configuration.showScan15s)) scanhide.Interval = 15000;
-            else if (Config(Configuration.showScan30s)) scanhide.Interval = 30000;
-            else if (Config(Configuration.showScan60s)) scanhide.Interval = 60000;
-            else scanhide.Interval = int.MaxValue;  // i know its not infinite, but are we going to be having it open this long, and it saves code !
-
-            if (!IsSurfaceScanOn)
-                HideScanData(null, null);
-            else if ( scantext != null )
-                scanhide.Start();
-        }
-
-        private void SetScanPosition(long? position)
-        {
-            if (position.HasValue)
-            {
-                FlipConfig(Configuration.showScanLeft,  position.Value == Configuration.showScanLeft);
-                FlipConfig(Configuration.showScanRight, position.Value == Configuration.showScanRight);
-                FlipConfig(Configuration.showScanOnTop, position.Value == Configuration.showScanOnTop);
-                FlipConfig(Configuration.showScanBelow, position.Value == Configuration.showScanBelow);
-                FlipConfig(Configuration.showScanAbove, position.Value == Configuration.showScanAbove);
-            }
-
-            scanRightMenuItem.Checked = Config(Configuration.showScanRight);
-            scanLeftMenuItem.Checked = Config(Configuration.showScanLeft);
-            scanOnTopMenuItem.Checked = Config(Configuration.showScanOnTop);
-            scanBelowMenuItem.Checked = Config(Configuration.showScanBelow);
-            scanAboveMenuItem.Checked = Config(Configuration.showScanAbove);
-
-            if ( scantext!=null)
-            {
-                Display(current_historylist);
-            }
+            Font f = FontHelpers.FontSelection(this.FindForm(), displayfont);
+            string setting = FontHelpers.GetFontSettingString(f);
+            System.Diagnostics.Debug.WriteLine($"Spanel Font selected {setting}");
+            PutSetting("font", setting);
+            displayfont = f != null ? f : discoveryform.theme.GetFont;
+            Display(current_historylist);
         }
 
         #endregion

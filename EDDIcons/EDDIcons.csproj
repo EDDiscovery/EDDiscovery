@@ -537,6 +537,7 @@
     <EmbeddedResource Include="Controls\notfirstdiscover.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Controls\ScanPosition.png" />
     <EmbeddedResource Include="Controls\Font.png" />
     <EmbeddedResource Include="Controls\Scan\Bodies\LandablePlanet.png" />
     <EmbeddedResource Include="Controls\Eccentric.png" />
@@ -1039,6 +1040,8 @@
     <EmbeddedResource Include="Controls\ImportSphere.png" />
     <EmbeddedResource Include="Controls\ImportNavRoute.png" />
     <EmbeddedResource Include="Controls\ImportNavRouteLatest.png" />
+    <EmbeddedResource Include="Controls\Columns.png" />
+    <EmbeddedResource Include="Controls\ColumnOrder.png" />
     <Content Include="Controls\readme.txt" />
     <EmbeddedResource Include="Panels\MissionOverlay.png" />
     <EmbeddedResource Include="Journal\CrimeVictim.png" />

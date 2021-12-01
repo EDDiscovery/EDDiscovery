@@ -92,12 +92,12 @@ namespace EDDiscovery.UserControls
             this.extButtonImportFile = new ExtendedControls.ExtButton();
             this.extButtonImportRoute = new ExtendedControls.ExtButton();
             this.extButtonImportNavRoute = new ExtendedControls.ExtButton();
+            this.extButtonNavRouteLatest = new ExtendedControls.ExtButton();
             this.extButtonAddSystems = new ExtendedControls.ExtButton();
             this.buttonExtExport = new ExtendedControls.ExtButton();
             this.extButtonShow3DMap = new ExtendedControls.ExtButton();
             this.extButtonDisplayFilters = new ExtendedControls.ExtButton();
             this.checkBoxEDSM = new ExtendedControls.ExtCheckBox();
-            this.extButtonNavRouteLatest = new ExtendedControls.ExtButton();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.contextMenuCopyPaste.SuspendLayout();
@@ -711,9 +711,22 @@ namespace EDDiscovery.UserControls
             this.extButtonImportNavRoute.Name = "extButtonImportNavRoute";
             this.extButtonImportNavRoute.Size = new System.Drawing.Size(28, 28);
             this.extButtonImportNavRoute.TabIndex = 29;
-            this.toolTip.SetToolTip(this.extButtonImportNavRoute, "Import last Nav Route");
+            this.toolTip.SetToolTip(this.extButtonImportNavRoute, "Import a Nav Route");
             this.extButtonImportNavRoute.UseVisualStyleBackColor = false;
             this.extButtonImportNavRoute.Click += new System.EventHandler(this.extButtonImportNavRoute_Click);
+            // 
+            // extButtonNavRouteLatest
+            // 
+            this.extButtonNavRouteLatest.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.extButtonNavRouteLatest.Image = global::EDDiscovery.Icons.Controls.ImportNavRouteLatest;
+            this.extButtonNavRouteLatest.Location = new System.Drawing.Point(288, 1);
+            this.extButtonNavRouteLatest.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.extButtonNavRouteLatest.Name = "extButtonNavRouteLatest";
+            this.extButtonNavRouteLatest.Size = new System.Drawing.Size(28, 28);
+            this.extButtonNavRouteLatest.TabIndex = 34;
+            this.toolTip.SetToolTip(this.extButtonNavRouteLatest, "Import Latest Nav Route");
+            this.extButtonNavRouteLatest.UseVisualStyleBackColor = true;
+            this.extButtonNavRouteLatest.Click += new System.EventHandler(this.extButtonNavLatest_Click);
             // 
             // extButtonAddSystems
             // 
@@ -799,19 +812,6 @@ namespace EDDiscovery.UserControls
             this.checkBoxEDSM.TickBoxReductionRatio = 0.75F;
             this.toolTip.SetToolTip(this.checkBoxEDSM, "Show/Hide Body data from EDSM.");
             this.checkBoxEDSM.UseVisualStyleBackColor = false;
-            // 
-            // extButtonNavRouteLatest
-            // 
-            this.extButtonNavRouteLatest.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.extButtonNavRouteLatest.Image = global::EDDiscovery.Icons.Controls.ImportNavRouteLatest;
-            this.extButtonNavRouteLatest.Location = new System.Drawing.Point(288, 1);
-            this.extButtonNavRouteLatest.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
-            this.extButtonNavRouteLatest.Name = "extButtonNavRouteLatest";
-            this.extButtonNavRouteLatest.Size = new System.Drawing.Size(28, 28);
-            this.extButtonNavRouteLatest.TabIndex = 34;
-            this.toolTip.SetToolTip(this.extButtonNavRouteLatest, "Import Latest Nav Route");
-            this.extButtonNavRouteLatest.UseVisualStyleBackColor = true;
-            this.extButtonNavRouteLatest.Click += new System.EventHandler(this.extButtonNavLatest_Click);
             // 
             // UserControlExpedition
             // 

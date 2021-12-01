@@ -232,6 +232,9 @@ namespace EDDiscovery.Icons
         public static Image RouteConfig { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.RouteConfig"); } }
         public static Image Eccentric { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Eccentric"); } }
         public static Image Font { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Font"); } }
+        public static Image Columns { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Columns"); } }
+        public static Image ColumnOrder { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.ColumnOrder"); } }
+        public static Image ScanPosition { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.ScanPosition"); } }
 
     }
 }
