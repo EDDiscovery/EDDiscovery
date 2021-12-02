@@ -261,14 +261,20 @@ SECTION UserControlExpedition
 
 SECTION UserControlJournalGrid
 
-.JHF: "Journal: Filter out fields" @
 .ColumnTime: "Time" @
 .Event: "Event" @
 .ColumnType: "Description" @
 .ColumnText: "Information" @
-.checkBoxMoveToTop: "Cursor to Top" @
-.labelSearch: "Search" @
+
 .labelTime: "Time" @
+.comboBoxTime.ToolTip: "Select the entries selected by age" @
+.labelSearch: "Search" @
+.textBoxSearch.ToolTip: "Enter text to search in any fields for an item" @
+.buttonExtExcel.ToolTip: "Send data on grid to excel" @
+.checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" @
+.buttonFilter.ToolTip: "Filter out entries based on event type" @
+.textBoxFilter.ToolTip: "Enter text to search in any fields for an item" @
+
 .removeSortingOfColumnsToolStripMenuItem: "Remove sorting of columns" @
 .jumpToEntryToolStripMenuItem: "Jump to Entry" @
 .mapGotoStartoolStripMenuItem: "Go to star on 3D Map" @
@@ -277,6 +283,7 @@ SECTION UserControlJournalGrid
 .sendUnsyncedScanToEDDNToolStripMenuItem: "Send unsynced scan to EDDN" @
 .runActionsOnThisEntryToolStripMenuItem: "Run Actions on this entry" @
 .copyJournalEntryToClipboardToolStripMenuItem: "Copy journal entry to clipboard" @
+
 .TT1: " showing {0} original {1}" @
 .TTFilt1: "Filtered {0}" @
 .TTSelAge: "Select the entries by age, " @
@@ -284,12 +291,8 @@ SECTION UserControlJournalGrid
 .TTEvent: "Filter out entries based on event type, " @
 .TTFilt3: "Total filtered out {0}" @
 .TTTotal: "Filter out entries matching the field selection, " @
+.JHF: "Journal: Filter out fields" @
 .NotSynced: "System could not be found - has not been synched or EDSM is unavailable" @
-.checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" @
-.buttonExtExcel.ToolTip: "Send data on grid to excel" @
-.textBoxFilter.ToolTip: "Enter text to search in any fields for an item" @
-.buttonFilter.ToolTip: "Filter out entries based on event type" @
-.comboBoxJournalWindow.ToolTip: "Select the entries selected by age" @
 
 SECTION UserControlLedger
 
@@ -734,56 +737,35 @@ SECTION UserControlScan
 
 SECTION UserControlScanGrid
 
-.Geologicalactivity: "Geological activity" @
-.Surfacemapped: "Surface mapped" @
-.colName: "Name" @
-.colClass: "Class" @
-.colDistance: "Distance" @
-.colBriefing: "Information" @
-.Moon: "Moon" @
-.MainStar: "Main Star" @
-.Mass: "Mass" @
-.HabitableZone: "Habitable Zone" @
-.Landable: "Landable" @
-.Terraformable: "Terraformable" @
-.Volcanism: "Volcanism" @
-.Rings: "Has {0} rings: " @
-.Ring: "Ring: " @
-.BC: "This body contains: " @
-.Value: "Value" @
-.SS: "Scan Summary for {0}. {1}" @
-.AV: "Approx total scan value: {0:N0}" @
-.Radius: "Radius" @
-.Temperature: "Temperature" @
-.MetalRichbodies: "Metal Rich bodies" @
-.Waterworlds: "Water worlds" @
-.Earthlikesplanets: "Earth likes planets" @
-.Ammoniaworlds: "Ammonia worlds" @
-.Volcanicactivity: "Volcanic activity" @
-.Belt: "Belt: " @
-.ScanSummaryfor: "Scan Summary for {0}: {1} stars; {2} planets ({3} terrestrial, {4} gas giants), {5} moons" @
-.circumstellarZoneToolStripMenuItem: "Circumstellar Zones" @
-.circumstellarZoneToolStripMenuItem.habitableZoneToolStripMenuItem: "Habitable Zone" @
-.circumstellarZoneToolStripMenuItem.metalRichToolStripMenuItem: "Metal Rich" @
-.circumstellarZoneToolStripMenuItem.waterWorldsToolStripMenuItem: "Water Worlds" @
-.circumstellarZoneToolStripMenuItem.earthLikePlanetsToolStripMenuItem: "Earth Like Planets" @
-.circumstellarZoneToolStripMenuItem.ammoniaWorldsToolStripMenuItem: "Ammonia Worlds" @
-.circumstellarZoneToolStripMenuItem.icyBodiesToolStripMenuItem: "Icy Bodies" @
-.structuresToolStripMenuItem: "Structures" @
 .structuresToolStripMenuItem.beltsToolStripMenuItem: "Belts" @
 .structuresToolStripMenuItem.ringsToolStripMenuItem: "Rings" @
 .materialsToolStripMenuItem: "Materials" @
 .valuesToolStripMenuItem: "Values" @
-.columnsToolStripMenuItem: "Columns" @
-.columnsToolStripMenuItem.nameToolStripMenuItem: "Name" @
-.columnsToolStripMenuItem.classToolStripMenuItem: "Class" @
-.columnsToolStripMenuItem.distanceToolStripMenuItem: "Distance" @
-.columnsToolStripMenuItem.informationToolStripMenuItem: "Information" @
-.toolStripStatusTotalValue: "Estimated scans value" @
-.toolStripStatusGreen: "GREEN SYSTEM" @
+.checkBoxEDSM.ToolTip: "EDSM lookup toggle" @
+
+.MainStar: "Main Star" @
+.Mass: "Mass" @
+.Radius: "Radius" @
+.Temperature: "Temperature" @
+.Terraformable: "Terraformable" @
+.Moon: "Moon" @
+.Landable: "Landable" @
+.Geologicalactivity: "Geological activity" @
+.Surfacemapped: "Surface mapped" @
+.BC: "This body contains: " @
+.Ring: "Ring: " @
+.Belt: "Belt: " @
+.Value: "Value" @
 .GS: "This is a green system, as it has all existing jumponium materials available!" @
 .JS: " jumponium materials found in system." @
-.eDSMCheckToolStripMenuItem: "EDSM Check" @
+.ScanSummaryfor: "Scan Summary for {0}: {1} stars; {2} planets ({3} terrestrial, {4} gas giants), {5} moons" @
+
+.colName: "Name" @
+.colClass: "Class" @
+.colDistance: "Distance" @
+.colBriefing: "Information" @
+.extButtonShowControl.ToolTip: "Configure overall settings" @
+.extButtonHabZones.ToolTip: "Configure hab zone information" @
 
 SECTION UserControlSettings
 

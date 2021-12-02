@@ -657,36 +657,22 @@ namespace EDDiscovery
         UserControlShipYards_Manufacturer, // Manufacturer
         UserControlShipYards_MS, // Mass/Speed
 
-        UserControlScanGrid_Geologicalactivity, // Geological activity
-        UserControlScanGrid_Surfacemapped, // Surface mapped
-        UserControlScanGrid_colName, // Name
-        UserControlScanGrid_colClass, // Class
-        UserControlScanGrid_colDistance, // Distance
-        UserControlScanGrid_colBriefing, // Briefing
-        UserControlScanGrid_Moon, // Moon
         UserControlScanGrid_MainStar, // Main Star
         UserControlScanGrid_Mass, // Mass
-        UserControlScanGrid_HabitableZone, // Habitable Zone
-        UserControlScanGrid_Landable, // Landable
-        UserControlScanGrid_Terraformable, // Terraformable
-        UserControlScanGrid_Volcanism, // Volcanism
-        UserControlScanGrid_Rings, // Has {0} rings:
-        UserControlScanGrid_Ring, // Has 1 ring:
-        UserControlScanGrid_BC, // This body contains:
-        UserControlScanGrid_Value, // Value
-        UserControlScanGrid_SS, // Scan Summary for {0}. {1}
-        UserControlScanGrid_AV, // Approx total scan value: {0:N0}
         UserControlScanGrid_Radius, // Radius
         UserControlScanGrid_Temperature, // Temperature
-        UserControlScanGrid_MetalRichbodies, // Metal Rich bodies
-        UserControlScanGrid_Waterworlds, // Water worlds
-        UserControlScanGrid_Earthlikesplanets, // Earth likes planets
-        UserControlScanGrid_Ammoniaworlds, // Ammonia worlds
-        UserControlScanGrid_Volcanicactivity, // Volcanic activity
+        UserControlScanGrid_Terraformable, // Terraformable
+        UserControlScanGrid_Moon, // Moon
+        UserControlScanGrid_Landable, // Landable
+        UserControlScanGrid_Geologicalactivity, // Geological activity
+        UserControlScanGrid_Surfacemapped, // Surface mapped
+        UserControlScanGrid_BC, // This body contains:
+        UserControlScanGrid_Ring, // Has 1 ring:
         UserControlScanGrid_Belt, // Belt:
-        UserControlScanGrid_ScanSummaryfor, // Scan Summary for {0}: {1} stars; {2} planets ({3} terrestrial, {4} gas giants), {5} moons
+        UserControlScanGrid_Value, // Value
         UserControlScanGrid_GS, // This is a green system, as it has all existing jumponium materials available!
         UserControlScanGrid_JS, //  jumponium materials found in system.
+        UserControlScanGrid_ScanSummaryfor, // Scan Summary for {0}: {1} stars; {2} planets ({3} terrestrial, {4} gas giants), {5} moons
 
         UserControlCommonBase_Copyingtexttoclipboardfailed, // Copying text to clipboard failed
 

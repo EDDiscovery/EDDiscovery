@@ -16,6 +16,7 @@
 
 using EliteDangerousCore;
 using EliteDangerousCore.JournalEvents;
+using ExtendedControls;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -30,8 +31,8 @@ namespace EDDiscovery.UserControls
     {
         private HistoryEntry last_he = null;
 
-        int iconsize;   // computed icon and body sizes
-        int bodysize;
+        private int iconsize;   // computed icon and body sizes
+        private int bodysize;
 
         public UserControlScanGrid()
         {
@@ -53,20 +54,13 @@ namespace EDDiscovery.UserControls
 
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
-            BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
 
             // retrieve context menu entries check state from DB
-            habitableZoneToolStripMenuItem.Checked = GetSetting( "showHabitable", true);
-            metalRichToolStripMenuItem.Checked = GetSetting( "showMetalRich", true);
-            waterWorldsToolStripMenuItem.Checked = GetSetting( "showWaterWorlds", true);
-            earthLikePlanetsToolStripMenuItem.Checked = GetSetting( "showEarthLike", true);
-            ammoniaWorldsToolStripMenuItem.Checked = GetSetting( "showAmmonia", true);
-            icyBodiesToolStripMenuItem.Checked = GetSetting( "showIcyBodies", true);
-            beltsToolStripMenuItem.Checked = GetSetting( "showBelts", true);
-            ringsToolStripMenuItem.Checked = GetSetting( "showRings", true);
-            materialsToolStripMenuItem.Checked = GetSetting( "showMaterials", true);
-            valuesToolStripMenuItem.Checked = GetSetting("showValues", true);
-            eDSMCheckToolStripMenuItem.Checked = GetSetting("checkEDSM", true);
+
+            checkBoxEDSM.Checked = GetSetting("checkEDSM", true);
+            checkBoxEDSM.Click += CheckBoxEDSM_Click;
+
+            PopulateCtrlList();
         }
 
         public override void LoadLayout()
@@ -125,7 +119,7 @@ namespace EDDiscovery.UserControls
             }
             else
             {
-                scannode = await discoveryform.history.StarScan.FindSystemAsync(he.System, eDSMCheckToolStripMenuItem.Checked);        // get data with EDSM maybe
+                scannode = await discoveryform.history.StarScan.FindSystemAsync(he.System, checkBoxEDSM.Checked);        // get data with EDSM maybe
 
                 if (scannode == null)     // no data, clear display, clear any last_he so samesys is false next time
                 {
@@ -180,7 +174,7 @@ namespace EDDiscovery.UserControls
                 else if (sn.NodeType == StarScan.ScanNodeType.beltcluster )
                 {
                     // if have a scan, we show belts, and its not edsm body, or getting edsm
-                    if (sn.ScanData?.BodyName != null && beltsToolStripMenuItem.Checked && (!sn.ScanData.IsEDSMBody || eDSMCheckToolStripMenuItem.Checked))
+                    if (sn.ScanData?.BodyName != null && IsSet(CtrlList.showBelts) && (!sn.ScanData.IsEDSMBody || checkBoxEDSM.Checked))
                     {
                         bdClass.Clear();
                         bdClass.Append("Belt Cluster");
@@ -212,7 +206,7 @@ namespace EDDiscovery.UserControls
                     }
                 }
                 // must have scan data and a name to be good, and either not edsm body or edsm check
-                else if (sn.ScanData?.BodyName != null && (!sn.ScanData.IsEDSMBody || eDSMCheckToolStripMenuItem.Checked))     
+                else if (sn.ScanData?.BodyName != null && (!sn.ScanData.IsEDSMBody || checkBoxEDSM.Checked))     
                 { 
                     var overlays = new StarColumnOverlays();
 
@@ -254,32 +248,32 @@ namespace EDDiscovery.UserControls
                         // habitable zone for stars - do not display for black holes.
                         if (sn.ScanData.StarTypeID != EDStar.H)
                         {
-                            if (habitableZoneToolStripMenuItem.Checked)
+                            if (IsSet(CtrlList.showHabitable))
                             {
                                 string hz = sn.ScanData.CircumstellarZonesString(false, JournalScan.CZPrint.CZHab);
                                 bdDetails.AppendFormat(Environment.NewLine + hz);
                             }
-                            if (metalRichToolStripMenuItem.Checked)
+                            if (IsSet(CtrlList.showMetalRich))
                             {
                                 string hz = sn.ScanData.CircumstellarZonesString(false, JournalScan.CZPrint.CZMR);
                                 bdDetails.AppendFormat(Environment.NewLine + hz);
                             }
-                            if (waterWorldsToolStripMenuItem.Checked)
+                            if (IsSet(CtrlList.showWaterWorlds))
                             {
                                 string hz = sn.ScanData.CircumstellarZonesString(false, JournalScan.CZPrint.CZWW);
                                 bdDetails.AppendFormat(Environment.NewLine + hz);
                             }
-                            if (earthLikePlanetsToolStripMenuItem.Checked)
+                            if (IsSet(CtrlList.showEarthLike))
                             {
                                 string hz = sn.ScanData.CircumstellarZonesString(false, JournalScan.CZPrint.CZEL);
                                 bdDetails.AppendFormat(Environment.NewLine + hz);
                             }
-                            if (ammoniaWorldsToolStripMenuItem.Checked)
+                            if (IsSet(CtrlList.showAmmonia))
                             {
                                 string hz = sn.ScanData.CircumstellarZonesString(false, JournalScan.CZPrint.CZAW);
                                 bdDetails.AppendFormat(Environment.NewLine + hz);
                             }
-                            if (icyBodiesToolStripMenuItem.Checked)
+                            if (IsSet(CtrlList.showIcyBodies))
                             {
                                 string hz = sn.ScanData.CircumstellarZonesString(false, JournalScan.CZPrint.CZIP);
                                 bdDetails.AppendFormat(Environment.NewLine + hz);
@@ -390,7 +384,7 @@ namespace EDDiscovery.UserControls
                                 }
                             }
 
-                            if (ret.Length > 0 && materialsToolStripMenuItem.Checked)
+                            if (ret.Length > 0 && IsSet(CtrlList.showMaterials))
                             {
                                 bdDetails.Append(Environment.NewLine).Append("This body contains: ".T(EDTx.UserControlScanGrid_BC)).Append(ret);
                             }
@@ -404,7 +398,7 @@ namespace EDDiscovery.UserControls
                         {
                             if (sn.ScanData.Rings[r].Name.EndsWith("Belt", StringComparison.Ordinal))
                             {
-                                if (beltsToolStripMenuItem.Checked)
+                                if (IsSet(CtrlList.showBelts))
                                 {
                                     // is a belt
                                     bdDetails.Append(Environment.NewLine).Append("Belt: ".T(EDTx.UserControlScanGrid_Belt));
@@ -415,7 +409,7 @@ namespace EDDiscovery.UserControls
                             }
                             else
                             {
-                                if (ringsToolStripMenuItem.Checked)
+                                if (IsSet(CtrlList.showRings))
                                 {
                                     // is a ring
                                     bdDetails.Append(Environment.NewLine).Append("Ring: ".T(EDTx.UserControlScanGrid_Ring));
@@ -428,7 +422,7 @@ namespace EDDiscovery.UserControls
                     }
 
                     // give estimated value
-                    if (valuesToolStripMenuItem.Checked)
+                    if (IsSet(CtrlList.showValues))
                     {
                         var value = sn.ScanData.EstimatedValue;
                         bdDetails.Append(Environment.NewLine).Append("Value".T(EDTx.UserControlScanGrid_Value)).Append(" ").Append(value.ToString("N0"));
@@ -466,7 +460,7 @@ namespace EDDiscovery.UserControls
                 toolStripJumponiumProgressBar.ToolTipText = toolStripJumponiumProgressBar.Value + " jumponium materials found in system.".T(EDTx.UserControlScanGrid_JS);
 
             string report = string.Format("Scan Summary for {0}: {1} stars; {2} planets ({3} terrestrial, {4} gas giants), {5} moons".T(EDTx.UserControlScanGrid_ScanSummaryfor), scannode.System.Name, stars, planets, terrestrial, gasgiants, moons);
-            report = "~" + scannode.ScanValue(eDSMCheckToolStripMenuItem.Checked).ToString() + " cr " + report;
+            report = "~" + scannode.ScanValue( checkBoxEDSM.Checked).ToString() + " cr " + report;
             SetControlText(scannode.System.Name);
             toolStripStatusTotalValue.Text = report;
 
@@ -482,11 +476,10 @@ namespace EDDiscovery.UserControls
             PaintHelpers.PaintStarColumn(dataGridViewScangrid, e, cur.Cells[0].Tag as StarColumnOverlays, colImage.Index, iconsize, bodysize);
         }
 
-        #region ContextMenuInteraction
-
+        #region UI
         void dataGridViewScangrid_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.ColumnIndex == 4 && e.RowIndex>=0)
+            if (e.ColumnIndex == 4 && e.RowIndex >= 0)
             {
                 var curdata = dataGridViewScangrid.Rows[e.RowIndex].Cells[4].Value;
                 dataGridViewScangrid.Rows[e.RowIndex].Cells[4].Value = dataGridViewScangrid.Rows[e.RowIndex].Cells[4].Tag;
@@ -494,75 +487,87 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void habitableZoneToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
+
+        protected enum CtrlList
         {
-            PutSetting( "showHabitable", habitableZoneToolStripMenuItem.Checked);
-            DrawSystem(last_he, true);
+            showHabitable,showMetalRich,showWaterWorlds,showEarthLike,showAmmonia,showIcyBodies,
+            showBelts,showRings,showMaterials,showValues,
+        };
+
+
+        private bool[] ctrlset; // holds current state of each control above
+
+        private bool IsSet(CtrlList v)
+        {
+            return ctrlset[(int)v];
         }
 
-        private void metallicRichToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
+        private void PopulateCtrlList()
         {
-            PutSetting( "showMetalRich", metalRichToolStripMenuItem.Checked);
-            DrawSystem(last_he, true);
+            ctrlset = new bool[Enum.GetNames(typeof(CtrlList)).Length];
+            foreach (CtrlList e in Enum.GetValues(typeof(CtrlList)))
+            {
+                bool def = true;
+                var v = GetSetting(e.ToString(), def);
+                //System.Diagnostics.Debug.WriteLine($"Surveyor {e.ToString()} = {v}");
+                ctrlset[(int)e] = v;
+            }
         }
 
-        private void waterWorldsToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
+        private string CtrlStateAsString()      // returns all controls in one string, note Show below does not care about the extras
         {
-            PutSetting( "showWaterWorlds", waterWorldsToolStripMenuItem.Checked);
-            DrawSystem(last_he, true);
+            string s = "";
+            foreach (CtrlList v in Enum.GetValues(typeof(CtrlList)))
+            {
+                if (ctrlset[(int)v])
+                    s += v.ToString() + ";";
+            }
+
+            return s;
+        }
+        private void extButtonShowControl_Click(object sender, EventArgs e)
+        {
+            ExtendedControls.CheckedIconListBoxFormGroup displayfilter = new CheckedIconListBoxFormGroup();
+            displayfilter.AddAllNone();
+            displayfilter.AddStandardOption(CtrlList.showBelts.ToString(), "Show belts".TxID("UserControlScanGrid.structuresToolStripMenuItem.beltsToolStripMenuItem"));
+            displayfilter.AddStandardOption(CtrlList.showRings.ToString(), "Show rings".TxID("UserControlScanGrid.structuresToolStripMenuItem.ringsToolStripMenuItem"));
+            displayfilter.AddStandardOption(CtrlList.showMaterials.ToString(), "Show materials".TxID("UserControlScanGrid.materialsToolStripMenuItem"));
+            displayfilter.AddStandardOption(CtrlList.showValues.ToString(), "Show values".TxID("UserControlScanGrid.valuesToolStripMenuItem"));
+            CommonCtrl(displayfilter, extButtonHabZones);
         }
 
-        private void earthLikePlanetsToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
+        private void extButtonHabZones_Click(object sender, EventArgs e)
         {
-            PutSetting( "showEarthLike", earthLikePlanetsToolStripMenuItem.Checked);
-            DrawSystem(last_he, true);
+            ExtendedControls.CheckedIconListBoxFormGroup displayfilter = new CheckedIconListBoxFormGroup();
+            displayfilter.AddAllNone();
+            displayfilter.AddStandardOption(CtrlList.showHabitable.ToString(), "Show Habitation Zone".TxID("UserControlSpanel.showCircumstellarZonesToolStripMenuItem"));
+            displayfilter.AddStandardOption(CtrlList.showMetalRich.ToString(), "Show Metal Rich Planet Zone".TxID("UserControlSpanel.showCircumstellarZonesToolStripMenuItem.showMetalRichPlanetsToolStripMenuItem"));
+            displayfilter.AddStandardOption(CtrlList.showWaterWorlds.ToString(), "Show Water World Zone".TxID("UserControlSpanel.showCircumstellarZonesToolStripMenuItem.showWaterWorldsToolStripMenuItem"));
+            displayfilter.AddStandardOption(CtrlList.showEarthLike.ToString(), "Show Earth Like Zone".TxID("UserControlSpanel.showCircumstellarZonesToolStripMenuItem.showEarthLikeToolStripMenuItem"));
+            displayfilter.AddStandardOption(CtrlList.showAmmonia.ToString(), "Show Ammonia Worlds Zone".TxID("UserControlSpanel.showCircumstellarZonesToolStripMenuItem.showAmmoniaWorldsToolStripMenuItem"));
+            displayfilter.AddStandardOption(CtrlList.showIcyBodies.ToString(), "Show Icy Planets Zone".TxID("UserControlSpanel.showCircumstellarZonesToolStripMenuItem.showIcyPlanetsToolStripMenuItem"));
+            CommonCtrl(displayfilter, extButtonHabZones);
         }
 
-        private void ammoniaWorldsToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
+        private void CommonCtrl(CheckedIconListBoxFormGroup displayfilter, Control button)
         {
-            PutSetting( "showAmmonia", ammoniaWorldsToolStripMenuItem.Checked);
-            DrawSystem(last_he, true);
+            displayfilter.AllOrNoneBack = false;
+            displayfilter.ScreenMargin = new Size(0, 0);
+
+            displayfilter.SaveSettings = (s, o) =>
+            {
+                var ctrllist = displayfilter.SettingsTagList();
+                PutBoolSettingsFromString(s, ctrllist);
+                PopulateCtrlList();
+                DrawSystem(last_he, true);
+            };
+
+            displayfilter.Show(CtrlStateAsString(), button, this.FindForm());
         }
 
-        private void icyBodiesToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
+        private void CheckBoxEDSM_Click(object sender, EventArgs e)
         {
-            PutSetting( "showIcyBodies", icyBodiesToolStripMenuItem.Checked);
-            DrawSystem(last_he, true);
-        }
-
-        private void structuresToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
-        {
-            PutSetting( "showStructures", structuresToolStripMenuItem.Checked);
-            DrawSystem(last_he, true);
-        }
-
-        private void beltsToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
-        {
-            PutSetting( "showBelts", beltsToolStripMenuItem.Checked);
-            DrawSystem(last_he, true);
-        }
-
-        private void ringsToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
-        {
-            PutSetting( "showRings", ringsToolStripMenuItem.Checked);
-            DrawSystem(last_he, true);
-        }
-
-        private void materialsToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
-        {
-            PutSetting( "showMaterials", materialsToolStripMenuItem.Checked);
-            DrawSystem(last_he, true);
-        }
-
-        private void valuesToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
-        {
-            PutSetting( "showValues", valuesToolStripMenuItem.Checked);
-            DrawSystem(last_he, true);
-        }
-
-        private void eDSMCheckToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            PutSetting("checkEDSM", eDSMCheckToolStripMenuItem.Checked);
+            PutSetting("checkEDSM", checkBoxEDSM.Checked);
             DrawSystem(last_he, true);
         }
 
