@@ -52,10 +52,10 @@ namespace EDDiscovery.UserControls
         private ExtButton[] dividers;
         private int dividercapture = -2;        //-2 not shown, -1 shown, >=0 captured
         private int divideroriginalxpos = -1;
-        private bool Config(long c) { return (config & c) != 0; }
-        private bool IsSurfaceScanOn { get { return Config(Configuration.showScan15s) || Config(Configuration.showScan30s) || Config(Configuration.showScan60s) || Config(Configuration.showScanIndefinite); } }
 
         private int layoutorder = 0;
+
+        private int startingtextrowpos = 0;
 
         private EliteDangerousCore.UIEvents.UIGUIFocus.Focus uistate = EliteDangerousCore.UIEvents.UIGUIFocus.Focus.NoFocus;
 
@@ -114,6 +114,8 @@ namespace EDDiscovery.UserControls
                                                 Configuration.showXYZ | Configuration.showDistancePerStar |
                                                Configuration.showScan15s | Configuration.showSystemInformation |
                                                Configuration.showScanRight;
+        private bool Config(long c) { return (config & c) != 0; }
+        private bool IsSurfaceScanOn { get { return Config(Configuration.showScan15s) || Config(Configuration.showScan30s) || Config(Configuration.showScan60s) || Config(Configuration.showScanIndefinite); } }
 
 
         #region Initialisation
@@ -368,6 +370,8 @@ namespace EDDiscovery.UserControls
                             string dist = (currentsystem.HasCoordinate) ? currentsystem.Distance(tpos.X, tpos.Y, tpos.Z).ToString("0.00") : "Unknown".T(EDTx.Unknown);
                             rowpos = rowmargin + AddColText(0, 0, rowpos, "Target".T(EDTx.UserControlSpanel_Target) + ": " + name + " @ " + dist +" ly", textcolour, backcolour, null).Location.Bottom;
                         }
+
+                        startingtextrowpos = rowpos;
 
                         foreach (HistoryEntry rhe in result)
                         {
@@ -732,9 +736,10 @@ namespace EDDiscovery.UserControls
 
         private void pictureBox_MouseMove(object sender, MouseEventArgs e)
         {
-            if (dividercapture == -2 && e.Y < 24)
+            bool inarea = e.Y > startingtextrowpos && e.Y < startingtextrowpos + 24;
+            if (dividercapture == -2 && inarea)
                 ShowDividers(true);
-            else if (dividercapture == -1 && e.Y >= 24)
+            else if (dividercapture == -1 && !inarea)
                 ShowDividers(false);
         }
 
@@ -757,7 +762,7 @@ namespace EDDiscovery.UserControls
                 for (int i = 1; i < columnpos.Count; i++)              // bring up the number of dividers needed
                 {
                     ExtButton b = dividers[i - 1];
-                    b.Location = new Point(scanpostextoffset.X + columnpos[i] - b.Width/2, pictureBox.Top);
+                    b.Location = new Point(scanpostextoffset.X + columnpos[i] - b.Width/2, pictureBox.Top + startingtextrowpos);
                     b.ButtonColorScaling = 1.0F;
                     if (b.FlatStyle == FlatStyle.System)            // System can't do bitmaps.. we need standard.
                         b.FlatStyle = FlatStyle.Standard;

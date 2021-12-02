@@ -777,8 +777,7 @@ namespace EDDiscovery.UserControls
             displayfilter.AddStandardOption(CtrlList.largelandable.ToString(), "Landable and large".TxID("UserControlSurveyor.bodyFeaturesToolStripMenuItem.landableAndLargeToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Bodies_LandablePlanet);
             displayfilter.AddStandardOption(CtrlList.isLandableWithVolcanism.ToString(), "Landable with volcanism".TxID("UserControlSurveyor.bodyFeaturesToolStripMenuItem.landableWithVolcanismToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Bodies_LandablePlanet);
 
-            string[] planetctrllist = Enum.GetNames(typeof(CtrlList)).RangeSubset((int)CtrlList.allplanets, 18);
-            CommonCtrl(displayfilter, planetctrllist, extButtonPlanets);
+            CommonCtrl(displayfilter, extButtonPlanets);
 
         }
 
@@ -790,8 +789,7 @@ namespace EDDiscovery.UserControls
             displayfilter.AddStandardOption(CtrlList.allstars.ToString(), "Show All Stars".TxID("UserControlSurveyor.showAllStarsToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Scan_Star);
             displayfilter.AddStandardOption(CtrlList.beltclusters.ToString(), "Show Belt Clusters".TxID("UserControlSurveyor.showBeltClustersToolStripMenuItem"), global::EDDiscovery.Icons.Controls.Belt);
 
-            string[] starctrllist = Enum.GetNames(typeof(CtrlList)).RangeSubset((int)CtrlList.allstars, 2);
-            CommonCtrl(displayfilter, starctrllist, extButtonStars);
+            CommonCtrl(displayfilter, extButtonStars);
         }
 
         private void extButtonShowControl_Click(object sender, EventArgs e)
@@ -809,8 +807,7 @@ namespace EDDiscovery.UserControls
             displayfilter.AddStandardOption(CtrlList.hideMapped.ToString(), "Hide already mapped bodies".TxID("UserControlSurveyor.hideAlreadyMappedBodiesToolStripMenuItem"));
             displayfilter.AddStandardOption(CtrlList.showsysinfo.ToString(), "Show System Info Always".TxID("UserControlSurveyor.showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem"));
 
-            string[] showctrllist = Enum.GetNames(typeof(CtrlList)).RangeSubset((int)CtrlList.showValues, 9);
-            CommonCtrl(displayfilter, showctrllist, extButtonShowControl);
+            CommonCtrl(displayfilter, extButtonShowControl);
         }
 
         #endregion
@@ -827,11 +824,10 @@ namespace EDDiscovery.UserControls
             displayfilter.AddStandardOption(ct, "Alignment Center".TxID("UserControlSurveyor.textAlignToolStripMenuItem.centerToolStripMenuItem"), global::EDDiscovery.Icons.Controls.AlignCentre, exclusivetags: lt + ";" + rt, disableuncheck: true);
             displayfilter.AddStandardOption(rt, "Alignment Right".TxID("UserControlSurveyor.textAlignToolStripMenuItem.rightToolStripMenuItem"), global::EDDiscovery.Icons.Controls.AlignRight, exclusivetags: lt + ";" + ct, disableuncheck: true);
             displayfilter.CloseOnChange = true;
-            string[] showctrllist = Enum.GetNames(typeof(CtrlList)).RangeSubset((int)CtrlList.alignleft, 3);
-            CommonCtrl(displayfilter, showctrllist, extButtonAlignment);
+            CommonCtrl(displayfilter, extButtonAlignment);
         }
 
-        private void CommonCtrl(ExtendedControls.CheckedIconListBoxFormGroup displayfilter, string[] list, Control under)
+        private void CommonCtrl(ExtendedControls.CheckedIconListBoxFormGroup displayfilter, Control under)
         {
             displayfilter.AllOrNoneBack = false;
             displayfilter.ImageSize = new Size(24, 24);
@@ -839,7 +835,7 @@ namespace EDDiscovery.UserControls
 
             displayfilter.SaveSettings = (s, o) =>
             {
-                PutBoolSettingsFromString(s, list);
+                PutBoolSettingsFromString(s, displayfilter.SettingsTagList());
                 PopulateCtrlList();
                 DrawSystem(last_sys);
             };
