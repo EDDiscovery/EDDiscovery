@@ -52,6 +52,9 @@ namespace EDDiscovery.UserControls
             checkBoxEDSM.Checked = GetSetting("EDSM", false);
             checkBoxEDSM.CheckedChanged += CheckBoxEDSM_CheckedChanged;
 
+            extCheckBoxShowImpossible.Checked = GetSetting("Impossible", false);
+            extCheckBoxShowImpossible.CheckedChanged += ExtCheckBoxShowImpossible_CheckedChanged;
+
             dataGridViewEstimatedValues.MakeDoubleBuffered();
             dataGridViewEstimatedValues.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             dataGridViewEstimatedValues.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
@@ -129,12 +132,32 @@ namespace EDDiscovery.UserControls
                 {
                     if ( bodies.ScanData != null && bodies.ScanData.BodyName != null && (checkBoxEDSM.Checked || !bodies.ScanData.IsEDSMBody))     // if check edsm, or not edsm body, with scandata
                     {
-                        System.Diagnostics.Debug.WriteLine("Recalc for " + bodies.ScanData.BodyName);
+                        //System.Diagnostics.Debug.WriteLine("Estimated values Recalc for " + bodies.ScanData.BodyName);
                         var ev = bodies.ScanData.RecalcEstimatedValues();
                         if ( !checkBoxShowZeros.Checked && ev.EstimatedValueBase == 0)
                             continue; // skip 0-value things
 
+                        bool showimpossibleValues = extCheckBoxShowImpossible.Checked;
+
                         string spclass = bodies.ScanData.IsStar ? bodies.ScanData.StarTypeText : bodies.ScanData.PlanetTypeText;
+
+                        // IsPreviouslyMapped is true if the marker was there and true
+                        // IsPreviouslyDiscovered is true if the marker was there and true
+
+                        string mappedstr = ev.EstimatedValueMapped > 0 && (showimpossibleValues || bodies.ScanData.IsPreviouslyMapped ) ?
+                                                    (ev.EstimatedValueMappedEfficiently.ToString("N0") + " / " + ev.EstimatedValueMapped.ToString("N0")) : "";
+
+                        string firstdiscoveredstr = ev.EstimatedValueFirstDiscovered > 0 && (showimpossibleValues || !bodies.ScanData.IsPreviouslyDiscovered) ? 
+                                                    ev.EstimatedValueFirstDiscovered.ToString("N0") : "";
+
+                        string firstmappedeffstr = ev.EstimatedValueFirstMappedEfficiently > 0 && (showimpossibleValues || (!bodies.ScanData.IsPreviouslyMapped && bodies.ScanData.IsPreviouslyDiscovered)) ? 
+                                                    (ev.EstimatedValueFirstMappedEfficiently.ToString("N0") + " / " + ev.EstimatedValueFirstMapped.ToString("N0")) : "";
+
+                        // this one used both of them
+                        string fdmappedstr = ev.EstimatedValueFirstDiscoveredFirstMappedEfficiently > 0 && (showimpossibleValues || 
+                                                                                                (!bodies.ScanData.IsPreviouslyDiscovered && !bodies.ScanData.IsPreviouslyMapped))
+                            ? (ev.EstimatedValueFirstDiscoveredFirstMappedEfficiently.ToString("N0") + " / " + ev.EstimatedValueFirstDiscoveredFirstMapped.ToString("N0")) : "";
+
                         dataGridViewEstimatedValues.Rows.Add(new object[] {
                                         GetBodySimpleName(bodies.ScanData.BodyDesignationOrName, last_he.System.Name),
                                         spclass,
@@ -143,10 +166,10 @@ namespace EDDiscovery.UserControls
                                         (bodies.ScanData.WasMapped == true? Icons.Controls.Scan_Bodies_Mapped : nullimg),
                                         (bodies.ScanData.WasDiscovered == true ? Icons.Controls.Scan_DisplaySystemAlways : nullimg),
                                         ev.EstimatedValueBase.ToString("N0"),
-                                        ev.EstimatedValueMapped>0 ? (ev.EstimatedValueMappedEfficiently.ToString("N0") + " / " + ev.EstimatedValueMapped.ToString("N0")) : "",
-                                        ev.EstimatedValueFirstDiscovered>0 ? ev.EstimatedValueFirstDiscovered.ToString("N0") : "",
-                                        ev.EstimatedValueFirstMappedEfficiently>0 ? (ev.EstimatedValueFirstMappedEfficiently.ToString("N0") + " / " + ev.EstimatedValueFirstMapped.ToString("N0")) : "",
-                                        ev.EstimatedValueFirstDiscoveredFirstMappedEfficiently> 0 ? (ev.EstimatedValueFirstDiscoveredFirstMappedEfficiently.ToString("N0") + " / " + ev.EstimatedValueFirstDiscoveredFirstMapped.ToString("N0")):"" ,
+                                        mappedstr,
+                                        firstdiscoveredstr,
+                                        firstmappedeffstr,
+                                        fdmappedstr ,
                                         bodies.ScanData.EstimatedValue.ToString("N0") });
                     }
                 }
@@ -170,6 +193,12 @@ namespace EDDiscovery.UserControls
         private void CheckBoxShowZeros_CheckedChanged(object sender, EventArgs e)
         {
             PutSetting(dbShowZero, checkBoxShowZeros.Checked);    // negative because we changed button sense
+            DrawSystem();
+        }
+
+        private void ExtCheckBoxShowImpossible_CheckedChanged(object sender, EventArgs e)
+        {
+            PutSetting("Impossible", extCheckBoxShowImpossible.Checked);
             DrawSystem();
         }
 

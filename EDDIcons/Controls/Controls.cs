@@ -235,6 +235,7 @@ namespace EDDiscovery.Icons
         public static Image Columns { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Columns"); } }
         public static Image ColumnOrder { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.ColumnOrder"); } }
         public static Image ScanPosition { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.ScanPosition"); } }
+        public static Image HighValueTick { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.HighValueTick"); } }
 
     }
 }
