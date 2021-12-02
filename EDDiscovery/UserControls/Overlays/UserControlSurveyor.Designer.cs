@@ -55,10 +55,10 @@ namespace EDDiscovery.UserControls
             this.rollUpPanelTop = new ExtendedControls.ExtPanelRollUp();
             this.panelControls = new System.Windows.Forms.FlowLayoutPanel();
             this.extButtonAlignment = new ExtendedControls.ExtButton();
-            this.extButtonFont = new ExtendedControls.ExtButton();
             this.extButtonFSS = new ExtendedControls.ExtButton();
             this.extButtonSetRoute = new ExtendedControls.ExtButton();
             this.extButtonControlRoute = new ExtendedControls.ExtButton();
+            this.extButtonFont = new ExtendedControls.ExtButton();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.extPictureBoxScroll.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSurveyor)).BeginInit();
@@ -157,7 +157,7 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxWordWrap.ImageIndeterminate = null;
             this.extCheckBoxWordWrap.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxWordWrap.ImageUnchecked = global::EDDiscovery.Icons.Controls.WordWrapOff;
-            this.extCheckBoxWordWrap.Location = new System.Drawing.Point(248, 1);
+            this.extCheckBoxWordWrap.Location = new System.Drawing.Point(368, 1);
             this.extCheckBoxWordWrap.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
             this.extCheckBoxWordWrap.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.extCheckBoxWordWrap.Name = "extCheckBoxWordWrap";
@@ -248,10 +248,10 @@ namespace EDDiscovery.UserControls
             this.panelControls.Controls.Add(this.extButtonAlignment);
             this.panelControls.Controls.Add(this.extButtonFSS);
             this.panelControls.Controls.Add(this.checkBoxEDSM);
-            this.panelControls.Controls.Add(this.extCheckBoxWordWrap);
             this.panelControls.Controls.Add(this.extButtonSetRoute);
             this.panelControls.Controls.Add(this.extButtonControlRoute);
             this.panelControls.Controls.Add(this.extButtonFont);
+            this.panelControls.Controls.Add(this.extCheckBoxWordWrap);
             this.panelControls.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelControls.Location = new System.Drawing.Point(0, 0);
             this.panelControls.Name = "panelControls";
@@ -272,20 +272,6 @@ namespace EDDiscovery.UserControls
             this.extButtonAlignment.UseVisualStyleBackColor = false;
             this.extButtonAlignment.Click += new System.EventHandler(this.extButtonAlignment_Click);
             // 
-            // extButtonFont
-            // 
-            this.extButtonFont.BackColor = System.Drawing.SystemColors.Control;
-            this.extButtonFont.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.extButtonFont.Image = global::EDDiscovery.Icons.Controls.Font;
-            this.extButtonFont.Location = new System.Drawing.Point(368, 1);
-            this.extButtonFont.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
-            this.extButtonFont.Name = "extButtonFont";
-            this.extButtonFont.Size = new System.Drawing.Size(28, 28);
-            this.extButtonFont.TabIndex = 29;
-            this.toolTip.SetToolTip(this.extButtonFont, "Font");
-            this.extButtonFont.UseVisualStyleBackColor = false;
-            this.extButtonFont.Click += new System.EventHandler(this.extButtonFont_Click);
-            // 
             // extButtonFSS
             // 
             this.extButtonFSS.BackColor = System.Drawing.SystemColors.Control;
@@ -305,7 +291,7 @@ namespace EDDiscovery.UserControls
             this.extButtonSetRoute.BackColor = System.Drawing.SystemColors.Control;
             this.extButtonSetRoute.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.extButtonSetRoute.Image = global::EDDiscovery.Icons.Controls.Route;
-            this.extButtonSetRoute.Location = new System.Drawing.Point(288, 1);
+            this.extButtonSetRoute.Location = new System.Drawing.Point(248, 1);
             this.extButtonSetRoute.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
             this.extButtonSetRoute.Name = "extButtonSetRoute";
             this.extButtonSetRoute.Size = new System.Drawing.Size(28, 28);
@@ -319,7 +305,7 @@ namespace EDDiscovery.UserControls
             this.extButtonControlRoute.BackColor = System.Drawing.SystemColors.Control;
             this.extButtonControlRoute.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.extButtonControlRoute.Image = global::EDDiscovery.Icons.Controls.RouteConfig;
-            this.extButtonControlRoute.Location = new System.Drawing.Point(328, 1);
+            this.extButtonControlRoute.Location = new System.Drawing.Point(288, 1);
             this.extButtonControlRoute.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
             this.extButtonControlRoute.Name = "extButtonControlRoute";
             this.extButtonControlRoute.Size = new System.Drawing.Size(28, 28);
@@ -327,6 +313,20 @@ namespace EDDiscovery.UserControls
             this.toolTip.SetToolTip(this.extButtonControlRoute, "Route Settings");
             this.extButtonControlRoute.UseVisualStyleBackColor = false;
             this.extButtonControlRoute.Click += new System.EventHandler(this.extButtonControlRoute_Click);
+            // 
+            // extButtonFont
+            // 
+            this.extButtonFont.BackColor = System.Drawing.SystemColors.Control;
+            this.extButtonFont.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.extButtonFont.Image = global::EDDiscovery.Icons.Controls.Font;
+            this.extButtonFont.Location = new System.Drawing.Point(328, 1);
+            this.extButtonFont.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.extButtonFont.Name = "extButtonFont";
+            this.extButtonFont.Size = new System.Drawing.Size(28, 28);
+            this.extButtonFont.TabIndex = 29;
+            this.toolTip.SetToolTip(this.extButtonFont, "Font");
+            this.extButtonFont.UseVisualStyleBackColor = false;
+            this.extButtonFont.Click += new System.EventHandler(this.extButtonFont_Click);
             // 
             // UserControlSurveyor
             // 

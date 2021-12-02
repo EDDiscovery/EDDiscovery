@@ -624,6 +624,8 @@ namespace EDDiscovery.UserControls
 
                     }
                 }
+
+                frmt.Dispose();
             }
             else
             {

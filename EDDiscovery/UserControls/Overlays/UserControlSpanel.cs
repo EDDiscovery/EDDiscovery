@@ -165,6 +165,9 @@ namespace EDDiscovery.UserControls
             cfs.AddJournalEntries();
             cfs.SaveSettings += EventFilterChanged;
 
+            extCheckBoxWordWrap.Checked = GetSetting("wordwrap", false);
+            extCheckBoxWordWrap.Click += wordWrapToolStripMenuItem_Click;
+
             dividers = new ExtButton[] { buttonExt0, buttonExt1, buttonExt2, buttonExt3, buttonExt4, buttonExt5, buttonExt6, buttonExt7, buttonExt8, buttonExt9, buttonExt10, buttonExt11, buttonExt12 };
 
             discoveryform.OnHistoryChange += Display;
@@ -176,7 +179,7 @@ namespace EDDiscovery.UserControls
 
             rollUpPanelTop.PinState = GetSetting("PinState", true);
             
-            // scantext = "kwkwkwkw\r\nwkwkwkwk\r\nwjqjqjw ro"; // for debug
+             //scantext = "kwkwkwkw qwkqwkqw qw qwkqwjjqw qwjkqwjqwj wjwhghe wwjsjsjsjw.\r\nwkwkwkwk\r\nwjqjqjw ro"; // for debug
         }
 
         public override void Closing()
@@ -497,42 +500,45 @@ namespace EDDiscovery.UserControls
 
             if (scantext != null)
             {
-                if (attop)
+                using (StringFormat frmt = new StringFormat(extCheckBoxWordWrap.Checked ? 0 : StringFormatFlags.NoWrap))
                 {
-                    if (Config(Configuration.showScanLeft))
+                    if (attop)
                     {
-                        ExtPictureBox.ImageElement scanimg = pictureBox.AddTextAutoSize(new Point(4, 0), maxscansize, scantext, displayfont, textcolour, backcolour, 1.0F, "SCAN");
-                        scanpostextoffset = new Point(4 + scanimg.Image.Width + 4, 0);
-                        RequestTemporaryMinimumSize(new Size(scanimg.Image.Width + 8, scanimg.Image.Height + 4));
-                    }
-                    else if (Config(Configuration.showScanAbove))     // if above, NOT transparent (can't do on top)
-                    {
-                        ExtPictureBox.ImageElement scanimg = pictureBox.AddTextAutoSize(new Point(4, 0), maxscansize, scantext, displayfont, textcolour, backcolour, 1.0F, "SCAN");
-                        scanpostextoffset = new Point(0, scanimg.Image.Height + 4);
-                        RequestTemporaryResizeExpand(new Size(0, scanimg.Image.Height + 4));
-                    }
-                    else if (Config(Configuration.showScanOnTop))
-                    {
-                        ExtPictureBox.ImageElement scanimg = pictureBox.AddTextAutoSize(new Point(4, 0), maxscansize, scantext, displayfont, textcolour, backcolour, 1.0F, "SCAN");
+                        if (Config(Configuration.showScanLeft))
+                        {
+                            ExtPictureBox.ImageElement scanimg = pictureBox.AddTextAutoSize(new Point(4, 0), maxscansize, scantext, displayfont, textcolour, backcolour, 1.0F, "SCAN", null, frmt);
+                            scanpostextoffset = new Point(4 + scanimg.Image.Width + 4, 0);
+                            RequestTemporaryMinimumSize(new Size(scanimg.Image.Width + 8, scanimg.Image.Height + 4));
+                        }
+                        else if (Config(Configuration.showScanAbove))     // if above, NOT transparent (can't do on top)
+                        {
+                            ExtPictureBox.ImageElement scanimg = pictureBox.AddTextAutoSize(new Point(4, 0), maxscansize, scantext, displayfont, textcolour, backcolour, 1.0F, "SCAN", null, frmt);
+                            scanpostextoffset = new Point(0, scanimg.Image.Height + 4);
+                            RequestTemporaryResizeExpand(new Size(0, scanimg.Image.Height + 4));
+                        }
+                        else if (Config(Configuration.showScanOnTop))
+                        {
+                            ExtPictureBox.ImageElement scanimg = pictureBox.AddTextAutoSize(new Point(4, 0), maxscansize, scantext, displayfont, textcolour, backcolour, 1.0F, "SCAN", null, frmt);
 
-                        if ( IsTransparent )        // if transparent, the roll up panel is not visible, we can set the whole size to the text
-                            RequestTemporaryResize(new Size(scanimg.Image.Width + 8, scanimg.Image.Height + 4 ));        // match exactly to use minimum space
-                        return true;
+                            if (IsTransparent)        // if transparent, the roll up panel is not visible, we can set the whole size to the text
+                                RequestTemporaryResize(new Size(scanimg.Image.Width + 8, scanimg.Image.Height + 4));        // match exactly to use minimum space
+                            return true;
+                        }
                     }
-                }
-                else // bottom chance
-                {
-                    if (Config(Configuration.showScanRight))
+                    else // bottom chance
                     {
-                        Size s = pictureBox.DisplaySize();
-                        ExtPictureBox.ImageElement scanimg = pictureBox.AddTextAutoSize(new Point(s.Width + 4, 0), maxscansize, scantext, displayfont, textcolour, backcolour, 1.0F, "SCAN");
-                        RequestTemporaryMinimumSize(new Size(s.Width+4+scanimg.Image.Width + 8, scanimg.Image.Height + 4));
-                    }
-                    else if (Config(Configuration.showScanBelow))
-                    {
-                        Size s = pictureBox.DisplaySize();
-                        ExtPictureBox.ImageElement scanimg = pictureBox.AddTextAutoSize(new Point(4, s.Height + 4), maxscansize, scantext, displayfont, textcolour, backcolour, 1.0F, "SCAN");
-                        RequestTemporaryResizeExpand(new Size(0, scanimg.Image.Height + 4));
+                        if (Config(Configuration.showScanRight))
+                        {
+                            Size s = pictureBox.DisplaySize();
+                            ExtPictureBox.ImageElement scanimg = pictureBox.AddTextAutoSize(new Point(s.Width + 4, 0), maxscansize, scantext, displayfont, textcolour, backcolour, 1.0F, "SCAN",null, frmt);
+                            RequestTemporaryMinimumSize(new Size(s.Width + 4 + scanimg.Image.Width + 8, scanimg.Image.Height + 4));
+                        }
+                        else if (Config(Configuration.showScanBelow))
+                        {
+                            Size s = pictureBox.DisplaySize();
+                            ExtPictureBox.ImageElement scanimg = pictureBox.AddTextAutoSize(new Point(4, s.Height + 4), maxscansize, scantext, displayfont, textcolour, backcolour, 1.0F, "SCAN", null, frmt);
+                            RequestTemporaryResizeExpand(new Size(0, scanimg.Image.Height + 4));
+                        }
                     }
                 }
             }
@@ -554,12 +560,15 @@ namespace EDDiscovery.UserControls
                     colpos += 24;
                 }
 
-                ExtendedControls.ExtPictureBox.ImageElement e =
-                                pictureBox.AddTextAutoSize(new Point(colpos, rowpos),
-                                new Size(endpos, 200),
-                                text, displayfont, textcolour, backcolour, 1.0F, null, tooltip);
+                using (StringFormat frmt = new StringFormat(extCheckBoxWordWrap.Checked ? 0 : StringFormatFlags.NoWrap))
+                {
+                    ExtendedControls.ExtPictureBox.ImageElement e =
+                                    pictureBox.AddTextAutoSize(new Point(colpos, rowpos),
+                                    new Size(endpos, 200),
+                                    text, displayfont, textcolour, backcolour, 1.0F, null, tooltip, frmt);
+                    return e;
+                }
 
-                return e;
             }
             else
                 return null;
@@ -1043,6 +1052,13 @@ namespace EDDiscovery.UserControls
             displayfont = f != null ? f : discoveryform.theme.GetFont;
             Display(current_historylist);
         }
+
+        private void wordWrapToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PutSetting("wordwrap", extCheckBoxWordWrap.Checked);
+            Display(current_historylist);
+        }
+
 
         #endregion
 
