@@ -180,20 +180,22 @@ SECTION UserControlEngineering
 SECTION UserControlEstimatedValues
 
 .BodyName: "Body Name" @
-.EstValue: "Current Value" @
+.BodyType: "Body Type" @
+.EDSM: "EDSM" @
+.Mapped: "Mapped" @
+.WasMapped: "Already Mapped" @
+.WasDiscovered: "Already Discovered" @
 .EstBase: "Base Value" @
 .MappedValue: "Mapped" @
 .FirstDiscovered: "First Discovered" @
 .FirstMappedEff: "First Mapped" @
 .FirstDiscMapped: "First Discovered Mapped" @
-.BodyType: "Body Type" @
-.Mapped: "Mapped" @
-.WasMapped: "Already Mapped" @
-.WasDiscovered: "Already Discovered" @
+.EstValue: "Current Value" @
+
+.checkBoxEDSM.ToolTip: "Get and show information from EDSM" @
+.checkBoxShowZeros.ToolTip: "Green will show materials with zero counts, red means remove them" @
 
 .SV: "Estimated Scan Values for {0}" @
-.EDSM: "EDSM" @
-.checkBoxEDSM.ToolTip: "Get and show information from EDSM" @
 
 SECTION UserControlExpedition
 
