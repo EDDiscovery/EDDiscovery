@@ -22,6 +22,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using static EDDiscovery.UserControls.PaintHelpers;
 
 namespace EDDiscovery.UserControls
 {
@@ -106,11 +107,6 @@ namespace EDDiscovery.UserControls
         #endregion
 
         #region PopulateGrid
-
-        private class Overlays
-        {
-            public bool landable, materials, volcanism, mapped;     // all false on creation
-        }
 
         private async void DrawSystem(HistoryEntry he, bool force)
         {
@@ -218,7 +214,7 @@ namespace EDDiscovery.UserControls
                 // must have scan data and a name to be good, and either not edsm body or edsm check
                 else if (sn.ScanData?.BodyName != null && (!sn.ScanData.IsEDSMBody || eDSMCheckToolStripMenuItem.Checked))     
                 { 
-                    var overlays = new Overlays();
+                    var overlays = new StarColumnOverlays();
 
                     if (sn.ScanData.IsStar)
                     {
@@ -483,53 +479,7 @@ namespace EDDiscovery.UserControls
         private void dataGridViewScangrid_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
         {
             var cur = dataGridViewScangrid.Rows[e.RowIndex];
-            Overlays overlays = cur.Cells[0].Tag as Overlays;       // may be null
-
-            if (cur.Tag != null && colImage.Visible)
-            {
-                // we programatically draw the image because we have control over its pos/ size this way, which you can't do
-                // with a image column - there you can only draw a fixed image or stretch it to cell contents.. which we don't want to do
-
-                int vmid = (e.RowBounds.Top + e.RowBounds.Bottom) / 2;
-                int hmid = e.RowBounds.Left + cur.Cells[0].Size.Width / 2;
-
-                int icons = 0;
-
-                if (overlays != null)
-                    icons = (overlays.mapped ? 1 : 0) + (overlays.volcanism ? 1 : 0) + (overlays.materials ? 1 : 0) + (overlays.landable ? 1 : 0);
-
-                int iconspacing = Font.ScalePixels(2);
-
-                Image img = cur.Tag as Image;
-                Rectangle body = new Rectangle(hmid - (iconsize + bodysize + iconspacing) / 2, vmid - bodysize / 2, bodysize, bodysize);
-                e.Graphics.DrawImage(img, body);        // main icon
-
-                int right = body.Left + bodysize + iconspacing;
-                int vposoverlay = vmid - iconsize * icons / 2;                       // position it centrally vertically
-
-                if (overlays?.landable ?? false)
-                {
-                    e.Graphics.DrawImage((Image)EDDiscovery.Icons.Controls.Scan_Bodies_Landable, new Rectangle(right, vposoverlay, iconsize, iconsize));
-                    vposoverlay += iconsize + iconspacing;
-                }
-
-                if (overlays?.materials ?? false)
-                {
-                    e.Graphics.DrawImage((Image)EDDiscovery.Icons.Controls.Scan_ShowAllMaterials, new Rectangle(right, vposoverlay, iconsize, iconsize));
-                    vposoverlay += iconsize + iconspacing;
-                }
-
-                if (overlays?.volcanism ?? false)
-                {
-                    e.Graphics.DrawImage((Image)EDDiscovery.Icons.Controls.Scan_Bodies_Volcanism, new Rectangle(right, vposoverlay, iconsize, iconsize));
-                    vposoverlay += iconsize + iconspacing;
-                }
-
-                if (overlays?.mapped ?? false)
-                {
-                    e.Graphics.DrawImage((Image)EDDiscovery.Icons.Controls.Scan_Bodies_Mapped, new Rectangle(right, vposoverlay, iconsize, iconsize));
-                }
-            }
+            PaintHelpers.PaintStarColumn(dataGridViewScangrid, e, cur.Cells[0].Tag as StarColumnOverlays, colImage.Index, iconsize, bodysize);
         }
 
         #region ContextMenuInteraction

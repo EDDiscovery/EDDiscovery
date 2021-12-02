@@ -45,7 +45,7 @@ namespace EDDiscovery.UserControls
         {
             this.components = new System.ComponentModel.Container();
             this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
-            this.dataGridViewModules = new BaseUtils.DataGridViewColumnHider();
+            this.dataGridViewModules = new BaseUtils.DataGridViewColumnControl();
             this.ItemLocalised = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ItemCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.SlotCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -367,7 +367,7 @@ namespace EDDiscovery.UserControls
         #endregion
 
         private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanel;
-        private BaseUtils.DataGridViewColumnHider dataGridViewModules;
+        private BaseUtils.DataGridViewColumnControl dataGridViewModules;
         private ExtendedControls.ExtScrollBar vScrollBarCustomMC;
         internal ExtendedControls.ExtComboBox comboBoxShips;
         private System.Windows.Forms.Label labelShip;

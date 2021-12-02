@@ -22,7 +22,7 @@ using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls.Search
 {
-    public class DataGridViewStarResults : BaseUtils.DataGridViewColumnHider
+    public class DataGridViewStarResults : BaseUtils.DataGridViewColumnControl
     {
         public bool CheckEDSM { get; set; }
         public Action<HistoryEntry> GotoEntryClicked = null;

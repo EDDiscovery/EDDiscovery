@@ -568,7 +568,7 @@ namespace EDDiscovery.UserControls
             {
                 FactionStatistics fs = dataGridViewFactions.Rows[dataGridViewFactions.RightClickRow].Tag as FactionStatistics;
 
-                var dgvpanel = new ExtendedControls.ExtPanelDataGridViewScrollWithDGV<BaseUtils.DataGridViewColumnHider>();
+                var dgvpanel = new ExtendedControls.ExtPanelDataGridViewScrollWithDGV<BaseUtils.DataGridViewColumnControl>();
                 dgvpanel.DataGrid.CreateTextColumns("Date".T(EDTx.UserControlOutfitting_Date), 100, 5,
                                                     "Item".T(EDTx.UserControlFactions_Item), 150, 5,
                                                     "Bought".T(EDTx.UserControlStats_GoodsBought), 50, 5,
@@ -632,7 +632,7 @@ namespace EDDiscovery.UserControls
             {
                 FactionStatistics fs = dataGridViewFactions.Rows[dataGridViewFactions.RightClickRow].Tag as FactionStatistics;
 
-                var dgvpanel = new ExtendedControls.ExtPanelDataGridViewScrollWithDGV<BaseUtils.DataGridViewColumnHider>();
+                var dgvpanel = new ExtendedControls.ExtPanelDataGridViewScrollWithDGV<BaseUtils.DataGridViewColumnControl>();
                 dgvpanel.DataGrid.CreateTextColumns("Date".T(EDTx.UserControlOutfitting_Date), 100, 5,
                                                     "Bounty/Bond".T(EDTx.UserControlFactions_BountyBond), 80, 5,
                                                     "Target".T(EDTx.UserControlFactions_Target), 150, 5,
@@ -674,7 +674,7 @@ namespace EDDiscovery.UserControls
             {
                 FactionStatistics fs = dataGridViewFactions.Rows[dataGridViewFactions.RightClickRow].Tag as FactionStatistics;
 
-                var dgvpanel = new ExtendedControls.ExtPanelDataGridViewScrollWithDGV<BaseUtils.DataGridViewColumnHider>();
+                var dgvpanel = new ExtendedControls.ExtPanelDataGridViewScrollWithDGV<BaseUtils.DataGridViewColumnControl>();
                 dgvpanel.DataGrid.CreateTextColumns("System".T(EDTx.UserControlModules_System), 100, 5,
                                                     "System Address".T(EDTx.UserControlFactions_SystemAddress), 60, 5,
                                                     "Missions".T(EDTx.UserControlMissions_MPlural), 50, 5,

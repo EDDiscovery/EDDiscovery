@@ -46,7 +46,7 @@ namespace EDDiscovery.UserControls
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControlLedger));
             this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
-            this.dataGridViewLedger = new BaseUtils.DataGridViewColumnHider();
+            this.dataGridViewLedger = new BaseUtils.DataGridViewColumnControl();
             this.TimeCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Type = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Notes = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -347,7 +347,7 @@ namespace EDDiscovery.UserControls
         #endregion
 
         private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanel;
-        private BaseUtils.DataGridViewColumnHider dataGridViewLedger;
+        private BaseUtils.DataGridViewColumnControl dataGridViewLedger;
         private ExtendedControls.ExtScrollBar vScrollBarCustomMC;
         private ExtendedControls.ExtButton buttonFilter;
         internal ExtendedControls.ExtComboBox comboBoxTime;

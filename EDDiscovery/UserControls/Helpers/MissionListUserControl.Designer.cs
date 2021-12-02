@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.dataGridView = new BaseUtils.DataGridViewColumnHider();
+            this.dataGridView = new BaseUtils.DataGridViewColumnControl();
             this.PcolName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pColStart = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pColEnd = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -282,7 +282,7 @@
 
         #endregion
 
-        public BaseUtils.DataGridViewColumnHider dataGridView;
+        public BaseUtils.DataGridViewColumnControl dataGridView;
         private System.Windows.Forms.FlowLayoutPanel panelButtons;
         public ExtendedControls.ExtDateTimePicker customDateTimePickerStart;
         private System.Windows.Forms.Label labelTo;

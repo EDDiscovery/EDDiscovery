@@ -69,7 +69,7 @@
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.dataViewScrollerPanel1 = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.vScrollBarCustom1 = new ExtendedControls.ExtScrollBar();
-            this.dataGridViewRoute = new BaseUtils.DataGridViewColumnHider();
+            this.dataGridViewRoute = new BaseUtils.DataGridViewColumnControl();
             this.SystemCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.DistanceCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.XCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -936,7 +936,7 @@
         internal ExtendedControls.ExtTextBox textBox_FromY;
         private System.Windows.Forms.Label labelFrom;
         internal ExtendedControls.ExtTextBox textBox_FromX;
-        private BaseUtils.DataGridViewColumnHider dataGridViewRoute;
+        private BaseUtils.DataGridViewColumnControl dataGridViewRoute;
         private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanel1;
         private ExtendedControls.ExtScrollBar vScrollBarCustom1;
         private System.Windows.Forms.DataGridViewTextBoxColumn SystemCol;

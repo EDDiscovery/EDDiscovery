@@ -63,7 +63,7 @@ namespace EDDiscovery.UserControls
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.dataViewScrollerPanelCombat = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.vScrollBarCustom1 = new ExtendedControls.ExtScrollBar();
-            this.dataGridViewCombat = new BaseUtils.DataGridViewColumnHider();
+            this.dataGridViewCombat = new BaseUtils.DataGridViewColumnControl();
             this.Time = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Event = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Description = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -397,7 +397,7 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtButton buttonExtEditCampaign;
         private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanelCombat;
         private ExtendedControls.ExtScrollBar vScrollBarCustom1;
-        private BaseUtils.DataGridViewColumnHider dataGridViewCombat;
+        private BaseUtils.DataGridViewColumnControl dataGridViewCombat;
         private ExtendedControls.ExtLabel labelTotalKills;
         private ExtendedControls.ExtLabel labelFactionKills;
         private ExtendedControls.ExtLabel labelTotalCrimes;

@@ -49,7 +49,7 @@ namespace EDDiscovery.UserControls
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dataViewScrollerPanel2 = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.vScrollBarCustom2 = new ExtendedControls.ExtScrollBar();
-            this.dataGridViewEstimatedValues = new BaseUtils.DataGridViewColumnHider();
+            this.dataGridViewEstimatedValues = new BaseUtils.DataGridViewColumnControl();
             this.BodyName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.BodyType = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.EDSM = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -336,7 +336,7 @@ namespace EDDiscovery.UserControls
         #endregion
         private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanel2;
         private ExtendedControls.ExtScrollBar vScrollBarCustom2;
-        private BaseUtils.DataGridViewColumnHider dataGridViewEstimatedValues;
+        private BaseUtils.DataGridViewColumnControl dataGridViewEstimatedValues;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private ExtendedControls.ExtCheckBox checkBoxEDSM;
         private ExtendedControls.ExtPanelRollUp extPanelRollUp;

@@ -45,7 +45,7 @@ namespace EDDiscovery.UserControls
         {
             this.components = new System.ComponentModel.Container();
             this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
-            this.dataGridViewEngineering = new BaseUtils.DataGridViewColumnHider();
+            this.dataGridViewEngineering = new BaseUtils.DataGridViewColumnControl();
             this.UpgradeCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ModuleCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.LevelCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -387,7 +387,7 @@ namespace EDDiscovery.UserControls
         #endregion
 
         private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanel;
-        private BaseUtils.DataGridViewColumnHider dataGridViewEngineering;
+        private BaseUtils.DataGridViewColumnControl dataGridViewEngineering;
         private ExtendedControls.ExtScrollBar vScrollBarCustomMC;
         private System.Windows.Forms.ToolTip toolTip;
         private ExtendedControls.ExtButton buttonFilterLevel;

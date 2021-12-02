@@ -42,7 +42,7 @@
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.dataViewScrollerPanelFactions = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.scrollBarFactions = new ExtendedControls.ExtScrollBar();
-            this.dataGridViewFactions = new BaseUtils.DataGridViewColumnHider();
+            this.dataGridViewFactions = new BaseUtils.DataGridViewColumnControl();
             this.colFaction = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colMissions = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colInfluence = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -468,7 +468,7 @@
         private System.Windows.Forms.Label labelValue;
         private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanelFactions;
         private ExtendedControls.ExtScrollBar scrollBarFactions;
-        private BaseUtils.DataGridViewColumnHider dataGridViewFactions;
+        private BaseUtils.DataGridViewColumnControl dataGridViewFactions;
         private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem showMissionsForFactionToolStripMenuItem;

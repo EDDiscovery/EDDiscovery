@@ -48,7 +48,7 @@ namespace EDDiscovery.UserControls
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panelPrev = new System.Windows.Forms.Panel();
             this.extPanelDataGridViewScrollWeapons = new ExtendedControls.ExtPanelDataGridViewScroll();
-            this.dataGridViewWeapons = new BaseUtils.DataGridViewColumnHider();
+            this.dataGridViewWeapons = new BaseUtils.DataGridViewColumnControl();
             this.CWTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CWName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CWClass = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -66,7 +66,7 @@ namespace EDDiscovery.UserControls
             this.extScrollBar1 = new ExtendedControls.ExtScrollBar();
             this.panelCurrent = new System.Windows.Forms.Panel();
             this.extPanelDataGridViewScrollSuits = new ExtendedControls.ExtPanelDataGridViewScroll();
-            this.dataGridViewSuits = new BaseUtils.DataGridViewColumnHider();
+            this.dataGridViewSuits = new BaseUtils.DataGridViewColumnControl();
             this.CSTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CSName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CSMods = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -476,10 +476,10 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.Panel panelCurrent;
         private System.Windows.Forms.SplitContainer splitContainerMissions;
         private ExtendedControls.ExtPanelDataGridViewScroll extPanelDataGridViewScrollWeapons;
-        private BaseUtils.DataGridViewColumnHider dataGridViewWeapons;
+        private BaseUtils.DataGridViewColumnControl dataGridViewWeapons;
         private ExtendedControls.ExtScrollBar extScrollBar1;
         private ExtendedControls.ExtPanelDataGridViewScroll extPanelDataGridViewScrollSuits;
-        private BaseUtils.DataGridViewColumnHider dataGridViewSuits;
+        private BaseUtils.DataGridViewColumnControl dataGridViewSuits;
         private ExtendedControls.ExtScrollBar extScrollBar2;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripSuits;
         private System.Windows.Forms.ToolStripMenuItem forceSellShipToolStripMenuItem;

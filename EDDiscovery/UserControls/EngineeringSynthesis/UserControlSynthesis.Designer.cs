@@ -45,7 +45,7 @@ namespace EDDiscovery.UserControls
         {
             this.components = new System.ComponentModel.Container();
             this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
-            this.dataGridViewSynthesis = new BaseUtils.DataGridViewColumnHider();
+            this.dataGridViewSynthesis = new BaseUtils.DataGridViewColumnControl();
             this.UpgradeCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Level = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.MaxCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -337,7 +337,7 @@ namespace EDDiscovery.UserControls
         #endregion
 
         private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanel;
-        private BaseUtils.DataGridViewColumnHider dataGridViewSynthesis;
+        private BaseUtils.DataGridViewColumnControl dataGridViewSynthesis;
         private ExtendedControls.ExtScrollBar vScrollBarCustomMC;
         private System.Windows.Forms.ToolTip toolTip;
         private ExtendedControls.ExtButton buttonClear;

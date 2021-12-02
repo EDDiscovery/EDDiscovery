@@ -46,7 +46,7 @@ namespace EDDiscovery.UserControls
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dataViewScrollerPanel2 = new ExtendedControls.ExtPanelDataGridViewScroll();
-            this.dataGridViewScangrid = new BaseUtils.DataGridViewColumnHider();
+            this.dataGridViewScangrid = new BaseUtils.DataGridViewColumnControl();
             this.colImage = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colClass = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -400,7 +400,7 @@ namespace EDDiscovery.UserControls
         #endregion
         private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanel2;
         private ExtendedControls.ExtScrollBar vScrollBarCustom2;
-        private BaseUtils.DataGridViewColumnHider dataGridViewScangrid;
+        private BaseUtils.DataGridViewColumnControl dataGridViewScangrid;
         private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem circumstellarZoneToolStripMenuItem;

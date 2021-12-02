@@ -65,7 +65,7 @@ namespace EDDiscovery.UserControls
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.vScrollBarCustom = new ExtendedControls.ExtScrollBar();
-            this.dataGridViewStarList = new BaseUtils.DataGridViewColumnHider();
+            this.dataGridViewStarList = new BaseUtils.DataGridViewColumnControl();
             this.ColumnTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnVisits = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -470,7 +470,7 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.Label labelTime;
         private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanel;
         private ExtendedControls.ExtScrollBar vScrollBarCustom;
-        public  BaseUtils.DataGridViewColumnHider dataGridViewStarList;
+        public  BaseUtils.DataGridViewColumnControl dataGridViewStarList;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem mapGotoStartoolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem viewOnEDSMToolStripMenuItem;

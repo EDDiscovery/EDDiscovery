@@ -58,7 +58,7 @@ namespace EDDiscovery.UserControls
             this.labelDateStart = new System.Windows.Forms.Label();
             this.textBoxRouteName = new ExtendedControls.ExtTextBox();
             this.labelRouteName = new System.Windows.Forms.Label();
-            this.dataGridView = new BaseUtils.DataGridViewColumnHider();
+            this.dataGridView = new BaseUtils.DataGridViewColumnControl();
             this.SystemName = new ExtendedControls.ExtDataGridViewColumnAutoComplete();
             this.Distance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Note = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -843,7 +843,7 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtDateTimePicker dateTimePickerStartDate;
         private System.Windows.Forms.Label labelDateStart;
         private System.Windows.Forms.Label labelRouteName;
-        private BaseUtils.DataGridViewColumnHider dataGridView;
+        private BaseUtils.DataGridViewColumnControl dataGridView;
         private ExtendedControls.ExtTextBox textBoxRouteName;
         private System.Windows.Forms.ContextMenuStrip contextMenuCopyPaste;
         private System.Windows.Forms.ToolStripMenuItem copyToolStripMenuItem;

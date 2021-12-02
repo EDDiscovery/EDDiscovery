@@ -41,7 +41,7 @@
             this.labelSearch = new System.Windows.Forms.Label();
             this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.vScrollBarCustom1 = new ExtendedControls.ExtScrollBar();
-            this.dataGridView = new BaseUtils.DataGridViewColumnHider();
+            this.dataGridView = new BaseUtils.DataGridViewColumnControl();
             this.ColTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColBodyName = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -382,7 +382,7 @@
         #endregion
         private ExtendedControls.ExtTextBox textBoxFilter;
         private System.Windows.Forms.Label labelSearch;
-        private BaseUtils.DataGridViewColumnHider dataGridView;
+        private BaseUtils.DataGridViewColumnControl dataGridView;
         private ExtendedControls.ExtButton buttonNew;
         private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanel;
         private ExtendedControls.ExtScrollBar vScrollBarCustom1;

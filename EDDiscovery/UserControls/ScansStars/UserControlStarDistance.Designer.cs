@@ -65,7 +65,7 @@ namespace EDDiscovery.UserControls
             this.flowLayoutStarDistances = new System.Windows.Forms.FlowLayoutPanel();
             this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.vScrollBarCustom = new ExtendedControls.ExtScrollBar();
-            this.dataGridViewNearest = new BaseUtils.DataGridViewColumnHider();
+            this.dataGridViewNearest = new BaseUtils.DataGridViewColumnControl();
             this.colName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colVisited = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -377,7 +377,7 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripMenuItem viewOnEDSMToolStripMenuItem1;
         private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanel;
         private ExtendedControls.ExtScrollBar vScrollBarCustom;
-        private BaseUtils.DataGridViewColumnHider dataGridViewNearest;
+        private BaseUtils.DataGridViewColumnControl dataGridViewNearest;
         private DataGridViewTextBoxColumn colName;
         private DataGridViewTextBoxColumn colDistance;
         private DataGridViewTextBoxColumn colVisited;
