@@ -65,6 +65,7 @@ namespace EDDiscovery.UserControls
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.checkBoxEDSM = new ExtendedControls.ExtCheckBox();
             this.checkBoxShowZeros = new ExtendedControls.ExtCheckBox();
+            this.extCheckBoxShowImpossible = new ExtendedControls.ExtCheckBox();
             this.extPanelRollUp = new ExtendedControls.ExtPanelRollUp();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.dataViewScrollerPanel2.SuspendLayout();
@@ -237,6 +238,7 @@ namespace EDDiscovery.UserControls
             this.flowLayoutPanel1.AutoSize = true;
             this.flowLayoutPanel1.Controls.Add(this.checkBoxEDSM);
             this.flowLayoutPanel1.Controls.Add(this.checkBoxShowZeros);
+            this.flowLayoutPanel1.Controls.Add(this.extCheckBoxShowImpossible);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
@@ -294,6 +296,28 @@ namespace EDDiscovery.UserControls
             this.checkBoxShowZeros.TickBoxReductionRatio = 0.75F;
             this.toolTip.SetToolTip(this.checkBoxShowZeros, "Green will show materials with zero counts, red means remove them");
             this.checkBoxShowZeros.UseVisualStyleBackColor = true;
+            // 
+            // extCheckBoxShowImpossible
+            // 
+            this.extCheckBoxShowImpossible.Appearance = System.Windows.Forms.Appearance.Button;
+            this.extCheckBoxShowImpossible.CheckBoxColor = System.Drawing.Color.Gray;
+            this.extCheckBoxShowImpossible.CheckBoxDisabledScaling = 0.5F;
+            this.extCheckBoxShowImpossible.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.extCheckBoxShowImpossible.CheckColor = System.Drawing.Color.DarkBlue;
+            this.extCheckBoxShowImpossible.Image = global::EDDiscovery.Icons.Controls.HighValueTick;
+            this.extCheckBoxShowImpossible.ImageButtonDisabledScaling = 0.5F;
+            this.extCheckBoxShowImpossible.ImageIndeterminate = null;
+            this.extCheckBoxShowImpossible.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.extCheckBoxShowImpossible.ImageUnchecked = null;
+            this.extCheckBoxShowImpossible.Location = new System.Drawing.Point(76, 1);
+            this.extCheckBoxShowImpossible.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.extCheckBoxShowImpossible.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.extCheckBoxShowImpossible.Name = "extCheckBoxShowImpossible";
+            this.extCheckBoxShowImpossible.Size = new System.Drawing.Size(28, 28);
+            this.extCheckBoxShowImpossible.TabIndex = 5;
+            this.extCheckBoxShowImpossible.TickBoxReductionRatio = 0.75F;
+            this.toolTip.SetToolTip(this.extCheckBoxShowImpossible, "Show all values, even ones which are impossible to get");
+            this.extCheckBoxShowImpossible.UseVisualStyleBackColor = true;
             // 
             // extPanelRollUp
             // 
@@ -359,5 +383,7 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn FirstMappedEff;
         private System.Windows.Forms.DataGridViewTextBoxColumn FirstDiscMapped;
         private System.Windows.Forms.DataGridViewTextBoxColumn EstValue;
+        private ExtendedControls.ExtCheckBox extCheckBoxShowImpossible;
+
     }
 }

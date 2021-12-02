@@ -679,4 +679,7 @@
   <data name="ScanPosition" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\scanposition.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="HighValueTick" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\highvaluetick.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>
