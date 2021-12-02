@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2020 EDDiscovery development team
+ * Copyright © 2016 - 2021 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -65,7 +65,6 @@ namespace EDDiscovery.UserControls
         {
             uctg.OnTravelSelectionChanged += Display;
             DGVLoadColumnLayout(dataGridViewEstimatedValues);
-
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
