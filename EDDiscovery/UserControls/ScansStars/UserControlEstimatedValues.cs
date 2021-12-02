@@ -146,8 +146,8 @@ namespace EDDiscovery.UserControls
 
                        // System.Diagnostics.Debug.WriteLine($"EV was map {bodies.ScanData.IsPreviouslyMapped} was dis {bodies.ScanData.IsPreviouslyDiscovered} we map {bodies.ScanData.Mapped}");
 
-                        // shown if not previously mapped and we have not mapped (if we have mapped, one of the next will show the figure)
-                        string mappedstr = ev.EstimatedValueMapped > 0 && (showimpossibleValues || (bodies.ScanData.IsPreviouslyMapped && bodies.ScanData.Mapped == false))
+                        // shown if previously mapped and discovered - we are just mapping again
+                        string mappedstr = ev.EstimatedValueMapped > 0 && (showimpossibleValues || (bodies.ScanData.IsPreviouslyMapped && bodies.ScanData.IsPreviouslyDiscovered))
                                         ? (ev.EstimatedValueMappedEfficiently.ToString("N0") + " / " + ev.EstimatedValueMapped.ToString("N0")) : "";
 
                         // shown if not previously discovered, and we have not mapped (if we have mapped, one of the next will show the figure)
