@@ -66,14 +66,14 @@ namespace EDDiscovery.UserControls
 
             // design for std 8.25 font sizes
 
-            Bitmap backimage = new Bitmap(EDDiscovery.Icons.Controls.Selector_Background);
+            Bitmap backimage = new Bitmap(EDDiscovery.Icons.Controls.Selector);
             Color centre = backimage.GetPixel(48, 48);
             Size iconsize = new Size(24,24);
             int width = 96;
             int padbot = 6, padbetween = 5;
 
             float brigthness = EDDTheme.Instance.Form.GetBrightness();
-            Image selback = brigthness < 0.3 ? EDDiscovery.Icons.Controls.Selector_Background : EDDiscovery.Icons.Controls.Selector_Background2;
+            Image selback = brigthness < 0.3 ? EDDiscovery.Icons.Controls.Selector : EDDiscovery.Icons.Controls.Selector2;
 
             {
                 Versions.VersioningManager mgr = new Versions.VersioningManager();
@@ -87,8 +87,8 @@ namespace EDDiscovery.UserControls
                             EDDTheme.Instance.GetFont,
                             (i == 0) ? Color.Red : (EDDTheme.Instance.TextBlockColor.GetBrightness() < 0.1 ? Color.AntiqueWhite : EDDTheme.Instance.TextBlockColor),
                             Color.Transparent,
-                            EDDiscovery.Icons.Controls.Main_Addons_ManageAddOns, iconsize,
-                            new Image[] { EDDiscovery.Icons.Controls.Main_Addons_ManageAddOns }, iconsize,
+                            EDDiscovery.Icons.Controls.ManageAddOns, iconsize,
+                            new Image[] { EDDiscovery.Icons.Controls.ManageAddOns }, iconsize,
                             padbetween,
                             ButtonPress);
 
@@ -117,7 +117,7 @@ namespace EDDiscovery.UserControls
                             EDDTheme.Instance.TextBlockColor.GetBrightness() < 0.1 ? Color.AntiqueWhite : EDDTheme.Instance.TextBlockColor,
                             Color.Transparent,
                             pi.TabIcon, iconsize,
-                            new Image[] { EDDiscovery.Icons.Controls.Popout, EDDiscovery.Icons.Controls.Selector_AddTab }, iconsize,
+                            new Image[] { EDDiscovery.Icons.Controls.Popout, EDDiscovery.Icons.Controls.AddTab }, iconsize,
                             padbetween,
                             ButtonPress);
                 cb.SuspendLayout();

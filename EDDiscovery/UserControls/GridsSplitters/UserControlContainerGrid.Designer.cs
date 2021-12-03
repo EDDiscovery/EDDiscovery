@@ -62,7 +62,7 @@
             this.buttonExtTile.BorderColorScaling = 1.25F;
             this.buttonExtTile.ButtonColorScaling = 0.5F;
             this.buttonExtTile.ButtonDisabledScaling = 0.5F;
-            this.buttonExtTile.Image = global::EDDiscovery.Icons.Controls.UCContainer_Tile;
+            this.buttonExtTile.Image = global::EDDiscovery.Icons.Controls.Tile;
             this.buttonExtTile.Location = new System.Drawing.Point(63, 3);
             this.buttonExtTile.Name = "buttonExtTile";
             this.buttonExtTile.Size = new System.Drawing.Size(24, 24);
@@ -76,7 +76,7 @@
             this.buttonExtDelete.BorderColorScaling = 1.25F;
             this.buttonExtDelete.ButtonColorScaling = 0.5F;
             this.buttonExtDelete.ButtonDisabledScaling = 0.5F;
-            this.buttonExtDelete.Image = global::EDDiscovery.Icons.Controls.UCContainer_Remove;
+            this.buttonExtDelete.Image = global::EDDiscovery.Icons.Controls.Delete;
             this.buttonExtDelete.Location = new System.Drawing.Point(33, 3);
             this.buttonExtDelete.Name = "buttonExtDelete";
             this.buttonExtDelete.Size = new System.Drawing.Size(24, 24);
@@ -108,7 +108,7 @@
             this.buttonExtPopOut.BorderColorScaling = 1.25F;
             this.buttonExtPopOut.ButtonColorScaling = 0.5F;
             this.buttonExtPopOut.ButtonDisabledScaling = 0.5F;
-            this.buttonExtPopOut.Image = global::EDDiscovery.Icons.Controls.UCContainer_Panels;
+            this.buttonExtPopOut.Image = global::EDDiscovery.Icons.Controls.Panels;
             this.buttonExtPopOut.Location = new System.Drawing.Point(3, 3);
             this.buttonExtPopOut.Name = "buttonExtPopOut";
             this.buttonExtPopOut.Size = new System.Drawing.Size(24, 24);

@@ -30,6 +30,7 @@ namespace EDDiscovery.UserControls
         {
             CloseOnDeactivate = false;          // this one, we hide it on deactivate, to make it pop up quicker next time
             HideOnDeactivate = true;
+            ScreenMargin = new Size(0, 0);
 
             AddAllNone();
             foreach (var s in opts)

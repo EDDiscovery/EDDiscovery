@@ -72,6 +72,7 @@ namespace EDDiscovery.UserControls
             DBBaseName = "JournalGrid";
 
             dataGridViewJournal.MakeDoubleBuffered();
+            dataGridViewJournal.RowTemplate.MinimumHeight = 26;      // enough for the icon
             dataGridViewJournal.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             dataGridViewJournal.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
 

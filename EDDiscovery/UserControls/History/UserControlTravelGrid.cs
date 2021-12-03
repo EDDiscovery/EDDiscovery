@@ -105,6 +105,7 @@ namespace EDDiscovery.UserControls
             checkBoxCursorToTop.Checked = true;
 
             dataGridViewTravel.MakeDoubleBuffered();
+            dataGridViewTravel.RowTemplate.MinimumHeight = 26;      // enough for the icon
 
             string filter = GetSetting(dbFieldFilter, "");
             if (filter.Length > 0)

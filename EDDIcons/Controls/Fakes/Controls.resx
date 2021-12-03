@@ -118,93 +118,6 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="Main_Addons_ConfigureAddOnActions" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Main\Addons\ConfigureAddOnActions.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Main_Addons_EditLastActionPack" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Main\Addons\EditLastActionPack.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Main_Addons_ManageAddOns" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Main\Addons\ManageAddOns.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Main_Addons_StopCurrentAction" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Main\Addons\StopCurrentAction.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Main_Admin_ClearEDSMIDs" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Main\Admin\ClearEDSMIDs.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Main_Admin_DeleteDupFSDJumps" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Main\Admin\DeleteDupFSDJumps.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Main_Admin_EDSMSystemsSync" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Main\Admin\EDSMSystemsSync.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Main_Admin_ReadNetLogs" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Main\Admin\ReadNetLogs.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Main_Admin_RescanJournals" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Main\Admin\RescanJournals.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Main_Admin_ResetHistory" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Main\Admin\ResetHistory.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Main_Admin_SendUnsyncedEDDN" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Main\Admin\SendUnsyncedEDDN.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Main_Admin_ShowLogFiles" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Main\Admin\ShowLogFiles.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Main_Help_About" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Main\Help\About.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Main_Help_CheckForNewRelease" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Main\Help\CheckForNewRelease.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Main_Help_DiscordChat" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Main\Help\DiscordChat.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Main_Help_FrontierForumThread" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Main\Help\FrontierForumThread.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Main_Help_Github" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Main\Help\Github.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Main_Help_ReportIssue" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Main\Help\ReportIssue.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Main_Help_SafeModeHelp" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Main\Help\SafeModeHelp.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Main_Toolbar_EditAddons" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Main\Toolbar\EditAddons.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Main_Toolbar_ManageAddOns" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Main\Toolbar\ManageAddOns.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Main_Toolbar_Popouts" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Main\Toolbar\Popouts.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Main_Toolbar_Refresh" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Main\Toolbar\Refresh.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Main_Tools_Exit" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Main\Tools\Exit.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Main_Tools_Open3DMap" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Main\Tools\Open3DMap.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Main_Tools_Popouts_DisableTransparency" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Main\Tools\Popouts\DisableTransparency.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Main_Tools_Popouts_Menu" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Main\Tools\Popouts\Menu.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Main_Tools_Popouts_ShowAllInTaskbar" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Main\Tools\Popouts\ShowAllInTaskbar.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Main_Tools_Settings" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Main\Tools\Settings.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="Map3D_Bookmarks_AddRegionBookmark" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Map3D\Bookmarks\AddRegionBookmark.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -430,18 +343,6 @@
   <data name="Scan_SizeMinuscule" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Scan\SizeMinuscule.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="SPanel_ResizeColumn" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\SPanel\ResizeColumn.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="UCContainer_Panels" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\UCContainer\Panels.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="UCContainer_Remove" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\UCContainer\Remove.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="UCContainer_Tile" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\UCContainer\Tile.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="Scan_Star" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Scan\Star.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -450,9 +351,6 @@
   </data>
   <data name="backbutton" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Scan\backbutton.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="SendInara" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Main\Admin\SendInara.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="DisplayFilters" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Scan\DisplayFilters.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -681,5 +579,128 @@
   </data>
   <data name="HighValueTick" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\highvaluetick.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ConfigureAddOnActions" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\configureaddonactions.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="EDDN" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\eddn.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="EditLastActionPack" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\editlastactionpack.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FSDJumps" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\fsdjumps.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="InaraDark" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\inaradark.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ManageAddOns" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\manageaddons.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Pause" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\pause.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ReadNetLogs" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\readnetlogs.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="RescanJournals" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\rescanjournals.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ShowLogFiles" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\showlogfiles.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Warning" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\warning.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="About" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\about.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="CheckForNewRelease" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\checkfornewrelease.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="DiscordChat" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\discordchat.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FrontierForumThread" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\frontierforumthread.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Github" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\github.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ReportIssue" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\reportissue.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SafeModeHelp" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\safemodehelp.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="EditAddons" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\editaddons.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Exit" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\exit.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ManyStars" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\manystars.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Map3D" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\map3d.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Popouts" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\popouts.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Refresh" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\refresh.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Settings" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\settings.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Addtab" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\addtab.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="DisableTransparency" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\disabletransparency.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Menu" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\menu.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Panels" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\panels.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ResizeColumn" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resizecolumn.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Selector" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\selector.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Selector2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\selector2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ShowAllInTaskbar" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\showallintaskbar.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Tile" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\tile.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="EngineerApply" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\journal\engineerapply.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="EngineerCraft" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\journal\engineercraft.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="EngineerRecipe" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\engineerrecipe.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Level" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\level.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Materials" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\journal\materials.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ModuleInfo" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\Journal\ModuleInfo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Synthesis" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\journal\synthesis.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

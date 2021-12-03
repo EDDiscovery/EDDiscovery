@@ -56,15 +56,15 @@ namespace EDDiscovery.UserControls
             this.RecipeCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.EngineersCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.vScrollBarCustomMC = new ExtendedControls.ExtScrollBar();
-            this.chkNotHistoric = new ExtendedControls.ExtCheckBox();
-            this.buttonClear = new ExtendedControls.ExtButton();
-            this.buttonFilterMaterial = new ExtendedControls.ExtButton();
-            this.buttonFilterUpgrade = new ExtendedControls.ExtButton();
-            this.buttonFilterLevel = new ExtendedControls.ExtButton();
-            this.buttonFilterEngineer = new ExtendedControls.ExtButton();
-            this.buttonFilterModule = new ExtendedControls.ExtButton();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.panelTop = new System.Windows.Forms.FlowLayoutPanel();
+            this.buttonFilterUpgrade = new ExtendedControls.ExtButton();
+            this.buttonFilterModule = new ExtendedControls.ExtButton();
+            this.buttonFilterLevel = new ExtendedControls.ExtButton();
+            this.buttonFilterEngineer = new ExtendedControls.ExtButton();
+            this.buttonFilterMaterial = new ExtendedControls.ExtButton();
+            this.buttonClear = new ExtendedControls.ExtButton();
+            this.chkNotHistoric = new ExtendedControls.ExtCheckBox();
             this.extCheckBoxWordWrap = new ExtendedControls.ExtCheckBox();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewEngineering)).BeginInit();
@@ -91,6 +91,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewEngineering.AllowUserToOrderColumns = true;
             this.dataGridViewEngineering.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewEngineering.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewEngineering.ColumnReorder = true;
             this.dataGridViewEngineering.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.UpgradeCol,
             this.ModuleCol,
@@ -103,9 +104,11 @@ namespace EDDiscovery.UserControls
             this.EngineersCol});
             this.dataGridViewEngineering.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewEngineering.Name = "dataGridViewEngineering";
+            this.dataGridViewEngineering.RowHeaderMenuStrip = null;
             this.dataGridViewEngineering.RowHeadersVisible = false;
             this.dataGridViewEngineering.RowHeadersWidth = 25;
             this.dataGridViewEngineering.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dataGridViewEngineering.SingleRowSelect = true;
             this.dataGridViewEngineering.Size = new System.Drawing.Size(784, 542);
             this.dataGridViewEngineering.TabIndex = 1;
             this.dataGridViewEngineering.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewModules_CellEndEdit);
@@ -219,103 +222,6 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustomMC.Value = -1;
             this.vScrollBarCustomMC.ValueLimited = -1;
             // 
-            // chkNotHistoric
-            // 
-            this.chkNotHistoric.Appearance = System.Windows.Forms.Appearance.Button;
-            this.chkNotHistoric.CheckBoxColor = System.Drawing.Color.Gray;
-            this.chkNotHistoric.CheckBoxDisabledScaling = 0.5F;
-            this.chkNotHistoric.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.chkNotHistoric.CheckColor = System.Drawing.Color.DarkBlue;
-            this.chkNotHistoric.Image = global::EDDiscovery.Icons.Controls.CursorToTop;
-            this.chkNotHistoric.ImageButtonDisabledScaling = 0.5F;
-            this.chkNotHistoric.ImageIndeterminate = null;
-            this.chkNotHistoric.ImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.chkNotHistoric.ImageUnchecked = global::EDDiscovery.Icons.Controls.CursorStill;
-            this.chkNotHistoric.Location = new System.Drawing.Point(528, 1);
-            this.chkNotHistoric.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.chkNotHistoric.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.chkNotHistoric.Name = "chkNotHistoric";
-            this.chkNotHistoric.Size = new System.Drawing.Size(28, 28);
-            this.chkNotHistoric.TabIndex = 6;
-            this.chkNotHistoric.TickBoxReductionRatio = 0.75F;
-            this.toolTip.SetToolTip(this.chkNotHistoric, "When red, use the materials at the cursor to estimate, when green always use the " +
-        "latest materials.");
-            this.chkNotHistoric.UseVisualStyleBackColor = true;
-            this.chkNotHistoric.CheckedChanged += new System.EventHandler(this.chkHistoric_CheckedChanged);
-            // 
-            // buttonClear
-            // 
-            this.buttonClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonClear.Location = new System.Drawing.Point(440, 1);
-            this.buttonClear.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.buttonClear.Name = "buttonClear";
-            this.buttonClear.Size = new System.Drawing.Size(80, 23);
-            this.buttonClear.TabIndex = 5;
-            this.buttonClear.Text = "Clear";
-            this.toolTip.SetToolTip(this.buttonClear, "Set all wanted values to zero");
-            this.buttonClear.UseVisualStyleBackColor = true;
-            this.buttonClear.Click += new System.EventHandler(this.buttonClear_Click);
-            // 
-            // buttonFilterMaterial
-            // 
-            this.buttonFilterMaterial.Location = new System.Drawing.Point(352, 1);
-            this.buttonFilterMaterial.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.buttonFilterMaterial.Name = "buttonFilterMaterial";
-            this.buttonFilterMaterial.Size = new System.Drawing.Size(80, 23);
-            this.buttonFilterMaterial.TabIndex = 4;
-            this.buttonFilterMaterial.Text = "Material";
-            this.toolTip.SetToolTip(this.buttonFilterMaterial, "Filter the table by material");
-            this.buttonFilterMaterial.UseVisualStyleBackColor = true;
-            this.buttonFilterMaterial.Click += new System.EventHandler(this.buttonFilterMaterial_Click);
-            // 
-            // buttonFilterUpgrade
-            // 
-            this.buttonFilterUpgrade.Location = new System.Drawing.Point(0, 1);
-            this.buttonFilterUpgrade.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.buttonFilterUpgrade.Name = "buttonFilterUpgrade";
-            this.buttonFilterUpgrade.Size = new System.Drawing.Size(80, 23);
-            this.buttonFilterUpgrade.TabIndex = 3;
-            this.buttonFilterUpgrade.Text = "Upgrade";
-            this.toolTip.SetToolTip(this.buttonFilterUpgrade, "Filter the table by upgrade type");
-            this.buttonFilterUpgrade.UseVisualStyleBackColor = true;
-            this.buttonFilterUpgrade.Click += new System.EventHandler(this.buttonFilterUpgrade_Click);
-            // 
-            // buttonFilterLevel
-            // 
-            this.buttonFilterLevel.Location = new System.Drawing.Point(176, 1);
-            this.buttonFilterLevel.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.buttonFilterLevel.Name = "buttonFilterLevel";
-            this.buttonFilterLevel.Size = new System.Drawing.Size(80, 23);
-            this.buttonFilterLevel.TabIndex = 2;
-            this.buttonFilterLevel.Text = "Level";
-            this.toolTip.SetToolTip(this.buttonFilterLevel, "Filter the table by level");
-            this.buttonFilterLevel.UseVisualStyleBackColor = true;
-            this.buttonFilterLevel.Click += new System.EventHandler(this.buttonFilterLevel_Click);
-            // 
-            // buttonFilterEngineer
-            // 
-            this.buttonFilterEngineer.Location = new System.Drawing.Point(264, 1);
-            this.buttonFilterEngineer.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.buttonFilterEngineer.Name = "buttonFilterEngineer";
-            this.buttonFilterEngineer.Size = new System.Drawing.Size(80, 23);
-            this.buttonFilterEngineer.TabIndex = 1;
-            this.buttonFilterEngineer.Text = "Engineer";
-            this.toolTip.SetToolTip(this.buttonFilterEngineer, "Filter the table by engineer");
-            this.buttonFilterEngineer.UseVisualStyleBackColor = true;
-            this.buttonFilterEngineer.Click += new System.EventHandler(this.buttonFilterEngineer_Click);
-            // 
-            // buttonFilterModule
-            // 
-            this.buttonFilterModule.Location = new System.Drawing.Point(88, 1);
-            this.buttonFilterModule.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.buttonFilterModule.Name = "buttonFilterModule";
-            this.buttonFilterModule.Size = new System.Drawing.Size(80, 23);
-            this.buttonFilterModule.TabIndex = 0;
-            this.buttonFilterModule.Text = "Module";
-            this.toolTip.SetToolTip(this.buttonFilterModule, "Filter the table by module type");
-            this.buttonFilterModule.UseVisualStyleBackColor = true;
-            this.buttonFilterModule.Click += new System.EventHandler(this.buttonFilterModule_Click);
-            // 
             // toolTip
             // 
             this.toolTip.ShowAlways = true;
@@ -337,6 +243,107 @@ namespace EDDiscovery.UserControls
             this.panelTop.Size = new System.Drawing.Size(800, 30);
             this.panelTop.TabIndex = 2;
             // 
+            // buttonFilterUpgrade
+            // 
+            this.buttonFilterUpgrade.Image = global::EDDiscovery.Icons.Controls.EngineerRecipe;
+            this.buttonFilterUpgrade.Location = new System.Drawing.Point(8, 1);
+            this.buttonFilterUpgrade.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.buttonFilterUpgrade.Name = "buttonFilterUpgrade";
+            this.buttonFilterUpgrade.Size = new System.Drawing.Size(28, 28);
+            this.buttonFilterUpgrade.TabIndex = 3;
+            this.toolTip.SetToolTip(this.buttonFilterUpgrade, "Filter the table by upgrade type");
+            this.buttonFilterUpgrade.UseVisualStyleBackColor = true;
+            this.buttonFilterUpgrade.Click += new System.EventHandler(this.buttonFilterUpgrade_Click);
+            // 
+            // buttonFilterModule
+            // 
+            this.buttonFilterModule.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonFilterModule.Image = global::EDDiscovery.Icons.Controls.ModuleInfo;
+            this.buttonFilterModule.Location = new System.Drawing.Point(48, 1);
+            this.buttonFilterModule.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.buttonFilterModule.Name = "buttonFilterModule";
+            this.buttonFilterModule.Size = new System.Drawing.Size(28, 28);
+            this.buttonFilterModule.TabIndex = 0;
+            this.toolTip.SetToolTip(this.buttonFilterModule, "Filter the table by module type");
+            this.buttonFilterModule.UseVisualStyleBackColor = true;
+            this.buttonFilterModule.Click += new System.EventHandler(this.buttonFilterModule_Click);
+            // 
+            // buttonFilterLevel
+            // 
+            this.buttonFilterLevel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonFilterLevel.Image = global::EDDiscovery.Icons.Controls.Level;
+            this.buttonFilterLevel.Location = new System.Drawing.Point(88, 1);
+            this.buttonFilterLevel.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.buttonFilterLevel.Name = "buttonFilterLevel";
+            this.buttonFilterLevel.Size = new System.Drawing.Size(28, 28);
+            this.buttonFilterLevel.TabIndex = 2;
+            this.toolTip.SetToolTip(this.buttonFilterLevel, "Filter the table by level");
+            this.buttonFilterLevel.UseVisualStyleBackColor = true;
+            this.buttonFilterLevel.Click += new System.EventHandler(this.buttonFilterLevel_Click);
+            // 
+            // buttonFilterEngineer
+            // 
+            this.buttonFilterEngineer.Image = global::EDDiscovery.Icons.Controls.EngineerCraft;
+            this.buttonFilterEngineer.Location = new System.Drawing.Point(128, 1);
+            this.buttonFilterEngineer.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.buttonFilterEngineer.Name = "buttonFilterEngineer";
+            this.buttonFilterEngineer.Size = new System.Drawing.Size(28, 28);
+            this.buttonFilterEngineer.TabIndex = 1;
+            this.toolTip.SetToolTip(this.buttonFilterEngineer, "Filter the table by engineer");
+            this.buttonFilterEngineer.UseVisualStyleBackColor = true;
+            this.buttonFilterEngineer.Click += new System.EventHandler(this.buttonFilterEngineer_Click);
+            // 
+            // buttonFilterMaterial
+            // 
+            this.buttonFilterMaterial.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonFilterMaterial.Image = global::EDDiscovery.Icons.Controls.Materials;
+            this.buttonFilterMaterial.Location = new System.Drawing.Point(168, 1);
+            this.buttonFilterMaterial.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.buttonFilterMaterial.Name = "buttonFilterMaterial";
+            this.buttonFilterMaterial.Size = new System.Drawing.Size(28, 28);
+            this.buttonFilterMaterial.TabIndex = 4;
+            this.toolTip.SetToolTip(this.buttonFilterMaterial, "Filter the table by material");
+            this.buttonFilterMaterial.UseVisualStyleBackColor = true;
+            this.buttonFilterMaterial.Click += new System.EventHandler(this.buttonFilterMaterial_Click);
+            // 
+            // buttonClear
+            // 
+            this.buttonClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonClear.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonClear.Image = global::EDDiscovery.Icons.Controls.Cross;
+            this.buttonClear.Location = new System.Drawing.Point(208, 1);
+            this.buttonClear.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.buttonClear.Name = "buttonClear";
+            this.buttonClear.Size = new System.Drawing.Size(28, 28);
+            this.buttonClear.TabIndex = 5;
+            this.toolTip.SetToolTip(this.buttonClear, "Set all wanted values to zero");
+            this.buttonClear.UseVisualStyleBackColor = true;
+            this.buttonClear.Click += new System.EventHandler(this.buttonClear_Click);
+            // 
+            // chkNotHistoric
+            // 
+            this.chkNotHistoric.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkNotHistoric.CheckBoxColor = System.Drawing.Color.Gray;
+            this.chkNotHistoric.CheckBoxDisabledScaling = 0.5F;
+            this.chkNotHistoric.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.chkNotHistoric.CheckColor = System.Drawing.Color.DarkBlue;
+            this.chkNotHistoric.Image = global::EDDiscovery.Icons.Controls.CursorToTop;
+            this.chkNotHistoric.ImageButtonDisabledScaling = 0.5F;
+            this.chkNotHistoric.ImageIndeterminate = null;
+            this.chkNotHistoric.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.chkNotHistoric.ImageUnchecked = global::EDDiscovery.Icons.Controls.CursorStill;
+            this.chkNotHistoric.Location = new System.Drawing.Point(248, 1);
+            this.chkNotHistoric.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.chkNotHistoric.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.chkNotHistoric.Name = "chkNotHistoric";
+            this.chkNotHistoric.Size = new System.Drawing.Size(28, 28);
+            this.chkNotHistoric.TabIndex = 6;
+            this.chkNotHistoric.TickBoxReductionRatio = 0.75F;
+            this.toolTip.SetToolTip(this.chkNotHistoric, "When red, use the materials at the cursor to estimate, when green always use the " +
+        "latest materials.");
+            this.chkNotHistoric.UseVisualStyleBackColor = true;
+            this.chkNotHistoric.CheckedChanged += new System.EventHandler(this.chkHistoric_CheckedChanged);
+            // 
             // extCheckBoxWordWrap
             // 
             this.extCheckBoxWordWrap.Appearance = System.Windows.Forms.Appearance.Button;
@@ -357,8 +364,8 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxWordWrap.ImageIndeterminate = null;
             this.extCheckBoxWordWrap.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxWordWrap.ImageUnchecked = global::EDDiscovery.Icons.Controls.WordWrapOff;
-            this.extCheckBoxWordWrap.Location = new System.Drawing.Point(564, 1);
-            this.extCheckBoxWordWrap.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.extCheckBoxWordWrap.Location = new System.Drawing.Point(288, 1);
+            this.extCheckBoxWordWrap.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
             this.extCheckBoxWordWrap.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.extCheckBoxWordWrap.Name = "extCheckBoxWordWrap";
             this.extCheckBoxWordWrap.Size = new System.Drawing.Size(28, 28);

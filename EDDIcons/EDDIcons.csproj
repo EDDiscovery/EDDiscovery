@@ -330,9 +330,8 @@
     <EmbeddedResource Include="Controls\Map3D\Navigation\GoToHistorySelection.png" />
     <EmbeddedResource Include="Controls\Map3D\Recorder\Menu.png" />
     <EmbeddedResource Include="Controls\Map3D\YellowDot.png" />
-    <EmbeddedResource Include="Controls\UCContainer\Remove.png" />
-    <EmbeddedResource Include="Controls\UCContainer\Panels.png" />
-    <EmbeddedResource Include="Controls\UCContainer\Tile.png" />
+    <EmbeddedResource Include="Controls\Panels.png" />
+    <EmbeddedResource Include="Controls\Tile.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -344,36 +343,33 @@
     <EmbeddedResource Include="Controls\ImportRoute.png" />
     <EmbeddedResource Include="Controls\Save.png" />
     <EmbeddedResource Include="Controls\Export.png" />
-    <EmbeddedResource Include="Controls\Main\Addons\EditLastActionPack.png" />
-    <EmbeddedResource Include="Controls\Main\Addons\ManageAddOns.png" />
-    <EmbeddedResource Include="Controls\Main\Addons\StopCurrentAction.png" />
-    <EmbeddedResource Include="Controls\Main\Admin\DeleteDupFSDJumps.png" />
-    <EmbeddedResource Include="Controls\Main\Admin\ClearEDSMIDs.png" />
-    <EmbeddedResource Include="Controls\Main\Admin\SendUnsyncedEDDN.png" />
-    <EmbeddedResource Include="Controls\Main\Admin\EDSMSystemsSync.png" />
-    <EmbeddedResource Include="Controls\Main\Addons\ConfigureAddOnActions.png" />
-    <EmbeddedResource Include="Controls\Main\Admin\RescanJournals.png" />
-    <EmbeddedResource Include="Controls\Main\Admin\ShowLogFiles.png" />
-    <EmbeddedResource Include="Controls\Main\Admin\ReadNetLogs.png" />
-    <EmbeddedResource Include="Controls\Main\Admin\ResetHistory.png" />
+    <EmbeddedResource Include="Controls\EditLastActionPack.png" />
+    <EmbeddedResource Include="Controls\ManageAddOns.png" />
+    <EmbeddedResource Include="Controls\Pause.png" />
+    <EmbeddedResource Include="Controls\FSDJumps.png" />
+    <EmbeddedResource Include="Controls\EDDN.png" />
+    <EmbeddedResource Include="Controls\ConfigureAddOnActions.png" />
+    <EmbeddedResource Include="Controls\RescanJournals.png" />
+    <EmbeddedResource Include="Controls\ShowLogFiles.png" />
+    <EmbeddedResource Include="Controls\ReadNetLogs.png" />
+    <EmbeddedResource Include="Controls\Warning.png" />
     <EmbeddedResource Include="Panels\Map2D.png" />
-    <EmbeddedResource Include="Controls\Main\Toolbar\EditAddons.png" />
-    <EmbeddedResource Include="Controls\Main\Toolbar\ManageAddOns.png" />
-    <EmbeddedResource Include="Controls\Main\Toolbar\Popouts.png" />
-    <EmbeddedResource Include="Controls\Main\Toolbar\Refresh.png" />
-    <EmbeddedResource Include="Controls\Main\Help\CheckForNewRelease.png" />
-    <EmbeddedResource Include="Controls\Main\Help\DiscordChat.png" />
-    <EmbeddedResource Include="Controls\Main\Help\FrontierForumThread.png" />
-    <EmbeddedResource Include="Controls\Main\Help\Github.png" />
-    <EmbeddedResource Include="Controls\Main\Help\SafeModeHelp.png" />
-    <EmbeddedResource Include="Controls\Main\Help\ReportIssue.png" />
-    <EmbeddedResource Include="Controls\Main\Help\About.png" />
-    <EmbeddedResource Include="Controls\Main\Tools\Exit.png" />
-    <EmbeddedResource Include="Controls\Main\Tools\Popouts\Menu.png" />
-    <EmbeddedResource Include="Controls\Main\Tools\Settings.png" />
-    <EmbeddedResource Include="Controls\Main\Tools\Open3DMap.png" />
-    <EmbeddedResource Include="Controls\Main\Tools\Popouts\ShowAllInTaskbar.png" />
-    <EmbeddedResource Include="Controls\Main\Tools\Popouts\DisableTransparency.png" />
+    <EmbeddedResource Include="Controls\EditAddons.png" />
+    <EmbeddedResource Include="Controls\Popouts.png" />
+    <EmbeddedResource Include="Controls\Refresh.png" />
+    <EmbeddedResource Include="Controls\CheckForNewRelease.png" />
+    <EmbeddedResource Include="Controls\DiscordChat.png" />
+    <EmbeddedResource Include="Controls\FrontierForumThread.png" />
+    <EmbeddedResource Include="Controls\Github.png" />
+    <EmbeddedResource Include="Controls\SafeModeHelp.png" />
+    <EmbeddedResource Include="Controls\ReportIssue.png" />
+    <EmbeddedResource Include="Controls\About.png" />
+    <EmbeddedResource Include="Controls\Exit.png" />
+    <EmbeddedResource Include="Controls\Menu.png" />
+    <EmbeddedResource Include="Controls\Settings.png" />
+    <EmbeddedResource Include="Controls\ManyStars.png" />
+    <EmbeddedResource Include="Controls\ShowAllInTaskbar.png" />
+    <EmbeddedResource Include="Controls\DisableTransparency.png" />
     <EmbeddedResource Include="Controls\Scan\ExportToExcel.png" />
     <EmbeddedResource Include="Controls\Scan\FetchEDSMBodies.png" />
     <EmbeddedResource Include="Controls\Scan\ShowAllMaterials.png" />
@@ -414,7 +410,7 @@
     <EmbeddedResource Include="Controls\Scan\Bodies\RingGap.png" />
     <EmbeddedResource Include="Controls\Scan\Bodies\Terraformable.png" />
     <EmbeddedResource Include="Controls\Scan\Bodies\Volcanism.png" />
-    <EmbeddedResource Include="Controls\SPanel\ResizeColumn.png" />
+    <EmbeddedResource Include="Controls\ResizeColumn.png" />
     <EmbeddedResource Include="Controls\FlagStart.png" />
     <EmbeddedResource Include="Controls\FlagStop.png" />
   </ItemGroup>
@@ -488,10 +484,10 @@
     <EmbeddedResource Include="Journal\Shutdown.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Controls\Selector\Selector.png" />
+    <EmbeddedResource Include="Controls\Selector.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Controls\Selector\Addtab.png" />
+    <EmbeddedResource Include="Controls\Addtab.png" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Panels\PanelSelector.png" />
@@ -687,7 +683,7 @@
     <EmbeddedResource Include="Journal\CarrierJump.png" />
     <EmbeddedResource Include="Journal\CarrierJumpCancelled.png" />
     <EmbeddedResource Include="Journal\CarrierJumpRequest.png" />
-    <EmbeddedResource Include="Controls\Selector\Selector2.png" />
+    <EmbeddedResource Include="Controls\Selector2.png" />
     <EmbeddedResource Include="Controls\Scan\SizeHuge.png" />
     <EmbeddedResource Include="Controls\Scan\SizeVeryLarge.png" />
     <EmbeddedResource Include="Controls\Scan\ShowAllG.png" />
@@ -792,7 +788,7 @@
     <EmbeddedResource Include="Controls\MaterialTrader\LeftArrow.png" />
     <EmbeddedResource Include="Controls\MaterialTrader\RightArrow.png" />
     <EmbeddedResource Include="Controls\MaterialTrader\TraderBar.png" />
-    <EmbeddedResource Include="Controls\Main\Admin\SendInara.png" />
+    <EmbeddedResource Include="Controls\InaraDark.png" />
     <EmbeddedResource Include="Controls\MaterialTrader\manubackground.png" />
     <EmbeddedResource Include="Controls\MaterialTrader\rawbackground.png" />
     <EmbeddedResource Include="Controls\redzero.png" />
@@ -1043,6 +1039,9 @@
     <EmbeddedResource Include="Controls\Columns.png" />
     <EmbeddedResource Include="Controls\ColumnOrder.png" />
     <EmbeddedResource Include="Controls\HighValueTick.png" />
+    <EmbeddedResource Include="Controls\Map3D.png" />
+    <EmbeddedResource Include="Controls\Level.png" />
+    <EmbeddedResource Include="Controls\EngineerRecipe.png" />
     <Content Include="Controls\readme.txt" />
     <EmbeddedResource Include="Panels\MissionOverlay.png" />
     <EmbeddedResource Include="Journal\CrimeVictim.png" />

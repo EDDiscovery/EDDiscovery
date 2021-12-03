@@ -266,7 +266,7 @@ namespace EDDiscovery.UserControls
             this.buttonExt12.BackColor = System.Drawing.Color.Transparent;
             this.buttonExt12.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.buttonExt12.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
-            this.buttonExt12.Image = global::EDDiscovery.Icons.Controls.SPanel_ResizeColumn;
+            this.buttonExt12.Image = global::EDDiscovery.Icons.Controls.ResizeColumn;
             this.buttonExt12.Location = new System.Drawing.Point(384, 48);
             this.buttonExt12.Name = "buttonExt12";
             this.buttonExt12.Size = new System.Drawing.Size(24, 24);
@@ -283,7 +283,7 @@ namespace EDDiscovery.UserControls
             this.buttonExt11.BackColor = System.Drawing.Color.Transparent;
             this.buttonExt11.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.buttonExt11.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
-            this.buttonExt11.Image = global::EDDiscovery.Icons.Controls.SPanel_ResizeColumn;
+            this.buttonExt11.Image = global::EDDiscovery.Icons.Controls.ResizeColumn;
             this.buttonExt11.Location = new System.Drawing.Point(354, 48);
             this.buttonExt11.Name = "buttonExt11";
             this.buttonExt11.Size = new System.Drawing.Size(24, 24);
@@ -300,7 +300,7 @@ namespace EDDiscovery.UserControls
             this.buttonExt10.BackColor = System.Drawing.Color.Transparent;
             this.buttonExt10.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.buttonExt10.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
-            this.buttonExt10.Image = global::EDDiscovery.Icons.Controls.SPanel_ResizeColumn;
+            this.buttonExt10.Image = global::EDDiscovery.Icons.Controls.ResizeColumn;
             this.buttonExt10.Location = new System.Drawing.Point(324, 48);
             this.buttonExt10.Name = "buttonExt10";
             this.buttonExt10.Size = new System.Drawing.Size(24, 24);
@@ -317,7 +317,7 @@ namespace EDDiscovery.UserControls
             this.buttonExt9.BackColor = System.Drawing.Color.Transparent;
             this.buttonExt9.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.buttonExt9.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
-            this.buttonExt9.Image = global::EDDiscovery.Icons.Controls.SPanel_ResizeColumn;
+            this.buttonExt9.Image = global::EDDiscovery.Icons.Controls.ResizeColumn;
             this.buttonExt9.Location = new System.Drawing.Point(290, 48);
             this.buttonExt9.Name = "buttonExt9";
             this.buttonExt9.Size = new System.Drawing.Size(24, 24);
@@ -334,7 +334,7 @@ namespace EDDiscovery.UserControls
             this.buttonExt8.BackColor = System.Drawing.Color.Transparent;
             this.buttonExt8.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.buttonExt8.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
-            this.buttonExt8.Image = global::EDDiscovery.Icons.Controls.SPanel_ResizeColumn;
+            this.buttonExt8.Image = global::EDDiscovery.Icons.Controls.ResizeColumn;
             this.buttonExt8.Location = new System.Drawing.Point(260, 48);
             this.buttonExt8.Name = "buttonExt8";
             this.buttonExt8.Size = new System.Drawing.Size(24, 24);
@@ -351,7 +351,7 @@ namespace EDDiscovery.UserControls
             this.buttonExt7.BackColor = System.Drawing.Color.Transparent;
             this.buttonExt7.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.buttonExt7.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
-            this.buttonExt7.Image = global::EDDiscovery.Icons.Controls.SPanel_ResizeColumn;
+            this.buttonExt7.Image = global::EDDiscovery.Icons.Controls.ResizeColumn;
             this.buttonExt7.Location = new System.Drawing.Point(230, 48);
             this.buttonExt7.Name = "buttonExt7";
             this.buttonExt7.Size = new System.Drawing.Size(24, 24);
@@ -368,7 +368,7 @@ namespace EDDiscovery.UserControls
             this.buttonExt6.BackColor = System.Drawing.Color.Transparent;
             this.buttonExt6.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.buttonExt6.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
-            this.buttonExt6.Image = global::EDDiscovery.Icons.Controls.SPanel_ResizeColumn;
+            this.buttonExt6.Image = global::EDDiscovery.Icons.Controls.ResizeColumn;
             this.buttonExt6.Location = new System.Drawing.Point(200, 48);
             this.buttonExt6.Name = "buttonExt6";
             this.buttonExt6.Size = new System.Drawing.Size(24, 24);
@@ -385,7 +385,7 @@ namespace EDDiscovery.UserControls
             this.buttonExt5.BackColor = System.Drawing.Color.Transparent;
             this.buttonExt5.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.buttonExt5.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
-            this.buttonExt5.Image = global::EDDiscovery.Icons.Controls.SPanel_ResizeColumn;
+            this.buttonExt5.Image = global::EDDiscovery.Icons.Controls.ResizeColumn;
             this.buttonExt5.Location = new System.Drawing.Point(164, 48);
             this.buttonExt5.Name = "buttonExt5";
             this.buttonExt5.Size = new System.Drawing.Size(24, 24);
@@ -402,7 +402,7 @@ namespace EDDiscovery.UserControls
             this.buttonExt4.BackColor = System.Drawing.Color.Transparent;
             this.buttonExt4.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.buttonExt4.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
-            this.buttonExt4.Image = global::EDDiscovery.Icons.Controls.SPanel_ResizeColumn;
+            this.buttonExt4.Image = global::EDDiscovery.Icons.Controls.ResizeColumn;
             this.buttonExt4.Location = new System.Drawing.Point(133, 48);
             this.buttonExt4.Name = "buttonExt4";
             this.buttonExt4.Size = new System.Drawing.Size(24, 24);
@@ -419,7 +419,7 @@ namespace EDDiscovery.UserControls
             this.buttonExt3.BackColor = System.Drawing.Color.Transparent;
             this.buttonExt3.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.buttonExt3.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
-            this.buttonExt3.Image = global::EDDiscovery.Icons.Controls.SPanel_ResizeColumn;
+            this.buttonExt3.Image = global::EDDiscovery.Icons.Controls.ResizeColumn;
             this.buttonExt3.Location = new System.Drawing.Point(103, 48);
             this.buttonExt3.Name = "buttonExt3";
             this.buttonExt3.Size = new System.Drawing.Size(24, 24);
@@ -436,7 +436,7 @@ namespace EDDiscovery.UserControls
             this.buttonExt2.BackColor = System.Drawing.Color.Transparent;
             this.buttonExt2.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.buttonExt2.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
-            this.buttonExt2.Image = global::EDDiscovery.Icons.Controls.SPanel_ResizeColumn;
+            this.buttonExt2.Image = global::EDDiscovery.Icons.Controls.ResizeColumn;
             this.buttonExt2.Location = new System.Drawing.Point(73, 48);
             this.buttonExt2.Name = "buttonExt2";
             this.buttonExt2.Size = new System.Drawing.Size(24, 24);
@@ -453,7 +453,7 @@ namespace EDDiscovery.UserControls
             this.buttonExt1.BackColor = System.Drawing.Color.Transparent;
             this.buttonExt1.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.buttonExt1.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
-            this.buttonExt1.Image = global::EDDiscovery.Icons.Controls.SPanel_ResizeColumn;
+            this.buttonExt1.Image = global::EDDiscovery.Icons.Controls.ResizeColumn;
             this.buttonExt1.Location = new System.Drawing.Point(43, 48);
             this.buttonExt1.Name = "buttonExt1";
             this.buttonExt1.Size = new System.Drawing.Size(24, 24);
@@ -470,7 +470,7 @@ namespace EDDiscovery.UserControls
             this.buttonExt0.BackColor = System.Drawing.Color.Transparent;
             this.buttonExt0.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.buttonExt0.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
-            this.buttonExt0.Image = global::EDDiscovery.Icons.Controls.SPanel_ResizeColumn;
+            this.buttonExt0.Image = global::EDDiscovery.Icons.Controls.ResizeColumn;
             this.buttonExt0.Location = new System.Drawing.Point(8, 48);
             this.buttonExt0.Name = "buttonExt0";
             this.buttonExt0.Size = new System.Drawing.Size(24, 24);
