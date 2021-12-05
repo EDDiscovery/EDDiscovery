@@ -649,55 +649,6 @@ namespace EDDiscovery.UserControls
         #endregion
 
         #region UI
-
-        private void checkBoxEDSM_Clicked(object sender, EventArgs e)
-        {
-            PutSetting("edsm", checkBoxEDSM.Checked);
-            DrawSystem(last_sys);
-        }
-
-        private void wordWrapToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            PutSetting("wordwrap", extCheckBoxWordWrap.Checked);
-            DrawSystem(last_sys);
-        }
-
-        private void extButtonFSS_Click(object sender, EventArgs e)
-        {
-            ExtendedControls.ConfigurableForm f = new ExtendedControls.ConfigurableForm();
-
-            int width = 430;
-
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("Text", typeof(ExtendedControls.ExtTextBox), fsssignalsdisplayed, new Point(10, 40), new Size(width - 10 - 20, 110), "List Names to show") { textboxmultiline = true });
-
-            f.AddOK(new Point(width - 100, 180));
-            f.AddCancel(new Point(width - 200, 180));
-
-            f.Trigger += (dialogname, controlname, tag) =>
-            {
-                if (controlname == "OK")
-                {
-                    f.ReturnResult(DialogResult.OK);
-                }
-                else if (controlname == "Cancel" || controlname == "Close")
-                {
-                    f.ReturnResult(DialogResult.Cancel);
-                }
-            };
-
-            DialogResult res = f.ShowDialogCentred(this.FindForm(), this.FindForm().Icon, "List signals to display, semicolon seperated".T(EDTx.UserControlSurveyor_fsssignals), closeicon: true);
-            if (res == DialogResult.OK)
-            {
-                fsssignalsdisplayed = f.Get("Text");
-                PutSetting("fsssignals", fsssignalsdisplayed);
-                DrawSystem(last_sys);
-            }
-        }
-
-        #endregion
-
-        #region UI for Ctrl items
-
         protected enum CtrlList
         {
             allplanets, showAmmonia, showEarthlike, showWaterWorld, showHMC, showMR,
@@ -722,15 +673,7 @@ namespace EDDiscovery.UserControls
         // from DB, set up ctrlset, and set the defaults
         private void PopulateCtrlList()
         {
-            ctrlset = new bool[Enum.GetNames(typeof(CtrlList)).Length];
-            foreach (CtrlList e in Enum.GetValues(typeof(CtrlList)))
-            {
-                bool def = DefaultSetting(e);
-                var v = GetSetting(e.ToString(), def);
-                //System.Diagnostics.Debug.WriteLine($"Surveyor {e.ToString()} = {v}");
-                ctrlset[(int)e] = v;
-            }
-
+            ctrlset = GetSettingAsCtrlSet<CtrlList>(DefaultSetting);
             alignment = ctrlset[(int)CtrlList.alignright] ? StringAlignment.Far : ctrlset[(int)CtrlList.aligncenter] ? StringAlignment.Center : StringAlignment.Near;
         }
 
@@ -739,18 +682,6 @@ namespace EDDiscovery.UserControls
             bool def = (e != CtrlList.alignright && e != CtrlList.aligncenter && e != CtrlList.autohide && e != CtrlList.lowradius
                 && e != CtrlList.allplanets && e != CtrlList.allstars && e != CtrlList.beltclusters);
             return def;
-        }
-
-        private string CtrlStateAsString()      // returns all controls in one string, note Show below does not care about the extras
-        {
-            string s = "";
-            foreach (CtrlList v in Enum.GetValues(typeof(CtrlList)))
-            {
-                if (ctrlset[(int)v])
-                    s += v.ToString() + ";";
-            }
-
-            return s;
         }
 
         private void extButtonPlanets_Click(object sender, EventArgs e)
@@ -810,8 +741,6 @@ namespace EDDiscovery.UserControls
             CommonCtrl(displayfilter, extButtonShowControl);
         }
 
-        #endregion
-
         private void extButtonAlignment_Click(object sender, EventArgs e)
         {
             ExtendedControls.CheckedIconListBoxFormGroup displayfilter = new CheckedIconListBoxFormGroup();
@@ -840,7 +769,7 @@ namespace EDDiscovery.UserControls
                 DrawSystem(last_sys);
             };
 
-            displayfilter.Show(CtrlStateAsString(), under, this.FindForm());
+            displayfilter.Show(typeof(CtrlList), ctrlset, under, this.FindForm());
         }
 
         private void extButtonFont_Click(object sender, EventArgs e)
@@ -853,6 +782,51 @@ namespace EDDiscovery.UserControls
             DrawSystem(last_sys);
         }
 
+        private void checkBoxEDSM_Clicked(object sender, EventArgs e)
+        {
+            PutSetting("edsm", checkBoxEDSM.Checked);
+            DrawSystem(last_sys);
+        }
+
+        private void wordWrapToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PutSetting("wordwrap", extCheckBoxWordWrap.Checked);
+            DrawSystem(last_sys);
+        }
+
+        private void extButtonFSS_Click(object sender, EventArgs e)
+        {
+            ExtendedControls.ConfigurableForm f = new ExtendedControls.ConfigurableForm();
+
+            int width = 430;
+
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("Text", typeof(ExtendedControls.ExtTextBox), fsssignalsdisplayed, new Point(10, 40), new Size(width - 10 - 20, 110), "List Names to show") { textboxmultiline = true });
+
+            f.AddOK(new Point(width - 100, 180));
+            f.AddCancel(new Point(width - 200, 180));
+
+            f.Trigger += (dialogname, controlname, tag) =>
+            {
+                if (controlname == "OK")
+                {
+                    f.ReturnResult(DialogResult.OK);
+                }
+                else if (controlname == "Cancel" || controlname == "Close")
+                {
+                    f.ReturnResult(DialogResult.Cancel);
+                }
+            };
+
+            DialogResult res = f.ShowDialogCentred(this.FindForm(), this.FindForm().Icon, "List signals to display, semicolon seperated".T(EDTx.UserControlSurveyor_fsssignals), closeicon: true);
+            if (res == DialogResult.OK)
+            {
+                fsssignalsdisplayed = f.Get("Text");
+                PutSetting("fsssignals", fsssignalsdisplayed);
+                DrawSystem(last_sys);
+            }
+        }
+
+        #endregion
 
         #region Route control
 

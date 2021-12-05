@@ -260,6 +260,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewTravel.AllowUserToDeleteRows = false;
             this.dataGridViewTravel.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewTravel.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewTravel.ColumnReorder = true;
             this.dataGridViewTravel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewTravel.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewTravel.Name = "dataGridViewTravel";
@@ -312,6 +313,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewScan.AllowUserToDeleteRows = false;
             this.dataGridViewScan.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewScan.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewScan.ColumnReorder = true;
             this.dataGridViewScan.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewScan.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewScan.Name = "dataGridViewScan";
@@ -431,6 +433,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewByShip.AllowUserToDeleteRows = false;
             this.dataGridViewByShip.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewByShip.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewByShip.ColumnReorder = true;
             this.dataGridViewByShip.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewByShip.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewByShip.Name = "dataGridViewByShip";

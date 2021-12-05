@@ -258,6 +258,12 @@
     <Compile Include="UserControls\3DMap\UserControl3DMap.Designer.cs">
       <DependentUpon>UserControl3DMap.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\Overlays\UserControlOrganics.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\Overlays\UserControlOrganics.Designer.cs">
+      <DependentUpon>UserControlOrganics.cs</DependentUpon>
+    </Compile>
     <Compile Include="WebServer\EDDWebTexts.cs" />
     <Compile Include="WebServer\EDDWebPresskey.cs" />
     <Compile Include="WebServer\EDDWebJournal.cs" />
@@ -849,6 +855,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\Overlays\UserControlSpanel.resx">
       <DependentUpon>UserControlSpanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Overlays\UserControlOrganics.resx">
+      <DependentUpon>UserControlOrganics.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\Overlays\UserControlSurveyor.resx">
       <DependentUpon>UserControlSurveyor.cs</DependentUpon>

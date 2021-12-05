@@ -151,6 +151,8 @@ SECTION PopOutInfo
 .Map3D.Description: "3D Map of galaxy" @
 .LocalMap3D.Title: "Local 3D Map" @
 .LocalMap3D.Description: "Local 3D Map of systems near you" @
+.Organics.Title: "Organic Scans" @
+.Organics.Description: "Current body organic information and history of scans" @
 
 SECTION EDDiscoveryForm
 

@@ -39,14 +39,14 @@ namespace EDDiscovery
             Statistics=8,             
             Scan=9,
             Modules=10,
-                                        // Exploration removed
+            // Exploration removed for 15.0
             Synthesis=12,             
             Missions=13,
             Engineering=14,
             MarketData=15,
             SystemInformation=16,      
             Spanel=17,
-                                        // Trippanel removed
+            // Trippanel removed for 15.0
             NotePanel = 19,
             RouteTracker=20,           
             Grid=21,
@@ -60,6 +60,7 @@ namespace EDDiscovery
             Settings=29,               
             ScanGrid=30,               
             Compass=31,                
+            // plot and LocalMap removed for 15.0
             PanelSelector=34,          
             BookmarkManager=35,        
             CombatPanel=36,            
@@ -81,6 +82,7 @@ namespace EDDiscovery
             SuitsWeapons=52,
             Map3D = 53,
             LocalMap3D = 54,
+            Organics = 55,
             // ****** ADD More here DO NOT RENUMBER *****
         };
 
@@ -132,6 +134,7 @@ namespace EDDiscovery
             { new PanelInfo( PanelIDs.Map2D, typeof(UserControl2DMap) ,"2D Map", "map2d", "2D Map of galaxy") },
             { new PanelInfo( PanelIDs.Map3D, typeof(UserControl3DMap) ,"3D Map", "map3d", "3D Map of galaxy") },
             { new PanelInfo( PanelIDs.LocalMap3D, typeof(UserControlLocal3DMap) ,"Local 3D Map", "localmap3d", "Local 3D Map of systems near you") },
+            { new PanelInfo( PanelIDs.Organics, typeof(UserControlOrganics) ,"Organic Scans", "OrganicScans", "Current body organic information and history of scans") },
 
             { new PanelInfo( "Bookmarks and Logs") },
             { new PanelInfo( PanelIDs.BookmarkManager, typeof(UserControlBookmarks), "Bookmarks", "Bookmarks", "Bookmarks on systems and planets", transparent:false)},

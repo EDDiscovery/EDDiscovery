@@ -62,6 +62,8 @@ namespace EDDiscovery.UserControls
 
             checkBoxShowZeros.Checked = GetSetting(dbShowZero, false); 
             checkBoxShowZeros.CheckedChanged += CheckBoxShowZeros_CheckedChanged;
+
+            extPanelRollUp.PinState = GetSetting("PinState", true);
         }
 
         public override void LoadLayout()
@@ -79,6 +81,7 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
+            PutSetting("PinState", extPanelRollUp.PinState);
             DGVSaveColumnLayout(dataGridViewEstimatedValues);
 
             uctg.OnTravelSelectionChanged -= Display;

@@ -248,13 +248,28 @@ namespace EDDiscovery.UserControls
             }
             return s;
         }
+
+        public bool[] GetSettingAsCtrlSet<T>(Func<T,bool> defaultvalue) where T:Enum
+        {
+            var ctrlset = new bool[Enum.GetNames(typeof(T)).Length];
+            foreach (T e in Enum.GetValues(typeof(T)))
+            {
+                bool def = defaultvalue(e);
+                var v = GetSetting(e.ToString(), def);
+                //System.Diagnostics.Debug.WriteLine($"{DBBaseName} Get Ctrl Set {e.ToString()} = {v}");
+                ctrlset[Convert.ToInt32(e)] = v;
+            }
+
+            return ctrlset;
+        }
+
         public void PutBoolSettingsFromString(string res, params string[] paras)    // given a set of semicolon ; parameter names, update them
         {
             string[] set = res.Split(";");
             foreach (var p in paras)
             {
                 bool v = Array.IndexOf(set, p) >= 0;
-              //  System.Diagnostics.Debug.WriteLine($"UCCB Write {p} with {v}");
+              //  System.Diagnostics.Debug.WriteLine($"{DBBaseName} Put Bool {p} with {v}");
                 PutSetting(p, v);
             }
         }
