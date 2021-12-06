@@ -154,8 +154,7 @@ namespace EDDiscovery.UserControls
                 catch { }
             }
 
-            displayfont = FontHelpers.GetFont(GetSetting("font", ""), discoveryform.theme.GetFont);
-            System.Diagnostics.Debug.WriteLine($"Spanel font {FontHelpers.GetFontSettingString(displayfont)}");
+            displayfont = FontHelpers.GetFont(GetSetting("font", ""), null);
 
             string filter = GetSetting(dbFieldFilter, "");
             if (filter.Length > 0)
@@ -246,15 +245,16 @@ namespace EDDiscovery.UserControls
                 RevertToNormalSize();                                           // ensure size is back to normal..
                 scanpostextoffset = new Point(0, 0);                            // left/ top used by scan display
 
+                Font dfont = displayfont ?? this.Font;
                 Color textcolour = IsTransparent ? discoveryform.theme.SPanelColor : discoveryform.theme.LabelColor;
                 Color backcolour = IsTransparent ? (Config(Configuration.showBlackBoxAroundText) ? Color.Black : Color.Transparent) : this.BackColor;
 
-                bool drawnnootherstuff = DrawScanText(true, textcolour, backcolour);                    // go 1 for some of the scan positions
+                bool drawnnootherstuff = DrawScanText(true, textcolour, backcolour, dfont);                    // go 1 for some of the scan positions
 
                 if (!drawnnootherstuff)                                         // and it may indicate its overwriting all stuff, which is fine
                 {
                     int rowpos = scanpostextoffset.Y;
-                    int rowmargin = displayfont.ScalePixels(4);
+                    int rowmargin = dfont.ScalePixels(4);
 
                     // Check if need to hide the UI
                     var ts = hl.CurrentTravelState();
@@ -263,7 +263,7 @@ namespace EDDiscovery.UserControls
                     {
 						if (!Config(Configuration.showNoTitleWhenHidden))
 						{
-							AddColText(0, 0, rowpos, "<>",textcolour, backcolour, null);        // just show a marker
+							AddColText(0, 0, rowpos, "<>",textcolour, backcolour, dfont, null);        // just show a marker
 						}
 					}
                     else if ( uistate != EliteDangerousCore.UIEvents.UIGUIFocus.Focus.NoFocus && Config(Configuration.showNothingWhenPanel))
@@ -271,7 +271,7 @@ namespace EDDiscovery.UserControls
 						if (!Config(Configuration.showNoTitleWhenHidden))
 						{
 							AddColText(0, 0, rowpos, uistate.ToString().SplitCapsWord(),
-									   textcolour, backcolour, null);
+									   textcolour, backcolour, dfont, null);
 						}
 					}
                     else
@@ -304,7 +304,7 @@ namespace EDDiscovery.UserControls
                             HistoryEntry lastfsd = hl.GetLastHistoryEntry(x => x.journalEntry is EliteDangerousCore.JournalEvents.JournalFSDJump, last);
                             bool firstdiscovery = (lastfsd != null && (lastfsd.journalEntry as EliteDangerousCore.JournalEvents.JournalFSDJump).EDSMFirstDiscover);
 
-                            rowpos = rowmargin + AddColText(0, 0, rowpos, str, textcolour, backcolour, null , firstdiscovery ? EDDiscovery.Icons.Controls.firstdiscover : null, "Shows if EDSM indicates your it's first discoverer").Location.Bottom;
+                            rowpos = rowmargin + AddColText(0, 0, rowpos, str, textcolour, backcolour, dfont, null, firstdiscovery ? EDDiscovery.Icons.Controls.firstdiscover : null, "Shows if EDSM indicates your it's first discoverer").Location.Bottom;
                         }
 
                         var zoneson = Config(Configuration.showHabInformation | Configuration.showMetalRichZone | Configuration.showWaterWrldZone |
@@ -361,21 +361,21 @@ namespace EDDiscovery.UserControls
 
                             if (res.ToString().HasChars())
                             {
-                                rowpos = rowmargin + AddColText(0, 0, rowpos, res.ToString(), textcolour, backcolour, null).Location.Bottom;
+                                rowpos = rowmargin + AddColText(0, 0, rowpos, res.ToString(), textcolour, backcolour, dfont, null).Location.Bottom;
                             }
                         }
 
                         if (targetpresent && Config(Configuration.showTargetLine) && currentsystem != null)
                         {
                             string dist = (currentsystem.HasCoordinate) ? currentsystem.Distance(tpos.X, tpos.Y, tpos.Z).ToString("0.00") : "Unknown".T(EDTx.Unknown);
-                            rowpos = rowmargin + AddColText(0, 0, rowpos, "Target".T(EDTx.UserControlSpanel_Target) + ": " + name + " @ " + dist +" ly", textcolour, backcolour, null).Location.Bottom;
+                            rowpos = rowmargin + AddColText(0, 0, rowpos, "Target".T(EDTx.UserControlSpanel_Target) + ": " + name + " @ " + dist +" ly", textcolour, backcolour, dfont, null).Location.Bottom;
                         }
 
                         startingtextrowpos = rowpos;
 
                         foreach (HistoryEntry rhe in result)
                         {
-                            rowpos = rowmargin + DrawHistoryEntry(rhe, rowpos, tpos, textcolour, backcolour);
+                            rowpos = rowmargin + DrawHistoryEntry(rhe, rowpos, tpos, textcolour, backcolour, dfont );
 
                             if (rowpos > ClientRectangle.Height)                // stop when off of screen
                                 break;
@@ -383,13 +383,13 @@ namespace EDDiscovery.UserControls
                     }
                 }
 
-                DrawScanText(false, textcolour, backcolour);     // go 2
+                DrawScanText(false, textcolour, backcolour, dfont);     // go 2
             }
 
             pictureBox.Render();
         }
 
-        int DrawHistoryEntry(HistoryEntry he, int rowpos, Point3D tpos , Color textcolour , Color backcolour )
+        int DrawHistoryEntry(HistoryEntry he, int rowpos, Point3D tpos , Color textcolour , Color backcolour, Font dfont )
         {
             List<string> coldata = new List<string>();                      // First we accumulate the strings
             List<int> tooltipattach = new List<int>();
@@ -454,8 +454,8 @@ namespace EDDiscovery.UserControls
                     Color backtext = (backcolour.IsFullyTransparent()) ? Color.Black : backcolour;
 
                     edsm = pictureBox.AddTextAutoSize(new Point(scanpostextoffset.X + columnpos[colnum], rowpos), new Size(200, 200),
-                                            "EDSM", displayfont, backtext, textcolour, 0.5F, he, "View system on EDSM".T(EDTx.UserControlSpanel_TVE));
-                    edsm.SetAlternateImage(BaseUtils.BitMapHelpers.DrawTextIntoAutoSizedBitmap("EDSM", new Size(200, 200), displayfont, backtext, textcolour.Multiply(1.2F), 0.5F), edsm.Location, true);
+                                            "EDSM", dfont, backtext, textcolour, 0.5F, he, "View system on EDSM".T(EDTx.UserControlSpanel_TVE));
+                    edsm.SetAlternateImage(BaseUtils.BitMapHelpers.DrawTextIntoAutoSizedBitmap("EDSM", new Size(200, 200), dfont, backtext, textcolour.Multiply(1.2F), 0.5F), edsm.Location, true);
                 }
 
                 colnum++;
@@ -480,7 +480,7 @@ namespace EDDiscovery.UserControls
                 }
                 else
                 {
-                    var e = AddColText(colnum + i, colnum + nextfull, rowpos, coldata[i], textcolour, backcolour, tooltipattach.Contains(i) ? tooltip : null);
+                    var e = AddColText(colnum + i, colnum + nextfull, rowpos, coldata[i], textcolour, backcolour, dfont, tooltipattach.Contains(i) ? tooltip : null);
                     if (e != null)
                     {
                         maxrowpos = Math.Max(maxrowpos, e.Location.Bottom);
@@ -498,7 +498,7 @@ namespace EDDiscovery.UserControls
             return maxrowpos;
         }
 
-        public bool DrawScanText(bool attop, Color textcolour , Color backcolour)
+        public bool DrawScanText(bool attop, Color textcolour , Color backcolour, Font dfont)
         {
             Size maxscansize = new Size(10000, 10000);            // set arbitary large.. not important for this.
 
@@ -510,19 +510,19 @@ namespace EDDiscovery.UserControls
                     {
                         if (Config(Configuration.showScanLeft))
                         {
-                            ExtPictureBox.ImageElement scanimg = pictureBox.AddTextAutoSize(new Point(4, 0), maxscansize, scantext, displayfont, textcolour, backcolour, 1.0F, "SCAN", null, frmt);
+                            ExtPictureBox.ImageElement scanimg = pictureBox.AddTextAutoSize(new Point(4, 0), maxscansize, scantext, dfont, textcolour, backcolour, 1.0F, "SCAN", null, frmt);
                             scanpostextoffset = new Point(4 + scanimg.Image.Width + 4, 0);
                             RequestTemporaryMinimumSize(new Size(scanimg.Image.Width + 8, scanimg.Image.Height + 4));
                         }
                         else if (Config(Configuration.showScanAbove))     // if above, NOT transparent (can't do on top)
                         {
-                            ExtPictureBox.ImageElement scanimg = pictureBox.AddTextAutoSize(new Point(4, 0), maxscansize, scantext, displayfont, textcolour, backcolour, 1.0F, "SCAN", null, frmt);
+                            ExtPictureBox.ImageElement scanimg = pictureBox.AddTextAutoSize(new Point(4, 0), maxscansize, scantext, dfont, textcolour, backcolour, 1.0F, "SCAN", null, frmt);
                             scanpostextoffset = new Point(0, scanimg.Image.Height + 4);
                             RequestTemporaryResizeExpand(new Size(0, scanimg.Image.Height + 4));
                         }
                         else if (Config(Configuration.showScanOnTop))
                         {
-                            ExtPictureBox.ImageElement scanimg = pictureBox.AddTextAutoSize(new Point(4, 0), maxscansize, scantext, displayfont, textcolour, backcolour, 1.0F, "SCAN", null, frmt);
+                            ExtPictureBox.ImageElement scanimg = pictureBox.AddTextAutoSize(new Point(4, 0), maxscansize, scantext, dfont, textcolour, backcolour, 1.0F, "SCAN", null, frmt);
 
                             if (IsTransparent)        // if transparent, the roll up panel is not visible, we can set the whole size to the text
                                 RequestTemporaryResize(new Size(scanimg.Image.Width + 8, scanimg.Image.Height + 4));        // match exactly to use minimum space
@@ -534,13 +534,13 @@ namespace EDDiscovery.UserControls
                         if (Config(Configuration.showScanRight))
                         {
                             Size s = pictureBox.DisplaySize();
-                            ExtPictureBox.ImageElement scanimg = pictureBox.AddTextAutoSize(new Point(s.Width + 4, 0), maxscansize, scantext, displayfont, textcolour, backcolour, 1.0F, "SCAN",null, frmt);
+                            ExtPictureBox.ImageElement scanimg = pictureBox.AddTextAutoSize(new Point(s.Width + 4, 0), maxscansize, scantext, dfont, textcolour, backcolour, 1.0F, "SCAN",null, frmt);
                             RequestTemporaryMinimumSize(new Size(s.Width + 4 + scanimg.Image.Width + 8, scanimg.Image.Height + 4));
                         }
                         else if (Config(Configuration.showScanBelow))
                         {
                             Size s = pictureBox.DisplaySize();
-                            ExtPictureBox.ImageElement scanimg = pictureBox.AddTextAutoSize(new Point(4, s.Height + 4), maxscansize, scantext, displayfont, textcolour, backcolour, 1.0F, "SCAN", null, frmt);
+                            ExtPictureBox.ImageElement scanimg = pictureBox.AddTextAutoSize(new Point(4, s.Height + 4), maxscansize, scantext, dfont, textcolour, backcolour, 1.0F, "SCAN", null, frmt);
                             RequestTemporaryResizeExpand(new Size(0, scanimg.Image.Height + 4));
                         }
                     }
@@ -550,7 +550,8 @@ namespace EDDiscovery.UserControls
             return false;
         }
 
-        ExtendedControls.ExtPictureBox.ImageElement AddColText(int coli, int nextcol , int rowpos, string text, Color textcolour, Color backcolour, string tooltip, Image opt = null , string imagetooltip = null)
+        ExtendedControls.ExtPictureBox.ImageElement AddColText(int coli, int nextcol , int rowpos, string text, Color textcolour, Color backcolour, 
+                                Font dfont, string tooltip, Image opt = null , string imagetooltip = null)
         {
             if (text.Length > 0)            // don't place empty text, do not want image handling to work on blank screen
             {
@@ -569,7 +570,7 @@ namespace EDDiscovery.UserControls
                     ExtendedControls.ExtPictureBox.ImageElement e =
                                     pictureBox.AddTextAutoSize(new Point(colpos, rowpos),
                                     new Size(endpos, 200),
-                                    text, displayfont, textcolour, backcolour, 1.0F, null, tooltip, frmt);
+                                    text, dfont, textcolour, backcolour, 1.0F, null, tooltip, frmt);
                     return e;
                 }
 
@@ -1050,11 +1051,11 @@ namespace EDDiscovery.UserControls
 
         private void extButtonFont_Click(object sender, EventArgs e)
         {
-            Font f = FontHelpers.FontSelection(this.FindForm(), displayfont);
+            Font f = FontHelpers.FontSelection(this.FindForm(), displayfont ?? this.Font);
             string setting = FontHelpers.GetFontSettingString(f);
             System.Diagnostics.Debug.WriteLine($"Spanel Font selected {setting}");
             PutSetting("font", setting);
-            displayfont = f != null ? f : discoveryform.theme.GetFont;
+            displayfont = f;
             Display(current_historylist);
         }
 

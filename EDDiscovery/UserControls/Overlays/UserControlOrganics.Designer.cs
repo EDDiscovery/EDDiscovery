@@ -405,7 +405,7 @@ namespace EDDiscovery.UserControls
             this.labelStart.TabIndex = 1;
             this.labelStart.Text = "Start";
             // 
-            // extDateTimePicker1
+            // extDateTimePickerStartDate
             // 
             this.extDateTimePickerStartDate.BorderColor = System.Drawing.Color.Transparent;
             this.extDateTimePickerStartDate.BorderColorScaling = 0.5F;
@@ -413,7 +413,7 @@ namespace EDDiscovery.UserControls
             this.extDateTimePickerStartDate.CustomFormat = "dd MMMM yyyy";
             this.extDateTimePickerStartDate.Format = System.Windows.Forms.DateTimePickerFormat.Long;
             this.extDateTimePickerStartDate.Location = new System.Drawing.Point(38, 3);
-            this.extDateTimePickerStartDate.Name = "extDateTimePicker1";
+            this.extDateTimePickerStartDate.Name = "extDateTimePickerStartDate";
             this.extDateTimePickerStartDate.SelectedColor = System.Drawing.Color.Yellow;
             this.extDateTimePickerStartDate.ShowCheckBox = true;
             this.extDateTimePickerStartDate.ShowUpDown = false;
@@ -432,7 +432,7 @@ namespace EDDiscovery.UserControls
             this.labelEnd.TabIndex = 2;
             this.labelEnd.Text = "End";
             // 
-            // extDateTimePicker2
+            // extDateTimePickerEndDate
             // 
             this.extDateTimePickerEndDate.BorderColor = System.Drawing.Color.Transparent;
             this.extDateTimePickerEndDate.BorderColorScaling = 0.5F;
@@ -440,7 +440,7 @@ namespace EDDiscovery.UserControls
             this.extDateTimePickerEndDate.CustomFormat = "dd MMMM yyyy";
             this.extDateTimePickerEndDate.Format = System.Windows.Forms.DateTimePickerFormat.Long;
             this.extDateTimePickerEndDate.Location = new System.Drawing.Point(326, 3);
-            this.extDateTimePickerEndDate.Name = "extDateTimePicker2";
+            this.extDateTimePickerEndDate.Name = "extDateTimePickerEndDate";
             this.extDateTimePickerEndDate.SelectedColor = System.Drawing.Color.Yellow;
             this.extDateTimePickerEndDate.ShowCheckBox = true;
             this.extDateTimePickerEndDate.ShowUpDown = false;
@@ -468,7 +468,6 @@ namespace EDDiscovery.UserControls
             this.Controls.Add(this.rollUpPanelTop);
             this.Name = "UserControlOrganics";
             this.Size = new System.Drawing.Size(888, 605);
-            this.Resize += new System.EventHandler(this.UserControl_Resize);
             this.extPictureBoxScroll.ResumeLayout(false);
             this.extPictureBoxScroll.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();

@@ -80,8 +80,7 @@ namespace EDDiscovery.UserControls
 
             translatednavroutename = "Nav Route".T(EDTx.UserControlSurveyor_navroute);
 
-            displayfont = FontHelpers.GetFont(GetSetting("font", ""), discoveryform.theme.GetFont);
-            System.Diagnostics.Debug.WriteLine($"Surveyor font {FontHelpers.GetFontSettingString(displayfont)}");
+            displayfont = FontHelpers.GetFont(GetSetting("font", ""), null);        // null if not set
 
             LoadRoute(GetSetting("route", ""));
             routecontrolsettings = GetSetting("routecontrol", "showJumps;showwaypoints");
@@ -251,6 +250,8 @@ namespace EDDiscovery.UserControls
                 var textcolour = IsTransparent ? discoveryform.theme.SPanelColor : discoveryform.theme.LabelColor;
                 var backcolour = IsTransparent ? Color.Transparent : this.BackColor;
 
+                Font dfont = displayfont ?? this.Font;
+
                 if (IsSet(CtrlList.showsysinfo))
                 {
                     var i = new ExtPictureBox.ImageElement();
@@ -258,7 +259,7 @@ namespace EDDiscovery.UserControls
                             new Point(3, vpos),
                             new Size(Math.Max(pictureBoxSurveyor.Width - 6, 24), 10000),
                             titletext,
-                            displayfont,
+                            dfont,
                             textcolour,
                             backcolour,
                             1.0F,
@@ -420,7 +421,7 @@ namespace EDDiscovery.UserControls
                             new Point(3, vpos),
                             new Size(Math.Max(pictureBoxSurveyor.Width - 6, 24), 10000),
                             lastroutetext,
-                            displayfont,
+                            dfont,
                             textcolour,
                             backcolour,
                             1.0F,
@@ -458,7 +459,7 @@ namespace EDDiscovery.UserControls
                             new Point(3, vpos),
                             new Size(Math.Max(pictureBoxSurveyor.Width - 6, 24), 10000),
                             infoline,
-                            displayfont,
+                            dfont,
                             textcolour,
                             backcolour,
                             1.0F,
@@ -543,7 +544,7 @@ namespace EDDiscovery.UserControls
                                                 new Point(3, vpos),
                                                 new Size(Math.Max(pictureBoxSurveyor.Width - 6, 24), 10000),
                                                 il,
-                                                displayfont,
+                                                dfont,
                                                 textcolour,
                                                 backcolour,
                                                 1.0F,
@@ -563,7 +564,7 @@ namespace EDDiscovery.UserControls
                                 new Point(3, vpos),
                                 new Size(Math.Max(pictureBoxSurveyor.Width - 6, 24), 10000),
                                 "^^ ~ " + value.ToString("N0") + " cr",
-                                displayfont,
+                                dfont,
                                 textcolour,
                                 backcolour,
                                 1.0F,
@@ -614,7 +615,7 @@ namespace EDDiscovery.UserControls
                             i.TextAutoSize(new Point(3, vpos),
                                                             new Size(Math.Max(pictureBoxSurveyor.Width - 6, 24), 10000),
                                                             siglist,
-                                                            displayfont,
+                                                            dfont,
                                                             textcolour,
                                                             backcolour,
                                                             1.0F,
@@ -774,11 +775,11 @@ namespace EDDiscovery.UserControls
 
         private void extButtonFont_Click(object sender, EventArgs e)
         {
-            Font f = FontHelpers.FontSelection(this.FindForm(), displayfont);
+            Font f = FontHelpers.FontSelection(this.FindForm(), displayfont ?? this.Font);     // will be null on cancel
             string setting = FontHelpers.GetFontSettingString(f);
             System.Diagnostics.Debug.WriteLine($"Surveyor Font selected {setting}");
             PutSetting("font", setting);
-            displayfont = f != null ? f : discoveryform.theme.GetFont;
+            displayfont = f;
             DrawSystem(last_sys);
         }
 

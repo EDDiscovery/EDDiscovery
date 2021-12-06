@@ -329,7 +329,7 @@ namespace EDDiscovery.UserControls
                             bdDetails.Append("Temperature".T(EDTx.UserControlScanGrid_Temperature)).Append(": ").Append((sn.ScanData.nSurfaceTemperature.Value).ToString("N2")).Append("K, (").Append((sn.ScanData.nSurfaceTemperature.Value - 273).ToString("N2")).Append("C).");
 
                         // print the main atmospheric composition and pressure, if presents
-                        if (!String.IsNullOrEmpty(sn.ScanData.Atmosphere) && sn.ScanData.Atmosphere != "None")
+                        if (sn.ScanData.Atmosphere != "none")
                         {
                             bdDetails.Append(Environment.NewLine).Append(sn.ScanData.Atmosphere);
                             if (sn.ScanData.nSurfacePressure.HasValue)

@@ -65,8 +65,7 @@ namespace EDDiscovery.UserControls
 
             BaseUtils.Translator.Instance.Translate(toolTip, this);
 
-            displayfont = FontHelpers.GetFont(GetSetting("font", ""), discoveryform.theme.GetFont);
-            System.Diagnostics.Debug.WriteLine($"Surveyor font {FontHelpers.GetFontSettingString(displayfont)}");
+            displayfont = FontHelpers.GetFont(GetSetting("font", ""), null);
 
             extDateTimePickerStartDate.Value = GetSetting(dbStartDate, new DateTime(2014, 12, 14));
             var startchecked = extDateTimePickerStartDate.Checked = GetSetting(dbStartDateOn, false);
@@ -95,7 +94,7 @@ namespace EDDiscovery.UserControls
         public override void InitialDisplay()
         {
             lasthe = uctg.GetCurrentHistoryEntry;
-            DrawSystem(lasthe,true);    // may be null
+            DrawAll();
         }
 
         public override void Closing()
@@ -112,13 +111,13 @@ namespace EDDiscovery.UserControls
         {
             extPictureBoxScroll.ScrollBarEnabled = !on;     // turn off the scroll bar if its transparent
             extPictureBoxScroll.BackColor = pictureBox.BackColor = this.BackColor = curcol;
-            rollUpPanelTop.Visible = !on;
+            ControlVisibility();
         }
 
-        private void Discoveryform_OnHistoryChange(HistoryList hl)
+        private void Discoveryform_OnHistoryChange(HistoryList hl)      
         {
-            lasthe = hl.GetLast;      // may be null
-            DrawSystem(lasthe, true);    // may be null
+            DrawGrid();             // don't do the Body info, its tied to the UCTG
+            ControlVisibility();
         }
 
         private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)
@@ -127,7 +126,7 @@ namespace EDDiscovery.UserControls
             if (he.EntryType == JournalTypeEnum.ScanOrganic)
             {
                 lasthe = hl.GetLast;      // may be null
-                DrawSystem(lasthe,true);      // need to recreate the grid
+                DrawAll();
             }
         }
 
@@ -136,7 +135,8 @@ namespace EDDiscovery.UserControls
             if (he != null)
             {
                 lasthe = he;
-                DrawSystem(lasthe,false);
+                DrawBodyInfo();
+                ControlVisibility();
             }
         }
 
@@ -150,56 +150,88 @@ namespace EDDiscovery.UserControls
                 uistate = gui.GUIFocus;
 
                 if (refresh)
-                    DrawSystem(lasthe,false);
+                    ControlVisibility();
             }
         }
 
         #endregion
 
         #region Main
-        private void DrawSystem(HistoryEntry he, bool redogrid)
+
+        private void DrawAll()
         {
-            System.Diagnostics.Debug.WriteLine($"Organics {displaynumber} Draw {he?.System.Name} {he?.System.HasCoordinate}");
+            DrawBodyInfo();
+            DrawGrid();
+            ControlVisibility();
+        }
 
-            var picelements = new List<ExtPictureBox.ImageElement>();       // accumulate picture elements in here and render under lock due to async below.
-
-            // if system, and we are in no focus or don't care
+        private void ControlVisibility()
+        {
             if ((uistate == EliteDangerousCore.UIEvents.UIGUIFocus.Focus.NoFocus || !IsSet(CtrlList.autohide)
-                                || (uistate == EliteDangerousCore.UIEvents.UIGUIFocus.Focus.FSSMode && IsSet(CtrlList.donthidefssmode))))
+                                            || (uistate == EliteDangerousCore.UIEvents.UIGUIFocus.Focus.FSSMode && IsSet(CtrlList.donthidefssmode))))
             {
-                if (he != null)
-                {
-                    System.Diagnostics.Debug.WriteLine($"Organics {displaynumber} Go for draw on {he.WhereAmI} {he.BodyType}");
+                rollUpPanelTop.Visible = panelGrid.Visible = !IsTransparent;
+                extPictureBoxScroll.Visible = pictureBox.Count > 0;
+            }
+            else
+            {
+                rollUpPanelTop.Visible =  extPictureBoxScroll.Visible = panelGrid.Visible = false;
+            }
+        }
 
-                    int vpos = 30;
+        private void DrawBodyInfo()
+        {
+            System.Diagnostics.Debug.WriteLine($"Organics {displaynumber} Draw {lasthe?.System.Name} {lasthe?.System.HasCoordinate}");
+
+            pictureBox.ClearImageList();
+
+            if (lasthe != null && lasthe.HasBodyID && lasthe.Status.OnFoot)
+            {
+                StarScan.SystemNode data = discoveryform.history.StarScan.FindSystemSynchronous(lasthe.System, false);
+
+                if (data != null && data.NodesByID.TryGetValue(lasthe.BodyID.Value, out StarScan.ScanNode node))
+                {
+                    var picelements = new List<ExtPictureBox.ImageElement>();       // accumulate picture elements in here and render under lock due to async below.
+
+                    Font dfont = displayfont ?? this.Font;
+
+                    System.Diagnostics.Debug.WriteLine($"Organics {displaynumber} Go for draw on {lasthe.WhereAmI} {lasthe.BodyType}");
+
+                    int vpos = 0;
                     StringFormat frmt = new StringFormat(extCheckBoxWordWrap.Checked ? 0 : StringFormatFlags.NoWrap);
                     frmt.Alignment = StringAlignment.Near;
                     var textcolour = IsTransparent ? discoveryform.theme.SPanelColor : discoveryform.theme.LabelColor;
                     var backcolour = IsTransparent ? Color.Transparent : this.BackColor;
 
+                    string l = string.Format("On Foot at {0}, planet type {1}, Radius {2}, Gravity {3} G, Atmosphere {4}", node.FullName, node.ScanData?.PlanetTypeText ?? "Unknown", node.ScanData?.RadiusText() ?? "Unknown", 
+                                                node.ScanData?.nSurfaceGravityG?.ToString("N1")  ?? "Unknown" , node.ScanData?.Atmosphere);
+
+                    string s = node.Organics != null ? JournalScanOrganic.OrganicList(node.Organics) : "No organic scanned";
+
                     var i = new ExtPictureBox.ImageElement();
                     i.TextAutoSize(new Point(3, vpos),
                                                     new Size(Math.Max(pictureBox.Width - 6, 24), 10000),
-                                                    $"Holds list of current results for current body `{he.System.Name}` bt `{he.BodyType}` where `{he.WhereAmI}`- autosized",
-                                                    displayfont,
+                                                    l.AppendPrePad(s,Environment.NewLine),
+                                                    dfont,
                                                     textcolour,
                                                     backcolour,
                                                     1.0F,
-                                                    frmt: frmt);
+                                                    frmt: frmt); ;
+
+                    extPictureBoxScroll.Height = i.Location.Bottom + 8;
                     picelements.Add(i);
-
                     frmt.Dispose();
+
+                    pictureBox.AddRange(picelements);
+                    extPictureBoxScroll.Render();
+                    Refresh();
                 }
-
-                panelGrid.Visible = !IsTransparent;
             }
-            else
-            {
-                System.Diagnostics.Debug.WriteLine($"Organics ${displaynumber} display disabled");
-                panelGrid.Visible = false;
-            }
+        }
 
-            if ( redogrid && discoveryform.history != null )
+        void DrawGrid()
+        { 
+            if ( discoveryform.history != null )
             {
                 DateTime? start = extDateTimePickerStartDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromSelected(extDateTimePickerStartDate.Value) : default(DateTime?);
                 DateTime? end = extDateTimePickerEndDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromSelected(extDateTimePickerEndDate.Value.EndOfDay()) : default(DateTime?);
@@ -245,24 +277,10 @@ namespace EDDiscovery.UserControls
                                     }
                                 }
                             }
-
                         }
-
                     }
                 }
             }
-
-            lock (extPictureBoxScroll)      // because of the async call above, we may be running two of these at the same time. So, we lock and then add/update/render
-            {
-                pictureBox.ClearImageList();
-                pictureBox.AddRange(picelements);
-                extPictureBoxScroll.Render();
-                Refresh();
-            }
-        }
-
-        private void UserControl_Resize(object sender, EventArgs e)
-        {
         }
 
         #endregion
@@ -318,7 +336,7 @@ namespace EDDiscovery.UserControls
             {
                 PutBoolSettingsFromString(s, displayfilter.SettingsTagList());
                 ctrlset = GetSettingAsCtrlSet<CtrlList>(DefaultSetting);
-                DrawSystem(lasthe,false);
+                DrawAll();
             };
 
             displayfilter.Show(typeof(CtrlList), ctrlset, under, this.FindForm());
@@ -326,33 +344,33 @@ namespace EDDiscovery.UserControls
 
         private void extButtonFont_Click(object sender, EventArgs e)
         {
-            Font f = FontHelpers.FontSelection(this.FindForm(), displayfont);
+            Font f = FontHelpers.FontSelection(this.FindForm(), displayfont ?? this.Font);
             string setting = FontHelpers.GetFontSettingString(f);
             System.Diagnostics.Debug.WriteLine($"Organics Font selected {setting}");
             PutSetting("font", setting);
-            displayfont = f != null ? f : discoveryform.theme.GetFont;
-            DrawSystem(lasthe,false);
+            displayfont = f;
+            DrawBodyInfo();
         }
 
         private void wordWrapToolStripMenuItem_Click(object sender, EventArgs e)
         {
             PutSetting("wordwrap", extCheckBoxWordWrap.Checked);
             dataGridView.DefaultCellStyle.WrapMode = extCheckBoxWordWrap.Checked ? DataGridViewTriState.True : DataGridViewTriState.False;
-            DrawSystem(lasthe, false);
+            DrawBodyInfo();
         }
 
         private void DateTimePicker_ValueChangedStart(object sender, EventArgs e)
         {
             PutSetting(dbStartDate, extDateTimePickerStartDate.Value);
             PutSetting(dbStartDateOn, extDateTimePickerStartDate.Checked);
-            DrawSystem(lasthe, true);
+            DrawGrid();
         }
 
         private void DateTimePicker_ValueChangedEnd(object sender, EventArgs e)
         {
             PutSetting(dbEndDate, extDateTimePickerEndDate.Value);
             PutSetting(dbEndDateOn, extDateTimePickerEndDate.Checked);
-            DrawSystem(lasthe, true);
+            DrawGrid();
        }
 
     }
