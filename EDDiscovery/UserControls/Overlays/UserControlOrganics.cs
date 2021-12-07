@@ -168,16 +168,20 @@ namespace EDDiscovery.UserControls
 
         private void ControlVisibility()
         {
-            if ((uistate == EliteDangerousCore.UIEvents.UIGUIFocus.Focus.NoFocus || !IsSet(CtrlList.autohide)
-                                            || (uistate == EliteDangerousCore.UIEvents.UIGUIFocus.Focus.FSSMode && IsSet(CtrlList.donthidefssmode))))
+            // if not in transparent mode, OR in No focus, or not autohiding, or FSSMode and don't hide in FSS mode
+            if ( !IsTransparent || 
+                    uistate == EliteDangerousCore.UIEvents.UIGUIFocus.Focus.NoFocus || !IsSet(CtrlList.autohide)
+                    || (uistate == EliteDangerousCore.UIEvents.UIGUIFocus.Focus.FSSMode && IsSet(CtrlList.donthidefssmode)))
             {
-                flowLayoutPanelGridControl.Visible = dataViewScrollerPanel.Visible = extPictureBoxScroll.ScrollBarEnabled = !intransparent;     // turn off the scroll bar if its transparent
+                // these are controlled by tranparency
+                flowLayoutPanelGridControl.Visible = dataViewScrollerPanel.Visible = extPictureBoxScroll.ScrollBarEnabled =
                 rollUpPanelTop.Visible = !intransparent;
                 extPictureBoxScroll.Visible = pictureBox.Count > 0;
             }
             else
             {
-                flowLayoutPanelGridControl.Visible = rollUpPanelTop.Visible =  extPictureBoxScroll.Visible = dataViewScrollerPanel.Visible = false;
+                flowLayoutPanelGridControl.Visible = dataViewScrollerPanel.Visible = extPictureBoxScroll.Visible =
+                rollUpPanelTop.Visible = false;
             }
         }
 
