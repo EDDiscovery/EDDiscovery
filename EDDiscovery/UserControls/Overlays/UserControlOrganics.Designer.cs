@@ -64,14 +64,12 @@ namespace EDDiscovery.UserControls
             this.panelControls = new System.Windows.Forms.FlowLayoutPanel();
             this.extButtonFont = new ExtendedControls.ExtButton();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.panelGrid = new System.Windows.Forms.Panel();
             this.flowLayoutPanelGridControl = new System.Windows.Forms.FlowLayoutPanel();
             this.labelStart = new System.Windows.Forms.Label();
             this.extDateTimePickerStartDate = new ExtendedControls.ExtDateTimePicker();
             this.labelEnd = new System.Windows.Forms.Label();
             this.extDateTimePickerEndDate = new ExtendedControls.ExtDateTimePicker();
             this.labelValue = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
             this.extPictureBoxScroll.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.dataViewScrollerPanel.SuspendLayout();
@@ -186,7 +184,6 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel.Size = new System.Drawing.Size(1108, 407);
             this.dataViewScrollerPanel.TabIndex = 26;
             this.dataViewScrollerPanel.VerticalScrollBarDockRight = true;
-            this.dataViewScrollerPanel.Resize += new System.EventHandler(this.dataViewScrollerPanel_Resize);
             // 
             // vScrollBar
             // 
@@ -339,16 +336,6 @@ namespace EDDiscovery.UserControls
             this.extButtonFont.UseVisualStyleBackColor = false;
             this.extButtonFont.Click += new System.EventHandler(this.extButtonFont_Click);
             // 
-            // panelGrid
-            // 
-            this.panelGrid.AutoSize = true;
-            this.panelGrid.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelGrid.Location = new System.Drawing.Point(0, 0);
-            this.panelGrid.Name = "panelGrid";
-            this.panelGrid.Size = new System.Drawing.Size(1108, 723);
-            this.panelGrid.TabIndex = 2;
-            this.panelGrid.Resize += new System.EventHandler(this.panelGrid_Resize);
-            // 
             // flowLayoutPanelGridControl
             // 
             this.flowLayoutPanelGridControl.AutoSize = true;
@@ -428,26 +415,14 @@ namespace EDDiscovery.UserControls
             this.labelValue.TabIndex = 2;
             this.labelValue.Text = "0 cr";
             // 
-            // button1
-            // 
-            this.button1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.button1.Location = new System.Drawing.Point(0, 316);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(1108, 23);
-            this.button1.TabIndex = 2;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            // 
             // UserControlOrganics
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.button1);
             this.Controls.Add(this.dataViewScrollerPanel);
             this.Controls.Add(this.flowLayoutPanelGridControl);
             this.Controls.Add(this.extPictureBoxScroll);
             this.Controls.Add(this.rollUpPanelTop);
-            this.Controls.Add(this.panelGrid);
             this.Name = "UserControlOrganics";
             this.Size = new System.Drawing.Size(1108, 723);
             this.extPictureBoxScroll.ResumeLayout(false);
@@ -486,13 +461,11 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn ColSpecies;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColLastScanType;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColValue;
-        private System.Windows.Forms.Panel panelGrid;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanelGridControl;
         private System.Windows.Forms.Label labelStart;
         private ExtendedControls.ExtDateTimePicker extDateTimePickerStartDate;
         private System.Windows.Forms.Label labelEnd;
         private ExtendedControls.ExtDateTimePicker extDateTimePickerEndDate;
         private System.Windows.Forms.Label labelValue;
-        private System.Windows.Forms.Button button1;
     }
 }

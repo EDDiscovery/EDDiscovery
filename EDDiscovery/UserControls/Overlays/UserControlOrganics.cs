@@ -112,7 +112,6 @@ namespace EDDiscovery.UserControls
         {
             intransparent = on;
             extPictureBoxScroll.BackColor = pictureBox.BackColor = this.BackColor = curcol;
-            pictureBox.BackColor = Color.Red;
             ControlVisibility();
         }
 
@@ -172,13 +171,13 @@ namespace EDDiscovery.UserControls
             if ((uistate == EliteDangerousCore.UIEvents.UIGUIFocus.Focus.NoFocus || !IsSet(CtrlList.autohide)
                                             || (uistate == EliteDangerousCore.UIEvents.UIGUIFocus.Focus.FSSMode && IsSet(CtrlList.donthidefssmode))))
             {
-                extPictureBoxScroll.ScrollBarEnabled = !intransparent;     // turn off the scroll bar if its transparent
-                rollUpPanelTop.Visible = panelGrid.Visible = !intransparent;
+                flowLayoutPanelGridControl.Visible = dataViewScrollerPanel.Visible = extPictureBoxScroll.ScrollBarEnabled = !intransparent;     // turn off the scroll bar if its transparent
+                rollUpPanelTop.Visible = !intransparent;
                 extPictureBoxScroll.Visible = pictureBox.Count > 0;
             }
             else
             {
-                rollUpPanelTop.Visible =  extPictureBoxScroll.Visible = panelGrid.Visible = false;
+                flowLayoutPanelGridControl.Visible = rollUpPanelTop.Visible =  extPictureBoxScroll.Visible = dataViewScrollerPanel.Visible = false;
             }
         }
 
@@ -282,6 +281,7 @@ namespace EDDiscovery.UserControls
 
         protected override void OnResize(EventArgs e)
         {
+            base.OnResize(e);
             DrawBodyInfo();
         }
 
@@ -366,16 +366,5 @@ namespace EDDiscovery.UserControls
             PutSetting(dbEndDateOn, extDateTimePickerEndDate.Checked);
             DrawGrid();
        }
-
-        private void panelGrid_Resize(object sender, EventArgs e)
-        {
-            System.Diagnostics.Debug.WriteLine("Panel grid resize");
-        }
-
-        private void dataViewScrollerPanel_Resize(object sender, EventArgs e)
-        {
-            System.Diagnostics.Debug.WriteLine("Scroller Panel grid resize");
-
-        }
     }
 }
