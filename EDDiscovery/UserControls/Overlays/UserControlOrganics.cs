@@ -15,7 +15,6 @@
  */
 using EDDiscovery.Controls;
 using EliteDangerousCore;
-using EliteDangerousCore.DB;
 using EliteDangerousCore.JournalEvents;
 using ExtendedControls;
 using System;
@@ -38,6 +37,8 @@ namespace EDDiscovery.UserControls
         private string dbStartDateOn = "StartDateChecked";
         private string dbEndDate = "EndDate";
         private string dbEndDateOn = "EndDateChecked";
+
+        private bool intransparent = false;
 
         #region Initialisation
 
@@ -109,8 +110,9 @@ namespace EDDiscovery.UserControls
         public override bool SupportTransparency { get { return true; } }
         public override void SetTransparency(bool on, Color curcol)
         {
-            extPictureBoxScroll.ScrollBarEnabled = !on;     // turn off the scroll bar if its transparent
+            intransparent = on;
             extPictureBoxScroll.BackColor = pictureBox.BackColor = this.BackColor = curcol;
+            pictureBox.BackColor = Color.Red;
             ControlVisibility();
         }
 
@@ -170,7 +172,8 @@ namespace EDDiscovery.UserControls
             if ((uistate == EliteDangerousCore.UIEvents.UIGUIFocus.Focus.NoFocus || !IsSet(CtrlList.autohide)
                                             || (uistate == EliteDangerousCore.UIEvents.UIGUIFocus.Focus.FSSMode && IsSet(CtrlList.donthidefssmode))))
             {
-                rollUpPanelTop.Visible = panelGrid.Visible = !IsTransparent;
+                extPictureBoxScroll.ScrollBarEnabled = !intransparent;     // turn off the scroll bar if its transparent
+                rollUpPanelTop.Visible = panelGrid.Visible = !intransparent;
                 extPictureBoxScroll.Visible = pictureBox.Count > 0;
             }
             else
@@ -203,6 +206,7 @@ namespace EDDiscovery.UserControls
                     var textcolour = IsTransparent ? discoveryform.theme.SPanelColor : discoveryform.theme.LabelColor;
                     var backcolour = IsTransparent ? Color.Transparent : this.BackColor;
 
+                    System.Diagnostics.Debug.WriteLine($"Pbox size {pictureBox.Size}");
                     string l = string.Format("On Foot at {0}, planet type {1}, Radius {2}, Gravity {3} G, Atmosphere {4}", node.FullName, node.ScanData?.PlanetTypeText ?? "Unknown", node.ScanData?.RadiusText() ?? "Unknown", 
                                                 node.ScanData?.nSurfaceGravityG?.ToString("N1")  ?? "Unknown" , node.ScanData?.Atmosphere);
 
@@ -246,41 +250,39 @@ namespace EDDiscovery.UserControls
                             if (body.Organics != null)
                             {
                                 var orglist = JournalScanOrganic.SortList(body.Organics);
-                                
-                                if ( start != null || end != null)      // if sorting by date, knock out ones outside range
-                                {
-                                    orglist = orglist.Where(x => (start == null || x.EventTimeUTC >= start) && (end == null || x.EventTimeUTC <= end)).ToList();
-                                }
 
-                                string last_key = null;
+                                if (start != null || end != null)      // if sorting by date, knock out ones outside range
+                                {
+                                    orglist = orglist.Where(x => (start == null || x.Item2.EventTimeUTC >= start) && (end == null || x.Item2.EventTimeUTC <= end)).ToList();
+                                }
 
                                 foreach (var os in orglist)
                                 {
-                                    string key = os.Genus + ":" + os.Species;     // don't repeat genus/species
-                                    if (key != last_key)
-                                    {
-                                        last_key = key;
-                                        DateTime time = EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(os.EventTimeUTC);
+                                    DateTime time = EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(os.Item2.EventTimeUTC);
 
-                                        object[] data = new object[]
-                                        {
+                                    object[] data = new object[]
+                                    {
                                             time.ToStringYearFirst(),
                                             syskvp.Key.ToString() + ": " + starkvp.Key.ToString(),
                                             body.FullName,
                                             body.ScanData?.PlanetTypeText ?? "",
-                                            os.Genus_Localised,
-                                            os.Species_Localised,
-                                            os.ScanType,
-                                        };
+                                            os.Item2.Genus_Localised,
+                                            os.Item2.Species_Localised,
+                                            os.Item2.ScanType,
+                                    };
 
-                                        dataGridView.Rows.Add(data);
-                                    }
+                                    dataGridView.Rows.Add(data);
                                 }
                             }
                         }
                     }
                 }
             }
+        }
+
+        protected override void OnResize(EventArgs e)
+        {
+            DrawBodyInfo();
         }
 
         #endregion
@@ -303,14 +305,6 @@ namespace EDDiscovery.UserControls
         {
             bool def = true;
             return def;
-        }
-
-        private void extButtonPlanets_Click(object sender, EventArgs e)
-        {
-        }
-
-        private void extButtonStars_Click(object sender, EventArgs e)
-        {
         }
 
         private void extButtonShowControl_Click(object sender, EventArgs e)
@@ -373,5 +367,15 @@ namespace EDDiscovery.UserControls
             DrawGrid();
        }
 
+        private void panelGrid_Resize(object sender, EventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine("Panel grid resize");
+        }
+
+        private void dataViewScrollerPanel_Resize(object sender, EventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine("Scroller Panel grid resize");
+
+        }
     }
 }

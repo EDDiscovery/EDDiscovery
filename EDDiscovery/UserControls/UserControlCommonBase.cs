@@ -134,7 +134,7 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        public bool IsTransparent
+        public bool IsTransparent           // this means the transparent mode is on, not that its currently transparent.
         {
             get
             {
