@@ -365,6 +365,62 @@ namespace EDDiscovery.UserControls.Map3D
                 galaxystars.Create(items, rObjects, galaxysunsize, findresults);
             }
 
+
+            // Matrix calc holding transform info
+
+            matrixcalc = new GLMatrixCalc();
+            matrixcalc.PerspectiveNearZDistance = 1f;
+            matrixcalc.PerspectiveFarZDistance = 120000f / lyscale;
+            matrixcalc.InPerspectiveMode = true;
+            matrixcalc.ResizeViewPort(this, glwfc.Size);          // must establish size before starting
+
+            // menu system
+
+            displaycontrol = new GLControlDisplay(items, glwfc, matrixcalc, true, 0.00001f, 0.00001f);       // hook form to the window - its the master
+            displaycontrol.Font = new Font("Arial", 10f);
+            displaycontrol.Focusable = true;          // we want to be able to focus and receive key presses.
+            displaycontrol.SetFocus();
+
+            // 3d controller
+
+            gl3dcontroller = new Controller3D();
+            gl3dcontroller.PosCamera.ZoomMax = 600;     // gives 5ly
+            gl3dcontroller.ZoomDistance = 3000F / lyscale;
+            gl3dcontroller.PosCamera.ZoomMin = 0.1f;
+            gl3dcontroller.PosCamera.ZoomScaling = 1.1f;
+            gl3dcontroller.YHoldMovement = true;
+            gl3dcontroller.PaintObjects = Controller3DDraw;
+            gl3dcontroller.KeyboardTravelSpeed = (ms, eyedist) =>
+            {
+                double eyedistr = Math.Pow(eyedist, 1.0);
+                float v = (float)Math.Max(eyedistr / 2000, 0);
+                // System.Diagnostics.Debug.WriteLine("Speed " + eyedistr + " "+ v);
+                return (float)ms * v;
+            };
+
+            // hook gl3dcontroller to display control - its the slave. Do not register mouse UI, we will deal with that and feed any events thru we want
+            gl3dcontroller.Start(matrixcalc, displaycontrol, new Vector3(0, 0, 0), new Vector3(140.75f, 0, 0), 0.5F, registermouseui: false, registerkeyui: true);
+
+            if (displaycontrol != null)
+            {
+                displaycontrol.Paint += (o, ts) =>        // subscribing after start means we paint over the scene, letting transparency work
+                {
+                    // MCUB set up by Controller3DDraw which did the work first
+                    galaxymenu?.UpdateCoords(gl3dcontroller);
+                    displaycontrol.Animate(glwfc.ElapsedTimems);
+                    displaycontrol.Render(glwfc.RenderState, ts);
+                };
+            }
+
+            displaycontrol.MouseClick += MouseClickOnMap;       // grab mouse UI
+            displaycontrol.MouseUp += MouseUpOnMap;
+            displaycontrol.MouseDown += MouseDownOnMap;
+            displaycontrol.MouseMove += MouseMoveOnMap;
+            displaycontrol.MouseWheel += MouseWheelOnMap;
+
+            if ((parts & Parts.Menu) != 0)
+               galaxymenu = new MapMenu(this, parts);
+
             if ((parts & Parts.RightClick) != 0)
             {
                 rightclickmenu = new GLContextMenu("RightClickMenu",
@@ -374,9 +430,28 @@ namespace EDDiscovery.UserControls.Map3D
                         {
                             var nl = NameLocationDescription(rightclickmenu.Tag, parent.discoveryform.history.GetLast);
                             System.Diagnostics.Debug.WriteLine($"Info {nl.Item1} {nl.Item2}");
-                            // logical name is important as menu uses it to close down
-                            GLMessageBox msg = new GLMessageBox("InfoBoxForm-1", displaycontrol, e.WindowLocation, null,
-                                    nl.Item3, $"{nl.Item1}", GLMessageBox.MessageBoxButtons.OK, null, Color.FromArgb(220, 60, 60, 70), Color.DarkOrange);
+
+                            GLFormConfigurable cfg = new GLFormConfigurable("Info");
+                            GLMultiLineTextBox tb = new GLMultiLineTextBox("MLT", new Rectangle(10, 10, 1000, 1000), nl.Item3);
+                            tb.Font = cfg.Font = displaycontrol.Font;                             // set the font up first, as its needed for config
+                            var sizer = tb.CalculateTextArea(new Size(50, 24), new Size(displaycontrol.Width - 64, displaycontrol.Height - 64));
+                            tb.Size = sizer.Item1;
+                            tb.EnableHorizontalScrollBar = sizer.Item2;
+                            tb.CursorToEnd();
+                            tb.BackColor = cfg.BackColor;
+                            cfg.AddOK("OK");            // order important for tab control
+                            cfg.AddButton("goto", "Goto", new Point(0, 0), ac: AnchorType.AutoPlacement);
+                            cfg.Add("tb", tb);
+                            cfg.Init(e.ViewportLocation, nl.Item1);
+                            cfg.InstallStandardTriggers();
+                            cfg.Trigger += (form, entry, name, tag) => { if (name == "goto") { gl3dcontroller.SlewToPositionZoom(nl.Item2, 300, -1); } };
+                            cfg.ResumeLayout();
+                            displaycontrol.Add(cfg);
+                            cfg.Moveable = true;
+
+                            // logical name is important as menu uses it to close downno 
+                            //GLMessageBox msg = new GLMessageBox("InfoBoxForm-1", displaycontrol, e.WindowLocation, null,
+                            //      nl.Item3, $"{nl.Item1}", GLMessageBox.MessageBoxButtons.OK, null, Color.FromArgb(220, 60, 60, 70), Color.DarkOrange);
                         }
                     },
                     new GLMenuItem("RCMZoomIn", "Goto Zoom In")
@@ -438,61 +513,6 @@ namespace EDDiscovery.UserControls.Map3D
                     ms["RCMAddExpedition"].Enabled = ms["RCMViewStarDisplay"].Enabled = ms["RCMViewEDSM"].Enabled = rightclickmenu.Tag is ISystem || rightclickmenu.Tag is HistoryEntry;
                 };
             }
-
-            // Matrix calc holding transform info
-
-            matrixcalc = new GLMatrixCalc();
-            matrixcalc.PerspectiveNearZDistance = 1f;
-            matrixcalc.PerspectiveFarZDistance = 120000f / lyscale;
-            matrixcalc.InPerspectiveMode = true;
-            matrixcalc.ResizeViewPort(this, glwfc.Size);          // must establish size before starting
-
-            // menu system
-
-            displaycontrol = new GLControlDisplay(items, glwfc, matrixcalc, true, 0.00001f, 0.00001f);       // hook form to the window - its the master
-            displaycontrol.Font = new Font("Arial", 10f);
-            displaycontrol.Focusable = true;          // we want to be able to focus and receive key presses.
-            displaycontrol.SetFocus();
-
-            // 3d controller
-
-            gl3dcontroller = new Controller3D();
-            gl3dcontroller.PosCamera.ZoomMax = 600;     // gives 5ly
-            gl3dcontroller.ZoomDistance = 3000F / lyscale;
-            gl3dcontroller.PosCamera.ZoomMin = 0.1f;
-            gl3dcontroller.PosCamera.ZoomScaling = 1.1f;
-            gl3dcontroller.YHoldMovement = true;
-            gl3dcontroller.PaintObjects = Controller3DDraw;
-            gl3dcontroller.KeyboardTravelSpeed = (ms, eyedist) =>
-            {
-                double eyedistr = Math.Pow(eyedist, 1.0);
-                float v = (float)Math.Max(eyedistr / 2000, 0);
-                // System.Diagnostics.Debug.WriteLine("Speed " + eyedistr + " "+ v);
-                return (float)ms * v;
-            };
-
-            // hook gl3dcontroller to display control - its the slave. Do not register mouse UI, we will deal with that and feed any events thru we want
-            gl3dcontroller.Start(matrixcalc, displaycontrol, new Vector3(0, 0, 0), new Vector3(140.75f, 0, 0), 0.5F, registermouseui: false, registerkeyui: true);
-
-            if (displaycontrol != null)
-            {
-                displaycontrol.Paint += (o, ts) =>        // subscribing after start means we paint over the scene, letting transparency work
-                {
-                    // MCUB set up by Controller3DDraw which did the work first
-                    galaxymenu?.UpdateCoords(gl3dcontroller);
-                    displaycontrol.Animate(glwfc.ElapsedTimems);
-                    displaycontrol.Render(glwfc.RenderState, ts);
-                };
-            }
-
-            displaycontrol.MouseClick += MouseClickOnMap;       // grab mouse UI
-            displaycontrol.MouseUp += MouseUpOnMap;
-            displaycontrol.MouseDown += MouseDownOnMap;
-            displaycontrol.MouseMove += MouseMoveOnMap;
-            displaycontrol.MouseWheel += MouseWheelOnMap;
-
-            if ((parts & Parts.Menu) != 0)
-               galaxymenu = new MapMenu(this, parts);
 
             // Autocomplete text box at top for searching
 
@@ -963,7 +983,7 @@ namespace EDDiscovery.UserControls.Map3D
 
         private void MouseClickOnMap(Object s, GLMouseEventArgs e)
         {
-            int distmovedsq = gl3dcontroller.MouseMovedSq(e.WindowLocation);        //3dcontroller is monitoring mouse movements
+            int distmovedsq = gl3dcontroller.MouseMovedSq(e);        //3dcontroller is monitoring mouse movements
             if (distmovedsq < 4)
             {
                 //  System.Diagnostics.Debug.WriteLine("map click");
@@ -1009,7 +1029,7 @@ namespace EDDiscovery.UserControls.Map3D
 
             if ((parts & Parts.YHoldButton) != 0 && kb.HasBeenPressed(Keys.O, KeyboardMonitor.ShiftState.None))
             {
-                gl3dcontroller.PosCamera.YHoldMovement = !gl3dcontroller.PosCamera.YHoldMovement;
+                gl3dcontroller.YHoldMovement = !gl3dcontroller.YHoldMovement;
             }
 
             if (kb.HasBeenPressed(Keys.D1, GLOFC.Controller.KeyboardMonitor.ShiftState.None))

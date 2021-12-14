@@ -138,8 +138,6 @@ namespace EDDiscovery.UserControls.Map3D
             int ypad = 10;
 
             GLForm pform = new GLForm("Galmenu", "Configure Map", new Rectangle(10, 10, 500, 600));
-            pform.BackColor = Color.FromArgb(220, 60, 60, 70);
-            pform.ForeColor = Color.Orange;
             pform.FormClosed = (frm) => { map.displaycontrol.ApplyToControlOfName("MS*", (c) => { c.Visible = true; }); };
             pform.Resizeable = pform.Moveable = false;
 
@@ -242,7 +240,7 @@ namespace EDDiscovery.UserControls.Map3D
             if ((parts & Map.Parts.EDSMStars) != 0)
             {
                 GLGroupBox tpgb = new GLGroupBox("GalaxyStarsGB", "Galaxy Stars", new Rectangle(leftmargin, vpos, pform.ClientWidth - leftmargin * 2, iconsize * 2));
-                tpgb.BackColor = pform.BackColor;
+                tpgb.BackColor = Color.Transparent;
                 tpgb.ForeColor = Color.Orange;
                 pform.Add(tpgb);
 
@@ -279,7 +277,7 @@ namespace EDDiscovery.UserControls.Map3D
 
                 if ((parts & Map.Parts.LimitSelector) != 0)
                 {
-                    GLComboBox cbstars = new GLComboBox("GalaxyStarsNumber", new Rectangle(hpos, 0, 100, iconsize));
+                    GLComboBox cbstars = new GLComboBox("GalaxyStarsNumber", new Rectangle(hpos, 0, 150, iconsize));
                     cbstars.ToolTipText = "Control how many stars are shown when zoomes in";
                     cbstars.Items = new List<string>() { "Stars-Ultra", "Stars-High", "Stars-Medium", "Stars-Low" };
                     var list = new List<int>() { 750000, 500000, 250000, 100000 };
@@ -301,7 +299,7 @@ namespace EDDiscovery.UserControls.Map3D
             if ((parts & Map.Parts.TravelPath) != 0)
             {
                 GLGroupBox tpgb = new GLGroupBox("TravelPathGB", "Travel Path", new Rectangle(leftmargin, vpos, pform.ClientWidth - leftmargin * 2, iconsize * 3));
-                tpgb.BackColor = pform.BackColor;
+                tpgb.BackColor = Color.Transparent;
                 tpgb.ForeColor = Color.Orange;
                 pform.Add(tpgb);
 
@@ -348,12 +346,12 @@ namespace EDDiscovery.UserControls.Map3D
             {
                 GLGroupBox galgb = new GLGroupBox("GalGB", "Galaxy Objects", new Rectangle(leftmargin, vpos, pform.ClientWidth - leftmargin * 2, 50));
                 galgb.ClientHeight = (iconsize + 4) * 2;
-                galgb.BackColor = pform.BackColor;
+                galgb.BackColor = Color.Transparent;
                 galgb.ForeColor = Color.Orange;
                 pform.Add(galgb);
                 GLFlowLayoutPanel galfp = new GLFlowLayoutPanel("GALFP", DockingType.Fill, 0);
                 galfp.FlowPadding = new Padding(2, 2, 2, 2);
-                galfp.BackColor = pform.BackColor;
+                galfp.BackColor = Color.Transparent;
                 galgb.Add(galfp);
                 vpos += galgb.Height + ypad;
 
@@ -387,7 +385,7 @@ namespace EDDiscovery.UserControls.Map3D
 
                 GLGroupBox edsmregionsgb = new GLGroupBox("EDSMR", "EDSM Regions", new Rectangle(leftmargin, vpos, pform.ClientWidth - leftmargin * 2, 50));
                 edsmregionsgb.ClientHeight = iconsize + 8;
-                edsmregionsgb.BackColor = pform.BackColor;
+                edsmregionsgb.BackColor = Color.Transparent;
                 edsmregionsgb.ForeColor = Color.Orange;
                 pform.Add(edsmregionsgb);
                 vpos += edsmregionsgb.Height + ypad;
@@ -423,7 +421,7 @@ namespace EDDiscovery.UserControls.Map3D
 
                 GLGroupBox eliteregionsgb = new GLGroupBox("ELITER", "Elite Regions", new Rectangle(leftmargin, vpos, pform.ClientWidth - leftmargin * 2, 50));
                 eliteregionsgb.ClientHeight = iconsize + 8;
-                eliteregionsgb.BackColor = pform.BackColor;
+                eliteregionsgb.BackColor = Color.Transparent;
                 eliteregionsgb.ForeColor = Color.Orange;
                 pform.Add(eliteregionsgb);
                 vpos += eliteregionsgb.Height + ypad;
@@ -491,25 +489,74 @@ namespace EDDiscovery.UserControls.Map3D
 
         static void Theme(GLBaseControl s)      // run on each control during add, theme it
         {
+            Color formback = Color.FromArgb(220, 60, 60, 70);
+            Color buttonface = Color.FromArgb(255, 128, 128, 128);
+            Color texc = Color.Orange;
+
+            var but = s as GLButton;
+            if (but != null)
+            {
+                but.ButtonFaceColour = buttonface;
+                but.ForeColor = texc;
+                but.BackColor = buttonface;
+                but.BorderColor = buttonface;
+            }
+
             var cb = s as GLCheckBox;
             if (cb != null)
             {
-                float[][] colorMatrixElements = {
-                           new float[] {0.5f,  0,  0,  0, 0},        // red scaling factor of 0.5
-                           new float[] {0,  0.5f,  0,  0, 0},        // green scaling factor of 1
-                           new float[] {0,  0,  0.5f,  0, 0},        // blue scaling factor of 1
-                           new float[] {0,  0,  0,  1, 0},        // alpha scaling factor of 1
-                           new float[] {0.0f, 0.0f, 0.0f, 0, 1}};    // three translations of 
-
-                var colormap1 = new System.Drawing.Imaging.ColorMap();
-                cb.SetDrawnBitmapUnchecked(new System.Drawing.Imaging.ColorMap[] { colormap1 }, colorMatrixElements);
+                cb.ButtonFaceColour = buttonface;
             }
-            else
+            var cmb = s as GLComboBox;
+            if (cmb != null)
             {
-                var but = s as GLButton;
-                if (but != null)
-                    but.ForeColor = Color.DarkOrange;
+                cmb.BackColor = formback ;
+                cmb.ForeColor = cmb.DropDownForeColor = texc;
+                cmb.FaceColor = cmb.DropDownBackgroundColor = buttonface;
+                cmb.BorderColor = formback;
             }
+
+            var dt = s as GLDateTimePicker;
+            if (dt != null)
+            {
+                dt.BackColor = buttonface;
+                dt.ForeColor = texc;
+                dt.Calendar.ButLeft.ForeColor = dt.Calendar.ButRight.ForeColor = texc;
+                dt.SelectedColor = Color.FromArgb(255, 160, 160, 160);
+            }
+
+            var fr = s as GLForm;
+            if (fr != null)
+            {
+                fr.BackColor = formback;
+                fr.ForeColor = texc;
+            }
+
+            var tb = s as GLMultiLineTextBox;
+            if (tb != null)
+            {
+                tb.BackColor = formback;
+                tb.ForeColor = texc;
+            }
+
+            Color cmbck = Color.FromArgb(255, 128, 128, 128);
+
+            var ms = s as GLMenuStrip;
+            if (ms != null)
+            {
+                ms.BackColor = cmbck;
+                ms.IconStripBackColor = cmbck.Multiply(1.2f);
+            }
+            var mi = s as GLMenuItem;
+            if (mi != null)
+            {
+                mi.BackColor = cmbck;
+                mi.ButtonFaceColour = cmbck;
+                mi.ForeColor = texc;
+                mi.BackDisabledScaling = 1.0f;
+            }
+
+
         }
 
 

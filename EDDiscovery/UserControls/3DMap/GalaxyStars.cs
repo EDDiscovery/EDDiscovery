@@ -205,7 +205,7 @@ namespace EDDiscovery.UserControls.Map3D
                             }
                         }
 
-                        System.Diagnostics.Debug.WriteLine($"Galaxy: {sector.pos} requestor accepts");
+                        //System.Diagnostics.Debug.WriteLine($"Galaxy: {sector.pos} requestor accepts");
 
                         Interlocked.Add(ref subthreadsrunning, 1);      // committed to run, and count subthreads
 
@@ -231,7 +231,7 @@ namespace EDDiscovery.UserControls.Map3D
         {
             Sector d = (Sector)seco;
 
-            System.Diagnostics.Debug.WriteLine($"Galaxy: Thread start for {d.pos}");
+            //System.Diagnostics.Debug.WriteLine($"Galaxy: Thread start for {d.pos}");
 
             // note d.text/d.positions may be much longer than d.systems
 
@@ -291,7 +291,7 @@ namespace EDDiscovery.UserControls.Map3D
                     int max = 2;
                     while (max-- > 0 && generatedsectors.TryDequeue(out Sector d) )      // limit fill rate.. (max first)
                     {
-                        System.Diagnostics.Debug.WriteLine($"Galaxy: Add {d.pos} number {d.systems} total {slset.Objects}");
+                        //System.Diagnostics.Debug.WriteLine($"Galaxy: Add {d.pos} number {d.systems} total {slset.Objects}");
                         if (d.systems > 0)      // may return zero
                         {
                             System.Diagnostics.Debug.Assert(slset.TagsToBlocks.ContainsKey(d.pos));
