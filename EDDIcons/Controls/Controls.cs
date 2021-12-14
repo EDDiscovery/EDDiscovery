@@ -230,5 +230,6 @@ namespace EDDiscovery.Icons
         public static Image ModuleInfo { get { return BaseUtils.Icons.IconSet.GetIcon("Journal.ModuleInfo"); } }
         public static Image EngineerApply { get { return BaseUtils.Icons.IconSet.GetIcon("Journal.EngineerApply"); } }
         public static Image Synthesis { get { return BaseUtils.Icons.IconSet.GetIcon("Journal.Synthesis"); } }
+        public static Image OrganicIncomplete { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.OrganicIncomplete"); } }
     }
 }

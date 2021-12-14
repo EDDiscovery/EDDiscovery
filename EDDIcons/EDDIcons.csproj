@@ -533,6 +533,7 @@
     <EmbeddedResource Include="Controls\notfirstdiscover.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Panels\Organics.png" />
     <EmbeddedResource Include="Controls\ScanPosition.png" />
     <EmbeddedResource Include="Controls\Font.png" />
     <EmbeddedResource Include="Controls\Scan\Bodies\LandablePlanet.png" />
@@ -1042,6 +1043,7 @@
     <EmbeddedResource Include="Controls\Map3D.png" />
     <EmbeddedResource Include="Controls\Level.png" />
     <EmbeddedResource Include="Controls\EngineerRecipe.png" />
+    <EmbeddedResource Include="Controls\OrganicIncomplete.png" />
     <Content Include="Controls\readme.txt" />
     <EmbeddedResource Include="Panels\MissionOverlay.png" />
     <EmbeddedResource Include="Journal\CrimeVictim.png" />

@@ -77,6 +77,8 @@ namespace EDDiscovery.UserControls
             extDateTimePickerEndDate.ValueChanged += DateTimePicker_ValueChangedEnd;
 
             rollUpPanelTop.PinState = GetSetting("PinState", true);
+            extCheckBoxShowIncomplete.Checked = GetSetting("ShowIncomplete", true);
+            extCheckBoxShowIncomplete.Click += ExtCheckBoxShowIncomplete_Click;
         }
 
 
@@ -114,8 +116,7 @@ namespace EDDiscovery.UserControls
             extPictureBoxScroll.BackColor = pictureBox.BackColor = this.BackColor = curcol;
             ControlVisibility();
         }
-
-        private void Discoveryform_OnHistoryChange(HistoryList hl)      
+        private void Discoveryform_OnHistoryChange(HistoryList hl)
         {
             DrawGrid();             // don't do the Body info, its tied to the UCTG
             ControlVisibility();
@@ -261,20 +262,23 @@ namespace EDDiscovery.UserControls
 
                                 foreach (var os in orglist)
                                 {
-                                    DateTime time = EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(os.Item2.EventTimeUTC);
-
-                                    object[] data = new object[]
+                                    if (os.Item2.ScanType == JournalScanOrganic.ScanTypeEnum.Analyse || extCheckBoxShowIncomplete.Checked)
                                     {
-                                            time.ToStringYearFirst(),
-                                            syskvp.Key.ToString() + ": " + starkvp.Key.ToString(),
-                                            body.FullName,
-                                            body.ScanData?.PlanetTypeText ?? "",
-                                            os.Item2.Genus_Localised,
-                                            os.Item2.Species_Localised,
-                                            os.Item2.ScanType,
-                                    };
+                                        DateTime time = EDDiscoveryForm.EDDConfig.ConvertTimeToSelectedFromUTC(os.Item2.EventTimeUTC);
 
-                                    dataGridView.Rows.Add(data);
+                                        object[] data = new object[]
+                                        {
+                                                time.ToStringYearFirst(),
+                                                syskvp.Key.ToString() + ": " + starkvp.Key.ToString(),
+                                                body.FullName,
+                                                body.ScanData?.PlanetTypeText ?? "",
+                                                os.Item2.Genus_Localised,
+                                                os.Item2.Species_Localised,
+                                                os.Item2.ScanType,
+                                        };
+
+                                        dataGridView.Rows.Add(data);
+                                    }
                                 }
                             }
                         }
@@ -355,6 +359,12 @@ namespace EDDiscovery.UserControls
             PutSetting("wordwrap", extCheckBoxWordWrap.Checked);
             dataGridView.DefaultCellStyle.WrapMode = extCheckBoxWordWrap.Checked ? DataGridViewTriState.True : DataGridViewTriState.False;
             DrawBodyInfo();
+        }
+
+        private void ExtCheckBoxShowIncomplete_Click(object sender, EventArgs e)
+        {
+            PutSetting("ShowIncomplete", extCheckBoxShowIncomplete.Checked);
+            DrawGrid();
         }
 
         private void DateTimePicker_ValueChangedStart(object sender, EventArgs e)
