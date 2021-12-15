@@ -29,18 +29,10 @@ namespace EDDiscovery.UserControls
     public partial class UserControlWebBrowser : UserControlCommonBase
     {
         private string source;
-        private string urlallowed;
         private ISystem last_sys_tracked = null;        // this tracks the travel grid selection always
         private SystemClass override_system = null;     // if set, override to this system.. 
 
-        private string defaultallowed =
-                "about:" + Environment.NewLine +
-                "https://www.google.com/recaptcha" + Environment.NewLine +
-                "https://consentcdn.cookiebot.com" + Environment.NewLine +
-                "https://auth.frontierstore.net" + Environment.NewLine +
-                "https://googleads.g.doubleclick.net" + Environment.NewLine;
-        
-        private string userurllist;
+        private WebBrowserBase wbb;
 
         #region Init
         public UserControlWebBrowser()
@@ -49,12 +41,12 @@ namespace EDDiscovery.UserControls
             toolTip.ShowAlways = true;
 
             BaseUtils.BrowserInfo.FixIECompatibility(System.Diagnostics.Process.GetCurrentProcess().ProcessName + ".exe");
+
         }
 
         public void Init(string source, string urlallowed)
         {
             this.source = source;
-            this.urlallowed = urlallowed;
             DBBaseName = source + "AutoView";
 
             rollUpPanelTop.PinState = GetSetting("PinState", true);
@@ -69,9 +61,12 @@ namespace EDDiscovery.UserControls
 
             extCheckBoxStar.Visible = source != "Spansh";
 
-            userurllist = GetSetting("Allowed", "");
-
-            webBrowser.Visible = false; // hide ugly white until load
+            wbb = new WebBrowserIE11();
+            wbb.urlallowed = urlallowed;
+            wbb.userurllist = GetSetting("Allowed", "");
+            wbb.webbrowser.Dock = DockStyle.Fill;
+            Controls.Add(wbb.webbrowser);
+            Controls.SetChildIndex(wbb.webbrowser,0);
         }
 
         public override void LoadLayout()
@@ -161,17 +156,17 @@ namespace EDDiscovery.UserControls
                 else
                     url = "https://spansh.co.uk";
 
-                defaulturl = urlallowed;
+                //defaulturl = urlallowed;
             }
             else if (source == "EDDB")
             {
                 url = Properties.Resources.URLEDDBSystemName + System.Web.HttpUtility.UrlEncode(sys.Name);
-                defaulturl = urlallowed;
+                //defaulturl = urlallowed;
             }
             else if (source == "Inara")
             {
                 url = Properties.Resources.URLInaraStarSystem + System.Web.HttpUtility.UrlEncode(sys.Name);
-                defaulturl = urlallowed;
+                //defaulturl = urlallowed;
             }
 
             System.Diagnostics.Debug.WriteLine("Url is " + last_sys_tracked.Name + "=" + url);
@@ -183,12 +178,12 @@ namespace EDDiscovery.UserControls
                     if (url.HasChars())
                     {
                         SetControlText("Data on " + sys.Name);
-                        webBrowser.Navigate(url);
+                        wbb.Navigate(url);
                     }
                     else
                     {
                         SetControlText("No Data on " + sys.Name);
-                        webBrowser.Navigate(defaulturl);
+                        wbb.Navigate(defaulturl);
                     }
                 }
             });
@@ -264,43 +259,10 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
-        private void webBrowser_Navigating(object sender, WebBrowserNavigatingEventArgs e)
-        {
-            // if not starting with the current url for the site, or not in whitelist..
-
-            string[] userlistsplit = userurllist.HasChars() ? userurllist.Split(Environment.NewLine) : new string[0];
-            bool all = Array.IndexOf(userlistsplit, "*") >= 0;
-            string[] defaultlistsplit = defaultallowed.Split(Environment.NewLine);
-
-            // if not in these
-            if (!all &&
-                  !e.Url.Host.StartsWith(urlallowed, StringComparison.InvariantCultureIgnoreCase) &&
-                  userlistsplit.StartsWith(e.Url.AbsoluteUri, StringComparison.InvariantCultureIgnoreCase) == -1 &&
-                  defaultlistsplit.StartsWith(e.Url.AbsoluteUri, StringComparison.InvariantCultureIgnoreCase) == -1
-                  )
-            {
-                System.Diagnostics.Debug.WriteLine("Webbrowser Disallowed " + e.Url.Host + " : " + e.Url.AbsoluteUri);
-                e.Cancel = true;
-            }
-            else
-            {
-                System.Diagnostics.Debug.WriteLine("Webbrowser Allowed " + e.Url.Host + " : " + e.Url.AbsoluteUri);
-            }
-        }
-
-        private void webBrowser_NewWindow(object sender, CancelEventArgs e)
-        {
-            e.Cancel = true;
-        }
 
         private void extCheckBoxClickBack(object sender, EventArgs e)
         {
-            webBrowser.GoBack();
-        }
-
-        private void webBrowser_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
-        {
-            webBrowser.Visible = true;
+            wbb.GoBack();
         }
 
         private void extCheckBoxAllowedList_Click(object sender, EventArgs e)
@@ -309,7 +271,7 @@ namespace EDDiscovery.UserControls
 
             int width = 430;
 
-            string deflist = GetSetting("Allowed", defaultallowed);
+            string deflist = GetSetting("Allowed", "");
 
             f.Add(new ExtendedControls.ConfigurableForm.Entry("Text", typeof(ExtendedControls.ExtTextBox), deflist, new Point(10, 40), new Size(width - 10 - 20, 110), "URLs") { textboxmultiline = true });
 
@@ -327,13 +289,13 @@ namespace EDDiscovery.UserControls
             DialogResult res = f.ShowDialogCentred(this.FindForm(), this.FindForm().Icon, "URLs", closeicon: true);
             if (res == DialogResult.OK)
             {
-                userurllist = f.Get("Text");
+                string userurllist = f.Get("Text");
+                wbb.userurllist = userurllist;
                 PutSetting("Allowed", userurllist);
                 PresentSystem(last_sys_tracked);
             }
         }
     }
-
 
     public partial class UserControlEDSM : UserControlWebBrowser
     {
@@ -364,6 +326,83 @@ namespace EDDiscovery.UserControls
         public override void Init()
         {
             Init("Inara", "inara.cz");
+        }
+    }
+
+    public abstract class WebBrowserBase
+    {
+        public string urlallowed { get; set; }
+        public string userurllist { get; set; }
+
+        private string defaultallowed =
+                "about:" + Environment.NewLine +
+                "https://www.google.com/recaptcha" + Environment.NewLine +
+                "https://consentcdn.cookiebot.com" + Environment.NewLine +
+                "https://auth.frontierstore.net" + Environment.NewLine +
+                "https://googleads.g.doubleclick.net" + Environment.NewLine;
+
+
+        public Control webbrowser { get; set; }
+        public abstract void Navigate(string uri);
+        public abstract void GoBack();
+
+        public bool IsDisallowed(string urlhost,string absuri)
+        {
+            string[] userlistsplit = userurllist.HasChars() ? userurllist.Split(Environment.NewLine) : new string[0];
+            bool all = Array.IndexOf(userlistsplit, "*") >= 0;
+            string[] defaultlistsplit = defaultallowed.Split(Environment.NewLine);
+
+            // if not in these
+            if (!all &&
+                  !urlhost.StartsWith(urlallowed, StringComparison.InvariantCultureIgnoreCase) &&
+                  userlistsplit.StartsWith(absuri, StringComparison.InvariantCultureIgnoreCase) == -1 &&
+                  defaultlistsplit.StartsWith(absuri, StringComparison.InvariantCultureIgnoreCase) == -1
+                  )
+            {
+                System.Diagnostics.Debug.WriteLine("Webbrowser Disallowed " + urlhost + " : " + absuri);
+                return true;
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine("Webbrowser Allowed " + urlhost + " : " + absuri);
+                return false;
+            }
+        }
+
+    }
+
+    public class WebBrowserIE11 : WebBrowserBase
+    {
+        private WebBrowser wbie11;
+        public WebBrowserIE11()
+        {
+            webbrowser = wbie11 = new WebBrowser();
+            wbie11.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.webBrowser_DocumentCompleted);
+            wbie11.Navigating += new System.Windows.Forms.WebBrowserNavigatingEventHandler(this.webBrowser_Navigating);
+            wbie11.NewWindow += new System.ComponentModel.CancelEventHandler(this.webBrowser_NewWindow);
+            webbrowser.Visible = false; // hide ugly white until load
+        }
+        public override void Navigate(string uri)
+        {
+            wbie11.Navigate(uri);
+        }
+        public override void GoBack()
+        {
+            wbie11.GoBack();
+        }
+
+        private void webBrowser_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
+        {
+            wbie11.Visible = true;
+        }
+        private void webBrowser_Navigating(object sender, WebBrowserNavigatingEventArgs e)
+        {
+            e.Cancel = IsDisallowed(e.Url.Host, e.Url.AbsoluteUri);
+        }
+
+        private void webBrowser_NewWindow(object sender, CancelEventArgs e)
+        {
+            e.Cancel = true;
         }
     }
 

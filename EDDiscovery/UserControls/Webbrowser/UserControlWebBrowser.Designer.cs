@@ -47,11 +47,10 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxStar = new ExtendedControls.ExtCheckBox();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.checkBoxAutoTrack = new ExtendedControls.ExtCheckBox();
-            this.rollUpPanelTop = new ExtendedControls.ExtPanelRollUp();
-            this.panelControls = new System.Windows.Forms.FlowLayoutPanel();
             this.extCheckBoxBack = new ExtendedControls.ExtCheckBox();
             this.extCheckBoxAllowedList = new ExtendedControls.ExtCheckBox();
-            this.webBrowser = new System.Windows.Forms.WebBrowser();
+            this.rollUpPanelTop = new ExtendedControls.ExtPanelRollUp();
+            this.panelControls = new System.Windows.Forms.FlowLayoutPanel();
             this.rollUpPanelTop.SuspendLayout();
             this.panelControls.SuspendLayout();
             this.SuspendLayout();
@@ -123,38 +122,6 @@ namespace EDDiscovery.UserControls
             this.toolTip.SetToolTip(this.checkBoxAutoTrack, "Track system in history panel");
             this.checkBoxAutoTrack.UseVisualStyleBackColor = false;
             // 
-            // rollUpPanelTop
-            // 
-            this.rollUpPanelTop.AutoSize = true;
-            this.rollUpPanelTop.Controls.Add(this.panelControls);
-            this.rollUpPanelTop.Dock = System.Windows.Forms.DockStyle.Top;
-            this.rollUpPanelTop.HiddenMarkerWidth = 400;
-            this.rollUpPanelTop.Location = new System.Drawing.Point(0, 0);
-            this.rollUpPanelTop.Name = "rollUpPanelTop";
-            this.rollUpPanelTop.PinState = true;
-            this.rollUpPanelTop.RolledUpHeight = 5;
-            this.rollUpPanelTop.RollUpAnimationTime = 500;
-            this.rollUpPanelTop.RollUpDelay = 1000;
-            this.rollUpPanelTop.SecondHiddenMarkerWidth = 0;
-            this.rollUpPanelTop.ShowHiddenMarker = true;
-            this.rollUpPanelTop.Size = new System.Drawing.Size(748, 30);
-            this.rollUpPanelTop.TabIndex = 4;
-            this.rollUpPanelTop.UnrollHoverDelay = 1000;
-            // 
-            // panelControls
-            // 
-            this.panelControls.AutoSize = true;
-            this.panelControls.BackColor = System.Drawing.SystemColors.Control;
-            this.panelControls.Controls.Add(this.extCheckBoxBack);
-            this.panelControls.Controls.Add(this.extCheckBoxStar);
-            this.panelControls.Controls.Add(this.checkBoxAutoTrack);
-            this.panelControls.Controls.Add(this.extCheckBoxAllowedList);
-            this.panelControls.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelControls.Location = new System.Drawing.Point(0, 0);
-            this.panelControls.Name = "panelControls";
-            this.panelControls.Size = new System.Drawing.Size(748, 30);
-            this.panelControls.TabIndex = 32;
-            // 
             // extCheckBoxBack
             // 
             this.extCheckBoxBack.Appearance = System.Windows.Forms.Appearance.Button;
@@ -217,24 +184,45 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxAllowedList.UseVisualStyleBackColor = false;
             this.extCheckBoxAllowedList.Click += new System.EventHandler(this.extCheckBoxAllowedList_Click);
             // 
-            // webBrowser
+            // rollUpPanelTop
             // 
-            this.webBrowser.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.webBrowser.Location = new System.Drawing.Point(0, 30);
-            this.webBrowser.MinimumSize = new System.Drawing.Size(20, 20);
-            this.webBrowser.Name = "webBrowser";
-            this.webBrowser.ScriptErrorsSuppressed = true;
-            this.webBrowser.Size = new System.Drawing.Size(748, 652);
-            this.webBrowser.TabIndex = 5;
-            this.webBrowser.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.webBrowser_DocumentCompleted);
-            this.webBrowser.Navigating += new System.Windows.Forms.WebBrowserNavigatingEventHandler(this.webBrowser_Navigating);
-            this.webBrowser.NewWindow += new System.ComponentModel.CancelEventHandler(this.webBrowser_NewWindow);
+            this.rollUpPanelTop.AutoHeight = false;
+            this.rollUpPanelTop.AutoHeightWidthDisable = false;
+            this.rollUpPanelTop.AutoSize = true;
+            this.rollUpPanelTop.AutoWidth = false;
+            this.rollUpPanelTop.Controls.Add(this.panelControls);
+            this.rollUpPanelTop.Dock = System.Windows.Forms.DockStyle.Top;
+            this.rollUpPanelTop.HiddenMarkerWidth = 400;
+            this.rollUpPanelTop.Location = new System.Drawing.Point(0, 0);
+            this.rollUpPanelTop.Name = "rollUpPanelTop";
+            this.rollUpPanelTop.PinState = true;
+            this.rollUpPanelTop.RolledUpHeight = 5;
+            this.rollUpPanelTop.RollUpAnimationTime = 500;
+            this.rollUpPanelTop.RollUpDelay = 1000;
+            this.rollUpPanelTop.SecondHiddenMarkerWidth = 0;
+            this.rollUpPanelTop.ShowHiddenMarker = true;
+            this.rollUpPanelTop.Size = new System.Drawing.Size(748, 30);
+            this.rollUpPanelTop.TabIndex = 4;
+            this.rollUpPanelTop.UnrollHoverDelay = 1000;
+            // 
+            // panelControls
+            // 
+            this.panelControls.AutoSize = true;
+            this.panelControls.BackColor = System.Drawing.SystemColors.Control;
+            this.panelControls.Controls.Add(this.extCheckBoxBack);
+            this.panelControls.Controls.Add(this.extCheckBoxStar);
+            this.panelControls.Controls.Add(this.checkBoxAutoTrack);
+            this.panelControls.Controls.Add(this.extCheckBoxAllowedList);
+            this.panelControls.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelControls.Location = new System.Drawing.Point(0, 0);
+            this.panelControls.Name = "panelControls";
+            this.panelControls.Size = new System.Drawing.Size(748, 30);
+            this.panelControls.TabIndex = 32;
             // 
             // UserControlWebBrowser
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.webBrowser);
             this.Controls.Add(this.rollUpPanelTop);
             this.Name = "UserControlWebBrowser";
             this.Size = new System.Drawing.Size(748, 682);
@@ -251,7 +239,6 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtPanelRollUp rollUpPanelTop;
         private ExtendedControls.ExtCheckBox extCheckBoxStar;
         private System.Windows.Forms.FlowLayoutPanel panelControls;
-        private System.Windows.Forms.WebBrowser webBrowser;
         private ExtendedControls.ExtCheckBox extCheckBoxBack;
         private ExtendedControls.ExtCheckBox checkBoxAutoTrack;
         private ExtendedControls.ExtCheckBox extCheckBoxAllowedList;
