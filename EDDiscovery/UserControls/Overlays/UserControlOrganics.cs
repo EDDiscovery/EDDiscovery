@@ -284,7 +284,7 @@ namespace EDDiscovery.UserControls
                                                 os.Item2.Genus_Localised,
                                                 os.Item2.Species_Localised,
                                                 os.Item2.ScanType,
-                                                os.Item2.EstimatedValue.ToStringInvariant("N0")
+                                                os.Item2.EstimatedValue?.ToStringInvariant("N0") ??""
                                         };
 
                                         dataGridView.Rows.Add(data);
